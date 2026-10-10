@@ -1,8 +1,12 @@
 //! HP 48GX desktop calculator.
 //!
-//! hp48-app [--rom PATH] [--screenshot OUT.png] [--keys "K ..."]
+//! hp48-app [--rom PATH] [--screenshot OUT.png] [--keys "K ..."] [--persist]
+//!
+//! State is kept in %APPDATA%/HP48GX/state.bin (or $XDG_DATA_HOME/HP48GX);
+//! set HP48GX_STATE to use another file.
 
 mod face;
+mod persist;
 
 use eframe::egui::{self, Align2, Color32, CornerRadius, FontId, Pos2, Rect, Sense, Stroke, Vec2};
 use face::{KeyCap, ShiftColor, Style, ROWS};
@@ -41,11 +45,14 @@ struct App {
     script: Vec<(Key, bool, f64)>,
     script_time: f64,
     end_time: f64,
+    /// Save continuous memory (off for scripted screenshot runs).
+    persistent: bool,
+    last_save: Instant,
 }
 
 impl App {
     /// `keys`: None means "wait one second".
-    fn new(rom: &[u8], screenshot: Option<String>, keys: Vec<Option<Key>>) -> Self {
+    fn new(rom: &[u8], screenshot: Option<String>, keys: Vec<Option<Key>>, force_persist: bool) -> Self {
         // Key script for automated runs: press/release with timings.
         let mut script = Vec::new();
         let mut t = 3.5;
@@ -60,8 +67,15 @@ impl App {
             }
         }
         let end_time = t + 2.0;
+        let persistent = screenshot.is_none() || force_persist;
+        let mut machine = Machine::new(rom);
+        if persistent {
+            persist::load(&mut machine);
+        }
         App {
-            machine: Machine::new(rom),
+            machine,
+            persistent,
+            last_save: Instant::now(),
             last: None,
             mouse_keys: HashSet::new(),
             kb_keys: HashSet::new(),
@@ -70,6 +84,13 @@ impl App {
             script_time: 0.0,
             end_time,
         }
+    }
+
+    fn save(&mut self) {
+        if let Err(e) = persist::save(&self.machine) {
+            eprintln!("could not save calculator state: {e}");
+        }
+        self.last_save = Instant::now();
     }
 
     fn set_key(&mut self, key: Key, down: bool) {
@@ -114,7 +135,16 @@ impl eframe::App for App {
         }
         self.handle_keyboard(ctx);
         self.screenshot_step(ctx);
+        if self.persistent && self.last_save.elapsed().as_secs() >= 60 {
+            self.save();
+        }
         ctx.request_repaint();
+    }
+
+    fn on_exit(&mut self) {
+        if self.persistent {
+            self.save();
+        }
     }
 
     fn ui(&mut self, ui: &mut egui::Ui, _frame: &mut eframe::Frame) {
@@ -324,8 +354,10 @@ fn main() -> eframe::Result {
     let mut rom_path = String::from("ROM/gxrom-r");
     let mut screenshot = None;
     let mut keys = Vec::new();
+    let mut force_persist = false;
     while let Some(a) = args.next() {
         match a.as_str() {
+            "--persist" => force_persist = true,
             "--rom" => rom_path = args.next().expect("--rom PATH"),
             "--screenshot" => screenshot = args.next(),
             "--keys" => {
@@ -360,7 +392,7 @@ fn main() -> eframe::Result {
         options,
         Box::new(move |cc| {
             install_fonts(&cc.egui_ctx);
-            Ok(Box::new(App::new(&rom, screenshot, keys)))
+            Ok(Box::new(App::new(&rom, screenshot, keys, force_persist)))
         }),
     )
 }

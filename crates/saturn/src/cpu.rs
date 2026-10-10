@@ -96,6 +96,12 @@ impl Cpu {
         &self.rstk
     }
 
+    /// Replace the return stack (keeps at most the 8 most recent entries).
+    pub fn set_rstk(&mut self, entries: &[u32]) {
+        let start = entries.len().saturating_sub(RSTK_DEPTH);
+        self.rstk = entries[start..].iter().map(|a| a & 0xF_FFFF).collect();
+    }
+
     fn push(&mut self, addr: u32) {
         if self.rstk.len() == RSTK_DEPTH {
             self.rstk.remove(0);

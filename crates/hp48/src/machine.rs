@@ -62,6 +62,15 @@ impl Machine {
         }
     }
 
+    /// Reset the emulated clock (used when restoring a snapshot).
+    pub(crate) fn set_time(&mut self, time: u64) {
+        self.time = time;
+        self.t1_count = time * 16 / CPU_HZ + 1;
+        self.t2_count = time * 8192 / CPU_HZ + 1;
+        self.next_t1 = period(16, self.t1_count);
+        self.next_t2 = period(8192, self.t2_count);
+    }
+
     /// Run for about `cycles` CPU cycles of emulated time.
     pub fn run(&mut self, cycles: u64) {
         let end = self.time + cycles;

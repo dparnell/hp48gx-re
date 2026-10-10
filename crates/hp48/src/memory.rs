@@ -34,6 +34,17 @@ impl Module {
         Module { kind, configs, remaining: configs, mask: 0, base: 0 }
     }
 
+    /// (configs still needed, mask, base) for snapshots.
+    pub fn raw(&self) -> (u8, u32, u32) {
+        (self.remaining, self.mask, self.base)
+    }
+
+    pub fn set_raw(&mut self, remaining: u8, mask: u32, base: u32) {
+        self.remaining = remaining.min(self.configs);
+        self.mask = mask & 0xF_FFFF;
+        self.base = base & 0xF_FFFF;
+    }
+
     pub fn configured(&self) -> bool {
         self.remaining == 0
     }

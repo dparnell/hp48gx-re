@@ -52,3 +52,24 @@ fn divides_with_full_precision() {
     m.run(CPU_HZ / 2);
     assert_eq!(level1_real(&m).as_deref(), Some("233333333333E0"));
 }
+
+#[test]
+fn state_round_trip_keeps_the_stack() {
+    let Some(mut m) = machine() else { return };
+    for k in [Key::N4, Key::N2, Key::Enter] {
+        m.tap(k);
+    }
+    m.run(CPU_HZ / 2);
+    let snap = m.save_state();
+
+    let rom = std::fs::read(concat!(env!("CARGO_MANIFEST_DIR"), "/../../ROM/gxrom-r")).unwrap();
+    let mut restored = Machine::new(&rom);
+    restored.load_state(&snap).expect("load");
+    assert_eq!(level1_real(&restored).as_deref(), Some("42E1"));
+    // The restored machine keeps working: 42 8 + = 50.
+    for k in [Key::N8, Key::Plus] {
+        restored.tap(k);
+    }
+    restored.run(CPU_HZ / 2);
+    assert_eq!(level1_real(&restored).as_deref(), Some("5E1"));
+}
