@@ -1,14 +1,9 @@
-pub fn add(left: u64, right: u64) -> u64 {
-    left + right
-}
+//! HP 48GX hardware emulation around the Saturn CPU core.
 
-#[cfg(test)]
-mod tests {
-    use super::*;
+pub mod hardware;
+pub mod keyboard;
+pub mod machine;
+pub mod memory;
 
-    #[test]
-    fn it_works() {
-        let result = add(2, 2);
-        assert_eq!(result, 4);
-    }
-}
+pub use keyboard::Key;
+pub use machine::{Lcd, Machine, CPU_HZ, LCD_HEIGHT, LCD_WIDTH};

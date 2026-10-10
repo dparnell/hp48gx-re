@@ -5,10 +5,16 @@ version = 4
 [[package]]
 name = "hp48"
 version = "0.1.0"
+dependencies = [
+ "saturn",
+]
 
 [[package]]
 name = "hp48-cli"
 version = "0.1.0"
+dependencies = [
+ "hp48",
+]
 
 [[package]]
 name = "saturn"
