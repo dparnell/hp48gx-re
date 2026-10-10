@@ -102,14 +102,16 @@ impl Cpu {
         self.rstk = entries[start..].iter().map(|a| a & 0xF_FFFF).collect();
     }
 
-    fn push(&mut self, addr: u32) {
+    /// Push a return address (GOSUB / RSTK=C).
+    pub fn push(&mut self, addr: u32) {
         if self.rstk.len() == RSTK_DEPTH {
             self.rstk.remove(0);
         }
         self.rstk.push(addr & 0xF_FFFF);
     }
 
-    fn pop(&mut self) -> u32 {
+    /// Pop a return address (RTN / C=RSTK); an empty stack yields 0.
+    pub fn pop(&mut self) -> u32 {
         self.rstk.pop().unwrap_or(0)
     }
 

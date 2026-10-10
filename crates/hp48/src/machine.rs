@@ -33,9 +33,17 @@ pub struct Lcd {
     pub contrast: u8,
 }
 
+/// A native replacement for a machine-code ROM routine: it receives the CPU
+/// and hardware at the routine's entry and must leave them exactly as the
+/// ROM code would at its RTN (the machine performs the RTN).
+pub type Native = fn(&mut Cpu, &mut Hardware);
+
+#[derive(Clone)]
 pub struct Machine {
     pub cpu: Cpu,
     pub hw: Hardware,
+    /// Native routines by entry address (see crate::hle).
+    pub natives: std::collections::HashMap<u32, Native>,
     /// Elapsed emulated time in CPU cycles.
     pub time: u64,
     next_t1: u64,
@@ -43,6 +51,9 @@ pub struct Machine {
     t2_count: u64,
     t1_count: u64,
 }
+
+/// Cycles charged for a call to a native routine.
+const NATIVE_CYCLES: u32 = 40;
 
 fn period(hz: u64, n: u64) -> u64 {
     n * CPU_HZ / hz
@@ -54,6 +65,7 @@ impl Machine {
         Machine {
             cpu: Cpu::new(),
             hw: Hardware::new(rom_packed),
+            natives: std::collections::HashMap::new(),
             time: 0,
             next_t1: period(16, 1),
             next_t2: period(8192, 1),
@@ -83,7 +95,14 @@ impl Machine {
                 self.service();
                 continue;
             }
-            let c = self.cpu.step(&mut self.hw);
+            let c = match self.natives.get(&self.cpu.pc) {
+                Some(native) => {
+                    native(&mut self.cpu, &mut self.hw);
+                    self.cpu.pc = self.cpu.pop();
+                    NATIVE_CYCLES
+                }
+                None => self.cpu.step(&mut self.hw),
+            };
             self.time += u64::from(c);
             self.advance_timers();
             self.service();

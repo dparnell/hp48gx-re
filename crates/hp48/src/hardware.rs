@@ -35,6 +35,7 @@ pub const TC_INT: u8 = 2;
 pub const TC_WAKE: u8 = 4;
 pub const TC_SRQ: u8 = 8;
 
+#[derive(Clone)]
 pub struct Hardware {
     pub rom: Box<[u8]>,
     pub ram: Box<[u8]>,
