@@ -1,6 +1,6 @@
 //! Headless runner: boot the ROM, optionally type keys, print the LCD.
 //!
-//! hp48-cli [--rom PATH] [--seconds S] [--keys "K1 K2 ..."] [--wait S] [--profile] [--png OUT]
+//! hp48-cli [--rom PATH] [--seconds S] [--keys "K1 K2 ..."] [--wait S] [--profile] [--png OUT] [--dump OUT.txt]
 //!
 //! Keys may be written KEY:SECONDS to hold them; "wait:S" just runs.
 
@@ -67,6 +67,7 @@ fn main() {
     let mut profile = false;
     let mut wait = 0.0f64;
     let mut png_out: Option<String> = None;
+    let mut dump_out: Option<String> = None;
     while let Some(a) = args.next() {
         match a.as_str() {
             "--rom" => rom = args.next().expect("--rom PATH"),
@@ -74,6 +75,7 @@ fn main() {
             "--keys" => keys = args.next().expect("--keys LIST").split_whitespace().map(String::from).collect(),
             "--profile" => profile = true,
             "--png" => png_out = args.next(),
+            "--dump" => dump_out = args.next(),
             "--wait" => wait = args.next().expect("--wait S").parse().expect("number"),
             other => panic!("unknown argument {other}"),
         }
@@ -121,6 +123,17 @@ fn main() {
     run(&mut m, (wait * CPU_HZ as f64) as u64, &mut hist);
 
     print_lcd(&m);
+    if let Some(path) = &dump_out {
+        // One line per LCD row, '1' = dark pixel.
+        let lcd = m.lcd();
+        let text: String = lcd
+            .pixels
+            .iter()
+            .map(|row| row.iter().map(|&p| if p { '1' } else { '0' }).collect::<String>() + "
+")
+            .collect();
+        std::fs::write(path, text).expect("write dump");
+    }
     if let Some(path) = &png_out {
         write_lcd_png(&m, path, 6);
     }
