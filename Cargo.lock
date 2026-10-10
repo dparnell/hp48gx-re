@@ -1393,6 +1393,7 @@ version = "0.1.0"
 dependencies = [
  "eframe",
  "hp48",
+ "hp48-vector",
  "png",
 ]
 
@@ -1401,6 +1402,14 @@ name = "hp48-cli"
 version = "0.1.0"
 dependencies = [
  "hp48",
+ "hp48-vector",
+ "png",
+]
+
+[[package]]
+name = "hp48-vector"
+version = "0.1.0"
+dependencies = [
  "png",
 ]
 

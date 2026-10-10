@@ -1,6 +1,6 @@
 //! Headless runner: boot the ROM, optionally type keys, print the LCD.
 //!
-//! hp48-cli [--rom PATH] [--seconds S] [--keys "K1 K2 ..."] [--wait S] [--profile] [--png OUT] [--dump OUT.txt]
+//! hp48-cli [--rom PATH] [--seconds S] [--keys "K1 K2 ..."] [--wait S] [--profile] [--png OUT] [--dump OUT.txt] [--vector-png OUT] [--svg OUT]
 //!
 //! Keys may be written KEY:SECONDS to hold them; "wait:S" just runs.
 
@@ -68,6 +68,8 @@ fn main() {
     let mut wait = 0.0f64;
     let mut png_out: Option<String> = None;
     let mut dump_out: Option<String> = None;
+    let mut vpng_out: Option<String> = None;
+    let mut svg_out: Option<String> = None;
     while let Some(a) = args.next() {
         match a.as_str() {
             "--rom" => rom = args.next().expect("--rom PATH"),
@@ -76,6 +78,8 @@ fn main() {
             "--profile" => profile = true,
             "--png" => png_out = args.next(),
             "--dump" => dump_out = args.next(),
+            "--vector-png" => vpng_out = args.next(),
+            "--svg" => svg_out = args.next(),
             "--wait" => wait = args.next().expect("--wait S").parse().expect("number"),
             other => panic!("unknown argument {other}"),
         }
@@ -134,6 +138,17 @@ fn main() {
             .collect();
         std::fs::write(path, text).expect("write dump");
     }
+    if vpng_out.is_some() || svg_out.is_some() {
+        let scene = hp48_vector::vectorize(&hp48_vector::Bitmap::from_rows(&m.lcd().pixels));
+        if let Some(path) = &svg_out {
+            std::fs::write(path, scene.to_svg(LCD_WIDTH, LCD_HEIGHT, 8.0, 0.92)).expect("write svg");
+        }
+        if let Some(path) = &vpng_out {
+            let (w, h, rgb) =
+                hp48_vector::render_rgb(&scene, LCD_WIDTH, LCD_HEIGHT, 8.0, 0.92, [188, 198, 169], [30, 36, 28]);
+            write_rgb_png(path, w, h, &rgb);
+        }
+    }
     if let Some(path) = &png_out {
         write_lcd_png(&m, path, 6);
     }
@@ -162,6 +177,14 @@ fn main() {
             println!("{pc:05X} {n:>10}  {near}");
         }
     }
+}
+
+fn write_rgb_png(path: &str, w: usize, h: usize, rgb: &[u8]) {
+    let file = std::fs::File::create(path).expect("create png");
+    let mut enc = png::Encoder::new(std::io::BufWriter::new(file), w as u32, h as u32);
+    enc.set_color(png::ColorType::Rgb);
+    enc.set_depth(png::BitDepth::Eight);
+    enc.write_header().and_then(|mut wr| wr.write_image_data(rgb)).expect("write png");
 }
 
 /// Write the LCD as a PNG, each pixel `scale` x `scale` with a 1px grid.

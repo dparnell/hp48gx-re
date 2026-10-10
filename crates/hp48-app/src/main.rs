@@ -1,6 +1,6 @@
 //! HP 48GX desktop calculator.
 //!
-//! hp48-app [--rom PATH] [--screenshot OUT.png] [--keys "K ..."] [--persist]
+//! hp48-app [--rom PATH] [--screenshot OUT.png] [--keys "K ..."] [--persist] [--pixels]
 //!
 //! State is kept in %APPDATA%/HP48GX/state.bin (or $XDG_DATA_HOME/HP48GX);
 //! set HP48GX_STATE to use another file.
@@ -36,8 +36,20 @@ const LEGEND: Color32 = Color32::from_rgb(0xF2, 0xF2, 0xF2);
 const LCD_BG: Color32 = Color32::from_rgb(0xBC, 0xC6, 0xA9);
 const LCD_INK: Color32 = Color32::from_rgb(0x1E, 0x24, 0x1C);
 
+#[derive(Clone, Copy, PartialEq, Eq)]
+enum Display {
+    /// The original 131x64 pixels, drawn as crisp squares.
+    Pixels,
+    /// Vectorised LCD content (hp48-vector).
+    Vector,
+}
+
+type SceneCache = Option<([[bool; LCD_WIDTH]; LCD_HEIGHT], std::rc::Rc<hp48_vector::Scene>)>;
+
 struct App {
     machine: Machine,
+    display: Display,
+    scene_cache: std::cell::RefCell<SceneCache>,
     last: Option<Instant>,
     mouse_keys: HashSet<Key>,
     kb_keys: HashSet<Key>,
@@ -74,6 +86,8 @@ impl App {
         }
         App {
             machine,
+            display: Display::Vector,
+            scene_cache: std::cell::RefCell::new(None),
             persistent,
             last_save: Instant::now(),
             last: None,
@@ -161,6 +175,12 @@ impl eframe::App for App {
         );
 
         self.draw_lcd(&painter, &to_screen, scale);
+        let lcd_rect = Rect::from_min_max(to_screen(MARGIN, 1.0), to_screen(FACE_W - MARGIN, LCD_TOP + LCD_H + 2.0));
+        let lcd_resp = ui.interact(lcd_rect, ui.id().with("lcd"), Sense::click());
+        lcd_resp.context_menu(|ui| {
+            ui.radio_value(&mut self.display, Display::Vector, "Vector display");
+            ui.radio_value(&mut self.display, Display::Pixels, "Original pixels");
+        });
 
         let mut new_mouse: HashSet<Key> = HashSet::new();
         for (row_i, row) in ROWS.iter().enumerate() {
@@ -245,23 +265,84 @@ impl App {
             return;
         }
         let px = LCD_W / LCD_WIDTH as f32;
-        for (y, row) in lcd.pixels.iter().enumerate() {
-            let mut x = 0;
-            while x < LCD_WIDTH {
-                if !row[x] {
-                    x += 1;
-                    continue;
+        let pt = |x: f32, y: f32| to_screen(x0 + x * px, LCD_TOP + y * px);
+        match self.display {
+            Display::Pixels => {
+                for (y, row) in lcd.pixels.iter().enumerate() {
+                    let mut x = 0;
+                    while x < LCD_WIDTH {
+                        if !row[x] {
+                            x += 1;
+                            continue;
+                        }
+                        // Merge horizontal runs into one rectangle.
+                        let start = x;
+                        while x < LCD_WIDTH && row[x] {
+                            x += 1;
+                        }
+                        let r = Rect::from_min_max(pt(start as f32, y as f32), pt(x as f32, (y + 1) as f32));
+                        painter.rect_filled(r, CornerRadius::ZERO, LCD_INK);
+                    }
                 }
-                // Merge horizontal runs into one rectangle.
-                let start = x;
-                while x < LCD_WIDTH && row[x] {
-                    x += 1;
+            }
+            Display::Vector => {
+                let scene = self.vector_scene(&lcd);
+                for r in &scene.fills {
+                    painter.rect_filled(Rect::from_min_max(pt(r.x, r.y), pt(r.x + r.w, r.y + r.h)), CornerRadius::ZERO, LCD_INK);
                 }
-                let r = Rect::from_min_max(
-                    to_screen(x0 + start as f32 * px, LCD_TOP + y as f32 * px),
-                    to_screen(x0 + x as f32 * px, LCD_TOP + (y + 1) as f32 * px),
-                );
-                painter.rect_filled(r, CornerRadius::ZERO, LCD_INK);
+                for d in &scene.dots {
+                    let c = pt(d.x, d.y);
+                    painter.circle_filled(c, d.r * px * scale, LCD_INK);
+                }
+                let width = STROKE_WIDTH * px * scale;
+                for (lines, color) in [(&scene.dark, LCD_INK), (&scene.light, LCD_BG)] {
+                    for pl in lines.iter() {
+                        draw_polyline(painter, pl, width, color, &pt);
+                    }
+                }
+            }
+        }
+    }
+
+    /// The vectorised LCD, recomputed only when the pixels change.
+    fn vector_scene(&self, lcd: &hp48::Lcd) -> std::rc::Rc<hp48_vector::Scene> {
+        let mut cache = self.scene_cache.borrow_mut();
+        if let Some((pixels, scene)) = cache.as_ref() {
+            if pixels == &lcd.pixels {
+                return scene.clone();
+            }
+        }
+        let scene = std::rc::Rc::new(hp48_vector::vectorize(&hp48_vector::Bitmap::from_rows(&lcd.pixels)));
+        *cache = Some((lcd.pixels, scene.clone()));
+        scene
+    }
+}
+
+/// Stroke width of vectorised LCD lines, in LCD pixels.
+const STROKE_WIDTH: f32 = 0.92;
+
+fn draw_polyline(
+    painter: &egui::Painter,
+    pl: &hp48_vector::Polyline,
+    width: f32,
+    color: Color32,
+    pt: &dyn Fn(f32, f32) -> Pos2,
+) {
+    let pts: Vec<Pos2> = pl.points.iter().map(|p| pt(p[0], p[1])).collect();
+    let stroke = Stroke::new(width, color);
+    match pts.len() {
+        0 => {}
+        1 => {
+            painter.circle_filled(pts[0], width / 2.0, color);
+        }
+        _ => {
+            if pl.closed {
+                painter.add(egui::Shape::closed_line(pts, stroke));
+            } else {
+                // Round caps.
+                painter.circle_filled(pts[0], width / 2.0, color);
+                painter.circle_filled(*pts.last().unwrap(), width / 2.0, color);
+                painter.add(egui::Shape::line(pts, stroke));
             }
         }
     }
@@ -369,9 +450,11 @@ fn main() -> eframe::Result {
     let mut screenshot = None;
     let mut keys = Vec::new();
     let mut force_persist = false;
+    let mut pixels = false;
     while let Some(a) = args.next() {
         match a.as_str() {
             "--persist" => force_persist = true,
+            "--pixels" => pixels = true,
             "--rom" => rom_path = args.next().expect("--rom PATH"),
             "--screenshot" => screenshot = args.next(),
             "--keys" => {
@@ -406,7 +489,11 @@ fn main() -> eframe::Result {
         options,
         Box::new(move |cc| {
             install_fonts(&cc.egui_ctx);
-            Ok(Box::new(App::new(&rom, screenshot, keys, force_persist)))
+            let mut app = App::new(&rom, screenshot, keys, force_persist);
+            if pixels {
+                app.display = Display::Pixels;
+            }
+            Ok(Box::new(app))
         }),
     )
 }

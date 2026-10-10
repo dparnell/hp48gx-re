@@ -1,0 +1,10 @@
+[package]
+name = "hp48-vector"
+edition.workspace = true
+version.workspace = true
+license.workspace = true
+
+[dependencies]
+
+[dev-dependencies]
+png = "0.18.1"

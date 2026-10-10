@@ -7,4 +7,5 @@ license.workspace = true
 [dependencies]
 eframe = "0.36.2"
 hp48 = { version = "0.1.0", path = "../hp48" }
+hp48-vector = { version = "0.1.0", path = "../hp48-vector" }
 png = "0.18.1"
