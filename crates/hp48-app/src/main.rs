@@ -7,6 +7,7 @@
 
 mod face;
 mod persist;
+mod plot;
 
 use eframe::egui::{self, Align2, Color32, CornerRadius, FontId, Pos2, Rect, Sense, Stroke, Vec2};
 use face::{KeyCap, ShiftColor, Style, ROWS};
@@ -48,6 +49,10 @@ type SceneCache = Option<([[bool; LCD_WIDTH]; LCD_HEIGHT], std::rc::Rc<hp48_vect
 
 struct App {
     machine: Machine,
+    plot_open: bool,
+    /// Debug: show the plot in the main window (for scripted screenshots).
+    plot_only: bool,
+    plot: plot::PlotWindow,
     display: Display,
     scene_cache: std::cell::RefCell<SceneCache>,
     last: Option<Instant>,
@@ -86,6 +91,9 @@ impl App {
         }
         App {
             machine,
+            plot_open: false,
+            plot_only: false,
+            plot: plot::PlotWindow::default(),
             display: Display::Vector,
             scene_cache: std::cell::RefCell::new(None),
             persistent,
@@ -162,6 +170,11 @@ impl eframe::App for App {
     }
 
     fn ui(&mut self, ui: &mut egui::Ui, _frame: &mut eframe::Frame) {
+        if self.plot_only {
+            self.plot.refresh(&self.machine);
+            self.plot.ui(ui);
+            return;
+        }
         let avail = ui.max_rect();
         let scale = (avail.width() / FACE_W).min(avail.height() / FACE_H);
         let origin = avail.center() - Vec2::new(FACE_W, FACE_H) * scale / 2.0;
@@ -180,7 +193,12 @@ impl eframe::App for App {
         lcd_resp.context_menu(|ui| {
             ui.radio_value(&mut self.display, Display::Vector, "Vector display");
             ui.radio_value(&mut self.display, Display::Pixels, "Original pixels");
+            ui.separator();
+            ui.checkbox(&mut self.plot_open, "Plot window");
         });
+        if self.plot_open {
+            self.show_plot(ui.ctx());
+        }
 
         let mut new_mouse: HashSet<Key> = HashSet::new();
         for (row_i, row) in ROWS.iter().enumerate() {
@@ -221,6 +239,25 @@ impl eframe::App for App {
 }
 
 impl App {
+    fn show_plot(&mut self, ctx: &egui::Context) {
+        self.plot.refresh(&self.machine);
+        let builder = egui::ViewportBuilder::default()
+            .with_title("HP 48GX Plot")
+            .with_inner_size([720.0, 480.0])
+            .with_min_inner_size([240.0, 160.0]);
+        let plot = &mut self.plot;
+        let mut close = false;
+        ctx.show_viewport_immediate(egui::ViewportId::from_hash_of("hp48-plot"), builder, |ui, _class| {
+            plot.ui(ui);
+            if ui.ctx().input(|i| i.viewport().close_requested()) {
+                close = true;
+            }
+        });
+        if close {
+            self.plot_open = false;
+        }
+    }
+
     /// Scripted runs: once the key script has finished, grab a frame and exit.
     fn screenshot_step(&mut self, ctx: &egui::Context) {
         let Some((path, frames)) = &mut self.screenshot else { return };
@@ -451,10 +488,12 @@ fn main() -> eframe::Result {
     let mut keys = Vec::new();
     let mut force_persist = false;
     let mut pixels = false;
+    let mut plot_only = false;
     while let Some(a) = args.next() {
         match a.as_str() {
             "--persist" => force_persist = true,
             "--pixels" => pixels = true,
+            "--plot-only" => plot_only = true,
             "--rom" => rom_path = args.next().expect("--rom PATH"),
             "--screenshot" => screenshot = args.next(),
             "--keys" => {
@@ -493,6 +532,7 @@ fn main() -> eframe::Result {
             if pixels {
                 app.display = Display::Pixels;
             }
+            app.plot_only = plot_only;
             Ok(Box::new(app))
         }),
     )
