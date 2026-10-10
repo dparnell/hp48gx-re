@@ -290,7 +290,21 @@ fn draw_key(painter: &egui::Painter, cap: &KeyCap, key: Rect, cell: Rect, scale:
     painter.text(key.center(), Align2::CENTER_CENTER, cap.label, FontId::new(main_size * scale, bold()), text_color);
 
     let legend_y = cell.top() + cell.height() * 0.2;
-    let small = FontId::proportional(1.45 * scale);
+    // Shrink the shifted legends if both together would not fit above the key.
+    let measure = |t: &str, size: f32| {
+        if t.is_empty() {
+            0.0
+        } else {
+            painter.layout_no_wrap(t.to_string(), FontId::proportional(size), LEGEND).size().x
+        }
+    };
+    let mut size = 1.45 * scale;
+    let room = key.width();
+    let need = measure(cap.left, size) + measure(cap.right, size) + 0.6 * scale;
+    if need > room {
+        size *= room / need;
+    }
+    let small = FontId::proportional(size);
     match (cap.left.is_empty(), cap.right.is_empty()) {
         (false, false) => {
             painter.text(Pos2::new(key.left(), legend_y), Align2::LEFT_CENTER, cap.left, small.clone(), LEFT_SHIFT);
