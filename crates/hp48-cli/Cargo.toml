@@ -6,3 +6,4 @@ license.workspace = true
 
 [dependencies]
 hp48 = { path = "../hp48" }
+png = "0.18.1"

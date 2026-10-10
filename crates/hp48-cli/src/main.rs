@@ -1,6 +1,8 @@
 //! Headless runner: boot the ROM, optionally type keys, print the LCD.
 //!
-//! hp48-cli [--rom PATH] [--seconds S] [--keys "K1 K2 ..."] [--wait S] [--profile]
+//! hp48-cli [--rom PATH] [--seconds S] [--keys "K1 K2 ..."] [--wait S] [--profile] [--png OUT]
+//!
+//! Keys may be written KEY:SECONDS to hold them; "wait:S" just runs.
 
 use hp48::{Key, Machine, CPU_HZ, LCD_HEIGHT, LCD_WIDTH};
 use std::collections::HashMap;
@@ -64,12 +66,14 @@ fn main() {
     let mut keys: Vec<String> = Vec::new();
     let mut profile = false;
     let mut wait = 0.0f64;
+    let mut png_out: Option<String> = None;
     while let Some(a) = args.next() {
         match a.as_str() {
             "--rom" => rom = args.next().expect("--rom PATH"),
             "--seconds" => seconds = args.next().expect("--seconds S").parse().expect("number"),
             "--keys" => keys = args.next().expect("--keys LIST").split_whitespace().map(String::from).collect(),
             "--profile" => profile = true,
+            "--png" => png_out = args.next(),
             "--wait" => wait = args.next().expect("--wait S").parse().expect("number"),
             other => panic!("unknown argument {other}"),
         }
@@ -99,15 +103,27 @@ fn main() {
     };
     run(&mut m, total, &mut hist);
     for k in &keys {
-        let key = key_by_name(k).unwrap_or_else(|| panic!("unknown key {k}"));
+        // KEY or KEY:SECONDS (how long to hold it)
+        let (name, hold) = match k.split_once(':') {
+            Some((n, h)) => (n, h.parse::<f64>().expect("hold seconds")),
+            None => (k.as_str(), 0.1),
+        };
+        if name.eq_ignore_ascii_case("wait") {
+            run(&mut m, (hold * CPU_HZ as f64) as u64, &mut hist);
+            continue;
+        }
+        let key = key_by_name(name).unwrap_or_else(|| panic!("unknown key {name}"));
         m.key(key, true);
-        run(&mut m, CPU_HZ / 10, &mut hist);
+        run(&mut m, (hold * CPU_HZ as f64) as u64, &mut hist);
         m.key(key, false);
         run(&mut m, CPU_HZ / 5, &mut hist);
     }
     run(&mut m, (wait * CPU_HZ as f64) as u64, &mut hist);
 
     print_lcd(&m);
+    if let Some(path) = &png_out {
+        write_lcd_png(&m, path, 6);
+    }
     let c = &m.cpu;
     println!(
         "PC {:05X} {}  shutdown {}  P {}  ST {:04X}  carry {}  D0 {:05X} D1 {:05X}",
@@ -133,6 +149,30 @@ fn main() {
             println!("{pc:05X} {n:>10}  {near}");
         }
     }
+}
+
+/// Write the LCD as a PNG, each pixel `scale` x `scale` with a 1px grid.
+fn write_lcd_png(m: &Machine, path: &str, scale: usize) {
+    let lcd = m.lcd();
+    let (w, h) = (LCD_WIDTH * scale, LCD_HEIGHT * scale);
+    let mut raw = vec![0u8; w * h * 3];
+    for y in 0..h {
+        for x in 0..w {
+            let on = lcd.pixels[y / scale][x / scale];
+            let grid = x % scale == 0 || y % scale == 0;
+            let c: [u8; 3] = match (on, grid) {
+                (true, _) => [30, 36, 28],
+                (false, true) => [170, 180, 150],
+                (false, false) => [188, 198, 169],
+            };
+            raw[(y * w + x) * 3..][..3].copy_from_slice(&c);
+        }
+    }
+    let file = std::fs::File::create(path).expect("create png");
+    let mut enc = png::Encoder::new(std::io::BufWriter::new(file), w as u32, h as u32);
+    enc.set_color(png::ColorType::Rgb);
+    enc.set_depth(png::BitDepth::Eight);
+    enc.write_header().and_then(|mut wr| wr.write_image_data(&raw)).expect("write png");
 }
 
 trait NearestSymbol {

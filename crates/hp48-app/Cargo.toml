@@ -1,0 +1,10 @@
+[package]
+name = "hp48-app"
+edition.workspace = true
+version.workspace = true
+license.workspace = true
+
+[dependencies]
+eframe = "0.36.2"
+hp48 = { version = "0.1.0", path = "../hp48" }
+png = "0.18.1"
