@@ -1384,6 +1384,7 @@ checksum = "7f24254aa9a54b5c858eaee2f5bccdb46aaf0e486a595ed5fd8f86ba55232a70"
 name = "hp48"
 version = "0.1.0"
 dependencies = [
+ "hp48-rpl",
  "saturn",
 ]
 
@@ -1405,6 +1406,10 @@ dependencies = [
  "hp48-vector",
  "png",
 ]
+
+[[package]]
+name = "hp48-rpl"
+version = "0.1.0"
 
 [[package]]
 name = "hp48-vector"

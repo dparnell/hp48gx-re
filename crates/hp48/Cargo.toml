@@ -6,3 +6,6 @@ license.workspace = true
 
 [dependencies]
 saturn = { path = "../saturn" }
+
+[dev-dependencies]
+hp48-rpl = { path = "../hp48-rpl" }
