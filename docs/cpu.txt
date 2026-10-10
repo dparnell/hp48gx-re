@@ -1,0 +1,1969 @@
+ $DRAW chapter.hrd$
+
+				   CHAPTER 5
+				    1LT8 CPU
+
+
+
+
+       5.1  INTRODUCTION
+
+       The 1LT8 CPU is identical to the SACAJAWEA/LEWIS CPU  which  is	a
+       leveraged  redesign  of	the  1LK7  CPU.  This CPU provides faster
+       instruction execution times but still maintains full compatibility
+       with the 1LF2/1LK7 and the HP-71B bus architecture.
+
+       The CPU internal and external data paths are 4 bits wide.   Memory
+       is  accessed in 4-bit quantities (referred to as nibbles) using 20
+       bit addresses yielding a physical address  space  of  512K  bytes.
+       The  CPU  internal word size is 64-bits.  Operations are performed
+       on data strings up to 16 nibbles in length.
+
+       Section 5.6 is a summary of differences between the 1LT8  CPU  and
+       the 1LK7 for those already familiar with the 1LK7.
+
+
+
+       5.2  ARCHITECTURE
+
+
+       5.2.1  CPU Overview
+
+       The 1LT8 CPU is a proprietary CPU optimized for high-accuracy  BCD
+       math and low power consumption.
+
+       Operations performed by the 4-bit ALU include ADD,  SUBTRACT,  AND
+       OR,  and ones, twos, nines and tens complements.  A shifter allows
+       bit-shift, nibble-shift and nibble rotate.  The CPU internal  word
+       size  is  64-bits  (16  nibbles).   Selected  portions  of  a word
+       (fields) may be operated on while leaving  the  remainder  of  the
+       word  unchanged.   Operations on fields longer than one nibble are
+       performed  serially  with  each	successive  nibble  requiring  an
+       additional  CPU	cycle.	 For  information  regarding the full CPU
+       instruction set see Section 5.3 INSTRUCTION SET.
+
+
+
+
+
+
+
+
+
+
+       Page 14		      	    A-1LT8-0601-1
+
+
+
+
+
+
+
+
+
+
+
+
+       5.2.2  Registers
+
+       Figure 5.1 shows the programmers model of the CPU.  A  description
+       of the register groups and their functions follows.
+
+
+
+
+
+			 Figure 5.1.  CPU Register Set
+       $DRAW ch5_regs.hrd$
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+       A-1LT8-0601-1	      		  Page 15
+
+
+
+
+
+
+
+
+
+
+
+
+       There are 198 nibbles of CPU resident  RAM  organized  to  provide
+       four  64-bit  working  registers  (A,B,C,D),  five  64-bit scratch
+       registers (R0,R1,R2,R3,R4),  two  20-bit  data  pointer	registers
+       (D0,D1),  an  eight  level hardware return stack (RSTK) for 20-bit
+       addresses, and 16 bits of program status.
+
+       There are two types of registers on the CPU; those used	for  data
+       and  arithmetic	operations, and those used for program and system
+       control.
+
+
+	      ARITHMETIC/DATA REGISTERS:
+
+	      A      64-bits   Working register - I/O register
+	      B      64-bits   Working register
+	      C      64-bits   Working register - I/O register
+	      D      64-bits   Working register
+
+	      R0     64-bits   Scratch register
+	      R1     64-bits   Scratch register
+	      R2     64-bits   Scratch register
+	      R3     64-bits   Scratch register
+	      R4     64-bits   Scratch register
+
+	      CRY     1-bit    Flag   adjusted	 by    arithmetic
+			       operations and tests
+
+	      CONTROL REGISTERS:
+
+	      P       4-bits   Pointer register
+	      D0     20-bits   Address pointer register
+	      D1     20-bits   Address pointer register
+
+	      PC     20-bits   Program Counter
+	      RSTK   20-bits   8-level subroutine stack
+
+	      ST     16-bits   Program status flags
+	      HS      4-bits   Hardware status flags
+
+	      OUT    12-bits   Keyscan/write only Output Register
+	      IN     16-bits   Keyscan/read only Input Register
+
+
+       For the 1LT8 chip, only 10 bits of the OUT register and 10 bits of
+       the  IN register are used (including IR[15] (ON) and OR11 (BEEP)).
+       When the unused bits of the OUT register are written  to,  nothing
+       will happen external to the chip.
+
+       All arithmetic  operations  are	performed  using  the  4  working
+       registers:   A,	 B,  C,  and  D.  Data	transfers  are	performed
+       principally with the A and C registers.	The scratch registers are
+
+
+       Page 16		      	    A-1LT8-0601-1
+
+
+
+
+
+
+
+
+
+
+
+
+       used to temporarily hold the contents of the working registers.
+
+
+       5.2.2.1	Field Selection
+
+       Subfields of the working registers may be manipulated using  field
+       selection.   The  possible  field selections range from the entire
+       register to any single nibble of the register.  Certain	subfields
+       are  designed  for use in BCD calculations and others are designed
+       for use in general data manipulation and data access.  Nibble 0 is
+       considered to be least significant by the ALU.
+
+
+			   FIELD SELECTION FIELDS
+			   ----------------------
+
+		  P	nibble pointed to by P register
+		 WP	nibble 0 through nibble pointed at by P
+		 XS	nibble 2     - Exponent sign
+		  X	nibbles 0-2  - Exponent and exponent sign
+		  S	nibble 15    - Mantissa sign
+		  M	nibbles 3-14 - Mantissa
+		  B	nibbles 0-1  - Exponent or byte field
+		  W	nibbles 0-15 - Whole word
+		  A	nibbles 0-4  - Address field
+
+			      Nibbles  of  Register
+
+		 ------------------------------------------------
+		 15:14:13:12:11:10: 9: 8: 7: 6: 5: 4: 3: 2: 1: 0
+		 ------------------------------------------------
+		 |S|				       |XS|<-B->|
+						 |<---- A ----->|
+		   |<-------------- M ---------------->|<-- X ->|
+		 |<--------------------- W -------------------->|
+
+
+
+       5.2.2.2	Carry Bit
+
+       The Carry bit is adjusted when an arithmetic operation or test  is
+       performed.    During   a  calculation,  such  as  incrementing  or
+       decrementing a register, it is set if the calculation overflows or
+       borrows	and  cleared  if  it does not.	During a arithmetic test,
+       such as comparing two registers for equality, it  is  set  if  the
+       test is true and cleared if it is not.
+
+
+       5.2.2.3	Pointer Registers
+
+       The CPU uses D0 and D1 to provide the  source  addresses  for  all
+
+
+       A-1LT8-0601-1	      		  Page 17
+
+
+
+
+
+
+
+
+
+
+
+
+       external  data  transfers.   During  execution  of a data transfer
+       instruction the local DPs of all peripheral chips are loaded  with
+       either  D0  or  D1.  The data access will then occur utilizing the
+       auto-increment  feature	of  the  local	DPs.   See   SYSTEM   BUS
+       DESCRIPTION.   It  should  be  noted  that  D0  and  D1 are merely
+       registers and do not increment during data transfer.
+
+       The Pointer register is used in Field  Selection  operations  with
+       the working registers.
+
+
+       5.2.2.4	Program Counter and Return Stack
+
+       The CPU resident PC is a true counter that increments in real time
+       during  instruction  fetches.  It can be accessed only using GOTO,
+       GOSUB and RETURN instructions.	Relative  GOTOs  and  GOSUBs  are
+       handled using the ALU to modify the PC.	Absolute GOTOs and GOSUBs
+       are handled using a  parallel  load  feature.   All  non-increment
+       modifications  to  the PC are eventually followed by a load to the
+       local PCs on all peripheral chips.
+
+       The subroutine return stack consists  of  eight	20-bit	registers
+       implemented  as	a  LIFO.  Subroutine call and return instructions
+       automatically push and pop addresses on this stack.   If  a  ninth
+       address	is pushed onto the stack, the oldest address will be lost
+       and will be replaced by zero if it is eventually popped	from  the
+       stack.  This feature insures that repeated returns will eventually
+       end at address zero.  The return stack  can  also  be  manipulated
+       through use of the push (RSTK=C) and pop (C=RSTK) instructions.
+
+
+       5.2.2.5	Status Bits
+
+       Additional program control  is  provided  by  the  16-bit  Program
+       Status  register  and  the  4-bit  Hardware Status register.  Each
+       Program status bit can be individually  set,  reset,  and  tested.
+       The  upper four bits may only be accessed individually.	The lower
+       12 Program status bits may be collectively manipulated as  the  ST
+       register.
+
+       The four Hardware  Status  bits	are  set  (but	not  cleared)  by
+       hardware  related events, and must therefore be cleared beforehand
+       in order to detect a particular occurrence.  They are individually
+       accessible  by  name.   The Module Pulled bit (MP) is set when the
+       NINTX line is pulled low (regardless of whether	an  interrupt  is
+       actually  executed).   The  Sticky Bit (SB) is set when a non-zero
+       bit or digit shifts off the right end of a working register as the
+       result  of  a  shift  right  instruction, or the least significant
+       nibble of a working register is non-zero prior to  a  shift  right
+       circular  instruction.	The  Service Request (SR) bit is set as a
+       result of a response to	the  SREQ?   instruction.   The  external
+
+
+       Page 18		      	    A-1LT8-0601-1
+
+
+
+
+
+
+
+
+
+
+
+
+       Module  Missing	bit  (XM)  is  set  by execution of a "00" opcode
+       (RTNSXM instruction).  Since the BUS[0:3] is precharged	low,  the
+       CPU  will  receive a RTNSXM instruction if no device responds to a
+       PC READ bus command.
+
+
+
+
+	HARDWARE STATUS:    4 bits
+
+	     Bit  Symbol   Name
+	     ---  ------   -----------------------
+	      3      MP    Module Pulled
+	      2      SR    Service Request
+	      1      SB    Sticky Bit
+	      0      XM    External Module Missing
+
+
+       5.2.3  Loading Data from Memory
+
+       When data is read from an external device into a register, the CPU
+       places the lowest addressed nibble in the least significant nibble
+       of the selected field in the register.  For example, if	the  data
+       shown  below  in  memory  is  read  into  the C register using the
+       C=DAT1	4 instruction, the data in the register will be  arranged
+       as shown:
+
+
+	   Memory
+	  Location  Value		C   Register
+	  --------  -----	+---------------------------+
+	    1000      0	|   |	    | 3 | 2 | 1 | 0 |
+	    1001      1	+---------------------------+
+	    1002      2	  15  . . .   3   2   1   0
+	    1003      3
+	    .
+	    .
+	    .
+
+
+       This principle also  applies  to  loading  constants  into  a  CPU
+       register such as C, D0,or D1, since the CPU must read the constant
+       from  the  instruction  opcode  in  memory.   For   example,   the
+       instruction  LCHEX  3210  produces  the	opcode	330123	and the C
+       register is loaded as shown above (assuming P=0).
+
+
+
+
+
+
+
+
+       A-1LT8-0601-1	      		  Page 19
+
+
+
+
+
+
+
+
+
+
+
+
+       5.2.4  Storing Data in Memory
+
+       When data is written from a register to an  external  device,  the
+       CPU  places  the  least	significant nibble of the register in the
+       first addressed nibble of the memory location.	For  example,  if
+       the  data shown above in the C register is written to memory using
+       the DAT1=C   4 instruction, the data will be written to memory  as
+       shown.
+
+
+       5.2.5  HEX/DEC Modes
+
+       All arithmetic operations, except  for  those  listed  below,  are
+       performed  according  to the HEX or DEC mode setting.  The mode is
+       set  using  the	SETHEX	or  SETDEC  instruction.   The	following
+       operations are performed in HEX regardless of the mode setting.
+
+		       C+P+1
+		       D0=D0+ n        D0=D0- n
+		       D1=D1+ n        D1=D1- n
+		       P=P+1	       P=P-1
+		       A=A+CON fs,N    A=A-CON fs,N
+		       B=B+CON fs,N    B=B-CON fs,N
+		       C=C+CON fs,N    C=C-CON fs,N
+		       D=D+CON fs,N    D=D-CON fs,N
+
+
+       5.3  INSTRUCTION SET
+
+
+       5.3.1  General Information
+
+       Many CPU instructions modify only a selected field of a	register.
+       Nibbles	 not  explicitly  changed  by  an  instruction	are  left
+       unchanged.
+
+       The offset addresses for the relative jump and gosub  instructions
+       are  in	two's  compliment  form with the least significant nibble
+       first.  Offsets for jump instructions are relative  to  the  least
+       significant  nibble of the offset.  Offsets for gosub instructions
+       are relative to the first nibble of the next instruction.
+
+       Conditional instructions have two cycle counts listed.  The second
+       (and smaller count) is if the condition (test) is false.
+
+
+       5.3.1.1	Glossary of Symbols
+
+	   DATn  Memory location addressed by either D0 or D1.
+
+
+
+
+       Page 20		      	    A-1LT8-0601-1
+
+
+
+
+
+
+
+
+
+
+
+
+	   fs	 Field selection specifier.
+
+	   D	 Number of nibbles operated upon.  Used in calculation of
+		 cycle counts.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+       A-1LT8-0601-1	      		  Page 21
+
+
+
+
+
+
+
+
+
+
+
+
+       5.3.2  Instruction Description
+
+
+
+       MNEMON	CODE CYC FLG DESCRIPTION
+       -------- ---- --- --- ---------------------------------------------
+       RTNSXM	 00   9  HS0 Return and set HS0
+
+       RTN	     01   9  --- Return from subroutine
+
+       RTNSC	 02   9  CRY Return and set CRY
+
+       RTNCC	 03   9  CRY Return and clear CRY
+
+       SETHEX	 04   3  --- Set ALU to HEX mode
+
+       SETDEC	 05   3  --- Set ALU to BCD mode
+
+       RSTK=C	 06   8  --- Push C(A) onto stack
+
+       C=RSTK	 07   8  --- Pop stack to C(A)
+
+       CLRST	 08   5  ST  Clear ST[0:11]
+
+       C=ST	     09   5  --- Load C(X) with ST[0:11]
+
+       ST=C	     0A   5  ST  Load ST[0:11] with C(X)
+
+       CSTEX	 0B   5  ST  Exchange ST[0:11] with C(X)
+
+       P=P+1	 0C   3  CRY Hexadecimal increment of P. F wraps to 0.
+
+       P=P-1	 0D   3  CRY Hexadecimal decrement of P. 0 wraps to F.
+
+       r=r&s fs 0Eft 4+D --- Logical AND
+       r=r!s fs 0Eft 4+D --- Logical OR
+
+			f:3210	 fs   t: HEX	t: HEX
+			------	 --   -------	-------
+			  X000	 P    0 A=B&A	8 A=B!A
+			  X001	 WP   1 B=C&B	9 B=C!B
+			  X010	 XS   2 C=A&C	A C=A!C
+			  X011	 X    3 D=C&D	B D=C!D
+			  X100	 S    4 B=B&A	C B=B!A
+			  X101	 M    5 C=C&B	D C=C!B
+			  X110	 B    6 A=A&C	E A=A!C
+			  0111	 W    7 C=C&D	F C=C!D
+			  1111	 A
+
+
+
+
+
+       Page 22		      	    A-1LT8-0601-1
+
+
+
+
+
+
+
+
+
+
+
+
+       MNEMON CODE CYC FLG DESCRIPTION
+       ------ ---- --- --- ---------------------------------------------
+       RTI     0F   9  --- Return from interrupt  and  enable  interrupt
+			   handling.
+
+       ss=r   10s  19  --- Copy A or C to scratch register.
+
+       r=ss   11s  19  --- Copy scratch register to A or C.
+
+       rssEX  12s  19  --- Exchange A or C with scratch register.
+
+			  s:3210
+			  ------
+			    X000   scratch register R0
+			    X001   scratch register R1
+			    X010   scratch register R2
+			    X011   scratch register R3
+			    X100   scratch register R4
+			    X101   scratch register R1
+			    X110   scratch register R2
+			    X111   scratch register R3
+			    0XXX   working register A
+			    1XXX   working register C
+
+       MNEMON CODE CYC FLG DESCRIPTION
+       ------ ---- --- --- ---------------------------------------------
+       d=r    13t   8  --- Copy A field of A or C to D0 or D1
+
+       d=rS   13t   7  --- Copy nibbles 0-3 of A or C to nib. 0-3 of  D0
+			   or D1
+
+       rdEX   13t   8  --- Exchange A field of A or C r<-dwith D0 or D1
+
+       rdXS   13t   7  --- Exchange nibbles 0-3 of A r<-d or C with nib.
+			   0-3 of D0 or D1.
+
+			t: HEX		 t: HEX
+			------		 ------
+			     0	 D0=A	      8   D0=AS
+			     1	 D1=A	      9   D1=AS
+			     2	 AD0EX	      A   AD0XS
+			     3	 AD1EX	      B   AD1XS
+			     4	 D0=C	      C   D0=CS
+			     5	 D1=C	      D   D1=CS
+			     6	 CD0EX	      E   CD0XS
+			     7	 CD1EX	      F   CD1XS
+
+
+
+
+
+
+
+       A-1LT8-0601-1	      		  Page 23
+
+
+
+
+
+
+
+
+
+
+
+
+       MNEMON	CODE CYC FLG DESCRIPTION
+       -------- ---- --- --- ---------------------------------------------
+       DATn=r A 14t  17  --- Write A field of A or C to location addressed
+			     by D0 or D1.
+
+       DATn=r B 14t  14  --- Write B field of A or C to location addressed
+			     by D0 or D1.
+
+       r=DATn A 14t  18  --- Read  A  field  of  A  or	C  from   location
+			     addressed by D0 or D1.
+
+       r=DATn B 14t  15  --- Read  B  field  of  A  or	C  from   location
+			     addressed by D0 or D1.
+
+		     t: HEX		 t: HEX
+		     ------		 ------
+			  0   DAT0=A A	      8   DAT0=A B
+			  1   DAT1=A A	      9   DAT1=A B
+			  2   A=DAT0 A	      A   A=DAT0 B
+			  3   A=DAT1 A	      B   A=DAT1 B
+			  4   DAT0=C A	      C   DAT0=C B
+			  5   DAT1=C A	      D   DAT1=C B
+			  6   C=DAT0 A	      E   C=DAT0 B
+			  7   C=DAT1 A	      F   C=DAT1 B
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+       Page 24		      	    A-1LT8-0601-1
+
+
+
+
+
+
+
+
+
+
+
+
+       MNEMON	   CODE   CYC  FLG DESCRIPTION
+       --------- -------- ---- --- ---------------------------------------------
+       DATn=r fs   15tn   16+D --- Write selected field of A or  C  to	location
+				   addressed by D0 or D1.
+
+       DATn=r N  15t(N-1) 16+N --- Write nib. 0-(N-1) of  A  or  C  to	location
+				   addressed by D0 or D1.
+
+       r=DATn fs   15tn   17+D --- Read selected field of A or C  from	location
+				   addressed by D0 or D1.
+
+       r=DATn N  15t(N-1) 17+N --- Read nib. 0-(N-1)  of  A  or  C  to	location
+				   addressed by D0 or D1.
+
+			t: 3210	   n: 3210
+			-------	   -------
+			   X000   DAT0=A      X000   P
+			   X001   DAT1=A      X001   WP
+			   X010   A=DAT0      X010   XS
+			   X011   A=DAT1      X011   X
+			   X100   DAT0=C      X100   S
+			   X101   DAT1=C      X101   M
+			   X110   C=DAT0      X110   B
+			   X111   C=DAT1      X111   W
+
+			   0XXX   fs specified by n
+			   1XXX   nibbles 0-N
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+       A-1LT8-0601-1	      		  Page 25
+
+
+
+
+
+
+
+
+
+
+
+
+       MNEMON	    CODE   CYC FLG DESCRIPTION
+       ----------- ------- --- --- ---------------------------------------------
+       D0=D0+ n      16n    7  CRY Hex increment of D0 by n+1. F wraps to 0.
+
+       D1=D1+ n      17n    7  CRY Hex increment of D1 by n+1. F wraps to 0.
+
+       D0=D0- n      18n    7  CRY Hex decrement of D0 by n+1. 0 wraps to F.
+
+       D0= nn	    19nn    4  --- Load B field of D0 with nn.
+
+       D0= nnnn    1Annnn   6  --- Load nib. 0-3 of D0 with nnnn.
+
+       D0= nnnnn   1Bnnnnn  7  --- Load D0 with nnnnn.
+
+       D1=D1- n      1Cn    7  CRY Hex decrement of D1 by n+1. 0 wraps to F.
+
+       D1= nn	    1Dnn    4  --- Load B field of D1 with nn.
+
+       D1= nnnn    1Ennnn   6  --- Load nib. 0-3 of D1 with nnnn.
+
+       D1= nnnnn   1Fnnnnn  7  --- Load D1 with nnnnn.
+
+       P= n	     2n     2  --- Load pointer with n.
+
+       LC nn..n    3tnn..n 3+t --- Load C with t+1 nibbles nn...n  beginning  at
+				   the	 pointer   position   with  wrap  around
+				   capability. This mnemonic is not supported by
+				   most assemblers.
+
+       LCHEX n.n    Same.  3+t --- These  mnemonics  are   supported   by   most
+				   assemblers
+
+       LC(i) nnnnn  Same.  3+t --- Same.
+
+       LCASC 'c.c'  Same.  3+t --- Same.
+
+       RTNC	     400   10  --- Return if CRY is set.
+			    3
+
+       GOC	     4aa   10  --- Jump relative if CRY is set.
+			    3
+
+       RTNNC	     500   10  --- Return if CRY is clear.
+			    3
+
+       GONC	     5aa   10  --- Jump relative if CRY is clear.
+			    3
+
+
+
+
+
+
+       Page 26		      	    A-1LT8-0601-1
+
+
+
+
+
+
+
+
+
+
+
+
+       MNEMON	    CODE   CYC FLG DESCRIPTION
+       ----------- ------- --- --- ---------------------------------------------
+       GOTO	    6aaa   11  --- Relative jump.
+
+       GOSUB	    7aaa   12  --- Relative gosub.
+
+       OUT=CS	     800    4  --- Load nib. 0 of OR with nib. 0 of C.
+
+       OUT=C	     801    6  --- Load OR with X field of C.
+
+       A=IN	     802    7  --- Load nib. 0-3 of A from IR.
+
+       C=IN	     803    7  --- Load nib. 0-3 of C from IR.
+
+       UNCNFG	     804   12  --- Unconfigure a configured device addressed  by
+				   A field of C.
+
+       CONFIG	     805   11  --- Configure an  unconfigured  device  that  has
+				   DAISYIN=1 at the address in A field of C.
+
+       C=ID	     806   11  --- Load the A field of	C  with  the  ID  of  an
+				   unconfigured device that has DAISYIN=1.
+
+       SHUTDN	     807    6  --- CPU issues the NOP bus command  to  eliminate
+				   all	memory	ops then issues the SHUTDOWN bus
+				   command and enters the low power state.
+
+       INTON	    8080    5  --- Unmask maskable IR interrupts.
+
+       RSI	    80810   6  --- Causes any IR line high to  be  considered  a
+				   new	interrupt  regardless  of whether all IR
+				   lines have returned low.
+
+       LAHEX n.n   8082tn. 6+t --- Load A with t+1 nibbles nn...n  beginning  at
+				   the	 pointer   position   with  wrap  around
+				   capability.
+
+       LA(i) nnnnn  Same.  6+t --- Same.
+
+       LAASC 'c.c'  Same.  6+t --- Same.
+
+       BUSCB	    8083    7  --- Issue the BUSCB bus command.
+
+
+
+
+
+
+
+
+
+
+
+       A-1LT8-0601-1	      		  Page 27
+
+
+
+
+
+
+
+
+
+
+
+
+       MNEMON	  CODE	 CYC FLG DESCRIPTION
+       --------- ------- --- --- ---------------------------------------------
+       ABIT=0 n   8084n   6  --- Clear specified bit (0 to F) of A register.
+
+       ABIT=1 n   8085n   6  --- Set specified bit (0 to F) of A register.
+
+       ?ABIT=0 n 8086n00 16  CRY Return and set CRY if specified bit (0 to  F)
+       RTNYES		  9	 of A register is 0.
+
+       ?ABIT=0 n 8086naa 16  CRY Jump relative and set CRY if specified bit (0
+       GOYES		  9	 to F) of A register is 0.
+
+       ?ABIT=1 n 8087n00 16  CRY Return and set CRY if specified bit (0 to  F)
+       RTNYES		  9	 of A register is 1.
+
+       ?ABIT=1 n 8087naa 16  CRY Jump relative and set CRY if specified bit (0
+       GOYES		  9	 to F) of A register is 1.
+
+       CBIT=0 n   8088n   6  --- Clear specified bit (0 to F) of C register.
+
+       CBIT=1 n   8089n   6  --- Set specified bit (0 to F) of C register.
+
+       ?CBIT=0 n 808An00 16  CRY Return and set CRY if specified bit (0 to  F)
+       RTNYES		  9	 of C register is 0.
+
+       ?CBIT=0 n 808Anaa 16  CRY Jump relative and set CRY if specified bit (0
+       GOYES		  9	 to F) of C register is 0.
+
+       ?CBIT=1 n 808Bn00 16  CRY Return and set CRY if specified bit (0 to  F)
+       RTNYES		  9	 of C register is 1.
+
+       ?CBIT=1 n 808Bnaa 16  CRY Jump relative and set CRY if specified bit (0
+       GOYES		  9	 to F) of C register is 1.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+       Page 28		      	    A-1LT8-0601-1
+
+
+
+
+
+
+
+
+
+
+
+
+       MNEMON CODE CYC FLG DESCRIPTION
+       ------ ---- --- --- ---------------------------------------------
+       PC=(A) 808C 23  --- Indirect Jump. Data addressed by the A  field
+			   of  the  A  register  is placed in the PC and
+			   execution resumes there.
+
+       BUSCD  808D  7  --- Issue the BUSCD bus command.
+
+       PC=(C) 808E 23  --- Indirect Jump. Data addressed by the A  field
+			   of  the  C  register  is placed in the PC and
+			   execution resumes there.
+
+       INTOFF 808F  5  --- Mask the maskable IR interrupts.
+
+       C+P+1  809   8  CRY Hex increment of A field of C by  P+1.  Wraps
+			   to 0.
+
+       RESET  80A   6  --- Issue  the  RESET  bus  command.  All   chips
+			   perform a local reset.
+
+       BUSCC  80B   6  --- Issue  the  BUSCC  bus  command.  The  device
+			   addressed  by  its  DP performs a specialized
+			   function.
+
+       C=P n  80Cn  6  --- Load nibble n of C with P.
+
+       P=C n  80Dn  6  --- Load P with nibble n of C.
+
+       SREQ?  80E   7  HS2 Issue POLL bus command and latch  system  bus
+			   into nib 0 of C. HS2 is set if this nibble is
+			   not zero.
+
+       CPEX n 80Fn  6  --- Exchange the pointer with nibble n of C.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+       A-1LT8-0601-1	      		  Page 29
+
+
+
+
+
+
+
+
+
+
+
+
+       MNEMON CODE CYC FLG DESCRIPTION
+       ------ ---- --- --- ---------------------------------------------
+       rSLC   81s  21  --- Left  circular  nibble  shift  of  entire  16
+			   nibble register.
+
+       rSRC   81s  21  HS1 Right circular  nibble  shift  of  entire  16
+			   nibble  register. Sticky bit is set if a non-
+			   zero nibble is shifted off.
+
+       rSRB   81s  20  HS1 Right bit shift of entire  64  bit  register.
+			   Sticky  bit	is  set  if  a	non-zero  bit is
+			   shifted off.
+
+			      s:3210
+			      ------
+				XX00   A register.
+				XX01   B register.
+				XX10   C register.
+				XX11   D register.
+				00XX   rSLC
+				01XX   rSRC
+				11XX   rSRB
+
+
+
+       MNEMON	     CODE  CYC FLG DESCRIPTION
+       ------------ ------ --- --- ---------------------------------------------
+       r=r+CON fs,n 818frn 5+D CRY Hex increment of register r by n+1.
+
+       r=r-CON fs,n 818frn 5+D CRY Hex decrement of register r by n+1.
+
+
+
+		      f: 3210	    r: 3210
+		      -------	    -------
+				       XX00   A register
+			 X011	X      XX01   B register
+			 X101	M      XX10   C register
+			 X110	B      XX11   D register
+			 0111	W      0XXX   addition
+			 1111	A      1XXX   subtraction
+
+
+
+
+
+
+
+
+
+
+
+
+       Page 30		      	    A-1LT8-0601-1
+
+
+
+
+
+
+
+
+
+
+
+
+       MNEMON	 CODE  CYC FLG DESCRIPTION
+       --------- ----- --- --- ---------------------------------------------
+       rSRB.F fs 819fr 6+D HS1 Right bit shift of  register  field.   Sticky
+			       bit is set if a non-zero bit is shifted off.
+
+
+
+		      f: 3210	     r: 3210
+		      -------	     -------
+			 X000	P	XX00   A register
+			 X001	WP	XX01   B register
+			 X010	XS	XX10   C register
+			 X011	X	XX11   D register
+			 X100	S
+			 X101	M
+			 X110	B
+			 0111	W
+			 1111	A
+
+
+
+       MNEMON	   CODE  CYC FLG DESCRIPTION
+       ---------- ------ --- --- ---------------------------------------------
+       ss=r.F fs  81Afrn 6+D --- Copy selected field of  A  or	C  to  scratch
+				 register.
+
+       r=ss.F fs  81Afrn 6+D --- Copy selected field of scratch register to  A
+				 or C.
+
+       rssEX.F fs 81Afrn 6+D --- Exchange  selected  field  of	A  or  C  with
+				 scratch register.
+
+		  f:3210	r: 3210	  n: HEX
+		  ------	-------	  ------
+		    X000   P	   0000   ss=r	    X000   R0
+		    X001   WP	   0001   r=ss	    X001   R1
+		    X010   XS	   0010   rssEX     X010   R2
+		    X011   X			    X011   R3
+		    X100   S			    X100   R4
+		    X101   M			    X101   R1
+		    X110   B			    X110   R2
+		    0111   W			    X111   R3
+		    1111   A			    0XXX   A
+						    1XXX   C
+
+
+
+
+
+
+
+
+
+       A-1LT8-0601-1	      		  Page 31
+
+
+
+
+
+
+
+
+
+
+
+
+       MNEMON	CODE CYC  FLG  DESCRIPTION
+       -------- ---- --- ----- ---------------------------------------------
+       PC=A	81B2 16   ---  Absolute jump to the address contained in the
+			       A field of the A register.
+
+       PC=C	81B3 16   ---  Absolute jump to the address contained in the
+			       A field of the C register.
+
+       A=PC	81B4  9   ---  Move the address of the next  instruction  to
+			       the A field of the A register.
+
+       C=PC	81B5  9   ---  Move the address of the next  instruction  to
+			       the A field of the C register.
+
+       APCEX	81B6 16   ---  Exchange the A field of A and the current  PC
+			       (pointing to the next instruction).
+
+       CPCEX	81B7 16   ---  Exchange the A field of C and the current  PC
+			       (pointing to the next instruction).
+
+       CLRHSN n 82n   3   HSn  Clear the hardware status flags specified  by
+			       the bitmap of n.
+       XM=0	821   3   HS0
+       SB=0	822   3   HS1
+       SR=0	824   3   HS2
+       MP=0	828   3   HS3
+       CLRHST	82F   3  HS0-3
+
+	      n:3210
+	      ------
+		XXX1	Missing module; set by RTNSXM
+		XX1X	Sticky bit; set by rotate and shift right
+		X1XX	Service request response
+		1XXX	Module interrupt line (*INT) pulled low
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+       Page 32		      	    A-1LT8-0601-1
+
+
+
+
+
+
+
+
+
+
+
+
+       MNEMON  CODE  CYC FLG DESCRIPTION
+       ------- ----- --- --- ---------------------------------------------
+       ?HS=0 n 83n00 13  CRY Return and set CRY  if  all  hardware  status
+       RTNYES	      6      bits specified by the bit-map of n are 0.
+
+       ?HS=0 n 83naa 13  CRY Relative jump and set  CRY  if  all  hardware
+       GOYES	      6      status bits specified by the bit-map of n are
+			     0.
+
+       ?XM=0   83100 13  CRY Same.
+       RTNYES	      6
+
+       ?XM=0   831aa 13  CRY
+       GOYES	      6
+
+       ?SB=0   83200 13  CRY
+       RTNYES	      6
+
+       ?SB=0   832aa 13  CRY Same.
+       GOYES	      6
+
+       ?SR=0   83400 13  CRY Same.
+       RTNYES	      6
+
+       ?SR=0   834aa 13  CRY Same.
+       GOYES	      6
+
+       ?MP=0   83800 13  CRY Same.
+       RTNYES	      6
+
+       ?MP=0   838aa 13  CRY Same.
+       GOYES	      6
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+       A-1LT8-0601-1	      		  Page 33
+
+
+
+
+
+
+
+
+
+
+
+
+       MNEMON  CODE  CYC FLG DESCRIPTION
+       ------- ----- --- --- ---------------------------------------------
+       ST=0 n	84n   4  STn Clear program status bit n.
+
+       ST=1 n	85n   4  STn Set program status bit n.
+
+       ?ST=0 n 86n00 14  CRY Return and set CRY if program status bit n is
+       RTNYES	      7      0.
+
+       ?ST=0 n 86naa 14  CRY Jump relative and set CRY if  program  status
+       GOYES	      7      bit n is 0.
+
+       ?ST=1 n 87n00 14  CRY Return and set CRY if program status bit n is
+       RTNYES	      7      1.
+
+       ?ST=1 n 87naa 14  CRY Jump relative and set CRY if  program  status
+       GOYES	      7      bit n is 1.
+
+       ?P# n   88n00 13  CRY Return and set CRY  if  the  pointer  is  not
+       RTNYES	      6      equal to n.
+
+       ?P# n   88naa 13  CRY Jump relative and set CRY if the  pointer	is
+       GOYES	      6      not equal to n.
+
+       ?P= n   89n00 13  CRY Return and set CRY if the pointer is equal to
+       RTNYES	      6      n.
+
+       ?P= n   89naa 13  CRY Jump relative and set CRY if the  pointer	is
+       GOYES	      6      equal to n.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+       Page 34		      	    A-1LT8-0601-1
+
+
+
+
+
+
+
+
+
+
+
+
+       MNEMON CODE  CYC FLG DESCRIPTION
+       ------ ----- --- --- ---------------------------------------------
+       ?XXX A 8At00 18	CRY Return and set CRY if test selected in  GROUP
+       RTNYES	    11	    A below is true for A field.
+
+       ?XXX A 8Ataa 18	CRY Jump relative and set CRY if test in GROUP	A
+       GOYES	    11	    below is true for A field.
+
+       ?XXX A 8Bt00 18	CRY Return and set CRY if test selected in  GROUP
+       RTNYES	    11	    B below is true for A field.
+
+       ?XXX A 8Btaa 18	CRY Jump relative and set CRY if test in GROUP	B
+       GOYES	    11	    below is true for A field.
+
+			 t:3210    GROUP A     GROUP B
+			 ------    --------    --------
+			  0000	   ?A=B        ?A>B
+			  0001	   ?B=C        ?B>C
+			  0010	   ?C=A        ?C>A
+			  0011	   ?D=C        ?D>C
+			  0100	   ?A#B        ?A<B
+			  0101	   ?B#C        ?B<C
+			  0110	   ?C#A        ?C<A
+			  0111	   ?D#C        ?D<C
+			  1000	   ?A=0        ?A>=B
+			  1001	   ?B=0        ?B>=C
+			  1010	   ?C=0        ?C>=A
+			  1011	   ?D=0        ?D>=C
+			  1100	   ?A#0        ?A<=B
+			  1101	   ?B#0        ?B<=C
+			  1110	   ?C#0        ?C<=A
+			  1111	   ?D#0        ?D<=C
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+       A-1LT8-0601-1	      		  Page 35
+
+
+
+
+
+
+
+
+
+
+
+
+       MNEMON	CODE   CYC  FLG DESCRIPTION
+       ------- ------- ---- --- ---------------------------------------------
+       GOLONG  8Caaaa	14  --- Long relative jump.
+				[LOAD PC]
+				BUS,PC<-0+PC+CY0
+
+       GOVLNG  8Daaaaa	14  --- Absolute jump.
+				[LOAD PC]
+				BUS,PC<-0+PC+CY0
+
+       GOSUBL  8Eaaaa	14  --- Long relative gosub.
+				[LOAD PC]
+				BUS,PC<-RSTK+PC+CY0
+				RSTK<-PC
+
+       GOSBVL  8Faaaaa	15  --- Absolute gosub.
+				[LOAD PC]
+				BUS,PC<-RSTK+0+CY0
+				RSTK<-PC
+
+       ?XXX fs	9ft00  13+D CRY Return and set CRY if the  selected  test  is
+       RTNYES	       6+D	true on the selected field.
+
+       ?XXX fs	9ftaa  13+D CRY Jump relative and set  CRY  if	the  selected
+       GOYES	       6+D	test is true on the field selected.
+
+	   f:3210
+	   ------
+	     X000    P
+	     X001    WP
+	     X010    XS
+	     X011    X
+	     X100    S
+	     X101    M
+	     X110    B
+	     X111    W
+	     0XXX    t selects test from GROUP A (see 8At00 opcode)
+	     1XXX    t selects test from GROUP B (see 8Bt00 opcode)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+       Page 36		      	    A-1LT8-0601-1
+
+
+
+
+
+
+
+
+
+
+
+
+       MNEMON	CODE CYC FLG DESCRIPTION
+       -------- ---- --- --- ---------------------------------------------
+       r=r+s fs Aft  3+D CRY Arithmetic operation selected by t  on  field
+       r=r+r fs Aft  3+D CRY selected by f. CRY is set on carry or borrow.
+       s=r+s fs Aft  3+D CRY
+       r=r-1 fs Aft  3+D CRY
+
+       r=0 fs	Aft  3+D --- Arithmetic operation selected by t  on  field
+       r=s fs	Aft  3+D --- selected by  f. CRY is not altered.
+       s=r fs	Aft  3+D ---
+       rsEX fs	Aft  3+D ---
+
+	       f:3210
+	       ------
+		 X000	 P
+		 X001	 WP
+		 X010	 XS
+		 X011	 X
+		 X100	 S
+		 X101	 M
+		 X110	 B
+		 X111	 W
+		 0XXX	 Selects GROUP C arithmetic operations.
+		 1XXX	 Selects GROUP D arithmetic operations.
+
+			 t:3210    GROUP C     GROUP D
+			 ------    --------    --------
+			   0000    A=A+B       A=0
+			   0001    B=B+C       B=0
+			   0010    C=C+A       C=0
+			   0011    D=D+C       D=0
+			   0100    A=A+A       A=B
+			   0101    B=B+B       B=C
+			   0110    C=C+C       C=A
+			   0111    D=D+D       D=C
+			   1000    B=B+A       B=A
+			   1001    C=C+B       C=B
+			   1010    A=A+C       A=C
+			   1011    C=C+D       C=D
+			   1100    A=A-1       ABEX
+			   1101    B=B-1       BCEX
+			   1110    C=C-1       CAEX
+			   1111    D=D-1       DCEX
+
+
+
+
+
+
+
+
+
+
+       A-1LT8-0601-1	      		  Page 37
+
+
+
+
+
+
+
+
+
+
+
+
+       MNEMON	 CODE CYC FLG DESCRIPTION
+       --------- ---- --- --- ---------------------------------------------
+       r=r-s fs  Bft  3+D CRY Arithmetic operation selected by t  on  field
+       r=r+1 fs  Bft  3+D CRY selected by f. CRY is set on carry or borrow.
+       s=s-r fs  Bft  3+D CRY
+       r=s-r fs  Bft  3+D CRY
+
+       rSL fs	 Bft  4+D --- Left nibble shift  selected  by  t  on  field
+			      selected by f. CRY is not altered.
+
+       rSR fs	 Bft  4+D HS1 Right nib.  shift  selected  by  t  on  field
+			      selected	by f.  HS1 is set if a non-zero nib
+			      is shifted off.
+
+       r=-r fs	 Bft  3+D CRY Arithmetic operation selected by t  on  field
+       r=-r-1 fs Bft  3+D CRY selected by f. CRY is set on borrow.
+
+	       f:3210
+	       ------
+		 X000	 P
+		 X001	 WP
+		 X010	 XS
+		 X011	 X
+		 X100	 S
+		 X101	 M
+		 X110	 B
+		 X111	 W
+		 0XXX	 Selects GROUP E arithmetic operations.
+		 1XXX	 Selects GROUP F arithmetic operations.
+
+			 t:3210    GROUP E     GROUP F
+			 ------    --------    --------
+			   0000    A=A-B       ASL
+			   0001    B=B-C       BSL
+			   0010    C=C-A       CSL
+			   0011    D=D-C       DSL
+			   0100    A=A+1       ASR
+			   0101    B=B+1       BSR
+			   0110    C=C+1       CSR
+			   0111    D=D+1       DSR
+			   1000    B=B-A       A=-A
+			   1001    C=C-B       B=-B
+			   1010    A=A-C       C=-C
+			   1011    C=C-D       D=-D
+			   1100    A=B-A       A=-A-1
+			   1101    B=C-B       B=-B-1
+			   1110    C=A-C       C=-C-1
+			   1111    D=C-D       D=-D-1
+
+
+
+
+
+       Page 38		      	    A-1LT8-0601-1
+
+
+
+
+
+
+
+
+
+
+
+
+       MNEMON	CODE CYC FLG DESCRIPTION
+       -------- ---- --- --- ---------------------------------------------
+       r=r+s A	 Ct   7  CRY GROUP C operation selected by t is  performed
+       r=r+r A	 Ct   7  CRY on A field. CRY is set on carry or borrow.
+       s=r+s A	 Ct   7  CRY
+       r=r-1 A	 Ct   7  CRY
+
+       r=0 A	 Dt   7  --- GROUP D operation selected by t is  performed
+       r=s A	 Dt   7  --- on the A field.
+       s=r A	 Dt   7  ---
+       rsEX A	 Dt   7  ---
+
+       r=r-s A	 Et   7  CRY GROUP E operation selected by t is  performed
+       r=r+1 A	 Et   7  CRY on the a field.
+       s=s-r A	 Et   7  CRY
+       r=s-r A	 Et   7  CRY
+
+       rSL A	 Ft   8  --- GROUP F operation selected by t is  performed
+       rSR A	 Ft   8  HS1 on the A field.
+       r=-r A	 Ft   7  CRY
+       r=-r-1 A  Ft   7  CRY
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+       A-1LT8-0601-1	      		  Page 39
+
+
+
+
+
+
+
+
+
+
+
+
+       5.4  INTERRUPT SYSTEM
+
+       The 1LT8 CPU supports several types of non-prioritized interrupts.
+       Interrupts  are handled one at a time without nesting. The CPU can
+       be interrupted in the following manners:
+
+	 1.  Pulling the NINTX line low.
+
+	 2.  Pulling the NINT2X line low.
+
+	 3.  Pulling the IR15X (ON) line high.
+
+	 4.  Pulling the KDN line high.
+
+       Any interrupt source must remain active for a minimum interval  to
+       ensure  recognition.  This interval corresponds to the longest CPU
+       instruction execution time (32 cycles).
+
+       If interrupted, the CPU completes the current instruction,  pushes
+       the PC onto the return stack (decrements the SP) and forces the PC
+       to the interrupt routine starting address of 0000F, where F is  in
+       the least significant nibble of the PC.	The instructions starting
+       at this address are referred to as the interrupt  routine.   While
+       in the interrupt routine the CPU cannot be reinterrupted.  The RTI
+       instruction defines the end  of	the  interrupt	routine  and  re-
+       enables interrupt processing.
+
+       Each interrupt type is somewhat specialized for a specific purpose
+       and each is described separately.
+
+
+       5.4.1  NINTX Interrupt
+
+       NINTX line - level sensitive - active low.
+
+       If pulled low the interrupt routine is entered and all  interrupts
+       are  disabled.	Hardware  status  bit  3 is set any time NINTX is
+       pulled low regardless of whether an interrupt actually occurs.  If
+       NINTX  is  held low the CPU will be repeatedly reinterrupted after
+       each  RTI  instruction  is  executed.   This  is  a   non-maskable
+       interrupt.
+
+
+       5.4.2  NINT2X Interrupt
+
+       NINT2X line - level sensitive - active low.
+
+       Identical to NINTX except that no hardware status bits are set.
+
+
+
+
+
+       Page 40		      	    A-1LT8-0601-1
+
+
+
+
+
+
+
+
+
+
+
+
+       5.4.3  IR15X Interrupt
+
+       IR15X line - level sensitive - active high.
+
+       Non-maskable interrupt.	IR15X state is readable  using	the  A=IN
+       and C=IN instructions.
+
+
+       5.4.4  KDN Interrupts
+
+       KDN line - rising edge sensitive with qualifications - see text.
+
+       KDN is the "logic  OR"  of  IR15X  (ON)	and  the  IR[0:8]  lines.
+       IR[0:8]	lines  held high will generate only one initial interrupt
+       and will not repetitively reinterrupt the CPU  as  do  the  NINTX,
+       NINT2X and IR15X lines.	IR[0:6] interrupts are maskable using the
+       INTON and INTOFF instructions.
+
+       A rising edge of KDN will generate an  interrupt  if  the  CPU  is
+       outside	of  the  interrupt  routine  (RTI)  and interrupts are ON
+       (INTON).   Once	this  interrupt  has  occurred,  no  further  KDN
+       interrupts  can	occur  until  another  rising  edge of KDN occurs
+       outside of the interrupt routine with interrupts ON or until  both
+       an  RTI	instruction  and an RSI instruction (see below) have been
+       executed.
+
+       A rising edge of KDN will occur if  IR[0:6]  and  IR15X	were  all
+       momentarily  low  and if : 1) a rising edge occurs on IR15X; or 2)
+       one or more of the IR[0:6] goes high.
+
+       The interrupt state machine ignores edges on  KDN  (and	does  not
+       latch  a  request  for  a  new  interrupt) while the CPU is in the
+       interrupt routine.  This allows software to scan the  keyboard  by
+       setting	each  OR line high in succession and executing an A=IN or
+       C=IN without latching the need for another interrupt.  During this
+       keyboard  scanning,  KDN may be toggling low and high based on the
+       keys that are down and the OR line that	is  high.   In	order  to
+       avoid  "spurious"  interrupts,  software  must ensure that the KDN
+       signal has  been  updated  to  match  the  current  state  of  the
+       keyboard-OR  lines  before  exiting  an	interrupt  routine  where
+       keyboard  scanning  has	occurred.   This  is  normally	done   by
+       restoring  all keyboard-OR lines to their normal state using OUT=C
+       or OUT=CS prior to the RTI.  This ensures that if any key is  down
+       the KDN signal will be HIGH when the RTI is executed.
+
+
+       5.4.5  RSI Instruction
+
+       The RSI (ReSet Interrupts) instruction resets  the  KDN	interrupt
+       state  machine.	After  an  RSI is executed the CPU will interrupt
+       immediately if KDN is high and  interrupt  processing  is  enabled
+
+
+       A-1LT8-0601-1	      		  Page 41
+
+
+
+
+
+
+
+
+
+
+
+
+       (INTON  and  RTI).   If	KDN  is  high and interrupt processing is
+       disabled, the CPU will interrupt as soon as  interrupt  processing
+       is  enabled (INTON and/or RTI).	This bypasses the need for KDN to
+       go low before a new interrupt can be generated.
+
+       The RSI instruction should be used  prior  to  RTI  when  keyboard
+       scanning  shows	no keys are down.  This will detect keys that are
+       depressed between the time of the last scan and the RTI by causing
+       an immediate reinterrupt.
+
+
+       5.4.6  INTON/INTOFF Instructions
+
+       The INTON and INTOFF  instructions  control  the  masking  of  KDN
+       generated  interrupts.	If KDN goes high while interrupts are off
+       it must remain  high  until  INTON  is  executed  to  generate  an
+       interrupt.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+       Page 42		      	    A-1LT8-0601-1
+
+
+
+
+
+
+
+
+
+
+
+
+		 Figure 5.2.  Keyboard Interrupt State Machine
+       $DRAW -x-25 ch5_int.hrd$
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+       Notes:
+
+	 1.  State A is:  Waiting for an IR line to be high while not  in
+	     the interrupt routine.
+
+	 2.  State B is:  An IR line went high.  Wait for CPU  to  vector
+	     to 0000F or all IR line to return low.
+
+	 3.  State C is:  Presently in the  interrupt  routine.   Waiting
+	     for all IR lines to be low outside of the interrupt routine.
+
+	 4.  The RSI instruction resets State C to State A.
+
+	 5.  The INTON and INTOFF instructions do not  affect  the  state
+	     machine.	They  merely  control  the  masking  of  the VINT
+	     signal.
+
+	 6.  NENINT is true when you are in  the  interrupt  routine  and
+	     ENINT is true when you are outside the interrupt routine.
+
+	 7.  * means logic AND.  + means logic OR.
+
+	 8.  VINT=1 requests the CPU execution unit to interrupt  at  the
+	     completion of the current instruction.
+
+
+
+       A-1LT8-0601-1	      		  Page 43
+
