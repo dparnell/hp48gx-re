@@ -1,0 +1,4791 @@
+# HP48G ROM rev R symbols, from Carsten Dominik's EDB 2.11
+# ADDR	NAME	FLAGS	STACK
+00001	Ann_RAD.b	RAM	
+00001	ParenModmask	aka	
+00001	Sfkey1		
+00001	mEditLExists	RAM	
+00001	sTRUNC		
+00002	Ann_IO.b	RAM	
+00002	sFLUSH	aka	
+00002	sNEGATE		
+00003	DZP		
+00004	Ann_Susp.b	RAM	
+00004	sBPOFF		
+00006	Sfkey6		
+00008	Ann_Alert.b	RAM	
+00008	IRAMHOMEmsn	RAM	MSN of the IRAM base address
+00008	sBEG		
+0000A	portnotaverr		"Port Not Avaliable"
+0000F	sALLOWINTR		
+00010	Ann_Shift.b	RAM	
+00011	LOCUPSIZE	RAM	Number of variables between <REF>SYSUPSTART and <REF>OBUPSTART
+00019	ENTERCODE		
+00020	Ann_ALT.b	RAM	
+00025	OBUPSIZE	RAM	Number of variables between <REF>OBUPSTART and <REF>OBUPEND
+00036	SYSUPSIZE	RAM	<REF>OBUPSIZE + <REF>LOCUPSIZE
+00040	Ann_Alpha.b	RAM	
+00080	Ann_Busy.b	RAM	
+00100	DISPIO	ML,U	Display bit offset for scrolling and DON (display on) [DON OFF2 OFF1 OFF0]
+00101	CONTRAST	ML,U	5 bit value for contrast. [CON3 CON2 CON1 CON0]
+00101	NoRolDA2MASK	RAM	DA2 can't be rolled up to become valid <REF>SysNib1
+00102	DISPTEST	ML,U	High bit of contrast and display test bits.
+00102	ReqClkOnMASK	RAM	Flag for System Request of CLKON state <REF>SysNib2
+00103	UNDOMASK	RAM	Automatic stack save <REF>SysNib3
+00104	CRC	ML	4 nibbles for CRC. Every memory fetch updates CRC.
+00104	DA2aTempMASK	RAM	DA2a temporarily valid <REF>SysNib4
+00105	COMMANDMASK	RAM	CMD history enabled <REF>SysNib5
+00106	Do1UserMASK	RAM	One-key user mode <REF>SysNib6
+00107	DA1ValidMASK	RAM	DA1 known to be valid <REF>SysNib7
+00108	DA1NoChMASK	RAM	DA1 not changed <REF>SysNib8
+00108	POWERSTATUS	ML,U	Low power registers
+00109	DA1BadMASK	RAM	DA1 invalid <REF>SysNib9
+00109	POWERCTRL	ML,U	Low power detection
+0010A	EDITLMASK	RAM	Edit line exists <REF>SysNib10
+0010B	ANNCTRL	ML	Annunciator control [LA4 LA3 LA2 LA1] (alarm alpha -> <-)
+0010B	ParenModMASK	RAM	Implicit parenthesized "/", "^", and "SQRT" in EQW <REF>SysNib11
+0010C	ANNCTRL2	ML,U	Annunciator control [AON XTRA LA6 LA5] (on extra io busy)
+0010C	DispTimeMASK	RAM	Status bar clock may be displayed <REF>SysNib12
+0010D	NOP1MASK13	RAM	unused <REF>SysNib13
+0010E	NOP1MASK14	RAM	unused <REF>SysNib14
+00110	IOC		
+00110	NOP1MASK16	RAM	<REF>SysNib16
+00111	NOP1MASK17	RAM	<REF>SysNib17
+00111	RCS		
+00112	NOP1MASK18	RAM	<REF>SysNib18
+00112	TCS		
+00113	CRER		
+00113	NOP1MASK19	RAM	<REF>SysNib19
+00114	NOP1MASK20	RAM	<REF>SysNib20
+00114	RBR		
+00116	TBR		
+0011A	IRC		
+0011F	IRAM@		
+00120	DISPADDR	ML,U	Display start address write-only
+00125	LINEOFFS	ML,U	3 nibble offset for display write-only
+00128	LINECOUNT	ML,U	Display line counter [LC3 LC2 LC1 LC0] and miscellaneous [DA19 M32 LC5 LC4]
+0012E	TIMER1CTRL	ML,U	TIMER1 control [SRQ WKE INT XTRA]
+0012E	TIMERCTRL.1		
+0012F	TIMER2CTRL	ML,U	TIMER2 control [SRQ WKE INT TRUN]
+0012F	TIMERCTRL.2		
+00130	MENUADDR	ML,U	Menu display start addr write-only
+00137	TIMER1	ML	1 nibble timer decremented 16 times/s
+00138	TIMER2	ML	8 nibble timer decremented 8192 times/s
+001CE	BadTOLUIMASK	RAM	TOL UI potentially corrupt <REF>SysNib15
+001CE	NOP1MASK15	aka	
+001FF	allkeys		
+00201	AbbrStkMASK	RAM	Display obj types only <REF>SysNib1
+00202	ServModeMASK	RAM	Server mode on <REF>SysNib2
+00202	argtypeerr		"Bad Argument Type"
+00203	INSERTMASK	RAM	Insert/replace mode <REF>SysNib3
+00203	argvalerr		"Bad Argument Value"
+00204	DA2bTempMASK	RAM	DA2b temporarily valid <REF>SysNib4
+00205	BLINKMASK	RAM	Active Timer1 Int's <REF>SysNib5
+00206	ASuspOKMASK	RAM	Suspending current environment is allowed <REF>SysNib6
+00207	DA2aValdMASK	RAM	DA2a known to be valid <REF>SysNib7
+00208	DA2aNoChMASK	RAM	DA2a not changed <REF>SysNib8
+00209	DA2aBadMASK	RAM	DA2a invalid <REF>SysNib9
+0020A	NAppKeyMASK	RAM	Non-app keys allowed in POL <REF>SysNib10
+0020B	1PDCMASK	RAM	Partial DeCompile info will not be saved <REF>SysNib11
+0020C	NOP2MASK12	RAM	unused <REF>SysNib12
+0020D	NOP2MASK13	RAM	unused <REF>SysNib13
+0020E	NOP2MASK14	RAM	unused <REF>SysNib14
+00210	NOP2MASK16	RAM	<REF>SysNib16
+00211	NOP2MASK17	RAM	<REF>SysNib17
+00212	NOP2MASK18	RAM	<REF>SysNib18
+00213	NOP2MASK19	RAM	<REF>SysNib19
+00214	NOP2MASK20	RAM	<REF>SysNib20
+00219	IRAMBSIZE	RAM	Size of <REF>IRAMBUFF
+002CE	NOP2MASK15	aka	
+002CE	NoAlgProcess	RAM	EVAL-> will not create a list nor return NOVAL <REF>SysNib15
+00301	posunferr		"Positive Underflow"
+00302	negunferr		"Negative Underflow"
+00303	ofloerr		"Overflow"
+00305	infreserr		"Infinite Result"
+00401	DA2bIsEdMASK	RAM	DA2b shows the edit line <REF>SysNib1
+00402	TrackMASK	RAM	New context needs to be compared with old <REF>SysNib2
+00403	ALGMASK	RAM	Algebraic entry mode <REF>SysNib3
+00404	DA3TempMASK	RAM	DA3 temporarily valid <REF>SysNib4
+00405	LOWERMASK	RAM	Lowercase keys <REF>SysNib5
+00406	BadPOLUIMASK	RAM	POL UI possibly corrupt <REF>SysNib6
+00407	DA2bValdMASK	RAM	DA2b known to be valid <REF>SysNib7
+00408	DA2bNoChMASK	RAM	DA2b not changed <REF>SysNib8
+00409	DA2bBadMASK	RAM	DA2b invalid <REF>SysNib9
+0040A	NUsrKeyMASK	RAM	Non-user keys allowed in USR mode <REF>SysNib10
+0040B	NewEditLMASK	RAM	New one-line edit line has been created <REF>SysNib11
+0040C	NOP4MASK12	RAM	unused <REF>SysNib12
+0040D	NOP4MASK13	RAM	unused <REF>SysNib13
+0040E	NOP4MASK14	RAM	unused <REF>SysNib14
+00410	NOP4MASK16	RAM	<REF>SysNib16
+00411	NOP4MASK17	RAM	<REF>SysNib17
+00412	NOP4MASK18	RAM	<REF>SysNib18
+00413	NOP4MASK19	RAM	<REF>SysNib19
+00414	NOP4MASK20	RAM	<REF>SysNib20
+004CE	InSimplyExpr	RAM	<REF>SysNib15
+004CE	NOP4MASK15	aka	
+007B5	SrvcKbdAB	ML	( A.W -> ) Sets KEYSTATE and KEYBUFFER
+00801	IgnorAlmMASK	RAM	Ignore <REF>ALARMSDUE in <REF>GETKEY <REF>SysNib1
+00802	BadMenuMASK	RAM	Menu system corrupt <REF>SysNib2
+00803	PRINTINGMASK	RAM	<REF>SysNib3
+00804	RebuildMASK	RAM	Menu requires TOUCHTAB rebuild each time it is redisplayed <REF>SysNib4
+00805	STKDCMASK	RAM	Decompilation for stack display (not editing) <REF>SysNib5
+00806	DA1TempMASK	RAM	DA1 temporarily valid <REF>SysNib6
+00807	DA3ValidMASK	RAM	DA3 known to be valid <REF>SysNib7
+00808	DA3NoChMASK	RAM	DA3 not changed <REF>SysNib8
+00809	DA3BadMASK	RAM	DA3 invalid <REF>SysNib9
+0080A	AppModeMASK	RAM	POL application running <REF>SysNib10
+0080B	DoStdKeyMASK	RAM	Do only standard keys <REF>SysNib11
+0080C	NOP8MASK12	RAM	unused <REF>SysNib12
+0080D	NOP8MASK13	RAM	unused <REF>SysNib13
+0080E	NOP8MASK14	RAM	unused <REF>SysNib14
+00810	NOP8MASK16	RAM	<REF>SysNib16
+00811	NOP8MASK17	RAM	<REF>SysNib17
+00812	NOP8MASK18	RAM	<REF>SysNib18
+00813	NOP8MASK19	RAM	<REF>SysNib19
+00814	NOP8MASK20	RAM	<REF>SysNib20
+008CE	DoCreateMenu	RAM	<REF>SysNib15
+008CE	NOP8MASK15	aka	
+008E6	BITMAP	ML	
+009A5	Debounce	ML	Scans keyboard until no more instabilities detected returns a map of the pressed keys in A.W Uses A.W B.W C.W D.A D0 P
+00A03	intrptderr		"Interrupted"
+00B02	constuniterr		"Inconsistent Units"
+00C02	timeouterr		"Timeout"
+00C06	xferfailerr		"Transfer Failed"
+00C0D	kermsendmsg		
+00C0E	kermrecvmsg		
+00C10	kermpktmsg		
+00C13	prtparerr		"Invalid PRTPAR"
+00C14	lowbaterr		"Low Battery"
+00C74	OnKeyDown?	ML	Carry if true
+00C80	OnKeyStable?	ML	Carry if true
+00D48	addrKEYSTATE		
+00D57	Flush	ML	Flushes key buffer.
+00D71	FLUSH	aka	
+00D71	FLUSHKEYS		->
+00D8E	FlushAttn	ML	Flushes attn counter.
+010E5	AllowIntr	ML	Allow interrupts.
+01115	DisableIntr	ML	Disable interrupts.
+0115A	AINRTN	ML	A=IN see also <REF>CINRTN For hardware reasons (bug) A=IN must be at even addr
+01160	CINRTN	ML	C=IN see also <REF>AINRTN For hardware reasons (bug) C=IN must be at even addr
+012EE	GetTimChk	ML	
+01307	SavPtrTime*	ML	
+0130E	GetTime++	ML	
+0131D	srvc_timer2	ML	
+017A6	makebeep	ML	C = msec, D = Hz Checks BEEP flag.
+0188D	addrORghost		
+018E2	clkspd	ML	Measure CPU clock speed Interrupts off on entry and exit -> A.A=spd/16 B.A=loops/16s Uses C.A D0 P CRY
+01AD7	RCKBp	ML	
+01B8F	DispOn	ML	Turns display on <REF>Dispoff
+01BBD	DispOff	ML	Turns display off <REF>Dispon
+01C31	D0->Row1	ML	( --> D0 ) Gets addr of current display
+01C58	D0->Sft1	ML	( --> D0 ) Gets address of menu grob
+01F6D	CLCD10		->
+01FA7	CLEARLCD		->
+01FBD	Warmstart	ML	
+01FBD	norecPWLseq	aka	
+01FD3	Coldstart	ML	
+01FDA	norecCSseq	ML	
+0210F	DOROMPOLL	U	{#libnum1 #libnum2..} ->
+021DD	ROMPOLL	U	->
+028FC	PRLG		
+02911	DOBINT		BINT prologue 5  number (hex)
+02933	DOREAL		Real number prologue 3  exponent 12 mantissa 1  sign
+02955	DOEREL		Long real prologue 5  exponent 15 mantissa 1  sign
+02977	DOCMP		Complex number prologue 3  real exponent 12 real mantissa 1  real sign 3  complex exponent 12 complex mantissa 1  complex sign
+0299D	DOECMP		Long complex prologue 5  real exponent 15 real mantissa 1  real sign 5  complex exponent 15 complex mantissa 1  complex sign
+029BF	DOCHAR		Character prologue 2  character
+029E8	DOARRY		Array prologue 5  size 5  prologue of objects 5  # of dimensions 5n dimensions .. objects (content only)
+02A0A	DOLNKARRY		Linked array prologue
+02A2C	DOCSTR		String prologue 5  length .. characters
+02A4E	DOHSTR		HXS prologue 5  length .. hex digits, reverse order
+02A4E	DOHXS	aka	
+02A74	DOLIST		List prologue see <REF>DOCOL
+02A96	DORRP		Directory prologue
+02AB8	DOSYMB		Symbolic prologue .. objects 5  SEMI
+02ADA	DOEXT		Unit object prologue .. object (usually a real) .. unit 5  SEMI
+02AFC	DOTAG		Tagged object prologue 2  # of chars in tag .. tag .. object
+02B1E	DOGROB		GROB prologue 5  size 5  height 5  width .. pixels Rows must be byte-aligned
+02B40	DOLIB		Library prologue
+02B62	DOBAK		Backup prologue 5  size 2  # of chars in name .. name .. object 5  DOBINT 5  CRC
+02B88	DOEXT0		
+02BAA	DOACPTR	aka	
+02BAA	DOEXT1		
+02BCC	DOEXT2		
+02BEE	DOEXT3		
+02C10	DOEXT4		
+02D9D	DOCOL		Secondary prologue .. objects 5  SEMI
+02DCC	DOCODE		Code prologue 5  length .. machine code
+02E48	DOIDNT		Global name (ID) prologue 2  # of characters .. characters
+02E6D	DOLAM		Local name (LAM) prologue see <REF>DOIDNT
+02E92	DOROMP		XLIB prologue 3  library ID 3  command #
+02FD6	DoLam	U	lam -> ob -> !error!
+02FEF	ROMSEC	U	ROMPTR -> ?
+03019	SKIPOB	ML	Skip object in D0, clears ST1, clears carry, P=0 --> D0  = addr past object Uses: A.A C.A P ST1 RSTK2
+0312B	SEMI		->
+0314C	DEPTH		1..n -> 1..n #n
+03188	DUP		ob -> ob ob
+031AC	2DUP		1 2 -> 1 2 1 2
+031D9	NDUP		1..n #n -> 1..n 1..n
+03223	SWAP		1 2 -> 2 1
+03244	DROP		1 ->
+03249	DropLoop	ML	Pop stack, Loop
+03258	2DROP		1 2 ->
+0326E	NDROP		meta ->
+0326E	NDROP		1..n #n ->
+03295	ROT		1 2 3 -> 2 3 1
+032C2	OVER		1 2 -> 1 2 1
+032E2	PICK		1..n #n -> 1..n 1
+03325	ROLL		1..n #n -> 2..n 1
+0339E	UNROLL		1..n #n -> n 1..n-1
+03442	MAKEARRY		{#n #m} ob -> []
+03562	ARSIZE		[] -> #
+0357C	PUSH#ALOOP	ML	<REF>GETPTR , Push A as #, Loop
+0357F	PUSH#LOOP	ML	<REF>GETPTR , Push R0 as #, Loop
+035A9	DIMLIMITS		[] -> {#n #m}
+0366F	GPOverWrR0Lp	ML	<REF>GETPTR , OverWr R0, Loop
+03672	GPOverWrALp	ML	<REF>GETPTR , OverWr A, Loop
+03685	ARRYEL?	U	{#n #m} [] -> # T -> F
+03685	FINDELN	U	{} A -> # flag
+036F7	Push#TLoop	ML	<REF>GETPTR , Push R0 as #, Do TRUE
+0371D	GETATELN		# [] -> ob T -> F
+03991	MUL#	ML	B.A = A.A*C.A
+039BE	GETTEMP	ML	<REF>CREATETEMP with <REF>GARBAGECOL if necessary <REF>GPMEMERR if not enough memory
+039EF	ECUSER		
+03A81	TRUE		-> T
+03A86	PUSHA	ML	Push A, Loop
+03AC0	FALSE		-> F
+03ADA	XOR		flag1 flag2 -> flag
+03AF2	NOT		flag -> flag'
+03B2E	EQ		ob1 ob2 -> flag
+03B46	AND		flag1 flag2 -> flag
+03B75	OR		flag1 flag2 -> flag
+03B97	EQUAL		ob1 ob2 -> flag
+03C64	TYPE		ob -> #prolog
+03CA6	#0=		# -> flag
+03CC7	#0<>		# -> flag
+03CE4	#<		# #' -> flag
+03D19	#=		# #' -> flag
+03D4E	#<>		# #' -> flag
+03D83	#>		# #' -> flag
+03DBC	#+		# #' -> #+#'
+03DC7	Push#Loop	ML	<REF>SAVPTR , R0=A, <REF>PUSH# , Loop
+03DE0	#-		# #' -> #-#'
+03DEF	#1+		# -> #+1
+03E0E	#1-		# -> #-1
+03E2D	#2+		# -> #+2
+03E4E	#2-		# -> #-2
+03E6F	#2*		# -> #*2
+03E8E	#2/		# -> #/2
+03EB1	#AND		# #' -> #''
+03EC2	#*		# #' -> #*#'
+03EF7	#/		# #' -> #r #q
+03F14	Push2#Loop	ML	<REF>GETPTR , Push R0 & R1 as #, Loop
+03F24	IntDiv	ML	A.A/C.A -> A.A=remainder, C.A=quotient, uses D.A P SB
+03F5D	POP2#	ML	( #1 #2 --> ) Pop #1 to A.A and #2 to C.A
+03F8B	TYPEREAL		10547d 2933h
+03F95	TYPECMP	U	10615d 2977h
+03F9F	TYPELIST	U	10868d 2A74h
+03FA9	TYPEIDNT		10568d 2948h
+03FB3	TYPECOL	U	11677d 2D9Dh
+03FBD	TYPESYMB	U	10936d 2AB8h
+03FC7	TYPERRP	U	10902d 2A96h
+03FD1	TYPELAM	U	11885d 2E6Dh
+03FDB	TYPEEREL	U	10581d 2955h
+03FE5	TYPEEXT	U	10970d 2ADAh
+03FEF	BINT0		0d 0h
+03FEF	ZERO	aka	
+03FEF	any	aka	
+03FF9	BINT1		1d 1h
+03FF9	MEMERR	aka	
+03FF9	ONE	aka	
+03FF9	real	aka	
+04003	BINT2		2d 2h
+04003	TWO	aka	
+04003	cmp	aka	
+0400D	BINT3		3d 3h
+0400D	THREE	aka	
+0400D	str	aka	
+04017	BINT4		4d 4h
+04017	FOUR	aka	
+04017	arry	aka	
+04021	BINT5		5d 5h
+04021	FIVE	aka	
+04021	list	aka	
+0402B	BINT6		6d 6h
+0402B	SIX	aka	
+0402B	id	aka	
+0402B	idnt	aka	
+04035	BINT7		7d 7h
+04035	SEVEN	aka	
+04035	lam	aka	
+0403F	BINT8		8d 8h
+0403F	EIGHT	aka	
+0403F	seco	aka	
+04049	BINT9		9d 9h
+04049	NINE	aka	
+04049	symb	aka	
+04053	BINT10		10d  Ah
+04053	TEN	aka	
+04053	sym	aka	
+0405D	BINT11		11d  Bh
+0405D	ELEVEN	aka	
+0405D	hxs	aka	
+04067	BINT12		12d  Ch
+04067	TWELVE	aka	
+04067	grob	aka	
+04071	BINT13		13d  Dh
+04071	TAGGED	aka	
+04071	THIRTEEN	aka	
+0407B	BINT14		14d  Eh
+0407B	EXT	aka	
+0407B	FOURTEEN	aka	
+0407B	unitob	aka	
+04085	BINT15		15d  Fh
+04085	FIFTEEN	aka	
+04085	rompointer	aka	
+0408F	BINT16		16d 10h
+0408F	REALOB	aka	
+0408F	SIXTEEN	aka	
+04099	2REAL	aka	
+04099	BINT17		17d 11h
+04099	REALREAL	aka	
+04099	SEVENTEEN	aka	
+040A3	BINT18		18d 12h
+040A3	EIGHTEEN	aka	
+040AD	BINT19		19d 13h
+040AD	NINETEEN	aka	
+040B7	BINT20		20d 14h
+040B7	TWENTY	aka	
+040C1	BINT21		21d 15h
+040C1	TWENTYONE	aka	
+040CB	BINT22		22d 16h
+040CB	TWENTYTWO	aka	
+040D5	BINT23		23d 17h
+040D5	TWENTYTHREE	aka	
+040DF	BINT24		24d 18h
+040DF	TWENTYFOUR	aka	
+040E9	BINT25		25d 19h
+040E9	TWENTYFIVE	aka	
+040F3	BINT26		26d 1Ah
+040F3	REALSYM	aka	
+040F3	TWENTYSIX	aka	
+040FD	BINT27		27d 1Bh
+040FD	TWENTYSEVEN	aka	
+04107	BINT28		28d 1Ch
+04107	TWENTYEIGHT	aka	
+04111	BINT29		29d 1Dh
+04111	TWENTYNINE	aka	
+0411B	BINT30		30d 1Eh
+0411B	REALEXT	aka	
+0411B	THIRTY	aka	
+04125	BINT31		31d 1Fh
+04125	THIRTYONE	aka	
+0412F	BINT32		32d 20h
+0412F	THIRTYTWO	aka	
+04139	BINT33		33d 21h
+04139	THIRTYTHREE	aka	
+04143	BINT34		34d 22h
+04143	THIRTYFOUR	aka	
+0414D	BINT35		35d 23h
+0414D	THIRTYFIVE	aka	
+04157	BINT36		36d 24h
+04157	TTHIRTYSIX	aka	
+04161	BINT37		37d 25h
+04161	THIRTYSEVEN	aka	
+0416B	BINT38		38d 26h
+0416B	THIRTYEIGHT	aka	
+04175	BINT39		39d 27h
+04175	THIRTYNINE	aka	
+0417F	BINT40		40d 28h
+0417F	FORTY	aka	
+0417F	FOURTY	aka	
+04189	BINT41		41d 29h
+04189	FORTYONE	aka	
+04193	BINT42		42d 2Ah
+04193	FORTYTWO	aka	
+0419D	BINT43		43d 2Bh
+0419D	FORTYTHREE	aka	
+041A7	TurnOff		->
+041DA	!TurnOff	U	->
+041ED	DEEPSLEEP		-> flag
+0426A	ShowInvRomp		->
+04292	DeepSleep	ML	Puts calc into "deep sleep" Low power mode, display off Wakeup on ON key or interrupt
+04544	AlertStatus	U	-> #
+04575	Alert$	U	# -> $
+04708	CHECKKEY		-> #kc T -> F
+04714	GETTOUCH		-> #kc T -> F
+047C7	REPKEY?		#kc -> flag
+047CF	adrDISABLE_K		
+047DD	adrKEYBUFFER		
+04840	POPKEY	ML	( -> C.A ) Sets carry if buffer is empty.Else returns key in C.B (and in @KEYSTORE) Uses: A.S C.S C.A D1 (sets P=0)
+04912	LiteSlp	U	->
+04929	liteslp	ML	Puts calc into "lite sleep" Low power mode with display on Wakeup on any key or interrupt
+04988	Attn?	ML,U	Sets carry when ATTNFLG <> 0.
+04999	KeyInBuff?	ML	Carry if true
+04A0B	GETPROC		#menukey -> ob
+04A41	GETDF		#menukey -> ob
+04CE6	ERROR@		-> #
+04D0E	ERRORSTO		# ->
+04D33	ERRORCLR		->
+04D3E	DROPNULL$		ob -> NULL$
+04D57	TWODROPNULL$	U	ob ob' -> NULL$
+04D64	GETTHEMESG		# -> $
+04D87	JstGETTHEMSG	aka	
+04D87	JstGetTHEMESG		# -> $
+04DD7	SPLITmsg	U	#msg -> #error #libnum
+04E07	GETEXITMSG		-> $
+04E37	EXITMSGSTO		$ ->
+04E5E	ERRSET		->
+04E66	addrTEMPENV		
+04EA4	ABORT		->
+04EB8	ERRTRAP		->
+04ED1	ERRJMP		->
+04FAA	SETLBERR	U	Error 006h
+04FB6	SETMEMERR		Error 001h
+04FBB	DOMEMERR		Insufficient Memory error
+04FC2	SETDIRRECUR	U	Error 002h
+04FCE	SETLAMERR	U	Error 003h
+04FDA	SETCORPORT	U	Error 008h
+04FE6	SETOBINUSE	U	Error 009h
+04FF2	SETPORTNOTAV	U	Error 00Ah
+04FFE	SETNOROOM	U	Error 00Bh
+0500A	SETXNONEXT	U	Error 00Ch
+05016	SETROMPERR		Error 004h
+05023	Errjmp	ML	Error exit A.A = error number
+05040	ATTNFLG@		-> #
+05068	ATTNFLGCLR		->
+05089	CARCOMP		comp -> ob_head comp_null -> comp_null
+050ED	CAR$		$ -> chr -> ""
+05143	GETPTRLOOP	ML	<REF>GETPTR , Loop to RPL
+05153	CDRCOMP		comp -> comp-ob_head comp_null -> comp_null
+0516C	CDR$		$ -> $'
+0518A	&HXS		hxs hxs' -> hxs''
+05193	&$		$ $' -> $+$'
+0521F	&COMP		comp comp' -> comp''
+0525B	>H$		$ chr -> $'
+052C6	>HCOMP		comp ob -> ob+comp
+052EE	>T$		$ chr -> $'
+052FA	>TCOMP		comp ob -> comp+ob
+05331	COMPN		obn..ob1 #n #prolog -> comp
+05445	::N		ob1..obn #n -> :: ob1..obn ;
+05459	{}N		obn..ob1 #n -> { obn..ob1 }
+0546D	SYMBN		ob1..obn #n -> symb
+0546D	SYMBN		ob1..obn #n -> sym
+05481	EXTN		ob1..obn #n -> u
+05481	EXTN		ob1..obn #n -> u
+054AF	INNERCOMP		comp -> obn..ob1 #n
+0554C	DOGARBAGE	ML	If ST=1 10 then <REF>GPMEMERR else <REF>GARBAGECOL and <REF>GETPTR
+05566	NULLHXS?	U	hxs -> flag
+0556F	NULL$?		ob -> flag
+055B7	NULLCOMP?		comp -> flag
+055D5	NULLHXS		HXS 0
+055DF	NULL$		""
+055E9	NULL{}		-> {}
+055F3	NULLSYMB	U	-> sym
+055FD	NULL::		-> :: ;
+05616	LENHXS		hxs -> #nibs
+05622	OVERLEN$		$ ob -> $ ob #len
+05636	LEN$		$ -> #length
+0567B	LENCOMP		comp -> #n
+056B6	NTHELCOMP		comp #i -> ob T -> F
+05733	SUB$		$ #start #end -> $'
+05815	SUBHXS		hxs #m #n -> hxs'
+05821	SUBCOMP		comp #m #n -> comp'
+05902	OSIZE		ob -> #
+05944	OCRC		ob -> #nib hxs
+0596D	PUSHhxsLoop	ML	Push A.WP as hxs, Loop
+0597E	DoCRCc	ML	D0=C <REF>DoCRC
+05981	DoCRC	ML	Calculates the CRC of A.A nibs at D0. Returns CRC in A.A Uses C.W P
+059CC	#>HXS		# -> hxs
+05A03	HXS>#		hxs -> #
+05A51	CHR>#		chr -> #
+05A75	#>CHR		# -> chr
+05AB3	CHANGETYPE		ob #prolog -> ob'
+05ACC	!CHANGETYPE	U	ob #prolog -> ob'
+05AED	ID>LAM	U	id -> lam
+05B01	LAM>ID	U	lam -> id
+05B15	$>ID		$ -> ID
+05B79	MAKE$	ML	Creates character string in tempob area Does SETHEX, C=C+C.A and then <REF>MAKE$N
+05B7D	MAKE$N	ML	Creates character string in tempob area If not enough mem even after GC then memerr C.A = nibbles -> A=nibbles+5, B=nibbles+16 C=D1=addr of stack D0 = addr of body of $ R0 = addr of $  Not used: R1-R4
+05BE9	ID>$		id/lam -> $
+05C27	%>C%		%re %im -> C%
+05C72	%%>C%%	U	%%re %%im -> C%%
+05D2C	C%>%		C% -> %re %im
+05DBC	C%%>%%		C%% -> %%re %%im
+05E81	>TAG		ob $tag -> tagged
+05E9F	{}>TAG	U	{ id ob } -> tagged
+05EC9	TAG>	U	tagged -> ob $tag
+05F2E	ID>TAG		ob id/lam -> tagged
+05F42	GARBAGE		->
+05F61	MEM		-> #
+0613E	GARBAGECOL	ML	Garbage collection does not use R1..R4
+064BD	TOTEMPOBADJ	U	ob -> ob ob'
+064D6	DOADJ1	U	ob1 ob2 -> ob1 ob'
+064E2	DOADJ	U	ob1 ob2 -> ob1 ob'
+06529	PUSH2#	ML	<REF>GETPTR , Push R0 & R1 as #
+06537	PUSH#	ML	<REF>GETPTR , Push R0 as #
+065AA	GPMEMERR	ML	<REF>GETPTR <REF>DOMEMERR
+065D9	PTRREFD?	U	ob -> ob flag
+065E5	REFERENCED?	U	ob -> ob flag
+06641	POP#	ML	Pop # to A.A
+06657	TOTEMPOB		ob -> ob'
+066B9	MOVEUP	ML	Copy upwards C.A nibbles from D0 to D1 D0 D1 will point to start of area Used: A.W C.A P Use this to move downwards
+0670C	MOVEDOWN	ML	Copy downwards C.A nibbles from D0 to D1, D0 and D1 will point to the next locations Used: A.W C.A P Use this to move upwards
+0675C	WIPEOUT	ML	Zeroes C.A nibbles at D1 Uses A.W C.A P
+0679B	SAVPTR	ML	D0 to RPLTOP D1 to DSKTOP B to RETTOP D to FREETOP Clear carry
+067D2	GETPTR	ML	<REF>SAVPTR in reverse \ Clears Carry.
+06806	ROOM	ML	-> C.A = @DSKTOP-@RETTOP Uses A.A D0
+06992	MOVERSD	ML	Delete a block below RSK A.A=end C.A=nibbles Adjusts all refs, then <REF>ADJMEM Uses A.W B.A C.W D.10 D0 D1 P
+069C5	MOVEDSU	ML	Delete a block above stack A.A=start C.A=nibbles Adjusts all refs, then <REF>ADJMEM Uses A.W B.A C.10 D.10 D0 D1 P
+069F7	ADJMEM	ML	D= @FREETOP=<REF>ROOM / 5 Uses A.10 B.10 C.10 D.10 <REF>DIV5
+06A1D	MOVEDSD	ML	Open a block above stack A.A=end C.A=nibbles Adjusts all refs, then <REF>ADJMEM Uses A.W B.A C.10 D.10 D0 D1 P
+06A53	MOVERSU	ML	Open a block below RSK A.A=start C.A=nibbles Adjusts all refs, then <REF>ADJMEM Uses A.W B.A C.10 D.10 D0 D1 P
+06A8E	DIV5	ML	C.A = C.A/5 Uses A.10 C.10 D.10 P
+06AD8	CREATETEMP	ML	Allocates C.A nibbles carry if not enough memory -> D0=bottom, D1=top of area -> B.A = C.A = @D1 = offset to previous tempob = #nibbles+6
+06B3E	FREEINTEMP?	U	ob -> ob flag
+06B4E	INTEMNOTREF?		ob -> ob flag
+06BC2	NOTREF?	U	ob -> ob flag
+06DDE	>TOPTEMP	U	ob -> ob'
+06E8E	NOP		->
+06E97	'		-> nob (nextob)
+06EEB	'R		-> ob
+06F66	'REVAL		-> ?
+06F8E	EVAL		ob ->
+06F9F	>R		:: ->
+06FB7	RDROP		->
+06FD1	COLA		Evals next obj and drops rest of this stream.
+07012	R@		-> ::
+0701F	R>		-> ::
+070C3	RPITE		T ob1 ob2 -> :: ob1 <ob1> <rest> ; F ob1 ob2 -> ob2 <ob1> <rest> ;
+070FD	RPIT		T ob -> :: ob <ob1> <rest> ; F ob -> :: <ob1> <rest> ;
+0712A	?SKIP		T -> :: <ob2> <rest> ; F -> :: <ob1> <rest> ;
+0712A	NOT_IT	aka	
+0714D	SKIP		Skips 1 obj in the runstream.
+0715C	2SKIP	U	Skips 2 objs in the runstream.
+0716B	IDUP		->
+0716B	IDUP		->
+071A2	BEGIN		->
+071AB	AGAIN		->
+071C8	UNTIL		flag ->
+071E5	REPEAT		->
+071EE	WHILE		flag ->
+07221	INDEX@		-> #
+07249	ISTOP@		-> #
+07258	JINDEX@		-> #
+07264	JSTOP@		-> #
+07270	INDEXSTO		# ->
+07295	ISTOPSTO		# ->
+072AD	JINDEXSTO		# ->
+072C2	JSTOPSTO		# ->
+07321	STOPLOOP	U	->
+07334	LOOP		->
+073A5	+LOOP		# ->
+073C3	ZERO_DO		#stop ->
+073CE	ONE_DO		#stop ->
+073DB	#1+_ONE_DO		#stop ->
+073F7	DO		#stop #start ->
+07497	ABND		->
+074D0	BIND		obn..ob1 {lamn..lam1} ->
+074E4	DOBIND		obn..ob1 lamn..lam1 #n ->
+075A5	GETLAM		#n -> ob
+075E9	PUTLAM		ob #n ->
+07638	SETHASH		#libnum hxs ->
+0764E	SETMESG	U	[$] #libnum ->
+07661	SET		
+076AE	OFFSRRP		# ->
+07709	TOSRRP		# ->
+0778D	ONSRRP?	U	# -> flag
+077E4	MAKERRP	U	#libnum -> rrp
+078E9	FIRST@LAM	U	lam -> ob T -> F
+078F5	NTH@LAM	U	lam #n -> ob T -> F
+07943	undo		-> -> F
+0797B	DRPExitAtLOOP		ob -> -> F ->
+07C18	COMPILEID	U	id -> id T -> ROMPTR T -> F
+07D1B	STOLAM		ob lam ->
+07D27	STO		ob id/lam ->
+07E50	#>ROMPTR		#lib #cmd -> ROMPTR
+07E76	PTR>ROMPTR	U	ob -> ROMPTR T -> F
+07E99	ROMPTR@		ROMPTR -> ob T -> F
+07F86	ROMPART	U	rrp -> {#lib1..#libn} T ROMPTR -> #libnum
+08081	ROMPART>ADDR	U	#libnum -> #addr T -> F
+080BF	ROMPARTSIZE	U	#libnum -> #nibbles-10 T -> F
+080DA	NEXTROMPID	U	#libnum -> #nextlibnum T -> F
+08112	GETHASH	U	#libnum -> hxs_table T -> F
+08130	GETMSG	U	#libnum -> [] T -> F
+0813C	GETLINK	U	#libnum -> hxs_table T -> F
+08157	GETCONFIG	U	#libnum -> ob T -> F
+08199	ROMPARTNAME	U	#libnum -> id T -> F
+081D9	BAKNAME		bak -> id T
+081DE	LIB>#	U	lib -> #libnum T
+081E3	PTR>ID	U	ob -> id T -> F
+081FB	ROMPTRDECOMP	U	ROMPTR -> id T -> F
+082E3	RAM-WORDNAME		ob -> id
+08309	MYRAMROMPAIR	U	rrp -> rrp' T -> F
+08326	LASTRAM-WORD		rrp -> ob T -> F
+08376	PREVRAM-WORD		ob -> ob' T -> F
+083D1	GETRRP	ML,UBS	Returns the RRP in which the object at A.A lies. If ob is SysRRP, returns CS and leaves A.A unchanged; else CC and A.A->RRP B.A->RAM-WORD Uses A.A B.A C.A D.A D0
+085D3	REPLACE		newob oldob -> newob
+08696	CREATE		ob id ->
+08C27	PURGE		id ->
+08CCC	ROMPTR>#		ROMPTR -> #lib #cmd
+08D08	CONTEXT!		rrp ->
+08D4A	STOPSIGN!	U	rrp ->
+08D5A	CONTEXT@		-> rrp
+08D66	SysPtr@	ML	
+08D82	STOPSIGN@	U	-> rrp
+08D92	HOMEDIR		->
+08D92	SYSCONTEXT	aka	
+08DC4	SYSSTOPSIGN	U	->
+08DD4	SYSRRP?	U	rrp -> flag
+08DD4	SYSRRP?		rrp -> flag
+08DF2	CREATERRP	U	id ->
+0931B	X@		
+0948E	BAK>OB		bak -> ob
+0970A	InitEnab		
+09B73	COMPCONFCRC	ML	
+0A00E	CKLBCRC	ML	Check CRC of library at D0 CC: Ok  CS: CRC is wrong Uses A.A C.W D0 P
+0A532	SAFESKIPOB	ML	
+0AAB2	PORTSTATUS		#port -> present? writeable? merged? #size #addr
+0AB22	PORTEND	U	#port -> #addr
+0AB82	NEXTLIBBAK		#addr -> backup/library #nextaddr
+0B409	MERGE	U	#port ->
+0BBED	TrueTrue		-> T T
+0BC01	failed		-> F T
+0BC6F	!*trior		F -> <SKIP> T T -> <COLA>
+0BCCF	!*triand		T T -> F T -> F T <SEMI>
+0BD54	tok8cktrior		$1 $1 -> :: $1 <Ob1> ; $1 $2 -> :: $1 <Ob2> <Rest> ;
+0BD60	tok8trior		GNT data $1 $1 -> :: GNT data GetNextToken ; GNT data $1 $2 -> :: $1 <Ob1> <Rest> ;
+0C147	restoreiram		
+0C501	GETEL	U	#i [] -> ob T -> F
+0C506	rGETATELN		
+0CA60	ATTNchk	ML	ATTN exit check with restoreiram
+0CBAE	NOALARMERR	U	Error D04h
+0CBC4	ErrTime		
+0CBFA	TOD		-> %time
+0CC0E	DATE		-> %date
+0CC39	DDAYS		%date1 %date2 -> %days
+0CC5B	DATE+DAYS		%date %days -> %date'
+0CD2B	>DATE	U	%date ->
+0CD3F	CLKADJ	U	%time ->
+0CD3F	CLKADJ*	UBS	
+0CD53	>TIME	U	%time ->
+0CF5B	Ticks>wd$	U	hxs -> $weekday
+0CFD9	Date>d$		%date -> $
+0D06A	TOD>t$		%time -> $
+0D143	Ticks>TOD	U	hxs -> %time
+0D156	Ticks>Date	U	hxs -> %date
+0D169	Ticks>Rpt	U	hxs -> %rpt
+0D18A	WSLOGN	U	#n -> $
+0D2A3	WSLOG	U	-> $4 $3 $2 $1
+0D2F0	Date>wd$	U	%date -> $weekday
+0D304	TIMESTR		%dt %tm -> "dy dt tm"
+0D304	TIMESTR		%dt %tm -> "dy dt tm"
+0D4AD	DAY#		
+0D5E5	ASRW5	ML	ASR.W 5 times
+0D5F6	ASLW5	ML	ASL.W 5 times
+0D607	CSRW5	ML	CSR.W 5 times
+0D618	CSLW5	ML	CSL.W 5 times
+0D62F	DCHXW	ML	Converts BCD in C.W to hex in A.W B.W C.W. See <REF>HXDCW Uses P CRY
+0D6D8	FLOAT		
+0D744	Day>Date		
+0D7A1	CLKUTL1		
+0D809	getBPOFF		
+0D8AE	mpop1%		
+0D92C	POPDATE%		
+0D948	POPTIME%		
+0D9C7	CKTIME		
+0DB3A	YMD>Ticks	ML	
+0DB51	dowutil	ML	
+0DB91	HXDCW	ML	Converts hex in A.W to BCD in A.W B.W C.W. See <REF>DCHXW Uses P CRY
+0DDA8	ACKALLALMS	U	->
+0DDC1	ACKALM	U	-> flag
+0E029	DISPROW1*!		$ ->
+0E047	Save16	U	-> grob
+0E05B	Restore16	U	grob ->
+0E06F	Clr16		->
+0E083	Clr8		->
+0E097	Clr8-15		->
+0E0AB	TOP16		-> HBgrob #x1 #y1 #x1+131 #y1+16
+0E0D3	TOP8		-> HBgrob #x1 #y #x1+131 #y1+8
+0E0FB	Rows8-15		-> HBgrob #x1 #y1+8 #x1+131 #y1+16
+0E128	HBUFF_X_Y		-> HBgrob #x #y
+0E128	HBUF_X_Y		-> HBgrob #x #y
+0E1D8	ALRMLS>	U	{} -> {}'
+0E235	ALARMS@		-> {}
+0E3DF	RCLALARM%	UBS	%n -> {}
+0E402	RCLALM	U	#n -> {} T -> F
+0E461	INSERTN{}	U	{} ob #n -> {}'
+0E4DE	REMOVEN{}	U	{} #n -> {}'
+0E510	STOALARM%	U	%time -> %
+0E54D	STOALARMLS	U	{} -> %
+0E66A	VerifyTOD		%time -> %time
+0E6ED	STOALM		%date %time acti %rep -> %
+0E724	DELALARM	U	%n ->
+0E724	PURGALARM%	UBS	% ->
+0E7D3	addrClkOnNib		
+0EAD7	FINDALARM%	U	%date -> %
+0EB31	FINDALARMLS	U	{} -> %
+0EB31	FNDALARM{}	UBS	
+0EB81	CLKTICKS		-> hxs
+0EB81	SysTime	aka	
+0EBD5	FindNext		
+0ED78	ClrDouseAlm	UBS	
+0EDE1	MAKEHXS		#nibs -> hxs
+0EE26	Date+Time	U	hxs_d hxs_t -> hxs
+0EE50	Date>hxs13		%date -> hxs
+0EE83	TOD>Ticks	U	%time -> hxs
+0EF45	>ALRMLS	U	$ %date %time %rpt -> {}
+0EFEE	%TICKSsec	U	8192
+0F003	%TICKSmin	U	491520
+0F018	%HrTicks	U	29491200
+0F02D	%TICKSday	U	707788800
+0F042	%TICKSweek	U	4954521600
+0F218	UNIT>$		u -> $
+0F33A	UM>U		% u -> u'
+0F34E	UMU>		u -> % u'
+0F371	UMCONV		u1 u2 -> u1'
+0F3E4	puretemp?		[] []' -> [] []' flag
+0F41B	TempConv		???
+0F584	UM=?		u u' -> %flag
+0F598	UM#?		u u' -> %flag
+0F5AC	UM<?		u u' -> %flag
+0F5C0	UM>?		u u' -> %flag
+0F5D4	UM<=?		u u' -> %flag
+0F5E8	UM>=?		u u' -> %flag
+0F5FC	UMABS		u -> u'
+0F615	UMCHS		u -> u'
+0F62E	UMSIN		u -> u'
+0F660	UMCOS		u -> u'
+0F674	UMTAN		u -> u'
+0F688	%%2PI		2pi
+0F6A2	UM+		u u' -> u''
+0F774	UM-		u u' -> u''
+0F792	UM*		u u' -> u''
+0F823	UM/		u u' -> u''
+0F841	UMINV	U	u -> u'
+0F8FA	UMXROOT		u u' -> u''
+0F913	UMSQ		u -> u'
+0F92C	UMSQRT		u -> u'
+0F945	UMSI		u -> u'
+0FA69	tok_g		"g"
+0FA8E	tok_m		"m"
+0FACE	tok_s		"s"
+0FB6F	UMMAX		u u' -> u?
+0FB8D	UMMIN		u u' -> u?
+0FBAB	UM%		u %percent -> u'
+0FC3C	UM%CH		u u' -> %
+0FCCD	UM%T		u u' -> %
+0FCE6	UMSIGN		u -> %
+0FCFA	UMIP		u -> u'
+0FD0E	UMFP		u -> u'
+0FD22	UMFLOOR		u -> u'
+0FD36	UMCEIL		u -> u'
+0FD4A	UMOPER:	U	u -> u'
+0FD68	UMRND		u -> u'
+0FD8B	UMTRC		u -> u'
+0FE44	U>NCQ		u -> n%% cf%% qhxs
+10029	4DROPTRUE	U	ob1..ob4 -> T
+10047	U>nbr		u -> %
+10065	Unbr>U		u % -> u'
+10ADB	UobROT	UBS	ob meta1 meta2 -> meta1 meta2 ob
+10ADB	rot1	aka	
+10AF9	unrot1	U	meta1 meta2 ob -> ob meta1 meta2
+10B5E	um*		* marker
+10B68	um/		/ marker
+10B72	um^		^ marker
+10B7C	umP		Char prefix operator
+10B86	umEND		Unit end operator
+10E36	8NULLLAM{}	U	-> {}
+10E68	cfF		0.555...
+10E82	cfC		1
+10E9C	%%KZERO	U	273.15
+10EB6	%%RZERO	U	459.67
+10EEA	INVUNITERR	U	Error B01h
+10EFA	CONSTUNITERR	U	Error B02h
+10F40	GPErrjmpC	ML	A=C.A <REF>GETPTR <REF>Errjmp
+10F54	NULLCHARERR	U	Error 102h
+10F64	INVFUNCERR	U	Error 103h
+10F74	NOEQERR	U	Error 104h
+10F80	ErrjmpC	ML	A=C.A <REF>Errjmp
+10F86	SYNTAXERR		Error 106h
+10F96	SETINVPPAR	U	Error 12Eh
+10FA6	SETNONERAL	U	Error 12Fh
+10FB6	SETISOLERR	U	Error 130h
+10FC6	NOHALTERR		Error 126h
+10FE6	LASTSTKERR	U	Error 124h
+10FF6	LASTCMDERR	U	Error 125h
+11006	ARGNUMERR	U	Error 128h
+11016	SETCIRCERR		Error 129h
+11026	DIRARGERR	U	Error 12Ah
+11036	EMPTYDIRERR	U	Error 12Bh
+11046	INVDEFERR	U	Error 12Ch
+11056	MISLIBERR	U	Error 12Dh
+11066	IDCONFERR	U	Error 13Ch
+11320	ClrBusyAnn	U	->
+1132D	SetAlphaAnn		->
+1133A	ClrAlphaAnn		->
+11347	SetRightAnn		->
+11354	ClrRightAnn		->
+11361	SetLeftAnn		->
+1136E	ClrLeftAnn		->
+11432	FIRSTC@	UBS	-> #
+11442	SETFIRSTC_0	UBS	->
+11462	FIRSTC+	UBS	->
+11501	Lock?	U	-> flag
+11511	PrgmEntry?		-> flag
+11533	SetPrgmEntry		->
+11543	SetLock	U	->
+1155C	ClrPrgmEntry	U	->
+1156C	ClrLock	U	->
+1158F	MAKEGROB		#height #width -> grob
+115B3	makegrob	ML	R0.A = x, R1.A = y --> D0 = body Makes a grob of size x,y Prolog is in D0-20
+1165A	w->W	ML	Calculates GROB width A.A=width in pixels -> A.A=width in nibbles
+11679	GROB!		grob1 grob2 #x #y ->
+116B5	grob!	ML,U	R0,R1 = (row,col), D0 = grob1, D1 = grob2 --> Stores grob1 into grob2
+1192F	SUBGROB		grob #x1 #y1 #x2 #y2 -> grob'
+11A6D	GROB!ZERO		grob #x1 #y1 #x2 #y2 -> grob'
+11CF3	$>BIGGROB		$ -> grob
+11D00	$>GROB		$ -> grob
+11D8F	$5x7	ML	( D.A B.A C.A D0 D1 --> ) Displays string body at D1 in grob at D0 C.A = chars B.A = xlocation D.A = row length in nibbles -> D1 = addr after $ D0 = location of next char D.A = row length
+11F80	$>grob		$ -> grob
+1200C	RIGHT$3x6		$ #n -> flag grob
+1215E	CENTER$3x5		grob #x #y $ #w -> grob'
+122FF	INVGROB		grob -> grob'
+12429	BIGDISPN	aka	
+12429	DISPN		$ #row ->
+1245B	BIGDISPROW1	aka	
+1245B	DISP@01	aka	
+1245B	DISPROW1		$ ->
+1246B	BIGDISPROW2	aka	
+1246B	DISP@09	aka	
+1246B	DISPROW2		$ ->
+1247B	BIGDISPROW3	aka	
+1247B	DISP@17	aka	
+1247B	DISPROW3		$ ->
+1248B	BIGDISPROW4	aka	
+1248B	DISP@25	aka	
+1248B	DISPROW4		$ ->
+1249B	DISPROW5		$ ->
+124AB	DISPROW6		$ ->
+124BB	DISPROW7		$ ->
+124CB	DISPROW8		$ ->
+12635	HARDBUFF		-> dispgrob
+1263A	addrVDISP	ML	
+12645	HARDBUFF2		-> menugrob
+1264A	addrVDISP2	ML	
+12655	ABUFF		-> textgrob
+1265A	addrADISP	ML	
+12665	GBUFF		-> graphgrob
+126DF	BLANKIT		#startrow #rows ->
+1270C	DISPSTATUS2		$ ->
+12725	DISPROW1*		$ ->
+12748	DISPROW2*		$ ->
+12770	COERCE$22		$ -> $'
+127A7	SEP$NL		$ -> $' $''
+127CA	DROPDUPLEN$1+	U	$ ob -> $ #len+1
+128B0	XYGROBDISP		#x #y grob ->
+12964	HEIGHTENHBUFF	U	#rows ->
+1297D	BROADENHBUFF	U	#cols ->
+12996	ScreenUpN	U	(#n -> ) moves stk displ up #n lines
+12A0D	ScreenUp	U	moves stk displ up 1 line
+12A4A	ScreenDnN	U	(#n -> ) moves stk displ down #n lines
+12AF6	ScreenDn	U	moves stk displ down 1 line
+12B58	HBUFFDIMw	U	-> #width
+12B6C	HARDHEIGHT		-> #height
+12B85	FlashMsg		$ ->
+12BB7	BROADENGROB	U	grob #cols ->
+12DD1	HEIGHTENGROB		grob #rows ->
+12F94	GROB>GDISP		grob ->
+13043	KILLADISP	U	->
+13061	KILLGDISP		->
+130AC	RECLAIMDISP		->
+130CA	RSZVDISP	U	->
+13135	TOGDISP		->
+1314D	TOADISP		->
+13167	GDISPON?	U	-> flag
+131C8	WINDOWUP		->
+13220	WINDOWDOWN		->
+133AB	disprange		
+134AE	CLEARVDISP		->
+134E4	WINDOWLEFT		->
+1357F	WINDOWRIGHT		->
+13679	WINDOWXY		#y #x ->
+13695	REDISPHBUFF	U	->
+136AA	WindowXY	ML	
+136AC	addrLINECNTg	ML	
+137B6	WINDOWCORNER		-> #y #x
+137DC	corner	ML	
+1380F	PIXOFF3		#x #y ->
+13825	PIXON3		#x #y ->
+1383B	PIXOFF		#x #y ->
+1384A	PIXON		#x #y ->
+138CA	pixon2		
+138EF	GETPIX		
+138F2	GETPIX3		
+13986	PIXON?3		#x #y -> flag
+13992	PIXON?		#x #y -> flag
+13B51	DISPCHAR+PC		
+13D28	cursorblink+		
+13D55	cursorblink-		
+13D8C	CURSOR1		-> grob
+13DB4	CURSOR2		-> grob
+13E85	CURSOR_OFF		-> #
+13EBC	CURSOR_OFF0	UBS	->
+13ED2	CURSOR_OFF+	UBS	->
+13EF1	CURSOR@	UBS	-> #
+13F01	CURSOR+	UBS	
+13F29	SETCURSOR	UBS	
+13FE5	SAVEERRN	U	->
+1400E	ERR0	U	->
+14039	ERRN	U	-> #
+1404C	ERRN>HXS	U	-> hxs
+14065	ERRM	U	-> $
+14088	DO>STR		$ -> $ ob -> $
+140AB	DODISP		ob %row ->
+140F1	DOCHR		% -> $
+1410F	DONUM	U	$ -> CHR
+14137	DOSTR>		$ -> ?
+1415A	DOBEEP		%freq %dur ->
+141B2	setbeep		#ms #Hz ->
+141E5	ERRBEEP		->
+1420A	$>$?	U	$ $' -> flag
+142A6	$<$?	U	$ $' -> flag
+142BA	$>=$?	U	$ $' -> flag
+142E2	$<=$?	U	$ $' -> flag
+142FB	Ck&Freeze		% ->
+1446F	SuspendOK?		-> flag
+14483	nohalt		-> ob
+14C17	sstDISP		ob ->
+14EA5	RDUP		->
+14F2A	RROLL	U	#n ->
+15007	DO%EXIT		% ->
+1501B	DOHXSEXIT	U	hxs ->
+1502F	DO#EXIT		# ->
+15048	DO$EXIT		$ ->
+1508E	xDBUG	UBS,Usr	prog -> name ->
+1518D	GsstFIN		
+151A6	SolvMenuInit		->
+152FF	EqList?		ob ->
+153FC	DispVarsUtil		
+1553B	KeepUnit		% ob ob' -> % ob % ob u -> u' ob
+1568F	ALGeq?		
+15717	DOSTOE		ob ->
+1572B	DORCLE		-> ob
+15744	EQUATION		-> ob T -> F
+1576C	CUREQ	U	ID EQ
+15777	NULLID		-> id
+1578D	CRUNCH		ob -> %
+1583C	EVALCRUNCH		
+1592D	CK1NoBlame		->
+15941	CRUNCHNoBlame		
+15978	1stkdecomp$w		ob -> $
+159EB	stkdecomp$w		ob -> $
+159FA	setStdWid	UBS	->
+15A0E	EDITDECOMP$		ob -> $
+15A40	ederr		->
+15A60	rstfmt1		->
+15A8B	savefmt1		->
+15B13	DECOMP$		ob -> $
+15B31	editdecomp$w		ob -> $
+15D6F	BINT_117h	U	279d 117h
+15E83	longhxs		
+15EF6	ONEPOS$	U	$ $find/chr -> #pos -> #0
+1605F	addtics		
+1613F	NULL$TEMP		-> $
+162B8	a%>$		% -> $
+162B8	a%>$,	aka	
+16671	Shrink$	ML	Shrinks a strobj R0.A=->$ D0=end of $ Uses A.W B.A C.W D.10 D0 D1
+16677	Clean$R0	ML,UBS	R1=R0+5 <REF>Clean$
+16683	Clean$	ML,UBS	Shrink strobj in top of TEMPOB R1=addr of length field A.A=new end address Uses A.W B.A C.W D.A D0 D1
+166E3	DOFIX		# ->
+166EF	DOSCI		# ->
+166FB	DOENG		# ->
+16707	DOSTD		->
+167BF	DPRADIX?		-> flag
+167D8	#:>$		# -> "#:\ "
+167E4	#>$		# -> $
+1686A	stackitw		
+169A5	NDROPFALSE		meta -> F
+169A5	NDROPFALSE		ob1..obn #n -> F
+1782E	2LEN$#+	U	$ $' -> $ $' #
+1795A	!DcompWidth		# ->
+17980	DcompWidth@		-> #
+179D0	NEXTRRPOB		
+179E8	addrTEMPTOP		
+17ADB	FixRRP		
+17B86	VLM		
+18308	DropSysObs		
+1848C	PATHDIR		-> {HOME dir1 dir2..}
+184E1	CREATEDIR		id ->
+18513	?STO_HERE	aka	
+18513	XEQSTOID		ob id/lam ->
+1853B	SAFE@_HERE		id -> ob F -> T
+1854F	?PURGE_HERE		id ->
+18595	XEQPGDIR		id ->
+185C7	DoHere:		->
+18621	LastNonNull		rrp -> ob T -> F
+1863A	PrevNonNull		ob -> ob' T -> F
+18653	CkNonNull	U	ob -> ob T -> F
+1867F	DODIRPRG	U	ob :: -> {}
+186E8	DOTVARS%		% -> {}
+18779	DOVARS		-> {id1 id2..}
+1884D	0LASTOWDOB!		->
+1884D	0LASTOWDOB!	aka	
+1884D	0LastRomWrd!	aka	
+18873	AND$		$1 $2 -> $'
+18887	OR$		$ $' -> $''
+1889B	XOR$		$ $' -> $''
+188D2	NOT$	U	$1 $2 -> $'
+188E6	!AND$	U	$ $' -> $''   ???
+188F5	!OR$	U	$ $' -> $''   ???
+18904	!XOR$	U	$ $' -> $''   ???
+18961	!NOT$	U	$ $' -> $''   ???
+18A15	CK0NOLASTWD		->
+18A1E	CK0		->
+18A5B	CK3		ob1...ob3 -> ob1...ob3
+18A68	CK3NOLASTWD		ob1...ob3 -> ob1...ob3
+18A80	CK2		ob1 ob2 -> ob1 ob2
+18A8D	CK2NOLASTWD		ob1 ob2 -> ob1 ob2
+18AA5	CK1		ob -> ob
+18AB2	CK1NOLASTWD		ob -> ob
+18B6D	CK5		ob1...ob5 -> ob1...ob5
+18B7A	CK5NOLASTWD		ob1...ob5 -> ob1...ob5
+18B92	CK4		ob1...ob5 -> ob1...ob5
+18B9F	CK4NOLASTWD		ob1...ob4 -> ob1...ob4
+18C34	CKN		ob1...obn %n ->  ob1..obn #n
+18C4A	CKNNOLASTWD		ob1...obn %n ->  ob1..obn #n
+18C92	SETNONEXTERR		Error 204h
+18CA2	SETSIZEERR		Error 203h
+18CA7	DOSIZEERR	ML	Bad Argument Value error
+18CB2	SETTYPEERR		Error 202h
+18CC2	SETSTACKERR		Error 201h
+18CD7	%ABSCOERCE		% -> #
+18CEA	COERCE		% -> #
+18DBF	UNCOERCE		# -> %
+18E45	DNOTSYMB?SEMI	U	symb -> :: symb <ob1> <rest> ; ob -> :: ob ;
+18EBA	COMPEVAL		comp ->
+18ECE	CK1&Dispatch		->
+18EDF	CK2&Dispatch		->
+18EF0	CK3&Dispatch		->
+18F01	CK4&Dispatch		->
+18F12	CK5&Dispatch		->
+18F23	EvalNoCK		comp -> ?
+18F6A	'EvalNoCK:_sup	U	RS ob ->
+18F6A	EvalNoCK:	U	RS ob ->
+18F6A	EvalNoCK:	aka	
+18F9D	CK&DISPATCH0		->
+18FA9	CK&DISPATCH2		->
+18FB2	CK&DISPATCH1		->
+191B9	#*OVF		# #' -> #*#'
+19207	CKNFLOATS	U	->
+19294	>ARRY	U	F%..F% #n [%F] -> [F%]'
+19350	NOTINHARDROM?	U	ob -> ob flag
+193DA	COERCE{}2	U	{%} -> {#}
+194F7	COERCE2		% %' -> # #'
+1950B	UNCOERCE2		# # -> % %
+19529	UNCOERCE{}2	U	{#} -> {%} {# #} -> {% %}
+1957B	xASR	Usr	# -> #'
+1959B	xRL	Usr	# -> #'
+195BB	xRLB	Usr	# -> #'
+195DB	xRR	Usr	# -> x'
+195FB	xRRB	Usr	# -> x'
+1961B	xSL	Usr	# -> #'
+1963B	xSLB	Usr	# -> #'
+1965B	xSR	Usr	# -> #'
+1967B	xSRB	Usr	# -> #'
+1969B	xR>B	Usr	x -> #
+196BB	xB>R	Usr	# -> R
+196DB	xCONVERT	Usr	x1_u1 x2_u2 -> x3_u2
+1971B	xUVAL	Usr	u -> x
+1974F	x>UNIT	Usr	x u -> u'
+19771	xUBASE	Usr	u -> u'
+197A5	xUFACT	Usr	u1 u2 -> u3
+197C8	UMFACT	U	u1 u2 -> u
+197F7	xTIME	Usr	-> time
+19812	xDATE	Usr	-> date
+1982D	xTICKS	Usr	-> #
+19848	xWSLOG	Usr	-> $ $ $ $
+19863	xACKALL	Usr	->
+1987E	xACK	Usr	->
+1989E	xSETDATE	Usr	date ->
+198BE	xSETTIME	Usr	time ->
+198DE	xCLKADJ	Usr	ticks ->
+198FE	xSTOALARM	Usr	time -> n {date time act rep} -> n
+19928	xRCLALARM	Usr	n -> {date time action rep}
+19948	xFINDALARM	Usr	date -> n {date time} -> n 0 -> n
+19972	xDELALARM	Usr	n ->
+19992	xTSTR	Usr	date time -> $
+199B2	xDDAYS	Usr	date1 date2 -> days
+199D2	xDATE+	Usr	date ndays -> date'
+199EB	DoInputForm		l1..ln f1..fm #n #m msg $ -> ob1..obn T -> F\n l = $ #x #y f = msg #x #y #w #h #type legal dec $hlp ChDat ChDec res init
+1A105	xCRDIR	Usr	name ->
+1A125	xPATH	Usr	-> {HOME dir1 .. dirn}
+1A140	xHOME	Usr	->
+1A15B	xUPDIR	Usr	->
+1A16F	UPDIR		->
+1A194	xVARS	Usr	-> {}
+1A1AF	xTVARS	Usr	ntype -> {} {n...} -> {}
+1A1D9	xBYTES	Usr	obj -> chksum size
+1A1FC	OCRC%		ob -> hxs %bytes
+1A265	VARSIZE		id -> hxs %bytes
+1A2BC	xNEWOB	Usr	ob -> ob
+1A2DA	INHARDROM?		ob -> ob flag
+1A303	xKILL	Usr	->
+1A31E	xOFF	Usr	->
+1A339	xDOERR	Usr	n -> #n -> $ -> 0 ->
+1A36D	xERR0	Usr	->
+1A388	xERRN	Usr	-> $nerr
+1A3A3	xERRM	Usr	-> $msg
+1A3BE	xEVAL	Usr	ob -> ?
+1A3FE	xIFTE	Usr	0/1 objT objF -> ?
+1A4A3	%IFTE	U	% ob1 ob2 -> ?
+1A4CD	xIFT	Usr	0/1 obj -> ?
+1A52E	xSYSEVAL	Usr	# -> ?
+1A584	xDISP	Usr	obj n_line ->
+1A5A4	xFREEZE	Usr	n ->
+1A5C4	xBEEP	Usr	freq dur ->
+1A5E4	x>NUM	Usr	x -> x'
+1A604	xLAST	Usr	-> ob1 .. obn
+1A71F	xWAIT	Usr	sec -> 0 -> rc.p
+1A738	Wait/GetKey		% -> ?
+1A7B5	dowait/quit?	U	%secs ->
+1A7C9	dowait		%secs ->
+1A7ED	wait	U	hxs ->
+1A858	xCLLCD	Usr	->
+1A873	xKEY	Usr	-> rc 1 -> 0
+1A8BB	xCONT	Usr	->
+1A8D8	x=	Usr	x y -> x=y
+1A995	xNEG	Usr	x -> x'
+1AA1F	xABS	Usr	x -> x'
+1AA6E	xCONJ	Usr	x -> x'
+1AABD	xPI	Usr	-> pi
+1AADF	xMAXR	Usr	-> MAXR
+1AB01	xMINR	Usr	-> MINR
+1AB23	xCONSTANTe	Usr	-> e
+1AB45	xi	Usr	-> i
+1AB67	x+	Usr	x y -> x+y
+1AC93	SWAP>HCOMP	U	ob comp -> ob+comp
+1ACDD	xNEGNEG		->
+1AD09	x-	Usr	x y -> x-y
+1ADEE	x*	Usr	x y -> x*y
+1AF05	x/	Usr	x y -> x/y
+1B02D	x^	Usr	y x -> y^x
+1B185	rpnXROOT		
+1B1CA	xXROOT	Usr	y x -> Y'
+1B278	xINV	Usr	x -> 1/x [[]] -> [[]]'
+1B2DB	xARG	Usr	c -> \Gh
+1B30D	%ARG	U	% %' -> %rem
+1B32A	xSIGN	Usr	x -> x'
+1B374	xSQRT	Usr	x -> x'
+1B3F5	CK%SQRT	U	% -> SQRT%%
+1B426	xSQ	Usr	x -> x'
+1B47B	%SQ	U	% -> %'
+1B48F	C%C*C	U	C% -> C%^2
+1B4AC	xSIN	Usr	x -> x'
+1B505	xCOS	Usr	x -> x'
+1B55E	xTAN	Usr	x -> x'
+1B5B7	xSINH	Usr	x -> x'
+1B606	xCOSH	Usr	x -> x'
+1B655	xTANH	Usr	x -> x'
+1B6A4	xASIN	Usr	x -> x'
+1B6EA	CK%ASIN	U	% -> ASIN%
+1B72F	xACOS	Usr	x -> x'
+1B775	CK%ACOS	U	% -> ACOS%
+1B79C	xATAN	Usr	x -> x'
+1B7EB	xASINH	Usr	x -> x'
+1B830	xACOSH	Usr	x -> x'
+1B86C	CK%ACOSH	U	% -> ACOSH%
+1B8A2	xATANH	Usr	x -> x'
+1B8DE	CK%ATANH	U	% -> ATANH%
+1B905	xEXP	Usr	x -> x'
+1B94F	xLN	Usr	x -> x'
+1B995	CK%LN	U	% -> LN%
+1B9C6	xLOG	Usr	x -> x'
+1BA0C	CK%LOG	U	% -> LOG%
+1BA3D	xALOG	Usr	x -> x'
+1BA8C	xLNP1	Usr	x -> x'
+1BAC2	xEXPM	Usr	x -> x'
+1BB02	xFACT	Usr	x -> x'
+1BB41	preFACT		
+1BB6D	xIP	Usr	x -> n
+1BBA3	xFP	Usr	x -> x'
+1BBD9	xFLOOR	Usr	x -> n
+1BC0F	xCEIL	Usr	x -> n
+1BC45	xXPON	Usr	% -> n symb -> XPON(symb)
+1BC71	xMAX	Usr	x y -> x'
+1BCE3	xMIN	Usr	x y -> x'
+1BD55	xRND	Usr	x n -> x'
+1BDD1	xTRNC	Usr	x n ->
+1BE4D	xMOD	Usr	x y -> x'
+1BE9C	xMANT	Usr	x -> x'
+1BEC8	xD>R	Usr	x -> (pi/180)x
+1BEF4	xR>D	Usr	x -> (180/pi)x
+1BF1E	x>HMS	Usr	x -> x'
+1BF3E	xHMS>	Usr	x -> x'
+1BF5E	xHMS+	Usr	hms1 hms2 -> hms3
+1BF7E	xHMS-	Usr	hms1 hms2 -> hms3
+1BF9E	xRNRM	Usr	[] -> x
+1BFBE	xCNRM	Usr	[] -> col_norm
+1BFDE	xDET	Usr	[[]] -> x
+1BFFE	xDOT	Usr	[1] [2] -> x
+1C01E	xCROSS	Usr	[1] [2] -> [3]
+1C03E	xRSD	Usr	[B] [[A]] [Z] ->  []' [[B]] [[A]] [[Z]] -> [[]]'
+1C060	x%	Usr	x y -> xy/100
+1C0D7	x%T	Usr	x y -> 100y/x
+1C149	x%CH	Usr	x1 x2 -> x3
+1C1B9	xRAND	Usr	-> x
+1C1D4	xRDZ	Usr	x ->
+1C1F6	xCOMB	Usr	n k -> Cn,k
+1C236	xPERM	Usr	n k -> n'
+1C274	xSF	Usr	n ->
+1C2D5	xCF	Usr	n ->
+1C313	xFS?	Usr	n -> 0/1
+1C360	xFC?	Usr	n -> 0/1
+1C399	xDEG	Usr	->
+1C3B4	xRAD	Usr	->
+1C3CF	xGRAD	Usr	->
+1C3EA	xFIX	Usr	n ->
+1C41E	xSCI	Usr	n ->
+1C452	xENG	Usr	n ->
+1C486	xSTD	Usr	->
+1C4A1	xFS?C	Usr	n -> 0/1
+1C4CE	TestUserClr	U	# -> flag
+1C4EC	TestSysClr	U	# -> flag
+1C520	xFC?C	Usr	n -> 0/1
+1C559	xBIN	Usr	->
+1C574	xDEC	Usr	->
+1C58F	xHEX	Usr	->
+1C5AA	xOCT	Usr	->
+1C5C5	xSTWS	Usr	n -> #n ->
+1C5FE	xRCWS	Usr	-> n
+1C619	xRCLF	Usr	-> {#s1 #u1 #s2 #u2}
+1C637	RCLSYSF		-> hxs
+1C64E	RCLUSERF		-> hxs
+1C67F	xSTOF	Usr	{#s1 #u1 #s2 #u2} ->
+1C6A2	DOSTOALLF0		{} ->
+1C6CF	STOALLFcont	U	hxs_usr hxs_sys ->
+1C6E3	DOSTOSYSF		hxs ->
+1C6F7	STOUSERF	U	hxs ->
+1C731	STOSYSF	U	hxs ->
+1C783	x>LIST	Usr	ob1 .. obn n -> {}
+1C79E	xR>C	Usr	x y -> (x,y) [X] [Y] -> [(x,y)]
+1C7CA	xRE	Usr	(x,y) -> x [] -> []'
+1C819	xIM	Usr	(x,y) -> y [] -> []'
+1C85C	xSUB	Usr	ob start end -> ob' ob= [[]], $, {}, grob, PICT start,end = n, {n m}, (n,m)
+1C8BB	XEQSUB$	U	$ % %' -> $'
+1C8EA	xREPL	Usr	ob pos new -> ob' ob= [[]] or [] or {} or $ or PICT pos= N or {n m} or (n,m)
+1C95A	xLIST>	Usr	{} -> ob1...obn n
+1C973	XEQLIST>	U	comp -> obn..ob1 %n
+1C98E	xC>R	Usr	(x,y) -> x y [C]   -> [R] [I]
+1C9B8	xSIZE	Usr	ob -> n -> {N m} -> #nw #nh
+1CA0D	DROP%1	U	ob -> %1
+1CA26	LEN$>%	U	$ ->  %
+1CA3A	LENCOMP>%	U	comp -> %n
+1CAB4	xPOS	Usr	str substring -> n/0 {} ob -> n/0
+1CAD7	XEQPOS$	U	$ $find/chr -> %pos -> %0
+1CB0B	x>STR	Usr	ob -> $
+1CB26	xSTR>	Usr	$ -> ob
+1CB46	xNUM	Usr	$ -> n
+1CB66	xCHR	Usr	n -> $
+1CB86	xTYPE	Usr	ob -> %type
+1CB90	XEQTYPE		ob -> ob %type
+1CC03	%11		11
+1CC1D	%12		12
+1CC37	%13		13
+1CC51	%14		14
+1CC6B	%20		20
+1CC85	%15		15
+1CCA4	%21		21
+1CCC3	%22		22
+1CCE2	%23		23
+1CD01	%24		24
+1CD20	%25		25
+1CD3A	%16		16
+1CD54	%17		17
+1CD69	BINT_AFh	U	175d AFh
+1CD73	%26		26
+1CD8D	%27		27
+1CDF2	%18		18
+1CE07	%19		19
+1CE28	xVTYPE	Usr	name -> n
+1CEE3	xEQ>	Usr	'l=r' -> l r
+1CF2E	SPLITEQ	U	sym -> arg1 arg2
+1CF42	drppargsym	U	meta&ob -> 'M_rest''MetaLast'
+1CF7B	xOBJ>	Usr	ob -> ?
+1CFD0	EXPR>	U	sym -> arg1..argn %n ob
+1D009	x>ARRY	Usr	x1..xn n -> [] x11...xnm {n m} -> [[]]
+1D02C	XEQ>VECTOR	U	F%..F% %n -> [%F]
+1D054	XEQ>ARRAY		F%..F% {#n #m} -> [F%]
+1D054	XEQ>ARRY	aka	
+1D092	xARRY>	Usr	[] -> x1...xn {n} [[]] -> x11...xnm {n m}
+1D0AB	DOARRY>	U	[] -> F%..F% {#n #m}
+1D0DF	xRDM	Usr	ob size -> ob' name size -> ob= [] or [[]] size = {n} or {n m}
+1D186	xCON	Usr	{ n } x -> [] { n k } x -> [[]] [] x -> []'
+1D2DC	xIDN	Usr	n -> [[]] [[]] -> [[]]' name -> [[]]
+1D392	xTRN	Usr	[[]] -> [[]]' name ->
+1D407	xPUT	Usr	ob pos obj -> ob' ob  = [] or [[]] or {} or name pos = n or {n} or {n m}
+1D5DF	xPUTI	Usr	ob pos obj -> [] pos' ob  = [] or [[]] or {} or name pos = n or {n} or {n m}
+1D7C6	xGET	Usr	ob n -> elm ob = [] or [[]] or {} or name pos = n or {n} or {n m}
+1D8C7	xGETI	Usr	ob pos -> ob' pos' elm ob = [] or [[]] or {} or name pos = n or {n} or {n m}
+1DABB	#1+ROT		ob ob' # -> ob' #+1 ob
+1DBB0	BANGARRY	U	el # M -> M'
+1DBB0	BANGARRY	UBS	el # M -> M'
+1DC00	PUTLIST		ob #i {} -> {}'
+1DD06	xV>	Usr	[]/() -> x y -> x y z (in current co-system)
+1DE66	x>V2	Usr	x y -> [] -> ()
+1DEC2	x>V3	Usr	x y z -> []
+1E04A	xINDEP	Usr	name -> {name} -> {name x1 x2} -> {x1 x2} -> x1 x2 ->
+1E07E	xPMIN	Usr	(x,y) ->
+1E09E	xPMAX	Usr	(x,y) ->
+1E0BE	xAXES	Usr	c -> {c tick $x $y } ->
+1E0E8	xCENTR	Usr	(x,y) -> x     ->
+1E126	xRES	Usr	n_int -> #n_int ->
+1E150	x*H	Usr	xf ->
+1E170	x*W	Usr	yf ->
+1E190	xDRAW	Usr	->
+1E1AB	xAUTO	Usr	->
+1E1C6	xDRAX	Usr	->
+1E1E1	xSCALE	Usr	xs ys ->
+1E201	xPDIM	Usr	(xmin,ymin) (xmax,ymax) -> #width #height ->
+1E22B	xDEPND	Usr	name -> {name} -> {name y1 y2} -> {y1 y2} -> y1 y2 ->
+1E25F	xERASE	Usr	->
+1E27A	xPX>C	Usr	{#m #n} -> (x,y)
+1E29A	xC>PX	Usr	(x,y) -> {#n #m}
+1E2BA	xGRAPH	Usr	->
+1E2D5	xLABEL	Usr	->
+1E2F0	xPVIEW	Usr	(x,y) -> {#n #m} ->
+1E31A	xPIXON	Usr	(x,y) -> {#n #m} ->
+1E344	xPIXOFF	Usr	(x,y) -> {#n #m} ->
+1E36E	xPIX?	Usr	(x,y) -> 1/0 {#n #m} -> 1/0
+1E398	xLINE	Usr	(x1,y1) (x2,y2) -> {#n1 #m1} {#n2 #m2} ->
+1E3C2	xTLINE	Usr	(x1,y1) (x2,y2) -> {#n1 #m1} {#n2 #m2} ->
+1E3EC	xBOX	Usr	{#n1 #m1} {#n2 #m2} -> c1 c2 ->
+1E416	xBLANK	Usr	#width #height -> grob
+1E436	xPICT	Usr	-> PICT
+1E456	xGOR	Usr	g_targ {#n #m} grob -> g_targ' g_targ (x,y) grob -> g_targ' PICT ... ... ->
+1E4E4	xGXOR	Usr	g_targ {#n #m} g_src -> g_targ' g_targ (x,y) g_src -> g_targ' PICT ... ... ->
+1E572	xLCD>	Usr	-> grob
+1E58D	x>LCD	Usr	grob ->
+1E5AD	x>GROB	Usr	ob n_chrsize -> grob
+1E5D2	xARC	Usr	c r \Gh1 \Gh2 -> {#x #y} #r \Gh1 \Gh2 ->
+1E606	xTEXT	Usr	->
+1E621	xXRNG	Usr	x1 x2 ->
+1E641	xYRNG	Usr	y1 y2 ->
+1E661	xFUNCTION	Usr	->
+1E681	xCONIC	Usr	->
+1E6C1	xPARAMETRIC	Usr	->
+1E6E1	xTRUTH	Usr	->
+1E701	xSCATTER	Usr	
+1E721	xHISTOGRAM	Usr	->
+1E741	xBAR	Usr	->
+1E761	xSAME	Usr	ob1 ob2 -> 1/0
+1E783	xAND	Usr	x1 x2 -> x3
+1E809	xOR	Usr	x y -> x'
+1E88F	xNOT	Usr	x -> x'
+1E8F6	xXOR	Usr	# #' -> #'' $ $' -> $'' 1/0 1/0 -> 1/0
+1E972	x==	Usr	x y -> 1 \n -> 0
+1EA9D	x#?	Usr	x y -> 1 \n -> 0
+1EBBE	x<	Usr	x y -> 1 \n -> 0
+1EC5D	x>	Usr	x y -> 1 \n -> 0
+1ECFC	x<=?	Usr	x y -> 1 \n -> 0
+1ED9B	x>=?	Usr	x y -> 1 \n -> 0
+1EE38	xOLDPRT	Usr	
+1EE53	xPR1	Usr	ob -> ob
+1EE6E	xPRSTC	Usr	
+1EE89	xPRST	Usr	->
+1EEA4	xCR	Usr	->
+1EEBF	xPRVAR	Usr	name -> {names} -> :port:name ->
+1EF43	xDELAY	Usr	x_delay ->
+1EF63	xPRLCD	Usr	->
+1EFD2	xDER		
+1F047	2DROP%0	U	ob ob' -> %0
+1F0F5	XEQSYMDERSTEP	U	QN sym -> symf
+1F113	XEQSYMDERCON	U	QN %/C%/u -> symf
+1F133	xRCEQ	Usr	-> EQ
+1F14E	xSTEQ	Usr	ob ->
+1F16E	xROOT	Usr	prog/s var guess -> x prog/s var {guesses} -> x
+1F201	XEQINTEGID	U	ob ob ob id/lam -> symf
+1F223	xINTEGRAL		
+1F27A	XEQINTEG	U	ob ob ob QN -> symf
+1F38B	SYMWHERE	U	symf {} -> symf
+1F3F3	xWHERE		
+1F439	XEQSYMWHERE	U	symf QN1 id1..QNn idn -> symf
+1F43E	CKWHEREARGS	U	checks pairs of quoted names
+1F500	xQUOTE	Usr	ob -> 'ob
+1F5C5	xAPPLY	Usr	{symb1 .. symbn} f -> f(symb1...symbn)
+1F640	xFCNAPPLY		
+1F9C4	x->Q	Usr	x -> a/b
+1F9E9	x->QPI	Usr	x -> symb
+1FA59	xMATCHUP	Usr	symb {spat srepl} -> symb' 0/1 symb {spat srepl scond} -> symb' 0/1
+1FA8D	xMATCHDN	Usr	symb {spat srepl} -> symb' 0/1 symb {spat srepl scond} -> symb' 0/1
+1FAEB	xFORMUNIT	Usr	
+1FB5D	xPREDIV	Usr	x y -> x/y
+1FB87	xDUP	Usr	ob -> ob ob
+1FBA2	xDUP2	Usr	1 2 -> 1 2 1 2
+1FBBD	xSWAP	Usr	ob1 ob2 -> ob2 ob1
+1FBD8	xDROP	Usr	ob ->
+1FBF3	xDROP2	Usr	ob1 ob2 ->
+1FC0E	xROT	Usr	1 2 3 -> 2 3 1
+1FC29	xOVER	Usr	1 2 -> 1 2 1
+1FC44	xDEPTH	Usr	-> n
+1FC64	xDROPN	Usr	ob1...obn n ->
+1FC7F	xDUPN	Usr	1...n n -> 1...n 1...n
+1FC9A	xPICK	Usr	1...n n -> 1..n 1
+1FCB5	xROLL	Usr	1...n n -> 2...n 1
+1FCD0	xROLLD	Usr	n ... 1 n -> 1 n...2
+1FCEB	xCLEAR	Usr	ob1 .. obn ->
+1FD0B	xSTOSIGMA	Usr	ob ->
+1FD2B	xCLSIGMA	Usr	->
+1FD46	xRCLSIGMA	Usr	-> [[]]
+1FD61	xSIGMA+	Usr	x -> x1...xn -> []/[[]] ->
+1FD8B	xSIGMA-	Usr	-> x -> []
+1FDA6	xNSIGMA	Usr	-> nrows
+1FDC1	xCORR	Usr	-> x_correlation
+1FDDC	xCOV	Usr	-> x_covariance
+1FE12	xSUMY	Usr	-> xsum
+1FE2D	xSUMX2	Usr	-> xsum
+1FE48	xSUMY2	Usr	-> xsum
+1FE63	xSUMXY	Usr	-> xsum
+1FE7E	xMAXSIGMA	Usr	-> xmax -> [x1...xn]
+1FE99	xMEAN	Usr	-> xmean -> [x1...xn]
+1FEB4	xMINSIGMA	Usr	-> xmin -> [x1...xn]
+1FECF	xSDEV	Usr	-> xsdev -> [x1...xn]
+1FEEA	xTOT	Usr	-> xsum -> {x1...xn}
+1FF05	xVAR	Usr	-> x -> [x1...xn]
+1FF20	xLR	Usr	-> Intercept Slope
+1FF7A	xPREDV	Usr	x -> y
+1FF9A	xPREDY	Usr	x -> y
+1FFBA	xPREDX	Usr	y -> x
+1FFDA	xXCOL	Usr	n ->
+1FFFA	xYCOL	Usr	n ->
+2001A	xUTPC	Usr	n x -> x'
+2003A	xUTPN	Usr	n v x -> x'
+2005A	xUTPF	Usr	n1 n2 x -> x'
+2007A	xUTPT	Usr	n x -> x'
+2009A	xSIGMACOL	Usr	x_col y_col ->
+200C4	xSCLSIGMA	Usr	->
+200F3	xSIGMALINE	Usr	-> symb
+2010E	xBINS	Usr	min width n -> [[]] []
+20133	xBARPLOT	Usr	->
+20167	xHISTPLOT	Usr	->
+2018C	xSCATRPLOT	Usr	->
+201B1	xLINFIT	Usr	->
+201D6	xLOGFIT	Usr	->
+201FB	xEXPFIT	Usr	->
+20220	xPWRFIT	Usr	
+2025E	xBESTFIT	Usr	->
+202CE	xSINV	Usr	name ->
+2034D	xSNEG	Usr	name ->
+203CC	xSCONJ	Usr	name ->
+2044B	xSTO+	Usr	ob name -> name ob ->
+20538	xSTO-	Usr	ob name -> name ob ->
+2060C	xSTO/	Usr	ob name -> name ob ->
+20753	xSTO*	Usr	ob name -> name ob ->
+208F4	xINCR	Usr	name -> x
+209AA	xDECR	Usr	name -> x_new
+20A15	xCOLCT	Usr	symb -> symb'
+20A49	xEXPAN	Usr	symb1 -> symb2
+20A7D	xRULES	Usr	
+20A93	xISOL	Usr	symb var -> symb'
+20AB3	xQUAD	Usr	symb var -> symb'
+20AD3	xSHOW	Usr	symb name -> symb' symb {names} -> symb'
+20B00	XEQSHOWLS		sym {} -> symf
+20B20	xTAYLR	Usr	symb var n -> symb'
+20B40	xRCL	Usr	var -> x :port:nlib -> lib :port:name -> ob :port:{path} -> ob
+20B81	XEQRCL		id -> ob
+20CAD	PICTRCL		xPICT -> grob
+20CCD	xSTO	Usr	ob name -> ob :port:name -> lib port -> bup port -> ob 'name(i)' ->
+20D65	xDEFINE	Usr	'name=expr' -> 'name(name1...)=expr(name1...) ->
+20EFE	xPURGE	Usr	name -> {names} -> PICT -> :port:name -> :port:nlib ->
+20F8A	XEQPURGEPICT		xPICT ->
+20FAA	xMEM	Usr	-> x
+20FD9	xORDER	Usr	{names} ->
+20FF2	XEQORDER		{id1 id2..} ->
+210FC	xCLUSR	Usr	->
+2115D	xTMENU	Usr	%  -> [InitMenu%] {} -> name -> Ob -> [@LIST InitMenu]
+21196	xMENU	Usr	% -> menu ->
+211B4	ID_CST	U	ID CST
+211E1	xRCLMENU	Usr	-> x
+211FC	xPVARS	Usr	nport -> {} mem
+2123A	xPGDIR	Usr	name ->
+2125A	xARCHIVE	Usr	:port:name -> :IO:name ->
+2133C	xRESTORE	Usr	:port:name -> ob ->
+2137F	xMERGE	Usr	1 ->
+213D1	xFREE	Usr	
+2142D	xLIBS	Usr	-> {title nlib nport ...}
+21448	xATTACH	Usr	n -> :nport:n ->
+2147C	xDETACH	Usr	n -> :port:n ->
+21660	SWAPDROPTRUE		ob1 ob2 -> ob2 T
+21674	>BAK		id ob -> bak
+216D8	OB>BAKcode		
+21922	GetBVars		
+21B4E	DOAPWL	U	->
+21B5A	XEQIOBACKUP		
+21C47	MEMSKIP	U	ob -> #nextaddress
+21C6F	XEQSETLIB		% ->
+21CBA	SETROMPART		
+21E75	xXMIT	Usr	$ -> 1 -> $rest 0
+21E95	xSRECV	Usr	n -> $ 0/1
+21EB5	xOPENIO	Usr	->
+21ED5	xCLOSEIO	Usr	->
+21EF0	xSEND	Usr	name -> {names} -> {{old new}...} ->
+21F24	xKGET	Usr	name -> "name" -> {names} -> {{old new}...} ->
+21F62	xRECN	Usr	name -> $name ->
+21F96	xRECV	Usr	->
+21FB6	xFINISH	Usr	->
+21FD1	xSERVER	Usr	->
+21FEC	xCKSM	Usr	n_type ->
+2200C	xBAUD	Usr	n ->
+2202C	xPARITY	Usr	n ->
+2204C	xTRANSIO	Usr	n ->
+2206C	xKERRM	Usr	-> msg
+22087	xBUFLEN	Usr	-> nchars 0/1
+220A2	xSTIME	Usr	x/0 ->
+220C2	xSBRK	Usr	->
+220DD	xPKT	Usr	$data $type -> $response
+22352	%1200	U	1200
+22367	%2400	U	2400
+2237C	%4800	U	4800
+22391	%9600	U	9600
+224CA	xINPUT	Usr	$prompt $ -> $' $prompt {specs} -> $'
+224F4	xASN	Usr	obj key -> 'SKEY' ->
+22514	xSTOKEYS	Usr	{ob key ...} -> {'S' ob key ...} -> 'S' ->
+22548	xDELKEYS	Usr	rc.p -> { rc.p ... n } -> 0 -> 'S' ->
+22586	xRCLKEYS	Usr	-> {ob ... key ...} -> {S ob ... key ...}
+225A4	ID_S	U	ID S
+225BE	x->TAG	Usr	ob tag -> :tag:ob
+225F5	USER$>TAG		ob $tag -> tagged
+22618	%>TAG		ob % -> tagged
+22633	xDTAG	Usr	tag:obj -> obj
+22EC3	xIF	Usr	->
+22EFA	xTHEN	Usr	0/1 ->
+22F68	SYMCRUNCH1	U	ob -> %
+22F86	SYMCRUNCH2	U	ob1 ob2 -> % ob2
+22FB5	xELSE	Usr	->
+22FD5	xIFEND	Usr	
+22FEB	xALG->	Usr	
+23033	xWHILE	Usr	->
+2305D	xREPEAT	Usr	1/0 ->
+230C3	xDO	Usr	->
+230ED	xUNTIL	Usr	->
+23103	xSTART	Usr	start finish ->
+231A0	xSTARTVAR	Usr	start finish ->
+2324C	xNEXT	Usr	->
+23380	xSTEP	Usr	n -> symb ->
+233DF	xIFERR	Usr	->
+23472	xHALT	Usr	->
+2349C	xSILENT'		-> nextob
+234C1	xRPN->	Usr	ob1 .. obn ->
+235FE	x>>ABND	Usr	
+2361E	x<<	Usr	
+23639	x>>	Usr	
+23654	x'	Usr	
+23679	xENDTIC	Usr	
+23694	xWHILEEND	Usr	
+236B9	xENDDO	Usr	1/0 ->
+2371F	xERRTHEN	Usr	
+23768	CK0ATTNABORT		->
+2378D	xCASE	Usr	->
+237A8	xTHENCASE	Usr	
+23813	xDIR	Usr	
+23813	xGROB	Usr	
+23824	xPROMPT	Usr	$ ->
+238A4	palparse		$ -> ob T               \ -> $ #pos $' F
+23EED	ONE{}N		ob -> { ob }
+24C0D	List		
+24EA6	{}>DIR		
+2512D	delimcase		
+2520A	'Rapndit		meta ob1...ob4 -> meta&ob ob1...ob4
+25223	DaDGNTc		
+25322	4psh	U	meta1 ob1..ob4 -> ob1&..ob4 meta1
+2534A	nultrior		NULL$ -> :: ; $ -> :: $ <Ob1> <Rest> ;
+25446	tok->		"->"
+25452	getmatchtok		hxs-mask $ #loc $_tok -> hxs-mask $ #next $match
+255BD	ngsizecase		
+255FB	need'case		
+25632	newBASE		
+256E4	convertbase		
+25B0B	#+OVF	U	# #' -> #+#'
+25C41	Extobcode		
+25CE1	GETPTRTRUE	ML	<REF>GETPTR , Do TRUE
+26162	GetNextToken		hxs-mask $ #start -> hxs-mask $ #next $token
+265ED	realPAcode		
+267D5	GPPushFTLp	ML	<REF>GETPTR , Loop to FalseTrue
+267DC	PushFTLp	ML,U	Loop to False/True
+26A2D	?OKINALG		ob -> ob flag
+26FAE	GETPTRFALSE	ML	<REF>GETPTR , Do FALSE
+27224	DNOTBAKcase	U	bak -> :: bak <ob2> <rest> ; ob -> :: ob <ob1> ;
+27234	DNOTLIBcase	U	lib -> :: lib <ob2> <rest> ; ob -> :: ob <ob1> ;
+27244	NOTLISTcase		{} -> :: {} <ob2> <rest> ; ob -> :: ob <ob1> ;
+27254	NOTSECOcase		seco -> :: seco <ob2> <rest> ; ob -> :: ob <ob1> ;
+27264	NOTROMPcase		romp -> :: romp <ob2> <rest> ; ob -> :: ob <ob1> ;
+27D00	check_pdata		
+28296	metatail		ob1..obn-i..obn #i #n+1 -> ob1..ob..obn-i #n-i obn-i+1..obn #i
+283C4	COLAskipcola	U	Drops rest of current stream, skipcola in the above.
+283D8	3SKIP	U	Skips 3 objs in the runstream.
+28558	#1-UNROT		ob ob' # -> #-1 ob ob'
+2856C	tok=casedrop		$ $' -> :: <ob1> ; -> :: $ <ob2> <rest> ;
+29A8D	nextsym'R		
+29BC2	subpdcdptch		
+29DCC	POSFLOWERR	U	Error 301h
+29DDC	NEGFLOWERR	U	Error 302h
+29DEC	OVERFLOWERR	U	Error 303h
+29DFC	SETIVLERR		Error 304h
+29E0C	INFRESERR	U	Error 305h
+29E21	PACKSB	ML	( x -> A ) Converts %% to %.If SB is clear uses roundup, if set uses lowest nibble in % field to determine rounding direction. Obeys and sets flow flags/indicators
+29E46	PACK	ML	( x -> A ) <REF>PACKSB without rounding 
+29FD0	POP1%SPLITA	ML	( %pop -> x ) Pop %, convert to %%, <REF>SAVPTR
+29FDA	POP1%	ML	( %pop -> A ) Pop %, <REF>SAVPTR
+2A002	POP2%	ML	( %pop1 %pop2 -> A,C ) Pop 2 reals, <REF>SAVPTR
+2A188	PUSH%	ML	( A -> %push ) Push A as %, <REF>GETPTR
+2A23D	PUSH%LOOP	ML	( A -> %push ) Push A as %, <REF>GETPTRLOOP
+2A2B4	%0		0
+2A2C9	%1		1
+2A2DE	%2		2
+2A2F3	%3		3
+2A308	%4		4
+2A31D	%5		5
+2A332	%6		6
+2A347	%7		7
+2A35C	%8		8
+2A371	%9		9
+2A386	%-1		-1
+2A39B	%-2		-2
+2A3B0	%-3		-3
+2A3C5	%-4		-4
+2A3DA	%-5		-5
+2A3EF	%-6		-6
+2A404	%-7		-7
+2A419	%-8		-8
+2A42E	%-9		-9
+2A443	%PI		pi
+2A458	%%PI	UBS	pi
+2A472	%MAXREAL		9.99E499
+2A487	%-MAXREAL		-9.99E499
+2A49C	%MINREAL		1E-499
+2A4B1	%-MINREAL		-1E-499
+2A4C6	%%0		0
+2A4E0	%%1		1
+2A4FA	%%2		2
+2A514	%%3		3
+2A52E	%%4		4
+2A548	%%5		5
+2A562	%%.1		0.1
+2A57C	%%.5		0.5
+2A596	%%10		10
+2A5B0	%%>%		%% -> %
+2A5C1	%>%%		% -> %%
+2A5D2	SETDEG		->
+2A5F0	SETRAD		->
+2A604	SETGRAD		->
+2A622	%D>R		%deg -> %rad
+2A62C	PI/180		pi/180
+2A655	%R>D		%rad -> %deg
+2A673	%>HMS		% -> %hms
+2A68C	%HMS>		%hms -> %
+2A6A0	%HMS+		%hms1 %hms2 -> %hms
+2A6C8	%HMS-		%hms1 %hms2 -> %hms
+2A6DC	%%MAX		%% %%' -> %%max
+2A6F5	%MAX		% %' -> %greater
+2A70E	%MIN		% %' -> %lesser
+2A727	%%0<		%% -> flag
+2A738	%0<		% -> flag
+2A75A	%%0=		%% -> flag
+2A76B	%0=		% -> flag
+2A788	%%0>		%% -> flag
+2A799	%0>		% -> flag
+2A7BB	%%0<>		%% -> flag
+2A7CF	%0<>		% -> flag
+2A7CF	%0<>		% -> flag
+2A7E3	%%0>=		%% -> flag
+2A7F7	%0>=		% -> flag
+2A80B	%%0<=		%% -> flag
+2A81F	%%<		%% %%' -> flag
+2A871	%<		% %' -> flag
+2A87F	%%>		%% %%' -> flag
+2A88A	%>		% %' -> flag
+2A895	%%>=		%% %%' -> flag
+2A8A0	%>=		% %' -> flag
+2A8AB	%%<=		%% %%' -> falg
+2A8B6	%<=		% %' -> flag
+2A8C1	%=		% %' -> flag
+2A8CC	%<>		% %' -> flag
+2A8D7	%SGN		% -> -1/0/1
+2A8F0	%%ABS		%% -> %%abs
+2A900	%ABS		% -> %'
+2A910	%%CHS		%% -> -%%
+2A920	%CHS		% -> -%
+2A930	%MANTISSA		% -> %mant
+2A943	%%+		%% %%' -> %%+%%'
+2A94F	%%-		%% %%' -> %%-%%'
+2A95B	%>%%-		% %' -> %%-%%'
+2A974	%+		% %' -> %+%'
+2A981	%-		% %' -> %-%'
+2A99A	%%*		%% %%' -> %%*%%'
+2A9BC	%*		% %' -> %*%'
+2A9C9	%OF		% %' -> %'/% * 100
+2A9E8	%%/		%% %%' -> %%/%%'
+2A9FE	%/		% %' -> %/%'
+2AA0B	%T		% %' -> %pctotal
+2AA30	%CH		% %' -> %pcchange
+2AA5F	%%^		%% %%' -> %%^%%'
+2AA70	%^		% %' -> %^%'
+2AA81	%NROOT		% %n -> %'
+2AA92	%%1/		%% -> 1/%%
+2AA9E	%>%%1/		% -> 1/%%
+2AAAF	%1/		% -> 1/%
+2AAEA	%%SQRT		%% -> SQRT%%
+2AAF6	%>%%SQRT		% -> SQRT%%
+2AB09	%SQRT		% -> SQRT%
+2AB1C	%%EXP		%% -> e^%%
+2AB2F	%EXP		% -> e^%
+2AB42	%EXPM1		% -> e^%-1
+2AB5B	%%LN		%% -> ln %%
+2AB6E	%LN		% -> LN%
+2AB81	%LOG		% -> LOG%
+2AB94	%%LNP1		%% -> %%ln(%%+1)
+2ABA7	%LNP1		% -> LN(%+1)
+2ABBA	%ALOG		% -> 10^%
+2ABDC	%MOD		% %' -> %rem
+2ABEF	%SIN		% -> SIN%
+2AC06	%%SIN		%% -> %%sin
+2AC17	%%SINDEG		%%deg -> %%sin
+2AC27	%%SINRAD		%% -> %%'
+2AC40	%COS		% -> COS%
+2AC57	%%COS		%% -> %%cos
+2AC68	%%COSDEG		%%deg -> %%cos
+2AC78	%%COSRAD		%%rad -> %%cos
+2AC91	%TAN		% -> TAN%
+2ACA8	%%TANRAD		%%rad -> %%tan
+2ACC1	%ASIN		% -> ASIN%
+2ACD8	%%ASINRAD		%% -> %%rad
+2ACF1	%ACOS		% -> ACOS%
+2AD08	%%ACOSRAD		%% -> %%rad
+2AD21	%ATAN		% -> ATAN%
+2AD38	%ANGLE		%x %y -> %ang
+2AD4F	%%ANGLE		%%x %%y -> %%ang
+2AD5B	%>%%ANGLE		%x %y -> %%ang
+2AD6C	%%ANGLEDEG		%%x %%y -> %%deg
+2AD7C	%%ANGLERAD		%% -> %%'
+2AD95	%%SINH		%% -> %%sinh
+2ADAE	%SINH		% -> SINH%
+2ADC7	%%COSH		%% -> %%cosh
+2ADDA	%COSH		% -> COSH%
+2ADED	%TANH		% -> TANH%
+2AE00	%ASINH		% -> ASINH%
+2AE13	%ACOSH		% -> ACOSH%
+2AE26	%ATANH		% -> ATANH%
+2AE39	%EXPONENT		% -> %expn
+2AE4C	%NFACT		% -> %!
+2AE62	%COMB		% %' -> COMB(%,%')
+2AE75	%PERM		% %' -> PERM(%,%')
+2AF27	%%H>HMS		%% -> %%hms
+2AF4D	%FP		% -> %frac
+2AF60	%IP		% -> %int
+2AF73	%CEIL		% -> %minint >=%
+2AF86	%FLOOR		% -> %maxint <=%
+2AF99	%%FLOOR		%% -> %%maxint
+2AF99	%%INT	aka	
+2AFAC	%INT	U	% %' -> %rem
+2AFC2	%RAN		-> %random
+2B044	%RANDOMIZE		%seed ->
+2B07B	DORANDOMIZE		% ->
+2B0C4	%FACT		% -> gamma(%+1)
+2B1FF	%%7		7
+2B2DC	%%12		12
+2B300	%%60		60
+2B3DD	%%.4		0.4
+2B45C	2%>%%		% % -> %% %%
+2B470	2%%>%		%% %%' -> % %'
+2B48E	%REC>%POL		%r %ang -> %x %y
+2B498	%%R>P		%%x %%y -> %%radius %%angle
+2B4BB	%POL>%REC		%x %y -> %r %ang
+2B4C5	%%P>R		%%r %%ang -> %%x %%y
+2B4F2	%SPH>%REC		%r %ang %ph -> %x %y %z
+2B529	RNDXY		% %places -> %'
+2B53D	TRCXY		% %places -> %'
+2B67D	aMODF		
+2B770	aH>HMS		
+2B789	1/X15		
+2B7A7	RSUB1	ML	x=x-1 see <REF>RADDF
+2B7B0	RADD1	ML	x=x+1 see <REF>RADDF
+2B7CA	RADDF	ML	x=x+y
+2B7DC	ADDF		
+2B91E	MULTF	ML	x=x*y
+2B977	DIVF	ML	x=x/y
+2BA0F	SQRF		
+2BBB5	DIV2		
+2BBE2	CLRFRC		
+2BC4A	SPLITA	ML	( A -> x ) Convert % to %%
+2BCA0	SPLTAC	ML	( A,C -> x, y ) Convert 2 reals to long reals
+2BD32	Y<=X		
+2BD76	TST15		
+2BE53	XYEX	ML	A:B <-> C:D
+2BE61	STAB0	ML	A.W -> R0 \ B.W -> R1
+2BE6F	STAB2	ML	A.W -> R2 \ B.W -> R3
+2BE7D	STCD0	ML	C.W -> R0 \ B.W -> R1
+2BE8B	STCD2	ML	C.W -> R2 \ B.W -> R3
+2BE99	EXAB0	ML	A.W <-> R0 B.W <-> R1
+2BEA7	EXAB2	ML	A.W <-> R2 B.W <-> R3
+2BEB5	RCAB0	ML	R0 -> A.W \ R1 -> B.W
+2BEC0	RCAB2	ML	R2 -> A.W \ R3 -> B.W
+2BECB	RCCD0	ML	R0 -> C.W \ R1 -> D.W
+2BED6	RCCD2	ML	R2 -> C.W \ R3 -> D.W
+2BEE1	CCSB1	ML	Uses D.S to set SB, clears carry
+2BEEC	RNDC[B]		
+2BFE3	GETAB1		
+2BFFD	GETAB0		
+2C031	GETCD0		
+2C04B	PUTAB0		
+2C1F3	STATSTO	U	ob ->
+2C1FD	ID_SIGMADAT	U	ID SIGMADAT
+2C22F	STATCLST		->
+2C270	STATRCL	U	-> ob
+2C535	STATN		-> N
+2C558	STATSMAX		-> %
+2C571	STATMEAN		-> % -> []
+2C58A	STATSMIN		-> %
+2C5A3	STATSTDEV		-> % -> []
+2C5BC	STATTOT		-> % -> []
+2C5D5	STATVAR		-> % -> []
+2C675	STATCOL	U	% %' ->
+2C6B6	STATXCOL	U	n ->
+2C6CF	STATYCOL	U	n ->
+2C6F2	STATGETXCOL	U	
+2C706	STATGETYCOL	U	
+2C83C	STATCORR	U	-> %
+2C8E6	STATCOV	U	-> %
+2C940	STATX	U	-> %
+2C959	STATY	U	-> %
+2C972	STATXX	U	-> %
+2C99A	STATYY	U	-> %
+2C9C2	STATXY	U	-> %
+2CA0D	STATLR	U	
+2CADA	STATPREDY	U	% -> %'
+2CB4D	STATPREDX	U	% -> %'
+2CCBA	ColumnMAX	U	
+2CCD3	ColumnMIN	U	
+2CCDF	ColumnTOT	U	
+2CCEE	ColumnMEAN	U	
+2CCFD	ColumnVAR	U	
+2CD09	ColumnTDEV	U	
+2D396	MAXRETRY		
+2D3A0	LAMPKNO		
+2D3B1	LAMPACKET		
+2D3C6	LAMRETRY		
+2D3D9	LAMERRMSG	U	
+2D3EE	LAMKP		
+2D3FB	LAMLNAME		
+2D40E	LAMOBJ		
+2D41D	LAMOPOS		
+2D42E	LAMEXCHP	U	
+2D441	'LamKPSto		
+2D45A	LAMKLIST		
+2D46D	LAMKMODE		
+2D480	LAMKPTRN	U	
+2D493	LAMKRM		
+2D4A2	LAMMaxR	U	
+2D517	EXCHINITPK		
+2D564	Loop		
+2D58C	SENDEOT		
+2D5E1	SEND_PACKET		
+2D730	KDispRow2		
+2D74E	KDispStatus2		
+2D816	DORECN	U	$/id/lam ->
+2D9A1	SetServMode		
+2D9B2	ClrServMode		
+2D9F5	DOSERVER	U	
+2DDC4	DropSysErr$		
+2E0A9	SENDNAK		
+2E0C7	SENDERROR		
+2E0F4	SENDPKT		
+2E108	BUILDKPACKET		
+2E31F	Push#FLoop	ML	<REF>GETPTR , Push R0 as #, Do FALSE
+2E4DC	APNDCRLF		$ -> $'
+2E4DC	APNDCRLF		$ -> $'
+2E4F0	CRLF$		"\0d\0a"
+2E5AB	SENDNAME	U	id/lam ->
+2E6BE	InitIOEnv		
+2E6EB	SENDLIST		{} ->
+2E7EF	GETNAME		$/id/lam ->
+2E876	DOFINISH		->
+2E8D1	DOPKT		$ $' ->
+2E99E	StdIOPAR		-> {}
+2E9CB	StoIOPAR		{} ->
+2E9E6	SysSTO		ob ID ->
+2EA4F	GetIOPAR		-> %baud % % % % %
+2EA6A	Sys@		ID -> ob T -> F
+2EAE2	KERMOPEN		
+2EB37	DOOPENIO		
+2EB62	OpenIO		
+2EC11	%IP>#		% -> #IP(ABS(%))
+2EC25	IOCheckReal		
+2EC34	SetIOPARerr		Error C12h
+2EC34	SetIOPARerr		->
+2EC84	DOBAUD		% ->
+2ECCA	DOPARITY		% ->
+2ED10	DOTRANSIO		% ->
+2ED4C	DOCKSM	U	
+2EDA6	DOKERRM		-> $
+2EDE1	DOBUFLEN		-> % 0/1
+2EDF5	DOSTIME	U	
+2EE18	DOSBRK		->
+2EE6F	DOXMIT	U	$ ->
+2EE97	DOSRECV		% ->
+2EEC4	SendSetup		
+2EFD7	TRPACKETFAIL		
+2F211	LAMKML		
+2F383	IncrLAMPKNO		
+2F39C	GetKermPkt#		
+2F542	2DROPTRUE	U	ob ob' -> T
+2F934	FalseFalse		-> F F
+2F989	RecvNextPkt		
+2FEA1	SENDACK		
+2FEB5	SENDNULLACK		
+2FEC9	KVISLF		$ -> $'
+2FEDD	KVIS		$ -> $'
+2FFB4	GetStrLenStk	ML	Pop $ -> C.A = length, D1 = body
+2FFB7	GetStrLenC	ML	D1 = C, <REF>GetStrLen
+2FFBA	GetStrLen	ML	D1=$ -> C.A = length, D1 = body
+3016B	KINVISLF		$ -> $' $''
+3037A	VERSTRING?	U	$ -> $ flag
+30794	VERSTRING		-> $
+307E2	GETKP		
+30805	SUB$1#		$ #pos -> #'
+30914	ACK_INIT		
+30B1D	CHOOSE_INIT	UBS	
+30BBE	ENCODE1PKT		
+30BD7	ENCODE		
+30D31	DECODE		
+30E4E	PutSerialECk		
+30ED2	OUTUART		
+31289	POPUART		
+312DA	adr_uart_han		
+3133B	UARTBUFLEN		
+3136C	FLUSHRSBUF		
+31416	WaitTbz0	UBS	
+31444	PUTSERIAL		
+314E5	GETSERIAL		
+315C6	CLOSEUART		->
+315F9	CloseUart		
+31608	OpenUart?Clr	UBS	
+3161E	OpenUartClr		
+31854	docr		
+31868	DOCR		->
+3187C	OpenIOPrt		
+31EE2	DOPRLCD		
+31F4A	StdPRTPAR		
+31F7D	StoPRTPAR		
+31FFD	DODELAY		% ->
+3205C	GetChkPRTPAR		
+320B1	%80		80
+32161	PRINT		
+32387	PRINTxNLF		
+323E9	PSubErr		
+323F9	REMAP		
+324A6	AllowPrlcdCl		
+3251C	PopASavptr	ML	Pop to A.A, <REF>SAVPTR
+3251F	PopSavptr	ML	Pop <REF>SAVPTR
+3252B	SetEcma94		
+325AA	ChkLowBat		
+32B08	ErrFixEIRU		
+32B1A	FixEIRU		
+32B74	PrintGrob		
+32CAF	ChkGrHook		
+32CB6	adrGraphPrtH		
+32FF9	SYMBNUMSOLVE		
+3303F	NUMSOLVE		
+3306C	7NULLLAM{}	U	-> {}
+34301	ATTN#		2563d A03h
+34301	Attn#		2563d A03h
+34D2B	1NULLLAM{}		-> {}
+34D30	NULLLAM		-> lam
+353AB	FINDVAR	U	sym -> {}
+35491	apndvarlst		{} ob -> {}'
+3558E	PULLEL	U	[F%] #n -> [F%] F%
+355B8	PULLREALEL		[%] # -> [%] %
+355C8	PULLCMPEL		[C%] # -> [C%] C%
+355D8	PULLLONGEL	U	[F%] #n -> [F%] L%
+35602	PULLEREALEL	U	[%] #n -> [%] %%
+35628	PUTEL		[%] % # -> [%]' [C%] C% # -> [C%]'
+3566F	PUTREALEL		[%] % # -> [%]'
+356F3	PUTCMPEL		[C%] C% # -> [C%]'
+357A8	MDIMS		[1D] -> #m F [2D] -> #m #n T
+35B47	SWITCHFLOATS	U	B% -> ?
+35B88	SWITCH2FLOATS	U	L% L% -> ?
+35C2C	DOARRYPRG1	U	seco [F%] -> [F%]'
+35C63	DOARRYPRG2	U	seco [F%] [F%] -> [F%]'
+35CAE	MATCON		[%] % -> [%]' [C%] C% -> [C%]'
+35D08	DROP3PICK	UBS	1 2 3 4 -> 1 2 3 1
+35D35	MATIDN	U	[F%] -> [F%]'
+35DEB	MATNEG	U	[F%] -> [F%]'
+35E2C	MATRND	U	[F%] % -> [F%]'
+35EA9	MATTRNC	U	[F%] % -> [F%]'
+35F30	MATCONJ	U	[F%] -> [F%]'
+35F8F	MATRE	U	[F%] -> [%re]
+35FA3	DUP%0CON	U	[F%] -> [F%] [0%]
+35FEE	MATIM	U	[F%] -> [%im]
+36039	MATR>C	U	[%re] [%im] -> [C%]
+360B6	MATC>R	U	[C%] -> [%re] [%im]
+36115	MAT+	U	[F%] [F%]' -> [F%]''
+36278	MAT-	U	[F%] [F%]' -> [F%]''
+362DC	MATFLOAT*	U	[F%] F% -> [F%]'
+363DB	MATFLOAT/	U	[F%] F% -> [F%]'
+36444	MATSQ	U	[F%] -> [F%]'
+3644E	MAT*	U	[F%] [F%]' -> [F%]''
+365BB	MATRSD	U	[F%] [F%] [F%] -> [F%]
+36705	MATDOT	U	[F%] [F%]' -> F%
+36791	MATCROSS	U	[F%] [F%]' -> [F%]''
+368F4	MATRNRM	U	
+3690D	MATCNRM	U	[F%] -> F%
+369E9	MATABS	U	[F%] -> F%
+36A48	MATDET	U	[F%] -> F%
+36A99	MATINV	U	[F%] -> [F%]'
+36AC3	MAT/	U	[F%] [F%]' -> [F%]''
+3742D	!MAKEHXS	U	#nibs -> hxs
+3745E	SWAPROWS		[] #m #n -> []' #m #n
+3745E	SWAPROWS		M % %' -> M'
+37508	SWAPCOLUMNS	U	[] #m #n -> []' #m #n
+37B17	3NULLLAM{}	U	-> {}
+37B44	CKREF		ob -> ob'
+37BCB	ONE_DO_ARRY	U	[] -> []
+37BE9	L%+	U	L% L% -> L%
+37C0C	L%-	U	L% L% -> L%
+37C2F	L%*	U	L% L% -> L%
+37C52	L%/	U	L% L% -> L%
+37C75	B%ABS	U	B% -> B%'
+37CD3	B%NEG	U	B% -> B%'
+37D19	F%>L%	U	%  -> %% C% -> C%%
+37DB9	2NULLLAM{}	U	-> {}
+37DF6	B%0=	U	B% -> flag
+37E0F	MATREDIM		[F%] {#n #m} -> [F%]'
+37E0F	METREDIM		[F%] {#n #m} -> [F%]'
+3811F	MATTRN		[F%] -> [F%]'
+3858E	StartupProc		
+385E8	InitSysUI		
+3866F	SysMenuCheck		->
+386A1	SysDisplay		->
+386D8	?FlashAlert		->
+38728	SysErrorTrap		
+38908	DoWarning		$ ->
+38926	FlashWarning		$ ->
+38985	ParOuterLoop		Disp Keys NonAppKeys? DoStdKeys? menu #row suspendOK? ExitCond AppErr ->
+38994	POLSet&KeyUI	U	<REF>ParOuterLoop
+389BC	POLSaveUI		Disp Keys NonAppKeys? DoStdKeys? menu #row suspendOK? ExitCond AppErr ->
+389CB	RclUI	U	
+38A11	RclHPUI	U	
+38A3E	LAMSavedUI	U	
+38A3E	SavedUILS	U	
+38A64	POLSetUI		<REF>ParOuterLoop
+38AEB	POLKeyUI		->
+38B09	1POLKeyUI	U	->
+38B45	POLErrorTrap		
+38B45	POLKeyErr	U	->
+38B77	POLResUI&Err		->
+38B90	POLRestoreUI		->
+38BD6	InitPOLVars	UBS	
+38BD6	NormAppFlags	U	
+38C08	AppDisplay!		ob ->
+38C18	AppDisplay@		->
+38C28	NoAppDisplay!	U	
+38C38	AppKeys!		ob ->
+38C48	AppKeys@	U	
+38C58	AppKeys0		???
+38C58	NoAppKeys!	U	
+38C68	AppExitCond!		ob ->
+38C78	AppExitCond@		-> ob
+38C88	NoAppExitCnd!	U	
+38C98	AppError!		ob ->
+38CAB	AppError@		-> ob
+38CBE	NoAppError!	U	->
+38CD1	AppError?	U	-> flag
+38CDF	SetAppError	U	->
+38CDF	SetBadPOLUI	UBS	
+38CED	ClrAppError	U	->
+38CFB	AppMode?		-> flag
+38D09	SetAppMode		->
+38D17	ClrAppMode		->
+38D25	NAppKeyOK?	U	-> flag
+38D33	SetNAppKeyOK		->
+38D41	ClrNAppKeyOK	U	->
+38D4F	DoStdKeys?	UBS	-> flag
+38D5D	SetDoStdKeys		->
+38D6B	ClrDoStdKeys	U	->
+38D79	AppSuspOK?	U	->
+38D8A	SetAppSuspOK		->
+38D9B	ClrAppSuspOK		->
+38DAC	DA1OK?		-> flag
+38DE8	SetDA1BadT	U	-> T
+38DFC	DA2aOK?	U	-> flag
+38E38	SetDA2aBadT	U	-> T
+38E4C	DA2bOK?	U	-> flag
+38E88	SetDA2bBadT	U	-> T
+38E9C	DA2OK?	U	-> flag
+38EB5	DA3OK?		-> flag
+38EF1	SetDA3BadT	U	-> T
+38F05	DAsOK?	U	-> flag
+38F28	DA1OK?NOTIT		->
+38F41	DA2aOK?NOTIT		->
+38F5A	DA2bOK?NOTIT		->
+38F73	DA3OK?NOTIT		->
+38F8C	InitDispModes	U	->
+38FB9	DA2aLess1OK?		-> flag
+38FD2	SetDA1Valid		->
+38FEB	SetDA2aValid		->
+38FFF	SetDA2bValid		->
+39018	SetDA3Valid		->
+3902C	SetDA1Temp		->
+39045	SetDA2aTemp		->
+39059	SetDA2bTemp		->
+39072	SetDA3Temp		->
+39086	?SetEditRoll	U	:: EditExst?NOT ITE SetDA2RollF SetDA2aNoCh ;
+39086	SetDA2Echo		->
+39086	SetDA2aEcho		->
+390A4	MENoP&FixDA1		
+390B3	MENP&FixDA12		
+390CC	ClrDA1OK		->
+390E5	ClrDA2aOK		->
+390FE	ClrDA2bOK		->
+39117	ClrDA2OK		->
+3912B	ClrDA3OK		->
+39144	ClrDAsOK		->
+3915D	SetDA2Valid		->
+39171	SetDAsValid	U	->
+3918A	SetDA2NoCh		->
+3919E	SetDA12NoCh		->
+391B2	SetDA23NoCh		->
+391C6	SetDA13NoCh		->
+391DA	SetDA12a3NCh	UBS	->
+391DA	SetDA12a3NoCh	aka	
+391EE	SetDA123NoCh		->
+391EE	SetDAsNoCh	UBS	->
+39207	SetDA2OKTemp		->
+3921B	SetDA12Temp		->
+3922F	SetDAsTemp		->
+39248	DAsBad?	U	-> flag
+39275	DA1ValidF?	U	-> flag
+39283	SetDA1ValidF	U	->
+39291	ClrDA1ValidF	U	->
+3929F	DA2aValidF?	U	-> flag
+392AD	SetDA2aValidF	U	->
+392BB	ClrDA2aValidF	U	->
+392C9	DA2bValidF?	U	-> flag
+392D7	SetDA2bValidF	U	->
+392E5	ClrDA2bValidF	U	->
+392F3	DA3ValidF?	U	-> flag
+39301	SetDA3ValidF		->
+3930F	ClrDA3ValidF	U	->
+3931D	DA1TempF	U	->
+3932B	SetDA1TempF	U	->
+39339	ClrDA1TempF	U	->
+39347	DA2aTempF?	U	-> flag
+39355	SetDA2aTempF	U	->
+39363	ClrDA2aTempF	U	->
+39371	DA2bTemp?	UBS	
+39371	DA2bTempF?	U	-> flag
+3937F	SetDA2bTempF	UBS	->
+3938D	ClrDA2bTemp	UBS	->
+3938D	ClrDA2bTempF	U	->
+3939B	DA3TempF?	U	-> flag
+393A9	SetDA3TempF	U	->
+393B7	ClrDA3TempF	U	->
+393C5	DA1NoCh?	U	-> flag
+393D3	SetDA1NoCh		->
+393E1	ClrDA1NoCh	U	->
+393EF	DA2aNoCh?	U	-> flag
+393FD	SetDA2aNoCh		->
+3940B	ClrDA2NoCh	U	->
+39419	DA2bNoCh?		-> flag
+39427	SetDA2bNoCh		->
+39435	ClrDA2bNoCh	U	->
+39443	DA3NoCh?	U	-> flag
+39451	SetDA3NoCh		->
+3945F	ClrDA3NoCh	U	->
+3946D	DA1Bad?	U	-> flag
+3947B	SetDA1Bad		->
+39489	ClrDA1Bad		->
+39497	DA2aBad?		-> flag
+394A5	SetDA2aBad		->
+394B3	ClrDA2aBad		->
+394C1	DA2bBad?	UBS	-> flag
+394CF	SetDA2bBad		->
+394DD	ClrDA2bBad		->
+394EB	DA3Bad?	UBS	-> flag
+394F9	SetDA3Bad		->
+39507	ClrDA3Bad		->
+39515	DA1IsStat?	U	-> flag
+39515	DA1IsStatus?	UBS	-> flag
+39515	DispTime?	UBS	
+39523	SetDA1IsStat		->
+39531	ClrDA1IsStat		->
+3953F	DA2bEdit?	U	-> flag
+3953F	DA2bIsEdL?	UBS	-> flag
+3954D	SetDA2bEdit	U	->
+3954D	SetDA2bIsEdL	UBS	->
+3955B	ClrDA2bEdit	U	->
+3955B	ClrDA2bIsEdL	UBS	->
+39569	NoRollDA2?	U	-> flag
+3957A	SetNoRollDA2		->
+3958B	ClrNoRollDA2		->
+3959C	?DispStatus		->
+395BA	DispStatus		->
+39632	Blank&GROB!		$ #x #x1 #x2 ->
+39673	AngleStatus		
+396C8	ComVecStatus		
+39748	UserFlagStat		
+397BB	UserKeysStat		
+3981B	AlgEntryStat		
+39853	PrgmEntrStat		
+3988B	DispDir?Time		
+398F4	DispDir?Tim1		
+39958	DispDir?Tim2		
+39971	PathStatus		
+39AF1	DispTimeReq?		-> flag
+39B0A	DispStsBound		->
+39B2D	LineGrob	U	131x2 line
+39B85	?DispStack		->
+39BF3	?RollUpDA2		
+39F6F	LINESOFSTACK		
+39FB0	AbbrevStack?		
+39FC1	SetAbbrevStk		
+39FD2	ClrAbbrevStk		
+3A00D	DispEditLine		->
+3A1CA	?DispMenu		->
+3A1CA	?DispMenu		->
+3A1E8	DispMenu		->
+3A1E8	DispMenu		->
+3A1FC	DispMenu.1		->
+3A1FC	DispMenu.1		->
+3A260	>MENU	U	#col grob -> #col $ -> #col id -> #col :: ->
+3A260	StdLabelDef	U	#col grob -> #col $ -> #col id -> #col :: ->
+3A297	Grob>Menu		#col grob ->
+3A297	Grob>Menu		#col grob ->
+3A2B5	Str>Menu		#col $ ->
+3A2B5	Str>Menu		#col $ ->
+3A2C9	Seco>Menu		#col :: ->
+3A2C9	Seco>Menu		#col :: ->
+3A2DD	Id>Menu		#col id ->
+3A2DD	Id>Menu		#col id ->
+3A328	MakeStdLabel		$ -> grob
+3A337	NullMenuLbl	U	21x8 normal menu key
+3A38A	MakeBoxLabel		$ -> grob
+3A399	BoxLabelGrob	U	21x8 menu key with box
+3A3EC	MakeDirLabel		$ -> grob
+3A3FB	DirLabelGrob	U	21x8 directory menu key
+3A44E	MakeInvLabel		$ -> grob
+3A45D	InvLabelGrob	U	21x8 inverse menu key
+3A4AB	MakeLabel		$ #w #x grob -> grob'
+3A4AB	MakeLabel		$ #w #x grob -> grob'
+3A4CE	Disp5x7		$ #start #max ->
+3A546	BlankDA1		->
+3A55F	BlankDA2		->
+3A578	BlankDA12		->
+3A591	BlankDA2a		->
+3A71C	DoNextRow		
+3A735	DoPrevRow		
+3A9B8	'DROPFALSE		-> DROPFALSE
+3A9CE	TurnOffKey		
+3A9E7	SetSomeRow		#n ->
+3AA0A	1A/LockA		->
+3ADED	DoPlotMenu		
+3B211	DoFirstRow		->
+3BDFA	EditMenu		-> {}
+3BE54	DoSolvrMenu		->
+3E2DD	<SkipKey		-> {}
+3E35F	>SkipKey		-> {}
+3E3E1	<DelKey		-> {}
+3E4CA	>DelKey		-> {}
+3E586	TogInsertKey		
+3E5CD	IStackKey		
+3EC71	NullMenuKey		->
+3EC85	NoExitAction		->
+3EC99	Box/StdLabel		$ flag -> grob
+3ECB2	Box/StdLbl:		-> grob
+3ECD0	FStd/BoxLbl:	U	-> grob
+3ECEE	FBox/StdLbl:	U	-> grob
+3ED0C	Std/BoxLabel		$ flag -> grob
+3ED25	BBox/StdLbl:	U	-> grob
+3ED48	MBox/StdLbl:	U	-> grob
+3ED6B	DirLabel:	U	-> grob
+3EDA2	TogSysFlag	U	# ->
+3EDF2	Do1st/1st+:	U	-> :: ob1 ; (PRG mode) -> :: ob1 <rest> (no PRG mode)
+3EE1A	Do1st/2nd+:		-> :: <ob1> ; (PRG mode) -> :: <ob2> <rest> ; (no PRG mode)
+3EE47	Echo2Macros		
+3F78C	DUPExitAtLOOP	U	ob -> ob ob
+3F7EB	ExitAtLOOPDUP	U	ob -> ob ob
+3FA57	Key>U/SKeyOb		#kc #pl -> ob
+3FA7A	?Key>UKeyOb		
+3FACF	ID_SKEY	U	ID SKEY
+3FAE8	LAM_SKEY	U	LAM SKEY
+3FB1A	Key>StdKeyOb		#kc #pl -> ob
+3FCAF	SetKeysNS		ob ->
+3FDBD	2DropBadKey		ob ob' ->
+3FDC7	DropBadKey		ob ->
+3FDD1	DoBadKey		->
+3FDFE	'DoBadKey		-> DoBadKey
+3FE12	'DoBadKeyT		-> DoBadKey T
+3FE26	H/WKey>KeyOb		
+3FE44	H/W>KeyCode		# -> #'
+3FE7B	ModifierKey?		#kc #pl -> flag
+3FF1B	?CaseKeyDef		# #' -> :: ' ob1 T ; -> :: <ob2> <rest> ;
+3FF48	?CaseRomptr@		# #' -> ob T -> F -> :: <ob2> <rest> ;
+3FF75	NonUsrKeyOK?	U	-> flag
+3FF86	SetNUsrKeyOK	U	->
+3FF97	ClrNUsrKeyOK	U	->
+4019D	StdMenuKeyNS		ob-NS -> ? {ob-NS ob-LS ob-RS} -> ?
+401D4	StdMenuKeyLS		{ob-NS ob-LS ob-RS} -> ?
+40337	DoNameKeyRS		
+40350	DoNameKeyLRS		
+40454	DoKeyOb		ob ->
+40788	TakeOver		->
+40792	SystemLevel?		
+407FB	MenuMaker		->  ob
+40828	MenuKey		->
+4085A	Modifier		->
+40882	CkSecoType	UBS	
+408AA	ImmedEntry?		-> flag
+40A6F	KeyOb!		ob ->
+40A82	KeyOb@		-> id/romptr
+40A95	KeyOb0		->
+40AD9	Parse.1		
+40B2E	ParseFail		ob $parsed #pos $' ->
+40B56	DispBadToken	UBS	ob $parsed #pos $' ->
+40BC9	AtUserStack		->
+40BDD	GetLastEdit	UBS	
+40C76	SaveLastEdit		$ ->
+40C94	CMDSTO		$ ->
+40CE9	CacheStack		->
+40D25	LockAlpha		->
+40D39	UnLockAlpha		->
+40D93	NoEdit?case		-> :: <ob1> <rest> ; -> :: <rest> ;
+40DC0	DoMenuKey		menu ->
+40DD4	DoDelim		->
+40DF7	DoDelims		->
+40E3D	?ClrAlg		->
+40E5B	?ClrAlgSetPr		->
+40E88	REPEATER		->
+40EE7	SLOW		->
+40F02	VERYSLOW		->
+40F12	VERYVERYSLOW		->
+40F22	XEQStoKey		ob ID ->
+40F86	InitMenu		menu ->
+41008	StartMenu		menu #n ->
+410C6	SetThisRow		->
+41111	CheckMenuRow		# -> # #'
+41175	LoadTouchTbl		MenuKey1 .. MenuKeyN #n ->
+4139B	SaveLastMenu		->
+41422	>Review$		id -> $
+414BD	$_:	U	":"
+415C9	GetMenu%		-> %
+415F1	%100		100
+41679	InitMenu%		%mnu.pg   -> %0        ->
+41741	InitTrack:		->
+417F3	SetRebuild		->
+41848	MenuRow!		#n ->
+4185B	MenuRow@		-> #n
+4186E	LastMenuRow!		#n ->
+41881	LastMenuRow@		-> #n
+418A4	MenuDef@		-> menu
+418D4	MenuRowAct!		ob ->
+418F4	LabelDef!		ob ->
+41904	DoLabel		#col ob ->
+41904	DoLabel		#col ob ->
+41914	MenuKeyNS!		og -> ob
+41924	MenuKeyNS@		-> ob
+41934	DoMenuKeyNS		#n ->
+41944	MenuKeyLS!		ob -> ob
+41964	MenuKeyRS!		ob -> ob
+41984	ReviewKey!		ob ->
+419C4	MenuExitAct!		ob ->
+419E4	LastMenuDef!		menu ->
+419F4	LastMenuDef@		-> menu
+41A39	'idUserKeys	U	-> id
+41A43	ID_UserKeys	U	ID UserKeys
+41A5F	'idUserKeys.	U	-> id
+41A69	ID_UserKeys.	U	ID UserKeys.CRC
+41A8D	UserKeys?		-> flag
+41AA1	Ck&AsnUKeys	U	{} ->
+41B28	XEQAsnKey	U	ob %rc.p ->
+41B3C	XEQDelKeys	U	{} ->
+41B69	Ck&ClrUKey	U	0 -> %rc.p ->
+41B8C	DelKey	U	#kc #plane ->
+41C02	XEQRclKeys	U	-> {}
+41CA2	Ck&DecKeyLoc		%rc.p -> #kc #p
+41D92	CodePl>%rc.p		#kc #p -> %rc.p
+41E32	StoUserKeys	U	{} ->
+41E78	StoUserKeypatch	U	ob #kc #p ->
+41F13	ClrUserKeys	U	->
+41F2C	UserKeys!	U	{} ->
+41F3F	GetUserKeys		-> {}
+41F52	PgUserKeys	U	->
+41F65	WaitForKey		-> #kc #flag
+4203C	GetKeyOb		-> ob
+42078	?BlinkCursor		->
+420A0	GETKEY*		-> #kc T -> F F -> {Alrmlist} T F
+420F5	ATTNxcp		
+42113	ALARMxcp		
+42131	SLEEPxcp		
+42145	UARTxcp		
+42159	GETKEY		-> #kc flag
+42249	UART?		
+42262	ATTN?		-> flag
+4226A	addrATTNFLG	ML	
+4227F	TIMEOUT?		
+42284	adrTIMEOUTCLK	ML	
+422A1	ALARM?		-> flag
+423BB	settimeout	ML	
+423D3	clrtimeout	ML	
+42402	KEYINBUFFER?		-> flag
+4243E	?ATTNQUIT		->
+4243E	?ATTN_QUIT	aka	
+4245C	NoAttn?Semi		->
+42475	DoCAlarmKey		
+4248E	CtlAlarm!		
+424A1	CtlAlarm@	UBS	
+424DA	DCursor		
+4256B	LCursor		
+42660	UCursor		
+426F1	LastERow?		
+4272D	TopERow?		
+427AF	Cursor&Disp		
+42AE4	EchoChrKey		$/chr ->
+42BB6	Echo$NoChr00		$ ->
+42BD4	Echo$Key		$/chr ->
+42C3D	CkChr00		$ -> $ flag
+42CFB	InsertEcho	UBS	$ ->
+42D32	EditLevel1		ob -> ob'
+42D46	ViewLevel1		ob -> ob'
+42D82	CharEdit		
+42DC8	ObEdit		ob -> ob' T -> F
+42E27	Roll&Do:		# ->
+42E86	Rcl&Do:		id ->
+42EC7	AdjEdModes		
+42F44	InputLine		args -> $ T -> $ ob1..obn T -> ob1..obn T -> F args = $pr $line #pos #I/R #I/A #alph menu #row attn #parse
+430CF	DispILPrompt		->
+43179	InputLEnter		
+43200	InputLAttn		
+4325A	SetCursor		# -> {# #'} ->
+44277	InitEd&Modes		->
+4428B	InitEdLine		->
+44394	InitEdModes		->
+443CB	EditString		$ ->
+444A5	CURSOR_END?		-> flag
+444EE	Char>Edit		
+44683	EDITLINE$		-> $
+44730	EDITPARTS		
+4488A	NoEditLine?		-> flag
+4489E	ROWNUM		
+448C1	?TogU/LCase		chr -> chr'
+44C31	DoNewMatrix		-> []/[[]]
+44F42	BindMatVars		
+44FE7	DoOldMatrix		[] -> []'
+45023	InitOldMat		
+45676	Blank$		#len -> $
+45AE0	GetMat/Vec		
+45C2F	RowElt#		
+45D1F	GetElt		
+46409	CopyRowsUp		
+4651C	CopyColsLeft		
+46625	CopyRowsDown		
+4677E	CopyColsRght		
+4744F	'IDX		-> id
+47467	STOAPPLDATA		
+47984	APPprompt1!		
+479A7	APPprompt2		
+48FF9	SORTASLOW		->
+491D5	AUTOSCALE		->
+494B4	%.1		.1
+495AA	%.15	U	.15
+49709	PromptIdUtil		id ob -> $
+49AD3	PointDerivUt		
+49BA5	FcnUtilEnd		
+49BD2	RootUtil		
+49C54	CkEQUtil		
+49CD6	ROLL{}	U	{} -> {}'
+49F06	PointMoveCur		
+4A055	DISPCOORD2		$ ->
+4A0AA	GetEqN		#n -> ob T -> NULL$ F
+4A95A	ICMPDRPRTDRP		comp -> obn...ob4 ob2 ob1
+4A9AF	CHECKPVARS		-> {}
+4AAEA	MAKEPVARS		-> {}
+4AB1C	ID_X		ID X
+4AB2A	PvarsC%0		
+4AB59	ID_Y		ID Y
+4ADB0	GETSCALE		-> % %'
+4AE3C	PUTSCALE		% %' ->
+4AF63	GETINDEP		-> id -> {}
+4AF77	PUTINDEP		ID ->
+4AF8B	PUTINDEPLIST		{} ->
+4AFDB	GETRES		-> %
+4B012	PUTRES		% ->
+4B062	GETPTYPE		-> name
+4B076	PUTPTYPE		name ->
+4B0DA	GETPMIN&MAX		-> C% C%
+4B10C	GETXMIN		-> %
+4B120	GETYMIN		-> %
+4B139	GETXMAX		-> %
+4B14D	GETYMAX		-> %
+4B166	PUTXMIN		% ->
+4B189	PUTYMIN		% ->
+4B1AC	PUTXMAX		% ->
+4B1CF	PUTYMAX		% ->
+4B323	MAKEPICT#		#w #h ->
+4B364	GETPARAM		# -> ob
+4B553	VSCALE		
+4B5AD	HSCALE		
+4B60C	DOERASE		->
+4B6D9	PLOTERR		
+4B710	RESETDEPTH		ob1..obn obn+1..obx #n -> ob1..obn
+4B765	PLOTPREP		
+4B7D8	GetRes		
+4BFAE	NEXTSTEP		
+4C09B	NEWINDEP		
+4C639	drax		
+4CE4C	EXITFCNsto		
+4CE6F	DOGRAPHIC		->
+4CEE7	GraphicExit		
+4CF05	GDISPCENTER		->
+4CF41	SETLOOPENV		
+4CF68	ExitFcn		
+4D11E	DROPDEADTRUE		ob -> DoBadKey T
+4D132	SCROLLUP		->
+4D150	SCROLLLEFT		->
+4D16E	SCROLLDOWN		->
+4D18C	SCROLLRIGHT		->
+4DA0D	CROSS_HAIRS		
+4DA76	CROSS_OFF		
+4E266	CHECKMENU		->
+4E2AC	MENUOFF		->
+4E2CF	TURNMENUOFF		->
+4E347	TURNMENUON		->
+4E360	MENUOFF?		-> flag
+4E37E	LINECHANGE		
+4E442	CURRENTMARK?		
+4E46A	EQCURSOR?		
+4E497	PREMARKON		
+4E4B0	NEWMARK		
+4E582	DRAWBOX#		#x1 #y1 #x2 #y2 ->
+4E6EF	DispCoord1		$ ->
+4E776	Z-BOX		
+4ECAD	CROSSMARKON		
+4F052	WINDOW#		#x #y  ->
+4F0AC	DOPX>C		{ hxs hxs' } -> C%
+4F179	DOC>PX		C% -> { hxs hxs' }
+4F1D8	SWAPTRUE		ob1 ob2 -> ob2 ob1 T
+4F3D1	2HXS>#	U	hxs hxs -> # #
+4F408	C%>#		C% -> # #'
+4F78C	GROB+#		flag grob1 grob2 #x #y -> grob'
+4F7E6	CKGROBFITS		g1 g2 #n #m -> g1 g2' #n #m
+50262	%1+		% -> %+1
+50276	%1-		% -> %-1
+503D4	DOLCD>		-> grob
+50438	DO>LCD		grob ->
+5046A	DOCLLCD		->
+5053C	CROSSGROB		-> grob
+5055A	MARKGROB		-> grob
+50578	GROBDIM		grob -> #height #width
+505B2	NULLPAINT	U	-> grob
+505C6	GETXPOS		
+505E4	getxpos		
+5068D	GETYPOS		
+506AB	getypos		
+5072B	TOGGLELINE#3		#x1 #y1 #x2 #y2 ->
+50758	DRAWLINE#3		#x1 #y1 #x2 #y2 ->
+50A3B	UNROT2DROP%0	U	1 2 3 -> 3 %0
+50ACC	LINEOFF3		#x1 #y1 #x2 #y2 ->
+50ADB	TOGLINE3		#x1 #y1 #x2 #y2 ->
+50AEA	LINEON3		#x1 #y1 #x2 #y2 ->
+50AF9	TOGLINE		#x1 #y1 #x2 #y2 ->
+50B08	LINEOFF		#x1 #y1 #x2 #y2 ->
+50B17	LINEON		#x1 #y1 #x2 #y2 ->
+50D78	LASTPT?		
+50DA5	PlotOneMore?		
+50E59	!#1+IF<dim-1		
+50EA5	!#1-IF>0		
+50F60	dropDROPf	U	ob meta -> F
+510AD	INDEPVAR		-> id
+510D5	RECORDX&YC%		
+51125	CLEARMENU		->
+51148	CKPICT		xPICT ->
+51166	CHECKPICT		->
+511E3	CHECKHEIGHT		grob #height ->
+5127E	'IDPAR	U	-> id
+5127E	'IDPAR	U	-> id
+5129C	'IDFUNCTION		-> xFUNCTION
+512B0	'IDCONIC	U	-> xCONIC
+512C4	'IDPOLAR		-> xPOLAR
+512D8	'IDPARAMETER		-> xPARAMETRIC
+512EC	'IDTRUTH	U	-> xTRUTH
+51300	'IDSCATTER	U	-> xSCATTER
+51314	'IDHISTOGRAM	U	-> xHISTOGRAM
+51328	'IDBAR	U	-> xBAR
+5133C	PtoR		
+514AF	GETRHS		
+514DC	1REV		-> 6.28318530718 -> 360. -> 400.
+514EB	%2PI	U	2pi
+51532	2HXSLIST?		{ hxs hxs' } -> # #'
+515A0	TOPROW		-> #y
+515B4	BOTROW		-> #y
+515FA	LEFTCOL		-> #x
+5160E	RIGHTCOL		-> #x
+5162C	WINDOWTOP?		-> flag
+51645	WINDOWBOT?		-> flag
+5165E	WINDOWLEFT?		-> flag
+51677	WINDOWRIGHT?		-> flag
+51690	JUMPTOP		->
+516AE	JUMPBOT		->
+516E5	JUMPLEFT		->
+51703	JUMPRIGHT		->
+51735	REPEATERCH		->
+5179E	DUPGROBDIM		grob -> grob #height #width
+517F3	EQUALcasedrop		ob1 ob2 -> :: <ob1> ; ob1 ob2 -> :: ob1 <ob2> <rest> ;
+517FE	EQUALcasedro		ob1 ob2 -> :: <ob1> ; ob1 ob2 -> :: ob1 <ob2> <rest> ;
+5182F	ISTOP-INDEX		-> #
+51843	SWAP#1+SWAP		# ob -> #+1 ob
+51857	SWAP#1-SWAP		# ob -> #-1 ob
+5187F	GBUFFGROBDIM		-> #height #width
+51893	ORDERXY#		#x1 #y1 #x2 #y2 -> #x1' #y1' #x2' #y2'
+518CA	ORDERXY%		%x1 %y1 %x2 %y2 -> %x1' %y1' %x2' %y2'
+5193B	C%%1		(Q%%1,%%0Q)
+5196A	C%-1		(-1,0)
+5198F	DROP%0	U	ob -> %0
+519A3	C>Re%		C% -> %re
+519B7	C>Im%		C% -> %im
+519CB	C%>%%		C% -> %%re %%im
+519DF	C%>%%SWAP		C% -> %%im %%re
+519F8	C%%>C%		C%% -> C%
+51A07	%%>C%		%%re %%im -> C%
+51A37	Re>C%		%re -> C%
+51A4A	C%*i	U	C% -> C%'
+51A5F	C/i	U	C% -> C%'
+51A71	2%>%%SQR	U	%r %ang %ph -> %x %y %z
+51A94	%%SQR	U	%% -> %%'
+51AB7	%MAXIMIZE	U	% %' -> %max %min
+51B2A	C%%0=		C%% -> flag
+51B43	C%0=		C% -> flag
+51B70	C%CHS		C% -> -C%
+51B91	C%%CHS		C%% -> -C%%
+51BB2	C%CONJ		C% -> C%'
+51BC1	C%%CONJ		C%% -> C%%'
+51BD0	C%C+R	U	C% % -> C%'
+51BE4	%+SWAP		ob % %' -> %+%' ob
+51BF8	C%R+C	U	% C% -> C%'
+51C16	C%C+C	U	C% C%' -> C%''
+51C3E	C%%C+C	U	C%% C%%' -> C%%''
+51C6B	SWAP2C%>%	U	C% C%' -> %re %im %re' %im'
+51C84	SWAP2C%%>%%	U	C%% C%%' -> %%re %%im %%re' %%im'
+51C9D	C%%C+R	U	C%% %% -> C%%'
+51CB1	C%%R+C	U	%% C%% -> C%%'
+51CD4	C%R-C	U	% C% -> C%'
+51CE8	C%C-R	U	C% % -> C%'
+51CFC	C%C-C	U	C% C%' -> C%''
+51D10	C%%C-C	U	C%% C%%' -> C%%''
+51D24	C%%R-C	U	%% C%% -> C%%'
+51D38	C%%C-R	U	C%% %% -> C%%'
+51D4C	C%C*R	U	C% % -> C%'
+51D60	C%R*C	U	% C% -> C%'
+51D88	C%C*C	U	C% C%' -> C%''
+51DAB	C%%C*R	U	C%% %% -> C%%'
+51DBF	C%%R*C	U	%% C%% -> C%%'
+51DE2	C%%C*C	U	C%% C%%' -> C%%''
+51E19	C%R/C	U	% C% -> C%'
+51E64	C%C/R	U	C% % -> C%'
+51EC8	C%C/C	U	C% C%' -> C%''
+51EFA	C%1/		C% -> 1/C%
+51F13	C%%C/C	U	C%% C%%' -> C%%''
+51F3B	C%%R/C	U	%% C%% -> C%%'
+51F7C	C%%C/R	U	C%% %% -> C%%'
+52062	C%ABS		C% -> %
+52080	C%%ABS	U	C%% -> %%
+52099	C%ARG		C% -> %
+520B2	2DUP%%R	U	
+520CB	C%SGN		C% -> C%/C%ABS
+52107	C%SQRT		C% -> SQRTC%
+52193	C%EXP		C% -> e^C%
+521E3	C%LN		C% -> ln C%
+5226F	SYMUVAL	U	
+522BF	C%LOG		C% -> log C%
+52305	C%ALOG		C% -> 10^C%
+52342	C%R^C		% C% -> C%'
+52360	C%C^R		C% % -> C%'
+52374	C%C^C		C% C%' -> C%''
+524AF	C%0		(0,0)
+524F7	C%1		(1,0)
+52530	C%SIN		C% -> sin C%
+52571	C%COS		C% -> cos C%
+525B7	C%TAN		C% -> tan C%
+5262F	C%SINH		C% -> sinh C%
+52648	C%COSH		C% -> cosh C%
+5265C	C%TANH		C% -> tanh C%
+52675	C%ATAN		C% -> atan C%
+5267F	C%i	U	(0,1)
+526AE	C%-i	U	(0,-1)
+527EB	C%ATANH		C% -> atanh C%
+52804	C%ASIN		C% -> asin C%
+5281D	C%ASINH		C% -> asinh C%
+52836	C%ACOSH		C% -> acosh C%
+52863	C%ACOS		C% -> acos C%
+52AB7	POPC%	ML,UBS	( C%pop -> A:C ) Pop C% (<REF>SETDEC )
+52ADB	PUSHC%	ML,UBS	( A:C -> C%push ) Push C%
+52B57	POPC%%	ML,UBS	( C%%pop -> A:B C:D) Pop C%% (<REF>SETDEC )
+52B95	PUSHC%%	ML,UBS	( A:B:C:D -> C%%push ) Push C%%
+52C36	CALCINTEG	U	seco %precision %lo %hi -> %integral %error
+52D26	4NULLLAM{}	U	-> {}
+53725	SetUserFlag		# ->
+53731	SetSysFlag		# ->
+53755	ClrUserFlag		# ->
+53761	ClrSysFlag		# ->
+53778	TestUserFlag		# -> flag
+53784	TestSysFlag		# -> flag
+5380E	COERCEFLAG		T -> %1 F -> %0
+53860	HISTON?		
+538C0	UNDO_ON?		-> flag
+538CE	UNDO_ON		->
+538DC	UNDO_OFF		->
+538F8	NOBLINK		->
+53968	AlgEntry?		-> flag
+53976	SetAlgEntry		->
+53984	ClrAlgEntry		->
+539F9	SetISysFlag	ML	
+53A05	D0=ALoop	ML,UBS	
+53A20	REPLACE_MODE		
+53A2E	INSERT_MODE		->
+53A3C	INSERT?		-> flag
+53A4A	EditLExists?		-> flag
+53A90	ClrNewEditL		
+53AE4	NoIgnoreAlm		
+53B31	setflag	ML	
+53B61	NumbMode	U	-> #
+53B88	CLRNUM	U	->
+53B9C	SETNUM	U	->
+53BB0	NOTNUM?	U	-> flag
+53BC9	DEG?	U	-> flag
+53BDD	RAD?		-> flag
+53C0A	NOTCONST?	U	-> flag
+53C23	PRSOL?	U	-> flag
+53C37	DOHEX		->
+53C43	DOBIN		->
+53C4F	DOOCT		->
+53C5B	DODEC		->
+53C96	XEQSTWS	U	% ->
+53CAA	dostws		# ->
+53CF0	XEQRCWS	U	-> %
+53D04	bitAND		hxs hxs' -> hxs''
+53D15	bitOR		hxs hxs' -> hxs''
+53D26	bitXOR		hxs hxs' -> hxs''
+53D4E	bitNOT		hxs -> hxs'
+53D5E	bitSL		hxs -> hxs'
+53D6E	bitSLB		hxs -> hxs'
+53D81	bitSR		hxs -> hxs'
+53D91	bitSRB		hxs -> hxs'
+53DA4	bitRR		hxs -> hxs'
+53DE1	bitRRB		hxs -> hxs'
+53E0C	bitRL		hxs -> hxs'
+53E3B	bitRLB		hxs -> hxs'
+53E65	bitASR		hxs -> hxs'
+53EA0	bit+		hxs hxs' -> hxs''
+53EB0	bit-		hxs hxs' -> hxs''
+53EC3	bitNEG	U	hxs -> hxs'
+53ED3	bit*		hxs hxs' -> hxs''
+53EE4	MPY	ML	Multiply A.W and C.W (-> A.W=C.W) Uses D.W, SB. Returns carry clear
+53F05	bit/		hxs hxs' -> hxs''
+53F77	POP2HXS	ML,U	Pop hxs to C and hxs to A, <REF>SAVPTR , Clear Carry P has current wordsize.
+53F8D	POPHXS	ML,U	Pop hxs to A, <REF>SAVPTR , Clear Carry
+54021	getwordsize	ML,U	Fetches current word size to A, Clear Carry
+54039	WORDSIZE		-> #
+54050	BASE		-> #
+54061	HXS>$		hxs -> $
+5407A	BASECHAR	U	-> char
+540BB	hxs>$		hxs -> $
+5422C	PUSHhxs	ML	Push A.WP as hxs
+54266	GPPushA	ML	<REF>GETPTR , Push A, Clear Carry
+5429F	bit%#/		% hxs -> hxs'
+542BD	bit#%/		hxs % -> hxs'
+542D1	bit%#*		% hxs -> hxs'
+542EA	bit#%*		hxs % -> hxs'
+542FE	bit%#-		% hxs -> hxs'
+5431C	bit#%-		hxs % -> hxs'
+54330	bit%#+		% hxs -> hxs'
+54349	bit#%+		hxs % -> hxs'
+5435D	#>%		hxs -> %
+5435D	HXS>%		hxs -> %
+543F9	%>#		% -> hxs
+544D9	HXS==HXS		hxs hxs' -> %flag
+544EC	HXS#HXS		hxs hxs' -> %flag
+54500	HXS>HXS		hxs hxs' -> %flag
+5452C	HXS>=HXS		hxs hxs' -> %flag
+5453F	HXS<=HXS		hxs hxs' -> %flag
+54552	HXS<HXS		hxs hxs' -> %flag
+54564	SYMIFTE	U	sym symf symf -> symf
+545A0	cknumdsptch1		sym -> symf
+54609	MetaIFTE	U	
+54653	NumIFTE	U	
+547B5	SYMBWHERE		symf QN1 id1..QNn idn #2n+1 -> symf
+547E2	WHERE1	U	QN1 id1..QNn idn #n meta1 -> symf
+5483C	COLAkeep1st	U	meta&ob -> ob
+54887	WHEREN	U	QN1 id1..QNn idn #2 metan -> symf
+548AA	revpull&psh	U	meta&ob1 ob2 -> ob1&ob2 meta
+54954	SYMDER	U	sym sym -> symf
+54977	SYMDERSTEP	U	QN sym -> symf
+5499F	Repl0ABND	U	meta -> %0
+549DB	lam'dvar	U	LAM 'dvar
+549EC	MetaConcase	U	meta -> meta
+54A9C	DROP%1ABND	U	ob -> %1
+54AE0	SYMRE	U	
+54B1E	DROP%0ABND	U	ob -> %0
+54C4F	RDROPCOLATRUE	U	-> T
+54C63	nmetasyms		meta -> meta
+54CB3	SWAPDROPLOOP	U	ob1 ob2 -> ob2
+54CEF	Cr	U	ob1..obn #n -> symb
+54CEF	SYMBN:	U	ob1..obn #n -> symb
+54DBC	ckseval1:	U	symf' -> symf'
+54E2A	ckevaleq1	U	meta&= -> sym
+54EB9	SYMIM	U	
+54ED2	SYMNOT	U	
+54EEB	SYMNEG	U	
+54F04	SYMABS	U	
+54F1D	SYMCONJ	U	
+54F36	SYMINV	U	
+54F4F	SYMARG	U	
+54F68	SYMSIGN	U	
+54F81	SYMSQRT	U	
+54F9A	SYMSQ	U	
+54FB3	SYMSIN	U	
+54FCC	SYMCOS	U	
+54FE5	SYMTAN	U	
+54FFE	SYMSINH	U	
+55017	SYMCOSH	U	
+55030	SYMTANH	U	
+55049	SYMASIN	U	
+55062	SYMACOS	U	
+5507B	SYMATAN	U	
+55094	SYMASINH	U	
+550AD	SYMACOSH	U	
+550C6	SYMATANH	U	
+550DF	SYMEXP	U	
+550F8	SYMLN	U	
+55111	SYMLOG	U	
+5512A	SYMALOG	U	
+55143	SYMLNP1	U	
+5515C	SYMEXPM	U	
+55175	SYMFACT	U	
+5518E	SYMIP	U	
+551A7	SYMFP	U	
+551C0	SYMFLOOR	U	
+551D9	SYMCEIL	U	
+551F2	SYMEXPONENT	U	
+5520B	SYMMANT	U	
+55224	SYMD>R	U	
+5523D	SYMR>D	U	
+55256	SYMUBASE	U	
+55288	1GETLAMSWP1+		# -> 1lamob #+1
+5529C	MetaSINH	U	
+552B0	MetaCOSH	U	
+552C4	MetaTANH	U	
+552D8	MetaEXP	U	
+552EC	MetaALOG	U	
+55300	MetaEXPM	U	
+55314	?addinver:	U	meta&Nob -> meta meta -> meta&1LAM
+5533C	MetaSIN	U	
+55378	MetaCOS	U	
+553A5	MetaTAN	U	
+553D2	MetaNEG	U	
+553EB	MetaINV	U	
+5540E	?addrever	U	meta&1LAM -> meta&1LAM meta -> meta&1LAM
+5542C	MetaRE	U	
+55477	replfunc	U	meta&ob -> meta&LAM1
+55495	MetaIM	U	
+554B3	repl%1	U	meta&ob -> meta&%1
+5551C	Repl0	U	meta -> %0 #0
+55535	Repl1	U	meta -> %1 #1
+5554E	Repl-1	U	meta -> %-1 #1
+55567	MetaCONJ	U	
+555B2	MetaABS	U	
+555E9	MetaSQ	U	
+55607	repl%-1	U	meta&ob -> meta&%-1
+55657	cknum2:	U	symf symf -> symf
+5573D	COLAthexFCN		
+5575B	cknseval:	U	% sym -> symf
+5576F	cksneval2:	U	sym % -> symf
+557EC	cksseval2:	U	sym sym -> symf
+558BE	?spliteq	U	meta1&meta2&= -> meta2 meta1
+558DC	sscknum2		sym sym -> symf
+558F5	sncknum2		sym % -> symf
+5590E	nscknum2		% sym -> symf
+5599A	SYM%AND	U	
+559B3	%SYMAND	U	
+559CC	SYMAND	U	
+559E5	SYM%OR	U	
+559FE	%SYMOR	U	
+55A17	SYMOR	U	
+55A30	SYM%XOR	U	
+55A49	%SYMXOR	U	
+55A62	SYMXOR	U	
+55A7B	SYMFLOAT==	U	
+55A94	FLOATSYM==	U	
+55AAD	SYM==	U	
+55AC6	SYMFLOAT<>	U	
+55ADF	FLOATSYM<>	U	
+55AF8	SYM<>	U	
+55B11	SYM%<	U	
+55B2A	%SYM<	U	
+55B43	SYM<	U	
+55B5C	SYM%>	U	
+55B75	%SYM>	U	
+55B8E	SYM>	U	
+55BA7	SYM%<=	U	
+55BC0	%SYM<=	U	
+55BD9	SYM<=	U	
+55BF2	SYM%>=	U	
+55C0B	%SYM>=	U	
+55C24	SYM>=	U	
+55C3D	SYM%%OF	U	
+55C56	%SYM%OF	U	
+55C6F	SYM%OF	U	
+55C88	SYM%%CH	U	
+55CA1	%SYM%CH	U	
+55CBA	SYM%CH	U	
+55CD3	SYM%%T	U	
+55CEC	%SYM%T	U	
+55D05	SYM%T	U	
+55D1E	SYM%COMB	U	
+55D37	%SYMCOMB	U	
+55D50	SYMCOMB	U	
+55D69	SYM%PERM	U	
+55D82	%SYMPERM	U	
+55D9B	SYMPERM	U	
+55DB4	SYM%RND	U	
+55DCD	SYMRND	U	
+55DE6	RNDSYM	U	
+55DFF	SYM%TRNC	U	
+55E18	TRCNYM	U	
+55E31	SYMTRCN	U	
+55E4A	SYM%MAX	U	
+55E63	%SYMMAX	U	
+55E7C	SYMMAX	U	
+55E95	SYM%MIN	U	
+55EAE	%SYMMIN	U	
+55EC7	SYMMIN	U	
+55EE0	SYM^O	U	
+55EF9	O^SYM	U	
+55F12	SYM^	U	
+55F2B	SYM+O	U	
+55F44	O+SYM	U	
+55F5D	SYM+	U	
+55F76	SYM-O	U	
+55F85	O-SYM	U	
+55F8F	SYM-	U	
+55FC1	SYM*O	U	
+55FDA	O*SYM	U	
+55FF3	SYM*	U	
+5600C	SYM/O	U	
+56025	O/SYM	U	
+5603E	SYM/	U	
+56057	SYM%MOD	U	
+56070	%SYMMOD	U	
+56089	SYMMOD	U	
+560A2	SYM%XROOT	U	
+560BB	%SYMXROOT	U	
+560D4	SYMXROOT	U	
+560ED	xssgeneral		
+560ED	xssgneral		meta1 meta2 -> meta1&meta2&LAM1
+56101	xnsgeneral		meta -> LAM3&meta&LAM1
+5611F	xsngeneral		meta -> meta&LAM3&LAM1
+5613D	?addsimir	U	meta meta -> meta
+56160	Meta+	U	
+56174	Meta-	U	
+56183	2Repl0	U	meta1 meta2 -> %0 #1
+561BA	Meta*	U	
+561D8	2Repl-1	U	meta1 meta2 -> %-1 #1
+56214	Meta/		
+56250	Metamod	U	
+562BE	dropaddoper	U	meta1 meta2 meta3 -> meta1&meta2&LAM1
+562FA	Con^Meta	U	
+56309	MetaUnCalc	U	meta ob -> LAM3 #1
+56331	Con+Meta	U	
+56359	Con-Meta	U	
+56390	Con*Meta	U	
+563DB	Con/Meta	U	
+5642B	ConmodMeta	U	
+5643A	DropRepl0	U	meta ob -> %0 #1
+5645D	Meta^Con	U	
+56543	Meta+Con	U	
+56566	Meta-Con	U	
+56589	Meta*Con	U	
+565CF	Meta/Con	U	
+5660B	MetamodCon	U	
+5662E	NUMINTEG	U	symf QN symf_lo symf_hi -> %
+5670F	>dvars	U	meta1 meta2 -> meta1&meta2'
+56949	SYMSUM	U	sym sym sym ob -> symf
+56A06	SYM%SUM	U	sym sym % ob -> symf
+56A4C	%SYMSUM	U	sym % sym ob -> symf
+56AC9	%%SUM	U	sym % % ob -> symf
+56AFB	4DROP%0	U	1...4 -> %0
+57293	SYMISOL	U	sym id -> symb
+57405	2DROP2dropf	U	meta1 meta2 ob1 ob2 -> F
+57419	DROP2dropf	U	meta1 meta2 ob -> F
+57432	addtpsh	U	meta1 meta2 ob -> meta1&ob meta2
+5768A	ObInMeta?	U	meta ob -> meta ob flag
+57A0C	SYMEXPAN	U	symf -> symf
+57A48	expan	U	meta1 meta2 meta3 -> meta
+57AA2	expan1	U	meta -> meta1 meta2
+57AB6	expansq	U	
+57B01	?expanapp	U	
+57B4C	?expanneginv	U	
+57B63	?expan^	U	
+57C71	expansum^	U	
+57CF8	NXTPOT%	U	% -> flag %' T % -> % F
+57D90	SYMCOLCT		symf -> symf
+57DA4	colct	U	symf -> symf
+57E08	colrev	U	meta1 meta2 -> meta'
+57F4B	swappargunrot	U	meta1 meta2 -> M_rest meta2 M_last
+584B2	MEQU?	U	meta1 meta2 -> meta1 meta2 flag
+58511	MetaLess?	U	meta1 meta2 -> meta1 meta2 flag
+58525	MetaMore?	U	meta1 meta2 -> meta1 meta2 flag
+585A7	BodyMore?	U	ob1 ob2 -> flag
+58715	NoIdsInMeta?	U	meta -> meta flag
+587AA	colfac	U	meta1 meta2 -> meta'
+58A20	colunfac	U	meta1 meta2 -> meta'
+58A61	colinv1	U	[expr1 INV expr2 INV *] -> [expr1 expr2 /]
+58A93	colinv2	U	[expr INV *] -> [expr /]
+58AAC	colinv3	U	[expr1 INV expr2 *] -> [expr1 expr2 /]
+58ADE	M-1potcase	U	Meta&-1&^ ? case
+58C02	count+	U	meta -> meta #0 meta &+&+..&+ -> meta #n
+58C0E	count*	U	meta -> meta #0 meta &*&*..&* -> meta #n
+58CDA	coleval	U	ob -> ob'
+58CE4	parameval	U	sym param -> ?
+58CEE	eval	U	sym -> ?
+58D75	SYMSHOW		sym id/lam -> symf
+5910B	SHOWLS	U	sym {names} -> symf
+5918A	evalTRUE	U	sym -> ? T
+591AD	SYMQUAD	U	sym id -> symf
+595DD	SYMTAYLR	U	sym id % -> symf
+596D3	MetaRCOLCT	U	restricted collection
+5971D	MetaDNEG	U	double negate
+5976B	MetaDINV	U	double invert
+597B5	Meta*1	U	mult by one
+5983B	Meta^1	U	pow by one
+59885	Meta1/	U	div by one
+5990F	Meta+1-1	U	add 1 subtract 1
+5A01D	SWAPcompSWAP		ob ob' -> ob'' ob'
+5A036	uncrunch		->
+5A310	symbn		
+5AAC7	SYMINTEG	U	symf symf symf QN -> symf
+5AC86	dvars>	U	meta -> meta'
+5ACC7	intg	U	#0 #0 meta -> meta_ok meta_fail
+5ACD6	M1st+?Drp	U	meta&+ -> meta
+5AD08	dvars?	U	meta -> meta flag
+5AD6C	linear!	U	meta #level -> meta' flag
+5AD80	linear?	U	meta #level -> meta' T meta #level -> meta' #loc F
+5AD9E	linear	U	meta #level -> meta #loc flag
+5AFAB	intg1	U	M_ok M_fail M_temp meta -> M_ok' M_fail' M_temp
+5B09B	intg1fail	U	M1 M2 M3 M4 -> M1 M2' M4 T
+5B0CD	intgconst	U	M_ok M_fail M_temp meta -> M_ok' M_fail' M_temp
+5B0FA	intg1ok	U	M1 M2 M3 M4 -> M1' M2 M3 T
+5B131	intglinear	U	M1 M2 M3 M4 -> M1' M2 M3
+5B140	intgaddlin	U	meta #loc -> meta'
+5B659	forcemul?aga	U	meta -> meta'
+5B717	forcemul	U	meta -> meta'
+5B861	top&pshtop&	U	meta1 meta2 meta3 -> meta2&meta3&meta1
+5BBE5	metaneg	U	meta&NEG -> meta meta -> meta&NEG
+5BC03	metaneglft	U	meta -> meta'
+5BC21	metainvlft	U	meta -> meta'
+5BC3F	metainv	U	meta&INV -> meta meta -> meta&INV
+5BC5D	meta+	U	meta&NEG -> meta&-
+5BC67	addt-	U	meta -> meta&-
+5BC8A	meta-	U	meta&NEG -> meta&+
+5BC94	addt+	U	meta -> meta&+
+5BCB7	meta*	U	meta&INV -> meta&/
+5BCC1	repl/	U	meta&ob -> meta&/
+5BCE4	meta/	U	meta&INV -> meta&*
+5BCEE	repl*	U	meta&ob -> meta&*
+5BD3E	drpmeta+	U	meta&NEG&ob -> meta&- meta&ob -> meta&+
+5BD57	drpmeta-	U	meta&NEG&ob -> meta&+ meta&ob -> meta&-
+5BD70	drpmeta*	U	meta&INV&ob -> meta&/ meta&ob -> meta&*
+5BD89	drpmeta/	U	meta&INV&ob -> meta&* meta&ob -> meta&/
+5BE56	MetaMulInv	U	
+5BE81	Meta<-->	U	commute terms
+5BECE	Meta<-A	U	associate left term
+5BF53	MetaA->	U	associate right term
+5BFD8	MetaD->	U	delete right term
+5C0B9	Meta<-D	U	delete left term
+5C102	Meta<-D!	U	delete left term
+5C137	Meta->()	U	remove prefix
+5C204	Meta1/()	U	double invert & remove prefix
+5C261	Meta-()	U	double negate & remove prefix
+5C2CE	MetaE^	U	EXP(a*b) -> EXP(a)^b
+5C31B	MetaE()	U	EXP(a)^b -> EXP(a*b)
+5C348	MetaL*	U	LN(a^b) -> b*LN(a)
+5C375	MetaL()	U	b*LN(a) -> LN(a^b)
+5C3C2	Meta<-M	U	merge common factor on left
+5C4CF	MetaM->	U	merge common factor on right
+5C53C	MetaAF	U	add fractions
+5C589	Meta(<-	U	include left term
+5C5D6	Meta->)	U	include right term
+5C623	Meta(())	U	parenthesise nearest term
+5C670	Meta->TRG	U	change EXP to trig. fns.
+5C68D	MetaT->	U	move nearest left term to right
+5C6D9	Meta<-T	U	move nearest right term to left
+5C73D	Meta->()C%	U	remove 1st RE,IM; CONJ
+5C845	Meta->DEF	U	define function
+5C91D	MetaTRG*	U	expand trig fns. of a sum
+5CBF9	drppargtop&	U	meta&ob -> M_last&M_rest
+5CC12	2pull2DROP	U	meta&ob1&ob2 -> meta
+5CCEE	larg&	U	meta1 meta2 -> meta1&M_rest M_last
+5CD16	addt*	U	meta -> meta&*
+5CD2A	addtNEG	U	meta -> meta&NEG
+5CD3E	addtINV	U	meta -> meta&INV
+5CD52	evalcase:	U	meta -> ?
+5CD7A	revalcase:	U	meta -> ?omeg
+5CDF2	Meta<-Dall	U	
+5CE15	Meta<-Aall	U	
+5CE4C	MetaA->all	U	
+5CE83	Meta->)all	U	
+5CEBA	Meta(<-all	U	
+5CEF1	MetaD->all	U	
+5CF23	MetaT->all	U	
+5CF5A	Meta<-Tall	U	
+5CF91	Meta->()all	U	
+5CFC3	Meta->()C%all	U	
+5CFF5	Meta<-Mall	U	
+5D009	MetaM->all	U	
+5D0C2	forceadd	U	meta -> meta'
+5D6FA	pshpullpsh1&	U	meta1&ob meta2 -> ob&meta2 meta1
+5DD65	2psh1&rev:	U	meta1 meta2 -> meta1&ob meta2&ob
+5DE41	COLATRUE	U	-> T
+5DE55	RDROPFALSE		-> F
+5DE7D	reversym		1..n #n -> n..1 #n
+5E067	SINNER	U	sym -> meta ob -> ob #1
+5E085	CKSYMBN	U	meta -> ob
+5E0A3	PSYMBN	U	ob1..obn #n -> sym
+5E0DA	P{}N		ob1..obn #n -> {}
+5E111	P::N	U	ob1..obn #n -> seco
+5E2F8	2SINNERtop&	U	ob1 ob2 -> meta
+5E30C	2SINNER	U	ob1 ob2 -> meta1 meta2
+5E32A	SINNERMETA	U	meta -> meta'
+5E35C	dup	U	meta -> meta meta
+5E370	NDUPN		ob #n -> ob..ob #n ob #0 -> #0
+5E3AC	psh&		meta1 meta2 meta3 -> meta1&meta3 meta2
+5E3C0	over&	U	meta1 meta2 meta3 -> meta1&meta2 meta3
+5E3E8	pshm1	U	meta ob -> ob #1 meta
+5E401	psh1top&		meta ob -> ob&meta
+5E415	top&		meta1 meta2 -> meta1&meta2
+5E490	2top&	U	meta1 meta2 meta3 -> meta1&meta2&meta3
+5E4A9	#1-SWAP		ob # -> #-1 ob
+5E4A9	#1-SWAP	aka	
+5E4A9	pull	aka	
+5E4A9	pull		meta&ob -> meta ob
+5E4BD	pullrev		ob&meta -> meta ob
+5E4D1	pshtop&		meta1 meta2 -> meta2&meta1
+5E4EA	pullpsh1&		meta1 meta2&ob -> ob&meta1 meta2
+5E503	pullrev1&	U	meta1 meta2&ob -> meta1&ob meta2
+5E51C	addt:	U	meta -> meta&ob
+5E530	addt2:	U	meta -> meta&ob1&ob2
+5E549	psh1&rev:	U	meta1 meta2 -> meta1&ob meta2
+5E562	psh1&rev2:	U	meta1 meta2 -> meta1&ob1&ob2 meta2
+5E585	INNERtop&		obn..ob1 #n comp -> obm..ob1 #m
+5E59E	repl:	U	meta&ob -> meta&ob'
+5E5B7	ROMPTR@NOT	U	ROMPTR -> ob F -> ROMPTR T ob -> ob T
+5E5EE	SAFE@NOT	U	id -> ob F -> T
+5E602	LISTRCL	U	{path id} -> ob -> lam T
+5E652	symcomp		ob -> ob'
+5E661	ONESYMBN	U	ob1..obn #n -> symb
+5E67A	pshzer		meta -> #0 meta
+5E68E	pargop	U	meta -> M_last&op M_rest
+5E6BB	pullpshm1	U	meta&ob -> ob #1 meta
+5E6F2	parg&	U	meta1 meta2 -> meta1&M_last M_rest
+5E706	psh1&		meta1 meta2 ob -> ob&meta1 meta2
+5E7A5	psh1&rev		meta1 meta2 ob -> ob&meta1 meta2
+5E843	overev&	U	meta1 meta2 meta3 -> meta2&meta1 meta3
+5E857	rotswap	U	meta1 meta2 meta3 -> meta2 meta1 meta3
+5E870	4rollunrot	U	meta1 meta2 meta3 meta4 -> meta2 meta1 meta3 meta4
+5E8DE	argum	U	seco -> seco #args
+5E984	nonopcase		seco -> :: seco <ob2> <rest> ; ob -> :: ob <ob1> ;
+5E9A7	infarg?	U	seco -> seco flag
+5EA09	CKINFARGS		->
+5EA9F	pshzerpsharg		meta -> M_last M_rest
+5EAC2	larg	U	meta -> M_rest M_last
+5EAF4	SWAPDROP#1-	U	ob # -> #-1
+5EAF4	pulldrop	U	meta&ob -> meta
+5EB1C	psh		meta1 meta2 -> meta2 meta1
+5EB58	rot	UBS	meta1 meta2 meta3 -> meta2 meta3 meta1
+5EBC6	4roll	U	meta1 meta2 meta3 meta4 -> meta2 meta3 meta4 meta1
+5EBDB	unrot	UBS	meta1 meta2 meta3 -> meta3 meta1 meta2
+5EBEA	4unroll	U	meta1 meta2 meta3 meta4 -> meta4 meta1 meta2 meta3
+5EBFC	N+1roll	U	META1..METAn+1 #n -> META2..METAn+1 META1
+5ED45	5roll	U	meta1..meta5 -> meta2..meta5 meta1
+5ED5A	5unroll	U	meta1..meta5 -> meta5 meta1..meta4
+5ED6C	N+1unroll	U	META1..METAn+1 #n -> METAn+1 META1..METAn
+5EDFC	numb1stcase		%/C%/[]/[L] -> :: <ob1> ; ob -> :: ob2 <rest> ;
+5EE10	M-1stcasechs		Meta&NEG -> Meta COLA Meta -> Meta SKIP Meta&(%<0) -> Meta&ABS(%) COLA
+5EEDB	REALNEGcase	U	%<0 -> :: % <ob1> ; ob -> :: ob <ob2> <rest> ;
+5EF15	AEQ1stcase		meta&ob -> ob=nob ? case
+5EF2E	M1st+case	U	Meta&+ ? case
+5EF41	M1st-case	U	Meta&- ? case
+5EF54	M1st*case	U	Meta&* ? case
+5EF67	M1st/case	U	Meta&/ ? case
+5EF7A	M1stNEGcase	U	Meta&NEG ? case
+5EF8D	M1stINVcase	U	Meta&INV ? case
+5EFA0	M1st^case	U	Meta&^ ? case
+5EFB3	M1stSQcase	U	Meta&SQ ? case
+5EFC6	M1stFNCcase	U	Meta&FNCAPPLY ? case
+5EFD9	MEQ1stcase		meta&ob1 ob2 -> ob1=ob2 ? case
+5EFF9	MEQopscase		meta1&ob1 meta2&ob2 ob3 ->
+5F048	AEQopscase		meta1&ob1 meta2&ob2
+5F061	Mid1stcase		meta&ob -> ob is id lam ? case
+5F090	doskip	ML,U	Exit to rpl SKIP
+5F09D	docola	ML,U	Exit to rpl COLA
+5F0AA	idntcase		id -> :: id <ob1> ; ob -> :: ob <ob2> <rest> ;
+5F0CD	idntlamcase		id/lam -> :: id <ob1> ; ob -> :: ob <ob2> <rest> ;
+5F0FA	num0=case		0 -> :: 0 <ob1> ; ob -> :: ob <ob2> <rest> ;
+5F127	%0=case		%0 -> :: %0 <ob1> ; ob -> :: ob <ob2> <rest> ;
+5F13B	C%0=case		C%0 -> :: C%0 <ob1> ; ob -> :: ob <ob2> <rest> ;
+5F154	num1=case		1 -> :: 1 <ob1> ; ob -> :: ob <ob2> <rest> ;
+5F181	%1=case		%1 -> :: %1 <ob1> ; ob -> :: ob <ob2> <rest> ;
+5F19F	C%1=case		C%1 -> :: C%1 <ob1> ; ob -> :: ob <ob2> <rest> ;
+5F1BD	num2=case		2 -> :: 2 <ob1> ; ob -> :: ob <ob2> <rest> ;
+5F1EA	%2=case		%2 -> :: %2 <ob1> ; ob -> :: ob <ob2> <rest> ;
+5F208	C%2=case		C%2 -> :: C%2 <ob1> ; ob -> :: ob <ob2> <rest> ;
+5F23A	num-1=case		-1 -> :: -1 <ob1> ; ob -> :: ob <ob2> <rest> ;
+5F267	%-1=case		%-1 -> :: %-1 <ob1> ; ob -> :: ob <ob2> <rest> ;
+5F285	C%-1=case		C%-1 -> :: C%-1 <ob1> ; ob -> ob <ob2> <rest> ;
+5F2A3	EXPLODE	U	ob -> meta
+5F2EE	IMPLODE	U	meta -> ob
+5F384	DROPSYM	U	ob1 ob2 -> ob
+5F5E4	4DROPFALSE	U	ob1..ob4 -> F
+5F657	3DROPTRUE	U	ob1 ob2 ob3 -> T
+5F6B1	5DROPFALSE	U	ob1..ob5 -> F
+5F926	splitup	U	meta #n #m -> meta #level
+5F96E	splitdown	U	meta #n #m -> meta #lowlevel #args+1
+5F996	tailpsh	U	meta #n -> meta1 meta2
+5FA45	pulldroppull	U	meta&ob1&ob2 -> meta ob1
+5FA63	revpulldrop	U	meta&ob1 ob2 -> meta ob2
+5FB49	NOTcaseFALSE		T -> :: <ob1> <rest> ; F -> F
+5FB76	ROT#1+UNROT		# ob ob' -> #+1 ob ob'
+5FBE6	pick1#0=case	U	#0 M -> COLA ob M -> SKIP
+5FC24	DUP#2+PICK	U	n..1 #n -> n..1 #n n+1
+5FC24	pick1	U	ob meta -> ob meta ob
+5FC38	%1pshm1	U	meta -> %1 #1 meta
+60EBD	RSWAP		->
+60EE7	ROTSWAP		1 2 3 -> 2 1 3
+60EE7	XYZ>YXZ	aka	
+60F0E	ROTDROPSWAP		1 2 3 -> 3 2
+60F0E	ROTDROPSWAP	aka	
+60F0E	UNROTSWAPDROP		1 2 3 -> 3 2
+60F0E	XYZ>ZY	aka	
+60F0E	XYZ>ZY	aka	
+60F21	ROTDROP		1 2 3 -> 2 3
+60F21	XYZ>YZ	aka	
+60F33	SWAPROT		1 2 3 -> 3 2 1
+60F33	SWAPROT	aka	
+60F33	UNROTSWAP	aka	
+60F33	UNROTSWAP		1 2 3 -> 3 2 1
+60F33	XYZ>ZYX	aka	
+60F33	XYZ>ZYX	aka	
+60F4B	3DROP		1 2 3 ->
+60F4B	XYZ>	aka	
+60F54	7DROP		1..7 ->
+60F66	6DROP		1..6 ->
+60F72	5DROP		1..5 ->
+60F7E	4DROP		1..4 ->
+60F7E	XYZW>	aka	
+60F83	4DropLoop	ML	Pop 4, Loop
+60F9B	SWAPDROP		1 2 -> 2
+60F9B	XY>Y	aka	
+60FAC	3UNROLL	aka	
+60FAC	3UNROLL		1 2 3 -> 3 1 2
+60FAC	UNROT		1 2 3 -> 3 1 2
+60FAC	UNROT	aka	
+60FAC	XYZ>ZXY	aka	
+60FAC	XYZ>ZXY	aka	
+60FBB	4ROLL		1 2 3 4 -> 2 3 4 1
+60FBB	FOURROLL	aka	
+60FBB	XYZW>YZWX	aka	
+60FD8	5ROLL		1 2 3 4 5 -> 2 3 4 5 1
+60FD8	FIVEROLL	aka	
+61002	6ROLL		1..6 -> 2..6 1
+61002	SIXROLL	aka	
+6103C	8ROLL		1..8 -> 2..8 1
+6103C	EIGHTROLL	aka	
+6106B	7ROLL		1..7 -> 2..7 1
+6106B	SEVENROLL	aka	
+61099	DUP4UNROLL		1 2 3 -> 3 1 2 3
+6109E	4UNROLL		1 2 3 4 -> 4 1 2 3
+6109E	FOURUNROLL	aka	
+6109E	XYZW>WXYZ	aka	
+610C4	5UNROLL		1 2 3 4 5 -> 5 1 2 3 4
+610C4	FIVEUNROLL	aka	
+610FA	6UNROLL		1..6 -> 6 1..5
+610FA	SIXUNROLL	aka	
+6112A	ROTROT2DROP		1 2 3 -> 3
+6112A	ROTROT2DROP	aka	
+6112A	UNROT2DROP	aka	
+6112A	UNROT2DROP		1 2 3 -> 3
+6112A	XYZ>Z	aka	
+6112A	XYZ>Z	aka	
+6113C	4UNROLL3DROP		1 2 3 4 -> 4
+6113C	XYZW>W	aka	
+6114E	2RDROP		->
+61160	3RDROP		->
+61172	#-PICK		1..n-m #n #m -> 1..n-m 1
+61184	#+PICK		1..n+m #n #m -> 1..n+m 1
+6119E	DUP#1+PICK		ob&meta -> ob&meta ob
+6119E	DUP#1+PICK		n..1 #n -> n..1 #n n
+611A3	#1+PICK		1..n #n-1 -> 1..n 1
+611BE	#2+PICK		1..n #n-2 -> 1..n 1
+611D2	#3+PICK		1..n #n-3 -> 1..n 1
+611E1	#4+PICK		1..n #n-4 -> 1..n 1
+611F9	2DUPSWAP	aka	
+611F9	2DUPSWAP		1 2 -> 1 2 2 1
+611F9	DUP3PICK		1 2 -> 1 2 2 1
+611F9	DUP3PICK	aka	
+611FE	3PICK		1 2 3 -> 1 2 3 1
+6121C	4PICK		1 2 3 4 -> 1 2 3 4 1
+6123A	5PICK		1 2 3 4 5 -> 1 2 3 4 5 1
+6125E	6PICK		1..6 -> 1..6 1
+61282	7PICK		1..7 -> 1..7 1
+612A9	8PICK		1..8 -> 1..8 1
+612CC	#-ROLL		1..n-m #n #m -> 2..n-m 1
+612DE	#+ROLL		1..n+m #n #m -> 2..n+m 1
+612F3	#1+ROLL		ob 1..n #n -> 1..n ob
+61305	get1		ob meta -> meta ob
+61318	#2+ROLL		a b 1..n #n -> b 1..n a
+6132C	#-UNROLL		1..n-m #n #m -> n-m 1..n+m-1
+6133E	#+UNROLL		1..n+m #n #m -> n+m 1..n+m-1
+61353	#1+UNROLL		ob 1..n #n -> n ob 1..n-1
+61365	#2+UNROLL		a b 1..n #n -> n a b 1..n-1
+61380	DUPUNROT		1 2 -> 2 1 2
+61380	DUPUNROT	aka	
+61380	SWAPOVER	aka	
+61380	SWAPOVER		1 2 -> 2 1 2
+613B6	1GETLAM		-> ob
+613E7	2GETLAM		-> ob
+6140E	3GETLAM		-> ob
+61438	4GETLAM		-> ob
+6145C	5GETLAM		-> ob
+6146C	6GETLAM		-> ob
+6147C	7GETLAM		-> ob
+6148C	8GETLAM		-> ob
+6149C	9GETLAM		-> ob
+614AC	10GETLAM		-> ob
+614BC	11GETLAM		-> ob
+614CC	12GETLAM		-> ob
+614DC	13GETLAM		-> ob
+614EC	14GETLAM		-> ob
+614FC	15GETLAM		-> ob
+6150C	16GETLAM		-> ob
+6151C	17GETLAM		-> ob
+6152C	18GETLAM		-> ob
+6153C	19GETLAM		-> ob
+6154C	20GETLAM		-> ob
+6155C	21GETLAM		-> ob
+615E0	1PUTLAM		ob ->
+615F0	2PUTLAM		ob ->
+61600	3PUTLAM		ob ->
+61610	DUP4PUTLAM		ob -> ob
+61615	4PUTLAM		ob ->
+61625	5PUTLAM		ob ->
+61635	6PUTLAM		ob ->
+61645	7PUTLAM		ob ->
+61655	8PUTLAM		ob ->
+61665	9PUTLAM		ob ->
+61675	10PUTLAM		ob ->
+61685	11PUTLAM		ob ->
+61695	12PUTLAM		ob ->
+616A5	13PUTLAM		ob ->
+616B5	14PUTLAM		ob ->
+616C5	15PUTLAM		ob ->
+616D5	16PUTLAM		ob ->
+616E5	17PUTLAM		ob ->
+616F5	18PUTLAM		ob ->
+61705	19PUTLAM		ob ->
+61715	20PUTLAM		ob ->
+61725	21PUTLAM		ob ->
+61735	22PUTLAM		ob ->
+61745	DUPTEMPENV		->
+61745	DUPTEMPEVN		->
+617D8	GETLAMPAIR		#n -> #n ob lam F -> #n T
+6186C	#=case		#m #n -> :: <ob1> ; #m #n -> :: <ob2> <rest> ;
+6187C	OVER#=case		#m #n -> :: #m <ob1> ; #m #n -> :: #m <ob2> <rest> ;
+61891	DUP#0=case		#0 -> :: #0 <ob1> ; # -> :: # <ob2> <rest> ;
+61896	#0=case		#0 -> :: <ob1> ; # -> :: <ob2> <rest> ;
+618A8	DUP#0=csedrp		#0 -> :: <ob1> ; # -> :: # <ob2> <rest> ;
+618BA	EQcasedrop		ob1 ob1 -> :: <ob1> ; ob1 ob2 -> :: ob1 <ob2> <rest> ;
+618D3	#=casedrop		#m #n -> :: <ob1> ; #m #n -> :: #m <ob2> <rest> ;
+618E8	NOTcasedrop		ob T -> :: ob <ob2> <rest> ; ob F -> :: <ob1> ;
+618F7	casedrop		ob T -> :: <ob1> ; ob F -> :: ob <ob2> <rest> ;
+61910	NOTcase2drop		ob1 ob2 T -> :: ob1 ob2 <ob2> <rest> ; ob1 ob2 F -> :: <ob1> ;
+6191F	case2drop		ob1 ob2 T -> :: <ob1> ; ob1 ob2 F -> :: ob1 ob2 <ob2> <rest> ;
+61933	EQcase		ob1 ob1 -> :: ob1 <ob1> ; ob1 ob2 -> :: ob1 <ob2> <rest> ;
+6194B	caseDROP		ob T -> :: ; ob F -> :: ob <ob1> <rest> ;
+61960	NOTcaseDROP		ob T -> :: ob <ob1> <rest> ; ob F -> :: ;
+61970	case2DROP		ob1 ob2 T -> :: ; ob1 ob2 F -> :: ob1 ob2 <ob1> <rest> ;
+61984	NOTcase2DROP		ob1 ob2 T -> :: ob1 ob2 <ob1> <rest> ; ob1 ob2 F -> :: ;
+61993	case		T -> :: <ob1> ; F -> :: <ob2> <rest> ;
+619AD	NOTcase		T -> :: <ob2> <rest> ; F -> :: <ob1> ;
+619BC	IT		T -> :: <ob1> <rest> ; F -> :: <ob2> <rest> ;
+619CB	GOTO		->
+619E0	?GOTO		flag ->
+619F3	NOT?GOTO		flag ->
+61A02	popflag	ML	Pop to A.A, if TRUE then set carry
+61A18	#0=?SEMI		#0 -> :: ; #  -> :: <ob1> <rest> ;
+61A2C	NOT?SEMI		T -> :: <ob1> <rest> ; F -> :: ;
+61A3B	?SEMI		T -> :: ; F -> :: <ob1> <rest> ;
+61A47	SEMILOOP		->
+61A58	ITE_DROP		ob T -> :: <ob2> <rest> ; ob F -> :: ob <ob1> <rest> ;
+61A6D	COLA_EVAL		Returns and evals first obj in previous stream.
+61A8E	COLARPITE		T ob1 ob2 -> :: ob1 ; F ob1 ob2 -> :: ob2 ;
+61AD8	ITE		T -> :: <ob1> <ob3> <rest> ; F -> :: <ob2> <rest> ;
+61AE9	2'RCOLARPITE		Return to composite and ITE there.
+61B45	2@REVAL		->
+61B55	3@REVAL		->
+61B72	NOT?DROP		ob T -> :: ob <ob1> <rest> ; ob F -> :: <ob1> <rest> ;
+61B89	ticR		-> ob T -> F
+61C1C	EXPAND		hxs #nibs -> hxs'
+61C1C	EXPAND		hxs #nibs -> hxs'
+61CE9	CACHE		obn..ob1 #n lam ->
+61D3A	SAVELAM		
+61D41	SAVESTACK		->
+61EA7	DUMP		NULLLAM -> ob1..obn #n
+61FA9	DUPROM-WORD?		ob -> ob flag
+61FB6	ROM-WORD?		ob -> flag
+61FCF	Rom-Word?		
+62001	2SWAP		1 2 3 4 -> 3 4 1 2
+62020	DUPTYPECHAR?		ob -> ob flag
+62025	TYPECHAR?		ob -> flag
+62035	DUPTYPEIDNT?		ob -> ob flag
+6203A	TYPEIDNT?		ob -> flag
+6204A	DUPTYPEEXT?		ob -> ob flag
+6204F	TYPEEXT?		ob -> flag
+62073	GPOverWrT/FL	ML	<REF>GETPTR , OverWr TRUE/FALSE, Loop
+62076	GPOverWrTLp	ML	<REF>GETPTR , OverWr TRUE, Loop
+6207D	OverWrF/TLp		
+62080	OverWrTLoop	ML	OverWr TRUE, Loop 
+62096	GPOverWrFLp	ML	<REF>GETPTR , OverWr FALSE, Loop
+6209D	OverWrT/FLp	ML	OverWr TRUE/FALSE, Loop
+620A0	OverWrFLoop	ML	OverWr FALSE, Loop
+620B6	GPPushT/FLp	ML	<REF>GETPTR , Push TRUE/FALSE, Loop
+620B9	GPPushTLoop	ML	<REF>GETPTR , Push TRUE, Loop
+620C0	PushF/TLoop	ML	Push FALSE (CRY)/TRUE, Loop
+620C3	DOTRUE	aka	
+620C3	PushTLoop	ML	Push TRUE, Loop
+620D2	GPPushFLoop	ML	<REF>GETPTR , Push FALSE, Loop
+620D9	PushT/F	aka	
+620D9	PushT/FLoop	ML	Push TRUE (CRY)/FALSE, Loop
+620DC	DOFALSE	aka	
+620DC	PushFLoop	ML	Push FALSE, Loop
+620EB	OVER#=		# #' -> # flag
+62103	DROPTRUE		ob -> T
+6210C	DROPFALSE		ob -> F
+62115	DUPTYPELAM?		ob -> ob flag
+6211A	TYPELAM?		ob -> flag
+6212A	DUPTYPEBINT?		ob -> ob flag
+6212F	TYPEBINT?		ob -> flag
+6213F	DUPTYPEHSTR?		ob -> ob flag
+62144	TYPEHSTR?		ob -> flag
+62154	DTYPECSTR?	aka	
+62154	DUPTYPECSTR?		ob -> ob flag
+62159	TYPECSTR?		ob -> flag
+62169	DTYPEREAL?	aka	
+62169	DUPTYPEREAL?		ob -> ob flag
+6216E	TYPEREAL?		ob -> flag
+6217E	DUPTYPECMP?		ob -> ob flag
+62183	TYPECMP?		ob -> flag
+62193	DTYPEARRY?	aka	
+62193	DUPTYPEARRY?		ob -> ob flag
+62198	TYPEARRAY?		ob -> flag
+62198	TYPEARRY?		ob -> flag ???
+621A8	DUPTYPEROMP?		ob -> ob flag
+621AD	TYPEROMP?		ob -> flag
+621BD	DUPTYPERRP?		ob -> ob flag
+621C2	TYPERRP?		ob -> flag
+621D2	DUPTYPESYMB?		ob -> ob flag
+621D7	TYPESYMB?		ob -> flag
+621E7	DTYPECOL?	aka	
+621E7	DUPTYPECOL?		ob -> ob flag
+621EC	TYPECOL?		ob -> flag
+621FC	DUPTYPEGROB?		ob -> ob flag
+62201	TYPEGROB?		ob -> flag
+62211	DTYPELIST?	aka	
+62211	DUPTYPELIST?		ob -> ob flag
+62216	TYPELIST?		ob -> flag
+62226	DUPTYPETAG?		ob -> ob flag
+6222B	TYPETAGGED?		ob -> flag
+6223B	TYPERARRY?		ob -> flag
+62256	TYPECARRY?		ob -> flag
+62266	DUP#0=		# -> # flag
+62289	#3=		# -> flag
+6229A	#2=		# -> flag
+622A7	#1=		# -> flag
+622B6	#1<>		# -> flag
+622C5	DUP#1=		# -> # flag
+622D4	DUP#0<>		# -> # flag
+622E5	!insert$		$ $' -> $'+$
+622EF	SWAP&$		$ $' -> $'+$
+62312	!!append$?		$ $' -> $+$'
+62376	!append$		$ $' -> $+$'
+62394	!!insert$		$ $' -> $'+$
+623A0	!!append$		$ $' -> $+$'
+62474	'RSAVEWORD		->
+62474	'RSaveRomWrd	aka	
+624BA	#MIN		# #' -> #''
+624C6	#MAX		# #' -> #''
+624FB	#-#2/		# #' -> (#-#')/2
+62535	DROPZERO		ob -> #0
+6254E	2DROP00		ob ob -> #0 #0
+6256A	#3+		# -> #+3
+6257A	#4+		# -> #+4
+6258A	#5+		# -> #+5
+6259A	#6+		# -> #+6
+625AA	#7+		# -> #+7
+625BA	#8+		# -> #+8
+625CA	#9+		# -> #+9
+625DA	#10+		# -> #+10
+625EA	#12+		# -> #+12
+625FA	#3-		# -> #-3
+6260A	#4-		# -> #-4
+6261A	#5-		# -> #-5
+6262A	#6-		# -> #-6
+6264E	#10*		# -> #*10
+62674	#8*		# -> #*8
+62691	#6*		# -> #*6
+626AE	5skipcola		Skips 5 objects, then does COLA.
+626DC	3skipcola		Does 3SKIP, then COLA.
+626E5	2skipcola		Does 2SKIP, then COLA.
+626EE	skipcola		Does SKIP, then COLA.
+626F7	DUP#2+		# -> # #+2
+6270C	DROPSWAP		1 2 3 -> 2 1
+62726	DROPSWAPDROP		1 2 3 -> 2
+62726	DROPSWAPDROP	aka	
+62726	ROT2DROP	aka	
+62726	ROT2DROP		1 2 3 -> 2
+62726	XYZ>Y	aka	
+62726	XYZ>Y	aka	
+62747	SWAPDUP		1 2 -> 2 1 1
+62775	ROTDUP		1 2 3 -> 2 3 1 1
+62794	SWAP#-		# #' -> #'-#
+627A7	DROPDUP		1 2 -> 1 1
+627BB	DUPLEN$		$ -> $ #
+627D5	#+DUP		# #' -> #+#' #+#'
+627EB	Push2#aLoop	ML	<REF>GETPTR , Push R0 & A as #, Loop
+627F8	#-DUP		# #' -> #-#' #-#'
+62809	#1+DUP		# -> #+1 #+1
+6281A	#1-DUP		# -> #-1 #-1
+62830	SWAPDROPDUP		1 2 -> 2 2
+6284B	SWAPDROPSWAP		1 2 3 -> 3 1
+6284B	SWAPDROPSWAP	aka	
+6284B	UNROTDROP	aka	
+6284B	UNROTDROP		1 2 3 -> 3 1
+6284B	XYZ>ZX	aka	
+6284B	XYZ>ZX	aka	
+62864	4ROLLDROP		1 2 3 4 -> 2 3 4
+62880	5ROLLDROP		1 2 3 4 5 -> 2 3 4 5
+6289B	2DUP#<		# #' -> # #' flag
+628B5	2DUP#=		# #' -> # #' flag
+628D1	2DUP#>		# #' -> # #' flag
+628EB	DUP#1+		# -> # #+1
+62904	SWAP#1+		# ob -> ob #+1
+62904	SWAP#1+		meta ob -> meta&ob
+62904	SWP1+	aka	
+62904	SWP1+	aka	
+6292F	DUP#1-		# -> # #-1
+62946	DROPONE		ob -> #1
+62958	RDROPCOLA		->
+6296D	COLACOLA		Drops rest of current stream does COLA in the above one.
+62986	COLAcase		T -> :: <ob1> ; F -> :: <ob2> <rest> ;
+629A1	COLANOTcase		T -> :: <ob2> <rest> ; F -> :: <ob1> ;
+629BC	ORcase		f1 f2 -> :: <ob1> ; f1 f2 -> :: <ob2> <rest> ;
+629D0	REQcase		ob -> :: ob <ob2> ; -> :: ob <ob3> <rest> ;
+629E9	REQcasedrop		ob -> <ob2> ; -> <ob3> <rest> ;
+62A02	SAFESTO		ob id/lam ->
+62A2F	DUPSAFE@		id/lam -> id/lam ob T -> id/lam F
+62A34	SAFE@		id/lam -> ob T -> F
+62A61	?>ROMPTR		ob -> ob'
+62A84	?ROMPTR>		ob -> ob'
+62ABB	MACRODCMP		
+62B0B	2DROPFALSE		ob1 ob2 -> F
+62B1F	PALPTRDCMP		
+62B5B	palrompdcmp		romptr -> $ T
+62B6F	#0=UNTIL		# -> #
+62B88	INCOMPDROP		comp -> obn..ob1
+62B9C	NTHCOMPDROP		comp #i -> ob
+62BB0	APPEND_SPACE		$ -> $'
+62BC4	7UNROLL		1..7 -> 7 1..6
+62BC4	SEVENUNROLL	aka	
+62BD8	RESOROMP		-> ob
+62BF1	%10*		% -> %*10
+62C05	DUP@		id/lam -> id/lam ob T -> id/lam F
+62C19	DUPROMPTR@		ROMPTR -> ROMPTR ob T -> ROMPTR F
+62C2D	#=ITE		#m #n -> :: <ob1> <ob3> <rest> ; #m #n -> :: <ob2> <rest> ;
+62C41	INNERDUP		comp -> obn..ob1 #n #n
+62C55	NOTAND		flag1 flag2 -> flag
+62C69	TOTEMPSWAP		ob1 ob2 -> ob2' ob1
+62C7D	ROT2DUP		1 2 3 -> 2 3 1 3 1
+62C91	ROTAND		flag1 ob flag2 -> ob flag
+62CA5	ROTOVER		1 2 3 -> 2 3 1 3
+62CB9	DUPDUP		ob -> ob ob ob
+62CCD	OVERDUP		1 2 -> 1 2 1 1
+62CE1	COERCEDUP		% -> # #
+62CF5	UNROTDUP		1 2 3 -> 3 1 2 1
+62D09	4UNROLLDUP		1 2 3 4 -> 4 1 2 3 3
+62D1D	NTHCOMDDUP		comp #i -> ob ob
+62D31	OVERSWAP		1 2 -> 1 1 2
+62D31	OVERSWAP	aka	
+62D31	OVERUNROT	aka	
+62D31	OVERUNROT		1 2 -> 1 1 2
+62D45	ROLLSWAP		1..n #n -> 2..n-1 1 n
+62D59	NULL$SWAP		ob -> $ ob
+62D6D	SUB$SWAP		ob $ # #' -> $' ob
+62D81	%MAXorder		% %' -> %max %min
+62D9F	?SKIPSWAP		ob1 ob2 T -> :: ob1 ob2 <ob1> <rest> ; ob1 ob2 F -> :: ob2 ob1 <ob1> <rest> ;
+62DB3	1ABNDSWAP		ob -> 1lamob ob
+62DCC	ROT#+SWAP		# ob #' -> #'+# ob
+62DCC	ROT+SWAP	aka	
+62DE5	4PICK#+SWAP		# ob1 ob2 #' -> # ob1 #'+# ob2
+62DE5	4PICK+SWAP	aka	
+62DFE	#+SWAP		ob # #' -> #+#' ob
+62E12	#-SWAP		ob # #' -> #-#' ob
+62E26	#1+SWAP		ob # -> #+1 ob
+62E3A	ZEROSWAP		ob -> #0 ob
+62E4E	#1-1SWAP		# -> 1 #-1
+62E67	ONESWAP		ob -> #1 ob
+62E7B	COERCESWAP		ob % -> # ob
+62E8F	%>%%SWAP		ob % -> %% ob
+62EA3	%%*SWAP		ob %% %%' -> %%+%%' ob
+62EB7	XYZ>ZTRUE		ob1 ob2 ob3 -> ob3 T
+62ECB	4ROLLSWAP		1 2 3 4 -> 2 3 1 4
+62EDF	3PICKSWAP		1 2 3 -> 1 2 1 3
+62EF3	4PICKSWAP		1 2 3 4 -> 1 2 3 1 4
+62F07	1GETSWAP		ob -> 1lamob ob
+62F1B	?SWAP		ob1 ob2 T -> :: ob2 ob1 <ob1> <rest> ; ob1 ob2 F -> :: ob1 ob2 <ob1> <rest> ;
+62F2F	!append$SWAP		ob $ $' -> $+$' ob
+62F43	NOT?SWAPDROP		ob1 ob2 T -> :: ob2 <ob1> <rest> ; ob1 ob2 F -> :: ob1 <ob1> <rest> ;
+62F5C	?SWAPDROP		ob1 ob2 T -> :: ob1 <ob1> <rest> ; ob1 ob2 F -> :: ob2 <ob1> <rest> ;
+62F75	#1+NDROP		ob meta ->
+62F75	#1+NDROP		ob 1..n #n ->
+62F75	N+1DROP	aka	
+62F75	N+1DROP	aka	
+62F89	ROLLDROP		1..n #n -> 2..n
+62F9D	MDIMSDROP		[2D] -> #m #n
+62FB1	DUPROT		1 2 -> 2 2 1
+62FC5	DROPROT		1 2 3 4 -> 2 3 1
+62FD9	#1-ROT		ob ob' # -> ob' #-1 ob
+62FED	%%*ROT		ob ob' %% %%' -> ob' %%+%%' ob
+63001	4ROLLROT		1 2 3 4 -> 2 4 1 3
+63001	FOURROLLROT	aka	
+63015	4UNROLLROT		1 2 3 4 -> 4 3 2 1
+63029	DROPOVER		1 2 3 -> 1 2 1
+6303D	EQOVER		ob3 ob1 ob2 -> ob3 flag ob3
+63051	#+OVER		ob # #' -> ob #+#' ob
+63065	#-OVER		ob # #' -> ob #-#' ob
+63079	ZEROOVER		ob -> ob #0 ob
+6308D	UNROTOVER		1 2 3 -> 3 1 2 1
+630A1	4ROLLOVER		1 2 3 4 -> 2 3 4 1 4
+630B5	3PICKOVER		1 2 3 -> 1 2 3 1 3
+630C9	4PICKOVER		1 2 3 4 -> 1 2 3 4 1 4
+630DD	DUPPICK		n..1 #n -> n..1 #n n-1
+630F1	DUPROLL		1..n #n -> 1 3..n #n 2
+63105	OVER#2+UNROL		meta ob -> ob meta
+63105	OVER#2+UNROLL		1..n #n ob -> ob 1..n #n
+63119	8UNROLL		1..8 -> 8 1..7
+6312D	10UNROLL		1..10 -> 10 1..9
+63141	OVERARSIZE		[] ob -> [] ob #elts
+63155	'ERRJMP		-> ERRJMP
+63169	caseERRJMP		T -> :: ERRJMP ; F -> :: <ob> <rest> ;
+6317D	?CARCOMP		comp T -> ob comp F -> comp
+63191	NEWLINE$&$		$ -> "$\0a"
+63191	NEWLINE&$	aka	
+631A5	#1-{}N		ob1..obn #n+1 -> {}
+631B9	TWO{}N		ob1 ob2 -> { ob1 ob2 }
+631CD	THREE{}N		ob1 ob2 ob3 -> { ob1 ob2 ob3 }
+631E1	DUPINCOMP		comp -> comp obn..ob1 #n
+631F5	SWAPINCOMP		comp obj -> obj obn..ob1 #n
+63209	DUPNULL$?		ob -> ob flag
+6321D	DUPNULLCOMP?		comp -> comp flag
+63231	DUPLENCOMP		comp -> comp #n
+63245	#1-SUB$		$ #start #end+#1 -> $'
+63259	1_#1-SUB	aka	
+63259	1_#1-SUB$		$ #end -> $'
+6326D	LAST$		$ #start -> $'
+63281	#1+LAST$		$ #start-#1 -> $'
+63295	DUP$>ID		$ -> $ ID
+632A9	SWAP%>C%		%im %re -> C%
+632BD	'NOP		-> NOP
+632D1	::NEVAL		ob1..obn #n -> ?
+632E5	2GETEVAL		-> ?
+632F9	DROPRDROP		ob ->
+63312	SWAPCOLA		Does SWAP, then COLA.
+63326	XYZ>ZCOLA		Does UNROT2DROP, then COLA.
+6333A	#0=?SKIP		#0 -> :: <ob2> <rest> ; # -> :: <ob1> <rest> ;
+63353	#1=?SKIP		#1 -> :: <ob2> <rest> ; # -> :: <ob1> <rest> ;
+6336C	#=?SKIP		#m #n -> :: <ob2> <rest> ; #m #n -> :: <ob1> <rest> ;
+63385	ONE_EQ		# -> flag
+63399	#>?SKIP		#m #n -> :: <ob1> <rest> ; #m #n -> :: <ob2> <rest> ;
+633B2	COLASKIP		Drops rest of current stream and skips one obj in above stream.
+633C6	NOT_UNTIL		flag ->
+633DF	NOT_WHILE		flag ->
+633F8	DUP#0<>WHILE		# ->
+63411	DUPINDEX@		ob -> ob #
+63425	SWAPINDEX@		ob1 ob2 -> ob2 ob1 #
+63439	OVERINDEX@		ob1 ob2 -> ob1 ob2 ob1 #
+6344D	SWAPLOOP		ob1 ob2 -> ob2 ob1
+63466	DROPLOOP		ob ->
+6347F	DUP#0_DO		#stop -> #stop
+63498	toLEN_DO		{} -> {}
+634B6	1GETABND		-> 1lamob
+634CA	DUP1LAMBIND		ob -> ob
+634CF	1LAMBIND		ob ->
+634E3	caseTRUE		T -> T F -> :: <ob1> <rest> ;
+634F7	TRUEFALSE	aka	
+634F7	TrueFalse		-> T F
+6350B	FALSETRUE	aka	
+6350B	FalseTrue		-> F T
+6351F	ZEROFALSE		-> #0 F
+63533	ONEFALSE		-> #1 F
+63547	#=casedrpfls		#m #n -> F #m #n -> :: #m <ob1> <rest> ;
+6356A	casedrpfls		ob T -> F ob F -> :: ob <ob1> <rest> ;
+63583	case2drpfls		ob1 ob2 T -> F ob1 ob2 F -> :: ob1 ob2 <ob1> <rest> ;
+6359C	caseFALSE		T -> F F -> :: <ob1> <rest> ;
+635B0	ORNOT		flag1 flag2 -> flag
+635C4	EQUALNOT		ob1 ob2 -> flag
+635D8	2DUPEQ		ob1 ob2 -> ob1 ob2 flag
+635EC	DUPEQ:		ob -> ob flag
+635F1	EQ:		ob -> flag
+63605	EQOR		flag ob1 ob2 -> flag'
+63619	EQUALOR		flag ob1 ob2 -> flag'
+6362D	2#0=OR		# # -> flag
+6364B	OVER#0=		# #' -> # #' flag
+6365F	OVER#<		# #' -> # flag
+63673	#<3		# -> flag
+63687	DUP#<7		# -> # flag
+636A0	INNER#1=		comp -> obn..ob1 flag
+636B4	#5=		# -> flag
+636C8	#2<>		# -> flag
+636DC	OVER#>		# #' -> # flag
+636F0	#>1		# -> flag
+636F0	ONE#>	aka	
+63704	2DUP#+		# #' -> # #' #+#'
+63704	DUP3PICK#+	aka	
+63718	ROT#+		# ob #' -> ob #'+#
+6372C	OVER#+		# #' -> # #'+#
+63740	3PICK#+		# ob #' -> # ob #'+#
+63754	4PICK#+		# ob1 ob2 #' -> # ob1 ob2 #'+#
+63768	ROT#-		# ob #' -> ob #'-#
+6377C	OVER#-		# #' -> # #'-#
+63790	INDEX@#-		# -> #'
+63790	INDEX@-		# -> #'
+637A4	SWAPOVER#-		# #' -> #' #-#'
+637B8	ROT#1+		# ob ob' -> ob ob' #+1
+637CC	#-+1	aka	
+637CC	#1--		# #' -> #-#'+1
+637E0	SWAP#1-		# ob -> ob #-1
+637F4	DROP#1-		# ob -> #-1
+63808	#+-1	aka	
+63808	#1-+		# #' -> #+#'-1
+63808	$1-+	aka	
+6381C	COLAITE		T -> :: <ob1> ; F -> :: <ob2> ;
+6383A	ERROROUT		# ->
+6384E	D0=DSKTOP	ML	Get new D0 from DSKTOP, uses A
+6385D	D1=DSKTOP	ML	Get new D1 from DSKTOP, uses C
+6386C	SWAP2DUP		1 2 -> 2 1 2 1
+63880	RSKIP		->
+6389E	GROB!ZERODRP		grob #x1 #y1 #x2 #y2 ->
+638B2	casedrptru		ob T -> T ob F -> :: ob <ob1> <rest> ;
+638CB	NOTcaseTRUE		T -> :: <ob1> <rest> ; F -> T
+638E4	?SEMIDROP		ob T -> :: ob ; ob F -> :: <ob1> <rest> ;
+638FD	SWAPUnDROP		meta1 meta2 -> meta2 ob1..obn
+63911	SWAPUnNDROP		meta1 meta2 -> meta2
+63925	DUP'		ob -> ob nob
+63939	SWAP'		ob1 ob2 -> ob2 ob1 nob
+6394D	DROP'		ob -> nob
+63961	OVER'		ob1 ob2 -> ob1 ob2 ob1 nob
+63975	STO'		ob id/lam -> nob
+63989	TRUE'		-> T nob
+6399D	ONEFALSE'		-> #1 F nob
+639B6	FALSE'		-> F nob
+639CA	#1+'		# -> #+1 nob
+639DE	'R'R		-> ob1 ob2
+639FC	'RRDROP		-> ob
+63A15	ONECOLA		Does ONE, then COLA.
+63A29	dvarlsBIND		ob ->
+63A3D	'LAMLNAMESTO		ob ->
+63A56	'xDEREQ		ob -> flag
+63A6F	DUPNULL{}?		{} -> {} flag
+63A88	DUPZERO		ob -> ob ob #0
+63A9C	DUPONE		ob -> ob ob #1
+63AB0	SWAPONE		ob ob' -> ob' ob #1
+63AC4	ONEDUP	aka	
+63AC4	ONEONE		-> #1 #1
+63AD8	DUPTWO		ob -> ob ob #2
+63AEC	NOTcsdrpfls		ob T -> :: ob <ob1> <rest> ; ob F -> F
+63B05	caseSIZEERR		T -> :: SIZEERR ; F -> :: <ob> <rest> ;
+63B19	NcaseSIZEERR		T -> :: <ob> <rest> ; F -> :: SIZEERR ;
+63B2D	CKREAL		% -> % Z -> %
+63B46	NcaseTYPEERR		T -> :: <ob1> <rest> ; F -> :: TYPEERR ;
+63B5A	'x*		-> x*
+63B6E	'xDER		-> xDER
+63B82	%%/>%		%% %%' -> %
+63B96	UNCOERCE%%		# -> %%
+63BAA	DUP%0=		% -> flag
+63BBE	SWAP%%/		%% %%' -> %%''
+63BD2	caseDrpBadKy		ob T -> :: DoBadKey ; ob F -> :: ob <ob1> <rest> ;
+63BEB	caseDEADKEY	aka	
+63BEB	caseDoBadKey		T -> :: DoBadKey ; F -> :: <ob1> <rest> ;
+63C04	GROBDIMw		grob -> #width
+63C18	%%*UNROT		ob ob' %% %%' -> %%+%%' ob ob'
+63C2C	SWAP4ROLL		1 2 3 4 -> 2 4 3 1
+63C2C	XYZW>YWZX	aka	
+63C40	2DUP5ROLL		1 2 3 -> 2 3 2 3 1
+63C54	SWAP3PICK		1 2 3 -> 1 3 2 1
+63C68	3PICK3PICK		1 2 3 -> 1 2 3 1 2
+63C7C	SWAP4PICK		1 2 3 4 -> 1 2 4 3 1
+63C90	OVER5PICK		1 2 3 4 -> 1 2 3 4 3 1
+63CA4	EQUALcasedrp		ob ob1 ob2 -> :: <ob1> ; ob ob1 ob2 -> :: ob <ob2> <rest> ;
+63CBD	DUP#0=csDROP		#0 -> :: ; # -> :: # <ob1> <rest> ;
+63CD6	jEQcase		ob1 ob1 -> :: <ob1> ; ob1 ob2 -> :: <ob2> <rest> ;
+63CEA	ANDcase		f1 f2 -> :: <ob1> ; f1 f2 -> :: <ob2> <rest> ;
+63CFE	EQUALcase		ob1 ob1 -> :: <ob1> ; ob1 ob2 -> :: <ob2> <rest> ;
+63D12	#<case		#m #n -> :: <ob1> ; #m #n -> :: <ob2> <rest> ;
+63D26	#1=case		#1 -> :: <ob1> ; # -> :: <ob2> <rest> ;
+63D3A	#<>case		#m #n -> :: <ob2> <rest> ; #m #n -> :: <ob1> ;
+63D4E	#>2case		#0/#1/#2 -> :: <ob2> <rest> ; # -> :: <ob1> ;
+63D67	#>case		#m #n -> :: <ob2> <rest> ; #m #n -> :: <ob1> ;
+63D7B	j%0=case		%0 -> :: <ob1> ; ob -> :: <ob2> <rest> ;
+63D8F	REALcase		% -> :: <ob1> ; ob -> :: <ob2> <rest> ;
+63DA3	dARRYcase		[] -> :: [] <ob1> ; ob -> :: ob <ob2> <rest> ;
+63DB7	dLISTcase		{} -> :: {} ob1 ; ob -> :: ob <ob2> <rest> ;
+63DCB	EditExstCase		-> :: <ob1> <rest> ; -> :: <rest> ;
+63DDF	ANDNOTcase		f1 f2 -> :: <ob1> ; f1 f2 -> :: <ob2> <rest> ;
+63DF3	EQUALNOTcase		ob1 ob1 -> :: <ob2> <rest> ; ob1 ob2 -> :: <ob1> ;
+63E07	dIDNTNcase		id -> :: id <ob2> <rest> ; ob -> :: ob <ob1> ;
+63E1B	dREALNcase		% -> :: % <ob2> <rest> ; ob -> :: ob <ob1> ;
+63E2F	EQIT		ob1 ob1 -> :: <ob1> <rest> ; ob1 ob2 -> :: <ob2> <rest> ;
+63E48	DUP#0=IT		#0 -> :: #0 <ob1> <rest> ; # -> :: # <ob2> <rest> ;
+63E61	ANDITE		f1 f2 -> :: <ob1> <ob3> <rest> ; f1 f2 -> :: <ob2> <rest> ;
+63E75	EQITE		ob1 ob1 -> :: <ob1> <ob3> <rest> ; ob1 ob2 -> :: <ob2> <rest> ;
+63E89	#0=ITE		#0 -> :: <ob1> <ob3> <rest> ; # -> :: <ob2> <rest>
+63E9D	#<ITE		#m #n -> :: <ob1> <ob3> <rest> ; #m #n -> :: <ob2> <rest> ;
+63EB1	#>ITE		#m #n -> :: <ob2> <rest> ; #m #n -> :: <ob1> <ob3> <rest> ;
+63EC5	DUP#0=ITE		#0 -> :: #0 <ob1> <ob3> <rest> ; # -> :: # <ob2> <rest> ;
+63ED9	UserITE		#set -> :: <ob1> <ob3> <rest> ; #clr -> :: <ob2> <rest> ;
+63EED	SysITE		#set -> :: <ob1> <ob3> <rest> ; #clr -> :: <ob2> <rest> ;
+63F01	top&Cr		meta1 meta2 -> symb
+63F1A	metaROTDUP		meta1 meta2 meta3 -> meta2 meta3 meta1 meta1
+63F2E	ROTUntop&		meta1 meta2 meta3 -> meta2 meta3&meta1
+63F42	roll2top&		meta1 meta2 meta3 -> meta3 meta1&meta2
+63F42	rolltwotop&	aka	
+63F56	plDRPpZparg		meta&ob -> M_last M_rest
+63F6A	&$SWAP		ob $ $' -> $+$' ob
+63F7E	SWAPCKREF		ob1 ob2 -> ob2 ob1'
+63F92	pZpargSWAPUn		meta -> M_rest M_last
+63FA6	DROPNDROP		meta ob ->
+63FA6	DROPNDROP		1..n #n ob ->
+63FBA	2OVER		1 2 3 4 -> 1 2 3 4 1 2
+63FCE	?Ob>Seco		ob -> :: ob ;
+63FE7	Ob>Seco		ob -> :: ob ;
+63FFB	2Ob>Seco		ob1 ob2 -> :: ob1 ob2 ;
+6400F	ExitAtLOOP		->
+6400F	ExitAtLoop	aka	
+6400F	ZEROISTOPSTO	aka	
+64023	RclHiddenVar		id -> ob T -> F
+64037	WithHidden		-> ?
+64078	StoHiddenVar		ob id ->
+6408C	PuHiddenVar		id ->
+640A0	SaveVarRes		->
+640BE	SetHiddenRes		->
+640FA	RestVarRes		->
+64127	Embedded?		ob1 ob2 -> flag
+6416D	UStackDepth		-> #
+64190	Sig?ErrJmp		# ->
+641CC	DupAndThen		
+641FC	ZEROZERO		-> #0 #0
+64209	#ZERO#ONE		-> #0 #1
+6427A	#ZERO#SEVEN		-> #0 #7
+6428A	#ONE#27		-> #1 #27d
+6429D	#TWO#ONE		-> #2 #1
+642AF	#TWO#TWO		-> #2 #2
+642BF	#TWO#FOUR		-> #2 #4
+642D1	#THREE#FOUR		-> #3 #4
+642E3	#FIVE#FOUR		-> #5 #4
+64309	ZEROZEROZERO		-> #0 #0 #0
+6431D	ZEROZEROONE		-> #0 #0 #1
+64331	ZEROZEROTWO		-> #0 #0 #2
+64345	SubMetaOb		meta #start #end -> meta'
+643BD	SubMetaOb1		ob1..obi..obn #n #i #n #i -> ob1..obi #n #i
+643EF	matchob?		ob comp -> T -> ob F
+643F9	matchob?Lp		
+64426	POSCOMP		comp ob pred -> #i -> #0 (eg: pred = ' %<)
+6443A	nextpos		
+64449	3DROPZERO	U	ob ob ob -> #0
+6448A	#=POSCOMP		comp # -> #i -> #0
+644A3	EQUALPOSCOMP		comp ob -> #pos -> #0
+644BC	NTHOF		ob comp -> #i -> #0
+644D0	Find1stTrue		comp test -> ob T -> F
+644EE	Find1stT.1		
+6452F	Lookup		ob test comp -> nextob T -> ob F
+64548	Lookup.1		ob test -> nextob T -> ob F Return Stack: comp ->
+64593	EQLookup		ob comp -> nextob T -> ob F
+645B1	POS$		$ $find start# -> #pos -> #0
+645B1	POSCHR		$search chr #start -> #pos -> #0
+645BD	POS$REV		$ $find #limit -> #pos -> #0
+645BD	POSCHRREV		$seach chr #start -> #pos \ -> #0
+6475C	CHR>$		chr -> $* Strings
+64775	STRIPTAGS		tagged -> ob
+647A2	STRIPTAGSl2		tagged ob' -> ob ob'
+647BB	TAGOBS		ob $tag -> tagged ob.. { $.. } -> tagged...
+6480B	NEXTCOMPOB		comp #ofs -> comp #ofs' ob T -> comp F
+648BD	>LASTRAM-WORD		
+64B12	BINT44		44d 2Ch
+64B12	FORTYFOUR	aka	
+64B12	illnameerr	aka	
+64B1C	BINT45		45d 2Dh
+64B1C	FORTYFIVE	aka	
+64B26	BINT46		46d 2Eh
+64B26	FORTYSIX	aka	
+64B30	BINT47		47d 2Fh
+64B30	FORTYSEVEN	aka	
+64B30	rrp	aka	
+64B3A	BINT48		48d 30h
+64B3A	FORTYEIGHT	aka	
+64B44	BINT49		49d 31h
+64B44	FORTYNINE	aka	
+64B4E	BINT50		50d 32h
+64B4E	FIFTY	aka	
+64B58	BINT51		51d 33h
+64B58	FIFTYONE	aka	
+64B62	BINT52		52d 34h
+64B62	FIFTYTWO	aka	
+64B62	THREEFOUR	aka	
+64B6C	BINT53		53d 35h
+64B6C	FIFTYTHREE	aka	
+64B6C	STRLIST	aka	
+64B6C	THREEFIVE	aka	
+64B76	BINT54		54d 36h
+64B76	FIFTYFOUR	aka	
+64B80	#THREESEVEN	aka	
+64B80	BINT55		55d 37h
+64B80	FIFTYFIVE	aka	
+64B8A	BINT56		56d 38h
+64B8A	FIFTYSIX	aka	
+64B94	BINT57		57d 39h
+64B94	FIFTYSEVEN	aka	
+64B9E	BINT58		58d 3Ah
+64B9E	FIFTYEIGHT	aka	
+64BA8	BINT59		59d 3Bh
+64BA8	FIFTYNINE	aka	
+64BB2	BINT60		60d 3Ch
+64BB2	SIXTY	aka	
+64BBC	BINT61		61d 3Dh
+64BBC	SIXTYONE	aka	
+64BC6	BINT62		62d 3Eh
+64BC6	SIXTYTWO	aka	
+64BD0	BINT3Fh	aka	
+64BD0	BINT63		63d 3Fh
+64BD0	SIXTYTHREE	aka	
+64BDA	BINT40h	aka	
+64BDA	BINT64		64d 40h
+64BDA	BINT_40h	aka	
+64BDA	SIXTYFOUR	aka	
+64BDA	YHI	aka	
+64BE4	ARRYREAL	aka	
+64BE4	BINT65		65d 41h
+64BE4	BINT_65d	aka	
+64BEE	ARRYCMP	aka	
+64BEE	BINT66		66d 42h
+64BEE	FOURTWO	aka	
+64BF8	BINT67		67d 43h
+64BF8	FOURTHREE	aka	
+64C02	2ARRY	aka	
+64C02	BINT68		68d 44h
+64C02	SIXTYEIGHT	aka	
+64C0C	BINT69		69d 45h
+64C0C	FOURFIVE	aka	
+64C16	ARRYID	aka	
+64C16	BINT70		70d 46h
+64C16	SEVENTY	aka	
+64C20	BINT74		74d 4Ah
+64C20	SEVENTYFOUR	aka	
+64C2A	BINT79		79d 4Fh
+64C2A	SEVENTYNINE	aka	
+64C3A	BINT80		80d 50h
+64C3A	EIGHTY	aka	
+64C3A	LISTOB	aka	
+64C3E	BINT81		81d 51h
+64C3E	EIGHTYONE	aka	
+64C3E	LISTREAL	aka	
+64C48	BINT82		82d 52h
+64C48	LISTCMP	aka	
+64C52	BINT83		83d 53h
+64C52	FIVETHREE	aka	
+64C5C	BINT84		84d 54h
+64C5C	FIVEFOUR	aka	
+64C66	2LIST	aka	
+64C66	BINT85		85d 55h
+64C70	BINT86		86d 56h
+64C70	FIVESIX	aka	
+64C70	LISTID	aka	
+64C7A	BINT87		87d 57h
+64C7A	LISTLAM	aka	
+64C84	BINT91		91d 5Bh
+64C84	BINT_91d	aka	
+64C8E	BINT96		96d 60h
+64C8E	BINT_96d	aka	
+64C8E	idntany	aka	
+64C98	BINT97		97d 61h
+64C98	IDREAL	aka	
+64CA2	BINT98	UBS	98d 62h
+64CA2	IDCMP	aka	
+64CA2	NINETYEIGHT	aka	
+64CAC	BINT100		100d 64h
+64CAC	IDARRY	aka	
+64CAC	ONEHUNDRED	aka	
+64CB6	BINT101	UBS	101d 65h
+64CB6	IDLIST	aka	
+64CB6	SIXFIVE	aka	
+64CC0	BINT111		111d 6Fh
+64CC0	char	aka	
+64CCA	BINT112	UBS	112d 70h
+64CCA	lamany	aka	
+64CD4	BINT113	UBS	113d 71h
+64CD4	LAMREAL	aka	
+64CDE	BINT114	UBS	114d 72h
+64CDE	BINT_114d	aka	
+64CE8	BINT115		115d 73h
+64CE8	BINT_115d	aka	
+64CF2	BINT116		116d 74h
+64CF2	BINT_116d	aka	
+64CFC	BINT117	UBS	117d 75h
+64CFC	BINT_117d	aka	
+64CFC	LAMLIST	aka	
+64D06	BINT122		122d 7Ah
+64D06	BINT_122d	aka	
+64D10	BINT128		128d 80h
+64D10	BINT80h	aka	
+64D1A	BINT130		130d 82h
+64D1A	BINT130d	aka	
+64D1A	BINT_130d	aka	
+64D1A	XHI-1	aka	
+64D24	BINT131		131d 83h
+64D24	BINT131d	aka	
+64D24	BINT_131d	aka	
+64D24	XHI	aka	
+64D2E	#8F	UBS	143d 8Fh
+64D2E	library	aka	
+64D38	SYMBREAL		145d 91h
+64D42	SYMBCMP	UBS	146d 92h
+64D42	SYMBCMP	aka	
+64D4C	SYMBSYM	UBS	154d 9Ah
+64D4C	SYMBSYM	aka	
+64D4C	SYMCMP	aka	
+64D56	SYMBUNIT		158d 9Eh
+64D60	backup	UBS	159d 9Fh
+64D6A	SYMOB		160d A0h
+64D74	SYMREAL		161d A1h
+64D88	SYMLIST	UBS	165d A5h
+64D92	SYMID		166d A6h
+64D9C	SYMLAM		167d A7h
+64DA6	SYMSYMB	UBS	169d A9h
+64DB0	SYMSYM		170d AAh
+64DBA	SYMEXT		174d AEh
+64DC4	HXSREAL	U	177d B1h
+64DCE	2HXS	UBS	187d BBh
+64DD8	BINTC0h		192d C0h
+64DE2	2GROB		204d CCh
+64DEC	TAGGEDANY		208d D0h
+64DF6	EXTREAL		225d E1h
+64E00	EXTSYM		234d EAh
+64E00	UNITSYM	aka	
+64E0A	2EXT		238d EEh
+64E14	ROMPANY		240d F0h
+64E1E	BINT253		253d FDh
+64E28	BINT255d		255d FFh
+64E32	FSTFLOATROM#	aka	
+64E32	REALOBOB		256d 100h
+64E3C	#_102		258d 102h
+64E3C	#_258_d	aka	
+64E3C	Err#Chr00	aka	
+64E46	#SyntaxErr	UBS	262d 106h
+64E50	BINT_263d	UBS	263d 107h
+64E5A	REALREALOB	UBS	272d 110h
+64E64	3REAL		273d 111h
+64E6E	#_123	aka	
+64E6E	#_291_d	aka	
+64E6E	Err#Kill	UBS	291d 123h
+64E78	#_124	aka	
+64E78	#_292_d	aka	
+64E78	Err#NoLstStk	UBS	292d 124h
+64E82	#NoRoomForSt	UBS	305d 131h
+64E82	BINT_305d	aka	
+64E8C	#132	UBS	306d 132h
+64E96	REALSTRSTR	UBS	307d 133h
+64EA0	#134	UBS	308d 134h
+64EA0	VLMpurgemsg	aka	
+64EAA	#135	UBS	309d 135h
+64EAA	VLMmsg	aka	
+64EB4	#136	UBS	310d 136h
+64EB4	REALSTRID	aka	
+64EB4	VLMstkmsg	aka	
+64EBE	#137	UBS	311d 137h
+64EBE	VLMundomsg	aka	
+64EC8	#138	UBS	312d 138h
+64EC8	VLMhistmsg	aka	
+64ED2	#139	UBS	313d 139h
+64ED2	VLMUserKeys	aka	
+64EDC	#13A	UBS	314d 13Ah
+64EDC	VLMAlarmMsg	aka	
+64EE6	#13B	UBS	315d 13Bh
+64EE6	VLMlastargs	aka	
+64EF0	#13D	UBS	317d 13Dh
+64EF0	VLMcmdlmsg	aka	
+64EFA	Err#Cont	UBS	318d 13Eh
+64F04	INTEGER337		337d 151h
+64F04	REALLISTREAL	aka	
+64F0E	CMPOBOB	UBS	512d 200h
+64F18	#_205	aka	
+64F18	#_517_d	aka	
+64F18	Err#NoLstArg	UBS	517d 205h
+64F22	STRREALREAL		785d 311h
+64F2C	ARRYREALREAL	UBS	1041d 411h
+64F36	ARRYREALCMP	UBS	1042d 412h
+64F40	3ARRY	UBS	1092d 444h
+64F4A	ARRYLISTREAL	UBS	1105d 451h
+64F54	ARRYLISTCMP	UBS	1106d 452h
+64F5E	LISTREALOB	UBS	1296d 510h
+64F68	LISTREALREAL	UBS	1297d 511h
+64F72	LISTLISTOB	UBS	1360d 550h
+64F7C	IDREALOB	U	1552d 610h
+64F86	IDLISTOB	U	1616d 650h
+64F90	FSTMACROROM#	UBS	1792d 700h
+64F90	LAMANYANY	aka	
+64F9A	PROGIDREAL	UBS	2145d 861h
+64FA4	PROGIDCMP	UBS	2146d 862h
+64FAE	PROGIDLIST	UBS	2149d 865h
+64FB8	PROGIDEXT	UBS	2158d 86Eh
+64FC2	ATTNERR		2563d A03h
+64FCC	SYMREALREAL	UBS	2577d A11h
+64FD6	SYMREALCMP	UBS	2578d A12h
+64FE0	SYMREALSYM	UBS	2586d A1Ah
+64FEA	SYMCMPREAL	UBS	2593d A21h
+64FF4	SYMCMPCMP	UBS	2594d A22h
+64FFE	SYMCMPSYM	UBS	2602d A2Ah
+65008	SYMIDREAL	UBS	2657d A61h
+65012	SYMIDCMP	UBS	2658d A62h
+6501C	SYMIDLIST	UBS	2661d A65h
+65026	SYMIDEXT	UBS	2670d A6Eh
+65030	SYMSYMREAL	UBS	2721d AA1h
+6503A	SYMSYMCMP	UBS	2722d AA2h
+65044	3SYM	UBS	2730d AAAh
+6504E	XFERFAIL	UBS	3078d C06h
+65058	PROTERR	UBS	3079d C07h
+65062	InvalServCmd	UBS	3080d C08h
+6506C	Connecting		3082d C0Ah
+65076	Retry	UBS	3083d C0Bh
+65080	#CAlarmErr	UBS	3583d DFFh
+6508A	EXTOBOB		3584d E00h
+65094	#EXITERR		458752d 70000h
+6509E	MINUSONE		1048575d FFFFFh
+650A8	%e		e
+650BD	%.5		.5
+650D2	%-.5	UBS	-.5
+650E7	%10		10
+650FC	%180		180
+65111	%200	UBS	200
+65126	%360		360
+6513B	%400	UBS	400
+65150	tok]	UBS	"]"
+6515C	lbrac	UBS	
+6516A	tok[	UBS	"["
+65176	tok{		"{"
+65182	tok}	UBS	"}"
+6518E	toksharp		"#"
+6519A	tokuscore	UBS	"_"
+651A6	tok$	UBS	"$"
+651B2	tok&	UBS	"&"
+651BE	tokESC		"\1B"
+651CA	tok>>	UBS	">>"
+651D6	tok<<		"<<"
+651E2	tokexponent		"E"
+651EE	tokanglesign	UBS	"ANG"
+651FA	tokSIGMA	UBS	"SIGMA"
+65206	tokWHERE	UBS	"|"
+65212	14SPACES$	U	"\ \ \ \ \ \ \ \ \ \ \ \ \ \ "
+65238	LF$	aka	
+65238	NEWLINE$		"\0a"
+65244	$DER	UBS	"der"
+65254	SPACE$		"\ "
+65254	tok_	aka	
+65260	tokUNKNOWN	UBS	"UNKNOWN"
+65278	tokquote		"""
+65284	tok'		"'"
+65290	tok,		","
+6529C	tok.		"."
+652A8	tok;	UBS	";"
+652B4	toklparen	UBS	"("
+652C0	tokrparen	UBS	")"
+652CC	tok^	UBS	"^"
+652D8	tok*	UBS	"*"
+652E4	tok/	UBS	"/"
+652F0	tok+	UBS	"+"
+652FC	tok-		"-"
+65308	tok=		"="
+65314	tokSQRT	UBS	"SQRT"
+65320	tokDER	UBS	"DERIV"
+6532C	tokCTGROB	UBS	"GROB"
+6533E	tokCTSTR	UBS	"C$"
+6534C	tok0		"0"
+65358	tok1		"1"
+65364	tok2	UBS	"2"
+65370	tok3	UBS	"3"
+6537C	tok4	UBS	"4"
+65388	tok5	UBS	"5"
+65394	tok6	UBS	"6"
+653A0	tok7	UBS	"7"
+653AC	tok8		"8"
+653B8	tok9		"9"
+6541E	CHR_00		'\00', CHR   0d 00h
+65425	CHR_...		'...', CHR  31d 1Fh
+6542C	CHR_DblQuote		'"',   CHR  34d 22h
+65433	CHR_#		'#',   CHR  35d 23h
+6543A	CHR_*		'*',   CHR  42d 2Ah
+65441	CHR_+		'+',   CHR  43d 2Bh
+65448	CHR_,		',',   CHR  44d 2Ch
+6544F	CHR_-		'-',   CHR  45d 2Dh
+65456	CHR_.		'.',   CHR  46d 2Eh
+6545D	CHR_/		'/',   CHR  47d 2Fh
+65464	CHR_0		'0',   CHR  48d 30h
+6546B	CHR_1		'1',   CHR  49d 31h
+65472	CHR_2		'2',   CHR  50d 32h
+65479	CHR_3		'3',   CHR  51d 33h
+65480	CHR_4		'4',   CHR  52d 34h
+65487	CHR_5		'5',   CHR  53d 35h
+6548E	CHR_6		'6',   CHR  54d 36h
+65495	CHR_7		'7',   CHR  55d 37h
+6549C	CHR_8		'8',   CHR  56d 38h
+654A3	CHR_9		'9',   CHR  57d 39h
+654AA	CHR_:		':',   CHR  58d 3Ah
+654B1	CHR_;		';',   CHR  59d 3Bh
+654B8	CHR_<		'<',   CHR  60d 3Ch
+654BF	CHR_=		'=',   CHR  61d 3Dh
+654C6	CHR_>		'>',   CHR  62d 3Eh
+654CD	CHR_A		'A',   CHR  65d 41h
+654D4	CHR_B		'B',   CHR  66d 42h
+654DB	CHR_C		'C',   CHR  67d 43h
+654E2	CHR_D		'D',   CHR  68d 44h
+654E9	CHR_E		'E',   CHR  69d 45h
+654F0	CHR_F		'F',   CHR  70d 46h
+654F7	CHR_G		'G',   CHR  71d 47h
+654FE	CHR_H		'H',   CHR  72d 48h
+65505	CHR_I		'I',   CHR  73d 49h
+6550C	CHR_J		'J',   CHR  74d 4Ah
+65513	CHR_K		'K',   CHR  75d 4Bh
+6551A	CHR_L		'L',   CHR  76d 4Ch
+65521	CHR_M		'M',   CHR  77d 4Dh
+65528	CHR_N		'N',   CHR  78d 4Eh
+6552F	CHR_O		'O',   CHR  79d 4Fh
+65536	CHR_P		'P',   CHR  80d 50h
+6553D	CHR_Q		'Q',   CHR  81d 51h
+65544	CHR_R		'R',   CHR  82d 52h
+6554B	CHR_S		'S',   CHR  83d 53h
+65552	CHR_T		'T',   CHR  84d 54h
+65559	CHR_U		'U',   CHR  85d 55h
+65560	CHR_V		'V',   CHR  86d 56h
+65567	CHR_W		'W',   CHR  87d 57h
+6556E	CHR_X		'X',   CHR  88d 58h
+65575	CHR_Y		'Y',   CHR  89d 59h
+6557C	CHR_Z		'Z',   CHR  90d 5Ah
+65583	CHR_a		'a',   CHR  97d 61h
+6558A	CHR_b		'b',   CHR  98d 62h
+65591	CHR_c		'c',   CHR  99d 63h
+65598	CHR_d		'd',   CHR 100d 64h
+6559F	CHR_e		'e',   CHR 101d 65h
+655A6	CHR_f		'f',   CHR 102d 66h
+655AD	CHR_g		'g',   CHR 103d 67h
+655B4	CHR_h		'h',   CHR 104d 68h
+655BB	CHR_i		'i',   CHR 105d 69h
+655C2	CHR_j		'j',   CHR 106d 6Ah
+655C9	CHR_k		'k',   CHR 107d 6Bh
+655D0	CHR_l		'l',   CHR 108d 6Ch
+655D7	CHR_m		'm',   CHR 109d 5Dh
+655DE	CHR_n		'n',   CHR 110d 6Eh
+655E5	CHR_o		'o',   CHR 111d 6Fh
+655EC	CHR_p		'p',   CHR 112d 70h
+655F3	CHR_q		'q',   CHR 113d 71h
+655FA	CHR_r		'r',   CHR 114d 72h
+65601	CHR_s		's',   CHR 115d 73h
+65608	CHR_t		't',   CHR 116d 74h
+6560F	CHR_u		'u',   CHR 117d 75h
+65616	CHR_v		'v',   CHR 118d 76h
+6561D	CHR_w		'w',   CHR 119d 77h
+65624	CHR_x		'x',   CHR 120d 78h
+6562B	CHR_y		'y',   CHR 121d 79h
+65632	CHR_z		'z',   CHR 122d 7Ah
+65639	CHR_->		'->', CHR 141d 8Dh
+65640	CHR_<<		'<<', CHR 171d ABh
+65647	CHR_>>		'>>', CHR 187d BBh
+6564E	CHR_Angle		'ANG', CHR 128d 80h
+65655	CHR_Deriv		'DERIV', CHR 136d 88h
+6565C	CHR_Integral		'INTEG', CHR 132d 84h
+65663	CHR_LeftPar		'(',   CHR  40d 28h
+6566A	CHR_Newline		'\0a', CHR  10d 0Ah
+65671	CHR_Pi		'pi', CHR 135d 87h
+65678	CHR_RightPar		')',   CHR  41d 29h
+6567F	CHR_Sigma		'SIGMA', CHR 133d 85h
+65686	CHR_Space		'\ ',  CHR  32d 20h
+6568D	CHR_UndScore		'_',   CHR  95d 5Fh
+65694	CHR_[		'[',   CHR  91d 5Bh
+6569B	CHR_]		']',   CHR  93d 5Dh
+656A2	CHR_{		'{',   CHR 123d 7Bh
+656A9	CHR_}		'{',   CHR 125d 7Dh
+656B0	CHR_<=		'<=', CHR 137d 89h
+656B7	CHR_>=		'>=', CHR 138d 8Ah
+656BE	CHR_<>		'<>', CHR 139d 8Bh
+656C5	$_R<<		"RANGANG"
+656D5	$_R<Z		"RANGZ"
+656E5	$_XYZ		"XYZ"
+656F5	$_<<>>		"<<>>"
+65703	$_{}		"{}"
+65711	$_[]		"[]"
+6571F	$_''		"''"
+6572D	$_::		"::"
+6573B	$_LRParens		"()"
+65749	$_2DQ		""""
+65757	$_ECHO		"ECHO"
+65769	$_EXIT		"EXIT"
+6577B	$_Undefined		"Undefined"
+65797	$_RAD		"RAD"
+657A7	$_GRAD		"GRAD"
+6594E	putnibs		hxs hxs ->
+6595A	getnibs		hxs hxs -> hxs'
+659DE	Symb>HBuff		symb ->
+66EA5	BigCursor		-> grob
+66ECD	MediumCursor		-> grob
+66EF1	SmallCursor		-> grob
+70601	BANKMTHDS		
+715B1	?ACCPTR>		
+71C3B	rNTHELCOMP		romptr #i -> ob T -> F
+71DB2	RPTRACC		
+7DBA0	nWHEREIFTE		
+7DBAB	nWHEREDER		
+7DBB6	nWHEREINTG		
+7DBC1	nWHERESUM		
+7DBCC	nWHEREWHERE		
+7DBD7	nWHEREFCNAPP		
+7DBE2	D/D*		
+7DBED	D/D+		
+7DBF8	D/D-		
+7DC03	D/D/		
+7DC0E	derquot		
+7DC54	derprod1		
+7DC72	D/D=		
+7DC72	D/Dalg=	aka	
+7DC7D	D/DABS		
+7DC88	easyabs		
+7DCA1	D/DACOS		
+7DCAC	D/DACOSH		
+7DCB7	D/DALOG		
+7DCC2	D/DARG		
+7DCCD	D/DASIN		
+7DCD8	D/DASINH		
+7DCE3	D/DATAN		
+7DCEE	D/DATANH		
+7DCF9	D/DCHS		
+7DD17	D/DCONJ		
+7DD35	D/DCOS		
+7DD40	D/DCOSH		
+7DD4B	D/DEXP		
+7DD4B	D/DEXPM1	aka	
+7DD56	D/DINV		
+7DD61	D/DLN		
+7DD6C	D/DLNP1		
+7DD77	D/DLOG		
+7DD82	D/DIFTE		
+7DD8D	D/DSIN		
+7DD98	D/DSINH		
+7DDA3	D/DSQ		
+7DDAE	D/DSQRT		
+7DDB9	D/DTAN		
+7DDC4	D/DTANH		
+7DDCF	D/D^		
+7DDDA	D/D^X		
+7DDE5	D/D^Y		
+7DDF0	D/DDER		
+7DDFB	D/DWHERE		
+7DE06	D/DINTEGRAL		
+7DE11	D/DSUM		
+7DE1C	D/DAPPLY		
+7DE27	nINTGINV		
+7DE32	nINTGSIGN		
+7DE3D	nINTGSQRT		
+7DE48	nINTGSQ		
+7DE53	nINTGSIN		
+7DE5E	nINTGCOS		
+7DE69	nINTGTAN		
+7DE74	nINTGSINH		
+7DE7F	nINTGCOSH		
+7DE8A	nINTGTANH		
+7DE95	nINTGASIN		
+7DEA0	nINTGACOS		
+7DEAB	nINTGATAN		
+7DEB6	nINTGLN		
+7DEC1	nINTGLOG		
+7DECC	nINTGALOG		
+7DED7	nINTGEXPM		
+7DEE2	nCustomMenu		->
+7DEED	nCOLCTQUOTE		
+7DEF8	SPLITWHERE		
+7DF03	MANMENU+-		
+7DF0E	MANMENU*/		
+7DF19	MANMENU^		
+7DF24	MANMENUEXP		
+7DF2F	MANMENULN		
+7DF3A	MANMENUCSIV		
+7DF45	MANMENUEQ		
+7DF50	MANMENUCX		
+7DF5B	MANMENUTRG		
+7DF66	MANMENUATG		
+7DF71	PTYPE>PINFO		
+7DF7C	MOVEVAR		
+7DF87	COPYVAR		
+80000	CMOS	RAM	Quick RAM corrupt check (5)
+80000	HARDROMEND	aka	
+80000	RAMSTART	aka	
+80005	IRAMMASK	RAM	IRAM Size Config Mask (5)
+8000A	HOMEMASK	RAM	Home Size of RAM (mask) (5)
+8000F	HRAMEND	RAM	M.S.N. of size of RAM chip (1)
+80010	FAILSTK1	RAM	Warmstart log 1st (newest) entry (18)
+80022	FAILSTK2	RAM	<REF>FAILSTK1 2nd entry (18)
+80034	FAILSTK3	RAM	<REF>FAILSTK1 3rd entry (18)
+80046	FAILSTK4	RAM	<REF>FAILSTK1 4th entry (18)
+80058	NEXTIRQ	RAM	Time at next Timer2 int. (13)
+80065	TIMECRC	RAM	CRC CheckSum for NEXTIRQ (4)
+80069	TIMEOUT	aka	
+80069	TIMExmit	RAM	Time at scheduled timeout (13)
+80076	TIMEOUTCLK	RAM	ScratchPad (4)
+80077	LoBatTime	RAM	Flag periodic ((*)) updates (1)
+80078	StartTime	RAM	SelfTest Start Time (Ticks) (13)
+80085	FailTime	RAM	SelfTest Fail Time (Ticks) (13)
+80092	TESTMSG	RAM	SelfTest Msg Buffer (44)
+800BE	SW_Image	RAM	"HH:MM:SS:ss" Stopwatch (22)
+800D4	SW_ETime	RAM	Stopwatch Elapsed Time Ticks (13)
+800E1	PortStat	RAM	Copy of CARDSTAT Nib (1)
+800E2	Port1CRC	RAM	CRC for Device in Port1 (4)
+800E6	AccessInit	RAM	Saved value of INITEN & sALLOWINTR (2)
+800E8	COVERstate	RAM	Iram state before uncovering (3)
+800EB	COVERsave	RAM	Save area for G/DoCovered (10)
+800F5	IRAMBUFF	RAM	Exec Buff (code under IRAM) (537)
+80127	IRAMBUFF2	RAM	<REF>IRAMBUFF +50
+8030E	GraphPrtHook	RAM	(11)
+8030E	IRAMBEND	aka	
+80319	uart_buffer	RAM	UART buffer area (512)
+80519	uart_buf_end	RAM	# of bytes in the UART buffer (2)
+8051B	uart_error	RAM	UART error flag (1)
+8051C	uart_buf_st	RAM	UART buffer offset (2)
+8051E	uart_handshk	RAM	UART handshake (1)
+8051F	uart_modes	RAM	UART mode (1)
+80520	uart_parity	RAM	(1)
+80521	uart_timeout	RAM	(2)
+80523	IOCNIB	RAM	Saves IOC in OUTUART (1)
+80524	CONFRAM	RAM	RAM configuration (7)
+8052B	CONFTAB	RAM	RAM configuration with CRC (11)
+80536	PORT0EOS	RAM	(5)
+8053B	PORT1EOS	RAM	(5)
+80540	PORT2EOS	RAM	(5)
+805DB	INTRAM	RAM	Save area for the interrupt sys (16)
+805EB	SAVE_MODES	RAM	<REF>INTRAM (5)
+805F0	SAVE_C[A]	RAM	<REF>INTRAM (5)
+805F5	SAVE_A	RAM	<REF>INTRAM (16)
+80605	SAVE_ST	RAM	<REF>INTRAM (3)
+80608	SAVE_B	RAM	<REF>INTRAM (16)
+80618	SAVE_D	RAM	<REF>INTRAM (16)
+80628	SAVE_R0	RAM	<REF>INTRAM (16)
+80638	SAVE_PC	RAM	<REF>INTRAM (5)
+8063D	SAVE_D0	RAM	<REF>INTRAM (5)
+80642	ORghost	aka	
+80642	SAVE_OR	RAM	
+80645	DRSTART	RAM	Display Refresh Lo Bound (5)
+8064A	DREND	RAM	Display Refresh Hi Bound (5)
+8064F	IREG	RAM	Saves Interrupt History (3)
+80652	SEMAPH	RAM	Saves control byte for IREG (2)
+80654	IOSAVE	RAM	Saves HiNib of ANNCTRL (1)
+80655	CSPEED	RAM	CPU speed (16hz units) (5)
+8065A	INITEN	RAM	Warmstart Enable flag (1)
+8065B	DISABLE_KBD	RAM	Keyboard handshake (1)
+8065B	HANDSHK	aka	
+8065C	KEYSTATE	RAM	location of kbd state (16)
+80669	INPUTSTREAM	RAM	Key Buffer (max 15 keys). (34)
+80669	KEYBUFFER	aka	
+8068B	POPPEDKEY	RAM	Last Key from POPKEY (2)
+8068D	DISP1CTLg	RAM	Ghost for DISP1CTL (5)
+80692	LINENIBSg	RAM	Ghost for LINENIBS (3)
+80695	DISP2CTLg	RAM	Ghost for DISP2CTL (5)
+8069A	LINECOUNTg	RAM	Ghost for LINECOUNT (2)
+8069C	Stk0save	RAM	RSTK0 used by PrintLCD inside the interrupt sys (5)
+806A1	Stk1save	RAM	RSTK1 <REF>Stk0save (5)
+806A6	Stk2save	RAM	RSTK2 <REF>Stk0save (5)
+806AB	Stk3save	RAM	RSTK3 <REF>Stk0save (5)
+806B0	Stk4save	RAM	RSTK4 <REF>Stk0save (5)
+806B5	Stk5save	RAM	RSTK5 <REF>Stk0save (5)
+806BA	R2[A]save	RAM	<REF>R1[A]save (5)
+806BF	R2[S]save	RAM	<REF>R1[A]save (1)
+806C0	R1[A]save	RAM	Used by PrintLCD inside the interrupt system (5)
+806C5	SAVE_BO	RAM	Save BitOffset (1)
+806C6	SAVE_LC	RAM	Save LineCount (2)
+806C8	SAVE_LN	RAM	Save LineNibs (3)
+806CB	SAVE_OFFSET	RAM	Save Window Offset (5)
+806D0	VDISP2	RAM	->Menu grob
+806D5	ADISP	RAM	->Stack grob
+806DA	SYSUPSTART	aka	
+806DA	VDISP	RAM	->Display grob
+806DA	VDISP1	aka	
+806DF	VDISP3	RAM	->Not displayed grob <REF>VDISP
+806E4	GDISP	RAM	->Blackboard grob
+806E9	TEMPOB	RAM	->Beginning of TempOb area
+806EE	TEMPTOP	RAM	->End of TempOb area
+806F3	RSKTOP	RAM	->Return stack
+806F8	DSKTOP	RAM	->Data stack
+806FD	EDITLINE	RAM	->Command line
+80702	TEMPENV	RAM	->LAM environments (5)
+80707	DOLPENV	RAM	->DO LOOP environments
+8070C	TOUCHTAB	RAM	(5)
+80711	USEROB	RAM	->UserOb Area (HOME)
+80716	ROMPARTS	RAM	->RomParts Area
+8071B	CONTEXT	RAM	->Current dir
+80720	STOPSIGN	RAM	(5)
+80725	UserKeys	RAM	->User key assignments (5)
+8072A	ALARMS	RAM	->System Alarm List (5)
+8072F	INTRPPTR	RAM	->RPL runstream
+8072F	OBUPSTART	aka	
+80734	OSAVE	RAM	
+80739	LASTARG	RAM	->1st argument saved in CK<n>
+80739	LASTARG1	aka	
+8073E	LASTARG2	RAM	->2nd <REF>LASTARG
+80743	LASTARG3	RAM	->3rd <REF>LASTARG
+80748	LASTARG4	RAM	->4th <REF>LASTARG
+8074D	LASTARG5	RAM	->5th <REF>LASTARG
+80752	leeway	RAM	->hxs which will be GC'ed in a very-low-memory condition
+80757	ITEM1STATE	RAM	->list of lists describing stack level 1
+8075C	HISTORY1	RAM	-> $ with the most recent CMD history entry
+80761	HISTORY2	RAM	->2nd entry <REF>HISTORY1
+80766	HISTORY3	RAM	->3rd entry <REF>HISTORY1
+8076B	HISTORY4	RAM	->4th (oldest) entry <REF>HISTORY1
+80770	PDCHXS	RAM	->hxs map of outermost symbolic
+80775	KERMERRM	RAM	->Kermit error message
+80775	PDCSYMB	aka	
+8077A	PAINTTREE	RAM	->hxs of "textbook-mode" graphics
+8077F	EXITMSG	RAM	->msg set by user in EXIT word
+80784	AppDisplay	RAM	->App display object
+80789	AppKeys	RAM	->App key assignments
+8078E	AppExitCond	RAM	->App exit condition
+80793	AppError	RAM	->App error handler
+80798	CtlAlarm	RAM	->Control alarm data
+8079D	MenuDef	RAM	->Current menu definition
+807A2	LastMenuDef	RAM	->Last menu definition
+807A7	MenuData	RAM	->Menu data for touch table
+807AC	MenuRowAct	RAM	->Prev/Next action definition
+807B1	LabelDef	RAM	->How to make menu labels
+807B6	MenuKeyNS	RAM	->No-shift menu key handler
+807BB	MenuKeyLS	RAM	->Left-shift menu key handler
+807C0	MenuKeyRS	RAM	->Right-shift menu key handler
+807C5	ReviewKey	RAM	->Review-key definition
+807CA	LastContext	RAM	->RRP saved for CheckContext
+807CF	TrackAct	RAM	->Action when CONTEXT changes
+807D4	MenuExitAct	RAM	->Menu exit action definition
+807D9	LASTROMWDOB	RAM	->Last user-level ROM-WORD evaluated (set by CK<n>)
+807DE	KeyOb	RAM	->Pending key-object
+807E8	RAMEND	RAM	->End of RAM
+807E8	SYSNOUPSTART	aka	
+807ED	AVMEM	RAM	Free mem / 5 (5)
+807F2	ERROR	RAM	(5)
+807F7	ATTNFLG	RAM	Counts ON presses (5)
+807FC	FIRSTPROC	RAM	->StartupProc Secondary (5)
+80801	SysNib1	RAM	ISysFlags 1
+80802	SysNib2	RAM	ISysFlags 2
+80803	SysNib3	RAM	ISysFlags 3
+80804	SysNib4	RAM	ISysFlags 4
+80805	SysNib5	RAM	ISysFlags 5
+80806	SysNib6	RAM	ISysFlags 6
+80807	SysNib7	RAM	ISysFlags 7
+80808	SysNib8	RAM	ISysFlags 8
+80809	SysNib9	RAM	ISysFlags 9
+8080A	EDITFLAG	aka	
+8080A	EDITLFLAG	aka	
+8080A	SysNib10	RAM	ISysFlags 10
+8080B	ParenModFLAG	aka	
+8080B	SysNib11	RAM	ISysFlags 11
+8080C	SysNib12	RAM	ISysFlags 12
+8080D	SysNib13	RAM	ISysFlags 13
+8080E	SizeMLDisp	RAM	
+8080E	SysNib14	aka	
+8080F	SysNib15	RAM	ISysFlags 15
+80810	SysNib16	RAM	ISysFlags 16 (unused)
+80811	SysNib17	RAM	ISysFlags 17 (unused)
+80812	SysNib18	RAM	ISysFlags 18 (unused)
+80813	SysNib19	RAM	ISysFlags 19 (unused)
+80814	SysNib20	RAM	ISysFlags 20 (unused)
+80815	AppCount	RAM	# of nested POLs (2)
+80817	ITEM1LINES	RAM	# display lines currently (1)
+80818	VIEWLEVEL	RAM	stack element currently viewed (5)
+8081D	DEPTHSAVE	RAM	Saved user stack depth (5)
+80822	RNSEED	RAM	Random number seed (15)
+80831	SAVECLK	RAM	Save of CLKON state (1)
+80832	ALARMSDUE	RAM	Flags Alarm Due (1)
+80833	PASTDUE	RAM	Flags Past Due Alarm (1)
+80834	DOUSEALARM	RAM	Flags Deactivate Curr Alarm (1)
+80835	NOALARMSRV	RAM	Flags Disable Alarm Service (1)
+80836	ALARM#	RAM	
+8083B	PASTDUE#	RAM	
+80840	LPD_HIST	RAM	Low Power Detect History (1)
+80841	ANNUNCIATORS	RAM	Annunciator flags (2)
+80843	SystemFlags	RAM	128 System flags (16)
+80853	UserFlags	RAM	128 User Flags (16)
+80863	ELEMENT	RAM	decompile obj depth counter (2)
+80865	FIRSTCHAR	RAM	offset to 1st visible (5)
+8086A	CR_COUNT	RAM	# of newlines in editline (5)
+8086F	STACKNUM	RAM	ref. number of 1st visible (5)
+80874	TOPLINE	RAM	Editline-segment which appears first on the screen (5)
+80879	LASTLAST?	RAM	true if lastkey was last hit (1)
+8087A	HISTORYLEVEL	RAM	which stack level is next (1)
+8087B	LASTARGCOUNT	RAM	# of args saved by CK<n> (1)
+8087C	LASTARGf	RAM	Flag #Args>3 (1)
+8087D	LASTERROR	RAM	Save area for error number (5)
+80882	CURSOR	RAM	Cursor editline position (5)
+80882	CURSOREPOSN	aka	
+80887	CURSORPART	RAM	Cursor display row (5)
+80887	CURSORROW	aka	
+8088C	CURSOROFFSET	RAM	Cursor position from left of screen (2)
+8088C	CURSORPOSN	aka	
+8088E	CURSORSTATE	RAM	Show cursor/char underneath (1)
+8088F	CURSORCHR	RAM	Char under Cursor (2)
+80891	CURSORGROB	RAM	Cursor Grob Data (40)
+808B9	CURSORX	RAM	Pxl X-Coord of Cursor (5)
+808BE	CURSORY	RAM	Pxl Y-Coord of Cursor (5)
+808C3	CURRENTMENU	RAM	Menu ID of current menu (2)
+808C5	MENULEVEL	RAM	User-menu level (5)
+808CA	OLDMENU	RAM	Saves previous menu number (2)
+808CC	T1COUNT	RAM	Decremented by       srvc_timer1 (1)
+808CD	PADCOUNT	RAM	Indentation count for decomp (1)
+808CE	GARBSCRATCH1	RAM	Saves 1 RSTK level in G.C. (5)
+808D3	GARBSCRATCH2	RAM	Saves counter in G.C. (5)
+808D8	SAVECROSS	RAM	cursor moves in plotting (10)
+808E2	PADJSAVE1	RAM	Status save in PTRADJUST (1)
+808E3	PADJSAVE2	RAM	RSTK save in PTRADJUST (10)
+808ED	KERMMODE	RAM	Kermit Mode information (1)
+808EE	DcompWidth	RAM	String Decomp Width (2)
+808F0	FONTHEIGHT	RAM	font-height selector (1)
+808F1	FONTWIDTH	RAM	font-width selector (1)
+808F2	FONTCOUNT	RAM	counter (3)
+808F5	NODECOUNT	RAM	expr-tree node count (3)
+808F8	OBTREELEN	RAM	object length (3)
+808FB	LASTOP	RAM	3-state encoding of operand/ unary/binary (1)
+808FC	LEFTTREE	RAM	(3)
+808FF	RIGHTTREE	RAM	(3)
+80902	PARENTTREE	RAM	(3)
+80905	PRECSTACK	RAM	Op Precedence textbook entry (7)
+8090C	KEYLIST	RAM	(5)
+80911	KEYLOCK	RAM	(1)
+80912	ACCUM	RAM	(1)
+80913	OB/EXP?	RAM	
+80914	COLWIDTH	RAM	(2)
+80916	ENTRWISE	RAM	(1)
+80917	PARENCOUNT	RAM	(2)
+80919	STRETCHCOUNT	RAM	(2)
+8091B	ClkOnNib	RAM	Clock display on/off (1)
+8091C	XmitSrcvTOut	RAM	XMIT/SRECV   timeout (2)
+8091E	DelayCt	RAM	REDEYE Print time/line (2)
+80920	GCOLCOUNT	RAM	Graphics #Cols (2)
+80922	COLCOUNT	RAM	Dot Cols on line (2)
+80924	PrtStatus	RAM	CPU Status Bits et al. (3)
+80927	IOCsave	RAM	Save of IOC before change (1)
+80928	LineByteCt	RAM	Line Byte Counter (2)
+8092A	FifoByteCt	RAM	Sum of FIFO Line Counts (2)
+8092C	LastPrntTime	RAM	Time (Upper 11 nibs) (11)
+80937	PFIFO	RAM	FIFO Buffer (16)
+80947	MenuRow	RAM	(5)
+8094C	EqPtr	RAM	Points to Curr Eqn in EqList (5)
+80951	KeyRomPtr0	RAM	RomPtr for KeyOb (11)
+8095C	KeyRomPtr1	RAM	RomPtr for MenuKey 1 (11)
+80967	KeyRomPtr2	RAM	RomPtr for MenuKey 2 (11)
+80972	KeyRomPtr3	RAM	RomPtr for MenuKey 3 (11)
+8097D	KeyRomPtr4	RAM	RomPtr for MenuKey 4 (11)
+80988	KeyRomPtr5	RAM	RomPtr for MenuKey 5 (11)
+80993	KeyRomPtr6	RAM	RomPtr for MenuKey 6 (11)
+8099E	LastMenuRow	RAM	(5)
+809A3	FlashROMPTAB	aka	
+809A3	RESRAMEND	aka	
+809A3	ROMPTAB	RAM	Library table (3+n*16)
+90000	HARDRAMEND	RAM	IRAM Home ends at #7FFFF
+9358F	TYPEARRY@	UBS	[] -> #
+0000B1	~DoMsgBox		$ #x #y grob menu -> T
+0000B3	~Choose		::Appl $Title ::Convert {} offset -> {}' T -> ob T -> F
+0020B1	~MsgBoxMenu		-> {}
+0030E0	~BRStoC1		
+0050B0	~IFMenuRow1		-> {}
+0050B3	~ChooseMenu0		-> {}
+0060B0	~IFMenuRow2		-> {}
+0060B3	~ChooseMenu1		-> {}
+0070B3	~ChooseMenu2		-> {}
+0090B1	DoMKeyOK		
+00E0B1	Ck&DoMsgBox		$ ->
+0100E0	~BRbrowse		
+0110E7	~UTVUNS1Arg		
+0120E0	~BRoutput		
+0120E4	~MESRclEqn		
+0130B0	IFEDispField		
+0130E0	BRdone		
+0150B3	~BBMoveTo	UBS	# ->
+0170E0	~BRRclCurRow		
+0180E0	~BRRclC1		->
+0190B3	~BBRecalOff&Disp	UBS	flag ->
+01E0E8	~INTEMPOB?		ob -> ob flag
+0220B3	~BBRunEntryProc	UBS	->
+0230B3	~BBReReadPageSize	UBS	->
+0240B3	~BBReReadHeight	UBS	->
+0250B3	~BBReReadCoords	UBS	->
+0260B3	~BBReReadWidth	UBS	->
+0280B3	~BBRunENTERAction	UBS	->
+0290B3	~BBRunCanclAction	UBS	->
+02A0B3	DoCKeyCheck	UBS	->
+02B0B3	DoCKeyChAll	UBS	->
+02C0B3	DoCKeyUnChAll	UBS	->
+02D0B3	DoCKeyCancel	UBS	->
+02E0B3	DoCKeyOK	UBS	->
+02F0B3	~BBReDrawBackgr	UBS	->
+0300B3	LEDispPrompt	UBS	->
+0350B3	LEDispList	UBS	->
+0360B3	LEDispItem	UBS	# ->
+0370B3	~BBGetNGrob	UBS	#n -> grob
+0380B3	~BBGetNStr	UBS	#n -> $
+03B0B3	~BBRereadChkEnbl	UBS	->
+03C0B3	~BBRereadFullScr	UBS	->
+03D0B3	~BReReadMenus	UBS	->
+03E0B3	~BBReReadNElems	UBS	->
+03F0B3	~BBGetN	UBS	#n -> ob
+0450E0	BRDispItems		
+0490E0	BRinverse		
+04B0B3	~BBIsChecked?	UBS	#n -> flag
+0520B3	~BBUpArrow	UBS	-> grob
+0520E0	BRViewItem		
+0530B3	~BBDownArrow	UBS	-> grob
+0530E0	BRGetItem		
+0540B3	~BBSpace	UBS	-> grob
+0560B0	DoKeyEdit		
+0580E7	~UTTYPEEXT0?		
+0590B0	DoKeyCancel		
+0590B3	~BBPgDown	UBS	->
+05A0B0	DoKeyOK		
+05A0B3	~BBPgUp	UBS	->
+05B0AB	~xNOVAL	Usr	->
+05B0B3	~BBEmpty?	UBS	-> flag
+05C0B3	~BBGetDefltHeight	UBS	-> #
+05F0B3	~$>grobOrGROB	UBS	$ -> grob
+0600B3	sysCHOOSE	UBS	$title {} %sel -> ob %1 $title {} %sel -> %0
+0630E3	~PCunpack		
+0660B3	~ChooseSimple		$title {items} -> ob T -> F
+0850B0	~grobAlertIcon		9x9 Alert grob
+0860B0	~grobCheckKey		21x8 Check Key menu grob
+0910B0	DoAlert		$ ->
+0B006B	ChangeFocus		
+0B41D8	BrowseMem.1		
+0C50B0	~gFldVal		
+0C80B0	GetFieldVals		
+0D50B0	~sFldVal		
+0DB0B0	~nNullBind		obn..ob1 #n ->
