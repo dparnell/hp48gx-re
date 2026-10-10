@@ -1,14 +1,15 @@
 //! Native, resizable plot window.
 //!
-//! Instead of the calculator's 131x64 PICT, the equation in EQ is evaluated
-//! natively (hp48-rpl) over the ranges in PPAR and drawn at the window's
-//! full resolution. The view can be zoomed and panned without touching the
-//! calculator; it refreshes when EQ or PPAR change.
+//! Instead of the calculator's 131x64 PICT, the plot described by EQ, PPAR
+//! and ΣDAT is computed natively (hp48_rpl::plot, checked against the ROM's
+//! own drawing) and drawn at the window's full resolution. The view can be
+//! zoomed and panned without touching the calculator; it refreshes when the
+//! plot changes.
 
-use eframe::egui::{self, Align2, Color32, FontId, Pos2, Rect, Sense, Stroke, Vec2};
+use eframe::egui::{self, Align2, Color32, FontId, Pos2, Rect, Sense, Shape, Stroke, Vec2};
 use hp48::Machine;
-use hp48_rpl::expr::{self, Angle, Expr};
-use hp48_rpl::{decode, lookup_var, Memory, Object};
+use hp48_rpl::plot::{read_spec, Kind, Mark, Spec, View};
+use hp48_rpl::Memory;
 
 struct Ram<'a>(&'a Machine);
 
@@ -18,145 +19,23 @@ impl Memory for Ram<'_> {
     }
 }
 
-/// System flags live in RAM at #80843 (64 bits; flag -n is bit n-1),
-/// as read by TestSysFlag (#53784).
-const SYSTEM_FLAGS: u32 = 0x80843;
-
-fn system_flag(mem: &impl Memory, n: u32) -> bool {
-    let bit = n - 1;
-    mem.nib(SYSTEM_FLAGS + bit / 4) & (1 << (bit % 4)) != 0
+/// Marks computed for one view and size, reused until either changes.
+struct Traced {
+    view: View,
+    size: Vec2,
+    layers: Vec<Vec<Mark>>,
 }
-
-#[derive(Clone, Copy, Debug, PartialEq)]
-pub enum Kind {
-    Function,
-    Polar,
-}
-
-#[derive(Clone, Debug, PartialEq)]
-pub struct Spec {
-    pub curves: Vec<Expr>,
-    pub label: String,
-    pub indep: String,
-    /// Independent variable range when PPAR gives one (polar sweeps).
-    pub indep_range: Option<(f64, f64)>,
-    pub x: (f64, f64),
-    pub y: (f64, f64),
-    pub axes: (f64, f64),
-    pub kind: Kind,
-    pub angle: Angle,
-}
-
-fn real(o: &Object) -> Option<f64> {
-    match o {
-        Object::Real(v) => Some(*v),
-        Object::Bint(v) => Some(f64::from(*v)),
-        _ => None,
-    }
-}
-
-/// Read EQ and PPAR from the calculator.
-pub fn read_spec(machine: &Machine) -> Result<Spec, String> {
-    let mem = Ram(machine);
-    let eq_addr = lookup_var(&mem, "EQ").ok_or("No EQ variable: store an equation in EQ (e.g. via PLOT)")?;
-    let eq = decode(&mem, eq_addr).map_err(|e| e.to_string())?;
-    let items = match &eq {
-        Object::List(l) => l.clone(),
-        o => vec![o.clone()],
-    };
-    let mut curves = Vec::new();
-    let mut labels = Vec::new();
-    for it in &items {
-        let e = expr::compile(it).map_err(|e| e.to_string())?;
-        labels.push(e.to_string());
-        curves.extend(e.sides().into_iter().cloned());
-    }
-
-    let angle = if system_flag(&mem, 17) {
-        Angle::Radians
-    } else if system_flag(&mem, 18) {
-        Angle::Grads
-    } else {
-        Angle::Degrees
-    };
-    // HP defaults when PPAR does not exist yet.
-    let mut spec = Spec {
-        curves,
-        label: labels.join(", "),
-        indep: "X".into(),
-        indep_range: None,
-        x: (-6.5, 6.5),
-        y: (-3.1, 3.2),
-        axes: (0.0, 0.0),
-        kind: Kind::Function,
-        angle,
-    };
-    if let Some(addr) = lookup_var(&mem, "PPAR") {
-        if let Ok(Object::List(p)) = decode(&mem, addr) {
-            if let (Some(Object::Complex(x0, y0)), Some(Object::Complex(x1, y1))) = (p.first(), p.get(1)) {
-                spec.x = (*x0, *x1);
-                spec.y = (*y0, *y1);
-            }
-            match p.get(2) {
-                Some(Object::Id(n)) => spec.indep = n.clone(),
-                Some(Object::List(l)) => {
-                    if let Some(Object::Id(n)) = l.first() {
-                        spec.indep = n.clone();
-                    }
-                    if let (Some(a), Some(b)) = (l.get(1).and_then(real), l.get(2).and_then(real)) {
-                        spec.indep_range = Some((a, b));
-                    }
-                }
-                _ => {}
-            }
-            match p.get(4) {
-                Some(Object::Complex(a, b)) => spec.axes = (*a, *b),
-                Some(Object::List(l)) => {
-                    if let Some(Object::Complex(a, b)) = l.first() {
-                        spec.axes = (*a, *b);
-                    }
-                }
-                _ => {}
-            }
-            // Plot type: a ROMPTR into the plot library 0F1 (FUNCTION = 033,
-            // POLAR = 035), as named by that library's hash table.
-            match p.get(5) {
-                Some(Object::RomPtr { lib: 0xF1, cmd: 0x33 }) | None => {}
-                Some(Object::RomPtr { lib: 0xF1, cmd: 0x35 }) => spec.kind = Kind::Polar,
-                Some(Object::RomPtr { lib: 0xF1, cmd }) => {
-                    let name = match cmd {
-                        0x34 => "CONIC",
-                        0x36 => "PARAMETRIC",
-                        0x37 => "TRUTH",
-                        0x38 => "SCATTER",
-                        0x39 => "HISTOGRAM",
-                        0x3A => "BAR",
-                        _ => "this",
-                    };
-                    return Err(format!("{name} plots are not supported in the plot window yet"));
-                }
-                Some(_) => {}
-            }
-        }
-    }
-    if spec.x.0 == spec.x.1 || spec.y.0 == spec.y.1 {
-        return Err("PPAR has an empty plot range".into());
-    }
-    Ok(spec)
-}
-
-/// Visible region (x0, x1, y0, y1) in plot coordinates.
-type View = (f64, f64, f64, f64);
 
 pub struct PlotWindow {
     spec: Result<Spec, String>,
     view: Option<View>,
     last_read: Option<std::time::Instant>,
+    traced: Option<Traced>,
 }
 
 impl Default for PlotWindow {
     fn default() -> Self {
-        PlotWindow { spec: Err("Reading EQ and PPAR...".into()), view: None, last_read: None }
+        PlotWindow { spec: Err("Reading the plot...".into()), view: None, last_read: None, traced: None }
     }
 }
 
@@ -170,6 +49,11 @@ const CURVES: [Color32; 4] = [
     Color32::from_rgb(0x2E, 0x8B, 0x57),
     Color32::from_rgb(0x8E, 0x44, 0xAD),
 ];
+
+fn lerp_color(a: Color32, b: Color32, t: f32) -> Color32 {
+    let mix = |x: u8, y: u8| (f32::from(x) + (f32::from(y) - f32::from(x)) * t).round() as u8;
+    Color32::from_rgb(mix(a.r(), b.r()), mix(a.g(), b.g()), mix(a.b(), b.b()))
+}
 
 /// A "nice" step (1, 2 or 5 times a power of ten) near `raw`.
 fn nice_step(raw: f64) -> f64 {
@@ -197,13 +81,17 @@ fn fmt_tick(v: f64, step: f64) -> String {
 }
 
 impl PlotWindow {
-    /// Re-read EQ/PPAR at most twice a second; reset the view if PPAR moved.
-    pub fn refresh(&mut self, machine: &Machine) {
-        if self.last_read.is_some_and(|t| t.elapsed().as_millis() < 500) {
+    /// Re-read the plot at most twice a second (or now, if `force`); reset
+    /// the view when the plot ranges move.
+    pub fn refresh(&mut self, machine: &Machine, force: bool) {
+        if !force && self.last_read.is_some_and(|t| t.elapsed().as_millis() < 500) {
             return;
         }
         self.last_read = Some(std::time::Instant::now());
-        let new = read_spec(machine);
+        let new = read_spec(&Ram(machine));
+        if new == self.spec {
+            return;
+        }
         let ranges_changed = match (&self.spec, &new) {
             (Ok(a), Ok(b)) => a.x != b.x || a.y != b.y,
             _ => true,
@@ -212,6 +100,7 @@ impl PlotWindow {
             self.view = None;
         }
         self.spec = new;
+        self.traced = None;
     }
 
     pub fn ui(&mut self, ui: &mut egui::Ui) {
@@ -219,157 +108,138 @@ impl PlotWindow {
         let painter = ui.painter_at(rect);
         painter.rect_filled(rect, 0.0, BG);
         let spec = match &self.spec {
-            Ok(s) => s.clone(),
+            Ok(s) => s,
             Err(msg) => {
                 painter.text(rect.center(), Align2::CENTER_CENTER, msg, FontId::proportional(16.0), TEXT);
                 return;
             }
         };
-        let (mut x0, mut x1, mut y0, mut y1) = self.view.unwrap_or((spec.x.0, spec.x.1, spec.y.0, spec.y.1));
+        let mut v = self.view.unwrap_or(spec.view());
 
         // Interaction: drag to pan, wheel to zoom about the pointer,
         // double-click to return to PPAR.
         let resp = ui.interact(rect, ui.id().with("plot"), Sense::click_and_drag());
         let to_plot = |p: Pos2, v: View| {
             (
-                v.0 + (p.x - rect.left()) as f64 / rect.width() as f64 * (v.1 - v.0),
-                v.3 - (p.y - rect.top()) as f64 / rect.height() as f64 * (v.3 - v.2),
+                v.x0 + (p.x - rect.left()) as f64 / rect.width() as f64 * (v.x1 - v.x0),
+                v.y1 - (p.y - rect.top()) as f64 / rect.height() as f64 * (v.y1 - v.y0),
             )
         };
         if resp.dragged() {
             let d = resp.drag_delta();
-            let dx = -(d.x as f64) / rect.width() as f64 * (x1 - x0);
-            let dy = (d.y as f64) / rect.height() as f64 * (y1 - y0);
-            x0 += dx;
-            x1 += dx;
-            y0 += dy;
-            y1 += dy;
+            let dx = -(d.x as f64) / rect.width() as f64 * (v.x1 - v.x0);
+            let dy = (d.y as f64) / rect.height() as f64 * (v.y1 - v.y0);
+            v = View { x0: v.x0 + dx, x1: v.x1 + dx, y0: v.y0 + dy, y1: v.y1 + dy };
         }
         if let Some(p) = resp.hover_pos() {
             let scroll = ui.input(|i| i.smooth_scroll_delta.y);
             if scroll != 0.0 {
                 let f = (-(scroll as f64) / 400.0).exp();
-                let (px, py) = to_plot(p, (x0, x1, y0, y1));
-                x0 = px + (x0 - px) * f;
-                x1 = px + (x1 - px) * f;
-                y0 = py + (y0 - py) * f;
-                y1 = py + (y1 - py) * f;
+                let (px, py) = to_plot(p, v);
+                v = View { x0: px + (v.x0 - px) * f, x1: px + (v.x1 - px) * f, y0: py + (v.y0 - py) * f, y1: py + (v.y1 - py) * f };
             }
         }
         if resp.double_clicked() {
             self.view = None;
-            (x0, x1, y0, y1) = (spec.x.0, spec.x.1, spec.y.0, spec.y.1);
+            v = spec.view();
         } else {
-            self.view = Some((x0, x1, y0, y1));
+            self.view = Some(v);
         }
 
-        let sx = |x: f64| rect.left() + ((x - x0) / (x1 - x0)) as f32 * rect.width();
-        let sy = |y: f64| rect.bottom() - ((y - y0) / (y1 - y0)) as f32 * rect.height();
+        let sx = |x: f64| rect.left() + ((x - v.x0) / (v.x1 - v.x0)) as f32 * rect.width();
+        let sy = |y: f64| rect.bottom() - ((y - v.y0) / (v.y1 - v.y0)) as f32 * rect.height();
         let font = FontId::proportional(12.0);
 
-        // Grid and tick labels.
-        let xs = nice_step((x1 - x0) / (rect.width() as f64 / 90.0));
-        let ys = nice_step((y1 - y0) / (rect.height() as f64 / 60.0));
-        let mut gx = (x0 / xs).ceil() * xs;
-        while gx <= x1 {
-            painter.line_segment([Pos2::new(sx(gx), rect.top()), Pos2::new(sx(gx), rect.bottom())], Stroke::new(1.0, GRID));
-            let ty = sy(spec.axes.1).clamp(rect.top() + 4.0, rect.bottom() - 18.0);
-            painter.text(Pos2::new(sx(gx) + 3.0, ty + 3.0), Align2::LEFT_TOP, fmt_tick(gx, xs), font.clone(), TEXT);
-            gx += xs;
+        // Plot marks, recomputed only when the view or size changes. Filled
+        // areas go under the grid and axes, lines and dots over them.
+        if !self.traced.as_ref().is_some_and(|t| t.view == v && t.size == rect.size()) {
+            let layers = spec.trace(v, rect.width() as f64, rect.height() as f64);
+            self.traced = Some(Traced { view: v, size: rect.size(), layers });
         }
-        let mut gy = (y0 / ys).ceil() * ys;
-        while gy <= y1 {
-            painter.line_segment([Pos2::new(rect.left(), sy(gy)), Pos2::new(rect.right(), sy(gy))], Stroke::new(1.0, GRID));
-            let tx = sx(spec.axes.0).clamp(rect.left() + 4.0, rect.right() - 40.0);
-            painter.text(Pos2::new(tx + 3.0, sy(gy) - 2.0), Align2::LEFT_BOTTOM, fmt_tick(gy, ys), font.clone(), TEXT);
-            gy += ys;
-        }
-        // Axes.
-        painter.line_segment([Pos2::new(rect.left(), sy(spec.axes.1)), Pos2::new(rect.right(), sy(spec.axes.1))], Stroke::new(1.4, AXIS));
-        painter.line_segment([Pos2::new(sx(spec.axes.0), rect.top()), Pos2::new(sx(spec.axes.0), rect.bottom())], Stroke::new(1.4, AXIS));
-
-        // Curves.
-        let height = (y1 - y0).abs();
-        for (i, e) in spec.curves.iter().enumerate() {
+        let layers = &self.traced.as_ref().expect("traced above").layers;
+        let truth = spec.kind == Kind::Truth;
+        for (i, layer) in layers.iter().enumerate() {
             let color = CURVES[i % CURVES.len()];
-            let points: Vec<Option<(f64, f64)>> = match spec.kind {
-                Kind::Function => {
-                    let n = (rect.width() * 2.0) as usize;
-                    (0..=n)
-                        .map(|k| {
-                            let x = x0 + (x1 - x0) * k as f64 / n as f64;
-                            let y = e.eval(&|v| (v == spec.indep).then_some(x), spec.angle);
-                            y.is_finite().then_some((x, y))
-                        })
-                        .collect()
-                }
-                Kind::Polar => {
-                    let full = match spec.angle {
-                        Angle::Degrees => 360.0,
-                        Angle::Radians => std::f64::consts::TAU,
-                        Angle::Grads => 400.0,
-                    };
-                    let (t0, t1) = spec.indep_range.unwrap_or((0.0, full));
-                    let n = 2000;
-                    (0..=n)
-                        .map(|k| {
-                            let t = t0 + (t1 - t0) * k as f64 / n as f64;
-                            let r = e.eval(&|v| (v == spec.indep).then_some(t), spec.angle);
-                            let rad = match spec.angle {
-                                Angle::Degrees => t.to_radians(),
-                                Angle::Radians => t,
-                                Angle::Grads => t * std::f64::consts::PI / 200.0,
-                            };
-                            r.is_finite().then_some((r * rad.cos(), r * rad.sin()))
-                        })
-                        .collect()
-                }
-            };
-            // Split into runs at undefined points and at jumps across
-            // asymptotes (tan, 1/x).
-            let mut run: Vec<Pos2> = Vec::new();
-            let mut prev: Option<(f64, f64)> = None;
-            let flush = |run: &mut Vec<Pos2>| {
-                if run.len() > 1 {
-                    painter.add(egui::Shape::line(std::mem::take(run), Stroke::new(2.2, color)));
-                }
-                run.clear();
-            };
-            for p in points {
-                match p {
-                    Some((x, y)) => {
-                        if let Some((_, py)) = prev {
-                            if (y - py).abs() > height * 4.0 {
-                                flush(&mut run);
-                            }
-                        }
-                        run.push(Pos2::new(sx(x), sy(y.clamp(y0 - height * 10.0, y1 + height * 10.0))));
-                        prev = Some((x, y));
-                    }
-                    None => {
-                        flush(&mut run);
-                        prev = None;
+            // Truth rows meet edge to edge: one opaque mesh, rows overlapping
+            // slightly, so no seams show.
+            let mut mesh = egui::Mesh::default();
+            let shade = lerp_color(BG, color, 0.45);
+            for mark in layer {
+                if let Mark::Rect(x0, y0, x1, y1) = *mark {
+                    let r = Rect::from_two_pos(Pos2::new(sx(x0), sy(y0)), Pos2::new(sx(x1), sy(y1)));
+                    if truth {
+                        mesh.add_colored_rect(r.expand2(Vec2::new(0.0, 0.5)), shade);
+                    } else {
+                        painter.rect_filled(r, 0.0, color.gamma_multiply(0.55));
+                        painter.rect_stroke(r, 0.0, Stroke::new(1.2, color), egui::StrokeKind::Inside);
                     }
                 }
             }
-            flush(&mut run);
+            if !mesh.is_empty() {
+                painter.add(Shape::mesh(mesh));
+            }
+        }
+        // Grid (over filled areas); tick labels are drawn last.
+        let mut ticks: Vec<(Pos2, Align2, String)> = Vec::new();
+        let xs = nice_step((v.x1 - v.x0) / (rect.width() as f64 / 90.0));
+        let ys = nice_step((v.y1 - v.y0) / (rect.height() as f64 / 60.0));
+        let mut gx = (v.x0 / xs).ceil() * xs;
+        while gx <= v.x1 {
+            painter.line_segment([Pos2::new(sx(gx), rect.top()), Pos2::new(sx(gx), rect.bottom())], Stroke::new(1.0, GRID));
+            let ty = sy(spec.axes.1).clamp(rect.top() + 4.0, rect.bottom() - 18.0);
+            ticks.push((Pos2::new(sx(gx) + 3.0, ty + 3.0), Align2::LEFT_TOP, fmt_tick(gx, xs)));
+            gx += xs;
+        }
+        let mut gy = (v.y0 / ys).ceil() * ys;
+        while gy <= v.y1 {
+            painter.line_segment([Pos2::new(rect.left(), sy(gy)), Pos2::new(rect.right(), sy(gy))], Stroke::new(1.0, GRID));
+            let tx = sx(spec.axes.0).clamp(rect.left() + 4.0, rect.right() - 40.0);
+            ticks.push((Pos2::new(tx + 3.0, sy(gy) - 2.0), Align2::LEFT_BOTTOM, fmt_tick(gy, ys)));
+            gy += ys;
         }
 
-        // Equation and pointer read-out.
-        let label = format!("{}: {}", if spec.kind == Kind::Polar { "Polar" } else { "Function" }, spec.label);
-        painter.text(rect.right_top() + Vec2::new(-10.0, 8.0), Align2::RIGHT_TOP, label, FontId::proportional(14.0), TEXT);
+        painter.line_segment([Pos2::new(rect.left(), sy(spec.axes.1)), Pos2::new(rect.right(), sy(spec.axes.1))], Stroke::new(1.4, AXIS));
+        painter.line_segment([Pos2::new(sx(spec.axes.0), rect.top()), Pos2::new(sx(spec.axes.0), rect.bottom())], Stroke::new(1.4, AXIS));
+        for (i, layer) in layers.iter().enumerate() {
+            let color = CURVES[i % CURVES.len()];
+            for mark in layer {
+                match mark {
+                    Mark::Line(pts) => {
+                        let pts: Vec<Pos2> = pts.iter().map(|&(x, y)| Pos2::new(sx(x), sy(y))).collect();
+                        painter.add(Shape::line(pts, Stroke::new(2.2, color)));
+                    }
+                    Mark::Dot(x, y) => {
+                        let r = if spec.kind == Kind::Scatter { 4.0 } else { 1.6 };
+                        painter.circle_filled(Pos2::new(sx(*x), sy(*y)), r, color);
+                    }
+                    Mark::Rect(..) => {}
+                }
+            }
+        }
+
+        for (pos, align, text) in ticks {
+            painter.text(pos, align, text, font.clone(), TEXT);
+        }
+
+        // Plot description and pointer read-out.
+        let label = format!("{}: {}", spec.kind.name(), spec.label);
+        let galley = painter.layout_no_wrap(label, FontId::proportional(14.0), TEXT);
+        let at = rect.right_top() + Vec2::new(-10.0 - galley.size().x, 8.0);
+        painter.rect_filled(Rect::from_min_size(at, galley.size()).expand(4.0), 4.0, BG.gamma_multiply(0.9));
+        painter.galley(at, galley, TEXT);
         if let Some(p) = resp.hover_pos() {
-            let (px, py) = to_plot(p, (x0, x1, y0, y1));
+            let (px, py) = to_plot(p, v);
+            let xname = if matches!(spec.kind, Kind::Function | Kind::Conic | Kind::Truth) { spec.indep.as_str() } else { "x" };
+            let yname = if matches!(spec.kind, Kind::Conic | Kind::Truth) { spec.depend.as_str() } else { "y" };
             painter.text(
                 rect.left_top() + Vec2::new(10.0, 8.0),
                 Align2::LEFT_TOP,
-                format!("{} = {:.6}   y = {:.6}", spec.indep, px, py),
+                format!("{xname} = {px:.6}   {yname} = {py:.6}"),
                 FontId::monospace(13.0),
                 TEXT,
             );
         }
         let hint = "drag: pan   wheel: zoom   double-click: reset";
         painter.text(rect.left_bottom() + Vec2::new(10.0, -8.0), Align2::LEFT_BOTTOM, hint, FontId::proportional(11.0), GRID.gamma_multiply(0.5));
-        let _ = Rect::NOTHING;
     }
 }

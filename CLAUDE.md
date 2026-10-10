@@ -21,11 +21,15 @@ cargo test --release --workspace                   # all tests (boot tests need 
 cargo test --release -p hp48 --test boot adds_two_numbers   # one test
 cargo clippy --workspace --release                 # keep clean
 cargo run --release -p hp48-cli -- --seconds 3 --keys "F wait:3 1 Enter 2 Plus" --wait 1
+cargo run --release -p hp48-cli -- --seconds 3 --keys "F wait:3" --type "RAD 'SIN(X)' STEQ ERASE DRAW PICTURE" --wait 3
+cargo run --release -p hp48 --example stack -- "'X^2' 'Y' STO"   # print the decoded stack
 ```
 
-`hp48-cli` boots the ROM headless and prints the LCD as text. Keys are `Key` variant names (`N7`, `LeftShift`, `Enter`, ...); `KEY:SECONDS` holds a key and `wait:S` just runs. Other options: `--profile` (PC hot spots with ROM symbols), `--png`, `--dump` (raw 0/1 rows), `--vector-png`, `--svg`.
+`hp48-cli` boots the ROM headless and prints the LCD as text. Keys are `Key` variant names (`N7`, `LeftShift`, `Enter`, ...); `KEY:SECONDS` holds a key and `wait:S` just runs. `--type TEXT` (repeatable) types an RPL command line after the keys and presses ENTER. Other options: `--profile` (PC hot spots with ROM symbols), `--png`, `--dump` (raw 0/1 rows), `--vector-png`, `--svg`.
 
-`hp48-app` options: `--screenshot OUT.png --keys "..."` runs a key script, saves the window and exits; `wait` in the script is one second. `--plot-only` shows the plot view in the main window, `--pixels` starts in pixel mode, and `--persist` keeps state in scripted runs. State lives in `%APPDATA%/HP48GX/state.bin` (`$XDG_DATA_HOME/HP48GX` elsewhere); set `HP48GX_STATE` to use another file.
+Typing (`hp48::typing`, `Machine::type_text`) turns text into keystrokes. Letters go through alpha mode, and brackets and quotes insert a pair whose closer is typed as ▶. `-5` is typed as 5 +/-, because in immediate mode `-` subtracts. Symbols such as `<`, `≤` and `→` use their alpha-shift keys (`examples/alphachars.rs`), because the plain `→` key adds spaces. `Σ` has no key, so build names like `ΣDAT` with `133 CHR "DAT" + STR→`.
+
+`hp48-app` options: `--screenshot OUT.png --keys "..." --type "..."` runs a key script (the keys, then each typed line with ENTER), saves the window and exits; `wait` in the script is one second. When the first typed key is a shift, wait about 5 s after `F`. `--plot-only` shows the plot view in the main window, `--pixels` starts in pixel mode, and `--persist` keeps state in scripted runs. State lives in `%APPDATA%/HP48GX/state.bin` (`$XDG_DATA_HOME/HP48GX` elsewhere); set `HP48GX_STATE` to use another file.
 
 After a fresh boot, the ROM shows "Try To Recover Memory?". Answer NO (key F), then wait about 3 s before pressing a shift key: the calculator drops shifts pressed while it is still clearing memory.
 
@@ -61,11 +65,13 @@ Run the Python tests from the repo root with `python -m unittest discover -s tes
 - **`crates/hp48-rpl`: RPL objects in emulated memory.**
   - Covers object sizes, directories and variable lookup through `CONTEXT`/`USEROB`.
   - Directory layout: `DORRP`, library count (#7FF = none) with 13-nibble entries, offset to the last name, then names chained backwards. Each 5-nibble back-field measures from itself to the previous name.
-  - `expr.rs` compiles symbolic objects (RPN order) to an `Expr` by mapping ROM user-command addresses (`x+` #1AB67, `xSIN` #1B4AC, ...) to operators.
+  - `expr.rs` compiles symbolic objects (RPN order) to an `Expr` by mapping ROM user-command addresses (`x+` #1AB67, `xSIN` #1B4AC, `xi` #1AB45, comparisons, AND/OR, ...) to operators. It evaluates over the reals, or over the complex numbers for parametric plots.
+  - `plot.rs` reads the plot setup (EQ, PPAR, ΣDAT/ΣPAR, angle mode) and traces all eight plot types into marks in plot coordinates for any view and size. Its rules come from what the ROM draws, and `crates/hp48/tests/plot.rs` checks every type against the ROM's own PICT: it runs DRAW, reads the grob at `GDISP` (#806E4), and requires a match within one pixel.
 - **`crates/hp48-app`: the eframe/egui UI.**
   - `face.rs` holds the key layout and legends (left = purple left-shift, right = green right-shift). The faceplate is drawn with vector primitives scaled to the window.
   - The LCD is drawn either from the vector scene (the default, cached per frame contents) or as pixel rectangles.
-  - `plot.rs` reads EQ/PPAR and the angle-mode flags (system flags at #80843) and draws FUNCTION/POLAR plots natively in a separate resizable viewport.
+  - `plot.rs` draws `hp48_rpl::plot` output in a separate resizable viewport, with zoom and pan. The viewport opens by itself when the calculator shows PICT (VDISP #806DA equals GDISP).
+  - Ctrl+V types the clipboard into the calculator.
   - `persist.rs` gives the calculator continuous memory: save on exit, and advance TIMER2 by the wall-clock time spent closed.
 
 ### Translating ROM routines to Rust (HLE)

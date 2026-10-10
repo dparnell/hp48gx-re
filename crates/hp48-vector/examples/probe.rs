@@ -12,7 +12,7 @@ fn main() {
     }
     for (name, v) in [("dark", &s.dark), ("light", &s.light)] {
         for p in v.iter() {
-            if p.points.iter().any(|q| inside(q)) { println!("{name} {:?}", p.points); }
+            if p.points.iter().any(&inside) { println!("{name} {:?}", p.points); }
         }
     }
 }

@@ -43,7 +43,7 @@ fn natives_match_rom() {
             m.cpu.c = Reg(rng.value());
             m.cpu.d = Reg(rng.value());
             m.cpu.p = (rng.next() % 16) as u8;
-            m.cpu.carry = rng.next() % 2 == 0;
+            m.cpu.carry = rng.next().is_multiple_of(2);
             m.cpu.hst = (rng.next() % 16) as u8;
             if let Err(e) = hle::verify(&m, entry, f, 100_000) {
                 panic!("{name} case {case}: {e}");

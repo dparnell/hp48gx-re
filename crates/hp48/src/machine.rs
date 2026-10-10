@@ -178,6 +178,15 @@ impl Machine {
         self.run(CPU_HZ / 10);
     }
 
+    /// Type `text` on the command line (see [`crate::typing`]). Returns
+    /// the first character that cannot be typed, typing nothing.
+    pub fn type_text(&mut self, text: &str) -> Result<(), char> {
+        for k in crate::typing::keystrokes(text)? {
+            self.tap(k);
+        }
+        Ok(())
+    }
+
     /// Assemble the current LCD contents from display memory.
     pub fn lcd(&self) -> Lcd {
         let hw = &self.hw;

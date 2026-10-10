@@ -5,6 +5,7 @@
 //! prolog is a pointer to an object elsewhere (usually in ROM).
 
 pub mod expr;
+pub mod plot;
 
 /// Prolog addresses (ROM rev R; all are supported entry points).
 pub mod prolog {
@@ -80,6 +81,8 @@ pub enum Object {
     Program(Vec<Object>),
     Unit(Vec<Object>),
     Tagged(String, Box<Object>),
+    /// Real or complex array; `items` in row-major order.
+    Array { dims: Vec<u32>, items: Vec<Object> },
     RomPtr { lib: u16, cmd: u16 },
     /// Pointer to a ROM command (a PCO or secondary), e.g. xSIN.
     Builtin(u32),
@@ -282,6 +285,7 @@ fn decode_depth(mem: &impl Memory, addr: u32, depth: u32) -> Result<Object, Erro
         DOCSTR => Object::String(text(mem, b + 5, (mem.addr(b).saturating_sub(5)) / 2)),
         DOIDNT => Object::Id(text(mem, b + 2, u32::from(mem.byte(b)))),
         DOLAM => Object::Lam(text(mem, b + 2, u32::from(mem.byte(b)))),
+        DOARRY => array(mem, addr)?,
         DOROMP => Object::RomPtr { lib: mem.value(b, 3) as u16, cmd: mem.value(b + 3, 3) as u16 },
         DOTAG => {
             let n = u32::from(mem.byte(b));
@@ -318,6 +322,39 @@ fn decode_depth(mem: &impl Memory, addr: u32, depth: u32) -> Result<Object, Erro
     })
 }
 
+/// Array body: length, element prolog, dimension count, dimensions, then
+/// the elements without their prologs.
+fn array(mem: &impl Memory, addr: u32) -> Result<Object, Error> {
+    use prolog::*;
+    let b = addr + 5;
+    let elem = mem.addr(b + 5);
+    let ndims = mem.addr(b + 10);
+    if ndims == 0 || ndims > 2 {
+        return Err(Error::Malformed(addr));
+    }
+    let dims: Vec<u32> = (0..ndims).map(|i| mem.addr(b + 15 + 5 * i)).collect();
+    let count = dims.iter().product::<u32>();
+    let data = b + 15 + 5 * ndims;
+    let width = match elem {
+        DOREAL => 16,
+        DOCMP => 32,
+        _ => return Ok(Object::Other { prolog: DOARRY, addr, size: 5 + mem.addr(b) }),
+    };
+    if data + count * width > b + mem.addr(b) {
+        return Err(Error::Malformed(addr));
+    }
+    let items = (0..count)
+        .map(|i| {
+            let e = data + i * width;
+            match elem {
+                DOREAL => Object::Real(bcd_real(mem, e, 3, 12)),
+                _ => Object::Complex(bcd_real(mem, e, 3, 12), bcd_real(mem, e + 16, 3, 12)),
+            }
+        })
+        .collect();
+    Ok(Object::Array { dims, items })
+}
+
 /// A pointer inside a composite: data objects are followed, commands
 /// (programs and primitive code objects) are kept as references.
 fn pointer(mem: &impl Memory, target: u32, depth: u32) -> Result<Object, Error> {
@@ -344,6 +381,7 @@ mod tests {
     }
 
     #[test]
+    #[allow(clippy::approx_constant)] // 12-digit pi as the calculator stores it
     fn reals() {
         // 1.0, -2.5E-3, 3.14159265359
         let m = mem(0, "339200000000000000010");

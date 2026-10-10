@@ -1,6 +1,10 @@
 //! HP 48GX desktop calculator.
 //!
-//! hp48-app [--rom PATH] [--screenshot OUT.png] [--keys "K ..."] [--persist] [--pixels]
+//! hp48-app [--rom PATH] [--screenshot OUT.png] [--keys "K ..."] [--type "RPL text"]... [--persist] [--pixels] [--plot-only]
+//!
+//! Ctrl+V types the clipboard text into the calculator. The plot window
+//! opens by itself when the calculator shows its graphics screen (DRAW,
+//! PICTURE), unless turned off in the LCD's context menu.
 //!
 //! State is kept in %APPDATA%/HP48GX/state.bin (or $XDG_DATA_HOME/HP48GX);
 //! set HP48GX_STATE to use another file.
@@ -12,7 +16,7 @@ mod plot;
 use eframe::egui::{self, Align2, Color32, CornerRadius, FontId, Pos2, Rect, Sense, Stroke, Vec2};
 use face::{KeyCap, ShiftColor, Style, ROWS};
 use hp48::{Key, Machine, CPU_HZ, LCD_HEIGHT, LCD_WIDTH};
-use std::collections::HashSet;
+use std::collections::{HashSet, VecDeque};
 use std::time::Instant;
 
 // Layout in faceplate units; everything is scaled to the window.
@@ -53,6 +57,14 @@ struct App {
     /// Debug: show the plot in the main window (for scripted screenshots).
     plot_only: bool,
     plot: plot::PlotWindow,
+    /// Open the plot window when the calculator shows PICT.
+    auto_plot: bool,
+    /// The calculator was showing PICT on the last frame.
+    showing_pict: bool,
+    /// Pasted text waiting to be typed, and the key currently held.
+    typing: VecDeque<Key>,
+    typing_down: Option<Key>,
+    typing_timer: f64,
     display: Display,
     scene_cache: std::cell::RefCell<SceneCache>,
     last: Option<Instant>,
@@ -97,6 +109,11 @@ impl App {
             plot_open: false,
             plot_only: false,
             plot: plot::PlotWindow::default(),
+            auto_plot: true,
+            showing_pict: false,
+            typing: VecDeque::new(),
+            typing_down: None,
+            typing_timer: 0.0,
             display: Display::Vector,
             scene_cache: std::cell::RefCell::new(None),
             persistent,
@@ -125,16 +142,63 @@ impl App {
     fn handle_keyboard(&mut self, ctx: &egui::Context) {
         let events = ctx.input(|i| i.events.clone());
         for ev in events {
-            if let egui::Event::Key { key, pressed, repeat: false, .. } = ev {
-                if let Some(k) = face::key_for(key) {
-                    if pressed && self.kb_keys.insert(k) {
+            match ev {
+                egui::Event::Key { key, pressed, repeat: false, modifiers, .. } => {
+                    let Some(k) = face::key_for(key) else { continue };
+                    // Ctrl/Cmd shortcuts (Ctrl+V) are not calculator keys.
+                    if pressed && !modifiers.command && self.kb_keys.insert(k) {
                         self.set_key(k, true);
                     } else if !pressed && self.kb_keys.remove(&k) {
                         self.set_key(k, false);
                     }
                 }
+                egui::Event::Paste(text) => self.type_text(&text),
+                _ => {}
             }
         }
+    }
+
+    /// Queue `text` to be typed, dropping characters with no key.
+    fn type_text(&mut self, text: &str) {
+        let mut text = text.replace("\r\n", "\n");
+        loop {
+            match hp48::typing::keystrokes(&text) {
+                Ok(keys) => break self.typing.extend(keys),
+                Err(c) => text.retain(|t| t != c),
+            }
+        }
+    }
+
+    /// Feed queued keystrokes: each held 50 ms, then 80 ms apart.
+    fn feed_typing(&mut self, dt: f64) {
+        self.typing_timer -= dt;
+        if self.typing_timer > 0.0 {
+            return;
+        }
+        if let Some(k) = self.typing_down.take() {
+            self.set_key(k, false);
+            self.typing_timer = 0.08;
+        } else if let Some(k) = self.typing.pop_front() {
+            self.set_key(k, true);
+            self.typing_down = Some(k);
+            self.typing_timer = 0.05;
+        }
+    }
+
+    /// Open the plot window when the calculator switches to its graphics
+    /// screen: the displayed grob (VDISP) becomes PICT (GDISP).
+    fn watch_pict(&mut self) {
+        const ADISP: u32 = 0x806D5;
+        const VDISP: u32 = 0x806DA;
+        const GDISP: u32 = 0x806E4;
+        let [a, v, g] = [ADISP, VDISP, GDISP].map(|p| self.machine.peek_value(p, 5));
+        // While memory is being set up the pointers are not yet distinct.
+        let pict = v == g && v != a && v >= 0x80000;
+        if pict && !self.showing_pict && self.auto_plot {
+            self.plot_open = true;
+            self.plot.refresh(&self.machine, true);
+        }
+        self.showing_pict = pict;
     }
 }
 
@@ -157,8 +221,10 @@ impl eframe::App for App {
             self.machine.run((step * CPU_HZ as f64) as u64);
         } else {
             self.machine.run((dt * CPU_HZ as f64) as u64);
+            self.feed_typing(dt);
         }
         self.handle_keyboard(ctx);
+        self.watch_pict();
         self.screenshot_step(ctx);
         if self.persistent && self.last_save.elapsed().as_secs() >= 60 {
             self.save();
@@ -174,7 +240,7 @@ impl eframe::App for App {
 
     fn ui(&mut self, ui: &mut egui::Ui, _frame: &mut eframe::Frame) {
         if self.plot_only {
-            self.plot.refresh(&self.machine);
+            self.plot.refresh(&self.machine, false);
             self.plot.ui(ui);
             return;
         }
@@ -198,6 +264,7 @@ impl eframe::App for App {
             ui.radio_value(&mut self.display, Display::Pixels, "Original pixels");
             ui.separator();
             ui.checkbox(&mut self.plot_open, "Plot window");
+            ui.checkbox(&mut self.auto_plot, "Open plot window on DRAW");
         });
         if self.plot_open {
             self.show_plot(ui.ctx());
@@ -243,7 +310,7 @@ impl eframe::App for App {
 
 impl App {
     fn show_plot(&mut self, ctx: &egui::Context) {
-        self.plot.refresh(&self.machine);
+        self.plot.refresh(&self.machine, false);
         let builder = egui::ViewportBuilder::default()
             .with_title("HP 48GX Plot")
             .with_inner_size([720.0, 480.0])
@@ -499,6 +566,13 @@ fn main() -> eframe::Result {
             "--plot-only" => plot_only = true,
             "--rom" => rom_path = args.next().expect("--rom PATH"),
             "--screenshot" => screenshot = args.next(),
+            "--type" => {
+                let text = args.next().expect("--type TEXT");
+                let typed = hp48::typing::keystrokes(&text).unwrap_or_else(|c| panic!("cannot type {c:?}"));
+                keys.extend(typed.into_iter().map(Some));
+                keys.push(Some(Key::Enter));
+                keys.push(None);
+            }
             "--keys" => {
                 keys = args
                     .next()
@@ -513,6 +587,9 @@ fn main() -> eframe::Result {
                             .find(|k| format!("{k:?}").eq_ignore_ascii_case(n) || format!("{k:?}").eq_ignore_ascii_case(&format!("N{n}")))
                             .unwrap_or_else(|| panic!("unknown key {n}")))
                     })
+                    .collect::<Vec<_>>()
+                    .into_iter()
+                    .chain(keys.drain(..))
                     .collect()
             }
             other => panic!("unknown argument {other}"),

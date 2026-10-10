@@ -1,8 +1,9 @@
 //! Headless runner: boot the ROM, optionally type keys, print the LCD.
 //!
-//! hp48-cli [--rom PATH] [--seconds S] [--keys "K1 K2 ..."] [--wait S] [--profile] [--png OUT] [--dump OUT.txt] [--vector-png OUT] [--svg OUT]
+//! hp48-cli [--rom PATH] [--seconds S] [--keys "K1 K2 ..."] [--type "RPL text"]... [--wait S] [--profile] [--png OUT] [--dump OUT.txt] [--vector-png OUT] [--svg OUT]
 //!
 //! Keys may be written KEY:SECONDS to hold them; "wait:S" just runs.
+//! Each --type line is typed on the command line after the keys, then ENTER.
 
 use hp48::{Key, Machine, CPU_HZ, LCD_HEIGHT, LCD_WIDTH};
 use std::collections::HashMap;
@@ -64,6 +65,7 @@ fn main() {
     let mut rom = String::from("ROM/gxrom-r");
     let mut seconds = 3.0f64;
     let mut keys: Vec<String> = Vec::new();
+    let mut typed: Vec<String> = Vec::new();
     let mut profile = false;
     let mut wait = 0.0f64;
     let mut png_out: Option<String> = None;
@@ -76,6 +78,7 @@ fn main() {
             "--seconds" => seconds = args.next().expect("--seconds S").parse().expect("number"),
             "--keys" => keys = args.next().expect("--keys LIST").split_whitespace().map(String::from).collect(),
             "--profile" => profile = true,
+            "--type" => typed.push(args.next().expect("--type TEXT")),
             "--png" => png_out = args.next(),
             "--dump" => dump_out = args.next(),
             "--vector-png" => vpng_out = args.next(),
@@ -123,6 +126,13 @@ fn main() {
         run(&mut m, (hold * CPU_HZ as f64) as u64, &mut hist);
         m.key(key, false);
         run(&mut m, CPU_HZ / 5, &mut hist);
+    }
+    for line in &typed {
+        if let Err(c) = m.type_text(line) {
+            panic!("cannot type {c:?}");
+        }
+        m.tap(Key::Enter);
+        run(&mut m, CPU_HZ, &mut hist);
     }
     run(&mut m, (wait * CPU_HZ as f64) as u64, &mut hist);
 
