@@ -137,6 +137,19 @@ impl Machine {
         }
     }
 
+    /// Read `count` nibbles at `addr` as a little-endian value (no side effects).
+    pub fn peek_value(&self, addr: u32, count: u32) -> u64 {
+        (0..count).rev().fold(0u64, |acc, i| (acc << 4) | u64::from(self.hw.peek(addr + i)))
+    }
+
+    /// Press and release a key, running the machine in between.
+    pub fn tap(&mut self, key: Key) {
+        self.key(key, true);
+        self.run(CPU_HZ / 20);
+        self.key(key, false);
+        self.run(CPU_HZ / 10);
+    }
+
     /// Assemble the current LCD contents from display memory.
     pub fn lcd(&self) -> Lcd {
         let hw = &self.hw;
