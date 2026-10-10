@@ -86,6 +86,9 @@ impl App {
         let end_time = t + 2.0;
         let persistent = screenshot.is_none() || force_persist;
         let mut machine = Machine::new(rom);
+        // Native Rust replacements for ROM routines, each verified against
+        // the original (crates/hp48/tests/hle.rs).
+        hp48::hle::install(&mut machine);
         if persistent {
             persist::load(&mut machine);
         }

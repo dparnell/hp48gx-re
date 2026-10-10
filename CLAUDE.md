@@ -68,6 +68,14 @@ Run the Python tests from the repo root with `python -m unittest discover -s tes
   - `plot.rs` reads EQ/PPAR and the angle-mode flags (system flags at #80843) and draws FUNCTION/POLAR plots natively in a separate resizable viewport.
   - `persist.rs` gives the calculator continuous memory: save on exit, and advance TIMER2 by the wall-clock time spent closed.
 
+### Translating ROM routines to Rust (HLE)
+
+`crates/hp48/src/hle.rs` holds native replacements for machine-code ROM routines, registered in `NATIVES` by entry address. `Machine::run` calls a native in place of the routine and then performs the RTN.
+
+- A native must reproduce the routine's full effect: every register (including scratch registers and P), carry, HST bits and memory. Read the ROM code (`python tools/hpdis.py func ADDR`) and mirror its early exits.
+- `tests/hle.rs` runs every native against the ROM on 5000 random register states through `hle::verify`. Add new natives to `NATIVES` and they are tested automatically.
+- RPL-level routines (secondaries) will need a similar harness that compares the data stack instead of registers.
+
 Addresses you will need again: fonts at #7A047 (10-row), #7B257 (8-row) and #7C102 (minifont, with remap table #7C793); `DSKTOP` #806F8 (stack level 1 pointer); `USEROB` #80711; `CONTEXT` #8071B; system flags #80843; user flags #80853; ROM library table #702C4.
 
 ## Python architecture
