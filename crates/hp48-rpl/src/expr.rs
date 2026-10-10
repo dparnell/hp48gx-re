@@ -189,7 +189,7 @@ impl Angle {
             Angle::Grads => x * std::f64::consts::PI / 200.0,
         }
     }
-    fn from_rad(self, x: f64) -> f64 {
+    fn rad_to(self, x: f64) -> f64 {
         match self {
             Angle::Degrees => x.to_degrees(),
             Angle::Radians => x,
@@ -224,9 +224,9 @@ impl Expr {
                     Op::Sinh => a.sinh(),
                     Op::Cosh => a.cosh(),
                     Op::Tanh => a.tanh(),
-                    Op::Asin => angle.from_rad(a.asin()),
-                    Op::Acos => angle.from_rad(a.acos()),
-                    Op::Atan => angle.from_rad(a.atan()),
+                    Op::Asin => angle.rad_to(a.asin()),
+                    Op::Acos => angle.rad_to(a.acos()),
+                    Op::Atan => angle.rad_to(a.atan()),
                     Op::Exp => a.exp(),
                     Op::Ln => a.ln(),
                     Op::Log => a.log10(),

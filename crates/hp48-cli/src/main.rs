@@ -171,7 +171,7 @@ fn main() {
     }
     if profile {
         let mut v: Vec<_> = hist.into_iter().collect();
-        v.sort_by(|a, b| b.1.cmp(&a.1));
+        v.sort_by_key(|e| std::cmp::Reverse(e.1));
         for (pc, n) in v.into_iter().take(25) {
             let near = syms.range_name(pc);
             println!("{pc:05X} {n:>10}  {near}");

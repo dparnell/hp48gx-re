@@ -136,9 +136,9 @@ impl Machine {
         if !down {
             return;
         }
-        if key == Key::On {
-            self.cpu.interrupt();
-        } else if self.cpu.kbd_int_enabled && !was_down {
+        // ON is wired to its own interrupt line; other keys interrupt only
+        // when keyboard interrupts are enabled and nothing was held yet.
+        if key == Key::On || (self.cpu.kbd_int_enabled && !was_down) {
             self.cpu.interrupt();
         }
         if self.cpu.shutdown && self.hw.keyboard.input(self.cpu.out) != 0 {
