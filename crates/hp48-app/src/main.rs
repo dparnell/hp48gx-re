@@ -1,6 +1,12 @@
 //! HP 48GX desktop calculator.
 //!
 //! hp48-app [--rom PATH] [--screenshot OUT.png] [--keys "K ..."] [--type "RPL text"]... [--persist] [--pixels] [--plot-only]
+//!          [--layout auto|calculator|desktop] [--size WxH] [--line "RPL text"]...
+//!
+//! The layout follows the window: a narrow window shows the calculator
+//! alone; a wide one adds a desktop panel (desk.rs) with the stack as text,
+//! the menu keys as buttons and a command line typed on the computer's
+//! keyboard. The LCD's context menu can fix the layout.
 //!
 //! Ctrl+V types the clipboard text into the calculator. The plot window
 //! opens by itself when the calculator shows its graphics screen (DRAW,
@@ -9,11 +15,12 @@
 //! State is kept in %APPDATA%/HP48GX/state.bin (or $XDG_DATA_HOME/HP48GX);
 //! set HP48GX_STATE to use another file.
 
+mod desk;
 mod face;
 mod persist;
 mod plot;
 
-use eframe::egui::{self, Align2, Color32, CornerRadius, FontId, Pos2, Rect, Sense, Stroke, Vec2};
+use eframe::egui::{self, Align2, Color32, CornerRadius, FontId, Pos2, Rect, Sense, Stroke, UiBuilder, Vec2};
 use face::{KeyCap, ShiftColor, Style, ROWS};
 use hp48::{Key, Machine, CPU_HZ, LCD_HEIGHT, LCD_WIDTH};
 use std::collections::{HashSet, VecDeque};
@@ -49,6 +56,17 @@ enum Display {
     Vector,
 }
 
+#[derive(Clone, Copy, PartialEq, Eq)]
+enum Layout {
+    /// Desktop when the window is wide enough, else the calculator.
+    Auto,
+    Calculator,
+    Desktop,
+}
+
+/// Narrowest window that gets the desktop layout in `Layout::Auto`.
+const DESK_MIN_WIDTH: f32 = 760.0;
+
 type SceneCache = Option<([[bool; LCD_WIDTH]; LCD_HEIGHT], std::rc::Rc<hp48_vector::Scene>)>;
 
 struct App {
@@ -61,10 +79,13 @@ struct App {
     auto_plot: bool,
     /// The calculator was showing PICT on the last frame.
     showing_pict: bool,
-    /// Pasted text waiting to be typed, and the key currently held.
+    /// Pasted text waiting to be typed, the key currently held, and the
+    /// machine time of the next press or release.
     typing: VecDeque<Key>,
     typing_down: Option<Key>,
-    typing_timer: f64,
+    typing_at: u64,
+    layout: Layout,
+    desk: desk::Desk,
     display: Display,
     scene_cache: std::cell::RefCell<SceneCache>,
     last: Option<Instant>,
@@ -73,6 +94,8 @@ struct App {
     screenshot: Option<(String, u32)>,
     script: Vec<(Key, bool, f64)>,
     script_time: f64,
+    /// --line commands still to type (scripted runs).
+    lines: Vec<String>,
     end_time: f64,
     /// Save continuous memory (off for scripted screenshot runs).
     persistent: bool,
@@ -114,7 +137,9 @@ impl App {
             showing_pict: false,
             typing: VecDeque::new(),
             typing_down: None,
-            typing_timer: 0.0,
+            typing_at: 0,
+            layout: Layout::Auto,
+            desk: desk::Desk::default(),
             display: Display::Vector,
             scene_cache: std::cell::RefCell::new(None),
             persistent,
@@ -125,6 +150,7 @@ impl App {
             screenshot: screenshot.map(|p| (p, 0)),
             script,
             script_time: 0.0,
+            lines: Vec::new(),
             end_time,
         }
     }
@@ -141,6 +167,10 @@ impl App {
     }
 
     fn handle_keyboard(&mut self, ctx: &egui::Context) {
+        // The desktop command line is being typed in.
+        if self.desk.focused {
+            return;
+        }
         let events = ctx.input(|i| i.events.clone());
         for ev in events {
             match ev {
@@ -170,19 +200,50 @@ impl App {
         }
     }
 
-    /// Feed queued keystrokes: each held 50 ms, then 80 ms apart.
-    fn feed_typing(&mut self, dt: f64) {
-        self.typing_timer -= dt;
-        if self.typing_timer > 0.0 {
+    fn is_typing(&self) -> bool {
+        !self.typing.is_empty() || self.typing_down.is_some()
+    }
+
+    /// Feed queued keystrokes: each held 50 ms, then 80 ms apart, in
+    /// calculator time.
+    fn feed_typing(&mut self) {
+        if self.machine.time < self.typing_at {
             return;
         }
         if let Some(k) = self.typing_down.take() {
             self.set_key(k, false);
-            self.typing_timer = 0.08;
+            self.typing_at = self.machine.time + CPU_HZ * 8 / 100;
         } else if let Some(k) = self.typing.pop_front() {
             self.set_key(k, true);
             self.typing_down = Some(k);
-            self.typing_timer = 0.05;
+            self.typing_at = self.machine.time + CPU_HZ * 5 / 100;
+        }
+    }
+
+    /// Run for `dt` seconds. While text is being typed, run faster than
+    /// real time (up to about 10 ms of work per frame), so that a typed line
+    /// takes a moment rather than seconds.
+    fn run_for(&mut self, dt: f64) {
+        let cycles = (dt * CPU_HZ as f64) as u64;
+        if !self.is_typing() {
+            self.machine.run(cycles);
+            return;
+        }
+        let start = Instant::now();
+        let end = self.machine.time + cycles;
+        while self.is_typing() && (self.machine.time < end || start.elapsed().as_millis() < 10) {
+            self.feed_typing();
+            self.machine.run(CPU_HZ / 200);
+        }
+    }
+
+    fn act(&mut self, action: desk::Action) {
+        match action {
+            desk::Action::Enter(text) => {
+                self.type_text(&text);
+                self.typing.push_back(Key::Enter);
+            }
+            desk::Action::Key(k) => self.typing.push_back(k),
         }
     }
 
@@ -219,10 +280,19 @@ impl eframe::App for App {
                 self.script.remove(0);
                 self.set_key(k, down);
             }
+            // then the --line commands, typed as the desktop command line does
+            if self.script.is_empty() && !self.is_typing() && !self.lines.is_empty() {
+                let line = self.lines.remove(0);
+                self.act(desk::Action::Enter(line));
+                self.end_time = self.end_time.max(self.script_time + 2.0);
+            }
+            if self.is_typing() {
+                self.end_time = self.end_time.max(self.script_time + 2.0);
+            }
+            self.feed_typing();
             self.machine.run((step * CPU_HZ as f64) as u64);
         } else {
-            self.machine.run((dt * CPU_HZ as f64) as u64);
-            self.feed_typing(dt);
+            self.run_for(dt);
         }
         self.handle_keyboard(ctx);
         self.watch_pict();
@@ -245,12 +315,40 @@ impl eframe::App for App {
             self.plot.ui(ui);
             return;
         }
-        let avail = ui.max_rect();
+        let full = ui.max_rect();
+        ui.painter().rect_filled(full, CornerRadius::ZERO, Color32::from_rgb(0x12, 0x12, 0x14));
+        let desktop = match self.layout {
+            Layout::Auto => full.width() >= DESK_MIN_WIDTH && full.width() >= full.height(),
+            Layout::Calculator => false,
+            Layout::Desktop => true,
+        };
+        if !desktop {
+            self.desk.focused = false;
+            self.calculator_ui(ui, full);
+            return;
+        }
+        // The calculator on the left at the window's height, the panel beside it.
+        let calc_w = (full.height() * FACE_W / FACE_H).min(full.width() * 0.45);
+        let calc = Rect::from_min_size(full.min, Vec2::new(calc_w, full.height()));
+        self.calculator_ui(ui, calc);
+        let panel = Rect::from_min_max(Pos2::new(calc.right(), full.top()), full.max);
+        ui.painter().rect_filled(panel, CornerRadius::ZERO, desk::PANEL_BG);
+        let actions = ui
+            .scope_builder(UiBuilder::new().max_rect(panel.shrink(14.0)), |ui| self.desk.ui(ui, &self.machine))
+            .inner;
+        for a in actions {
+            self.act(a);
+        }
+    }
+}
+
+impl App {
+    /// The calculator itself, scaled to fit `avail`.
+    fn calculator_ui(&mut self, ui: &mut egui::Ui, avail: Rect) {
         let scale = (avail.width() / FACE_W).min(avail.height() / FACE_H);
         let origin = avail.center() - Vec2::new(FACE_W, FACE_H) * scale / 2.0;
         let to_screen = |x: f32, y: f32| origin + Vec2::new(x, y) * scale;
         let painter = ui.painter().clone();
-        painter.rect_filled(avail, CornerRadius::ZERO, Color32::from_rgb(0x12, 0x12, 0x14));
         painter.rect_filled(
             Rect::from_min_max(to_screen(0.0, 0.0), to_screen(FACE_W, FACE_H)),
             CornerRadius::same((2.0 * scale) as u8),
@@ -263,6 +361,11 @@ impl eframe::App for App {
         lcd_resp.context_menu(|ui| {
             ui.radio_value(&mut self.display, Display::Vector, "Vector display");
             ui.radio_value(&mut self.display, Display::Pixels, "Original pixels");
+            ui.separator();
+            ui.separator();
+            ui.radio_value(&mut self.layout, Layout::Auto, "Layout follows the window");
+            ui.radio_value(&mut self.layout, Layout::Calculator, "Calculator only");
+            ui.radio_value(&mut self.layout, Layout::Desktop, "Desktop panel");
             ui.separator();
             ui.checkbox(&mut self.plot_open, "Plot window");
             ui.checkbox(&mut self.auto_plot, "Open plot window on DRAW");
@@ -331,12 +434,13 @@ impl App {
 
     /// Scripted runs: once the key script has finished, grab a frame and exit.
     fn screenshot_step(&mut self, ctx: &egui::Context) {
+        let done = self.script.is_empty() && self.lines.is_empty() && !self.is_typing();
         let Some((path, frames)) = &mut self.screenshot else { return };
         *frames += 1;
         if *frames % 60 == 0 {
             eprintln!("script time {:.1}s / {:.1}s", self.script_time, self.end_time);
         }
-        if self.script.is_empty() && self.script_time > self.end_time {
+        if done && self.script_time > self.end_time {
             ctx.send_viewport_cmd(egui::ViewportCommand::Screenshot(egui::UserData::default()));
         }
         let shot = ctx.input(|i| {
@@ -557,14 +661,31 @@ fn main() -> eframe::Result {
     let mut rom_path = hp48::default_rom_path().display().to_string();
     let mut screenshot = None;
     let mut keys = Vec::new();
+    let mut lines = Vec::new();
     let mut force_persist = false;
     let mut pixels = false;
     let mut plot_only = false;
+    let mut layout = Layout::Auto;
+    let mut size = [420.0, 784.0];
     while let Some(a) = args.next() {
         match a.as_str() {
             "--persist" => force_persist = true,
+            "--line" => lines.push(args.next().expect("--line TEXT")),
             "--pixels" => pixels = true,
             "--plot-only" => plot_only = true,
+            "--layout" => {
+                layout = match args.next().as_deref() {
+                    Some("auto") => Layout::Auto,
+                    Some("calculator") => Layout::Calculator,
+                    Some("desktop") => Layout::Desktop,
+                    other => panic!("--layout auto|calculator|desktop, not {other:?}"),
+                }
+            }
+            "--size" => {
+                let s = args.next().expect("--size WxH");
+                let (w, h) = s.split_once('x').expect("--size WxH");
+                size = [w.parse().expect("width"), h.parse().expect("height")];
+            }
             "--rom" => rom_path = args.next().expect("--rom PATH"),
             "--screenshot" => screenshot = args.next(),
             "--type" => {
@@ -600,7 +721,7 @@ fn main() -> eframe::Result {
     let options = eframe::NativeOptions {
         viewport: egui::ViewportBuilder::default()
             .with_title("HP 48GX")
-            .with_inner_size([420.0, 784.0])
+            .with_inner_size(size)
             .with_min_inner_size([200.0, 370.0]),
         ..Default::default()
     };
@@ -610,10 +731,12 @@ fn main() -> eframe::Result {
         Box::new(move |cc| {
             install_fonts(&cc.egui_ctx);
             let mut app = App::new(&rom, screenshot, keys, force_persist);
+            app.lines = lines;
             if pixels {
                 app.display = Display::Pixels;
             }
             app.plot_only = plot_only;
+            app.layout = layout;
             Ok(Box::new(app))
         }),
     )

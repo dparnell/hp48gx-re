@@ -32,7 +32,7 @@ cargo run --release -p hp48 --example stack -- "'X^2' 'Y' STO"   # print the dec
 
 Typing (`hp48::typing`, `Machine::type_text`) turns text into keystrokes. Letters go through alpha mode, and brackets and quotes insert a pair whose closer is typed as ▶. `-5` is typed as 5 +/-, because in immediate mode `-` subtracts. Symbols such as `<`, `≤` and `→` use their alpha-shift keys (`examples/alphachars.rs`), because the plain `→` key adds spaces. `Σ` has no key, so build names like `ΣDAT` with `133 CHR "DAT" + STR→`.
 
-`hp48-app` options: `--screenshot OUT.png --keys "..." --type "..."` runs a key script (the keys, then each typed line with ENTER), saves the window and exits; `wait` in the script is one second. When the first typed key is a shift, wait about 5 s after `F`. `--plot-only` shows the plot view in the main window, `--pixels` starts in pixel mode, and `--persist` keeps state in scripted runs. State lives in `%APPDATA%/HP48GX/state.bin` (`$XDG_DATA_HOME/HP48GX` elsewhere); set `HP48GX_STATE` to use another file.
+`hp48-app` options: `--screenshot OUT.png --keys "..." --type "..."` runs a key script (the keys, then each typed line with ENTER), saves the window and exits; `wait` in the script is one second. When the first typed key is a shift, wait about 5 s after `F`. `--line "..."` types a line through the desktop command line after the script. `--size WxH` sets the window size, and `--layout auto|calculator|desktop` fixes the layout (also in the LCD's context menu). `--plot-only` shows the plot view in the main window, `--pixels` starts in pixel mode, and `--persist` keeps state in scripted runs. State lives in `%APPDATA%/HP48GX/state.bin` (`$XDG_DATA_HOME/HP48GX` elsewhere); set `HP48GX_STATE` to use another file.
 
 After a fresh boot, the ROM shows "Try To Recover Memory?". Answer NO (key F), then wait about 3 s before pressing a shift key: the calculator drops shifts pressed while it is still clearing memory.
 
@@ -77,7 +77,21 @@ Run the Python tests from the repo root with `python -m unittest discover -s tes
   - Directory layout: `DORRP`, library count (#7FF = none) with 13-nibble entries, offset to the last name, then names chained backwards. Each 5-nibble back-field measures from itself to the previous name.
   - `expr.rs` compiles symbolic objects (RPN order) to an `Expr` by mapping ROM user-command addresses (`x+` #1AB67, `xSIN` #1B4AC, `xi` #1AB45, comparisons, AND/OR, ...) to operators. It evaluates over the reals, or over the complex numbers for parametric plots.
   - `plot.rs` reads the plot setup (EQ, PPAR, ΣDAT/ΣPAR, angle mode) and traces all eight plot types into marks in plot coordinates for any view and size. Its rules come from what the ROM draws, and `crates/hp48/tests/plot.rs` checks every type against the ROM's own PICT: it runs DRAW, reads the grob at `GDISP` (#806E4), and requires a match within one pixel.
+  - `show.rs` writes objects as the stack shows them. `crates/hp48/tests/show.rs` compares it with the ROM's `→STR` on about 80 objects and modes. Add a case there when changing a rule.
+    - Command names come from the libraries in `ROMPTAB` (`Names::read`). Library 002's hash table is behind an access pointer into banked ROM, so names are read from the ROM image.
+    - Display settings come from the system flags: digits in -45..-48, format in -49/-50, fraction mark -51, base -11/-12, word size -5..-10.
+    - Rules taken from the ROM: STD is positional when it fits in 12 digits. FIX caps the total at 12 digits and switches to SCI when the number rounds to zero. In algebraics and units, integers below 1000 stay in STD form. Units are bare on the stack but quoted by `→STR`.
+    - Algebraics use these precedences: `=` < OR/XOR < AND < NOT < comparisons < `+ -` < `* /` < NEG < `^`. The right operand is parenthesised at equal precedence, and a negation operand never is (`'X*-Y'`).
+  - `stack()` lists the data stack, counted as `SAVESTACK` counts it: (`EDITLINE` − `DSKTOP`)/5 − 1.
+  - `hp_char` maps the calculator's character set (128–159: ∡ ẋ ∇ √ ∫ Σ ▶ π ∂ ≤ ≥ ≠ α → ← ↓ ↑ γ δ ε η θ λ ρ σ τ ω Δ Π Ω ■ ∞).
+  - Decoder details: unit operators (`um*` … `umEND`, five adjacent empty lists) stay `Builtin`. A tagged object may hold a pointer to a ROM object.
 - **`crates/hp48-app`: the eframe/egui UI.**
+  - Layout follows the window. Below 760 px wide, or when taller than wide, it shows the calculator alone, which suits small screens. Wider windows add `desk.rs` beside it:
+    - the stack as text (`hp48_rpl::show`), with level 1 at the bottom and a Copy context menu;
+    - the six menu labels, cut from the LCD's bottom 8 rows, as buttons;
+    - a command line on the computer's keyboard, with Up/Down history. Esc gives the keyboard back to the calculator.
+  - The panel only reads memory and sends keystrokes, so the ROM does all the work. While BUSY is lit, the panel keeps the last stack, because the RAM stack then holds work in progress.
+  - Typed text runs faster than real time (`App::run_for`), so the calculator's clock gains a little while typing.
   - `face.rs` holds the key layout and legends (left = purple left-shift, right = green right-shift). The faceplate is drawn with vector primitives scaled to the window.
   - The LCD is drawn either from the vector scene (the default, cached per frame contents) or as pixel rectangles.
   - `plot.rs` draws `hp48_rpl::plot` output in a separate resizable viewport, with zoom and pan. The viewport opens by itself when the calculator shows PICT (VDISP #806DA equals GDISP).

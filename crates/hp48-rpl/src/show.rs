@@ -182,6 +182,16 @@ impl Format {
         }
     }
 
+    /// A number inside an algebraic or a unit: whole numbers below 1000
+    /// are written as in STD (`'X^2'` in FIX 3), others in the display mode.
+    pub fn inline_real(&self, v: f64) -> String {
+        if v.fract() == 0.0 && v.abs() < 1000.0 {
+            Format { mode: Mode::Std, ..*self }.real(v)
+        } else {
+            self.real(v)
+        }
+    }
+
     fn real_dot(&self, v: f64) -> String {
         if !v.is_finite() {
             return format!("{v}");
@@ -342,7 +352,9 @@ fn fix(d: &[u8], e: i32, n: u8) -> String {
         "0".into()
     };
     s.push('.');
-    for i in 0..i32::from(n) {
+    // at most 12 digits in all: 123456789012 in FIX 3 is "123456789012."
+    let decimals = i32::from(n).min(11 - e2.max(0));
+    for i in 0..decimals {
         // digit at position 10^-(i+1)
         let idx = e2 + 1 + i;
         s.push(if (0..12).contains(&idx) { char::from(b'0' + r[idx as usize]) } else { '0' });
@@ -504,8 +516,8 @@ impl<M: Memory> Writer<'_, M> {
         let mut number = String::new();
         for (i, it) in items[..items.len() - 1].iter().enumerate() {
             match it {
-                Object::Real(v) if i == 0 => number = self.format.real(*v),
-                Object::Real(v) => stack.push(self.format.real(*v)),
+                Object::Real(v) if i == 0 => number = self.format.inline_real(*v),
+                Object::Real(v) => stack.push(self.format.inline_real(*v)),
                 Object::String(s) => stack.push(s.clone()),
                 Object::Char(c) => stack.push(crate::hp_char(*c).to_string()),
                 Object::Builtin(a) => {
@@ -547,7 +559,7 @@ impl<M: Memory> Writer<'_, M> {
                     let p = self.precedence_of(inner);
                     stack.push((t, p));
                 }
-                Object::Real(v) => stack.push((self.format.real(*v), if *v < 0.0 { P_NEG } else { P_ATOM })),
+                Object::Real(v) => stack.push((self.format.inline_real(*v), if *v < 0.0 { P_NEG } else { P_ATOM })),
                 Object::Bint(n) if matches!(items.get(i), Some(Object::Builtin(_))) && self.is_fcnapply(&items[i]) => {
                     // user function: args..., 'F', count, FCNAPPLY
                     i += 1;

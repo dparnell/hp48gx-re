@@ -8,9 +8,11 @@ This repository holds three things:
   ROM. Use it to fix ROM bugs or to study how the calculator works. Start with
   [`firmware/README.md`](firmware/README.md). The known bugs are in
   [`firmware/BUGS.md`](firmware/BUGS.md).
-- **`crates/`**: an HP 48GX emulator in Rust. It has a desktop calculator with
-  a vector-drawn display and a resizable plot window, and a headless
-  command-line runner.
+- **`crates/`**: an HP 48GX emulator in Rust. The desktop calculator adapts to
+  its window. A narrow window shows the calculator alone, with a vector-drawn
+  display. A wide one adds a panel with the stack as text, the menu keys as
+  buttons and a command line typed on the computer's keyboard. Plots open in
+  a resizable window. There is also a headless command-line runner.
 - **`tools/`, `docs/`, `data/`**: the reverse-engineering tools that produced
   the source (an analyser, a disassembler and an assembler), and notes on the
   ROM's structure ([`docs/rom-map.md`](docs/rom-map.md)).
