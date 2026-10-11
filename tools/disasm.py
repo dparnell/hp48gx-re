@@ -62,6 +62,10 @@ CRC_WORDS = (0x7FFFC, 0xFFFFC)
 # addresses (constuniterr = #B02 "Inconsistent Units").
 MESSAGE_MAX = 0x1000
 
+# The self-test runs with RAM not yet configured, so its own data is
+# visible: D0=/D1=/LC/LA values inside it are addresses.
+SELFTEST = (0x80000, 0x82000)
+
 # Code that must stay where it is, whatever else moves.
 PINNED = {
     0x0000F: "the CPU jumps here on an interrupt",
@@ -326,8 +330,10 @@ class Generator:
                     notes.append(why)
                 # D0=/D1= of a ROM address is a pointer, but #7E000-#7FFFF
                 # holds the bank switcher and port controls (CE1/CE2/NCE3)
-                if given == "addr" or (given is None and mn[0] == "D" and 0x140 <= v < HARDWARE):
-                    parts = op(mn, Ref(v, a, "addr"))
+                in_selftest = SELFTEST[0] <= a < SELFTEST[1] and SELFTEST[0] < v < SELFTEST[1]
+                if given == "addr" or (given is None and (in_selftest or mn[0] == "D" and 0x140 <= v < HARDWARE)):
+                    # "rom": an upper-ROM value here is ROM (the self-test area), not RAM
+                    parts = op(mn, Ref(v, a, "rom" if v >= LOWER_END else "addr"))
                 elif given == "num":
                     parts = op(mn, tok[1])
                 elif given:
@@ -621,7 +627,7 @@ class Generator:
         out = []
         prev = None
         for a, w, f, k in t["words"]:
-            if f == "a":
+            if f in ("a", "c"):
                 parts = op("CON(5)", Ref(self.rom.addr(a), a, "addr"))
             elif f == "n":
                 parts = op("CON(%d)" % w, "#%0*X" % (w, self.rom.read(a, w)))

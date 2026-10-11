@@ -3,6 +3,8 @@
 //! Addresses in [LO, HI) of the original are at +DELTA in the relocated ROM
 //! (see tools/relocate.py). After boot both machines get the same key presses:
 //! F (do not recover memory), then each command line given, with ENTER.
+//! A line `!On+E` instead holds the first key while tapping the second (ON-E
+//! starts the continuous self-test, which reads the whole ROM).
 //!
 //! cargo run --release -p hp48 --example lockstep -- ROM/gxrom-r out/reloc.bin 041D9 7E001 16 ["1 2 +" ...]
 
@@ -23,20 +25,32 @@ fn main() {
     // Key events (time, key, down): F after 3 s, then the typed lines.
     let mut events: Vec<(u64, Key, bool)> = Vec::new();
     let mut t = 3 * CPU_HZ;
-    let mut press = |t: &mut u64, k: Key| {
+    let press = |events: &mut Vec<(u64, Key, bool)>, t: &mut u64, k: Key| {
         events.push((*t, k, true));
         events.push((*t + CPU_HZ / 20, k, false));
         *t += CPU_HZ / 20 + CPU_HZ / 10;
     };
-    press(&mut t, Key::F);
+    press(&mut events, &mut t, Key::F);
     t += 4 * CPU_HZ;
+    let named = |n: &str| {
+        Key::ALL.into_iter().find(|k| format!("{k:?}").eq_ignore_ascii_case(n)).unwrap_or_else(|| panic!("no key {n}"))
+    };
     for line in &a[5..] {
-        for k in hp48::typing::keystrokes(line).unwrap_or_else(|c| panic!("cannot type {c:?}")) {
-            press(&mut t, k);
+        if let Some((hold, tap)) = line.strip_prefix('!').and_then(|c| c.split_once('+')) {
+            let (hold, tap) = (named(hold), named(tap));
+            events.push((t, hold, true));
+            t += CPU_HZ / 4;
+            press(&mut events, &mut t, tap);
+            events.push((t, hold, false));
+            t += 20 * CPU_HZ;
+            continue;
         }
-        press(&mut t, Key::Enter);
+        for k in hp48::typing::keystrokes(line).unwrap_or_else(|c| panic!("cannot type {c:?}")) {
+            press(&mut events, &mut t, k);
+        }
+        press(&mut events, &mut t, Key::Enter);
         t += 3 * CPU_HZ;
-        press(&mut t, Key::On);
+        press(&mut events, &mut t, Key::On);
         t += CPU_HZ / 2;
     }
     let end = t + CPU_HZ;

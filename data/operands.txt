@@ -75,3 +75,10 @@
 530D0	num	offset added to a RAM pointer
 00EC1	addr	return address, pushed with RSTK=C
 C07EE	addr	the version object, read by VERSION
+020B5	addr	in the self-test area (#80000-#82006): ROM, not RAM
+0218D	addr	in the self-test area
+0219D	addr	in the self-test area
+0234E	addr	memory-recovery code in the self-test area
+023ED	addr	in the self-test area
+17F24	addr	code in the self-test area
+40F17	num	delay count

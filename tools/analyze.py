@@ -39,7 +39,8 @@ DOHSTR = 0x02A4E
 def read_tables(rom=None):
     """data/tables.txt as dicts: start, size, desc, and words: (address,
     width, field, entry) for every field of every entry, where field is
-    "a" (an address), "n" (a number) or "end" (the zero terminator)."""
+    "a" (address of an object or data), "c" (address of machine code), "n"
+    (a number) or "end" (the zero terminator)."""
     rom = rom or Rom()
     out = []
     path = DATA / "tables.txt"
@@ -49,7 +50,7 @@ def read_tables(rom=None):
         if line.startswith("#") or not line.strip():
             continue
         a, fields, count, desc = (line.split("\t") + ["", "", ""])[:4]
-        fields = [("a", 5) if f == "a" else ("n", int(f)) for f in fields]
+        fields = [(f, 5) if f in "ac" else ("n", int(f)) for f in fields]
         a = p = int(a, 16)
         count = int(count)
         words = []
@@ -522,8 +523,8 @@ class Analyzer:
         for t in read_tables():
             self.mark(Item(t["start"], t["size"], "table", t))
             for w, _, fld, _ in t["words"]:
-                if fld == "a":
-                    self.q("ptr", self.rom.addr(w), w, "table")
+                if fld in "ac":
+                    self.q("ptr" if fld == "a" else "code", self.rom.addr(w), w, "table")
 
     def analyze(self):
         self.declared_tables()
