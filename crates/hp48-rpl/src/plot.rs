@@ -209,7 +209,7 @@ fn read_eq(mem: &impl Memory, spec: &mut Spec) -> Result<(), String> {
     };
     let mut labels = Vec::new();
     for it in &items {
-        let e = expr::compile(it).map_err(|e| e.to_string())?;
+        let e = expr::compile_in(it, &expr::Commands::from_memory(mem)).map_err(|e| e.to_string())?;
         labels.push(e.to_string());
         match spec.kind {
             // A function plot draws both sides of an equation.

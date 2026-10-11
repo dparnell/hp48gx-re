@@ -80,10 +80,22 @@ pub fn div5(cpu: &mut Cpu, _hw: &mut Hardware) {
 /// All natives with their ROM entry points.
 pub const NATIVES: &[(u32, &str, Native)] = &[(0x03991, "MUL#", mul_bint), (0x06A8E, "DIV5", div5)];
 
-/// Route calls to every implemented native.
+/// The first 16 nibbles of each replaced routine in ROM revision R. A ROM
+/// built from firmware/ may have moved or changed a routine; its native is
+/// then not used.
+const SIGNATURES: &[(u32, u64)] = &[(0x03991, 0x0C0A_8081_004C_A81D), (0x06A8E, 0xB1A6_1AB9_A7D3_9AA2)];
+
+/// Is the routine a native replaces at `addr` in this machine's ROM?
+pub fn routine_present(machine: &Machine, addr: u32) -> bool {
+    SIGNATURES.iter().any(|&(a, sig)| a == addr && machine.peek_value(addr, 16) == sig)
+}
+
+/// Route calls to every implemented native whose routine is in the ROM.
 pub fn install(machine: &mut Machine) {
     for &(addr, _, f) in NATIVES {
-        machine.natives.insert(addr, f);
+        if routine_present(machine, addr) {
+            machine.natives.insert(addr, f);
+        }
     }
 }
 

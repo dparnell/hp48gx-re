@@ -97,6 +97,7 @@ impl App {
         }
         let end_time = t + 2.0;
         let persistent = screenshot.is_none() || force_persist;
+        persist::set_rom(hp48::rom_hash(rom));
         let mut machine = Machine::new(rom);
         // Native Rust replacements for ROM routines, each verified against
         // the original (crates/hp48/tests/hle.rs).
@@ -553,7 +554,7 @@ fn save_png(path: &str, image: &egui::ColorImage) {
 
 fn main() -> eframe::Result {
     let mut args = std::env::args().skip(1);
-    let mut rom_path = String::from("ROM/gxrom-r");
+    let mut rom_path = hp48::default_rom_path().display().to_string();
     let mut screenshot = None;
     let mut keys = Vec::new();
     let mut force_persist = false;

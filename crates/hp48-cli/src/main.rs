@@ -62,7 +62,7 @@ fn print_lcd(m: &Machine) {
 
 fn main() {
     let mut args = std::env::args().skip(1);
-    let mut rom = String::from("ROM/gxrom-r");
+    let mut rom = hp48::default_rom_path().display().to_string();
     let mut seconds = 3.0f64;
     let mut keys: Vec<String> = Vec::new();
     let mut typed: Vec<String> = Vec::new();

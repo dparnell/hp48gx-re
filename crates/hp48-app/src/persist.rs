@@ -3,7 +3,17 @@
 
 use hp48::Machine;
 use std::path::PathBuf;
+use std::sync::OnceLock;
 use std::time::{SystemTime, UNIX_EPOCH};
+
+static ROM: OnceLock<u64> = OnceLock::new();
+
+/// The ROM in use (its `hp48::rom_hash`). RAM saved under one ROM holds
+/// addresses into it, so each ROM image gets its own state file: the
+/// original keeps `state.bin`, a ROM built from firmware/ `state-HASH.bin`.
+pub fn set_rom(hash: u64) {
+    let _ = ROM.set(hash);
+}
 
 /// `HP48GX_STATE` overrides the location (used by tests).
 pub fn state_path() -> Option<PathBuf> {
@@ -17,7 +27,11 @@ pub fn state_path() -> Option<PathBuf> {
             .map(PathBuf::from)
             .or_else(|| std::env::home_dir().map(|h| h.join(".local").join("share")))
     }?;
-    Some(base.join("HP48GX").join("state.bin"))
+    let name = match ROM.get() {
+        Some(&h) if h != hp48::ROM_R_HASH => format!("state-{h:016x}.bin"),
+        _ => "state.bin".into(),
+    };
+    Some(base.join("HP48GX").join(name))
 }
 
 fn now_secs() -> f64 {

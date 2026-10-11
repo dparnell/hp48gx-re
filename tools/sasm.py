@@ -627,6 +627,7 @@ class Assembler:
     def file(self, path):
         state = {"mode": "ASM", "code": [], "dir": path.parent}
         for no, line in enumerate(path.read_text(encoding="utf-8").split("\n"), 1):
+            line = line.rstrip("\r")    # a checkout with CRLF line ends
             try:
                 self.line(line, state)
             except AsmError as e:

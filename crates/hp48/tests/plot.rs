@@ -25,7 +25,7 @@ impl Memory for Ram<'_> {
 type Pixels = HashSet<(i32, i32)>;
 
 fn machine() -> Option<Machine> {
-    let rom = std::fs::read(concat!(env!("CARGO_MANIFEST_DIR"), "/../../ROM/gxrom-r")).ok()?;
+    let rom = std::fs::read(hp48::default_rom_path()).ok()?;
     let mut m = Machine::new(&rom);
     m.run(3 * CPU_HZ);
     m.tap(Key::F);

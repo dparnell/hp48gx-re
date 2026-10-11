@@ -8,7 +8,7 @@ const DSKTOP: u32 = 0x806F8;
 const DOREAL: u64 = 0x02933;
 
 fn machine() -> Option<Machine> {
-    let rom = std::fs::read(concat!(env!("CARGO_MANIFEST_DIR"), "/../../ROM/gxrom-r")).ok()?;
+    let rom = std::fs::read(hp48::default_rom_path()).ok()?;
     let mut m = Machine::new(&rom);
     m.run(3 * CPU_HZ);
     // "Try To Recover Memory?" -> NO
@@ -62,7 +62,7 @@ fn state_round_trip_keeps_the_stack() {
     m.run(CPU_HZ / 2);
     let snap = m.save_state();
 
-    let rom = std::fs::read(concat!(env!("CARGO_MANIFEST_DIR"), "/../../ROM/gxrom-r")).unwrap();
+    let rom = std::fs::read(hp48::default_rom_path()).unwrap();
     let mut restored = Machine::new(&rom);
     restored.load_state(&snap).expect("load");
     assert_eq!(level1_real(&restored).as_deref(), Some("42E1"));

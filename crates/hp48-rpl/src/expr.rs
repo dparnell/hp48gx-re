@@ -3,8 +3,13 @@
 //! A symbolic object holds its expression in RPN order: operands, then the
 //! command that combines them, e.g. `X xSIN %1 x+`. Commands are pointers to
 //! the user-command entries in ROM; this table maps them to operators.
+//!
+//! The table uses the addresses of ROM revision R. A ROM built from
+//! firmware/ may have moved the commands, so `Commands::from_memory` finds
+//! where they are in the running ROM, by library and command number.
 
-use crate::Object;
+use crate::{Memory, Object};
+use std::collections::HashMap;
 
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub enum Op {
@@ -145,6 +150,111 @@ impl Op {
 /// The imaginary unit as a command.
 const XI: u32 = 0x1AB45;
 
+/// The commands used above, all in library 002: (ROM R address, command number).
+const LIB002: &[(u32, u32)] = &[
+    (0x1A8D8, 0x03B),
+    (0x1A995, 0x03C),
+    (0x1AA1F, 0x03D),
+    (0x1AA6E, 0x03E),
+    (0x1AABD, 0x03F),
+    (0x1AB23, 0x042),
+    (0x1AB45, 0x043),
+    (0x1AB67, 0x044),
+    (0x1AD09, 0x046),
+    (0x1ADEE, 0x047),
+    (0x1AF05, 0x048),
+    (0x1B02D, 0x049),
+    (0x1B1CA, 0x04B),
+    (0x1B278, 0x04C),
+    (0x1B2DB, 0x04D),
+    (0x1B32A, 0x04E),
+    (0x1B374, 0x04F),
+    (0x1B426, 0x050),
+    (0x1B4AC, 0x051),
+    (0x1B505, 0x052),
+    (0x1B55E, 0x053),
+    (0x1B5B7, 0x054),
+    (0x1B606, 0x055),
+    (0x1B655, 0x056),
+    (0x1B6A4, 0x057),
+    (0x1B72F, 0x058),
+    (0x1B79C, 0x059),
+    (0x1B905, 0x05D),
+    (0x1B94F, 0x05E),
+    (0x1B9C6, 0x05F),
+    (0x1BA3D, 0x060),
+    (0x1BA8C, 0x061),
+    (0x1BAC2, 0x062),
+    (0x1BB6D, 0x065),
+    (0x1BBA3, 0x066),
+    (0x1BBD9, 0x067),
+    (0x1BC0F, 0x068),
+    (0x1BC71, 0x06A),
+    (0x1BCE3, 0x06B),
+    (0x1BE4D, 0x06E),
+    (0x1C7CA, 0x09A),
+    (0x1C819, 0x09B),
+    (0x1E783, 0x0E5),
+    (0x1E809, 0x0E6),
+    (0x1E88F, 0x0E7),
+    (0x1E8F6, 0x0E8),
+    (0x1E972, 0x0E9),
+    (0x1EA9D, 0x0EA),
+    (0x1EBBE, 0x0EB),
+    (0x1EC5D, 0x0EC),
+    (0x1ECFC, 0x0ED),
+    (0x1ED9B, 0x0EE),
+];
+
+/// `ROMPTAB` (RAM): a 3-nibble count, then 16-nibble entries that start with
+/// the library number (3) and the address of its header (5).
+const ROMPTAB: u32 = 0x809A3;
+
+/// Where the running ROM has the commands this module knows by their
+/// revision R addresses.
+#[derive(Clone, Debug, Default)]
+pub struct Commands(HashMap<u32, u32>);
+
+impl Commands {
+    /// ROM revision R: addresses are used as they are.
+    pub fn rev_r() -> Self {
+        Commands(HashMap::new())
+    }
+
+    /// Read library 002's link table (found through `ROMPTAB`) from a booted
+    /// machine. Falls back to revision R if the table is not there.
+    pub fn from_memory(mem: &impl Memory) -> Self {
+        let count = mem.value(ROMPTAB, 3) as u32;
+        let header = (0..count.min(256))
+            .map(|i| ROMPTAB + 3 + 16 * i)
+            .find(|&e| mem.value(e, 3) == 0x002)
+            .map(|e| mem.addr(e + 3));
+        let Some(h) = header else { return Self::rev_r() };
+        // header: lib# (3), hash, message, link, config: self-relative offsets
+        let link = (h + 13 + mem.addr(h + 13)) & 0xF_FFFF;
+        if mem.addr(link) != crate::prolog::DOHSTR {
+            return Self::rev_r();
+        }
+        let n = (mem.addr(link + 5) - 5) / 5;
+        let mut map = HashMap::new();
+        for &(r, cmd) in LIB002 {
+            if cmd < n {
+                let slot = link + 10 + 5 * cmd;
+                let now = (slot + mem.addr(slot)) & 0xF_FFFF;
+                if now != r {
+                    map.insert(now, r);
+                }
+            }
+        }
+        Commands(map)
+    }
+
+    /// The revision R address of the command at `a`.
+    pub fn canonical(&self, a: u32) -> u32 {
+        self.0.get(&a).copied().unwrap_or(a)
+    }
+}
+
 /// Constants that appear as commands (`xPI`, `xCONSTANTe`).
 fn constant(a: u32) -> Option<f64> {
     match a {
@@ -186,24 +296,30 @@ impl std::error::Error for CompileError {}
 
 /// Compile a symbolic object (or a bare name/number) into an expression.
 pub fn compile(obj: &Object) -> Result<Expr, CompileError> {
+    compile_in(obj, &Commands::rev_r())
+}
+
+/// `compile` for a ROM whose commands may have moved (see `Commands`).
+pub fn compile_in(obj: &Object, cmds: &Commands) -> Result<Expr, CompileError> {
     match obj {
-        Object::Symbolic(items) => compile_items(items),
+        Object::Symbolic(items) => compile_items(items, cmds),
         Object::Real(v) => Ok(Expr::Num(*v)),
         Object::Id(n) | Object::Lam(n) => Ok(Expr::Var(n.clone())),
         _ => Err(CompileError::NotSymbolic),
     }
 }
 
-fn compile_items(items: &[Object]) -> Result<Expr, CompileError> {
+fn compile_items(items: &[Object], cmds: &Commands) -> Result<Expr, CompileError> {
     let mut stack: Vec<Expr> = Vec::new();
     for it in items {
         match it {
             Object::Real(v) => stack.push(Expr::Num(*v)),
             Object::Bint(v) => stack.push(Expr::Num(f64::from(*v))),
             Object::Id(n) | Object::Lam(n) => stack.push(Expr::Var(n.clone())),
-            Object::Symbolic(inner) => stack.push(compile_items(inner)?),
-            Object::Builtin(XI) => stack.push(Expr::I),
+            Object::Symbolic(inner) => stack.push(compile_items(inner, cmds)?),
+            Object::Builtin(a) if cmds.canonical(*a) == XI => stack.push(Expr::I),
             Object::Builtin(a) => {
+                let a = &cmds.canonical(*a);
                 if let Some(c) = constant(*a) {
                     stack.push(Expr::Num(c));
                     continue;

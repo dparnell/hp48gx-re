@@ -27,7 +27,7 @@ impl Rng {
 }
 
 fn machine() -> Option<Machine> {
-    let rom = std::fs::read(concat!(env!("CARGO_MANIFEST_DIR"), "/../../ROM/gxrom-r")).ok()?;
+    let rom = std::fs::read(hp48::default_rom_path()).ok()?;
     Some(Machine::new(&rom))
 }
 
@@ -36,6 +36,10 @@ fn natives_match_rom() {
     let Some(base) = machine() else { return };
     let mut rng = Rng(0x48_6458_2025);
     for &(entry, name, f) in NATIVES {
+        if !hle::routine_present(&base, entry) {
+            eprintln!("{name}: not in this ROM, skipped");
+            continue;
+        }
         for case in 0..5000 {
             let mut m = base.clone();
             m.cpu.a = Reg(rng.value());

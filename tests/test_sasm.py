@@ -167,6 +167,43 @@ class Source(unittest.TestCase):
             self.assertEqual(c, 0xFFFF)
 
 
+class Firmware(unittest.TestCase):
+    """firmware/, the source to edit. It builds without the original ROM.
+    While it holds no fixes it must still give ROM revision R exactly:
+    change test_is_still_revision_r when it deliberately differs."""
+
+    def test_assembles(self):
+        asm = sasm.Assembler().run(ROOT / "firmware" / "rom.s")
+        self.assertEqual(asm.notes, [])
+        self.assertEqual(sum(asm.written), sasm.ROM_SIZE)
+
+    @unittest.skipUnless((ROOT / "ROM" / "gxrom-r").exists(), "needs ROM/gxrom-r")
+    def test_is_still_revision_r(self):
+        asm = sasm.Assembler().run(ROOT / "firmware" / "rom.s")
+        self.assertEqual(asm.image(), (ROOT / "ROM" / "gxrom-r").read_bytes())
+
+    @unittest.skipUnless((ROOT / "ROM" / "gxrom-r").exists(), "needs ROM/gxrom-r")
+    def test_build_reports_an_edit(self):
+        """tools/build.py explains a longer message as one move plus the
+        real changes (the text, and the two CRC words)."""
+        import build
+        import io
+        import shutil
+        from contextlib import redirect_stdout
+        with tempfile.TemporaryDirectory() as d:
+            src = Path(d) / "fw"
+            shutil.copytree(ROOT / "firmware", src)
+            f = src / "lower" / "740E1-messages.s"
+            t = f.read_text(encoding="utf-8")
+            f.write_text(t.replace('$BODY   "Infinite Result"', '$BODY   "Infinite Result!"', 1), encoding="utf-8")
+            out = io.StringIO()
+            with redirect_stdout(out):
+                self.assertEqual(build.main(["build", "--src", str(src), "-o", str(Path(d) / "rom.bin")]), 0)
+        text = out.getvalue()
+        self.assertIn("+2 nibbles  from MsgTab(6)", text)
+        self.assertIn("in 3 regions", text)
+
+
 @unittest.skipUnless((ROOT / "ROM" / "gxrom-r").exists(), "needs ROM/gxrom-r")
 class RomRoundTrip(unittest.TestCase):
     def test_source_reassembles_to_the_rom(self):

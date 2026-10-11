@@ -1,0 +1,3 @@
+# The firmware source is assembled by tools/sasm.py; keep LF line ends.
+firmware/**/*.s text eol=lf
+*.png binary

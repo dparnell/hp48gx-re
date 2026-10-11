@@ -4,10 +4,11 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Purpose
 
-This repository has two parts:
+This repository has three parts:
 
 1. **ROM analysis (Python, `tools/`).** It reverse engineers the HP 48GX ROM, revision R (`ROM/gxrom-r`). The findings are in `docs/rom-map.md`. Read that first: it covers the memory map, boot path, ROM library table, covered upper ROM, and the code idioms the analyser handles.
-2. **HP 48GX desktop calculator (Rust, `crates/`).** An emulator that runs the real ROM, with a vector-rendered UI and a native, resizable plot window. The long-term plan is to replace ROM routines one by one with native Rust (high-level emulation), checking each replacement against the emulated original.
+2. **The ROM as editable source (`firmware/`).** The complete firmware as commented assembler and RPL, the master copy. `python tools/build.py` turns it into a ROM image. Built unchanged, it is identical to ROM R. It is meant for fixing ROM bugs; `firmware/README.md` is the guide.
+3. **HP 48GX desktop calculator (Rust, `crates/`).** An emulator that runs the real ROM, with a vector-rendered UI and a native, resizable plot window. The long-term plan is to replace ROM routines one by one with native Rust (high-level emulation), checking each replacement against the emulated original.
 
 ## Commands
 
@@ -43,9 +44,10 @@ python listing.py [lo hi]         # annotated listing -> ../out/rom-r.lst (needs
 python libcat.py                  # library/command catalogue -> ../out/libraries.txt
 python fonts.py --png DIR         # render the three ROM fonts
 python hpdis.py code|func|rpl|auto ADDR|NAME   # disassemble / decompile on demand
-python disasm.py                  # commented source tree -> ../out/src, then reassemble and compare with the ROM
-python sasm.py ../out/src/rom.s -o ../out/rom.bin --check ../ROM/gxrom-r   # assemble the source tree
-python relocate.py [--pad N] [FILE-PREFIX]   # copy out/src with N nibbles inserted -> ../out/reloc.bin
+python build.py                   # firmware/ -> ../out/rom.bin; reports moves and real changes against ROM/gxrom-r
+python disasm.py [--out DIR]       # regenerate the source from the ROM -> ../out/src (not firmware/: that holds edits)
+python sasm.py SRC/rom.s -o OUT --check ../ROM/gxrom-r   # the assembler on its own
+python relocate.py [--pad N] [FILE-PREFIX]   # copy firmware/ with N nibbles inserted -> ../out/reloc.bin
 ```
 
 Relocation check (does edited source still work?): `relocate.py` prints where it padded, e.g. `#041D9` (a prefix such as `C0000` pads inside an upper-ROM library part; the range then ends at its window). Then run
@@ -100,13 +102,13 @@ Addresses you will need again: fonts at #7A047 (10-row), #7B257 (8-row) and #7C1
   - Carry is tracked so that `GOC`/`GONC` after a test become unconditional. Callees that start with `C=RSTK` take inline data.
   - `gap_pass` speculatively classifies the rest.
 - Memory model rule: pointers from lower ROM to #80000 and up mean RAM. Code in upper ROM is only allowed inside `DOCODE` bodies and in the self-test area #80000–#82006.
-- **Reassemblable source.** `disasm.py` turns the analysis into `out/src`. `sasm.py` assembles it back, byte for byte.
+- **Reassemblable source.** `disasm.py` turned the analysis into the source, which is now committed as `firmware/`. Edit it there. `disasm.py` writes to `out/src` by default, so improvements to the generator can be compared, and carried over into `firmware/` by hand or by regenerating with `--out firmware` when it has no edits. `sasm.py` assembles the source, byte for byte.
   - Source format (documented in `sasm.py`): SASM mnemonics as printed by `saturn.py`, and RPLCOMP-like RPL (`::`, `;`, `# 3F`, `$ "..."`, `CODE`…`ENDCODE`). Comments start with `*`.
   - Images: GROBs become PNGs in `images/`, and the fonts become glyph sheets in `fonts/` (the `GLYPHS` directive).
   - Labels, in order of preference: `data/annotations.txt`, then EDB/VBL names, then library command names, then generated names (`SUB_`/`L_`/`OBJ_`/`ROMP_lib_cmd`).
-  - The split into files comes from `data/rom-layout.txt` plus one region per upper-ROM library part. Both data files are our own notes: add names, comments and region descriptions there as the code is understood, not in `out/src`.
+  - The split into files comes from `data/rom-layout.txt` plus one region per upper-ROM library part. Both data files are our own notes: add names, comments and region descriptions there as the code is understood. Regenerating `firmware/` from them only makes sense while `firmware/` holds no hand edits.
   - Every generated line is assembled and compared with the ROM. A line that doesn't reproduce (three instructions with don't-care bits set) is written as `NIBHEX` with the original text in its comment.
-  - The source is derived from HP's ROM, so it stays in git-ignored `out/`.
+  - Tests: `test_sasm.Firmware` checks that `firmware/` assembles, and that it is still ROM R. Change that test when `firmware/` deliberately differs.
   - The assembler builds its table of fixed instructions by running the decoder over every opcode prefix. A text with two encodings (`DAT0=A B`: `148` or `1506`) assembles to the shortest one.
 - **Editable source.**
   - Lengths are `LENGTH`…`ENDLENGTH` blocks, and RPL syntax uses the source's own `DOCOL`/`SEMI`/… labels.
@@ -134,7 +136,8 @@ Addresses you will need again: fonts at #7A047 (10-row), #7B257 (8-row) and #7C1
 - `docs/saturn.txt`: Mastracci's Saturn/HP48 hardware guide (I/O registers §4.1, bank switching §4.4, keyboard §4.9, CONFIG and daisy chain §2.4).
 - `data/entries48g.txt` and `data/vbl48gx-r.txt`: symbol tables derived from third-party lists, using ROM R addresses.
 - `crates/hp48-app/assets/`: DejaVu Sans (see `DejaVu-LICENSE`), used for faceplate symbols.
-- `ROM/gxrom-r` is proprietary HP firmware. Don't redistribute or publish it, or listings, fonts or other data extracted from it. The Rust code reads the fonts and objects from the ROM at run time instead of shipping copies.
+- `ROM/gxrom-r` is HP's firmware (Copyright HP 1993). HP has made the HP 48 ROM images freely available for use with emulators. The repository publishes it as source in `firmware/`, for study and for fixing ROM bugs. The Rust code reads fonts and objects from whatever ROM it runs.
+- `HP48_ROM=PATH` makes the CLI, the app and the Rust tests use another ROM image (e.g. `out/rom.bin`). The app keeps a saved state per ROM image. `hle::install` skips natives whose routine is not at its ROM R address, and the plot window finds the commands through `ROMPTAB` (`expr::Commands`).
 
 ## Domain notes
 

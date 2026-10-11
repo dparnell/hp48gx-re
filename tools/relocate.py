@@ -1,6 +1,6 @@
 """Relocation test for the source tree: does the ROM still work when code moves?
 
-Copies out/src to out/reloc and inserts zero nibbles at the start of the chosen
+Copies firmware/ to out/reloc and inserts zero nibbles at the start of the chosen
 files. FILLTO lines become BSS of their original size, so everything after an
 insertion moves, up to the free space at the end of its half of the ROM (or,
 in upper ROM, of its window; see disasm.WINDOWS).
@@ -25,7 +25,7 @@ import sasm
 from disasm import WINDOWS, CRC_WORDS
 
 ROOT = Path(__file__).resolve().parent.parent
-SRC = ROOT / "out" / "src"
+SRC = ROOT / "firmware"
 DST = ROOT / "out" / "reloc"
 # Fills that absorb the shift: before the version object, the CRC words and
 # the upper-ROM windows.
