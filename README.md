@@ -6,7 +6,8 @@ This repository holds three things:
   editable assembler and RPL source. It builds to a ROM image that runs on the
   calculator's emulators. Built unchanged, it is identical to the original
   ROM. Use it to fix ROM bugs or to study how the calculator works. Start with
-  [`firmware/README.md`](firmware/README.md).
+  [`firmware/README.md`](firmware/README.md). The known bugs are in
+  [`firmware/BUGS.md`](firmware/BUGS.md).
 - **`crates/`**: an HP 48GX emulator in Rust. It has a desktop calculator with
   a vector-drawn display and a resizable plot window, and a headless
   command-line runner.

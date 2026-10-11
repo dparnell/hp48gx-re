@@ -112,6 +112,14 @@ fn main() {
     };
     run(&mut m, total, &mut hist);
     for k in &keys {
+        // type:TEXT types TEXT (~ for a space), without ENTER
+        if let Some(text) = k.strip_prefix("type:") {
+            if let Err(c) = m.type_text(&text.replace('~', " ")) {
+                panic!("cannot type {c:?}");
+            }
+            run(&mut m, CPU_HZ / 5, &mut hist);
+            continue;
+        }
         // KEY or KEY:SECONDS (how long to hold it)
         let (name, hold) = match k.split_once(':') {
             Some((n, h)) => (n, h.parse::<f64>().expect("hold seconds")),

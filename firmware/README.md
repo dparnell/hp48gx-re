@@ -33,6 +33,13 @@ cargo run --release -p hp48 --example selftest -- out/rom.bin  # the ROM's own s
 The image is packed two nibbles per byte, low nibble first, the format most
 HP 48 emulators use.
 
+## Known bugs
+
+`BUGS.md` lists the bugs the HP 48 FAQ reports for revision R, with steps
+to reproduce, where each is in the source and what is known about its cause.
+`cargo run --release -p hp48 --example knownbugs -- out/rom.bin` checks a
+build for each bug.
+
 ## Layout
 
 | Path | Contents |

@@ -26,7 +26,9 @@ cargo run --release -p hp48-cli -- --seconds 3 --keys "F wait:3" --type "RAD 'SI
 cargo run --release -p hp48 --example stack -- "'X^2' 'Y' STO"   # print the decoded stack
 ```
 
-`hp48-cli` boots the ROM headless and prints the LCD as text. Keys are `Key` variant names (`N7`, `LeftShift`, `Enter`, ...); `KEY:SECONDS` holds a key and `wait:S` just runs. `--type TEXT` (repeatable) types an RPL command line after the keys and presses ENTER. Other options: `--profile` (PC hot spots with ROM symbols), `--png`, `--dump` (raw 0/1 rows), `--vector-png`, `--svg`.
+`cargo run --release -p hp48 --example knownbugs -- [ROM] [NAME...]` checks a ROM for the bugs in `firmware/BUGS.md`. It prints PRESENT, fixed or unknown, and exits 1 while any bug is present.
+
+`hp48-cli` boots the ROM headless and prints the LCD as text. Keys are `Key` variant names (`N7`, `LeftShift`, `Enter`, ...). `KEY:SECONDS` holds a key, `wait:S` just runs, and `type:TEXT` types text (`~` for a space) without ENTER. `--type TEXT` (repeatable) types an RPL command line after the keys and presses ENTER. Other options: `--profile` (PC hot spots with ROM symbols), `--png`, `--dump` (raw 0/1 rows), `--vector-png`, `--svg`.
 
 Typing (`hp48::typing`, `Machine::type_text`) turns text into keystrokes. Letters go through alpha mode, and brackets and quotes insert a pair whose closer is typed as ▶. `-5` is typed as 5 +/-, because in immediate mode `-` subtracts. Symbols such as `<`, `≤` and `→` use their alpha-shift keys (`examples/alphachars.rs`), because the plain `→` key adds spaces. `Σ` has no key, so build names like `ΣDAT` with `133 CHR "DAT" + STR→`.
 
