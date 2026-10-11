@@ -68,3 +68,10 @@
 7A22C	Minifont+1111	minifont glyph for codes below #20
 7A244	MiniRemap
 7A28B	Minifont-341	minifont glyph i = #7C102 + 11*i
+00437	addr	table of 3-nibble entries, indexed by 3*A
+00CD3	addr	table of 6-nibble entries, indexed by 6*B
+00E3A	addr	return address, pushed with RSTK=C
+2D2EC	num	error number
+530D0	num	offset added to a RAM pointer
+00EC1	addr	return address, pushed with RSTK=C
+C07EE	addr	the version object, read by VERSION

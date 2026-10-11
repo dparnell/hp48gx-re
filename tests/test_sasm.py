@@ -127,6 +127,39 @@ class Source(unittest.TestCase):
                   + [0xB, 2, 1, 3, 0])
         self.assertEqual(list(asm.mem[p:p + len(expect)]), expect)
 
+    def assemble(self, *lines):
+        with tempfile.TemporaryDirectory() as d:
+            f = Path(d) / "t.s"
+            f.write_text("\n".join(lines), encoding="utf-8")
+            return sasm.Assembler().run(f)
+
+    def test_fillto_gives_way(self):
+        """FILLTO pads up to its address, or, once the code has passed it,
+        writes nothing and lets what follows move."""
+        asm = self.assemble("        NIBHEX  123", "        FILLTO  #00008", "a:      NIBHEX  4")
+        self.assertEqual(asm.symbols["a"], 8)
+        self.assertEqual(asm.notes, [])
+        asm = self.assemble("        NIBHEX  1234567890", "        FILLTO  #00008", "a:      NIBHEX  4")
+        self.assertEqual(asm.symbols["a"], 10)
+        self.assertEqual(len(asm.notes), 1)
+
+    def test_input_register_at_even_address(self):
+        self.assemble("        NIBHEX  12", "        C=IN")
+        with self.assertRaises(sasm.AsmError):
+            self.assemble("        NIBHEX  1", "        A=IN")
+
+    def test_crc_word(self):
+        """The CRC word makes each half of the ROM read as #FFFF by the
+        self-test, whatever else is there."""
+        asm = self.assemble("        NIBHEX  0123456789", "        ORG     #40020", "        NIBHEX  F00D",
+                            "        ORG     #7FFFC", "        CRC", "        ORG     #C0000", "        NIBHEX  77",
+                            "        ORG     #FFFF0", "        CRC")
+        for half in (0, 0x80000):
+            c = 0
+            for a in sasm.crc_order(half):
+                c = sasm.crc_step(c, asm.mem[a])
+            self.assertEqual(c, 0xFFFF)
+
 
 @unittest.skipUnless((ROOT / "ROM" / "gxrom-r").exists(), "needs ROM/gxrom-r")
 class RomRoundTrip(unittest.TestCase):
@@ -137,6 +170,12 @@ class RomRoundTrip(unittest.TestCase):
         an.analyze()
         an.save()
         self.assertEqual(disasm.Generator().run(check=True), 0)
+
+    def test_crc_words_match_the_rom(self):
+        from rom import Rom
+        mem = bytearray(Rom().n)
+        for a in (0x7FFFC, 0xFFFFC):
+            self.assertEqual(sasm.crc_fix(mem, a), list(mem[a:a + 4]))
 
 
 if __name__ == "__main__":

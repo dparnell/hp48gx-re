@@ -15,7 +15,10 @@ fn main() {
     let (lo, hi, delta) = (hex(&a[2]), hex(&a[3]), a[4].parse::<u32>().expect("delta"));
     let mut orig = Machine::new(&std::fs::read(&a[0]).expect("original ROM"));
     let mut moved = Machine::new(&std::fs::read(&a[1]).expect("relocated ROM"));
-    let unmap = |pc: u32| if pc >= lo + delta && pc < hi + delta { pc - delta } else { pc };
+    // Only addresses the ROM answers moved (upper ROM is mostly covered by RAM).
+    let unmap = |m: &Machine, pc: u32| {
+        if pc >= lo + delta && pc < hi + delta && m.hw.mmu.select(pc).is_none() { pc - delta } else { pc }
+    };
 
     // Key events (time, key, down): F after 3 s, then the typed lines.
     let mut events: Vec<(u64, Key, bool)> = Vec::new();
@@ -52,8 +55,8 @@ fn main() {
             next += 1;
         }
         let (p0, p1) = (orig.cpu.pc, moved.cpu.pc);
-        if p0 != unmap(p1) || orig.cpu.shutdown != moved.cpu.shutdown {
-            println!("diverged after {step} steps: original at #{p0:05X}, relocated at #{p1:05X} (= #{:05X} in the original)", unmap(p1));
+        if p0 != unmap(&moved, p1) || orig.cpu.shutdown != moved.cpu.shutdown {
+            println!("diverged after {step} steps: original at #{p0:05X}, relocated at #{p1:05X} (= #{:05X} in the original)", unmap(&moved, p1));
             for (x, y) in &hist {
                 println!("  #{x:05X}   #{y:05X}");
             }

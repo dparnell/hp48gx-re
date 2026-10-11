@@ -14,7 +14,7 @@
 702C4	RomLibTable	ROM library table: lib# (3), header address (5), access handler (5); ends with lib #FFF
 7073F		Bank-select stubs, reached through computed jumps: D0=(5) #7F040+2n, then GOTO
 7A1FA		Minifont renderer: glyph = #7C102 + 11*index, codes above #9F remapped through the table at #7C793
-7FFA0		Version and copyright strings
+7FFA0	VersionStrings	Version and copyright strings (VERSION reads them through # VersionStrings)
 7A2B3	Font10	10-row font
 7B447	Font8	8-row font
 7C257	Minifont	Minifont glyphs

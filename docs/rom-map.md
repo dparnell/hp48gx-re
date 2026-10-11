@@ -122,6 +122,13 @@ These are the places the reassemblable source (`tools/disasm.py`) must handle so
 - **Inline tables after GOSUB:** e.g. `GOSUB SUB_15C5F` at #15B48 is followed by 15-nibble entries (prolog, two handler addresses) that the callee reads.
 - **RPL pointer runs after code:** e.g. #315EF after CLOSEUART holds a pointer and SEMI, run by the inner loop after the code.
 - **Units table:** the hex string at #75675–#760C9. It mixes names and numbers with pointers to constants such as `%%1` at arbitrary offsets (e.g. #756A7).
+- **Self-test CRC.** The self-test (#804D3) reads each half of the ROM through the CRC circuit, 16 nibbles from the first quarter, then 16 from the second, and so on, and expects #FFFF. The last four nibbles of each half are the correction word (`DEFD` at #7FFFC, `1B0F` at #FFFFC). `sasm.crc_fix` reproduces both.
+- **Upper-ROM windows.** The access handlers (#726A1, #72386, #70B38) uncover #80000–#8FFFF, #90000–#BFFFF or #C0000–#FFFFF. Each window starts with 7 unexplained nibbles (`DDD8000` at #90000, `EB13000` at #C0000; `DDF4000` at #82000 after the self-test). Parts are reached only through the library table and self-relative offsets, so they can move within a window.
+- **Input register.** `A=IN`/`C=IN` must be at an even address. HP's note on `AINRTN` #0115A says so, and the nibble at #01159 is padding for it.
+- **Message numbers.** Error and message numbers are `lib·256 + n` (#B02 "Inconsistent Units", #0BF01). Several coincide with code addresses.
+- **Addresses in binary integers.** `TYPEREAL` … (#03F8B–#03FE5) are integers holding prolog addresses. `VERSION` (#C07E4) fetches the version strings `::` at #7FFA0 through `# 7FFA0`.
+- **Command trailers.** Built-in functions are often followed by slots: derivative, inverse, rules menu, integral. Example: after `SIN`, `D/DSIN` `#574CF` `MANMENUTRG` `nINTGSIN` `00000`, then the byte `CC`. Slots are pointers, `00000` or inline objects. Library 002 ends them with a byte whose meaning is unknown, and library 700 (e.g. `»` #23639 → #14D02) has no byte.
+- **Inline tables after GOSUB, other cases.** `GOSUB SUB_15C5F` at #15B48 is followed by 15-nibble entries (type prolog, handler when ST3 is set, handler when clear), ending at a zero prolog. Table bases loaded with `LC(5)` and indexed: #00487 (3·A, at #00437) and #00AE5 (6·B, at #00CD3). `LC(5) #00FF8; RSTK=C` (#00E3A) pushes a return address.
 - **Font and table bases** are loaded as addresses before the first entry: `LC(5) #7A047` is Font10 − 620 (code 0 of a table that starts at code #1F), and `LC(5) #26DBF` (#26D7D) is indexed by 5·n.
 
 ## RPL object layer

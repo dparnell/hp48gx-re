@@ -1,6 +1,7 @@
 //! Type each argument as a command line, then print the decoded stack.
 //!
 //! cargo run --release -p hp48 --example stack -- "'SIN(T)+i*COS(T)'" "1 2"
+//! HP48_ROM=out/reloc.bin uses another ROM image.
 use hp48::{Key, Machine, CPU_HZ};
 use hp48_rpl::{decode, Memory};
 
@@ -8,7 +9,7 @@ const DSKTOP: u32 = 0x806F8;
 /// Stack levels are 5-nibble pointers above DSKTOP's target; the list
 /// ends with a zero pointer (the stack marker).
 fn main() {
-    let rom = std::fs::read("ROM/gxrom-r").unwrap();
+    let rom = std::fs::read(std::env::var("HP48_ROM").unwrap_or_else(|_| "ROM/gxrom-r".into())).unwrap();
     let mut m = Machine::new(&rom);
     m.run(3 * CPU_HZ);
     m.tap(Key::F);

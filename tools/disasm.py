@@ -48,12 +48,28 @@ FONT_TABLES = [
 ]
 MINI_REMAP = (0x7C793, 0x7C855)    # minifont index for codes #9F-#FF, one byte each
 
+# Upper ROM is covered by RAM; the library access handlers (#726A1, #72386,
+# #70B38) uncover one window at a time to read library parts from it. A part
+# may move within its window but not out of it, so each window starts with
+# an ORG and ends with a FILLTO.
+WINDOWS = (0x80000, 0x90000, 0xC0000)
+
+# The self-test (#804D3) checks that each half of the ROM has CRC #FFFF; the
+# last four nibbles of each half are the correction word (sasm's CRC).
+CRC_WORDS = (0x7FFFC, 0xFFFFC)
+
+# EDB names below this that end in "err" or "msg" are message numbers, not
+# addresses (constuniterr = #B02 "Inconsistent Units").
+MESSAGE_MAX = 0x1000
+
 # Code that must stay where it is, whatever else moves.
 PINNED = {
     0x0000F: "the CPU jumps here on an interrupt",
     0x028FC: "PRLG: every prolog starts with D=D-1 A, HST=0 0, whose nibbles CF820 "
              "read as the address #028FC, so running a prolog as an object comes here",
 }
+
+PROLOG_ADDRS = set(sasm.PROLOG.values())
 
 OPENER = {"DOCOL": "::", "DOLIST": "{", "DOSYMB": "SYMBOL", "DOEXT": "UNIT"}
 
@@ -149,6 +165,8 @@ class Generator:
         self.slots = set(self.s.get("addr_slots", ()))
         self.ref_targets |= self.slots
         self.fallbacks = defaultdict(int)
+        self.messages = {a for a, sy in self.sym.by_addr.items()
+                         if a < MESSAGE_MAX and not sy.flags and re.search(r"(err|msg)$", sy.name or "")}
 
     # ================================================================ names
     @staticmethod
@@ -166,6 +184,8 @@ class Generator:
         """A known name for ROM address a, or None."""
         if a in self.ann_names:
             return self.ann_names[a]
+        if a in self.messages:
+            return None
         s = self.sym.by_addr.get(a)
         if s and s.name and "RAM" not in s.flags and (a >= 0x140 or s.usage == "ASM") and a < LOWER_END:
             n = s.name
@@ -218,6 +238,8 @@ class Generator:
     def resolve(self, r):
         a, k = r.addr, r.kind
         lit = "#%05X" % a
+        if k == "const" and a in self.messages:
+            return self.equate(a) or lit
         if a >= LOWER_END and r.src < LOWER_END and k != "rom":
             return self.equate(a) or lit           # RAM, as seen from lower ROM
         if a < 0x140:
@@ -251,6 +273,11 @@ class Generator:
             q = p
             while q < hi and self.n[q] == 0 and (q == p or q not in self.ends):
                 q += 1
+            if q == hi and indent == 0 and mode is None and q > p and (
+                    q - p >= FILL_TO or hi in WINDOWS or hi in CRC_WORDS):
+                out.append(self.fill_line(p, q, force=True))
+                p = q
+                continue
             if q - p >= 16 or (q == hi and q - p >= 6) or (q < hi and q in self.ends and q > p):
                 out.append(Line(p, q - p, op("BSS", str(q - p)), indent=indent, mode=mode))
                 p = q
@@ -349,8 +376,14 @@ class Generator:
         text = None
         comment = ""
         if k == "DOBINT":
-            text = op("#", "%X" % o.value)
-            comment = "%d" % o.value
+            given, why = self.operands.get(a, (None, ""))
+            if given == "addr" or (given is None and o.value in PROLOG_ADDRS):
+                # an address held in a binary integer (TYPEREAL = DOREAL)
+                text = ["#       ", Ref(o.value, a, "addr")]
+                comment = why or "address"
+            else:
+                text = op("#", "%X" % o.value)
+                comment = "%d" % o.value
         elif k in ("DOREAL", "DOEREL"):
             r = sasm.format_real(body, *((3, 12) if k == "DOREAL" else (5, 15)))
             if r:
@@ -580,6 +613,46 @@ class Generator:
         out += self.data_lines(p, it.start + it.size)
         return out
 
+    def table_lines(self, it):
+        """A table declared in data/tables.txt: one line per field."""
+        t = it.info
+        if t["desc"] and t["desc"] not in self.notes[it.start]:
+            self.notes[it.start].append(t["desc"])
+        out = []
+        prev = None
+        for a, w, f, k in t["words"]:
+            if f == "a":
+                parts = op("CON(5)", Ref(self.rom.addr(a), a, "addr"))
+            elif f == "n":
+                parts = op("CON(%d)" % w, "#%0*X" % (w, self.rom.read(a, w)))
+            else:
+                parts = op("CON(%d)" % w, "0")
+            note = "" if k == prev else "end of table" if f == "end" else "entry %d" % k
+            out.append(Line(a, w, parts, comment=note))
+            prev = k
+        return out
+
+    def trailer_lines(self, it):
+        """The slots after a built-in function (analyze.command_trailers)."""
+        out = []
+        for k, (kind, p, size) in enumerate(it.info["slots"]):
+            note = "slot %d" % k
+            if kind == "ptr":
+                out.append(Line(p, 5, op("CON(5)", Ref(self.rom.addr(p), p, "addr")), comment=note))
+            elif kind == "none":
+                out.append(Line(p, 5, op("CON(5)", "0"), comment=note + ": none"))
+            else:
+                lines = self.obj_lines(self.rd.decode(p), 0)
+                lines[0].comment = (note + ": " + lines[0].comment).rstrip(": ")
+                out += lines
+        if it.info["byte"]:
+            b = it.start + it.size - 2
+            out.append(Line(b, 2, op("CON(2)", "#%02X" % self.rom.read(b, 2)),
+                            comment="end of the slots: property byte (meaning not yet known)"))
+        out[0].pre.append("* slots of %03X %03X (derivative, inverse, ...: used by the symbolic code)"
+                          % (it.info["lib"], it.info["cmd"]))
+        return out
+
     def library_object_lines(self, lib):
         """The DOLIB prolog, length and title before a library part's header."""
         r = self.rom
@@ -634,6 +707,7 @@ class Generator:
             step = 2 * f[1] + (1 if f[4] else 0)
             special.append((f[0], f[0] + step * f[3], "font", f))
         special.append((MINI_REMAP[0], MINI_REMAP[1], "remap", None))
+        special += [(a, a + 4, "crc", None) for a in CRC_WORDS]
         for lib in self.s["libs"]:
             if lib.obj_start is not None:
                 special.append((lib.obj_start, lib.hdr, "libobj", lib))
@@ -678,10 +752,27 @@ class Generator:
                         self._owner.setdefault(s0 + i, "item")
         return self._owner.get(a)
 
+    def fill_line(self, start, end, force=False):
+        """FILLTO for a zero run between entries (or, with force, for the
+        zero run that data_lines found), or None."""
+        if not force and (end - start < FILL_TO and end not in WINDOWS and end not in CRC_WORDS
+                          or any(self.n[start:end]) or any(start < e <= end for e in self.ends)):
+            return None
+        return Line(start, end - start, op("FILLTO", "#%05X" % end),
+                    comment="%d zero nibbles: the next entry stays at #%05X" % (end - start, end), verify=False)
+
     def render_unit(self, start, end, kind, x):
-        if kind == "fill" and start < LOWER_END and end - start >= FILL_TO:
-            return [Line(start, end - start, op("FILLTO", "#%05X" % end),
-                         comment="%d zero nibbles: the next entry stays at #%05X" % (end - start, end), verify=False)]
+        if kind in ("fill", "data"):
+            ln = self.fill_line(start, end)
+            if ln:
+                return [ln]
+        if kind == "table":
+            return self.table_lines(x)
+        if kind == "trailer":
+            return self.trailer_lines(x)
+        if kind == "crc":
+            return [Line(start, 4, ["CRC"], comment="self-test CRC correction (computed by the assembler)",
+                         verify=False)]
         if kind == "cmdhdr":
             lib, cmd, a = x
             ln = [Line(start, 1, op("CON(1)", "%d" % self.n[start]), comment="command header: flags (meaning not yet known)"),
@@ -748,7 +839,8 @@ class Generator:
                     p = end
                 continue
             if start > p:
-                self.blocks.append((p, start, self.data_lines(p, start)))
+                fill = self.fill_line(p, start)
+                self.blocks.append((p, start, [fill] if fill else self.data_lines(p, start)))
             lines = self.render_unit(start, end, kind, x)
             if lines is None or sum(ln.size for ln in lines) != end - start or lines[0].pc != start:
                 self.fallbacks["unit " + kind] += 1
@@ -770,6 +862,8 @@ class Generator:
         for p in ln.parts:
             parts.append(self.resolve(p) if isinstance(p, Ref) else p)
         t = "".join(parts)
+        if ln.parts[0] == "#       " and isinstance(ln.parts[-1], Ref) and sasm.HEX.fullmatch(t[8:]):
+            t += "+0"           # a name that reads as hex: keep it a name
         if ln.mode == "RPL" and len(ln.parts) == 1 and isinstance(ln.parts[0], Ref):
             if not self.rpl_safe(t):
                 t = "PTR     " + t
@@ -869,7 +963,13 @@ class Generator:
             if lib.hdr >= 0x82000:
                 st = lib.obj_start if lib.obj_start is not None else lib.hdr
                 regs.append((st, "lib%03X" % lib.num, "Library part %03X" % lib.num))
-        return sorted(regs)
+        regs.sort()
+        # The first file of a window starts at the window (with its ORG)
+        for w in WINDOWS:
+            i = bisect.bisect_left(regs, (w,))
+            if i < len(regs) and regs[i][0] - w < 16:
+                regs[i] = (w,) + regs[i][1:]
+        return regs
 
     def files(self):
         """Assign blocks to files: [(path, description, blocks)]."""
@@ -888,7 +988,7 @@ class Generator:
             chunk = []
             first = True
             for b in self.blocks[i:j]:
-                if chunk and b[0] - chunk[0][0] >= SPLIT:
+                if chunk and (b[0] - chunk[0][0] >= SPLIT or b[0] in WINDOWS):
                     out.append((name, desc, chunk, first))
                     chunk = []
                     first = False
@@ -898,10 +998,9 @@ class Generator:
         res = []
         for name, desc, chunk, first in out:
             st = chunk[0][0]
-            # Fixed addresses: the start of the ROM, and each upper-ROM part
-            # (reached through the library table at fixed places). The rest
-            # of lower ROM flows on from the previous file.
-            pinned = st == 0 or (st >= LOWER_END and first)
+            # Fixed addresses: the start of the ROM and of each upper-ROM
+            # window. Everything else flows on from the previous file.
+            pinned = st == 0 or st in WINDOWS
             res.append(("%s/%05X-%s.s" % ("lower" if st < LOWER_END else "upper", st, name), desc, chunk, pinned))
         return res
 

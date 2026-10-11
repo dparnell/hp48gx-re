@@ -26,10 +26,14 @@ Source format
     NIBASC "text"     bytes, low nibble first (escape: \\xx hex, \\" and \\\\)
     $BODY "text"      a string body without prolog: length (5), then bytes
     BSS n             n zero nibbles
-    FILLTO expr       zero nibbles up to address expr (free space that
-                      absorbs code growing or shrinking before it)
+    FILLTO expr       zero nibbles up to address expr: free space that
+                      absorbs code growing or shrinking before it. If the
+                      code has already passed expr, nothing is written and
+                      what follows moves up (reported as a note)
     PIN expr          assert that the next line is at address expr (code
                       that must not move)
+    CRC               4 nibbles that make the self-test CRC of this half of
+                      the ROM come out as #FFFF (see crc_fix)
     LENGTH ... ENDLENGTH   5 nibbles holding the distance from LENGTH to
                       ENDLENGTH: the length field of an object
     GLYPHS "png" rows first count [widths]   font glyphs from a sheet (16 per
@@ -38,7 +42,8 @@ Source format
                       starts with its width nibble (minifont)
 * Saturn mode: one instruction per line, e.g. `A=DAT1 A`, `LC(5) DOBINT`,
   `GOSBVL POP#`, `?C=0 A` then `GOYES label` / `RTNYES` on the next line.
-* RPL mode: `::` `;` `{` `}` `SYMBOL` `UNIT`, `# hex`, `% real`, `%% real`,
+* RPL mode: `::` `;` `{` `}` `SYMBOL` `UNIT`, `# hex` (or `# expr` when the
+  value is an address, e.g. `# DOREAL`), `% real`, `%% real`,
   `C% re im`, `C%% re im`, `CHR "c"` or `CHR #xx`, `$ "text"`, `HXS hex`,
   `ID name`, `LAM name`, `TAG "text"`, `ROMPTR lib cmd`, `ACPTR expr expr`,
   `GROB "png"`, `CODE` ... `ENDCODE` (Saturn lines in between). Any other
@@ -69,7 +74,7 @@ RPL_WORDS = set(OPENERS) | {";", "}", "#", "%", "%%", "C%", "C%%", "CHR", "$", "
                             "ID", "LAM", "TAG", "ROMPTR", "ACPTR", "GROB", "CODE",
                             "ENDCODE", "PTR"}
 DIRECTIVES = {"ORG", "INCLUDE", "ASSEMBLE", "RPL", "NIBHEX", "NIBASC", "BSS", "EQU",
-              "GLYPHS", "$BODY", "LENGTH", "ENDLENGTH", "FILLTO", "PIN"}
+              "GLYPHS", "$BODY", "LENGTH", "ENDLENGTH", "FILLTO", "PIN", "CRC"}
 KEYWORDS = RPL_WORDS | DIRECTIVES
 
 
@@ -348,6 +353,48 @@ def sheet_glyphs(img, rows, count):
     return out
 
 
+# ---------------------------------------------------------------- self-test CRC
+def crc_order(base):
+    """Addresses in the order the self-test (#804D3) reads one half of the
+    ROM through the CRC circuit: 16 nibbles from the first quarter, then 16
+    from the second, and so on."""
+    for k in range(0, 0x40000, 16):
+        yield from range(base + k, base + k + 16)
+        yield from range(base + 0x40000 + k, base + 0x40000 + k + 16)
+
+
+def crc_step(c, n):
+    return (c >> 4) ^ (((c ^ n) & 0xF) * 0x1081)
+
+
+def crc_unstep(c, n):
+    """The CRC before reading nibble n, given the CRC after."""
+    t = c >> 12
+    return ((c ^ (t * 0x1081)) << 4) & 0xFFF0 | (t ^ n)
+
+
+def crc_fix(mem, at):
+    """Four nibbles for addresses at..at+3 such that the half of the ROM
+    holding them has CRC #FFFF, as the self-test requires."""
+    order = list(crc_order(at & 0x80000))
+    i = order.index(at)
+    assert order[i:i + 4] == list(range(at, at + 4)), "CRC word must not cross a 16-nibble boundary"
+    before = 0
+    for a in order[:i]:
+        before = crc_step(before, mem[a])
+    after = 0xFFFF
+    for a in reversed(order[i + 4:]):
+        after = crc_unstep(after, mem[a])
+    for v in range(0x10000):
+        nibs = [(v >> (4 * k)) & 0xF for k in range(4)]
+        c = before
+        for x in nibs:
+            c = crc_step(c, x)
+        if c == after:
+            return nibs
+    raise AsmError("no CRC word fits")
+
+
 # ---------------------------------------------------------------- lexing
 def split_line(line):
     """Tokens of a line without its comment; quoted strings stay whole."""
@@ -380,6 +427,7 @@ def unquote(tok):
 
 
 NUM = re.compile(r"#[0-9A-Fa-f]+|\d+")
+HEX = re.compile(r"[0-9A-Fa-f]+")
 
 
 class Assembler:
@@ -468,11 +516,23 @@ class Assembler:
     def saturn(self, op, args, pc):
         if op in BRANCHES:
             code, n, base = BRANCHES[op]
-            return code + rel(self.value(args[0], pc), pc + base, n) if self.pass_ == 2 else code + [0] * n
+            if self.pass_ == 1:
+                return code + [0] * n
+            try:
+                return code + rel(self.value(args[0], pc), pc + base, n)
+            except AsmError as e:
+                longer = {"GOTO": "GOLONG", "GOSUB": "GOSUBL", "GOLONG": "GOVLNG", "GOSUBL": "GOSBVL"}.get(op)
+                raise AsmError("%s %s: %s%s" % (op, args[0], e, "; use %s" % longer if longer else
+                                                "; reach it through a GOTO nearby")) from None
         if op in ABSOLUTE:
             return ABSOLUTE[op] + digits(self.value(args[0], pc), 5)
         if op == "GOYES":
-            return rel(self.value(args[0], pc), pc, 2) if self.pass_ == 2 else [0, 0]
+            if self.pass_ == 1:
+                return [0, 0]
+            try:
+                return rel(self.value(args[0], pc), pc, 2)
+            except AsmError as e:
+                raise AsmError("GOYES %s: %s; reach it through a GOTO nearby" % (args[0], e)) from None
         if op == "RTNYES":
             return [0, 0]
         if op in POINTER_LOADS:
@@ -503,7 +563,9 @@ class Assembler:
         if op in (";", "}"):
             return digits(self.symbols.get("SEMI", SEMI), 5)
         if op == "#":
-            return p("DOBINT") + digits(int(args[0], 16), 5)
+            # `# 3F` is hex; anything else is an expression (`# DOREAL`)
+            v = int(args[0], 16) if HEX.fullmatch(args[0]) else self.value(args[0], pc)
+            return p("DOBINT") + digits(v, 5)
         if op in ("%", "%%"):
             return p("DOREAL" if op == "%" else "DOEREL") + encode_real(args[0], *((3, 12) if op == "%" else (5, 15)))
         if op in ("C%", "C%%"):
@@ -549,11 +611,15 @@ class Assembler:
         for self.pass_ in (1, 2):
             self.pc = 0
             self.lengths = []
+            self.crcs = []
+            self.notes = []
             self.mem[:] = bytes(ROM_SIZE)
             self.written[:] = bytes(ROM_SIZE)
             self.file(Path(path))
             if self.lengths:
                 raise AsmError("LENGTH at #%05X has no ENDLENGTH" % self.lengths[-1])
+        for a in self.crcs:
+            self.put(a, crc_fix(self.mem, a), overwrite=True)
         return self
 
     def file(self, path):
@@ -594,6 +660,10 @@ class Assembler:
                 raise AsmError("ORG #%05X moves back from #%05X" % (a, self.pc))
             self.pc = a
             return
+        if op in ("A=IN", "C=IN") and self.pc & 1:
+            # The input register latches wrongly when read from an odd
+            # address (HP's note on AINRTN/CINRTN).
+            raise AsmError("%s at odd address #%05X: it must be at an even address" % (op, self.pc))
         if op in ("ASSEMBLE", "RPL"):
             state["mode"] = "ASM" if op == "ASSEMBLE" else "RPL"
             return
@@ -615,8 +685,15 @@ class Assembler:
         if op == "FILLTO":
             a = self.value(toks[1], self.pc)
             if a < self.pc:
-                raise AsmError("FILLTO #%05X: already at #%05X (%d nibbles too many)" % (a, self.pc, self.pc - a))
+                if self.pass_ == 2:
+                    self.notes.append("FILLTO #%05X: code reaches #%05X, so what follows moves up by %d nibbles"
+                                      % (a, self.pc, self.pc - a))
+                return
             self.put(self.pc, [0] * (a - self.pc))
+            return
+        if op == "CRC":
+            self.crcs.append(self.pc)
+            self.put(self.pc, [0] * 4)
             return
         if op == "ENDCODE":
             start = state["code"].pop()
@@ -657,6 +734,8 @@ def main(argv):
     img = asm.image()
     if a.out:
         Path(a.out).write_bytes(img)
+    for n in asm.notes:
+        print("note:", n)
     print("assembled %d nibbles, %d symbols, %d nibbles unwritten" % (ROM_SIZE - gaps, len(asm.symbols), gaps))
     if a.check:
         ref = Path(a.check).read_bytes()

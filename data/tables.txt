@@ -1,0 +1,9 @@
+# Tables the ROM code walks, declared by hand after reading that code, for
+# tools/analyze.py and tools/disasm.py. Each address field is written as a
+# label, so the table stays right when code moves.
+# ADDR<TAB>FIELDS<TAB>COUNT<TAB>DESCRIPTION
+# FIELDS: one character per field: `a` is a 5-nibble address, a digit 1-9 is a
+# number of that many nibbles.
+# COUNT: the number of entries, or 0 for "until an entry whose first field is
+# zero" (that zero word belongs to the table).
+15B4C	aaa	0	Decompiler handlers by object type (walked by SUB_15C5F): prolog, handler when ST3 is set, handler when it is clear

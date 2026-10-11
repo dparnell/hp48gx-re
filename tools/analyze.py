@@ -13,6 +13,7 @@ are not followed.
 
 Usage: python analyze.py            writes out/analysis.pickle and a summary
 """
+import bisect
 import pickle
 import sys
 from collections import defaultdict
@@ -33,6 +34,37 @@ DOACPTR = 0x02BAA
 # RAM unconfigured (it calls lower ROM directly and shows "Version HP48-R").
 UNCOVERED_CODE = (0x80000, 0x82007)
 DOHSTR = 0x02A4E
+
+
+def read_tables(rom=None):
+    """data/tables.txt as dicts: start, size, desc, and words: (address,
+    width, field, entry) for every field of every entry, where field is
+    "a" (an address), "n" (a number) or "end" (the zero terminator)."""
+    rom = rom or Rom()
+    out = []
+    path = DATA / "tables.txt"
+    if not path.exists():
+        return out
+    for line in path.read_text(encoding="utf-8").splitlines():
+        if line.startswith("#") or not line.strip():
+            continue
+        a, fields, count, desc = (line.split("\t") + ["", "", ""])[:4]
+        fields = [("a", 5) if f == "a" else ("n", int(f)) for f in fields]
+        a = p = int(a, 16)
+        count = int(count)
+        words = []
+        k = 0
+        while count == 0 or k < count:
+            if count == 0 and rom.read(p, fields[0][1]) == 0:
+                words.append((p, fields[0][1], "end", k))
+                p += fields[0][1]
+                break
+            for f, w in fields:
+                words.append((p, w, f, k))
+                p += w
+            k += 1
+        out.append({"start": a, "size": p - a, "desc": desc, "words": words})
+    return out
 
 
 @dataclass
@@ -407,6 +439,7 @@ class Analyzer:
         self.q("code", 0x00000)      # reset
         self.q("code", 0x0000F)      # interrupt vector
         self.q("code", UNCOVERED_CODE[0])
+        self.q("ptr", 0x7FFA0)       # version strings (VERSION has # 7FFA0)
         for p in PROLOGS:
             self.q("code", p)
         for a, s in self.sym.by_addr.items():
@@ -484,7 +517,16 @@ class Analyzer:
                 self.q("ptr", self.rom.addr(a), a, "rpl")
         self.run()
 
+    def declared_tables(self):
+        """Tables listed in data/tables.txt, claimed before anything else."""
+        for t in read_tables():
+            self.mark(Item(t["start"], t["size"], "table", t))
+            for w, _, fld, _ in t["words"]:
+                if fld == "a":
+                    self.q("ptr", self.rom.addr(w), w, "table")
+
     def analyze(self):
+        self.declared_tables()
         self.mark_prolog_descriptors()
         self.seed_executed()
         self.read_library_table()
@@ -497,7 +539,80 @@ class Analyzer:
         self.run()
         self.follow_executed()
         self.seed_slots()
+        self.command_trailers()
         self.gap_pass()
+        self.command_trailers()
+
+    # ------------------------------------------------------------ trailers
+    def command_trailers(self):
+        """Many built-in functions are followed by slots that the symbolic
+        code uses (x+ has D/D+, the derivative, and more): each slot is a
+        pointer, 00000 (none) or an inline object, and in library 002 a
+        byte ends the trailer (CC after SIN). Only commands with a 7-nibble
+        header are tried, and a parse counts only if it ends exactly where
+        the next command header starts."""
+        heads = []
+        for lib in self.libs:
+            for cmd, a in enumerate(lib.commands):
+                h = a - 7
+                if self.rom.read(h + 1, 3) == lib.num and self.rom.read(h + 4, 3) == cmd:
+                    heads.append((h, a, lib.num, cmd))
+        heads.sort()
+        starts = [h for h, _, _, _ in heads]
+        for h, a, lib, cmd in heads:
+            if not self.rd.is_object(a):
+                continue
+            try:
+                end = a + self.rd.decode(a).size
+            except DecodeError:
+                continue
+            if end in self.items and self.items[end].kind == "trailer":
+                continue
+            i = bisect.bisect_right(starts, end - 1)
+            if i == len(starts) or not 2 <= starts[i] - end <= 600:
+                continue
+            nxt = starts[i]
+            slots = self.parse_trailer(end, nxt - 2)
+            byte = slots is not None
+            if not byte:
+                slots = self.parse_trailer(end, nxt)
+            if not byte and (slots is None or all(k == "obj" for k, _, _ in slots)):
+                continue    # nothing but objects: ordinary objects, not slots
+            inside = {self.owner[x] for x in range(end, nxt) if x in self.owner}
+            if any(self.items[o].kind not in ("addrslot", "rplptr", "data", "fill", "obj", "codeptr")
+                   or o < end or o + self.items[o].size > nxt for o in inside):
+                continue
+            for o in inside:
+                del self.items[o]
+            for x in range(end, nxt):
+                self.owner.pop(x, None)
+            self.mark(Item(end, nxt - end, "trailer", {"slots": slots, "lib": lib, "cmd": cmd, "byte": byte}))
+            for kind, p, _ in slots:
+                if kind == "ptr":
+                    self.q("ptr", self.rom.addr(p), p, "trailer")
+        self.run()
+
+    def parse_trailer(self, p, stop):
+        """Slots from p up to stop: [(kind, address, size)], or None."""
+        slots = []
+        while p < stop:
+            w = self.rom.addr(p)
+            if w == 0:
+                slots.append(("none", p, 5))
+                p += 5
+            elif self.rd.is_object(p):
+                try:
+                    size = self.rd.decode(p).size
+                except DecodeError:
+                    return None
+                slots.append(("obj", p, size))
+                p += size
+            elif 0x140 <= w < LOWER_END and (w in self.items or w in self.insns or w in self.sym.by_addr):
+                slots.append(("ptr", p, 5))
+                p += 5
+            else:
+                return None
+        return slots if p == stop else None
 
     # ------------------------------------------------------------ gaps
     def gaps(self, lo=0, hi=LOWER_END, minsize=4):

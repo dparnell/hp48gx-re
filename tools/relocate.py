@@ -1,15 +1,17 @@
 """Relocation test for the source tree: does the ROM still work when code moves?
 
 Copies out/src to out/reloc and inserts zero nibbles at the start of the chosen
-lower-ROM files. FILLTO lines between them become BSS of their original size,
-so everything after an insertion moves, up to the free space at #7E001.
+files. FILLTO lines become BSS of their original size, so everything after an
+insertion moves, up to the free space at the end of its half of the ROM (or,
+in upper ROM, of its window; see disasm.WINDOWS).
 Then it assembles out/reloc.bin. Boot it with the emulator, e.g.
 
     cargo run --release -p hp48-cli -- --rom out/reloc.bin --seconds 3 --keys "F wait:3 1 Enter 2 Plus" --wait 1
 
 An address still written as a number shows up as a crash or a glitch.
 
-Usage: python relocate.py [--pad N] [FILE-PREFIX ...]   (default: pad 16 in 04003-*.s)
+Usage: python relocate.py [--pad N] [FILE-PREFIX ...]   (default: pad 16 in 04003-*.s;
+       a prefix such as C0000 pads inside an upper-ROM library part)
        --compare   also list the nibbles that differ from the ROM outside the
                    moved range (pointers that moved with their targets are
                    expected; anything else is suspicious)
@@ -20,11 +22,14 @@ import sys
 from pathlib import Path
 
 import sasm
+from disasm import WINDOWS, CRC_WORDS
 
 ROOT = Path(__file__).resolve().parent.parent
 SRC = ROOT / "out" / "src"
 DST = ROOT / "out" / "reloc"
-KEEP_FILLTO = 0x7FFA0      # the fill before the version object absorbs the shift
+# Fills that absorb the shift: before the version object, the CRC words and
+# the upper-ROM windows.
+KEEP_FILLTO = {0x7FFA0, *WINDOWS, *CRC_WORDS}
 
 
 ENDS_FLOW = {"RTN", "RTNSXM", "RTNCC", "RTNSC", "RTI", "GOTO", "GOLONG", "GOVLNG",
@@ -60,12 +65,12 @@ def main(argv):
         shutil.rmtree(DST)
     shutil.copytree(SRC, DST)
     done = []
-    for f in sorted((DST / "lower").glob("*.s")):
+    for f in sorted(DST.glob("[lu]*/*.s")):
         text = f.read_text(encoding="utf-8").split("\n")
         out = []
         for line in text:
             m = re.match(r"(\s+)FILLTO\s+#([0-9A-F]+)\s+\*\s+[0-9A-F]{5}\s+(\d+) zero", line)
-            if m and int(m.group(2), 16) != KEEP_FILLTO:
+            if m and int(m.group(2), 16) not in KEEP_FILLTO:
                 line = "%sBSS     %s" % (m.group(1), m.group(3))
             out.append(line)
         if any(f.name.startswith(p) for p in prefixes):
