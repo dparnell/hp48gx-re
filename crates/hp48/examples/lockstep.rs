@@ -4,11 +4,15 @@
 //! (see tools/relocate.py). After boot both machines get the same key presses:
 //! F (do not recover memory), then each command line given, with ENTER.
 //! A line `!On+E` instead holds the first key while tapping the second (ON-E
-//! starts the continuous self-test, which reads the whole ROM).
+//! starts the continuous self-test, which reads the whole ROM). `--tour`
+//! runs the tour of examples/execmap.rs (common/tour.rs) instead of lines.
 //!
 //! cargo run --release -p hp48 --example lockstep -- ROM/gxrom-r out/reloc.bin 041D9 7E001 16 ["1 2 +" ...]
 
 use hp48::{Key, Machine, CPU_HZ};
+
+#[path = "common/tour.rs"]
+mod tour;
 use std::collections::VecDeque;
 
 fn main() {
@@ -35,7 +39,9 @@ fn main() {
     let named = |n: &str| {
         Key::ALL.into_iter().find(|k| format!("{k:?}").eq_ignore_ascii_case(n)).unwrap_or_else(|| panic!("no key {n}"))
     };
-    for line in &a[5..] {
+    let tour = a.get(5).is_some_and(|x| x == "--tour");
+    let lines: Vec<&str> = if tour { tour::TOUR.to_vec() } else { a[5..].iter().map(|x| x.as_str()).collect() };
+    for line in lines {
         if let Some((hold, tap)) = line.strip_prefix('!').and_then(|c| c.split_once('+')) {
             let (hold, tap) = (named(hold), named(tap));
             events.push((t, hold, true));
@@ -45,13 +51,19 @@ fn main() {
             t += 20 * CPU_HZ;
             continue;
         }
-        for k in hp48::typing::keystrokes(line).unwrap_or_else(|c| panic!("cannot type {c:?}")) {
+        for k in hp48::typing::keystrokes(line).unwrap_or_else(|c| panic!("cannot type {c:?} in {line}")) {
             press(&mut events, &mut t, k);
         }
         press(&mut events, &mut t, Key::Enter);
         t += 3 * CPU_HZ;
         press(&mut events, &mut t, Key::On);
         t += CPU_HZ / 2;
+    }
+    if tour {
+        for &k in tour::KEYS {
+            press(&mut events, &mut t, k);
+            t += CPU_HZ;
+        }
     }
     let end = t + CPU_HZ;
 

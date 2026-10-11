@@ -34,6 +34,11 @@ DOACPTR = 0x02BAA
 # RAM unconfigured (it calls lower ROM directly and shows "Version HP48-R").
 UNCOVERED_CODE = (0x80000, 0x82007)
 DOHSTR = 0x02A4E
+DOROMP = 0x02E92
+RPL_GOTOS = {0x619CB, 0x619E0, 0x619F3}     # GOTO ?GOTO NOT?GOTO: an address follows
+# Entries of the algebra's rule interpreter: the call is followed by a rule
+# stream, not by code (see Analyzer.rule_streams).
+RULE_INTERPRETERS = {0x5F6F2, 0x5F6F9}
 
 
 def read_tables(rom=None):
@@ -252,7 +257,7 @@ class Analyzer:
         """Callees that pop their return address to read inline data."""
         if t is None or t >= LOWER_END:
             return False
-        return self.rom.n[t] == 0 and self.rom.n[t + 1] == 7  # C=RSTK
+        return t in RULE_INTERPRETERS or (self.rom.n[t] == 0 and self.rom.n[t + 1] == 7)  # C=RSTK
 
     def const_ref(self, src, v):
         if v >= LOWER_END:
@@ -448,6 +453,8 @@ class Analyzer:
                 continue
             if "RAM" in s.flags or s.usage in ("SYS", "IOR"):
                 continue
+            if a < 0x1000 and not s.flags and s.name and s.name.endswith(("err", "msg")):
+                continue    # a message number (posunferr = #301), not an address
             if self.rd.is_object(a) or self.rd.is_pco(a):
                 self.q("ptr", a)
             elif "ML" in s.flags or s.usage == "ASM":
@@ -489,6 +496,9 @@ class Analyzer:
         for a in self.executed[""]:
             covered.update(range(a, a + self.cd.decode(a).size))
         for a in self.executed["A"]:
+            # A prolog's first word reads as #028FC (PRLG): code, not a slot
+            if a in PROLOGS:
+                continue
             if self.free(a, 5) and not covered.intersection(range(a, a + 5)):
                 self.mark(Item(a, 5, "addrslot"))
         # The executed instructions themselves, without following them yet:
@@ -516,6 +526,18 @@ class Analyzer:
             if self.free(a, 5):
                 self.mark(Item(a, 5, "rplptr"))
                 self.q("ptr", self.rom.addr(a), a, "rpl")
+        self.goto_targets()
+
+    def goto_targets(self):
+        """GOTO, ?GOTO and NOT?GOTO in a run of pointers take the next word
+        as the address of the RPL to continue with (#1803D GOTO #17FBB,
+        then SEMI)."""
+        for a, it in list(self.items.items()):
+            if it.kind in ("rplptr", "addrslot") and self.rom.addr(a) in RPL_GOTOS and self.free(a + 5, 5):
+                self.mark(Item(a + 5, 5, "addrslot", {"static": True}))
+                self.xrefs[self.rom.addr(a + 5)].add((a + 5, "rpl goto"))
+                if self.rom.addr(a + 10) == SEMI and self.free(a + 10, 5):
+                    self.mark(Item(a + 10, 5, "rplptr"))
         self.run()
 
     def declared_tables(self):
@@ -541,8 +563,66 @@ class Analyzer:
         self.follow_executed()
         self.seed_slots()
         self.command_trailers()
+        self.rule_streams()
         self.gap_pass()
         self.command_trailers()
+
+    # ------------------------------------------------------------ rule streams
+    def rule_streams(self):
+        """The algebra's rewrite rules (SUB_5F6F2) follow the call as data:
+        pairs of a pattern word and the object to run when it matches (a
+        pointer or an inline ROMPTR), ended by a word whose first nibble is
+        F (only that nibble belongs to the stream) or by a zero word and its
+        object. Each nibble of a pattern word is a test: k > 0 compares the
+        expression with entry k-1 of an operator table, 0 descends into an
+        argument."""
+        for call in sorted(self.inline_callers):
+            ins = self.insns.get(call)
+            if ins is None or ins.target not in RULE_INTERPRETERS:
+                continue
+            start = call + ins.size
+            parts = self.parse_rules(start)
+            if parts is None:
+                self.unresolved[start].add("rule stream does not parse")
+                continue
+            end = parts[-1][1] + parts[-1][2]
+            inside = {self.owner[x] for x in range(start, end) if x in self.owner}
+            if any(o < start or o + self.items[o].size > end for o in inside):
+                self.unresolved[start].add("rule stream overlaps other items")
+                continue
+            for o in inside:
+                del self.items[o]
+                self.insns.pop(o, None)
+            for x in range(start, end):
+                self.owner.pop(x, None)
+            self.mark(Item(start, end - start, "rules", {"parts": parts}))
+            for kind, q, _ in parts:
+                if kind == "ptr":
+                    self.q("ptr", self.rom.addr(q), q, "rule")
+        self.run()
+
+    def parse_rules(self, p):
+        """[(kind, address, size)] of a rule stream at p, or None."""
+        parts = []
+        for _ in range(64):
+            if self.rom.n[p] == 0xF:
+                parts.append(("end", p, 1))
+                return parts
+            w = self.rom.addr(p)
+            parts.append(("pattern", p, 5))
+            p += 5
+            v = self.rom.addr(p)
+            if v == DOROMP:
+                parts.append(("romptr", p, 11))
+                p += 11
+            elif 0x140 <= v < LOWER_END and (v in self.items or v in self.insns or v in self.sym.by_addr):
+                parts.append(("ptr", p, 5))
+                p += 5
+            else:
+                return None
+            if w == 0:
+                return parts
+        return None
 
     # ------------------------------------------------------------ trailers
     def command_trailers(self):
@@ -638,17 +718,18 @@ class Analyzer:
             p = work.pop()
             first = True
             while p not in seen:
-                if p >= LOWER_END or n > limit:
+                if n > limit:
+                    return True     # that many clean instructions: code
+                if p >= LOWER_END:
                     return False
+                if p in self.insns:
+                    break           # known code from here on
                 ins = self.cd.decode(p)
                 if ins.flow == "stop":
                     return False
                 for i in range(ins.size):
-                    o = self.owned_by(p + i)
-                    if o is not None and o.kind != "code":
-                        return False
-                    if o is not None and (p + i) not in self.insns:
-                        return False   # would land inside an existing instruction
+                    if self.owned_by(p + i) is not None:
+                        return False   # runs into an object, data or another instruction
                 seen.add(p)
                 n += 1
                 first = False
@@ -683,6 +764,7 @@ class Analyzer:
                 else:
                     p += 1
         self.run()
+        self.goto_targets()
 
     def gap_pass(self):
         """Classify unreferenced gaps: objects with a valid prolog first,

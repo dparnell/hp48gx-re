@@ -117,6 +117,10 @@ pub fn keystrokes(text: &str) -> Result<Vec<Key>, char> {
         if open.last() == Some(&c) {
             open.pop();
             keys.push(Key::Right);
+            if c == '»' {
+                // the editor puts the closing » on a line of its own
+                keys.push(Key::Right);
+            }
         } else if let Some((close, seq)) = pair(c) {
             open.push(close);
             keys.extend_from_slice(seq);
@@ -147,5 +151,7 @@ mod tests {
         );
         assert_eq!(keystrokes("a"), Ok(vec![Key::Alpha, Key::LeftShift, Key::A]));
         assert_eq!(keystrokes("@"), Err('@'));
+        let k = keystrokes("« 2 »").unwrap();
+        assert_eq!(&k[k.len() - 2..], [Key::Right, Key::Right]);
     }
 }

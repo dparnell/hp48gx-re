@@ -74,6 +74,7 @@ PINNED = {
 }
 
 PROLOG_ADDRS = set(sasm.PROLOG.values())
+UNITS_TABLE = 0x75675      # hex string of unit names and definitions
 
 OPENER = {"DOCOL": "::", "DOLIST": "{", "DOSYMB": "SYMBOL", "DOEXT": "UNIT"}
 
@@ -405,6 +406,8 @@ class Generator:
         elif k == "DOCSTR" and len(body) % 2 == 1:
             nb = [body[i] | body[i + 1] << 4 for i in range(5, len(body), 2)]
             text = op("$", sasm.escape(nb))
+        elif k == "DOHSTR" and a == UNITS_TABLE:
+            return self.units_table_lines(o, depth)
         elif k == "DOHSTR" and len(body) <= 69 and not any(a + 10 <= t < a + o.size for t in self.slots):
             text = op("HXS", hexs(body[5:]) or "")
             if len(body) == 5:
@@ -433,6 +436,65 @@ class Generator:
         if text is not None:
             return [Line(a, o.size, text, comment=comment, mode="RPL", indent=depth)]
         return self.raw_object(o, depth)
+
+    def units_table_lines(self, o, depth):
+        """The units table (a hex string): for each name length 1-8 the
+        offset to its first entry, then the entries. An entry is a link
+        byte (offset from itself to the next name of the same length, 0 at
+        the end), the name, and two fields read by #0C3A3: a nibble n, then
+        a pointer if n is 0, else n digits (the second field has an exponent
+        byte before its digits)."""
+        r = self.rom
+        a = o.addr
+        out = [Line(a, 5, op("CON(5)", Ref(r.addr(a), a, "rom")), comment="units table", indent=depth),
+               self.length(a + 5, depth)]
+        base = a + 10
+        names = {}            # name address -> (length, link address)
+        heads = []
+        for n in range(1, 9):
+            slot = base + 4 * (n - 1)
+            off = r.read(slot, 4)
+            heads.append((slot, slot + off if off else None, n))
+            p = slot + off if off else None
+            while p is not None:
+                names[p] = (n, p - 2)
+                step = r.byte(p - 2)
+                p = p - 2 + step if step else None
+        for p, (n, _) in names.items():
+            nb = [r.byte(p + 2 * i) for i in range(n)]
+            t = "".join(sasm.hp_char(b) or "\0" for b in nb)
+            self.hints[p] = "U.%s" % t if "\0" not in t else "U_%05X" % p
+        for slot, first, n in heads:
+            parts = op("CON(4)", "0") if first is None else ["CON(4)  ", Ref(first, slot, "rom"), "-(*)"]
+            out.append(Line(slot, 4, parts, comment="names of %d character%s" % (n, "s" * (n > 1)), indent=depth))
+        for p in sorted(names):
+            n, link = names[p]
+            step = r.byte(link)
+            parts = ["CON(2)  ", Ref(link + step, link, "rom"), "-(*)"] if step else op("CON(2)", "0")
+            out.append(Line(link, 2, parts, comment="next name of this length" if step else "last of this length",
+                            indent=depth))
+            nb = [r.byte(p + 2 * i) for i in range(n)]
+            out.append(Line(p, 2 * n, op("NIBASC", sasm.escape(nb)), indent=depth))
+            q = p + 2 * n
+            for second in (False, True):
+                k = self.n[q]
+                out.append(Line(q, 1, op("CON(1)", "%d" % k),
+                                comment=("pointer follows" if k == 0 else "%d digits" % k), indent=depth))
+                q += 1
+                if k == 0:
+                    out.append(Line(q, 5, op("CON(5)", Ref(r.addr(q), q, "rom")), indent=depth))
+                    q += 5
+                    continue
+                if second:
+                    e = int("%02X" % r.byte(q)) if r.byte(q) < 0xA0 and r.byte(q) & 15 < 10 else None
+                    note = "exponent" if e is None else "exponent %d" % (e - 100 if e >= 50 else e)
+                    out.append(Line(q, 2, op("CON(2)", "#%02X" % r.byte(q)), comment=note, indent=depth))
+                    q += 2
+                out.append(Line(q, k, op("NIBHEX", hexs(self.n[q:q + k])), indent=depth))
+                q += k
+        if sum(ln.size for ln in out) != o.size:
+            return self.raw_object(o, depth)
+        return out
 
     def ptr_parts(self, v, src):
         r = Ref(v, src)
@@ -638,6 +700,27 @@ class Generator:
             prev = k
         return out
 
+    def rule_lines(self, it):
+        """A rule stream after a call to the algebra's rule interpreter
+        (analyze.rule_streams)."""
+        out = []
+        for kind, p, size in it.info["parts"]:
+            if kind == "pattern":
+                w = self.rom.read(p, 5)
+                tests = " ".join("arg" if d == "0" else "op%d" % (int(d, 16) - 1)
+                                 for d in ("%05X" % w)[::-1].rstrip("0") or "0") if w else "always"
+                out.append(Line(p, 5, op("NIBHEX", hexs(self.n[p:p + 5])), comment="pattern: " + tests))
+            elif kind == "ptr":
+                out.append(Line(p, 5, op("CON(5)", Ref(self.rom.addr(p), p, "addr")), comment="run if it matches"))
+            elif kind == "romptr":
+                lines = self.obj_lines(self.rd.decode(p), 0)
+                lines[0].comment = "run if it matches"
+                out += lines
+            else:
+                out.append(Line(p, 1, op("NIBHEX", "F"), comment="end of the rules"))
+        out[0].pre.append("* rewrite rules, read by the interpreter called just before (SUB_5F6F2)")
+        return out
+
     def trailer_lines(self, it):
         """The slots after a built-in function (analyze.command_trailers)."""
         out = []
@@ -776,6 +859,8 @@ class Generator:
             return self.table_lines(x)
         if kind == "trailer":
             return self.trailer_lines(x)
+        if kind == "rules":
+            return self.rule_lines(x)
         if kind == "crc":
             return [Line(start, 4, ["CRC"], comment="self-test CRC correction (computed by the assembler)",
                          verify=False)]

@@ -121,14 +121,26 @@ These are the places the reassemblable source (`tools/disasm.py`) must handle so
 - **Code-pointer objects:** an RPL object can be just the address of machine code elsewhere, run through the inner loop like a PCO. Example: `DUP#0=case` #61891 → #641CC.
 - **Inline tables after GOSUB:** e.g. `GOSUB SUB_15C5F` at #15B48 is followed by 15-nibble entries (prolog, two handler addresses) that the callee reads.
 - **RPL pointer runs after code:** e.g. #315EF after CLOSEUART holds a pointer and SEMI, run by the inner loop after the code.
-- **Units table:** the hex string at #75675–#760C9. It mixes names and numbers with pointers to constants such as `%%1` at arbitrary offsets (e.g. #756A7).
+- **Units table:** the hex string at #75675–#760C9 holds all 123 units. It is read by #0C310 (is this a unit name?) and #0C3A3 (look one up).
+  - It starts with one 4-nibble offset per name length 1–8, each measured from its own position to the first name of that length.
+  - Each entry is a link byte (from itself to the next name of the same length; 0 ends the chain), the name, and two fields. A field is a nibble n, then a pointer if n = 0, else n digits. The second field has an exponent byte first, a two-digit decimal in ten's complement (#97 = −3: a litre is 1E−3).
+  - The pointers are `%%1`, an angle constant #384D0 (°, r, grad, arcs, arcmin), a temperature constant #38417 (K, °C, °F, °R) and `cfC`/`cfF`.
+  - The chains of different lengths are interleaved, so every link is short (one byte).
+  - `disasm.units_table_lines` writes it with labels (`U.m`, `U.galUK`) and `label-(*)` links.
 - **Self-test CRC.** The self-test (#804D3) reads each half of the ROM through the CRC circuit, 16 nibbles from the first quarter, then 16 from the second, and so on, and expects #FFFF. The last four nibbles of each half are the correction word (`DEFD` at #7FFFC, `1B0F` at #FFFFC). `sasm.crc_fix` reproduces both.
 - **Upper-ROM windows.** The access handlers (#726A1, #72386, #70B38) uncover #80000–#8FFFF, #90000–#BFFFF or #C0000–#FFFFF. Each window starts with 7 unexplained nibbles (`DDD8000` at #90000, `EB13000` at #C0000; `DDF4000` at #82000 after the self-test). Parts are reached only through the library table and self-relative offsets, so they can move within a window.
 - **Input register.** `A=IN`/`C=IN` must be at an even address. HP's note on `AINRTN` #0115A says so, and the nibble at #01159 is padding for it.
 - **Message numbers.** Error and message numbers are `lib·256 + n` (#B02 "Inconsistent Units", #0BF01). Several coincide with code addresses.
 - **Addresses in binary integers.** `TYPEREAL` … (#03F8B–#03FE5) are integers holding prolog addresses. `VERSION` (#C07E4) fetches the version strings `::` at #7FFA0 through `# 7FFA0`.
+- **Rule streams.** The algebra's pattern-matching rules are data that follows a call to `SUB_5F6F2` (or `SUB_5F6F9` with an operator table in C, e.g. `L_5BDA2` = `x/ xNEG xINV …`). The interpreter pops the return address and reads pairs:
+  - a pattern word, tested nibble by nibble from the low end: `k` > 0 compares the expression with entry `k-1` of the operator table (default #5F7E0), and 0 steps into an argument;
+  - the object to run if every test passes: a pointer, or an inline `ROMPTR` (skipped by length when the test fails).
+
+  A word with low nibble F ends the stream. Only that nibble belongs to it; the interpreter then continues the RPL stream of its caller. A zero word always matches. Example: `MetaMulInv` #5BE56 maps three patterns to `colinv1`–`colinv3`.
 - **Command trailers.** Built-in functions are often followed by slots: derivative, inverse, rules menu, integral. Example: after `SIN`, `D/DSIN` `#574CF` `MANMENUTRG` `nINTGSIN` `00000`, then the byte `CC`. Slots are pointers, `00000` or inline objects. Library 002 ends them with a byte whose meaning is unknown, and library 700 (e.g. `»` #23639 → #14D02) has no byte.
 - **Inline tables after GOSUB, other cases.** `GOSUB SUB_15C5F` at #15B48 is followed by 15-nibble entries (type prolog, handler when ST3 is set, handler when clear), ending at a zero prolog. Table bases loaded with `LC(5)` and indexed: #00487 (3·A, at #00437) and #00AE5 (6·B, at #00CD3). `LC(5) #00FF8; RSTK=C` (#00E3A) pushes a return address.
+- **RPL GOTO.** `GOTO`, `?GOTO` and `NOT?GOTO` (#619CB, #619E0, #619F3) take the next word as the address of the RPL to continue with (e.g. #1803D `GOTO` `L_17FBB` `;`).
+- **Bank switcher methods.** `BANKMTHDS` (#70601) is followed by a table of 31 entry points (#70606). Each is an 11-nibble stub `D0=(5) #7F0xx; GOTO #708C2`.
 - **Font and table bases** are loaded as addresses before the first entry: `LC(5) #7A047` is Font10 − 620 (code 0 of a table that starts at code #1F), and `LC(5) #26DBF` (#26D7D) is indexed by 5·n.
 
 ## RPL object layer

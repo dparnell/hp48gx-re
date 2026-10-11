@@ -16,37 +16,9 @@ use hp48::{Key, Machine, CPU_HZ};
 use saturn::{Field, Op, R};
 use std::collections::{BTreeSet, VecDeque};
 
-/// Command lines typed after boot; each is followed by ENTER, two seconds,
-/// and ON (to leave graphics or clear an error).
-const TOUR: &[&str] = &[
-    "1 2 + 3 * 7 / 2 ^ 1 - ABS LN EXP",
-    "RAD 1 SIN COS TAN ASIN ACOS ATAN DEG 30 SIN",
-    "\"HELLO\" \"WORLD\" + SIZE",
-    "{ 1 2 3 } { 4 5 } + REVLIST SORT 2 GET",
-    "[[1 2][3 4]] DUP INV * DET",
-    "[[1 2][3 4]] TRN [1 2] *",
-    "(1,2) (3,4) * ABS",
-    "1_m 1_ft + 1_in CONVERT",
-    "« 1 5 FOR I I NEXT » EVAL",
-    "'A' 5 STO A 'A' PURGE",
-    "12 FACT 5 3 COMB",
-    "#FFh #10h AND R→B B→R",
-    "'X^2+3*X' 'X' 2 TAYLR",
-    "'2*X+3=7' 'X' ISOL",
-    "MEM VARS TIME DATE",
-    "1 0 /",
-    "CLEAR 'SIN(X)' STEQ RAD FUNCTION ERASE DRAW",
-    "CLEAR '2*COS(2*X)' STEQ POLAR ERASE DRAW",
-    "CLEAR 1.5 2.5 3.5 →LIST →STR STR→",
-    "CLEAR 2 3 4 5 →ARRY RANM",
-    "CLEAR 5 RAND DROP 2 3 RND",
-];
-
-/// Keys pressed on their own (menus and shifts), each followed by a second.
-const KEYS: &[Key] = &[
-    Key::Mth, Key::Nxt, Key::Nxt, Key::Prg, Key::Nxt, Key::Cst, Key::Var, Key::A, Key::On,
-    Key::LeftShift, Key::Mth, Key::RightShift, Key::Prg, Key::On,
-];
+#[path = "common/tour.rs"]
+mod tour;
+use tour::{KEYS, TOUR};
 
 struct Tour {
     m: Machine,
@@ -153,6 +125,14 @@ impl Tour {
 
 fn main() {
     let out = std::env::args().nth(1).unwrap_or_else(|| "data/executed.txt".into());
+    for line in TOUR {
+        if let Err(c) = hp48::typing::keystrokes(line) {
+            panic!("cannot type {c:?} in {line}");
+        }
+    }
+    if out == "--check" {
+        return;
+    }
     let rom = std::fs::read("ROM/gxrom-r").expect("ROM/gxrom-r");
     let mut t = Tour { m: Machine::new(&rom), seen: BTreeSet::new(), objects: BTreeSet::new(), slots: BTreeSet::new(),
                          tables: BTreeSet::new(), reads: VecDeque::new() };

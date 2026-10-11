@@ -143,6 +143,12 @@ class Source(unittest.TestCase):
         self.assertEqual(asm.symbols["a"], 10)
         self.assertEqual(len(asm.notes), 1)
 
+    def test_values_must_fit(self):
+        """A one-byte link that grew past 255 is an error, not truncated."""
+        self.assemble("a:      CON(2)  b-(*)", "        BSS     200", "b:      NIBHEX  1")
+        with self.assertRaises(sasm.AsmError):
+            self.assemble("a:      CON(2)  b-(*)", "        BSS     300", "b:      NIBHEX  1")
+
     def test_input_register_at_even_address(self):
         self.assemble("        NIBHEX  12", "        C=IN")
         with self.assertRaises(sasm.AsmError):

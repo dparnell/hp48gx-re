@@ -489,6 +489,8 @@ class Assembler:
             v = self.value(arg(), pc)
             if m.group(1) == "REL":
                 v -= pc
+            if self.pass_ == 2 and not -(1 << 4 * n) < v < 1 << 4 * n:
+                raise AsmError("%s %s: %d does not fit in %d nibbles" % (op, arg(), v, n))
             return digits(v & ((1 << 4 * n) - 1), n)
         if op == "NIBHEX":
             return [int(c, 16) for c in "".join(args)]

@@ -9,3 +9,4 @@
 # zero" (that zero word belongs to the table).
 15B4C	aaa	0	Decompiler handlers by object type (walked by SUB_15C5F): prolog, handler when ST3 is set, handler when it is clear
 80232	c	28	Self-test commands by key code - 1 (dispatched by PC=(A) at #8007D)
+70606	c	31	Bank switcher methods after BANKMTHDS: stubs of D0=(5) #7F0xx, GOTO #708C2
