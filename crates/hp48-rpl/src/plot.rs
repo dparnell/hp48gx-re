@@ -30,8 +30,8 @@ pub fn system_flag(mem: &impl Memory, n: u32) -> bool {
     mem.nib(SYSTEM_FLAGS + bit / 4) & (1 << (bit % 4)) != 0
 }
 
-/// Character 133 in the calculator's character set.
-const SIGMA: char = '\u{85}';
+/// Character 133 in the calculator's character set, as decoded.
+const SIGMA: char = 'Σ';
 
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub enum Kind {

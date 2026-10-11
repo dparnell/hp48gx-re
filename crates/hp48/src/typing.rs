@@ -105,14 +105,33 @@ pub fn keystrokes(text: &str) -> Result<Vec<Key>, char> {
         // A negative number outside an algebraic: in immediate mode `-`
         // would subtract, so type the digits and then +/-.
         let starts_token = i == 0 || matches!(chars[i - 1], ' ' | '\n' | '[' | '{' | '(' | '«');
-        if c == '-' && starts_token && !open.contains(&'\'') && chars.get(i + 1).is_some_and(|d| d.is_ascii_digit() || *d == '.') {
-            let len = chars[i + 1..].iter().take_while(|d| d.is_ascii_digit() || **d == '.').count();
-            for &d in &chars[i + 1..i + 1 + len] {
-                keys.extend_from_slice(plain(d).ok_or(d)?);
+        // A number outside an algebraic: type the exponent with EEX, and a
+        // negative exponent's sign with +/- after its digits.
+        if starts_token && !open.contains(&'\'') {
+            if let Some(len) = number_len(&chars[i..]) {
+                let num = &chars[i..i + len];
+                let neg = num[0] == '-';
+                let e = num.iter().position(|&d| d == 'E').unwrap_or(len);
+                for &d in &num[usize::from(neg)..e] {
+                    keys.extend_from_slice(plain(d).ok_or(d)?);
+                }
+                if neg {
+                    keys.push(Key::Neg);
+                }
+                if e < len {
+                    keys.push(Key::Eex);
+                    let exp = &num[e + 1..];
+                    let eneg = exp.first() == Some(&'-');
+                    for &d in exp.iter().filter(|d| d.is_ascii_digit()) {
+                        keys.extend_from_slice(plain(d).ok_or(d)?);
+                    }
+                    if eneg {
+                        keys.push(Key::Neg);
+                    }
+                }
+                i += len;
+                continue;
             }
-            keys.push(Key::Neg);
-            i += 1 + len;
-            continue;
         }
         if open.last() == Some(&c) {
             open.pop();
@@ -130,6 +149,26 @@ pub fn keystrokes(text: &str) -> Result<Vec<Key>, char> {
         i += 1;
     }
     Ok(keys)
+}
+
+/// Length of the number (`-1.5E-3`) at the start of `s`, if it is one
+/// that `-` or `E` would otherwise break: a sign or an exponent.
+fn number_len(s: &[char]) -> Option<usize> {
+    let mut i = usize::from(s.first() == Some(&'-'));
+    let mant = s[i..].iter().take_while(|d| d.is_ascii_digit() || **d == '.').count();
+    if !s[i..i + mant].iter().any(char::is_ascii_digit) {
+        return None;
+    }
+    i += mant;
+    if s.get(i) == Some(&'E') {
+        let sign = usize::from(s.get(i + 1) == Some(&'-'));
+        let digits = s[i + 1 + sign..].iter().take_while(|d| d.is_ascii_digit()).count();
+        if digits > 0 {
+            i += 1 + sign + digits;
+        }
+    }
+    let ends = !matches!(s.get(i), Some(c) if c.is_alphanumeric());
+    (ends && i > mant).then_some(i)
 }
 
 #[cfg(test)]
@@ -151,6 +190,11 @@ mod tests {
         );
         assert_eq!(keystrokes("a"), Ok(vec![Key::Alpha, Key::LeftShift, Key::A]));
         assert_eq!(keystrokes("@"), Err('@'));
+        // a negative exponent: EEX, its digits, then +/-
+        assert_eq!(
+            keystrokes("-1E-2"),
+            Ok(vec![Key::N1, Key::Neg, Key::Eex, Key::N2, Key::Neg])
+        );
         let k = keystrokes("« 2 »").unwrap();
         assert_eq!(&k[k.len() - 2..], [Key::Right, Key::Right]);
     }

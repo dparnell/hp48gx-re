@@ -6,6 +6,7 @@
 
 pub mod expr;
 pub mod plot;
+pub mod show;
 
 /// Prolog addresses (ROM rev R; all are supported entry points).
 pub mod prolog {
@@ -44,6 +45,20 @@ pub mod prolog {
 pub const USEROB: u32 = 0x80711;
 pub const CONTEXT: u32 = 0x8071B;
 
+/// RAM: address of stack level 1's slot, and of the command line, whose
+/// pointer sits just past the stack's last slot and its end marker.
+pub const DSKTOP: u32 = 0x806F8;
+pub const EDITLINE: u32 = 0x806FD;
+
+/// The objects on the data stack, level 1 first. The depth is counted as
+/// `SAVESTACK` (#61D41) counts it.
+pub fn stack(mem: &impl Memory) -> Vec<u32> {
+    let top = mem.addr(DSKTOP);
+    let end = mem.addr(EDITLINE);
+    let depth = (end.wrapping_sub(top) / 5).saturating_sub(1).min(10_000);
+    (0..depth).map(|i| mem.addr(top + 5 * i)).take_while(|&a| a != 0).collect()
+}
+
 /// Read access to the calculator's address space.
 pub trait Memory {
     fn nib(&self, addr: u32) -> u8;
@@ -79,6 +94,8 @@ pub enum Object {
     List(Vec<Object>),
     Symbolic(Vec<Object>),
     Program(Vec<Object>),
+    /// RPN: the number, then names, prefixes and exponents combined by the
+    /// unit operators (kept as `Builtin`), ending with `umEND`.
     Unit(Vec<Object>),
     Tagged(String, Box<Object>),
     /// Real or complex array; `items` in row-major order.
@@ -120,7 +137,30 @@ pub fn is_prolog(p: u32) -> bool {
 }
 
 fn text(mem: &impl Memory, addr: u32, chars: u32) -> String {
-    (0..chars).map(|i| char::from(mem.byte(addr + 2 * i))).collect()
+    (0..chars).map(|i| hp_char(mem.byte(addr + 2 * i))).collect()
+}
+
+/// Characters 128-159 of the calculator's character set; the rest is
+/// ISO 8859-1. x-bar (129) has no single Unicode character: ẋ stands in.
+const HIGH: [char; 32] = [
+    '∡', 'ẋ', '∇', '√', '∫', 'Σ', '▶', 'π', '∂', '≤', '≥', '≠', 'α', '→', '←', '↓', //
+    '↑', 'γ', 'δ', 'ε', 'η', 'θ', 'λ', 'ρ', 'σ', 'τ', 'ω', 'Δ', 'Π', 'Ω', '■', '∞',
+];
+
+/// The Unicode character for a byte of the calculator's character set.
+pub fn hp_char(b: u8) -> char {
+    match b {
+        128..=159 => HIGH[usize::from(b - 128)],
+        _ => char::from(b),
+    }
+}
+
+/// The calculator byte for a Unicode character, if it has one.
+pub fn hp_byte(c: char) -> Option<u8> {
+    match c {
+        '\0'..='\x7F' | '\u{A0}'..='\u{FF}' => Some(c as u8),
+        _ => HIGH.iter().position(|&h| h == c).map(|i| 128 + i as u8),
+    }
 }
 
 /// Decode a BCD real: exponent (`exp_n` nibbles, 10's complement), mantissa
@@ -171,7 +211,9 @@ fn size_depth(mem: &impl Memory, addr: u32, depth: u32) -> Result<u32, Error> {
         DOTAG => {
             let n = u32::from(mem.byte(b));
             let inner = b + 2 + 2 * n;
-            inner + size_depth(mem, inner, depth + 1)? - addr
+            // the tagged object may be a pointer, e.g. to %3 in ROM
+            let len = if is_prolog(mem.addr(inner)) { size_depth(mem, inner, depth + 1)? } else { 5 };
+            inner + len - addr
         }
         DOCOL | DOLIST | DOSYMB | DOEXT => {
             let mut q = b;
@@ -289,7 +331,13 @@ fn decode_depth(mem: &impl Memory, addr: u32, depth: u32) -> Result<Object, Erro
         DOROMP => Object::RomPtr { lib: mem.value(b, 3) as u16, cmd: mem.value(b + 3, 3) as u16 },
         DOTAG => {
             let n = u32::from(mem.byte(b));
-            Object::Tagged(text(mem, b + 2, n), Box::new(decode_depth(mem, b + 2 + 2 * n, depth + 1)?))
+            let inner = b + 2 + 2 * n;
+            let obj = if is_prolog(mem.addr(inner)) {
+                decode_depth(mem, inner, depth + 1)?
+            } else {
+                pointer(mem, mem.addr(inner), depth)?
+            };
+            Object::Tagged(text(mem, b + 2, n), Box::new(obj))
         }
         DOCOL | DOLIST | DOSYMB | DOEXT => {
             let mut items = Vec::new();
@@ -302,6 +350,16 @@ fn decode_depth(mem: &impl Memory, addr: u32, depth: u32) -> Result<Object, Erro
                 if is_prolog(v) {
                     items.push(decode_depth(mem, q, depth + 1)?);
                     q += size_depth(mem, q, depth + 1)?;
+                } else if p == DOEXT {
+                    // unit operators (um*, umEND, ...) are empty lists in
+                    // ROM, told apart only by address
+                    let target = mem.addr(v);
+                    items.push(if target == DOCSTR || target == DOCHAR || target == DOREAL {
+                        decode_depth(mem, v, depth + 1)?
+                    } else {
+                        Object::Builtin(v)
+                    });
+                    q += 5;
                 } else {
                     items.push(pointer(mem, v, depth)?);
                     q += 5;
