@@ -166,7 +166,10 @@ fn matrixwriter(rom: &[u8]) -> Verdict {
     }
 }
 
-const CHECKS: &[(&str, &str, fn(&[u8]) -> Verdict)] = &[
+/// (name, description, check)
+type Check = (&'static str, &'static str, fn(&[u8]) -> Verdict);
+
+const CHECKS: &[Check] = &[
     ("dtag", "DTAG with an empty stack says XLIB 0 0 Error", dtag),
     ("rpm", "60_rpm -> r/s depends on the angle mode", rpm),
     ("hz", "r/s + Hz depends on the angle mode", hz),
