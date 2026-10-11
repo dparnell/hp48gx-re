@@ -18,6 +18,10 @@ cargo run --release -p hp48 --example knownbugs -- out/rom.bin dtag # one check
 Each check prints PRESENT, fixed or unknown. The exit status is 1 while any
 bug is present.
 
+`firmware/` deliberately keeps these bugs, so it still builds the original ROM.
+They are to be fixed in the emulator's native (Rust) replacements of the
+routines involved, as those are written.
+
 | Check | Bug | Reproduces here |
 |---|---|---|
 | `dtag` | DTAG with an empty stack reports "XLIB 0 0 Error" | yes |

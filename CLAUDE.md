@@ -91,6 +91,7 @@ Run the Python tests from the repo root with `python -m unittest discover -s tes
 - A native must reproduce the routine's full effect: every register (including scratch registers and P), carry, HST bits and memory. Read the ROM code (`python tools/hpdis.py func ADDR`) and mirror its early exits.
 - `tests/hle.rs` runs every native against the ROM on 5000 random register states through `hle::verify`. Add new natives to `NATIVES` and they are tested automatically.
 - RPL-level routines (secondaries) will need a similar harness that compares the data stack instead of registers.
+- `firmware/` stays plain revision R; the known ROM bugs (`firmware/BUGS.md`) are to be fixed in the Rust implementation instead. When a native replaces a routine involved in one (DTAG's argument check, unit conversion of angles/rpm/Hz, `SAVESTACK` #61D41 with a negative depth, the MatrixWriter's GO→ handling, FFT's return-stack use), fix the bug on purpose: leave the inputs that trigger it out of the `verify` comparison, and say so in the native's comment. Running `knownbugs` with the natives installed should then show that bug fixed.
 
 Addresses you will need again: fonts at #7A047 (10-row), #7B257 (8-row) and #7C102 (minifont, with remap table #7C793); `DSKTOP` #806F8 (stack level 1 pointer); `USEROB` #80711; `CONTEXT` #8071B; system flags #80843; user flags #80853; ROM library table #702C4.
 
