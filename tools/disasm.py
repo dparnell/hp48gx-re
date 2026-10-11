@@ -35,6 +35,8 @@ SRC = OUT / "src"
 DATA = ROOT / "data"
 LOWER_END = 0x80000
 SPLIT = 0x3000            # split regions into files of about this many nibbles
+HARDWARE = 0x7E000        # D0=/D1= from here up are I/O windows (bank switcher at #7F000)
+FILL_TO = 32              # zero fill at least this long between entries becomes FILLTO
 COMMENT_COL = 48
 MAX_XREFS = 6
 
@@ -46,6 +48,13 @@ FONT_TABLES = [
 ]
 MINI_REMAP = (0x7C793, 0x7C855)    # minifont index for codes #9F-#FF, one byte each
 
+# Code that must stay where it is, whatever else moves.
+PINNED = {
+    0x0000F: "the CPU jumps here on an interrupt",
+    0x028FC: "PRLG: every prolog starts with D=D-1 A, HST=0 0, whose nibbles CF820 "
+             "read as the address #028FC, so running a prolog as an object comes here",
+}
+
 OPENER = {"DOCOL": "::", "DOLIST": "{", "DOSYMB": "SYMBOL", "DOEXT": "UNIT"}
 
 
@@ -53,7 +62,8 @@ class Ref:
     """An address in a line, written as a name when one fits.
     kind: "ptr" (pointer or branch target), "rom" (a ROM address even when
     it is in upper ROM), "const" (an LC/LA value: named only when it is a
-    known entry), "dptr" (a D0=/D1= address: I/O names allowed)."""
+    known entry), "dptr" (a D0=/D1= address: I/O names allowed), "addr"
+    (a constant data/operands.txt says is an address)."""
     __slots__ = ("addr", "src", "kind")
 
     def __init__(self, addr, src, kind="ptr"):
@@ -125,9 +135,19 @@ class Generator:
             if comment:
                 self.notes[a].append(comment)
         self.hints = {}                     # addr -> preferred generated name
+        self.operands = {}                  # insn addr -> ("addr" or expression, note)
+        for line in (DATA / "operands.txt").read_text(encoding="utf-8").splitlines():
+            if line.startswith("#") or not line.strip():
+                continue
+            a, v, note = (line.split("	") + ["", ""])[:3]
+            self.operands[int(a, 16)] = (v, note)
         for a, (lib, cmd, nm) in self.libcmd.items():
             self.hints[a] = "ROMP_%03X_%03X" % (lib, cmd)
         self.ref_targets = {a for a in self.xrefs if isinstance(a, int)} | set(self.s["data_refs"])
+        # Words the emulator saw used as addresses (also inside objects such
+        # as the hex string at #75675); data is written around them.
+        self.slots = set(self.s.get("addr_slots", ()))
+        self.ref_targets |= self.slots
         self.fallbacks = defaultdict(int)
 
     # ================================================================ names
@@ -205,12 +225,14 @@ class Generator:
                 return self.equate(a) or lit
             if k in ("const", "dptr"):
                 return lit
-        if k in ("const", "dptr") and not (a in self.line_start and (self.symbol_name(a) or a in self.s["labels"])):
+        known = self.symbol_name(a) or a in self.s["labels"] or (
+            a in self.items and self.items[a].kind in ("addrslot", "rplptr", "codeptr"))
+        if k in ("const", "dptr") and not (a in self.line_start and known):
             return lit
         if a in self.line_start:
             return self.label_for(a)
         i = bisect.bisect_right(self.starts, a) - 1
-        if i >= 0 and a - self.starts[i] < 0x100:
+        if i >= 0 and (a - self.starts[i] < 0x100 or k == "addr"):
             b = self.starts[i]
             return "%s+%d" % (self.label_for(b), a - b)
         return lit
@@ -221,16 +243,21 @@ class Generator:
         out = []
         p = lo
         while p < hi:
+            if p in self.slots and p + 5 <= hi and not any(p < e < p + 5 for e in self.ends):
+                out.append(Line(p, 5, op("CON(5)", Ref(self.rom.addr(p), p, "addr")), comment="address",
+                                indent=indent))
+                p += 5
+                continue
             q = p
-            while q < hi and self.n[q] == 0:
+            while q < hi and self.n[q] == 0 and (q == p or q not in self.ends):
                 q += 1
-            if q - p >= 16 or (q == hi and q - p >= 6):
+            if q - p >= 16 or (q == hi and q - p >= 6) or (q < hi and q in self.ends and q > p):
                 out.append(Line(p, q - p, op("BSS", str(q - p)), indent=indent, mode=mode))
                 p = q
                 continue
             q = min(hi, p + 32)
             for t in range(p + 1, q):
-                if t in self.ref_targets:
+                if t in self.ref_targets or t in self.ends:
                     q = t
                     break
             # stop before a long zero run
@@ -266,7 +293,20 @@ class Generator:
             if mn in sasm.BRANCHES or mn in sasm.ABSOLUTE or mn == "GOYES":
                 parts = op(mn, Ref(int(tok[1][1:], 16), a))
             elif re.fullmatch(r"(LC|LA|D0=|D1=)\(5\)", mn):
-                parts = op(mn, Ref(int(tok[1][1:], 16), a, "dptr" if mn[0] == "D" else "const"))
+                v = int(tok[1][1:], 16)
+                given, why = self.operands.get(a, (None, ""))
+                if why:
+                    notes.append(why)
+                # D0=/D1= of a ROM address is a pointer, but #7E000-#7FFFF
+                # holds the bank switcher and port controls (CE1/CE2/NCE3)
+                if given == "addr" or (given is None and mn[0] == "D" and 0x140 <= v < HARDWARE):
+                    parts = op(mn, Ref(v, a, "addr"))
+                elif given == "num":
+                    parts = op(mn, tok[1])
+                elif given:
+                    parts = op(mn, given)
+                else:
+                    parts = op(mn, Ref(v, a, "dptr" if mn[0] == "D" else "const"))
             else:
                 parts = op(mn, " ".join(tok[1:])) if len(tok) > 1 else [mn]
             out.append(Line(pc, size, parts, comment=", ".join(notes) if k == len(texts) - 1 else "",
@@ -326,7 +366,7 @@ class Generator:
         elif k == "DOCSTR" and len(body) % 2 == 1:
             nb = [body[i] | body[i + 1] << 4 for i in range(5, len(body), 2)]
             text = op("$", sasm.escape(nb))
-        elif k == "DOHSTR" and len(body) <= 69:
+        elif k == "DOHSTR" and len(body) <= 69 and not any(a + 10 <= t < a + o.size for t in self.slots):
             text = op("HXS", hexs(body[5:]) or "")
             if len(body) == 5:
                 text = None
@@ -365,13 +405,19 @@ class Generator:
             return t
         return sasm.escape(nb)
 
+    def length(self, p, indent=0):
+        """The length field at p: LENGTH here, ENDLENGTH where it ends."""
+        end = p + self.rom.addr(p)
+        self.ends[end] += 1
+        return Line(p, 5, "LENGTH", comment="length, to #%05X" % end, indent=indent, verify=False)
+
     def raw_object(self, o, depth):
         """Prolog, length if any, and the body as NIBHEX."""
         a = o.addr
         out = [Line(a, 5, op("CON(5)", Ref(self.rom.addr(a), a, "rom")), comment=o.kind, indent=depth)]
         p = a + 5
         if o.kind in LENGTH_PREFIXED:
-            out.append(Line(p, 5, op("CON(5)", "#%05X" % self.rom.addr(p)), comment="length", indent=depth))
+            out.append(self.length(p, depth))
             p += 5
         out += self.data_lines(p, a + o.size, depth)
         return out
@@ -413,7 +459,7 @@ class Generator:
         a = o.addr
         ep = self.rom.addr(a + 10)
         out = [Line(a, 5, op("CON(5)", Ref(0x029E8, a, "rom")), comment="array %s" % "x".join(map(str, dims)), indent=depth),
-               Line(a + 5, 5, op("CON(5)", "#%05X" % self.rom.addr(a + 5)), comment="length", indent=depth),
+               self.length(a + 5, depth),
                Line(a + 10, 5, op("CON(5)", Ref(ep, a, "rom")), comment="element type", indent=depth),
                Line(a + 15, 5, op("CON(5)", str(len(dims))), comment="dimensions", indent=depth)]
         for i, d in enumerate(dims):
@@ -468,7 +514,7 @@ class Generator:
         a = it.start
         lib = it.info["lib"]
         out = [Line(a, 5, op("CON(5)", Ref(0x02A4E, a, "rom")), comment="link table of library %03X" % lib),
-               Line(a + 5, 5, op("CON(5)", "#%05X" % self.rom.addr(a + 5)), comment="length")]
+               self.length(a + 5)]
         p = a + 10
         cmd = 0
         while p < a + it.size:
@@ -486,7 +532,7 @@ class Generator:
         lib = it.info["lib"]
         end = a + it.size
         out = [Line(a, 5, op("CON(5)", Ref(0x02A4E, a, "rom")), comment="hash table of library %03X" % lib),
-               Line(a + 5, 5, op("CON(5)", "#%05X" % r.addr(a + 5)), comment="length")]
+               self.length(a + 5)]
         p = a + 10
         for n in range(1, 17):
             off = r.addr(p)
@@ -539,7 +585,7 @@ class Generator:
         r = self.rom
         a = lib.obj_start
         out = [Line(a, 5, op("CON(5)", Ref(0x02B40, a, "rom")), comment="library object"),
-               Line(a + 5, 5, op("CON(5)", "#%05X" % r.addr(a + 5)), comment="length, to #%05X" % (a + 5 + r.addr(a + 5)))]
+               self.length(a + 5)]
         p = a + 10
         nl = r.byte(p)
         out.append(Line(p, 2, op("CON(2)", str(nl)), comment="title length"))
@@ -633,6 +679,9 @@ class Generator:
         return self._owner.get(a)
 
     def render_unit(self, start, end, kind, x):
+        if kind == "fill" and start < LOWER_END and end - start >= FILL_TO:
+            return [Line(start, end - start, op("FILLTO", "#%05X" % end),
+                         comment="%d zero nibbles: the next entry stays at #%05X" % (end - start, end), verify=False)]
         if kind == "cmdhdr":
             lib, cmd, a = x
             ln = [Line(start, 1, op("CON(1)", "%d" % self.n[start]), comment="command header: flags (meaning not yet known)"),
@@ -648,6 +697,14 @@ class Generator:
             return self.library_object_lines(x)
         if kind == "code":
             return self.insn_lines(start)
+        if kind == "addrslot":
+            return [Line(start, 5, op("CON(5)", Ref(self.rom.addr(start), start, "addr")),
+                         comment="address (the code jumps or points through it)")]
+        if kind == "rplptr":
+            return [Line(start, 5, [Ref(self.rom.addr(start), start)], mode="RPL")]
+        if kind == "codeptr":
+            return [Line(start, 5, op("CON(5)", Ref(self.rom.addr(start), start, "rom")),
+                         comment="code object: the address of its machine code")]
         if kind == "pco":
             return [Line(start, 5, op("CON(5)", "(*)+5"), comment="primitive code object")]
         if kind == "obj":
@@ -671,6 +728,7 @@ class Generator:
     def render(self):
         """Lines for the whole ROM, grouped into top-level units."""
         self.blocks = []      # (start, end, lines)
+        self.ends = defaultdict(int)   # address -> number of ENDLENGTHs there
         p = 0
         prev_kind = None
         for start, end, kind, x in self.units():
@@ -790,6 +848,8 @@ class Generator:
             out.append(c)
         if ln.size:
             out += ["* " + c for c in self.notes.get(a, ())]
+        if a in PINNED and ln.size:
+            out.append("%-*s * %s" % (COMMENT_COL, "        PIN     #%05X" % a, PINNED[a]))
         if a in self.label and ln.size:
             out.append(self.label[a] + ":")
         body = " " * (8 + 2 * ln.indent) + ln.parts[0]
@@ -826,17 +886,23 @@ class Generator:
         for k, (i, name, desc) in enumerate(cut):
             j = cut[k + 1][0] if k + 1 < len(cut) else len(self.blocks)
             chunk = []
+            first = True
             for b in self.blocks[i:j]:
                 if chunk and b[0] - chunk[0][0] >= SPLIT:
-                    out.append((name, desc, chunk))
+                    out.append((name, desc, chunk, first))
                     chunk = []
+                    first = False
                 chunk.append(b)
             if chunk:
-                out.append((name, desc, chunk))
+                out.append((name, desc, chunk, first))
         res = []
-        for name, desc, chunk in out:
+        for name, desc, chunk, first in out:
             st = chunk[0][0]
-            res.append(("%s/%05X-%s.s" % ("lower" if st < LOWER_END else "upper", st, name), desc, chunk))
+            # Fixed addresses: the start of the ROM, and each upper-ROM part
+            # (reached through the library table at fixed places). The rest
+            # of lower ROM flows on from the previous file.
+            pinned = st == 0 or (st >= LOWER_END and first)
+            res.append(("%s/%05X-%s.s" % ("lower" if st < LOWER_END else "upper", st, name), desc, chunk, pinned))
         return res
 
     def write(self):
@@ -845,17 +911,23 @@ class Generator:
                "* HP's firmware: keep it private, do not redistribute.",
                "* Build: python tools/sasm.py out/src/rom.s -o out/rom.bin --check ROM/gxrom-r",
                "", "        INCLUDE \"equates.s\""]
-        for path, desc, blocks in files:
+        for path, desc, blocks, pinned in files:
             top.append("        INCLUDE \"%s\"%s" % (path, " " * max(1, 40 - len(path)) + "* " + desc if desc else ""))
-            self.write_file(path, desc, blocks)
+            self.write_file(path, desc, blocks, pinned)
+        if self.ends:
+            raise RuntimeError("LENGTH without an end at %s" % ", ".join("#%05X" % a for a in self.ends))
         (SRC / "rom.s").write_text("\n".join(top) + "\n", encoding="utf-8", newline="\n")
         eq = ["* RAM and I/O addresses named in the source (EDB/VBL names)."]
         for a in sorted(self.eq):
             eq.append("%-24s EQU #%05X" % (self.eq[a], a))
+        # The assembler writes prologs by these names (sasm.PROLOG)
+        for name, a in list(sasm.PROLOG.items()) + [("SEMI", sasm.SEMI)]:
+            if name not in self.used and a in self.label:
+                eq.append("%-24s EQU %s" % (name, self.label[a]))
         (SRC / "equates.s").write_text("\n".join(eq) + "\n", encoding="utf-8", newline="\n")
         return files
 
-    def write_file(self, path, desc, blocks):
+    def write_file(self, path, desc, blocks, pinned):
         lo, hi = blocks[0][0], blocks[-1][1]
         out = ["* HP 48GX ROM revision R, #%05X-#%05X: %s" % (lo, hi - 1, desc or "not yet identified"),
                "* Generated by tools/disasm.py. HP's firmware: keep it private, do not redistribute."]
@@ -863,11 +935,17 @@ class Generator:
                         if lo <= a < hi and self.symbol_name(a)), reverse=True)[:12]
         if named:
             out.append("* Most referenced: " + " ".join(n for _, n in named))
-        out += ["", "        ORG     #%05X" % lo]
+        if pinned:
+            out += ["", "        ORG     #%05X" % lo]
+        else:
+            out += ["* Follows on from the previous file (at #%05X in the original ROM)." % lo]
         mode = "ASM"
         self.done = set()
         for _, _, lines in blocks:
             for k, ln in enumerate(lines):
+                if ln.size:
+                    for _ in range(self.ends.pop(ln.pc, 0)):
+                        out.append("%-*s * %05X" % (COMMENT_COL, "        ENDLENGTH", ln.pc))
                 if ln.mode and ln.mode != mode:
                     out.append("        %s" % ("RPL" if ln.mode == "RPL" else "ASSEMBLE"))
                     mode = ln.mode

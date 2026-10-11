@@ -15,3 +15,7 @@
 7073F		Bank-select stubs, reached through computed jumps: D0=(5) #7F040+2n, then GOTO
 7A1FA		Minifont renderer: glyph = #7C102 + 11*index, codes above #9F remapped through the table at #7C793
 7FFA0		Version and copyright strings
+7A2B3	Font10	10-row font
+7B447	Font8	8-row font
+7C257	Minifont	Minifont glyphs
+7C793	MiniRemap	Minifont index for codes #9F-#FF

@@ -1,0 +1,70 @@
+# Address constants for tools/disasm.py, keyed by the address of the
+# instruction. D0=(5)/D1=(5) operands are taken as addresses unless listed
+# here as `num`; LC(5)/LA(5) operands are numbers unless they are known
+# entries or listed here as `addr`. Found by reading the code around each one
+# (see tools/relocate.py).
+# INSN<TAB>VALUE. VALUE is `addr` (write the nearest label, plus an offset if
+# needed), `num`, or an expression. Note after a second tab.
+01148	num	loop count, swapped into A
+026E0	addr
+02D52	addr
+02E15	addr
+02EAD	addr
+02EB8	addr
+02EC3	addr
+03C7A	addr	table, read 10 nibbles further on
+0953A	addr
+0958A	addr
+0A67E	addr	table walked 5 nibbles at a time
+0AAEE	addr	table indexed by 4*B+C
+0ADD8	addr	same table
+0AF9A	addr	access handler, put into the library table entries
+0AFBD	addr	access handler
+0C319	addr
+0C3AC	addr
+0CF9D	addr	table indexed by 3*A
+0D4DE	addr
+11F3D	Font10+2540	glyph used for codes below #20
+11F50	Font10-620	glyph of code c = #7A047 + 20*c
+11F64	Font8+2032	glyph used for codes below #20
+11F6F	Font8-496	glyph of code c = #7B257 + 16*c
+14576	addr
+145D2	addr
+14D55	addr
+14EFF	addr
+15192	addr
+1902B	addr
+256F5	addr
+25707	addr
+25718	addr
+25724	addr
+29A56	addr	moved into D1
+30043	addr
+30060	addr
+30245	addr
+302BB	addr
+35190	addr
+351E4	addr
+3F30A	addr
+58AE6	addr
+5C692	addr
+5C6DE	addr
+5C742	addr
+5C84A	addr
+5C922	addr
+5F6F2	addr
+5F85C	addr
+668DD	addr
+6691E	addr
+683D2	addr
+684F1	addr
+700B5	addr
+799EB	addr
+79A03	addr
+7A156	Font10+2540
+7A16A	Font10-620
+7A17F	Font8+2032
+7A18B	Font8-496
+7A22C	Minifont+1111	minifont glyph for codes below #20
+7A244	MiniRemap
+7A28B	Minifont-341	minifont glyph i = #7C102 + 11*i

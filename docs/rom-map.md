@@ -112,6 +112,18 @@ table (→ #7633B) and its message table.
 `out/libraries.txt` lists every library and command. Commands are named from
 the hash tables, with Dominik's EDB used as a fallback for ROMPTRs.
 
+## Fixed points and data that holds addresses
+
+These are the places the reassemblable source (`tools/disasm.py`) must handle so that code can move.
+
+- **PRLG must stay at #028FC.** Every prolog starts with `D=D-1 A; HST=0 0`. Its nibbles `CF820`, read as an address, are #028FC. So `PC=(A)` on a prolog address (running a prolog as an object, e.g. in SKIPOB #03019) jumps to PRLG. The zero fill at #02848 absorbs changes before it.
+- **Bank switcher and ports:** `D0=(5) #7F000` (#723C1) and `LC(5) #7E000` are I/O windows (CE1/CE2/NCE3), not ROM.
+- **Code-pointer objects:** an RPL object can be just the address of machine code elsewhere, run through the inner loop like a PCO. Example: `DUP#0=case` #61891 → #641CC.
+- **Inline tables after GOSUB:** e.g. `GOSUB SUB_15C5F` at #15B48 is followed by 15-nibble entries (prolog, two handler addresses) that the callee reads.
+- **RPL pointer runs after code:** e.g. #315EF after CLOSEUART holds a pointer and SEMI, run by the inner loop after the code.
+- **Units table:** the hex string at #75675–#760C9. It mixes names and numbers with pointers to constants such as `%%1` at arbitrary offsets (e.g. #756A7).
+- **Font and table bases** are loaded as addresses before the first entry: `LC(5) #7A047` is Font10 − 620 (code 0 of a table that starts at code #1F), and `LC(5) #26DBF` (#26D7D) is indexed by 5·n.
+
 ## RPL object layer
 
 - Prolog addresses are listed in `tools/rpl.py`; they match EDB. Each prolog's

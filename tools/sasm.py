@@ -26,6 +26,12 @@ Source format
     NIBASC "text"     bytes, low nibble first (escape: \\xx hex, \\" and \\\\)
     $BODY "text"      a string body without prolog: length (5), then bytes
     BSS n             n zero nibbles
+    FILLTO expr       zero nibbles up to address expr (free space that
+                      absorbs code growing or shrinking before it)
+    PIN expr          assert that the next line is at address expr (code
+                      that must not move)
+    LENGTH ... ENDLENGTH   5 nibbles holding the distance from LENGTH to
+                      ENDLENGTH: the length field of an object
     GLYPHS "png" rows first count [widths]   font glyphs from a sheet (16 per
                       row, gray gutters): one byte per row, bit 0 at the
                       left; with widths (hex, one per glyph), each glyph
@@ -63,7 +69,7 @@ RPL_WORDS = set(OPENERS) | {";", "}", "#", "%", "%%", "C%", "C%%", "CHR", "$", "
                             "ID", "LAM", "TAG", "ROMPTR", "ACPTR", "GROB", "CODE",
                             "ENDCODE", "PTR"}
 DIRECTIVES = {"ORG", "INCLUDE", "ASSEMBLE", "RPL", "NIBHEX", "NIBASC", "BSS", "EQU",
-              "GLYPHS", "$BODY"}
+              "GLYPHS", "$BODY", "LENGTH", "ENDLENGTH", "FILLTO", "PIN"}
 KEYWORDS = RPL_WORDS | DIRECTIVES
 
 
@@ -489,11 +495,13 @@ class Assembler:
         return list(enc)
 
     def rpl(self, op, args, pc, state):
-        p = lambda name: digits(PROLOG[name], 5)  # noqa: E731
+        # Prologs and SEMI are wherever the source puts them (labels DOCOL,
+        # SEMI, ...); the fixed ROM addresses are only a fallback.
+        p = lambda name: digits(self.symbols.get(name, PROLOG[name]), 5)  # noqa: E731
         if op in OPENERS:
             return p(OPENERS[op])
         if op in (";", "}"):
-            return digits(SEMI, 5)
+            return digits(self.symbols.get("SEMI", SEMI), 5)
         if op == "#":
             return p("DOBINT") + digits(int(args[0], 16), 5)
         if op in ("%", "%%"):
@@ -540,9 +548,12 @@ class Assembler:
         self.root = Path(path).parent
         for self.pass_ in (1, 2):
             self.pc = 0
+            self.lengths = []
             self.mem[:] = bytes(ROM_SIZE)
             self.written[:] = bytes(ROM_SIZE)
             self.file(Path(path))
+            if self.lengths:
+                raise AsmError("LENGTH at #%05X has no ENDLENGTH" % self.lengths[-1])
         return self
 
     def file(self, path):
@@ -570,8 +581,8 @@ class Assembler:
                 return
         op = toks[0]
         if len(toks) >= 3 and toks[1] == "EQU":
-            if self.pass_ == 1:
-                self.symbols[op] = self.value(toks[2], self.pc)
+            # evaluated again in pass 2, when later labels are known
+            self.symbols[op] = self.value(toks[2], self.pc)
             return
         if op == "INCLUDE":
             sub = state["dir"] / unquote(toks[1])
@@ -585,6 +596,27 @@ class Assembler:
             return
         if op in ("ASSEMBLE", "RPL"):
             state["mode"] = "ASM" if op == "ASSEMBLE" else "RPL"
+            return
+        if op == "LENGTH":
+            self.lengths.append(self.pc)
+            self.put(self.pc, [0] * 5)
+            return
+        if op == "ENDLENGTH":
+            if not self.lengths:
+                raise AsmError("ENDLENGTH without LENGTH")
+            start = self.lengths.pop()
+            self.put(start, digits(self.pc - start, 5), overwrite=True)
+            return
+        if op == "PIN":
+            a = self.value(toks[1], self.pc)
+            if a != self.pc:
+                raise AsmError("PIN #%05X: this code is at #%05X; it must not move" % (a, self.pc))
+            return
+        if op == "FILLTO":
+            a = self.value(toks[1], self.pc)
+            if a < self.pc:
+                raise AsmError("FILLTO #%05X: already at #%05X (%d nibbles too many)" % (a, self.pc, self.pc - a))
+            self.put(self.pc, [0] * (a - self.pc))
             return
         if op == "ENDCODE":
             start = state["code"].pop()

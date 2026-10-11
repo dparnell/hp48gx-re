@@ -25,6 +25,7 @@ from saturn import Decoder as CodeDecoder
 from symbols import Symbols
 
 OUT = Path(__file__).resolve().parent.parent / "out"
+DATA = Path(__file__).resolve().parent.parent / "data"
 LOWER_END = 0x80000
 ROM_LIB_TABLE = 0x702C4   # loaded by LC(5) at #0ACF9 during warmstart
 DOACPTR = 0x02BAA
@@ -78,6 +79,7 @@ class Analyzer:
         self.presumed_uncond = set()   # conditional branches inferred to be always taken
         self.data_refs = defaultdict(set)  # address constants in code: target -> {insn}
         self.speculative = set()       # entry points found by the gap pass, not by references
+        self.shallow = set()           # executed instructions not yet followed
 
     # ------------------------------------------------------------ marking
     def free(self, a, size):
@@ -131,7 +133,7 @@ class Analyzer:
         branch_target = True
         prev = None
         while True:
-            if a in self.insns:
+            if a in self.insns and a not in self.shallow:
                 return
             if a >= LOWER_END and not upper_ok:
                 self.unresolved[a].add("code in upper ROM")
@@ -144,7 +146,7 @@ class Analyzer:
             shared = False
             for i in range(ins.size):
                 o = self.owned_by(a + i)
-                if o is None or o.kind == "codebody":
+                if o is None or o.kind == "codebody" or (o.start == a and a in self.shallow):
                     continue
                 if o.kind == "code":
                     shared = True
@@ -168,6 +170,7 @@ class Analyzer:
                 return
             if shared:
                 self.overlaps.add(a)
+            self.shallow.discard(a)
             self.insns[a] = ins
             if self.owned_by(a) is None or self.owned_by(a).kind != "codebody":
                 self.items[a] = Item(a, ins.size, "code")
@@ -231,7 +234,18 @@ class Analyzer:
             self.q("ptr", v, src, "const")
 
     # ------------------------------------------------------------ RPL
+    def unmark_slot(self, a):
+        """Drop a dynamic pointer slot at a, so an object starting there can
+        be decoded (its prolog word is read and jumped through too)."""
+        it = self.items.get(a)
+        if it is not None and it.kind in ("addrslot", "rplptr"):
+            del self.items[a]
+            for i in range(it.size):
+                self.owner.pop(a + i, None)
+
     def do_ptr(self, a):
+        if self.rd.is_object(a) or self.rd.is_pco(a):
+            self.unmark_slot(a)
         if a in self.items:
             return
         if a < LOWER_END and a in PROLOGS:
@@ -244,10 +258,25 @@ class Analyzer:
                 self.mark(Item(a, 5, "pco"))
                 self.labels.setdefault(a, "obj")
             self.q("code", a + 5, a, "pco")
+        elif self.is_code_pointer(a):
+            # An object that is just the address of machine code elsewhere:
+            # the inner loop's PC=(A) jumps through it like through a PCO
+            # (e.g. DUP#0=case at #61891 -> #641CC).
+            v = self.rom.addr(a)
+            self.mark(Item(a, 5, "codeptr"))
+            self.labels.setdefault(a, "obj")
+            self.q("code", v, a, "codeptr")
         else:
             self.unresolved[a].add("pointer target is neither object nor PCO")
 
+    def is_code_pointer(self, a):
+        v = self.rom.addr(a)
+        if a >= LOWER_END or v >= LOWER_END or v < 0x140 or not self.free(a, 5):
+            return False
+        return v in self.insns or self.try_code(v)
+
     def do_obj(self, a):
+        self.unmark_slot(a)
         if a in self.items:
             return
         it = self.owned_by(a)
@@ -267,8 +296,9 @@ class Analyzer:
             # Objects found earlier may be embedded in this one: absorb them.
             inner = {self.owner[a + i] for i in range(o.size) if (a + i) in self.owner}
             items = [self.items[s] for s in inner]
-            if all(it.kind in ("obj", "pco", "codebody") and it.start + it.size <= a + o.size
-                   for it in items):
+            if all((it.kind in ("obj", "pco", "codebody", "addrslot", "rplptr")
+                    or (it.kind == "code" and it.start in self.shallow))
+                   and it.start + it.size <= a + o.size for it in items):
                 for it in items:
                     if it.kind == "codebody":
                         continue
@@ -399,8 +429,64 @@ class Analyzer:
             if self.free(a, 10):
                 self.mark(Item(a, 10, "ptrdata", {"what": "prolog descriptor"}))
 
+    def read_executed(self):
+        """What the emulator saw the ROM do (crates/hp48/examples/execmap.rs):
+        executed instructions, objects run through PC=(A), and the RPL
+        pointer slots the inner loop fetched them from."""
+        self.executed = {"": [], "O": [], "P": [], "A": []}
+        path = DATA / "executed.txt"
+        if path.exists():
+            for line in path.read_text().splitlines():
+                if line and not line.startswith("#"):
+                    kind, _, a = line.rpartition(" ")
+                    self.executed[kind].append(int(a, 16))
+
+    def seed_executed(self):
+        """Executed instructions are certainly code, even where nothing static
+        leads to them (computed jumps, the self-test). Decoded first, so that
+        bytes that merely look like an object cannot claim them."""
+        self.read_executed()
+        self.addr_slots = set(self.executed["A"])
+        # Table words whose value the code put into PC, D0 or D1 are
+        # addresses, whatever bytes around them look like. Mark them before
+        # following code, so that falling through a GOSUB does not decode
+        # an inline table as instructions (#15B4C after GOSUB SUB_15C5F).
+        covered = set()
+        for a in self.executed[""]:
+            covered.update(range(a, a + self.cd.decode(a).size))
+        for a in self.executed["A"]:
+            if self.free(a, 5) and not covered.intersection(range(a, a + 5)):
+                self.mark(Item(a, 5, "addrslot"))
+        # The executed instructions themselves, without following them yet:
+        # objects are decoded first, so that a fall-through (a GONC whose
+        # carry the analysis cannot know) stops at them (the PCO at #7D4C5).
+        for a in self.executed[""]:
+            ins = self.cd.decode(a)
+            if ins.flow != "stop" and self.free(a, ins.size):
+                self.insns[a] = ins
+                self.mark(Item(a, ins.size, "code"))
+                self.shallow.add(a)
+        for a in self.executed["O"]:
+            self.q("ptr", a)
+        self.run()
+
+    def follow_executed(self):
+        for a in self.executed[""]:
+            self.q("code", a)
+        self.run()
+
+    def seed_slots(self):
+        """Pointer slots outside any known object: runs of RPL pointers that
+        machine code hands to the inner loop (e.g. #315EF after CLOSEUART)."""
+        for a in self.executed["P"]:
+            if self.free(a, 5):
+                self.mark(Item(a, 5, "rplptr"))
+                self.q("ptr", self.rom.addr(a), a, "rpl")
+        self.run()
+
     def analyze(self):
         self.mark_prolog_descriptors()
+        self.seed_executed()
         self.read_library_table()
         self.process_libraries()
         self.run()
@@ -409,6 +495,8 @@ class Analyzer:
                 self.q("code", lib.access, lib.hdr, "libaccess")
         self.seed()
         self.run()
+        self.follow_executed()
+        self.seed_slots()
         self.gap_pass()
 
     # ------------------------------------------------------------ gaps
@@ -458,10 +546,33 @@ class Analyzer:
                 p += ins.size
         return n >= 3
 
+    def address_tables(self):
+        """In unclaimed areas, runs of two or more 5-nibble words that each
+        hold the address of a named entry are address tables (e.g. #5F908:
+        argument-check routines the code compares against). Random data
+        does that rarely; without this the gap pass may decode them as code."""
+        named = {a for a, sy in self.sym.by_addr.items()
+                 if 0x140 <= a < LOWER_END and "RAM" not in sy.flags and sy.usage not in ("IOR", "SYS")}
+        for a, b in list(self.gaps(0, LOWER_END, 10)):
+            p = a
+            while p + 10 <= b:
+                q = p
+                while q + 5 <= b and self.rom.addr(q) in named:
+                    q += 5
+                if q - p >= 10:
+                    for w in range(p, q, 5):
+                        self.mark(Item(w, 5, "addrslot", {"static": True}))
+                        self.q("ptr", self.rom.addr(w), w, "table")
+                    p = q
+                else:
+                    p += 1
+        self.run()
+
     def gap_pass(self):
         """Classify unreferenced gaps: objects with a valid prolog first,
         then code that decodes cleanly. Entries found here are speculative
         (reached by computed jumps or not at all)."""
+        self.address_tables()
         for rounds in range(4):
             found = 0
             for a, b in list(self.gaps()):
@@ -554,7 +665,8 @@ class Analyzer:
         OUT.mkdir(exist_ok=True)
         state = {k: getattr(self, k) for k in
                  ("items", "insns", "labels", "xrefs", "conflicts", "unresolved",
-                  "libs", "romptr_names", "inline_callers", "overlaps", "presumed_uncond", "data_refs", "speculative")}
+                  "libs", "romptr_names", "inline_callers", "overlaps", "presumed_uncond", "data_refs", "speculative",
+                  "addr_slots")}
         with open(OUT / "analysis.pickle", "wb") as f:
             pickle.dump(state, f)
 

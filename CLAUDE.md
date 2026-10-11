@@ -45,7 +45,11 @@ python fonts.py --png DIR         # render the three ROM fonts
 python hpdis.py code|func|rpl|auto ADDR|NAME   # disassemble / decompile on demand
 python disasm.py                  # commented source tree -> ../out/src, then reassemble and compare with the ROM
 python sasm.py ../out/src/rom.s -o ../out/rom.bin --check ../ROM/gxrom-r   # assemble the source tree
+python relocate.py [--pad N] [FILE-PREFIX]   # copy out/src with N nibbles inserted -> ../out/reloc.bin
 ```
+
+Relocation check (does edited source still work?): `relocate.py` prints where it padded, e.g. `#041D9`. Then run
+`cargo run --release -p hp48 --example lockstep -- ROM/gxrom-r out/reloc.bin 041D9 7E001 16 "1 2 +" ...`. It runs both ROMs one instruction at a time with the same typed lines and stops where control flow first differs. `WATCH=ADDR`, `WATCHR=n` and `WATCHD1=VALUE` trace a RAM word, register Rn or D1. `cargo run --release -p hp48 --example execmap` re-records `data/executed.txt`; run it after changing the tour.
 
 Run the Python tests from the repo root with `python -m unittest discover -s tests`; `test_sasm` includes the full ROM → source → ROM round trip (about 20 s). `out/` is generated and git-ignored; re-run `analyze.py` after changing `saturn.py`, `rpl.py`, `symbols.py` or the data files.
 
@@ -104,6 +108,16 @@ Addresses you will need again: fonts at #7A047 (10-row), #7B257 (8-row) and #7C1
   - Every generated line is assembled and compared with the ROM. A line that doesn't reproduce (three instructions with don't-care bits set) is written as `NIBHEX` with the original text in its comment.
   - The source is derived from HP's ROM, so it stays in git-ignored `out/`.
   - The assembler builds its table of fixed instructions by running the decoder over every opcode prefix. A text with two encodings (`DAT0=A B`: `148` or `1506`) assembles to the shortest one.
+- **Editable source.**
+  - Lengths are `LENGTH`…`ENDLENGTH` blocks, and RPL syntax uses the source's own `DOCOL`/`SEMI`/… labels.
+  - Only the ROM start and the upper-ROM parts have `ORG`; everything else flows on.
+  - Zero fill between entries is `FILLTO #addr`, so it absorbs growth before it and keeps later entries in place.
+  - `PIN #addr` asserts code that must not move: the interrupt entry #0000F, and PRLG #028FC (see `docs/rom-map.md`).
+  - Shifting code by a few nibbles has run the whole `lockstep` tour cleanly, at #0A00E, #041D9 and #46039.
+- **Which numbers are addresses.** A literal that is really an address breaks relocated code, so these must be written symbolically:
+  - `data/executed.txt`, recorded by `crates/hp48/examples/execmap.rs`, lists executed instructions, objects run through `PC=(A)`, RPL pointer slots, and table words whose value soon became PC, D0 or D1 (or that were copied into RAM as object pointers).
+  - `analyze.py` claims executed instructions and table words before anything else, then decodes objects, then follows the executed code. That order stops inline tables after a `GOSUB` from being decoded as code. It also finds code-pointer objects (an object that is just the address of code, e.g. `DUP#0=case` #61891) and static address tables (two or more words naming entries).
+  - In `disasm.py`, `D0=(5)`/`D1=(5)` operands are addresses unless they are #7E000 or above (bank switcher and ports). `LC(5)`/`LA(5)` operands are numbers unless they name a known entry or table, or `data/operands.txt` says `addr` (or gives an expression such as `Font10-620`).
 
 ## Contents
 
