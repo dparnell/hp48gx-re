@@ -43,9 +43,11 @@ python listing.py [lo hi]         # annotated listing -> ../out/rom-r.lst (needs
 python libcat.py                  # library/command catalogue -> ../out/libraries.txt
 python fonts.py --png DIR         # render the three ROM fonts
 python hpdis.py code|func|rpl|auto ADDR|NAME   # disassemble / decompile on demand
+python disasm.py                  # commented source tree -> ../out/src, then reassemble and compare with the ROM
+python sasm.py ../out/src/rom.s -o ../out/rom.bin --check ../ROM/gxrom-r   # assemble the source tree
 ```
 
-Run the Python tests from the repo root with `python -m unittest discover -s tests`. `out/` is generated and git-ignored; re-run `analyze.py` after changing `saturn.py`, `rpl.py`, `symbols.py` or the data files.
+Run the Python tests from the repo root with `python -m unittest discover -s tests`; `test_sasm` includes the full ROM → source → ROM round trip (about 20 s). `out/` is generated and git-ignored; re-run `analyze.py` after changing `saturn.py`, `rpl.py`, `symbols.py` or the data files.
 
 ## Rust architecture
 
@@ -94,6 +96,14 @@ Addresses you will need again: fonts at #7A047 (10-row), #7B257 (8-row) and #7C1
   - Carry is tracked so that `GOC`/`GONC` after a test become unconditional. Callees that start with `C=RSTK` take inline data.
   - `gap_pass` speculatively classifies the rest.
 - Memory model rule: pointers from lower ROM to #80000 and up mean RAM. Code in upper ROM is only allowed inside `DOCODE` bodies and in the self-test area #80000–#82006.
+- **Reassemblable source.** `disasm.py` turns the analysis into `out/src`. `sasm.py` assembles it back, byte for byte.
+  - Source format (documented in `sasm.py`): SASM mnemonics as printed by `saturn.py`, and RPLCOMP-like RPL (`::`, `;`, `# 3F`, `$ "..."`, `CODE`…`ENDCODE`). Comments start with `*`.
+  - Images: GROBs become PNGs in `images/`, and the fonts become glyph sheets in `fonts/` (the `GLYPHS` directive).
+  - Labels, in order of preference: `data/annotations.txt`, then EDB/VBL names, then library command names, then generated names (`SUB_`/`L_`/`OBJ_`/`ROMP_lib_cmd`).
+  - The split into files comes from `data/rom-layout.txt` plus one region per upper-ROM library part. Both data files are our own notes: add names, comments and region descriptions there as the code is understood, not in `out/src`.
+  - Every generated line is assembled and compared with the ROM. A line that doesn't reproduce (three instructions with don't-care bits set) is written as `NIBHEX` with the original text in its comment.
+  - The source is derived from HP's ROM, so it stays in git-ignored `out/`.
+  - The assembler builds its table of fixed instructions by running the decoder over every opcode prefix. A text with two encodings (`DAT0=A B`: `148` or `1506`) assembles to the shortest one.
 
 ## Contents
 

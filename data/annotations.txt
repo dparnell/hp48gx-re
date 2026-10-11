@@ -1,0 +1,17 @@
+# Names and comments for tools/disasm.py, keyed by ROM address.
+# ADDR<TAB>NAME<TAB>COMMENT. NAME (optional) replaces the label at ADDR;
+# COMMENT is printed above the line at ADDR. Several lines may share an
+# address. These are our own notes, not data taken from the ROM.
+00000		Reset entry: P=3, then on to RESET (#01FEA) and the boot code at #7018C
+0000F	Interrupt	Interrupt handler entry
+02241		Boot: configure the I/O page
+0224F		Boot: probe RAM by writing #80000 and looking for a mirror at #90000, then configure 128K or 32K
+0843A		Search ROMPTAB (RAM #809A3) by library number; used by ROMPART>ADDR
+0AC6A		Warm start: rebuild ROMPTAB from the ROM library table, reconfigure the bank switcher and ports
+0ACF9		Address of the ROM library table
+11F28		String renderer. XM=1: 10-row font, glyph = #7A047 + 20*code; XM=0: 8-row font, glyph = #7B257 + 16*code
+7018C		Boot code, reached from RESET (#01FEA)
+702C4	RomLibTable	ROM library table: lib# (3), header address (5), access handler (5); ends with lib #FFF
+7073F		Bank-select stubs, reached through computed jumps: D0=(5) #7F040+2n, then GOTO
+7A1FA		Minifont renderer: glyph = #7C102 + 11*index, codes above #9F remapped through the table at #7C793
+7FFA0		Version and copyright strings

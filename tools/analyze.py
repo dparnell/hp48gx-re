@@ -501,6 +501,25 @@ class Analyzer:
                         found += 1
             if not found:
                 break
+        # objects that follow zero fill inside a gap (e.g. the version
+        # strings after the fill at #7E001)
+        for a, b in list(self.gaps(0, 0x100000, 16)):
+            p = a
+            while p < b:
+                z = p
+                while z < b and self.rom.n[z] == 0:
+                    z += 1
+                if z - p >= 16 and z + 5 <= b and self.rd.is_object(z):
+                    try:
+                        o = self.rd.decode(z)
+                    except DecodeError:
+                        o = None
+                    if o is not None and z + o.size <= b:
+                        self.speculative.add(z)
+                        self.q("obj", z)
+                        self.run()
+                        break
+                p = z + 1
         # residual gaps: runs of zeros (>= 16 nibbles) are fill, the rest data
         for a, b in list(self.gaps(0, 0x100000, 1)):
             p = a

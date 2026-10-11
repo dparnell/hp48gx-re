@@ -96,7 +96,18 @@ table (→ #7633B) and its message table.
 - **Link table:** a `DOHSTR` of 5-nibble self-relative offsets, one per command.
 - **Hash table:** a `DOHSTR` holding 16 offsets (one per name length 1–16),
   then a 5-nibble names-area size, then entries of the form
-  `len(2) chars(2·len) cmd#(3)`.
+  `len(2) chars(2·len) cmd#(3)`. After the names comes one 5-nibble
+  word per command, in command order: the distance back to that command's
+  name entry, or 0 if the command has no name (e.g. lib 002 at #776DD).
+- **Command headers.** 514 commands of libs 002, 0AB, 0F1 and 700 are
+  preceded by 7 nibbles: a flag nibble, then the lib# (3) and command# (3).
+  The flag is mostly 8; values 0–E occur and their meaning is not yet
+  known. Example: `8 002 0C0` right before `xAUTO` at #1E1AB.
+- **Message tables** (`MsgTab(n)`, #740E1…) are arrays of strings (`DOARRY`
+  with element type `DOCSTR`): each element is a length and the characters,
+  without a prolog.
+- **Version strings.** They form a `::` object at #7FFA0 that holds two
+  strings. The image ends with the nibbles `DEFD` at #7FFFC.
 
 `out/libraries.txt` lists every library and command. Commands are named from
 the hash tables, with Dominik's EDB used as a fallback for ROMPTRs.
@@ -133,8 +144,11 @@ the hash tables, with Dominik's EDB used as a fallback for ROMPTRs.
 
 | Range | What |
 |---|---|
-| #7A2B3–#7C854 | Appears to be font bitmaps: glyph-shaped rows, e.g. `!` = `40 40 40 40 40 40 00 40`. Addresses inside it are loaded at #11F3D… and #7A156… |
-| #7E001–#7FFBE | Zero fill up to the version string (under the bank switcher at run time) |
+| #7A2B3–#7B446 | 10-row font, codes #1F–#FF (glyph = #7A047 + 20·code, used when XM=1; see `tools/fonts.py`) |
+| #7B447–#7C256 | 8-row font, codes #1F–#FF (glyph = #7B257 + 16·code, XM=0) |
+| #7C257–#7C6B8 | Minifont, indexes #1F–#84 (glyph = #7C102 + 11·index: width nibble, 5 rows) |
+| #7C793–#7C854 | Minifont index for codes #9F–#FF, one byte each |
+| #7E001–#7FF9F | Zero fill up to the version object (under the bank switcher at run time) |
 | #FF959–#FFFFF | Zero fill after the last library |
 
 ## Coverage (run `python tools/analyze.py`)
