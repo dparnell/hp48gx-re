@@ -1,5 +1,7 @@
 # HP 48GX: emulator and ROM source
 
+![The desktop calculator in a wide window: the calculator on the left, the stack, menu keys and command line on the right](docs/images/desktop.png)
+
 This repository holds three things:
 
 - **`firmware/`**: the complete HP 48GX ROM (revision R) as commented,
