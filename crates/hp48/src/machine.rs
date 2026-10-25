@@ -87,26 +87,30 @@ impl Machine {
     pub fn run(&mut self, cycles: u64) {
         let end = self.time + cycles;
         while self.time < end {
-            if self.cpu.shutdown {
-                // Sleep until the next timer tick.
-                let next = self.next_t1.min(self.next_t2).min(end);
-                self.time = next;
-                self.advance_timers();
-                self.service();
-                continue;
-            }
-            let c = match self.natives.get(&self.cpu.pc) {
-                Some(native) => {
-                    native(&mut self.cpu, &mut self.hw);
-                    self.cpu.pc = self.cpu.pop();
-                    NATIVE_CYCLES
-                }
-                None => self.cpu.step(&mut self.hw),
-            };
-            self.time += u64::from(c);
+            self.step(end);
+        }
+    }
+
+    /// Run one instruction or native call; while the CPU is shut down,
+    /// sleep until the next timer tick instead, but not past `until`.
+    pub fn step(&mut self, until: u64) {
+        if self.cpu.shutdown {
+            self.time = self.next_t1.min(self.next_t2).min(until).max(self.time);
             self.advance_timers();
             self.service();
+            return;
         }
+        let c = match self.natives.get(&self.cpu.pc) {
+            Some(native) => {
+                native(&mut self.cpu, &mut self.hw);
+                self.cpu.pc = self.cpu.pop();
+                NATIVE_CYCLES
+            }
+            None => self.cpu.step(&mut self.hw),
+        };
+        self.time += u64::from(c);
+        self.advance_timers();
+        self.service();
     }
 
     /// Run until the CPU reaches `addr` or `max_cycles` elapse; true if reached.

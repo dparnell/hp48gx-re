@@ -1,6 +1,7 @@
 //! The tour of calculator features shared by examples/execmap.rs (which
-//! records what the ROM executes) and examples/lockstep.rs (which runs it on
-//! an original and a relocated ROM side by side).
+//! records what the ROM executes), examples/lockstep.rs (which runs it on
+//! an original and a relocated ROM side by side) and examples/coverage.rs
+//! (which measures how much of it the natives cover).
 use hp48::Key;
 
 /// Command lines typed after boot; each is followed by ENTER, two seconds,
