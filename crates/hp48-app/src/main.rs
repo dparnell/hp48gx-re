@@ -1,7 +1,7 @@
 //! HP 48GX desktop calculator.
 //!
 //! hp48-app [--rom PATH] [--screenshot OUT.png] [--keys "K ..."] [--type "RPL text"]... [--persist] [--pixels] [--plot-only]
-//!          [--layout auto|calculator|desktop] [--size WxH] [--line "RPL text"]...
+//!          [--layout auto|calculator|desktop] [--size WxH] [--line "RPL text"]... [--live]
 //!
 //! The layout follows the window: a narrow window shows the calculator
 //! alone; a wide one adds a desktop panel (desk.rs) with the stack as text,
@@ -14,17 +14,23 @@
 //!
 //! State is kept in %APPDATA%/HP48GX/state.bin (or $XDG_DATA_HOME/HP48GX);
 //! set HP48GX_STATE to use another file.
+//!
+//! The calculator runs on a thread of its own (runner.rs), and the window
+//! is drawn again only when what it shows changes. Scripted screenshot runs
+//! step it frame by frame instead, unless given --live.
 
 mod desk;
 mod face;
 mod persist;
 mod plot;
+mod runner;
 
 use eframe::egui::{self, Align2, Color32, CornerRadius, FontId, Pos2, Rect, Sense, Stroke, UiBuilder, Vec2};
 use face::{KeyCap, ShiftColor, Style, ROWS};
 use hp48::{Key, Machine, CPU_HZ, LCD_HEIGHT, LCD_WIDTH};
 use std::collections::{HashSet, VecDeque};
-use std::time::Instant;
+use std::sync::{Arc, Mutex, MutexGuard};
+use std::time::{Duration, Instant};
 
 // Layout in faceplate units; everything is scaled to the window.
 const FACE_W: f32 = 60.0;
@@ -70,7 +76,9 @@ const DESK_MIN_WIDTH: f32 = 760.0;
 type SceneCache = Option<([[bool; LCD_WIDTH]; LCD_HEIGHT], std::rc::Rc<hp48_vector::Scene>)>;
 
 struct App {
-    machine: Machine,
+    /// Shared with the thread that runs it (runner.rs).
+    machine: Arc<Mutex<Machine>>,
+    runner: Option<runner::Runner>,
     plot_open: bool,
     /// Debug: show the plot in the main window (for scripted screenshots).
     plot_only: bool,
@@ -90,10 +98,13 @@ struct App {
     scene_cache: std::cell::RefCell<SceneCache>,
     /// The ROM's minifont, recognised in the LCD and drawn with a real font.
     minifont: hp48_vector::MiniFont,
-    last: Option<Instant>,
     mouse_keys: HashSet<Key>,
     kb_keys: HashSet<Key>,
     screenshot: Option<(String, u32)>,
+    /// --live: run the script in real time with the runner thread (the
+    /// time of the last frame), and count the frames drawn once it is done.
+    live: Option<Instant>,
+    idle_frames: u32,
     script: Vec<(Key, bool, f64)>,
     script_time: f64,
     /// --line commands still to type (scripted runs).
@@ -101,7 +112,6 @@ struct App {
     end_time: f64,
     /// Save continuous memory (off for scripted screenshot runs).
     persistent: bool,
-    last_save: Instant,
 }
 
 impl App {
@@ -134,7 +144,8 @@ impl App {
         }
         App {
             minifont: read_minifont(&machine),
-            machine,
+            machine: Arc::new(Mutex::new(machine)),
+            runner: None,
             plot_open: false,
             plot_only: false,
             plot: plot::PlotWindow::default(),
@@ -148,11 +159,11 @@ impl App {
             display: Display::Vector,
             scene_cache: std::cell::RefCell::new(None),
             persistent,
-            last_save: Instant::now(),
-            last: None,
             mouse_keys: HashSet::new(),
             kb_keys: HashSet::new(),
             screenshot: screenshot.map(|p| (p, 0)),
+            live: None,
+            idle_frames: 0,
             script,
             script_time: 0.0,
             lines: Vec::new(),
@@ -160,15 +171,20 @@ impl App {
         }
     }
 
-    fn save(&mut self) {
-        if let Err(e) = persist::save(&self.machine) {
-            eprintln!("could not save calculator state: {e}");
-        }
-        self.last_save = Instant::now();
+    /// The machine, while the returned guard lives. Don't call another
+    /// method that locks it meanwhile.
+    fn m(&self) -> MutexGuard<'_, Machine> {
+        self.machine.lock().unwrap()
     }
 
-    fn set_key(&mut self, key: Key, down: bool) {
-        self.machine.key(key, down);
+    fn save_state(&self) {
+        if let Err(e) = persist::save(&self.m()) {
+            eprintln!("could not save calculator state: {e}");
+        }
+    }
+
+    fn set_key(&self, key: Key, down: bool) {
+        self.m().key(key, down);
     }
 
     fn handle_keyboard(&mut self, ctx: &egui::Context) {
@@ -211,34 +227,30 @@ impl App {
 
     /// Feed queued keystrokes: each held 50 ms, then 80 ms apart, in
     /// calculator time.
-    fn feed_typing(&mut self) {
-        if self.machine.time < self.typing_at {
+    fn feed_typing(&mut self, m: &mut Machine) {
+        if m.time < self.typing_at {
             return;
         }
         if let Some(k) = self.typing_down.take() {
-            self.set_key(k, false);
-            self.typing_at = self.machine.time + CPU_HZ * 8 / 100;
+            m.key(k, false);
+            self.typing_at = m.time + CPU_HZ * 8 / 100;
         } else if let Some(k) = self.typing.pop_front() {
-            self.set_key(k, true);
+            m.key(k, true);
             self.typing_down = Some(k);
-            self.typing_at = self.machine.time + CPU_HZ * 5 / 100;
+            self.typing_at = m.time + CPU_HZ * 5 / 100;
         }
     }
 
-    /// Run for `dt` seconds. While text is being typed, run faster than
-    /// real time (up to about 10 ms of work per frame), so that a typed line
-    /// takes a moment rather than seconds.
-    fn run_for(&mut self, dt: f64) {
-        let cycles = (dt * CPU_HZ as f64) as u64;
-        if !self.is_typing() {
-            self.machine.run(cycles);
-            return;
-        }
+    /// While text is being typed, run faster than real time (about 10 ms of
+    /// work per frame, besides the runner thread's real time), so that a
+    /// typed line takes a moment rather than seconds.
+    fn type_ahead(&mut self) {
+        let machine = self.machine.clone();
+        let mut m = machine.lock().unwrap();
         let start = Instant::now();
-        let end = self.machine.time + cycles;
-        while self.is_typing() && (self.machine.time < end || start.elapsed().as_millis() < 10) {
-            self.feed_typing();
-            self.machine.run(CPU_HZ / 200);
+        while self.is_typing() && start.elapsed().as_millis() < 10 {
+            self.feed_typing(&mut m);
+            m.run(CPU_HZ / 200);
         }
     }
 
@@ -258,25 +270,37 @@ impl App {
         const ADISP: u32 = 0x806D5;
         const VDISP: u32 = 0x806DA;
         const GDISP: u32 = 0x806E4;
-        let [a, v, g] = [ADISP, VDISP, GDISP].map(|p| self.machine.peek_value(p, 5));
+        let machine = self.machine.clone();
+        let m = machine.lock().unwrap();
+        let [a, v, g] = [ADISP, VDISP, GDISP].map(|p| m.peek_value(p, 5));
         // While memory is being set up the pointers are not yet distinct.
         let pict = v == g && v != a && v >= 0x80000;
         if pict && !self.showing_pict && self.auto_plot {
             self.plot_open = true;
-            self.plot.refresh(&self.machine, true);
+            self.plot.refresh(&m, true);
         }
         self.showing_pict = pict;
     }
 }
 
 impl eframe::App for App {
+    /// The runner thread runs the calculator and asks for a repaint when
+    /// what it shows changes; egui repaints on input too. Frames are only
+    /// asked for here while typing ahead, and in scripted runs, which step
+    /// the calculator frame by frame instead of with the thread.
     fn logic(&mut self, ctx: &egui::Context, _frame: &mut eframe::Frame) {
-        let now = Instant::now();
-        let dt = self.last.map_or(1.0 / 60.0, |l| (now - l).as_secs_f64()).min(0.1);
-        self.last = Some(now);
         if self.screenshot.is_some() {
-            // Deterministic timing for scripted screenshots.
-            let step = 1.0 / 30.0;
+            // Deterministic timing for scripted screenshots, or with --live
+            // the wall clock and the runner thread, as in interactive use.
+            let step = match &mut self.live {
+                Some(last) => {
+                    let now = Instant::now();
+                    let dt = (now - *last).as_secs_f64();
+                    *last = now;
+                    dt
+                }
+                None => 1.0 / 30.0,
+            };
             self.script_time += step;
             while let Some(&(k, down, t)) = self.script.first() {
                 if t > self.script_time {
@@ -294,29 +318,44 @@ impl eframe::App for App {
             if self.is_typing() {
                 self.end_time = self.end_time.max(self.script_time + 2.0);
             }
-            self.feed_typing();
-            self.machine.run((step * CPU_HZ as f64) as u64);
-        } else {
-            self.run_for(dt);
+            if self.live.is_none() {
+                let machine = self.machine.clone();
+                let mut m = machine.lock().unwrap();
+                self.feed_typing(&mut m);
+                m.run((step * CPU_HZ as f64) as u64);
+                ctx.request_repaint();
+            } else if self.is_typing() {
+                self.type_ahead();
+                ctx.request_repaint();
+            } else if let Some(&(_, _, t)) = self.script.first() {
+                ctx.request_repaint_after(Duration::from_secs_f64((t - self.script_time).max(0.0)));
+            } else {
+                // From here frames come from the runner, when the display
+                // changes, and once more to take the screenshot.
+                self.idle_frames += 1;
+                ctx.request_repaint_after(Duration::from_secs_f64((self.end_time - self.script_time).max(0.0) + 0.05));
+            }
+        } else if self.is_typing() {
+            self.type_ahead();
+            ctx.request_repaint();
         }
         self.handle_keyboard(ctx);
         self.watch_pict();
         self.screenshot_step(ctx);
-        if self.persistent && self.last_save.elapsed().as_secs() >= 60 {
-            self.save();
-        }
-        ctx.request_repaint();
     }
 
     fn on_exit(&mut self) {
+        // Stop the thread first, so the state saved is the final one.
+        self.runner = None;
         if self.persistent {
-            self.save();
+            self.save_state();
         }
     }
 
     fn ui(&mut self, ui: &mut egui::Ui, _frame: &mut eframe::Frame) {
         if self.plot_only {
-            self.plot.refresh(&self.machine, false);
+            let machine = self.machine.clone();
+            self.plot.refresh(&machine.lock().unwrap(), false);
             self.plot.ui(ui);
             return;
         }
@@ -338,11 +377,18 @@ impl eframe::App for App {
         self.calculator_ui(ui, calc);
         let panel = Rect::from_min_max(Pos2::new(calc.right(), full.top()), full.max);
         ui.painter().rect_filled(panel, CornerRadius::ZERO, desk::PANEL_BG);
+        let machine = self.machine.clone();
         let actions = ui
-            .scope_builder(UiBuilder::new().max_rect(panel.shrink(14.0)), |ui| self.desk.ui(ui, &self.machine, &self.minifont))
+            .scope_builder(UiBuilder::new().max_rect(panel.shrink(14.0)), |ui| {
+                self.desk.ui(ui, &machine.lock().unwrap(), &self.minifont)
+            })
             .inner;
         for a in actions {
             self.act(a);
+        }
+        // Start typing what was entered (logic types it ahead).
+        if self.is_typing() {
+            ui.ctx().request_repaint();
         }
     }
 }
@@ -380,6 +426,7 @@ impl App {
         }
 
         let mut new_mouse: HashSet<Key> = HashSet::new();
+        let keyboard_live = self.m().hw.keyboard.input(0x1FF) != 0;
         for (row_i, row) in ROWS.iter().enumerate() {
             // ENTER is double width, so its row also uses a six-column grid.
             let cols: f32 = if row_i < 5 { 6.0 } else { 5.0 };
@@ -398,8 +445,7 @@ impl App {
                 if resp.is_pointer_button_down_on() {
                     new_mouse.insert(cap.key);
                 }
-                let down = self.machine.hw.keyboard.input(0x1FF) != 0
-                    && (self.mouse_keys.contains(&cap.key) || self.kb_keys.contains(&cap.key));
+                let down = keyboard_live && (self.mouse_keys.contains(&cap.key) || self.kb_keys.contains(&cap.key));
                 draw_key(&painter, cap, key_rect, Rect::from_min_max(to_screen(x, y), to_screen(x + w, y + ROW_PITCH)), scale, down);
             }
         }
@@ -419,7 +465,8 @@ impl App {
 
 impl App {
     fn show_plot(&mut self, ctx: &egui::Context) {
-        self.plot.refresh(&self.machine, false);
+        let machine = self.machine.clone();
+        self.plot.refresh(&machine.lock().unwrap(), false);
         let builder = egui::ViewportBuilder::default()
             .with_title("HP 48GX Plot")
             .with_inner_size([720.0, 480.0])
@@ -455,13 +502,16 @@ impl App {
             })
         });
         if let Some(image) = shot {
+            if self.live.is_some() {
+                eprintln!("{} frames drawn after the script ended", self.idle_frames);
+            }
             save_png(path, &image);
             ctx.send_viewport_cmd(egui::ViewportCommand::Close);
         }
     }
 
     fn draw_lcd(&self, painter: &egui::Painter, to_screen: &dyn Fn(f32, f32) -> Pos2, scale: f32) {
-        let lcd = self.machine.lcd();
+        let lcd = self.m().lcd();
         let x0 = MARGIN + 1.0;
         let bezel = Rect::from_min_max(to_screen(MARGIN, 1.0), to_screen(FACE_W - MARGIN, LCD_TOP + LCD_H + 2.0));
         painter.rect_filled(bezel, CornerRadius::same((1.0 * scale) as u8), BEZEL);
@@ -739,6 +789,7 @@ fn main() -> eframe::Result {
     let mut force_persist = false;
     let mut pixels = false;
     let mut plot_only = false;
+    let mut live = false;
     let mut natives = true;
     let mut layout = Layout::Auto;
     let mut size = [420.0, 784.0];
@@ -749,6 +800,7 @@ fn main() -> eframe::Result {
             "--pixels" => pixels = true,
             "--no-natives" => natives = false,
             "--plot-only" => plot_only = true,
+            "--live" => live = true,
             "--layout" => {
                 layout = match args.next().as_deref() {
                     Some("auto") => Layout::Auto,
@@ -806,12 +858,20 @@ fn main() -> eframe::Result {
         options,
         Box::new(move |cc| {
             install_fonts(&cc.egui_ctx);
+            let scripted = screenshot.is_some();
             let mut app = App::new(&rom, screenshot, keys, force_persist);
             app.lines = lines;
             if !natives {
-                app.machine.natives.clear();
-                app.machine.jumps.clear();
-                app.machine.blocks = None;
+                let mut m = app.m();
+                m.natives.clear();
+                m.jumps.clear();
+                m.blocks = None;
+            }
+            if live {
+                app.live = Some(Instant::now());
+            }
+            if !scripted || live {
+                app.runner = Some(runner::Runner::start(app.machine.clone(), cc.egui_ctx.clone(), app.persistent));
             }
             if pixels {
                 app.display = Display::Pixels;
