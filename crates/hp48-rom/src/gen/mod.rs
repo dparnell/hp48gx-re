@@ -9,6 +9,10 @@ mod r5;
 mod r6;
 mod r7;
 mod r8;
+mod r9;
+mod ra;
+mod rb;
+mod rc;
 mod rd;
 
 /// `hp48::rom_hash` of the ROM's nibbles.
@@ -27,5 +31,9 @@ pub const ALL: &[&[(u32, u32, Block)]] = &[
     r6::BLOCKS,
     r7::BLOCKS,
     r8::BLOCKS,
+    r9::BLOCKS,
+    ra::BLOCKS,
+    rb::BLOCKS,
+    rc::BLOCKS,
     rd::BLOCKS,
 ];

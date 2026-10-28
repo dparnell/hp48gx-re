@@ -2,8 +2,9 @@
 //!
 //! cargo run --release -p hp48 --example translate -- [ROM]
 //!
-//! The code translated is every instruction in data/executed.txt (recorded
-//! by execmap over the tour). Each becomes a function that runs it and, if
+//! The code translated is every instruction the ROM analysis found
+//! (out/code.txt, written by tools/analyze.py) and every instruction in
+//! data/executed.txt (recorded by execmap over the tour). Each becomes a function that runs it and, if
 //! execution falls through to another translated instruction, calls that
 //! one's function. An instruction that changes the machine's configuration
 //! or interrupts, or calls a subroutine, ends the run. See hp48::translated
@@ -127,13 +128,18 @@ fn main() {
     let rom = &m.hw.rom;
     let fetch = |a: u32| rom[(a & 0xF_FFFF) as usize];
 
-    let executed: BTreeSet<u32> = std::fs::read_to_string("data/executed.txt")
-        .expect("data/executed.txt")
-        .lines()
-        .filter(|l| l.len() == 5)
-        .filter_map(|l| u32::from_str_radix(l, 16).ok())
-        .collect();
-    let code: BTreeMap<u32, (Op, u32)> = executed.iter().map(|&a| (a, decode(a, fetch))).collect();
+    // Instructions the tour ran, and every instruction the analysis found.
+    let addrs = |path: &str| -> BTreeSet<u32> {
+        std::fs::read_to_string(path)
+            .unwrap_or_else(|e| panic!("{path}: {e} (run tools/analyze.py first)"))
+            .lines()
+            .filter(|l| l.len() == 5)
+            .filter_map(|l| u32::from_str_radix(l, 16).ok())
+            .collect()
+    };
+    let mut wanted = addrs("data/executed.txt");
+    wanted.extend(addrs("out/code.txt"));
+    let code: BTreeMap<u32, (Op, u32)> = wanted.iter().map(|&a| (a, decode(a, fetch))).collect();
 
     // Where execution goes on after each instruction, if it falls through
     // to translated code, and the last address of the run from each one.

@@ -90,6 +90,29 @@ fn translated_code_matches_the_interpreter() {
     assert!(p.translated.block_runs > 100_000, "blocks ran: {}", p.translated.block_runs);
 }
 
+/// Commands the tour leaves out, which run ROM code translated from the
+/// static analysis alone (about 1300 instructions the tour never reaches).
+#[test]
+fn translated_code_beyond_the_tour_matches_the_interpreter() {
+    let Some(mut p) = pair() else { return };
+    for line in [
+        "1 2 R→C 3 4 R→C * ABS ARG",
+        "#FFh #3h AND #2h * RL #1234h B→R R→B",
+        "0.5 RDZ RAND 1.5 →Q 0.25 →Q",
+        "DATE TIME TICKS 1000 0.1 BEEP",
+        "'X^2-4' 'X' 3 ROOT",
+        "1 ASIN ACOS ATAN 0.5 SINH TANH ACOSH",
+        "[[2 1][1 3]] DUP EGV DROP2 LU",
+        "[1 2 3 4] FFT 2 3 IDN",
+        "[[1 2][3 4]] SVD [1 -3 2] PROOT",
+        "10 0.5 0.1 UTPC",
+    ] {
+        p.enter(line, 2 * CPU_HZ);
+        p.tap(Key::On);
+        p.run(CPU_HZ / 2);
+    }
+}
+
 /// The whole tour (a few minutes).
 /// cargo test --release -p hp48-rom -- --ignored
 #[test]

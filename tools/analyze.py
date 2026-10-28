@@ -867,6 +867,9 @@ class Analyzer:
                   "addr_slots")}
         with open(OUT / "analysis.pickle", "wb") as f:
             pickle.dump(state, f)
+        # Every code address, for the Rust translator (examples/translate.rs).
+        with open(OUT / "code.txt", "w") as f:
+            f.writelines("%05X\n" % a for a in sorted(self.insns))
 
 
 def main():

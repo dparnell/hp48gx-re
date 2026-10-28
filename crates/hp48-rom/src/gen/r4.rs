@@ -137,6 +137,184 @@ fn i40aa1(r: &mut Run) {
     op!(r, 0x40AA1, 7, Op::Jump(0x8D2F)); // GOTO #08D2F
 }
 
+fn i40aad(r: &mut Run) {
+    op!(r, 0x40AAD, 7, Op::LoadConst { r: R::C, len: 5, val: 0x807DE }); // LC(5) #807DE
+    i40ab4(r)
+}
+
+fn i40ab4(r: &mut Run) {
+    op!(r, 0x40AB4, 7, Op::Jump(0x8D35)); // GOTO #08D35
+}
+
+fn i40be2(r: &mut Run) {
+    op!(r, 0x40BE2, 7, Op::Call(0x679B)); // GOSUB #0679B
+}
+
+fn i40be9(r: &mut Run) {
+    op!(r, 0x40BE9, 7, Op::DLoad { d: 0, len: 5, val: 0x8087A }); // D0=(5) #8087A
+    i40bf0(r)
+}
+
+fn i40bf0(r: &mut Run) {
+    op!(r, 0x40BF0, 7, Op::DLoad { d: 1, len: 5, val: 0x8075C }); // D1=(5) #8075C
+    i40bf7(r)
+}
+
+fn i40bf7(r: &mut Run) {
+    op!(r, 0x40BF7, 2, Op::Zero { r: R::A, f: Field::A }); // A=0 A
+    i40bf9(r)
+}
+
+fn i40bf9(r: &mut Run) {
+    op!(r, 0x40BF9, 4, Op::Mem { store: false, d: 0, r: R::A, f: Field::Nibbles(1) }); // A=DAT0 1
+    i40bfd(r)
+}
+
+fn i40bfd(r: &mut Run) {
+    op!(r, 0x40BFD, 3, Op::Copy { dst: R::B, src: R::A, f: Field::P }); // B=A P
+    i40c00(r)
+}
+
+fn i40c00(r: &mut Run) {
+    op!(r, 0x40C00, 5, Op::Test { test: Test::Zero(R::A), f: Field::P, goyes: Some(0x40C26) }); // ?A=0 P / GOYES #40C26
+    i40c05(r)
+}
+
+fn i40c05(r: &mut Run) {
+    op!(r, 0x40C05, 2, Op::Copy { dst: R::C, src: R::A, f: Field::A }); // C=A A
+    i40c07(r)
+}
+
+fn i40c07(r: &mut Run) {
+    op!(r, 0x40C07, 3, Op::Add { dst: R::C, src: R::C, f: Field::P }); // C=C+C P
+    i40c0a(r)
+}
+
+fn i40c0a(r: &mut Run) {
+    op!(r, 0x40C0A, 3, Op::Add { dst: R::C, src: R::C, f: Field::P }); // C=C+C P
+    i40c0d(r)
+}
+
+fn i40c0d(r: &mut Run) {
+    op!(r, 0x40C0D, 3, Op::Add { dst: R::C, src: R::A, f: Field::P }); // C=C+A P
+    i40c10(r)
+}
+
+fn i40c10(r: &mut Run) {
+    op!(r, 0x40C10, 3, Op::DExR { d: 1, r: R::A, short: false }); // AD1EX
+    i40c13(r)
+}
+
+fn i40c13(r: &mut Run) {
+    op!(r, 0x40C13, 2, Op::Add { dst: R::C, src: R::A, f: Field::A }); // C=C+A A
+    i40c15(r)
+}
+
+fn i40c15(r: &mut Run) {
+    op!(r, 0x40C15, 3, Op::DFromR { d: 1, r: R::C, short: false }); // D1=C
+    i40c18(r)
+}
+
+fn i40c18(r: &mut Run) {
+    op!(r, 0x40C18, 3, Op::Mem { store: false, d: 1, r: R::C, f: Field::A }); // C=DAT1 A
+    i40c1b(r)
+}
+
+fn i40c1b(r: &mut Run) {
+    op!(r, 0x40C1B, 5, Op::Test { test: Test::NonZero(R::C), f: Field::A, goyes: Some(0x40C35) }); // ?C#0 A / GOYES #40C35
+    i40c20(r)
+}
+
+fn i40c20(r: &mut Run) {
+    op!(r, 0x40C20, 3, Op::Copy { dst: R::B, src: R::C, f: Field::P }); // B=C P
+    i40c23(r)
+}
+
+fn i40c23(r: &mut Run) {
+    op!(r, 0x40C23, 3, Op::DFromR { d: 1, r: R::A, short: false }); // D1=A
+    i40c26(r)
+}
+
+fn i40c26(r: &mut Run) {
+    op!(r, 0x40C26, 3, Op::Mem { store: false, d: 1, r: R::C, f: Field::A }); // C=DAT1 A
+    i40c29(r)
+}
+
+fn i40c29(r: &mut Run) {
+    op!(r, 0x40C29, 5, Op::Test { test: Test::NonZero(R::C), f: Field::A, goyes: Some(0x40C35) }); // ?C#0 A / GOYES #40C35
+    i40c2e(r)
+}
+
+fn i40c2e(r: &mut Run) {
+    op!(r, 0x40C2E, 7, Op::Jump(0x370A)); // GOTO #0370A
+}
+
+fn i40c35(r: &mut Run) {
+    op!(r, 0x40C35, 3, Op::Inc { r: R::B, f: Field::P }); // B=B+1 P
+    i40c38(r)
+}
+
+fn i40c38(r: &mut Run) {
+    op!(r, 0x40C38, 6, Op::LoadConst { r: R::A, len: 1, val: 3 }); // LA(1) #3
+    i40c3e(r)
+}
+
+fn i40c3e(r: &mut Run) {
+    op!(r, 0x40C3E, 4, Op::Logic { and: true, dst: R::A, src: R::B, f: Field::P }); // A=A&B P
+    i40c42(r)
+}
+
+fn i40c42(r: &mut Run) {
+    op!(r, 0x40C42, 4, Op::Mem { store: true, d: 0, r: R::A, f: Field::Nibbles(1) }); // DAT0=A 1
+    i40c46(r)
+}
+
+fn i40c46(r: &mut Run) {
+    op!(r, 0x40C46, 2, Op::Copy { dst: R::A, src: R::C, f: Field::A }); // A=C A
+    i40c48(r)
+}
+
+fn i40c48(r: &mut Run) {
+    op!(r, 0x40C48, 7, Op::Call(0x67D2)); // GOSUB #067D2
+}
+
+fn i40c4f(r: &mut Run) {
+    op!(r, 0x40C4F, 3, Op::StSet { bit: 0xA, set: false }); // ST=0 10
+    i40c52(r)
+}
+
+fn i40c52(r: &mut Run) {
+    op!(r, 0x40C52, 2, Op::Dec { r: R::D, f: Field::A }); // D=D-1 A
+    i40c54(r)
+}
+
+fn i40c54(r: &mut Run) {
+    op!(r, 0x40C54, 3, Op::CondJump(Cond::Carry, 0x40C64)); // GOC #40C64
+    i40c57(r)
+}
+
+fn i40c57(r: &mut Run) {
+    op!(r, 0x40C57, 3, Op::DSub { d: 1, n: 5 }); // D1=D1- 5
+    i40c5a(r)
+}
+
+fn i40c5a(r: &mut Run) {
+    op!(r, 0x40C5A, 3, Op::Mem { store: true, d: 1, r: R::A, f: Field::A }); // DAT1=A A
+    i40c5d(r)
+}
+
+fn i40c5d(r: &mut Run) {
+    op!(r, 0x40C5D, 7, Op::Jump(0x620C3)); // GOTO #620C3
+}
+
+fn i40c64(r: &mut Run) {
+    op!(r, 0x40C64, 7, Op::Call(0x12D68)); // GOSUB #12D68
+}
+
+fn i40c6b(r: &mut Run) {
+    op!(r, 0x40C6B, 4, Op::Jump(0x40C52)); // GOTO #40C52
+}
+
 fn i40c99(r: &mut Run) {
     op!(r, 0x40C99, 3, Op::Mem { store: false, d: 1, r: R::A, f: Field::A }); // A=DAT1 A
     i40c9c(r)
@@ -240,6 +418,11 @@ fn i40ce5(r: &mut Run) {
     op!(r, 0x40CE5, 4, Op::PcIndirect(R::A)); // PC=(A)
 }
 
+fn i40eec(r: &mut Run) {
+    op!(r, 0x40EEC, 7, Op::LoadConst { r: R::C, len: 5, val: 0xABD }); // LC(5) #00ABD
+    i40ef3(r)
+}
+
 fn i40ef3(r: &mut Run) {
     op!(r, 0x40EF3, 2, Op::Dec { r: R::C, f: Field::A }); // C=C-1 A
     i40ef5(r)
@@ -271,6 +454,15 @@ fn i40f07(r: &mut Run) {
 
 fn i40f0e(r: &mut Run) {
     op!(r, 0x40F0E, 4, Op::Jump(0x40EF3)); // GOTO #40EF3
+}
+
+fn i40f17(r: &mut Run) {
+    op!(r, 0x40F17, 7, Op::LoadConst { r: R::C, len: 5, val: 0x8640C }); // LC(5) #8640C
+    i40f1e(r)
+}
+
+fn i40f1e(r: &mut Run) {
+    op!(r, 0x40F1E, 4, Op::Jump(0x40EF3)); // GOTO #40EF3
 }
 
 fn i417b4(r: &mut Run) {
@@ -471,6 +663,15 @@ fn i41920(r: &mut Run) {
     op!(r, 0x41920, 4, Op::Jump(0x41A24)); // GOTO #41A24
 }
 
+fn i41929(r: &mut Run) {
+    op!(r, 0x41929, 7, Op::LoadConst { r: R::C, len: 5, val: 0x807B6 }); // LC(5) #807B6
+    i41930(r)
+}
+
+fn i41930(r: &mut Run) {
+    op!(r, 0x41930, 4, Op::Jump(0x41A2B)); // GOTO #41A2B
+}
+
 fn i41939(r: &mut Run) {
     op!(r, 0x41939, 7, Op::LoadConst { r: R::C, len: 5, val: 0x807B6 }); // LC(5) #807B6
     i41940(r)
@@ -489,6 +690,15 @@ fn i41950(r: &mut Run) {
     op!(r, 0x41950, 4, Op::Jump(0x41A24)); // GOTO #41A24
 }
 
+fn i41959(r: &mut Run) {
+    op!(r, 0x41959, 7, Op::LoadConst { r: R::C, len: 5, val: 0x807BB }); // LC(5) #807BB
+    i41960(r)
+}
+
+fn i41960(r: &mut Run) {
+    op!(r, 0x41960, 4, Op::Jump(0x41A32)); // GOTO #41A32
+}
+
 fn i41969(r: &mut Run) {
     op!(r, 0x41969, 7, Op::LoadConst { r: R::C, len: 5, val: 0x807C0 }); // LC(5) #807C0
     i41970(r)
@@ -496,6 +706,15 @@ fn i41969(r: &mut Run) {
 
 fn i41970(r: &mut Run) {
     op!(r, 0x41970, 4, Op::Jump(0x41A24)); // GOTO #41A24
+}
+
+fn i41979(r: &mut Run) {
+    op!(r, 0x41979, 7, Op::LoadConst { r: R::C, len: 5, val: 0x807C0 }); // LC(5) #807C0
+    i41980(r)
+}
+
+fn i41980(r: &mut Run) {
+    op!(r, 0x41980, 4, Op::Jump(0x41A32)); // GOTO #41A32
 }
 
 fn i41989(r: &mut Run) {
@@ -507,6 +726,15 @@ fn i41990(r: &mut Run) {
     op!(r, 0x41990, 4, Op::Jump(0x41A24)); // GOTO #41A24
 }
 
+fn i41999(r: &mut Run) {
+    op!(r, 0x41999, 7, Op::LoadConst { r: R::C, len: 5, val: 0x807C5 }); // LC(5) #807C5
+    i419a0(r)
+}
+
+fn i419a0(r: &mut Run) {
+    op!(r, 0x419A0, 4, Op::Jump(0x41A32)); // GOTO #41A32
+}
+
 fn i419a9(r: &mut Run) {
     op!(r, 0x419A9, 7, Op::LoadConst { r: R::C, len: 5, val: 0x807CF }); // LC(5) #807CF
     i419b0(r)
@@ -514,6 +742,15 @@ fn i419a9(r: &mut Run) {
 
 fn i419b0(r: &mut Run) {
     op!(r, 0x419B0, 4, Op::Jump(0x41A24)); // GOTO #41A24
+}
+
+fn i419b9(r: &mut Run) {
+    op!(r, 0x419B9, 7, Op::LoadConst { r: R::C, len: 5, val: 0x807CF }); // LC(5) #807CF
+    i419c0(r)
+}
+
+fn i419c0(r: &mut Run) {
+    op!(r, 0x419C0, 4, Op::Jump(0x41A32)); // GOTO #41A32
 }
 
 fn i419c9(r: &mut Run) {
@@ -589,6 +826,15 @@ fn i41f31(r: &mut Run) {
 
 fn i41f38(r: &mut Run) {
     op!(r, 0x41F38, 7, Op::Jump(0x8D14)); // GOTO #08D14
+}
+
+fn i41f44(r: &mut Run) {
+    op!(r, 0x41F44, 7, Op::LoadConst { r: R::C, len: 5, val: 0x80725 }); // LC(5) #80725
+    i41f4b(r)
+}
+
+fn i41f4b(r: &mut Run) {
+    op!(r, 0x41F4B, 7, Op::Jump(0x8D66)); // GOTO #08D66
 }
 
 fn i41f57(r: &mut Run) {
@@ -973,6 +1219,33 @@ fn i423dd(r: &mut Run) {
     op!(r, 0x423DD, 7, Op::Jump(0x1485)); // GOTO #01485
 }
 
+fn i42493(r: &mut Run) {
+    op!(r, 0x42493, 7, Op::LoadConst { r: R::C, len: 5, val: 0x80798 }); // LC(5) #80798
+    i4249a(r)
+}
+
+fn i4249a(r: &mut Run) {
+    op!(r, 0x4249A, 7, Op::Jump(0x8D14)); // GOTO #08D14
+}
+
+fn i424a6(r: &mut Run) {
+    op!(r, 0x424A6, 7, Op::LoadConst { r: R::C, len: 5, val: 0x80798 }); // LC(5) #80798
+    i424ad(r)
+}
+
+fn i424ad(r: &mut Run) {
+    op!(r, 0x424AD, 7, Op::Jump(0x8D66)); // GOTO #08D66
+}
+
+fn i424b9(r: &mut Run) {
+    op!(r, 0x424B9, 7, Op::LoadConst { r: R::C, len: 5, val: 0x80798 }); // LC(5) #80798
+    i424c0(r)
+}
+
+fn i424c0(r: &mut Run) {
+    op!(r, 0x424C0, 7, Op::Jump(0x8D35)); // GOTO #08D35
+}
+
 fn i424cc(r: &mut Run) {
     op!(r, 0x424CC, 7, Op::LoadConst { r: R::C, len: 5, val: 0x80798 }); // LC(5) #80798
     i424d3(r)
@@ -980,6 +1253,240 @@ fn i424cc(r: &mut Run) {
 
 fn i424d3(r: &mut Run) {
     op!(r, 0x424D3, 7, Op::Jump(0x8D2F)); // GOTO #08D2F
+}
+
+fn i42a0c(r: &mut Run) {
+    op!(r, 0x42A0C, 7, Op::Call(0x679B)); // GOSUB #0679B
+}
+
+fn i42a13(r: &mut Run) {
+    op!(r, 0x42A13, 4, Op::Call(0x42AC4)); // GOSUB #42AC4
+}
+
+fn i42a17(r: &mut Run) {
+    op!(r, 0x42A17, 3, Op::DFromR { d: 0, r: R::C, short: false }); // D0=C
+    i42a1a(r)
+}
+
+fn i42a1a(r: &mut Run) {
+    op!(r, 0x42A1A, 3, Op::Mem { store: false, d: 0, r: R::A, f: Field::B }); // A=DAT0 B
+    i42a1d(r)
+}
+
+fn i42a1d(r: &mut Run) {
+    op!(r, 0x42A1D, 5, Op::Test { test: Test::NonZero(R::A), f: Field::B, goyes: Some(0x42A29) }); // ?A#0 B / GOYES #42A29
+    i42a22(r)
+}
+
+fn i42a22(r: &mut Run) {
+    op!(r, 0x42A22, 3, Op::StSet { bit: 3, set: false }); // ST=0 3
+    i42a25(r)
+}
+
+fn i42a25(r: &mut Run) {
+    op!(r, 0x42A25, 4, Op::Jump(0x42AB8)); // GOTO #42AB8
+}
+
+fn i42a29(r: &mut Run) {
+    op!(r, 0x42A29, 2, Op::PushC); // RSTK=C
+    i42a2b(r)
+}
+
+fn i42a2b(r: &mut Run) {
+    op!(r, 0x42A2B, 7, Op::DLoad { d: 0, len: 5, val: 0x806FD }); // D0=(5) #806FD
+    i42a32(r)
+}
+
+fn i42a32(r: &mut Run) {
+    op!(r, 0x42A32, 3, Op::Mem { store: false, d: 0, r: R::C, f: Field::A }); // C=DAT0 A
+    i42a35(r)
+}
+
+fn i42a35(r: &mut Run) {
+    op!(r, 0x42A35, 2, Op::Copy { dst: R::A, src: R::C, f: Field::A }); // A=C A
+    i42a37(r)
+}
+
+fn i42a37(r: &mut Run) {
+    op!(r, 0x42A37, 2, Op::Sub { dst: R::B, a: R::B, b: R::C, f: Field::A }); // B=B-C A
+    i42a39(r)
+}
+
+fn i42a39(r: &mut Run) {
+    op!(r, 0x42A39, 7, Op::LoadConst { r: R::C, len: 5, val: 0x30 }); // LC(5) #00030
+    i42a40(r)
+}
+
+fn i42a40(r: &mut Run) {
+    op!(r, 0x42A40, 5, Op::Test { test: Test::Regs(Cmp::Le, R::B, R::C), f: Field::A, goyes: Some(0x42A69) }); // ?B<=C A / GOYES #42A69
+    i42a45(r)
+}
+
+fn i42a45(r: &mut Run) {
+    op!(r, 0x42A45, 7, Op::DLoad { d: 1, len: 5, val: 0x806F8 }); // D1=(5) #806F8
+    i42a4c(r)
+}
+
+fn i42a4c(r: &mut Run) {
+    op!(r, 0x42A4C, 3, Op::Mem { store: false, d: 1, r: R::A, f: Field::A }); // A=DAT1 A
+    i42a4f(r)
+}
+
+fn i42a4f(r: &mut Run) {
+    op!(r, 0x42A4F, 2, Op::Copy { dst: R::C, src: R::A, f: Field::A }); // C=A A
+    i42a51(r)
+}
+
+fn i42a51(r: &mut Run) {
+    op!(r, 0x42A51, 2, Op::Inc { r: R::C, f: Field::A }); // C=C+1 A
+    i42a53(r)
+}
+
+fn i42a53(r: &mut Run) {
+    op!(r, 0x42A53, 2, Op::Inc { r: R::C, f: Field::A }); // C=C+1 A
+    i42a55(r)
+}
+
+fn i42a55(r: &mut Run) {
+    op!(r, 0x42A55, 3, Op::Mem { store: true, d: 1, r: R::C, f: Field::A }); // DAT1=C A
+    i42a58(r)
+}
+
+fn i42a58(r: &mut Run) {
+    op!(r, 0x42A58, 7, Op::DLoad { d: 1, len: 5, val: 0x806FD }); // D1=(5) #806FD
+    i42a5f(r)
+}
+
+fn i42a5f(r: &mut Run) {
+    op!(r, 0x42A5F, 3, Op::Mem { store: false, d: 1, r: R::C, f: Field::A }); // C=DAT1 A
+    i42a62(r)
+}
+
+fn i42a62(r: &mut Run) {
+    op!(r, 0x42A62, 2, Op::Inc { r: R::C, f: Field::A }); // C=C+1 A
+    i42a64(r)
+}
+
+fn i42a64(r: &mut Run) {
+    op!(r, 0x42A64, 2, Op::Inc { r: R::C, f: Field::A }); // C=C+1 A
+    i42a66(r)
+}
+
+fn i42a66(r: &mut Run) {
+    op!(r, 0x42A66, 3, Op::Mem { store: true, d: 1, r: R::C, f: Field::A }); // DAT1=C A
+    i42a69(r)
+}
+
+fn i42a69(r: &mut Run) {
+    op!(r, 0x42A69, 4, Op::LoadConst { r: R::C, len: 2, val: 0xA }); // LC(2) #0A
+    i42a6d(r)
+}
+
+fn i42a6d(r: &mut Run) {
+    op!(r, 0x42A6D, 3, Op::Copy { dst: R::B, src: R::C, f: Field::B }); // B=C B
+    i42a70(r)
+}
+
+fn i42a70(r: &mut Run) {
+    op!(r, 0x42A70, 2, Op::PopC); // C=RSTK
+    i42a72(r)
+}
+
+fn i42a72(r: &mut Run) {
+    op!(r, 0x42A72, 3, Op::DFromR { d: 0, r: R::C, short: false }); // D0=C
+    i42a75(r)
+}
+
+fn i42a75(r: &mut Run) {
+    op!(r, 0x42A75, 3, Op::DFromR { d: 1, r: R::C, short: false }); // D1=C
+    i42a78(r)
+}
+
+fn i42a78(r: &mut Run) {
+    op!(r, 0x42A78, 3, Op::DAdd { d: 1, n: 2 }); // D1=D1+ 2
+    i42a7b(r)
+}
+
+fn i42a7b(r: &mut Run) {
+    op!(r, 0x42A7B, 2, Op::Sub { dst: R::C, a: R::C, b: R::A, f: Field::A }); // C=C-A A
+    i42a7d(r)
+}
+
+fn i42a7d(r: &mut Run) {
+    op!(r, 0x42A7D, 3, Op::Mem { store: false, d: 0, r: R::A, f: Field::B }); // A=DAT0 B
+    i42a80(r)
+}
+
+fn i42a80(r: &mut Run) {
+    op!(r, 0x42A80, 3, Op::StSet { bit: 3, set: false }); // ST=0 3
+    i42a83(r)
+}
+
+fn i42a83(r: &mut Run) {
+    op!(r, 0x42A83, 5, Op::Test { test: Test::Regs(Cmp::Ne, R::A, R::B), f: Field::B, goyes: Some(0x42A8B) }); // ?A#B B / GOYES #42A8B
+    i42a88(r)
+}
+
+fn i42a88(r: &mut Run) {
+    op!(r, 0x42A88, 3, Op::StSet { bit: 3, set: true }); // ST=1 3
+    i42a8b(r)
+}
+
+fn i42a8b(r: &mut Run) {
+    op!(r, 0x42A8B, 7, Op::Call(0x66B9)); // GOSUB #066B9
+}
+
+fn i42a92(r: &mut Run) {
+    op!(r, 0x42A92, 5, Op::StTest { bit: 3, set: false, goyes: Some(0x42AA9) }); // ?ST=0 3 / GOYES #42AA9
+    i42a97(r)
+}
+
+fn i42a97(r: &mut Run) {
+    op!(r, 0x42A97, 7, Op::DLoad { d: 1, len: 5, val: 0x8086A }); // D1=(5) #8086A
+    i42a9e(r)
+}
+
+fn i42a9e(r: &mut Run) {
+    op!(r, 0x42A9E, 3, Op::Mem { store: false, d: 1, r: R::C, f: Field::A }); // C=DAT1 A
+    i42aa1(r)
+}
+
+fn i42aa1(r: &mut Run) {
+    op!(r, 0x42AA1, 2, Op::Dec { r: R::C, f: Field::A }); // C=C-1 A
+    i42aa3(r)
+}
+
+fn i42aa3(r: &mut Run) {
+    op!(r, 0x42AA3, 3, Op::Mem { store: true, d: 1, r: R::C, f: Field::A }); // DAT1=C A
+    i42aa6(r)
+}
+
+fn i42aa6(r: &mut Run) {
+    op!(r, 0x42AA6, 3, Op::CondJump(Cond::NoCarry, 0x42AB8)); // GONC #42AB8
+    i42aa9(r)
+}
+
+fn i42aa9(r: &mut Run) {
+    op!(r, 0x42AA9, 7, Op::Call(0x44772)); // GOSUB #44772
+}
+
+fn i42ab0(r: &mut Run) {
+    op!(r, 0x42AB0, 5, Op::Test { test: Test::NonZero(R::A), f: Field::B, goyes: Some(0x42AB8) }); // ?A#0 B / GOYES #42AB8
+    i42ab5(r)
+}
+
+fn i42ab5(r: &mut Run) {
+    op!(r, 0x42AB5, 3, Op::StSet { bit: 3, set: true }); // ST=1 3
+    i42ab8(r)
+}
+
+fn i42ab8(r: &mut Run) {
+    op!(r, 0x42AB8, 5, Op::StTest { bit: 3, set: true, goyes: Some(0x42ABD) }); // ?ST=1 3 / GOYES #42ABD
+    i42abd(r)
+}
+
+fn i42abd(r: &mut Run) {
+    op!(r, 0x42ABD, 7, Op::Jump(0x620B6)); // GOTO #620B6
 }
 
 fn i42ac4(r: &mut Run) {
@@ -1518,6 +2025,12 @@ fn i44520(r: &mut Run) {
 
 fn i44527(r: &mut Run) {
     op!(r, 0x44527, 5, Op::StTest { bit: 1, set: false, goyes: Some(0x444CE) }); // ?ST=0 1 / GOYES #444CE
+    i4452c(r)
+}
+
+fn i4452c(r: &mut Run) {
+    op!(r, 0x4452C, 3, Op::CondJump(Cond::NoCarry, 0x444F9)); // GONC #444F9
+    i4452f(r)
 }
 
 fn i4452f(r: &mut Run) {
@@ -1621,6 +2134,30 @@ fn i44574(r: &mut Run) {
 
 fn i4457b(r: &mut Run) {
     op!(r, 0x4457B, 3, Op::CondJump(Cond::Carry, 0x44590)); // GOC #44590
+    i4457e(r)
+}
+
+fn i4457e(r: &mut Run) {
+    op!(r, 0x4457E, 4, Op::LoadConst { r: R::C, len: 2, val: 0xA }); // LC(2) #0A
+    i44582(r)
+}
+
+fn i44582(r: &mut Run) {
+    op!(r, 0x44582, 4, Op::Call(0x44616)); // GOSUB #44616
+}
+
+fn i44586(r: &mut Run) {
+    op!(r, 0x44586, 3, Op::CondJump(Cond::Carry, 0x44590)); // GOC #44590
+    i44589(r)
+}
+
+fn i44589(r: &mut Run) {
+    op!(r, 0x44589, 4, Op::Call(0x44603)); // GOSUB #44603
+}
+
+fn i4458d(r: &mut Run) {
+    op!(r, 0x4458D, 3, Op::CondJump(Cond::NoCarry, 0x44582)); // GONC #44582
+    i44590(r)
 }
 
 fn i44590(r: &mut Run) {
@@ -2083,6 +2620,14 @@ fn i446d5(r: &mut Run) {
     op!(r, 0x446D5, 7, Op::Jump(0x3678)); // GOTO #03678
 }
 
+fn i446dc(r: &mut Run) {
+    op!(r, 0x446DC, 7, Op::Call(0x12D68)); // GOSUB #12D68
+}
+
+fn i446e3(r: &mut Run) {
+    op!(r, 0x446E3, 4, Op::Jump(0x4468F)); // GOTO #4468F
+}
+
 fn i446e7(r: &mut Run) {
     op!(r, 0x446E7, 7, Op::DLoad { d: 0, len: 5, val: 0x80702 }); // D0=(5) #80702
     i446ee(r)
@@ -2135,6 +2680,24 @@ fn i4470d(r: &mut Run) {
 
 fn i4470f(r: &mut Run) {
     op!(r, 0x4470F, 2, Op::Rtn(RtnKind::Plain)); // RTN
+}
+
+fn i44716(r: &mut Run) {
+    op!(r, 0x44716, 7, Op::Call(0x679B)); // GOSUB #0679B
+}
+
+fn i4471d(r: &mut Run) {
+    op!(r, 0x4471D, 4, Op::Call(0x446E7)); // GOSUB #446E7
+}
+
+fn i44721(r: &mut Run) {
+    op!(r, 0x44721, 5, Op::SrbField { r: R::C, f: Field::A }); // CSRB.F A
+    i44726(r)
+}
+
+fn i44726(r: &mut Run) {
+    op!(r, 0x44726, 3, Op::Scratch { op: ScratchOp::ToScratch, r: R::C, n: 0, f: Field::W }); // R0=C
+    i44729(r)
 }
 
 fn i44729(r: &mut Run) {
@@ -2248,6 +2811,39 @@ fn i44785(r: &mut Run) {
 
 fn i44788(r: &mut Run) {
     op!(r, 0x44788, 2, Op::Rtn(RtnKind::Plain)); // RTN
+}
+
+fn i4478f(r: &mut Run) {
+    op!(r, 0x4478F, 3, Op::DExR { d: 0, r: R::C, short: false }); // CD0EX
+    i44792(r)
+}
+
+fn i44792(r: &mut Run) {
+    op!(r, 0x44792, 2, Op::PushC); // RSTK=C
+    i44794(r)
+}
+
+fn i44794(r: &mut Run) {
+    op!(r, 0x44794, 4, Op::Call(0x44772)); // GOSUB #44772
+}
+
+fn i44798(r: &mut Run) {
+    op!(r, 0x44798, 2, Op::PopC); // C=RSTK
+    i4479a(r)
+}
+
+fn i4479a(r: &mut Run) {
+    op!(r, 0x4479A, 3, Op::DFromR { d: 0, r: R::C, short: false }); // D0=C
+    i4479d(r)
+}
+
+fn i4479d(r: &mut Run) {
+    op!(r, 0x4479D, 5, Op::Test { test: Test::Zero(R::A), f: Field::B, goyes: Some(0x447A2) }); // ?A=0 B / GOYES #447A2
+    i447a2(r)
+}
+
+fn i447a2(r: &mut Run) {
+    op!(r, 0x447A2, 7, Op::Jump(0x620D9)); // GOTO #620D9
 }
 
 fn i447a9(r: &mut Run) {
@@ -2438,6 +3034,25 @@ fn i44822(r: &mut Run) {
     op!(r, 0x44822, 2, Op::Rtn(RtnKind::Plain)); // RTN
 }
 
+fn i44824(r: &mut Run) {
+    op!(r, 0x44824, 2, Op::Copy { dst: R::A, src: R::C, f: Field::A }); // A=C A
+    i44826(r)
+}
+
+fn i44826(r: &mut Run) {
+    op!(r, 0x44826, 2, Op::Zero { r: R::C, f: Field::A }); // C=0 A
+    i44828(r)
+}
+
+fn i44828(r: &mut Run) {
+    op!(r, 0x44828, 3, Op::StSet { bit: 2, set: true }); // ST=1 2
+    i4482b(r)
+}
+
+fn i4482b(r: &mut Run) {
+    op!(r, 0x4482B, 2, Op::Rtn(RtnKind::Plain)); // RTN
+}
+
 fn i44832(r: &mut Run) {
     op!(r, 0x44832, 7, Op::LoadConst { r: R::C, len: 5, val: 0x80887 }); // LC(5) #80887
     i44839(r)
@@ -2469,6 +3084,22 @@ fn i44846(r: &mut Run) {
 
 fn i4484b(r: &mut Run) {
     op!(r, 0x4484B, 5, Op::StTest { bit: 2, set: false, goyes: Some(0x4485A) }); // ?ST=0 2 / GOYES #4485A
+    i44850(r)
+}
+
+fn i44850(r: &mut Run) {
+    op!(r, 0x44850, 3, Op::Mem { store: true, d: 0, r: R::C, f: Field::A }); // DAT0=C A
+    i44853(r)
+}
+
+fn i44853(r: &mut Run) {
+    op!(r, 0x44853, 2, Op::Copy { dst: R::C, src: R::A, f: Field::A }); // C=A A
+    i44855(r)
+}
+
+fn i44855(r: &mut Run) {
+    op!(r, 0x44855, 5, Op::SrbField { r: R::C, f: Field::A }); // CSRB.F A
+    i4485a(r)
 }
 
 fn i4485a(r: &mut Run) {
@@ -2522,6 +3153,177 @@ fn i4487e(r: &mut Run) {
 
 fn i44883(r: &mut Run) {
     op!(r, 0x44883, 7, Op::Jump(0x620D9)); // GOTO #620D9
+}
+
+fn i44ba0(r: &mut Run) {
+    op!(r, 0x44BA0, 7, Op::LoadConst { r: R::C, len: 5, val: 0x80914 }); // LC(5) #80914
+    i44ba7(r)
+}
+
+fn i44ba7(r: &mut Run) {
+    op!(r, 0x44BA7, 4, Op::Jump(0x44BF9)); // GOTO #44BF9
+}
+
+fn i44bb0(r: &mut Run) {
+    op!(r, 0x44BB0, 7, Op::LoadConst { r: R::C, len: 5, val: 0x80914 }); // LC(5) #80914
+    i44bb7(r)
+}
+
+fn i44bb7(r: &mut Run) {
+    op!(r, 0x44BB7, 4, Op::Jump(0x44BDB)); // GOTO #44BDB
+}
+
+fn i44bc0(r: &mut Run) {
+    op!(r, 0x44BC0, 7, Op::LoadConst { r: R::C, len: 5, val: 0x80916 }); // LC(5) #80916
+    i44bc7(r)
+}
+
+fn i44bc7(r: &mut Run) {
+    op!(r, 0x44BC7, 4, Op::Jump(0x44BF9)); // GOTO #44BF9
+}
+
+fn i44bd0(r: &mut Run) {
+    op!(r, 0x44BD0, 7, Op::LoadConst { r: R::C, len: 5, val: 0x80916 }); // LC(5) #80916
+    i44bd7(r)
+}
+
+fn i44bd7(r: &mut Run) {
+    op!(r, 0x44BD7, 4, Op::Nop); // NOP
+    i44bdb(r)
+}
+
+fn i44bdb(r: &mut Run) {
+    op!(r, 0x44BDB, 2, Op::PushC); // RSTK=C
+    i44bdd(r)
+}
+
+fn i44bdd(r: &mut Run) {
+    op!(r, 0x44BDD, 7, Op::Call(0x6641)); // GOSUB #06641
+}
+
+fn i44be4(r: &mut Run) {
+    op!(r, 0x44BE4, 2, Op::PopC); // C=RSTK
+    i44be6(r)
+}
+
+fn i44be6(r: &mut Run) {
+    op!(r, 0x44BE6, 3, Op::DExR { d: 1, r: R::C, short: false }); // CD1EX
+    i44be9(r)
+}
+
+fn i44be9(r: &mut Run) {
+    op!(r, 0x44BE9, 3, Op::Mem { store: true, d: 1, r: R::A, f: Field::B }); // DAT1=A B
+    i44bec(r)
+}
+
+fn i44bec(r: &mut Run) {
+    op!(r, 0x44BEC, 3, Op::DFromR { d: 1, r: R::C, short: false }); // D1=C
+    i44bef(r)
+}
+
+fn i44bef(r: &mut Run) {
+    op!(r, 0x44BEF, 3, Op::Mem { store: false, d: 0, r: R::A, f: Field::A }); // A=DAT0 A
+    i44bf2(r)
+}
+
+fn i44bf2(r: &mut Run) {
+    op!(r, 0x44BF2, 3, Op::DAdd { d: 0, n: 5 }); // D0=D0+ 5
+    i44bf5(r)
+}
+
+fn i44bf5(r: &mut Run) {
+    op!(r, 0x44BF5, 4, Op::PcIndirect(R::A)); // PC=(A)
+}
+
+fn i44bf9(r: &mut Run) {
+    op!(r, 0x44BF9, 3, Op::DExR { d: 1, r: R::C, short: false }); // CD1EX
+    i44bfc(r)
+}
+
+fn i44bfc(r: &mut Run) {
+    op!(r, 0x44BFC, 2, Op::Zero { r: R::A, f: Field::A }); // A=0 A
+    i44bfe(r)
+}
+
+fn i44bfe(r: &mut Run) {
+    op!(r, 0x44BFE, 3, Op::Mem { store: false, d: 1, r: R::A, f: Field::B }); // A=DAT1 B
+    i44c01(r)
+}
+
+fn i44c01(r: &mut Run) {
+    op!(r, 0x44C01, 3, Op::DFromR { d: 1, r: R::C, short: false }); // D1=C
+    i44c04(r)
+}
+
+fn i44c04(r: &mut Run) {
+    op!(r, 0x44C04, 7, Op::Jump(0x67907)); // GOTO #67907
+}
+
+fn i45bed(r: &mut Run) {
+    op!(r, 0x45BED, 2, Op::Copy { dst: R::A, src: R::B, f: Field::A }); // A=B A
+    i45bef(r)
+}
+
+fn i45bef(r: &mut Run) {
+    op!(r, 0x45BEF, 6, Op::Scratch { op: ScratchOp::ToScratch, r: R::A, n: 0, f: Field::A }); // R0=A.F A
+    i45bf5(r)
+}
+
+fn i45bf5(r: &mut Run) {
+    op!(r, 0x45BF5, 7, Op::Call(0x6641)); // GOSUB #06641
+}
+
+fn i45bfc(r: &mut Run) {
+    op!(r, 0x45BFC, 2, Op::Copy { dst: R::B, src: R::A, f: Field::A }); // B=A A
+    i45bfe(r)
+}
+
+fn i45bfe(r: &mut Run) {
+    op!(r, 0x45BFE, 2, Op::Dec { r: R::B, f: Field::A }); // B=B-1 A
+    i45c00(r)
+}
+
+fn i45c00(r: &mut Run) {
+    op!(r, 0x45C00, 3, Op::CondJump(Cond::Carry, 0x45C0F)); // GOC #45C0F
+    i45c03(r)
+}
+
+fn i45c03(r: &mut Run) {
+    op!(r, 0x45C03, 7, Op::Call(0x3019)); // GOSUB #03019
+}
+
+fn i45c0a(r: &mut Run) {
+    op!(r, 0x45C0A, 2, Op::Dec { r: R::B, f: Field::A }); // B=B-1 A
+    i45c0c(r)
+}
+
+fn i45c0c(r: &mut Run) {
+    op!(r, 0x45C0C, 3, Op::CondJump(Cond::NoCarry, 0x45C03)); // GONC #45C03
+    i45c0f(r)
+}
+
+fn i45c0f(r: &mut Run) {
+    op!(r, 0x45C0F, 6, Op::Scratch { op: ScratchOp::FromScratch, r: R::A, n: 0, f: Field::A }); // A=R0.F A
+    i45c15(r)
+}
+
+fn i45c15(r: &mut Run) {
+    op!(r, 0x45C15, 2, Op::Copy { dst: R::B, src: R::A, f: Field::A }); // B=A A
+    i45c17(r)
+}
+
+fn i45c17(r: &mut Run) {
+    op!(r, 0x45C17, 3, Op::Mem { store: false, d: 0, r: R::A, f: Field::A }); // A=DAT0 A
+    i45c1a(r)
+}
+
+fn i45c1a(r: &mut Run) {
+    op!(r, 0x45C1A, 3, Op::DAdd { d: 0, n: 5 }); // D0=D0+ 5
+    i45c1d(r)
+}
+
+fn i45c1d(r: &mut Run) {
+    op!(r, 0x45C1D, 4, Op::PcIndirect(R::A)); // PC=(A)
 }
 
 fn i4c0a0(r: &mut Run) {
@@ -2592,6 +3394,894 @@ fn i4c0cf(r: &mut Run) {
 
 fn i4c0d2(r: &mut Run) {
     op!(r, 0x4C0D2, 2, Op::Rtn(RtnKind::Plain)); // RTN
+}
+
+fn i4c0d9(r: &mut Run) {
+    op!(r, 0x4C0D9, 4, Op::Call(0x4C0BE)); // GOSUB #4C0BE
+}
+
+fn i4c0dd(r: &mut Run) {
+    op!(r, 0x4C0DD, 3, Op::DAdd { d: 1, n: 5 }); // D1=D1+ 5
+    i4c0e0(r)
+}
+
+fn i4c0e0(r: &mut Run) {
+    op!(r, 0x4C0E0, 4, Op::Jump(0x4C0A4)); // GOTO #4C0A4
+}
+
+fn i4c8c3(r: &mut Run) {
+    op!(r, 0x4C8C3, 7, Op::LoadConst { r: R::C, len: 5, val: 0x607 }); // LC(5) #00607
+    i4c8ca(r)
+}
+
+fn i4c8ca(r: &mut Run) {
+    op!(r, 0x4C8CA, 7, Op::Jump(0x10F80)); // GOTO #10F80
+}
+
+fn i4dafd(r: &mut Run) {
+    op!(r, 0x4DAFD, 7, Op::DLoad { d: 0, len: 5, val: 0x11C }); // D0=(5) #0011C
+    i4db04(r)
+}
+
+fn i4db04(r: &mut Run) {
+    op!(r, 0x4DB04, 4, Op::Mem { store: false, d: 0, r: R::C, f: Field::XS }); // C=DAT0 XS
+    i4db08(r)
+}
+
+fn i4db08(r: &mut Run) {
+    op!(r, 0x4DB08, 3, Op::Dec { r: R::C, f: Field::B }); // C=C-1 B
+    i4db0b(r)
+}
+
+fn i4db0b(r: &mut Run) {
+    op!(r, 0x4DB0B, 3, Op::CondRtn(Cond::NoCarry)); // RTNNC
+    i4db0e(r)
+}
+
+fn i4db0e(r: &mut Run) {
+    op!(r, 0x4DB0E, 2, Op::PSet(2)); // P= 2
+    i4db10(r)
+}
+
+fn i4db10(r: &mut Run) {
+    op!(r, 0x4DB10, 7, Op::Jump(0x1FC6)); // GOTO #01FC6
+}
+
+fn i4dccb(r: &mut Run) {
+    op!(r, 0x4DCCB, 3, Op::DExR { d: 1, r: R::C, short: false }); // CD1EX
+    i4dcce(r)
+}
+
+fn i4dcce(r: &mut Run) {
+    op!(r, 0x4DCCE, 7, Op::DLoad { d: 1, len: 5, val: 0x137 }); // D1=(5) #00137
+    i4dcd5(r)
+}
+
+fn i4dcd5(r: &mut Run) {
+    op!(r, 0x4DCD5, 6, Op::LoadConst { r: R::A, len: 1, val: 4 }); // LA(1) #4
+    i4dcdb(r)
+}
+
+fn i4dcdb(r: &mut Run) {
+    op!(r, 0x4DCDB, 4, Op::Mem { store: true, d: 1, r: R::A, f: Field::Nibbles(1) }); // DAT1=A 1
+    i4dcdf(r)
+}
+
+fn i4dcdf(r: &mut Run) {
+    op!(r, 0x4DCDF, 3, Op::DFromR { d: 1, r: R::C, short: false }); // D1=C
+    i4dce2(r)
+}
+
+fn i4dce2(r: &mut Run) {
+    op!(r, 0x4DCE2, 3, Op::Mem { store: false, d: 0, r: R::A, f: Field::A }); // A=DAT0 A
+    i4dce5(r)
+}
+
+fn i4dce5(r: &mut Run) {
+    op!(r, 0x4DCE5, 3, Op::DAdd { d: 0, n: 5 }); // D0=D0+ 5
+    i4dce8(r)
+}
+
+fn i4dce8(r: &mut Run) {
+    op!(r, 0x4DCE8, 4, Op::PcIndirect(R::A)); // PC=(A)
+}
+
+fn i4df6c(r: &mut Run) {
+    op!(r, 0x4DF6C, 3, Op::Mem { store: false, d: 1, r: R::A, f: Field::A }); // A=DAT1 A
+    i4df6f(r)
+}
+
+fn i4df6f(r: &mut Run) {
+    op!(r, 0x4DF6F, 7, Op::LoadConst { r: R::C, len: 5, val: 0x3A81 }); // LC(5) #03A81
+    i4df76(r)
+}
+
+fn i4df76(r: &mut Run) {
+    op!(r, 0x4DF76, 3, Op::DAdd { d: 1, n: 5 }); // D1=D1+ 5
+    i4df79(r)
+}
+
+fn i4df79(r: &mut Run) {
+    op!(r, 0x4DF79, 2, Op::Inc { r: R::D, f: Field::A }); // D=D+1 A
+    i4df7b(r)
+}
+
+fn i4df7b(r: &mut Run) {
+    op!(r, 0x4DF7B, 3, Op::StSet { bit: 1, set: true }); // ST=1 1
+    i4df7e(r)
+}
+
+fn i4df7e(r: &mut Run) {
+    op!(r, 0x4DF7E, 5, Op::Test { test: Test::Regs(Cmp::Eq, R::C, R::A), f: Field::A, goyes: Some(0x4DF86) }); // ?C=A A / GOYES #4DF86
+    i4df83(r)
+}
+
+fn i4df83(r: &mut Run) {
+    op!(r, 0x4DF83, 3, Op::StSet { bit: 1, set: false }); // ST=0 1
+    i4df86(r)
+}
+
+fn i4df86(r: &mut Run) {
+    op!(r, 0x4DF86, 3, Op::Mem { store: false, d: 1, r: R::C, f: Field::A }); // C=DAT1 A
+    i4df89(r)
+}
+
+fn i4df89(r: &mut Run) {
+    op!(r, 0x4DF89, 3, Op::DExR { d: 1, r: R::C, short: false }); // CD1EX
+    i4df8c(r)
+}
+
+fn i4df8c(r: &mut Run) {
+    op!(r, 0x4DF8C, 3, Op::DAdd { d: 1, n: 0xA }); // D1=D1+ 10
+    i4df8f(r)
+}
+
+fn i4df8f(r: &mut Run) {
+    op!(r, 0x4DF8F, 3, Op::Mem { store: false, d: 1, r: R::A, f: Field::A }); // A=DAT1 A
+    i4df92(r)
+}
+
+fn i4df92(r: &mut Run) {
+    op!(r, 0x4DF92, 6, Op::Scratch { op: ScratchOp::ToScratch, r: R::A, n: 0, f: Field::A }); // R0=A.F A
+    i4df98(r)
+}
+
+fn i4df98(r: &mut Run) {
+    op!(r, 0x4DF98, 3, Op::DAdd { d: 1, n: 0xA }); // D1=D1+ 10
+    i4df9b(r)
+}
+
+fn i4df9b(r: &mut Run) {
+    op!(r, 0x4DF9B, 4, Op::Mem { store: false, d: 1, r: R::A, f: Field::W }); // A=DAT1 W
+    i4df9f(r)
+}
+
+fn i4df9f(r: &mut Run) {
+    op!(r, 0x4DF9F, 3, Op::Scratch { op: ScratchOp::ToScratch, r: R::A, n: 1, f: Field::W }); // R1=A
+    i4dfa2(r)
+}
+
+fn i4dfa2(r: &mut Run) {
+    op!(r, 0x4DFA2, 3, Op::DFromR { d: 1, r: R::C, short: false }); // D1=C
+    i4dfa5(r)
+}
+
+fn i4dfa5(r: &mut Run) {
+    op!(r, 0x4DFA5, 3, Op::DAdd { d: 1, n: 5 }); // D1=D1+ 5
+    i4dfa8(r)
+}
+
+fn i4dfa8(r: &mut Run) {
+    op!(r, 0x4DFA8, 2, Op::Inc { r: R::D, f: Field::A }); // D=D+1 A
+    i4dfaa(r)
+}
+
+fn i4dfaa(r: &mut Run) {
+    op!(r, 0x4DFAA, 3, Op::Mem { store: false, d: 1, r: R::A, f: Field::A }); // A=DAT1 A
+    i4dfad(r)
+}
+
+fn i4dfad(r: &mut Run) {
+    op!(r, 0x4DFAD, 7, Op::Call(0x679B)); // GOSUB #0679B
+}
+
+fn i4dfb4(r: &mut Run) {
+    op!(r, 0x4DFB4, 3, Op::DFromR { d: 1, r: R::A, short: false }); // D1=A
+    i4dfb7(r)
+}
+
+fn i4dfb7(r: &mut Run) {
+    op!(r, 0x4DFB7, 3, Op::DAdd { d: 1, n: 0xA }); // D1=D1+ 10
+    i4dfba(r)
+}
+
+fn i4dfba(r: &mut Run) {
+    op!(r, 0x4DFBA, 3, Op::DAdd { d: 1, n: 0xA }); // D1=D1+ 10
+    i4dfbd(r)
+}
+
+fn i4dfbd(r: &mut Run) {
+    op!(r, 0x4DFBD, 4, Op::Mem { store: false, d: 1, r: R::A, f: Field::Nibbles(0xA) }); // A=DAT1 10
+    i4dfc1(r)
+}
+
+fn i4dfc1(r: &mut Run) {
+    op!(r, 0x4DFC1, 3, Op::Scratch { op: ScratchOp::FromScratch, r: R::C, n: 1, f: Field::W }); // C=R1
+    i4dfc4(r)
+}
+
+fn i4dfc4(r: &mut Run) {
+    op!(r, 0x4DFC4, 3, Op::Copy { dst: R::B, src: R::A, f: Field::W }); // B=A W
+    i4dfc7(r)
+}
+
+fn i4dfc7(r: &mut Run) {
+    op!(r, 0x4DFC7, 4, Op::Logic { and: false, dst: R::A, src: R::C, f: Field::W }); // A=A!C W
+    i4dfcb(r)
+}
+
+fn i4dfcb(r: &mut Run) {
+    op!(r, 0x4DFCB, 5, Op::StTest { bit: 1, set: false, goyes: Some(0x4DFDA) }); // ?ST=0 1 / GOYES #4DFDA
+    i4dfd0(r)
+}
+
+fn i4dfd0(r: &mut Run) {
+    op!(r, 0x4DFD0, 3, Op::Exch { a: R::A, b: R::B, f: Field::W }); // ABEX W
+    i4dfd3(r)
+}
+
+fn i4dfd3(r: &mut Run) {
+    op!(r, 0x4DFD3, 4, Op::Logic { and: true, dst: R::A, src: R::C, f: Field::W }); // A=A&C W
+    i4dfd7(r)
+}
+
+fn i4dfd7(r: &mut Run) {
+    op!(r, 0x4DFD7, 3, Op::Sub { dst: R::A, a: R::B, b: R::A, f: Field::W }); // A=B-A W
+    i4dfda(r)
+}
+
+fn i4dfda(r: &mut Run) {
+    op!(r, 0x4DFDA, 6, Op::Scratch { op: ScratchOp::FromScratch, r: R::C, n: 0, f: Field::A }); // C=R0.F A
+    i4dfe0(r)
+}
+
+fn i4dfe0(r: &mut Run) {
+    op!(r, 0x4DFE0, 2, Op::Dec { r: R::C, f: Field::A }); // C=C-1 A
+    i4dfe2(r)
+}
+
+fn i4dfe2(r: &mut Run) {
+    op!(r, 0x4DFE2, 3, Op::CondJump(Cond::Carry, 0x4DFF6)); // GOC #4DFF6
+    i4dfe5(r)
+}
+
+fn i4dfe5(r: &mut Run) {
+    op!(r, 0x4DFE5, 4, Op::Mem { store: true, d: 1, r: R::A, f: Field::Nibbles(2) }); // DAT1=A 2
+    i4dfe9(r)
+}
+
+fn i4dfe9(r: &mut Run) {
+    op!(r, 0x4DFE9, 3, Op::Shr { r: R::A, f: Field::W }); // ASR W
+    i4dfec(r)
+}
+
+fn i4dfec(r: &mut Run) {
+    op!(r, 0x4DFEC, 3, Op::Shr { r: R::A, f: Field::W }); // ASR W
+    i4dfef(r)
+}
+
+fn i4dfef(r: &mut Run) {
+    op!(r, 0x4DFEF, 3, Op::DAdd { d: 1, n: 2 }); // D1=D1+ 2
+    i4dff2(r)
+}
+
+fn i4dff2(r: &mut Run) {
+    op!(r, 0x4DFF2, 4, Op::Jump(0x4DFE0)); // GOTO #4DFE0
+}
+
+fn i4dff6(r: &mut Run) {
+    op!(r, 0x4DFF6, 7, Op::Jump(0x5143)); // GOTO #05143
+}
+
+fn i4e002(r: &mut Run) {
+    op!(r, 0x4E002, 3, Op::DExR { d: 1, r: R::C, short: false }); // CD1EX
+    i4e005(r)
+}
+
+fn i4e005(r: &mut Run) {
+    op!(r, 0x4E005, 6, Op::Scratch { op: ScratchOp::ToScratch, r: R::C, n: 0, f: Field::A }); // R0=C.F A
+    i4e00b(r)
+}
+
+fn i4e00b(r: &mut Run) {
+    op!(r, 0x4E00B, 3, Op::DExR { d: 1, r: R::C, short: false }); // CD1EX
+    i4e00e(r)
+}
+
+fn i4e00e(r: &mut Run) {
+    op!(r, 0x4E00E, 4, Op::Call(0x4E06F)); // GOSUB #4E06F
+}
+
+fn i4e012(r: &mut Run) {
+    op!(r, 0x4E012, 2, Op::Copy { dst: R::A, src: R::C, f: Field::A }); // A=C A
+    i4e014(r)
+}
+
+fn i4e014(r: &mut Run) {
+    op!(r, 0x4E014, 6, Op::Scratch { op: ScratchOp::FromScratch, r: R::C, n: 0, f: Field::A }); // C=R0.F A
+    i4e01a(r)
+}
+
+fn i4e01a(r: &mut Run) {
+    op!(r, 0x4E01A, 3, Op::DExR { d: 1, r: R::C, short: false }); // CD1EX
+    i4e01d(r)
+}
+
+fn i4e01d(r: &mut Run) {
+    op!(r, 0x4E01D, 3, Op::DAdd { d: 1, n: 5 }); // D1=D1+ 5
+    i4e020(r)
+}
+
+fn i4e020(r: &mut Run) {
+    op!(r, 0x4E020, 4, Op::Call(0x4E06F)); // GOSUB #4E06F
+}
+
+fn i4e024(r: &mut Run) {
+    op!(r, 0x4E024, 4, Op::Call(0x4E07D)); // GOSUB #4E07D
+}
+
+fn i4e028(r: &mut Run) {
+    op!(r, 0x4E028, 6, Op::Scratch { op: ScratchOp::FromScratch, r: R::C, n: 0, f: Field::A }); // C=R0.F A
+    i4e02e(r)
+}
+
+fn i4e02e(r: &mut Run) {
+    op!(r, 0x4E02E, 3, Op::DExR { d: 1, r: R::C, short: false }); // CD1EX
+    i4e031(r)
+}
+
+fn i4e031(r: &mut Run) {
+    op!(r, 0x4E031, 3, Op::DAdd { d: 1, n: 0xA }); // D1=D1+ 10
+    i4e034(r)
+}
+
+fn i4e034(r: &mut Run) {
+    op!(r, 0x4E034, 4, Op::Call(0x4E06F)); // GOSUB #4E06F
+}
+
+fn i4e038(r: &mut Run) {
+    op!(r, 0x4E038, 2, Op::Copy { dst: R::A, src: R::C, f: Field::A }); // A=C A
+    i4e03a(r)
+}
+
+fn i4e03a(r: &mut Run) {
+    op!(r, 0x4E03A, 6, Op::Scratch { op: ScratchOp::FromScratch, r: R::C, n: 0, f: Field::A }); // C=R0.F A
+    i4e040(r)
+}
+
+fn i4e040(r: &mut Run) {
+    op!(r, 0x4E040, 3, Op::DExR { d: 1, r: R::C, short: false }); // CD1EX
+    i4e043(r)
+}
+
+fn i4e043(r: &mut Run) {
+    op!(r, 0x4E043, 3, Op::DAdd { d: 1, n: 0xF }); // D1=D1+ 15
+    i4e046(r)
+}
+
+fn i4e046(r: &mut Run) {
+    op!(r, 0x4E046, 4, Op::Call(0x4E06F)); // GOSUB #4E06F
+}
+
+fn i4e04a(r: &mut Run) {
+    op!(r, 0x4E04A, 4, Op::Call(0x4E07D)); // GOSUB #4E07D
+}
+
+fn i4e04e(r: &mut Run) {
+    op!(r, 0x4E04E, 7, Op::LoadConst { r: R::C, len: 5, val: 0x3AC0 }); // LC(5) #03AC0
+    i4e055(r)
+}
+
+fn i4e055(r: &mut Run) {
+    op!(r, 0x4E055, 4, Op::Jump(0x4E060)); // GOTO #4E060
+}
+
+fn i4e059(r: &mut Run) {
+    op!(r, 0x4E059, 7, Op::LoadConst { r: R::C, len: 5, val: 0x3A81 }); // LC(5) #03A81
+    i4e060(r)
+}
+
+fn i4e060(r: &mut Run) {
+    op!(r, 0x4E060, 6, Op::Scratch { op: ScratchOp::FromScratch, r: R::A, n: 0, f: Field::A }); // A=R0.F A
+    i4e066(r)
+}
+
+fn i4e066(r: &mut Run) {
+    op!(r, 0x4E066, 3, Op::DExR { d: 1, r: R::A, short: false }); // AD1EX
+    i4e069(r)
+}
+
+fn i4e069(r: &mut Run) {
+    op!(r, 0x4E069, 2, Op::Copy { dst: R::A, src: R::C, f: Field::A }); // A=C A
+    i4e06b(r)
+}
+
+fn i4e06b(r: &mut Run) {
+    op!(r, 0x4E06B, 4, Op::PcIndirect(R::A)); // PC=(A)
+}
+
+fn i4e06f(r: &mut Run) {
+    op!(r, 0x4E06F, 3, Op::Mem { store: false, d: 1, r: R::C, f: Field::A }); // C=DAT1 A
+    i4e072(r)
+}
+
+fn i4e072(r: &mut Run) {
+    op!(r, 0x4E072, 3, Op::DExR { d: 1, r: R::C, short: false }); // CD1EX
+    i4e075(r)
+}
+
+fn i4e075(r: &mut Run) {
+    op!(r, 0x4E075, 3, Op::DAdd { d: 1, n: 5 }); // D1=D1+ 5
+    i4e078(r)
+}
+
+fn i4e078(r: &mut Run) {
+    op!(r, 0x4E078, 3, Op::Mem { store: false, d: 1, r: R::C, f: Field::A }); // C=DAT1 A
+    i4e07b(r)
+}
+
+fn i4e07b(r: &mut Run) {
+    op!(r, 0x4E07B, 2, Op::Rtn(RtnKind::Plain)); // RTN
+}
+
+fn i4e07d(r: &mut Run) {
+    op!(r, 0x4E07D, 2, Op::Dec { r: R::A, f: Field::A }); // A=A-1 A
+    i4e07f(r)
+}
+
+fn i4e07f(r: &mut Run) {
+    op!(r, 0x4E07F, 2, Op::Dec { r: R::A, f: Field::A }); // A=A-1 A
+    i4e081(r)
+}
+
+fn i4e081(r: &mut Run) {
+    op!(r, 0x4E081, 5, Op::Test { test: Test::Regs(Cmp::Gt, R::C, R::A), f: Field::A, goyes: Some(0x4E059) }); // ?C>A A / GOYES #4E059
+    i4e086(r)
+}
+
+fn i4e086(r: &mut Run) {
+    op!(r, 0x4E086, 2, Op::Dec { r: R::C, f: Field::A }); // C=C-1 A
+    i4e088(r)
+}
+
+fn i4e088(r: &mut Run) {
+    op!(r, 0x4E088, 3, Op::CondJump(Cond::Carry, 0x4E059)); // GOC #4E059
+    i4e08b(r)
+}
+
+fn i4e08b(r: &mut Run) {
+    op!(r, 0x4E08B, 2, Op::Dec { r: R::C, f: Field::A }); // C=C-1 A
+    i4e08d(r)
+}
+
+fn i4e08d(r: &mut Run) {
+    op!(r, 0x4E08D, 3, Op::CondJump(Cond::Carry, 0x4E059)); // GOC #4E059
+    i4e090(r)
+}
+
+fn i4e090(r: &mut Run) {
+    op!(r, 0x4E090, 2, Op::Rtn(RtnKind::Plain)); // RTN
+}
+
+fn i4e0bf(r: &mut Run) {
+    op!(r, 0x4E0BF, 7, Op::Call(0x3F5D)); // GOSUB #03F5D
+}
+
+fn i4e0c6(r: &mut Run) {
+    op!(r, 0x4E0C6, 6, Op::Scratch { op: ScratchOp::ToScratch, r: R::C, n: 1, f: Field::A }); // R1=C.F A
+    i4e0cc(r)
+}
+
+fn i4e0cc(r: &mut Run) {
+    op!(r, 0x4E0CC, 7, Op::Call(0x679B)); // GOSUB #0679B
+}
+
+fn i4e0d3(r: &mut Run) {
+    op!(r, 0x4E0D3, 2, Op::Dec { r: R::A, f: Field::A }); // A=A-1 A
+    i4e0d5(r)
+}
+
+fn i4e0d5(r: &mut Run) {
+    op!(r, 0x4E0D5, 3, Op::CondJump(Cond::Carry, 0x4E100)); // GOC #4E100
+    i4e0d8(r)
+}
+
+fn i4e0d8(r: &mut Run) {
+    op!(r, 0x4E0D8, 2, Op::Dec { r: R::A, f: Field::A }); // A=A-1 A
+    i4e0da(r)
+}
+
+fn i4e0da(r: &mut Run) {
+    op!(r, 0x4E0DA, 3, Op::CondJump(Cond::Carry, 0x4E100)); // GOC #4E100
+    i4e0dd(r)
+}
+
+fn i4e0dd(r: &mut Run) {
+    op!(r, 0x4E0DD, 6, Op::Scratch { op: ScratchOp::ToScratch, r: R::A, n: 0, f: Field::A }); // R0=A.F A
+    i4e0e3(r)
+}
+
+fn i4e0e3(r: &mut Run) {
+    op!(r, 0x4E0E3, 6, Op::Scratch { op: ScratchOp::FromScratch, r: R::C, n: 1, f: Field::A }); // C=R1.F A
+    i4e0e9(r)
+}
+
+fn i4e0e9(r: &mut Run) {
+    op!(r, 0x4E0E9, 2, Op::Dec { r: R::C, f: Field::A }); // C=C-1 A
+    i4e0eb(r)
+}
+
+fn i4e0eb(r: &mut Run) {
+    op!(r, 0x4E0EB, 3, Op::CondJump(Cond::Carry, 0x4E106)); // GOC #4E106
+    i4e0ee(r)
+}
+
+fn i4e0ee(r: &mut Run) {
+    op!(r, 0x4E0EE, 2, Op::Dec { r: R::C, f: Field::A }); // C=C-1 A
+    i4e0f0(r)
+}
+
+fn i4e0f0(r: &mut Run) {
+    op!(r, 0x4E0F0, 3, Op::CondJump(Cond::Carry, 0x4E106)); // GOC #4E106
+    i4e0f3(r)
+}
+
+fn i4e0f3(r: &mut Run) {
+    op!(r, 0x4E0F3, 6, Op::Scratch { op: ScratchOp::ToScratch, r: R::C, n: 1, f: Field::A }); // R1=C.F A
+    i4e0f9(r)
+}
+
+fn i4e0f9(r: &mut Run) {
+    op!(r, 0x4E0F9, 7, Op::Jump(0x3F14)); // GOTO #03F14
+}
+
+fn i4e100(r: &mut Run) {
+    op!(r, 0x4E100, 2, Op::Zero { r: R::A, f: Field::A }); // A=0 A
+    i4e102(r)
+}
+
+fn i4e102(r: &mut Run) {
+    op!(r, 0x4E102, 4, Op::Jump(0x4E0DD)); // GOTO #4E0DD
+}
+
+fn i4e106(r: &mut Run) {
+    op!(r, 0x4E106, 2, Op::Zero { r: R::C, f: Field::A }); // C=0 A
+    i4e108(r)
+}
+
+fn i4e108(r: &mut Run) {
+    op!(r, 0x4E108, 4, Op::Jump(0x4E0F3)); // GOTO #4E0F3
+}
+
+fn i4e111(r: &mut Run) {
+    op!(r, 0x4E111, 7, Op::Call(0x3F5D)); // GOSUB #03F5D
+}
+
+fn i4e118(r: &mut Run) {
+    op!(r, 0x4E118, 6, Op::Scratch { op: ScratchOp::ToScratch, r: R::A, n: 2, f: Field::A }); // R2=A.F A
+    i4e11e(r)
+}
+
+fn i4e11e(r: &mut Run) {
+    op!(r, 0x4E11E, 4, Op::Call(0x4E210)); // GOSUB #4E210
+}
+
+fn i4e122(r: &mut Run) {
+    op!(r, 0x4E122, 3, Op::Rotate { r: R::C, left: false }); // CSRC
+    i4e125(r)
+}
+
+fn i4e125(r: &mut Run) {
+    op!(r, 0x4E125, 6, Op::Scratch { op: ScratchOp::ToScratch, r: R::C, n: 3, f: Field::S }); // R3=C.F S
+    i4e12b(r)
+}
+
+fn i4e12b(r: &mut Run) {
+    op!(r, 0x4E12B, 7, Op::Call(0x3F5D)); // GOSUB #03F5D
+}
+
+fn i4e132(r: &mut Run) {
+    op!(r, 0x4E132, 6, Op::Scratch { op: ScratchOp::ToScratch, r: R::A, n: 4, f: Field::A }); // R4=A.F A
+    i4e138(r)
+}
+
+fn i4e138(r: &mut Run) {
+    op!(r, 0x4E138, 4, Op::Call(0x4E210)); // GOSUB #4E210
+}
+
+fn i4e13c(r: &mut Run) {
+    op!(r, 0x4E13C, 6, Op::Scratch { op: ScratchOp::ToScratch, r: R::C, n: 3, f: Field::P }); // R3=C.F P
+    i4e142(r)
+}
+
+fn i4e142(r: &mut Run) {
+    op!(r, 0x4E142, 6, Op::Scratch { op: ScratchOp::FromScratch, r: R::A, n: 4, f: Field::A }); // A=R4.F A
+    i4e148(r)
+}
+
+fn i4e148(r: &mut Run) {
+    op!(r, 0x4E148, 4, Op::Call(0x4E227)); // GOSUB #4E227
+}
+
+fn i4e14c(r: &mut Run) {
+    op!(r, 0x4E14C, 6, Op::Scratch { op: ScratchOp::ToScratch, r: R::A, n: 0, f: Field::A }); // R0=A.F A
+    i4e152(r)
+}
+
+fn i4e152(r: &mut Run) {
+    op!(r, 0x4E152, 6, Op::Scratch { op: ScratchOp::FromScratch, r: R::A, n: 2, f: Field::A }); // A=R2.F A
+    i4e158(r)
+}
+
+fn i4e158(r: &mut Run) {
+    op!(r, 0x4E158, 4, Op::Call(0x4E227)); // GOSUB #4E227
+}
+
+fn i4e15c(r: &mut Run) {
+    op!(r, 0x4E15C, 6, Op::Scratch { op: ScratchOp::ToScratch, r: R::A, n: 1, f: Field::A }); // R1=A.F A
+    i4e162(r)
+}
+
+fn i4e162(r: &mut Run) {
+    op!(r, 0x4E162, 7, Op::Call(0x679B)); // GOSUB #0679B
+}
+
+fn i4e169(r: &mut Run) {
+    op!(r, 0x4E169, 7, Op::Call(0x6529)); // GOSUB #06529
+}
+
+fn i4e170(r: &mut Run) {
+    op!(r, 0x4E170, 7, Op::Call(0x679B)); // GOSUB #0679B
+}
+
+fn i4e177(r: &mut Run) {
+    op!(r, 0x4E177, 6, Op::Scratch { op: ScratchOp::FromScratch, r: R::A, n: 4, f: Field::A }); // A=R4.F A
+    i4e17d(r)
+}
+
+fn i4e17d(r: &mut Run) {
+    op!(r, 0x4E17D, 2, Op::Zero { r: R::C, f: Field::A }); // C=0 A
+    i4e17f(r)
+}
+
+fn i4e17f(r: &mut Run) {
+    op!(r, 0x4E17F, 6, Op::Scratch { op: ScratchOp::FromScratch, r: R::C, n: 3, f: Field::P }); // C=R3.F P
+    i4e185(r)
+}
+
+fn i4e185(r: &mut Run) {
+    op!(r, 0x4E185, 2, Op::Add { dst: R::A, src: R::C, f: Field::A }); // A=A+C A
+    i4e187(r)
+}
+
+fn i4e187(r: &mut Run) {
+    op!(r, 0x4E187, 6, Op::Scratch { op: ScratchOp::ToScratch, r: R::A, n: 0, f: Field::A }); // R0=A.F A
+    i4e18d(r)
+}
+
+fn i4e18d(r: &mut Run) {
+    op!(r, 0x4E18D, 6, Op::Scratch { op: ScratchOp::FromScratch, r: R::A, n: 2, f: Field::A }); // A=R2.F A
+    i4e193(r)
+}
+
+fn i4e193(r: &mut Run) {
+    op!(r, 0x4E193, 2, Op::Zero { r: R::C, f: Field::A }); // C=0 A
+    i4e195(r)
+}
+
+fn i4e195(r: &mut Run) {
+    op!(r, 0x4E195, 6, Op::Scratch { op: ScratchOp::FromScratch, r: R::C, n: 3, f: Field::S }); // C=R3.F S
+    i4e19b(r)
+}
+
+fn i4e19b(r: &mut Run) {
+    op!(r, 0x4E19B, 3, Op::Rotate { r: R::C, left: true }); // CSLC
+    i4e19e(r)
+}
+
+fn i4e19e(r: &mut Run) {
+    op!(r, 0x4E19E, 2, Op::Add { dst: R::A, src: R::C, f: Field::A }); // A=A+C A
+    i4e1a0(r)
+}
+
+fn i4e1a0(r: &mut Run) {
+    op!(r, 0x4E1A0, 6, Op::Scratch { op: ScratchOp::ToScratch, r: R::A, n: 1, f: Field::A }); // R1=A.F A
+    i4e1a6(r)
+}
+
+fn i4e1a6(r: &mut Run) {
+    op!(r, 0x4E1A6, 7, Op::Call(0x6529)); // GOSUB #06529
+}
+
+fn i4e1ad(r: &mut Run) {
+    op!(r, 0x4E1AD, 7, Op::Call(0x679B)); // GOSUB #0679B
+}
+
+fn i4e1b4(r: &mut Run) {
+    op!(r, 0x4E1B4, 6, Op::Scratch { op: ScratchOp::FromScratch, r: R::C, n: 4, f: Field::A }); // C=R4.F A
+    i4e1ba(r)
+}
+
+fn i4e1ba(r: &mut Run) {
+    op!(r, 0x4E1BA, 4, Op::Call(0x4E235)); // GOSUB #4E235
+}
+
+fn i4e1be(r: &mut Run) {
+    op!(r, 0x4E1BE, 6, Op::Scratch { op: ScratchOp::ToScratch, r: R::A, n: 0, f: Field::A }); // R0=A.F A
+    i4e1c4(r)
+}
+
+fn i4e1c4(r: &mut Run) {
+    op!(r, 0x4E1C4, 6, Op::Scratch { op: ScratchOp::FromScratch, r: R::C, n: 2, f: Field::A }); // C=R2.F A
+    i4e1ca(r)
+}
+
+fn i4e1ca(r: &mut Run) {
+    op!(r, 0x4E1CA, 4, Op::Call(0x4E235)); // GOSUB #4E235
+}
+
+fn i4e1ce(r: &mut Run) {
+    op!(r, 0x4E1CE, 6, Op::Scratch { op: ScratchOp::ToScratch, r: R::A, n: 1, f: Field::A }); // R1=A.F A
+    i4e1d4(r)
+}
+
+fn i4e1d4(r: &mut Run) {
+    op!(r, 0x4E1D4, 7, Op::Call(0x6529)); // GOSUB #06529
+}
+
+fn i4e1db(r: &mut Run) {
+    op!(r, 0x4E1DB, 7, Op::Call(0x679B)); // GOSUB #0679B
+}
+
+fn i4e1e2(r: &mut Run) {
+    op!(r, 0x4E1E2, 2, Op::Zero { r: R::A, f: Field::A }); // A=0 A
+    i4e1e4(r)
+}
+
+fn i4e1e4(r: &mut Run) {
+    op!(r, 0x4E1E4, 6, Op::Scratch { op: ScratchOp::FromScratch, r: R::A, n: 3, f: Field::P }); // A=R3.F P
+    i4e1ea(r)
+}
+
+fn i4e1ea(r: &mut Run) {
+    op!(r, 0x4E1EA, 2, Op::Inc { r: R::A, f: Field::A }); // A=A+1 A
+    i4e1ec(r)
+}
+
+fn i4e1ec(r: &mut Run) {
+    op!(r, 0x4E1EC, 2, Op::Inc { r: R::A, f: Field::A }); // A=A+1 A
+    i4e1ee(r)
+}
+
+fn i4e1ee(r: &mut Run) {
+    op!(r, 0x4E1EE, 6, Op::Scratch { op: ScratchOp::ToScratch, r: R::A, n: 0, f: Field::A }); // R0=A.F A
+    i4e1f4(r)
+}
+
+fn i4e1f4(r: &mut Run) {
+    op!(r, 0x4E1F4, 2, Op::Zero { r: R::A, f: Field::A }); // A=0 A
+    i4e1f6(r)
+}
+
+fn i4e1f6(r: &mut Run) {
+    op!(r, 0x4E1F6, 6, Op::Scratch { op: ScratchOp::FromScratch, r: R::A, n: 3, f: Field::S }); // A=R3.F S
+    i4e1fc(r)
+}
+
+fn i4e1fc(r: &mut Run) {
+    op!(r, 0x4E1FC, 3, Op::Rotate { r: R::A, left: true }); // ASLC
+    i4e1ff(r)
+}
+
+fn i4e1ff(r: &mut Run) {
+    op!(r, 0x4E1FF, 2, Op::Inc { r: R::A, f: Field::A }); // A=A+1 A
+    i4e201(r)
+}
+
+fn i4e201(r: &mut Run) {
+    op!(r, 0x4E201, 2, Op::Inc { r: R::A, f: Field::A }); // A=A+1 A
+    i4e203(r)
+}
+
+fn i4e203(r: &mut Run) {
+    op!(r, 0x4E203, 6, Op::Scratch { op: ScratchOp::ToScratch, r: R::A, n: 1, f: Field::A }); // R1=A.F A
+    i4e209(r)
+}
+
+fn i4e209(r: &mut Run) {
+    op!(r, 0x4E209, 7, Op::Jump(0x3F14)); // GOTO #03F14
+}
+
+fn i4e210(r: &mut Run) {
+    op!(r, 0x4E210, 2, Op::Dec { r: R::A, f: Field::A }); // A=A-1 A
+    i4e212(r)
+}
+
+fn i4e212(r: &mut Run) {
+    op!(r, 0x4E212, 2, Op::Sub { dst: R::C, a: R::C, b: R::A, f: Field::A }); // C=C-A A
+    i4e214(r)
+}
+
+fn i4e214(r: &mut Run) {
+    op!(r, 0x4E214, 10, Op::LoadConst { r: R::A, len: 5, val: 3 }); // LA(5) #00003
+    i4e21e(r)
+}
+
+fn i4e21e(r: &mut Run) {
+    op!(r, 0x4E21E, 5, Op::Test { test: Test::Regs(Cmp::Le, R::C, R::A), f: Field::A, goyes: None }); // ?C<=A A / RTNYES
+    i4e223(r)
+}
+
+fn i4e223(r: &mut Run) {
+    op!(r, 0x4E223, 2, Op::Copy { dst: R::C, src: R::A, f: Field::A }); // C=A A
+    i4e225(r)
+}
+
+fn i4e225(r: &mut Run) {
+    op!(r, 0x4E225, 2, Op::Rtn(RtnKind::Plain)); // RTN
+}
+
+fn i4e227(r: &mut Run) {
+    op!(r, 0x4E227, 2, Op::Dec { r: R::A, f: Field::A }); // A=A-1 A
+    i4e229(r)
+}
+
+fn i4e229(r: &mut Run) {
+    op!(r, 0x4E229, 3, Op::CondJump(Cond::Carry, 0x4E231)); // GOC #4E231
+    i4e22c(r)
+}
+
+fn i4e22c(r: &mut Run) {
+    op!(r, 0x4E22C, 2, Op::Dec { r: R::A, f: Field::A }); // A=A-1 A
+    i4e22e(r)
+}
+
+fn i4e22e(r: &mut Run) {
+    op!(r, 0x4E22E, 3, Op::CondRtn(Cond::NoCarry)); // RTNNC
+    i4e231(r)
+}
+
+fn i4e231(r: &mut Run) {
+    op!(r, 0x4E231, 2, Op::Zero { r: R::A, f: Field::A }); // A=0 A
+    i4e233(r)
+}
+
+fn i4e233(r: &mut Run) {
+    op!(r, 0x4E233, 2, Op::Rtn(RtnKind::Plain)); // RTN
+}
+
+fn i4e235(r: &mut Run) {
+    op!(r, 0x4E235, 10, Op::LoadConst { r: R::A, len: 5, val: 2 }); // LA(5) #00002
+    i4e23f(r)
+}
+
+fn i4e23f(r: &mut Run) {
+    op!(r, 0x4E23F, 2, Op::Sub { dst: R::A, a: R::A, b: R::C, f: Field::A }); // A=A-C A
+    i4e241(r)
+}
+
+fn i4e241(r: &mut Run) {
+    op!(r, 0x4E241, 3, Op::CondRtn(Cond::NoCarry)); // RTNNC
+    i4e244(r)
+}
+
+fn i4e244(r: &mut Run) {
+    op!(r, 0x4E244, 2, Op::Zero { r: R::A, f: Field::A }); // A=0 A
+    i4e246(r)
+}
+
+fn i4e246(r: &mut Run) {
+    op!(r, 0x4E246, 2, Op::Rtn(RtnKind::Plain)); // RTN
 }
 
 fn i4e383(r: &mut Run) {
@@ -2694,6 +4384,43 @@ pub const BLOCKS: &[(u32, u32, Block)] = &[
     (0x40A8E, 0x40A94, i40a8e),
     (0x40A9A, 0x40AA7, i40a9a),
     (0x40AA1, 0x40AA7, i40aa1),
+    (0x40AAD, 0x40ABA, i40aad),
+    (0x40AB4, 0x40ABA, i40ab4),
+    (0x40BE2, 0x40BE8, i40be2),
+    (0x40BE9, 0x40C34, i40be9),
+    (0x40BF0, 0x40C34, i40bf0),
+    (0x40BF7, 0x40C34, i40bf7),
+    (0x40BF9, 0x40C34, i40bf9),
+    (0x40BFD, 0x40C34, i40bfd),
+    (0x40C00, 0x40C34, i40c00),
+    (0x40C05, 0x40C34, i40c05),
+    (0x40C07, 0x40C34, i40c07),
+    (0x40C0A, 0x40C34, i40c0a),
+    (0x40C0D, 0x40C34, i40c0d),
+    (0x40C10, 0x40C34, i40c10),
+    (0x40C13, 0x40C34, i40c13),
+    (0x40C15, 0x40C34, i40c15),
+    (0x40C18, 0x40C34, i40c18),
+    (0x40C1B, 0x40C34, i40c1b),
+    (0x40C20, 0x40C34, i40c20),
+    (0x40C23, 0x40C34, i40c23),
+    (0x40C26, 0x40C34, i40c26),
+    (0x40C29, 0x40C34, i40c29),
+    (0x40C2E, 0x40C34, i40c2e),
+    (0x40C35, 0x40C4E, i40c35),
+    (0x40C38, 0x40C4E, i40c38),
+    (0x40C3E, 0x40C4E, i40c3e),
+    (0x40C42, 0x40C4E, i40c42),
+    (0x40C46, 0x40C4E, i40c46),
+    (0x40C48, 0x40C4E, i40c48),
+    (0x40C4F, 0x40C63, i40c4f),
+    (0x40C52, 0x40C63, i40c52),
+    (0x40C54, 0x40C63, i40c54),
+    (0x40C57, 0x40C63, i40c57),
+    (0x40C5A, 0x40C63, i40c5a),
+    (0x40C5D, 0x40C63, i40c5d),
+    (0x40C64, 0x40C6A, i40c64),
+    (0x40C6B, 0x40C6E, i40c6b),
     (0x40C99, 0x40CC2, i40c99),
     (0x40C9C, 0x40CC2, i40c9c),
     (0x40CA3, 0x40CC2, i40ca3),
@@ -2715,6 +4442,7 @@ pub const BLOCKS: &[(u32, u32, Block)] = &[
     (0x40CDF, 0x40CE8, i40cdf),
     (0x40CE2, 0x40CE8, i40ce2),
     (0x40CE5, 0x40CE8, i40ce5),
+    (0x40EEC, 0x40F01, i40eec),
     (0x40EF3, 0x40F01, i40ef3),
     (0x40EF5, 0x40F01, i40ef5),
     (0x40EF8, 0x40F01, i40ef8),
@@ -2722,6 +4450,8 @@ pub const BLOCKS: &[(u32, u32, Block)] = &[
     (0x40EFE, 0x40F01, i40efe),
     (0x40F07, 0x40F11, i40f07),
     (0x40F0E, 0x40F11, i40f0e),
+    (0x40F17, 0x40F21, i40f17),
+    (0x40F1E, 0x40F21, i40f1e),
     (0x417B4, 0x417BF, i417b4),
     (0x417B9, 0x417BF, i417b9),
     (0x417C5, 0x417D0, i417c5),
@@ -2766,16 +4496,26 @@ pub const BLOCKS: &[(u32, u32, Block)] = &[
     (0x41910, 0x41913, i41910),
     (0x41919, 0x41923, i41919),
     (0x41920, 0x41923, i41920),
+    (0x41929, 0x41933, i41929),
+    (0x41930, 0x41933, i41930),
     (0x41939, 0x41943, i41939),
     (0x41940, 0x41943, i41940),
     (0x41949, 0x41953, i41949),
     (0x41950, 0x41953, i41950),
+    (0x41959, 0x41963, i41959),
+    (0x41960, 0x41963, i41960),
     (0x41969, 0x41973, i41969),
     (0x41970, 0x41973, i41970),
+    (0x41979, 0x41983, i41979),
+    (0x41980, 0x41983, i41980),
     (0x41989, 0x41993, i41989),
     (0x41990, 0x41993, i41990),
+    (0x41999, 0x419A3, i41999),
+    (0x419A0, 0x419A3, i419a0),
     (0x419A9, 0x419B3, i419a9),
     (0x419B0, 0x419B3, i419b0),
+    (0x419B9, 0x419C3, i419b9),
+    (0x419C0, 0x419C3, i419c0),
     (0x419C9, 0x419D3, i419c9),
     (0x419D0, 0x419D3, i419d0),
     (0x419D9, 0x419E3, i419d9),
@@ -2793,6 +4533,8 @@ pub const BLOCKS: &[(u32, u32, Block)] = &[
     (0x41A32, 0x41A38, i41a32),
     (0x41F31, 0x41F3E, i41f31),
     (0x41F38, 0x41F3E, i41f38),
+    (0x41F44, 0x41F51, i41f44),
+    (0x41F4B, 0x41F51, i41f4b),
     (0x41F57, 0x41F64, i41f57),
     (0x41F5E, 0x41F64, i41f5e),
     (0x42267, 0x4227E, i42267),
@@ -2874,8 +4616,62 @@ pub const BLOCKS: &[(u32, u32, Block)] = &[
     (0x423D3, 0x423DC, i423d3),
     (0x423D6, 0x423DC, i423d6),
     (0x423DD, 0x423E3, i423dd),
+    (0x42493, 0x424A0, i42493),
+    (0x4249A, 0x424A0, i4249a),
+    (0x424A6, 0x424B3, i424a6),
+    (0x424AD, 0x424B3, i424ad),
+    (0x424B9, 0x424C6, i424b9),
+    (0x424C0, 0x424C6, i424c0),
     (0x424CC, 0x424D9, i424cc),
     (0x424D3, 0x424D9, i424d3),
+    (0x42A0C, 0x42A12, i42a0c),
+    (0x42A13, 0x42A16, i42a13),
+    (0x42A17, 0x42A28, i42a17),
+    (0x42A1A, 0x42A28, i42a1a),
+    (0x42A1D, 0x42A28, i42a1d),
+    (0x42A22, 0x42A28, i42a22),
+    (0x42A25, 0x42A28, i42a25),
+    (0x42A29, 0x42A91, i42a29),
+    (0x42A2B, 0x42A91, i42a2b),
+    (0x42A32, 0x42A91, i42a32),
+    (0x42A35, 0x42A91, i42a35),
+    (0x42A37, 0x42A91, i42a37),
+    (0x42A39, 0x42A91, i42a39),
+    (0x42A40, 0x42A91, i42a40),
+    (0x42A45, 0x42A91, i42a45),
+    (0x42A4C, 0x42A91, i42a4c),
+    (0x42A4F, 0x42A91, i42a4f),
+    (0x42A51, 0x42A91, i42a51),
+    (0x42A53, 0x42A91, i42a53),
+    (0x42A55, 0x42A91, i42a55),
+    (0x42A58, 0x42A91, i42a58),
+    (0x42A5F, 0x42A91, i42a5f),
+    (0x42A62, 0x42A91, i42a62),
+    (0x42A64, 0x42A91, i42a64),
+    (0x42A66, 0x42A91, i42a66),
+    (0x42A69, 0x42A91, i42a69),
+    (0x42A6D, 0x42A91, i42a6d),
+    (0x42A70, 0x42A91, i42a70),
+    (0x42A72, 0x42A91, i42a72),
+    (0x42A75, 0x42A91, i42a75),
+    (0x42A78, 0x42A91, i42a78),
+    (0x42A7B, 0x42A91, i42a7b),
+    (0x42A7D, 0x42A91, i42a7d),
+    (0x42A80, 0x42A91, i42a80),
+    (0x42A83, 0x42A91, i42a83),
+    (0x42A88, 0x42A91, i42a88),
+    (0x42A8B, 0x42A91, i42a8b),
+    (0x42A92, 0x42AAF, i42a92),
+    (0x42A97, 0x42AAF, i42a97),
+    (0x42A9E, 0x42AAF, i42a9e),
+    (0x42AA1, 0x42AAF, i42aa1),
+    (0x42AA3, 0x42AAF, i42aa3),
+    (0x42AA6, 0x42AAF, i42aa6),
+    (0x42AA9, 0x42AAF, i42aa9),
+    (0x42AB0, 0x42AC3, i42ab0),
+    (0x42AB5, 0x42AC3, i42ab5),
+    (0x42AB8, 0x42AC3, i42ab8),
+    (0x42ABD, 0x42AC3, i42abd),
     (0x42AC4, 0x42AE3, i42ac4),
     (0x42ACB, 0x42AE3, i42acb),
     (0x42ACD, 0x42AE3, i42acd),
@@ -2986,7 +4782,8 @@ pub const BLOCKS: &[(u32, u32, Block)] = &[
     (0x44514, 0x4451A, i44514),
     (0x4451B, 0x44526, i4451b),
     (0x44520, 0x44526, i44520),
-    (0x44527, 0x4452B, i44527),
+    (0x44527, 0x4457A, i44527),
+    (0x4452C, 0x4457A, i4452c),
     (0x4452F, 0x4457A, i4452f),
     (0x44534, 0x4457A, i44534),
     (0x44536, 0x4457A, i44536),
@@ -3007,7 +4804,12 @@ pub const BLOCKS: &[(u32, u32, Block)] = &[
     (0x4456C, 0x4457A, i4456c),
     (0x4456F, 0x4457A, i4456f),
     (0x44574, 0x4457A, i44574),
-    (0x4457B, 0x4457D, i4457b),
+    (0x4457B, 0x44585, i4457b),
+    (0x4457E, 0x44585, i4457e),
+    (0x44582, 0x44585, i44582),
+    (0x44586, 0x4458C, i44586),
+    (0x44589, 0x4458C, i44589),
+    (0x4458D, 0x445A5, i4458d),
     (0x44590, 0x445A5, i44590),
     (0x44595, 0x445A5, i44595),
     (0x4459A, 0x445A5, i4459a),
@@ -3103,6 +4905,8 @@ pub const BLOCKS: &[(u32, u32, Block)] = &[
     (0x446CF, 0x446DB, i446cf),
     (0x446D2, 0x446DB, i446d2),
     (0x446D5, 0x446DB, i446d5),
+    (0x446DC, 0x446E2, i446dc),
+    (0x446E3, 0x446E6, i446e3),
     (0x446E7, 0x44710, i446e7),
     (0x446EE, 0x44710, i446ee),
     (0x446F1, 0x44710, i446f1),
@@ -3114,6 +4918,10 @@ pub const BLOCKS: &[(u32, u32, Block)] = &[
     (0x4470A, 0x44710, i4470a),
     (0x4470D, 0x44710, i4470d),
     (0x4470F, 0x44710, i4470f),
+    (0x44716, 0x4471C, i44716),
+    (0x4471D, 0x44720, i4471d),
+    (0x44721, 0x4472F, i44721),
+    (0x44726, 0x4472F, i44726),
     (0x44729, 0x4472F, i44729),
     (0x44735, 0x4473B, i44735),
     (0x4473C, 0x4473F, i4473c),
@@ -3138,6 +4946,13 @@ pub const BLOCKS: &[(u32, u32, Block)] = &[
     (0x44783, 0x44789, i44783),
     (0x44785, 0x44789, i44785),
     (0x44788, 0x44789, i44788),
+    (0x4478F, 0x44797, i4478f),
+    (0x44792, 0x44797, i44792),
+    (0x44794, 0x44797, i44794),
+    (0x44798, 0x447A8, i44798),
+    (0x4479A, 0x447A8, i4479a),
+    (0x4479D, 0x447A8, i4479d),
+    (0x447A2, 0x447A8, i447a2),
     (0x447A9, 0x447AF, i447a9),
     (0x447B0, 0x44823, i447b0),
     (0x447B2, 0x44823, i447b2),
@@ -3176,13 +4991,20 @@ pub const BLOCKS: &[(u32, u32, Block)] = &[
     (0x4481D, 0x44823, i4481d),
     (0x4481F, 0x44823, i4481f),
     (0x44822, 0x44823, i44822),
+    (0x44824, 0x4482C, i44824),
+    (0x44826, 0x4482C, i44826),
+    (0x44828, 0x4482C, i44828),
+    (0x4482B, 0x4482C, i4482b),
     (0x44832, 0x44845, i44832),
     (0x44839, 0x44845, i44839),
     (0x4483C, 0x44845, i4483c),
     (0x4483F, 0x44845, i4483f),
     (0x44842, 0x44845, i44842),
-    (0x44846, 0x4484F, i44846),
-    (0x4484B, 0x4484F, i4484b),
+    (0x44846, 0x4487D, i44846),
+    (0x4484B, 0x4487D, i4484b),
+    (0x44850, 0x4487D, i44850),
+    (0x44853, 0x4487D, i44853),
+    (0x44855, 0x4487D, i44855),
     (0x4485A, 0x4487D, i4485a),
     (0x4485D, 0x4487D, i4485d),
     (0x44864, 0x4487D, i44864),
@@ -3194,6 +5016,42 @@ pub const BLOCKS: &[(u32, u32, Block)] = &[
     (0x44877, 0x4487D, i44877),
     (0x4487E, 0x44889, i4487e),
     (0x44883, 0x44889, i44883),
+    (0x44BA0, 0x44BAA, i44ba0),
+    (0x44BA7, 0x44BAA, i44ba7),
+    (0x44BB0, 0x44BBA, i44bb0),
+    (0x44BB7, 0x44BBA, i44bb7),
+    (0x44BC0, 0x44BCA, i44bc0),
+    (0x44BC7, 0x44BCA, i44bc7),
+    (0x44BD0, 0x44BE3, i44bd0),
+    (0x44BD7, 0x44BE3, i44bd7),
+    (0x44BDB, 0x44BE3, i44bdb),
+    (0x44BDD, 0x44BE3, i44bdd),
+    (0x44BE4, 0x44BF8, i44be4),
+    (0x44BE6, 0x44BF8, i44be6),
+    (0x44BE9, 0x44BF8, i44be9),
+    (0x44BEC, 0x44BF8, i44bec),
+    (0x44BEF, 0x44BF8, i44bef),
+    (0x44BF2, 0x44BF8, i44bf2),
+    (0x44BF5, 0x44BF8, i44bf5),
+    (0x44BF9, 0x44C0A, i44bf9),
+    (0x44BFC, 0x44C0A, i44bfc),
+    (0x44BFE, 0x44C0A, i44bfe),
+    (0x44C01, 0x44C0A, i44c01),
+    (0x44C04, 0x44C0A, i44c04),
+    (0x45BED, 0x45BFB, i45bed),
+    (0x45BEF, 0x45BFB, i45bef),
+    (0x45BF5, 0x45BFB, i45bf5),
+    (0x45BFC, 0x45C09, i45bfc),
+    (0x45BFE, 0x45C09, i45bfe),
+    (0x45C00, 0x45C09, i45c00),
+    (0x45C03, 0x45C09, i45c03),
+    (0x45C0A, 0x45C20, i45c0a),
+    (0x45C0C, 0x45C20, i45c0c),
+    (0x45C0F, 0x45C20, i45c0f),
+    (0x45C15, 0x45C20, i45c15),
+    (0x45C17, 0x45C20, i45c17),
+    (0x45C1A, 0x45C20, i45c1a),
+    (0x45C1D, 0x45C20, i45c1d),
     (0x4C0A0, 0x4C0A3, i4c0a0),
     (0x4C0A4, 0x4C0AE, i4c0a4),
     (0x4C0A8, 0x4C0AE, i4c0a8),
@@ -3209,6 +5067,192 @@ pub const BLOCKS: &[(u32, u32, Block)] = &[
     (0x4C0CC, 0x4C0D3, i4c0cc),
     (0x4C0CF, 0x4C0D3, i4c0cf),
     (0x4C0D2, 0x4C0D3, i4c0d2),
+    (0x4C0D9, 0x4C0DC, i4c0d9),
+    (0x4C0DD, 0x4C0E3, i4c0dd),
+    (0x4C0E0, 0x4C0E3, i4c0e0),
+    (0x4C8C3, 0x4C8D0, i4c8c3),
+    (0x4C8CA, 0x4C8D0, i4c8ca),
+    (0x4DAFD, 0x4DB16, i4dafd),
+    (0x4DB04, 0x4DB16, i4db04),
+    (0x4DB08, 0x4DB16, i4db08),
+    (0x4DB0B, 0x4DB16, i4db0b),
+    (0x4DB0E, 0x4DB16, i4db0e),
+    (0x4DB10, 0x4DB16, i4db10),
+    (0x4DCCB, 0x4DCEB, i4dccb),
+    (0x4DCCE, 0x4DCEB, i4dcce),
+    (0x4DCD5, 0x4DCEB, i4dcd5),
+    (0x4DCDB, 0x4DCEB, i4dcdb),
+    (0x4DCDF, 0x4DCEB, i4dcdf),
+    (0x4DCE2, 0x4DCEB, i4dce2),
+    (0x4DCE5, 0x4DCEB, i4dce5),
+    (0x4DCE8, 0x4DCEB, i4dce8),
+    (0x4DF6C, 0x4DFB3, i4df6c),
+    (0x4DF6F, 0x4DFB3, i4df6f),
+    (0x4DF76, 0x4DFB3, i4df76),
+    (0x4DF79, 0x4DFB3, i4df79),
+    (0x4DF7B, 0x4DFB3, i4df7b),
+    (0x4DF7E, 0x4DFB3, i4df7e),
+    (0x4DF83, 0x4DFB3, i4df83),
+    (0x4DF86, 0x4DFB3, i4df86),
+    (0x4DF89, 0x4DFB3, i4df89),
+    (0x4DF8C, 0x4DFB3, i4df8c),
+    (0x4DF8F, 0x4DFB3, i4df8f),
+    (0x4DF92, 0x4DFB3, i4df92),
+    (0x4DF98, 0x4DFB3, i4df98),
+    (0x4DF9B, 0x4DFB3, i4df9b),
+    (0x4DF9F, 0x4DFB3, i4df9f),
+    (0x4DFA2, 0x4DFB3, i4dfa2),
+    (0x4DFA5, 0x4DFB3, i4dfa5),
+    (0x4DFA8, 0x4DFB3, i4dfa8),
+    (0x4DFAA, 0x4DFB3, i4dfaa),
+    (0x4DFAD, 0x4DFB3, i4dfad),
+    (0x4DFB4, 0x4DFF5, i4dfb4),
+    (0x4DFB7, 0x4DFF5, i4dfb7),
+    (0x4DFBA, 0x4DFF5, i4dfba),
+    (0x4DFBD, 0x4DFF5, i4dfbd),
+    (0x4DFC1, 0x4DFF5, i4dfc1),
+    (0x4DFC4, 0x4DFF5, i4dfc4),
+    (0x4DFC7, 0x4DFF5, i4dfc7),
+    (0x4DFCB, 0x4DFF5, i4dfcb),
+    (0x4DFD0, 0x4DFF5, i4dfd0),
+    (0x4DFD3, 0x4DFF5, i4dfd3),
+    (0x4DFD7, 0x4DFF5, i4dfd7),
+    (0x4DFDA, 0x4DFF5, i4dfda),
+    (0x4DFE0, 0x4DFF5, i4dfe0),
+    (0x4DFE2, 0x4DFF5, i4dfe2),
+    (0x4DFE5, 0x4DFF5, i4dfe5),
+    (0x4DFE9, 0x4DFF5, i4dfe9),
+    (0x4DFEC, 0x4DFF5, i4dfec),
+    (0x4DFEF, 0x4DFF5, i4dfef),
+    (0x4DFF2, 0x4DFF5, i4dff2),
+    (0x4DFF6, 0x4DFFC, i4dff6),
+    (0x4E002, 0x4E011, i4e002),
+    (0x4E005, 0x4E011, i4e005),
+    (0x4E00B, 0x4E011, i4e00b),
+    (0x4E00E, 0x4E011, i4e00e),
+    (0x4E012, 0x4E023, i4e012),
+    (0x4E014, 0x4E023, i4e014),
+    (0x4E01A, 0x4E023, i4e01a),
+    (0x4E01D, 0x4E023, i4e01d),
+    (0x4E020, 0x4E023, i4e020),
+    (0x4E024, 0x4E027, i4e024),
+    (0x4E028, 0x4E037, i4e028),
+    (0x4E02E, 0x4E037, i4e02e),
+    (0x4E031, 0x4E037, i4e031),
+    (0x4E034, 0x4E037, i4e034),
+    (0x4E038, 0x4E049, i4e038),
+    (0x4E03A, 0x4E049, i4e03a),
+    (0x4E040, 0x4E049, i4e040),
+    (0x4E043, 0x4E049, i4e043),
+    (0x4E046, 0x4E049, i4e046),
+    (0x4E04A, 0x4E04D, i4e04a),
+    (0x4E04E, 0x4E058, i4e04e),
+    (0x4E055, 0x4E058, i4e055),
+    (0x4E059, 0x4E06E, i4e059),
+    (0x4E060, 0x4E06E, i4e060),
+    (0x4E066, 0x4E06E, i4e066),
+    (0x4E069, 0x4E06E, i4e069),
+    (0x4E06B, 0x4E06E, i4e06b),
+    (0x4E06F, 0x4E07C, i4e06f),
+    (0x4E072, 0x4E07C, i4e072),
+    (0x4E075, 0x4E07C, i4e075),
+    (0x4E078, 0x4E07C, i4e078),
+    (0x4E07B, 0x4E07C, i4e07b),
+    (0x4E07D, 0x4E091, i4e07d),
+    (0x4E07F, 0x4E091, i4e07f),
+    (0x4E081, 0x4E091, i4e081),
+    (0x4E086, 0x4E091, i4e086),
+    (0x4E088, 0x4E091, i4e088),
+    (0x4E08B, 0x4E091, i4e08b),
+    (0x4E08D, 0x4E091, i4e08d),
+    (0x4E090, 0x4E091, i4e090),
+    (0x4E0BF, 0x4E0C5, i4e0bf),
+    (0x4E0C6, 0x4E0D2, i4e0c6),
+    (0x4E0CC, 0x4E0D2, i4e0cc),
+    (0x4E0D3, 0x4E0FF, i4e0d3),
+    (0x4E0D5, 0x4E0FF, i4e0d5),
+    (0x4E0D8, 0x4E0FF, i4e0d8),
+    (0x4E0DA, 0x4E0FF, i4e0da),
+    (0x4E0DD, 0x4E0FF, i4e0dd),
+    (0x4E0E3, 0x4E0FF, i4e0e3),
+    (0x4E0E9, 0x4E0FF, i4e0e9),
+    (0x4E0EB, 0x4E0FF, i4e0eb),
+    (0x4E0EE, 0x4E0FF, i4e0ee),
+    (0x4E0F0, 0x4E0FF, i4e0f0),
+    (0x4E0F3, 0x4E0FF, i4e0f3),
+    (0x4E0F9, 0x4E0FF, i4e0f9),
+    (0x4E100, 0x4E105, i4e100),
+    (0x4E102, 0x4E105, i4e102),
+    (0x4E106, 0x4E10B, i4e106),
+    (0x4E108, 0x4E10B, i4e108),
+    (0x4E111, 0x4E117, i4e111),
+    (0x4E118, 0x4E121, i4e118),
+    (0x4E11E, 0x4E121, i4e11e),
+    (0x4E122, 0x4E131, i4e122),
+    (0x4E125, 0x4E131, i4e125),
+    (0x4E12B, 0x4E131, i4e12b),
+    (0x4E132, 0x4E13B, i4e132),
+    (0x4E138, 0x4E13B, i4e138),
+    (0x4E13C, 0x4E14B, i4e13c),
+    (0x4E142, 0x4E14B, i4e142),
+    (0x4E148, 0x4E14B, i4e148),
+    (0x4E14C, 0x4E15B, i4e14c),
+    (0x4E152, 0x4E15B, i4e152),
+    (0x4E158, 0x4E15B, i4e158),
+    (0x4E15C, 0x4E168, i4e15c),
+    (0x4E162, 0x4E168, i4e162),
+    (0x4E169, 0x4E16F, i4e169),
+    (0x4E170, 0x4E176, i4e170),
+    (0x4E177, 0x4E1AC, i4e177),
+    (0x4E17D, 0x4E1AC, i4e17d),
+    (0x4E17F, 0x4E1AC, i4e17f),
+    (0x4E185, 0x4E1AC, i4e185),
+    (0x4E187, 0x4E1AC, i4e187),
+    (0x4E18D, 0x4E1AC, i4e18d),
+    (0x4E193, 0x4E1AC, i4e193),
+    (0x4E195, 0x4E1AC, i4e195),
+    (0x4E19B, 0x4E1AC, i4e19b),
+    (0x4E19E, 0x4E1AC, i4e19e),
+    (0x4E1A0, 0x4E1AC, i4e1a0),
+    (0x4E1A6, 0x4E1AC, i4e1a6),
+    (0x4E1AD, 0x4E1B3, i4e1ad),
+    (0x4E1B4, 0x4E1BD, i4e1b4),
+    (0x4E1BA, 0x4E1BD, i4e1ba),
+    (0x4E1BE, 0x4E1CD, i4e1be),
+    (0x4E1C4, 0x4E1CD, i4e1c4),
+    (0x4E1CA, 0x4E1CD, i4e1ca),
+    (0x4E1CE, 0x4E1DA, i4e1ce),
+    (0x4E1D4, 0x4E1DA, i4e1d4),
+    (0x4E1DB, 0x4E1E1, i4e1db),
+    (0x4E1E2, 0x4E20F, i4e1e2),
+    (0x4E1E4, 0x4E20F, i4e1e4),
+    (0x4E1EA, 0x4E20F, i4e1ea),
+    (0x4E1EC, 0x4E20F, i4e1ec),
+    (0x4E1EE, 0x4E20F, i4e1ee),
+    (0x4E1F4, 0x4E20F, i4e1f4),
+    (0x4E1F6, 0x4E20F, i4e1f6),
+    (0x4E1FC, 0x4E20F, i4e1fc),
+    (0x4E1FF, 0x4E20F, i4e1ff),
+    (0x4E201, 0x4E20F, i4e201),
+    (0x4E203, 0x4E20F, i4e203),
+    (0x4E209, 0x4E20F, i4e209),
+    (0x4E210, 0x4E226, i4e210),
+    (0x4E212, 0x4E226, i4e212),
+    (0x4E214, 0x4E226, i4e214),
+    (0x4E21E, 0x4E226, i4e21e),
+    (0x4E223, 0x4E226, i4e223),
+    (0x4E225, 0x4E226, i4e225),
+    (0x4E227, 0x4E234, i4e227),
+    (0x4E229, 0x4E234, i4e229),
+    (0x4E22C, 0x4E234, i4e22c),
+    (0x4E22E, 0x4E234, i4e22e),
+    (0x4E231, 0x4E234, i4e231),
+    (0x4E233, 0x4E234, i4e233),
+    (0x4E235, 0x4E247, i4e235),
+    (0x4E23F, 0x4E247, i4e23f),
+    (0x4E241, 0x4E247, i4e241),
+    (0x4E244, 0x4E247, i4e244),
+    (0x4E246, 0x4E247, i4e246),
     (0x4E383, 0x4E389, i4e383),
     (0x4E38A, 0x4E390, i4e38a),
     (0x4E391, 0x4E3C2, i4e391),
