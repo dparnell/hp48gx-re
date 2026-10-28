@@ -737,6 +737,7 @@ fn main() -> eframe::Result {
     let mut force_persist = false;
     let mut pixels = false;
     let mut plot_only = false;
+    let mut natives = true;
     let mut layout = Layout::Auto;
     let mut size = [420.0, 784.0];
     while let Some(a) = args.next() {
@@ -744,6 +745,7 @@ fn main() -> eframe::Result {
             "--persist" => force_persist = true,
             "--line" => lines.push(args.next().expect("--line TEXT")),
             "--pixels" => pixels = true,
+            "--no-natives" => natives = false,
             "--plot-only" => plot_only = true,
             "--layout" => {
                 layout = match args.next().as_deref() {
@@ -804,6 +806,10 @@ fn main() -> eframe::Result {
             install_fonts(&cc.egui_ctx);
             let mut app = App::new(&rom, screenshot, keys, force_persist);
             app.lines = lines;
+            if !natives {
+                app.machine.natives.clear();
+                app.machine.jumps.clear();
+            }
             if pixels {
                 app.display = Display::Pixels;
             }

@@ -67,6 +67,7 @@ fn main() {
     let mut keys: Vec<String> = Vec::new();
     let mut typed: Vec<String> = Vec::new();
     let mut profile = false;
+    let mut natives = true;
     let mut wait = 0.0f64;
     let mut png_out: Option<String> = None;
     let mut dump_out: Option<String> = None;
@@ -78,6 +79,7 @@ fn main() {
             "--seconds" => seconds = args.next().expect("--seconds S").parse().expect("number"),
             "--keys" => keys = args.next().expect("--keys LIST").split_whitespace().map(String::from).collect(),
             "--profile" => profile = true,
+            "--no-natives" => natives = false,
             "--type" => typed.push(args.next().expect("--type TEXT")),
             "--png" => png_out = args.next(),
             "--dump" => dump_out = args.next(),
@@ -90,6 +92,11 @@ fn main() {
     let image = std::fs::read(&rom).unwrap_or_else(|e| panic!("reading {rom}: {e}"));
     let syms = load_symbols();
     let mut m = Machine::new(&image);
+    // Native Rust replacements for ROM code, each verified against the
+    // original (crates/hp48/tests/hle.rs).
+    if natives {
+        hp48::hle::install(&mut m);
+    }
 
     let mut hist: HashMap<u32, u64> = HashMap::new();
     let total = (seconds * CPU_HZ as f64) as u64;

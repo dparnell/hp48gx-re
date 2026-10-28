@@ -28,11 +28,11 @@ cargo run --release -p hp48 --example stack -- "'X^2' 'Y' STO"   # print the dec
 
 `cargo run --release -p hp48 --example knownbugs -- [ROM] [NAME...]` checks a ROM for the bugs in `firmware/BUGS.md`. It prints PRESENT, fixed or unknown, and exits 1 while any bug is present.
 
-`hp48-cli` boots the ROM headless and prints the LCD as text. Keys are `Key` variant names (`N7`, `LeftShift`, `Enter`, ...). `KEY:SECONDS` holds a key, `wait:S` just runs, and `type:TEXT` types text (`~` for a space) without ENTER. `--type TEXT` (repeatable) types an RPL command line after the keys and presses ENTER. Other options: `--profile` (PC hot spots with ROM symbols), `--png`, `--dump` (raw 0/1 rows), `--vector-png`, `--svg`.
+`hp48-cli` boots the ROM headless and prints the LCD as text. Keys are `Key` variant names (`N7`, `LeftShift`, `Enter`, ...). `KEY:SECONDS` holds a key, `wait:S` just runs, and `type:TEXT` types text (`~` for a space) without ENTER. `--type TEXT` (repeatable) types an RPL command line after the keys and presses ENTER. Other options: `--profile` (PC hot spots with ROM symbols; with the natives installed it shows the ROM code that is left), `--no-natives` (plain emulation), `--png`, `--dump` (raw 0/1 rows), `--vector-png`, `--svg`.
 
 Typing (`hp48::typing`, `Machine::type_text`) turns text into keystrokes. Letters go through alpha mode, and brackets and quotes insert a pair whose closer is typed as ▶. `-5` is typed as 5 +/-, because in immediate mode `-` subtracts. Symbols such as `<`, `≤` and `→` use their alpha-shift keys (`examples/alphachars.rs`), because the plain `→` key adds spaces. `Σ` has no key, so build names like `ΣDAT` with `133 CHR "DAT" + STR→`.
 
-`hp48-app` options: `--screenshot OUT.png --keys "..." --type "..."` runs a key script (the keys, then each typed line with ENTER), saves the window and exits; `wait` in the script is one second. When the first typed key is a shift, wait about 5 s after `F`. `--line "..."` types a line through the desktop command line after the script. `--size WxH` sets the window size, and `--layout auto|calculator|desktop` fixes the layout (also in the LCD's context menu). `--plot-only` shows the plot view in the main window, `--pixels` starts in pixel mode, and `--persist` keeps state in scripted runs. State lives in `%APPDATA%/HP48GX/state.bin` (`$XDG_DATA_HOME/HP48GX` elsewhere); set `HP48GX_STATE` to use another file.
+`hp48-app` options: `--screenshot OUT.png --keys "..." --type "..."` runs a key script (the keys, then each typed line with ENTER), saves the window and exits; `wait` in the script is one second. When the first typed key is a shift, wait about 5 s after `F`. `--line "..."` types a line through the desktop command line after the script. `--size WxH` sets the window size, and `--layout auto|calculator|desktop` fixes the layout (also in the LCD's context menu). `--plot-only` shows the plot view in the main window, `--pixels` starts in pixel mode, and `--persist` keeps state in scripted runs. `--no-natives` runs the ROM without the HLE natives. State lives in `%APPDATA%/HP48GX/state.bin` (`$XDG_DATA_HOME/HP48GX` elsewhere); set `HP48GX_STATE` to use another file.
 
 After a fresh boot, the ROM shows "Try To Recover Memory?". Answer NO (key F), then wait about 3 s before pressing a shift key: the calculator drops shifts pressed while it is still clearing memory.
 
@@ -101,7 +101,7 @@ Run the Python tests from the repo root with `python -m unittest discover -s tes
 
 ### Translating ROM routines to Rust (HLE)
 
-`crates/hp48/src/hle.rs` holds native replacements for machine-code ROM routines, registered in `NATIVES` by entry address. `Machine::run` calls a native in place of the routine and then performs the RTN.
+`crates/hp48/src/hle.rs` holds native replacements for machine-code ROM routines, registered in `NATIVES` by entry address. `Machine::run` calls a native in place of the routine and then performs the RTN. The app and `hp48-cli` install every native (`hle::install`) unless given `--no-natives`; the Rust tests and examples run the plain ROM unless they install them.
 
 - A native must reproduce the routine's full effect: every register (including scratch registers and P), carry, HST bits and memory. Read the ROM code (`python tools/hpdis.py func ADDR`) and mirror its early exits.
 - `tests/hle.rs` runs every native against the ROM on 5000 random register states through `hle::verify`. Add new natives to `NATIVES` and they are tested automatically.
