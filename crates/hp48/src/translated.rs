@@ -1,21 +1,25 @@
 //! Running ROM code translated ahead of time into Rust (crate `hp48-rom`).
 //!
 //! The translator turns each ROM instruction into a Rust function, a
-//! [`Block`], that executes it without fetching or decoding it and goes on
-//! with the function of the instruction that follows, as long as execution
-//! falls through. So a function runs the straight run of code from its
+//! [`Block`], that executes it by calling the CPU's method for that
+//! instruction (the one the interpreter uses) with constant operands, and
+//! goes on with the function of the instruction that follows, as long as
+//! execution falls through. So a function runs the straight run of code from its
 //! address on. [`Machine::step`](crate::Machine::step) runs the function at
 //! PC, when there is one and ROM is visible all along its run.
 //!
 //! A run stops at every point where the interpreter would notice a
 //! difference between instructions: a branch taken, the next timer tick or
 //! the end of the run (the budget), an interrupt, wake-up or MP request
-//! from the hardware, and SHUTDN. Each instruction also sees the LCD scan
-//! line the interpreter would show it. So a machine running blocks goes
+//! from the hardware, and SHUTDN. Each instruction that uses the bus also
+//! sees the LCD scan line the interpreter would show it. Only the checks an
+//! instruction can need are made after it: the budget always, PC after
+//! branches, the hardware after bus access. PC and `Cpu::cycles` are
+//! brought up to date when the block stops. So a machine running blocks goes
 //! through exactly the same states as one that interprets the ROM.
 
 use crate::hardware::Hardware;
-use saturn::{Cpu, Op};
+use saturn::Cpu;
 
 /// Translated ROM code from one address on.
 pub type Block = fn(&mut Run);
@@ -42,20 +46,56 @@ impl<'a> Run<'a> {
         self.spent
     }
 
-    /// Execute the instruction at `addr`, `len` nibbles long. Returns
-    /// whether the block may go on with the next one.
+    /// Show the hardware the LCD scan line of this moment, before an
+    /// instruction that uses the bus.
     #[inline]
-    pub fn op(&mut self, addr: u32, len: u32, op: Op) -> bool {
+    pub fn sync(&mut self) {
         self.hw.scan_line = crate::machine::scan_line(self.now + u64::from(self.spent));
-        let next = (addr + len) & 0xF_FFFF;
+    }
+
+    /// After an instruction that touches neither PC nor the hardware: may
+    /// the block go on to the one at `next`? If not, PC is left there.
+    #[inline]
+    pub fn next(&mut self, next: u32, cycles: u32) -> bool {
+        self.spent += cycles;
+        if self.spent < self.budget {
+            return true;
+        }
         self.cpu.pc = next;
-        let c = self.cpu.exec(op, len, self.hw);
-        self.cpu.cycles += u64::from(c);
-        self.spent += c;
-        self.cpu.pc == next
-            && self.spent < self.budget
-            && !self.cpu.shutdown
-            && !(self.hw.irq || self.hw.wake || self.hw.set_mp)
+        false
+    }
+
+    /// After an instruction that may branch or return (PC was set to
+    /// `next` before it): go on only if it fell through.
+    #[inline]
+    pub fn next_pc(&mut self, next: u32, cycles: u32) -> bool {
+        self.spent += cycles;
+        self.cpu.pc == next && self.spent < self.budget
+    }
+
+    /// After an instruction that used the bus: go on unless the hardware
+    /// now wants attention (an interrupt, wake-up or MP request).
+    #[inline]
+    pub fn next_io(&mut self, next: u32, cycles: u32) -> bool {
+        self.spent += cycles;
+        if self.spent < self.budget && !(self.hw.irq || self.hw.wake || self.hw.set_mp) {
+            return true;
+        }
+        self.cpu.pc = next;
+        false
+    }
+
+    /// The last instruction of a run, which leaves PC at `next`.
+    #[inline]
+    pub fn end(&mut self, next: u32, cycles: u32) {
+        self.spent += cycles;
+        self.cpu.pc = next;
+    }
+
+    /// The last instruction of a run, which set PC itself.
+    #[inline]
+    pub fn spend(&mut self, cycles: u32) {
+        self.spent += cycles;
     }
 }
 

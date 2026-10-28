@@ -149,7 +149,9 @@ impl Machine {
                         let mut run = crate::translated::Run::new(&mut self.cpu, &mut self.hw, budget, self.time);
                         block(&mut run);
                         self.block_runs += 1;
-                        run.spent()
+                        let spent = run.spent();
+                        self.cpu.cycles += u64::from(spent);
+                        spent
                     }
                     None => self.cpu.step(&mut self.hw),
                 },

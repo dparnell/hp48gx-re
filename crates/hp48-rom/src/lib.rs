@@ -1,7 +1,7 @@
 //! The ROM's machine code translated into Rust.
 //!
 //! `src/gen/` is written by `cargo run --release -p hp48 --example
-//! translate` (see hp48::translated): one function per block of ROM code.
+//! translate` (see hp48::translated): one function per instruction.
 //! [`install`] makes a machine run them in place of interpreting that code.
 
 mod gen;
@@ -9,19 +9,9 @@ mod gen;
 /// What the generated code uses.
 mod prelude {
     pub use hp48::translated::{Block, Run};
-    pub use saturn::op::{Cmp, Cond, Op, RtnKind, ScratchOp, Test};
+    pub use saturn::op::{Cmp, Cond, RtnKind, ScratchOp, Test};
     pub use saturn::reg::{Field, R};
-
-    /// Run one instruction; leave the block when the machine must look
-    /// at what happened (see `Run::op`).
-    macro_rules! op {
-        ($r:ident, $addr:expr, $len:expr, $op:expr) => {
-            if !$r.op($addr, $len, $op) {
-                return;
-            }
-        };
-    }
-    pub(crate) use op;
+    pub use saturn::Bus;
 }
 
 /// Run the translated code on `machine`, if its ROM is the one the code was

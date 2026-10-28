@@ -126,6 +126,24 @@ pub enum Op {
     Illegal,
 }
 
+impl Op {
+    /// The instruction's cycle count, `len` nibbles long, or None when it
+    /// depends on P (a memory access over the P or WP field: see
+    /// `Cpu::mem_cycles`).
+    pub fn cycles(self, len: u32) -> Option<u32> {
+        match self {
+            Op::Rtn(_) => Some(9),
+            Op::PcIndirect(_) => Some(23),
+            Op::Mem { f: Field::P | Field::WP, .. } => None,
+            Op::Mem { f, .. } => {
+                let (lo, hi) = f.range(0);
+                Some(15 + (hi - lo) as u32)
+            }
+            _ => Some(2 + len),
+        }
+    }
+}
+
 /// Register pairs used by the arithmetic and test groups, indexed by t & 3.
 const PAIRS: [(R, R); 4] = [(R::A, R::B), (R::B, R::C), (R::C, R::A), (R::D, R::C)];
 

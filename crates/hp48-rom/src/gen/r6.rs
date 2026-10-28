@@ -3,19592 +3,28171 @@
 use super::super::prelude::*;
 
 fn i601bb(r: &mut Run) {
-    op!(r, 0x601BB, 7, Op::Call(0x6641)); // GOSUB #06641
+    r.cpu.pc = 0x601C2;
+    r.cpu.call(0x06641); // GOSUB #06641
+    r.spend(9);
 }
 
 fn i601c2(r: &mut Run) {
-    op!(r, 0x601C2, 6, Op::Scratch { op: ScratchOp::ToScratch, r: R::A, n: 0, f: Field::A }); // R0=A.F A
-    i601c8(r)
+    r.cpu.scratch(ScratchOp::ToScratch, R::A, 0, Field::A); // R0=A.F A
+    if r.next(0x601C8, 8) {
+        i601c8(r)
+    }
 }
 
 fn i601c8(r: &mut Run) {
-    op!(r, 0x601C8, 7, Op::Call(0x6641)); // GOSUB #06641
+    r.cpu.pc = 0x601CF;
+    r.cpu.call(0x06641); // GOSUB #06641
+    r.spend(9);
 }
 
 fn i601cf(r: &mut Run) {
-    op!(r, 0x601CF, 6, Op::Scratch { op: ScratchOp::ToScratch, r: R::A, n: 1, f: Field::A }); // R1=A.F A
-    i601d5(r)
+    r.cpu.scratch(ScratchOp::ToScratch, R::A, 1, Field::A); // R1=A.F A
+    if r.next(0x601D5, 8) {
+        i601d5(r)
+    }
 }
 
 fn i601d5(r: &mut Run) {
-    op!(r, 0x601D5, 7, Op::Call(0x6641)); // GOSUB #06641
+    r.cpu.pc = 0x601DC;
+    r.cpu.call(0x06641); // GOSUB #06641
+    r.spend(9);
 }
 
 fn i601dc(r: &mut Run) {
-    op!(r, 0x601DC, 6, Op::Scratch { op: ScratchOp::ToScratch, r: R::A, n: 2, f: Field::A }); // R2=A.F A
-    i601e2(r)
+    r.cpu.scratch(ScratchOp::ToScratch, R::A, 2, Field::A); // R2=A.F A
+    if r.next(0x601E2, 8) {
+        i601e2(r)
+    }
 }
 
 fn i601e2(r: &mut Run) {
-    op!(r, 0x601E2, 7, Op::Call(0x679B)); // GOSUB #0679B
+    r.cpu.pc = 0x601E9;
+    r.cpu.call(0x0679B); // GOSUB #0679B
+    r.spend(9);
 }
 
 fn i601e9(r: &mut Run) {
-    op!(r, 0x601E9, 3, Op::DAdd { d: 1, n: 5 }); // D1=D1+ 5
-    i601ec(r)
+    r.cpu.d_add(1, 5); // D1=D1+ 5
+    if r.next(0x601EC, 5) {
+        i601ec(r)
+    }
 }
 
 fn i601ec(r: &mut Run) {
-    op!(r, 0x601EC, 6, Op::Scratch { op: ScratchOp::FromScratch, r: R::A, n: 1, f: Field::A }); // A=R1.F A
-    i601f2(r)
+    r.cpu.scratch(ScratchOp::FromScratch, R::A, 1, Field::A); // A=R1.F A
+    if r.next(0x601F2, 8) {
+        i601f2(r)
+    }
 }
 
 fn i601f2(r: &mut Run) {
-    op!(r, 0x601F2, 4, Op::Call(0x60236)); // GOSUB #60236
+    r.cpu.pc = 0x601F6;
+    r.cpu.call(0x60236); // GOSUB #60236
+    r.spend(6);
 }
 
 fn i601f6(r: &mut Run) {
-    op!(r, 0x601F6, 3, Op::DExR { d: 1, r: R::C, short: false }); // CD1EX
-    i601f9(r)
+    r.cpu.d_ex_r(1, R::C, false); // CD1EX
+    if r.next(0x601F9, 5) {
+        i601f9(r)
+    }
 }
 
 fn i601f9(r: &mut Run) {
-    op!(r, 0x601F9, 2, Op::Add { dst: R::A, src: R::C, f: Field::A }); // A=A+C A
-    i601fb(r)
+    r.cpu.add(R::A, R::C, Field::A); // A=A+C A
+    if r.next(0x601FB, 4) {
+        i601fb(r)
+    }
 }
 
 fn i601fb(r: &mut Run) {
-    op!(r, 0x601FB, 3, Op::DFromR { d: 0, r: R::A, short: false }); // D0=A
-    i601fe(r)
+    r.cpu.d_from_r(0, R::A, false); // D0=A
+    if r.next(0x601FE, 5) {
+        i601fe(r)
+    }
 }
 
 fn i601fe(r: &mut Run) {
-    op!(r, 0x601FE, 3, Op::DFromR { d: 1, r: R::C, short: false }); // D1=C
-    i60201(r)
+    r.cpu.d_from_r(1, R::C, false); // D1=C
+    if r.next(0x60201, 5) {
+        i60201(r)
+    }
 }
 
 fn i60201(r: &mut Run) {
-    op!(r, 0x60201, 6, Op::Scratch { op: ScratchOp::FromScratch, r: R::A, n: 2, f: Field::A }); // A=R2.F A
-    i60207(r)
+    r.cpu.scratch(ScratchOp::FromScratch, R::A, 2, Field::A); // A=R2.F A
+    if r.next(0x60207, 8) {
+        i60207(r)
+    }
 }
 
 fn i60207(r: &mut Run) {
-    op!(r, 0x60207, 4, Op::Call(0x60236)); // GOSUB #60236
+    r.cpu.pc = 0x6020B;
+    r.cpu.call(0x60236); // GOSUB #60236
+    r.spend(6);
 }
 
 fn i6020b(r: &mut Run) {
-    op!(r, 0x6020B, 3, Op::DExR { d: 1, r: R::C, short: false }); // CD1EX
-    i6020e(r)
+    r.cpu.d_ex_r(1, R::C, false); // CD1EX
+    if r.next(0x6020E, 5) {
+        i6020e(r)
+    }
 }
 
 fn i6020e(r: &mut Run) {
-    op!(r, 0x6020E, 2, Op::Add { dst: R::C, src: R::A, f: Field::A }); // C=C+A A
-    i60210(r)
+    r.cpu.add(R::C, R::A, Field::A); // C=C+A A
+    if r.next(0x60210, 4) {
+        i60210(r)
+    }
 }
 
 fn i60210(r: &mut Run) {
-    op!(r, 0x60210, 3, Op::DFromR { d: 1, r: R::C, short: false }); // D1=C
-    i60213(r)
+    r.cpu.d_from_r(1, R::C, false); // D1=C
+    if r.next(0x60213, 5) {
+        i60213(r)
+    }
 }
 
 fn i60213(r: &mut Run) {
-    op!(r, 0x60213, 6, Op::Scratch { op: ScratchOp::FromScratch, r: R::C, n: 0, f: Field::A }); // C=R0.F A
-    i60219(r)
+    r.cpu.scratch(ScratchOp::FromScratch, R::C, 0, Field::A); // C=R0.F A
+    if r.next(0x60219, 8) {
+        i60219(r)
+    }
 }
 
 fn i60219(r: &mut Run) {
-    op!(r, 0x60219, 6, Op::Call(0x5FCA3)); // GOSUB #5FCA3
+    r.cpu.pc = 0x6021F;
+    r.cpu.call(0x5FCA3); // GOSUB #5FCA3
+    r.spend(8);
 }
 
 fn i6021f(r: &mut Run) {
-    op!(r, 0x6021F, 3, Op::CondJump(Cond::NoCarry, 0x60240)); // GONC #60240
-    i60222(r)
+    r.cpu.pc = 0x60222;
+    r.cpu.jump_if(Cond::NoCarry, 0x60240); // GONC #60240
+    if r.next_pc(0x60222, 5) {
+        i60222(r)
+    }
 }
 
 fn i60222(r: &mut Run) {
-    op!(r, 0x60222, 7, Op::Call(0x67D2)); // GOSUB #067D2
+    r.cpu.pc = 0x60229;
+    r.cpu.call(0x067D2); // GOSUB #067D2
+    r.spend(9);
 }
 
 fn i60229(r: &mut Run) {
-    op!(r, 0x60229, 7, Op::LoadConst { r: R::C, len: 5, val: 0x3AC0 }); // LC(5) #03AC0
-    i60230(r)
+    r.cpu.load_const(R::C, 5, 0x3AC0); // LC(5) #03AC0
+    if r.next(0x60230, 9) {
+        i60230(r)
+    }
 }
 
 fn i60230(r: &mut Run) {
-    op!(r, 0x60230, 2, Op::Copy { dst: R::A, src: R::C, f: Field::A }); // A=C A
-    i60232(r)
+    r.cpu.copy(R::A, R::C, Field::A); // A=C A
+    if r.next(0x60232, 4) {
+        i60232(r)
+    }
 }
 
 fn i60232(r: &mut Run) {
-    op!(r, 0x60232, 4, Op::PcIndirect(R::A)); // PC=(A)
+    r.sync();
+    r.cpu.pc_indirect(R::A, r.hw); // PC=(A)
+    r.spend(23);
 }
 
 fn i60236(r: &mut Run) {
-    op!(r, 0x60236, 2, Op::Copy { dst: R::C, src: R::A, f: Field::A }); // C=A A
-    i60238(r)
+    r.cpu.copy(R::C, R::A, Field::A); // C=A A
+    if r.next(0x60238, 4) {
+        i60238(r)
+    }
 }
 
 fn i60238(r: &mut Run) {
-    op!(r, 0x60238, 2, Op::Add { dst: R::A, src: R::A, f: Field::A }); // A=A+A A
-    i6023a(r)
+    r.cpu.add(R::A, R::A, Field::A); // A=A+A A
+    if r.next(0x6023A, 4) {
+        i6023a(r)
+    }
 }
 
 fn i6023a(r: &mut Run) {
-    op!(r, 0x6023A, 2, Op::Add { dst: R::A, src: R::A, f: Field::A }); // A=A+A A
-    i6023c(r)
+    r.cpu.add(R::A, R::A, Field::A); // A=A+A A
+    if r.next(0x6023C, 4) {
+        i6023c(r)
+    }
 }
 
 fn i6023c(r: &mut Run) {
-    op!(r, 0x6023C, 2, Op::Add { dst: R::A, src: R::C, f: Field::A }); // A=A+C A
-    i6023e(r)
+    r.cpu.add(R::A, R::C, Field::A); // A=A+C A
+    if r.next(0x6023E, 4) {
+        i6023e(r)
+    }
 }
 
 fn i6023e(r: &mut Run) {
-    op!(r, 0x6023E, 2, Op::Rtn(RtnKind::Plain)); // RTN
+    r.cpu.rtn(RtnKind::Plain); // RTN
+    r.spend(9);
 }
 
 fn i60240(r: &mut Run) {
-    op!(r, 0x60240, 7, Op::Call(0x67D2)); // GOSUB #067D2
+    r.cpu.pc = 0x60247;
+    r.cpu.call(0x067D2); // GOSUB #067D2
+    r.spend(9);
 }
 
 fn i60247(r: &mut Run) {
-    op!(r, 0x60247, 7, Op::LoadConst { r: R::C, len: 5, val: 0x3A81 }); // LC(5) #03A81
-    i6024e(r)
+    r.cpu.load_const(R::C, 5, 0x3A81); // LC(5) #03A81
+    if r.next(0x6024E, 9) {
+        i6024e(r)
+    }
 }
 
 fn i6024e(r: &mut Run) {
-    op!(r, 0x6024E, 2, Op::Copy { dst: R::A, src: R::C, f: Field::A }); // A=C A
-    i60250(r)
+    r.cpu.copy(R::A, R::C, Field::A); // A=C A
+    if r.next(0x60250, 4) {
+        i60250(r)
+    }
 }
 
 fn i60250(r: &mut Run) {
-    op!(r, 0x60250, 4, Op::PcIndirect(R::A)); // PC=(A)
+    r.sync();
+    r.cpu.pc_indirect(R::A, r.hw); // PC=(A)
+    r.spend(23);
 }
 
 fn i602c2(r: &mut Run) {
-    op!(r, 0x602C2, 7, Op::Call(0x6641)); // GOSUB #06641
+    r.cpu.pc = 0x602C9;
+    r.cpu.call(0x06641); // GOSUB #06641
+    r.spend(9);
 }
 
 fn i602c9(r: &mut Run) {
-    op!(r, 0x602C9, 6, Op::Scratch { op: ScratchOp::ToScratch, r: R::A, n: 0, f: Field::A }); // R0=A.F A
-    i602cf(r)
+    r.cpu.scratch(ScratchOp::ToScratch, R::A, 0, Field::A); // R0=A.F A
+    if r.next(0x602CF, 8) {
+        i602cf(r)
+    }
 }
 
 fn i602cf(r: &mut Run) {
-    op!(r, 0x602CF, 7, Op::Call(0x6641)); // GOSUB #06641
+    r.cpu.pc = 0x602D6;
+    r.cpu.call(0x06641); // GOSUB #06641
+    r.spend(9);
 }
 
 fn i602d6(r: &mut Run) {
-    op!(r, 0x602D6, 6, Op::Scratch { op: ScratchOp::ToScratch, r: R::A, n: 1, f: Field::A }); // R1=A.F A
-    i602dc(r)
+    r.cpu.scratch(ScratchOp::ToScratch, R::A, 1, Field::A); // R1=A.F A
+    if r.next(0x602DC, 8) {
+        i602dc(r)
+    }
 }
 
 fn i602dc(r: &mut Run) {
-    op!(r, 0x602DC, 7, Op::Call(0x6641)); // GOSUB #06641
+    r.cpu.pc = 0x602E3;
+    r.cpu.call(0x06641); // GOSUB #06641
+    r.spend(9);
 }
 
 fn i602e3(r: &mut Run) {
-    op!(r, 0x602E3, 6, Op::Scratch { op: ScratchOp::ToScratch, r: R::A, n: 2, f: Field::A }); // R2=A.F A
-    i602e9(r)
+    r.cpu.scratch(ScratchOp::ToScratch, R::A, 2, Field::A); // R2=A.F A
+    if r.next(0x602E9, 8) {
+        i602e9(r)
+    }
 }
 
 fn i602e9(r: &mut Run) {
-    op!(r, 0x602E9, 7, Op::Call(0x6641)); // GOSUB #06641
+    r.cpu.pc = 0x602F0;
+    r.cpu.call(0x06641); // GOSUB #06641
+    r.spend(9);
 }
 
 fn i602f0(r: &mut Run) {
-    op!(r, 0x602F0, 6, Op::Scratch { op: ScratchOp::ToScratch, r: R::A, n: 3, f: Field::A }); // R3=A.F A
-    i602f6(r)
+    r.cpu.scratch(ScratchOp::ToScratch, R::A, 3, Field::A); // R3=A.F A
+    if r.next(0x602F6, 8) {
+        i602f6(r)
+    }
 }
 
 fn i602f6(r: &mut Run) {
-    op!(r, 0x602F6, 6, Op::Scratch { op: ScratchOp::FromScratch, r: R::C, n: 1, f: Field::A }); // C=R1.F A
-    i602fc(r)
+    r.cpu.scratch(ScratchOp::FromScratch, R::C, 1, Field::A); // C=R1.F A
+    if r.next(0x602FC, 8) {
+        i602fc(r)
+    }
 }
 
 fn i602fc(r: &mut Run) {
-    op!(r, 0x602FC, 2, Op::Sub { dst: R::D, a: R::D, b: R::C, f: Field::A }); // D=D-C A
-    i602fe(r)
+    r.cpu.sub(R::D, R::D, R::C, Field::A); // D=D-C A
+    if r.next(0x602FE, 4) {
+        i602fe(r)
+    }
 }
 
 fn i602fe(r: &mut Run) {
-    op!(r, 0x602FE, 3, Op::CondJump(Cond::NoCarry, 0x60328)); // GONC #60328
-    i60301(r)
+    r.cpu.pc = 0x60301;
+    r.cpu.jump_if(Cond::NoCarry, 0x60328); // GONC #60328
+    if r.next_pc(0x60301, 5) {
+        i60301(r)
+    }
 }
 
 fn i60301(r: &mut Run) {
-    op!(r, 0x60301, 7, Op::Call(0x679B)); // GOSUB #0679B
+    r.cpu.pc = 0x60308;
+    r.cpu.call(0x0679B); // GOSUB #0679B
+    r.spend(9);
 }
 
 fn i60308(r: &mut Run) {
-    op!(r, 0x60308, 7, Op::Call(0x613E)); // GOSUB #0613E
+    r.cpu.pc = 0x6030F;
+    r.cpu.call(0x0613E); // GOSUB #0613E
+    r.spend(9);
 }
 
 fn i6030f(r: &mut Run) {
-    op!(r, 0x6030F, 7, Op::Call(0x67D2)); // GOSUB #067D2
+    r.cpu.pc = 0x60316;
+    r.cpu.call(0x067D2); // GOSUB #067D2
+    r.spend(9);
 }
 
 fn i60316(r: &mut Run) {
-    op!(r, 0x60316, 6, Op::Scratch { op: ScratchOp::FromScratch, r: R::C, n: 1, f: Field::A }); // C=R1.F A
-    i6031c(r)
+    r.cpu.scratch(ScratchOp::FromScratch, R::C, 1, Field::A); // C=R1.F A
+    if r.next(0x6031C, 8) {
+        i6031c(r)
+    }
 }
 
 fn i6031c(r: &mut Run) {
-    op!(r, 0x6031C, 2, Op::Sub { dst: R::D, a: R::D, b: R::C, f: Field::A }); // D=D-C A
-    i6031e(r)
+    r.cpu.sub(R::D, R::D, R::C, Field::A); // D=D-C A
+    if r.next(0x6031E, 4) {
+        i6031e(r)
+    }
 }
 
 fn i6031e(r: &mut Run) {
-    op!(r, 0x6031E, 3, Op::CondJump(Cond::NoCarry, 0x60328)); // GONC #60328
-    i60321(r)
+    r.cpu.pc = 0x60321;
+    r.cpu.jump_if(Cond::NoCarry, 0x60328); // GONC #60328
+    if r.next_pc(0x60321, 5) {
+        i60321(r)
+    }
 }
 
 fn i60321(r: &mut Run) {
-    op!(r, 0x60321, 7, Op::Jump(0x4FBB)); // GOTO #04FBB
+    r.cpu.pc = 0x04FBB; // GOTO #04FBB
+    r.spend(9);
 }
 
 fn i60328(r: &mut Run) {
-    op!(r, 0x60328, 2, Op::Inc { r: R::D, f: Field::A }); // D=D+1 A
-    i6032a(r)
+    r.cpu.inc(R::D, Field::A); // D=D+1 A
+    if r.next(0x6032A, 4) {
+        i6032a(r)
+    }
 }
 
 fn i6032a(r: &mut Run) {
-    op!(r, 0x6032A, 7, Op::Call(0x679B)); // GOSUB #0679B
+    r.cpu.pc = 0x60331;
+    r.cpu.call(0x0679B); // GOSUB #0679B
+    r.spend(9);
 }
 
 fn i60331(r: &mut Run) {
-    op!(r, 0x60331, 6, Op::Scratch { op: ScratchOp::FromScratch, r: R::C, n: 1, f: Field::A }); // C=R1.F A
-    i60337(r)
+    r.cpu.scratch(ScratchOp::FromScratch, R::C, 1, Field::A); // C=R1.F A
+    if r.next(0x60337, 8) {
+        i60337(r)
+    }
 }
 
 fn i60337(r: &mut Run) {
-    op!(r, 0x60337, 4, Op::Call(0x603BF)); // GOSUB #603BF
+    r.cpu.pc = 0x6033B;
+    r.cpu.call(0x603BF); // GOSUB #603BF
+    r.spend(6);
 }
 
 fn i6033b(r: &mut Run) {
-    op!(r, 0x6033B, 6, Op::Scratch { op: ScratchOp::ToScratch, r: R::C, n: 4, f: Field::A }); // R4=C.F A
-    i60341(r)
+    r.cpu.scratch(ScratchOp::ToScratch, R::C, 4, Field::A); // R4=C.F A
+    if r.next(0x60341, 8) {
+        i60341(r)
+    }
 }
 
 fn i60341(r: &mut Run) {
-    op!(r, 0x60341, 3, Op::DExR { d: 1, r: R::A, short: false }); // AD1EX
-    i60344(r)
+    r.cpu.d_ex_r(1, R::A, false); // AD1EX
+    if r.next(0x60344, 5) {
+        i60344(r)
+    }
 }
 
 fn i60344(r: &mut Run) {
-    op!(r, 0x60344, 3, Op::DFromR { d: 0, r: R::A, short: false }); // D0=A
-    i60347(r)
+    r.cpu.d_from_r(0, R::A, false); // D0=A
+    if r.next(0x60347, 5) {
+        i60347(r)
+    }
 }
 
 fn i60347(r: &mut Run) {
-    op!(r, 0x60347, 2, Op::Sub { dst: R::A, a: R::A, b: R::C, f: Field::A }); // A=A-C A
-    i60349(r)
+    r.cpu.sub(R::A, R::A, R::C, Field::A); // A=A-C A
+    if r.next(0x60349, 4) {
+        i60349(r)
+    }
 }
 
 fn i60349(r: &mut Run) {
-    op!(r, 0x60349, 6, Op::AddCon { r: R::A, f: Field::A, n: 5 }); // A=A+CON A,5
-    i6034f(r)
+    r.cpu.add_con(R::A, Field::A, 5); // A=A+CON A,5
+    if r.next(0x6034F, 8) {
+        i6034f(r)
+    }
 }
 
 fn i6034f(r: &mut Run) {
-    op!(r, 0x6034F, 7, Op::DLoad { d: 1, len: 5, val: 0x806F8 }); // D1=(5) #806F8
-    i60356(r)
+    r.cpu.d_load(1, 5, 0x806F8); // D1=(5) #806F8
+    if r.next(0x60356, 9) {
+        i60356(r)
+    }
 }
 
 fn i60356(r: &mut Run) {
-    op!(r, 0x60356, 3, Op::Mem { store: true, d: 1, r: R::A, f: Field::A }); // DAT1=A A
-    i60359(r)
+    r.sync();
+    r.cpu.store(1, R::A, Field::A, r.hw); // DAT1=A A
+    if r.next_io(0x60359, 19) {
+        i60359(r)
+    }
 }
 
 fn i60359(r: &mut Run) {
-    op!(r, 0x60359, 3, Op::DFromR { d: 1, r: R::A, short: false }); // D1=A
-    i6035c(r)
+    r.cpu.d_from_r(1, R::A, false); // D1=A
+    if r.next(0x6035C, 5) {
+        i6035c(r)
+    }
 }
 
 fn i6035c(r: &mut Run) {
-    op!(r, 0x6035C, 6, Op::Scratch { op: ScratchOp::FromScratch, r: R::C, n: 0, f: Field::A }); // C=R0.F A
-    i60362(r)
+    r.cpu.scratch(ScratchOp::FromScratch, R::C, 0, Field::A); // C=R0.F A
+    if r.next(0x60362, 8) {
+        i60362(r)
+    }
 }
 
 fn i60362(r: &mut Run) {
-    op!(r, 0x60362, 2, Op::Dec { r: R::C, f: Field::A }); // C=C-1 A
-    i60364(r)
+    r.cpu.dec(R::C, Field::A); // C=C-1 A
+    if r.next(0x60364, 4) {
+        i60364(r)
+    }
 }
 
 fn i60364(r: &mut Run) {
-    op!(r, 0x60364, 2, Op::Dec { r: R::C, f: Field::A }); // C=C-1 A
-    i60366(r)
+    r.cpu.dec(R::C, Field::A); // C=C-1 A
+    if r.next(0x60366, 4) {
+        i60366(r)
+    }
 }
 
 fn i60366(r: &mut Run) {
-    op!(r, 0x60366, 4, Op::Call(0x603BF)); // GOSUB #603BF
+    r.cpu.pc = 0x6036A;
+    r.cpu.call(0x603BF); // GOSUB #603BF
+    r.spend(6);
 }
 
 fn i6036a(r: &mut Run) {
-    op!(r, 0x6036A, 7, Op::Call(0x670C)); // GOSUB #0670C
+    r.cpu.pc = 0x60371;
+    r.cpu.call(0x0670C); // GOSUB #0670C
+    r.spend(9);
 }
 
 fn i60371(r: &mut Run) {
-    op!(r, 0x60371, 6, Op::Scratch { op: ScratchOp::FromScratch, r: R::C, n: 0, f: Field::A }); // C=R0.F A
-    i60377(r)
+    r.cpu.scratch(ScratchOp::FromScratch, R::C, 0, Field::A); // C=R0.F A
+    if r.next(0x60377, 8) {
+        i60377(r)
+    }
 }
 
 fn i60377(r: &mut Run) {
-    op!(r, 0x60377, 6, Op::Scratch { op: ScratchOp::FromScratch, r: R::A, n: 2, f: Field::A }); // A=R2.F A
-    i6037d(r)
+    r.cpu.scratch(ScratchOp::FromScratch, R::A, 2, Field::A); // A=R2.F A
+    if r.next(0x6037D, 8) {
+        i6037d(r)
+    }
 }
 
 fn i6037d(r: &mut Run) {
-    op!(r, 0x6037D, 2, Op::Sub { dst: R::A, a: R::A, b: R::C, f: Field::A }); // A=A-C A
-    i6037f(r)
+    r.cpu.sub(R::A, R::A, R::C, Field::A); // A=A-C A
+    if r.next(0x6037F, 4) {
+        i6037f(r)
+    }
 }
 
 fn i6037f(r: &mut Run) {
-    op!(r, 0x6037F, 6, Op::Scratch { op: ScratchOp::FromScratch, r: R::C, n: 3, f: Field::A }); // C=R3.F A
-    i60385(r)
+    r.cpu.scratch(ScratchOp::FromScratch, R::C, 3, Field::A); // C=R3.F A
+    if r.next(0x60385, 8) {
+        i60385(r)
+    }
 }
 
 fn i60385(r: &mut Run) {
-    op!(r, 0x60385, 2, Op::Inc { r: R::A, f: Field::A }); // A=A+1 A
-    i60387(r)
+    r.cpu.inc(R::A, Field::A); // A=A+1 A
+    if r.next(0x60387, 4) {
+        i60387(r)
+    }
 }
 
 fn i60387(r: &mut Run) {
-    op!(r, 0x60387, 2, Op::Add { dst: R::A, src: R::C, f: Field::A }); // A=A+C A
-    i60389(r)
+    r.cpu.add(R::A, R::C, Field::A); // A=A+C A
+    if r.next(0x60389, 4) {
+        i60389(r)
+    }
 }
 
 fn i60389(r: &mut Run) {
-    op!(r, 0x60389, 4, Op::Call(0x60236)); // GOSUB #60236
+    r.cpu.pc = 0x6038D;
+    r.cpu.call(0x60236); // GOSUB #60236
+    r.spend(6);
 }
 
 fn i6038d(r: &mut Run) {
-    op!(r, 0x6038D, 3, Op::DExR { d: 0, r: R::C, short: false }); // CD0EX
-    i60390(r)
+    r.cpu.d_ex_r(0, R::C, false); // CD0EX
+    if r.next(0x60390, 5) {
+        i60390(r)
+    }
 }
 
 fn i60390(r: &mut Run) {
-    op!(r, 0x60390, 2, Op::Add { dst: R::C, src: R::A, f: Field::A }); // C=C+A A
-    i60392(r)
+    r.cpu.add(R::C, R::A, Field::A); // C=C+A A
+    if r.next(0x60392, 4) {
+        i60392(r)
+    }
 }
 
 fn i60392(r: &mut Run) {
-    op!(r, 0x60392, 3, Op::DFromR { d: 0, r: R::C, short: false }); // D0=C
-    i60395(r)
+    r.cpu.d_from_r(0, R::C, false); // D0=C
+    if r.next(0x60395, 5) {
+        i60395(r)
+    }
 }
 
 fn i60395(r: &mut Run) {
-    op!(r, 0x60395, 6, Op::Scratch { op: ScratchOp::FromScratch, r: R::C, n: 4, f: Field::A }); // C=R4.F A
-    i6039b(r)
+    r.cpu.scratch(ScratchOp::FromScratch, R::C, 4, Field::A); // C=R4.F A
+    if r.next(0x6039B, 8) {
+        i6039b(r)
+    }
 }
 
 fn i6039b(r: &mut Run) {
-    op!(r, 0x6039B, 7, Op::Call(0x670C)); // GOSUB #0670C
+    r.cpu.pc = 0x603A2;
+    r.cpu.call(0x0670C); // GOSUB #0670C
+    r.spend(9);
 }
 
 fn i603a2(r: &mut Run) {
-    op!(r, 0x603A2, 6, Op::Scratch { op: ScratchOp::FromScratch, r: R::C, n: 3, f: Field::A }); // C=R3.F A
-    i603a8(r)
+    r.cpu.scratch(ScratchOp::FromScratch, R::C, 3, Field::A); // C=R3.F A
+    if r.next(0x603A8, 8) {
+        i603a8(r)
+    }
 }
 
 fn i603a8(r: &mut Run) {
-    op!(r, 0x603A8, 6, Op::Scratch { op: ScratchOp::FromScratch, r: R::A, n: 1, f: Field::A }); // A=R1.F A
-    i603ae(r)
+    r.cpu.scratch(ScratchOp::FromScratch, R::A, 1, Field::A); // A=R1.F A
+    if r.next(0x603AE, 8) {
+        i603ae(r)
+    }
 }
 
 fn i603ae(r: &mut Run) {
-    op!(r, 0x603AE, 2, Op::Add { dst: R::A, src: R::C, f: Field::A }); // A=A+C A
-    i603b0(r)
+    r.cpu.add(R::A, R::C, Field::A); // A=A+C A
+    if r.next(0x603B0, 4) {
+        i603b0(r)
+    }
 }
 
 fn i603b0(r: &mut Run) {
-    op!(r, 0x603B0, 2, Op::Dec { r: R::A, f: Field::A }); // A=A-1 A
-    i603b2(r)
+    r.cpu.dec(R::A, Field::A); // A=A-1 A
+    if r.next(0x603B2, 4) {
+        i603b2(r)
+    }
 }
 
 fn i603b2(r: &mut Run) {
-    op!(r, 0x603B2, 6, Op::Scratch { op: ScratchOp::ToScratch, r: R::A, n: 0, f: Field::A }); // R0=A.F A
-    i603b8(r)
+    r.cpu.scratch(ScratchOp::ToScratch, R::A, 0, Field::A); // R0=A.F A
+    if r.next(0x603B8, 8) {
+        i603b8(r)
+    }
 }
 
 fn i603b8(r: &mut Run) {
-    op!(r, 0x603B8, 7, Op::Jump(0x357F)); // GOTO #0357F
+    r.cpu.pc = 0x0357F; // GOTO #0357F
+    r.spend(9);
 }
 
 fn i603bf(r: &mut Run) {
-    op!(r, 0x603BF, 2, Op::Copy { dst: R::A, src: R::C, f: Field::A }); // A=C A
-    i603c1(r)
+    r.cpu.copy(R::A, R::C, Field::A); // A=C A
+    if r.next(0x603C1, 4) {
+        i603c1(r)
+    }
 }
 
 fn i603c1(r: &mut Run) {
-    op!(r, 0x603C1, 2, Op::Add { dst: R::C, src: R::C, f: Field::A }); // C=C+C A
-    i603c3(r)
+    r.cpu.add(R::C, R::C, Field::A); // C=C+C A
+    if r.next(0x603C3, 4) {
+        i603c3(r)
+    }
 }
 
 fn i603c3(r: &mut Run) {
-    op!(r, 0x603C3, 2, Op::Add { dst: R::C, src: R::C, f: Field::A }); // C=C+C A
-    i603c5(r)
+    r.cpu.add(R::C, R::C, Field::A); // C=C+C A
+    if r.next(0x603C5, 4) {
+        i603c5(r)
+    }
 }
 
 fn i603c5(r: &mut Run) {
-    op!(r, 0x603C5, 2, Op::Add { dst: R::C, src: R::A, f: Field::A }); // C=C+A A
-    i603c7(r)
+    r.cpu.add(R::C, R::A, Field::A); // C=C+A A
+    if r.next(0x603C7, 4) {
+        i603c7(r)
+    }
 }
 
 fn i603c7(r: &mut Run) {
-    op!(r, 0x603C7, 2, Op::Rtn(RtnKind::Plain)); // RTN
+    r.cpu.rtn(RtnKind::Plain); // RTN
+    r.spend(9);
 }
 
 fn i60ec2(r: &mut Run) {
-    op!(r, 0x60EC2, 2, Op::Copy { dst: R::C, src: R::B, f: Field::A }); // C=B A
-    i60ec4(r)
+    r.cpu.copy(R::C, R::B, Field::A); // C=B A
+    if r.next(0x60EC4, 4) {
+        i60ec4(r)
+    }
 }
 
 fn i60ec4(r: &mut Run) {
-    op!(r, 0x60EC4, 3, Op::DExR { d: 0, r: R::C, short: false }); // CD0EX
-    i60ec7(r)
+    r.cpu.d_ex_r(0, R::C, false); // CD0EX
+    if r.next(0x60EC7, 5) {
+        i60ec7(r)
+    }
 }
 
 fn i60ec7(r: &mut Run) {
-    op!(r, 0x60EC7, 2, Op::PushC); // RSTK=C
-    i60ec9(r)
+    r.cpu.push_c(); // RSTK=C
+    if r.next(0x60EC9, 4) {
+        i60ec9(r)
+    }
 }
 
 fn i60ec9(r: &mut Run) {
-    op!(r, 0x60EC9, 3, Op::DSub { d: 0, n: 5 }); // D0=D0- 5
-    i60ecc(r)
+    r.cpu.d_sub(0, 5); // D0=D0- 5
+    if r.next(0x60ECC, 5) {
+        i60ecc(r)
+    }
 }
 
 fn i60ecc(r: &mut Run) {
-    op!(r, 0x60ECC, 3, Op::Mem { store: false, d: 0, r: R::A, f: Field::A }); // A=DAT0 A
-    i60ecf(r)
+    r.sync();
+    r.cpu.load(0, R::A, Field::A, r.hw); // A=DAT0 A
+    if r.next_io(0x60ECF, 19) {
+        i60ecf(r)
+    }
 }
 
 fn i60ecf(r: &mut Run) {
-    op!(r, 0x60ECF, 3, Op::DSub { d: 0, n: 5 }); // D0=D0- 5
-    i60ed2(r)
+    r.cpu.d_sub(0, 5); // D0=D0- 5
+    if r.next(0x60ED2, 5) {
+        i60ed2(r)
+    }
 }
 
 fn i60ed2(r: &mut Run) {
-    op!(r, 0x60ED2, 3, Op::Mem { store: false, d: 0, r: R::C, f: Field::A }); // C=DAT0 A
-    i60ed5(r)
+    r.sync();
+    r.cpu.load(0, R::C, Field::A, r.hw); // C=DAT0 A
+    if r.next_io(0x60ED5, 19) {
+        i60ed5(r)
+    }
 }
 
 fn i60ed5(r: &mut Run) {
-    op!(r, 0x60ED5, 3, Op::Mem { store: true, d: 0, r: R::A, f: Field::A }); // DAT0=A A
-    i60ed8(r)
+    r.sync();
+    r.cpu.store(0, R::A, Field::A, r.hw); // DAT0=A A
+    if r.next_io(0x60ED8, 19) {
+        i60ed8(r)
+    }
 }
 
 fn i60ed8(r: &mut Run) {
-    op!(r, 0x60ED8, 3, Op::DAdd { d: 0, n: 5 }); // D0=D0+ 5
-    i60edb(r)
+    r.cpu.d_add(0, 5); // D0=D0+ 5
+    if r.next(0x60EDB, 5) {
+        i60edb(r)
+    }
 }
 
 fn i60edb(r: &mut Run) {
-    op!(r, 0x60EDB, 3, Op::Mem { store: true, d: 0, r: R::C, f: Field::A }); // DAT0=C A
-    i60ede(r)
+    r.sync();
+    r.cpu.store(0, R::C, Field::A, r.hw); // DAT0=C A
+    if r.next_io(0x60EDE, 19) {
+        i60ede(r)
+    }
 }
 
 fn i60ede(r: &mut Run) {
-    op!(r, 0x60EDE, 2, Op::PopC); // C=RSTK
-    i60ee0(r)
+    r.cpu.pop_c(); // C=RSTK
+    if r.next(0x60EE0, 4) {
+        i60ee0(r)
+    }
 }
 
 fn i60ee0(r: &mut Run) {
-    op!(r, 0x60EE0, 3, Op::DFromR { d: 0, r: R::C, short: false }); // D0=C
-    i60ee3(r)
+    r.cpu.d_from_r(0, R::C, false); // D0=C
+    if r.next(0x60EE3, 5) {
+        i60ee3(r)
+    }
 }
 
 fn i60ee3(r: &mut Run) {
-    op!(r, 0x60EE3, 4, Op::Jump(0x60F91)); // GOTO #60F91
+    r.cpu.pc = 0x60F91; // GOTO #60F91
+    r.spend(6);
 }
 
 fn i60eec(r: &mut Run) {
-    op!(r, 0x60EEC, 3, Op::DAdd { d: 1, n: 5 }); // D1=D1+ 5
-    i60eef(r)
+    r.cpu.d_add(1, 5); // D1=D1+ 5
+    if r.next(0x60EEF, 5) {
+        i60eef(r)
+    }
 }
 
 fn i60eef(r: &mut Run) {
-    op!(r, 0x60EEF, 3, Op::Mem { store: false, d: 1, r: R::A, f: Field::A }); // A=DAT1 A
-    i60ef2(r)
+    r.sync();
+    r.cpu.load(1, R::A, Field::A, r.hw); // A=DAT1 A
+    if r.next_io(0x60EF2, 19) {
+        i60ef2(r)
+    }
 }
 
 fn i60ef2(r: &mut Run) {
-    op!(r, 0x60EF2, 3, Op::DAdd { d: 1, n: 5 }); // D1=D1+ 5
-    i60ef5(r)
+    r.cpu.d_add(1, 5); // D1=D1+ 5
+    if r.next(0x60EF5, 5) {
+        i60ef5(r)
+    }
 }
 
 fn i60ef5(r: &mut Run) {
-    op!(r, 0x60EF5, 3, Op::Mem { store: false, d: 1, r: R::C, f: Field::A }); // C=DAT1 A
-    i60ef8(r)
+    r.sync();
+    r.cpu.load(1, R::C, Field::A, r.hw); // C=DAT1 A
+    if r.next_io(0x60EF8, 19) {
+        i60ef8(r)
+    }
 }
 
 fn i60ef8(r: &mut Run) {
-    op!(r, 0x60EF8, 3, Op::Mem { store: true, d: 1, r: R::A, f: Field::A }); // DAT1=A A
-    i60efb(r)
+    r.sync();
+    r.cpu.store(1, R::A, Field::A, r.hw); // DAT1=A A
+    if r.next_io(0x60EFB, 19) {
+        i60efb(r)
+    }
 }
 
 fn i60efb(r: &mut Run) {
-    op!(r, 0x60EFB, 3, Op::DSub { d: 1, n: 5 }); // D1=D1- 5
-    i60efe(r)
+    r.cpu.d_sub(1, 5); // D1=D1- 5
+    if r.next(0x60EFE, 5) {
+        i60efe(r)
+    }
 }
 
 fn i60efe(r: &mut Run) {
-    op!(r, 0x60EFE, 3, Op::Mem { store: true, d: 1, r: R::C, f: Field::A }); // DAT1=C A
-    i60f01(r)
+    r.sync();
+    r.cpu.store(1, R::C, Field::A, r.hw); // DAT1=C A
+    if r.next_io(0x60F01, 19) {
+        i60f01(r)
+    }
 }
 
 fn i60f01(r: &mut Run) {
-    op!(r, 0x60F01, 3, Op::DSub { d: 1, n: 5 }); // D1=D1- 5
-    i60f04(r)
+    r.cpu.d_sub(1, 5); // D1=D1- 5
+    if r.next(0x60F04, 5) {
+        i60f04(r)
+    }
 }
 
 fn i60f04(r: &mut Run) {
-    op!(r, 0x60F04, 3, Op::Mem { store: false, d: 0, r: R::A, f: Field::A }); // A=DAT0 A
-    i60f07(r)
+    r.sync();
+    r.cpu.load(0, R::A, Field::A, r.hw); // A=DAT0 A
+    if r.next_io(0x60F07, 19) {
+        i60f07(r)
+    }
 }
 
 fn i60f07(r: &mut Run) {
-    op!(r, 0x60F07, 3, Op::DAdd { d: 0, n: 5 }); // D0=D0+ 5
-    i60f0a(r)
+    r.cpu.d_add(0, 5); // D0=D0+ 5
+    if r.next(0x60F0A, 5) {
+        i60f0a(r)
+    }
 }
 
 fn i60f0a(r: &mut Run) {
-    op!(r, 0x60F0A, 4, Op::PcIndirect(R::A)); // PC=(A)
+    r.sync();
+    r.cpu.pc_indirect(R::A, r.hw); // PC=(A)
+    r.spend(23);
 }
 
 fn i60f13(r: &mut Run) {
-    op!(r, 0x60F13, 3, Op::Mem { store: false, d: 1, r: R::A, f: Field::A }); // A=DAT1 A
-    i60f16(r)
+    r.sync();
+    r.cpu.load(1, R::A, Field::A, r.hw); // A=DAT1 A
+    if r.next_io(0x60F16, 19) {
+        i60f16(r)
+    }
 }
 
 fn i60f16(r: &mut Run) {
-    op!(r, 0x60F16, 3, Op::DAdd { d: 1, n: 0xA }); // D1=D1+ 10
-    i60f19(r)
+    r.cpu.d_add(1, 10); // D1=D1+ 10
+    if r.next(0x60F19, 5) {
+        i60f19(r)
+    }
 }
 
 fn i60f19(r: &mut Run) {
-    op!(r, 0x60F19, 3, Op::Mem { store: true, d: 1, r: R::A, f: Field::A }); // DAT1=A A
-    i60f1c(r)
+    r.sync();
+    r.cpu.store(1, R::A, Field::A, r.hw); // DAT1=A A
+    if r.next_io(0x60F1C, 19) {
+        i60f1c(r)
+    }
 }
 
 fn i60f1c(r: &mut Run) {
-    op!(r, 0x60F1C, 2, Op::Inc { r: R::D, f: Field::A }); // D=D+1 A
-    i60f1e(r)
+    r.cpu.inc(R::D, Field::A); // D=D+1 A
+    if r.next(0x60F1E, 4) {
+        i60f1e(r)
+    }
 }
 
 fn i60f1e(r: &mut Run) {
-    op!(r, 0x60F1E, 3, Op::CondJump(Cond::NoCarry, 0x60F01)); // GONC #60F01
+    r.cpu.pc = 0x60F21;
+    r.cpu.jump_if(Cond::NoCarry, 0x60F01); // GONC #60F01
+    r.spend(5);
 }
 
 fn i60f26(r: &mut Run) {
-    op!(r, 0x60F26, 2, Op::Inc { r: R::D, f: Field::A }); // D=D+1 A
-    i60f28(r)
+    r.cpu.inc(R::D, Field::A); // D=D+1 A
+    if r.next(0x60F28, 4) {
+        i60f28(r)
+    }
 }
 
 fn i60f28(r: &mut Run) {
-    op!(r, 0x60F28, 4, Op::Mem { store: false, d: 1, r: R::C, f: Field::Nibbles(0xA) }); // C=DAT1 10
-    i60f2c(r)
+    r.sync();
+    r.cpu.load(1, R::C, Field::Nibbles(10), r.hw); // C=DAT1 10
+    if r.next_io(0x60F2C, 24) {
+        i60f2c(r)
+    }
 }
 
 fn i60f2c(r: &mut Run) {
-    op!(r, 0x60F2C, 3, Op::DAdd { d: 1, n: 5 }); // D1=D1+ 5
-    i60f2f(r)
+    r.cpu.d_add(1, 5); // D1=D1+ 5
+    if r.next(0x60F2F, 5) {
+        i60f2f(r)
+    }
 }
 
 fn i60f2f(r: &mut Run) {
-    op!(r, 0x60F2F, 4, Op::Jump(0x6139A)); // GOTO #6139A
+    r.cpu.pc = 0x6139A; // GOTO #6139A
+    r.spend(6);
 }
 
 fn i60f38(r: &mut Run) {
-    op!(r, 0x60F38, 3, Op::Mem { store: false, d: 1, r: R::A, f: Field::A }); // A=DAT1 A
-    i60f3b(r)
+    r.sync();
+    r.cpu.load(1, R::A, Field::A, r.hw); // A=DAT1 A
+    if r.next_io(0x60F3B, 19) {
+        i60f3b(r)
+    }
 }
 
 fn i60f3b(r: &mut Run) {
-    op!(r, 0x60F3B, 3, Op::DAdd { d: 1, n: 0xA }); // D1=D1+ 10
-    i60f3e(r)
+    r.cpu.d_add(1, 10); // D1=D1+ 10
+    if r.next(0x60F3E, 5) {
+        i60f3e(r)
+    }
 }
 
 fn i60f3e(r: &mut Run) {
-    op!(r, 0x60F3E, 3, Op::Mem { store: false, d: 1, r: R::C, f: Field::A }); // C=DAT1 A
-    i60f41(r)
+    r.sync();
+    r.cpu.load(1, R::C, Field::A, r.hw); // C=DAT1 A
+    if r.next_io(0x60F41, 19) {
+        i60f41(r)
+    }
 }
 
 fn i60f41(r: &mut Run) {
-    op!(r, 0x60F41, 3, Op::Mem { store: true, d: 1, r: R::A, f: Field::A }); // DAT1=A A
-    i60f44(r)
+    r.sync();
+    r.cpu.store(1, R::A, Field::A, r.hw); // DAT1=A A
+    if r.next_io(0x60F44, 19) {
+        i60f44(r)
+    }
 }
 
 fn i60f44(r: &mut Run) {
-    op!(r, 0x60F44, 3, Op::DSub { d: 1, n: 0xA }); // D1=D1- 10
-    i60f47(r)
+    r.cpu.d_sub(1, 10); // D1=D1- 10
+    if r.next(0x60F47, 5) {
+        i60f47(r)
+    }
 }
 
 fn i60f47(r: &mut Run) {
-    op!(r, 0x60F47, 4, Op::Jump(0x610ED)); // GOTO #610ED
+    r.cpu.pc = 0x610ED; // GOTO #610ED
+    r.spend(6);
 }
 
 fn i60f50(r: &mut Run) {
-    op!(r, 0x60F50, 4, Op::Jump(0x60F88)); // GOTO #60F88
+    r.cpu.pc = 0x60F88; // GOTO #60F88
+    r.spend(6);
 }
 
 fn i60f59(r: &mut Run) {
-    op!(r, 0x60F59, 3, Op::DAdd { d: 1, n: 0xF }); // D1=D1+ 15
-    i60f5c(r)
+    r.cpu.d_add(1, 15); // D1=D1+ 15
+    if r.next(0x60F5C, 5) {
+        i60f5c(r)
+    }
 }
 
 fn i60f5c(r: &mut Run) {
-    op!(r, 0x60F5C, 2, Op::Inc { r: R::D, f: Field::A }); // D=D+1 A
-    i60f5e(r)
+    r.cpu.inc(R::D, Field::A); // D=D+1 A
+    if r.next(0x60F5E, 4) {
+        i60f5e(r)
+    }
 }
 
 fn i60f5e(r: &mut Run) {
-    op!(r, 0x60F5E, 2, Op::Inc { r: R::D, f: Field::A }); // D=D+1 A
-    i60f60(r)
+    r.cpu.inc(R::D, Field::A); // D=D+1 A
+    if r.next(0x60F60, 4) {
+        i60f60(r)
+    }
 }
 
 fn i60f60(r: &mut Run) {
-    op!(r, 0x60F60, 2, Op::Inc { r: R::D, f: Field::A }); // D=D+1 A
-    i60f62(r)
+    r.cpu.inc(R::D, Field::A); // D=D+1 A
+    if r.next(0x60F62, 4) {
+        i60f62(r)
+    }
 }
 
 fn i60f62(r: &mut Run) {
-    op!(r, 0x60F62, 4, Op::Jump(0x60F83)); // GOTO #60F83
+    r.cpu.pc = 0x60F83; // GOTO #60F83
+    r.spend(6);
 }
 
 fn i60f6b(r: &mut Run) {
-    op!(r, 0x60F6B, 3, Op::DAdd { d: 1, n: 0xA }); // D1=D1+ 10
-    i60f6e(r)
+    r.cpu.d_add(1, 10); // D1=D1+ 10
+    if r.next(0x60F6E, 5) {
+        i60f6e(r)
+    }
 }
 
 fn i60f6e(r: &mut Run) {
-    op!(r, 0x60F6E, 4, Op::Jump(0x60F5E)); // GOTO #60F5E
+    r.cpu.pc = 0x60F5E; // GOTO #60F5E
+    r.spend(6);
 }
 
 fn i60f77(r: &mut Run) {
-    op!(r, 0x60F77, 3, Op::DAdd { d: 1, n: 5 }); // D1=D1+ 5
-    i60f7a(r)
+    r.cpu.d_add(1, 5); // D1=D1+ 5
+    if r.next(0x60F7A, 5) {
+        i60f7a(r)
+    }
 }
 
 fn i60f7a(r: &mut Run) {
-    op!(r, 0x60F7A, 4, Op::Jump(0x60F60)); // GOTO #60F60
+    r.cpu.pc = 0x60F60; // GOTO #60F60
+    r.spend(6);
 }
 
 /// 4DropLoop
 fn i60f83(r: &mut Run) {
-    op!(r, 0x60F83, 3, Op::DAdd { d: 1, n: 5 }); // D1=D1+ 5
-    i60f86(r)
+    r.cpu.d_add(1, 5); // D1=D1+ 5
+    if r.next(0x60F86, 5) {
+        i60f86(r)
+    }
 }
 
 fn i60f86(r: &mut Run) {
-    op!(r, 0x60F86, 2, Op::Inc { r: R::D, f: Field::A }); // D=D+1 A
-    i60f88(r)
+    r.cpu.inc(R::D, Field::A); // D=D+1 A
+    if r.next(0x60F88, 4) {
+        i60f88(r)
+    }
 }
 
 fn i60f88(r: &mut Run) {
-    op!(r, 0x60F88, 3, Op::DAdd { d: 1, n: 0xF }); // D1=D1+ 15
-    i60f8b(r)
+    r.cpu.d_add(1, 15); // D1=D1+ 15
+    if r.next(0x60F8B, 5) {
+        i60f8b(r)
+    }
 }
 
 fn i60f8b(r: &mut Run) {
-    op!(r, 0x60F8B, 2, Op::Inc { r: R::D, f: Field::A }); // D=D+1 A
-    i60f8d(r)
+    r.cpu.inc(R::D, Field::A); // D=D+1 A
+    if r.next(0x60F8D, 4) {
+        i60f8d(r)
+    }
 }
 
 fn i60f8d(r: &mut Run) {
-    op!(r, 0x60F8D, 2, Op::Inc { r: R::D, f: Field::A }); // D=D+1 A
-    i60f8f(r)
+    r.cpu.inc(R::D, Field::A); // D=D+1 A
+    if r.next(0x60F8F, 4) {
+        i60f8f(r)
+    }
 }
 
 fn i60f8f(r: &mut Run) {
-    op!(r, 0x60F8F, 2, Op::Inc { r: R::D, f: Field::A }); // D=D+1 A
-    i60f91(r)
+    r.cpu.inc(R::D, Field::A); // D=D+1 A
+    if r.next(0x60F91, 4) {
+        i60f91(r)
+    }
 }
 
 fn i60f91(r: &mut Run) {
-    op!(r, 0x60F91, 3, Op::Mem { store: false, d: 0, r: R::A, f: Field::A }); // A=DAT0 A
-    i60f94(r)
+    r.sync();
+    r.cpu.load(0, R::A, Field::A, r.hw); // A=DAT0 A
+    if r.next_io(0x60F94, 19) {
+        i60f94(r)
+    }
 }
 
 fn i60f94(r: &mut Run) {
-    op!(r, 0x60F94, 3, Op::DAdd { d: 0, n: 5 }); // D0=D0+ 5
-    i60f97(r)
+    r.cpu.d_add(0, 5); // D0=D0+ 5
+    if r.next(0x60F97, 5) {
+        i60f97(r)
+    }
 }
 
 fn i60f97(r: &mut Run) {
-    op!(r, 0x60F97, 4, Op::PcIndirect(R::A)); // PC=(A)
+    r.sync();
+    r.cpu.pc_indirect(R::A, r.hw); // PC=(A)
+    r.spend(23);
 }
 
 fn i60fa0(r: &mut Run) {
-    op!(r, 0x60FA0, 3, Op::Mem { store: false, d: 1, r: R::A, f: Field::A }); // A=DAT1 A
-    i60fa3(r)
+    r.sync();
+    r.cpu.load(1, R::A, Field::A, r.hw); // A=DAT1 A
+    if r.next_io(0x60FA3, 19) {
+        i60fa3(r)
+    }
 }
 
 fn i60fa3(r: &mut Run) {
-    op!(r, 0x60FA3, 3, Op::DAdd { d: 1, n: 5 }); // D1=D1+ 5
-    i60fa6(r)
+    r.cpu.d_add(1, 5); // D1=D1+ 5
+    if r.next(0x60FA6, 5) {
+        i60fa6(r)
+    }
 }
 
 fn i60fa6(r: &mut Run) {
-    op!(r, 0x60FA6, 2, Op::Inc { r: R::D, f: Field::A }); // D=D+1 A
-    i60fa8(r)
+    r.cpu.inc(R::D, Field::A); // D=D+1 A
+    if r.next(0x60FA8, 4) {
+        i60fa8(r)
+    }
 }
 
 fn i60fa8(r: &mut Run) {
-    op!(r, 0x60FA8, 4, Op::Jump(0x6102F)); // GOTO #6102F
+    r.cpu.pc = 0x6102F; // GOTO #6102F
+    r.spend(6);
 }
 
 fn i60fb1(r: &mut Run) {
-    op!(r, 0x60FB1, 3, Op::Mem { store: false, d: 1, r: R::A, f: Field::A }); // A=DAT1 A
-    i60fb4(r)
+    r.sync();
+    r.cpu.load(1, R::A, Field::A, r.hw); // A=DAT1 A
+    if r.next_io(0x60FB4, 19) {
+        i60fb4(r)
+    }
 }
 
 fn i60fb4(r: &mut Run) {
-    op!(r, 0x60FB4, 3, Op::DAdd { d: 1, n: 5 }); // D1=D1+ 5
-    i60fb7(r)
+    r.cpu.d_add(1, 5); // D1=D1+ 5
+    if r.next(0x60FB7, 5) {
+        i60fb7(r)
+    }
 }
 
 fn i60fb7(r: &mut Run) {
-    op!(r, 0x60FB7, 4, Op::Jump(0x6138D)); // GOTO #6138D
+    r.cpu.pc = 0x6138D; // GOTO #6138D
+    r.spend(6);
 }
 
 fn i60fc0(r: &mut Run) {
-    op!(r, 0x60FC0, 4, Op::Mem { store: false, d: 1, r: R::A, f: Field::Nibbles(0xF) }); // A=DAT1 15
-    i60fc4(r)
+    r.sync();
+    r.cpu.load(1, R::A, Field::Nibbles(15), r.hw); // A=DAT1 15
+    if r.next_io(0x60FC4, 29) {
+        i60fc4(r)
+    }
 }
 
 fn i60fc4(r: &mut Run) {
-    op!(r, 0x60FC4, 3, Op::DAdd { d: 1, n: 0xF }); // D1=D1+ 15
-    i60fc7(r)
+    r.cpu.d_add(1, 15); // D1=D1+ 15
+    if r.next(0x60FC7, 5) {
+        i60fc7(r)
+    }
 }
 
 fn i60fc7(r: &mut Run) {
-    op!(r, 0x60FC7, 3, Op::Mem { store: false, d: 1, r: R::C, f: Field::A }); // C=DAT1 A
-    i60fca(r)
+    r.sync();
+    r.cpu.load(1, R::C, Field::A, r.hw); // C=DAT1 A
+    if r.next_io(0x60FCA, 19) {
+        i60fca(r)
+    }
 }
 
 fn i60fca(r: &mut Run) {
-    op!(r, 0x60FCA, 3, Op::DSub { d: 1, n: 0xA }); // D1=D1- 10
-    i60fcd(r)
+    r.cpu.d_sub(1, 10); // D1=D1- 10
+    if r.next(0x60FCD, 5) {
+        i60fcd(r)
+    }
 }
 
 fn i60fcd(r: &mut Run) {
-    op!(r, 0x60FCD, 4, Op::Mem { store: true, d: 1, r: R::A, f: Field::Nibbles(0xF) }); // DAT1=A 15
-    i60fd1(r)
+    r.sync();
+    r.cpu.store(1, R::A, Field::Nibbles(15), r.hw); // DAT1=A 15
+    if r.next_io(0x60FD1, 29) {
+        i60fd1(r)
+    }
 }
 
 fn i60fd1(r: &mut Run) {
-    op!(r, 0x60FD1, 3, Op::DSub { d: 1, n: 5 }); // D1=D1- 5
-    i60fd4(r)
+    r.cpu.d_sub(1, 5); // D1=D1- 5
+    if r.next(0x60FD4, 5) {
+        i60fd4(r)
+    }
 }
 
 fn i60fd4(r: &mut Run) {
-    op!(r, 0x60FD4, 4, Op::Jump(0x610ED)); // GOTO #610ED
+    r.cpu.pc = 0x610ED; // GOTO #610ED
+    r.spend(6);
 }
 
 fn i60fdd(r: &mut Run) {
-    op!(r, 0x60FDD, 3, Op::Mem { store: false, d: 1, r: R::C, f: Field::A }); // C=DAT1 A
-    i60fe0(r)
+    r.sync();
+    r.cpu.load(1, R::C, Field::A, r.hw); // C=DAT1 A
+    if r.next_io(0x60FE0, 19) {
+        i60fe0(r)
+    }
 }
 
 fn i60fe0(r: &mut Run) {
-    op!(r, 0x60FE0, 2, Op::PushC); // RSTK=C
-    i60fe2(r)
+    r.cpu.push_c(); // RSTK=C
+    if r.next(0x60FE2, 4) {
+        i60fe2(r)
+    }
 }
 
 fn i60fe2(r: &mut Run) {
-    op!(r, 0x60FE2, 3, Op::DAdd { d: 1, n: 5 }); // D1=D1+ 5
-    i60fe5(r)
+    r.cpu.d_add(1, 5); // D1=D1+ 5
+    if r.next(0x60FE5, 5) {
+        i60fe5(r)
+    }
 }
 
 fn i60fe5(r: &mut Run) {
-    op!(r, 0x60FE5, 4, Op::Mem { store: false, d: 1, r: R::C, f: Field::Nibbles(0xF) }); // C=DAT1 15
-    i60fe9(r)
+    r.sync();
+    r.cpu.load(1, R::C, Field::Nibbles(15), r.hw); // C=DAT1 15
+    if r.next_io(0x60FE9, 29) {
+        i60fe9(r)
+    }
 }
 
 fn i60fe9(r: &mut Run) {
-    op!(r, 0x60FE9, 3, Op::DAdd { d: 1, n: 0xF }); // D1=D1+ 15
-    i60fec(r)
+    r.cpu.d_add(1, 15); // D1=D1+ 15
+    if r.next(0x60FEC, 5) {
+        i60fec(r)
+    }
 }
 
 fn i60fec(r: &mut Run) {
-    op!(r, 0x60FEC, 3, Op::Mem { store: false, d: 1, r: R::A, f: Field::A }); // A=DAT1 A
-    i60fef(r)
+    r.sync();
+    r.cpu.load(1, R::A, Field::A, r.hw); // A=DAT1 A
+    if r.next_io(0x60FEF, 19) {
+        i60fef(r)
+    }
 }
 
 fn i60fef(r: &mut Run) {
-    op!(r, 0x60FEF, 3, Op::DSub { d: 1, n: 0xA }); // D1=D1- 10
-    i60ff2(r)
+    r.cpu.d_sub(1, 10); // D1=D1- 10
+    if r.next(0x60FF2, 5) {
+        i60ff2(r)
+    }
 }
 
 fn i60ff2(r: &mut Run) {
-    op!(r, 0x60FF2, 4, Op::Mem { store: true, d: 1, r: R::C, f: Field::Nibbles(0xF) }); // DAT1=C 15
-    i60ff6(r)
+    r.sync();
+    r.cpu.store(1, R::C, Field::Nibbles(15), r.hw); // DAT1=C 15
+    if r.next_io(0x60FF6, 29) {
+        i60ff6(r)
+    }
 }
 
 fn i60ff6(r: &mut Run) {
-    op!(r, 0x60FF6, 3, Op::DSub { d: 1, n: 5 }); // D1=D1- 5
-    i60ff9(r)
+    r.cpu.d_sub(1, 5); // D1=D1- 5
+    if r.next(0x60FF9, 5) {
+        i60ff9(r)
+    }
 }
 
 fn i60ff9(r: &mut Run) {
-    op!(r, 0x60FF9, 2, Op::PopC); // C=RSTK
-    i60ffb(r)
+    r.cpu.pop_c(); // C=RSTK
+    if r.next(0x60FFB, 4) {
+        i60ffb(r)
+    }
 }
 
 fn i60ffb(r: &mut Run) {
-    op!(r, 0x60FFB, 3, Op::Mem { store: true, d: 1, r: R::C, f: Field::A }); // DAT1=C A
-    i60ffe(r)
+    r.sync();
+    r.cpu.store(1, R::C, Field::A, r.hw); // DAT1=C A
+    if r.next_io(0x60FFE, 19) {
+        i60ffe(r)
+    }
 }
 
 fn i60ffe(r: &mut Run) {
-    op!(r, 0x60FFE, 4, Op::Jump(0x6102C)); // GOTO #6102C
+    r.cpu.pc = 0x6102C; // GOTO #6102C
+    r.spend(6);
 }
 
 fn i61007(r: &mut Run) {
-    op!(r, 0x61007, 4, Op::Mem { store: false, d: 1, r: R::C, f: Field::Nibbles(0xA) }); // C=DAT1 10
-    i6100b(r)
+    r.sync();
+    r.cpu.load(1, R::C, Field::Nibbles(10), r.hw); // C=DAT1 10
+    if r.next_io(0x6100B, 24) {
+        i6100b(r)
+    }
 }
 
 fn i6100b(r: &mut Run) {
-    op!(r, 0x6100B, 3, Op::Scratch { op: ScratchOp::ToScratch, r: R::C, n: 0, f: Field::W }); // R0=C
-    i6100e(r)
+    r.cpu.scratch(ScratchOp::ToScratch, R::C, 0, Field::W); // R0=C
+    if r.next(0x6100E, 5) {
+        i6100e(r)
+    }
 }
 
 fn i6100e(r: &mut Run) {
-    op!(r, 0x6100E, 3, Op::DAdd { d: 1, n: 0xA }); // D1=D1+ 10
-    i61011(r)
+    r.cpu.d_add(1, 10); // D1=D1+ 10
+    if r.next(0x61011, 5) {
+        i61011(r)
+    }
 }
 
 fn i61011(r: &mut Run) {
-    op!(r, 0x61011, 4, Op::Mem { store: false, d: 1, r: R::C, f: Field::Nibbles(0xF) }); // C=DAT1 15
-    i61015(r)
+    r.sync();
+    r.cpu.load(1, R::C, Field::Nibbles(15), r.hw); // C=DAT1 15
+    if r.next_io(0x61015, 29) {
+        i61015(r)
+    }
 }
 
 fn i61015(r: &mut Run) {
-    op!(r, 0x61015, 3, Op::DAdd { d: 1, n: 0xF }); // D1=D1+ 15
-    i61018(r)
+    r.cpu.d_add(1, 15); // D1=D1+ 15
+    if r.next(0x61018, 5) {
+        i61018(r)
+    }
 }
 
 fn i61018(r: &mut Run) {
-    op!(r, 0x61018, 3, Op::Mem { store: false, d: 1, r: R::A, f: Field::A }); // A=DAT1 A
-    i6101b(r)
+    r.sync();
+    r.cpu.load(1, R::A, Field::A, r.hw); // A=DAT1 A
+    if r.next_io(0x6101B, 19) {
+        i6101b(r)
+    }
 }
 
 fn i6101b(r: &mut Run) {
-    op!(r, 0x6101B, 3, Op::DSub { d: 1, n: 0xA }); // D1=D1- 10
-    i6101e(r)
+    r.cpu.d_sub(1, 10); // D1=D1- 10
+    if r.next(0x6101E, 5) {
+        i6101e(r)
+    }
 }
 
 fn i6101e(r: &mut Run) {
-    op!(r, 0x6101E, 4, Op::Mem { store: true, d: 1, r: R::C, f: Field::Nibbles(0xF) }); // DAT1=C 15
-    i61022(r)
+    r.sync();
+    r.cpu.store(1, R::C, Field::Nibbles(15), r.hw); // DAT1=C 15
+    if r.next_io(0x61022, 29) {
+        i61022(r)
+    }
 }
 
 fn i61022(r: &mut Run) {
-    op!(r, 0x61022, 3, Op::DSub { d: 1, n: 0xA }); // D1=D1- 10
-    i61025(r)
+    r.cpu.d_sub(1, 10); // D1=D1- 10
+    if r.next(0x61025, 5) {
+        i61025(r)
+    }
 }
 
 fn i61025(r: &mut Run) {
-    op!(r, 0x61025, 3, Op::Scratch { op: ScratchOp::FromScratch, r: R::C, n: 0, f: Field::W }); // C=R0
-    i61028(r)
+    r.cpu.scratch(ScratchOp::FromScratch, R::C, 0, Field::W); // C=R0
+    if r.next(0x61028, 5) {
+        i61028(r)
+    }
 }
 
 fn i61028(r: &mut Run) {
-    op!(r, 0x61028, 4, Op::Mem { store: true, d: 1, r: R::C, f: Field::Nibbles(0xA) }); // DAT1=C 10
-    i6102c(r)
+    r.sync();
+    r.cpu.store(1, R::C, Field::Nibbles(10), r.hw); // DAT1=C 10
+    if r.next_io(0x6102C, 24) {
+        i6102c(r)
+    }
 }
 
 fn i6102c(r: &mut Run) {
-    op!(r, 0x6102C, 3, Op::DSub { d: 1, n: 5 }); // D1=D1- 5
-    i6102f(r)
+    r.cpu.d_sub(1, 5); // D1=D1- 5
+    if r.next(0x6102F, 5) {
+        i6102f(r)
+    }
 }
 
 fn i6102f(r: &mut Run) {
-    op!(r, 0x6102F, 3, Op::Mem { store: true, d: 1, r: R::A, f: Field::A }); // DAT1=A A
-    i61032(r)
+    r.sync();
+    r.cpu.store(1, R::A, Field::A, r.hw); // DAT1=A A
+    if r.next_io(0x61032, 19) {
+        i61032(r)
+    }
 }
 
 fn i61032(r: &mut Run) {
-    op!(r, 0x61032, 3, Op::Mem { store: false, d: 0, r: R::A, f: Field::A }); // A=DAT0 A
-    i61035(r)
+    r.sync();
+    r.cpu.load(0, R::A, Field::A, r.hw); // A=DAT0 A
+    if r.next_io(0x61035, 19) {
+        i61035(r)
+    }
 }
 
 fn i61035(r: &mut Run) {
-    op!(r, 0x61035, 3, Op::DAdd { d: 0, n: 5 }); // D0=D0+ 5
-    i61038(r)
+    r.cpu.d_add(0, 5); // D0=D0+ 5
+    if r.next(0x61038, 5) {
+        i61038(r)
+    }
 }
 
 fn i61038(r: &mut Run) {
-    op!(r, 0x61038, 4, Op::PcIndirect(R::A)); // PC=(A)
+    r.sync();
+    r.cpu.pc_indirect(R::A, r.hw); // PC=(A)
+    r.spend(23);
 }
 
 fn i61041(r: &mut Run) {
-    op!(r, 0x61041, 4, Op::Mem { store: false, d: 1, r: R::C, f: Field::Nibbles(0xF) }); // C=DAT1 15
-    i61045(r)
+    r.sync();
+    r.cpu.load(1, R::C, Field::Nibbles(15), r.hw); // C=DAT1 15
+    if r.next_io(0x61045, 29) {
+        i61045(r)
+    }
 }
 
 fn i61045(r: &mut Run) {
-    op!(r, 0x61045, 3, Op::Scratch { op: ScratchOp::ToScratch, r: R::C, n: 0, f: Field::W }); // R0=C
-    i61048(r)
+    r.cpu.scratch(ScratchOp::ToScratch, R::C, 0, Field::W); // R0=C
+    if r.next(0x61048, 5) {
+        i61048(r)
+    }
 }
 
 fn i61048(r: &mut Run) {
-    op!(r, 0x61048, 3, Op::DAdd { d: 1, n: 0xF }); // D1=D1+ 15
-    i6104b(r)
+    r.cpu.d_add(1, 15); // D1=D1+ 15
+    if r.next(0x6104B, 5) {
+        i6104b(r)
+    }
 }
 
 fn i6104b(r: &mut Run) {
-    op!(r, 0x6104B, 4, Op::Mem { store: false, d: 1, r: R::C, f: Field::Nibbles(0xF) }); // C=DAT1 15
-    i6104f(r)
+    r.sync();
+    r.cpu.load(1, R::C, Field::Nibbles(15), r.hw); // C=DAT1 15
+    if r.next_io(0x6104F, 29) {
+        i6104f(r)
+    }
 }
 
 fn i6104f(r: &mut Run) {
-    op!(r, 0x6104F, 3, Op::Scratch { op: ScratchOp::ToScratch, r: R::C, n: 1, f: Field::W }); // R1=C
-    i61052(r)
+    r.cpu.scratch(ScratchOp::ToScratch, R::C, 1, Field::W); // R1=C
+    if r.next(0x61052, 5) {
+        i61052(r)
+    }
 }
 
 fn i61052(r: &mut Run) {
-    op!(r, 0x61052, 3, Op::DAdd { d: 1, n: 0xF }); // D1=D1+ 15
-    i61055(r)
+    r.cpu.d_add(1, 15); // D1=D1+ 15
+    if r.next(0x61055, 5) {
+        i61055(r)
+    }
 }
 
 fn i61055(r: &mut Run) {
-    op!(r, 0x61055, 3, Op::Mem { store: false, d: 1, r: R::C, f: Field::A }); // C=DAT1 A
-    i61058(r)
+    r.sync();
+    r.cpu.load(1, R::C, Field::A, r.hw); // C=DAT1 A
+    if r.next_io(0x61058, 19) {
+        i61058(r)
+    }
 }
 
 fn i61058(r: &mut Run) {
-    op!(r, 0x61058, 3, Op::DAdd { d: 1, n: 5 }); // D1=D1+ 5
-    i6105b(r)
+    r.cpu.d_add(1, 5); // D1=D1+ 5
+    if r.next(0x6105B, 5) {
+        i6105b(r)
+    }
 }
 
 fn i6105b(r: &mut Run) {
-    op!(r, 0x6105B, 3, Op::Mem { store: false, d: 1, r: R::A, f: Field::A }); // A=DAT1 A
-    i6105e(r)
+    r.sync();
+    r.cpu.load(1, R::A, Field::A, r.hw); // A=DAT1 A
+    if r.next_io(0x6105E, 19) {
+        i6105e(r)
+    }
 }
 
 fn i6105e(r: &mut Run) {
-    op!(r, 0x6105E, 3, Op::Mem { store: true, d: 1, r: R::C, f: Field::A }); // DAT1=C A
-    i61061(r)
+    r.sync();
+    r.cpu.store(1, R::C, Field::A, r.hw); // DAT1=C A
+    if r.next_io(0x61061, 19) {
+        i61061(r)
+    }
 }
 
 fn i61061(r: &mut Run) {
-    op!(r, 0x61061, 3, Op::DSub { d: 1, n: 0xF }); // D1=D1- 15
-    i61064(r)
+    r.cpu.d_sub(1, 15); // D1=D1- 15
+    if r.next(0x61064, 5) {
+        i61064(r)
+    }
 }
 
 fn i61064(r: &mut Run) {
-    op!(r, 0x61064, 3, Op::Scratch { op: ScratchOp::FromScratch, r: R::C, n: 1, f: Field::W }); // C=R1
-    i61067(r)
+    r.cpu.scratch(ScratchOp::FromScratch, R::C, 1, Field::W); // C=R1
+    if r.next(0x61067, 5) {
+        i61067(r)
+    }
 }
 
 fn i61067(r: &mut Run) {
-    op!(r, 0x61067, 4, Op::Jump(0x61087)); // GOTO #61087
+    r.cpu.pc = 0x61087; // GOTO #61087
+    r.spend(6);
 }
 
 fn i61070(r: &mut Run) {
-    op!(r, 0x61070, 4, Op::Mem { store: false, d: 1, r: R::C, f: Field::Nibbles(0xF) }); // C=DAT1 15
-    i61074(r)
+    r.sync();
+    r.cpu.load(1, R::C, Field::Nibbles(15), r.hw); // C=DAT1 15
+    if r.next_io(0x61074, 29) {
+        i61074(r)
+    }
 }
 
 fn i61074(r: &mut Run) {
-    op!(r, 0x61074, 3, Op::Scratch { op: ScratchOp::ToScratch, r: R::C, n: 0, f: Field::W }); // R0=C
-    i61077(r)
+    r.cpu.scratch(ScratchOp::ToScratch, R::C, 0, Field::W); // R0=C
+    if r.next(0x61077, 5) {
+        i61077(r)
+    }
 }
 
 fn i61077(r: &mut Run) {
-    op!(r, 0x61077, 3, Op::DAdd { d: 1, n: 0xF }); // D1=D1+ 15
-    i6107a(r)
+    r.cpu.d_add(1, 15); // D1=D1+ 15
+    if r.next(0x6107A, 5) {
+        i6107a(r)
+    }
 }
 
 fn i6107a(r: &mut Run) {
-    op!(r, 0x6107A, 4, Op::Mem { store: false, d: 1, r: R::C, f: Field::Nibbles(0xF) }); // C=DAT1 15
-    i6107e(r)
+    r.sync();
+    r.cpu.load(1, R::C, Field::Nibbles(15), r.hw); // C=DAT1 15
+    if r.next_io(0x6107E, 29) {
+        i6107e(r)
+    }
 }
 
 fn i6107e(r: &mut Run) {
-    op!(r, 0x6107E, 3, Op::DAdd { d: 1, n: 0xF }); // D1=D1+ 15
-    i61081(r)
+    r.cpu.d_add(1, 15); // D1=D1+ 15
+    if r.next(0x61081, 5) {
+        i61081(r)
+    }
 }
 
 fn i61081(r: &mut Run) {
-    op!(r, 0x61081, 3, Op::Mem { store: false, d: 1, r: R::A, f: Field::A }); // A=DAT1 A
-    i61084(r)
+    r.sync();
+    r.cpu.load(1, R::A, Field::A, r.hw); // A=DAT1 A
+    if r.next_io(0x61084, 19) {
+        i61084(r)
+    }
 }
 
 fn i61084(r: &mut Run) {
-    op!(r, 0x61084, 3, Op::DSub { d: 1, n: 0xA }); // D1=D1- 10
-    i61087(r)
+    r.cpu.d_sub(1, 10); // D1=D1- 10
+    if r.next(0x61087, 5) {
+        i61087(r)
+    }
 }
 
 fn i61087(r: &mut Run) {
-    op!(r, 0x61087, 4, Op::Mem { store: true, d: 1, r: R::C, f: Field::Nibbles(0xF) }); // DAT1=C 15
-    i6108b(r)
+    r.sync();
+    r.cpu.store(1, R::C, Field::Nibbles(15), r.hw); // DAT1=C 15
+    if r.next_io(0x6108B, 29) {
+        i6108b(r)
+    }
 }
 
 fn i6108b(r: &mut Run) {
-    op!(r, 0x6108B, 3, Op::DSub { d: 1, n: 0xF }); // D1=D1- 15
-    i6108e(r)
+    r.cpu.d_sub(1, 15); // D1=D1- 15
+    if r.next(0x6108E, 5) {
+        i6108e(r)
+    }
 }
 
 fn i6108e(r: &mut Run) {
-    op!(r, 0x6108E, 3, Op::Scratch { op: ScratchOp::FromScratch, r: R::C, n: 0, f: Field::W }); // C=R0
-    i61091(r)
+    r.cpu.scratch(ScratchOp::FromScratch, R::C, 0, Field::W); // C=R0
+    if r.next(0x61091, 5) {
+        i61091(r)
+    }
 }
 
 fn i61091(r: &mut Run) {
-    op!(r, 0x61091, 4, Op::Mem { store: true, d: 1, r: R::C, f: Field::Nibbles(0xF) }); // DAT1=C 15
-    i61095(r)
+    r.sync();
+    r.cpu.store(1, R::C, Field::Nibbles(15), r.hw); // DAT1=C 15
+    if r.next_io(0x61095, 29) {
+        i61095(r)
+    }
 }
 
 fn i61095(r: &mut Run) {
-    op!(r, 0x61095, 4, Op::Jump(0x6102C)); // GOTO #6102C
+    r.cpu.pc = 0x6102C; // GOTO #6102C
+    r.spend(6);
 }
 
 fn i610a3(r: &mut Run) {
-    op!(r, 0x610A3, 3, Op::Mem { store: false, d: 1, r: R::A, f: Field::A }); // A=DAT1 A
-    i610a6(r)
+    r.sync();
+    r.cpu.load(1, R::A, Field::A, r.hw); // A=DAT1 A
+    if r.next_io(0x610A6, 19) {
+        i610a6(r)
+    }
 }
 
 fn i610a6(r: &mut Run) {
-    op!(r, 0x610A6, 3, Op::DAdd { d: 1, n: 5 }); // D1=D1+ 5
-    i610a9(r)
+    r.cpu.d_add(1, 5); // D1=D1+ 5
+    if r.next(0x610A9, 5) {
+        i610a9(r)
+    }
 }
 
 fn i610a9(r: &mut Run) {
-    op!(r, 0x610A9, 4, Op::Mem { store: false, d: 1, r: R::C, f: Field::Nibbles(0xF) }); // C=DAT1 15
-    i610ad(r)
+    r.sync();
+    r.cpu.load(1, R::C, Field::Nibbles(15), r.hw); // C=DAT1 15
+    if r.next_io(0x610AD, 29) {
+        i610ad(r)
+    }
 }
 
 fn i610ad(r: &mut Run) {
-    op!(r, 0x610AD, 3, Op::DAdd { d: 1, n: 0xA }); // D1=D1+ 10
-    i610b0(r)
+    r.cpu.d_add(1, 10); // D1=D1+ 10
+    if r.next(0x610B0, 5) {
+        i610b0(r)
+    }
 }
 
 fn i610b0(r: &mut Run) {
-    op!(r, 0x610B0, 3, Op::Mem { store: true, d: 1, r: R::A, f: Field::A }); // DAT1=A A
-    i610b3(r)
+    r.sync();
+    r.cpu.store(1, R::A, Field::A, r.hw); // DAT1=A A
+    if r.next_io(0x610B3, 19) {
+        i610b3(r)
+    }
 }
 
 fn i610b3(r: &mut Run) {
-    op!(r, 0x610B3, 3, Op::DSub { d: 1, n: 0xF }); // D1=D1- 15
-    i610b6(r)
+    r.cpu.d_sub(1, 15); // D1=D1- 15
+    if r.next(0x610B6, 5) {
+        i610b6(r)
+    }
 }
 
 fn i610b6(r: &mut Run) {
-    op!(r, 0x610B6, 4, Op::Mem { store: true, d: 1, r: R::C, f: Field::Nibbles(0xF) }); // DAT1=C 15
-    i610ba(r)
+    r.sync();
+    r.cpu.store(1, R::C, Field::Nibbles(15), r.hw); // DAT1=C 15
+    if r.next_io(0x610BA, 29) {
+        i610ba(r)
+    }
 }
 
 fn i610ba(r: &mut Run) {
-    op!(r, 0x610BA, 3, Op::Mem { store: false, d: 0, r: R::A, f: Field::A }); // A=DAT0 A
-    i610bd(r)
+    r.sync();
+    r.cpu.load(0, R::A, Field::A, r.hw); // A=DAT0 A
+    if r.next_io(0x610BD, 19) {
+        i610bd(r)
+    }
 }
 
 fn i610bd(r: &mut Run) {
-    op!(r, 0x610BD, 3, Op::DAdd { d: 0, n: 5 }); // D0=D0+ 5
-    i610c0(r)
+    r.cpu.d_add(0, 5); // D0=D0+ 5
+    if r.next(0x610C0, 5) {
+        i610c0(r)
+    }
 }
 
 fn i610c0(r: &mut Run) {
-    op!(r, 0x610C0, 4, Op::PcIndirect(R::A)); // PC=(A)
+    r.sync();
+    r.cpu.pc_indirect(R::A, r.hw); // PC=(A)
+    r.spend(23);
 }
 
 fn i610c9(r: &mut Run) {
-    op!(r, 0x610C9, 3, Op::Mem { store: false, d: 1, r: R::A, f: Field::A }); // A=DAT1 A
-    i610cc(r)
+    r.sync();
+    r.cpu.load(1, R::A, Field::A, r.hw); // A=DAT1 A
+    if r.next_io(0x610CC, 19) {
+        i610cc(r)
+    }
 }
 
 fn i610cc(r: &mut Run) {
-    op!(r, 0x610CC, 3, Op::DAdd { d: 1, n: 5 }); // D1=D1+ 5
-    i610cf(r)
+    r.cpu.d_add(1, 5); // D1=D1+ 5
+    if r.next(0x610CF, 5) {
+        i610cf(r)
+    }
 }
 
 fn i610cf(r: &mut Run) {
-    op!(r, 0x610CF, 3, Op::Mem { store: false, d: 1, r: R::C, f: Field::A }); // C=DAT1 A
-    i610d2(r)
+    r.sync();
+    r.cpu.load(1, R::C, Field::A, r.hw); // C=DAT1 A
+    if r.next_io(0x610D2, 19) {
+        i610d2(r)
+    }
 }
 
 fn i610d2(r: &mut Run) {
-    op!(r, 0x610D2, 2, Op::PushC); // RSTK=C
-    i610d4(r)
+    r.cpu.push_c(); // RSTK=C
+    if r.next(0x610D4, 4) {
+        i610d4(r)
+    }
 }
 
 fn i610d4(r: &mut Run) {
-    op!(r, 0x610D4, 3, Op::DAdd { d: 1, n: 5 }); // D1=D1+ 5
-    i610d7(r)
+    r.cpu.d_add(1, 5); // D1=D1+ 5
+    if r.next(0x610D7, 5) {
+        i610d7(r)
+    }
 }
 
 fn i610d7(r: &mut Run) {
-    op!(r, 0x610D7, 4, Op::Mem { store: false, d: 1, r: R::C, f: Field::Nibbles(0xF) }); // C=DAT1 15
-    i610db(r)
+    r.sync();
+    r.cpu.load(1, R::C, Field::Nibbles(15), r.hw); // C=DAT1 15
+    if r.next_io(0x610DB, 29) {
+        i610db(r)
+    }
 }
 
 fn i610db(r: &mut Run) {
-    op!(r, 0x610DB, 3, Op::DAdd { d: 1, n: 0xA }); // D1=D1+ 10
-    i610de(r)
+    r.cpu.d_add(1, 10); // D1=D1+ 10
+    if r.next(0x610DE, 5) {
+        i610de(r)
+    }
 }
 
 fn i610de(r: &mut Run) {
-    op!(r, 0x610DE, 3, Op::Mem { store: true, d: 1, r: R::A, f: Field::A }); // DAT1=A A
-    i610e1(r)
+    r.sync();
+    r.cpu.store(1, R::A, Field::A, r.hw); // DAT1=A A
+    if r.next_io(0x610E1, 19) {
+        i610e1(r)
+    }
 }
 
 fn i610e1(r: &mut Run) {
-    op!(r, 0x610E1, 3, Op::DSub { d: 1, n: 0xF }); // D1=D1- 15
-    i610e4(r)
+    r.cpu.d_sub(1, 15); // D1=D1- 15
+    if r.next(0x610E4, 5) {
+        i610e4(r)
+    }
 }
 
 fn i610e4(r: &mut Run) {
-    op!(r, 0x610E4, 4, Op::Mem { store: true, d: 1, r: R::C, f: Field::Nibbles(0xF) }); // DAT1=C 15
-    i610e8(r)
+    r.sync();
+    r.cpu.store(1, R::C, Field::Nibbles(15), r.hw); // DAT1=C 15
+    if r.next_io(0x610E8, 29) {
+        i610e8(r)
+    }
 }
 
 fn i610e8(r: &mut Run) {
-    op!(r, 0x610E8, 3, Op::DSub { d: 1, n: 5 }); // D1=D1- 5
-    i610eb(r)
+    r.cpu.d_sub(1, 5); // D1=D1- 5
+    if r.next(0x610EB, 5) {
+        i610eb(r)
+    }
 }
 
 fn i610eb(r: &mut Run) {
-    op!(r, 0x610EB, 2, Op::PopC); // C=RSTK
-    i610ed(r)
+    r.cpu.pop_c(); // C=RSTK
+    if r.next(0x610ED, 4) {
+        i610ed(r)
+    }
 }
 
 fn i610ed(r: &mut Run) {
-    op!(r, 0x610ED, 3, Op::Mem { store: true, d: 1, r: R::C, f: Field::A }); // DAT1=C A
-    i610f0(r)
+    r.sync();
+    r.cpu.store(1, R::C, Field::A, r.hw); // DAT1=C A
+    if r.next_io(0x610F0, 19) {
+        i610f0(r)
+    }
 }
 
 fn i610f0(r: &mut Run) {
-    op!(r, 0x610F0, 3, Op::Mem { store: false, d: 0, r: R::A, f: Field::A }); // A=DAT0 A
-    i610f3(r)
+    r.sync();
+    r.cpu.load(0, R::A, Field::A, r.hw); // A=DAT0 A
+    if r.next_io(0x610F3, 19) {
+        i610f3(r)
+    }
 }
 
 fn i610f3(r: &mut Run) {
-    op!(r, 0x610F3, 3, Op::DAdd { d: 0, n: 5 }); // D0=D0+ 5
-    i610f6(r)
+    r.cpu.d_add(0, 5); // D0=D0+ 5
+    if r.next(0x610F6, 5) {
+        i610f6(r)
+    }
 }
 
 fn i610f6(r: &mut Run) {
-    op!(r, 0x610F6, 4, Op::PcIndirect(R::A)); // PC=(A)
+    r.sync();
+    r.cpu.pc_indirect(R::A, r.hw); // PC=(A)
+    r.spend(23);
 }
 
 fn i610ff(r: &mut Run) {
-    op!(r, 0x610FF, 3, Op::Mem { store: false, d: 1, r: R::A, f: Field::A }); // A=DAT1 A
-    i61102(r)
+    r.sync();
+    r.cpu.load(1, R::A, Field::A, r.hw); // A=DAT1 A
+    if r.next_io(0x61102, 19) {
+        i61102(r)
+    }
 }
 
 fn i61102(r: &mut Run) {
-    op!(r, 0x61102, 3, Op::DAdd { d: 1, n: 5 }); // D1=D1+ 5
-    i61105(r)
+    r.cpu.d_add(1, 5); // D1=D1+ 5
+    if r.next(0x61105, 5) {
+        i61105(r)
+    }
 }
 
 fn i61105(r: &mut Run) {
-    op!(r, 0x61105, 4, Op::Mem { store: false, d: 1, r: R::C, f: Field::Nibbles(0xA) }); // C=DAT1 10
-    i61109(r)
+    r.sync();
+    r.cpu.load(1, R::C, Field::Nibbles(10), r.hw); // C=DAT1 10
+    if r.next_io(0x61109, 24) {
+        i61109(r)
+    }
 }
 
 fn i61109(r: &mut Run) {
-    op!(r, 0x61109, 3, Op::Scratch { op: ScratchOp::ToScratch, r: R::C, n: 0, f: Field::W }); // R0=C
-    i6110c(r)
+    r.cpu.scratch(ScratchOp::ToScratch, R::C, 0, Field::W); // R0=C
+    if r.next(0x6110C, 5) {
+        i6110c(r)
+    }
 }
 
 fn i6110c(r: &mut Run) {
-    op!(r, 0x6110C, 3, Op::DAdd { d: 1, n: 0xA }); // D1=D1+ 10
-    i6110f(r)
+    r.cpu.d_add(1, 10); // D1=D1+ 10
+    if r.next(0x6110F, 5) {
+        i6110f(r)
+    }
 }
 
 fn i6110f(r: &mut Run) {
-    op!(r, 0x6110F, 4, Op::Mem { store: false, d: 1, r: R::C, f: Field::Nibbles(0xF) }); // C=DAT1 15
-    i61113(r)
+    r.sync();
+    r.cpu.load(1, R::C, Field::Nibbles(15), r.hw); // C=DAT1 15
+    if r.next_io(0x61113, 29) {
+        i61113(r)
+    }
 }
 
 fn i61113(r: &mut Run) {
-    op!(r, 0x61113, 3, Op::DAdd { d: 1, n: 0xA }); // D1=D1+ 10
-    i61116(r)
+    r.cpu.d_add(1, 10); // D1=D1+ 10
+    if r.next(0x61116, 5) {
+        i61116(r)
+    }
 }
 
 fn i61116(r: &mut Run) {
-    op!(r, 0x61116, 3, Op::Mem { store: true, d: 1, r: R::A, f: Field::A }); // DAT1=A A
-    i61119(r)
+    r.sync();
+    r.cpu.store(1, R::A, Field::A, r.hw); // DAT1=A A
+    if r.next_io(0x61119, 19) {
+        i61119(r)
+    }
 }
 
 fn i61119(r: &mut Run) {
-    op!(r, 0x61119, 3, Op::DSub { d: 1, n: 0xF }); // D1=D1- 15
-    i6111c(r)
+    r.cpu.d_sub(1, 15); // D1=D1- 15
+    if r.next(0x6111C, 5) {
+        i6111c(r)
+    }
 }
 
 fn i6111c(r: &mut Run) {
-    op!(r, 0x6111C, 4, Op::Mem { store: true, d: 1, r: R::C, f: Field::Nibbles(0xF) }); // DAT1=C 15
-    i61120(r)
+    r.sync();
+    r.cpu.store(1, R::C, Field::Nibbles(15), r.hw); // DAT1=C 15
+    if r.next_io(0x61120, 29) {
+        i61120(r)
+    }
 }
 
 fn i61120(r: &mut Run) {
-    op!(r, 0x61120, 3, Op::DSub { d: 1, n: 0xA }); // D1=D1- 10
-    i61123(r)
+    r.cpu.d_sub(1, 10); // D1=D1- 10
+    if r.next(0x61123, 5) {
+        i61123(r)
+    }
 }
 
 fn i61123(r: &mut Run) {
-    op!(r, 0x61123, 3, Op::Scratch { op: ScratchOp::FromScratch, r: R::C, n: 0, f: Field::W }); // C=R0
-    i61126(r)
+    r.cpu.scratch(ScratchOp::FromScratch, R::C, 0, Field::W); // C=R0
+    if r.next(0x61126, 5) {
+        i61126(r)
+    }
 }
 
 fn i61126(r: &mut Run) {
-    op!(r, 0x61126, 4, Op::Jump(0x6139A)); // GOTO #6139A
+    r.cpu.pc = 0x6139A; // GOTO #6139A
+    r.spend(6);
 }
 
 fn i6112f(r: &mut Run) {
-    op!(r, 0x6112F, 3, Op::Mem { store: false, d: 1, r: R::A, f: Field::A }); // A=DAT1 A
-    i61132(r)
+    r.sync();
+    r.cpu.load(1, R::A, Field::A, r.hw); // A=DAT1 A
+    if r.next_io(0x61132, 19) {
+        i61132(r)
+    }
 }
 
 fn i61132(r: &mut Run) {
-    op!(r, 0x61132, 3, Op::DAdd { d: 1, n: 0xA }); // D1=D1+ 10
-    i61135(r)
+    r.cpu.d_add(1, 10); // D1=D1+ 10
+    if r.next(0x61135, 5) {
+        i61135(r)
+    }
 }
 
 fn i61135(r: &mut Run) {
-    op!(r, 0x61135, 3, Op::Mem { store: true, d: 1, r: R::A, f: Field::A }); // DAT1=A A
-    i61138(r)
+    r.sync();
+    r.cpu.store(1, R::A, Field::A, r.hw); // DAT1=A A
+    if r.next_io(0x61138, 19) {
+        i61138(r)
+    }
 }
 
 fn i61138(r: &mut Run) {
-    op!(r, 0x61138, 4, Op::Jump(0x60F8D)); // GOTO #60F8D
+    r.cpu.pc = 0x60F8D; // GOTO #60F8D
+    r.spend(6);
 }
 
 fn i61141(r: &mut Run) {
-    op!(r, 0x61141, 3, Op::Mem { store: false, d: 1, r: R::A, f: Field::A }); // A=DAT1 A
-    i61144(r)
+    r.sync();
+    r.cpu.load(1, R::A, Field::A, r.hw); // A=DAT1 A
+    if r.next_io(0x61144, 19) {
+        i61144(r)
+    }
 }
 
 fn i61144(r: &mut Run) {
-    op!(r, 0x61144, 3, Op::DAdd { d: 1, n: 0xF }); // D1=D1+ 15
-    i61147(r)
+    r.cpu.d_add(1, 15); // D1=D1+ 15
+    if r.next(0x61147, 5) {
+        i61147(r)
+    }
 }
 
 fn i61147(r: &mut Run) {
-    op!(r, 0x61147, 3, Op::Mem { store: true, d: 1, r: R::A, f: Field::A }); // DAT1=A A
-    i6114a(r)
+    r.sync();
+    r.cpu.store(1, R::A, Field::A, r.hw); // DAT1=A A
+    if r.next_io(0x6114A, 19) {
+        i6114a(r)
+    }
 }
 
 fn i6114a(r: &mut Run) {
-    op!(r, 0x6114A, 4, Op::Jump(0x60F8B)); // GOTO #60F8B
+    r.cpu.pc = 0x60F8B; // GOTO #60F8B
+    r.spend(6);
 }
 
 fn i61153(r: &mut Run) {
-    op!(r, 0x61153, 7, Op::LoadConst { r: R::C, len: 5, val: 0xA }); // LC(5) #0000A
-    i6115a(r)
+    r.cpu.load_const(R::C, 5, 0xA); // LC(5) #0000A
+    if r.next(0x6115A, 9) {
+        i6115a(r)
+    }
 }
 
 fn i6115a(r: &mut Run) {
-    op!(r, 0x6115A, 2, Op::Sub { dst: R::B, a: R::B, b: R::C, f: Field::A }); // B=B-C A
-    i6115c(r)
+    r.cpu.sub(R::B, R::B, R::C, Field::A); // B=B-C A
+    if r.next(0x6115C, 4) {
+        i6115c(r)
+    }
 }
 
 fn i6115c(r: &mut Run) {
-    op!(r, 0x6115C, 4, Op::Jump(0x60F8D)); // GOTO #60F8D
+    r.cpu.pc = 0x60F8D; // GOTO #60F8D
+    r.spend(6);
 }
 
 fn i61165(r: &mut Run) {
-    op!(r, 0x61165, 7, Op::LoadConst { r: R::C, len: 5, val: 0xF }); // LC(5) #0000F
-    i6116c(r)
+    r.cpu.load_const(R::C, 5, 0xF); // LC(5) #0000F
+    if r.next(0x6116C, 9) {
+        i6116c(r)
+    }
 }
 
 fn i6116c(r: &mut Run) {
-    op!(r, 0x6116C, 2, Op::Sub { dst: R::B, a: R::B, b: R::C, f: Field::A }); // B=B-C A
-    i6116e(r)
+    r.cpu.sub(R::B, R::B, R::C, Field::A); // B=B-C A
+    if r.next(0x6116E, 4) {
+        i6116e(r)
+    }
 }
 
 fn i6116e(r: &mut Run) {
-    op!(r, 0x6116E, 4, Op::Jump(0x60F8B)); // GOTO #60F8B
+    r.cpu.pc = 0x60F8B; // GOTO #60F8B
+    r.spend(6);
 }
 
 fn i61177(r: &mut Run) {
-    op!(r, 0x61177, 7, Op::Call(0x3F5D)); // GOSUB #03F5D
+    r.cpu.pc = 0x6117E;
+    r.cpu.call(0x03F5D); // GOSUB #03F5D
+    r.spend(9);
 }
 
 fn i6117e(r: &mut Run) {
-    op!(r, 0x6117E, 2, Op::Sub { dst: R::A, a: R::A, b: R::C, f: Field::A }); // A=A-C A
-    i61180(r)
+    r.cpu.sub(R::A, R::A, R::C, Field::A); // A=A-C A
+    if r.next(0x61180, 4) {
+        i61180(r)
+    }
 }
 
 fn i61180(r: &mut Run) {
-    op!(r, 0x61180, 4, Op::Jump(0x61192)); // GOTO #61192
+    r.cpu.pc = 0x61192; // GOTO #61192
+    r.spend(6);
 }
 
 fn i61189(r: &mut Run) {
-    op!(r, 0x61189, 7, Op::Call(0x3F5D)); // GOSUB #03F5D
+    r.cpu.pc = 0x61190;
+    r.cpu.call(0x03F5D); // GOSUB #03F5D
+    r.spend(9);
 }
 
 fn i61190(r: &mut Run) {
-    op!(r, 0x61190, 2, Op::Add { dst: R::A, src: R::C, f: Field::A }); // A=A+C A
-    i61192(r)
+    r.cpu.add(R::A, R::C, Field::A); // A=A+C A
+    if r.next(0x61192, 4) {
+        i61192(r)
+    }
 }
 
 fn i61192(r: &mut Run) {
-    op!(r, 0x61192, 3, Op::DSub { d: 1, n: 5 }); // D1=D1- 5
-    i61195(r)
+    r.cpu.d_sub(1, 5); // D1=D1- 5
+    if r.next(0x61195, 5) {
+        i61195(r)
+    }
 }
 
 fn i61195(r: &mut Run) {
-    op!(r, 0x61195, 2, Op::Dec { r: R::D, f: Field::A }); // D=D-1 A
-    i61197(r)
+    r.cpu.dec(R::D, Field::A); // D=D-1 A
+    if r.next(0x61197, 4) {
+        i61197(r)
+    }
 }
 
 fn i61197(r: &mut Run) {
-    op!(r, 0x61197, 3, Op::DExR { d: 1, r: R::C, short: false }); // CD1EX
-    i6119a(r)
+    r.cpu.d_ex_r(1, R::C, false); // CD1EX
+    if r.next(0x6119A, 5) {
+        i6119a(r)
+    }
 }
 
 fn i6119a(r: &mut Run) {
-    op!(r, 0x6119A, 4, Op::Jump(0x611CB)); // GOTO #611CB
+    r.cpu.pc = 0x611CB; // GOTO #611CB
+    r.spend(6);
 }
 
 fn i611a8(r: &mut Run) {
-    op!(r, 0x611A8, 4, Op::Call(0x611B0)); // GOSUB #611B0
+    r.cpu.pc = 0x611AC;
+    r.cpu.call(0x611B0); // GOSUB #611B0
+    r.spend(6);
 }
 
 fn i611ac(r: &mut Run) {
-    op!(r, 0x611AC, 4, Op::Jump(0x611C9)); // GOTO #611C9
+    r.cpu.pc = 0x611C9; // GOTO #611C9
+    r.spend(6);
 }
 
 fn i611b0(r: &mut Run) {
-    op!(r, 0x611B0, 3, Op::Mem { store: false, d: 1, r: R::C, f: Field::A }); // C=DAT1 A
-    i611b3(r)
+    r.sync();
+    r.cpu.load(1, R::C, Field::A, r.hw); // C=DAT1 A
+    if r.next_io(0x611B3, 19) {
+        i611b3(r)
+    }
 }
 
 fn i611b3(r: &mut Run) {
-    op!(r, 0x611B3, 3, Op::DExR { d: 1, r: R::C, short: false }); // CD1EX
-    i611b6(r)
+    r.cpu.d_ex_r(1, R::C, false); // CD1EX
+    if r.next(0x611B6, 5) {
+        i611b6(r)
+    }
 }
 
 fn i611b6(r: &mut Run) {
-    op!(r, 0x611B6, 3, Op::DAdd { d: 1, n: 5 }); // D1=D1+ 5
-    i611b9(r)
+    r.cpu.d_add(1, 5); // D1=D1+ 5
+    if r.next(0x611B9, 5) {
+        i611b9(r)
+    }
 }
 
 fn i611b9(r: &mut Run) {
-    op!(r, 0x611B9, 3, Op::Mem { store: false, d: 1, r: R::A, f: Field::A }); // A=DAT1 A
-    i611bc(r)
+    r.sync();
+    r.cpu.load(1, R::A, Field::A, r.hw); // A=DAT1 A
+    if r.next_io(0x611BC, 19) {
+        i611bc(r)
+    }
 }
 
 fn i611bc(r: &mut Run) {
-    op!(r, 0x611BC, 2, Op::Rtn(RtnKind::Plain)); // RTN
+    r.cpu.rtn(RtnKind::Plain); // RTN
+    r.spend(9);
 }
 
 fn i611c3(r: &mut Run) {
-    op!(r, 0x611C3, 4, Op::Call(0x611B0)); // GOSUB #611B0
+    r.cpu.pc = 0x611C7;
+    r.cpu.call(0x611B0); // GOSUB #611B0
+    r.spend(6);
 }
 
 fn i611c7(r: &mut Run) {
-    op!(r, 0x611C7, 2, Op::Inc { r: R::A, f: Field::A }); // A=A+1 A
-    i611c9(r)
+    r.cpu.inc(R::A, Field::A); // A=A+1 A
+    if r.next(0x611C9, 4) {
+        i611c9(r)
+    }
 }
 
 fn i611c9(r: &mut Run) {
-    op!(r, 0x611C9, 2, Op::Inc { r: R::A, f: Field::A }); // A=A+1 A
-    i611cb(r)
+    r.cpu.inc(R::A, Field::A); // A=A+1 A
+    if r.next(0x611CB, 4) {
+        i611cb(r)
+    }
 }
 
 fn i611cb(r: &mut Run) {
-    op!(r, 0x611CB, 7, Op::Jump(0x32F3)); // GOTO #032F3
+    r.cpu.pc = 0x032F3; // GOTO #032F3
+    r.spend(9);
 }
 
 fn i611d7(r: &mut Run) {
-    op!(r, 0x611D7, 4, Op::Call(0x611B0)); // GOSUB #611B0
+    r.cpu.pc = 0x611DB;
+    r.cpu.call(0x611B0); // GOSUB #611B0
+    r.spend(6);
 }
 
 fn i611db(r: &mut Run) {
-    op!(r, 0x611DB, 2, Op::Inc { r: R::A, f: Field::A }); // A=A+1 A
-    i611dd(r)
+    r.cpu.inc(R::A, Field::A); // A=A+1 A
+    if r.next(0x611DD, 4) {
+        i611dd(r)
+    }
 }
 
 fn i611dd(r: &mut Run) {
-    op!(r, 0x611DD, 4, Op::Jump(0x611C7)); // GOTO #611C7
+    r.cpu.pc = 0x611C7; // GOTO #611C7
+    r.spend(6);
 }
 
 fn i611e6(r: &mut Run) {
-    op!(r, 0x611E6, 4, Op::Call(0x611B0)); // GOSUB #611B0
+    r.cpu.pc = 0x611EA;
+    r.cpu.call(0x611B0); // GOSUB #611B0
+    r.spend(6);
 }
 
 fn i611ea(r: &mut Run) {
-    op!(r, 0x611EA, 2, Op::Inc { r: R::A, f: Field::A }); // A=A+1 A
-    i611ec(r)
+    r.cpu.inc(R::A, Field::A); // A=A+1 A
+    if r.next(0x611EC, 4) {
+        i611ec(r)
+    }
 }
 
 fn i611ec(r: &mut Run) {
-    op!(r, 0x611EC, 2, Op::Inc { r: R::A, f: Field::A }); // A=A+1 A
-    i611ee(r)
+    r.cpu.inc(R::A, Field::A); // A=A+1 A
+    if r.next(0x611EE, 4) {
+        i611ee(r)
+    }
 }
 
 fn i611ee(r: &mut Run) {
-    op!(r, 0x611EE, 4, Op::Jump(0x611C7)); // GOTO #611C7
+    r.cpu.pc = 0x611C7; // GOTO #611C7
+    r.spend(6);
 }
 
 fn i611f2(r: &mut Run) {
-    op!(r, 0x611F2, 4, Op::Call(0x613A8)); // GOSUB #613A8
+    r.cpu.pc = 0x611F6;
+    r.cpu.call(0x613A8); // GOSUB #613A8
+    r.spend(6);
 }
 
 fn i611f6(r: &mut Run) {
-    op!(r, 0x611F6, 3, Op::CondJump(Cond::NoCarry, 0x61208)); // GONC #61208
+    r.cpu.pc = 0x611F9;
+    r.cpu.jump_if(Cond::NoCarry, 0x61208); // GONC #61208
+    r.spend(5);
 }
 
 fn i61203(r: &mut Run) {
-    op!(r, 0x61203, 2, Op::Dec { r: R::D, f: Field::A }); // D=D-1 A
-    i61205(r)
+    r.cpu.dec(R::D, Field::A); // D=D-1 A
+    if r.next(0x61205, 4) {
+        i61205(r)
+    }
 }
 
 fn i61205(r: &mut Run) {
-    op!(r, 0x61205, 3, Op::CondJump(Cond::Carry, 0x611F2)); // GOC #611F2
-    i61208(r)
+    r.cpu.pc = 0x61208;
+    r.cpu.jump_if(Cond::Carry, 0x611F2); // GOC #611F2
+    if r.next_pc(0x61208, 5) {
+        i61208(r)
+    }
 }
 
 fn i61208(r: &mut Run) {
-    op!(r, 0x61208, 3, Op::DAdd { d: 1, n: 0xA }); // D1=D1+ 10
-    i6120b(r)
+    r.cpu.d_add(1, 10); // D1=D1+ 10
+    if r.next(0x6120B, 5) {
+        i6120b(r)
+    }
 }
 
 fn i6120b(r: &mut Run) {
-    op!(r, 0x6120B, 3, Op::Mem { store: false, d: 1, r: R::A, f: Field::A }); // A=DAT1 A
-    i6120e(r)
+    r.sync();
+    r.cpu.load(1, R::A, Field::A, r.hw); // A=DAT1 A
+    if r.next_io(0x6120E, 19) {
+        i6120e(r)
+    }
 }
 
 fn i6120e(r: &mut Run) {
-    op!(r, 0x6120E, 3, Op::DSub { d: 1, n: 0xF }); // D1=D1- 15
-    i61211(r)
+    r.cpu.d_sub(1, 15); // D1=D1- 15
+    if r.next(0x61211, 5) {
+        i61211(r)
+    }
 }
 
 fn i61211(r: &mut Run) {
-    op!(r, 0x61211, 4, Op::Jump(0x6102F)); // GOTO #6102F
+    r.cpu.pc = 0x6102F; // GOTO #6102F
+    r.spend(6);
 }
 
 fn i61215(r: &mut Run) {
-    op!(r, 0x61215, 4, Op::Call(0x613A8)); // GOSUB #613A8
+    r.cpu.pc = 0x61219;
+    r.cpu.call(0x613A8); // GOSUB #613A8
+    r.spend(6);
 }
 
 fn i61219(r: &mut Run) {
-    op!(r, 0x61219, 3, Op::CondJump(Cond::NoCarry, 0x61226)); // GONC #61226
+    r.cpu.pc = 0x6121C;
+    r.cpu.jump_if(Cond::NoCarry, 0x61226); // GONC #61226
+    r.spend(5);
 }
 
 fn i61221(r: &mut Run) {
-    op!(r, 0x61221, 2, Op::Dec { r: R::D, f: Field::A }); // D=D-1 A
-    i61223(r)
+    r.cpu.dec(R::D, Field::A); // D=D-1 A
+    if r.next(0x61223, 4) {
+        i61223(r)
+    }
 }
 
 fn i61223(r: &mut Run) {
-    op!(r, 0x61223, 3, Op::CondJump(Cond::Carry, 0x61215)); // GOC #61215
-    i61226(r)
+    r.cpu.pc = 0x61226;
+    r.cpu.jump_if(Cond::Carry, 0x61215); // GOC #61215
+    if r.next_pc(0x61226, 5) {
+        i61226(r)
+    }
 }
 
 fn i61226(r: &mut Run) {
-    op!(r, 0x61226, 3, Op::DAdd { d: 1, n: 0xF }); // D1=D1+ 15
-    i61229(r)
+    r.cpu.d_add(1, 15); // D1=D1+ 15
+    if r.next(0x61229, 5) {
+        i61229(r)
+    }
 }
 
 fn i61229(r: &mut Run) {
-    op!(r, 0x61229, 3, Op::Mem { store: false, d: 1, r: R::A, f: Field::A }); // A=DAT1 A
-    i6122c(r)
+    r.sync();
+    r.cpu.load(1, R::A, Field::A, r.hw); // A=DAT1 A
+    if r.next_io(0x6122C, 19) {
+        i6122c(r)
+    }
 }
 
 fn i6122c(r: &mut Run) {
-    op!(r, 0x6122C, 3, Op::DSub { d: 1, n: 0xF }); // D1=D1- 15
-    i6122f(r)
+    r.cpu.d_sub(1, 15); // D1=D1- 15
+    if r.next(0x6122F, 5) {
+        i6122f(r)
+    }
 }
 
 fn i6122f(r: &mut Run) {
-    op!(r, 0x6122F, 4, Op::Jump(0x6102C)); // GOTO #6102C
+    r.cpu.pc = 0x6102C; // GOTO #6102C
+    r.spend(6);
 }
 
 fn i61233(r: &mut Run) {
-    op!(r, 0x61233, 4, Op::Call(0x613A8)); // GOSUB #613A8
+    r.cpu.pc = 0x61237;
+    r.cpu.call(0x613A8); // GOSUB #613A8
+    r.spend(6);
 }
 
 fn i61237(r: &mut Run) {
-    op!(r, 0x61237, 3, Op::CondJump(Cond::NoCarry, 0x61244)); // GONC #61244
+    r.cpu.pc = 0x6123A;
+    r.cpu.jump_if(Cond::NoCarry, 0x61244); // GONC #61244
+    r.spend(5);
 }
 
 fn i6123f(r: &mut Run) {
-    op!(r, 0x6123F, 2, Op::Dec { r: R::D, f: Field::A }); // D=D-1 A
-    i61241(r)
+    r.cpu.dec(R::D, Field::A); // D=D-1 A
+    if r.next(0x61241, 4) {
+        i61241(r)
+    }
 }
 
 fn i61241(r: &mut Run) {
-    op!(r, 0x61241, 3, Op::CondJump(Cond::Carry, 0x61233)); // GOC #61233
-    i61244(r)
+    r.cpu.pc = 0x61244;
+    r.cpu.jump_if(Cond::Carry, 0x61233); // GOC #61233
+    if r.next_pc(0x61244, 5) {
+        i61244(r)
+    }
 }
 
 fn i61244(r: &mut Run) {
-    op!(r, 0x61244, 3, Op::DAdd { d: 1, n: 0xF }); // D1=D1+ 15
-    i61247(r)
+    r.cpu.d_add(1, 15); // D1=D1+ 15
+    if r.next(0x61247, 5) {
+        i61247(r)
+    }
 }
 
 fn i61247(r: &mut Run) {
-    op!(r, 0x61247, 3, Op::DAdd { d: 1, n: 5 }); // D1=D1+ 5
-    i6124a(r)
+    r.cpu.d_add(1, 5); // D1=D1+ 5
+    if r.next(0x6124A, 5) {
+        i6124a(r)
+    }
 }
 
 fn i6124a(r: &mut Run) {
-    op!(r, 0x6124A, 3, Op::Mem { store: false, d: 1, r: R::A, f: Field::A }); // A=DAT1 A
-    i6124d(r)
+    r.sync();
+    r.cpu.load(1, R::A, Field::A, r.hw); // A=DAT1 A
+    if r.next_io(0x6124D, 19) {
+        i6124d(r)
+    }
 }
 
 fn i6124d(r: &mut Run) {
-    op!(r, 0x6124D, 3, Op::DSub { d: 1, n: 0xF }); // D1=D1- 15
-    i61250(r)
+    r.cpu.d_sub(1, 15); // D1=D1- 15
+    if r.next(0x61250, 5) {
+        i61250(r)
+    }
 }
 
 fn i61250(r: &mut Run) {
-    op!(r, 0x61250, 3, Op::DSub { d: 1, n: 0xA }); // D1=D1- 10
-    i61253(r)
+    r.cpu.d_sub(1, 10); // D1=D1- 10
+    if r.next(0x61253, 5) {
+        i61253(r)
+    }
 }
 
 fn i61253(r: &mut Run) {
-    op!(r, 0x61253, 4, Op::Jump(0x6102F)); // GOTO #6102F
+    r.cpu.pc = 0x6102F; // GOTO #6102F
+    r.spend(6);
 }
 
 fn i61257(r: &mut Run) {
-    op!(r, 0x61257, 4, Op::Call(0x613A8)); // GOSUB #613A8
+    r.cpu.pc = 0x6125B;
+    r.cpu.call(0x613A8); // GOSUB #613A8
+    r.spend(6);
 }
 
 fn i6125b(r: &mut Run) {
-    op!(r, 0x6125B, 3, Op::CondJump(Cond::NoCarry, 0x61268)); // GONC #61268
+    r.cpu.pc = 0x6125E;
+    r.cpu.jump_if(Cond::NoCarry, 0x61268); // GONC #61268
+    r.spend(5);
 }
 
 fn i61263(r: &mut Run) {
-    op!(r, 0x61263, 2, Op::Dec { r: R::D, f: Field::A }); // D=D-1 A
-    i61265(r)
+    r.cpu.dec(R::D, Field::A); // D=D-1 A
+    if r.next(0x61265, 4) {
+        i61265(r)
+    }
 }
 
 fn i61265(r: &mut Run) {
-    op!(r, 0x61265, 3, Op::CondJump(Cond::Carry, 0x61257)); // GOC #61257
-    i61268(r)
+    r.cpu.pc = 0x61268;
+    r.cpu.jump_if(Cond::Carry, 0x61257); // GOC #61257
+    if r.next_pc(0x61268, 5) {
+        i61268(r)
+    }
 }
 
 fn i61268(r: &mut Run) {
-    op!(r, 0x61268, 3, Op::DAdd { d: 1, n: 0xF }); // D1=D1+ 15
-    i6126b(r)
+    r.cpu.d_add(1, 15); // D1=D1+ 15
+    if r.next(0x6126B, 5) {
+        i6126b(r)
+    }
 }
 
 fn i6126b(r: &mut Run) {
-    op!(r, 0x6126B, 3, Op::DAdd { d: 1, n: 0xA }); // D1=D1+ 10
-    i6126e(r)
+    r.cpu.d_add(1, 10); // D1=D1+ 10
+    if r.next(0x6126E, 5) {
+        i6126e(r)
+    }
 }
 
 fn i6126e(r: &mut Run) {
-    op!(r, 0x6126E, 3, Op::Mem { store: false, d: 1, r: R::A, f: Field::A }); // A=DAT1 A
-    i61271(r)
+    r.sync();
+    r.cpu.load(1, R::A, Field::A, r.hw); // A=DAT1 A
+    if r.next_io(0x61271, 19) {
+        i61271(r)
+    }
 }
 
 fn i61271(r: &mut Run) {
-    op!(r, 0x61271, 3, Op::DSub { d: 1, n: 0xF }); // D1=D1- 15
-    i61274(r)
+    r.cpu.d_sub(1, 15); // D1=D1- 15
+    if r.next(0x61274, 5) {
+        i61274(r)
+    }
 }
 
 fn i61274(r: &mut Run) {
-    op!(r, 0x61274, 3, Op::DSub { d: 1, n: 0xF }); // D1=D1- 15
-    i61277(r)
+    r.cpu.d_sub(1, 15); // D1=D1- 15
+    if r.next(0x61277, 5) {
+        i61277(r)
+    }
 }
 
 fn i61277(r: &mut Run) {
-    op!(r, 0x61277, 4, Op::Jump(0x6102F)); // GOTO #6102F
+    r.cpu.pc = 0x6102F; // GOTO #6102F
+    r.spend(6);
 }
 
 fn i6127b(r: &mut Run) {
-    op!(r, 0x6127B, 4, Op::Call(0x613A8)); // GOSUB #613A8
+    r.cpu.pc = 0x6127F;
+    r.cpu.call(0x613A8); // GOSUB #613A8
+    r.spend(6);
 }
 
 fn i6127f(r: &mut Run) {
-    op!(r, 0x6127F, 3, Op::CondJump(Cond::NoCarry, 0x6128C)); // GONC #6128C
+    r.cpu.pc = 0x61282;
+    r.cpu.jump_if(Cond::NoCarry, 0x6128C); // GONC #6128C
+    r.spend(5);
 }
 
 fn i61287(r: &mut Run) {
-    op!(r, 0x61287, 2, Op::Dec { r: R::D, f: Field::A }); // D=D-1 A
-    i61289(r)
+    r.cpu.dec(R::D, Field::A); // D=D-1 A
+    if r.next(0x61289, 4) {
+        i61289(r)
+    }
 }
 
 fn i61289(r: &mut Run) {
-    op!(r, 0x61289, 3, Op::CondJump(Cond::Carry, 0x6127B)); // GOC #6127B
-    i6128c(r)
+    r.cpu.pc = 0x6128C;
+    r.cpu.jump_if(Cond::Carry, 0x6127B); // GOC #6127B
+    if r.next_pc(0x6128C, 5) {
+        i6128c(r)
+    }
 }
 
 fn i6128c(r: &mut Run) {
-    op!(r, 0x6128C, 3, Op::DAdd { d: 1, n: 0xF }); // D1=D1+ 15
-    i6128f(r)
+    r.cpu.d_add(1, 15); // D1=D1+ 15
+    if r.next(0x6128F, 5) {
+        i6128f(r)
+    }
 }
 
 fn i6128f(r: &mut Run) {
-    op!(r, 0x6128F, 3, Op::DAdd { d: 1, n: 0xF }); // D1=D1+ 15
-    i61292(r)
+    r.cpu.d_add(1, 15); // D1=D1+ 15
+    if r.next(0x61292, 5) {
+        i61292(r)
+    }
 }
 
 fn i61292(r: &mut Run) {
-    op!(r, 0x61292, 3, Op::Mem { store: false, d: 1, r: R::A, f: Field::A }); // A=DAT1 A
-    i61295(r)
+    r.sync();
+    r.cpu.load(1, R::A, Field::A, r.hw); // A=DAT1 A
+    if r.next_io(0x61295, 19) {
+        i61295(r)
+    }
 }
 
 fn i61295(r: &mut Run) {
-    op!(r, 0x61295, 3, Op::DSub { d: 1, n: 0xF }); // D1=D1- 15
-    i61298(r)
+    r.cpu.d_sub(1, 15); // D1=D1- 15
+    if r.next(0x61298, 5) {
+        i61298(r)
+    }
 }
 
 fn i61298(r: &mut Run) {
-    op!(r, 0x61298, 3, Op::DSub { d: 1, n: 0xF }); // D1=D1- 15
-    i6129b(r)
+    r.cpu.d_sub(1, 15); // D1=D1- 15
+    if r.next(0x6129B, 5) {
+        i6129b(r)
+    }
 }
 
 fn i6129b(r: &mut Run) {
-    op!(r, 0x6129B, 3, Op::DSub { d: 1, n: 5 }); // D1=D1- 5
-    i6129e(r)
+    r.cpu.d_sub(1, 5); // D1=D1- 5
+    if r.next(0x6129E, 5) {
+        i6129e(r)
+    }
 }
 
 fn i6129e(r: &mut Run) {
-    op!(r, 0x6129E, 4, Op::Jump(0x6102F)); // GOTO #6102F
+    r.cpu.pc = 0x6102F; // GOTO #6102F
+    r.spend(6);
 }
 
 fn i612a2(r: &mut Run) {
-    op!(r, 0x612A2, 4, Op::Call(0x613A8)); // GOSUB #613A8
+    r.cpu.pc = 0x612A6;
+    r.cpu.call(0x613A8); // GOSUB #613A8
+    r.spend(6);
 }
 
 fn i612a6(r: &mut Run) {
-    op!(r, 0x612A6, 3, Op::CondJump(Cond::NoCarry, 0x612B3)); // GONC #612B3
+    r.cpu.pc = 0x612A9;
+    r.cpu.jump_if(Cond::NoCarry, 0x612B3); // GONC #612B3
+    r.spend(5);
 }
 
 fn i612ae(r: &mut Run) {
-    op!(r, 0x612AE, 2, Op::Dec { r: R::D, f: Field::A }); // D=D-1 A
-    i612b0(r)
+    r.cpu.dec(R::D, Field::A); // D=D-1 A
+    if r.next(0x612B0, 4) {
+        i612b0(r)
+    }
 }
 
 fn i612b0(r: &mut Run) {
-    op!(r, 0x612B0, 3, Op::CondJump(Cond::Carry, 0x612A2)); // GOC #612A2
-    i612b3(r)
+    r.cpu.pc = 0x612B3;
+    r.cpu.jump_if(Cond::Carry, 0x612A2); // GOC #612A2
+    if r.next_pc(0x612B3, 5) {
+        i612b3(r)
+    }
 }
 
 fn i612b3(r: &mut Run) {
-    op!(r, 0x612B3, 3, Op::DAdd { d: 1, n: 0xF }); // D1=D1+ 15
-    i612b6(r)
+    r.cpu.d_add(1, 15); // D1=D1+ 15
+    if r.next(0x612B6, 5) {
+        i612b6(r)
+    }
 }
 
 fn i612b6(r: &mut Run) {
-    op!(r, 0x612B6, 3, Op::DAdd { d: 1, n: 0xF }); // D1=D1+ 15
-    i612b9(r)
+    r.cpu.d_add(1, 15); // D1=D1+ 15
+    if r.next(0x612B9, 5) {
+        i612b9(r)
+    }
 }
 
 fn i612b9(r: &mut Run) {
-    op!(r, 0x612B9, 3, Op::DAdd { d: 1, n: 5 }); // D1=D1+ 5
-    i612bc(r)
+    r.cpu.d_add(1, 5); // D1=D1+ 5
+    if r.next(0x612BC, 5) {
+        i612bc(r)
+    }
 }
 
 fn i612bc(r: &mut Run) {
-    op!(r, 0x612BC, 3, Op::Mem { store: false, d: 1, r: R::A, f: Field::A }); // A=DAT1 A
-    i612bf(r)
+    r.sync();
+    r.cpu.load(1, R::A, Field::A, r.hw); // A=DAT1 A
+    if r.next_io(0x612BF, 19) {
+        i612bf(r)
+    }
 }
 
 fn i612bf(r: &mut Run) {
-    op!(r, 0x612BF, 3, Op::DSub { d: 1, n: 0xF }); // D1=D1- 15
-    i612c2(r)
+    r.cpu.d_sub(1, 15); // D1=D1- 15
+    if r.next(0x612C2, 5) {
+        i612c2(r)
+    }
 }
 
 fn i612c2(r: &mut Run) {
-    op!(r, 0x612C2, 3, Op::DSub { d: 1, n: 0xF }); // D1=D1- 15
-    i612c5(r)
+    r.cpu.d_sub(1, 15); // D1=D1- 15
+    if r.next(0x612C5, 5) {
+        i612c5(r)
+    }
 }
 
 fn i612c5(r: &mut Run) {
-    op!(r, 0x612C5, 3, Op::DSub { d: 1, n: 0xA }); // D1=D1- 10
-    i612c8(r)
+    r.cpu.d_sub(1, 10); // D1=D1- 10
+    if r.next(0x612C8, 5) {
+        i612c8(r)
+    }
 }
 
 fn i612c8(r: &mut Run) {
-    op!(r, 0x612C8, 4, Op::Jump(0x6102F)); // GOTO #6102F
+    r.cpu.pc = 0x6102F; // GOTO #6102F
+    r.spend(6);
 }
 
 fn i612d1(r: &mut Run) {
-    op!(r, 0x612D1, 7, Op::Call(0x3F5D)); // GOSUB #03F5D
+    r.cpu.pc = 0x612D8;
+    r.cpu.call(0x03F5D); // GOSUB #03F5D
+    r.spend(9);
 }
 
 fn i612d8(r: &mut Run) {
-    op!(r, 0x612D8, 2, Op::Sub { dst: R::A, a: R::A, b: R::C, f: Field::A }); // A=A-C A
-    i612da(r)
+    r.cpu.sub(R::A, R::A, R::C, Field::A); // A=A-C A
+    if r.next(0x612DA, 4) {
+        i612da(r)
+    }
 }
 
 fn i612da(r: &mut Run) {
-    op!(r, 0x612DA, 4, Op::Jump(0x612EC)); // GOTO #612EC
+    r.cpu.pc = 0x612EC; // GOTO #612EC
+    r.spend(6);
 }
 
 fn i612e3(r: &mut Run) {
-    op!(r, 0x612E3, 7, Op::Call(0x3F5D)); // GOSUB #03F5D
+    r.cpu.pc = 0x612EA;
+    r.cpu.call(0x03F5D); // GOSUB #03F5D
+    r.spend(9);
 }
 
 fn i612ea(r: &mut Run) {
-    op!(r, 0x612EA, 2, Op::Add { dst: R::A, src: R::C, f: Field::A }); // A=A+C A
-    i612ec(r)
+    r.cpu.add(R::A, R::C, Field::A); // A=A+C A
+    if r.next(0x612EC, 4) {
+        i612ec(r)
+    }
 }
 
 fn i612ec(r: &mut Run) {
-    op!(r, 0x612EC, 7, Op::Jump(0x3330)); // GOTO #03330
+    r.cpu.pc = 0x03330; // GOTO #03330
+    r.spend(9);
 }
 
 fn i612f8(r: &mut Run) {
-    op!(r, 0x612F8, 7, Op::Call(0x6641)); // GOSUB #06641
+    r.cpu.pc = 0x612FF;
+    r.cpu.call(0x06641); // GOSUB #06641
+    r.spend(9);
 }
 
 fn i612ff(r: &mut Run) {
-    op!(r, 0x612FF, 2, Op::Inc { r: R::A, f: Field::A }); // A=A+1 A
-    i61301(r)
+    r.cpu.inc(R::A, Field::A); // A=A+1 A
+    if r.next(0x61301, 4) {
+        i61301(r)
+    }
 }
 
 fn i61301(r: &mut Run) {
-    op!(r, 0x61301, 4, Op::Jump(0x612EC)); // GOTO #612EC
+    r.cpu.pc = 0x612EC; // GOTO #612EC
+    r.spend(6);
 }
 
 fn i6130a(r: &mut Run) {
-    op!(r, 0x6130A, 6, Op::Call(0x62278)); // GOSUB #62278
+    r.cpu.pc = 0x61310;
+    r.cpu.call(0x62278); // GOSUB #62278
+    r.spend(8);
 }
 
 fn i61310(r: &mut Run) {
-    op!(r, 0x61310, 2, Op::Inc { r: R::A, f: Field::A }); // A=A+1 A
-    i61312(r)
+    r.cpu.inc(R::A, Field::A); // A=A+1 A
+    if r.next(0x61312, 4) {
+        i61312(r)
+    }
 }
 
 fn i61312(r: &mut Run) {
-    op!(r, 0x61312, 2, Op::Inc { r: R::A, f: Field::A }); // A=A+1 A
-    i61314(r)
+    r.cpu.inc(R::A, Field::A); // A=A+1 A
+    if r.next(0x61314, 4) {
+        i61314(r)
+    }
 }
 
 fn i61314(r: &mut Run) {
-    op!(r, 0x61314, 4, Op::Jump(0x612EC)); // GOTO #612EC
+    r.cpu.pc = 0x612EC; // GOTO #612EC
+    r.spend(6);
 }
 
 fn i6131d(r: &mut Run) {
-    op!(r, 0x6131D, 7, Op::Call(0x6641)); // GOSUB #06641
+    r.cpu.pc = 0x61324;
+    r.cpu.call(0x06641); // GOSUB #06641
+    r.spend(9);
 }
 
 fn i61324(r: &mut Run) {
-    op!(r, 0x61324, 2, Op::Inc { r: R::A, f: Field::A }); // A=A+1 A
-    i61326(r)
+    r.cpu.inc(R::A, Field::A); // A=A+1 A
+    if r.next(0x61326, 4) {
+        i61326(r)
+    }
 }
 
 fn i61326(r: &mut Run) {
-    op!(r, 0x61326, 2, Op::Inc { r: R::A, f: Field::A }); // A=A+1 A
-    i61328(r)
+    r.cpu.inc(R::A, Field::A); // A=A+1 A
+    if r.next(0x61328, 4) {
+        i61328(r)
+    }
 }
 
 fn i61328(r: &mut Run) {
-    op!(r, 0x61328, 4, Op::Jump(0x612EC)); // GOTO #612EC
+    r.cpu.pc = 0x612EC; // GOTO #612EC
+    r.spend(6);
 }
 
 fn i61331(r: &mut Run) {
-    op!(r, 0x61331, 7, Op::Call(0x3F5D)); // GOSUB #03F5D
+    r.cpu.pc = 0x61338;
+    r.cpu.call(0x03F5D); // GOSUB #03F5D
+    r.spend(9);
 }
 
 fn i61338(r: &mut Run) {
-    op!(r, 0x61338, 2, Op::Sub { dst: R::A, a: R::A, b: R::C, f: Field::A }); // A=A-C A
-    i6133a(r)
+    r.cpu.sub(R::A, R::A, R::C, Field::A); // A=A-C A
+    if r.next(0x6133A, 4) {
+        i6133a(r)
+    }
 }
 
 fn i6133a(r: &mut Run) {
-    op!(r, 0x6133A, 4, Op::Jump(0x6134C)); // GOTO #6134C
+    r.cpu.pc = 0x6134C; // GOTO #6134C
+    r.spend(6);
 }
 
 fn i61343(r: &mut Run) {
-    op!(r, 0x61343, 7, Op::Call(0x3F5D)); // GOSUB #03F5D
+    r.cpu.pc = 0x6134A;
+    r.cpu.call(0x03F5D); // GOSUB #03F5D
+    r.spend(9);
 }
 
 fn i6134a(r: &mut Run) {
-    op!(r, 0x6134A, 2, Op::Add { dst: R::A, src: R::C, f: Field::A }); // A=A+C A
-    i6134c(r)
+    r.cpu.add(R::A, R::C, Field::A); // A=A+C A
+    if r.next(0x6134C, 4) {
+        i6134c(r)
+    }
 }
 
 fn i6134c(r: &mut Run) {
-    op!(r, 0x6134C, 7, Op::Jump(0x33A9)); // GOTO #033A9
+    r.cpu.pc = 0x033A9; // GOTO #033A9
+    r.spend(9);
 }
 
 fn i61358(r: &mut Run) {
-    op!(r, 0x61358, 7, Op::Call(0x6641)); // GOSUB #06641
+    r.cpu.pc = 0x6135F;
+    r.cpu.call(0x06641); // GOSUB #06641
+    r.spend(9);
 }
 
 fn i6135f(r: &mut Run) {
-    op!(r, 0x6135F, 2, Op::Inc { r: R::A, f: Field::A }); // A=A+1 A
-    i61361(r)
+    r.cpu.inc(R::A, Field::A); // A=A+1 A
+    if r.next(0x61361, 4) {
+        i61361(r)
+    }
 }
 
 fn i61361(r: &mut Run) {
-    op!(r, 0x61361, 4, Op::Jump(0x6134C)); // GOTO #6134C
+    r.cpu.pc = 0x6134C; // GOTO #6134C
+    r.spend(6);
 }
 
 fn i6136a(r: &mut Run) {
-    op!(r, 0x6136A, 7, Op::Call(0x6641)); // GOSUB #06641
+    r.cpu.pc = 0x61371;
+    r.cpu.call(0x06641); // GOSUB #06641
+    r.spend(9);
 }
 
 fn i61371(r: &mut Run) {
-    op!(r, 0x61371, 2, Op::Inc { r: R::A, f: Field::A }); // A=A+1 A
-    i61373(r)
+    r.cpu.inc(R::A, Field::A); // A=A+1 A
+    if r.next(0x61373, 4) {
+        i61373(r)
+    }
 }
 
 fn i61373(r: &mut Run) {
-    op!(r, 0x61373, 2, Op::Inc { r: R::A, f: Field::A }); // A=A+1 A
-    i61375(r)
+    r.cpu.inc(R::A, Field::A); // A=A+1 A
+    if r.next(0x61375, 4) {
+        i61375(r)
+    }
 }
 
 fn i61375(r: &mut Run) {
-    op!(r, 0x61375, 4, Op::Jump(0x6134C)); // GOTO #6134C
+    r.cpu.pc = 0x6134C; // GOTO #6134C
+    r.spend(6);
 }
 
 fn i61379(r: &mut Run) {
-    op!(r, 0x61379, 4, Op::Call(0x613A8)); // GOSUB #613A8
+    r.cpu.pc = 0x6137D;
+    r.cpu.call(0x613A8); // GOSUB #613A8
+    r.spend(6);
 }
 
 fn i6137d(r: &mut Run) {
-    op!(r, 0x6137D, 3, Op::CondJump(Cond::NoCarry, 0x6138A)); // GONC #6138A
+    r.cpu.pc = 0x61380;
+    r.cpu.jump_if(Cond::NoCarry, 0x6138A); // GONC #6138A
+    r.spend(5);
 }
 
 fn i61385(r: &mut Run) {
-    op!(r, 0x61385, 2, Op::Dec { r: R::D, f: Field::A }); // D=D-1 A
-    i61387(r)
+    r.cpu.dec(R::D, Field::A); // D=D-1 A
+    if r.next(0x61387, 4) {
+        i61387(r)
+    }
 }
 
 fn i61387(r: &mut Run) {
-    op!(r, 0x61387, 3, Op::CondJump(Cond::Carry, 0x61379)); // GOC #61379
-    i6138a(r)
+    r.cpu.pc = 0x6138A;
+    r.cpu.jump_if(Cond::Carry, 0x61379); // GOC #61379
+    if r.next_pc(0x6138A, 5) {
+        i6138a(r)
+    }
 }
 
 fn i6138a(r: &mut Run) {
-    op!(r, 0x6138A, 3, Op::Mem { store: false, d: 1, r: R::A, f: Field::A }); // A=DAT1 A
-    i6138d(r)
+    r.sync();
+    r.cpu.load(1, R::A, Field::A, r.hw); // A=DAT1 A
+    if r.next_io(0x6138D, 19) {
+        i6138d(r)
+    }
 }
 
 fn i6138d(r: &mut Run) {
-    op!(r, 0x6138D, 4, Op::Mem { store: false, d: 1, r: R::C, f: Field::Nibbles(0xA) }); // C=DAT1 10
-    i61391(r)
+    r.sync();
+    r.cpu.load(1, R::C, Field::Nibbles(10), r.hw); // C=DAT1 10
+    if r.next_io(0x61391, 24) {
+        i61391(r)
+    }
 }
 
 fn i61391(r: &mut Run) {
-    op!(r, 0x61391, 3, Op::DAdd { d: 1, n: 5 }); // D1=D1+ 5
-    i61394(r)
+    r.cpu.d_add(1, 5); // D1=D1+ 5
+    if r.next(0x61394, 5) {
+        i61394(r)
+    }
 }
 
 fn i61394(r: &mut Run) {
-    op!(r, 0x61394, 3, Op::Mem { store: true, d: 1, r: R::A, f: Field::A }); // DAT1=A A
-    i61397(r)
+    r.sync();
+    r.cpu.store(1, R::A, Field::A, r.hw); // DAT1=A A
+    if r.next_io(0x61397, 19) {
+        i61397(r)
+    }
 }
 
 fn i61397(r: &mut Run) {
-    op!(r, 0x61397, 3, Op::DSub { d: 1, n: 0xA }); // D1=D1- 10
-    i6139a(r)
+    r.cpu.d_sub(1, 10); // D1=D1- 10
+    if r.next(0x6139A, 5) {
+        i6139a(r)
+    }
 }
 
 fn i6139a(r: &mut Run) {
-    op!(r, 0x6139A, 4, Op::Mem { store: true, d: 1, r: R::C, f: Field::Nibbles(0xA) }); // DAT1=C 10
-    i6139e(r)
+    r.sync();
+    r.cpu.store(1, R::C, Field::Nibbles(10), r.hw); // DAT1=C 10
+    if r.next_io(0x6139E, 24) {
+        i6139e(r)
+    }
 }
 
 fn i6139e(r: &mut Run) {
-    op!(r, 0x6139E, 3, Op::Mem { store: false, d: 0, r: R::A, f: Field::A }); // A=DAT0 A
-    i613a1(r)
+    r.sync();
+    r.cpu.load(0, R::A, Field::A, r.hw); // A=DAT0 A
+    if r.next_io(0x613A1, 19) {
+        i613a1(r)
+    }
 }
 
 fn i613a1(r: &mut Run) {
-    op!(r, 0x613A1, 3, Op::DAdd { d: 0, n: 5 }); // D0=D0+ 5
-    i613a4(r)
+    r.cpu.d_add(0, 5); // D0=D0+ 5
+    if r.next(0x613A4, 5) {
+        i613a4(r)
+    }
 }
 
 fn i613a4(r: &mut Run) {
-    op!(r, 0x613A4, 4, Op::PcIndirect(R::A)); // PC=(A)
+    r.sync();
+    r.cpu.pc_indirect(R::A, r.hw); // PC=(A)
+    r.spend(23);
 }
 
 fn i613a8(r: &mut Run) {
-    op!(r, 0x613A8, 7, Op::Jump(0x5F0F)); // GOTO #05F0F
+    r.cpu.pc = 0x05F0F; // GOTO #05F0F
+    r.spend(9);
 }
 
 fn i613af(r: &mut Run) {
-    op!(r, 0x613AF, 4, Op::Call(0x613A8)); // GOSUB #613A8
+    r.cpu.pc = 0x613B3;
+    r.cpu.call(0x613A8); // GOSUB #613A8
+    r.spend(6);
 }
 
 fn i613b3(r: &mut Run) {
-    op!(r, 0x613B3, 3, Op::CondJump(Cond::NoCarry, 0x613C0)); // GONC #613C0
+    r.cpu.pc = 0x613B6;
+    r.cpu.jump_if(Cond::NoCarry, 0x613C0); // GONC #613C0
+    r.spend(5);
 }
 
 fn i613bb(r: &mut Run) {
-    op!(r, 0x613BB, 2, Op::Dec { r: R::D, f: Field::A }); // D=D-1 A
-    i613bd(r)
+    r.cpu.dec(R::D, Field::A); // D=D-1 A
+    if r.next(0x613BD, 4) {
+        i613bd(r)
+    }
 }
 
 fn i613bd(r: &mut Run) {
-    op!(r, 0x613BD, 3, Op::CondJump(Cond::Carry, 0x613AF)); // GOC #613AF
-    i613c0(r)
+    r.cpu.pc = 0x613C0;
+    r.cpu.jump_if(Cond::Carry, 0x613AF); // GOC #613AF
+    if r.next_pc(0x613C0, 5) {
+        i613c0(r)
+    }
 }
 
 fn i613c0(r: &mut Run) {
-    op!(r, 0x613C0, 3, Op::DExR { d: 0, r: R::A, short: false }); // AD0EX
-    i613c3(r)
+    r.cpu.d_ex_r(0, R::A, false); // AD0EX
+    if r.next(0x613C3, 5) {
+        i613c3(r)
+    }
 }
 
 fn i613c3(r: &mut Run) {
-    op!(r, 0x613C3, 7, Op::DLoad { d: 0, len: 5, val: 0x80702 }); // D0=(5) #80702
-    i613ca(r)
+    r.cpu.d_load(0, 5, 0x80702); // D0=(5) #80702
+    if r.next(0x613CA, 9) {
+        i613ca(r)
+    }
 }
 
 fn i613ca(r: &mut Run) {
-    op!(r, 0x613CA, 3, Op::Mem { store: false, d: 0, r: R::C, f: Field::A }); // C=DAT0 A
-    i613cd(r)
+    r.sync();
+    r.cpu.load(0, R::C, Field::A, r.hw); // C=DAT0 A
+    if r.next_io(0x613CD, 19) {
+        i613cd(r)
+    }
 }
 
 fn i613cd(r: &mut Run) {
-    op!(r, 0x613CD, 3, Op::DFromR { d: 0, r: R::C, short: false }); // D0=C
-    i613d0(r)
+    r.cpu.d_from_r(0, R::C, false); // D0=C
+    if r.next(0x613D0, 5) {
+        i613d0(r)
+    }
 }
 
 fn i613d0(r: &mut Run) {
-    op!(r, 0x613D0, 3, Op::DAdd { d: 0, n: 0xF }); // D0=D0+ 15
-    i613d3(r)
+    r.cpu.d_add(0, 15); // D0=D0+ 15
+    if r.next(0x613D3, 5) {
+        i613d3(r)
+    }
 }
 
 fn i613d3(r: &mut Run) {
-    op!(r, 0x613D3, 3, Op::Mem { store: false, d: 0, r: R::C, f: Field::A }); // C=DAT0 A
-    i613d6(r)
+    r.sync();
+    r.cpu.load(0, R::C, Field::A, r.hw); // C=DAT0 A
+    if r.next_io(0x613D6, 19) {
+        i613d6(r)
+    }
 }
 
 fn i613d6(r: &mut Run) {
-    op!(r, 0x613D6, 3, Op::DFromR { d: 0, r: R::A, short: false }); // D0=A
-    i613d9(r)
+    r.cpu.d_from_r(0, R::A, false); // D0=A
+    if r.next(0x613D9, 5) {
+        i613d9(r)
+    }
 }
 
 fn i613d9(r: &mut Run) {
-    op!(r, 0x613D9, 3, Op::DSub { d: 1, n: 5 }); // D1=D1- 5
-    i613dc(r)
+    r.cpu.d_sub(1, 5); // D1=D1- 5
+    if r.next(0x613DC, 5) {
+        i613dc(r)
+    }
 }
 
 fn i613dc(r: &mut Run) {
-    op!(r, 0x613DC, 4, Op::Jump(0x610ED)); // GOTO #610ED
+    r.cpu.pc = 0x610ED; // GOTO #610ED
+    r.spend(6);
 }
 
 fn i613e0(r: &mut Run) {
-    op!(r, 0x613E0, 4, Op::Call(0x613A8)); // GOSUB #613A8
+    r.cpu.pc = 0x613E4;
+    r.cpu.call(0x613A8); // GOSUB #613A8
+    r.spend(6);
 }
 
 fn i613e4(r: &mut Run) {
-    op!(r, 0x613E4, 3, Op::CondJump(Cond::NoCarry, 0x613F1)); // GONC #613F1
+    r.cpu.pc = 0x613E7;
+    r.cpu.jump_if(Cond::NoCarry, 0x613F1); // GONC #613F1
+    r.spend(5);
 }
 
 fn i613ec(r: &mut Run) {
-    op!(r, 0x613EC, 2, Op::Dec { r: R::D, f: Field::A }); // D=D-1 A
-    i613ee(r)
+    r.cpu.dec(R::D, Field::A); // D=D-1 A
+    if r.next(0x613EE, 4) {
+        i613ee(r)
+    }
 }
 
 fn i613ee(r: &mut Run) {
-    op!(r, 0x613EE, 3, Op::CondJump(Cond::Carry, 0x613E0)); // GOC #613E0
-    i613f1(r)
+    r.cpu.pc = 0x613F1;
+    r.cpu.jump_if(Cond::Carry, 0x613E0); // GOC #613E0
+    if r.next_pc(0x613F1, 5) {
+        i613f1(r)
+    }
 }
 
 fn i613f1(r: &mut Run) {
-    op!(r, 0x613F1, 3, Op::DExR { d: 0, r: R::A, short: false }); // AD0EX
-    i613f4(r)
+    r.cpu.d_ex_r(0, R::A, false); // AD0EX
+    if r.next(0x613F4, 5) {
+        i613f4(r)
+    }
 }
 
 fn i613f4(r: &mut Run) {
-    op!(r, 0x613F4, 7, Op::DLoad { d: 0, len: 5, val: 0x80702 }); // D0=(5) #80702
-    i613fb(r)
+    r.cpu.d_load(0, 5, 0x80702); // D0=(5) #80702
+    if r.next(0x613FB, 9) {
+        i613fb(r)
+    }
 }
 
 fn i613fb(r: &mut Run) {
-    op!(r, 0x613FB, 3, Op::Mem { store: false, d: 0, r: R::C, f: Field::A }); // C=DAT0 A
-    i613fe(r)
+    r.sync();
+    r.cpu.load(0, R::C, Field::A, r.hw); // C=DAT0 A
+    if r.next_io(0x613FE, 19) {
+        i613fe(r)
+    }
 }
 
 fn i613fe(r: &mut Run) {
-    op!(r, 0x613FE, 3, Op::DFromR { d: 0, r: R::C, short: false }); // D0=C
-    i61401(r)
+    r.cpu.d_from_r(0, R::C, false); // D0=C
+    if r.next(0x61401, 5) {
+        i61401(r)
+    }
 }
 
 fn i61401(r: &mut Run) {
-    op!(r, 0x61401, 3, Op::DAdd { d: 0, n: 0xA }); // D0=D0+ 10
-    i61404(r)
+    r.cpu.d_add(0, 10); // D0=D0+ 10
+    if r.next(0x61404, 5) {
+        i61404(r)
+    }
 }
 
 fn i61404(r: &mut Run) {
-    op!(r, 0x61404, 3, Op::CondJump(Cond::NoCarry, 0x613D0)); // GONC #613D0
-    i61407(r)
+    r.cpu.pc = 0x61407;
+    r.cpu.jump_if(Cond::NoCarry, 0x613D0); // GONC #613D0
+    if r.next_pc(0x61407, 5) {
+        i61407(r)
+    }
 }
 
 fn i61407(r: &mut Run) {
-    op!(r, 0x61407, 4, Op::Call(0x613A8)); // GOSUB #613A8
+    r.cpu.pc = 0x6140B;
+    r.cpu.call(0x613A8); // GOSUB #613A8
+    r.spend(6);
 }
 
 fn i6140b(r: &mut Run) {
-    op!(r, 0x6140B, 3, Op::CondJump(Cond::NoCarry, 0x61418)); // GONC #61418
+    r.cpu.pc = 0x6140E;
+    r.cpu.jump_if(Cond::NoCarry, 0x61418); // GONC #61418
+    r.spend(5);
 }
 
 fn i61413(r: &mut Run) {
-    op!(r, 0x61413, 2, Op::Dec { r: R::D, f: Field::A }); // D=D-1 A
-    i61415(r)
+    r.cpu.dec(R::D, Field::A); // D=D-1 A
+    if r.next(0x61415, 4) {
+        i61415(r)
+    }
 }
 
 fn i61415(r: &mut Run) {
-    op!(r, 0x61415, 3, Op::CondJump(Cond::Carry, 0x61407)); // GOC #61407
-    i61418(r)
+    r.cpu.pc = 0x61418;
+    r.cpu.jump_if(Cond::Carry, 0x61407); // GOC #61407
+    if r.next_pc(0x61418, 5) {
+        i61418(r)
+    }
 }
 
 fn i61418(r: &mut Run) {
-    op!(r, 0x61418, 3, Op::DExR { d: 0, r: R::A, short: false }); // AD0EX
-    i6141b(r)
+    r.cpu.d_ex_r(0, R::A, false); // AD0EX
+    if r.next(0x6141B, 5) {
+        i6141b(r)
+    }
 }
 
 fn i6141b(r: &mut Run) {
-    op!(r, 0x6141B, 7, Op::DLoad { d: 0, len: 5, val: 0x80702 }); // D0=(5) #80702
-    i61422(r)
+    r.cpu.d_load(0, 5, 0x80702); // D0=(5) #80702
+    if r.next(0x61422, 9) {
+        i61422(r)
+    }
 }
 
 fn i61422(r: &mut Run) {
-    op!(r, 0x61422, 3, Op::Mem { store: false, d: 0, r: R::C, f: Field::A }); // C=DAT0 A
-    i61425(r)
+    r.sync();
+    r.cpu.load(0, R::C, Field::A, r.hw); // C=DAT0 A
+    if r.next_io(0x61425, 19) {
+        i61425(r)
+    }
 }
 
 fn i61425(r: &mut Run) {
-    op!(r, 0x61425, 3, Op::DFromR { d: 0, r: R::C, short: false }); // D0=C
-    i61428(r)
+    r.cpu.d_from_r(0, R::C, false); // D0=C
+    if r.next(0x61428, 5) {
+        i61428(r)
+    }
 }
 
 fn i61428(r: &mut Run) {
-    op!(r, 0x61428, 3, Op::DAdd { d: 0, n: 0xA }); // D0=D0+ 10
-    i6142b(r)
+    r.cpu.d_add(0, 10); // D0=D0+ 10
+    if r.next(0x6142B, 5) {
+        i6142b(r)
+    }
 }
 
 fn i6142b(r: &mut Run) {
-    op!(r, 0x6142B, 3, Op::DAdd { d: 0, n: 0xA }); // D0=D0+ 10
-    i6142e(r)
+    r.cpu.d_add(0, 10); // D0=D0+ 10
+    if r.next(0x6142E, 5) {
+        i6142e(r)
+    }
 }
 
 fn i6142e(r: &mut Run) {
-    op!(r, 0x6142E, 3, Op::CondJump(Cond::NoCarry, 0x613D0)); // GONC #613D0
-    i61431(r)
+    r.cpu.pc = 0x61431;
+    r.cpu.jump_if(Cond::NoCarry, 0x613D0); // GONC #613D0
+    if r.next_pc(0x61431, 5) {
+        i61431(r)
+    }
 }
 
 fn i61431(r: &mut Run) {
-    op!(r, 0x61431, 4, Op::Call(0x613A8)); // GOSUB #613A8
+    r.cpu.pc = 0x61435;
+    r.cpu.call(0x613A8); // GOSUB #613A8
+    r.spend(6);
 }
 
 fn i61435(r: &mut Run) {
-    op!(r, 0x61435, 3, Op::CondJump(Cond::NoCarry, 0x61442)); // GONC #61442
+    r.cpu.pc = 0x61438;
+    r.cpu.jump_if(Cond::NoCarry, 0x61442); // GONC #61442
+    r.spend(5);
 }
 
 fn i6143d(r: &mut Run) {
-    op!(r, 0x6143D, 2, Op::Dec { r: R::D, f: Field::A }); // D=D-1 A
-    i6143f(r)
+    r.cpu.dec(R::D, Field::A); // D=D-1 A
+    if r.next(0x6143F, 4) {
+        i6143f(r)
+    }
 }
 
 fn i6143f(r: &mut Run) {
-    op!(r, 0x6143F, 3, Op::CondJump(Cond::Carry, 0x61431)); // GOC #61431
-    i61442(r)
+    r.cpu.pc = 0x61442;
+    r.cpu.jump_if(Cond::Carry, 0x61431); // GOC #61431
+    if r.next_pc(0x61442, 5) {
+        i61442(r)
+    }
 }
 
 fn i61442(r: &mut Run) {
-    op!(r, 0x61442, 3, Op::DExR { d: 0, r: R::A, short: false }); // AD0EX
-    i61445(r)
+    r.cpu.d_ex_r(0, R::A, false); // AD0EX
+    if r.next(0x61445, 5) {
+        i61445(r)
+    }
 }
 
 fn i61445(r: &mut Run) {
-    op!(r, 0x61445, 7, Op::DLoad { d: 0, len: 5, val: 0x80702 }); // D0=(5) #80702
-    i6144c(r)
+    r.cpu.d_load(0, 5, 0x80702); // D0=(5) #80702
+    if r.next(0x6144C, 9) {
+        i6144c(r)
+    }
 }
 
 fn i6144c(r: &mut Run) {
-    op!(r, 0x6144C, 3, Op::Mem { store: false, d: 0, r: R::C, f: Field::A }); // C=DAT0 A
-    i6144f(r)
+    r.sync();
+    r.cpu.load(0, R::C, Field::A, r.hw); // C=DAT0 A
+    if r.next_io(0x6144F, 19) {
+        i6144f(r)
+    }
 }
 
 fn i6144f(r: &mut Run) {
-    op!(r, 0x6144F, 3, Op::DFromR { d: 0, r: R::C, short: false }); // D0=C
-    i61452(r)
+    r.cpu.d_from_r(0, R::C, false); // D0=C
+    if r.next(0x61452, 5) {
+        i61452(r)
+    }
 }
 
 fn i61452(r: &mut Run) {
-    op!(r, 0x61452, 3, Op::DAdd { d: 0, n: 0xF }); // D0=D0+ 15
-    i61455(r)
+    r.cpu.d_add(0, 15); // D0=D0+ 15
+    if r.next(0x61455, 5) {
+        i61455(r)
+    }
 }
 
 fn i61455(r: &mut Run) {
-    op!(r, 0x61455, 3, Op::DAdd { d: 0, n: 0xF }); // D0=D0+ 15
-    i61458(r)
+    r.cpu.d_add(0, 15); // D0=D0+ 15
+    if r.next(0x61458, 5) {
+        i61458(r)
+    }
 }
 
 fn i61458(r: &mut Run) {
-    op!(r, 0x61458, 4, Op::Jump(0x613D0)); // GOTO #613D0
+    r.cpu.pc = 0x613D0; // GOTO #613D0
+    r.spend(6);
 }
 
 fn i61461(r: &mut Run) {
-    op!(r, 0x61461, 7, Op::LoadConst { r: R::C, len: 5, val: 0x37 }); // LC(5) #00037
-    i61468(r)
+    r.cpu.load_const(R::C, 5, 0x37); // LC(5) #00037
+    if r.next(0x61468, 9) {
+        i61468(r)
+    }
 }
 
 fn i61468(r: &mut Run) {
-    op!(r, 0x61468, 4, Op::Jump(0x61589)); // GOTO #61589
+    r.cpu.pc = 0x61589; // GOTO #61589
+    r.spend(6);
 }
 
 fn i61471(r: &mut Run) {
-    op!(r, 0x61471, 7, Op::LoadConst { r: R::C, len: 5, val: 0x41 }); // LC(5) #00041
-    i61478(r)
+    r.cpu.load_const(R::C, 5, 0x41); // LC(5) #00041
+    if r.next(0x61478, 9) {
+        i61478(r)
+    }
 }
 
 fn i61478(r: &mut Run) {
-    op!(r, 0x61478, 4, Op::Jump(0x61589)); // GOTO #61589
+    r.cpu.pc = 0x61589; // GOTO #61589
+    r.spend(6);
 }
 
 fn i61481(r: &mut Run) {
-    op!(r, 0x61481, 7, Op::LoadConst { r: R::C, len: 5, val: 0x4B }); // LC(5) #0004B
-    i61488(r)
+    r.cpu.load_const(R::C, 5, 0x4B); // LC(5) #0004B
+    if r.next(0x61488, 9) {
+        i61488(r)
+    }
 }
 
 fn i61488(r: &mut Run) {
-    op!(r, 0x61488, 4, Op::Jump(0x61589)); // GOTO #61589
+    r.cpu.pc = 0x61589; // GOTO #61589
+    r.spend(6);
 }
 
 fn i61491(r: &mut Run) {
-    op!(r, 0x61491, 7, Op::LoadConst { r: R::C, len: 5, val: 0x55 }); // LC(5) #00055
-    i61498(r)
+    r.cpu.load_const(R::C, 5, 0x55); // LC(5) #00055
+    if r.next(0x61498, 9) {
+        i61498(r)
+    }
 }
 
 fn i61498(r: &mut Run) {
-    op!(r, 0x61498, 4, Op::Jump(0x61589)); // GOTO #61589
+    r.cpu.pc = 0x61589; // GOTO #61589
+    r.spend(6);
 }
 
 fn i614a1(r: &mut Run) {
-    op!(r, 0x614A1, 7, Op::LoadConst { r: R::C, len: 5, val: 0x5F }); // LC(5) #0005F
-    i614a8(r)
+    r.cpu.load_const(R::C, 5, 0x5F); // LC(5) #0005F
+    if r.next(0x614A8, 9) {
+        i614a8(r)
+    }
 }
 
 fn i614a8(r: &mut Run) {
-    op!(r, 0x614A8, 4, Op::Jump(0x61589)); // GOTO #61589
+    r.cpu.pc = 0x61589; // GOTO #61589
+    r.spend(6);
 }
 
 fn i614b1(r: &mut Run) {
-    op!(r, 0x614B1, 7, Op::LoadConst { r: R::C, len: 5, val: 0x69 }); // LC(5) #00069
-    i614b8(r)
+    r.cpu.load_const(R::C, 5, 0x69); // LC(5) #00069
+    if r.next(0x614B8, 9) {
+        i614b8(r)
+    }
 }
 
 fn i614b8(r: &mut Run) {
-    op!(r, 0x614B8, 4, Op::Jump(0x61589)); // GOTO #61589
+    r.cpu.pc = 0x61589; // GOTO #61589
+    r.spend(6);
 }
 
 fn i614c1(r: &mut Run) {
-    op!(r, 0x614C1, 7, Op::LoadConst { r: R::C, len: 5, val: 0x73 }); // LC(5) #00073
-    i614c8(r)
+    r.cpu.load_const(R::C, 5, 0x73); // LC(5) #00073
+    if r.next(0x614C8, 9) {
+        i614c8(r)
+    }
 }
 
 fn i614c8(r: &mut Run) {
-    op!(r, 0x614C8, 4, Op::Jump(0x61589)); // GOTO #61589
+    r.cpu.pc = 0x61589; // GOTO #61589
+    r.spend(6);
 }
 
 fn i614d1(r: &mut Run) {
-    op!(r, 0x614D1, 7, Op::LoadConst { r: R::C, len: 5, val: 0x7D }); // LC(5) #0007D
-    i614d8(r)
+    r.cpu.load_const(R::C, 5, 0x7D); // LC(5) #0007D
+    if r.next(0x614D8, 9) {
+        i614d8(r)
+    }
 }
 
 fn i614d8(r: &mut Run) {
-    op!(r, 0x614D8, 4, Op::Jump(0x61589)); // GOTO #61589
+    r.cpu.pc = 0x61589; // GOTO #61589
+    r.spend(6);
 }
 
 fn i614e1(r: &mut Run) {
-    op!(r, 0x614E1, 7, Op::LoadConst { r: R::C, len: 5, val: 0x87 }); // LC(5) #00087
-    i614e8(r)
+    r.cpu.load_const(R::C, 5, 0x87); // LC(5) #00087
+    if r.next(0x614E8, 9) {
+        i614e8(r)
+    }
 }
 
 fn i614e8(r: &mut Run) {
-    op!(r, 0x614E8, 4, Op::Jump(0x61589)); // GOTO #61589
+    r.cpu.pc = 0x61589; // GOTO #61589
+    r.spend(6);
 }
 
 fn i614f1(r: &mut Run) {
-    op!(r, 0x614F1, 7, Op::LoadConst { r: R::C, len: 5, val: 0x91 }); // LC(5) #00091
-    i614f8(r)
+    r.cpu.load_const(R::C, 5, 0x91); // LC(5) #00091
+    if r.next(0x614F8, 9) {
+        i614f8(r)
+    }
 }
 
 fn i614f8(r: &mut Run) {
-    op!(r, 0x614F8, 4, Op::Jump(0x61589)); // GOTO #61589
+    r.cpu.pc = 0x61589; // GOTO #61589
+    r.spend(6);
 }
 
 fn i61501(r: &mut Run) {
-    op!(r, 0x61501, 7, Op::LoadConst { r: R::C, len: 5, val: 0x9B }); // LC(5) #0009B
-    i61508(r)
+    r.cpu.load_const(R::C, 5, 0x9B); // LC(5) #0009B
+    if r.next(0x61508, 9) {
+        i61508(r)
+    }
 }
 
 fn i61508(r: &mut Run) {
-    op!(r, 0x61508, 4, Op::Jump(0x61589)); // GOTO #61589
+    r.cpu.pc = 0x61589; // GOTO #61589
+    r.spend(6);
 }
 
 fn i61511(r: &mut Run) {
-    op!(r, 0x61511, 7, Op::LoadConst { r: R::C, len: 5, val: 0xA5 }); // LC(5) #000A5
-    i61518(r)
+    r.cpu.load_const(R::C, 5, 0xA5); // LC(5) #000A5
+    if r.next(0x61518, 9) {
+        i61518(r)
+    }
 }
 
 fn i61518(r: &mut Run) {
-    op!(r, 0x61518, 4, Op::Jump(0x61589)); // GOTO #61589
+    r.cpu.pc = 0x61589; // GOTO #61589
+    r.spend(6);
 }
 
 fn i61521(r: &mut Run) {
-    op!(r, 0x61521, 7, Op::LoadConst { r: R::C, len: 5, val: 0xAF }); // LC(5) #000AF
-    i61528(r)
+    r.cpu.load_const(R::C, 5, 0xAF); // LC(5) #000AF
+    if r.next(0x61528, 9) {
+        i61528(r)
+    }
 }
 
 fn i61528(r: &mut Run) {
-    op!(r, 0x61528, 4, Op::Jump(0x61589)); // GOTO #61589
+    r.cpu.pc = 0x61589; // GOTO #61589
+    r.spend(6);
 }
 
 fn i61531(r: &mut Run) {
-    op!(r, 0x61531, 7, Op::LoadConst { r: R::C, len: 5, val: 0xB9 }); // LC(5) #000B9
-    i61538(r)
+    r.cpu.load_const(R::C, 5, 0xB9); // LC(5) #000B9
+    if r.next(0x61538, 9) {
+        i61538(r)
+    }
 }
 
 fn i61538(r: &mut Run) {
-    op!(r, 0x61538, 4, Op::Jump(0x61589)); // GOTO #61589
+    r.cpu.pc = 0x61589; // GOTO #61589
+    r.spend(6);
 }
 
 fn i61541(r: &mut Run) {
-    op!(r, 0x61541, 7, Op::LoadConst { r: R::C, len: 5, val: 0xC3 }); // LC(5) #000C3
-    i61548(r)
+    r.cpu.load_const(R::C, 5, 0xC3); // LC(5) #000C3
+    if r.next(0x61548, 9) {
+        i61548(r)
+    }
 }
 
 fn i61548(r: &mut Run) {
-    op!(r, 0x61548, 4, Op::Jump(0x61589)); // GOTO #61589
+    r.cpu.pc = 0x61589; // GOTO #61589
+    r.spend(6);
 }
 
 fn i61551(r: &mut Run) {
-    op!(r, 0x61551, 7, Op::LoadConst { r: R::C, len: 5, val: 0xCD }); // LC(5) #000CD
-    i61558(r)
+    r.cpu.load_const(R::C, 5, 0xCD); // LC(5) #000CD
+    if r.next(0x61558, 9) {
+        i61558(r)
+    }
 }
 
 fn i61558(r: &mut Run) {
-    op!(r, 0x61558, 4, Op::Jump(0x61589)); // GOTO #61589
+    r.cpu.pc = 0x61589; // GOTO #61589
+    r.spend(6);
 }
 
 fn i61561(r: &mut Run) {
-    op!(r, 0x61561, 7, Op::LoadConst { r: R::C, len: 5, val: 0xD7 }); // LC(5) #000D7
-    i61568(r)
+    r.cpu.load_const(R::C, 5, 0xD7); // LC(5) #000D7
+    if r.next(0x61568, 9) {
+        i61568(r)
+    }
 }
 
 fn i61568(r: &mut Run) {
-    op!(r, 0x61568, 4, Op::Jump(0x61589)); // GOTO #61589
+    r.cpu.pc = 0x61589; // GOTO #61589
+    r.spend(6);
 }
 
 fn i61571(r: &mut Run) {
-    op!(r, 0x61571, 7, Op::LoadConst { r: R::C, len: 5, val: 0xE1 }); // LC(5) #000E1
-    i61578(r)
+    r.cpu.load_const(R::C, 5, 0xE1); // LC(5) #000E1
+    if r.next(0x61578, 9) {
+        i61578(r)
+    }
 }
 
 fn i61578(r: &mut Run) {
-    op!(r, 0x61578, 4, Op::Jump(0x61589)); // GOTO #61589
+    r.cpu.pc = 0x61589; // GOTO #61589
+    r.spend(6);
 }
 
 fn i6157c(r: &mut Run) {
-    op!(r, 0x6157C, 3, Op::Scratch { op: ScratchOp::ToScratch, r: R::C, n: 0, f: Field::W }); // R0=C
-    i6157f(r)
+    r.cpu.scratch(ScratchOp::ToScratch, R::C, 0, Field::W); // R0=C
+    if r.next(0x6157F, 5) {
+        i6157f(r)
+    }
 }
 
 fn i6157f(r: &mut Run) {
-    op!(r, 0x6157F, 4, Op::Call(0x613A8)); // GOSUB #613A8
+    r.cpu.pc = 0x61583;
+    r.cpu.call(0x613A8); // GOSUB #613A8
+    r.spend(6);
 }
 
 fn i61583(r: &mut Run) {
-    op!(r, 0x61583, 3, Op::Scratch { op: ScratchOp::FromScratch, r: R::C, n: 0, f: Field::W }); // C=R0
-    i61586(r)
+    r.cpu.scratch(ScratchOp::FromScratch, R::C, 0, Field::W); // C=R0
+    if r.next(0x61586, 5) {
+        i61586(r)
+    }
 }
 
 fn i61586(r: &mut Run) {
-    op!(r, 0x61586, 3, Op::CondJump(Cond::NoCarry, 0x6158E)); // GONC #6158E
-    i61589(r)
+    r.cpu.pc = 0x61589;
+    r.cpu.jump_if(Cond::NoCarry, 0x6158E); // GONC #6158E
+    if r.next_pc(0x61589, 5) {
+        i61589(r)
+    }
 }
 
 fn i61589(r: &mut Run) {
-    op!(r, 0x61589, 2, Op::Dec { r: R::D, f: Field::A }); // D=D-1 A
-    i6158b(r)
+    r.cpu.dec(R::D, Field::A); // D=D-1 A
+    if r.next(0x6158B, 4) {
+        i6158b(r)
+    }
 }
 
 fn i6158b(r: &mut Run) {
-    op!(r, 0x6158B, 3, Op::CondJump(Cond::Carry, 0x6157C)); // GOC #6157C
-    i6158e(r)
+    r.cpu.pc = 0x6158E;
+    r.cpu.jump_if(Cond::Carry, 0x6157C); // GOC #6157C
+    if r.next_pc(0x6158E, 5) {
+        i6158e(r)
+    }
 }
 
 fn i6158e(r: &mut Run) {
-    op!(r, 0x6158E, 2, Op::Copy { dst: R::A, src: R::C, f: Field::A }); // A=C A
-    i61590(r)
+    r.cpu.copy(R::A, R::C, Field::A); // A=C A
+    if r.next(0x61590, 4) {
+        i61590(r)
+    }
 }
 
 fn i61590(r: &mut Run) {
-    op!(r, 0x61590, 3, Op::DExR { d: 0, r: R::C, short: false }); // CD0EX
-    i61593(r)
+    r.cpu.d_ex_r(0, R::C, false); // CD0EX
+    if r.next(0x61593, 5) {
+        i61593(r)
+    }
 }
 
 fn i61593(r: &mut Run) {
-    op!(r, 0x61593, 2, Op::PushC); // RSTK=C
-    i61595(r)
+    r.cpu.push_c(); // RSTK=C
+    if r.next(0x61595, 4) {
+        i61595(r)
+    }
 }
 
 fn i61595(r: &mut Run) {
-    op!(r, 0x61595, 7, Op::DLoad { d: 0, len: 5, val: 0x80702 }); // D0=(5) #80702
-    i6159c(r)
+    r.cpu.d_load(0, 5, 0x80702); // D0=(5) #80702
+    if r.next(0x6159C, 9) {
+        i6159c(r)
+    }
 }
 
 fn i6159c(r: &mut Run) {
-    op!(r, 0x6159C, 3, Op::Mem { store: false, d: 0, r: R::C, f: Field::A }); // C=DAT0 A
-    i6159f(r)
+    r.sync();
+    r.cpu.load(0, R::C, Field::A, r.hw); // C=DAT0 A
+    if r.next_io(0x6159F, 19) {
+        i6159f(r)
+    }
 }
 
 fn i6159f(r: &mut Run) {
-    op!(r, 0x6159F, 2, Op::Add { dst: R::C, src: R::A, f: Field::A }); // C=C+A A
-    i615a1(r)
+    r.cpu.add(R::C, R::A, Field::A); // C=C+A A
+    if r.next(0x615A1, 4) {
+        i615a1(r)
+    }
 }
 
 fn i615a1(r: &mut Run) {
-    op!(r, 0x615A1, 3, Op::DFromR { d: 0, r: R::C, short: false }); // D0=C
-    i615a4(r)
+    r.cpu.d_from_r(0, R::C, false); // D0=C
+    if r.next(0x615A4, 5) {
+        i615a4(r)
+    }
 }
 
 fn i615a4(r: &mut Run) {
-    op!(r, 0x615A4, 3, Op::Mem { store: false, d: 0, r: R::A, f: Field::A }); // A=DAT0 A
-    i615a7(r)
+    r.sync();
+    r.cpu.load(0, R::A, Field::A, r.hw); // A=DAT0 A
+    if r.next_io(0x615A7, 19) {
+        i615a7(r)
+    }
 }
 
 fn i615a7(r: &mut Run) {
-    op!(r, 0x615A7, 3, Op::DSub { d: 1, n: 5 }); // D1=D1- 5
-    i615aa(r)
+    r.cpu.d_sub(1, 5); // D1=D1- 5
+    if r.next(0x615AA, 5) {
+        i615aa(r)
+    }
 }
 
 fn i615aa(r: &mut Run) {
-    op!(r, 0x615AA, 3, Op::Mem { store: true, d: 1, r: R::A, f: Field::A }); // DAT1=A A
-    i615ad(r)
+    r.sync();
+    r.cpu.store(1, R::A, Field::A, r.hw); // DAT1=A A
+    if r.next_io(0x615AD, 19) {
+        i615ad(r)
+    }
 }
 
 fn i615ad(r: &mut Run) {
-    op!(r, 0x615AD, 2, Op::PopC); // C=RSTK
-    i615af(r)
+    r.cpu.pop_c(); // C=RSTK
+    if r.next(0x615AF, 4) {
+        i615af(r)
+    }
 }
 
 fn i615af(r: &mut Run) {
-    op!(r, 0x615AF, 3, Op::DFromR { d: 0, r: R::C, short: false }); // D0=C
-    i615b2(r)
+    r.cpu.d_from_r(0, R::C, false); // D0=C
+    if r.next(0x615B2, 5) {
+        i615b2(r)
+    }
 }
 
 fn i615b2(r: &mut Run) {
-    op!(r, 0x615B2, 3, Op::Mem { store: false, d: 0, r: R::A, f: Field::A }); // A=DAT0 A
-    i615b5(r)
+    r.sync();
+    r.cpu.load(0, R::A, Field::A, r.hw); // A=DAT0 A
+    if r.next_io(0x615B5, 19) {
+        i615b5(r)
+    }
 }
 
 fn i615b5(r: &mut Run) {
-    op!(r, 0x615B5, 3, Op::DAdd { d: 0, n: 5 }); // D0=D0+ 5
-    i615b8(r)
+    r.cpu.d_add(0, 5); // D0=D0+ 5
+    if r.next(0x615B8, 5) {
+        i615b8(r)
+    }
 }
 
 fn i615b8(r: &mut Run) {
-    op!(r, 0x615B8, 4, Op::PcIndirect(R::A)); // PC=(A)
+    r.sync();
+    r.cpu.pc_indirect(R::A, r.hw); // PC=(A)
+    r.spend(23);
 }
 
 fn i615bc(r: &mut Run) {
-    op!(r, 0x615BC, 2, Op::Copy { dst: R::A, src: R::C, f: Field::A }); // A=C A
-    i615be(r)
+    r.cpu.copy(R::A, R::C, Field::A); // A=C A
+    if r.next(0x615BE, 4) {
+        i615be(r)
+    }
 }
 
 fn i615be(r: &mut Run) {
-    op!(r, 0x615BE, 3, Op::DExR { d: 0, r: R::C, short: false }); // CD0EX
-    i615c1(r)
+    r.cpu.d_ex_r(0, R::C, false); // CD0EX
+    if r.next(0x615C1, 5) {
+        i615c1(r)
+    }
 }
 
 fn i615c1(r: &mut Run) {
-    op!(r, 0x615C1, 2, Op::PushC); // RSTK=C
-    i615c3(r)
+    r.cpu.push_c(); // RSTK=C
+    if r.next(0x615C3, 4) {
+        i615c3(r)
+    }
 }
 
 fn i615c3(r: &mut Run) {
-    op!(r, 0x615C3, 7, Op::DLoad { d: 0, len: 5, val: 0x80702 }); // D0=(5) #80702
-    i615ca(r)
+    r.cpu.d_load(0, 5, 0x80702); // D0=(5) #80702
+    if r.next(0x615CA, 9) {
+        i615ca(r)
+    }
 }
 
 fn i615ca(r: &mut Run) {
-    op!(r, 0x615CA, 3, Op::Mem { store: false, d: 0, r: R::C, f: Field::A }); // C=DAT0 A
-    i615cd(r)
+    r.sync();
+    r.cpu.load(0, R::C, Field::A, r.hw); // C=DAT0 A
+    if r.next_io(0x615CD, 19) {
+        i615cd(r)
+    }
 }
 
 fn i615cd(r: &mut Run) {
-    op!(r, 0x615CD, 2, Op::Add { dst: R::C, src: R::A, f: Field::A }); // C=C+A A
-    i615cf(r)
+    r.cpu.add(R::C, R::A, Field::A); // C=C+A A
+    if r.next(0x615CF, 4) {
+        i615cf(r)
+    }
 }
 
 fn i615cf(r: &mut Run) {
-    op!(r, 0x615CF, 3, Op::DFromR { d: 0, r: R::C, short: false }); // D0=C
-    i615d2(r)
+    r.cpu.d_from_r(0, R::C, false); // D0=C
+    if r.next(0x615D2, 5) {
+        i615d2(r)
+    }
 }
 
 fn i615d2(r: &mut Run) {
-    op!(r, 0x615D2, 3, Op::Mem { store: false, d: 1, r: R::A, f: Field::A }); // A=DAT1 A
-    i615d5(r)
+    r.sync();
+    r.cpu.load(1, R::A, Field::A, r.hw); // A=DAT1 A
+    if r.next_io(0x615D5, 19) {
+        i615d5(r)
+    }
 }
 
 fn i615d5(r: &mut Run) {
-    op!(r, 0x615D5, 3, Op::DAdd { d: 1, n: 5 }); // D1=D1+ 5
-    i615d8(r)
+    r.cpu.d_add(1, 5); // D1=D1+ 5
+    if r.next(0x615D8, 5) {
+        i615d8(r)
+    }
 }
 
 fn i615d8(r: &mut Run) {
-    op!(r, 0x615D8, 2, Op::Inc { r: R::D, f: Field::A }); // D=D+1 A
-    i615da(r)
+    r.cpu.inc(R::D, Field::A); // D=D+1 A
+    if r.next(0x615DA, 4) {
+        i615da(r)
+    }
 }
 
 fn i615da(r: &mut Run) {
-    op!(r, 0x615DA, 3, Op::Mem { store: true, d: 0, r: R::A, f: Field::A }); // DAT0=A A
-    i615dd(r)
+    r.sync();
+    r.cpu.store(0, R::A, Field::A, r.hw); // DAT0=A A
+    if r.next_io(0x615DD, 19) {
+        i615dd(r)
+    }
 }
 
 fn i615dd(r: &mut Run) {
-    op!(r, 0x615DD, 3, Op::CondJump(Cond::NoCarry, 0x615AD)); // GONC #615AD
+    r.cpu.pc = 0x615E0;
+    r.cpu.jump_if(Cond::NoCarry, 0x615AD); // GONC #615AD
+    r.spend(5);
 }
 
 fn i615e5(r: &mut Run) {
-    op!(r, 0x615E5, 7, Op::LoadConst { r: R::C, len: 5, val: 0xF }); // LC(5) #0000F
-    i615ec(r)
+    r.cpu.load_const(R::C, 5, 0xF); // LC(5) #0000F
+    if r.next(0x615EC, 9) {
+        i615ec(r)
+    }
 }
 
 fn i615ec(r: &mut Run) {
-    op!(r, 0x615EC, 4, Op::Jump(0x615BC)); // GOTO #615BC
+    r.cpu.pc = 0x615BC; // GOTO #615BC
+    r.spend(6);
 }
 
 fn i615f5(r: &mut Run) {
-    op!(r, 0x615F5, 7, Op::LoadConst { r: R::C, len: 5, val: 0x19 }); // LC(5) #00019
-    i615fc(r)
+    r.cpu.load_const(R::C, 5, 0x19); // LC(5) #00019
+    if r.next(0x615FC, 9) {
+        i615fc(r)
+    }
 }
 
 fn i615fc(r: &mut Run) {
-    op!(r, 0x615FC, 4, Op::Jump(0x615BC)); // GOTO #615BC
+    r.cpu.pc = 0x615BC; // GOTO #615BC
+    r.spend(6);
 }
 
 fn i61605(r: &mut Run) {
-    op!(r, 0x61605, 7, Op::LoadConst { r: R::C, len: 5, val: 0x23 }); // LC(5) #00023
-    i6160c(r)
+    r.cpu.load_const(R::C, 5, 0x23); // LC(5) #00023
+    if r.next(0x6160C, 9) {
+        i6160c(r)
+    }
 }
 
 fn i6160c(r: &mut Run) {
-    op!(r, 0x6160C, 4, Op::Jump(0x615BC)); // GOTO #615BC
+    r.cpu.pc = 0x615BC; // GOTO #615BC
+    r.spend(6);
 }
 
 fn i6161a(r: &mut Run) {
-    op!(r, 0x6161A, 7, Op::LoadConst { r: R::C, len: 5, val: 0x2D }); // LC(5) #0002D
-    i61621(r)
+    r.cpu.load_const(R::C, 5, 0x2D); // LC(5) #0002D
+    if r.next(0x61621, 9) {
+        i61621(r)
+    }
 }
 
 fn i61621(r: &mut Run) {
-    op!(r, 0x61621, 4, Op::Jump(0x615BC)); // GOTO #615BC
+    r.cpu.pc = 0x615BC; // GOTO #615BC
+    r.spend(6);
 }
 
 fn i6162a(r: &mut Run) {
-    op!(r, 0x6162A, 7, Op::LoadConst { r: R::C, len: 5, val: 0x37 }); // LC(5) #00037
-    i61631(r)
+    r.cpu.load_const(R::C, 5, 0x37); // LC(5) #00037
+    if r.next(0x61631, 9) {
+        i61631(r)
+    }
 }
 
 fn i61631(r: &mut Run) {
-    op!(r, 0x61631, 4, Op::Jump(0x615BC)); // GOTO #615BC
+    r.cpu.pc = 0x615BC; // GOTO #615BC
+    r.spend(6);
 }
 
 fn i6163a(r: &mut Run) {
-    op!(r, 0x6163A, 7, Op::LoadConst { r: R::C, len: 5, val: 0x41 }); // LC(5) #00041
-    i61641(r)
+    r.cpu.load_const(R::C, 5, 0x41); // LC(5) #00041
+    if r.next(0x61641, 9) {
+        i61641(r)
+    }
 }
 
 fn i61641(r: &mut Run) {
-    op!(r, 0x61641, 4, Op::Jump(0x615BC)); // GOTO #615BC
+    r.cpu.pc = 0x615BC; // GOTO #615BC
+    r.spend(6);
 }
 
 fn i6164a(r: &mut Run) {
-    op!(r, 0x6164A, 7, Op::LoadConst { r: R::C, len: 5, val: 0x4B }); // LC(5) #0004B
-    i61651(r)
+    r.cpu.load_const(R::C, 5, 0x4B); // LC(5) #0004B
+    if r.next(0x61651, 9) {
+        i61651(r)
+    }
 }
 
 fn i61651(r: &mut Run) {
-    op!(r, 0x61651, 4, Op::Jump(0x615BC)); // GOTO #615BC
+    r.cpu.pc = 0x615BC; // GOTO #615BC
+    r.spend(6);
 }
 
 fn i6165a(r: &mut Run) {
-    op!(r, 0x6165A, 7, Op::LoadConst { r: R::C, len: 5, val: 0x55 }); // LC(5) #00055
-    i61661(r)
+    r.cpu.load_const(R::C, 5, 0x55); // LC(5) #00055
+    if r.next(0x61661, 9) {
+        i61661(r)
+    }
 }
 
 fn i61661(r: &mut Run) {
-    op!(r, 0x61661, 4, Op::Jump(0x615BC)); // GOTO #615BC
+    r.cpu.pc = 0x615BC; // GOTO #615BC
+    r.spend(6);
 }
 
 fn i6166a(r: &mut Run) {
-    op!(r, 0x6166A, 7, Op::LoadConst { r: R::C, len: 5, val: 0x5F }); // LC(5) #0005F
-    i61671(r)
+    r.cpu.load_const(R::C, 5, 0x5F); // LC(5) #0005F
+    if r.next(0x61671, 9) {
+        i61671(r)
+    }
 }
 
 fn i61671(r: &mut Run) {
-    op!(r, 0x61671, 4, Op::Jump(0x615BC)); // GOTO #615BC
+    r.cpu.pc = 0x615BC; // GOTO #615BC
+    r.spend(6);
 }
 
 fn i6167a(r: &mut Run) {
-    op!(r, 0x6167A, 7, Op::LoadConst { r: R::C, len: 5, val: 0x69 }); // LC(5) #00069
-    i61681(r)
+    r.cpu.load_const(R::C, 5, 0x69); // LC(5) #00069
+    if r.next(0x61681, 9) {
+        i61681(r)
+    }
 }
 
 fn i61681(r: &mut Run) {
-    op!(r, 0x61681, 4, Op::Jump(0x615BC)); // GOTO #615BC
+    r.cpu.pc = 0x615BC; // GOTO #615BC
+    r.spend(6);
 }
 
 fn i6168a(r: &mut Run) {
-    op!(r, 0x6168A, 7, Op::LoadConst { r: R::C, len: 5, val: 0x73 }); // LC(5) #00073
-    i61691(r)
+    r.cpu.load_const(R::C, 5, 0x73); // LC(5) #00073
+    if r.next(0x61691, 9) {
+        i61691(r)
+    }
 }
 
 fn i61691(r: &mut Run) {
-    op!(r, 0x61691, 4, Op::Jump(0x615BC)); // GOTO #615BC
+    r.cpu.pc = 0x615BC; // GOTO #615BC
+    r.spend(6);
 }
 
 fn i6169a(r: &mut Run) {
-    op!(r, 0x6169A, 7, Op::LoadConst { r: R::C, len: 5, val: 0x7D }); // LC(5) #0007D
-    i616a1(r)
+    r.cpu.load_const(R::C, 5, 0x7D); // LC(5) #0007D
+    if r.next(0x616A1, 9) {
+        i616a1(r)
+    }
 }
 
 fn i616a1(r: &mut Run) {
-    op!(r, 0x616A1, 4, Op::Jump(0x615BC)); // GOTO #615BC
+    r.cpu.pc = 0x615BC; // GOTO #615BC
+    r.spend(6);
 }
 
 fn i616aa(r: &mut Run) {
-    op!(r, 0x616AA, 7, Op::LoadConst { r: R::C, len: 5, val: 0x87 }); // LC(5) #00087
-    i616b1(r)
+    r.cpu.load_const(R::C, 5, 0x87); // LC(5) #00087
+    if r.next(0x616B1, 9) {
+        i616b1(r)
+    }
 }
 
 fn i616b1(r: &mut Run) {
-    op!(r, 0x616B1, 4, Op::Jump(0x615BC)); // GOTO #615BC
+    r.cpu.pc = 0x615BC; // GOTO #615BC
+    r.spend(6);
 }
 
 fn i616ba(r: &mut Run) {
-    op!(r, 0x616BA, 7, Op::LoadConst { r: R::C, len: 5, val: 0x91 }); // LC(5) #00091
-    i616c1(r)
+    r.cpu.load_const(R::C, 5, 0x91); // LC(5) #00091
+    if r.next(0x616C1, 9) {
+        i616c1(r)
+    }
 }
 
 fn i616c1(r: &mut Run) {
-    op!(r, 0x616C1, 4, Op::Jump(0x615BC)); // GOTO #615BC
+    r.cpu.pc = 0x615BC; // GOTO #615BC
+    r.spend(6);
 }
 
 fn i616ca(r: &mut Run) {
-    op!(r, 0x616CA, 7, Op::LoadConst { r: R::C, len: 5, val: 0x9B }); // LC(5) #0009B
-    i616d1(r)
+    r.cpu.load_const(R::C, 5, 0x9B); // LC(5) #0009B
+    if r.next(0x616D1, 9) {
+        i616d1(r)
+    }
 }
 
 fn i616d1(r: &mut Run) {
-    op!(r, 0x616D1, 4, Op::Jump(0x615BC)); // GOTO #615BC
+    r.cpu.pc = 0x615BC; // GOTO #615BC
+    r.spend(6);
 }
 
 fn i616da(r: &mut Run) {
-    op!(r, 0x616DA, 7, Op::LoadConst { r: R::C, len: 5, val: 0xA5 }); // LC(5) #000A5
-    i616e1(r)
+    r.cpu.load_const(R::C, 5, 0xA5); // LC(5) #000A5
+    if r.next(0x616E1, 9) {
+        i616e1(r)
+    }
 }
 
 fn i616e1(r: &mut Run) {
-    op!(r, 0x616E1, 4, Op::Jump(0x615BC)); // GOTO #615BC
+    r.cpu.pc = 0x615BC; // GOTO #615BC
+    r.spend(6);
 }
 
 fn i616ea(r: &mut Run) {
-    op!(r, 0x616EA, 7, Op::LoadConst { r: R::C, len: 5, val: 0xAF }); // LC(5) #000AF
-    i616f1(r)
+    r.cpu.load_const(R::C, 5, 0xAF); // LC(5) #000AF
+    if r.next(0x616F1, 9) {
+        i616f1(r)
+    }
 }
 
 fn i616f1(r: &mut Run) {
-    op!(r, 0x616F1, 4, Op::Jump(0x615BC)); // GOTO #615BC
+    r.cpu.pc = 0x615BC; // GOTO #615BC
+    r.spend(6);
 }
 
 fn i616fa(r: &mut Run) {
-    op!(r, 0x616FA, 7, Op::LoadConst { r: R::C, len: 5, val: 0xB9 }); // LC(5) #000B9
-    i61701(r)
+    r.cpu.load_const(R::C, 5, 0xB9); // LC(5) #000B9
+    if r.next(0x61701, 9) {
+        i61701(r)
+    }
 }
 
 fn i61701(r: &mut Run) {
-    op!(r, 0x61701, 4, Op::Jump(0x615BC)); // GOTO #615BC
+    r.cpu.pc = 0x615BC; // GOTO #615BC
+    r.spend(6);
 }
 
 fn i6170a(r: &mut Run) {
-    op!(r, 0x6170A, 7, Op::LoadConst { r: R::C, len: 5, val: 0xC3 }); // LC(5) #000C3
-    i61711(r)
+    r.cpu.load_const(R::C, 5, 0xC3); // LC(5) #000C3
+    if r.next(0x61711, 9) {
+        i61711(r)
+    }
 }
 
 fn i61711(r: &mut Run) {
-    op!(r, 0x61711, 4, Op::Jump(0x615BC)); // GOTO #615BC
+    r.cpu.pc = 0x615BC; // GOTO #615BC
+    r.spend(6);
 }
 
 fn i6171a(r: &mut Run) {
-    op!(r, 0x6171A, 7, Op::LoadConst { r: R::C, len: 5, val: 0xCD }); // LC(5) #000CD
-    i61721(r)
+    r.cpu.load_const(R::C, 5, 0xCD); // LC(5) #000CD
+    if r.next(0x61721, 9) {
+        i61721(r)
+    }
 }
 
 fn i61721(r: &mut Run) {
-    op!(r, 0x61721, 4, Op::Jump(0x615BC)); // GOTO #615BC
+    r.cpu.pc = 0x615BC; // GOTO #615BC
+    r.spend(6);
 }
 
 fn i6172a(r: &mut Run) {
-    op!(r, 0x6172A, 7, Op::LoadConst { r: R::C, len: 5, val: 0xD7 }); // LC(5) #000D7
-    i61731(r)
+    r.cpu.load_const(R::C, 5, 0xD7); // LC(5) #000D7
+    if r.next(0x61731, 9) {
+        i61731(r)
+    }
 }
 
 fn i61731(r: &mut Run) {
-    op!(r, 0x61731, 4, Op::Jump(0x615BC)); // GOTO #615BC
+    r.cpu.pc = 0x615BC; // GOTO #615BC
+    r.spend(6);
 }
 
 fn i6173a(r: &mut Run) {
-    op!(r, 0x6173A, 7, Op::LoadConst { r: R::C, len: 5, val: 0xE1 }); // LC(5) #000E1
-    i61741(r)
+    r.cpu.load_const(R::C, 5, 0xE1); // LC(5) #000E1
+    if r.next(0x61741, 9) {
+        i61741(r)
+    }
 }
 
 fn i61741(r: &mut Run) {
-    op!(r, 0x61741, 4, Op::Jump(0x615BC)); // GOTO #615BC
+    r.cpu.pc = 0x615BC; // GOTO #615BC
+    r.spend(6);
 }
 
 fn i6174a(r: &mut Run) {
-    op!(r, 0x6174A, 7, Op::Call(0x679B)); // GOSUB #0679B
+    r.cpu.pc = 0x61751;
+    r.cpu.call(0x0679B); // GOSUB #0679B
+    r.spend(9);
 }
 
 fn i61751(r: &mut Run) {
-    op!(r, 0x61751, 3, Op::StSet { bit: 0xA, set: false }); // ST=0 10
-    i61754(r)
+    r.cpu.st_set(10, false); // ST=0 10
+    if r.next(0x61754, 5) {
+        i61754(r)
+    }
 }
 
 fn i61754(r: &mut Run) {
-    op!(r, 0x61754, 7, Op::DLoad { d: 0, len: 5, val: 0x80702 }); // D0=(5) #80702
-    i6175b(r)
+    r.cpu.d_load(0, 5, 0x80702); // D0=(5) #80702
+    if r.next(0x6175B, 9) {
+        i6175b(r)
+    }
 }
 
 fn i6175b(r: &mut Run) {
-    op!(r, 0x6175B, 3, Op::Mem { store: false, d: 0, r: R::A, f: Field::A }); // A=DAT0 A
-    i6175e(r)
+    r.sync();
+    r.cpu.load(0, R::A, Field::A, r.hw); // A=DAT0 A
+    if r.next_io(0x6175E, 19) {
+        i6175e(r)
+    }
 }
 
 fn i6175e(r: &mut Run) {
-    op!(r, 0x6175E, 3, Op::DFromR { d: 0, r: R::A, short: false }); // D0=A
-    i61761(r)
+    r.cpu.d_from_r(0, R::A, false); // D0=A
+    if r.next(0x61761, 5) {
+        i61761(r)
+    }
 }
 
 fn i61761(r: &mut Run) {
-    op!(r, 0x61761, 3, Op::Mem { store: false, d: 0, r: R::A, f: Field::A }); // A=DAT0 A
-    i61764(r)
+    r.sync();
+    r.cpu.load(0, R::A, Field::A, r.hw); // A=DAT0 A
+    if r.next_io(0x61764, 19) {
+        i61764(r)
+    }
 }
 
 fn i61764(r: &mut Run) {
-    op!(r, 0x61764, 2, Op::Copy { dst: R::B, src: R::A, f: Field::A }); // B=A A
-    i61766(r)
+    r.cpu.copy(R::B, R::A, Field::A); // B=A A
+    if r.next(0x61766, 4) {
+        i61766(r)
+    }
 }
 
 fn i61766(r: &mut Run) {
-    op!(r, 0x61766, 7, Op::DLoad { d: 1, len: 5, val: 0x806F3 }); // D1=(5) #806F3
-    i6176d(r)
+    r.cpu.d_load(1, 5, 0x806F3); // D1=(5) #806F3
+    if r.next(0x6176D, 9) {
+        i6176d(r)
+    }
 }
 
 fn i6176d(r: &mut Run) {
-    op!(r, 0x6176D, 3, Op::Mem { store: false, d: 1, r: R::C, f: Field::A }); // C=DAT1 A
-    i61770(r)
+    r.sync();
+    r.cpu.load(1, R::C, Field::A, r.hw); // C=DAT1 A
+    if r.next_io(0x61770, 19) {
+        i61770(r)
+    }
 }
 
 fn i61770(r: &mut Run) {
-    op!(r, 0x61770, 7, Op::DLoad { d: 1, len: 5, val: 0x806F8 }); // D1=(5) #806F8
-    i61777(r)
+    r.cpu.d_load(1, 5, 0x806F8); // D1=(5) #806F8
+    if r.next(0x61777, 9) {
+        i61777(r)
+    }
 }
 
 fn i61777(r: &mut Run) {
-    op!(r, 0x61777, 3, Op::Mem { store: false, d: 1, r: R::A, f: Field::A }); // A=DAT1 A
-    i6177a(r)
+    r.sync();
+    r.cpu.load(1, R::A, Field::A, r.hw); // A=DAT1 A
+    if r.next_io(0x6177A, 19) {
+        i6177a(r)
+    }
 }
 
 fn i6177a(r: &mut Run) {
-    op!(r, 0x6177A, 2, Op::Sub { dst: R::A, a: R::A, b: R::B, f: Field::A }); // A=A-B A
-    i6177c(r)
+    r.cpu.sub(R::A, R::A, R::B, Field::A); // A=A-B A
+    if r.next(0x6177C, 4) {
+        i6177c(r)
+    }
 }
 
 fn i6177c(r: &mut Run) {
-    op!(r, 0x6177C, 5, Op::Test { test: Test::Regs(Cmp::Lt, R::C, R::A), f: Field::A, goyes: Some(0x6178C) }); // ?C<A A / GOYES #6178C
-    i61781(r)
+    r.cpu.pc = 0x61781;
+    r.cpu.test(Test::Regs(Cmp::Lt, R::C, R::A), Field::A, Some(0x6178C)); // ?C<A A / GOYES #6178C
+    if r.next_pc(0x61781, 7) {
+        i61781(r)
+    }
 }
 
 fn i61781(r: &mut Run) {
-    op!(r, 0x61781, 7, Op::Call(0x1633D)); // GOSUB #1633D
+    r.cpu.pc = 0x61788;
+    r.cpu.call(0x1633D); // GOSUB #1633D
+    r.spend(9);
 }
 
 fn i61788(r: &mut Run) {
-    op!(r, 0x61788, 4, Op::Jump(0x61754)); // GOTO #61754
+    r.cpu.pc = 0x61754; // GOTO #61754
+    r.spend(6);
 }
 
 fn i6178c(r: &mut Run) {
-    op!(r, 0x6178C, 3, Op::Mem { store: true, d: 1, r: R::A, f: Field::A }); // DAT1=A A
-    i6178f(r)
+    r.sync();
+    r.cpu.store(1, R::A, Field::A, r.hw); // DAT1=A A
+    if r.next_io(0x6178F, 19) {
+        i6178f(r)
+    }
 }
 
 fn i6178f(r: &mut Run) {
-    op!(r, 0x6178F, 3, Op::DFromR { d: 1, r: R::A, short: false }); // D1=A
-    i61792(r)
+    r.cpu.d_from_r(1, R::A, false); // D1=A
+    if r.next(0x61792, 5) {
+        i61792(r)
+    }
 }
 
 fn i61792(r: &mut Run) {
-    op!(r, 0x61792, 2, Op::Copy { dst: R::C, src: R::A, f: Field::A }); // C=A A
-    i61794(r)
+    r.cpu.copy(R::C, R::A, Field::A); // C=A A
+    if r.next(0x61794, 4) {
+        i61794(r)
+    }
 }
 
 fn i61794(r: &mut Run) {
-    op!(r, 0x61794, 2, Op::Add { dst: R::A, src: R::B, f: Field::A }); // A=A+B A
-    i61796(r)
+    r.cpu.add(R::A, R::B, Field::A); // A=A+B A
+    if r.next(0x61796, 4) {
+        i61796(r)
+    }
 }
 
 fn i61796(r: &mut Run) {
-    op!(r, 0x61796, 3, Op::DExR { d: 0, r: R::A, short: false }); // AD0EX
-    i61799(r)
+    r.cpu.d_ex_r(0, R::A, false); // AD0EX
+    if r.next(0x61799, 5) {
+        i61799(r)
+    }
 }
 
 fn i61799(r: &mut Run) {
-    op!(r, 0x61799, 2, Op::Sub { dst: R::C, a: R::A, b: R::C, f: Field::A }); // C=A-C A
-    i6179b(r)
+    r.cpu.sub(R::C, R::A, R::C, Field::A); // C=A-C A
+    if r.next(0x6179B, 4) {
+        i6179b(r)
+    }
 }
 
 fn i6179b(r: &mut Run) {
-    op!(r, 0x6179B, 7, Op::Call(0x670C)); // GOSUB #0670C
+    r.cpu.pc = 0x617A2;
+    r.cpu.call(0x0670C); // GOSUB #0670C
+    r.spend(9);
 }
 
 fn i617a2(r: &mut Run) {
-    op!(r, 0x617A2, 3, Op::DExR { d: 1, r: R::A, short: false }); // AD1EX
-    i617a5(r)
+    r.cpu.d_ex_r(1, R::A, false); // AD1EX
+    if r.next(0x617A5, 5) {
+        i617a5(r)
+    }
 }
 
 fn i617a5(r: &mut Run) {
-    op!(r, 0x617A5, 2, Op::Sub { dst: R::A, a: R::A, b: R::B, f: Field::A }); // A=A-B A
-    i617a7(r)
+    r.cpu.sub(R::A, R::A, R::B, Field::A); // A=A-B A
+    if r.next(0x617A7, 4) {
+        i617a7(r)
+    }
 }
 
 fn i617a7(r: &mut Run) {
-    op!(r, 0x617A7, 7, Op::DLoad { d: 1, len: 5, val: 0x80702 }); // D1=(5) #80702
-    i617ae(r)
+    r.cpu.d_load(1, 5, 0x80702); // D1=(5) #80702
+    if r.next(0x617AE, 9) {
+        i617ae(r)
+    }
 }
 
 fn i617ae(r: &mut Run) {
-    op!(r, 0x617AE, 3, Op::Mem { store: true, d: 1, r: R::A, f: Field::A }); // DAT1=A A
-    i617b1(r)
+    r.sync();
+    r.cpu.store(1, R::A, Field::A, r.hw); // DAT1=A A
+    if r.next_io(0x617B1, 19) {
+        i617b1(r)
+    }
 }
 
 fn i617b1(r: &mut Run) {
-    op!(r, 0x617B1, 3, Op::DFromR { d: 1, r: R::A, short: false }); // D1=A
-    i617b4(r)
+    r.cpu.d_from_r(1, R::A, false); // D1=A
+    if r.next(0x617B4, 5) {
+        i617b4(r)
+    }
 }
 
 fn i617b4(r: &mut Run) {
-    op!(r, 0x617B4, 3, Op::DAdd { d: 1, n: 5 }); // D1=D1+ 5
-    i617b7(r)
+    r.cpu.d_add(1, 5); // D1=D1+ 5
+    if r.next(0x617B7, 5) {
+        i617b7(r)
+    }
 }
 
 fn i617b7(r: &mut Run) {
-    op!(r, 0x617B7, 2, Op::Zero { r: R::C, f: Field::A }); // C=0 A
-    i617b9(r)
+    r.cpu.zero(R::C, Field::A); // C=0 A
+    if r.next(0x617B9, 4) {
+        i617b9(r)
+    }
 }
 
 fn i617b9(r: &mut Run) {
-    op!(r, 0x617B9, 3, Op::Mem { store: true, d: 1, r: R::C, f: Field::A }); // DAT1=C A
-    i617bc(r)
+    r.sync();
+    r.cpu.store(1, R::C, Field::A, r.hw); // DAT1=C A
+    if r.next_io(0x617BC, 19) {
+        i617bc(r)
+    }
 }
 
 fn i617bc(r: &mut Run) {
-    op!(r, 0x617BC, 7, Op::DLoad { d: 1, len: 5, val: 0x806FD }); // D1=(5) #806FD
-    i617c3(r)
+    r.cpu.d_load(1, 5, 0x806FD); // D1=(5) #806FD
+    if r.next(0x617C3, 9) {
+        i617c3(r)
+    }
 }
 
 fn i617c3(r: &mut Run) {
-    op!(r, 0x617C3, 3, Op::Mem { store: false, d: 1, r: R::A, f: Field::A }); // A=DAT1 A
-    i617c6(r)
+    r.sync();
+    r.cpu.load(1, R::A, Field::A, r.hw); // A=DAT1 A
+    if r.next_io(0x617C6, 19) {
+        i617c6(r)
+    }
 }
 
 fn i617c6(r: &mut Run) {
-    op!(r, 0x617C6, 2, Op::Sub { dst: R::A, a: R::A, b: R::B, f: Field::A }); // A=A-B A
-    i617c8(r)
+    r.cpu.sub(R::A, R::A, R::B, Field::A); // A=A-B A
+    if r.next(0x617C8, 4) {
+        i617c8(r)
+    }
 }
 
 fn i617c8(r: &mut Run) {
-    op!(r, 0x617C8, 3, Op::Mem { store: true, d: 1, r: R::A, f: Field::A }); // DAT1=A A
-    i617cb(r)
+    r.sync();
+    r.cpu.store(1, R::A, Field::A, r.hw); // DAT1=A A
+    if r.next_io(0x617CB, 19) {
+        i617cb(r)
+    }
 }
 
 fn i617cb(r: &mut Run) {
-    op!(r, 0x617CB, 7, Op::Call(0x69F7)); // GOSUB #069F7
+    r.cpu.pc = 0x617D2;
+    r.cpu.call(0x069F7); // GOSUB #069F7
+    r.spend(9);
 }
 
 fn i617d2(r: &mut Run) {
-    op!(r, 0x617D2, 6, Op::Jump(0x61F88)); // GOTO #61F88
+    r.cpu.pc = 0x61F88; // GOTO #61F88
+    r.spend(8);
 }
 
 fn i617dd(r: &mut Run) {
-    op!(r, 0x617DD, 3, Op::Mem { store: false, d: 1, r: R::C, f: Field::A }); // C=DAT1 A
-    i617e0(r)
+    r.sync();
+    r.cpu.load(1, R::C, Field::A, r.hw); // C=DAT1 A
+    if r.next_io(0x617E0, 19) {
+        i617e0(r)
+    }
 }
 
 fn i617e0(r: &mut Run) {
-    op!(r, 0x617E0, 3, Op::DExR { d: 1, r: R::C, short: false }); // CD1EX
-    i617e3(r)
+    r.cpu.d_ex_r(1, R::C, false); // CD1EX
+    if r.next(0x617E3, 5) {
+        i617e3(r)
+    }
 }
 
 fn i617e3(r: &mut Run) {
-    op!(r, 0x617E3, 2, Op::PushC); // RSTK=C
-    i617e5(r)
+    r.cpu.push_c(); // RSTK=C
+    if r.next(0x617E5, 4) {
+        i617e5(r)
+    }
 }
 
 fn i617e5(r: &mut Run) {
-    op!(r, 0x617E5, 3, Op::DAdd { d: 1, n: 5 }); // D1=D1+ 5
-    i617e8(r)
+    r.cpu.d_add(1, 5); // D1=D1+ 5
+    if r.next(0x617E8, 5) {
+        i617e8(r)
+    }
 }
 
 fn i617e8(r: &mut Run) {
-    op!(r, 0x617E8, 3, Op::Mem { store: false, d: 1, r: R::A, f: Field::A }); // A=DAT1 A
-    i617eb(r)
+    r.sync();
+    r.cpu.load(1, R::A, Field::A, r.hw); // A=DAT1 A
+    if r.next_io(0x617EB, 19) {
+        i617eb(r)
+    }
 }
 
 fn i617eb(r: &mut Run) {
-    op!(r, 0x617EB, 7, Op::DLoad { d: 1, len: 5, val: 0x80702 }); // D1=(5) #80702
-    i617f2(r)
+    r.cpu.d_load(1, 5, 0x80702); // D1=(5) #80702
+    if r.next(0x617F2, 9) {
+        i617f2(r)
+    }
 }
 
 fn i617f2(r: &mut Run) {
-    op!(r, 0x617F2, 3, Op::Mem { store: false, d: 1, r: R::C, f: Field::A }); // C=DAT1 A
-    i617f5(r)
+    r.sync();
+    r.cpu.load(1, R::C, Field::A, r.hw); // C=DAT1 A
+    if r.next_io(0x617F5, 19) {
+        i617f5(r)
+    }
 }
 
 fn i617f5(r: &mut Run) {
-    op!(r, 0x617F5, 3, Op::DFromR { d: 1, r: R::C, short: false }); // D1=C
-    i617f8(r)
+    r.cpu.d_from_r(1, R::C, false); // D1=C
+    if r.next(0x617F8, 5) {
+        i617f8(r)
+    }
 }
 
 fn i617f8(r: &mut Run) {
-    op!(r, 0x617F8, 3, Op::Mem { store: false, d: 1, r: R::C, f: Field::A }); // C=DAT1 A
-    i617fb(r)
+    r.sync();
+    r.cpu.load(1, R::C, Field::A, r.hw); // C=DAT1 A
+    if r.next_io(0x617FB, 19) {
+        i617fb(r)
+    }
 }
 
 fn i617fb(r: &mut Run) {
-    op!(r, 0x617FB, 5, Op::Test { test: Test::Regs(Cmp::Gt, R::C, R::A), f: Field::A, goyes: Some(0x6180B) }); // ?C>A A / GOYES #6180B
-    i61800(r)
+    r.cpu.pc = 0x61800;
+    r.cpu.test(Test::Regs(Cmp::Gt, R::C, R::A), Field::A, Some(0x6180B)); // ?C>A A / GOYES #6180B
+    if r.next_pc(0x61800, 7) {
+        i61800(r)
+    }
 }
 
 fn i61800(r: &mut Run) {
-    op!(r, 0x61800, 2, Op::PopC); // C=RSTK
-    i61802(r)
+    r.cpu.pop_c(); // C=RSTK
+    if r.next(0x61802, 4) {
+        i61802(r)
+    }
 }
 
 fn i61802(r: &mut Run) {
-    op!(r, 0x61802, 3, Op::DFromR { d: 1, r: R::C, short: false }); // D1=C
-    i61805(r)
+    r.cpu.d_from_r(1, R::C, false); // D1=C
+    if r.next(0x61805, 5) {
+        i61805(r)
+    }
 }
 
 fn i61805(r: &mut Run) {
-    op!(r, 0x61805, 6, Op::Jump(0x620C3)); // GOTO #620C3
+    r.cpu.pc = 0x620C3; // GOTO #620C3
+    r.spend(8);
 }
 
 fn i6180b(r: &mut Run) {
-    op!(r, 0x6180B, 3, Op::DExR { d: 1, r: R::C, short: false }); // CD1EX
-    i6180e(r)
+    r.cpu.d_ex_r(1, R::C, false); // CD1EX
+    if r.next(0x6180E, 5) {
+        i6180e(r)
+    }
 }
 
 fn i6180e(r: &mut Run) {
-    op!(r, 0x6180E, 2, Op::Add { dst: R::A, src: R::C, f: Field::A }); // A=A+C A
-    i61810(r)
+    r.cpu.add(R::A, R::C, Field::A); // A=A+C A
+    if r.next(0x61810, 4) {
+        i61810(r)
+    }
 }
 
 fn i61810(r: &mut Run) {
-    op!(r, 0x61810, 7, Op::LoadConst { r: R::C, len: 5, val: 2 }); // LC(5) #00002
-    i61817(r)
+    r.cpu.load_const(R::C, 5, 0x2); // LC(5) #00002
+    if r.next(0x61817, 9) {
+        i61817(r)
+    }
 }
 
 fn i61817(r: &mut Run) {
-    op!(r, 0x61817, 2, Op::Sub { dst: R::D, a: R::D, b: R::C, f: Field::A }); // D=D-C A
-    i61819(r)
+    r.cpu.sub(R::D, R::D, R::C, Field::A); // D=D-C A
+    if r.next(0x61819, 4) {
+        i61819(r)
+    }
 }
 
 fn i61819(r: &mut Run) {
-    op!(r, 0x61819, 3, Op::CondJump(Cond::NoCarry, 0x61853)); // GONC #61853
-    i6181c(r)
+    r.cpu.pc = 0x6181C;
+    r.cpu.jump_if(Cond::NoCarry, 0x61853); // GONC #61853
+    if r.next_pc(0x6181C, 5) {
+        i6181c(r)
+    }
 }
 
 fn i6181c(r: &mut Run) {
-    op!(r, 0x6181C, 2, Op::Add { dst: R::D, src: R::C, f: Field::A }); // D=D+C A
-    i6181e(r)
+    r.cpu.add(R::D, R::C, Field::A); // D=D+C A
+    if r.next(0x6181E, 4) {
+        i6181e(r)
+    }
 }
 
 fn i6181e(r: &mut Run) {
-    op!(r, 0x6181E, 3, Op::Scratch { op: ScratchOp::ToScratch, r: R::A, n: 0, f: Field::W }); // R0=A
-    i61821(r)
+    r.cpu.scratch(ScratchOp::ToScratch, R::A, 0, Field::W); // R0=A
+    if r.next(0x61821, 5) {
+        i61821(r)
+    }
 }
 
 fn i61821(r: &mut Run) {
-    op!(r, 0x61821, 2, Op::PopC); // C=RSTK
-    i61823(r)
+    r.cpu.pop_c(); // C=RSTK
+    if r.next(0x61823, 4) {
+        i61823(r)
+    }
 }
 
 fn i61823(r: &mut Run) {
-    op!(r, 0x61823, 3, Op::DFromR { d: 1, r: R::C, short: false }); // D1=C
-    i61826(r)
+    r.cpu.d_from_r(1, R::C, false); // D1=C
+    if r.next(0x61826, 5) {
+        i61826(r)
+    }
 }
 
 fn i61826(r: &mut Run) {
-    op!(r, 0x61826, 7, Op::Call(0x679B)); // GOSUB #0679B
+    r.cpu.pc = 0x6182D;
+    r.cpu.call(0x0679B); // GOSUB #0679B
+    r.spend(9);
 }
 
 fn i6182d(r: &mut Run) {
-    op!(r, 0x6182D, 6, Op::Call(0x624A5)); // GOSUB #624A5
+    r.cpu.pc = 0x61833;
+    r.cpu.call(0x624A5); // GOSUB #624A5
+    r.spend(8);
 }
 
 fn i61833(r: &mut Run) {
-    op!(r, 0x61833, 6, Op::Call(0x624AC)); // GOSUB #624AC
+    r.cpu.pc = 0x61839;
+    r.cpu.call(0x624AC); // GOSUB #624AC
+    r.spend(8);
 }
 
 fn i61839(r: &mut Run) {
-    op!(r, 0x61839, 7, Op::LoadConst { r: R::C, len: 5, val: 2 }); // LC(5) #00002
-    i61840(r)
+    r.cpu.load_const(R::C, 5, 0x2); // LC(5) #00002
+    if r.next(0x61840, 9) {
+        i61840(r)
+    }
 }
 
 fn i61840(r: &mut Run) {
-    op!(r, 0x61840, 2, Op::Sub { dst: R::D, a: R::D, b: R::C, f: Field::A }); // D=D-C A
-    i61842(r)
+    r.cpu.sub(R::D, R::D, R::C, Field::A); // D=D-C A
+    if r.next(0x61842, 4) {
+        i61842(r)
+    }
 }
 
 fn i61842(r: &mut Run) {
-    op!(r, 0x61842, 3, Op::CondJump(Cond::NoCarry, 0x6184B)); // GONC #6184B
-    i61845(r)
+    r.cpu.pc = 0x61845;
+    r.cpu.jump_if(Cond::NoCarry, 0x6184B); // GONC #6184B
+    if r.next_pc(0x61845, 5) {
+        i61845(r)
+    }
 }
 
 fn i61845(r: &mut Run) {
-    op!(r, 0x61845, 2, Op::Add { dst: R::D, src: R::C, f: Field::A }); // D=D+C A
-    i61847(r)
+    r.cpu.add(R::D, R::C, Field::A); // D=D+C A
+    if r.next(0x61847, 4) {
+        i61847(r)
+    }
 }
 
 fn i61847(r: &mut Run) {
-    op!(r, 0x61847, 4, Op::Jump(0x61DBD)); // GOTO #61DBD
+    r.cpu.pc = 0x61DBD; // GOTO #61DBD
+    r.spend(6);
 }
 
 fn i6184b(r: &mut Run) {
-    op!(r, 0x6184B, 3, Op::DExR { d: 1, r: R::C, short: false }); // CD1EX
-    i6184e(r)
+    r.cpu.d_ex_r(1, R::C, false); // CD1EX
+    if r.next(0x6184E, 5) {
+        i6184e(r)
+    }
 }
 
 fn i6184e(r: &mut Run) {
-    op!(r, 0x6184E, 2, Op::PushC); // RSTK=C
-    i61850(r)
+    r.cpu.push_c(); // RSTK=C
+    if r.next(0x61850, 4) {
+        i61850(r)
+    }
 }
 
 fn i61850(r: &mut Run) {
-    op!(r, 0x61850, 3, Op::Scratch { op: ScratchOp::FromScratch, r: R::A, n: 0, f: Field::W }); // A=R0
-    i61853(r)
+    r.cpu.scratch(ScratchOp::FromScratch, R::A, 0, Field::W); // A=R0
+    if r.next(0x61853, 5) {
+        i61853(r)
+    }
 }
 
 fn i61853(r: &mut Run) {
-    op!(r, 0x61853, 3, Op::DFromR { d: 1, r: R::A, short: false }); // D1=A
-    i61856(r)
+    r.cpu.d_from_r(1, R::A, false); // D1=A
+    if r.next(0x61856, 5) {
+        i61856(r)
+    }
 }
 
 fn i61856(r: &mut Run) {
-    op!(r, 0x61856, 4, Op::Mem { store: false, d: 1, r: R::A, f: Field::Nibbles(0xA) }); // A=DAT1 10
-    i6185a(r)
+    r.sync();
+    r.cpu.load(1, R::A, Field::Nibbles(10), r.hw); // A=DAT1 10
+    if r.next_io(0x6185A, 24) {
+        i6185a(r)
+    }
 }
 
 fn i6185a(r: &mut Run) {
-    op!(r, 0x6185A, 2, Op::PopC); // C=RSTK
-    i6185c(r)
+    r.cpu.pop_c(); // C=RSTK
+    if r.next(0x6185C, 4) {
+        i6185c(r)
+    }
 }
 
 fn i6185c(r: &mut Run) {
-    op!(r, 0x6185C, 3, Op::DFromR { d: 1, r: R::C, short: false }); // D1=C
-    i6185f(r)
+    r.cpu.d_from_r(1, R::C, false); // D1=C
+    if r.next(0x6185F, 5) {
+        i6185f(r)
+    }
 }
 
 fn i6185f(r: &mut Run) {
-    op!(r, 0x6185F, 3, Op::DSub { d: 1, n: 0xA }); // D1=D1- 10
-    i61862(r)
+    r.cpu.d_sub(1, 10); // D1=D1- 10
+    if r.next(0x61862, 5) {
+        i61862(r)
+    }
 }
 
 fn i61862(r: &mut Run) {
-    op!(r, 0x61862, 4, Op::Mem { store: true, d: 1, r: R::A, f: Field::Nibbles(0xA) }); // DAT1=A 10
-    i61866(r)
+    r.sync();
+    r.cpu.store(1, R::A, Field::Nibbles(10), r.hw); // DAT1=A 10
+    if r.next_io(0x61866, 24) {
+        i61866(r)
+    }
 }
 
 fn i61866(r: &mut Run) {
-    op!(r, 0x61866, 6, Op::Jump(0x620DC)); // GOTO #620DC
+    r.cpu.pc = 0x620DC; // GOTO #620DC
+    r.spend(8);
 }
 
 fn i61871(r: &mut Run) {
-    op!(r, 0x61871, 7, Op::Call(0x3F5D)); // GOSUB #03F5D
+    r.cpu.pc = 0x61878;
+    r.cpu.call(0x03F5D); // GOSUB #03F5D
+    r.spend(9);
 }
 
 fn i61878(r: &mut Run) {
-    op!(r, 0x61878, 4, Op::Jump(0x61943)); // GOTO #61943
+    r.cpu.pc = 0x61943; // GOTO #61943
+    r.spend(6);
 }
 
 fn i61881(r: &mut Run) {
-    op!(r, 0x61881, 7, Op::Call(0x3F5D)); // GOSUB #03F5D
+    r.cpu.pc = 0x61888;
+    r.cpu.call(0x03F5D); // GOSUB #03F5D
+    r.spend(9);
 }
 
 fn i61888(r: &mut Run) {
-    op!(r, 0x61888, 3, Op::DSub { d: 1, n: 5 }); // D1=D1- 5
-    i6188b(r)
+    r.cpu.d_sub(1, 5); // D1=D1- 5
+    if r.next(0x6188B, 5) {
+        i6188b(r)
+    }
 }
 
 fn i6188b(r: &mut Run) {
-    op!(r, 0x6188B, 2, Op::Dec { r: R::D, f: Field::A }); // D=D-1 A
-    i6188d(r)
+    r.cpu.dec(R::D, Field::A); // D=D-1 A
+    if r.next(0x6188D, 4) {
+        i6188d(r)
+    }
 }
 
 fn i6188d(r: &mut Run) {
-    op!(r, 0x6188D, 4, Op::Jump(0x61943)); // GOTO #61943
+    r.cpu.pc = 0x61943; // GOTO #61943
+    r.spend(6);
 }
 
 fn i6189b(r: &mut Run) {
-    op!(r, 0x6189B, 7, Op::Call(0x6641)); // GOSUB #06641
+    r.cpu.pc = 0x618A2;
+    r.cpu.call(0x06641); // GOSUB #06641
+    r.spend(9);
 }
 
 fn i618a2(r: &mut Run) {
-    op!(r, 0x618A2, 2, Op::Dec { r: R::A, f: Field::A }); // A=A-1 A
-    i618a4(r)
+    r.cpu.dec(R::A, Field::A); // A=A-1 A
+    if r.next(0x618A4, 4) {
+        i618a4(r)
+    }
 }
 
 fn i618a4(r: &mut Run) {
-    op!(r, 0x618A4, 4, Op::Jump(0x6199C)); // GOTO #6199C
+    r.cpu.pc = 0x6199C; // GOTO #6199C
+    r.spend(6);
 }
 
 fn i618ad(r: &mut Run) {
-    op!(r, 0x618AD, 4, Op::Call(0x611B0)); // GOSUB #611B0
+    r.cpu.pc = 0x618B1;
+    r.cpu.call(0x611B0); // GOSUB #611B0
+    r.spend(6);
 }
 
 fn i618b1(r: &mut Run) {
-    op!(r, 0x618B1, 3, Op::DFromR { d: 1, r: R::C, short: false }); // D1=C
-    i618b4(r)
+    r.cpu.d_from_r(1, R::C, false); // D1=C
+    if r.next(0x618B4, 5) {
+        i618b4(r)
+    }
 }
 
 fn i618b4(r: &mut Run) {
-    op!(r, 0x618B4, 2, Op::Zero { r: R::C, f: Field::A }); // C=0 A
-    i618b6(r)
+    r.cpu.zero(R::C, Field::A); // C=0 A
+    if r.next(0x618B6, 4) {
+        i618b6(r)
+    }
 }
 
 fn i618b6(r: &mut Run) {
-    op!(r, 0x618B6, 4, Op::Jump(0x618CA)); // GOTO #618CA
+    r.cpu.pc = 0x618CA; // GOTO #618CA
+    r.spend(6);
 }
 
 fn i618bf(r: &mut Run) {
-    op!(r, 0x618BF, 3, Op::Mem { store: false, d: 1, r: R::A, f: Field::A }); // A=DAT1 A
-    i618c2(r)
+    r.sync();
+    r.cpu.load(1, R::A, Field::A, r.hw); // A=DAT1 A
+    if r.next_io(0x618C2, 19) {
+        i618c2(r)
+    }
 }
 
 fn i618c2(r: &mut Run) {
-    op!(r, 0x618C2, 3, Op::DAdd { d: 1, n: 5 }); // D1=D1+ 5
-    i618c5(r)
+    r.cpu.d_add(1, 5); // D1=D1+ 5
+    if r.next(0x618C5, 5) {
+        i618c5(r)
+    }
 }
 
 fn i618c5(r: &mut Run) {
-    op!(r, 0x618C5, 2, Op::Inc { r: R::D, f: Field::A }); // D=D+1 A
-    i618c7(r)
+    r.cpu.inc(R::D, Field::A); // D=D+1 A
+    if r.next(0x618C7, 4) {
+        i618c7(r)
+    }
 }
 
 fn i618c7(r: &mut Run) {
-    op!(r, 0x618C7, 3, Op::Mem { store: false, d: 1, r: R::C, f: Field::A }); // C=DAT1 A
-    i618ca(r)
+    r.sync();
+    r.cpu.load(1, R::C, Field::A, r.hw); // C=DAT1 A
+    if r.next_io(0x618CA, 19) {
+        i618ca(r)
+    }
 }
 
 fn i618ca(r: &mut Run) {
-    op!(r, 0x618CA, 5, Op::Test { test: Test::Regs(Cmp::Eq, R::C, R::A), f: Field::A, goyes: Some(0x61907) }); // ?C=A A / GOYES #61907
-    i618cf(r)
+    r.cpu.pc = 0x618CF;
+    r.cpu.test(Test::Regs(Cmp::Eq, R::C, R::A), Field::A, Some(0x61907)); // ?C=A A / GOYES #61907
+    if r.next_pc(0x618CF, 7) {
+        i618cf(r)
+    }
 }
 
 fn i618cf(r: &mut Run) {
-    op!(r, 0x618CF, 4, Op::Jump(0x619A6)); // GOTO #619A6
+    r.cpu.pc = 0x619A6; // GOTO #619A6
+    r.spend(6);
 }
 
 fn i618d8(r: &mut Run) {
-    op!(r, 0x618D8, 7, Op::Call(0x3F5D)); // GOSUB #03F5D
+    r.cpu.pc = 0x618DF;
+    r.cpu.call(0x03F5D); // GOSUB #03F5D
+    r.spend(9);
 }
 
 fn i618df(r: &mut Run) {
-    op!(r, 0x618DF, 3, Op::DSub { d: 1, n: 5 }); // D1=D1- 5
-    i618e2(r)
+    r.cpu.d_sub(1, 5); // D1=D1- 5
+    if r.next(0x618E2, 5) {
+        i618e2(r)
+    }
 }
 
 fn i618e2(r: &mut Run) {
-    op!(r, 0x618E2, 2, Op::Dec { r: R::D, f: Field::A }); // D=D-1 A
-    i618e4(r)
+    r.cpu.dec(R::D, Field::A); // D=D-1 A
+    if r.next(0x618E4, 4) {
+        i618e4(r)
+    }
 }
 
 fn i618e4(r: &mut Run) {
-    op!(r, 0x618E4, 4, Op::Jump(0x618CA)); // GOTO #618CA
+    r.cpu.pc = 0x618CA; // GOTO #618CA
+    r.spend(6);
 }
 
 fn i618ed(r: &mut Run) {
-    op!(r, 0x618ED, 4, Op::Call(0x61A02)); // GOSUB #61A02
+    r.cpu.pc = 0x618F1;
+    r.cpu.call(0x61A02); // GOSUB #61A02
+    r.spend(6);
 }
 
 fn i618f1(r: &mut Run) {
-    op!(r, 0x618F1, 3, Op::CondJump(Cond::NoCarry, 0x61907)); // GONC #61907
-    i618f4(r)
+    r.cpu.pc = 0x618F4;
+    r.cpu.jump_if(Cond::NoCarry, 0x61907); // GONC #61907
+    if r.next_pc(0x618F4, 5) {
+        i618f4(r)
+    }
 }
 
 fn i618f4(r: &mut Run) {
-    op!(r, 0x618F4, 3, Op::CondJump(Cond::Carry, 0x61903)); // GOC #61903
+    r.cpu.pc = 0x618F7;
+    r.cpu.jump_if(Cond::Carry, 0x61903); // GOC #61903
+    r.spend(5);
 }
 
 fn i618fc(r: &mut Run) {
-    op!(r, 0x618FC, 4, Op::Call(0x61A02)); // GOSUB #61A02
+    r.cpu.pc = 0x61900;
+    r.cpu.call(0x61A02); // GOSUB #61A02
+    r.spend(6);
 }
 
 fn i61900(r: &mut Run) {
-    op!(r, 0x61900, 3, Op::CondJump(Cond::Carry, 0x61907)); // GOC #61907
-    i61903(r)
+    r.cpu.pc = 0x61903;
+    r.cpu.jump_if(Cond::Carry, 0x61907); // GOC #61907
+    if r.next_pc(0x61903, 5) {
+        i61903(r)
+    }
 }
 
 fn i61903(r: &mut Run) {
-    op!(r, 0x61903, 4, Op::Jump(0x619A6)); // GOTO #619A6
+    r.cpu.pc = 0x619A6; // GOTO #619A6
+    r.spend(6);
 }
 
 fn i61907(r: &mut Run) {
-    op!(r, 0x61907, 3, Op::DAdd { d: 1, n: 5 }); // D1=D1+ 5
-    i6190a(r)
+    r.cpu.d_add(1, 5); // D1=D1+ 5
+    if r.next(0x6190A, 5) {
+        i6190a(r)
+    }
 }
 
 fn i6190a(r: &mut Run) {
-    op!(r, 0x6190A, 2, Op::Inc { r: R::D, f: Field::A }); // D=D+1 A
-    i6190c(r)
+    r.cpu.inc(R::D, Field::A); // D=D+1 A
+    if r.next(0x6190C, 4) {
+        i6190c(r)
+    }
 }
 
 fn i6190c(r: &mut Run) {
-    op!(r, 0x6190C, 4, Op::Jump(0x6199F)); // GOTO #6199F
+    r.cpu.pc = 0x6199F; // GOTO #6199F
+    r.spend(6);
 }
 
 fn i61915(r: &mut Run) {
-    op!(r, 0x61915, 4, Op::Call(0x61A02)); // GOSUB #61A02
+    r.cpu.pc = 0x61919;
+    r.cpu.call(0x61A02); // GOSUB #61A02
+    r.spend(6);
 }
 
 fn i61919(r: &mut Run) {
-    op!(r, 0x61919, 3, Op::CondJump(Cond::Carry, 0x61903)); // GOC #61903
-    i6191c(r)
+    r.cpu.pc = 0x6191C;
+    r.cpu.jump_if(Cond::Carry, 0x61903); // GOC #61903
+    if r.next_pc(0x6191C, 5) {
+        i6191c(r)
+    }
 }
 
 fn i6191c(r: &mut Run) {
-    op!(r, 0x6191C, 3, Op::CondJump(Cond::NoCarry, 0x6192B)); // GONC #6192B
+    r.cpu.pc = 0x6191F;
+    r.cpu.jump_if(Cond::NoCarry, 0x6192B); // GONC #6192B
+    r.spend(5);
 }
 
 fn i61924(r: &mut Run) {
-    op!(r, 0x61924, 4, Op::Call(0x61A02)); // GOSUB #61A02
+    r.cpu.pc = 0x61928;
+    r.cpu.call(0x61A02); // GOSUB #61A02
+    r.spend(6);
 }
 
 fn i61928(r: &mut Run) {
-    op!(r, 0x61928, 3, Op::CondJump(Cond::NoCarry, 0x61903)); // GONC #61903
-    i6192b(r)
+    r.cpu.pc = 0x6192B;
+    r.cpu.jump_if(Cond::NoCarry, 0x61903); // GONC #61903
+    if r.next_pc(0x6192B, 5) {
+        i6192b(r)
+    }
 }
 
 fn i6192b(r: &mut Run) {
-    op!(r, 0x6192B, 3, Op::DAdd { d: 1, n: 5 }); // D1=D1+ 5
-    i6192e(r)
+    r.cpu.d_add(1, 5); // D1=D1+ 5
+    if r.next(0x6192E, 5) {
+        i6192e(r)
+    }
 }
 
 fn i6192e(r: &mut Run) {
-    op!(r, 0x6192E, 2, Op::Inc { r: R::D, f: Field::A }); // D=D+1 A
-    i61930(r)
+    r.cpu.inc(R::D, Field::A); // D=D+1 A
+    if r.next(0x61930, 4) {
+        i61930(r)
+    }
 }
 
 fn i61930(r: &mut Run) {
-    op!(r, 0x61930, 3, Op::CondJump(Cond::NoCarry, 0x61907)); // GONC #61907
+    r.cpu.pc = 0x61933;
+    r.cpu.jump_if(Cond::NoCarry, 0x61907); // GONC #61907
+    r.spend(5);
 }
 
 fn i61938(r: &mut Run) {
-    op!(r, 0x61938, 3, Op::Mem { store: false, d: 1, r: R::A, f: Field::A }); // A=DAT1 A
-    i6193b(r)
+    r.sync();
+    r.cpu.load(1, R::A, Field::A, r.hw); // A=DAT1 A
+    if r.next_io(0x6193B, 19) {
+        i6193b(r)
+    }
 }
 
 fn i6193b(r: &mut Run) {
-    op!(r, 0x6193B, 3, Op::DAdd { d: 1, n: 5 }); // D1=D1+ 5
-    i6193e(r)
+    r.cpu.d_add(1, 5); // D1=D1+ 5
+    if r.next(0x6193E, 5) {
+        i6193e(r)
+    }
 }
 
 fn i6193e(r: &mut Run) {
-    op!(r, 0x6193E, 2, Op::Inc { r: R::D, f: Field::A }); // D=D+1 A
-    i61940(r)
+    r.cpu.inc(R::D, Field::A); // D=D+1 A
+    if r.next(0x61940, 4) {
+        i61940(r)
+    }
 }
 
 fn i61940(r: &mut Run) {
-    op!(r, 0x61940, 3, Op::Mem { store: false, d: 1, r: R::C, f: Field::A }); // C=DAT1 A
-    i61943(r)
+    r.sync();
+    r.cpu.load(1, R::C, Field::A, r.hw); // C=DAT1 A
+    if r.next_io(0x61943, 19) {
+        i61943(r)
+    }
 }
 
 fn i61943(r: &mut Run) {
-    op!(r, 0x61943, 5, Op::Test { test: Test::Regs(Cmp::Eq, R::C, R::A), f: Field::A, goyes: Some(0x6199F) }); // ?C=A A / GOYES #6199F
-    i61948(r)
+    r.cpu.pc = 0x61948;
+    r.cpu.test(Test::Regs(Cmp::Eq, R::C, R::A), Field::A, Some(0x6199F)); // ?C=A A / GOYES #6199F
+    if r.next_pc(0x61948, 7) {
+        i61948(r)
+    }
 }
 
 fn i61948(r: &mut Run) {
-    op!(r, 0x61948, 3, Op::CondJump(Cond::NoCarry, 0x619A6)); // GONC #619A6
+    r.cpu.pc = 0x6194B;
+    r.cpu.jump_if(Cond::NoCarry, 0x619A6); // GONC #619A6
+    r.spend(5);
 }
 
 fn i61950(r: &mut Run) {
-    op!(r, 0x61950, 4, Op::Call(0x61A02)); // GOSUB #61A02
+    r.cpu.pc = 0x61954;
+    r.cpu.call(0x61A02); // GOSUB #61A02
+    r.spend(6);
 }
 
 fn i61954(r: &mut Run) {
-    op!(r, 0x61954, 3, Op::CondJump(Cond::NoCarry, 0x6196C)); // GONC #6196C
-    i61957(r)
+    r.cpu.pc = 0x61957;
+    r.cpu.jump_if(Cond::NoCarry, 0x6196C); // GONC #6196C
+    if r.next_pc(0x61957, 5) {
+        i61957(r)
+    }
 }
 
 fn i61957(r: &mut Run) {
-    op!(r, 0x61957, 3, Op::DAdd { d: 1, n: 5 }); // D1=D1+ 5
-    i6195a(r)
+    r.cpu.d_add(1, 5); // D1=D1+ 5
+    if r.next(0x6195A, 5) {
+        i6195a(r)
+    }
 }
 
 fn i6195a(r: &mut Run) {
-    op!(r, 0x6195A, 2, Op::Inc { r: R::D, f: Field::A }); // D=D+1 A
-    i6195c(r)
+    r.cpu.inc(R::D, Field::A); // D=D+1 A
+    if r.next(0x6195C, 4) {
+        i6195c(r)
+    }
 }
 
 fn i6195c(r: &mut Run) {
-    op!(r, 0x6195C, 4, Op::Jump(0x61A47)); // GOTO #61A47
+    r.cpu.pc = 0x61A47; // GOTO #61A47
+    r.spend(6);
 }
 
 fn i61965(r: &mut Run) {
-    op!(r, 0x61965, 4, Op::Call(0x61A02)); // GOSUB #61A02
+    r.cpu.pc = 0x61969;
+    r.cpu.call(0x61A02); // GOSUB #61A02
+    r.spend(6);
 }
 
 fn i61969(r: &mut Run) {
-    op!(r, 0x61969, 3, Op::CondJump(Cond::NoCarry, 0x61957)); // GONC #61957
-    i6196c(r)
+    r.cpu.pc = 0x6196C;
+    r.cpu.jump_if(Cond::NoCarry, 0x61957); // GONC #61957
+    if r.next_pc(0x6196C, 5) {
+        i6196c(r)
+    }
 }
 
 fn i6196c(r: &mut Run) {
-    op!(r, 0x6196C, 4, Op::Jump(0x61A4E)); // GOTO #61A4E
+    r.cpu.pc = 0x61A4E; // GOTO #61A4E
+    r.spend(6);
 }
 
 fn i61975(r: &mut Run) {
-    op!(r, 0x61975, 4, Op::Call(0x61A02)); // GOSUB #61A02
+    r.cpu.pc = 0x61979;
+    r.cpu.call(0x61A02); // GOSUB #61A02
+    r.spend(6);
 }
 
 fn i61979(r: &mut Run) {
-    op!(r, 0x61979, 3, Op::CondJump(Cond::NoCarry, 0x6196C)); // GONC #6196C
-    i6197c(r)
+    r.cpu.pc = 0x6197C;
+    r.cpu.jump_if(Cond::NoCarry, 0x6196C); // GONC #6196C
+    if r.next_pc(0x6197C, 5) {
+        i6197c(r)
+    }
 }
 
 fn i6197c(r: &mut Run) {
-    op!(r, 0x6197C, 3, Op::DAdd { d: 1, n: 5 }); // D1=D1+ 5
-    i6197f(r)
+    r.cpu.d_add(1, 5); // D1=D1+ 5
+    if r.next(0x6197F, 5) {
+        i6197f(r)
+    }
 }
 
 fn i6197f(r: &mut Run) {
-    op!(r, 0x6197F, 2, Op::Inc { r: R::D, f: Field::A }); // D=D+1 A
-    i61981(r)
+    r.cpu.inc(R::D, Field::A); // D=D+1 A
+    if r.next(0x61981, 4) {
+        i61981(r)
+    }
 }
 
 fn i61981(r: &mut Run) {
-    op!(r, 0x61981, 3, Op::CondJump(Cond::NoCarry, 0x61957)); // GONC #61957
+    r.cpu.pc = 0x61984;
+    r.cpu.jump_if(Cond::NoCarry, 0x61957); // GONC #61957
+    r.spend(5);
 }
 
 fn i61989(r: &mut Run) {
-    op!(r, 0x61989, 4, Op::Call(0x61A02)); // GOSUB #61A02
+    r.cpu.pc = 0x6198D;
+    r.cpu.call(0x61A02); // GOSUB #61A02
+    r.spend(6);
 }
 
 fn i6198d(r: &mut Run) {
-    op!(r, 0x6198D, 3, Op::CondJump(Cond::Carry, 0x6196C)); // GOC #6196C
-    i61990(r)
+    r.cpu.pc = 0x61990;
+    r.cpu.jump_if(Cond::Carry, 0x6196C); // GOC #6196C
+    if r.next_pc(0x61990, 5) {
+        i61990(r)
+    }
 }
 
 fn i61990(r: &mut Run) {
-    op!(r, 0x61990, 3, Op::CondJump(Cond::NoCarry, 0x6197C)); // GONC #6197C
+    r.cpu.pc = 0x61993;
+    r.cpu.jump_if(Cond::NoCarry, 0x6197C); // GONC #6197C
+    r.spend(5);
 }
 
 fn i61998(r: &mut Run) {
-    op!(r, 0x61998, 4, Op::Call(0x61A02)); // GOSUB #61A02
+    r.cpu.pc = 0x6199C;
+    r.cpu.call(0x61A02); // GOSUB #61A02
+    r.spend(6);
 }
 
 fn i6199c(r: &mut Run) {
-    op!(r, 0x6199C, 3, Op::CondJump(Cond::NoCarry, 0x619A6)); // GONC #619A6
-    i6199f(r)
+    r.cpu.pc = 0x6199F;
+    r.cpu.jump_if(Cond::NoCarry, 0x619A6); // GONC #619A6
+    if r.next_pc(0x6199F, 5) {
+        i6199f(r)
+    }
 }
 
 fn i6199f(r: &mut Run) {
-    op!(r, 0x6199F, 7, Op::Jump(0x6FD6)); // GOTO #06FD6
+    r.cpu.pc = 0x06FD6; // GOTO #06FD6
+    r.spend(9);
 }
 
 fn i619a6(r: &mut Run) {
-    op!(r, 0x619A6, 7, Op::Jump(0x7152)); // GOTO #07152
+    r.cpu.pc = 0x07152; // GOTO #07152
+    r.spend(9);
 }
 
 fn i619b2(r: &mut Run) {
-    op!(r, 0x619B2, 4, Op::Call(0x61A02)); // GOSUB #61A02
+    r.cpu.pc = 0x619B6;
+    r.cpu.call(0x61A02); // GOSUB #61A02
+    r.spend(6);
 }
 
 fn i619b6(r: &mut Run) {
-    op!(r, 0x619B6, 3, Op::CondJump(Cond::Carry, 0x619A6)); // GOC #619A6
-    i619b9(r)
+    r.cpu.pc = 0x619B9;
+    r.cpu.jump_if(Cond::Carry, 0x619A6); // GOC #619A6
+    if r.next_pc(0x619B9, 5) {
+        i619b9(r)
+    }
 }
 
 fn i619b9(r: &mut Run) {
-    op!(r, 0x619B9, 3, Op::CondJump(Cond::NoCarry, 0x6199F)); // GONC #6199F
+    r.cpu.pc = 0x619BC;
+    r.cpu.jump_if(Cond::NoCarry, 0x6199F); // GONC #6199F
+    r.spend(5);
 }
 
 fn i619c1(r: &mut Run) {
-    op!(r, 0x619C1, 4, Op::Call(0x61A02)); // GOSUB #61A02
+    r.cpu.pc = 0x619C5;
+    r.cpu.call(0x61A02); // GOSUB #61A02
+    r.spend(6);
 }
 
 fn i619c5(r: &mut Run) {
-    op!(r, 0x619C5, 3, Op::CondJump(Cond::NoCarry, 0x619A6)); // GONC #619A6
-    i619c8(r)
+    r.cpu.pc = 0x619C8;
+    r.cpu.jump_if(Cond::NoCarry, 0x619A6); // GONC #619A6
+    if r.next_pc(0x619C8, 5) {
+        i619c8(r)
+    }
 }
 
 fn i619c8(r: &mut Run) {
-    op!(r, 0x619C8, 3, Op::CondJump(Cond::Carry, 0x619D6)); // GOC #619D6
+    r.cpu.pc = 0x619CB;
+    r.cpu.jump_if(Cond::Carry, 0x619D6); // GOC #619D6
+    r.spend(5);
 }
 
 fn i619d0(r: &mut Run) {
-    op!(r, 0x619D0, 3, Op::Mem { store: false, d: 0, r: R::A, f: Field::A }); // A=DAT0 A
-    i619d3(r)
+    r.sync();
+    r.cpu.load(0, R::A, Field::A, r.hw); // A=DAT0 A
+    if r.next_io(0x619D3, 19) {
+        i619d3(r)
+    }
 }
 
 fn i619d3(r: &mut Run) {
-    op!(r, 0x619D3, 3, Op::DFromR { d: 0, r: R::A, short: false }); // D0=A
-    i619d6(r)
+    r.cpu.d_from_r(0, R::A, false); // D0=A
+    if r.next(0x619D6, 5) {
+        i619d6(r)
+    }
 }
 
 fn i619d6(r: &mut Run) {
-    op!(r, 0x619D6, 3, Op::Mem { store: false, d: 0, r: R::A, f: Field::A }); // A=DAT0 A
-    i619d9(r)
+    r.sync();
+    r.cpu.load(0, R::A, Field::A, r.hw); // A=DAT0 A
+    if r.next_io(0x619D9, 19) {
+        i619d9(r)
+    }
 }
 
 fn i619d9(r: &mut Run) {
-    op!(r, 0x619D9, 3, Op::DAdd { d: 0, n: 5 }); // D0=D0+ 5
-    i619dc(r)
+    r.cpu.d_add(0, 5); // D0=D0+ 5
+    if r.next(0x619DC, 5) {
+        i619dc(r)
+    }
 }
 
 fn i619dc(r: &mut Run) {
-    op!(r, 0x619DC, 4, Op::PcIndirect(R::A)); // PC=(A)
+    r.sync();
+    r.cpu.pc_indirect(R::A, r.hw); // PC=(A)
+    r.spend(23);
 }
 
 fn i619e5(r: &mut Run) {
-    op!(r, 0x619E5, 4, Op::Call(0x61A02)); // GOSUB #61A02
+    r.cpu.pc = 0x619E9;
+    r.cpu.call(0x61A02); // GOSUB #61A02
+    r.spend(6);
 }
 
 fn i619e9(r: &mut Run) {
-    op!(r, 0x619E9, 3, Op::CondJump(Cond::Carry, 0x619D0)); // GOC #619D0
-    i619ec(r)
+    r.cpu.pc = 0x619EC;
+    r.cpu.jump_if(Cond::Carry, 0x619D0); // GOC #619D0
+    if r.next_pc(0x619EC, 5) {
+        i619ec(r)
+    }
 }
 
 fn i619ec(r: &mut Run) {
-    op!(r, 0x619EC, 3, Op::DAdd { d: 0, n: 5 }); // D0=D0+ 5
-    i619ef(r)
+    r.cpu.d_add(0, 5); // D0=D0+ 5
+    if r.next(0x619EF, 5) {
+        i619ef(r)
+    }
 }
 
 fn i619ef(r: &mut Run) {
-    op!(r, 0x619EF, 4, Op::Jump(0x61A4E)); // GOTO #61A4E
+    r.cpu.pc = 0x61A4E; // GOTO #61A4E
+    r.spend(6);
 }
 
 fn i619f8(r: &mut Run) {
-    op!(r, 0x619F8, 4, Op::Call(0x61A02)); // GOSUB #61A02
+    r.cpu.pc = 0x619FC;
+    r.cpu.call(0x61A02); // GOSUB #61A02
+    r.spend(6);
 }
 
 fn i619fc(r: &mut Run) {
-    op!(r, 0x619FC, 3, Op::CondJump(Cond::Carry, 0x619EC)); // GOC #619EC
-    i619ff(r)
+    r.cpu.pc = 0x619FF;
+    r.cpu.jump_if(Cond::Carry, 0x619EC); // GOC #619EC
+    if r.next_pc(0x619FF, 5) {
+        i619ff(r)
+    }
 }
 
 fn i619ff(r: &mut Run) {
-    op!(r, 0x619FF, 3, Op::CondJump(Cond::NoCarry, 0x619D0)); // GONC #619D0
-    i61a02(r)
+    r.cpu.pc = 0x61A02;
+    r.cpu.jump_if(Cond::NoCarry, 0x619D0); // GONC #619D0
+    if r.next_pc(0x61A02, 5) {
+        i61a02(r)
+    }
 }
 
 /// popflag
 fn i61a02(r: &mut Run) {
-    op!(r, 0x61A02, 3, Op::Mem { store: false, d: 1, r: R::A, f: Field::A }); // A=DAT1 A
-    i61a05(r)
+    r.sync();
+    r.cpu.load(1, R::A, Field::A, r.hw); // A=DAT1 A
+    if r.next_io(0x61A05, 19) {
+        i61a05(r)
+    }
 }
 
 fn i61a05(r: &mut Run) {
-    op!(r, 0x61A05, 3, Op::DAdd { d: 1, n: 5 }); // D1=D1+ 5
-    i61a08(r)
+    r.cpu.d_add(1, 5); // D1=D1+ 5
+    if r.next(0x61A08, 5) {
+        i61a08(r)
+    }
 }
 
 fn i61a08(r: &mut Run) {
-    op!(r, 0x61A08, 2, Op::Inc { r: R::D, f: Field::A }); // D=D+1 A
-    i61a0a(r)
+    r.cpu.inc(R::D, Field::A); // D=D+1 A
+    if r.next(0x61A0A, 4) {
+        i61a0a(r)
+    }
 }
 
 fn i61a0a(r: &mut Run) {
-    op!(r, 0x61A0A, 7, Op::LoadConst { r: R::C, len: 5, val: 0x3A81 }); // LC(5) #03A81
-    i61a11(r)
+    r.cpu.load_const(R::C, 5, 0x3A81); // LC(5) #03A81
+    if r.next(0x61A11, 9) {
+        i61a11(r)
+    }
 }
 
 fn i61a11(r: &mut Run) {
-    op!(r, 0x61A11, 5, Op::Test { test: Test::Regs(Cmp::Eq, R::C, R::A), f: Field::A, goyes: None }); // ?C=A A / RTNYES
-    i61a16(r)
+    r.cpu.pc = 0x61A16;
+    r.cpu.test(Test::Regs(Cmp::Eq, R::C, R::A), Field::A, None); // ?C=A A / RTNYES
+    if r.next_pc(0x61A16, 7) {
+        i61a16(r)
+    }
 }
 
 fn i61a16(r: &mut Run) {
-    op!(r, 0x61A16, 2, Op::Rtn(RtnKind::Plain)); // RTN
+    r.cpu.rtn(RtnKind::Plain); // RTN
+    r.spend(9);
 }
 
 fn i61a1d(r: &mut Run) {
-    op!(r, 0x61A1D, 7, Op::Call(0x6641)); // GOSUB #06641
+    r.cpu.pc = 0x61A24;
+    r.cpu.call(0x06641); // GOSUB #06641
+    r.spend(9);
 }
 
 fn i61a24(r: &mut Run) {
-    op!(r, 0x61A24, 5, Op::Test { test: Test::Zero(R::A), f: Field::A, goyes: Some(0x61A47) }); // ?A=0 A / GOYES #61A47
-    i61a29(r)
+    r.cpu.pc = 0x61A29;
+    r.cpu.test(Test::Zero(R::A), Field::A, Some(0x61A47)); // ?A=0 A / GOYES #61A47
+    if r.next_pc(0x61A29, 7) {
+        i61a29(r)
+    }
 }
 
 fn i61a29(r: &mut Run) {
-    op!(r, 0x61A29, 3, Op::CondJump(Cond::NoCarry, 0x61A4E)); // GONC #61A4E
+    r.cpu.pc = 0x61A2C;
+    r.cpu.jump_if(Cond::NoCarry, 0x61A4E); // GONC #61A4E
+    r.spend(5);
 }
 
 fn i61a31(r: &mut Run) {
-    op!(r, 0x61A31, 4, Op::Call(0x61A02)); // GOSUB #61A02
+    r.cpu.pc = 0x61A35;
+    r.cpu.call(0x61A02); // GOSUB #61A02
+    r.spend(6);
 }
 
 fn i61a35(r: &mut Run) {
-    op!(r, 0x61A35, 3, Op::CondJump(Cond::NoCarry, 0x61A47)); // GONC #61A47
-    i61a38(r)
+    r.cpu.pc = 0x61A38;
+    r.cpu.jump_if(Cond::NoCarry, 0x61A47); // GONC #61A47
+    if r.next_pc(0x61A38, 5) {
+        i61a38(r)
+    }
 }
 
 fn i61a38(r: &mut Run) {
-    op!(r, 0x61A38, 3, Op::CondJump(Cond::Carry, 0x61A4E)); // GOC #61A4E
+    r.cpu.pc = 0x61A3B;
+    r.cpu.jump_if(Cond::Carry, 0x61A4E); // GOC #61A4E
+    r.spend(5);
 }
 
 fn i61a40(r: &mut Run) {
-    op!(r, 0x61A40, 4, Op::Call(0x61A02)); // GOSUB #61A02
+    r.cpu.pc = 0x61A44;
+    r.cpu.call(0x61A02); // GOSUB #61A02
+    r.spend(6);
 }
 
 fn i61a44(r: &mut Run) {
-    op!(r, 0x61A44, 3, Op::CondJump(Cond::NoCarry, 0x61A4E)); // GONC #61A4E
-    i61a47(r)
+    r.cpu.pc = 0x61A47;
+    r.cpu.jump_if(Cond::NoCarry, 0x61A4E); // GONC #61A4E
+    if r.next_pc(0x61A47, 5) {
+        i61a47(r)
+    }
 }
 
 /// SEMILOOP
 fn i61a47(r: &mut Run) {
-    op!(r, 0x61A47, 7, Op::Jump(0x3130)); // GOTO #03130
+    r.cpu.pc = 0x03130; // GOTO #03130
+    r.spend(9);
 }
 
 fn i61a4e(r: &mut Run) {
-    op!(r, 0x61A4E, 3, Op::Mem { store: false, d: 0, r: R::A, f: Field::A }); // A=DAT0 A
-    i61a51(r)
+    r.sync();
+    r.cpu.load(0, R::A, Field::A, r.hw); // A=DAT0 A
+    if r.next_io(0x61A51, 19) {
+        i61a51(r)
+    }
 }
 
 fn i61a51(r: &mut Run) {
-    op!(r, 0x61A51, 3, Op::DAdd { d: 0, n: 5 }); // D0=D0+ 5
-    i61a54(r)
+    r.cpu.d_add(0, 5); // D0=D0+ 5
+    if r.next(0x61A54, 5) {
+        i61a54(r)
+    }
 }
 
 fn i61a54(r: &mut Run) {
-    op!(r, 0x61A54, 4, Op::PcIndirect(R::A)); // PC=(A)
+    r.sync();
+    r.cpu.pc_indirect(R::A, r.hw); // PC=(A)
+    r.spend(23);
 }
 
 fn i61a5d(r: &mut Run) {
-    op!(r, 0x61A5D, 4, Op::Call(0x61A02)); // GOSUB #61A02
+    r.cpu.pc = 0x61A61;
+    r.cpu.call(0x61A02); // GOSUB #61A02
+    r.spend(6);
 }
 
 fn i61a61(r: &mut Run) {
-    op!(r, 0x61A61, 3, Op::CondJump(Cond::NoCarry, 0x61A4E)); // GONC #61A4E
-    i61a64(r)
+    r.cpu.pc = 0x61A64;
+    r.cpu.jump_if(Cond::NoCarry, 0x61A4E); // GONC #61A4E
+    if r.next_pc(0x61A64, 5) {
+        i61a64(r)
+    }
 }
 
 fn i61a64(r: &mut Run) {
-    op!(r, 0x61A64, 3, Op::DAdd { d: 1, n: 5 }); // D1=D1+ 5
-    i61a67(r)
+    r.cpu.d_add(1, 5); // D1=D1+ 5
+    if r.next(0x61A67, 5) {
+        i61a67(r)
+    }
 }
 
 fn i61a67(r: &mut Run) {
-    op!(r, 0x61A67, 2, Op::Inc { r: R::D, f: Field::A }); // D=D+1 A
-    i61a69(r)
+    r.cpu.inc(R::D, Field::A); // D=D+1 A
+    if r.next(0x61A69, 4) {
+        i61a69(r)
+    }
 }
 
 fn i61a69(r: &mut Run) {
-    op!(r, 0x61A69, 4, Op::Jump(0x619A6)); // GOTO #619A6
+    r.cpu.pc = 0x619A6; // GOTO #619A6
+    r.spend(6);
 }
 
 fn i61a72(r: &mut Run) {
-    op!(r, 0x61A72, 2, Op::Exch { a: R::A, b: R::B, f: Field::A }); // ABEX A
-    i61a74(r)
+    r.cpu.exch(R::A, R::B, Field::A); // ABEX A
+    if r.next(0x61A74, 4) {
+        i61a74(r)
+    }
 }
 
 fn i61a74(r: &mut Run) {
-    op!(r, 0x61A74, 3, Op::DExR { d: 0, r: R::A, short: false }); // AD0EX
-    i61a77(r)
+    r.cpu.d_ex_r(0, R::A, false); // AD0EX
+    if r.next(0x61A77, 5) {
+        i61a77(r)
+    }
 }
 
 fn i61a77(r: &mut Run) {
-    op!(r, 0x61A77, 3, Op::DSub { d: 0, n: 5 }); // D0=D0- 5
-    i61a7a(r)
+    r.cpu.d_sub(0, 5); // D0=D0- 5
+    if r.next(0x61A7A, 5) {
+        i61a7a(r)
+    }
 }
 
 fn i61a7a(r: &mut Run) {
-    op!(r, 0x61A7A, 3, Op::Mem { store: false, d: 0, r: R::A, f: Field::A }); // A=DAT0 A
-    i61a7d(r)
+    r.sync();
+    r.cpu.load(0, R::A, Field::A, r.hw); // A=DAT0 A
+    if r.next_io(0x61A7D, 19) {
+        i61a7d(r)
+    }
 }
 
 fn i61a7d(r: &mut Run) {
-    op!(r, 0x61A7D, 3, Op::DExR { d: 0, r: R::A, short: false }); // AD0EX
-    i61a80(r)
+    r.cpu.d_ex_r(0, R::A, false); // AD0EX
+    if r.next(0x61A80, 5) {
+        i61a80(r)
+    }
 }
 
 fn i61a80(r: &mut Run) {
-    op!(r, 0x61A80, 2, Op::Copy { dst: R::B, src: R::A, f: Field::A }); // B=A A
-    i61a82(r)
+    r.cpu.copy(R::B, R::A, Field::A); // B=A A
+    if r.next(0x61A82, 4) {
+        i61a82(r)
+    }
 }
 
 fn i61a82(r: &mut Run) {
-    op!(r, 0x61A82, 3, Op::Mem { store: false, d: 1, r: R::A, f: Field::A }); // A=DAT1 A
-    i61a85(r)
+    r.sync();
+    r.cpu.load(1, R::A, Field::A, r.hw); // A=DAT1 A
+    if r.next_io(0x61A85, 19) {
+        i61a85(r)
+    }
 }
 
 fn i61a85(r: &mut Run) {
-    op!(r, 0x61A85, 3, Op::DAdd { d: 1, n: 5 }); // D1=D1+ 5
-    i61a88(r)
+    r.cpu.d_add(1, 5); // D1=D1+ 5
+    if r.next(0x61A88, 5) {
+        i61a88(r)
+    }
 }
 
 fn i61a88(r: &mut Run) {
-    op!(r, 0x61A88, 2, Op::Inc { r: R::D, f: Field::A }); // D=D+1 A
-    i61a8a(r)
+    r.cpu.inc(R::D, Field::A); // D=D+1 A
+    if r.next(0x61A8A, 4) {
+        i61a8a(r)
+    }
 }
 
 fn i61a8a(r: &mut Run) {
-    op!(r, 0x61A8A, 4, Op::PcIndirect(R::A)); // PC=(A)
+    r.sync();
+    r.cpu.pc_indirect(R::A, r.hw); // PC=(A)
+    r.spend(23);
 }
 
 fn i61a93(r: &mut Run) {
-    op!(r, 0x61A93, 2, Op::Copy { dst: R::A, src: R::B, f: Field::A }); // A=B A
-    i61a95(r)
+    r.cpu.copy(R::A, R::B, Field::A); // A=B A
+    if r.next(0x61A95, 4) {
+        i61a95(r)
+    }
 }
 
 fn i61a95(r: &mut Run) {
-    op!(r, 0x61A95, 3, Op::DFromR { d: 0, r: R::A, short: false }); // D0=A
-    i61a98(r)
+    r.cpu.d_from_r(0, R::A, false); // D0=A
+    if r.next(0x61A98, 5) {
+        i61a98(r)
+    }
 }
 
 fn i61a98(r: &mut Run) {
-    op!(r, 0x61A98, 3, Op::DSub { d: 0, n: 5 }); // D0=D0- 5
-    i61a9b(r)
+    r.cpu.d_sub(0, 5); // D0=D0- 5
+    if r.next(0x61A9B, 5) {
+        i61a9b(r)
+    }
 }
 
 fn i61a9b(r: &mut Run) {
-    op!(r, 0x61A9B, 3, Op::Mem { store: false, d: 0, r: R::A, f: Field::A }); // A=DAT0 A
-    i61a9e(r)
+    r.sync();
+    r.cpu.load(0, R::A, Field::A, r.hw); // A=DAT0 A
+    if r.next_io(0x61A9E, 19) {
+        i61a9e(r)
+    }
 }
 
 fn i61a9e(r: &mut Run) {
-    op!(r, 0x61A9E, 3, Op::DExR { d: 0, r: R::A, short: false }); // AD0EX
-    i61aa1(r)
+    r.cpu.d_ex_r(0, R::A, false); // AD0EX
+    if r.next(0x61AA1, 5) {
+        i61aa1(r)
+    }
 }
 
 fn i61aa1(r: &mut Run) {
-    op!(r, 0x61AA1, 2, Op::Copy { dst: R::B, src: R::A, f: Field::A }); // B=A A
-    i61aa3(r)
+    r.cpu.copy(R::B, R::A, Field::A); // B=A A
+    if r.next(0x61AA3, 4) {
+        i61aa3(r)
+    }
 }
 
 fn i61aa3(r: &mut Run) {
-    op!(r, 0x61AA3, 3, Op::Mem { store: false, d: 1, r: R::C, f: Field::A }); // C=DAT1 A
-    i61aa6(r)
+    r.sync();
+    r.cpu.load(1, R::C, Field::A, r.hw); // C=DAT1 A
+    if r.next_io(0x61AA6, 19) {
+        i61aa6(r)
+    }
 }
 
 fn i61aa6(r: &mut Run) {
-    op!(r, 0x61AA6, 2, Op::PushC); // RSTK=C
-    i61aa8(r)
+    r.cpu.push_c(); // RSTK=C
+    if r.next(0x61AA8, 4) {
+        i61aa8(r)
+    }
 }
 
 fn i61aa8(r: &mut Run) {
-    op!(r, 0x61AA8, 3, Op::DAdd { d: 1, n: 5 }); // D1=D1+ 5
-    i61aab(r)
+    r.cpu.d_add(1, 5); // D1=D1+ 5
+    if r.next(0x61AAB, 5) {
+        i61aab(r)
+    }
 }
 
 fn i61aab(r: &mut Run) {
-    op!(r, 0x61AAB, 3, Op::Mem { store: false, d: 1, r: R::C, f: Field::A }); // C=DAT1 A
-    i61aae(r)
+    r.sync();
+    r.cpu.load(1, R::C, Field::A, r.hw); // C=DAT1 A
+    if r.next_io(0x61AAE, 19) {
+        i61aae(r)
+    }
 }
 
 fn i61aae(r: &mut Run) {
-    op!(r, 0x61AAE, 2, Op::PushC); // RSTK=C
-    i61ab0(r)
+    r.cpu.push_c(); // RSTK=C
+    if r.next(0x61AB0, 4) {
+        i61ab0(r)
+    }
 }
 
 fn i61ab0(r: &mut Run) {
-    op!(r, 0x61AB0, 3, Op::DAdd { d: 1, n: 5 }); // D1=D1+ 5
-    i61ab3(r)
+    r.cpu.d_add(1, 5); // D1=D1+ 5
+    if r.next(0x61AB3, 5) {
+        i61ab3(r)
+    }
 }
 
 fn i61ab3(r: &mut Run) {
-    op!(r, 0x61AB3, 3, Op::Mem { store: false, d: 1, r: R::A, f: Field::A }); // A=DAT1 A
-    i61ab6(r)
+    r.sync();
+    r.cpu.load(1, R::A, Field::A, r.hw); // A=DAT1 A
+    if r.next_io(0x61AB6, 19) {
+        i61ab6(r)
+    }
 }
 
 fn i61ab6(r: &mut Run) {
-    op!(r, 0x61AB6, 3, Op::DAdd { d: 1, n: 5 }); // D1=D1+ 5
-    i61ab9(r)
+    r.cpu.d_add(1, 5); // D1=D1+ 5
+    if r.next(0x61AB9, 5) {
+        i61ab9(r)
+    }
 }
 
 fn i61ab9(r: &mut Run) {
-    op!(r, 0x61AB9, 7, Op::LoadConst { r: R::C, len: 5, val: 4 }); // LC(5) #00004
-    i61ac0(r)
+    r.cpu.load_const(R::C, 5, 0x4); // LC(5) #00004
+    if r.next(0x61AC0, 9) {
+        i61ac0(r)
+    }
 }
 
 fn i61ac0(r: &mut Run) {
-    op!(r, 0x61AC0, 2, Op::Add { dst: R::D, src: R::C, f: Field::A }); // D=D+C A
-    i61ac2(r)
+    r.cpu.add(R::D, R::C, Field::A); // D=D+C A
+    if r.next(0x61AC2, 4) {
+        i61ac2(r)
+    }
 }
 
 fn i61ac2(r: &mut Run) {
-    op!(r, 0x61AC2, 7, Op::LoadConst { r: R::C, len: 5, val: 0x3A81 }); // LC(5) #03A81
-    i61ac9(r)
+    r.cpu.load_const(R::C, 5, 0x3A81); // LC(5) #03A81
+    if r.next(0x61AC9, 9) {
+        i61ac9(r)
+    }
 }
 
 fn i61ac9(r: &mut Run) {
-    op!(r, 0x61AC9, 5, Op::Test { test: Test::Regs(Cmp::Eq, R::C, R::A), f: Field::A, goyes: Some(0x61AD0) }); // ?C=A A / GOYES #61AD0
-    i61ace(r)
+    r.cpu.pc = 0x61ACE;
+    r.cpu.test(Test::Regs(Cmp::Eq, R::C, R::A), Field::A, Some(0x61AD0)); // ?C=A A / GOYES #61AD0
+    if r.next_pc(0x61ACE, 7) {
+        i61ace(r)
+    }
 }
 
 fn i61ace(r: &mut Run) {
-    op!(r, 0x61ACE, 2, Op::PopC); // C=RSTK
-    i61ad0(r)
+    r.cpu.pop_c(); // C=RSTK
+    if r.next(0x61AD0, 4) {
+        i61ad0(r)
+    }
 }
 
 fn i61ad0(r: &mut Run) {
-    op!(r, 0x61AD0, 2, Op::PopC); // C=RSTK
-    i61ad2(r)
+    r.cpu.pop_c(); // C=RSTK
+    if r.next(0x61AD2, 4) {
+        i61ad2(r)
+    }
 }
 
 fn i61ad2(r: &mut Run) {
-    op!(r, 0x61AD2, 2, Op::Copy { dst: R::A, src: R::C, f: Field::A }); // A=C A
-    i61ad4(r)
+    r.cpu.copy(R::A, R::C, Field::A); // A=C A
+    if r.next(0x61AD4, 4) {
+        i61ad4(r)
+    }
 }
 
 fn i61ad4(r: &mut Run) {
-    op!(r, 0x61AD4, 4, Op::PcIndirect(R::A)); // PC=(A)
+    r.sync();
+    r.cpu.pc_indirect(R::A, r.hw); // PC=(A)
+    r.spend(23);
 }
 
 fn i61add(r: &mut Run) {
-    op!(r, 0x61ADD, 3, Op::DExR { d: 0, r: R::C, short: false }); // CD0EX
-    i61ae0(r)
+    r.cpu.d_ex_r(0, R::C, false); // CD0EX
+    if r.next(0x61AE0, 5) {
+        i61ae0(r)
+    }
 }
 
 fn i61ae0(r: &mut Run) {
-    op!(r, 0x61AE0, 3, Op::DFromR { d: 0, r: R::C, short: false }); // D0=C
-    i61ae3(r)
+    r.cpu.d_from_r(0, R::C, false); // D0=C
+    if r.next(0x61AE3, 5) {
+        i61ae3(r)
+    }
 }
 
 fn i61ae3(r: &mut Run) {
-    op!(r, 0x61AE3, 2, Op::PushC); // RSTK=C
-    i61ae5(r)
+    r.cpu.push_c(); // RSTK=C
+    if r.next(0x61AE5, 4) {
+        i61ae5(r)
+    }
 }
 
 fn i61ae5(r: &mut Run) {
-    op!(r, 0x61AE5, 4, Op::Jump(0x61B02)); // GOTO #61B02
+    r.cpu.pc = 0x61B02; // GOTO #61B02
+    r.spend(6);
 }
 
 fn i61aee(r: &mut Run) {
-    op!(r, 0x61AEE, 2, Op::Copy { dst: R::A, src: R::B, f: Field::A }); // A=B A
-    i61af0(r)
+    r.cpu.copy(R::A, R::B, Field::A); // A=B A
+    if r.next(0x61AF0, 4) {
+        i61af0(r)
+    }
 }
 
 fn i61af0(r: &mut Run) {
-    op!(r, 0x61AF0, 3, Op::DFromR { d: 0, r: R::A, short: false }); // D0=A
-    i61af3(r)
+    r.cpu.d_from_r(0, R::A, false); // D0=A
+    if r.next(0x61AF3, 5) {
+        i61af3(r)
+    }
 }
 
 fn i61af3(r: &mut Run) {
-    op!(r, 0x61AF3, 3, Op::DSub { d: 0, n: 5 }); // D0=D0- 5
-    i61af6(r)
+    r.cpu.d_sub(0, 5); // D0=D0- 5
+    if r.next(0x61AF6, 5) {
+        i61af6(r)
+    }
 }
 
 fn i61af6(r: &mut Run) {
-    op!(r, 0x61AF6, 3, Op::Mem { store: false, d: 0, r: R::C, f: Field::A }); // C=DAT0 A
-    i61af9(r)
+    r.sync();
+    r.cpu.load(0, R::C, Field::A, r.hw); // C=DAT0 A
+    if r.next_io(0x61AF9, 19) {
+        i61af9(r)
+    }
 }
 
 fn i61af9(r: &mut Run) {
-    op!(r, 0x61AF9, 2, Op::PushC); // RSTK=C
-    i61afb(r)
+    r.cpu.push_c(); // RSTK=C
+    if r.next(0x61AFB, 4) {
+        i61afb(r)
+    }
 }
 
 fn i61afb(r: &mut Run) {
-    op!(r, 0x61AFB, 3, Op::DExR { d: 0, r: R::C, short: false }); // CD0EX
-    i61afe(r)
+    r.cpu.d_ex_r(0, R::C, false); // CD0EX
+    if r.next(0x61AFE, 5) {
+        i61afe(r)
+    }
 }
 
 fn i61afe(r: &mut Run) {
-    op!(r, 0x61AFE, 2, Op::Copy { dst: R::B, src: R::C, f: Field::A }); // B=C A
-    i61b00(r)
+    r.cpu.copy(R::B, R::C, Field::A); // B=C A
+    if r.next(0x61B00, 4) {
+        i61b00(r)
+    }
 }
 
 fn i61b00(r: &mut Run) {
-    op!(r, 0x61B00, 2, Op::Inc { r: R::D, f: Field::A }); // D=D+1 A
-    i61b02(r)
+    r.cpu.inc(R::D, Field::A); // D=D+1 A
+    if r.next(0x61B02, 4) {
+        i61b02(r)
+    }
 }
 
 fn i61b02(r: &mut Run) {
-    op!(r, 0x61B02, 7, Op::Call(0x3019)); // GOSUB #03019
+    r.cpu.pc = 0x61B09;
+    r.cpu.call(0x03019); // GOSUB #03019
+    r.spend(9);
 }
 
 fn i61b09(r: &mut Run) {
-    op!(r, 0x61B09, 3, Op::DExR { d: 0, r: R::C, short: false }); // CD0EX
-    i61b0c(r)
+    r.cpu.d_ex_r(0, R::C, false); // CD0EX
+    if r.next(0x61B0C, 5) {
+        i61b0c(r)
+    }
 }
 
 fn i61b0c(r: &mut Run) {
-    op!(r, 0x61B0C, 2, Op::PushC); // RSTK=C
-    i61b0e(r)
+    r.cpu.push_c(); // RSTK=C
+    if r.next(0x61B0E, 4) {
+        i61b0e(r)
+    }
 }
 
 fn i61b0e(r: &mut Run) {
-    op!(r, 0x61B0E, 3, Op::DFromR { d: 0, r: R::C, short: false }); // D0=C
-    i61b11(r)
+    r.cpu.d_from_r(0, R::C, false); // D0=C
+    if r.next(0x61B11, 5) {
+        i61b11(r)
+    }
 }
 
 fn i61b11(r: &mut Run) {
-    op!(r, 0x61B11, 7, Op::Call(0x3019)); // GOSUB #03019
+    r.cpu.pc = 0x61B18;
+    r.cpu.call(0x03019); // GOSUB #03019
+    r.spend(9);
 }
 
 fn i61b18(r: &mut Run) {
-    op!(r, 0x61B18, 4, Op::Call(0x61A02)); // GOSUB #61A02
+    r.cpu.pc = 0x61B1C;
+    r.cpu.call(0x61A02); // GOSUB #61A02
+    r.spend(6);
 }
 
 fn i61b1c(r: &mut Run) {
-    op!(r, 0x61B1C, 3, Op::CondJump(Cond::NoCarry, 0x61B21)); // GONC #61B21
-    i61b1f(r)
+    r.cpu.pc = 0x61B1F;
+    r.cpu.jump_if(Cond::NoCarry, 0x61B21); // GONC #61B21
+    if r.next_pc(0x61B1F, 5) {
+        i61b1f(r)
+    }
 }
 
 fn i61b1f(r: &mut Run) {
-    op!(r, 0x61B1F, 2, Op::PopC); // C=RSTK
-    i61b21(r)
+    r.cpu.pop_c(); // C=RSTK
+    if r.next(0x61B21, 4) {
+        i61b21(r)
+    }
 }
 
 fn i61b21(r: &mut Run) {
-    op!(r, 0x61B21, 2, Op::PopC); // C=RSTK
-    i61b23(r)
+    r.cpu.pop_c(); // C=RSTK
+    if r.next(0x61B23, 4) {
+        i61b23(r)
+    }
 }
 
 fn i61b23(r: &mut Run) {
-    op!(r, 0x61B23, 2, Op::PushC); // RSTK=C
-    i61b25(r)
+    r.cpu.push_c(); // RSTK=C
+    if r.next(0x61B25, 4) {
+        i61b25(r)
+    }
 }
 
 fn i61b25(r: &mut Run) {
-    op!(r, 0x61B25, 3, Op::DExR { d: 0, r: R::C, short: false }); // CD0EX
-    i61b28(r)
+    r.cpu.d_ex_r(0, R::C, false); // CD0EX
+    if r.next(0x61B28, 5) {
+        i61b28(r)
+    }
 }
 
 fn i61b28(r: &mut Run) {
-    op!(r, 0x61B28, 3, Op::Mem { store: false, d: 0, r: R::A, f: Field::A }); // A=DAT0 A
-    i61b2b(r)
+    r.sync();
+    r.cpu.load(0, R::A, Field::A, r.hw); // A=DAT0 A
+    if r.next_io(0x61B2B, 19) {
+        i61b2b(r)
+    }
 }
 
 fn i61b2b(r: &mut Run) {
-    op!(r, 0x61B2B, 3, Op::DFromR { d: 0, r: R::A, short: false }); // D0=A
-    i61b2e(r)
+    r.cpu.d_from_r(0, R::A, false); // D0=A
+    if r.next(0x61B2E, 5) {
+        i61b2e(r)
+    }
 }
 
 fn i61b2e(r: &mut Run) {
-    op!(r, 0x61B2E, 3, Op::Mem { store: false, d: 0, r: R::A, f: Field::A }); // A=DAT0 A
-    i61b31(r)
+    r.sync();
+    r.cpu.load(0, R::A, Field::A, r.hw); // A=DAT0 A
+    if r.next_io(0x61B31, 19) {
+        i61b31(r)
+    }
 }
 
 fn i61b31(r: &mut Run) {
-    op!(r, 0x61B31, 3, Op::DExR { d: 0, r: R::C, short: false }); // CD0EX
-    i61b34(r)
+    r.cpu.d_ex_r(0, R::C, false); // CD0EX
+    if r.next(0x61B34, 5) {
+        i61b34(r)
+    }
 }
 
 fn i61b34(r: &mut Run) {
-    op!(r, 0x61B34, 2, Op::PushC); // RSTK=C
-    i61b36(r)
+    r.cpu.push_c(); // RSTK=C
+    if r.next(0x61B36, 4) {
+        i61b36(r)
+    }
 }
 
 fn i61b36(r: &mut Run) {
-    op!(r, 0x61B36, 7, Op::LoadConst { r: R::C, len: 5, val: 0x28FC }); // LC(5) #028FC
-    i61b3d(r)
+    r.cpu.load_const(R::C, 5, 0x28FC); // LC(5) #028FC
+    if r.next(0x61B3D, 9) {
+        i61b3d(r)
+    }
 }
 
 fn i61b3d(r: &mut Run) {
-    op!(r, 0x61B3D, 5, Op::Test { test: Test::Regs(Cmp::Ne, R::C, R::A), f: Field::A, goyes: Some(0x61AD0) }); // ?C#A A / GOYES #61AD0
-    i61b42(r)
+    r.cpu.pc = 0x61B42;
+    r.cpu.test(Test::Regs(Cmp::Ne, R::C, R::A), Field::A, Some(0x61AD0)); // ?C#A A / GOYES #61AD0
+    if r.next_pc(0x61B42, 7) {
+        i61b42(r)
+    }
 }
 
 fn i61b42(r: &mut Run) {
-    op!(r, 0x61B42, 3, Op::CondJump(Cond::NoCarry, 0x61ACE)); // GONC #61ACE
+    r.cpu.pc = 0x61B45;
+    r.cpu.jump_if(Cond::NoCarry, 0x61ACE); // GONC #61ACE
+    r.spend(5);
 }
 
 fn i61b4a(r: &mut Run) {
-    op!(r, 0x61B4A, 7, Op::LoadConst { r: R::C, len: 5, val: 0xFFFF6 }); // LC(5) #FFFF6
-    i61b51(r)
+    r.cpu.load_const(R::C, 5, 0xFFFF6); // LC(5) #FFFF6
+    if r.next(0x61B51, 9) {
+        i61b51(r)
+    }
 }
 
 fn i61b51(r: &mut Run) {
-    op!(r, 0x61B51, 4, Op::Jump(0x61B61)); // GOTO #61B61
+    r.cpu.pc = 0x61B61; // GOTO #61B61
+    r.spend(6);
 }
 
 fn i61b5a(r: &mut Run) {
-    op!(r, 0x61B5A, 7, Op::LoadConst { r: R::C, len: 5, val: 0xFFFF1 }); // LC(5) #FFFF1
-    i61b61(r)
+    r.cpu.load_const(R::C, 5, 0xFFFF1); // LC(5) #FFFF1
+    if r.next(0x61B61, 9) {
+        i61b61(r)
+    }
 }
 
 fn i61b61(r: &mut Run) {
-    op!(r, 0x61B61, 2, Op::Add { dst: R::C, src: R::B, f: Field::A }); // C=C+B A
-    i61b63(r)
+    r.cpu.add(R::C, R::B, Field::A); // C=C+B A
+    if r.next(0x61B63, 4) {
+        i61b63(r)
+    }
 }
 
 fn i61b63(r: &mut Run) {
-    op!(r, 0x61B63, 3, Op::DExR { d: 0, r: R::C, short: false }); // CD0EX
-    i61b66(r)
+    r.cpu.d_ex_r(0, R::C, false); // CD0EX
+    if r.next(0x61B66, 5) {
+        i61b66(r)
+    }
 }
 
 fn i61b66(r: &mut Run) {
-    op!(r, 0x61B66, 3, Op::Mem { store: false, d: 0, r: R::A, f: Field::A }); // A=DAT0 A
-    i61b69(r)
+    r.sync();
+    r.cpu.load(0, R::A, Field::A, r.hw); // A=DAT0 A
+    if r.next_io(0x61B69, 19) {
+        i61b69(r)
+    }
 }
 
 fn i61b69(r: &mut Run) {
-    op!(r, 0x61B69, 3, Op::DFromR { d: 0, r: R::C, short: false }); // D0=C
-    i61b6c(r)
+    r.cpu.d_from_r(0, R::C, false); // D0=C
+    if r.next(0x61B6C, 5) {
+        i61b6c(r)
+    }
 }
 
 fn i61b6c(r: &mut Run) {
-    op!(r, 0x61B6C, 2, Op::Copy { dst: R::C, src: R::A, f: Field::A }); // C=A A
-    i61b6e(r)
+    r.cpu.copy(R::C, R::A, Field::A); // C=A A
+    if r.next(0x61B6E, 4) {
+        i61b6e(r)
+    }
 }
 
 fn i61b6e(r: &mut Run) {
-    op!(r, 0x61B6E, 4, Op::Jump(0x61B23)); // GOTO #61B23
+    r.cpu.pc = 0x61B23; // GOTO #61B23
+    r.spend(6);
 }
 
 fn i61b77(r: &mut Run) {
-    op!(r, 0x61B77, 6, Op::Call(0x61A02)); // GOSUB #61A02
+    r.cpu.pc = 0x61B7D;
+    r.cpu.call(0x61A02); // GOSUB #61A02
+    r.spend(8);
 }
 
 fn i61b7d(r: &mut Run) {
-    op!(r, 0x61B7D, 3, Op::CondJump(Cond::Carry, 0x61B85)); // GOC #61B85
-    i61b80(r)
+    r.cpu.pc = 0x61B80;
+    r.cpu.jump_if(Cond::Carry, 0x61B85); // GOC #61B85
+    if r.next_pc(0x61B80, 5) {
+        i61b80(r)
+    }
 }
 
 fn i61b80(r: &mut Run) {
-    op!(r, 0x61B80, 3, Op::DAdd { d: 1, n: 5 }); // D1=D1+ 5
-    i61b83(r)
+    r.cpu.d_add(1, 5); // D1=D1+ 5
+    if r.next(0x61B83, 5) {
+        i61b83(r)
+    }
 }
 
 fn i61b83(r: &mut Run) {
-    op!(r, 0x61B83, 2, Op::Inc { r: R::D, f: Field::A }); // D=D+1 A
-    i61b85(r)
+    r.cpu.inc(R::D, Field::A); // D=D+1 A
+    if r.next(0x61B85, 4) {
+        i61b85(r)
+    }
 }
 
 fn i61b85(r: &mut Run) {
-    op!(r, 0x61B85, 4, Op::Jump(0x61A4E)); // GOTO #61A4E
+    r.cpu.pc = 0x61A4E; // GOTO #61A4E
+    r.spend(6);
 }
 
 fn i61b8e(r: &mut Run) {
-    op!(r, 0x61B8E, 2, Op::Dec { r: R::D, f: Field::A }); // D=D-1 A
-    i61b90(r)
+    r.cpu.dec(R::D, Field::A); // D=D-1 A
+    if r.next(0x61B90, 4) {
+        i61b90(r)
+    }
 }
 
 fn i61b90(r: &mut Run) {
-    op!(r, 0x61B90, 3, Op::CondJump(Cond::NoCarry, 0x61B99)); // GONC #61B99
-    i61b93(r)
+    r.cpu.pc = 0x61B93;
+    r.cpu.jump_if(Cond::NoCarry, 0x61B99); // GONC #61B99
+    if r.next_pc(0x61B93, 5) {
+        i61b93(r)
+    }
 }
 
 fn i61b93(r: &mut Run) {
-    op!(r, 0x61B93, 6, Op::Call(0x613A8)); // GOSUB #613A8
+    r.cpu.pc = 0x61B99;
+    r.cpu.call(0x613A8); // GOSUB #613A8
+    r.spend(8);
 }
 
 fn i61b99(r: &mut Run) {
-    op!(r, 0x61B99, 2, Op::Copy { dst: R::C, src: R::B, f: Field::A }); // C=B A
-    i61b9b(r)
+    r.cpu.copy(R::C, R::B, Field::A); // C=B A
+    if r.next(0x61B9B, 4) {
+        i61b9b(r)
+    }
 }
 
 fn i61b9b(r: &mut Run) {
-    op!(r, 0x61B9B, 3, Op::DExR { d: 0, r: R::C, short: false }); // CD0EX
-    i61b9e(r)
+    r.cpu.d_ex_r(0, R::C, false); // CD0EX
+    if r.next(0x61B9E, 5) {
+        i61b9e(r)
+    }
 }
 
 fn i61b9e(r: &mut Run) {
-    op!(r, 0x61B9E, 2, Op::PushC); // RSTK=C
-    i61ba0(r)
+    r.cpu.push_c(); // RSTK=C
+    if r.next(0x61BA0, 4) {
+        i61ba0(r)
+    }
 }
 
 fn i61ba0(r: &mut Run) {
-    op!(r, 0x61BA0, 3, Op::DSub { d: 0, n: 5 }); // D0=D0- 5
-    i61ba3(r)
+    r.cpu.d_sub(0, 5); // D0=D0- 5
+    if r.next(0x61BA3, 5) {
+        i61ba3(r)
+    }
 }
 
 fn i61ba3(r: &mut Run) {
-    op!(r, 0x61BA3, 3, Op::Mem { store: false, d: 0, r: R::C, f: Field::A }); // C=DAT0 A
-    i61ba6(r)
+    r.sync();
+    r.cpu.load(0, R::C, Field::A, r.hw); // C=DAT0 A
+    if r.next_io(0x61BA6, 19) {
+        i61ba6(r)
+    }
 }
 
 fn i61ba6(r: &mut Run) {
-    op!(r, 0x61BA6, 2, Op::PushC); // RSTK=C
-    i61ba8(r)
+    r.cpu.push_c(); // RSTK=C
+    if r.next(0x61BA8, 4) {
+        i61ba8(r)
+    }
 }
 
 fn i61ba8(r: &mut Run) {
-    op!(r, 0x61BA8, 3, Op::DSub { d: 1, n: 5 }); // D1=D1- 5
-    i61bab(r)
+    r.cpu.d_sub(1, 5); // D1=D1- 5
+    if r.next(0x61BAB, 5) {
+        i61bab(r)
+    }
 }
 
 fn i61bab(r: &mut Run) {
-    op!(r, 0x61BAB, 3, Op::Mem { store: true, d: 1, r: R::C, f: Field::A }); // DAT1=C A
-    i61bae(r)
+    r.sync();
+    r.cpu.store(1, R::C, Field::A, r.hw); // DAT1=C A
+    if r.next_io(0x61BAE, 19) {
+        i61bae(r)
+    }
 }
 
 fn i61bae(r: &mut Run) {
-    op!(r, 0x61BAE, 3, Op::DFromR { d: 0, r: R::C, short: false }); // D0=C
-    i61bb1(r)
+    r.cpu.d_from_r(0, R::C, false); // D0=C
+    if r.next(0x61BB1, 5) {
+        i61bb1(r)
+    }
 }
 
 fn i61bb1(r: &mut Run) {
-    op!(r, 0x61BB1, 3, Op::Mem { store: false, d: 0, r: R::A, f: Field::A }); // A=DAT0 A
-    i61bb4(r)
+    r.sync();
+    r.cpu.load(0, R::A, Field::A, r.hw); // A=DAT0 A
+    if r.next_io(0x61BB4, 19) {
+        i61bb4(r)
+    }
 }
 
 fn i61bb4(r: &mut Run) {
-    op!(r, 0x61BB4, 7, Op::LoadConst { r: R::C, len: 5, val: 0x312B }); // LC(5) #0312B
-    i61bbb(r)
+    r.cpu.load_const(R::C, 5, 0x312B); // LC(5) #0312B
+    if r.next(0x61BBB, 9) {
+        i61bbb(r)
+    }
 }
 
 fn i61bbb(r: &mut Run) {
-    op!(r, 0x61BBB, 5, Op::Test { test: Test::Regs(Cmp::Eq, R::C, R::A), f: Field::A, goyes: Some(0x61C05) }); // ?C=A A / GOYES #61C05
-    i61bc0(r)
+    r.cpu.pc = 0x61BC0;
+    r.cpu.test(Test::Regs(Cmp::Eq, R::C, R::A), Field::A, Some(0x61C05)); // ?C=A A / GOYES #61C05
+    if r.next_pc(0x61BC0, 7) {
+        i61bc0(r)
+    }
 }
 
 fn i61bc0(r: &mut Run) {
-    op!(r, 0x61BC0, 3, Op::DFromR { d: 0, r: R::A, short: false }); // D0=A
-    i61bc3(r)
+    r.cpu.d_from_r(0, R::A, false); // D0=A
+    if r.next(0x61BC3, 5) {
+        i61bc3(r)
+    }
 }
 
 fn i61bc3(r: &mut Run) {
-    op!(r, 0x61BC3, 3, Op::Mem { store: false, d: 0, r: R::A, f: Field::A }); // A=DAT0 A
-    i61bc6(r)
+    r.sync();
+    r.cpu.load(0, R::A, Field::A, r.hw); // A=DAT0 A
+    if r.next_io(0x61BC6, 19) {
+        i61bc6(r)
+    }
 }
 
 fn i61bc6(r: &mut Run) {
-    op!(r, 0x61BC6, 7, Op::LoadConst { r: R::C, len: 5, val: 0x28FC }); // LC(5) #028FC
-    i61bcd(r)
+    r.cpu.load_const(R::C, 5, 0x28FC); // LC(5) #028FC
+    if r.next(0x61BCD, 9) {
+        i61bcd(r)
+    }
 }
 
 fn i61bcd(r: &mut Run) {
-    op!(r, 0x61BCD, 5, Op::Test { test: Test::Regs(Cmp::Eq, R::C, R::A), f: Field::A, goyes: Some(0x61BE3) }); // ?C=A A / GOYES #61BE3
-    i61bd2(r)
+    r.cpu.pc = 0x61BD2;
+    r.cpu.test(Test::Regs(Cmp::Eq, R::C, R::A), Field::A, Some(0x61BE3)); // ?C=A A / GOYES #61BE3
+    if r.next_pc(0x61BD2, 7) {
+        i61bd2(r)
+    }
 }
 
 fn i61bd2(r: &mut Run) {
-    op!(r, 0x61BD2, 3, Op::DExR { d: 0, r: R::A, short: false }); // AD0EX
-    i61bd5(r)
+    r.cpu.d_ex_r(0, R::A, false); // AD0EX
+    if r.next(0x61BD5, 5) {
+        i61bd5(r)
+    }
 }
 
 fn i61bd5(r: &mut Run) {
-    op!(r, 0x61BD5, 3, Op::Mem { store: true, d: 1, r: R::A, f: Field::A }); // DAT1=A A
-    i61bd8(r)
+    r.sync();
+    r.cpu.store(1, R::A, Field::A, r.hw); // DAT1=A A
+    if r.next_io(0x61BD8, 19) {
+        i61bd8(r)
+    }
 }
 
 fn i61bd8(r: &mut Run) {
-    op!(r, 0x61BD8, 2, Op::PopC); // C=RSTK
-    i61bda(r)
+    r.cpu.pop_c(); // C=RSTK
+    if r.next(0x61BDA, 4) {
+        i61bda(r)
+    }
 }
 
 fn i61bda(r: &mut Run) {
-    op!(r, 0x61BDA, 3, Op::DFromR { d: 0, r: R::C, short: false }); // D0=C
-    i61bdd(r)
+    r.cpu.d_from_r(0, R::C, false); // D0=C
+    if r.next(0x61BDD, 5) {
+        i61bdd(r)
+    }
 }
 
 fn i61bdd(r: &mut Run) {
-    op!(r, 0x61BDD, 3, Op::DAdd { d: 0, n: 5 }); // D0=D0+ 5
-    i61be0(r)
+    r.cpu.d_add(0, 5); // D0=D0+ 5
+    if r.next(0x61BE0, 5) {
+        i61be0(r)
+    }
 }
 
 fn i61be0(r: &mut Run) {
-    op!(r, 0x61BE0, 3, Op::CondJump(Cond::NoCarry, 0x61BEF)); // GONC #61BEF
-    i61be3(r)
+    r.cpu.pc = 0x61BE3;
+    r.cpu.jump_if(Cond::NoCarry, 0x61BEF); // GONC #61BEF
+    if r.next_pc(0x61BE3, 5) {
+        i61be3(r)
+    }
 }
 
 fn i61be3(r: &mut Run) {
-    op!(r, 0x61BE3, 2, Op::PopC); // C=RSTK
-    i61be5(r)
+    r.cpu.pop_c(); // C=RSTK
+    if r.next(0x61BE5, 4) {
+        i61be5(r)
+    }
 }
 
 fn i61be5(r: &mut Run) {
-    op!(r, 0x61BE5, 3, Op::DFromR { d: 0, r: R::C, short: false }); // D0=C
-    i61be8(r)
+    r.cpu.d_from_r(0, R::C, false); // D0=C
+    if r.next(0x61BE8, 5) {
+        i61be8(r)
+    }
 }
 
 fn i61be8(r: &mut Run) {
-    op!(r, 0x61BE8, 7, Op::Call(0x3019)); // GOSUB #03019
+    r.cpu.pc = 0x61BEF;
+    r.cpu.call(0x03019); // GOSUB #03019
+    r.spend(9);
 }
 
 fn i61bef(r: &mut Run) {
-    op!(r, 0x61BEF, 2, Op::Copy { dst: R::A, src: R::B, f: Field::A }); // A=B A
-    i61bf1(r)
+    r.cpu.copy(R::A, R::B, Field::A); // A=B A
+    if r.next(0x61BF1, 4) {
+        i61bf1(r)
+    }
 }
 
 fn i61bf1(r: &mut Run) {
-    op!(r, 0x61BF1, 3, Op::DExR { d: 0, r: R::A, short: false }); // AD0EX
-    i61bf4(r)
+    r.cpu.d_ex_r(0, R::A, false); // AD0EX
+    if r.next(0x61BF4, 5) {
+        i61bf4(r)
+    }
 }
 
 fn i61bf4(r: &mut Run) {
-    op!(r, 0x61BF4, 3, Op::DSub { d: 0, n: 5 }); // D0=D0- 5
-    i61bf7(r)
+    r.cpu.d_sub(0, 5); // D0=D0- 5
+    if r.next(0x61BF7, 5) {
+        i61bf7(r)
+    }
 }
 
 fn i61bf7(r: &mut Run) {
-    op!(r, 0x61BF7, 3, Op::Mem { store: true, d: 0, r: R::A, f: Field::A }); // DAT0=A A
-    i61bfa(r)
+    r.sync();
+    r.cpu.store(0, R::A, Field::A, r.hw); // DAT0=A A
+    if r.next_io(0x61BFA, 19) {
+        i61bfa(r)
+    }
 }
 
 fn i61bfa(r: &mut Run) {
-    op!(r, 0x61BFA, 2, Op::PopC); // C=RSTK
-    i61bfc(r)
+    r.cpu.pop_c(); // C=RSTK
+    if r.next(0x61BFC, 4) {
+        i61bfc(r)
+    }
 }
 
 fn i61bfc(r: &mut Run) {
-    op!(r, 0x61BFC, 3, Op::DFromR { d: 0, r: R::C, short: false }); // D0=C
-    i61bff(r)
+    r.cpu.d_from_r(0, R::C, false); // D0=C
+    if r.next(0x61BFF, 5) {
+        i61bff(r)
+    }
 }
 
 fn i61bff(r: &mut Run) {
-    op!(r, 0x61BFF, 6, Op::Jump(0x620C3)); // GOTO #620C3
+    r.cpu.pc = 0x620C3; // GOTO #620C3
+    r.spend(8);
 }
 
 fn i61c05(r: &mut Run) {
-    op!(r, 0x61C05, 2, Op::Copy { dst: R::A, src: R::B, f: Field::A }); // A=B A
-    i61c07(r)
+    r.cpu.copy(R::A, R::B, Field::A); // A=B A
+    if r.next(0x61C07, 4) {
+        i61c07(r)
+    }
 }
 
 fn i61c07(r: &mut Run) {
-    op!(r, 0x61C07, 3, Op::DFromR { d: 0, r: R::A, short: false }); // D0=A
-    i61c0a(r)
+    r.cpu.d_from_r(0, R::A, false); // D0=A
+    if r.next(0x61C0A, 5) {
+        i61c0a(r)
+    }
 }
 
 fn i61c0a(r: &mut Run) {
-    op!(r, 0x61C0A, 3, Op::DSub { d: 0, n: 5 }); // D0=D0- 5
-    i61c0d(r)
+    r.cpu.d_sub(0, 5); // D0=D0- 5
+    if r.next(0x61C0D, 5) {
+        i61c0d(r)
+    }
 }
 
 fn i61c0d(r: &mut Run) {
-    op!(r, 0x61C0D, 2, Op::PopC); // C=RSTK
-    i61c0f(r)
+    r.cpu.pop_c(); // C=RSTK
+    if r.next(0x61C0F, 4) {
+        i61c0f(r)
+    }
 }
 
 fn i61c0f(r: &mut Run) {
-    op!(r, 0x61C0F, 2, Op::PopC); // C=RSTK
-    i61c11(r)
+    r.cpu.pop_c(); // C=RSTK
+    if r.next(0x61C11, 4) {
+        i61c11(r)
+    }
 }
 
 fn i61c11(r: &mut Run) {
-    op!(r, 0x61C11, 3, Op::DExR { d: 0, r: R::C, short: false }); // CD0EX
-    i61c14(r)
+    r.cpu.d_ex_r(0, R::C, false); // CD0EX
+    if r.next(0x61C14, 5) {
+        i61c14(r)
+    }
 }
 
 fn i61c14(r: &mut Run) {
-    op!(r, 0x61C14, 2, Op::Copy { dst: R::B, src: R::C, f: Field::A }); // B=C A
-    i61c16(r)
+    r.cpu.copy(R::B, R::C, Field::A); // B=C A
+    if r.next(0x61C16, 4) {
+        i61c16(r)
+    }
 }
 
 fn i61c16(r: &mut Run) {
-    op!(r, 0x61C16, 6, Op::Jump(0x620A0)); // GOTO #620A0
+    r.cpu.pc = 0x620A0; // GOTO #620A0
+    r.spend(8);
 }
 
 fn i61c21(r: &mut Run) {
-    op!(r, 0x61C21, 6, Op::Call(0x6249E)); // GOSUB #6249E
+    r.cpu.pc = 0x61C27;
+    r.cpu.call(0x6249E); // GOSUB #6249E
+    r.spend(8);
 }
 
 fn i61c27(r: &mut Run) {
-    op!(r, 0x61C27, 7, Op::Call(0x679B)); // GOSUB #0679B
+    r.cpu.pc = 0x61C2E;
+    r.cpu.call(0x0679B); // GOSUB #0679B
+    r.spend(9);
 }
 
 fn i61c2e(r: &mut Run) {
-    op!(r, 0x61C2E, 2, Op::Copy { dst: R::B, src: R::A, f: Field::A }); // B=A A
-    i61c30(r)
+    r.cpu.copy(R::B, R::A, Field::A); // B=A A
+    if r.next(0x61C30, 4) {
+        i61c30(r)
+    }
 }
 
 fn i61c30(r: &mut Run) {
-    op!(r, 0x61C30, 3, Op::Mem { store: false, d: 1, r: R::C, f: Field::A }); // C=DAT1 A
-    i61c33(r)
+    r.sync();
+    r.cpu.load(1, R::C, Field::A, r.hw); // C=DAT1 A
+    if r.next_io(0x61C33, 19) {
+        i61c33(r)
+    }
 }
 
 fn i61c33(r: &mut Run) {
-    op!(r, 0x61C33, 3, Op::DExR { d: 1, r: R::C, short: false }); // CD1EX
-    i61c36(r)
+    r.cpu.d_ex_r(1, R::C, false); // CD1EX
+    if r.next(0x61C36, 5) {
+        i61c36(r)
+    }
 }
 
 fn i61c36(r: &mut Run) {
-    op!(r, 0x61C36, 3, Op::DAdd { d: 1, n: 5 }); // D1=D1+ 5
-    i61c39(r)
+    r.cpu.d_add(1, 5); // D1=D1+ 5
+    if r.next(0x61C39, 5) {
+        i61c39(r)
+    }
 }
 
 fn i61c39(r: &mut Run) {
-    op!(r, 0x61C39, 3, Op::Mem { store: false, d: 1, r: R::A, f: Field::A }); // A=DAT1 A
-    i61c3c(r)
+    r.sync();
+    r.cpu.load(1, R::A, Field::A, r.hw); // A=DAT1 A
+    if r.next_io(0x61C3C, 19) {
+        i61c3c(r)
+    }
 }
 
 fn i61c3c(r: &mut Run) {
-    op!(r, 0x61C3C, 2, Op::Add { dst: R::B, src: R::A, f: Field::A }); // B=B+A A
-    i61c3e(r)
+    r.cpu.add(R::B, R::A, Field::A); // B=B+A A
+    if r.next(0x61C3E, 4) {
+        i61c3e(r)
+    }
 }
 
 fn i61c3e(r: &mut Run) {
-    op!(r, 0x61C3E, 3, Op::DExR { d: 1, r: R::C, short: false }); // CD1EX
-    i61c41(r)
+    r.cpu.d_ex_r(1, R::C, false); // CD1EX
+    if r.next(0x61C41, 5) {
+        i61c41(r)
+    }
 }
 
 fn i61c41(r: &mut Run) {
-    op!(r, 0x61C41, 2, Op::PushC); // RSTK=C
-    i61c43(r)
+    r.cpu.push_c(); // RSTK=C
+    if r.next(0x61C43, 4) {
+        i61c43(r)
+    }
 }
 
 fn i61c43(r: &mut Run) {
-    op!(r, 0x61C43, 2, Op::Copy { dst: R::C, src: R::B, f: Field::A }); // C=B A
-    i61c45(r)
+    r.cpu.copy(R::C, R::B, Field::A); // C=B A
+    if r.next(0x61C45, 4) {
+        i61c45(r)
+    }
 }
 
 fn i61c45(r: &mut Run) {
-    op!(r, 0x61C45, 2, Op::PSet(4)); // P= 4
-    i61c47(r)
+    r.cpu.p = 4; // P= 4
+    if r.next(0x61C47, 4) {
+        i61c47(r)
+    }
 }
 
 fn i61c47(r: &mut Run) {
-    op!(r, 0x61C47, 3, Op::CPlusP1); // C+P+1
-    i61c4a(r)
+    r.cpu.c_plus_p1(); // C+P+1
+    if r.next(0x61C4A, 5) {
+        i61c4a(r)
+    }
 }
 
 fn i61c4a(r: &mut Run) {
-    op!(r, 0x61C4A, 2, Op::PushC); // RSTK=C
-    i61c4c(r)
+    r.cpu.push_c(); // RSTK=C
+    if r.next(0x61C4C, 4) {
+        i61c4c(r)
+    }
 }
 
 fn i61c4c(r: &mut Run) {
-    op!(r, 0x61C4C, 3, Op::StSet { bit: 0xA, set: false }); // ST=0 10
-    i61c4f(r)
+    r.cpu.st_set(10, false); // ST=0 10
+    if r.next(0x61C4F, 5) {
+        i61c4f(r)
+    }
 }
 
 fn i61c4f(r: &mut Run) {
-    op!(r, 0x61C4F, 2, Op::PopC); // C=RSTK
-    i61c51(r)
+    r.cpu.pop_c(); // C=RSTK
+    if r.next(0x61C51, 4) {
+        i61c51(r)
+    }
 }
 
 fn i61c51(r: &mut Run) {
-    op!(r, 0x61C51, 2, Op::PushC); // RSTK=C
-    i61c53(r)
+    r.cpu.push_c(); // RSTK=C
+    if r.next(0x61C53, 4) {
+        i61c53(r)
+    }
 }
 
 fn i61c53(r: &mut Run) {
-    op!(r, 0x61C53, 7, Op::Call(0x6AD8)); // GOSUB #06AD8
+    r.cpu.pc = 0x61C5A;
+    r.cpu.call(0x06AD8); // GOSUB #06AD8
+    r.spend(9);
 }
 
 fn i61c5a(r: &mut Run) {
-    op!(r, 0x61C5A, 3, Op::CondJump(Cond::NoCarry, 0x61C99)); // GONC #61C99
-    i61c5d(r)
+    r.cpu.pc = 0x61C5D;
+    r.cpu.jump_if(Cond::NoCarry, 0x61C99); // GONC #61C99
+    if r.next_pc(0x61C5D, 5) {
+        i61c5d(r)
+    }
 }
 
 fn i61c5d(r: &mut Run) {
-    op!(r, 0x61C5D, 5, Op::StTest { bit: 0xA, set: false, goyes: Some(0x61C70) }); // ?ST=0 10 / GOYES #61C70
-    i61c62(r)
+    r.cpu.pc = 0x61C62;
+    r.cpu.st_test(10, false, Some(0x61C70)); // ?ST=0 10 / GOYES #61C70
+    if r.next_pc(0x61C62, 7) {
+        i61c62(r)
+    }
 }
 
 fn i61c62(r: &mut Run) {
-    op!(r, 0x61C62, 2, Op::PopC); // C=RSTK
-    i61c64(r)
+    r.cpu.pop_c(); // C=RSTK
+    if r.next(0x61C64, 4) {
+        i61c64(r)
+    }
 }
 
 fn i61c64(r: &mut Run) {
-    op!(r, 0x61C64, 2, Op::PopC); // C=RSTK
-    i61c66(r)
+    r.cpu.pop_c(); // C=RSTK
+    if r.next(0x61C66, 4) {
+        i61c66(r)
+    }
 }
 
 fn i61c66(r: &mut Run) {
-    op!(r, 0x61C66, 6, Op::Call(0x624AC)); // GOSUB #624AC
+    r.cpu.pc = 0x61C6C;
+    r.cpu.call(0x624AC); // GOSUB #624AC
+    r.spend(8);
 }
 
 fn i61c6c(r: &mut Run) {
-    op!(r, 0x61C6C, 4, Op::Jump(0x61DBD)); // GOTO #61DBD
+    r.cpu.pc = 0x61DBD; // GOTO #61DBD
+    r.spend(6);
 }
 
 fn i61c70(r: &mut Run) {
-    op!(r, 0x61C70, 3, Op::StSet { bit: 0xA, set: true }); // ST=1 10
-    i61c73(r)
+    r.cpu.st_set(10, true); // ST=1 10
+    if r.next(0x61C73, 5) {
+        i61c73(r)
+    }
 }
 
 fn i61c73(r: &mut Run) {
-    op!(r, 0x61C73, 6, Op::Call(0x624A5)); // GOSUB #624A5
+    r.cpu.pc = 0x61C79;
+    r.cpu.call(0x624A5); // GOSUB #624A5
+    r.spend(8);
 }
 
 fn i61c79(r: &mut Run) {
-    op!(r, 0x61C79, 6, Op::Call(0x624AC)); // GOSUB #624AC
+    r.cpu.pc = 0x61C7F;
+    r.cpu.call(0x624AC); // GOSUB #624AC
+    r.spend(8);
 }
 
 fn i61c7f(r: &mut Run) {
-    op!(r, 0x61C7F, 2, Op::PopC); // C=RSTK
-    i61c81(r)
+    r.cpu.pop_c(); // C=RSTK
+    if r.next(0x61C81, 4) {
+        i61c81(r)
+    }
 }
 
 fn i61c81(r: &mut Run) {
-    op!(r, 0x61C81, 2, Op::Copy { dst: R::A, src: R::C, f: Field::A }); // A=C A
-    i61c83(r)
+    r.cpu.copy(R::A, R::C, Field::A); // A=C A
+    if r.next(0x61C83, 4) {
+        i61c83(r)
+    }
 }
 
 fn i61c83(r: &mut Run) {
-    op!(r, 0x61C83, 2, Op::PopC); // C=RSTK
-    i61c85(r)
+    r.cpu.pop_c(); // C=RSTK
+    if r.next(0x61C85, 4) {
+        i61c85(r)
+    }
 }
 
 fn i61c85(r: &mut Run) {
-    op!(r, 0x61C85, 3, Op::Mem { store: false, d: 1, r: R::C, f: Field::A }); // C=DAT1 A
-    i61c88(r)
+    r.sync();
+    r.cpu.load(1, R::C, Field::A, r.hw); // C=DAT1 A
+    if r.next_io(0x61C88, 19) {
+        i61c88(r)
+    }
 }
 
 fn i61c88(r: &mut Run) {
-    op!(r, 0x61C88, 2, Op::PSet(4)); // P= 4
-    i61c8a(r)
+    r.cpu.p = 4; // P= 4
+    if r.next(0x61C8A, 4) {
+        i61c8a(r)
+    }
 }
 
 fn i61c8a(r: &mut Run) {
-    op!(r, 0x61C8A, 3, Op::CPlusP1); // C+P+1
-    i61c8d(r)
+    r.cpu.c_plus_p1(); // C+P+1
+    if r.next(0x61C8D, 5) {
+        i61c8d(r)
+    }
 }
 
 fn i61c8d(r: &mut Run) {
-    op!(r, 0x61C8D, 2, Op::PSet(0)); // P= 0
-    i61c8f(r)
+    r.cpu.p = 0; // P= 0
+    if r.next(0x61C8F, 4) {
+        i61c8f(r)
+    }
 }
 
 fn i61c8f(r: &mut Run) {
-    op!(r, 0x61C8F, 2, Op::PushC); // RSTK=C
-    i61c91(r)
+    r.cpu.push_c(); // RSTK=C
+    if r.next(0x61C91, 4) {
+        i61c91(r)
+    }
 }
 
 fn i61c91(r: &mut Run) {
-    op!(r, 0x61C91, 2, Op::Copy { dst: R::C, src: R::A, f: Field::A }); // C=A A
-    i61c93(r)
+    r.cpu.copy(R::C, R::A, Field::A); // C=A A
+    if r.next(0x61C93, 4) {
+        i61c93(r)
+    }
 }
 
 fn i61c93(r: &mut Run) {
-    op!(r, 0x61C93, 2, Op::PushC); // RSTK=C
-    i61c95(r)
+    r.cpu.push_c(); // RSTK=C
+    if r.next(0x61C95, 4) {
+        i61c95(r)
+    }
 }
 
 fn i61c95(r: &mut Run) {
-    op!(r, 0x61C95, 4, Op::Jump(0x61C4F)); // GOTO #61C4F
+    r.cpu.pc = 0x61C4F; // GOTO #61C4F
+    r.spend(6);
 }
 
 fn i61c99(r: &mut Run) {
-    op!(r, 0x61C99, 2, Op::PopC); // C=RSTK
-    i61c9b(r)
+    r.cpu.pop_c(); // C=RSTK
+    if r.next(0x61C9B, 4) {
+        i61c9b(r)
+    }
 }
 
 fn i61c9b(r: &mut Run) {
-    op!(r, 0x61C9B, 2, Op::Copy { dst: R::B, src: R::C, f: Field::A }); // B=C A
-    i61c9d(r)
+    r.cpu.copy(R::B, R::C, Field::A); // B=C A
+    if r.next(0x61C9D, 4) {
+        i61c9d(r)
+    }
 }
 
 fn i61c9d(r: &mut Run) {
-    op!(r, 0x61C9D, 2, Op::PopC); // C=RSTK
-    i61c9f(r)
+    r.cpu.pop_c(); // C=RSTK
+    if r.next(0x61C9F, 4) {
+        i61c9f(r)
+    }
 }
 
 fn i61c9f(r: &mut Run) {
-    op!(r, 0x61C9F, 3, Op::DExR { d: 0, r: R::C, short: false }); // CD0EX
-    i61ca2(r)
+    r.cpu.d_ex_r(0, R::C, false); // CD0EX
+    if r.next(0x61CA2, 5) {
+        i61ca2(r)
+    }
 }
 
 fn i61ca2(r: &mut Run) {
-    op!(r, 0x61CA2, 2, Op::PushC); // RSTK=C
-    i61ca4(r)
+    r.cpu.push_c(); // RSTK=C
+    if r.next(0x61CA4, 4) {
+        i61ca4(r)
+    }
 }
 
 fn i61ca4(r: &mut Run) {
-    op!(r, 0x61CA4, 3, Op::DExR { d: 1, r: R::C, short: false }); // CD1EX
-    i61ca7(r)
+    r.cpu.d_ex_r(1, R::C, false); // CD1EX
+    if r.next(0x61CA7, 5) {
+        i61ca7(r)
+    }
 }
 
 fn i61ca7(r: &mut Run) {
-    op!(r, 0x61CA7, 3, Op::Mem { store: false, d: 0, r: R::C, f: Field::A }); // C=DAT0 A
-    i61caa(r)
+    r.sync();
+    r.cpu.load(0, R::C, Field::A, r.hw); // C=DAT0 A
+    if r.next_io(0x61CAA, 19) {
+        i61caa(r)
+    }
 }
 
 fn i61caa(r: &mut Run) {
-    op!(r, 0x61CAA, 2, Op::PSet(4)); // P= 4
-    i61cac(r)
+    r.cpu.p = 4; // P= 4
+    if r.next(0x61CAC, 4) {
+        i61cac(r)
+    }
 }
 
 fn i61cac(r: &mut Run) {
-    op!(r, 0x61CAC, 3, Op::CPlusP1); // C+P+1
-    i61caf(r)
+    r.cpu.c_plus_p1(); // C+P+1
+    if r.next(0x61CAF, 5) {
+        i61caf(r)
+    }
 }
 
 fn i61caf(r: &mut Run) {
-    op!(r, 0x61CAF, 2, Op::Copy { dst: R::D, src: R::C, f: Field::A }); // D=C A
-    i61cb1(r)
+    r.cpu.copy(R::D, R::C, Field::A); // D=C A
+    if r.next(0x61CB1, 4) {
+        i61cb1(r)
+    }
 }
 
 fn i61cb1(r: &mut Run) {
-    op!(r, 0x61CB1, 3, Op::DSub { d: 0, n: 5 }); // D0=D0- 5
-    i61cb4(r)
+    r.cpu.d_sub(0, 5); // D0=D0- 5
+    if r.next(0x61CB4, 5) {
+        i61cb4(r)
+    }
 }
 
 fn i61cb4(r: &mut Run) {
-    op!(r, 0x61CB4, 7, Op::Call(0x670C)); // GOSUB #0670C
+    r.cpu.pc = 0x61CBB;
+    r.cpu.call(0x0670C); // GOSUB #0670C
+    r.spend(9);
 }
 
 fn i61cbb(r: &mut Run) {
-    op!(r, 0x61CBB, 2, Op::PopC); // C=RSTK
-    i61cbd(r)
+    r.cpu.pop_c(); // C=RSTK
+    if r.next(0x61CBD, 4) {
+        i61cbd(r)
+    }
 }
 
 fn i61cbd(r: &mut Run) {
-    op!(r, 0x61CBD, 3, Op::DExR { d: 0, r: R::C, short: false }); // CD0EX
-    i61cc0(r)
+    r.cpu.d_ex_r(0, R::C, false); // CD0EX
+    if r.next(0x61CC0, 5) {
+        i61cc0(r)
+    }
 }
 
 fn i61cc0(r: &mut Run) {
-    op!(r, 0x61CC0, 2, Op::Copy { dst: R::C, src: R::B, f: Field::A }); // C=B A
-    i61cc2(r)
+    r.cpu.copy(R::C, R::B, Field::A); // C=B A
+    if r.next(0x61CC2, 4) {
+        i61cc2(r)
+    }
 }
 
 fn i61cc2(r: &mut Run) {
-    op!(r, 0x61CC2, 3, Op::DExR { d: 0, r: R::C, short: false }); // CD0EX
-    i61cc5(r)
+    r.cpu.d_ex_r(0, R::C, false); // CD0EX
+    if r.next(0x61CC5, 5) {
+        i61cc5(r)
+    }
 }
 
 fn i61cc5(r: &mut Run) {
-    op!(r, 0x61CC5, 3, Op::DSub { d: 0, n: 5 }); // D0=D0- 5
-    i61cc8(r)
+    r.cpu.d_sub(0, 5); // D0=D0- 5
+    if r.next(0x61CC8, 5) {
+        i61cc8(r)
+    }
 }
 
 fn i61cc8(r: &mut Run) {
-    op!(r, 0x61CC8, 3, Op::DExR { d: 0, r: R::C, short: false }); // CD0EX
-    i61ccb(r)
+    r.cpu.d_ex_r(0, R::C, false); // CD0EX
+    if r.next(0x61CCB, 5) {
+        i61ccb(r)
+    }
 }
 
 fn i61ccb(r: &mut Run) {
-    op!(r, 0x61CCB, 3, Op::DAdd { d: 0, n: 5 }); // D0=D0+ 5
-    i61cce(r)
+    r.cpu.d_add(0, 5); // D0=D0+ 5
+    if r.next(0x61CCE, 5) {
+        i61cce(r)
+    }
 }
 
 fn i61cce(r: &mut Run) {
-    op!(r, 0x61CCE, 3, Op::Mem { store: true, d: 0, r: R::C, f: Field::A }); // DAT0=C A
-    i61cd1(r)
+    r.sync();
+    r.cpu.store(0, R::C, Field::A, r.hw); // DAT0=C A
+    if r.next_io(0x61CD1, 19) {
+        i61cd1(r)
+    }
 }
 
 fn i61cd1(r: &mut Run) {
-    op!(r, 0x61CD1, 3, Op::DSub { d: 0, n: 5 }); // D0=D0- 5
-    i61cd4(r)
+    r.cpu.d_sub(0, 5); // D0=D0- 5
+    if r.next(0x61CD4, 5) {
+        i61cd4(r)
+    }
 }
 
 fn i61cd4(r: &mut Run) {
-    op!(r, 0x61CD4, 2, Op::Copy { dst: R::C, src: R::B, f: Field::A }); // C=B A
-    i61cd6(r)
+    r.cpu.copy(R::C, R::B, Field::A); // C=B A
+    if r.next(0x61CD6, 4) {
+        i61cd6(r)
+    }
 }
 
 fn i61cd6(r: &mut Run) {
-    op!(r, 0x61CD6, 2, Op::Sub { dst: R::C, a: R::C, b: R::D, f: Field::A }); // C=C-D A
-    i61cd8(r)
+    r.cpu.sub(R::C, R::C, R::D, Field::A); // C=C-D A
+    if r.next(0x61CD8, 4) {
+        i61cd8(r)
+    }
 }
 
 fn i61cd8(r: &mut Run) {
-    op!(r, 0x61CD8, 7, Op::Call(0x675C)); // GOSUB #0675C
+    r.cpu.pc = 0x61CDF;
+    r.cpu.call(0x0675C); // GOSUB #0675C
+    r.spend(9);
 }
 
 fn i61cdf(r: &mut Run) {
-    op!(r, 0x61CDF, 3, Op::DExR { d: 0, r: R::A, short: false }); // AD0EX
-    i61ce2(r)
+    r.cpu.d_ex_r(0, R::A, false); // AD0EX
+    if r.next(0x61CE2, 5) {
+        i61ce2(r)
+    }
 }
 
 fn i61ce2(r: &mut Run) {
-    op!(r, 0x61CE2, 7, Op::Jump(0x3672)); // GOTO #03672
+    r.cpu.pc = 0x03672; // GOTO #03672
+    r.spend(9);
 }
 
 fn i61cee(r: &mut Run) {
-    op!(r, 0x61CEE, 3, Op::Mem { store: false, d: 1, r: R::A, f: Field::A }); // A=DAT1 A
-    i61cf1(r)
+    r.sync();
+    r.cpu.load(1, R::A, Field::A, r.hw); // A=DAT1 A
+    if r.next_io(0x61CF1, 19) {
+        i61cf1(r)
+    }
 }
 
 fn i61cf1(r: &mut Run) {
-    op!(r, 0x61CF1, 6, Op::Scratch { op: ScratchOp::ToScratch, r: R::A, n: 2, f: Field::A }); // R2=A.F A
-    i61cf7(r)
+    r.cpu.scratch(ScratchOp::ToScratch, R::A, 2, Field::A); // R2=A.F A
+    if r.next(0x61CF7, 8) {
+        i61cf7(r)
+    }
 }
 
 fn i61cf7(r: &mut Run) {
-    op!(r, 0x61CF7, 3, Op::DAdd { d: 1, n: 5 }); // D1=D1+ 5
-    i61cfa(r)
+    r.cpu.d_add(1, 5); // D1=D1+ 5
+    if r.next(0x61CFA, 5) {
+        i61cfa(r)
+    }
 }
 
 fn i61cfa(r: &mut Run) {
-    op!(r, 0x61CFA, 2, Op::Inc { r: R::D, f: Field::A }); // D=D+1 A
-    i61cfc(r)
+    r.cpu.inc(R::D, Field::A); // D=D+1 A
+    if r.next(0x61CFC, 4) {
+        i61cfc(r)
+    }
 }
 
 fn i61cfc(r: &mut Run) {
-    op!(r, 0x61CFC, 6, Op::Call(0x6249E)); // GOSUB #6249E
+    r.cpu.pc = 0x61D02;
+    r.cpu.call(0x6249E); // GOSUB #6249E
+    r.spend(8);
 }
 
 fn i61d02(r: &mut Run) {
-    op!(r, 0x61D02, 7, Op::Call(0x679B)); // GOSUB #0679B
+    r.cpu.pc = 0x61D09;
+    r.cpu.call(0x0679B); // GOSUB #0679B
+    r.spend(9);
 }
 
 fn i61d09(r: &mut Run) {
-    op!(r, 0x61D09, 2, Op::Copy { dst: R::C, src: R::A, f: Field::A }); // C=A A
-    i61d0b(r)
+    r.cpu.copy(R::C, R::A, Field::A); // C=A A
+    if r.next(0x61D0B, 4) {
+        i61d0b(r)
+    }
 }
 
 fn i61d0b(r: &mut Run) {
-    op!(r, 0x61D0B, 3, Op::StSet { bit: 1, set: true }); // ST=1 1
-    i61d0e(r)
+    r.cpu.st_set(1, true); // ST=1 1
+    if r.next(0x61D0E, 5) {
+        i61d0e(r)
+    }
 }
 
 fn i61d0e(r: &mut Run) {
-    op!(r, 0x61D0E, 4, Op::Call(0x61D86)); // GOSUB #61D86
+    r.cpu.pc = 0x61D12;
+    r.cpu.call(0x61D86); // GOSUB #61D86
+    r.spend(6);
 }
 
 fn i61d12(r: &mut Run) {
-    op!(r, 0x61D12, 3, Op::Mem { store: false, d: 1, r: R::A, f: Field::A }); // A=DAT1 A
-    i61d15(r)
+    r.sync();
+    r.cpu.load(1, R::A, Field::A, r.hw); // A=DAT1 A
+    if r.next_io(0x61D15, 19) {
+        i61d15(r)
+    }
 }
 
 fn i61d15(r: &mut Run) {
-    op!(r, 0x61D15, 3, Op::Scratch { op: ScratchOp::FromScratch, r: R::C, n: 0, f: Field::W }); // C=R0
-    i61d18(r)
+    r.cpu.scratch(ScratchOp::FromScratch, R::C, 0, Field::W); // C=R0
+    if r.next(0x61D18, 5) {
+        i61d18(r)
+    }
 }
 
 fn i61d18(r: &mut Run) {
-    op!(r, 0x61D18, 2, Op::Sub { dst: R::A, a: R::A, b: R::C, f: Field::A }); // A=A-C A
-    i61d1a(r)
+    r.cpu.sub(R::A, R::A, R::C, Field::A); // A=A-C A
+    if r.next(0x61D1A, 4) {
+        i61d1a(r)
+    }
 }
 
 fn i61d1a(r: &mut Run) {
-    op!(r, 0x61D1A, 3, Op::Mem { store: true, d: 1, r: R::A, f: Field::A }); // DAT1=A A
-    i61d1d(r)
+    r.sync();
+    r.cpu.store(1, R::A, Field::A, r.hw); // DAT1=A A
+    if r.next_io(0x61D1D, 19) {
+        i61d1d(r)
+    }
 }
 
 fn i61d1d(r: &mut Run) {
-    op!(r, 0x61D1D, 6, Op::Call(0x624AC)); // GOSUB #624AC
+    r.cpu.pc = 0x61D23;
+    r.cpu.call(0x624AC); // GOSUB #624AC
+    r.spend(8);
 }
 
 fn i61d23(r: &mut Run) {
-    op!(r, 0x61D23, 3, Op::Scratch { op: ScratchOp::FromScratch, r: R::C, n: 1, f: Field::W }); // C=R1
-    i61d26(r)
+    r.cpu.scratch(ScratchOp::FromScratch, R::C, 1, Field::W); // C=R1
+    if r.next(0x61D26, 5) {
+        i61d26(r)
+    }
 }
 
 fn i61d26(r: &mut Run) {
-    op!(r, 0x61D26, 2, Op::Copy { dst: R::A, src: R::C, f: Field::A }); // A=C A
-    i61d28(r)
+    r.cpu.copy(R::A, R::C, Field::A); // A=C A
+    if r.next(0x61D28, 4) {
+        i61d28(r)
+    }
 }
 
 fn i61d28(r: &mut Run) {
-    op!(r, 0x61D28, 2, Op::Add { dst: R::A, src: R::A, f: Field::A }); // A=A+A A
-    i61d2a(r)
+    r.cpu.add(R::A, R::A, Field::A); // A=A+A A
+    if r.next(0x61D2A, 4) {
+        i61d2a(r)
+    }
 }
 
 fn i61d2a(r: &mut Run) {
-    op!(r, 0x61D2A, 2, Op::Add { dst: R::A, src: R::A, f: Field::A }); // A=A+A A
-    i61d2c(r)
+    r.cpu.add(R::A, R::A, Field::A); // A=A+A A
+    if r.next(0x61D2C, 4) {
+        i61d2c(r)
+    }
 }
 
 fn i61d2c(r: &mut Run) {
-    op!(r, 0x61D2C, 2, Op::Add { dst: R::A, src: R::C, f: Field::A }); // A=A+C A
-    i61d2e(r)
+    r.cpu.add(R::A, R::C, Field::A); // A=A+C A
+    if r.next(0x61D2E, 4) {
+        i61d2e(r)
+    }
 }
 
 fn i61d2e(r: &mut Run) {
-    op!(r, 0x61D2E, 3, Op::DExR { d: 1, r: R::C, short: false }); // CD1EX
-    i61d31(r)
+    r.cpu.d_ex_r(1, R::C, false); // CD1EX
+    if r.next(0x61D31, 5) {
+        i61d31(r)
+    }
 }
 
 fn i61d31(r: &mut Run) {
-    op!(r, 0x61D31, 2, Op::Add { dst: R::C, src: R::A, f: Field::A }); // C=C+A A
-    i61d33(r)
+    r.cpu.add(R::C, R::A, Field::A); // C=C+A A
+    if r.next(0x61D33, 4) {
+        i61d33(r)
+    }
 }
 
 fn i61d33(r: &mut Run) {
-    op!(r, 0x61D33, 3, Op::DFromR { d: 1, r: R::C, short: false }); // D1=C
-    i61d36(r)
+    r.cpu.d_from_r(1, R::C, false); // D1=C
+    if r.next(0x61D36, 5) {
+        i61d36(r)
+    }
 }
 
 fn i61d36(r: &mut Run) {
-    op!(r, 0x61D36, 4, Op::Jump(0x61A4E)); // GOTO #61A4E
+    r.cpu.pc = 0x61A4E; // GOTO #61A4E
+    r.spend(6);
 }
 
 fn i61d46(r: &mut Run) {
-    op!(r, 0x61D46, 7, Op::Call(0x679B)); // GOSUB #0679B
+    r.cpu.pc = 0x61D4D;
+    r.cpu.call(0x0679B); // GOSUB #0679B
+    r.spend(9);
 }
 
 fn i61d4d(r: &mut Run) {
-    op!(r, 0x61D4D, 7, Op::LoadConst { r: R::C, len: 5, val: 0x61D3A }); // LC(5) #61D3A
-    i61d54(r)
+    r.cpu.load_const(R::C, 5, 0x61D3A); // LC(5) #61D3A
+    if r.next(0x61D54, 9) {
+        i61d54(r)
+    }
 }
 
 fn i61d54(r: &mut Run) {
-    op!(r, 0x61D54, 3, Op::Scratch { op: ScratchOp::ToScratch, r: R::C, n: 2, f: Field::W }); // R2=C
-    i61d57(r)
+    r.cpu.scratch(ScratchOp::ToScratch, R::C, 2, Field::W); // R2=C
+    if r.next(0x61D57, 5) {
+        i61d57(r)
+    }
 }
 
 fn i61d57(r: &mut Run) {
-    op!(r, 0x61D57, 7, Op::LoadConst { r: R::C, len: 5, val: 0x806FD }); // LC(5) #806FD
-    i61d5e(r)
+    r.cpu.load_const(R::C, 5, 0x806FD); // LC(5) #806FD
+    if r.next(0x61D5E, 9) {
+        i61d5e(r)
+    }
 }
 
 fn i61d5e(r: &mut Run) {
-    op!(r, 0x61D5E, 3, Op::DExR { d: 1, r: R::C, short: false }); // CD1EX
-    i61d61(r)
+    r.cpu.d_ex_r(1, R::C, false); // CD1EX
+    if r.next(0x61D61, 5) {
+        i61d61(r)
+    }
 }
 
 fn i61d61(r: &mut Run) {
-    op!(r, 0x61D61, 3, Op::Mem { store: false, d: 1, r: R::A, f: Field::A }); // A=DAT1 A
-    i61d64(r)
+    r.sync();
+    r.cpu.load(1, R::A, Field::A, r.hw); // A=DAT1 A
+    if r.next_io(0x61D64, 19) {
+        i61d64(r)
+    }
 }
 
 fn i61d64(r: &mut Run) {
-    op!(r, 0x61D64, 3, Op::DFromR { d: 1, r: R::C, short: false }); // D1=C
-    i61d67(r)
+    r.cpu.d_from_r(1, R::C, false); // D1=C
+    if r.next(0x61D67, 5) {
+        i61d67(r)
+    }
 }
 
 fn i61d67(r: &mut Run) {
-    op!(r, 0x61D67, 2, Op::Sub { dst: R::C, a: R::A, b: R::C, f: Field::A }); // C=A-C A
-    i61d69(r)
+    r.cpu.sub(R::C, R::A, R::C, Field::A); // C=A-C A
+    if r.next(0x61D69, 4) {
+        i61d69(r)
+    }
 }
 
 fn i61d69(r: &mut Run) {
-    op!(r, 0x61D69, 7, Op::Call(0x6A8E)); // GOSUB #06A8E
+    r.cpu.pc = 0x61D70;
+    r.cpu.call(0x06A8E); // GOSUB #06A8E
+    r.spend(9);
 }
 
 fn i61d70(r: &mut Run) {
-    op!(r, 0x61D70, 2, Op::Dec { r: R::C, f: Field::A }); // C=C-1 A
-    i61d72(r)
+    r.cpu.dec(R::C, Field::A); // C=C-1 A
+    if r.next(0x61D72, 4) {
+        i61d72(r)
+    }
 }
 
 fn i61d72(r: &mut Run) {
-    op!(r, 0x61D72, 3, Op::StSet { bit: 1, set: false }); // ST=0 1
-    i61d75(r)
+    r.cpu.st_set(1, false); // ST=0 1
+    if r.next(0x61D75, 5) {
+        i61d75(r)
+    }
 }
 
 fn i61d75(r: &mut Run) {
-    op!(r, 0x61D75, 4, Op::Call(0x61D86)); // GOSUB #61D86
+    r.cpu.pc = 0x61D79;
+    r.cpu.call(0x61D86); // GOSUB #61D86
+    r.spend(6);
 }
 
 fn i61d79(r: &mut Run) {
-    op!(r, 0x61D79, 3, Op::DAdd { d: 0, n: 5 }); // D0=D0+ 5
-    i61d7c(r)
+    r.cpu.d_add(0, 5); // D0=D0+ 5
+    if r.next(0x61D7C, 5) {
+        i61d7c(r)
+    }
 }
 
 fn i61d7c(r: &mut Run) {
-    op!(r, 0x61D7C, 3, Op::DExR { d: 0, r: R::A, short: false }); // AD0EX
-    i61d7f(r)
+    r.cpu.d_ex_r(0, R::A, false); // AD0EX
+    if r.next(0x61D7F, 5) {
+        i61d7f(r)
+    }
 }
 
 fn i61d7f(r: &mut Run) {
-    op!(r, 0x61D7F, 3, Op::Mem { store: true, d: 1, r: R::A, f: Field::A }); // DAT1=A A
-    i61d82(r)
+    r.sync();
+    r.cpu.store(1, R::A, Field::A, r.hw); // DAT1=A A
+    if r.next_io(0x61D82, 19) {
+        i61d82(r)
+    }
 }
 
 fn i61d82(r: &mut Run) {
-    op!(r, 0x61D82, 4, Op::Jump(0x61F88)); // GOTO #61F88
+    r.cpu.pc = 0x61F88; // GOTO #61F88
+    r.spend(6);
 }
 
 fn i61d86(r: &mut Run) {
-    op!(r, 0x61D86, 3, Op::Scratch { op: ScratchOp::ToScratch, r: R::C, n: 1, f: Field::W }); // R1=C
-    i61d89(r)
+    r.cpu.scratch(ScratchOp::ToScratch, R::C, 1, Field::W); // R1=C
+    if r.next(0x61D89, 5) {
+        i61d89(r)
+    }
 }
 
 fn i61d89(r: &mut Run) {
-    op!(r, 0x61D89, 3, Op::StSet { bit: 0xA, set: false }); // ST=0 10
-    i61d8c(r)
+    r.cpu.st_set(10, false); // ST=0 10
+    if r.next(0x61D8C, 5) {
+        i61d8c(r)
+    }
 }
 
 fn i61d8c(r: &mut Run) {
-    op!(r, 0x61D8C, 2, Op::Inc { r: R::C, f: Field::A }); // C=C+1 A
-    i61d8e(r)
+    r.cpu.inc(R::C, Field::A); // C=C+1 A
+    if r.next(0x61D8E, 4) {
+        i61d8e(r)
+    }
 }
 
 fn i61d8e(r: &mut Run) {
-    op!(r, 0x61D8E, 2, Op::Inc { r: R::C, f: Field::A }); // C=C+1 A
-    i61d90(r)
+    r.cpu.inc(R::C, Field::A); // C=C+1 A
+    if r.next(0x61D90, 4) {
+        i61d90(r)
+    }
 }
 
 fn i61d90(r: &mut Run) {
-    op!(r, 0x61D90, 2, Op::Copy { dst: R::B, src: R::C, f: Field::A }); // B=C A
-    i61d92(r)
+    r.cpu.copy(R::B, R::C, Field::A); // B=C A
+    if r.next(0x61D92, 4) {
+        i61d92(r)
+    }
 }
 
 fn i61d92(r: &mut Run) {
-    op!(r, 0x61D92, 2, Op::Add { dst: R::C, src: R::C, f: Field::A }); // C=C+C A
-    i61d94(r)
+    r.cpu.add(R::C, R::C, Field::A); // C=C+C A
+    if r.next(0x61D94, 4) {
+        i61d94(r)
+    }
 }
 
 fn i61d94(r: &mut Run) {
-    op!(r, 0x61D94, 2, Op::Add { dst: R::C, src: R::C, f: Field::A }); // C=C+C A
-    i61d96(r)
+    r.cpu.add(R::C, R::C, Field::A); // C=C+C A
+    if r.next(0x61D96, 4) {
+        i61d96(r)
+    }
 }
 
 fn i61d96(r: &mut Run) {
-    op!(r, 0x61D96, 2, Op::Add { dst: R::B, src: R::C, f: Field::A }); // B=B+C A
-    i61d98(r)
+    r.cpu.add(R::B, R::C, Field::A); // B=B+C A
+    if r.next(0x61D98, 4) {
+        i61d98(r)
+    }
 }
 
 fn i61d98(r: &mut Run) {
-    op!(r, 0x61D98, 2, Op::Add { dst: R::B, src: R::B, f: Field::A }); // B=B+B A
-    i61d9a(r)
+    r.cpu.add(R::B, R::B, Field::A); // B=B+B A
+    if r.next(0x61D9A, 4) {
+        i61d9a(r)
+    }
 }
 
 fn i61d9a(r: &mut Run) {
-    op!(r, 0x61D9A, 7, Op::Call(0x6806)); // GOSUB #06806
+    r.cpu.pc = 0x61DA1;
+    r.cpu.call(0x06806); // GOSUB #06806
+    r.spend(9);
 }
 
 fn i61da1(r: &mut Run) {
-    op!(r, 0x61DA1, 5, Op::Test { test: Test::Regs(Cmp::Le, R::B, R::C), f: Field::A, goyes: Some(0x61DF3) }); // ?B<=C A / GOYES #61DF3
-    i61da6(r)
+    r.cpu.pc = 0x61DA6;
+    r.cpu.test(Test::Regs(Cmp::Le, R::B, R::C), Field::A, Some(0x61DF3)); // ?B<=C A / GOYES #61DF3
+    if r.next_pc(0x61DA6, 7) {
+        i61da6(r)
+    }
 }
 
 fn i61da6(r: &mut Run) {
-    op!(r, 0x61DA6, 5, Op::StTest { bit: 0xA, set: false, goyes: Some(0x61DC4) }); // ?ST=0 10 / GOYES #61DC4
-    i61dab(r)
+    r.cpu.pc = 0x61DAB;
+    r.cpu.st_test(10, false, Some(0x61DC4)); // ?ST=0 10 / GOYES #61DC4
+    if r.next_pc(0x61DAB, 7) {
+        i61dab(r)
+    }
 }
 
 fn i61dab(r: &mut Run) {
-    op!(r, 0x61DAB, 6, Op::Call(0x624AC)); // GOSUB #624AC
+    r.cpu.pc = 0x61DB1;
+    r.cpu.call(0x624AC); // GOSUB #624AC
+    r.spend(8);
 }
 
 fn i61db1(r: &mut Run) {
-    op!(r, 0x61DB1, 5, Op::StTest { bit: 1, set: true, goyes: Some(0x61DBD) }); // ?ST=1 1 / GOYES #61DBD
-    i61db6(r)
+    r.cpu.pc = 0x61DB6;
+    r.cpu.st_test(1, true, Some(0x61DBD)); // ?ST=1 1 / GOYES #61DBD
+    if r.next_pc(0x61DB6, 7) {
+        i61db6(r)
+    }
 }
 
 fn i61db6(r: &mut Run) {
-    op!(r, 0x61DB6, 7, Op::Jump(0x10F2D)); // GOTO #10F2D
+    r.cpu.pc = 0x10F2D; // GOTO #10F2D
+    r.spend(9);
 }
 
 fn i61dbd(r: &mut Run) {
-    op!(r, 0x61DBD, 7, Op::Jump(0x4FBB)); // GOTO #04FBB
+    r.cpu.pc = 0x04FBB; // GOTO #04FBB
+    r.spend(9);
 }
 
 fn i61dc4(r: &mut Run) {
-    op!(r, 0x61DC4, 6, Op::Scratch { op: ScratchOp::FromScratch, r: R::A, n: 2, f: Field::A }); // A=R2.F A
-    i61dca(r)
+    r.cpu.scratch(ScratchOp::FromScratch, R::A, 2, Field::A); // A=R2.F A
+    if r.next(0x61DCA, 8) {
+        i61dca(r)
+    }
 }
 
 fn i61dca(r: &mut Run) {
-    op!(r, 0x61DCA, 7, Op::DLoad { d: 0, len: 5, val: 0x80734 }); // D0=(5) #80734
-    i61dd1(r)
+    r.cpu.d_load(0, 5, 0x80734); // D0=(5) #80734
+    if r.next(0x61DD1, 9) {
+        i61dd1(r)
+    }
 }
 
 fn i61dd1(r: &mut Run) {
-    op!(r, 0x61DD1, 3, Op::Mem { store: true, d: 0, r: R::A, f: Field::A }); // DAT0=A A
-    i61dd4(r)
+    r.sync();
+    r.cpu.store(0, R::A, Field::A, r.hw); // DAT0=A A
+    if r.next_io(0x61DD4, 19) {
+        i61dd4(r)
+    }
 }
 
 fn i61dd4(r: &mut Run) {
-    op!(r, 0x61DD4, 6, Op::Call(0x624A5)); // GOSUB #624A5
+    r.cpu.pc = 0x61DDA;
+    r.cpu.call(0x624A5); // GOSUB #624A5
+    r.spend(8);
 }
 
 fn i61dda(r: &mut Run) {
-    op!(r, 0x61DDA, 3, Op::StSet { bit: 0xA, set: true }); // ST=1 10
-    i61ddd(r)
+    r.cpu.st_set(10, true); // ST=1 10
+    if r.next(0x61DDD, 5) {
+        i61ddd(r)
+    }
 }
 
 fn i61ddd(r: &mut Run) {
-    op!(r, 0x61DDD, 7, Op::DLoad { d: 0, len: 5, val: 0x80734 }); // D0=(5) #80734
-    i61de4(r)
+    r.cpu.d_load(0, 5, 0x80734); // D0=(5) #80734
+    if r.next(0x61DE4, 9) {
+        i61de4(r)
+    }
 }
 
 fn i61de4(r: &mut Run) {
-    op!(r, 0x61DE4, 3, Op::Mem { store: false, d: 0, r: R::A, f: Field::A }); // A=DAT0 A
-    i61de7(r)
+    r.sync();
+    r.cpu.load(0, R::A, Field::A, r.hw); // A=DAT0 A
+    if r.next_io(0x61DE7, 19) {
+        i61de7(r)
+    }
 }
 
 fn i61de7(r: &mut Run) {
-    op!(r, 0x61DE7, 6, Op::Scratch { op: ScratchOp::ToScratch, r: R::A, n: 2, f: Field::A }); // R2=A.F A
-    i61ded(r)
+    r.cpu.scratch(ScratchOp::ToScratch, R::A, 2, Field::A); // R2=A.F A
+    if r.next(0x61DED, 8) {
+        i61ded(r)
+    }
 }
 
 fn i61ded(r: &mut Run) {
-    op!(r, 0x61DED, 3, Op::Scratch { op: ScratchOp::FromScratch, r: R::C, n: 1, f: Field::W }); // C=R1
-    i61df0(r)
+    r.cpu.scratch(ScratchOp::FromScratch, R::C, 1, Field::W); // C=R1
+    if r.next(0x61DF0, 5) {
+        i61df0(r)
+    }
 }
 
 fn i61df0(r: &mut Run) {
-    op!(r, 0x61DF0, 3, Op::CondJump(Cond::NoCarry, 0x61D8C)); // GONC #61D8C
-    i61df3(r)
+    r.cpu.pc = 0x61DF3;
+    r.cpu.jump_if(Cond::NoCarry, 0x61D8C); // GONC #61D8C
+    if r.next_pc(0x61DF3, 5) {
+        i61df3(r)
+    }
 }
 
 fn i61df3(r: &mut Run) {
-    op!(r, 0x61DF3, 2, Op::Copy { dst: R::C, src: R::B, f: Field::A }); // C=B A
-    i61df5(r)
+    r.cpu.copy(R::C, R::B, Field::A); // C=B A
+    if r.next(0x61DF5, 4) {
+        i61df5(r)
+    }
 }
 
 fn i61df5(r: &mut Run) {
-    op!(r, 0x61DF5, 3, Op::Scratch { op: ScratchOp::ToScratch, r: R::C, n: 0, f: Field::W }); // R0=C
-    i61df8(r)
+    r.cpu.scratch(ScratchOp::ToScratch, R::C, 0, Field::W); // R0=C
+    if r.next(0x61DF8, 5) {
+        i61df8(r)
+    }
 }
 
 fn i61df8(r: &mut Run) {
-    op!(r, 0x61DF8, 7, Op::DLoad { d: 0, len: 5, val: 0x80702 }); // D0=(5) #80702
-    i61dff(r)
+    r.cpu.d_load(0, 5, 0x80702); // D0=(5) #80702
+    if r.next(0x61DFF, 9) {
+        i61dff(r)
+    }
 }
 
 fn i61dff(r: &mut Run) {
-    op!(r, 0x61DFF, 3, Op::Mem { store: false, d: 0, r: R::C, f: Field::A }); // C=DAT0 A
-    i61e02(r)
+    r.sync();
+    r.cpu.load(0, R::C, Field::A, r.hw); // C=DAT0 A
+    if r.next_io(0x61E02, 19) {
+        i61e02(r)
+    }
 }
 
 fn i61e02(r: &mut Run) {
-    op!(r, 0x61E02, 6, Op::Call(0x6384E)); // GOSUB #6384E
+    r.cpu.pc = 0x61E08;
+    r.cpu.call(0x6384E); // GOSUB #6384E
+    r.spend(8);
 }
 
 fn i61e08(r: &mut Run) {
-    op!(r, 0x61E08, 2, Op::Sub { dst: R::C, a: R::C, b: R::A, f: Field::A }); // C=C-A A
-    i61e0a(r)
+    r.cpu.sub(R::C, R::C, R::A, Field::A); // C=C-A A
+    if r.next(0x61E0A, 4) {
+        i61e0a(r)
+    }
 }
 
 fn i61e0a(r: &mut Run) {
-    op!(r, 0x61E0A, 2, Op::Sub { dst: R::A, a: R::A, b: R::B, f: Field::A }); // A=A-B A
-    i61e0c(r)
+    r.cpu.sub(R::A, R::A, R::B, Field::A); // A=A-B A
+    if r.next(0x61E0C, 4) {
+        i61e0c(r)
+    }
 }
 
 fn i61e0c(r: &mut Run) {
-    op!(r, 0x61E0C, 3, Op::DFromR { d: 1, r: R::A, short: false }); // D1=A
-    i61e0f(r)
+    r.cpu.d_from_r(1, R::A, false); // D1=A
+    if r.next(0x61E0F, 5) {
+        i61e0f(r)
+    }
 }
 
 fn i61e0f(r: &mut Run) {
-    op!(r, 0x61E0F, 2, Op::Copy { dst: R::B, src: R::A, f: Field::A }); // B=A A
-    i61e11(r)
+    r.cpu.copy(R::B, R::A, Field::A); // B=A A
+    if r.next(0x61E11, 4) {
+        i61e11(r)
+    }
 }
 
 fn i61e11(r: &mut Run) {
-    op!(r, 0x61E11, 7, Op::Call(0x670C)); // GOSUB #0670C
+    r.cpu.pc = 0x61E18;
+    r.cpu.call(0x0670C); // GOSUB #0670C
+    r.spend(9);
 }
 
 fn i61e18(r: &mut Run) {
-    op!(r, 0x61E18, 3, Op::Scratch { op: ScratchOp::FromScratch, r: R::C, n: 0, f: Field::W }); // C=R0
-    i61e1b(r)
+    r.cpu.scratch(ScratchOp::FromScratch, R::C, 0, Field::W); // C=R0
+    if r.next(0x61E1B, 5) {
+        i61e1b(r)
+    }
 }
 
 fn i61e1b(r: &mut Run) {
-    op!(r, 0x61E1B, 2, Op::PSet(5)); // P= 5
-    i61e1d(r)
+    r.cpu.p = 5; // P= 5
+    if r.next(0x61E1D, 4) {
+        i61e1d(r)
+    }
 }
 
 fn i61e1d(r: &mut Run) {
-    op!(r, 0x61E1D, 7, Op::LoadConst { r: R::C, len: 5, val: 0 }); // LC(5) #00000
-    i61e24(r)
+    r.cpu.load_const(R::C, 5, 0x0); // LC(5) #00000
+    if r.next(0x61E24, 9) {
+        i61e24(r)
+    }
 }
 
 fn i61e24(r: &mut Run) {
-    op!(r, 0x61E24, 2, Op::PSet(0)); // P= 0
-    i61e26(r)
+    r.cpu.p = 0; // P= 0
+    if r.next(0x61E26, 4) {
+        i61e26(r)
+    }
 }
 
 fn i61e26(r: &mut Run) {
-    op!(r, 0x61E26, 4, Op::Mem { store: true, d: 1, r: R::C, f: Field::Nibbles(0xA) }); // DAT1=C 10
-    i61e2a(r)
+    r.sync();
+    r.cpu.store(1, R::C, Field::Nibbles(10), r.hw); // DAT1=C 10
+    if r.next_io(0x61E2A, 24) {
+        i61e2a(r)
+    }
 }
 
 fn i61e2a(r: &mut Run) {
-    op!(r, 0x61E2A, 7, Op::DLoad { d: 0, len: 5, val: 0x806F8 }); // D0=(5) #806F8
-    i61e31(r)
+    r.cpu.d_load(0, 5, 0x806F8); // D0=(5) #806F8
+    if r.next(0x61E31, 9) {
+        i61e31(r)
+    }
 }
 
 fn i61e31(r: &mut Run) {
-    op!(r, 0x61E31, 2, Op::Copy { dst: R::A, src: R::B, f: Field::A }); // A=B A
-    i61e33(r)
+    r.cpu.copy(R::A, R::B, Field::A); // A=B A
+    if r.next(0x61E33, 4) {
+        i61e33(r)
+    }
 }
 
 fn i61e33(r: &mut Run) {
-    op!(r, 0x61E33, 3, Op::Mem { store: true, d: 0, r: R::A, f: Field::A }); // DAT0=A A
-    i61e36(r)
+    r.sync();
+    r.cpu.store(0, R::A, Field::A, r.hw); // DAT0=A A
+    if r.next_io(0x61E36, 19) {
+        i61e36(r)
+    }
 }
 
 fn i61e36(r: &mut Run) {
-    op!(r, 0x61E36, 7, Op::DLoad { d: 0, len: 5, val: 0x80702 }); // D0=(5) #80702
-    i61e3d(r)
+    r.cpu.d_load(0, 5, 0x80702); // D0=(5) #80702
+    if r.next(0x61E3D, 9) {
+        i61e3d(r)
+    }
 }
 
 fn i61e3d(r: &mut Run) {
-    op!(r, 0x61E3D, 3, Op::DExR { d: 1, r: R::A, short: false }); // AD1EX
-    i61e40(r)
+    r.cpu.d_ex_r(1, R::A, false); // AD1EX
+    if r.next(0x61E40, 5) {
+        i61e40(r)
+    }
 }
 
 fn i61e40(r: &mut Run) {
-    op!(r, 0x61E40, 3, Op::Mem { store: true, d: 0, r: R::A, f: Field::A }); // DAT0=A A
-    i61e43(r)
+    r.sync();
+    r.cpu.store(0, R::A, Field::A, r.hw); // DAT0=A A
+    if r.next_io(0x61E43, 19) {
+        i61e43(r)
+    }
 }
 
 fn i61e43(r: &mut Run) {
-    op!(r, 0x61E43, 3, Op::DFromR { d: 1, r: R::A, short: false }); // D1=A
-    i61e46(r)
+    r.cpu.d_from_r(1, R::A, false); // D1=A
+    if r.next(0x61E46, 5) {
+        i61e46(r)
+    }
 }
 
 fn i61e46(r: &mut Run) {
-    op!(r, 0x61E46, 7, Op::Call(0x69F7)); // GOSUB #069F7
+    r.cpu.pc = 0x61E4D;
+    r.cpu.call(0x069F7); // GOSUB #069F7
+    r.spend(9);
 }
 
 fn i61e4d(r: &mut Run) {
-    op!(r, 0x61E4D, 2, Op::Copy { dst: R::A, src: R::B, f: Field::A }); // A=B A
-    i61e4f(r)
+    r.cpu.copy(R::A, R::B, Field::A); // A=B A
+    if r.next(0x61E4F, 4) {
+        i61e4f(r)
+    }
 }
 
 fn i61e4f(r: &mut Run) {
-    op!(r, 0x61E4F, 3, Op::DFromR { d: 0, r: R::A, short: false }); // D0=A
-    i61e52(r)
+    r.cpu.d_from_r(0, R::A, false); // D0=A
+    if r.next(0x61E52, 5) {
+        i61e52(r)
+    }
 }
 
 fn i61e52(r: &mut Run) {
-    op!(r, 0x61E52, 3, Op::DAdd { d: 1, n: 0xA }); // D1=D1+ 10
-    i61e55(r)
+    r.cpu.d_add(1, 10); // D1=D1+ 10
+    if r.next(0x61E55, 5) {
+        i61e55(r)
+    }
 }
 
 fn i61e55(r: &mut Run) {
-    op!(r, 0x61E55, 3, Op::Scratch { op: ScratchOp::FromScratch, r: R::C, n: 2, f: Field::W }); // C=R2
-    i61e58(r)
+    r.cpu.scratch(ScratchOp::FromScratch, R::C, 2, Field::W); // C=R2
+    if r.next(0x61E58, 5) {
+        i61e58(r)
+    }
 }
 
 fn i61e58(r: &mut Run) {
-    op!(r, 0x61E58, 3, Op::Mem { store: true, d: 1, r: R::C, f: Field::A }); // DAT1=C A
-    i61e5b(r)
+    r.sync();
+    r.cpu.store(1, R::C, Field::A, r.hw); // DAT1=C A
+    if r.next_io(0x61E5B, 19) {
+        i61e5b(r)
+    }
 }
 
 fn i61e5b(r: &mut Run) {
-    op!(r, 0x61E5B, 3, Op::Shl { r: R::C, f: Field::W }); // CSL W
-    i61e5e(r)
+    r.cpu.shl(R::C, Field::W); // CSL W
+    if r.next(0x61E5E, 5) {
+        i61e5e(r)
+    }
 }
 
 fn i61e5e(r: &mut Run) {
-    op!(r, 0x61E5E, 3, Op::Shl { r: R::C, f: Field::W }); // CSL W
-    i61e61(r)
+    r.cpu.shl(R::C, Field::W); // CSL W
+    if r.next(0x61E61, 5) {
+        i61e61(r)
+    }
 }
 
 fn i61e61(r: &mut Run) {
-    op!(r, 0x61E61, 3, Op::Shl { r: R::C, f: Field::W }); // CSL W
-    i61e64(r)
+    r.cpu.shl(R::C, Field::W); // CSL W
+    if r.next(0x61E64, 5) {
+        i61e64(r)
+    }
 }
 
 fn i61e64(r: &mut Run) {
-    op!(r, 0x61E64, 3, Op::Shl { r: R::C, f: Field::W }); // CSL W
-    i61e67(r)
+    r.cpu.shl(R::C, Field::W); // CSL W
+    if r.next(0x61E67, 5) {
+        i61e67(r)
+    }
 }
 
 fn i61e67(r: &mut Run) {
-    op!(r, 0x61E67, 3, Op::Shl { r: R::C, f: Field::W }); // CSL W
-    i61e6a(r)
+    r.cpu.shl(R::C, Field::W); // CSL W
+    if r.next(0x61E6A, 5) {
+        i61e6a(r)
+    }
 }
 
 fn i61e6a(r: &mut Run) {
-    op!(r, 0x61E6A, 3, Op::Scratch { op: ScratchOp::FromScratch, r: R::A, n: 1, f: Field::W }); // A=R1
-    i61e6d(r)
+    r.cpu.scratch(ScratchOp::FromScratch, R::A, 1, Field::W); // A=R1
+    if r.next(0x61E6D, 5) {
+        i61e6d(r)
+    }
 }
 
 fn i61e6d(r: &mut Run) {
-    op!(r, 0x61E6D, 2, Op::Copy { dst: R::C, src: R::A, f: Field::A }); // C=A A
-    i61e6f(r)
+    r.cpu.copy(R::C, R::A, Field::A); // C=A A
+    if r.next(0x61E6F, 4) {
+        i61e6f(r)
+    }
 }
 
 fn i61e6f(r: &mut Run) {
-    op!(r, 0x61E6F, 3, Op::DAdd { d: 1, n: 5 }); // D1=D1+ 5
-    i61e72(r)
+    r.cpu.d_add(1, 5); // D1=D1+ 5
+    if r.next(0x61E72, 5) {
+        i61e72(r)
+    }
 }
 
 fn i61e72(r: &mut Run) {
-    op!(r, 0x61E72, 2, Op::Dec { r: R::A, f: Field::A }); // A=A-1 A
-    i61e74(r)
+    r.cpu.dec(R::A, Field::A); // A=A-1 A
+    if r.next(0x61E74, 4) {
+        i61e74(r)
+    }
 }
 
 fn i61e74(r: &mut Run) {
-    op!(r, 0x61E74, 3, Op::CondJump(Cond::Carry, 0x61E9B)); // GOC #61E9B
-    i61e77(r)
+    r.cpu.pc = 0x61E77;
+    r.cpu.jump_if(Cond::Carry, 0x61E9B); // GOC #61E9B
+    if r.next_pc(0x61E77, 5) {
+        i61e77(r)
+    }
 }
 
 fn i61e77(r: &mut Run) {
-    op!(r, 0x61E77, 4, Op::Mem { store: true, d: 1, r: R::C, f: Field::Nibbles(0xA) }); // DAT1=C 10
-    i61e7b(r)
+    r.sync();
+    r.cpu.store(1, R::C, Field::Nibbles(10), r.hw); // DAT1=C 10
+    if r.next_io(0x61E7B, 24) {
+        i61e7b(r)
+    }
 }
 
 fn i61e7b(r: &mut Run) {
-    op!(r, 0x61E7B, 3, Op::DAdd { d: 1, n: 0xA }); // D1=D1+ 10
-    i61e7e(r)
+    r.cpu.d_add(1, 10); // D1=D1+ 10
+    if r.next(0x61E7E, 5) {
+        i61e7e(r)
+    }
 }
 
 fn i61e7e(r: &mut Run) {
-    op!(r, 0x61E7E, 2, Op::Dec { r: R::A, f: Field::A }); // A=A-1 A
-    i61e80(r)
+    r.cpu.dec(R::A, Field::A); // A=A-1 A
+    if r.next(0x61E80, 4) {
+        i61e80(r)
+    }
 }
 
 fn i61e80(r: &mut Run) {
-    op!(r, 0x61E80, 3, Op::CondJump(Cond::Carry, 0x61E95)); // GOC #61E95
-    i61e83(r)
+    r.cpu.pc = 0x61E83;
+    r.cpu.jump_if(Cond::Carry, 0x61E95); // GOC #61E95
+    if r.next_pc(0x61E83, 5) {
+        i61e83(r)
+    }
 }
 
 fn i61e83(r: &mut Run) {
-    op!(r, 0x61E83, 3, Op::Mem { store: false, d: 0, r: R::C, f: Field::A }); // C=DAT0 A
-    i61e86(r)
+    r.sync();
+    r.cpu.load(0, R::C, Field::A, r.hw); // C=DAT0 A
+    if r.next_io(0x61E86, 19) {
+        i61e86(r)
+    }
 }
 
 fn i61e86(r: &mut Run) {
-    op!(r, 0x61E86, 4, Op::Mem { store: true, d: 1, r: R::C, f: Field::Nibbles(0xA) }); // DAT1=C 10
-    i61e8a(r)
+    r.sync();
+    r.cpu.store(1, R::C, Field::Nibbles(10), r.hw); // DAT1=C 10
+    if r.next_io(0x61E8A, 24) {
+        i61e8a(r)
+    }
 }
 
 fn i61e8a(r: &mut Run) {
-    op!(r, 0x61E8A, 3, Op::DAdd { d: 1, n: 0xA }); // D1=D1+ 10
-    i61e8d(r)
+    r.cpu.d_add(1, 10); // D1=D1+ 10
+    if r.next(0x61E8D, 5) {
+        i61e8d(r)
+    }
 }
 
 fn i61e8d(r: &mut Run) {
-    op!(r, 0x61E8D, 3, Op::DAdd { d: 0, n: 5 }); // D0=D0+ 5
-    i61e90(r)
+    r.cpu.d_add(0, 5); // D0=D0+ 5
+    if r.next(0x61E90, 5) {
+        i61e90(r)
+    }
 }
 
 fn i61e90(r: &mut Run) {
-    op!(r, 0x61E90, 2, Op::Dec { r: R::A, f: Field::A }); // A=A-1 A
-    i61e92(r)
+    r.cpu.dec(R::A, Field::A); // A=A-1 A
+    if r.next(0x61E92, 4) {
+        i61e92(r)
+    }
 }
 
 fn i61e92(r: &mut Run) {
-    op!(r, 0x61E92, 3, Op::CondJump(Cond::NoCarry, 0x61E83)); // GONC #61E83
-    i61e95(r)
+    r.cpu.pc = 0x61E95;
+    r.cpu.jump_if(Cond::NoCarry, 0x61E83); // GONC #61E83
+    if r.next_pc(0x61E95, 5) {
+        i61e95(r)
+    }
 }
 
 fn i61e95(r: &mut Run) {
-    op!(r, 0x61E95, 3, Op::Mem { store: false, d: 0, r: R::C, f: Field::A }); // C=DAT0 A
-    i61e98(r)
+    r.sync();
+    r.cpu.load(0, R::C, Field::A, r.hw); // C=DAT0 A
+    if r.next_io(0x61E98, 19) {
+        i61e98(r)
+    }
 }
 
 fn i61e98(r: &mut Run) {
-    op!(r, 0x61E98, 3, Op::DAdd { d: 0, n: 5 }); // D0=D0+ 5
-    i61e9b(r)
+    r.cpu.d_add(0, 5); // D0=D0+ 5
+    if r.next(0x61E9B, 5) {
+        i61e9b(r)
+    }
 }
 
 fn i61e9b(r: &mut Run) {
-    op!(r, 0x61E9B, 3, Op::Mem { store: true, d: 1, r: R::C, f: Field::A }); // DAT1=C A
-    i61e9e(r)
+    r.sync();
+    r.cpu.store(1, R::C, Field::A, r.hw); // DAT1=C A
+    if r.next_io(0x61E9E, 19) {
+        i61e9e(r)
+    }
 }
 
 fn i61e9e(r: &mut Run) {
-    op!(r, 0x61E9E, 7, Op::DLoad { d: 1, len: 5, val: 0x806FD }); // D1=(5) #806FD
-    i61ea5(r)
+    r.cpu.d_load(1, 5, 0x806FD); // D1=(5) #806FD
+    if r.next(0x61EA5, 9) {
+        i61ea5(r)
+    }
 }
 
 fn i61ea5(r: &mut Run) {
-    op!(r, 0x61EA5, 2, Op::Rtn(RtnKind::Plain)); // RTN
+    r.cpu.rtn(RtnKind::Plain); // RTN
+    r.spend(9);
 }
 
 fn i61eac(r: &mut Run) {
-    op!(r, 0x61EAC, 3, Op::StSet { bit: 1, set: true }); // ST=1 1
-    i61eaf(r)
+    r.cpu.st_set(1, true); // ST=1 1
+    if r.next(0x61EAF, 5) {
+        i61eaf(r)
+    }
 }
 
 fn i61eaf(r: &mut Run) {
-    op!(r, 0x61EAF, 3, Op::Mem { store: false, d: 1, r: R::A, f: Field::A }); // A=DAT1 A
-    i61eb2(r)
+    r.sync();
+    r.cpu.load(1, R::A, Field::A, r.hw); // A=DAT1 A
+    if r.next_io(0x61EB2, 19) {
+        i61eb2(r)
+    }
 }
 
 fn i61eb2(r: &mut Run) {
-    op!(r, 0x61EB2, 3, Op::DAdd { d: 1, n: 5 }); // D1=D1+ 5
-    i61eb5(r)
+    r.cpu.d_add(1, 5); // D1=D1+ 5
+    if r.next(0x61EB5, 5) {
+        i61eb5(r)
+    }
 }
 
 fn i61eb5(r: &mut Run) {
-    op!(r, 0x61EB5, 2, Op::Inc { r: R::D, f: Field::A }); // D=D+1 A
-    i61eb7(r)
+    r.cpu.inc(R::D, Field::A); // D=D+1 A
+    if r.next(0x61EB7, 4) {
+        i61eb7(r)
+    }
 }
 
 fn i61eb7(r: &mut Run) {
-    op!(r, 0x61EB7, 7, Op::Call(0x679B)); // GOSUB #0679B
+    r.cpu.pc = 0x61EBE;
+    r.cpu.call(0x0679B); // GOSUB #0679B
+    r.spend(9);
 }
 
 fn i61ebe(r: &mut Run) {
-    op!(r, 0x61EBE, 2, Op::Copy { dst: R::C, src: R::A, f: Field::A }); // C=A A
-    i61ec0(r)
+    r.cpu.copy(R::C, R::A, Field::A); // C=A A
+    if r.next(0x61EC0, 4) {
+        i61ec0(r)
+    }
 }
 
 fn i61ec0(r: &mut Run) {
-    op!(r, 0x61EC0, 2, Op::PushC); // RSTK=C
-    i61ec2(r)
+    r.cpu.push_c(); // RSTK=C
+    if r.next(0x61EC2, 4) {
+        i61ec2(r)
+    }
 }
 
 fn i61ec2(r: &mut Run) {
-    op!(r, 0x61EC2, 6, Op::Call(0x624A5)); // GOSUB #624A5
+    r.cpu.pc = 0x61EC8;
+    r.cpu.call(0x624A5); // GOSUB #624A5
+    r.spend(8);
 }
 
 fn i61ec8(r: &mut Run) {
-    op!(r, 0x61EC8, 2, Op::PopC); // C=RSTK
-    i61eca(r)
+    r.cpu.pop_c(); // C=RSTK
+    if r.next(0x61ECA, 4) {
+        i61eca(r)
+    }
 }
 
 fn i61eca(r: &mut Run) {
-    op!(r, 0x61ECA, 2, Op::Copy { dst: R::D, src: R::C, f: Field::A }); // D=C A
-    i61ecc(r)
+    r.cpu.copy(R::D, R::C, Field::A); // D=C A
+    if r.next(0x61ECC, 4) {
+        i61ecc(r)
+    }
 }
 
 fn i61ecc(r: &mut Run) {
-    op!(r, 0x61ECC, 7, Op::DLoad { d: 0, len: 5, val: 0x80702 }); // D0=(5) #80702
-    i61ed3(r)
+    r.cpu.d_load(0, 5, 0x80702); // D0=(5) #80702
+    if r.next(0x61ED3, 9) {
+        i61ed3(r)
+    }
 }
 
 fn i61ed3(r: &mut Run) {
-    op!(r, 0x61ED3, 3, Op::Mem { store: false, d: 0, r: R::C, f: Field::A }); // C=DAT0 A
-    i61ed6(r)
+    r.sync();
+    r.cpu.load(0, R::C, Field::A, r.hw); // C=DAT0 A
+    if r.next_io(0x61ED6, 19) {
+        i61ed6(r)
+    }
 }
 
 fn i61ed6(r: &mut Run) {
-    op!(r, 0x61ED6, 3, Op::DFromR { d: 0, r: R::C, short: false }); // D0=C
-    i61ed9(r)
+    r.cpu.d_from_r(0, R::C, false); // D0=C
+    if r.next(0x61ED9, 5) {
+        i61ed9(r)
+    }
 }
 
 fn i61ed9(r: &mut Run) {
-    op!(r, 0x61ED9, 3, Op::Zero { r: R::A, f: Field::M }); // A=0 M
-    i61edc(r)
+    r.cpu.zero(R::A, Field::M); // A=0 M
+    if r.next(0x61EDC, 5) {
+        i61edc(r)
+    }
 }
 
 fn i61edc(r: &mut Run) {
-    op!(r, 0x61EDC, 3, Op::Mem { store: false, d: 0, r: R::A, f: Field::A }); // A=DAT0 A
-    i61edf(r)
+    r.sync();
+    r.cpu.load(0, R::A, Field::A, r.hw); // A=DAT0 A
+    if r.next_io(0x61EDF, 19) {
+        i61edf(r)
+    }
 }
 
 fn i61edf(r: &mut Run) {
-    op!(r, 0x61EDF, 2, Op::Add { dst: R::C, src: R::A, f: Field::A }); // C=C+A A
-    i61ee1(r)
+    r.cpu.add(R::C, R::A, Field::A); // C=C+A A
+    if r.next(0x61EE1, 4) {
+        i61ee1(r)
+    }
 }
 
 fn i61ee1(r: &mut Run) {
-    op!(r, 0x61EE1, 2, Op::Copy { dst: R::B, src: R::C, f: Field::A }); // B=C A
-    i61ee3(r)
+    r.cpu.copy(R::B, R::C, Field::A); // B=C A
+    if r.next(0x61EE3, 4) {
+        i61ee3(r)
+    }
 }
 
 fn i61ee3(r: &mut Run) {
-    op!(r, 0x61EE3, 3, Op::DAdd { d: 0, n: 0xA }); // D0=D0+ 10
-    i61ee6(r)
+    r.cpu.d_add(0, 10); // D0=D0+ 10
+    if r.next(0x61EE6, 5) {
+        i61ee6(r)
+    }
 }
 
 fn i61ee6(r: &mut Run) {
-    op!(r, 0x61EE6, 3, Op::Mem { store: false, d: 0, r: R::C, f: Field::A }); // C=DAT0 A
-    i61ee9(r)
+    r.sync();
+    r.cpu.load(0, R::C, Field::A, r.hw); // C=DAT0 A
+    if r.next_io(0x61EE9, 19) {
+        i61ee9(r)
+    }
 }
 
 fn i61ee9(r: &mut Run) {
-    op!(r, 0x61EE9, 5, Op::Test { test: Test::Regs(Cmp::Eq, R::D, R::C), f: Field::A, goyes: Some(0x61EF6) }); // ?D=C A / GOYES #61EF6
-    i61eee(r)
+    r.cpu.pc = 0x61EEE;
+    r.cpu.test(Test::Regs(Cmp::Eq, R::D, R::C), Field::A, Some(0x61EF6)); // ?D=C A / GOYES #61EF6
+    if r.next_pc(0x61EEE, 7) {
+        i61eee(r)
+    }
 }
 
 fn i61eee(r: &mut Run) {
-    op!(r, 0x61EEE, 2, Op::Copy { dst: R::C, src: R::B, f: Field::A }); // C=B A
-    i61ef0(r)
+    r.cpu.copy(R::C, R::B, Field::A); // C=B A
+    if r.next(0x61EF0, 4) {
+        i61ef0(r)
+    }
 }
 
 fn i61ef0(r: &mut Run) {
-    op!(r, 0x61EF0, 3, Op::DFromR { d: 0, r: R::C, short: false }); // D0=C
-    i61ef3(r)
+    r.cpu.d_from_r(0, R::C, false); // D0=C
+    if r.next(0x61EF3, 5) {
+        i61ef3(r)
+    }
 }
 
 fn i61ef3(r: &mut Run) {
-    op!(r, 0x61EF3, 3, Op::CondJump(Cond::NoCarry, 0x61EDC)); // GONC #61EDC
-    i61ef6(r)
+    r.cpu.pc = 0x61EF6;
+    r.cpu.jump_if(Cond::NoCarry, 0x61EDC); // GONC #61EDC
+    if r.next_pc(0x61EF6, 5) {
+        i61ef6(r)
+    }
 }
 
 fn i61ef6(r: &mut Run) {
-    op!(r, 0x61EF6, 3, Op::Srb(R::A)); // ASRB
-    i61ef9(r)
+    r.cpu.srb(R::A); // ASRB
+    if r.next(0x61EF9, 5) {
+        i61ef9(r)
+    }
 }
 
 fn i61ef9(r: &mut Run) {
-    op!(r, 0x61EF9, 7, Op::LoadConst { r: R::C, len: 5, val: 5 }); // LC(5) #00005
-    i61f00(r)
+    r.cpu.load_const(R::C, 5, 0x5); // LC(5) #00005
+    if r.next(0x61F00, 9) {
+        i61f00(r)
+    }
 }
 
 fn i61f00(r: &mut Run) {
-    op!(r, 0x61F00, 2, Op::Sub { dst: R::A, a: R::A, b: R::C, f: Field::A }); // A=A-C A
-    i61f02(r)
+    r.cpu.sub(R::A, R::A, R::C, Field::A); // A=A-C A
+    if r.next(0x61F02, 4) {
+        i61f02(r)
+    }
 }
 
 fn i61f02(r: &mut Run) {
-    op!(r, 0x61F02, 7, Op::DLoad { d: 1, len: 5, val: 0x806F3 }); // D1=(5) #806F3
-    i61f09(r)
+    r.cpu.d_load(1, 5, 0x806F3); // D1=(5) #806F3
+    if r.next(0x61F09, 9) {
+        i61f09(r)
+    }
 }
 
 fn i61f09(r: &mut Run) {
-    op!(r, 0x61F09, 3, Op::Mem { store: false, d: 1, r: R::C, f: Field::A }); // C=DAT1 A
-    i61f0c(r)
+    r.sync();
+    r.cpu.load(1, R::C, Field::A, r.hw); // C=DAT1 A
+    if r.next_io(0x61F0C, 19) {
+        i61f0c(r)
+    }
 }
 
 fn i61f0c(r: &mut Run) {
-    op!(r, 0x61F0C, 2, Op::Copy { dst: R::B, src: R::C, f: Field::A }); // B=C A
-    i61f0e(r)
+    r.cpu.copy(R::B, R::C, Field::A); // B=C A
+    if r.next(0x61F0E, 4) {
+        i61f0e(r)
+    }
 }
 
 fn i61f0e(r: &mut Run) {
-    op!(r, 0x61F0E, 7, Op::DLoad { d: 1, len: 5, val: 0x806F8 }); // D1=(5) #806F8
-    i61f15(r)
+    r.cpu.d_load(1, 5, 0x806F8); // D1=(5) #806F8
+    if r.next(0x61F15, 9) {
+        i61f15(r)
+    }
 }
 
 fn i61f15(r: &mut Run) {
-    op!(r, 0x61F15, 5, Op::StTest { bit: 1, set: true, goyes: Some(0x61F21) }); // ?ST=1 1 / GOYES #61F21
-    i61f1a(r)
+    r.cpu.pc = 0x61F1A;
+    r.cpu.st_test(1, true, Some(0x61F21)); // ?ST=1 1 / GOYES #61F21
+    if r.next_pc(0x61F1A, 7) {
+        i61f1a(r)
+    }
 }
 
 fn i61f1a(r: &mut Run) {
-    op!(r, 0x61F1A, 7, Op::DLoad { d: 1, len: 5, val: 0x806FD }); // D1=(5) #806FD
-    i61f21(r)
+    r.cpu.d_load(1, 5, 0x806FD); // D1=(5) #806FD
+    if r.next(0x61F21, 9) {
+        i61f21(r)
+    }
 }
 
 fn i61f21(r: &mut Run) {
-    op!(r, 0x61F21, 3, Op::Mem { store: false, d: 1, r: R::C, f: Field::A }); // C=DAT1 A
-    i61f24(r)
+    r.sync();
+    r.cpu.load(1, R::C, Field::A, r.hw); // C=DAT1 A
+    if r.next_io(0x61F24, 19) {
+        i61f24(r)
+    }
 }
 
 fn i61f24(r: &mut Run) {
-    op!(r, 0x61F24, 2, Op::PushC); // RSTK=C
-    i61f26(r)
+    r.cpu.push_c(); // RSTK=C
+    if r.next(0x61F26, 4) {
+        i61f26(r)
+    }
 }
 
 fn i61f26(r: &mut Run) {
-    op!(r, 0x61F26, 2, Op::Sub { dst: R::C, a: R::C, b: R::B, f: Field::A }); // C=C-B A
-    i61f28(r)
+    r.cpu.sub(R::C, R::C, R::B, Field::A); // C=C-B A
+    if r.next(0x61F28, 4) {
+        i61f28(r)
+    }
 }
 
 fn i61f28(r: &mut Run) {
-    op!(r, 0x61F28, 5, Op::Test { test: Test::Regs(Cmp::Ge, R::C, R::A), f: Field::A, goyes: Some(0x61F33) }); // ?C>=A A / GOYES #61F33
-    i61f2d(r)
+    r.cpu.pc = 0x61F2D;
+    r.cpu.test(Test::Regs(Cmp::Ge, R::C, R::A), Field::A, Some(0x61F33)); // ?C>=A A / GOYES #61F33
+    if r.next_pc(0x61F2D, 7) {
+        i61f2d(r)
+    }
 }
 
 fn i61f2d(r: &mut Run) {
-    op!(r, 0x61F2D, 6, Op::Jump(0x61DBD)); // GOTO #61DBD
+    r.cpu.pc = 0x61DBD; // GOTO #61DBD
+    r.spend(8);
 }
 
 fn i61f33(r: &mut Run) {
-    op!(r, 0x61F33, 2, Op::PopC); // C=RSTK
-    i61f35(r)
+    r.cpu.pop_c(); // C=RSTK
+    if r.next(0x61F35, 4) {
+        i61f35(r)
+    }
 }
 
 fn i61f35(r: &mut Run) {
-    op!(r, 0x61F35, 2, Op::Sub { dst: R::C, a: R::C, b: R::A, f: Field::A }); // C=C-A A
-    i61f37(r)
+    r.cpu.sub(R::C, R::C, R::A, Field::A); // C=C-A A
+    if r.next(0x61F37, 4) {
+        i61f37(r)
+    }
 }
 
 fn i61f37(r: &mut Run) {
-    op!(r, 0x61F37, 7, Op::DLoad { d: 1, len: 5, val: 0x806F8 }); // D1=(5) #806F8
-    i61f3e(r)
+    r.cpu.d_load(1, 5, 0x806F8); // D1=(5) #806F8
+    if r.next(0x61F3E, 9) {
+        i61f3e(r)
+    }
 }
 
 fn i61f3e(r: &mut Run) {
-    op!(r, 0x61F3E, 5, Op::StTest { bit: 1, set: false, goyes: Some(0x61F4C) }); // ?ST=0 1 / GOYES #61F4C
-    i61f43(r)
+    r.cpu.pc = 0x61F43;
+    r.cpu.st_test(1, false, Some(0x61F4C)); // ?ST=0 1 / GOYES #61F4C
+    if r.next_pc(0x61F43, 7) {
+        i61f43(r)
+    }
 }
 
 fn i61f43(r: &mut Run) {
-    op!(r, 0x61F43, 3, Op::DExR { d: 1, r: R::C, short: false }); // CD1EX
-    i61f46(r)
+    r.cpu.d_ex_r(1, R::C, false); // CD1EX
+    if r.next(0x61F46, 5) {
+        i61f46(r)
+    }
 }
 
 fn i61f46(r: &mut Run) {
-    op!(r, 0x61F46, 3, Op::DAdd { d: 1, n: 5 }); // D1=D1+ 5
-    i61f49(r)
+    r.cpu.d_add(1, 5); // D1=D1+ 5
+    if r.next(0x61F49, 5) {
+        i61f49(r)
+    }
 }
 
 fn i61f49(r: &mut Run) {
-    op!(r, 0x61F49, 3, Op::DExR { d: 1, r: R::C, short: false }); // CD1EX
-    i61f4c(r)
+    r.cpu.d_ex_r(1, R::C, false); // CD1EX
+    if r.next(0x61F4C, 5) {
+        i61f4c(r)
+    }
 }
 
 fn i61f4c(r: &mut Run) {
-    op!(r, 0x61F4C, 3, Op::Mem { store: true, d: 1, r: R::C, f: Field::A }); // DAT1=C A
-    i61f4f(r)
+    r.sync();
+    r.cpu.store(1, R::C, Field::A, r.hw); // DAT1=C A
+    if r.next_io(0x61F4F, 19) {
+        i61f4f(r)
+    }
 }
 
 fn i61f4f(r: &mut Run) {
-    op!(r, 0x61F4F, 3, Op::DFromR { d: 1, r: R::C, short: false }); // D1=C
-    i61f52(r)
+    r.cpu.d_from_r(1, R::C, false); // D1=C
+    if r.next(0x61F52, 5) {
+        i61f52(r)
+    }
 }
 
 fn i61f52(r: &mut Run) {
-    op!(r, 0x61F52, 3, Op::DAdd { d: 0, n: 5 }); // D0=D0+ 5
-    i61f55(r)
+    r.cpu.d_add(0, 5); // D0=D0+ 5
+    if r.next(0x61F55, 5) {
+        i61f55(r)
+    }
 }
 
 fn i61f55(r: &mut Run) {
-    op!(r, 0x61F55, 3, Op::Mem { store: false, d: 0, r: R::A, f: Field::A }); // A=DAT0 A
-    i61f58(r)
+    r.sync();
+    r.cpu.load(0, R::A, Field::A, r.hw); // A=DAT0 A
+    if r.next_io(0x61F58, 19) {
+        i61f58(r)
+    }
 }
 
 fn i61f58(r: &mut Run) {
-    op!(r, 0x61F58, 2, Op::Copy { dst: R::B, src: R::A, f: Field::A }); // B=A A
-    i61f5a(r)
+    r.cpu.copy(R::B, R::A, Field::A); // B=A A
+    if r.next(0x61F5A, 4) {
+        i61f5a(r)
+    }
 }
 
 fn i61f5a(r: &mut Run) {
-    op!(r, 0x61F5A, 3, Op::DAdd { d: 0, n: 0xA }); // D0=D0+ 10
-    i61f5d(r)
+    r.cpu.d_add(0, 10); // D0=D0+ 10
+    if r.next(0x61F5D, 5) {
+        i61f5d(r)
+    }
 }
 
 fn i61f5d(r: &mut Run) {
-    op!(r, 0x61F5D, 2, Op::Dec { r: R::A, f: Field::A }); // A=A-1 A
-    i61f5f(r)
+    r.cpu.dec(R::A, Field::A); // A=A-1 A
+    if r.next(0x61F5F, 4) {
+        i61f5f(r)
+    }
 }
 
 fn i61f5f(r: &mut Run) {
-    op!(r, 0x61F5F, 3, Op::CondJump(Cond::Carry, 0x61F73)); // GOC #61F73
-    i61f62(r)
+    r.cpu.pc = 0x61F62;
+    r.cpu.jump_if(Cond::Carry, 0x61F73); // GOC #61F73
+    if r.next_pc(0x61F62, 5) {
+        i61f62(r)
+    }
 }
 
 fn i61f62(r: &mut Run) {
-    op!(r, 0x61F62, 3, Op::Mem { store: false, d: 0, r: R::C, f: Field::A }); // C=DAT0 A
-    i61f65(r)
+    r.sync();
+    r.cpu.load(0, R::C, Field::A, r.hw); // C=DAT0 A
+    if r.next_io(0x61F65, 19) {
+        i61f65(r)
+    }
 }
 
 fn i61f65(r: &mut Run) {
-    op!(r, 0x61F65, 3, Op::Mem { store: true, d: 1, r: R::C, f: Field::A }); // DAT1=C A
-    i61f68(r)
+    r.sync();
+    r.cpu.store(1, R::C, Field::A, r.hw); // DAT1=C A
+    if r.next_io(0x61F68, 19) {
+        i61f68(r)
+    }
 }
 
 fn i61f68(r: &mut Run) {
-    op!(r, 0x61F68, 3, Op::DAdd { d: 0, n: 0xA }); // D0=D0+ 10
-    i61f6b(r)
+    r.cpu.d_add(0, 10); // D0=D0+ 10
+    if r.next(0x61F6B, 5) {
+        i61f6b(r)
+    }
 }
 
 fn i61f6b(r: &mut Run) {
-    op!(r, 0x61F6B, 3, Op::DAdd { d: 1, n: 5 }); // D1=D1+ 5
-    i61f6e(r)
+    r.cpu.d_add(1, 5); // D1=D1+ 5
+    if r.next(0x61F6E, 5) {
+        i61f6e(r)
+    }
 }
 
 fn i61f6e(r: &mut Run) {
-    op!(r, 0x61F6E, 2, Op::Dec { r: R::A, f: Field::A }); // A=A-1 A
-    i61f70(r)
+    r.cpu.dec(R::A, Field::A); // A=A-1 A
+    if r.next(0x61F70, 4) {
+        i61f70(r)
+    }
 }
 
 fn i61f70(r: &mut Run) {
-    op!(r, 0x61F70, 3, Op::CondJump(Cond::NoCarry, 0x61F62)); // GONC #61F62
-    i61f73(r)
+    r.cpu.pc = 0x61F73;
+    r.cpu.jump_if(Cond::NoCarry, 0x61F62); // GONC #61F62
+    if r.next_pc(0x61F73, 5) {
+        i61f73(r)
+    }
 }
 
 fn i61f73(r: &mut Run) {
-    op!(r, 0x61F73, 7, Op::Call(0x69F7)); // GOSUB #069F7
+    r.cpu.pc = 0x61F7A;
+    r.cpu.call(0x069F7); // GOSUB #069F7
+    r.spend(9);
 }
 
 fn i61f7a(r: &mut Run) {
-    op!(r, 0x61F7A, 5, Op::StTest { bit: 1, set: false, goyes: Some(0x61F88) }); // ?ST=0 1 / GOYES #61F88
-    i61f7f(r)
+    r.cpu.pc = 0x61F7F;
+    r.cpu.st_test(1, false, Some(0x61F88)); // ?ST=0 1 / GOYES #61F88
+    if r.next_pc(0x61F7F, 7) {
+        i61f7f(r)
+    }
 }
 
 fn i61f7f(r: &mut Run) {
-    op!(r, 0x61F7F, 2, Op::Copy { dst: R::A, src: R::B, f: Field::A }); // A=B A
-    i61f81(r)
+    r.cpu.copy(R::A, R::B, Field::A); // A=B A
+    if r.next(0x61F81, 4) {
+        i61f81(r)
+    }
 }
 
 fn i61f81(r: &mut Run) {
-    op!(r, 0x61F81, 7, Op::Jump(0x357C)); // GOTO #0357C
+    r.cpu.pc = 0x0357C; // GOTO #0357C
+    r.spend(9);
 }
 
 fn i61f88(r: &mut Run) {
-    op!(r, 0x61F88, 7, Op::Jump(0x5143)); // GOTO #05143
+    r.cpu.pc = 0x05143; // GOTO #05143
+    r.spend(9);
 }
 
 fn i61f94(r: &mut Run) {
-    op!(r, 0x61F94, 7, Op::Call(0x679B)); // GOSUB #0679B
+    r.cpu.pc = 0x61F9B;
+    r.cpu.call(0x0679B); // GOSUB #0679B
+    r.spend(9);
 }
 
 fn i61f9b(r: &mut Run) {
-    op!(r, 0x61F9B, 3, Op::StSet { bit: 1, set: false }); // ST=0 1
-    i61f9e(r)
+    r.cpu.st_set(1, false); // ST=0 1
+    if r.next(0x61F9E, 5) {
+        i61f9e(r)
+    }
 }
 
 fn i61f9e(r: &mut Run) {
-    op!(r, 0x61F9E, 7, Op::LoadConst { r: R::C, len: 5, val: 0x61D3A }); // LC(5) #61D3A
-    i61fa5(r)
+    r.cpu.load_const(R::C, 5, 0x61D3A); // LC(5) #61D3A
+    if r.next(0x61FA5, 9) {
+        i61fa5(r)
+    }
 }
 
 fn i61fa5(r: &mut Run) {
-    op!(r, 0x61FA5, 4, Op::Jump(0x61EC0)); // GOTO #61EC0
+    r.cpu.pc = 0x61EC0; // GOTO #61EC0
+    r.spend(6);
 }
 
 fn i61fae(r: &mut Run) {
-    op!(r, 0x61FAE, 4, Op::Call(0x624B3)); // GOSUB #624B3
+    r.cpu.pc = 0x61FB2;
+    r.cpu.call(0x624B3); // GOSUB #624B3
+    r.spend(6);
 }
 
 fn i61fb2(r: &mut Run) {
-    op!(r, 0x61FB2, 4, Op::Jump(0x61FC7)); // GOTO #61FC7
+    r.cpu.pc = 0x61FC7; // GOTO #61FC7
+    r.spend(6);
 }
 
 fn i61fbb(r: &mut Run) {
-    op!(r, 0x61FBB, 3, Op::DAdd { d: 1, n: 5 }); // D1=D1+ 5
-    i61fbe(r)
+    r.cpu.d_add(1, 5); // D1=D1+ 5
+    if r.next(0x61FBE, 5) {
+        i61fbe(r)
+    }
 }
 
 fn i61fbe(r: &mut Run) {
-    op!(r, 0x61FBE, 2, Op::Inc { r: R::D, f: Field::A }); // D=D+1 A
-    i61fc0(r)
+    r.cpu.inc(R::D, Field::A); // D=D+1 A
+    if r.next(0x61FC0, 4) {
+        i61fc0(r)
+    }
 }
 
 fn i61fc0(r: &mut Run) {
-    op!(r, 0x61FC0, 4, Op::Call(0x624B3)); // GOSUB #624B3
+    r.cpu.pc = 0x61FC4;
+    r.cpu.call(0x624B3); // GOSUB #624B3
+    r.spend(6);
 }
 
 fn i61fc4(r: &mut Run) {
-    op!(r, 0x61FC4, 3, Op::DSub { d: 1, n: 5 }); // D1=D1- 5
-    i61fc7(r)
+    r.cpu.d_sub(1, 5); // D1=D1- 5
+    if r.next(0x61FC7, 5) {
+        i61fc7(r)
+    }
 }
 
 fn i61fc7(r: &mut Run) {
-    op!(r, 0x61FC7, 4, Op::Call(0x61FCF)); // GOSUB #61FCF
+    r.cpu.pc = 0x61FCB;
+    r.cpu.call(0x61FCF); // GOSUB #61FCF
+    r.spend(6);
 }
 
 fn i61fcb(r: &mut Run) {
-    op!(r, 0x61FCB, 4, Op::Jump(0x620B6)); // GOTO #620B6
+    r.cpu.pc = 0x620B6; // GOTO #620B6
+    r.spend(6);
 }
 
 /// Rom-Word?
 fn i61fcf(r: &mut Run) {
-    op!(r, 0x61FCF, 3, Op::Mem { store: false, d: 1, r: R::A, f: Field::A }); // A=DAT1 A
-    i61fd2(r)
+    r.sync();
+    r.cpu.load(1, R::A, Field::A, r.hw); // A=DAT1 A
+    if r.next_io(0x61FD2, 19) {
+        i61fd2(r)
+    }
 }
 
 fn i61fd2(r: &mut Run) {
-    op!(r, 0x61FD2, 7, Op::LoadConst { r: R::C, len: 5, val: 0x80000 }); // LC(5) #80000
-    i61fd9(r)
+    r.cpu.load_const(R::C, 5, 0x80000); // LC(5) #80000
+    if r.next(0x61FD9, 9) {
+        i61fd9(r)
+    }
 }
 
 fn i61fd9(r: &mut Run) {
-    op!(r, 0x61FD9, 5, Op::Test { test: Test::Regs(Cmp::Gt, R::C, R::A), f: Field::A, goyes: Some(0x61FE2) }); // ?C>A A / GOYES #61FE2
-    i61fde(r)
+    r.cpu.pc = 0x61FDE;
+    r.cpu.test(Test::Regs(Cmp::Gt, R::C, R::A), Field::A, Some(0x61FE2)); // ?C>A A / GOYES #61FE2
+    if r.next_pc(0x61FDE, 7) {
+        i61fde(r)
+    }
 }
 
 fn i61fde(r: &mut Run) {
-    op!(r, 0x61FDE, 4, Op::Jump(0x61FFF)); // GOTO #61FFF
+    r.cpu.pc = 0x61FFF; // GOTO #61FFF
+    r.spend(6);
 }
 
 fn i61fe2(r: &mut Run) {
-    op!(r, 0x61FE2, 2, Op::Copy { dst: R::C, src: R::A, f: Field::A }); // C=A A
-    i61fe4(r)
+    r.cpu.copy(R::C, R::A, Field::A); // C=A A
+    if r.next(0x61FE4, 4) {
+        i61fe4(r)
+    }
 }
 
 fn i61fe4(r: &mut Run) {
-    op!(r, 0x61FE4, 2, Op::PushC); // RSTK=C
-    i61fe6(r)
+    r.cpu.push_c(); // RSTK=C
+    if r.next(0x61FE6, 4) {
+        i61fe6(r)
+    }
 }
 
 fn i61fe6(r: &mut Run) {
-    op!(r, 0x61FE6, 6, Op::SubCon { r: R::A, f: Field::A, n: 0xB }); // A=A-CON A,11
-    i61fec(r)
+    r.cpu.sub_con(R::A, Field::A, 11); // A=A-CON A,11
+    if r.next(0x61FEC, 8) {
+        i61fec(r)
+    }
 }
 
 fn i61fec(r: &mut Run) {
-    op!(r, 0x61FEC, 7, Op::Call(0x7ED8)); // GOSUB #07ED8
+    r.cpu.pc = 0x61FF3;
+    r.cpu.call(0x07ED8); // GOSUB #07ED8
+    r.spend(9);
 }
 
 fn i61ff3(r: &mut Run) {
-    op!(r, 0x61FF3, 2, Op::PopC); // C=RSTK
-    i61ff5(r)
+    r.cpu.pop_c(); // C=RSTK
+    if r.next(0x61FF5, 4) {
+        i61ff5(r)
+    }
 }
 
 fn i61ff5(r: &mut Run) {
-    op!(r, 0x61FF5, 2, Op::Exch { a: R::C, b: R::A, f: Field::A }); // CAEX A
-    i61ff7(r)
+    r.cpu.exch(R::C, R::A, Field::A); // CAEX A
+    if r.next(0x61FF7, 4) {
+        i61ff7(r)
+    }
 }
 
 fn i61ff7(r: &mut Run) {
-    op!(r, 0x61FF7, 3, Op::CondJump(Cond::Carry, 0x61FFF)); // GOC #61FFF
-    i61ffa(r)
+    r.cpu.pc = 0x61FFA;
+    r.cpu.jump_if(Cond::Carry, 0x61FFF); // GOC #61FFF
+    if r.next_pc(0x61FFA, 5) {
+        i61ffa(r)
+    }
 }
 
 fn i61ffa(r: &mut Run) {
-    op!(r, 0x61FFA, 5, Op::Test { test: Test::Regs(Cmp::Eq, R::C, R::A), f: Field::A, goyes: None }); // ?C=A A / RTNYES
-    i61fff(r)
+    r.cpu.pc = 0x61FFF;
+    r.cpu.test(Test::Regs(Cmp::Eq, R::C, R::A), Field::A, None); // ?C=A A / RTNYES
+    if r.next_pc(0x61FFF, 7) {
+        i61fff(r)
+    }
 }
 
 fn i61fff(r: &mut Run) {
-    op!(r, 0x61FFF, 2, Op::Rtn(RtnKind::ClearCarry)); // RTNCC
+    r.cpu.rtn(RtnKind::ClearCarry); // RTNCC
+    r.spend(9);
 }
 
 fn i62006(r: &mut Run) {
-    op!(r, 0x62006, 4, Op::Mem { store: false, d: 1, r: R::A, f: Field::Nibbles(0xA) }); // A=DAT1 10
-    i6200a(r)
+    r.sync();
+    r.cpu.load(1, R::A, Field::Nibbles(10), r.hw); // A=DAT1 10
+    if r.next_io(0x6200A, 24) {
+        i6200a(r)
+    }
 }
 
 fn i6200a(r: &mut Run) {
-    op!(r, 0x6200A, 3, Op::DAdd { d: 1, n: 0xA }); // D1=D1+ 10
-    i6200d(r)
+    r.cpu.d_add(1, 10); // D1=D1+ 10
+    if r.next(0x6200D, 5) {
+        i6200d(r)
+    }
 }
 
 fn i6200d(r: &mut Run) {
-    op!(r, 0x6200D, 4, Op::Mem { store: false, d: 1, r: R::C, f: Field::Nibbles(0xA) }); // C=DAT1 10
-    i62011(r)
+    r.sync();
+    r.cpu.load(1, R::C, Field::Nibbles(10), r.hw); // C=DAT1 10
+    if r.next_io(0x62011, 24) {
+        i62011(r)
+    }
 }
 
 fn i62011(r: &mut Run) {
-    op!(r, 0x62011, 4, Op::Mem { store: true, d: 1, r: R::A, f: Field::Nibbles(0xA) }); // DAT1=A 10
-    i62015(r)
+    r.sync();
+    r.cpu.store(1, R::A, Field::Nibbles(10), r.hw); // DAT1=A 10
+    if r.next_io(0x62015, 24) {
+        i62015(r)
+    }
 }
 
 fn i62015(r: &mut Run) {
-    op!(r, 0x62015, 3, Op::DSub { d: 1, n: 0xA }); // D1=D1- 10
-    i62018(r)
+    r.cpu.d_sub(1, 10); // D1=D1- 10
+    if r.next(0x62018, 5) {
+        i62018(r)
+    }
 }
 
 fn i62018(r: &mut Run) {
-    op!(r, 0x62018, 4, Op::Mem { store: true, d: 1, r: R::C, f: Field::Nibbles(0xA) }); // DAT1=C 10
-    i6201c(r)
+    r.sync();
+    r.cpu.store(1, R::C, Field::Nibbles(10), r.hw); // DAT1=C 10
+    if r.next_io(0x6201C, 24) {
+        i6201c(r)
+    }
 }
 
 fn i6201c(r: &mut Run) {
-    op!(r, 0x6201C, 4, Op::Jump(0x62544)); // GOTO #62544
+    r.cpu.pc = 0x62544; // GOTO #62544
+    r.spend(6);
 }
 
 fn i6202a(r: &mut Run) {
-    op!(r, 0x6202A, 7, Op::LoadConst { r: R::C, len: 5, val: 0x29BF }); // LC(5) #029BF
-    i62031(r)
+    r.cpu.load_const(R::C, 5, 0x29BF); // LC(5) #029BF
+    if r.next(0x62031, 9) {
+        i62031(r)
+    }
 }
 
 fn i62031(r: &mut Run) {
-    op!(r, 0x62031, 4, Op::Jump(0x6205B)); // GOTO #6205B
+    r.cpu.pc = 0x6205B; // GOTO #6205B
+    r.spend(6);
 }
 
 fn i6203f(r: &mut Run) {
-    op!(r, 0x6203F, 7, Op::LoadConst { r: R::C, len: 5, val: 0x2E48 }); // LC(5) #02E48
-    i62046(r)
+    r.cpu.load_const(R::C, 5, 0x2E48); // LC(5) #02E48
+    if r.next(0x62046, 9) {
+        i62046(r)
+    }
 }
 
 fn i62046(r: &mut Run) {
-    op!(r, 0x62046, 4, Op::Jump(0x6205B)); // GOTO #6205B
+    r.cpu.pc = 0x6205B; // GOTO #6205B
+    r.spend(6);
 }
 
 fn i62054(r: &mut Run) {
-    op!(r, 0x62054, 7, Op::LoadConst { r: R::C, len: 5, val: 0x2ADA }); // LC(5) #02ADA
-    i6205b(r)
+    r.cpu.load_const(R::C, 5, 0x2ADA); // LC(5) #02ADA
+    if r.next(0x6205B, 9) {
+        i6205b(r)
+    }
 }
 
 fn i6205b(r: &mut Run) {
-    op!(r, 0x6205B, 2, Op::PushC); // RSTK=C
-    i6205d(r)
+    r.cpu.push_c(); // RSTK=C
+    if r.next(0x6205D, 4) {
+        i6205d(r)
+    }
 }
 
 fn i6205d(r: &mut Run) {
-    op!(r, 0x6205D, 3, Op::Mem { store: false, d: 1, r: R::C, f: Field::A }); // C=DAT1 A
-    i62060(r)
+    r.sync();
+    r.cpu.load(1, R::C, Field::A, r.hw); // C=DAT1 A
+    if r.next_io(0x62060, 19) {
+        i62060(r)
+    }
 }
 
 fn i62060(r: &mut Run) {
-    op!(r, 0x62060, 3, Op::DExR { d: 1, r: R::C, short: false }); // CD1EX
-    i62063(r)
+    r.cpu.d_ex_r(1, R::C, false); // CD1EX
+    if r.next(0x62063, 5) {
+        i62063(r)
+    }
 }
 
 fn i62063(r: &mut Run) {
-    op!(r, 0x62063, 3, Op::Mem { store: false, d: 1, r: R::A, f: Field::A }); // A=DAT1 A
-    i62066(r)
+    r.sync();
+    r.cpu.load(1, R::A, Field::A, r.hw); // A=DAT1 A
+    if r.next_io(0x62066, 19) {
+        i62066(r)
+    }
 }
 
 fn i62066(r: &mut Run) {
-    op!(r, 0x62066, 3, Op::DFromR { d: 1, r: R::C, short: false }); // D1=C
-    i62069(r)
+    r.cpu.d_from_r(1, R::C, false); // D1=C
+    if r.next(0x62069, 5) {
+        i62069(r)
+    }
 }
 
 fn i62069(r: &mut Run) {
-    op!(r, 0x62069, 2, Op::PopC); // C=RSTK
-    i6206b(r)
+    r.cpu.pop_c(); // C=RSTK
+    if r.next(0x6206B, 4) {
+        i6206b(r)
+    }
 }
 
 fn i6206b(r: &mut Run) {
-    op!(r, 0x6206B, 5, Op::Test { test: Test::Regs(Cmp::Eq, R::C, R::A), f: Field::A, goyes: Some(0x62080) }); // ?C=A A / GOYES #62080
-    i62070(r)
+    r.cpu.pc = 0x62070;
+    r.cpu.test(Test::Regs(Cmp::Eq, R::C, R::A), Field::A, Some(0x62080)); // ?C=A A / GOYES #62080
+    if r.next_pc(0x62070, 7) {
+        i62070(r)
+    }
 }
 
 fn i62070(r: &mut Run) {
-    op!(r, 0x62070, 3, Op::CondJump(Cond::NoCarry, 0x620A0)); // GONC #620A0
-    i62073(r)
+    r.cpu.pc = 0x62073;
+    r.cpu.jump_if(Cond::NoCarry, 0x620A0); // GONC #620A0
+    if r.next_pc(0x62073, 5) {
+        i62073(r)
+    }
 }
 
 /// GPOverWrT/FL
 fn i62073(r: &mut Run) {
-    op!(r, 0x62073, 3, Op::CondJump(Cond::NoCarry, 0x62096)); // GONC #62096
-    i62076(r)
+    r.cpu.pc = 0x62076;
+    r.cpu.jump_if(Cond::NoCarry, 0x62096); // GONC #62096
+    if r.next_pc(0x62076, 5) {
+        i62076(r)
+    }
 }
 
 /// GPOverWrTLp
 fn i62076(r: &mut Run) {
-    op!(r, 0x62076, 7, Op::Call(0x67D2)); // GOSUB #067D2
+    r.cpu.pc = 0x6207D;
+    r.cpu.call(0x067D2); // GOSUB #067D2
+    r.spend(9);
 }
 
 /// OverWrF/TLp
 fn i6207d(r: &mut Run) {
-    op!(r, 0x6207D, 3, Op::CondJump(Cond::Carry, 0x620A0)); // GOC #620A0
-    i62080(r)
+    r.cpu.pc = 0x62080;
+    r.cpu.jump_if(Cond::Carry, 0x620A0); // GOC #620A0
+    if r.next_pc(0x62080, 5) {
+        i62080(r)
+    }
 }
 
 /// OverWrTLoop
 fn i62080(r: &mut Run) {
-    op!(r, 0x62080, 2, Op::PSet(0)); // P= 0
-    i62082(r)
+    r.cpu.p = 0; // P= 0
+    if r.next(0x62082, 4) {
+        i62082(r)
+    }
 }
 
 fn i62082(r: &mut Run) {
-    op!(r, 0x62082, 7, Op::LoadConst { r: R::C, len: 5, val: 0x3A81 }); // LC(5) #03A81
-    i62089(r)
+    r.cpu.load_const(R::C, 5, 0x3A81); // LC(5) #03A81
+    if r.next(0x62089, 9) {
+        i62089(r)
+    }
 }
 
 fn i62089(r: &mut Run) {
-    op!(r, 0x62089, 3, Op::Mem { store: true, d: 1, r: R::C, f: Field::A }); // DAT1=C A
-    i6208c(r)
+    r.sync();
+    r.cpu.store(1, R::C, Field::A, r.hw); // DAT1=C A
+    if r.next_io(0x6208C, 19) {
+        i6208c(r)
+    }
 }
 
 fn i6208c(r: &mut Run) {
-    op!(r, 0x6208C, 3, Op::Mem { store: false, d: 0, r: R::A, f: Field::A }); // A=DAT0 A
-    i6208f(r)
+    r.sync();
+    r.cpu.load(0, R::A, Field::A, r.hw); // A=DAT0 A
+    if r.next_io(0x6208F, 19) {
+        i6208f(r)
+    }
 }
 
 fn i6208f(r: &mut Run) {
-    op!(r, 0x6208F, 3, Op::DAdd { d: 0, n: 5 }); // D0=D0+ 5
-    i62092(r)
+    r.cpu.d_add(0, 5); // D0=D0+ 5
+    if r.next(0x62092, 5) {
+        i62092(r)
+    }
 }
 
 fn i62092(r: &mut Run) {
-    op!(r, 0x62092, 4, Op::PcIndirect(R::A)); // PC=(A)
+    r.sync();
+    r.cpu.pc_indirect(R::A, r.hw); // PC=(A)
+    r.spend(23);
 }
 
 /// GPOverWrFLp
 fn i62096(r: &mut Run) {
-    op!(r, 0x62096, 7, Op::Call(0x67D2)); // GOSUB #067D2
+    r.cpu.pc = 0x6209D;
+    r.cpu.call(0x067D2); // GOSUB #067D2
+    r.spend(9);
 }
 
 /// OverWrT/FLp
 fn i6209d(r: &mut Run) {
-    op!(r, 0x6209D, 3, Op::CondJump(Cond::Carry, 0x62080)); // GOC #62080
-    i620a0(r)
+    r.cpu.pc = 0x620A0;
+    r.cpu.jump_if(Cond::Carry, 0x62080); // GOC #62080
+    if r.next_pc(0x620A0, 5) {
+        i620a0(r)
+    }
 }
 
 /// OverWrFLoop
 fn i620a0(r: &mut Run) {
-    op!(r, 0x620A0, 2, Op::PSet(0)); // P= 0
-    i620a2(r)
+    r.cpu.p = 0; // P= 0
+    if r.next(0x620A2, 4) {
+        i620a2(r)
+    }
 }
 
 fn i620a2(r: &mut Run) {
-    op!(r, 0x620A2, 7, Op::LoadConst { r: R::C, len: 5, val: 0x3AC0 }); // LC(5) #03AC0
-    i620a9(r)
+    r.cpu.load_const(R::C, 5, 0x3AC0); // LC(5) #03AC0
+    if r.next(0x620A9, 9) {
+        i620a9(r)
+    }
 }
 
 fn i620a9(r: &mut Run) {
-    op!(r, 0x620A9, 3, Op::Mem { store: true, d: 1, r: R::C, f: Field::A }); // DAT1=C A
-    i620ac(r)
+    r.sync();
+    r.cpu.store(1, R::C, Field::A, r.hw); // DAT1=C A
+    if r.next_io(0x620AC, 19) {
+        i620ac(r)
+    }
 }
 
 fn i620ac(r: &mut Run) {
-    op!(r, 0x620AC, 3, Op::Mem { store: false, d: 0, r: R::A, f: Field::A }); // A=DAT0 A
-    i620af(r)
+    r.sync();
+    r.cpu.load(0, R::A, Field::A, r.hw); // A=DAT0 A
+    if r.next_io(0x620AF, 19) {
+        i620af(r)
+    }
 }
 
 fn i620af(r: &mut Run) {
-    op!(r, 0x620AF, 3, Op::DAdd { d: 0, n: 5 }); // D0=D0+ 5
-    i620b2(r)
+    r.cpu.d_add(0, 5); // D0=D0+ 5
+    if r.next(0x620B2, 5) {
+        i620b2(r)
+    }
 }
 
 fn i620b2(r: &mut Run) {
-    op!(r, 0x620B2, 4, Op::PcIndirect(R::A)); // PC=(A)
+    r.sync();
+    r.cpu.pc_indirect(R::A, r.hw); // PC=(A)
+    r.spend(23);
 }
 
 /// GPPushT/FLp
 fn i620b6(r: &mut Run) {
-    op!(r, 0x620B6, 3, Op::CondJump(Cond::NoCarry, 0x620D2)); // GONC #620D2
-    i620b9(r)
+    r.cpu.pc = 0x620B9;
+    r.cpu.jump_if(Cond::NoCarry, 0x620D2); // GONC #620D2
+    if r.next_pc(0x620B9, 5) {
+        i620b9(r)
+    }
 }
 
 /// GPPushTLoop
 fn i620b9(r: &mut Run) {
-    op!(r, 0x620B9, 7, Op::Call(0x67D2)); // GOSUB #067D2
+    r.cpu.pc = 0x620C0;
+    r.cpu.call(0x067D2); // GOSUB #067D2
+    r.spend(9);
 }
 
 /// PushF/TLoop
 fn i620c0(r: &mut Run) {
-    op!(r, 0x620C0, 3, Op::CondJump(Cond::Carry, 0x620DC)); // GOC #620DC
-    i620c3(r)
+    r.cpu.pc = 0x620C3;
+    r.cpu.jump_if(Cond::Carry, 0x620DC); // GOC #620DC
+    if r.next_pc(0x620C3, 5) {
+        i620c3(r)
+    }
 }
 
 /// PushTLoop
 fn i620c3(r: &mut Run) {
-    op!(r, 0x620C3, 2, Op::PSet(0)); // P= 0
-    i620c5(r)
+    r.cpu.p = 0; // P= 0
+    if r.next(0x620C5, 4) {
+        i620c5(r)
+    }
 }
 
 fn i620c5(r: &mut Run) {
-    op!(r, 0x620C5, 7, Op::LoadConst { r: R::C, len: 5, val: 0x3A81 }); // LC(5) #03A81
-    i620cc(r)
+    r.cpu.load_const(R::C, 5, 0x3A81); // LC(5) #03A81
+    if r.next(0x620CC, 9) {
+        i620cc(r)
+    }
 }
 
 fn i620cc(r: &mut Run) {
-    op!(r, 0x620CC, 2, Op::Copy { dst: R::A, src: R::C, f: Field::A }); // A=C A
-    i620ce(r)
+    r.cpu.copy(R::A, R::C, Field::A); // A=C A
+    if r.next(0x620CE, 4) {
+        i620ce(r)
+    }
 }
 
 fn i620ce(r: &mut Run) {
-    op!(r, 0x620CE, 4, Op::PcIndirect(R::A)); // PC=(A)
+    r.sync();
+    r.cpu.pc_indirect(R::A, r.hw); // PC=(A)
+    r.spend(23);
 }
 
 /// GPPushFLoop
 fn i620d2(r: &mut Run) {
-    op!(r, 0x620D2, 7, Op::Call(0x67D2)); // GOSUB #067D2
+    r.cpu.pc = 0x620D9;
+    r.cpu.call(0x067D2); // GOSUB #067D2
+    r.spend(9);
 }
 
 /// PushT/FLoop
 fn i620d9(r: &mut Run) {
-    op!(r, 0x620D9, 3, Op::CondJump(Cond::Carry, 0x620C3)); // GOC #620C3
-    i620dc(r)
+    r.cpu.pc = 0x620DC;
+    r.cpu.jump_if(Cond::Carry, 0x620C3); // GOC #620C3
+    if r.next_pc(0x620DC, 5) {
+        i620dc(r)
+    }
 }
 
 /// PushFLoop
 fn i620dc(r: &mut Run) {
-    op!(r, 0x620DC, 2, Op::PSet(0)); // P= 0
-    i620de(r)
+    r.cpu.p = 0; // P= 0
+    if r.next(0x620DE, 4) {
+        i620de(r)
+    }
 }
 
 fn i620de(r: &mut Run) {
-    op!(r, 0x620DE, 7, Op::LoadConst { r: R::C, len: 5, val: 0x3AC0 }); // LC(5) #03AC0
-    i620e5(r)
+    r.cpu.load_const(R::C, 5, 0x3AC0); // LC(5) #03AC0
+    if r.next(0x620E5, 9) {
+        i620e5(r)
+    }
 }
 
 fn i620e5(r: &mut Run) {
-    op!(r, 0x620E5, 2, Op::Copy { dst: R::A, src: R::C, f: Field::A }); // A=C A
-    i620e7(r)
+    r.cpu.copy(R::A, R::C, Field::A); // A=C A
+    if r.next(0x620E7, 4) {
+        i620e7(r)
+    }
 }
 
 fn i620e7(r: &mut Run) {
-    op!(r, 0x620E7, 4, Op::PcIndirect(R::A)); // PC=(A)
+    r.sync();
+    r.cpu.pc_indirect(R::A, r.hw); // PC=(A)
+    r.spend(23);
 }
 
 fn i620f0(r: &mut Run) {
-    op!(r, 0x620F0, 6, Op::Call(0x62829)); // GOSUB #62829
+    r.cpu.pc = 0x620F6;
+    r.cpu.call(0x62829); // GOSUB #62829
+    r.spend(8);
 }
 
 fn i620f6(r: &mut Run) {
-    op!(r, 0x620F6, 2, Op::Dec { r: R::D, f: Field::A }); // D=D-1 A
-    i620f8(r)
+    r.cpu.dec(R::D, Field::A); // D=D-1 A
+    if r.next(0x620F8, 4) {
+        i620f8(r)
+    }
 }
 
 fn i620f8(r: &mut Run) {
-    op!(r, 0x620F8, 3, Op::DSub { d: 1, n: 5 }); // D1=D1- 5
-    i620fb(r)
+    r.cpu.d_sub(1, 5); // D1=D1- 5
+    if r.next(0x620FB, 5) {
+        i620fb(r)
+    }
 }
 
 fn i620fb(r: &mut Run) {
-    op!(r, 0x620FB, 5, Op::Test { test: Test::Regs(Cmp::Eq, R::C, R::A), f: Field::A, goyes: Some(0x620C3) }); // ?C=A A / GOYES #620C3
-    i62100(r)
+    r.cpu.pc = 0x62100;
+    r.cpu.test(Test::Regs(Cmp::Eq, R::C, R::A), Field::A, Some(0x620C3)); // ?C=A A / GOYES #620C3
+    if r.next_pc(0x62100, 7) {
+        i62100(r)
+    }
 }
 
 fn i62100(r: &mut Run) {
-    op!(r, 0x62100, 3, Op::CondJump(Cond::NoCarry, 0x620DC)); // GONC #620DC
+    r.cpu.pc = 0x62103;
+    r.cpu.jump_if(Cond::NoCarry, 0x620DC); // GONC #620DC
+    r.spend(5);
 }
 
 fn i62108(r: &mut Run) {
-    op!(r, 0x62108, 4, Op::Jump(0x62080)); // GOTO #62080
+    r.cpu.pc = 0x62080; // GOTO #62080
+    r.spend(6);
 }
 
 fn i62111(r: &mut Run) {
-    op!(r, 0x62111, 4, Op::Jump(0x620A0)); // GOTO #620A0
+    r.cpu.pc = 0x620A0; // GOTO #620A0
+    r.spend(6);
 }
 
 fn i6211f(r: &mut Run) {
-    op!(r, 0x6211F, 7, Op::LoadConst { r: R::C, len: 5, val: 0x2E6D }); // LC(5) #02E6D
-    i62126(r)
+    r.cpu.load_const(R::C, 5, 0x2E6D); // LC(5) #02E6D
+    if r.next(0x62126, 9) {
+        i62126(r)
+    }
 }
 
 fn i62126(r: &mut Run) {
-    op!(r, 0x62126, 4, Op::Jump(0x6205B)); // GOTO #6205B
+    r.cpu.pc = 0x6205B; // GOTO #6205B
+    r.spend(6);
 }
 
 fn i62134(r: &mut Run) {
-    op!(r, 0x62134, 7, Op::LoadConst { r: R::C, len: 5, val: 0x2911 }); // LC(5) #02911
-    i6213b(r)
+    r.cpu.load_const(R::C, 5, 0x2911); // LC(5) #02911
+    if r.next(0x6213B, 9) {
+        i6213b(r)
+    }
 }
 
 fn i6213b(r: &mut Run) {
-    op!(r, 0x6213B, 4, Op::Jump(0x6205B)); // GOTO #6205B
+    r.cpu.pc = 0x6205B; // GOTO #6205B
+    r.spend(6);
 }
 
 fn i62149(r: &mut Run) {
-    op!(r, 0x62149, 7, Op::LoadConst { r: R::C, len: 5, val: 0x2A4E }); // LC(5) #02A4E
-    i62150(r)
+    r.cpu.load_const(R::C, 5, 0x2A4E); // LC(5) #02A4E
+    if r.next(0x62150, 9) {
+        i62150(r)
+    }
 }
 
 fn i62150(r: &mut Run) {
-    op!(r, 0x62150, 4, Op::Jump(0x6205B)); // GOTO #6205B
+    r.cpu.pc = 0x6205B; // GOTO #6205B
+    r.spend(6);
 }
 
 fn i6215e(r: &mut Run) {
-    op!(r, 0x6215E, 7, Op::LoadConst { r: R::C, len: 5, val: 0x2A2C }); // LC(5) #02A2C
-    i62165(r)
+    r.cpu.load_const(R::C, 5, 0x2A2C); // LC(5) #02A2C
+    if r.next(0x62165, 9) {
+        i62165(r)
+    }
 }
 
 fn i62165(r: &mut Run) {
-    op!(r, 0x62165, 4, Op::Jump(0x6205B)); // GOTO #6205B
+    r.cpu.pc = 0x6205B; // GOTO #6205B
+    r.spend(6);
 }
 
 fn i62173(r: &mut Run) {
-    op!(r, 0x62173, 7, Op::LoadConst { r: R::C, len: 5, val: 0x2933 }); // LC(5) #02933
-    i6217a(r)
+    r.cpu.load_const(R::C, 5, 0x2933); // LC(5) #02933
+    if r.next(0x6217A, 9) {
+        i6217a(r)
+    }
 }
 
 fn i6217a(r: &mut Run) {
-    op!(r, 0x6217A, 4, Op::Jump(0x6205B)); // GOTO #6205B
+    r.cpu.pc = 0x6205B; // GOTO #6205B
+    r.spend(6);
 }
 
 fn i62188(r: &mut Run) {
-    op!(r, 0x62188, 7, Op::LoadConst { r: R::C, len: 5, val: 0x2977 }); // LC(5) #02977
-    i6218f(r)
+    r.cpu.load_const(R::C, 5, 0x2977); // LC(5) #02977
+    if r.next(0x6218F, 9) {
+        i6218f(r)
+    }
 }
 
 fn i6218f(r: &mut Run) {
-    op!(r, 0x6218F, 4, Op::Jump(0x6205B)); // GOTO #6205B
+    r.cpu.pc = 0x6205B; // GOTO #6205B
+    r.spend(6);
 }
 
 fn i6219d(r: &mut Run) {
-    op!(r, 0x6219D, 7, Op::LoadConst { r: R::C, len: 5, val: 0x29E8 }); // LC(5) #029E8
-    i621a4(r)
+    r.cpu.load_const(R::C, 5, 0x29E8); // LC(5) #029E8
+    if r.next(0x621A4, 9) {
+        i621a4(r)
+    }
 }
 
 fn i621a4(r: &mut Run) {
-    op!(r, 0x621A4, 4, Op::Jump(0x6205B)); // GOTO #6205B
+    r.cpu.pc = 0x6205B; // GOTO #6205B
+    r.spend(6);
 }
 
 fn i621b2(r: &mut Run) {
-    op!(r, 0x621B2, 7, Op::LoadConst { r: R::C, len: 5, val: 0x2E92 }); // LC(5) #02E92
-    i621b9(r)
+    r.cpu.load_const(R::C, 5, 0x2E92); // LC(5) #02E92
+    if r.next(0x621B9, 9) {
+        i621b9(r)
+    }
 }
 
 fn i621b9(r: &mut Run) {
-    op!(r, 0x621B9, 4, Op::Jump(0x6205B)); // GOTO #6205B
+    r.cpu.pc = 0x6205B; // GOTO #6205B
+    r.spend(6);
 }
 
 fn i621c7(r: &mut Run) {
-    op!(r, 0x621C7, 7, Op::LoadConst { r: R::C, len: 5, val: 0x2A96 }); // LC(5) #02A96
-    i621ce(r)
+    r.cpu.load_const(R::C, 5, 0x2A96); // LC(5) #02A96
+    if r.next(0x621CE, 9) {
+        i621ce(r)
+    }
 }
 
 fn i621ce(r: &mut Run) {
-    op!(r, 0x621CE, 4, Op::Jump(0x6205B)); // GOTO #6205B
+    r.cpu.pc = 0x6205B; // GOTO #6205B
+    r.spend(6);
 }
 
 fn i621dc(r: &mut Run) {
-    op!(r, 0x621DC, 7, Op::LoadConst { r: R::C, len: 5, val: 0x2AB8 }); // LC(5) #02AB8
-    i621e3(r)
+    r.cpu.load_const(R::C, 5, 0x2AB8); // LC(5) #02AB8
+    if r.next(0x621E3, 9) {
+        i621e3(r)
+    }
 }
 
 fn i621e3(r: &mut Run) {
-    op!(r, 0x621E3, 4, Op::Jump(0x6205B)); // GOTO #6205B
+    r.cpu.pc = 0x6205B; // GOTO #6205B
+    r.spend(6);
 }
 
 fn i621f1(r: &mut Run) {
-    op!(r, 0x621F1, 7, Op::LoadConst { r: R::C, len: 5, val: 0x2D9D }); // LC(5) #02D9D
-    i621f8(r)
+    r.cpu.load_const(R::C, 5, 0x2D9D); // LC(5) #02D9D
+    if r.next(0x621F8, 9) {
+        i621f8(r)
+    }
 }
 
 fn i621f8(r: &mut Run) {
-    op!(r, 0x621F8, 4, Op::Jump(0x6205B)); // GOTO #6205B
+    r.cpu.pc = 0x6205B; // GOTO #6205B
+    r.spend(6);
 }
 
 fn i62206(r: &mut Run) {
-    op!(r, 0x62206, 7, Op::LoadConst { r: R::C, len: 5, val: 0x2B1E }); // LC(5) #02B1E
-    i6220d(r)
+    r.cpu.load_const(R::C, 5, 0x2B1E); // LC(5) #02B1E
+    if r.next(0x6220D, 9) {
+        i6220d(r)
+    }
 }
 
 fn i6220d(r: &mut Run) {
-    op!(r, 0x6220D, 4, Op::Jump(0x6205B)); // GOTO #6205B
+    r.cpu.pc = 0x6205B; // GOTO #6205B
+    r.spend(6);
 }
 
 fn i6221b(r: &mut Run) {
-    op!(r, 0x6221B, 7, Op::LoadConst { r: R::C, len: 5, val: 0x2A74 }); // LC(5) #02A74
-    i62222(r)
+    r.cpu.load_const(R::C, 5, 0x2A74); // LC(5) #02A74
+    if r.next(0x62222, 9) {
+        i62222(r)
+    }
 }
 
 fn i62222(r: &mut Run) {
-    op!(r, 0x62222, 4, Op::Jump(0x6205B)); // GOTO #6205B
+    r.cpu.pc = 0x6205B; // GOTO #6205B
+    r.spend(6);
 }
 
 fn i62230(r: &mut Run) {
-    op!(r, 0x62230, 7, Op::LoadConst { r: R::C, len: 5, val: 0x2AFC }); // LC(5) #02AFC
-    i62237(r)
+    r.cpu.load_const(R::C, 5, 0x2AFC); // LC(5) #02AFC
+    if r.next(0x62237, 9) {
+        i62237(r)
+    }
 }
 
 fn i62237(r: &mut Run) {
-    op!(r, 0x62237, 4, Op::Jump(0x6205B)); // GOTO #6205B
+    r.cpu.pc = 0x6205B; // GOTO #6205B
+    r.spend(6);
 }
 
 fn i62240(r: &mut Run) {
-    op!(r, 0x62240, 7, Op::LoadConst { r: R::C, len: 5, val: 0x2933 }); // LC(5) #02933
-    i62247(r)
+    r.cpu.load_const(R::C, 5, 0x2933); // LC(5) #02933
+    if r.next(0x62247, 9) {
+        i62247(r)
+    }
 }
 
 fn i62247(r: &mut Run) {
-    op!(r, 0x62247, 2, Op::PushC); // RSTK=C
-    i62249(r)
+    r.cpu.push_c(); // RSTK=C
+    if r.next(0x62249, 4) {
+        i62249(r)
+    }
 }
 
 fn i62249(r: &mut Run) {
-    op!(r, 0x62249, 3, Op::Mem { store: false, d: 1, r: R::C, f: Field::A }); // C=DAT1 A
-    i6224c(r)
+    r.sync();
+    r.cpu.load(1, R::C, Field::A, r.hw); // C=DAT1 A
+    if r.next_io(0x6224C, 19) {
+        i6224c(r)
+    }
 }
 
 fn i6224c(r: &mut Run) {
-    op!(r, 0x6224C, 3, Op::DExR { d: 1, r: R::C, short: false }); // CD1EX
-    i6224f(r)
+    r.cpu.d_ex_r(1, R::C, false); // CD1EX
+    if r.next(0x6224F, 5) {
+        i6224f(r)
+    }
 }
 
 fn i6224f(r: &mut Run) {
-    op!(r, 0x6224F, 3, Op::DAdd { d: 1, n: 0xA }); // D1=D1+ 10
-    i62252(r)
+    r.cpu.d_add(1, 10); // D1=D1+ 10
+    if r.next(0x62252, 5) {
+        i62252(r)
+    }
 }
 
 fn i62252(r: &mut Run) {
-    op!(r, 0x62252, 4, Op::Jump(0x62063)); // GOTO #62063
+    r.cpu.pc = 0x62063; // GOTO #62063
+    r.spend(6);
 }
 
 fn i6225b(r: &mut Run) {
-    op!(r, 0x6225B, 7, Op::LoadConst { r: R::C, len: 5, val: 0x2977 }); // LC(5) #02977
-    i62262(r)
+    r.cpu.load_const(R::C, 5, 0x2977); // LC(5) #02977
+    if r.next(0x62262, 9) {
+        i62262(r)
+    }
 }
 
 fn i62262(r: &mut Run) {
-    op!(r, 0x62262, 4, Op::Jump(0x62247)); // GOTO #62247
+    r.cpu.pc = 0x62247; // GOTO #62247
+    r.spend(6);
 }
 
 fn i6226b(r: &mut Run) {
-    op!(r, 0x6226B, 4, Op::Call(0x62278)); // GOSUB #62278
+    r.cpu.pc = 0x6226F;
+    r.cpu.call(0x62278); // GOSUB #62278
+    r.spend(6);
 }
 
 fn i6226f(r: &mut Run) {
-    op!(r, 0x6226F, 5, Op::Test { test: Test::Zero(R::A), f: Field::A, goyes: Some(0x62274) }); // ?A=0 A / GOYES #62274
-    i62274(r)
+    r.cpu.pc = 0x62274;
+    r.cpu.test(Test::Zero(R::A), Field::A, Some(0x62274)); // ?A=0 A / GOYES #62274
+    if r.next_pc(0x62274, 7) {
+        i62274(r)
+    }
 }
 
 fn i62274(r: &mut Run) {
-    op!(r, 0x62274, 4, Op::Jump(0x620D9)); // GOTO #620D9
+    r.cpu.pc = 0x620D9; // GOTO #620D9
+    r.spend(6);
 }
 
 fn i62278(r: &mut Run) {
-    op!(r, 0x62278, 3, Op::Mem { store: false, d: 1, r: R::C, f: Field::A }); // C=DAT1 A
-    i6227b(r)
+    r.sync();
+    r.cpu.load(1, R::C, Field::A, r.hw); // C=DAT1 A
+    if r.next_io(0x6227B, 19) {
+        i6227b(r)
+    }
 }
 
 fn i6227b(r: &mut Run) {
-    op!(r, 0x6227B, 3, Op::DExR { d: 1, r: R::C, short: false }); // CD1EX
-    i6227e(r)
+    r.cpu.d_ex_r(1, R::C, false); // CD1EX
+    if r.next(0x6227E, 5) {
+        i6227e(r)
+    }
 }
 
 fn i6227e(r: &mut Run) {
-    op!(r, 0x6227E, 3, Op::DAdd { d: 1, n: 5 }); // D1=D1+ 5
-    i62281(r)
+    r.cpu.d_add(1, 5); // D1=D1+ 5
+    if r.next(0x62281, 5) {
+        i62281(r)
+    }
 }
 
 fn i62281(r: &mut Run) {
-    op!(r, 0x62281, 3, Op::Mem { store: false, d: 1, r: R::A, f: Field::A }); // A=DAT1 A
-    i62284(r)
+    r.sync();
+    r.cpu.load(1, R::A, Field::A, r.hw); // A=DAT1 A
+    if r.next_io(0x62284, 19) {
+        i62284(r)
+    }
 }
 
 fn i62284(r: &mut Run) {
-    op!(r, 0x62284, 3, Op::DFromR { d: 1, r: R::C, short: false }); // D1=C
-    i62287(r)
+    r.cpu.d_from_r(1, R::C, false); // D1=C
+    if r.next(0x62287, 5) {
+        i62287(r)
+    }
 }
 
 fn i62287(r: &mut Run) {
-    op!(r, 0x62287, 2, Op::Rtn(RtnKind::Plain)); // RTN
+    r.cpu.rtn(RtnKind::Plain); // RTN
+    r.spend(9);
 }
 
 fn i6228e(r: &mut Run) {
-    op!(r, 0x6228E, 4, Op::Call(0x6249E)); // GOSUB #6249E
+    r.cpu.pc = 0x62292;
+    r.cpu.call(0x6249E); // GOSUB #6249E
+    r.spend(6);
 }
 
 fn i62292(r: &mut Run) {
-    op!(r, 0x62292, 2, Op::Dec { r: R::A, f: Field::A }); // A=A-1 A
-    i62294(r)
+    r.cpu.dec(R::A, Field::A); // A=A-1 A
+    if r.next(0x62294, 4) {
+        i62294(r)
+    }
 }
 
 fn i62294(r: &mut Run) {
-    op!(r, 0x62294, 2, Op::Dec { r: R::A, f: Field::A }); // A=A-1 A
-    i62296(r)
+    r.cpu.dec(R::A, Field::A); // A=A-1 A
+    if r.next(0x62296, 4) {
+        i62296(r)
+    }
 }
 
 fn i62296(r: &mut Run) {
-    op!(r, 0x62296, 4, Op::Jump(0x622B0)); // GOTO #622B0
+    r.cpu.pc = 0x622B0; // GOTO #622B0
+    r.spend(6);
 }
 
 fn i6229f(r: &mut Run) {
-    op!(r, 0x6229F, 4, Op::Call(0x6249E)); // GOSUB #6249E
+    r.cpu.pc = 0x622A3;
+    r.cpu.call(0x6249E); // GOSUB #6249E
+    r.spend(6);
 }
 
 fn i622a3(r: &mut Run) {
-    op!(r, 0x622A3, 4, Op::Jump(0x62294)); // GOTO #62294
+    r.cpu.pc = 0x62294; // GOTO #62294
+    r.spend(6);
 }
 
 fn i622ac(r: &mut Run) {
-    op!(r, 0x622AC, 4, Op::Call(0x6249E)); // GOSUB #6249E
+    r.cpu.pc = 0x622B0;
+    r.cpu.call(0x6249E); // GOSUB #6249E
+    r.spend(6);
 }
 
 fn i622b0(r: &mut Run) {
-    op!(r, 0x622B0, 2, Op::Dec { r: R::A, f: Field::A }); // A=A-1 A
-    i622b2(r)
+    r.cpu.dec(R::A, Field::A); // A=A-1 A
+    if r.next(0x622B2, 4) {
+        i622b2(r)
+    }
 }
 
 fn i622b2(r: &mut Run) {
-    op!(r, 0x622B2, 4, Op::Jump(0x6226F)); // GOTO #6226F
+    r.cpu.pc = 0x6226F; // GOTO #6226F
+    r.spend(6);
 }
 
 fn i622bb(r: &mut Run) {
-    op!(r, 0x622BB, 4, Op::Call(0x6249E)); // GOSUB #6249E
+    r.cpu.pc = 0x622BF;
+    r.cpu.call(0x6249E); // GOSUB #6249E
+    r.spend(6);
 }
 
 fn i622bf(r: &mut Run) {
-    op!(r, 0x622BF, 2, Op::Dec { r: R::A, f: Field::A }); // A=A-1 A
-    i622c1(r)
+    r.cpu.dec(R::A, Field::A); // A=A-1 A
+    if r.next(0x622C1, 4) {
+        i622c1(r)
+    }
 }
 
 fn i622c1(r: &mut Run) {
-    op!(r, 0x622C1, 4, Op::Jump(0x622DD)); // GOTO #622DD
+    r.cpu.pc = 0x622DD; // GOTO #622DD
+    r.spend(6);
 }
 
 fn i622ca(r: &mut Run) {
-    op!(r, 0x622CA, 4, Op::Call(0x62278)); // GOSUB #62278
+    r.cpu.pc = 0x622CE;
+    r.cpu.call(0x62278); // GOSUB #62278
+    r.spend(6);
 }
 
 fn i622ce(r: &mut Run) {
-    op!(r, 0x622CE, 2, Op::Dec { r: R::A, f: Field::A }); // A=A-1 A
-    i622d0(r)
+    r.cpu.dec(R::A, Field::A); // A=A-1 A
+    if r.next(0x622D0, 4) {
+        i622d0(r)
+    }
 }
 
 fn i622d0(r: &mut Run) {
-    op!(r, 0x622D0, 4, Op::Jump(0x6226F)); // GOTO #6226F
+    r.cpu.pc = 0x6226F; // GOTO #6226F
+    r.spend(6);
 }
 
 fn i622d9(r: &mut Run) {
-    op!(r, 0x622D9, 4, Op::Call(0x62278)); // GOSUB #62278
+    r.cpu.pc = 0x622DD;
+    r.cpu.call(0x62278); // GOSUB #62278
+    r.spend(6);
 }
 
 fn i622dd(r: &mut Run) {
-    op!(r, 0x622DD, 5, Op::Test { test: Test::NonZero(R::A), f: Field::A, goyes: Some(0x62274) }); // ?A#0 A / GOYES #62274
-    i622e2(r)
+    r.cpu.pc = 0x622E2;
+    r.cpu.test(Test::NonZero(R::A), Field::A, Some(0x62274)); // ?A#0 A / GOYES #62274
+    if r.next_pc(0x622E2, 7) {
+        i622e2(r)
+    }
 }
 
 fn i622e2(r: &mut Run) {
-    op!(r, 0x622E2, 3, Op::CondJump(Cond::NoCarry, 0x62274)); // GONC #62274
+    r.cpu.pc = 0x622E5;
+    r.cpu.jump_if(Cond::NoCarry, 0x62274); // GONC #62274
+    r.spend(5);
 }
 
 fn i62399(r: &mut Run) {
-    op!(r, 0x62399, 3, Op::StSet { bit: 3, set: true }); // ST=1 3
-    i6239c(r)
+    r.cpu.st_set(3, true); // ST=1 3
+    if r.next(0x6239C, 5) {
+        i6239c(r)
+    }
 }
 
 fn i6239c(r: &mut Run) {
-    op!(r, 0x6239C, 4, Op::Jump(0x623A8)); // GOTO #623A8
+    r.cpu.pc = 0x623A8; // GOTO #623A8
+    r.spend(6);
 }
 
 fn i623a5(r: &mut Run) {
-    op!(r, 0x623A5, 3, Op::StSet { bit: 3, set: false }); // ST=0 3
-    i623a8(r)
+    r.cpu.st_set(3, false); // ST=0 3
+    if r.next(0x623A8, 5) {
+        i623a8(r)
+    }
 }
 
 fn i623a8(r: &mut Run) {
-    op!(r, 0x623A8, 7, Op::Call(0x679B)); // GOSUB #0679B
+    r.cpu.pc = 0x623AF;
+    r.cpu.call(0x0679B); // GOSUB #0679B
+    r.spend(9);
 }
 
 fn i623af(r: &mut Run) {
-    op!(r, 0x623AF, 3, Op::StSet { bit: 0xA, set: false }); // ST=0 10
-    i623b2(r)
+    r.cpu.st_set(10, false); // ST=0 10
+    if r.next(0x623B2, 5) {
+        i623b2(r)
+    }
 }
 
 fn i623b2(r: &mut Run) {
-    op!(r, 0x623B2, 3, Op::Mem { store: false, d: 1, r: R::A, f: Field::A }); // A=DAT1 A
-    i623b5(r)
+    r.sync();
+    r.cpu.load(1, R::A, Field::A, r.hw); // A=DAT1 A
+    if r.next_io(0x623B5, 19) {
+        i623b5(r)
+    }
 }
 
 fn i623b5(r: &mut Run) {
-    op!(r, 0x623B5, 3, Op::DFromR { d: 1, r: R::A, short: false }); // D1=A
-    i623b8(r)
+    r.cpu.d_from_r(1, R::A, false); // D1=A
+    if r.next(0x623B8, 5) {
+        i623b8(r)
+    }
 }
 
 fn i623b8(r: &mut Run) {
-    op!(r, 0x623B8, 3, Op::DAdd { d: 1, n: 5 }); // D1=D1+ 5
-    i623bb(r)
+    r.cpu.d_add(1, 5); // D1=D1+ 5
+    if r.next(0x623BB, 5) {
+        i623bb(r)
+    }
 }
 
 fn i623bb(r: &mut Run) {
-    op!(r, 0x623BB, 3, Op::Mem { store: false, d: 1, r: R::A, f: Field::A }); // A=DAT1 A
-    i623be(r)
+    r.sync();
+    r.cpu.load(1, R::A, Field::A, r.hw); // A=DAT1 A
+    if r.next_io(0x623BE, 19) {
+        i623be(r)
+    }
 }
 
 fn i623be(r: &mut Run) {
-    op!(r, 0x623BE, 7, Op::LoadConst { r: R::C, len: 5, val: 5 }); // LC(5) #00005
-    i623c5(r)
+    r.cpu.load_const(R::C, 5, 0x5); // LC(5) #00005
+    if r.next(0x623C5, 9) {
+        i623c5(r)
+    }
 }
 
 fn i623c5(r: &mut Run) {
-    op!(r, 0x623C5, 2, Op::Sub { dst: R::C, a: R::A, b: R::C, f: Field::A }); // C=A-C A
-    i623c7(r)
+    r.cpu.sub(R::C, R::A, R::C, Field::A); // C=A-C A
+    if r.next(0x623C7, 4) {
+        i623c7(r)
+    }
 }
 
 fn i623c7(r: &mut Run) {
-    op!(r, 0x623C7, 5, Op::Test { test: Test::Zero(R::C), f: Field::A, goyes: Some(0x623F9) }); // ?C=0 A / GOYES #623F9
-    i623cc(r)
+    r.cpu.pc = 0x623CC;
+    r.cpu.test(Test::Zero(R::C), Field::A, Some(0x623F9)); // ?C=0 A / GOYES #623F9
+    if r.next_pc(0x623CC, 7) {
+        i623cc(r)
+    }
 }
 
 fn i623cc(r: &mut Run) {
-    op!(r, 0x623CC, 2, Op::Copy { dst: R::D, src: R::C, f: Field::A }); // D=C A
-    i623ce(r)
+    r.cpu.copy(R::D, R::C, Field::A); // D=C A
+    if r.next(0x623CE, 4) {
+        i623ce(r)
+    }
 }
 
 fn i623ce(r: &mut Run) {
-    op!(r, 0x623CE, 7, Op::Call(0x6806)); // GOSUB #06806
+    r.cpu.pc = 0x623D5;
+    r.cpu.call(0x06806); // GOSUB #06806
+    r.spend(9);
 }
 
 fn i623d5(r: &mut Run) {
-    op!(r, 0x623D5, 2, Op::Exch { a: R::D, b: R::C, f: Field::A }); // DCEX A
-    i623d7(r)
+    r.cpu.exch(R::D, R::C, Field::A); // DCEX A
+    if r.next(0x623D7, 4) {
+        i623d7(r)
+    }
 }
 
 fn i623d7(r: &mut Run) {
-    op!(r, 0x623D7, 5, Op::Test { test: Test::Regs(Cmp::Ge, R::D, R::C), f: Field::A, goyes: Some(0x623FD) }); // ?D>=C A / GOYES #623FD
-    i623dc(r)
+    r.cpu.pc = 0x623DC;
+    r.cpu.test(Test::Regs(Cmp::Ge, R::D, R::C), Field::A, Some(0x623FD)); // ?D>=C A / GOYES #623FD
+    if r.next_pc(0x623DC, 7) {
+        i623dc(r)
+    }
 }
 
 fn i623dc(r: &mut Run) {
-    op!(r, 0x623DC, 5, Op::StTest { bit: 0xA, set: true, goyes: Some(0x623EF) }); // ?ST=1 10 / GOYES #623EF
-    i623e1(r)
+    r.cpu.pc = 0x623E1;
+    r.cpu.st_test(10, true, Some(0x623EF)); // ?ST=1 10 / GOYES #623EF
+    if r.next_pc(0x623E1, 7) {
+        i623e1(r)
+    }
 }
 
 fn i623e1(r: &mut Run) {
-    op!(r, 0x623E1, 2, Op::PushC); // RSTK=C
-    i623e3(r)
+    r.cpu.push_c(); // RSTK=C
+    if r.next(0x623E3, 4) {
+        i623e3(r)
+    }
 }
 
 fn i623e3(r: &mut Run) {
-    op!(r, 0x623E3, 4, Op::Call(0x624A5)); // GOSUB #624A5
+    r.cpu.pc = 0x623E7;
+    r.cpu.call(0x624A5); // GOSUB #624A5
+    r.spend(6);
 }
 
 fn i623e7(r: &mut Run) {
-    op!(r, 0x623E7, 3, Op::StSet { bit: 0xA, set: true }); // ST=1 10
-    i623ea(r)
+    r.cpu.st_set(10, true); // ST=1 10
+    if r.next(0x623EA, 5) {
+        i623ea(r)
+    }
 }
 
 fn i623ea(r: &mut Run) {
-    op!(r, 0x623EA, 2, Op::PopC); // C=RSTK
-    i623ec(r)
+    r.cpu.pop_c(); // C=RSTK
+    if r.next(0x623EC, 4) {
+        i623ec(r)
+    }
 }
 
 fn i623ec(r: &mut Run) {
-    op!(r, 0x623EC, 3, Op::CondJump(Cond::NoCarry, 0x623CC)); // GONC #623CC
-    i623ef(r)
+    r.cpu.pc = 0x623EF;
+    r.cpu.jump_if(Cond::NoCarry, 0x623CC); // GONC #623CC
+    if r.next_pc(0x623EF, 5) {
+        i623ef(r)
+    }
 }
 
 fn i623ef(r: &mut Run) {
-    op!(r, 0x623EF, 4, Op::Call(0x624AC)); // GOSUB #624AC
+    r.cpu.pc = 0x623F3;
+    r.cpu.call(0x624AC); // GOSUB #624AC
+    r.spend(6);
 }
 
 fn i623f3(r: &mut Run) {
-    op!(r, 0x623F3, 6, Op::Jump(0x61DBD)); // GOTO #61DBD
+    r.cpu.pc = 0x61DBD; // GOTO #61DBD
+    r.spend(8);
 }
 
 fn i623f9(r: &mut Run) {
-    op!(r, 0x623F9, 4, Op::Jump(0x62467)); // GOTO #62467
+    r.cpu.pc = 0x62467; // GOTO #62467
+    r.spend(6);
 }
 
 fn i623fd(r: &mut Run) {
-    op!(r, 0x623FD, 6, Op::Call(0x6384E)); // GOSUB #6384E
+    r.cpu.pc = 0x62403;
+    r.cpu.call(0x6384E); // GOSUB #6384E
+    r.spend(8);
 }
 
 fn i62403(r: &mut Run) {
-    op!(r, 0x62403, 3, Op::DAdd { d: 0, n: 5 }); // D0=D0+ 5
-    i62406(r)
+    r.cpu.d_add(0, 5); // D0=D0+ 5
+    if r.next(0x62406, 5) {
+        i62406(r)
+    }
 }
 
 fn i62406(r: &mut Run) {
-    op!(r, 0x62406, 3, Op::Mem { store: false, d: 0, r: R::A, f: Field::A }); // A=DAT0 A
-    i62409(r)
+    r.sync();
+    r.cpu.load(0, R::A, Field::A, r.hw); // A=DAT0 A
+    if r.next_io(0x62409, 19) {
+        i62409(r)
+    }
 }
 
 fn i62409(r: &mut Run) {
-    op!(r, 0x62409, 2, Op::Copy { dst: R::B, src: R::A, f: Field::A }); // B=A A
-    i6240b(r)
+    r.cpu.copy(R::B, R::A, Field::A); // B=A A
+    if r.next(0x6240B, 4) {
+        i6240b(r)
+    }
 }
 
 fn i6240b(r: &mut Run) {
-    op!(r, 0x6240B, 3, Op::DFromR { d: 0, r: R::A, short: false }); // D0=A
-    i6240e(r)
+    r.cpu.d_from_r(0, R::A, false); // D0=A
+    if r.next(0x6240E, 5) {
+        i6240e(r)
+    }
 }
 
 fn i6240e(r: &mut Run) {
-    op!(r, 0x6240E, 3, Op::DAdd { d: 0, n: 5 }); // D0=D0+ 5
-    i62411(r)
+    r.cpu.d_add(0, 5); // D0=D0+ 5
+    if r.next(0x62411, 5) {
+        i62411(r)
+    }
 }
 
 fn i62411(r: &mut Run) {
-    op!(r, 0x62411, 2, Op::Copy { dst: R::A, src: R::C, f: Field::A }); // A=C A
-    i62413(r)
+    r.cpu.copy(R::A, R::C, Field::A); // A=C A
+    if r.next(0x62413, 4) {
+        i62413(r)
+    }
 }
 
 fn i62413(r: &mut Run) {
-    op!(r, 0x62413, 3, Op::Mem { store: false, d: 0, r: R::C, f: Field::A }); // C=DAT0 A
-    i62416(r)
+    r.sync();
+    r.cpu.load(0, R::C, Field::A, r.hw); // C=DAT0 A
+    if r.next_io(0x62416, 19) {
+        i62416(r)
+    }
 }
 
 fn i62416(r: &mut Run) {
-    op!(r, 0x62416, 2, Op::Copy { dst: R::D, src: R::C, f: Field::A }); // D=C A
-    i62418(r)
+    r.cpu.copy(R::D, R::C, Field::A); // D=C A
+    if r.next(0x62418, 4) {
+        i62418(r)
+    }
 }
 
 fn i62418(r: &mut Run) {
-    op!(r, 0x62418, 2, Op::Add { dst: R::C, src: R::A, f: Field::A }); // C=C+A A
-    i6241a(r)
+    r.cpu.add(R::C, R::A, Field::A); // C=C+A A
+    if r.next(0x6241A, 4) {
+        i6241a(r)
+    }
 }
 
 fn i6241a(r: &mut Run) {
-    op!(r, 0x6241A, 3, Op::Mem { store: true, d: 0, r: R::C, f: Field::A }); // DAT0=C A
-    i6241d(r)
+    r.sync();
+    r.cpu.store(0, R::C, Field::A, r.hw); // DAT0=C A
+    if r.next_io(0x6241D, 19) {
+        i6241d(r)
+    }
 }
 
 fn i6241d(r: &mut Run) {
-    op!(r, 0x6241D, 3, Op::DExR { d: 0, r: R::C, short: false }); // CD0EX
-    i62420(r)
+    r.cpu.d_ex_r(0, R::C, false); // CD0EX
+    if r.next(0x62420, 5) {
+        i62420(r)
+    }
 }
 
 fn i62420(r: &mut Run) {
-    op!(r, 0x62420, 2, Op::Add { dst: R::C, src: R::D, f: Field::A }); // C=C+D A
-    i62422(r)
+    r.cpu.add(R::C, R::D, Field::A); // C=C+D A
+    if r.next(0x62422, 4) {
+        i62422(r)
+    }
 }
 
 fn i62422(r: &mut Run) {
-    op!(r, 0x62422, 3, Op::DFromR { d: 0, r: R::C, short: false }); // D0=C
-    i62425(r)
+    r.cpu.d_from_r(0, R::C, false); // D0=C
+    if r.next(0x62425, 5) {
+        i62425(r)
+    }
 }
 
 fn i62425(r: &mut Run) {
-    op!(r, 0x62425, 3, Op::Mem { store: false, d: 0, r: R::C, f: Field::A }); // C=DAT0 A
-    i62428(r)
+    r.sync();
+    r.cpu.load(0, R::C, Field::A, r.hw); // C=DAT0 A
+    if r.next_io(0x62428, 19) {
+        i62428(r)
+    }
 }
 
 fn i62428(r: &mut Run) {
-    op!(r, 0x62428, 2, Op::Add { dst: R::C, src: R::A, f: Field::A }); // C=C+A A
-    i6242a(r)
+    r.cpu.add(R::C, R::A, Field::A); // C=C+A A
+    if r.next(0x6242A, 4) {
+        i6242a(r)
+    }
 }
 
 fn i6242a(r: &mut Run) {
-    op!(r, 0x6242A, 3, Op::Mem { store: true, d: 0, r: R::C, f: Field::A }); // DAT0=C A
-    i6242d(r)
+    r.sync();
+    r.cpu.store(0, R::C, Field::A, r.hw); // DAT0=C A
+    if r.next_io(0x6242D, 19) {
+        i6242d(r)
+    }
 }
 
 fn i6242d(r: &mut Run) {
-    op!(r, 0x6242D, 3, Op::Scratch { op: ScratchOp::ToScratch, r: R::A, n: 0, f: Field::W }); // R0=A
-    i62430(r)
+    r.cpu.scratch(ScratchOp::ToScratch, R::A, 0, Field::W); // R0=A
+    if r.next(0x62430, 5) {
+        i62430(r)
+    }
 }
 
 fn i62430(r: &mut Run) {
-    op!(r, 0x62430, 2, Op::Copy { dst: R::C, src: R::A, f: Field::A }); // C=A A
-    i62432(r)
+    r.cpu.copy(R::C, R::A, Field::A); // C=A A
+    if r.next(0x62432, 4) {
+        i62432(r)
+    }
 }
 
 fn i62432(r: &mut Run) {
-    op!(r, 0x62432, 5, Op::StTest { bit: 3, set: false, goyes: Some(0x6243F) }); // ?ST=0 3 / GOYES #6243F
-    i62437(r)
+    r.cpu.pc = 0x62437;
+    r.cpu.st_test(3, false, Some(0x6243F)); // ?ST=0 3 / GOYES #6243F
+    if r.next_pc(0x62437, 7) {
+        i62437(r)
+    }
 }
 
 fn i62437(r: &mut Run) {
-    op!(r, 0x62437, 2, Op::Copy { dst: R::A, src: R::B, f: Field::A }); // A=B A
-    i62439(r)
+    r.cpu.copy(R::A, R::B, Field::A); // A=B A
+    if r.next(0x62439, 4) {
+        i62439(r)
+    }
 }
 
 fn i62439(r: &mut Run) {
-    op!(r, 0x62439, 3, Op::DFromR { d: 0, r: R::A, short: false }); // D0=A
-    i6243c(r)
+    r.cpu.d_from_r(0, R::A, false); // D0=A
+    if r.next(0x6243C, 5) {
+        i6243c(r)
+    }
 }
 
 fn i6243c(r: &mut Run) {
-    op!(r, 0x6243C, 3, Op::DAdd { d: 0, n: 0xA }); // D0=D0+ 10
-    i6243f(r)
+    r.cpu.d_add(0, 10); // D0=D0+ 10
+    if r.next(0x6243F, 5) {
+        i6243f(r)
+    }
 }
 
 fn i6243f(r: &mut Run) {
-    op!(r, 0x6243F, 3, Op::DExR { d: 0, r: R::A, short: false }); // AD0EX
-    i62442(r)
+    r.cpu.d_ex_r(0, R::A, false); // AD0EX
+    if r.next(0x62442, 5) {
+        i62442(r)
+    }
 }
 
 fn i62442(r: &mut Run) {
-    op!(r, 0x62442, 7, Op::Call(0x6A53)); // GOSUB #06A53
+    r.cpu.pc = 0x62449;
+    r.cpu.call(0x06A53); // GOSUB #06A53
+    r.spend(9);
 }
 
 fn i62449(r: &mut Run) {
-    op!(r, 0x62449, 2, Op::Copy { dst: R::A, src: R::B, f: Field::A }); // A=B A
-    i6244b(r)
+    r.cpu.copy(R::A, R::B, Field::A); // A=B A
+    if r.next(0x6244B, 4) {
+        i6244b(r)
+    }
 }
 
 fn i6244b(r: &mut Run) {
-    op!(r, 0x6244B, 3, Op::DFromR { d: 1, r: R::A, short: false }); // D1=A
-    i6244e(r)
+    r.cpu.d_from_r(1, R::A, false); // D1=A
+    if r.next(0x6244E, 5) {
+        i6244e(r)
+    }
 }
 
 fn i6244e(r: &mut Run) {
-    op!(r, 0x6244E, 6, Op::Call(0x6384E)); // GOSUB #6384E
+    r.cpu.pc = 0x62454;
+    r.cpu.call(0x6384E); // GOSUB #6384E
+    r.spend(8);
 }
 
 fn i62454(r: &mut Run) {
-    op!(r, 0x62454, 3, Op::Mem { store: false, d: 0, r: R::A, f: Field::A }); // A=DAT0 A
-    i62457(r)
+    r.sync();
+    r.cpu.load(0, R::A, Field::A, r.hw); // A=DAT0 A
+    if r.next_io(0x62457, 19) {
+        i62457(r)
+    }
 }
 
 fn i62457(r: &mut Run) {
-    op!(r, 0x62457, 3, Op::DFromR { d: 0, r: R::A, short: false }); // D0=A
-    i6245a(r)
+    r.cpu.d_from_r(0, R::A, false); // D0=A
+    if r.next(0x6245A, 5) {
+        i6245a(r)
+    }
 }
 
 fn i6245a(r: &mut Run) {
-    op!(r, 0x6245A, 3, Op::DAdd { d: 0, n: 0xA }); // D0=D0+ 10
-    i6245d(r)
+    r.cpu.d_add(0, 10); // D0=D0+ 10
+    if r.next(0x6245D, 5) {
+        i6245d(r)
+    }
 }
 
 fn i6245d(r: &mut Run) {
-    op!(r, 0x6245D, 3, Op::Scratch { op: ScratchOp::FromScratch, r: R::C, n: 0, f: Field::W }); // C=R0
-    i62460(r)
+    r.cpu.scratch(ScratchOp::FromScratch, R::C, 0, Field::W); // C=R0
+    if r.next(0x62460, 5) {
+        i62460(r)
+    }
 }
 
 fn i62460(r: &mut Run) {
-    op!(r, 0x62460, 7, Op::Call(0x670C)); // GOSUB #0670C
+    r.cpu.pc = 0x62467;
+    r.cpu.call(0x0670C); // GOSUB #0670C
+    r.spend(9);
 }
 
 fn i62467(r: &mut Run) {
-    op!(r, 0x62467, 4, Op::Call(0x624AC)); // GOSUB #624AC
+    r.cpu.pc = 0x6246B;
+    r.cpu.call(0x624AC); // GOSUB #624AC
+    r.spend(6);
 }
 
 fn i6246b(r: &mut Run) {
-    op!(r, 0x6246B, 3, Op::DAdd { d: 1, n: 5 }); // D1=D1+ 5
-    i6246e(r)
+    r.cpu.d_add(1, 5); // D1=D1+ 5
+    if r.next(0x6246E, 5) {
+        i6246e(r)
+    }
 }
 
 fn i6246e(r: &mut Run) {
-    op!(r, 0x6246E, 2, Op::Inc { r: R::D, f: Field::A }); // D=D+1 A
-    i62470(r)
+    r.cpu.inc(R::D, Field::A); // D=D+1 A
+    if r.next(0x62470, 4) {
+        i62470(r)
+    }
 }
 
 fn i62470(r: &mut Run) {
-    op!(r, 0x62470, 4, Op::Jump(0x62544)); // GOTO #62544
+    r.cpu.pc = 0x62544; // GOTO #62544
+    r.spend(6);
 }
 
 fn i62479(r: &mut Run) {
-    op!(r, 0x62479, 3, Op::DExR { d: 0, r: R::A, short: false }); // AD0EX
-    i6247c(r)
+    r.cpu.d_ex_r(0, R::A, false); // AD0EX
+    if r.next(0x6247C, 5) {
+        i6247c(r)
+    }
 }
 
 fn i6247c(r: &mut Run) {
-    op!(r, 0x6247C, 2, Op::Copy { dst: R::C, src: R::B, f: Field::A }); // C=B A
-    i6247e(r)
+    r.cpu.copy(R::C, R::B, Field::A); // C=B A
+    if r.next(0x6247E, 4) {
+        i6247e(r)
+    }
 }
 
 fn i6247e(r: &mut Run) {
-    op!(r, 0x6247E, 3, Op::DFromR { d: 0, r: R::C, short: false }); // D0=C
-    i62481(r)
+    r.cpu.d_from_r(0, R::C, false); // D0=C
+    if r.next(0x62481, 5) {
+        i62481(r)
+    }
 }
 
 fn i62481(r: &mut Run) {
-    op!(r, 0x62481, 3, Op::DSub { d: 0, n: 5 }); // D0=D0- 5
-    i62484(r)
+    r.cpu.d_sub(0, 5); // D0=D0- 5
+    if r.next(0x62484, 5) {
+        i62484(r)
+    }
 }
 
 fn i62484(r: &mut Run) {
-    op!(r, 0x62484, 3, Op::Mem { store: false, d: 0, r: R::C, f: Field::A }); // C=DAT0 A
-    i62487(r)
+    r.sync();
+    r.cpu.load(0, R::C, Field::A, r.hw); // C=DAT0 A
+    if r.next_io(0x62487, 19) {
+        i62487(r)
+    }
 }
 
 fn i62487(r: &mut Run) {
-    op!(r, 0x62487, 6, Op::SubCon { r: R::C, f: Field::A, n: 0xA }); // C=C-CON A,10
-    i6248d(r)
+    r.cpu.sub_con(R::C, Field::A, 10); // C=C-CON A,10
+    if r.next(0x6248D, 8) {
+        i6248d(r)
+    }
 }
 
 fn i6248d(r: &mut Run) {
-    op!(r, 0x6248D, 7, Op::DLoad { d: 0, len: 5, val: 0x807D9 }); // D0=(5) #807D9
-    i62494(r)
+    r.cpu.d_load(0, 5, 0x807D9); // D0=(5) #807D9
+    if r.next(0x62494, 9) {
+        i62494(r)
+    }
 }
 
 fn i62494(r: &mut Run) {
-    op!(r, 0x62494, 3, Op::Mem { store: true, d: 0, r: R::C, f: Field::A }); // DAT0=C A
-    i62497(r)
+    r.sync();
+    r.cpu.store(0, R::C, Field::A, r.hw); // DAT0=C A
+    if r.next_io(0x62497, 19) {
+        i62497(r)
+    }
 }
 
 fn i62497(r: &mut Run) {
-    op!(r, 0x62497, 3, Op::DFromR { d: 0, r: R::A, short: false }); // D0=A
-    i6249a(r)
+    r.cpu.d_from_r(0, R::A, false); // D0=A
+    if r.next(0x6249A, 5) {
+        i6249a(r)
+    }
 }
 
 fn i6249a(r: &mut Run) {
-    op!(r, 0x6249A, 4, Op::Jump(0x62544)); // GOTO #62544
+    r.cpu.pc = 0x62544; // GOTO #62544
+    r.spend(6);
 }
 
 fn i6249e(r: &mut Run) {
-    op!(r, 0x6249E, 7, Op::Jump(0x6641)); // GOTO #06641
+    r.cpu.pc = 0x06641; // GOTO #06641
+    r.spend(9);
 }
 
 fn i624a5(r: &mut Run) {
-    op!(r, 0x624A5, 7, Op::Jump(0x613E)); // GOTO #0613E
+    r.cpu.pc = 0x0613E; // GOTO #0613E
+    r.spend(9);
 }
 
 fn i624ac(r: &mut Run) {
-    op!(r, 0x624AC, 7, Op::Jump(0x67D2)); // GOTO #067D2
+    r.cpu.pc = 0x067D2; // GOTO #067D2
+    r.spend(9);
 }
 
 fn i624b3(r: &mut Run) {
-    op!(r, 0x624B3, 7, Op::Jump(0x679B)); // GOTO #0679B
+    r.cpu.pc = 0x0679B; // GOTO #0679B
+    r.spend(9);
 }
 
 fn i624bf(r: &mut Run) {
-    op!(r, 0x624BF, 3, Op::StSet { bit: 1, set: false }); // ST=0 1
-    i624c2(r)
+    r.cpu.st_set(1, false); // ST=0 1
+    if r.next(0x624C2, 5) {
+        i624c2(r)
+    }
 }
 
 fn i624c2(r: &mut Run) {
-    op!(r, 0x624C2, 4, Op::Jump(0x624CE)); // GOTO #624CE
+    r.cpu.pc = 0x624CE; // GOTO #624CE
+    r.spend(6);
 }
 
 fn i624cb(r: &mut Run) {
-    op!(r, 0x624CB, 3, Op::StSet { bit: 1, set: true }); // ST=1 1
-    i624ce(r)
+    r.cpu.st_set(1, true); // ST=1 1
+    if r.next(0x624CE, 5) {
+        i624ce(r)
+    }
 }
 
 fn i624ce(r: &mut Run) {
-    op!(r, 0x624CE, 7, Op::Call(0x6641)); // GOSUB #06641
+    r.cpu.pc = 0x624D5;
+    r.cpu.call(0x06641); // GOSUB #06641
+    r.spend(9);
 }
 
 fn i624d5(r: &mut Run) {
-    op!(r, 0x624D5, 3, Op::Scratch { op: ScratchOp::ToScratch, r: R::A, n: 0, f: Field::W }); // R0=A
-    i624d8(r)
+    r.cpu.scratch(ScratchOp::ToScratch, R::A, 0, Field::W); // R0=A
+    if r.next(0x624D8, 5) {
+        i624d8(r)
+    }
 }
 
 fn i624d8(r: &mut Run) {
-    op!(r, 0x624D8, 7, Op::Call(0x6641)); // GOSUB #06641
+    r.cpu.pc = 0x624DF;
+    r.cpu.call(0x06641); // GOSUB #06641
+    r.spend(9);
 }
 
 fn i624df(r: &mut Run) {
-    op!(r, 0x624DF, 7, Op::Call(0x679B)); // GOSUB #0679B
+    r.cpu.pc = 0x624E6;
+    r.cpu.call(0x0679B); // GOSUB #0679B
+    r.spend(9);
 }
 
 fn i624e6(r: &mut Run) {
-    op!(r, 0x624E6, 3, Op::Scratch { op: ScratchOp::FromScratch, r: R::C, n: 0, f: Field::W }); // C=R0
-    i624e9(r)
+    r.cpu.scratch(ScratchOp::FromScratch, R::C, 0, Field::W); // C=R0
+    if r.next(0x624E9, 5) {
+        i624e9(r)
+    }
 }
 
 fn i624e9(r: &mut Run) {
-    op!(r, 0x624E9, 5, Op::Test { test: Test::Regs(Cmp::Lt, R::C, R::A), f: Field::A, goyes: Some(0x624F0) }); // ?C<A A / GOYES #624F0
-    i624ee(r)
+    r.cpu.pc = 0x624EE;
+    r.cpu.test(Test::Regs(Cmp::Lt, R::C, R::A), Field::A, Some(0x624F0)); // ?C<A A / GOYES #624F0
+    if r.next_pc(0x624EE, 7) {
+        i624ee(r)
+    }
 }
 
 fn i624ee(r: &mut Run) {
-    op!(r, 0x624EE, 2, Op::Exch { a: R::C, b: R::A, f: Field::A }); // CAEX A
-    i624f0(r)
+    r.cpu.exch(R::C, R::A, Field::A); // CAEX A
+    if r.next(0x624F0, 4) {
+        i624f0(r)
+    }
 }
 
 fn i624f0(r: &mut Run) {
-    op!(r, 0x624F0, 5, Op::StTest { bit: 1, set: true, goyes: Some(0x62504) }); // ?ST=1 1 / GOYES #62504
-    i624f5(r)
+    r.cpu.pc = 0x624F5;
+    r.cpu.st_test(1, true, Some(0x62504)); // ?ST=1 1 / GOYES #62504
+    if r.next_pc(0x624F5, 7) {
+        i624f5(r)
+    }
 }
 
 fn i624f5(r: &mut Run) {
-    op!(r, 0x624F5, 2, Op::Copy { dst: R::A, src: R::C, f: Field::A }); // A=C A
-    i624f7(r)
+    r.cpu.copy(R::A, R::C, Field::A); // A=C A
+    if r.next(0x624F7, 4) {
+        i624f7(r)
+    }
 }
 
 fn i624f7(r: &mut Run) {
-    op!(r, 0x624F7, 4, Op::Jump(0x62504)); // GOTO #62504
+    r.cpu.pc = 0x62504; // GOTO #62504
+    r.spend(6);
 }
 
 fn i62500(r: &mut Run) {
-    op!(r, 0x62500, 4, Op::Call(0x6250B)); // GOSUB #6250B
+    r.cpu.pc = 0x62504;
+    r.cpu.call(0x6250B); // GOSUB #6250B
+    r.spend(6);
 }
 
 fn i62504(r: &mut Run) {
-    op!(r, 0x62504, 7, Op::Jump(0x357C)); // GOTO #0357C
+    r.cpu.pc = 0x0357C; // GOTO #0357C
+    r.spend(9);
 }
 
 fn i6250b(r: &mut Run) {
-    op!(r, 0x6250B, 7, Op::Call(0x6641)); // GOSUB #06641
+    r.cpu.pc = 0x62512;
+    r.cpu.call(0x06641); // GOSUB #06641
+    r.spend(9);
 }
 
 fn i62512(r: &mut Run) {
-    op!(r, 0x62512, 6, Op::Scratch { op: ScratchOp::ToScratch, r: R::A, n: 0, f: Field::A }); // R0=A.F A
-    i62518(r)
+    r.cpu.scratch(ScratchOp::ToScratch, R::A, 0, Field::A); // R0=A.F A
+    if r.next(0x62518, 8) {
+        i62518(r)
+    }
 }
 
 fn i62518(r: &mut Run) {
-    op!(r, 0x62518, 7, Op::Call(0x6641)); // GOSUB #06641
+    r.cpu.pc = 0x6251F;
+    r.cpu.call(0x06641); // GOSUB #06641
+    r.spend(9);
 }
 
 fn i6251f(r: &mut Run) {
-    op!(r, 0x6251F, 7, Op::Call(0x679B)); // GOSUB #0679B
+    r.cpu.pc = 0x62526;
+    r.cpu.call(0x0679B); // GOSUB #0679B
+    r.spend(9);
 }
 
 fn i62526(r: &mut Run) {
-    op!(r, 0x62526, 6, Op::Scratch { op: ScratchOp::FromScratch, r: R::C, n: 0, f: Field::A }); // C=R0.F A
-    i6252c(r)
+    r.cpu.scratch(ScratchOp::FromScratch, R::C, 0, Field::A); // C=R0.F A
+    if r.next(0x6252C, 8) {
+        i6252c(r)
+    }
 }
 
 fn i6252c(r: &mut Run) {
-    op!(r, 0x6252C, 2, Op::Sub { dst: R::A, a: R::A, b: R::C, f: Field::A }); // A=A-C A
-    i6252e(r)
+    r.cpu.sub(R::A, R::A, R::C, Field::A); // A=A-C A
+    if r.next(0x6252E, 4) {
+        i6252e(r)
+    }
 }
 
 fn i6252e(r: &mut Run) {
-    op!(r, 0x6252E, 5, Op::SrbField { r: R::A, f: Field::A }); // ASRB.F A
-    i62533(r)
+    r.cpu.srb_field(R::A, Field::A); // ASRB.F A
+    if r.next(0x62533, 7) {
+        i62533(r)
+    }
 }
 
 fn i62533(r: &mut Run) {
-    op!(r, 0x62533, 2, Op::Rtn(RtnKind::Plain)); // RTN
+    r.cpu.rtn(RtnKind::Plain); // RTN
+    r.spend(9);
 }
 
 fn i6253a(r: &mut Run) {
-    op!(r, 0x6253A, 7, Op::LoadConst { r: R::C, len: 5, val: 0x3FEF }); // LC(5) #03FEF
-    i62541(r)
+    r.cpu.load_const(R::C, 5, 0x3FEF); // LC(5) #03FEF
+    if r.next(0x62541, 9) {
+        i62541(r)
+    }
 }
 
 fn i62541(r: &mut Run) {
-    op!(r, 0x62541, 3, Op::Mem { store: true, d: 1, r: R::C, f: Field::A }); // DAT1=C A
-    i62544(r)
+    r.sync();
+    r.cpu.store(1, R::C, Field::A, r.hw); // DAT1=C A
+    if r.next_io(0x62544, 19) {
+        i62544(r)
+    }
 }
 
 fn i62544(r: &mut Run) {
-    op!(r, 0x62544, 3, Op::Mem { store: false, d: 0, r: R::A, f: Field::A }); // A=DAT0 A
-    i62547(r)
+    r.sync();
+    r.cpu.load(0, R::A, Field::A, r.hw); // A=DAT0 A
+    if r.next_io(0x62547, 19) {
+        i62547(r)
+    }
 }
 
 fn i62547(r: &mut Run) {
-    op!(r, 0x62547, 3, Op::DAdd { d: 0, n: 5 }); // D0=D0+ 5
-    i6254a(r)
+    r.cpu.d_add(0, 5); // D0=D0+ 5
+    if r.next(0x6254A, 5) {
+        i6254a(r)
+    }
 }
 
 fn i6254a(r: &mut Run) {
-    op!(r, 0x6254A, 4, Op::PcIndirect(R::A)); // PC=(A)
+    r.sync();
+    r.cpu.pc_indirect(R::A, r.hw); // PC=(A)
+    r.spend(23);
 }
 
 fn i62553(r: &mut Run) {
-    op!(r, 0x62553, 7, Op::LoadConst { r: R::C, len: 5, val: 0x3FEF }); // LC(5) #03FEF
-    i6255a(r)
+    r.cpu.load_const(R::C, 5, 0x3FEF); // LC(5) #03FEF
+    if r.next(0x6255A, 9) {
+        i6255a(r)
+    }
 }
 
 fn i6255a(r: &mut Run) {
-    op!(r, 0x6255A, 3, Op::Mem { store: true, d: 1, r: R::C, f: Field::A }); // DAT1=C A
-    i6255d(r)
+    r.sync();
+    r.cpu.store(1, R::C, Field::A, r.hw); // DAT1=C A
+    if r.next_io(0x6255D, 19) {
+        i6255d(r)
+    }
 }
 
 fn i6255d(r: &mut Run) {
-    op!(r, 0x6255D, 3, Op::DAdd { d: 1, n: 5 }); // D1=D1+ 5
-    i62560(r)
+    r.cpu.d_add(1, 5); // D1=D1+ 5
+    if r.next(0x62560, 5) {
+        i62560(r)
+    }
 }
 
 fn i62560(r: &mut Run) {
-    op!(r, 0x62560, 3, Op::Mem { store: true, d: 1, r: R::C, f: Field::A }); // DAT1=C A
-    i62563(r)
+    r.sync();
+    r.cpu.store(1, R::C, Field::A, r.hw); // DAT1=C A
+    if r.next_io(0x62563, 19) {
+        i62563(r)
+    }
 }
 
 fn i62563(r: &mut Run) {
-    op!(r, 0x62563, 3, Op::DSub { d: 1, n: 5 }); // D1=D1- 5
-    i62566(r)
+    r.cpu.d_sub(1, 5); // D1=D1- 5
+    if r.next(0x62566, 5) {
+        i62566(r)
+    }
 }
 
 fn i62566(r: &mut Run) {
-    op!(r, 0x62566, 4, Op::Jump(0x62544)); // GOTO #62544
+    r.cpu.pc = 0x62544; // GOTO #62544
+    r.spend(6);
 }
 
 fn i6256f(r: &mut Run) {
-    op!(r, 0x6256F, 7, Op::LoadConst { r: R::C, len: 5, val: 3 }); // LC(5) #00003
-    i62576(r)
+    r.cpu.load_const(R::C, 5, 0x3); // LC(5) #00003
+    if r.next(0x62576, 9) {
+        i62576(r)
+    }
 }
 
 fn i62576(r: &mut Run) {
-    op!(r, 0x62576, 4, Op::Jump(0x62636)); // GOTO #62636
+    r.cpu.pc = 0x62636; // GOTO #62636
+    r.spend(6);
 }
 
 fn i6257f(r: &mut Run) {
-    op!(r, 0x6257F, 7, Op::LoadConst { r: R::C, len: 5, val: 4 }); // LC(5) #00004
-    i62586(r)
+    r.cpu.load_const(R::C, 5, 0x4); // LC(5) #00004
+    if r.next(0x62586, 9) {
+        i62586(r)
+    }
 }
 
 fn i62586(r: &mut Run) {
-    op!(r, 0x62586, 4, Op::Jump(0x62636)); // GOTO #62636
+    r.cpu.pc = 0x62636; // GOTO #62636
+    r.spend(6);
 }
 
 fn i6258f(r: &mut Run) {
-    op!(r, 0x6258F, 7, Op::LoadConst { r: R::C, len: 5, val: 5 }); // LC(5) #00005
-    i62596(r)
+    r.cpu.load_const(R::C, 5, 0x5); // LC(5) #00005
+    if r.next(0x62596, 9) {
+        i62596(r)
+    }
 }
 
 fn i62596(r: &mut Run) {
-    op!(r, 0x62596, 4, Op::Jump(0x62636)); // GOTO #62636
+    r.cpu.pc = 0x62636; // GOTO #62636
+    r.spend(6);
 }
 
 fn i6259f(r: &mut Run) {
-    op!(r, 0x6259F, 7, Op::LoadConst { r: R::C, len: 5, val: 6 }); // LC(5) #00006
-    i625a6(r)
+    r.cpu.load_const(R::C, 5, 0x6); // LC(5) #00006
+    if r.next(0x625A6, 9) {
+        i625a6(r)
+    }
 }
 
 fn i625a6(r: &mut Run) {
-    op!(r, 0x625A6, 4, Op::Jump(0x62636)); // GOTO #62636
+    r.cpu.pc = 0x62636; // GOTO #62636
+    r.spend(6);
 }
 
 fn i625af(r: &mut Run) {
-    op!(r, 0x625AF, 7, Op::LoadConst { r: R::C, len: 5, val: 7 }); // LC(5) #00007
-    i625b6(r)
+    r.cpu.load_const(R::C, 5, 0x7); // LC(5) #00007
+    if r.next(0x625B6, 9) {
+        i625b6(r)
+    }
 }
 
 fn i625b6(r: &mut Run) {
-    op!(r, 0x625B6, 4, Op::Jump(0x62636)); // GOTO #62636
+    r.cpu.pc = 0x62636; // GOTO #62636
+    r.spend(6);
 }
 
 fn i625bf(r: &mut Run) {
-    op!(r, 0x625BF, 7, Op::LoadConst { r: R::C, len: 5, val: 8 }); // LC(5) #00008
-    i625c6(r)
+    r.cpu.load_const(R::C, 5, 0x8); // LC(5) #00008
+    if r.next(0x625C6, 9) {
+        i625c6(r)
+    }
 }
 
 fn i625c6(r: &mut Run) {
-    op!(r, 0x625C6, 4, Op::Jump(0x62636)); // GOTO #62636
+    r.cpu.pc = 0x62636; // GOTO #62636
+    r.spend(6);
 }
 
 fn i625cf(r: &mut Run) {
-    op!(r, 0x625CF, 7, Op::LoadConst { r: R::C, len: 5, val: 9 }); // LC(5) #00009
-    i625d6(r)
+    r.cpu.load_const(R::C, 5, 0x9); // LC(5) #00009
+    if r.next(0x625D6, 9) {
+        i625d6(r)
+    }
 }
 
 fn i625d6(r: &mut Run) {
-    op!(r, 0x625D6, 4, Op::Jump(0x62636)); // GOTO #62636
+    r.cpu.pc = 0x62636; // GOTO #62636
+    r.spend(6);
 }
 
 fn i625df(r: &mut Run) {
-    op!(r, 0x625DF, 7, Op::LoadConst { r: R::C, len: 5, val: 0xA }); // LC(5) #0000A
-    i625e6(r)
+    r.cpu.load_const(R::C, 5, 0xA); // LC(5) #0000A
+    if r.next(0x625E6, 9) {
+        i625e6(r)
+    }
 }
 
 fn i625e6(r: &mut Run) {
-    op!(r, 0x625E6, 4, Op::Jump(0x62636)); // GOTO #62636
+    r.cpu.pc = 0x62636; // GOTO #62636
+    r.spend(6);
 }
 
 fn i625ef(r: &mut Run) {
-    op!(r, 0x625EF, 7, Op::LoadConst { r: R::C, len: 5, val: 0xC }); // LC(5) #0000C
-    i625f6(r)
+    r.cpu.load_const(R::C, 5, 0xC); // LC(5) #0000C
+    if r.next(0x625F6, 9) {
+        i625f6(r)
+    }
 }
 
 fn i625f6(r: &mut Run) {
-    op!(r, 0x625F6, 4, Op::Jump(0x62636)); // GOTO #62636
+    r.cpu.pc = 0x62636; // GOTO #62636
+    r.spend(6);
 }
 
 fn i625ff(r: &mut Run) {
-    op!(r, 0x625FF, 7, Op::LoadConst { r: R::C, len: 5, val: 0xFFFFD }); // LC(5) #FFFFD
-    i62606(r)
+    r.cpu.load_const(R::C, 5, 0xFFFFD); // LC(5) #FFFFD
+    if r.next(0x62606, 9) {
+        i62606(r)
+    }
 }
 
 fn i62606(r: &mut Run) {
-    op!(r, 0x62606, 4, Op::Jump(0x62636)); // GOTO #62636
+    r.cpu.pc = 0x62636; // GOTO #62636
+    r.spend(6);
 }
 
 fn i6260f(r: &mut Run) {
-    op!(r, 0x6260F, 7, Op::LoadConst { r: R::C, len: 5, val: 0xFFFFC }); // LC(5) #FFFFC
-    i62616(r)
+    r.cpu.load_const(R::C, 5, 0xFFFFC); // LC(5) #FFFFC
+    if r.next(0x62616, 9) {
+        i62616(r)
+    }
 }
 
 fn i62616(r: &mut Run) {
-    op!(r, 0x62616, 4, Op::Jump(0x62636)); // GOTO #62636
+    r.cpu.pc = 0x62636; // GOTO #62636
+    r.spend(6);
 }
 
 fn i6261f(r: &mut Run) {
-    op!(r, 0x6261F, 7, Op::LoadConst { r: R::C, len: 5, val: 0xFFFFB }); // LC(5) #FFFFB
-    i62626(r)
+    r.cpu.load_const(R::C, 5, 0xFFFFB); // LC(5) #FFFFB
+    if r.next(0x62626, 9) {
+        i62626(r)
+    }
 }
 
 fn i62626(r: &mut Run) {
-    op!(r, 0x62626, 4, Op::Jump(0x62636)); // GOTO #62636
+    r.cpu.pc = 0x62636; // GOTO #62636
+    r.spend(6);
 }
 
 fn i6262f(r: &mut Run) {
-    op!(r, 0x6262F, 7, Op::LoadConst { r: R::C, len: 5, val: 0xFFFFA }); // LC(5) #FFFFA
-    i62636(r)
+    r.cpu.load_const(R::C, 5, 0xFFFFA); // LC(5) #FFFFA
+    if r.next(0x62636, 9) {
+        i62636(r)
+    }
 }
 
 fn i62636(r: &mut Run) {
-    op!(r, 0x62636, 2, Op::PushC); // RSTK=C
-    i62638(r)
+    r.cpu.push_c(); // RSTK=C
+    if r.next(0x62638, 4) {
+        i62638(r)
+    }
 }
 
 fn i62638(r: &mut Run) {
-    op!(r, 0x62638, 7, Op::Call(0x6641)); // GOSUB #06641
+    r.cpu.pc = 0x6263F;
+    r.cpu.call(0x06641); // GOSUB #06641
+    r.spend(9);
 }
 
 fn i6263f(r: &mut Run) {
-    op!(r, 0x6263F, 7, Op::Call(0x679B)); // GOSUB #0679B
+    r.cpu.pc = 0x62646;
+    r.cpu.call(0x0679B); // GOSUB #0679B
+    r.spend(9);
 }
 
 fn i62646(r: &mut Run) {
-    op!(r, 0x62646, 2, Op::PopC); // C=RSTK
-    i62648(r)
+    r.cpu.pop_c(); // C=RSTK
+    if r.next(0x62648, 4) {
+        i62648(r)
+    }
 }
 
 fn i62648(r: &mut Run) {
-    op!(r, 0x62648, 2, Op::Add { dst: R::A, src: R::C, f: Field::A }); // A=A+C A
-    i6264a(r)
+    r.cpu.add(R::A, R::C, Field::A); // A=A+C A
+    if r.next(0x6264A, 4) {
+        i6264a(r)
+    }
 }
 
 fn i6264a(r: &mut Run) {
-    op!(r, 0x6264A, 4, Op::Jump(0x6266D)); // GOTO #6266D
+    r.cpu.pc = 0x6266D; // GOTO #6266D
+    r.spend(6);
 }
 
 fn i62653(r: &mut Run) {
-    op!(r, 0x62653, 7, Op::Call(0x6641)); // GOSUB #06641
+    r.cpu.pc = 0x6265A;
+    r.cpu.call(0x06641); // GOSUB #06641
+    r.spend(9);
 }
 
 fn i6265a(r: &mut Run) {
-    op!(r, 0x6265A, 7, Op::Call(0x679B)); // GOSUB #0679B
+    r.cpu.pc = 0x62661;
+    r.cpu.call(0x0679B); // GOSUB #0679B
+    r.spend(9);
 }
 
 fn i62661(r: &mut Run) {
-    op!(r, 0x62661, 2, Op::Copy { dst: R::C, src: R::A, f: Field::A }); // C=A A
-    i62663(r)
+    r.cpu.copy(R::C, R::A, Field::A); // C=A A
+    if r.next(0x62663, 4) {
+        i62663(r)
+    }
 }
 
 fn i62663(r: &mut Run) {
-    op!(r, 0x62663, 2, Op::Add { dst: R::A, src: R::A, f: Field::A }); // A=A+A A
-    i62665(r)
+    r.cpu.add(R::A, R::A, Field::A); // A=A+A A
+    if r.next(0x62665, 4) {
+        i62665(r)
+    }
 }
 
 fn i62665(r: &mut Run) {
-    op!(r, 0x62665, 2, Op::Add { dst: R::A, src: R::A, f: Field::A }); // A=A+A A
-    i62667(r)
+    r.cpu.add(R::A, R::A, Field::A); // A=A+A A
+    if r.next(0x62667, 4) {
+        i62667(r)
+    }
 }
 
 fn i62667(r: &mut Run) {
-    op!(r, 0x62667, 2, Op::Add { dst: R::A, src: R::A, f: Field::A }); // A=A+A A
-    i62669(r)
+    r.cpu.add(R::A, R::A, Field::A); // A=A+A A
+    if r.next(0x62669, 4) {
+        i62669(r)
+    }
 }
 
 fn i62669(r: &mut Run) {
-    op!(r, 0x62669, 2, Op::Add { dst: R::C, src: R::C, f: Field::A }); // C=C+C A
-    i6266b(r)
+    r.cpu.add(R::C, R::C, Field::A); // C=C+C A
+    if r.next(0x6266B, 4) {
+        i6266b(r)
+    }
 }
 
 fn i6266b(r: &mut Run) {
-    op!(r, 0x6266B, 2, Op::Add { dst: R::A, src: R::C, f: Field::A }); // A=A+C A
-    i6266d(r)
+    r.cpu.add(R::A, R::C, Field::A); // A=A+C A
+    if r.next(0x6266D, 4) {
+        i6266d(r)
+    }
 }
 
 fn i6266d(r: &mut Run) {
-    op!(r, 0x6266D, 7, Op::Jump(0x357C)); // GOTO #0357C
+    r.cpu.pc = 0x0357C; // GOTO #0357C
+    r.spend(9);
 }
 
 fn i62679(r: &mut Run) {
-    op!(r, 0x62679, 7, Op::Call(0x6641)); // GOSUB #06641
+    r.cpu.pc = 0x62680;
+    r.cpu.call(0x06641); // GOSUB #06641
+    r.spend(9);
 }
 
 fn i62680(r: &mut Run) {
-    op!(r, 0x62680, 7, Op::Call(0x679B)); // GOSUB #0679B
+    r.cpu.pc = 0x62687;
+    r.cpu.call(0x0679B); // GOSUB #0679B
+    r.spend(9);
 }
 
 fn i62687(r: &mut Run) {
-    op!(r, 0x62687, 2, Op::Add { dst: R::A, src: R::A, f: Field::A }); // A=A+A A
-    i62689(r)
+    r.cpu.add(R::A, R::A, Field::A); // A=A+A A
+    if r.next(0x62689, 4) {
+        i62689(r)
+    }
 }
 
 fn i62689(r: &mut Run) {
-    op!(r, 0x62689, 2, Op::Add { dst: R::A, src: R::A, f: Field::A }); // A=A+A A
-    i6268b(r)
+    r.cpu.add(R::A, R::A, Field::A); // A=A+A A
+    if r.next(0x6268B, 4) {
+        i6268b(r)
+    }
 }
 
 fn i6268b(r: &mut Run) {
-    op!(r, 0x6268B, 2, Op::Add { dst: R::A, src: R::A, f: Field::A }); // A=A+A A
-    i6268d(r)
+    r.cpu.add(R::A, R::A, Field::A); // A=A+A A
+    if r.next(0x6268D, 4) {
+        i6268d(r)
+    }
 }
 
 fn i6268d(r: &mut Run) {
-    op!(r, 0x6268D, 4, Op::Jump(0x6266D)); // GOTO #6266D
+    r.cpu.pc = 0x6266D; // GOTO #6266D
+    r.spend(6);
 }
 
 fn i62696(r: &mut Run) {
-    op!(r, 0x62696, 7, Op::Call(0x6641)); // GOSUB #06641
+    r.cpu.pc = 0x6269D;
+    r.cpu.call(0x06641); // GOSUB #06641
+    r.spend(9);
 }
 
 fn i6269d(r: &mut Run) {
-    op!(r, 0x6269D, 7, Op::Call(0x679B)); // GOSUB #0679B
+    r.cpu.pc = 0x626A4;
+    r.cpu.call(0x0679B); // GOSUB #0679B
+    r.spend(9);
 }
 
 fn i626a4(r: &mut Run) {
-    op!(r, 0x626A4, 2, Op::Add { dst: R::A, src: R::A, f: Field::A }); // A=A+A A
-    i626a6(r)
+    r.cpu.add(R::A, R::A, Field::A); // A=A+A A
+    if r.next(0x626A6, 4) {
+        i626a6(r)
+    }
 }
 
 fn i626a6(r: &mut Run) {
-    op!(r, 0x626A6, 2, Op::Copy { dst: R::C, src: R::A, f: Field::A }); // C=A A
-    i626a8(r)
+    r.cpu.copy(R::C, R::A, Field::A); // C=A A
+    if r.next(0x626A8, 4) {
+        i626a8(r)
+    }
 }
 
 fn i626a8(r: &mut Run) {
-    op!(r, 0x626A8, 2, Op::Add { dst: R::A, src: R::A, f: Field::A }); // A=A+A A
-    i626aa(r)
+    r.cpu.add(R::A, R::A, Field::A); // A=A+A A
+    if r.next(0x626AA, 4) {
+        i626aa(r)
+    }
 }
 
 fn i626aa(r: &mut Run) {
-    op!(r, 0x626AA, 4, Op::Jump(0x6266B)); // GOTO #6266B
+    r.cpu.pc = 0x6266B; // GOTO #6266B
+    r.spend(6);
 }
 
 fn i626b3(r: &mut Run) {
-    op!(r, 0x626B3, 7, Op::Call(0x3019)); // GOSUB #03019
+    r.cpu.pc = 0x626BA;
+    r.cpu.call(0x03019); // GOSUB #03019
+    r.spend(9);
 }
 
 fn i626ba(r: &mut Run) {
-    op!(r, 0x626BA, 7, Op::Call(0x3019)); // GOSUB #03019
+    r.cpu.pc = 0x626C1;
+    r.cpu.call(0x03019); // GOSUB #03019
+    r.spend(9);
 }
 
 fn i626c1(r: &mut Run) {
-    op!(r, 0x626C1, 7, Op::Call(0x3019)); // GOSUB #03019
+    r.cpu.pc = 0x626C8;
+    r.cpu.call(0x03019); // GOSUB #03019
+    r.spend(9);
 }
 
 fn i626c8(r: &mut Run) {
-    op!(r, 0x626C8, 7, Op::Call(0x3019)); // GOSUB #03019
+    r.cpu.pc = 0x626CF;
+    r.cpu.call(0x03019); // GOSUB #03019
+    r.spend(9);
 }
 
 fn i626cf(r: &mut Run) {
-    op!(r, 0x626CF, 7, Op::Call(0x3019)); // GOSUB #03019
+    r.cpu.pc = 0x626D6;
+    r.cpu.call(0x03019); // GOSUB #03019
+    r.spend(9);
 }
 
 fn i626d6(r: &mut Run) {
-    op!(r, 0x626D6, 6, Op::Jump(0x6199F)); // GOTO #6199F
+    r.cpu.pc = 0x6199F; // GOTO #6199F
+    r.spend(8);
 }
 
 fn i626e1(r: &mut Run) {
-    op!(r, 0x626E1, 4, Op::Jump(0x626C1)); // GOTO #626C1
+    r.cpu.pc = 0x626C1; // GOTO #626C1
+    r.spend(6);
 }
 
 fn i626ea(r: &mut Run) {
-    op!(r, 0x626EA, 4, Op::Jump(0x626C8)); // GOTO #626C8
+    r.cpu.pc = 0x626C8; // GOTO #626C8
+    r.spend(6);
 }
 
 fn i626f3(r: &mut Run) {
-    op!(r, 0x626F3, 4, Op::Jump(0x626CF)); // GOTO #626CF
+    r.cpu.pc = 0x626CF; // GOTO #626CF
+    r.spend(6);
 }
 
 fn i626fc(r: &mut Run) {
-    op!(r, 0x626FC, 4, Op::Call(0x62278)); // GOSUB #62278
+    r.cpu.pc = 0x62700;
+    r.cpu.call(0x62278); // GOSUB #62278
+    r.spend(6);
 }
 
 fn i62700(r: &mut Run) {
-    op!(r, 0x62700, 2, Op::Inc { r: R::A, f: Field::A }); // A=A+1 A
-    i62702(r)
+    r.cpu.inc(R::A, Field::A); // A=A+1 A
+    if r.next(0x62702, 4) {
+        i62702(r)
+    }
 }
 
 fn i62702(r: &mut Run) {
-    op!(r, 0x62702, 2, Op::Inc { r: R::A, f: Field::A }); // A=A+1 A
-    i62704(r)
+    r.cpu.inc(R::A, Field::A); // A=A+1 A
+    if r.next(0x62704, 4) {
+        i62704(r)
+    }
 }
 
 fn i62704(r: &mut Run) {
-    op!(r, 0x62704, 4, Op::Call(0x624B3)); // GOSUB #624B3
+    r.cpu.pc = 0x62708;
+    r.cpu.call(0x624B3); // GOSUB #624B3
+    r.spend(6);
 }
 
 fn i62708(r: &mut Run) {
-    op!(r, 0x62708, 4, Op::Jump(0x627CE)); // GOTO #627CE
+    r.cpu.pc = 0x627CE; // GOTO #627CE
+    r.spend(6);
 }
 
 fn i62711(r: &mut Run) {
-    op!(r, 0x62711, 2, Op::Inc { r: R::D, f: Field::A }); // D=D+1 A
-    i62713(r)
+    r.cpu.inc(R::D, Field::A); // D=D+1 A
+    if r.next(0x62713, 4) {
+        i62713(r)
+    }
 }
 
 fn i62713(r: &mut Run) {
-    op!(r, 0x62713, 4, Op::Mem { store: false, d: 1, r: R::C, f: Field::Nibbles(0xA) }); // C=DAT1 10
-    i62717(r)
+    r.sync();
+    r.cpu.load(1, R::C, Field::Nibbles(10), r.hw); // C=DAT1 10
+    if r.next_io(0x62717, 24) {
+        i62717(r)
+    }
 }
 
 fn i62717(r: &mut Run) {
-    op!(r, 0x62717, 3, Op::DAdd { d: 1, n: 0xA }); // D1=D1+ 10
-    i6271a(r)
+    r.cpu.d_add(1, 10); // D1=D1+ 10
+    if r.next(0x6271A, 5) {
+        i6271a(r)
+    }
 }
 
 fn i6271a(r: &mut Run) {
-    op!(r, 0x6271A, 3, Op::Mem { store: false, d: 1, r: R::C, f: Field::A }); // C=DAT1 A
-    i6271d(r)
+    r.sync();
+    r.cpu.load(1, R::C, Field::A, r.hw); // C=DAT1 A
+    if r.next_io(0x6271D, 19) {
+        i6271d(r)
+    }
 }
 
 fn i6271d(r: &mut Run) {
-    op!(r, 0x6271D, 3, Op::DSub { d: 1, n: 5 }); // D1=D1- 5
-    i62720(r)
+    r.cpu.d_sub(1, 5); // D1=D1- 5
+    if r.next(0x62720, 5) {
+        i62720(r)
+    }
 }
 
 fn i62720(r: &mut Run) {
-    op!(r, 0x62720, 6, Op::Jump(0x6139A)); // GOTO #6139A
+    r.cpu.pc = 0x6139A; // GOTO #6139A
+    r.spend(8);
 }
 
 fn i6272b(r: &mut Run) {
-    op!(r, 0x6272B, 2, Op::Inc { r: R::D, f: Field::A }); // D=D+1 A
-    i6272d(r)
+    r.cpu.inc(R::D, Field::A); // D=D+1 A
+    if r.next(0x6272D, 4) {
+        i6272d(r)
+    }
 }
 
 fn i6272d(r: &mut Run) {
-    op!(r, 0x6272D, 2, Op::Inc { r: R::D, f: Field::A }); // D=D+1 A
-    i6272f(r)
+    r.cpu.inc(R::D, Field::A); // D=D+1 A
+    if r.next(0x6272F, 4) {
+        i6272f(r)
+    }
 }
 
 fn i6272f(r: &mut Run) {
-    op!(r, 0x6272F, 3, Op::DAdd { d: 1, n: 5 }); // D1=D1+ 5
-    i62732(r)
+    r.cpu.d_add(1, 5); // D1=D1+ 5
+    if r.next(0x62732, 5) {
+        i62732(r)
+    }
 }
 
 fn i62732(r: &mut Run) {
-    op!(r, 0x62732, 3, Op::Mem { store: false, d: 1, r: R::A, f: Field::A }); // A=DAT1 A
-    i62735(r)
+    r.sync();
+    r.cpu.load(1, R::A, Field::A, r.hw); // A=DAT1 A
+    if r.next_io(0x62735, 19) {
+        i62735(r)
+    }
 }
 
 fn i62735(r: &mut Run) {
-    op!(r, 0x62735, 3, Op::DAdd { d: 1, n: 5 }); // D1=D1+ 5
-    i62738(r)
+    r.cpu.d_add(1, 5); // D1=D1+ 5
+    if r.next(0x62738, 5) {
+        i62738(r)
+    }
 }
 
 fn i62738(r: &mut Run) {
-    op!(r, 0x62738, 6, Op::Jump(0x6102F)); // GOTO #6102F
+    r.cpu.pc = 0x6102F; // GOTO #6102F
+    r.spend(8);
 }
 
 fn i6273e(r: &mut Run) {
-    op!(r, 0x6273E, 6, Op::Call(0x613A8)); // GOSUB #613A8
+    r.cpu.pc = 0x62744;
+    r.cpu.call(0x613A8); // GOSUB #613A8
+    r.spend(8);
 }
 
 fn i62744(r: &mut Run) {
-    op!(r, 0x62744, 3, Op::CondJump(Cond::NoCarry, 0x62751)); // GONC #62751
+    r.cpu.pc = 0x62747;
+    r.cpu.jump_if(Cond::NoCarry, 0x62751); // GONC #62751
+    r.spend(5);
 }
 
 fn i6274c(r: &mut Run) {
-    op!(r, 0x6274C, 2, Op::Dec { r: R::D, f: Field::A }); // D=D-1 A
-    i6274e(r)
+    r.cpu.dec(R::D, Field::A); // D=D-1 A
+    if r.next(0x6274E, 4) {
+        i6274e(r)
+    }
 }
 
 fn i6274e(r: &mut Run) {
-    op!(r, 0x6274E, 3, Op::CondJump(Cond::Carry, 0x6273E)); // GOC #6273E
-    i62751(r)
+    r.cpu.pc = 0x62751;
+    r.cpu.jump_if(Cond::Carry, 0x6273E); // GOC #6273E
+    if r.next_pc(0x62751, 5) {
+        i62751(r)
+    }
 }
 
 fn i62751(r: &mut Run) {
-    op!(r, 0x62751, 3, Op::Mem { store: false, d: 1, r: R::A, f: Field::A }); // A=DAT1 A
-    i62754(r)
+    r.sync();
+    r.cpu.load(1, R::A, Field::A, r.hw); // A=DAT1 A
+    if r.next_io(0x62754, 19) {
+        i62754(r)
+    }
 }
 
 fn i62754(r: &mut Run) {
-    op!(r, 0x62754, 3, Op::DAdd { d: 1, n: 5 }); // D1=D1+ 5
-    i62757(r)
+    r.cpu.d_add(1, 5); // D1=D1+ 5
+    if r.next(0x62757, 5) {
+        i62757(r)
+    }
 }
 
 fn i62757(r: &mut Run) {
-    op!(r, 0x62757, 3, Op::Mem { store: false, d: 1, r: R::C, f: Field::A }); // C=DAT1 A
-    i6275a(r)
+    r.sync();
+    r.cpu.load(1, R::C, Field::A, r.hw); // C=DAT1 A
+    if r.next_io(0x6275A, 19) {
+        i6275a(r)
+    }
 }
 
 fn i6275a(r: &mut Run) {
-    op!(r, 0x6275A, 3, Op::Mem { store: true, d: 1, r: R::A, f: Field::A }); // DAT1=A A
-    i6275d(r)
+    r.sync();
+    r.cpu.store(1, R::A, Field::A, r.hw); // DAT1=A A
+    if r.next_io(0x6275D, 19) {
+        i6275d(r)
+    }
 }
 
 fn i6275d(r: &mut Run) {
-    op!(r, 0x6275D, 3, Op::DSub { d: 1, n: 5 }); // D1=D1- 5
-    i62760(r)
+    r.cpu.d_sub(1, 5); // D1=D1- 5
+    if r.next(0x62760, 5) {
+        i62760(r)
+    }
 }
 
 fn i62760(r: &mut Run) {
-    op!(r, 0x62760, 3, Op::Mem { store: true, d: 1, r: R::C, f: Field::A }); // DAT1=C A
-    i62763(r)
+    r.sync();
+    r.cpu.store(1, R::C, Field::A, r.hw); // DAT1=C A
+    if r.next_io(0x62763, 19) {
+        i62763(r)
+    }
 }
 
 fn i62763(r: &mut Run) {
-    op!(r, 0x62763, 3, Op::DSub { d: 1, n: 5 }); // D1=D1- 5
-    i62766(r)
+    r.cpu.d_sub(1, 5); // D1=D1- 5
+    if r.next(0x62766, 5) {
+        i62766(r)
+    }
 }
 
 fn i62766(r: &mut Run) {
-    op!(r, 0x62766, 6, Op::Jump(0x610ED)); // GOTO #610ED
+    r.cpu.pc = 0x610ED; // GOTO #610ED
+    r.spend(8);
 }
 
 fn i6276c(r: &mut Run) {
-    op!(r, 0x6276C, 6, Op::Call(0x613A8)); // GOSUB #613A8
+    r.cpu.pc = 0x62772;
+    r.cpu.call(0x613A8); // GOSUB #613A8
+    r.spend(8);
 }
 
 fn i62772(r: &mut Run) {
-    op!(r, 0x62772, 3, Op::CondJump(Cond::NoCarry, 0x6277F)); // GONC #6277F
+    r.cpu.pc = 0x62775;
+    r.cpu.jump_if(Cond::NoCarry, 0x6277F); // GONC #6277F
+    r.spend(5);
 }
 
 fn i6277a(r: &mut Run) {
-    op!(r, 0x6277A, 2, Op::Dec { r: R::D, f: Field::A }); // D=D-1 A
-    i6277c(r)
+    r.cpu.dec(R::D, Field::A); // D=D-1 A
+    if r.next(0x6277C, 4) {
+        i6277c(r)
+    }
 }
 
 fn i6277c(r: &mut Run) {
-    op!(r, 0x6277C, 3, Op::CondJump(Cond::Carry, 0x6276C)); // GOC #6276C
-    i6277f(r)
+    r.cpu.pc = 0x6277F;
+    r.cpu.jump_if(Cond::Carry, 0x6276C); // GOC #6276C
+    if r.next_pc(0x6277F, 5) {
+        i6277f(r)
+    }
 }
 
 fn i6277f(r: &mut Run) {
-    op!(r, 0x6277F, 4, Op::Mem { store: false, d: 1, r: R::A, f: Field::Nibbles(0xA) }); // A=DAT1 10
-    i62783(r)
+    r.sync();
+    r.cpu.load(1, R::A, Field::Nibbles(10), r.hw); // A=DAT1 10
+    if r.next_io(0x62783, 24) {
+        i62783(r)
+    }
 }
 
 fn i62783(r: &mut Run) {
-    op!(r, 0x62783, 3, Op::DAdd { d: 1, n: 0xA }); // D1=D1+ 10
-    i62786(r)
+    r.cpu.d_add(1, 10); // D1=D1+ 10
+    if r.next(0x62786, 5) {
+        i62786(r)
+    }
 }
 
 fn i62786(r: &mut Run) {
-    op!(r, 0x62786, 3, Op::Mem { store: false, d: 1, r: R::C, f: Field::A }); // C=DAT1 A
-    i62789(r)
+    r.sync();
+    r.cpu.load(1, R::C, Field::A, r.hw); // C=DAT1 A
+    if r.next_io(0x62789, 19) {
+        i62789(r)
+    }
 }
 
 fn i62789(r: &mut Run) {
-    op!(r, 0x62789, 3, Op::DSub { d: 1, n: 5 }); // D1=D1- 5
-    i6278c(r)
+    r.cpu.d_sub(1, 5); // D1=D1- 5
+    if r.next(0x6278C, 5) {
+        i6278c(r)
+    }
 }
 
 fn i6278c(r: &mut Run) {
-    op!(r, 0x6278C, 4, Op::Mem { store: true, d: 1, r: R::A, f: Field::Nibbles(0xA) }); // DAT1=A 10
-    i62790(r)
+    r.sync();
+    r.cpu.store(1, R::A, Field::Nibbles(10), r.hw); // DAT1=A 10
+    if r.next_io(0x62790, 24) {
+        i62790(r)
+    }
 }
 
 fn i62790(r: &mut Run) {
-    op!(r, 0x62790, 4, Op::Jump(0x6275D)); // GOTO #6275D
+    r.cpu.pc = 0x6275D; // GOTO #6275D
+    r.spend(6);
 }
 
 fn i62799(r: &mut Run) {
-    op!(r, 0x62799, 6, Op::Call(0x62829)); // GOSUB #62829
+    r.cpu.pc = 0x6279F;
+    r.cpu.call(0x62829); // GOSUB #62829
+    r.spend(8);
 }
 
 fn i6279f(r: &mut Run) {
-    op!(r, 0x6279F, 2, Op::Exch { a: R::C, b: R::A, f: Field::A }); // CAEX A
-    i627a1(r)
+    r.cpu.exch(R::C, R::A, Field::A); // CAEX A
+    if r.next(0x627A1, 4) {
+        i627a1(r)
+    }
 }
 
 fn i627a1(r: &mut Run) {
-    op!(r, 0x627A1, 2, Op::Sub { dst: R::A, a: R::A, b: R::C, f: Field::A }); // A=A-C A
-    i627a3(r)
+    r.cpu.sub(R::A, R::A, R::C, Field::A); // A=A-C A
+    if r.next(0x627A3, 4) {
+        i627a3(r)
+    }
 }
 
 fn i627a3(r: &mut Run) {
-    op!(r, 0x627A3, 4, Op::Jump(0x62704)); // GOTO #62704
+    r.cpu.pc = 0x62704; // GOTO #62704
+    r.spend(6);
 }
 
 fn i627ac(r: &mut Run) {
-    op!(r, 0x627AC, 3, Op::DAdd { d: 1, n: 5 }); // D1=D1+ 5
-    i627af(r)
+    r.cpu.d_add(1, 5); // D1=D1+ 5
+    if r.next(0x627AF, 5) {
+        i627af(r)
+    }
 }
 
 fn i627af(r: &mut Run) {
-    op!(r, 0x627AF, 3, Op::Mem { store: false, d: 1, r: R::A, f: Field::A }); // A=DAT1 A
-    i627b2(r)
+    r.sync();
+    r.cpu.load(1, R::A, Field::A, r.hw); // A=DAT1 A
+    if r.next_io(0x627B2, 19) {
+        i627b2(r)
+    }
 }
 
 fn i627b2(r: &mut Run) {
-    op!(r, 0x627B2, 3, Op::DSub { d: 1, n: 5 }); // D1=D1- 5
-    i627b5(r)
+    r.cpu.d_sub(1, 5); // D1=D1- 5
+    if r.next(0x627B5, 5) {
+        i627b5(r)
+    }
 }
 
 fn i627b5(r: &mut Run) {
-    op!(r, 0x627B5, 6, Op::Jump(0x6102F)); // GOTO #6102F
+    r.cpu.pc = 0x6102F; // GOTO #6102F
+    r.spend(8);
 }
 
 fn i627c0(r: &mut Run) {
-    op!(r, 0x627C0, 3, Op::Mem { store: false, d: 1, r: R::A, f: Field::A }); // A=DAT1 A
-    i627c3(r)
+    r.sync();
+    r.cpu.load(1, R::A, Field::A, r.hw); // A=DAT1 A
+    if r.next_io(0x627C3, 19) {
+        i627c3(r)
+    }
 }
 
 fn i627c3(r: &mut Run) {
-    op!(r, 0x627C3, 4, Op::Call(0x624B3)); // GOSUB #624B3
+    r.cpu.pc = 0x627C7;
+    r.cpu.call(0x624B3); // GOSUB #624B3
+    r.spend(6);
 }
 
 fn i627c7(r: &mut Run) {
-    op!(r, 0x627C7, 7, Op::Call(0x120CC)); // GOSUB #120CC
+    r.cpu.pc = 0x627CE;
+    r.cpu.call(0x120CC); // GOSUB #120CC
+    r.spend(9);
 }
 
 fn i627ce(r: &mut Run) {
-    op!(r, 0x627CE, 7, Op::Jump(0x357C)); // GOTO #0357C
+    r.cpu.pc = 0x0357C; // GOTO #0357C
+    r.spend(9);
 }
 
 fn i627da(r: &mut Run) {
-    op!(r, 0x627DA, 6, Op::Call(0x62829)); // GOSUB #62829
+    r.cpu.pc = 0x627E0;
+    r.cpu.call(0x62829); // GOSUB #62829
+    r.spend(8);
 }
 
 fn i627e0(r: &mut Run) {
-    op!(r, 0x627E0, 2, Op::Add { dst: R::A, src: R::C, f: Field::A }); // A=A+C A
-    i627e2(r)
+    r.cpu.add(R::A, R::C, Field::A); // A=A+C A
+    if r.next(0x627E2, 4) {
+        i627e2(r)
+    }
 }
 
 fn i627e2(r: &mut Run) {
-    op!(r, 0x627E2, 6, Op::Call(0x624B3)); // GOSUB #624B3
+    r.cpu.pc = 0x627E8;
+    r.cpu.call(0x624B3); // GOSUB #624B3
+    r.spend(8);
 }
 
 fn i627e8(r: &mut Run) {
-    op!(r, 0x627E8, 3, Op::Scratch { op: ScratchOp::ToScratch, r: R::A, n: 0, f: Field::W }); // R0=A
-    i627eb(r)
+    r.cpu.scratch(ScratchOp::ToScratch, R::A, 0, Field::W); // R0=A
+    if r.next(0x627EB, 5) {
+        i627eb(r)
+    }
 }
 
 /// Push2#aLoop
 fn i627eb(r: &mut Run) {
-    op!(r, 0x627EB, 6, Op::Scratch { op: ScratchOp::ToScratch, r: R::A, n: 1, f: Field::A }); // R1=A.F A
-    i627f1(r)
+    r.cpu.scratch(ScratchOp::ToScratch, R::A, 1, Field::A); // R1=A.F A
+    if r.next(0x627F1, 8) {
+        i627f1(r)
+    }
 }
 
 fn i627f1(r: &mut Run) {
-    op!(r, 0x627F1, 7, Op::Jump(0x3F14)); // GOTO #03F14
+    r.cpu.pc = 0x03F14; // GOTO #03F14
+    r.spend(9);
 }
 
 fn i627fd(r: &mut Run) {
-    op!(r, 0x627FD, 6, Op::Call(0x62829)); // GOSUB #62829
+    r.cpu.pc = 0x62803;
+    r.cpu.call(0x62829); // GOSUB #62829
+    r.spend(8);
 }
 
 fn i62803(r: &mut Run) {
-    op!(r, 0x62803, 2, Op::Sub { dst: R::A, a: R::A, b: R::C, f: Field::A }); // A=A-C A
-    i62805(r)
+    r.cpu.sub(R::A, R::A, R::C, Field::A); // A=A-C A
+    if r.next(0x62805, 4) {
+        i62805(r)
+    }
 }
 
 fn i62805(r: &mut Run) {
-    op!(r, 0x62805, 4, Op::Jump(0x627E2)); // GOTO #627E2
+    r.cpu.pc = 0x627E2; // GOTO #627E2
+    r.spend(6);
 }
 
 fn i6280e(r: &mut Run) {
-    op!(r, 0x6280E, 6, Op::Call(0x6249E)); // GOSUB #6249E
+    r.cpu.pc = 0x62814;
+    r.cpu.call(0x6249E); // GOSUB #6249E
+    r.spend(8);
 }
 
 fn i62814(r: &mut Run) {
-    op!(r, 0x62814, 2, Op::Inc { r: R::A, f: Field::A }); // A=A+1 A
-    i62816(r)
+    r.cpu.inc(R::A, Field::A); // A=A+1 A
+    if r.next(0x62816, 4) {
+        i62816(r)
+    }
 }
 
 fn i62816(r: &mut Run) {
-    op!(r, 0x62816, 4, Op::Jump(0x627E2)); // GOTO #627E2
+    r.cpu.pc = 0x627E2; // GOTO #627E2
+    r.spend(6);
 }
 
 fn i6281f(r: &mut Run) {
-    op!(r, 0x6281F, 4, Op::Call(0x6249E)); // GOSUB #6249E
+    r.cpu.pc = 0x62823;
+    r.cpu.call(0x6249E); // GOSUB #6249E
+    r.spend(6);
 }
 
 fn i62823(r: &mut Run) {
-    op!(r, 0x62823, 2, Op::Dec { r: R::A, f: Field::A }); // A=A-1 A
-    i62825(r)
+    r.cpu.dec(R::A, Field::A); // A=A-1 A
+    if r.next(0x62825, 4) {
+        i62825(r)
+    }
 }
 
 fn i62825(r: &mut Run) {
-    op!(r, 0x62825, 4, Op::Jump(0x627E2)); // GOTO #627E2
+    r.cpu.pc = 0x627E2; // GOTO #627E2
+    r.spend(6);
 }
 
 fn i62829(r: &mut Run) {
-    op!(r, 0x62829, 7, Op::Jump(0x3F5D)); // GOTO #03F5D
+    r.cpu.pc = 0x03F5D; // GOTO #03F5D
+    r.spend(9);
 }
 
 fn i62835(r: &mut Run) {
-    op!(r, 0x62835, 3, Op::Mem { store: false, d: 1, r: R::A, f: Field::A }); // A=DAT1 A
-    i62838(r)
+    r.sync();
+    r.cpu.load(1, R::A, Field::A, r.hw); // A=DAT1 A
+    if r.next_io(0x62838, 19) {
+        i62838(r)
+    }
 }
 
 fn i62838(r: &mut Run) {
-    op!(r, 0x62838, 3, Op::DAdd { d: 1, n: 5 }); // D1=D1+ 5
-    i6283b(r)
+    r.cpu.d_add(1, 5); // D1=D1+ 5
+    if r.next(0x6283B, 5) {
+        i6283b(r)
+    }
 }
 
 fn i6283b(r: &mut Run) {
-    op!(r, 0x6283B, 3, Op::Mem { store: true, d: 1, r: R::A, f: Field::A }); // DAT1=A A
-    i6283e(r)
+    r.sync();
+    r.cpu.store(1, R::A, Field::A, r.hw); // DAT1=A A
+    if r.next_io(0x6283E, 19) {
+        i6283e(r)
+    }
 }
 
 fn i6283e(r: &mut Run) {
-    op!(r, 0x6283E, 3, Op::DSub { d: 1, n: 5 }); // D1=D1- 5
-    i62841(r)
+    r.cpu.d_sub(1, 5); // D1=D1- 5
+    if r.next(0x62841, 5) {
+        i62841(r)
+    }
 }
 
 fn i62841(r: &mut Run) {
-    op!(r, 0x62841, 3, Op::Mem { store: false, d: 0, r: R::A, f: Field::A }); // A=DAT0 A
-    i62844(r)
+    r.sync();
+    r.cpu.load(0, R::A, Field::A, r.hw); // A=DAT0 A
+    if r.next_io(0x62844, 19) {
+        i62844(r)
+    }
 }
 
 fn i62844(r: &mut Run) {
-    op!(r, 0x62844, 3, Op::DAdd { d: 0, n: 5 }); // D0=D0+ 5
-    i62847(r)
+    r.cpu.d_add(0, 5); // D0=D0+ 5
+    if r.next(0x62847, 5) {
+        i62847(r)
+    }
 }
 
 fn i62847(r: &mut Run) {
-    op!(r, 0x62847, 4, Op::PcIndirect(R::A)); // PC=(A)
+    r.sync();
+    r.cpu.pc_indirect(R::A, r.hw); // PC=(A)
+    r.spend(23);
 }
 
 fn i62850(r: &mut Run) {
-    op!(r, 0x62850, 2, Op::Inc { r: R::D, f: Field::A }); // D=D+1 A
-    i62852(r)
+    r.cpu.inc(R::D, Field::A); // D=D+1 A
+    if r.next(0x62852, 4) {
+        i62852(r)
+    }
 }
 
 fn i62852(r: &mut Run) {
-    op!(r, 0x62852, 3, Op::Mem { store: false, d: 1, r: R::C, f: Field::A }); // C=DAT1 A
-    i62855(r)
+    r.sync();
+    r.cpu.load(1, R::C, Field::A, r.hw); // C=DAT1 A
+    if r.next_io(0x62855, 19) {
+        i62855(r)
+    }
 }
 
 fn i62855(r: &mut Run) {
-    op!(r, 0x62855, 3, Op::DAdd { d: 1, n: 0xA }); // D1=D1+ 10
-    i62858(r)
+    r.cpu.d_add(1, 10); // D1=D1+ 10
+    if r.next(0x62858, 5) {
+        i62858(r)
+    }
 }
 
 fn i62858(r: &mut Run) {
-    op!(r, 0x62858, 3, Op::Mem { store: false, d: 1, r: R::A, f: Field::A }); // A=DAT1 A
-    i6285b(r)
+    r.sync();
+    r.cpu.load(1, R::A, Field::A, r.hw); // A=DAT1 A
+    if r.next_io(0x6285B, 19) {
+        i6285b(r)
+    }
 }
 
 fn i6285b(r: &mut Run) {
-    op!(r, 0x6285B, 3, Op::Mem { store: true, d: 1, r: R::C, f: Field::A }); // DAT1=C A
-    i6285e(r)
+    r.sync();
+    r.cpu.store(1, R::C, Field::A, r.hw); // DAT1=C A
+    if r.next_io(0x6285E, 19) {
+        i6285e(r)
+    }
 }
 
 fn i6285e(r: &mut Run) {
-    op!(r, 0x6285E, 6, Op::Jump(0x6102C)); // GOTO #6102C
+    r.cpu.pc = 0x6102C; // GOTO #6102C
+    r.spend(8);
 }
 
 fn i62869(r: &mut Run) {
-    op!(r, 0x62869, 2, Op::Inc { r: R::D, f: Field::A }); // D=D+1 A
-    i6286b(r)
+    r.cpu.inc(R::D, Field::A); // D=D+1 A
+    if r.next(0x6286B, 4) {
+        i6286b(r)
+    }
 }
 
 fn i6286b(r: &mut Run) {
-    op!(r, 0x6286B, 4, Op::Mem { store: false, d: 1, r: R::A, f: Field::Nibbles(0xF) }); // A=DAT1 15
-    i6286f(r)
+    r.sync();
+    r.cpu.load(1, R::A, Field::Nibbles(15), r.hw); // A=DAT1 15
+    if r.next_io(0x6286F, 29) {
+        i6286f(r)
+    }
 }
 
 fn i6286f(r: &mut Run) {
-    op!(r, 0x6286F, 3, Op::DAdd { d: 1, n: 5 }); // D1=D1+ 5
-    i62872(r)
+    r.cpu.d_add(1, 5); // D1=D1+ 5
+    if r.next(0x62872, 5) {
+        i62872(r)
+    }
 }
 
 fn i62872(r: &mut Run) {
-    op!(r, 0x62872, 4, Op::Mem { store: true, d: 1, r: R::A, f: Field::Nibbles(0xF) }); // DAT1=A 15
-    i62876(r)
+    r.sync();
+    r.cpu.store(1, R::A, Field::Nibbles(15), r.hw); // DAT1=A 15
+    if r.next_io(0x62876, 29) {
+        i62876(r)
+    }
 }
 
 fn i62876(r: &mut Run) {
-    op!(r, 0x62876, 3, Op::Mem { store: false, d: 0, r: R::A, f: Field::A }); // A=DAT0 A
-    i62879(r)
+    r.sync();
+    r.cpu.load(0, R::A, Field::A, r.hw); // A=DAT0 A
+    if r.next_io(0x62879, 19) {
+        i62879(r)
+    }
 }
 
 fn i62879(r: &mut Run) {
-    op!(r, 0x62879, 3, Op::DAdd { d: 0, n: 5 }); // D0=D0+ 5
-    i6287c(r)
+    r.cpu.d_add(0, 5); // D0=D0+ 5
+    if r.next(0x6287C, 5) {
+        i6287c(r)
+    }
 }
 
 fn i6287c(r: &mut Run) {
-    op!(r, 0x6287C, 4, Op::PcIndirect(R::A)); // PC=(A)
+    r.sync();
+    r.cpu.pc_indirect(R::A, r.hw); // PC=(A)
+    r.spend(23);
 }
 
 fn i62885(r: &mut Run) {
-    op!(r, 0x62885, 3, Op::DAdd { d: 1, n: 0xF }); // D1=D1+ 15
-    i62888(r)
+    r.cpu.d_add(1, 15); // D1=D1+ 15
+    if r.next(0x62888, 5) {
+        i62888(r)
+    }
 }
 
 fn i62888(r: &mut Run) {
-    op!(r, 0x62888, 3, Op::Mem { store: false, d: 1, r: R::A, f: Field::A }); // A=DAT1 A
-    i6288b(r)
+    r.sync();
+    r.cpu.load(1, R::A, Field::A, r.hw); // A=DAT1 A
+    if r.next_io(0x6288B, 19) {
+        i6288b(r)
+    }
 }
 
 fn i6288b(r: &mut Run) {
-    op!(r, 0x6288B, 3, Op::DAdd { d: 1, n: 5 }); // D1=D1+ 5
-    i6288e(r)
+    r.cpu.d_add(1, 5); // D1=D1+ 5
+    if r.next(0x6288E, 5) {
+        i6288e(r)
+    }
 }
 
 fn i6288e(r: &mut Run) {
-    op!(r, 0x6288E, 3, Op::Mem { store: true, d: 1, r: R::A, f: Field::A }); // DAT1=A A
-    i62891(r)
+    r.sync();
+    r.cpu.store(1, R::A, Field::A, r.hw); // DAT1=A A
+    if r.next_io(0x62891, 19) {
+        i62891(r)
+    }
 }
 
 fn i62891(r: &mut Run) {
-    op!(r, 0x62891, 3, Op::DSub { d: 1, n: 5 }); // D1=D1- 5
-    i62894(r)
+    r.cpu.d_sub(1, 5); // D1=D1- 5
+    if r.next(0x62894, 5) {
+        i62894(r)
+    }
 }
 
 fn i62894(r: &mut Run) {
-    op!(r, 0x62894, 3, Op::DSub { d: 1, n: 0xF }); // D1=D1- 15
-    i62897(r)
+    r.cpu.d_sub(1, 15); // D1=D1- 15
+    if r.next(0x62897, 5) {
+        i62897(r)
+    }
 }
 
 fn i62897(r: &mut Run) {
-    op!(r, 0x62897, 4, Op::Jump(0x62869)); // GOTO #62869
+    r.cpu.pc = 0x62869; // GOTO #62869
+    r.spend(6);
 }
 
 fn i628a0(r: &mut Run) {
-    op!(r, 0x628A0, 6, Op::Call(0x624B3)); // GOSUB #624B3
+    r.cpu.pc = 0x628A6;
+    r.cpu.call(0x624B3); // GOSUB #624B3
+    r.spend(8);
 }
 
 fn i628a6(r: &mut Run) {
-    op!(r, 0x628A6, 6, Op::Call(0x62829)); // GOSUB #62829
+    r.cpu.pc = 0x628AC;
+    r.cpu.call(0x62829); // GOSUB #62829
+    r.spend(8);
 }
 
 fn i628ac(r: &mut Run) {
-    op!(r, 0x628AC, 5, Op::Test { test: Test::Regs(Cmp::Gt, R::C, R::A), f: Field::A, goyes: Some(0x628CB) }); // ?C>A A / GOYES #628CB
-    i628b1(r)
+    r.cpu.pc = 0x628B1;
+    r.cpu.test(Test::Regs(Cmp::Gt, R::C, R::A), Field::A, Some(0x628CB)); // ?C>A A / GOYES #628CB
+    if r.next_pc(0x628B1, 7) {
+        i628b1(r)
+    }
 }
 
 fn i628b1(r: &mut Run) {
-    op!(r, 0x628B1, 4, Op::Jump(0x628CB)); // GOTO #628CB
+    r.cpu.pc = 0x628CB; // GOTO #628CB
+    r.spend(6);
 }
 
 fn i628ba(r: &mut Run) {
-    op!(r, 0x628BA, 6, Op::Call(0x624B3)); // GOSUB #624B3
+    r.cpu.pc = 0x628C0;
+    r.cpu.call(0x624B3); // GOSUB #624B3
+    r.spend(8);
 }
 
 fn i628c0(r: &mut Run) {
-    op!(r, 0x628C0, 6, Op::Call(0x62829)); // GOSUB #62829
+    r.cpu.pc = 0x628C6;
+    r.cpu.call(0x62829); // GOSUB #62829
+    r.spend(8);
 }
 
 fn i628c6(r: &mut Run) {
-    op!(r, 0x628C6, 5, Op::Test { test: Test::Regs(Cmp::Eq, R::C, R::A), f: Field::A, goyes: Some(0x628CB) }); // ?C=A A / GOYES #628CB
-    i628cb(r)
+    r.cpu.pc = 0x628CB;
+    r.cpu.test(Test::Regs(Cmp::Eq, R::C, R::A), Field::A, Some(0x628CB)); // ?C=A A / GOYES #628CB
+    if r.next_pc(0x628CB, 7) {
+        i628cb(r)
+    }
 }
 
 fn i628cb(r: &mut Run) {
-    op!(r, 0x628CB, 6, Op::Jump(0x620B6)); // GOTO #620B6
+    r.cpu.pc = 0x620B6; // GOTO #620B6
+    r.spend(8);
 }
 
 fn i628d6(r: &mut Run) {
-    op!(r, 0x628D6, 6, Op::Call(0x624B3)); // GOSUB #624B3
+    r.cpu.pc = 0x628DC;
+    r.cpu.call(0x624B3); // GOSUB #624B3
+    r.spend(8);
 }
 
 fn i628dc(r: &mut Run) {
-    op!(r, 0x628DC, 6, Op::Call(0x62829)); // GOSUB #62829
+    r.cpu.pc = 0x628E2;
+    r.cpu.call(0x62829); // GOSUB #62829
+    r.spend(8);
 }
 
 fn i628e2(r: &mut Run) {
-    op!(r, 0x628E2, 5, Op::Test { test: Test::Regs(Cmp::Lt, R::C, R::A), f: Field::A, goyes: Some(0x628CB) }); // ?C<A A / GOYES #628CB
-    i628e7(r)
+    r.cpu.pc = 0x628E7;
+    r.cpu.test(Test::Regs(Cmp::Lt, R::C, R::A), Field::A, Some(0x628CB)); // ?C<A A / GOYES #628CB
+    if r.next_pc(0x628E7, 7) {
+        i628e7(r)
+    }
 }
 
 fn i628e7(r: &mut Run) {
-    op!(r, 0x628E7, 4, Op::Jump(0x628CB)); // GOTO #628CB
+    r.cpu.pc = 0x628CB; // GOTO #628CB
+    r.spend(6);
 }
 
 fn i628f0(r: &mut Run) {
-    op!(r, 0x628F0, 6, Op::Call(0x624B3)); // GOSUB #624B3
+    r.cpu.pc = 0x628F6;
+    r.cpu.call(0x624B3); // GOSUB #624B3
+    r.spend(8);
 }
 
 fn i628f6(r: &mut Run) {
-    op!(r, 0x628F6, 6, Op::Call(0x6249E)); // GOSUB #6249E
+    r.cpu.pc = 0x628FC;
+    r.cpu.call(0x6249E); // GOSUB #6249E
+    r.spend(8);
 }
 
 fn i628fc(r: &mut Run) {
-    op!(r, 0x628FC, 2, Op::Inc { r: R::A, f: Field::A }); // A=A+1 A
-    i628fe(r)
+    r.cpu.inc(R::A, Field::A); // A=A+1 A
+    if r.next(0x628FE, 4) {
+        i628fe(r)
+    }
 }
 
 fn i628fe(r: &mut Run) {
-    op!(r, 0x628FE, 6, Op::Jump(0x6266D)); // GOTO #6266D
+    r.cpu.pc = 0x6266D; // GOTO #6266D
+    r.spend(8);
 }
 
 fn i62909(r: &mut Run) {
-    op!(r, 0x62909, 3, Op::Mem { store: false, d: 1, r: R::A, f: Field::A }); // A=DAT1 A
-    i6290c(r)
+    r.sync();
+    r.cpu.load(1, R::A, Field::A, r.hw); // A=DAT1 A
+    if r.next_io(0x6290C, 19) {
+        i6290c(r)
+    }
 }
 
 fn i6290c(r: &mut Run) {
-    op!(r, 0x6290C, 3, Op::DAdd { d: 1, n: 5 }); // D1=D1+ 5
-    i6290f(r)
+    r.cpu.d_add(1, 5); // D1=D1+ 5
+    if r.next(0x6290F, 5) {
+        i6290f(r)
+    }
 }
 
 fn i6290f(r: &mut Run) {
-    op!(r, 0x6290F, 2, Op::Inc { r: R::D, f: Field::A }); // D=D+1 A
-    i62911(r)
+    r.cpu.inc(R::D, Field::A); // D=D+1 A
+    if r.next(0x62911, 4) {
+        i62911(r)
+    }
 }
 
 fn i62911(r: &mut Run) {
-    op!(r, 0x62911, 6, Op::Call(0x624B3)); // GOSUB #624B3
+    r.cpu.pc = 0x62917;
+    r.cpu.call(0x624B3); // GOSUB #624B3
+    r.spend(8);
 }
 
 fn i62917(r: &mut Run) {
-    op!(r, 0x62917, 3, Op::Mem { store: false, d: 1, r: R::C, f: Field::A }); // C=DAT1 A
-    i6291a(r)
+    r.sync();
+    r.cpu.load(1, R::C, Field::A, r.hw); // C=DAT1 A
+    if r.next_io(0x6291A, 19) {
+        i6291a(r)
+    }
 }
 
 fn i6291a(r: &mut Run) {
-    op!(r, 0x6291A, 3, Op::Mem { store: true, d: 1, r: R::A, f: Field::A }); // DAT1=A A
-    i6291d(r)
+    r.sync();
+    r.cpu.store(1, R::A, Field::A, r.hw); // DAT1=A A
+    if r.next_io(0x6291D, 19) {
+        i6291d(r)
+    }
 }
 
 fn i6291d(r: &mut Run) {
-    op!(r, 0x6291D, 3, Op::DExR { d: 1, r: R::C, short: false }); // CD1EX
-    i62920(r)
+    r.cpu.d_ex_r(1, R::C, false); // CD1EX
+    if r.next(0x62920, 5) {
+        i62920(r)
+    }
 }
 
 fn i62920(r: &mut Run) {
-    op!(r, 0x62920, 3, Op::DAdd { d: 1, n: 5 }); // D1=D1+ 5
-    i62923(r)
+    r.cpu.d_add(1, 5); // D1=D1+ 5
+    if r.next(0x62923, 5) {
+        i62923(r)
+    }
 }
 
 fn i62923(r: &mut Run) {
-    op!(r, 0x62923, 3, Op::Mem { store: false, d: 1, r: R::A, f: Field::A }); // A=DAT1 A
-    i62926(r)
+    r.sync();
+    r.cpu.load(1, R::A, Field::A, r.hw); // A=DAT1 A
+    if r.next_io(0x62926, 19) {
+        i62926(r)
+    }
 }
 
 fn i62926(r: &mut Run) {
-    op!(r, 0x62926, 3, Op::DFromR { d: 1, r: R::C, short: false }); // D1=C
-    i62929(r)
+    r.cpu.d_from_r(1, R::C, false); // D1=C
+    if r.next(0x62929, 5) {
+        i62929(r)
+    }
 }
 
 fn i62929(r: &mut Run) {
-    op!(r, 0x62929, 2, Op::Inc { r: R::A, f: Field::A }); // A=A+1 A
-    i6292b(r)
+    r.cpu.inc(R::A, Field::A); // A=A+1 A
+    if r.next(0x6292B, 4) {
+        i6292b(r)
+    }
 }
 
 fn i6292b(r: &mut Run) {
-    op!(r, 0x6292B, 4, Op::Jump(0x628FE)); // GOTO #628FE
+    r.cpu.pc = 0x628FE; // GOTO #628FE
+    r.spend(6);
 }
 
 fn i62934(r: &mut Run) {
-    op!(r, 0x62934, 6, Op::Call(0x624B3)); // GOSUB #624B3
+    r.cpu.pc = 0x6293A;
+    r.cpu.call(0x624B3); // GOSUB #624B3
+    r.spend(8);
 }
 
 fn i6293a(r: &mut Run) {
-    op!(r, 0x6293A, 6, Op::Call(0x6249E)); // GOSUB #6249E
+    r.cpu.pc = 0x62940;
+    r.cpu.call(0x6249E); // GOSUB #6249E
+    r.spend(8);
 }
 
 fn i62940(r: &mut Run) {
-    op!(r, 0x62940, 2, Op::Dec { r: R::A, f: Field::A }); // A=A-1 A
-    i62942(r)
+    r.cpu.dec(R::A, Field::A); // A=A-1 A
+    if r.next(0x62942, 4) {
+        i62942(r)
+    }
 }
 
 fn i62942(r: &mut Run) {
-    op!(r, 0x62942, 4, Op::Jump(0x628FE)); // GOTO #628FE
+    r.cpu.pc = 0x628FE; // GOTO #628FE
+    r.spend(6);
 }
 
 fn i6294b(r: &mut Run) {
-    op!(r, 0x6294B, 7, Op::LoadConst { r: R::C, len: 5, val: 0x3FF9 }); // LC(5) #03FF9
-    i62952(r)
+    r.cpu.load_const(R::C, 5, 0x3FF9); // LC(5) #03FF9
+    if r.next(0x62952, 9) {
+        i62952(r)
+    }
 }
 
 fn i62952(r: &mut Run) {
-    op!(r, 0x62952, 6, Op::Jump(0x610ED)); // GOTO #610ED
+    r.cpu.pc = 0x610ED; // GOTO #610ED
+    r.spend(8);
 }
 
 fn i6295d(r: &mut Run) {
-    op!(r, 0x6295D, 7, Op::LoadConst { r: R::C, len: 5, val: 5 }); // LC(5) #00005
-    i62964(r)
+    r.cpu.load_const(R::C, 5, 0x5); // LC(5) #00005
+    if r.next(0x62964, 9) {
+        i62964(r)
+    }
 }
 
 fn i62964(r: &mut Run) {
-    op!(r, 0x62964, 2, Op::Sub { dst: R::B, a: R::B, b: R::C, f: Field::A }); // B=B-C A
-    i62966(r)
+    r.cpu.sub(R::B, R::B, R::C, Field::A); // B=B-C A
+    if r.next(0x62966, 4) {
+        i62966(r)
+    }
 }
 
 fn i62966(r: &mut Run) {
-    op!(r, 0x62966, 7, Op::Jump(0x6FD6)); // GOTO #06FD6
+    r.cpu.pc = 0x06FD6; // GOTO #06FD6
+    r.spend(9);
 }
 
 fn i62972(r: &mut Run) {
-    op!(r, 0x62972, 2, Op::Exch { a: R::A, b: R::B, f: Field::A }); // ABEX A
-    i62974(r)
+    r.cpu.exch(R::A, R::B, Field::A); // ABEX A
+    if r.next(0x62974, 4) {
+        i62974(r)
+    }
 }
 
 fn i62974(r: &mut Run) {
-    op!(r, 0x62974, 3, Op::DExR { d: 0, r: R::A, short: false }); // AD0EX
-    i62977(r)
+    r.cpu.d_ex_r(0, R::A, false); // AD0EX
+    if r.next(0x62977, 5) {
+        i62977(r)
+    }
 }
 
 fn i62977(r: &mut Run) {
-    op!(r, 0x62977, 3, Op::DSub { d: 0, n: 5 }); // D0=D0- 5
-    i6297a(r)
+    r.cpu.d_sub(0, 5); // D0=D0- 5
+    if r.next(0x6297A, 5) {
+        i6297a(r)
+    }
 }
 
 fn i6297a(r: &mut Run) {
-    op!(r, 0x6297A, 3, Op::Mem { store: false, d: 0, r: R::A, f: Field::A }); // A=DAT0 A
-    i6297d(r)
+    r.sync();
+    r.cpu.load(0, R::A, Field::A, r.hw); // A=DAT0 A
+    if r.next_io(0x6297D, 19) {
+        i6297d(r)
+    }
 }
 
 fn i6297d(r: &mut Run) {
-    op!(r, 0x6297D, 3, Op::DExR { d: 0, r: R::A, short: false }); // AD0EX
-    i62980(r)
+    r.cpu.d_ex_r(0, R::A, false); // AD0EX
+    if r.next(0x62980, 5) {
+        i62980(r)
+    }
 }
 
 fn i62980(r: &mut Run) {
-    op!(r, 0x62980, 2, Op::Copy { dst: R::B, src: R::A, f: Field::A }); // B=A A
-    i62982(r)
+    r.cpu.copy(R::B, R::A, Field::A); // B=A A
+    if r.next(0x62982, 4) {
+        i62982(r)
+    }
 }
 
 fn i62982(r: &mut Run) {
-    op!(r, 0x62982, 4, Op::Jump(0x62966)); // GOTO #62966
+    r.cpu.pc = 0x62966; // GOTO #62966
+    r.spend(6);
 }
 
 fn i6298b(r: &mut Run) {
-    op!(r, 0x6298B, 2, Op::Exch { a: R::A, b: R::B, f: Field::A }); // ABEX A
-    i6298d(r)
+    r.cpu.exch(R::A, R::B, Field::A); // ABEX A
+    if r.next(0x6298D, 4) {
+        i6298d(r)
+    }
 }
 
 fn i6298d(r: &mut Run) {
-    op!(r, 0x6298D, 3, Op::DExR { d: 0, r: R::A, short: false }); // AD0EX
-    i62990(r)
+    r.cpu.d_ex_r(0, R::A, false); // AD0EX
+    if r.next(0x62990, 5) {
+        i62990(r)
+    }
 }
 
 fn i62990(r: &mut Run) {
-    op!(r, 0x62990, 3, Op::DSub { d: 0, n: 5 }); // D0=D0- 5
-    i62993(r)
+    r.cpu.d_sub(0, 5); // D0=D0- 5
+    if r.next(0x62993, 5) {
+        i62993(r)
+    }
 }
 
 fn i62993(r: &mut Run) {
-    op!(r, 0x62993, 3, Op::Mem { store: false, d: 0, r: R::A, f: Field::A }); // A=DAT0 A
-    i62996(r)
+    r.sync();
+    r.cpu.load(0, R::A, Field::A, r.hw); // A=DAT0 A
+    if r.next_io(0x62996, 19) {
+        i62996(r)
+    }
 }
 
 fn i62996(r: &mut Run) {
-    op!(r, 0x62996, 3, Op::DExR { d: 0, r: R::A, short: false }); // AD0EX
-    i62999(r)
+    r.cpu.d_ex_r(0, R::A, false); // AD0EX
+    if r.next(0x62999, 5) {
+        i62999(r)
+    }
 }
 
 fn i62999(r: &mut Run) {
-    op!(r, 0x62999, 2, Op::Copy { dst: R::B, src: R::A, f: Field::A }); // B=A A
-    i6299b(r)
+    r.cpu.copy(R::B, R::A, Field::A); // B=A A
+    if r.next(0x6299B, 4) {
+        i6299b(r)
+    }
 }
 
 fn i6299b(r: &mut Run) {
-    op!(r, 0x6299B, 6, Op::Jump(0x61998)); // GOTO #61998
+    r.cpu.pc = 0x61998; // GOTO #61998
+    r.spend(8);
 }
 
 fn i629a6(r: &mut Run) {
-    op!(r, 0x629A6, 2, Op::Exch { a: R::A, b: R::B, f: Field::A }); // ABEX A
-    i629a8(r)
+    r.cpu.exch(R::A, R::B, Field::A); // ABEX A
+    if r.next(0x629A8, 4) {
+        i629a8(r)
+    }
 }
 
 fn i629a8(r: &mut Run) {
-    op!(r, 0x629A8, 3, Op::DExR { d: 0, r: R::A, short: false }); // AD0EX
-    i629ab(r)
+    r.cpu.d_ex_r(0, R::A, false); // AD0EX
+    if r.next(0x629AB, 5) {
+        i629ab(r)
+    }
 }
 
 fn i629ab(r: &mut Run) {
-    op!(r, 0x629AB, 3, Op::DSub { d: 0, n: 5 }); // D0=D0- 5
-    i629ae(r)
+    r.cpu.d_sub(0, 5); // D0=D0- 5
+    if r.next(0x629AE, 5) {
+        i629ae(r)
+    }
 }
 
 fn i629ae(r: &mut Run) {
-    op!(r, 0x629AE, 3, Op::Mem { store: false, d: 0, r: R::A, f: Field::A }); // A=DAT0 A
-    i629b1(r)
+    r.sync();
+    r.cpu.load(0, R::A, Field::A, r.hw); // A=DAT0 A
+    if r.next_io(0x629B1, 19) {
+        i629b1(r)
+    }
 }
 
 fn i629b1(r: &mut Run) {
-    op!(r, 0x629B1, 3, Op::DExR { d: 0, r: R::A, short: false }); // AD0EX
-    i629b4(r)
+    r.cpu.d_ex_r(0, R::A, false); // AD0EX
+    if r.next(0x629B4, 5) {
+        i629b4(r)
+    }
 }
 
 fn i629b4(r: &mut Run) {
-    op!(r, 0x629B4, 2, Op::Copy { dst: R::B, src: R::A, f: Field::A }); // B=A A
-    i629b6(r)
+    r.cpu.copy(R::B, R::A, Field::A); // B=A A
+    if r.next(0x629B6, 4) {
+        i629b6(r)
+    }
 }
 
 fn i629b6(r: &mut Run) {
-    op!(r, 0x629B6, 6, Op::Jump(0x619B2)); // GOTO #619B2
+    r.cpu.pc = 0x619B2; // GOTO #619B2
+    r.spend(8);
 }
 
 fn i637d1(r: &mut Run) {
-    op!(r, 0x637D1, 6, Op::Call(0x62829)); // GOSUB #62829
+    r.cpu.pc = 0x637D7;
+    r.cpu.call(0x62829); // GOSUB #62829
+    r.spend(8);
 }
 
 fn i637d7(r: &mut Run) {
-    op!(r, 0x637D7, 2, Op::Sub { dst: R::A, a: R::A, b: R::C, f: Field::A }); // A=A-C A
-    i637d9(r)
+    r.cpu.sub(R::A, R::A, R::C, Field::A); // A=A-C A
+    if r.next(0x637D9, 4) {
+        i637d9(r)
+    }
 }
 
 fn i637d9(r: &mut Run) {
-    op!(r, 0x637D9, 7, Op::Jump(0x36FBB)); // GOTO #36FBB
+    r.cpu.pc = 0x36FBB; // GOTO #36FBB
+    r.spend(9);
 }
 
 fn i6380d(r: &mut Run) {
-    op!(r, 0x6380D, 6, Op::Call(0x62829)); // GOSUB #62829
+    r.cpu.pc = 0x63813;
+    r.cpu.call(0x62829); // GOSUB #62829
+    r.spend(8);
 }
 
 fn i63813(r: &mut Run) {
-    op!(r, 0x63813, 2, Op::Add { dst: R::A, src: R::C, f: Field::A }); // A=A+C A
-    i63815(r)
+    r.cpu.add(R::A, R::C, Field::A); // A=A+C A
+    if r.next(0x63815, 4) {
+        i63815(r)
+    }
 }
 
 fn i63815(r: &mut Run) {
-    op!(r, 0x63815, 7, Op::Jump(0x36FCF)); // GOTO #36FCF
+    r.cpu.pc = 0x36FCF; // GOTO #36FCF
+    r.spend(9);
 }
 
 /// D0=DSKTOP
 fn i6384e(r: &mut Run) {
-    op!(r, 0x6384E, 7, Op::DLoad { d: 0, len: 5, val: 0x806F8 }); // D0=(5) #806F8
-    i63855(r)
+    r.cpu.d_load(0, 5, 0x806F8); // D0=(5) #806F8
+    if r.next(0x63855, 9) {
+        i63855(r)
+    }
 }
 
 fn i63855(r: &mut Run) {
-    op!(r, 0x63855, 3, Op::Mem { store: false, d: 0, r: R::A, f: Field::A }); // A=DAT0 A
-    i63858(r)
+    r.sync();
+    r.cpu.load(0, R::A, Field::A, r.hw); // A=DAT0 A
+    if r.next_io(0x63858, 19) {
+        i63858(r)
+    }
 }
 
 fn i63858(r: &mut Run) {
-    op!(r, 0x63858, 3, Op::DFromR { d: 0, r: R::A, short: false }); // D0=A
-    i6385b(r)
+    r.cpu.d_from_r(0, R::A, false); // D0=A
+    if r.next(0x6385B, 5) {
+        i6385b(r)
+    }
 }
 
 fn i6385b(r: &mut Run) {
-    op!(r, 0x6385B, 2, Op::Rtn(RtnKind::Plain)); // RTN
+    r.cpu.rtn(RtnKind::Plain); // RTN
+    r.spend(9);
 }
 
 /// D1=DSKTOP
 fn i6385d(r: &mut Run) {
-    op!(r, 0x6385D, 7, Op::DLoad { d: 1, len: 5, val: 0x806F8 }); // D1=(5) #806F8
-    i63864(r)
+    r.cpu.d_load(1, 5, 0x806F8); // D1=(5) #806F8
+    if r.next(0x63864, 9) {
+        i63864(r)
+    }
 }
 
 fn i63864(r: &mut Run) {
-    op!(r, 0x63864, 3, Op::Mem { store: false, d: 1, r: R::C, f: Field::A }); // C=DAT1 A
-    i63867(r)
+    r.sync();
+    r.cpu.load(1, R::C, Field::A, r.hw); // C=DAT1 A
+    if r.next_io(0x63867, 19) {
+        i63867(r)
+    }
 }
 
 fn i63867(r: &mut Run) {
-    op!(r, 0x63867, 3, Op::DFromR { d: 1, r: R::C, short: false }); // D1=C
-    i6386a(r)
+    r.cpu.d_from_r(1, R::C, false); // D1=C
+    if r.next(0x6386A, 5) {
+        i6386a(r)
+    }
 }
 
 fn i6386a(r: &mut Run) {
-    op!(r, 0x6386A, 2, Op::Rtn(RtnKind::Plain)); // RTN
+    r.cpu.rtn(RtnKind::Plain); // RTN
+    r.spend(9);
 }
 
 fn i6412c(r: &mut Run) {
-    op!(r, 0x6412C, 3, Op::DAdd { d: 1, n: 0xA }); // D1=D1+ 10
-    i6412f(r)
+    r.cpu.d_add(1, 10); // D1=D1+ 10
+    if r.next(0x6412F, 5) {
+        i6412f(r)
+    }
 }
 
 fn i6412f(r: &mut Run) {
-    op!(r, 0x6412F, 2, Op::Inc { r: R::D, f: Field::A }); // D=D+1 A
-    i64131(r)
+    r.cpu.inc(R::D, Field::A); // D=D+1 A
+    if r.next(0x64131, 4) {
+        i64131(r)
+    }
 }
 
 fn i64131(r: &mut Run) {
-    op!(r, 0x64131, 2, Op::Inc { r: R::D, f: Field::A }); // D=D+1 A
-    i64133(r)
+    r.cpu.inc(R::D, Field::A); // D=D+1 A
+    if r.next(0x64133, 4) {
+        i64133(r)
+    }
 }
 
 fn i64133(r: &mut Run) {
-    op!(r, 0x64133, 7, Op::Call(0x679B)); // GOSUB #0679B
+    r.cpu.pc = 0x6413A;
+    r.cpu.call(0x0679B); // GOSUB #0679B
+    r.spend(9);
 }
 
 fn i6413a(r: &mut Run) {
-    op!(r, 0x6413A, 3, Op::DSub { d: 1, n: 5 }); // D1=D1- 5
-    i6413d(r)
+    r.cpu.d_sub(1, 5); // D1=D1- 5
+    if r.next(0x6413D, 5) {
+        i6413d(r)
+    }
 }
 
 fn i6413d(r: &mut Run) {
-    op!(r, 0x6413D, 3, Op::Mem { store: false, d: 1, r: R::C, f: Field::A }); // C=DAT1 A
-    i64140(r)
+    r.sync();
+    r.cpu.load(1, R::C, Field::A, r.hw); // C=DAT1 A
+    if r.next_io(0x64140, 19) {
+        i64140(r)
+    }
 }
 
 fn i64140(r: &mut Run) {
-    op!(r, 0x64140, 2, Op::Copy { dst: R::B, src: R::C, f: Field::A }); // B=C A
-    i64142(r)
+    r.cpu.copy(R::B, R::C, Field::A); // B=C A
+    if r.next(0x64142, 4) {
+        i64142(r)
+    }
 }
 
 fn i64142(r: &mut Run) {
-    op!(r, 0x64142, 3, Op::DFromR { d: 0, r: R::C, short: false }); // D0=C
-    i64145(r)
+    r.cpu.d_from_r(0, R::C, false); // D0=C
+    if r.next(0x64145, 5) {
+        i64145(r)
+    }
 }
 
 fn i64145(r: &mut Run) {
-    op!(r, 0x64145, 7, Op::Call(0x3019)); // GOSUB #03019
+    r.cpu.pc = 0x6414C;
+    r.cpu.call(0x03019); // GOSUB #03019
+    r.spend(9);
 }
 
 fn i6414c(r: &mut Run) {
-    op!(r, 0x6414C, 3, Op::DExR { d: 0, r: R::A, short: false }); // AD0EX
-    i6414f(r)
+    r.cpu.d_ex_r(0, R::A, false); // AD0EX
+    if r.next(0x6414F, 5) {
+        i6414f(r)
+    }
 }
 
 fn i6414f(r: &mut Run) {
-    op!(r, 0x6414F, 3, Op::DSub { d: 1, n: 5 }); // D1=D1- 5
-    i64152(r)
+    r.cpu.d_sub(1, 5); // D1=D1- 5
+    if r.next(0x64152, 5) {
+        i64152(r)
+    }
 }
 
 fn i64152(r: &mut Run) {
-    op!(r, 0x64152, 3, Op::Mem { store: false, d: 1, r: R::C, f: Field::A }); // C=DAT1 A
-    i64155(r)
+    r.sync();
+    r.cpu.load(1, R::C, Field::A, r.hw); // C=DAT1 A
+    if r.next_io(0x64155, 19) {
+        i64155(r)
+    }
 }
 
 fn i64155(r: &mut Run) {
-    op!(r, 0x64155, 5, Op::Test { test: Test::Regs(Cmp::Gt, R::B, R::C), f: Field::A, goyes: Some(0x64166) }); // ?B>C A / GOYES #64166
-    i6415a(r)
+    r.cpu.pc = 0x6415A;
+    r.cpu.test(Test::Regs(Cmp::Gt, R::B, R::C), Field::A, Some(0x64166)); // ?B>C A / GOYES #64166
+    if r.next_pc(0x6415A, 7) {
+        i6415a(r)
+    }
 }
 
 fn i6415a(r: &mut Run) {
-    op!(r, 0x6415A, 5, Op::Test { test: Test::Regs(Cmp::Ge, R::C, R::A), f: Field::A, goyes: Some(0x64166) }); // ?C>=A A / GOYES #64166
-    i6415f(r)
+    r.cpu.pc = 0x6415F;
+    r.cpu.test(Test::Regs(Cmp::Ge, R::C, R::A), Field::A, Some(0x64166)); // ?C>=A A / GOYES #64166
+    if r.next_pc(0x6415F, 7) {
+        i6415f(r)
+    }
 }
 
 fn i6415f(r: &mut Run) {
-    op!(r, 0x6415F, 7, Op::Jump(0x620B9)); // GOTO #620B9
+    r.cpu.pc = 0x620B9; // GOTO #620B9
+    r.spend(9);
 }
 
 fn i64166(r: &mut Run) {
-    op!(r, 0x64166, 7, Op::Jump(0x620D2)); // GOTO #620D2
+    r.cpu.pc = 0x620D2; // GOTO #620D2
+    r.spend(9);
 }
 
 /// DupAndThen
 fn i641cc(r: &mut Run) {
-    op!(r, 0x641CC, 2, Op::Zero { r: R::C, f: Field::A }); // C=0 A
-    i641ce(r)
+    r.cpu.zero(R::C, Field::A); // C=0 A
+    if r.next(0x641CE, 4) {
+        i641ce(r)
+    }
 }
 
 fn i641ce(r: &mut Run) {
-    op!(r, 0x641CE, 3, Op::LoadConst { r: R::C, len: 1, val: 5 }); // LC(1) #5
-    i641d1(r)
+    r.cpu.load_const(R::C, 1, 0x5); // LC(1) #5
+    if r.next(0x641D1, 5) {
+        i641d1(r)
+    }
 }
 
 fn i641d1(r: &mut Run) {
-    op!(r, 0x641D1, 2, Op::Add { dst: R::A, src: R::C, f: Field::A }); // A=A+C A
-    i641d3(r)
+    r.cpu.add(R::A, R::C, Field::A); // A=A+C A
+    if r.next(0x641D3, 4) {
+        i641d3(r)
+    }
 }
 
 fn i641d3(r: &mut Run) {
-    op!(r, 0x641D3, 2, Op::Dec { r: R::D, f: Field::A }); // D=D-1 A
-    i641d5(r)
+    r.cpu.dec(R::D, Field::A); // D=D-1 A
+    if r.next(0x641D5, 4) {
+        i641d5(r)
+    }
 }
 
 fn i641d5(r: &mut Run) {
-    op!(r, 0x641D5, 3, Op::CondJump(Cond::Carry, 0x641E5)); // GOC #641E5
-    i641d8(r)
+    r.cpu.pc = 0x641D8;
+    r.cpu.jump_if(Cond::Carry, 0x641E5); // GOC #641E5
+    if r.next_pc(0x641D8, 5) {
+        i641d8(r)
+    }
 }
 
 fn i641d8(r: &mut Run) {
-    op!(r, 0x641D8, 3, Op::Mem { store: false, d: 1, r: R::C, f: Field::A }); // C=DAT1 A
-    i641db(r)
+    r.sync();
+    r.cpu.load(1, R::C, Field::A, r.hw); // C=DAT1 A
+    if r.next_io(0x641DB, 19) {
+        i641db(r)
+    }
 }
 
 fn i641db(r: &mut Run) {
-    op!(r, 0x641DB, 3, Op::DSub { d: 1, n: 5 }); // D1=D1- 5
-    i641de(r)
+    r.cpu.d_sub(1, 5); // D1=D1- 5
+    if r.next(0x641DE, 5) {
+        i641de(r)
+    }
 }
 
 fn i641de(r: &mut Run) {
-    op!(r, 0x641DE, 3, Op::Mem { store: true, d: 1, r: R::C, f: Field::A }); // DAT1=C A
-    i641e1(r)
+    r.sync();
+    r.cpu.store(1, R::C, Field::A, r.hw); // DAT1=C A
+    if r.next_io(0x641E1, 19) {
+        i641e1(r)
+    }
 }
 
 fn i641e1(r: &mut Run) {
-    op!(r, 0x641E1, 4, Op::PcIndirect(R::A)); // PC=(A)
+    r.sync();
+    r.cpu.pc_indirect(R::A, r.hw); // PC=(A)
+    r.spend(23);
 }
 
 fn i641e5(r: &mut Run) {
-    op!(r, 0x641E5, 6, Op::Scratch { op: ScratchOp::ToScratch, r: R::A, n: 1, f: Field::A }); // R1=A.F A
-    i641eb(r)
+    r.cpu.scratch(ScratchOp::ToScratch, R::A, 1, Field::A); // R1=A.F A
+    if r.next(0x641EB, 8) {
+        i641eb(r)
+    }
 }
 
 fn i641eb(r: &mut Run) {
-    op!(r, 0x641EB, 7, Op::Call(0x5F0F)); // GOSUB #05F0F
+    r.cpu.pc = 0x641F2;
+    r.cpu.call(0x05F0F); // GOSUB #05F0F
+    r.spend(9);
 }
 
 fn i641f2(r: &mut Run) {
-    op!(r, 0x641F2, 6, Op::Scratch { op: ScratchOp::FromScratch, r: R::A, n: 1, f: Field::A }); // A=R1.F A
-    i641f8(r)
+    r.cpu.scratch(ScratchOp::FromScratch, R::A, 1, Field::A); // A=R1.F A
+    if r.next(0x641F8, 8) {
+        i641f8(r)
+    }
 }
 
 fn i641f8(r: &mut Run) {
-    op!(r, 0x641F8, 4, Op::Jump(0x641D8)); // GOTO #641D8
+    r.cpu.pc = 0x641D8; // GOTO #641D8
+    r.spend(6);
 }
 
 fn i64201(r: &mut Run) {
-    op!(r, 0x64201, 2, Op::Zero { r: R::A, f: Field::A }); // A=0 A
-    i64203(r)
+    r.cpu.zero(R::A, Field::A); // A=0 A
+    if r.next(0x64203, 4) {
+        i64203(r)
+    }
 }
 
 fn i64203(r: &mut Run) {
-    op!(r, 0x64203, 2, Op::Zero { r: R::C, f: Field::A }); // C=0 A
-    i64205(r)
+    r.cpu.zero(R::C, Field::A); // C=0 A
+    if r.next(0x64205, 4) {
+        i64205(r)
+    }
 }
 
 fn i64205(r: &mut Run) {
-    op!(r, 0x64205, 4, Op::Jump(0x64214)); // GOTO #64214
+    r.cpu.pc = 0x64214; // GOTO #64214
+    r.spend(6);
 }
 
 fn i6420e(r: &mut Run) {
-    op!(r, 0x6420E, 2, Op::Zero { r: R::A, f: Field::A }); // A=0 A
-    i64210(r)
+    r.cpu.zero(R::A, Field::A); // A=0 A
+    if r.next(0x64210, 4) {
+        i64210(r)
+    }
 }
 
 fn i64210(r: &mut Run) {
-    op!(r, 0x64210, 2, Op::Zero { r: R::C, f: Field::A }); // C=0 A
-    i64212(r)
+    r.cpu.zero(R::C, Field::A); // C=0 A
+    if r.next(0x64212, 4) {
+        i64212(r)
+    }
 }
 
 fn i64212(r: &mut Run) {
-    op!(r, 0x64212, 2, Op::Inc { r: R::C, f: Field::A }); // C=C+1 A
-    i64214(r)
+    r.cpu.inc(R::C, Field::A); // C=C+1 A
+    if r.next(0x64214, 4) {
+        i64214(r)
+    }
 }
 
 fn i64214(r: &mut Run) {
-    op!(r, 0x64214, 2, Op::Dec { r: R::D, f: Field::A }); // D=D-1 A
-    i64216(r)
+    r.cpu.dec(R::D, Field::A); // D=D-1 A
+    if r.next(0x64216, 4) {
+        i64216(r)
+    }
 }
 
 fn i64216(r: &mut Run) {
-    op!(r, 0x64216, 3, Op::CondJump(Cond::Carry, 0x64251)); // GOC #64251
-    i64219(r)
+    r.cpu.pc = 0x64219;
+    r.cpu.jump_if(Cond::Carry, 0x64251); // GOC #64251
+    if r.next_pc(0x64219, 5) {
+        i64219(r)
+    }
 }
 
 fn i64219(r: &mut Run) {
-    op!(r, 0x64219, 2, Op::Dec { r: R::D, f: Field::A }); // D=D-1 A
-    i6421b(r)
+    r.cpu.dec(R::D, Field::A); // D=D-1 A
+    if r.next(0x6421B, 4) {
+        i6421b(r)
+    }
 }
 
 fn i6421b(r: &mut Run) {
-    op!(r, 0x6421B, 3, Op::CondJump(Cond::Carry, 0x64251)); // GOC #64251
-    i6421e(r)
+    r.cpu.pc = 0x6421E;
+    r.cpu.jump_if(Cond::Carry, 0x64251); // GOC #64251
+    if r.next_pc(0x6421E, 5) {
+        i6421e(r)
+    }
 }
 
 fn i6421e(r: &mut Run) {
-    op!(r, 0x6421E, 2, Op::PushC); // RSTK=C
-    i64220(r)
+    r.cpu.push_c(); // RSTK=C
+    if r.next(0x64220, 4) {
+        i64220(r)
+    }
 }
 
 fn i64220(r: &mut Run) {
-    op!(r, 0x64220, 4, Op::Call(0x64236)); // GOSUB #64236
+    r.cpu.pc = 0x64224;
+    r.cpu.call(0x64236); // GOSUB #64236
+    r.spend(6);
 }
 
 fn i64224(r: &mut Run) {
-    op!(r, 0x64224, 2, Op::PopC); // C=RSTK
-    i64226(r)
+    r.cpu.pop_c(); // C=RSTK
+    if r.next(0x64226, 4) {
+        i64226(r)
+    }
 }
 
 fn i64226(r: &mut Run) {
-    op!(r, 0x64226, 2, Op::Copy { dst: R::A, src: R::C, f: Field::A }); // A=C A
-    i64228(r)
+    r.cpu.copy(R::A, R::C, Field::A); // A=C A
+    if r.next(0x64228, 4) {
+        i64228(r)
+    }
 }
 
 fn i64228(r: &mut Run) {
-    op!(r, 0x64228, 4, Op::Call(0x64236)); // GOSUB #64236
+    r.cpu.pc = 0x6422C;
+    r.cpu.call(0x64236); // GOSUB #64236
+    r.spend(6);
 }
 
 fn i6422c(r: &mut Run) {
-    op!(r, 0x6422C, 3, Op::Mem { store: false, d: 0, r: R::A, f: Field::A }); // A=DAT0 A
-    i6422f(r)
+    r.sync();
+    r.cpu.load(0, R::A, Field::A, r.hw); // A=DAT0 A
+    if r.next_io(0x6422F, 19) {
+        i6422f(r)
+    }
 }
 
 fn i6422f(r: &mut Run) {
-    op!(r, 0x6422F, 3, Op::DAdd { d: 0, n: 5 }); // D0=D0+ 5
-    i64232(r)
+    r.cpu.d_add(0, 5); // D0=D0+ 5
+    if r.next(0x64232, 5) {
+        i64232(r)
+    }
 }
 
 fn i64232(r: &mut Run) {
-    op!(r, 0x64232, 4, Op::PcIndirect(R::A)); // PC=(A)
+    r.sync();
+    r.cpu.pc_indirect(R::A, r.hw); // PC=(A)
+    r.spend(23);
 }
 
 fn i64236(r: &mut Run) {
-    op!(r, 0x64236, 2, Op::Add { dst: R::A, src: R::A, f: Field::A }); // A=A+A A
-    i64238(r)
+    r.cpu.add(R::A, R::A, Field::A); // A=A+A A
+    if r.next(0x64238, 4) {
+        i64238(r)
+    }
 }
 
 fn i64238(r: &mut Run) {
-    op!(r, 0x64238, 2, Op::Copy { dst: R::C, src: R::A, f: Field::A }); // C=A A
-    i6423a(r)
+    r.cpu.copy(R::C, R::A, Field::A); // C=A A
+    if r.next(0x6423A, 4) {
+        i6423a(r)
+    }
 }
 
 fn i6423a(r: &mut Run) {
-    op!(r, 0x6423A, 2, Op::Add { dst: R::A, src: R::A, f: Field::A }); // A=A+A A
-    i6423c(r)
+    r.cpu.add(R::A, R::A, Field::A); // A=A+A A
+    if r.next(0x6423C, 4) {
+        i6423c(r)
+    }
 }
 
 fn i6423c(r: &mut Run) {
-    op!(r, 0x6423C, 2, Op::Add { dst: R::A, src: R::A, f: Field::A }); // A=A+A A
-    i6423e(r)
+    r.cpu.add(R::A, R::A, Field::A); // A=A+A A
+    if r.next(0x6423E, 4) {
+        i6423e(r)
+    }
 }
 
 fn i6423e(r: &mut Run) {
-    op!(r, 0x6423E, 2, Op::Add { dst: R::A, src: R::C, f: Field::A }); // A=A+C A
-    i64240(r)
+    r.cpu.add(R::A, R::C, Field::A); // A=A+C A
+    if r.next(0x64240, 4) {
+        i64240(r)
+    }
 }
 
 fn i64240(r: &mut Run) {
-    op!(r, 0x64240, 7, Op::LoadConst { r: R::C, len: 5, val: 0x3FEF }); // LC(5) #03FEF
-    i64247(r)
+    r.cpu.load_const(R::C, 5, 0x3FEF); // LC(5) #03FEF
+    if r.next(0x64247, 9) {
+        i64247(r)
+    }
 }
 
 fn i64247(r: &mut Run) {
-    op!(r, 0x64247, 2, Op::Add { dst: R::A, src: R::C, f: Field::A }); // A=A+C A
-    i64249(r)
+    r.cpu.add(R::A, R::C, Field::A); // A=A+C A
+    if r.next(0x64249, 4) {
+        i64249(r)
+    }
 }
 
 fn i64249(r: &mut Run) {
-    op!(r, 0x64249, 3, Op::DSub { d: 1, n: 5 }); // D1=D1- 5
-    i6424c(r)
+    r.cpu.d_sub(1, 5); // D1=D1- 5
+    if r.next(0x6424C, 5) {
+        i6424c(r)
+    }
 }
 
 fn i6424c(r: &mut Run) {
-    op!(r, 0x6424C, 3, Op::Mem { store: true, d: 1, r: R::A, f: Field::A }); // DAT1=A A
-    i6424f(r)
+    r.sync();
+    r.cpu.store(1, R::A, Field::A, r.hw); // DAT1=A A
+    if r.next_io(0x6424F, 19) {
+        i6424f(r)
+    }
 }
 
 fn i6424f(r: &mut Run) {
-    op!(r, 0x6424F, 2, Op::Rtn(RtnKind::Plain)); // RTN
+    r.cpu.rtn(RtnKind::Plain); // RTN
+    r.spend(9);
 }
 
 fn i64251(r: &mut Run) {
-    op!(r, 0x64251, 6, Op::Scratch { op: ScratchOp::ToScratch, r: R::A, n: 0, f: Field::A }); // R0=A.F A
-    i64257(r)
+    r.cpu.scratch(ScratchOp::ToScratch, R::A, 0, Field::A); // R0=A.F A
+    if r.next(0x64257, 8) {
+        i64257(r)
+    }
 }
 
 fn i64257(r: &mut Run) {
-    op!(r, 0x64257, 2, Op::PushC); // RSTK=C
-    i64259(r)
+    r.cpu.push_c(); // RSTK=C
+    if r.next(0x64259, 4) {
+        i64259(r)
+    }
 }
 
 fn i64259(r: &mut Run) {
-    op!(r, 0x64259, 7, Op::Call(0x5F0F)); // GOSUB #05F0F
+    r.cpu.pc = 0x64260;
+    r.cpu.call(0x05F0F); // GOSUB #05F0F
+    r.spend(9);
 }
 
 fn i64260(r: &mut Run) {
-    op!(r, 0x64260, 2, Op::Dec { r: R::D, f: Field::A }); // D=D-1 A
-    i64262(r)
+    r.cpu.dec(R::D, Field::A); // D=D-1 A
+    if r.next(0x64262, 4) {
+        i64262(r)
+    }
 }
 
 fn i64262(r: &mut Run) {
-    op!(r, 0x64262, 3, Op::CondJump(Cond::Carry, 0x64271)); // GOC #64271
-    i64265(r)
+    r.cpu.pc = 0x64265;
+    r.cpu.jump_if(Cond::Carry, 0x64271); // GOC #64271
+    if r.next_pc(0x64265, 5) {
+        i64265(r)
+    }
 }
 
 fn i64265(r: &mut Run) {
-    op!(r, 0x64265, 2, Op::PopC); // C=RSTK
-    i64267(r)
+    r.cpu.pop_c(); // C=RSTK
+    if r.next(0x64267, 4) {
+        i64267(r)
+    }
 }
 
 fn i64267(r: &mut Run) {
-    op!(r, 0x64267, 6, Op::Scratch { op: ScratchOp::FromScratch, r: R::A, n: 0, f: Field::A }); // A=R0.F A
-    i6426d(r)
+    r.cpu.scratch(ScratchOp::FromScratch, R::A, 0, Field::A); // A=R0.F A
+    if r.next(0x6426D, 8) {
+        i6426d(r)
+    }
 }
 
 fn i6426d(r: &mut Run) {
-    op!(r, 0x6426D, 4, Op::Jump(0x6421E)); // GOTO #6421E
+    r.cpu.pc = 0x6421E; // GOTO #6421E
+    r.spend(6);
 }
 
 fn i64271(r: &mut Run) {
-    op!(r, 0x64271, 2, Op::Zero { r: R::D, f: Field::A }); // D=0 A
-    i64273(r)
+    r.cpu.zero(R::D, Field::A); // D=0 A
+    if r.next(0x64273, 4) {
+        i64273(r)
+    }
 }
 
 fn i64273(r: &mut Run) {
-    op!(r, 0x64273, 7, Op::Jump(0x4FBB)); // GOTO #04FBB
+    r.cpu.pc = 0x04FBB; // GOTO #04FBB
+    r.spend(9);
 }
 
 fn i6427f(r: &mut Run) {
-    op!(r, 0x6427F, 2, Op::Zero { r: R::A, f: Field::A }); // A=0 A
-    i64281(r)
+    r.cpu.zero(R::A, Field::A); // A=0 A
+    if r.next(0x64281, 4) {
+        i64281(r)
+    }
 }
 
 fn i64281(r: &mut Run) {
-    op!(r, 0x64281, 2, Op::Zero { r: R::C, f: Field::A }); // C=0 A
-    i64283(r)
+    r.cpu.zero(R::C, Field::A); // C=0 A
+    if r.next(0x64283, 4) {
+        i64283(r)
+    }
 }
 
 fn i64283(r: &mut Run) {
-    op!(r, 0x64283, 3, Op::LoadConst { r: R::C, len: 1, val: 7 }); // LC(1) #7
-    i64286(r)
+    r.cpu.load_const(R::C, 1, 0x7); // LC(1) #7
+    if r.next(0x64286, 5) {
+        i64286(r)
+    }
 }
 
 fn i64286(r: &mut Run) {
-    op!(r, 0x64286, 4, Op::Jump(0x64214)); // GOTO #64214
+    r.cpu.pc = 0x64214; // GOTO #64214
+    r.spend(6);
 }
 
 fn i6428f(r: &mut Run) {
-    op!(r, 0x6428F, 2, Op::Zero { r: R::A, f: Field::A }); // A=0 A
-    i64291(r)
+    r.cpu.zero(R::A, Field::A); // A=0 A
+    if r.next(0x64291, 4) {
+        i64291(r)
+    }
 }
 
 fn i64291(r: &mut Run) {
-    op!(r, 0x64291, 2, Op::Inc { r: R::A, f: Field::A }); // A=A+1 A
-    i64293(r)
+    r.cpu.inc(R::A, Field::A); // A=A+1 A
+    if r.next(0x64293, 4) {
+        i64293(r)
+    }
 }
 
 fn i64293(r: &mut Run) {
-    op!(r, 0x64293, 2, Op::Zero { r: R::C, f: Field::A }); // C=0 A
-    i64295(r)
+    r.cpu.zero(R::C, Field::A); // C=0 A
+    if r.next(0x64295, 4) {
+        i64295(r)
+    }
 }
 
 fn i64295(r: &mut Run) {
-    op!(r, 0x64295, 4, Op::LoadConst { r: R::C, len: 2, val: 0x1B }); // LC(2) #1B
-    i64299(r)
+    r.cpu.load_const(R::C, 2, 0x1B); // LC(2) #1B
+    if r.next(0x64299, 6) {
+        i64299(r)
+    }
 }
 
 fn i64299(r: &mut Run) {
-    op!(r, 0x64299, 4, Op::Jump(0x64214)); // GOTO #64214
+    r.cpu.pc = 0x64214; // GOTO #64214
+    r.spend(6);
 }
 
 fn i642a2(r: &mut Run) {
-    op!(r, 0x642A2, 2, Op::Zero { r: R::C, f: Field::A }); // C=0 A
-    i642a4(r)
+    r.cpu.zero(R::C, Field::A); // C=0 A
+    if r.next(0x642A4, 4) {
+        i642a4(r)
+    }
 }
 
 fn i642a4(r: &mut Run) {
-    op!(r, 0x642A4, 3, Op::LoadConst { r: R::C, len: 1, val: 1 }); // LC(1) #1
-    i642a7(r)
+    r.cpu.load_const(R::C, 1, 0x1); // LC(1) #1
+    if r.next(0x642A7, 5) {
+        i642a7(r)
+    }
 }
 
 fn i642a7(r: &mut Run) {
-    op!(r, 0x642A7, 2, Op::Copy { dst: R::A, src: R::C, f: Field::A }); // A=C A
-    i642a9(r)
+    r.cpu.copy(R::A, R::C, Field::A); // A=C A
+    if r.next(0x642A9, 4) {
+        i642a9(r)
+    }
 }
 
 fn i642a9(r: &mut Run) {
-    op!(r, 0x642A9, 2, Op::Inc { r: R::A, f: Field::A }); // A=A+1 A
-    i642ab(r)
+    r.cpu.inc(R::A, Field::A); // A=A+1 A
+    if r.next(0x642AB, 4) {
+        i642ab(r)
+    }
 }
 
 fn i642ab(r: &mut Run) {
-    op!(r, 0x642AB, 4, Op::Jump(0x64214)); // GOTO #64214
+    r.cpu.pc = 0x64214; // GOTO #64214
+    r.spend(6);
 }
 
 fn i642b4(r: &mut Run) {
-    op!(r, 0x642B4, 2, Op::Zero { r: R::C, f: Field::A }); // C=0 A
-    i642b6(r)
+    r.cpu.zero(R::C, Field::A); // C=0 A
+    if r.next(0x642B6, 4) {
+        i642b6(r)
+    }
 }
 
 fn i642b6(r: &mut Run) {
-    op!(r, 0x642B6, 3, Op::LoadConst { r: R::C, len: 1, val: 2 }); // LC(1) #2
-    i642b9(r)
+    r.cpu.load_const(R::C, 1, 0x2); // LC(1) #2
+    if r.next(0x642B9, 5) {
+        i642b9(r)
+    }
 }
 
 fn i642b9(r: &mut Run) {
-    op!(r, 0x642B9, 2, Op::Copy { dst: R::A, src: R::C, f: Field::A }); // A=C A
-    i642bb(r)
+    r.cpu.copy(R::A, R::C, Field::A); // A=C A
+    if r.next(0x642BB, 4) {
+        i642bb(r)
+    }
 }
 
 fn i642bb(r: &mut Run) {
-    op!(r, 0x642BB, 4, Op::Jump(0x64214)); // GOTO #64214
+    r.cpu.pc = 0x64214; // GOTO #64214
+    r.spend(6);
 }
 
 fn i642c4(r: &mut Run) {
-    op!(r, 0x642C4, 2, Op::Zero { r: R::C, f: Field::A }); // C=0 A
-    i642c6(r)
+    r.cpu.zero(R::C, Field::A); // C=0 A
+    if r.next(0x642C6, 4) {
+        i642c6(r)
+    }
 }
 
 fn i642c6(r: &mut Run) {
-    op!(r, 0x642C6, 3, Op::LoadConst { r: R::C, len: 1, val: 2 }); // LC(1) #2
-    i642c9(r)
+    r.cpu.load_const(R::C, 1, 0x2); // LC(1) #2
+    if r.next(0x642C9, 5) {
+        i642c9(r)
+    }
 }
 
 fn i642c9(r: &mut Run) {
-    op!(r, 0x642C9, 2, Op::Copy { dst: R::A, src: R::C, f: Field::A }); // A=C A
-    i642cb(r)
+    r.cpu.copy(R::A, R::C, Field::A); // A=C A
+    if r.next(0x642CB, 4) {
+        i642cb(r)
+    }
 }
 
 fn i642cb(r: &mut Run) {
-    op!(r, 0x642CB, 2, Op::Add { dst: R::C, src: R::C, f: Field::A }); // C=C+C A
-    i642cd(r)
+    r.cpu.add(R::C, R::C, Field::A); // C=C+C A
+    if r.next(0x642CD, 4) {
+        i642cd(r)
+    }
 }
 
 fn i642cd(r: &mut Run) {
-    op!(r, 0x642CD, 4, Op::Jump(0x64214)); // GOTO #64214
+    r.cpu.pc = 0x64214; // GOTO #64214
+    r.spend(6);
 }
 
 fn i642d6(r: &mut Run) {
-    op!(r, 0x642D6, 2, Op::Zero { r: R::C, f: Field::A }); // C=0 A
-    i642d8(r)
+    r.cpu.zero(R::C, Field::A); // C=0 A
+    if r.next(0x642D8, 4) {
+        i642d8(r)
+    }
 }
 
 fn i642d8(r: &mut Run) {
-    op!(r, 0x642D8, 3, Op::LoadConst { r: R::C, len: 1, val: 3 }); // LC(1) #3
-    i642db(r)
+    r.cpu.load_const(R::C, 1, 0x3); // LC(1) #3
+    if r.next(0x642DB, 5) {
+        i642db(r)
+    }
 }
 
 fn i642db(r: &mut Run) {
-    op!(r, 0x642DB, 2, Op::Copy { dst: R::A, src: R::C, f: Field::A }); // A=C A
-    i642dd(r)
+    r.cpu.copy(R::A, R::C, Field::A); // A=C A
+    if r.next(0x642DD, 4) {
+        i642dd(r)
+    }
 }
 
 fn i642dd(r: &mut Run) {
-    op!(r, 0x642DD, 2, Op::Inc { r: R::C, f: Field::A }); // C=C+1 A
-    i642df(r)
+    r.cpu.inc(R::C, Field::A); // C=C+1 A
+    if r.next(0x642DF, 4) {
+        i642df(r)
+    }
 }
 
 fn i642df(r: &mut Run) {
-    op!(r, 0x642DF, 4, Op::Jump(0x64214)); // GOTO #64214
+    r.cpu.pc = 0x64214; // GOTO #64214
+    r.spend(6);
 }
 
 fn i642fc(r: &mut Run) {
-    op!(r, 0x642FC, 2, Op::Zero { r: R::C, f: Field::A }); // C=0 A
-    i642fe(r)
+    r.cpu.zero(R::C, Field::A); // C=0 A
+    if r.next(0x642FE, 4) {
+        i642fe(r)
+    }
 }
 
 fn i642fe(r: &mut Run) {
-    op!(r, 0x642FE, 3, Op::LoadConst { r: R::C, len: 1, val: 5 }); // LC(1) #5
-    i64301(r)
+    r.cpu.load_const(R::C, 1, 0x5); // LC(1) #5
+    if r.next(0x64301, 5) {
+        i64301(r)
+    }
 }
 
 fn i64301(r: &mut Run) {
-    op!(r, 0x64301, 2, Op::Copy { dst: R::A, src: R::C, f: Field::A }); // A=C A
-    i64303(r)
+    r.cpu.copy(R::A, R::C, Field::A); // A=C A
+    if r.next(0x64303, 4) {
+        i64303(r)
+    }
 }
 
 fn i64303(r: &mut Run) {
-    op!(r, 0x64303, 2, Op::Dec { r: R::C, f: Field::A }); // C=C-1 A
-    i64305(r)
+    r.cpu.dec(R::C, Field::A); // C=C-1 A
+    if r.next(0x64305, 4) {
+        i64305(r)
+    }
 }
 
 fn i64305(r: &mut Run) {
-    op!(r, 0x64305, 4, Op::Jump(0x64214)); // GOTO #64214
+    r.cpu.pc = 0x64214; // GOTO #64214
+    r.spend(6);
 }
 
 fn i645b6(r: &mut Run) {
-    op!(r, 0x645B6, 3, Op::StSet { bit: 1, set: false }); // ST=0 1
-    i645b9(r)
+    r.cpu.st_set(1, false); // ST=0 1
+    if r.next(0x645B9, 5) {
+        i645b9(r)
+    }
 }
 
 fn i645b9(r: &mut Run) {
-    op!(r, 0x645B9, 4, Op::Jump(0x645C5)); // GOTO #645C5
+    r.cpu.pc = 0x645C5; // GOTO #645C5
+    r.spend(6);
 }
 
 fn i645c2(r: &mut Run) {
-    op!(r, 0x645C2, 3, Op::StSet { bit: 1, set: true }); // ST=1 1
-    i645c5(r)
+    r.cpu.st_set(1, true); // ST=1 1
+    if r.next(0x645C5, 5) {
+        i645c5(r)
+    }
 }
 
 fn i645c5(r: &mut Run) {
-    op!(r, 0x645C5, 7, Op::Call(0x6641)); // GOSUB #06641
+    r.cpu.pc = 0x645CC;
+    r.cpu.call(0x06641); // GOSUB #06641
+    r.spend(9);
 }
 
 fn i645cc(r: &mut Run) {
-    op!(r, 0x645CC, 6, Op::Scratch { op: ScratchOp::ToScratch, r: R::A, n: 0, f: Field::A }); // R0=A.F A
-    i645d2(r)
+    r.cpu.scratch(ScratchOp::ToScratch, R::A, 0, Field::A); // R0=A.F A
+    if r.next(0x645D2, 8) {
+        i645d2(r)
+    }
 }
 
 fn i645d2(r: &mut Run) {
-    op!(r, 0x645D2, 3, Op::Mem { store: false, d: 1, r: R::C, f: Field::A }); // C=DAT1 A
-    i645d5(r)
+    r.sync();
+    r.cpu.load(1, R::C, Field::A, r.hw); // C=DAT1 A
+    if r.next_io(0x645D5, 19) {
+        i645d5(r)
+    }
 }
 
 fn i645d5(r: &mut Run) {
-    op!(r, 0x645D5, 3, Op::DAdd { d: 1, n: 5 }); // D1=D1+ 5
-    i645d8(r)
+    r.cpu.d_add(1, 5); // D1=D1+ 5
+    if r.next(0x645D8, 5) {
+        i645d8(r)
+    }
 }
 
 fn i645d8(r: &mut Run) {
-    op!(r, 0x645D8, 2, Op::Inc { r: R::D, f: Field::A }); // D=D+1 A
-    i645da(r)
+    r.cpu.inc(R::D, Field::A); // D=D+1 A
+    if r.next(0x645DA, 4) {
+        i645da(r)
+    }
 }
 
 fn i645da(r: &mut Run) {
-    op!(r, 0x645DA, 6, Op::Scratch { op: ScratchOp::ToScratch, r: R::C, n: 3, f: Field::A }); // R3=C.F A
-    i645e0(r)
+    r.cpu.scratch(ScratchOp::ToScratch, R::C, 3, Field::A); // R3=C.F A
+    if r.next(0x645E0, 8) {
+        i645e0(r)
+    }
 }
 
 fn i645e0(r: &mut Run) {
-    op!(r, 0x645E0, 3, Op::Mem { store: false, d: 1, r: R::C, f: Field::A }); // C=DAT1 A
-    i645e3(r)
+    r.sync();
+    r.cpu.load(1, R::C, Field::A, r.hw); // C=DAT1 A
+    if r.next_io(0x645E3, 19) {
+        i645e3(r)
+    }
 }
 
 fn i645e3(r: &mut Run) {
-    op!(r, 0x645E3, 3, Op::DAdd { d: 1, n: 5 }); // D1=D1+ 5
-    i645e6(r)
+    r.cpu.d_add(1, 5); // D1=D1+ 5
+    if r.next(0x645E6, 5) {
+        i645e6(r)
+    }
 }
 
 fn i645e6(r: &mut Run) {
-    op!(r, 0x645E6, 2, Op::Inc { r: R::D, f: Field::A }); // D=D+1 A
-    i645e8(r)
+    r.cpu.inc(R::D, Field::A); // D=D+1 A
+    if r.next(0x645E8, 4) {
+        i645e8(r)
+    }
 }
 
 fn i645e8(r: &mut Run) {
-    op!(r, 0x645E8, 6, Op::Scratch { op: ScratchOp::ToScratch, r: R::C, n: 1, f: Field::A }); // R1=C.F A
-    i645ee(r)
+    r.cpu.scratch(ScratchOp::ToScratch, R::C, 1, Field::A); // R1=C.F A
+    if r.next(0x645EE, 8) {
+        i645ee(r)
+    }
 }
 
 fn i645ee(r: &mut Run) {
-    op!(r, 0x645EE, 7, Op::Call(0x679B)); // GOSUB #0679B
+    r.cpu.pc = 0x645F5;
+    r.cpu.call(0x0679B); // GOSUB #0679B
+    r.spend(9);
 }
 
 fn i645f5(r: &mut Run) {
-    op!(r, 0x645F5, 6, Op::Scratch { op: ScratchOp::FromScratch, r: R::A, n: 1, f: Field::A }); // A=R1.F A
-    i645fb(r)
+    r.cpu.scratch(ScratchOp::FromScratch, R::A, 1, Field::A); // A=R1.F A
+    if r.next(0x645FB, 8) {
+        i645fb(r)
+    }
 }
 
 fn i645fb(r: &mut Run) {
-    op!(r, 0x645FB, 4, Op::Call(0x64727)); // GOSUB #64727
+    r.cpu.pc = 0x645FF;
+    r.cpu.call(0x64727); // GOSUB #64727
+    r.spend(6);
 }
 
 fn i645ff(r: &mut Run) {
-    op!(r, 0x645FF, 5, Op::Test { test: Test::Zero(R::C), f: Field::A, goyes: Some(0x6466C) }); // ?C=0 A / GOYES #6466C
-    i64604(r)
+    r.cpu.pc = 0x64604;
+    r.cpu.test(Test::Zero(R::C), Field::A, Some(0x6466C)); // ?C=0 A / GOYES #6466C
+    if r.next_pc(0x64604, 7) {
+        i64604(r)
+    }
 }
 
 fn i64604(r: &mut Run) {
-    op!(r, 0x64604, 6, Op::Scratch { op: ScratchOp::ToScratch, r: R::A, n: 1, f: Field::A }); // R1=A.F A
-    i6460a(r)
+    r.cpu.scratch(ScratchOp::ToScratch, R::A, 1, Field::A); // R1=A.F A
+    if r.next(0x6460A, 8) {
+        i6460a(r)
+    }
 }
 
 fn i6460a(r: &mut Run) {
-    op!(r, 0x6460A, 6, Op::Scratch { op: ScratchOp::ToScratch, r: R::C, n: 2, f: Field::A }); // R2=C.F A
-    i64610(r)
+    r.cpu.scratch(ScratchOp::ToScratch, R::C, 2, Field::A); // R2=C.F A
+    if r.next(0x64610, 8) {
+        i64610(r)
+    }
 }
 
 fn i64610(r: &mut Run) {
-    op!(r, 0x64610, 6, Op::Scratch { op: ScratchOp::FromScratch, r: R::A, n: 3, f: Field::A }); // A=R3.F A
-    i64616(r)
+    r.cpu.scratch(ScratchOp::FromScratch, R::A, 3, Field::A); // A=R3.F A
+    if r.next(0x64616, 8) {
+        i64616(r)
+    }
 }
 
 fn i64616(r: &mut Run) {
-    op!(r, 0x64616, 4, Op::Call(0x64727)); // GOSUB #64727
+    r.cpu.pc = 0x6461A;
+    r.cpu.call(0x64727); // GOSUB #64727
+    r.spend(6);
 }
 
 fn i6461a(r: &mut Run) {
-    op!(r, 0x6461A, 5, Op::Test { test: Test::Zero(R::C), f: Field::A, goyes: Some(0x6466C) }); // ?C=0 A / GOYES #6466C
-    i6461f(r)
+    r.cpu.pc = 0x6461F;
+    r.cpu.test(Test::Zero(R::C), Field::A, Some(0x6466C)); // ?C=0 A / GOYES #6466C
+    if r.next_pc(0x6461F, 7) {
+        i6461f(r)
+    }
 }
 
 fn i6461f(r: &mut Run) {
-    op!(r, 0x6461F, 6, Op::Scratch { op: ScratchOp::ToScratch, r: R::A, n: 3, f: Field::A }); // R3=A.F A
-    i64625(r)
+    r.cpu.scratch(ScratchOp::ToScratch, R::A, 3, Field::A); // R3=A.F A
+    if r.next(0x64625, 8) {
+        i64625(r)
+    }
 }
 
 fn i64625(r: &mut Run) {
-    op!(r, 0x64625, 6, Op::Scratch { op: ScratchOp::ToScratch, r: R::C, n: 4, f: Field::A }); // R4=C.F A
-    i6462b(r)
+    r.cpu.scratch(ScratchOp::ToScratch, R::C, 4, Field::A); // R4=C.F A
+    if r.next(0x6462B, 8) {
+        i6462b(r)
+    }
 }
 
 fn i6462b(r: &mut Run) {
-    op!(r, 0x6462B, 6, Op::Scratch { op: ScratchOp::FromScratch, r: R::A, n: 0, f: Field::A }); // A=R0.F A
-    i64631(r)
+    r.cpu.scratch(ScratchOp::FromScratch, R::A, 0, Field::A); // A=R0.F A
+    if r.next(0x64631, 8) {
+        i64631(r)
+    }
 }
 
 fn i64631(r: &mut Run) {
-    op!(r, 0x64631, 5, Op::Test { test: Test::Zero(R::A), f: Field::A, goyes: Some(0x6466C) }); // ?A=0 A / GOYES #6466C
-    i64636(r)
+    r.cpu.pc = 0x64636;
+    r.cpu.test(Test::Zero(R::A), Field::A, Some(0x6466C)); // ?A=0 A / GOYES #6466C
+    if r.next_pc(0x64636, 7) {
+        i64636(r)
+    }
 }
 
 fn i64636(r: &mut Run) {
-    op!(r, 0x64636, 6, Op::Scratch { op: ScratchOp::FromScratch, r: R::C, n: 2, f: Field::A }); // C=R2.F A
-    i6463c(r)
+    r.cpu.scratch(ScratchOp::FromScratch, R::C, 2, Field::A); // C=R2.F A
+    if r.next(0x6463C, 8) {
+        i6463c(r)
+    }
 }
 
 fn i6463c(r: &mut Run) {
-    op!(r, 0x6463C, 2, Op::Sub { dst: R::C, a: R::C, b: R::A, f: Field::A }); // C=C-A A
-    i6463e(r)
+    r.cpu.sub(R::C, R::C, R::A, Field::A); // C=C-A A
+    if r.next(0x6463E, 4) {
+        i6463e(r)
+    }
 }
 
 fn i6463e(r: &mut Run) {
-    op!(r, 0x6463E, 3, Op::CondJump(Cond::Carry, 0x6466C)); // GOC #6466C
-    i64641(r)
+    r.cpu.pc = 0x64641;
+    r.cpu.jump_if(Cond::Carry, 0x6466C); // GOC #6466C
+    if r.next_pc(0x64641, 5) {
+        i64641(r)
+    }
 }
 
 fn i64641(r: &mut Run) {
-    op!(r, 0x64641, 5, Op::StTest { bit: 1, set: true, goyes: Some(0x64672) }); // ?ST=1 1 / GOYES #64672
-    i64646(r)
+    r.cpu.pc = 0x64646;
+    r.cpu.st_test(1, true, Some(0x64672)); // ?ST=1 1 / GOYES #64672
+    if r.next_pc(0x64646, 7) {
+        i64646(r)
+    }
 }
 
 fn i64646(r: &mut Run) {
-    op!(r, 0x64646, 2, Op::Inc { r: R::C, f: Field::A }); // C=C+1 A
-    i64648(r)
+    r.cpu.inc(R::C, Field::A); // C=C+1 A
+    if r.next(0x64648, 4) {
+        i64648(r)
+    }
 }
 
 fn i64648(r: &mut Run) {
-    op!(r, 0x64648, 2, Op::Copy { dst: R::D, src: R::C, f: Field::A }); // D=C A
-    i6464a(r)
+    r.cpu.copy(R::D, R::C, Field::A); // D=C A
+    if r.next(0x6464A, 4) {
+        i6464a(r)
+    }
 }
 
 fn i6464a(r: &mut Run) {
-    op!(r, 0x6464A, 2, Op::Dec { r: R::A, f: Field::A }); // A=A-1 A
-    i6464c(r)
+    r.cpu.dec(R::A, Field::A); // A=A-1 A
+    if r.next(0x6464C, 4) {
+        i6464c(r)
+    }
 }
 
 fn i6464c(r: &mut Run) {
-    op!(r, 0x6464C, 2, Op::Add { dst: R::A, src: R::A, f: Field::A }); // A=A+A A
-    i6464e(r)
+    r.cpu.add(R::A, R::A, Field::A); // A=A+A A
+    if r.next(0x6464E, 4) {
+        i6464e(r)
+    }
 }
 
 fn i6464e(r: &mut Run) {
-    op!(r, 0x6464E, 6, Op::Scratch { op: ScratchOp::FromScratch, r: R::C, n: 1, f: Field::A }); // C=R1.F A
-    i64654(r)
+    r.cpu.scratch(ScratchOp::FromScratch, R::C, 1, Field::A); // C=R1.F A
+    if r.next(0x64654, 8) {
+        i64654(r)
+    }
 }
 
 fn i64654(r: &mut Run) {
-    op!(r, 0x64654, 2, Op::Add { dst: R::A, src: R::C, f: Field::A }); // A=A+C A
-    i64656(r)
+    r.cpu.add(R::A, R::C, Field::A); // A=A+C A
+    if r.next(0x64656, 4) {
+        i64656(r)
+    }
 }
 
 fn i64656(r: &mut Run) {
-    op!(r, 0x64656, 6, Op::Scratch { op: ScratchOp::ToScratch, r: R::A, n: 2, f: Field::A }); // R2=A.F A
-    i6465c(r)
+    r.cpu.scratch(ScratchOp::ToScratch, R::A, 2, Field::A); // R2=A.F A
+    if r.next(0x6465C, 8) {
+        i6465c(r)
+    }
 }
 
 fn i6465c(r: &mut Run) {
-    op!(r, 0x6465C, 6, Op::Scratch { op: ScratchOp::FromScratch, r: R::C, n: 4, f: Field::A }); // C=R4.F A
-    i64662(r)
+    r.cpu.scratch(ScratchOp::FromScratch, R::C, 4, Field::A); // C=R4.F A
+    if r.next(0x64662, 8) {
+        i64662(r)
+    }
 }
 
 fn i64662(r: &mut Run) {
-    op!(r, 0x64662, 2, Op::Sub { dst: R::D, a: R::D, b: R::C, f: Field::A }); // D=D-C A
-    i64664(r)
+    r.cpu.sub(R::D, R::D, R::C, Field::A); // D=D-C A
+    if r.next(0x64664, 4) {
+        i64664(r)
+    }
 }
 
 fn i64664(r: &mut Run) {
-    op!(r, 0x64664, 3, Op::CondJump(Cond::Carry, 0x6466C)); // GOC #6466C
-    i64667(r)
+    r.cpu.pc = 0x64667;
+    r.cpu.jump_if(Cond::Carry, 0x6466C); // GOC #6466C
+    if r.next_pc(0x64667, 5) {
+        i64667(r)
+    }
 }
 
 fn i64667(r: &mut Run) {
-    op!(r, 0x64667, 2, Op::Inc { r: R::D, f: Field::A }); // D=D+1 A
-    i64669(r)
+    r.cpu.inc(R::D, Field::A); // D=D+1 A
+    if r.next(0x64669, 4) {
+        i64669(r)
+    }
 }
 
 fn i64669(r: &mut Run) {
-    op!(r, 0x64669, 3, Op::CondJump(Cond::NoCarry, 0x646A6)); // GONC #646A6
-    i6466c(r)
+    r.cpu.pc = 0x6466C;
+    r.cpu.jump_if(Cond::NoCarry, 0x646A6); // GONC #646A6
+    if r.next_pc(0x6466C, 5) {
+        i6466c(r)
+    }
 }
 
 fn i6466c(r: &mut Run) {
-    op!(r, 0x6466C, 2, Op::Zero { r: R::A, f: Field::A }); // A=0 A
-    i6466e(r)
+    r.cpu.zero(R::A, Field::A); // A=0 A
+    if r.next(0x6466E, 4) {
+        i6466e(r)
+    }
 }
 
 fn i6466e(r: &mut Run) {
-    op!(r, 0x6466E, 4, Op::Jump(0x64710)); // GOTO #64710
+    r.cpu.pc = 0x64710; // GOTO #64710
+    r.spend(6);
 }
 
 fn i64672(r: &mut Run) {
-    op!(r, 0x64672, 2, Op::Copy { dst: R::B, src: R::A, f: Field::A }); // B=A A
-    i64674(r)
+    r.cpu.copy(R::B, R::A, Field::A); // B=A A
+    if r.next(0x64674, 4) {
+        i64674(r)
+    }
 }
 
 fn i64674(r: &mut Run) {
-    op!(r, 0x64674, 6, Op::Scratch { op: ScratchOp::FromScratch, r: R::A, n: 2, f: Field::A }); // A=R2.F A
-    i6467a(r)
+    r.cpu.scratch(ScratchOp::FromScratch, R::A, 2, Field::A); // A=R2.F A
+    if r.next(0x6467A, 8) {
+        i6467a(r)
+    }
 }
 
 fn i6467a(r: &mut Run) {
-    op!(r, 0x6467A, 6, Op::Scratch { op: ScratchOp::FromScratch, r: R::C, n: 4, f: Field::A }); // C=R4.F A
-    i64680(r)
+    r.cpu.scratch(ScratchOp::FromScratch, R::C, 4, Field::A); // C=R4.F A
+    if r.next(0x64680, 8) {
+        i64680(r)
+    }
 }
 
 fn i64680(r: &mut Run) {
-    op!(r, 0x64680, 2, Op::Sub { dst: R::A, a: R::A, b: R::C, f: Field::A }); // A=A-C A
-    i64682(r)
+    r.cpu.sub(R::A, R::A, R::C, Field::A); // A=A-C A
+    if r.next(0x64682, 4) {
+        i64682(r)
+    }
 }
 
 fn i64682(r: &mut Run) {
-    op!(r, 0x64682, 3, Op::CondJump(Cond::Carry, 0x6466C)); // GOC #6466C
-    i64685(r)
+    r.cpu.pc = 0x64685;
+    r.cpu.jump_if(Cond::Carry, 0x6466C); // GOC #6466C
+    if r.next_pc(0x64685, 5) {
+        i64685(r)
+    }
 }
 
 fn i64685(r: &mut Run) {
-    op!(r, 0x64685, 2, Op::Inc { r: R::A, f: Field::A }); // A=A+1 A
-    i64687(r)
+    r.cpu.inc(R::A, Field::A); // A=A+1 A
+    if r.next(0x64687, 4) {
+        i64687(r)
+    }
 }
 
 fn i64687(r: &mut Run) {
-    op!(r, 0x64687, 5, Op::Test { test: Test::Regs(Cmp::Lt, R::A, R::B), f: Field::A, goyes: Some(0x6468E) }); // ?A<B A / GOYES #6468E
-    i6468c(r)
+    r.cpu.pc = 0x6468C;
+    r.cpu.test(Test::Regs(Cmp::Lt, R::A, R::B), Field::A, Some(0x6468E)); // ?A<B A / GOYES #6468E
+    if r.next_pc(0x6468C, 7) {
+        i6468c(r)
+    }
 }
 
 fn i6468c(r: &mut Run) {
-    op!(r, 0x6468C, 2, Op::Copy { dst: R::A, src: R::B, f: Field::A }); // A=B A
-    i6468e(r)
+    r.cpu.copy(R::A, R::B, Field::A); // A=B A
+    if r.next(0x6468E, 4) {
+        i6468e(r)
+    }
 }
 
 fn i6468e(r: &mut Run) {
-    op!(r, 0x6468E, 2, Op::Copy { dst: R::C, src: R::A, f: Field::A }); // C=A A
-    i64690(r)
+    r.cpu.copy(R::C, R::A, Field::A); // C=A A
+    if r.next(0x64690, 4) {
+        i64690(r)
+    }
 }
 
 fn i64690(r: &mut Run) {
-    op!(r, 0x64690, 2, Op::Copy { dst: R::D, src: R::C, f: Field::A }); // D=C A
-    i64692(r)
+    r.cpu.copy(R::D, R::C, Field::A); // D=C A
+    if r.next(0x64692, 4) {
+        i64692(r)
+    }
 }
 
 fn i64692(r: &mut Run) {
-    op!(r, 0x64692, 2, Op::Inc { r: R::D, f: Field::A }); // D=D+1 A
-    i64694(r)
+    r.cpu.inc(R::D, Field::A); // D=D+1 A
+    if r.next(0x64694, 4) {
+        i64694(r)
+    }
 }
 
 fn i64694(r: &mut Run) {
-    op!(r, 0x64694, 2, Op::Dec { r: R::A, f: Field::A }); // A=A-1 A
-    i64696(r)
+    r.cpu.dec(R::A, Field::A); // A=A-1 A
+    if r.next(0x64696, 4) {
+        i64696(r)
+    }
 }
 
 fn i64696(r: &mut Run) {
-    op!(r, 0x64696, 2, Op::Add { dst: R::A, src: R::A, f: Field::A }); // A=A+A A
-    i64698(r)
+    r.cpu.add(R::A, R::A, Field::A); // A=A+A A
+    if r.next(0x64698, 4) {
+        i64698(r)
+    }
 }
 
 fn i64698(r: &mut Run) {
-    op!(r, 0x64698, 6, Op::Scratch { op: ScratchOp::FromScratch, r: R::C, n: 1, f: Field::A }); // C=R1.F A
-    i6469e(r)
+    r.cpu.scratch(ScratchOp::FromScratch, R::C, 1, Field::A); // C=R1.F A
+    if r.next(0x6469E, 8) {
+        i6469e(r)
+    }
 }
 
 fn i6469e(r: &mut Run) {
-    op!(r, 0x6469E, 2, Op::Add { dst: R::A, src: R::C, f: Field::A }); // A=A+C A
-    i646a0(r)
+    r.cpu.add(R::A, R::C, Field::A); // A=A+C A
+    if r.next(0x646A0, 4) {
+        i646a0(r)
+    }
 }
 
 fn i646a0(r: &mut Run) {
-    op!(r, 0x646A0, 6, Op::Scratch { op: ScratchOp::ToScratch, r: R::A, n: 2, f: Field::A }); // R2=A.F A
-    i646a6(r)
+    r.cpu.scratch(ScratchOp::ToScratch, R::A, 2, Field::A); // R2=A.F A
+    if r.next(0x646A6, 8) {
+        i646a6(r)
+    }
 }
 
 fn i646a6(r: &mut Run) {
-    op!(r, 0x646A6, 2, Op::Dec { r: R::D, f: Field::A }); // D=D-1 A
-    i646a8(r)
+    r.cpu.dec(R::D, Field::A); // D=D-1 A
+    if r.next(0x646A8, 4) {
+        i646a8(r)
+    }
 }
 
 fn i646a8(r: &mut Run) {
-    op!(r, 0x646A8, 3, Op::CondJump(Cond::Carry, 0x6466C)); // GOC #6466C
-    i646ab(r)
+    r.cpu.pc = 0x646AB;
+    r.cpu.jump_if(Cond::Carry, 0x6466C); // GOC #6466C
+    if r.next_pc(0x646AB, 5) {
+        i646ab(r)
+    }
 }
 
 fn i646ab(r: &mut Run) {
-    op!(r, 0x646AB, 3, Op::DFromR { d: 0, r: R::A, short: false }); // D0=A
-    i646ae(r)
+    r.cpu.d_from_r(0, R::A, false); // D0=A
+    if r.next(0x646AE, 5) {
+        i646ae(r)
+    }
 }
 
 fn i646ae(r: &mut Run) {
-    op!(r, 0x646AE, 6, Op::Scratch { op: ScratchOp::FromScratch, r: R::A, n: 3, f: Field::A }); // A=R3.F A
-    i646b4(r)
+    r.cpu.scratch(ScratchOp::FromScratch, R::A, 3, Field::A); // A=R3.F A
+    if r.next(0x646B4, 8) {
+        i646b4(r)
+    }
 }
 
 fn i646b4(r: &mut Run) {
-    op!(r, 0x646B4, 3, Op::DFromR { d: 1, r: R::A, short: false }); // D1=A
-    i646b7(r)
+    r.cpu.d_from_r(1, R::A, false); // D1=A
+    if r.next(0x646B7, 5) {
+        i646b7(r)
+    }
 }
 
 fn i646b7(r: &mut Run) {
-    op!(r, 0x646B7, 6, Op::Scratch { op: ScratchOp::FromScratch, r: R::A, n: 4, f: Field::A }); // A=R4.F A
-    i646bd(r)
+    r.cpu.scratch(ScratchOp::FromScratch, R::A, 4, Field::A); // A=R4.F A
+    if r.next(0x646BD, 8) {
+        i646bd(r)
+    }
 }
 
 fn i646bd(r: &mut Run) {
-    op!(r, 0x646BD, 2, Op::Copy { dst: R::B, src: R::A, f: Field::A }); // B=A A
-    i646bf(r)
+    r.cpu.copy(R::B, R::A, Field::A); // B=A A
+    if r.next(0x646BF, 4) {
+        i646bf(r)
+    }
 }
 
 fn i646bf(r: &mut Run) {
-    op!(r, 0x646BF, 2, Op::Dec { r: R::B, f: Field::A }); // B=B-1 A
-    i646c1(r)
+    r.cpu.dec(R::B, Field::A); // B=B-1 A
+    if r.next(0x646C1, 4) {
+        i646c1(r)
+    }
 }
 
 fn i646c1(r: &mut Run) {
-    op!(r, 0x646C1, 3, Op::CondJump(Cond::Carry, 0x646FB)); // GOC #646FB
-    i646c4(r)
+    r.cpu.pc = 0x646C4;
+    r.cpu.jump_if(Cond::Carry, 0x646FB); // GOC #646FB
+    if r.next_pc(0x646C4, 5) {
+        i646c4(r)
+    }
 }
 
 fn i646c4(r: &mut Run) {
-    op!(r, 0x646C4, 3, Op::Mem { store: false, d: 0, r: R::A, f: Field::B }); // A=DAT0 B
-    i646c7(r)
+    r.sync();
+    r.cpu.load(0, R::A, Field::B, r.hw); // A=DAT0 B
+    if r.next_io(0x646C7, 16) {
+        i646c7(r)
+    }
 }
 
 fn i646c7(r: &mut Run) {
-    op!(r, 0x646C7, 3, Op::Mem { store: false, d: 1, r: R::C, f: Field::B }); // C=DAT1 B
-    i646ca(r)
+    r.sync();
+    r.cpu.load(1, R::C, Field::B, r.hw); // C=DAT1 B
+    if r.next_io(0x646CA, 16) {
+        i646ca(r)
+    }
 }
 
 fn i646ca(r: &mut Run) {
-    op!(r, 0x646CA, 5, Op::Test { test: Test::Regs(Cmp::Ne, R::C, R::A), f: Field::B, goyes: Some(0x646D8) }); // ?C#A B / GOYES #646D8
-    i646cf(r)
+    r.cpu.pc = 0x646CF;
+    r.cpu.test(Test::Regs(Cmp::Ne, R::C, R::A), Field::B, Some(0x646D8)); // ?C#A B / GOYES #646D8
+    if r.next_pc(0x646CF, 7) {
+        i646cf(r)
+    }
 }
 
 fn i646cf(r: &mut Run) {
-    op!(r, 0x646CF, 3, Op::DAdd { d: 0, n: 2 }); // D0=D0+ 2
-    i646d2(r)
+    r.cpu.d_add(0, 2); // D0=D0+ 2
+    if r.next(0x646D2, 5) {
+        i646d2(r)
+    }
 }
 
 fn i646d2(r: &mut Run) {
-    op!(r, 0x646D2, 3, Op::DAdd { d: 1, n: 2 }); // D1=D1+ 2
-    i646d5(r)
+    r.cpu.d_add(1, 2); // D1=D1+ 2
+    if r.next(0x646D5, 5) {
+        i646d5(r)
+    }
 }
 
 fn i646d5(r: &mut Run) {
-    op!(r, 0x646D5, 3, Op::CondJump(Cond::NoCarry, 0x646BF)); // GONC #646BF
-    i646d8(r)
+    r.cpu.pc = 0x646D8;
+    r.cpu.jump_if(Cond::NoCarry, 0x646BF); // GONC #646BF
+    if r.next_pc(0x646D8, 5) {
+        i646d8(r)
+    }
 }
 
 fn i646d8(r: &mut Run) {
-    op!(r, 0x646D8, 6, Op::Scratch { op: ScratchOp::FromScratch, r: R::A, n: 2, f: Field::A }); // A=R2.F A
-    i646de(r)
+    r.cpu.scratch(ScratchOp::FromScratch, R::A, 2, Field::A); // A=R2.F A
+    if r.next(0x646DE, 8) {
+        i646de(r)
+    }
 }
 
 fn i646de(r: &mut Run) {
-    op!(r, 0x646DE, 3, Op::DFromR { d: 0, r: R::A, short: false }); // D0=A
-    i646e1(r)
+    r.cpu.d_from_r(0, R::A, false); // D0=A
+    if r.next(0x646E1, 5) {
+        i646e1(r)
+    }
 }
 
 fn i646e1(r: &mut Run) {
-    op!(r, 0x646E1, 5, Op::StTest { bit: 1, set: true, goyes: Some(0x646EC) }); // ?ST=1 1 / GOYES #646EC
-    i646e6(r)
+    r.cpu.pc = 0x646E6;
+    r.cpu.st_test(1, true, Some(0x646EC)); // ?ST=1 1 / GOYES #646EC
+    if r.next_pc(0x646E6, 7) {
+        i646e6(r)
+    }
 }
 
 fn i646e6(r: &mut Run) {
-    op!(r, 0x646E6, 3, Op::DAdd { d: 0, n: 2 }); // D0=D0+ 2
-    i646e9(r)
+    r.cpu.d_add(0, 2); // D0=D0+ 2
+    if r.next(0x646E9, 5) {
+        i646e9(r)
+    }
 }
 
 fn i646e9(r: &mut Run) {
-    op!(r, 0x646E9, 3, Op::CondJump(Cond::NoCarry, 0x646EF)); // GONC #646EF
-    i646ec(r)
+    r.cpu.pc = 0x646EC;
+    r.cpu.jump_if(Cond::NoCarry, 0x646EF); // GONC #646EF
+    if r.next_pc(0x646EC, 5) {
+        i646ec(r)
+    }
 }
 
 fn i646ec(r: &mut Run) {
-    op!(r, 0x646EC, 3, Op::DSub { d: 0, n: 2 }); // D0=D0- 2
-    i646ef(r)
+    r.cpu.d_sub(0, 2); // D0=D0- 2
+    if r.next(0x646EF, 5) {
+        i646ef(r)
+    }
 }
 
 fn i646ef(r: &mut Run) {
-    op!(r, 0x646EF, 3, Op::DExR { d: 0, r: R::A, short: false }); // AD0EX
-    i646f2(r)
+    r.cpu.d_ex_r(0, R::A, false); // AD0EX
+    if r.next(0x646F2, 5) {
+        i646f2(r)
+    }
 }
 
 fn i646f2(r: &mut Run) {
-    op!(r, 0x646F2, 6, Op::Scratch { op: ScratchOp::ToScratch, r: R::A, n: 2, f: Field::A }); // R2=A.F A
-    i646f8(r)
+    r.cpu.scratch(ScratchOp::ToScratch, R::A, 2, Field::A); // R2=A.F A
+    if r.next(0x646F8, 8) {
+        i646f8(r)
+    }
 }
 
 fn i646f8(r: &mut Run) {
-    op!(r, 0x646F8, 3, Op::CondJump(Cond::NoCarry, 0x646A6)); // GONC #646A6
-    i646fb(r)
+    r.cpu.pc = 0x646FB;
+    r.cpu.jump_if(Cond::NoCarry, 0x646A6); // GONC #646A6
+    if r.next_pc(0x646FB, 5) {
+        i646fb(r)
+    }
 }
 
 fn i646fb(r: &mut Run) {
-    op!(r, 0x646FB, 6, Op::Scratch { op: ScratchOp::FromScratch, r: R::C, n: 1, f: Field::A }); // C=R1.F A
-    i64701(r)
+    r.cpu.scratch(ScratchOp::FromScratch, R::C, 1, Field::A); // C=R1.F A
+    if r.next(0x64701, 8) {
+        i64701(r)
+    }
 }
 
 fn i64701(r: &mut Run) {
-    op!(r, 0x64701, 6, Op::Scratch { op: ScratchOp::FromScratch, r: R::A, n: 2, f: Field::A }); // A=R2.F A
-    i64707(r)
+    r.cpu.scratch(ScratchOp::FromScratch, R::A, 2, Field::A); // A=R2.F A
+    if r.next(0x64707, 8) {
+        i64707(r)
+    }
 }
 
 fn i64707(r: &mut Run) {
-    op!(r, 0x64707, 2, Op::Sub { dst: R::A, a: R::A, b: R::C, f: Field::A }); // A=A-C A
-    i64709(r)
+    r.cpu.sub(R::A, R::A, R::C, Field::A); // A=A-C A
+    if r.next(0x64709, 4) {
+        i64709(r)
+    }
 }
 
 fn i64709(r: &mut Run) {
-    op!(r, 0x64709, 5, Op::SrbField { r: R::A, f: Field::A }); // ASRB.F A
-    i6470e(r)
+    r.cpu.srb_field(R::A, Field::A); // ASRB.F A
+    if r.next(0x6470E, 7) {
+        i6470e(r)
+    }
 }
 
 fn i6470e(r: &mut Run) {
-    op!(r, 0x6470E, 2, Op::Inc { r: R::A, f: Field::A }); // A=A+1 A
-    i64710(r)
+    r.cpu.inc(R::A, Field::A); // A=A+1 A
+    if r.next(0x64710, 4) {
+        i64710(r)
+    }
 }
 
 fn i64710(r: &mut Run) {
-    op!(r, 0x64710, 6, Op::Scratch { op: ScratchOp::ToScratch, r: R::A, n: 0, f: Field::A }); // R0=A.F A
-    i64716(r)
+    r.cpu.scratch(ScratchOp::ToScratch, R::A, 0, Field::A); // R0=A.F A
+    if r.next(0x64716, 8) {
+        i64716(r)
+    }
 }
 
 fn i64716(r: &mut Run) {
-    op!(r, 0x64716, 7, Op::Call(0x6537)); // GOSUB #06537
+    r.cpu.pc = 0x6471D;
+    r.cpu.call(0x06537); // GOSUB #06537
+    r.spend(9);
 }
 
 fn i6471d(r: &mut Run) {
-    op!(r, 0x6471D, 3, Op::Mem { store: false, d: 0, r: R::A, f: Field::A }); // A=DAT0 A
-    i64720(r)
+    r.sync();
+    r.cpu.load(0, R::A, Field::A, r.hw); // A=DAT0 A
+    if r.next_io(0x64720, 19) {
+        i64720(r)
+    }
 }
 
 fn i64720(r: &mut Run) {
-    op!(r, 0x64720, 3, Op::DAdd { d: 0, n: 5 }); // D0=D0+ 5
-    i64723(r)
+    r.cpu.d_add(0, 5); // D0=D0+ 5
+    if r.next(0x64723, 5) {
+        i64723(r)
+    }
 }
 
 fn i64723(r: &mut Run) {
-    op!(r, 0x64723, 4, Op::PcIndirect(R::A)); // PC=(A)
+    r.sync();
+    r.cpu.pc_indirect(R::A, r.hw); // PC=(A)
+    r.spend(23);
 }
 
 fn i64727(r: &mut Run) {
-    op!(r, 0x64727, 3, Op::DFromR { d: 0, r: R::A, short: false }); // D0=A
-    i6472a(r)
+    r.cpu.d_from_r(0, R::A, false); // D0=A
+    if r.next(0x6472A, 5) {
+        i6472a(r)
+    }
 }
 
 fn i6472a(r: &mut Run) {
-    op!(r, 0x6472A, 3, Op::Mem { store: false, d: 0, r: R::A, f: Field::A }); // A=DAT0 A
-    i6472d(r)
+    r.sync();
+    r.cpu.load(0, R::A, Field::A, r.hw); // A=DAT0 A
+    if r.next_io(0x6472D, 19) {
+        i6472d(r)
+    }
 }
 
 fn i6472d(r: &mut Run) {
-    op!(r, 0x6472D, 7, Op::LoadConst { r: R::C, len: 5, val: 0x29BF }); // LC(5) #029BF
-    i64734(r)
+    r.cpu.load_const(R::C, 5, 0x29BF); // LC(5) #029BF
+    if r.next(0x64734, 9) {
+        i64734(r)
+    }
 }
 
 fn i64734(r: &mut Run) {
-    op!(r, 0x64734, 5, Op::Test { test: Test::Regs(Cmp::Ne, R::C, R::A), f: Field::A, goyes: Some(0x64740) }); // ?C#A A / GOYES #64740
-    i64739(r)
+    r.cpu.pc = 0x64739;
+    r.cpu.test(Test::Regs(Cmp::Ne, R::C, R::A), Field::A, Some(0x64740)); // ?C#A A / GOYES #64740
+    if r.next_pc(0x64739, 7) {
+        i64739(r)
+    }
 }
 
 fn i64739(r: &mut Run) {
-    op!(r, 0x64739, 2, Op::Zero { r: R::C, f: Field::A }); // C=0 A
-    i6473b(r)
+    r.cpu.zero(R::C, Field::A); // C=0 A
+    if r.next(0x6473B, 4) {
+        i6473b(r)
+    }
 }
 
 fn i6473b(r: &mut Run) {
-    op!(r, 0x6473B, 2, Op::Inc { r: R::C, f: Field::A }); // C=C+1 A
-    i6473d(r)
+    r.cpu.inc(R::C, Field::A); // C=C+1 A
+    if r.next(0x6473D, 4) {
+        i6473d(r)
+    }
 }
 
 fn i6473d(r: &mut Run) {
-    op!(r, 0x6473D, 3, Op::CondJump(Cond::NoCarry, 0x64754)); // GONC #64754
-    i64740(r)
+    r.cpu.pc = 0x64740;
+    r.cpu.jump_if(Cond::NoCarry, 0x64754); // GONC #64754
+    if r.next_pc(0x64740, 5) {
+        i64740(r)
+    }
 }
 
 fn i64740(r: &mut Run) {
-    op!(r, 0x64740, 3, Op::DAdd { d: 0, n: 5 }); // D0=D0+ 5
-    i64743(r)
+    r.cpu.d_add(0, 5); // D0=D0+ 5
+    if r.next(0x64743, 5) {
+        i64743(r)
+    }
 }
 
 fn i64743(r: &mut Run) {
-    op!(r, 0x64743, 3, Op::Mem { store: false, d: 0, r: R::A, f: Field::A }); // A=DAT0 A
-    i64746(r)
+    r.sync();
+    r.cpu.load(0, R::A, Field::A, r.hw); // A=DAT0 A
+    if r.next_io(0x64746, 19) {
+        i64746(r)
+    }
 }
 
 fn i64746(r: &mut Run) {
-    op!(r, 0x64746, 3, Op::DFromR { d: 1, r: R::A, short: false }); // D1=A
-    i64749(r)
+    r.cpu.d_from_r(1, R::A, false); // D1=A
+    if r.next(0x64749, 5) {
+        i64749(r)
+    }
 }
 
 fn i64749(r: &mut Run) {
-    op!(r, 0x64749, 3, Op::DSub { d: 1, n: 5 }); // D1=D1- 5
-    i6474c(r)
+    r.cpu.d_sub(1, 5); // D1=D1- 5
+    if r.next(0x6474C, 5) {
+        i6474c(r)
+    }
 }
 
 fn i6474c(r: &mut Run) {
-    op!(r, 0x6474C, 3, Op::DExR { d: 1, r: R::C, short: false }); // CD1EX
-    i6474f(r)
+    r.cpu.d_ex_r(1, R::C, false); // CD1EX
+    if r.next(0x6474F, 5) {
+        i6474f(r)
+    }
 }
 
 fn i6474f(r: &mut Run) {
-    op!(r, 0x6474F, 5, Op::SrbField { r: R::C, f: Field::A }); // CSRB.F A
-    i64754(r)
+    r.cpu.srb_field(R::C, Field::A); // CSRB.F A
+    if r.next(0x64754, 7) {
+        i64754(r)
+    }
 }
 
 fn i64754(r: &mut Run) {
-    op!(r, 0x64754, 3, Op::DAdd { d: 0, n: 5 }); // D0=D0+ 5
-    i64757(r)
+    r.cpu.d_add(0, 5); // D0=D0+ 5
+    if r.next(0x64757, 5) {
+        i64757(r)
+    }
 }
 
 fn i64757(r: &mut Run) {
-    op!(r, 0x64757, 3, Op::DExR { d: 0, r: R::A, short: false }); // AD0EX
-    i6475a(r)
+    r.cpu.d_ex_r(0, R::A, false); // AD0EX
+    if r.next(0x6475A, 5) {
+        i6475a(r)
+    }
 }
 
 fn i6475a(r: &mut Run) {
-    op!(r, 0x6475A, 2, Op::Rtn(RtnKind::Plain)); // RTN
+    r.cpu.rtn(RtnKind::Plain); // RTN
+    r.spend(9);
 }
 
 fn i64810(r: &mut Run) {
-    op!(r, 0x64810, 7, Op::Call(0x6641)); // GOSUB #06641
+    r.cpu.pc = 0x64817;
+    r.cpu.call(0x06641); // GOSUB #06641
+    r.spend(9);
 }
 
 fn i64817(r: &mut Run) {
-    op!(r, 0x64817, 5, Op::Test { test: Test::NonZero(R::A), f: Field::A, goyes: Some(0x64822) }); // ?A#0 A / GOYES #64822
-    i6481c(r)
+    r.cpu.pc = 0x6481C;
+    r.cpu.test(Test::NonZero(R::A), Field::A, Some(0x64822)); // ?A#0 A / GOYES #64822
+    if r.next_pc(0x6481C, 7) {
+        i6481c(r)
+    }
 }
 
 fn i6481c(r: &mut Run) {
-    op!(r, 0x6481C, 3, Op::LoadConst { r: R::C, len: 1, val: 5 }); // LC(1) #5
-    i6481f(r)
+    r.cpu.load_const(R::C, 1, 0x5); // LC(1) #5
+    if r.next(0x6481F, 5) {
+        i6481f(r)
+    }
 }
 
 fn i6481f(r: &mut Run) {
-    op!(r, 0x6481F, 3, Op::Copy { dst: R::A, src: R::C, f: Field::P }); // A=C P
-    i64822(r)
+    r.cpu.copy(R::A, R::C, Field::P); // A=C P
+    if r.next(0x64822, 5) {
+        i64822(r)
+    }
 }
 
 fn i64822(r: &mut Run) {
-    op!(r, 0x64822, 3, Op::Mem { store: false, d: 1, r: R::C, f: Field::A }); // C=DAT1 A
-    i64825(r)
+    r.sync();
+    r.cpu.load(1, R::C, Field::A, r.hw); // C=DAT1 A
+    if r.next_io(0x64825, 19) {
+        i64825(r)
+    }
 }
 
 fn i64825(r: &mut Run) {
-    op!(r, 0x64825, 2, Op::Add { dst: R::C, src: R::A, f: Field::A }); // C=C+A A
-    i64827(r)
+    r.cpu.add(R::C, R::A, Field::A); // C=C+A A
+    if r.next(0x64827, 4) {
+        i64827(r)
+    }
 }
 
 fn i64827(r: &mut Run) {
-    op!(r, 0x64827, 3, Op::DExR { d: 1, r: R::C, short: false }); // CD1EX
-    i6482a(r)
+    r.cpu.d_ex_r(1, R::C, false); // CD1EX
+    if r.next(0x6482A, 5) {
+        i6482a(r)
+    }
 }
 
 fn i6482a(r: &mut Run) {
-    op!(r, 0x6482A, 2, Op::PushC); // RSTK=C
-    i6482c(r)
+    r.cpu.push_c(); // RSTK=C
+    if r.next(0x6482C, 4) {
+        i6482c(r)
+    }
 }
 
 fn i6482c(r: &mut Run) {
-    op!(r, 0x6482C, 3, Op::Mem { store: false, d: 1, r: R::A, f: Field::A }); // A=DAT1 A
-    i6482f(r)
+    r.sync();
+    r.cpu.load(1, R::A, Field::A, r.hw); // A=DAT1 A
+    if r.next_io(0x6482F, 19) {
+        i6482f(r)
+    }
 }
 
 fn i6482f(r: &mut Run) {
-    op!(r, 0x6482F, 7, Op::LoadConst { r: R::C, len: 5, val: 0x312B }); // LC(5) #0312B
-    i64836(r)
+    r.cpu.load_const(R::C, 5, 0x312B); // LC(5) #0312B
+    if r.next(0x64836, 9) {
+        i64836(r)
+    }
 }
 
 fn i64836(r: &mut Run) {
-    op!(r, 0x64836, 5, Op::Test { test: Test::Regs(Cmp::Ne, R::C, R::A), f: Field::A, goyes: Some(0x6484D) }); // ?C#A A / GOYES #6484D
-    i6483b(r)
+    r.cpu.pc = 0x6483B;
+    r.cpu.test(Test::Regs(Cmp::Ne, R::C, R::A), Field::A, Some(0x6484D)); // ?C#A A / GOYES #6484D
+    if r.next_pc(0x6483B, 7) {
+        i6483b(r)
+    }
 }
 
 fn i6483b(r: &mut Run) {
-    op!(r, 0x6483B, 2, Op::PopC); // C=RSTK
-    i6483d(r)
+    r.cpu.pop_c(); // C=RSTK
+    if r.next(0x6483D, 4) {
+        i6483d(r)
+    }
 }
 
 fn i6483d(r: &mut Run) {
-    op!(r, 0x6483D, 3, Op::DFromR { d: 1, r: R::C, short: false }); // D1=C
-    i64840(r)
+    r.cpu.d_from_r(1, R::C, false); // D1=C
+    if r.next(0x64840, 5) {
+        i64840(r)
+    }
 }
 
 fn i64840(r: &mut Run) {
-    op!(r, 0x64840, 7, Op::LoadConst { r: R::C, len: 5, val: 0x3AC0 }); // LC(5) #03AC0
-    i64847(r)
+    r.cpu.load_const(R::C, 5, 0x3AC0); // LC(5) #03AC0
+    if r.next(0x64847, 9) {
+        i64847(r)
+    }
 }
 
 fn i64847(r: &mut Run) {
-    op!(r, 0x64847, 2, Op::Copy { dst: R::A, src: R::C, f: Field::A }); // A=C A
-    i64849(r)
+    r.cpu.copy(R::A, R::C, Field::A); // A=C A
+    if r.next(0x64849, 4) {
+        i64849(r)
+    }
 }
 
 fn i64849(r: &mut Run) {
-    op!(r, 0x64849, 4, Op::PcIndirect(R::A)); // PC=(A)
+    r.sync();
+    r.cpu.pc_indirect(R::A, r.hw); // PC=(A)
+    r.spend(23);
 }
 
 fn i6484d(r: &mut Run) {
-    op!(r, 0x6484D, 2, Op::Copy { dst: R::C, src: R::A, f: Field::A }); // C=A A
-    i6484f(r)
+    r.cpu.copy(R::C, R::A, Field::A); // C=A A
+    if r.next(0x6484F, 4) {
+        i6484f(r)
+    }
 }
 
 fn i6484f(r: &mut Run) {
-    op!(r, 0x6484F, 3, Op::DExR { d: 1, r: R::C, short: false }); // CD1EX
-    i64852(r)
+    r.cpu.d_ex_r(1, R::C, false); // CD1EX
+    if r.next(0x64852, 5) {
+        i64852(r)
+    }
 }
 
 fn i64852(r: &mut Run) {
-    op!(r, 0x64852, 2, Op::PushC); // RSTK=C
-    i64854(r)
+    r.cpu.push_c(); // RSTK=C
+    if r.next(0x64854, 4) {
+        i64854(r)
+    }
 }
 
 fn i64854(r: &mut Run) {
-    op!(r, 0x64854, 3, Op::Mem { store: false, d: 1, r: R::A, f: Field::A }); // A=DAT1 A
-    i64857(r)
+    r.sync();
+    r.cpu.load(1, R::A, Field::A, r.hw); // A=DAT1 A
+    if r.next_io(0x64857, 19) {
+        i64857(r)
+    }
 }
 
 fn i64857(r: &mut Run) {
-    op!(r, 0x64857, 7, Op::LoadConst { r: R::C, len: 5, val: 0x28FC }); // LC(5) #028FC
-    i6485e(r)
+    r.cpu.load_const(R::C, 5, 0x28FC); // LC(5) #028FC
+    if r.next(0x6485E, 9) {
+        i6485e(r)
+    }
 }
 
 fn i6485e(r: &mut Run) {
-    op!(r, 0x6485E, 5, Op::Test { test: Test::Regs(Cmp::Ne, R::C, R::A), f: Field::A, goyes: Some(0x6486A) }); // ?C#A A / GOYES #6486A
-    i64863(r)
+    r.cpu.pc = 0x64863;
+    r.cpu.test(Test::Regs(Cmp::Ne, R::C, R::A), Field::A, Some(0x6486A)); // ?C#A A / GOYES #6486A
+    if r.next_pc(0x64863, 7) {
+        i64863(r)
+    }
 }
 
 fn i64863(r: &mut Run) {
-    op!(r, 0x64863, 2, Op::PopC); // C=RSTK
-    i64865(r)
+    r.cpu.pop_c(); // C=RSTK
+    if r.next(0x64865, 4) {
+        i64865(r)
+    }
 }
 
 fn i64865(r: &mut Run) {
-    op!(r, 0x64865, 2, Op::PushC); // RSTK=C
-    i64867(r)
+    r.cpu.push_c(); // RSTK=C
+    if r.next(0x64867, 4) {
+        i64867(r)
+    }
 }
 
 fn i64867(r: &mut Run) {
-    op!(r, 0x64867, 3, Op::DFromR { d: 1, r: R::C, short: false }); // D1=C
-    i6486a(r)
+    r.cpu.d_from_r(1, R::C, false); // D1=C
+    if r.next(0x6486A, 5) {
+        i6486a(r)
+    }
 }
 
 fn i6486a(r: &mut Run) {
-    op!(r, 0x6486A, 2, Op::PopC); // C=RSTK
-    i6486c(r)
+    r.cpu.pop_c(); // C=RSTK
+    if r.next(0x6486C, 4) {
+        i6486c(r)
+    }
 }
 
 fn i6486c(r: &mut Run) {
-    op!(r, 0x6486C, 2, Op::Copy { dst: R::A, src: R::C, f: Field::A }); // A=C A
-    i6486e(r)
+    r.cpu.copy(R::A, R::C, Field::A); // A=C A
+    if r.next(0x6486E, 4) {
+        i6486e(r)
+    }
 }
 
 fn i6486e(r: &mut Run) {
-    op!(r, 0x6486E, 2, Op::PopC); // C=RSTK
-    i64870(r)
+    r.cpu.pop_c(); // C=RSTK
+    if r.next(0x64870, 4) {
+        i64870(r)
+    }
 }
 
 fn i64870(r: &mut Run) {
-    op!(r, 0x64870, 3, Op::DExR { d: 1, r: R::C, short: false }); // CD1EX
-    i64873(r)
+    r.cpu.d_ex_r(1, R::C, false); // CD1EX
+    if r.next(0x64873, 5) {
+        i64873(r)
+    }
 }
 
 fn i64873(r: &mut Run) {
-    op!(r, 0x64873, 3, Op::DSub { d: 1, n: 5 }); // D1=D1- 5
-    i64876(r)
+    r.cpu.d_sub(1, 5); // D1=D1- 5
+    if r.next(0x64876, 5) {
+        i64876(r)
+    }
 }
 
 fn i64876(r: &mut Run) {
-    op!(r, 0x64876, 2, Op::Dec { r: R::D, f: Field::A }); // D=D-1 A
-    i64878(r)
+    r.cpu.dec(R::D, Field::A); // D=D-1 A
+    if r.next(0x64878, 4) {
+        i64878(r)
+    }
 }
 
 fn i64878(r: &mut Run) {
-    op!(r, 0x64878, 3, Op::Mem { store: true, d: 1, r: R::C, f: Field::A }); // DAT1=C A
-    i6487b(r)
+    r.sync();
+    r.cpu.store(1, R::C, Field::A, r.hw); // DAT1=C A
+    if r.next_io(0x6487B, 19) {
+        i6487b(r)
+    }
 }
 
 fn i6487b(r: &mut Run) {
-    op!(r, 0x6487B, 7, Op::Call(0x679B)); // GOSUB #0679B
+    r.cpu.pc = 0x64882;
+    r.cpu.call(0x0679B); // GOSUB #0679B
+    r.spend(9);
 }
 
 fn i64882(r: &mut Run) {
-    op!(r, 0x64882, 3, Op::DFromR { d: 0, r: R::A, short: false }); // D0=A
-    i64885(r)
+    r.cpu.d_from_r(0, R::A, false); // D0=A
+    if r.next(0x64885, 5) {
+        i64885(r)
+    }
 }
 
 fn i64885(r: &mut Run) {
-    op!(r, 0x64885, 7, Op::Call(0x3019)); // GOSUB #03019
+    r.cpu.pc = 0x6488C;
+    r.cpu.call(0x03019); // GOSUB #03019
+    r.spend(9);
 }
 
 fn i6488c(r: &mut Run) {
-    op!(r, 0x6488C, 3, Op::DAdd { d: 1, n: 5 }); // D1=D1+ 5
-    i6488f(r)
+    r.cpu.d_add(1, 5); // D1=D1+ 5
+    if r.next(0x6488F, 5) {
+        i6488f(r)
+    }
 }
 
 fn i6488f(r: &mut Run) {
-    op!(r, 0x6488F, 3, Op::Mem { store: false, d: 1, r: R::A, f: Field::A }); // A=DAT1 A
-    i64892(r)
+    r.sync();
+    r.cpu.load(1, R::A, Field::A, r.hw); // A=DAT1 A
+    if r.next_io(0x64892, 19) {
+        i64892(r)
+    }
 }
 
 fn i64892(r: &mut Run) {
-    op!(r, 0x64892, 3, Op::DExR { d: 0, r: R::C, short: false }); // CD0EX
-    i64895(r)
+    r.cpu.d_ex_r(0, R::C, false); // CD0EX
+    if r.next(0x64895, 5) {
+        i64895(r)
+    }
 }
 
 fn i64895(r: &mut Run) {
-    op!(r, 0x64895, 2, Op::Sub { dst: R::C, a: R::C, b: R::A, f: Field::A }); // C=C-A A
-    i64897(r)
+    r.cpu.sub(R::C, R::C, R::A, Field::A); // C=C-A A
+    if r.next(0x64897, 4) {
+        i64897(r)
+    }
 }
 
 fn i64897(r: &mut Run) {
-    op!(r, 0x64897, 3, Op::Scratch { op: ScratchOp::ToScratch, r: R::C, n: 0, f: Field::W }); // R0=C
-    i6489a(r)
+    r.cpu.scratch(ScratchOp::ToScratch, R::C, 0, Field::W); // R0=C
+    if r.next(0x6489A, 5) {
+        i6489a(r)
+    }
 }
 
 fn i6489a(r: &mut Run) {
-    op!(r, 0x6489A, 7, Op::Call(0x6537)); // GOSUB #06537
+    r.cpu.pc = 0x648A1;
+    r.cpu.call(0x06537); // GOSUB #06537
+    r.spend(9);
 }
 
 fn i648a1(r: &mut Run) {
-    op!(r, 0x648A1, 3, Op::Mem { store: false, d: 1, r: R::C, f: Field::A }); // C=DAT1 A
-    i648a4(r)
+    r.sync();
+    r.cpu.load(1, R::C, Field::A, r.hw); // C=DAT1 A
+    if r.next_io(0x648A4, 19) {
+        i648a4(r)
+    }
 }
 
 fn i648a4(r: &mut Run) {
-    op!(r, 0x648A4, 3, Op::DAdd { d: 1, n: 5 }); // D1=D1+ 5
-    i648a7(r)
+    r.cpu.d_add(1, 5); // D1=D1+ 5
+    if r.next(0x648A7, 5) {
+        i648a7(r)
+    }
 }
 
 fn i648a7(r: &mut Run) {
-    op!(r, 0x648A7, 3, Op::Mem { store: false, d: 1, r: R::A, f: Field::A }); // A=DAT1 A
-    i648aa(r)
+    r.sync();
+    r.cpu.load(1, R::A, Field::A, r.hw); // A=DAT1 A
+    if r.next_io(0x648AA, 19) {
+        i648aa(r)
+    }
 }
 
 fn i648aa(r: &mut Run) {
-    op!(r, 0x648AA, 3, Op::Mem { store: true, d: 1, r: R::C, f: Field::A }); // DAT1=C A
-    i648ad(r)
+    r.sync();
+    r.cpu.store(1, R::C, Field::A, r.hw); // DAT1=C A
+    if r.next_io(0x648AD, 19) {
+        i648ad(r)
+    }
 }
 
 fn i648ad(r: &mut Run) {
-    op!(r, 0x648AD, 3, Op::DSub { d: 1, n: 5 }); // D1=D1- 5
-    i648b0(r)
+    r.cpu.d_sub(1, 5); // D1=D1- 5
+    if r.next(0x648B0, 5) {
+        i648b0(r)
+    }
 }
 
 fn i648b0(r: &mut Run) {
-    op!(r, 0x648B0, 3, Op::Mem { store: true, d: 1, r: R::A, f: Field::A }); // DAT1=A A
-    i648b3(r)
+    r.sync();
+    r.cpu.store(1, R::A, Field::A, r.hw); // DAT1=A A
+    if r.next_io(0x648B3, 19) {
+        i648b3(r)
+    }
 }
 
 fn i648b3(r: &mut Run) {
-    op!(r, 0x648B3, 7, Op::LoadConst { r: R::C, len: 5, val: 0x3A81 }); // LC(5) #03A81
-    i648ba(r)
+    r.cpu.load_const(R::C, 5, 0x3A81); // LC(5) #03A81
+    if r.next(0x648BA, 9) {
+        i648ba(r)
+    }
 }
 
 fn i648ba(r: &mut Run) {
-    op!(r, 0x648BA, 3, Op::CondJump(Cond::NoCarry, 0x64847)); // GONC #64847
-    i648bd(r)
+    r.cpu.pc = 0x648BD;
+    r.cpu.jump_if(Cond::NoCarry, 0x64847); // GONC #64847
+    if r.next_pc(0x648BD, 5) {
+        i648bd(r)
+    }
 }
 
 /// >LASTRAM-WORD
 fn i648bd(r: &mut Run) {
-    op!(r, 0x648BD, 2, Op::Copy { dst: R::C, src: R::B, f: Field::A }); // C=B A
-    i648bf(r)
+    r.cpu.copy(R::C, R::B, Field::A); // C=B A
+    if r.next(0x648BF, 4) {
+        i648bf(r)
+    }
 }
 
 fn i648bf(r: &mut Run) {
-    op!(r, 0x648BF, 2, Op::Zero { r: R::C, f: Field::A }); // C=0 A
-    i648c1(r)
+    r.cpu.zero(R::C, Field::A); // C=0 A
+    if r.next(0x648C1, 4) {
+        i648c1(r)
+    }
 }
 
 fn i648c1(r: &mut Run) {
-    op!(r, 0x648C1, 2, Op::ClrSt); // CLRST
-    i648c3(r)
+    r.cpu.clr_st(); // CLRST
+    if r.next(0x648C3, 4) {
+        i648c3(r)
+    }
 }
 
 fn i648c3(r: &mut Run) {
-    op!(r, 0x648C3, 3, Op::Rotate { r: R::D, left: true }); // DSLC
-    i648c6(r)
+    r.cpu.rotate(R::D, true); // DSLC
+    if r.next(0x648C6, 5) {
+        i648c6(r)
+    }
 }
 
 fn i648c6(r: &mut Run) {
-    op!(r, 0x648C6, 2, Op::CFromSt); // C=ST
-    i648c8(r)
+    r.cpu.c_from_st(); // C=ST
+    if r.next(0x648C8, 4) {
+        i648c8(r)
+    }
 }
 
 fn i648c8(r: &mut Run) {
-    op!(r, 0x648C8, 2, Op::Rtn(RtnKind::ClearCarry)); // RTNCC
+    r.cpu.rtn(RtnKind::ClearCarry); // RTNCC
+    r.spend(9);
 }
 
 fn i648f9(r: &mut Run) {
-    op!(r, 0x648F9, 3, Op::StSet { bit: 0xA, set: false }); // ST=0 10
-    i648fc(r)
+    r.cpu.st_set(10, false); // ST=0 10
+    if r.next(0x648FC, 5) {
+        i648fc(r)
+    }
 }
 
 fn i648fc(r: &mut Run) {
-    op!(r, 0x648FC, 7, Op::Call(0x679B)); // GOSUB #0679B
+    r.cpu.pc = 0x64903;
+    r.cpu.call(0x0679B); // GOSUB #0679B
+    r.spend(9);
 }
 
 fn i64903(r: &mut Run) {
-    op!(r, 0x64903, 7, Op::Call(0x6806)); // GOSUB #06806
+    r.cpu.pc = 0x6490A;
+    r.cpu.call(0x06806); // GOSUB #06806
+    r.spend(9);
 }
 
 fn i6490a(r: &mut Run) {
-    op!(r, 0x6490A, 10, Op::LoadConst { r: R::A, len: 5, val: 5 }); // LA(5) #00005
-    i64914(r)
+    r.cpu.load_const(R::A, 5, 0x5); // LA(5) #00005
+    if r.next(0x64914, 12) {
+        i64914(r)
+    }
 }
 
 fn i64914(r: &mut Run) {
-    op!(r, 0x64914, 5, Op::Test { test: Test::Regs(Cmp::Gt, R::C, R::A), f: Field::A, goyes: Some(0x64924) }); // ?C>A A / GOYES #64924
-    i64919(r)
+    r.cpu.pc = 0x64919;
+    r.cpu.test(Test::Regs(Cmp::Gt, R::C, R::A), Field::A, Some(0x64924)); // ?C>A A / GOYES #64924
+    if r.next_pc(0x64919, 7) {
+        i64919(r)
+    }
 }
 
 fn i64919(r: &mut Run) {
-    op!(r, 0x64919, 7, Op::Call(0x12D68)); // GOSUB #12D68
+    r.cpu.pc = 0x64920;
+    r.cpu.call(0x12D68); // GOSUB #12D68
+    r.spend(9);
 }
 
 fn i64920(r: &mut Run) {
-    op!(r, 0x64920, 4, Op::Jump(0x648FC)); // GOTO #648FC
+    r.cpu.pc = 0x648FC; // GOTO #648FC
+    r.spend(6);
 }
 
 fn i64924(r: &mut Run) {
-    op!(r, 0x64924, 3, Op::Scratch { op: ScratchOp::ToScratch, r: R::C, n: 0, f: Field::W }); // R0=C
-    i64927(r)
+    r.cpu.scratch(ScratchOp::ToScratch, R::C, 0, Field::W); // R0=C
+    if r.next(0x64927, 5) {
+        i64927(r)
+    }
 }
 
 fn i64927(r: &mut Run) {
-    op!(r, 0x64927, 3, Op::Zero { r: R::C, f: Field::S }); // C=0 S
-    i6492a(r)
+    r.cpu.zero(R::C, Field::S); // C=0 S
+    if r.next(0x6492A, 5) {
+        i6492a(r)
+    }
 }
 
 fn i6492a(r: &mut Run) {
-    op!(r, 0x6492A, 7, Op::DLoad { d: 0, len: 5, val: 0x8065A }); // D0=(5) #8065A
-    i64931(r)
+    r.cpu.d_load(0, 5, 0x8065A); // D0=(5) #8065A
+    if r.next(0x64931, 9) {
+        i64931(r)
+    }
 }
 
 fn i64931(r: &mut Run) {
-    op!(r, 0x64931, 4, Op::Mem { store: false, d: 0, r: R::A, f: Field::S }); // A=DAT0 S
-    i64935(r)
+    r.sync();
+    r.cpu.load(0, R::A, Field::S, r.hw); // A=DAT0 S
+    if r.next_io(0x64935, 15) {
+        i64935(r)
+    }
 }
 
 fn i64935(r: &mut Run) {
-    op!(r, 0x64935, 4, Op::Mem { store: true, d: 0, r: R::C, f: Field::S }); // DAT0=C S
-    i64939(r)
+    r.sync();
+    r.cpu.store(0, R::C, Field::S, r.hw); // DAT0=C S
+    if r.next_io(0x64939, 15) {
+        i64939(r)
+    }
 }
 
 fn i64939(r: &mut Run) {
-    op!(r, 0x64939, 6, Op::Scratch { op: ScratchOp::ToScratch, r: R::A, n: 0, f: Field::S }); // R0=A.F S
-    i6493f(r)
+    r.cpu.scratch(ScratchOp::ToScratch, R::A, 0, Field::S); // R0=A.F S
+    if r.next(0x6493F, 8) {
+        i6493f(r)
+    }
 }
 
 fn i6493f(r: &mut Run) {
-    op!(r, 0x6493F, 3, Op::Mem { store: false, d: 1, r: R::C, f: Field::A }); // C=DAT1 A
-    i64942(r)
+    r.sync();
+    r.cpu.load(1, R::C, Field::A, r.hw); // C=DAT1 A
+    if r.next_io(0x64942, 19) {
+        i64942(r)
+    }
 }
 
 fn i64942(r: &mut Run) {
-    op!(r, 0x64942, 3, Op::DAdd { d: 1, n: 5 }); // D1=D1+ 5
-    i64945(r)
+    r.cpu.d_add(1, 5); // D1=D1+ 5
+    if r.next(0x64945, 5) {
+        i64945(r)
+    }
 }
 
 fn i64945(r: &mut Run) {
-    op!(r, 0x64945, 2, Op::Copy { dst: R::D, src: R::C, f: Field::A }); // D=C A
-    i64947(r)
+    r.cpu.copy(R::D, R::C, Field::A); // D=C A
+    if r.next(0x64947, 4) {
+        i64947(r)
+    }
 }
 
 fn i64947(r: &mut Run) {
-    op!(r, 0x64947, 3, Op::DFromR { d: 0, r: R::C, short: false }); // D0=C
-    i6494a(r)
+    r.cpu.d_from_r(0, R::C, false); // D0=C
+    if r.next(0x6494A, 5) {
+        i6494a(r)
+    }
 }
 
 fn i6494a(r: &mut Run) {
-    op!(r, 0x6494A, 3, Op::DSub { d: 0, n: 2 }); // D0=D0- 2
-    i6494d(r)
+    r.cpu.d_sub(0, 2); // D0=D0- 2
+    if r.next(0x6494D, 5) {
+        i6494d(r)
+    }
 }
 
 fn i6494d(r: &mut Run) {
-    op!(r, 0x6494D, 2, Op::Zero { r: R::C, f: Field::A }); // C=0 A
-    i6494f(r)
+    r.cpu.zero(R::C, Field::A); // C=0 A
+    if r.next(0x6494F, 4) {
+        i6494f(r)
+    }
 }
 
 fn i6494f(r: &mut Run) {
-    op!(r, 0x6494F, 3, Op::Mem { store: false, d: 0, r: R::C, f: Field::B }); // C=DAT0 B
-    i64952(r)
+    r.sync();
+    r.cpu.load(0, R::C, Field::B, r.hw); // C=DAT0 B
+    if r.next_io(0x64952, 16) {
+        i64952(r)
+    }
 }
 
 fn i64952(r: &mut Run) {
-    op!(r, 0x64952, 3, Op::DAdd { d: 0, n: 2 }); // D0=D0+ 2
-    i64955(r)
+    r.cpu.d_add(0, 2); // D0=D0+ 2
+    if r.next(0x64955, 5) {
+        i64955(r)
+    }
 }
 
 fn i64955(r: &mut Run) {
-    op!(r, 0x64955, 2, Op::Inc { r: R::C, f: Field::A }); // C=C+1 A
-    i64957(r)
+    r.cpu.inc(R::C, Field::A); // C=C+1 A
+    if r.next(0x64957, 4) {
+        i64957(r)
+    }
 }
 
 fn i64957(r: &mut Run) {
-    op!(r, 0x64957, 2, Op::Inc { r: R::C, f: Field::A }); // C=C+1 A
-    i64959(r)
+    r.cpu.inc(R::C, Field::A); // C=C+1 A
+    if r.next(0x64959, 4) {
+        i64959(r)
+    }
 }
 
 fn i64959(r: &mut Run) {
-    op!(r, 0x64959, 2, Op::Add { dst: R::C, src: R::C, f: Field::A }); // C=C+C A
-    i6495b(r)
+    r.cpu.add(R::C, R::C, Field::A); // C=C+C A
+    if r.next(0x6495B, 4) {
+        i6495b(r)
+    }
 }
 
 fn i6495b(r: &mut Run) {
-    op!(r, 0x6495B, 2, Op::Sub { dst: R::D, a: R::D, b: R::C, f: Field::A }); // D=D-C A
-    i6495d(r)
+    r.cpu.sub(R::D, R::D, R::C, Field::A); // D=D-C A
+    if r.next(0x6495D, 4) {
+        i6495d(r)
+    }
 }
 
 fn i6495d(r: &mut Run) {
-    op!(r, 0x6495D, 7, Op::Call(0x3019)); // GOSUB #03019
+    r.cpu.pc = 0x64964;
+    r.cpu.call(0x03019); // GOSUB #03019
+    r.spend(9);
 }
 
 fn i64964(r: &mut Run) {
-    op!(r, 0x64964, 3, Op::Mem { store: false, d: 1, r: R::C, f: Field::A }); // C=DAT1 A
-    i64967(r)
+    r.sync();
+    r.cpu.load(1, R::C, Field::A, r.hw); // C=DAT1 A
+    if r.next_io(0x64967, 19) {
+        i64967(r)
+    }
 }
 
 fn i64967(r: &mut Run) {
-    op!(r, 0x64967, 2, Op::Copy { dst: R::B, src: R::C, f: Field::A }); // B=C A
-    i64969(r)
+    r.cpu.copy(R::B, R::C, Field::A); // B=C A
+    if r.next(0x64969, 4) {
+        i64969(r)
+    }
 }
 
 fn i64969(r: &mut Run) {
-    op!(r, 0x64969, 3, Op::DExR { d: 0, r: R::C, short: false }); // CD0EX
-    i6496c(r)
+    r.cpu.d_ex_r(0, R::C, false); // CD0EX
+    if r.next(0x6496C, 5) {
+        i6496c(r)
+    }
 }
 
 fn i6496c(r: &mut Run) {
-    op!(r, 0x6496C, 3, Op::Scratch { op: ScratchOp::ToScratch, r: R::C, n: 1, f: Field::W }); // R1=C
-    i6496f(r)
+    r.cpu.scratch(ScratchOp::ToScratch, R::C, 1, Field::W); // R1=C
+    if r.next(0x6496F, 5) {
+        i6496f(r)
+    }
 }
 
 fn i6496f(r: &mut Run) {
-    op!(r, 0x6496F, 2, Op::Sub { dst: R::C, a: R::C, b: R::D, f: Field::A }); // C=C-D A
-    i64971(r)
+    r.cpu.sub(R::C, R::C, R::D, Field::A); // C=C-D A
+    if r.next(0x64971, 4) {
+        i64971(r)
+    }
 }
 
 fn i64971(r: &mut Run) {
-    op!(r, 0x64971, 3, Op::Scratch { op: ScratchOp::ToScratch, r: R::C, n: 2, f: Field::W }); // R2=C
-    i64974(r)
+    r.cpu.scratch(ScratchOp::ToScratch, R::C, 2, Field::W); // R2=C
+    if r.next(0x64974, 5) {
+        i64974(r)
+    }
 }
 
 fn i64974(r: &mut Run) {
-    op!(r, 0x64974, 3, Op::DSub { d: 0, n: 2 }); // D0=D0- 2
-    i64977(r)
+    r.cpu.d_sub(0, 2); // D0=D0- 2
+    if r.next(0x64977, 5) {
+        i64977(r)
+    }
 }
 
 fn i64977(r: &mut Run) {
-    op!(r, 0x64977, 2, Op::Zero { r: R::C, f: Field::A }); // C=0 A
-    i64979(r)
+    r.cpu.zero(R::C, Field::A); // C=0 A
+    if r.next(0x64979, 4) {
+        i64979(r)
+    }
 }
 
 fn i64979(r: &mut Run) {
-    op!(r, 0x64979, 3, Op::Mem { store: false, d: 0, r: R::C, f: Field::B }); // C=DAT0 B
-    i6497c(r)
+    r.sync();
+    r.cpu.load(0, R::C, Field::B, r.hw); // C=DAT0 B
+    if r.next_io(0x6497C, 16) {
+        i6497c(r)
+    }
 }
 
 fn i6497c(r: &mut Run) {
-    op!(r, 0x6497C, 3, Op::DAdd { d: 0, n: 2 }); // D0=D0+ 2
-    i6497f(r)
+    r.cpu.d_add(0, 2); // D0=D0+ 2
+    if r.next(0x6497F, 5) {
+        i6497f(r)
+    }
 }
 
 fn i6497f(r: &mut Run) {
-    op!(r, 0x6497F, 2, Op::Inc { r: R::C, f: Field::A }); // C=C+1 A
-    i64981(r)
+    r.cpu.inc(R::C, Field::A); // C=C+1 A
+    if r.next(0x64981, 4) {
+        i64981(r)
+    }
 }
 
 fn i64981(r: &mut Run) {
-    op!(r, 0x64981, 2, Op::Inc { r: R::C, f: Field::A }); // C=C+1 A
-    i64983(r)
+    r.cpu.inc(R::C, Field::A); // C=C+1 A
+    if r.next(0x64983, 4) {
+        i64983(r)
+    }
 }
 
 fn i64983(r: &mut Run) {
-    op!(r, 0x64983, 2, Op::Add { dst: R::C, src: R::C, f: Field::A }); // C=C+C A
-    i64985(r)
+    r.cpu.add(R::C, R::C, Field::A); // C=C+C A
+    if r.next(0x64985, 4) {
+        i64985(r)
+    }
 }
 
 fn i64985(r: &mut Run) {
-    op!(r, 0x64985, 2, Op::Sub { dst: R::B, a: R::B, b: R::C, f: Field::A }); // B=B-C A
-    i64987(r)
+    r.cpu.sub(R::B, R::B, R::C, Field::A); // B=B-C A
+    if r.next(0x64987, 4) {
+        i64987(r)
+    }
 }
 
 fn i64987(r: &mut Run) {
-    op!(r, 0x64987, 7, Op::Call(0x3019)); // GOSUB #03019
+    r.cpu.pc = 0x6498E;
+    r.cpu.call(0x03019); // GOSUB #03019
+    r.spend(9);
 }
 
 fn i6498e(r: &mut Run) {
-    op!(r, 0x6498E, 3, Op::DExR { d: 0, r: R::C, short: false }); // CD0EX
-    i64991(r)
+    r.cpu.d_ex_r(0, R::C, false); // CD0EX
+    if r.next(0x64991, 5) {
+        i64991(r)
+    }
 }
 
 fn i64991(r: &mut Run) {
-    op!(r, 0x64991, 3, Op::DFromR { d: 0, r: R::C, short: false }); // D0=C
-    i64994(r)
+    r.cpu.d_from_r(0, R::C, false); // D0=C
+    if r.next(0x64994, 5) {
+        i64994(r)
+    }
 }
 
 fn i64994(r: &mut Run) {
-    op!(r, 0x64994, 3, Op::DAdd { d: 0, n: 5 }); // D0=D0+ 5
-    i64997(r)
+    r.cpu.d_add(0, 5); // D0=D0+ 5
+    if r.next(0x64997, 5) {
+        i64997(r)
+    }
 }
 
 fn i64997(r: &mut Run) {
-    op!(r, 0x64997, 3, Op::DFromR { d: 1, r: R::C, short: false }); // D1=C
-    i6499a(r)
+    r.cpu.d_from_r(1, R::C, false); // D1=C
+    if r.next(0x6499A, 5) {
+        i6499a(r)
+    }
 }
 
 fn i6499a(r: &mut Run) {
-    op!(r, 0x6499A, 3, Op::Scratch { op: ScratchOp::ToScratch, r: R::C, n: 3, f: Field::W }); // R3=C
-    i6499d(r)
+    r.cpu.scratch(ScratchOp::ToScratch, R::C, 3, Field::W); // R3=C
+    if r.next(0x6499D, 5) {
+        i6499d(r)
+    }
 }
 
 fn i6499d(r: &mut Run) {
-    op!(r, 0x6499D, 2, Op::Sub { dst: R::C, a: R::C, b: R::B, f: Field::A }); // C=C-B A
-    i6499f(r)
+    r.cpu.sub(R::C, R::C, R::B, Field::A); // C=C-B A
+    if r.next(0x6499F, 4) {
+        i6499f(r)
+    }
 }
 
 fn i6499f(r: &mut Run) {
-    op!(r, 0x6499F, 3, Op::Scratch { op: ScratchOp::ToScratch, r: R::C, n: 4, f: Field::W }); // R4=C
-    i649a2(r)
+    r.cpu.scratch(ScratchOp::ToScratch, R::C, 4, Field::W); // R4=C
+    if r.next(0x649A2, 5) {
+        i649a2(r)
+    }
 }
 
 fn i649a2(r: &mut Run) {
-    op!(r, 0x649A2, 3, Op::DExR { d: 0, r: R::A, short: false }); // AD0EX
-    i649a5(r)
+    r.cpu.d_ex_r(0, R::A, false); // AD0EX
+    if r.next(0x649A5, 5) {
+        i649a5(r)
+    }
 }
 
 fn i649a5(r: &mut Run) {
-    op!(r, 0x649A5, 3, Op::DFromR { d: 0, r: R::A, short: false }); // D0=A
-    i649a8(r)
+    r.cpu.d_from_r(0, R::A, false); // D0=A
+    if r.next(0x649A8, 5) {
+        i649a8(r)
+    }
 }
 
 fn i649a8(r: &mut Run) {
-    op!(r, 0x649A8, 3, Op::Scratch { op: ScratchOp::FromScratch, r: R::C, n: 1, f: Field::W }); // C=R1
-    i649ab(r)
+    r.cpu.scratch(ScratchOp::FromScratch, R::C, 1, Field::W); // C=R1
+    if r.next(0x649AB, 5) {
+        i649ab(r)
+    }
 }
 
 fn i649ab(r: &mut Run) {
-    op!(r, 0x649AB, 2, Op::Sub { dst: R::C, a: R::C, b: R::A, f: Field::A }); // C=C-A A
-    i649ad(r)
+    r.cpu.sub(R::C, R::C, R::A, Field::A); // C=C-A A
+    if r.next(0x649AD, 4) {
+        i649ad(r)
+    }
 }
 
 fn i649ad(r: &mut Run) {
-    op!(r, 0x649AD, 7, Op::Call(0x670C)); // GOSUB #0670C
+    r.cpu.pc = 0x649B4;
+    r.cpu.call(0x0670C); // GOSUB #0670C
+    r.spend(9);
 }
 
 fn i649b4(r: &mut Run) {
-    op!(r, 0x649B4, 3, Op::Scratch { op: ScratchOp::FromScratch, r: R::C, n: 2, f: Field::W }); // C=R2
-    i649b7(r)
+    r.cpu.scratch(ScratchOp::FromScratch, R::C, 2, Field::W); // C=R2
+    if r.next(0x649B7, 5) {
+        i649b7(r)
+    }
 }
 
 fn i649b7(r: &mut Run) {
-    op!(r, 0x649B7, 3, Op::Mem { store: true, d: 1, r: R::C, f: Field::A }); // DAT1=C A
-    i649ba(r)
+    r.sync();
+    r.cpu.store(1, R::C, Field::A, r.hw); // DAT1=C A
+    if r.next_io(0x649BA, 19) {
+        i649ba(r)
+    }
 }
 
 fn i649ba(r: &mut Run) {
-    op!(r, 0x649BA, 7, Op::DLoad { d: 1, len: 5, val: 0x806F8 }); // D1=(5) #806F8
-    i649c1(r)
+    r.cpu.d_load(1, 5, 0x806F8); // D1=(5) #806F8
+    if r.next(0x649C1, 9) {
+        i649c1(r)
+    }
 }
 
 fn i649c1(r: &mut Run) {
-    op!(r, 0x649C1, 3, Op::Mem { store: false, d: 1, r: R::C, f: Field::A }); // C=DAT1 A
-    i649c4(r)
+    r.sync();
+    r.cpu.load(1, R::C, Field::A, r.hw); // C=DAT1 A
+    if r.next_io(0x649C4, 19) {
+        i649c4(r)
+    }
 }
 
 fn i649c4(r: &mut Run) {
-    op!(r, 0x649C4, 2, Op::Copy { dst: R::B, src: R::C, f: Field::A }); // B=C A
-    i649c6(r)
+    r.cpu.copy(R::B, R::C, Field::A); // B=C A
+    if r.next(0x649C6, 4) {
+        i649c6(r)
+    }
 }
 
 fn i649c6(r: &mut Run) {
-    op!(r, 0x649C6, 3, Op::Scratch { op: ScratchOp::FromScratch, r: R::A, n: 0, f: Field::W }); // A=R0
-    i649c9(r)
+    r.cpu.scratch(ScratchOp::FromScratch, R::A, 0, Field::W); // A=R0
+    if r.next(0x649C9, 5) {
+        i649c9(r)
+    }
 }
 
 fn i649c9(r: &mut Run) {
-    op!(r, 0x649C9, 2, Op::Sub { dst: R::A, a: R::A, b: R::C, f: Field::A }); // A=A-C A
-    i649cb(r)
+    r.cpu.sub(R::A, R::A, R::C, Field::A); // A=A-C A
+    if r.next(0x649CB, 4) {
+        i649cb(r)
+    }
 }
 
 fn i649cb(r: &mut Run) {
-    op!(r, 0x649CB, 2, Op::Neg { r: R::A, f: Field::A }); // A=-A A
-    i649cd(r)
+    r.cpu.neg(R::A, Field::A); // A=-A A
+    if r.next(0x649CD, 4) {
+        i649cd(r)
+    }
 }
 
 fn i649cd(r: &mut Run) {
-    op!(r, 0x649CD, 3, Op::DFromR { d: 1, r: R::A, short: false }); // D1=A
-    i649d0(r)
+    r.cpu.d_from_r(1, R::A, false); // D1=A
+    if r.next(0x649D0, 5) {
+        i649d0(r)
+    }
 }
 
 fn i649d0(r: &mut Run) {
-    op!(r, 0x649D0, 3, Op::DExR { d: 0, r: R::A, short: false }); // AD0EX
-    i649d3(r)
+    r.cpu.d_ex_r(0, R::A, false); // AD0EX
+    if r.next(0x649D3, 5) {
+        i649d3(r)
+    }
 }
 
 fn i649d3(r: &mut Run) {
-    op!(r, 0x649D3, 3, Op::DFromR { d: 0, r: R::C, short: false }); // D0=C
-    i649d6(r)
+    r.cpu.d_from_r(0, R::C, false); // D0=C
+    if r.next(0x649D6, 5) {
+        i649d6(r)
+    }
 }
 
 fn i649d6(r: &mut Run) {
-    op!(r, 0x649D6, 2, Op::Sub { dst: R::C, a: R::A, b: R::C, f: Field::A }); // C=A-C A
-    i649d8(r)
+    r.cpu.sub(R::C, R::A, R::C, Field::A); // C=A-C A
+    if r.next(0x649D8, 4) {
+        i649d8(r)
+    }
 }
 
 fn i649d8(r: &mut Run) {
-    op!(r, 0x649D8, 7, Op::Call(0x670C)); // GOSUB #0670C
+    r.cpu.pc = 0x649DF;
+    r.cpu.call(0x0670C); // GOSUB #0670C
+    r.spend(9);
 }
 
 fn i649df(r: &mut Run) {
-    op!(r, 0x649DF, 3, Op::Scratch { op: ScratchOp::FromScratch, r: R::A, n: 3, f: Field::W }); // A=R3
-    i649e2(r)
+    r.cpu.scratch(ScratchOp::FromScratch, R::A, 3, Field::W); // A=R3
+    if r.next(0x649E2, 5) {
+        i649e2(r)
+    }
 }
 
 fn i649e2(r: &mut Run) {
-    op!(r, 0x649E2, 2, Op::Copy { dst: R::B, src: R::A, f: Field::A }); // B=A A
-    i649e4(r)
+    r.cpu.copy(R::B, R::A, Field::A); // B=A A
+    if r.next(0x649E4, 4) {
+        i649e4(r)
+    }
 }
 
 fn i649e4(r: &mut Run) {
-    op!(r, 0x649E4, 3, Op::Scratch { op: ScratchOp::FromScratch, r: R::C, n: 0, f: Field::W }); // C=R0
-    i649e7(r)
+    r.cpu.scratch(ScratchOp::FromScratch, R::C, 0, Field::W); // C=R0
+    if r.next(0x649E7, 5) {
+        i649e7(r)
+    }
 }
 
 fn i649e7(r: &mut Run) {
-    op!(r, 0x649E7, 2, Op::Sub { dst: R::A, a: R::A, b: R::C, f: Field::A }); // A=A-C A
-    i649e9(r)
+    r.cpu.sub(R::A, R::A, R::C, Field::A); // A=A-C A
+    if r.next(0x649E9, 4) {
+        i649e9(r)
+    }
 }
 
 fn i649e9(r: &mut Run) {
-    op!(r, 0x649E9, 3, Op::Scratch { op: ScratchOp::ToScratch, r: R::A, n: 3, f: Field::W }); // R3=A
-    i649ec(r)
+    r.cpu.scratch(ScratchOp::ToScratch, R::A, 3, Field::W); // R3=A
+    if r.next(0x649EC, 5) {
+        i649ec(r)
+    }
 }
 
 fn i649ec(r: &mut Run) {
-    op!(r, 0x649EC, 3, Op::Scratch { op: ScratchOp::FromScratch, r: R::C, n: 1, f: Field::W }); // C=R1
-    i649ef(r)
+    r.cpu.scratch(ScratchOp::FromScratch, R::C, 1, Field::W); // C=R1
+    if r.next(0x649EF, 5) {
+        i649ef(r)
+    }
 }
 
 fn i649ef(r: &mut Run) {
-    op!(r, 0x649EF, 2, Op::Sub { dst: R::C, a: R::C, b: R::B, f: Field::A }); // C=C-B A
-    i649f1(r)
+    r.cpu.sub(R::C, R::C, R::B, Field::A); // C=C-B A
+    if r.next(0x649F1, 4) {
+        i649f1(r)
+    }
 }
 
 fn i649f1(r: &mut Run) {
-    op!(r, 0x649F1, 3, Op::Scratch { op: ScratchOp::ToScratch, r: R::C, n: 2, f: Field::W }); // R2=C
-    i649f4(r)
+    r.cpu.scratch(ScratchOp::ToScratch, R::C, 2, Field::W); // R2=C
+    if r.next(0x649F4, 5) {
+        i649f4(r)
+    }
 }
 
 fn i649f4(r: &mut Run) {
-    op!(r, 0x649F4, 3, Op::DExR { d: 0, r: R::A, short: false }); // AD0EX
-    i649f7(r)
+    r.cpu.d_ex_r(0, R::A, false); // AD0EX
+    if r.next(0x649F7, 5) {
+        i649f7(r)
+    }
 }
 
 fn i649f7(r: &mut Run) {
-    op!(r, 0x649F7, 3, Op::DFromR { d: 1, r: R::A, short: false }); // D1=A
-    i649fa(r)
+    r.cpu.d_from_r(1, R::A, false); // D1=A
+    if r.next(0x649FA, 5) {
+        i649fa(r)
+    }
 }
 
 fn i649fa(r: &mut Run) {
-    op!(r, 0x649FA, 3, Op::Scratch { op: ScratchOp::FromScratch, r: R::C, n: 0, f: Field::W }); // C=R0
-    i649fd(r)
+    r.cpu.scratch(ScratchOp::FromScratch, R::C, 0, Field::W); // C=R0
+    if r.next(0x649FD, 5) {
+        i649fd(r)
+    }
 }
 
 fn i649fd(r: &mut Run) {
-    op!(r, 0x649FD, 3, Op::Scratch { op: ScratchOp::FromScratch, r: R::A, n: 4, f: Field::W }); // A=R4
-    i64a00(r)
+    r.cpu.scratch(ScratchOp::FromScratch, R::A, 4, Field::W); // A=R4
+    if r.next(0x64A00, 5) {
+        i64a00(r)
+    }
 }
 
 fn i64a00(r: &mut Run) {
-    op!(r, 0x64A00, 2, Op::Sub { dst: R::A, a: R::A, b: R::C, f: Field::A }); // A=A-C A
-    i64a02(r)
+    r.cpu.sub(R::A, R::A, R::C, Field::A); // A=A-C A
+    if r.next(0x64A02, 4) {
+        i64a02(r)
+    }
 }
 
 fn i64a02(r: &mut Run) {
-    op!(r, 0x64A02, 3, Op::CondJump(Cond::Carry, 0x64A10)); // GOC #64A10
-    i64a05(r)
+    r.cpu.pc = 0x64A05;
+    r.cpu.jump_if(Cond::Carry, 0x64A10); // GOC #64A10
+    if r.next_pc(0x64A05, 5) {
+        i64a05(r)
+    }
 }
 
 fn i64a05(r: &mut Run) {
-    op!(r, 0x64A05, 3, Op::Scratch { op: ScratchOp::ToScratch, r: R::A, n: 4, f: Field::W }); // R4=A
-    i64a08(r)
+    r.cpu.scratch(ScratchOp::ToScratch, R::A, 4, Field::W); // R4=A
+    if r.next(0x64A08, 5) {
+        i64a08(r)
+    }
 }
 
 fn i64a08(r: &mut Run) {
-    op!(r, 0x64A08, 4, Op::Call(0x64ADC)); // GOSUB #64ADC
+    r.cpu.pc = 0x64A0C;
+    r.cpu.call(0x64ADC); // GOSUB #64ADC
+    r.spend(6);
 }
 
 fn i64a0c(r: &mut Run) {
-    op!(r, 0x64A0C, 4, Op::Jump(0x649FA)); // GOTO #649FA
+    r.cpu.pc = 0x649FA; // GOTO #649FA
+    r.spend(6);
 }
 
 fn i64a10(r: &mut Run) {
-    op!(r, 0x64A10, 2, Op::Add { dst: R::C, src: R::A, f: Field::A }); // C=C+A A
-    i64a12(r)
+    r.cpu.add(R::C, R::A, Field::A); // C=C+A A
+    if r.next(0x64A12, 4) {
+        i64a12(r)
+    }
 }
 
 fn i64a12(r: &mut Run) {
-    op!(r, 0x64A12, 4, Op::Call(0x64ADC)); // GOSUB #64ADC
+    r.cpu.pc = 0x64A16;
+    r.cpu.call(0x64ADC); // GOSUB #64ADC
+    r.spend(6);
 }
 
 fn i64a16(r: &mut Run) {
-    op!(r, 0x64A16, 7, Op::DLoad { d: 0, len: 5, val: 0x806F8 }); // D0=(5) #806F8
-    i64a1d(r)
+    r.cpu.d_load(0, 5, 0x806F8); // D0=(5) #806F8
+    if r.next(0x64A1D, 9) {
+        i64a1d(r)
+    }
 }
 
 fn i64a1d(r: &mut Run) {
-    op!(r, 0x64A1D, 3, Op::Mem { store: false, d: 0, r: R::A, f: Field::A }); // A=DAT0 A
-    i64a20(r)
+    r.sync();
+    r.cpu.load(0, R::A, Field::A, r.hw); // A=DAT0 A
+    if r.next_io(0x64A20, 19) {
+        i64a20(r)
+    }
 }
 
 fn i64a20(r: &mut Run) {
-    op!(r, 0x64A20, 3, Op::DExR { d: 1, r: R::C, short: false }); // CD1EX
-    i64a23(r)
+    r.cpu.d_ex_r(1, R::C, false); // CD1EX
+    if r.next(0x64A23, 5) {
+        i64a23(r)
+    }
 }
 
 fn i64a23(r: &mut Run) {
-    op!(r, 0x64A23, 3, Op::DFromR { d: 1, r: R::C, short: false }); // D1=C
-    i64a26(r)
+    r.cpu.d_from_r(1, R::C, false); // D1=C
+    if r.next(0x64A26, 5) {
+        i64a26(r)
+    }
 }
 
 fn i64a26(r: &mut Run) {
-    op!(r, 0x64A26, 2, Op::Copy { dst: R::B, src: R::C, f: Field::A }); // B=C A
-    i64a28(r)
+    r.cpu.copy(R::B, R::C, Field::A); // B=C A
+    if r.next(0x64A28, 4) {
+        i64a28(r)
+    }
 }
 
 fn i64a28(r: &mut Run) {
-    op!(r, 0x64A28, 2, Op::Sub { dst: R::C, a: R::C, b: R::A, f: Field::A }); // C=C-A A
-    i64a2a(r)
+    r.cpu.sub(R::C, R::C, R::A, Field::A); // C=C-A A
+    if r.next(0x64A2A, 4) {
+        i64a2a(r)
+    }
 }
 
 fn i64a2a(r: &mut Run) {
-    op!(r, 0x64A2A, 2, Op::Copy { dst: R::D, src: R::C, f: Field::A }); // D=C A
-    i64a2c(r)
+    r.cpu.copy(R::D, R::C, Field::A); // D=C A
+    if r.next(0x64A2C, 4) {
+        i64a2c(r)
+    }
 }
 
 fn i64a2c(r: &mut Run) {
-    op!(r, 0x64A2C, 3, Op::Scratch { op: ScratchOp::FromScratch, r: R::C, n: 0, f: Field::W }); // C=R0
-    i64a2f(r)
+    r.cpu.scratch(ScratchOp::FromScratch, R::C, 0, Field::W); // C=R0
+    if r.next(0x64A2F, 5) {
+        i64a2f(r)
+    }
 }
 
 fn i64a2f(r: &mut Run) {
-    op!(r, 0x64A2F, 2, Op::Sub { dst: R::C, a: R::C, b: R::B, f: Field::A }); // C=C-B A
-    i64a31(r)
+    r.cpu.sub(R::C, R::C, R::B, Field::A); // C=C-B A
+    if r.next(0x64A31, 4) {
+        i64a31(r)
+    }
 }
 
 fn i64a31(r: &mut Run) {
-    op!(r, 0x64A31, 2, Op::Neg { r: R::C, f: Field::A }); // C=-C A
-    i64a33(r)
+    r.cpu.neg(R::C, Field::A); // C=-C A
+    if r.next(0x64A33, 4) {
+        i64a33(r)
+    }
 }
 
 fn i64a33(r: &mut Run) {
-    op!(r, 0x64A33, 3, Op::DFromR { d: 0, r: R::C, short: false }); // D0=C
-    i64a36(r)
+    r.cpu.d_from_r(0, R::C, false); // D0=C
+    if r.next(0x64A36, 5) {
+        i64a36(r)
+    }
 }
 
 fn i64a36(r: &mut Run) {
-    op!(r, 0x64A36, 2, Op::Copy { dst: R::C, src: R::D, f: Field::A }); // C=D A
-    i64a38(r)
+    r.cpu.copy(R::C, R::D, Field::A); // C=D A
+    if r.next(0x64A38, 4) {
+        i64a38(r)
+    }
 }
 
 fn i64a38(r: &mut Run) {
-    op!(r, 0x64A38, 7, Op::Call(0x66B9)); // GOSUB #066B9
+    r.cpu.pc = 0x64A3F;
+    r.cpu.call(0x066B9); // GOSUB #066B9
+    r.spend(9);
 }
 
 fn i64a3f(r: &mut Run) {
-    op!(r, 0x64A3F, 3, Op::DAdd { d: 1, n: 0xA }); // D1=D1+ 10
-    i64a42(r)
+    r.cpu.d_add(1, 10); // D1=D1+ 10
+    if r.next(0x64A42, 5) {
+        i64a42(r)
+    }
 }
 
 fn i64a42(r: &mut Run) {
-    op!(r, 0x64A42, 3, Op::Mem { store: false, d: 1, r: R::A, f: Field::A }); // A=DAT1 A
-    i64a45(r)
+    r.sync();
+    r.cpu.load(1, R::A, Field::A, r.hw); // A=DAT1 A
+    if r.next_io(0x64A45, 19) {
+        i64a45(r)
+    }
 }
 
 fn i64a45(r: &mut Run) {
-    op!(r, 0x64A45, 7, Op::DLoad { d: 1, len: 5, val: 0x80711 }); // D1=(5) #80711
-    i64a4c(r)
+    r.cpu.d_load(1, 5, 0x80711); // D1=(5) #80711
+    if r.next(0x64A4C, 9) {
+        i64a4c(r)
+    }
 }
 
 fn i64a4c(r: &mut Run) {
-    op!(r, 0x64A4C, 3, Op::Mem { store: false, d: 1, r: R::C, f: Field::A }); // C=DAT1 A
-    i64a4f(r)
+    r.sync();
+    r.cpu.load(1, R::C, Field::A, r.hw); // C=DAT1 A
+    if r.next_io(0x64A4F, 19) {
+        i64a4f(r)
+    }
 }
 
 fn i64a4f(r: &mut Run) {
-    op!(r, 0x64A4F, 3, Op::DFromR { d: 1, r: R::A, short: false }); // D1=A
-    i64a52(r)
+    r.cpu.d_from_r(1, R::A, false); // D1=A
+    if r.next(0x64A52, 5) {
+        i64a52(r)
+    }
 }
 
 fn i64a52(r: &mut Run) {
-    op!(r, 0x64A52, 3, Op::DAdd { d: 1, n: 5 }); // D1=D1+ 5
-    i64a55(r)
+    r.cpu.d_add(1, 5); // D1=D1+ 5
+    if r.next(0x64A55, 5) {
+        i64a55(r)
+    }
 }
 
 fn i64a55(r: &mut Run) {
-    op!(r, 0x64A55, 5, Op::Test { test: Test::Regs(Cmp::Ne, R::C, R::A), f: Field::A, goyes: Some(0x64A72) }); // ?C#A A / GOYES #64A72
-    i64a5a(r)
+    r.cpu.pc = 0x64A5A;
+    r.cpu.test(Test::Regs(Cmp::Ne, R::C, R::A), Field::A, Some(0x64A72)); // ?C#A A / GOYES #64A72
+    if r.next_pc(0x64A5A, 7) {
+        i64a5a(r)
+    }
 }
 
 fn i64a5a(r: &mut Run) {
-    op!(r, 0x64A5A, 2, Op::Zero { r: R::C, f: Field::A }); // C=0 A
-    i64a5c(r)
+    r.cpu.zero(R::C, Field::A); // C=0 A
+    if r.next(0x64A5C, 4) {
+        i64a5c(r)
+    }
 }
 
 fn i64a5c(r: &mut Run) {
-    op!(r, 0x64A5C, 4, Op::Mem { store: false, d: 1, r: R::C, f: Field::X }); // C=DAT1 X
-    i64a60(r)
+    r.sync();
+    r.cpu.load(1, R::C, Field::X, r.hw); // C=DAT1 X
+    if r.next_io(0x64A60, 17) {
+        i64a60(r)
+    }
 }
 
 fn i64a60(r: &mut Run) {
-    op!(r, 0x64A60, 2, Op::Copy { dst: R::A, src: R::C, f: Field::A }); // A=C A
-    i64a62(r)
+    r.cpu.copy(R::A, R::C, Field::A); // A=C A
+    if r.next(0x64A62, 4) {
+        i64a62(r)
+    }
 }
 
 fn i64a62(r: &mut Run) {
-    op!(r, 0x64A62, 2, Op::Shl { r: R::C, f: Field::A }); // CSL A
-    i64a64(r)
+    r.cpu.shl(R::C, Field::A); // CSL A
+    if r.next(0x64A64, 4) {
+        i64a64(r)
+    }
 }
 
 fn i64a64(r: &mut Run) {
-    op!(r, 0x64A64, 2, Op::Sub { dst: R::C, a: R::C, b: R::A, f: Field::A }); // C=C-A A
-    i64a66(r)
+    r.cpu.sub(R::C, R::C, R::A, Field::A); // C=C-A A
+    if r.next(0x64A66, 4) {
+        i64a66(r)
+    }
 }
 
 fn i64a66(r: &mut Run) {
-    op!(r, 0x64A66, 2, Op::Sub { dst: R::C, a: R::C, b: R::A, f: Field::A }); // C=C-A A
-    i64a68(r)
+    r.cpu.sub(R::C, R::C, R::A, Field::A); // C=C-A A
+    if r.next(0x64A68, 4) {
+        i64a68(r)
+    }
 }
 
 fn i64a68(r: &mut Run) {
-    op!(r, 0x64A68, 2, Op::Sub { dst: R::C, a: R::C, b: R::A, f: Field::A }); // C=C-A A
-    i64a6a(r)
+    r.cpu.sub(R::C, R::C, R::A, Field::A); // C=C-A A
+    if r.next(0x64A6A, 4) {
+        i64a6a(r)
+    }
 }
 
 fn i64a6a(r: &mut Run) {
-    op!(r, 0x64A6A, 3, Op::DExR { d: 1, r: R::A, short: false }); // AD1EX
-    i64a6d(r)
+    r.cpu.d_ex_r(1, R::A, false); // AD1EX
+    if r.next(0x64A6D, 5) {
+        i64a6d(r)
+    }
 }
 
 fn i64a6d(r: &mut Run) {
-    op!(r, 0x64A6D, 2, Op::Add { dst: R::A, src: R::C, f: Field::A }); // A=A+C A
-    i64a6f(r)
+    r.cpu.add(R::A, R::C, Field::A); // A=A+C A
+    if r.next(0x64A6F, 4) {
+        i64a6f(r)
+    }
 }
 
 fn i64a6f(r: &mut Run) {
-    op!(r, 0x64A6F, 3, Op::DFromR { d: 1, r: R::A, short: false }); // D1=A
-    i64a72(r)
+    r.cpu.d_from_r(1, R::A, false); // D1=A
+    if r.next(0x64A72, 5) {
+        i64a72(r)
+    }
 }
 
 fn i64a72(r: &mut Run) {
-    op!(r, 0x64A72, 3, Op::DAdd { d: 1, n: 3 }); // D1=D1+ 3
-    i64a75(r)
+    r.cpu.d_add(1, 3); // D1=D1+ 3
+    if r.next(0x64A75, 5) {
+        i64a75(r)
+    }
 }
 
 fn i64a75(r: &mut Run) {
-    op!(r, 0x64A75, 3, Op::DExR { d: 1, r: R::C, short: false }); // CD1EX
-    i64a78(r)
+    r.cpu.d_ex_r(1, R::C, false); // CD1EX
+    if r.next(0x64A78, 5) {
+        i64a78(r)
+    }
 }
 
 fn i64a78(r: &mut Run) {
-    op!(r, 0x64A78, 3, Op::DFromR { d: 1, r: R::C, short: false }); // D1=C
-    i64a7b(r)
+    r.cpu.d_from_r(1, R::C, false); // D1=C
+    if r.next(0x64A7B, 5) {
+        i64a7b(r)
+    }
 }
 
 fn i64a7b(r: &mut Run) {
-    op!(r, 0x64A7B, 2, Op::Copy { dst: R::A, src: R::B, f: Field::A }); // A=B A
-    i64a7d(r)
+    r.cpu.copy(R::A, R::B, Field::A); // A=B A
+    if r.next(0x64A7D, 4) {
+        i64a7d(r)
+    }
 }
 
 fn i64a7d(r: &mut Run) {
-    op!(r, 0x64A7D, 2, Op::Sub { dst: R::A, a: R::A, b: R::C, f: Field::A }); // A=A-C A
-    i64a7f(r)
+    r.cpu.sub(R::A, R::A, R::C, Field::A); // A=A-C A
+    if r.next(0x64A7F, 4) {
+        i64a7f(r)
+    }
 }
 
 fn i64a7f(r: &mut Run) {
-    op!(r, 0x64A7F, 3, Op::Mem { store: true, d: 1, r: R::A, f: Field::A }); // DAT1=A A
-    i64a82(r)
+    r.sync();
+    r.cpu.store(1, R::A, Field::A, r.hw); // DAT1=A A
+    if r.next_io(0x64A82, 19) {
+        i64a82(r)
+    }
 }
 
 fn i64a82(r: &mut Run) {
-    op!(r, 0x64A82, 3, Op::Scratch { op: ScratchOp::FromScratch, r: R::A, n: 3, f: Field::W }); // A=R3
-    i64a85(r)
+    r.cpu.scratch(ScratchOp::FromScratch, R::A, 3, Field::W); // A=R3
+    if r.next(0x64A85, 5) {
+        i64a85(r)
+    }
 }
 
 fn i64a85(r: &mut Run) {
-    op!(r, 0x64A85, 3, Op::Scratch { op: ScratchOp::FromScratch, r: R::C, n: 0, f: Field::W }); // C=R0
-    i64a88(r)
+    r.cpu.scratch(ScratchOp::FromScratch, R::C, 0, Field::W); // C=R0
+    if r.next(0x64A88, 5) {
+        i64a88(r)
+    }
 }
 
 fn i64a88(r: &mut Run) {
-    op!(r, 0x64A88, 2, Op::Add { dst: R::A, src: R::C, f: Field::A }); // A=A+C A
-    i64a8a(r)
+    r.cpu.add(R::A, R::C, Field::A); // A=A+C A
+    if r.next(0x64A8A, 4) {
+        i64a8a(r)
+    }
 }
 
 fn i64a8a(r: &mut Run) {
-    op!(r, 0x64A8A, 6, Op::Scratch { op: ScratchOp::ToScratch, r: R::A, n: 0, f: Field::A }); // R0=A.F A
-    i64a90(r)
+    r.cpu.scratch(ScratchOp::ToScratch, R::A, 0, Field::A); // R0=A.F A
+    if r.next(0x64A90, 8) {
+        i64a90(r)
+    }
 }
 
 fn i64a90(r: &mut Run) {
-    op!(r, 0x64A90, 2, Op::Exch { a: R::A, b: R::B, f: Field::A }); // ABEX A
-    i64a92(r)
+    r.cpu.exch(R::A, R::B, Field::A); // ABEX A
+    if r.next(0x64A92, 4) {
+        i64a92(r)
+    }
 }
 
 fn i64a92(r: &mut Run) {
-    op!(r, 0x64A92, 3, Op::Scratch { op: ScratchOp::FromScratch, r: R::C, n: 1, f: Field::W }); // C=R1
-    i64a95(r)
+    r.cpu.scratch(ScratchOp::FromScratch, R::C, 1, Field::W); // C=R1
+    if r.next(0x64A95, 5) {
+        i64a95(r)
+    }
 }
 
 fn i64a95(r: &mut Run) {
-    op!(r, 0x64A95, 2, Op::Sub { dst: R::C, a: R::C, b: R::B, f: Field::A }); // C=C-B A
-    i64a97(r)
+    r.cpu.sub(R::C, R::C, R::B, Field::A); // C=C-B A
+    if r.next(0x64A97, 4) {
+        i64a97(r)
+    }
 }
 
 fn i64a97(r: &mut Run) {
-    op!(r, 0x64A97, 2, Op::Copy { dst: R::D, src: R::C, f: Field::A }); // D=C A
-    i64a99(r)
+    r.cpu.copy(R::D, R::C, Field::A); // D=C A
+    if r.next(0x64A99, 4) {
+        i64a99(r)
+    }
 }
 
 fn i64a99(r: &mut Run) {
-    op!(r, 0x64A99, 3, Op::Scratch { op: ScratchOp::FromScratch, r: R::C, n: 1, f: Field::W }); // C=R1
-    i64a9c(r)
+    r.cpu.scratch(ScratchOp::FromScratch, R::C, 1, Field::W); // C=R1
+    if r.next(0x64A9C, 5) {
+        i64a9c(r)
+    }
 }
 
 fn i64a9c(r: &mut Run) {
-    op!(r, 0x64A9C, 2, Op::Sub { dst: R::A, a: R::A, b: R::C, f: Field::A }); // A=A-C A
-    i64a9e(r)
+    r.cpu.sub(R::A, R::A, R::C, Field::A); // A=A-C A
+    if r.next(0x64A9E, 4) {
+        i64a9e(r)
+    }
 }
 
 fn i64a9e(r: &mut Run) {
-    op!(r, 0x64A9E, 2, Op::Copy { dst: R::C, src: R::A, f: Field::A }); // C=A A
-    i64aa0(r)
+    r.cpu.copy(R::C, R::A, Field::A); // C=A A
+    if r.next(0x64AA0, 4) {
+        i64aa0(r)
+    }
 }
 
 fn i64aa0(r: &mut Run) {
-    op!(r, 0x64AA0, 2, Op::Add { dst: R::A, src: R::B, f: Field::A }); // A=A+B A
-    i64aa2(r)
+    r.cpu.add(R::A, R::B, Field::A); // A=A+B A
+    if r.next(0x64AA2, 4) {
+        i64aa2(r)
+    }
 }
 
 fn i64aa2(r: &mut Run) {
-    op!(r, 0x64AA2, 3, Op::DFromR { d: 0, r: R::C, short: false }); // D0=C
-    i64aa5(r)
+    r.cpu.d_from_r(0, R::C, false); // D0=C
+    if r.next(0x64AA5, 5) {
+        i64aa5(r)
+    }
 }
 
 fn i64aa5(r: &mut Run) {
-    op!(r, 0x64AA5, 3, Op::DSub { d: 0, n: 5 }); // D0=D0- 5
-    i64aa8(r)
+    r.cpu.d_sub(0, 5); // D0=D0- 5
+    if r.next(0x64AA8, 5) {
+        i64aa8(r)
+    }
 }
 
 fn i64aa8(r: &mut Run) {
-    op!(r, 0x64AA8, 2, Op::Copy { dst: R::C, src: R::D, f: Field::A }); // C=D A
-    i64aaa(r)
+    r.cpu.copy(R::C, R::D, Field::A); // C=D A
+    if r.next(0x64AAA, 4) {
+        i64aaa(r)
+    }
 }
 
 fn i64aaa(r: &mut Run) {
-    op!(r, 0x64AAA, 7, Op::Call(0x686E)); // GOSUB #0686E
+    r.cpu.pc = 0x64AB1;
+    r.cpu.call(0x0686E); // GOSUB #0686E
+    r.spend(9);
 }
 
 fn i64ab1(r: &mut Run) {
-    op!(r, 0x64AB1, 7, Op::DLoad { d: 1, len: 5, val: 0x8065A }); // D1=(5) #8065A
-    i64ab8(r)
+    r.cpu.d_load(1, 5, 0x8065A); // D1=(5) #8065A
+    if r.next(0x64AB8, 9) {
+        i64ab8(r)
+    }
 }
 
 fn i64ab8(r: &mut Run) {
-    op!(r, 0x64AB8, 6, Op::Scratch { op: ScratchOp::FromScratch, r: R::C, n: 0, f: Field::S }); // C=R0.F S
-    i64abe(r)
+    r.cpu.scratch(ScratchOp::FromScratch, R::C, 0, Field::S); // C=R0.F S
+    if r.next(0x64ABE, 8) {
+        i64abe(r)
+    }
 }
 
 fn i64abe(r: &mut Run) {
-    op!(r, 0x64ABE, 4, Op::Mem { store: true, d: 1, r: R::C, f: Field::S }); // DAT1=C S
-    i64ac2(r)
+    r.sync();
+    r.cpu.store(1, R::C, Field::S, r.hw); // DAT1=C S
+    if r.next_io(0x64AC2, 15) {
+        i64ac2(r)
+    }
 }
 
 fn i64ac2(r: &mut Run) {
-    op!(r, 0x64AC2, 7, Op::Call(0x67D2)); // GOSUB #067D2
+    r.cpu.pc = 0x64AC9;
+    r.cpu.call(0x067D2); // GOSUB #067D2
+    r.spend(9);
 }
 
 fn i64ac9(r: &mut Run) {
-    op!(r, 0x64AC9, 3, Op::DAdd { d: 1, n: 0xF }); // D1=D1+ 15
-    i64acc(r)
+    r.cpu.d_add(1, 15); // D1=D1+ 15
+    if r.next(0x64ACC, 5) {
+        i64acc(r)
+    }
 }
 
 fn i64acc(r: &mut Run) {
-    op!(r, 0x64ACC, 2, Op::Inc { r: R::D, f: Field::A }); // D=D+1 A
-    i64ace(r)
+    r.cpu.inc(R::D, Field::A); // D=D+1 A
+    if r.next(0x64ACE, 4) {
+        i64ace(r)
+    }
 }
 
 fn i64ace(r: &mut Run) {
-    op!(r, 0x64ACE, 2, Op::Inc { r: R::D, f: Field::A }); // D=D+1 A
-    i64ad0(r)
+    r.cpu.inc(R::D, Field::A); // D=D+1 A
+    if r.next(0x64AD0, 4) {
+        i64ad0(r)
+    }
 }
 
 fn i64ad0(r: &mut Run) {
-    op!(r, 0x64AD0, 2, Op::Inc { r: R::D, f: Field::A }); // D=D+1 A
-    i64ad2(r)
+    r.cpu.inc(R::D, Field::A); // D=D+1 A
+    if r.next(0x64AD2, 4) {
+        i64ad2(r)
+    }
 }
 
 fn i64ad2(r: &mut Run) {
-    op!(r, 0x64AD2, 3, Op::Mem { store: false, d: 0, r: R::A, f: Field::A }); // A=DAT0 A
-    i64ad5(r)
+    r.sync();
+    r.cpu.load(0, R::A, Field::A, r.hw); // A=DAT0 A
+    if r.next_io(0x64AD5, 19) {
+        i64ad5(r)
+    }
 }
 
 fn i64ad5(r: &mut Run) {
-    op!(r, 0x64AD5, 3, Op::DAdd { d: 0, n: 5 }); // D0=D0+ 5
-    i64ad8(r)
+    r.cpu.d_add(0, 5); // D0=D0+ 5
+    if r.next(0x64AD8, 5) {
+        i64ad8(r)
+    }
 }
 
 fn i64ad8(r: &mut Run) {
-    op!(r, 0x64AD8, 4, Op::PcIndirect(R::A)); // PC=(A)
+    r.sync();
+    r.cpu.pc_indirect(R::A, r.hw); // PC=(A)
+    r.spend(23);
 }
 
 fn i64adc(r: &mut Run) {
-    op!(r, 0x64ADC, 2, Op::Copy { dst: R::D, src: R::C, f: Field::A }); // D=C A
-    i64ade(r)
+    r.cpu.copy(R::D, R::C, Field::A); // D=C A
+    if r.next(0x64ADE, 4) {
+        i64ade(r)
+    }
 }
 
 fn i64ade(r: &mut Run) {
-    op!(r, 0x64ADE, 7, Op::Call(0x66B9)); // GOSUB #066B9
+    r.cpu.pc = 0x64AE5;
+    r.cpu.call(0x066B9); // GOSUB #066B9
+    r.spend(9);
 }
 
 fn i64ae5(r: &mut Run) {
-    op!(r, 0x64AE5, 3, Op::DExR { d: 1, r: R::C, short: false }); // CD1EX
-    i64ae8(r)
+    r.cpu.d_ex_r(1, R::C, false); // CD1EX
+    if r.next(0x64AE8, 5) {
+        i64ae8(r)
+    }
 }
 
 fn i64ae8(r: &mut Run) {
-    op!(r, 0x64AE8, 2, Op::Exch { a: R::D, b: R::C, f: Field::A }); // DCEX A
-    i64aea(r)
+    r.cpu.exch(R::D, R::C, Field::A); // DCEX A
+    if r.next(0x64AEA, 4) {
+        i64aea(r)
+    }
 }
 
 fn i64aea(r: &mut Run) {
-    op!(r, 0x64AEA, 3, Op::DExR { d: 0, r: R::A, short: false }); // AD0EX
-    i64aed(r)
+    r.cpu.d_ex_r(0, R::A, false); // AD0EX
+    if r.next(0x64AED, 5) {
+        i64aed(r)
+    }
 }
 
 fn i64aed(r: &mut Run) {
-    op!(r, 0x64AED, 3, Op::DFromR { d: 1, r: R::A, short: false }); // D1=A
-    i64af0(r)
+    r.cpu.d_from_r(1, R::A, false); // D1=A
+    if r.next(0x64AF0, 5) {
+        i64af0(r)
+    }
 }
 
 fn i64af0(r: &mut Run) {
-    op!(r, 0x64AF0, 2, Op::Copy { dst: R::B, src: R::A, f: Field::A }); // B=A A
-    i64af2(r)
+    r.cpu.copy(R::B, R::A, Field::A); // B=A A
+    if r.next(0x64AF2, 4) {
+        i64af2(r)
+    }
 }
 
 fn i64af2(r: &mut Run) {
-    op!(r, 0x64AF2, 2, Op::Add { dst: R::A, src: R::C, f: Field::A }); // A=A+C A
-    i64af4(r)
+    r.cpu.add(R::A, R::C, Field::A); // A=A+C A
+    if r.next(0x64AF4, 4) {
+        i64af4(r)
+    }
 }
 
 fn i64af4(r: &mut Run) {
-    op!(r, 0x64AF4, 3, Op::DFromR { d: 0, r: R::A, short: false }); // D0=A
-    i64af7(r)
+    r.cpu.d_from_r(0, R::A, false); // D0=A
+    if r.next(0x64AF7, 5) {
+        i64af7(r)
+    }
 }
 
 fn i64af7(r: &mut Run) {
-    op!(r, 0x64AF7, 3, Op::Scratch { op: ScratchOp::FromScratch, r: R::C, n: 2, f: Field::W }); // C=R2
-    i64afa(r)
+    r.cpu.scratch(ScratchOp::FromScratch, R::C, 2, Field::W); // C=R2
+    if r.next(0x64AFA, 5) {
+        i64afa(r)
+    }
 }
 
 fn i64afa(r: &mut Run) {
-    op!(r, 0x64AFA, 7, Op::Call(0x670C)); // GOSUB #0670C
+    r.cpu.pc = 0x64B01;
+    r.cpu.call(0x0670C); // GOSUB #0670C
+    r.spend(9);
 }
 
 fn i64b01(r: &mut Run) {
-    op!(r, 0x64B01, 2, Op::Copy { dst: R::A, src: R::B, f: Field::A }); // A=B A
-    i64b03(r)
+    r.cpu.copy(R::A, R::B, Field::A); // A=B A
+    if r.next(0x64B03, 4) {
+        i64b03(r)
+    }
 }
 
 fn i64b03(r: &mut Run) {
-    op!(r, 0x64B03, 3, Op::DFromR { d: 0, r: R::A, short: false }); // D0=A
-    i64b06(r)
+    r.cpu.d_from_r(0, R::A, false); // D0=A
+    if r.next(0x64B06, 5) {
+        i64b06(r)
+    }
 }
 
 fn i64b06(r: &mut Run) {
-    op!(r, 0x64B06, 2, Op::Copy { dst: R::C, src: R::D, f: Field::A }); // C=D A
-    i64b08(r)
+    r.cpu.copy(R::C, R::D, Field::A); // C=D A
+    if r.next(0x64B08, 4) {
+        i64b08(r)
+    }
 }
 
 fn i64b08(r: &mut Run) {
-    op!(r, 0x64B08, 3, Op::DFromR { d: 1, r: R::C, short: false }); // D1=C
-    i64b0b(r)
+    r.cpu.d_from_r(1, R::C, false); // D1=C
+    if r.next(0x64B0B, 5) {
+        i64b0b(r)
+    }
 }
 
 fn i64b0b(r: &mut Run) {
-    op!(r, 0x64B0B, 2, Op::Rtn(RtnKind::Plain)); // RTN
+    r.cpu.rtn(RtnKind::Plain); // RTN
+    r.spend(9);
 }
 
 fn i657b9(r: &mut Run) {
-    op!(r, 0x657B9, 4, Op::Call(0x657DF)); // GOSUB #657DF
+    r.cpu.pc = 0x657BD;
+    r.cpu.call(0x657DF); // GOSUB #657DF
+    r.spend(6);
 }
 
 fn i657bd(r: &mut Run) {
-    op!(r, 0x657BD, 2, Op::Zero { r: R::C, f: Field::A }); // C=0 A
-    i657bf(r)
+    r.cpu.zero(R::C, Field::A); // C=0 A
+    if r.next(0x657BF, 4) {
+        i657bf(r)
+    }
 }
 
 fn i657bf(r: &mut Run) {
-    op!(r, 0x657BF, 3, Op::LoadConst { r: R::C, len: 1, val: 6 }); // LC(1) #6
-    i657c2(r)
+    r.cpu.load_const(R::C, 1, 0x6); // LC(1) #6
+    if r.next(0x657C2, 5) {
+        i657c2(r)
+    }
 }
 
 fn i657c2(r: &mut Run) {
-    op!(r, 0x657C2, 2, Op::Copy { dst: R::A, src: R::C, f: Field::A }); // A=C A
-    i657c4(r)
+    r.cpu.copy(R::A, R::C, Field::A); // A=C A
+    if r.next(0x657C4, 4) {
+        i657c4(r)
+    }
 }
 
 fn i657c4(r: &mut Run) {
-    op!(r, 0x657C4, 4, Op::Jump(0x657D1)); // GOTO #657D1
+    r.cpu.pc = 0x657D1; // GOTO #657D1
+    r.spend(6);
 }
 
 fn i657c8(r: &mut Run) {
-    op!(r, 0x657C8, 3, Op::Shr { r: R::B, f: Field::W }); // BSR W
-    i657cb(r)
+    r.cpu.shr(R::B, Field::W); // BSR W
+    if r.next(0x657CB, 5) {
+        i657cb(r)
+    }
 }
 
 fn i657cb(r: &mut Run) {
-    op!(r, 0x657CB, 3, Op::Shl { r: R::C, f: Field::W }); // CSL W
-    i657ce(r)
+    r.cpu.shl(R::C, Field::W); // CSL W
+    if r.next(0x657CE, 5) {
+        i657ce(r)
+    }
 }
 
 fn i657ce(r: &mut Run) {
-    op!(r, 0x657CE, 3, Op::Shl { r: R::C, f: Field::W }); // CSL W
-    i657d1(r)
+    r.cpu.shl(R::C, Field::W); // CSL W
+    if r.next(0x657D1, 5) {
+        i657d1(r)
+    }
 }
 
 fn i657d1(r: &mut Run) {
-    op!(r, 0x657D1, 4, Op::LoadConst { r: R::C, len: 2, val: 0x30 }); // LC(2) #30
-    i657d5(r)
+    r.cpu.load_const(R::C, 2, 0x30); // LC(2) #30
+    if r.next(0x657D5, 6) {
+        i657d5(r)
+    }
 }
 
 fn i657d5(r: &mut Run) {
-    op!(r, 0x657D5, 3, Op::Copy { dst: R::C, src: R::B, f: Field::P }); // C=B P
-    i657d8(r)
+    r.cpu.copy(R::C, R::B, Field::P); // C=B P
+    if r.next(0x657D8, 5) {
+        i657d8(r)
+    }
 }
 
 fn i657d8(r: &mut Run) {
-    op!(r, 0x657D8, 2, Op::Dec { r: R::A, f: Field::A }); // A=A-1 A
-    i657da(r)
+    r.cpu.dec(R::A, Field::A); // A=A-1 A
+    if r.next(0x657DA, 4) {
+        i657da(r)
+    }
 }
 
 fn i657da(r: &mut Run) {
-    op!(r, 0x657DA, 3, Op::CondJump(Cond::NoCarry, 0x657C8)); // GONC #657C8
-    i657dd(r)
+    r.cpu.pc = 0x657DD;
+    r.cpu.jump_if(Cond::NoCarry, 0x657C8); // GONC #657C8
+    if r.next_pc(0x657DD, 5) {
+        i657dd(r)
+    }
 }
 
 fn i657dd(r: &mut Run) {
-    op!(r, 0x657DD, 2, Op::Rtn(RtnKind::Plain)); // RTN
+    r.cpu.rtn(RtnKind::Plain); // RTN
+    r.spend(9);
 }
 
 fn i657df(r: &mut Run) {
-    op!(r, 0x657DF, 2, Op::PSet(0)); // P= 0
-    i657e1(r)
+    r.cpu.p = 0; // P= 0
+    if r.next(0x657E1, 4) {
+        i657e1(r)
+    }
 }
 
 fn i657e1(r: &mut Run) {
-    op!(r, 0x657E1, 2, Op::Zero { r: R::C, f: Field::A }); // C=0 A
-    i657e3(r)
+    r.cpu.zero(R::C, Field::A); // C=0 A
+    if r.next(0x657E3, 4) {
+        i657e3(r)
+    }
 }
 
 fn i657e3(r: &mut Run) {
-    op!(r, 0x657E3, 4, Op::LoadConst { r: R::C, len: 2, val: 0x23 }); // LC(2) #23
-    i657e7(r)
+    r.cpu.load_const(R::C, 2, 0x23); // LC(2) #23
+    if r.next(0x657E7, 6) {
+        i657e7(r)
+    }
 }
 
 fn i657e7(r: &mut Run) {
-    op!(r, 0x657E7, 3, Op::Zero { r: R::B, f: Field::W }); // B=0 W
-    i657ea(r)
+    r.cpu.zero(R::B, Field::W); // B=0 W
+    if r.next(0x657EA, 5) {
+        i657ea(r)
+    }
 }
 
 fn i657ea(r: &mut Run) {
-    op!(r, 0x657EA, 2, Op::PSet(5)); // P= 5
-    i657ec(r)
+    r.cpu.p = 5; // P= 5
+    if r.next(0x657EC, 4) {
+        i657ec(r)
+    }
 }
 
 fn i657ec(r: &mut Run) {
-    op!(r, 0x657EC, 3, Op::Add { dst: R::B, src: R::B, f: Field::W }); // B=B+B W
-    i657ef(r)
+    r.cpu.add(R::B, R::B, Field::W); // B=B+B W
+    if r.next(0x657EF, 5) {
+        i657ef(r)
+    }
 }
 
 fn i657ef(r: &mut Run) {
-    op!(r, 0x657EF, 2, Op::SetHex); // SETHEX
-    i657f1(r)
+    r.cpu.dec = false; // SETHEX
+    if r.next(0x657F1, 4) {
+        i657f1(r)
+    }
 }
 
 fn i657f1(r: &mut Run) {
-    op!(r, 0x657F1, 3, Op::Add { dst: R::A, src: R::A, f: Field::WP }); // A=A+A WP
-    i657f4(r)
+    r.cpu.add(R::A, R::A, Field::WP); // A=A+A WP
+    if r.next(0x657F4, 5) {
+        i657f4(r)
+    }
 }
 
 fn i657f4(r: &mut Run) {
-    op!(r, 0x657F4, 2, Op::SetDec); // SETDEC
-    i657f6(r)
+    r.cpu.dec = true; // SETDEC
+    if r.next(0x657F6, 4) {
+        i657f6(r)
+    }
 }
 
 fn i657f6(r: &mut Run) {
-    op!(r, 0x657F6, 3, Op::CondJump(Cond::NoCarry, 0x657FC)); // GONC #657FC
-    i657f9(r)
+    r.cpu.pc = 0x657F9;
+    r.cpu.jump_if(Cond::NoCarry, 0x657FC); // GONC #657FC
+    if r.next_pc(0x657F9, 5) {
+        i657f9(r)
+    }
 }
 
 fn i657f9(r: &mut Run) {
-    op!(r, 0x657F9, 3, Op::Inc { r: R::B, f: Field::W }); // B=B+1 W
-    i657fc(r)
+    r.cpu.inc(R::B, Field::W); // B=B+1 W
+    if r.next(0x657FC, 5) {
+        i657fc(r)
+    }
 }
 
 fn i657fc(r: &mut Run) {
-    op!(r, 0x657FC, 2, Op::Dec { r: R::C, f: Field::A }); // C=C-1 A
-    i657fe(r)
+    r.cpu.dec(R::C, Field::A); // C=C-1 A
+    if r.next(0x657FE, 4) {
+        i657fe(r)
+    }
 }
 
 fn i657fe(r: &mut Run) {
-    op!(r, 0x657FE, 3, Op::CondJump(Cond::NoCarry, 0x657EC)); // GONC #657EC
-    i65801(r)
+    r.cpu.pc = 0x65801;
+    r.cpu.jump_if(Cond::NoCarry, 0x657EC); // GONC #657EC
+    if r.next_pc(0x65801, 5) {
+        i65801(r)
+    }
 }
 
 fn i65801(r: &mut Run) {
-    op!(r, 0x65801, 2, Op::PSet(0)); // P= 0
-    i65803(r)
+    r.cpu.p = 0; // P= 0
+    if r.next(0x65803, 4) {
+        i65803(r)
+    }
 }
 
 fn i65803(r: &mut Run) {
-    op!(r, 0x65803, 2, Op::SetHex); // SETHEX
-    i65805(r)
+    r.cpu.dec = false; // SETHEX
+    if r.next(0x65805, 4) {
+        i65805(r)
+    }
 }
 
 fn i65805(r: &mut Run) {
-    op!(r, 0x65805, 2, Op::Rtn(RtnKind::ClearCarry)); // RTNCC
+    r.cpu.rtn(RtnKind::ClearCarry); // RTNCC
+    r.spend(9);
 }
 
 fn i65807(r: &mut Run) {
-    op!(r, 0x65807, 2, Op::PSet(0)); // P= 0
-    i65809(r)
+    r.cpu.p = 0; // P= 0
+    if r.next(0x65809, 4) {
+        i65809(r)
+    }
 }
 
 fn i65809(r: &mut Run) {
-    op!(r, 0x65809, 5, Op::Test { test: Test::NonZero(R::C), f: Field::S, goyes: Some(0x6581B) }); // ?C#0 S / GOYES #6581B
-    i6580e(r)
+    r.cpu.pc = 0x6580E;
+    r.cpu.test(Test::NonZero(R::C), Field::S, Some(0x6581B)); // ?C#0 S / GOYES #6581B
+    if r.next_pc(0x6580E, 7) {
+        i6580e(r)
+    }
 }
 
 fn i6580e(r: &mut Run) {
-    op!(r, 0x6580E, 5, Op::Test { test: Test::Regs(Cmp::Ge, R::C, R::A), f: Field::W, goyes: Some(0x6581B) }); // ?C>=A W / GOYES #6581B
-    i65813(r)
+    r.cpu.pc = 0x65813;
+    r.cpu.test(Test::Regs(Cmp::Ge, R::C, R::A), Field::W, Some(0x6581B)); // ?C>=A W / GOYES #6581B
+    if r.next_pc(0x65813, 7) {
+        i65813(r)
+    }
 }
 
 fn i65813(r: &mut Run) {
-    op!(r, 0x65813, 3, Op::Shl { r: R::C, f: Field::W }); // CSL W
-    i65816(r)
+    r.cpu.shl(R::C, Field::W); // CSL W
+    if r.next(0x65816, 5) {
+        i65816(r)
+    }
 }
 
 fn i65816(r: &mut Run) {
-    op!(r, 0x65816, 2, Op::PInc); // P=P+1
-    i65818(r)
+    r.cpu.p_inc(); // P=P+1
+    if r.next(0x65818, 4) {
+        i65818(r)
+    }
 }
 
 fn i65818(r: &mut Run) {
-    op!(r, 0x65818, 3, Op::CondJump(Cond::NoCarry, 0x65809)); // GONC #65809
-    i6581b(r)
+    r.cpu.pc = 0x6581B;
+    r.cpu.jump_if(Cond::NoCarry, 0x65809); // GONC #65809
+    if r.next_pc(0x6581B, 5) {
+        i6581b(r)
+    }
 }
 
 fn i6581b(r: &mut Run) {
-    op!(r, 0x6581B, 3, Op::Copy { dst: R::B, src: R::A, f: Field::W }); // B=A W
-    i6581e(r)
+    r.cpu.copy(R::B, R::A, Field::W); // B=A W
+    if r.next(0x6581E, 5) {
+        i6581e(r)
+    }
 }
 
 fn i6581e(r: &mut Run) {
-    op!(r, 0x6581E, 3, Op::Zero { r: R::A, f: Field::W }); // A=0 W
-    i65821(r)
+    r.cpu.zero(R::A, Field::W); // A=0 W
+    if r.next(0x65821, 5) {
+        i65821(r)
+    }
 }
 
 fn i65821(r: &mut Run) {
-    op!(r, 0x65821, 3, Op::Dec { r: R::A, f: Field::P }); // A=A-1 P
-    i65824(r)
+    r.cpu.dec(R::A, Field::P); // A=A-1 P
+    if r.next(0x65824, 5) {
+        i65824(r)
+    }
 }
 
 fn i65824(r: &mut Run) {
-    op!(r, 0x65824, 3, Op::Inc { r: R::A, f: Field::P }); // A=A+1 P
-    i65827(r)
+    r.cpu.inc(R::A, Field::P); // A=A+1 P
+    if r.next(0x65827, 5) {
+        i65827(r)
+    }
 }
 
 fn i65827(r: &mut Run) {
-    op!(r, 0x65827, 3, Op::Sub { dst: R::B, a: R::B, b: R::C, f: Field::W }); // B=B-C W
-    i6582a(r)
+    r.cpu.sub(R::B, R::B, R::C, Field::W); // B=B-C W
+    if r.next(0x6582A, 5) {
+        i6582a(r)
+    }
 }
 
 fn i6582a(r: &mut Run) {
-    op!(r, 0x6582A, 3, Op::CondJump(Cond::NoCarry, 0x65824)); // GONC #65824
-    i6582d(r)
+    r.cpu.pc = 0x6582D;
+    r.cpu.jump_if(Cond::NoCarry, 0x65824); // GONC #65824
+    if r.next_pc(0x6582D, 5) {
+        i6582d(r)
+    }
 }
 
 fn i6582d(r: &mut Run) {
-    op!(r, 0x6582D, 3, Op::Add { dst: R::B, src: R::C, f: Field::W }); // B=B+C W
-    i65830(r)
+    r.cpu.add(R::B, R::C, Field::W); // B=B+C W
+    if r.next(0x65830, 5) {
+        i65830(r)
+    }
 }
 
 fn i65830(r: &mut Run) {
-    op!(r, 0x65830, 2, Op::PDec); // P=P-1
-    i65832(r)
+    r.cpu.p_dec(); // P=P-1
+    if r.next(0x65832, 4) {
+        i65832(r)
+    }
 }
 
 fn i65832(r: &mut Run) {
-    op!(r, 0x65832, 3, Op::CondJump(Cond::Carry, 0x6583B)); // GOC #6583B
-    i65835(r)
+    r.cpu.pc = 0x65835;
+    r.cpu.jump_if(Cond::Carry, 0x6583B); // GOC #6583B
+    if r.next_pc(0x65835, 5) {
+        i65835(r)
+    }
 }
 
 fn i65835(r: &mut Run) {
-    op!(r, 0x65835, 3, Op::Shr { r: R::C, f: Field::W }); // CSR W
-    i65838(r)
+    r.cpu.shr(R::C, Field::W); // CSR W
+    if r.next(0x65838, 5) {
+        i65838(r)
+    }
 }
 
 fn i65838(r: &mut Run) {
-    op!(r, 0x65838, 3, Op::CondJump(Cond::NoCarry, 0x65827)); // GONC #65827
-    i6583b(r)
+    r.cpu.pc = 0x6583B;
+    r.cpu.jump_if(Cond::NoCarry, 0x65827); // GONC #65827
+    if r.next_pc(0x6583B, 5) {
+        i6583b(r)
+    }
 }
 
 fn i6583b(r: &mut Run) {
-    op!(r, 0x6583B, 3, Op::Copy { dst: R::C, src: R::A, f: Field::W }); // C=A W
-    i6583e(r)
+    r.cpu.copy(R::C, R::A, Field::W); // C=A W
+    if r.next(0x6583E, 5) {
+        i6583e(r)
+    }
 }
 
 fn i6583e(r: &mut Run) {
-    op!(r, 0x6583E, 2, Op::PSet(0)); // P= 0
-    i65840(r)
+    r.cpu.p = 0; // P= 0
+    if r.next(0x65840, 4) {
+        i65840(r)
+    }
 }
 
 fn i65840(r: &mut Run) {
-    op!(r, 0x65840, 2, Op::Rtn(RtnKind::ClearCarry)); // RTNCC
+    r.cpu.rtn(RtnKind::ClearCarry); // RTNCC
+    r.spend(9);
 }
 
 fn i65842(r: &mut Run) {
-    op!(r, 0x65842, 4, Op::Logic { and: true, dst: R::C, src: R::A, f: Field::B }); // C=C&A B
-    i65846(r)
+    r.cpu.and(R::C, R::A, Field::B); // C=C&A B
+    if r.next(0x65846, 6) {
+        i65846(r)
+    }
 }
 
 fn i65846(r: &mut Run) {
-    op!(r, 0x65846, 2, Op::Zero { r: R::B, f: Field::A }); // B=0 A
-    i65848(r)
+    r.cpu.zero(R::B, Field::A); // B=0 A
+    if r.next(0x65848, 4) {
+        i65848(r)
+    }
 }
 
 fn i65848(r: &mut Run) {
-    op!(r, 0x65848, 5, Op::Test { test: Test::Zero(R::C), f: Field::B, goyes: Some(0x65858) }); // ?C=0 B / GOYES #65858
-    i6584d(r)
+    r.cpu.pc = 0x6584D;
+    r.cpu.test(Test::Zero(R::C), Field::B, Some(0x65858)); // ?C=0 B / GOYES #65858
+    if r.next_pc(0x6584D, 7) {
+        i6584d(r)
+    }
 }
 
 fn i6584d(r: &mut Run) {
-    op!(r, 0x6584D, 3, Op::Add { dst: R::C, src: R::C, f: Field::B }); // C=C+C B
-    i65850(r)
+    r.cpu.add(R::C, R::C, Field::B); // C=C+C B
+    if r.next(0x65850, 5) {
+        i65850(r)
+    }
 }
 
 fn i65850(r: &mut Run) {
-    op!(r, 0x65850, 3, Op::CondJump(Cond::NoCarry, 0x6584D)); // GONC #6584D
-    i65853(r)
+    r.cpu.pc = 0x65853;
+    r.cpu.jump_if(Cond::NoCarry, 0x6584D); // GONC #6584D
+    if r.next_pc(0x65853, 5) {
+        i65853(r)
+    }
 }
 
 fn i65853(r: &mut Run) {
-    op!(r, 0x65853, 2, Op::Inc { r: R::B, f: Field::A }); // B=B+1 A
-    i65855(r)
+    r.cpu.inc(R::B, Field::A); // B=B+1 A
+    if r.next(0x65855, 4) {
+        i65855(r)
+    }
 }
 
 fn i65855(r: &mut Run) {
-    op!(r, 0x65855, 3, Op::CondJump(Cond::NoCarry, 0x65848)); // GONC #65848
-    i65858(r)
+    r.cpu.pc = 0x65858;
+    r.cpu.jump_if(Cond::NoCarry, 0x65848); // GONC #65848
+    if r.next_pc(0x65858, 5) {
+        i65858(r)
+    }
 }
 
 fn i65858(r: &mut Run) {
-    op!(r, 0x65858, 2, Op::Copy { dst: R::C, src: R::B, f: Field::A }); // C=B A
-    i6585a(r)
+    r.cpu.copy(R::C, R::B, Field::A); // C=B A
+    if r.next(0x6585A, 4) {
+        i6585a(r)
+    }
 }
 
 fn i6585a(r: &mut Run) {
-    op!(r, 0x6585A, 7, Op::BitTest { r: R::C, bit: 0, set: false, goyes: None }); // ?CBIT=0 0 / RTNYES
-    i65861(r)
+    r.cpu.pc = 0x65861;
+    r.cpu.bit_test(R::C, 0, false, None); // ?CBIT=0 0 / RTNYES
+    if r.next_pc(0x65861, 9) {
+        i65861(r)
+    }
 }
 
 fn i65861(r: &mut Run) {
-    op!(r, 0x65861, 2, Op::Rtn(RtnKind::ClearCarry)); // RTNCC
+    r.cpu.rtn(RtnKind::ClearCarry); // RTNCC
+    r.spend(9);
 }
 
 fn i65863(r: &mut Run) {
-    op!(r, 0x65863, 3, Op::Add { dst: R::C, src: R::C, f: Field::WP }); // C=C+C WP
-    i65866(r)
+    r.cpu.add(R::C, R::C, Field::WP); // C=C+C WP
+    if r.next(0x65866, 5) {
+        i65866(r)
+    }
 }
 
 fn i65866(r: &mut Run) {
-    op!(r, 0x65866, 3, Op::Add { dst: R::C, src: R::C, f: Field::WP }); // C=C+C WP
-    i65869(r)
+    r.cpu.add(R::C, R::C, Field::WP); // C=C+C WP
+    if r.next(0x65869, 5) {
+        i65869(r)
+    }
 }
 
 fn i65869(r: &mut Run) {
-    op!(r, 0x65869, 5, Op::BitSet { r: R::C, bit: 1, set: true }); // CBIT=1 1
-    i6586e(r)
+    r.cpu.bit_set(R::C, 1, true); // CBIT=1 1
+    if r.next(0x6586E, 7) {
+        i6586e(r)
+    }
 }
 
 fn i6586e(r: &mut Run) {
-    op!(r, 0x6586E, 7, Op::BitTest { r: R::A, bit: 0, set: false, goyes: Some(0x6587F) }); // ?ABIT=0 0 / GOYES #6587F
-    i65875(r)
+    r.cpu.pc = 0x65875;
+    r.cpu.bit_test(R::A, 0, false, Some(0x6587F)); // ?ABIT=0 0 / GOYES #6587F
+    if r.next_pc(0x65875, 9) {
+        i65875(r)
+    }
 }
 
 fn i65875(r: &mut Run) {
-    op!(r, 0x65875, 5, Op::BitSet { r: R::C, bit: 1, set: false }); // CBIT=0 1
-    i6587a(r)
+    r.cpu.bit_set(R::C, 1, false); // CBIT=0 1
+    if r.next(0x6587A, 7) {
+        i6587a(r)
+    }
 }
 
 fn i6587a(r: &mut Run) {
-    op!(r, 0x6587A, 5, Op::BitSet { r: R::C, bit: 0, set: true }); // CBIT=1 0
-    i6587f(r)
+    r.cpu.bit_set(R::C, 0, true); // CBIT=1 0
+    if r.next(0x6587F, 7) {
+        i6587f(r)
+    }
 }
 
 fn i6587f(r: &mut Run) {
-    op!(r, 0x6587F, 5, Op::SrbField { r: R::A, f: Field::X }); // ASRB.F X
-    i65884(r)
+    r.cpu.srb_field(R::A, Field::X); // ASRB.F X
+    if r.next(0x65884, 7) {
+        i65884(r)
+    }
 }
 
 fn i65884(r: &mut Run) {
-    op!(r, 0x65884, 2, Op::Rtn(RtnKind::Plain)); // RTN
+    r.cpu.rtn(RtnKind::Plain); // RTN
+    r.spend(9);
 }
 
 fn i65886(r: &mut Run) {
-    op!(r, 0x65886, 2, Op::PSet(0)); // P= 0
-    i65888(r)
+    r.cpu.p = 0; // P= 0
+    if r.next(0x65888, 4) {
+        i65888(r)
+    }
 }
 
 fn i65888(r: &mut Run) {
-    op!(r, 0x65888, 2, Op::SetHex); // SETHEX
-    i6588a(r)
+    r.cpu.dec = false; // SETHEX
+    if r.next(0x6588A, 4) {
+        i6588a(r)
+    }
 }
 
 fn i6588a(r: &mut Run) {
-    op!(r, 0x6588A, 7, Op::DLoad { d: 0, len: 5, val: 0x10B }); // D0=(5) #0010B
-    i65891(r)
+    r.cpu.d_load(0, 5, 0x10B); // D0=(5) #0010B
+    if r.next(0x65891, 9) {
+        i65891(r)
+    }
 }
 
 fn i65891(r: &mut Run) {
-    op!(r, 0x65891, 3, Op::Mem { store: false, d: 0, r: R::C, f: Field::B }); // C=DAT0 B
-    i65894(r)
+    r.sync();
+    r.cpu.load(0, R::C, Field::B, r.hw); // C=DAT0 B
+    if r.next_io(0x65894, 16) {
+        i65894(r)
+    }
 }
 
 fn i65894(r: &mut Run) {
-    op!(r, 0x65894, 5, Op::BitSet { r: R::C, bit: 5, set: true }); // CBIT=1 5
-    i65899(r)
+    r.cpu.bit_set(R::C, 5, true); // CBIT=1 5
+    if r.next(0x65899, 7) {
+        i65899(r)
+    }
 }
 
 fn i65899(r: &mut Run) {
-    op!(r, 0x65899, 3, Op::Mem { store: true, d: 0, r: R::C, f: Field::B }); // DAT0=C B
-    i6589c(r)
+    r.sync();
+    r.cpu.store(0, R::C, Field::B, r.hw); // DAT0=C B
+    if r.next_io(0x6589C, 16) {
+        i6589c(r)
+    }
 }
 
 fn i6589c(r: &mut Run) {
-    op!(r, 0x6589C, 3, Op::Zero { r: R::A, f: Field::XS }); // A=0 XS
-    i6589f(r)
+    r.cpu.zero(R::A, Field::XS); // A=0 XS
+    if r.next(0x6589F, 5) {
+        i6589f(r)
+    }
 }
 
 fn i6589f(r: &mut Run) {
-    op!(r, 0x6589F, 4, Op::LoadConst { r: R::C, len: 2, val: 0x78 }); // LC(2) #78
-    i658a3(r)
+    r.cpu.load_const(R::C, 2, 0x78); // LC(2) #78
+    if r.next(0x658A3, 6) {
+        i658a3(r)
+    }
 }
 
 fn i658a3(r: &mut Run) {
-    op!(r, 0x658A3, 4, Op::Call(0x65842)); // GOSUB #65842
+    r.cpu.pc = 0x658A7;
+    r.cpu.call(0x65842); // GOSUB #65842
+    r.spend(6);
 }
 
 fn i658a7(r: &mut Run) {
-    op!(r, 0x658A7, 3, Op::CondJump(Cond::Carry, 0x658AF)); // GOC #658AF
-    i658aa(r)
+    r.cpu.pc = 0x658AA;
+    r.cpu.jump_if(Cond::Carry, 0x658AF); // GOC #658AF
+    if r.next_pc(0x658AA, 5) {
+        i658aa(r)
+    }
 }
 
 fn i658aa(r: &mut Run) {
-    op!(r, 0x658AA, 5, Op::BitSet { r: R::A, bit: 0xB, set: true }); // ABIT=1 11
-    i658af(r)
+    r.cpu.bit_set(R::A, 11, true); // ABIT=1 11
+    if r.next(0x658AF, 7) {
+        i658af(r)
+    }
 }
 
 fn i658af(r: &mut Run) {
-    op!(r, 0x658AF, 4, Op::LoadConst { r: R::C, len: 2, val: 0xE6 }); // LC(2) #E6
-    i658b3(r)
+    r.cpu.load_const(R::C, 2, 0xE6); // LC(2) #E6
+    if r.next(0x658B3, 6) {
+        i658b3(r)
+    }
 }
 
 fn i658b3(r: &mut Run) {
-    op!(r, 0x658B3, 4, Op::Call(0x65842)); // GOSUB #65842
+    r.cpu.pc = 0x658B7;
+    r.cpu.call(0x65842); // GOSUB #65842
+    r.spend(6);
 }
 
 fn i658b7(r: &mut Run) {
-    op!(r, 0x658B7, 3, Op::CondJump(Cond::Carry, 0x658BF)); // GOC #658BF
-    i658ba(r)
+    r.cpu.pc = 0x658BA;
+    r.cpu.jump_if(Cond::Carry, 0x658BF); // GOC #658BF
+    if r.next_pc(0x658BA, 5) {
+        i658ba(r)
+    }
 }
 
 fn i658ba(r: &mut Run) {
-    op!(r, 0x658BA, 5, Op::BitSet { r: R::A, bit: 0xA, set: true }); // ABIT=1 10
-    i658bf(r)
+    r.cpu.bit_set(R::A, 10, true); // ABIT=1 10
+    if r.next(0x658BF, 7) {
+        i658bf(r)
+    }
 }
 
 fn i658bf(r: &mut Run) {
-    op!(r, 0x658BF, 4, Op::LoadConst { r: R::C, len: 2, val: 0xD5 }); // LC(2) #D5
-    i658c3(r)
+    r.cpu.load_const(R::C, 2, 0xD5); // LC(2) #D5
+    if r.next(0x658C3, 6) {
+        i658c3(r)
+    }
 }
 
 fn i658c3(r: &mut Run) {
-    op!(r, 0x658C3, 4, Op::Call(0x65842)); // GOSUB #65842
+    r.cpu.pc = 0x658C7;
+    r.cpu.call(0x65842); // GOSUB #65842
+    r.spend(6);
 }
 
 fn i658c7(r: &mut Run) {
-    op!(r, 0x658C7, 3, Op::CondJump(Cond::Carry, 0x658CF)); // GOC #658CF
-    i658ca(r)
+    r.cpu.pc = 0x658CA;
+    r.cpu.jump_if(Cond::Carry, 0x658CF); // GOC #658CF
+    if r.next_pc(0x658CA, 5) {
+        i658ca(r)
+    }
 }
 
 fn i658ca(r: &mut Run) {
-    op!(r, 0x658CA, 5, Op::BitSet { r: R::A, bit: 9, set: true }); // ABIT=1 9
-    i658cf(r)
+    r.cpu.bit_set(R::A, 9, true); // ABIT=1 9
+    if r.next(0x658CF, 7) {
+        i658cf(r)
+    }
 }
 
 fn i658cf(r: &mut Run) {
-    op!(r, 0x658CF, 4, Op::LoadConst { r: R::C, len: 2, val: 0x8B }); // LC(2) #8B
-    i658d3(r)
+    r.cpu.load_const(R::C, 2, 0x8B); // LC(2) #8B
+    if r.next(0x658D3, 6) {
+        i658d3(r)
+    }
 }
 
 fn i658d3(r: &mut Run) {
-    op!(r, 0x658D3, 4, Op::Call(0x65842)); // GOSUB #65842
+    r.cpu.pc = 0x658D7;
+    r.cpu.call(0x65842); // GOSUB #65842
+    r.spend(6);
 }
 
 fn i658d7(r: &mut Run) {
-    op!(r, 0x658D7, 3, Op::CondJump(Cond::Carry, 0x658DF)); // GOC #658DF
-    i658da(r)
+    r.cpu.pc = 0x658DA;
+    r.cpu.jump_if(Cond::Carry, 0x658DF); // GOC #658DF
+    if r.next_pc(0x658DA, 5) {
+        i658da(r)
+    }
 }
 
 fn i658da(r: &mut Run) {
-    op!(r, 0x658DA, 5, Op::BitSet { r: R::A, bit: 8, set: true }); // ABIT=1 8
-    i658df(r)
+    r.cpu.bit_set(R::A, 8, true); // ABIT=1 8
+    if r.next(0x658DF, 7) {
+        i658df(r)
+    }
 }
 
 fn i658df(r: &mut Run) {
-    op!(r, 0x658DF, 3, Op::Zero { r: R::C, f: Field::W }); // C=0 W
-    i658e2(r)
+    r.cpu.zero(R::C, Field::W); // C=0 W
+    if r.next(0x658E2, 5) {
+        i658e2(r)
+    }
 }
 
 fn i658e2(r: &mut Run) {
-    op!(r, 0x658E2, 4, Op::Call(0x65863)); // GOSUB #65863
+    r.cpu.pc = 0x658E6;
+    r.cpu.call(0x65863); // GOSUB #65863
+    r.spend(6);
 }
 
 fn i658e6(r: &mut Run) {
-    op!(r, 0x658E6, 4, Op::Call(0x65863)); // GOSUB #65863
+    r.cpu.pc = 0x658EA;
+    r.cpu.call(0x65863); // GOSUB #65863
+    r.spend(6);
 }
 
 fn i658ea(r: &mut Run) {
-    op!(r, 0x658EA, 2, Op::PInc); // P=P+1
-    i658ec(r)
+    r.cpu.p_inc(); // P=P+1
+    if r.next(0x658EC, 4) {
+        i658ec(r)
+    }
 }
 
 fn i658ec(r: &mut Run) {
-    op!(r, 0x658EC, 5, Op::PTest { n: 6, equal: false, goyes: Some(0x658E2) }); // ?P# 6 / GOYES #658E2
-    i658f1(r)
+    r.cpu.pc = 0x658F1;
+    r.cpu.p_test(6, false, Some(0x658E2)); // ?P# 6 / GOYES #658E2
+    if r.next_pc(0x658F1, 7) {
+        i658f1(r)
+    }
 }
 
 fn i658f1(r: &mut Run) {
-    op!(r, 0x658F1, 3, Op::Shl { r: R::C, f: Field::WP }); // CSL WP
-    i658f4(r)
+    r.cpu.shl(R::C, Field::WP); // CSL WP
+    if r.next(0x658F4, 5) {
+        i658f4(r)
+    }
 }
 
 fn i658f4(r: &mut Run) {
-    op!(r, 0x658F4, 2, Op::PSet(0)); // P= 0
-    i658f6(r)
+    r.cpu.p = 0; // P= 0
+    if r.next(0x658F6, 4) {
+        i658f6(r)
+    }
 }
 
 fn i658f6(r: &mut Run) {
-    op!(r, 0x658F6, 3, Op::LoadConst { r: R::C, len: 1, val: 0xE }); // LC(1) #E
-    i658f9(r)
+    r.cpu.load_const(R::C, 1, 0xE); // LC(1) #E
+    if r.next(0x658F9, 5) {
+        i658f9(r)
+    }
 }
 
 fn i658f9(r: &mut Run) {
-    op!(r, 0x658F9, 3, Op::Add { dst: R::C, src: R::C, f: Field::W }); // C=C+C W
-    i658fc(r)
+    r.cpu.add(R::C, R::C, Field::W); // C=C+C W
+    if r.next(0x658FC, 5) {
+        i658fc(r)
+    }
 }
 
 fn i658fc(r: &mut Run) {
-    op!(r, 0x658FC, 3, Op::Add { dst: R::C, src: R::C, f: Field::W }); // C=C+C W
-    i658ff(r)
+    r.cpu.add(R::C, R::C, Field::W); // C=C+C W
+    if r.next(0x658FF, 5) {
+        i658ff(r)
+    }
 }
 
 fn i658ff(r: &mut Run) {
-    op!(r, 0x658FF, 3, Op::Copy { dst: R::A, src: R::C, f: Field::W }); // A=C W
-    i65902(r)
+    r.cpu.copy(R::A, R::C, Field::W); // A=C W
+    if r.next(0x65902, 5) {
+        i65902(r)
+    }
 }
 
 fn i65902(r: &mut Run) {
-    op!(r, 0x65902, 4, Op::LoadConst { r: R::C, len: 2, val: 0x44 }); // LC(2) #44
-    i65906(r)
+    r.cpu.load_const(R::C, 2, 0x44); // LC(2) #44
+    if r.next(0x65906, 6) {
+        i65906(r)
+    }
 }
 
 fn i65906(r: &mut Run) {
-    op!(r, 0x65906, 7, Op::Call(0x4DAFD)); // GOSUB #4DAFD
+    r.cpu.pc = 0x6590D;
+    r.cpu.call(0x4DAFD); // GOSUB #4DAFD
+    r.spend(9);
 }
 
 fn i6590d(r: &mut Run) {
-    op!(r, 0x6590D, 7, Op::BitTest { r: R::C, bit: 9, set: true, goyes: Some(0x65906) }); // ?CBIT=1 9 / GOYES #65906
-    i65914(r)
+    r.cpu.pc = 0x65914;
+    r.cpu.bit_test(R::C, 9, true, Some(0x65906)); // ?CBIT=1 9 / GOYES #65906
+    if r.next_pc(0x65914, 9) {
+        i65914(r)
+    }
 }
 
 fn i65914(r: &mut Run) {
-    op!(r, 0x65914, 4, Op::LoadConst { r: R::C, len: 2, val: 0x1D }); // LC(2) #1D
-    i65918(r)
+    r.cpu.load_const(R::C, 2, 0x1D); // LC(2) #1D
+    if r.next(0x65918, 6) {
+        i65918(r)
+    }
 }
 
 fn i65918(r: &mut Run) {
-    op!(r, 0x65918, 2, Op::Copy { dst: R::B, src: R::C, f: Field::A }); // B=C A
-    i6591a(r)
+    r.cpu.copy(R::B, R::C, Field::A); // B=C A
+    if r.next(0x6591A, 4) {
+        i6591a(r)
+    }
 }
 
 fn i6591a(r: &mut Run) {
-    op!(r, 0x6591A, 4, Op::LoadConst { r: R::C, len: 2, val: 0x44 }); // LC(2) #44
-    i6591e(r)
+    r.cpu.load_const(R::C, 2, 0x44); // LC(2) #44
+    if r.next(0x6591E, 6) {
+        i6591e(r)
+    }
 }
 
 fn i6591e(r: &mut Run) {
-    op!(r, 0x6591E, 7, Op::Call(0x4DAFD)); // GOSUB #4DAFD
+    r.cpu.pc = 0x65925;
+    r.cpu.call(0x4DAFD); // GOSUB #4DAFD
+    r.spend(9);
 }
 
 fn i65925(r: &mut Run) {
-    op!(r, 0x65925, 7, Op::BitTest { r: R::C, bit: 8, set: true, goyes: Some(0x6591E) }); // ?CBIT=1 8 / GOYES #6591E
-    i6592c(r)
+    r.cpu.pc = 0x6592C;
+    r.cpu.bit_test(R::C, 8, true, Some(0x6591E)); // ?CBIT=1 8 / GOYES #6591E
+    if r.next_pc(0x6592C, 9) {
+        i6592c(r)
+    }
 }
 
 fn i6592c(r: &mut Run) {
-    op!(r, 0x6592C, 7, Op::DLoad { d: 0, len: 5, val: 0x11D }); // D0=(5) #0011D
-    i65933(r)
+    r.cpu.d_load(0, 5, 0x11D); // D0=(5) #0011D
+    if r.next(0x65933, 9) {
+        i65933(r)
+    }
 }
 
 fn i65933(r: &mut Run) {
-    op!(r, 0x65933, 2, Op::Zero { r: R::C, f: Field::A }); // C=0 A
-    i65935(r)
+    r.cpu.zero(R::C, Field::A); // C=0 A
+    if r.next(0x65935, 4) {
+        i65935(r)
+    }
 }
 
 fn i65935(r: &mut Run) {
-    op!(r, 0x65935, 7, Op::BitTest { r: R::A, bit: 0, set: false, goyes: Some(0x6593E) }); // ?ABIT=0 0 / GOYES #6593E
-    i6593c(r)
+    r.cpu.pc = 0x6593C;
+    r.cpu.bit_test(R::A, 0, false, Some(0x6593E)); // ?ABIT=0 0 / GOYES #6593E
+    if r.next_pc(0x6593C, 9) {
+        i6593c(r)
+    }
 }
 
 fn i6593c(r: &mut Run) {
-    op!(r, 0x6593C, 2, Op::Inc { r: R::C, f: Field::A }); // C=C+1 A
-    i6593e(r)
+    r.cpu.inc(R::C, Field::A); // C=C+1 A
+    if r.next(0x6593E, 4) {
+        i6593e(r)
+    }
 }
 
 fn i6593e(r: &mut Run) {
-    op!(r, 0x6593E, 4, Op::Mem { store: true, d: 0, r: R::C, f: Field::Nibbles(1) }); // DAT0=C 1
-    i65942(r)
+    r.sync();
+    r.cpu.store(0, R::C, Field::Nibbles(1), r.hw); // DAT0=C 1
+    if r.next_io(0x65942, 15) {
+        i65942(r)
+    }
 }
 
 fn i65942(r: &mut Run) {
-    op!(r, 0x65942, 3, Op::Srb(R::A)); // ASRB
-    i65945(r)
+    r.cpu.srb(R::A); // ASRB
+    if r.next(0x65945, 5) {
+        i65945(r)
+    }
 }
 
 fn i65945(r: &mut Run) {
-    op!(r, 0x65945, 3, Op::Dec { r: R::B, f: Field::B }); // B=B-1 B
-    i65948(r)
+    r.cpu.dec(R::B, Field::B); // B=B-1 B
+    if r.next(0x65948, 5) {
+        i65948(r)
+    }
 }
 
 fn i65948(r: &mut Run) {
-    op!(r, 0x65948, 3, Op::CondJump(Cond::NoCarry, 0x6591A)); // GONC #6591A
-    i6594b(r)
+    r.cpu.pc = 0x6594B;
+    r.cpu.jump_if(Cond::NoCarry, 0x6591A); // GONC #6591A
+    if r.next_pc(0x6594B, 5) {
+        i6594b(r)
+    }
 }
 
 fn i6594b(r: &mut Run) {
-    op!(r, 0x6594B, 2, Op::Rtn(RtnKind::ClearCarry)); // RTNCC
+    r.cpu.rtn(RtnKind::ClearCarry); // RTNCC
+    r.spend(9);
 }
 
 fn i65953(r: &mut Run) {
-    op!(r, 0x65953, 3, Op::StSet { bit: 0, set: true }); // ST=1 0
-    i65956(r)
+    r.cpu.st_set(0, true); // ST=1 0
+    if r.next(0x65956, 5) {
+        i65956(r)
+    }
 }
 
 fn i65956(r: &mut Run) {
-    op!(r, 0x65956, 4, Op::Jump(0x65962)); // GOTO #65962
+    r.cpu.pc = 0x65962; // GOTO #65962
+    r.spend(6);
 }
 
 fn i6595f(r: &mut Run) {
-    op!(r, 0x6595F, 3, Op::StSet { bit: 0, set: false }); // ST=0 0
-    i65962(r)
+    r.cpu.st_set(0, false); // ST=0 0
+    if r.next(0x65962, 5) {
+        i65962(r)
+    }
 }
 
 fn i65962(r: &mut Run) {
-    op!(r, 0x65962, 3, Op::Mem { store: false, d: 1, r: R::A, f: Field::A }); // A=DAT1 A
-    i65965(r)
+    r.sync();
+    r.cpu.load(1, R::A, Field::A, r.hw); // A=DAT1 A
+    if r.next_io(0x65965, 19) {
+        i65965(r)
+    }
 }
 
 fn i65965(r: &mut Run) {
-    op!(r, 0x65965, 3, Op::DExR { d: 1, r: R::A, short: false }); // AD1EX
-    i65968(r)
+    r.cpu.d_ex_r(1, R::A, false); // AD1EX
+    if r.next(0x65968, 5) {
+        i65968(r)
+    }
 }
 
 fn i65968(r: &mut Run) {
-    op!(r, 0x65968, 3, Op::DAdd { d: 1, n: 0xA }); // D1=D1+ 10
-    i6596b(r)
+    r.cpu.d_add(1, 10); // D1=D1+ 10
+    if r.next(0x6596B, 5) {
+        i6596b(r)
+    }
 }
 
 fn i6596b(r: &mut Run) {
-    op!(r, 0x6596B, 3, Op::Mem { store: false, d: 1, r: R::C, f: Field::A }); // C=DAT1 A
-    i6596e(r)
+    r.sync();
+    r.cpu.load(1, R::C, Field::A, r.hw); // C=DAT1 A
+    if r.next_io(0x6596E, 19) {
+        i6596e(r)
+    }
 }
 
 fn i6596e(r: &mut Run) {
-    op!(r, 0x6596E, 3, Op::Scratch { op: ScratchOp::ToScratch, r: R::C, n: 0, f: Field::W }); // R0=C
-    i65971(r)
+    r.cpu.scratch(ScratchOp::ToScratch, R::C, 0, Field::W); // R0=C
+    if r.next(0x65971, 5) {
+        i65971(r)
+    }
 }
 
 fn i65971(r: &mut Run) {
-    op!(r, 0x65971, 3, Op::DFromR { d: 1, r: R::A, short: false }); // D1=A
-    i65974(r)
+    r.cpu.d_from_r(1, R::A, false); // D1=A
+    if r.next(0x65974, 5) {
+        i65974(r)
+    }
 }
 
 fn i65974(r: &mut Run) {
-    op!(r, 0x65974, 3, Op::DAdd { d: 1, n: 5 }); // D1=D1+ 5
-    i65977(r)
+    r.cpu.d_add(1, 5); // D1=D1+ 5
+    if r.next(0x65977, 5) {
+        i65977(r)
+    }
 }
 
 fn i65977(r: &mut Run) {
-    op!(r, 0x65977, 2, Op::Inc { r: R::D, f: Field::A }); // D=D+1 A
-    i65979(r)
+    r.cpu.inc(R::D, Field::A); // D=D+1 A
+    if r.next(0x65979, 4) {
+        i65979(r)
+    }
 }
 
 fn i65979(r: &mut Run) {
-    op!(r, 0x65979, 5, Op::StTest { bit: 0, set: false, goyes: Some(0x65991) }); // ?ST=0 0 / GOYES #65991
-    i6597e(r)
+    r.cpu.pc = 0x6597E;
+    r.cpu.st_test(0, false, Some(0x65991)); // ?ST=0 0 / GOYES #65991
+    if r.next_pc(0x6597E, 7) {
+        i6597e(r)
+    }
 }
 
 fn i6597e(r: &mut Run) {
-    op!(r, 0x6597E, 3, Op::Mem { store: false, d: 1, r: R::A, f: Field::A }); // A=DAT1 A
-    i65981(r)
+    r.sync();
+    r.cpu.load(1, R::A, Field::A, r.hw); // A=DAT1 A
+    if r.next_io(0x65981, 19) {
+        i65981(r)
+    }
 }
 
 fn i65981(r: &mut Run) {
-    op!(r, 0x65981, 3, Op::DAdd { d: 1, n: 5 }); // D1=D1+ 5
-    i65984(r)
+    r.cpu.d_add(1, 5); // D1=D1+ 5
+    if r.next(0x65984, 5) {
+        i65984(r)
+    }
 }
 
 fn i65984(r: &mut Run) {
-    op!(r, 0x65984, 2, Op::Inc { r: R::D, f: Field::A }); // D=D+1 A
-    i65986(r)
+    r.cpu.inc(R::D, Field::A); // D=D+1 A
+    if r.next(0x65986, 4) {
+        i65986(r)
+    }
 }
 
 fn i65986(r: &mut Run) {
-    op!(r, 0x65986, 7, Op::Call(0x679B)); // GOSUB #0679B
+    r.cpu.pc = 0x6598D;
+    r.cpu.call(0x0679B); // GOSUB #0679B
+    r.spend(9);
 }
 
 fn i6598d(r: &mut Run) {
-    op!(r, 0x6598D, 4, Op::Jump(0x6599B)); // GOTO #6599B
+    r.cpu.pc = 0x6599B; // GOTO #6599B
+    r.spend(6);
 }
 
 fn i65991(r: &mut Run) {
-    op!(r, 0x65991, 7, Op::Call(0x679B)); // GOSUB #0679B
+    r.cpu.pc = 0x65998;
+    r.cpu.call(0x0679B); // GOSUB #0679B
+    r.spend(9);
 }
 
 fn i65998(r: &mut Run) {
-    op!(r, 0x65998, 3, Op::Mem { store: false, d: 1, r: R::A, f: Field::A }); // A=DAT1 A
-    i6599b(r)
+    r.sync();
+    r.cpu.load(1, R::A, Field::A, r.hw); // A=DAT1 A
+    if r.next_io(0x6599B, 19) {
+        i6599b(r)
+    }
 }
 
 fn i6599b(r: &mut Run) {
-    op!(r, 0x6599B, 3, Op::DFromR { d: 1, r: R::A, short: false }); // D1=A
-    i6599e(r)
+    r.cpu.d_from_r(1, R::A, false); // D1=A
+    if r.next(0x6599E, 5) {
+        i6599e(r)
+    }
 }
 
 fn i6599e(r: &mut Run) {
-    op!(r, 0x6599E, 3, Op::DAdd { d: 1, n: 5 }); // D1=D1+ 5
-    i659a1(r)
+    r.cpu.d_add(1, 5); // D1=D1+ 5
+    if r.next(0x659A1, 5) {
+        i659a1(r)
+    }
 }
 
 fn i659a1(r: &mut Run) {
-    op!(r, 0x659A1, 3, Op::Mem { store: false, d: 1, r: R::C, f: Field::A }); // C=DAT1 A
-    i659a4(r)
+    r.sync();
+    r.cpu.load(1, R::C, Field::A, r.hw); // C=DAT1 A
+    if r.next_io(0x659A4, 19) {
+        i659a4(r)
+    }
 }
 
 fn i659a4(r: &mut Run) {
-    op!(r, 0x659A4, 6, Op::SubCon { r: R::C, f: Field::A, n: 6 }); // C=C-CON A,6
-    i659aa(r)
+    r.cpu.sub_con(R::C, Field::A, 6); // C=C-CON A,6
+    if r.next(0x659AA, 8) {
+        i659aa(r)
+    }
 }
 
 fn i659aa(r: &mut Run) {
-    op!(r, 0x659AA, 3, Op::CondJump(Cond::Carry, 0x659D7)); // GOC #659D7
-    i659ad(r)
+    r.cpu.pc = 0x659AD;
+    r.cpu.jump_if(Cond::Carry, 0x659D7); // GOC #659D7
+    if r.next_pc(0x659AD, 5) {
+        i659ad(r)
+    }
 }
 
 fn i659ad(r: &mut Run) {
-    op!(r, 0x659AD, 3, Op::DAdd { d: 1, n: 5 }); // D1=D1+ 5
-    i659b0(r)
+    r.cpu.d_add(1, 5); // D1=D1+ 5
+    if r.next(0x659B0, 5) {
+        i659b0(r)
+    }
 }
 
 fn i659b0(r: &mut Run) {
-    op!(r, 0x659B0, 4, Op::CpEx(0)); // CPEX 0
-    i659b4(r)
+    r.cpu.cp_ex(0); // CPEX 0
+    if r.next(0x659B4, 6) {
+        i659b4(r)
+    }
 }
 
 fn i659b4(r: &mut Run) {
-    op!(r, 0x659B4, 5, Op::Test { test: Test::NonZero(R::C), f: Field::A, goyes: Some(0x659D7) }); // ?C#0 A / GOYES #659D7
-    i659b9(r)
+    r.cpu.pc = 0x659B9;
+    r.cpu.test(Test::NonZero(R::C), Field::A, Some(0x659D7)); // ?C#0 A / GOYES #659D7
+    if r.next_pc(0x659B9, 7) {
+        i659b9(r)
+    }
 }
 
 fn i659b9(r: &mut Run) {
-    op!(r, 0x659B9, 3, Op::Scratch { op: ScratchOp::FromScratch, r: R::C, n: 0, f: Field::W }); // C=R0
-    i659bc(r)
+    r.cpu.scratch(ScratchOp::FromScratch, R::C, 0, Field::W); // C=R0
+    if r.next(0x659BC, 5) {
+        i659bc(r)
+    }
 }
 
 fn i659bc(r: &mut Run) {
-    op!(r, 0x659BC, 3, Op::DFromR { d: 0, r: R::C, short: false }); // D0=C
-    i659bf(r)
+    r.cpu.d_from_r(0, R::C, false); // D0=C
+    if r.next(0x659BF, 5) {
+        i659bf(r)
+    }
 }
 
 fn i659bf(r: &mut Run) {
-    op!(r, 0x659BF, 5, Op::StTest { bit: 0, set: false, goyes: Some(0x659CD) }); // ?ST=0 0 / GOYES #659CD
-    i659c4(r)
+    r.cpu.pc = 0x659C4;
+    r.cpu.st_test(0, false, Some(0x659CD)); // ?ST=0 0 / GOYES #659CD
+    if r.next_pc(0x659C4, 7) {
+        i659c4(r)
+    }
 }
 
 fn i659c4(r: &mut Run) {
-    op!(r, 0x659C4, 3, Op::DExR { d: 0, r: R::C, short: false }); // CD0EX
-    i659c7(r)
+    r.cpu.d_ex_r(0, R::C, false); // CD0EX
+    if r.next(0x659C7, 5) {
+        i659c7(r)
+    }
 }
 
 fn i659c7(r: &mut Run) {
-    op!(r, 0x659C7, 3, Op::DExR { d: 1, r: R::C, short: false }); // CD1EX
-    i659ca(r)
+    r.cpu.d_ex_r(1, R::C, false); // CD1EX
+    if r.next(0x659CA, 5) {
+        i659ca(r)
+    }
 }
 
 fn i659ca(r: &mut Run) {
-    op!(r, 0x659CA, 3, Op::DExR { d: 0, r: R::C, short: false }); // CD0EX
-    i659cd(r)
+    r.cpu.d_ex_r(0, R::C, false); // CD0EX
+    if r.next(0x659CD, 5) {
+        i659cd(r)
+    }
 }
 
 fn i659cd(r: &mut Run) {
-    op!(r, 0x659CD, 4, Op::Mem { store: false, d: 0, r: R::C, f: Field::WP }); // C=DAT0 WP
-    i659d1(r)
+    r.sync();
+    r.cpu.load(0, R::C, Field::WP, r.hw); // C=DAT0 WP
+    if r.next_io(0x659D1, r.cpu.mem_cycles(Field::WP)) {
+        i659d1(r)
+    }
 }
 
 fn i659d1(r: &mut Run) {
-    op!(r, 0x659D1, 4, Op::Mem { store: true, d: 1, r: R::C, f: Field::WP }); // DAT1=C WP
-    i659d5(r)
+    r.sync();
+    r.cpu.store(1, R::C, Field::WP, r.hw); // DAT1=C WP
+    if r.next_io(0x659D5, r.cpu.mem_cycles(Field::WP)) {
+        i659d5(r)
+    }
 }
 
 fn i659d5(r: &mut Run) {
-    op!(r, 0x659D5, 2, Op::PSet(0)); // P= 0
-    i659d7(r)
+    r.cpu.p = 0; // P= 0
+    if r.next(0x659D7, 4) {
+        i659d7(r)
+    }
 }
 
 fn i659d7(r: &mut Run) {
-    op!(r, 0x659D7, 7, Op::Jump(0x5143)); // GOTO #05143
+    r.cpu.pc = 0x05143; // GOTO #05143
+    r.spend(9);
 }
 
 fn i65a2e(r: &mut Run) {
-    op!(r, 0x65A2E, 3, Op::Mem { store: false, d: 0, r: R::A, f: Field::A }); // A=DAT0 A
-    i65a31(r)
+    r.sync();
+    r.cpu.load(0, R::A, Field::A, r.hw); // A=DAT0 A
+    if r.next_io(0x65A31, 19) {
+        i65a31(r)
+    }
 }
 
 fn i65a31(r: &mut Run) {
-    op!(r, 0x65A31, 3, Op::DAdd { d: 0, n: 5 }); // D0=D0+ 5
-    i65a34(r)
+    r.cpu.d_add(0, 5); // D0=D0+ 5
+    if r.next(0x65A34, 5) {
+        i65a34(r)
+    }
 }
 
 fn i65a34(r: &mut Run) {
-    op!(r, 0x65A34, 4, Op::PcIndirect(R::A)); // PC=(A)
+    r.sync();
+    r.cpu.pc_indirect(R::A, r.hw); // PC=(A)
+    r.spend(23);
 }
 
 fn i6670f(r: &mut Run) {
-    op!(r, 0x6670F, 3, Op::StSet { bit: 0xA, set: false }); // ST=0 10
-    i66712(r)
+    r.cpu.st_set(10, false); // ST=0 10
+    if r.next(0x66712, 5) {
+        i66712(r)
+    }
 }
 
 fn i66712(r: &mut Run) {
-    op!(r, 0x66712, 7, Op::LoadConst { r: R::C, len: 5, val: 9 }); // LC(5) #00009
-    i66719(r)
+    r.cpu.load_const(R::C, 5, 0x9); // LC(5) #00009
+    if r.next(0x66719, 9) {
+        i66719(r)
+    }
 }
 
 fn i66719(r: &mut Run) {
-    op!(r, 0x66719, 2, Op::Sub { dst: R::D, a: R::D, b: R::C, f: Field::A }); // D=D-C A
-    i6671b(r)
+    r.cpu.sub(R::D, R::D, R::C, Field::A); // D=D-C A
+    if r.next(0x6671B, 4) {
+        i6671b(r)
+    }
 }
 
 fn i6671b(r: &mut Run) {
-    op!(r, 0x6671B, 3, Op::CondJump(Cond::NoCarry, 0x66728)); // GONC #66728
-    i6671e(r)
+    r.cpu.pc = 0x6671E;
+    r.cpu.jump_if(Cond::NoCarry, 0x66728); // GONC #66728
+    if r.next_pc(0x6671E, 5) {
+        i6671e(r)
+    }
 }
 
 fn i6671e(r: &mut Run) {
-    op!(r, 0x6671E, 7, Op::Call(0x6DDAB)); // GOSUB #6DDAB
+    r.cpu.pc = 0x66725;
+    r.cpu.call(0x6DDAB); // GOSUB #6DDAB
+    r.spend(9);
 }
 
 fn i66725(r: &mut Run) {
-    op!(r, 0x66725, 3, Op::CondJump(Cond::Carry, 0x66712)); // GOC #66712
-    i66728(r)
+    r.cpu.pc = 0x66728;
+    r.cpu.jump_if(Cond::Carry, 0x66712); // GOC #66712
+    if r.next_pc(0x66728, 5) {
+        i66728(r)
+    }
 }
 
 fn i66728(r: &mut Run) {
-    op!(r, 0x66728, 2, Op::Add { dst: R::D, src: R::C, f: Field::A }); // D=D+C A
-    i6672a(r)
+    r.cpu.add(R::D, R::C, Field::A); // D=D+C A
+    if r.next(0x6672A, 4) {
+        i6672a(r)
+    }
 }
 
 fn i6672a(r: &mut Run) {
-    op!(r, 0x6672A, 7, Op::Call(0x6641)); // GOSUB #06641
+    r.cpu.pc = 0x66731;
+    r.cpu.call(0x06641); // GOSUB #06641
+    r.spend(9);
 }
 
 fn i66731(r: &mut Run) {
-    op!(r, 0x66731, 6, Op::Scratch { op: ScratchOp::ToScratch, r: R::A, n: 1, f: Field::A }); // R1=A.F A
-    i66737(r)
+    r.cpu.scratch(ScratchOp::ToScratch, R::A, 1, Field::A); // R1=A.F A
+    if r.next(0x66737, 8) {
+        i66737(r)
+    }
 }
 
 fn i66737(r: &mut Run) {
-    op!(r, 0x66737, 7, Op::Call(0x67A51)); // GOSUB #67A51
+    r.cpu.pc = 0x6673E;
+    r.cpu.call(0x67A51); // GOSUB #67A51
+    r.spend(9);
 }
 
 fn i6673e(r: &mut Run) {
-    op!(r, 0x6673E, 4, Op::Mem { store: false, d: 0, r: R::A, f: Field::S }); // A=DAT0 S
-    i66742(r)
+    r.sync();
+    r.cpu.load(0, R::A, Field::S, r.hw); // A=DAT0 S
+    if r.next_io(0x66742, 15) {
+        i66742(r)
+    }
 }
 
 fn i66742(r: &mut Run) {
-    op!(r, 0x66742, 5, Op::Test { test: Test::Zero(R::A), f: Field::S, goyes: Some(0x66776) }); // ?A=0 S / GOYES #66776
-    i66747(r)
+    r.cpu.pc = 0x66747;
+    r.cpu.test(Test::Zero(R::A), Field::S, Some(0x66776)); // ?A=0 S / GOYES #66776
+    if r.next_pc(0x66747, 7) {
+        i66747(r)
+    }
 }
 
 fn i66747(r: &mut Run) {
-    op!(r, 0x66747, 3, Op::DExR { d: 0, r: R::A, short: false }); // AD0EX
-    i6674a(r)
+    r.cpu.d_ex_r(0, R::A, false); // AD0EX
+    if r.next(0x6674A, 5) {
+        i6674a(r)
+    }
 }
 
 fn i6674a(r: &mut Run) {
-    op!(r, 0x6674A, 7, Op::LoadConst { r: R::C, len: 5, val: 0x24 }); // LC(5) #00024
-    i66751(r)
+    r.cpu.load_const(R::C, 5, 0x24); // LC(5) #00024
+    if r.next(0x66751, 9) {
+        i66751(r)
+    }
 }
 
 fn i66751(r: &mut Run) {
-    op!(r, 0x66751, 2, Op::Add { dst: R::A, src: R::C, f: Field::A }); // A=A+C A
-    i66753(r)
+    r.cpu.add(R::A, R::C, Field::A); // A=A+C A
+    if r.next(0x66753, 4) {
+        i66753(r)
+    }
 }
 
 fn i66753(r: &mut Run) {
-    op!(r, 0x66753, 3, Op::DFromR { d: 0, r: R::A, short: false }); // D0=A
-    i66756(r)
+    r.cpu.d_from_r(0, R::A, false); // D0=A
+    if r.next(0x66756, 5) {
+        i66756(r)
+    }
 }
 
 fn i66756(r: &mut Run) {
-    op!(r, 0x66756, 2, Op::Zero { r: R::A, f: Field::A }); // A=0 A
-    i66758(r)
+    r.cpu.zero(R::A, Field::A); // A=0 A
+    if r.next(0x66758, 4) {
+        i66758(r)
+    }
 }
 
 fn i66758(r: &mut Run) {
-    op!(r, 0x66758, 4, Op::Mem { store: false, d: 0, r: R::A, f: Field::X }); // A=DAT0 X
-    i6675c(r)
+    r.sync();
+    r.cpu.load(0, R::A, Field::X, r.hw); // A=DAT0 X
+    if r.next_io(0x6675C, 17) {
+        i6675c(r)
+    }
 }
 
 fn i6675c(r: &mut Run) {
-    op!(r, 0x6675C, 7, Op::Call(0x67918)); // GOSUB #67918
+    r.cpu.pc = 0x66763;
+    r.cpu.call(0x67918); // GOSUB #67918
+    r.spend(9);
 }
 
 fn i66763(r: &mut Run) {
-    op!(r, 0x66763, 3, Op::Scratch { op: ScratchOp::FromScratch, r: R::C, n: 2, f: Field::W }); // C=R2
-    i66766(r)
+    r.cpu.scratch(ScratchOp::FromScratch, R::C, 2, Field::W); // C=R2
+    if r.next(0x66766, 5) {
+        i66766(r)
+    }
 }
 
 fn i66766(r: &mut Run) {
-    op!(r, 0x66766, 3, Op::DFromR { d: 0, r: R::C, short: false }); // D0=C
-    i66769(r)
+    r.cpu.d_from_r(0, R::C, false); // D0=C
+    if r.next(0x66769, 5) {
+        i66769(r)
+    }
 }
 
 fn i66769(r: &mut Run) {
-    op!(r, 0x66769, 7, Op::LoadConst { r: R::C, len: 5, val: 0x666EC }); // LC(5) #666EC
-    i66770(r)
+    r.cpu.load_const(R::C, 5, 0x666EC); // LC(5) #666EC
+    if r.next(0x66770, 9) {
+        i66770(r)
+    }
 }
 
 fn i66770(r: &mut Run) {
-    op!(r, 0x66770, 2, Op::Copy { dst: R::A, src: R::C, f: Field::A }); // A=C A
-    i66772(r)
+    r.cpu.copy(R::A, R::C, Field::A); // A=C A
+    if r.next(0x66772, 4) {
+        i66772(r)
+    }
 }
 
 fn i66772(r: &mut Run) {
-    op!(r, 0x66772, 4, Op::PcIndirect(R::A)); // PC=(A)
+    r.sync();
+    r.cpu.pc_indirect(R::A, r.hw); // PC=(A)
+    r.spend(23);
 }
 
 fn i66776(r: &mut Run) {
-    op!(r, 0x66776, 3, Op::DAdd { d: 0, n: 1 }); // D0=D0+ 1
-    i66779(r)
+    r.cpu.d_add(0, 1); // D0=D0+ 1
+    if r.next(0x66779, 5) {
+        i66779(r)
+    }
 }
 
 fn i66779(r: &mut Run) {
-    op!(r, 0x66779, 4, Op::Mem { store: false, d: 0, r: R::A, f: Field::S }); // A=DAT0 S
-    i6677d(r)
+    r.sync();
+    r.cpu.load(0, R::A, Field::S, r.hw); // A=DAT0 S
+    if r.next_io(0x6677D, 15) {
+        i6677d(r)
+    }
 }
 
 fn i6677d(r: &mut Run) {
-    op!(r, 0x6677D, 3, Op::Add { dst: R::A, src: R::A, f: Field::S }); // A=A+A S
-    i66780(r)
+    r.cpu.add(R::A, R::A, Field::S); // A=A+A S
+    if r.next(0x66780, 5) {
+        i66780(r)
+    }
 }
 
 fn i66780(r: &mut Run) {
-    op!(r, 0x66780, 3, Op::CondJump(Cond::NoCarry, 0x6678A)); // GONC #6678A
-    i66783(r)
+    r.cpu.pc = 0x66783;
+    r.cpu.jump_if(Cond::NoCarry, 0x6678A); // GONC #6678A
+    if r.next_pc(0x66783, 5) {
+        i66783(r)
+    }
 }
 
 fn i66783(r: &mut Run) {
-    op!(r, 0x66783, 7, Op::Jump(0x685CD)); // GOTO #685CD
+    r.cpu.pc = 0x685CD; // GOTO #685CD
+    r.spend(9);
 }
 
 fn i6678a(r: &mut Run) {
-    op!(r, 0x6678A, 4, Op::Mem { store: false, d: 0, r: R::A, f: Field::S }); // A=DAT0 S
-    i6678e(r)
+    r.sync();
+    r.cpu.load(0, R::A, Field::S, r.hw); // A=DAT0 S
+    if r.next_io(0x6678E, 15) {
+        i6678e(r)
+    }
 }
 
 fn i6678e(r: &mut Run) {
-    op!(r, 0x6678E, 2, Op::PSet(0xF)); // P= 15
-    i66790(r)
+    r.cpu.p = 15; // P= 15
+    if r.next(0x66790, 4) {
+        i66790(r)
+    }
 }
 
 fn i66790(r: &mut Run) {
-    op!(r, 0x66790, 3, Op::LoadConst { r: R::C, len: 1, val: 8 }); // LC(1) #8
-    i66793(r)
+    r.cpu.load_const(R::C, 1, 0x8); // LC(1) #8
+    if r.next(0x66793, 5) {
+        i66793(r)
+    }
 }
 
 fn i66793(r: &mut Run) {
-    op!(r, 0x66793, 4, Op::Logic { and: false, dst: R::A, src: R::C, f: Field::P }); // A=A!C P
-    i66797(r)
+    r.cpu.or(R::A, R::C, Field::P); // A=A!C P
+    if r.next(0x66797, 6) {
+        i66797(r)
+    }
 }
 
 fn i66797(r: &mut Run) {
-    op!(r, 0x66797, 2, Op::PSet(0)); // P= 0
-    i66799(r)
+    r.cpu.p = 0; // P= 0
+    if r.next(0x66799, 4) {
+        i66799(r)
+    }
 }
 
 fn i66799(r: &mut Run) {
-    op!(r, 0x66799, 4, Op::Mem { store: true, d: 0, r: R::A, f: Field::S }); // DAT0=A S
-    i6679d(r)
+    r.sync();
+    r.cpu.store(0, R::A, Field::S, r.hw); // DAT0=A S
+    if r.next_io(0x6679D, 15) {
+        i6679d(r)
+    }
 }
 
 fn i6679d(r: &mut Run) {
-    op!(r, 0x6679D, 3, Op::DAdd { d: 0, n: 4 }); // D0=D0+ 4
-    i667a0(r)
+    r.cpu.d_add(0, 4); // D0=D0+ 4
+    if r.next(0x667A0, 5) {
+        i667a0(r)
+    }
 }
 
 fn i667a0(r: &mut Run) {
-    op!(r, 0x667A0, 2, Op::Zero { r: R::A, f: Field::A }); // A=0 A
-    i667a2(r)
+    r.cpu.zero(R::A, Field::A); // A=0 A
+    if r.next(0x667A2, 4) {
+        i667a2(r)
+    }
 }
 
 fn i667a2(r: &mut Run) {
-    op!(r, 0x667A2, 4, Op::Mem { store: false, d: 0, r: R::A, f: Field::X }); // A=DAT0 X
-    i667a6(r)
+    r.sync();
+    r.cpu.load(0, R::A, Field::X, r.hw); // A=DAT0 X
+    if r.next_io(0x667A6, 17) {
+        i667a6(r)
+    }
 }
 
 fn i667a6(r: &mut Run) {
-    op!(r, 0x667A6, 7, Op::Call(0x680FB)); // GOSUB #680FB
+    r.cpu.pc = 0x667AD;
+    r.cpu.call(0x680FB); // GOSUB #680FB
+    r.spend(9);
 }
 
 fn i667ad(r: &mut Run) {
-    op!(r, 0x667AD, 3, Op::DSub { d: 0, n: 3 }); // D0=D0- 3
-    i667b0(r)
+    r.cpu.d_sub(0, 3); // D0=D0- 3
+    if r.next(0x667B0, 5) {
+        i667b0(r)
+    }
 }
 
 fn i667b0(r: &mut Run) {
-    op!(r, 0x667B0, 2, Op::Zero { r: R::A, f: Field::A }); // A=0 A
-    i667b2(r)
+    r.cpu.zero(R::A, Field::A); // A=0 A
+    if r.next(0x667B2, 4) {
+        i667b2(r)
+    }
 }
 
 fn i667b2(r: &mut Run) {
-    op!(r, 0x667B2, 4, Op::Mem { store: false, d: 0, r: R::A, f: Field::X }); // A=DAT0 X
-    i667b6(r)
+    r.sync();
+    r.cpu.load(0, R::A, Field::X, r.hw); // A=DAT0 X
+    if r.next_io(0x667B6, 17) {
+        i667b6(r)
+    }
 }
 
 fn i667b6(r: &mut Run) {
-    op!(r, 0x667B6, 7, Op::Call(0x67918)); // GOSUB #67918
+    r.cpu.pc = 0x667BD;
+    r.cpu.call(0x67918); // GOSUB #67918
+    r.spend(9);
 }
 
 fn i667bd(r: &mut Run) {
-    op!(r, 0x667BD, 3, Op::DExR { d: 1, r: R::C, short: false }); // CD1EX
-    i667c0(r)
+    r.cpu.d_ex_r(1, R::C, false); // CD1EX
+    if r.next(0x667C0, 5) {
+        i667c0(r)
+    }
 }
 
 fn i667c0(r: &mut Run) {
-    op!(r, 0x667C0, 2, Op::PushC); // RSTK=C
-    i667c2(r)
+    r.cpu.push_c(); // RSTK=C
+    if r.next(0x667C2, 4) {
+        i667c2(r)
+    }
 }
 
 fn i667c2(r: &mut Run) {
-    op!(r, 0x667C2, 7, Op::DLoad { d: 1, len: 5, val: 0x806FD }); // D1=(5) #806FD
-    i667c9(r)
+    r.cpu.d_load(1, 5, 0x806FD); // D1=(5) #806FD
+    if r.next(0x667C9, 9) {
+        i667c9(r)
+    }
 }
 
 fn i667c9(r: &mut Run) {
-    op!(r, 0x667C9, 3, Op::Mem { store: false, d: 1, r: R::C, f: Field::A }); // C=DAT1 A
-    i667cc(r)
+    r.sync();
+    r.cpu.load(1, R::C, Field::A, r.hw); // C=DAT1 A
+    if r.next_io(0x667CC, 19) {
+        i667cc(r)
+    }
 }
 
 fn i667cc(r: &mut Run) {
-    op!(r, 0x667CC, 7, Op::DLoad { d: 1, len: 5, val: 0x80770 }); // D1=(5) #80770
-    i667d3(r)
+    r.cpu.d_load(1, 5, 0x80770); // D1=(5) #80770
+    if r.next(0x667D3, 9) {
+        i667d3(r)
+    }
 }
 
 fn i667d3(r: &mut Run) {
-    op!(r, 0x667D3, 3, Op::Mem { store: false, d: 1, r: R::A, f: Field::A }); // A=DAT1 A
-    i667d6(r)
+    r.sync();
+    r.cpu.load(1, R::A, Field::A, r.hw); // A=DAT1 A
+    if r.next_io(0x667D6, 19) {
+        i667d6(r)
+    }
 }
 
 fn i667d6(r: &mut Run) {
-    op!(r, 0x667D6, 2, Op::Sub { dst: R::C, a: R::C, b: R::A, f: Field::A }); // C=C-A A
-    i667d8(r)
+    r.cpu.sub(R::C, R::C, R::A, Field::A); // C=C-A A
+    if r.next(0x667D8, 4) {
+        i667d8(r)
+    }
 }
 
 fn i667d8(r: &mut Run) {
-    op!(r, 0x667D8, 7, Op::DLoad { d: 1, len: 5, val: 0x808C5 }); // D1=(5) #808C5
-    i667df(r)
+    r.cpu.d_load(1, 5, 0x808C5); // D1=(5) #808C5
+    if r.next(0x667DF, 9) {
+        i667df(r)
+    }
 }
 
 fn i667df(r: &mut Run) {
-    op!(r, 0x667DF, 3, Op::Mem { store: false, d: 1, r: R::A, f: Field::A }); // A=DAT1 A
-    i667e2(r)
+    r.sync();
+    r.cpu.load(1, R::A, Field::A, r.hw); // A=DAT1 A
+    if r.next_io(0x667E2, 19) {
+        i667e2(r)
+    }
 }
 
 fn i667e2(r: &mut Run) {
-    op!(r, 0x667E2, 3, Op::Scratch { op: ScratchOp::Exchange, r: R::C, n: 1, f: Field::W }); // CR1EX
-    i667e5(r)
+    r.cpu.scratch(ScratchOp::Exchange, R::C, 1, Field::W); // CR1EX
+    if r.next(0x667E5, 5) {
+        i667e5(r)
+    }
 }
 
 fn i667e5(r: &mut Run) {
-    op!(r, 0x667E5, 2, Op::Sub { dst: R::A, a: R::A, b: R::C, f: Field::A }); // A=A-C A
-    i667e7(r)
+    r.cpu.sub(R::A, R::A, R::C, Field::A); // A=A-C A
+    if r.next(0x667E7, 4) {
+        i667e7(r)
+    }
 }
 
 fn i667e7(r: &mut Run) {
-    op!(r, 0x667E7, 2, Op::Copy { dst: R::C, src: R::A, f: Field::A }); // C=A A
-    i667e9(r)
+    r.cpu.copy(R::C, R::A, Field::A); // C=A A
+    if r.next(0x667E9, 4) {
+        i667e9(r)
+    }
 }
 
 fn i667e9(r: &mut Run) {
-    op!(r, 0x667E9, 2, Op::Add { dst: R::A, src: R::A, f: Field::A }); // A=A+A A
-    i667eb(r)
+    r.cpu.add(R::A, R::A, Field::A); // A=A+A A
+    if r.next(0x667EB, 4) {
+        i667eb(r)
+    }
 }
 
 fn i667eb(r: &mut Run) {
-    op!(r, 0x667EB, 2, Op::Add { dst: R::A, src: R::A, f: Field::A }); // A=A+A A
-    i667ed(r)
+    r.cpu.add(R::A, R::A, Field::A); // A=A+A A
+    if r.next(0x667ED, 4) {
+        i667ed(r)
+    }
 }
 
 fn i667ed(r: &mut Run) {
-    op!(r, 0x667ED, 2, Op::Add { dst: R::A, src: R::C, f: Field::A }); // A=A+C A
-    i667ef(r)
+    r.cpu.add(R::A, R::C, Field::A); // A=A+C A
+    if r.next(0x667EF, 4) {
+        i667ef(r)
+    }
 }
 
 fn i667ef(r: &mut Run) {
-    op!(r, 0x667EF, 3, Op::Scratch { op: ScratchOp::FromScratch, r: R::C, n: 1, f: Field::W }); // C=R1
-    i667f2(r)
+    r.cpu.scratch(ScratchOp::FromScratch, R::C, 1, Field::W); // C=R1
+    if r.next(0x667F2, 5) {
+        i667f2(r)
+    }
 }
 
 fn i667f2(r: &mut Run) {
-    op!(r, 0x667F2, 2, Op::Add { dst: R::C, src: R::A, f: Field::A }); // C=C+A A
-    i667f4(r)
+    r.cpu.add(R::C, R::A, Field::A); // C=C+A A
+    if r.next(0x667F4, 4) {
+        i667f4(r)
+    }
 }
 
 fn i667f4(r: &mut Run) {
-    op!(r, 0x667F4, 3, Op::DFromR { d: 1, r: R::C, short: false }); // D1=C
-    i667f7(r)
+    r.cpu.d_from_r(1, R::C, false); // D1=C
+    if r.next(0x667F7, 5) {
+        i667f7(r)
+    }
 }
 
 fn i667f7(r: &mut Run) {
-    op!(r, 0x667F7, 3, Op::Mem { store: false, d: 1, r: R::A, f: Field::A }); // A=DAT1 A
-    i667fa(r)
+    r.sync();
+    r.cpu.load(1, R::A, Field::A, r.hw); // A=DAT1 A
+    if r.next_io(0x667FA, 19) {
+        i667fa(r)
+    }
 }
 
 fn i667fa(r: &mut Run) {
-    op!(r, 0x667FA, 2, Op::PopC); // C=RSTK
-    i667fc(r)
+    r.cpu.pop_c(); // C=RSTK
+    if r.next(0x667FC, 4) {
+        i667fc(r)
+    }
 }
 
 fn i667fc(r: &mut Run) {
-    op!(r, 0x667FC, 3, Op::DFromR { d: 1, r: R::C, short: false }); // D1=C
-    i667ff(r)
+    r.cpu.d_from_r(1, R::C, false); // D1=C
+    if r.next(0x667FF, 5) {
+        i667ff(r)
+    }
 }
 
 fn i667ff(r: &mut Run) {
-    op!(r, 0x667FF, 3, Op::DSub { d: 1, n: 5 }); // D1=D1- 5
-    i66802(r)
+    r.cpu.d_sub(1, 5); // D1=D1- 5
+    if r.next(0x66802, 5) {
+        i66802(r)
+    }
 }
 
 fn i66802(r: &mut Run) {
-    op!(r, 0x66802, 2, Op::Dec { r: R::D, f: Field::A }); // D=D-1 A
-    i66804(r)
+    r.cpu.dec(R::D, Field::A); // D=D-1 A
+    if r.next(0x66804, 4) {
+        i66804(r)
+    }
 }
 
 fn i66804(r: &mut Run) {
-    op!(r, 0x66804, 3, Op::Mem { store: true, d: 1, r: R::A, f: Field::A }); // DAT1=A A
-    i66807(r)
+    r.sync();
+    r.cpu.store(1, R::A, Field::A, r.hw); // DAT1=A A
+    if r.next_io(0x66807, 19) {
+        i66807(r)
+    }
 }
 
 fn i66807(r: &mut Run) {
-    op!(r, 0x66807, 3, Op::Scratch { op: ScratchOp::FromScratch, r: R::C, n: 2, f: Field::W }); // C=R2
-    i6680a(r)
+    r.cpu.scratch(ScratchOp::FromScratch, R::C, 2, Field::W); // C=R2
+    if r.next(0x6680A, 5) {
+        i6680a(r)
+    }
 }
 
 fn i6680a(r: &mut Run) {
-    op!(r, 0x6680A, 3, Op::DFromR { d: 0, r: R::C, short: false }); // D0=C
-    i6680d(r)
+    r.cpu.d_from_r(0, R::C, false); // D0=C
+    if r.next(0x6680D, 5) {
+        i6680d(r)
+    }
 }
 
 fn i6680d(r: &mut Run) {
-    op!(r, 0x6680D, 7, Op::LoadConst { r: R::C, len: 5, val: 0x128B0 }); // LC(5) #128B0
-    i66814(r)
+    r.cpu.load_const(R::C, 5, 0x128B0); // LC(5) #128B0
+    if r.next(0x66814, 9) {
+        i66814(r)
+    }
 }
 
 fn i66814(r: &mut Run) {
-    op!(r, 0x66814, 2, Op::Copy { dst: R::A, src: R::C, f: Field::A }); // A=C A
-    i66816(r)
+    r.cpu.copy(R::A, R::C, Field::A); // A=C A
+    if r.next(0x66816, 4) {
+        i66816(r)
+    }
 }
 
 fn i66816(r: &mut Run) {
-    op!(r, 0x66816, 4, Op::PcIndirect(R::A)); // PC=(A)
+    r.sync();
+    r.cpu.pc_indirect(R::A, r.hw); // PC=(A)
+    r.spend(23);
 }
 
 fn i668a1(r: &mut Run) {
-    op!(r, 0x668A1, 7, Op::Call(0x67A4A)); // GOSUB #67A4A
+    r.cpu.pc = 0x668A8;
+    r.cpu.call(0x67A4A); // GOSUB #67A4A
+    r.spend(9);
 }
 
 fn i668a8(r: &mut Run) {
-    op!(r, 0x668A8, 3, Op::DSub { d: 1, n: 5 }); // D1=D1- 5
-    i668ab(r)
+    r.cpu.d_sub(1, 5); // D1=D1- 5
+    if r.next(0x668AB, 5) {
+        i668ab(r)
+    }
 }
 
 fn i668ab(r: &mut Run) {
-    op!(r, 0x668AB, 2, Op::Dec { r: R::D, f: Field::A }); // D=D-1 A
-    i668ad(r)
+    r.cpu.dec(R::D, Field::A); // D=D-1 A
+    if r.next(0x668AD, 4) {
+        i668ad(r)
+    }
 }
 
 fn i668ad(r: &mut Run) {
-    op!(r, 0x668AD, 4, Op::Mem { store: false, d: 0, r: R::A, f: Field::S }); // A=DAT0 S
-    i668b1(r)
+    r.sync();
+    r.cpu.load(0, R::A, Field::S, r.hw); // A=DAT0 S
+    if r.next_io(0x668B1, 15) {
+        i668b1(r)
+    }
 }
 
 fn i668b1(r: &mut Run) {
-    op!(r, 0x668B1, 3, Op::DAdd { d: 0, n: 0xA }); // D0=D0+ 10
-    i668b4(r)
+    r.cpu.d_add(0, 10); // D0=D0+ 10
+    if r.next(0x668B4, 5) {
+        i668b4(r)
+    }
 }
 
 fn i668b4(r: &mut Run) {
-    op!(r, 0x668B4, 3, Op::DAdd { d: 0, n: 0xA }); // D0=D0+ 10
-    i668b7(r)
+    r.cpu.d_add(0, 10); // D0=D0+ 10
+    if r.next(0x668B7, 5) {
+        i668b7(r)
+    }
 }
 
 fn i668b7(r: &mut Run) {
-    op!(r, 0x668B7, 2, Op::Zero { r: R::A, f: Field::A }); // A=0 A
-    i668b9(r)
+    r.cpu.zero(R::A, Field::A); // A=0 A
+    if r.next(0x668B9, 4) {
+        i668b9(r)
+    }
 }
 
 fn i668b9(r: &mut Run) {
-    op!(r, 0x668B9, 3, Op::Mem { store: false, d: 0, r: R::A, f: Field::B }); // A=DAT0 B
-    i668bc(r)
+    r.sync();
+    r.cpu.load(0, R::A, Field::B, r.hw); // A=DAT0 B
+    if r.next_io(0x668BC, 16) {
+        i668bc(r)
+    }
 }
 
 fn i668bc(r: &mut Run) {
-    op!(r, 0x668BC, 5, Op::Test { test: Test::NonZero(R::A), f: Field::S, goyes: Some(0x668E8) }); // ?A#0 S / GOYES #668E8
-    i668c1(r)
+    r.cpu.pc = 0x668C1;
+    r.cpu.test(Test::NonZero(R::A), Field::S, Some(0x668E8)); // ?A#0 S / GOYES #668E8
+    if r.next_pc(0x668C1, 7) {
+        i668c1(r)
+    }
 }
 
 fn i668c1(r: &mut Run) {
-    op!(r, 0x668C1, 5, Op::Test { test: Test::Zero(R::A), f: Field::B, goyes: Some(0x668E8) }); // ?A=0 B / GOYES #668E8
-    i668c6(r)
+    r.cpu.pc = 0x668C6;
+    r.cpu.test(Test::Zero(R::A), Field::B, Some(0x668E8)); // ?A=0 B / GOYES #668E8
+    if r.next_pc(0x668C6, 7) {
+        i668c6(r)
+    }
 }
 
 fn i668c6(r: &mut Run) {
-    op!(r, 0x668C6, 3, Op::Inc { r: R::A, f: Field::B }); // A=A+1 B
-    i668c9(r)
+    r.cpu.inc(R::A, Field::B); // A=A+1 B
+    if r.next(0x668C9, 5) {
+        i668c9(r)
+    }
 }
 
 fn i668c9(r: &mut Run) {
-    op!(r, 0x668C9, 3, Op::CondJump(Cond::NoCarry, 0x668D3)); // GONC #668D3
-    i668cc(r)
+    r.cpu.pc = 0x668CC;
+    r.cpu.jump_if(Cond::NoCarry, 0x668D3); // GONC #668D3
+    if r.next_pc(0x668CC, 5) {
+        i668cc(r)
+    }
 }
 
 fn i668cc(r: &mut Run) {
-    op!(r, 0x668CC, 7, Op::Jump(0x684C3)); // GOTO #684C3
+    r.cpu.pc = 0x684C3; // GOTO #684C3
+    r.spend(9);
 }
 
 fn i668d3(r: &mut Run) {
-    op!(r, 0x668D3, 3, Op::Dec { r: R::A, f: Field::B }); // A=A-1 B
-    i668d6(r)
+    r.cpu.dec(R::A, Field::B); // A=A-1 B
+    if r.next(0x668D6, 5) {
+        i668d6(r)
+    }
 }
 
 fn i668d6(r: &mut Run) {
-    op!(r, 0x668D6, 7, Op::Call(0x683D2)); // GOSUB #683D2
+    r.cpu.pc = 0x668DD;
+    r.cpu.call(0x683D2); // GOSUB #683D2
+    r.spend(9);
 }
 
 fn i668dd(r: &mut Run) {
-    op!(r, 0x668DD, 7, Op::DLoad { d: 0, len: 5, val: 0x6684C }); // D0=(5) #6684C
-    i668e4(r)
+    r.cpu.d_load(0, 5, 0x6684C); // D0=(5) #6684C
+    if r.next(0x668E4, 9) {
+        i668e4(r)
+    }
 }
 
 fn i668e4(r: &mut Run) {
-    op!(r, 0x668E4, 4, Op::PcIndirect(R::A)); // PC=(A)
+    r.sync();
+    r.cpu.pc_indirect(R::A, r.hw); // PC=(A)
+    r.spend(23);
 }
 
 fn i668e8(r: &mut Run) {
-    op!(r, 0x668E8, 3, Op::DAdd { d: 0, n: 0xA }); // D0=D0+ 10
-    i668eb(r)
+    r.cpu.d_add(0, 10); // D0=D0+ 10
+    if r.next(0x668EB, 5) {
+        i668eb(r)
+    }
 }
 
 fn i668eb(r: &mut Run) {
-    op!(r, 0x668EB, 2, Op::Zero { r: R::A, f: Field::A }); // A=0 A
-    i668ed(r)
+    r.cpu.zero(R::A, Field::A); // A=0 A
+    if r.next(0x668ED, 4) {
+        i668ed(r)
+    }
 }
 
 fn i668ed(r: &mut Run) {
-    op!(r, 0x668ED, 4, Op::Mem { store: false, d: 0, r: R::A, f: Field::X }); // A=DAT0 X
-    i668f1(r)
+    r.sync();
+    r.cpu.load(0, R::A, Field::X, r.hw); // A=DAT0 X
+    if r.next_io(0x668F1, 17) {
+        i668f1(r)
+    }
 }
 
 fn i668f1(r: &mut Run) {
-    op!(r, 0x668F1, 5, Op::Test { test: Test::Zero(R::A), f: Field::A, goyes: Some(0x66919) }); // ?A=0 A / GOYES #66919
-    i668f6(r)
+    r.cpu.pc = 0x668F6;
+    r.cpu.test(Test::Zero(R::A), Field::A, Some(0x66919)); // ?A=0 A / GOYES #66919
+    if r.next_pc(0x668F6, 7) {
+        i668f6(r)
+    }
 }
 
 fn i668f6(r: &mut Run) {
-    op!(r, 0x668F6, 6, Op::Scratch { op: ScratchOp::ToScratch, r: R::A, n: 3, f: Field::A }); // R3=A.F A
-    i668fc(r)
+    r.cpu.scratch(ScratchOp::ToScratch, R::A, 3, Field::A); // R3=A.F A
+    if r.next(0x668FC, 8) {
+        i668fc(r)
+    }
 }
 
 fn i668fc(r: &mut Run) {
-    op!(r, 0x668FC, 3, Op::DAdd { d: 1, n: 5 }); // D1=D1+ 5
-    i668ff(r)
+    r.cpu.d_add(1, 5); // D1=D1+ 5
+    if r.next(0x668FF, 5) {
+        i668ff(r)
+    }
 }
 
 fn i668ff(r: &mut Run) {
-    op!(r, 0x668FF, 2, Op::Inc { r: R::D, f: Field::A }); // D=D+1 A
-    i66901(r)
+    r.cpu.inc(R::D, Field::A); // D=D+1 A
+    if r.next(0x66901, 4) {
+        i66901(r)
+    }
 }
 
 fn i66901(r: &mut Run) {
-    op!(r, 0x66901, 7, Op::Call(0x67918)); // GOSUB #67918
+    r.cpu.pc = 0x66908;
+    r.cpu.call(0x67918); // GOSUB #67918
+    r.spend(9);
 }
 
 fn i66908(r: &mut Run) {
-    op!(r, 0x66908, 6, Op::Scratch { op: ScratchOp::FromScratch, r: R::A, n: 3, f: Field::A }); // A=R3.F A
-    i6690e(r)
+    r.cpu.scratch(ScratchOp::FromScratch, R::A, 3, Field::A); // A=R3.F A
+    if r.next(0x6690E, 8) {
+        i6690e(r)
+    }
 }
 
 fn i6690e(r: &mut Run) {
-    op!(r, 0x6690E, 7, Op::Call(0x67A3D)); // GOSUB #67A3D
+    r.cpu.pc = 0x66915;
+    r.cpu.call(0x67A3D); // GOSUB #67A3D
+    r.spend(9);
 }
 
 fn i66915(r: &mut Run) {
-    op!(r, 0x66915, 4, Op::Jump(0x668AD)); // GOTO #668AD
+    r.cpu.pc = 0x668AD; // GOTO #668AD
+    r.spend(6);
 }
 
 fn i66919(r: &mut Run) {
-    op!(r, 0x66919, 3, Op::DAdd { d: 1, n: 5 }); // D1=D1+ 5
-    i6691c(r)
+    r.cpu.d_add(1, 5); // D1=D1+ 5
+    if r.next(0x6691C, 5) {
+        i6691c(r)
+    }
 }
 
 fn i6691c(r: &mut Run) {
-    op!(r, 0x6691C, 2, Op::Inc { r: R::D, f: Field::A }); // D=D+1 A
-    i6691e(r)
+    r.cpu.inc(R::D, Field::A); // D=D+1 A
+    if r.next(0x6691E, 4) {
+        i6691e(r)
+    }
 }
 
 fn i6691e(r: &mut Run) {
-    op!(r, 0x6691E, 7, Op::DLoad { d: 0, len: 5, val: 0x66851 }); // D0=(5) #66851
-    i66925(r)
+    r.cpu.d_load(0, 5, 0x66851); // D0=(5) #66851
+    if r.next(0x66925, 9) {
+        i66925(r)
+    }
 }
 
 fn i66925(r: &mut Run) {
-    op!(r, 0x66925, 10, Op::LoadConst { r: R::A, len: 5, val: 0x6FB7 }); // LA(5) #06FB7
-    i6692f(r)
+    r.cpu.load_const(R::A, 5, 0x6FB7); // LA(5) #06FB7
+    if r.next(0x6692F, 12) {
+        i6692f(r)
+    }
 }
 
 fn i6692f(r: &mut Run) {
-    op!(r, 0x6692F, 4, Op::PcIndirect(R::A)); // PC=(A)
+    r.sync();
+    r.cpu.pc_indirect(R::A, r.hw); // PC=(A)
+    r.spend(23);
 }
 
 fn i66a0f(r: &mut Run) {
-    op!(r, 0x66A0F, 7, Op::Call(0x67A4A)); // GOSUB #67A4A
+    r.cpu.pc = 0x66A16;
+    r.cpu.call(0x67A4A); // GOSUB #67A4A
+    r.spend(9);
 }
 
 fn i66a16(r: &mut Run) {
-    op!(r, 0x66A16, 3, Op::DAdd { d: 1, n: 0xF }); // D1=D1+ 15
-    i66a19(r)
+    r.cpu.d_add(1, 15); // D1=D1+ 15
+    if r.next(0x66A19, 5) {
+        i66a19(r)
+    }
 }
 
 fn i66a19(r: &mut Run) {
-    op!(r, 0x66A19, 3, Op::DAdd { d: 1, n: 0xA }); // D1=D1+ 10
-    i66a1c(r)
+    r.cpu.d_add(1, 10); // D1=D1+ 10
+    if r.next(0x66A1C, 5) {
+        i66a1c(r)
+    }
 }
 
 fn i66a1c(r: &mut Run) {
-    op!(r, 0x66A1C, 3, Op::DAdd { d: 0, n: 0xA }); // D0=D0+ 10
-    i66a1f(r)
+    r.cpu.d_add(0, 10); // D0=D0+ 10
+    if r.next(0x66A1F, 5) {
+        i66a1f(r)
+    }
 }
 
 fn i66a1f(r: &mut Run) {
-    op!(r, 0x66A1F, 3, Op::DAdd { d: 0, n: 0xC }); // D0=D0+ 12
-    i66a22(r)
+    r.cpu.d_add(0, 12); // D0=D0+ 12
+    if r.next(0x66A22, 5) {
+        i66a22(r)
+    }
 }
 
 fn i66a22(r: &mut Run) {
-    op!(r, 0x66A22, 2, Op::Zero { r: R::A, f: Field::A }); // A=0 A
-    i66a24(r)
+    r.cpu.zero(R::A, Field::A); // A=0 A
+    if r.next(0x66A24, 4) {
+        i66a24(r)
+    }
 }
 
 fn i66a24(r: &mut Run) {
-    op!(r, 0x66A24, 3, Op::Mem { store: false, d: 0, r: R::A, f: Field::B }); // A=DAT0 B
-    i66a27(r)
+    r.sync();
+    r.cpu.load(0, R::A, Field::B, r.hw); // A=DAT0 B
+    if r.next_io(0x66A27, 16) {
+        i66a27(r)
+    }
 }
 
 fn i66a27(r: &mut Run) {
-    op!(r, 0x66A27, 5, Op::Test { test: Test::NonZero(R::A), f: Field::B, goyes: Some(0x66A34) }); // ?A#0 B / GOYES #66A34
-    i66a2c(r)
+    r.cpu.pc = 0x66A2C;
+    r.cpu.test(Test::NonZero(R::A), Field::B, Some(0x66A34)); // ?A#0 B / GOYES #66A34
+    if r.next_pc(0x66A2C, 7) {
+        i66a2c(r)
+    }
 }
 
 fn i66a2c(r: &mut Run) {
-    op!(r, 0x66A2C, 3, Op::DSub { d: 1, n: 5 }); // D1=D1- 5
-    i66a2f(r)
+    r.cpu.d_sub(1, 5); // D1=D1- 5
+    if r.next(0x66A2F, 5) {
+        i66a2f(r)
+    }
 }
 
 fn i66a2f(r: &mut Run) {
-    op!(r, 0x66A2F, 2, Op::Dec { r: R::D, f: Field::A }); // D=D-1 A
-    i66a31(r)
+    r.cpu.dec(R::D, Field::A); // D=D-1 A
+    if r.next(0x66A31, 4) {
+        i66a31(r)
+    }
 }
 
 fn i66a31(r: &mut Run) {
-    op!(r, 0x66A31, 3, Op::CondJump(Cond::NoCarry, 0x66A3B)); // GONC #66A3B
-    i66a34(r)
+    r.cpu.pc = 0x66A34;
+    r.cpu.jump_if(Cond::NoCarry, 0x66A3B); // GONC #66A3B
+    if r.next_pc(0x66A34, 5) {
+        i66a34(r)
+    }
 }
 
 fn i66a34(r: &mut Run) {
-    op!(r, 0x66A34, 7, Op::Call(0x68573)); // GOSUB #68573
+    r.cpu.pc = 0x66A3B;
+    r.cpu.call(0x68573); // GOSUB #68573
+    r.spend(9);
 }
 
 fn i66a3b(r: &mut Run) {
-    op!(r, 0x66A3B, 2, Op::Zero { r: R::C, f: Field::A }); // C=0 A
-    i66a3d(r)
+    r.cpu.zero(R::C, Field::A); // C=0 A
+    if r.next(0x66A3D, 4) {
+        i66a3d(r)
+    }
 }
 
 fn i66a3d(r: &mut Run) {
-    op!(r, 0x66A3D, 3, Op::DSub { d: 0, n: 5 }); // D0=D0- 5
-    i66a40(r)
+    r.cpu.d_sub(0, 5); // D0=D0- 5
+    if r.next(0x66A40, 5) {
+        i66a40(r)
+    }
 }
 
 fn i66a40(r: &mut Run) {
-    op!(r, 0x66A40, 4, Op::Mem { store: false, d: 0, r: R::C, f: Field::X }); // C=DAT0 X
-    i66a44(r)
+    r.sync();
+    r.cpu.load(0, R::C, Field::X, r.hw); // C=DAT0 X
+    if r.next_io(0x66A44, 17) {
+        i66a44(r)
+    }
 }
 
 fn i66a44(r: &mut Run) {
-    op!(r, 0x66A44, 3, Op::Scratch { op: ScratchOp::ToScratch, r: R::C, n: 0, f: Field::W }); // R0=C
-    i66a47(r)
+    r.cpu.scratch(ScratchOp::ToScratch, R::C, 0, Field::W); // R0=C
+    if r.next(0x66A47, 5) {
+        i66a47(r)
+    }
 }
 
 fn i66a47(r: &mut Run) {
-    op!(r, 0x66A47, 3, Op::DSub { d: 0, n: 3 }); // D0=D0- 3
-    i66a4a(r)
+    r.cpu.d_sub(0, 3); // D0=D0- 3
+    if r.next(0x66A4A, 5) {
+        i66a4a(r)
+    }
 }
 
 fn i66a4a(r: &mut Run) {
-    op!(r, 0x66A4A, 4, Op::Mem { store: false, d: 0, r: R::C, f: Field::X }); // C=DAT0 X
-    i66a4e(r)
+    r.sync();
+    r.cpu.load(0, R::C, Field::X, r.hw); // C=DAT0 X
+    if r.next_io(0x66A4E, 17) {
+        i66a4e(r)
+    }
 }
 
 fn i66a4e(r: &mut Run) {
-    op!(r, 0x66A4E, 3, Op::Scratch { op: ScratchOp::ToScratch, r: R::C, n: 3, f: Field::W }); // R3=C
-    i66a51(r)
+    r.cpu.scratch(ScratchOp::ToScratch, R::C, 3, Field::W); // R3=C
+    if r.next(0x66A51, 5) {
+        i66a51(r)
+    }
 }
 
 fn i66a51(r: &mut Run) {
-    op!(r, 0x66A51, 3, Op::DSub { d: 0, n: 6 }); // D0=D0- 6
-    i66a54(r)
+    r.cpu.d_sub(0, 6); // D0=D0- 6
+    if r.next(0x66A54, 5) {
+        i66a54(r)
+    }
 }
 
 fn i66a54(r: &mut Run) {
-    op!(r, 0x66A54, 4, Op::Mem { store: false, d: 0, r: R::C, f: Field::X }); // C=DAT0 X
-    i66a58(r)
+    r.sync();
+    r.cpu.load(0, R::C, Field::X, r.hw); // C=DAT0 X
+    if r.next_io(0x66A58, 17) {
+        i66a58(r)
+    }
 }
 
 fn i66a58(r: &mut Run) {
-    op!(r, 0x66A58, 3, Op::Scratch { op: ScratchOp::ToScratch, r: R::C, n: 1, f: Field::W }); // R1=C
-    i66a5b(r)
+    r.cpu.scratch(ScratchOp::ToScratch, R::C, 1, Field::W); // R1=C
+    if r.next(0x66A5B, 5) {
+        i66a5b(r)
+    }
 }
 
 fn i66a5b(r: &mut Run) {
-    op!(r, 0x66A5B, 3, Op::DSub { d: 1, n: 0xF }); // D1=D1- 15
-    i66a5e(r)
+    r.cpu.d_sub(1, 15); // D1=D1- 15
+    if r.next(0x66A5E, 5) {
+        i66a5e(r)
+    }
 }
 
 fn i66a5e(r: &mut Run) {
-    op!(r, 0x66A5E, 3, Op::DSub { d: 1, n: 0xA }); // D1=D1- 10
-    i66a61(r)
+    r.cpu.d_sub(1, 10); // D1=D1- 10
+    if r.next(0x66A61, 5) {
+        i66a61(r)
+    }
 }
 
 fn i66a61(r: &mut Run) {
-    op!(r, 0x66A61, 2, Op::Dec { r: R::D, f: Field::A }); // D=D-1 A
-    i66a63(r)
+    r.cpu.dec(R::D, Field::A); // D=D-1 A
+    if r.next(0x66A63, 4) {
+        i66a63(r)
+    }
 }
 
 fn i66a63(r: &mut Run) {
-    op!(r, 0x66A63, 7, Op::Call(0x6641)); // GOSUB #06641
+    r.cpu.pc = 0x66A6A;
+    r.cpu.call(0x06641); // GOSUB #06641
+    r.spend(9);
 }
 
 fn i66a6a(r: &mut Run) {
-    op!(r, 0x66A6A, 3, Op::Scratch { op: ScratchOp::ToScratch, r: R::A, n: 4, f: Field::W }); // R4=A
-    i66a6d(r)
+    r.cpu.scratch(ScratchOp::ToScratch, R::A, 4, Field::W); // R4=A
+    if r.next(0x66A6D, 5) {
+        i66a6d(r)
+    }
 }
 
 fn i66a6d(r: &mut Run) {
-    op!(r, 0x66A6D, 7, Op::Call(0x6641)); // GOSUB #06641
+    r.cpu.pc = 0x66A74;
+    r.cpu.call(0x06641); // GOSUB #06641
+    r.spend(9);
 }
 
 fn i66a74(r: &mut Run) {
-    op!(r, 0x66A74, 3, Op::Scratch { op: ScratchOp::Exchange, r: R::A, n: 3, f: Field::W }); // AR3EX
-    i66a77(r)
+    r.cpu.scratch(ScratchOp::Exchange, R::A, 3, Field::W); // AR3EX
+    if r.next(0x66A77, 5) {
+        i66a77(r)
+    }
 }
 
 fn i66a77(r: &mut Run) {
-    op!(r, 0x66A77, 3, Op::Scratch { op: ScratchOp::FromScratch, r: R::C, n: 1, f: Field::W }); // C=R1
-    i66a7a(r)
+    r.cpu.scratch(ScratchOp::FromScratch, R::C, 1, Field::W); // C=R1
+    if r.next(0x66A7A, 5) {
+        i66a7a(r)
+    }
 }
 
 fn i66a7a(r: &mut Run) {
-    op!(r, 0x66A7A, 2, Op::Sub { dst: R::C, a: R::A, b: R::C, f: Field::A }); // C=A-C A
-    i66a7c(r)
+    r.cpu.sub(R::C, R::A, R::C, Field::A); // C=A-C A
+    if r.next(0x66A7C, 4) {
+        i66a7c(r)
+    }
 }
 
 fn i66a7c(r: &mut Run) {
-    op!(r, 0x66A7C, 3, Op::CondJump(Cond::NoCarry, 0x66A81)); // GONC #66A81
-    i66a7f(r)
+    r.cpu.pc = 0x66A7F;
+    r.cpu.jump_if(Cond::NoCarry, 0x66A81); // GONC #66A81
+    if r.next_pc(0x66A7F, 5) {
+        i66a7f(r)
+    }
 }
 
 fn i66a7f(r: &mut Run) {
-    op!(r, 0x66A7F, 2, Op::Zero { r: R::C, f: Field::A }); // C=0 A
-    i66a81(r)
+    r.cpu.zero(R::C, Field::A); // C=0 A
+    if r.next(0x66A81, 4) {
+        i66a81(r)
+    }
 }
 
 fn i66a81(r: &mut Run) {
-    op!(r, 0x66A81, 3, Op::Scratch { op: ScratchOp::FromScratch, r: R::A, n: 3, f: Field::W }); // A=R3
-    i66a84(r)
+    r.cpu.scratch(ScratchOp::FromScratch, R::A, 3, Field::W); // A=R3
+    if r.next(0x66A84, 5) {
+        i66a84(r)
+    }
 }
 
 fn i66a84(r: &mut Run) {
-    op!(r, 0x66A84, 5, Op::Test { test: Test::Regs(Cmp::Le, R::C, R::A), f: Field::A, goyes: Some(0x66A8B) }); // ?C<=A A / GOYES #66A8B
-    i66a89(r)
+    r.cpu.pc = 0x66A89;
+    r.cpu.test(Test::Regs(Cmp::Le, R::C, R::A), Field::A, Some(0x66A8B)); // ?C<=A A / GOYES #66A8B
+    if r.next_pc(0x66A89, 7) {
+        i66a89(r)
+    }
 }
 
 fn i66a89(r: &mut Run) {
-    op!(r, 0x66A89, 2, Op::Copy { dst: R::A, src: R::C, f: Field::A }); // A=C A
-    i66a8b(r)
+    r.cpu.copy(R::A, R::C, Field::A); // A=C A
+    if r.next(0x66A8B, 4) {
+        i66a8b(r)
+    }
 }
 
 fn i66a8b(r: &mut Run) {
-    op!(r, 0x66A8B, 3, Op::Scratch { op: ScratchOp::ToScratch, r: R::A, n: 3, f: Field::W }); // R3=A
-    i66a8e(r)
+    r.cpu.scratch(ScratchOp::ToScratch, R::A, 3, Field::W); // R3=A
+    if r.next(0x66A8E, 5) {
+        i66a8e(r)
+    }
 }
 
 fn i66a8e(r: &mut Run) {
-    op!(r, 0x66A8E, 7, Op::Call(0x6641)); // GOSUB #06641
+    r.cpu.pc = 0x66A95;
+    r.cpu.call(0x06641); // GOSUB #06641
+    r.spend(9);
 }
 
 fn i66a95(r: &mut Run) {
-    op!(r, 0x66A95, 3, Op::Scratch { op: ScratchOp::FromScratch, r: R::C, n: 1, f: Field::W }); // C=R1
-    i66a98(r)
+    r.cpu.scratch(ScratchOp::FromScratch, R::C, 1, Field::W); // C=R1
+    if r.next(0x66A98, 5) {
+        i66a98(r)
+    }
 }
 
 fn i66a98(r: &mut Run) {
-    op!(r, 0x66A98, 5, Op::Test { test: Test::Regs(Cmp::Ge, R::C, R::A), f: Field::A, goyes: Some(0x66A9F) }); // ?C>=A A / GOYES #66A9F
-    i66a9d(r)
+    r.cpu.pc = 0x66A9D;
+    r.cpu.test(Test::Regs(Cmp::Ge, R::C, R::A), Field::A, Some(0x66A9F)); // ?C>=A A / GOYES #66A9F
+    if r.next_pc(0x66A9D, 7) {
+        i66a9d(r)
+    }
 }
 
 fn i66a9d(r: &mut Run) {
-    op!(r, 0x66A9D, 2, Op::Copy { dst: R::C, src: R::A, f: Field::A }); // C=A A
-    i66a9f(r)
+    r.cpu.copy(R::C, R::A, Field::A); // C=A A
+    if r.next(0x66A9F, 4) {
+        i66a9f(r)
+    }
 }
 
 fn i66a9f(r: &mut Run) {
-    op!(r, 0x66A9F, 3, Op::Scratch { op: ScratchOp::ToScratch, r: R::C, n: 1, f: Field::W }); // R1=C
-    i66aa2(r)
+    r.cpu.scratch(ScratchOp::ToScratch, R::C, 1, Field::W); // R1=C
+    if r.next(0x66AA2, 5) {
+        i66aa2(r)
+    }
 }
 
 fn i66aa2(r: &mut Run) {
-    op!(r, 0x66AA2, 7, Op::Call(0x6641)); // GOSUB #06641
+    r.cpu.pc = 0x66AA9;
+    r.cpu.call(0x06641); // GOSUB #06641
+    r.spend(9);
 }
 
 fn i66aa9(r: &mut Run) {
-    op!(r, 0x66AA9, 3, Op::Scratch { op: ScratchOp::FromScratch, r: R::C, n: 0, f: Field::W }); // C=R0
-    i66aac(r)
+    r.cpu.scratch(ScratchOp::FromScratch, R::C, 0, Field::W); // C=R0
+    if r.next(0x66AAC, 5) {
+        i66aac(r)
+    }
 }
 
 fn i66aac(r: &mut Run) {
-    op!(r, 0x66AAC, 2, Op::Add { dst: R::C, src: R::A, f: Field::A }); // C=C+A A
-    i66aae(r)
+    r.cpu.add(R::C, R::A, Field::A); // C=C+A A
+    if r.next(0x66AAE, 4) {
+        i66aae(r)
+    }
 }
 
 fn i66aae(r: &mut Run) {
-    op!(r, 0x66AAE, 3, Op::Scratch { op: ScratchOp::ToScratch, r: R::C, n: 0, f: Field::W }); // R0=C
-    i66ab1(r)
+    r.cpu.scratch(ScratchOp::ToScratch, R::C, 0, Field::W); // R0=C
+    if r.next(0x66AB1, 5) {
+        i66ab1(r)
+    }
 }
 
 fn i66ab1(r: &mut Run) {
-    op!(r, 0x66AB1, 3, Op::DAdd { d: 0, n: 0xA }); // D0=D0+ 10
-    i66ab4(r)
+    r.cpu.d_add(0, 10); // D0=D0+ 10
+    if r.next(0x66AB4, 5) {
+        i66ab4(r)
+    }
 }
 
 fn i66ab4(r: &mut Run) {
-    op!(r, 0x66AB4, 3, Op::DAdd { d: 0, n: 0xC }); // D0=D0+ 12
-    i66ab7(r)
+    r.cpu.d_add(0, 12); // D0=D0+ 12
+    if r.next(0x66AB7, 5) {
+        i66ab7(r)
+    }
 }
 
 fn i66ab7(r: &mut Run) {
-    op!(r, 0x66AB7, 2, Op::Zero { r: R::C, f: Field::A }); // C=0 A
-    i66ab9(r)
+    r.cpu.zero(R::C, Field::A); // C=0 A
+    if r.next(0x66AB9, 4) {
+        i66ab9(r)
+    }
 }
 
 fn i66ab9(r: &mut Run) {
-    op!(r, 0x66AB9, 4, Op::Mem { store: false, d: 0, r: R::C, f: Field::X }); // C=DAT0 X
-    i66abd(r)
+    r.sync();
+    r.cpu.load(0, R::C, Field::X, r.hw); // C=DAT0 X
+    if r.next_io(0x66ABD, 17) {
+        i66abd(r)
+    }
 }
 
 fn i66abd(r: &mut Run) {
-    op!(r, 0x66ABD, 3, Op::Scratch { op: ScratchOp::Exchange, r: R::C, n: 2, f: Field::W }); // CR2EX
-    i66ac0(r)
+    r.cpu.scratch(ScratchOp::Exchange, R::C, 2, Field::W); // CR2EX
+    if r.next(0x66AC0, 5) {
+        i66ac0(r)
+    }
 }
 
 fn i66ac0(r: &mut Run) {
-    op!(r, 0x66AC0, 3, Op::DFromR { d: 0, r: R::C, short: false }); // D0=C
-    i66ac3(r)
+    r.cpu.d_from_r(0, R::C, false); // D0=C
+    if r.next(0x66AC3, 5) {
+        i66ac3(r)
+    }
 }
 
 fn i66ac3(r: &mut Run) {
-    op!(r, 0x66AC3, 7, Op::Call(0x679B)); // GOSUB #0679B
+    r.cpu.pc = 0x66ACA;
+    r.cpu.call(0x0679B); // GOSUB #0679B
+    r.spend(9);
 }
 
 fn i66aca(r: &mut Run) {
-    op!(r, 0x66ACA, 7, Op::Call(0x6529)); // GOSUB #06529
+    r.cpu.pc = 0x66AD1;
+    r.cpu.call(0x06529); // GOSUB #06529
+    r.spend(9);
 }
 
 fn i66ad1(r: &mut Run) {
-    op!(r, 0x66AD1, 7, Op::Call(0x679B)); // GOSUB #0679B
+    r.cpu.pc = 0x66AD8;
+    r.cpu.call(0x0679B); // GOSUB #0679B
+    r.spend(9);
 }
 
 fn i66ad8(r: &mut Run) {
-    op!(r, 0x66AD8, 3, Op::Scratch { op: ScratchOp::FromScratch, r: R::C, n: 3, f: Field::W }); // C=R3
-    i66adb(r)
+    r.cpu.scratch(ScratchOp::FromScratch, R::C, 3, Field::W); // C=R3
+    if r.next(0x66ADB, 5) {
+        i66adb(r)
+    }
 }
 
 fn i66adb(r: &mut Run) {
-    op!(r, 0x66ADB, 3, Op::Scratch { op: ScratchOp::ToScratch, r: R::C, n: 0, f: Field::W }); // R0=C
-    i66ade(r)
+    r.cpu.scratch(ScratchOp::ToScratch, R::C, 0, Field::W); // R0=C
+    if r.next(0x66ADE, 5) {
+        i66ade(r)
+    }
 }
 
 fn i66ade(r: &mut Run) {
-    op!(r, 0x66ADE, 3, Op::Scratch { op: ScratchOp::FromScratch, r: R::C, n: 4, f: Field::W }); // C=R4
-    i66ae1(r)
+    r.cpu.scratch(ScratchOp::FromScratch, R::C, 4, Field::W); // C=R4
+    if r.next(0x66AE1, 5) {
+        i66ae1(r)
+    }
 }
 
 fn i66ae1(r: &mut Run) {
-    op!(r, 0x66AE1, 3, Op::Scratch { op: ScratchOp::ToScratch, r: R::C, n: 1, f: Field::W }); // R1=C
-    i66ae4(r)
+    r.cpu.scratch(ScratchOp::ToScratch, R::C, 1, Field::W); // R1=C
+    if r.next(0x66AE4, 5) {
+        i66ae4(r)
+    }
 }
 
 fn i66ae4(r: &mut Run) {
-    op!(r, 0x66AE4, 7, Op::Call(0x6529)); // GOSUB #06529
+    r.cpu.pc = 0x66AEB;
+    r.cpu.call(0x06529); // GOSUB #06529
+    r.spend(9);
 }
 
 fn i66aeb(r: &mut Run) {
-    op!(r, 0x66AEB, 3, Op::DAdd { d: 1, n: 5 }); // D1=D1+ 5
-    i66aee(r)
+    r.cpu.d_add(1, 5); // D1=D1+ 5
+    if r.next(0x66AEE, 5) {
+        i66aee(r)
+    }
 }
 
 fn i66aee(r: &mut Run) {
-    op!(r, 0x66AEE, 2, Op::Inc { r: R::D, f: Field::A }); // D=D+1 A
-    i66af0(r)
+    r.cpu.inc(R::D, Field::A); // D=D+1 A
+    if r.next(0x66AF0, 4) {
+        i66af0(r)
+    }
 }
 
 fn i66af0(r: &mut Run) {
-    op!(r, 0x66AF0, 3, Op::Scratch { op: ScratchOp::FromScratch, r: R::A, n: 2, f: Field::W }); // A=R2
-    i66af3(r)
+    r.cpu.scratch(ScratchOp::FromScratch, R::A, 2, Field::W); // A=R2
+    if r.next(0x66AF3, 5) {
+        i66af3(r)
+    }
 }
 
 fn i66af3(r: &mut Run) {
-    op!(r, 0x66AF3, 5, Op::Test { test: Test::Zero(R::A), f: Field::A, goyes: Some(0x66B0F) }); // ?A=0 A / GOYES #66B0F
-    i66af8(r)
+    r.cpu.pc = 0x66AF8;
+    r.cpu.test(Test::Zero(R::A), Field::A, Some(0x66B0F)); // ?A=0 A / GOYES #66B0F
+    if r.next_pc(0x66AF8, 7) {
+        i66af8(r)
+    }
 }
 
 fn i66af8(r: &mut Run) {
-    op!(r, 0x66AF8, 3, Op::DExR { d: 0, r: R::C, short: false }); // CD0EX
-    i66afb(r)
+    r.cpu.d_ex_r(0, R::C, false); // CD0EX
+    if r.next(0x66AFB, 5) {
+        i66afb(r)
+    }
 }
 
 fn i66afb(r: &mut Run) {
-    op!(r, 0x66AFB, 3, Op::Scratch { op: ScratchOp::ToScratch, r: R::C, n: 2, f: Field::W }); // R2=C
-    i66afe(r)
+    r.cpu.scratch(ScratchOp::ToScratch, R::C, 2, Field::W); // R2=C
+    if r.next(0x66AFE, 5) {
+        i66afe(r)
+    }
 }
 
 fn i66afe(r: &mut Run) {
-    op!(r, 0x66AFE, 7, Op::Call(0x67918)); // GOSUB #67918
+    r.cpu.pc = 0x66B05;
+    r.cpu.call(0x67918); // GOSUB #67918
+    r.spend(9);
 }
 
 fn i66b05(r: &mut Run) {
-    op!(r, 0x66B05, 3, Op::Scratch { op: ScratchOp::FromScratch, r: R::C, n: 2, f: Field::W }); // C=R2
-    i66b08(r)
+    r.cpu.scratch(ScratchOp::FromScratch, R::C, 2, Field::W); // C=R2
+    if r.next(0x66B08, 5) {
+        i66b08(r)
+    }
 }
 
 fn i66b08(r: &mut Run) {
-    op!(r, 0x66B08, 3, Op::DFromR { d: 0, r: R::C, short: false }); // D0=C
-    i66b0b(r)
+    r.cpu.d_from_r(0, R::C, false); // D0=C
+    if r.next(0x66B0B, 5) {
+        i66b0b(r)
+    }
 }
 
 fn i66b0b(r: &mut Run) {
-    op!(r, 0x66B0B, 4, Op::Jump(0x66A0F)); // GOTO #66A0F
+    r.cpu.pc = 0x66A0F; // GOTO #66A0F
+    r.spend(6);
 }
 
 fn i66b0f(r: &mut Run) {
-    op!(r, 0x66B0F, 3, Op::Mem { store: false, d: 0, r: R::A, f: Field::A }); // A=DAT0 A
-    i66b12(r)
+    r.sync();
+    r.cpu.load(0, R::A, Field::A, r.hw); // A=DAT0 A
+    if r.next_io(0x66B12, 19) {
+        i66b12(r)
+    }
 }
 
 fn i66b12(r: &mut Run) {
-    op!(r, 0x66B12, 3, Op::DAdd { d: 0, n: 5 }); // D0=D0+ 5
-    i66b15(r)
+    r.cpu.d_add(0, 5); // D0=D0+ 5
+    if r.next(0x66B15, 5) {
+        i66b15(r)
+    }
 }
 
 fn i66b15(r: &mut Run) {
-    op!(r, 0x66B15, 4, Op::PcIndirect(R::A)); // PC=(A)
+    r.sync();
+    r.cpu.pc_indirect(R::A, r.hw); // PC=(A)
+    r.spend(23);
 }
 
 fn i66b1e(r: &mut Run) {
-    op!(r, 0x66B1E, 3, Op::DAdd { d: 1, n: 0xF }); // D1=D1+ 15
-    i66b21(r)
+    r.cpu.d_add(1, 15); // D1=D1+ 15
+    if r.next(0x66B21, 5) {
+        i66b21(r)
+    }
 }
 
 fn i66b21(r: &mut Run) {
-    op!(r, 0x66B21, 3, Op::DAdd { d: 1, n: 5 }); // D1=D1+ 5
-    i66b24(r)
+    r.cpu.d_add(1, 5); // D1=D1+ 5
+    if r.next(0x66B24, 5) {
+        i66b24(r)
+    }
 }
 
 fn i66b24(r: &mut Run) {
-    op!(r, 0x66B24, 3, Op::Mem { store: false, d: 1, r: R::A, f: Field::A }); // A=DAT1 A
-    i66b27(r)
+    r.sync();
+    r.cpu.load(1, R::A, Field::A, r.hw); // A=DAT1 A
+    if r.next_io(0x66B27, 19) {
+        i66b27(r)
+    }
 }
 
 fn i66b27(r: &mut Run) {
-    op!(r, 0x66B27, 3, Op::DSub { d: 1, n: 0xA }); // D1=D1- 10
-    i66b2a(r)
+    r.cpu.d_sub(1, 10); // D1=D1- 10
+    if r.next(0x66B2A, 5) {
+        i66b2a(r)
+    }
 }
 
 fn i66b2a(r: &mut Run) {
-    op!(r, 0x66B2A, 7, Op::LoadConst { r: R::C, len: 5, val: 0x3FEF }); // LC(5) #03FEF
-    i66b31(r)
+    r.cpu.load_const(R::C, 5, 0x3FEF); // LC(5) #03FEF
+    if r.next(0x66B31, 9) {
+        i66b31(r)
+    }
 }
 
 fn i66b31(r: &mut Run) {
-    op!(r, 0x66B31, 5, Op::Test { test: Test::Regs(Cmp::Eq, R::C, R::A), f: Field::A, goyes: Some(0x66B3D) }); // ?C=A A / GOYES #66B3D
-    i66b36(r)
+    r.cpu.pc = 0x66B36;
+    r.cpu.test(Test::Regs(Cmp::Eq, R::C, R::A), Field::A, Some(0x66B3D)); // ?C=A A / GOYES #66B3D
+    if r.next_pc(0x66B36, 7) {
+        i66b36(r)
+    }
 }
 
 fn i66b36(r: &mut Run) {
-    op!(r, 0x66B36, 3, Op::DSub { d: 1, n: 0xA }); // D1=D1- 10
-    i66b39(r)
+    r.cpu.d_sub(1, 10); // D1=D1- 10
+    if r.next(0x66B39, 5) {
+        i66b39(r)
+    }
 }
 
 fn i66b39(r: &mut Run) {
-    op!(r, 0x66B39, 4, Op::Jump(0x66BA6)); // GOTO #66BA6
+    r.cpu.pc = 0x66BA6; // GOTO #66BA6
+    r.spend(6);
 }
 
 fn i66b3d(r: &mut Run) {
-    op!(r, 0x66B3D, 3, Op::Mem { store: false, d: 1, r: R::A, f: Field::A }); // A=DAT1 A
-    i66b40(r)
+    r.sync();
+    r.cpu.load(1, R::A, Field::A, r.hw); // A=DAT1 A
+    if r.next_io(0x66B40, 19) {
+        i66b40(r)
+    }
 }
 
 fn i66b40(r: &mut Run) {
-    op!(r, 0x66B40, 3, Op::DExR { d: 0, r: R::A, short: false }); // AD0EX
-    i66b43(r)
+    r.cpu.d_ex_r(0, R::A, false); // AD0EX
+    if r.next(0x66B43, 5) {
+        i66b43(r)
+    }
 }
 
 fn i66b43(r: &mut Run) {
-    op!(r, 0x66B43, 3, Op::DAdd { d: 0, n: 5 }); // D0=D0+ 5
-    i66b46(r)
+    r.cpu.d_add(0, 5); // D0=D0+ 5
+    if r.next(0x66B46, 5) {
+        i66b46(r)
+    }
 }
 
 fn i66b46(r: &mut Run) {
-    op!(r, 0x66B46, 3, Op::Mem { store: false, d: 0, r: R::C, f: Field::A }); // C=DAT0 A
-    i66b49(r)
+    r.sync();
+    r.cpu.load(0, R::C, Field::A, r.hw); // C=DAT0 A
+    if r.next_io(0x66B49, 19) {
+        i66b49(r)
+    }
 }
 
 fn i66b49(r: &mut Run) {
-    op!(r, 0x66B49, 3, Op::Scratch { op: ScratchOp::ToScratch, r: R::C, n: 1, f: Field::W }); // R1=C
-    i66b4c(r)
+    r.cpu.scratch(ScratchOp::ToScratch, R::C, 1, Field::W); // R1=C
+    if r.next(0x66B4C, 5) {
+        i66b4c(r)
+    }
 }
 
 fn i66b4c(r: &mut Run) {
-    op!(r, 0x66B4C, 3, Op::DSub { d: 1, n: 0xA }); // D1=D1- 10
-    i66b4f(r)
+    r.cpu.d_sub(1, 10); // D1=D1- 10
+    if r.next(0x66B4F, 5) {
+        i66b4f(r)
+    }
 }
 
 fn i66b4f(r: &mut Run) {
-    op!(r, 0x66B4F, 3, Op::Mem { store: false, d: 1, r: R::C, f: Field::A }); // C=DAT1 A
-    i66b52(r)
+    r.sync();
+    r.cpu.load(1, R::C, Field::A, r.hw); // C=DAT1 A
+    if r.next_io(0x66B52, 19) {
+        i66b52(r)
+    }
 }
 
 fn i66b52(r: &mut Run) {
-    op!(r, 0x66B52, 3, Op::DFromR { d: 0, r: R::C, short: false }); // D0=C
-    i66b55(r)
+    r.cpu.d_from_r(0, R::C, false); // D0=C
+    if r.next(0x66B55, 5) {
+        i66b55(r)
+    }
 }
 
 fn i66b55(r: &mut Run) {
-    op!(r, 0x66B55, 3, Op::DAdd { d: 0, n: 5 }); // D0=D0+ 5
-    i66b58(r)
+    r.cpu.d_add(0, 5); // D0=D0+ 5
+    if r.next(0x66B58, 5) {
+        i66b58(r)
+    }
 }
 
 fn i66b58(r: &mut Run) {
-    op!(r, 0x66B58, 3, Op::Mem { store: false, d: 0, r: R::C, f: Field::A }); // C=DAT0 A
-    i66b5b(r)
+    r.sync();
+    r.cpu.load(0, R::C, Field::A, r.hw); // C=DAT0 A
+    if r.next_io(0x66B5B, 19) {
+        i66b5b(r)
+    }
 }
 
 fn i66b5b(r: &mut Run) {
-    op!(r, 0x66B5B, 3, Op::Scratch { op: ScratchOp::ToScratch, r: R::C, n: 3, f: Field::W }); // R3=C
-    i66b5e(r)
+    r.cpu.scratch(ScratchOp::ToScratch, R::C, 3, Field::W); // R3=C
+    if r.next(0x66B5E, 5) {
+        i66b5e(r)
+    }
 }
 
 fn i66b5e(r: &mut Run) {
-    op!(r, 0x66B5E, 3, Op::DFromR { d: 0, r: R::A, short: false }); // D0=A
-    i66b61(r)
+    r.cpu.d_from_r(0, R::A, false); // D0=A
+    if r.next(0x66B61, 5) {
+        i66b61(r)
+    }
 }
 
 fn i66b61(r: &mut Run) {
-    op!(r, 0x66B61, 3, Op::DAdd { d: 1, n: 0xF }); // D1=D1+ 15
-    i66b64(r)
+    r.cpu.d_add(1, 15); // D1=D1+ 15
+    if r.next(0x66B64, 5) {
+        i66b64(r)
+    }
 }
 
 fn i66b64(r: &mut Run) {
-    op!(r, 0x66B64, 7, Op::Call(0x67A4A)); // GOSUB #67A4A
+    r.cpu.pc = 0x66B6B;
+    r.cpu.call(0x67A4A); // GOSUB #67A4A
+    r.spend(9);
 }
 
 fn i66b6b(r: &mut Run) {
-    op!(r, 0x66B6B, 2, Op::Dec { r: R::D, f: Field::A }); // D=D-1 A
-    i66b6d(r)
+    r.cpu.dec(R::D, Field::A); // D=D-1 A
+    if r.next(0x66B6D, 4) {
+        i66b6d(r)
+    }
 }
 
 fn i66b6d(r: &mut Run) {
-    op!(r, 0x66B6D, 3, Op::DSub { d: 1, n: 0xA }); // D1=D1- 10
-    i66b70(r)
+    r.cpu.d_sub(1, 10); // D1=D1- 10
+    if r.next(0x66B70, 5) {
+        i66b70(r)
+    }
 }
 
 fn i66b70(r: &mut Run) {
-    op!(r, 0x66B70, 3, Op::DSub { d: 1, n: 0xA }); // D1=D1- 10
-    i66b73(r)
+    r.cpu.d_sub(1, 10); // D1=D1- 10
+    if r.next(0x66B73, 5) {
+        i66b73(r)
+    }
 }
 
 fn i66b73(r: &mut Run) {
-    op!(r, 0x66B73, 3, Op::DAdd { d: 0, n: 0xE }); // D0=D0+ 14
-    i66b76(r)
+    r.cpu.d_add(0, 14); // D0=D0+ 14
+    if r.next(0x66B76, 5) {
+        i66b76(r)
+    }
 }
 
 fn i66b76(r: &mut Run) {
-    op!(r, 0x66B76, 2, Op::Zero { r: R::A, f: Field::A }); // A=0 A
-    i66b78(r)
+    r.cpu.zero(R::A, Field::A); // A=0 A
+    if r.next(0x66B78, 4) {
+        i66b78(r)
+    }
 }
 
 fn i66b78(r: &mut Run) {
-    op!(r, 0x66B78, 4, Op::Mem { store: false, d: 0, r: R::A, f: Field::X }); // A=DAT0 X
-    i66b7c(r)
+    r.sync();
+    r.cpu.load(0, R::A, Field::X, r.hw); // A=DAT0 X
+    if r.next_io(0x66B7C, 17) {
+        i66b7c(r)
+    }
 }
 
 fn i66b7c(r: &mut Run) {
-    op!(r, 0x66B7C, 3, Op::Scratch { op: ScratchOp::FromScratch, r: R::C, n: 3, f: Field::W }); // C=R3
-    i66b7f(r)
+    r.cpu.scratch(ScratchOp::FromScratch, R::C, 3, Field::W); // C=R3
+    if r.next(0x66B7F, 5) {
+        i66b7f(r)
+    }
 }
 
 fn i66b7f(r: &mut Run) {
-    op!(r, 0x66B7F, 5, Op::Test { test: Test::Regs(Cmp::Ne, R::C, R::A), f: Field::A, goyes: Some(0x66BA0) }); // ?C#A A / GOYES #66BA0
-    i66b84(r)
+    r.cpu.pc = 0x66B84;
+    r.cpu.test(Test::Regs(Cmp::Ne, R::C, R::A), Field::A, Some(0x66BA0)); // ?C#A A / GOYES #66BA0
+    if r.next_pc(0x66B84, 7) {
+        i66b84(r)
+    }
 }
 
 fn i66b84(r: &mut Run) {
-    op!(r, 0x66B84, 3, Op::DAdd { d: 0, n: 3 }); // D0=D0+ 3
-    i66b87(r)
+    r.cpu.d_add(0, 3); // D0=D0+ 3
+    if r.next(0x66B87, 5) {
+        i66b87(r)
+    }
 }
 
 fn i66b87(r: &mut Run) {
-    op!(r, 0x66B87, 4, Op::Mem { store: false, d: 0, r: R::A, f: Field::X }); // A=DAT0 X
-    i66b8b(r)
+    r.sync();
+    r.cpu.load(0, R::A, Field::X, r.hw); // A=DAT0 X
+    if r.next_io(0x66B8B, 17) {
+        i66b8b(r)
+    }
 }
 
 fn i66b8b(r: &mut Run) {
-    op!(r, 0x66B8B, 3, Op::Scratch { op: ScratchOp::FromScratch, r: R::C, n: 2, f: Field::W }); // C=R2
-    i66b8e(r)
+    r.cpu.scratch(ScratchOp::FromScratch, R::C, 2, Field::W); // C=R2
+    if r.next(0x66B8E, 5) {
+        i66b8e(r)
+    }
 }
 
 fn i66b8e(r: &mut Run) {
-    op!(r, 0x66B8E, 3, Op::DFromR { d: 0, r: R::C, short: false }); // D0=C
-    i66b91(r)
+    r.cpu.d_from_r(0, R::C, false); // D0=C
+    if r.next(0x66B91, 5) {
+        i66b91(r)
+    }
 }
 
 fn i66b91(r: &mut Run) {
-    op!(r, 0x66B91, 3, Op::Scratch { op: ScratchOp::FromScratch, r: R::C, n: 1, f: Field::W }); // C=R1
-    i66b94(r)
+    r.cpu.scratch(ScratchOp::FromScratch, R::C, 1, Field::W); // C=R1
+    if r.next(0x66B94, 5) {
+        i66b94(r)
+    }
 }
 
 fn i66b94(r: &mut Run) {
-    op!(r, 0x66B94, 5, Op::Test { test: Test::Regs(Cmp::Ne, R::C, R::A), f: Field::A, goyes: Some(0x66BA0) }); // ?C#A A / GOYES #66BA0
-    i66b99(r)
+    r.cpu.pc = 0x66B99;
+    r.cpu.test(Test::Regs(Cmp::Ne, R::C, R::A), Field::A, Some(0x66BA0)); // ?C#A A / GOYES #66BA0
+    if r.next_pc(0x66B99, 7) {
+        i66b99(r)
+    }
 }
 
 fn i66b99(r: &mut Run) {
-    op!(r, 0x66B99, 7, Op::Jump(0x620DC)); // GOTO #620DC
+    r.cpu.pc = 0x620DC; // GOTO #620DC
+    r.spend(9);
 }
 
 fn i66ba0(r: &mut Run) {
-    op!(r, 0x66BA0, 3, Op::Scratch { op: ScratchOp::FromScratch, r: R::C, n: 2, f: Field::W }); // C=R2
-    i66ba3(r)
+    r.cpu.scratch(ScratchOp::FromScratch, R::C, 2, Field::W); // C=R2
+    if r.next(0x66BA3, 5) {
+        i66ba3(r)
+    }
 }
 
 fn i66ba3(r: &mut Run) {
-    op!(r, 0x66BA3, 3, Op::DFromR { d: 0, r: R::C, short: false }); // D0=C
-    i66ba6(r)
+    r.cpu.d_from_r(0, R::C, false); // D0=C
+    if r.next(0x66BA6, 5) {
+        i66ba6(r)
+    }
 }
 
 fn i66ba6(r: &mut Run) {
-    op!(r, 0x66BA6, 7, Op::Jump(0x620C3)); // GOTO #620C3
+    r.cpu.pc = 0x620C3; // GOTO #620C3
+    r.spend(9);
 }
 
 fn i66bb2(r: &mut Run) {
-    op!(r, 0x66BB2, 7, Op::Call(0x6641)); // GOSUB #06641
+    r.cpu.pc = 0x66BB9;
+    r.cpu.call(0x06641); // GOSUB #06641
+    r.spend(9);
 }
 
 fn i66bb9(r: &mut Run) {
-    op!(r, 0x66BB9, 2, Op::Add { dst: R::A, src: R::A, f: Field::A }); // A=A+A A
-    i66bbb(r)
+    r.cpu.add(R::A, R::A, Field::A); // A=A+A A
+    if r.next(0x66BBB, 4) {
+        i66bbb(r)
+    }
 }
 
 fn i66bbb(r: &mut Run) {
-    op!(r, 0x66BBB, 3, Op::CondJump(Cond::Carry, 0x66BA6)); // GOC #66BA6
-    i66bbe(r)
+    r.cpu.pc = 0x66BBE;
+    r.cpu.jump_if(Cond::Carry, 0x66BA6); // GOC #66BA6
+    if r.next_pc(0x66BBE, 5) {
+        i66bbe(r)
+    }
 }
 
 fn i66bbe(r: &mut Run) {
-    op!(r, 0x66BBE, 3, Op::CondJump(Cond::NoCarry, 0x66B99)); // GONC #66B99
+    r.cpu.pc = 0x66BC1;
+    r.cpu.jump_if(Cond::NoCarry, 0x66B99); // GONC #66B99
+    r.spend(5);
 }
 
 fn i66bc6(r: &mut Run) {
-    op!(r, 0x66BC6, 3, Op::DAdd { d: 1, n: 0xA }); // D1=D1+ 10
-    i66bc9(r)
+    r.cpu.d_add(1, 10); // D1=D1+ 10
+    if r.next(0x66BC9, 5) {
+        i66bc9(r)
+    }
 }
 
 fn i66bc9(r: &mut Run) {
-    op!(r, 0x66BC9, 7, Op::Call(0x67A4A)); // GOSUB #67A4A
+    r.cpu.pc = 0x66BD0;
+    r.cpu.call(0x67A4A); // GOSUB #67A4A
+    r.spend(9);
 }
 
 fn i66bd0(r: &mut Run) {
-    op!(r, 0x66BD0, 3, Op::DSub { d: 1, n: 0xF }); // D1=D1- 15
-    i66bd3(r)
+    r.cpu.d_sub(1, 15); // D1=D1- 15
+    if r.next(0x66BD3, 5) {
+        i66bd3(r)
+    }
 }
 
 fn i66bd3(r: &mut Run) {
-    op!(r, 0x66BD3, 3, Op::DAdd { d: 0, n: 8 }); // D0=D0+ 8
-    i66bd6(r)
+    r.cpu.d_add(0, 8); // D0=D0+ 8
+    if r.next(0x66BD6, 5) {
+        i66bd6(r)
+    }
 }
 
 fn i66bd6(r: &mut Run) {
-    op!(r, 0x66BD6, 2, Op::Zero { r: R::C, f: Field::A }); // C=0 A
-    i66bd8(r)
+    r.cpu.zero(R::C, Field::A); // C=0 A
+    if r.next(0x66BD8, 4) {
+        i66bd8(r)
+    }
 }
 
 fn i66bd8(r: &mut Run) {
-    op!(r, 0x66BD8, 4, Op::Mem { store: false, d: 0, r: R::C, f: Field::X }); // C=DAT0 X
-    i66bdc(r)
+    r.sync();
+    r.cpu.load(0, R::C, Field::X, r.hw); // C=DAT0 X
+    if r.next_io(0x66BDC, 17) {
+        i66bdc(r)
+    }
 }
 
 fn i66bdc(r: &mut Run) {
-    op!(r, 0x66BDC, 7, Op::Call(0x6641)); // GOSUB #06641
+    r.cpu.pc = 0x66BE3;
+    r.cpu.call(0x06641); // GOSUB #06641
+    r.spend(9);
 }
 
 fn i66be3(r: &mut Run) {
-    op!(r, 0x66BE3, 4, Op::Mem { store: true, d: 0, r: R::A, f: Field::X }); // DAT0=A X
-    i66be7(r)
+    r.sync();
+    r.cpu.store(0, R::A, Field::X, r.hw); // DAT0=A X
+    if r.next_io(0x66BE7, 17) {
+        i66be7(r)
+    }
 }
 
 fn i66be7(r: &mut Run) {
-    op!(r, 0x66BE7, 7, Op::Call(0x6641)); // GOSUB #06641
+    r.cpu.pc = 0x66BEE;
+    r.cpu.call(0x06641); // GOSUB #06641
+    r.spend(9);
 }
 
 fn i66bee(r: &mut Run) {
-    op!(r, 0x66BEE, 3, Op::DAdd { d: 0, n: 3 }); // D0=D0+ 3
-    i66bf1(r)
+    r.cpu.d_add(0, 3); // D0=D0+ 3
+    if r.next(0x66BF1, 5) {
+        i66bf1(r)
+    }
 }
 
 fn i66bf1(r: &mut Run) {
-    op!(r, 0x66BF1, 4, Op::Mem { store: true, d: 0, r: R::A, f: Field::X }); // DAT0=A X
-    i66bf5(r)
+    r.sync();
+    r.cpu.store(0, R::A, Field::X, r.hw); // DAT0=A X
+    if r.next_io(0x66BF5, 17) {
+        i66bf5(r)
+    }
 }
 
 fn i66bf5(r: &mut Run) {
-    op!(r, 0x66BF5, 3, Op::Scratch { op: ScratchOp::Exchange, r: R::C, n: 2, f: Field::W }); // CR2EX
-    i66bf8(r)
+    r.cpu.scratch(ScratchOp::Exchange, R::C, 2, Field::W); // CR2EX
+    if r.next(0x66BF8, 5) {
+        i66bf8(r)
+    }
 }
 
 fn i66bf8(r: &mut Run) {
-    op!(r, 0x66BF8, 3, Op::DFromR { d: 0, r: R::C, short: false }); // D0=C
-    i66bfb(r)
+    r.cpu.d_from_r(0, R::C, false); // D0=C
+    if r.next(0x66BFB, 5) {
+        i66bfb(r)
+    }
 }
 
 fn i66bfb(r: &mut Run) {
-    op!(r, 0x66BFB, 3, Op::Scratch { op: ScratchOp::FromScratch, r: R::C, n: 2, f: Field::W }); // C=R2
-    i66bfe(r)
+    r.cpu.scratch(ScratchOp::FromScratch, R::C, 2, Field::W); // C=R2
+    if r.next(0x66BFE, 5) {
+        i66bfe(r)
+    }
 }
 
 fn i66bfe(r: &mut Run) {
-    op!(r, 0x66BFE, 3, Op::DSub { d: 1, n: 0xA }); // D1=D1- 10
-    i66c01(r)
+    r.cpu.d_sub(1, 10); // D1=D1- 10
+    if r.next(0x66C01, 5) {
+        i66c01(r)
+    }
 }
 
 fn i66c01(r: &mut Run) {
-    op!(r, 0x66C01, 3, Op::Mem { store: false, d: 1, r: R::A, f: Field::A }); // A=DAT1 A
-    i66c04(r)
+    r.sync();
+    r.cpu.load(1, R::A, Field::A, r.hw); // A=DAT1 A
+    if r.next_io(0x66C04, 19) {
+        i66c04(r)
+    }
 }
 
 fn i66c04(r: &mut Run) {
-    op!(r, 0x66C04, 3, Op::DAdd { d: 1, n: 0xA }); // D1=D1+ 10
-    i66c07(r)
+    r.cpu.d_add(1, 10); // D1=D1+ 10
+    if r.next(0x66C07, 5) {
+        i66c07(r)
+    }
 }
 
 fn i66c07(r: &mut Run) {
-    op!(r, 0x66C07, 2, Op::Dec { r: R::D, f: Field::A }); // D=D-1 A
-    i66c09(r)
+    r.cpu.dec(R::D, Field::A); // D=D-1 A
+    if r.next(0x66C09, 4) {
+        i66c09(r)
+    }
 }
 
 fn i66c09(r: &mut Run) {
-    op!(r, 0x66C09, 5, Op::Test { test: Test::Regs(Cmp::Ne, R::C, R::A), f: Field::A, goyes: Some(0x66C18) }); // ?C#A A / GOYES #66C18
-    i66c0e(r)
+    r.cpu.pc = 0x66C0E;
+    r.cpu.test(Test::Regs(Cmp::Ne, R::C, R::A), Field::A, Some(0x66C18)); // ?C#A A / GOYES #66C18
+    if r.next_pc(0x66C0E, 7) {
+        i66c0e(r)
+    }
 }
 
 fn i66c0e(r: &mut Run) {
-    op!(r, 0x66C0E, 3, Op::Mem { store: false, d: 0, r: R::A, f: Field::A }); // A=DAT0 A
-    i66c11(r)
+    r.sync();
+    r.cpu.load(0, R::A, Field::A, r.hw); // A=DAT0 A
+    if r.next_io(0x66C11, 19) {
+        i66c11(r)
+    }
 }
 
 fn i66c11(r: &mut Run) {
-    op!(r, 0x66C11, 3, Op::DAdd { d: 0, n: 5 }); // D0=D0+ 5
-    i66c14(r)
+    r.cpu.d_add(0, 5); // D0=D0+ 5
+    if r.next(0x66C14, 5) {
+        i66c14(r)
+    }
 }
 
 fn i66c14(r: &mut Run) {
-    op!(r, 0x66C14, 4, Op::PcIndirect(R::A)); // PC=(A)
+    r.sync();
+    r.cpu.pc_indirect(R::A, r.hw); // PC=(A)
+    r.spend(23);
 }
 
 fn i66c18(r: &mut Run) {
-    op!(r, 0x66C18, 7, Op::LoadConst { r: R::C, len: 5, val: 0x3A81 }); // LC(5) #03A81
-    i66c1f(r)
+    r.cpu.load_const(R::C, 5, 0x3A81); // LC(5) #03A81
+    if r.next(0x66C1F, 9) {
+        i66c1f(r)
+    }
 }
 
 fn i66c1f(r: &mut Run) {
-    op!(r, 0x66C1F, 3, Op::DAdd { d: 1, n: 5 }); // D1=D1+ 5
-    i66c22(r)
+    r.cpu.d_add(1, 5); // D1=D1+ 5
+    if r.next(0x66C22, 5) {
+        i66c22(r)
+    }
 }
 
 fn i66c22(r: &mut Run) {
-    op!(r, 0x66C22, 3, Op::Mem { store: true, d: 1, r: R::C, f: Field::A }); // DAT1=C A
-    i66c25(r)
+    r.sync();
+    r.cpu.store(1, R::C, Field::A, r.hw); // DAT1=C A
+    if r.next_io(0x66C25, 19) {
+        i66c25(r)
+    }
 }
 
 fn i66c25(r: &mut Run) {
-    op!(r, 0x66C25, 3, Op::DSub { d: 1, n: 5 }); // D1=D1- 5
-    i66c28(r)
+    r.cpu.d_sub(1, 5); // D1=D1- 5
+    if r.next(0x66C28, 5) {
+        i66c28(r)
+    }
 }
 
 fn i66c28(r: &mut Run) {
-    op!(r, 0x66C28, 4, Op::Jump(0x66C0E)); // GOTO #66C0E
+    r.cpu.pc = 0x66C0E; // GOTO #66C0E
+    r.spend(6);
 }
 
 fn i6700f(r: &mut Run) {
-    op!(r, 0x6700F, 3, Op::StSet { bit: 0, set: false }); // ST=0 0
-    i67012(r)
+    r.cpu.st_set(0, false); // ST=0 0
+    if r.next(0x67012, 5) {
+        i67012(r)
+    }
 }
 
 fn i67012(r: &mut Run) {
-    op!(r, 0x67012, 4, Op::Call(0x67036)); // GOSUB #67036
+    r.cpu.pc = 0x67016;
+    r.cpu.call(0x67036); // GOSUB #67036
+    r.spend(6);
 }
 
 fn i67016(r: &mut Run) {
-    op!(r, 0x67016, 6, Op::Scratch { op: ScratchOp::FromScratch, r: R::C, n: 1, f: Field::A }); // C=R1.F A
-    i6701c(r)
+    r.cpu.scratch(ScratchOp::FromScratch, R::C, 1, Field::A); // C=R1.F A
+    if r.next(0x6701C, 8) {
+        i6701c(r)
+    }
 }
 
 fn i6701c(r: &mut Run) {
-    op!(r, 0x6701C, 2, Op::Copy { dst: R::D, src: R::C, f: Field::A }); // D=C A
-    i6701e(r)
+    r.cpu.copy(R::D, R::C, Field::A); // D=C A
+    if r.next(0x6701E, 4) {
+        i6701e(r)
+    }
 }
 
 fn i6701e(r: &mut Run) {
-    op!(r, 0x6701E, 6, Op::Scratch { op: ScratchOp::FromScratch, r: R::A, n: 0, f: Field::A }); // A=R0.F A
-    i67024(r)
+    r.cpu.scratch(ScratchOp::FromScratch, R::A, 0, Field::A); // A=R0.F A
+    if r.next(0x67024, 8) {
+        i67024(r)
+    }
 }
 
 fn i67024(r: &mut Run) {
-    op!(r, 0x67024, 3, Op::DFromR { d: 1, r: R::A, short: false }); // D1=A
-    i67027(r)
+    r.cpu.d_from_r(1, R::A, false); // D1=A
+    if r.next(0x67027, 5) {
+        i67027(r)
+    }
 }
 
 fn i67027(r: &mut Run) {
-    op!(r, 0x67027, 3, Op::Mem { store: false, d: 0, r: R::A, f: Field::A }); // A=DAT0 A
-    i6702a(r)
+    r.sync();
+    r.cpu.load(0, R::A, Field::A, r.hw); // A=DAT0 A
+    if r.next_io(0x6702A, 19) {
+        i6702a(r)
+    }
 }
 
 fn i6702a(r: &mut Run) {
-    op!(r, 0x6702A, 3, Op::DAdd { d: 0, n: 5 }); // D0=D0+ 5
-    i6702d(r)
+    r.cpu.d_add(0, 5); // D0=D0+ 5
+    if r.next(0x6702D, 5) {
+        i6702d(r)
+    }
 }
 
 fn i6702d(r: &mut Run) {
-    op!(r, 0x6702D, 4, Op::PcIndirect(R::A)); // PC=(A)
+    r.sync();
+    r.cpu.pc_indirect(R::A, r.hw); // PC=(A)
+    r.spend(23);
 }
 
 fn i67036(r: &mut Run) {
-    op!(r, 0x67036, 3, Op::Mem { store: false, d: 1, r: R::A, f: Field::A }); // A=DAT1 A
-    i67039(r)
+    r.sync();
+    r.cpu.load(1, R::A, Field::A, r.hw); // A=DAT1 A
+    if r.next_io(0x67039, 19) {
+        i67039(r)
+    }
 }
 
 fn i67039(r: &mut Run) {
-    op!(r, 0x67039, 3, Op::DExR { d: 1, r: R::A, short: false }); // AD1EX
-    i6703c(r)
+    r.cpu.d_ex_r(1, R::A, false); // AD1EX
+    if r.next(0x6703C, 5) {
+        i6703c(r)
+    }
 }
 
 fn i6703c(r: &mut Run) {
-    op!(r, 0x6703C, 6, Op::Scratch { op: ScratchOp::ToScratch, r: R::A, n: 0, f: Field::A }); // R0=A.F A
-    i67042(r)
+    r.cpu.scratch(ScratchOp::ToScratch, R::A, 0, Field::A); // R0=A.F A
+    if r.next(0x67042, 8) {
+        i67042(r)
+    }
 }
 
 fn i67042(r: &mut Run) {
-    op!(r, 0x67042, 3, Op::DAdd { d: 1, n: 0xA }); // D1=D1+ 10
-    i67045(r)
+    r.cpu.d_add(1, 10); // D1=D1+ 10
+    if r.next(0x67045, 5) {
+        i67045(r)
+    }
 }
 
 fn i67045(r: &mut Run) {
-    op!(r, 0x67045, 3, Op::Mem { store: false, d: 1, r: R::A, f: Field::A }); // A=DAT1 A
-    i67048(r)
+    r.sync();
+    r.cpu.load(1, R::A, Field::A, r.hw); // A=DAT1 A
+    if r.next_io(0x67048, 19) {
+        i67048(r)
+    }
 }
 
 fn i67048(r: &mut Run) {
-    op!(r, 0x67048, 6, Op::Scratch { op: ScratchOp::ToScratch, r: R::A, n: 2, f: Field::A }); // R2=A.F A
-    i6704e(r)
+    r.cpu.scratch(ScratchOp::ToScratch, R::A, 2, Field::A); // R2=A.F A
+    if r.next(0x6704E, 8) {
+        i6704e(r)
+    }
 }
 
 fn i6704e(r: &mut Run) {
-    op!(r, 0x6704E, 3, Op::DAdd { d: 1, n: 5 }); // D1=D1+ 5
-    i67051(r)
+    r.cpu.d_add(1, 5); // D1=D1+ 5
+    if r.next(0x67051, 5) {
+        i67051(r)
+    }
 }
 
 fn i67051(r: &mut Run) {
-    op!(r, 0x67051, 3, Op::Mem { store: false, d: 1, r: R::A, f: Field::A }); // A=DAT1 A
-    i67054(r)
+    r.sync();
+    r.cpu.load(1, R::A, Field::A, r.hw); // A=DAT1 A
+    if r.next_io(0x67054, 19) {
+        i67054(r)
+    }
 }
 
 fn i67054(r: &mut Run) {
-    op!(r, 0x67054, 3, Op::DAdd { d: 1, n: 5 }); // D1=D1+ 5
-    i67057(r)
+    r.cpu.d_add(1, 5); // D1=D1+ 5
+    if r.next(0x67057, 5) {
+        i67057(r)
+    }
 }
 
 fn i67057(r: &mut Run) {
-    op!(r, 0x67057, 3, Op::LoadConst { r: R::C, len: 1, val: 3 }); // LC(1) #3
-    i6705a(r)
+    r.cpu.load_const(R::C, 1, 0x3); // LC(1) #3
+    if r.next(0x6705A, 5) {
+        i6705a(r)
+    }
 }
 
 fn i6705a(r: &mut Run) {
-    op!(r, 0x6705A, 4, Op::Logic { and: true, dst: R::C, src: R::A, f: Field::P }); // C=C&A P
-    i6705e(r)
+    r.cpu.and(R::C, R::A, Field::P); // C=C&A P
+    if r.next(0x6705E, 6) {
+        i6705e(r)
+    }
 }
 
 fn i6705e(r: &mut Run) {
-    op!(r, 0x6705E, 3, Op::Rotate { r: R::C, left: false }); // CSRC
-    i67061(r)
+    r.cpu.rotate(R::C, false); // CSRC
+    if r.next(0x67061, 5) {
+        i67061(r)
+    }
 }
 
 fn i67061(r: &mut Run) {
-    op!(r, 0x67061, 2, Op::Copy { dst: R::C, src: R::A, f: Field::A }); // C=A A
-    i67063(r)
+    r.cpu.copy(R::C, R::A, Field::A); // C=A A
+    if r.next(0x67063, 4) {
+        i67063(r)
+    }
 }
 
 fn i67063(r: &mut Run) {
-    op!(r, 0x67063, 3, Op::HstClear(2)); // SB=0
-    i67066(r)
+    r.cpu.hst_clear(2); // SB=0
+    if r.next(0x67066, 5) {
+        i67066(r)
+    }
 }
 
 fn i67066(r: &mut Run) {
-    op!(r, 0x67066, 5, Op::SrbField { r: R::C, f: Field::A }); // CSRB.F A
-    i6706b(r)
+    r.cpu.srb_field(R::C, Field::A); // CSRB.F A
+    if r.next(0x6706B, 7) {
+        i6706b(r)
+    }
 }
 
 fn i6706b(r: &mut Run) {
-    op!(r, 0x6706B, 5, Op::SrbField { r: R::C, f: Field::A }); // CSRB.F A
-    i67070(r)
+    r.cpu.srb_field(R::C, Field::A); // CSRB.F A
+    if r.next(0x67070, 7) {
+        i67070(r)
+    }
 }
 
 fn i67070(r: &mut Run) {
-    op!(r, 0x67070, 5, Op::HsTest { mask: 2, goyes: Some(0x67077) }); // ?HST=0 2 / GOYES #67077
-    i67075(r)
+    r.cpu.pc = 0x67075;
+    r.cpu.hs_test(2, Some(0x67077)); // ?HST=0 2 / GOYES #67077
+    if r.next_pc(0x67075, 7) {
+        i67075(r)
+    }
 }
 
 fn i67075(r: &mut Run) {
-    op!(r, 0x67075, 2, Op::Inc { r: R::C, f: Field::A }); // C=C+1 A
-    i67077(r)
+    r.cpu.inc(R::C, Field::A); // C=C+1 A
+    if r.next(0x67077, 4) {
+        i67077(r)
+    }
 }
 
 fn i67077(r: &mut Run) {
-    op!(r, 0x67077, 5, Op::Test { test: Test::NonZero(R::C), f: Field::S, goyes: Some(0x6707E) }); // ?C#0 S / GOYES #6707E
-    i6707c(r)
+    r.cpu.pc = 0x6707C;
+    r.cpu.test(Test::NonZero(R::C), Field::S, Some(0x6707E)); // ?C#0 S / GOYES #6707E
+    if r.next_pc(0x6707C, 7) {
+        i6707c(r)
+    }
 }
 
 fn i6707c(r: &mut Run) {
-    op!(r, 0x6707C, 2, Op::Inc { r: R::C, f: Field::A }); // C=C+1 A
-    i6707e(r)
+    r.cpu.inc(R::C, Field::A); // C=C+1 A
+    if r.next(0x6707E, 4) {
+        i6707e(r)
+    }
 }
 
 fn i6707e(r: &mut Run) {
-    op!(r, 0x6707E, 6, Op::Scratch { op: ScratchOp::ToScratch, r: R::C, n: 4, f: Field::A }); // R4=C.F A
-    i67084(r)
+    r.cpu.scratch(ScratchOp::ToScratch, R::C, 4, Field::A); // R4=C.F A
+    if r.next(0x67084, 8) {
+        i67084(r)
+    }
 }
 
 fn i67084(r: &mut Run) {
-    op!(r, 0x67084, 2, Op::Exch { a: R::D, b: R::C, f: Field::A }); // DCEX A
-    i67086(r)
+    r.cpu.exch(R::D, R::C, Field::A); // DCEX A
+    if r.next(0x67086, 4) {
+        i67086(r)
+    }
 }
 
 fn i67086(r: &mut Run) {
-    op!(r, 0x67086, 6, Op::Scratch { op: ScratchOp::ToScratch, r: R::C, n: 1, f: Field::A }); // R1=C.F A
-    i6708c(r)
+    r.cpu.scratch(ScratchOp::ToScratch, R::C, 1, Field::A); // R1=C.F A
+    if r.next(0x6708C, 8) {
+        i6708c(r)
+    }
 }
 
 fn i6708c(r: &mut Run) {
-    op!(r, 0x6708C, 7, Op::Call(0x1165A)); // GOSUB #1165A
+    r.cpu.pc = 0x67093;
+    r.cpu.call(0x1165A); // GOSUB #1165A
+    r.spend(9);
 }
 
 fn i67093(r: &mut Run) {
-    op!(r, 0x67093, 6, Op::Scratch { op: ScratchOp::ToScratch, r: R::A, n: 3, f: Field::A }); // R3=A.F A
-    i67099(r)
+    r.cpu.scratch(ScratchOp::ToScratch, R::A, 3, Field::A); // R3=A.F A
+    if r.next(0x67099, 8) {
+        i67099(r)
+    }
 }
 
 fn i67099(r: &mut Run) {
-    op!(r, 0x67099, 2, Op::Copy { dst: R::C, src: R::A, f: Field::A }); // C=A A
-    i6709b(r)
+    r.cpu.copy(R::C, R::A, Field::A); // C=A A
+    if r.next(0x6709B, 4) {
+        i6709b(r)
+    }
 }
 
 fn i6709b(r: &mut Run) {
-    op!(r, 0x6709B, 3, Op::DExR { d: 1, r: R::A, short: false }); // AD1EX
-    i6709e(r)
+    r.cpu.d_ex_r(1, R::A, false); // AD1EX
+    if r.next(0x6709E, 5) {
+        i6709e(r)
+    }
 }
 
 fn i6709e(r: &mut Run) {
-    op!(r, 0x6709E, 5, Op::StTest { bit: 0, set: false, goyes: Some(0x670A5) }); // ?ST=0 0 / GOYES #670A5
-    i670a3(r)
+    r.cpu.pc = 0x670A3;
+    r.cpu.st_test(0, false, Some(0x670A5)); // ?ST=0 0 / GOYES #670A5
+    if r.next_pc(0x670A3, 7) {
+        i670a3(r)
+    }
 }
 
 fn i670a3(r: &mut Run) {
-    op!(r, 0x670A3, 2, Op::Add { dst: R::A, src: R::C, f: Field::A }); // A=A+C A
-    i670a5(r)
+    r.cpu.add(R::A, R::C, Field::A); // A=A+C A
+    if r.next(0x670A5, 4) {
+        i670a5(r)
+    }
 }
 
 fn i670a5(r: &mut Run) {
-    op!(r, 0x670A5, 3, Op::DFromR { d: 1, r: R::A, short: false }); // D1=A
-    i670a8(r)
+    r.cpu.d_from_r(1, R::A, false); // D1=A
+    if r.next(0x670A8, 5) {
+        i670a8(r)
+    }
 }
 
 fn i670a8(r: &mut Run) {
-    op!(r, 0x670A8, 2, Op::Dec { r: R::D, f: Field::A }); // D=D-1 A
-    i670aa(r)
+    r.cpu.dec(R::D, Field::A); // D=D-1 A
+    if r.next(0x670AA, 4) {
+        i670aa(r)
+    }
 }
 
 fn i670aa(r: &mut Run) {
-    op!(r, 0x670AA, 3, Op::CondRtn(Cond::Carry)); // RTNC
-    i670ad(r)
+    r.cpu.pc = 0x670AD;
+    r.cpu.rtn_if(Cond::Carry); // RTNC
+    if r.next_pc(0x670AD, 5) {
+        i670ad(r)
+    }
 }
 
 fn i670ad(r: &mut Run) {
-    op!(r, 0x670AD, 3, Op::LoadConst { r: R::C, len: 1, val: 0xF }); // LC(1) #F
-    i670b0(r)
+    r.cpu.load_const(R::C, 1, 0xF); // LC(1) #F
+    if r.next(0x670B0, 5) {
+        i670b0(r)
+    }
 }
 
 fn i670b0(r: &mut Run) {
-    op!(r, 0x670B0, 2, Op::Dec { r: R::D, f: Field::A }); // D=D-1 A
-    i670b2(r)
+    r.cpu.dec(R::D, Field::A); // D=D-1 A
+    if r.next(0x670B2, 4) {
+        i670b2(r)
+    }
 }
 
 fn i670b2(r: &mut Run) {
-    op!(r, 0x670B2, 3, Op::CondJump(Cond::Carry, 0x670C1)); // GOC #670C1
-    i670b5(r)
+    r.cpu.pc = 0x670B5;
+    r.cpu.jump_if(Cond::Carry, 0x670C1); // GOC #670C1
+    if r.next_pc(0x670B5, 5) {
+        i670b5(r)
+    }
 }
 
 fn i670b5(r: &mut Run) {
-    op!(r, 0x670B5, 4, Op::Mem { store: true, d: 1, r: R::C, f: Field::Nibbles(1) }); // DAT1=C 1
-    i670b9(r)
+    r.sync();
+    r.cpu.store(1, R::C, Field::Nibbles(1), r.hw); // DAT1=C 1
+    if r.next_io(0x670B9, 15) {
+        i670b9(r)
+    }
 }
 
 fn i670b9(r: &mut Run) {
-    op!(r, 0x670B9, 3, Op::DAdd { d: 1, n: 1 }); // D1=D1+ 1
-    i670bc(r)
+    r.cpu.d_add(1, 1); // D1=D1+ 1
+    if r.next(0x670BC, 5) {
+        i670bc(r)
+    }
 }
 
 fn i670bc(r: &mut Run) {
-    op!(r, 0x670BC, 2, Op::Dec { r: R::D, f: Field::A }); // D=D-1 A
-    i670be(r)
+    r.cpu.dec(R::D, Field::A); // D=D-1 A
+    if r.next(0x670BE, 4) {
+        i670be(r)
+    }
 }
 
 fn i670be(r: &mut Run) {
-    op!(r, 0x670BE, 3, Op::CondJump(Cond::NoCarry, 0x670B5)); // GONC #670B5
-    i670c1(r)
+    r.cpu.pc = 0x670C1;
+    r.cpu.jump_if(Cond::NoCarry, 0x670B5); // GONC #670B5
+    if r.next_pc(0x670C1, 5) {
+        i670c1(r)
+    }
 }
 
 fn i670c1(r: &mut Run) {
-    op!(r, 0x670C1, 3, Op::Dec { r: R::C, f: Field::S }); // C=C-1 S
-    i670c4(r)
+    r.cpu.dec(R::C, Field::S); // C=C-1 S
+    if r.next(0x670C4, 5) {
+        i670c4(r)
+    }
 }
 
 fn i670c4(r: &mut Run) {
-    op!(r, 0x670C4, 3, Op::CondJump(Cond::NoCarry, 0x670D3)); // GONC #670D3
-    i670c7(r)
+    r.cpu.pc = 0x670C7;
+    r.cpu.jump_if(Cond::NoCarry, 0x670D3); // GONC #670D3
+    if r.next_pc(0x670C7, 5) {
+        i670c7(r)
+    }
 }
 
 fn i670c7(r: &mut Run) {
-    op!(r, 0x670C7, 3, Op::DSub { d: 1, n: 1 }); // D1=D1- 1
-    i670ca(r)
+    r.cpu.d_sub(1, 1); // D1=D1- 1
+    if r.next(0x670CA, 5) {
+        i670ca(r)
+    }
 }
 
 fn i670ca(r: &mut Run) {
-    op!(r, 0x670CA, 3, Op::LoadConst { r: R::C, len: 1, val: 7 }); // LC(1) #7
-    i670cd(r)
+    r.cpu.load_const(R::C, 1, 0x7); // LC(1) #7
+    if r.next(0x670CD, 5) {
+        i670cd(r)
+    }
 }
 
 fn i670cd(r: &mut Run) {
-    op!(r, 0x670CD, 4, Op::Mem { store: true, d: 1, r: R::C, f: Field::P }); // DAT1=C P
-    i670d1(r)
+    r.sync();
+    r.cpu.store(1, R::C, Field::P, r.hw); // DAT1=C P
+    if r.next_io(0x670D1, r.cpu.mem_cycles(Field::P)) {
+        i670d1(r)
+    }
 }
 
 fn i670d1(r: &mut Run) {
-    op!(r, 0x670D1, 2, Op::Rtn(RtnKind::ClearCarry)); // RTNCC
+    r.cpu.rtn(RtnKind::ClearCarry); // RTNCC
+    r.spend(9);
 }
 
 fn i670d3(r: &mut Run) {
-    op!(r, 0x670D3, 3, Op::Dec { r: R::C, f: Field::S }); // C=C-1 S
-    i670d6(r)
+    r.cpu.dec(R::C, Field::S); // C=C-1 S
+    if r.next(0x670D6, 5) {
+        i670d6(r)
+    }
 }
 
 fn i670d6(r: &mut Run) {
-    op!(r, 0x670D6, 3, Op::CondJump(Cond::Carry, 0x670EC)); // GOC #670EC
-    i670d9(r)
+    r.cpu.pc = 0x670D9;
+    r.cpu.jump_if(Cond::Carry, 0x670EC); // GOC #670EC
+    if r.next_pc(0x670D9, 5) {
+        i670d9(r)
+    }
 }
 
 fn i670d9(r: &mut Run) {
-    op!(r, 0x670D9, 3, Op::Zero { r: R::C, f: Field::P }); // C=0 P
-    i670dc(r)
+    r.cpu.zero(R::C, Field::P); // C=0 P
+    if r.next(0x670DC, 5) {
+        i670dc(r)
+    }
 }
 
 fn i670dc(r: &mut Run) {
-    op!(r, 0x670DC, 3, Op::Add { dst: R::C, src: R::C, f: Field::P }); // C=C+C P
-    i670df(r)
+    r.cpu.add(R::C, R::C, Field::P); // C=C+C P
+    if r.next(0x670DF, 5) {
+        i670df(r)
+    }
 }
 
 fn i670df(r: &mut Run) {
-    op!(r, 0x670DF, 3, Op::Inc { r: R::C, f: Field::P }); // C=C+1 P
-    i670e2(r)
+    r.cpu.inc(R::C, Field::P); // C=C+1 P
+    if r.next(0x670E2, 5) {
+        i670e2(r)
+    }
 }
 
 fn i670e2(r: &mut Run) {
-    op!(r, 0x670E2, 3, Op::Dec { r: R::C, f: Field::S }); // C=C-1 S
-    i670e5(r)
+    r.cpu.dec(R::C, Field::S); // C=C-1 S
+    if r.next(0x670E5, 5) {
+        i670e5(r)
+    }
 }
 
 fn i670e5(r: &mut Run) {
-    op!(r, 0x670E5, 3, Op::CondJump(Cond::NoCarry, 0x670DC)); // GONC #670DC
-    i670e8(r)
+    r.cpu.pc = 0x670E8;
+    r.cpu.jump_if(Cond::NoCarry, 0x670DC); // GONC #670DC
+    if r.next_pc(0x670E8, 5) {
+        i670e8(r)
+    }
 }
 
 fn i670e8(r: &mut Run) {
-    op!(r, 0x670E8, 4, Op::Mem { store: true, d: 1, r: R::C, f: Field::Nibbles(1) }); // DAT1=C 1
-    i670ec(r)
+    r.sync();
+    r.cpu.store(1, R::C, Field::Nibbles(1), r.hw); // DAT1=C 1
+    if r.next_io(0x670EC, 15) {
+        i670ec(r)
+    }
 }
 
 fn i670ec(r: &mut Run) {
-    op!(r, 0x670EC, 2, Op::Rtn(RtnKind::ClearCarry)); // RTNCC
+    r.cpu.rtn(RtnKind::ClearCarry); // RTNCC
+    r.spend(9);
 }
 
 fn i670f3(r: &mut Run) {
-    op!(r, 0x670F3, 4, Op::Call(0x67136)); // GOSUB #67136
+    r.cpu.pc = 0x670F7;
+    r.cpu.call(0x67136); // GOSUB #67136
+    r.spend(6);
 }
 
 fn i670f7(r: &mut Run) {
-    op!(r, 0x670F7, 4, Op::LoadConst { r: R::C, len: 2, val: 8 }); // LC(2) #08
-    i670fb(r)
+    r.cpu.load_const(R::C, 2, 0x8); // LC(2) #08
+    if r.next(0x670FB, 6) {
+        i670fb(r)
+    }
 }
 
 fn i670fb(r: &mut Run) {
-    op!(r, 0x670FB, 3, Op::Mem { store: true, d: 1, r: R::C, f: Field::B }); // DAT1=C B
-    i670fe(r)
+    r.sync();
+    r.cpu.store(1, R::C, Field::B, r.hw); // DAT1=C B
+    if r.next_io(0x670FE, 16) {
+        i670fe(r)
+    }
 }
 
 fn i670fe(r: &mut Run) {
-    op!(r, 0x670FE, 3, Op::DAdd { d: 1, n: 2 }); // D1=D1+ 2
-    i67101(r)
+    r.cpu.d_add(1, 2); // D1=D1+ 2
+    if r.next(0x67101, 5) {
+        i67101(r)
+    }
 }
 
 fn i67101(r: &mut Run) {
-    op!(r, 0x67101, 4, Op::LoadConst { r: R::C, len: 2, val: 0x14 }); // LC(2) #14
-    i67105(r)
+    r.cpu.load_const(R::C, 2, 0x14); // LC(2) #14
+    if r.next(0x67105, 6) {
+        i67105(r)
+    }
 }
 
 fn i67105(r: &mut Run) {
-    op!(r, 0x67105, 3, Op::Mem { store: true, d: 1, r: R::C, f: Field::B }); // DAT1=C B
-    i67108(r)
+    r.sync();
+    r.cpu.store(1, R::C, Field::B, r.hw); // DAT1=C B
+    if r.next_io(0x67108, 16) {
+        i67108(r)
+    }
 }
 
 fn i67108(r: &mut Run) {
-    op!(r, 0x67108, 3, Op::DAdd { d: 1, n: 2 }); // D1=D1+ 2
-    i6710b(r)
+    r.cpu.d_add(1, 2); // D1=D1+ 2
+    if r.next(0x6710B, 5) {
+        i6710b(r)
+    }
 }
 
 fn i6710b(r: &mut Run) {
-    op!(r, 0x6710B, 4, Op::LoadConst { r: R::C, len: 2, val: 4 }); // LC(2) #04
-    i6710f(r)
+    r.cpu.load_const(R::C, 2, 0x4); // LC(2) #04
+    if r.next(0x6710F, 6) {
+        i6710f(r)
+    }
 }
 
 fn i6710f(r: &mut Run) {
-    op!(r, 0x6710F, 4, Op::Call(0x67129)); // GOSUB #67129
+    r.cpu.pc = 0x67113;
+    r.cpu.call(0x67129); // GOSUB #67129
+    r.spend(6);
 }
 
 fn i67113(r: &mut Run) {
-    op!(r, 0x67113, 3, Op::LoadConst { r: R::C, len: 1, val: 5 }); // LC(1) #5
-    i67116(r)
+    r.cpu.load_const(R::C, 1, 0x5); // LC(1) #5
+    if r.next(0x67116, 5) {
+        i67116(r)
+    }
 }
 
 fn i67116(r: &mut Run) {
-    op!(r, 0x67116, 3, Op::Mem { store: true, d: 1, r: R::C, f: Field::B }); // DAT1=C B
-    i67119(r)
+    r.sync();
+    r.cpu.store(1, R::C, Field::B, r.hw); // DAT1=C B
+    if r.next_io(0x67119, 16) {
+        i67119(r)
+    }
 }
 
 fn i67119(r: &mut Run) {
-    op!(r, 0x67119, 3, Op::DAdd { d: 1, n: 2 }); // D1=D1+ 2
-    i6711c(r)
+    r.cpu.d_add(1, 2); // D1=D1+ 2
+    if r.next(0x6711C, 5) {
+        i6711c(r)
+    }
 }
 
 fn i6711c(r: &mut Run) {
-    op!(r, 0x6711C, 3, Op::LoadConst { r: R::C, len: 1, val: 2 }); // LC(1) #2
-    i6711f(r)
+    r.cpu.load_const(R::C, 1, 0x2); // LC(1) #2
+    if r.next(0x6711F, 5) {
+        i6711f(r)
+    }
 }
 
 fn i6711f(r: &mut Run) {
-    op!(r, 0x6711F, 3, Op::Mem { store: true, d: 1, r: R::C, f: Field::B }); // DAT1=C B
-    i67122(r)
+    r.sync();
+    r.cpu.store(1, R::C, Field::B, r.hw); // DAT1=C B
+    if r.next_io(0x67122, 16) {
+        i67122(r)
+    }
 }
 
 fn i67122(r: &mut Run) {
-    op!(r, 0x67122, 7, Op::Jump(0x5143)); // GOTO #05143
+    r.cpu.pc = 0x05143; // GOTO #05143
+    r.spend(9);
 }
 
 fn i67129(r: &mut Run) {
-    op!(r, 0x67129, 3, Op::Mem { store: true, d: 1, r: R::C, f: Field::B }); // DAT1=C B
-    i6712c(r)
+    r.sync();
+    r.cpu.store(1, R::C, Field::B, r.hw); // DAT1=C B
+    if r.next_io(0x6712C, 16) {
+        i6712c(r)
+    }
 }
 
 fn i6712c(r: &mut Run) {
-    op!(r, 0x6712C, 3, Op::DAdd { d: 1, n: 2 }); // D1=D1+ 2
-    i6712f(r)
+    r.cpu.d_add(1, 2); // D1=D1+ 2
+    if r.next(0x6712F, 5) {
+        i6712f(r)
+    }
 }
 
 fn i6712f(r: &mut Run) {
-    op!(r, 0x6712F, 2, Op::Dec { r: R::D, f: Field::A }); // D=D-1 A
-    i67131(r)
+    r.cpu.dec(R::D, Field::A); // D=D-1 A
+    if r.next(0x67131, 4) {
+        i67131(r)
+    }
 }
 
 fn i67131(r: &mut Run) {
-    op!(r, 0x67131, 3, Op::CondJump(Cond::NoCarry, 0x67129)); // GONC #67129
-    i67134(r)
+    r.cpu.pc = 0x67134;
+    r.cpu.jump_if(Cond::NoCarry, 0x67129); // GONC #67129
+    if r.next_pc(0x67134, 5) {
+        i67134(r)
+    }
 }
 
 fn i67134(r: &mut Run) {
-    op!(r, 0x67134, 2, Op::Rtn(RtnKind::Plain)); // RTN
+    r.cpu.rtn(RtnKind::Plain); // RTN
+    r.spend(9);
 }
 
 fn i67136(r: &mut Run) {
-    op!(r, 0x67136, 4, Op::Call(0x67156)); // GOSUB #67156
+    r.cpu.pc = 0x6713A;
+    r.cpu.call(0x67156); // GOSUB #67156
+    r.spend(6);
 }
 
 fn i6713a(r: &mut Run) {
-    op!(r, 0x6713A, 3, Op::Mem { store: false, d: 1, r: R::A, f: Field::A }); // A=DAT1 A
-    i6713d(r)
+    r.sync();
+    r.cpu.load(1, R::A, Field::A, r.hw); // A=DAT1 A
+    if r.next_io(0x6713D, 19) {
+        i6713d(r)
+    }
 }
 
 fn i6713d(r: &mut Run) {
-    op!(r, 0x6713D, 3, Op::DFromR { d: 1, r: R::A, short: false }); // D1=A
-    i67140(r)
+    r.cpu.d_from_r(1, R::A, false); // D1=A
+    if r.next(0x67140, 5) {
+        i67140(r)
+    }
 }
 
 fn i67140(r: &mut Run) {
-    op!(r, 0x67140, 3, Op::DAdd { d: 1, n: 0xA }); // D1=D1+ 10
-    i67143(r)
+    r.cpu.d_add(1, 10); // D1=D1+ 10
+    if r.next(0x67143, 5) {
+        i67143(r)
+    }
 }
 
 fn i67143(r: &mut Run) {
-    op!(r, 0x67143, 3, Op::Mem { store: false, d: 1, r: R::C, f: Field::A }); // C=DAT1 A
-    i67146(r)
+    r.sync();
+    r.cpu.load(1, R::C, Field::A, r.hw); // C=DAT1 A
+    if r.next_io(0x67146, 19) {
+        i67146(r)
+    }
 }
 
 fn i67146(r: &mut Run) {
-    op!(r, 0x67146, 6, Op::SubCon { r: R::C, f: Field::A, n: 5 }); // C=C-CON A,5
-    i6714c(r)
+    r.cpu.sub_con(R::C, Field::A, 5); // C=C-CON A,5
+    if r.next(0x6714C, 8) {
+        i6714c(r)
+    }
 }
 
 fn i6714c(r: &mut Run) {
-    op!(r, 0x6714C, 3, Op::CondJump(Cond::Carry, 0x67122)); // GOC #67122
-    i6714f(r)
+    r.cpu.pc = 0x6714F;
+    r.cpu.jump_if(Cond::Carry, 0x67122); // GOC #67122
+    if r.next_pc(0x6714F, 5) {
+        i6714f(r)
+    }
 }
 
 fn i6714f(r: &mut Run) {
-    op!(r, 0x6714F, 2, Op::Copy { dst: R::D, src: R::C, f: Field::A }); // D=C A
-    i67151(r)
+    r.cpu.copy(R::D, R::C, Field::A); // D=C A
+    if r.next(0x67151, 4) {
+        i67151(r)
+    }
 }
 
 fn i67151(r: &mut Run) {
-    op!(r, 0x67151, 3, Op::DAdd { d: 1, n: 0xA }); // D1=D1+ 10
-    i67154(r)
+    r.cpu.d_add(1, 10); // D1=D1+ 10
+    if r.next(0x67154, 5) {
+        i67154(r)
+    }
 }
 
 fn i67154(r: &mut Run) {
-    op!(r, 0x67154, 2, Op::Rtn(RtnKind::Plain)); // RTN
+    r.cpu.rtn(RtnKind::Plain); // RTN
+    r.spend(9);
 }
 
 fn i67156(r: &mut Run) {
-    op!(r, 0x67156, 7, Op::Jump(0x679B)); // GOTO #0679B
+    r.cpu.pc = 0x0679B; // GOTO #0679B
+    r.spend(9);
 }
 
 fn i67162(r: &mut Run) {
-    op!(r, 0x67162, 4, Op::Call(0x67136)); // GOSUB #67136
+    r.cpu.pc = 0x67166;
+    r.cpu.call(0x67136); // GOSUB #67136
+    r.spend(6);
 }
 
 fn i67166(r: &mut Run) {
-    op!(r, 0x67166, 4, Op::LoadConst { r: R::C, len: 2, val: 0xC }); // LC(2) #0C
-    i6716a(r)
+    r.cpu.load_const(R::C, 2, 0xC); // LC(2) #0C
+    if r.next(0x6716A, 6) {
+        i6716a(r)
+    }
 }
 
 fn i6716a(r: &mut Run) {
-    op!(r, 0x6716A, 3, Op::Mem { store: true, d: 1, r: R::C, f: Field::B }); // DAT1=C B
-    i6716d(r)
+    r.sync();
+    r.cpu.store(1, R::C, Field::B, r.hw); // DAT1=C B
+    if r.next_io(0x6716D, 16) {
+        i6716d(r)
+    }
 }
 
 fn i6716d(r: &mut Run) {
-    op!(r, 0x6716D, 3, Op::DAdd { d: 1, n: 2 }); // D1=D1+ 2
-    i67170(r)
+    r.cpu.d_add(1, 2); // D1=D1+ 2
+    if r.next(0x67170, 5) {
+        i67170(r)
+    }
 }
 
 fn i67170(r: &mut Run) {
-    op!(r, 0x67170, 3, Op::LoadConst { r: R::C, len: 1, val: 4 }); // LC(1) #4
-    i67173(r)
+    r.cpu.load_const(R::C, 1, 0x4); // LC(1) #4
+    if r.next(0x67173, 5) {
+        i67173(r)
+    }
 }
 
 fn i67173(r: &mut Run) {
-    op!(r, 0x67173, 4, Op::Call(0x67129)); // GOSUB #67129
+    r.cpu.pc = 0x67177;
+    r.cpu.call(0x67129); // GOSUB #67129
+    r.spend(6);
 }
 
 fn i67177(r: &mut Run) {
-    op!(r, 0x67177, 3, Op::LoadConst { r: R::C, len: 1, val: 5 }); // LC(1) #5
-    i6717a(r)
+    r.cpu.load_const(R::C, 1, 0x5); // LC(1) #5
+    if r.next(0x6717A, 5) {
+        i6717a(r)
+    }
 }
 
 fn i6717a(r: &mut Run) {
-    op!(r, 0x6717A, 3, Op::Mem { store: true, d: 1, r: R::C, f: Field::B }); // DAT1=C B
-    i6717d(r)
+    r.sync();
+    r.cpu.store(1, R::C, Field::B, r.hw); // DAT1=C B
+    if r.next_io(0x6717D, 16) {
+        i6717d(r)
+    }
 }
 
 fn i6717d(r: &mut Run) {
-    op!(r, 0x6717D, 3, Op::DAdd { d: 1, n: 2 }); // D1=D1+ 2
-    i67180(r)
+    r.cpu.d_add(1, 2); // D1=D1+ 2
+    if r.next(0x67180, 5) {
+        i67180(r)
+    }
 }
 
 fn i67180(r: &mut Run) {
-    op!(r, 0x67180, 3, Op::LoadConst { r: R::C, len: 1, val: 6 }); // LC(1) #6
-    i67183(r)
+    r.cpu.load_const(R::C, 1, 0x6); // LC(1) #6
+    if r.next(0x67183, 5) {
+        i67183(r)
+    }
 }
 
 fn i67183(r: &mut Run) {
-    op!(r, 0x67183, 3, Op::Mem { store: true, d: 1, r: R::C, f: Field::B }); // DAT1=C B
-    i67186(r)
+    r.sync();
+    r.cpu.store(1, R::C, Field::B, r.hw); // DAT1=C B
+    if r.next_io(0x67186, 16) {
+        i67186(r)
+    }
 }
 
 fn i67186(r: &mut Run) {
-    op!(r, 0x67186, 3, Op::DAdd { d: 1, n: 2 }); // D1=D1+ 2
-    i67189(r)
+    r.cpu.d_add(1, 2); // D1=D1+ 2
+    if r.next(0x67189, 5) {
+        i67189(r)
+    }
 }
 
 fn i67189(r: &mut Run) {
-    op!(r, 0x67189, 3, Op::LoadConst { r: R::C, len: 1, val: 4 }); // LC(1) #4
-    i6718c(r)
+    r.cpu.load_const(R::C, 1, 0x4); // LC(1) #4
+    if r.next(0x6718C, 5) {
+        i6718c(r)
+    }
 }
 
 fn i6718c(r: &mut Run) {
-    op!(r, 0x6718C, 3, Op::Mem { store: true, d: 1, r: R::C, f: Field::B }); // DAT1=C B
-    i6718f(r)
+    r.sync();
+    r.cpu.store(1, R::C, Field::B, r.hw); // DAT1=C B
+    if r.next_io(0x6718F, 16) {
+        i6718f(r)
+    }
 }
 
 fn i6718f(r: &mut Run) {
-    op!(r, 0x6718F, 4, Op::Jump(0x67122)); // GOTO #67122
+    r.cpu.pc = 0x67122; // GOTO #67122
+    r.spend(6);
 }
 
 fn i67198(r: &mut Run) {
-    op!(r, 0x67198, 4, Op::Call(0x67136)); // GOSUB #67136
+    r.cpu.pc = 0x6719C;
+    r.cpu.call(0x67136); // GOSUB #67136
+    r.spend(6);
 }
 
 fn i6719c(r: &mut Run) {
-    op!(r, 0x6719C, 7, Op::LoadConst { r: R::C, len: 5, val: 4 }); // LC(5) #00004
-    i671a3(r)
+    r.cpu.load_const(R::C, 5, 0x4); // LC(5) #00004
+    if r.next(0x671A3, 9) {
+        i671a3(r)
+    }
 }
 
 fn i671a3(r: &mut Run) {
-    op!(r, 0x671A3, 2, Op::Add { dst: R::D, src: R::C, f: Field::A }); // D=D+C A
-    i671a5(r)
+    r.cpu.add(R::D, R::C, Field::A); // D=D+C A
+    if r.next(0x671A5, 4) {
+        i671a5(r)
+    }
 }
 
 fn i671a5(r: &mut Run) {
-    op!(r, 0x671A5, 3, Op::LoadConst { r: R::C, len: 1, val: 1 }); // LC(1) #1
-    i671a8(r)
+    r.cpu.load_const(R::C, 1, 0x1); // LC(1) #1
+    if r.next(0x671A8, 5) {
+        i671a8(r)
+    }
 }
 
 fn i671a8(r: &mut Run) {
-    op!(r, 0x671A8, 4, Op::Call(0x67129)); // GOSUB #67129
+    r.cpu.pc = 0x671AC;
+    r.cpu.call(0x67129); // GOSUB #67129
+    r.spend(6);
 }
 
 fn i671ac(r: &mut Run) {
-    op!(r, 0x671AC, 4, Op::Jump(0x67122)); // GOTO #67122
+    r.cpu.pc = 0x67122; // GOTO #67122
+    r.spend(6);
 }
 
 fn i671b5(r: &mut Run) {
-    op!(r, 0x671B5, 3, Op::StSet { bit: 0, set: false }); // ST=0 0
-    i671b8(r)
+    r.cpu.st_set(0, false); // ST=0 0
+    if r.next(0x671B8, 5) {
+        i671b8(r)
+    }
 }
 
 fn i671b8(r: &mut Run) {
-    op!(r, 0x671B8, 3, Op::StSet { bit: 3, set: false }); // ST=0 3
-    i671bb(r)
+    r.cpu.st_set(3, false); // ST=0 3
+    if r.next(0x671BB, 5) {
+        i671bb(r)
+    }
 }
 
 fn i671bb(r: &mut Run) {
-    op!(r, 0x671BB, 4, Op::Jump(0x671CA)); // GOTO #671CA
+    r.cpu.pc = 0x671CA; // GOTO #671CA
+    r.spend(6);
 }
 
 fn i671c4(r: &mut Run) {
-    op!(r, 0x671C4, 3, Op::StSet { bit: 0, set: true }); // ST=1 0
-    i671c7(r)
+    r.cpu.st_set(0, true); // ST=1 0
+    if r.next(0x671C7, 5) {
+        i671c7(r)
+    }
 }
 
 fn i671c7(r: &mut Run) {
-    op!(r, 0x671C7, 3, Op::StSet { bit: 3, set: false }); // ST=0 3
-    i671ca(r)
+    r.cpu.st_set(3, false); // ST=0 3
+    if r.next(0x671CA, 5) {
+        i671ca(r)
+    }
 }
 
 fn i671ca(r: &mut Run) {
-    op!(r, 0x671CA, 7, Op::Call(0x679B)); // GOSUB #0679B
+    r.cpu.pc = 0x671D1;
+    r.cpu.call(0x0679B); // GOSUB #0679B
+    r.spend(9);
 }
 
 fn i671d1(r: &mut Run) {
-    op!(r, 0x671D1, 3, Op::Mem { store: false, d: 1, r: R::A, f: Field::A }); // A=DAT1 A
-    i671d4(r)
+    r.sync();
+    r.cpu.load(1, R::A, Field::A, r.hw); // A=DAT1 A
+    if r.next_io(0x671D4, 19) {
+        i671d4(r)
+    }
 }
 
 fn i671d4(r: &mut Run) {
-    op!(r, 0x671D4, 3, Op::DFromR { d: 1, r: R::A, short: false }); // D1=A
-    i671d7(r)
+    r.cpu.d_from_r(1, R::A, false); // D1=A
+    if r.next(0x671D7, 5) {
+        i671d7(r)
+    }
 }
 
 fn i671d7(r: &mut Run) {
-    op!(r, 0x671D7, 3, Op::DAdd { d: 1, n: 0xA }); // D1=D1+ 10
-    i671da(r)
+    r.cpu.d_add(1, 10); // D1=D1+ 10
+    if r.next(0x671DA, 5) {
+        i671da(r)
+    }
 }
 
 fn i671da(r: &mut Run) {
-    op!(r, 0x671DA, 3, Op::Mem { store: false, d: 1, r: R::C, f: Field::A }); // C=DAT1 A
-    i671dd(r)
+    r.sync();
+    r.cpu.load(1, R::C, Field::A, r.hw); // C=DAT1 A
+    if r.next_io(0x671DD, 19) {
+        i671dd(r)
+    }
 }
 
 fn i671dd(r: &mut Run) {
-    op!(r, 0x671DD, 2, Op::Copy { dst: R::D, src: R::C, f: Field::A }); // D=C A
-    i671df(r)
+    r.cpu.copy(R::D, R::C, Field::A); // D=C A
+    if r.next(0x671DF, 4) {
+        i671df(r)
+    }
 }
 
 fn i671df(r: &mut Run) {
-    op!(r, 0x671DF, 3, Op::DAdd { d: 1, n: 5 }); // D1=D1+ 5
-    i671e2(r)
+    r.cpu.d_add(1, 5); // D1=D1+ 5
+    if r.next(0x671E2, 5) {
+        i671e2(r)
+    }
 }
 
 fn i671e2(r: &mut Run) {
-    op!(r, 0x671E2, 3, Op::Mem { store: false, d: 1, r: R::A, f: Field::A }); // A=DAT1 A
-    i671e5(r)
+    r.sync();
+    r.cpu.load(1, R::A, Field::A, r.hw); // A=DAT1 A
+    if r.next_io(0x671E5, 19) {
+        i671e5(r)
+    }
 }
 
 fn i671e5(r: &mut Run) {
-    op!(r, 0x671E5, 3, Op::DAdd { d: 1, n: 5 }); // D1=D1+ 5
-    i671e8(r)
+    r.cpu.d_add(1, 5); // D1=D1+ 5
+    if r.next(0x671E8, 5) {
+        i671e8(r)
+    }
 }
 
 fn i671e8(r: &mut Run) {
-    op!(r, 0x671E8, 3, Op::DExR { d: 1, r: R::A, short: false }); // AD1EX
-    i671eb(r)
+    r.cpu.d_ex_r(1, R::A, false); // AD1EX
+    if r.next(0x671EB, 5) {
+        i671eb(r)
+    }
 }
 
 fn i671eb(r: &mut Run) {
-    op!(r, 0x671EB, 6, Op::Scratch { op: ScratchOp::ToScratch, r: R::A, n: 0, f: Field::A }); // R0=A.F A
-    i671f1(r)
+    r.cpu.scratch(ScratchOp::ToScratch, R::A, 0, Field::A); // R0=A.F A
+    if r.next(0x671F1, 8) {
+        i671f1(r)
+    }
 }
 
 fn i671f1(r: &mut Run) {
-    op!(r, 0x671F1, 3, Op::DExR { d: 1, r: R::A, short: false }); // AD1EX
-    i671f4(r)
+    r.cpu.d_ex_r(1, R::A, false); // AD1EX
+    if r.next(0x671F4, 5) {
+        i671f4(r)
+    }
 }
 
 fn i671f4(r: &mut Run) {
-    op!(r, 0x671F4, 7, Op::Call(0x1165A)); // GOSUB #1165A
+    r.cpu.pc = 0x671FB;
+    r.cpu.call(0x1165A); // GOSUB #1165A
+    r.spend(9);
 }
 
 fn i671fb(r: &mut Run) {
-    op!(r, 0x671FB, 2, Op::Copy { dst: R::B, src: R::A, f: Field::A }); // B=A A
-    i671fd(r)
+    r.cpu.copy(R::B, R::A, Field::A); // B=A A
+    if r.next(0x671FD, 4) {
+        i671fd(r)
+    }
 }
 
 fn i671fd(r: &mut Run) {
-    op!(r, 0x671FD, 5, Op::StTest { bit: 3, set: false, goyes: Some(0x67228) }); // ?ST=0 3 / GOYES #67228
-    i67202(r)
+    r.cpu.pc = 0x67202;
+    r.cpu.st_test(3, false, Some(0x67228)); // ?ST=0 3 / GOYES #67228
+    if r.next_pc(0x67202, 7) {
+        i67202(r)
+    }
 }
 
 fn i67202(r: &mut Run) {
-    op!(r, 0x67202, 3, Op::LoadConst { r: R::C, len: 1, val: 8 }); // LC(1) #8
-    i67205(r)
+    r.cpu.load_const(R::C, 1, 0x8); // LC(1) #8
+    if r.next(0x67205, 5) {
+        i67205(r)
+    }
 }
 
 fn i67205(r: &mut Run) {
-    op!(r, 0x67205, 4, Op::Mem { store: true, d: 1, r: R::C, f: Field::P }); // DAT1=C P
-    i67209(r)
+    r.sync();
+    r.cpu.store(1, R::C, Field::P, r.hw); // DAT1=C P
+    if r.next_io(0x67209, r.cpu.mem_cycles(Field::P)) {
+        i67209(r)
+    }
 }
 
 fn i67209(r: &mut Run) {
-    op!(r, 0x67209, 4, Op::Call(0x672D2)); // GOSUB #672D2
+    r.cpu.pc = 0x6720D;
+    r.cpu.call(0x672D2); // GOSUB #672D2
+    r.spend(6);
 }
 
 fn i6720d(r: &mut Run) {
-    op!(r, 0x6720D, 3, Op::LoadConst { r: R::C, len: 1, val: 4 }); // LC(1) #4
-    i67210(r)
+    r.cpu.load_const(R::C, 1, 0x4); // LC(1) #4
+    if r.next(0x67210, 5) {
+        i67210(r)
+    }
 }
 
 fn i67210(r: &mut Run) {
-    op!(r, 0x67210, 4, Op::Mem { store: true, d: 1, r: R::C, f: Field::P }); // DAT1=C P
-    i67214(r)
+    r.sync();
+    r.cpu.store(1, R::C, Field::P, r.hw); // DAT1=C P
+    if r.next_io(0x67214, r.cpu.mem_cycles(Field::P)) {
+        i67214(r)
+    }
 }
 
 fn i67214(r: &mut Run) {
-    op!(r, 0x67214, 3, Op::DAdd { d: 1, n: 1 }); // D1=D1+ 1
-    i67217(r)
+    r.cpu.d_add(1, 1); // D1=D1+ 1
+    if r.next(0x67217, 5) {
+        i67217(r)
+    }
 }
 
 fn i67217(r: &mut Run) {
-    op!(r, 0x67217, 2, Op::PSet(0xF)); // P= 15
-    i67219(r)
+    r.cpu.p = 15; // P= 15
+    if r.next(0x67219, 4) {
+        i67219(r)
+    }
 }
 
 fn i67219(r: &mut Run) {
-    op!(r, 0x67219, 3, Op::LoadConst { r: R::C, len: 1, val: 1 }); // LC(1) #1
-    i6721c(r)
+    r.cpu.load_const(R::C, 1, 0x1); // LC(1) #1
+    if r.next(0x6721C, 5) {
+        i6721c(r)
+    }
 }
 
 fn i6721c(r: &mut Run) {
-    op!(r, 0x6721C, 2, Op::PSet(0)); // P= 0
-    i6721e(r)
+    r.cpu.p = 0; // P= 0
+    if r.next(0x6721E, 4) {
+        i6721e(r)
+    }
 }
 
 fn i6721e(r: &mut Run) {
-    op!(r, 0x6721E, 4, Op::Call(0x672C4)); // GOSUB #672C4
+    r.cpu.pc = 0x67222;
+    r.cpu.call(0x672C4); // GOSUB #672C4
+    r.spend(6);
 }
 
 fn i67222(r: &mut Run) {
-    op!(r, 0x67222, 3, Op::DSub { d: 1, n: 1 }); // D1=D1- 1
-    i67225(r)
+    r.cpu.d_sub(1, 1); // D1=D1- 1
+    if r.next(0x67225, 5) {
+        i67225(r)
+    }
 }
 
 fn i67225(r: &mut Run) {
-    op!(r, 0x67225, 3, Op::CondJump(Cond::NoCarry, 0x67254)); // GONC #67254
-    i67228(r)
+    r.cpu.pc = 0x67228;
+    r.cpu.jump_if(Cond::NoCarry, 0x67254); // GONC #67254
+    if r.next_pc(0x67228, 5) {
+        i67228(r)
+    }
 }
 
 fn i67228(r: &mut Run) {
-    op!(r, 0x67228, 2, Op::Dec { r: R::D, f: Field::A }); // D=D-1 A
-    i6722a(r)
+    r.cpu.dec(R::D, Field::A); // D=D-1 A
+    if r.next(0x6722A, 4) {
+        i6722a(r)
+    }
 }
 
 fn i6722a(r: &mut Run) {
-    op!(r, 0x6722A, 2, Op::PSet(0xF)); // P= 15
-    i6722c(r)
+    r.cpu.p = 15; // P= 15
+    if r.next(0x6722C, 4) {
+        i6722c(r)
+    }
 }
 
 fn i6722c(r: &mut Run) {
-    op!(r, 0x6722C, 3, Op::LoadConst { r: R::C, len: 1, val: 1 }); // LC(1) #1
-    i6722f(r)
+    r.cpu.load_const(R::C, 1, 0x1); // LC(1) #1
+    if r.next(0x6722F, 5) {
+        i6722f(r)
+    }
 }
 
 fn i6722f(r: &mut Run) {
-    op!(r, 0x6722F, 5, Op::StTest { bit: 0, set: false, goyes: Some(0x67237) }); // ?ST=0 0 / GOYES #67237
-    i67234(r)
+    r.cpu.pc = 0x67234;
+    r.cpu.st_test(0, false, Some(0x67237)); // ?ST=0 0 / GOYES #67237
+    if r.next_pc(0x67234, 7) {
+        i67234(r)
+    }
 }
 
 fn i67234(r: &mut Run) {
-    op!(r, 0x67234, 3, Op::LoadConst { r: R::C, len: 1, val: 8 }); // LC(1) #8
-    i67237(r)
+    r.cpu.load_const(R::C, 1, 0x8); // LC(1) #8
+    if r.next(0x67237, 5) {
+        i67237(r)
+    }
 }
 
 fn i67237(r: &mut Run) {
-    op!(r, 0x67237, 2, Op::PSet(0)); // P= 0
-    i67239(r)
+    r.cpu.p = 0; // P= 0
+    if r.next(0x67239, 4) {
+        i67239(r)
+    }
 }
 
 fn i67239(r: &mut Run) {
-    op!(r, 0x67239, 4, Op::Call(0x672C4)); // GOSUB #672C4
+    r.cpu.pc = 0x6723D;
+    r.cpu.call(0x672C4); // GOSUB #672C4
+    r.spend(6);
 }
 
 fn i6723d(r: &mut Run) {
-    op!(r, 0x6723D, 4, Op::Call(0x672D2)); // GOSUB #672D2
+    r.cpu.pc = 0x67241;
+    r.cpu.call(0x672D2); // GOSUB #672D2
+    r.spend(6);
 }
 
 fn i67241(r: &mut Run) {
-    op!(r, 0x67241, 2, Op::PSet(0xF)); // P= 15
-    i67243(r)
+    r.cpu.p = 15; // P= 15
+    if r.next(0x67243, 4) {
+        i67243(r)
+    }
 }
 
 fn i67243(r: &mut Run) {
-    op!(r, 0x67243, 3, Op::LoadConst { r: R::C, len: 1, val: 2 }); // LC(1) #2
-    i67246(r)
+    r.cpu.load_const(R::C, 1, 0x2); // LC(1) #2
+    if r.next(0x67246, 5) {
+        i67246(r)
+    }
 }
 
 fn i67246(r: &mut Run) {
-    op!(r, 0x67246, 5, Op::StTest { bit: 0, set: false, goyes: Some(0x6724E) }); // ?ST=0 0 / GOYES #6724E
-    i6724b(r)
+    r.cpu.pc = 0x6724B;
+    r.cpu.st_test(0, false, Some(0x6724E)); // ?ST=0 0 / GOYES #6724E
+    if r.next_pc(0x6724B, 7) {
+        i6724b(r)
+    }
 }
 
 fn i6724b(r: &mut Run) {
-    op!(r, 0x6724B, 3, Op::LoadConst { r: R::C, len: 1, val: 4 }); // LC(1) #4
-    i6724e(r)
+    r.cpu.load_const(R::C, 1, 0x4); // LC(1) #4
+    if r.next(0x6724E, 5) {
+        i6724e(r)
+    }
 }
 
 fn i6724e(r: &mut Run) {
-    op!(r, 0x6724E, 2, Op::PSet(0)); // P= 0
-    i67250(r)
+    r.cpu.p = 0; // P= 0
+    if r.next(0x67250, 4) {
+        i67250(r)
+    }
 }
 
 fn i67250(r: &mut Run) {
-    op!(r, 0x67250, 4, Op::Call(0x672C4)); // GOSUB #672C4
+    r.cpu.pc = 0x67254;
+    r.cpu.call(0x672C4); // GOSUB #672C4
+    r.spend(6);
 }
 
 fn i67254(r: &mut Run) {
-    op!(r, 0x67254, 2, Op::PSet(0xF)); // P= 15
-    i67256(r)
+    r.cpu.p = 15; // P= 15
+    if r.next(0x67256, 4) {
+        i67256(r)
+    }
 }
 
 fn i67256(r: &mut Run) {
-    op!(r, 0x67256, 3, Op::LoadConst { r: R::C, len: 1, val: 2 }); // LC(1) #2
-    i67259(r)
+    r.cpu.load_const(R::C, 1, 0x2); // LC(1) #2
+    if r.next(0x67259, 5) {
+        i67259(r)
+    }
 }
 
 fn i67259(r: &mut Run) {
-    op!(r, 0x67259, 5, Op::StTest { bit: 0, set: true, goyes: Some(0x67261) }); // ?ST=1 0 / GOYES #67261
-    i6725e(r)
+    r.cpu.pc = 0x6725E;
+    r.cpu.st_test(0, true, Some(0x67261)); // ?ST=1 0 / GOYES #67261
+    if r.next_pc(0x6725E, 7) {
+        i6725e(r)
+    }
 }
 
 fn i6725e(r: &mut Run) {
-    op!(r, 0x6725E, 3, Op::LoadConst { r: R::C, len: 1, val: 4 }); // LC(1) #4
-    i67261(r)
+    r.cpu.load_const(R::C, 1, 0x4); // LC(1) #4
+    if r.next(0x67261, 5) {
+        i67261(r)
+    }
 }
 
 fn i67261(r: &mut Run) {
-    op!(r, 0x67261, 2, Op::PSet(0)); // P= 0
-    i67263(r)
+    r.cpu.p = 0; // P= 0
+    if r.next(0x67263, 4) {
+        i67263(r)
+    }
 }
 
 fn i67263(r: &mut Run) {
-    op!(r, 0x67263, 2, Op::Zero { r: R::C, f: Field::A }); // C=0 A
-    i67265(r)
+    r.cpu.zero(R::C, Field::A); // C=0 A
+    if r.next(0x67265, 4) {
+        i67265(r)
+    }
 }
 
 fn i67265(r: &mut Run) {
-    op!(r, 0x67265, 3, Op::LoadConst { r: R::C, len: 1, val: 5 }); // LC(1) #5
-    i67268(r)
+    r.cpu.load_const(R::C, 1, 0x5); // LC(1) #5
+    if r.next(0x67268, 5) {
+        i67268(r)
+    }
 }
 
 fn i67268(r: &mut Run) {
-    op!(r, 0x67268, 2, Op::Sub { dst: R::D, a: R::D, b: R::C, f: Field::A }); // D=D-C A
-    i6726a(r)
+    r.cpu.sub(R::D, R::D, R::C, Field::A); // D=D-C A
+    if r.next(0x6726A, 4) {
+        i6726a(r)
+    }
 }
 
 fn i6726a(r: &mut Run) {
-    op!(r, 0x6726A, 4, Op::Call(0x672D2)); // GOSUB #672D2
+    r.cpu.pc = 0x6726E;
+    r.cpu.call(0x672D2); // GOSUB #672D2
+    r.spend(6);
 }
 
 fn i6726e(r: &mut Run) {
-    op!(r, 0x6726E, 4, Op::Call(0x672C4)); // GOSUB #672C4
+    r.cpu.pc = 0x67272;
+    r.cpu.call(0x672C4); // GOSUB #672C4
+    r.spend(6);
 }
 
 fn i67272(r: &mut Run) {
-    op!(r, 0x67272, 2, Op::Dec { r: R::D, f: Field::A }); // D=D-1 A
-    i67274(r)
+    r.cpu.dec(R::D, Field::A); // D=D-1 A
+    if r.next(0x67274, 4) {
+        i67274(r)
+    }
 }
 
 fn i67274(r: &mut Run) {
-    op!(r, 0x67274, 3, Op::CondJump(Cond::NoCarry, 0x6726A)); // GONC #6726A
-    i67277(r)
+    r.cpu.pc = 0x67277;
+    r.cpu.jump_if(Cond::NoCarry, 0x6726A); // GONC #6726A
+    if r.next_pc(0x67277, 5) {
+        i67277(r)
+    }
 }
 
 fn i67277(r: &mut Run) {
-    op!(r, 0x67277, 2, Op::PSet(0xF)); // P= 15
-    i67279(r)
+    r.cpu.p = 15; // P= 15
+    if r.next(0x67279, 4) {
+        i67279(r)
+    }
 }
 
 fn i67279(r: &mut Run) {
-    op!(r, 0x67279, 5, Op::StTest { bit: 3, set: true, goyes: Some(0x672AE) }); // ?ST=1 3 / GOYES #672AE
-    i6727e(r)
+    r.cpu.pc = 0x6727E;
+    r.cpu.st_test(3, true, Some(0x672AE)); // ?ST=1 3 / GOYES #672AE
+    if r.next_pc(0x6727E, 7) {
+        i6727e(r)
+    }
 }
 
 fn i6727e(r: &mut Run) {
-    op!(r, 0x6727E, 3, Op::LoadConst { r: R::C, len: 1, val: 2 }); // LC(1) #2
-    i67281(r)
+    r.cpu.load_const(R::C, 1, 0x2); // LC(1) #2
+    if r.next(0x67281, 5) {
+        i67281(r)
+    }
 }
 
 fn i67281(r: &mut Run) {
-    op!(r, 0x67281, 5, Op::StTest { bit: 0, set: false, goyes: Some(0x67289) }); // ?ST=0 0 / GOYES #67289
-    i67286(r)
+    r.cpu.pc = 0x67286;
+    r.cpu.st_test(0, false, Some(0x67289)); // ?ST=0 0 / GOYES #67289
+    if r.next_pc(0x67286, 7) {
+        i67286(r)
+    }
 }
 
 fn i67286(r: &mut Run) {
-    op!(r, 0x67286, 3, Op::LoadConst { r: R::C, len: 1, val: 4 }); // LC(1) #4
-    i67289(r)
+    r.cpu.load_const(R::C, 1, 0x4); // LC(1) #4
+    if r.next(0x67289, 5) {
+        i67289(r)
+    }
 }
 
 fn i67289(r: &mut Run) {
-    op!(r, 0x67289, 2, Op::PSet(0)); // P= 0
-    i6728b(r)
+    r.cpu.p = 0; // P= 0
+    if r.next(0x6728B, 4) {
+        i6728b(r)
+    }
 }
 
 fn i6728b(r: &mut Run) {
-    op!(r, 0x6728B, 4, Op::Call(0x672D2)); // GOSUB #672D2
+    r.cpu.pc = 0x6728F;
+    r.cpu.call(0x672D2); // GOSUB #672D2
+    r.spend(6);
 }
 
 fn i6728f(r: &mut Run) {
-    op!(r, 0x6728F, 4, Op::Call(0x672C4)); // GOSUB #672C4
+    r.cpu.pc = 0x67293;
+    r.cpu.call(0x672C4); // GOSUB #672C4
+    r.spend(6);
 }
 
 fn i67293(r: &mut Run) {
-    op!(r, 0x67293, 4, Op::Call(0x672D2)); // GOSUB #672D2
+    r.cpu.pc = 0x67297;
+    r.cpu.call(0x672D2); // GOSUB #672D2
+    r.spend(6);
 }
 
 fn i67297(r: &mut Run) {
-    op!(r, 0x67297, 2, Op::PSet(0xF)); // P= 15
-    i67299(r)
+    r.cpu.p = 15; // P= 15
+    if r.next(0x67299, 4) {
+        i67299(r)
+    }
 }
 
 fn i67299(r: &mut Run) {
-    op!(r, 0x67299, 3, Op::LoadConst { r: R::C, len: 1, val: 1 }); // LC(1) #1
-    i6729c(r)
+    r.cpu.load_const(R::C, 1, 0x1); // LC(1) #1
+    if r.next(0x6729C, 5) {
+        i6729c(r)
+    }
 }
 
 fn i6729c(r: &mut Run) {
-    op!(r, 0x6729C, 5, Op::StTest { bit: 0, set: false, goyes: Some(0x672A4) }); // ?ST=0 0 / GOYES #672A4
-    i672a1(r)
+    r.cpu.pc = 0x672A1;
+    r.cpu.st_test(0, false, Some(0x672A4)); // ?ST=0 0 / GOYES #672A4
+    if r.next_pc(0x672A1, 7) {
+        i672a1(r)
+    }
 }
 
 fn i672a1(r: &mut Run) {
-    op!(r, 0x672A1, 3, Op::LoadConst { r: R::C, len: 1, val: 8 }); // LC(1) #8
-    i672a4(r)
+    r.cpu.load_const(R::C, 1, 0x8); // LC(1) #8
+    if r.next(0x672A4, 5) {
+        i672a4(r)
+    }
 }
 
 fn i672a4(r: &mut Run) {
-    op!(r, 0x672A4, 2, Op::PSet(0)); // P= 0
-    i672a6(r)
+    r.cpu.p = 0; // P= 0
+    if r.next(0x672A6, 4) {
+        i672a6(r)
+    }
 }
 
 fn i672a6(r: &mut Run) {
-    op!(r, 0x672A6, 4, Op::Call(0x672C4)); // GOSUB #672C4
+    r.cpu.pc = 0x672AA;
+    r.cpu.call(0x672C4); // GOSUB #672C4
+    r.spend(6);
 }
 
 fn i672aa(r: &mut Run) {
-    op!(r, 0x672AA, 4, Op::Jump(0x67122)); // GOTO #67122
+    r.cpu.pc = 0x67122; // GOTO #67122
+    r.spend(6);
 }
 
 fn i672ae(r: &mut Run) {
-    op!(r, 0x672AE, 3, Op::LoadConst { r: R::C, len: 1, val: 5 }); // LC(1) #5
-    i672b1(r)
+    r.cpu.load_const(R::C, 1, 0x5); // LC(1) #5
+    if r.next(0x672B1, 5) {
+        i672b1(r)
+    }
 }
 
 fn i672b1(r: &mut Run) {
-    op!(r, 0x672B1, 4, Op::Mem { store: true, d: 1, r: R::C, f: Field::P }); // DAT1=C P
-    i672b5(r)
+    r.sync();
+    r.cpu.store(1, R::C, Field::P, r.hw); // DAT1=C P
+    if r.next_io(0x672B5, r.cpu.mem_cycles(Field::P)) {
+        i672b5(r)
+    }
 }
 
 fn i672b5(r: &mut Run) {
-    op!(r, 0x672B5, 4, Op::Call(0x672D2)); // GOSUB #672D2
+    r.cpu.pc = 0x672B9;
+    r.cpu.call(0x672D2); // GOSUB #672D2
+    r.spend(6);
 }
 
 fn i672b9(r: &mut Run) {
-    op!(r, 0x672B9, 3, Op::LoadConst { r: R::C, len: 1, val: 2 }); // LC(1) #2
-    i672bc(r)
+    r.cpu.load_const(R::C, 1, 0x2); // LC(1) #2
+    if r.next(0x672BC, 5) {
+        i672bc(r)
+    }
 }
 
 fn i672bc(r: &mut Run) {
-    op!(r, 0x672BC, 4, Op::Mem { store: true, d: 1, r: R::C, f: Field::P }); // DAT1=C P
-    i672c0(r)
+    r.sync();
+    r.cpu.store(1, R::C, Field::P, r.hw); // DAT1=C P
+    if r.next_io(0x672C0, r.cpu.mem_cycles(Field::P)) {
+        i672c0(r)
+    }
 }
 
 fn i672c0(r: &mut Run) {
-    op!(r, 0x672C0, 4, Op::Jump(0x67289)); // GOTO #67289
+    r.cpu.pc = 0x67289; // GOTO #67289
+    r.spend(6);
 }
 
 fn i672c4(r: &mut Run) {
-    op!(r, 0x672C4, 4, Op::Mem { store: false, d: 1, r: R::A, f: Field::S }); // A=DAT1 S
-    i672c8(r)
+    r.sync();
+    r.cpu.load(1, R::A, Field::S, r.hw); // A=DAT1 S
+    if r.next_io(0x672C8, 15) {
+        i672c8(r)
+    }
 }
 
 fn i672c8(r: &mut Run) {
-    op!(r, 0x672C8, 4, Op::Logic { and: false, dst: R::A, src: R::C, f: Field::S }); // A=A!C S
-    i672cc(r)
+    r.cpu.or(R::A, R::C, Field::S); // A=A!C S
+    if r.next(0x672CC, 6) {
+        i672cc(r)
+    }
 }
 
 fn i672cc(r: &mut Run) {
-    op!(r, 0x672CC, 4, Op::Mem { store: true, d: 1, r: R::A, f: Field::S }); // DAT1=A S
-    i672d0(r)
+    r.sync();
+    r.cpu.store(1, R::A, Field::S, r.hw); // DAT1=A S
+    if r.next_io(0x672D0, 15) {
+        i672d0(r)
+    }
 }
 
 fn i672d0(r: &mut Run) {
-    op!(r, 0x672D0, 2, Op::Rtn(RtnKind::Plain)); // RTN
+    r.cpu.rtn(RtnKind::Plain); // RTN
+    r.spend(9);
 }
 
 fn i672d2(r: &mut Run) {
-    op!(r, 0x672D2, 3, Op::DExR { d: 1, r: R::C, short: false }); // CD1EX
-    i672d5(r)
+    r.cpu.d_ex_r(1, R::C, false); // CD1EX
+    if r.next(0x672D5, 5) {
+        i672d5(r)
+    }
 }
 
 fn i672d5(r: &mut Run) {
-    op!(r, 0x672D5, 2, Op::Add { dst: R::C, src: R::B, f: Field::A }); // C=C+B A
-    i672d7(r)
+    r.cpu.add(R::C, R::B, Field::A); // C=C+B A
+    if r.next(0x672D7, 4) {
+        i672d7(r)
+    }
 }
 
 fn i672d7(r: &mut Run) {
-    op!(r, 0x672D7, 3, Op::DFromR { d: 1, r: R::C, short: false }); // D1=C
-    i672da(r)
+    r.cpu.d_from_r(1, R::C, false); // D1=C
+    if r.next(0x672DA, 5) {
+        i672da(r)
+    }
 }
 
 fn i672da(r: &mut Run) {
-    op!(r, 0x672DA, 2, Op::Rtn(RtnKind::Plain)); // RTN
+    r.cpu.rtn(RtnKind::Plain); // RTN
+    r.spend(9);
 }
 
 fn i672eb(r: &mut Run) {
-    op!(r, 0x672EB, 7, Op::LoadConst { r: R::C, len: 5, val: 0x8090C }); // LC(5) #8090C
-    i672f2(r)
+    r.cpu.load_const(R::C, 5, 0x8090C); // LC(5) #8090C
+    if r.next(0x672F2, 9) {
+        i672f2(r)
+    }
 }
 
 fn i672f2(r: &mut Run) {
-    op!(r, 0x672F2, 3, Op::DExR { d: 0, r: R::C, short: false }); // CD0EX
-    i672f5(r)
+    r.cpu.d_ex_r(0, R::C, false); // CD0EX
+    if r.next(0x672F5, 5) {
+        i672f5(r)
+    }
 }
 
 fn i672f5(r: &mut Run) {
-    op!(r, 0x672F5, 2, Op::PushC); // RSTK=C
-    i672f7(r)
+    r.cpu.push_c(); // RSTK=C
+    if r.next(0x672F7, 4) {
+        i672f7(r)
+    }
 }
 
 fn i672f7(r: &mut Run) {
-    op!(r, 0x672F7, 3, Op::Mem { store: false, d: 0, r: R::A, f: Field::A }); // A=DAT0 A
-    i672fa(r)
+    r.sync();
+    r.cpu.load(0, R::A, Field::A, r.hw); // A=DAT0 A
+    if r.next_io(0x672FA, 19) {
+        i672fa(r)
+    }
 }
 
 fn i672fa(r: &mut Run) {
-    op!(r, 0x672FA, 7, Op::DLoad { d: 0, len: 5, val: 0x8086F }); // D0=(5) #8086F
-    i67301(r)
+    r.cpu.d_load(0, 5, 0x8086F); // D0=(5) #8086F
+    if r.next(0x67301, 9) {
+        i67301(r)
+    }
 }
 
 fn i67301(r: &mut Run) {
-    op!(r, 0x67301, 3, Op::Mem { store: false, d: 0, r: R::C, f: Field::A }); // C=DAT0 A
-    i67304(r)
+    r.sync();
+    r.cpu.load(0, R::C, Field::A, r.hw); // C=DAT0 A
+    if r.next_io(0x67304, 19) {
+        i67304(r)
+    }
 }
 
 fn i67304(r: &mut Run) {
-    op!(r, 0x67304, 2, Op::Sub { dst: R::A, a: R::A, b: R::C, f: Field::A }); // A=A-C A
-    i67306(r)
+    r.cpu.sub(R::A, R::A, R::C, Field::A); // A=A-C A
+    if r.next(0x67306, 4) {
+        i67306(r)
+    }
 }
 
 fn i67306(r: &mut Run) {
-    op!(r, 0x67306, 2, Op::PopC); // C=RSTK
-    i67308(r)
+    r.cpu.pop_c(); // C=RSTK
+    if r.next(0x67308, 4) {
+        i67308(r)
+    }
 }
 
 fn i67308(r: &mut Run) {
-    op!(r, 0x67308, 3, Op::DFromR { d: 0, r: R::C, short: false }); // D0=C
-    i6730b(r)
+    r.cpu.d_from_r(0, R::C, false); // D0=C
+    if r.next(0x6730B, 5) {
+        i6730b(r)
+    }
 }
 
 fn i6730b(r: &mut Run) {
-    op!(r, 0x6730B, 4, Op::Jump(0x6739E)); // GOTO #6739E
+    r.cpu.pc = 0x6739E; // GOTO #6739E
+    r.spend(6);
 }
 
 fn i67340(r: &mut Run) {
-    op!(r, 0x67340, 2, Op::Zero { r: R::C, f: Field::A }); // C=0 A
-    i67342(r)
+    r.cpu.zero(R::C, Field::A); // C=0 A
+    if r.next(0x67342, 4) {
+        i67342(r)
+    }
 }
 
 fn i67342(r: &mut Run) {
-    op!(r, 0x67342, 2, Op::Inc { r: R::C, f: Field::A }); // C=C+1 A
-    i67344(r)
+    r.cpu.inc(R::C, Field::A); // C=C+1 A
+    if r.next(0x67344, 4) {
+        i67344(r)
+    }
 }
 
 fn i67344(r: &mut Run) {
-    op!(r, 0x67344, 4, Op::Jump(0x67388)); // GOTO #67388
+    r.cpu.pc = 0x67388; // GOTO #67388
+    r.spend(6);
 }
 
 fn i6734d(r: &mut Run) {
-    op!(r, 0x6734D, 2, Op::Zero { r: R::C, f: Field::A }); // C=0 A
-    i6734f(r)
+    r.cpu.zero(R::C, Field::A); // C=0 A
+    if r.next(0x6734F, 4) {
+        i6734f(r)
+    }
 }
 
 fn i6734f(r: &mut Run) {
-    op!(r, 0x6734F, 3, Op::LoadConst { r: R::C, len: 1, val: 2 }); // LC(1) #2
-    i67352(r)
+    r.cpu.load_const(R::C, 1, 0x2); // LC(1) #2
+    if r.next(0x67352, 5) {
+        i67352(r)
+    }
 }
 
 fn i67352(r: &mut Run) {
-    op!(r, 0x67352, 4, Op::Jump(0x67388)); // GOTO #67388
+    r.cpu.pc = 0x67388; // GOTO #67388
+    r.spend(6);
 }
 
 fn i6735b(r: &mut Run) {
-    op!(r, 0x6735B, 2, Op::Zero { r: R::C, f: Field::A }); // C=0 A
-    i6735d(r)
+    r.cpu.zero(R::C, Field::A); // C=0 A
+    if r.next(0x6735D, 4) {
+        i6735d(r)
+    }
 }
 
 fn i6735d(r: &mut Run) {
-    op!(r, 0x6735D, 3, Op::LoadConst { r: R::C, len: 1, val: 3 }); // LC(1) #3
-    i67360(r)
+    r.cpu.load_const(R::C, 1, 0x3); // LC(1) #3
+    if r.next(0x67360, 5) {
+        i67360(r)
+    }
 }
 
 fn i67360(r: &mut Run) {
-    op!(r, 0x67360, 4, Op::Jump(0x67388)); // GOTO #67388
+    r.cpu.pc = 0x67388; // GOTO #67388
+    r.spend(6);
 }
 
 fn i67369(r: &mut Run) {
-    op!(r, 0x67369, 2, Op::Zero { r: R::C, f: Field::A }); // C=0 A
-    i6736b(r)
+    r.cpu.zero(R::C, Field::A); // C=0 A
+    if r.next(0x6736B, 4) {
+        i6736b(r)
+    }
 }
 
 fn i6736b(r: &mut Run) {
-    op!(r, 0x6736B, 2, Op::Dec { r: R::C, f: Field::A }); // C=C-1 A
-    i6736d(r)
+    r.cpu.dec(R::C, Field::A); // C=C-1 A
+    if r.next(0x6736D, 4) {
+        i6736d(r)
+    }
 }
 
 fn i6736d(r: &mut Run) {
-    op!(r, 0x6736D, 4, Op::Jump(0x67388)); // GOTO #67388
+    r.cpu.pc = 0x67388; // GOTO #67388
+    r.spend(6);
 }
 
 fn i67376(r: &mut Run) {
-    op!(r, 0x67376, 7, Op::LoadConst { r: R::C, len: 5, val: 0xFFFFE }); // LC(5) #FFFFE
-    i6737d(r)
+    r.cpu.load_const(R::C, 5, 0xFFFFE); // LC(5) #FFFFE
+    if r.next(0x6737D, 9) {
+        i6737d(r)
+    }
 }
 
 fn i6737d(r: &mut Run) {
-    op!(r, 0x6737D, 4, Op::Jump(0x67388)); // GOTO #67388
+    r.cpu.pc = 0x67388; // GOTO #67388
+    r.spend(6);
 }
 
 fn i67386(r: &mut Run) {
-    op!(r, 0x67386, 2, Op::Zero { r: R::C, f: Field::A }); // C=0 A
-    i67388(r)
+    r.cpu.zero(R::C, Field::A); // C=0 A
+    if r.next(0x67388, 4) {
+        i67388(r)
+    }
 }
 
 fn i67388(r: &mut Run) {
-    op!(r, 0x67388, 2, Op::PushC); // RSTK=C
-    i6738a(r)
+    r.cpu.push_c(); // RSTK=C
+    if r.next(0x6738A, 4) {
+        i6738a(r)
+    }
 }
 
 fn i6738a(r: &mut Run) {
-    op!(r, 0x6738A, 7, Op::LoadConst { r: R::C, len: 5, val: 0x808C5 }); // LC(5) #808C5
-    i67391(r)
+    r.cpu.load_const(R::C, 5, 0x808C5); // LC(5) #808C5
+    if r.next(0x67391, 9) {
+        i67391(r)
+    }
 }
 
 fn i67391(r: &mut Run) {
-    op!(r, 0x67391, 3, Op::DExR { d: 0, r: R::C, short: false }); // CD0EX
-    i67394(r)
+    r.cpu.d_ex_r(0, R::C, false); // CD0EX
+    if r.next(0x67394, 5) {
+        i67394(r)
+    }
 }
 
 fn i67394(r: &mut Run) {
-    op!(r, 0x67394, 3, Op::Mem { store: false, d: 0, r: R::A, f: Field::A }); // A=DAT0 A
-    i67397(r)
+    r.sync();
+    r.cpu.load(0, R::A, Field::A, r.hw); // A=DAT0 A
+    if r.next_io(0x67397, 19) {
+        i67397(r)
+    }
 }
 
 fn i67397(r: &mut Run) {
-    op!(r, 0x67397, 3, Op::DExR { d: 0, r: R::C, short: false }); // CD0EX
-    i6739a(r)
+    r.cpu.d_ex_r(0, R::C, false); // CD0EX
+    if r.next(0x6739A, 5) {
+        i6739a(r)
+    }
 }
 
 fn i6739a(r: &mut Run) {
-    op!(r, 0x6739A, 2, Op::PopC); // C=RSTK
-    i6739c(r)
+    r.cpu.pop_c(); // C=RSTK
+    if r.next(0x6739C, 4) {
+        i6739c(r)
+    }
 }
 
 fn i6739c(r: &mut Run) {
-    op!(r, 0x6739C, 2, Op::Add { dst: R::A, src: R::C, f: Field::A }); // A=A+C A
-    i6739e(r)
+    r.cpu.add(R::A, R::C, Field::A); // A=A+C A
+    if r.next(0x6739E, 4) {
+        i6739e(r)
+    }
 }
 
 fn i6739e(r: &mut Run) {
-    op!(r, 0x6739E, 4, Op::Jump(0x67907)); // GOTO #67907
+    r.cpu.pc = 0x67907; // GOTO #67907
+    r.spend(6);
 }
 
 fn i673a7(r: &mut Run) {
-    op!(r, 0x673A7, 7, Op::LoadConst { r: R::C, len: 5, val: 0x808D8 }); // LC(5) #808D8
-    i673ae(r)
+    r.cpu.load_const(R::C, 5, 0x808D8); // LC(5) #808D8
+    if r.next(0x673AE, 9) {
+        i673ae(r)
+    }
 }
 
 fn i673ae(r: &mut Run) {
-    op!(r, 0x673AE, 3, Op::DExR { d: 0, r: R::C, short: false }); // CD0EX
-    i673b1(r)
+    r.cpu.d_ex_r(0, R::C, false); // CD0EX
+    if r.next(0x673B1, 5) {
+        i673b1(r)
+    }
 }
 
 fn i673b1(r: &mut Run) {
-    op!(r, 0x673B1, 3, Op::Mem { store: false, d: 0, r: R::A, f: Field::A }); // A=DAT0 A
-    i673b4(r)
+    r.sync();
+    r.cpu.load(0, R::A, Field::A, r.hw); // A=DAT0 A
+    if r.next_io(0x673B4, 19) {
+        i673b4(r)
+    }
 }
 
 fn i673b4(r: &mut Run) {
-    op!(r, 0x673B4, 3, Op::DFromR { d: 0, r: R::C, short: false }); // D0=C
-    i673b7(r)
+    r.cpu.d_from_r(0, R::C, false); // D0=C
+    if r.next(0x673B7, 5) {
+        i673b7(r)
+    }
 }
 
 fn i673b7(r: &mut Run) {
-    op!(r, 0x673B7, 4, Op::Jump(0x67907)); // GOTO #67907
+    r.cpu.pc = 0x67907; // GOTO #67907
+    r.spend(6);
 }
 
 fn i673c0(r: &mut Run) {
-    op!(r, 0x673C0, 7, Op::LoadConst { r: R::C, len: 5, val: 0x80815 }); // LC(5) #80815
-    i673c7(r)
+    r.cpu.load_const(R::C, 5, 0x80815); // LC(5) #80815
+    if r.next(0x673C7, 9) {
+        i673c7(r)
+    }
 }
 
 fn i673c7(r: &mut Run) {
-    op!(r, 0x673C7, 3, Op::DExR { d: 0, r: R::C, short: false }); // CD0EX
-    i673ca(r)
+    r.cpu.d_ex_r(0, R::C, false); // CD0EX
+    if r.next(0x673CA, 5) {
+        i673ca(r)
+    }
 }
 
 fn i673ca(r: &mut Run) {
-    op!(r, 0x673CA, 2, Op::Zero { r: R::A, f: Field::A }); // A=0 A
-    i673cc(r)
+    r.cpu.zero(R::A, Field::A); // A=0 A
+    if r.next(0x673CC, 4) {
+        i673cc(r)
+    }
 }
 
 fn i673cc(r: &mut Run) {
-    op!(r, 0x673CC, 3, Op::Mem { store: false, d: 0, r: R::A, f: Field::B }); // A=DAT0 B
-    i673cf(r)
+    r.sync();
+    r.cpu.load(0, R::A, Field::B, r.hw); // A=DAT0 B
+    if r.next_io(0x673CF, 16) {
+        i673cf(r)
+    }
 }
 
 fn i673cf(r: &mut Run) {
-    op!(r, 0x673CF, 3, Op::DFromR { d: 0, r: R::C, short: false }); // D0=C
-    i673d2(r)
+    r.cpu.d_from_r(0, R::C, false); // D0=C
+    if r.next(0x673D2, 5) {
+        i673d2(r)
+    }
 }
 
 fn i673d2(r: &mut Run) {
-    op!(r, 0x673D2, 4, Op::Jump(0x6739E)); // GOTO #6739E
+    r.cpu.pc = 0x6739E; // GOTO #6739E
+    r.spend(6);
 }
 
 fn i673db(r: &mut Run) {
-    op!(r, 0x673DB, 7, Op::LoadConst { r: R::C, len: 5, val: 0x8094C }); // LC(5) #8094C
-    i673e2(r)
+    r.cpu.load_const(R::C, 5, 0x8094C); // LC(5) #8094C
+    if r.next(0x673E2, 9) {
+        i673e2(r)
+    }
 }
 
 fn i673e2(r: &mut Run) {
-    op!(r, 0x673E2, 4, Op::Jump(0x673AE)); // GOTO #673AE
+    r.cpu.pc = 0x673AE; // GOTO #673AE
+    r.spend(6);
 }
 
 fn i673eb(r: &mut Run) {
-    op!(r, 0x673EB, 7, Op::LoadConst { r: R::C, len: 5, val: 0x80818 }); // LC(5) #80818
-    i673f2(r)
+    r.cpu.load_const(R::C, 5, 0x80818); // LC(5) #80818
+    if r.next(0x673F2, 9) {
+        i673f2(r)
+    }
 }
 
 fn i673f2(r: &mut Run) {
-    op!(r, 0x673F2, 4, Op::Jump(0x673AE)); // GOTO #673AE
+    r.cpu.pc = 0x673AE; // GOTO #673AE
+    r.spend(6);
 }
 
 fn i673fb(r: &mut Run) {
-    op!(r, 0x673FB, 7, Op::LoadConst { r: R::C, len: 5, val: 0x8086F }); // LC(5) #8086F
-    i67402(r)
+    r.cpu.load_const(R::C, 5, 0x8086F); // LC(5) #8086F
+    if r.next(0x67402, 9) {
+        i67402(r)
+    }
 }
 
 fn i67402(r: &mut Run) {
-    op!(r, 0x67402, 4, Op::Jump(0x673AE)); // GOTO #673AE
+    r.cpu.pc = 0x673AE; // GOTO #673AE
+    r.spend(6);
 }
 
 fn i6740b(r: &mut Run) {
-    op!(r, 0x6740B, 7, Op::LoadConst { r: R::C, len: 5, val: 0x8090C }); // LC(5) #8090C
-    i67412(r)
+    r.cpu.load_const(R::C, 5, 0x8090C); // LC(5) #8090C
+    if r.next(0x67412, 9) {
+        i67412(r)
+    }
 }
 
 fn i67412(r: &mut Run) {
-    op!(r, 0x67412, 4, Op::Jump(0x673AE)); // GOTO #673AE
+    r.cpu.pc = 0x673AE; // GOTO #673AE
+    r.spend(6);
 }
 
 fn i6741b(r: &mut Run) {
-    op!(r, 0x6741B, 7, Op::LoadConst { r: R::C, len: 5, val: 0x808F0 }); // LC(5) #808F0
-    i67422(r)
+    r.cpu.load_const(R::C, 5, 0x808F0); // LC(5) #808F0
+    if r.next(0x67422, 9) {
+        i67422(r)
+    }
 }
 
 fn i67422(r: &mut Run) {
-    op!(r, 0x67422, 4, Op::Jump(0x673AE)); // GOTO #673AE
+    r.cpu.pc = 0x673AE; // GOTO #673AE
+    r.spend(6);
 }
 
 fn i6742b(r: &mut Run) {
-    op!(r, 0x6742B, 7, Op::Call(0x6641)); // GOSUB #06641
+    r.cpu.pc = 0x67432;
+    r.cpu.call(0x06641); // GOSUB #06641
+    r.spend(9);
 }
 
 fn i67432(r: &mut Run) {
-    op!(r, 0x67432, 7, Op::LoadConst { r: R::C, len: 5, val: 0x80815 }); // LC(5) #80815
-    i67439(r)
+    r.cpu.load_const(R::C, 5, 0x80815); // LC(5) #80815
+    if r.next(0x67439, 9) {
+        i67439(r)
+    }
 }
 
 fn i67439(r: &mut Run) {
-    op!(r, 0x67439, 3, Op::DExR { d: 0, r: R::C, short: false }); // CD0EX
-    i6743c(r)
+    r.cpu.d_ex_r(0, R::C, false); // CD0EX
+    if r.next(0x6743C, 5) {
+        i6743c(r)
+    }
 }
 
 fn i6743c(r: &mut Run) {
-    op!(r, 0x6743C, 3, Op::Mem { store: true, d: 0, r: R::A, f: Field::B }); // DAT0=A B
-    i6743f(r)
+    r.sync();
+    r.cpu.store(0, R::A, Field::B, r.hw); // DAT0=A B
+    if r.next_io(0x6743F, 16) {
+        i6743f(r)
+    }
 }
 
 fn i6743f(r: &mut Run) {
-    op!(r, 0x6743F, 4, Op::Jump(0x6778D)); // GOTO #6778D
+    r.cpu.pc = 0x6778D; // GOTO #6778D
+    r.spend(6);
 }
 
 fn i6744d(r: &mut Run) {
-    op!(r, 0x6744D, 7, Op::LoadConst { r: R::C, len: 5, val: 0x808F0 }); // LC(5) #808F0
-    i67454(r)
+    r.cpu.load_const(R::C, 5, 0x808F0); // LC(5) #808F0
+    if r.next(0x67454, 9) {
+        i67454(r)
+    }
 }
 
 fn i67454(r: &mut Run) {
-    op!(r, 0x67454, 4, Op::Jump(0x67464)); // GOTO #67464
+    r.cpu.pc = 0x67464; // GOTO #67464
+    r.spend(6);
 }
 
 fn i6745d(r: &mut Run) {
-    op!(r, 0x6745D, 7, Op::LoadConst { r: R::C, len: 5, val: 0x808D8 }); // LC(5) #808D8
-    i67464(r)
+    r.cpu.load_const(R::C, 5, 0x808D8); // LC(5) #808D8
+    if r.next(0x67464, 9) {
+        i67464(r)
+    }
 }
 
 fn i67464(r: &mut Run) {
-    op!(r, 0x67464, 7, Op::Jump(0x114C9)); // GOTO #114C9
+    r.cpu.pc = 0x114C9; // GOTO #114C9
+    r.spend(9);
 }
 
 fn i67470(r: &mut Run) {
-    op!(r, 0x67470, 7, Op::LoadConst { r: R::C, len: 5, val: 0x808C5 }); // LC(5) #808C5
-    i67477(r)
+    r.cpu.load_const(R::C, 5, 0x808C5); // LC(5) #808C5
+    if r.next(0x67477, 9) {
+        i67477(r)
+    }
 }
 
 fn i67477(r: &mut Run) {
-    op!(r, 0x67477, 4, Op::Jump(0x67464)); // GOTO #67464
+    r.cpu.pc = 0x67464; // GOTO #67464
+    r.spend(6);
 }
 
 fn i67480(r: &mut Run) {
-    op!(r, 0x67480, 7, Op::LoadConst { r: R::C, len: 5, val: 0x8094C }); // LC(5) #8094C
-    i67487(r)
+    r.cpu.load_const(R::C, 5, 0x8094C); // LC(5) #8094C
+    if r.next(0x67487, 9) {
+        i67487(r)
+    }
 }
 
 fn i67487(r: &mut Run) {
-    op!(r, 0x67487, 4, Op::Jump(0x67464)); // GOTO #67464
+    r.cpu.pc = 0x67464; // GOTO #67464
+    r.spend(6);
 }
 
 fn i67490(r: &mut Run) {
-    op!(r, 0x67490, 7, Op::LoadConst { r: R::C, len: 5, val: 0x80818 }); // LC(5) #80818
-    i67497(r)
+    r.cpu.load_const(R::C, 5, 0x80818); // LC(5) #80818
+    if r.next(0x67497, 9) {
+        i67497(r)
+    }
 }
 
 fn i67497(r: &mut Run) {
-    op!(r, 0x67497, 4, Op::Jump(0x67464)); // GOTO #67464
+    r.cpu.pc = 0x67464; // GOTO #67464
+    r.spend(6);
 }
 
 fn i674a0(r: &mut Run) {
-    op!(r, 0x674A0, 7, Op::LoadConst { r: R::C, len: 5, val: 0x8086F }); // LC(5) #8086F
-    i674a7(r)
+    r.cpu.load_const(R::C, 5, 0x8086F); // LC(5) #8086F
+    if r.next(0x674A7, 9) {
+        i674a7(r)
+    }
 }
 
 fn i674a7(r: &mut Run) {
-    op!(r, 0x674A7, 4, Op::Jump(0x67464)); // GOTO #67464
+    r.cpu.pc = 0x67464; // GOTO #67464
+    r.spend(6);
 }
 
 fn i674b0(r: &mut Run) {
-    op!(r, 0x674B0, 7, Op::LoadConst { r: R::C, len: 5, val: 0x8090C }); // LC(5) #8090C
-    i674b7(r)
+    r.cpu.load_const(R::C, 5, 0x8090C); // LC(5) #8090C
+    if r.next(0x674B7, 9) {
+        i674b7(r)
+    }
 }
 
 fn i674b7(r: &mut Run) {
-    op!(r, 0x674B7, 4, Op::Jump(0x67464)); // GOTO #67464
+    r.cpu.pc = 0x67464; // GOTO #67464
+    r.spend(6);
 }
 
 fn i674c0(r: &mut Run) {
-    op!(r, 0x674C0, 7, Op::LoadConst { r: R::C, len: 5, val: 0x8086F }); // LC(5) #8086F
-    i674c7(r)
+    r.cpu.load_const(R::C, 5, 0x8086F); // LC(5) #8086F
+    if r.next(0x674C7, 9) {
+        i674c7(r)
+    }
 }
 
 fn i674c7(r: &mut Run) {
-    op!(r, 0x674C7, 3, Op::DExR { d: 0, r: R::C, short: false }); // CD0EX
-    i674ca(r)
+    r.cpu.d_ex_r(0, R::C, false); // CD0EX
+    if r.next(0x674CA, 5) {
+        i674ca(r)
+    }
 }
 
 fn i674ca(r: &mut Run) {
-    op!(r, 0x674CA, 3, Op::Mem { store: false, d: 0, r: R::A, f: Field::A }); // A=DAT0 A
-    i674cd(r)
+    r.sync();
+    r.cpu.load(0, R::A, Field::A, r.hw); // A=DAT0 A
+    if r.next_io(0x674CD, 19) {
+        i674cd(r)
+    }
 }
 
 fn i674cd(r: &mut Run) {
-    op!(r, 0x674CD, 2, Op::Inc { r: R::A, f: Field::A }); // A=A+1 A
-    i674cf(r)
+    r.cpu.inc(R::A, Field::A); // A=A+1 A
+    if r.next(0x674CF, 4) {
+        i674cf(r)
+    }
 }
 
 fn i674cf(r: &mut Run) {
-    op!(r, 0x674CF, 3, Op::Mem { store: true, d: 0, r: R::A, f: Field::A }); // DAT0=A A
-    i674d2(r)
+    r.sync();
+    r.cpu.store(0, R::A, Field::A, r.hw); // DAT0=A A
+    if r.next_io(0x674D2, 19) {
+        i674d2(r)
+    }
 }
 
 fn i674d2(r: &mut Run) {
-    op!(r, 0x674D2, 4, Op::Jump(0x6778D)); // GOTO #6778D
+    r.cpu.pc = 0x6778D; // GOTO #6778D
+    r.spend(6);
 }
 
 fn i674db(r: &mut Run) {
-    op!(r, 0x674DB, 4, Op::Call(0x674EA)); // GOSUB #674EA
+    r.cpu.pc = 0x674DF;
+    r.cpu.call(0x674EA); // GOSUB #674EA
+    r.spend(6);
 }
 
 fn i674df(r: &mut Run) {
-    op!(r, 0x674DF, 7, Op::Call(0x67D2)); // GOSUB #067D2
+    r.cpu.pc = 0x674E6;
+    r.cpu.call(0x067D2); // GOSUB #067D2
+    r.spend(9);
 }
 
 fn i674e6(r: &mut Run) {
-    op!(r, 0x674E6, 4, Op::Jump(0x67907)); // GOTO #67907
+    r.cpu.pc = 0x67907; // GOTO #67907
+    r.spend(6);
 }
 
 fn i674ea(r: &mut Run) {
-    op!(r, 0x674EA, 7, Op::Call(0x679B)); // GOSUB #0679B
+    r.cpu.pc = 0x674F1;
+    r.cpu.call(0x0679B); // GOSUB #0679B
+    r.spend(9);
 }
 
 fn i674f1(r: &mut Run) {
-    op!(r, 0x674F1, 7, Op::DLoad { d: 0, len: 5, val: 0x806FD }); // D0=(5) #806FD
-    i674f8(r)
+    r.cpu.d_load(0, 5, 0x806FD); // D0=(5) #806FD
+    if r.next(0x674F8, 9) {
+        i674f8(r)
+    }
 }
 
 fn i674f8(r: &mut Run) {
-    op!(r, 0x674F8, 3, Op::Mem { store: false, d: 0, r: R::C, f: Field::A }); // C=DAT0 A
-    i674fb(r)
+    r.sync();
+    r.cpu.load(0, R::C, Field::A, r.hw); // C=DAT0 A
+    if r.next_io(0x674FB, 19) {
+        i674fb(r)
+    }
 }
 
 fn i674fb(r: &mut Run) {
-    op!(r, 0x674FB, 3, Op::DExR { d: 1, r: R::A, short: false }); // AD1EX
-    i674fe(r)
+    r.cpu.d_ex_r(1, R::A, false); // AD1EX
+    if r.next(0x674FE, 5) {
+        i674fe(r)
+    }
 }
 
 fn i674fe(r: &mut Run) {
-    op!(r, 0x674FE, 2, Op::Sub { dst: R::C, a: R::C, b: R::A, f: Field::A }); // C=C-A A
-    i67500(r)
+    r.cpu.sub(R::C, R::C, R::A, Field::A); // C=C-A A
+    if r.next(0x67500, 4) {
+        i67500(r)
+    }
 }
 
 fn i67500(r: &mut Run) {
-    op!(r, 0x67500, 7, Op::DLoad { d: 0, len: 5, val: 0x80770 }); // D0=(5) #80770
-    i67507(r)
+    r.cpu.d_load(0, 5, 0x80770); // D0=(5) #80770
+    if r.next(0x67507, 9) {
+        i67507(r)
+    }
 }
 
 fn i67507(r: &mut Run) {
-    op!(r, 0x67507, 3, Op::Mem { store: false, d: 0, r: R::A, f: Field::A }); // A=DAT0 A
-    i6750a(r)
+    r.sync();
+    r.cpu.load(0, R::A, Field::A, r.hw); // A=DAT0 A
+    if r.next_io(0x6750A, 19) {
+        i6750a(r)
+    }
 }
 
 fn i6750a(r: &mut Run) {
-    op!(r, 0x6750A, 2, Op::Sub { dst: R::C, a: R::C, b: R::A, f: Field::A }); // C=C-A A
-    i6750c(r)
+    r.cpu.sub(R::C, R::C, R::A, Field::A); // C=C-A A
+    if r.next(0x6750C, 4) {
+        i6750c(r)
+    }
 }
 
 fn i6750c(r: &mut Run) {
-    op!(r, 0x6750C, 7, Op::Call(0x6A8E)); // GOSUB #06A8E
+    r.cpu.pc = 0x67513;
+    r.cpu.call(0x06A8E); // GOSUB #06A8E
+    r.spend(9);
 }
 
 fn i67513(r: &mut Run) {
-    op!(r, 0x67513, 2, Op::Copy { dst: R::A, src: R::C, f: Field::A }); // A=C A
-    i67515(r)
+    r.cpu.copy(R::A, R::C, Field::A); // A=C A
+    if r.next(0x67515, 4) {
+        i67515(r)
+    }
 }
 
 fn i67515(r: &mut Run) {
-    op!(r, 0x67515, 2, Op::Inc { r: R::A, f: Field::A }); // A=A+1 A
-    i67517(r)
+    r.cpu.inc(R::A, Field::A); // A=A+1 A
+    if r.next(0x67517, 4) {
+        i67517(r)
+    }
 }
 
 fn i67517(r: &mut Run) {
-    op!(r, 0x67517, 2, Op::Rtn(RtnKind::Plain)); // RTN
+    r.cpu.rtn(RtnKind::Plain); // RTN
+    r.spend(9);
 }
 
 fn i6751e(r: &mut Run) {
-    op!(r, 0x6751E, 4, Op::Call(0x674EA)); // GOSUB #674EA
+    r.cpu.pc = 0x67522;
+    r.cpu.call(0x674EA); // GOSUB #674EA
+    r.spend(6);
 }
 
 fn i67522(r: &mut Run) {
-    op!(r, 0x67522, 7, Op::DLoad { d: 0, len: 5, val: 0x808C5 }); // D0=(5) #808C5
-    i67529(r)
+    r.cpu.d_load(0, 5, 0x808C5); // D0=(5) #808C5
+    if r.next(0x67529, 9) {
+        i67529(r)
+    }
 }
 
 fn i67529(r: &mut Run) {
-    op!(r, 0x67529, 3, Op::Mem { store: false, d: 0, r: R::C, f: Field::A }); // C=DAT0 A
-    i6752c(r)
+    r.sync();
+    r.cpu.load(0, R::C, Field::A, r.hw); // C=DAT0 A
+    if r.next_io(0x6752C, 19) {
+        i6752c(r)
+    }
 }
 
 fn i6752c(r: &mut Run) {
-    op!(r, 0x6752C, 2, Op::Add { dst: R::A, src: R::C, f: Field::A }); // A=A+C A
-    i6752e(r)
+    r.cpu.add(R::A, R::C, Field::A); // A=A+C A
+    if r.next(0x6752E, 4) {
+        i6752e(r)
+    }
 }
 
 fn i6752e(r: &mut Run) {
-    op!(r, 0x6752E, 4, Op::Jump(0x674DF)); // GOTO #674DF
+    r.cpu.pc = 0x674DF; // GOTO #674DF
+    r.spend(6);
 }
 
 fn i6755f(r: &mut Run) {
-    op!(r, 0x6755F, 7, Op::LoadConst { r: R::C, len: 5, val: 0x808C5 }); // LC(5) #808C5
-    i67566(r)
+    r.cpu.load_const(R::C, 5, 0x808C5); // LC(5) #808C5
+    if r.next(0x67566, 9) {
+        i67566(r)
+    }
 }
 
 fn i67566(r: &mut Run) {
-    op!(r, 0x67566, 3, Op::DExR { d: 0, r: R::C, short: false }); // CD0EX
-    i67569(r)
+    r.cpu.d_ex_r(0, R::C, false); // CD0EX
+    if r.next(0x67569, 5) {
+        i67569(r)
+    }
 }
 
 fn i67569(r: &mut Run) {
-    op!(r, 0x67569, 3, Op::Mem { store: false, d: 0, r: R::A, f: Field::A }); // A=DAT0 A
-    i6756c(r)
+    r.sync();
+    r.cpu.load(0, R::A, Field::A, r.hw); // A=DAT0 A
+    if r.next_io(0x6756C, 19) {
+        i6756c(r)
+    }
 }
 
 fn i6756c(r: &mut Run) {
-    op!(r, 0x6756C, 3, Op::DFromR { d: 0, r: R::C, short: false }); // D0=C
-    i6756f(r)
+    r.cpu.d_from_r(0, R::C, false); // D0=C
+    if r.next(0x6756F, 5) {
+        i6756f(r)
+    }
 }
 
 fn i6756f(r: &mut Run) {
-    op!(r, 0x6756F, 4, Op::Call(0x676C5)); // GOSUB #676C5
+    r.cpu.pc = 0x67573;
+    r.cpu.call(0x676C5); // GOSUB #676C5
+    r.spend(6);
 }
 
 fn i67573(r: &mut Run) {
-    op!(r, 0x67573, 3, Op::Scratch { op: ScratchOp::ToScratch, r: R::A, n: 0, f: Field::W }); // R0=A
-    i67576(r)
+    r.cpu.scratch(ScratchOp::ToScratch, R::A, 0, Field::W); // R0=A
+    if r.next(0x67576, 5) {
+        i67576(r)
+    }
 }
 
 fn i67576(r: &mut Run) {
-    op!(r, 0x67576, 7, Op::Call(0x6641)); // GOSUB #06641
+    r.cpu.pc = 0x6757D;
+    r.cpu.call(0x06641); // GOSUB #06641
+    r.spend(9);
 }
 
 fn i6757d(r: &mut Run) {
-    op!(r, 0x6757D, 2, Op::Dec { r: R::A, f: Field::A }); // A=A-1 A
-    i6757f(r)
+    r.cpu.dec(R::A, Field::A); // A=A-1 A
+    if r.next(0x6757F, 4) {
+        i6757f(r)
+    }
 }
 
 fn i6757f(r: &mut Run) {
-    op!(r, 0x6757F, 4, Op::Call(0x676C5)); // GOSUB #676C5
+    r.cpu.pc = 0x67583;
+    r.cpu.call(0x676C5); // GOSUB #676C5
+    r.spend(6);
 }
 
 fn i67583(r: &mut Run) {
-    op!(r, 0x67583, 4, Op::Call(0x676C5)); // GOSUB #676C5
+    r.cpu.pc = 0x67587;
+    r.cpu.call(0x676C5); // GOSUB #676C5
+    r.spend(6);
 }
 
 fn i67587(r: &mut Run) {
-    op!(r, 0x67587, 3, Op::Scratch { op: ScratchOp::ToScratch, r: R::A, n: 1, f: Field::W }); // R1=A
-    i6758a(r)
+    r.cpu.scratch(ScratchOp::ToScratch, R::A, 1, Field::W); // R1=A
+    if r.next(0x6758A, 5) {
+        i6758a(r)
+    }
 }
 
 fn i6758a(r: &mut Run) {
-    op!(r, 0x6758A, 4, Op::Call(0x675BE)); // GOSUB #675BE
+    r.cpu.pc = 0x6758E;
+    r.cpu.call(0x675BE); // GOSUB #675BE
+    r.spend(6);
 }
 
 fn i6758e(r: &mut Run) {
-    op!(r, 0x6758E, 3, Op::Scratch { op: ScratchOp::FromScratch, r: R::A, n: 1, f: Field::W }); // A=R1
-    i67591(r)
+    r.cpu.scratch(ScratchOp::FromScratch, R::A, 1, Field::W); // A=R1
+    if r.next(0x67591, 5) {
+        i67591(r)
+    }
 }
 
 fn i67591(r: &mut Run) {
-    op!(r, 0x67591, 2, Op::Add { dst: R::C, src: R::A, f: Field::A }); // C=C+A A
-    i67593(r)
+    r.cpu.add(R::C, R::A, Field::A); // C=C+A A
+    if r.next(0x67593, 4) {
+        i67593(r)
+    }
 }
 
 fn i67593(r: &mut Run) {
-    op!(r, 0x67593, 3, Op::DFromR { d: 0, r: R::C, short: false }); // D0=C
-    i67596(r)
+    r.cpu.d_from_r(0, R::C, false); // D0=C
+    if r.next(0x67596, 5) {
+        i67596(r)
+    }
 }
 
 fn i67596(r: &mut Run) {
-    op!(r, 0x67596, 4, Op::Mem { store: false, d: 1, r: R::C, f: Field::Nibbles(0xF) }); // C=DAT1 15
-    i6759a(r)
+    r.sync();
+    r.cpu.load(1, R::C, Field::Nibbles(15), r.hw); // C=DAT1 15
+    if r.next_io(0x6759A, 29) {
+        i6759a(r)
+    }
 }
 
 fn i6759a(r: &mut Run) {
-    op!(r, 0x6759A, 4, Op::Mem { store: true, d: 0, r: R::C, f: Field::Nibbles(0xF) }); // DAT0=C 15
-    i6759e(r)
+    r.sync();
+    r.cpu.store(0, R::C, Field::Nibbles(15), r.hw); // DAT0=C 15
+    if r.next_io(0x6759E, 29) {
+        i6759e(r)
+    }
 }
 
 fn i6759e(r: &mut Run) {
-    op!(r, 0x6759E, 3, Op::DAdd { d: 1, n: 0xF }); // D1=D1+ 15
-    i675a1(r)
+    r.cpu.d_add(1, 15); // D1=D1+ 15
+    if r.next(0x675A1, 5) {
+        i675a1(r)
+    }
 }
 
 fn i675a1(r: &mut Run) {
-    op!(r, 0x675A1, 3, Op::DAdd { d: 0, n: 0xF }); // D0=D0+ 15
-    i675a4(r)
+    r.cpu.d_add(0, 15); // D0=D0+ 15
+    if r.next(0x675A4, 5) {
+        i675a4(r)
+    }
 }
 
 fn i675a4(r: &mut Run) {
-    op!(r, 0x675A4, 4, Op::Mem { store: false, d: 1, r: R::C, f: Field::Nibbles(0xA) }); // C=DAT1 10
-    i675a8(r)
+    r.sync();
+    r.cpu.load(1, R::C, Field::Nibbles(10), r.hw); // C=DAT1 10
+    if r.next_io(0x675A8, 24) {
+        i675a8(r)
+    }
 }
 
 fn i675a8(r: &mut Run) {
-    op!(r, 0x675A8, 4, Op::Mem { store: true, d: 0, r: R::C, f: Field::Nibbles(0xA) }); // DAT0=C 10
-    i675ac(r)
+    r.sync();
+    r.cpu.store(0, R::C, Field::Nibbles(10), r.hw); // DAT0=C 10
+    if r.next_io(0x675AC, 24) {
+        i675ac(r)
+    }
 }
 
 fn i675ac(r: &mut Run) {
-    op!(r, 0x675AC, 3, Op::DAdd { d: 1, n: 0xA }); // D1=D1+ 10
-    i675af(r)
+    r.cpu.d_add(1, 10); // D1=D1+ 10
+    if r.next(0x675AF, 5) {
+        i675af(r)
+    }
 }
 
 fn i675af(r: &mut Run) {
-    op!(r, 0x675AF, 7, Op::LoadConst { r: R::C, len: 5, val: 5 }); // LC(5) #00005
-    i675b6(r)
+    r.cpu.load_const(R::C, 5, 0x5); // LC(5) #00005
+    if r.next(0x675B6, 9) {
+        i675b6(r)
+    }
 }
 
 fn i675b6(r: &mut Run) {
-    op!(r, 0x675B6, 2, Op::Add { dst: R::D, src: R::C, f: Field::A }); // D=D+C A
-    i675b8(r)
+    r.cpu.add(R::D, R::C, Field::A); // D=D+C A
+    if r.next(0x675B8, 4) {
+        i675b8(r)
+    }
 }
 
 fn i675b8(r: &mut Run) {
-    op!(r, 0x675B8, 6, Op::Jump(0x685CD)); // GOTO #685CD
+    r.cpu.pc = 0x685CD; // GOTO #685CD
+    r.spend(8);
 }
 
 fn i675be(r: &mut Run) {
-    op!(r, 0x675BE, 7, Op::LoadConst { r: R::C, len: 5, val: 0x80770 }); // LC(5) #80770
-    i675c5(r)
+    r.cpu.load_const(R::C, 5, 0x80770); // LC(5) #80770
+    if r.next(0x675C5, 9) {
+        i675c5(r)
+    }
 }
 
 fn i675c5(r: &mut Run) {
-    op!(r, 0x675C5, 3, Op::DExR { d: 0, r: R::C, short: false }); // CD0EX
-    i675c8(r)
+    r.cpu.d_ex_r(0, R::C, false); // CD0EX
+    if r.next(0x675C8, 5) {
+        i675c8(r)
+    }
 }
 
 fn i675c8(r: &mut Run) {
-    op!(r, 0x675C8, 6, Op::Scratch { op: ScratchOp::ToScratch, r: R::C, n: 2, f: Field::A }); // R2=C.F A
-    i675ce(r)
+    r.cpu.scratch(ScratchOp::ToScratch, R::C, 2, Field::A); // R2=C.F A
+    if r.next(0x675CE, 8) {
+        i675ce(r)
+    }
 }
 
 fn i675ce(r: &mut Run) {
-    op!(r, 0x675CE, 3, Op::Mem { store: false, d: 0, r: R::C, f: Field::A }); // C=DAT0 A
-    i675d1(r)
+    r.sync();
+    r.cpu.load(0, R::C, Field::A, r.hw); // C=DAT0 A
+    if r.next_io(0x675D1, 19) {
+        i675d1(r)
+    }
 }
 
 fn i675d1(r: &mut Run) {
-    op!(r, 0x675D1, 7, Op::DLoad { d: 0, len: 5, val: 0x806FD }); // D0=(5) #806FD
-    i675d8(r)
+    r.cpu.d_load(0, 5, 0x806FD); // D0=(5) #806FD
+    if r.next(0x675D8, 9) {
+        i675d8(r)
+    }
 }
 
 fn i675d8(r: &mut Run) {
-    op!(r, 0x675D8, 3, Op::Mem { store: false, d: 0, r: R::A, f: Field::A }); // A=DAT0 A
-    i675db(r)
+    r.sync();
+    r.cpu.load(0, R::A, Field::A, r.hw); // A=DAT0 A
+    if r.next_io(0x675DB, 19) {
+        i675db(r)
+    }
 }
 
 fn i675db(r: &mut Run) {
-    op!(r, 0x675DB, 2, Op::Sub { dst: R::A, a: R::A, b: R::C, f: Field::A }); // A=A-C A
-    i675dd(r)
+    r.cpu.sub(R::A, R::A, R::C, Field::A); // A=A-C A
+    if r.next(0x675DD, 4) {
+        i675dd(r)
+    }
 }
 
 fn i675dd(r: &mut Run) {
-    op!(r, 0x675DD, 3, Op::Scratch { op: ScratchOp::FromScratch, r: R::C, n: 0, f: Field::W }); // C=R0
-    i675e0(r)
+    r.cpu.scratch(ScratchOp::FromScratch, R::C, 0, Field::W); // C=R0
+    if r.next(0x675E0, 5) {
+        i675e0(r)
+    }
 }
 
 fn i675e0(r: &mut Run) {
-    op!(r, 0x675E0, 2, Op::Add { dst: R::C, src: R::A, f: Field::A }); // C=C+A A
-    i675e2(r)
+    r.cpu.add(R::C, R::A, Field::A); // C=C+A A
+    if r.next(0x675E2, 4) {
+        i675e2(r)
+    }
 }
 
 fn i675e2(r: &mut Run) {
-    op!(r, 0x675E2, 2, Op::Rtn(RtnKind::Plain)); // RTN
+    r.cpu.rtn(RtnKind::Plain); // RTN
+    r.spend(9);
 }
 
 fn i6764d(r: &mut Run) {
-    op!(r, 0x6764D, 7, Op::Call(0x6641)); // GOSUB #06641
+    r.cpu.pc = 0x67654;
+    r.cpu.call(0x06641); // GOSUB #06641
+    r.spend(9);
 }
 
 fn i67654(r: &mut Run) {
-    op!(r, 0x67654, 7, Op::LoadConst { r: R::C, len: 5, val: 0x80770 }); // LC(5) #80770
-    i6765b(r)
+    r.cpu.load_const(R::C, 5, 0x80770); // LC(5) #80770
+    if r.next(0x6765B, 9) {
+        i6765b(r)
+    }
 }
 
 fn i6765b(r: &mut Run) {
-    op!(r, 0x6765B, 3, Op::DExR { d: 0, r: R::C, short: false }); // CD0EX
-    i6765e(r)
+    r.cpu.d_ex_r(0, R::C, false); // CD0EX
+    if r.next(0x6765E, 5) {
+        i6765e(r)
+    }
 }
 
 fn i6765e(r: &mut Run) {
-    op!(r, 0x6765E, 3, Op::Mem { store: true, d: 0, r: R::A, f: Field::A }); // DAT0=A A
-    i67661(r)
+    r.sync();
+    r.cpu.store(0, R::A, Field::A, r.hw); // DAT0=A A
+    if r.next_io(0x67661, 19) {
+        i67661(r)
+    }
 }
 
 fn i67661(r: &mut Run) {
-    op!(r, 0x67661, 4, Op::Jump(0x6778D)); // GOTO #6778D
+    r.cpu.pc = 0x6778D; // GOTO #6778D
+    r.spend(6);
 }
 
 fn i6766a(r: &mut Run) {
-    op!(r, 0x6766A, 7, Op::Call(0x679B)); // GOSUB #0679B
+    r.cpu.pc = 0x67671;
+    r.cpu.call(0x0679B); // GOSUB #0679B
+    r.spend(9);
 }
 
 fn i67671(r: &mut Run) {
-    op!(r, 0x67671, 7, Op::DLoad { d: 0, len: 5, val: 0x80770 }); // D0=(5) #80770
-    i67678(r)
+    r.cpu.d_load(0, 5, 0x80770); // D0=(5) #80770
+    if r.next(0x67678, 9) {
+        i67678(r)
+    }
 }
 
 fn i67678(r: &mut Run) {
-    op!(r, 0x67678, 3, Op::Mem { store: false, d: 0, r: R::A, f: Field::A }); // A=DAT0 A
-    i6767b(r)
+    r.sync();
+    r.cpu.load(0, R::A, Field::A, r.hw); // A=DAT0 A
+    if r.next_io(0x6767B, 19) {
+        i6767b(r)
+    }
 }
 
 fn i6767b(r: &mut Run) {
-    op!(r, 0x6767B, 7, Op::Jump(0x357C)); // GOTO #0357C
+    r.cpu.pc = 0x0357C; // GOTO #0357C
+    r.spend(9);
 }
 
 fn i67687(r: &mut Run) {
-    op!(r, 0x67687, 7, Op::LoadConst { r: R::C, len: 5, val: 0x80770 }); // LC(5) #80770
-    i6768e(r)
+    r.cpu.load_const(R::C, 5, 0x80770); // LC(5) #80770
+    if r.next(0x6768E, 9) {
+        i6768e(r)
+    }
 }
 
 fn i6768e(r: &mut Run) {
-    op!(r, 0x6768E, 3, Op::DExR { d: 1, r: R::C, short: false }); // CD1EX
-    i67691(r)
+    r.cpu.d_ex_r(1, R::C, false); // CD1EX
+    if r.next(0x67691, 5) {
+        i67691(r)
+    }
 }
 
 fn i67691(r: &mut Run) {
-    op!(r, 0x67691, 3, Op::Mem { store: false, d: 1, r: R::A, f: Field::A }); // A=DAT1 A
-    i67694(r)
+    r.sync();
+    r.cpu.load(1, R::A, Field::A, r.hw); // A=DAT1 A
+    if r.next_io(0x67694, 19) {
+        i67694(r)
+    }
 }
 
 fn i67694(r: &mut Run) {
-    op!(r, 0x67694, 3, Op::DFromR { d: 1, r: R::C, short: false }); // D1=C
-    i67697(r)
+    r.cpu.d_from_r(1, R::C, false); // D1=C
+    if r.next(0x67697, 5) {
+        i67697(r)
+    }
 }
 
 fn i67697(r: &mut Run) {
-    op!(r, 0x67697, 3, Op::Scratch { op: ScratchOp::ToScratch, r: R::A, n: 0, f: Field::W }); // R0=A
-    i6769a(r)
+    r.cpu.scratch(ScratchOp::ToScratch, R::A, 0, Field::W); // R0=A
+    if r.next(0x6769A, 5) {
+        i6769a(r)
+    }
 }
 
 fn i6769a(r: &mut Run) {
-    op!(r, 0x6769A, 3, Op::Mem { store: false, d: 1, r: R::A, f: Field::A }); // A=DAT1 A
-    i6769d(r)
+    r.sync();
+    r.cpu.load(1, R::A, Field::A, r.hw); // A=DAT1 A
+    if r.next_io(0x6769D, 19) {
+        i6769d(r)
+    }
 }
 
 fn i6769d(r: &mut Run) {
-    op!(r, 0x6769D, 3, Op::DExR { d: 1, r: R::A, short: false }); // AD1EX
-    i676a0(r)
+    r.cpu.d_ex_r(1, R::A, false); // AD1EX
+    if r.next(0x676A0, 5) {
+        i676a0(r)
+    }
 }
 
 fn i676a0(r: &mut Run) {
-    op!(r, 0x676A0, 3, Op::DAdd { d: 1, n: 5 }); // D1=D1+ 5
-    i676a3(r)
+    r.cpu.d_add(1, 5); // D1=D1+ 5
+    if r.next(0x676A3, 5) {
+        i676a3(r)
+    }
 }
 
 fn i676a3(r: &mut Run) {
-    op!(r, 0x676A3, 3, Op::Mem { store: false, d: 1, r: R::C, f: Field::A }); // C=DAT1 A
-    i676a6(r)
+    r.sync();
+    r.cpu.load(1, R::C, Field::A, r.hw); // C=DAT1 A
+    if r.next_io(0x676A6, 19) {
+        i676a6(r)
+    }
 }
 
 fn i676a6(r: &mut Run) {
-    op!(r, 0x676A6, 3, Op::DFromR { d: 1, r: R::A, short: false }); // D1=A
-    i676a9(r)
+    r.cpu.d_from_r(1, R::A, false); // D1=A
+    if r.next(0x676A9, 5) {
+        i676a9(r)
+    }
 }
 
 fn i676a9(r: &mut Run) {
-    op!(r, 0x676A9, 2, Op::Copy { dst: R::A, src: R::C, f: Field::A }); // A=C A
-    i676ab(r)
+    r.cpu.copy(R::A, R::C, Field::A); // A=C A
+    if r.next(0x676AB, 4) {
+        i676ab(r)
+    }
 }
 
 fn i676ab(r: &mut Run) {
-    op!(r, 0x676AB, 4, Op::Call(0x676C5)); // GOSUB #676C5
+    r.cpu.pc = 0x676AF;
+    r.cpu.call(0x676C5); // GOSUB #676C5
+    r.spend(6);
 }
 
 fn i676af(r: &mut Run) {
-    op!(r, 0x676AF, 3, Op::Scratch { op: ScratchOp::FromScratch, r: R::C, n: 0, f: Field::W }); // C=R0
-    i676b2(r)
+    r.cpu.scratch(ScratchOp::FromScratch, R::C, 0, Field::W); // C=R0
+    if r.next(0x676B2, 5) {
+        i676b2(r)
+    }
 }
 
 fn i676b2(r: &mut Run) {
-    op!(r, 0x676B2, 2, Op::Add { dst: R::A, src: R::C, f: Field::A }); // A=A+C A
-    i676b4(r)
+    r.cpu.add(R::A, R::C, Field::A); // A=A+C A
+    if r.next(0x676B4, 4) {
+        i676b4(r)
+    }
 }
 
 fn i676b4(r: &mut Run) {
-    op!(r, 0x676B4, 7, Op::LoadConst { r: R::C, len: 5, val: 0x80770 }); // LC(5) #80770
-    i676bb(r)
+    r.cpu.load_const(R::C, 5, 0x80770); // LC(5) #80770
+    if r.next(0x676BB, 9) {
+        i676bb(r)
+    }
 }
 
 fn i676bb(r: &mut Run) {
-    op!(r, 0x676BB, 3, Op::DExR { d: 0, r: R::C, short: false }); // CD0EX
-    i676be(r)
+    r.cpu.d_ex_r(0, R::C, false); // CD0EX
+    if r.next(0x676BE, 5) {
+        i676be(r)
+    }
 }
 
 fn i676be(r: &mut Run) {
-    op!(r, 0x676BE, 3, Op::Mem { store: true, d: 0, r: R::A, f: Field::A }); // DAT0=A A
-    i676c1(r)
+    r.sync();
+    r.cpu.store(0, R::A, Field::A, r.hw); // DAT0=A A
+    if r.next_io(0x676C1, 19) {
+        i676c1(r)
+    }
 }
 
 fn i676c1(r: &mut Run) {
-    op!(r, 0x676C1, 4, Op::Jump(0x6778D)); // GOTO #6778D
+    r.cpu.pc = 0x6778D; // GOTO #6778D
+    r.spend(6);
 }
 
 fn i676c5(r: &mut Run) {
-    op!(r, 0x676C5, 2, Op::Copy { dst: R::C, src: R::A, f: Field::A }); // C=A A
-    i676c7(r)
+    r.cpu.copy(R::C, R::A, Field::A); // C=A A
+    if r.next(0x676C7, 4) {
+        i676c7(r)
+    }
 }
 
 fn i676c7(r: &mut Run) {
-    op!(r, 0x676C7, 2, Op::Add { dst: R::A, src: R::A, f: Field::A }); // A=A+A A
-    i676c9(r)
+    r.cpu.add(R::A, R::A, Field::A); // A=A+A A
+    if r.next(0x676C9, 4) {
+        i676c9(r)
+    }
 }
 
 fn i676c9(r: &mut Run) {
-    op!(r, 0x676C9, 2, Op::Add { dst: R::A, src: R::A, f: Field::A }); // A=A+A A
-    i676cb(r)
+    r.cpu.add(R::A, R::A, Field::A); // A=A+A A
+    if r.next(0x676CB, 4) {
+        i676cb(r)
+    }
 }
 
 fn i676cb(r: &mut Run) {
-    op!(r, 0x676CB, 2, Op::Add { dst: R::A, src: R::C, f: Field::A }); // A=A+C A
-    i676cd(r)
+    r.cpu.add(R::A, R::C, Field::A); // A=A+C A
+    if r.next(0x676CD, 4) {
+        i676cd(r)
+    }
 }
 
 fn i676cd(r: &mut Run) {
-    op!(r, 0x676CD, 2, Op::Rtn(RtnKind::Plain)); // RTN
+    r.cpu.rtn(RtnKind::Plain); // RTN
+    r.spend(9);
 }
 
 fn i6776a(r: &mut Run) {
-    op!(r, 0x6776A, 7, Op::Call(0x6641)); // GOSUB #06641
+    r.cpu.pc = 0x67771;
+    r.cpu.call(0x06641); // GOSUB #06641
+    r.spend(9);
 }
 
 fn i67771(r: &mut Run) {
-    op!(r, 0x67771, 4, Op::Call(0x676C5)); // GOSUB #676C5
+    r.cpu.pc = 0x67775;
+    r.cpu.call(0x676C5); // GOSUB #676C5
+    r.spend(6);
 }
 
 fn i67775(r: &mut Run) {
-    op!(r, 0x67775, 3, Op::Scratch { op: ScratchOp::ToScratch, r: R::A, n: 0, f: Field::W }); // R0=A
-    i67778(r)
+    r.cpu.scratch(ScratchOp::ToScratch, R::A, 0, Field::W); // R0=A
+    if r.next(0x67778, 5) {
+        i67778(r)
+    }
 }
 
 fn i67778(r: &mut Run) {
-    op!(r, 0x67778, 4, Op::Call(0x675BE)); // GOSUB #675BE
+    r.cpu.pc = 0x6777C;
+    r.cpu.call(0x675BE); // GOSUB #675BE
+    r.spend(6);
 }
 
 fn i6777c(r: &mut Run) {
-    op!(r, 0x6777C, 3, Op::DFromR { d: 0, r: R::C, short: false }); // D0=C
-    i6777f(r)
+    r.cpu.d_from_r(0, R::C, false); // D0=C
+    if r.next(0x6777F, 5) {
+        i6777f(r)
+    }
 }
 
 fn i6777f(r: &mut Run) {
-    op!(r, 0x6777F, 3, Op::Mem { store: false, d: 1, r: R::C, f: Field::A }); // C=DAT1 A
-    i67782(r)
+    r.sync();
+    r.cpu.load(1, R::C, Field::A, r.hw); // C=DAT1 A
+    if r.next_io(0x67782, 19) {
+        i67782(r)
+    }
 }
 
 fn i67782(r: &mut Run) {
-    op!(r, 0x67782, 3, Op::DAdd { d: 1, n: 5 }); // D1=D1+ 5
-    i67785(r)
+    r.cpu.d_add(1, 5); // D1=D1+ 5
+    if r.next(0x67785, 5) {
+        i67785(r)
+    }
 }
 
 fn i67785(r: &mut Run) {
-    op!(r, 0x67785, 2, Op::Inc { r: R::D, f: Field::A }); // D=D+1 A
-    i67787(r)
+    r.cpu.inc(R::D, Field::A); // D=D+1 A
+    if r.next(0x67787, 4) {
+        i67787(r)
+    }
 }
 
 fn i67787(r: &mut Run) {
-    op!(r, 0x67787, 3, Op::Mem { store: true, d: 0, r: R::C, f: Field::A }); // DAT0=C A
-    i6778a(r)
+    r.sync();
+    r.cpu.store(0, R::C, Field::A, r.hw); // DAT0=C A
+    if r.next_io(0x6778A, 19) {
+        i6778a(r)
+    }
 }
 
 fn i6778a(r: &mut Run) {
-    op!(r, 0x6778A, 3, Op::Scratch { op: ScratchOp::FromScratch, r: R::C, n: 2, f: Field::W }); // C=R2
-    i6778d(r)
+    r.cpu.scratch(ScratchOp::FromScratch, R::C, 2, Field::W); // C=R2
+    if r.next(0x6778D, 5) {
+        i6778d(r)
+    }
 }
 
 fn i6778d(r: &mut Run) {
-    op!(r, 0x6778D, 3, Op::DFromR { d: 0, r: R::C, short: false }); // D0=C
-    i67790(r)
+    r.cpu.d_from_r(0, R::C, false); // D0=C
+    if r.next(0x67790, 5) {
+        i67790(r)
+    }
 }
 
 fn i67790(r: &mut Run) {
-    op!(r, 0x67790, 3, Op::Mem { store: false, d: 0, r: R::A, f: Field::A }); // A=DAT0 A
-    i67793(r)
+    r.sync();
+    r.cpu.load(0, R::A, Field::A, r.hw); // A=DAT0 A
+    if r.next_io(0x67793, 19) {
+        i67793(r)
+    }
 }
 
 fn i67793(r: &mut Run) {
-    op!(r, 0x67793, 3, Op::DAdd { d: 0, n: 5 }); // D0=D0+ 5
-    i67796(r)
+    r.cpu.d_add(0, 5); // D0=D0+ 5
+    if r.next(0x67796, 5) {
+        i67796(r)
+    }
 }
 
 fn i67796(r: &mut Run) {
-    op!(r, 0x67796, 4, Op::PcIndirect(R::A)); // PC=(A)
+    r.sync();
+    r.cpu.pc_indirect(R::A, r.hw); // PC=(A)
+    r.spend(23);
 }
 
 fn i6779f(r: &mut Run) {
-    op!(r, 0x6779F, 7, Op::Call(0x6641)); // GOSUB #06641
+    r.cpu.pc = 0x677A6;
+    r.cpu.call(0x06641); // GOSUB #06641
+    r.spend(9);
 }
 
 fn i677a6(r: &mut Run) {
-    op!(r, 0x677A6, 4, Op::Call(0x676C5)); // GOSUB #676C5
+    r.cpu.pc = 0x677AA;
+    r.cpu.call(0x676C5); // GOSUB #676C5
+    r.spend(6);
 }
 
 fn i677aa(r: &mut Run) {
-    op!(r, 0x677AA, 3, Op::Scratch { op: ScratchOp::ToScratch, r: R::A, n: 0, f: Field::W }); // R0=A
-    i677ad(r)
+    r.cpu.scratch(ScratchOp::ToScratch, R::A, 0, Field::W); // R0=A
+    if r.next(0x677AD, 5) {
+        i677ad(r)
+    }
 }
 
 fn i677ad(r: &mut Run) {
-    op!(r, 0x677AD, 4, Op::Call(0x675BE)); // GOSUB #675BE
+    r.cpu.pc = 0x677B1;
+    r.cpu.call(0x675BE); // GOSUB #675BE
+    r.spend(6);
 }
 
 fn i677b1(r: &mut Run) {
-    op!(r, 0x677B1, 3, Op::DFromR { d: 0, r: R::C, short: false }); // D0=C
-    i677b4(r)
+    r.cpu.d_from_r(0, R::C, false); // D0=C
+    if r.next(0x677B4, 5) {
+        i677b4(r)
+    }
 }
 
 fn i677b4(r: &mut Run) {
-    op!(r, 0x677B4, 3, Op::Mem { store: false, d: 0, r: R::C, f: Field::A }); // C=DAT0 A
-    i677b7(r)
+    r.sync();
+    r.cpu.load(0, R::C, Field::A, r.hw); // C=DAT0 A
+    if r.next_io(0x677B7, 19) {
+        i677b7(r)
+    }
 }
 
 fn i677b7(r: &mut Run) {
-    op!(r, 0x677B7, 3, Op::DSub { d: 1, n: 5 }); // D1=D1- 5
-    i677ba(r)
+    r.cpu.d_sub(1, 5); // D1=D1- 5
+    if r.next(0x677BA, 5) {
+        i677ba(r)
+    }
 }
 
 fn i677ba(r: &mut Run) {
-    op!(r, 0x677BA, 2, Op::Dec { r: R::D, f: Field::A }); // D=D-1 A
-    i677bc(r)
+    r.cpu.dec(R::D, Field::A); // D=D-1 A
+    if r.next(0x677BC, 4) {
+        i677bc(r)
+    }
 }
 
 fn i677bc(r: &mut Run) {
-    op!(r, 0x677BC, 3, Op::Mem { store: true, d: 1, r: R::C, f: Field::A }); // DAT1=C A
-    i677bf(r)
+    r.sync();
+    r.cpu.store(1, R::C, Field::A, r.hw); // DAT1=C A
+    if r.next_io(0x677BF, 19) {
+        i677bf(r)
+    }
 }
 
 fn i677bf(r: &mut Run) {
-    op!(r, 0x677BF, 4, Op::Jump(0x6778A)); // GOTO #6778A
+    r.cpu.pc = 0x6778A; // GOTO #6778A
+    r.spend(6);
 }
 
 fn i677c8(r: &mut Run) {
-    op!(r, 0x677C8, 4, Op::Call(0x67E7B)); // GOSUB #67E7B
+    r.cpu.pc = 0x677CC;
+    r.cpu.call(0x67E7B); // GOSUB #67E7B
+    r.spend(6);
 }
 
 fn i677cc(r: &mut Run) {
-    op!(r, 0x677CC, 3, Op::Scratch { op: ScratchOp::FromScratch, r: R::C, n: 2, f: Field::W }); // C=R2
-    i677cf(r)
+    r.cpu.scratch(ScratchOp::FromScratch, R::C, 2, Field::W); // C=R2
+    if r.next(0x677CF, 5) {
+        i677cf(r)
+    }
 }
 
 fn i677cf(r: &mut Run) {
-    op!(r, 0x677CF, 3, Op::DExR { d: 0, r: R::C, short: false }); // CD0EX
-    i677d2(r)
+    r.cpu.d_ex_r(0, R::C, false); // CD0EX
+    if r.next(0x677D2, 5) {
+        i677d2(r)
+    }
 }
 
 fn i677d2(r: &mut Run) {
-    op!(r, 0x677D2, 3, Op::DExR { d: 1, r: R::C, short: false }); // CD1EX
-    i677d5(r)
+    r.cpu.d_ex_r(1, R::C, false); // CD1EX
+    if r.next(0x677D5, 5) {
+        i677d5(r)
+    }
 }
 
 fn i677d5(r: &mut Run) {
-    op!(r, 0x677D5, 2, Op::PushC); // RSTK=C
-    i677d7(r)
+    r.cpu.push_c(); // RSTK=C
+    if r.next(0x677D7, 4) {
+        i677d7(r)
+    }
 }
 
 fn i677d7(r: &mut Run) {
-    op!(r, 0x677D7, 7, Op::Jump(0x2832B)); // GOTO #2832B
+    r.cpu.pc = 0x2832B; // GOTO #2832B
+    r.spend(9);
 }
 
 fn i677e3(r: &mut Run) {
-    op!(r, 0x677E3, 3, Op::StSet { bit: 0, set: false }); // ST=0 0
-    i677e6(r)
+    r.cpu.st_set(0, false); // ST=0 0
+    if r.next(0x677E6, 5) {
+        i677e6(r)
+    }
 }
 
 fn i677e6(r: &mut Run) {
-    op!(r, 0x677E6, 4, Op::Jump(0x677F2)); // GOTO #677F2
+    r.cpu.pc = 0x677F2; // GOTO #677F2
+    r.spend(6);
 }
 
 fn i677ef(r: &mut Run) {
-    op!(r, 0x677EF, 3, Op::StSet { bit: 0, set: true }); // ST=1 0
-    i677f2(r)
+    r.cpu.st_set(0, true); // ST=1 0
+    if r.next(0x677F2, 5) {
+        i677f2(r)
+    }
 }
 
 fn i677f2(r: &mut Run) {
-    op!(r, 0x677F2, 7, Op::Call(0x679B)); // GOSUB #0679B
+    r.cpu.pc = 0x677F9;
+    r.cpu.call(0x0679B); // GOSUB #0679B
+    r.spend(9);
 }
 
 fn i677f9(r: &mut Run) {
-    op!(r, 0x677F9, 7, Op::DLoad { d: 0, len: 5, val: 0x806FD }); // D0=(5) #806FD
-    i67800(r)
+    r.cpu.d_load(0, 5, 0x806FD); // D0=(5) #806FD
+    if r.next(0x67800, 9) {
+        i67800(r)
+    }
 }
 
 fn i67800(r: &mut Run) {
-    op!(r, 0x67800, 3, Op::Mem { store: false, d: 0, r: R::C, f: Field::A }); // C=DAT0 A
-    i67803(r)
+    r.sync();
+    r.cpu.load(0, R::C, Field::A, r.hw); // C=DAT0 A
+    if r.next_io(0x67803, 19) {
+        i67803(r)
+    }
 }
 
 fn i67803(r: &mut Run) {
-    op!(r, 0x67803, 3, Op::DFromR { d: 0, r: R::C, short: false }); // D0=C
-    i67806(r)
+    r.cpu.d_from_r(0, R::C, false); // D0=C
+    if r.next(0x67806, 5) {
+        i67806(r)
+    }
 }
 
 fn i67806(r: &mut Run) {
-    op!(r, 0x67806, 3, Op::DSub { d: 0, n: 5 }); // D0=D0- 5
-    i67809(r)
+    r.cpu.d_sub(0, 5); // D0=D0- 5
+    if r.next(0x67809, 5) {
+        i67809(r)
+    }
 }
 
 fn i67809(r: &mut Run) {
-    op!(r, 0x67809, 2, Op::Zero { r: R::B, f: Field::A }); // B=0 A
-    i6780b(r)
+    r.cpu.zero(R::B, Field::A); // B=0 A
+    if r.next(0x6780B, 4) {
+        i6780b(r)
+    }
 }
 
 fn i6780b(r: &mut Run) {
-    op!(r, 0x6780B, 7, Op::LoadConst { r: R::C, len: 5, val: 0x6C7E5 }); // LC(5) #6C7E5
-    i67812(r)
+    r.cpu.load_const(R::C, 5, 0x6C7E5); // LC(5) #6C7E5
+    if r.next(0x67812, 9) {
+        i67812(r)
+    }
 }
 
 fn i67812(r: &mut Run) {
-    op!(r, 0x67812, 3, Op::Mem { store: false, d: 1, r: R::A, f: Field::A }); // A=DAT1 A
-    i67815(r)
+    r.sync();
+    r.cpu.load(1, R::A, Field::A, r.hw); // A=DAT1 A
+    if r.next_io(0x67815, 19) {
+        i67815(r)
+    }
 }
 
 fn i67815(r: &mut Run) {
-    op!(r, 0x67815, 2, Op::Inc { r: R::B, f: Field::A }); // B=B+1 A
-    i67817(r)
+    r.cpu.inc(R::B, Field::A); // B=B+1 A
+    if r.next(0x67817, 4) {
+        i67817(r)
+    }
 }
 
 fn i67817(r: &mut Run) {
-    op!(r, 0x67817, 5, Op::Test { test: Test::Regs(Cmp::Eq, R::C, R::A), f: Field::A, goyes: Some(0x6782F) }); // ?C=A A / GOYES #6782F
-    i6781c(r)
+    r.cpu.pc = 0x6781C;
+    r.cpu.test(Test::Regs(Cmp::Eq, R::C, R::A), Field::A, Some(0x6782F)); // ?C=A A / GOYES #6782F
+    if r.next_pc(0x6781C, 7) {
+        i6781c(r)
+    }
 }
 
 fn i6781c(r: &mut Run) {
-    op!(r, 0x6781C, 3, Op::DAdd { d: 1, n: 5 }); // D1=D1+ 5
-    i6781f(r)
+    r.cpu.d_add(1, 5); // D1=D1+ 5
+    if r.next(0x6781F, 5) {
+        i6781f(r)
+    }
 }
 
 fn i6781f(r: &mut Run) {
-    op!(r, 0x6781F, 3, Op::DExR { d: 1, r: R::A, short: false }); // AD1EX
-    i67822(r)
+    r.cpu.d_ex_r(1, R::A, false); // AD1EX
+    if r.next(0x67822, 5) {
+        i67822(r)
+    }
 }
 
 fn i67822(r: &mut Run) {
-    op!(r, 0x67822, 3, Op::DExR { d: 0, r: R::C, short: false }); // CD0EX
-    i67825(r)
+    r.cpu.d_ex_r(0, R::C, false); // CD0EX
+    if r.next(0x67825, 5) {
+        i67825(r)
+    }
 }
 
 fn i67825(r: &mut Run) {
-    op!(r, 0x67825, 5, Op::Test { test: Test::Regs(Cmp::Gt, R::C, R::A), f: Field::A, goyes: Some(0x6783D) }); // ?C>A A / GOYES #6783D
-    i6782a(r)
+    r.cpu.pc = 0x6782A;
+    r.cpu.test(Test::Regs(Cmp::Gt, R::C, R::A), Field::A, Some(0x6783D)); // ?C>A A / GOYES #6783D
+    if r.next_pc(0x6782A, 7) {
+        i6782a(r)
+    }
 }
 
 fn i6782a(r: &mut Run) {
-    op!(r, 0x6782A, 3, Op::DFromR { d: 1, r: R::A, short: false }); // D1=A
-    i6782d(r)
+    r.cpu.d_from_r(1, R::A, false); // D1=A
+    if r.next(0x6782D, 5) {
+        i6782d(r)
+    }
 }
 
 fn i6782d(r: &mut Run) {
-    op!(r, 0x6782D, 2, Op::Zero { r: R::B, f: Field::A }); // B=0 A
-    i6782f(r)
+    r.cpu.zero(R::B, Field::A); // B=0 A
+    if r.next(0x6782F, 4) {
+        i6782f(r)
+    }
 }
 
 fn i6782f(r: &mut Run) {
-    op!(r, 0x6782F, 2, Op::Copy { dst: R::A, src: R::B, f: Field::A }); // A=B A
-    i67831(r)
+    r.cpu.copy(R::A, R::B, Field::A); // A=B A
+    if r.next(0x67831, 4) {
+        i67831(r)
+    }
 }
 
 fn i67831(r: &mut Run) {
-    op!(r, 0x67831, 5, Op::StTest { bit: 0, set: false, goyes: Some(0x67846) }); // ?ST=0 0 / GOYES #67846
-    i67836(r)
+    r.cpu.pc = 0x67836;
+    r.cpu.st_test(0, false, Some(0x67846)); // ?ST=0 0 / GOYES #67846
+    if r.next_pc(0x67836, 7) {
+        i67836(r)
+    }
 }
 
 fn i67836(r: &mut Run) {
-    op!(r, 0x67836, 7, Op::Jump(0x357C)); // GOTO #0357C
+    r.cpu.pc = 0x0357C; // GOTO #0357C
+    r.spend(9);
 }
 
 fn i6783d(r: &mut Run) {
-    op!(r, 0x6783D, 3, Op::DExR { d: 0, r: R::C, short: false }); // CD0EX
-    i67840(r)
+    r.cpu.d_ex_r(0, R::C, false); // CD0EX
+    if r.next(0x67840, 5) {
+        i67840(r)
+    }
 }
 
 fn i67840(r: &mut Run) {
-    op!(r, 0x67840, 3, Op::DFromR { d: 1, r: R::A, short: false }); // D1=A
-    i67843(r)
+    r.cpu.d_from_r(1, R::A, false); // D1=A
+    if r.next(0x67843, 5) {
+        i67843(r)
+    }
 }
 
 fn i67843(r: &mut Run) {
-    op!(r, 0x67843, 3, Op::CondJump(Cond::Carry, 0x67812)); // GOC #67812
-    i67846(r)
+    r.cpu.pc = 0x67846;
+    r.cpu.jump_if(Cond::Carry, 0x67812); // GOC #67812
+    if r.next_pc(0x67846, 5) {
+        i67846(r)
+    }
 }
 
 fn i67846(r: &mut Run) {
-    op!(r, 0x67846, 5, Op::Test { test: Test::NonZero(R::A), f: Field::A, goyes: Some(0x6784E) }); // ?A#0 A / GOYES #6784E
-    i6784b(r)
+    r.cpu.pc = 0x6784B;
+    r.cpu.test(Test::NonZero(R::A), Field::A, Some(0x6784E)); // ?A#0 A / GOYES #6784E
+    if r.next_pc(0x6784B, 7) {
+        i6784b(r)
+    }
 }
 
 fn i6784b(r: &mut Run) {
-    op!(r, 0x6784B, 3, Op::StSet { bit: 0, set: true }); // ST=1 0
-    i6784e(r)
+    r.cpu.st_set(0, true); // ST=1 0
+    if r.next(0x6784E, 5) {
+        i6784e(r)
+    }
 }
 
 fn i6784e(r: &mut Run) {
-    op!(r, 0x6784E, 3, Op::DAdd { d: 1, n: 5 }); // D1=D1+ 5
-    i67851(r)
+    r.cpu.d_add(1, 5); // D1=D1+ 5
+    if r.next(0x67851, 5) {
+        i67851(r)
+    }
 }
 
 fn i67851(r: &mut Run) {
-    op!(r, 0x67851, 3, Op::DExR { d: 1, r: R::C, short: false }); // CD1EX
-    i67854(r)
+    r.cpu.d_ex_r(1, R::C, false); // CD1EX
+    if r.next(0x67854, 5) {
+        i67854(r)
+    }
 }
 
 fn i67854(r: &mut Run) {
-    op!(r, 0x67854, 2, Op::PushC); // RSTK=C
-    i67856(r)
+    r.cpu.push_c(); // RSTK=C
+    if r.next(0x67856, 4) {
+        i67856(r)
+    }
 }
 
 fn i67856(r: &mut Run) {
-    op!(r, 0x67856, 7, Op::Call(0x69F7)); // GOSUB #069F7
+    r.cpu.pc = 0x6785D;
+    r.cpu.call(0x069F7); // GOSUB #069F7
+    r.spend(9);
 }
 
 fn i6785d(r: &mut Run) {
-    op!(r, 0x6785D, 7, Op::Call(0x67D2)); // GOSUB #067D2
+    r.cpu.pc = 0x67864;
+    r.cpu.call(0x067D2); // GOSUB #067D2
+    r.spend(9);
 }
 
 fn i67864(r: &mut Run) {
-    op!(r, 0x67864, 5, Op::StTest { bit: 0, set: true, goyes: Some(0x6786E) }); // ?ST=1 0 / GOYES #6786E
-    i67869(r)
+    r.cpu.pc = 0x67869;
+    r.cpu.st_test(0, true, Some(0x6786E)); // ?ST=1 0 / GOYES #6786E
+    if r.next_pc(0x67869, 7) {
+        i67869(r)
+    }
 }
 
 fn i67869(r: &mut Run) {
-    op!(r, 0x67869, 2, Op::PopC); // C=RSTK
-    i6786b(r)
+    r.cpu.pop_c(); // C=RSTK
+    if r.next(0x6786B, 4) {
+        i6786b(r)
+    }
 }
 
 fn i6786b(r: &mut Run) {
-    op!(r, 0x6786B, 3, Op::DFromR { d: 1, r: R::C, short: false }); // D1=C
-    i6786e(r)
+    r.cpu.d_from_r(1, R::C, false); // D1=C
+    if r.next(0x6786E, 5) {
+        i6786e(r)
+    }
 }
 
 fn i6786e(r: &mut Run) {
-    op!(r, 0x6786E, 3, Op::Mem { store: false, d: 0, r: R::A, f: Field::A }); // A=DAT0 A
-    i67871(r)
+    r.sync();
+    r.cpu.load(0, R::A, Field::A, r.hw); // A=DAT0 A
+    if r.next_io(0x67871, 19) {
+        i67871(r)
+    }
 }
 
 fn i67871(r: &mut Run) {
-    op!(r, 0x67871, 3, Op::DAdd { d: 0, n: 5 }); // D0=D0+ 5
-    i67874(r)
+    r.cpu.d_add(0, 5); // D0=D0+ 5
+    if r.next(0x67874, 5) {
+        i67874(r)
+    }
 }
 
 fn i67874(r: &mut Run) {
-    op!(r, 0x67874, 4, Op::PcIndirect(R::A)); // PC=(A)
+    r.sync();
+    r.cpu.pc_indirect(R::A, r.hw); // PC=(A)
+    r.spend(23);
 }
 
 fn i6787d(r: &mut Run) {
-    op!(r, 0x6787D, 7, Op::Call(0x3F5D)); // GOSUB #03F5D
+    r.cpu.pc = 0x67884;
+    r.cpu.call(0x03F5D); // GOSUB #03F5D
+    r.spend(9);
 }
 
 fn i67884(r: &mut Run) {
-    op!(r, 0x67884, 2, Op::Exch { a: R::C, b: R::A, f: Field::A }); // CAEX A
-    i67886(r)
+    r.cpu.exch(R::C, R::A, Field::A); // CAEX A
+    if r.next(0x67886, 4) {
+        i67886(r)
+    }
 }
 
 fn i67886(r: &mut Run) {
-    op!(r, 0x67886, 2, Op::PushC); // RSTK=C
-    i67888(r)
+    r.cpu.push_c(); // RSTK=C
+    if r.next(0x67888, 4) {
+        i67888(r)
+    }
 }
 
 fn i67888(r: &mut Run) {
-    op!(r, 0x67888, 2, Op::Zero { r: R::C, f: Field::A }); // C=0 A
-    i6788a(r)
+    r.cpu.zero(R::C, Field::A); // C=0 A
+    if r.next(0x6788A, 4) {
+        i6788a(r)
+    }
 }
 
 fn i6788a(r: &mut Run) {
-    op!(r, 0x6788A, 3, Op::Scratch { op: ScratchOp::ToScratch, r: R::C, n: 1, f: Field::W }); // R1=C
-    i6788d(r)
+    r.cpu.scratch(ScratchOp::ToScratch, R::C, 1, Field::W); // R1=C
+    if r.next(0x6788D, 5) {
+        i6788d(r)
+    }
 }
 
 fn i6788d(r: &mut Run) {
-    op!(r, 0x6788D, 3, Op::Scratch { op: ScratchOp::ToScratch, r: R::C, n: 3, f: Field::W }); // R3=C
-    i67890(r)
+    r.cpu.scratch(ScratchOp::ToScratch, R::C, 3, Field::W); // R3=C
+    if r.next(0x67890, 5) {
+        i67890(r)
+    }
 }
 
 fn i67890(r: &mut Run) {
-    op!(r, 0x67890, 3, Op::Scratch { op: ScratchOp::ToScratch, r: R::A, n: 0, f: Field::W }); // R0=A
-    i67893(r)
+    r.cpu.scratch(ScratchOp::ToScratch, R::A, 0, Field::W); // R0=A
+    if r.next(0x67893, 5) {
+        i67893(r)
+    }
 }
 
 fn i67893(r: &mut Run) {
-    op!(r, 0x67893, 4, Op::Call(0x67A51)); // GOSUB #67A51
+    r.cpu.pc = 0x67897;
+    r.cpu.call(0x67A51); // GOSUB #67A51
+    r.spend(6);
 }
 
 fn i67897(r: &mut Run) {
-    op!(r, 0x67897, 3, Op::DAdd { d: 0, n: 0xA }); // D0=D0+ 10
-    i6789a(r)
+    r.cpu.d_add(0, 10); // D0=D0+ 10
+    if r.next(0x6789A, 5) {
+        i6789a(r)
+    }
 }
 
 fn i6789a(r: &mut Run) {
-    op!(r, 0x6789A, 3, Op::DAdd { d: 0, n: 0xE }); // D0=D0+ 14
-    i6789d(r)
+    r.cpu.d_add(0, 14); // D0=D0+ 14
+    if r.next(0x6789D, 5) {
+        i6789d(r)
+    }
 }
 
 fn i6789d(r: &mut Run) {
-    op!(r, 0x6789D, 4, Op::Mem { store: false, d: 0, r: R::C, f: Field::X }); // C=DAT0 X
-    i678a1(r)
+    r.sync();
+    r.cpu.load(0, R::C, Field::X, r.hw); // C=DAT0 X
+    if r.next_io(0x678A1, 17) {
+        i678a1(r)
+    }
 }
 
 fn i678a1(r: &mut Run) {
-    op!(r, 0x678A1, 3, Op::Copy { dst: R::A, src: R::C, f: Field::X }); // A=C X
-    i678a4(r)
+    r.cpu.copy(R::A, R::C, Field::X); // A=C X
+    if r.next(0x678A4, 5) {
+        i678a4(r)
+    }
 }
 
 fn i678a4(r: &mut Run) {
-    op!(r, 0x678A4, 3, Op::Add { dst: R::A, src: R::A, f: Field::X }); // A=A+A X
-    i678a7(r)
+    r.cpu.add(R::A, R::A, Field::X); // A=A+A X
+    if r.next(0x678A7, 5) {
+        i678a7(r)
+    }
 }
 
 fn i678a7(r: &mut Run) {
-    op!(r, 0x678A7, 3, Op::CondJump(Cond::Carry, 0x678BB)); // GOC #678BB
-    i678aa(r)
+    r.cpu.pc = 0x678AA;
+    r.cpu.jump_if(Cond::Carry, 0x678BB); // GOC #678BB
+    if r.next_pc(0x678AA, 5) {
+        i678aa(r)
+    }
 }
 
 fn i678aa(r: &mut Run) {
-    op!(r, 0x678AA, 3, Op::Scratch { op: ScratchOp::FromScratch, r: R::A, n: 1, f: Field::W }); // A=R1
-    i678ad(r)
+    r.cpu.scratch(ScratchOp::FromScratch, R::A, 1, Field::W); // A=R1
+    if r.next(0x678AD, 5) {
+        i678ad(r)
+    }
 }
 
 fn i678ad(r: &mut Run) {
-    op!(r, 0x678AD, 5, Op::Test { test: Test::Regs(Cmp::Le, R::C, R::A), f: Field::X, goyes: Some(0x678BB) }); // ?C<=A X / GOYES #678BB
-    i678b2(r)
+    r.cpu.pc = 0x678B2;
+    r.cpu.test(Test::Regs(Cmp::Le, R::C, R::A), Field::X, Some(0x678BB)); // ?C<=A X / GOYES #678BB
+    if r.next_pc(0x678B2, 7) {
+        i678b2(r)
+    }
 }
 
 fn i678b2(r: &mut Run) {
-    op!(r, 0x678B2, 3, Op::Scratch { op: ScratchOp::ToScratch, r: R::C, n: 1, f: Field::W }); // R1=C
-    i678b5(r)
+    r.cpu.scratch(ScratchOp::ToScratch, R::C, 1, Field::W); // R1=C
+    if r.next(0x678B5, 5) {
+        i678b5(r)
+    }
 }
 
 fn i678b5(r: &mut Run) {
-    op!(r, 0x678B5, 3, Op::Scratch { op: ScratchOp::FromScratch, r: R::C, n: 0, f: Field::W }); // C=R0
-    i678b8(r)
+    r.cpu.scratch(ScratchOp::FromScratch, R::C, 0, Field::W); // C=R0
+    if r.next(0x678B8, 5) {
+        i678b8(r)
+    }
 }
 
 fn i678b8(r: &mut Run) {
-    op!(r, 0x678B8, 3, Op::Scratch { op: ScratchOp::ToScratch, r: R::C, n: 3, f: Field::W }); // R3=C
-    i678bb(r)
+    r.cpu.scratch(ScratchOp::ToScratch, R::C, 3, Field::W); // R3=C
+    if r.next(0x678BB, 5) {
+        i678bb(r)
+    }
 }
 
 fn i678bb(r: &mut Run) {
-    op!(r, 0x678BB, 3, Op::Scratch { op: ScratchOp::FromScratch, r: R::A, n: 0, f: Field::W }); // A=R0
-    i678be(r)
+    r.cpu.scratch(ScratchOp::FromScratch, R::A, 0, Field::W); // A=R0
+    if r.next(0x678BE, 5) {
+        i678be(r)
+    }
 }
 
 fn i678be(r: &mut Run) {
-    op!(r, 0x678BE, 2, Op::Inc { r: R::A, f: Field::A }); // A=A+1 A
-    i678c0(r)
+    r.cpu.inc(R::A, Field::A); // A=A+1 A
+    if r.next(0x678C0, 4) {
+        i678c0(r)
+    }
 }
 
 fn i678c0(r: &mut Run) {
-    op!(r, 0x678C0, 3, Op::Scratch { op: ScratchOp::FromScratch, r: R::C, n: 2, f: Field::W }); // C=R2
-    i678c3(r)
+    r.cpu.scratch(ScratchOp::FromScratch, R::C, 2, Field::W); // C=R2
+    if r.next(0x678C3, 5) {
+        i678c3(r)
+    }
 }
 
 fn i678c3(r: &mut Run) {
-    op!(r, 0x678C3, 3, Op::DFromR { d: 0, r: R::C, short: false }); // D0=C
-    i678c6(r)
+    r.cpu.d_from_r(0, R::C, false); // D0=C
+    if r.next(0x678C6, 5) {
+        i678c6(r)
+    }
 }
 
 fn i678c6(r: &mut Run) {
-    op!(r, 0x678C6, 2, Op::PopC); // C=RSTK
-    i678c8(r)
+    r.cpu.pop_c(); // C=RSTK
+    if r.next(0x678C8, 4) {
+        i678c8(r)
+    }
 }
 
 fn i678c8(r: &mut Run) {
-    op!(r, 0x678C8, 2, Op::PushC); // RSTK=C
-    i678ca(r)
+    r.cpu.push_c(); // RSTK=C
+    if r.next(0x678CA, 4) {
+        i678ca(r)
+    }
 }
 
 fn i678ca(r: &mut Run) {
-    op!(r, 0x678CA, 5, Op::Test { test: Test::Regs(Cmp::Ge, R::C, R::A), f: Field::A, goyes: Some(0x67890) }); // ?C>=A A / GOYES #67890
-    i678cf(r)
+    r.cpu.pc = 0x678CF;
+    r.cpu.test(Test::Regs(Cmp::Ge, R::C, R::A), Field::A, Some(0x67890)); // ?C>=A A / GOYES #67890
+    if r.next_pc(0x678CF, 7) {
+        i678cf(r)
+    }
 }
 
 fn i678cf(r: &mut Run) {
-    op!(r, 0x678CF, 3, Op::Scratch { op: ScratchOp::FromScratch, r: R::A, n: 3, f: Field::W }); // A=R3
-    i678d2(r)
+    r.cpu.scratch(ScratchOp::FromScratch, R::A, 3, Field::W); // A=R3
+    if r.next(0x678D2, 5) {
+        i678d2(r)
+    }
 }
 
 fn i678d2(r: &mut Run) {
-    op!(r, 0x678D2, 4, Op::Jump(0x67907)); // GOTO #67907
+    r.cpu.pc = 0x67907; // GOTO #67907
+    r.spend(6);
 }
 
 fn i678e0(r: &mut Run) {
-    op!(r, 0x678E0, 4, Op::LoadConst { r: R::C, len: 2, val: 0x1B }); // LC(2) #1B
-    i678e4(r)
+    r.cpu.load_const(R::C, 2, 0x1B); // LC(2) #1B
+    if r.next(0x678E4, 6) {
+        i678e4(r)
+    }
 }
 
 fn i678e4(r: &mut Run) {
-    op!(r, 0x678E4, 3, Op::Scratch { op: ScratchOp::ToScratch, r: R::C, n: 1, f: Field::W }); // R1=C
-    i678e7(r)
+    r.cpu.scratch(ScratchOp::ToScratch, R::C, 1, Field::W); // R1=C
+    if r.next(0x678E7, 5) {
+        i678e7(r)
+    }
 }
 
 fn i678e7(r: &mut Run) {
-    op!(r, 0x678E7, 4, Op::Call(0x67A4A)); // GOSUB #67A4A
+    r.cpu.pc = 0x678EB;
+    r.cpu.call(0x67A4A); // GOSUB #67A4A
+    r.spend(6);
 }
 
 fn i678eb(r: &mut Run) {
-    op!(r, 0x678EB, 3, Op::DExR { d: 0, r: R::A, short: false }); // AD0EX
-    i678ee(r)
+    r.cpu.d_ex_r(0, R::A, false); // AD0EX
+    if r.next(0x678EE, 5) {
+        i678ee(r)
+    }
 }
 
 fn i678ee(r: &mut Run) {
-    op!(r, 0x678EE, 2, Op::Zero { r: R::C, f: Field::A }); // C=0 A
-    i678f0(r)
+    r.cpu.zero(R::C, Field::A); // C=0 A
+    if r.next(0x678F0, 4) {
+        i678f0(r)
+    }
 }
 
 fn i678f0(r: &mut Run) {
-    op!(r, 0x678F0, 6, Op::Scratch { op: ScratchOp::FromScratch, r: R::C, n: 1, f: Field::B }); // C=R1.F B
-    i678f6(r)
+    r.cpu.scratch(ScratchOp::FromScratch, R::C, 1, Field::B); // C=R1.F B
+    if r.next(0x678F6, 8) {
+        i678f6(r)
+    }
 }
 
 fn i678f6(r: &mut Run) {
-    op!(r, 0x678F6, 2, Op::Add { dst: R::A, src: R::C, f: Field::A }); // A=A+C A
-    i678f8(r)
+    r.cpu.add(R::A, R::C, Field::A); // A=A+C A
+    if r.next(0x678F8, 4) {
+        i678f8(r)
+    }
 }
 
 fn i678f8(r: &mut Run) {
-    op!(r, 0x678F8, 3, Op::DFromR { d: 0, r: R::A, short: false }); // D0=A
-    i678fb(r)
+    r.cpu.d_from_r(0, R::A, false); // D0=A
+    if r.next(0x678FB, 5) {
+        i678fb(r)
+    }
 }
 
 fn i678fb(r: &mut Run) {
-    op!(r, 0x678FB, 2, Op::Zero { r: R::A, f: Field::A }); // A=0 A
-    i678fd(r)
+    r.cpu.zero(R::A, Field::A); // A=0 A
+    if r.next(0x678FD, 4) {
+        i678fd(r)
+    }
 }
 
 fn i678fd(r: &mut Run) {
-    op!(r, 0x678FD, 4, Op::Mem { store: false, d: 0, r: R::A, f: Field::X }); // A=DAT0 X
-    i67901(r)
+    r.sync();
+    r.cpu.load(0, R::A, Field::X, r.hw); // A=DAT0 X
+    if r.next_io(0x67901, 17) {
+        i67901(r)
+    }
 }
 
 fn i67901(r: &mut Run) {
-    op!(r, 0x67901, 3, Op::Scratch { op: ScratchOp::FromScratch, r: R::C, n: 2, f: Field::W }); // C=R2
-    i67904(r)
+    r.cpu.scratch(ScratchOp::FromScratch, R::C, 2, Field::W); // C=R2
+    if r.next(0x67904, 5) {
+        i67904(r)
+    }
 }
 
 fn i67904(r: &mut Run) {
-    op!(r, 0x67904, 3, Op::DFromR { d: 0, r: R::C, short: false }); // D0=C
-    i67907(r)
+    r.cpu.d_from_r(0, R::C, false); // D0=C
+    if r.next(0x67907, 5) {
+        i67907(r)
+    }
 }
 
 fn i67907(r: &mut Run) {
-    op!(r, 0x67907, 3, Op::DExR { d: 0, r: R::C, short: false }); // CD0EX
-    i6790a(r)
+    r.cpu.d_ex_r(0, R::C, false); // CD0EX
+    if r.next(0x6790A, 5) {
+        i6790a(r)
+    }
 }
 
 fn i67908(r: &mut Run) {
-    op!(r, 0x67908, 9, Op::LoadConst { r: R::C, len: 7, val: 0x7431A01 }); // LC(7) #7431A01
+    r.cpu.load_const(R::C, 7, 0x7431A01); // LC(7) #7431A01
+    r.end(0x67911, 11);
 }
 
 fn i6790a(r: &mut Run) {
-    op!(r, 0x6790A, 3, Op::Scratch { op: ScratchOp::ToScratch, r: R::C, n: 2, f: Field::W }); // R2=C
-    i6790d(r)
+    r.cpu.scratch(ScratchOp::ToScratch, R::C, 2, Field::W); // R2=C
+    if r.next(0x6790D, 5) {
+        i6790d(r)
+    }
 }
 
 fn i6790d(r: &mut Run) {
-    op!(r, 0x6790D, 3, Op::DFromR { d: 0, r: R::C, short: false }); // D0=C
-    i67910(r)
+    r.cpu.d_from_r(0, R::C, false); // D0=C
+    if r.next(0x67910, 5) {
+        i67910(r)
+    }
 }
 
 fn i67910(r: &mut Run) {
-    op!(r, 0x67910, 4, Op::Call(0x67918)); // GOSUB #67918
+    r.cpu.pc = 0x67914;
+    r.cpu.call(0x67918); // GOSUB #67918
+    r.spend(6);
 }
 
 fn i67914(r: &mut Run) {
-    op!(r, 0x67914, 4, Op::Jump(0x67790)); // GOTO #67790
+    r.cpu.pc = 0x67790; // GOTO #67790
+    r.spend(6);
 }
 
 fn i67918(r: &mut Run) {
-    op!(r, 0x67918, 2, Op::Dec { r: R::D, f: Field::A }); // D=D-1 A
-    i6791a(r)
+    r.cpu.dec(R::D, Field::A); // D=D-1 A
+    if r.next(0x6791A, 4) {
+        i6791a(r)
+    }
 }
 
 fn i6791a(r: &mut Run) {
-    op!(r, 0x6791A, 3, Op::CondJump(Cond::NoCarry, 0x67923)); // GONC #67923
-    i6791d(r)
+    r.cpu.pc = 0x6791D;
+    r.cpu.jump_if(Cond::NoCarry, 0x67923); // GONC #67923
+    if r.next_pc(0x6791D, 5) {
+        i6791d(r)
+    }
 }
 
 fn i6791d(r: &mut Run) {
-    op!(r, 0x6791D, 2, Op::Zero { r: R::D, f: Field::A }); // D=0 A
-    i6791f(r)
+    r.cpu.zero(R::D, Field::A); // D=0 A
+    if r.next(0x6791F, 4) {
+        i6791f(r)
+    }
 }
 
 fn i6791f(r: &mut Run) {
-    op!(r, 0x6791F, 4, Op::Jump(0x6794A)); // GOTO #6794A
+    r.cpu.pc = 0x6794A; // GOTO #6794A
+    r.spend(6);
 }
 
 fn i67923(r: &mut Run) {
-    op!(r, 0x67923, 7, Op::LoadConst { r: R::C, len: 5, val: 0x2C }); // LC(5) #0002C
-    i6792a(r)
+    r.cpu.load_const(R::C, 5, 0x2C); // LC(5) #0002C
+    if r.next(0x6792A, 9) {
+        i6792a(r)
+    }
 }
 
 fn i6792a(r: &mut Run) {
-    op!(r, 0x6792A, 5, Op::Test { test: Test::Regs(Cmp::Le, R::C, R::A), f: Field::A, goyes: Some(0x6794A) }); // ?C<=A A / GOYES #6794A
-    i6792f(r)
+    r.cpu.pc = 0x6792F;
+    r.cpu.test(Test::Regs(Cmp::Le, R::C, R::A), Field::A, Some(0x6794A)); // ?C<=A A / GOYES #6794A
+    if r.next_pc(0x6792F, 7) {
+        i6792f(r)
+    }
 }
 
 fn i6792f(r: &mut Run) {
-    op!(r, 0x6792F, 2, Op::Add { dst: R::A, src: R::A, f: Field::A }); // A=A+A A
-    i67931(r)
+    r.cpu.add(R::A, R::A, Field::A); // A=A+A A
+    if r.next(0x67931, 4) {
+        i67931(r)
+    }
 }
 
 fn i67931(r: &mut Run) {
-    op!(r, 0x67931, 2, Op::Copy { dst: R::C, src: R::A, f: Field::A }); // C=A A
-    i67933(r)
+    r.cpu.copy(R::C, R::A, Field::A); // C=A A
+    if r.next(0x67933, 4) {
+        i67933(r)
+    }
 }
 
 fn i67933(r: &mut Run) {
-    op!(r, 0x67933, 2, Op::Add { dst: R::A, src: R::A, f: Field::A }); // A=A+A A
-    i67935(r)
+    r.cpu.add(R::A, R::A, Field::A); // A=A+A A
+    if r.next(0x67935, 4) {
+        i67935(r)
+    }
 }
 
 fn i67935(r: &mut Run) {
-    op!(r, 0x67935, 2, Op::Add { dst: R::A, src: R::A, f: Field::A }); // A=A+A A
-    i67937(r)
+    r.cpu.add(R::A, R::A, Field::A); // A=A+A A
+    if r.next(0x67937, 4) {
+        i67937(r)
+    }
 }
 
 fn i67937(r: &mut Run) {
-    op!(r, 0x67937, 2, Op::Add { dst: R::A, src: R::C, f: Field::A }); // A=A+C A
-    i67939(r)
+    r.cpu.add(R::A, R::C, Field::A); // A=A+C A
+    if r.next(0x67939, 4) {
+        i67939(r)
+    }
 }
 
 fn i67939(r: &mut Run) {
-    op!(r, 0x67939, 7, Op::LoadConst { r: R::C, len: 5, val: 0x3FEF }); // LC(5) #03FEF
-    i67940(r)
+    r.cpu.load_const(R::C, 5, 0x3FEF); // LC(5) #03FEF
+    if r.next(0x67940, 9) {
+        i67940(r)
+    }
 }
 
 fn i67940(r: &mut Run) {
-    op!(r, 0x67940, 2, Op::Add { dst: R::A, src: R::C, f: Field::A }); // A=A+C A
-    i67942(r)
+    r.cpu.add(R::A, R::C, Field::A); // A=A+C A
+    if r.next(0x67942, 4) {
+        i67942(r)
+    }
 }
 
 fn i67942(r: &mut Run) {
-    op!(r, 0x67942, 3, Op::DSub { d: 1, n: 5 }); // D1=D1- 5
-    i67945(r)
+    r.cpu.d_sub(1, 5); // D1=D1- 5
+    if r.next(0x67945, 5) {
+        i67945(r)
+    }
 }
 
 fn i67945(r: &mut Run) {
-    op!(r, 0x67945, 3, Op::Mem { store: true, d: 1, r: R::A, f: Field::A }); // DAT1=A A
-    i67948(r)
+    r.sync();
+    r.cpu.store(1, R::A, Field::A, r.hw); // DAT1=A A
+    if r.next_io(0x67948, 19) {
+        i67948(r)
+    }
 }
 
 fn i67948(r: &mut Run) {
-    op!(r, 0x67948, 2, Op::Rtn(RtnKind::ClearCarry)); // RTNCC
+    r.cpu.rtn(RtnKind::ClearCarry); // RTNCC
+    r.spend(9);
 }
 
 fn i6794a(r: &mut Run) {
-    op!(r, 0x6794A, 3, Op::Scratch { op: ScratchOp::ToScratch, r: R::A, n: 0, f: Field::W }); // R0=A
-    i6794d(r)
+    r.cpu.scratch(ScratchOp::ToScratch, R::A, 0, Field::W); // R0=A
+    if r.next(0x6794D, 5) {
+        i6794d(r)
+    }
 }
 
 fn i6794d(r: &mut Run) {
-    op!(r, 0x6794D, 3, Op::Scratch { op: ScratchOp::FromScratch, r: R::C, n: 2, f: Field::W }); // C=R2
-    i67950(r)
+    r.cpu.scratch(ScratchOp::FromScratch, R::C, 2, Field::W); // C=R2
+    if r.next(0x67950, 5) {
+        i67950(r)
+    }
 }
 
 fn i67950(r: &mut Run) {
-    op!(r, 0x67950, 3, Op::DFromR { d: 0, r: R::C, short: false }); // D0=C
-    i67953(r)
+    r.cpu.d_from_r(0, R::C, false); // D0=C
+    if r.next(0x67953, 5) {
+        i67953(r)
+    }
 }
 
 fn i67953(r: &mut Run) {
-    op!(r, 0x67953, 7, Op::Call(0x679B)); // GOSUB #0679B
+    r.cpu.pc = 0x6795A;
+    r.cpu.call(0x0679B); // GOSUB #0679B
+    r.spend(9);
 }
 
 fn i6795a(r: &mut Run) {
-    op!(r, 0x6795A, 7, Op::Call(0x6537)); // GOSUB #06537
+    r.cpu.pc = 0x67961;
+    r.cpu.call(0x06537); // GOSUB #06537
+    r.spend(9);
 }
 
 fn i67961(r: &mut Run) {
-    op!(r, 0x67961, 3, Op::DExR { d: 0, r: R::C, short: false }); // CD0EX
-    i67964(r)
+    r.cpu.d_ex_r(0, R::C, false); // CD0EX
+    if r.next(0x67964, 5) {
+        i67964(r)
+    }
 }
 
 fn i67964(r: &mut Run) {
-    op!(r, 0x67964, 3, Op::Scratch { op: ScratchOp::ToScratch, r: R::C, n: 2, f: Field::W }); // R2=C
-    i67967(r)
+    r.cpu.scratch(ScratchOp::ToScratch, R::C, 2, Field::W); // R2=C
+    if r.next(0x67967, 5) {
+        i67967(r)
+    }
 }
 
 fn i67967(r: &mut Run) {
-    op!(r, 0x67967, 2, Op::Rtn(RtnKind::SetCarry)); // RTNSC
+    r.cpu.rtn(RtnKind::SetCarry); // RTNSC
+    r.spend(9);
 }
 
 fn i67991(r: &mut Run) {
-    op!(r, 0x67991, 4, Op::LoadConst { r: R::C, len: 2, val: 0x1E }); // LC(2) #1E
-    i67995(r)
+    r.cpu.load_const(R::C, 2, 0x1E); // LC(2) #1E
+    if r.next(0x67995, 6) {
+        i67995(r)
+    }
 }
 
 fn i67995(r: &mut Run) {
-    op!(r, 0x67995, 3, Op::StSet { bit: 2, set: true }); // ST=1 2
-    i67998(r)
+    r.cpu.st_set(2, true); // ST=1 2
+    if r.next(0x67998, 5) {
+        i67998(r)
+    }
 }
 
 fn i67998(r: &mut Run) {
-    op!(r, 0x67998, 4, Op::Jump(0x678E4)); // GOTO #678E4
+    r.cpu.pc = 0x678E4; // GOTO #678E4
+    r.spend(6);
 }
 
 fn i679a6(r: &mut Run) {
-    op!(r, 0x679A6, 4, Op::LoadConst { r: R::C, len: 2, val: 0x21 }); // LC(2) #21
-    i679aa(r)
+    r.cpu.load_const(R::C, 2, 0x21); // LC(2) #21
+    if r.next(0x679AA, 6) {
+        i679aa(r)
+    }
 }
 
 fn i679aa(r: &mut Run) {
-    op!(r, 0x679AA, 4, Op::Jump(0x678E4)); // GOTO #678E4
+    r.cpu.pc = 0x678E4; // GOTO #678E4
+    r.spend(6);
 }
 
 fn i679b8(r: &mut Run) {
-    op!(r, 0x679B8, 4, Op::LoadConst { r: R::C, len: 2, val: 0x24 }); // LC(2) #24
-    i679bc(r)
+    r.cpu.load_const(R::C, 2, 0x24); // LC(2) #24
+    if r.next(0x679BC, 6) {
+        i679bc(r)
+    }
 }
 
 fn i679bc(r: &mut Run) {
-    op!(r, 0x679BC, 4, Op::Jump(0x678E4)); // GOTO #678E4
+    r.cpu.pc = 0x678E4; // GOTO #678E4
+    r.spend(6);
 }
 
 fn i679ca(r: &mut Run) {
-    op!(r, 0x679CA, 4, Op::LoadConst { r: R::C, len: 2, val: 0x27 }); // LC(2) #27
-    i679ce(r)
+    r.cpu.load_const(R::C, 2, 0x27); // LC(2) #27
+    if r.next(0x679CE, 6) {
+        i679ce(r)
+    }
 }
 
 fn i679ce(r: &mut Run) {
-    op!(r, 0x679CE, 4, Op::Jump(0x678E4)); // GOTO #678E4
+    r.cpu.pc = 0x678E4; // GOTO #678E4
+    r.spend(6);
 }
 
 fn i679dc(r: &mut Run) {
-    op!(r, 0x679DC, 4, Op::Call(0x67A4A)); // GOSUB #67A4A
+    r.cpu.pc = 0x679E0;
+    r.cpu.call(0x67A4A); // GOSUB #67A4A
+    r.spend(6);
 }
 
 fn i679e0(r: &mut Run) {
-    op!(r, 0x679E0, 2, Op::Zero { r: R::A, f: Field::A }); // A=0 A
-    i679e2(r)
+    r.cpu.zero(R::A, Field::A); // A=0 A
+    if r.next(0x679E2, 4) {
+        i679e2(r)
+    }
 }
 
 fn i679e2(r: &mut Run) {
-    op!(r, 0x679E2, 4, Op::Mem { store: false, d: 0, r: R::A, f: Field::Nibbles(1) }); // A=DAT0 1
-    i679e6(r)
+    r.sync();
+    r.cpu.load(0, R::A, Field::Nibbles(1), r.hw); // A=DAT0 1
+    if r.next_io(0x679E6, 15) {
+        i679e6(r)
+    }
 }
 
 fn i679e6(r: &mut Run) {
-    op!(r, 0x679E6, 4, Op::Jump(0x67901)); // GOTO #67901
+    r.cpu.pc = 0x67901; // GOTO #67901
+    r.spend(6);
 }
 
 fn i679ef(r: &mut Run) {
-    op!(r, 0x679EF, 4, Op::Call(0x67A4A)); // GOSUB #67A4A
+    r.cpu.pc = 0x679F3;
+    r.cpu.call(0x67A4A); // GOSUB #67A4A
+    r.spend(6);
 }
 
 fn i679f3(r: &mut Run) {
-    op!(r, 0x679F3, 3, Op::DSub { d: 1, n: 5 }); // D1=D1- 5
-    i679f6(r)
+    r.cpu.d_sub(1, 5); // D1=D1- 5
+    if r.next(0x679F6, 5) {
+        i679f6(r)
+    }
 }
 
 fn i679f6(r: &mut Run) {
-    op!(r, 0x679F6, 2, Op::Dec { r: R::D, f: Field::A }); // D=D-1 A
-    i679f8(r)
+    r.cpu.dec(R::D, Field::A); // D=D-1 A
+    if r.next(0x679F8, 4) {
+        i679f8(r)
+    }
 }
 
 fn i679f8(r: &mut Run) {
-    op!(r, 0x679F8, 4, Op::Mem { store: false, d: 0, r: R::A, f: Field::S }); // A=DAT0 S
-    i679fc(r)
+    r.sync();
+    r.cpu.load(0, R::A, Field::S, r.hw); // A=DAT0 S
+    if r.next_io(0x679FC, 15) {
+        i679fc(r)
+    }
 }
 
 fn i679fc(r: &mut Run) {
-    op!(r, 0x679FC, 3, Op::Scratch { op: ScratchOp::FromScratch, r: R::C, n: 2, f: Field::W }); // C=R2
-    i679ff(r)
+    r.cpu.scratch(ScratchOp::FromScratch, R::C, 2, Field::W); // C=R2
+    if r.next(0x679FF, 5) {
+        i679ff(r)
+    }
 }
 
 fn i679ff(r: &mut Run) {
-    op!(r, 0x679FF, 3, Op::DFromR { d: 0, r: R::C, short: false }); // D0=C
-    i67a02(r)
+    r.cpu.d_from_r(0, R::C, false); // D0=C
+    if r.next(0x67A02, 5) {
+        i67a02(r)
+    }
 }
 
 fn i67a02(r: &mut Run) {
-    op!(r, 0x67A02, 5, Op::Test { test: Test::Zero(R::A), f: Field::S, goyes: Some(0x67A11) }); // ?A=0 S / GOYES #67A11
-    i67a07(r)
+    r.cpu.pc = 0x67A07;
+    r.cpu.test(Test::Zero(R::A), Field::S, Some(0x67A11)); // ?A=0 S / GOYES #67A11
+    if r.next_pc(0x67A07, 7) {
+        i67a07(r)
+    }
 }
 
 fn i67a07(r: &mut Run) {
-    op!(r, 0x67A07, 7, Op::LoadConst { r: R::C, len: 5, val: 0x3AC0 }); // LC(5) #03AC0
-    i67a0e(r)
+    r.cpu.load_const(R::C, 5, 0x3AC0); // LC(5) #03AC0
+    if r.next(0x67A0E, 9) {
+        i67a0e(r)
+    }
 }
 
 fn i67a0e(r: &mut Run) {
-    op!(r, 0x67A0E, 3, Op::CondJump(Cond::NoCarry, 0x67A18)); // GONC #67A18
-    i67a11(r)
+    r.cpu.pc = 0x67A11;
+    r.cpu.jump_if(Cond::NoCarry, 0x67A18); // GONC #67A18
+    if r.next_pc(0x67A11, 5) {
+        i67a11(r)
+    }
 }
 
 fn i67a11(r: &mut Run) {
-    op!(r, 0x67A11, 7, Op::LoadConst { r: R::C, len: 5, val: 0x3A81 }); // LC(5) #03A81
-    i67a18(r)
+    r.cpu.load_const(R::C, 5, 0x3A81); // LC(5) #03A81
+    if r.next(0x67A18, 9) {
+        i67a18(r)
+    }
 }
 
 fn i67a18(r: &mut Run) {
-    op!(r, 0x67A18, 2, Op::Copy { dst: R::A, src: R::C, f: Field::A }); // A=C A
-    i67a1a(r)
+    r.cpu.copy(R::A, R::C, Field::A); // A=C A
+    if r.next(0x67A1A, 4) {
+        i67a1a(r)
+    }
 }
 
 fn i67a1a(r: &mut Run) {
-    op!(r, 0x67A1A, 4, Op::PcIndirect(R::A)); // PC=(A)
+    r.sync();
+    r.cpu.pc_indirect(R::A, r.hw); // PC=(A)
+    r.spend(23);
 }
 
 fn i67a23(r: &mut Run) {
-    op!(r, 0x67A23, 4, Op::Call(0x67A4A)); // GOSUB #67A4A
+    r.cpu.pc = 0x67A27;
+    r.cpu.call(0x67A4A); // GOSUB #67A4A
+    r.spend(6);
 }
 
 fn i67a27(r: &mut Run) {
-    op!(r, 0x67A27, 3, Op::DAdd { d: 0, n: 1 }); // D0=D0+ 1
-    i67a2a(r)
+    r.cpu.d_add(0, 1); // D0=D0+ 1
+    if r.next(0x67A2A, 5) {
+        i67a2a(r)
+    }
 }
 
 fn i67a2a(r: &mut Run) {
-    op!(r, 0x67A2A, 2, Op::Zero { r: R::A, f: Field::A }); // A=0 A
-    i67a2c(r)
+    r.cpu.zero(R::A, Field::A); // A=0 A
+    if r.next(0x67A2C, 4) {
+        i67a2c(r)
+    }
 }
 
 fn i67a2c(r: &mut Run) {
-    op!(r, 0x67A2C, 4, Op::Mem { store: false, d: 0, r: R::A, f: Field::Nibbles(1) }); // A=DAT0 1
-    i67a30(r)
+    r.sync();
+    r.cpu.load(0, R::A, Field::Nibbles(1), r.hw); // A=DAT0 1
+    if r.next_io(0x67A30, 15) {
+        i67a30(r)
+    }
 }
 
 fn i67a30(r: &mut Run) {
-    op!(r, 0x67A30, 3, Op::LoadConst { r: R::C, len: 1, val: 7 }); // LC(1) #7
-    i67a33(r)
+    r.cpu.load_const(R::C, 1, 0x7); // LC(1) #7
+    if r.next(0x67A33, 5) {
+        i67a33(r)
+    }
 }
 
 fn i67a33(r: &mut Run) {
-    op!(r, 0x67A33, 4, Op::Logic { and: true, dst: R::A, src: R::C, f: Field::P }); // A=A&C P
-    i67a37(r)
+    r.cpu.and(R::A, R::C, Field::P); // A=A&C P
+    if r.next(0x67A37, 6) {
+        i67a37(r)
+    }
 }
 
 fn i67a37(r: &mut Run) {
-    op!(r, 0x67A37, 4, Op::Jump(0x67901)); // GOTO #67901
+    r.cpu.pc = 0x67901; // GOTO #67901
+    r.spend(6);
 }
 
 fn i67a3b(r: &mut Run) {
-    op!(r, 0x67A3B, 2, Op::Inc { r: R::A, f: Field::A }); // A=A+1 A
-    i67a3d(r)
+    r.cpu.inc(R::A, Field::A); // A=A+1 A
+    if r.next(0x67A3D, 4) {
+        i67a3d(r)
+    }
 }
 
 fn i67a3d(r: &mut Run) {
-    op!(r, 0x67A3D, 6, Op::Scratch { op: ScratchOp::FromScratch, r: R::C, n: 2, f: Field::A }); // C=R2.F A
-    i67a43(r)
+    r.cpu.scratch(ScratchOp::FromScratch, R::C, 2, Field::A); // C=R2.F A
+    if r.next(0x67A43, 8) {
+        i67a43(r)
+    }
 }
 
 fn i67a43(r: &mut Run) {
-    op!(r, 0x67A43, 3, Op::DFromR { d: 0, r: R::C, short: false }); // D0=C
-    i67a46(r)
+    r.cpu.d_from_r(0, R::C, false); // D0=C
+    if r.next(0x67A46, 5) {
+        i67a46(r)
+    }
 }
 
 fn i67a46(r: &mut Run) {
-    op!(r, 0x67A46, 4, Op::Jump(0x67A51)); // GOTO #67A51
+    r.cpu.pc = 0x67A51; // GOTO #67A51
+    r.spend(6);
 }
 
 fn i67a4a(r: &mut Run) {
-    op!(r, 0x67A4A, 7, Op::Call(0x6641)); // GOSUB #06641
+    r.cpu.pc = 0x67A51;
+    r.cpu.call(0x06641); // GOSUB #06641
+    r.spend(9);
 }
 
 fn i67a51(r: &mut Run) {
-    op!(r, 0x67A51, 2, Op::Dec { r: R::A, f: Field::A }); // A=A-1 A
-    i67a53(r)
+    r.cpu.dec(R::A, Field::A); // A=A-1 A
+    if r.next(0x67A53, 4) {
+        i67a53(r)
+    }
 }
 
 fn i67a53(r: &mut Run) {
-    op!(r, 0x67A53, 2, Op::Add { dst: R::A, src: R::A, f: Field::A }); // A=A+A A
-    i67a55(r)
+    r.cpu.add(R::A, R::A, Field::A); // A=A+A A
+    if r.next(0x67A55, 4) {
+        i67a55(r)
+    }
 }
 
 fn i67a55(r: &mut Run) {
-    op!(r, 0x67A55, 2, Op::Copy { dst: R::C, src: R::A, f: Field::A }); // C=A A
-    i67a57(r)
+    r.cpu.copy(R::C, R::A, Field::A); // C=A A
+    if r.next(0x67A57, 4) {
+        i67a57(r)
+    }
 }
 
 fn i67a57(r: &mut Run) {
-    op!(r, 0x67A57, 2, Op::Shl { r: R::A, f: Field::A }); // ASL A
-    i67a59(r)
+    r.cpu.shl(R::A, Field::A); // ASL A
+    if r.next(0x67A59, 4) {
+        i67a59(r)
+    }
 }
 
 fn i67a59(r: &mut Run) {
-    op!(r, 0x67A59, 2, Op::Add { dst: R::A, src: R::C, f: Field::A }); // A=A+C A
-    i67a5b(r)
+    r.cpu.add(R::A, R::C, Field::A); // A=A+C A
+    if r.next(0x67A5B, 4) {
+        i67a5b(r)
+    }
 }
 
 fn i67a5b(r: &mut Run) {
-    op!(r, 0x67A5B, 2, Op::Add { dst: R::C, src: R::C, f: Field::A }); // C=C+C A
-    i67a5d(r)
+    r.cpu.add(R::C, R::C, Field::A); // C=C+C A
+    if r.next(0x67A5D, 4) {
+        i67a5d(r)
+    }
 }
 
 fn i67a5d(r: &mut Run) {
-    op!(r, 0x67A5D, 2, Op::Add { dst: R::C, src: R::C, f: Field::A }); // C=C+C A
-    i67a5f(r)
+    r.cpu.add(R::C, R::C, Field::A); // C=C+C A
+    if r.next(0x67A5F, 4) {
+        i67a5f(r)
+    }
 }
 
 fn i67a5f(r: &mut Run) {
-    op!(r, 0x67A5F, 2, Op::Add { dst: R::A, src: R::C, f: Field::A }); // A=A+C A
-    i67a61(r)
+    r.cpu.add(R::A, R::C, Field::A); // A=A+C A
+    if r.next(0x67A61, 4) {
+        i67a61(r)
+    }
 }
 
 fn i67a61(r: &mut Run) {
-    op!(r, 0x67A61, 7, Op::LoadConst { r: R::C, len: 5, val: 0x80757 }); // LC(5) #80757
-    i67a68(r)
+    r.cpu.load_const(R::C, 5, 0x80757); // LC(5) #80757
+    if r.next(0x67A68, 9) {
+        i67a68(r)
+    }
 }
 
 fn i67a68(r: &mut Run) {
-    op!(r, 0x67A68, 3, Op::DExR { d: 0, r: R::C, short: false }); // CD0EX
-    i67a6b(r)
+    r.cpu.d_ex_r(0, R::C, false); // CD0EX
+    if r.next(0x67A6B, 5) {
+        i67a6b(r)
+    }
 }
 
 fn i67a6b(r: &mut Run) {
-    op!(r, 0x67A6B, 6, Op::Scratch { op: ScratchOp::ToScratch, r: R::C, n: 2, f: Field::A }); // R2=C.F A
-    i67a71(r)
+    r.cpu.scratch(ScratchOp::ToScratch, R::C, 2, Field::A); // R2=C.F A
+    if r.next(0x67A71, 8) {
+        i67a71(r)
+    }
 }
 
 fn i67a71(r: &mut Run) {
-    op!(r, 0x67A71, 3, Op::Mem { store: false, d: 0, r: R::C, f: Field::A }); // C=DAT0 A
-    i67a74(r)
+    r.sync();
+    r.cpu.load(0, R::C, Field::A, r.hw); // C=DAT0 A
+    if r.next_io(0x67A74, 19) {
+        i67a74(r)
+    }
 }
 
 fn i67a74(r: &mut Run) {
-    op!(r, 0x67A74, 2, Op::Add { dst: R::C, src: R::A, f: Field::A }); // C=C+A A
-    i67a76(r)
+    r.cpu.add(R::C, R::A, Field::A); // C=C+A A
+    if r.next(0x67A76, 4) {
+        i67a76(r)
+    }
 }
 
 fn i67a76(r: &mut Run) {
-    op!(r, 0x67A76, 3, Op::DFromR { d: 0, r: R::C, short: false }); // D0=C
-    i67a79(r)
+    r.cpu.d_from_r(0, R::C, false); // D0=C
+    if r.next(0x67A79, 5) {
+        i67a79(r)
+    }
 }
 
 fn i67a79(r: &mut Run) {
-    op!(r, 0x67A79, 3, Op::DAdd { d: 0, n: 0xA }); // D0=D0+ 10
-    i67a7c(r)
+    r.cpu.d_add(0, 10); // D0=D0+ 10
+    if r.next(0x67A7C, 5) {
+        i67a7c(r)
+    }
 }
 
 fn i67a7c(r: &mut Run) {
-    op!(r, 0x67A7C, 2, Op::Rtn(RtnKind::Plain)); // RTN
+    r.cpu.rtn(RtnKind::Plain); // RTN
+    r.spend(9);
 }
 
 fn i67a83(r: &mut Run) {
-    op!(r, 0x67A83, 4, Op::LoadConst { r: R::C, len: 2, val: 5 }); // LC(2) #05
-    i67a87(r)
+    r.cpu.load_const(R::C, 2, 0x5); // LC(2) #05
+    if r.next(0x67A87, 6) {
+        i67a87(r)
+    }
 }
 
 fn i67a87(r: &mut Run) {
-    op!(r, 0x67A87, 4, Op::Jump(0x678E4)); // GOTO #678E4
+    r.cpu.pc = 0x678E4; // GOTO #678E4
+    r.spend(6);
 }
 
 fn i67a90(r: &mut Run) {
-    op!(r, 0x67A90, 4, Op::LoadConst { r: R::C, len: 2, val: 2 }); // LC(2) #02
-    i67a94(r)
+    r.cpu.load_const(R::C, 2, 0x2); // LC(2) #02
+    if r.next(0x67A94, 6) {
+        i67a94(r)
+    }
 }
 
 fn i67a94(r: &mut Run) {
-    op!(r, 0x67A94, 4, Op::Jump(0x678E4)); // GOTO #678E4
+    r.cpu.pc = 0x678E4; // GOTO #678E4
+    r.spend(6);
 }
 
 fn i67aa2(r: &mut Run) {
-    op!(r, 0x67AA2, 4, Op::LoadConst { r: R::C, len: 2, val: 0x11 }); // LC(2) #11
-    i67aa6(r)
+    r.cpu.load_const(R::C, 2, 0x11); // LC(2) #11
+    if r.next(0x67AA6, 6) {
+        i67aa6(r)
+    }
 }
 
 fn i67aa6(r: &mut Run) {
-    op!(r, 0x67AA6, 4, Op::Jump(0x678E4)); // GOTO #678E4
+    r.cpu.pc = 0x678E4; // GOTO #678E4
+    r.spend(6);
 }
 
 fn i67ab4(r: &mut Run) {
-    op!(r, 0x67AB4, 4, Op::LoadConst { r: R::C, len: 2, val: 0xE }); // LC(2) #0E
-    i67ab8(r)
+    r.cpu.load_const(R::C, 2, 0xE); // LC(2) #0E
+    if r.next(0x67AB8, 6) {
+        i67ab8(r)
+    }
 }
 
 fn i67ab8(r: &mut Run) {
-    op!(r, 0x67AB8, 4, Op::Jump(0x678E4)); // GOTO #678E4
+    r.cpu.pc = 0x678E4; // GOTO #678E4
+    r.spend(6);
 }
 
 fn i67ada(r: &mut Run) {
-    op!(r, 0x67ADA, 4, Op::LoadConst { r: R::C, len: 2, val: 0xB }); // LC(2) #0B
-    i67ade(r)
+    r.cpu.load_const(R::C, 2, 0xB); // LC(2) #0B
+    if r.next(0x67ADE, 6) {
+        i67ade(r)
+    }
 }
 
 fn i67ade(r: &mut Run) {
-    op!(r, 0x67ADE, 4, Op::Jump(0x678E4)); // GOTO #678E4
+    r.cpu.pc = 0x678E4; // GOTO #678E4
+    r.spend(6);
 }
 
 fn i67ae7(r: &mut Run) {
-    op!(r, 0x67AE7, 4, Op::LoadConst { r: R::C, len: 2, val: 8 }); // LC(2) #08
-    i67aeb(r)
+    r.cpu.load_const(R::C, 2, 0x8); // LC(2) #08
+    if r.next(0x67AEB, 6) {
+        i67aeb(r)
+    }
 }
 
 fn i67aeb(r: &mut Run) {
-    op!(r, 0x67AEB, 4, Op::Jump(0x678E4)); // GOTO #678E4
+    r.cpu.pc = 0x678E4; // GOTO #678E4
+    r.spend(6);
 }
 
 fn i67b1c(r: &mut Run) {
-    op!(r, 0x67B1C, 4, Op::Call(0x67A4A)); // GOSUB #67A4A
+    r.cpu.pc = 0x67B20;
+    r.cpu.call(0x67A4A); // GOSUB #67A4A
+    r.spend(6);
 }
 
 fn i67b20(r: &mut Run) {
-    op!(r, 0x67B20, 3, Op::DAdd { d: 0, n: 0xC }); // D0=D0+ 12
-    i67b23(r)
+    r.cpu.d_add(0, 12); // D0=D0+ 12
+    if r.next(0x67B23, 5) {
+        i67b23(r)
+    }
 }
 
 fn i67b23(r: &mut Run) {
-    op!(r, 0x67B23, 3, Op::DAdd { d: 0, n: 0xC }); // D0=D0+ 12
-    i67b26(r)
+    r.cpu.d_add(0, 12); // D0=D0+ 12
+    if r.next(0x67B26, 5) {
+        i67b26(r)
+    }
 }
 
 fn i67b26(r: &mut Run) {
-    op!(r, 0x67B26, 2, Op::Zero { r: R::A, f: Field::A }); // A=0 A
-    i67b28(r)
+    r.cpu.zero(R::A, Field::A); // A=0 A
+    if r.next(0x67B28, 4) {
+        i67b28(r)
+    }
 }
 
 fn i67b28(r: &mut Run) {
-    op!(r, 0x67B28, 4, Op::Mem { store: false, d: 0, r: R::C, f: Field::X }); // C=DAT0 X
-    i67b2c(r)
+    r.sync();
+    r.cpu.load(0, R::C, Field::X, r.hw); // C=DAT0 X
+    if r.next_io(0x67B2C, 17) {
+        i67b2c(r)
+    }
 }
 
 fn i67b2c(r: &mut Run) {
-    op!(r, 0x67B2C, 3, Op::Copy { dst: R::A, src: R::C, f: Field::X }); // A=C X
-    i67b2f(r)
+    r.cpu.copy(R::A, R::C, Field::X); // A=C X
+    if r.next(0x67B2F, 5) {
+        i67b2f(r)
+    }
 }
 
 fn i67b2f(r: &mut Run) {
-    op!(r, 0x67B2F, 3, Op::Inc { r: R::C, f: Field::X }); // C=C+1 X
-    i67b32(r)
+    r.cpu.inc(R::C, Field::X); // C=C+1 X
+    if r.next(0x67B32, 5) {
+        i67b32(r)
+    }
 }
 
 fn i67b32(r: &mut Run) {
-    op!(r, 0x67B32, 3, Op::CondJump(Cond::Carry, 0x67B48)); // GOC #67B48
-    i67b35(r)
+    r.cpu.pc = 0x67B35;
+    r.cpu.jump_if(Cond::Carry, 0x67B48); // GOC #67B48
+    if r.next_pc(0x67B35, 5) {
+        i67b35(r)
+    }
 }
 
 fn i67b35(r: &mut Run) {
-    op!(r, 0x67B35, 3, Op::Copy { dst: R::C, src: R::A, f: Field::X }); // C=A X
-    i67b38(r)
+    r.cpu.copy(R::C, R::A, Field::X); // C=A X
+    if r.next(0x67B38, 5) {
+        i67b38(r)
+    }
 }
 
 fn i67b38(r: &mut Run) {
-    op!(r, 0x67B38, 3, Op::Add { dst: R::C, src: R::C, f: Field::X }); // C=C+C X
-    i67b3b(r)
+    r.cpu.add(R::C, R::C, Field::X); // C=C+C X
+    if r.next(0x67B3B, 5) {
+        i67b3b(r)
+    }
 }
 
 fn i67b3b(r: &mut Run) {
-    op!(r, 0x67B3B, 3, Op::CondJump(Cond::Carry, 0x67B4F)); // GOC #67B4F
-    i67b3e(r)
+    r.cpu.pc = 0x67B3E;
+    r.cpu.jump_if(Cond::Carry, 0x67B4F); // GOC #67B4F
+    if r.next_pc(0x67B3E, 5) {
+        i67b3e(r)
+    }
 }
 
 fn i67b3e(r: &mut Run) {
-    op!(r, 0x67B3E, 3, Op::Scratch { op: ScratchOp::FromScratch, r: R::C, n: 2, f: Field::W }); // C=R2
-    i67b41(r)
+    r.cpu.scratch(ScratchOp::FromScratch, R::C, 2, Field::W); // C=R2
+    if r.next(0x67B41, 5) {
+        i67b41(r)
+    }
 }
 
 fn i67b41(r: &mut Run) {
-    op!(r, 0x67B41, 3, Op::DFromR { d: 0, r: R::C, short: false }); // D0=C
-    i67b44(r)
+    r.cpu.d_from_r(0, R::C, false); // D0=C
+    if r.next(0x67B44, 5) {
+        i67b44(r)
+    }
 }
 
 fn i67b44(r: &mut Run) {
-    op!(r, 0x67B44, 4, Op::Jump(0x67907)); // GOTO #67907
+    r.cpu.pc = 0x67907; // GOTO #67907
+    r.spend(6);
 }
 
 fn i67b48(r: &mut Run) {
-    op!(r, 0x67B48, 2, Op::Zero { r: R::A, f: Field::A }); // A=0 A
-    i67b4a(r)
+    r.cpu.zero(R::A, Field::A); // A=0 A
+    if r.next(0x67B4A, 4) {
+        i67b4a(r)
+    }
 }
 
 fn i67b4a(r: &mut Run) {
-    op!(r, 0x67B4A, 2, Op::Dec { r: R::A, f: Field::A }); // A=A-1 A
-    i67b4c(r)
+    r.cpu.dec(R::A, Field::A); // A=A-1 A
+    if r.next(0x67B4C, 4) {
+        i67b4c(r)
+    }
 }
 
 fn i67b4c(r: &mut Run) {
-    op!(r, 0x67B4C, 3, Op::CondJump(Cond::Carry, 0x67B3E)); // GOC #67B3E
-    i67b4f(r)
+    r.cpu.pc = 0x67B4F;
+    r.cpu.jump_if(Cond::Carry, 0x67B3E); // GOC #67B3E
+    if r.next_pc(0x67B4F, 5) {
+        i67b4f(r)
+    }
 }
 
 fn i67b4f(r: &mut Run) {
-    op!(r, 0x67B4F, 5, Op::LoadConst { r: R::C, len: 3, val: 0x7FF }); // LC(3) #7FF
-    i67b54(r)
+    r.cpu.load_const(R::C, 3, 0x7FF); // LC(3) #7FF
+    if r.next(0x67B54, 7) {
+        i67b54(r)
+    }
 }
 
 fn i67b54(r: &mut Run) {
-    op!(r, 0x67B54, 4, Op::Logic { and: true, dst: R::A, src: R::C, f: Field::X }); // A=A&C X
-    i67b58(r)
+    r.cpu.and(R::A, R::C, Field::X); // A=A&C X
+    if r.next(0x67B58, 6) {
+        i67b58(r)
+    }
 }
 
 fn i67b58(r: &mut Run) {
-    op!(r, 0x67B58, 7, Op::LoadConst { r: R::C, len: 5, val: 0x80000 }); // LC(5) #80000
-    i67b5f(r)
+    r.cpu.load_const(R::C, 5, 0x80000); // LC(5) #80000
+    if r.next(0x67B5F, 9) {
+        i67b5f(r)
+    }
 }
 
 fn i67b5f(r: &mut Run) {
-    op!(r, 0x67B5F, 4, Op::Logic { and: false, dst: R::A, src: R::C, f: Field::A }); // A=A!C A
-    i67b63(r)
+    r.cpu.or(R::A, R::C, Field::A); // A=A!C A
+    if r.next(0x67B63, 6) {
+        i67b63(r)
+    }
 }
 
 fn i67b63(r: &mut Run) {
-    op!(r, 0x67B63, 4, Op::Jump(0x67B3E)); // GOTO #67B3E
+    r.cpu.pc = 0x67B3E; // GOTO #67B3E
+    r.spend(6);
 }
 
 fn i67b6c(r: &mut Run) {
-    op!(r, 0x67B6C, 4, Op::LoadConst { r: R::C, len: 2, val: 5 }); // LC(2) #05
-    i67b70(r)
+    r.cpu.load_const(R::C, 2, 0x5); // LC(2) #05
+    if r.next(0x67B70, 6) {
+        i67b70(r)
+    }
 }
 
 fn i67b70(r: &mut Run) {
-    op!(r, 0x67B70, 6, Op::Scratch { op: ScratchOp::ToScratch, r: R::C, n: 1, f: Field::B }); // R1=C.F B
-    i67b76(r)
+    r.cpu.scratch(ScratchOp::ToScratch, R::C, 1, Field::B); // R1=C.F B
+    if r.next(0x67B76, 8) {
+        i67b76(r)
+    }
 }
 
 fn i67b76(r: &mut Run) {
-    op!(r, 0x67B76, 7, Op::Call(0x6641)); // GOSUB #06641
+    r.cpu.pc = 0x67B7D;
+    r.cpu.call(0x06641); // GOSUB #06641
+    r.spend(9);
 }
 
 fn i67b7d(r: &mut Run) {
-    op!(r, 0x67B7D, 2, Op::Copy { dst: R::C, src: R::A, f: Field::A }); // C=A A
-    i67b7f(r)
+    r.cpu.copy(R::C, R::A, Field::A); // C=A A
+    if r.next(0x67B7F, 4) {
+        i67b7f(r)
+    }
 }
 
 fn i67b7f(r: &mut Run) {
-    op!(r, 0x67B7F, 2, Op::PushC); // RSTK=C
-    i67b81(r)
+    r.cpu.push_c(); // RSTK=C
+    if r.next(0x67B81, 4) {
+        i67b81(r)
+    }
 }
 
 fn i67b81(r: &mut Run) {
-    op!(r, 0x67B81, 4, Op::Call(0x67A4A)); // GOSUB #67A4A
+    r.cpu.pc = 0x67B85;
+    r.cpu.call(0x67A4A); // GOSUB #67A4A
+    r.spend(6);
 }
 
 fn i67b85(r: &mut Run) {
-    op!(r, 0x67B85, 3, Op::DExR { d: 0, r: R::A, short: false }); // AD0EX
-    i67b88(r)
+    r.cpu.d_ex_r(0, R::A, false); // AD0EX
+    if r.next(0x67B88, 5) {
+        i67b88(r)
+    }
 }
 
 fn i67b88(r: &mut Run) {
-    op!(r, 0x67B88, 2, Op::Zero { r: R::C, f: Field::A }); // C=0 A
-    i67b8a(r)
+    r.cpu.zero(R::C, Field::A); // C=0 A
+    if r.next(0x67B8A, 4) {
+        i67b8a(r)
+    }
 }
 
 fn i67b8a(r: &mut Run) {
-    op!(r, 0x67B8A, 6, Op::Scratch { op: ScratchOp::FromScratch, r: R::C, n: 1, f: Field::B }); // C=R1.F B
-    i67b90(r)
+    r.cpu.scratch(ScratchOp::FromScratch, R::C, 1, Field::B); // C=R1.F B
+    if r.next(0x67B90, 8) {
+        i67b90(r)
+    }
 }
 
 fn i67b90(r: &mut Run) {
-    op!(r, 0x67B90, 2, Op::Add { dst: R::A, src: R::C, f: Field::A }); // A=A+C A
-    i67b92(r)
+    r.cpu.add(R::A, R::C, Field::A); // A=A+C A
+    if r.next(0x67B92, 4) {
+        i67b92(r)
+    }
 }
 
 fn i67b92(r: &mut Run) {
-    op!(r, 0x67B92, 3, Op::DFromR { d: 0, r: R::A, short: false }); // D0=A
-    i67b95(r)
+    r.cpu.d_from_r(0, R::A, false); // D0=A
+    if r.next(0x67B95, 5) {
+        i67b95(r)
+    }
 }
 
 fn i67b95(r: &mut Run) {
-    op!(r, 0x67B95, 2, Op::PopC); // C=RSTK
-    i67b97(r)
+    r.cpu.pop_c(); // C=RSTK
+    if r.next(0x67B97, 4) {
+        i67b97(r)
+    }
 }
 
 fn i67b97(r: &mut Run) {
-    op!(r, 0x67B97, 4, Op::Mem { store: true, d: 0, r: R::C, f: Field::X }); // DAT0=C X
-    i67b9b(r)
+    r.sync();
+    r.cpu.store(0, R::C, Field::X, r.hw); // DAT0=C X
+    if r.next_io(0x67B9B, 17) {
+        i67b9b(r)
+    }
 }
 
 fn i67b9b(r: &mut Run) {
-    op!(r, 0x67B9B, 6, Op::Jump(0x685CD)); // GOTO #685CD
+    r.cpu.pc = 0x685CD; // GOTO #685CD
+    r.spend(8);
 }
 
 fn i67ba6(r: &mut Run) {
-    op!(r, 0x67BA6, 4, Op::LoadConst { r: R::C, len: 2, val: 2 }); // LC(2) #02
-    i67baa(r)
+    r.cpu.load_const(R::C, 2, 0x2); // LC(2) #02
+    if r.next(0x67BAA, 6) {
+        i67baa(r)
+    }
 }
 
 fn i67baa(r: &mut Run) {
-    op!(r, 0x67BAA, 4, Op::Jump(0x67B70)); // GOTO #67B70
+    r.cpu.pc = 0x67B70; // GOTO #67B70
+    r.spend(6);
 }
 
 fn i67bb3(r: &mut Run) {
-    op!(r, 0x67BB3, 4, Op::LoadConst { r: R::C, len: 2, val: 0x11 }); // LC(2) #11
-    i67bb7(r)
+    r.cpu.load_const(R::C, 2, 0x11); // LC(2) #11
+    if r.next(0x67BB7, 6) {
+        i67bb7(r)
+    }
 }
 
 fn i67bb7(r: &mut Run) {
-    op!(r, 0x67BB7, 4, Op::Jump(0x67B70)); // GOTO #67B70
+    r.cpu.pc = 0x67B70; // GOTO #67B70
+    r.spend(6);
 }
 
 fn i67bc0(r: &mut Run) {
-    op!(r, 0x67BC0, 4, Op::LoadConst { r: R::C, len: 2, val: 0xE }); // LC(2) #0E
-    i67bc4(r)
+    r.cpu.load_const(R::C, 2, 0xE); // LC(2) #0E
+    if r.next(0x67BC4, 6) {
+        i67bc4(r)
+    }
 }
 
 fn i67bc4(r: &mut Run) {
-    op!(r, 0x67BC4, 4, Op::Jump(0x67B70)); // GOTO #67B70
+    r.cpu.pc = 0x67B70; // GOTO #67B70
+    r.spend(6);
 }
 
 fn i67bcd(r: &mut Run) {
-    op!(r, 0x67BCD, 4, Op::LoadConst { r: R::C, len: 2, val: 0x1B }); // LC(2) #1B
-    i67bd1(r)
+    r.cpu.load_const(R::C, 2, 0x1B); // LC(2) #1B
+    if r.next(0x67BD1, 6) {
+        i67bd1(r)
+    }
 }
 
 fn i67bd1(r: &mut Run) {
-    op!(r, 0x67BD1, 4, Op::Jump(0x67B70)); // GOTO #67B70
+    r.cpu.pc = 0x67B70; // GOTO #67B70
+    r.spend(6);
 }
 
 fn i67bda(r: &mut Run) {
-    op!(r, 0x67BDA, 4, Op::LoadConst { r: R::C, len: 2, val: 0x21 }); // LC(2) #21
-    i67bde(r)
+    r.cpu.load_const(R::C, 2, 0x21); // LC(2) #21
+    if r.next(0x67BDE, 6) {
+        i67bde(r)
+    }
 }
 
 fn i67bde(r: &mut Run) {
-    op!(r, 0x67BDE, 4, Op::Jump(0x67B70)); // GOTO #67B70
+    r.cpu.pc = 0x67B70; // GOTO #67B70
+    r.spend(6);
 }
 
 fn i67be7(r: &mut Run) {
-    op!(r, 0x67BE7, 4, Op::LoadConst { r: R::C, len: 2, val: 0x1E }); // LC(2) #1E
-    i67beb(r)
+    r.cpu.load_const(R::C, 2, 0x1E); // LC(2) #1E
+    if r.next(0x67BEB, 6) {
+        i67beb(r)
+    }
 }
 
 fn i67beb(r: &mut Run) {
-    op!(r, 0x67BEB, 4, Op::Jump(0x67B70)); // GOTO #67B70
+    r.cpu.pc = 0x67B70; // GOTO #67B70
+    r.spend(6);
 }
 
 fn i67bf4(r: &mut Run) {
-    op!(r, 0x67BF4, 4, Op::LoadConst { r: R::C, len: 2, val: 0x24 }); // LC(2) #24
-    i67bf8(r)
+    r.cpu.load_const(R::C, 2, 0x24); // LC(2) #24
+    if r.next(0x67BF8, 6) {
+        i67bf8(r)
+    }
 }
 
 fn i67bf8(r: &mut Run) {
-    op!(r, 0x67BF8, 4, Op::Jump(0x67B70)); // GOTO #67B70
+    r.cpu.pc = 0x67B70; // GOTO #67B70
+    r.spend(6);
 }
 
 fn i67c01(r: &mut Run) {
-    op!(r, 0x67C01, 4, Op::LoadConst { r: R::C, len: 2, val: 0x27 }); // LC(2) #27
-    i67c05(r)
+    r.cpu.load_const(R::C, 2, 0x27); // LC(2) #27
+    if r.next(0x67C05, 6) {
+        i67c05(r)
+    }
 }
 
 fn i67c05(r: &mut Run) {
-    op!(r, 0x67C05, 4, Op::Jump(0x67B70)); // GOTO #67B70
+    r.cpu.pc = 0x67B70; // GOTO #67B70
+    r.spend(6);
 }
 
 fn i67c0e(r: &mut Run) {
-    op!(r, 0x67C0E, 4, Op::LoadConst { r: R::C, len: 2, val: 0xB }); // LC(2) #0B
-    i67c12(r)
+    r.cpu.load_const(R::C, 2, 0xB); // LC(2) #0B
+    if r.next(0x67C12, 6) {
+        i67c12(r)
+    }
 }
 
 fn i67c12(r: &mut Run) {
-    op!(r, 0x67C12, 4, Op::Jump(0x67B70)); // GOTO #67B70
+    r.cpu.pc = 0x67B70; // GOTO #67B70
+    r.spend(6);
 }
 
 fn i67c1b(r: &mut Run) {
-    op!(r, 0x67C1B, 4, Op::LoadConst { r: R::C, len: 2, val: 8 }); // LC(2) #08
-    i67c1f(r)
+    r.cpu.load_const(R::C, 2, 0x8); // LC(2) #08
+    if r.next(0x67C1F, 6) {
+        i67c1f(r)
+    }
 }
 
 fn i67c1f(r: &mut Run) {
-    op!(r, 0x67C1F, 4, Op::Jump(0x67B70)); // GOTO #67B70
+    r.cpu.pc = 0x67B70; // GOTO #67B70
+    r.spend(6);
 }
 
 fn i67c41(r: &mut Run) {
-    op!(r, 0x67C41, 4, Op::Call(0x67C53)); // GOSUB #67C53
+    r.cpu.pc = 0x67C45;
+    r.cpu.call(0x67C53); // GOSUB #67C53
+    r.spend(6);
 }
 
 fn i67c45(r: &mut Run) {
-    op!(r, 0x67C45, 4, Op::LoadConst { r: R::C, len: 2, val: 0x18 }); // LC(2) #18
-    i67c49(r)
+    r.cpu.load_const(R::C, 2, 0x18); // LC(2) #18
+    if r.next(0x67C49, 6) {
+        i67c49(r)
+    }
 }
 
 fn i67c49(r: &mut Run) {
-    op!(r, 0x67C49, 6, Op::Scratch { op: ScratchOp::ToScratch, r: R::C, n: 1, f: Field::B }); // R1=C.F B
-    i67c4f(r)
+    r.cpu.scratch(ScratchOp::ToScratch, R::C, 1, Field::B); // R1=C.F B
+    if r.next(0x67C4F, 8) {
+        i67c4f(r)
+    }
 }
 
 fn i67c4f(r: &mut Run) {
-    op!(r, 0x67C4F, 4, Op::Jump(0x67B7D)); // GOTO #67B7D
+    r.cpu.pc = 0x67B7D; // GOTO #67B7D
+    r.spend(6);
 }
 
 fn i67c53(r: &mut Run) {
-    op!(r, 0x67C53, 7, Op::Call(0x6641)); // GOSUB #06641
+    r.cpu.pc = 0x67C5A;
+    r.cpu.call(0x06641); // GOSUB #06641
+    r.spend(9);
 }
 
 fn i67c5a(r: &mut Run) {
-    op!(r, 0x67C5A, 2, Op::Copy { dst: R::C, src: R::A, f: Field::A }); // C=A A
-    i67c5c(r)
+    r.cpu.copy(R::C, R::A, Field::A); // C=A A
+    if r.next(0x67C5C, 4) {
+        i67c5c(r)
+    }
 }
 
 fn i67c5c(r: &mut Run) {
-    op!(r, 0x67C5C, 2, Op::Add { dst: R::C, src: R::C, f: Field::A }); // C=C+C A
-    i67c5e(r)
+    r.cpu.add(R::C, R::C, Field::A); // C=C+C A
+    if r.next(0x67C5E, 4) {
+        i67c5e(r)
+    }
 }
 
 fn i67c5e(r: &mut Run) {
-    op!(r, 0x67C5E, 3, Op::CondRtn(Cond::NoCarry)); // RTNNC
-    i67c61(r)
+    r.cpu.pc = 0x67C61;
+    r.cpu.rtn_if(Cond::NoCarry); // RTNNC
+    if r.next_pc(0x67C61, 5) {
+        i67c61(r)
+    }
 }
 
 fn i67c61(r: &mut Run) {
-    op!(r, 0x67C61, 5, Op::LoadConst { r: R::C, len: 3, val: 0x800 }); // LC(3) #800
-    i67c66(r)
+    r.cpu.load_const(R::C, 3, 0x800); // LC(3) #800
+    if r.next(0x67C66, 7) {
+        i67c66(r)
+    }
 }
 
 fn i67c66(r: &mut Run) {
-    op!(r, 0x67C66, 4, Op::Logic { and: false, dst: R::A, src: R::C, f: Field::X }); // A=A!C X
-    i67c6a(r)
+    r.cpu.or(R::A, R::C, Field::X); // A=A!C X
+    if r.next(0x67C6A, 6) {
+        i67c6a(r)
+    }
 }
 
 fn i67c6a(r: &mut Run) {
-    op!(r, 0x67C6A, 2, Op::Rtn(RtnKind::Plain)); // RTN
+    r.cpu.rtn(RtnKind::Plain); // RTN
+    r.spend(9);
 }
 
 fn i67c8a(r: &mut Run) {
-    op!(r, 0x67C8A, 7, Op::Call(0x6641)); // GOSUB #06641
+    r.cpu.pc = 0x67C91;
+    r.cpu.call(0x06641); // GOSUB #06641
+    r.spend(9);
 }
 
 fn i67c91(r: &mut Run) {
-    op!(r, 0x67C91, 3, Op::Rotate { r: R::A, left: false }); // ASRC
-    i67c94(r)
+    r.cpu.rotate(R::A, false); // ASRC
+    if r.next(0x67C94, 5) {
+        i67c94(r)
+    }
 }
 
 fn i67c94(r: &mut Run) {
-    op!(r, 0x67C94, 4, Op::Call(0x67A4A)); // GOSUB #67A4A
+    r.cpu.pc = 0x67C98;
+    r.cpu.call(0x67A4A); // GOSUB #67A4A
+    r.spend(6);
 }
 
 fn i67c98(r: &mut Run) {
-    op!(r, 0x67C98, 4, Op::Mem { store: true, d: 0, r: R::A, f: Field::S }); // DAT0=A S
-    i67c9c(r)
+    r.sync();
+    r.cpu.store(0, R::A, Field::S, r.hw); // DAT0=A S
+    if r.next_io(0x67C9C, 15) {
+        i67c9c(r)
+    }
 }
 
 fn i67c9c(r: &mut Run) {
-    op!(r, 0x67C9C, 6, Op::Jump(0x685CD)); // GOTO #685CD
+    r.cpu.pc = 0x685CD; // GOTO #685CD
+    r.spend(8);
 }
 
 fn i67ca7(r: &mut Run) {
-    op!(r, 0x67CA7, 6, Op::Call(0x67A4A)); // GOSUB #67A4A
+    r.cpu.pc = 0x67CAD;
+    r.cpu.call(0x67A4A); // GOSUB #67A4A
+    r.spend(8);
 }
 
 fn i67cad(r: &mut Run) {
-    op!(r, 0x67CAD, 3, Op::DAdd { d: 0, n: 1 }); // D0=D0+ 1
-    i67cb0(r)
+    r.cpu.d_add(0, 1); // D0=D0+ 1
+    if r.next(0x67CB0, 5) {
+        i67cb0(r)
+    }
 }
 
 fn i67cb0(r: &mut Run) {
-    op!(r, 0x67CB0, 4, Op::Mem { store: false, d: 0, r: R::A, f: Field::S }); // A=DAT0 S
-    i67cb4(r)
+    r.sync();
+    r.cpu.load(0, R::A, Field::S, r.hw); // A=DAT0 S
+    if r.next_io(0x67CB4, 15) {
+        i67cb4(r)
+    }
 }
 
 fn i67cb4(r: &mut Run) {
-    op!(r, 0x67CB4, 3, Op::Add { dst: R::A, src: R::A, f: Field::S }); // A=A+A S
-    i67cb7(r)
+    r.cpu.add(R::A, R::A, Field::S); // A=A+A S
+    if r.next(0x67CB7, 5) {
+        i67cb7(r)
+    }
 }
 
 fn i67cb7(r: &mut Run) {
-    op!(r, 0x67CB7, 3, Op::Srb(R::A)); // ASRB
-    i67cba(r)
+    r.cpu.srb(R::A); // ASRB
+    if r.next(0x67CBA, 5) {
+        i67cba(r)
+    }
 }
 
 fn i67cba(r: &mut Run) {
-    op!(r, 0x67CBA, 4, Op::Jump(0x67C98)); // GOTO #67C98
+    r.cpu.pc = 0x67C98; // GOTO #67C98
+    r.spend(6);
 }
 
 fn i67cc3(r: &mut Run) {
-    op!(r, 0x67CC3, 7, Op::LoadConst { r: R::C, len: 5, val: 0x808C5 }); // LC(5) #808C5
-    i67cca(r)
+    r.cpu.load_const(R::C, 5, 0x808C5); // LC(5) #808C5
+    if r.next(0x67CCA, 9) {
+        i67cca(r)
+    }
 }
 
 fn i67cca(r: &mut Run) {
-    op!(r, 0x67CCA, 3, Op::DExR { d: 0, r: R::C, short: false }); // CD0EX
-    i67ccd(r)
+    r.cpu.d_ex_r(0, R::C, false); // CD0EX
+    if r.next(0x67CCD, 5) {
+        i67ccd(r)
+    }
 }
 
 fn i67ccd(r: &mut Run) {
-    op!(r, 0x67CCD, 2, Op::PushC); // RSTK=C
-    i67ccf(r)
+    r.cpu.push_c(); // RSTK=C
+    if r.next(0x67CCF, 4) {
+        i67ccf(r)
+    }
 }
 
 fn i67ccf(r: &mut Run) {
-    op!(r, 0x67CCF, 3, Op::Mem { store: false, d: 0, r: R::A, f: Field::A }); // A=DAT0 A
-    i67cd2(r)
+    r.sync();
+    r.cpu.load(0, R::A, Field::A, r.hw); // A=DAT0 A
+    if r.next_io(0x67CD2, 19) {
+        i67cd2(r)
+    }
 }
 
 fn i67cd2(r: &mut Run) {
-    op!(r, 0x67CD2, 7, Op::DLoad { d: 0, len: 5, val: 0x80757 }); // D0=(5) #80757
-    i67cd9(r)
+    r.cpu.d_load(0, 5, 0x80757); // D0=(5) #80757
+    if r.next(0x67CD9, 9) {
+        i67cd9(r)
+    }
 }
 
 fn i67cd9(r: &mut Run) {
-    op!(r, 0x67CD9, 3, Op::Mem { store: false, d: 0, r: R::C, f: Field::A }); // C=DAT0 A
-    i67cdc(r)
+    r.sync();
+    r.cpu.load(0, R::C, Field::A, r.hw); // C=DAT0 A
+    if r.next_io(0x67CDC, 19) {
+        i67cdc(r)
+    }
 }
 
 fn i67cdc(r: &mut Run) {
-    op!(r, 0x67CDC, 3, Op::DFromR { d: 0, r: R::C, short: false }); // D0=C
-    i67cdf(r)
+    r.cpu.d_from_r(0, R::C, false); // D0=C
+    if r.next(0x67CDF, 5) {
+        i67cdf(r)
+    }
 }
 
 fn i67cdf(r: &mut Run) {
-    op!(r, 0x67CDF, 2, Op::PSet(0xF)); // P= 15
-    i67ce1(r)
+    r.cpu.p = 15; // P= 15
+    if r.next(0x67CE1, 4) {
+        i67ce1(r)
+    }
 }
 
 fn i67ce1(r: &mut Run) {
-    op!(r, 0x67CE1, 3, Op::LoadConst { r: R::C, len: 1, val: 7 }); // LC(1) #7
-    i67ce4(r)
+    r.cpu.load_const(R::C, 1, 0x7); // LC(1) #7
+    if r.next(0x67CE4, 5) {
+        i67ce4(r)
+    }
 }
 
 fn i67ce4(r: &mut Run) {
-    op!(r, 0x67CE4, 2, Op::PSet(0)); // P= 0
-    i67ce6(r)
+    r.cpu.p = 0; // P= 0
+    if r.next(0x67CE6, 4) {
+        i67ce6(r)
+    }
 }
 
 fn i67ce6(r: &mut Run) {
-    op!(r, 0x67CE6, 3, Op::DAdd { d: 0, n: 0xB }); // D0=D0+ 11
-    i67ce9(r)
+    r.cpu.d_add(0, 11); // D0=D0+ 11
+    if r.next(0x67CE9, 5) {
+        i67ce9(r)
+    }
 }
 
 fn i67ce9(r: &mut Run) {
-    op!(r, 0x67CE9, 2, Op::Dec { r: R::A, f: Field::A }); // A=A-1 A
-    i67ceb(r)
+    r.cpu.dec(R::A, Field::A); // A=A-1 A
+    if r.next(0x67CEB, 4) {
+        i67ceb(r)
+    }
 }
 
 fn i67ceb(r: &mut Run) {
-    op!(r, 0x67CEB, 3, Op::CondJump(Cond::Carry, 0x67D07)); // GOC #67D07
-    i67cee(r)
+    r.cpu.pc = 0x67CEE;
+    r.cpu.jump_if(Cond::Carry, 0x67D07); // GOC #67D07
+    if r.next_pc(0x67CEE, 5) {
+        i67cee(r)
+    }
 }
 
 fn i67cee(r: &mut Run) {
-    op!(r, 0x67CEE, 4, Op::Mem { store: false, d: 0, r: R::A, f: Field::S }); // A=DAT0 S
-    i67cf2(r)
+    r.sync();
+    r.cpu.load(0, R::A, Field::S, r.hw); // A=DAT0 S
+    if r.next_io(0x67CF2, 15) {
+        i67cf2(r)
+    }
 }
 
 fn i67cf2(r: &mut Run) {
-    op!(r, 0x67CF2, 4, Op::Logic { and: true, dst: R::A, src: R::C, f: Field::S }); // A=A&C S
-    i67cf6(r)
+    r.cpu.and(R::A, R::C, Field::S); // A=A&C S
+    if r.next(0x67CF6, 6) {
+        i67cf6(r)
+    }
 }
 
 fn i67cf6(r: &mut Run) {
-    op!(r, 0x67CF6, 4, Op::Mem { store: true, d: 0, r: R::A, f: Field::S }); // DAT0=A S
-    i67cfa(r)
+    r.sync();
+    r.cpu.store(0, R::A, Field::S, r.hw); // DAT0=A S
+    if r.next_io(0x67CFA, 15) {
+        i67cfa(r)
+    }
 }
 
 fn i67cfa(r: &mut Run) {
-    op!(r, 0x67CFA, 3, Op::DAdd { d: 0, n: 0x10 }); // D0=D0+ 16
-    i67cfd(r)
+    r.cpu.d_add(0, 16); // D0=D0+ 16
+    if r.next(0x67CFD, 5) {
+        i67cfd(r)
+    }
 }
 
 fn i67cfd(r: &mut Run) {
-    op!(r, 0x67CFD, 3, Op::DAdd { d: 0, n: 0x10 }); // D0=D0+ 16
-    i67d00(r)
+    r.cpu.d_add(0, 16); // D0=D0+ 16
+    if r.next(0x67D00, 5) {
+        i67d00(r)
+    }
 }
 
 fn i67d00(r: &mut Run) {
-    op!(r, 0x67D00, 3, Op::DAdd { d: 0, n: 0xA }); // D0=D0+ 10
-    i67d03(r)
+    r.cpu.d_add(0, 10); // D0=D0+ 10
+    if r.next(0x67D03, 5) {
+        i67d03(r)
+    }
 }
 
 fn i67d03(r: &mut Run) {
-    op!(r, 0x67D03, 4, Op::Jump(0x67CE9)); // GOTO #67CE9
+    r.cpu.pc = 0x67CE9; // GOTO #67CE9
+    r.spend(6);
 }
 
 fn i67d07(r: &mut Run) {
-    op!(r, 0x67D07, 2, Op::PopC); // C=RSTK
-    i67d09(r)
+    r.cpu.pop_c(); // C=RSTK
+    if r.next(0x67D09, 4) {
+        i67d09(r)
+    }
 }
 
 fn i67d09(r: &mut Run) {
-    op!(r, 0x67D09, 6, Op::Jump(0x6778D)); // GOTO #6778D
+    r.cpu.pc = 0x6778D; // GOTO #6778D
+    r.spend(8);
 }
 
 fn i67d14(r: &mut Run) {
-    op!(r, 0x67D14, 3, Op::StSet { bit: 0, set: false }); // ST=0 0
-    i67d17(r)
+    r.cpu.st_set(0, false); // ST=0 0
+    if r.next(0x67D17, 5) {
+        i67d17(r)
+    }
 }
 
 fn i67d17(r: &mut Run) {
-    op!(r, 0x67D17, 4, Op::Jump(0x67D23)); // GOTO #67D23
+    r.cpu.pc = 0x67D23; // GOTO #67D23
+    r.spend(6);
 }
 
 fn i67d20(r: &mut Run) {
-    op!(r, 0x67D20, 3, Op::StSet { bit: 0, set: true }); // ST=1 0
-    i67d23(r)
+    r.cpu.st_set(0, true); // ST=1 0
+    if r.next(0x67D23, 5) {
+        i67d23(r)
+    }
 }
 
 fn i67d23(r: &mut Run) {
-    op!(r, 0x67D23, 7, Op::Call(0x679B)); // GOSUB #0679B
+    r.cpu.pc = 0x67D2A;
+    r.cpu.call(0x0679B); // GOSUB #0679B
+    r.spend(9);
 }
 
 fn i67d2a(r: &mut Run) {
-    op!(r, 0x67D2A, 7, Op::DLoad { d: 0, len: 5, val: 0x808C5 }); // D0=(5) #808C5
-    i67d31(r)
+    r.cpu.d_load(0, 5, 0x808C5); // D0=(5) #808C5
+    if r.next(0x67D31, 9) {
+        i67d31(r)
+    }
 }
 
 fn i67d31(r: &mut Run) {
-    op!(r, 0x67D31, 2, Op::Zero { r: R::B, f: Field::A }); // B=0 A
-    i67d33(r)
+    r.cpu.zero(R::B, Field::A); // B=0 A
+    if r.next(0x67D33, 4) {
+        i67d33(r)
+    }
 }
 
 fn i67d33(r: &mut Run) {
-    op!(r, 0x67D33, 3, Op::Mem { store: false, d: 0, r: R::C, f: Field::A }); // C=DAT0 A
-    i67d36(r)
+    r.sync();
+    r.cpu.load(0, R::C, Field::A, r.hw); // C=DAT0 A
+    if r.next_io(0x67D36, 19) {
+        i67d36(r)
+    }
 }
 
 fn i67d36(r: &mut Run) {
-    op!(r, 0x67D36, 2, Op::Dec { r: R::C, f: Field::A }); // C=C-1 A
-    i67d38(r)
+    r.cpu.dec(R::C, Field::A); // C=C-1 A
+    if r.next(0x67D38, 4) {
+        i67d38(r)
+    }
 }
 
 fn i67d38(r: &mut Run) {
-    op!(r, 0x67D38, 2, Op::PushC); // RSTK=C
-    i67d3a(r)
+    r.cpu.push_c(); // RSTK=C
+    if r.next(0x67D3A, 4) {
+        i67d3a(r)
+    }
 }
 
 fn i67d3a(r: &mut Run) {
-    op!(r, 0x67D3A, 7, Op::DLoad { d: 0, len: 5, val: 0x80757 }); // D0=(5) #80757
-    i67d41(r)
+    r.cpu.d_load(0, 5, 0x80757); // D0=(5) #80757
+    if r.next(0x67D41, 9) {
+        i67d41(r)
+    }
 }
 
 fn i67d41(r: &mut Run) {
-    op!(r, 0x67D41, 3, Op::Mem { store: false, d: 0, r: R::C, f: Field::A }); // C=DAT0 A
-    i67d44(r)
+    r.sync();
+    r.cpu.load(0, R::C, Field::A, r.hw); // C=DAT0 A
+    if r.next_io(0x67D44, 19) {
+        i67d44(r)
+    }
 }
 
 fn i67d44(r: &mut Run) {
-    op!(r, 0x67D44, 3, Op::DFromR { d: 0, r: R::C, short: false }); // D0=C
-    i67d47(r)
+    r.cpu.d_from_r(0, R::C, false); // D0=C
+    if r.next(0x67D47, 5) {
+        i67d47(r)
+    }
 }
 
 fn i67d47(r: &mut Run) {
-    op!(r, 0x67D47, 3, Op::DAdd { d: 0, n: 0xA }); // D0=D0+ 10
-    i67d4a(r)
+    r.cpu.d_add(0, 10); // D0=D0+ 10
+    if r.next(0x67D4A, 5) {
+        i67d4a(r)
+    }
 }
 
 fn i67d4a(r: &mut Run) {
-    op!(r, 0x67D4A, 3, Op::Zero { r: R::C, f: Field::X }); // C=0 X
-    i67d4d(r)
+    r.cpu.zero(R::C, Field::X); // C=0 X
+    if r.next(0x67D4D, 5) {
+        i67d4d(r)
+    }
 }
 
 fn i67d4d(r: &mut Run) {
-    op!(r, 0x67D4D, 5, Op::StTest { bit: 0, set: true, goyes: Some(0x67D55) }); // ?ST=1 0 / GOYES #67D55
-    i67d52(r)
+    r.cpu.pc = 0x67D52;
+    r.cpu.st_test(0, true, Some(0x67D55)); // ?ST=1 0 / GOYES #67D55
+    if r.next_pc(0x67D52, 7) {
+        i67d52(r)
+    }
 }
 
 fn i67d52(r: &mut Run) {
-    op!(r, 0x67D52, 3, Op::Dec { r: R::C, f: Field::X }); // C=C-1 X
-    i67d55(r)
+    r.cpu.dec(R::C, Field::X); // C=C-1 X
+    if r.next(0x67D55, 5) {
+        i67d55(r)
+    }
 }
 
 fn i67d55(r: &mut Run) {
-    op!(r, 0x67D55, 3, Op::Scratch { op: ScratchOp::ToScratch, r: R::C, n: 2, f: Field::W }); // R2=C
-    i67d58(r)
+    r.cpu.scratch(ScratchOp::ToScratch, R::C, 2, Field::W); // R2=C
+    if r.next(0x67D58, 5) {
+        i67d58(r)
+    }
 }
 
 fn i67d58(r: &mut Run) {
-    op!(r, 0x67D58, 2, Op::Inc { r: R::B, f: Field::A }); // B=B+1 A
-    i67d5a(r)
+    r.cpu.inc(R::B, Field::A); // B=B+1 A
+    if r.next(0x67D5A, 4) {
+        i67d5a(r)
+    }
 }
 
 fn i67d5a(r: &mut Run) {
-    op!(r, 0x67D5A, 4, Op::Mem { store: false, d: 0, r: R::A, f: Field::S }); // A=DAT0 S
-    i67d5e(r)
+    r.sync();
+    r.cpu.load(0, R::A, Field::S, r.hw); // A=DAT0 S
+    if r.next_io(0x67D5E, 15) {
+        i67d5e(r)
+    }
 }
 
 fn i67d5e(r: &mut Run) {
-    op!(r, 0x67D5E, 3, Op::DAdd { d: 0, n: 5 }); // D0=D0+ 5
-    i67d61(r)
+    r.cpu.d_add(0, 5); // D0=D0+ 5
+    if r.next(0x67D61, 5) {
+        i67d61(r)
+    }
 }
 
 fn i67d61(r: &mut Run) {
-    op!(r, 0x67D61, 5, Op::Test { test: Test::Zero(R::A), f: Field::S, goyes: Some(0x67D73) }); // ?A=0 S / GOYES #67D73
-    i67d66(r)
+    r.cpu.pc = 0x67D66;
+    r.cpu.test(Test::Zero(R::A), Field::S, Some(0x67D73)); // ?A=0 S / GOYES #67D73
+    if r.next_pc(0x67D66, 7) {
+        i67d66(r)
+    }
 }
 
 fn i67d66(r: &mut Run) {
-    op!(r, 0x67D66, 3, Op::DAdd { d: 0, n: 0xF }); // D0=D0+ 15
-    i67d69(r)
+    r.cpu.d_add(0, 15); // D0=D0+ 15
+    if r.next(0x67D69, 5) {
+        i67d69(r)
+    }
 }
 
 fn i67d69(r: &mut Run) {
-    op!(r, 0x67D69, 3, Op::DAdd { d: 0, n: 0xF }); // D0=D0+ 15
-    i67d6c(r)
+    r.cpu.d_add(0, 15); // D0=D0+ 15
+    if r.next(0x67D6C, 5) {
+        i67d6c(r)
+    }
 }
 
 fn i67d6c(r: &mut Run) {
-    op!(r, 0x67D6C, 3, Op::DAdd { d: 0, n: 7 }); // D0=D0+ 7
-    i67d6f(r)
+    r.cpu.d_add(0, 7); // D0=D0+ 7
+    if r.next(0x67D6F, 5) {
+        i67d6f(r)
+    }
 }
 
 fn i67d6f(r: &mut Run) {
-    op!(r, 0x67D6F, 4, Op::Jump(0x67DBB)); // GOTO #67DBB
+    r.cpu.pc = 0x67DBB; // GOTO #67DBB
+    r.spend(6);
 }
 
 fn i67d73(r: &mut Run) {
-    op!(r, 0x67D73, 4, Op::Mem { store: false, d: 0, r: R::A, f: Field::X }); // A=DAT0 X
-    i67d77(r)
+    r.sync();
+    r.cpu.load(0, R::A, Field::X, r.hw); // A=DAT0 X
+    if r.next_io(0x67D77, 17) {
+        i67d77(r)
+    }
 }
 
 fn i67d77(r: &mut Run) {
-    op!(r, 0x67D77, 3, Op::DAdd { d: 0, n: 0xF }); // D0=D0+ 15
-    i67d7a(r)
+    r.cpu.d_add(0, 15); // D0=D0+ 15
+    if r.next(0x67D7A, 5) {
+        i67d7a(r)
+    }
 }
 
 fn i67d7a(r: &mut Run) {
-    op!(r, 0x67D7A, 3, Op::Mem { store: false, d: 0, r: R::C, f: Field::B }); // C=DAT0 B
-    i67d7d(r)
+    r.sync();
+    r.cpu.load(0, R::C, Field::B, r.hw); // C=DAT0 B
+    if r.next_io(0x67D7D, 16) {
+        i67d7d(r)
+    }
 }
 
 fn i67d7d(r: &mut Run) {
-    op!(r, 0x67D7D, 3, Op::Copy { dst: R::D, src: R::C, f: Field::B }); // D=C B
-    i67d80(r)
+    r.cpu.copy(R::D, R::C, Field::B); // D=C B
+    if r.next(0x67D80, 5) {
+        i67d80(r)
+    }
 }
 
 fn i67d80(r: &mut Run) {
-    op!(r, 0x67D80, 3, Op::DAdd { d: 0, n: 4 }); // D0=D0+ 4
-    i67d83(r)
+    r.cpu.d_add(0, 4); // D0=D0+ 4
+    if r.next(0x67D83, 5) {
+        i67d83(r)
+    }
 }
 
 fn i67d83(r: &mut Run) {
-    op!(r, 0x67D83, 4, Op::Mem { store: false, d: 0, r: R::C, f: Field::X }); // C=DAT0 X
-    i67d87(r)
+    r.sync();
+    r.cpu.load(0, R::C, Field::X, r.hw); // C=DAT0 X
+    if r.next_io(0x67D87, 17) {
+        i67d87(r)
+    }
 }
 
 fn i67d87(r: &mut Run) {
-    op!(r, 0x67D87, 3, Op::DAdd { d: 0, n: 0xF }); // D0=D0+ 15
-    i67d8a(r)
+    r.cpu.d_add(0, 15); // D0=D0+ 15
+    if r.next(0x67D8A, 5) {
+        i67d8a(r)
+    }
 }
 
 fn i67d8a(r: &mut Run) {
-    op!(r, 0x67D8A, 3, Op::DAdd { d: 0, n: 3 }); // D0=D0+ 3
-    i67d8d(r)
+    r.cpu.d_add(0, 3); // D0=D0+ 3
+    if r.next(0x67D8D, 5) {
+        i67d8d(r)
+    }
 }
 
 fn i67d8d(r: &mut Run) {
-    op!(r, 0x67D8D, 5, Op::Test { test: Test::Zero(R::C), f: Field::X, goyes: Some(0x67DBB) }); // ?C=0 X / GOYES #67DBB
-    i67d92(r)
+    r.cpu.pc = 0x67D92;
+    r.cpu.test(Test::Zero(R::C), Field::X, Some(0x67DBB)); // ?C=0 X / GOYES #67DBB
+    if r.next_pc(0x67D92, 7) {
+        i67d92(r)
+    }
 }
 
 fn i67d92(r: &mut Run) {
-    op!(r, 0x67D92, 3, Op::Dec { r: R::D, f: Field::B }); // D=D-1 B
-    i67d95(r)
+    r.cpu.dec(R::D, Field::B); // D=D-1 B
+    if r.next(0x67D95, 5) {
+        i67d95(r)
+    }
 }
 
 fn i67d95(r: &mut Run) {
-    op!(r, 0x67D95, 3, Op::CondJump(Cond::Carry, 0x67D9E)); // GOC #67D9E
-    i67d98(r)
+    r.cpu.pc = 0x67D98;
+    r.cpu.jump_if(Cond::Carry, 0x67D9E); // GOC #67D9E
+    if r.next_pc(0x67D98, 5) {
+        i67d98(r)
+    }
 }
 
 fn i67d98(r: &mut Run) {
-    op!(r, 0x67D98, 3, Op::Dec { r: R::D, f: Field::B }); // D=D-1 B
-    i67d9b(r)
+    r.cpu.dec(R::D, Field::B); // D=D-1 B
+    if r.next(0x67D9B, 5) {
+        i67d9b(r)
+    }
 }
 
 fn i67d9b(r: &mut Run) {
-    op!(r, 0x67D9B, 3, Op::CondJump(Cond::Carry, 0x67DBB)); // GOC #67DBB
-    i67d9e(r)
+    r.cpu.pc = 0x67D9E;
+    r.cpu.jump_if(Cond::Carry, 0x67DBB); // GOC #67DBB
+    if r.next_pc(0x67D9E, 5) {
+        i67d9e(r)
+    }
 }
 
 fn i67d9e(r: &mut Run) {
-    op!(r, 0x67D9E, 3, Op::Scratch { op: ScratchOp::FromScratch, r: R::C, n: 2, f: Field::W }); // C=R2
-    i67da1(r)
+    r.cpu.scratch(ScratchOp::FromScratch, R::C, 2, Field::W); // C=R2
+    if r.next(0x67DA1, 5) {
+        i67da1(r)
+    }
 }
 
 fn i67da1(r: &mut Run) {
-    op!(r, 0x67DA1, 5, Op::StTest { bit: 0, set: true, goyes: Some(0x67DAE) }); // ?ST=1 0 / GOYES #67DAE
-    i67da6(r)
+    r.cpu.pc = 0x67DA6;
+    r.cpu.st_test(0, true, Some(0x67DAE)); // ?ST=1 0 / GOYES #67DAE
+    if r.next_pc(0x67DA6, 7) {
+        i67da6(r)
+    }
 }
 
 fn i67da6(r: &mut Run) {
-    op!(r, 0x67DA6, 5, Op::Test { test: Test::Regs(Cmp::Lt, R::C, R::A), f: Field::X, goyes: Some(0x67DBB) }); // ?C<A X / GOYES #67DBB
-    i67dab(r)
+    r.cpu.pc = 0x67DAB;
+    r.cpu.test(Test::Regs(Cmp::Lt, R::C, R::A), Field::X, Some(0x67DBB)); // ?C<A X / GOYES #67DBB
+    if r.next_pc(0x67DAB, 7) {
+        i67dab(r)
+    }
 }
 
 fn i67dab(r: &mut Run) {
-    op!(r, 0x67DAB, 3, Op::CondJump(Cond::NoCarry, 0x67DB3)); // GONC #67DB3
-    i67dae(r)
+    r.cpu.pc = 0x67DAE;
+    r.cpu.jump_if(Cond::NoCarry, 0x67DB3); // GONC #67DB3
+    if r.next_pc(0x67DAE, 5) {
+        i67dae(r)
+    }
 }
 
 fn i67dae(r: &mut Run) {
-    op!(r, 0x67DAE, 5, Op::Test { test: Test::Regs(Cmp::Gt, R::C, R::A), f: Field::X, goyes: Some(0x67DBB) }); // ?C>A X / GOYES #67DBB
-    i67db3(r)
+    r.cpu.pc = 0x67DB3;
+    r.cpu.test(Test::Regs(Cmp::Gt, R::C, R::A), Field::X, Some(0x67DBB)); // ?C>A X / GOYES #67DBB
+    if r.next_pc(0x67DB3, 7) {
+        i67db3(r)
+    }
 }
 
 fn i67db3(r: &mut Run) {
-    op!(r, 0x67DB3, 3, Op::Scratch { op: ScratchOp::ToScratch, r: R::A, n: 2, f: Field::W }); // R2=A
-    i67db6(r)
+    r.cpu.scratch(ScratchOp::ToScratch, R::A, 2, Field::W); // R2=A
+    if r.next(0x67DB6, 5) {
+        i67db6(r)
+    }
 }
 
 fn i67db6(r: &mut Run) {
-    op!(r, 0x67DB6, 2, Op::Copy { dst: R::C, src: R::B, f: Field::A }); // C=B A
-    i67db8(r)
+    r.cpu.copy(R::C, R::B, Field::A); // C=B A
+    if r.next(0x67DB8, 4) {
+        i67db8(r)
+    }
 }
 
 fn i67db8(r: &mut Run) {
-    op!(r, 0x67DB8, 3, Op::Scratch { op: ScratchOp::ToScratch, r: R::C, n: 0, f: Field::W }); // R0=C
-    i67dbb(r)
+    r.cpu.scratch(ScratchOp::ToScratch, R::C, 0, Field::W); // R0=C
+    if r.next(0x67DBB, 5) {
+        i67dbb(r)
+    }
 }
 
 fn i67dbb(r: &mut Run) {
-    op!(r, 0x67DBB, 2, Op::PopC); // C=RSTK
-    i67dbd(r)
+    r.cpu.pop_c(); // C=RSTK
+    if r.next(0x67DBD, 4) {
+        i67dbd(r)
+    }
 }
 
 fn i67dbd(r: &mut Run) {
-    op!(r, 0x67DBD, 2, Op::Dec { r: R::C, f: Field::A }); // C=C-1 A
-    i67dbf(r)
+    r.cpu.dec(R::C, Field::A); // C=C-1 A
+    if r.next(0x67DBF, 4) {
+        i67dbf(r)
+    }
 }
 
 fn i67dbf(r: &mut Run) {
-    op!(r, 0x67DBF, 3, Op::CondJump(Cond::Carry, 0x67DC8)); // GOC #67DC8
-    i67dc2(r)
+    r.cpu.pc = 0x67DC2;
+    r.cpu.jump_if(Cond::Carry, 0x67DC8); // GOC #67DC8
+    if r.next_pc(0x67DC2, 5) {
+        i67dc2(r)
+    }
 }
 
 fn i67dc2(r: &mut Run) {
-    op!(r, 0x67DC2, 2, Op::PushC); // RSTK=C
-    i67dc4(r)
+    r.cpu.push_c(); // RSTK=C
+    if r.next(0x67DC4, 4) {
+        i67dc4(r)
+    }
 }
 
 fn i67dc4(r: &mut Run) {
-    op!(r, 0x67DC4, 4, Op::Jump(0x67D58)); // GOTO #67D58
+    r.cpu.pc = 0x67D58; // GOTO #67D58
+    r.spend(6);
 }
 
 fn i67dc8(r: &mut Run) {
-    op!(r, 0x67DC8, 7, Op::Jump(0x357F)); // GOTO #0357F
+    r.cpu.pc = 0x0357F; // GOTO #0357F
+    r.spend(9);
 }
 
 fn i67dd4(r: &mut Run) {
-    op!(r, 0x67DD4, 4, Op::Call(0x67E77)); // GOSUB #67E77
+    r.cpu.pc = 0x67DD8;
+    r.cpu.call(0x67E77); // GOSUB #67E77
+    r.spend(6);
 }
 
 fn i67dd8(r: &mut Run) {
-    op!(r, 0x67DD8, 3, Op::DAdd { d: 0, n: 5 }); // D0=D0+ 5
-    i67ddb(r)
+    r.cpu.d_add(0, 5); // D0=D0+ 5
+    if r.next(0x67DDB, 5) {
+        i67ddb(r)
+    }
 }
 
 fn i67ddb(r: &mut Run) {
-    op!(r, 0x67DDB, 4, Op::Jump(0x67E1B)); // GOTO #67E1B
+    r.cpu.pc = 0x67E1B; // GOTO #67E1B
+    r.spend(6);
 }
 
 fn i67de4(r: &mut Run) {
-    op!(r, 0x67DE4, 4, Op::Call(0x67E77)); // GOSUB #67E77
+    r.cpu.pc = 0x67DE8;
+    r.cpu.call(0x67E77); // GOSUB #67E77
+    r.spend(6);
 }
 
 fn i67de8(r: &mut Run) {
-    op!(r, 0x67DE8, 4, Op::Jump(0x67E1B)); // GOTO #67E1B
+    r.cpu.pc = 0x67E1B; // GOTO #67E1B
+    r.spend(6);
 }
 
 fn i67df1(r: &mut Run) {
-    op!(r, 0x67DF1, 4, Op::Call(0x67E77)); // GOSUB #67E77
+    r.cpu.pc = 0x67DF5;
+    r.cpu.call(0x67E77); // GOSUB #67E77
+    r.spend(6);
 }
 
 fn i67df5(r: &mut Run) {
-    op!(r, 0x67DF5, 3, Op::DAdd { d: 0, n: 0xF }); // D0=D0+ 15
-    i67df8(r)
+    r.cpu.d_add(0, 15); // D0=D0+ 15
+    if r.next(0x67DF8, 5) {
+        i67df8(r)
+    }
 }
 
 fn i67df8(r: &mut Run) {
-    op!(r, 0x67DF8, 4, Op::Jump(0x67E1B)); // GOTO #67E1B
+    r.cpu.pc = 0x67E1B; // GOTO #67E1B
+    r.spend(6);
 }
 
 fn i67e01(r: &mut Run) {
-    op!(r, 0x67E01, 4, Op::Call(0x67E77)); // GOSUB #67E77
+    r.cpu.pc = 0x67E05;
+    r.cpu.call(0x67E77); // GOSUB #67E77
+    r.spend(6);
 }
 
 fn i67e05(r: &mut Run) {
-    op!(r, 0x67E05, 3, Op::DAdd { d: 0, n: 0xA }); // D0=D0+ 10
-    i67e08(r)
+    r.cpu.d_add(0, 10); // D0=D0+ 10
+    if r.next(0x67E08, 5) {
+        i67e08(r)
+    }
 }
 
 fn i67e08(r: &mut Run) {
-    op!(r, 0x67E08, 4, Op::Jump(0x67E1B)); // GOTO #67E1B
+    r.cpu.pc = 0x67E1B; // GOTO #67E1B
+    r.spend(6);
 }
 
 fn i67e11(r: &mut Run) {
-    op!(r, 0x67E11, 4, Op::Call(0x67E77)); // GOSUB #67E77
+    r.cpu.pc = 0x67E15;
+    r.cpu.call(0x67E77); // GOSUB #67E77
+    r.spend(6);
 }
 
 fn i67e15(r: &mut Run) {
-    op!(r, 0x67E15, 3, Op::DAdd { d: 0, n: 0xF }); // D0=D0+ 15
-    i67e18(r)
+    r.cpu.d_add(0, 15); // D0=D0+ 15
+    if r.next(0x67E18, 5) {
+        i67e18(r)
+    }
 }
 
 fn i67e18(r: &mut Run) {
-    op!(r, 0x67E18, 3, Op::DAdd { d: 0, n: 5 }); // D0=D0+ 5
-    i67e1b(r)
+    r.cpu.d_add(0, 5); // D0=D0+ 5
+    if r.next(0x67E1B, 5) {
+        i67e1b(r)
+    }
 }
 
 fn i67e1b(r: &mut Run) {
-    op!(r, 0x67E1B, 3, Op::Mem { store: false, d: 0, r: R::A, f: Field::A }); // A=DAT0 A
-    i67e1e(r)
+    r.sync();
+    r.cpu.load(0, R::A, Field::A, r.hw); // A=DAT0 A
+    if r.next_io(0x67E1E, 19) {
+        i67e1e(r)
+    }
 }
 
 fn i67e1e(r: &mut Run) {
-    op!(r, 0x67E1E, 3, Op::Scratch { op: ScratchOp::FromScratch, r: R::C, n: 2, f: Field::W }); // C=R2
-    i67e21(r)
+    r.cpu.scratch(ScratchOp::FromScratch, R::C, 2, Field::W); // C=R2
+    if r.next(0x67E21, 5) {
+        i67e21(r)
+    }
 }
 
 fn i67e21(r: &mut Run) {
-    op!(r, 0x67E21, 3, Op::DFromR { d: 0, r: R::C, short: false }); // D0=C
-    i67e24(r)
+    r.cpu.d_from_r(0, R::C, false); // D0=C
+    if r.next(0x67E24, 5) {
+        i67e24(r)
+    }
 }
 
 fn i67e24(r: &mut Run) {
-    op!(r, 0x67E24, 3, Op::DSub { d: 1, n: 5 }); // D1=D1- 5
-    i67e27(r)
+    r.cpu.d_sub(1, 5); // D1=D1- 5
+    if r.next(0x67E27, 5) {
+        i67e27(r)
+    }
 }
 
 fn i67e27(r: &mut Run) {
-    op!(r, 0x67E27, 3, Op::Mem { store: true, d: 1, r: R::A, f: Field::A }); // DAT1=A A
-    i67e2a(r)
+    r.sync();
+    r.cpu.store(1, R::A, Field::A, r.hw); // DAT1=A A
+    if r.next_io(0x67E2A, 19) {
+        i67e2a(r)
+    }
 }
 
 fn i67e2a(r: &mut Run) {
-    op!(r, 0x67E2A, 3, Op::Mem { store: false, d: 0, r: R::A, f: Field::A }); // A=DAT0 A
-    i67e2d(r)
+    r.sync();
+    r.cpu.load(0, R::A, Field::A, r.hw); // A=DAT0 A
+    if r.next_io(0x67E2D, 19) {
+        i67e2d(r)
+    }
 }
 
 fn i67e2d(r: &mut Run) {
-    op!(r, 0x67E2D, 3, Op::DAdd { d: 0, n: 5 }); // D0=D0+ 5
-    i67e30(r)
+    r.cpu.d_add(0, 5); // D0=D0+ 5
+    if r.next(0x67E30, 5) {
+        i67e30(r)
+    }
 }
 
 fn i67e30(r: &mut Run) {
-    op!(r, 0x67E30, 4, Op::PcIndirect(R::A)); // PC=(A)
+    r.sync();
+    r.cpu.pc_indirect(R::A, r.hw); // PC=(A)
+    r.spend(23);
 }
 
 fn i67e3e(r: &mut Run) {
-    op!(r, 0x67E3E, 4, Op::Call(0x67EB4)); // GOSUB #67EB4
+    r.cpu.pc = 0x67E42;
+    r.cpu.call(0x67EB4); // GOSUB #67EB4
+    r.spend(6);
 }
 
 fn i67e42(r: &mut Run) {
-    op!(r, 0x67E42, 3, Op::CondJump(Cond::NoCarry, 0x67E1B)); // GONC #67E1B
+    r.cpu.pc = 0x67E45;
+    r.cpu.jump_if(Cond::NoCarry, 0x67E1B); // GONC #67E1B
+    r.spend(5);
 }
 
 fn i67e4a(r: &mut Run) {
-    op!(r, 0x67E4A, 4, Op::Call(0x67EB4)); // GOSUB #67EB4
+    r.cpu.pc = 0x67E4E;
+    r.cpu.call(0x67EB4); // GOSUB #67EB4
+    r.spend(6);
 }
 
 fn i67e4e(r: &mut Run) {
-    op!(r, 0x67E4E, 3, Op::DAdd { d: 0, n: 0xA }); // D0=D0+ 10
-    i67e51(r)
+    r.cpu.d_add(0, 10); // D0=D0+ 10
+    if r.next(0x67E51, 5) {
+        i67e51(r)
+    }
 }
 
 fn i67e51(r: &mut Run) {
-    op!(r, 0x67E51, 3, Op::CondJump(Cond::NoCarry, 0x67E1B)); // GONC #67E1B
+    r.cpu.pc = 0x67E54;
+    r.cpu.jump_if(Cond::NoCarry, 0x67E1B); // GONC #67E1B
+    r.spend(5);
 }
 
 fn i67e59(r: &mut Run) {
-    op!(r, 0x67E59, 4, Op::Call(0x67EB4)); // GOSUB #67EB4
+    r.cpu.pc = 0x67E5D;
+    r.cpu.call(0x67EB4); // GOSUB #67EB4
+    r.spend(6);
 }
 
 fn i67e5d(r: &mut Run) {
-    op!(r, 0x67E5D, 3, Op::DAdd { d: 0, n: 0xF }); // D0=D0+ 15
-    i67e60(r)
+    r.cpu.d_add(0, 15); // D0=D0+ 15
+    if r.next(0x67E60, 5) {
+        i67e60(r)
+    }
 }
 
 fn i67e60(r: &mut Run) {
-    op!(r, 0x67E60, 4, Op::Jump(0x67E1B)); // GOTO #67E1B
+    r.cpu.pc = 0x67E1B; // GOTO #67E1B
+    r.spend(6);
 }
 
 fn i67e69(r: &mut Run) {
-    op!(r, 0x67E69, 4, Op::Call(0x67EB4)); // GOSUB #67EB4
+    r.cpu.pc = 0x67E6D;
+    r.cpu.call(0x67EB4); // GOSUB #67EB4
+    r.spend(6);
 }
 
 fn i67e6d(r: &mut Run) {
-    op!(r, 0x67E6D, 3, Op::DAdd { d: 0, n: 0xA }); // D0=D0+ 10
-    i67e70(r)
+    r.cpu.d_add(0, 10); // D0=D0+ 10
+    if r.next(0x67E70, 5) {
+        i67e70(r)
+    }
 }
 
 fn i67e70(r: &mut Run) {
-    op!(r, 0x67E70, 3, Op::DAdd { d: 0, n: 0xA }); // D0=D0+ 10
-    i67e73(r)
+    r.cpu.d_add(0, 10); // D0=D0+ 10
+    if r.next(0x67E73, 5) {
+        i67e73(r)
+    }
 }
 
 fn i67e73(r: &mut Run) {
-    op!(r, 0x67E73, 4, Op::Jump(0x67E1B)); // GOTO #67E1B
+    r.cpu.pc = 0x67E1B; // GOTO #67E1B
+    r.spend(6);
 }
 
 fn i67e77(r: &mut Run) {
-    op!(r, 0x67E77, 4, Op::Call(0x67E9E)); // GOSUB #67E9E
+    r.cpu.pc = 0x67E7B;
+    r.cpu.call(0x67E9E); // GOSUB #67E9E
+    r.spend(6);
 }
 
 fn i67e7b(r: &mut Run) {
-    op!(r, 0x67E7B, 7, Op::LoadConst { r: R::C, len: 5, val: 0x8086F }); // LC(5) #8086F
-    i67e82(r)
+    r.cpu.load_const(R::C, 5, 0x8086F); // LC(5) #8086F
+    if r.next(0x67E82, 9) {
+        i67e82(r)
+    }
 }
 
 fn i67e82(r: &mut Run) {
-    op!(r, 0x67E82, 3, Op::DExR { d: 0, r: R::C, short: false }); // CD0EX
-    i67e85(r)
+    r.cpu.d_ex_r(0, R::C, false); // CD0EX
+    if r.next(0x67E85, 5) {
+        i67e85(r)
+    }
 }
 
 fn i67e85(r: &mut Run) {
-    op!(r, 0x67E85, 2, Op::PushC); // RSTK=C
-    i67e87(r)
+    r.cpu.push_c(); // RSTK=C
+    if r.next(0x67E87, 4) {
+        i67e87(r)
+    }
 }
 
 fn i67e87(r: &mut Run) {
-    op!(r, 0x67E87, 3, Op::Mem { store: false, d: 0, r: R::C, f: Field::A }); // C=DAT0 A
-    i67e8a(r)
+    r.sync();
+    r.cpu.load(0, R::C, Field::A, r.hw); // C=DAT0 A
+    if r.next_io(0x67E8A, 19) {
+        i67e8a(r)
+    }
 }
 
 fn i67e8a(r: &mut Run) {
-    op!(r, 0x67E8A, 7, Op::DLoad { d: 0, len: 5, val: 0x8090C }); // D0=(5) #8090C
-    i67e91(r)
+    r.cpu.d_load(0, 5, 0x8090C); // D0=(5) #8090C
+    if r.next(0x67E91, 9) {
+        i67e91(r)
+    }
 }
 
 fn i67e91(r: &mut Run) {
-    op!(r, 0x67E91, 3, Op::Mem { store: false, d: 0, r: R::A, f: Field::A }); // A=DAT0 A
-    i67e94(r)
+    r.sync();
+    r.cpu.load(0, R::A, Field::A, r.hw); // A=DAT0 A
+    if r.next_io(0x67E94, 19) {
+        i67e94(r)
+    }
 }
 
 fn i67e94(r: &mut Run) {
-    op!(r, 0x67E94, 2, Op::Sub { dst: R::A, a: R::A, b: R::C, f: Field::A }); // A=A-C A
-    i67e96(r)
+    r.cpu.sub(R::A, R::A, R::C, Field::A); // A=A-C A
+    if r.next(0x67E96, 4) {
+        i67e96(r)
+    }
 }
 
 fn i67e96(r: &mut Run) {
-    op!(r, 0x67E96, 3, Op::Scratch { op: ScratchOp::ToScratch, r: R::A, n: 3, f: Field::W }); // R3=A
-    i67e99(r)
+    r.cpu.scratch(ScratchOp::ToScratch, R::A, 3, Field::W); // R3=A
+    if r.next(0x67E99, 5) {
+        i67e99(r)
+    }
 }
 
 fn i67e99(r: &mut Run) {
-    op!(r, 0x67E99, 2, Op::PopC); // C=RSTK
-    i67e9b(r)
+    r.cpu.pop_c(); // C=RSTK
+    if r.next(0x67E9B, 4) {
+        i67e9b(r)
+    }
 }
 
 fn i67e9b(r: &mut Run) {
-    op!(r, 0x67E9B, 3, Op::CondJump(Cond::NoCarry, 0x67ECC)); // GONC #67ECC
-    i67e9e(r)
+    r.cpu.pc = 0x67E9E;
+    r.cpu.jump_if(Cond::NoCarry, 0x67ECC); // GONC #67ECC
+    if r.next_pc(0x67E9E, 5) {
+        i67e9e(r)
+    }
 }
 
 fn i67e9e(r: &mut Run) {
-    op!(r, 0x67E9E, 3, Op::StSet { bit: 0xA, set: false }); // ST=0 10
-    i67ea1(r)
+    r.cpu.st_set(10, false); // ST=0 10
+    if r.next(0x67EA1, 5) {
+        i67ea1(r)
+    }
 }
 
 fn i67ea1(r: &mut Run) {
-    op!(r, 0x67EA1, 2, Op::Dec { r: R::D, f: Field::A }); // D=D-1 A
-    i67ea3(r)
+    r.cpu.dec(R::D, Field::A); // D=D-1 A
+    if r.next(0x67EA3, 4) {
+        i67ea3(r)
+    }
 }
 
 fn i67ea3(r: &mut Run) {
-    op!(r, 0x67EA3, 3, Op::CondRtn(Cond::NoCarry)); // RTNNC
-    i67ea6(r)
+    r.cpu.pc = 0x67EA6;
+    r.cpu.rtn_if(Cond::NoCarry); // RTNNC
+    if r.next_pc(0x67EA6, 5) {
+        i67ea6(r)
+    }
 }
 
 fn i67ea6(r: &mut Run) {
-    op!(r, 0x67EA6, 2, Op::Zero { r: R::C, f: Field::A }); // C=0 A
-    i67ea8(r)
+    r.cpu.zero(R::C, Field::A); // C=0 A
+    if r.next(0x67EA8, 4) {
+        i67ea8(r)
+    }
 }
 
 fn i67ea8(r: &mut Run) {
-    op!(r, 0x67EA8, 2, Op::Inc { r: R::C, f: Field::A }); // C=C+1 A
-    i67eaa(r)
+    r.cpu.inc(R::C, Field::A); // C=C+1 A
+    if r.next(0x67EAA, 4) {
+        i67eaa(r)
+    }
 }
 
 fn i67eaa(r: &mut Run) {
-    op!(r, 0x67EAA, 7, Op::Call(0x6DDAB)); // GOSUB #6DDAB
+    r.cpu.pc = 0x67EB1;
+    r.cpu.call(0x6DDAB); // GOSUB #6DDAB
+    r.spend(9);
 }
 
 fn i67eb1(r: &mut Run) {
-    op!(r, 0x67EB1, 3, Op::CondJump(Cond::Carry, 0x67E9E)); // GOC #67E9E
-    i67eb4(r)
+    r.cpu.pc = 0x67EB4;
+    r.cpu.jump_if(Cond::Carry, 0x67E9E); // GOC #67E9E
+    if r.next_pc(0x67EB4, 5) {
+        i67eb4(r)
+    }
 }
 
 fn i67eb4(r: &mut Run) {
-    op!(r, 0x67EB4, 4, Op::Call(0x67E9E)); // GOSUB #67E9E
+    r.cpu.pc = 0x67EB8;
+    r.cpu.call(0x67E9E); // GOSUB #67E9E
+    r.spend(6);
 }
 
 fn i67eb8(r: &mut Run) {
-    op!(r, 0x67EB8, 7, Op::Call(0x6641)); // GOSUB #06641
+    r.cpu.pc = 0x67EBF;
+    r.cpu.call(0x06641); // GOSUB #06641
+    r.spend(9);
 }
 
 fn i67ebf(r: &mut Run) {
-    op!(r, 0x67EBF, 3, Op::Scratch { op: ScratchOp::ToScratch, r: R::A, n: 3, f: Field::W }); // R3=A
-    i67ec2(r)
+    r.cpu.scratch(ScratchOp::ToScratch, R::A, 3, Field::W); // R3=A
+    if r.next(0x67EC2, 5) {
+        i67ec2(r)
+    }
 }
 
 fn i67ec2(r: &mut Run) {
-    op!(r, 0x67EC2, 7, Op::LoadConst { r: R::C, len: 5, val: 0x8090C }); // LC(5) #8090C
-    i67ec9(r)
+    r.cpu.load_const(R::C, 5, 0x8090C); // LC(5) #8090C
+    if r.next(0x67EC9, 9) {
+        i67ec9(r)
+    }
 }
 
 fn i67ec9(r: &mut Run) {
-    op!(r, 0x67EC9, 3, Op::DExR { d: 0, r: R::C, short: false }); // CD0EX
-    i67ecc(r)
+    r.cpu.d_ex_r(0, R::C, false); // CD0EX
+    if r.next(0x67ECC, 5) {
+        i67ecc(r)
+    }
 }
 
 fn i67ecc(r: &mut Run) {
-    op!(r, 0x67ECC, 3, Op::Mem { store: false, d: 0, r: R::A, f: Field::A }); // A=DAT0 A
-    i67ecf(r)
+    r.sync();
+    r.cpu.load(0, R::A, Field::A, r.hw); // A=DAT0 A
+    if r.next_io(0x67ECF, 19) {
+        i67ecf(r)
+    }
 }
 
 fn i67ecf(r: &mut Run) {
-    op!(r, 0x67ECF, 3, Op::Scratch { op: ScratchOp::ToScratch, r: R::A, n: 0, f: Field::W }); // R0=A
-    i67ed2(r)
+    r.cpu.scratch(ScratchOp::ToScratch, R::A, 0, Field::W); // R0=A
+    if r.next(0x67ED2, 5) {
+        i67ed2(r)
+    }
 }
 
 fn i67ed2(r: &mut Run) {
-    op!(r, 0x67ED2, 7, Op::DLoad { d: 0, len: 5, val: 0x808C5 }); // D0=(5) #808C5
-    i67ed9(r)
+    r.cpu.d_load(0, 5, 0x808C5); // D0=(5) #808C5
+    if r.next(0x67ED9, 9) {
+        i67ed9(r)
+    }
 }
 
 fn i67ed9(r: &mut Run) {
-    op!(r, 0x67ED9, 3, Op::Mem { store: false, d: 0, r: R::A, f: Field::A }); // A=DAT0 A
-    i67edc(r)
+    r.sync();
+    r.cpu.load(0, R::A, Field::A, r.hw); // A=DAT0 A
+    if r.next_io(0x67EDC, 19) {
+        i67edc(r)
+    }
 }
 
 fn i67edc(r: &mut Run) {
-    op!(r, 0x67EDC, 3, Op::Scratch { op: ScratchOp::ToScratch, r: R::A, n: 1, f: Field::W }); // R1=A
-    i67edf(r)
+    r.cpu.scratch(ScratchOp::ToScratch, R::A, 1, Field::W); // R1=A
+    if r.next(0x67EDF, 5) {
+        i67edf(r)
+    }
 }
 
 fn i67edf(r: &mut Run) {
-    op!(r, 0x67EDF, 3, Op::DFromR { d: 0, r: R::C, short: false }); // D0=C
-    i67ee2(r)
+    r.cpu.d_from_r(0, R::C, false); // D0=C
+    if r.next(0x67EE2, 5) {
+        i67ee2(r)
+    }
 }
 
 fn i67ee2(r: &mut Run) {
-    op!(r, 0x67EE2, 3, Op::Scratch { op: ScratchOp::FromScratch, r: R::A, n: 3, f: Field::W }); // A=R3
-    i67ee5(r)
+    r.cpu.scratch(ScratchOp::FromScratch, R::A, 3, Field::W); // A=R3
+    if r.next(0x67EE5, 5) {
+        i67ee5(r)
+    }
 }
 
 fn i67ee5(r: &mut Run) {
-    op!(r, 0x67EE5, 3, Op::Scratch { op: ScratchOp::FromScratch, r: R::C, n: 0, f: Field::W }); // C=R0
-    i67ee8(r)
+    r.cpu.scratch(ScratchOp::FromScratch, R::C, 0, Field::W); // C=R0
+    if r.next(0x67EE8, 5) {
+        i67ee8(r)
+    }
 }
 
 fn i67ee8(r: &mut Run) {
-    op!(r, 0x67EE8, 2, Op::Sub { dst: R::C, a: R::C, b: R::A, f: Field::A }); // C=C-A A
-    i67eea(r)
+    r.cpu.sub(R::C, R::C, R::A, Field::A); // C=C-A A
+    if r.next(0x67EEA, 4) {
+        i67eea(r)
+    }
 }
 
 fn i67eea(r: &mut Run) {
-    op!(r, 0x67EEA, 2, Op::Copy { dst: R::A, src: R::C, f: Field::A }); // A=C A
-    i67eec(r)
+    r.cpu.copy(R::A, R::C, Field::A); // A=C A
+    if r.next(0x67EEC, 4) {
+        i67eec(r)
+    }
 }
 
 fn i67eec(r: &mut Run) {
-    op!(r, 0x67EEC, 6, Op::Call(0x676C5)); // GOSUB #676C5
+    r.cpu.pc = 0x67EF2;
+    r.cpu.call(0x676C5); // GOSUB #676C5
+    r.spend(8);
 }
 
 fn i67ef2(r: &mut Run) {
-    op!(r, 0x67EF2, 3, Op::Scratch { op: ScratchOp::FromScratch, r: R::C, n: 1, f: Field::W }); // C=R1
-    i67ef5(r)
+    r.cpu.scratch(ScratchOp::FromScratch, R::C, 1, Field::W); // C=R1
+    if r.next(0x67EF5, 5) {
+        i67ef5(r)
+    }
 }
 
 fn i67ef5(r: &mut Run) {
-    op!(r, 0x67EF5, 2, Op::Add { dst: R::A, src: R::C, f: Field::A }); // A=A+C A
-    i67ef7(r)
+    r.cpu.add(R::A, R::C, Field::A); // A=A+C A
+    if r.next(0x67EF7, 4) {
+        i67ef7(r)
+    }
 }
 
 fn i67ef7(r: &mut Run) {
-    op!(r, 0x67EF7, 6, Op::Call(0x676C5)); // GOSUB #676C5
+    r.cpu.pc = 0x67EFD;
+    r.cpu.call(0x676C5); // GOSUB #676C5
+    r.spend(8);
 }
 
 fn i67efd(r: &mut Run) {
-    op!(r, 0x67EFD, 3, Op::Scratch { op: ScratchOp::ToScratch, r: R::A, n: 0, f: Field::W }); // R0=A
-    i67f00(r)
+    r.cpu.scratch(ScratchOp::ToScratch, R::A, 0, Field::W); // R0=A
+    if r.next(0x67F00, 5) {
+        i67f00(r)
+    }
 }
 
 fn i67f00(r: &mut Run) {
-    op!(r, 0x67F00, 6, Op::Call(0x675BE)); // GOSUB #675BE
+    r.cpu.pc = 0x67F06;
+    r.cpu.call(0x675BE); // GOSUB #675BE
+    r.spend(8);
 }
 
 fn i67f06(r: &mut Run) {
-    op!(r, 0x67F06, 3, Op::DFromR { d: 0, r: R::C, short: false }); // D0=C
-    i67f09(r)
+    r.cpu.d_from_r(0, R::C, false); // D0=C
+    if r.next(0x67F09, 5) {
+        i67f09(r)
+    }
 }
 
 fn i67f09(r: &mut Run) {
-    op!(r, 0x67F09, 2, Op::Rtn(RtnKind::Plain)); // RTN
+    r.cpu.rtn(RtnKind::Plain); // RTN
+    r.spend(9);
 }
 
 fn i67f10(r: &mut Run) {
-    op!(r, 0x67F10, 4, Op::Call(0x67F24)); // GOSUB #67F24
+    r.cpu.pc = 0x67F14;
+    r.cpu.call(0x67F24); // GOSUB #67F24
+    r.spend(6);
 }
 
 fn i67f14(r: &mut Run) {
-    op!(r, 0x67F14, 4, Op::Call(0x67EB8)); // GOSUB #67EB8
+    r.cpu.pc = 0x67F18;
+    r.cpu.call(0x67EB8); // GOSUB #67EB8
+    r.spend(6);
 }
 
 fn i67f18(r: &mut Run) {
-    op!(r, 0x67F18, 3, Op::Scratch { op: ScratchOp::FromScratch, r: R::C, n: 4, f: Field::W }); // C=R4
-    i67f1b(r)
+    r.cpu.scratch(ScratchOp::FromScratch, R::C, 4, Field::W); // C=R4
+    if r.next(0x67F1B, 5) {
+        i67f1b(r)
+    }
 }
 
 fn i67f1b(r: &mut Run) {
-    op!(r, 0x67F1B, 3, Op::Mem { store: true, d: 0, r: R::C, f: Field::A }); // DAT0=C A
-    i67f1e(r)
+    r.sync();
+    r.cpu.store(0, R::C, Field::A, r.hw); // DAT0=C A
+    if r.next_io(0x67F1E, 19) {
+        i67f1e(r)
+    }
 }
 
 fn i67f1e(r: &mut Run) {
-    op!(r, 0x67F1E, 6, Op::Jump(0x685CD)); // GOTO #685CD
+    r.cpu.pc = 0x685CD; // GOTO #685CD
+    r.spend(8);
 }
 
 fn i67f24(r: &mut Run) {
-    op!(r, 0x67F24, 3, Op::Mem { store: false, d: 1, r: R::C, f: Field::A }); // C=DAT1 A
-    i67f27(r)
+    r.sync();
+    r.cpu.load(1, R::C, Field::A, r.hw); // C=DAT1 A
+    if r.next_io(0x67F27, 19) {
+        i67f27(r)
+    }
 }
 
 fn i67f27(r: &mut Run) {
-    op!(r, 0x67F27, 3, Op::Scratch { op: ScratchOp::ToScratch, r: R::C, n: 4, f: Field::W }); // R4=C
-    i67f2a(r)
+    r.cpu.scratch(ScratchOp::ToScratch, R::C, 4, Field::W); // R4=C
+    if r.next(0x67F2A, 5) {
+        i67f2a(r)
+    }
 }
 
 fn i67f2a(r: &mut Run) {
-    op!(r, 0x67F2A, 3, Op::DAdd { d: 1, n: 5 }); // D1=D1+ 5
-    i67f2d(r)
+    r.cpu.d_add(1, 5); // D1=D1+ 5
+    if r.next(0x67F2D, 5) {
+        i67f2d(r)
+    }
 }
 
 fn i67f2d(r: &mut Run) {
-    op!(r, 0x67F2D, 2, Op::Inc { r: R::D, f: Field::A }); // D=D+1 A
-    i67f2f(r)
+    r.cpu.inc(R::D, Field::A); // D=D+1 A
+    if r.next(0x67F2F, 4) {
+        i67f2f(r)
+    }
 }
 
 fn i67f2f(r: &mut Run) {
-    op!(r, 0x67F2F, 2, Op::Rtn(RtnKind::Plain)); // RTN
+    r.cpu.rtn(RtnKind::Plain); // RTN
+    r.spend(9);
 }
 
 fn i67f36(r: &mut Run) {
-    op!(r, 0x67F36, 4, Op::Call(0x67F24)); // GOSUB #67F24
+    r.cpu.pc = 0x67F3A;
+    r.cpu.call(0x67F24); // GOSUB #67F24
+    r.spend(6);
 }
 
 fn i67f3a(r: &mut Run) {
-    op!(r, 0x67F3A, 4, Op::Call(0x67EB8)); // GOSUB #67EB8
+    r.cpu.pc = 0x67F3E;
+    r.cpu.call(0x67EB8); // GOSUB #67EB8
+    r.spend(6);
 }
 
 fn i67f3e(r: &mut Run) {
-    op!(r, 0x67F3E, 3, Op::DAdd { d: 0, n: 0xF }); // D0=D0+ 15
-    i67f41(r)
+    r.cpu.d_add(0, 15); // D0=D0+ 15
+    if r.next(0x67F41, 5) {
+        i67f41(r)
+    }
 }
 
 fn i67f41(r: &mut Run) {
-    op!(r, 0x67F41, 4, Op::Jump(0x67F18)); // GOTO #67F18
+    r.cpu.pc = 0x67F18; // GOTO #67F18
+    r.spend(6);
 }
 
 fn i67f4a(r: &mut Run) {
-    op!(r, 0x67F4A, 4, Op::Call(0x67E7B)); // GOSUB #67E7B
+    r.cpu.pc = 0x67F4E;
+    r.cpu.call(0x67E7B); // GOSUB #67E7B
+    r.spend(6);
 }
 
 fn i67f4e(r: &mut Run) {
-    op!(r, 0x67F4E, 3, Op::DAdd { d: 0, n: 0xF }); // D0=D0+ 15
-    i67f51(r)
+    r.cpu.d_add(0, 15); // D0=D0+ 15
+    if r.next(0x67F51, 5) {
+        i67f51(r)
+    }
 }
 
 fn i67f51(r: &mut Run) {
-    op!(r, 0x67F51, 3, Op::Mem { store: false, d: 0, r: R::A, f: Field::A }); // A=DAT0 A
-    i67f54(r)
+    r.sync();
+    r.cpu.load(0, R::A, Field::A, r.hw); // A=DAT0 A
+    if r.next_io(0x67F54, 19) {
+        i67f54(r)
+    }
 }
 
 fn i67f54(r: &mut Run) {
-    op!(r, 0x67F54, 3, Op::DFromR { d: 0, r: R::A, short: false }); // D0=A
-    i67f57(r)
+    r.cpu.d_from_r(0, R::A, false); // D0=A
+    if r.next(0x67F57, 5) {
+        i67f57(r)
+    }
 }
 
 fn i67f57(r: &mut Run) {
-    op!(r, 0x67F57, 3, Op::Mem { store: false, d: 0, r: R::A, f: Field::A }); // A=DAT0 A
-    i67f5a(r)
+    r.sync();
+    r.cpu.load(0, R::A, Field::A, r.hw); // A=DAT0 A
+    if r.next_io(0x67F5A, 19) {
+        i67f5a(r)
+    }
 }
 
 fn i67f5a(r: &mut Run) {
-    op!(r, 0x67F5A, 7, Op::LoadConst { r: R::C, len: 5, val: 0x2A74 }); // LC(5) #02A74
-    i67f61(r)
+    r.cpu.load_const(R::C, 5, 0x2A74); // LC(5) #02A74
+    if r.next(0x67F61, 9) {
+        i67f61(r)
+    }
 }
 
 fn i67f61(r: &mut Run) {
-    op!(r, 0x67F61, 5, Op::Test { test: Test::Regs(Cmp::Eq, R::C, R::A), f: Field::A, goyes: Some(0x67F6A) }); // ?C=A A / GOYES #67F6A
-    i67f66(r)
+    r.cpu.pc = 0x67F66;
+    r.cpu.test(Test::Regs(Cmp::Eq, R::C, R::A), Field::A, Some(0x67F6A)); // ?C=A A / GOYES #67F6A
+    if r.next_pc(0x67F66, 7) {
+        i67f66(r)
+    }
 }
 
 fn i67f66(r: &mut Run) {
-    op!(r, 0x67F66, 4, Op::Jump(0x67FE7)); // GOTO #67FE7
+    r.cpu.pc = 0x67FE7; // GOTO #67FE7
+    r.spend(6);
 }
 
 fn i67f6a(r: &mut Run) {
-    op!(r, 0x67F6A, 3, Op::DAdd { d: 0, n: 5 }); // D0=D0+ 5
-    i67f6d(r)
+    r.cpu.d_add(0, 5); // D0=D0+ 5
+    if r.next(0x67F6D, 5) {
+        i67f6d(r)
+    }
 }
 
 fn i67f6d(r: &mut Run) {
-    op!(r, 0x67F6D, 3, Op::Mem { store: false, d: 0, r: R::A, f: Field::A }); // A=DAT0 A
-    i67f70(r)
+    r.sync();
+    r.cpu.load(0, R::A, Field::A, r.hw); // A=DAT0 A
+    if r.next_io(0x67F70, 19) {
+        i67f70(r)
+    }
 }
 
 fn i67f70(r: &mut Run) {
-    op!(r, 0x67F70, 7, Op::LoadConst { r: R::C, len: 5, val: 0x312B }); // LC(5) #0312B
-    i67f77(r)
+    r.cpu.load_const(R::C, 5, 0x312B); // LC(5) #0312B
+    if r.next(0x67F77, 9) {
+        i67f77(r)
+    }
 }
 
 fn i67f77(r: &mut Run) {
-    op!(r, 0x67F77, 5, Op::Test { test: Test::Regs(Cmp::Eq, R::C, R::A), f: Field::A, goyes: Some(0x67F66) }); // ?C=A A / GOYES #67F66
-    i67f7c(r)
+    r.cpu.pc = 0x67F7C;
+    r.cpu.test(Test::Regs(Cmp::Eq, R::C, R::A), Field::A, Some(0x67F66)); // ?C=A A / GOYES #67F66
+    if r.next_pc(0x67F7C, 7) {
+        i67f7c(r)
+    }
 }
 
 fn i67f7c(r: &mut Run) {
-    op!(r, 0x67F7C, 3, Op::DExR { d: 0, r: R::A, short: false }); // AD0EX
-    i67f7f(r)
+    r.cpu.d_ex_r(0, R::A, false); // AD0EX
+    if r.next(0x67F7F, 5) {
+        i67f7f(r)
+    }
 }
 
 fn i67f7f(r: &mut Run) {
-    op!(r, 0x67F7F, 3, Op::Scratch { op: ScratchOp::ToScratch, r: R::A, n: 0, f: Field::W }); // R0=A
-    i67f82(r)
+    r.cpu.scratch(ScratchOp::ToScratch, R::A, 0, Field::W); // R0=A
+    if r.next(0x67F82, 5) {
+        i67f82(r)
+    }
 }
 
 fn i67f82(r: &mut Run) {
-    op!(r, 0x67F82, 3, Op::Mem { store: false, d: 0, r: R::A, f: Field::A }); // A=DAT0 A
-    i67f85(r)
+    r.sync();
+    r.cpu.load(0, R::A, Field::A, r.hw); // A=DAT0 A
+    if r.next_io(0x67F85, 19) {
+        i67f85(r)
+    }
 }
 
 fn i67f85(r: &mut Run) {
-    op!(r, 0x67F85, 7, Op::LoadConst { r: R::C, len: 5, val: 0x2911 }); // LC(5) #02911
-    i67f8c(r)
+    r.cpu.load_const(R::C, 5, 0x2911); // LC(5) #02911
+    if r.next(0x67F8C, 9) {
+        i67f8c(r)
+    }
 }
 
 fn i67f8c(r: &mut Run) {
-    op!(r, 0x67F8C, 3, Op::StSet { bit: 3, set: false }); // ST=0 3
-    i67f8f(r)
+    r.cpu.st_set(3, false); // ST=0 3
+    if r.next(0x67F8F, 5) {
+        i67f8f(r)
+    }
 }
 
 fn i67f8f(r: &mut Run) {
-    op!(r, 0x67F8F, 5, Op::Test { test: Test::Regs(Cmp::Ne, R::C, R::A), f: Field::A, goyes: Some(0x67F97) }); // ?C#A A / GOYES #67F97
-    i67f94(r)
+    r.cpu.pc = 0x67F94;
+    r.cpu.test(Test::Regs(Cmp::Ne, R::C, R::A), Field::A, Some(0x67F97)); // ?C#A A / GOYES #67F97
+    if r.next_pc(0x67F94, 7) {
+        i67f94(r)
+    }
 }
 
 fn i67f94(r: &mut Run) {
-    op!(r, 0x67F94, 3, Op::StSet { bit: 3, set: true }); // ST=1 3
-    i67f97(r)
+    r.cpu.st_set(3, true); // ST=1 3
+    if r.next(0x67F97, 5) {
+        i67f97(r)
+    }
 }
 
 fn i67f97(r: &mut Run) {
-    op!(r, 0x67F97, 3, Op::Scratch { op: ScratchOp::FromScratch, r: R::A, n: 0, f: Field::W }); // A=R0
-    i67f9a(r)
+    r.cpu.scratch(ScratchOp::FromScratch, R::A, 0, Field::W); // A=R0
+    if r.next(0x67F9A, 5) {
+        i67f9a(r)
+    }
 }
 
 fn i67f9a(r: &mut Run) {
-    op!(r, 0x67F9A, 3, Op::DFromR { d: 0, r: R::A, short: false }); // D0=A
-    i67f9d(r)
+    r.cpu.d_from_r(0, R::A, false); // D0=A
+    if r.next(0x67F9D, 5) {
+        i67f9d(r)
+    }
 }
 
 fn i67f9d(r: &mut Run) {
-    op!(r, 0x67F9D, 5, Op::StTest { bit: 3, set: true, goyes: Some(0x67FA9) }); // ?ST=1 3 / GOYES #67FA9
-    i67fa2(r)
+    r.cpu.pc = 0x67FA2;
+    r.cpu.st_test(3, true, Some(0x67FA9)); // ?ST=1 3 / GOYES #67FA9
+    if r.next_pc(0x67FA2, 7) {
+        i67fa2(r)
+    }
 }
 
 fn i67fa2(r: &mut Run) {
-    op!(r, 0x67FA2, 7, Op::Call(0x3019)); // GOSUB #03019
+    r.cpu.pc = 0x67FA9;
+    r.cpu.call(0x03019); // GOSUB #03019
+    r.spend(9);
 }
 
 fn i67fa9(r: &mut Run) {
-    op!(r, 0x67FA9, 3, Op::Mem { store: false, d: 0, r: R::A, f: Field::A }); // A=DAT0 A
-    i67fac(r)
+    r.sync();
+    r.cpu.load(0, R::A, Field::A, r.hw); // A=DAT0 A
+    if r.next_io(0x67FAC, 19) {
+        i67fac(r)
+    }
 }
 
 fn i67fac(r: &mut Run) {
-    op!(r, 0x67FAC, 3, Op::DExR { d: 0, r: R::A, short: false }); // AD0EX
-    i67faf(r)
+    r.cpu.d_ex_r(0, R::A, false); // AD0EX
+    if r.next(0x67FAF, 5) {
+        i67faf(r)
+    }
 }
 
 fn i67faf(r: &mut Run) {
-    op!(r, 0x67FAF, 3, Op::DAdd { d: 0, n: 5 }); // D0=D0+ 5
-    i67fb2(r)
+    r.cpu.d_add(0, 5); // D0=D0+ 5
+    if r.next(0x67FB2, 5) {
+        i67fb2(r)
+    }
 }
 
 fn i67fb2(r: &mut Run) {
-    op!(r, 0x67FB2, 3, Op::Mem { store: false, d: 0, r: R::C, f: Field::A }); // C=DAT0 A
-    i67fb5(r)
+    r.sync();
+    r.cpu.load(0, R::C, Field::A, r.hw); // C=DAT0 A
+    if r.next_io(0x67FB5, 19) {
+        i67fb5(r)
+    }
 }
 
 fn i67fb5(r: &mut Run) {
-    op!(r, 0x67FB5, 3, Op::DFromR { d: 0, r: R::A, short: false }); // D0=A
-    i67fb8(r)
+    r.cpu.d_from_r(0, R::A, false); // D0=A
+    if r.next(0x67FB8, 5) {
+        i67fb8(r)
+    }
 }
 
 fn i67fb8(r: &mut Run) {
-    op!(r, 0x67FB8, 2, Op::Copy { dst: R::A, src: R::C, f: Field::A }); // A=C A
-    i67fba(r)
+    r.cpu.copy(R::A, R::C, Field::A); // A=C A
+    if r.next(0x67FBA, 4) {
+        i67fba(r)
+    }
 }
 
 fn i67fba(r: &mut Run) {
-    op!(r, 0x67FBA, 7, Op::LoadConst { r: R::C, len: 5, val: 0x2C }); // LC(5) #0002C
-    i67fc1(r)
+    r.cpu.load_const(R::C, 5, 0x2C); // LC(5) #0002C
+    if r.next(0x67FC1, 9) {
+        i67fc1(r)
+    }
 }
 
 fn i67fc1(r: &mut Run) {
-    op!(r, 0x67FC1, 5, Op::Test { test: Test::Regs(Cmp::Le, R::C, R::A), f: Field::A, goyes: Some(0x68001) }); // ?C<=A A / GOYES #68001
-    i67fc6(r)
+    r.cpu.pc = 0x67FC6;
+    r.cpu.test(Test::Regs(Cmp::Le, R::C, R::A), Field::A, Some(0x68001)); // ?C<=A A / GOYES #68001
+    if r.next_pc(0x67FC6, 7) {
+        i67fc6(r)
+    }
 }
 
 fn i67fc6(r: &mut Run) {
-    op!(r, 0x67FC6, 3, Op::DExR { d: 1, r: R::C, short: false }); // CD1EX
-    i67fc9(r)
+    r.cpu.d_ex_r(1, R::C, false); // CD1EX
+    if r.next(0x67FC9, 5) {
+        i67fc9(r)
+    }
 }
 
 fn i67fc9(r: &mut Run) {
-    op!(r, 0x67FC9, 3, Op::Scratch { op: ScratchOp::ToScratch, r: R::C, n: 1, f: Field::W }); // R1=C
-    i67fcc(r)
+    r.cpu.scratch(ScratchOp::ToScratch, R::C, 1, Field::W); // R1=C
+    if r.next(0x67FCC, 5) {
+        i67fcc(r)
+    }
 }
 
 fn i67fcc(r: &mut Run) {
-    op!(r, 0x67FCC, 10, Op::LoadConst { r: R::A, len: 5, val: 0x67FED }); // LA(5) #67FED
-    i67fd6(r)
+    r.cpu.load_const(R::A, 5, 0x67FED); // LA(5) #67FED
+    if r.next(0x67FD6, 12) {
+        i67fd6(r)
+    }
 }
 
 fn i67fd6(r: &mut Run) {
-    op!(r, 0x67FD6, 3, Op::DExR { d: 0, r: R::A, short: false }); // AD0EX
-    i67fd9(r)
+    r.cpu.d_ex_r(0, R::A, false); // AD0EX
+    if r.next(0x67FD9, 5) {
+        i67fd9(r)
+    }
 }
 
 fn i67fd9(r: &mut Run) {
-    op!(r, 0x67FD9, 7, Op::DLoad { d: 1, len: 5, val: 0x3DEF }); // D1=(5) #03DEF
-    i67fe0(r)
+    r.cpu.d_load(1, 5, 0x3DEF); // D1=(5) #03DEF
+    if r.next(0x67FE0, 9) {
+        i67fe0(r)
+    }
 }
 
 fn i67fe0(r: &mut Run) {
-    op!(r, 0x67FE0, 3, Op::DExR { d: 1, r: R::A, short: false }); // AD1EX
-    i67fe3(r)
+    r.cpu.d_ex_r(1, R::A, false); // AD1EX
+    if r.next(0x67FE3, 5) {
+        i67fe3(r)
+    }
 }
 
 fn i67fe3(r: &mut Run) {
-    op!(r, 0x67FE3, 4, Op::PcIndirect(R::A)); // PC=(A)
+    r.sync();
+    r.cpu.pc_indirect(R::A, r.hw); // PC=(A)
+    r.spend(23);
 }
 
 fn i67fe7(r: &mut Run) {
-    op!(r, 0x67FE7, 6, Op::Jump(0x685CD)); // GOTO #685CD
+    r.cpu.pc = 0x685CD; // GOTO #685CD
+    r.spend(8);
 }
 
 fn i67ff2(r: &mut Run) {
-    op!(r, 0x67FF2, 4, Op::Call(0x687F5)); // GOSUB #687F5
+    r.cpu.pc = 0x67FF6;
+    r.cpu.call(0x687F5); // GOSUB #687F5
+    r.spend(6);
 }
 
 fn i67ff6(r: &mut Run) {
-    op!(r, 0x67FF6, 4, Op::Jump(0x67908)); // GOTO #67908
+    r.cpu.pc = 0x67908; // GOTO #67908
+    r.spend(6);
 }
 
 fn i68001(r: &mut Run) {
-    op!(r, 0x68001, 3, Op::Scratch { op: ScratchOp::FromScratch, r: R::C, n: 2, f: Field::W }); // C=R2
-    i68004(r)
+    r.cpu.scratch(ScratchOp::FromScratch, R::C, 2, Field::W); // C=R2
+    if r.next(0x68004, 5) {
+        i68004(r)
+    }
 }
 
 fn i68004(r: &mut Run) {
-    op!(r, 0x68004, 3, Op::DFromR { d: 0, r: R::C, short: false }); // D0=C
-    i68007(r)
+    r.cpu.d_from_r(0, R::C, false); // D0=C
+    if r.next(0x68007, 5) {
+        i68007(r)
+    }
 }
 
 fn i68007(r: &mut Run) {
-    op!(r, 0x68007, 7, Op::LoadConst { r: R::C, len: 5, val: 0x106 }); // LC(5) #00106
-    i6800e(r)
+    r.cpu.load_const(R::C, 5, 0x106); // LC(5) #00106
+    if r.next(0x6800E, 9) {
+        i6800e(r)
+    }
 }
 
 fn i6800e(r: &mut Run) {
-    op!(r, 0x6800E, 2, Op::Copy { dst: R::A, src: R::C, f: Field::A }); // A=C A
-    i68010(r)
+    r.cpu.copy(R::A, R::C, Field::A); // A=C A
+    if r.next(0x68010, 4) {
+        i68010(r)
+    }
 }
 
 fn i68010(r: &mut Run) {
-    op!(r, 0x68010, 7, Op::Jump(0x5023)); // GOTO #05023
+    r.cpu.pc = 0x05023; // GOTO #05023
+    r.spend(9);
 }
 
 fn i6801c(r: &mut Run) {
-    op!(r, 0x6801C, 3, Op::DAdd { d: 1, n: 0xA }); // D1=D1+ 10
-    i6801f(r)
+    r.cpu.d_add(1, 10); // D1=D1+ 10
+    if r.next(0x6801F, 5) {
+        i6801f(r)
+    }
 }
 
 fn i6801f(r: &mut Run) {
-    op!(r, 0x6801F, 6, Op::Call(0x67A4A)); // GOSUB #67A4A
+    r.cpu.pc = 0x68025;
+    r.cpu.call(0x67A4A); // GOSUB #67A4A
+    r.spend(8);
 }
 
 fn i68025(r: &mut Run) {
-    op!(r, 0x68025, 3, Op::DSub { d: 1, n: 0xF }); // D1=D1- 15
-    i68028(r)
+    r.cpu.d_sub(1, 15); // D1=D1- 15
+    if r.next(0x68028, 5) {
+        i68028(r)
+    }
 }
 
 fn i68028(r: &mut Run) {
-    op!(r, 0x68028, 3, Op::DAdd { d: 0, n: 2 }); // D0=D0+ 2
-    i6802b(r)
+    r.cpu.d_add(0, 2); // D0=D0+ 2
+    if r.next(0x6802B, 5) {
+        i6802b(r)
+    }
 }
 
 fn i6802b(r: &mut Run) {
-    op!(r, 0x6802B, 2, Op::Zero { r: R::C, f: Field::A }); // C=0 A
-    i6802d(r)
+    r.cpu.zero(R::C, Field::A); // C=0 A
+    if r.next(0x6802D, 4) {
+        i6802d(r)
+    }
 }
 
 fn i6802d(r: &mut Run) {
-    op!(r, 0x6802D, 4, Op::Mem { store: false, d: 0, r: R::C, f: Field::X }); // C=DAT0 X
-    i68031(r)
+    r.sync();
+    r.cpu.load(0, R::C, Field::X, r.hw); // C=DAT0 X
+    if r.next_io(0x68031, 17) {
+        i68031(r)
+    }
 }
 
 fn i68031(r: &mut Run) {
-    op!(r, 0x68031, 3, Op::StSet { bit: 1, set: false }); // ST=0 1
-    i68034(r)
+    r.cpu.st_set(1, false); // ST=0 1
+    if r.next(0x68034, 5) {
+        i68034(r)
+    }
 }
 
 fn i68034(r: &mut Run) {
-    op!(r, 0x68034, 5, Op::Test { test: Test::NonZero(R::C), f: Field::A, goyes: Some(0x6803C) }); // ?C#0 A / GOYES #6803C
-    i68039(r)
+    r.cpu.pc = 0x68039;
+    r.cpu.test(Test::NonZero(R::C), Field::A, Some(0x6803C)); // ?C#0 A / GOYES #6803C
+    if r.next_pc(0x68039, 7) {
+        i68039(r)
+    }
 }
 
 fn i68039(r: &mut Run) {
-    op!(r, 0x68039, 3, Op::StSet { bit: 1, set: true }); // ST=1 1
-    i6803c(r)
+    r.cpu.st_set(1, true); // ST=1 1
+    if r.next(0x6803C, 5) {
+        i6803c(r)
+    }
 }
 
 fn i6803c(r: &mut Run) {
-    op!(r, 0x6803C, 2, Op::PushC); // RSTK=C
-    i6803e(r)
+    r.cpu.push_c(); // RSTK=C
+    if r.next(0x6803E, 4) {
+        i6803e(r)
+    }
 }
 
 fn i6803e(r: &mut Run) {
-    op!(r, 0x6803E, 7, Op::Call(0x6641)); // GOSUB #06641
+    r.cpu.pc = 0x68045;
+    r.cpu.call(0x06641); // GOSUB #06641
+    r.spend(9);
 }
 
 fn i68045(r: &mut Run) {
-    op!(r, 0x68045, 2, Op::PopC); // C=RSTK
-    i68047(r)
+    r.cpu.pop_c(); // C=RSTK
+    if r.next(0x68047, 4) {
+        i68047(r)
+    }
 }
 
 fn i68047(r: &mut Run) {
-    op!(r, 0x68047, 2, Op::Exch { a: R::C, b: R::A, f: Field::A }); // CAEX A
-    i68049(r)
+    r.cpu.exch(R::C, R::A, Field::A); // CAEX A
+    if r.next(0x68049, 4) {
+        i68049(r)
+    }
 }
 
 fn i68049(r: &mut Run) {
-    op!(r, 0x68049, 3, Op::Scratch { op: ScratchOp::ToScratch, r: R::C, n: 1, f: Field::W }); // R1=C
-    i6804c(r)
+    r.cpu.scratch(ScratchOp::ToScratch, R::C, 1, Field::W); // R1=C
+    if r.next(0x6804C, 5) {
+        i6804c(r)
+    }
 }
 
 fn i6804c(r: &mut Run) {
-    op!(r, 0x6804C, 6, Op::Scratch { op: ScratchOp::ToScratch, r: R::A, n: 4, f: Field::A }); // R4=A.F A
-    i68052(r)
+    r.cpu.scratch(ScratchOp::ToScratch, R::A, 4, Field::A); // R4=A.F A
+    if r.next(0x68052, 8) {
+        i68052(r)
+    }
 }
 
 fn i68052(r: &mut Run) {
-    op!(r, 0x68052, 4, Op::Call(0x680FB)); // GOSUB #680FB
+    r.cpu.pc = 0x68056;
+    r.cpu.call(0x680FB); // GOSUB #680FB
+    r.spend(6);
 }
 
 fn i68056(r: &mut Run) {
-    op!(r, 0x68056, 6, Op::Scratch { op: ScratchOp::FromScratch, r: R::A, n: 4, f: Field::A }); // A=R4.F A
-    i6805c(r)
+    r.cpu.scratch(ScratchOp::FromScratch, R::A, 4, Field::A); // A=R4.F A
+    if r.next(0x6805C, 8) {
+        i6805c(r)
+    }
 }
 
 fn i6805c(r: &mut Run) {
-    op!(r, 0x6805C, 3, Op::Scratch { op: ScratchOp::FromScratch, r: R::C, n: 1, f: Field::W }); // C=R1
-    i6805f(r)
+    r.cpu.scratch(ScratchOp::FromScratch, R::C, 1, Field::W); // C=R1
+    if r.next(0x6805F, 5) {
+        i6805f(r)
+    }
 }
 
 fn i6805f(r: &mut Run) {
-    op!(r, 0x6805F, 3, Op::StSet { bit: 2, set: false }); // ST=0 2
-    i68062(r)
+    r.cpu.st_set(2, false); // ST=0 2
+    if r.next(0x68062, 5) {
+        i68062(r)
+    }
 }
 
 fn i68062(r: &mut Run) {
-    op!(r, 0x68062, 5, Op::Test { test: Test::Regs(Cmp::Eq, R::C, R::A), f: Field::A, goyes: Some(0x6806E) }); // ?C=A A / GOYES #6806E
-    i68067(r)
+    r.cpu.pc = 0x68067;
+    r.cpu.test(Test::Regs(Cmp::Eq, R::C, R::A), Field::A, Some(0x6806E)); // ?C=A A / GOYES #6806E
+    if r.next_pc(0x68067, 7) {
+        i68067(r)
+    }
 }
 
 fn i68067(r: &mut Run) {
-    op!(r, 0x68067, 4, Op::Mem { store: true, d: 0, r: R::C, f: Field::X }); // DAT0=C X
-    i6806b(r)
+    r.sync();
+    r.cpu.store(0, R::C, Field::X, r.hw); // DAT0=C X
+    if r.next_io(0x6806B, 17) {
+        i6806b(r)
+    }
 }
 
 fn i6806b(r: &mut Run) {
-    op!(r, 0x6806B, 3, Op::StSet { bit: 2, set: true }); // ST=1 2
-    i6806e(r)
+    r.cpu.st_set(2, true); // ST=1 2
+    if r.next(0x6806E, 5) {
+        i6806e(r)
+    }
 }
 
 fn i6806e(r: &mut Run) {
-    op!(r, 0x6806E, 3, Op::DAdd { d: 0, n: 3 }); // D0=D0+ 3
-    i68071(r)
+    r.cpu.d_add(0, 3); // D0=D0+ 3
+    if r.next(0x68071, 5) {
+        i68071(r)
+    }
 }
 
 fn i68071(r: &mut Run) {
-    op!(r, 0x68071, 3, Op::DAdd { d: 1, n: 5 }); // D1=D1+ 5
-    i68074(r)
+    r.cpu.d_add(1, 5); // D1=D1+ 5
+    if r.next(0x68074, 5) {
+        i68074(r)
+    }
 }
 
 fn i68074(r: &mut Run) {
-    op!(r, 0x68074, 2, Op::Zero { r: R::C, f: Field::A }); // C=0 A
-    i68076(r)
+    r.cpu.zero(R::C, Field::A); // C=0 A
+    if r.next(0x68076, 4) {
+        i68076(r)
+    }
 }
 
 fn i68076(r: &mut Run) {
-    op!(r, 0x68076, 4, Op::Mem { store: false, d: 0, r: R::C, f: Field::X }); // C=DAT0 X
-    i6807a(r)
+    r.sync();
+    r.cpu.load(0, R::C, Field::X, r.hw); // C=DAT0 X
+    if r.next_io(0x6807A, 17) {
+        i6807a(r)
+    }
 }
 
 fn i6807a(r: &mut Run) {
-    op!(r, 0x6807A, 5, Op::StTest { bit: 1, set: false, goyes: Some(0x68087) }); // ?ST=0 1 / GOYES #68087
-    i6807f(r)
+    r.cpu.pc = 0x6807F;
+    r.cpu.st_test(1, false, Some(0x68087)); // ?ST=0 1 / GOYES #68087
+    if r.next_pc(0x6807F, 7) {
+        i6807f(r)
+    }
 }
 
 fn i6807f(r: &mut Run) {
-    op!(r, 0x6807F, 5, Op::Test { test: Test::Zero(R::C), f: Field::A, goyes: Some(0x68087) }); // ?C=0 A / GOYES #68087
-    i68084(r)
+    r.cpu.pc = 0x68084;
+    r.cpu.test(Test::Zero(R::C), Field::A, Some(0x68087)); // ?C=0 A / GOYES #68087
+    if r.next_pc(0x68084, 7) {
+        i68084(r)
+    }
 }
 
 fn i68084(r: &mut Run) {
-    op!(r, 0x68084, 3, Op::StSet { bit: 1, set: false }); // ST=0 1
-    i68087(r)
+    r.cpu.st_set(1, false); // ST=0 1
+    if r.next(0x68087, 5) {
+        i68087(r)
+    }
 }
 
 fn i68087(r: &mut Run) {
-    op!(r, 0x68087, 2, Op::PushC); // RSTK=C
-    i68089(r)
+    r.cpu.push_c(); // RSTK=C
+    if r.next(0x68089, 4) {
+        i68089(r)
+    }
 }
 
 fn i68089(r: &mut Run) {
-    op!(r, 0x68089, 7, Op::Call(0x6641)); // GOSUB #06641
+    r.cpu.pc = 0x68090;
+    r.cpu.call(0x06641); // GOSUB #06641
+    r.spend(9);
 }
 
 fn i68090(r: &mut Run) {
-    op!(r, 0x68090, 2, Op::PopC); // C=RSTK
-    i68092(r)
+    r.cpu.pop_c(); // C=RSTK
+    if r.next(0x68092, 4) {
+        i68092(r)
+    }
 }
 
 fn i68092(r: &mut Run) {
-    op!(r, 0x68092, 2, Op::Exch { a: R::C, b: R::A, f: Field::A }); // CAEX A
-    i68094(r)
+    r.cpu.exch(R::C, R::A, Field::A); // CAEX A
+    if r.next(0x68094, 4) {
+        i68094(r)
+    }
 }
 
 fn i68094(r: &mut Run) {
-    op!(r, 0x68094, 3, Op::Scratch { op: ScratchOp::ToScratch, r: R::C, n: 1, f: Field::W }); // R1=C
-    i68097(r)
+    r.cpu.scratch(ScratchOp::ToScratch, R::C, 1, Field::W); // R1=C
+    if r.next(0x68097, 5) {
+        i68097(r)
+    }
 }
 
 fn i68097(r: &mut Run) {
-    op!(r, 0x68097, 6, Op::Scratch { op: ScratchOp::ToScratch, r: R::A, n: 4, f: Field::A }); // R4=A.F A
-    i6809d(r)
+    r.cpu.scratch(ScratchOp::ToScratch, R::A, 4, Field::A); // R4=A.F A
+    if r.next(0x6809D, 8) {
+        i6809d(r)
+    }
 }
 
 fn i6809d(r: &mut Run) {
-    op!(r, 0x6809D, 4, Op::Call(0x680FB)); // GOSUB #680FB
+    r.cpu.pc = 0x680A1;
+    r.cpu.call(0x680FB); // GOSUB #680FB
+    r.spend(6);
 }
 
 fn i680a1(r: &mut Run) {
-    op!(r, 0x680A1, 6, Op::Scratch { op: ScratchOp::FromScratch, r: R::A, n: 4, f: Field::A }); // A=R4.F A
-    i680a7(r)
+    r.cpu.scratch(ScratchOp::FromScratch, R::A, 4, Field::A); // A=R4.F A
+    if r.next(0x680A7, 8) {
+        i680a7(r)
+    }
 }
 
 fn i680a7(r: &mut Run) {
-    op!(r, 0x680A7, 3, Op::Scratch { op: ScratchOp::FromScratch, r: R::C, n: 1, f: Field::W }); // C=R1
-    i680aa(r)
+    r.cpu.scratch(ScratchOp::FromScratch, R::C, 1, Field::W); // C=R1
+    if r.next(0x680AA, 5) {
+        i680aa(r)
+    }
 }
 
 fn i680aa(r: &mut Run) {
-    op!(r, 0x680AA, 5, Op::Test { test: Test::Regs(Cmp::Ne, R::C, R::A), f: Field::A, goyes: Some(0x680C9) }); // ?C#A A / GOYES #680C9
-    i680af(r)
+    r.cpu.pc = 0x680AF;
+    r.cpu.test(Test::Regs(Cmp::Ne, R::C, R::A), Field::A, Some(0x680C9)); // ?C#A A / GOYES #680C9
+    if r.next_pc(0x680AF, 7) {
+        i680af(r)
+    }
 }
 
 fn i680af(r: &mut Run) {
-    op!(r, 0x680AF, 5, Op::StTest { bit: 2, set: true, goyes: Some(0x680CD) }); // ?ST=1 2 / GOYES #680CD
-    i680b4(r)
+    r.cpu.pc = 0x680B4;
+    r.cpu.st_test(2, true, Some(0x680CD)); // ?ST=1 2 / GOYES #680CD
+    if r.next_pc(0x680B4, 7) {
+        i680b4(r)
+    }
 }
 
 fn i680b4(r: &mut Run) {
-    op!(r, 0x680B4, 3, Op::DAdd { d: 1, n: 0xA }); // D1=D1+ 10
-    i680b7(r)
+    r.cpu.d_add(1, 10); // D1=D1+ 10
+    if r.next(0x680B7, 5) {
+        i680b7(r)
+    }
 }
 
 fn i680b7(r: &mut Run) {
-    op!(r, 0x680B7, 2, Op::Inc { r: R::D, f: Field::A }); // D=D+1 A
-    i680b9(r)
+    r.cpu.inc(R::D, Field::A); // D=D+1 A
+    if r.next(0x680B9, 4) {
+        i680b9(r)
+    }
 }
 
 fn i680b9(r: &mut Run) {
-    op!(r, 0x680B9, 2, Op::Inc { r: R::D, f: Field::A }); // D=D+1 A
-    i680bb(r)
+    r.cpu.inc(R::D, Field::A); // D=D+1 A
+    if r.next(0x680BB, 4) {
+        i680bb(r)
+    }
 }
 
 fn i680bb(r: &mut Run) {
-    op!(r, 0x680BB, 10, Op::LoadConst { r: R::A, len: 5, val: 0x312B }); // LA(5) #0312B
-    i680c5(r)
+    r.cpu.load_const(R::A, 5, 0x312B); // LA(5) #0312B
+    if r.next(0x680C5, 12) {
+        i680c5(r)
+    }
 }
 
 fn i680c5(r: &mut Run) {
-    op!(r, 0x680C5, 4, Op::PcIndirect(R::A)); // PC=(A)
+    r.sync();
+    r.cpu.pc_indirect(R::A, r.hw); // PC=(A)
+    r.spend(23);
 }
 
 fn i680c9(r: &mut Run) {
-    op!(r, 0x680C9, 4, Op::Mem { store: true, d: 0, r: R::C, f: Field::X }); // DAT0=C X
-    i680cd(r)
+    r.sync();
+    r.cpu.store(0, R::C, Field::X, r.hw); // DAT0=C X
+    if r.next_io(0x680CD, 17) {
+        i680cd(r)
+    }
 }
 
 fn i680cd(r: &mut Run) {
-    op!(r, 0x680CD, 3, Op::DSub { d: 0, n: 4 }); // D0=D0- 4
-    i680d0(r)
+    r.cpu.d_sub(0, 4); // D0=D0- 4
+    if r.next(0x680D0, 5) {
+        i680d0(r)
+    }
 }
 
 fn i680d0(r: &mut Run) {
-    op!(r, 0x680D0, 4, Op::Mem { store: false, d: 0, r: R::A, f: Field::S }); // A=DAT0 S
-    i680d4(r)
+    r.sync();
+    r.cpu.load(0, R::A, Field::S, r.hw); // A=DAT0 S
+    if r.next_io(0x680D4, 15) {
+        i680d4(r)
+    }
 }
 
 fn i680d4(r: &mut Run) {
-    op!(r, 0x680D4, 3, Op::Add { dst: R::A, src: R::A, f: Field::S }); // A=A+A S
-    i680d7(r)
+    r.cpu.add(R::A, R::A, Field::S); // A=A+A S
+    if r.next(0x680D7, 5) {
+        i680d7(r)
+    }
 }
 
 fn i680d7(r: &mut Run) {
-    op!(r, 0x680D7, 3, Op::CondJump(Cond::Carry, 0x680EE)); // GOC #680EE
-    i680da(r)
+    r.cpu.pc = 0x680DA;
+    r.cpu.jump_if(Cond::Carry, 0x680EE); // GOC #680EE
+    if r.next_pc(0x680DA, 5) {
+        i680da(r)
+    }
 }
 
 fn i680da(r: &mut Run) {
-    op!(r, 0x680DA, 3, Op::DSub { d: 0, n: 1 }); // D0=D0- 1
-    i680dd(r)
+    r.cpu.d_sub(0, 1); // D0=D0- 1
+    if r.next(0x680DD, 5) {
+        i680dd(r)
+    }
 }
 
 fn i680dd(r: &mut Run) {
-    op!(r, 0x680DD, 4, Op::Mem { store: false, d: 0, r: R::A, f: Field::S }); // A=DAT0 S
-    i680e1(r)
+    r.sync();
+    r.cpu.load(0, R::A, Field::S, r.hw); // A=DAT0 S
+    if r.next_io(0x680E1, 15) {
+        i680e1(r)
+    }
 }
 
 fn i680e1(r: &mut Run) {
-    op!(r, 0x680E1, 5, Op::Test { test: Test::Zero(R::A), f: Field::S, goyes: Some(0x680E9) }); // ?A=0 S / GOYES #680E9
-    i680e6(r)
+    r.cpu.pc = 0x680E6;
+    r.cpu.test(Test::Zero(R::A), Field::S, Some(0x680E9)); // ?A=0 S / GOYES #680E9
+    if r.next_pc(0x680E6, 7) {
+        i680e6(r)
+    }
 }
 
 fn i680e6(r: &mut Run) {
-    op!(r, 0x680E6, 3, Op::CondJump(Cond::NoCarry, 0x680B4)); // GONC #680B4
-    i680e9(r)
+    r.cpu.pc = 0x680E9;
+    r.cpu.jump_if(Cond::NoCarry, 0x680B4); // GONC #680B4
+    if r.next_pc(0x680E9, 5) {
+        i680e9(r)
+    }
 }
 
 fn i680e9(r: &mut Run) {
-    op!(r, 0x680E9, 5, Op::StTest { bit: 1, set: true, goyes: Some(0x680B4) }); // ?ST=1 1 / GOYES #680B4
-    i680ee(r)
+    r.cpu.pc = 0x680EE;
+    r.cpu.st_test(1, true, Some(0x680B4)); // ?ST=1 1 / GOYES #680B4
+    if r.next_pc(0x680EE, 7) {
+        i680ee(r)
+    }
 }
 
 fn i680ee(r: &mut Run) {
-    op!(r, 0x680EE, 4, Op::Call(0x67E9E)); // GOSUB #67E9E
+    r.cpu.pc = 0x680F2;
+    r.cpu.call(0x67E9E); // GOSUB #67E9E
+    r.spend(6);
 }
 
 fn i680f2(r: &mut Run) {
-    op!(r, 0x680F2, 3, Op::DSub { d: 1, n: 5 }); // D1=D1- 5
-    i680f5(r)
+    r.cpu.d_sub(1, 5); // D1=D1- 5
+    if r.next(0x680F5, 5) {
+        i680f5(r)
+    }
 }
 
 fn i680f5(r: &mut Run) {
-    op!(r, 0x680F5, 6, Op::Jump(0x685CD)); // GOTO #685CD
+    r.cpu.pc = 0x685CD; // GOTO #685CD
+    r.spend(8);
 }
 
 fn i680fb(r: &mut Run) {
-    op!(r, 0x680FB, 3, Op::Scratch { op: ScratchOp::ToScratch, r: R::A, n: 3, f: Field::W }); // R3=A
-    i680fe(r)
+    r.cpu.scratch(ScratchOp::ToScratch, R::A, 3, Field::W); // R3=A
+    if r.next(0x680FE, 5) {
+        i680fe(r)
+    }
 }
 
 fn i680fe(r: &mut Run) {
-    op!(r, 0x680FE, 7, Op::LoadConst { r: R::C, len: 5, val: 0x80757 }); // LC(5) #80757
-    i68105(r)
+    r.cpu.load_const(R::C, 5, 0x80757); // LC(5) #80757
+    if r.next(0x68105, 9) {
+        i68105(r)
+    }
 }
 
 fn i68105(r: &mut Run) {
-    op!(r, 0x68105, 3, Op::DExR { d: 0, r: R::C, short: false }); // CD0EX
-    i68108(r)
+    r.cpu.d_ex_r(0, R::C, false); // CD0EX
+    if r.next(0x68108, 5) {
+        i68108(r)
+    }
 }
 
 fn i68108(r: &mut Run) {
-    op!(r, 0x68108, 3, Op::Mem { store: false, d: 0, r: R::A, f: Field::A }); // A=DAT0 A
-    i6810b(r)
+    r.sync();
+    r.cpu.load(0, R::A, Field::A, r.hw); // A=DAT0 A
+    if r.next_io(0x6810B, 19) {
+        i6810b(r)
+    }
 }
 
 fn i6810b(r: &mut Run) {
-    op!(r, 0x6810B, 2, Op::Sub { dst: R::C, a: R::C, b: R::A, f: Field::A }); // C=C-A A
-    i6810d(r)
+    r.cpu.sub(R::C, R::C, R::A, Field::A); // C=C-A A
+    if r.next(0x6810D, 4) {
+        i6810d(r)
+    }
 }
 
 fn i6810d(r: &mut Run) {
-    op!(r, 0x6810D, 3, Op::Scratch { op: ScratchOp::Exchange, r: R::C, n: 3, f: Field::W }); // CR3EX
-    i68110(r)
+    r.cpu.scratch(ScratchOp::Exchange, R::C, 3, Field::W); // CR3EX
+    if r.next(0x68110, 5) {
+        i68110(r)
+    }
 }
 
 fn i68110(r: &mut Run) {
-    op!(r, 0x68110, 2, Op::Copy { dst: R::A, src: R::C, f: Field::A }); // A=C A
-    i68112(r)
+    r.cpu.copy(R::A, R::C, Field::A); // A=C A
+    if r.next(0x68112, 4) {
+        i68112(r)
+    }
 }
 
 fn i68112(r: &mut Run) {
-    op!(r, 0x68112, 6, Op::Call(0x67918)); // GOSUB #67918
+    r.cpu.pc = 0x68118;
+    r.cpu.call(0x67918); // GOSUB #67918
+    r.spend(8);
 }
 
 fn i68118(r: &mut Run) {
-    op!(r, 0x68118, 7, Op::DLoad { d: 0, len: 5, val: 0x80757 }); // D0=(5) #80757
-    i6811f(r)
+    r.cpu.d_load(0, 5, 0x80757); // D0=(5) #80757
+    if r.next(0x6811F, 9) {
+        i6811f(r)
+    }
 }
 
 fn i6811f(r: &mut Run) {
-    op!(r, 0x6811F, 3, Op::Mem { store: false, d: 0, r: R::A, f: Field::A }); // A=DAT0 A
-    i68122(r)
+    r.sync();
+    r.cpu.load(0, R::A, Field::A, r.hw); // A=DAT0 A
+    if r.next_io(0x68122, 19) {
+        i68122(r)
+    }
 }
 
 fn i68122(r: &mut Run) {
-    op!(r, 0x68122, 3, Op::Scratch { op: ScratchOp::FromScratch, r: R::C, n: 3, f: Field::W }); // C=R3
-    i68125(r)
+    r.cpu.scratch(ScratchOp::FromScratch, R::C, 3, Field::W); // C=R3
+    if r.next(0x68125, 5) {
+        i68125(r)
+    }
 }
 
 fn i68125(r: &mut Run) {
-    op!(r, 0x68125, 2, Op::Add { dst: R::A, src: R::C, f: Field::A }); // A=A+C A
-    i68127(r)
+    r.cpu.add(R::A, R::C, Field::A); // A=A+C A
+    if r.next(0x68127, 4) {
+        i68127(r)
+    }
 }
 
 fn i68127(r: &mut Run) {
-    op!(r, 0x68127, 3, Op::DFromR { d: 0, r: R::A, short: false }); // D0=A
-    i6812a(r)
+    r.cpu.d_from_r(0, R::A, false); // D0=A
+    if r.next(0x6812A, 5) {
+        i6812a(r)
+    }
 }
 
 fn i6812a(r: &mut Run) {
-    op!(r, 0x6812A, 2, Op::Rtn(RtnKind::Plain)); // RTN
+    r.cpu.rtn(RtnKind::Plain); // RTN
+    r.spend(9);
 }
 
 fn i68131(r: &mut Run) {
-    op!(r, 0x68131, 6, Op::Call(0x67A4A)); // GOSUB #67A4A
+    r.cpu.pc = 0x68137;
+    r.cpu.call(0x67A4A); // GOSUB #67A4A
+    r.spend(8);
 }
 
 fn i68137(r: &mut Run) {
-    op!(r, 0x68137, 3, Op::DAdd { d: 0, n: 5 }); // D0=D0+ 5
-    i6813a(r)
+    r.cpu.d_add(0, 5); // D0=D0+ 5
+    if r.next(0x6813A, 5) {
+        i6813a(r)
+    }
 }
 
 fn i6813a(r: &mut Run) {
-    op!(r, 0x6813A, 2, Op::Zero { r: R::A, f: Field::A }); // A=0 A
-    i6813c(r)
+    r.cpu.zero(R::A, Field::A); // A=0 A
+    if r.next(0x6813C, 4) {
+        i6813c(r)
+    }
 }
 
 fn i6813c(r: &mut Run) {
-    op!(r, 0x6813C, 4, Op::Mem { store: false, d: 0, r: R::A, f: Field::X }); // A=DAT0 X
-    i68140(r)
+    r.sync();
+    r.cpu.load(0, R::A, Field::X, r.hw); // A=DAT0 X
+    if r.next_io(0x68140, 17) {
+        i68140(r)
+    }
 }
 
 fn i68140(r: &mut Run) {
-    op!(r, 0x68140, 4, Op::Call(0x680FB)); // GOSUB #680FB
+    r.cpu.pc = 0x68144;
+    r.cpu.call(0x680FB); // GOSUB #680FB
+    r.spend(6);
 }
 
 fn i68144(r: &mut Run) {
-    op!(r, 0x68144, 3, Op::DExR { d: 0, r: R::A, short: false }); // AD0EX
-    i68147(r)
+    r.cpu.d_ex_r(0, R::A, false); // AD0EX
+    if r.next(0x68147, 5) {
+        i68147(r)
+    }
 }
 
 fn i68147(r: &mut Run) {
-    op!(r, 0x68147, 7, Op::LoadConst { r: R::C, len: 5, val: 0x1F }); // LC(5) #0001F
-    i6814e(r)
+    r.cpu.load_const(R::C, 5, 0x1F); // LC(5) #0001F
+    if r.next(0x6814E, 9) {
+        i6814e(r)
+    }
 }
 
 fn i6814e(r: &mut Run) {
-    op!(r, 0x6814E, 2, Op::Add { dst: R::A, src: R::C, f: Field::A }); // A=A+C A
-    i68150(r)
+    r.cpu.add(R::A, R::C, Field::A); // A=A+C A
+    if r.next(0x68150, 4) {
+        i68150(r)
+    }
 }
 
 fn i68150(r: &mut Run) {
-    op!(r, 0x68150, 3, Op::DFromR { d: 0, r: R::A, short: false }); // D0=A
-    i68153(r)
+    r.cpu.d_from_r(0, R::A, false); // D0=A
+    if r.next(0x68153, 5) {
+        i68153(r)
+    }
 }
 
 fn i68153(r: &mut Run) {
-    op!(r, 0x68153, 2, Op::Zero { r: R::A, f: Field::A }); // A=0 A
-    i68155(r)
+    r.cpu.zero(R::A, Field::A); // A=0 A
+    if r.next(0x68155, 4) {
+        i68155(r)
+    }
 }
 
 fn i68155(r: &mut Run) {
-    op!(r, 0x68155, 4, Op::Mem { store: false, d: 0, r: R::A, f: Field::X }); // A=DAT0 X
-    i68159(r)
+    r.sync();
+    r.cpu.load(0, R::A, Field::X, r.hw); // A=DAT0 X
+    if r.next_io(0x68159, 17) {
+        i68159(r)
+    }
 }
 
 fn i68159(r: &mut Run) {
-    op!(r, 0x68159, 4, Op::Call(0x680FB)); // GOSUB #680FB
+    r.cpu.pc = 0x6815D;
+    r.cpu.call(0x680FB); // GOSUB #680FB
+    r.spend(6);
 }
 
 fn i6815d(r: &mut Run) {
-    op!(r, 0x6815D, 7, Op::LoadConst { r: R::C, len: 5, val: 0x22 }); // LC(5) #00022
-    i68164(r)
+    r.cpu.load_const(R::C, 5, 0x22); // LC(5) #00022
+    if r.next(0x68164, 9) {
+        i68164(r)
+    }
 }
 
 fn i68164(r: &mut Run) {
-    op!(r, 0x68164, 3, Op::DExR { d: 0, r: R::A, short: false }); // AD0EX
-    i68167(r)
+    r.cpu.d_ex_r(0, R::A, false); // AD0EX
+    if r.next(0x68167, 5) {
+        i68167(r)
+    }
 }
 
 fn i68167(r: &mut Run) {
-    op!(r, 0x68167, 2, Op::Sub { dst: R::A, a: R::A, b: R::C, f: Field::A }); // A=A-C A
-    i68169(r)
+    r.cpu.sub(R::A, R::A, R::C, Field::A); // A=A-C A
+    if r.next(0x68169, 4) {
+        i68169(r)
+    }
 }
 
 fn i68169(r: &mut Run) {
-    op!(r, 0x68169, 3, Op::DFromR { d: 0, r: R::A, short: false }); // D0=A
-    i6816c(r)
+    r.cpu.d_from_r(0, R::A, false); // D0=A
+    if r.next(0x6816C, 5) {
+        i6816c(r)
+    }
 }
 
 fn i6816c(r: &mut Run) {
-    op!(r, 0x6816C, 2, Op::Zero { r: R::A, f: Field::A }); // A=0 A
-    i6816e(r)
+    r.cpu.zero(R::A, Field::A); // A=0 A
+    if r.next(0x6816E, 4) {
+        i6816e(r)
+    }
 }
 
 fn i6816e(r: &mut Run) {
-    op!(r, 0x6816E, 4, Op::Mem { store: false, d: 0, r: R::A, f: Field::X }); // A=DAT0 X
-    i68172(r)
+    r.sync();
+    r.cpu.load(0, R::A, Field::X, r.hw); // A=DAT0 X
+    if r.next_io(0x68172, 17) {
+        i68172(r)
+    }
 }
 
 fn i68172(r: &mut Run) {
-    op!(r, 0x68172, 3, Op::DAdd { d: 0, n: 6 }); // D0=D0+ 6
-    i68175(r)
+    r.cpu.d_add(0, 6); // D0=D0+ 6
+    if r.next(0x68175, 5) {
+        i68175(r)
+    }
 }
 
 fn i68175(r: &mut Run) {
-    op!(r, 0x68175, 2, Op::Zero { r: R::C, f: Field::A }); // C=0 A
-    i68177(r)
+    r.cpu.zero(R::C, Field::A); // C=0 A
+    if r.next(0x68177, 4) {
+        i68177(r)
+    }
 }
 
 fn i68177(r: &mut Run) {
-    op!(r, 0x68177, 4, Op::Mem { store: false, d: 0, r: R::C, f: Field::X }); // C=DAT0 X
-    i6817b(r)
+    r.sync();
+    r.cpu.load(0, R::C, Field::X, r.hw); // C=DAT0 X
+    if r.next_io(0x6817B, 17) {
+        i6817b(r)
+    }
 }
 
 fn i6817b(r: &mut Run) {
-    op!(r, 0x6817B, 2, Op::Add { dst: R::A, src: R::C, f: Field::A }); // A=A+C A
-    i6817d(r)
+    r.cpu.add(R::A, R::C, Field::A); // A=A+C A
+    if r.next(0x6817D, 4) {
+        i6817d(r)
+    }
 }
 
 fn i6817d(r: &mut Run) {
-    op!(r, 0x6817D, 6, Op::Jump(0x67901)); // GOTO #67901
+    r.cpu.pc = 0x67901; // GOTO #67901
+    r.spend(8);
 }
 
 fn i68188(r: &mut Run) {
-    op!(r, 0x68188, 7, Op::Call(0x6641)); // GOSUB #06641
+    r.cpu.pc = 0x6818F;
+    r.cpu.call(0x06641); // GOSUB #06641
+    r.spend(9);
 }
 
 fn i6818f(r: &mut Run) {
-    op!(r, 0x6818F, 2, Op::Copy { dst: R::C, src: R::A, f: Field::A }); // C=A A
-    i68191(r)
+    r.cpu.copy(R::C, R::A, Field::A); // C=A A
+    if r.next(0x68191, 4) {
+        i68191(r)
+    }
 }
 
 fn i68191(r: &mut Run) {
-    op!(r, 0x68191, 2, Op::Add { dst: R::A, src: R::A, f: Field::A }); // A=A+A A
-    i68193(r)
+    r.cpu.add(R::A, R::A, Field::A); // A=A+A A
+    if r.next(0x68193, 4) {
+        i68193(r)
+    }
 }
 
 fn i68193(r: &mut Run) {
-    op!(r, 0x68193, 2, Op::Add { dst: R::A, src: R::A, f: Field::A }); // A=A+A A
-    i68195(r)
+    r.cpu.add(R::A, R::A, Field::A); // A=A+A A
+    if r.next(0x68195, 4) {
+        i68195(r)
+    }
 }
 
 fn i68195(r: &mut Run) {
-    op!(r, 0x68195, 2, Op::Add { dst: R::A, src: R::C, f: Field::A }); // A=A+C A
-    i68197(r)
+    r.cpu.add(R::A, R::C, Field::A); // A=A+C A
+    if r.next(0x68197, 4) {
+        i68197(r)
+    }
 }
 
 fn i68197(r: &mut Run) {
-    op!(r, 0x68197, 6, Op::Jump(0x67907)); // GOTO #67907
+    r.cpu.pc = 0x67907; // GOTO #67907
+    r.spend(8);
 }
 
 fn i681a2(r: &mut Run) {
-    op!(r, 0x681A2, 7, Op::Call(0x6641)); // GOSUB #06641
+    r.cpu.pc = 0x681A9;
+    r.cpu.call(0x06641); // GOSUB #06641
+    r.spend(9);
 }
 
 fn i681a9(r: &mut Run) {
-    op!(r, 0x681A9, 2, Op::Copy { dst: R::C, src: R::A, f: Field::A }); // C=A A
-    i681ab(r)
+    r.cpu.copy(R::C, R::A, Field::A); // C=A A
+    if r.next(0x681AB, 4) {
+        i681ab(r)
+    }
 }
 
 fn i681ab(r: &mut Run) {
-    op!(r, 0x681AB, 2, Op::Add { dst: R::C, src: R::C, f: Field::A }); // C=C+C A
-    i681ad(r)
+    r.cpu.add(R::C, R::C, Field::A); // C=C+C A
+    if r.next(0x681AD, 4) {
+        i681ad(r)
+    }
 }
 
 fn i681ad(r: &mut Run) {
-    op!(r, 0x681AD, 4, Op::Jump(0x68195)); // GOTO #68195
+    r.cpu.pc = 0x68195; // GOTO #68195
+    r.spend(6);
 }
 
 fn i681b6(r: &mut Run) {
-    op!(r, 0x681B6, 7, Op::LoadConst { r: R::C, len: 5, val: 0x80757 }); // LC(5) #80757
-    i681bd(r)
+    r.cpu.load_const(R::C, 5, 0x80757); // LC(5) #80757
+    if r.next(0x681BD, 9) {
+        i681bd(r)
+    }
 }
 
 fn i681bd(r: &mut Run) {
-    op!(r, 0x681BD, 3, Op::Mem { store: false, d: 1, r: R::A, f: Field::A }); // A=DAT1 A
-    i681c0(r)
+    r.sync();
+    r.cpu.load(1, R::A, Field::A, r.hw); // A=DAT1 A
+    if r.next_io(0x681C0, 19) {
+        i681c0(r)
+    }
 }
 
 fn i681c0(r: &mut Run) {
-    op!(r, 0x681C0, 3, Op::DAdd { d: 1, n: 5 }); // D1=D1+ 5
-    i681c3(r)
+    r.cpu.d_add(1, 5); // D1=D1+ 5
+    if r.next(0x681C3, 5) {
+        i681c3(r)
+    }
 }
 
 fn i681c3(r: &mut Run) {
-    op!(r, 0x681C3, 2, Op::Inc { r: R::D, f: Field::A }); // D=D+1 A
-    i681c5(r)
+    r.cpu.inc(R::D, Field::A); // D=D+1 A
+    if r.next(0x681C5, 4) {
+        i681c5(r)
+    }
 }
 
 fn i681c5(r: &mut Run) {
-    op!(r, 0x681C5, 3, Op::DExR { d: 0, r: R::C, short: false }); // CD0EX
-    i681c8(r)
+    r.cpu.d_ex_r(0, R::C, false); // CD0EX
+    if r.next(0x681C8, 5) {
+        i681c8(r)
+    }
 }
 
 fn i681c8(r: &mut Run) {
-    op!(r, 0x681C8, 3, Op::Mem { store: true, d: 0, r: R::A, f: Field::A }); // DAT0=A A
-    i681cb(r)
+    r.sync();
+    r.cpu.store(0, R::A, Field::A, r.hw); // DAT0=A A
+    if r.next_io(0x681CB, 19) {
+        i681cb(r)
+    }
 }
 
 fn i681cb(r: &mut Run) {
-    op!(r, 0x681CB, 3, Op::DFromR { d: 0, r: R::C, short: false }); // D0=C
-    i681ce(r)
+    r.cpu.d_from_r(0, R::C, false); // D0=C
+    if r.next(0x681CE, 5) {
+        i681ce(r)
+    }
 }
 
 fn i681ce(r: &mut Run) {
-    op!(r, 0x681CE, 3, Op::Mem { store: false, d: 0, r: R::A, f: Field::A }); // A=DAT0 A
-    i681d1(r)
+    r.sync();
+    r.cpu.load(0, R::A, Field::A, r.hw); // A=DAT0 A
+    if r.next_io(0x681D1, 19) {
+        i681d1(r)
+    }
 }
 
 fn i681d1(r: &mut Run) {
-    op!(r, 0x681D1, 3, Op::DAdd { d: 0, n: 5 }); // D0=D0+ 5
-    i681d4(r)
+    r.cpu.d_add(0, 5); // D0=D0+ 5
+    if r.next(0x681D4, 5) {
+        i681d4(r)
+    }
 }
 
 fn i681d4(r: &mut Run) {
-    op!(r, 0x681D4, 4, Op::PcIndirect(R::A)); // PC=(A)
+    r.sync();
+    r.cpu.pc_indirect(R::A, r.hw); // PC=(A)
+    r.spend(23);
 }
 
 fn i681dd(r: &mut Run) {
-    op!(r, 0x681DD, 7, Op::LoadConst { r: R::C, len: 5, val: 0x8077A }); // LC(5) #8077A
-    i681e4(r)
+    r.cpu.load_const(R::C, 5, 0x8077A); // LC(5) #8077A
+    if r.next(0x681E4, 9) {
+        i681e4(r)
+    }
 }
 
 fn i681e4(r: &mut Run) {
-    op!(r, 0x681E4, 4, Op::Jump(0x681BD)); // GOTO #681BD
+    r.cpu.pc = 0x681BD; // GOTO #681BD
+    r.spend(6);
 }
 
 fn i681ed(r: &mut Run) {
-    op!(r, 0x681ED, 7, Op::LoadConst { r: R::C, len: 5, val: 0x80757 }); // LC(5) #80757
-    i681f4(r)
+    r.cpu.load_const(R::C, 5, 0x80757); // LC(5) #80757
+    if r.next(0x681F4, 9) {
+        i681f4(r)
+    }
 }
 
 fn i681f4(r: &mut Run) {
-    op!(r, 0x681F4, 3, Op::StSet { bit: 0xA, set: false }); // ST=0 10
-    i681f7(r)
+    r.cpu.st_set(10, false); // ST=0 10
+    if r.next(0x681F7, 5) {
+        i681f7(r)
+    }
 }
 
 fn i681f7(r: &mut Run) {
-    op!(r, 0x681F7, 3, Op::Scratch { op: ScratchOp::ToScratch, r: R::C, n: 0, f: Field::W }); // R0=C
-    i681fa(r)
+    r.cpu.scratch(ScratchOp::ToScratch, R::C, 0, Field::W); // R0=C
+    if r.next(0x681FA, 5) {
+        i681fa(r)
+    }
 }
 
 fn i681fa(r: &mut Run) {
-    op!(r, 0x681FA, 2, Op::Dec { r: R::D, f: Field::A }); // D=D-1 A
-    i681fc(r)
+    r.cpu.dec(R::D, Field::A); // D=D-1 A
+    if r.next(0x681FC, 4) {
+        i681fc(r)
+    }
 }
 
 fn i681fc(r: &mut Run) {
-    op!(r, 0x681FC, 3, Op::CondJump(Cond::NoCarry, 0x68209)); // GONC #68209
-    i681ff(r)
+    r.cpu.pc = 0x681FF;
+    r.cpu.jump_if(Cond::NoCarry, 0x68209); // GONC #68209
+    if r.next_pc(0x681FF, 5) {
+        i681ff(r)
+    }
 }
 
 fn i681ff(r: &mut Run) {
-    op!(r, 0x681FF, 7, Op::Call(0x6DDAB)); // GOSUB #6DDAB
+    r.cpu.pc = 0x68206;
+    r.cpu.call(0x6DDAB); // GOSUB #6DDAB
+    r.spend(9);
 }
 
 fn i68206(r: &mut Run) {
-    op!(r, 0x68206, 3, Op::CondJump(Cond::Carry, 0x681FA)); // GOC #681FA
-    i68209(r)
+    r.cpu.pc = 0x68209;
+    r.cpu.jump_if(Cond::Carry, 0x681FA); // GOC #681FA
+    if r.next_pc(0x68209, 5) {
+        i68209(r)
+    }
 }
 
 fn i68209(r: &mut Run) {
-    op!(r, 0x68209, 3, Op::DSub { d: 1, n: 5 }); // D1=D1- 5
-    i6820c(r)
+    r.cpu.d_sub(1, 5); // D1=D1- 5
+    if r.next(0x6820C, 5) {
+        i6820c(r)
+    }
 }
 
 fn i6820c(r: &mut Run) {
-    op!(r, 0x6820C, 3, Op::Scratch { op: ScratchOp::FromScratch, r: R::C, n: 0, f: Field::W }); // C=R0
-    i6820f(r)
+    r.cpu.scratch(ScratchOp::FromScratch, R::C, 0, Field::W); // C=R0
+    if r.next(0x6820F, 5) {
+        i6820f(r)
+    }
 }
 
 fn i6820f(r: &mut Run) {
-    op!(r, 0x6820F, 3, Op::DExR { d: 0, r: R::C, short: false }); // CD0EX
-    i68212(r)
+    r.cpu.d_ex_r(0, R::C, false); // CD0EX
+    if r.next(0x68212, 5) {
+        i68212(r)
+    }
 }
 
 fn i68212(r: &mut Run) {
-    op!(r, 0x68212, 3, Op::Mem { store: false, d: 0, r: R::A, f: Field::A }); // A=DAT0 A
-    i68215(r)
+    r.sync();
+    r.cpu.load(0, R::A, Field::A, r.hw); // A=DAT0 A
+    if r.next_io(0x68215, 19) {
+        i68215(r)
+    }
 }
 
 fn i68215(r: &mut Run) {
-    op!(r, 0x68215, 3, Op::Mem { store: true, d: 1, r: R::A, f: Field::A }); // DAT1=A A
-    i68218(r)
+    r.sync();
+    r.cpu.store(1, R::A, Field::A, r.hw); // DAT1=A A
+    if r.next_io(0x68218, 19) {
+        i68218(r)
+    }
 }
 
 fn i68218(r: &mut Run) {
-    op!(r, 0x68218, 4, Op::Jump(0x681CB)); // GOTO #681CB
+    r.cpu.pc = 0x681CB; // GOTO #681CB
+    r.spend(6);
 }
 
 fn i68221(r: &mut Run) {
-    op!(r, 0x68221, 7, Op::LoadConst { r: R::C, len: 5, val: 0x8077A }); // LC(5) #8077A
-    i68228(r)
+    r.cpu.load_const(R::C, 5, 0x8077A); // LC(5) #8077A
+    if r.next(0x68228, 9) {
+        i68228(r)
+    }
 }
 
 fn i68228(r: &mut Run) {
-    op!(r, 0x68228, 4, Op::Jump(0x681F4)); // GOTO #681F4
+    r.cpu.pc = 0x681F4; // GOTO #681F4
+    r.spend(6);
 }
 
 fn i6827c(r: &mut Run) {
-    op!(r, 0x6827C, 3, Op::StSet { bit: 3, set: true }); // ST=1 3
-    i6827f(r)
+    r.cpu.st_set(3, true); // ST=1 3
+    if r.next(0x6827F, 5) {
+        i6827f(r)
+    }
 }
 
 fn i6827f(r: &mut Run) {
-    op!(r, 0x6827F, 4, Op::Jump(0x682AE)); // GOTO #682AE
+    r.cpu.pc = 0x682AE; // GOTO #682AE
+    r.spend(6);
 }
 
 fn i682ab(r: &mut Run) {
-    op!(r, 0x682AB, 3, Op::StSet { bit: 3, set: false }); // ST=0 3
-    i682ae(r)
+    r.cpu.st_set(3, false); // ST=0 3
+    if r.next(0x682AE, 5) {
+        i682ae(r)
+    }
 }
 
 fn i682ae(r: &mut Run) {
-    op!(r, 0x682AE, 6, Op::Call(0x67A4A)); // GOSUB #67A4A
+    r.cpu.pc = 0x682B4;
+    r.cpu.call(0x67A4A); // GOSUB #67A4A
+    r.spend(8);
 }
 
 fn i682b4(r: &mut Run) {
-    op!(r, 0x682B4, 3, Op::StSet { bit: 4, set: false }); // ST=0 4
-    i682b7(r)
+    r.cpu.st_set(4, false); // ST=0 4
+    if r.next(0x682B7, 5) {
+        i682b7(r)
+    }
 }
 
 fn i682b7(r: &mut Run) {
-    op!(r, 0x682B7, 4, Op::Call(0x68329)); // GOSUB #68329
+    r.cpu.pc = 0x682BB;
+    r.cpu.call(0x68329); // GOSUB #68329
+    r.spend(6);
 }
 
 fn i682bb(r: &mut Run) {
-    op!(r, 0x682BB, 4, Op::Jump(0x685D3)); // GOTO #685D3
+    r.cpu.pc = 0x685D3; // GOTO #685D3
+    r.spend(6);
 }
 
 fn i682bf(r: &mut Run) {
-    op!(r, 0x682BF, 3, Op::DFromR { d: 0, r: R::C, short: false }); // D0=C
-    i682c2(r)
+    r.cpu.d_from_r(0, R::C, false); // D0=C
+    if r.next(0x682C2, 5) {
+        i682c2(r)
+    }
 }
 
 fn i682c2(r: &mut Run) {
-    op!(r, 0x682C2, 3, Op::DSub { d: 0, n: 5 }); // D0=D0- 5
-    i682c5(r)
+    r.cpu.d_sub(0, 5); // D0=D0- 5
+    if r.next(0x682C5, 5) {
+        i682c5(r)
+    }
 }
 
 fn i682c5(r: &mut Run) {
-    op!(r, 0x682C5, 7, Op::LoadConst { r: R::C, len: 5, val: 0x6867A }); // LC(5) #6867A
-    i682cc(r)
+    r.cpu.load_const(R::C, 5, 0x6867A); // LC(5) #6867A
+    if r.next(0x682CC, 9) {
+        i682cc(r)
+    }
 }
 
 fn i682cc(r: &mut Run) {
-    op!(r, 0x682CC, 2, Op::Copy { dst: R::A, src: R::C, f: Field::A }); // A=C A
-    i682ce(r)
+    r.cpu.copy(R::A, R::C, Field::A); // A=C A
+    if r.next(0x682CE, 4) {
+        i682ce(r)
+    }
 }
 
 fn i682ce(r: &mut Run) {
-    op!(r, 0x682CE, 4, Op::PcIndirect(R::A)); // PC=(A)
+    r.sync();
+    r.cpu.pc_indirect(R::A, r.hw); // PC=(A)
+    r.spend(23);
 }
 
 fn i682d7(r: &mut Run) {
-    op!(r, 0x682D7, 3, Op::StSet { bit: 4, set: true }); // ST=1 4
-    i682da(r)
+    r.cpu.st_set(4, true); // ST=1 4
+    if r.next(0x682DA, 5) {
+        i682da(r)
+    }
 }
 
 fn i682da(r: &mut Run) {
-    op!(r, 0x682DA, 4, Op::Jump(0x682E6)); // GOTO #682E6
+    r.cpu.pc = 0x682E6; // GOTO #682E6
+    r.spend(6);
 }
 
 fn i682e3(r: &mut Run) {
-    op!(r, 0x682E3, 3, Op::StSet { bit: 4, set: false }); // ST=0 4
-    i682e6(r)
+    r.cpu.st_set(4, false); // ST=0 4
+    if r.next(0x682E6, 5) {
+        i682e6(r)
+    }
 }
 
 fn i682e6(r: &mut Run) {
-    op!(r, 0x682E6, 4, Op::Call(0x682F7)); // GOSUB #682F7
+    r.cpu.pc = 0x682EA;
+    r.cpu.call(0x682F7); // GOSUB #682F7
+    r.spend(6);
 }
 
 fn i682ea(r: &mut Run) {
-    op!(r, 0x682EA, 7, Op::LoadConst { r: R::C, len: 5, val: 0x6D4E2 }); // LC(5) #6D4E2
-    i682f1(r)
+    r.cpu.load_const(R::C, 5, 0x6D4E2); // LC(5) #6D4E2
+    if r.next(0x682F1, 9) {
+        i682f1(r)
+    }
 }
 
 fn i682f1(r: &mut Run) {
-    op!(r, 0x682F1, 2, Op::Copy { dst: R::A, src: R::C, f: Field::A }); // A=C A
-    i682f3(r)
+    r.cpu.copy(R::A, R::C, Field::A); // A=C A
+    if r.next(0x682F3, 4) {
+        i682f3(r)
+    }
 }
 
 fn i682f3(r: &mut Run) {
-    op!(r, 0x682F3, 4, Op::PcIndirect(R::A)); // PC=(A)
+    r.sync();
+    r.cpu.pc_indirect(R::A, r.hw); // PC=(A)
+    r.spend(23);
 }
 
 fn i682f7(r: &mut Run) {
-    op!(r, 0x682F7, 3, Op::StSet { bit: 3, set: false }); // ST=0 3
-    i682fa(r)
+    r.cpu.st_set(3, false); // ST=0 3
+    if r.next(0x682FA, 5) {
+        i682fa(r)
+    }
 }
 
 fn i682fa(r: &mut Run) {
-    op!(r, 0x682FA, 7, Op::LoadConst { r: R::C, len: 5, val: 0x808D8 }); // LC(5) #808D8
-    i68301(r)
+    r.cpu.load_const(R::C, 5, 0x808D8); // LC(5) #808D8
+    if r.next(0x68301, 9) {
+        i68301(r)
+    }
 }
 
 fn i68301(r: &mut Run) {
-    op!(r, 0x68301, 3, Op::DExR { d: 0, r: R::C, short: false }); // CD0EX
-    i68304(r)
+    r.cpu.d_ex_r(0, R::C, false); // CD0EX
+    if r.next(0x68304, 5) {
+        i68304(r)
+    }
 }
 
 fn i68304(r: &mut Run) {
-    op!(r, 0x68304, 3, Op::Mem { store: false, d: 0, r: R::A, f: Field::A }); // A=DAT0 A
-    i68307(r)
+    r.sync();
+    r.cpu.load(0, R::A, Field::A, r.hw); // A=DAT0 A
+    if r.next_io(0x68307, 19) {
+        i68307(r)
+    }
 }
 
 fn i68307(r: &mut Run) {
-    op!(r, 0x68307, 5, Op::Test { test: Test::Zero(R::A), f: Field::A, goyes: Some(0x682BF) }); // ?A=0 A / GOYES #682BF
-    i6830c(r)
+    r.cpu.pc = 0x6830C;
+    r.cpu.test(Test::Zero(R::A), Field::A, Some(0x682BF)); // ?A=0 A / GOYES #682BF
+    if r.next_pc(0x6830C, 7) {
+        i6830c(r)
+    }
 }
 
 fn i6830c(r: &mut Run) {
-    op!(r, 0x6830C, 2, Op::Dec { r: R::A, f: Field::A }); // A=A-1 A
-    i6830e(r)
+    r.cpu.dec(R::A, Field::A); // A=A-1 A
+    if r.next(0x6830E, 4) {
+        i6830e(r)
+    }
 }
 
 fn i6830e(r: &mut Run) {
-    op!(r, 0x6830E, 3, Op::Mem { store: true, d: 0, r: R::A, f: Field::A }); // DAT0=A A
-    i68311(r)
+    r.sync();
+    r.cpu.store(0, R::A, Field::A, r.hw); // DAT0=A A
+    if r.next_io(0x68311, 19) {
+        i68311(r)
+    }
 }
 
 fn i68311(r: &mut Run) {
-    op!(r, 0x68311, 7, Op::DLoad { d: 0, len: 5, val: 0x808C5 }); // D0=(5) #808C5
-    i68318(r)
+    r.cpu.d_load(0, 5, 0x808C5); // D0=(5) #808C5
+    if r.next(0x68318, 9) {
+        i68318(r)
+    }
 }
 
 fn i68318(r: &mut Run) {
-    op!(r, 0x68318, 3, Op::Mem { store: false, d: 0, r: R::A, f: Field::A }); // A=DAT0 A
-    i6831b(r)
+    r.sync();
+    r.cpu.load(0, R::A, Field::A, r.hw); // A=DAT0 A
+    if r.next_io(0x6831B, 19) {
+        i6831b(r)
+    }
 }
 
 fn i6831b(r: &mut Run) {
-    op!(r, 0x6831B, 2, Op::Inc { r: R::A, f: Field::A }); // A=A+1 A
-    i6831d(r)
+    r.cpu.inc(R::A, Field::A); // A=A+1 A
+    if r.next(0x6831D, 4) {
+        i6831d(r)
+    }
 }
 
 fn i6831d(r: &mut Run) {
-    op!(r, 0x6831D, 3, Op::Mem { store: true, d: 0, r: R::A, f: Field::A }); // DAT0=A A
-    i68320(r)
+    r.sync();
+    r.cpu.store(0, R::A, Field::A, r.hw); // DAT0=A A
+    if r.next_io(0x68320, 19) {
+        i68320(r)
+    }
 }
 
 fn i68320(r: &mut Run) {
-    op!(r, 0x68320, 3, Op::DFromR { d: 0, r: R::C, short: false }); // D0=C
-    i68323(r)
+    r.cpu.d_from_r(0, R::C, false); // D0=C
+    if r.next(0x68323, 5) {
+        i68323(r)
+    }
 }
 
 fn i68323(r: &mut Run) {
-    op!(r, 0x68323, 6, Op::Call(0x67A51)); // GOSUB #67A51
+    r.cpu.pc = 0x68329;
+    r.cpu.call(0x67A51); // GOSUB #67A51
+    r.spend(8);
 }
 
 fn i68329(r: &mut Run) {
-    op!(r, 0x68329, 7, Op::Call(0x6641)); // GOSUB #06641
+    r.cpu.pc = 0x68330;
+    r.cpu.call(0x06641); // GOSUB #06641
+    r.spend(9);
 }
 
 fn i68330(r: &mut Run) {
-    op!(r, 0x68330, 4, Op::Mem { store: true, d: 0, r: R::A, f: Field::Nibbles(1) }); // DAT0=A 1
-    i68334(r)
+    r.sync();
+    r.cpu.store(0, R::A, Field::Nibbles(1), r.hw); // DAT0=A 1
+    if r.next_io(0x68334, 15) {
+        i68334(r)
+    }
 }
 
 fn i68334(r: &mut Run) {
-    op!(r, 0x68334, 3, Op::DAdd { d: 0, n: 1 }); // D0=D0+ 1
-    i68337(r)
+    r.cpu.d_add(0, 1); // D0=D0+ 1
+    if r.next(0x68337, 5) {
+        i68337(r)
+    }
 }
 
 fn i68337(r: &mut Run) {
-    op!(r, 0x68337, 7, Op::LoadConst { r: R::C, len: 5, val: 0x80815 }); // LC(5) #80815
-    i6833e(r)
+    r.cpu.load_const(R::C, 5, 0x80815); // LC(5) #80815
+    if r.next(0x6833E, 9) {
+        i6833e(r)
+    }
 }
 
 fn i6833e(r: &mut Run) {
-    op!(r, 0x6833E, 3, Op::DExR { d: 0, r: R::C, short: false }); // CD0EX
-    i68341(r)
+    r.cpu.d_ex_r(0, R::C, false); // CD0EX
+    if r.next(0x68341, 5) {
+        i68341(r)
+    }
 }
 
 fn i68341(r: &mut Run) {
-    op!(r, 0x68341, 3, Op::Mem { store: false, d: 0, r: R::A, f: Field::B }); // A=DAT0 B
-    i68344(r)
+    r.sync();
+    r.cpu.load(0, R::A, Field::B, r.hw); // A=DAT0 B
+    if r.next_io(0x68344, 16) {
+        i68344(r)
+    }
 }
 
 fn i68344(r: &mut Run) {
-    op!(r, 0x68344, 3, Op::DFromR { d: 0, r: R::C, short: false }); // D0=C
-    i68347(r)
+    r.cpu.d_from_r(0, R::C, false); // D0=C
+    if r.next(0x68347, 5) {
+        i68347(r)
+    }
 }
 
 fn i68347(r: &mut Run) {
-    op!(r, 0x68347, 3, Op::LoadConst { r: R::C, len: 1, val: 7 }); // LC(1) #7
-    i6834a(r)
+    r.cpu.load_const(R::C, 1, 0x7); // LC(1) #7
+    if r.next(0x6834A, 5) {
+        i6834a(r)
+    }
 }
 
 fn i6834a(r: &mut Run) {
-    op!(r, 0x6834A, 5, Op::Test { test: Test::Regs(Cmp::Ge, R::C, R::A), f: Field::P, goyes: Some(0x68352) }); // ?C>=A P / GOYES #68352
-    i6834f(r)
+    r.cpu.pc = 0x6834F;
+    r.cpu.test(Test::Regs(Cmp::Ge, R::C, R::A), Field::P, Some(0x68352)); // ?C>=A P / GOYES #68352
+    if r.next_pc(0x6834F, 7) {
+        i6834f(r)
+    }
 }
 
 fn i6834f(r: &mut Run) {
-    op!(r, 0x6834F, 3, Op::Copy { dst: R::A, src: R::C, f: Field::P }); // A=C P
-    i68352(r)
+    r.cpu.copy(R::A, R::C, Field::P); // A=C P
+    if r.next(0x68352, 5) {
+        i68352(r)
+    }
 }
 
 fn i68352(r: &mut Run) {
-    op!(r, 0x68352, 4, Op::Mem { store: true, d: 0, r: R::A, f: Field::Nibbles(1) }); // DAT0=A 1
-    i68356(r)
+    r.sync();
+    r.cpu.store(0, R::A, Field::Nibbles(1), r.hw); // DAT0=A 1
+    if r.next_io(0x68356, 15) {
+        i68356(r)
+    }
 }
 
 fn i68356(r: &mut Run) {
-    op!(r, 0x68356, 3, Op::DAdd { d: 0, n: 1 }); // D0=D0+ 1
-    i68359(r)
+    r.cpu.d_add(0, 1); // D0=D0+ 1
+    if r.next(0x68359, 5) {
+        i68359(r)
+    }
 }
 
 fn i68359(r: &mut Run) {
-    op!(r, 0x68359, 2, Op::PSet(5)); // P= 5
-    i6835b(r)
+    r.cpu.p = 5; // P= 5
+    if r.next(0x6835B, 4) {
+        i6835b(r)
+    }
 }
 
 fn i6835b(r: &mut Run) {
-    op!(r, 0x6835B, 4, Op::Call(0x683BB)); // GOSUB #683BB
+    r.cpu.pc = 0x6835F;
+    r.cpu.call(0x683BB); // GOSUB #683BB
+    r.spend(6);
 }
 
 fn i6835f(r: &mut Run) {
-    op!(r, 0x6835F, 3, Op::Mem { store: false, d: 1, r: R::A, f: Field::A }); // A=DAT1 A
-    i68362(r)
+    r.sync();
+    r.cpu.load(1, R::A, Field::A, r.hw); // A=DAT1 A
+    if r.next_io(0x68362, 19) {
+        i68362(r)
+    }
 }
 
 fn i68362(r: &mut Run) {
-    op!(r, 0x68362, 3, Op::DAdd { d: 1, n: 5 }); // D1=D1+ 5
-    i68365(r)
+    r.cpu.d_add(1, 5); // D1=D1+ 5
+    if r.next(0x68365, 5) {
+        i68365(r)
+    }
 }
 
 fn i68365(r: &mut Run) {
-    op!(r, 0x68365, 2, Op::Inc { r: R::D, f: Field::A }); // D=D+1 A
-    i68367(r)
+    r.cpu.inc(R::D, Field::A); // D=D+1 A
+    if r.next(0x68367, 4) {
+        i68367(r)
+    }
 }
 
 fn i68367(r: &mut Run) {
-    op!(r, 0x68367, 6, Op::Scratch { op: ScratchOp::ToScratch, r: R::A, n: 3, f: Field::A }); // R3=A.F A
-    i6836d(r)
+    r.cpu.scratch(ScratchOp::ToScratch, R::A, 3, Field::A); // R3=A.F A
+    if r.next(0x6836D, 8) {
+        i6836d(r)
+    }
 }
 
 fn i6836d(r: &mut Run) {
-    op!(r, 0x6836D, 7, Op::Call(0x6641)); // GOSUB #06641
+    r.cpu.pc = 0x68374;
+    r.cpu.call(0x06641); // GOSUB #06641
+    r.spend(9);
 }
 
 fn i68374(r: &mut Run) {
-    op!(r, 0x68374, 3, Op::Mem { store: true, d: 0, r: R::A, f: Field::B }); // DAT0=A B
-    i68377(r)
+    r.sync();
+    r.cpu.store(0, R::A, Field::B, r.hw); // DAT0=A B
+    if r.next_io(0x68377, 16) {
+        i68377(r)
+    }
 }
 
 fn i68377(r: &mut Run) {
-    op!(r, 0x68377, 3, Op::DAdd { d: 0, n: 2 }); // D0=D0+ 2
-    i6837a(r)
+    r.cpu.d_add(0, 2); // D0=D0+ 2
+    if r.next(0x6837A, 5) {
+        i6837a(r)
+    }
 }
 
 fn i6837a(r: &mut Run) {
-    op!(r, 0x6837A, 5, Op::StTest { bit: 3, set: true, goyes: Some(0x683A7) }); // ?ST=1 3 / GOYES #683A7
-    i6837f(r)
+    r.cpu.pc = 0x6837F;
+    r.cpu.st_test(3, true, Some(0x683A7)); // ?ST=1 3 / GOYES #683A7
+    if r.next_pc(0x6837F, 7) {
+        i6837f(r)
+    }
 }
 
 fn i6837f(r: &mut Run) {
-    op!(r, 0x6837F, 7, Op::Call(0x6641)); // GOSUB #06641
+    r.cpu.pc = 0x68386;
+    r.cpu.call(0x06641); // GOSUB #06641
+    r.spend(9);
 }
 
 fn i68386(r: &mut Run) {
-    op!(r, 0x68386, 2, Op::Dec { r: R::D, f: Field::A }); // D=D-1 A
-    i68388(r)
+    r.cpu.dec(R::D, Field::A); // D=D-1 A
+    if r.next(0x68388, 4) {
+        i68388(r)
+    }
 }
 
 fn i68388(r: &mut Run) {
-    op!(r, 0x68388, 3, Op::Mem { store: true, d: 0, r: R::A, f: Field::B }); // DAT0=A B
-    i6838b(r)
+    r.sync();
+    r.cpu.store(0, R::A, Field::B, r.hw); // DAT0=A B
+    if r.next_io(0x6838B, 16) {
+        i6838b(r)
+    }
 }
 
 fn i6838b(r: &mut Run) {
-    op!(r, 0x6838B, 3, Op::DAdd { d: 0, n: 2 }); // D0=D0+ 2
-    i6838e(r)
+    r.cpu.d_add(0, 2); // D0=D0+ 2
+    if r.next(0x6838E, 5) {
+        i6838e(r)
+    }
 }
 
 fn i6838e(r: &mut Run) {
-    op!(r, 0x6838E, 2, Op::PSet(5)); // P= 5
-    i68390(r)
+    r.cpu.p = 5; // P= 5
+    if r.next(0x68390, 4) {
+        i68390(r)
+    }
 }
 
 fn i68390(r: &mut Run) {
-    op!(r, 0x68390, 5, Op::StTest { bit: 4, set: false, goyes: Some(0x68397) }); // ?ST=0 4 / GOYES #68397
-    i68395(r)
+    r.cpu.pc = 0x68395;
+    r.cpu.st_test(4, false, Some(0x68397)); // ?ST=0 4 / GOYES #68397
+    if r.next_pc(0x68395, 7) {
+        i68395(r)
+    }
 }
 
 fn i68395(r: &mut Run) {
-    op!(r, 0x68395, 2, Op::PSet(3)); // P= 3
-    i68397(r)
+    r.cpu.p = 3; // P= 3
+    if r.next(0x68397, 4) {
+        i68397(r)
+    }
 }
 
 fn i68397(r: &mut Run) {
-    op!(r, 0x68397, 4, Op::Call(0x683BB)); // GOSUB #683BB
+    r.cpu.pc = 0x6839B;
+    r.cpu.call(0x683BB); // GOSUB #683BB
+    r.spend(6);
 }
 
 fn i6839b(r: &mut Run) {
-    op!(r, 0x6839B, 5, Op::StTest { bit: 4, set: false, goyes: Some(0x683A7) }); // ?ST=0 4 / GOYES #683A7
-    i683a0(r)
+    r.cpu.pc = 0x683A0;
+    r.cpu.st_test(4, false, Some(0x683A7)); // ?ST=0 4 / GOYES #683A7
+    if r.next_pc(0x683A0, 7) {
+        i683a0(r)
+    }
 }
 
 fn i683a0(r: &mut Run) {
-    op!(r, 0x683A0, 3, Op::Zero { r: R::C, f: Field::W }); // C=0 W
-    i683a3(r)
+    r.cpu.zero(R::C, Field::W); // C=0 W
+    if r.next(0x683A3, 5) {
+        i683a3(r)
+    }
 }
 
 fn i683a3(r: &mut Run) {
-    op!(r, 0x683A3, 4, Op::Mem { store: true, d: 0, r: R::C, f: Field::Nibbles(6) }); // DAT0=C 6
-    i683a7(r)
+    r.sync();
+    r.cpu.store(0, R::C, Field::Nibbles(6), r.hw); // DAT0=C 6
+    if r.next_io(0x683A7, 20) {
+        i683a7(r)
+    }
 }
 
 fn i683a7(r: &mut Run) {
-    op!(r, 0x683A7, 3, Op::DSub { d: 1, n: 5 }); // D1=D1- 5
-    i683aa(r)
+    r.cpu.d_sub(1, 5); // D1=D1- 5
+    if r.next(0x683AA, 5) {
+        i683aa(r)
+    }
 }
 
 fn i683aa(r: &mut Run) {
-    op!(r, 0x683AA, 6, Op::Scratch { op: ScratchOp::FromScratch, r: R::A, n: 3, f: Field::A }); // A=R3.F A
-    i683b0(r)
+    r.cpu.scratch(ScratchOp::FromScratch, R::A, 3, Field::A); // A=R3.F A
+    if r.next(0x683B0, 8) {
+        i683b0(r)
+    }
 }
 
 fn i683b0(r: &mut Run) {
-    op!(r, 0x683B0, 3, Op::Mem { store: true, d: 1, r: R::A, f: Field::A }); // DAT1=A A
-    i683b3(r)
+    r.sync();
+    r.cpu.store(1, R::A, Field::A, r.hw); // DAT1=A A
+    if r.next_io(0x683B3, 19) {
+        i683b3(r)
+    }
 }
 
 fn i683b3(r: &mut Run) {
-    op!(r, 0x683B3, 3, Op::Scratch { op: ScratchOp::FromScratch, r: R::C, n: 2, f: Field::W }); // C=R2
-    i683b6(r)
+    r.cpu.scratch(ScratchOp::FromScratch, R::C, 2, Field::W); // C=R2
+    if r.next(0x683B6, 5) {
+        i683b6(r)
+    }
 }
 
 fn i683b6(r: &mut Run) {
-    op!(r, 0x683B6, 3, Op::DFromR { d: 0, r: R::C, short: false }); // D0=C
-    i683b9(r)
+    r.cpu.d_from_r(0, R::C, false); // D0=C
+    if r.next(0x683B9, 5) {
+        i683b9(r)
+    }
 }
 
 fn i683b9(r: &mut Run) {
-    op!(r, 0x683B9, 2, Op::Rtn(RtnKind::Plain)); // RTN
+    r.cpu.rtn(RtnKind::Plain); // RTN
+    r.spend(9);
 }
 
 fn i683bb(r: &mut Run) {
-    op!(r, 0x683BB, 7, Op::Call(0x6641)); // GOSUB #06641
+    r.cpu.pc = 0x683C2;
+    r.cpu.call(0x06641); // GOSUB #06641
+    r.spend(9);
 }
 
 fn i683c2(r: &mut Run) {
-    op!(r, 0x683C2, 4, Op::Mem { store: true, d: 0, r: R::A, f: Field::X }); // DAT0=A X
-    i683c6(r)
+    r.sync();
+    r.cpu.store(0, R::A, Field::X, r.hw); // DAT0=A X
+    if r.next_io(0x683C6, 17) {
+        i683c6(r)
+    }
 }
 
 fn i683c6(r: &mut Run) {
-    op!(r, 0x683C6, 3, Op::DAdd { d: 0, n: 3 }); // D0=D0+ 3
-    i683c9(r)
+    r.cpu.d_add(0, 3); // D0=D0+ 3
+    if r.next(0x683C9, 5) {
+        i683c9(r)
+    }
 }
 
 fn i683c9(r: &mut Run) {
-    op!(r, 0x683C9, 2, Op::PDec); // P=P-1
-    i683cb(r)
+    r.cpu.p_dec(); // P=P-1
+    if r.next(0x683CB, 4) {
+        i683cb(r)
+    }
 }
 
 fn i683cb(r: &mut Run) {
-    op!(r, 0x683CB, 3, Op::CondJump(Cond::NoCarry, 0x683BB)); // GONC #683BB
-    i683ce(r)
+    r.cpu.pc = 0x683CE;
+    r.cpu.jump_if(Cond::NoCarry, 0x683BB); // GONC #683BB
+    if r.next_pc(0x683CE, 5) {
+        i683ce(r)
+    }
 }
 
 fn i683ce(r: &mut Run) {
-    op!(r, 0x683CE, 2, Op::PSet(0)); // P= 0
-    i683d0(r)
+    r.cpu.p = 0; // P= 0
+    if r.next(0x683D0, 4) {
+        i683d0(r)
+    }
 }
 
 fn i683d0(r: &mut Run) {
-    op!(r, 0x683D0, 2, Op::Rtn(RtnKind::Plain)); // RTN
+    r.cpu.rtn(RtnKind::Plain); // RTN
+    r.spend(9);
 }
 
 fn i683d2(r: &mut Run) {
-    op!(r, 0x683D2, 7, Op::LoadConst { r: R::C, len: 5, val: 0x683F8 }); // LC(5) #683F8
-    i683d9(r)
+    r.cpu.load_const(R::C, 5, 0x683F8); // LC(5) #683F8
+    if r.next(0x683D9, 9) {
+        i683d9(r)
+    }
 }
 
 fn i683d9(r: &mut Run) {
-    op!(r, 0x683D9, 3, Op::DExR { d: 1, r: R::C, short: false }); // CD1EX
-    i683dc(r)
+    r.cpu.d_ex_r(1, R::C, false); // CD1EX
+    if r.next(0x683DC, 5) {
+        i683dc(r)
+    }
 }
 
 fn i683dc(r: &mut Run) {
-    op!(r, 0x683DC, 2, Op::PushC); // RSTK=C
-    i683de(r)
+    r.cpu.push_c(); // RSTK=C
+    if r.next(0x683DE, 4) {
+        i683de(r)
+    }
 }
 
 fn i683de(r: &mut Run) {
-    op!(r, 0x683DE, 2, Op::Copy { dst: R::C, src: R::A, f: Field::A }); // C=A A
-    i683e0(r)
+    r.cpu.copy(R::C, R::A, Field::A); // C=A A
+    if r.next(0x683E0, 4) {
+        i683e0(r)
+    }
 }
 
 fn i683e0(r: &mut Run) {
-    op!(r, 0x683E0, 2, Op::Add { dst: R::C, src: R::C, f: Field::A }); // C=C+C A
-    i683e2(r)
+    r.cpu.add(R::C, R::C, Field::A); // C=C+C A
+    if r.next(0x683E2, 4) {
+        i683e2(r)
+    }
 }
 
 fn i683e2(r: &mut Run) {
-    op!(r, 0x683E2, 2, Op::Add { dst: R::C, src: R::C, f: Field::A }); // C=C+C A
-    i683e4(r)
+    r.cpu.add(R::C, R::C, Field::A); // C=C+C A
+    if r.next(0x683E4, 4) {
+        i683e4(r)
+    }
 }
 
 fn i683e4(r: &mut Run) {
-    op!(r, 0x683E4, 2, Op::Add { dst: R::A, src: R::C, f: Field::A }); // A=A+C A
-    i683e6(r)
+    r.cpu.add(R::A, R::C, Field::A); // A=A+C A
+    if r.next(0x683E6, 4) {
+        i683e6(r)
+    }
 }
 
 fn i683e6(r: &mut Run) {
-    op!(r, 0x683E6, 3, Op::DExR { d: 1, r: R::C, short: false }); // CD1EX
-    i683e9(r)
+    r.cpu.d_ex_r(1, R::C, false); // CD1EX
+    if r.next(0x683E9, 5) {
+        i683e9(r)
+    }
 }
 
 fn i683e9(r: &mut Run) {
-    op!(r, 0x683E9, 2, Op::Add { dst: R::C, src: R::A, f: Field::A }); // C=C+A A
-    i683eb(r)
+    r.cpu.add(R::C, R::A, Field::A); // C=C+A A
+    if r.next(0x683EB, 4) {
+        i683eb(r)
+    }
 }
 
 fn i683eb(r: &mut Run) {
-    op!(r, 0x683EB, 3, Op::DFromR { d: 1, r: R::C, short: false }); // D1=C
-    i683ee(r)
+    r.cpu.d_from_r(1, R::C, false); // D1=C
+    if r.next(0x683EE, 5) {
+        i683ee(r)
+    }
 }
 
 fn i683ee(r: &mut Run) {
-    op!(r, 0x683EE, 3, Op::Mem { store: false, d: 1, r: R::A, f: Field::A }); // A=DAT1 A
-    i683f1(r)
+    r.sync();
+    r.cpu.load(1, R::A, Field::A, r.hw); // A=DAT1 A
+    if r.next_io(0x683F1, 19) {
+        i683f1(r)
+    }
 }
 
 fn i683f1(r: &mut Run) {
-    op!(r, 0x683F1, 2, Op::PopC); // C=RSTK
-    i683f3(r)
+    r.cpu.pop_c(); // C=RSTK
+    if r.next(0x683F3, 4) {
+        i683f3(r)
+    }
 }
 
 fn i683f3(r: &mut Run) {
-    op!(r, 0x683F3, 3, Op::DFromR { d: 1, r: R::C, short: false }); // D1=C
-    i683f6(r)
+    r.cpu.d_from_r(1, R::C, false); // D1=C
+    if r.next(0x683F6, 5) {
+        i683f6(r)
+    }
 }
 
 fn i683f6(r: &mut Run) {
-    op!(r, 0x683F6, 2, Op::Rtn(RtnKind::Plain)); // RTN
+    r.cpu.rtn(RtnKind::Plain); // RTN
+    r.spend(9);
 }
 
 fn i68457(r: &mut Run) {
-    op!(r, 0x68457, 4, Op::Call(0x6845F)); // GOSUB #6845F
+    r.cpu.pc = 0x6845B;
+    r.cpu.call(0x6845F); // GOSUB #6845F
+    r.spend(6);
 }
 
 fn i6845b(r: &mut Run) {
-    op!(r, 0x6845B, 4, Op::Jump(0x685CD)); // GOTO #685CD
+    r.cpu.pc = 0x685CD; // GOTO #685CD
+    r.spend(6);
 }
 
 fn i6845f(r: &mut Run) {
-    op!(r, 0x6845F, 6, Op::Call(0x67A4A)); // GOSUB #67A4A
+    r.cpu.pc = 0x68465;
+    r.cpu.call(0x67A4A); // GOSUB #67A4A
+    r.spend(8);
 }
 
 fn i68465(r: &mut Run) {
-    op!(r, 0x68465, 3, Op::DAdd { d: 0, n: 0xA }); // D0=D0+ 10
-    i68468(r)
+    r.cpu.d_add(0, 10); // D0=D0+ 10
+    if r.next(0x68468, 5) {
+        i68468(r)
+    }
 }
 
 fn i68468(r: &mut Run) {
-    op!(r, 0x68468, 3, Op::DAdd { d: 0, n: 0xA }); // D0=D0+ 10
-    i6846b(r)
+    r.cpu.d_add(0, 10); // D0=D0+ 10
+    if r.next(0x6846B, 5) {
+        i6846b(r)
+    }
 }
 
 fn i6846b(r: &mut Run) {
-    op!(r, 0x6846B, 3, Op::Mem { store: false, d: 0, r: R::C, f: Field::B }); // C=DAT0 B
-    i6846e(r)
+    r.sync();
+    r.cpu.load(0, R::C, Field::B, r.hw); // C=DAT0 B
+    if r.next_io(0x6846E, 16) {
+        i6846e(r)
+    }
 }
 
 fn i6846e(r: &mut Run) {
-    op!(r, 0x6846E, 3, Op::Inc { r: R::C, f: Field::B }); // C=C+1 B
-    i68471(r)
+    r.cpu.inc(R::C, Field::B); // C=C+1 B
+    if r.next(0x68471, 5) {
+        i68471(r)
+    }
 }
 
 fn i68471(r: &mut Run) {
-    op!(r, 0x68471, 3, Op::CondJump(Cond::Carry, 0x6848A)); // GOC #6848A
-    i68474(r)
+    r.cpu.pc = 0x68474;
+    r.cpu.jump_if(Cond::Carry, 0x6848A); // GOC #6848A
+    if r.next_pc(0x68474, 5) {
+        i68474(r)
+    }
 }
 
 fn i68474(r: &mut Run) {
-    op!(r, 0x68474, 3, Op::Dec { r: R::C, f: Field::B }); // C=C-1 B
-    i68477(r)
+    r.cpu.dec(R::C, Field::B); // C=C-1 B
+    if r.next(0x68477, 5) {
+        i68477(r)
+    }
 }
 
 fn i68477(r: &mut Run) {
-    op!(r, 0x68477, 2, Op::Zero { r: R::A, f: Field::A }); // A=0 A
-    i68479(r)
+    r.cpu.zero(R::A, Field::A); // A=0 A
+    if r.next(0x68479, 4) {
+        i68479(r)
+    }
 }
 
 fn i68479(r: &mut Run) {
-    op!(r, 0x68479, 3, Op::Copy { dst: R::A, src: R::C, f: Field::B }); // A=C B
-    i6847c(r)
+    r.cpu.copy(R::A, R::C, Field::B); // A=C B
+    if r.next(0x6847C, 5) {
+        i6847c(r)
+    }
 }
 
 fn i6847c(r: &mut Run) {
-    op!(r, 0x6847C, 4, Op::Call(0x683D2)); // GOSUB #683D2
+    r.cpu.pc = 0x68480;
+    r.cpu.call(0x683D2); // GOSUB #683D2
+    r.spend(6);
 }
 
 fn i68480(r: &mut Run) {
-    op!(r, 0x68480, 3, Op::DSub { d: 1, n: 5 }); // D1=D1- 5
-    i68483(r)
+    r.cpu.d_sub(1, 5); // D1=D1- 5
+    if r.next(0x68483, 5) {
+        i68483(r)
+    }
 }
 
 fn i68483(r: &mut Run) {
-    op!(r, 0x68483, 3, Op::Mem { store: true, d: 1, r: R::A, f: Field::A }); // DAT1=A A
-    i68486(r)
+    r.sync();
+    r.cpu.store(1, R::A, Field::A, r.hw); // DAT1=A A
+    if r.next_io(0x68486, 19) {
+        i68486(r)
+    }
 }
 
 fn i68486(r: &mut Run) {
-    op!(r, 0x68486, 2, Op::Dec { r: R::D, f: Field::A }); // D=D-1 A
-    i68488(r)
+    r.cpu.dec(R::D, Field::A); // D=D-1 A
+    if r.next(0x68488, 4) {
+        i68488(r)
+    }
 }
 
 fn i68488(r: &mut Run) {
-    op!(r, 0x68488, 2, Op::Rtn(RtnKind::Plain)); // RTN
+    r.cpu.rtn(RtnKind::Plain); // RTN
+    r.spend(9);
 }
 
 fn i6848a(r: &mut Run) {
-    op!(r, 0x6848A, 3, Op::Scratch { op: ScratchOp::FromScratch, r: R::C, n: 2, f: Field::W }); // C=R2
-    i6848d(r)
+    r.cpu.scratch(ScratchOp::FromScratch, R::C, 2, Field::W); // C=R2
+    if r.next(0x6848D, 5) {
+        i6848d(r)
+    }
 }
 
 fn i6848d(r: &mut Run) {
-    op!(r, 0x6848D, 3, Op::DFromR { d: 0, r: R::C, short: false }); // D0=C
-    i68490(r)
+    r.cpu.d_from_r(0, R::C, false); // D0=C
+    if r.next(0x68490, 5) {
+        i68490(r)
+    }
 }
 
 fn i68490(r: &mut Run) {
-    op!(r, 0x68490, 7, Op::LoadConst { r: R::C, len: 5, val: 0x2A }); // LC(5) #0002A
-    i68497(r)
+    r.cpu.load_const(R::C, 5, 0x2A); // LC(5) #0002A
+    if r.next(0x68497, 9) {
+        i68497(r)
+    }
 }
 
 fn i68497(r: &mut Run) {
-    op!(r, 0x68497, 2, Op::Exch { a: R::B, b: R::C, f: Field::A }); // BCEX A
-    i68499(r)
+    r.cpu.exch(R::B, R::C, Field::A); // BCEX A
+    if r.next(0x68499, 4) {
+        i68499(r)
+    }
 }
 
 fn i68499(r: &mut Run) {
-    op!(r, 0x68499, 2, Op::PushC); // RSTK=C
-    i6849b(r)
+    r.cpu.push_c(); // RSTK=C
+    if r.next(0x6849B, 4) {
+        i6849b(r)
+    }
 }
 
 fn i6849b(r: &mut Run) {
-    op!(r, 0x6849B, 2, Op::Zero { r: R::C, f: Field::A }); // C=0 A
-    i6849d(r)
+    r.cpu.zero(R::C, Field::A); // C=0 A
+    if r.next(0x6849D, 4) {
+        i6849d(r)
+    }
 }
 
 fn i6849d(r: &mut Run) {
-    op!(r, 0x6849D, 2, Op::Sub { dst: R::A, a: R::A, b: R::B, f: Field::A }); // A=A-B A
-    i6849f(r)
+    r.cpu.sub(R::A, R::A, R::B, Field::A); // A=A-B A
+    if r.next(0x6849F, 4) {
+        i6849f(r)
+    }
 }
 
 fn i6849f(r: &mut Run) {
-    op!(r, 0x6849F, 3, Op::CondJump(Cond::Carry, 0x684A7)); // GOC #684A7
-    i684a2(r)
+    r.cpu.pc = 0x684A2;
+    r.cpu.jump_if(Cond::Carry, 0x684A7); // GOC #684A7
+    if r.next_pc(0x684A2, 5) {
+        i684a2(r)
+    }
 }
 
 fn i684a2(r: &mut Run) {
-    op!(r, 0x684A2, 2, Op::Inc { r: R::C, f: Field::A }); // C=C+1 A
-    i684a4(r)
+    r.cpu.inc(R::C, Field::A); // C=C+1 A
+    if r.next(0x684A4, 4) {
+        i684a4(r)
+    }
 }
 
 fn i684a4(r: &mut Run) {
-    op!(r, 0x684A4, 3, Op::CondJump(Cond::NoCarry, 0x6849D)); // GONC #6849D
-    i684a7(r)
+    r.cpu.pc = 0x684A7;
+    r.cpu.jump_if(Cond::NoCarry, 0x6849D); // GONC #6849D
+    if r.next_pc(0x684A7, 5) {
+        i684a7(r)
+    }
 }
 
 fn i684a7(r: &mut Run) {
-    op!(r, 0x684A7, 2, Op::Copy { dst: R::A, src: R::C, f: Field::A }); // A=C A
-    i684a9(r)
+    r.cpu.copy(R::A, R::C, Field::A); // A=C A
+    if r.next(0x684A9, 4) {
+        i684a9(r)
+    }
 }
 
 fn i684a9(r: &mut Run) {
-    op!(r, 0x684A9, 2, Op::PopC); // C=RSTK
-    i684ab(r)
+    r.cpu.pop_c(); // C=RSTK
+    if r.next(0x684AB, 4) {
+        i684ab(r)
+    }
 }
 
 fn i684ab(r: &mut Run) {
-    op!(r, 0x684AB, 2, Op::Copy { dst: R::B, src: R::C, f: Field::A }); // B=C A
-    i684ad(r)
+    r.cpu.copy(R::B, R::C, Field::A); // B=C A
+    if r.next(0x684AD, 4) {
+        i684ad(r)
+    }
 }
 
 fn i684ad(r: &mut Run) {
-    op!(r, 0x684AD, 2, Op::Inc { r: R::A, f: Field::A }); // A=A+1 A
-    i684af(r)
+    r.cpu.inc(R::A, Field::A); // A=A+1 A
+    if r.next(0x684AF, 4) {
+        i684af(r)
+    }
 }
 
 fn i684af(r: &mut Run) {
-    op!(r, 0x684AF, 7, Op::Call(0x67918)); // GOSUB #67918
+    r.cpu.pc = 0x684B6;
+    r.cpu.call(0x67918); // GOSUB #67918
+    r.spend(9);
 }
 
 fn i684b6(r: &mut Run) {
-    op!(r, 0x684B6, 7, Op::LoadConst { r: R::C, len: 5, val: 0x6FE73 }); // LC(5) #6FE73
-    i684bd(r)
+    r.cpu.load_const(R::C, 5, 0x6FE73); // LC(5) #6FE73
+    if r.next(0x684BD, 9) {
+        i684bd(r)
+    }
 }
 
 fn i684bd(r: &mut Run) {
-    op!(r, 0x684BD, 2, Op::Copy { dst: R::A, src: R::C, f: Field::A }); // A=C A
-    i684bf(r)
+    r.cpu.copy(R::A, R::C, Field::A); // A=C A
+    if r.next(0x684BF, 4) {
+        i684bf(r)
+    }
 }
 
 fn i684bf(r: &mut Run) {
-    op!(r, 0x684BF, 4, Op::PcIndirect(R::A)); // PC=(A)
+    r.sync();
+    r.cpu.pc_indirect(R::A, r.hw); // PC=(A)
+    r.spend(23);
 }
 
 fn i684c3(r: &mut Run) {
-    op!(r, 0x684C3, 3, Op::Scratch { op: ScratchOp::FromScratch, r: R::C, n: 2, f: Field::W }); // C=R2
-    i684c6(r)
+    r.cpu.scratch(ScratchOp::FromScratch, R::C, 2, Field::W); // C=R2
+    if r.next(0x684C6, 5) {
+        i684c6(r)
+    }
 }
 
 fn i684c6(r: &mut Run) {
-    op!(r, 0x684C6, 3, Op::DFromR { d: 0, r: R::C, short: false }); // D0=C
-    i684c9(r)
+    r.cpu.d_from_r(0, R::C, false); // D0=C
+    if r.next(0x684C9, 5) {
+        i684c9(r)
+    }
 }
 
 fn i684c9(r: &mut Run) {
-    op!(r, 0x684C9, 7, Op::LoadConst { r: R::C, len: 5, val: 0x6FE69 }); // LC(5) #6FE69
-    i684d0(r)
+    r.cpu.load_const(R::C, 5, 0x6FE69); // LC(5) #6FE69
+    if r.next(0x684D0, 9) {
+        i684d0(r)
+    }
 }
 
 fn i684d0(r: &mut Run) {
-    op!(r, 0x684D0, 4, Op::Jump(0x684BD)); // GOTO #684BD
+    r.cpu.pc = 0x684BD; // GOTO #684BD
+    r.spend(6);
 }
 
 fn i684d9(r: &mut Run) {
-    op!(r, 0x684D9, 7, Op::Call(0x6641)); // GOSUB #06641
+    r.cpu.pc = 0x684E0;
+    r.cpu.call(0x06641); // GOSUB #06641
+    r.spend(9);
 }
 
 fn i684e0(r: &mut Run) {
-    op!(r, 0x684E0, 2, Op::Copy { dst: R::C, src: R::A, f: Field::A }); // C=A A
-    i684e2(r)
+    r.cpu.copy(R::C, R::A, Field::A); // C=A A
+    if r.next(0x684E2, 4) {
+        i684e2(r)
+    }
 }
 
 fn i684e2(r: &mut Run) {
-    op!(r, 0x684E2, 2, Op::Inc { r: R::C, f: Field::A }); // C=C+1 A
-    i684e4(r)
+    r.cpu.inc(R::C, Field::A); // C=C+1 A
+    if r.next(0x684E4, 4) {
+        i684e4(r)
+    }
 }
 
 fn i684e4(r: &mut Run) {
-    op!(r, 0x684E4, 3, Op::CondJump(Cond::NoCarry, 0x684F1)); // GONC #684F1
-    i684e7(r)
+    r.cpu.pc = 0x684E7;
+    r.cpu.jump_if(Cond::NoCarry, 0x684F1); // GONC #684F1
+    if r.next_pc(0x684E7, 5) {
+        i684e7(r)
+    }
 }
 
 fn i684e7(r: &mut Run) {
-    op!(r, 0x684E7, 7, Op::LoadConst { r: R::C, len: 5, val: 0x68500 }); // LC(5) #68500
-    i684ee(r)
+    r.cpu.load_const(R::C, 5, 0x68500); // LC(5) #68500
+    if r.next(0x684EE, 9) {
+        i684ee(r)
+    }
 }
 
 fn i684ee(r: &mut Run) {
-    op!(r, 0x684EE, 3, Op::CondJump(Cond::Carry, 0x684BD)); // GOC #684BD
-    i684f1(r)
+    r.cpu.pc = 0x684F1;
+    r.cpu.jump_if(Cond::Carry, 0x684BD); // GOC #684BD
+    if r.next_pc(0x684F1, 5) {
+        i684f1(r)
+    }
 }
 
 fn i684f1(r: &mut Run) {
-    op!(r, 0x684F1, 7, Op::LoadConst { r: R::C, len: 5, val: 0x68425 }); // LC(5) #68425
-    i684f8(r)
+    r.cpu.load_const(R::C, 5, 0x68425); // LC(5) #68425
+    if r.next(0x684F8, 9) {
+        i684f8(r)
+    }
 }
 
 fn i684f8(r: &mut Run) {
-    op!(r, 0x684F8, 4, Op::Call(0x683D9)); // GOSUB #683D9
+    r.cpu.pc = 0x684FC;
+    r.cpu.call(0x683D9); // GOSUB #683D9
+    r.spend(6);
 }
 
 fn i684fc(r: &mut Run) {
-    op!(r, 0x684FC, 4, Op::PcIndirect(R::A)); // PC=(A)
+    r.sync();
+    r.cpu.pc_indirect(R::A, r.hw); // PC=(A)
+    r.spend(23);
 }
 
 fn i6855a(r: &mut Run) {
-    op!(r, 0x6855A, 6, Op::Call(0x67A4A)); // GOSUB #67A4A
+    r.cpu.pc = 0x68560;
+    r.cpu.call(0x67A4A); // GOSUB #67A4A
+    r.spend(8);
 }
 
 fn i68560(r: &mut Run) {
-    op!(r, 0x68560, 3, Op::DAdd { d: 0, n: 0xA }); // D0=D0+ 10
-    i68563(r)
+    r.cpu.d_add(0, 10); // D0=D0+ 10
+    if r.next(0x68563, 5) {
+        i68563(r)
+    }
 }
 
 fn i68563(r: &mut Run) {
-    op!(r, 0x68563, 3, Op::DAdd { d: 0, n: 0xC }); // D0=D0+ 12
-    i68566(r)
+    r.cpu.d_add(0, 12); // D0=D0+ 12
+    if r.next(0x68566, 5) {
+        i68566(r)
+    }
 }
 
 fn i68566(r: &mut Run) {
-    op!(r, 0x68566, 2, Op::Zero { r: R::A, f: Field::A }); // A=0 A
-    i68568(r)
+    r.cpu.zero(R::A, Field::A); // A=0 A
+    if r.next(0x68568, 4) {
+        i68568(r)
+    }
 }
 
 fn i68568(r: &mut Run) {
-    op!(r, 0x68568, 3, Op::Mem { store: false, d: 0, r: R::A, f: Field::B }); // A=DAT0 B
-    i6856b(r)
+    r.sync();
+    r.cpu.load(0, R::A, Field::B, r.hw); // A=DAT0 B
+    if r.next_io(0x6856B, 16) {
+        i6856b(r)
+    }
 }
 
 fn i6856b(r: &mut Run) {
-    op!(r, 0x6856B, 4, Op::Call(0x68573)); // GOSUB #68573
+    r.cpu.pc = 0x6856F;
+    r.cpu.call(0x68573); // GOSUB #68573
+    r.spend(6);
 }
 
 fn i6856f(r: &mut Run) {
-    op!(r, 0x6856F, 4, Op::Jump(0x685CD)); // GOTO #685CD
+    r.cpu.pc = 0x685CD; // GOTO #685CD
+    r.spend(6);
 }
 
 fn i68573(r: &mut Run) {
-    op!(r, 0x68573, 3, Op::Inc { r: R::A, f: Field::B }); // A=A+1 B
-    i68576(r)
+    r.cpu.inc(R::A, Field::B); // A=A+1 B
+    if r.next(0x68576, 5) {
+        i68576(r)
+    }
 }
 
 fn i68576(r: &mut Run) {
-    op!(r, 0x68576, 3, Op::CondJump(Cond::NoCarry, 0x6858A)); // GONC #6858A
-    i68579(r)
+    r.cpu.pc = 0x68579;
+    r.cpu.jump_if(Cond::NoCarry, 0x6858A); // GONC #6858A
+    if r.next_pc(0x68579, 5) {
+        i68579(r)
+    }
 }
 
 fn i68579(r: &mut Run) {
-    op!(r, 0x68579, 7, Op::LoadConst { r: R::C, len: 5, val: 0x6509E }); // LC(5) #6509E
-    i68580(r)
+    r.cpu.load_const(R::C, 5, 0x6509E); // LC(5) #6509E
+    if r.next(0x68580, 9) {
+        i68580(r)
+    }
 }
 
 fn i68580(r: &mut Run) {
-    op!(r, 0x68580, 3, Op::DSub { d: 1, n: 5 }); // D1=D1- 5
-    i68583(r)
+    r.cpu.d_sub(1, 5); // D1=D1- 5
+    if r.next(0x68583, 5) {
+        i68583(r)
+    }
 }
 
 fn i68583(r: &mut Run) {
-    op!(r, 0x68583, 3, Op::Mem { store: true, d: 1, r: R::C, f: Field::A }); // DAT1=C A
-    i68586(r)
+    r.sync();
+    r.cpu.store(1, R::C, Field::A, r.hw); // DAT1=C A
+    if r.next_io(0x68586, 19) {
+        i68586(r)
+    }
 }
 
 fn i68586(r: &mut Run) {
-    op!(r, 0x68586, 2, Op::Dec { r: R::D, f: Field::A }); // D=D-1 A
-    i68588(r)
+    r.cpu.dec(R::D, Field::A); // D=D-1 A
+    if r.next(0x68588, 4) {
+        i68588(r)
+    }
 }
 
 fn i68588(r: &mut Run) {
-    op!(r, 0x68588, 2, Op::Rtn(RtnKind::Plain)); // RTN
+    r.cpu.rtn(RtnKind::Plain); // RTN
+    r.spend(9);
 }
 
 fn i6858a(r: &mut Run) {
-    op!(r, 0x6858A, 3, Op::Dec { r: R::A, f: Field::B }); // A=A-1 B
-    i6858d(r)
+    r.cpu.dec(R::A, Field::B); // A=A-1 B
+    if r.next(0x6858D, 5) {
+        i6858d(r)
+    }
 }
 
 fn i6858d(r: &mut Run) {
-    op!(r, 0x6858D, 6, Op::Jump(0x67918)); // GOTO #67918
+    r.cpu.pc = 0x67918; // GOTO #67918
+    r.spend(8);
 }
 
 fn i68598(r: &mut Run) {
-    op!(r, 0x68598, 6, Op::Call(0x67A4A)); // GOSUB #67A4A
+    r.cpu.pc = 0x6859E;
+    r.cpu.call(0x67A4A); // GOSUB #67A4A
+    r.spend(8);
 }
 
 fn i6859e(r: &mut Run) {
-    op!(r, 0x6859E, 7, Op::Call(0x6641)); // GOSUB #06641
+    r.cpu.pc = 0x685A5;
+    r.cpu.call(0x06641); // GOSUB #06641
+    r.spend(9);
 }
 
 fn i685a5(r: &mut Run) {
-    op!(r, 0x685A5, 3, Op::DAdd { d: 0, n: 0xA }); // D0=D0+ 10
-    i685a8(r)
+    r.cpu.d_add(0, 10); // D0=D0+ 10
+    if r.next(0x685A8, 5) {
+        i685a8(r)
+    }
 }
 
 fn i685a8(r: &mut Run) {
-    op!(r, 0x685A8, 3, Op::DAdd { d: 0, n: 0xA }); // D0=D0+ 10
-    i685ab(r)
+    r.cpu.d_add(0, 10); // D0=D0+ 10
+    if r.next(0x685AB, 5) {
+        i685ab(r)
+    }
 }
 
 fn i685ab(r: &mut Run) {
-    op!(r, 0x685AB, 3, Op::Mem { store: true, d: 0, r: R::A, f: Field::B }); // DAT0=A B
-    i685ae(r)
+    r.sync();
+    r.cpu.store(0, R::A, Field::B, r.hw); // DAT0=A B
+    if r.next_io(0x685AE, 16) {
+        i685ae(r)
+    }
 }
 
 fn i685ae(r: &mut Run) {
-    op!(r, 0x685AE, 4, Op::Jump(0x685CD)); // GOTO #685CD
+    r.cpu.pc = 0x685CD; // GOTO #685CD
+    r.spend(6);
 }
 
 fn i685b7(r: &mut Run) {
-    op!(r, 0x685B7, 6, Op::Call(0x67A4A)); // GOSUB #67A4A
+    r.cpu.pc = 0x685BD;
+    r.cpu.call(0x67A4A); // GOSUB #67A4A
+    r.spend(8);
 }
 
 fn i685bd(r: &mut Run) {
-    op!(r, 0x685BD, 7, Op::Call(0x6641)); // GOSUB #06641
+    r.cpu.pc = 0x685C4;
+    r.cpu.call(0x06641); // GOSUB #06641
+    r.spend(9);
 }
 
 fn i685c4(r: &mut Run) {
-    op!(r, 0x685C4, 3, Op::DAdd { d: 0, n: 0xA }); // D0=D0+ 10
-    i685c7(r)
+    r.cpu.d_add(0, 10); // D0=D0+ 10
+    if r.next(0x685C7, 5) {
+        i685c7(r)
+    }
 }
 
 fn i685c7(r: &mut Run) {
-    op!(r, 0x685C7, 3, Op::DAdd { d: 0, n: 0xC }); // D0=D0+ 12
-    i685ca(r)
+    r.cpu.d_add(0, 12); // D0=D0+ 12
+    if r.next(0x685CA, 5) {
+        i685ca(r)
+    }
 }
 
 fn i685ca(r: &mut Run) {
-    op!(r, 0x685CA, 3, Op::Mem { store: true, d: 0, r: R::A, f: Field::B }); // DAT0=A B
-    i685cd(r)
+    r.sync();
+    r.cpu.store(0, R::A, Field::B, r.hw); // DAT0=A B
+    if r.next_io(0x685CD, 16) {
+        i685cd(r)
+    }
 }
 
 fn i685cd(r: &mut Run) {
-    op!(r, 0x685CD, 3, Op::Scratch { op: ScratchOp::FromScratch, r: R::C, n: 2, f: Field::W }); // C=R2
-    i685d0(r)
+    r.cpu.scratch(ScratchOp::FromScratch, R::C, 2, Field::W); // C=R2
+    if r.next(0x685D0, 5) {
+        i685d0(r)
+    }
 }
 
 fn i685d0(r: &mut Run) {
-    op!(r, 0x685D0, 3, Op::DFromR { d: 0, r: R::C, short: false }); // D0=C
-    i685d3(r)
+    r.cpu.d_from_r(0, R::C, false); // D0=C
+    if r.next(0x685D3, 5) {
+        i685d3(r)
+    }
 }
 
 fn i685d3(r: &mut Run) {
-    op!(r, 0x685D3, 3, Op::Mem { store: false, d: 0, r: R::A, f: Field::A }); // A=DAT0 A
-    i685d6(r)
+    r.sync();
+    r.cpu.load(0, R::A, Field::A, r.hw); // A=DAT0 A
+    if r.next_io(0x685D6, 19) {
+        i685d6(r)
+    }
 }
 
 fn i685d6(r: &mut Run) {
-    op!(r, 0x685D6, 3, Op::DAdd { d: 0, n: 5 }); // D0=D0+ 5
-    i685d9(r)
+    r.cpu.d_add(0, 5); // D0=D0+ 5
+    if r.next(0x685D9, 5) {
+        i685d9(r)
+    }
 }
 
 fn i685d9(r: &mut Run) {
-    op!(r, 0x685D9, 4, Op::PcIndirect(R::A)); // PC=(A)
+    r.sync();
+    r.cpu.pc_indirect(R::A, r.hw); // PC=(A)
+    r.spend(23);
 }
 
 fn i685e2(r: &mut Run) {
-    op!(r, 0x685E2, 7, Op::LoadConst { r: R::C, len: 5, val: 0x808D8 }); // LC(5) #808D8
-    i685e9(r)
+    r.cpu.load_const(R::C, 5, 0x808D8); // LC(5) #808D8
+    if r.next(0x685E9, 9) {
+        i685e9(r)
+    }
 }
 
 fn i685e9(r: &mut Run) {
-    op!(r, 0x685E9, 3, Op::DExR { d: 0, r: R::C, short: false }); // CD0EX
-    i685ec(r)
+    r.cpu.d_ex_r(0, R::C, false); // CD0EX
+    if r.next(0x685EC, 5) {
+        i685ec(r)
+    }
 }
 
 fn i685ec(r: &mut Run) {
-    op!(r, 0x685EC, 3, Op::Mem { store: false, d: 0, r: R::A, f: Field::A }); // A=DAT0 A
-    i685ef(r)
+    r.sync();
+    r.cpu.load(0, R::A, Field::A, r.hw); // A=DAT0 A
+    if r.next_io(0x685EF, 19) {
+        i685ef(r)
+    }
 }
 
 fn i685ef(r: &mut Run) {
-    op!(r, 0x685EF, 3, Op::DFromR { d: 0, r: R::C, short: false }); // D0=C
-    i685f2(r)
+    r.cpu.d_from_r(0, R::C, false); // D0=C
+    if r.next(0x685F2, 5) {
+        i685f2(r)
+    }
 }
 
 fn i685f2(r: &mut Run) {
-    op!(r, 0x685F2, 6, Op::SubCon { r: R::A, f: Field::A, n: 3 }); // A=A-CON A,3
-    i685f8(r)
+    r.cpu.sub_con(R::A, Field::A, 3); // A=A-CON A,3
+    if r.next(0x685F8, 8) {
+        i685f8(r)
+    }
 }
 
 fn i685f8(r: &mut Run) {
-    op!(r, 0x685F8, 3, Op::CondJump(Cond::Carry, 0x685FF)); // GOC #685FF
-    i685fb(r)
+    r.cpu.pc = 0x685FB;
+    r.cpu.jump_if(Cond::Carry, 0x685FF); // GOC #685FF
+    if r.next_pc(0x685FB, 5) {
+        i685fb(r)
+    }
 }
 
 fn i685fb(r: &mut Run) {
-    op!(r, 0x685FB, 4, Op::Jump(0x685D3)); // GOTO #685D3
+    r.cpu.pc = 0x685D3; // GOTO #685D3
+    r.spend(6);
 }
 
 fn i685ff(r: &mut Run) {
-    op!(r, 0x685FF, 7, Op::LoadConst { r: R::C, len: 5, val: 0x6867A }); // LC(5) #6867A
-    i68606(r)
+    r.cpu.load_const(R::C, 5, 0x6867A); // LC(5) #6867A
+    if r.next(0x68606, 9) {
+        i68606(r)
+    }
 }
 
 fn i68606(r: &mut Run) {
-    op!(r, 0x68606, 4, Op::Jump(0x684BD)); // GOTO #684BD
+    r.cpu.pc = 0x684BD; // GOTO #684BD
+    r.spend(6);
 }
 
 fn i6860f(r: &mut Run) {
-    op!(r, 0x6860F, 3, Op::StSet { bit: 4, set: false }); // ST=0 4
-    i68612(r)
+    r.cpu.st_set(4, false); // ST=0 4
+    if r.next(0x68612, 5) {
+        i68612(r)
+    }
 }
 
 fn i68612(r: &mut Run) {
-    op!(r, 0x68612, 7, Op::LoadConst { r: R::C, len: 5, val: 0xA0 }); // LC(5) #000A0
-    i68619(r)
+    r.cpu.load_const(R::C, 5, 0xA0); // LC(5) #000A0
+    if r.next(0x68619, 9) {
+        i68619(r)
+    }
 }
 
 fn i68619(r: &mut Run) {
-    op!(r, 0x68619, 4, Op::Call(0x68670)); // GOSUB #68670
+    r.cpu.pc = 0x6861D;
+    r.cpu.call(0x68670); // GOSUB #68670
+    r.spend(6);
 }
 
 fn i6861d(r: &mut Run) {
-    op!(r, 0x6861D, 4, Op::Call(0x682F7)); // GOSUB #682F7
+    r.cpu.pc = 0x68621;
+    r.cpu.call(0x682F7); // GOSUB #682F7
+    r.spend(6);
 }
 
 fn i68621(r: &mut Run) {
-    op!(r, 0x68621, 7, Op::LoadConst { r: R::C, len: 5, val: 0xFFF65 }); // LC(5) #FFF65
-    i68628(r)
+    r.cpu.load_const(R::C, 5, 0xFFF65); // LC(5) #FFF65
+    if r.next(0x68628, 9) {
+        i68628(r)
+    }
 }
 
 fn i68628(r: &mut Run) {
-    op!(r, 0x68628, 4, Op::Call(0x68670)); // GOSUB #68670
+    r.cpu.pc = 0x6862C;
+    r.cpu.call(0x68670); // GOSUB #68670
+    r.spend(6);
 }
 
 fn i6862c(r: &mut Run) {
-    op!(r, 0x6862C, 4, Op::Call(0x682F7)); // GOSUB #682F7
+    r.cpu.pc = 0x68630;
+    r.cpu.call(0x682F7); // GOSUB #682F7
+    r.spend(6);
 }
 
 fn i68630(r: &mut Run) {
-    op!(r, 0x68630, 7, Op::LoadConst { r: R::C, len: 5, val: 0xFFF65 }); // LC(5) #FFF65
-    i68637(r)
+    r.cpu.load_const(R::C, 5, 0xFFF65); // LC(5) #FFF65
+    if r.next(0x68637, 9) {
+        i68637(r)
+    }
 }
 
 fn i68637(r: &mut Run) {
-    op!(r, 0x68637, 4, Op::Call(0x68670)); // GOSUB #68670
+    r.cpu.pc = 0x6863B;
+    r.cpu.call(0x68670); // GOSUB #68670
+    r.spend(6);
 }
 
 fn i6863b(r: &mut Run) {
-    op!(r, 0x6863B, 4, Op::Call(0x682F7)); // GOSUB #682F7
+    r.cpu.pc = 0x6863F;
+    r.cpu.call(0x682F7); // GOSUB #682F7
+    r.spend(6);
 }
 
 fn i6863f(r: &mut Run) {
-    op!(r, 0x6863F, 3, Op::Mem { store: false, d: 1, r: R::C, f: Field::A }); // C=DAT1 A
-    i68642(r)
+    r.sync();
+    r.cpu.load(1, R::C, Field::A, r.hw); // C=DAT1 A
+    if r.next_io(0x68642, 19) {
+        i68642(r)
+    }
 }
 
 fn i68642(r: &mut Run) {
-    op!(r, 0x68642, 2, Op::PushC); // RSTK=C
-    i68644(r)
+    r.cpu.push_c(); // RSTK=C
+    if r.next(0x68644, 4) {
+        i68644(r)
+    }
 }
 
 fn i68644(r: &mut Run) {
-    op!(r, 0x68644, 7, Op::LoadConst { r: R::C, len: 5, val: 0x50 }); // LC(5) #00050
-    i6864b(r)
+    r.cpu.load_const(R::C, 5, 0x50); // LC(5) #00050
+    if r.next(0x6864B, 9) {
+        i6864b(r)
+    }
 }
 
 fn i6864b(r: &mut Run) {
-    op!(r, 0x6864B, 4, Op::Call(0x68670)); // GOSUB #68670
+    r.cpu.pc = 0x6864F;
+    r.cpu.call(0x68670); // GOSUB #68670
+    r.spend(6);
 }
 
 fn i6864f(r: &mut Run) {
-    op!(r, 0x6864F, 3, Op::Mem { store: false, d: 1, r: R::C, f: Field::A }); // C=DAT1 A
-    i68652(r)
+    r.sync();
+    r.cpu.load(1, R::C, Field::A, r.hw); // C=DAT1 A
+    if r.next_io(0x68652, 19) {
+        i68652(r)
+    }
 }
 
 fn i68652(r: &mut Run) {
-    op!(r, 0x68652, 2, Op::PushC); // RSTK=C
-    i68654(r)
+    r.cpu.push_c(); // RSTK=C
+    if r.next(0x68654, 4) {
+        i68654(r)
+    }
 }
 
 fn i68654(r: &mut Run) {
-    op!(r, 0x68654, 7, Op::LoadConst { r: R::C, len: 5, val: 0x4B }); // LC(5) #0004B
-    i6865b(r)
+    r.cpu.load_const(R::C, 5, 0x4B); // LC(5) #0004B
+    if r.next(0x6865B, 9) {
+        i6865b(r)
+    }
 }
 
 fn i6865b(r: &mut Run) {
-    op!(r, 0x6865B, 4, Op::Call(0x68670)); // GOSUB #68670
+    r.cpu.pc = 0x6865F;
+    r.cpu.call(0x68670); // GOSUB #68670
+    r.spend(6);
 }
 
 fn i6865f(r: &mut Run) {
-    op!(r, 0x6865F, 2, Op::PopC); // C=RSTK
-    i68661(r)
+    r.cpu.pop_c(); // C=RSTK
+    if r.next(0x68661, 4) {
+        i68661(r)
+    }
 }
 
 fn i68661(r: &mut Run) {
-    op!(r, 0x68661, 3, Op::Mem { store: true, d: 1, r: R::C, f: Field::A }); // DAT1=C A
-    i68664(r)
+    r.sync();
+    r.cpu.store(1, R::C, Field::A, r.hw); // DAT1=C A
+    if r.next_io(0x68664, 19) {
+        i68664(r)
+    }
 }
 
 fn i68664(r: &mut Run) {
-    op!(r, 0x68664, 3, Op::DSub { d: 1, n: 5 }); // D1=D1- 5
-    i68667(r)
+    r.cpu.d_sub(1, 5); // D1=D1- 5
+    if r.next(0x68667, 5) {
+        i68667(r)
+    }
 }
 
 fn i68667(r: &mut Run) {
-    op!(r, 0x68667, 2, Op::PopC); // C=RSTK
-    i68669(r)
+    r.cpu.pop_c(); // C=RSTK
+    if r.next(0x68669, 4) {
+        i68669(r)
+    }
 }
 
 fn i68669(r: &mut Run) {
-    op!(r, 0x68669, 3, Op::Mem { store: true, d: 1, r: R::C, f: Field::A }); // DAT1=C A
-    i6866c(r)
+    r.sync();
+    r.cpu.store(1, R::C, Field::A, r.hw); // DAT1=C A
+    if r.next_io(0x6866C, 19) {
+        i6866c(r)
+    }
 }
 
 fn i6866c(r: &mut Run) {
-    op!(r, 0x6866C, 4, Op::Jump(0x685D3)); // GOTO #685D3
+    r.cpu.pc = 0x685D3; // GOTO #685D3
+    r.spend(6);
 }
 
 fn i68670(r: &mut Run) {
-    op!(r, 0x68670, 3, Op::DExR { d: 1, r: R::A, short: false }); // AD1EX
-    i68673(r)
+    r.cpu.d_ex_r(1, R::A, false); // AD1EX
+    if r.next(0x68673, 5) {
+        i68673(r)
+    }
 }
 
 fn i68673(r: &mut Run) {
-    op!(r, 0x68673, 2, Op::Add { dst: R::A, src: R::C, f: Field::A }); // A=A+C A
-    i68675(r)
+    r.cpu.add(R::A, R::C, Field::A); // A=A+C A
+    if r.next(0x68675, 4) {
+        i68675(r)
+    }
 }
 
 fn i68675(r: &mut Run) {
-    op!(r, 0x68675, 3, Op::DFromR { d: 1, r: R::A, short: false }); // D1=A
-    i68678(r)
+    r.cpu.d_from_r(1, R::A, false); // D1=A
+    if r.next(0x68678, 5) {
+        i68678(r)
+    }
 }
 
 fn i68678(r: &mut Run) {
-    op!(r, 0x68678, 2, Op::Rtn(RtnKind::Plain)); // RTN
+    r.cpu.rtn(RtnKind::Plain); // RTN
+    r.spend(9);
 }
 
 fn i69652(r: &mut Run) {
-    op!(r, 0x69652, 3, Op::StSet { bit: 2, set: true }); // ST=1 2
-    i69655(r)
+    r.cpu.st_set(2, true); // ST=1 2
+    if r.next(0x69655, 5) {
+        i69655(r)
+    }
 }
 
 fn i69655(r: &mut Run) {
-    op!(r, 0x69655, 4, Op::Jump(0x69661)); // GOTO #69661
+    r.cpu.pc = 0x69661; // GOTO #69661
+    r.spend(6);
 }
 
 fn i6965e(r: &mut Run) {
-    op!(r, 0x6965E, 3, Op::StSet { bit: 2, set: false }); // ST=0 2
-    i69661(r)
+    r.cpu.st_set(2, false); // ST=0 2
+    if r.next(0x69661, 5) {
+        i69661(r)
+    }
 }
 
 fn i69661(r: &mut Run) {
-    op!(r, 0x69661, 7, Op::Call(0x6641)); // GOSUB #06641
+    r.cpu.pc = 0x69668;
+    r.cpu.call(0x06641); // GOSUB #06641
+    r.spend(9);
 }
 
 fn i69668(r: &mut Run) {
-    op!(r, 0x69668, 3, Op::DSub { d: 1, n: 5 }); // D1=D1- 5
-    i6966b(r)
+    r.cpu.d_sub(1, 5); // D1=D1- 5
+    if r.next(0x6966B, 5) {
+        i6966b(r)
+    }
 }
 
 fn i6966b(r: &mut Run) {
-    op!(r, 0x6966B, 2, Op::Dec { r: R::D, f: Field::A }); // D=D-1 A
-    i6966d(r)
+    r.cpu.dec(R::D, Field::A); // D=D-1 A
+    if r.next(0x6966D, 4) {
+        i6966d(r)
+    }
 }
 
 fn i6966d(r: &mut Run) {
-    op!(r, 0x6966D, 3, Op::Rotate { r: R::A, left: false }); // ASRC
-    i69670(r)
+    r.cpu.rotate(R::A, false); // ASRC
+    if r.next(0x69670, 5) {
+        i69670(r)
+    }
 }
 
 fn i69670(r: &mut Run) {
-    op!(r, 0x69670, 7, Op::Call(0x67E7B)); // GOSUB #67E7B
+    r.cpu.pc = 0x69677;
+    r.cpu.call(0x67E7B); // GOSUB #67E7B
+    r.spend(9);
 }
 
 fn i69677(r: &mut Run) {
-    op!(r, 0x69677, 3, Op::DAdd { d: 0, n: 0xA }); // D0=D0+ 10
-    i6967a(r)
+    r.cpu.d_add(0, 10); // D0=D0+ 10
+    if r.next(0x6967A, 5) {
+        i6967a(r)
+    }
 }
 
 fn i6967a(r: &mut Run) {
-    op!(r, 0x6967A, 3, Op::DAdd { d: 0, n: 5 }); // D0=D0+ 5
-    i6967d(r)
+    r.cpu.d_add(0, 5); // D0=D0+ 5
+    if r.next(0x6967D, 5) {
+        i6967d(r)
+    }
 }
 
 fn i6967d(r: &mut Run) {
-    op!(r, 0x6967D, 3, Op::Mem { store: false, d: 0, r: R::A, f: Field::A }); // A=DAT0 A
-    i69680(r)
+    r.sync();
+    r.cpu.load(0, R::A, Field::A, r.hw); // A=DAT0 A
+    if r.next_io(0x69680, 19) {
+        i69680(r)
+    }
 }
 
 fn i69680(r: &mut Run) {
-    op!(r, 0x69680, 3, Op::DSub { d: 0, n: 0xF }); // D0=D0- 15
-    i69683(r)
+    r.cpu.d_sub(0, 15); // D0=D0- 15
+    if r.next(0x69683, 5) {
+        i69683(r)
+    }
 }
 
 fn i69683(r: &mut Run) {
-    op!(r, 0x69683, 7, Op::LoadConst { r: R::C, len: 5, val: 0x1A8D8 }); // LC(5) #1A8D8
-    i6968a(r)
+    r.cpu.load_const(R::C, 5, 0x1A8D8); // LC(5) #1A8D8
+    if r.next(0x6968A, 9) {
+        i6968a(r)
+    }
 }
 
 fn i6968a(r: &mut Run) {
-    op!(r, 0x6968A, 5, Op::Test { test: Test::Regs(Cmp::Ne, R::C, R::A), f: Field::A, goyes: Some(0x696B0) }); // ?C#A A / GOYES #696B0
-    i6968f(r)
+    r.cpu.pc = 0x6968F;
+    r.cpu.test(Test::Regs(Cmp::Ne, R::C, R::A), Field::A, Some(0x696B0)); // ?C#A A / GOYES #696B0
+    if r.next_pc(0x6968F, 7) {
+        i6968f(r)
+    }
 }
 
 fn i6968f(r: &mut Run) {
-    op!(r, 0x6968F, 5, Op::StTest { bit: 2, set: false, goyes: Some(0x69698) }); // ?ST=0 2 / GOYES #69698
-    i69694(r)
+    r.cpu.pc = 0x69694;
+    r.cpu.st_test(2, false, Some(0x69698)); // ?ST=0 2 / GOYES #69698
+    if r.next_pc(0x69694, 7) {
+        i69694(r)
+    }
 }
 
 fn i69694(r: &mut Run) {
-    op!(r, 0x69694, 4, Op::Jump(0x69787)); // GOTO #69787
+    r.cpu.pc = 0x69787; // GOTO #69787
+    r.spend(6);
 }
 
 fn i69698(r: &mut Run) {
-    op!(r, 0x69698, 7, Op::LoadConst { r: R::C, len: 5, val: 0x3AC0 }); // LC(5) #03AC0
-    i6969f(r)
+    r.cpu.load_const(R::C, 5, 0x3AC0); // LC(5) #03AC0
+    if r.next(0x6969F, 9) {
+        i6969f(r)
+    }
 }
 
 fn i6969f(r: &mut Run) {
-    op!(r, 0x6969F, 3, Op::Scratch { op: ScratchOp::ToScratch, r: R::C, n: 0, f: Field::W }); // R0=C
-    i696a2(r)
+    r.cpu.scratch(ScratchOp::ToScratch, R::C, 0, Field::W); // R0=C
+    if r.next(0x696A2, 5) {
+        i696a2(r)
+    }
 }
 
 fn i696a2(r: &mut Run) {
-    op!(r, 0x696A2, 10, Op::LoadConst { r: R::A, len: 5, val: 0x3A81 }); // LA(5) #03A81
-    i696ac(r)
+    r.cpu.load_const(R::A, 5, 0x3A81); // LA(5) #03A81
+    if r.next(0x696AC, 12) {
+        i696ac(r)
+    }
 }
 
 fn i696ac(r: &mut Run) {
-    op!(r, 0x696AC, 4, Op::Jump(0x69766)); // GOTO #69766
+    r.cpu.pc = 0x69766; // GOTO #69766
+    r.spend(6);
 }
 
 fn i696b0(r: &mut Run) {
-    op!(r, 0x696B0, 3, Op::Mem { store: false, d: 0, r: R::C, f: Field::A }); // C=DAT0 A
-    i696b3(r)
+    r.sync();
+    r.cpu.load(0, R::C, Field::A, r.hw); // C=DAT0 A
+    if r.next_io(0x696B3, 19) {
+        i696b3(r)
+    }
 }
 
 fn i696b3(r: &mut Run) {
-    op!(r, 0x696B3, 3, Op::DExR { d: 0, r: R::C, short: false }); // CD0EX
-    i696b6(r)
+    r.cpu.d_ex_r(0, R::C, false); // CD0EX
+    if r.next(0x696B6, 5) {
+        i696b6(r)
+    }
 }
 
 fn i696b6(r: &mut Run) {
-    op!(r, 0x696B6, 3, Op::DAdd { d: 0, n: 5 }); // D0=D0+ 5
-    i696b9(r)
+    r.cpu.d_add(0, 5); // D0=D0+ 5
+    if r.next(0x696B9, 5) {
+        i696b9(r)
+    }
 }
 
 fn i696b9(r: &mut Run) {
-    op!(r, 0x696B9, 3, Op::Mem { store: false, d: 0, r: R::A, f: Field::A }); // A=DAT0 A
-    i696bc(r)
+    r.sync();
+    r.cpu.load(0, R::A, Field::A, r.hw); // A=DAT0 A
+    if r.next_io(0x696BC, 19) {
+        i696bc(r)
+    }
 }
 
 fn i696bc(r: &mut Run) {
-    op!(r, 0x696BC, 3, Op::DFromR { d: 0, r: R::C, short: false }); // D0=C
-    i696bf(r)
+    r.cpu.d_from_r(0, R::C, false); // D0=C
+    if r.next(0x696BF, 5) {
+        i696bf(r)
+    }
 }
 
 fn i696bf(r: &mut Run) {
-    op!(r, 0x696BF, 5, Op::Test { test: Test::NonZero(R::A), f: Field::A, goyes: Some(0x696C8) }); // ?A#0 A / GOYES #696C8
-    i696c4(r)
+    r.cpu.pc = 0x696C4;
+    r.cpu.test(Test::NonZero(R::A), Field::A, Some(0x696C8)); // ?A#0 A / GOYES #696C8
+    if r.next_pc(0x696C4, 7) {
+        i696c4(r)
+    }
 }
 
 fn i696c4(r: &mut Run) {
-    op!(r, 0x696C4, 4, Op::Jump(0x69776)); // GOTO #69776
+    r.cpu.pc = 0x69776; // GOTO #69776
+    r.spend(6);
 }
 
 fn i696c8(r: &mut Run) {
-    op!(r, 0x696C8, 3, Op::DAdd { d: 0, n: 0xA }); // D0=D0+ 10
-    i696cb(r)
+    r.cpu.d_add(0, 10); // D0=D0+ 10
+    if r.next(0x696CB, 5) {
+        i696cb(r)
+    }
 }
 
 fn i696cb(r: &mut Run) {
-    op!(r, 0x696CB, 3, Op::Mem { store: false, d: 0, r: R::C, f: Field::A }); // C=DAT0 A
-    i696ce(r)
+    r.sync();
+    r.cpu.load(0, R::C, Field::A, r.hw); // C=DAT0 A
+    if r.next_io(0x696CE, 19) {
+        i696ce(r)
+    }
 }
 
 fn i696ce(r: &mut Run) {
-    op!(r, 0x696CE, 3, Op::DExR { d: 0, r: R::C, short: false }); // CD0EX
-    i696d1(r)
+    r.cpu.d_ex_r(0, R::C, false); // CD0EX
+    if r.next(0x696D1, 5) {
+        i696d1(r)
+    }
 }
 
 fn i696d1(r: &mut Run) {
-    op!(r, 0x696D1, 2, Op::PushC); // RSTK=C
-    i696d3(r)
+    r.cpu.push_c(); // RSTK=C
+    if r.next(0x696D3, 4) {
+        i696d3(r)
+    }
 }
 
 fn i696d3(r: &mut Run) {
-    op!(r, 0x696D3, 3, Op::DAdd { d: 0, n: 5 }); // D0=D0+ 5
-    i696d6(r)
+    r.cpu.d_add(0, 5); // D0=D0+ 5
+    if r.next(0x696D6, 5) {
+        i696d6(r)
+    }
 }
 
 fn i696d6(r: &mut Run) {
-    op!(r, 0x696D6, 3, Op::Mem { store: false, d: 0, r: R::C, f: Field::A }); // C=DAT0 A
-    i696d9(r)
+    r.sync();
+    r.cpu.load(0, R::C, Field::A, r.hw); // C=DAT0 A
+    if r.next_io(0x696D9, 19) {
+        i696d9(r)
+    }
 }
 
 fn i696d9(r: &mut Run) {
-    op!(r, 0x696D9, 6, Op::SubCon { r: R::C, f: Field::A, n: 8 }); // C=C-CON A,8
-    i696df(r)
+    r.cpu.sub_con(R::C, Field::A, 8); // C=C-CON A,8
+    if r.next(0x696DF, 8) {
+        i696df(r)
+    }
 }
 
 fn i696df(r: &mut Run) {
-    op!(r, 0x696DF, 3, Op::CondJump(Cond::NoCarry, 0x696F6)); // GONC #696F6
-    i696e2(r)
+    r.cpu.pc = 0x696E2;
+    r.cpu.jump_if(Cond::NoCarry, 0x696F6); // GONC #696F6
+    if r.next_pc(0x696E2, 5) {
+        i696e2(r)
+    }
 }
 
 fn i696e2(r: &mut Run) {
-    op!(r, 0x696E2, 2, Op::PopC); // C=RSTK
-    i696e4(r)
+    r.cpu.pop_c(); // C=RSTK
+    if r.next(0x696E4, 4) {
+        i696e4(r)
+    }
 }
 
 fn i696e4(r: &mut Run) {
-    op!(r, 0x696E4, 2, Op::Copy { dst: R::A, src: R::C, f: Field::A }); // A=C A
-    i696e6(r)
+    r.cpu.copy(R::A, R::C, Field::A); // A=C A
+    if r.next(0x696E6, 4) {
+        i696e6(r)
+    }
 }
 
 fn i696e6(r: &mut Run) {
-    op!(r, 0x696E6, 7, Op::LoadConst { r: R::C, len: 5, val: 0x19 }); // LC(5) #00019
-    i696ed(r)
+    r.cpu.load_const(R::C, 5, 0x19); // LC(5) #00019
+    if r.next(0x696ED, 9) {
+        i696ed(r)
+    }
 }
 
 fn i696ed(r: &mut Run) {
-    op!(r, 0x696ED, 2, Op::Add { dst: R::A, src: R::C, f: Field::A }); // A=A+C A
-    i696ef(r)
+    r.cpu.add(R::A, R::C, Field::A); // A=A+C A
+    if r.next(0x696EF, 4) {
+        i696ef(r)
+    }
 }
 
 fn i696ef(r: &mut Run) {
-    op!(r, 0x696EF, 3, Op::DFromR { d: 0, r: R::A, short: false }); // D0=A
-    i696f2(r)
+    r.cpu.d_from_r(0, R::A, false); // D0=A
+    if r.next(0x696F2, 5) {
+        i696f2(r)
+    }
 }
 
 fn i696f2(r: &mut Run) {
-    op!(r, 0x696F2, 4, Op::Jump(0x6967A)); // GOTO #6967A
+    r.cpu.pc = 0x6967A; // GOTO #6967A
+    r.spend(6);
 }
 
 fn i696f6(r: &mut Run) {
-    op!(r, 0x696F6, 2, Op::Sub { dst: R::C, a: R::C, b: R::A, f: Field::A }); // C=C-A A
-    i696f8(r)
+    r.cpu.sub(R::C, R::C, R::A, Field::A); // C=C-A A
+    if r.next(0x696F8, 4) {
+        i696f8(r)
+    }
 }
 
 fn i696f8(r: &mut Run) {
-    op!(r, 0x696F8, 3, Op::CondJump(Cond::Carry, 0x696E2)); // GOC #696E2
-    i696fb(r)
+    r.cpu.pc = 0x696FB;
+    r.cpu.jump_if(Cond::Carry, 0x696E2); // GOC #696E2
+    if r.next_pc(0x696FB, 5) {
+        i696fb(r)
+    }
 }
 
 fn i696fb(r: &mut Run) {
-    op!(r, 0x696FB, 3, Op::DAdd { d: 0, n: 6 }); // D0=D0+ 6
-    i696fe(r)
+    r.cpu.d_add(0, 6); // D0=D0+ 6
+    if r.next(0x696FE, 5) {
+        i696fe(r)
+    }
 }
 
 fn i696fe(r: &mut Run) {
-    op!(r, 0x696FE, 3, Op::DExR { d: 0, r: R::C, short: false }); // CD0EX
-    i69701(r)
+    r.cpu.d_ex_r(0, R::C, false); // CD0EX
+    if r.next(0x69701, 5) {
+        i69701(r)
+    }
 }
 
 fn i69701(r: &mut Run) {
-    op!(r, 0x69701, 2, Op::Add { dst: R::C, src: R::A, f: Field::A }); // C=C+A A
-    i69703(r)
+    r.cpu.add(R::C, R::A, Field::A); // C=C+A A
+    if r.next(0x69703, 4) {
+        i69703(r)
+    }
 }
 
 fn i69703(r: &mut Run) {
-    op!(r, 0x69703, 3, Op::DFromR { d: 0, r: R::C, short: false }); // D0=C
-    i69706(r)
+    r.cpu.d_from_r(0, R::C, false); // D0=C
+    if r.next(0x69706, 5) {
+        i69706(r)
+    }
 }
 
 fn i69706(r: &mut Run) {
-    op!(r, 0x69706, 4, Op::Mem { store: false, d: 0, r: R::C, f: Field::S }); // C=DAT0 S
-    i6970a(r)
+    r.sync();
+    r.cpu.load(0, R::C, Field::S, r.hw); // C=DAT0 S
+    if r.next_io(0x6970A, 15) {
+        i6970a(r)
+    }
 }
 
 fn i6970a(r: &mut Run) {
-    op!(r, 0x6970A, 5, Op::Test { test: Test::Regs(Cmp::Eq, R::C, R::A), f: Field::S, goyes: Some(0x6975A) }); // ?C=A S / GOYES #6975A
-    i6970f(r)
+    r.cpu.pc = 0x6970F;
+    r.cpu.test(Test::Regs(Cmp::Eq, R::C, R::A), Field::S, Some(0x6975A)); // ?C=A S / GOYES #6975A
+    if r.next_pc(0x6970F, 7) {
+        i6970f(r)
+    }
 }
 
 fn i6970f(r: &mut Run) {
-    op!(r, 0x6970F, 4, Op::CpEx(0xF)); // CPEX 15
-    i69713(r)
+    r.cpu.cp_ex(15); // CPEX 15
+    if r.next(0x69713, 6) {
+        i69713(r)
+    }
 }
 
 fn i69713(r: &mut Run) {
-    op!(r, 0x69713, 5, Op::PTest { n: 0, equal: true, goyes: Some(0x69740) }); // ?P= 0 / GOYES #69740
-    i69718(r)
+    r.cpu.pc = 0x69718;
+    r.cpu.p_test(0, true, Some(0x69740)); // ?P= 0 / GOYES #69740
+    if r.next_pc(0x69718, 7) {
+        i69718(r)
+    }
 }
 
 fn i69718(r: &mut Run) {
-    op!(r, 0x69718, 5, Op::PTest { n: 2, equal: true, goyes: Some(0x69740) }); // ?P= 2 / GOYES #69740
-    i6971d(r)
+    r.cpu.pc = 0x6971D;
+    r.cpu.p_test(2, true, Some(0x69740)); // ?P= 2 / GOYES #69740
+    if r.next_pc(0x6971D, 7) {
+        i6971d(r)
+    }
 }
 
 fn i6971d(r: &mut Run) {
-    op!(r, 0x6971D, 5, Op::PTest { n: 3, equal: true, goyes: Some(0x69740) }); // ?P= 3 / GOYES #69740
-    i69722(r)
+    r.cpu.pc = 0x69722;
+    r.cpu.p_test(3, true, Some(0x69740)); // ?P= 3 / GOYES #69740
+    if r.next_pc(0x69722, 7) {
+        i69722(r)
+    }
 }
 
 fn i69722(r: &mut Run) {
-    op!(r, 0x69722, 4, Op::CpEx(0xF)); // CPEX 15
-    i69726(r)
+    r.cpu.cp_ex(15); // CPEX 15
+    if r.next(0x69726, 6) {
+        i69726(r)
+    }
 }
 
 fn i69726(r: &mut Run) {
-    op!(r, 0x69726, 3, Op::Exch { a: R::C, b: R::A, f: Field::S }); // CAEX S
-    i69729(r)
+    r.cpu.exch(R::C, R::A, Field::S); // CAEX S
+    if r.next(0x69729, 5) {
+        i69729(r)
+    }
 }
 
 fn i69729(r: &mut Run) {
-    op!(r, 0x69729, 2, Op::PSet(7)); // P= 7
-    i6972b(r)
+    r.cpu.p = 7; // P= 7
+    if r.next(0x6972B, 4) {
+        i6972b(r)
+    }
 }
 
 fn i6972b(r: &mut Run) {
-    op!(r, 0x6972B, 4, Op::CpEx(0xF)); // CPEX 15
-    i6972f(r)
+    r.cpu.cp_ex(15); // CPEX 15
+    if r.next(0x6972F, 6) {
+        i6972f(r)
+    }
 }
 
 fn i6972f(r: &mut Run) {
-    op!(r, 0x6972F, 5, Op::Test { test: Test::Regs(Cmp::Lt, R::C, R::A), f: Field::S, goyes: Some(0x69734) }); // ?C<A S / GOYES #69734
-    i69734(r)
+    r.cpu.pc = 0x69734;
+    r.cpu.test(Test::Regs(Cmp::Lt, R::C, R::A), Field::S, Some(0x69734)); // ?C<A S / GOYES #69734
+    if r.next_pc(0x69734, 7) {
+        i69734(r)
+    }
 }
 
 fn i69734(r: &mut Run) {
-    op!(r, 0x69734, 4, Op::CpEx(0xF)); // CPEX 15
-    i69738(r)
+    r.cpu.cp_ex(15); // CPEX 15
+    if r.next(0x69738, 6) {
+        i69738(r)
+    }
 }
 
 fn i69738(r: &mut Run) {
-    op!(r, 0x69738, 3, Op::Exch { a: R::C, b: R::A, f: Field::S }); // CAEX S
-    i6973b(r)
+    r.cpu.exch(R::C, R::A, Field::S); // CAEX S
+    if r.next(0x6973B, 5) {
+        i6973b(r)
+    }
 }
 
 fn i6973b(r: &mut Run) {
-    op!(r, 0x6973B, 2, Op::PSet(0)); // P= 0
-    i6973d(r)
+    r.cpu.p = 0; // P= 0
+    if r.next(0x6973D, 4) {
+        i6973d(r)
+    }
 }
 
 fn i6973d(r: &mut Run) {
-    op!(r, 0x6973D, 3, Op::CondJump(Cond::Carry, 0x69776)); // GOC #69776
-    i69740(r)
+    r.cpu.pc = 0x69740;
+    r.cpu.jump_if(Cond::Carry, 0x69776); // GOC #69776
+    if r.next_pc(0x69740, 5) {
+        i69740(r)
+    }
 }
 
 fn i69740(r: &mut Run) {
-    op!(r, 0x69740, 3, Op::Scratch { op: ScratchOp::FromScratch, r: R::C, n: 2, f: Field::W }); // C=R2
-    i69743(r)
+    r.cpu.scratch(ScratchOp::FromScratch, R::C, 2, Field::W); // C=R2
+    if r.next(0x69743, 5) {
+        i69743(r)
+    }
 }
 
 fn i69743(r: &mut Run) {
-    op!(r, 0x69743, 3, Op::DFromR { d: 0, r: R::C, short: false }); // D0=C
-    i69746(r)
+    r.cpu.d_from_r(0, R::C, false); // D0=C
+    if r.next(0x69746, 5) {
+        i69746(r)
+    }
 }
 
 fn i69746(r: &mut Run) {
-    op!(r, 0x69746, 7, Op::LoadConst { r: R::C, len: 5, val: 0x3AC0 }); // LC(5) #03AC0
-    i6974d(r)
+    r.cpu.load_const(R::C, 5, 0x3AC0); // LC(5) #03AC0
+    if r.next(0x6974D, 9) {
+        i6974d(r)
+    }
 }
 
 fn i6974d(r: &mut Run) {
-    op!(r, 0x6974D, 3, Op::Mem { store: true, d: 1, r: R::C, f: Field::A }); // DAT1=C A
-    i69750(r)
+    r.sync();
+    r.cpu.store(1, R::C, Field::A, r.hw); // DAT1=C A
+    if r.next_io(0x69750, 19) {
+        i69750(r)
+    }
 }
 
 fn i69750(r: &mut Run) {
-    op!(r, 0x69750, 3, Op::Mem { store: false, d: 0, r: R::A, f: Field::A }); // A=DAT0 A
-    i69753(r)
+    r.sync();
+    r.cpu.load(0, R::A, Field::A, r.hw); // A=DAT0 A
+    if r.next_io(0x69753, 19) {
+        i69753(r)
+    }
 }
 
 fn i69753(r: &mut Run) {
-    op!(r, 0x69753, 3, Op::DAdd { d: 0, n: 5 }); // D0=D0+ 5
-    i69756(r)
+    r.cpu.d_add(0, 5); // D0=D0+ 5
+    if r.next(0x69756, 5) {
+        i69756(r)
+    }
 }
 
 fn i69756(r: &mut Run) {
-    op!(r, 0x69756, 4, Op::PcIndirect(R::A)); // PC=(A)
+    r.sync();
+    r.cpu.pc_indirect(R::A, r.hw); // PC=(A)
+    r.spend(23);
 }
 
 fn i6975a(r: &mut Run) {
-    op!(r, 0x6975A, 7, Op::LoadConst { r: R::C, len: 5, val: 0x3A81 }); // LC(5) #03A81
-    i69761(r)
+    r.cpu.load_const(R::C, 5, 0x3A81); // LC(5) #03A81
+    if r.next(0x69761, 9) {
+        i69761(r)
+    }
 }
 
 fn i69761(r: &mut Run) {
-    op!(r, 0x69761, 2, Op::Copy { dst: R::A, src: R::C, f: Field::A }); // A=C A
-    i69763(r)
+    r.cpu.copy(R::A, R::C, Field::A); // A=C A
+    if r.next(0x69763, 4) {
+        i69763(r)
+    }
 }
 
 fn i69763(r: &mut Run) {
-    op!(r, 0x69763, 3, Op::Scratch { op: ScratchOp::ToScratch, r: R::C, n: 0, f: Field::W }); // R0=C
-    i69766(r)
+    r.cpu.scratch(ScratchOp::ToScratch, R::C, 0, Field::W); // R0=C
+    if r.next(0x69766, 5) {
+        i69766(r)
+    }
 }
 
 fn i69766(r: &mut Run) {
-    op!(r, 0x69766, 3, Op::Scratch { op: ScratchOp::FromScratch, r: R::C, n: 2, f: Field::W }); // C=R2
-    i69769(r)
+    r.cpu.scratch(ScratchOp::FromScratch, R::C, 2, Field::W); // C=R2
+    if r.next(0x69769, 5) {
+        i69769(r)
+    }
 }
 
 fn i69769(r: &mut Run) {
-    op!(r, 0x69769, 3, Op::DFromR { d: 0, r: R::C, short: false }); // D0=C
-    i6976c(r)
+    r.cpu.d_from_r(0, R::C, false); // D0=C
+    if r.next(0x6976C, 5) {
+        i6976c(r)
+    }
 }
 
 fn i6976c(r: &mut Run) {
-    op!(r, 0x6976C, 3, Op::Scratch { op: ScratchOp::FromScratch, r: R::C, n: 0, f: Field::W }); // C=R0
-    i6976f(r)
+    r.cpu.scratch(ScratchOp::FromScratch, R::C, 0, Field::W); // C=R0
+    if r.next(0x6976F, 5) {
+        i6976f(r)
+    }
 }
 
 fn i6976f(r: &mut Run) {
-    op!(r, 0x6976F, 3, Op::Mem { store: true, d: 1, r: R::C, f: Field::A }); // DAT1=C A
-    i69772(r)
+    r.sync();
+    r.cpu.store(1, R::C, Field::A, r.hw); // DAT1=C A
+    if r.next_io(0x69772, 19) {
+        i69772(r)
+    }
 }
 
 fn i69772(r: &mut Run) {
-    op!(r, 0x69772, 4, Op::PcIndirect(R::A)); // PC=(A)
+    r.sync();
+    r.cpu.pc_indirect(R::A, r.hw); // PC=(A)
+    r.spend(23);
 }
 
 fn i69776(r: &mut Run) {
-    op!(r, 0x69776, 3, Op::Zero { r: R::C, f: Field::S }); // C=0 S
-    i69779(r)
+    r.cpu.zero(R::C, Field::S); // C=0 S
+    if r.next(0x69779, 5) {
+        i69779(r)
+    }
 }
 
 fn i69779(r: &mut Run) {
-    op!(r, 0x69779, 2, Op::PSet(7)); // P= 7
-    i6977b(r)
+    r.cpu.p = 7; // P= 7
+    if r.next(0x6977B, 4) {
+        i6977b(r)
+    }
 }
 
 fn i6977b(r: &mut Run) {
-    op!(r, 0x6977B, 4, Op::CpEx(0xF)); // CPEX 15
-    i6977f(r)
+    r.cpu.cp_ex(15); // CPEX 15
+    if r.next(0x6977F, 6) {
+        i6977f(r)
+    }
 }
 
 fn i6977f(r: &mut Run) {
-    op!(r, 0x6977F, 5, Op::Test { test: Test::Regs(Cmp::Eq, R::C, R::A), f: Field::S, goyes: Some(0x69740) }); // ?C=A S / GOYES #69740
-    i69784(r)
+    r.cpu.pc = 0x69784;
+    r.cpu.test(Test::Regs(Cmp::Eq, R::C, R::A), Field::S, Some(0x69740)); // ?C=A S / GOYES #69740
+    if r.next_pc(0x69784, 7) {
+        i69784(r)
+    }
 }
 
 fn i69784(r: &mut Run) {
-    op!(r, 0x69784, 3, Op::CondJump(Cond::NoCarry, 0x6975A)); // GONC #6975A
-    i69787(r)
+    r.cpu.pc = 0x69787;
+    r.cpu.jump_if(Cond::NoCarry, 0x6975A); // GONC #6975A
+    if r.next_pc(0x69787, 5) {
+        i69787(r)
+    }
 }
 
 fn i69787(r: &mut Run) {
-    op!(r, 0x69787, 3, Op::Mem { store: false, d: 0, r: R::C, f: Field::A }); // C=DAT0 A
-    i6978a(r)
+    r.sync();
+    r.cpu.load(0, R::C, Field::A, r.hw); // C=DAT0 A
+    if r.next_io(0x6978A, 19) {
+        i6978a(r)
+    }
 }
 
 fn i6978a(r: &mut Run) {
-    op!(r, 0x6978A, 3, Op::DExR { d: 0, r: R::C, short: false }); // CD0EX
-    i6978d(r)
+    r.cpu.d_ex_r(0, R::C, false); // CD0EX
+    if r.next(0x6978D, 5) {
+        i6978d(r)
+    }
 }
 
 fn i6978d(r: &mut Run) {
-    op!(r, 0x6978D, 3, Op::DAdd { d: 0, n: 5 }); // D0=D0+ 5
-    i69790(r)
+    r.cpu.d_add(0, 5); // D0=D0+ 5
+    if r.next(0x69790, 5) {
+        i69790(r)
+    }
 }
 
 fn i69790(r: &mut Run) {
-    op!(r, 0x69790, 3, Op::Mem { store: false, d: 0, r: R::A, f: Field::A }); // A=DAT0 A
-    i69793(r)
+    r.sync();
+    r.cpu.load(0, R::A, Field::A, r.hw); // A=DAT0 A
+    if r.next_io(0x69793, 19) {
+        i69793(r)
+    }
 }
 
 fn i69793(r: &mut Run) {
-    op!(r, 0x69793, 2, Op::Dec { r: R::A, f: Field::A }); // A=A-1 A
-    i69795(r)
+    r.cpu.dec(R::A, Field::A); // A=A-1 A
+    if r.next(0x69795, 4) {
+        i69795(r)
+    }
 }
 
 fn i69795(r: &mut Run) {
-    op!(r, 0x69795, 5, Op::Test { test: Test::Zero(R::A), f: Field::A, goyes: Some(0x6975A) }); // ?A=0 A / GOYES #6975A
-    i6979a(r)
+    r.cpu.pc = 0x6979A;
+    r.cpu.test(Test::Zero(R::A), Field::A, Some(0x6975A)); // ?A=0 A / GOYES #6975A
+    if r.next_pc(0x6979A, 7) {
+        i6979a(r)
+    }
 }
 
 fn i6979a(r: &mut Run) {
-    op!(r, 0x6979A, 3, Op::CondJump(Cond::NoCarry, 0x69740)); // GONC #69740
+    r.cpu.pc = 0x6979D;
+    r.cpu.jump_if(Cond::NoCarry, 0x69740); // GONC #69740
+    r.spend(5);
 }
 
 fn i6a668(r: &mut Run) {
-    op!(r, 0x6A668, 7, Op::Call(0x6641)); // GOSUB #06641
+    r.cpu.pc = 0x6A66F;
+    r.cpu.call(0x06641); // GOSUB #06641
+    r.spend(9);
 }
 
 fn i6a66f(r: &mut Run) {
-    op!(r, 0x6A66F, 3, Op::Scratch { op: ScratchOp::ToScratch, r: R::A, n: 1, f: Field::W }); // R1=A
-    i6a672(r)
+    r.cpu.scratch(ScratchOp::ToScratch, R::A, 1, Field::W); // R1=A
+    if r.next(0x6A672, 5) {
+        i6a672(r)
+    }
 }
 
 fn i6a672(r: &mut Run) {
-    op!(r, 0x6A672, 3, Op::DAdd { d: 1, n: 5 }); // D1=D1+ 5
-    i6a675(r)
+    r.cpu.d_add(1, 5); // D1=D1+ 5
+    if r.next(0x6A675, 5) {
+        i6a675(r)
+    }
 }
 
 fn i6a675(r: &mut Run) {
-    op!(r, 0x6A675, 7, Op::Call(0x6641)); // GOSUB #06641
+    r.cpu.pc = 0x6A67C;
+    r.cpu.call(0x06641); // GOSUB #06641
+    r.spend(9);
 }
 
 fn i6a67c(r: &mut Run) {
-    op!(r, 0x6A67C, 3, Op::Scratch { op: ScratchOp::ToScratch, r: R::A, n: 4, f: Field::W }); // R4=A
-    i6a67f(r)
+    r.cpu.scratch(ScratchOp::ToScratch, R::A, 4, Field::W); // R4=A
+    if r.next(0x6A67F, 5) {
+        i6a67f(r)
+    }
 }
 
 fn i6a67f(r: &mut Run) {
-    op!(r, 0x6A67F, 7, Op::Call(0x6641)); // GOSUB #06641
+    r.cpu.pc = 0x6A686;
+    r.cpu.call(0x06641); // GOSUB #06641
+    r.spend(9);
 }
 
 fn i6a686(r: &mut Run) {
-    op!(r, 0x6A686, 3, Op::Scratch { op: ScratchOp::ToScratch, r: R::A, n: 3, f: Field::W }); // R3=A
-    i6a689(r)
+    r.cpu.scratch(ScratchOp::ToScratch, R::A, 3, Field::W); // R3=A
+    if r.next(0x6A689, 5) {
+        i6a689(r)
+    }
 }
 
 fn i6a689(r: &mut Run) {
-    op!(r, 0x6A689, 7, Op::Call(0x6641)); // GOSUB #06641
+    r.cpu.pc = 0x6A690;
+    r.cpu.call(0x06641); // GOSUB #06641
+    r.spend(9);
 }
 
 fn i6a690(r: &mut Run) {
-    op!(r, 0x6A690, 3, Op::Rotate { r: R::A, left: false }); // ASRC
-    i6a693(r)
+    r.cpu.rotate(R::A, false); // ASRC
+    if r.next(0x6A693, 5) {
+        i6a693(r)
+    }
 }
 
 fn i6a693(r: &mut Run) {
-    op!(r, 0x6A693, 3, Op::DSub { d: 1, n: 0xF }); // D1=D1- 15
-    i6a696(r)
+    r.cpu.d_sub(1, 15); // D1=D1- 15
+    if r.next(0x6A696, 5) {
+        i6a696(r)
+    }
 }
 
 fn i6a696(r: &mut Run) {
-    op!(r, 0x6A696, 3, Op::DSub { d: 1, n: 5 }); // D1=D1- 5
-    i6a699(r)
+    r.cpu.d_sub(1, 5); // D1=D1- 5
+    if r.next(0x6A699, 5) {
+        i6a699(r)
+    }
 }
 
 fn i6a699(r: &mut Run) {
-    op!(r, 0x6A699, 7, Op::Call(0x67A4A)); // GOSUB #67A4A
+    r.cpu.pc = 0x6A6A0;
+    r.cpu.call(0x67A4A); // GOSUB #67A4A
+    r.spend(9);
 }
 
 fn i6a6a0(r: &mut Run) {
-    op!(r, 0x6A6A0, 3, Op::DAdd { d: 0, n: 0xF }); // D0=D0+ 15
-    i6a6a3(r)
+    r.cpu.d_add(0, 15); // D0=D0+ 15
+    if r.next(0x6A6A3, 5) {
+        i6a6a3(r)
+    }
 }
 
 fn i6a6a3(r: &mut Run) {
-    op!(r, 0x6A6A3, 3, Op::DAdd { d: 0, n: 0xC }); // D0=D0+ 12
-    i6a6a6(r)
+    r.cpu.d_add(0, 12); // D0=D0+ 12
+    if r.next(0x6A6A6, 5) {
+        i6a6a6(r)
+    }
 }
 
 fn i6a6a6(r: &mut Run) {
-    op!(r, 0x6A6A6, 2, Op::PSet(4)); // P= 4
-    i6a6a8(r)
+    r.cpu.p = 4; // P= 4
+    if r.next(0x6A6A8, 4) {
+        i6a6a8(r)
+    }
 }
 
 fn i6a6a8(r: &mut Run) {
-    op!(r, 0x6A6A8, 4, Op::Call(0x6A6C0)); // GOSUB #6A6C0
+    r.cpu.pc = 0x6A6AC;
+    r.cpu.call(0x6A6C0); // GOSUB #6A6C0
+    r.spend(6);
 }
 
 fn i6a6ac(r: &mut Run) {
-    op!(r, 0x6A6AC, 2, Op::PDec); // P=P-1
-    i6a6ae(r)
+    r.cpu.p_dec(); // P=P-1
+    if r.next(0x6A6AE, 4) {
+        i6a6ae(r)
+    }
 }
 
 fn i6a6ae(r: &mut Run) {
-    op!(r, 0x6A6AE, 3, Op::CondJump(Cond::NoCarry, 0x6A6A8)); // GONC #6A6A8
-    i6a6b1(r)
+    r.cpu.pc = 0x6A6B1;
+    r.cpu.jump_if(Cond::NoCarry, 0x6A6A8); // GONC #6A6A8
+    if r.next_pc(0x6A6B1, 5) {
+        i6a6b1(r)
+    }
 }
 
 fn i6a6b1(r: &mut Run) {
-    op!(r, 0x6A6B1, 2, Op::PSet(0)); // P= 0
-    i6a6b3(r)
+    r.cpu.p = 0; // P= 0
+    if r.next(0x6A6B3, 4) {
+        i6a6b3(r)
+    }
 }
 
 fn i6a6b3(r: &mut Run) {
-    op!(r, 0x6A6B3, 2, Op::Dec { r: R::D, f: Field::A }); // D=D-1 A
-    i6a6b5(r)
+    r.cpu.dec(R::D, Field::A); // D=D-1 A
+    if r.next(0x6A6B5, 4) {
+        i6a6b5(r)
+    }
 }
 
 fn i6a6b5(r: &mut Run) {
-    op!(r, 0x6A6B5, 2, Op::Dec { r: R::D, f: Field::A }); // D=D-1 A
-    i6a6b7(r)
+    r.cpu.dec(R::D, Field::A); // D=D-1 A
+    if r.next(0x6A6B7, 4) {
+        i6a6b7(r)
+    }
 }
 
 fn i6a6b7(r: &mut Run) {
-    op!(r, 0x6A6B7, 2, Op::Dec { r: R::D, f: Field::A }); // D=D-1 A
-    i6a6b9(r)
+    r.cpu.dec(R::D, Field::A); // D=D-1 A
+    if r.next(0x6A6B9, 4) {
+        i6a6b9(r)
+    }
 }
 
 fn i6a6b9(r: &mut Run) {
-    op!(r, 0x6A6B9, 7, Op::Jump(0x685CD)); // GOTO #685CD
+    r.cpu.pc = 0x685CD; // GOTO #685CD
+    r.spend(9);
 }
 
 fn i6a6c0(r: &mut Run) {
-    op!(r, 0x6A6C0, 4, Op::Mem { store: false, d: 0, r: R::A, f: Field::X }); // A=DAT0 X
-    i6a6c4(r)
+    r.sync();
+    r.cpu.load(0, R::A, Field::X, r.hw); // A=DAT0 X
+    if r.next_io(0x6A6C4, 17) {
+        i6a6c4(r)
+    }
 }
 
 fn i6a6c4(r: &mut Run) {
-    op!(r, 0x6A6C4, 3, Op::Scratch { op: ScratchOp::FromScratch, r: R::C, n: 4, f: Field::W }); // C=R4
-    i6a6c7(r)
+    r.cpu.scratch(ScratchOp::FromScratch, R::C, 4, Field::W); // C=R4
+    if r.next(0x6A6C7, 5) {
+        i6a6c7(r)
+    }
 }
 
 fn i6a6c7(r: &mut Run) {
-    op!(r, 0x6A6C7, 4, Op::Call(0x6A6D4)); // GOSUB #6A6D4
+    r.cpu.pc = 0x6A6CB;
+    r.cpu.call(0x6A6D4); // GOSUB #6A6D4
+    r.spend(6);
 }
 
 fn i6a6cb(r: &mut Run) {
-    op!(r, 0x6A6CB, 4, Op::Mem { store: true, d: 0, r: R::A, f: Field::X }); // DAT0=A X
-    i6a6cf(r)
+    r.sync();
+    r.cpu.store(0, R::A, Field::X, r.hw); // DAT0=A X
+    if r.next_io(0x6A6CF, 17) {
+        i6a6cf(r)
+    }
 }
 
 fn i6a6cf(r: &mut Run) {
-    op!(r, 0x6A6CF, 3, Op::DAdd { d: 0, n: 3 }); // D0=D0+ 3
-    i6a6d2(r)
+    r.cpu.d_add(0, 3); // D0=D0+ 3
+    if r.next(0x6A6D2, 5) {
+        i6a6d2(r)
+    }
 }
 
 fn i6a6d2(r: &mut Run) {
-    op!(r, 0x6A6D2, 2, Op::Rtn(RtnKind::Plain)); // RTN
+    r.cpu.rtn(RtnKind::Plain); // RTN
+    r.spend(9);
 }
 
 fn i6a6d4(r: &mut Run) {
-    op!(r, 0x6A6D4, 3, Op::Copy { dst: R::C, src: R::A, f: Field::S }); // C=A S
-    i6a6d7(r)
+    r.cpu.copy(R::C, R::A, Field::S); // C=A S
+    if r.next(0x6A6D7, 5) {
+        i6a6d7(r)
+    }
 }
 
 fn i6a6d7(r: &mut Run) {
-    op!(r, 0x6A6D7, 3, Op::Dec { r: R::C, f: Field::S }); // C=C-1 S
-    i6a6da(r)
+    r.cpu.dec(R::C, Field::S); // C=C-1 S
+    if r.next(0x6A6DA, 5) {
+        i6a6da(r)
+    }
 }
 
 fn i6a6da(r: &mut Run) {
-    op!(r, 0x6A6DA, 3, Op::CondJump(Cond::Carry, 0x6A6F0)); // GOC #6A6F0
-    i6a6dd(r)
+    r.cpu.pc = 0x6A6DD;
+    r.cpu.jump_if(Cond::Carry, 0x6A6F0); // GOC #6A6F0
+    if r.next_pc(0x6A6DD, 5) {
+        i6a6dd(r)
+    }
 }
 
 fn i6a6dd(r: &mut Run) {
-    op!(r, 0x6A6DD, 3, Op::Dec { r: R::C, f: Field::S }); // C=C-1 S
-    i6a6e0(r)
+    r.cpu.dec(R::C, Field::S); // C=C-1 S
+    if r.next(0x6A6E0, 5) {
+        i6a6e0(r)
+    }
 }
 
 fn i6a6e0(r: &mut Run) {
-    op!(r, 0x6A6E0, 3, Op::CondJump(Cond::Carry, 0x6A6F8)); // GOC #6A6F8
-    i6a6e3(r)
+    r.cpu.pc = 0x6A6E3;
+    r.cpu.jump_if(Cond::Carry, 0x6A6F8); // GOC #6A6F8
+    if r.next_pc(0x6A6E3, 5) {
+        i6a6e3(r)
+    }
 }
 
 fn i6a6e3(r: &mut Run) {
-    op!(r, 0x6A6E3, 5, Op::Test { test: Test::Regs(Cmp::Ge, R::C, R::A), f: Field::X, goyes: None }); // ?C>=A X / RTNYES
-    i6a6e8(r)
+    r.cpu.pc = 0x6A6E8;
+    r.cpu.test(Test::Regs(Cmp::Ge, R::C, R::A), Field::X, None); // ?C>=A X / RTNYES
+    if r.next_pc(0x6A6E8, 7) {
+        i6a6e8(r)
+    }
 }
 
 fn i6a6e8(r: &mut Run) {
-    op!(r, 0x6A6E8, 3, Op::Scratch { op: ScratchOp::FromScratch, r: R::C, n: 1, f: Field::W }); // C=R1
-    i6a6eb(r)
+    r.cpu.scratch(ScratchOp::FromScratch, R::C, 1, Field::W); // C=R1
+    if r.next(0x6A6EB, 5) {
+        i6a6eb(r)
+    }
 }
 
 fn i6a6eb(r: &mut Run) {
-    op!(r, 0x6A6EB, 3, Op::Add { dst: R::A, src: R::C, f: Field::X }); // A=A+C X
-    i6a6ee(r)
+    r.cpu.add(R::A, R::C, Field::X); // A=A+C X
+    if r.next(0x6A6EE, 5) {
+        i6a6ee(r)
+    }
 }
 
 fn i6a6ee(r: &mut Run) {
-    op!(r, 0x6A6EE, 2, Op::Rtn(RtnKind::Plain)); // RTN
+    r.cpu.rtn(RtnKind::Plain); // RTN
+    r.spend(9);
 }
 
 fn i6a6f0(r: &mut Run) {
-    op!(r, 0x6A6F0, 5, Op::Test { test: Test::Zero(R::A), f: Field::X, goyes: None }); // ?A=0 X / RTNYES
-    i6a6f5(r)
+    r.cpu.pc = 0x6A6F5;
+    r.cpu.test(Test::Zero(R::A), Field::X, None); // ?A=0 X / RTNYES
+    if r.next_pc(0x6A6F5, 7) {
+        i6a6f5(r)
+    }
 }
 
 fn i6a6f5(r: &mut Run) {
-    op!(r, 0x6A6F5, 3, Op::CondJump(Cond::NoCarry, 0x6A6EB)); // GONC #6A6EB
-    i6a6f8(r)
+    r.cpu.pc = 0x6A6F8;
+    r.cpu.jump_if(Cond::NoCarry, 0x6A6EB); // GONC #6A6EB
+    if r.next_pc(0x6A6F8, 5) {
+        i6a6f8(r)
+    }
 }
 
 fn i6a6f8(r: &mut Run) {
-    op!(r, 0x6A6F8, 5, Op::Test { test: Test::Regs(Cmp::Ne, R::C, R::A), f: Field::X, goyes: None }); // ?C#A X / RTNYES
-    i6a6fd(r)
+    r.cpu.pc = 0x6A6FD;
+    r.cpu.test(Test::Regs(Cmp::Ne, R::C, R::A), Field::X, None); // ?C#A X / RTNYES
+    if r.next_pc(0x6A6FD, 7) {
+        i6a6fd(r)
+    }
 }
 
 fn i6a6fd(r: &mut Run) {
-    op!(r, 0x6A6FD, 6, Op::Scratch { op: ScratchOp::FromScratch, r: R::A, n: 3, f: Field::X }); // A=R3.F X
-    i6a703(r)
+    r.cpu.scratch(ScratchOp::FromScratch, R::A, 3, Field::X); // A=R3.F X
+    if r.next(0x6A703, 8) {
+        i6a703(r)
+    }
 }
 
 fn i6a703(r: &mut Run) {
-    op!(r, 0x6A703, 2, Op::Rtn(RtnKind::Plain)); // RTN
+    r.cpu.rtn(RtnKind::Plain); // RTN
+    r.spend(9);
 }
 
 fn i6a70a(r: &mut Run) {
-    op!(r, 0x6A70A, 3, Op::StSet { bit: 1, set: true }); // ST=1 1
-    i6a70d(r)
+    r.cpu.st_set(1, true); // ST=1 1
+    if r.next(0x6A70D, 5) {
+        i6a70d(r)
+    }
 }
 
 fn i6a70d(r: &mut Run) {
-    op!(r, 0x6A70D, 7, Op::Call(0x6641)); // GOSUB #06641
+    r.cpu.pc = 0x6A714;
+    r.cpu.call(0x06641); // GOSUB #06641
+    r.spend(9);
 }
 
 fn i6a714(r: &mut Run) {
-    op!(r, 0x6A714, 3, Op::DExR { d: 0, r: R::C, short: false }); // CD0EX
-    i6a717(r)
+    r.cpu.d_ex_r(0, R::C, false); // CD0EX
+    if r.next(0x6A717, 5) {
+        i6a717(r)
+    }
 }
 
 fn i6a717(r: &mut Run) {
-    op!(r, 0x6A717, 3, Op::Scratch { op: ScratchOp::ToScratch, r: R::C, n: 2, f: Field::W }); // R2=C
-    i6a71a(r)
+    r.cpu.scratch(ScratchOp::ToScratch, R::C, 2, Field::W); // R2=C
+    if r.next(0x6A71A, 5) {
+        i6a71a(r)
+    }
 }
 
 fn i6a71a(r: &mut Run) {
-    op!(r, 0x6A71A, 3, Op::Scratch { op: ScratchOp::ToScratch, r: R::A, n: 3, f: Field::W }); // R3=A
-    i6a71d(r)
+    r.cpu.scratch(ScratchOp::ToScratch, R::A, 3, Field::W); // R3=A
+    if r.next(0x6A71D, 5) {
+        i6a71d(r)
+    }
 }
 
 fn i6a71d(r: &mut Run) {
-    op!(r, 0x6A71D, 7, Op::Call(0x67A3B)); // GOSUB #67A3B
+    r.cpu.pc = 0x6A724;
+    r.cpu.call(0x67A3B); // GOSUB #67A3B
+    r.spend(9);
 }
 
 fn i6a724(r: &mut Run) {
-    op!(r, 0x6A724, 3, Op::DSub { d: 0, n: 3 }); // D0=D0- 3
-    i6a727(r)
+    r.cpu.d_sub(0, 3); // D0=D0- 3
+    if r.next(0x6A727, 5) {
+        i6a727(r)
+    }
 }
 
 fn i6a727(r: &mut Run) {
-    op!(r, 0x6A727, 5, Op::StTest { bit: 1, set: false, goyes: Some(0x6A72F) }); // ?ST=0 1 / GOYES #6A72F
-    i6a72c(r)
+    r.cpu.pc = 0x6A72C;
+    r.cpu.st_test(1, false, Some(0x6A72F)); // ?ST=0 1 / GOYES #6A72F
+    if r.next_pc(0x6A72C, 7) {
+        i6a72c(r)
+    }
 }
 
 fn i6a72c(r: &mut Run) {
-    op!(r, 0x6A72C, 3, Op::DSub { d: 0, n: 3 }); // D0=D0- 3
-    i6a72f(r)
+    r.cpu.d_sub(0, 3); // D0=D0- 3
+    if r.next(0x6A72F, 5) {
+        i6a72f(r)
+    }
 }
 
 fn i6a72f(r: &mut Run) {
-    op!(r, 0x6A72F, 4, Op::Mem { store: false, d: 0, r: R::C, f: Field::X }); // C=DAT0 X
-    i6a733(r)
+    r.sync();
+    r.cpu.load(0, R::C, Field::X, r.hw); // C=DAT0 X
+    if r.next_io(0x6A733, 17) {
+        i6a733(r)
+    }
 }
 
 fn i6a733(r: &mut Run) {
-    op!(r, 0x6A733, 5, Op::Test { test: Test::Zero(R::C), f: Field::X, goyes: Some(0x6A753) }); // ?C=0 X / GOYES #6A753
-    i6a738(r)
+    r.cpu.pc = 0x6A738;
+    r.cpu.test(Test::Zero(R::C), Field::X, Some(0x6A753)); // ?C=0 X / GOYES #6A753
+    if r.next_pc(0x6A738, 7) {
+        i6a738(r)
+    }
 }
 
 fn i6a738(r: &mut Run) {
-    op!(r, 0x6A738, 3, Op::Scratch { op: ScratchOp::FromScratch, r: R::A, n: 3, f: Field::W }); // A=R3
-    i6a73b(r)
+    r.cpu.scratch(ScratchOp::FromScratch, R::A, 3, Field::W); // A=R3
+    if r.next(0x6A73B, 5) {
+        i6a73b(r)
+    }
 }
 
 fn i6a73b(r: &mut Run) {
-    op!(r, 0x6A73B, 5, Op::StTest { bit: 1, set: false, goyes: Some(0x6A745) }); // ?ST=0 1 / GOYES #6A745
-    i6a740(r)
+    r.cpu.pc = 0x6A740;
+    r.cpu.st_test(1, false, Some(0x6A745)); // ?ST=0 1 / GOYES #6A745
+    if r.next_pc(0x6A740, 7) {
+        i6a740(r)
+    }
 }
 
 fn i6a740(r: &mut Run) {
-    op!(r, 0x6A740, 5, Op::Test { test: Test::Regs(Cmp::Gt, R::C, R::A), f: Field::X, goyes: Some(0x6A753) }); // ?C>A X / GOYES #6A753
-    i6a745(r)
+    r.cpu.pc = 0x6A745;
+    r.cpu.test(Test::Regs(Cmp::Gt, R::C, R::A), Field::X, Some(0x6A753)); // ?C>A X / GOYES #6A753
+    if r.next_pc(0x6A745, 7) {
+        i6a745(r)
+    }
 }
 
 fn i6a745(r: &mut Run) {
-    op!(r, 0x6A745, 5, Op::Test { test: Test::Regs(Cmp::Lt, R::C, R::A), f: Field::X, goyes: Some(0x6A753) }); // ?C<A X / GOYES #6A753
-    i6a74a(r)
+    r.cpu.pc = 0x6A74A;
+    r.cpu.test(Test::Regs(Cmp::Lt, R::C, R::A), Field::X, Some(0x6A753)); // ?C<A X / GOYES #6A753
+    if r.next_pc(0x6A74A, 7) {
+        i6a74a(r)
+    }
 }
 
 fn i6a74a(r: &mut Run) {
-    op!(r, 0x6A74A, 2, Op::Zero { r: R::A, f: Field::A }); // A=0 A
-    i6a74c(r)
+    r.cpu.zero(R::A, Field::A); // A=0 A
+    if r.next(0x6A74C, 4) {
+        i6a74c(r)
+    }
 }
 
 fn i6a74c(r: &mut Run) {
-    op!(r, 0x6A74C, 3, Op::Copy { dst: R::A, src: R::C, f: Field::X }); // A=C X
-    i6a74f(r)
+    r.cpu.copy(R::A, R::C, Field::X); // A=C X
+    if r.next(0x6A74F, 5) {
+        i6a74f(r)
+    }
 }
 
 fn i6a74f(r: &mut Run) {
-    op!(r, 0x6A74F, 4, Op::Jump(0x6A71A)); // GOTO #6A71A
+    r.cpu.pc = 0x6A71A; // GOTO #6A71A
+    r.spend(6);
 }
 
 fn i6a753(r: &mut Run) {
-    op!(r, 0x6A753, 3, Op::Scratch { op: ScratchOp::FromScratch, r: R::A, n: 3, f: Field::W }); // A=R3
-    i6a756(r)
+    r.cpu.scratch(ScratchOp::FromScratch, R::A, 3, Field::W); // A=R3
+    if r.next(0x6A756, 5) {
+        i6a756(r)
+    }
 }
 
 fn i6a756(r: &mut Run) {
-    op!(r, 0x6A756, 7, Op::Jump(0x67901)); // GOTO #67901
+    r.cpu.pc = 0x67901; // GOTO #67901
+    r.spend(9);
 }
 
 fn i6a762(r: &mut Run) {
-    op!(r, 0x6A762, 3, Op::StSet { bit: 1, set: false }); // ST=0 1
-    i6a765(r)
+    r.cpu.st_set(1, false); // ST=0 1
+    if r.next(0x6A765, 5) {
+        i6a765(r)
+    }
 }
 
 fn i6a765(r: &mut Run) {
-    op!(r, 0x6A765, 4, Op::Jump(0x6A70D)); // GOTO #6A70D
+    r.cpu.pc = 0x6A70D; // GOTO #6A70D
+    r.spend(6);
 }
 
 fn i6a76e(r: &mut Run) {
-    op!(r, 0x6A76E, 7, Op::Call(0x6641)); // GOSUB #06641
+    r.cpu.pc = 0x6A775;
+    r.cpu.call(0x06641); // GOSUB #06641
+    r.spend(9);
 }
 
 fn i6a775(r: &mut Run) {
-    op!(r, 0x6A775, 3, Op::Scratch { op: ScratchOp::ToScratch, r: R::A, n: 0, f: Field::W }); // R0=A
-    i6a778(r)
+    r.cpu.scratch(ScratchOp::ToScratch, R::A, 0, Field::W); // R0=A
+    if r.next(0x6A778, 5) {
+        i6a778(r)
+    }
 }
 
 fn i6a778(r: &mut Run) {
-    op!(r, 0x6A778, 7, Op::Call(0x679B)); // GOSUB #0679B
+    r.cpu.pc = 0x6A77F;
+    r.cpu.call(0x0679B); // GOSUB #0679B
+    r.spend(9);
 }
 
 fn i6a77f(r: &mut Run) {
-    op!(r, 0x6A77F, 7, Op::Call(0x6641)); // GOSUB #06641
+    r.cpu.pc = 0x6A786;
+    r.cpu.call(0x06641); // GOSUB #06641
+    r.spend(9);
 }
 
 fn i6a786(r: &mut Run) {
-    op!(r, 0x6A786, 2, Op::Dec { r: R::A, f: Field::A }); // A=A-1 A
-    i6a788(r)
+    r.cpu.dec(R::A, Field::A); // A=A-1 A
+    if r.next(0x6A788, 4) {
+        i6a788(r)
+    }
 }
 
 fn i6a788(r: &mut Run) {
-    op!(r, 0x6A788, 3, Op::CondJump(Cond::Carry, 0x6A7B9)); // GOC #6A7B9
-    i6a78b(r)
+    r.cpu.pc = 0x6A78B;
+    r.cpu.jump_if(Cond::Carry, 0x6A7B9); // GOC #6A7B9
+    if r.next_pc(0x6A78B, 5) {
+        i6a78b(r)
+    }
 }
 
 fn i6a78b(r: &mut Run) {
-    op!(r, 0x6A78B, 2, Op::Copy { dst: R::C, src: R::A, f: Field::A }); // C=A A
-    i6a78d(r)
+    r.cpu.copy(R::C, R::A, Field::A); // C=A A
+    if r.next(0x6A78D, 4) {
+        i6a78d(r)
+    }
 }
 
 fn i6a78d(r: &mut Run) {
-    op!(r, 0x6A78D, 2, Op::Copy { dst: R::B, src: R::C, f: Field::A }); // B=C A
-    i6a78f(r)
+    r.cpu.copy(R::B, R::C, Field::A); // B=C A
+    if r.next(0x6A78F, 4) {
+        i6a78f(r)
+    }
 }
 
 fn i6a78f(r: &mut Run) {
-    op!(r, 0x6A78F, 2, Op::Add { dst: R::A, src: R::A, f: Field::A }); // A=A+A A
-    i6a791(r)
+    r.cpu.add(R::A, R::A, Field::A); // A=A+A A
+    if r.next(0x6A791, 4) {
+        i6a791(r)
+    }
 }
 
 fn i6a791(r: &mut Run) {
-    op!(r, 0x6A791, 2, Op::Add { dst: R::A, src: R::A, f: Field::A }); // A=A+A A
-    i6a793(r)
+    r.cpu.add(R::A, R::A, Field::A); // A=A+A A
+    if r.next(0x6A793, 4) {
+        i6a793(r)
+    }
 }
 
 fn i6a793(r: &mut Run) {
-    op!(r, 0x6A793, 2, Op::Add { dst: R::C, src: R::A, f: Field::A }); // C=C+A A
-    i6a795(r)
+    r.cpu.add(R::C, R::A, Field::A); // C=C+A A
+    if r.next(0x6A795, 4) {
+        i6a795(r)
+    }
 }
 
 fn i6a795(r: &mut Run) {
-    op!(r, 0x6A795, 3, Op::DExR { d: 1, r: R::A, short: false }); // AD1EX
-    i6a798(r)
+    r.cpu.d_ex_r(1, R::A, false); // AD1EX
+    if r.next(0x6A798, 5) {
+        i6a798(r)
+    }
 }
 
 fn i6a798(r: &mut Run) {
-    op!(r, 0x6A798, 2, Op::Add { dst: R::C, src: R::A, f: Field::A }); // C=C+A A
-    i6a79a(r)
+    r.cpu.add(R::C, R::A, Field::A); // C=C+A A
+    if r.next(0x6A79A, 4) {
+        i6a79a(r)
+    }
 }
 
 fn i6a79a(r: &mut Run) {
-    op!(r, 0x6A79A, 3, Op::DFromR { d: 0, r: R::C, short: false }); // D0=C
-    i6a79d(r)
+    r.cpu.d_from_r(0, R::C, false); // D0=C
+    if r.next(0x6A79D, 5) {
+        i6a79d(r)
+    }
 }
 
 fn i6a79d(r: &mut Run) {
-    op!(r, 0x6A79D, 3, Op::Scratch { op: ScratchOp::FromScratch, r: R::C, n: 0, f: Field::W }); // C=R0
-    i6a7a0(r)
+    r.cpu.scratch(ScratchOp::FromScratch, R::C, 0, Field::W); // C=R0
+    if r.next(0x6A7A0, 5) {
+        i6a7a0(r)
+    }
 }
 
 fn i6a7a0(r: &mut Run) {
-    op!(r, 0x6A7A0, 2, Op::Add { dst: R::A, src: R::C, f: Field::A }); // A=A+C A
-    i6a7a2(r)
+    r.cpu.add(R::A, R::C, Field::A); // A=A+C A
+    if r.next(0x6A7A2, 4) {
+        i6a7a2(r)
+    }
 }
 
 fn i6a7a2(r: &mut Run) {
-    op!(r, 0x6A7A2, 3, Op::DFromR { d: 1, r: R::A, short: false }); // D1=A
-    i6a7a5(r)
+    r.cpu.d_from_r(1, R::A, false); // D1=A
+    if r.next(0x6A7A5, 5) {
+        i6a7a5(r)
+    }
 }
 
 fn i6a7a5(r: &mut Run) {
-    op!(r, 0x6A7A5, 3, Op::DSub { d: 1, n: 5 }); // D1=D1- 5
-    i6a7a8(r)
+    r.cpu.d_sub(1, 5); // D1=D1- 5
+    if r.next(0x6A7A8, 5) {
+        i6a7a8(r)
+    }
 }
 
 fn i6a7a8(r: &mut Run) {
-    op!(r, 0x6A7A8, 3, Op::Mem { store: false, d: 0, r: R::A, f: Field::A }); // A=DAT0 A
-    i6a7ab(r)
+    r.sync();
+    r.cpu.load(0, R::A, Field::A, r.hw); // A=DAT0 A
+    if r.next_io(0x6A7AB, 19) {
+        i6a7ab(r)
+    }
 }
 
 fn i6a7ab(r: &mut Run) {
-    op!(r, 0x6A7AB, 3, Op::Mem { store: true, d: 1, r: R::A, f: Field::A }); // DAT1=A A
-    i6a7ae(r)
+    r.sync();
+    r.cpu.store(1, R::A, Field::A, r.hw); // DAT1=A A
+    if r.next_io(0x6A7AE, 19) {
+        i6a7ae(r)
+    }
 }
 
 fn i6a7ae(r: &mut Run) {
-    op!(r, 0x6A7AE, 3, Op::DSub { d: 1, n: 5 }); // D1=D1- 5
-    i6a7b1(r)
+    r.cpu.d_sub(1, 5); // D1=D1- 5
+    if r.next(0x6A7B1, 5) {
+        i6a7b1(r)
+    }
 }
 
 fn i6a7b1(r: &mut Run) {
-    op!(r, 0x6A7B1, 3, Op::DSub { d: 0, n: 5 }); // D0=D0- 5
-    i6a7b4(r)
+    r.cpu.d_sub(0, 5); // D0=D0- 5
+    if r.next(0x6A7B4, 5) {
+        i6a7b4(r)
+    }
 }
 
 fn i6a7b4(r: &mut Run) {
-    op!(r, 0x6A7B4, 2, Op::Dec { r: R::B, f: Field::A }); // B=B-1 A
-    i6a7b6(r)
+    r.cpu.dec(R::B, Field::A); // B=B-1 A
+    if r.next(0x6A7B6, 4) {
+        i6a7b6(r)
+    }
 }
 
 fn i6a7b6(r: &mut Run) {
-    op!(r, 0x6A7B6, 3, Op::CondJump(Cond::NoCarry, 0x6A7A8)); // GONC #6A7A8
-    i6a7b9(r)
+    r.cpu.pc = 0x6A7B9;
+    r.cpu.jump_if(Cond::NoCarry, 0x6A7A8); // GONC #6A7A8
+    if r.next_pc(0x6A7B9, 5) {
+        i6a7b9(r)
+    }
 }
 
 fn i6a7b9(r: &mut Run) {
-    op!(r, 0x6A7B9, 7, Op::Jump(0x5143)); // GOTO #05143
+    r.cpu.pc = 0x05143; // GOTO #05143
+    r.spend(9);
 }
 
 fn i6b386(r: &mut Run) {
-    op!(r, 0x6B386, 7, Op::Call(0x6641)); // GOSUB #06641
+    r.cpu.pc = 0x6B38D;
+    r.cpu.call(0x06641); // GOSUB #06641
+    r.spend(9);
 }
 
 fn i6b38d(r: &mut Run) {
-    op!(r, 0x6B38D, 7, Op::LoadConst { r: R::C, len: 5, val: 0x7FFFF }); // LC(5) #7FFFF
-    i6b394(r)
+    r.cpu.load_const(R::C, 5, 0x7FFFF); // LC(5) #7FFFF
+    if r.next(0x6B394, 9) {
+        i6b394(r)
+    }
 }
 
 fn i6b394(r: &mut Run) {
-    op!(r, 0x6B394, 4, Op::Logic { and: true, dst: R::A, src: R::C, f: Field::A }); // A=A&C A
-    i6b398(r)
+    r.cpu.and(R::A, R::C, Field::A); // A=A&C A
+    if r.next(0x6B398, 6) {
+        i6b398(r)
+    }
 }
 
 fn i6b398(r: &mut Run) {
-    op!(r, 0x6B398, 7, Op::Jump(0x67907)); // GOTO #67907
+    r.cpu.pc = 0x67907; // GOTO #67907
+    r.spend(9);
 }
 
 fn i6b3a4(r: &mut Run) {
-    op!(r, 0x6B3A4, 7, Op::Call(0x6641)); // GOSUB #06641
+    r.cpu.pc = 0x6B3AB;
+    r.cpu.call(0x06641); // GOSUB #06641
+    r.spend(9);
 }
 
 fn i6b3ab(r: &mut Run) {
-    op!(r, 0x6B3AB, 3, Op::Scratch { op: ScratchOp::ToScratch, r: R::A, n: 3, f: Field::W }); // R3=A
-    i6b3ae(r)
+    r.cpu.scratch(ScratchOp::ToScratch, R::A, 3, Field::W); // R3=A
+    if r.next(0x6B3AE, 5) {
+        i6b3ae(r)
+    }
 }
 
 fn i6b3ae(r: &mut Run) {
-    op!(r, 0x6B3AE, 2, Op::Zero { r: R::A, f: Field::A }); // A=0 A
-    i6b3b0(r)
+    r.cpu.zero(R::A, Field::A); // A=0 A
+    if r.next(0x6B3B0, 4) {
+        i6b3b0(r)
+    }
 }
 
 fn i6b3b0(r: &mut Run) {
-    op!(r, 0x6B3B0, 2, Op::Inc { r: R::A, f: Field::A }); // A=A+1 A
-    i6b3b2(r)
+    r.cpu.inc(R::A, Field::A); // A=A+1 A
+    if r.next(0x6B3B2, 4) {
+        i6b3b2(r)
+    }
 }
 
 fn i6b3b2(r: &mut Run) {
-    op!(r, 0x6B3B2, 7, Op::Call(0x67A51)); // GOSUB #67A51
+    r.cpu.pc = 0x6B3B9;
+    r.cpu.call(0x67A51); // GOSUB #67A51
+    r.spend(9);
 }
 
 fn i6b3b9(r: &mut Run) {
-    op!(r, 0x6B3B9, 3, Op::Scratch { op: ScratchOp::FromScratch, r: R::A, n: 3, f: Field::W }); // A=R3
-    i6b3bc(r)
+    r.cpu.scratch(ScratchOp::FromScratch, R::A, 3, Field::W); // A=R3
+    if r.next(0x6B3BC, 5) {
+        i6b3bc(r)
+    }
 }
 
 fn i6b3bc(r: &mut Run) {
-    op!(r, 0x6B3BC, 2, Op::Zero { r: R::C, f: Field::A }); // C=0 A
-    i6b3be(r)
+    r.cpu.zero(R::C, Field::A); // C=0 A
+    if r.next(0x6B3BE, 4) {
+        i6b3be(r)
+    }
 }
 
 fn i6b3be(r: &mut Run) {
-    op!(r, 0x6B3BE, 2, Op::Exch { a: R::B, b: R::C, f: Field::A }); // BCEX A
-    i6b3c0(r)
+    r.cpu.exch(R::B, R::C, Field::A); // BCEX A
+    if r.next(0x6B3C0, 4) {
+        i6b3c0(r)
+    }
 }
 
 fn i6b3c0(r: &mut Run) {
-    op!(r, 0x6B3C0, 2, Op::PushC); // RSTK=C
-    i6b3c2(r)
+    r.cpu.push_c(); // RSTK=C
+    if r.next(0x6B3C2, 4) {
+        i6b3c2(r)
+    }
 }
 
 fn i6b3c2(r: &mut Run) {
-    op!(r, 0x6B3C2, 3, Op::Zero { r: R::C, f: Field::W }); // C=0 W
-    i6b3c5(r)
+    r.cpu.zero(R::C, Field::W); // C=0 W
+    if r.next(0x6B3C5, 5) {
+        i6b3c5(r)
+    }
 }
 
 fn i6b3c5(r: &mut Run) {
-    op!(r, 0x6B3C5, 2, Op::Inc { r: R::B, f: Field::A }); // B=B+1 A
-    i6b3c7(r)
+    r.cpu.inc(R::B, Field::A); // B=B+1 A
+    if r.next(0x6B3C7, 4) {
+        i6b3c7(r)
+    }
 }
 
 fn i6b3c7(r: &mut Run) {
-    op!(r, 0x6B3C7, 3, Op::DAdd { d: 0, n: 0xF }); // D0=D0+ 15
-    i6b3ca(r)
+    r.cpu.d_add(0, 15); // D0=D0+ 15
+    if r.next(0x6B3CA, 5) {
+        i6b3ca(r)
+    }
 }
 
 fn i6b3ca(r: &mut Run) {
-    op!(r, 0x6B3CA, 3, Op::DAdd { d: 0, n: 9 }); // D0=D0+ 9
-    i6b3cd(r)
+    r.cpu.d_add(0, 9); // D0=D0+ 9
+    if r.next(0x6B3CD, 5) {
+        i6b3cd(r)
+    }
 }
 
 fn i6b3cd(r: &mut Run) {
-    op!(r, 0x6B3CD, 4, Op::Mem { store: false, d: 0, r: R::C, f: Field::X }); // C=DAT0 X
-    i6b3d1(r)
+    r.sync();
+    r.cpu.load(0, R::C, Field::X, r.hw); // C=DAT0 X
+    if r.next_io(0x6B3D1, 17) {
+        i6b3d1(r)
+    }
 }
 
 fn i6b3d1(r: &mut Run) {
-    op!(r, 0x6B3D1, 3, Op::Add { dst: R::C, src: R::C, f: Field::X }); // C=C+C X
-    i6b3d4(r)
+    r.cpu.add(R::C, R::C, Field::X); // C=C+C X
+    if r.next(0x6B3D4, 5) {
+        i6b3d4(r)
+    }
 }
 
 fn i6b3d4(r: &mut Run) {
-    op!(r, 0x6B3D4, 3, Op::CondJump(Cond::NoCarry, 0x6B3DF)); // GONC #6B3DF
-    i6b3d7(r)
+    r.cpu.pc = 0x6B3D7;
+    r.cpu.jump_if(Cond::NoCarry, 0x6B3DF); // GONC #6B3DF
+    if r.next_pc(0x6B3D7, 5) {
+        i6b3d7(r)
+    }
 }
 
 fn i6b3d7(r: &mut Run) {
-    op!(r, 0x6B3D7, 3, Op::Srb(R::C)); // CSRB
-    i6b3da(r)
+    r.cpu.srb(R::C); // CSRB
+    if r.next(0x6B3DA, 5) {
+        i6b3da(r)
+    }
 }
 
 fn i6b3da(r: &mut Run) {
-    op!(r, 0x6B3DA, 5, Op::Test { test: Test::Regs(Cmp::Eq, R::C, R::A), f: Field::X, goyes: Some(0x6B3E8) }); // ?C=A X / GOYES #6B3E8
-    i6b3df(r)
+    r.cpu.pc = 0x6B3DF;
+    r.cpu.test(Test::Regs(Cmp::Eq, R::C, R::A), Field::X, Some(0x6B3E8)); // ?C=A X / GOYES #6B3E8
+    if r.next_pc(0x6B3DF, 7) {
+        i6b3df(r)
+    }
 }
 
 fn i6b3df(r: &mut Run) {
-    op!(r, 0x6B3DF, 3, Op::DAdd { d: 0, n: 0xF }); // D0=D0+ 15
-    i6b3e2(r)
+    r.cpu.d_add(0, 15); // D0=D0+ 15
+    if r.next(0x6B3E2, 5) {
+        i6b3e2(r)
+    }
 }
 
 fn i6b3e2(r: &mut Run) {
-    op!(r, 0x6B3E2, 3, Op::DAdd { d: 0, n: 3 }); // D0=D0+ 3
-    i6b3e5(r)
+    r.cpu.d_add(0, 3); // D0=D0+ 3
+    if r.next(0x6B3E5, 5) {
+        i6b3e5(r)
+    }
 }
 
 fn i6b3e5(r: &mut Run) {
-    op!(r, 0x6B3E5, 3, Op::CondJump(Cond::NoCarry, 0x6B3C5)); // GONC #6B3C5
-    i6b3e8(r)
+    r.cpu.pc = 0x6B3E8;
+    r.cpu.jump_if(Cond::NoCarry, 0x6B3C5); // GONC #6B3C5
+    if r.next_pc(0x6B3E8, 5) {
+        i6b3e8(r)
+    }
 }
 
 fn i6b3e8(r: &mut Run) {
-    op!(r, 0x6B3E8, 2, Op::Copy { dst: R::A, src: R::B, f: Field::A }); // A=B A
-    i6b3ea(r)
+    r.cpu.copy(R::A, R::B, Field::A); // A=B A
+    if r.next(0x6B3EA, 4) {
+        i6b3ea(r)
+    }
 }
 
 fn i6b3ea(r: &mut Run) {
-    op!(r, 0x6B3EA, 2, Op::PopC); // C=RSTK
-    i6b3ec(r)
+    r.cpu.pop_c(); // C=RSTK
+    if r.next(0x6B3EC, 4) {
+        i6b3ec(r)
+    }
 }
 
 fn i6b3ec(r: &mut Run) {
-    op!(r, 0x6B3EC, 2, Op::Copy { dst: R::B, src: R::C, f: Field::A }); // B=C A
-    i6b3ee(r)
+    r.cpu.copy(R::B, R::C, Field::A); // B=C A
+    if r.next(0x6B3EE, 4) {
+        i6b3ee(r)
+    }
 }
 
 fn i6b3ee(r: &mut Run) {
-    op!(r, 0x6B3EE, 7, Op::Jump(0x67901)); // GOTO #67901
+    r.cpu.pc = 0x67901; // GOTO #67901
+    r.spend(9);
 }
 
 fn i6cc15(r: &mut Run) {
-    op!(r, 0x6CC15, 5, Op::LoadConst { r: R::C, len: 3, val: 0x10B }); // LC(3) #10B
-    i6cc1a(r)
+    r.cpu.load_const(R::C, 3, 0x10B); // LC(3) #10B
+    if r.next(0x6CC1A, 7) {
+        i6cc1a(r)
+    }
 }
 
 fn i6cc1a(r: &mut Run) {
-    op!(r, 0x6CC1A, 7, Op::Jump(0x539E6)); // GOTO #539E6
+    r.cpu.pc = 0x539E6; // GOTO #539E6
+    r.spend(9);
 }
 
 fn i6cc26(r: &mut Run) {
-    op!(r, 0x6CC26, 5, Op::LoadConst { r: R::C, len: 3, val: 0x10B }); // LC(3) #10B
-    i6cc2b(r)
+    r.cpu.load_const(R::C, 3, 0x10B); // LC(3) #10B
+    if r.next(0x6CC2B, 7) {
+        i6cc2b(r)
+    }
 }
 
 fn i6cc2b(r: &mut Run) {
-    op!(r, 0x6CC2B, 7, Op::Jump(0x539F9)); // GOTO #539F9
+    r.cpu.pc = 0x539F9; // GOTO #539F9
+    r.spend(9);
 }
 
 fn i6cc37(r: &mut Run) {
-    op!(r, 0x6CC37, 5, Op::LoadConst { r: R::C, len: 3, val: 0x10B }); // LC(3) #10B
-    i6cc3c(r)
+    r.cpu.load_const(R::C, 3, 0x10B); // LC(3) #10B
+    if r.next(0x6CC3C, 7) {
+        i6cc3c(r)
+    }
 }
 
 fn i6cc3c(r: &mut Run) {
-    op!(r, 0x6CC3C, 7, Op::Jump(0x539F1)); // GOTO #539F1
+    r.cpu.pc = 0x539F1; // GOTO #539F1
+    r.spend(9);
 }
 
 fn i6dd73(r: &mut Run) {
-    op!(r, 0x6DD73, 3, Op::StSet { bit: 0xA, set: false }); // ST=0 10
-    i6dd76(r)
+    r.cpu.st_set(10, false); // ST=0 10
+    if r.next(0x6DD76, 5) {
+        i6dd76(r)
+    }
 }
 
 fn i6dd76(r: &mut Run) {
-    op!(r, 0x6DD76, 7, Op::LoadConst { r: R::C, len: 5, val: 3 }); // LC(5) #00003
-    i6dd7d(r)
+    r.cpu.load_const(R::C, 5, 0x3); // LC(5) #00003
+    if r.next(0x6DD7D, 9) {
+        i6dd7d(r)
+    }
 }
 
 fn i6dd7d(r: &mut Run) {
-    op!(r, 0x6DD7D, 4, Op::Call(0x6DDA6)); // GOSUB #6DDA6
+    r.cpu.pc = 0x6DD81;
+    r.cpu.call(0x6DDA6); // GOSUB #6DDA6
+    r.spend(6);
 }
 
 fn i6dd81(r: &mut Run) {
-    op!(r, 0x6DD81, 3, Op::CondJump(Cond::Carry, 0x6DD76)); // GOC #6DD76
-    i6dd84(r)
+    r.cpu.pc = 0x6DD84;
+    r.cpu.jump_if(Cond::Carry, 0x6DD76); // GOC #6DD76
+    if r.next_pc(0x6DD84, 5) {
+        i6dd84(r)
+    }
 }
 
 fn i6dd84(r: &mut Run) {
-    op!(r, 0x6DD84, 17, Op::LoadConst { r: R::C, len: 0xF, val: 0x3FEF03FEF03FEF }); // LC(15) #03FEF03FEF03FEF
-    i6dd95(r)
+    r.cpu.load_const(R::C, 15, 0x3FEF03FEF03FEF); // LC(15) #03FEF03FEF03FEF
+    if r.next(0x6DD95, 19) {
+        i6dd95(r)
+    }
 }
 
 fn i6dd95(r: &mut Run) {
-    op!(r, 0x6DD95, 3, Op::DSub { d: 1, n: 0xF }); // D1=D1- 15
-    i6dd98(r)
+    r.cpu.d_sub(1, 15); // D1=D1- 15
+    if r.next(0x6DD98, 5) {
+        i6dd98(r)
+    }
 }
 
 fn i6dd98(r: &mut Run) {
-    op!(r, 0x6DD98, 4, Op::Mem { store: true, d: 1, r: R::C, f: Field::Nibbles(0xF) }); // DAT1=C 15
-    i6dd9c(r)
+    r.sync();
+    r.cpu.store(1, R::C, Field::Nibbles(15), r.hw); // DAT1=C 15
+    if r.next_io(0x6DD9C, 29) {
+        i6dd9c(r)
+    }
 }
 
 fn i6dd9c(r: &mut Run) {
-    op!(r, 0x6DD9C, 3, Op::Mem { store: false, d: 0, r: R::A, f: Field::A }); // A=DAT0 A
-    i6dd9f(r)
+    r.sync();
+    r.cpu.load(0, R::A, Field::A, r.hw); // A=DAT0 A
+    if r.next_io(0x6DD9F, 19) {
+        i6dd9f(r)
+    }
 }
 
 fn i6dd9f(r: &mut Run) {
-    op!(r, 0x6DD9F, 3, Op::DAdd { d: 0, n: 5 }); // D0=D0+ 5
-    i6dda2(r)
+    r.cpu.d_add(0, 5); // D0=D0+ 5
+    if r.next(0x6DDA2, 5) {
+        i6dda2(r)
+    }
 }
 
 fn i6dda2(r: &mut Run) {
-    op!(r, 0x6DDA2, 4, Op::PcIndirect(R::A)); // PC=(A)
+    r.sync();
+    r.cpu.pc_indirect(R::A, r.hw); // PC=(A)
+    r.spend(23);
 }
 
 fn i6dda6(r: &mut Run) {
-    op!(r, 0x6DDA6, 2, Op::Sub { dst: R::D, a: R::D, b: R::C, f: Field::A }); // D=D-C A
-    i6dda8(r)
+    r.cpu.sub(R::D, R::D, R::C, Field::A); // D=D-C A
+    if r.next(0x6DDA8, 4) {
+        i6dda8(r)
+    }
 }
 
 fn i6dda8(r: &mut Run) {
-    op!(r, 0x6DDA8, 3, Op::CondRtn(Cond::NoCarry)); // RTNNC
-    i6ddab(r)
+    r.cpu.pc = 0x6DDAB;
+    r.cpu.rtn_if(Cond::NoCarry); // RTNNC
+    if r.next_pc(0x6DDAB, 5) {
+        i6ddab(r)
+    }
 }
 
 fn i6ddab(r: &mut Run) {
-    op!(r, 0x6DDAB, 5, Op::StTest { bit: 0xA, set: true, goyes: Some(0x6DDCC) }); // ?ST=1 10 / GOYES #6DDCC
-    i6ddb0(r)
+    r.cpu.pc = 0x6DDB0;
+    r.cpu.st_test(10, true, Some(0x6DDCC)); // ?ST=1 10 / GOYES #6DDCC
+    if r.next_pc(0x6DDB0, 7) {
+        i6ddb0(r)
+    }
 }
 
 fn i6ddb0(r: &mut Run) {
-    op!(r, 0x6DDB0, 2, Op::Add { dst: R::D, src: R::C, f: Field::A }); // D=D+C A
-    i6ddb2(r)
+    r.cpu.add(R::D, R::C, Field::A); // D=D+C A
+    if r.next(0x6DDB2, 4) {
+        i6ddb2(r)
+    }
 }
 
 fn i6ddb2(r: &mut Run) {
-    op!(r, 0x6DDB2, 7, Op::Call(0x679B)); // GOSUB #0679B
+    r.cpu.pc = 0x6DDB9;
+    r.cpu.call(0x0679B); // GOSUB #0679B
+    r.spend(9);
 }
 
 fn i6ddb9(r: &mut Run) {
-    op!(r, 0x6DDB9, 7, Op::Call(0x613E)); // GOSUB #0613E
+    r.cpu.pc = 0x6DDC0;
+    r.cpu.call(0x0613E); // GOSUB #0613E
+    r.spend(9);
 }
 
 fn i6ddc0(r: &mut Run) {
-    op!(r, 0x6DDC0, 7, Op::Call(0x67D2)); // GOSUB #067D2
+    r.cpu.pc = 0x6DDC7;
+    r.cpu.call(0x067D2); // GOSUB #067D2
+    r.spend(9);
 }
 
 fn i6ddc7(r: &mut Run) {
-    op!(r, 0x6DDC7, 3, Op::StSet { bit: 0xA, set: true }); // ST=1 10
-    i6ddca(r)
+    r.cpu.st_set(10, true); // ST=1 10
+    if r.next(0x6DDCA, 5) {
+        i6ddca(r)
+    }
 }
 
 fn i6ddca(r: &mut Run) {
-    op!(r, 0x6DDCA, 2, Op::Rtn(RtnKind::SetCarry)); // RTNSC
+    r.cpu.rtn(RtnKind::SetCarry); // RTNSC
+    r.spend(9);
 }
 
 fn i6ddcc(r: &mut Run) {
-    op!(r, 0x6DDCC, 7, Op::Jump(0x4FBB)); // GOTO #04FBB
+    r.cpu.pc = 0x04FBB; // GOTO #04FBB
+    r.spend(9);
 }
 
 fn i6ddd8(r: &mut Run) {
-    op!(r, 0x6DDD8, 3, Op::StSet { bit: 0xA, set: false }); // ST=0 10
-    i6dddb(r)
+    r.cpu.st_set(10, false); // ST=0 10
+    if r.next(0x6DDDB, 5) {
+        i6dddb(r)
+    }
 }
 
 fn i6dddb(r: &mut Run) {
-    op!(r, 0x6DDDB, 7, Op::LoadConst { r: R::C, len: 5, val: 0x23 }); // LC(5) #00023
-    i6dde2(r)
+    r.cpu.load_const(R::C, 5, 0x23); // LC(5) #00023
+    if r.next(0x6DDE2, 9) {
+        i6dde2(r)
+    }
 }
 
 fn i6dde2(r: &mut Run) {
-    op!(r, 0x6DDE2, 5, Op::Test { test: Test::Regs(Cmp::Ge, R::D, R::C), f: Field::A, goyes: Some(0x6DDF0) }); // ?D>=C A / GOYES #6DDF0
-    i6dde7(r)
+    r.cpu.pc = 0x6DDE7;
+    r.cpu.test(Test::Regs(Cmp::Ge, R::D, R::C), Field::A, Some(0x6DDF0)); // ?D>=C A / GOYES #6DDF0
+    if r.next_pc(0x6DDE7, 7) {
+        i6dde7(r)
+    }
 }
 
 fn i6dde7(r: &mut Run) {
-    op!(r, 0x6DDE7, 2, Op::Sub { dst: R::D, a: R::D, b: R::C, f: Field::A }); // D=D-C A
-    i6dde9(r)
+    r.cpu.sub(R::D, R::D, R::C, Field::A); // D=D-C A
+    if r.next(0x6DDE9, 4) {
+        i6dde9(r)
+    }
 }
 
 fn i6dde9(r: &mut Run) {
-    op!(r, 0x6DDE9, 4, Op::Call(0x6DDAB)); // GOSUB #6DDAB
+    r.cpu.pc = 0x6DDED;
+    r.cpu.call(0x6DDAB); // GOSUB #6DDAB
+    r.spend(6);
 }
 
 fn i6dded(r: &mut Run) {
-    op!(r, 0x6DDED, 3, Op::CondJump(Cond::Carry, 0x6DDDB)); // GOC #6DDDB
-    i6ddf0(r)
+    r.cpu.pc = 0x6DDF0;
+    r.cpu.jump_if(Cond::Carry, 0x6DDDB); // GOC #6DDDB
+    if r.next_pc(0x6DDF0, 5) {
+        i6ddf0(r)
+    }
 }
 
 fn i6ddf0(r: &mut Run) {
-    op!(r, 0x6DDF0, 7, Op::Call(0x67A4A)); // GOSUB #67A4A
+    r.cpu.pc = 0x6DDF7;
+    r.cpu.call(0x67A4A); // GOSUB #67A4A
+    r.spend(9);
 }
 
 fn i6ddf7(r: &mut Run) {
-    op!(r, 0x6DDF7, 3, Op::DSub { d: 1, n: 5 }); // D1=D1- 5
-    i6ddfa(r)
+    r.cpu.d_sub(1, 5); // D1=D1- 5
+    if r.next(0x6DDFA, 5) {
+        i6ddfa(r)
+    }
 }
 
 fn i6ddfa(r: &mut Run) {
-    op!(r, 0x6DDFA, 2, Op::Dec { r: R::D, f: Field::A }); // D=D-1 A
-    i6ddfc(r)
+    r.cpu.dec(R::D, Field::A); // D=D-1 A
+    if r.next(0x6DDFC, 4) {
+        i6ddfc(r)
+    }
 }
 
 fn i6ddfc(r: &mut Run) {
-    op!(r, 0x6DDFC, 3, Op::DAdd { d: 0, n: 0xF }); // D0=D0+ 15
-    i6ddff(r)
+    r.cpu.d_add(0, 15); // D0=D0+ 15
+    if r.next(0x6DDFF, 5) {
+        i6ddff(r)
+    }
 }
 
 fn i6ddff(r: &mut Run) {
-    op!(r, 0x6DDFF, 3, Op::DAdd { d: 0, n: 0xF }); // D0=D0+ 15
-    i6de02(r)
+    r.cpu.d_add(0, 15); // D0=D0+ 15
+    if r.next(0x6DE02, 5) {
+        i6de02(r)
+    }
 }
 
 fn i6de02(r: &mut Run) {
-    op!(r, 0x6DE02, 3, Op::DAdd { d: 0, n: 3 }); // D0=D0+ 3
-    i6de05(r)
+    r.cpu.d_add(0, 3); // D0=D0+ 3
+    if r.next(0x6DE05, 5) {
+        i6de05(r)
+    }
 }
 
 fn i6de05(r: &mut Run) {
-    op!(r, 0x6DE05, 4, Op::Call(0x6DE70)); // GOSUB #6DE70
+    r.cpu.pc = 0x6DE09;
+    r.cpu.call(0x6DE70); // GOSUB #6DE70
+    r.spend(6);
 }
 
 fn i6de09(r: &mut Run) {
-    op!(r, 0x6DE09, 4, Op::Call(0x6DE70)); // GOSUB #6DE70
+    r.cpu.pc = 0x6DE0D;
+    r.cpu.call(0x6DE70); // GOSUB #6DE70
+    r.spend(6);
 }
 
 fn i6de0d(r: &mut Run) {
-    op!(r, 0x6DE0D, 4, Op::Call(0x6DE70)); // GOSUB #6DE70
+    r.cpu.pc = 0x6DE11;
+    r.cpu.call(0x6DE70); // GOSUB #6DE70
+    r.spend(6);
 }
 
 fn i6de11(r: &mut Run) {
-    op!(r, 0x6DE11, 3, Op::DSub { d: 1, n: 5 }); // D1=D1- 5
-    i6de14(r)
+    r.cpu.d_sub(1, 5); // D1=D1- 5
+    if r.next(0x6DE14, 5) {
+        i6de14(r)
+    }
 }
 
 fn i6de14(r: &mut Run) {
-    op!(r, 0x6DE14, 7, Op::LoadConst { r: R::C, len: 5, val: 0x3FEF }); // LC(5) #03FEF
-    i6de1b(r)
+    r.cpu.load_const(R::C, 5, 0x3FEF); // LC(5) #03FEF
+    if r.next(0x6DE1B, 9) {
+        i6de1b(r)
+    }
 }
 
 fn i6de1b(r: &mut Run) {
-    op!(r, 0x6DE1B, 3, Op::Mem { store: true, d: 1, r: R::C, f: Field::A }); // DAT1=C A
-    i6de1e(r)
+    r.sync();
+    r.cpu.store(1, R::C, Field::A, r.hw); // DAT1=C A
+    if r.next_io(0x6DE1E, 19) {
+        i6de1e(r)
+    }
 }
 
 fn i6de1e(r: &mut Run) {
-    op!(r, 0x6DE1E, 3, Op::DSub { d: 0, n: 2 }); // D0=D0- 2
-    i6de21(r)
+    r.cpu.d_sub(0, 2); // D0=D0- 2
+    if r.next(0x6DE21, 5) {
+        i6de21(r)
+    }
 }
 
 fn i6de21(r: &mut Run) {
-    op!(r, 0x6DE21, 2, Op::Zero { r: R::A, f: Field::A }); // A=0 A
-    i6de23(r)
+    r.cpu.zero(R::A, Field::A); // A=0 A
+    if r.next(0x6DE23, 4) {
+        i6de23(r)
+    }
 }
 
 fn i6de23(r: &mut Run) {
-    op!(r, 0x6DE23, 3, Op::Mem { store: false, d: 0, r: R::A, f: Field::B }); // A=DAT0 B
-    i6de26(r)
+    r.sync();
+    r.cpu.load(0, R::A, Field::B, r.hw); // A=DAT0 B
+    if r.next_io(0x6DE26, 16) {
+        i6de26(r)
+    }
 }
 
 fn i6de26(r: &mut Run) {
-    op!(r, 0x6DE26, 5, Op::Test { test: Test::Zero(R::A), f: Field::B, goyes: Some(0x6DE31) }); // ?A=0 B / GOYES #6DE31
-    i6de2b(r)
+    r.cpu.pc = 0x6DE2B;
+    r.cpu.test(Test::Zero(R::A), Field::B, Some(0x6DE31)); // ?A=0 B / GOYES #6DE31
+    if r.next_pc(0x6DE2B, 7) {
+        i6de2b(r)
+    }
 }
 
 fn i6de2b(r: &mut Run) {
-    op!(r, 0x6DE2B, 3, Op::Zero { r: R::C, f: Field::B }); // C=0 B
-    i6de2e(r)
+    r.cpu.zero(R::C, Field::B); // C=0 B
+    if r.next(0x6DE2E, 5) {
+        i6de2e(r)
+    }
 }
 
 fn i6de2e(r: &mut Run) {
-    op!(r, 0x6DE2E, 3, Op::Mem { store: true, d: 0, r: R::C, f: Field::B }); // DAT0=C B
-    i6de31(r)
+    r.sync();
+    r.cpu.store(0, R::C, Field::B, r.hw); // DAT0=C B
+    if r.next_io(0x6DE31, 16) {
+        i6de31(r)
+    }
 }
 
 fn i6de31(r: &mut Run) {
-    op!(r, 0x6DE31, 4, Op::Call(0x6DE76)); // GOSUB #6DE76
+    r.cpu.pc = 0x6DE35;
+    r.cpu.call(0x6DE76); // GOSUB #6DE76
+    r.spend(6);
 }
 
 fn i6de35(r: &mut Run) {
-    op!(r, 0x6DE35, 2, Op::Zero { r: R::A, f: Field::A }); // A=0 A
-    i6de37(r)
+    r.cpu.zero(R::A, Field::A); // A=0 A
+    if r.next(0x6DE37, 4) {
+        i6de37(r)
+    }
 }
 
 fn i6de37(r: &mut Run) {
-    op!(r, 0x6DE37, 4, Op::Call(0x6DE76)); // GOSUB #6DE76
+    r.cpu.pc = 0x6DE3B;
+    r.cpu.call(0x6DE76); // GOSUB #6DE76
+    r.spend(6);
 }
 
 fn i6de3b(r: &mut Run) {
-    op!(r, 0x6DE3B, 3, Op::DSub { d: 0, n: 2 }); // D0=D0- 2
-    i6de3e(r)
+    r.cpu.d_sub(0, 2); // D0=D0- 2
+    if r.next(0x6DE3E, 5) {
+        i6de3e(r)
+    }
 }
 
 fn i6de3e(r: &mut Run) {
-    op!(r, 0x6DE3E, 3, Op::DSub { d: 1, n: 5 }); // D1=D1- 5
-    i6de41(r)
+    r.cpu.d_sub(1, 5); // D1=D1- 5
+    if r.next(0x6DE41, 5) {
+        i6de41(r)
+    }
 }
 
 fn i6de41(r: &mut Run) {
-    op!(r, 0x6DE41, 7, Op::LoadConst { r: R::C, len: 5, val: 0x505B2 }); // LC(5) #505B2
-    i6de48(r)
+    r.cpu.load_const(R::C, 5, 0x505B2); // LC(5) #505B2
+    if r.next(0x6DE48, 9) {
+        i6de48(r)
+    }
 }
 
 fn i6de48(r: &mut Run) {
-    op!(r, 0x6DE48, 3, Op::Mem { store: true, d: 1, r: R::C, f: Field::A }); // DAT1=C A
-    i6de4b(r)
+    r.sync();
+    r.cpu.store(1, R::C, Field::A, r.hw); // DAT1=C A
+    if r.next_io(0x6DE4B, 19) {
+        i6de4b(r)
+    }
 }
 
 fn i6de4b(r: &mut Run) {
-    op!(r, 0x6DE4B, 4, Op::Call(0x6DE70)); // GOSUB #6DE70
+    r.cpu.pc = 0x6DE4F;
+    r.cpu.call(0x6DE70); // GOSUB #6DE70
+    r.spend(6);
 }
 
 fn i6de4f(r: &mut Run) {
-    op!(r, 0x6DE4F, 3, Op::DSub { d: 0, n: 3 }); // D0=D0- 3
-    i6de52(r)
+    r.cpu.d_sub(0, 3); // D0=D0- 3
+    if r.next(0x6DE52, 5) {
+        i6de52(r)
+    }
 }
 
 fn i6de52(r: &mut Run) {
-    op!(r, 0x6DE52, 4, Op::Call(0x6DE70)); // GOSUB #6DE70
+    r.cpu.pc = 0x6DE56;
+    r.cpu.call(0x6DE70); // GOSUB #6DE70
+    r.spend(6);
 }
 
 fn i6de56(r: &mut Run) {
-    op!(r, 0x6DE56, 3, Op::DAdd { d: 0, n: 0xC }); // D0=D0+ 12
-    i6de59(r)
+    r.cpu.d_add(0, 12); // D0=D0+ 12
+    if r.next(0x6DE59, 5) {
+        i6de59(r)
+    }
 }
 
 fn i6de59(r: &mut Run) {
-    op!(r, 0x6DE59, 4, Op::Call(0x6DE70)); // GOSUB #6DE70
+    r.cpu.pc = 0x6DE5D;
+    r.cpu.call(0x6DE70); // GOSUB #6DE70
+    r.spend(6);
 }
 
 fn i6de5d(r: &mut Run) {
-    op!(r, 0x6DE5D, 7, Op::LoadConst { r: R::C, len: 5, val: 4 }); // LC(5) #00004
-    i6de64(r)
+    r.cpu.load_const(R::C, 5, 0x4); // LC(5) #00004
+    if r.next(0x6DE64, 9) {
+        i6de64(r)
+    }
 }
 
 fn i6de64(r: &mut Run) {
-    op!(r, 0x6DE64, 2, Op::Sub { dst: R::D, a: R::D, b: R::C, f: Field::A }); // D=D-C A
-    i6de66(r)
+    r.cpu.sub(R::D, R::D, R::C, Field::A); // D=D-C A
+    if r.next(0x6DE66, 4) {
+        i6de66(r)
+    }
 }
 
 fn i6de66(r: &mut Run) {
-    op!(r, 0x6DE66, 3, Op::Scratch { op: ScratchOp::FromScratch, r: R::C, n: 2, f: Field::W }); // C=R2
-    i6de69(r)
+    r.cpu.scratch(ScratchOp::FromScratch, R::C, 2, Field::W); // C=R2
+    if r.next(0x6DE69, 5) {
+        i6de69(r)
+    }
 }
 
 fn i6de69(r: &mut Run) {
-    op!(r, 0x6DE69, 3, Op::DFromR { d: 0, r: R::C, short: false }); // D0=C
-    i6de6c(r)
+    r.cpu.d_from_r(0, R::C, false); // D0=C
+    if r.next(0x6DE6C, 5) {
+        i6de6c(r)
+    }
 }
 
 fn i6de6c(r: &mut Run) {
-    op!(r, 0x6DE6C, 4, Op::Jump(0x6DD9C)); // GOTO #6DD9C
+    r.cpu.pc = 0x6DD9C; // GOTO #6DD9C
+    r.spend(6);
 }
 
 fn i6de70(r: &mut Run) {
-    op!(r, 0x6DE70, 2, Op::Zero { r: R::A, f: Field::A }); // A=0 A
-    i6de72(r)
+    r.cpu.zero(R::A, Field::A); // A=0 A
+    if r.next(0x6DE72, 4) {
+        i6de72(r)
+    }
 }
 
 fn i6de72(r: &mut Run) {
-    op!(r, 0x6DE72, 4, Op::Mem { store: false, d: 0, r: R::A, f: Field::X }); // A=DAT0 X
-    i6de76(r)
+    r.sync();
+    r.cpu.load(0, R::A, Field::X, r.hw); // A=DAT0 X
+    if r.next_io(0x6DE76, 17) {
+        i6de76(r)
+    }
 }
 
 fn i6de76(r: &mut Run) {
-    op!(r, 0x6DE76, 7, Op::Call(0x680FB)); // GOSUB #680FB
+    r.cpu.pc = 0x6DE7D;
+    r.cpu.call(0x680FB); // GOSUB #680FB
+    r.spend(9);
 }
 
 fn i6de7d(r: &mut Run) {
-    op!(r, 0x6DE7D, 3, Op::DSub { d: 0, n: 3 }); // D0=D0- 3
-    i6de80(r)
+    r.cpu.d_sub(0, 3); // D0=D0- 3
+    if r.next(0x6DE80, 5) {
+        i6de80(r)
+    }
 }
 
 fn i6de80(r: &mut Run) {
-    op!(r, 0x6DE80, 2, Op::Rtn(RtnKind::Plain)); // RTN
+    r.cpu.rtn(RtnKind::Plain); // RTN
+    r.spend(9);
 }
 
 fn i6df22(r: &mut Run) {
-    op!(r, 0x6DF22, 3, Op::DAdd { d: 1, n: 5 }); // D1=D1+ 5
-    i6df25(r)
+    r.cpu.d_add(1, 5); // D1=D1+ 5
+    if r.next(0x6DF25, 5) {
+        i6df25(r)
+    }
 }
 
 fn i6df25(r: &mut Run) {
-    op!(r, 0x6DF25, 7, Op::Call(0x6641)); // GOSUB #06641
+    r.cpu.pc = 0x6DF2C;
+    r.cpu.call(0x06641); // GOSUB #06641
+    r.spend(9);
 }
 
 fn i6df2c(r: &mut Run) {
-    op!(r, 0x6DF2C, 3, Op::Scratch { op: ScratchOp::ToScratch, r: R::A, n: 4, f: Field::W }); // R4=A
-    i6df2f(r)
+    r.cpu.scratch(ScratchOp::ToScratch, R::A, 4, Field::W); // R4=A
+    if r.next(0x6DF2F, 5) {
+        i6df2f(r)
+    }
 }
 
 fn i6df2f(r: &mut Run) {
-    op!(r, 0x6DF2F, 3, Op::DSub { d: 1, n: 0xA }); // D1=D1- 10
-    i6df32(r)
+    r.cpu.d_sub(1, 10); // D1=D1- 10
+    if r.next(0x6DF32, 5) {
+        i6df32(r)
+    }
 }
 
 fn i6df32(r: &mut Run) {
-    op!(r, 0x6DF32, 2, Op::Dec { r: R::D, f: Field::A }); // D=D-1 A
-    i6df34(r)
+    r.cpu.dec(R::D, Field::A); // D=D-1 A
+    if r.next(0x6DF34, 4) {
+        i6df34(r)
+    }
 }
 
 fn i6df34(r: &mut Run) {
-    op!(r, 0x6DF34, 7, Op::LoadConst { r: R::C, len: 5, val: 0x808F0 }); // LC(5) #808F0
-    i6df3b(r)
+    r.cpu.load_const(R::C, 5, 0x808F0); // LC(5) #808F0
+    if r.next(0x6DF3B, 9) {
+        i6df3b(r)
+    }
 }
 
 fn i6df3b(r: &mut Run) {
-    op!(r, 0x6DF3B, 3, Op::DExR { d: 0, r: R::C, short: false }); // CD0EX
-    i6df3e(r)
+    r.cpu.d_ex_r(0, R::C, false); // CD0EX
+    if r.next(0x6DF3E, 5) {
+        i6df3e(r)
+    }
 }
 
 fn i6df3e(r: &mut Run) {
-    op!(r, 0x6DF3E, 3, Op::Mem { store: false, d: 0, r: R::A, f: Field::A }); // A=DAT0 A
-    i6df41(r)
+    r.sync();
+    r.cpu.load(0, R::A, Field::A, r.hw); // A=DAT0 A
+    if r.next_io(0x6DF41, 19) {
+        i6df41(r)
+    }
 }
 
 fn i6df41(r: &mut Run) {
-    op!(r, 0x6DF41, 3, Op::Scratch { op: ScratchOp::ToScratch, r: R::A, n: 0, f: Field::W }); // R0=A
-    i6df44(r)
+    r.cpu.scratch(ScratchOp::ToScratch, R::A, 0, Field::W); // R0=A
+    if r.next(0x6DF44, 5) {
+        i6df44(r)
+    }
 }
 
 fn i6df44(r: &mut Run) {
-    op!(r, 0x6DF44, 3, Op::DFromR { d: 0, r: R::C, short: false }); // D0=C
-    i6df47(r)
+    r.cpu.d_from_r(0, R::C, false); // D0=C
+    if r.next(0x6DF47, 5) {
+        i6df47(r)
+    }
 }
 
 fn i6df47(r: &mut Run) {
-    op!(r, 0x6DF47, 7, Op::Call(0x67A51)); // GOSUB #67A51
+    r.cpu.pc = 0x6DF4E;
+    r.cpu.call(0x67A51); // GOSUB #67A51
+    r.spend(9);
 }
 
 fn i6df4e(r: &mut Run) {
-    op!(r, 0x6DF4E, 3, Op::DAdd { d: 0, n: 0xF }); // D0=D0+ 15
-    i6df51(r)
+    r.cpu.d_add(0, 15); // D0=D0+ 15
+    if r.next(0x6DF51, 5) {
+        i6df51(r)
+    }
 }
 
 fn i6df51(r: &mut Run) {
-    op!(r, 0x6DF51, 3, Op::DAdd { d: 0, n: 0xC }); // D0=D0+ 12
-    i6df54(r)
+    r.cpu.d_add(0, 12); // D0=D0+ 12
+    if r.next(0x6DF54, 5) {
+        i6df54(r)
+    }
 }
 
 fn i6df54(r: &mut Run) {
-    op!(r, 0x6DF54, 2, Op::Zero { r: R::A, f: Field::A }); // A=0 A
-    i6df56(r)
+    r.cpu.zero(R::A, Field::A); // A=0 A
+    if r.next(0x6DF56, 4) {
+        i6df56(r)
+    }
 }
 
 fn i6df56(r: &mut Run) {
-    op!(r, 0x6DF56, 4, Op::Mem { store: false, d: 0, r: R::A, f: Field::X }); // A=DAT0 X
-    i6df5a(r)
+    r.sync();
+    r.cpu.load(0, R::A, Field::X, r.hw); // A=DAT0 X
+    if r.next_io(0x6DF5A, 17) {
+        i6df5a(r)
+    }
 }
 
 fn i6df5a(r: &mut Run) {
-    op!(r, 0x6DF5A, 3, Op::Scratch { op: ScratchOp::ToScratch, r: R::A, n: 3, f: Field::W }); // R3=A
-    i6df5d(r)
+    r.cpu.scratch(ScratchOp::ToScratch, R::A, 3, Field::W); // R3=A
+    if r.next(0x6DF5D, 5) {
+        i6df5d(r)
+    }
 }
 
 fn i6df5d(r: &mut Run) {
-    op!(r, 0x6DF5D, 3, Op::Scratch { op: ScratchOp::FromScratch, r: R::C, n: 4, f: Field::W }); // C=R4
-    i6df60(r)
+    r.cpu.scratch(ScratchOp::FromScratch, R::C, 4, Field::W); // C=R4
+    if r.next(0x6DF60, 5) {
+        i6df60(r)
+    }
 }
 
 fn i6df60(r: &mut Run) {
-    op!(r, 0x6DF60, 4, Op::Mem { store: true, d: 0, r: R::C, f: Field::X }); // DAT0=C X
-    i6df64(r)
+    r.sync();
+    r.cpu.store(0, R::C, Field::X, r.hw); // DAT0=C X
+    if r.next_io(0x6DF64, 17) {
+        i6df64(r)
+    }
 }
 
 fn i6df64(r: &mut Run) {
-    op!(r, 0x6DF64, 7, Op::Call(0x67A3B)); // GOSUB #67A3B
+    r.cpu.pc = 0x6DF6B;
+    r.cpu.call(0x67A3B); // GOSUB #67A3B
+    r.spend(9);
 }
 
 fn i6df6b(r: &mut Run) {
-    op!(r, 0x6DF6B, 3, Op::DSub { d: 0, n: 6 }); // D0=D0- 6
-    i6df6e(r)
+    r.cpu.d_sub(0, 6); // D0=D0- 6
+    if r.next(0x6DF6E, 5) {
+        i6df6e(r)
+    }
 }
 
 fn i6df6e(r: &mut Run) {
-    op!(r, 0x6DF6E, 2, Op::Zero { r: R::A, f: Field::A }); // A=0 A
-    i6df70(r)
+    r.cpu.zero(R::A, Field::A); // A=0 A
+    if r.next(0x6DF70, 4) {
+        i6df70(r)
+    }
 }
 
 fn i6df70(r: &mut Run) {
-    op!(r, 0x6DF70, 4, Op::Mem { store: false, d: 0, r: R::A, f: Field::X }); // A=DAT0 X
-    i6df74(r)
+    r.sync();
+    r.cpu.load(0, R::A, Field::X, r.hw); // A=DAT0 X
+    if r.next_io(0x6DF74, 17) {
+        i6df74(r)
+    }
 }
 
 fn i6df74(r: &mut Run) {
-    op!(r, 0x6DF74, 3, Op::Scratch { op: ScratchOp::ToScratch, r: R::A, n: 1, f: Field::W }); // R1=A
-    i6df77(r)
+    r.cpu.scratch(ScratchOp::ToScratch, R::A, 1, Field::W); // R1=A
+    if r.next(0x6DF77, 5) {
+        i6df77(r)
+    }
 }
 
 fn i6df77(r: &mut Run) {
-    op!(r, 0x6DF77, 4, Op::Call(0x6DFC9)); // GOSUB #6DFC9
+    r.cpu.pc = 0x6DF7B;
+    r.cpu.call(0x6DFC9); // GOSUB #6DFC9
+    r.spend(6);
 }
 
 fn i6df7b(r: &mut Run) {
-    op!(r, 0x6DF7B, 3, Op::DAdd { d: 0, n: 3 }); // D0=D0+ 3
-    i6df7e(r)
+    r.cpu.d_add(0, 3); // D0=D0+ 3
+    if r.next(0x6DF7E, 5) {
+        i6df7e(r)
+    }
 }
 
 fn i6df7e(r: &mut Run) {
-    op!(r, 0x6DF7E, 4, Op::Call(0x6DFC9)); // GOSUB #6DFC9
+    r.cpu.pc = 0x6DF82;
+    r.cpu.call(0x6DFC9); // GOSUB #6DFC9
+    r.spend(6);
 }
 
 fn i6df82(r: &mut Run) {
-    op!(r, 0x6DF82, 3, Op::Scratch { op: ScratchOp::FromScratch, r: R::A, n: 1, f: Field::W }); // A=R1
-    i6df85(r)
+    r.cpu.scratch(ScratchOp::FromScratch, R::A, 1, Field::W); // A=R1
+    if r.next(0x6DF85, 5) {
+        i6df85(r)
+    }
 }
 
 fn i6df85(r: &mut Run) {
-    op!(r, 0x6DF85, 7, Op::Call(0x67A3B)); // GOSUB #67A3B
+    r.cpu.pc = 0x6DF8C;
+    r.cpu.call(0x67A3B); // GOSUB #67A3B
+    r.spend(9);
 }
 
 fn i6df8c(r: &mut Run) {
-    op!(r, 0x6DF8C, 2, Op::Zero { r: R::A, f: Field::A }); // A=0 A
-    i6df8e(r)
+    r.cpu.zero(R::A, Field::A); // A=0 A
+    if r.next(0x6DF8E, 4) {
+        i6df8e(r)
+    }
 }
 
 fn i6df8e(r: &mut Run) {
-    op!(r, 0x6DF8E, 3, Op::DSub { d: 0, n: 9 }); // D0=D0- 9
-    i6df91(r)
+    r.cpu.d_sub(0, 9); // D0=D0- 9
+    if r.next(0x6DF91, 5) {
+        i6df91(r)
+    }
 }
 
 fn i6df91(r: &mut Run) {
-    op!(r, 0x6DF91, 4, Op::Call(0x6DFC9)); // GOSUB #6DFC9
+    r.cpu.pc = 0x6DF95;
+    r.cpu.call(0x6DFC9); // GOSUB #6DFC9
+    r.spend(6);
 }
 
 fn i6df95(r: &mut Run) {
-    op!(r, 0x6DF95, 3, Op::DSub { d: 0, n: 3 }); // D0=D0- 3
-    i6df98(r)
+    r.cpu.d_sub(0, 3); // D0=D0- 3
+    if r.next(0x6DF98, 5) {
+        i6df98(r)
+    }
 }
 
 fn i6df98(r: &mut Run) {
-    op!(r, 0x6DF98, 4, Op::Call(0x6DFC9)); // GOSUB #6DFC9
+    r.cpu.pc = 0x6DF9C;
+    r.cpu.call(0x6DFC9); // GOSUB #6DFC9
+    r.spend(6);
 }
 
 fn i6df9c(r: &mut Run) {
-    op!(r, 0x6DF9C, 5, Op::Test { test: Test::NonZero(R::A), f: Field::X, goyes: Some(0x6DF85) }); // ?A#0 X / GOYES #6DF85
-    i6dfa1(r)
+    r.cpu.pc = 0x6DFA1;
+    r.cpu.test(Test::NonZero(R::A), Field::X, Some(0x6DF85)); // ?A#0 X / GOYES #6DF85
+    if r.next_pc(0x6DFA1, 7) {
+        i6dfa1(r)
+    }
 }
 
 fn i6dfa1(r: &mut Run) {
-    op!(r, 0x6DFA1, 3, Op::Scratch { op: ScratchOp::FromScratch, r: R::A, n: 0, f: Field::W }); // A=R0
-    i6dfa4(r)
+    r.cpu.scratch(ScratchOp::FromScratch, R::A, 0, Field::W); // A=R0
+    if r.next(0x6DFA4, 5) {
+        i6dfa4(r)
+    }
 }
 
 fn i6dfa4(r: &mut Run) {
-    op!(r, 0x6DFA4, 7, Op::Call(0x67A3B)); // GOSUB #67A3B
+    r.cpu.pc = 0x6DFAB;
+    r.cpu.call(0x67A3B); // GOSUB #67A3B
+    r.spend(9);
 }
 
 fn i6dfab(r: &mut Run) {
-    op!(r, 0x6DFAB, 3, Op::DSub { d: 0, n: 0xC }); // D0=D0- 12
-    i6dfae(r)
+    r.cpu.d_sub(0, 12); // D0=D0- 12
+    if r.next(0x6DFAE, 5) {
+        i6dfae(r)
+    }
 }
 
 fn i6dfae(r: &mut Run) {
-    op!(r, 0x6DFAE, 3, Op::Scratch { op: ScratchOp::FromScratch, r: R::C, n: 4, f: Field::W }); // C=R4
-    i6dfb1(r)
+    r.cpu.scratch(ScratchOp::FromScratch, R::C, 4, Field::W); // C=R4
+    if r.next(0x6DFB1, 5) {
+        i6dfb1(r)
+    }
 }
 
 fn i6dfb1(r: &mut Run) {
-    op!(r, 0x6DFB1, 3, Op::Dec { r: R::C, f: Field::X }); // C=C-1 X
-    i6dfb4(r)
+    r.cpu.dec(R::C, Field::X); // C=C-1 X
+    if r.next(0x6DFB4, 5) {
+        i6dfb4(r)
+    }
 }
 
 fn i6dfb4(r: &mut Run) {
-    op!(r, 0x6DFB4, 4, Op::Mem { store: true, d: 0, r: R::C, f: Field::X }); // DAT0=C X
-    i6dfb8(r)
+    r.sync();
+    r.cpu.store(0, R::C, Field::X, r.hw); // DAT0=C X
+    if r.next_io(0x6DFB8, 17) {
+        i6dfb8(r)
+    }
 }
 
 fn i6dfb8(r: &mut Run) {
-    op!(r, 0x6DFB8, 3, Op::DAdd { d: 0, n: 3 }); // D0=D0+ 3
-    i6dfbb(r)
+    r.cpu.d_add(0, 3); // D0=D0+ 3
+    if r.next(0x6DFBB, 5) {
+        i6dfbb(r)
+    }
 }
 
 fn i6dfbb(r: &mut Run) {
-    op!(r, 0x6DFBB, 3, Op::Zero { r: R::C, f: Field::X }); // C=0 X
-    i6dfbe(r)
+    r.cpu.zero(R::C, Field::X); // C=0 X
+    if r.next(0x6DFBE, 5) {
+        i6dfbe(r)
+    }
 }
 
 fn i6dfbe(r: &mut Run) {
-    op!(r, 0x6DFBE, 4, Op::Mem { store: true, d: 0, r: R::C, f: Field::X }); // DAT0=C X
-    i6dfc2(r)
+    r.sync();
+    r.cpu.store(0, R::C, Field::X, r.hw); // DAT0=C X
+    if r.next_io(0x6DFC2, 17) {
+        i6dfc2(r)
+    }
 }
 
 fn i6dfc2(r: &mut Run) {
-    op!(r, 0x6DFC2, 7, Op::Jump(0x685CD)); // GOTO #685CD
+    r.cpu.pc = 0x685CD; // GOTO #685CD
+    r.spend(9);
 }
 
 fn i6dfc9(r: &mut Run) {
-    op!(r, 0x6DFC9, 3, Op::Scratch { op: ScratchOp::FromScratch, r: R::C, n: 0, f: Field::W }); // C=R0
-    i6dfcc(r)
+    r.cpu.scratch(ScratchOp::FromScratch, R::C, 0, Field::W); // C=R0
+    if r.next(0x6DFCC, 5) {
+        i6dfcc(r)
+    }
 }
 
 fn i6dfcc(r: &mut Run) {
-    op!(r, 0x6DFCC, 4, Op::Mem { store: false, d: 0, r: R::A, f: Field::X }); // A=DAT0 X
-    i6dfd0(r)
+    r.sync();
+    r.cpu.load(0, R::A, Field::X, r.hw); // A=DAT0 X
+    if r.next_io(0x6DFD0, 17) {
+        i6dfd0(r)
+    }
 }
 
 fn i6dfd0(r: &mut Run) {
-    op!(r, 0x6DFD0, 5, Op::Test { test: Test::Regs(Cmp::Ne, R::C, R::A), f: Field::X, goyes: None }); // ?C#A X / RTNYES
-    i6dfd5(r)
+    r.cpu.pc = 0x6DFD5;
+    r.cpu.test(Test::Regs(Cmp::Ne, R::C, R::A), Field::X, None); // ?C#A X / RTNYES
+    if r.next_pc(0x6DFD5, 7) {
+        i6dfd5(r)
+    }
 }
 
 fn i6dfd5(r: &mut Run) {
-    op!(r, 0x6DFD5, 3, Op::Scratch { op: ScratchOp::FromScratch, r: R::C, n: 4, f: Field::W }); // C=R4
-    i6dfd8(r)
+    r.cpu.scratch(ScratchOp::FromScratch, R::C, 4, Field::W); // C=R4
+    if r.next(0x6DFD8, 5) {
+        i6dfd8(r)
+    }
 }
 
 fn i6dfd8(r: &mut Run) {
-    op!(r, 0x6DFD8, 4, Op::Mem { store: true, d: 0, r: R::C, f: Field::X }); // DAT0=C X
-    i6dfdc(r)
+    r.sync();
+    r.cpu.store(0, R::C, Field::X, r.hw); // DAT0=C X
+    if r.next_io(0x6DFDC, 17) {
+        i6dfdc(r)
+    }
 }
 
 fn i6dfdc(r: &mut Run) {
-    op!(r, 0x6DFDC, 2, Op::Rtn(RtnKind::Plain)); // RTN
+    r.cpu.rtn(RtnKind::Plain); // RTN
+    r.spend(9);
 }
 
 fn i6dfe3(r: &mut Run) {
-    op!(r, 0x6DFE3, 4, Op::Call(0x6E08F)); // GOSUB #6E08F
+    r.cpu.pc = 0x6DFE7;
+    r.cpu.call(0x6E08F); // GOSUB #6E08F
+    r.spend(6);
 }
 
 fn i6dfe7(r: &mut Run) {
-    op!(r, 0x6DFE7, 3, Op::Inc { r: R::A, f: Field::B }); // A=A+1 B
-    i6dfea(r)
+    r.cpu.inc(R::A, Field::B); // A=A+1 B
+    if r.next(0x6DFEA, 5) {
+        i6dfea(r)
+    }
 }
 
 fn i6dfea(r: &mut Run) {
-    op!(r, 0x6DFEA, 3, Op::DExR { d: 0, r: R::C, short: false }); // CD0EX
-    i6dfed(r)
+    r.cpu.d_ex_r(0, R::C, false); // CD0EX
+    if r.next(0x6DFED, 5) {
+        i6dfed(r)
+    }
 }
 
 fn i6dfed(r: &mut Run) {
-    op!(r, 0x6DFED, 3, Op::Mem { store: true, d: 0, r: R::A, f: Field::B }); // DAT0=A B
-    i6dff0(r)
+    r.sync();
+    r.cpu.store(0, R::A, Field::B, r.hw); // DAT0=A B
+    if r.next_io(0x6DFF0, 16) {
+        i6dff0(r)
+    }
 }
 
 fn i6dff0(r: &mut Run) {
-    op!(r, 0x6DFF0, 3, Op::DFromR { d: 0, r: R::C, short: false }); // D0=C
-    i6dff3(r)
+    r.cpu.d_from_r(0, R::C, false); // D0=C
+    if r.next(0x6DFF3, 5) {
+        i6dff3(r)
+    }
 }
 
 fn i6dff3(r: &mut Run) {
-    op!(r, 0x6DFF3, 3, Op::Mem { store: false, d: 0, r: R::A, f: Field::A }); // A=DAT0 A
-    i6dff6(r)
+    r.sync();
+    r.cpu.load(0, R::A, Field::A, r.hw); // A=DAT0 A
+    if r.next_io(0x6DFF6, 19) {
+        i6dff6(r)
+    }
 }
 
 fn i6dff6(r: &mut Run) {
-    op!(r, 0x6DFF6, 3, Op::DAdd { d: 0, n: 5 }); // D0=D0+ 5
-    i6dff9(r)
+    r.cpu.d_add(0, 5); // D0=D0+ 5
+    if r.next(0x6DFF9, 5) {
+        i6dff9(r)
+    }
 }
 
 fn i6dff9(r: &mut Run) {
-    op!(r, 0x6DFF9, 4, Op::PcIndirect(R::A)); // PC=(A)
+    r.sync();
+    r.cpu.pc_indirect(R::A, r.hw); // PC=(A)
+    r.spend(23);
 }
 
 fn i6e002(r: &mut Run) {
-    op!(r, 0x6E002, 3, Op::DAdd { d: 1, n: 5 }); // D1=D1+ 5
-    i6e005(r)
+    r.cpu.d_add(1, 5); // D1=D1+ 5
+    if r.next(0x6E005, 5) {
+        i6e005(r)
+    }
 }
 
 fn i6e005(r: &mut Run) {
-    op!(r, 0x6E005, 2, Op::Inc { r: R::D, f: Field::A }); // D=D+1 A
-    i6e007(r)
+    r.cpu.inc(R::D, Field::A); // D=D+1 A
+    if r.next(0x6E007, 4) {
+        i6e007(r)
+    }
 }
 
 fn i6e007(r: &mut Run) {
-    op!(r, 0x6E007, 4, Op::Jump(0x6DFF3)); // GOTO #6DFF3
+    r.cpu.pc = 0x6DFF3; // GOTO #6DFF3
+    r.spend(6);
 }
 
 fn i6e010(r: &mut Run) {
-    op!(r, 0x6E010, 4, Op::Call(0x6E08F)); // GOSUB #6E08F
+    r.cpu.pc = 0x6E014;
+    r.cpu.call(0x6E08F); // GOSUB #6E08F
+    r.spend(6);
 }
 
 fn i6e014(r: &mut Run) {
-    op!(r, 0x6E014, 3, Op::DExR { d: 0, r: R::C, short: false }); // CD0EX
-    i6e017(r)
+    r.cpu.d_ex_r(0, R::C, false); // CD0EX
+    if r.next(0x6E017, 5) {
+        i6e017(r)
+    }
 }
 
 fn i6e017(r: &mut Run) {
-    op!(r, 0x6E017, 5, Op::Test { test: Test::Zero(R::A), f: Field::B, goyes: Some(0x6E022) }); // ?A=0 B / GOYES #6E022
-    i6e01c(r)
+    r.cpu.pc = 0x6E01C;
+    r.cpu.test(Test::Zero(R::A), Field::B, Some(0x6E022)); // ?A=0 B / GOYES #6E022
+    if r.next_pc(0x6E01C, 7) {
+        i6e01c(r)
+    }
 }
 
 fn i6e01c(r: &mut Run) {
-    op!(r, 0x6E01C, 3, Op::Dec { r: R::A, f: Field::B }); // A=A-1 B
-    i6e01f(r)
+    r.cpu.dec(R::A, Field::B); // A=A-1 B
+    if r.next(0x6E01F, 5) {
+        i6e01f(r)
+    }
 }
 
 fn i6e01f(r: &mut Run) {
-    op!(r, 0x6E01F, 3, Op::Mem { store: true, d: 0, r: R::A, f: Field::B }); // DAT0=A B
-    i6e022(r)
+    r.sync();
+    r.cpu.store(0, R::A, Field::B, r.hw); // DAT0=A B
+    if r.next_io(0x6E022, 16) {
+        i6e022(r)
+    }
 }
 
 fn i6e022(r: &mut Run) {
-    op!(r, 0x6E022, 4, Op::Jump(0x6DFF0)); // GOTO #6DFF0
+    r.cpu.pc = 0x6DFF0; // GOTO #6DFF0
+    r.spend(6);
 }
 
 fn i6e02b(r: &mut Run) {
-    op!(r, 0x6E02B, 3, Op::Mem { store: false, d: 1, r: R::C, f: Field::A }); // C=DAT1 A
-    i6e02e(r)
+    r.sync();
+    r.cpu.load(1, R::C, Field::A, r.hw); // C=DAT1 A
+    if r.next_io(0x6E02E, 19) {
+        i6e02e(r)
+    }
 }
 
 fn i6e02e(r: &mut Run) {
-    op!(r, 0x6E02E, 3, Op::DExR { d: 1, r: R::C, short: false }); // CD1EX
-    i6e031(r)
+    r.cpu.d_ex_r(1, R::C, false); // CD1EX
+    if r.next(0x6E031, 5) {
+        i6e031(r)
+    }
 }
 
 fn i6e031(r: &mut Run) {
-    op!(r, 0x6E031, 3, Op::Mem { store: false, d: 1, r: R::A, f: Field::A }); // A=DAT1 A
-    i6e034(r)
+    r.sync();
+    r.cpu.load(1, R::A, Field::A, r.hw); // A=DAT1 A
+    if r.next_io(0x6E034, 19) {
+        i6e034(r)
+    }
 }
 
 fn i6e034(r: &mut Run) {
-    op!(r, 0x6E034, 3, Op::DFromR { d: 1, r: R::C, short: false }); // D1=C
-    i6e037(r)
+    r.cpu.d_from_r(1, R::C, false); // D1=C
+    if r.next(0x6E037, 5) {
+        i6e037(r)
+    }
 }
 
 fn i6e037(r: &mut Run) {
-    op!(r, 0x6E037, 7, Op::LoadConst { r: R::C, len: 5, val: 0x2D9D }); // LC(5) #02D9D
-    i6e03e(r)
+    r.cpu.load_const(R::C, 5, 0x2D9D); // LC(5) #02D9D
+    if r.next(0x6E03E, 9) {
+        i6e03e(r)
+    }
 }
 
 fn i6e03e(r: &mut Run) {
-    op!(r, 0x6E03E, 5, Op::Test { test: Test::Regs(Cmp::Eq, R::C, R::A), f: Field::A, goyes: Some(0x6E04D) }); // ?C=A A / GOYES #6E04D
-    i6e043(r)
+    r.cpu.pc = 0x6E043;
+    r.cpu.test(Test::Regs(Cmp::Eq, R::C, R::A), Field::A, Some(0x6E04D)); // ?C=A A / GOYES #6E04D
+    if r.next_pc(0x6E043, 7) {
+        i6e043(r)
+    }
 }
 
 fn i6e043(r: &mut Run) {
-    op!(r, 0x6E043, 7, Op::LoadConst { r: R::C, len: 5, val: 0x26A2D }); // LC(5) #26A2D
-    i6e04a(r)
+    r.cpu.load_const(R::C, 5, 0x26A2D); // LC(5) #26A2D
+    if r.next(0x6E04A, 9) {
+        i6e04a(r)
+    }
 }
 
 fn i6e04a(r: &mut Run) {
-    op!(r, 0x6E04A, 3, Op::CondJump(Cond::NoCarry, 0x6E06D)); // GONC #6E06D
-    i6e04d(r)
+    r.cpu.pc = 0x6E04D;
+    r.cpu.jump_if(Cond::NoCarry, 0x6E06D); // GONC #6E06D
+    if r.next_pc(0x6E04D, 5) {
+        i6e04d(r)
+    }
 }
 
 fn i6e04d(r: &mut Run) {
-    op!(r, 0x6E04D, 7, Op::LoadConst { r: R::C, len: 5, val: 0x26A82 }); // LC(5) #26A82
-    i6e054(r)
+    r.cpu.load_const(R::C, 5, 0x26A82); // LC(5) #26A82
+    if r.next(0x6E054, 9) {
+        i6e054(r)
+    }
 }
 
 fn i6e054(r: &mut Run) {
-    op!(r, 0x6E054, 3, Op::CondJump(Cond::Carry, 0x6E06D)); // GOC #6E06D
+    r.cpu.pc = 0x6E057;
+    r.cpu.jump_if(Cond::Carry, 0x6E06D); // GOC #6E06D
+    r.spend(5);
 }
 
 fn i6e05c(r: &mut Run) {
-    op!(r, 0x6E05C, 4, Op::Call(0x6E08F)); // GOSUB #6E08F
+    r.cpu.pc = 0x6E060;
+    r.cpu.call(0x6E08F); // GOSUB #6E08F
+    r.spend(6);
 }
 
 fn i6e060(r: &mut Run) {
-    op!(r, 0x6E060, 3, Op::Dec { r: R::A, f: Field::B }); // A=A-1 B
-    i6e063(r)
+    r.cpu.dec(R::A, Field::B); // A=A-1 B
+    if r.next(0x6E063, 5) {
+        i6e063(r)
+    }
 }
 
 fn i6e063(r: &mut Run) {
-    op!(r, 0x6E063, 3, Op::CondJump(Cond::NoCarry, 0x6E073)); // GONC #6E073
-    i6e066(r)
+    r.cpu.pc = 0x6E066;
+    r.cpu.jump_if(Cond::NoCarry, 0x6E073); // GONC #6E073
+    if r.next_pc(0x6E066, 5) {
+        i6e066(r)
+    }
 }
 
 fn i6e066(r: &mut Run) {
-    op!(r, 0x6E066, 7, Op::LoadConst { r: R::C, len: 5, val: 0x4053 }); // LC(5) #04053
-    i6e06d(r)
+    r.cpu.load_const(R::C, 5, 0x4053); // LC(5) #04053
+    if r.next(0x6E06D, 9) {
+        i6e06d(r)
+    }
 }
 
 fn i6e06d(r: &mut Run) {
-    op!(r, 0x6E06D, 2, Op::Copy { dst: R::A, src: R::C, f: Field::A }); // A=C A
-    i6e06f(r)
+    r.cpu.copy(R::A, R::C, Field::A); // A=C A
+    if r.next(0x6E06F, 4) {
+        i6e06f(r)
+    }
 }
 
 fn i6e06f(r: &mut Run) {
-    op!(r, 0x6E06F, 4, Op::PcIndirect(R::A)); // PC=(A)
+    r.sync();
+    r.cpu.pc_indirect(R::A, r.hw); // PC=(A)
+    r.spend(23);
 }
 
 fn i6e073(r: &mut Run) {
-    op!(r, 0x6E073, 3, Op::Dec { r: R::A, f: Field::B }); // A=A-1 B
-    i6e076(r)
+    r.cpu.dec(R::A, Field::B); // A=A-1 B
+    if r.next(0x6E076, 5) {
+        i6e076(r)
+    }
 }
 
 fn i6e076(r: &mut Run) {
-    op!(r, 0x6E076, 3, Op::CondJump(Cond::Carry, 0x6E084)); // GOC #6E084
-    i6e079(r)
+    r.cpu.pc = 0x6E079;
+    r.cpu.jump_if(Cond::Carry, 0x6E084); // GOC #6E084
+    if r.next_pc(0x6E079, 5) {
+        i6e079(r)
+    }
 }
 
 fn i6e079(r: &mut Run) {
-    op!(r, 0x6E079, 7, Op::LoadConst { r: R::C, len: 5, val: 0x402B }); // LC(5) #0402B
-    i6e080(r)
+    r.cpu.load_const(R::C, 5, 0x402B); // LC(5) #0402B
+    if r.next(0x6E080, 9) {
+        i6e080(r)
+    }
 }
 
 fn i6e080(r: &mut Run) {
-    op!(r, 0x6E080, 4, Op::Jump(0x6E06D)); // GOTO #6E06D
+    r.cpu.pc = 0x6E06D; // GOTO #6E06D
+    r.spend(6);
 }
 
 fn i6e084(r: &mut Run) {
-    op!(r, 0x6E084, 7, Op::LoadConst { r: R::C, len: 5, val: 0x403F }); // LC(5) #0403F
-    i6e08b(r)
+    r.cpu.load_const(R::C, 5, 0x403F); // LC(5) #0403F
+    if r.next(0x6E08B, 9) {
+        i6e08b(r)
+    }
 }
 
 fn i6e08b(r: &mut Run) {
-    op!(r, 0x6E08B, 4, Op::Jump(0x6E06D)); // GOTO #6E06D
+    r.cpu.pc = 0x6E06D; // GOTO #6E06D
+    r.spend(6);
 }
 
 fn i6e08f(r: &mut Run) {
-    op!(r, 0x6E08F, 7, Op::LoadConst { r: R::C, len: 5, val: 0x80815 }); // LC(5) #80815
-    i6e096(r)
+    r.cpu.load_const(R::C, 5, 0x80815); // LC(5) #80815
+    if r.next(0x6E096, 9) {
+        i6e096(r)
+    }
 }
 
 fn i6e096(r: &mut Run) {
-    op!(r, 0x6E096, 3, Op::DExR { d: 0, r: R::C, short: false }); // CD0EX
-    i6e099(r)
+    r.cpu.d_ex_r(0, R::C, false); // CD0EX
+    if r.next(0x6E099, 5) {
+        i6e099(r)
+    }
 }
 
 fn i6e099(r: &mut Run) {
-    op!(r, 0x6E099, 3, Op::Mem { store: false, d: 0, r: R::A, f: Field::B }); // A=DAT0 B
-    i6e09c(r)
+    r.sync();
+    r.cpu.load(0, R::A, Field::B, r.hw); // A=DAT0 B
+    if r.next_io(0x6E09C, 16) {
+        i6e09c(r)
+    }
 }
 
 fn i6e09c(r: &mut Run) {
-    op!(r, 0x6E09C, 3, Op::DExR { d: 0, r: R::C, short: false }); // CD0EX
-    i6e09f(r)
+    r.cpu.d_ex_r(0, R::C, false); // CD0EX
+    if r.next(0x6E09F, 5) {
+        i6e09f(r)
+    }
 }
 
 fn i6e09f(r: &mut Run) {
-    op!(r, 0x6E09F, 2, Op::Rtn(RtnKind::Plain)); // RTN
+    r.cpu.rtn(RtnKind::Plain); // RTN
+    r.spend(9);
 }
 
 fn i6e0a6(r: &mut Run) {
-    op!(r, 0x6E0A6, 4, Op::Call(0x6E08F)); // GOSUB #6E08F
+    r.cpu.pc = 0x6E0AA;
+    r.cpu.call(0x6E08F); // GOSUB #6E08F
+    r.spend(6);
 }
 
 fn i6e0aa(r: &mut Run) {
-    op!(r, 0x6E0AA, 3, Op::Dec { r: R::A, f: Field::B }); // A=A-1 B
-    i6e0ad(r)
+    r.cpu.dec(R::A, Field::B); // A=A-1 B
+    if r.next(0x6E0AD, 5) {
+        i6e0ad(r)
+    }
 }
 
 fn i6e0ad(r: &mut Run) {
-    op!(r, 0x6E0AD, 3, Op::CondJump(Cond::Carry, 0x6E079)); // GOC #6E079
-    i6e0b0(r)
+    r.cpu.pc = 0x6E0B0;
+    r.cpu.jump_if(Cond::Carry, 0x6E079); // GOC #6E079
+    if r.next_pc(0x6E0B0, 5) {
+        i6e0b0(r)
+    }
 }
 
 fn i6e0b0(r: &mut Run) {
-    op!(r, 0x6E0B0, 3, Op::Dec { r: R::A, f: Field::B }); // A=A-1 B
-    i6e0b3(r)
+    r.cpu.dec(R::A, Field::B); // A=A-1 B
+    if r.next(0x6E0B3, 5) {
+        i6e0b3(r)
+    }
 }
 
 fn i6e0b3(r: &mut Run) {
-    op!(r, 0x6E0B3, 3, Op::CondJump(Cond::Carry, 0x6E079)); // GOC #6E079
-    i6e0b6(r)
+    r.cpu.pc = 0x6E0B6;
+    r.cpu.jump_if(Cond::Carry, 0x6E079); // GOC #6E079
+    if r.next_pc(0x6E0B6, 5) {
+        i6e0b6(r)
+    }
 }
 
 fn i6e0b6(r: &mut Run) {
-    op!(r, 0x6E0B6, 7, Op::LoadConst { r: R::C, len: 5, val: 0x4017 }); // LC(5) #04017
-    i6e0bd(r)
+    r.cpu.load_const(R::C, 5, 0x4017); // LC(5) #04017
+    if r.next(0x6E0BD, 9) {
+        i6e0bd(r)
+    }
 }
 
 fn i6e0bd(r: &mut Run) {
-    op!(r, 0x6E0BD, 3, Op::CondJump(Cond::NoCarry, 0x6E06D)); // GONC #6E06D
+    r.cpu.pc = 0x6E0C0;
+    r.cpu.jump_if(Cond::NoCarry, 0x6E06D); // GONC #6E06D
+    r.spend(5);
 }
 
 fn i6e0c5(r: &mut Run) {
-    op!(r, 0x6E0C5, 4, Op::Call(0x6E08F)); // GOSUB #6E08F
+    r.cpu.pc = 0x6E0C9;
+    r.cpu.call(0x6E08F); // GOSUB #6E08F
+    r.spend(6);
 }
 
 fn i6e0c9(r: &mut Run) {
-    op!(r, 0x6E0C9, 3, Op::Dec { r: R::A, f: Field::B }); // A=A-1 B
-    i6e0cc(r)
+    r.cpu.dec(R::A, Field::B); // A=A-1 B
+    if r.next(0x6E0CC, 5) {
+        i6e0cc(r)
+    }
 }
 
 fn i6e0cc(r: &mut Run) {
-    op!(r, 0x6E0CC, 3, Op::CondJump(Cond::Carry, 0x6E084)); // GOC #6E084
-    i6e0cf(r)
+    r.cpu.pc = 0x6E0CF;
+    r.cpu.jump_if(Cond::Carry, 0x6E084); // GOC #6E084
+    if r.next_pc(0x6E0CF, 5) {
+        i6e0cf(r)
+    }
 }
 
 fn i6e0cf(r: &mut Run) {
-    op!(r, 0x6E0CF, 3, Op::CondJump(Cond::NoCarry, 0x6E079)); // GONC #6E079
+    r.cpu.pc = 0x6E0D2;
+    r.cpu.jump_if(Cond::NoCarry, 0x6E079); // GONC #6E079
+    r.spend(5);
 }
 
 fn i6e0d7(r: &mut Run) {
-    op!(r, 0x6E0D7, 4, Op::Call(0x6E08F)); // GOSUB #6E08F
+    r.cpu.pc = 0x6E0DB;
+    r.cpu.call(0x6E08F); // GOSUB #6E08F
+    r.spend(6);
 }
 
 fn i6e0db(r: &mut Run) {
-    op!(r, 0x6E0DB, 3, Op::Dec { r: R::A, f: Field::B }); // A=A-1 B
-    i6e0de(r)
+    r.cpu.dec(R::A, Field::B); // A=A-1 B
+    if r.next(0x6E0DE, 5) {
+        i6e0de(r)
+    }
 }
 
 fn i6e0de(r: &mut Run) {
-    op!(r, 0x6E0DE, 3, Op::CondJump(Cond::Carry, 0x6E079)); // GOC #6E079
-    i6e0e1(r)
+    r.cpu.pc = 0x6E0E1;
+    r.cpu.jump_if(Cond::Carry, 0x6E079); // GOC #6E079
+    if r.next_pc(0x6E0E1, 5) {
+        i6e0e1(r)
+    }
 }
 
 fn i6e0e1(r: &mut Run) {
-    op!(r, 0x6E0E1, 3, Op::CondJump(Cond::NoCarry, 0x6E0B6)); // GONC #6E0B6
+    r.cpu.pc = 0x6E0E4;
+    r.cpu.jump_if(Cond::NoCarry, 0x6E0B6); // GONC #6E0B6
+    r.spend(5);
 }
 
 fn i6e0e9(r: &mut Run) {
-    op!(r, 0x6E0E9, 4, Op::Call(0x6E08F)); // GOSUB #6E08F
+    r.cpu.pc = 0x6E0ED;
+    r.cpu.call(0x6E08F); // GOSUB #6E08F
+    r.spend(6);
 }
 
 fn i6e0ed(r: &mut Run) {
-    op!(r, 0x6E0ED, 3, Op::Dec { r: R::A, f: Field::B }); // A=A-1 B
-    i6e0f0(r)
+    r.cpu.dec(R::A, Field::B); // A=A-1 B
+    if r.next(0x6E0F0, 5) {
+        i6e0f0(r)
+    }
 }
 
 fn i6e0f0(r: &mut Run) {
-    op!(r, 0x6E0F0, 3, Op::CondJump(Cond::Carry, 0x6E0FE)); // GOC #6E0FE
-    i6e0f3(r)
+    r.cpu.pc = 0x6E0F3;
+    r.cpu.jump_if(Cond::Carry, 0x6E0FE); // GOC #6E0FE
+    if r.next_pc(0x6E0F3, 5) {
+        i6e0f3(r)
+    }
 }
 
 fn i6e0f3(r: &mut Run) {
-    op!(r, 0x6E0F3, 7, Op::LoadConst { r: R::C, len: 5, val: 0x66E7F }); // LC(5) #66E7F
-    i6e0fa(r)
+    r.cpu.load_const(R::C, 5, 0x66E7F); // LC(5) #66E7F
+    if r.next(0x6E0FA, 9) {
+        i6e0fa(r)
+    }
 }
 
 fn i6e0fa(r: &mut Run) {
-    op!(r, 0x6E0FA, 4, Op::Jump(0x6E06D)); // GOTO #6E06D
+    r.cpu.pc = 0x6E06D; // GOTO #6E06D
+    r.spend(6);
 }
 
 fn i6e0fe(r: &mut Run) {
-    op!(r, 0x6E0FE, 7, Op::LoadConst { r: R::C, len: 5, val: 0x66FB1 }); // LC(5) #66FB1
-    i6e105(r)
+    r.cpu.load_const(R::C, 5, 0x66FB1); // LC(5) #66FB1
+    if r.next(0x6E105, 9) {
+        i6e105(r)
+    }
 }
 
 fn i6e105(r: &mut Run) {
-    op!(r, 0x6E105, 4, Op::Jump(0x6E06D)); // GOTO #6E06D
+    r.cpu.pc = 0x6E06D; // GOTO #6E06D
+    r.spend(6);
 }
 
 fn i6f0bd(r: &mut Run) {
-    op!(r, 0x6F0BD, 7, Op::Call(0x67A4A)); // GOSUB #67A4A
+    r.cpu.pc = 0x6F0C4;
+    r.cpu.call(0x67A4A); // GOSUB #67A4A
+    r.spend(9);
 }
 
 fn i6f0c4(r: &mut Run) {
-    op!(r, 0x6F0C4, 3, Op::DAdd { d: 0, n: 0xF }); // D0=D0+ 15
-    i6f0c7(r)
+    r.cpu.d_add(0, 15); // D0=D0+ 15
+    if r.next(0x6F0C7, 5) {
+        i6f0c7(r)
+    }
 }
 
 fn i6f0c7(r: &mut Run) {
-    op!(r, 0x6F0C7, 3, Op::DAdd { d: 0, n: 7 }); // D0=D0+ 7
-    i6f0ca(r)
+    r.cpu.d_add(0, 7); // D0=D0+ 7
+    if r.next(0x6F0CA, 5) {
+        i6f0ca(r)
+    }
 }
 
 fn i6f0ca(r: &mut Run) {
-    op!(r, 0x6F0CA, 3, Op::Mem { store: false, d: 0, r: R::C, f: Field::B }); // C=DAT0 B
-    i6f0cd(r)
+    r.sync();
+    r.cpu.load(0, R::C, Field::B, r.hw); // C=DAT0 B
+    if r.next_io(0x6F0CD, 16) {
+        i6f0cd(r)
+    }
 }
 
 fn i6f0cd(r: &mut Run) {
-    op!(r, 0x6F0CD, 2, Op::PushC); // RSTK=C
-    i6f0cf(r)
+    r.cpu.push_c(); // RSTK=C
+    if r.next(0x6F0CF, 4) {
+        i6f0cf(r)
+    }
 }
 
 fn i6f0cf(r: &mut Run) {
-    op!(r, 0x6F0CF, 3, Op::DAdd { d: 0, n: 5 }); // D0=D0+ 5
-    i6f0d2(r)
+    r.cpu.d_add(0, 5); // D0=D0+ 5
+    if r.next(0x6F0D2, 5) {
+        i6f0d2(r)
+    }
 }
 
 fn i6f0d2(r: &mut Run) {
-    op!(r, 0x6F0D2, 4, Op::Mem { store: false, d: 0, r: R::C, f: Field::W }); // C=DAT0 W
-    i6f0d6(r)
+    r.sync();
+    r.cpu.load(0, R::C, Field::W, r.hw); // C=DAT0 W
+    if r.next_io(0x6F0D6, 30) {
+        i6f0d6(r)
+    }
 }
 
 fn i6f0d6(r: &mut Run) {
-    op!(r, 0x6F0D6, 2, Op::PushC); // RSTK=C
-    i6f0d8(r)
+    r.cpu.push_c(); // RSTK=C
+    if r.next(0x6F0D8, 4) {
+        i6f0d8(r)
+    }
 }
 
 fn i6f0d8(r: &mut Run) {
-    op!(r, 0x6F0D8, 7, Op::Call(0x6641)); // GOSUB #06641
+    r.cpu.pc = 0x6F0DF;
+    r.cpu.call(0x06641); // GOSUB #06641
+    r.spend(9);
 }
 
 fn i6f0df(r: &mut Run) {
-    op!(r, 0x6F0DF, 7, Op::Call(0x67A3B)); // GOSUB #67A3B
+    r.cpu.pc = 0x6F0E6;
+    r.cpu.call(0x67A3B); // GOSUB #67A3B
+    r.spend(9);
 }
 
 fn i6f0e6(r: &mut Run) {
-    op!(r, 0x6F0E6, 3, Op::DSub { d: 0, n: 0xF }); // D0=D0- 15
-    i6f0e9(r)
+    r.cpu.d_sub(0, 15); // D0=D0- 15
+    if r.next(0x6F0E9, 5) {
+        i6f0e9(r)
+    }
 }
 
 fn i6f0e9(r: &mut Run) {
-    op!(r, 0x6F0E9, 2, Op::PopC); // C=RSTK
-    i6f0eb(r)
+    r.cpu.pop_c(); // C=RSTK
+    if r.next(0x6F0EB, 4) {
+        i6f0eb(r)
+    }
 }
 
 fn i6f0eb(r: &mut Run) {
-    op!(r, 0x6F0EB, 4, Op::Mem { store: true, d: 0, r: R::C, f: Field::Nibbles(9) }); // DAT0=C 9
-    i6f0ef(r)
+    r.sync();
+    r.cpu.store(0, R::C, Field::Nibbles(9), r.hw); // DAT0=C 9
+    if r.next_io(0x6F0EF, 23) {
+        i6f0ef(r)
+    }
 }
 
 fn i6f0ef(r: &mut Run) {
-    op!(r, 0x6F0EF, 3, Op::DSub { d: 0, n: 5 }); // D0=D0- 5
-    i6f0f2(r)
+    r.cpu.d_sub(0, 5); // D0=D0- 5
+    if r.next(0x6F0F2, 5) {
+        i6f0f2(r)
+    }
 }
 
 fn i6f0f2(r: &mut Run) {
-    op!(r, 0x6F0F2, 2, Op::PopC); // C=RSTK
-    i6f0f4(r)
+    r.cpu.pop_c(); // C=RSTK
+    if r.next(0x6F0F4, 4) {
+        i6f0f4(r)
+    }
 }
 
 fn i6f0f4(r: &mut Run) {
-    op!(r, 0x6F0F4, 3, Op::Mem { store: true, d: 0, r: R::C, f: Field::B }); // DAT0=C B
-    i6f0f7(r)
+    r.sync();
+    r.cpu.store(0, R::C, Field::B, r.hw); // DAT0=C B
+    if r.next_io(0x6F0F7, 16) {
+        i6f0f7(r)
+    }
 }
 
 fn i6f0f7(r: &mut Run) {
-    op!(r, 0x6F0F7, 7, Op::Jump(0x685CD)); // GOTO #685CD
+    r.cpu.pc = 0x685CD; // GOTO #685CD
+    r.spend(9);
 }
 
 fn i6fd8a(r: &mut Run) {
-    op!(r, 0x6FD8A, 7, Op::LoadConst { r: R::C, len: 5, val: 0x4003 }); // LC(5) #04003
-    i6fd91(r)
+    r.cpu.load_const(R::C, 5, 0x4003); // LC(5) #04003
+    if r.next(0x6FD91, 9) {
+        i6fd91(r)
+    }
 }
 
 fn i6fd91(r: &mut Run) {
-    op!(r, 0x6FD91, 3, Op::Mem { store: false, d: 1, r: R::A, f: Field::A }); // A=DAT1 A
-    i6fd94(r)
+    r.sync();
+    r.cpu.load(1, R::A, Field::A, r.hw); // A=DAT1 A
+    if r.next_io(0x6FD94, 19) {
+        i6fd94(r)
+    }
 }
 
 fn i6fd94(r: &mut Run) {
-    op!(r, 0x6FD94, 5, Op::Test { test: Test::Regs(Cmp::Eq, R::C, R::A), f: Field::A, goyes: Some(0x6FDA6) }); // ?C=A A / GOYES #6FDA6
-    i6fd99(r)
+    r.cpu.pc = 0x6FD99;
+    r.cpu.test(Test::Regs(Cmp::Eq, R::C, R::A), Field::A, Some(0x6FDA6)); // ?C=A A / GOYES #6FDA6
+    if r.next_pc(0x6FD99, 7) {
+        i6fd99(r)
+    }
 }
 
 fn i6fd99(r: &mut Run) {
-    op!(r, 0x6FD99, 7, Op::LoadConst { r: R::C, len: 5, val: 0x714D }); // LC(5) #0714D
-    i6fda0(r)
+    r.cpu.load_const(R::C, 5, 0x714D); // LC(5) #0714D
+    if r.next(0x6FDA0, 9) {
+        i6fda0(r)
+    }
 }
 
 fn i6fda0(r: &mut Run) {
-    op!(r, 0x6FDA0, 2, Op::Copy { dst: R::A, src: R::C, f: Field::A }); // A=C A
-    i6fda2(r)
+    r.cpu.copy(R::A, R::C, Field::A); // A=C A
+    if r.next(0x6FDA2, 4) {
+        i6fda2(r)
+    }
 }
 
 fn i6fda2(r: &mut Run) {
-    op!(r, 0x6FDA2, 4, Op::PcIndirect(R::A)); // PC=(A)
+    r.sync();
+    r.cpu.pc_indirect(R::A, r.hw); // PC=(A)
+    r.spend(23);
 }
 
 fn i6fda6(r: &mut Run) {
-    op!(r, 0x6FDA6, 3, Op::DAdd { d: 1, n: 5 }); // D1=D1+ 5
-    i6fda9(r)
+    r.cpu.d_add(1, 5); // D1=D1+ 5
+    if r.next(0x6FDA9, 5) {
+        i6fda9(r)
+    }
 }
 
 fn i6fda9(r: &mut Run) {
-    op!(r, 0x6FDA9, 2, Op::Inc { r: R::D, f: Field::A }); // D=D+1 A
-    i6fdab(r)
+    r.cpu.inc(R::D, Field::A); // D=D+1 A
+    if r.next(0x6FDAB, 4) {
+        i6fdab(r)
+    }
 }
 
 fn i6fdab(r: &mut Run) {
-    op!(r, 0x6FDAB, 7, Op::LoadConst { r: R::C, len: 5, val: 0x6FD1 }); // LC(5) #06FD1
-    i6fdb2(r)
+    r.cpu.load_const(R::C, 5, 0x6FD1); // LC(5) #06FD1
+    if r.next(0x6FDB2, 9) {
+        i6fdb2(r)
+    }
 }
 
 fn i6fdb2(r: &mut Run) {
-    op!(r, 0x6FDB2, 4, Op::Jump(0x6FDA0)); // GOTO #6FDA0
+    r.cpu.pc = 0x6FDA0; // GOTO #6FDA0
+    r.spend(6);
 }
 
 fn i6fdbb(r: &mut Run) {
-    op!(r, 0x6FDBB, 7, Op::LoadConst { r: R::C, len: 5, val: 0x4017 }); // LC(5) #04017
-    i6fdc2(r)
+    r.cpu.load_const(R::C, 5, 0x4017); // LC(5) #04017
+    if r.next(0x6FDC2, 9) {
+        i6fdc2(r)
+    }
 }
 
 fn i6fdc2(r: &mut Run) {
-    op!(r, 0x6FDC2, 4, Op::Jump(0x6FD91)); // GOTO #6FD91
+    r.cpu.pc = 0x6FD91; // GOTO #6FD91
+    r.spend(6);
 }
 
 fn i6fdcb(r: &mut Run) {
-    op!(r, 0x6FDCB, 7, Op::LoadConst { r: R::C, len: 5, val: 0x402B }); // LC(5) #0402B
-    i6fdd2(r)
+    r.cpu.load_const(R::C, 5, 0x402B); // LC(5) #0402B
+    if r.next(0x6FDD2, 9) {
+        i6fdd2(r)
+    }
 }
 
 fn i6fdd2(r: &mut Run) {
-    op!(r, 0x6FDD2, 4, Op::Jump(0x6FD91)); // GOTO #6FD91
+    r.cpu.pc = 0x6FD91; // GOTO #6FD91
+    r.spend(6);
 }
 
 fn i6fddb(r: &mut Run) {
-    op!(r, 0x6FDDB, 3, Op::StSet { bit: 0, set: true }); // ST=1 0
-    i6fdde(r)
+    r.cpu.st_set(0, true); // ST=1 0
+    if r.next(0x6FDDE, 5) {
+        i6fdde(r)
+    }
 }
 
 fn i6fdde(r: &mut Run) {
-    op!(r, 0x6FDDE, 4, Op::Jump(0x6FDEA)); // GOTO #6FDEA
+    r.cpu.pc = 0x6FDEA; // GOTO #6FDEA
+    r.spend(6);
 }
 
 fn i6fde7(r: &mut Run) {
-    op!(r, 0x6FDE7, 3, Op::StSet { bit: 0, set: false }); // ST=0 0
-    i6fdea(r)
+    r.cpu.st_set(0, false); // ST=0 0
+    if r.next(0x6FDEA, 5) {
+        i6fdea(r)
+    }
 }
 
 fn i6fdea(r: &mut Run) {
-    op!(r, 0x6FDEA, 3, Op::Mem { store: false, d: 0, r: R::C, f: Field::A }); // C=DAT0 A
-    i6fded(r)
+    r.sync();
+    r.cpu.load(0, R::C, Field::A, r.hw); // C=DAT0 A
+    if r.next_io(0x6FDED, 19) {
+        i6fded(r)
+    }
 }
 
 fn i6fded(r: &mut Run) {
-    op!(r, 0x6FDED, 3, Op::DAdd { d: 0, n: 5 }); // D0=D0+ 5
-    i6fdf0(r)
+    r.cpu.d_add(0, 5); // D0=D0+ 5
+    if r.next(0x6FDF0, 5) {
+        i6fdf0(r)
+    }
 }
 
 fn i6fdf0(r: &mut Run) {
-    op!(r, 0x6FDF0, 2, Op::PushC); // RSTK=C
-    i6fdf2(r)
+    r.cpu.push_c(); // RSTK=C
+    if r.next(0x6FDF2, 4) {
+        i6fdf2(r)
+    }
 }
 
 fn i6fdf2(r: &mut Run) {
-    op!(r, 0x6FDF2, 7, Op::Call(0x6641)); // GOSUB #06641
+    r.cpu.pc = 0x6FDF9;
+    r.cpu.call(0x06641); // GOSUB #06641
+    r.spend(9);
 }
 
 fn i6fdf9(r: &mut Run) {
-    op!(r, 0x6FDF9, 7, Op::Call(0x679B)); // GOSUB #0679B
+    r.cpu.pc = 0x6FE00;
+    r.cpu.call(0x0679B); // GOSUB #0679B
+    r.spend(9);
 }
 
 fn i6fe00(r: &mut Run) {
-    op!(r, 0x6FE00, 3, Op::Copy { dst: R::B, src: R::A, f: Field::B }); // B=A B
-    i6fe03(r)
+    r.cpu.copy(R::B, R::A, Field::B); // B=A B
+    if r.next(0x6FE03, 5) {
+        i6fe03(r)
+    }
 }
 
 fn i6fe03(r: &mut Run) {
-    op!(r, 0x6FE03, 2, Op::PopC); // C=RSTK
-    i6fe05(r)
+    r.cpu.pop_c(); // C=RSTK
+    if r.next(0x6FE05, 4) {
+        i6fe05(r)
+    }
 }
 
 fn i6fe05(r: &mut Run) {
-    op!(r, 0x6FE05, 3, Op::DFromR { d: 1, r: R::C, short: false }); // D1=C
-    i6fe08(r)
+    r.cpu.d_from_r(1, R::C, false); // D1=C
+    if r.next(0x6FE08, 5) {
+        i6fe08(r)
+    }
 }
 
 fn i6fe08(r: &mut Run) {
-    op!(r, 0x6FE08, 3, Op::Mem { store: false, d: 1, r: R::C, f: Field::B }); // C=DAT1 B
-    i6fe0b(r)
+    r.sync();
+    r.cpu.load(1, R::C, Field::B, r.hw); // C=DAT1 B
+    if r.next_io(0x6FE0B, 16) {
+        i6fe0b(r)
+    }
 }
 
 fn i6fe0b(r: &mut Run) {
-    op!(r, 0x6FE0B, 3, Op::Dec { r: R::C, f: Field::B }); // C=C-1 B
-    i6fe0e(r)
+    r.cpu.dec(R::C, Field::B); // C=C-1 B
+    if r.next(0x6FE0E, 5) {
+        i6fe0e(r)
+    }
 }
 
 fn i6fe0e(r: &mut Run) {
-    op!(r, 0x6FE0E, 3, Op::DAdd { d: 1, n: 2 }); // D1=D1+ 2
-    i6fe11(r)
+    r.cpu.d_add(1, 2); // D1=D1+ 2
+    if r.next(0x6FE11, 5) {
+        i6fe11(r)
+    }
 }
 
 fn i6fe11(r: &mut Run) {
-    op!(r, 0x6FE11, 3, Op::Mem { store: false, d: 1, r: R::A, f: Field::B }); // A=DAT1 B
-    i6fe14(r)
+    r.sync();
+    r.cpu.load(1, R::A, Field::B, r.hw); // A=DAT1 B
+    if r.next_io(0x6FE14, 16) {
+        i6fe14(r)
+    }
 }
 
 fn i6fe14(r: &mut Run) {
-    op!(r, 0x6FE14, 5, Op::Test { test: Test::Regs(Cmp::Eq, R::A, R::B), f: Field::B, goyes: Some(0x6FE3B) }); // ?A=B B / GOYES #6FE3B
-    i6fe19(r)
+    r.cpu.pc = 0x6FE19;
+    r.cpu.test(Test::Regs(Cmp::Eq, R::A, R::B), Field::B, Some(0x6FE3B)); // ?A=B B / GOYES #6FE3B
+    if r.next_pc(0x6FE19, 7) {
+        i6fe19(r)
+    }
 }
 
 fn i6fe19(r: &mut Run) {
-    op!(r, 0x6FE19, 3, Op::DAdd { d: 1, n: 7 }); // D1=D1+ 7
-    i6fe1c(r)
+    r.cpu.d_add(1, 7); // D1=D1+ 7
+    if r.next(0x6FE1C, 5) {
+        i6fe1c(r)
+    }
 }
 
 fn i6fe1c(r: &mut Run) {
-    op!(r, 0x6FE1C, 3, Op::Dec { r: R::C, f: Field::B }); // C=C-1 B
-    i6fe1f(r)
+    r.cpu.dec(R::C, Field::B); // C=C-1 B
+    if r.next(0x6FE1F, 5) {
+        i6fe1f(r)
+    }
 }
 
 fn i6fe1f(r: &mut Run) {
-    op!(r, 0x6FE1F, 3, Op::CondJump(Cond::NoCarry, 0x6FE11)); // GONC #6FE11
-    i6fe22(r)
+    r.cpu.pc = 0x6FE22;
+    r.cpu.jump_if(Cond::NoCarry, 0x6FE11); // GONC #6FE11
+    if r.next_pc(0x6FE22, 5) {
+        i6fe22(r)
+    }
 }
 
 fn i6fe22(r: &mut Run) {
-    op!(r, 0x6FE22, 5, Op::StTest { bit: 0, set: true, goyes: Some(0x6FE2E) }); // ?ST=1 0 / GOYES #6FE2E
-    i6fe27(r)
+    r.cpu.pc = 0x6FE27;
+    r.cpu.st_test(0, true, Some(0x6FE2E)); // ?ST=1 0 / GOYES #6FE2E
+    if r.next_pc(0x6FE27, 7) {
+        i6fe27(r)
+    }
 }
 
 fn i6fe27(r: &mut Run) {
-    op!(r, 0x6FE27, 7, Op::Jump(0x26FAE)); // GOTO #26FAE
+    r.cpu.pc = 0x26FAE; // GOTO #26FAE
+    r.spend(9);
 }
 
 fn i6fe2e(r: &mut Run) {
-    op!(r, 0x6FE2E, 10, Op::LoadConst { r: R::A, len: 5, val: 0x3FDD1 }); // LA(5) #3FDD1
-    i6fe38(r)
+    r.cpu.load_const(R::A, 5, 0x3FDD1); // LA(5) #3FDD1
+    if r.next(0x6FE38, 12) {
+        i6fe38(r)
+    }
 }
 
 fn i6fe38(r: &mut Run) {
-    op!(r, 0x6FE38, 3, Op::CondJump(Cond::Carry, 0x6FE41)); // GOC #6FE41
-    i6fe3b(r)
+    r.cpu.pc = 0x6FE3B;
+    r.cpu.jump_if(Cond::Carry, 0x6FE41); // GOC #6FE41
+    if r.next_pc(0x6FE3B, 5) {
+        i6fe3b(r)
+    }
 }
 
 fn i6fe3b(r: &mut Run) {
-    op!(r, 0x6FE3B, 3, Op::DAdd { d: 1, n: 2 }); // D1=D1+ 2
-    i6fe3e(r)
+    r.cpu.d_add(1, 2); // D1=D1+ 2
+    if r.next(0x6FE3E, 5) {
+        i6fe3e(r)
+    }
 }
 
 fn i6fe3e(r: &mut Run) {
-    op!(r, 0x6FE3E, 3, Op::Mem { store: false, d: 1, r: R::A, f: Field::A }); // A=DAT1 A
-    i6fe41(r)
+    r.sync();
+    r.cpu.load(1, R::A, Field::A, r.hw); // A=DAT1 A
+    if r.next_io(0x6FE41, 19) {
+        i6fe41(r)
+    }
 }
 
 fn i6fe41(r: &mut Run) {
-    op!(r, 0x6FE41, 7, Op::Call(0x67D2)); // GOSUB #067D2
+    r.cpu.pc = 0x6FE48;
+    r.cpu.call(0x067D2); // GOSUB #067D2
+    r.spend(9);
 }
 
 fn i6fe48(r: &mut Run) {
-    op!(r, 0x6FE48, 3, Op::DSub { d: 1, n: 5 }); // D1=D1- 5
-    i6fe4b(r)
+    r.cpu.d_sub(1, 5); // D1=D1- 5
+    if r.next(0x6FE4B, 5) {
+        i6fe4b(r)
+    }
 }
 
 fn i6fe4b(r: &mut Run) {
-    op!(r, 0x6FE4B, 3, Op::Mem { store: true, d: 1, r: R::A, f: Field::A }); // DAT1=A A
-    i6fe4e(r)
+    r.sync();
+    r.cpu.store(1, R::A, Field::A, r.hw); // DAT1=A A
+    if r.next_io(0x6FE4E, 19) {
+        i6fe4e(r)
+    }
 }
 
 fn i6fe4e(r: &mut Run) {
-    op!(r, 0x6FE4E, 2, Op::Dec { r: R::D, f: Field::A }); // D=D-1 A
-    i6fe50(r)
+    r.cpu.dec(R::D, Field::A); // D=D-1 A
+    if r.next(0x6FE50, 4) {
+        i6fe50(r)
+    }
 }
 
 fn i6fe50(r: &mut Run) {
-    op!(r, 0x6FE50, 7, Op::LoadConst { r: R::C, len: 5, val: 0x3A81 }); // LC(5) #03A81
-    i6fe57(r)
+    r.cpu.load_const(R::C, 5, 0x3A81); // LC(5) #03A81
+    if r.next(0x6FE57, 9) {
+        i6fe57(r)
+    }
 }
 
 fn i6fe57(r: &mut Run) {
-    op!(r, 0x6FE57, 3, Op::DSub { d: 1, n: 5 }); // D1=D1- 5
-    i6fe5a(r)
+    r.cpu.d_sub(1, 5); // D1=D1- 5
+    if r.next(0x6FE5A, 5) {
+        i6fe5a(r)
+    }
 }
 
 fn i6fe5a(r: &mut Run) {
-    op!(r, 0x6FE5A, 3, Op::Mem { store: true, d: 1, r: R::C, f: Field::A }); // DAT1=C A
-    i6fe5d(r)
+    r.sync();
+    r.cpu.store(1, R::C, Field::A, r.hw); // DAT1=C A
+    if r.next_io(0x6FE5D, 19) {
+        i6fe5d(r)
+    }
 }
 
 fn i6fe5d(r: &mut Run) {
-    op!(r, 0x6FE5D, 2, Op::Dec { r: R::D, f: Field::A }); // D=D-1 A
-    i6fe5f(r)
+    r.cpu.dec(R::D, Field::A); // D=D-1 A
+    if r.next(0x6FE5F, 4) {
+        i6fe5f(r)
+    }
 }
 
 fn i6fe5f(r: &mut Run) {
-    op!(r, 0x6FE5F, 3, Op::Mem { store: false, d: 0, r: R::A, f: Field::A }); // A=DAT0 A
-    i6fe62(r)
+    r.sync();
+    r.cpu.load(0, R::A, Field::A, r.hw); // A=DAT0 A
+    if r.next_io(0x6FE62, 19) {
+        i6fe62(r)
+    }
 }
 
 fn i6fe62(r: &mut Run) {
-    op!(r, 0x6FE62, 3, Op::DAdd { d: 0, n: 5 }); // D0=D0+ 5
-    i6fe65(r)
+    r.cpu.d_add(0, 5); // D0=D0+ 5
+    if r.next(0x6FE65, 5) {
+        i6fe65(r)
+    }
 }
 
 fn i6fe65(r: &mut Run) {
-    op!(r, 0x6FE65, 4, Op::PcIndirect(R::A)); // PC=(A)
+    r.sync();
+    r.cpu.pc_indirect(R::A, r.hw); // PC=(A)
+    r.spend(23);
 }
 
 fn i6ff81(r: &mut Run) {
-    op!(r, 0x6FF81, 3, Op::Dec { r: R::A, f: Field::S }); // A=A-1 S
-    i6ff84(r)
+    r.cpu.dec(R::A, Field::S); // A=A-1 S
+    if r.next(0x6FF84, 5) {
+        i6ff84(r)
+    }
 }
 
 fn i6ff84(r: &mut Run) {
-    op!(r, 0x6FF84, 3, Op::CondRtn(Cond::Carry)); // RTNC
-    i6ff87(r)
+    r.cpu.pc = 0x6FF87;
+    r.cpu.rtn_if(Cond::Carry); // RTNC
+    if r.next_pc(0x6FF87, 5) {
+        i6ff87(r)
+    }
 }
 
 fn i6ff87(r: &mut Run) {
-    op!(r, 0x6FF87, 3, Op::Dec { r: R::A, f: Field::S }); // A=A-1 S
-    i6ff8a(r)
+    r.cpu.dec(R::A, Field::S); // A=A-1 S
+    if r.next(0x6FF8A, 5) {
+        i6ff8a(r)
+    }
 }
 
 fn i6ff8a(r: &mut Run) {
-    op!(r, 0x6FF8A, 3, Op::CondRtn(Cond::Carry)); // RTNC
-    i6ff8d(r)
+    r.cpu.pc = 0x6FF8D;
+    r.cpu.rtn_if(Cond::Carry); // RTNC
+    if r.next_pc(0x6FF8D, 5) {
+        i6ff8d(r)
+    }
 }
 
 fn i6ff8d(r: &mut Run) {
-    op!(r, 0x6FF8D, 2, Op::PSet(0xF)); // P= 15
-    i6ff8f(r)
+    r.cpu.p = 15; // P= 15
+    if r.next(0x6FF8F, 4) {
+        i6ff8f(r)
+    }
 }
 
 fn i6ff8f(r: &mut Run) {
-    op!(r, 0x6FF8F, 3, Op::LoadConst { r: R::C, len: 1, val: 7 }); // LC(1) #7
-    i6ff92(r)
+    r.cpu.load_const(R::C, 1, 0x7); // LC(1) #7
+    if r.next(0x6FF92, 5) {
+        i6ff92(r)
+    }
 }
 
 fn i6ff92(r: &mut Run) {
-    op!(r, 0x6FF92, 2, Op::PSet(0)); // P= 0
-    i6ff94(r)
+    r.cpu.p = 0; // P= 0
+    if r.next(0x6FF94, 4) {
+        i6ff94(r)
+    }
 }
 
 fn i6ff94(r: &mut Run) {
-    op!(r, 0x6FF94, 3, Op::Sub { dst: R::A, a: R::A, b: R::C, f: Field::S }); // A=A-C S
-    i6ff97(r)
+    r.cpu.sub(R::A, R::A, R::C, Field::S); // A=A-C S
+    if r.next(0x6FF97, 5) {
+        i6ff97(r)
+    }
 }
 
 fn i6ff97(r: &mut Run) {
-    op!(r, 0x6FF97, 3, Op::CondJump(Cond::Carry, 0x6FFB5)); // GOC #6FFB5
-    i6ff9a(r)
+    r.cpu.pc = 0x6FF9A;
+    r.cpu.jump_if(Cond::Carry, 0x6FFB5); // GOC #6FFB5
+    if r.next_pc(0x6FF9A, 5) {
+        i6ff9a(r)
+    }
 }
 
 fn i6ff9a(r: &mut Run) {
-    op!(r, 0x6FF9A, 7, Op::DLoad { d: 1, len: 5, val: 0x8084F }); // D1=(5) #8084F
-    i6ffa1(r)
+    r.cpu.d_load(1, 5, 0x8084F); // D1=(5) #8084F
+    if r.next(0x6FFA1, 9) {
+        i6ffa1(r)
+    }
 }
 
 fn i6ffa1(r: &mut Run) {
-    op!(r, 0x6FFA1, 4, Op::Mem { store: false, d: 1, r: R::A, f: Field::Nibbles(1) }); // A=DAT1 1
-    i6ffa5(r)
+    r.sync();
+    r.cpu.load(1, R::A, Field::Nibbles(1), r.hw); // A=DAT1 1
+    if r.next_io(0x6FFA5, 15) {
+        i6ffa5(r)
+    }
 }
 
 fn i6ffa5(r: &mut Run) {
-    op!(r, 0x6FFA5, 7, Op::BitTest { r: R::A, bit: 2, set: false, goyes: Some(0x6FFAF) }); // ?ABIT=0 2 / GOYES #6FFAF
-    i6ffac(r)
+    r.cpu.pc = 0x6FFAC;
+    r.cpu.bit_test(R::A, 2, false, Some(0x6FFAF)); // ?ABIT=0 2 / GOYES #6FFAF
+    if r.next_pc(0x6FFAC, 9) {
+        i6ffac(r)
+    }
 }
 
 fn i6ffac(r: &mut Run) {
-    op!(r, 0x6FFAC, 3, Op::Dec { r: R::A, f: Field::S }); // A=A-1 S
-    i6ffaf(r)
+    r.cpu.dec(R::A, Field::S); // A=A-1 S
+    if r.next(0x6FFAF, 5) {
+        i6ffaf(r)
+    }
 }
 
 fn i6ffaf(r: &mut Run) {
-    op!(r, 0x6FFAF, 3, Op::Dec { r: R::A, f: Field::S }); // A=A-1 S
-    i6ffb2(r)
+    r.cpu.dec(R::A, Field::S); // A=A-1 S
+    if r.next(0x6FFB2, 5) {
+        i6ffb2(r)
+    }
 }
 
 fn i6ffb2(r: &mut Run) {
-    op!(r, 0x6FFB2, 3, Op::CondRtn(Cond::Carry)); // RTNC
-    i6ffb5(r)
+    r.cpu.pc = 0x6FFB5;
+    r.cpu.rtn_if(Cond::Carry); // RTNC
+    if r.next_pc(0x6FFB5, 5) {
+        i6ffb5(r)
+    }
 }
 
 fn i6ffb5(r: &mut Run) {
-    op!(r, 0x6FFB5, 2, Op::Rtn(RtnKind::ClearCarry)); // RTNCC
+    r.cpu.rtn(RtnKind::ClearCarry); // RTNCC
+    r.spend(9);
 }
 
 pub const BLOCKS: &[(u32, u32, Block)] = &[

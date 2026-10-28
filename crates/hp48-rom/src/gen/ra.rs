@@ -3,12 +3,15 @@
 use super::super::prelude::*;
 
 fn ia0130(r: &mut Run) {
-    op!(r, 0xA0130, 7, Op::LoadConst { r: R::C, len: 5, val: 0x807C5 }); // LC(5) #807C5
-    ia0137(r)
+    r.cpu.load_const(R::C, 5, 0x807C5); // LC(5) #807C5
+    if r.next(0xA0137, 9) {
+        ia0137(r)
+    }
 }
 
 fn ia0137(r: &mut Run) {
-    op!(r, 0xA0137, 7, Op::Jump(0x8D66)); // GOTO #08D66
+    r.cpu.pc = 0x08D66; // GOTO #08D66
+    r.spend(9);
 }
 
 pub const BLOCKS: &[(u32, u32, Block)] = &[
