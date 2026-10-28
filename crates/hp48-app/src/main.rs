@@ -88,6 +88,8 @@ struct App {
     desk: desk::Desk,
     display: Display,
     scene_cache: std::cell::RefCell<SceneCache>,
+    /// The ROM's minifont, recognised in the LCD and drawn with a real font.
+    minifont: hp48_vector::MiniFont,
     last: Option<Instant>,
     mouse_keys: HashSet<Key>,
     kb_keys: HashSet<Key>,
@@ -129,6 +131,7 @@ impl App {
             persist::load(&mut machine);
         }
         App {
+            minifont: read_minifont(&machine),
             machine,
             plot_open: false,
             plot_only: false,
@@ -334,7 +337,7 @@ impl eframe::App for App {
         let panel = Rect::from_min_max(Pos2::new(calc.right(), full.top()), full.max);
         ui.painter().rect_filled(panel, CornerRadius::ZERO, desk::PANEL_BG);
         let actions = ui
-            .scope_builder(UiBuilder::new().max_rect(panel.shrink(14.0)), |ui| self.desk.ui(ui, &self.machine))
+            .scope_builder(UiBuilder::new().max_rect(panel.shrink(14.0)), |ui| self.desk.ui(ui, &self.machine, &self.minifont))
             .inner;
         for a in actions {
             self.act(a);
@@ -512,6 +515,9 @@ impl App {
                         draw_polyline(painter, pl, width, color, &pt);
                     }
                 }
+                for t in &scene.text {
+                    draw_mini_text(painter, t, &pt, if t.light { LCD_BG } else { LCD_INK });
+                }
             }
         }
     }
@@ -524,16 +530,16 @@ impl App {
                 return scene.clone();
             }
         }
-        let scene = std::rc::Rc::new(hp48_vector::vectorize(&hp48_vector::Bitmap::from_rows(&lcd.pixels)));
+        let scene = std::rc::Rc::new(hp48_vector::vectorize_with(&hp48_vector::Bitmap::from_rows(&lcd.pixels), Some(&self.minifont)));
         *cache = Some((lcd.pixels, scene.clone()));
         scene
     }
 }
 
 /// Stroke width of vectorised LCD lines, in LCD pixels.
-const STROKE_WIDTH: f32 = 0.92;
+pub(crate) const STROKE_WIDTH: f32 = 0.92;
 
-fn draw_polyline(
+pub(crate) fn draw_polyline(
     painter: &egui::Painter,
     pl: &hp48_vector::Polyline,
     width: f32,
@@ -626,6 +632,67 @@ fn bold() -> egui::FontFamily {
     egui::FontFamily::Name("bold".into())
 }
 
+/// The font for the calculator's minifont text (path, menu labels).
+fn mini() -> egui::FontFamily {
+    egui::FontFamily::Name("mini".into())
+}
+
+/// The ROM's minifont, for recognising its text on the LCD (`tools/fonts.py`
+/// describes the layout). Lowercase letters share the capitals' glyphs.
+fn read_minifont(m: &Machine) -> hp48_vector::MiniFont {
+    const GLYPHS: usize = 0x7C102;
+    const REMAP: usize = 0x7C793;
+    let rom = &m.hw.rom;
+    let byte = |a: usize| rom[a] | rom[a + 1] << 4;
+    let glyphs = (0x20..=0xFFu8).filter(|c| !c.is_ascii_lowercase()).map(|code| {
+        let c = if code > 0x9F { byte(REMAP + 2 * usize::from(code - 0x9F)) } else { code };
+        let index = match c {
+            0..=0x60 => usize::from(c),
+            0x61..=0x7A => usize::from(c) - 0x20,
+            _ => usize::from(c) - 0x1A,
+        };
+        let a = GLYPHS + 11 * index;
+        hp48_vector::Glyph {
+            ch: hp48_rpl::hp_char(code),
+            width: usize::from(rom[a]),
+            rows: std::array::from_fn(|r| byte(a + 1 + 2 * r)),
+        }
+    });
+    hp48_vector::MiniFont::new(glyphs)
+}
+
+/// Draw recognised minifont text with a real font: capitals as tall as the
+/// glyphs' 5 rows, centred on their ink. Text wider than the ink is set
+/// tighter, then smaller. `pt` maps LCD pixel coordinates to the screen.
+pub(crate) fn draw_mini_text(painter: &egui::Painter, t: &hp48_vector::Text, pt: &dyn Fn(f32, f32) -> Pos2, color: Color32) {
+    // DejaVu Sans: capitals are 0.729 em tall, their tops 0.199 em below
+    // the top of the line.
+    const CAP: f32 = 0.729;
+    const CAP_TOP: f32 = 0.199;
+    let px = pt(1.0, 0.0).x - pt(0.0, 0.0).x;
+    let room = (t.w + 0.5) * px;
+    let gaps = t.text.chars().count().saturating_sub(1) as f32;
+    let layout = |size: f32, spacing: f32| {
+        let mut job = egui::text::LayoutJob::default();
+        let format = egui::TextFormat { font_id: FontId::new(size, mini()), color, extra_letter_spacing: spacing, ..Default::default() };
+        job.append(&t.text, 0.0, format);
+        painter.layout_job(job)
+    };
+    let mut size = 5.0 * px / CAP;
+    let mut galley = layout(size, 0.0);
+    if galley.size().x > room {
+        let spacing = ((room - galley.size().x) / gaps.max(1.0)).max(-0.06 * size);
+        galley = layout(size, spacing);
+        if galley.size().x > room {
+            size *= room / galley.size().x;
+            galley = layout(size, spacing * room / galley.size().x);
+        }
+    }
+    let centre = pt(t.x + t.w / 2.0, t.y + 2.5);
+    let pos = Pos2::new(centre.x - galley.size().x / 2.0, centre.y - CAP * size / 2.0 - CAP_TOP * size);
+    painter.galley(pos, galley, color);
+}
+
 /// DejaVu Sans covers the calculator's symbols (▲ ▼ → ˣ ∡ ↵ ∫ ∂ ...).
 fn install_fonts(ctx: &egui::Context) {
     use std::sync::Arc;
@@ -639,7 +706,12 @@ fn install_fonts(ctx: &egui::Context) {
         Arc::new(egui::FontData::from_static(include_bytes!("../assets/DejaVuSans-Bold.ttf"))),
     );
     fonts.families.entry(egui::FontFamily::Proportional).or_default().insert(0, "dejavu".into());
+    fonts.font_data.insert(
+        "dejavu-condensed-bold".into(),
+        Arc::new(egui::FontData::from_static(include_bytes!("../assets/DejaVuSansCondensed-Bold.ttf"))),
+    );
     fonts.families.insert(bold(), vec!["dejavu-bold".into(), "dejavu".into()]);
+    fonts.families.insert(mini(), vec!["dejavu-condensed-bold".into(), "dejavu-bold".into(), "dejavu".into()]);
     ctx.set_fonts(fonts);
 }
 

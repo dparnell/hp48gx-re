@@ -9,7 +9,9 @@
 //! * **dark strokes**: centrelines through ordinary 1-pixel line art, with
 //!   staircases smoothed into curves and real corners kept sharp;
 //! * **light strokes**: the same for light pixels enclosed by a fill (the
-//!   text of inverted labels).
+//!   text of inverted labels);
+//! * **text**: with [`vectorize_with`], runs of the 5-pixel minifont (path,
+//!   menu labels), recognised so they can be drawn with a real font.
 //!
 //! Coordinates are in LCD pixels with (0, 0) at the top-left corner of the
 //! top-left pixel, so a pixel centre is at (x + 0.5, y + 0.5).
@@ -17,10 +19,12 @@
 mod bitmap;
 mod raster;
 mod strokes;
+mod text;
 
 pub use bitmap::Bitmap;
 pub use raster::render_rgb;
 pub use strokes::{centerlines, Polyline};
+pub use text::{Glyph, MiniFont, Text};
 
 /// A filled axis-aligned rectangle in pixel units.
 #[derive(Clone, Copy, Debug, PartialEq)]
@@ -46,6 +50,8 @@ pub struct Scene {
     pub dots: Vec<Dot>,
     pub dark: Vec<Polyline>,
     pub light: Vec<Polyline>,
+    /// Minifont text, drawn with a font instead of strokes.
+    pub text: Vec<Text>,
 }
 
 /// Components at least this many pixels in both directions whose bounding
@@ -58,7 +64,28 @@ const SMALL_MIN_DENSITY: f32 = 0.45;
 const SMALL_MIN_PIXELS: usize = 6;
 
 pub fn vectorize(bmp: &Bitmap) -> Scene {
+    vectorize_with(bmp, None)
+}
+
+/// [`vectorize`], also recognising text in `font`. Recognised dark glyphs
+/// are left out of the strokes, and light ones are filled in, so their
+/// label becomes a plain fill under the text.
+pub fn vectorize_with(bmp: &Bitmap, font: Option<&MiniFont>) -> Scene {
     let mut scene = Scene::default();
+    let mut rest;
+    let bmp = match font {
+        Some(font) => {
+            rest = bmp.clone();
+            for (t, ink) in font.find_ink(bmp) {
+                for (x, y) in ink {
+                    rest.set(x, y, t.light);
+                }
+                scene.text.push(t);
+            }
+            &rest
+        }
+        None => bmp,
+    };
     let mut line_art = Bitmap::new(bmp.w, bmp.h);
     for comp in bmp.components() {
         let (x0, y0, x1, y1) = comp.bbox;
@@ -134,6 +161,18 @@ impl Scene {
                 s.push_str("\"/>");
             }
             s.push_str("</g>\n");
+        }
+        for t in &self.text {
+            let color = if t.light { "#bcc6a9" } else { "#1e241c" };
+            let text = t.text.replace('&', "&amp;").replace('<', "&lt;").replace('>', "&gt;");
+            let _ = writeln!(
+                s,
+                r##"<text x="{}" y="{}" textLength="{}" font-family="DejaVu Sans Condensed, sans-serif" font-weight="bold" font-size="{}" text-anchor="middle" fill="{color}" xml:space="preserve">{text}</text>"##,
+                t.x + t.w / 2.0,
+                t.y + 5.0,
+                t.w,
+                5.0 / 0.73,
+            );
         }
         s.push_str("</svg>\n");
         s

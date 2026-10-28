@@ -10,6 +10,7 @@ use hp48::{Key, Machine, LCD_WIDTH};
 use hp48_rpl::plot::system_flag;
 use hp48_rpl::show::{Format, Names, Writer};
 use hp48_rpl::{decode, stack, Memory};
+use hp48_vector::{Bitmap, MiniFont};
 use std::time::Instant;
 
 /// What the panel asks the calculator to do.
@@ -115,7 +116,7 @@ impl Desk {
     }
 
     /// Draw the panel in `ui`; returns what to send to the calculator.
-    pub fn ui(&mut self, ui: &mut egui::Ui, m: &Machine) -> Vec<Action> {
+    pub fn ui(&mut self, ui: &mut egui::Ui, m: &Machine, font: &MiniFont) -> Vec<Action> {
         self.refresh(m);
         let mut actions = Vec::new();
         ui.style_mut().visuals.override_text_color = Some(TEXT);
@@ -127,7 +128,7 @@ impl Desk {
         let stack_h = (ui.available_height() - menu_h - line_h - 24.0).max(60.0);
         self.stack_view(ui, stack_h);
         ui.add_space(8.0);
-        menu_row(ui, m, menu_h, &mut actions);
+        menu_row(ui, m, font, menu_h, &mut actions);
         ui.add_space(8.0);
         self.command_line(ui, line_h, &mut actions);
         actions
@@ -278,9 +279,11 @@ fn level_row(ui: &mut egui::Ui, level: usize, text: &str, font: &FontId) {
 }
 
 /// The six menu labels from the bottom of the LCD, as buttons that press
-/// the menu keys. Labels are 21 pixels wide, every 22 pixels.
-fn menu_row(ui: &mut egui::Ui, m: &Machine, height: f32, actions: &mut Vec<Action>) {
+/// the menu keys. Labels are 21 pixels wide, every 22 pixels; each is drawn
+/// from the vectorised bottom 8 rows, its text in a real font.
+fn menu_row(ui: &mut egui::Ui, m: &Machine, font: &MiniFont, height: f32, actions: &mut Vec<Action>) {
     let lcd = m.lcd();
+    let scene = hp48_vector::vectorize_with(&Bitmap::from_rows(&lcd.pixels[56..]), Some(font));
     let width = ui.available_width();
     let gap = 6.0;
     let w = (width - 5.0 * gap) / 6.0;
@@ -295,26 +298,33 @@ fn menu_row(ui: &mut egui::Ui, m: &Machine, height: f32, actions: &mut Vec<Actio
         } else {
             Color32::from_rgb(0xBC, 0xC6, 0xA9)
         };
-        let painter = ui.painter();
+        let painter = ui.painter_at(r);
         painter.rect_filled(r, CornerRadius::same(5), bg);
         painter.rect_stroke(r, CornerRadius::same(5), Stroke::new(1.0, Color32::from_black_alpha(80)), egui::StrokeKind::Inside);
-        // the label's pixels, scaled to fit
-        let x0 = 22 * i;
-        let cols = 21.min(LCD_WIDTH - x0);
-        let px = ((r.height() - 8.0) / 8.0).min((r.width() - 8.0) / cols as f32).max(1.0);
-        let origin = r.center() - Vec2::new(cols as f32 * px, 8.0 * px) / 2.0;
+        // the label, scaled to fit
+        let x0 = (22 * i) as f32;
+        let cols = 21.0f32.min(LCD_WIDTH as f32 - x0);
+        let px = ((r.height() - 8.0) / 8.0).min((r.width() - 8.0) / cols).max(1.0);
+        let origin = r.center() - Vec2::new(cols * px, 8.0 * px) / 2.0;
+        let pt = |x: f32, y: f32| origin + Vec2::new((x - x0) * px, y * px);
+        let inside = |x: f32| x >= x0 && x < x0 + cols;
         if lcd.on {
-            for y in 0..8 {
-                for x in 0..cols {
-                    if lcd.pixels[56 + y][x0 + x] {
-                        let p = origin + Vec2::new(x as f32 * px, y as f32 * px);
-                        painter.rect_filled(
-                            egui::Rect::from_min_size(p, Vec2::splat(px)),
-                            CornerRadius::ZERO,
-                            Color32::from_rgb(0x1E, 0x24, 0x1C),
-                        );
-                    }
+            let ink = Color32::from_rgb(0x1E, 0x24, 0x1C);
+            for f in scene.fills.iter().filter(|f| inside(f.x)) {
+                let right = f.w.min(x0 + cols - f.x);
+                painter.rect_filled(egui::Rect::from_min_max(pt(f.x, f.y), pt(f.x + right, f.y + f.h)), CornerRadius::ZERO, ink);
+            }
+            for d in scene.dots.iter().filter(|d| inside(d.x)) {
+                painter.circle_filled(pt(d.x, d.y), d.r * px, ink);
+            }
+            let stroke = crate::STROKE_WIDTH * px;
+            for (lines, color) in [(&scene.dark, ink), (&scene.light, bg)] {
+                for pl in lines.iter().filter(|pl| pl.points.first().is_some_and(|p| inside(p[0]))) {
+                    crate::draw_polyline(&painter, pl, stroke, color, &pt);
                 }
+            }
+            for t in scene.text.iter().filter(|t| inside(t.x)) {
+                crate::draw_mini_text(&painter, t, &pt, if t.light { bg } else { ink });
             }
         }
         if resp.clicked() {

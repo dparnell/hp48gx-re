@@ -72,6 +72,7 @@ Run the Python tests from the repo root with `python -m unittest discover -s tes
   - Dense components become rectangle fills, and the light pixels enclosed in them (inverted text) become light strokes. 2×2 blocks become round dots.
   - Everything else is traced as pixel-centre centrelines: diagonal links only where no orthogonal path exists, gentle (≤50°) turns smoothed with anchored Chaikin, sharp corners kept.
   - A loop that starts and ends at a junction stays an open chain. The tests cover this case (the bowl of an `e`).
+  - Minifont text (path, status line, menu labels) is too small to trace well. `vectorize_with` recognises it from the ROM's glyphs (`MiniFont`, read by the app from #7C102): runs of exact glyph matches with blank rows above and below, dark or inside fills. The app draws them in DejaVu Sans Condensed Bold, capitals 5 pixels tall.
 - **`crates/hp48-rpl`: RPL objects in emulated memory.**
   - Covers object sizes, directories and variable lookup through `CONTEXT`/`USEROB`.
   - Directory layout: `DORRP`, library count (#7FF = none) with 13-nibble entries, offset to the last name, then names chained backwards. Each 5-nibble back-field measures from itself to the previous name.
@@ -152,7 +153,7 @@ Addresses you will need again: fonts at #7A047 (10-row), #7B257 (8-row) and #7C1
 - `docs/cpu.txt`: HP's 1LT8 (Saturn) CPU spec. It is authoritative for instruction semantics and encodings (§5.3). Bit 3 of field nibbles marked "X" is don't-care.
 - `docs/saturn.txt`: Mastracci's Saturn/HP48 hardware guide (I/O registers §4.1, bank switching §4.4, keyboard §4.9, CONFIG and daisy chain §2.4).
 - `data/entries48g.txt` and `data/vbl48gx-r.txt`: symbol tables derived from third-party lists, using ROM R addresses.
-- `crates/hp48-app/assets/`: DejaVu Sans (see `DejaVu-LICENSE`), used for faceplate symbols.
+- `crates/hp48-app/assets/`: DejaVu Sans (see `DejaVu-LICENSE`), used for faceplate symbols; the Condensed Bold face draws the LCD's minifont text.
 - `ROM/gxrom-r` is HP's firmware (Copyright HP 1993). HP has made the HP 48 ROM images freely available for use with emulators. The repository publishes it as source in `firmware/`, for study and for fixing ROM bugs. The Rust code reads fonts and objects from whatever ROM it runs.
 - `HP48_ROM=PATH` makes the CLI, the app and the Rust tests use another ROM image (e.g. `out/rom.bin`). The app keeps a saved state per ROM image. `hle::install` skips natives whose routine is not at its ROM R address, and the plot window finds the commands through `ROMPTAB` (`expr::Commands`).
 
