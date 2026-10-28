@@ -3,10 +3,10 @@
 
 #![allow(non_snake_case, clippy::no_effect)]
 
-use super::super::prelude::*;
+use crate::prelude::*;
 
 // Unlabelled code at #D0955.
-pub(super) fn code_D0955(r: &mut Run) {
+pub(crate) fn code_D0955(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -63,7 +63,7 @@ pub(super) fn code_D0955(r: &mut Run) {
 }
 
 // Unlabelled code at #D1DF5.
-pub(super) fn code_D1DF5(r: &mut Run) {
+pub(crate) fn code_D1DF5(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -85,7 +85,7 @@ pub(super) fn code_D1DF5(r: &mut Run) {
 }
 
 // Unlabelled code at #D1E7D.
-pub(super) fn code_D1E7D(r: &mut Run) {
+pub(crate) fn code_D1E7D(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -104,7 +104,7 @@ pub(super) fn code_D1E7D(r: &mut Run) {
 }
 
 // Unlabelled code at #D1F7C.
-pub(super) fn code_D1F7C(r: &mut Run) {
+pub(crate) fn code_D1F7C(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -127,7 +127,7 @@ pub(super) fn code_D1F7C(r: &mut Run) {
 
 // ROMPTR 0E8 01E
 // ~INTEMPOB?: firmware/upper/D1362-lib0E8.s:805
-pub(super) fn _INTEMPOB_(r: &mut Run) {
+pub(crate) fn _INTEMPOB_(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -167,7 +167,7 @@ pub(super) fn _INTEMPOB_(r: &mut Run) {
 
 // ROMPTR 0E8 029
 // ROMP_0E8_029: firmware/upper/D1362-lib0E8.s:1143
-pub(super) fn ROMP_0E8_029(r: &mut Run) {
+pub(crate) fn ROMP_0E8_029(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -253,7 +253,7 @@ pub(super) fn ROMP_0E8_029(r: &mut Run) {
 }
 
 // Unlabelled code at #D4287.
-pub(super) fn code_D4287(r: &mut Run) {
+pub(crate) fn code_D4287(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -579,7 +579,7 @@ pub(super) fn code_D4287(r: &mut Run) {
 }
 
 // SUB_D4457: firmware/upper/D1362-lib0E8.s:2422
-pub(super) fn SUB_D4457(r: &mut Run) {
+pub(crate) fn SUB_D4457(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -609,7 +609,7 @@ pub(super) fn SUB_D4457(r: &mut Run) {
 }
 
 // SUB_D4468: firmware/upper/D1362-lib0E8.s:2431
-pub(super) fn SUB_D4468(r: &mut Run) {
+pub(crate) fn SUB_D4468(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -626,7 +626,7 @@ pub(super) fn SUB_D4468(r: &mut Run) {
 }
 
 // SUB_D446F: firmware/upper/D1362-lib0E8.s:2435
-pub(super) fn SUB_D446F(r: &mut Run) {
+pub(crate) fn SUB_D446F(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -676,7 +676,7 @@ pub(super) fn SUB_D446F(r: &mut Run) {
 }
 
 // SUB_D44B9: firmware/upper/D1362-lib0E8.s:2459
-pub(super) fn SUB_D44B9(r: &mut Run) {
+pub(crate) fn SUB_D44B9(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -711,7 +711,7 @@ pub(super) fn SUB_D44B9(r: &mut Run) {
 }
 
 // SUB_D44DF: firmware/upper/D1362-lib0E8.s:2475
-pub(super) fn SUB_D44DF(r: &mut Run) {
+pub(crate) fn SUB_D44DF(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -728,7 +728,7 @@ pub(super) fn SUB_D44DF(r: &mut Run) {
 }
 
 // SUB_D44EA: firmware/upper/D1362-lib0E8.s:2480
-pub(super) fn SUB_D44EA(r: &mut Run) {
+pub(crate) fn SUB_D44EA(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -755,7 +755,7 @@ pub(super) fn SUB_D44EA(r: &mut Run) {
 }
 
 // SUB_D44FB: firmware/upper/D1362-lib0E8.s:2488
-pub(super) fn SUB_D44FB(r: &mut Run) {
+pub(crate) fn SUB_D44FB(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -820,7 +820,7 @@ pub(super) fn SUB_D44FB(r: &mut Run) {
 }
 
 // SUB_D454E: firmware/upper/D1362-lib0E8.s:2518
-pub(super) fn SUB_D454E(r: &mut Run) {
+pub(crate) fn SUB_D454E(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -870,7 +870,7 @@ pub(super) fn SUB_D454E(r: &mut Run) {
 }
 
 // Unlabelled code at #D45FB.
-pub(super) fn code_D45FB(r: &mut Run) {
+pub(crate) fn code_D45FB(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -1204,21 +1204,21 @@ pub(super) fn code_D45FB(r: &mut Run) {
     }
 }
 
-pub const ROUTINES: &[(u32, u32, Block)] = &[
-    (0xD0955, 0xD09A7, code_D0955),
-    (0xD1DF5, 0xD1E08, code_D1DF5),
-    (0xD1E7D, 0xD1E90, code_D1E7D),
-    (0xD1F7C, 0xD1F8F, code_D1F7C),
-    (0xD21DF, 0xD221C, _INTEMPOB_),
-    (0xD2826, 0xD28CD, ROMP_0E8_029),
-    (0xD4287, 0xD4456, code_D4287),
-    (0xD4457, 0xD4467, SUB_D4457),
-    (0xD4468, 0xD446E, SUB_D4468),
-    (0xD446F, 0xD44B8, SUB_D446F),
-    (0xD44B9, 0xD44DE, SUB_D44B9),
-    (0xD44DF, 0xD44E9, SUB_D44DF),
-    (0xD44EA, 0xD44FA, SUB_D44EA),
-    (0xD44FB, 0xD454D, SUB_D44FB),
-    (0xD454E, 0xD45A0, SUB_D454E),
-    (0xD45FB, 0xD47F1, code_D45FB),
+pub const ROUTINES: &[(u32, u32, Block, &str)] = &[
+    (0xD0955, 0xD09A7, code_D0955, "code_D0955"),
+    (0xD1DF5, 0xD1E08, code_D1DF5, "code_D1DF5"),
+    (0xD1E7D, 0xD1E90, code_D1E7D, "code_D1E7D"),
+    (0xD1F7C, 0xD1F8F, code_D1F7C, "code_D1F7C"),
+    (0xD21DF, 0xD221C, _INTEMPOB_, "_INTEMPOB_"),
+    (0xD2826, 0xD28CD, ROMP_0E8_029, "ROMP_0E8_029"),
+    (0xD4287, 0xD4456, code_D4287, "code_D4287"),
+    (0xD4457, 0xD4467, SUB_D4457, "SUB_D4457"),
+    (0xD4468, 0xD446E, SUB_D4468, "SUB_D4468"),
+    (0xD446F, 0xD44B8, SUB_D446F, "SUB_D446F"),
+    (0xD44B9, 0xD44DE, SUB_D44B9, "SUB_D44B9"),
+    (0xD44DF, 0xD44E9, SUB_D44DF, "SUB_D44DF"),
+    (0xD44EA, 0xD44FA, SUB_D44EA, "SUB_D44EA"),
+    (0xD44FB, 0xD454D, SUB_D44FB, "SUB_D44FB"),
+    (0xD454E, 0xD45A0, SUB_D454E, "SUB_D454E"),
+    (0xD45FB, 0xD47F1, code_D45FB, "code_D45FB"),
 ];

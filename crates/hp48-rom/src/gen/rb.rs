@@ -3,10 +3,10 @@
 
 #![allow(non_snake_case, clippy::no_effect)]
 
-use super::super::prelude::*;
+use crate::prelude::*;
 
 // Unlabelled code at #B70F7.
-pub(super) fn code_B70F7(r: &mut Run) {
+pub(crate) fn code_B70F7(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -53,7 +53,7 @@ pub(super) fn code_B70F7(r: &mut Run) {
 }
 
 // Unlabelled code at #B7194.
-pub(super) fn code_B7194(r: &mut Run) {
+pub(crate) fn code_B7194(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -88,7 +88,7 @@ pub(super) fn code_B7194(r: &mut Run) {
 }
 
 // Unlabelled code at #B8694.
-pub(super) fn code_B8694(r: &mut Run) {
+pub(crate) fn code_B8694(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -163,7 +163,7 @@ pub(super) fn code_B8694(r: &mut Run) {
 }
 
 // SUB_B86EE: firmware/upper/B7B7D-lib0B5.s:747
-pub(super) fn SUB_B86EE(r: &mut Run) {
+pub(crate) fn SUB_B86EE(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -213,7 +213,7 @@ pub(super) fn SUB_B86EE(r: &mut Run) {
 
 // ROMPTR 0B5 139
 // ROMP_0B5_139: firmware/upper/B7B7D-lib0B5.s:1290
-pub(super) fn ROMP_0B5_139(r: &mut Run) {
+pub(crate) fn ROMP_0B5_139(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -236,7 +236,7 @@ pub(super) fn ROMP_0B5_139(r: &mut Run) {
 }
 
 // Unlabelled code at #B9829.
-pub(super) fn code_B9829(r: &mut Run) {
+pub(crate) fn code_B9829(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -255,11 +255,11 @@ pub(super) fn code_B9829(r: &mut Run) {
     }
 }
 
-pub const ROUTINES: &[(u32, u32, Block)] = &[
-    (0xB70F7, 0xB7129, code_B70F7),
-    (0xB7194, 0xB71C8, code_B7194),
-    (0xB8694, 0xB86ED, code_B8694),
-    (0xB86EE, 0xB8722, SUB_B86EE),
-    (0xB8FBB, 0xB8FD5, ROMP_0B5_139),
-    (0xB9829, 0xB983F, code_B9829),
+pub const ROUTINES: &[(u32, u32, Block, &str)] = &[
+    (0xB70F7, 0xB7129, code_B70F7, "code_B70F7"),
+    (0xB7194, 0xB71C8, code_B7194, "code_B7194"),
+    (0xB8694, 0xB86ED, code_B8694, "code_B8694"),
+    (0xB86EE, 0xB8722, SUB_B86EE, "SUB_B86EE"),
+    (0xB8FBB, 0xB8FD5, ROMP_0B5_139, "ROMP_0B5_139"),
+    (0xB9829, 0xB983F, code_B9829, "code_B9829"),
 ];

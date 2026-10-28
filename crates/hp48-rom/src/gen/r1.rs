@@ -3,10 +3,10 @@
 
 #![allow(non_snake_case, clippy::no_effect)]
 
-use super::super::prelude::*;
+use crate::prelude::*;
 
 // OBJ_1013C: firmware/lower/10029-units-grob.s:90
-pub(super) fn OBJ_1013C(r: &mut Run) {
+pub(crate) fn OBJ_1013C(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -65,7 +65,7 @@ pub(super) fn OBJ_1013C(r: &mut Run) {
 }
 
 // OBJ_10B1C: firmware/lower/10029-units-grob.s:706
-pub(super) fn OBJ_10B1C(r: &mut Run) {
+pub(crate) fn OBJ_10B1C(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -115,7 +115,7 @@ pub(super) fn OBJ_10B1C(r: &mut Run) {
 }
 
 // SUB_10CDB: firmware/lower/10029-units-grob.s:855
-pub(super) fn SUB_10CDB(r: &mut Run) {
+pub(crate) fn SUB_10CDB(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -192,7 +192,7 @@ pub(super) fn SUB_10CDB(r: &mut Run) {
 }
 
 // OBJ_10E0E: firmware/lower/10029-units-grob.s:944
-pub(super) fn OBJ_10E0E(r: &mut Run) {
+pub(crate) fn OBJ_10E0E(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -219,7 +219,7 @@ pub(super) fn OBJ_10E0E(r: &mut Run) {
 
 // Error B01h
 // INVUNITERR: firmware/lower/10029-units-grob.s:994
-pub(super) fn INVUNITERR(r: &mut Run) {
+pub(crate) fn INVUNITERR(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -237,7 +237,7 @@ pub(super) fn INVUNITERR(r: &mut Run) {
 
 // Error B02h
 // CONSTUNITERR: firmware/lower/10029-units-grob.s:1002
-pub(super) fn CONSTUNITERR(r: &mut Run) {
+pub(crate) fn CONSTUNITERR(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -259,7 +259,7 @@ pub(super) fn CONSTUNITERR(r: &mut Run) {
 }
 
 // L_10F2D: firmware/lower/10029-units-grob.s:1016
-pub(super) fn L_10F2D(r: &mut Run) {
+pub(crate) fn L_10F2D(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -282,7 +282,7 @@ pub(super) fn L_10F2D(r: &mut Run) {
 
 // A=C.A <REF>GETPTR <REF>Errjmp
 // GPErrjmpC: firmware/lower/10029-units-grob.s:1023
-pub(super) fn GPErrjmpC(r: &mut Run) {
+pub(crate) fn GPErrjmpC(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -306,7 +306,7 @@ pub(super) fn GPErrjmpC(r: &mut Run) {
 
 // Error 102h
 // NULLCHARERR: firmware/lower/10029-units-grob.s:1033
-pub(super) fn NULLCHARERR(r: &mut Run) {
+pub(crate) fn NULLCHARERR(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -324,7 +324,7 @@ pub(super) fn NULLCHARERR(r: &mut Run) {
 
 // Error 103h
 // INVFUNCERR: firmware/lower/10029-units-grob.s:1043
-pub(super) fn INVFUNCERR(r: &mut Run) {
+pub(crate) fn INVFUNCERR(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -342,7 +342,7 @@ pub(super) fn INVFUNCERR(r: &mut Run) {
 
 // Error 104h
 // NOEQERR: firmware/lower/10029-units-grob.s:1050
-pub(super) fn NOEQERR(r: &mut Run) {
+pub(crate) fn NOEQERR(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -360,7 +360,7 @@ pub(super) fn NOEQERR(r: &mut Run) {
 
 // A=C.A <REF>Errjmp
 // ErrjmpC: firmware/lower/10029-units-grob.s:1059
-pub(super) fn ErrjmpC(r: &mut Run) {
+pub(crate) fn ErrjmpC(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -378,7 +378,7 @@ pub(super) fn ErrjmpC(r: &mut Run) {
 
 // Error 106h
 // SYNTAXERR: firmware/lower/10029-units-grob.s:1065
-pub(super) fn SYNTAXERR(r: &mut Run) {
+pub(crate) fn SYNTAXERR(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -396,7 +396,7 @@ pub(super) fn SYNTAXERR(r: &mut Run) {
 
 // Error 12Eh
 // SETINVPPAR: firmware/lower/10029-units-grob.s:1075
-pub(super) fn SETINVPPAR(r: &mut Run) {
+pub(crate) fn SETINVPPAR(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -414,7 +414,7 @@ pub(super) fn SETINVPPAR(r: &mut Run) {
 
 // Error 12Fh
 // SETNONERAL: firmware/lower/10029-units-grob.s:1085
-pub(super) fn SETNONERAL(r: &mut Run) {
+pub(crate) fn SETNONERAL(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -432,7 +432,7 @@ pub(super) fn SETNONERAL(r: &mut Run) {
 
 // Error 130h
 // SETISOLERR: firmware/lower/10029-units-grob.s:1095
-pub(super) fn SETISOLERR(r: &mut Run) {
+pub(crate) fn SETISOLERR(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -450,7 +450,7 @@ pub(super) fn SETISOLERR(r: &mut Run) {
 
 // Error 126h
 // NOHALTERR: firmware/lower/10029-units-grob.s:1102
-pub(super) fn NOHALTERR(r: &mut Run) {
+pub(crate) fn NOHALTERR(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -467,7 +467,7 @@ pub(super) fn NOHALTERR(r: &mut Run) {
 }
 
 // kill: firmware/lower/10029-units-grob.s:1111
-pub(super) fn kill(r: &mut Run) {
+pub(crate) fn kill(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -485,7 +485,7 @@ pub(super) fn kill(r: &mut Run) {
 
 // Error 124h
 // LASTSTKERR: firmware/lower/10029-units-grob.s:1121
-pub(super) fn LASTSTKERR(r: &mut Run) {
+pub(crate) fn LASTSTKERR(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -503,7 +503,7 @@ pub(super) fn LASTSTKERR(r: &mut Run) {
 
 // Error 125h
 // LASTCMDERR: firmware/lower/10029-units-grob.s:1127
-pub(super) fn LASTCMDERR(r: &mut Run) {
+pub(crate) fn LASTCMDERR(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -521,7 +521,7 @@ pub(super) fn LASTCMDERR(r: &mut Run) {
 
 // Error 128h
 // ARGNUMERR: firmware/lower/10029-units-grob.s:1134
-pub(super) fn ARGNUMERR(r: &mut Run) {
+pub(crate) fn ARGNUMERR(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -539,7 +539,7 @@ pub(super) fn ARGNUMERR(r: &mut Run) {
 
 // Error 129h
 // SETCIRCERR: firmware/lower/10029-units-grob.s:1141
-pub(super) fn SETCIRCERR(r: &mut Run) {
+pub(crate) fn SETCIRCERR(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -557,7 +557,7 @@ pub(super) fn SETCIRCERR(r: &mut Run) {
 
 // Error 12Ah
 // DIRARGERR: firmware/lower/10029-units-grob.s:1151
-pub(super) fn DIRARGERR(r: &mut Run) {
+pub(crate) fn DIRARGERR(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -575,7 +575,7 @@ pub(super) fn DIRARGERR(r: &mut Run) {
 
 // Error 12Bh
 // EMPTYDIRERR: firmware/lower/10029-units-grob.s:1161
-pub(super) fn EMPTYDIRERR(r: &mut Run) {
+pub(crate) fn EMPTYDIRERR(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -593,7 +593,7 @@ pub(super) fn EMPTYDIRERR(r: &mut Run) {
 
 // Error 12Ch
 // INVDEFERR: firmware/lower/10029-units-grob.s:1171
-pub(super) fn INVDEFERR(r: &mut Run) {
+pub(crate) fn INVDEFERR(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -611,7 +611,7 @@ pub(super) fn INVDEFERR(r: &mut Run) {
 
 // Error 12Dh
 // MISLIBERR: firmware/lower/10029-units-grob.s:1181
-pub(super) fn MISLIBERR(r: &mut Run) {
+pub(crate) fn MISLIBERR(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -629,7 +629,7 @@ pub(super) fn MISLIBERR(r: &mut Run) {
 
 // Error 13Ch
 // IDCONFERR: firmware/lower/10029-units-grob.s:1191
-pub(super) fn IDCONFERR(r: &mut Run) {
+pub(crate) fn IDCONFERR(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -646,7 +646,7 @@ pub(super) fn IDCONFERR(r: &mut Run) {
 }
 
 // cont: firmware/lower/10029-units-grob.s:1200
-pub(super) fn cont(r: &mut Run) {
+pub(crate) fn cont(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -663,7 +663,7 @@ pub(super) fn cont(r: &mut Run) {
 }
 
 // OBJ_110EF: firmware/lower/10029-units-grob.s:1237
-pub(super) fn OBJ_110EF(r: &mut Run) {
+pub(crate) fn OBJ_110EF(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -743,7 +743,7 @@ pub(super) fn OBJ_110EF(r: &mut Run) {
 }
 
 // SUB_11156: firmware/lower/10029-units-grob.s:1273
-pub(super) fn SUB_11156(r: &mut Run) {
+pub(crate) fn SUB_11156(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -785,7 +785,7 @@ pub(super) fn SUB_11156(r: &mut Run) {
 }
 
 // SUB_11186: firmware/lower/10029-units-grob.s:1291
-pub(super) fn SUB_11186(r: &mut Run) {
+pub(crate) fn SUB_11186(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -834,7 +834,7 @@ pub(super) fn SUB_11186(r: &mut Run) {
 }
 
 // SUB_111D6: firmware/lower/10029-units-grob.s:1318
-pub(super) fn SUB_111D6(r: &mut Run) {
+pub(crate) fn SUB_111D6(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -851,7 +851,7 @@ pub(super) fn SUB_111D6(r: &mut Run) {
 }
 
 // SUB_111DD: firmware/lower/10029-units-grob.s:1323
-pub(super) fn SUB_111DD(r: &mut Run) {
+pub(crate) fn SUB_111DD(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -905,7 +905,7 @@ pub(super) fn SUB_111DD(r: &mut Run) {
 }
 
 // SUB_1120D: firmware/lower/10029-units-grob.s:1346
-pub(super) fn SUB_1120D(r: &mut Run) {
+pub(crate) fn SUB_1120D(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -942,7 +942,7 @@ pub(super) fn SUB_1120D(r: &mut Run) {
 }
 
 // OBJ_1123F: firmware/lower/10029-units-grob.s:1368
-pub(super) fn OBJ_1123F(r: &mut Run) {
+pub(crate) fn OBJ_1123F(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -1063,7 +1063,7 @@ pub(super) fn OBJ_1123F(r: &mut Run) {
 }
 
 // SUB_112C5: firmware/lower/10029-units-grob.s:1417
-pub(super) fn SUB_112C5(r: &mut Run) {
+pub(crate) fn SUB_112C5(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -1085,7 +1085,7 @@ pub(super) fn SUB_112C5(r: &mut Run) {
 }
 
 // SUB_112D8: firmware/lower/10029-units-grob.s:1425
-pub(super) fn SUB_112D8(r: &mut Run) {
+pub(crate) fn SUB_112D8(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -1111,7 +1111,7 @@ pub(super) fn SUB_112D8(r: &mut Run) {
 }
 
 // DelLastArg: firmware/lower/10029-units-grob.s:1435
-pub(super) fn DelLastArg(r: &mut Run) {
+pub(crate) fn DelLastArg(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -1139,7 +1139,7 @@ pub(super) fn DelLastArg(r: &mut Run) {
 
 // ->
 // ClrBusyAnn: firmware/lower/10029-units-grob.s:1452
-pub(super) fn ClrBusyAnn(r: &mut Run) {
+pub(crate) fn ClrBusyAnn(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -1157,7 +1157,7 @@ pub(super) fn ClrBusyAnn(r: &mut Run) {
 
 // ->
 // SetAlphaAnn: firmware/lower/10029-units-grob.s:1459
-pub(super) fn SetAlphaAnn(r: &mut Run) {
+pub(crate) fn SetAlphaAnn(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -1175,7 +1175,7 @@ pub(super) fn SetAlphaAnn(r: &mut Run) {
 
 // ->
 // ClrAlphaAnn: firmware/lower/10029-units-grob.s:1466
-pub(super) fn ClrAlphaAnn(r: &mut Run) {
+pub(crate) fn ClrAlphaAnn(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -1193,7 +1193,7 @@ pub(super) fn ClrAlphaAnn(r: &mut Run) {
 
 // ->
 // SetRightAnn: firmware/lower/10029-units-grob.s:1473
-pub(super) fn SetRightAnn(r: &mut Run) {
+pub(crate) fn SetRightAnn(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -1211,7 +1211,7 @@ pub(super) fn SetRightAnn(r: &mut Run) {
 
 // ->
 // ClrRightAnn: firmware/lower/10029-units-grob.s:1480
-pub(super) fn ClrRightAnn(r: &mut Run) {
+pub(crate) fn ClrRightAnn(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -1229,7 +1229,7 @@ pub(super) fn ClrRightAnn(r: &mut Run) {
 
 // ->
 // SetLeftAnn: firmware/lower/10029-units-grob.s:1487
-pub(super) fn SetLeftAnn(r: &mut Run) {
+pub(crate) fn SetLeftAnn(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -1247,7 +1247,7 @@ pub(super) fn SetLeftAnn(r: &mut Run) {
 
 // ->
 // ClrLeftAnn: firmware/lower/10029-units-grob.s:1494
-pub(super) fn ClrLeftAnn(r: &mut Run) {
+pub(crate) fn ClrLeftAnn(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -1273,7 +1273,7 @@ pub(super) fn ClrLeftAnn(r: &mut Run) {
 }
 
 // OBJ_11387: firmware/lower/10029-units-grob.s:1504
-pub(super) fn OBJ_11387(r: &mut Run) {
+pub(crate) fn OBJ_11387(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -1309,7 +1309,7 @@ pub(super) fn OBJ_11387(r: &mut Run) {
 }
 
 // SUB_113B0: firmware/lower/10029-units-grob.s:1520
-pub(super) fn SUB_113B0(r: &mut Run) {
+pub(crate) fn SUB_113B0(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -1329,7 +1329,7 @@ pub(super) fn SUB_113B0(r: &mut Run) {
 }
 
 // OBJ_113C2: firmware/lower/10029-units-grob.s:1528
-pub(super) fn OBJ_113C2(r: &mut Run) {
+pub(crate) fn OBJ_113C2(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -1346,7 +1346,7 @@ pub(super) fn OBJ_113C2(r: &mut Run) {
 }
 
 // OBJ_113D2: firmware/lower/10029-units-grob.s:1534
-pub(super) fn OBJ_113D2(r: &mut Run) {
+pub(crate) fn OBJ_113D2(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -1363,7 +1363,7 @@ pub(super) fn OBJ_113D2(r: &mut Run) {
 }
 
 // OBJ_113E2: firmware/lower/10029-units-grob.s:1540
-pub(super) fn OBJ_113E2(r: &mut Run) {
+pub(crate) fn OBJ_113E2(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -1380,7 +1380,7 @@ pub(super) fn OBJ_113E2(r: &mut Run) {
 }
 
 // OBJ_113F2: firmware/lower/10029-units-grob.s:1546
-pub(super) fn OBJ_113F2(r: &mut Run) {
+pub(crate) fn OBJ_113F2(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -1397,7 +1397,7 @@ pub(super) fn OBJ_113F2(r: &mut Run) {
 }
 
 // OBJ_11402: firmware/lower/10029-units-grob.s:1552
-pub(super) fn OBJ_11402(r: &mut Run) {
+pub(crate) fn OBJ_11402(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -1414,7 +1414,7 @@ pub(super) fn OBJ_11402(r: &mut Run) {
 }
 
 // OBJ_11412: firmware/lower/10029-units-grob.s:1558
-pub(super) fn OBJ_11412(r: &mut Run) {
+pub(crate) fn OBJ_11412(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -1431,7 +1431,7 @@ pub(super) fn OBJ_11412(r: &mut Run) {
 }
 
 // OBJ_11422: firmware/lower/10029-units-grob.s:1564
-pub(super) fn OBJ_11422(r: &mut Run) {
+pub(crate) fn OBJ_11422(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -1449,7 +1449,7 @@ pub(super) fn OBJ_11422(r: &mut Run) {
 
 // -> #
 // FIRSTC@: firmware/lower/10029-units-grob.s:1571
-pub(super) fn FIRSTC_(r: &mut Run) {
+pub(crate) fn FIRSTC_(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -1467,7 +1467,7 @@ pub(super) fn FIRSTC_(r: &mut Run) {
 
 // ->
 // SETFIRSTC_0: firmware/lower/10029-units-grob.s:1578
-pub(super) fn SETFIRSTC_0(r: &mut Run) {
+pub(crate) fn SETFIRSTC_0(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -1484,7 +1484,7 @@ pub(super) fn SETFIRSTC_0(r: &mut Run) {
 }
 
 // OBJ_11452: firmware/lower/10029-units-grob.s:1584
-pub(super) fn OBJ_11452(r: &mut Run) {
+pub(crate) fn OBJ_11452(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -1502,7 +1502,7 @@ pub(super) fn OBJ_11452(r: &mut Run) {
 
 // ->
 // FIRSTC+: firmware/lower/10029-units-grob.s:1591
-pub(super) fn FIRSTC__11467(r: &mut Run) {
+pub(crate) fn FIRSTC__11467(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -1519,7 +1519,7 @@ pub(super) fn FIRSTC__11467(r: &mut Run) {
 }
 
 // OBJ_11472: firmware/lower/10029-units-grob.s:1597
-pub(super) fn OBJ_11472(r: &mut Run) {
+pub(crate) fn OBJ_11472(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -1543,7 +1543,7 @@ pub(super) fn OBJ_11472(r: &mut Run) {
 }
 
 // OBJ_11495: firmware/lower/10029-units-grob.s:1607
-pub(super) fn OBJ_11495(r: &mut Run) {
+pub(crate) fn OBJ_11495(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -1623,7 +1623,7 @@ pub(super) fn OBJ_11495(r: &mut Run) {
 
 // -> flag
 // Lock?: firmware/lower/10029-units-grob.s:1648
-pub(super) fn Lock_(r: &mut Run) {
+pub(crate) fn Lock_(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -1641,7 +1641,7 @@ pub(super) fn Lock_(r: &mut Run) {
 
 // -> flag
 // PrgmEntry?: firmware/lower/10029-units-grob.s:1655
-pub(super) fn PrgmEntry_(r: &mut Run) {
+pub(crate) fn PrgmEntry_(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -1670,7 +1670,7 @@ pub(super) fn PrgmEntry_(r: &mut Run) {
 
 // ->
 // SetPrgmEntry: firmware/lower/10029-units-grob.s:1669
-pub(super) fn SetPrgmEntry(r: &mut Run) {
+pub(crate) fn SetPrgmEntry(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -1688,7 +1688,7 @@ pub(super) fn SetPrgmEntry(r: &mut Run) {
 
 // ->
 // SetLock: firmware/lower/10029-units-grob.s:1676
-pub(super) fn SetLock(r: &mut Run) {
+pub(crate) fn SetLock(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -1713,7 +1713,7 @@ pub(super) fn SetLock(r: &mut Run) {
 
 // ->
 // ClrPrgmEntry: firmware/lower/10029-units-grob.s:1687
-pub(super) fn ClrPrgmEntry(r: &mut Run) {
+pub(crate) fn ClrPrgmEntry(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -1731,7 +1731,7 @@ pub(super) fn ClrPrgmEntry(r: &mut Run) {
 
 // ->
 // ClrLock: firmware/lower/10029-units-grob.s:1694
-pub(super) fn ClrLock(r: &mut Run) {
+pub(crate) fn ClrLock(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -1767,7 +1767,7 @@ pub(super) fn ClrLock(r: &mut Run) {
 
 // #height #width -> grob
 // MAKEGROB: firmware/lower/10029-units-grob.s:1710
-pub(super) fn MAKEGROB(r: &mut Run) {
+pub(crate) fn MAKEGROB(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -1803,7 +1803,7 @@ pub(super) fn MAKEGROB(r: &mut Run) {
 
 // R0.A = x, R1.A = y --> D0 = body Makes a grob of size x,y Prolog is in D0-20
 // makegrob: firmware/lower/10029-units-grob.s:1723
-pub(super) fn makegrob(r: &mut Run) {
+pub(crate) fn makegrob(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -1892,7 +1892,7 @@ pub(super) fn makegrob(r: &mut Run) {
 }
 
 // SUB_11642: firmware/lower/10029-units-grob.s:1769
-pub(super) fn SUB_11642(r: &mut Run) {
+pub(crate) fn SUB_11642(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -1929,7 +1929,7 @@ pub(super) fn SUB_11642(r: &mut Run) {
 
 // Calculates GROB width A.A=width in pixels -> A.A=width in nibbles
 // w->W: firmware/lower/10029-units-grob.s:1785
-pub(super) fn w__W(r: &mut Run) {
+pub(crate) fn w__W(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -1957,7 +1957,7 @@ pub(super) fn w__W(r: &mut Run) {
 
 // grob1 grob2 #x #y ->
 // GROB!: firmware/lower/10029-units-grob.s:1799
-pub(super) fn GROB_(r: &mut Run) {
+pub(crate) fn GROB_(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -2002,7 +2002,7 @@ pub(super) fn GROB_(r: &mut Run) {
 
 // R0,R1 = (row,col), D0 = grob1, D1 = grob2 --> Stores grob1 into grob2
 // grob!: firmware/lower/10029-units-grob.s:1822
-pub(super) fn grob_(r: &mut Run) {
+pub(crate) fn grob_(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -2305,7 +2305,7 @@ pub(super) fn grob_(r: &mut Run) {
 }
 
 // SUB_118B8: firmware/lower/10029-units-grob.s:2015
-pub(super) fn SUB_118B8(r: &mut Run) {
+pub(crate) fn SUB_118B8(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -2368,7 +2368,7 @@ pub(super) fn SUB_118B8(r: &mut Run) {
 }
 
 // SUB_118F3: firmware/lower/10029-units-grob.s:2044
-pub(super) fn SUB_118F3(r: &mut Run) {
+pub(crate) fn SUB_118F3(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -2412,7 +2412,7 @@ pub(super) fn SUB_118F3(r: &mut Run) {
 
 // grob #x1 #y1 #x2 #y2 -> grob'
 // SUBGROB: firmware/lower/10029-units-grob.s:2067
-pub(super) fn SUBGROB(r: &mut Run) {
+pub(crate) fn SUBGROB(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -2595,7 +2595,7 @@ pub(super) fn SUBGROB(r: &mut Run) {
 }
 
 // SUB_11A58: firmware/lower/10029-units-grob.s:2171
-pub(super) fn SUB_11A58(r: &mut Run) {
+pub(crate) fn SUB_11A58(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -2617,7 +2617,7 @@ pub(super) fn SUB_11A58(r: &mut Run) {
 
 // grob #x1 #y1 #x2 #y2 -> grob'
 // GROB!ZERO: firmware/lower/10029-units-grob.s:2181
-pub(super) fn GROB_ZERO(r: &mut Run) {
+pub(crate) fn GROB_ZERO(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -2821,7 +2821,7 @@ pub(super) fn GROB_ZERO(r: &mut Run) {
 }
 
 // SUB_11BAA: firmware/lower/10029-units-grob.s:2297
-pub(super) fn SUB_11BAA(r: &mut Run) {
+pub(crate) fn SUB_11BAA(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -2878,7 +2878,7 @@ pub(super) fn SUB_11BAA(r: &mut Run) {
 }
 
 // SUB_11BED: firmware/lower/10029-units-grob.s:2323
-pub(super) fn SUB_11BED(r: &mut Run) {
+pub(crate) fn SUB_11BED(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -2906,7 +2906,7 @@ pub(super) fn SUB_11BED(r: &mut Run) {
 }
 
 // SUB_11C06: firmware/lower/10029-units-grob.s:2334
-pub(super) fn SUB_11C06(r: &mut Run) {
+pub(crate) fn SUB_11C06(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -2941,7 +2941,7 @@ pub(super) fn SUB_11C06(r: &mut Run) {
 }
 
 // SUB_11C29: firmware/lower/10029-units-grob.s:2351
-pub(super) fn SUB_11C29(r: &mut Run) {
+pub(crate) fn SUB_11C29(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -2986,7 +2986,7 @@ pub(super) fn SUB_11C29(r: &mut Run) {
 }
 
 // SUB_11C58: firmware/lower/10029-units-grob.s:2374
-pub(super) fn SUB_11C58(r: &mut Run) {
+pub(crate) fn SUB_11C58(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -3030,7 +3030,7 @@ pub(super) fn SUB_11C58(r: &mut Run) {
 }
 
 // SUB_11C8B: firmware/lower/10029-units-grob.s:2395
-pub(super) fn SUB_11C8B(r: &mut Run) {
+pub(crate) fn SUB_11C8B(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -3047,7 +3047,7 @@ pub(super) fn SUB_11C8B(r: &mut Run) {
 }
 
 // SUB_11C96: firmware/lower/10029-units-grob.s:2400
-pub(super) fn SUB_11C96(r: &mut Run) {
+pub(crate) fn SUB_11C96(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -3088,7 +3088,7 @@ pub(super) fn SUB_11C96(r: &mut Run) {
 }
 
 // SUB_11CBE: firmware/lower/10029-units-grob.s:2418
-pub(super) fn SUB_11CBE(r: &mut Run) {
+pub(crate) fn SUB_11CBE(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -3104,7 +3104,7 @@ pub(super) fn SUB_11CBE(r: &mut Run) {
 }
 
 // SUB_11CC5: firmware/lower/10029-units-grob.s:2422
-pub(super) fn SUB_11CC5(r: &mut Run) {
+pub(crate) fn SUB_11CC5(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -3120,7 +3120,7 @@ pub(super) fn SUB_11CC5(r: &mut Run) {
 }
 
 // SUB_11CCC: firmware/lower/10029-units-grob.s:2426
-pub(super) fn SUB_11CCC(r: &mut Run) {
+pub(crate) fn SUB_11CCC(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -3136,7 +3136,7 @@ pub(super) fn SUB_11CCC(r: &mut Run) {
 }
 
 // 3->grob(s): firmware/lower/10029-units-grob.s:2430
-pub(super) fn r3__grob_s_(r: &mut Run) {
+pub(crate) fn r3__grob_s_(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -3172,7 +3172,7 @@ pub(super) fn r3__grob_s_(r: &mut Run) {
 
 // $ -> grob
 // $>BIGGROB: firmware/lower/10029-units-grob.s:2446
-pub(super) fn __BIGGROB(r: &mut Run) {
+pub(crate) fn __BIGGROB(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -3193,7 +3193,7 @@ pub(super) fn __BIGGROB(r: &mut Run) {
 
 // $ -> grob
 // $>GROB: firmware/lower/10029-units-grob.s:2453
-pub(super) fn __GROB(r: &mut Run) {
+pub(crate) fn __GROB(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -3258,7 +3258,7 @@ pub(super) fn __GROB(r: &mut Run) {
 }
 
 // SUB_11D52: firmware/lower/10029-units-grob.s:2484
-pub(super) fn SUB_11D52(r: &mut Run) {
+pub(crate) fn SUB_11D52(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -3307,7 +3307,7 @@ pub(super) fn SUB_11D52(r: &mut Run) {
 
 // ( D.A B.A C.A D0 D1 --> ) Displays string body at D1 in grob at D0 C.A = chars B.A = xlocation D.A = row length in nibbles -> D1 = addr after $ D0 = location of next char D.A = row length
 // $5x7: firmware/lower/10029-units-grob.s:2509
-pub(super) fn _5x7(r: &mut Run) {
+pub(crate) fn _5x7(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -3324,7 +3324,7 @@ pub(super) fn _5x7(r: &mut Run) {
 }
 
 // SUB_11D92: firmware/lower/10029-units-grob.s:2513
-pub(super) fn SUB_11D92(r: &mut Run) {
+pub(crate) fn SUB_11D92(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -3539,7 +3539,7 @@ pub(super) fn SUB_11D92(r: &mut Run) {
 }
 
 // SUB_11EF2: firmware/lower/10029-units-grob.s:2639
-pub(super) fn SUB_11EF2(r: &mut Run) {
+pub(crate) fn SUB_11EF2(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -3555,7 +3555,7 @@ pub(super) fn SUB_11EF2(r: &mut Run) {
 }
 
 // SUB_11EF9: firmware/lower/10029-units-grob.s:2643
-pub(super) fn SUB_11EF9(r: &mut Run) {
+pub(crate) fn SUB_11EF9(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -3589,7 +3589,7 @@ pub(super) fn SUB_11EF9(r: &mut Run) {
 }
 
 // SUB_11F17: firmware/lower/10029-units-grob.s:2660
-pub(super) fn SUB_11F17(r: &mut Run) {
+pub(crate) fn SUB_11F17(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -3618,7 +3618,7 @@ pub(super) fn SUB_11F17(r: &mut Run) {
 
 // String renderer. XM=1: 10-row font, glyph = #7A047 + 20*code; XM=0: 8-row font, glyph = #7B257 + 16*code
 // SUB_11F28: firmware/lower/10029-units-grob.s:2672
-pub(super) fn SUB_11F28(r: &mut Run) {
+pub(crate) fn SUB_11F28(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -3676,7 +3676,7 @@ pub(super) fn SUB_11F28(r: &mut Run) {
 
 // $ -> grob
 // $>grob: firmware/lower/10029-units-grob.s:2707
-pub(super) fn __grob(r: &mut Run) {
+pub(crate) fn __grob(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -3784,7 +3784,7 @@ pub(super) fn __grob(r: &mut Run) {
 
 // $ #n -> flag grob
 // RIGHT$3x6: firmware/lower/12002-graphics.s:12
-pub(super) fn RIGHT_3x6(r: &mut Run) {
+pub(crate) fn RIGHT_3x6(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -3899,7 +3899,7 @@ pub(super) fn RIGHT_3x6(r: &mut Run) {
 }
 
 // SUB_120CC: firmware/lower/12002-graphics.s:77
-pub(super) fn SUB_120CC(r: &mut Run) {
+pub(crate) fn SUB_120CC(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -3922,7 +3922,7 @@ pub(super) fn SUB_120CC(r: &mut Run) {
 }
 
 // SUB_120E7: firmware/lower/12002-graphics.s:88
-pub(super) fn SUB_120E7(r: &mut Run) {
+pub(crate) fn SUB_120E7(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -3938,7 +3938,7 @@ pub(super) fn SUB_120E7(r: &mut Run) {
 }
 
 // SUB_120F5: firmware/lower/12002-graphics.s:93
-pub(super) fn SUB_120F5(r: &mut Run) {
+pub(crate) fn SUB_120F5(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -3984,7 +3984,7 @@ pub(super) fn SUB_120F5(r: &mut Run) {
 }
 
 // SUB_1211E: firmware/lower/12002-graphics.s:112
-pub(super) fn SUB_1211E(r: &mut Run) {
+pub(crate) fn SUB_1211E(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -4032,7 +4032,7 @@ pub(super) fn SUB_1211E(r: &mut Run) {
 
 // grob #x #y $ #w -> grob'
 // CENTER$3x5: firmware/lower/12002-graphics.s:136
-pub(super) fn CENTER_3x5(r: &mut Run) {
+pub(crate) fn CENTER_3x5(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -4165,7 +4165,7 @@ pub(super) fn CENTER_3x5(r: &mut Run) {
 }
 
 // SUB_12223: firmware/lower/12002-graphics.s:209
-pub(super) fn SUB_12223(r: &mut Run) {
+pub(crate) fn SUB_12223(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -4315,7 +4315,7 @@ pub(super) fn SUB_12223(r: &mut Run) {
 
 // grob -> grob'
 // INVGROB: firmware/lower/12002-graphics.s:301
-pub(super) fn INVGROB(r: &mut Run) {
+pub(crate) fn INVGROB(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -4444,7 +4444,7 @@ pub(super) fn INVGROB(r: &mut Run) {
 }
 
 // BigDisp(st,s): firmware/lower/12002-graphics.s:378
-pub(super) fn BigDisp_st_s_(r: &mut Run) {
+pub(crate) fn BigDisp_st_s_(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -4480,7 +4480,7 @@ pub(super) fn BigDisp_st_s_(r: &mut Run) {
 }
 
 // BigDisp1(st): firmware/lower/12002-graphics.s:391
-pub(super) fn BigDisp1_st_(r: &mut Run) {
+pub(crate) fn BigDisp1_st_(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -4497,7 +4497,7 @@ pub(super) fn BigDisp1_st_(r: &mut Run) {
 }
 
 // BigDisp2(st): firmware/lower/12002-graphics.s:397
-pub(super) fn BigDisp2_st_(r: &mut Run) {
+pub(crate) fn BigDisp2_st_(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -4514,7 +4514,7 @@ pub(super) fn BigDisp2_st_(r: &mut Run) {
 }
 
 // BigDisp3(st): firmware/lower/12002-graphics.s:403
-pub(super) fn BigDisp3_st_(r: &mut Run) {
+pub(crate) fn BigDisp3_st_(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -4531,7 +4531,7 @@ pub(super) fn BigDisp3_st_(r: &mut Run) {
 }
 
 // BigDisp4(st): firmware/lower/12002-graphics.s:409
-pub(super) fn BigDisp4_st_(r: &mut Run) {
+pub(crate) fn BigDisp4_st_(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -4557,7 +4557,7 @@ pub(super) fn BigDisp4_st_(r: &mut Run) {
 
 // $ #row ->
 // DISPN: firmware/lower/12002-graphics.s:419
-pub(super) fn DISPN(r: &mut Run) {
+pub(crate) fn DISPN(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -4614,7 +4614,7 @@ pub(super) fn DISPN(r: &mut Run) {
 
 // $ ->
 // DISPROW1: firmware/lower/12002-graphics.s:441
-pub(super) fn DISPROW1(r: &mut Run) {
+pub(crate) fn DISPROW1(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -4632,7 +4632,7 @@ pub(super) fn DISPROW1(r: &mut Run) {
 
 // $ ->
 // DISPROW2: firmware/lower/12002-graphics.s:449
-pub(super) fn DISPROW2(r: &mut Run) {
+pub(crate) fn DISPROW2(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -4650,7 +4650,7 @@ pub(super) fn DISPROW2(r: &mut Run) {
 
 // $ ->
 // DISPROW3: firmware/lower/12002-graphics.s:457
-pub(super) fn DISPROW3(r: &mut Run) {
+pub(crate) fn DISPROW3(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -4668,7 +4668,7 @@ pub(super) fn DISPROW3(r: &mut Run) {
 
 // $ ->
 // DISPROW4: firmware/lower/12002-graphics.s:465
-pub(super) fn DISPROW4(r: &mut Run) {
+pub(crate) fn DISPROW4(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -4686,7 +4686,7 @@ pub(super) fn DISPROW4(r: &mut Run) {
 
 // $ ->
 // DISPROW5: firmware/lower/12002-graphics.s:473
-pub(super) fn DISPROW5(r: &mut Run) {
+pub(crate) fn DISPROW5(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -4704,7 +4704,7 @@ pub(super) fn DISPROW5(r: &mut Run) {
 
 // $ ->
 // DISPROW6: firmware/lower/12002-graphics.s:481
-pub(super) fn DISPROW6(r: &mut Run) {
+pub(crate) fn DISPROW6(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -4722,7 +4722,7 @@ pub(super) fn DISPROW6(r: &mut Run) {
 
 // $ ->
 // DISPROW7: firmware/lower/12002-graphics.s:489
-pub(super) fn DISPROW7(r: &mut Run) {
+pub(crate) fn DISPROW7(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -4740,7 +4740,7 @@ pub(super) fn DISPROW7(r: &mut Run) {
 
 // $ ->
 // DISPROW8: firmware/lower/12002-graphics.s:496
-pub(super) fn DISPROW8(r: &mut Run) {
+pub(crate) fn DISPROW8(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -4949,7 +4949,7 @@ pub(super) fn DISPROW8(r: &mut Run) {
 
 // -> dispgrob
 // HARDBUFF: firmware/lower/12002-graphics.s:627
-pub(super) fn HARDBUFF(r: &mut Run) {
+pub(crate) fn HARDBUFF(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -4967,7 +4967,7 @@ pub(super) fn HARDBUFF(r: &mut Run) {
 
 // -> menugrob
 // HARDBUFF2: firmware/lower/12002-graphics.s:637
-pub(super) fn HARDBUFF2(r: &mut Run) {
+pub(crate) fn HARDBUFF2(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -4985,7 +4985,7 @@ pub(super) fn HARDBUFF2(r: &mut Run) {
 
 // -> textgrob
 // ABUFF: firmware/lower/12002-graphics.s:647
-pub(super) fn ABUFF(r: &mut Run) {
+pub(crate) fn ABUFF(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -5003,7 +5003,7 @@ pub(super) fn ABUFF(r: &mut Run) {
 
 // -> graphgrob
 // GBUFF: firmware/lower/12002-graphics.s:657
-pub(super) fn GBUFF(r: &mut Run) {
+pub(crate) fn GBUFF(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -5035,7 +5035,7 @@ pub(super) fn GBUFF(r: &mut Run) {
 }
 
 // SUB_12690: firmware/lower/12002-graphics.s:672
-pub(super) fn SUB_12690(r: &mut Run) {
+pub(crate) fn SUB_12690(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -5070,7 +5070,7 @@ pub(super) fn SUB_12690(r: &mut Run) {
 }
 
 // OBJ_12847: firmware/lower/12002-graphics.s:799
-pub(super) fn OBJ_12847(r: &mut Run) {
+pub(crate) fn OBJ_12847(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -5128,7 +5128,7 @@ pub(super) fn OBJ_12847(r: &mut Run) {
 }
 
 // SUB_12890: firmware/lower/12002-graphics.s:823
-pub(super) fn SUB_12890(r: &mut Run) {
+pub(crate) fn SUB_12890(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -5148,7 +5148,7 @@ pub(super) fn SUB_12890(r: &mut Run) {
 }
 
 // SUB_128A1: firmware/lower/12002-graphics.s:831
-pub(super) fn SUB_128A1(r: &mut Run) {
+pub(crate) fn SUB_128A1(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -5171,7 +5171,7 @@ pub(super) fn SUB_128A1(r: &mut Run) {
 }
 
 // Unlabelled code at #128C4.
-pub(super) fn code_128C4(r: &mut Run) {
+pub(crate) fn code_128C4(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -5200,7 +5200,7 @@ pub(super) fn code_128C4(r: &mut Run) {
 }
 
 // Unlabelled code at #128ED.
-pub(super) fn code_128ED(r: &mut Run) {
+pub(crate) fn code_128ED(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -5259,7 +5259,7 @@ pub(super) fn code_128ED(r: &mut Run) {
 
 // (#n -> ) moves stk displ up #n lines
 // ScreenUpN: firmware/lower/12002-graphics.s:908
-pub(super) fn ScreenUpN(r: &mut Run) {
+pub(crate) fn ScreenUpN(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -5328,7 +5328,7 @@ pub(super) fn ScreenUpN(r: &mut Run) {
 
 // moves stk displ up 1 line
 // ScreenUp: firmware/lower/12002-graphics.s:948
-pub(super) fn ScreenUp(r: &mut Run) {
+pub(crate) fn ScreenUp(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -5363,7 +5363,7 @@ pub(super) fn ScreenUp(r: &mut Run) {
 
 // (#n -> ) moves stk displ down #n lines
 // ScreenDnN: firmware/lower/12002-graphics.s:969
-pub(super) fn ScreenDnN(r: &mut Run) {
+pub(crate) fn ScreenDnN(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -5457,7 +5457,7 @@ pub(super) fn ScreenDnN(r: &mut Run) {
 
 // moves stk displ down 1 line
 // ScreenDn: firmware/lower/12002-graphics.s:1027
-pub(super) fn ScreenDn(r: &mut Run) {
+pub(crate) fn ScreenDn(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -5508,7 +5508,7 @@ pub(super) fn ScreenDn(r: &mut Run) {
 
 // grob #cols ->
 // BROADENGROB: firmware/lower/12002-graphics.s:1090
-pub(super) fn BROADENGROB(r: &mut Run) {
+pub(crate) fn BROADENGROB(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -5725,7 +5725,7 @@ pub(super) fn BROADENGROB(r: &mut Run) {
 }
 
 // SUB_12D68: firmware/lower/12002-graphics.s:1222
-pub(super) fn SUB_12D68(r: &mut Run) {
+pub(crate) fn SUB_12D68(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -5754,7 +5754,7 @@ pub(super) fn SUB_12D68(r: &mut Run) {
 }
 
 // SUB_12D85: firmware/lower/12002-graphics.s:1232
-pub(super) fn SUB_12D85(r: &mut Run) {
+pub(crate) fn SUB_12D85(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -5785,7 +5785,7 @@ pub(super) fn SUB_12D85(r: &mut Run) {
 }
 
 // SUB_12DB1: firmware/lower/12002-graphics.s:1248
-pub(super) fn SUB_12DB1(r: &mut Run) {
+pub(crate) fn SUB_12DB1(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -5810,7 +5810,7 @@ pub(super) fn SUB_12DB1(r: &mut Run) {
 
 // grob #rows ->
 // HEIGHTENGROB: firmware/lower/12002-graphics.s:1258
-pub(super) fn HEIGHTENGROB(r: &mut Run) {
+pub(crate) fn HEIGHTENGROB(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -5918,7 +5918,7 @@ pub(super) fn HEIGHTENGROB(r: &mut Run) {
 }
 
 // StoCurGrob(go): firmware/lower/12002-graphics.s:1319
-pub(super) fn StoCurGrob_go_(r: &mut Run) {
+pub(crate) fn StoCurGrob_go_(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -5973,7 +5973,7 @@ pub(super) fn StoCurGrob_go_(r: &mut Run) {
 }
 
 // StoNoCurGrob(go): firmware/lower/12002-graphics.s:1351
-pub(super) fn StoNoCurGrob_go_(r: &mut Run) {
+pub(crate) fn StoNoCurGrob_go_(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -6030,7 +6030,7 @@ pub(super) fn StoNoCurGrob_go_(r: &mut Run) {
 }
 
 // SUB_12FB2: firmware/lower/12002-graphics.s:1397
-pub(super) fn SUB_12FB2(r: &mut Run) {
+pub(crate) fn SUB_12FB2(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -6046,7 +6046,7 @@ pub(super) fn SUB_12FB2(r: &mut Run) {
 }
 
 // SUB_12FB9: firmware/lower/12002-graphics.s:1401
-pub(super) fn SUB_12FB9(r: &mut Run) {
+pub(crate) fn SUB_12FB9(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -6062,7 +6062,7 @@ pub(super) fn SUB_12FB9(r: &mut Run) {
 }
 
 // SUB_12FC0: firmware/lower/12002-graphics.s:1405
-pub(super) fn SUB_12FC0(r: &mut Run) {
+pub(crate) fn SUB_12FC0(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -6133,7 +6133,7 @@ pub(super) fn SUB_12FC0(r: &mut Run) {
 
 // ->
 // KILLADISP: firmware/lower/12002-graphics.s:1441
-pub(super) fn KILLADISP(r: &mut Run) {
+pub(crate) fn KILLADISP(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -6164,7 +6164,7 @@ pub(super) fn KILLADISP(r: &mut Run) {
 
 // ->
 // KILLGDISP: firmware/lower/12002-graphics.s:1453
-pub(super) fn KILLGDISP(r: &mut Run) {
+pub(crate) fn KILLGDISP(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -6185,7 +6185,7 @@ pub(super) fn KILLGDISP(r: &mut Run) {
 }
 
 // SUB_13075: firmware/lower/12002-graphics.s:1460
-pub(super) fn SUB_13075(r: &mut Run) {
+pub(crate) fn SUB_13075(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -6220,7 +6220,7 @@ pub(super) fn SUB_13075(r: &mut Run) {
 
 // ->
 // RSZVDISP: firmware/lower/12002-graphics.s:1492
-pub(super) fn RSZVDISP(r: &mut Run) {
+pub(crate) fn RSZVDISP(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -6268,7 +6268,7 @@ pub(super) fn RSZVDISP(r: &mut Run) {
 
 // ->
 // TOGDISP: firmware/lower/12002-graphics.s:1522
-pub(super) fn TOGDISP(r: &mut Run) {
+pub(crate) fn TOGDISP(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -6301,7 +6301,7 @@ pub(super) fn TOGDISP(r: &mut Run) {
 
 // ->
 // TOADISP: firmware/lower/12002-graphics.s:1532
-pub(super) fn TOADISP(r: &mut Run) {
+pub(crate) fn TOADISP(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -6334,7 +6334,7 @@ pub(super) fn TOADISP(r: &mut Run) {
 
 // -> flag
 // GDISPON?: firmware/lower/12002-graphics.s:1543
-pub(super) fn GDISPON_(r: &mut Run) {
+pub(crate) fn GDISPON_(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -6373,7 +6373,7 @@ pub(super) fn GDISPON_(r: &mut Run) {
 }
 
 // SUB_13197: firmware/lower/12002-graphics.s:1560
-pub(super) fn SUB_13197(r: &mut Run) {
+pub(crate) fn SUB_13197(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -6408,7 +6408,7 @@ pub(super) fn SUB_13197(r: &mut Run) {
 
 // ->
 // WINDOWUP: firmware/lower/12002-graphics.s:1577
-pub(super) fn WINDOWUP(r: &mut Run) {
+pub(crate) fn WINDOWUP(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -6461,7 +6461,7 @@ pub(super) fn WINDOWUP(r: &mut Run) {
 
 // ->
 // WINDOWDOWN: firmware/lower/12002-graphics.s:1606
-pub(super) fn WINDOWDOWN(r: &mut Run) {
+pub(crate) fn WINDOWDOWN(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -6553,7 +6553,7 @@ pub(super) fn WINDOWDOWN(r: &mut Run) {
 }
 
 // SUB_132C5: firmware/lower/12002-graphics.s:1664
-pub(super) fn SUB_132C5(r: &mut Run) {
+pub(crate) fn SUB_132C5(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -6630,7 +6630,7 @@ pub(super) fn SUB_132C5(r: &mut Run) {
 }
 
 // disprange: firmware/lower/12002-graphics.s:1722
-pub(super) fn disprange(r: &mut Run) {
+pub(crate) fn disprange(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -6693,7 +6693,7 @@ pub(super) fn disprange(r: &mut Run) {
 }
 
 // L_13425: firmware/lower/12002-graphics.s:1758
-pub(super) fn L_13425(r: &mut Run) {
+pub(crate) fn L_13425(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -6784,7 +6784,7 @@ pub(super) fn L_13425(r: &mut Run) {
 
 // ->
 // CLEARVDISP: firmware/lower/12002-graphics.s:1810
-pub(super) fn CLEARVDISP(r: &mut Run) {
+pub(crate) fn CLEARVDISP(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -6817,7 +6817,7 @@ pub(super) fn CLEARVDISP(r: &mut Run) {
 
 // ->
 // WINDOWLEFT: firmware/lower/12002-graphics.s:1826
-pub(super) fn WINDOWLEFT(r: &mut Run) {
+pub(crate) fn WINDOWLEFT(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -6903,7 +6903,7 @@ pub(super) fn WINDOWLEFT(r: &mut Run) {
 
 // ->
 // WINDOWRIGHT: firmware/lower/12002-graphics.s:1873
-pub(super) fn WINDOWRIGHT(r: &mut Run) {
+pub(crate) fn WINDOWRIGHT(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -6984,7 +6984,7 @@ pub(super) fn WINDOWRIGHT(r: &mut Run) {
 }
 
 // SUB_13606: firmware/lower/12002-graphics.s:1920
-pub(super) fn SUB_13606(r: &mut Run) {
+pub(crate) fn SUB_13606(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -7019,7 +7019,7 @@ pub(super) fn SUB_13606(r: &mut Run) {
 }
 
 // SUB_13642: firmware/lower/12002-graphics.s:1940
-pub(super) fn SUB_13642(r: &mut Run) {
+pub(crate) fn SUB_13642(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -7039,7 +7039,7 @@ pub(super) fn SUB_13642(r: &mut Run) {
 }
 
 // SUB_13657: firmware/lower/12002-graphics.s:1948
-pub(super) fn SUB_13657(r: &mut Run) {
+pub(crate) fn SUB_13657(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -7067,7 +7067,7 @@ pub(super) fn SUB_13657(r: &mut Run) {
 
 // #y #x ->
 // WINDOWXY: firmware/lower/12002-graphics.s:1961
-pub(super) fn WINDOWXY(r: &mut Run) {
+pub(crate) fn WINDOWXY(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -7098,7 +7098,7 @@ pub(super) fn WINDOWXY(r: &mut Run) {
 
 // ->
 // REDISPHBUFF: firmware/lower/12002-graphics.s:1972
-pub(super) fn REDISPHBUFF(r: &mut Run) {
+pub(crate) fn REDISPHBUFF(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -7124,7 +7124,7 @@ pub(super) fn REDISPHBUFF(r: &mut Run) {
 }
 
 // WindowXY: firmware/lower/12002-graphics.s:1981
-pub(super) fn WindowXY(r: &mut Run) {
+pub(crate) fn WindowXY(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -7141,7 +7141,7 @@ pub(super) fn WindowXY(r: &mut Run) {
 }
 
 // addrLINECNTg: firmware/lower/12002-graphics.s:1984
-pub(super) fn addrLINECNTg(r: &mut Run) {
+pub(crate) fn addrLINECNTg(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -7211,7 +7211,7 @@ pub(super) fn addrLINECNTg(r: &mut Run) {
 }
 
 // L_1373A: firmware/lower/12002-graphics.s:2032
-pub(super) fn L_1373A(r: &mut Run) {
+pub(crate) fn L_1373A(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -7271,7 +7271,7 @@ pub(super) fn L_1373A(r: &mut Run) {
 
 // -> #y #x
 // WINDOWCORNER: firmware/lower/12002-graphics.s:2072
-pub(super) fn WINDOWCORNER(r: &mut Run) {
+pub(crate) fn WINDOWCORNER(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -7303,7 +7303,7 @@ pub(super) fn WINDOWCORNER(r: &mut Run) {
 }
 
 // corner: firmware/lower/12002-graphics.s:2085
-pub(super) fn corner(r: &mut Run) {
+pub(crate) fn corner(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -7341,7 +7341,7 @@ pub(super) fn corner(r: &mut Run) {
 
 // #x #y ->
 // PIXOFF3: firmware/lower/12002-graphics.s:2105
-pub(super) fn PIXOFF3(r: &mut Run) {
+pub(crate) fn PIXOFF3(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -7361,7 +7361,7 @@ pub(super) fn PIXOFF3(r: &mut Run) {
 
 // #x #y ->
 // PIXON3: firmware/lower/12002-graphics.s:2114
-pub(super) fn PIXON3(r: &mut Run) {
+pub(crate) fn PIXON3(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -7381,7 +7381,7 @@ pub(super) fn PIXON3(r: &mut Run) {
 
 // #x #y ->
 // PIXOFF: firmware/lower/12002-graphics.s:2122
-pub(super) fn PIXOFF(r: &mut Run) {
+pub(crate) fn PIXOFF(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -7400,7 +7400,7 @@ pub(super) fn PIXOFF(r: &mut Run) {
 
 // #x #y ->
 // PIXON: firmware/lower/12002-graphics.s:2129
-pub(super) fn PIXON(r: &mut Run) {
+pub(crate) fn PIXON(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -7474,7 +7474,7 @@ pub(super) fn PIXON(r: &mut Run) {
 }
 
 // pixon2: firmware/lower/12002-graphics.s:2165
-pub(super) fn pixon2(r: &mut Run) {
+pub(crate) fn pixon2(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -7514,7 +7514,7 @@ pub(super) fn pixon2(r: &mut Run) {
 }
 
 // GETPIX: firmware/lower/12002-graphics.s:2181
-pub(super) fn GETPIX(r: &mut Run) {
+pub(crate) fn GETPIX(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -7531,7 +7531,7 @@ pub(super) fn GETPIX(r: &mut Run) {
 }
 
 // GETPIX3: firmware/lower/12002-graphics.s:2185
-pub(super) fn GETPIX3(r: &mut Run) {
+pub(crate) fn GETPIX3(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -7625,7 +7625,7 @@ pub(super) fn GETPIX3(r: &mut Run) {
 
 // #x #y -> flag
 // PIXON?3: firmware/lower/12002-graphics.s:2239
-pub(super) fn PIXON_3(r: &mut Run) {
+pub(crate) fn PIXON_3(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -7643,7 +7643,7 @@ pub(super) fn PIXON_3(r: &mut Run) {
 
 // #x #y -> flag
 // PIXON?: firmware/lower/12002-graphics.s:2245
-pub(super) fn PIXON_(r: &mut Run) {
+pub(crate) fn PIXON_(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -7709,7 +7709,7 @@ pub(super) fn PIXON_(r: &mut Run) {
 }
 
 // OBJ_139E7: firmware/lower/12002-graphics.s:2271
-pub(super) fn OBJ_139E7(r: &mut Run) {
+pub(crate) fn OBJ_139E7(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -7843,7 +7843,7 @@ pub(super) fn OBJ_139E7(r: &mut Run) {
 }
 
 // SUB_13AF8: firmware/lower/12002-graphics.s:2353
-pub(super) fn SUB_13AF8(r: &mut Run) {
+pub(crate) fn SUB_13AF8(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -7891,7 +7891,7 @@ pub(super) fn SUB_13AF8(r: &mut Run) {
 }
 
 // Unlabelled code at #13B46.
-pub(super) fn code_13B46(r: &mut Run) {
+pub(crate) fn code_13B46(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -7908,7 +7908,7 @@ pub(super) fn code_13B46(r: &mut Run) {
 }
 
 // OBJ_13BB5: firmware/lower/12002-graphics.s:2415
-pub(super) fn OBJ_13BB5(r: &mut Run) {
+pub(crate) fn OBJ_13BB5(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -7955,7 +7955,7 @@ pub(super) fn OBJ_13BB5(r: &mut Run) {
 }
 
 // OBJ_13BF1: firmware/lower/12002-graphics.s:2437
-pub(super) fn OBJ_13BF1(r: &mut Run) {
+pub(crate) fn OBJ_13BF1(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -8004,7 +8004,7 @@ pub(super) fn OBJ_13BF1(r: &mut Run) {
 }
 
 // SUB_13C58: firmware/lower/12002-graphics.s:2467
-pub(super) fn SUB_13C58(r: &mut Run) {
+pub(crate) fn SUB_13C58(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -8020,7 +8020,7 @@ pub(super) fn SUB_13C58(r: &mut Run) {
 }
 
 // SUB_13C5A: firmware/lower/12002-graphics.s:2471
-pub(super) fn SUB_13C5A(r: &mut Run) {
+pub(crate) fn SUB_13C5A(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -8063,7 +8063,7 @@ pub(super) fn SUB_13C5A(r: &mut Run) {
 }
 
 // cursorblink+: firmware/lower/12002-graphics.s:2530
-pub(super) fn cursorblink_(r: &mut Run) {
+pub(crate) fn cursorblink_(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -8098,7 +8098,7 @@ pub(super) fn cursorblink_(r: &mut Run) {
 }
 
 // cursorblink-: firmware/lower/12002-graphics.s:2543
-pub(super) fn cursorblink__13D5A(r: &mut Run) {
+pub(crate) fn cursorblink__13D5A(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -8144,7 +8144,7 @@ pub(super) fn cursorblink__13D5A(r: &mut Run) {
 }
 
 // SUB_13DDC: firmware/lower/12002-graphics.s:2573
-pub(super) fn SUB_13DDC(r: &mut Run) {
+pub(crate) fn SUB_13DDC(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -8169,7 +8169,7 @@ pub(super) fn SUB_13DDC(r: &mut Run) {
 }
 
 // OBJ_13E05: firmware/lower/12002-graphics.s:2586
-pub(super) fn OBJ_13E05(r: &mut Run) {
+pub(crate) fn OBJ_13E05(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -8190,7 +8190,7 @@ pub(super) fn OBJ_13E05(r: &mut Run) {
 }
 
 // OBJ_13E22: firmware/lower/12002-graphics.s:2596
-pub(super) fn OBJ_13E22(r: &mut Run) {
+pub(crate) fn OBJ_13E22(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -8207,7 +8207,7 @@ pub(super) fn OBJ_13E22(r: &mut Run) {
 }
 
 // OBJ_13E2E: firmware/lower/12002-graphics.s:2602
-pub(super) fn OBJ_13E2E(r: &mut Run) {
+pub(crate) fn OBJ_13E2E(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -8241,7 +8241,7 @@ pub(super) fn OBJ_13E2E(r: &mut Run) {
 }
 
 // OBJ_13E53: firmware/lower/12002-graphics.s:2617
-pub(super) fn OBJ_13E53(r: &mut Run) {
+pub(crate) fn OBJ_13E53(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -8258,7 +8258,7 @@ pub(super) fn OBJ_13E53(r: &mut Run) {
 }
 
 // OBJ_13E63: firmware/lower/12002-graphics.s:2623
-pub(super) fn OBJ_13E63(r: &mut Run) {
+pub(crate) fn OBJ_13E63(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -8287,7 +8287,7 @@ pub(super) fn OBJ_13E63(r: &mut Run) {
 
 // -> #
 // CURSOR_OFF: firmware/lower/12002-graphics.s:2637
-pub(super) fn CURSOR_OFF(r: &mut Run) {
+pub(crate) fn CURSOR_OFF(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -8310,7 +8310,7 @@ pub(super) fn CURSOR_OFF(r: &mut Run) {
 }
 
 // OBJ_13E9E: firmware/lower/12002-graphics.s:2646
-pub(super) fn OBJ_13E9E(r: &mut Run) {
+pub(crate) fn OBJ_13E9E(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -8335,7 +8335,7 @@ pub(super) fn OBJ_13E9E(r: &mut Run) {
 
 // ->
 // CURSOR_OFF0: firmware/lower/12002-graphics.s:2657
-pub(super) fn CURSOR_OFF0(r: &mut Run) {
+pub(crate) fn CURSOR_OFF0(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -8355,7 +8355,7 @@ pub(super) fn CURSOR_OFF0(r: &mut Run) {
 
 // ->
 // CURSOR_OFF+: firmware/lower/12002-graphics.s:2666
-pub(super) fn CURSOR_OFF_(r: &mut Run) {
+pub(crate) fn CURSOR_OFF_(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -8385,7 +8385,7 @@ pub(super) fn CURSOR_OFF_(r: &mut Run) {
 
 // -> #
 // CURSOR@: firmware/lower/12002-graphics.s:2680
-pub(super) fn CURSOR_(r: &mut Run) {
+pub(crate) fn CURSOR_(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -8402,7 +8402,7 @@ pub(super) fn CURSOR_(r: &mut Run) {
 }
 
 // CURSOR+: firmware/lower/12002-graphics.s:2686
-pub(super) fn CURSOR__13F06(r: &mut Run) {
+pub(crate) fn CURSOR__13F06(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -8419,7 +8419,7 @@ pub(super) fn CURSOR__13F06(r: &mut Run) {
 }
 
 // OBJ_13F11: firmware/lower/12002-graphics.s:2692
-pub(super) fn OBJ_13F11(r: &mut Run) {
+pub(crate) fn OBJ_13F11(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -8439,7 +8439,7 @@ pub(super) fn OBJ_13F11(r: &mut Run) {
 }
 
 // SETCURSOR: firmware/lower/12002-graphics.s:2701
-pub(super) fn SETCURSOR(r: &mut Run) {
+pub(crate) fn SETCURSOR(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -8463,7 +8463,7 @@ pub(super) fn SETCURSOR(r: &mut Run) {
 }
 
 // CurrentRow: firmware/lower/12002-graphics.s:2711
-pub(super) fn CurrentRow(r: &mut Run) {
+pub(crate) fn CurrentRow(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -8496,7 +8496,7 @@ pub(super) fn CurrentRow(r: &mut Run) {
 }
 
 // OBJ_13F69: firmware/lower/12002-graphics.s:2724
-pub(super) fn OBJ_13F69(r: &mut Run) {
+pub(crate) fn OBJ_13F69(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -8519,7 +8519,7 @@ pub(super) fn OBJ_13F69(r: &mut Run) {
 }
 
 // OBJ_13F7F: firmware/lower/12002-graphics.s:2733
-pub(super) fn OBJ_13F7F(r: &mut Run) {
+pub(crate) fn OBJ_13F7F(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -8543,7 +8543,7 @@ pub(super) fn OBJ_13F7F(r: &mut Run) {
 }
 
 // OBJ_13F9B: firmware/lower/12002-graphics.s:2744
-pub(super) fn OBJ_13F9B(r: &mut Run) {
+pub(crate) fn OBJ_13F9B(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -8562,7 +8562,7 @@ pub(super) fn OBJ_13F9B(r: &mut Run) {
 }
 
 // OBJ_13FB0: firmware/lower/12002-graphics.s:2752
-pub(super) fn OBJ_13FB0(r: &mut Run) {
+pub(crate) fn OBJ_13FB0(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -8603,7 +8603,7 @@ pub(super) fn OBJ_13FB0(r: &mut Run) {
 }
 
 // SUB_13FDE: firmware/lower/12002-graphics.s:2771
-pub(super) fn SUB_13FDE(r: &mut Run) {
+pub(crate) fn SUB_13FDE(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -8620,7 +8620,7 @@ pub(super) fn SUB_13FDE(r: &mut Run) {
 
 // ->
 // SAVEERRN: firmware/lower/12002-graphics.s:2776
-pub(super) fn SAVEERRN(r: &mut Run) {
+pub(crate) fn SAVEERRN(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -8653,7 +8653,7 @@ pub(super) fn SAVEERRN(r: &mut Run) {
 
 // ->
 // ERR0: firmware/lower/14001-decompile.s:13
-pub(super) fn ERR0(r: &mut Run) {
+pub(crate) fn ERR0(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -8679,7 +8679,7 @@ pub(super) fn ERR0(r: &mut Run) {
 
 // -> #
 // ERRN: firmware/lower/14001-decompile.s:28
-pub(super) fn ERRN(r: &mut Run) {
+pub(crate) fn ERRN(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -8696,7 +8696,7 @@ pub(super) fn ERRN(r: &mut Run) {
 }
 
 // Unlabelled code at #14169.
-pub(super) fn code_14169(r: &mut Run) {
+pub(crate) fn code_14169(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -8742,7 +8742,7 @@ pub(super) fn code_14169(r: &mut Run) {
 
 // #ms #Hz ->
 // setbeep: firmware/lower/14001-decompile.s:146
-pub(super) fn setbeep(r: &mut Run) {
+pub(crate) fn setbeep(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -8779,7 +8779,7 @@ pub(super) fn setbeep(r: &mut Run) {
 }
 
 // SUB_141DE: firmware/lower/14001-decompile.s:161
-pub(super) fn SUB_141DE(r: &mut Run) {
+pub(crate) fn SUB_141DE(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -8796,7 +8796,7 @@ pub(super) fn SUB_141DE(r: &mut Run) {
 
 // ->
 // ERRBEEP: firmware/lower/14001-decompile.s:166
-pub(super) fn ERRBEEP(r: &mut Run) {
+pub(crate) fn ERRBEEP(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -8825,7 +8825,7 @@ pub(super) fn ERRBEEP(r: &mut Run) {
 
 // $ $' -> flag
 // $>$?: firmware/lower/14001-decompile.s:179
-pub(super) fn r____(r: &mut Run) {
+pub(crate) fn r____(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -8921,7 +8921,7 @@ pub(super) fn r____(r: &mut Run) {
 }
 
 // Unlabelled code at #1456F.
-pub(super) fn code_1456F(r: &mut Run) {
+pub(crate) fn code_1456F(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -8960,7 +8960,7 @@ pub(super) fn code_1456F(r: &mut Run) {
 }
 
 // Unlabelled code at #145C4.
-pub(super) fn code_145C4(r: &mut Run) {
+pub(crate) fn code_145C4(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -8997,7 +8997,7 @@ pub(super) fn code_145C4(r: &mut Run) {
 }
 
 // OBJ_14D1B: firmware/lower/14001-decompile.s:946
-pub(super) fn OBJ_14D1B(r: &mut Run) {
+pub(crate) fn OBJ_14D1B(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -9042,7 +9042,7 @@ pub(super) fn OBJ_14D1B(r: &mut Run) {
 }
 
 // OBJ_14E6D: firmware/lower/14001-decompile.s:1050
-pub(super) fn OBJ_14E6D(r: &mut Run) {
+pub(crate) fn OBJ_14E6D(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -9075,7 +9075,7 @@ pub(super) fn OBJ_14E6D(r: &mut Run) {
 
 // ->
 // RDUP: firmware/lower/14001-decompile.s:1069
-pub(super) fn RDUP(r: &mut Run) {
+pub(crate) fn RDUP(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -9118,7 +9118,7 @@ pub(super) fn RDUP(r: &mut Run) {
 }
 
 // SUB_14ED6: firmware/lower/14001-decompile.s:1090
-pub(super) fn SUB_14ED6(r: &mut Run) {
+pub(crate) fn SUB_14ED6(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -9143,7 +9143,7 @@ pub(super) fn SUB_14ED6(r: &mut Run) {
 }
 
 // OBJ_14EEC: firmware/lower/14001-decompile.s:1099
-pub(super) fn OBJ_14EEC(r: &mut Run) {
+pub(crate) fn OBJ_14EEC(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -9194,7 +9194,7 @@ pub(super) fn OBJ_14EEC(r: &mut Run) {
 
 // #n ->
 // RROLL: firmware/lower/14001-decompile.s:1123
-pub(super) fn RROLL(r: &mut Run) {
+pub(crate) fn RROLL(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -9265,7 +9265,7 @@ pub(super) fn RROLL(r: &mut Run) {
 }
 
 // OBJ_14F8C: firmware/lower/14001-decompile.s:1164
-pub(super) fn OBJ_14F8C(r: &mut Run) {
+pub(crate) fn OBJ_14F8C(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -9301,7 +9301,7 @@ pub(super) fn OBJ_14F8C(r: &mut Run) {
 }
 
 // OBJ_14FC3: firmware/lower/14001-decompile.s:1186
-pub(super) fn OBJ_14FC3(r: &mut Run) {
+pub(crate) fn OBJ_14FC3(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -9348,7 +9348,7 @@ pub(super) fn OBJ_14FC3(r: &mut Run) {
 }
 
 // GsstFIN: firmware/lower/14001-decompile.s:1326
-pub(super) fn GsstFIN(r: &mut Run) {
+pub(crate) fn GsstFIN(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -9368,7 +9368,7 @@ pub(super) fn GsstFIN(r: &mut Run) {
 }
 
 // Unlabelled code at #1569E.
-pub(super) fn code_1569E(r: &mut Run) {
+pub(crate) fn code_1569E(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -9415,7 +9415,7 @@ pub(super) fn code_1569E(r: &mut Run) {
 
 // ob -> $
 // stkdecomp$w: firmware/lower/14001-decompile.s:1920
-pub(super) fn stkdecomp_w(r: &mut Run) {
+pub(crate) fn stkdecomp_w(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -9433,7 +9433,7 @@ pub(super) fn stkdecomp_w(r: &mut Run) {
 }
 
 // RclOldMode: firmware/lower/14001-decompile.s:1959
-pub(super) fn RclOldMode(r: &mut Run) {
+pub(crate) fn RclOldMode(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -9451,7 +9451,7 @@ pub(super) fn RclOldMode(r: &mut Run) {
 
 // ->
 // rstfmt1: firmware/lower/14001-decompile.s:1967
-pub(super) fn rstfmt1(r: &mut Run) {
+pub(crate) fn rstfmt1(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -9488,7 +9488,7 @@ pub(super) fn rstfmt1(r: &mut Run) {
 
 // ->
 // savefmt1: firmware/lower/14001-decompile.s:1984
-pub(super) fn savefmt1(r: &mut Run) {
+pub(crate) fn savefmt1(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -9505,7 +9505,7 @@ pub(super) fn savefmt1(r: &mut Run) {
 }
 
 // TempStd: firmware/lower/14001-decompile.s:1990
-pub(super) fn TempStd(r: &mut Run) {
+pub(crate) fn TempStd(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -9543,7 +9543,7 @@ pub(super) fn TempStd(r: &mut Run) {
 }
 
 // SUB_15AD5: firmware/lower/14001-decompile.s:2011
-pub(super) fn SUB_15AD5(r: &mut Run) {
+pub(crate) fn SUB_15AD5(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -9573,7 +9573,7 @@ pub(super) fn SUB_15AD5(r: &mut Run) {
 }
 
 // SUB_15AFD: firmware/lower/14001-decompile.s:2024
-pub(super) fn SUB_15AFD(r: &mut Run) {
+pub(crate) fn SUB_15AFD(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -9595,7 +9595,7 @@ pub(super) fn SUB_15AFD(r: &mut Run) {
 
 // ob -> $
 // editdecomp$w: firmware/lower/14001-decompile.s:2045
-pub(super) fn editdecomp_w(r: &mut Run) {
+pub(crate) fn editdecomp_w(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -9612,7 +9612,7 @@ pub(super) fn editdecomp_w(r: &mut Run) {
 }
 
 // OBJ_15B3D: firmware/lower/14001-decompile.s:2052
-pub(super) fn OBJ_15B3D(r: &mut Run) {
+pub(crate) fn OBJ_15B3D(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -9638,7 +9638,7 @@ pub(super) fn OBJ_15B3D(r: &mut Run) {
 }
 
 // SUB_15C5F: firmware/lower/14001-decompile.s:2122
-pub(super) fn SUB_15C5F(r: &mut Run) {
+pub(crate) fn SUB_15C5F(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -9718,7 +9718,7 @@ pub(super) fn SUB_15C5F(r: &mut Run) {
 }
 
 // OBJ_15FCF: firmware/lower/14001-decompile.s:2353
-pub(super) fn OBJ_15FCF(r: &mut Run) {
+pub(crate) fn OBJ_15FCF(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -9810,7 +9810,7 @@ pub(super) fn OBJ_15FCF(r: &mut Run) {
 }
 
 // addtics: firmware/lower/16000-strings.s:43
-pub(super) fn addtics(r: &mut Run) {
+pub(crate) fn addtics(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -9827,7 +9827,7 @@ pub(super) fn addtics(r: &mut Run) {
 }
 
 // add2_(st): firmware/lower/16000-strings.s:49
-pub(super) fn add2__st_(r: &mut Run) {
+pub(crate) fn add2__st_(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -9887,7 +9887,7 @@ pub(super) fn add2__st_(r: &mut Run) {
 }
 
 // ->str2(nm): firmware/lower/16000-strings.s:88
-pub(super) fn __str2_nm_(r: &mut Run) {
+pub(crate) fn __str2_nm_(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -9914,7 +9914,7 @@ pub(super) fn __str2_nm_(r: &mut Run) {
 }
 
 // ->str1(r): firmware/lower/16000-strings.s:204
-pub(super) fn __str1_r_(r: &mut Run) {
+pub(crate) fn __str1_r_(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -9932,7 +9932,7 @@ pub(super) fn __str1_r_(r: &mut Run) {
 
 // % -> $
 // a%>$: firmware/lower/16000-strings.s:212
-pub(super) fn a___(r: &mut Run) {
+pub(crate) fn a___(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -9971,7 +9971,7 @@ pub(super) fn a___(r: &mut Run) {
 }
 
 // SUB_162EA: firmware/lower/16000-strings.s:228
-pub(super) fn SUB_162EA(r: &mut Run) {
+pub(crate) fn SUB_162EA(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -9988,7 +9988,7 @@ pub(super) fn SUB_162EA(r: &mut Run) {
 }
 
 // SUB_162F4: firmware/lower/16000-strings.s:233
-pub(super) fn SUB_162F4(r: &mut Run) {
+pub(crate) fn SUB_162F4(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -10039,7 +10039,7 @@ pub(super) fn SUB_162F4(r: &mut Run) {
 }
 
 // St10Gb: firmware/lower/16000-strings.s:258
-pub(super) fn St10Gb(r: &mut Run) {
+pub(crate) fn St10Gb(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -10064,7 +10064,7 @@ pub(super) fn St10Gb(r: &mut Run) {
 }
 
 // SUB_16353: firmware/lower/16000-strings.s:267
-pub(super) fn SUB_16353(r: &mut Run) {
+pub(crate) fn SUB_16353(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -10573,7 +10573,7 @@ pub(super) fn SUB_16353(r: &mut Run) {
 }
 
 // SUB_16656: firmware/lower/16000-strings.s:573
-pub(super) fn SUB_16656(r: &mut Run) {
+pub(crate) fn SUB_16656(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -10604,7 +10604,7 @@ pub(super) fn SUB_16656(r: &mut Run) {
 
 // Shrinks a strobj R0.A=->$ D0=end of $ Uses A.W B.A C.W D.10 D0 D1
 // Shrink$: firmware/lower/16000-strings.s:587
-pub(super) fn Shrink_(r: &mut Run) {
+pub(crate) fn Shrink_(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -10623,7 +10623,7 @@ pub(super) fn Shrink_(r: &mut Run) {
 
 // R1=R0+5 <REF>Clean$
 // Clean$R0: firmware/lower/16000-strings.s:593
-pub(super) fn Clean_R0(r: &mut Run) {
+pub(crate) fn Clean_R0(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -10643,7 +10643,7 @@ pub(super) fn Clean_R0(r: &mut Run) {
 
 // Shrink strobj in top of TEMPOB R1=addr of length field A.A=new end address Uses A.W B.A C.W D.A D0 D1
 // Clean$: firmware/lower/16000-strings.s:600
-pub(super) fn Clean_(r: &mut Run) {
+pub(crate) fn Clean_(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -10691,7 +10691,7 @@ pub(super) fn Clean_(r: &mut Run) {
 
 // # ->
 // DOFIX: firmware/lower/16000-strings.s:633
-pub(super) fn DOFIX(r: &mut Run) {
+pub(crate) fn DOFIX(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -10714,7 +10714,7 @@ pub(super) fn DOFIX(r: &mut Run) {
 
 // # ->
 // DOSCI: firmware/lower/16000-strings.s:642
-pub(super) fn DOSCI(r: &mut Run) {
+pub(crate) fn DOSCI(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -10737,7 +10737,7 @@ pub(super) fn DOSCI(r: &mut Run) {
 
 // # ->
 // DOENG: firmware/lower/16000-strings.s:651
-pub(super) fn DOENG(r: &mut Run) {
+pub(crate) fn DOENG(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -10756,7 +10756,7 @@ pub(super) fn DOENG(r: &mut Run) {
 
 // ->
 // DOSTD: firmware/lower/16000-strings.s:659
-pub(super) fn DOSTD(r: &mut Run) {
+pub(crate) fn DOSTD(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -10808,7 +10808,7 @@ pub(super) fn DOSTD(r: &mut Run) {
 }
 
 // SUB_1676A: firmware/lower/16000-strings.s:690
-pub(super) fn SUB_1676A(r: &mut Run) {
+pub(crate) fn SUB_1676A(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -10881,7 +10881,7 @@ pub(super) fn SUB_1676A(r: &mut Run) {
 
 // # -> "#:\ "
 // #:>$: firmware/lower/16000-strings.s:740
-pub(super) fn r_____167DD(r: &mut Run) {
+pub(crate) fn r_____167DD(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -10899,7 +10899,7 @@ pub(super) fn r_____167DD(r: &mut Run) {
 
 // # -> $
 // #>$: firmware/lower/16000-strings.s:748
-pub(super) fn r____167E9(r: &mut Run) {
+pub(crate) fn r____167E9(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -10967,7 +10967,7 @@ pub(super) fn r____167E9(r: &mut Run) {
 }
 
 // SUB_16837: firmware/lower/16000-strings.s:781
-pub(super) fn SUB_16837(r: &mut Run) {
+pub(crate) fn SUB_16837(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -10999,7 +10999,7 @@ pub(super) fn SUB_16837(r: &mut Run) {
 }
 
 // s:str(st,s): firmware/lower/16000-strings.s:793
-pub(super) fn s_str_st_s_(r: &mut Run) {
+pub(crate) fn s_str_st_s_(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -11019,7 +11019,7 @@ pub(super) fn s_str_st_s_(r: &mut Run) {
 }
 
 // stackitw: firmware/lower/16000-strings.s:799
-pub(super) fn stackitw(r: &mut Run) {
+pub(crate) fn stackitw(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -11187,7 +11187,7 @@ pub(super) fn stackitw(r: &mut Run) {
 
 // # ->
 // !DcompWidth: firmware/lower/16000-strings.s:1881
-pub(super) fn _DcompWidth(r: &mut Run) {
+pub(crate) fn _DcompWidth(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -11214,7 +11214,7 @@ pub(super) fn _DcompWidth(r: &mut Run) {
 
 // -> #
 // DcompWidth@: firmware/lower/16000-strings.s:1895
-pub(super) fn DcompWidth_(r: &mut Run) {
+pub(crate) fn DcompWidth_(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -11248,7 +11248,7 @@ pub(super) fn DcompWidth_(r: &mut Run) {
 }
 
 // OBJ_179AC: firmware/lower/16000-strings.s:1910
-pub(super) fn OBJ_179AC(r: &mut Run) {
+pub(crate) fn OBJ_179AC(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -11273,7 +11273,7 @@ pub(super) fn OBJ_179AC(r: &mut Run) {
 }
 
 // NEXTRRPOB: firmware/lower/16000-strings.s:1924
-pub(super) fn NEXTRRPOB(r: &mut Run) {
+pub(crate) fn NEXTRRPOB(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -11299,7 +11299,7 @@ pub(super) fn NEXTRRPOB(r: &mut Run) {
 }
 
 // addrTEMPTOP: firmware/lower/16000-strings.s:1931
-pub(super) fn addrTEMPTOP(r: &mut Run) {
+pub(crate) fn addrTEMPTOP(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -11452,7 +11452,7 @@ pub(super) fn addrTEMPTOP(r: &mut Run) {
 }
 
 // Unlabelled code at #17AF4.
-pub(super) fn code_17AF4(r: &mut Run) {
+pub(crate) fn code_17AF4(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -11544,7 +11544,7 @@ pub(super) fn code_17AF4(r: &mut Run) {
 }
 
 // OBJ_17C3F: firmware/lower/16000-strings.s:2118
-pub(super) fn OBJ_17C3F(r: &mut Run) {
+pub(crate) fn OBJ_17C3F(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -11566,7 +11566,7 @@ pub(super) fn OBJ_17C3F(r: &mut Run) {
 }
 
 // OBJ_17C55: firmware/lower/16000-strings.s:2127
-pub(super) fn OBJ_17C55(r: &mut Run) {
+pub(crate) fn OBJ_17C55(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -11585,7 +11585,7 @@ pub(super) fn OBJ_17C55(r: &mut Run) {
 }
 
 // Y/N-Menu: firmware/lower/16000-strings.s:2278
-pub(super) fn Y_N_Menu(r: &mut Run) {
+pub(crate) fn Y_N_Menu(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -11615,7 +11615,7 @@ pub(super) fn Y_N_Menu(r: &mut Run) {
 }
 
 // Unlabelled code at #17F63.
-pub(super) fn code_17F63(r: &mut Run) {
+pub(crate) fn code_17F63(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -11638,7 +11638,7 @@ pub(super) fn code_17F63(r: &mut Run) {
 }
 
 // L_181FA: firmware/lower/1802E-dispatch.s:116
-pub(super) fn L_181FA(r: &mut Run) {
+pub(crate) fn L_181FA(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -11691,7 +11691,7 @@ pub(super) fn L_181FA(r: &mut Run) {
 }
 
 // NoMemComLine?: firmware/lower/1802E-dispatch.s:140
-pub(super) fn NoMemComLine_(r: &mut Run) {
+pub(crate) fn NoMemComLine_(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -11715,7 +11715,7 @@ pub(super) fn NoMemComLine_(r: &mut Run) {
 }
 
 // NoLastStack?: firmware/lower/1802E-dispatch.s:151
-pub(super) fn NoLastStack_(r: &mut Run) {
+pub(crate) fn NoLastStack_(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -11745,7 +11745,7 @@ pub(super) fn NoLastStack_(r: &mut Run) {
 }
 
 // NoLastArg?: firmware/lower/1802E-dispatch.s:165
-pub(super) fn NoLastArg_(r: &mut Run) {
+pub(crate) fn NoLastArg_(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -11763,7 +11763,7 @@ pub(super) fn NoLastArg_(r: &mut Run) {
 }
 
 // OBJ_18295: firmware/lower/1802E-dispatch.s:172
-pub(super) fn OBJ_18295(r: &mut Run) {
+pub(crate) fn OBJ_18295(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -11836,7 +11836,7 @@ pub(super) fn OBJ_18295(r: &mut Run) {
 }
 
 // DropSysObs: firmware/lower/1802E-dispatch.s:215
-pub(super) fn DropSysObs(r: &mut Run) {
+pub(crate) fn DropSysObs(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -11858,7 +11858,7 @@ pub(super) fn DropSysObs(r: &mut Run) {
 }
 
 // SUB_1831B: firmware/lower/1802E-dispatch.s:225
-pub(super) fn SUB_1831B(r: &mut Run) {
+pub(crate) fn SUB_1831B(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -11880,7 +11880,7 @@ pub(super) fn SUB_1831B(r: &mut Run) {
 }
 
 // OBJ_18338: firmware/lower/1802E-dispatch.s:235
-pub(super) fn OBJ_18338(r: &mut Run) {
+pub(crate) fn OBJ_18338(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -11909,7 +11909,7 @@ pub(super) fn OBJ_18338(r: &mut Run) {
 }
 
 // DelStack: firmware/lower/1802E-dispatch.s:246
-pub(super) fn DelStack(r: &mut Run) {
+pub(crate) fn DelStack(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -11929,7 +11929,7 @@ pub(super) fn DelStack(r: &mut Run) {
 }
 
 // SUB_18362: firmware/lower/1802E-dispatch.s:252
-pub(super) fn SUB_18362(r: &mut Run) {
+pub(crate) fn SUB_18362(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -11964,7 +11964,7 @@ pub(super) fn SUB_18362(r: &mut Run) {
 }
 
 // OBJ_183EB: firmware/lower/1802E-dispatch.s:288
-pub(super) fn OBJ_183EB(r: &mut Run) {
+pub(crate) fn OBJ_183EB(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -11987,7 +11987,7 @@ pub(super) fn OBJ_183EB(r: &mut Run) {
 }
 
 // OBJ_18404: firmware/lower/1802E-dispatch.s:298
-pub(super) fn OBJ_18404(r: &mut Run) {
+pub(crate) fn OBJ_18404(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -12065,7 +12065,7 @@ pub(super) fn OBJ_18404(r: &mut Run) {
 
 // ob -> ob T -> F
 // CkNonNull: firmware/lower/1802E-dispatch.s:484
-pub(super) fn CkNonNull(r: &mut Run) {
+pub(crate) fn CkNonNull(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -12096,7 +12096,7 @@ pub(super) fn CkNonNull(r: &mut Run) {
 }
 
 // OBJ_187AB: firmware/lower/1802E-dispatch.s:581
-pub(super) fn OBJ_187AB(r: &mut Run) {
+pub(crate) fn OBJ_187AB(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -12144,7 +12144,7 @@ pub(super) fn OBJ_187AB(r: &mut Run) {
 }
 
 // OBJ_18802: firmware/lower/1802E-dispatch.s:612
-pub(super) fn OBJ_18802(r: &mut Run) {
+pub(crate) fn OBJ_18802(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -12180,7 +12180,7 @@ pub(super) fn OBJ_18802(r: &mut Run) {
 }
 
 // SUB_1882C: firmware/lower/1802E-dispatch.s:628
-pub(super) fn SUB_1882C(r: &mut Run) {
+pub(crate) fn SUB_1882C(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -12213,7 +12213,7 @@ pub(super) fn SUB_1882C(r: &mut Run) {
 
 // ->
 // 0LASTOWDOB!: firmware/lower/1802E-dispatch.s:638
-pub(super) fn r0LASTOWDOB_(r: &mut Run) {
+pub(crate) fn r0LASTOWDOB_(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -12241,7 +12241,7 @@ pub(super) fn r0LASTOWDOB_(r: &mut Run) {
 
 // $ $' -> $''   ???
 // !AND$: firmware/lower/1802E-dispatch.s:695
-pub(super) fn _AND_(r: &mut Run) {
+pub(crate) fn _AND_(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -12260,7 +12260,7 @@ pub(super) fn _AND_(r: &mut Run) {
 
 // $ $' -> $''   ???
 // !OR$: firmware/lower/1802E-dispatch.s:704
-pub(super) fn _OR_(r: &mut Run) {
+pub(crate) fn _OR_(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -12279,7 +12279,7 @@ pub(super) fn _OR_(r: &mut Run) {
 
 // $ $' -> $''   ???
 // !XOR$: firmware/lower/1802E-dispatch.s:712
-pub(super) fn _XOR_(r: &mut Run) {
+pub(crate) fn _XOR_(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -12350,7 +12350,7 @@ pub(super) fn _XOR_(r: &mut Run) {
 
 // $ $' -> $''   ???
 // !NOT$: firmware/lower/1802E-dispatch.s:747
-pub(super) fn _NOT_(r: &mut Run) {
+pub(crate) fn _NOT_(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -12396,7 +12396,7 @@ pub(super) fn _NOT_(r: &mut Run) {
 }
 
 // SUB_18997: firmware/lower/1802E-dispatch.s:769
-pub(super) fn SUB_18997(r: &mut Run) {
+pub(crate) fn SUB_18997(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -12428,7 +12428,7 @@ pub(super) fn SUB_18997(r: &mut Run) {
 }
 
 // SUB_189C6: firmware/lower/1802E-dispatch.s:786
-pub(super) fn SUB_189C6(r: &mut Run) {
+pub(crate) fn SUB_189C6(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -12458,7 +12458,7 @@ pub(super) fn SUB_189C6(r: &mut Run) {
 
 // ->
 // CK0NOLASTWD: firmware/lower/1802E-dispatch.s:816
-pub(super) fn CK0NOLASTWD(r: &mut Run) {
+pub(crate) fn CK0NOLASTWD(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -12475,7 +12475,7 @@ pub(super) fn CK0NOLASTWD(r: &mut Run) {
 
 // ->
 // CK0: firmware/lower/1802E-dispatch.s:823
-pub(super) fn CK0(r: &mut Run) {
+pub(crate) fn CK0(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -12512,7 +12512,7 @@ pub(super) fn CK0(r: &mut Run) {
 
 // ob1...ob3 -> ob1...ob3
 // CK3: firmware/lower/1802E-dispatch.s:844
-pub(super) fn CK3(r: &mut Run) {
+pub(crate) fn CK3(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -12533,7 +12533,7 @@ pub(super) fn CK3(r: &mut Run) {
 
 // ob1...ob3 -> ob1...ob3
 // CK3NOLASTWD: firmware/lower/1802E-dispatch.s:851
-pub(super) fn CK3NOLASTWD(r: &mut Run) {
+pub(crate) fn CK3NOLASTWD(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -12553,7 +12553,7 @@ pub(super) fn CK3NOLASTWD(r: &mut Run) {
 }
 
 // SUB_18A75: firmware/lower/1802E-dispatch.s:858
-pub(super) fn SUB_18A75(r: &mut Run) {
+pub(crate) fn SUB_18A75(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -12573,7 +12573,7 @@ pub(super) fn SUB_18A75(r: &mut Run) {
 
 // ob1 ob2 -> ob1 ob2
 // CK2: firmware/lower/1802E-dispatch.s:866
-pub(super) fn CK2(r: &mut Run) {
+pub(crate) fn CK2(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -12594,7 +12594,7 @@ pub(super) fn CK2(r: &mut Run) {
 
 // ob1 ob2 -> ob1 ob2
 // CK2NOLASTWD: firmware/lower/1802E-dispatch.s:873
-pub(super) fn CK2NOLASTWD(r: &mut Run) {
+pub(crate) fn CK2NOLASTWD(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -12614,7 +12614,7 @@ pub(super) fn CK2NOLASTWD(r: &mut Run) {
 }
 
 // SUB_18A9A: firmware/lower/1802E-dispatch.s:880
-pub(super) fn SUB_18A9A(r: &mut Run) {
+pub(crate) fn SUB_18A9A(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -12634,7 +12634,7 @@ pub(super) fn SUB_18A9A(r: &mut Run) {
 
 // ob -> ob
 // CK1: firmware/lower/1802E-dispatch.s:888
-pub(super) fn CK1(r: &mut Run) {
+pub(crate) fn CK1(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -12655,7 +12655,7 @@ pub(super) fn CK1(r: &mut Run) {
 
 // ob -> ob
 // CK1NOLASTWD: firmware/lower/1802E-dispatch.s:895
-pub(super) fn CK1NOLASTWD(r: &mut Run) {
+pub(crate) fn CK1NOLASTWD(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -12675,7 +12675,7 @@ pub(super) fn CK1NOLASTWD(r: &mut Run) {
 }
 
 // SUB_18ABF: firmware/lower/1802E-dispatch.s:902
-pub(super) fn SUB_18ABF(r: &mut Run) {
+pub(crate) fn SUB_18ABF(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -12763,7 +12763,7 @@ pub(super) fn SUB_18ABF(r: &mut Run) {
 
 // ob1...ob5 -> ob1...ob5
 // CK5: firmware/lower/1802E-dispatch.s:958
-pub(super) fn CK5(r: &mut Run) {
+pub(crate) fn CK5(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -12784,7 +12784,7 @@ pub(super) fn CK5(r: &mut Run) {
 
 // ob1...ob5 -> ob1...ob5
 // CK5NOLASTWD: firmware/lower/1802E-dispatch.s:964
-pub(super) fn CK5NOLASTWD(r: &mut Run) {
+pub(crate) fn CK5NOLASTWD(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -12804,7 +12804,7 @@ pub(super) fn CK5NOLASTWD(r: &mut Run) {
 }
 
 // SUB_18B87: firmware/lower/1802E-dispatch.s:971
-pub(super) fn SUB_18B87(r: &mut Run) {
+pub(crate) fn SUB_18B87(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -12824,7 +12824,7 @@ pub(super) fn SUB_18B87(r: &mut Run) {
 
 // ob1...ob5 -> ob1...ob5
 // CK4: firmware/lower/1802E-dispatch.s:978
-pub(super) fn CK4(r: &mut Run) {
+pub(crate) fn CK4(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -12845,7 +12845,7 @@ pub(super) fn CK4(r: &mut Run) {
 
 // ob1...ob4 -> ob1...ob4
 // CK4NOLASTWD: firmware/lower/1802E-dispatch.s:985
-pub(super) fn CK4NOLASTWD(r: &mut Run) {
+pub(crate) fn CK4NOLASTWD(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -12865,7 +12865,7 @@ pub(super) fn CK4NOLASTWD(r: &mut Run) {
 }
 
 // SUB_18BAC: firmware/lower/1802E-dispatch.s:992
-pub(super) fn SUB_18BAC(r: &mut Run) {
+pub(crate) fn SUB_18BAC(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -12933,7 +12933,7 @@ pub(super) fn SUB_18BAC(r: &mut Run) {
 
 // ob1...obn %n ->  ob1..obn #n
 // CKN: firmware/lower/1802E-dispatch.s:1037
-pub(super) fn CKN(r: &mut Run) {
+pub(crate) fn CKN(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -12955,7 +12955,7 @@ pub(super) fn CKN(r: &mut Run) {
 }
 
 // SUB_18C77: firmware/lower/1802E-dispatch.s:1060
-pub(super) fn SUB_18C77(r: &mut Run) {
+pub(crate) fn SUB_18C77(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -12979,7 +12979,7 @@ pub(super) fn SUB_18C77(r: &mut Run) {
 
 // Error 204h
 // SETNONEXTERR: firmware/lower/1802E-dispatch.s:1072
-pub(super) fn SETNONEXTERR(r: &mut Run) {
+pub(crate) fn SETNONEXTERR(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -12997,7 +12997,7 @@ pub(super) fn SETNONEXTERR(r: &mut Run) {
 
 // Error 203h
 // SETSIZEERR: firmware/lower/1802E-dispatch.s:1082
-pub(super) fn SETSIZEERR(r: &mut Run) {
+pub(crate) fn SETSIZEERR(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -13015,7 +13015,7 @@ pub(super) fn SETSIZEERR(r: &mut Run) {
 
 // Error 202h
 // SETTYPEERR: firmware/lower/1802E-dispatch.s:1093
-pub(super) fn SETTYPEERR(r: &mut Run) {
+pub(crate) fn SETTYPEERR(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -13033,7 +13033,7 @@ pub(super) fn SETTYPEERR(r: &mut Run) {
 
 // Error 201h
 // SETSTACKERR: firmware/lower/1802E-dispatch.s:1103
-pub(super) fn SETSTACKERR(r: &mut Run) {
+pub(crate) fn SETSTACKERR(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -13056,7 +13056,7 @@ pub(super) fn SETSTACKERR(r: &mut Run) {
 
 // % -> #
 // %ABSCOERCE: firmware/lower/1802E-dispatch.s:1115
-pub(super) fn _ABSCOERCE(r: &mut Run) {
+pub(crate) fn _ABSCOERCE(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -13078,7 +13078,7 @@ pub(super) fn _ABSCOERCE(r: &mut Run) {
 
 // % -> #
 // COERCE: firmware/lower/1802E-dispatch.s:1123
-pub(super) fn COERCE(r: &mut Run) {
+pub(crate) fn COERCE(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -13233,7 +13233,7 @@ pub(super) fn COERCE(r: &mut Run) {
 
 // # -> %
 // UNCOERCE: firmware/lower/1802E-dispatch.s:1212
-pub(super) fn UNCOERCE(r: &mut Run) {
+pub(crate) fn UNCOERCE(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -13303,7 +13303,7 @@ pub(super) fn UNCOERCE(r: &mut Run) {
 
 // symb -> :: symb <ob1> <rest> ; ob -> :: ob ;
 // DNOTSYMB?SEMI: firmware/lower/1802E-dispatch.s:1258
-pub(super) fn DNOTSYMB_SEMI(r: &mut Run) {
+pub(crate) fn DNOTSYMB_SEMI(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -13340,7 +13340,7 @@ pub(super) fn DNOTSYMB_SEMI(r: &mut Run) {
 }
 
 // OBJ_18E7E: firmware/lower/1802E-dispatch.s:1280
-pub(super) fn OBJ_18E7E(r: &mut Run) {
+pub(crate) fn OBJ_18E7E(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -13378,7 +13378,7 @@ pub(super) fn OBJ_18E7E(r: &mut Run) {
 
 // comp ->
 // COMPEVAL: firmware/lower/1802E-dispatch.s:1302
-pub(super) fn COMPEVAL(r: &mut Run) {
+pub(crate) fn COMPEVAL(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -13398,7 +13398,7 @@ pub(super) fn COMPEVAL(r: &mut Run) {
 
 // ->
 // CK1&Dispatch: firmware/lower/1802E-dispatch.s:1311
-pub(super) fn CK1_Dispatch(r: &mut Run) {
+pub(crate) fn CK1_Dispatch(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -13423,7 +13423,7 @@ pub(super) fn CK1_Dispatch(r: &mut Run) {
 
 // ->
 // CK2&Dispatch: firmware/lower/1802E-dispatch.s:1319
-pub(super) fn CK2_Dispatch(r: &mut Run) {
+pub(crate) fn CK2_Dispatch(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -13448,7 +13448,7 @@ pub(super) fn CK2_Dispatch(r: &mut Run) {
 
 // ->
 // CK3&Dispatch: firmware/lower/1802E-dispatch.s:1327
-pub(super) fn CK3_Dispatch(r: &mut Run) {
+pub(crate) fn CK3_Dispatch(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -13473,7 +13473,7 @@ pub(super) fn CK3_Dispatch(r: &mut Run) {
 
 // ->
 // CK4&Dispatch: firmware/lower/1802E-dispatch.s:1335
-pub(super) fn CK4_Dispatch(r: &mut Run) {
+pub(crate) fn CK4_Dispatch(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -13498,7 +13498,7 @@ pub(super) fn CK4_Dispatch(r: &mut Run) {
 
 // ->
 // CK5&Dispatch: firmware/lower/1802E-dispatch.s:1343
-pub(super) fn CK5_Dispatch(r: &mut Run) {
+pub(crate) fn CK5_Dispatch(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -13522,7 +13522,7 @@ pub(super) fn CK5_Dispatch(r: &mut Run) {
 }
 
 // L_18F3F: firmware/lower/1802E-dispatch.s:1354
-pub(super) fn L_18F3F(r: &mut Run) {
+pub(crate) fn L_18F3F(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -13563,7 +13563,7 @@ pub(super) fn L_18F3F(r: &mut Run) {
 }
 
 // L_18F83: firmware/lower/1802E-dispatch.s:1382
-pub(super) fn L_18F83(r: &mut Run) {
+pub(crate) fn L_18F83(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -13593,7 +13593,7 @@ pub(super) fn L_18F83(r: &mut Run) {
 
 // ->
 // CK&DISPATCH0: firmware/lower/1802E-dispatch.s:1396
-pub(super) fn CK_DISPATCH0(r: &mut Run) {
+pub(crate) fn CK_DISPATCH0(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -13611,7 +13611,7 @@ pub(super) fn CK_DISPATCH0(r: &mut Run) {
 
 // ->
 // CK&DISPATCH2: firmware/lower/1802E-dispatch.s:1402
-pub(super) fn CK_DISPATCH2(r: &mut Run) {
+pub(crate) fn CK_DISPATCH2(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -13627,7 +13627,7 @@ pub(super) fn CK_DISPATCH2(r: &mut Run) {
 }
 
 // L_18FB7: firmware/lower/1802E-dispatch.s:1410
-pub(super) fn L_18FB7(r: &mut Run) {
+pub(crate) fn L_18FB7(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -13853,7 +13853,7 @@ pub(super) fn L_18FB7(r: &mut Run) {
 
 // # #' -> #*#'
 // #*OVF: firmware/lower/1802E-dispatch.s:1588
-pub(super) fn __OVF(r: &mut Run) {
+pub(crate) fn __OVF(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -13918,7 +13918,7 @@ pub(super) fn __OVF(r: &mut Run) {
 
 // ->
 // CKNFLOATS: firmware/lower/1802E-dispatch.s:1619
-pub(super) fn CKNFLOATS(r: &mut Run) {
+pub(crate) fn CKNFLOATS(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -14010,7 +14010,7 @@ pub(super) fn CKNFLOATS(r: &mut Run) {
 
 // F%..F% #n [%F] -> [F%]'
 // >ARRY: firmware/lower/1802E-dispatch.s:1665
-pub(super) fn _ARRY(r: &mut Run) {
+pub(crate) fn _ARRY(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -14119,7 +14119,7 @@ pub(super) fn _ARRY(r: &mut Run) {
 
 // ob -> ob flag
 // NOTINHARDROM?: firmware/lower/1802E-dispatch.s:1738
-pub(super) fn NOTINHARDROM_(r: &mut Run) {
+pub(crate) fn NOTINHARDROM_(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -14145,7 +14145,7 @@ pub(super) fn NOTINHARDROM_(r: &mut Run) {
 }
 
 // Unlabelled code at #195F4.
-pub(super) fn code_195F4(r: &mut Run) {
+pub(crate) fn code_195F4(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -14163,7 +14163,7 @@ pub(super) fn code_195F4(r: &mut Run) {
 }
 
 // Unlabelled code at #19614.
-pub(super) fn code_19614(r: &mut Run) {
+pub(crate) fn code_19614(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -14181,7 +14181,7 @@ pub(super) fn code_19614(r: &mut Run) {
 }
 
 // Unlabelled code at #19634.
-pub(super) fn code_19634(r: &mut Run) {
+pub(crate) fn code_19634(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -14199,7 +14199,7 @@ pub(super) fn code_19634(r: &mut Run) {
 }
 
 // Unlabelled code at #19654.
-pub(super) fn code_19654(r: &mut Run) {
+pub(crate) fn code_19654(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -14217,7 +14217,7 @@ pub(super) fn code_19654(r: &mut Run) {
 }
 
 // Unlabelled code at #19674.
-pub(super) fn code_19674(r: &mut Run) {
+pub(crate) fn code_19674(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -14235,7 +14235,7 @@ pub(super) fn code_19674(r: &mut Run) {
 }
 
 // Unlabelled code at #19694.
-pub(super) fn code_19694(r: &mut Run) {
+pub(crate) fn code_19694(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -14253,7 +14253,7 @@ pub(super) fn code_19694(r: &mut Run) {
 }
 
 // Unlabelled code at #196B4.
-pub(super) fn code_196B4(r: &mut Run) {
+pub(crate) fn code_196B4(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -14271,7 +14271,7 @@ pub(super) fn code_196B4(r: &mut Run) {
 }
 
 // Unlabelled code at #196D4.
-pub(super) fn code_196D4(r: &mut Run) {
+pub(crate) fn code_196D4(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -14289,7 +14289,7 @@ pub(super) fn code_196D4(r: &mut Run) {
 }
 
 // Unlabelled code at #19748.
-pub(super) fn code_19748(r: &mut Run) {
+pub(crate) fn code_19748(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -14308,7 +14308,7 @@ pub(super) fn code_19748(r: &mut Run) {
 
 // ob -> ob flag
 // INHARDROM?: firmware/lower/1A002-user-arith.s:217
-pub(super) fn INHARDROM_(r: &mut Run) {
+pub(crate) fn INHARDROM_(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -14334,7 +14334,7 @@ pub(super) fn INHARDROM_(r: &mut Run) {
 }
 
 // syseval(s): firmware/lower/1A002-user-arith.s:432
-pub(super) fn syseval_s_(r: &mut Run) {
+pub(crate) fn syseval_s_(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -14357,7 +14357,7 @@ pub(super) fn syseval_s_(r: &mut Run) {
 }
 
 // lastarg: firmware/lower/1A002-user-arith.s:515
-pub(super) fn lastarg(r: &mut Run) {
+pub(crate) fn lastarg(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -14499,7 +14499,7 @@ pub(super) fn lastarg(r: &mut Run) {
 
 // hxs ->
 // wait: firmware/lower/1A002-user-arith.s:657
-pub(super) fn wait(r: &mut Run) {
+pub(crate) fn wait(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -14555,7 +14555,7 @@ pub(super) fn wait(r: &mut Run) {
 
 // -> hxs
 // RCLSYSF: firmware/lower/1C017-user-commands.s:577
-pub(super) fn RCLSYSF(r: &mut Run) {
+pub(crate) fn RCLSYSF(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -14577,7 +14577,7 @@ pub(super) fn RCLSYSF(r: &mut Run) {
 
 // -> hxs
 // RCLUSERF: firmware/lower/1C017-user-commands.s:586
-pub(super) fn RCLUSERF(r: &mut Run) {
+pub(crate) fn RCLUSERF(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -14611,7 +14611,7 @@ pub(super) fn RCLUSERF(r: &mut Run) {
 
 // hxs ->
 // STOUSERF: firmware/lower/1C017-user-commands.s:645
-pub(super) fn STOUSERF(r: &mut Run) {
+pub(crate) fn STOUSERF(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -14642,7 +14642,7 @@ pub(super) fn STOUSERF(r: &mut Run) {
 
 // hxs ->
 // STOSYSF: firmware/lower/1C017-user-commands.s:666
-pub(super) fn STOSYSF(r: &mut Run) {
+pub(crate) fn STOSYSF(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -14682,7 +14682,7 @@ pub(super) fn STOSYSF(r: &mut Run) {
 }
 
 // ChkExpr1Name: firmware/lower/1F01F-user-commands.s:26
-pub(super) fn ChkExpr1Name(r: &mut Run) {
+pub(crate) fn ChkExpr1Name(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -14762,7 +14762,7 @@ pub(super) fn ChkExpr1Name(r: &mut Run) {
 }
 
 // Unlabelled code at #1F639.
-pub(super) fn code_1F639(r: &mut Run) {
+pub(crate) fn code_1F639(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -14780,7 +14780,7 @@ pub(super) fn code_1F639(r: &mut Run) {
 }
 
 // Unlabelled code at #1F9BD.
-pub(super) fn code_1F9BD(r: &mut Run) {
+pub(crate) fn code_1F9BD(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -14798,7 +14798,7 @@ pub(super) fn code_1F9BD(r: &mut Run) {
 }
 
 // Unlabelled code at #1F9E2.
-pub(super) fn code_1F9E2(r: &mut Run) {
+pub(crate) fn code_1F9E2(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -14816,7 +14816,7 @@ pub(super) fn code_1F9E2(r: &mut Run) {
 }
 
 // Unlabelled code at #1FA52.
-pub(super) fn code_1FA52(r: &mut Run) {
+pub(crate) fn code_1FA52(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -14834,7 +14834,7 @@ pub(super) fn code_1FA52(r: &mut Run) {
 }
 
 // Unlabelled code at #1FA86.
-pub(super) fn code_1FA86(r: &mut Run) {
+pub(crate) fn code_1FA86(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -14852,7 +14852,7 @@ pub(super) fn code_1FA86(r: &mut Run) {
 }
 
 // Unlabelled code at #1FAE4.
-pub(super) fn code_1FAE4(r: &mut Run) {
+pub(crate) fn code_1FAE4(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -14873,7 +14873,7 @@ pub(super) fn code_1FAE4(r: &mut Run) {
 }
 
 // Unlabelled code at #1FB56.
-pub(super) fn code_1FB56(r: &mut Run) {
+pub(crate) fn code_1FB56(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -14894,7 +14894,7 @@ pub(super) fn code_1FB56(r: &mut Run) {
 }
 
 // Unlabelled code at #1FB80.
-pub(super) fn code_1FB80(r: &mut Run) {
+pub(crate) fn code_1FB80(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -14911,369 +14911,369 @@ pub(super) fn code_1FB80(r: &mut Run) {
     }
 }
 
-pub const ROUTINES: &[(u32, u32, Block)] = &[
-    (0x10141, 0x10193, OBJ_1013C),
-    (0x10B21, 0x10B5D, OBJ_10B1C),
-    (0x10CDB, 0x10D77, SUB_10CDB),
-    (0x10E13, 0x10E2D, OBJ_10E0E),
-    (0x10EEF, 0x10EF9, INVUNITERR),
-    (0x10EFF, 0x10F0E, CONSTUNITERR),
-    (0x10F2D, 0x10F3F, L_10F2D),
-    (0x10F40, 0x10F53, GPErrjmpC),
-    (0x10F59, 0x10F63, NULLCHARERR),
-    (0x10F69, 0x10F73, INVFUNCERR),
-    (0x10F79, 0x10F7F, NOEQERR),
-    (0x10F80, 0x10F85, ErrjmpC),
-    (0x10F8B, 0x10F95, SYNTAXERR),
-    (0x10F9B, 0x10FA5, SETINVPPAR),
-    (0x10FAB, 0x10FB5, SETNONERAL),
-    (0x10FBB, 0x10FC5, SETISOLERR),
-    (0x10FCB, 0x10FD5, NOHALTERR),
-    (0x10FDB, 0x10FE5, kill),
-    (0x10FEB, 0x10FF5, LASTSTKERR),
-    (0x10FFB, 0x11005, LASTCMDERR),
-    (0x1100B, 0x11015, ARGNUMERR),
-    (0x1101B, 0x11025, SETCIRCERR),
-    (0x1102B, 0x11035, DIRARGERR),
-    (0x1103B, 0x11045, EMPTYDIRERR),
-    (0x1104B, 0x11055, INVDEFERR),
-    (0x1105B, 0x11065, MISLIBERR),
-    (0x1106B, 0x11075, IDCONFERR),
-    (0x1107B, 0x11085, cont),
-    (0x110F4, 0x11155, OBJ_110EF),
-    (0x11156, 0x11185, SUB_11156),
-    (0x11186, 0x111D5, SUB_11186),
-    (0x111D6, 0x111DC, SUB_111D6),
-    (0x111DD, 0x1120C, SUB_111DD),
-    (0x1120D, 0x11230, SUB_1120D),
-    (0x11244, 0x112C4, OBJ_1123F),
-    (0x112C5, 0x112D7, SUB_112C5),
-    (0x112D8, 0x112EB, SUB_112D8),
-    (0x112F1, 0x1131F, DelLastArg),
-    (0x11325, 0x1132C, ClrBusyAnn),
-    (0x11332, 0x11339, SetAlphaAnn),
-    (0x1133F, 0x11346, ClrAlphaAnn),
-    (0x1134C, 0x11353, SetRightAnn),
-    (0x11359, 0x11360, ClrRightAnn),
-    (0x11366, 0x1136D, SetLeftAnn),
-    (0x11373, 0x11386, ClrLeftAnn),
-    (0x1138C, 0x113AF, OBJ_11387),
-    (0x113B0, 0x113C1, SUB_113B0),
-    (0x113C7, 0x113D1, OBJ_113C2),
-    (0x113D7, 0x113E1, OBJ_113D2),
-    (0x113E7, 0x113F1, OBJ_113E2),
-    (0x113F7, 0x11401, OBJ_113F2),
-    (0x11407, 0x11411, OBJ_11402),
-    (0x11417, 0x11421, OBJ_11412),
-    (0x11427, 0x11431, OBJ_11422),
-    (0x11437, 0x11441, FIRSTC_),
-    (0x11447, 0x11451, SETFIRSTC_0),
-    (0x11457, 0x11461, OBJ_11452),
-    (0x11467, 0x11471, FIRSTC__11467),
-    (0x11477, 0x11494, OBJ_11472),
-    (0x1149A, 0x11500, OBJ_11495),
-    (0x11506, 0x11510, Lock_),
-    (0x11516, 0x11532, PrgmEntry_),
-    (0x11538, 0x11542, SetPrgmEntry),
-    (0x11548, 0x1155B, SetLock),
-    (0x11561, 0x1156B, ClrPrgmEntry),
-    (0x11571, 0x1158E, ClrLock),
-    (0x11594, 0x115B2, MAKEGROB),
-    (0x115B3, 0x11641, makegrob),
-    (0x11642, 0x11659, SUB_11642),
-    (0x1165A, 0x11678, w__W),
-    (0x1167E, 0x116B4, GROB_),
-    (0x116B5, 0x118B7, grob_),
-    (0x118B8, 0x118F2, SUB_118B8),
-    (0x118F3, 0x1192E, SUB_118F3),
-    (0x11934, 0x11A57, SUBGROB),
-    (0x11A58, 0x11A6C, SUB_11A58),
-    (0x11A72, 0x11BA9, GROB_ZERO),
-    (0x11BAA, 0x11BEC, SUB_11BAA),
-    (0x11BED, 0x11C05, SUB_11BED),
-    (0x11C06, 0x11C28, SUB_11C06),
-    (0x11C29, 0x11C57, SUB_11C29),
-    (0x11C58, 0x11C8A, SUB_11C58),
-    (0x11C8B, 0x11C95, SUB_11C8B),
-    (0x11C96, 0x11CBD, SUB_11C96),
-    (0x11CBE, 0x11CC4, SUB_11CBE),
-    (0x11CC5, 0x11CCB, SUB_11CC5),
-    (0x11CCC, 0x11CCD, SUB_11CCC),
-    (0x11CD3, 0x11CF2, r3__grob_s_),
-    (0x11CF8, 0x11CFF, __BIGGROB),
-    (0x11D05, 0x11D51, __GROB),
-    (0x11D52, 0x11D86, SUB_11D52),
-    (0x11D8F, 0x11D91, _5x7),
-    (0x11D92, 0x11EEA, SUB_11D92),
-    (0x11EF2, 0x11EF8, SUB_11EF2),
-    (0x11EF9, 0x11F16, SUB_11EF9),
-    (0x11F17, 0x11F27, SUB_11F17),
-    (0x11F28, 0x11F79, SUB_11F28),
-    (0x11F85, 0x1200B, __grob),
-    (0x12011, 0x120C6, RIGHT_3x6),
-    (0x120CC, 0x120E6, SUB_120CC),
-    (0x120E7, 0x120ED, SUB_120E7),
-    (0x120F5, 0x1211D, SUB_120F5),
-    (0x1211E, 0x12158, SUB_1211E),
-    (0x12163, 0x12222, CENTER_3x5),
-    (0x12223, 0x122FE, SUB_12223),
-    (0x12304, 0x123C7, INVGROB),
-    (0x123CD, 0x123E4, BigDisp_st_s_),
-    (0x123EA, 0x123F4, BigDisp1_st_),
-    (0x123FA, 0x12404, BigDisp2_st_),
-    (0x1240A, 0x12414, BigDisp3_st_),
-    (0x1241A, 0x12428, BigDisp4_st_),
-    (0x1242E, 0x1245A, DISPN),
-    (0x12460, 0x1246A, DISPROW1),
-    (0x12470, 0x1247A, DISPROW2),
-    (0x12480, 0x1248A, DISPROW3),
-    (0x12490, 0x1249A, DISPROW4),
-    (0x124A0, 0x124AA, DISPROW5),
-    (0x124B0, 0x124BA, DISPROW6),
-    (0x124C0, 0x124CA, DISPROW7),
-    (0x124D0, 0x12634, DISPROW8),
-    (0x1263A, 0x12644, HARDBUFF),
-    (0x1264A, 0x12654, HARDBUFF2),
-    (0x1265A, 0x12664, ABUFF),
-    (0x1266A, 0x1268F, GBUFF),
-    (0x12690, 0x126DE, SUB_12690),
-    (0x1284C, 0x1288F, OBJ_12847),
-    (0x12890, 0x128A0, SUB_12890),
-    (0x128A1, 0x128AF, SUB_128A1),
-    (0x128C4, 0x128E2, code_128C4),
-    (0x128ED, 0x1294F, code_128ED),
-    (0x1299B, 0x12A0C, ScreenUpN),
-    (0x12A12, 0x12A49, ScreenUp),
-    (0x12A4F, 0x12AF5, ScreenDnN),
-    (0x12AFB, 0x12B57, ScreenDn),
-    (0x12BBC, 0x12D67, BROADENGROB),
-    (0x12D68, 0x12D84, SUB_12D68),
-    (0x12D85, 0x12DB0, SUB_12D85),
-    (0x12DB1, 0x12DD0, SUB_12DB1),
-    (0x12DD6, 0x12E88, HEIGHTENGROB),
-    (0x12E8E, 0x12F09, StoCurGrob_go_),
-    (0x12F0F, 0x12F93, StoNoCurGrob_go_),
-    (0x12FB2, 0x12FB8, SUB_12FB2),
-    (0x12FB9, 0x12FBF, SUB_12FB9),
-    (0x12FC0, 0x13042, SUB_12FC0),
-    (0x13048, 0x13060, KILLADISP),
-    (0x13066, 0x13074, KILLGDISP),
-    (0x13075, 0x130AB, SUB_13075),
-    (0x130CF, 0x13134, RSZVDISP),
-    (0x1313A, 0x1314C, TOGDISP),
-    (0x13152, 0x13166, TOADISP),
-    (0x1316C, 0x13196, GDISPON_),
-    (0x13197, 0x131C7, SUB_13197),
-    (0x131CD, 0x1321F, WINDOWUP),
-    (0x13225, 0x132C4, WINDOWDOWN),
-    (0x132C5, 0x133AA, SUB_132C5),
-    (0x133AB, 0x13420, disprange),
-    (0x13425, 0x134AD, L_13425),
-    (0x134B3, 0x134E3, CLEARVDISP),
-    (0x134E9, 0x1357E, WINDOWLEFT),
-    (0x13584, 0x13605, WINDOWRIGHT),
-    (0x13606, 0x13641, SUB_13606),
-    (0x13642, 0x13656, SUB_13642),
-    (0x13657, 0x13678, SUB_13657),
-    (0x1367E, 0x13694, WINDOWXY),
-    (0x1369A, 0x136A9, REDISPHBUFF),
-    (0x136AA, 0x136AB, WindowXY),
-    (0x136AC, 0x13735, addrLINECNTg),
-    (0x1373A, 0x137B5, L_1373A),
-    (0x137BB, 0x137DB, WINDOWCORNER),
-    (0x137DC, 0x1380E, corner),
-    (0x13814, 0x13824, PIXOFF3),
-    (0x1382A, 0x1383A, PIXON3),
-    (0x13840, 0x13849, PIXOFF),
-    (0x1384F, 0x138C9, PIXON),
-    (0x138CA, 0x138EE, pixon2),
-    (0x138EF, 0x138F1, GETPIX),
-    (0x138F2, 0x13985, GETPIX3),
-    (0x1398B, 0x13991, PIXON_3),
-    (0x13997, 0x139E6, PIXON_),
-    (0x139EC, 0x13AF7, OBJ_139E7),
-    (0x13AF8, 0x13B40, SUB_13AF8),
-    (0x13B46, 0x13B50, code_13B46),
-    (0x13BBA, 0x13BF0, OBJ_13BB5),
-    (0x13BF6, 0x13C52, OBJ_13BF1),
-    (0x13C58, 0x13C59, SUB_13C58),
-    (0x13C5A, 0x13CAF, SUB_13C5A),
-    (0x13D2D, 0x13D54, cursorblink_),
-    (0x13D5A, 0x13D8B, cursorblink__13D5A),
-    (0x13DDC, 0x13E04, SUB_13DDC),
-    (0x13E0A, 0x13E21, OBJ_13E05),
-    (0x13E27, 0x13E2D, OBJ_13E22),
-    (0x13E33, 0x13E52, OBJ_13E2E),
-    (0x13E58, 0x13E62, OBJ_13E53),
-    (0x13E68, 0x13E84, OBJ_13E63),
-    (0x13E8A, 0x13E9D, CURSOR_OFF),
-    (0x13EA3, 0x13EBB, OBJ_13E9E),
-    (0x13EC1, 0x13ED1, CURSOR_OFF0),
-    (0x13ED7, 0x13EF0, CURSOR_OFF_),
-    (0x13EF6, 0x13F00, CURSOR_),
-    (0x13F06, 0x13F10, CURSOR__13F06),
-    (0x13F16, 0x13F28, OBJ_13F11),
-    (0x13F2E, 0x13F46, SETCURSOR),
-    (0x13F4C, 0x13F68, CurrentRow),
-    (0x13F6E, 0x13F7E, OBJ_13F69),
-    (0x13F84, 0x13F9A, OBJ_13F7F),
-    (0x13FA0, 0x13FAF, OBJ_13F9B),
-    (0x13FB5, 0x13FDD, OBJ_13FB0),
-    (0x13FDE, 0x13FE4, SUB_13FDE),
-    (0x13FEA, 0x1400D, SAVEERRN),
-    (0x14013, 0x14038, ERR0),
-    (0x1403E, 0x1404B, ERRN),
-    (0x14169, 0x14198, code_14169),
-    (0x141B7, 0x141DD, setbeep),
-    (0x141DE, 0x141E4, SUB_141DE),
-    (0x141EA, 0x14209, ERRBEEP),
-    (0x1420F, 0x142A5, r____),
-    (0x1456F, 0x145A5, code_1456F),
-    (0x145C4, 0x145F4, code_145C4),
-    (0x14D20, 0x14D6D, OBJ_14D1B),
-    (0x14E72, 0x14EA4, OBJ_14E6D),
-    (0x14EAA, 0x14ED5, RDUP),
-    (0x14ED6, 0x14EEB, SUB_14ED6),
-    (0x14EF1, 0x14F29, OBJ_14EEC),
-    (0x14F2F, 0x14F8B, RROLL),
-    (0x14F91, 0x14FC2, OBJ_14F8C),
-    (0x14FC8, 0x15006, OBJ_14FC3),
-    (0x15192, 0x151A5, GsstFIN),
-    (0x1569E, 0x156E4, code_1569E),
-    (0x159F0, 0x159F9, stkdecomp_w),
-    (0x15A59, 0x15A5F, RclOldMode),
-    (0x15A65, 0x15A8A, rstfmt1),
-    (0x15A90, 0x15A96, savefmt1),
-    (0x15A9C, 0x15AD4, TempStd),
-    (0x15AD5, 0x15AFC, SUB_15AD5),
-    (0x15AFD, 0x15B12, SUB_15AFD),
-    (0x15B36, 0x15B3C, editdecomp_w),
-    (0x15B42, 0x15B4B, OBJ_15B3D),
-    (0x15C5F, 0x15CBA, SUB_15C5F),
-    (0x15FD4, 0x1605E, OBJ_15FCF),
-    (0x16064, 0x1606B, addtics),
-    (0x16071, 0x160D0, add2__st_),
-    (0x160EA, 0x16102, __str2_nm_),
-    (0x162B1, 0x162B7, __str1_r_),
-    (0x162BD, 0x162E9, a___),
-    (0x162EA, 0x162F3, SUB_162EA),
-    (0x162F4, 0x1633C, SUB_162F4),
-    (0x1633D, 0x16352, St10Gb),
-    (0x16353, 0x16655, SUB_16353),
-    (0x16656, 0x16670, SUB_16656),
-    (0x16671, 0x16676, Shrink_),
-    (0x16677, 0x16682, Clean_R0),
-    (0x16683, 0x166E2, Clean_),
-    (0x166E8, 0x166EE, DOFIX),
-    (0x166F4, 0x166FA, DOSCI),
-    (0x16700, 0x16706, DOENG),
-    (0x1670C, 0x16769, DOSTD),
-    (0x1676A, 0x167BE, SUB_1676A),
-    (0x167DD, 0x167E3, r_____167DD),
-    (0x167E9, 0x16836, r____167E9),
-    (0x16837, 0x1685B, SUB_16837),
-    (0x16861, 0x16869, s_str_st_s_),
-    (0x1686F, 0x16968, stackitw),
-    (0x1795F, 0x1797F, _DcompWidth),
-    (0x17985, 0x179AB, DcompWidth_),
-    (0x179B1, 0x179CF, OBJ_179AC),
-    (0x179D5, 0x179E7, NEXTRRPOB),
-    (0x179E8, 0x17ADA, addrTEMPTOP),
-    (0x17AF4, 0x17B80, code_17AF4),
-    (0x17C44, 0x17C54, OBJ_17C3F),
-    (0x17C5A, 0x17C69, OBJ_17C55),
-    (0x17F1A, 0x17F3F, Y_N_Menu),
-    (0x17F63, 0x17F7E, code_17F63),
-    (0x181FA, 0x18241, L_181FA),
-    (0x18247, 0x1825E, NoMemComLine_),
-    (0x18264, 0x18281, NoLastStack_),
-    (0x18287, 0x18294, NoLastArg_),
-    (0x1829A, 0x18307, OBJ_18295),
-    (0x1830D, 0x1831A, DropSysObs),
-    (0x1831B, 0x18337, SUB_1831B),
-    (0x1833D, 0x18354, OBJ_18338),
-    (0x1835A, 0x18361, DelStack),
-    (0x18362, 0x18396, SUB_18362),
-    (0x183F0, 0x18403, OBJ_183EB),
-    (0x18409, 0x1848B, OBJ_18404),
-    (0x18658, 0x1867E, CkNonNull),
-    (0x187B0, 0x18801, OBJ_187AB),
-    (0x18807, 0x1882B, OBJ_18802),
-    (0x1882C, 0x1884C, SUB_1882C),
-    (0x18852, 0x18872, r0LASTOWDOB_),
-    (0x188EB, 0x188F4, _AND_),
-    (0x188FA, 0x18903, _OR_),
-    (0x18909, 0x18960, _XOR_),
-    (0x18966, 0x18996, _NOT_),
-    (0x18997, 0x189C5, SUB_18997),
-    (0x189C6, 0x189E2, SUB_189C6),
-    (0x18A1A, 0x18A1D, CK0NOLASTWD),
-    (0x18A23, 0x18A5A, CK0),
-    (0x18A60, 0x18A67, CK3),
-    (0x18A6D, 0x18A74, CK3NOLASTWD),
-    (0x18A75, 0x18A7F, SUB_18A75),
-    (0x18A85, 0x18A8C, CK2),
-    (0x18A92, 0x18A99, CK2NOLASTWD),
-    (0x18A9A, 0x18AA4, SUB_18A9A),
-    (0x18AAA, 0x18AB1, CK1),
-    (0x18AB7, 0x18ABE, CK1NOLASTWD),
-    (0x18ABF, 0x18B6C, SUB_18ABF),
-    (0x18B72, 0x18B79, CK5),
-    (0x18B7F, 0x18B86, CK5NOLASTWD),
-    (0x18B87, 0x18B91, SUB_18B87),
-    (0x18B97, 0x18B9E, CK4),
-    (0x18BA4, 0x18BAB, CK4NOLASTWD),
-    (0x18BAC, 0x18C33, SUB_18BAC),
-    (0x18C39, 0x18C49, CKN),
-    (0x18C77, 0x18C91, SUB_18C77),
-    (0x18C97, 0x18CA1, SETNONEXTERR),
-    (0x18CA7, 0x18CB1, SETSIZEERR),
-    (0x18CB7, 0x18CC1, SETTYPEERR),
-    (0x18CC7, 0x18CD6, SETSTACKERR),
-    (0x18CDC, 0x18CE9, _ABSCOERCE),
-    (0x18CEF, 0x18DBE, COERCE),
-    (0x18DC4, 0x18E17, UNCOERCE),
-    (0x18E4A, 0x18E7D, DNOTSYMB_SEMI),
-    (0x18E83, 0x18EB9, OBJ_18E7E),
-    (0x18EBF, 0x18ECD, COMPEVAL),
-    (0x18ED3, 0x18EDE, CK1_Dispatch),
-    (0x18EE4, 0x18EEF, CK2_Dispatch),
-    (0x18EF5, 0x18F00, CK3_Dispatch),
-    (0x18F06, 0x18F11, CK4_Dispatch),
-    (0x18F17, 0x18F22, CK5_Dispatch),
-    (0x18F3F, 0x18F69, L_18F3F),
-    (0x18F83, 0x18F9C, L_18F83),
-    (0x18FA2, 0x18FA8, CK_DISPATCH0),
-    (0x18FAE, 0x18FB1, CK_DISPATCH2),
-    (0x18FB7, 0x19127, L_18FB7),
-    (0x191BE, 0x19206, __OVF),
-    (0x1920C, 0x19293, CKNFLOATS),
-    (0x19299, 0x1934F, _ARRY),
-    (0x19355, 0x1936B, NOTINHARDROM_),
-    (0x195F4, 0x195FA, code_195F4),
-    (0x19614, 0x1961A, code_19614),
-    (0x19634, 0x1963A, code_19634),
-    (0x19654, 0x1965A, code_19654),
-    (0x19674, 0x1967A, code_19674),
-    (0x19694, 0x1969A, code_19694),
-    (0x196B4, 0x196BA, code_196B4),
-    (0x196D4, 0x196DA, code_196D4),
-    (0x19748, 0x1974E, code_19748),
-    (0x1A2DF, 0x1A2FB, INHARDROM_),
-    (0x1A560, 0x1A577, syseval_s_),
-    (0x1A636, 0x1A70B, lastarg),
-    (0x1A7F7, 0x1A84B, wait),
-    (0x1C63C, 0x1C64D, RCLSYSF),
-    (0x1C653, 0x1C677, RCLUSERF),
-    (0x1C6FC, 0x1C730, STOUSERF),
-    (0x1C736, 0x1C77B, STOSYSF),
-    (0x1F060, 0x1F0F4, ChkExpr1Name),
-    (0x1F639, 0x1F63F, code_1F639),
-    (0x1F9BD, 0x1F9C3, code_1F9BD),
-    (0x1F9E2, 0x1F9E8, code_1F9E2),
-    (0x1FA52, 0x1FA58, code_1FA52),
-    (0x1FA86, 0x1FA8C, code_1FA86),
-    (0x1FAE4, 0x1FAEA, code_1FAE4),
-    (0x1FB56, 0x1FB5C, code_1FB56),
-    (0x1FB80, 0x1FB86, code_1FB80),
+pub const ROUTINES: &[(u32, u32, Block, &str)] = &[
+    (0x10141, 0x10193, OBJ_1013C, "OBJ_1013C"),
+    (0x10B21, 0x10B5D, OBJ_10B1C, "OBJ_10B1C"),
+    (0x10CDB, 0x10D77, SUB_10CDB, "SUB_10CDB"),
+    (0x10E13, 0x10E2D, OBJ_10E0E, "OBJ_10E0E"),
+    (0x10EEF, 0x10EF9, INVUNITERR, "INVUNITERR"),
+    (0x10EFF, 0x10F0E, CONSTUNITERR, "CONSTUNITERR"),
+    (0x10F2D, 0x10F3F, L_10F2D, "L_10F2D"),
+    (0x10F40, 0x10F53, GPErrjmpC, "GPErrjmpC"),
+    (0x10F59, 0x10F63, NULLCHARERR, "NULLCHARERR"),
+    (0x10F69, 0x10F73, INVFUNCERR, "INVFUNCERR"),
+    (0x10F79, 0x10F7F, NOEQERR, "NOEQERR"),
+    (0x10F80, 0x10F85, ErrjmpC, "ErrjmpC"),
+    (0x10F8B, 0x10F95, SYNTAXERR, "SYNTAXERR"),
+    (0x10F9B, 0x10FA5, SETINVPPAR, "SETINVPPAR"),
+    (0x10FAB, 0x10FB5, SETNONERAL, "SETNONERAL"),
+    (0x10FBB, 0x10FC5, SETISOLERR, "SETISOLERR"),
+    (0x10FCB, 0x10FD5, NOHALTERR, "NOHALTERR"),
+    (0x10FDB, 0x10FE5, kill, "kill"),
+    (0x10FEB, 0x10FF5, LASTSTKERR, "LASTSTKERR"),
+    (0x10FFB, 0x11005, LASTCMDERR, "LASTCMDERR"),
+    (0x1100B, 0x11015, ARGNUMERR, "ARGNUMERR"),
+    (0x1101B, 0x11025, SETCIRCERR, "SETCIRCERR"),
+    (0x1102B, 0x11035, DIRARGERR, "DIRARGERR"),
+    (0x1103B, 0x11045, EMPTYDIRERR, "EMPTYDIRERR"),
+    (0x1104B, 0x11055, INVDEFERR, "INVDEFERR"),
+    (0x1105B, 0x11065, MISLIBERR, "MISLIBERR"),
+    (0x1106B, 0x11075, IDCONFERR, "IDCONFERR"),
+    (0x1107B, 0x11085, cont, "cont"),
+    (0x110F4, 0x11155, OBJ_110EF, "OBJ_110EF"),
+    (0x11156, 0x11185, SUB_11156, "SUB_11156"),
+    (0x11186, 0x111D5, SUB_11186, "SUB_11186"),
+    (0x111D6, 0x111DC, SUB_111D6, "SUB_111D6"),
+    (0x111DD, 0x1120C, SUB_111DD, "SUB_111DD"),
+    (0x1120D, 0x11230, SUB_1120D, "SUB_1120D"),
+    (0x11244, 0x112C4, OBJ_1123F, "OBJ_1123F"),
+    (0x112C5, 0x112D7, SUB_112C5, "SUB_112C5"),
+    (0x112D8, 0x112EB, SUB_112D8, "SUB_112D8"),
+    (0x112F1, 0x1131F, DelLastArg, "DelLastArg"),
+    (0x11325, 0x1132C, ClrBusyAnn, "ClrBusyAnn"),
+    (0x11332, 0x11339, SetAlphaAnn, "SetAlphaAnn"),
+    (0x1133F, 0x11346, ClrAlphaAnn, "ClrAlphaAnn"),
+    (0x1134C, 0x11353, SetRightAnn, "SetRightAnn"),
+    (0x11359, 0x11360, ClrRightAnn, "ClrRightAnn"),
+    (0x11366, 0x1136D, SetLeftAnn, "SetLeftAnn"),
+    (0x11373, 0x11386, ClrLeftAnn, "ClrLeftAnn"),
+    (0x1138C, 0x113AF, OBJ_11387, "OBJ_11387"),
+    (0x113B0, 0x113C1, SUB_113B0, "SUB_113B0"),
+    (0x113C7, 0x113D1, OBJ_113C2, "OBJ_113C2"),
+    (0x113D7, 0x113E1, OBJ_113D2, "OBJ_113D2"),
+    (0x113E7, 0x113F1, OBJ_113E2, "OBJ_113E2"),
+    (0x113F7, 0x11401, OBJ_113F2, "OBJ_113F2"),
+    (0x11407, 0x11411, OBJ_11402, "OBJ_11402"),
+    (0x11417, 0x11421, OBJ_11412, "OBJ_11412"),
+    (0x11427, 0x11431, OBJ_11422, "OBJ_11422"),
+    (0x11437, 0x11441, FIRSTC_, "FIRSTC_"),
+    (0x11447, 0x11451, SETFIRSTC_0, "SETFIRSTC_0"),
+    (0x11457, 0x11461, OBJ_11452, "OBJ_11452"),
+    (0x11467, 0x11471, FIRSTC__11467, "FIRSTC__11467"),
+    (0x11477, 0x11494, OBJ_11472, "OBJ_11472"),
+    (0x1149A, 0x11500, OBJ_11495, "OBJ_11495"),
+    (0x11506, 0x11510, Lock_, "Lock_"),
+    (0x11516, 0x11532, PrgmEntry_, "PrgmEntry_"),
+    (0x11538, 0x11542, SetPrgmEntry, "SetPrgmEntry"),
+    (0x11548, 0x1155B, SetLock, "SetLock"),
+    (0x11561, 0x1156B, ClrPrgmEntry, "ClrPrgmEntry"),
+    (0x11571, 0x1158E, ClrLock, "ClrLock"),
+    (0x11594, 0x115B2, MAKEGROB, "MAKEGROB"),
+    (0x115B3, 0x11641, makegrob, "makegrob"),
+    (0x11642, 0x11659, SUB_11642, "SUB_11642"),
+    (0x1165A, 0x11678, w__W, "w__W"),
+    (0x1167E, 0x116B4, GROB_, "GROB_"),
+    (0x116B5, 0x118B7, grob_, "grob_"),
+    (0x118B8, 0x118F2, SUB_118B8, "SUB_118B8"),
+    (0x118F3, 0x1192E, SUB_118F3, "SUB_118F3"),
+    (0x11934, 0x11A57, SUBGROB, "SUBGROB"),
+    (0x11A58, 0x11A6C, SUB_11A58, "SUB_11A58"),
+    (0x11A72, 0x11BA9, GROB_ZERO, "GROB_ZERO"),
+    (0x11BAA, 0x11BEC, SUB_11BAA, "SUB_11BAA"),
+    (0x11BED, 0x11C05, SUB_11BED, "SUB_11BED"),
+    (0x11C06, 0x11C28, SUB_11C06, "SUB_11C06"),
+    (0x11C29, 0x11C57, SUB_11C29, "SUB_11C29"),
+    (0x11C58, 0x11C8A, SUB_11C58, "SUB_11C58"),
+    (0x11C8B, 0x11C95, SUB_11C8B, "SUB_11C8B"),
+    (0x11C96, 0x11CBD, SUB_11C96, "SUB_11C96"),
+    (0x11CBE, 0x11CC4, SUB_11CBE, "SUB_11CBE"),
+    (0x11CC5, 0x11CCB, SUB_11CC5, "SUB_11CC5"),
+    (0x11CCC, 0x11CCD, SUB_11CCC, "SUB_11CCC"),
+    (0x11CD3, 0x11CF2, r3__grob_s_, "r3__grob_s_"),
+    (0x11CF8, 0x11CFF, __BIGGROB, "__BIGGROB"),
+    (0x11D05, 0x11D51, __GROB, "__GROB"),
+    (0x11D52, 0x11D86, SUB_11D52, "SUB_11D52"),
+    (0x11D8F, 0x11D91, _5x7, "_5x7"),
+    (0x11D92, 0x11EEA, SUB_11D92, "SUB_11D92"),
+    (0x11EF2, 0x11EF8, SUB_11EF2, "SUB_11EF2"),
+    (0x11EF9, 0x11F16, SUB_11EF9, "SUB_11EF9"),
+    (0x11F17, 0x11F27, SUB_11F17, "SUB_11F17"),
+    (0x11F28, 0x11F79, SUB_11F28, "SUB_11F28"),
+    (0x11F85, 0x1200B, __grob, "__grob"),
+    (0x12011, 0x120C6, RIGHT_3x6, "RIGHT_3x6"),
+    (0x120CC, 0x120E6, SUB_120CC, "SUB_120CC"),
+    (0x120E7, 0x120ED, SUB_120E7, "SUB_120E7"),
+    (0x120F5, 0x1211D, SUB_120F5, "SUB_120F5"),
+    (0x1211E, 0x12158, SUB_1211E, "SUB_1211E"),
+    (0x12163, 0x12222, CENTER_3x5, "CENTER_3x5"),
+    (0x12223, 0x122FE, SUB_12223, "SUB_12223"),
+    (0x12304, 0x123C7, INVGROB, "INVGROB"),
+    (0x123CD, 0x123E4, BigDisp_st_s_, "BigDisp_st_s_"),
+    (0x123EA, 0x123F4, BigDisp1_st_, "BigDisp1_st_"),
+    (0x123FA, 0x12404, BigDisp2_st_, "BigDisp2_st_"),
+    (0x1240A, 0x12414, BigDisp3_st_, "BigDisp3_st_"),
+    (0x1241A, 0x12428, BigDisp4_st_, "BigDisp4_st_"),
+    (0x1242E, 0x1245A, DISPN, "DISPN"),
+    (0x12460, 0x1246A, DISPROW1, "DISPROW1"),
+    (0x12470, 0x1247A, DISPROW2, "DISPROW2"),
+    (0x12480, 0x1248A, DISPROW3, "DISPROW3"),
+    (0x12490, 0x1249A, DISPROW4, "DISPROW4"),
+    (0x124A0, 0x124AA, DISPROW5, "DISPROW5"),
+    (0x124B0, 0x124BA, DISPROW6, "DISPROW6"),
+    (0x124C0, 0x124CA, DISPROW7, "DISPROW7"),
+    (0x124D0, 0x12634, DISPROW8, "DISPROW8"),
+    (0x1263A, 0x12644, HARDBUFF, "HARDBUFF"),
+    (0x1264A, 0x12654, HARDBUFF2, "HARDBUFF2"),
+    (0x1265A, 0x12664, ABUFF, "ABUFF"),
+    (0x1266A, 0x1268F, GBUFF, "GBUFF"),
+    (0x12690, 0x126DE, SUB_12690, "SUB_12690"),
+    (0x1284C, 0x1288F, OBJ_12847, "OBJ_12847"),
+    (0x12890, 0x128A0, SUB_12890, "SUB_12890"),
+    (0x128A1, 0x128AF, SUB_128A1, "SUB_128A1"),
+    (0x128C4, 0x128E2, code_128C4, "code_128C4"),
+    (0x128ED, 0x1294F, code_128ED, "code_128ED"),
+    (0x1299B, 0x12A0C, ScreenUpN, "ScreenUpN"),
+    (0x12A12, 0x12A49, ScreenUp, "ScreenUp"),
+    (0x12A4F, 0x12AF5, ScreenDnN, "ScreenDnN"),
+    (0x12AFB, 0x12B57, ScreenDn, "ScreenDn"),
+    (0x12BBC, 0x12D67, BROADENGROB, "BROADENGROB"),
+    (0x12D68, 0x12D84, SUB_12D68, "SUB_12D68"),
+    (0x12D85, 0x12DB0, SUB_12D85, "SUB_12D85"),
+    (0x12DB1, 0x12DD0, SUB_12DB1, "SUB_12DB1"),
+    (0x12DD6, 0x12E88, HEIGHTENGROB, "HEIGHTENGROB"),
+    (0x12E8E, 0x12F09, StoCurGrob_go_, "StoCurGrob_go_"),
+    (0x12F0F, 0x12F93, StoNoCurGrob_go_, "StoNoCurGrob_go_"),
+    (0x12FB2, 0x12FB8, SUB_12FB2, "SUB_12FB2"),
+    (0x12FB9, 0x12FBF, SUB_12FB9, "SUB_12FB9"),
+    (0x12FC0, 0x13042, SUB_12FC0, "SUB_12FC0"),
+    (0x13048, 0x13060, KILLADISP, "KILLADISP"),
+    (0x13066, 0x13074, KILLGDISP, "KILLGDISP"),
+    (0x13075, 0x130AB, SUB_13075, "SUB_13075"),
+    (0x130CF, 0x13134, RSZVDISP, "RSZVDISP"),
+    (0x1313A, 0x1314C, TOGDISP, "TOGDISP"),
+    (0x13152, 0x13166, TOADISP, "TOADISP"),
+    (0x1316C, 0x13196, GDISPON_, "GDISPON_"),
+    (0x13197, 0x131C7, SUB_13197, "SUB_13197"),
+    (0x131CD, 0x1321F, WINDOWUP, "WINDOWUP"),
+    (0x13225, 0x132C4, WINDOWDOWN, "WINDOWDOWN"),
+    (0x132C5, 0x133AA, SUB_132C5, "SUB_132C5"),
+    (0x133AB, 0x13420, disprange, "disprange"),
+    (0x13425, 0x134AD, L_13425, "L_13425"),
+    (0x134B3, 0x134E3, CLEARVDISP, "CLEARVDISP"),
+    (0x134E9, 0x1357E, WINDOWLEFT, "WINDOWLEFT"),
+    (0x13584, 0x13605, WINDOWRIGHT, "WINDOWRIGHT"),
+    (0x13606, 0x13641, SUB_13606, "SUB_13606"),
+    (0x13642, 0x13656, SUB_13642, "SUB_13642"),
+    (0x13657, 0x13678, SUB_13657, "SUB_13657"),
+    (0x1367E, 0x13694, WINDOWXY, "WINDOWXY"),
+    (0x1369A, 0x136A9, REDISPHBUFF, "REDISPHBUFF"),
+    (0x136AA, 0x136AB, WindowXY, "WindowXY"),
+    (0x136AC, 0x13735, addrLINECNTg, "addrLINECNTg"),
+    (0x1373A, 0x137B5, L_1373A, "L_1373A"),
+    (0x137BB, 0x137DB, WINDOWCORNER, "WINDOWCORNER"),
+    (0x137DC, 0x1380E, corner, "corner"),
+    (0x13814, 0x13824, PIXOFF3, "PIXOFF3"),
+    (0x1382A, 0x1383A, PIXON3, "PIXON3"),
+    (0x13840, 0x13849, PIXOFF, "PIXOFF"),
+    (0x1384F, 0x138C9, PIXON, "PIXON"),
+    (0x138CA, 0x138EE, pixon2, "pixon2"),
+    (0x138EF, 0x138F1, GETPIX, "GETPIX"),
+    (0x138F2, 0x13985, GETPIX3, "GETPIX3"),
+    (0x1398B, 0x13991, PIXON_3, "PIXON_3"),
+    (0x13997, 0x139E6, PIXON_, "PIXON_"),
+    (0x139EC, 0x13AF7, OBJ_139E7, "OBJ_139E7"),
+    (0x13AF8, 0x13B40, SUB_13AF8, "SUB_13AF8"),
+    (0x13B46, 0x13B50, code_13B46, "code_13B46"),
+    (0x13BBA, 0x13BF0, OBJ_13BB5, "OBJ_13BB5"),
+    (0x13BF6, 0x13C52, OBJ_13BF1, "OBJ_13BF1"),
+    (0x13C58, 0x13C59, SUB_13C58, "SUB_13C58"),
+    (0x13C5A, 0x13CAF, SUB_13C5A, "SUB_13C5A"),
+    (0x13D2D, 0x13D54, cursorblink_, "cursorblink_"),
+    (0x13D5A, 0x13D8B, cursorblink__13D5A, "cursorblink__13D5A"),
+    (0x13DDC, 0x13E04, SUB_13DDC, "SUB_13DDC"),
+    (0x13E0A, 0x13E21, OBJ_13E05, "OBJ_13E05"),
+    (0x13E27, 0x13E2D, OBJ_13E22, "OBJ_13E22"),
+    (0x13E33, 0x13E52, OBJ_13E2E, "OBJ_13E2E"),
+    (0x13E58, 0x13E62, OBJ_13E53, "OBJ_13E53"),
+    (0x13E68, 0x13E84, OBJ_13E63, "OBJ_13E63"),
+    (0x13E8A, 0x13E9D, CURSOR_OFF, "CURSOR_OFF"),
+    (0x13EA3, 0x13EBB, OBJ_13E9E, "OBJ_13E9E"),
+    (0x13EC1, 0x13ED1, CURSOR_OFF0, "CURSOR_OFF0"),
+    (0x13ED7, 0x13EF0, CURSOR_OFF_, "CURSOR_OFF_"),
+    (0x13EF6, 0x13F00, CURSOR_, "CURSOR_"),
+    (0x13F06, 0x13F10, CURSOR__13F06, "CURSOR__13F06"),
+    (0x13F16, 0x13F28, OBJ_13F11, "OBJ_13F11"),
+    (0x13F2E, 0x13F46, SETCURSOR, "SETCURSOR"),
+    (0x13F4C, 0x13F68, CurrentRow, "CurrentRow"),
+    (0x13F6E, 0x13F7E, OBJ_13F69, "OBJ_13F69"),
+    (0x13F84, 0x13F9A, OBJ_13F7F, "OBJ_13F7F"),
+    (0x13FA0, 0x13FAF, OBJ_13F9B, "OBJ_13F9B"),
+    (0x13FB5, 0x13FDD, OBJ_13FB0, "OBJ_13FB0"),
+    (0x13FDE, 0x13FE4, SUB_13FDE, "SUB_13FDE"),
+    (0x13FEA, 0x1400D, SAVEERRN, "SAVEERRN"),
+    (0x14013, 0x14038, ERR0, "ERR0"),
+    (0x1403E, 0x1404B, ERRN, "ERRN"),
+    (0x14169, 0x14198, code_14169, "code_14169"),
+    (0x141B7, 0x141DD, setbeep, "setbeep"),
+    (0x141DE, 0x141E4, SUB_141DE, "SUB_141DE"),
+    (0x141EA, 0x14209, ERRBEEP, "ERRBEEP"),
+    (0x1420F, 0x142A5, r____, "r____"),
+    (0x1456F, 0x145A5, code_1456F, "code_1456F"),
+    (0x145C4, 0x145F4, code_145C4, "code_145C4"),
+    (0x14D20, 0x14D6D, OBJ_14D1B, "OBJ_14D1B"),
+    (0x14E72, 0x14EA4, OBJ_14E6D, "OBJ_14E6D"),
+    (0x14EAA, 0x14ED5, RDUP, "RDUP"),
+    (0x14ED6, 0x14EEB, SUB_14ED6, "SUB_14ED6"),
+    (0x14EF1, 0x14F29, OBJ_14EEC, "OBJ_14EEC"),
+    (0x14F2F, 0x14F8B, RROLL, "RROLL"),
+    (0x14F91, 0x14FC2, OBJ_14F8C, "OBJ_14F8C"),
+    (0x14FC8, 0x15006, OBJ_14FC3, "OBJ_14FC3"),
+    (0x15192, 0x151A5, GsstFIN, "GsstFIN"),
+    (0x1569E, 0x156E4, code_1569E, "code_1569E"),
+    (0x159F0, 0x159F9, stkdecomp_w, "stkdecomp_w"),
+    (0x15A59, 0x15A5F, RclOldMode, "RclOldMode"),
+    (0x15A65, 0x15A8A, rstfmt1, "rstfmt1"),
+    (0x15A90, 0x15A96, savefmt1, "savefmt1"),
+    (0x15A9C, 0x15AD4, TempStd, "TempStd"),
+    (0x15AD5, 0x15AFC, SUB_15AD5, "SUB_15AD5"),
+    (0x15AFD, 0x15B12, SUB_15AFD, "SUB_15AFD"),
+    (0x15B36, 0x15B3C, editdecomp_w, "editdecomp_w"),
+    (0x15B42, 0x15B4B, OBJ_15B3D, "OBJ_15B3D"),
+    (0x15C5F, 0x15CBA, SUB_15C5F, "SUB_15C5F"),
+    (0x15FD4, 0x1605E, OBJ_15FCF, "OBJ_15FCF"),
+    (0x16064, 0x1606B, addtics, "addtics"),
+    (0x16071, 0x160D0, add2__st_, "add2__st_"),
+    (0x160EA, 0x16102, __str2_nm_, "__str2_nm_"),
+    (0x162B1, 0x162B7, __str1_r_, "__str1_r_"),
+    (0x162BD, 0x162E9, a___, "a___"),
+    (0x162EA, 0x162F3, SUB_162EA, "SUB_162EA"),
+    (0x162F4, 0x1633C, SUB_162F4, "SUB_162F4"),
+    (0x1633D, 0x16352, St10Gb, "St10Gb"),
+    (0x16353, 0x16655, SUB_16353, "SUB_16353"),
+    (0x16656, 0x16670, SUB_16656, "SUB_16656"),
+    (0x16671, 0x16676, Shrink_, "Shrink_"),
+    (0x16677, 0x16682, Clean_R0, "Clean_R0"),
+    (0x16683, 0x166E2, Clean_, "Clean_"),
+    (0x166E8, 0x166EE, DOFIX, "DOFIX"),
+    (0x166F4, 0x166FA, DOSCI, "DOSCI"),
+    (0x16700, 0x16706, DOENG, "DOENG"),
+    (0x1670C, 0x16769, DOSTD, "DOSTD"),
+    (0x1676A, 0x167BE, SUB_1676A, "SUB_1676A"),
+    (0x167DD, 0x167E3, r_____167DD, "r_____167DD"),
+    (0x167E9, 0x16836, r____167E9, "r____167E9"),
+    (0x16837, 0x1685B, SUB_16837, "SUB_16837"),
+    (0x16861, 0x16869, s_str_st_s_, "s_str_st_s_"),
+    (0x1686F, 0x16968, stackitw, "stackitw"),
+    (0x1795F, 0x1797F, _DcompWidth, "_DcompWidth"),
+    (0x17985, 0x179AB, DcompWidth_, "DcompWidth_"),
+    (0x179B1, 0x179CF, OBJ_179AC, "OBJ_179AC"),
+    (0x179D5, 0x179E7, NEXTRRPOB, "NEXTRRPOB"),
+    (0x179E8, 0x17ADA, addrTEMPTOP, "addrTEMPTOP"),
+    (0x17AF4, 0x17B80, code_17AF4, "code_17AF4"),
+    (0x17C44, 0x17C54, OBJ_17C3F, "OBJ_17C3F"),
+    (0x17C5A, 0x17C69, OBJ_17C55, "OBJ_17C55"),
+    (0x17F1A, 0x17F3F, Y_N_Menu, "Y_N_Menu"),
+    (0x17F63, 0x17F7E, code_17F63, "code_17F63"),
+    (0x181FA, 0x18241, L_181FA, "L_181FA"),
+    (0x18247, 0x1825E, NoMemComLine_, "NoMemComLine_"),
+    (0x18264, 0x18281, NoLastStack_, "NoLastStack_"),
+    (0x18287, 0x18294, NoLastArg_, "NoLastArg_"),
+    (0x1829A, 0x18307, OBJ_18295, "OBJ_18295"),
+    (0x1830D, 0x1831A, DropSysObs, "DropSysObs"),
+    (0x1831B, 0x18337, SUB_1831B, "SUB_1831B"),
+    (0x1833D, 0x18354, OBJ_18338, "OBJ_18338"),
+    (0x1835A, 0x18361, DelStack, "DelStack"),
+    (0x18362, 0x18396, SUB_18362, "SUB_18362"),
+    (0x183F0, 0x18403, OBJ_183EB, "OBJ_183EB"),
+    (0x18409, 0x1848B, OBJ_18404, "OBJ_18404"),
+    (0x18658, 0x1867E, CkNonNull, "CkNonNull"),
+    (0x187B0, 0x18801, OBJ_187AB, "OBJ_187AB"),
+    (0x18807, 0x1882B, OBJ_18802, "OBJ_18802"),
+    (0x1882C, 0x1884C, SUB_1882C, "SUB_1882C"),
+    (0x18852, 0x18872, r0LASTOWDOB_, "r0LASTOWDOB_"),
+    (0x188EB, 0x188F4, _AND_, "_AND_"),
+    (0x188FA, 0x18903, _OR_, "_OR_"),
+    (0x18909, 0x18960, _XOR_, "_XOR_"),
+    (0x18966, 0x18996, _NOT_, "_NOT_"),
+    (0x18997, 0x189C5, SUB_18997, "SUB_18997"),
+    (0x189C6, 0x189E2, SUB_189C6, "SUB_189C6"),
+    (0x18A1A, 0x18A1D, CK0NOLASTWD, "CK0NOLASTWD"),
+    (0x18A23, 0x18A5A, CK0, "CK0"),
+    (0x18A60, 0x18A67, CK3, "CK3"),
+    (0x18A6D, 0x18A74, CK3NOLASTWD, "CK3NOLASTWD"),
+    (0x18A75, 0x18A7F, SUB_18A75, "SUB_18A75"),
+    (0x18A85, 0x18A8C, CK2, "CK2"),
+    (0x18A92, 0x18A99, CK2NOLASTWD, "CK2NOLASTWD"),
+    (0x18A9A, 0x18AA4, SUB_18A9A, "SUB_18A9A"),
+    (0x18AAA, 0x18AB1, CK1, "CK1"),
+    (0x18AB7, 0x18ABE, CK1NOLASTWD, "CK1NOLASTWD"),
+    (0x18ABF, 0x18B6C, SUB_18ABF, "SUB_18ABF"),
+    (0x18B72, 0x18B79, CK5, "CK5"),
+    (0x18B7F, 0x18B86, CK5NOLASTWD, "CK5NOLASTWD"),
+    (0x18B87, 0x18B91, SUB_18B87, "SUB_18B87"),
+    (0x18B97, 0x18B9E, CK4, "CK4"),
+    (0x18BA4, 0x18BAB, CK4NOLASTWD, "CK4NOLASTWD"),
+    (0x18BAC, 0x18C33, SUB_18BAC, "SUB_18BAC"),
+    (0x18C39, 0x18C49, CKN, "CKN"),
+    (0x18C77, 0x18C91, SUB_18C77, "SUB_18C77"),
+    (0x18C97, 0x18CA1, SETNONEXTERR, "SETNONEXTERR"),
+    (0x18CA7, 0x18CB1, SETSIZEERR, "SETSIZEERR"),
+    (0x18CB7, 0x18CC1, SETTYPEERR, "SETTYPEERR"),
+    (0x18CC7, 0x18CD6, SETSTACKERR, "SETSTACKERR"),
+    (0x18CDC, 0x18CE9, _ABSCOERCE, "_ABSCOERCE"),
+    (0x18CEF, 0x18DBE, COERCE, "COERCE"),
+    (0x18DC4, 0x18E17, UNCOERCE, "UNCOERCE"),
+    (0x18E4A, 0x18E7D, DNOTSYMB_SEMI, "DNOTSYMB_SEMI"),
+    (0x18E83, 0x18EB9, OBJ_18E7E, "OBJ_18E7E"),
+    (0x18EBF, 0x18ECD, COMPEVAL, "COMPEVAL"),
+    (0x18ED3, 0x18EDE, CK1_Dispatch, "CK1_Dispatch"),
+    (0x18EE4, 0x18EEF, CK2_Dispatch, "CK2_Dispatch"),
+    (0x18EF5, 0x18F00, CK3_Dispatch, "CK3_Dispatch"),
+    (0x18F06, 0x18F11, CK4_Dispatch, "CK4_Dispatch"),
+    (0x18F17, 0x18F22, CK5_Dispatch, "CK5_Dispatch"),
+    (0x18F3F, 0x18F69, L_18F3F, "L_18F3F"),
+    (0x18F83, 0x18F9C, L_18F83, "L_18F83"),
+    (0x18FA2, 0x18FA8, CK_DISPATCH0, "CK_DISPATCH0"),
+    (0x18FAE, 0x18FB1, CK_DISPATCH2, "CK_DISPATCH2"),
+    (0x18FB7, 0x19127, L_18FB7, "L_18FB7"),
+    (0x191BE, 0x19206, __OVF, "__OVF"),
+    (0x1920C, 0x19293, CKNFLOATS, "CKNFLOATS"),
+    (0x19299, 0x1934F, _ARRY, "_ARRY"),
+    (0x19355, 0x1936B, NOTINHARDROM_, "NOTINHARDROM_"),
+    (0x195F4, 0x195FA, code_195F4, "code_195F4"),
+    (0x19614, 0x1961A, code_19614, "code_19614"),
+    (0x19634, 0x1963A, code_19634, "code_19634"),
+    (0x19654, 0x1965A, code_19654, "code_19654"),
+    (0x19674, 0x1967A, code_19674, "code_19674"),
+    (0x19694, 0x1969A, code_19694, "code_19694"),
+    (0x196B4, 0x196BA, code_196B4, "code_196B4"),
+    (0x196D4, 0x196DA, code_196D4, "code_196D4"),
+    (0x19748, 0x1974E, code_19748, "code_19748"),
+    (0x1A2DF, 0x1A2FB, INHARDROM_, "INHARDROM_"),
+    (0x1A560, 0x1A577, syseval_s_, "syseval_s_"),
+    (0x1A636, 0x1A70B, lastarg, "lastarg"),
+    (0x1A7F7, 0x1A84B, wait, "wait"),
+    (0x1C63C, 0x1C64D, RCLSYSF, "RCLSYSF"),
+    (0x1C653, 0x1C677, RCLUSERF, "RCLUSERF"),
+    (0x1C6FC, 0x1C730, STOUSERF, "STOUSERF"),
+    (0x1C736, 0x1C77B, STOSYSF, "STOSYSF"),
+    (0x1F060, 0x1F0F4, ChkExpr1Name, "ChkExpr1Name"),
+    (0x1F639, 0x1F63F, code_1F639, "code_1F639"),
+    (0x1F9BD, 0x1F9C3, code_1F9BD, "code_1F9BD"),
+    (0x1F9E2, 0x1F9E8, code_1F9E2, "code_1F9E2"),
+    (0x1FA52, 0x1FA58, code_1FA52, "code_1FA52"),
+    (0x1FA86, 0x1FA8C, code_1FA86, "code_1FA86"),
+    (0x1FAE4, 0x1FAEA, code_1FAE4, "code_1FAE4"),
+    (0x1FB56, 0x1FB5C, code_1FB56, "code_1FB56"),
+    (0x1FB80, 0x1FB86, code_1FB80, "code_1FB80"),
 ];

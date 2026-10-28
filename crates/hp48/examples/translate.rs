@@ -1,6 +1,9 @@
 //! Translate the ROM's machine code into Rust: writes crates/hp48-rom/src/gen/.
 //!
-//! cargo run --release -p hp48 --example translate -- [ROM]
+//! cargo run --release -p hp48 --example translate -- [ROM] [--edit NAME]...
+//!
+//! `--edit NAME` also starts a hand edit of routine NAME: see
+//! crates/hp48-rom/src/edited/mod.rs.
 //!
 //! The code translated is every instruction the ROM analysis found
 //! (out/code.txt, written by tools/analyze.py) and every instruction in
@@ -267,11 +270,13 @@ struct Routine {
     insns: Vec<u32>,
 }
 
-/// A label as a Rust identifier, unique among `taken`.
-fn ident(name: &str, a: u32, taken: &mut BTreeSet<String>) -> String {
-    const KEYWORDS: &[&str] = &["as", "break", "const", "continue", "crate", "else", "enum", "extern", "false", "fn", "for", "if",
+/// Rust keywords, which labels and module names must not be.
+const KEYWORDS: &[&str] = &["as", "break", "const", "continue", "crate", "else", "enum", "extern", "false", "fn", "for", "if",
         "impl", "in", "let", "loop", "match", "mod", "move", "mut", "pub", "ref", "return", "self", "Self", "static", "struct",
         "super", "trait", "true", "type", "unsafe", "use", "where", "while", "async", "await", "dyn"];
+
+/// A label as a Rust identifier, unique among `taken`.
+fn ident(name: &str, a: u32, taken: &mut BTreeSet<String>) -> String {
     let mut s: String = name.chars().map(|c| if c.is_ascii_alphanumeric() { c } else { '_' }).collect();
     if s.starts_with(|c: char| c.is_ascii_digit()) || s.chars().all(|c| c == '_') || KEYWORDS.contains(&s.as_str()) {
         s.insert(0, 'r');
@@ -319,7 +324,7 @@ fn routine(rt: &Routine, fname: &str, code: &BTreeMap<u32, (Op, u32)>, src: &Sou
         }
         None => writeln!(out, "// Unlabelled code at #{:05X}.", rt.insns[0]).unwrap(),
     }
-    writeln!(out, "pub(super) fn {fname}(r: &mut Run) {{\n    let mut at = r.cpu.pc;\n    loop {{\n        match at {{").unwrap();
+    writeln!(out, "pub(crate) fn {fname}(r: &mut Run) {{\n    let mut at = r.cpu.pc;\n    loop {{\n        match at {{").unwrap();
     for (i, b) in blocks.iter().enumerate() {
         let (first, last) = (b[0], *b.last().unwrap());
         if i > 0 {
@@ -384,8 +389,43 @@ fn routine(rt: &Routine, fname: &str, code: &BTreeMap<u32, (Op, u32)>, src: &Sou
     out
 }
 
+/// Start a hand edit of a routine: copy its generated text to
+/// crates/hp48-rom/src/edited/ and list it in that module's EDITS.
+fn start_edit(name: &str, text: &str) {
+    let dir = std::path::Path::new("crates/hp48-rom/src/edited");
+    let lower = name.to_lowercase();
+    let module = if KEYWORDS.contains(&lower.as_str()) { format!("{lower}_") } else { lower };
+    let file = dir.join(format!("{module}.rs"));
+    if file.exists() {
+        eprintln!("{} exists: not overwritten", file.display());
+        return;
+    }
+    let body = format!(
+        "//! {name}, edited by hand. `hp48_rom::install` runs it in place of the\n//! generated routine (`crate::gen::{name}`), which `install_generated` keeps.\n\n#![allow(non_snake_case, clippy::no_effect)]\n\nuse crate::prelude::*;\n\n{}",
+        text.trim_end().to_string() + "\n"
+    );
+    std::fs::write(&file, body).unwrap();
+    let list = dir.join("mod.rs");
+    let mut m = std::fs::read_to_string(&list).expect("edited/mod.rs");
+    let at = m.find("\n/// Routines that replace").expect("the EDITS list in edited/mod.rs");
+    m.insert_str(at, &format!("mod {module};\n"));
+    let end = m.rfind("];").expect("the end of EDITS");
+    m.insert_str(end, &format!("    (\"{name}\", {module}::{name}),\n"));
+    std::fs::write(&list, m).unwrap();
+    println!("{} written; edit it, then rebuild", file.display());
+}
+
 fn main() {
-    let path = std::env::args().nth(1).unwrap_or_else(|| "ROM/gxrom-r".into());
+    let (mut path, mut edit) = ("ROM/gxrom-r".to_string(), BTreeSet::new());
+    let mut args = std::env::args().skip(1);
+    while let Some(a) = args.next() {
+        match a.as_str() {
+            "--edit" => {
+                edit.insert(args.next().expect("--edit NAME"));
+            }
+            _ => path = a,
+        }
+    }
     let image = std::fs::read(&path).unwrap_or_else(|e| panic!("{path}: {e}"));
     let m = Machine::new(&image);
     let rom = &m.hw.rom;
@@ -444,8 +484,15 @@ fn main() {
         let last = rt.insns.last().map(|a| a + code[a].1 - 1).unwrap();
         let fname = ident(rt.label.as_ref().map_or(&rt.name, |l| &l.name), first, &mut taken);
         let region = first >> 16;
-        files.entry(region).or_default().push_str(&routine(rt, &fname, &code, &src));
-        writeln!(tables.entry(region).or_default(), "    (0x{first:05X}, 0x{last:05X}, {fname}),").unwrap();
+        let text = routine(rt, &fname, &code, &src);
+        if edit.contains(&fname) {
+            start_edit(&fname, &text);
+        }
+        files.entry(region).or_default().push_str(&text);
+        writeln!(tables.entry(region).or_default(), "    (0x{first:05X}, 0x{last:05X}, {fname}, \"{fname}\"),").unwrap();
+    }
+    for name in edit.iter().filter(|n| !taken.contains(*n)) {
+        eprintln!("no routine {name}");
     }
 
     let dir = std::path::Path::new("crates/hp48-rom/src/gen");
@@ -454,17 +501,18 @@ fn main() {
         std::fs::remove_file(old.path()).unwrap();
     }
     let header = "// Generated by `cargo run --release -p hp48 --example translate` from ROM revision R\n// and the firmware source (firmware/). Don't edit: change the generator.\n";
-    let mut module = format!("{header}\n");
+    // The routines are exported for the hand edits, which use a few.
+    let mut module = format!("{header}\n#![allow(unused_imports)]\n\n");
     let mut all = String::from(
-        "\n/// Every translated routine: the address of its first instruction, its\n/// last address, and its function.\npub const ALL: &[&[(u32, u32, Block)]] = &[\n",
+        "\n/// Every translated routine: the address of its first instruction, its\n/// last address, its function and its name.\npub const ALL: &[&[(u32, u32, Block, &str)]] = &[\n",
     );
     for (region, file) in &files {
         let text = format!(
-            "{header}\n#![allow(non_snake_case, clippy::no_effect)]\n\nuse super::super::prelude::*;\n\n{file}pub const ROUTINES: &[(u32, u32, Block)] = &[\n{}];\n",
+            "{header}\n#![allow(non_snake_case, clippy::no_effect)]\n\nuse crate::prelude::*;\n\n{file}pub const ROUTINES: &[(u32, u32, Block, &str)] = &[\n{}];\n",
             tables[region]
         );
         std::fs::write(dir.join(format!("r{region:x}.rs")), text).unwrap();
-        writeln!(module, "mod r{region:x};").unwrap();
+        writeln!(module, "mod r{region:x};\npub(crate) use r{region:x}::*;").unwrap();
         writeln!(all, "    r{region:x}::ROUTINES,").unwrap();
     }
     writeln!(module, "\n/// `hp48::rom_hash` of the ROM's nibbles.\npub const ROM_HASH: u64 = 0x{:016X};", hp48::rom_hash(rom)).unwrap();

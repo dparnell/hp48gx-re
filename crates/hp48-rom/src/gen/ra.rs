@@ -3,10 +3,10 @@
 
 #![allow(non_snake_case, clippy::no_effect)]
 
-use super::super::prelude::*;
+use crate::prelude::*;
 
 // Unlabelled code at #A0130.
-pub(super) fn code_A0130(r: &mut Run) {
+pub(crate) fn code_A0130(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -22,6 +22,6 @@ pub(super) fn code_A0130(r: &mut Run) {
     }
 }
 
-pub const ROUTINES: &[(u32, u32, Block)] = &[
-    (0xA0130, 0xA013D, code_A0130),
+pub const ROUTINES: &[(u32, u32, Block, &str)] = &[
+    (0xA0130, 0xA013D, code_A0130, "code_A0130"),
 ];

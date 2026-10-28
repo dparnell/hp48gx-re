@@ -3,10 +3,10 @@
 
 #![allow(non_snake_case, clippy::no_effect)]
 
-use super::super::prelude::*;
+use crate::prelude::*;
 
 // L_80000: firmware/upper/80000-selftest.s:5
-pub(super) fn L_80000(r: &mut Run) {
+pub(crate) fn L_80000(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -101,7 +101,7 @@ pub(super) fn L_80000(r: &mut Run) {
 }
 
 // SUB_80081: firmware/upper/80000-selftest.s:41
-pub(super) fn SUB_80081(r: &mut Run) {
+pub(crate) fn SUB_80081(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -268,7 +268,7 @@ pub(super) fn SUB_80081(r: &mut Run) {
 }
 
 // SUB_80167: firmware/upper/80000-selftest.s:113
-pub(super) fn SUB_80167(r: &mut Run) {
+pub(crate) fn SUB_80167(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -372,7 +372,7 @@ pub(super) fn SUB_80167(r: &mut Run) {
 }
 
 // SUB_80215: firmware/upper/80000-selftest.s:160
-pub(super) fn SUB_80215(r: &mut Run) {
+pub(crate) fn SUB_80215(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -399,7 +399,7 @@ pub(super) fn SUB_80215(r: &mut Run) {
 }
 
 // SUB_802BE: firmware/upper/80000-selftest.s:204
-pub(super) fn SUB_802BE(r: &mut Run) {
+pub(crate) fn SUB_802BE(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -417,7 +417,7 @@ pub(super) fn SUB_802BE(r: &mut Run) {
 }
 
 // SUB_802C8: firmware/upper/80000-selftest.s:210
-pub(super) fn SUB_802C8(r: &mut Run) {
+pub(crate) fn SUB_802C8(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -435,7 +435,7 @@ pub(super) fn SUB_802C8(r: &mut Run) {
 }
 
 // SUB_802D2: firmware/upper/80000-selftest.s:216
-pub(super) fn SUB_802D2(r: &mut Run) {
+pub(crate) fn SUB_802D2(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -453,7 +453,7 @@ pub(super) fn SUB_802D2(r: &mut Run) {
 }
 
 // SUB_802D8: firmware/upper/80000-selftest.s:221
-pub(super) fn SUB_802D8(r: &mut Run) {
+pub(crate) fn SUB_802D8(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -469,7 +469,7 @@ pub(super) fn SUB_802D8(r: &mut Run) {
 }
 
 // SUB_802DF: firmware/upper/80000-selftest.s:225
-pub(super) fn SUB_802DF(r: &mut Run) {
+pub(crate) fn SUB_802DF(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -524,7 +524,7 @@ pub(super) fn SUB_802DF(r: &mut Run) {
 }
 
 // SUB_80329: firmware/upper/80000-selftest.s:246
-pub(super) fn SUB_80329(r: &mut Run) {
+pub(crate) fn SUB_80329(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -564,7 +564,7 @@ pub(super) fn SUB_80329(r: &mut Run) {
 }
 
 // SUB_80360: firmware/upper/80000-selftest.s:259
-pub(super) fn SUB_80360(r: &mut Run) {
+pub(crate) fn SUB_80360(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -600,7 +600,7 @@ pub(super) fn SUB_80360(r: &mut Run) {
 }
 
 // SUB_80389: firmware/upper/80000-selftest.s:268
-pub(super) fn SUB_80389(r: &mut Run) {
+pub(crate) fn SUB_80389(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -693,7 +693,7 @@ pub(super) fn SUB_80389(r: &mut Run) {
 }
 
 // SUB_8040D: firmware/upper/80000-selftest.s:301
-pub(super) fn SUB_8040D(r: &mut Run) {
+pub(crate) fn SUB_8040D(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -709,7 +709,7 @@ pub(super) fn SUB_8040D(r: &mut Run) {
 }
 
 // SUB_80414: firmware/upper/80000-selftest.s:305
-pub(super) fn SUB_80414(r: &mut Run) {
+pub(crate) fn SUB_80414(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -747,7 +747,7 @@ pub(super) fn SUB_80414(r: &mut Run) {
 }
 
 // SUB_8043F: firmware/upper/80000-selftest.s:319
-pub(super) fn SUB_8043F(r: &mut Run) {
+pub(crate) fn SUB_8043F(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -778,7 +778,7 @@ pub(super) fn SUB_8043F(r: &mut Run) {
 }
 
 // SUB_8044F: firmware/upper/80000-selftest.s:329
-pub(super) fn SUB_8044F(r: &mut Run) {
+pub(crate) fn SUB_8044F(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -816,7 +816,7 @@ pub(super) fn SUB_8044F(r: &mut Run) {
 }
 
 // SUB_8047D: firmware/upper/80000-selftest.s:344
-pub(super) fn SUB_8047D(r: &mut Run) {
+pub(crate) fn SUB_8047D(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -860,7 +860,7 @@ pub(super) fn SUB_8047D(r: &mut Run) {
 }
 
 // SUB_8049F: firmware/upper/80000-selftest.s:361
-pub(super) fn SUB_8049F(r: &mut Run) {
+pub(crate) fn SUB_8049F(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -882,7 +882,7 @@ pub(super) fn SUB_8049F(r: &mut Run) {
 }
 
 // SUB_804B6: firmware/upper/80000-selftest.s:371
-pub(super) fn SUB_804B6(r: &mut Run) {
+pub(crate) fn SUB_804B6(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -899,7 +899,7 @@ pub(super) fn SUB_804B6(r: &mut Run) {
 }
 
 // SUB_804C0: firmware/upper/80000-selftest.s:376
-pub(super) fn SUB_804C0(r: &mut Run) {
+pub(crate) fn SUB_804C0(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -968,7 +968,7 @@ pub(super) fn SUB_804C0(r: &mut Run) {
 }
 
 // SUB_8054D: firmware/upper/80000-selftest.s:410
-pub(super) fn SUB_8054D(r: &mut Run) {
+pub(crate) fn SUB_8054D(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -1040,7 +1040,7 @@ pub(super) fn SUB_8054D(r: &mut Run) {
 }
 
 // SUB_805B7: firmware/upper/80000-selftest.s:452
-pub(super) fn SUB_805B7(r: &mut Run) {
+pub(crate) fn SUB_805B7(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -1113,7 +1113,7 @@ pub(super) fn SUB_805B7(r: &mut Run) {
 }
 
 // SUB_805FE: firmware/upper/80000-selftest.s:473
-pub(super) fn SUB_805FE(r: &mut Run) {
+pub(crate) fn SUB_805FE(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -1218,7 +1218,7 @@ pub(super) fn SUB_805FE(r: &mut Run) {
 }
 
 // SUB_8066D: firmware/upper/80000-selftest.s:502
-pub(super) fn SUB_8066D(r: &mut Run) {
+pub(crate) fn SUB_8066D(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -1297,7 +1297,7 @@ pub(super) fn SUB_8066D(r: &mut Run) {
 }
 
 // SUB_806DE: firmware/upper/80000-selftest.s:529
-pub(super) fn SUB_806DE(r: &mut Run) {
+pub(crate) fn SUB_806DE(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -1425,7 +1425,7 @@ pub(super) fn SUB_806DE(r: &mut Run) {
 }
 
 // SUB_807E9: firmware/upper/80000-selftest.s:617
-pub(super) fn SUB_807E9(r: &mut Run) {
+pub(crate) fn SUB_807E9(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -1450,7 +1450,7 @@ pub(super) fn SUB_807E9(r: &mut Run) {
 }
 
 // SUB_8081A: firmware/upper/80000-selftest.s:628
-pub(super) fn SUB_8081A(r: &mut Run) {
+pub(crate) fn SUB_8081A(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -1625,7 +1625,7 @@ pub(super) fn SUB_8081A(r: &mut Run) {
 }
 
 // SUB_80916: firmware/upper/80000-selftest.s:705
-pub(super) fn SUB_80916(r: &mut Run) {
+pub(crate) fn SUB_80916(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -1663,7 +1663,7 @@ pub(super) fn SUB_80916(r: &mut Run) {
 }
 
 // L_809BE: firmware/upper/80000-selftest.s:724
-pub(super) fn L_809BE(r: &mut Run) {
+pub(crate) fn L_809BE(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -1801,7 +1801,7 @@ pub(super) fn L_809BE(r: &mut Run) {
 }
 
 // SUB_80ABA: firmware/upper/80000-selftest.s:790
-pub(super) fn SUB_80ABA(r: &mut Run) {
+pub(crate) fn SUB_80ABA(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -2001,7 +2001,7 @@ pub(super) fn SUB_80ABA(r: &mut Run) {
 }
 
 // SUB_80BCB: firmware/upper/80000-selftest.s:881
-pub(super) fn SUB_80BCB(r: &mut Run) {
+pub(crate) fn SUB_80BCB(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -2029,7 +2029,7 @@ pub(super) fn SUB_80BCB(r: &mut Run) {
 }
 
 // SUB_80BE7: firmware/upper/80000-selftest.s:891
-pub(super) fn SUB_80BE7(r: &mut Run) {
+pub(crate) fn SUB_80BE7(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -2073,7 +2073,7 @@ pub(super) fn SUB_80BE7(r: &mut Run) {
 }
 
 // SUB_80C13: firmware/upper/80000-selftest.s:911
-pub(super) fn SUB_80C13(r: &mut Run) {
+pub(crate) fn SUB_80C13(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -2191,7 +2191,7 @@ pub(super) fn SUB_80C13(r: &mut Run) {
 }
 
 // SUB_80CC0: firmware/upper/80000-selftest.s:958
-pub(super) fn SUB_80CC0(r: &mut Run) {
+pub(crate) fn SUB_80CC0(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -2231,7 +2231,7 @@ pub(super) fn SUB_80CC0(r: &mut Run) {
 }
 
 // SUB_80CE3: firmware/upper/80000-selftest.s:974
-pub(super) fn SUB_80CE3(r: &mut Run) {
+pub(crate) fn SUB_80CE3(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -2253,7 +2253,7 @@ pub(super) fn SUB_80CE3(r: &mut Run) {
 }
 
 // SUB_80CF0: firmware/upper/80000-selftest.s:981
-pub(super) fn SUB_80CF0(r: &mut Run) {
+pub(crate) fn SUB_80CF0(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -2275,7 +2275,7 @@ pub(super) fn SUB_80CF0(r: &mut Run) {
 }
 
 // SUB_80CFD: firmware/upper/80000-selftest.s:988
-pub(super) fn SUB_80CFD(r: &mut Run) {
+pub(crate) fn SUB_80CFD(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -2295,7 +2295,7 @@ pub(super) fn SUB_80CFD(r: &mut Run) {
 }
 
 // SUB_80D13: firmware/upper/80000-selftest.s:996
-pub(super) fn SUB_80D13(r: &mut Run) {
+pub(crate) fn SUB_80D13(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -2315,7 +2315,7 @@ pub(super) fn SUB_80D13(r: &mut Run) {
 }
 
 // SUB_80D29: firmware/upper/80000-selftest.s:1004
-pub(super) fn SUB_80D29(r: &mut Run) {
+pub(crate) fn SUB_80D29(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -2339,7 +2339,7 @@ pub(super) fn SUB_80D29(r: &mut Run) {
 }
 
 // SUB_80D39: firmware/upper/80000-selftest.s:1010
-pub(super) fn SUB_80D39(r: &mut Run) {
+pub(crate) fn SUB_80D39(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -2397,7 +2397,7 @@ pub(super) fn SUB_80D39(r: &mut Run) {
 }
 
 // SUB_80D8B: firmware/upper/80000-selftest.s:1033
-pub(super) fn SUB_80D8B(r: &mut Run) {
+pub(crate) fn SUB_80D8B(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -2471,7 +2471,7 @@ pub(super) fn SUB_80D8B(r: &mut Run) {
 }
 
 // SUB_80DED: firmware/upper/80000-selftest.s:1060
-pub(super) fn SUB_80DED(r: &mut Run) {
+pub(crate) fn SUB_80DED(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -2487,7 +2487,7 @@ pub(super) fn SUB_80DED(r: &mut Run) {
 }
 
 // SUB_80DF4: firmware/upper/80000-selftest.s:1064
-pub(super) fn SUB_80DF4(r: &mut Run) {
+pub(crate) fn SUB_80DF4(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -2606,7 +2606,7 @@ pub(super) fn SUB_80DF4(r: &mut Run) {
 }
 
 // SUB_80EAE: firmware/upper/80000-selftest.s:1136
-pub(super) fn SUB_80EAE(r: &mut Run) {
+pub(crate) fn SUB_80EAE(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -2622,7 +2622,7 @@ pub(super) fn SUB_80EAE(r: &mut Run) {
 }
 
 // SUB_80EB5: firmware/upper/80000-selftest.s:1140
-pub(super) fn SUB_80EB5(r: &mut Run) {
+pub(crate) fn SUB_80EB5(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -2638,7 +2638,7 @@ pub(super) fn SUB_80EB5(r: &mut Run) {
 }
 
 // SUB_80EBC: firmware/upper/80000-selftest.s:1144
-pub(super) fn SUB_80EBC(r: &mut Run) {
+pub(crate) fn SUB_80EBC(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -2683,7 +2683,7 @@ pub(super) fn SUB_80EBC(r: &mut Run) {
 }
 
 // SUB_80EF3: firmware/upper/80000-selftest.s:1161
-pub(super) fn SUB_80EF3(r: &mut Run) {
+pub(crate) fn SUB_80EF3(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -2819,7 +2819,7 @@ pub(super) fn SUB_80EF3(r: &mut Run) {
 }
 
 // SUB_80FA6: firmware/upper/80000-selftest.s:1219
-pub(super) fn SUB_80FA6(r: &mut Run) {
+pub(crate) fn SUB_80FA6(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -2953,7 +2953,7 @@ pub(super) fn SUB_80FA6(r: &mut Run) {
 }
 
 // SUB_81051: firmware/upper/80000-selftest.s:1275
-pub(super) fn SUB_81051(r: &mut Run) {
+pub(crate) fn SUB_81051(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -2972,7 +2972,7 @@ pub(super) fn SUB_81051(r: &mut Run) {
 }
 
 // SUB_81061: firmware/upper/80000-selftest.s:1282
-pub(super) fn SUB_81061(r: &mut Run) {
+pub(crate) fn SUB_81061(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -2988,7 +2988,7 @@ pub(super) fn SUB_81061(r: &mut Run) {
 }
 
 // SUB_81068: firmware/upper/80000-selftest.s:1286
-pub(super) fn SUB_81068(r: &mut Run) {
+pub(crate) fn SUB_81068(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -3004,7 +3004,7 @@ pub(super) fn SUB_81068(r: &mut Run) {
 }
 
 // SUB_8106F: firmware/upper/80000-selftest.s:1290
-pub(super) fn SUB_8106F(r: &mut Run) {
+pub(crate) fn SUB_8106F(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -3020,7 +3020,7 @@ pub(super) fn SUB_8106F(r: &mut Run) {
 }
 
 // SUB_81076: firmware/upper/80000-selftest.s:1294
-pub(super) fn SUB_81076(r: &mut Run) {
+pub(crate) fn SUB_81076(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -3096,7 +3096,7 @@ pub(super) fn SUB_81076(r: &mut Run) {
 }
 
 // SUB_810E6: firmware/upper/80000-selftest.s:1325
-pub(super) fn SUB_810E6(r: &mut Run) {
+pub(crate) fn SUB_810E6(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -3242,7 +3242,7 @@ pub(super) fn SUB_810E6(r: &mut Run) {
 }
 
 // L_811ED: firmware/upper/80000-selftest.s:1389
-pub(super) fn L_811ED(r: &mut Run) {
+pub(crate) fn L_811ED(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -3269,7 +3269,7 @@ pub(super) fn L_811ED(r: &mut Run) {
 }
 
 // SUB_8120A: firmware/upper/80000-selftest.s:1398
-pub(super) fn SUB_8120A(r: &mut Run) {
+pub(crate) fn SUB_8120A(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -3285,7 +3285,7 @@ pub(super) fn SUB_8120A(r: &mut Run) {
 }
 
 // SUB_81211: firmware/upper/80000-selftest.s:1402
-pub(super) fn SUB_81211(r: &mut Run) {
+pub(crate) fn SUB_81211(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -3393,7 +3393,7 @@ pub(super) fn SUB_81211(r: &mut Run) {
 }
 
 // SUB_812AB: firmware/upper/80000-selftest.s:1456
-pub(super) fn SUB_812AB(r: &mut Run) {
+pub(crate) fn SUB_812AB(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -3462,7 +3462,7 @@ pub(super) fn SUB_812AB(r: &mut Run) {
 }
 
 // SUB_812FA: firmware/upper/80000-selftest.s:1477
-pub(super) fn SUB_812FA(r: &mut Run) {
+pub(crate) fn SUB_812FA(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -3531,7 +3531,7 @@ pub(super) fn SUB_812FA(r: &mut Run) {
 }
 
 // SUB_81349: firmware/upper/80000-selftest.s:1498
-pub(super) fn SUB_81349(r: &mut Run) {
+pub(crate) fn SUB_81349(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -3572,7 +3572,7 @@ pub(super) fn SUB_81349(r: &mut Run) {
 }
 
 // SUB_8136B: firmware/upper/80000-selftest.s:1509
-pub(super) fn SUB_8136B(r: &mut Run) {
+pub(crate) fn SUB_8136B(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -3589,7 +3589,7 @@ pub(super) fn SUB_8136B(r: &mut Run) {
 }
 
 // SUB_81374: firmware/upper/80000-selftest.s:1514
-pub(super) fn SUB_81374(r: &mut Run) {
+pub(crate) fn SUB_81374(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -3647,7 +3647,7 @@ pub(super) fn SUB_81374(r: &mut Run) {
 }
 
 // SUB_813BE: firmware/upper/80000-selftest.s:1536
-pub(super) fn SUB_813BE(r: &mut Run) {
+pub(crate) fn SUB_813BE(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -3668,7 +3668,7 @@ pub(super) fn SUB_813BE(r: &mut Run) {
 }
 
 // SUB_813CC: firmware/upper/80000-selftest.s:1542
-pub(super) fn SUB_813CC(r: &mut Run) {
+pub(crate) fn SUB_813CC(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -3770,7 +3770,7 @@ pub(super) fn SUB_813CC(r: &mut Run) {
 }
 
 // SUB_8148B: firmware/upper/80000-selftest.s:1613
-pub(super) fn SUB_8148B(r: &mut Run) {
+pub(crate) fn SUB_8148B(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -3803,7 +3803,7 @@ pub(super) fn SUB_8148B(r: &mut Run) {
 }
 
 // SUB_814C5: firmware/upper/80000-selftest.s:1629
-pub(super) fn SUB_814C5(r: &mut Run) {
+pub(crate) fn SUB_814C5(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -3837,7 +3837,7 @@ pub(super) fn SUB_814C5(r: &mut Run) {
 }
 
 // SUB_814E8: firmware/upper/80000-selftest.s:1641
-pub(super) fn SUB_814E8(r: &mut Run) {
+pub(crate) fn SUB_814E8(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -3871,7 +3871,7 @@ pub(super) fn SUB_814E8(r: &mut Run) {
 }
 
 // SUB_8150C: firmware/upper/80000-selftest.s:1657
-pub(super) fn SUB_8150C(r: &mut Run) {
+pub(crate) fn SUB_8150C(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -3903,7 +3903,7 @@ pub(super) fn SUB_8150C(r: &mut Run) {
 }
 
 // SUB_81529: firmware/upper/80000-selftest.s:1667
-pub(super) fn SUB_81529(r: &mut Run) {
+pub(crate) fn SUB_81529(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -3944,7 +3944,7 @@ pub(super) fn SUB_81529(r: &mut Run) {
 }
 
 // SUB_8155D: firmware/upper/80000-selftest.s:1690
-pub(super) fn SUB_8155D(r: &mut Run) {
+pub(crate) fn SUB_8155D(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -4014,7 +4014,7 @@ pub(super) fn SUB_8155D(r: &mut Run) {
 }
 
 // SUB_815C6: firmware/upper/80000-selftest.s:1719
-pub(super) fn SUB_815C6(r: &mut Run) {
+pub(crate) fn SUB_815C6(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -4032,7 +4032,7 @@ pub(super) fn SUB_815C6(r: &mut Run) {
 }
 
 // SUB_815D3: firmware/upper/80000-selftest.s:1725
-pub(super) fn SUB_815D3(r: &mut Run) {
+pub(crate) fn SUB_815D3(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -4059,7 +4059,7 @@ pub(super) fn SUB_815D3(r: &mut Run) {
 }
 
 // SUB_815FE: firmware/upper/80000-selftest.s:1735
-pub(super) fn SUB_815FE(r: &mut Run) {
+pub(crate) fn SUB_815FE(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -4075,7 +4075,7 @@ pub(super) fn SUB_815FE(r: &mut Run) {
 }
 
 // SUB_81602: firmware/upper/80000-selftest.s:1739
-pub(super) fn SUB_81602(r: &mut Run) {
+pub(crate) fn SUB_81602(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -4133,7 +4133,7 @@ pub(super) fn SUB_81602(r: &mut Run) {
 }
 
 // SUB_8165A: firmware/upper/80000-selftest.s:1764
-pub(super) fn SUB_8165A(r: &mut Run) {
+pub(crate) fn SUB_8165A(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -4152,7 +4152,7 @@ pub(super) fn SUB_8165A(r: &mut Run) {
 }
 
 // SUB_81662: firmware/upper/80000-selftest.s:1770
-pub(super) fn SUB_81662(r: &mut Run) {
+pub(crate) fn SUB_81662(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -4211,7 +4211,7 @@ pub(super) fn SUB_81662(r: &mut Run) {
 }
 
 // SUB_816AD: firmware/upper/80000-selftest.s:1801
-pub(super) fn SUB_816AD(r: &mut Run) {
+pub(crate) fn SUB_816AD(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -4254,7 +4254,7 @@ pub(super) fn SUB_816AD(r: &mut Run) {
 }
 
 // SUB_816E5: firmware/upper/80000-selftest.s:1820
-pub(super) fn SUB_816E5(r: &mut Run) {
+pub(crate) fn SUB_816E5(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -4284,7 +4284,7 @@ pub(super) fn SUB_816E5(r: &mut Run) {
 }
 
 // SUB_816FE: firmware/upper/80000-selftest.s:1833
-pub(super) fn SUB_816FE(r: &mut Run) {
+pub(crate) fn SUB_816FE(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -4322,7 +4322,7 @@ pub(super) fn SUB_816FE(r: &mut Run) {
 }
 
 // SUB_81736: firmware/upper/80000-selftest.s:1851
-pub(super) fn SUB_81736(r: &mut Run) {
+pub(crate) fn SUB_81736(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -4373,7 +4373,7 @@ pub(super) fn SUB_81736(r: &mut Run) {
 }
 
 // SUB_81769: firmware/upper/80000-selftest.s:1869
-pub(super) fn SUB_81769(r: &mut Run) {
+pub(crate) fn SUB_81769(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -4456,7 +4456,7 @@ pub(super) fn SUB_81769(r: &mut Run) {
 }
 
 // SUB_817E9: firmware/upper/80000-selftest.s:1912
-pub(super) fn SUB_817E9(r: &mut Run) {
+pub(crate) fn SUB_817E9(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -4503,7 +4503,7 @@ pub(super) fn SUB_817E9(r: &mut Run) {
 }
 
 // L_81D24: firmware/upper/80000-selftest.s:1986
-pub(super) fn L_81D24(r: &mut Run) {
+pub(crate) fn L_81D24(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -4554,7 +4554,7 @@ pub(super) fn L_81D24(r: &mut Run) {
 }
 
 // SUB_81D6E: firmware/upper/80000-selftest.s:2007
-pub(super) fn SUB_81D6E(r: &mut Run) {
+pub(crate) fn SUB_81D6E(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -4589,7 +4589,7 @@ pub(super) fn SUB_81D6E(r: &mut Run) {
 }
 
 // SUB_81DE7: firmware/upper/80000-selftest.s:2068
-pub(super) fn SUB_81DE7(r: &mut Run) {
+pub(crate) fn SUB_81DE7(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -4614,7 +4614,7 @@ pub(super) fn SUB_81DE7(r: &mut Run) {
 }
 
 // SUB_81E19: firmware/upper/80000-selftest.s:2076
-pub(super) fn SUB_81E19(r: &mut Run) {
+pub(crate) fn SUB_81E19(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -4655,7 +4655,7 @@ pub(super) fn SUB_81E19(r: &mut Run) {
 }
 
 // SUB_81E4C: firmware/upper/80000-selftest.s:2087
-pub(super) fn SUB_81E4C(r: &mut Run) {
+pub(crate) fn SUB_81E4C(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -4693,7 +4693,7 @@ pub(super) fn SUB_81E4C(r: &mut Run) {
 }
 
 // Unlabelled code at #85C25.
-pub(super) fn code_85C25(r: &mut Run) {
+pub(crate) fn code_85C25(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -4710,7 +4710,7 @@ pub(super) fn code_85C25(r: &mut Run) {
 }
 
 // Unlabelled code at #85C60.
-pub(super) fn code_85C60(r: &mut Run) {
+pub(crate) fn code_85C60(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -4757,7 +4757,7 @@ pub(super) fn code_85C60(r: &mut Run) {
 }
 
 // Unlabelled code at #87071.
-pub(super) fn code_87071(r: &mut Run) {
+pub(crate) fn code_87071(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -6340,7 +6340,7 @@ pub(super) fn code_87071(r: &mut Run) {
 }
 
 // SUB_87913: firmware/upper/86FE4-lib0C0.s:671
-pub(super) fn SUB_87913(r: &mut Run) {
+pub(crate) fn SUB_87913(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -6359,7 +6359,7 @@ pub(super) fn SUB_87913(r: &mut Run) {
 }
 
 // SUB_8791E: firmware/upper/86FE4-lib0C0.s:678
-pub(super) fn SUB_8791E(r: &mut Run) {
+pub(crate) fn SUB_8791E(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -6381,7 +6381,7 @@ pub(super) fn SUB_8791E(r: &mut Run) {
 }
 
 // SUB_87933: firmware/upper/86FE4-lib0C0.s:688
-pub(super) fn SUB_87933(r: &mut Run) {
+pub(crate) fn SUB_87933(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -6397,7 +6397,7 @@ pub(super) fn SUB_87933(r: &mut Run) {
 }
 
 // SUB_8793A: firmware/upper/86FE4-lib0C0.s:692
-pub(super) fn SUB_8793A(r: &mut Run) {
+pub(crate) fn SUB_8793A(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -6413,7 +6413,7 @@ pub(super) fn SUB_8793A(r: &mut Run) {
 }
 
 // SUB_87941: firmware/upper/86FE4-lib0C0.s:696
-pub(super) fn SUB_87941(r: &mut Run) {
+pub(crate) fn SUB_87941(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -6429,7 +6429,7 @@ pub(super) fn SUB_87941(r: &mut Run) {
 }
 
 // SUB_87948: firmware/upper/86FE4-lib0C0.s:700
-pub(super) fn SUB_87948(r: &mut Run) {
+pub(crate) fn SUB_87948(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -6445,7 +6445,7 @@ pub(super) fn SUB_87948(r: &mut Run) {
 }
 
 // SUB_8794F: firmware/upper/86FE4-lib0C0.s:704
-pub(super) fn SUB_8794F(r: &mut Run) {
+pub(crate) fn SUB_8794F(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -6461,7 +6461,7 @@ pub(super) fn SUB_8794F(r: &mut Run) {
 }
 
 // SUB_87956: firmware/upper/86FE4-lib0C0.s:708
-pub(super) fn SUB_87956(r: &mut Run) {
+pub(crate) fn SUB_87956(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -6477,7 +6477,7 @@ pub(super) fn SUB_87956(r: &mut Run) {
 }
 
 // SUB_8795D: firmware/upper/86FE4-lib0C0.s:712
-pub(super) fn SUB_8795D(r: &mut Run) {
+pub(crate) fn SUB_8795D(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -6506,7 +6506,7 @@ pub(super) fn SUB_8795D(r: &mut Run) {
 }
 
 // SUB_87977: firmware/upper/86FE4-lib0C0.s:724
-pub(super) fn SUB_87977(r: &mut Run) {
+pub(crate) fn SUB_87977(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -6522,7 +6522,7 @@ pub(super) fn SUB_87977(r: &mut Run) {
 }
 
 // SUB_8797B: firmware/upper/86FE4-lib0C0.s:728
-pub(super) fn SUB_8797B(r: &mut Run) {
+pub(crate) fn SUB_8797B(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -6538,7 +6538,7 @@ pub(super) fn SUB_8797B(r: &mut Run) {
 }
 
 // SUB_87982: firmware/upper/86FE4-lib0C0.s:732
-pub(super) fn SUB_87982(r: &mut Run) {
+pub(crate) fn SUB_87982(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -6558,7 +6558,7 @@ pub(super) fn SUB_87982(r: &mut Run) {
 }
 
 // SUB_8798A: firmware/upper/86FE4-lib0C0.s:737
-pub(super) fn SUB_8798A(r: &mut Run) {
+pub(crate) fn SUB_8798A(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -6578,7 +6578,7 @@ pub(super) fn SUB_8798A(r: &mut Run) {
 }
 
 // SUB_87992: firmware/upper/86FE4-lib0C0.s:742
-pub(super) fn SUB_87992(r: &mut Run) {
+pub(crate) fn SUB_87992(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -6594,7 +6594,7 @@ pub(super) fn SUB_87992(r: &mut Run) {
 }
 
 // SUB_87999: firmware/upper/86FE4-lib0C0.s:746
-pub(super) fn SUB_87999(r: &mut Run) {
+pub(crate) fn SUB_87999(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -6610,7 +6610,7 @@ pub(super) fn SUB_87999(r: &mut Run) {
 }
 
 // SUB_879A0: firmware/upper/86FE4-lib0C0.s:750
-pub(super) fn SUB_879A0(r: &mut Run) {
+pub(crate) fn SUB_879A0(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -6626,7 +6626,7 @@ pub(super) fn SUB_879A0(r: &mut Run) {
 }
 
 // SUB_879A7: firmware/upper/86FE4-lib0C0.s:754
-pub(super) fn SUB_879A7(r: &mut Run) {
+pub(crate) fn SUB_879A7(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -6681,7 +6681,7 @@ pub(super) fn SUB_879A7(r: &mut Run) {
 }
 
 // SUB_87A04: firmware/upper/86FE4-lib0C0.s:783
-pub(super) fn SUB_87A04(r: &mut Run) {
+pub(crate) fn SUB_87A04(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -6766,7 +6766,7 @@ pub(super) fn SUB_87A04(r: &mut Run) {
 }
 
 // SUB_87A6E: firmware/upper/86FE4-lib0C0.s:821
-pub(super) fn SUB_87A6E(r: &mut Run) {
+pub(crate) fn SUB_87A6E(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -6829,7 +6829,7 @@ pub(super) fn SUB_87A6E(r: &mut Run) {
 }
 
 // SUB_87AAD: firmware/upper/86FE4-lib0C0.s:848
-pub(super) fn SUB_87AAD(r: &mut Run) {
+pub(crate) fn SUB_87AAD(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -6873,7 +6873,7 @@ pub(super) fn SUB_87AAD(r: &mut Run) {
 }
 
 // SUB_87AD7: firmware/upper/86FE4-lib0C0.s:869
-pub(super) fn SUB_87AD7(r: &mut Run) {
+pub(crate) fn SUB_87AD7(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -6904,7 +6904,7 @@ pub(super) fn SUB_87AD7(r: &mut Run) {
 }
 
 // SUB_87AEE: firmware/upper/86FE4-lib0C0.s:881
-pub(super) fn SUB_87AEE(r: &mut Run) {
+pub(crate) fn SUB_87AEE(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -6928,7 +6928,7 @@ pub(super) fn SUB_87AEE(r: &mut Run) {
 }
 
 // SUB_87AFA: firmware/upper/86FE4-lib0C0.s:888
-pub(super) fn SUB_87AFA(r: &mut Run) {
+pub(crate) fn SUB_87AFA(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -6944,7 +6944,7 @@ pub(super) fn SUB_87AFA(r: &mut Run) {
 }
 
 // SUB_87B01: firmware/upper/86FE4-lib0C0.s:892
-pub(super) fn SUB_87B01(r: &mut Run) {
+pub(crate) fn SUB_87B01(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -6964,7 +6964,7 @@ pub(super) fn SUB_87B01(r: &mut Run) {
 }
 
 // SUB_87B09: firmware/upper/86FE4-lib0C0.s:897
-pub(super) fn SUB_87B09(r: &mut Run) {
+pub(crate) fn SUB_87B09(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -7003,7 +7003,7 @@ pub(super) fn SUB_87B09(r: &mut Run) {
 }
 
 // SUB_87B28: firmware/upper/86FE4-lib0C0.s:909
-pub(super) fn SUB_87B28(r: &mut Run) {
+pub(crate) fn SUB_87B28(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -7019,7 +7019,7 @@ pub(super) fn SUB_87B28(r: &mut Run) {
 }
 
 // SUB_87B2C: firmware/upper/86FE4-lib0C0.s:913
-pub(super) fn SUB_87B2C(r: &mut Run) {
+pub(crate) fn SUB_87B2C(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -7043,7 +7043,7 @@ pub(super) fn SUB_87B2C(r: &mut Run) {
 }
 
 // SUB_87B38: firmware/upper/86FE4-lib0C0.s:919
-pub(super) fn SUB_87B38(r: &mut Run) {
+pub(crate) fn SUB_87B38(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -7071,7 +7071,7 @@ pub(super) fn SUB_87B38(r: &mut Run) {
 }
 
 // SUB_87B48: firmware/upper/86FE4-lib0C0.s:926
-pub(super) fn SUB_87B48(r: &mut Run) {
+pub(crate) fn SUB_87B48(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -7087,7 +7087,7 @@ pub(super) fn SUB_87B48(r: &mut Run) {
 }
 
 // SUB_87B4C: firmware/upper/86FE4-lib0C0.s:930
-pub(super) fn SUB_87B4C(r: &mut Run) {
+pub(crate) fn SUB_87B4C(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -7111,7 +7111,7 @@ pub(super) fn SUB_87B4C(r: &mut Run) {
 }
 
 // SUB_87B58: firmware/upper/86FE4-lib0C0.s:936
-pub(super) fn SUB_87B58(r: &mut Run) {
+pub(crate) fn SUB_87B58(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -7131,7 +7131,7 @@ pub(super) fn SUB_87B58(r: &mut Run) {
 }
 
 // SUB_87B5F: firmware/upper/86FE4-lib0C0.s:941
-pub(super) fn SUB_87B5F(r: &mut Run) {
+pub(crate) fn SUB_87B5F(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -7156,7 +7156,7 @@ pub(super) fn SUB_87B5F(r: &mut Run) {
 }
 
 // SUB_87B6D: firmware/upper/86FE4-lib0C0.s:949
-pub(super) fn SUB_87B6D(r: &mut Run) {
+pub(crate) fn SUB_87B6D(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -7180,7 +7180,7 @@ pub(super) fn SUB_87B6D(r: &mut Run) {
 }
 
 // SUB_87B79: firmware/upper/86FE4-lib0C0.s:955
-pub(super) fn SUB_87B79(r: &mut Run) {
+pub(crate) fn SUB_87B79(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -7201,7 +7201,7 @@ pub(super) fn SUB_87B79(r: &mut Run) {
 }
 
 // SUB_87B89: firmware/upper/86FE4-lib0C0.s:964
-pub(super) fn SUB_87B89(r: &mut Run) {
+pub(crate) fn SUB_87B89(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -7219,7 +7219,7 @@ pub(super) fn SUB_87B89(r: &mut Run) {
 }
 
 // SUB_87B8F: firmware/upper/86FE4-lib0C0.s:969
-pub(super) fn SUB_87B8F(r: &mut Run) {
+pub(crate) fn SUB_87B8F(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -7237,7 +7237,7 @@ pub(super) fn SUB_87B8F(r: &mut Run) {
 }
 
 // SUB_87B95: firmware/upper/86FE4-lib0C0.s:974
-pub(super) fn SUB_87B95(r: &mut Run) {
+pub(crate) fn SUB_87B95(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -7257,7 +7257,7 @@ pub(super) fn SUB_87B95(r: &mut Run) {
 }
 
 // SUB_87BA1: firmware/upper/86FE4-lib0C0.s:981
-pub(super) fn SUB_87BA1(r: &mut Run) {
+pub(crate) fn SUB_87BA1(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -7276,7 +7276,7 @@ pub(super) fn SUB_87BA1(r: &mut Run) {
 }
 
 // SUB_87BAC: firmware/upper/86FE4-lib0C0.s:988
-pub(super) fn SUB_87BAC(r: &mut Run) {
+pub(crate) fn SUB_87BAC(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -7294,7 +7294,7 @@ pub(super) fn SUB_87BAC(r: &mut Run) {
 }
 
 // SUB_87BB2: firmware/upper/86FE4-lib0C0.s:993
-pub(super) fn SUB_87BB2(r: &mut Run) {
+pub(crate) fn SUB_87BB2(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -7314,7 +7314,7 @@ pub(super) fn SUB_87BB2(r: &mut Run) {
 }
 
 // SUB_87BBE: firmware/upper/86FE4-lib0C0.s:1000
-pub(super) fn SUB_87BBE(r: &mut Run) {
+pub(crate) fn SUB_87BBE(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -7332,7 +7332,7 @@ pub(super) fn SUB_87BBE(r: &mut Run) {
 }
 
 // SUB_87BC4: firmware/upper/86FE4-lib0C0.s:1005
-pub(super) fn SUB_87BC4(r: &mut Run) {
+pub(crate) fn SUB_87BC4(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -7351,7 +7351,7 @@ pub(super) fn SUB_87BC4(r: &mut Run) {
 }
 
 // SUB_87BDB: firmware/upper/86FE4-lib0C0.s:1013
-pub(super) fn SUB_87BDB(r: &mut Run) {
+pub(crate) fn SUB_87BDB(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -7369,7 +7369,7 @@ pub(super) fn SUB_87BDB(r: &mut Run) {
 }
 
 // SUB_87BE1: firmware/upper/86FE4-lib0C0.s:1018
-pub(super) fn SUB_87BE1(r: &mut Run) {
+pub(crate) fn SUB_87BE1(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -7387,7 +7387,7 @@ pub(super) fn SUB_87BE1(r: &mut Run) {
 }
 
 // SUB_87BE7: firmware/upper/86FE4-lib0C0.s:1023
-pub(super) fn SUB_87BE7(r: &mut Run) {
+pub(crate) fn SUB_87BE7(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -7406,7 +7406,7 @@ pub(super) fn SUB_87BE7(r: &mut Run) {
 }
 
 // SUB_87BF2: firmware/upper/86FE4-lib0C0.s:1030
-pub(super) fn SUB_87BF2(r: &mut Run) {
+pub(crate) fn SUB_87BF2(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -7429,7 +7429,7 @@ pub(super) fn SUB_87BF2(r: &mut Run) {
 }
 
 // SUB_87C09: firmware/upper/86FE4-lib0C0.s:1041
-pub(super) fn SUB_87C09(r: &mut Run) {
+pub(crate) fn SUB_87C09(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -7447,7 +7447,7 @@ pub(super) fn SUB_87C09(r: &mut Run) {
 }
 
 // SUB_87C0F: firmware/upper/86FE4-lib0C0.s:1046
-pub(super) fn SUB_87C0F(r: &mut Run) {
+pub(crate) fn SUB_87C0F(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -7463,7 +7463,7 @@ pub(super) fn SUB_87C0F(r: &mut Run) {
 }
 
 // SUB_87C16: firmware/upper/86FE4-lib0C0.s:1050
-pub(super) fn SUB_87C16(r: &mut Run) {
+pub(crate) fn SUB_87C16(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -7481,7 +7481,7 @@ pub(super) fn SUB_87C16(r: &mut Run) {
 }
 
 // SUB_87C1C: firmware/upper/86FE4-lib0C0.s:1055
-pub(super) fn SUB_87C1C(r: &mut Run) {
+pub(crate) fn SUB_87C1C(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -7497,7 +7497,7 @@ pub(super) fn SUB_87C1C(r: &mut Run) {
 }
 
 // SUB_87C23: firmware/upper/86FE4-lib0C0.s:1059
-pub(super) fn SUB_87C23(r: &mut Run) {
+pub(crate) fn SUB_87C23(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -7515,7 +7515,7 @@ pub(super) fn SUB_87C23(r: &mut Run) {
 }
 
 // SUB_87C29: firmware/upper/86FE4-lib0C0.s:1064
-pub(super) fn SUB_87C29(r: &mut Run) {
+pub(crate) fn SUB_87C29(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -7531,7 +7531,7 @@ pub(super) fn SUB_87C29(r: &mut Run) {
 }
 
 // SUB_87C30: firmware/upper/86FE4-lib0C0.s:1068
-pub(super) fn SUB_87C30(r: &mut Run) {
+pub(crate) fn SUB_87C30(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -7547,7 +7547,7 @@ pub(super) fn SUB_87C30(r: &mut Run) {
 }
 
 // SUB_87C37: firmware/upper/86FE4-lib0C0.s:1072
-pub(super) fn SUB_87C37(r: &mut Run) {
+pub(crate) fn SUB_87C37(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -7563,7 +7563,7 @@ pub(super) fn SUB_87C37(r: &mut Run) {
 }
 
 // SUB_87C3E: firmware/upper/86FE4-lib0C0.s:1076
-pub(super) fn SUB_87C3E(r: &mut Run) {
+pub(crate) fn SUB_87C3E(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -7581,7 +7581,7 @@ pub(super) fn SUB_87C3E(r: &mut Run) {
 }
 
 // SUB_87C4B: firmware/upper/86FE4-lib0C0.s:1082
-pub(super) fn SUB_87C4B(r: &mut Run) {
+pub(crate) fn SUB_87C4B(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -7609,7 +7609,7 @@ pub(super) fn SUB_87C4B(r: &mut Run) {
 }
 
 // SUB_87C66: firmware/upper/86FE4-lib0C0.s:1095
-pub(super) fn SUB_87C66(r: &mut Run) {
+pub(crate) fn SUB_87C66(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -7627,7 +7627,7 @@ pub(super) fn SUB_87C66(r: &mut Run) {
 }
 
 // SUB_87C73: firmware/upper/86FE4-lib0C0.s:1101
-pub(super) fn SUB_87C73(r: &mut Run) {
+pub(crate) fn SUB_87C73(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -7655,7 +7655,7 @@ pub(super) fn SUB_87C73(r: &mut Run) {
 }
 
 // SUB_87C8A: firmware/upper/86FE4-lib0C0.s:1113
-pub(super) fn SUB_87C8A(r: &mut Run) {
+pub(crate) fn SUB_87C8A(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -7671,7 +7671,7 @@ pub(super) fn SUB_87C8A(r: &mut Run) {
 }
 
 // SUB_87C91: firmware/upper/86FE4-lib0C0.s:1117
-pub(super) fn SUB_87C91(r: &mut Run) {
+pub(crate) fn SUB_87C91(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -7689,7 +7689,7 @@ pub(super) fn SUB_87C91(r: &mut Run) {
 }
 
 // SUB_87C9C: firmware/upper/86FE4-lib0C0.s:1123
-pub(super) fn SUB_87C9C(r: &mut Run) {
+pub(crate) fn SUB_87C9C(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -7707,7 +7707,7 @@ pub(super) fn SUB_87C9C(r: &mut Run) {
 }
 
 // SUB_87CA7: firmware/upper/86FE4-lib0C0.s:1129
-pub(super) fn SUB_87CA7(r: &mut Run) {
+pub(crate) fn SUB_87CA7(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -7725,7 +7725,7 @@ pub(super) fn SUB_87CA7(r: &mut Run) {
 }
 
 // SUB_87CB2: firmware/upper/86FE4-lib0C0.s:1135
-pub(super) fn SUB_87CB2(r: &mut Run) {
+pub(crate) fn SUB_87CB2(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -7743,7 +7743,7 @@ pub(super) fn SUB_87CB2(r: &mut Run) {
 }
 
 // SUB_87CBD: firmware/upper/86FE4-lib0C0.s:1141
-pub(super) fn SUB_87CBD(r: &mut Run) {
+pub(crate) fn SUB_87CBD(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -7761,7 +7761,7 @@ pub(super) fn SUB_87CBD(r: &mut Run) {
 }
 
 // SUB_87CC8: firmware/upper/86FE4-lib0C0.s:1147
-pub(super) fn SUB_87CC8(r: &mut Run) {
+pub(crate) fn SUB_87CC8(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -7779,7 +7779,7 @@ pub(super) fn SUB_87CC8(r: &mut Run) {
 }
 
 // SUB_87CD3: firmware/upper/86FE4-lib0C0.s:1153
-pub(super) fn SUB_87CD3(r: &mut Run) {
+pub(crate) fn SUB_87CD3(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -7797,7 +7797,7 @@ pub(super) fn SUB_87CD3(r: &mut Run) {
 }
 
 // SUB_87CDE: firmware/upper/86FE4-lib0C0.s:1159
-pub(super) fn SUB_87CDE(r: &mut Run) {
+pub(crate) fn SUB_87CDE(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -7815,7 +7815,7 @@ pub(super) fn SUB_87CDE(r: &mut Run) {
 }
 
 // SUB_87CE9: firmware/upper/86FE4-lib0C0.s:1165
-pub(super) fn SUB_87CE9(r: &mut Run) {
+pub(crate) fn SUB_87CE9(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -7833,7 +7833,7 @@ pub(super) fn SUB_87CE9(r: &mut Run) {
 }
 
 // SUB_87CF4: firmware/upper/86FE4-lib0C0.s:1171
-pub(super) fn SUB_87CF4(r: &mut Run) {
+pub(crate) fn SUB_87CF4(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -7851,7 +7851,7 @@ pub(super) fn SUB_87CF4(r: &mut Run) {
 }
 
 // SUB_87CFF: firmware/upper/86FE4-lib0C0.s:1177
-pub(super) fn SUB_87CFF(r: &mut Run) {
+pub(crate) fn SUB_87CFF(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -7869,7 +7869,7 @@ pub(super) fn SUB_87CFF(r: &mut Run) {
 }
 
 // SUB_87D0A: firmware/upper/86FE4-lib0C0.s:1183
-pub(super) fn SUB_87D0A(r: &mut Run) {
+pub(crate) fn SUB_87D0A(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -7887,7 +7887,7 @@ pub(super) fn SUB_87D0A(r: &mut Run) {
 }
 
 // SUB_87D15: firmware/upper/86FE4-lib0C0.s:1189
-pub(super) fn SUB_87D15(r: &mut Run) {
+pub(crate) fn SUB_87D15(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -7905,7 +7905,7 @@ pub(super) fn SUB_87D15(r: &mut Run) {
 }
 
 // SUB_87D20: firmware/upper/86FE4-lib0C0.s:1195
-pub(super) fn SUB_87D20(r: &mut Run) {
+pub(crate) fn SUB_87D20(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -7923,7 +7923,7 @@ pub(super) fn SUB_87D20(r: &mut Run) {
 }
 
 // SUB_87D2B: firmware/upper/86FE4-lib0C0.s:1201
-pub(super) fn SUB_87D2B(r: &mut Run) {
+pub(crate) fn SUB_87D2B(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -7941,7 +7941,7 @@ pub(super) fn SUB_87D2B(r: &mut Run) {
 }
 
 // SUB_87D36: firmware/upper/86FE4-lib0C0.s:1207
-pub(super) fn SUB_87D36(r: &mut Run) {
+pub(crate) fn SUB_87D36(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -7959,7 +7959,7 @@ pub(super) fn SUB_87D36(r: &mut Run) {
 }
 
 // SUB_87D41: firmware/upper/86FE4-lib0C0.s:1213
-pub(super) fn SUB_87D41(r: &mut Run) {
+pub(crate) fn SUB_87D41(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -7977,7 +7977,7 @@ pub(super) fn SUB_87D41(r: &mut Run) {
 }
 
 // SUB_87D4C: firmware/upper/86FE4-lib0C0.s:1219
-pub(super) fn SUB_87D4C(r: &mut Run) {
+pub(crate) fn SUB_87D4C(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -7995,7 +7995,7 @@ pub(super) fn SUB_87D4C(r: &mut Run) {
 }
 
 // SUB_87D57: firmware/upper/86FE4-lib0C0.s:1225
-pub(super) fn SUB_87D57(r: &mut Run) {
+pub(crate) fn SUB_87D57(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -8013,7 +8013,7 @@ pub(super) fn SUB_87D57(r: &mut Run) {
 }
 
 // SUB_87D62: firmware/upper/86FE4-lib0C0.s:1231
-pub(super) fn SUB_87D62(r: &mut Run) {
+pub(crate) fn SUB_87D62(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -8031,7 +8031,7 @@ pub(super) fn SUB_87D62(r: &mut Run) {
 }
 
 // SUB_87D6D: firmware/upper/86FE4-lib0C0.s:1237
-pub(super) fn SUB_87D6D(r: &mut Run) {
+pub(crate) fn SUB_87D6D(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -8049,7 +8049,7 @@ pub(super) fn SUB_87D6D(r: &mut Run) {
 }
 
 // SUB_87D78: firmware/upper/86FE4-lib0C0.s:1243
-pub(super) fn SUB_87D78(r: &mut Run) {
+pub(crate) fn SUB_87D78(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -8067,7 +8067,7 @@ pub(super) fn SUB_87D78(r: &mut Run) {
 }
 
 // SUB_87D83: firmware/upper/86FE4-lib0C0.s:1249
-pub(super) fn SUB_87D83(r: &mut Run) {
+pub(crate) fn SUB_87D83(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -8085,7 +8085,7 @@ pub(super) fn SUB_87D83(r: &mut Run) {
 }
 
 // SUB_87D8E: firmware/upper/86FE4-lib0C0.s:1255
-pub(super) fn SUB_87D8E(r: &mut Run) {
+pub(crate) fn SUB_87D8E(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -8119,7 +8119,7 @@ pub(super) fn SUB_87D8E(r: &mut Run) {
 }
 
 // SUB_87DA9: firmware/upper/86FE4-lib0C0.s:1267
-pub(super) fn SUB_87DA9(r: &mut Run) {
+pub(crate) fn SUB_87DA9(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -8137,7 +8137,7 @@ pub(super) fn SUB_87DA9(r: &mut Run) {
 }
 
 // SUB_87DB0: firmware/upper/86FE4-lib0C0.s:1272
-pub(super) fn SUB_87DB0(r: &mut Run) {
+pub(crate) fn SUB_87DB0(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -8161,7 +8161,7 @@ pub(super) fn SUB_87DB0(r: &mut Run) {
 }
 
 // SUB_87DC6: firmware/upper/86FE4-lib0C0.s:1284
-pub(super) fn SUB_87DC6(r: &mut Run) {
+pub(crate) fn SUB_87DC6(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -8181,7 +8181,7 @@ pub(super) fn SUB_87DC6(r: &mut Run) {
 }
 
 // SUB_87DCE: firmware/upper/86FE4-lib0C0.s:1289
-pub(super) fn SUB_87DCE(r: &mut Run) {
+pub(crate) fn SUB_87DCE(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -8217,7 +8217,7 @@ pub(super) fn SUB_87DCE(r: &mut Run) {
 }
 
 // SUB_87DF9: firmware/upper/86FE4-lib0C0.s:1307
-pub(super) fn SUB_87DF9(r: &mut Run) {
+pub(crate) fn SUB_87DF9(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -8237,7 +8237,7 @@ pub(super) fn SUB_87DF9(r: &mut Run) {
 }
 
 // SUB_87E01: firmware/upper/86FE4-lib0C0.s:1312
-pub(super) fn SUB_87E01(r: &mut Run) {
+pub(crate) fn SUB_87E01(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -8257,7 +8257,7 @@ pub(super) fn SUB_87E01(r: &mut Run) {
 }
 
 // SUB_87E09: firmware/upper/86FE4-lib0C0.s:1317
-pub(super) fn SUB_87E09(r: &mut Run) {
+pub(crate) fn SUB_87E09(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -8288,7 +8288,7 @@ pub(super) fn SUB_87E09(r: &mut Run) {
 }
 
 // SUB_87E34: firmware/upper/86FE4-lib0C0.s:1333
-pub(super) fn SUB_87E34(r: &mut Run) {
+pub(crate) fn SUB_87E34(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -8324,7 +8324,7 @@ pub(super) fn SUB_87E34(r: &mut Run) {
 }
 
 // SUB_87E4C: firmware/upper/86FE4-lib0C0.s:1342
-pub(super) fn SUB_87E4C(r: &mut Run) {
+pub(crate) fn SUB_87E4C(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -8340,7 +8340,7 @@ pub(super) fn SUB_87E4C(r: &mut Run) {
 }
 
 // SUB_87E50: firmware/upper/86FE4-lib0C0.s:1346
-pub(super) fn SUB_87E50(r: &mut Run) {
+pub(crate) fn SUB_87E50(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -8426,7 +8426,7 @@ pub(super) fn SUB_87E50(r: &mut Run) {
 }
 
 // SUB_87EA7: firmware/upper/86FE4-lib0C0.s:1372
-pub(super) fn SUB_87EA7(r: &mut Run) {
+pub(crate) fn SUB_87EA7(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -8470,7 +8470,7 @@ pub(super) fn SUB_87EA7(r: &mut Run) {
 }
 
 // SUB_87ED2: firmware/upper/86FE4-lib0C0.s:1389
-pub(super) fn SUB_87ED2(r: &mut Run) {
+pub(crate) fn SUB_87ED2(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -8542,7 +8542,7 @@ pub(super) fn SUB_87ED2(r: &mut Run) {
 }
 
 // SUB_87F14: firmware/upper/86FE4-lib0C0.s:1408
-pub(super) fn SUB_87F14(r: &mut Run) {
+pub(crate) fn SUB_87F14(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -8794,7 +8794,7 @@ pub(super) fn SUB_87F14(r: &mut Run) {
 }
 
 // SUB_8804A: firmware/upper/86FE4-lib0C0.s:1505
-pub(super) fn SUB_8804A(r: &mut Run) {
+pub(crate) fn SUB_8804A(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -8991,7 +8991,7 @@ pub(super) fn SUB_8804A(r: &mut Run) {
 }
 
 // SUB_88120: firmware/upper/86FE4-lib0C0.s:1561
-pub(super) fn SUB_88120(r: &mut Run) {
+pub(crate) fn SUB_88120(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -9031,7 +9031,7 @@ pub(super) fn SUB_88120(r: &mut Run) {
 }
 
 // SUB_8813B: firmware/upper/86FE4-lib0C0.s:1571
-pub(super) fn SUB_8813B(r: &mut Run) {
+pub(crate) fn SUB_8813B(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -9234,7 +9234,7 @@ pub(super) fn SUB_8813B(r: &mut Run) {
 }
 
 // SUB_88207: firmware/upper/86FE4-lib0C0.s:1626
-pub(super) fn SUB_88207(r: &mut Run) {
+pub(crate) fn SUB_88207(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -9254,7 +9254,7 @@ pub(super) fn SUB_88207(r: &mut Run) {
 }
 
 // SUB_88215: firmware/upper/86FE4-lib0C0.s:1634
-pub(super) fn SUB_88215(r: &mut Run) {
+pub(crate) fn SUB_88215(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -9346,7 +9346,7 @@ pub(super) fn SUB_88215(r: &mut Run) {
 }
 
 // SUB_88283: firmware/upper/86FE4-lib0C0.s:1667
-pub(super) fn SUB_88283(r: &mut Run) {
+pub(crate) fn SUB_88283(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -9410,7 +9410,7 @@ pub(super) fn SUB_88283(r: &mut Run) {
 }
 
 // SUB_882CA: firmware/upper/86FE4-lib0C0.s:1693
-pub(super) fn SUB_882CA(r: &mut Run) {
+pub(crate) fn SUB_882CA(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -9426,7 +9426,7 @@ pub(super) fn SUB_882CA(r: &mut Run) {
 }
 
 // SUB_882D1: firmware/upper/86FE4-lib0C0.s:1697
-pub(super) fn SUB_882D1(r: &mut Run) {
+pub(crate) fn SUB_882D1(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -9454,7 +9454,7 @@ pub(super) fn SUB_882D1(r: &mut Run) {
 }
 
 // Unlabelled code at #88398.
-pub(super) fn code_88398(r: &mut Run) {
+pub(crate) fn code_88398(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -11493,7 +11493,7 @@ pub(super) fn code_88398(r: &mut Run) {
 }
 
 // SUB_88F2A: firmware/upper/86FE4-lib0C0.s:2570
-pub(super) fn SUB_88F2A(r: &mut Run) {
+pub(crate) fn SUB_88F2A(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -11512,7 +11512,7 @@ pub(super) fn SUB_88F2A(r: &mut Run) {
 }
 
 // SUB_88F35: firmware/upper/86FE4-lib0C0.s:2577
-pub(super) fn SUB_88F35(r: &mut Run) {
+pub(crate) fn SUB_88F35(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -11534,7 +11534,7 @@ pub(super) fn SUB_88F35(r: &mut Run) {
 }
 
 // SUB_88F4A: firmware/upper/86FE4-lib0C0.s:2587
-pub(super) fn SUB_88F4A(r: &mut Run) {
+pub(crate) fn SUB_88F4A(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -11550,7 +11550,7 @@ pub(super) fn SUB_88F4A(r: &mut Run) {
 }
 
 // SUB_88F51: firmware/upper/86FE4-lib0C0.s:2591
-pub(super) fn SUB_88F51(r: &mut Run) {
+pub(crate) fn SUB_88F51(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -11566,7 +11566,7 @@ pub(super) fn SUB_88F51(r: &mut Run) {
 }
 
 // SUB_88F58: firmware/upper/86FE4-lib0C0.s:2595
-pub(super) fn SUB_88F58(r: &mut Run) {
+pub(crate) fn SUB_88F58(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -11582,7 +11582,7 @@ pub(super) fn SUB_88F58(r: &mut Run) {
 }
 
 // SUB_88F5F: firmware/upper/86FE4-lib0C0.s:2599
-pub(super) fn SUB_88F5F(r: &mut Run) {
+pub(crate) fn SUB_88F5F(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -11598,7 +11598,7 @@ pub(super) fn SUB_88F5F(r: &mut Run) {
 }
 
 // SUB_88F66: firmware/upper/86FE4-lib0C0.s:2603
-pub(super) fn SUB_88F66(r: &mut Run) {
+pub(crate) fn SUB_88F66(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -11614,7 +11614,7 @@ pub(super) fn SUB_88F66(r: &mut Run) {
 }
 
 // SUB_88F6D: firmware/upper/86FE4-lib0C0.s:2607
-pub(super) fn SUB_88F6D(r: &mut Run) {
+pub(crate) fn SUB_88F6D(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -11630,7 +11630,7 @@ pub(super) fn SUB_88F6D(r: &mut Run) {
 }
 
 // SUB_88F74: firmware/upper/86FE4-lib0C0.s:2611
-pub(super) fn SUB_88F74(r: &mut Run) {
+pub(crate) fn SUB_88F74(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -11659,7 +11659,7 @@ pub(super) fn SUB_88F74(r: &mut Run) {
 }
 
 // SUB_88F8E: firmware/upper/86FE4-lib0C0.s:2623
-pub(super) fn SUB_88F8E(r: &mut Run) {
+pub(crate) fn SUB_88F8E(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -11675,7 +11675,7 @@ pub(super) fn SUB_88F8E(r: &mut Run) {
 }
 
 // SUB_88F92: firmware/upper/86FE4-lib0C0.s:2627
-pub(super) fn SUB_88F92(r: &mut Run) {
+pub(crate) fn SUB_88F92(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -11691,7 +11691,7 @@ pub(super) fn SUB_88F92(r: &mut Run) {
 }
 
 // SUB_88F99: firmware/upper/86FE4-lib0C0.s:2631
-pub(super) fn SUB_88F99(r: &mut Run) {
+pub(crate) fn SUB_88F99(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -11711,7 +11711,7 @@ pub(super) fn SUB_88F99(r: &mut Run) {
 }
 
 // SUB_88FA1: firmware/upper/86FE4-lib0C0.s:2636
-pub(super) fn SUB_88FA1(r: &mut Run) {
+pub(crate) fn SUB_88FA1(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -11731,7 +11731,7 @@ pub(super) fn SUB_88FA1(r: &mut Run) {
 }
 
 // SUB_88FA9: firmware/upper/86FE4-lib0C0.s:2641
-pub(super) fn SUB_88FA9(r: &mut Run) {
+pub(crate) fn SUB_88FA9(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -11747,7 +11747,7 @@ pub(super) fn SUB_88FA9(r: &mut Run) {
 }
 
 // SUB_88FB0: firmware/upper/86FE4-lib0C0.s:2645
-pub(super) fn SUB_88FB0(r: &mut Run) {
+pub(crate) fn SUB_88FB0(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -11763,7 +11763,7 @@ pub(super) fn SUB_88FB0(r: &mut Run) {
 }
 
 // SUB_88FB7: firmware/upper/86FE4-lib0C0.s:2649
-pub(super) fn SUB_88FB7(r: &mut Run) {
+pub(crate) fn SUB_88FB7(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -11779,7 +11779,7 @@ pub(super) fn SUB_88FB7(r: &mut Run) {
 }
 
 // SUB_88FBE: firmware/upper/86FE4-lib0C0.s:2653
-pub(super) fn SUB_88FBE(r: &mut Run) {
+pub(crate) fn SUB_88FBE(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -11834,7 +11834,7 @@ pub(super) fn SUB_88FBE(r: &mut Run) {
 }
 
 // SUB_8901B: firmware/upper/86FE4-lib0C0.s:2682
-pub(super) fn SUB_8901B(r: &mut Run) {
+pub(crate) fn SUB_8901B(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -11909,7 +11909,7 @@ pub(super) fn SUB_8901B(r: &mut Run) {
 }
 
 // SUB_8907E: firmware/upper/86FE4-lib0C0.s:2718
-pub(super) fn SUB_8907E(r: &mut Run) {
+pub(crate) fn SUB_8907E(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -11962,7 +11962,7 @@ pub(super) fn SUB_8907E(r: &mut Run) {
 }
 
 // SUB_890B6: firmware/upper/86FE4-lib0C0.s:2743
-pub(super) fn SUB_890B6(r: &mut Run) {
+pub(crate) fn SUB_890B6(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -12006,7 +12006,7 @@ pub(super) fn SUB_890B6(r: &mut Run) {
 }
 
 // SUB_890E0: firmware/upper/86FE4-lib0C0.s:2764
-pub(super) fn SUB_890E0(r: &mut Run) {
+pub(crate) fn SUB_890E0(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -12037,7 +12037,7 @@ pub(super) fn SUB_890E0(r: &mut Run) {
 }
 
 // SUB_890F7: firmware/upper/86FE4-lib0C0.s:2776
-pub(super) fn SUB_890F7(r: &mut Run) {
+pub(crate) fn SUB_890F7(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -12061,7 +12061,7 @@ pub(super) fn SUB_890F7(r: &mut Run) {
 }
 
 // SUB_89103: firmware/upper/86FE4-lib0C0.s:2783
-pub(super) fn SUB_89103(r: &mut Run) {
+pub(crate) fn SUB_89103(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -12077,7 +12077,7 @@ pub(super) fn SUB_89103(r: &mut Run) {
 }
 
 // SUB_8910A: firmware/upper/86FE4-lib0C0.s:2787
-pub(super) fn SUB_8910A(r: &mut Run) {
+pub(crate) fn SUB_8910A(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -12097,7 +12097,7 @@ pub(super) fn SUB_8910A(r: &mut Run) {
 }
 
 // SUB_89112: firmware/upper/86FE4-lib0C0.s:2792
-pub(super) fn SUB_89112(r: &mut Run) {
+pub(crate) fn SUB_89112(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -12129,7 +12129,7 @@ pub(super) fn SUB_89112(r: &mut Run) {
 }
 
 // SUB_89126: firmware/upper/86FE4-lib0C0.s:2800
-pub(super) fn SUB_89126(r: &mut Run) {
+pub(crate) fn SUB_89126(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -12148,7 +12148,7 @@ pub(super) fn SUB_89126(r: &mut Run) {
 }
 
 // SUB_89131: firmware/upper/86FE4-lib0C0.s:2807
-pub(super) fn SUB_89131(r: &mut Run) {
+pub(crate) fn SUB_89131(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -12164,7 +12164,7 @@ pub(super) fn SUB_89131(r: &mut Run) {
 }
 
 // SUB_89135: firmware/upper/86FE4-lib0C0.s:2811
-pub(super) fn SUB_89135(r: &mut Run) {
+pub(crate) fn SUB_89135(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -12188,7 +12188,7 @@ pub(super) fn SUB_89135(r: &mut Run) {
 }
 
 // SUB_89141: firmware/upper/86FE4-lib0C0.s:2817
-pub(super) fn SUB_89141(r: &mut Run) {
+pub(crate) fn SUB_89141(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -12216,7 +12216,7 @@ pub(super) fn SUB_89141(r: &mut Run) {
 }
 
 // SUB_89151: firmware/upper/86FE4-lib0C0.s:2824
-pub(super) fn SUB_89151(r: &mut Run) {
+pub(crate) fn SUB_89151(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -12232,7 +12232,7 @@ pub(super) fn SUB_89151(r: &mut Run) {
 }
 
 // SUB_89155: firmware/upper/86FE4-lib0C0.s:2828
-pub(super) fn SUB_89155(r: &mut Run) {
+pub(crate) fn SUB_89155(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -12256,7 +12256,7 @@ pub(super) fn SUB_89155(r: &mut Run) {
 }
 
 // SUB_89161: firmware/upper/86FE4-lib0C0.s:2834
-pub(super) fn SUB_89161(r: &mut Run) {
+pub(crate) fn SUB_89161(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -12276,7 +12276,7 @@ pub(super) fn SUB_89161(r: &mut Run) {
 }
 
 // SUB_89168: firmware/upper/86FE4-lib0C0.s:2839
-pub(super) fn SUB_89168(r: &mut Run) {
+pub(crate) fn SUB_89168(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -12301,7 +12301,7 @@ pub(super) fn SUB_89168(r: &mut Run) {
 }
 
 // SUB_89176: firmware/upper/86FE4-lib0C0.s:2847
-pub(super) fn SUB_89176(r: &mut Run) {
+pub(crate) fn SUB_89176(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -12325,7 +12325,7 @@ pub(super) fn SUB_89176(r: &mut Run) {
 }
 
 // SUB_89182: firmware/upper/86FE4-lib0C0.s:2853
-pub(super) fn SUB_89182(r: &mut Run) {
+pub(crate) fn SUB_89182(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -12346,7 +12346,7 @@ pub(super) fn SUB_89182(r: &mut Run) {
 }
 
 // SUB_89192: firmware/upper/86FE4-lib0C0.s:2862
-pub(super) fn SUB_89192(r: &mut Run) {
+pub(crate) fn SUB_89192(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -12364,7 +12364,7 @@ pub(super) fn SUB_89192(r: &mut Run) {
 }
 
 // SUB_89198: firmware/upper/86FE4-lib0C0.s:2867
-pub(super) fn SUB_89198(r: &mut Run) {
+pub(crate) fn SUB_89198(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -12382,7 +12382,7 @@ pub(super) fn SUB_89198(r: &mut Run) {
 }
 
 // SUB_8919E: firmware/upper/86FE4-lib0C0.s:2872
-pub(super) fn SUB_8919E(r: &mut Run) {
+pub(crate) fn SUB_8919E(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -12402,7 +12402,7 @@ pub(super) fn SUB_8919E(r: &mut Run) {
 }
 
 // SUB_891AA: firmware/upper/86FE4-lib0C0.s:2879
-pub(super) fn SUB_891AA(r: &mut Run) {
+pub(crate) fn SUB_891AA(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -12421,7 +12421,7 @@ pub(super) fn SUB_891AA(r: &mut Run) {
 }
 
 // SUB_891B5: firmware/upper/86FE4-lib0C0.s:2886
-pub(super) fn SUB_891B5(r: &mut Run) {
+pub(crate) fn SUB_891B5(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -12439,7 +12439,7 @@ pub(super) fn SUB_891B5(r: &mut Run) {
 }
 
 // SUB_891BB: firmware/upper/86FE4-lib0C0.s:2891
-pub(super) fn SUB_891BB(r: &mut Run) {
+pub(crate) fn SUB_891BB(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -12459,7 +12459,7 @@ pub(super) fn SUB_891BB(r: &mut Run) {
 }
 
 // SUB_891C7: firmware/upper/86FE4-lib0C0.s:2898
-pub(super) fn SUB_891C7(r: &mut Run) {
+pub(crate) fn SUB_891C7(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -12477,7 +12477,7 @@ pub(super) fn SUB_891C7(r: &mut Run) {
 }
 
 // SUB_891CD: firmware/upper/86FE4-lib0C0.s:2903
-pub(super) fn SUB_891CD(r: &mut Run) {
+pub(crate) fn SUB_891CD(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -12496,7 +12496,7 @@ pub(super) fn SUB_891CD(r: &mut Run) {
 }
 
 // SUB_891D8: firmware/upper/86FE4-lib0C0.s:2910
-pub(super) fn SUB_891D8(r: &mut Run) {
+pub(crate) fn SUB_891D8(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -12516,7 +12516,7 @@ pub(super) fn SUB_891D8(r: &mut Run) {
 }
 
 // SUB_891E4: firmware/upper/86FE4-lib0C0.s:2917
-pub(super) fn SUB_891E4(r: &mut Run) {
+pub(crate) fn SUB_891E4(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -12534,7 +12534,7 @@ pub(super) fn SUB_891E4(r: &mut Run) {
 }
 
 // SUB_891EA: firmware/upper/86FE4-lib0C0.s:2922
-pub(super) fn SUB_891EA(r: &mut Run) {
+pub(crate) fn SUB_891EA(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -12552,7 +12552,7 @@ pub(super) fn SUB_891EA(r: &mut Run) {
 }
 
 // SUB_891F0: firmware/upper/86FE4-lib0C0.s:2927
-pub(super) fn SUB_891F0(r: &mut Run) {
+pub(crate) fn SUB_891F0(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -12571,7 +12571,7 @@ pub(super) fn SUB_891F0(r: &mut Run) {
 }
 
 // SUB_891FB: firmware/upper/86FE4-lib0C0.s:2934
-pub(super) fn SUB_891FB(r: &mut Run) {
+pub(crate) fn SUB_891FB(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -12591,7 +12591,7 @@ pub(super) fn SUB_891FB(r: &mut Run) {
 }
 
 // SUB_89207: firmware/upper/86FE4-lib0C0.s:2941
-pub(super) fn SUB_89207(r: &mut Run) {
+pub(crate) fn SUB_89207(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -12610,7 +12610,7 @@ pub(super) fn SUB_89207(r: &mut Run) {
 }
 
 // SUB_89212: firmware/upper/86FE4-lib0C0.s:2948
-pub(super) fn SUB_89212(r: &mut Run) {
+pub(crate) fn SUB_89212(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -12628,7 +12628,7 @@ pub(super) fn SUB_89212(r: &mut Run) {
 }
 
 // SUB_89218: firmware/upper/86FE4-lib0C0.s:2953
-pub(super) fn SUB_89218(r: &mut Run) {
+pub(crate) fn SUB_89218(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -12644,7 +12644,7 @@ pub(super) fn SUB_89218(r: &mut Run) {
 }
 
 // SUB_8921F: firmware/upper/86FE4-lib0C0.s:2957
-pub(super) fn SUB_8921F(r: &mut Run) {
+pub(crate) fn SUB_8921F(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -12662,7 +12662,7 @@ pub(super) fn SUB_8921F(r: &mut Run) {
 }
 
 // SUB_89225: firmware/upper/86FE4-lib0C0.s:2962
-pub(super) fn SUB_89225(r: &mut Run) {
+pub(crate) fn SUB_89225(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -12678,7 +12678,7 @@ pub(super) fn SUB_89225(r: &mut Run) {
 }
 
 // SUB_8922C: firmware/upper/86FE4-lib0C0.s:2966
-pub(super) fn SUB_8922C(r: &mut Run) {
+pub(crate) fn SUB_8922C(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -12696,7 +12696,7 @@ pub(super) fn SUB_8922C(r: &mut Run) {
 }
 
 // SUB_89232: firmware/upper/86FE4-lib0C0.s:2971
-pub(super) fn SUB_89232(r: &mut Run) {
+pub(crate) fn SUB_89232(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -12712,7 +12712,7 @@ pub(super) fn SUB_89232(r: &mut Run) {
 }
 
 // SUB_89239: firmware/upper/86FE4-lib0C0.s:2975
-pub(super) fn SUB_89239(r: &mut Run) {
+pub(crate) fn SUB_89239(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -12728,7 +12728,7 @@ pub(super) fn SUB_89239(r: &mut Run) {
 }
 
 // SUB_89240: firmware/upper/86FE4-lib0C0.s:2979
-pub(super) fn SUB_89240(r: &mut Run) {
+pub(crate) fn SUB_89240(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -12744,7 +12744,7 @@ pub(super) fn SUB_89240(r: &mut Run) {
 }
 
 // SUB_89247: firmware/upper/86FE4-lib0C0.s:2983
-pub(super) fn SUB_89247(r: &mut Run) {
+pub(crate) fn SUB_89247(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -12762,7 +12762,7 @@ pub(super) fn SUB_89247(r: &mut Run) {
 }
 
 // SUB_89254: firmware/upper/86FE4-lib0C0.s:2989
-pub(super) fn SUB_89254(r: &mut Run) {
+pub(crate) fn SUB_89254(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -12790,7 +12790,7 @@ pub(super) fn SUB_89254(r: &mut Run) {
 }
 
 // SUB_8926F: firmware/upper/86FE4-lib0C0.s:3002
-pub(super) fn SUB_8926F(r: &mut Run) {
+pub(crate) fn SUB_8926F(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -12808,7 +12808,7 @@ pub(super) fn SUB_8926F(r: &mut Run) {
 }
 
 // SUB_8927C: firmware/upper/86FE4-lib0C0.s:3008
-pub(super) fn SUB_8927C(r: &mut Run) {
+pub(crate) fn SUB_8927C(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -12836,7 +12836,7 @@ pub(super) fn SUB_8927C(r: &mut Run) {
 }
 
 // SUB_89293: firmware/upper/86FE4-lib0C0.s:3020
-pub(super) fn SUB_89293(r: &mut Run) {
+pub(crate) fn SUB_89293(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -12852,7 +12852,7 @@ pub(super) fn SUB_89293(r: &mut Run) {
 }
 
 // SUB_8929A: firmware/upper/86FE4-lib0C0.s:3024
-pub(super) fn SUB_8929A(r: &mut Run) {
+pub(crate) fn SUB_8929A(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -12870,7 +12870,7 @@ pub(super) fn SUB_8929A(r: &mut Run) {
 }
 
 // SUB_892A5: firmware/upper/86FE4-lib0C0.s:3030
-pub(super) fn SUB_892A5(r: &mut Run) {
+pub(crate) fn SUB_892A5(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -12888,7 +12888,7 @@ pub(super) fn SUB_892A5(r: &mut Run) {
 }
 
 // SUB_892B0: firmware/upper/86FE4-lib0C0.s:3036
-pub(super) fn SUB_892B0(r: &mut Run) {
+pub(crate) fn SUB_892B0(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -12906,7 +12906,7 @@ pub(super) fn SUB_892B0(r: &mut Run) {
 }
 
 // SUB_892BB: firmware/upper/86FE4-lib0C0.s:3042
-pub(super) fn SUB_892BB(r: &mut Run) {
+pub(crate) fn SUB_892BB(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -12924,7 +12924,7 @@ pub(super) fn SUB_892BB(r: &mut Run) {
 }
 
 // SUB_892C6: firmware/upper/86FE4-lib0C0.s:3048
-pub(super) fn SUB_892C6(r: &mut Run) {
+pub(crate) fn SUB_892C6(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -12942,7 +12942,7 @@ pub(super) fn SUB_892C6(r: &mut Run) {
 }
 
 // SUB_892D1: firmware/upper/86FE4-lib0C0.s:3054
-pub(super) fn SUB_892D1(r: &mut Run) {
+pub(crate) fn SUB_892D1(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -12960,7 +12960,7 @@ pub(super) fn SUB_892D1(r: &mut Run) {
 }
 
 // SUB_892DC: firmware/upper/86FE4-lib0C0.s:3060
-pub(super) fn SUB_892DC(r: &mut Run) {
+pub(crate) fn SUB_892DC(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -12978,7 +12978,7 @@ pub(super) fn SUB_892DC(r: &mut Run) {
 }
 
 // SUB_892E7: firmware/upper/86FE4-lib0C0.s:3066
-pub(super) fn SUB_892E7(r: &mut Run) {
+pub(crate) fn SUB_892E7(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -12996,7 +12996,7 @@ pub(super) fn SUB_892E7(r: &mut Run) {
 }
 
 // SUB_892F2: firmware/upper/86FE4-lib0C0.s:3072
-pub(super) fn SUB_892F2(r: &mut Run) {
+pub(crate) fn SUB_892F2(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -13014,7 +13014,7 @@ pub(super) fn SUB_892F2(r: &mut Run) {
 }
 
 // SUB_892FD: firmware/upper/86FE4-lib0C0.s:3078
-pub(super) fn SUB_892FD(r: &mut Run) {
+pub(crate) fn SUB_892FD(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -13032,7 +13032,7 @@ pub(super) fn SUB_892FD(r: &mut Run) {
 }
 
 // SUB_89308: firmware/upper/86FE4-lib0C0.s:3084
-pub(super) fn SUB_89308(r: &mut Run) {
+pub(crate) fn SUB_89308(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -13050,7 +13050,7 @@ pub(super) fn SUB_89308(r: &mut Run) {
 }
 
 // SUB_89313: firmware/upper/86FE4-lib0C0.s:3090
-pub(super) fn SUB_89313(r: &mut Run) {
+pub(crate) fn SUB_89313(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -13068,7 +13068,7 @@ pub(super) fn SUB_89313(r: &mut Run) {
 }
 
 // SUB_8931E: firmware/upper/86FE4-lib0C0.s:3096
-pub(super) fn SUB_8931E(r: &mut Run) {
+pub(crate) fn SUB_8931E(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -13086,7 +13086,7 @@ pub(super) fn SUB_8931E(r: &mut Run) {
 }
 
 // SUB_89329: firmware/upper/86FE4-lib0C0.s:3102
-pub(super) fn SUB_89329(r: &mut Run) {
+pub(crate) fn SUB_89329(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -13104,7 +13104,7 @@ pub(super) fn SUB_89329(r: &mut Run) {
 }
 
 // SUB_89334: firmware/upper/86FE4-lib0C0.s:3108
-pub(super) fn SUB_89334(r: &mut Run) {
+pub(crate) fn SUB_89334(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -13122,7 +13122,7 @@ pub(super) fn SUB_89334(r: &mut Run) {
 }
 
 // SUB_8933F: firmware/upper/86FE4-lib0C0.s:3114
-pub(super) fn SUB_8933F(r: &mut Run) {
+pub(crate) fn SUB_8933F(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -13140,7 +13140,7 @@ pub(super) fn SUB_8933F(r: &mut Run) {
 }
 
 // SUB_8934A: firmware/upper/86FE4-lib0C0.s:3120
-pub(super) fn SUB_8934A(r: &mut Run) {
+pub(crate) fn SUB_8934A(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -13158,7 +13158,7 @@ pub(super) fn SUB_8934A(r: &mut Run) {
 }
 
 // SUB_89355: firmware/upper/86FE4-lib0C0.s:3126
-pub(super) fn SUB_89355(r: &mut Run) {
+pub(crate) fn SUB_89355(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -13176,7 +13176,7 @@ pub(super) fn SUB_89355(r: &mut Run) {
 }
 
 // SUB_89360: firmware/upper/86FE4-lib0C0.s:3132
-pub(super) fn SUB_89360(r: &mut Run) {
+pub(crate) fn SUB_89360(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -13194,7 +13194,7 @@ pub(super) fn SUB_89360(r: &mut Run) {
 }
 
 // SUB_8936B: firmware/upper/86FE4-lib0C0.s:3138
-pub(super) fn SUB_8936B(r: &mut Run) {
+pub(crate) fn SUB_8936B(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -13212,7 +13212,7 @@ pub(super) fn SUB_8936B(r: &mut Run) {
 }
 
 // SUB_89376: firmware/upper/86FE4-lib0C0.s:3144
-pub(super) fn SUB_89376(r: &mut Run) {
+pub(crate) fn SUB_89376(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -13230,7 +13230,7 @@ pub(super) fn SUB_89376(r: &mut Run) {
 }
 
 // SUB_89381: firmware/upper/86FE4-lib0C0.s:3150
-pub(super) fn SUB_89381(r: &mut Run) {
+pub(crate) fn SUB_89381(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -13248,7 +13248,7 @@ pub(super) fn SUB_89381(r: &mut Run) {
 }
 
 // SUB_8938C: firmware/upper/86FE4-lib0C0.s:3156
-pub(super) fn SUB_8938C(r: &mut Run) {
+pub(crate) fn SUB_8938C(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -13266,7 +13266,7 @@ pub(super) fn SUB_8938C(r: &mut Run) {
 }
 
 // SUB_89397: firmware/upper/86FE4-lib0C0.s:3162
-pub(super) fn SUB_89397(r: &mut Run) {
+pub(crate) fn SUB_89397(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -13284,7 +13284,7 @@ pub(super) fn SUB_89397(r: &mut Run) {
 }
 
 // SUB_893A2: firmware/upper/86FE4-lib0C0.s:3168
-pub(super) fn SUB_893A2(r: &mut Run) {
+pub(crate) fn SUB_893A2(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -13302,7 +13302,7 @@ pub(super) fn SUB_893A2(r: &mut Run) {
 }
 
 // SUB_893AD: firmware/upper/86FE4-lib0C0.s:3174
-pub(super) fn SUB_893AD(r: &mut Run) {
+pub(crate) fn SUB_893AD(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -13320,7 +13320,7 @@ pub(super) fn SUB_893AD(r: &mut Run) {
 }
 
 // SUB_893B8: firmware/upper/86FE4-lib0C0.s:3180
-pub(super) fn SUB_893B8(r: &mut Run) {
+pub(crate) fn SUB_893B8(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -13338,7 +13338,7 @@ pub(super) fn SUB_893B8(r: &mut Run) {
 }
 
 // SUB_893C3: firmware/upper/86FE4-lib0C0.s:3186
-pub(super) fn SUB_893C3(r: &mut Run) {
+pub(crate) fn SUB_893C3(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -13372,7 +13372,7 @@ pub(super) fn SUB_893C3(r: &mut Run) {
 }
 
 // SUB_893DE: firmware/upper/86FE4-lib0C0.s:3198
-pub(super) fn SUB_893DE(r: &mut Run) {
+pub(crate) fn SUB_893DE(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -13390,7 +13390,7 @@ pub(super) fn SUB_893DE(r: &mut Run) {
 }
 
 // SUB_893E5: firmware/upper/86FE4-lib0C0.s:3203
-pub(super) fn SUB_893E5(r: &mut Run) {
+pub(crate) fn SUB_893E5(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -13414,7 +13414,7 @@ pub(super) fn SUB_893E5(r: &mut Run) {
 }
 
 // SUB_893FB: firmware/upper/86FE4-lib0C0.s:3215
-pub(super) fn SUB_893FB(r: &mut Run) {
+pub(crate) fn SUB_893FB(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -13434,7 +13434,7 @@ pub(super) fn SUB_893FB(r: &mut Run) {
 }
 
 // SUB_89403: firmware/upper/86FE4-lib0C0.s:3220
-pub(super) fn SUB_89403(r: &mut Run) {
+pub(crate) fn SUB_89403(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -13470,7 +13470,7 @@ pub(super) fn SUB_89403(r: &mut Run) {
 }
 
 // SUB_8942E: firmware/upper/86FE4-lib0C0.s:3238
-pub(super) fn SUB_8942E(r: &mut Run) {
+pub(crate) fn SUB_8942E(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -13490,7 +13490,7 @@ pub(super) fn SUB_8942E(r: &mut Run) {
 }
 
 // SUB_89436: firmware/upper/86FE4-lib0C0.s:3243
-pub(super) fn SUB_89436(r: &mut Run) {
+pub(crate) fn SUB_89436(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -13510,7 +13510,7 @@ pub(super) fn SUB_89436(r: &mut Run) {
 }
 
 // SUB_8943E: firmware/upper/86FE4-lib0C0.s:3248
-pub(super) fn SUB_8943E(r: &mut Run) {
+pub(crate) fn SUB_8943E(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -13541,7 +13541,7 @@ pub(super) fn SUB_8943E(r: &mut Run) {
 }
 
 // SUB_89469: firmware/upper/86FE4-lib0C0.s:3264
-pub(super) fn SUB_89469(r: &mut Run) {
+pub(crate) fn SUB_89469(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -13577,7 +13577,7 @@ pub(super) fn SUB_89469(r: &mut Run) {
 }
 
 // SUB_89481: firmware/upper/86FE4-lib0C0.s:3273
-pub(super) fn SUB_89481(r: &mut Run) {
+pub(crate) fn SUB_89481(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -13593,7 +13593,7 @@ pub(super) fn SUB_89481(r: &mut Run) {
 }
 
 // SUB_89485: firmware/upper/86FE4-lib0C0.s:3277
-pub(super) fn SUB_89485(r: &mut Run) {
+pub(crate) fn SUB_89485(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -13679,7 +13679,7 @@ pub(super) fn SUB_89485(r: &mut Run) {
 }
 
 // SUB_894DC: firmware/upper/86FE4-lib0C0.s:3303
-pub(super) fn SUB_894DC(r: &mut Run) {
+pub(crate) fn SUB_894DC(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -13723,7 +13723,7 @@ pub(super) fn SUB_894DC(r: &mut Run) {
 }
 
 // SUB_89507: firmware/upper/86FE4-lib0C0.s:3320
-pub(super) fn SUB_89507(r: &mut Run) {
+pub(crate) fn SUB_89507(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -13795,7 +13795,7 @@ pub(super) fn SUB_89507(r: &mut Run) {
 }
 
 // SUB_89549: firmware/upper/86FE4-lib0C0.s:3339
-pub(super) fn SUB_89549(r: &mut Run) {
+pub(crate) fn SUB_89549(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -14037,7 +14037,7 @@ pub(super) fn SUB_89549(r: &mut Run) {
 }
 
 // SUB_89667: firmware/upper/86FE4-lib0C0.s:3430
-pub(super) fn SUB_89667(r: &mut Run) {
+pub(crate) fn SUB_89667(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -14242,7 +14242,7 @@ pub(super) fn SUB_89667(r: &mut Run) {
 }
 
 // SUB_89743: firmware/upper/86FE4-lib0C0.s:3488
-pub(super) fn SUB_89743(r: &mut Run) {
+pub(crate) fn SUB_89743(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -14282,7 +14282,7 @@ pub(super) fn SUB_89743(r: &mut Run) {
 }
 
 // SUB_89760: firmware/upper/86FE4-lib0C0.s:3498
-pub(super) fn SUB_89760(r: &mut Run) {
+pub(crate) fn SUB_89760(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -14485,7 +14485,7 @@ pub(super) fn SUB_89760(r: &mut Run) {
 }
 
 // SUB_8982C: firmware/upper/86FE4-lib0C0.s:3553
-pub(super) fn SUB_8982C(r: &mut Run) {
+pub(crate) fn SUB_8982C(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -14505,7 +14505,7 @@ pub(super) fn SUB_8982C(r: &mut Run) {
 }
 
 // SUB_8983A: firmware/upper/86FE4-lib0C0.s:3561
-pub(super) fn SUB_8983A(r: &mut Run) {
+pub(crate) fn SUB_8983A(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -14597,7 +14597,7 @@ pub(super) fn SUB_8983A(r: &mut Run) {
 }
 
 // SUB_898A8: firmware/upper/86FE4-lib0C0.s:3594
-pub(super) fn SUB_898A8(r: &mut Run) {
+pub(crate) fn SUB_898A8(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -14661,7 +14661,7 @@ pub(super) fn SUB_898A8(r: &mut Run) {
 }
 
 // SUB_898EF: firmware/upper/86FE4-lib0C0.s:3620
-pub(super) fn SUB_898EF(r: &mut Run) {
+pub(crate) fn SUB_898EF(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -14677,7 +14677,7 @@ pub(super) fn SUB_898EF(r: &mut Run) {
 }
 
 // SUB_898F6: firmware/upper/86FE4-lib0C0.s:3624
-pub(super) fn SUB_898F6(r: &mut Run) {
+pub(crate) fn SUB_898F6(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -14706,7 +14706,7 @@ pub(super) fn SUB_898F6(r: &mut Run) {
 
 // ROMPTR 0F1 024
 // ROMP_0F1_024: firmware/upper/8998E-lib0F1.s:1686
-pub(super) fn ROMP_0F1_024(r: &mut Run) {
+pub(crate) fn ROMP_0F1_024(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -14779,7 +14779,7 @@ pub(super) fn ROMP_0F1_024(r: &mut Run) {
 
 // ROMPTR 0F1 025
 // ROMP_0F1_025: firmware/upper/8998E-lib0F1.s:1732
-pub(super) fn ROMP_0F1_025(r: &mut Run) {
+pub(crate) fn ROMP_0F1_025(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -14844,7 +14844,7 @@ pub(super) fn ROMP_0F1_025(r: &mut Run) {
 
 // ROMPTR 0EA 00C
 // ROMP_0EA_00C: firmware/upper/8D27C-lib0EA.s:277
-pub(super) fn ROMP_0EA_00C(r: &mut Run) {
+pub(crate) fn ROMP_0EA_00C(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -14887,314 +14887,314 @@ pub(super) fn ROMP_0EA_00C(r: &mut Run) {
     }
 }
 
-pub const ROUTINES: &[(u32, u32, Block)] = &[
-    (0x80000, 0x80080, L_80000),
-    (0x80081, 0x80166, SUB_80081),
-    (0x80167, 0x80214, SUB_80167),
-    (0x80215, 0x80231, SUB_80215),
-    (0x802BE, 0x802C7, SUB_802BE),
-    (0x802C8, 0x802D1, SUB_802C8),
-    (0x802D2, 0x802D7, SUB_802D2),
-    (0x802D8, 0x802DE, SUB_802D8),
-    (0x802DF, 0x80328, SUB_802DF),
-    (0x80329, 0x8035F, SUB_80329),
-    (0x80360, 0x80388, SUB_80360),
-    (0x80389, 0x8040C, SUB_80389),
-    (0x8040D, 0x80413, SUB_8040D),
-    (0x80414, 0x8043E, SUB_80414),
-    (0x8043F, 0x8044E, SUB_8043F),
-    (0x8044F, 0x8047C, SUB_8044F),
-    (0x8047D, 0x8049E, SUB_8047D),
-    (0x8049F, 0x804B5, SUB_8049F),
-    (0x804B6, 0x804BF, SUB_804B6),
-    (0x804C0, 0x8054C, SUB_804C0),
-    (0x8054D, 0x805B6, SUB_8054D),
-    (0x805B7, 0x805FD, SUB_805B7),
-    (0x805FE, 0x8066C, SUB_805FE),
-    (0x8066D, 0x806DD, SUB_8066D),
-    (0x806DE, 0x807E8, SUB_806DE),
-    (0x807E9, 0x80803, SUB_807E9),
-    (0x8081A, 0x80915, SUB_8081A),
-    (0x80916, 0x80945, SUB_80916),
-    (0x809BE, 0x80AB9, L_809BE),
-    (0x80ABA, 0x80BCA, SUB_80ABA),
-    (0x80BCB, 0x80BE6, SUB_80BCB),
-    (0x80BE7, 0x80C12, SUB_80BE7),
-    (0x80C13, 0x80CBF, SUB_80C13),
-    (0x80CC0, 0x80CE2, SUB_80CC0),
-    (0x80CE3, 0x80CEF, SUB_80CE3),
-    (0x80CF0, 0x80CFC, SUB_80CF0),
-    (0x80CFD, 0x80D12, SUB_80CFD),
-    (0x80D13, 0x80D28, SUB_80D13),
-    (0x80D29, 0x80D38, SUB_80D29),
-    (0x80D39, 0x80D8A, SUB_80D39),
-    (0x80D8B, 0x80DEC, SUB_80D8B),
-    (0x80DED, 0x80DF3, SUB_80DED),
-    (0x80DF4, 0x80EAD, SUB_80DF4),
-    (0x80EAE, 0x80EB4, SUB_80EAE),
-    (0x80EB5, 0x80EBB, SUB_80EB5),
-    (0x80EBC, 0x80EF2, SUB_80EBC),
-    (0x80EF3, 0x80FA5, SUB_80EF3),
-    (0x80FA6, 0x81049, SUB_80FA6),
-    (0x81051, 0x81060, SUB_81051),
-    (0x81061, 0x81067, SUB_81061),
-    (0x81068, 0x8106E, SUB_81068),
-    (0x8106F, 0x81075, SUB_8106F),
-    (0x81076, 0x810E5, SUB_81076),
-    (0x810E6, 0x811E2, SUB_810E6),
-    (0x811ED, 0x81209, L_811ED),
-    (0x8120A, 0x81210, SUB_8120A),
-    (0x81211, 0x812AA, SUB_81211),
-    (0x812AB, 0x812F9, SUB_812AB),
-    (0x812FA, 0x81348, SUB_812FA),
-    (0x81349, 0x8136A, SUB_81349),
-    (0x8136B, 0x81373, SUB_8136B),
-    (0x81374, 0x813BD, SUB_81374),
-    (0x813BE, 0x813CB, SUB_813BE),
-    (0x813CC, 0x8148A, SUB_813CC),
-    (0x8148B, 0x814B1, SUB_8148B),
-    (0x814C5, 0x814E7, SUB_814C5),
-    (0x814E8, 0x8150B, SUB_814E8),
-    (0x8150C, 0x81528, SUB_8150C),
-    (0x81529, 0x8155C, SUB_81529),
-    (0x8155D, 0x815C5, SUB_8155D),
-    (0x815C6, 0x815D2, SUB_815C6),
-    (0x815D3, 0x815E2, SUB_815D3),
-    (0x815FE, 0x81601, SUB_815FE),
-    (0x81602, 0x81659, SUB_81602),
-    (0x8165A, 0x81661, SUB_8165A),
-    (0x81662, 0x816AC, SUB_81662),
-    (0x816AD, 0x816E4, SUB_816AD),
-    (0x816E5, 0x816FD, SUB_816E5),
-    (0x816FE, 0x81735, SUB_816FE),
-    (0x81736, 0x81768, SUB_81736),
-    (0x81769, 0x817E6, SUB_81769),
-    (0x817E9, 0x81822, SUB_817E9),
-    (0x81D24, 0x81D6D, L_81D24),
-    (0x81D6E, 0x81D92, SUB_81D6E),
-    (0x81DE7, 0x81DFF, SUB_81DE7),
-    (0x81E19, 0x81E4B, SUB_81E19),
-    (0x81E4C, 0x81E73, SUB_81E4C),
-    (0x85C25, 0x85C32, code_85C25),
-    (0x85C60, 0x85CA8, code_85C60),
-    (0x87071, 0x87912, code_87071),
-    (0x87913, 0x8791D, SUB_87913),
-    (0x8791E, 0x87932, SUB_8791E),
-    (0x87933, 0x87939, SUB_87933),
-    (0x8793A, 0x87940, SUB_8793A),
-    (0x87941, 0x87947, SUB_87941),
-    (0x87948, 0x8794E, SUB_87948),
-    (0x8794F, 0x87955, SUB_8794F),
-    (0x87956, 0x8795C, SUB_87956),
-    (0x8795D, 0x87976, SUB_8795D),
-    (0x87977, 0x8797A, SUB_87977),
-    (0x8797B, 0x87981, SUB_8797B),
-    (0x87982, 0x87989, SUB_87982),
-    (0x8798A, 0x87991, SUB_8798A),
-    (0x87992, 0x87998, SUB_87992),
-    (0x87999, 0x8799F, SUB_87999),
-    (0x879A0, 0x879A6, SUB_879A0),
-    (0x879A7, 0x87A03, SUB_879A7),
-    (0x87A04, 0x87A6D, SUB_87A04),
-    (0x87A6E, 0x87AAC, SUB_87A6E),
-    (0x87AAD, 0x87AD6, SUB_87AAD),
-    (0x87AD7, 0x87AED, SUB_87AD7),
-    (0x87AEE, 0x87AF9, SUB_87AEE),
-    (0x87AFA, 0x87B00, SUB_87AFA),
-    (0x87B01, 0x87B08, SUB_87B01),
-    (0x87B09, 0x87B27, SUB_87B09),
-    (0x87B28, 0x87B2B, SUB_87B28),
-    (0x87B2C, 0x87B37, SUB_87B2C),
-    (0x87B38, 0x87B47, SUB_87B38),
-    (0x87B48, 0x87B4B, SUB_87B48),
-    (0x87B4C, 0x87B57, SUB_87B4C),
-    (0x87B58, 0x87B5E, SUB_87B58),
-    (0x87B5F, 0x87B6C, SUB_87B5F),
-    (0x87B6D, 0x87B78, SUB_87B6D),
-    (0x87B79, 0x87B88, SUB_87B79),
-    (0x87B89, 0x87B8E, SUB_87B89),
-    (0x87B8F, 0x87B94, SUB_87B8F),
-    (0x87B95, 0x87BA0, SUB_87B95),
-    (0x87BA1, 0x87BAB, SUB_87BA1),
-    (0x87BAC, 0x87BB1, SUB_87BAC),
-    (0x87BB2, 0x87BBD, SUB_87BB2),
-    (0x87BBE, 0x87BC3, SUB_87BBE),
-    (0x87BC4, 0x87BCE, SUB_87BC4),
-    (0x87BDB, 0x87BE0, SUB_87BDB),
-    (0x87BE1, 0x87BE6, SUB_87BE1),
-    (0x87BE7, 0x87BF1, SUB_87BE7),
-    (0x87BF2, 0x87C08, SUB_87BF2),
-    (0x87C09, 0x87C0E, SUB_87C09),
-    (0x87C0F, 0x87C15, SUB_87C0F),
-    (0x87C16, 0x87C1B, SUB_87C16),
-    (0x87C1C, 0x87C22, SUB_87C1C),
-    (0x87C23, 0x87C28, SUB_87C23),
-    (0x87C29, 0x87C2F, SUB_87C29),
-    (0x87C30, 0x87C36, SUB_87C30),
-    (0x87C37, 0x87C3D, SUB_87C37),
-    (0x87C3E, 0x87C4A, SUB_87C3E),
-    (0x87C4B, 0x87C65, SUB_87C4B),
-    (0x87C66, 0x87C72, SUB_87C66),
-    (0x87C73, 0x87C89, SUB_87C73),
-    (0x87C8A, 0x87C90, SUB_87C8A),
-    (0x87C91, 0x87C9B, SUB_87C91),
-    (0x87C9C, 0x87CA6, SUB_87C9C),
-    (0x87CA7, 0x87CB1, SUB_87CA7),
-    (0x87CB2, 0x87CBC, SUB_87CB2),
-    (0x87CBD, 0x87CC7, SUB_87CBD),
-    (0x87CC8, 0x87CD2, SUB_87CC8),
-    (0x87CD3, 0x87CDD, SUB_87CD3),
-    (0x87CDE, 0x87CE8, SUB_87CDE),
-    (0x87CE9, 0x87CF3, SUB_87CE9),
-    (0x87CF4, 0x87CFE, SUB_87CF4),
-    (0x87CFF, 0x87D09, SUB_87CFF),
-    (0x87D0A, 0x87D14, SUB_87D0A),
-    (0x87D15, 0x87D1F, SUB_87D15),
-    (0x87D20, 0x87D2A, SUB_87D20),
-    (0x87D2B, 0x87D35, SUB_87D2B),
-    (0x87D36, 0x87D40, SUB_87D36),
-    (0x87D41, 0x87D4B, SUB_87D41),
-    (0x87D4C, 0x87D56, SUB_87D4C),
-    (0x87D57, 0x87D61, SUB_87D57),
-    (0x87D62, 0x87D6C, SUB_87D62),
-    (0x87D6D, 0x87D77, SUB_87D6D),
-    (0x87D78, 0x87D82, SUB_87D78),
-    (0x87D83, 0x87D8D, SUB_87D83),
-    (0x87D8E, 0x87DA8, SUB_87D8E),
-    (0x87DA9, 0x87DAF, SUB_87DA9),
-    (0x87DB0, 0x87DC5, SUB_87DB0),
-    (0x87DC6, 0x87DCD, SUB_87DC6),
-    (0x87DCE, 0x87DF8, SUB_87DCE),
-    (0x87DF9, 0x87E00, SUB_87DF9),
-    (0x87E01, 0x87E08, SUB_87E01),
-    (0x87E09, 0x87E33, SUB_87E09),
-    (0x87E34, 0x87E4B, SUB_87E34),
-    (0x87E4C, 0x87E4F, SUB_87E4C),
-    (0x87E50, 0x87EA6, SUB_87E50),
-    (0x87EA7, 0x87ED1, SUB_87EA7),
-    (0x87ED2, 0x87F13, SUB_87ED2),
-    (0x87F14, 0x88049, SUB_87F14),
-    (0x8804A, 0x8811F, SUB_8804A),
-    (0x88120, 0x8813A, SUB_88120),
-    (0x8813B, 0x88206, SUB_8813B),
-    (0x88207, 0x88214, SUB_88207),
-    (0x88215, 0x88282, SUB_88215),
-    (0x88283, 0x882C9, SUB_88283),
-    (0x882CA, 0x882D0, SUB_882CA),
-    (0x882D1, 0x882E6, SUB_882D1),
-    (0x88398, 0x88F29, code_88398),
-    (0x88F2A, 0x88F34, SUB_88F2A),
-    (0x88F35, 0x88F49, SUB_88F35),
-    (0x88F4A, 0x88F50, SUB_88F4A),
-    (0x88F51, 0x88F57, SUB_88F51),
-    (0x88F58, 0x88F5E, SUB_88F58),
-    (0x88F5F, 0x88F65, SUB_88F5F),
-    (0x88F66, 0x88F6C, SUB_88F66),
-    (0x88F6D, 0x88F73, SUB_88F6D),
-    (0x88F74, 0x88F8D, SUB_88F74),
-    (0x88F8E, 0x88F91, SUB_88F8E),
-    (0x88F92, 0x88F98, SUB_88F92),
-    (0x88F99, 0x88FA0, SUB_88F99),
-    (0x88FA1, 0x88FA8, SUB_88FA1),
-    (0x88FA9, 0x88FAF, SUB_88FA9),
-    (0x88FB0, 0x88FB6, SUB_88FB0),
-    (0x88FB7, 0x88FBD, SUB_88FB7),
-    (0x88FBE, 0x8901A, SUB_88FBE),
-    (0x8901B, 0x8907D, SUB_8901B),
-    (0x8907E, 0x890B5, SUB_8907E),
-    (0x890B6, 0x890DF, SUB_890B6),
-    (0x890E0, 0x890F6, SUB_890E0),
-    (0x890F7, 0x89102, SUB_890F7),
-    (0x89103, 0x89109, SUB_89103),
-    (0x8910A, 0x89111, SUB_8910A),
-    (0x89112, 0x89125, SUB_89112),
-    (0x89126, 0x89130, SUB_89126),
-    (0x89131, 0x89134, SUB_89131),
-    (0x89135, 0x89140, SUB_89135),
-    (0x89141, 0x89150, SUB_89141),
-    (0x89151, 0x89154, SUB_89151),
-    (0x89155, 0x89160, SUB_89155),
-    (0x89161, 0x89167, SUB_89161),
-    (0x89168, 0x89175, SUB_89168),
-    (0x89176, 0x89181, SUB_89176),
-    (0x89182, 0x89191, SUB_89182),
-    (0x89192, 0x89197, SUB_89192),
-    (0x89198, 0x8919D, SUB_89198),
-    (0x8919E, 0x891A9, SUB_8919E),
-    (0x891AA, 0x891B4, SUB_891AA),
-    (0x891B5, 0x891BA, SUB_891B5),
-    (0x891BB, 0x891C6, SUB_891BB),
-    (0x891C7, 0x891CC, SUB_891C7),
-    (0x891CD, 0x891D7, SUB_891CD),
-    (0x891D8, 0x891E3, SUB_891D8),
-    (0x891E4, 0x891E9, SUB_891E4),
-    (0x891EA, 0x891EF, SUB_891EA),
-    (0x891F0, 0x891FA, SUB_891F0),
-    (0x891FB, 0x89206, SUB_891FB),
-    (0x89207, 0x89211, SUB_89207),
-    (0x89212, 0x89217, SUB_89212),
-    (0x89218, 0x8921E, SUB_89218),
-    (0x8921F, 0x89224, SUB_8921F),
-    (0x89225, 0x8922B, SUB_89225),
-    (0x8922C, 0x89231, SUB_8922C),
-    (0x89232, 0x89238, SUB_89232),
-    (0x89239, 0x8923F, SUB_89239),
-    (0x89240, 0x89246, SUB_89240),
-    (0x89247, 0x89253, SUB_89247),
-    (0x89254, 0x8926E, SUB_89254),
-    (0x8926F, 0x8927B, SUB_8926F),
-    (0x8927C, 0x89292, SUB_8927C),
-    (0x89293, 0x89299, SUB_89293),
-    (0x8929A, 0x892A4, SUB_8929A),
-    (0x892A5, 0x892AF, SUB_892A5),
-    (0x892B0, 0x892BA, SUB_892B0),
-    (0x892BB, 0x892C5, SUB_892BB),
-    (0x892C6, 0x892D0, SUB_892C6),
-    (0x892D1, 0x892DB, SUB_892D1),
-    (0x892DC, 0x892E6, SUB_892DC),
-    (0x892E7, 0x892F1, SUB_892E7),
-    (0x892F2, 0x892FC, SUB_892F2),
-    (0x892FD, 0x89307, SUB_892FD),
-    (0x89308, 0x89312, SUB_89308),
-    (0x89313, 0x8931D, SUB_89313),
-    (0x8931E, 0x89328, SUB_8931E),
-    (0x89329, 0x89333, SUB_89329),
-    (0x89334, 0x8933E, SUB_89334),
-    (0x8933F, 0x89349, SUB_8933F),
-    (0x8934A, 0x89354, SUB_8934A),
-    (0x89355, 0x8935F, SUB_89355),
-    (0x89360, 0x8936A, SUB_89360),
-    (0x8936B, 0x89375, SUB_8936B),
-    (0x89376, 0x89380, SUB_89376),
-    (0x89381, 0x8938B, SUB_89381),
-    (0x8938C, 0x89396, SUB_8938C),
-    (0x89397, 0x893A1, SUB_89397),
-    (0x893A2, 0x893AC, SUB_893A2),
-    (0x893AD, 0x893B7, SUB_893AD),
-    (0x893B8, 0x893C2, SUB_893B8),
-    (0x893C3, 0x893DD, SUB_893C3),
-    (0x893DE, 0x893E4, SUB_893DE),
-    (0x893E5, 0x893FA, SUB_893E5),
-    (0x893FB, 0x89402, SUB_893FB),
-    (0x89403, 0x8942D, SUB_89403),
-    (0x8942E, 0x89435, SUB_8942E),
-    (0x89436, 0x8943D, SUB_89436),
-    (0x8943E, 0x89468, SUB_8943E),
-    (0x89469, 0x89480, SUB_89469),
-    (0x89481, 0x89484, SUB_89481),
-    (0x89485, 0x894DB, SUB_89485),
-    (0x894DC, 0x89506, SUB_894DC),
-    (0x89507, 0x89548, SUB_89507),
-    (0x89549, 0x89666, SUB_89549),
-    (0x89667, 0x89742, SUB_89667),
-    (0x89743, 0x8975F, SUB_89743),
-    (0x89760, 0x8982B, SUB_89760),
-    (0x8982C, 0x89839, SUB_8982C),
-    (0x8983A, 0x898A7, SUB_8983A),
-    (0x898A8, 0x898EE, SUB_898A8),
-    (0x898EF, 0x898F5, SUB_898EF),
-    (0x898F6, 0x8990B, SUB_898F6),
-    (0x8C417, 0x8C4AA, ROMP_0F1_024),
-    (0x8C4B5, 0x8C53A, ROMP_0F1_025),
-    (0x8D738, 0x8D784, ROMP_0EA_00C),
+pub const ROUTINES: &[(u32, u32, Block, &str)] = &[
+    (0x80000, 0x80080, L_80000, "L_80000"),
+    (0x80081, 0x80166, SUB_80081, "SUB_80081"),
+    (0x80167, 0x80214, SUB_80167, "SUB_80167"),
+    (0x80215, 0x80231, SUB_80215, "SUB_80215"),
+    (0x802BE, 0x802C7, SUB_802BE, "SUB_802BE"),
+    (0x802C8, 0x802D1, SUB_802C8, "SUB_802C8"),
+    (0x802D2, 0x802D7, SUB_802D2, "SUB_802D2"),
+    (0x802D8, 0x802DE, SUB_802D8, "SUB_802D8"),
+    (0x802DF, 0x80328, SUB_802DF, "SUB_802DF"),
+    (0x80329, 0x8035F, SUB_80329, "SUB_80329"),
+    (0x80360, 0x80388, SUB_80360, "SUB_80360"),
+    (0x80389, 0x8040C, SUB_80389, "SUB_80389"),
+    (0x8040D, 0x80413, SUB_8040D, "SUB_8040D"),
+    (0x80414, 0x8043E, SUB_80414, "SUB_80414"),
+    (0x8043F, 0x8044E, SUB_8043F, "SUB_8043F"),
+    (0x8044F, 0x8047C, SUB_8044F, "SUB_8044F"),
+    (0x8047D, 0x8049E, SUB_8047D, "SUB_8047D"),
+    (0x8049F, 0x804B5, SUB_8049F, "SUB_8049F"),
+    (0x804B6, 0x804BF, SUB_804B6, "SUB_804B6"),
+    (0x804C0, 0x8054C, SUB_804C0, "SUB_804C0"),
+    (0x8054D, 0x805B6, SUB_8054D, "SUB_8054D"),
+    (0x805B7, 0x805FD, SUB_805B7, "SUB_805B7"),
+    (0x805FE, 0x8066C, SUB_805FE, "SUB_805FE"),
+    (0x8066D, 0x806DD, SUB_8066D, "SUB_8066D"),
+    (0x806DE, 0x807E8, SUB_806DE, "SUB_806DE"),
+    (0x807E9, 0x80803, SUB_807E9, "SUB_807E9"),
+    (0x8081A, 0x80915, SUB_8081A, "SUB_8081A"),
+    (0x80916, 0x80945, SUB_80916, "SUB_80916"),
+    (0x809BE, 0x80AB9, L_809BE, "L_809BE"),
+    (0x80ABA, 0x80BCA, SUB_80ABA, "SUB_80ABA"),
+    (0x80BCB, 0x80BE6, SUB_80BCB, "SUB_80BCB"),
+    (0x80BE7, 0x80C12, SUB_80BE7, "SUB_80BE7"),
+    (0x80C13, 0x80CBF, SUB_80C13, "SUB_80C13"),
+    (0x80CC0, 0x80CE2, SUB_80CC0, "SUB_80CC0"),
+    (0x80CE3, 0x80CEF, SUB_80CE3, "SUB_80CE3"),
+    (0x80CF0, 0x80CFC, SUB_80CF0, "SUB_80CF0"),
+    (0x80CFD, 0x80D12, SUB_80CFD, "SUB_80CFD"),
+    (0x80D13, 0x80D28, SUB_80D13, "SUB_80D13"),
+    (0x80D29, 0x80D38, SUB_80D29, "SUB_80D29"),
+    (0x80D39, 0x80D8A, SUB_80D39, "SUB_80D39"),
+    (0x80D8B, 0x80DEC, SUB_80D8B, "SUB_80D8B"),
+    (0x80DED, 0x80DF3, SUB_80DED, "SUB_80DED"),
+    (0x80DF4, 0x80EAD, SUB_80DF4, "SUB_80DF4"),
+    (0x80EAE, 0x80EB4, SUB_80EAE, "SUB_80EAE"),
+    (0x80EB5, 0x80EBB, SUB_80EB5, "SUB_80EB5"),
+    (0x80EBC, 0x80EF2, SUB_80EBC, "SUB_80EBC"),
+    (0x80EF3, 0x80FA5, SUB_80EF3, "SUB_80EF3"),
+    (0x80FA6, 0x81049, SUB_80FA6, "SUB_80FA6"),
+    (0x81051, 0x81060, SUB_81051, "SUB_81051"),
+    (0x81061, 0x81067, SUB_81061, "SUB_81061"),
+    (0x81068, 0x8106E, SUB_81068, "SUB_81068"),
+    (0x8106F, 0x81075, SUB_8106F, "SUB_8106F"),
+    (0x81076, 0x810E5, SUB_81076, "SUB_81076"),
+    (0x810E6, 0x811E2, SUB_810E6, "SUB_810E6"),
+    (0x811ED, 0x81209, L_811ED, "L_811ED"),
+    (0x8120A, 0x81210, SUB_8120A, "SUB_8120A"),
+    (0x81211, 0x812AA, SUB_81211, "SUB_81211"),
+    (0x812AB, 0x812F9, SUB_812AB, "SUB_812AB"),
+    (0x812FA, 0x81348, SUB_812FA, "SUB_812FA"),
+    (0x81349, 0x8136A, SUB_81349, "SUB_81349"),
+    (0x8136B, 0x81373, SUB_8136B, "SUB_8136B"),
+    (0x81374, 0x813BD, SUB_81374, "SUB_81374"),
+    (0x813BE, 0x813CB, SUB_813BE, "SUB_813BE"),
+    (0x813CC, 0x8148A, SUB_813CC, "SUB_813CC"),
+    (0x8148B, 0x814B1, SUB_8148B, "SUB_8148B"),
+    (0x814C5, 0x814E7, SUB_814C5, "SUB_814C5"),
+    (0x814E8, 0x8150B, SUB_814E8, "SUB_814E8"),
+    (0x8150C, 0x81528, SUB_8150C, "SUB_8150C"),
+    (0x81529, 0x8155C, SUB_81529, "SUB_81529"),
+    (0x8155D, 0x815C5, SUB_8155D, "SUB_8155D"),
+    (0x815C6, 0x815D2, SUB_815C6, "SUB_815C6"),
+    (0x815D3, 0x815E2, SUB_815D3, "SUB_815D3"),
+    (0x815FE, 0x81601, SUB_815FE, "SUB_815FE"),
+    (0x81602, 0x81659, SUB_81602, "SUB_81602"),
+    (0x8165A, 0x81661, SUB_8165A, "SUB_8165A"),
+    (0x81662, 0x816AC, SUB_81662, "SUB_81662"),
+    (0x816AD, 0x816E4, SUB_816AD, "SUB_816AD"),
+    (0x816E5, 0x816FD, SUB_816E5, "SUB_816E5"),
+    (0x816FE, 0x81735, SUB_816FE, "SUB_816FE"),
+    (0x81736, 0x81768, SUB_81736, "SUB_81736"),
+    (0x81769, 0x817E6, SUB_81769, "SUB_81769"),
+    (0x817E9, 0x81822, SUB_817E9, "SUB_817E9"),
+    (0x81D24, 0x81D6D, L_81D24, "L_81D24"),
+    (0x81D6E, 0x81D92, SUB_81D6E, "SUB_81D6E"),
+    (0x81DE7, 0x81DFF, SUB_81DE7, "SUB_81DE7"),
+    (0x81E19, 0x81E4B, SUB_81E19, "SUB_81E19"),
+    (0x81E4C, 0x81E73, SUB_81E4C, "SUB_81E4C"),
+    (0x85C25, 0x85C32, code_85C25, "code_85C25"),
+    (0x85C60, 0x85CA8, code_85C60, "code_85C60"),
+    (0x87071, 0x87912, code_87071, "code_87071"),
+    (0x87913, 0x8791D, SUB_87913, "SUB_87913"),
+    (0x8791E, 0x87932, SUB_8791E, "SUB_8791E"),
+    (0x87933, 0x87939, SUB_87933, "SUB_87933"),
+    (0x8793A, 0x87940, SUB_8793A, "SUB_8793A"),
+    (0x87941, 0x87947, SUB_87941, "SUB_87941"),
+    (0x87948, 0x8794E, SUB_87948, "SUB_87948"),
+    (0x8794F, 0x87955, SUB_8794F, "SUB_8794F"),
+    (0x87956, 0x8795C, SUB_87956, "SUB_87956"),
+    (0x8795D, 0x87976, SUB_8795D, "SUB_8795D"),
+    (0x87977, 0x8797A, SUB_87977, "SUB_87977"),
+    (0x8797B, 0x87981, SUB_8797B, "SUB_8797B"),
+    (0x87982, 0x87989, SUB_87982, "SUB_87982"),
+    (0x8798A, 0x87991, SUB_8798A, "SUB_8798A"),
+    (0x87992, 0x87998, SUB_87992, "SUB_87992"),
+    (0x87999, 0x8799F, SUB_87999, "SUB_87999"),
+    (0x879A0, 0x879A6, SUB_879A0, "SUB_879A0"),
+    (0x879A7, 0x87A03, SUB_879A7, "SUB_879A7"),
+    (0x87A04, 0x87A6D, SUB_87A04, "SUB_87A04"),
+    (0x87A6E, 0x87AAC, SUB_87A6E, "SUB_87A6E"),
+    (0x87AAD, 0x87AD6, SUB_87AAD, "SUB_87AAD"),
+    (0x87AD7, 0x87AED, SUB_87AD7, "SUB_87AD7"),
+    (0x87AEE, 0x87AF9, SUB_87AEE, "SUB_87AEE"),
+    (0x87AFA, 0x87B00, SUB_87AFA, "SUB_87AFA"),
+    (0x87B01, 0x87B08, SUB_87B01, "SUB_87B01"),
+    (0x87B09, 0x87B27, SUB_87B09, "SUB_87B09"),
+    (0x87B28, 0x87B2B, SUB_87B28, "SUB_87B28"),
+    (0x87B2C, 0x87B37, SUB_87B2C, "SUB_87B2C"),
+    (0x87B38, 0x87B47, SUB_87B38, "SUB_87B38"),
+    (0x87B48, 0x87B4B, SUB_87B48, "SUB_87B48"),
+    (0x87B4C, 0x87B57, SUB_87B4C, "SUB_87B4C"),
+    (0x87B58, 0x87B5E, SUB_87B58, "SUB_87B58"),
+    (0x87B5F, 0x87B6C, SUB_87B5F, "SUB_87B5F"),
+    (0x87B6D, 0x87B78, SUB_87B6D, "SUB_87B6D"),
+    (0x87B79, 0x87B88, SUB_87B79, "SUB_87B79"),
+    (0x87B89, 0x87B8E, SUB_87B89, "SUB_87B89"),
+    (0x87B8F, 0x87B94, SUB_87B8F, "SUB_87B8F"),
+    (0x87B95, 0x87BA0, SUB_87B95, "SUB_87B95"),
+    (0x87BA1, 0x87BAB, SUB_87BA1, "SUB_87BA1"),
+    (0x87BAC, 0x87BB1, SUB_87BAC, "SUB_87BAC"),
+    (0x87BB2, 0x87BBD, SUB_87BB2, "SUB_87BB2"),
+    (0x87BBE, 0x87BC3, SUB_87BBE, "SUB_87BBE"),
+    (0x87BC4, 0x87BCE, SUB_87BC4, "SUB_87BC4"),
+    (0x87BDB, 0x87BE0, SUB_87BDB, "SUB_87BDB"),
+    (0x87BE1, 0x87BE6, SUB_87BE1, "SUB_87BE1"),
+    (0x87BE7, 0x87BF1, SUB_87BE7, "SUB_87BE7"),
+    (0x87BF2, 0x87C08, SUB_87BF2, "SUB_87BF2"),
+    (0x87C09, 0x87C0E, SUB_87C09, "SUB_87C09"),
+    (0x87C0F, 0x87C15, SUB_87C0F, "SUB_87C0F"),
+    (0x87C16, 0x87C1B, SUB_87C16, "SUB_87C16"),
+    (0x87C1C, 0x87C22, SUB_87C1C, "SUB_87C1C"),
+    (0x87C23, 0x87C28, SUB_87C23, "SUB_87C23"),
+    (0x87C29, 0x87C2F, SUB_87C29, "SUB_87C29"),
+    (0x87C30, 0x87C36, SUB_87C30, "SUB_87C30"),
+    (0x87C37, 0x87C3D, SUB_87C37, "SUB_87C37"),
+    (0x87C3E, 0x87C4A, SUB_87C3E, "SUB_87C3E"),
+    (0x87C4B, 0x87C65, SUB_87C4B, "SUB_87C4B"),
+    (0x87C66, 0x87C72, SUB_87C66, "SUB_87C66"),
+    (0x87C73, 0x87C89, SUB_87C73, "SUB_87C73"),
+    (0x87C8A, 0x87C90, SUB_87C8A, "SUB_87C8A"),
+    (0x87C91, 0x87C9B, SUB_87C91, "SUB_87C91"),
+    (0x87C9C, 0x87CA6, SUB_87C9C, "SUB_87C9C"),
+    (0x87CA7, 0x87CB1, SUB_87CA7, "SUB_87CA7"),
+    (0x87CB2, 0x87CBC, SUB_87CB2, "SUB_87CB2"),
+    (0x87CBD, 0x87CC7, SUB_87CBD, "SUB_87CBD"),
+    (0x87CC8, 0x87CD2, SUB_87CC8, "SUB_87CC8"),
+    (0x87CD3, 0x87CDD, SUB_87CD3, "SUB_87CD3"),
+    (0x87CDE, 0x87CE8, SUB_87CDE, "SUB_87CDE"),
+    (0x87CE9, 0x87CF3, SUB_87CE9, "SUB_87CE9"),
+    (0x87CF4, 0x87CFE, SUB_87CF4, "SUB_87CF4"),
+    (0x87CFF, 0x87D09, SUB_87CFF, "SUB_87CFF"),
+    (0x87D0A, 0x87D14, SUB_87D0A, "SUB_87D0A"),
+    (0x87D15, 0x87D1F, SUB_87D15, "SUB_87D15"),
+    (0x87D20, 0x87D2A, SUB_87D20, "SUB_87D20"),
+    (0x87D2B, 0x87D35, SUB_87D2B, "SUB_87D2B"),
+    (0x87D36, 0x87D40, SUB_87D36, "SUB_87D36"),
+    (0x87D41, 0x87D4B, SUB_87D41, "SUB_87D41"),
+    (0x87D4C, 0x87D56, SUB_87D4C, "SUB_87D4C"),
+    (0x87D57, 0x87D61, SUB_87D57, "SUB_87D57"),
+    (0x87D62, 0x87D6C, SUB_87D62, "SUB_87D62"),
+    (0x87D6D, 0x87D77, SUB_87D6D, "SUB_87D6D"),
+    (0x87D78, 0x87D82, SUB_87D78, "SUB_87D78"),
+    (0x87D83, 0x87D8D, SUB_87D83, "SUB_87D83"),
+    (0x87D8E, 0x87DA8, SUB_87D8E, "SUB_87D8E"),
+    (0x87DA9, 0x87DAF, SUB_87DA9, "SUB_87DA9"),
+    (0x87DB0, 0x87DC5, SUB_87DB0, "SUB_87DB0"),
+    (0x87DC6, 0x87DCD, SUB_87DC6, "SUB_87DC6"),
+    (0x87DCE, 0x87DF8, SUB_87DCE, "SUB_87DCE"),
+    (0x87DF9, 0x87E00, SUB_87DF9, "SUB_87DF9"),
+    (0x87E01, 0x87E08, SUB_87E01, "SUB_87E01"),
+    (0x87E09, 0x87E33, SUB_87E09, "SUB_87E09"),
+    (0x87E34, 0x87E4B, SUB_87E34, "SUB_87E34"),
+    (0x87E4C, 0x87E4F, SUB_87E4C, "SUB_87E4C"),
+    (0x87E50, 0x87EA6, SUB_87E50, "SUB_87E50"),
+    (0x87EA7, 0x87ED1, SUB_87EA7, "SUB_87EA7"),
+    (0x87ED2, 0x87F13, SUB_87ED2, "SUB_87ED2"),
+    (0x87F14, 0x88049, SUB_87F14, "SUB_87F14"),
+    (0x8804A, 0x8811F, SUB_8804A, "SUB_8804A"),
+    (0x88120, 0x8813A, SUB_88120, "SUB_88120"),
+    (0x8813B, 0x88206, SUB_8813B, "SUB_8813B"),
+    (0x88207, 0x88214, SUB_88207, "SUB_88207"),
+    (0x88215, 0x88282, SUB_88215, "SUB_88215"),
+    (0x88283, 0x882C9, SUB_88283, "SUB_88283"),
+    (0x882CA, 0x882D0, SUB_882CA, "SUB_882CA"),
+    (0x882D1, 0x882E6, SUB_882D1, "SUB_882D1"),
+    (0x88398, 0x88F29, code_88398, "code_88398"),
+    (0x88F2A, 0x88F34, SUB_88F2A, "SUB_88F2A"),
+    (0x88F35, 0x88F49, SUB_88F35, "SUB_88F35"),
+    (0x88F4A, 0x88F50, SUB_88F4A, "SUB_88F4A"),
+    (0x88F51, 0x88F57, SUB_88F51, "SUB_88F51"),
+    (0x88F58, 0x88F5E, SUB_88F58, "SUB_88F58"),
+    (0x88F5F, 0x88F65, SUB_88F5F, "SUB_88F5F"),
+    (0x88F66, 0x88F6C, SUB_88F66, "SUB_88F66"),
+    (0x88F6D, 0x88F73, SUB_88F6D, "SUB_88F6D"),
+    (0x88F74, 0x88F8D, SUB_88F74, "SUB_88F74"),
+    (0x88F8E, 0x88F91, SUB_88F8E, "SUB_88F8E"),
+    (0x88F92, 0x88F98, SUB_88F92, "SUB_88F92"),
+    (0x88F99, 0x88FA0, SUB_88F99, "SUB_88F99"),
+    (0x88FA1, 0x88FA8, SUB_88FA1, "SUB_88FA1"),
+    (0x88FA9, 0x88FAF, SUB_88FA9, "SUB_88FA9"),
+    (0x88FB0, 0x88FB6, SUB_88FB0, "SUB_88FB0"),
+    (0x88FB7, 0x88FBD, SUB_88FB7, "SUB_88FB7"),
+    (0x88FBE, 0x8901A, SUB_88FBE, "SUB_88FBE"),
+    (0x8901B, 0x8907D, SUB_8901B, "SUB_8901B"),
+    (0x8907E, 0x890B5, SUB_8907E, "SUB_8907E"),
+    (0x890B6, 0x890DF, SUB_890B6, "SUB_890B6"),
+    (0x890E0, 0x890F6, SUB_890E0, "SUB_890E0"),
+    (0x890F7, 0x89102, SUB_890F7, "SUB_890F7"),
+    (0x89103, 0x89109, SUB_89103, "SUB_89103"),
+    (0x8910A, 0x89111, SUB_8910A, "SUB_8910A"),
+    (0x89112, 0x89125, SUB_89112, "SUB_89112"),
+    (0x89126, 0x89130, SUB_89126, "SUB_89126"),
+    (0x89131, 0x89134, SUB_89131, "SUB_89131"),
+    (0x89135, 0x89140, SUB_89135, "SUB_89135"),
+    (0x89141, 0x89150, SUB_89141, "SUB_89141"),
+    (0x89151, 0x89154, SUB_89151, "SUB_89151"),
+    (0x89155, 0x89160, SUB_89155, "SUB_89155"),
+    (0x89161, 0x89167, SUB_89161, "SUB_89161"),
+    (0x89168, 0x89175, SUB_89168, "SUB_89168"),
+    (0x89176, 0x89181, SUB_89176, "SUB_89176"),
+    (0x89182, 0x89191, SUB_89182, "SUB_89182"),
+    (0x89192, 0x89197, SUB_89192, "SUB_89192"),
+    (0x89198, 0x8919D, SUB_89198, "SUB_89198"),
+    (0x8919E, 0x891A9, SUB_8919E, "SUB_8919E"),
+    (0x891AA, 0x891B4, SUB_891AA, "SUB_891AA"),
+    (0x891B5, 0x891BA, SUB_891B5, "SUB_891B5"),
+    (0x891BB, 0x891C6, SUB_891BB, "SUB_891BB"),
+    (0x891C7, 0x891CC, SUB_891C7, "SUB_891C7"),
+    (0x891CD, 0x891D7, SUB_891CD, "SUB_891CD"),
+    (0x891D8, 0x891E3, SUB_891D8, "SUB_891D8"),
+    (0x891E4, 0x891E9, SUB_891E4, "SUB_891E4"),
+    (0x891EA, 0x891EF, SUB_891EA, "SUB_891EA"),
+    (0x891F0, 0x891FA, SUB_891F0, "SUB_891F0"),
+    (0x891FB, 0x89206, SUB_891FB, "SUB_891FB"),
+    (0x89207, 0x89211, SUB_89207, "SUB_89207"),
+    (0x89212, 0x89217, SUB_89212, "SUB_89212"),
+    (0x89218, 0x8921E, SUB_89218, "SUB_89218"),
+    (0x8921F, 0x89224, SUB_8921F, "SUB_8921F"),
+    (0x89225, 0x8922B, SUB_89225, "SUB_89225"),
+    (0x8922C, 0x89231, SUB_8922C, "SUB_8922C"),
+    (0x89232, 0x89238, SUB_89232, "SUB_89232"),
+    (0x89239, 0x8923F, SUB_89239, "SUB_89239"),
+    (0x89240, 0x89246, SUB_89240, "SUB_89240"),
+    (0x89247, 0x89253, SUB_89247, "SUB_89247"),
+    (0x89254, 0x8926E, SUB_89254, "SUB_89254"),
+    (0x8926F, 0x8927B, SUB_8926F, "SUB_8926F"),
+    (0x8927C, 0x89292, SUB_8927C, "SUB_8927C"),
+    (0x89293, 0x89299, SUB_89293, "SUB_89293"),
+    (0x8929A, 0x892A4, SUB_8929A, "SUB_8929A"),
+    (0x892A5, 0x892AF, SUB_892A5, "SUB_892A5"),
+    (0x892B0, 0x892BA, SUB_892B0, "SUB_892B0"),
+    (0x892BB, 0x892C5, SUB_892BB, "SUB_892BB"),
+    (0x892C6, 0x892D0, SUB_892C6, "SUB_892C6"),
+    (0x892D1, 0x892DB, SUB_892D1, "SUB_892D1"),
+    (0x892DC, 0x892E6, SUB_892DC, "SUB_892DC"),
+    (0x892E7, 0x892F1, SUB_892E7, "SUB_892E7"),
+    (0x892F2, 0x892FC, SUB_892F2, "SUB_892F2"),
+    (0x892FD, 0x89307, SUB_892FD, "SUB_892FD"),
+    (0x89308, 0x89312, SUB_89308, "SUB_89308"),
+    (0x89313, 0x8931D, SUB_89313, "SUB_89313"),
+    (0x8931E, 0x89328, SUB_8931E, "SUB_8931E"),
+    (0x89329, 0x89333, SUB_89329, "SUB_89329"),
+    (0x89334, 0x8933E, SUB_89334, "SUB_89334"),
+    (0x8933F, 0x89349, SUB_8933F, "SUB_8933F"),
+    (0x8934A, 0x89354, SUB_8934A, "SUB_8934A"),
+    (0x89355, 0x8935F, SUB_89355, "SUB_89355"),
+    (0x89360, 0x8936A, SUB_89360, "SUB_89360"),
+    (0x8936B, 0x89375, SUB_8936B, "SUB_8936B"),
+    (0x89376, 0x89380, SUB_89376, "SUB_89376"),
+    (0x89381, 0x8938B, SUB_89381, "SUB_89381"),
+    (0x8938C, 0x89396, SUB_8938C, "SUB_8938C"),
+    (0x89397, 0x893A1, SUB_89397, "SUB_89397"),
+    (0x893A2, 0x893AC, SUB_893A2, "SUB_893A2"),
+    (0x893AD, 0x893B7, SUB_893AD, "SUB_893AD"),
+    (0x893B8, 0x893C2, SUB_893B8, "SUB_893B8"),
+    (0x893C3, 0x893DD, SUB_893C3, "SUB_893C3"),
+    (0x893DE, 0x893E4, SUB_893DE, "SUB_893DE"),
+    (0x893E5, 0x893FA, SUB_893E5, "SUB_893E5"),
+    (0x893FB, 0x89402, SUB_893FB, "SUB_893FB"),
+    (0x89403, 0x8942D, SUB_89403, "SUB_89403"),
+    (0x8942E, 0x89435, SUB_8942E, "SUB_8942E"),
+    (0x89436, 0x8943D, SUB_89436, "SUB_89436"),
+    (0x8943E, 0x89468, SUB_8943E, "SUB_8943E"),
+    (0x89469, 0x89480, SUB_89469, "SUB_89469"),
+    (0x89481, 0x89484, SUB_89481, "SUB_89481"),
+    (0x89485, 0x894DB, SUB_89485, "SUB_89485"),
+    (0x894DC, 0x89506, SUB_894DC, "SUB_894DC"),
+    (0x89507, 0x89548, SUB_89507, "SUB_89507"),
+    (0x89549, 0x89666, SUB_89549, "SUB_89549"),
+    (0x89667, 0x89742, SUB_89667, "SUB_89667"),
+    (0x89743, 0x8975F, SUB_89743, "SUB_89743"),
+    (0x89760, 0x8982B, SUB_89760, "SUB_89760"),
+    (0x8982C, 0x89839, SUB_8982C, "SUB_8982C"),
+    (0x8983A, 0x898A7, SUB_8983A, "SUB_8983A"),
+    (0x898A8, 0x898EE, SUB_898A8, "SUB_898A8"),
+    (0x898EF, 0x898F5, SUB_898EF, "SUB_898EF"),
+    (0x898F6, 0x8990B, SUB_898F6, "SUB_898F6"),
+    (0x8C417, 0x8C4AA, ROMP_0F1_024, "ROMP_0F1_024"),
+    (0x8C4B5, 0x8C53A, ROMP_0F1_025, "ROMP_0F1_025"),
+    (0x8D738, 0x8D784, ROMP_0EA_00C, "ROMP_0EA_00C"),
 ];

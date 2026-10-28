@@ -3,8 +3,10 @@
 //! `src/gen/` is written by `cargo run --release -p hp48 --example
 //! translate` (see hp48::translated): one function per routine of the
 //! firmware source. [`install`] makes a machine run them in place of
-//! interpreting that code.
+//! interpreting that code, with the routines edited by hand (`src/edited/`)
+//! in place of their generated versions.
 
+mod edited;
 mod gen;
 
 /// What the generated code uses.
@@ -80,14 +82,32 @@ mod prelude {
 }
 
 /// Run the translated code on `machine`, if its ROM is the one the code was
-/// translated from. Returns whether it was installed.
+/// translated from, with the hand-edited routines. Returns whether it was
+/// installed.
 pub fn install(machine: &mut hp48::Machine) -> bool {
+    install_with(machine, edited::EDITS)
+}
+
+/// [`install`] without the hand edits: only the generated routines.
+pub fn install_generated(machine: &mut hp48::Machine) -> bool {
+    install_with(machine, &[])
+}
+
+fn install_with(machine: &mut hp48::Machine, edits: &[(&str, hp48::translated::Block)]) -> bool {
     let rom = &machine.hw.rom;
     if hp48::rom_hash(rom) != gen::ROM_HASH {
         return false;
     }
     let mut table = vec![None; 0x10_0000];
-    for &(first, last, routine) in gen::ALL.iter().copied().flatten() {
+    let mut unused: Vec<&str> = edits.iter().map(|e| e.0).collect();
+    for &(first, last, generated, name) in gen::ALL.iter().copied().flatten() {
+        let routine = match edits.iter().find(|e| e.0 == name) {
+            Some(&(_, edit)) => {
+                unused.retain(|&n| n != name);
+                edit
+            }
+            None => generated,
+        };
         // A routine's instructions follow each other from `first`.
         let mut a = first;
         while a <= last {
@@ -95,6 +115,7 @@ pub fn install(machine: &mut hp48::Machine) -> bool {
             a += saturn::decode(a, |x| rom[(x & 0xF_FFFF) as usize]).1;
         }
     }
+    assert!(unused.is_empty(), "edited routines with no generated routine of that name: {unused:?}");
     machine.blocks = Some(std::sync::Arc::new(table));
     true
 }
@@ -102,4 +123,9 @@ pub fn install(machine: &mut hp48::Machine) -> bool {
 /// How many routines were translated.
 pub fn routines() -> usize {
     gen::ALL.iter().map(|r| r.len()).sum()
+}
+
+/// The names of the hand-edited routines.
+pub fn edited() -> Vec<&'static str> {
+    edited::EDITS.iter().map(|e| e.0).collect()
 }

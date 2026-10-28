@@ -1,7 +1,9 @@
 //! The translated ROM code must take the machine through exactly the same
-//! states as the interpreter: run a plain machine and one with the blocks
-//! installed side by side and compare everything after each step of the
-//! script. Skipped when the ROM is not present.
+//! states as the interpreter: run a plain machine and one with the
+//! translated code installed side by side and compare everything after
+//! each step of the script. The generated routines are checked on their
+//! own, and the hand-edited ones in place. Skipped when the ROM is not
+//! present.
 
 use hp48::{Key, Machine, CPU_HZ};
 
@@ -70,10 +72,13 @@ impl Pair {
     }
 }
 
-fn pair() -> Option<Pair> {
+/// A plain machine and a translated one, booted. `edits`: with the
+/// hand-edited routines (`hp48_rom::install`), or only the generated ones.
+fn pair(edits: bool) -> Option<Pair> {
     let plain = machine()?;
     let mut translated = plain.clone();
-    assert!(hp48_rom::install(&mut translated), "translated from this ROM");
+    let install = if edits { hp48_rom::install } else { hp48_rom::install_generated };
+    assert!(install(&mut translated), "translated from this ROM");
     let mut p = Pair { plain, translated, checks: 0 };
     p.run(3 * CPU_HZ);
     p.tap(Key::F);
@@ -83,18 +88,28 @@ fn pair() -> Option<Pair> {
 
 #[test]
 fn translated_code_matches_the_interpreter() {
-    let Some(mut p) = pair() else { return };
+    let Some(mut p) = pair(false) else { return };
     for line in ["1 2 + 3 *", "« 1 5 FOR I I NEXT » EVAL + + + +", "{ 1 \"A\" } 'X^2+1' 3 SQ", "RAD 'SIN(X)' STEQ ERASE DRAW"] {
         p.enter(line, 2 * CPU_HZ);
     }
     assert!(p.translated.block_runs > 100_000, "blocks ran: {}", p.translated.block_runs);
 }
 
+/// The hand-edited routines (src/edited/) must keep the ROM's behaviour
+/// too, unless an edit says it changes it on purpose.
+#[test]
+fn edited_routines_match_the_interpreter() {
+    let Some(mut p) = pair(true) else { return };
+    for line in ["1 2 OVER + 3 *", "« 1 5 FOR I I NEXT » EVAL + + + +", "{ 1 \"A\" } 'X^2+1' 3 SQ", "RAD 'SIN(X)' STEQ ERASE DRAW"] {
+        p.enter(line, 2 * CPU_HZ);
+    }
+}
+
 /// Commands the tour leaves out, which run ROM code translated from the
 /// static analysis alone (about 1300 instructions the tour never reaches).
 #[test]
 fn translated_code_beyond_the_tour_matches_the_interpreter() {
-    let Some(mut p) = pair() else { return };
+    let Some(mut p) = pair(false) else { return };
     for line in [
         "1 2 R→C 3 4 R→C * ABS ARG",
         "#FFh #3h AND #2h * RL #1234h B→R R→B",
@@ -118,7 +133,7 @@ fn translated_code_beyond_the_tour_matches_the_interpreter() {
 #[test]
 #[ignore]
 fn translated_code_matches_the_interpreter_on_tour() {
-    let Some(mut p) = pair() else { return };
+    let Some(mut p) = pair(false) else { return };
     for line in tour::TOUR {
         p.enter(line, 2 * CPU_HZ);
         p.tap(Key::On);

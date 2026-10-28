@@ -3,10 +3,10 @@
 
 #![allow(non_snake_case, clippy::no_effect)]
 
-use super::super::prelude::*;
+use crate::prelude::*;
 
 // OBJ_601B6: firmware/lower/6001C-rpl-utils.s:113
-pub(super) fn OBJ_601B6(r: &mut Run) {
+pub(crate) fn OBJ_601B6(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -74,7 +74,7 @@ pub(super) fn OBJ_601B6(r: &mut Run) {
 }
 
 // SUB_60236: firmware/lower/6001C-rpl-utils.s:144
-pub(super) fn SUB_60236(r: &mut Run) {
+pub(crate) fn SUB_60236(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -104,7 +104,7 @@ pub(super) fn SUB_60236(r: &mut Run) {
 }
 
 // OBJ_602BD: firmware/lower/6001C-rpl-utils.s:185
-pub(super) fn OBJ_602BD(r: &mut Run) {
+pub(crate) fn OBJ_602BD(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -220,7 +220,7 @@ pub(super) fn OBJ_602BD(r: &mut Run) {
 }
 
 // SUB_603BF: firmware/lower/6001C-rpl-utils.s:244
-pub(super) fn SUB_603BF(r: &mut Run) {
+pub(crate) fn SUB_603BF(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -241,7 +241,7 @@ pub(super) fn SUB_603BF(r: &mut Run) {
 
 // ->
 // RSWAP: firmware/lower/6001C-rpl-utils.s:902
-pub(super) fn RSWAP(r: &mut Run) {
+pub(crate) fn RSWAP(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -270,7 +270,7 @@ pub(super) fn RSWAP(r: &mut Run) {
 
 // 1 2 3 -> 2 1 3
 // ROTSWAP: firmware/lower/6001C-rpl-utils.s:921
-pub(super) fn ROTSWAP(r: &mut Run) {
+pub(crate) fn ROTSWAP(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -301,7 +301,7 @@ pub(super) fn ROTSWAP(r: &mut Run) {
 
 // 1 2 3 -> 3 2
 // ROTDROPSWAP: firmware/lower/6001C-rpl-utils.s:938
-pub(super) fn ROTDROPSWAP(r: &mut Run) {
+pub(crate) fn ROTDROPSWAP(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -322,7 +322,7 @@ pub(super) fn ROTDROPSWAP(r: &mut Run) {
 
 // 1 2 3 -> 2 3
 // ROTDROP: firmware/lower/6001C-rpl-utils.s:948
-pub(super) fn ROTDROP(r: &mut Run) {
+pub(crate) fn ROTDROP(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -342,7 +342,7 @@ pub(super) fn ROTDROP(r: &mut Run) {
 
 // 1 2 3 -> 3 2 1
 // SWAPROT: firmware/lower/6001C-rpl-utils.s:957
-pub(super) fn SWAPROT(r: &mut Run) {
+pub(crate) fn SWAPROT(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -364,7 +364,7 @@ pub(super) fn SWAPROT(r: &mut Run) {
 
 // 1 2 3 ->
 // 3DROP: firmware/lower/6001C-rpl-utils.s:968
-pub(super) fn r3DROP(r: &mut Run) {
+pub(crate) fn r3DROP(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -381,7 +381,7 @@ pub(super) fn r3DROP(r: &mut Run) {
 
 // 1..7 ->
 // 7DROP: firmware/lower/6001C-rpl-utils.s:974
-pub(super) fn r7DROP(r: &mut Run) {
+pub(crate) fn r7DROP(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -410,7 +410,7 @@ pub(super) fn r7DROP(r: &mut Run) {
 
 // 1..6 ->
 // 6DROP: firmware/lower/6001C-rpl-utils.s:986
-pub(super) fn r6DROP(r: &mut Run) {
+pub(crate) fn r6DROP(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -428,7 +428,7 @@ pub(super) fn r6DROP(r: &mut Run) {
 
 // 1..5 ->
 // 5DROP: firmware/lower/6001C-rpl-utils.s:993
-pub(super) fn r5DROP(r: &mut Run) {
+pub(crate) fn r5DROP(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -446,7 +446,7 @@ pub(super) fn r5DROP(r: &mut Run) {
 
 // 1..4 ->
 // 4DROP: firmware/lower/6001C-rpl-utils.s:1000
-pub(super) fn r4DROP(r: &mut Run) {
+pub(crate) fn r4DROP(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -487,7 +487,7 @@ pub(super) fn r4DROP(r: &mut Run) {
 
 // 1 2 -> 2
 // SWAPDROP: firmware/lower/6001C-rpl-utils.s:1022
-pub(super) fn SWAPDROP(r: &mut Run) {
+pub(crate) fn SWAPDROP(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -507,7 +507,7 @@ pub(super) fn SWAPDROP(r: &mut Run) {
 
 // 1 2 3 -> 3 1 2
 // 3UNROLL: firmware/lower/6001C-rpl-utils.s:1031
-pub(super) fn r3UNROLL(r: &mut Run) {
+pub(crate) fn r3UNROLL(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -526,7 +526,7 @@ pub(super) fn r3UNROLL(r: &mut Run) {
 
 // 1 2 3 4 -> 2 3 4 1
 // 4ROLL: firmware/lower/6001C-rpl-utils.s:1039
-pub(super) fn r4ROLL(r: &mut Run) {
+pub(crate) fn r4ROLL(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -549,7 +549,7 @@ pub(super) fn r4ROLL(r: &mut Run) {
 
 // 1 2 3 4 5 -> 2 3 4 5 1
 // 5ROLL: firmware/lower/6001C-rpl-utils.s:1051
-pub(super) fn r5ROLL(r: &mut Run) {
+pub(crate) fn r5ROLL(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -577,7 +577,7 @@ pub(super) fn r5ROLL(r: &mut Run) {
 
 // 1..6 -> 2..6 1
 // 6ROLL: firmware/lower/6001C-rpl-utils.s:1068
-pub(super) fn r6ROLL(r: &mut Run) {
+pub(crate) fn r6ROLL(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -617,7 +617,7 @@ pub(super) fn r6ROLL(r: &mut Run) {
 
 // 1..8 -> 2..8 1
 // 8ROLL: firmware/lower/6001C-rpl-utils.s:1091
-pub(super) fn r8ROLL(r: &mut Run) {
+pub(crate) fn r8ROLL(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -646,7 +646,7 @@ pub(super) fn r8ROLL(r: &mut Run) {
 
 // 1..7 -> 2..7 1
 // 7ROLL: firmware/lower/6001C-rpl-utils.s:1109
-pub(super) fn r7ROLL(r: &mut Run) {
+pub(crate) fn r7ROLL(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -678,7 +678,7 @@ pub(super) fn r7ROLL(r: &mut Run) {
 
 // 1 2 3 4 -> 4 1 2 3
 // 4UNROLL: firmware/lower/6001C-rpl-utils.s:1132
-pub(super) fn r4UNROLL(r: &mut Run) {
+pub(crate) fn r4UNROLL(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -704,7 +704,7 @@ pub(super) fn r4UNROLL(r: &mut Run) {
 
 // 1 2 3 4 5 -> 5 1 2 3 4
 // 5UNROLL: firmware/lower/6001C-rpl-utils.s:1147
-pub(super) fn r5UNROLL(r: &mut Run) {
+pub(crate) fn r5UNROLL(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -740,7 +740,7 @@ pub(super) fn r5UNROLL(r: &mut Run) {
 
 // 1..6 -> 6 1..5
 // 6UNROLL: firmware/lower/6001C-rpl-utils.s:1169
-pub(super) fn r6UNROLL(r: &mut Run) {
+pub(crate) fn r6UNROLL(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -769,7 +769,7 @@ pub(super) fn r6UNROLL(r: &mut Run) {
 
 // 1 2 3 -> 3
 // ROTROT2DROP: firmware/lower/6001C-rpl-utils.s:1187
-pub(super) fn ROTROT2DROP(r: &mut Run) {
+pub(crate) fn ROTROT2DROP(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -789,7 +789,7 @@ pub(super) fn ROTROT2DROP(r: &mut Run) {
 
 // 1 2 3 4 -> 4
 // 4UNROLL3DROP: firmware/lower/6001C-rpl-utils.s:1196
-pub(super) fn r4UNROLL3DROP(r: &mut Run) {
+pub(crate) fn r4UNROLL3DROP(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -809,7 +809,7 @@ pub(super) fn r4UNROLL3DROP(r: &mut Run) {
 
 // ->
 // 2RDROP: firmware/lower/6001C-rpl-utils.s:1205
-pub(super) fn r2RDROP(r: &mut Run) {
+pub(crate) fn r2RDROP(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -828,7 +828,7 @@ pub(super) fn r2RDROP(r: &mut Run) {
 
 // ->
 // 3RDROP: firmware/lower/6001C-rpl-utils.s:1213
-pub(super) fn r3RDROP(r: &mut Run) {
+pub(crate) fn r3RDROP(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -847,7 +847,7 @@ pub(super) fn r3RDROP(r: &mut Run) {
 
 // 1..n-m #n #m -> 1..n-m 1
 // #-PICK: firmware/lower/6001C-rpl-utils.s:1221
-pub(super) fn __PICK(r: &mut Run) {
+pub(crate) fn __PICK(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -869,7 +869,7 @@ pub(super) fn __PICK(r: &mut Run) {
 
 // 1..n+m #n #m -> 1..n+m 1
 // #+PICK: firmware/lower/6001C-rpl-utils.s:1229
-pub(super) fn __PICK_61189(r: &mut Run) {
+pub(crate) fn __PICK_61189(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -898,7 +898,7 @@ pub(super) fn __PICK_61189(r: &mut Run) {
 
 // 1..n #n-1 -> 1..n 1
 // #1+PICK: firmware/lower/6001C-rpl-utils.s:1246
-pub(super) fn _1_PICK(r: &mut Run) {
+pub(crate) fn _1_PICK(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -918,7 +918,7 @@ pub(super) fn _1_PICK(r: &mut Run) {
 }
 
 // SUB_611B0: firmware/lower/6001C-rpl-utils.s:1252
-pub(super) fn SUB_611B0(r: &mut Run) {
+pub(crate) fn SUB_611B0(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -939,7 +939,7 @@ pub(super) fn SUB_611B0(r: &mut Run) {
 
 // 1..n #n-2 -> 1..n 1
 // #2+PICK: firmware/lower/6001C-rpl-utils.s:1261
-pub(super) fn _2_PICK(r: &mut Run) {
+pub(crate) fn _2_PICK(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -970,7 +970,7 @@ pub(super) fn _2_PICK(r: &mut Run) {
 
 // 1..n #n-3 -> 1..n 1
 // #3+PICK: firmware/lower/6001C-rpl-utils.s:1273
-pub(super) fn _3_PICK(r: &mut Run) {
+pub(crate) fn _3_PICK(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -992,7 +992,7 @@ pub(super) fn _3_PICK(r: &mut Run) {
 
 // 1..n #n-4 -> 1..n 1
 // #4+PICK: firmware/lower/6001C-rpl-utils.s:1281
-pub(super) fn _4_PICK(r: &mut Run) {
+pub(crate) fn _4_PICK(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -1023,7 +1023,7 @@ pub(super) fn _4_PICK(r: &mut Run) {
 
 // 1 2 3 -> 1 2 3 1
 // 3PICK: firmware/lower/6001C-rpl-utils.s:1298
-pub(super) fn r3PICK(r: &mut Run) {
+pub(crate) fn r3PICK(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -1056,7 +1056,7 @@ pub(super) fn r3PICK(r: &mut Run) {
 
 // 1 2 3 4 -> 1 2 3 4 1
 // 4PICK: firmware/lower/6001C-rpl-utils.s:1313
-pub(super) fn r4PICK(r: &mut Run) {
+pub(crate) fn r4PICK(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -1089,7 +1089,7 @@ pub(super) fn r4PICK(r: &mut Run) {
 
 // 1 2 3 4 5 -> 1 2 3 4 5 1
 // 5PICK: firmware/lower/6001C-rpl-utils.s:1328
-pub(super) fn r5PICK(r: &mut Run) {
+pub(crate) fn r5PICK(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -1124,7 +1124,7 @@ pub(super) fn r5PICK(r: &mut Run) {
 
 // 1..6 -> 1..6 1
 // 6PICK: firmware/lower/6001C-rpl-utils.s:1345
-pub(super) fn r6PICK(r: &mut Run) {
+pub(crate) fn r6PICK(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -1159,7 +1159,7 @@ pub(super) fn r6PICK(r: &mut Run) {
 
 // 1..7 -> 1..7 1
 // 7PICK: firmware/lower/6001C-rpl-utils.s:1362
-pub(super) fn r7PICK(r: &mut Run) {
+pub(crate) fn r7PICK(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -1195,7 +1195,7 @@ pub(super) fn r7PICK(r: &mut Run) {
 
 // 1..8 -> 1..8 1
 // 8PICK: firmware/lower/6001C-rpl-utils.s:1380
-pub(super) fn r8PICK(r: &mut Run) {
+pub(crate) fn r8PICK(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -1224,7 +1224,7 @@ pub(super) fn r8PICK(r: &mut Run) {
 
 // 1..n-m #n #m -> 2..n-m 1
 // #-ROLL: firmware/lower/6001C-rpl-utils.s:1396
-pub(super) fn __ROLL(r: &mut Run) {
+pub(crate) fn __ROLL(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -1246,7 +1246,7 @@ pub(super) fn __ROLL(r: &mut Run) {
 
 // 1..n+m #n #m -> 2..n+m 1
 // #+ROLL: firmware/lower/6001C-rpl-utils.s:1404
-pub(super) fn __ROLL_612E3(r: &mut Run) {
+pub(crate) fn __ROLL_612E3(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -1272,7 +1272,7 @@ pub(super) fn __ROLL_612E3(r: &mut Run) {
 
 // ob 1..n #n -> 1..n ob
 // #1+ROLL: firmware/lower/6001C-rpl-utils.s:1413
-pub(super) fn _1_ROLL(r: &mut Run) {
+pub(crate) fn _1_ROLL(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -1294,7 +1294,7 @@ pub(super) fn _1_ROLL(r: &mut Run) {
 
 // ob meta -> meta ob
 // get1: firmware/lower/6001C-rpl-utils.s:1421
-pub(super) fn get1(r: &mut Run) {
+pub(crate) fn get1(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -1317,7 +1317,7 @@ pub(super) fn get1(r: &mut Run) {
 
 // a b 1..n #n -> b 1..n a
 // #2+ROLL: firmware/lower/6001C-rpl-utils.s:1430
-pub(super) fn _2_ROLL(r: &mut Run) {
+pub(crate) fn _2_ROLL(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -1340,7 +1340,7 @@ pub(super) fn _2_ROLL(r: &mut Run) {
 
 // 1..n-m #n #m -> n-m 1..n+m-1
 // #-UNROLL: firmware/lower/6001C-rpl-utils.s:1439
-pub(super) fn __UNROLL(r: &mut Run) {
+pub(crate) fn __UNROLL(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -1362,7 +1362,7 @@ pub(super) fn __UNROLL(r: &mut Run) {
 
 // 1..n+m #n #m -> n+m 1..n+m-1
 // #+UNROLL: firmware/lower/6001C-rpl-utils.s:1447
-pub(super) fn __UNROLL_61343(r: &mut Run) {
+pub(crate) fn __UNROLL_61343(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -1388,7 +1388,7 @@ pub(super) fn __UNROLL_61343(r: &mut Run) {
 
 // ob 1..n #n -> n ob 1..n-1
 // #1+UNROLL: firmware/lower/6001C-rpl-utils.s:1456
-pub(super) fn _1_UNROLL(r: &mut Run) {
+pub(crate) fn _1_UNROLL(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -1410,7 +1410,7 @@ pub(super) fn _1_UNROLL(r: &mut Run) {
 
 // a b 1..n #n -> n a b 1..n-1
 // #2+UNROLL: firmware/lower/6001C-rpl-utils.s:1464
-pub(super) fn _2_UNROLL(r: &mut Run) {
+pub(crate) fn _2_UNROLL(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -1441,7 +1441,7 @@ pub(super) fn _2_UNROLL(r: &mut Run) {
 
 // 1 2 -> 2 1 2
 // DUPUNROT: firmware/lower/6001C-rpl-utils.s:1476
-pub(super) fn DUPUNROT(r: &mut Run) {
+pub(crate) fn DUPUNROT(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -1478,7 +1478,7 @@ pub(super) fn DUPUNROT(r: &mut Run) {
 }
 
 // SUB_613A8: firmware/lower/6001C-rpl-utils.s:1494
-pub(super) fn SUB_613A8(r: &mut Run) {
+pub(crate) fn SUB_613A8(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -1503,7 +1503,7 @@ pub(super) fn SUB_613A8(r: &mut Run) {
 
 // -> ob
 // 1GETLAM: firmware/lower/6001C-rpl-utils.s:1502
-pub(super) fn r1GETLAM(r: &mut Run) {
+pub(crate) fn r1GETLAM(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -1545,7 +1545,7 @@ pub(super) fn r1GETLAM(r: &mut Run) {
 
 // -> ob
 // 2GETLAM: firmware/lower/6001C-rpl-utils.s:1523
-pub(super) fn r2GETLAM(r: &mut Run) {
+pub(crate) fn r2GETLAM(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -1580,7 +1580,7 @@ pub(super) fn r2GETLAM(r: &mut Run) {
 
 // -> ob
 // 3GETLAM: firmware/lower/6001C-rpl-utils.s:1540
-pub(super) fn r3GETLAM(r: &mut Run) {
+pub(crate) fn r3GETLAM(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -1616,7 +1616,7 @@ pub(super) fn r3GETLAM(r: &mut Run) {
 
 // -> ob
 // 4GETLAM: firmware/lower/6001C-rpl-utils.s:1558
-pub(super) fn r4GETLAM(r: &mut Run) {
+pub(crate) fn r4GETLAM(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -1644,7 +1644,7 @@ pub(super) fn r4GETLAM(r: &mut Run) {
 
 // -> ob
 // 5GETLAM: firmware/lower/6001C-rpl-utils.s:1573
-pub(super) fn r5GETLAM(r: &mut Run) {
+pub(crate) fn r5GETLAM(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -1662,7 +1662,7 @@ pub(super) fn r5GETLAM(r: &mut Run) {
 
 // -> ob
 // 6GETLAM: firmware/lower/6001C-rpl-utils.s:1580
-pub(super) fn r6GETLAM(r: &mut Run) {
+pub(crate) fn r6GETLAM(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -1680,7 +1680,7 @@ pub(super) fn r6GETLAM(r: &mut Run) {
 
 // -> ob
 // 7GETLAM: firmware/lower/6001C-rpl-utils.s:1587
-pub(super) fn r7GETLAM(r: &mut Run) {
+pub(crate) fn r7GETLAM(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -1698,7 +1698,7 @@ pub(super) fn r7GETLAM(r: &mut Run) {
 
 // -> ob
 // 8GETLAM: firmware/lower/6001C-rpl-utils.s:1594
-pub(super) fn r8GETLAM(r: &mut Run) {
+pub(crate) fn r8GETLAM(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -1716,7 +1716,7 @@ pub(super) fn r8GETLAM(r: &mut Run) {
 
 // -> ob
 // 9GETLAM: firmware/lower/6001C-rpl-utils.s:1601
-pub(super) fn r9GETLAM(r: &mut Run) {
+pub(crate) fn r9GETLAM(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -1734,7 +1734,7 @@ pub(super) fn r9GETLAM(r: &mut Run) {
 
 // -> ob
 // 10GETLAM: firmware/lower/6001C-rpl-utils.s:1608
-pub(super) fn r10GETLAM(r: &mut Run) {
+pub(crate) fn r10GETLAM(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -1752,7 +1752,7 @@ pub(super) fn r10GETLAM(r: &mut Run) {
 
 // -> ob
 // 11GETLAM: firmware/lower/6001C-rpl-utils.s:1615
-pub(super) fn r11GETLAM(r: &mut Run) {
+pub(crate) fn r11GETLAM(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -1770,7 +1770,7 @@ pub(super) fn r11GETLAM(r: &mut Run) {
 
 // -> ob
 // 12GETLAM: firmware/lower/6001C-rpl-utils.s:1622
-pub(super) fn r12GETLAM(r: &mut Run) {
+pub(crate) fn r12GETLAM(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -1788,7 +1788,7 @@ pub(super) fn r12GETLAM(r: &mut Run) {
 
 // -> ob
 // 13GETLAM: firmware/lower/6001C-rpl-utils.s:1629
-pub(super) fn r13GETLAM(r: &mut Run) {
+pub(crate) fn r13GETLAM(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -1806,7 +1806,7 @@ pub(super) fn r13GETLAM(r: &mut Run) {
 
 // -> ob
 // 14GETLAM: firmware/lower/6001C-rpl-utils.s:1636
-pub(super) fn r14GETLAM(r: &mut Run) {
+pub(crate) fn r14GETLAM(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -1824,7 +1824,7 @@ pub(super) fn r14GETLAM(r: &mut Run) {
 
 // -> ob
 // 15GETLAM: firmware/lower/6001C-rpl-utils.s:1643
-pub(super) fn r15GETLAM(r: &mut Run) {
+pub(crate) fn r15GETLAM(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -1842,7 +1842,7 @@ pub(super) fn r15GETLAM(r: &mut Run) {
 
 // -> ob
 // 16GETLAM: firmware/lower/6001C-rpl-utils.s:1650
-pub(super) fn r16GETLAM(r: &mut Run) {
+pub(crate) fn r16GETLAM(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -1860,7 +1860,7 @@ pub(super) fn r16GETLAM(r: &mut Run) {
 
 // -> ob
 // 17GETLAM: firmware/lower/6001C-rpl-utils.s:1657
-pub(super) fn r17GETLAM(r: &mut Run) {
+pub(crate) fn r17GETLAM(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -1878,7 +1878,7 @@ pub(super) fn r17GETLAM(r: &mut Run) {
 
 // -> ob
 // 18GETLAM: firmware/lower/6001C-rpl-utils.s:1664
-pub(super) fn r18GETLAM(r: &mut Run) {
+pub(crate) fn r18GETLAM(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -1896,7 +1896,7 @@ pub(super) fn r18GETLAM(r: &mut Run) {
 
 // -> ob
 // 19GETLAM: firmware/lower/6001C-rpl-utils.s:1671
-pub(super) fn r19GETLAM(r: &mut Run) {
+pub(crate) fn r19GETLAM(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -1914,7 +1914,7 @@ pub(super) fn r19GETLAM(r: &mut Run) {
 
 // -> ob
 // 20GETLAM: firmware/lower/6001C-rpl-utils.s:1678
-pub(super) fn r20GETLAM(r: &mut Run) {
+pub(crate) fn r20GETLAM(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -1932,7 +1932,7 @@ pub(super) fn r20GETLAM(r: &mut Run) {
 
 // -> ob
 // 21GETLAM: firmware/lower/6001C-rpl-utils.s:1685
-pub(super) fn r21GETLAM(r: &mut Run) {
+pub(crate) fn r21GETLAM(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -1949,7 +1949,7 @@ pub(super) fn r21GETLAM(r: &mut Run) {
 }
 
 // 22Lget: firmware/lower/6001C-rpl-utils.s:1691
-pub(super) fn r22Lget(r: &mut Run) {
+pub(crate) fn r22Lget(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -2019,7 +2019,7 @@ pub(super) fn r22Lget(r: &mut Run) {
 
 // ob ->
 // 1PUTLAM: firmware/lower/6001C-rpl-utils.s:1736
-pub(super) fn r1PUTLAM(r: &mut Run) {
+pub(crate) fn r1PUTLAM(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -2037,7 +2037,7 @@ pub(super) fn r1PUTLAM(r: &mut Run) {
 
 // ob ->
 // 2PUTLAM: firmware/lower/6001C-rpl-utils.s:1743
-pub(super) fn r2PUTLAM(r: &mut Run) {
+pub(crate) fn r2PUTLAM(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -2055,7 +2055,7 @@ pub(super) fn r2PUTLAM(r: &mut Run) {
 
 // ob ->
 // 3PUTLAM: firmware/lower/6001C-rpl-utils.s:1750
-pub(super) fn r3PUTLAM(r: &mut Run) {
+pub(crate) fn r3PUTLAM(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -2073,7 +2073,7 @@ pub(super) fn r3PUTLAM(r: &mut Run) {
 
 // ob ->
 // 4PUTLAM: firmware/lower/6001C-rpl-utils.s:1762
-pub(super) fn r4PUTLAM(r: &mut Run) {
+pub(crate) fn r4PUTLAM(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -2091,7 +2091,7 @@ pub(super) fn r4PUTLAM(r: &mut Run) {
 
 // ob ->
 // 5PUTLAM: firmware/lower/6001C-rpl-utils.s:1769
-pub(super) fn r5PUTLAM(r: &mut Run) {
+pub(crate) fn r5PUTLAM(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -2109,7 +2109,7 @@ pub(super) fn r5PUTLAM(r: &mut Run) {
 
 // ob ->
 // 6PUTLAM: firmware/lower/6001C-rpl-utils.s:1776
-pub(super) fn r6PUTLAM(r: &mut Run) {
+pub(crate) fn r6PUTLAM(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -2127,7 +2127,7 @@ pub(super) fn r6PUTLAM(r: &mut Run) {
 
 // ob ->
 // 7PUTLAM: firmware/lower/6001C-rpl-utils.s:1783
-pub(super) fn r7PUTLAM(r: &mut Run) {
+pub(crate) fn r7PUTLAM(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -2145,7 +2145,7 @@ pub(super) fn r7PUTLAM(r: &mut Run) {
 
 // ob ->
 // 8PUTLAM: firmware/lower/6001C-rpl-utils.s:1790
-pub(super) fn r8PUTLAM(r: &mut Run) {
+pub(crate) fn r8PUTLAM(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -2163,7 +2163,7 @@ pub(super) fn r8PUTLAM(r: &mut Run) {
 
 // ob ->
 // 9PUTLAM: firmware/lower/6001C-rpl-utils.s:1797
-pub(super) fn r9PUTLAM(r: &mut Run) {
+pub(crate) fn r9PUTLAM(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -2181,7 +2181,7 @@ pub(super) fn r9PUTLAM(r: &mut Run) {
 
 // ob ->
 // 10PUTLAM: firmware/lower/6001C-rpl-utils.s:1804
-pub(super) fn r10PUTLAM(r: &mut Run) {
+pub(crate) fn r10PUTLAM(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -2199,7 +2199,7 @@ pub(super) fn r10PUTLAM(r: &mut Run) {
 
 // ob ->
 // 11PUTLAM: firmware/lower/6001C-rpl-utils.s:1811
-pub(super) fn r11PUTLAM(r: &mut Run) {
+pub(crate) fn r11PUTLAM(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -2217,7 +2217,7 @@ pub(super) fn r11PUTLAM(r: &mut Run) {
 
 // ob ->
 // 12PUTLAM: firmware/lower/6001C-rpl-utils.s:1818
-pub(super) fn r12PUTLAM(r: &mut Run) {
+pub(crate) fn r12PUTLAM(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -2235,7 +2235,7 @@ pub(super) fn r12PUTLAM(r: &mut Run) {
 
 // ob ->
 // 13PUTLAM: firmware/lower/6001C-rpl-utils.s:1825
-pub(super) fn r13PUTLAM(r: &mut Run) {
+pub(crate) fn r13PUTLAM(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -2253,7 +2253,7 @@ pub(super) fn r13PUTLAM(r: &mut Run) {
 
 // ob ->
 // 14PUTLAM: firmware/lower/6001C-rpl-utils.s:1832
-pub(super) fn r14PUTLAM(r: &mut Run) {
+pub(crate) fn r14PUTLAM(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -2271,7 +2271,7 @@ pub(super) fn r14PUTLAM(r: &mut Run) {
 
 // ob ->
 // 15PUTLAM: firmware/lower/6001C-rpl-utils.s:1839
-pub(super) fn r15PUTLAM(r: &mut Run) {
+pub(crate) fn r15PUTLAM(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -2289,7 +2289,7 @@ pub(super) fn r15PUTLAM(r: &mut Run) {
 
 // ob ->
 // 16PUTLAM: firmware/lower/6001C-rpl-utils.s:1846
-pub(super) fn r16PUTLAM(r: &mut Run) {
+pub(crate) fn r16PUTLAM(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -2307,7 +2307,7 @@ pub(super) fn r16PUTLAM(r: &mut Run) {
 
 // ob ->
 // 17PUTLAM: firmware/lower/6001C-rpl-utils.s:1853
-pub(super) fn r17PUTLAM(r: &mut Run) {
+pub(crate) fn r17PUTLAM(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -2325,7 +2325,7 @@ pub(super) fn r17PUTLAM(r: &mut Run) {
 
 // ob ->
 // 18PUTLAM: firmware/lower/6001C-rpl-utils.s:1860
-pub(super) fn r18PUTLAM(r: &mut Run) {
+pub(crate) fn r18PUTLAM(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -2343,7 +2343,7 @@ pub(super) fn r18PUTLAM(r: &mut Run) {
 
 // ob ->
 // 19PUTLAM: firmware/lower/6001C-rpl-utils.s:1867
-pub(super) fn r19PUTLAM(r: &mut Run) {
+pub(crate) fn r19PUTLAM(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -2361,7 +2361,7 @@ pub(super) fn r19PUTLAM(r: &mut Run) {
 
 // ob ->
 // 20PUTLAM: firmware/lower/6001C-rpl-utils.s:1874
-pub(super) fn r20PUTLAM(r: &mut Run) {
+pub(crate) fn r20PUTLAM(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -2379,7 +2379,7 @@ pub(super) fn r20PUTLAM(r: &mut Run) {
 
 // ob ->
 // 21PUTLAM: firmware/lower/6001C-rpl-utils.s:1881
-pub(super) fn r21PUTLAM(r: &mut Run) {
+pub(crate) fn r21PUTLAM(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -2397,7 +2397,7 @@ pub(super) fn r21PUTLAM(r: &mut Run) {
 
 // ob ->
 // 22PUTLAM: firmware/lower/6001C-rpl-utils.s:1888
-pub(super) fn r22PUTLAM(r: &mut Run) {
+pub(crate) fn r22PUTLAM(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -2415,7 +2415,7 @@ pub(super) fn r22PUTLAM(r: &mut Run) {
 
 // ->
 // DUPTEMPENV: firmware/lower/6001C-rpl-utils.s:1895
-pub(super) fn DUPTEMPENV(r: &mut Run) {
+pub(crate) fn DUPTEMPENV(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -2489,7 +2489,7 @@ pub(super) fn DUPTEMPENV(r: &mut Run) {
 
 // #n -> #n ob lam F -> #n T
 // GETLAMPAIR: firmware/lower/6001C-rpl-utils.s:1939
-pub(super) fn GETLAMPAIR(r: &mut Run) {
+pub(crate) fn GETLAMPAIR(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -2573,7 +2573,7 @@ pub(super) fn GETLAMPAIR(r: &mut Run) {
 
 // #m #n -> :: <ob1> ; #m #n -> :: <ob2> <rest> ;
 // #=case: firmware/lower/6001C-rpl-utils.s:1988
-pub(super) fn __case(r: &mut Run) {
+pub(crate) fn __case(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -2594,7 +2594,7 @@ pub(super) fn __case(r: &mut Run) {
 
 // #m #n -> :: #m <ob1> ; #m #n -> :: #m <ob2> <rest> ;
 // OVER#=case: firmware/lower/6001C-rpl-utils.s:1995
-pub(super) fn OVER__case(r: &mut Run) {
+pub(crate) fn OVER__case(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -2617,7 +2617,7 @@ pub(super) fn OVER__case(r: &mut Run) {
 
 // #0 -> :: <ob1> ; # -> :: <ob2> <rest> ;
 // #0=case: firmware/lower/6001C-rpl-utils.s:2009
-pub(super) fn _0_case(r: &mut Run) {
+pub(crate) fn _0_case(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -2639,7 +2639,7 @@ pub(super) fn _0_case(r: &mut Run) {
 
 // #0 -> :: <ob1> ; # -> :: # <ob2> <rest> ;
 // DUP#0=csedrp: firmware/lower/6001C-rpl-utils.s:2017
-pub(super) fn DUP_0_csedrp(r: &mut Run) {
+pub(crate) fn DUP_0_csedrp(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -2662,7 +2662,7 @@ pub(super) fn DUP_0_csedrp(r: &mut Run) {
 
 // ob1 ob1 -> :: <ob1> ; ob1 ob2 -> :: ob1 <ob2> <rest> ;
 // EQcasedrop: firmware/lower/6001C-rpl-utils.s:2026
-pub(super) fn EQcasedrop(r: &mut Run) {
+pub(crate) fn EQcasedrop(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -2691,7 +2691,7 @@ pub(super) fn EQcasedrop(r: &mut Run) {
 
 // #m #n -> :: <ob1> ; #m #n -> :: #m <ob2> <rest> ;
 // #=casedrop: firmware/lower/6001C-rpl-utils.s:2039
-pub(super) fn __casedrop(r: &mut Run) {
+pub(crate) fn __casedrop(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -2714,7 +2714,7 @@ pub(super) fn __casedrop(r: &mut Run) {
 
 // ob T -> :: ob <ob2> <rest> ; ob F -> :: <ob1> ;
 // NOTcasedrop: firmware/lower/6001C-rpl-utils.s:2048
-pub(super) fn NOTcasedrop(r: &mut Run) {
+pub(crate) fn NOTcasedrop(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -2739,7 +2739,7 @@ pub(super) fn NOTcasedrop(r: &mut Run) {
 
 // ob T -> :: <ob1> ; ob F -> :: ob <ob2> <rest> ;
 // casedrop: firmware/lower/6001C-rpl-utils.s:2056
-pub(super) fn casedrop(r: &mut Run) {
+pub(crate) fn casedrop(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -2770,7 +2770,7 @@ pub(super) fn casedrop(r: &mut Run) {
 
 // ob1 ob2 T -> :: ob1 ob2 <ob2> <rest> ; ob1 ob2 F -> :: <ob1> ;
 // NOTcase2drop: firmware/lower/6001C-rpl-utils.s:2069
-pub(super) fn NOTcase2drop(r: &mut Run) {
+pub(crate) fn NOTcase2drop(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -2795,7 +2795,7 @@ pub(super) fn NOTcase2drop(r: &mut Run) {
 
 // ob1 ob2 T -> :: <ob1> ; ob1 ob2 F -> :: ob1 ob2 <ob2> <rest> ;
 // case2drop: firmware/lower/6001C-rpl-utils.s:2077
-pub(super) fn case2drop(r: &mut Run) {
+pub(crate) fn case2drop(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -2822,7 +2822,7 @@ pub(super) fn case2drop(r: &mut Run) {
 
 // ob1 ob1 -> :: ob1 <ob1> ; ob1 ob2 -> :: ob1 <ob2> <rest> ;
 // EQcase: firmware/lower/6001C-rpl-utils.s:2088
-pub(super) fn EQcase(r: &mut Run) {
+pub(crate) fn EQcase(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -2851,7 +2851,7 @@ pub(super) fn EQcase(r: &mut Run) {
 
 // ob T -> :: ; ob F -> :: ob <ob1> <rest> ;
 // caseDROP: firmware/lower/6001C-rpl-utils.s:2101
-pub(super) fn caseDROP(r: &mut Run) {
+pub(crate) fn caseDROP(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -2878,7 +2878,7 @@ pub(super) fn caseDROP(r: &mut Run) {
 
 // ob T -> :: ob <ob1> <rest> ; ob F -> :: ;
 // NOTcaseDROP: firmware/lower/6001C-rpl-utils.s:2112
-pub(super) fn NOTcaseDROP(r: &mut Run) {
+pub(crate) fn NOTcaseDROP(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -2903,7 +2903,7 @@ pub(super) fn NOTcaseDROP(r: &mut Run) {
 
 // ob1 ob2 T -> :: ; ob1 ob2 F -> :: ob1 ob2 <ob1> <rest> ;
 // case2DROP: firmware/lower/6001C-rpl-utils.s:2121
-pub(super) fn case2DROP(r: &mut Run) {
+pub(crate) fn case2DROP(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -2930,7 +2930,7 @@ pub(super) fn case2DROP(r: &mut Run) {
 
 // ob1 ob2 T -> :: ob1 ob2 <ob1> <rest> ; ob1 ob2 F -> :: ;
 // NOTcase2DROP: firmware/lower/6001C-rpl-utils.s:2132
-pub(super) fn NOTcase2DROP(r: &mut Run) {
+pub(crate) fn NOTcase2DROP(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -2955,7 +2955,7 @@ pub(super) fn NOTcase2DROP(r: &mut Run) {
 
 // T -> :: <ob1> ; F -> :: <ob2> <rest> ;
 // case: firmware/lower/6001C-rpl-utils.s:2140
-pub(super) fn case(r: &mut Run) {
+pub(crate) fn case(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -2984,7 +2984,7 @@ pub(super) fn case(r: &mut Run) {
 
 // T -> :: <ob2> <rest> ; F -> :: <ob1> ;
 // NOTcase: firmware/lower/6001C-rpl-utils.s:2153
-pub(super) fn NOTcase(r: &mut Run) {
+pub(crate) fn NOTcase(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -3009,7 +3009,7 @@ pub(super) fn NOTcase(r: &mut Run) {
 
 // T -> :: <ob1> <rest> ; F -> :: <ob2> <rest> ;
 // IT: firmware/lower/6001C-rpl-utils.s:2162
-pub(super) fn IT(r: &mut Run) {
+pub(crate) fn IT(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -3034,7 +3034,7 @@ pub(super) fn IT(r: &mut Run) {
 
 // ->
 // GOTO: firmware/lower/6001C-rpl-utils.s:2170
-pub(super) fn GOTO(r: &mut Run) {
+pub(crate) fn GOTO(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -3059,7 +3059,7 @@ pub(super) fn GOTO(r: &mut Run) {
 
 // flag ->
 // ?GOTO: firmware/lower/6001C-rpl-utils.s:2182
-pub(super) fn _GOTO(r: &mut Run) {
+pub(crate) fn _GOTO(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -3085,7 +3085,7 @@ pub(super) fn _GOTO(r: &mut Run) {
 
 // flag ->
 // NOT?GOTO: firmware/lower/6001C-rpl-utils.s:2192
-pub(super) fn NOT_GOTO(r: &mut Run) {
+pub(crate) fn NOT_GOTO(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -3110,7 +3110,7 @@ pub(super) fn NOT_GOTO(r: &mut Run) {
 
 // Pop to A.A, if TRUE then set carry
 // popflag: firmware/lower/6001C-rpl-utils.s:2200
-pub(super) fn popflag(r: &mut Run) {
+pub(crate) fn popflag(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -3135,7 +3135,7 @@ pub(super) fn popflag(r: &mut Run) {
 
 // #0 -> :: ; #  -> :: <ob1> <rest> ;
 // #0=?SEMI: firmware/lower/6001C-rpl-utils.s:2211
-pub(super) fn _0__SEMI(r: &mut Run) {
+pub(crate) fn _0__SEMI(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -3160,7 +3160,7 @@ pub(super) fn _0__SEMI(r: &mut Run) {
 
 // T -> :: <ob1> <rest> ; F -> :: ;
 // NOT?SEMI: firmware/lower/6001C-rpl-utils.s:2220
-pub(super) fn NOT_SEMI(r: &mut Run) {
+pub(crate) fn NOT_SEMI(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -3185,7 +3185,7 @@ pub(super) fn NOT_SEMI(r: &mut Run) {
 
 // T -> :: ; F -> :: <ob1> <rest> ;
 // ?SEMI: firmware/lower/6001C-rpl-utils.s:2228
-pub(super) fn _SEMI(r: &mut Run) {
+pub(crate) fn _SEMI(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -3206,7 +3206,7 @@ pub(super) fn _SEMI(r: &mut Run) {
 
 // ->
 // SEMILOOP: firmware/lower/6001C-rpl-utils.s:2235
-pub(super) fn SEMILOOP(r: &mut Run) {
+pub(crate) fn SEMILOOP(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -3229,7 +3229,7 @@ pub(super) fn SEMILOOP(r: &mut Run) {
 
 // ob T -> :: <ob2> <rest> ; ob F -> :: ob <ob1> <rest> ;
 // ITE_DROP: firmware/lower/6001C-rpl-utils.s:2244
-pub(super) fn ITE_DROP(r: &mut Run) {
+pub(crate) fn ITE_DROP(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -3256,7 +3256,7 @@ pub(super) fn ITE_DROP(r: &mut Run) {
 
 // Returns and evals first obj in previous stream.
 // COLA_EVAL: firmware/lower/6001C-rpl-utils.s:2254
-pub(super) fn COLA_EVAL(r: &mut Run) {
+pub(crate) fn COLA_EVAL(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -3282,7 +3282,7 @@ pub(super) fn COLA_EVAL(r: &mut Run) {
 
 // T ob1 ob2 -> :: ob1 ; F ob1 ob2 -> :: ob2 ;
 // COLARPITE: firmware/lower/6001C-rpl-utils.s:2269
-pub(super) fn COLARPITE(r: &mut Run) {
+pub(crate) fn COLARPITE(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -3327,7 +3327,7 @@ pub(super) fn COLARPITE(r: &mut Run) {
 
 // T -> :: <ob1> <ob3> <rest> ; F -> :: <ob2> <rest> ;
 // ITE: firmware/lower/6001C-rpl-utils.s:2299
-pub(super) fn ITE(r: &mut Run) {
+pub(crate) fn ITE(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -3347,7 +3347,7 @@ pub(super) fn ITE(r: &mut Run) {
 
 // Return to composite and ITE there.
 // 2'RCOLARPITE: firmware/lower/6001C-rpl-utils.s:2308
-pub(super) fn r2_RCOLARPITE(r: &mut Run) {
+pub(crate) fn r2_RCOLARPITE(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -3417,7 +3417,7 @@ pub(super) fn r2_RCOLARPITE(r: &mut Run) {
 
 // ->
 // 2@REVAL: firmware/lower/6001C-rpl-utils.s:2344
-pub(super) fn r2_REVAL(r: &mut Run) {
+pub(crate) fn r2_REVAL(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -3435,7 +3435,7 @@ pub(super) fn r2_REVAL(r: &mut Run) {
 
 // ->
 // 3@REVAL: firmware/lower/6001C-rpl-utils.s:2351
-pub(super) fn r3_REVAL(r: &mut Run) {
+pub(crate) fn r3_REVAL(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -3462,7 +3462,7 @@ pub(super) fn r3_REVAL(r: &mut Run) {
 
 // ob T -> :: ob <ob1> <rest> ; ob F -> :: <ob1> <rest> ;
 // NOT?DROP: firmware/lower/6001C-rpl-utils.s:2364
-pub(super) fn NOT_DROP(r: &mut Run) {
+pub(crate) fn NOT_DROP(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -3493,7 +3493,7 @@ pub(super) fn NOT_DROP(r: &mut Run) {
 
 // -> ob T -> F
 // ticR: firmware/lower/6001C-rpl-utils.s:2375
-pub(super) fn ticR(r: &mut Run) {
+pub(crate) fn ticR(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -3573,7 +3573,7 @@ pub(super) fn ticR(r: &mut Run) {
 
 // hxs #nibs -> hxs'
 // EXPAND: firmware/lower/6001C-rpl-utils.s:2429
-pub(super) fn EXPAND(r: &mut Run) {
+pub(crate) fn EXPAND(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -3693,7 +3693,7 @@ pub(super) fn EXPAND(r: &mut Run) {
 
 // obn..ob1 #n lam ->
 // CACHE: firmware/lower/6001C-rpl-utils.s:2502
-pub(super) fn CACHE(r: &mut Run) {
+pub(crate) fn CACHE(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -3744,7 +3744,7 @@ pub(super) fn CACHE(r: &mut Run) {
 
 // ->
 // SAVESTACK: firmware/lower/6001C-rpl-utils.s:2535
-pub(super) fn SAVESTACK(r: &mut Run) {
+pub(crate) fn SAVESTACK(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -3784,7 +3784,7 @@ pub(super) fn SAVESTACK(r: &mut Run) {
 }
 
 // SUB_61D86: firmware/lower/6001C-rpl-utils.s:2556
-pub(super) fn SUB_61D86(r: &mut Run) {
+pub(crate) fn SUB_61D86(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -3932,7 +3932,7 @@ pub(super) fn SUB_61D86(r: &mut Run) {
 
 // NULLLAM -> ob1..obn #n
 // DUMP: firmware/lower/6001C-rpl-utils.s:2649
-pub(super) fn DUMP(r: &mut Run) {
+pub(crate) fn DUMP(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -4065,7 +4065,7 @@ pub(super) fn DUMP(r: &mut Run) {
 }
 
 // OBJ_61F8F: firmware/lower/6001C-rpl-utils.s:2730
-pub(super) fn OBJ_61F8F(r: &mut Run) {
+pub(crate) fn OBJ_61F8F(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -4088,7 +4088,7 @@ pub(super) fn OBJ_61F8F(r: &mut Run) {
 
 // ob -> ob flag
 // DUPROM-WORD?: firmware/lower/6001C-rpl-utils.s:2739
-pub(super) fn DUPROM_WORD_(r: &mut Run) {
+pub(crate) fn DUPROM_WORD_(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -4109,7 +4109,7 @@ pub(super) fn DUPROM_WORD_(r: &mut Run) {
 
 // ob -> flag
 // ROM-WORD?: firmware/lower/6001C-rpl-utils.s:2746
-pub(super) fn ROM_WORD_(r: &mut Run) {
+pub(crate) fn ROM_WORD_(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -4140,7 +4140,7 @@ pub(super) fn ROM_WORD_(r: &mut Run) {
 }
 
 // Rom-Word?: firmware/lower/6001C-rpl-utils.s:2757
-pub(super) fn Rom_Word_(r: &mut Run) {
+pub(crate) fn Rom_Word_(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -4184,7 +4184,7 @@ pub(super) fn Rom_Word_(r: &mut Run) {
 
 // 1 2 3 4 -> 3 4 1 2
 // 2SWAP: firmware/lower/6001C-rpl-utils.s:2778
-pub(super) fn r2SWAP(r: &mut Run) {
+pub(crate) fn r2SWAP(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -4207,7 +4207,7 @@ pub(super) fn r2SWAP(r: &mut Run) {
 
 // ob -> flag
 // TYPECHAR?: firmware/lower/6001C-rpl-utils.s:2795
-pub(super) fn TYPECHAR_(r: &mut Run) {
+pub(crate) fn TYPECHAR_(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -4225,7 +4225,7 @@ pub(super) fn TYPECHAR_(r: &mut Run) {
 
 // ob -> flag
 // TYPEIDNT?: firmware/lower/6001C-rpl-utils.s:2807
-pub(super) fn TYPEIDNT_(r: &mut Run) {
+pub(crate) fn TYPEIDNT_(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -4243,7 +4243,7 @@ pub(super) fn TYPEIDNT_(r: &mut Run) {
 
 // ob -> flag
 // TYPEEXT?: firmware/lower/6001C-rpl-utils.s:2819
-pub(super) fn TYPEEXT_(r: &mut Run) {
+pub(crate) fn TYPEEXT_(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -4279,7 +4279,7 @@ pub(super) fn TYPEEXT_(r: &mut Run) {
 
 // <REF>GETPTR , OverWr TRUE/FALSE, Loop
 // GPOverWrT/FL: firmware/lower/6001C-rpl-utils.s:2835
-pub(super) fn GPOverWrT_FL(r: &mut Run) {
+pub(crate) fn GPOverWrT_FL(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -4296,7 +4296,7 @@ pub(super) fn GPOverWrT_FL(r: &mut Run) {
 
 // <REF>GETPTR , OverWr TRUE, Loop
 // GPOverWrTLp: firmware/lower/6001C-rpl-utils.s:2840
-pub(super) fn GPOverWrTLp(r: &mut Run) {
+pub(crate) fn GPOverWrTLp(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -4312,7 +4312,7 @@ pub(super) fn GPOverWrTLp(r: &mut Run) {
 }
 
 // OverWrF/TLp: firmware/lower/6001C-rpl-utils.s:2844
-pub(super) fn OverWrF_TLp(r: &mut Run) {
+pub(crate) fn OverWrF_TLp(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -4329,7 +4329,7 @@ pub(super) fn OverWrF_TLp(r: &mut Run) {
 
 // OverWr TRUE, Loop
 // OverWrTLoop: firmware/lower/6001C-rpl-utils.s:2849
-pub(super) fn OverWrTLoop(r: &mut Run) {
+pub(crate) fn OverWrTLoop(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -4351,7 +4351,7 @@ pub(super) fn OverWrTLoop(r: &mut Run) {
 
 // <REF>GETPTR , OverWr FALSE, Loop
 // GPOverWrFLp: firmware/lower/6001C-rpl-utils.s:2859
-pub(super) fn GPOverWrFLp(r: &mut Run) {
+pub(crate) fn GPOverWrFLp(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -4368,7 +4368,7 @@ pub(super) fn GPOverWrFLp(r: &mut Run) {
 
 // OverWr TRUE/FALSE, Loop
 // OverWrT/FLp: firmware/lower/6001C-rpl-utils.s:2864
-pub(super) fn OverWrT_FLp(r: &mut Run) {
+pub(crate) fn OverWrT_FLp(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -4385,7 +4385,7 @@ pub(super) fn OverWrT_FLp(r: &mut Run) {
 
 // OverWr FALSE, Loop
 // OverWrFLoop: firmware/lower/6001C-rpl-utils.s:2869
-pub(super) fn OverWrFLoop(r: &mut Run) {
+pub(crate) fn OverWrFLoop(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -4407,7 +4407,7 @@ pub(super) fn OverWrFLoop(r: &mut Run) {
 
 // <REF>GETPTR , Push TRUE/FALSE, Loop
 // GPPushT/FLp: firmware/lower/6001C-rpl-utils.s:2879
-pub(super) fn GPPushT_FLp(r: &mut Run) {
+pub(crate) fn GPPushT_FLp(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -4424,7 +4424,7 @@ pub(super) fn GPPushT_FLp(r: &mut Run) {
 
 // <REF>GETPTR , Push TRUE, Loop
 // GPPushTLoop: firmware/lower/6001C-rpl-utils.s:2884
-pub(super) fn GPPushTLoop(r: &mut Run) {
+pub(crate) fn GPPushTLoop(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -4441,7 +4441,7 @@ pub(super) fn GPPushTLoop(r: &mut Run) {
 
 // Push FALSE (CRY)/TRUE, Loop
 // PushF/TLoop: firmware/lower/6001C-rpl-utils.s:2889
-pub(super) fn PushF_TLoop(r: &mut Run) {
+pub(crate) fn PushF_TLoop(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -4458,7 +4458,7 @@ pub(super) fn PushF_TLoop(r: &mut Run) {
 
 // Push TRUE, Loop
 // PushTLoop: firmware/lower/6001C-rpl-utils.s:2894
-pub(super) fn PushTLoop(r: &mut Run) {
+pub(crate) fn PushTLoop(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -4478,7 +4478,7 @@ pub(super) fn PushTLoop(r: &mut Run) {
 
 // <REF>GETPTR , Push FALSE, Loop
 // GPPushFLoop: firmware/lower/6001C-rpl-utils.s:2902
-pub(super) fn GPPushFLoop(r: &mut Run) {
+pub(crate) fn GPPushFLoop(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -4495,7 +4495,7 @@ pub(super) fn GPPushFLoop(r: &mut Run) {
 
 // Push TRUE (CRY)/FALSE, Loop
 // PushT/FLoop: firmware/lower/6001C-rpl-utils.s:2907
-pub(super) fn PushT_FLoop(r: &mut Run) {
+pub(crate) fn PushT_FLoop(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -4512,7 +4512,7 @@ pub(super) fn PushT_FLoop(r: &mut Run) {
 
 // Push FALSE, Loop
 // PushFLoop: firmware/lower/6001C-rpl-utils.s:2912
-pub(super) fn PushFLoop(r: &mut Run) {
+pub(crate) fn PushFLoop(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -4532,7 +4532,7 @@ pub(super) fn PushFLoop(r: &mut Run) {
 
 // # #' -> # flag
 // OVER#=: firmware/lower/6001C-rpl-utils.s:2920
-pub(super) fn OVER__(r: &mut Run) {
+pub(crate) fn OVER__(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -4559,7 +4559,7 @@ pub(super) fn OVER__(r: &mut Run) {
 
 // ob -> T
 // DROPTRUE: firmware/lower/6001C-rpl-utils.s:2931
-pub(super) fn DROPTRUE(r: &mut Run) {
+pub(crate) fn DROPTRUE(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -4576,7 +4576,7 @@ pub(super) fn DROPTRUE(r: &mut Run) {
 
 // ob -> F
 // DROPFALSE: firmware/lower/6001C-rpl-utils.s:2937
-pub(super) fn DROPFALSE(r: &mut Run) {
+pub(crate) fn DROPFALSE(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -4593,7 +4593,7 @@ pub(super) fn DROPFALSE(r: &mut Run) {
 
 // ob -> flag
 // TYPELAM?: firmware/lower/6001C-rpl-utils.s:2948
-pub(super) fn TYPELAM_(r: &mut Run) {
+pub(crate) fn TYPELAM_(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -4611,7 +4611,7 @@ pub(super) fn TYPELAM_(r: &mut Run) {
 
 // ob -> flag
 // TYPEBINT?: firmware/lower/6001C-rpl-utils.s:2960
-pub(super) fn TYPEBINT_(r: &mut Run) {
+pub(crate) fn TYPEBINT_(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -4629,7 +4629,7 @@ pub(super) fn TYPEBINT_(r: &mut Run) {
 
 // ob -> flag
 // TYPEHSTR?: firmware/lower/6001C-rpl-utils.s:2971
-pub(super) fn TYPEHSTR_(r: &mut Run) {
+pub(crate) fn TYPEHSTR_(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -4647,7 +4647,7 @@ pub(super) fn TYPEHSTR_(r: &mut Run) {
 
 // ob -> flag
 // TYPECSTR?: firmware/lower/6001C-rpl-utils.s:2983
-pub(super) fn TYPECSTR_(r: &mut Run) {
+pub(crate) fn TYPECSTR_(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -4665,7 +4665,7 @@ pub(super) fn TYPECSTR_(r: &mut Run) {
 
 // ob -> flag
 // TYPEREAL?: firmware/lower/6001C-rpl-utils.s:2995
-pub(super) fn TYPEREAL_(r: &mut Run) {
+pub(crate) fn TYPEREAL_(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -4683,7 +4683,7 @@ pub(super) fn TYPEREAL_(r: &mut Run) {
 
 // ob -> flag
 // TYPECMP?: firmware/lower/6001C-rpl-utils.s:3007
-pub(super) fn TYPECMP_(r: &mut Run) {
+pub(crate) fn TYPECMP_(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -4701,7 +4701,7 @@ pub(super) fn TYPECMP_(r: &mut Run) {
 
 // ob -> flag
 // TYPEARRAY?: firmware/lower/6001C-rpl-utils.s:3019
-pub(super) fn TYPEARRAY_(r: &mut Run) {
+pub(crate) fn TYPEARRAY_(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -4719,7 +4719,7 @@ pub(super) fn TYPEARRAY_(r: &mut Run) {
 
 // ob -> flag
 // TYPEROMP?: firmware/lower/6001C-rpl-utils.s:3031
-pub(super) fn TYPEROMP_(r: &mut Run) {
+pub(crate) fn TYPEROMP_(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -4737,7 +4737,7 @@ pub(super) fn TYPEROMP_(r: &mut Run) {
 
 // ob -> flag
 // TYPERRP?: firmware/lower/6001C-rpl-utils.s:3043
-pub(super) fn TYPERRP_(r: &mut Run) {
+pub(crate) fn TYPERRP_(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -4755,7 +4755,7 @@ pub(super) fn TYPERRP_(r: &mut Run) {
 
 // ob -> flag
 // TYPESYMB?: firmware/lower/6001C-rpl-utils.s:3055
-pub(super) fn TYPESYMB_(r: &mut Run) {
+pub(crate) fn TYPESYMB_(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -4773,7 +4773,7 @@ pub(super) fn TYPESYMB_(r: &mut Run) {
 
 // ob -> flag
 // TYPECOL?: firmware/lower/6001C-rpl-utils.s:3067
-pub(super) fn TYPECOL_(r: &mut Run) {
+pub(crate) fn TYPECOL_(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -4791,7 +4791,7 @@ pub(super) fn TYPECOL_(r: &mut Run) {
 
 // ob -> flag
 // TYPEGROB?: firmware/lower/6001C-rpl-utils.s:3079
-pub(super) fn TYPEGROB_(r: &mut Run) {
+pub(crate) fn TYPEGROB_(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -4809,7 +4809,7 @@ pub(super) fn TYPEGROB_(r: &mut Run) {
 
 // ob -> flag
 // TYPELIST?: firmware/lower/6001C-rpl-utils.s:3091
-pub(super) fn TYPELIST_(r: &mut Run) {
+pub(crate) fn TYPELIST_(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -4827,7 +4827,7 @@ pub(super) fn TYPELIST_(r: &mut Run) {
 
 // ob -> flag
 // TYPETAGGED?: firmware/lower/6001C-rpl-utils.s:3102
-pub(super) fn TYPETAGGED_(r: &mut Run) {
+pub(crate) fn TYPETAGGED_(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -4845,7 +4845,7 @@ pub(super) fn TYPETAGGED_(r: &mut Run) {
 
 // ob -> flag
 // TYPERARRY?: firmware/lower/6001C-rpl-utils.s:3109
-pub(super) fn TYPERARRY_(r: &mut Run) {
+pub(crate) fn TYPERARRY_(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -4871,7 +4871,7 @@ pub(super) fn TYPERARRY_(r: &mut Run) {
 
 // ob -> flag
 // TYPECARRY?: firmware/lower/6001C-rpl-utils.s:3121
-pub(super) fn TYPECARRY_(r: &mut Run) {
+pub(crate) fn TYPECARRY_(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -4889,7 +4889,7 @@ pub(super) fn TYPECARRY_(r: &mut Run) {
 
 // # -> # flag
 // DUP#0=: firmware/lower/6001C-rpl-utils.s:3128
-pub(super) fn DUP_0_(r: &mut Run) {
+pub(crate) fn DUP_0_(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -4913,7 +4913,7 @@ pub(super) fn DUP_0_(r: &mut Run) {
 }
 
 // SUB_62278: firmware/lower/6001C-rpl-utils.s:3138
-pub(super) fn SUB_62278(r: &mut Run) {
+pub(crate) fn SUB_62278(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -4935,7 +4935,7 @@ pub(super) fn SUB_62278(r: &mut Run) {
 
 // # -> flag
 // #3=: firmware/lower/6001C-rpl-utils.s:3148
-pub(super) fn _3_(r: &mut Run) {
+pub(crate) fn _3_(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -4962,7 +4962,7 @@ pub(super) fn _3_(r: &mut Run) {
 
 // # -> flag
 // #2=: firmware/lower/6001C-rpl-utils.s:3158
-pub(super) fn _2__6229F(r: &mut Run) {
+pub(crate) fn _2__6229F(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -4983,7 +4983,7 @@ pub(super) fn _2__6229F(r: &mut Run) {
 
 // # -> flag
 // #1=: firmware/lower/6001C-rpl-utils.s:3165
-pub(super) fn _1__622AC(r: &mut Run) {
+pub(crate) fn _1__622AC(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -5005,7 +5005,7 @@ pub(super) fn _1__622AC(r: &mut Run) {
 
 // # -> flag
 // #1<>: firmware/lower/6001C-rpl-utils.s:3174
-pub(super) fn _1__(r: &mut Run) {
+pub(crate) fn _1__(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -5027,7 +5027,7 @@ pub(super) fn _1__(r: &mut Run) {
 
 // # -> # flag
 // DUP#1=: firmware/lower/6001C-rpl-utils.s:3182
-pub(super) fn DUP_1_(r: &mut Run) {
+pub(crate) fn DUP_1_(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -5049,7 +5049,7 @@ pub(super) fn DUP_1_(r: &mut Run) {
 
 // # -> # flag
 // DUP#0<>: firmware/lower/6001C-rpl-utils.s:3190
-pub(super) fn DUP_0__(r: &mut Run) {
+pub(crate) fn DUP_0__(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -5074,7 +5074,7 @@ pub(super) fn DUP_0__(r: &mut Run) {
 
 // $ $' -> $'+$
 // !!insert$: firmware/lower/6001C-rpl-utils.s:3252
-pub(super) fn __insert_(r: &mut Run) {
+pub(crate) fn __insert_(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -5092,7 +5092,7 @@ pub(super) fn __insert_(r: &mut Run) {
 
 // $ $' -> $+$'
 // !!append$: firmware/lower/6001C-rpl-utils.s:3260
-pub(super) fn __append_(r: &mut Run) {
+pub(crate) fn __append_(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -5224,7 +5224,7 @@ pub(super) fn __append_(r: &mut Run) {
 
 // ->
 // 'RSAVEWORD: firmware/lower/6001C-rpl-utils.s:3336
-pub(super) fn _RSAVEWORD(r: &mut Run) {
+pub(crate) fn _RSAVEWORD(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -5249,7 +5249,7 @@ pub(super) fn _RSAVEWORD(r: &mut Run) {
 }
 
 // SUB_6249E: firmware/lower/6001C-rpl-utils.s:3350
-pub(super) fn SUB_6249E(r: &mut Run) {
+pub(crate) fn SUB_6249E(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -5265,7 +5265,7 @@ pub(super) fn SUB_6249E(r: &mut Run) {
 }
 
 // SUB_624A5: firmware/lower/6001C-rpl-utils.s:3354
-pub(super) fn SUB_624A5(r: &mut Run) {
+pub(crate) fn SUB_624A5(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -5281,7 +5281,7 @@ pub(super) fn SUB_624A5(r: &mut Run) {
 }
 
 // SUB_624AC: firmware/lower/6001C-rpl-utils.s:3358
-pub(super) fn SUB_624AC(r: &mut Run) {
+pub(crate) fn SUB_624AC(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -5297,7 +5297,7 @@ pub(super) fn SUB_624AC(r: &mut Run) {
 }
 
 // SUB_624B3: firmware/lower/6001C-rpl-utils.s:3362
-pub(super) fn SUB_624B3(r: &mut Run) {
+pub(crate) fn SUB_624B3(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -5314,7 +5314,7 @@ pub(super) fn SUB_624B3(r: &mut Run) {
 
 // # #' -> #''
 // #MIN: firmware/lower/6001C-rpl-utils.s:3367
-pub(super) fn _MIN(r: &mut Run) {
+pub(crate) fn _MIN(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -5332,7 +5332,7 @@ pub(super) fn _MIN(r: &mut Run) {
 
 // # #' -> #''
 // #MAX: firmware/lower/6001C-rpl-utils.s:3374
-pub(super) fn _MAX(r: &mut Run) {
+pub(crate) fn _MAX(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -5382,7 +5382,7 @@ pub(super) fn _MAX(r: &mut Run) {
 
 // # #' -> (#-#')/2
 // #-#2/: firmware/lower/6001C-rpl-utils.s:3394
-pub(super) fn ___2_(r: &mut Run) {
+pub(crate) fn ___2_(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -5402,7 +5402,7 @@ pub(super) fn ___2_(r: &mut Run) {
 }
 
 // SUB_6250B: firmware/lower/6001C-rpl-utils.s:3401
-pub(super) fn SUB_6250B(r: &mut Run) {
+pub(crate) fn SUB_6250B(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -5435,7 +5435,7 @@ pub(super) fn SUB_6250B(r: &mut Run) {
 
 // ob -> #0
 // DROPZERO: firmware/lower/6001C-rpl-utils.s:3413
-pub(super) fn DROPZERO(r: &mut Run) {
+pub(crate) fn DROPZERO(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -5460,7 +5460,7 @@ pub(super) fn DROPZERO(r: &mut Run) {
 
 // ob ob -> #0 #0
 // 2DROP00: firmware/lower/6001C-rpl-utils.s:3424
-pub(super) fn r2DROP00(r: &mut Run) {
+pub(crate) fn r2DROP00(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -5482,7 +5482,7 @@ pub(super) fn r2DROP00(r: &mut Run) {
 
 // # -> #+3
 // #3+: firmware/lower/6001C-rpl-utils.s:3435
-pub(super) fn _3__6256F(r: &mut Run) {
+pub(crate) fn _3__6256F(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -5500,7 +5500,7 @@ pub(super) fn _3__6256F(r: &mut Run) {
 
 // # -> #+4
 // #4+: firmware/lower/6001C-rpl-utils.s:3442
-pub(super) fn _4_(r: &mut Run) {
+pub(crate) fn _4_(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -5518,7 +5518,7 @@ pub(super) fn _4_(r: &mut Run) {
 
 // # -> #+5
 // #5+: firmware/lower/6001C-rpl-utils.s:3449
-pub(super) fn _5_(r: &mut Run) {
+pub(crate) fn _5_(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -5536,7 +5536,7 @@ pub(super) fn _5_(r: &mut Run) {
 
 // # -> #+6
 // #6+: firmware/lower/6001C-rpl-utils.s:3456
-pub(super) fn _6_(r: &mut Run) {
+pub(crate) fn _6_(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -5554,7 +5554,7 @@ pub(super) fn _6_(r: &mut Run) {
 
 // # -> #+7
 // #7+: firmware/lower/6001C-rpl-utils.s:3463
-pub(super) fn _7_(r: &mut Run) {
+pub(crate) fn _7_(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -5572,7 +5572,7 @@ pub(super) fn _7_(r: &mut Run) {
 
 // # -> #+8
 // #8+: firmware/lower/6001C-rpl-utils.s:3470
-pub(super) fn _8_(r: &mut Run) {
+pub(crate) fn _8_(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -5590,7 +5590,7 @@ pub(super) fn _8_(r: &mut Run) {
 
 // # -> #+9
 // #9+: firmware/lower/6001C-rpl-utils.s:3477
-pub(super) fn _9_(r: &mut Run) {
+pub(crate) fn _9_(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -5608,7 +5608,7 @@ pub(super) fn _9_(r: &mut Run) {
 
 // # -> #+10
 // #10+: firmware/lower/6001C-rpl-utils.s:3484
-pub(super) fn _10_(r: &mut Run) {
+pub(crate) fn _10_(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -5626,7 +5626,7 @@ pub(super) fn _10_(r: &mut Run) {
 
 // # -> #+12
 // #12+: firmware/lower/6001C-rpl-utils.s:3491
-pub(super) fn _12_(r: &mut Run) {
+pub(crate) fn _12_(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -5644,7 +5644,7 @@ pub(super) fn _12_(r: &mut Run) {
 
 // # -> #-3
 // #3-: firmware/lower/6001C-rpl-utils.s:3498
-pub(super) fn _3__625FF(r: &mut Run) {
+pub(crate) fn _3__625FF(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -5662,7 +5662,7 @@ pub(super) fn _3__625FF(r: &mut Run) {
 
 // # -> #-4
 // #4-: firmware/lower/6001C-rpl-utils.s:3505
-pub(super) fn _4__6260F(r: &mut Run) {
+pub(crate) fn _4__6260F(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -5680,7 +5680,7 @@ pub(super) fn _4__6260F(r: &mut Run) {
 
 // # -> #-5
 // #5-: firmware/lower/6001C-rpl-utils.s:3512
-pub(super) fn _5__6261F(r: &mut Run) {
+pub(crate) fn _5__6261F(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -5698,7 +5698,7 @@ pub(super) fn _5__6261F(r: &mut Run) {
 
 // # -> #-6
 // #6-: firmware/lower/6001C-rpl-utils.s:3519
-pub(super) fn _6__6262F(r: &mut Run) {
+pub(crate) fn _6__6262F(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -5731,7 +5731,7 @@ pub(super) fn _6__6262F(r: &mut Run) {
 
 // # -> #*10
 // #10*: firmware/lower/6001C-rpl-utils.s:3532
-pub(super) fn _10__62653(r: &mut Run) {
+pub(crate) fn _10__62653(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -5770,7 +5770,7 @@ pub(super) fn _10__62653(r: &mut Run) {
 
 // # -> #*8
 // #8*: firmware/lower/6001C-rpl-utils.s:3548
-pub(super) fn _8__62679(r: &mut Run) {
+pub(crate) fn _8__62679(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -5798,7 +5798,7 @@ pub(super) fn _8__62679(r: &mut Run) {
 
 // # -> #*6
 // #6*: firmware/lower/6001C-rpl-utils.s:3559
-pub(super) fn _6__62696(r: &mut Run) {
+pub(crate) fn _6__62696(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -5826,7 +5826,7 @@ pub(super) fn _6__62696(r: &mut Run) {
 
 // Skips 5 objects, then does COLA.
 // 5skipcola: firmware/lower/6001C-rpl-utils.s:3569
-pub(super) fn r5skipcola(r: &mut Run) {
+pub(crate) fn r5skipcola(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -5863,7 +5863,7 @@ pub(super) fn r5skipcola(r: &mut Run) {
 
 // Does 3SKIP, then COLA.
 // 3skipcola: firmware/lower/6001C-rpl-utils.s:3582
-pub(super) fn r3skipcola(r: &mut Run) {
+pub(crate) fn r3skipcola(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -5880,7 +5880,7 @@ pub(super) fn r3skipcola(r: &mut Run) {
 
 // Does 2SKIP, then COLA.
 // 2skipcola: firmware/lower/6001C-rpl-utils.s:3588
-pub(super) fn r2skipcola(r: &mut Run) {
+pub(crate) fn r2skipcola(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -5897,7 +5897,7 @@ pub(super) fn r2skipcola(r: &mut Run) {
 
 // Does SKIP, then COLA.
 // skipcola: firmware/lower/6001C-rpl-utils.s:3594
-pub(super) fn skipcola(r: &mut Run) {
+pub(crate) fn skipcola(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -5914,7 +5914,7 @@ pub(super) fn skipcola(r: &mut Run) {
 
 // # -> # #+2
 // DUP#2+: firmware/lower/6001C-rpl-utils.s:3600
-pub(super) fn DUP_2_(r: &mut Run) {
+pub(crate) fn DUP_2_(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -5945,7 +5945,7 @@ pub(super) fn DUP_2_(r: &mut Run) {
 
 // 1 2 3 -> 2 1
 // DROPSWAP: firmware/lower/6001C-rpl-utils.s:3611
-pub(super) fn DROPSWAP(r: &mut Run) {
+pub(crate) fn DROPSWAP(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -5967,7 +5967,7 @@ pub(super) fn DROPSWAP(r: &mut Run) {
 
 // 1 2 3 -> 2
 // DROPSWAPDROP: firmware/lower/6001C-rpl-utils.s:3622
-pub(super) fn DROPSWAPDROP(r: &mut Run) {
+pub(crate) fn DROPSWAPDROP(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -5997,7 +5997,7 @@ pub(super) fn DROPSWAPDROP(r: &mut Run) {
 
 // 1 2 -> 2 1 1
 // SWAPDUP: firmware/lower/6001C-rpl-utils.s:3636
-pub(super) fn SWAPDUP(r: &mut Run) {
+pub(crate) fn SWAPDUP(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -6038,7 +6038,7 @@ pub(super) fn SWAPDUP(r: &mut Run) {
 
 // 1 2 3 -> 2 3 1 1
 // ROTDUP: firmware/lower/6001C-rpl-utils.s:3656
-pub(super) fn ROTDUP(r: &mut Run) {
+pub(crate) fn ROTDUP(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -6065,7 +6065,7 @@ pub(super) fn ROTDUP(r: &mut Run) {
 
 // # #' -> #'-#
 // SWAP#-: firmware/lower/6001C-rpl-utils.s:3670
-pub(super) fn SWAP__(r: &mut Run) {
+pub(crate) fn SWAP__(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -6088,7 +6088,7 @@ pub(super) fn SWAP__(r: &mut Run) {
 
 // 1 2 -> 1 1
 // DROPDUP: firmware/lower/6001C-rpl-utils.s:3679
-pub(super) fn DROPDUP(r: &mut Run) {
+pub(crate) fn DROPDUP(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -6108,7 +6108,7 @@ pub(super) fn DROPDUP(r: &mut Run) {
 
 // $ -> $ #
 // DUPLEN$: firmware/lower/6001C-rpl-utils.s:3688
-pub(super) fn DUPLEN_(r: &mut Run) {
+pub(crate) fn DUPLEN_(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -6134,7 +6134,7 @@ pub(super) fn DUPLEN_(r: &mut Run) {
 
 // # #' -> #+#' #+#'
 // #+DUP: firmware/lower/6001C-rpl-utils.s:3698
-pub(super) fn __DUP(r: &mut Run) {
+pub(crate) fn __DUP(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -6165,7 +6165,7 @@ pub(super) fn __DUP(r: &mut Run) {
 
 // <REF>GETPTR , Push R0 & A as #, Loop
 // Push2#aLoop: firmware/lower/6001C-rpl-utils.s:3707
-pub(super) fn Push2_aLoop(r: &mut Run) {
+pub(crate) fn Push2_aLoop(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -6183,7 +6183,7 @@ pub(super) fn Push2_aLoop(r: &mut Run) {
 
 // # #' -> #-#' #-#'
 // #-DUP: firmware/lower/6001C-rpl-utils.s:3713
-pub(super) fn __DUP_627FD(r: &mut Run) {
+pub(crate) fn __DUP_627FD(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -6205,7 +6205,7 @@ pub(super) fn __DUP_627FD(r: &mut Run) {
 
 // # -> #+1 #+1
 // #1+DUP: firmware/lower/6001C-rpl-utils.s:3721
-pub(super) fn _1_DUP(r: &mut Run) {
+pub(crate) fn _1_DUP(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -6227,7 +6227,7 @@ pub(super) fn _1_DUP(r: &mut Run) {
 
 // # -> #-1 #-1
 // #1-DUP: firmware/lower/6001C-rpl-utils.s:3729
-pub(super) fn _1_DUP_6281F(r: &mut Run) {
+pub(crate) fn _1_DUP_6281F(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -6248,7 +6248,7 @@ pub(super) fn _1_DUP_6281F(r: &mut Run) {
 }
 
 // SUB_62829: firmware/lower/6001C-rpl-utils.s:3736
-pub(super) fn SUB_62829(r: &mut Run) {
+pub(crate) fn SUB_62829(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -6265,7 +6265,7 @@ pub(super) fn SUB_62829(r: &mut Run) {
 
 // 1 2 -> 2 2
 // SWAPDROPDUP: firmware/lower/6001C-rpl-utils.s:3741
-pub(super) fn SWAPDROPDUP(r: &mut Run) {
+pub(crate) fn SWAPDROPDUP(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -6288,7 +6288,7 @@ pub(super) fn SWAPDROPDUP(r: &mut Run) {
 
 // 1 2 3 -> 3 1
 // SWAPDROPSWAP: firmware/lower/6001C-rpl-utils.s:3753
-pub(super) fn SWAPDROPSWAP(r: &mut Run) {
+pub(crate) fn SWAPDROPSWAP(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -6310,7 +6310,7 @@ pub(super) fn SWAPDROPSWAP(r: &mut Run) {
 
 // 1 2 3 4 -> 2 3 4
 // 4ROLLDROP: firmware/lower/6001C-rpl-utils.s:3764
-pub(super) fn r4ROLLDROP(r: &mut Run) {
+pub(crate) fn r4ROLLDROP(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -6333,7 +6333,7 @@ pub(super) fn r4ROLLDROP(r: &mut Run) {
 
 // 1 2 3 4 5 -> 2 3 4 5
 // 5ROLLDROP: firmware/lower/6001C-rpl-utils.s:3777
-pub(super) fn r5ROLLDROP(r: &mut Run) {
+pub(crate) fn r5ROLLDROP(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -6356,7 +6356,7 @@ pub(super) fn r5ROLLDROP(r: &mut Run) {
 
 // # #' -> # #' flag
 // 2DUP#<: firmware/lower/6001C-rpl-utils.s:3789
-pub(super) fn r2DUP__(r: &mut Run) {
+pub(crate) fn r2DUP__(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -6385,7 +6385,7 @@ pub(super) fn r2DUP__(r: &mut Run) {
 
 // # #' -> # #' flag
 // 2DUP#=: firmware/lower/6001C-rpl-utils.s:3799
-pub(super) fn r2DUP___628BA(r: &mut Run) {
+pub(crate) fn r2DUP___628BA(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -6414,7 +6414,7 @@ pub(super) fn r2DUP___628BA(r: &mut Run) {
 
 // # #' -> # #' flag
 // 2DUP#>: firmware/lower/6001C-rpl-utils.s:3810
-pub(super) fn r2DUP___628D6(r: &mut Run) {
+pub(crate) fn r2DUP___628D6(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -6443,7 +6443,7 @@ pub(super) fn r2DUP___628D6(r: &mut Run) {
 
 // # -> # #+1
 // DUP#1+: firmware/lower/6001C-rpl-utils.s:3820
-pub(super) fn DUP_1__628F0(r: &mut Run) {
+pub(crate) fn DUP_1__628F0(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -6473,7 +6473,7 @@ pub(super) fn DUP_1__628F0(r: &mut Run) {
 
 // # ob -> ob #+1
 // SWAP#1+: firmware/lower/6001C-rpl-utils.s:3830
-pub(super) fn SWAP_1_(r: &mut Run) {
+pub(crate) fn SWAP_1_(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -6504,7 +6504,7 @@ pub(super) fn SWAP_1_(r: &mut Run) {
 
 // # -> # #-1
 // DUP#1-: firmware/lower/6001C-rpl-utils.s:3847
-pub(super) fn DUP_1__62934(r: &mut Run) {
+pub(crate) fn DUP_1__62934(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -6530,7 +6530,7 @@ pub(super) fn DUP_1__62934(r: &mut Run) {
 
 // ob -> #1
 // DROPONE: firmware/lower/6001C-rpl-utils.s:3856
-pub(super) fn DROPONE(r: &mut Run) {
+pub(crate) fn DROPONE(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -6548,7 +6548,7 @@ pub(super) fn DROPONE(r: &mut Run) {
 
 // ->
 // RDROPCOLA: firmware/lower/6001C-rpl-utils.s:3863
-pub(super) fn RDROPCOLA(r: &mut Run) {
+pub(crate) fn RDROPCOLA(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -6571,7 +6571,7 @@ pub(super) fn RDROPCOLA(r: &mut Run) {
 
 // Drops rest of current stream does COLA in the above one.
 // COLACOLA: firmware/lower/6001C-rpl-utils.s:3872
-pub(super) fn COLACOLA(r: &mut Run) {
+pub(crate) fn COLACOLA(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -6594,7 +6594,7 @@ pub(super) fn COLACOLA(r: &mut Run) {
 
 // T -> :: <ob1> ; F -> :: <ob2> <rest> ;
 // COLAcase: firmware/lower/6001C-rpl-utils.s:3884
-pub(super) fn COLAcase(r: &mut Run) {
+pub(crate) fn COLAcase(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -6617,7 +6617,7 @@ pub(super) fn COLAcase(r: &mut Run) {
 
 // T -> :: <ob2> <rest> ; F -> :: <ob1> ;
 // COLANOTcase: firmware/lower/6001C-rpl-utils.s:3896
-pub(super) fn COLANOTcase(r: &mut Run) {
+pub(crate) fn COLANOTcase(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -6640,7 +6640,7 @@ pub(super) fn COLANOTcase(r: &mut Run) {
 
 // # #' -> #-#'+1
 // #1--: firmware/lower/63029-rpl-utils.s:775
-pub(super) fn _1___637D1(r: &mut Run) {
+pub(crate) fn _1___637D1(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -6662,7 +6662,7 @@ pub(super) fn _1___637D1(r: &mut Run) {
 
 // # #' -> #+#'-1
 // #1-+: firmware/lower/63029-rpl-utils.s:801
-pub(super) fn _1___6380D(r: &mut Run) {
+pub(crate) fn _1___6380D(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -6684,7 +6684,7 @@ pub(super) fn _1___6380D(r: &mut Run) {
 
 // Get new D0 from DSKTOP, uses A
 // D0=DSKTOP: firmware/lower/63029-rpl-utils.s:830
-pub(super) fn D0_DSKTOP(r: &mut Run) {
+pub(crate) fn D0_DSKTOP(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -6704,7 +6704,7 @@ pub(super) fn D0_DSKTOP(r: &mut Run) {
 
 // Get new D1 from DSKTOP, uses C
 // D1=DSKTOP: firmware/lower/63029-rpl-utils.s:838
-pub(super) fn D1_DSKTOP(r: &mut Run) {
+pub(crate) fn D1_DSKTOP(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -6724,7 +6724,7 @@ pub(super) fn D1_DSKTOP(r: &mut Run) {
 
 // ob1 ob2 -> flag
 // Embedded?: firmware/lower/63029-rpl-utils.s:1692
-pub(super) fn Embedded_(r: &mut Run) {
+pub(crate) fn Embedded_(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -6770,7 +6770,7 @@ pub(super) fn Embedded_(r: &mut Run) {
 }
 
 // DupAndThen: firmware/lower/63029-rpl-utils.s:1746
-pub(super) fn DupAndThen(r: &mut Run) {
+pub(crate) fn DupAndThen(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -6808,7 +6808,7 @@ pub(super) fn DupAndThen(r: &mut Run) {
 
 // -> #0 #0
 // ZEROZERO: firmware/lower/63029-rpl-utils.s:1765
-pub(super) fn ZEROZERO(r: &mut Run) {
+pub(crate) fn ZEROZERO(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -6827,7 +6827,7 @@ pub(super) fn ZEROZERO(r: &mut Run) {
 
 // -> #0 #1
 // #ZERO#ONE: firmware/lower/63029-rpl-utils.s:1773
-pub(super) fn _ZERO_ONE(r: &mut Run) {
+pub(crate) fn _ZERO_ONE(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -6873,7 +6873,7 @@ pub(super) fn _ZERO_ONE(r: &mut Run) {
 }
 
 // SUB_64236: firmware/lower/63029-rpl-utils.s:1794
-pub(super) fn SUB_64236(r: &mut Run) {
+pub(crate) fn SUB_64236(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -6921,7 +6921,7 @@ pub(super) fn SUB_64236(r: &mut Run) {
 
 // -> #0 #7
 // #ZERO#SEVEN: firmware/lower/63029-rpl-utils.s:1820
-pub(super) fn _ZERO_SEVEN(r: &mut Run) {
+pub(crate) fn _ZERO_SEVEN(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -6941,7 +6941,7 @@ pub(super) fn _ZERO_SEVEN(r: &mut Run) {
 
 // -> #1 #27d
 // #ONE#27: firmware/lower/63029-rpl-utils.s:1828
-pub(super) fn _ONE_27(r: &mut Run) {
+pub(crate) fn _ONE_27(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -6962,7 +6962,7 @@ pub(super) fn _ONE_27(r: &mut Run) {
 
 // -> #2 #1
 // #TWO#ONE: firmware/lower/63029-rpl-utils.s:1838
-pub(super) fn _TWO_ONE(r: &mut Run) {
+pub(crate) fn _TWO_ONE(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -6983,7 +6983,7 @@ pub(super) fn _TWO_ONE(r: &mut Run) {
 
 // -> #2 #2
 // #TWO#TWO: firmware/lower/63029-rpl-utils.s:1848
-pub(super) fn _TWO_TWO(r: &mut Run) {
+pub(crate) fn _TWO_TWO(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -7003,7 +7003,7 @@ pub(super) fn _TWO_TWO(r: &mut Run) {
 
 // -> #2 #4
 // #TWO#FOUR: firmware/lower/63029-rpl-utils.s:1856
-pub(super) fn _TWO_FOUR(r: &mut Run) {
+pub(crate) fn _TWO_FOUR(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -7024,7 +7024,7 @@ pub(super) fn _TWO_FOUR(r: &mut Run) {
 
 // -> #3 #4
 // #THREE#FOUR: firmware/lower/63029-rpl-utils.s:1866
-pub(super) fn _THREE_FOUR(r: &mut Run) {
+pub(crate) fn _THREE_FOUR(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -7044,7 +7044,7 @@ pub(super) fn _THREE_FOUR(r: &mut Run) {
 }
 
 // Unlabelled code at #642FC.
-pub(super) fn code_642FC(r: &mut Run) {
+pub(crate) fn code_642FC(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -7065,7 +7065,7 @@ pub(super) fn code_642FC(r: &mut Run) {
 
 // $ $find start# -> #pos -> #0
 // POS$: firmware/lower/63029-rpl-utils.s:2096
-pub(super) fn POS_(r: &mut Run) {
+pub(crate) fn POS_(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -7083,7 +7083,7 @@ pub(super) fn POS_(r: &mut Run) {
 
 // $ $find #limit -> #pos -> #0
 // POS$REV: firmware/lower/63029-rpl-utils.s:2104
-pub(super) fn POS_REV(r: &mut Run) {
+pub(crate) fn POS_REV(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -7280,7 +7280,7 @@ pub(super) fn POS_REV(r: &mut Run) {
 }
 
 // SUB_64727: firmware/lower/63029-rpl-utils.s:2218
-pub(super) fn SUB_64727(r: &mut Run) {
+pub(crate) fn SUB_64727(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -7322,7 +7322,7 @@ pub(super) fn SUB_64727(r: &mut Run) {
 
 // comp #ofs -> comp #ofs' ob T -> comp F
 // NEXTCOMPOB: firmware/lower/63029-rpl-utils.s:2293
-pub(super) fn NEXTCOMPOB(r: &mut Run) {
+pub(crate) fn NEXTCOMPOB(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -7422,7 +7422,7 @@ pub(super) fn NEXTCOMPOB(r: &mut Run) {
 }
 
 // >LASTRAM-WORD: firmware/lower/63029-rpl-utils.s:2353
-pub(super) fn _LASTRAM_WORD(r: &mut Run) {
+pub(crate) fn _LASTRAM_WORD(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -7443,7 +7443,7 @@ pub(super) fn _LASTRAM_WORD(r: &mut Run) {
 }
 
 // Unlabelled code at #648F9.
-pub(super) fn code_648F9(r: &mut Run) {
+pub(crate) fn code_648F9(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -7669,7 +7669,7 @@ pub(super) fn code_648F9(r: &mut Run) {
 }
 
 // SUB_64ADC: firmware/lower/63029-rpl-utils.s:2535
-pub(super) fn SUB_64ADC(r: &mut Run) {
+pub(crate) fn SUB_64ADC(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -7706,7 +7706,7 @@ pub(super) fn SUB_64ADC(r: &mut Run) {
 }
 
 // SUB_657B9: firmware/lower/63029-rpl-utils.s:4031
-pub(super) fn SUB_657B9(r: &mut Run) {
+pub(crate) fn SUB_657B9(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -7747,7 +7747,7 @@ pub(super) fn SUB_657B9(r: &mut Run) {
 }
 
 // SUB_657DF: firmware/lower/63029-rpl-utils.s:4049
-pub(super) fn SUB_657DF(r: &mut Run) {
+pub(crate) fn SUB_657DF(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -7792,7 +7792,7 @@ pub(super) fn SUB_657DF(r: &mut Run) {
 }
 
 // SUB_65807: firmware/lower/63029-rpl-utils.s:4070
-pub(super) fn SUB_65807(r: &mut Run) {
+pub(crate) fn SUB_65807(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -7857,7 +7857,7 @@ pub(super) fn SUB_65807(r: &mut Run) {
 }
 
 // SUB_65842: firmware/lower/63029-rpl-utils.s:4100
-pub(super) fn SUB_65842(r: &mut Run) {
+pub(crate) fn SUB_65842(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -7898,7 +7898,7 @@ pub(super) fn SUB_65842(r: &mut Run) {
 }
 
 // SUB_65863: firmware/lower/63029-rpl-utils.s:4118
-pub(super) fn SUB_65863(r: &mut Run) {
+pub(crate) fn SUB_65863(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -8070,7 +8070,7 @@ pub(super) fn SUB_65863(r: &mut Run) {
 
 // hxs hxs ->
 // putnibs: firmware/lower/63029-rpl-utils.s:4197
-pub(super) fn putnibs(r: &mut Run) {
+pub(crate) fn putnibs(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -8088,7 +8088,7 @@ pub(super) fn putnibs(r: &mut Run) {
 
 // hxs hxs -> hxs'
 // getnibs: firmware/lower/63029-rpl-utils.s:4203
-pub(super) fn getnibs(r: &mut Run) {
+pub(crate) fn getnibs(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -8175,7 +8175,7 @@ pub(super) fn getnibs(r: &mut Run) {
 }
 
 // OBJ_65A29: firmware/lower/63029-rpl-utils.s:4273
-pub(super) fn OBJ_65A29(r: &mut Run) {
+pub(crate) fn OBJ_65A29(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -8193,7 +8193,7 @@ pub(super) fn OBJ_65A29(r: &mut Run) {
 }
 
 // OBJ_6670A: firmware/lower/660FC-misc-66000.s:357
-pub(super) fn OBJ_6670A(r: &mut Run) {
+pub(crate) fn OBJ_6670A(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -8320,7 +8320,7 @@ pub(super) fn OBJ_6670A(r: &mut Run) {
 }
 
 // OBJ_6689C: firmware/lower/660FC-misc-66000.s:471
-pub(super) fn OBJ_6689C(r: &mut Run) {
+pub(crate) fn OBJ_6689C(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -8405,7 +8405,7 @@ pub(super) fn OBJ_6689C(r: &mut Run) {
 }
 
 // OBJ_66A0A: firmware/lower/660FC-misc-66000.s:569
-pub(super) fn OBJ_66A0A(r: &mut Run) {
+pub(crate) fn OBJ_66A0A(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -8559,7 +8559,7 @@ pub(super) fn OBJ_66A0A(r: &mut Run) {
 }
 
 // OBJ_66B19: firmware/lower/660FC-misc-66000.s:658
-pub(super) fn OBJ_66B19(r: &mut Run) {
+pub(crate) fn OBJ_66B19(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -8636,7 +8636,7 @@ pub(super) fn OBJ_66B19(r: &mut Run) {
 }
 
 // OBJ_66BAD: firmware/lower/660FC-misc-66000.s:709
-pub(super) fn OBJ_66BAD(r: &mut Run) {
+pub(crate) fn OBJ_66BAD(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -8661,7 +8661,7 @@ pub(super) fn OBJ_66BAD(r: &mut Run) {
 }
 
 // OBJ_66BC1: firmware/lower/660FC-misc-66000.s:717
-pub(super) fn OBJ_66BC1(r: &mut Run) {
+pub(crate) fn OBJ_66BC1(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -8718,7 +8718,7 @@ pub(super) fn OBJ_66BC1(r: &mut Run) {
 }
 
 // Code_67005: firmware/lower/660FC-misc-66000.s:951
-pub(super) fn Code_67005(r: &mut Run) {
+pub(crate) fn Code_67005(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -8745,7 +8745,7 @@ pub(super) fn Code_67005(r: &mut Run) {
 }
 
 // SUB_67036: firmware/lower/660FC-misc-66000.s:967
-pub(super) fn SUB_67036(r: &mut Run) {
+pub(crate) fn SUB_67036(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -8867,7 +8867,7 @@ pub(super) fn SUB_67036(r: &mut Run) {
 }
 
 // OBJ_670EE: firmware/lower/660FC-misc-66000.s:1035
-pub(super) fn OBJ_670EE(r: &mut Run) {
+pub(crate) fn OBJ_670EE(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -8907,7 +8907,7 @@ pub(super) fn OBJ_670EE(r: &mut Run) {
 }
 
 // SUB_67129: firmware/lower/660FC-misc-66000.s:1055
-pub(super) fn SUB_67129(r: &mut Run) {
+pub(crate) fn SUB_67129(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -8930,7 +8930,7 @@ pub(super) fn SUB_67129(r: &mut Run) {
 }
 
 // SUB_67136: firmware/lower/660FC-misc-66000.s:1063
-pub(super) fn SUB_67136(r: &mut Run) {
+pub(crate) fn SUB_67136(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -8961,7 +8961,7 @@ pub(super) fn SUB_67136(r: &mut Run) {
 }
 
 // SUB_67156: firmware/lower/660FC-misc-66000.s:1076
-pub(super) fn SUB_67156(r: &mut Run) {
+pub(crate) fn SUB_67156(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -8977,7 +8977,7 @@ pub(super) fn SUB_67156(r: &mut Run) {
 }
 
 // OBJ_6715D: firmware/lower/660FC-misc-66000.s:1080
-pub(super) fn OBJ_6715D(r: &mut Run) {
+pub(crate) fn OBJ_6715D(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -9013,7 +9013,7 @@ pub(super) fn OBJ_6715D(r: &mut Run) {
 }
 
 // OBJ_67193: firmware/lower/660FC-misc-66000.s:1099
-pub(super) fn OBJ_67193(r: &mut Run) {
+pub(crate) fn OBJ_67193(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -9040,7 +9040,7 @@ pub(super) fn OBJ_67193(r: &mut Run) {
 }
 
 // OBJ_671B0: firmware/lower/660FC-misc-66000.s:1109
-pub(super) fn OBJ_671B0(r: &mut Run) {
+pub(crate) fn OBJ_671B0(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -9058,7 +9058,7 @@ pub(super) fn OBJ_671B0(r: &mut Run) {
 }
 
 // OBJ_671BF: firmware/lower/660FC-misc-66000.s:1116
-pub(super) fn OBJ_671BF(r: &mut Run) {
+pub(crate) fn OBJ_671BF(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -9250,7 +9250,7 @@ pub(super) fn OBJ_671BF(r: &mut Run) {
 }
 
 // SUB_672C4: firmware/lower/660FC-misc-66000.s:1214
-pub(super) fn SUB_672C4(r: &mut Run) {
+pub(crate) fn SUB_672C4(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -9269,7 +9269,7 @@ pub(super) fn SUB_672C4(r: &mut Run) {
 }
 
 // SUB_672D2: firmware/lower/660FC-misc-66000.s:1221
-pub(super) fn SUB_672D2(r: &mut Run) {
+pub(crate) fn SUB_672D2(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -9288,7 +9288,7 @@ pub(super) fn SUB_672D2(r: &mut Run) {
 }
 
 // OBJ_672E6: firmware/lower/660FC-misc-66000.s:1233
-pub(super) fn OBJ_672E6(r: &mut Run) {
+pub(crate) fn OBJ_672E6(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -9313,7 +9313,7 @@ pub(super) fn OBJ_672E6(r: &mut Run) {
 }
 
 // OBJ_6733B: firmware/lower/660FC-misc-66000.s:1259
-pub(super) fn OBJ_6733B(r: &mut Run) {
+pub(crate) fn OBJ_6733B(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -9331,7 +9331,7 @@ pub(super) fn OBJ_6733B(r: &mut Run) {
 }
 
 // OBJ_67348: firmware/lower/660FC-misc-66000.s:1267
-pub(super) fn OBJ_67348(r: &mut Run) {
+pub(crate) fn OBJ_67348(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -9349,7 +9349,7 @@ pub(super) fn OBJ_67348(r: &mut Run) {
 }
 
 // OBJ_67356: firmware/lower/660FC-misc-66000.s:1274
-pub(super) fn OBJ_67356(r: &mut Run) {
+pub(crate) fn OBJ_67356(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -9367,7 +9367,7 @@ pub(super) fn OBJ_67356(r: &mut Run) {
 }
 
 // OBJ_67364: firmware/lower/660FC-misc-66000.s:1281
-pub(super) fn OBJ_67364(r: &mut Run) {
+pub(crate) fn OBJ_67364(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -9385,7 +9385,7 @@ pub(super) fn OBJ_67364(r: &mut Run) {
 }
 
 // OBJ_67371: firmware/lower/660FC-misc-66000.s:1288
-pub(super) fn OBJ_67371(r: &mut Run) {
+pub(crate) fn OBJ_67371(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -9402,7 +9402,7 @@ pub(super) fn OBJ_67371(r: &mut Run) {
 }
 
 // OBJ_67381: firmware/lower/660FC-misc-66000.s:1294
-pub(super) fn OBJ_67381(r: &mut Run) {
+pub(crate) fn OBJ_67381(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -9434,7 +9434,7 @@ pub(super) fn OBJ_67381(r: &mut Run) {
 }
 
 // OBJ_673A2: firmware/lower/660FC-misc-66000.s:1309
-pub(super) fn OBJ_673A2(r: &mut Run) {
+pub(crate) fn OBJ_673A2(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -9458,7 +9458,7 @@ pub(super) fn OBJ_673A2(r: &mut Run) {
 }
 
 // OBJ_673BB: firmware/lower/660FC-misc-66000.s:1319
-pub(super) fn OBJ_673BB(r: &mut Run) {
+pub(crate) fn OBJ_673BB(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -9479,7 +9479,7 @@ pub(super) fn OBJ_673BB(r: &mut Run) {
 }
 
 // OBJ_673D6: firmware/lower/660FC-misc-66000.s:1329
-pub(super) fn OBJ_673D6(r: &mut Run) {
+pub(crate) fn OBJ_673D6(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -9496,7 +9496,7 @@ pub(super) fn OBJ_673D6(r: &mut Run) {
 }
 
 // OBJ_673E6: firmware/lower/660FC-misc-66000.s:1335
-pub(super) fn OBJ_673E6(r: &mut Run) {
+pub(crate) fn OBJ_673E6(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -9513,7 +9513,7 @@ pub(super) fn OBJ_673E6(r: &mut Run) {
 }
 
 // OBJ_673F6: firmware/lower/660FC-misc-66000.s:1341
-pub(super) fn OBJ_673F6(r: &mut Run) {
+pub(crate) fn OBJ_673F6(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -9530,7 +9530,7 @@ pub(super) fn OBJ_673F6(r: &mut Run) {
 }
 
 // OBJ_67406: firmware/lower/660FC-misc-66000.s:1347
-pub(super) fn OBJ_67406(r: &mut Run) {
+pub(crate) fn OBJ_67406(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -9547,7 +9547,7 @@ pub(super) fn OBJ_67406(r: &mut Run) {
 }
 
 // OBJ_67416: firmware/lower/660FC-misc-66000.s:1353
-pub(super) fn OBJ_67416(r: &mut Run) {
+pub(crate) fn OBJ_67416(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -9564,7 +9564,7 @@ pub(super) fn OBJ_67416(r: &mut Run) {
 }
 
 // OBJ_67426: firmware/lower/660FC-misc-66000.s:1359
-pub(super) fn OBJ_67426(r: &mut Run) {
+pub(crate) fn OBJ_67426(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -9587,7 +9587,7 @@ pub(super) fn OBJ_67426(r: &mut Run) {
 }
 
 // OBJ_67448: firmware/lower/660FC-misc-66000.s:1372
-pub(super) fn OBJ_67448(r: &mut Run) {
+pub(crate) fn OBJ_67448(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -9604,7 +9604,7 @@ pub(super) fn OBJ_67448(r: &mut Run) {
 }
 
 // OBJ_67458: firmware/lower/660FC-misc-66000.s:1378
-pub(super) fn OBJ_67458(r: &mut Run) {
+pub(crate) fn OBJ_67458(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -9625,7 +9625,7 @@ pub(super) fn OBJ_67458(r: &mut Run) {
 }
 
 // OBJ_6746B: firmware/lower/660FC-misc-66000.s:1385
-pub(super) fn OBJ_6746B(r: &mut Run) {
+pub(crate) fn OBJ_6746B(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -9642,7 +9642,7 @@ pub(super) fn OBJ_6746B(r: &mut Run) {
 }
 
 // OBJ_6747B: firmware/lower/660FC-misc-66000.s:1391
-pub(super) fn OBJ_6747B(r: &mut Run) {
+pub(crate) fn OBJ_6747B(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -9659,7 +9659,7 @@ pub(super) fn OBJ_6747B(r: &mut Run) {
 }
 
 // OBJ_6748B: firmware/lower/660FC-misc-66000.s:1397
-pub(super) fn OBJ_6748B(r: &mut Run) {
+pub(crate) fn OBJ_6748B(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -9676,7 +9676,7 @@ pub(super) fn OBJ_6748B(r: &mut Run) {
 }
 
 // OBJ_6749B: firmware/lower/660FC-misc-66000.s:1403
-pub(super) fn OBJ_6749B(r: &mut Run) {
+pub(crate) fn OBJ_6749B(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -9693,7 +9693,7 @@ pub(super) fn OBJ_6749B(r: &mut Run) {
 }
 
 // OBJ_674AB: firmware/lower/660FC-misc-66000.s:1409
-pub(super) fn OBJ_674AB(r: &mut Run) {
+pub(crate) fn OBJ_674AB(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -9710,7 +9710,7 @@ pub(super) fn OBJ_674AB(r: &mut Run) {
 }
 
 // OBJ_674BB: firmware/lower/660FC-misc-66000.s:1415
-pub(super) fn OBJ_674BB(r: &mut Run) {
+pub(crate) fn OBJ_674BB(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -9731,7 +9731,7 @@ pub(super) fn OBJ_674BB(r: &mut Run) {
 }
 
 // OBJ_674D6: firmware/lower/660FC-misc-66000.s:1425
-pub(super) fn OBJ_674D6(r: &mut Run) {
+pub(crate) fn OBJ_674D6(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -9755,7 +9755,7 @@ pub(super) fn OBJ_674D6(r: &mut Run) {
 }
 
 // SUB_674EA: firmware/lower/660FC-misc-66000.s:1433
-pub(super) fn SUB_674EA(r: &mut Run) {
+pub(crate) fn SUB_674EA(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -9788,7 +9788,7 @@ pub(super) fn SUB_674EA(r: &mut Run) {
 }
 
 // OBJ_67519: firmware/lower/660FC-misc-66000.s:1448
-pub(super) fn OBJ_67519(r: &mut Run) {
+pub(crate) fn OBJ_67519(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -9811,7 +9811,7 @@ pub(super) fn OBJ_67519(r: &mut Run) {
 }
 
 // OBJ_6755A: firmware/lower/660FC-misc-66000.s:1469
-pub(super) fn OBJ_6755A(r: &mut Run) {
+pub(crate) fn OBJ_6755A(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -9866,7 +9866,7 @@ pub(super) fn OBJ_6755A(r: &mut Run) {
 }
 
 // SUB_675BE: firmware/lower/660FC-misc-66000.s:1499
-pub(super) fn SUB_675BE(r: &mut Run) {
+pub(crate) fn SUB_675BE(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -9891,7 +9891,7 @@ pub(super) fn SUB_675BE(r: &mut Run) {
 }
 
 // OBJ_67648: firmware/lower/660FC-misc-66000.s:1539
-pub(super) fn OBJ_67648(r: &mut Run) {
+pub(crate) fn OBJ_67648(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -9914,7 +9914,7 @@ pub(super) fn OBJ_67648(r: &mut Run) {
 }
 
 // OBJ_67665: firmware/lower/660FC-misc-66000.s:1549
-pub(super) fn OBJ_67665(r: &mut Run) {
+pub(crate) fn OBJ_67665(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -9936,7 +9936,7 @@ pub(super) fn OBJ_67665(r: &mut Run) {
 }
 
 // OBJ_67682: firmware/lower/660FC-misc-66000.s:1557
-pub(super) fn OBJ_67682(r: &mut Run) {
+pub(crate) fn OBJ_67682(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -9972,7 +9972,7 @@ pub(super) fn OBJ_67682(r: &mut Run) {
 }
 
 // SUB_676C5: firmware/lower/660FC-misc-66000.s:1579
-pub(super) fn SUB_676C5(r: &mut Run) {
+pub(crate) fn SUB_676C5(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -9992,7 +9992,7 @@ pub(super) fn SUB_676C5(r: &mut Run) {
 }
 
 // OBJ_67765: firmware/lower/660FC-misc-66000.s:1627
-pub(super) fn OBJ_67765(r: &mut Run) {
+pub(crate) fn OBJ_67765(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -10042,7 +10042,7 @@ pub(super) fn OBJ_67765(r: &mut Run) {
 }
 
 // OBJ_6779A: firmware/lower/660FC-misc-66000.s:1649
-pub(super) fn OBJ_6779A(r: &mut Run) {
+pub(crate) fn OBJ_6779A(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -10076,7 +10076,7 @@ pub(super) fn OBJ_6779A(r: &mut Run) {
 }
 
 // OBJ_677C3: firmware/lower/660FC-misc-66000.s:1663
-pub(super) fn OBJ_677C3(r: &mut Run) {
+pub(crate) fn OBJ_677C3(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -10100,7 +10100,7 @@ pub(super) fn OBJ_677C3(r: &mut Run) {
 }
 
 // OBJ_677DE: firmware/lower/660FC-misc-66000.s:1673
-pub(super) fn OBJ_677DE(r: &mut Run) {
+pub(crate) fn OBJ_677DE(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -10117,7 +10117,7 @@ pub(super) fn OBJ_677DE(r: &mut Run) {
 }
 
 // OBJ_677EA: firmware/lower/660FC-misc-66000.s:1679
-pub(super) fn OBJ_677EA(r: &mut Run) {
+pub(crate) fn OBJ_677EA(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -10218,7 +10218,7 @@ pub(super) fn OBJ_677EA(r: &mut Run) {
 }
 
 // OBJ_67878: firmware/lower/660FC-misc-66000.s:1731
-pub(super) fn OBJ_67878(r: &mut Run) {
+pub(crate) fn OBJ_67878(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -10284,7 +10284,7 @@ pub(super) fn OBJ_67878(r: &mut Run) {
 }
 
 // OBJ_678DB: firmware/lower/660FC-misc-66000.s:1771
-pub(super) fn OBJ_678DB(r: &mut Run) {
+pub(crate) fn OBJ_678DB(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -10335,7 +10335,7 @@ pub(super) fn OBJ_678DB(r: &mut Run) {
 }
 
 // Unlabelled code at #67908.
-pub(super) fn overlap_67908(r: &mut Run) {
+pub(crate) fn overlap_67908(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -10352,7 +10352,7 @@ pub(super) fn overlap_67908(r: &mut Run) {
 }
 
 // SUB_67918: firmware/lower/660FC-misc-66000.s:1800
-pub(super) fn SUB_67918(r: &mut Run) {
+pub(crate) fn SUB_67918(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -10409,7 +10409,7 @@ pub(super) fn SUB_67918(r: &mut Run) {
 }
 
 // OBJ_6798C: firmware/lower/660FC-misc-66000.s:1844
-pub(super) fn OBJ_6798C(r: &mut Run) {
+pub(crate) fn OBJ_6798C(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -10427,7 +10427,7 @@ pub(super) fn OBJ_6798C(r: &mut Run) {
 }
 
 // OBJ_679A1: firmware/lower/660FC-misc-66000.s:1856
-pub(super) fn OBJ_679A1(r: &mut Run) {
+pub(crate) fn OBJ_679A1(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -10444,7 +10444,7 @@ pub(super) fn OBJ_679A1(r: &mut Run) {
 }
 
 // OBJ_679B3: firmware/lower/660FC-misc-66000.s:1866
-pub(super) fn OBJ_679B3(r: &mut Run) {
+pub(crate) fn OBJ_679B3(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -10461,7 +10461,7 @@ pub(super) fn OBJ_679B3(r: &mut Run) {
 }
 
 // OBJ_679C5: firmware/lower/660FC-misc-66000.s:1876
-pub(super) fn OBJ_679C5(r: &mut Run) {
+pub(crate) fn OBJ_679C5(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -10478,7 +10478,7 @@ pub(super) fn OBJ_679C5(r: &mut Run) {
 }
 
 // OBJ_679D7: firmware/lower/660FC-misc-66000.s:1886
-pub(super) fn OBJ_679D7(r: &mut Run) {
+pub(crate) fn OBJ_679D7(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -10500,7 +10500,7 @@ pub(super) fn OBJ_679D7(r: &mut Run) {
 }
 
 // OBJ_679EA: firmware/lower/660FC-misc-66000.s:1894
-pub(super) fn OBJ_679EA(r: &mut Run) {
+pub(crate) fn OBJ_679EA(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -10540,7 +10540,7 @@ pub(super) fn OBJ_679EA(r: &mut Run) {
 }
 
 // OBJ_67A1E: firmware/lower/660FC-misc-66000.s:1913
-pub(super) fn OBJ_67A1E(r: &mut Run) {
+pub(crate) fn OBJ_67A1E(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -10565,7 +10565,7 @@ pub(super) fn OBJ_67A1E(r: &mut Run) {
 }
 
 // SUB_67A3B: firmware/lower/660FC-misc-66000.s:1924
-pub(super) fn SUB_67A3B(r: &mut Run) {
+pub(crate) fn SUB_67A3B(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -10582,7 +10582,7 @@ pub(super) fn SUB_67A3B(r: &mut Run) {
 }
 
 // SUB_67A3D: firmware/lower/660FC-misc-66000.s:1928
-pub(super) fn SUB_67A3D(r: &mut Run) {
+pub(crate) fn SUB_67A3D(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -10600,7 +10600,7 @@ pub(super) fn SUB_67A3D(r: &mut Run) {
 }
 
 // SUB_67A4A: firmware/lower/660FC-misc-66000.s:1934
-pub(super) fn SUB_67A4A(r: &mut Run) {
+pub(crate) fn SUB_67A4A(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -10616,7 +10616,7 @@ pub(super) fn SUB_67A4A(r: &mut Run) {
 }
 
 // SUB_67A51: firmware/lower/660FC-misc-66000.s:1938
-pub(super) fn SUB_67A51(r: &mut Run) {
+pub(crate) fn SUB_67A51(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -10647,7 +10647,7 @@ pub(super) fn SUB_67A51(r: &mut Run) {
 }
 
 // OBJ_67A7E: firmware/lower/660FC-misc-66000.s:1957
-pub(super) fn OBJ_67A7E(r: &mut Run) {
+pub(crate) fn OBJ_67A7E(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -10664,7 +10664,7 @@ pub(super) fn OBJ_67A7E(r: &mut Run) {
 }
 
 // OBJ_67A8B: firmware/lower/660FC-misc-66000.s:1963
-pub(super) fn OBJ_67A8B(r: &mut Run) {
+pub(crate) fn OBJ_67A8B(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -10681,7 +10681,7 @@ pub(super) fn OBJ_67A8B(r: &mut Run) {
 }
 
 // OBJ_67A9D: firmware/lower/660FC-misc-66000.s:1973
-pub(super) fn OBJ_67A9D(r: &mut Run) {
+pub(crate) fn OBJ_67A9D(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -10698,7 +10698,7 @@ pub(super) fn OBJ_67A9D(r: &mut Run) {
 }
 
 // OBJ_67AAF: firmware/lower/660FC-misc-66000.s:1983
-pub(super) fn OBJ_67AAF(r: &mut Run) {
+pub(crate) fn OBJ_67AAF(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -10715,7 +10715,7 @@ pub(super) fn OBJ_67AAF(r: &mut Run) {
 }
 
 // OBJ_67AD5: firmware/lower/660FC-misc-66000.s:1998
-pub(super) fn OBJ_67AD5(r: &mut Run) {
+pub(crate) fn OBJ_67AD5(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -10732,7 +10732,7 @@ pub(super) fn OBJ_67AD5(r: &mut Run) {
 }
 
 // OBJ_67AE2: firmware/lower/660FC-misc-66000.s:2005
-pub(super) fn OBJ_67AE2(r: &mut Run) {
+pub(crate) fn OBJ_67AE2(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -10749,7 +10749,7 @@ pub(super) fn OBJ_67AE2(r: &mut Run) {
 }
 
 // OBJ_67B17: firmware/lower/660FC-misc-66000.s:2029
-pub(super) fn OBJ_67B17(r: &mut Run) {
+pub(crate) fn OBJ_67B17(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -10801,7 +10801,7 @@ pub(super) fn OBJ_67B17(r: &mut Run) {
 }
 
 // OBJ_67B67: firmware/lower/660FC-misc-66000.s:2059
-pub(super) fn OBJ_67B67(r: &mut Run) {
+pub(crate) fn OBJ_67B67(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -10840,7 +10840,7 @@ pub(super) fn OBJ_67B67(r: &mut Run) {
 }
 
 // OBJ_67BA1: firmware/lower/660FC-misc-66000.s:2079
-pub(super) fn OBJ_67BA1(r: &mut Run) {
+pub(crate) fn OBJ_67BA1(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -10857,7 +10857,7 @@ pub(super) fn OBJ_67BA1(r: &mut Run) {
 }
 
 // OBJ_67BAE: firmware/lower/660FC-misc-66000.s:2085
-pub(super) fn OBJ_67BAE(r: &mut Run) {
+pub(crate) fn OBJ_67BAE(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -10874,7 +10874,7 @@ pub(super) fn OBJ_67BAE(r: &mut Run) {
 }
 
 // OBJ_67BBB: firmware/lower/660FC-misc-66000.s:2091
-pub(super) fn OBJ_67BBB(r: &mut Run) {
+pub(crate) fn OBJ_67BBB(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -10891,7 +10891,7 @@ pub(super) fn OBJ_67BBB(r: &mut Run) {
 }
 
 // OBJ_67BC8: firmware/lower/660FC-misc-66000.s:2097
-pub(super) fn OBJ_67BC8(r: &mut Run) {
+pub(crate) fn OBJ_67BC8(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -10908,7 +10908,7 @@ pub(super) fn OBJ_67BC8(r: &mut Run) {
 }
 
 // OBJ_67BD5: firmware/lower/660FC-misc-66000.s:2103
-pub(super) fn OBJ_67BD5(r: &mut Run) {
+pub(crate) fn OBJ_67BD5(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -10925,7 +10925,7 @@ pub(super) fn OBJ_67BD5(r: &mut Run) {
 }
 
 // OBJ_67BE2: firmware/lower/660FC-misc-66000.s:2109
-pub(super) fn OBJ_67BE2(r: &mut Run) {
+pub(crate) fn OBJ_67BE2(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -10942,7 +10942,7 @@ pub(super) fn OBJ_67BE2(r: &mut Run) {
 }
 
 // OBJ_67BEF: firmware/lower/660FC-misc-66000.s:2115
-pub(super) fn OBJ_67BEF(r: &mut Run) {
+pub(crate) fn OBJ_67BEF(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -10959,7 +10959,7 @@ pub(super) fn OBJ_67BEF(r: &mut Run) {
 }
 
 // OBJ_67BFC: firmware/lower/660FC-misc-66000.s:2121
-pub(super) fn OBJ_67BFC(r: &mut Run) {
+pub(crate) fn OBJ_67BFC(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -10976,7 +10976,7 @@ pub(super) fn OBJ_67BFC(r: &mut Run) {
 }
 
 // OBJ_67C09: firmware/lower/660FC-misc-66000.s:2127
-pub(super) fn OBJ_67C09(r: &mut Run) {
+pub(crate) fn OBJ_67C09(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -10993,7 +10993,7 @@ pub(super) fn OBJ_67C09(r: &mut Run) {
 }
 
 // OBJ_67C16: firmware/lower/660FC-misc-66000.s:2133
-pub(super) fn OBJ_67C16(r: &mut Run) {
+pub(crate) fn OBJ_67C16(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -11010,7 +11010,7 @@ pub(super) fn OBJ_67C16(r: &mut Run) {
 }
 
 // OBJ_67C3C: firmware/lower/660FC-misc-66000.s:2148
-pub(super) fn OBJ_67C3C(r: &mut Run) {
+pub(crate) fn OBJ_67C3C(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -11032,7 +11032,7 @@ pub(super) fn OBJ_67C3C(r: &mut Run) {
 }
 
 // SUB_67C53: firmware/lower/660FC-misc-66000.s:2157
-pub(super) fn SUB_67C53(r: &mut Run) {
+pub(crate) fn SUB_67C53(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -11060,7 +11060,7 @@ pub(super) fn SUB_67C53(r: &mut Run) {
 }
 
 // OBJ_67C85: firmware/lower/660FC-misc-66000.s:2176
-pub(super) fn OBJ_67C85(r: &mut Run) {
+pub(crate) fn OBJ_67C85(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -11086,7 +11086,7 @@ pub(super) fn OBJ_67C85(r: &mut Run) {
 }
 
 // OBJ_67CA2: firmware/lower/660FC-misc-66000.s:2187
-pub(super) fn OBJ_67CA2(r: &mut Run) {
+pub(crate) fn OBJ_67CA2(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -11110,7 +11110,7 @@ pub(super) fn OBJ_67CA2(r: &mut Run) {
 }
 
 // OBJ_67CBE: firmware/lower/660FC-misc-66000.s:2197
-pub(super) fn OBJ_67CBE(r: &mut Run) {
+pub(crate) fn OBJ_67CBE(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -11157,7 +11157,7 @@ pub(super) fn OBJ_67CBE(r: &mut Run) {
 }
 
 // OBJ_67D0F: firmware/lower/660FC-misc-66000.s:2225
-pub(super) fn OBJ_67D0F(r: &mut Run) {
+pub(crate) fn OBJ_67D0F(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -11174,7 +11174,7 @@ pub(super) fn OBJ_67D0F(r: &mut Run) {
 }
 
 // OBJ_67D1B: firmware/lower/660FC-misc-66000.s:2231
-pub(super) fn OBJ_67D1B(r: &mut Run) {
+pub(crate) fn OBJ_67D1B(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -11294,7 +11294,7 @@ pub(super) fn OBJ_67D1B(r: &mut Run) {
 }
 
 // OBJ_67DCF: firmware/lower/660FC-misc-66000.s:2300
-pub(super) fn OBJ_67DCF(r: &mut Run) {
+pub(crate) fn OBJ_67DCF(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -11315,7 +11315,7 @@ pub(super) fn OBJ_67DCF(r: &mut Run) {
 }
 
 // OBJ_67DDF: firmware/lower/660FC-misc-66000.s:2307
-pub(super) fn OBJ_67DDF(r: &mut Run) {
+pub(crate) fn OBJ_67DDF(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -11335,7 +11335,7 @@ pub(super) fn OBJ_67DDF(r: &mut Run) {
 }
 
 // OBJ_67DEC: firmware/lower/660FC-misc-66000.s:2313
-pub(super) fn OBJ_67DEC(r: &mut Run) {
+pub(crate) fn OBJ_67DEC(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -11356,7 +11356,7 @@ pub(super) fn OBJ_67DEC(r: &mut Run) {
 }
 
 // OBJ_67DFC: firmware/lower/660FC-misc-66000.s:2320
-pub(super) fn OBJ_67DFC(r: &mut Run) {
+pub(crate) fn OBJ_67DFC(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -11377,7 +11377,7 @@ pub(super) fn OBJ_67DFC(r: &mut Run) {
 }
 
 // OBJ_67E0C: firmware/lower/660FC-misc-66000.s:2327
-pub(super) fn OBJ_67E0C(r: &mut Run) {
+pub(crate) fn OBJ_67E0C(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -11410,7 +11410,7 @@ pub(super) fn OBJ_67E0C(r: &mut Run) {
 }
 
 // OBJ_67E39: firmware/lower/660FC-misc-66000.s:2347
-pub(super) fn OBJ_67E39(r: &mut Run) {
+pub(crate) fn OBJ_67E39(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -11430,7 +11430,7 @@ pub(super) fn OBJ_67E39(r: &mut Run) {
 }
 
 // OBJ_67E45: firmware/lower/660FC-misc-66000.s:2353
-pub(super) fn OBJ_67E45(r: &mut Run) {
+pub(crate) fn OBJ_67E45(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -11451,7 +11451,7 @@ pub(super) fn OBJ_67E45(r: &mut Run) {
 }
 
 // OBJ_67E54: firmware/lower/660FC-misc-66000.s:2360
-pub(super) fn OBJ_67E54(r: &mut Run) {
+pub(crate) fn OBJ_67E54(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -11472,7 +11472,7 @@ pub(super) fn OBJ_67E54(r: &mut Run) {
 }
 
 // OBJ_67E64: firmware/lower/660FC-misc-66000.s:2367
-pub(super) fn OBJ_67E64(r: &mut Run) {
+pub(crate) fn OBJ_67E64(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -11494,7 +11494,7 @@ pub(super) fn OBJ_67E64(r: &mut Run) {
 }
 
 // SUB_67E77: firmware/lower/660FC-misc-66000.s:2375
-pub(super) fn SUB_67E77(r: &mut Run) {
+pub(crate) fn SUB_67E77(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -11510,7 +11510,7 @@ pub(super) fn SUB_67E77(r: &mut Run) {
 }
 
 // SUB_67E7B: firmware/lower/660FC-misc-66000.s:2379
-pub(super) fn SUB_67E7B(r: &mut Run) {
+pub(crate) fn SUB_67E7B(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -11535,7 +11535,7 @@ pub(super) fn SUB_67E7B(r: &mut Run) {
 }
 
 // SUB_67E9E: firmware/lower/660FC-misc-66000.s:2392
-pub(super) fn SUB_67E9E(r: &mut Run) {
+pub(crate) fn SUB_67E9E(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -11563,7 +11563,7 @@ pub(super) fn SUB_67E9E(r: &mut Run) {
 }
 
 // SUB_67EB4: firmware/lower/660FC-misc-66000.s:2402
-pub(super) fn SUB_67EB4(r: &mut Run) {
+pub(crate) fn SUB_67EB4(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -11579,7 +11579,7 @@ pub(super) fn SUB_67EB4(r: &mut Run) {
 }
 
 // SUB_67EB8: firmware/lower/660FC-misc-66000.s:2406
-pub(super) fn SUB_67EB8(r: &mut Run) {
+pub(crate) fn SUB_67EB8(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -11632,7 +11632,7 @@ pub(super) fn SUB_67EB8(r: &mut Run) {
 }
 
 // OBJ_67F0B: firmware/lower/660FC-misc-66000.s:2432
-pub(super) fn OBJ_67F0B(r: &mut Run) {
+pub(crate) fn OBJ_67F0B(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -11658,7 +11658,7 @@ pub(super) fn OBJ_67F0B(r: &mut Run) {
 }
 
 // SUB_67F24: firmware/lower/660FC-misc-66000.s:2442
-pub(super) fn SUB_67F24(r: &mut Run) {
+pub(crate) fn SUB_67F24(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -11678,7 +11678,7 @@ pub(super) fn SUB_67F24(r: &mut Run) {
 }
 
 // OBJ_67F31: firmware/lower/660FC-misc-66000.s:2450
-pub(super) fn OBJ_67F31(r: &mut Run) {
+pub(crate) fn OBJ_67F31(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -11703,7 +11703,7 @@ pub(super) fn OBJ_67F31(r: &mut Run) {
 }
 
 // OBJ_67F45: firmware/lower/660FC-misc-66000.s:2458
-pub(super) fn OBJ_67F45(r: &mut Run) {
+pub(crate) fn OBJ_67F45(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -11788,7 +11788,7 @@ pub(super) fn OBJ_67F45(r: &mut Run) {
 }
 
 // OBJ_67FED: firmware/lower/660FC-misc-66000.s:2511
-pub(super) fn OBJ_67FED(r: &mut Run) {
+pub(crate) fn OBJ_67FED(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -11808,7 +11808,7 @@ pub(super) fn OBJ_67FED(r: &mut Run) {
 }
 
 // L_68001: firmware/lower/660FC-misc-66000.s:2516
-pub(super) fn L_68001(r: &mut Run) {
+pub(crate) fn L_68001(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -11828,7 +11828,7 @@ pub(super) fn L_68001(r: &mut Run) {
 }
 
 // OBJ_68017: firmware/lower/660FC-misc-66000.s:2524
-pub(super) fn OBJ_68017(r: &mut Run) {
+pub(crate) fn OBJ_68017(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -11925,7 +11925,7 @@ pub(super) fn OBJ_68017(r: &mut Run) {
 }
 
 // drop;false;true_680B4: firmware/lower/660FC-misc-66000.s:2577
-pub(super) fn drop_false_true_680B4(r: &mut Run) {
+pub(crate) fn drop_false_true_680B4(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -11980,7 +11980,7 @@ pub(super) fn drop_false_true_680B4(r: &mut Run) {
 }
 
 // SUB_680FB: firmware/lower/660FC-misc-66000.s:2604
-pub(super) fn SUB_680FB(r: &mut Run) {
+pub(crate) fn SUB_680FB(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -12012,7 +12012,7 @@ pub(super) fn SUB_680FB(r: &mut Run) {
 }
 
 // OBJ_6812C: firmware/lower/660FC-misc-66000.s:2621
-pub(super) fn OBJ_6812C(r: &mut Run) {
+pub(crate) fn OBJ_6812C(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -12059,7 +12059,7 @@ pub(super) fn OBJ_6812C(r: &mut Run) {
 }
 
 // OBJ_68183: firmware/lower/660FC-misc-66000.s:2648
-pub(super) fn OBJ_68183(r: &mut Run) {
+pub(crate) fn OBJ_68183(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -12087,7 +12087,7 @@ pub(super) fn OBJ_68183(r: &mut Run) {
 }
 
 // OBJ_6819D: firmware/lower/660FC-misc-66000.s:2659
-pub(super) fn OBJ_6819D(r: &mut Run) {
+pub(crate) fn OBJ_6819D(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -12109,7 +12109,7 @@ pub(super) fn OBJ_6819D(r: &mut Run) {
 }
 
 // OBJ_681B1: firmware/lower/660FC-misc-66000.s:2667
-pub(super) fn OBJ_681B1(r: &mut Run) {
+pub(crate) fn OBJ_681B1(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -12142,7 +12142,7 @@ pub(super) fn OBJ_681B1(r: &mut Run) {
 }
 
 // OBJ_681D8: firmware/lower/660FC-misc-66000.s:2683
-pub(super) fn OBJ_681D8(r: &mut Run) {
+pub(crate) fn OBJ_681D8(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -12159,7 +12159,7 @@ pub(super) fn OBJ_681D8(r: &mut Run) {
 }
 
 // OBJ_681E8: firmware/lower/660FC-misc-66000.s:2689
-pub(super) fn OBJ_681E8(r: &mut Run) {
+pub(crate) fn OBJ_681E8(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -12204,7 +12204,7 @@ pub(super) fn OBJ_681E8(r: &mut Run) {
 }
 
 // OBJ_6821C: firmware/lower/660FC-misc-66000.s:2709
-pub(super) fn OBJ_6821C(r: &mut Run) {
+pub(crate) fn OBJ_6821C(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -12221,7 +12221,7 @@ pub(super) fn OBJ_6821C(r: &mut Run) {
 }
 
 // OBJ_68277: firmware/lower/660FC-misc-66000.s:2737
-pub(super) fn OBJ_68277(r: &mut Run) {
+pub(crate) fn OBJ_68277(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -12238,7 +12238,7 @@ pub(super) fn OBJ_68277(r: &mut Run) {
 }
 
 // OBJ_682A6: firmware/lower/660FC-misc-66000.s:2755
-pub(super) fn OBJ_682A6(r: &mut Run) {
+pub(crate) fn OBJ_682A6(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -12276,7 +12276,7 @@ pub(super) fn OBJ_682A6(r: &mut Run) {
 }
 
 // OBJ_682D2: firmware/lower/660FC-misc-66000.s:2772
-pub(super) fn OBJ_682D2(r: &mut Run) {
+pub(crate) fn OBJ_682D2(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -12293,7 +12293,7 @@ pub(super) fn OBJ_682D2(r: &mut Run) {
 }
 
 // OBJ_682DE: firmware/lower/660FC-misc-66000.s:2778
-pub(super) fn OBJ_682DE(r: &mut Run) {
+pub(crate) fn OBJ_682DE(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -12320,7 +12320,7 @@ pub(super) fn OBJ_682DE(r: &mut Run) {
 }
 
 // SUB_682F7: firmware/lower/660FC-misc-66000.s:2788
-pub(super) fn SUB_682F7(r: &mut Run) {
+pub(crate) fn SUB_682F7(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -12351,7 +12351,7 @@ pub(super) fn SUB_682F7(r: &mut Run) {
 }
 
 // SUB_68329: firmware/lower/660FC-misc-66000.s:2805
-pub(super) fn SUB_68329(r: &mut Run) {
+pub(crate) fn SUB_68329(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -12444,7 +12444,7 @@ pub(super) fn SUB_68329(r: &mut Run) {
 }
 
 // SUB_683BB: firmware/lower/660FC-misc-66000.s:2854
-pub(super) fn SUB_683BB(r: &mut Run) {
+pub(crate) fn SUB_683BB(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -12472,7 +12472,7 @@ pub(super) fn SUB_683BB(r: &mut Run) {
 }
 
 // SUB_683D2: firmware/lower/660FC-misc-66000.s:2864
-pub(super) fn SUB_683D2(r: &mut Run) {
+pub(crate) fn SUB_683D2(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -12489,7 +12489,7 @@ pub(super) fn SUB_683D2(r: &mut Run) {
 }
 
 // SUB_683D9: firmware/lower/660FC-misc-66000.s:2868
-pub(super) fn SUB_683D9(r: &mut Run) {
+pub(crate) fn SUB_683D9(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -12517,7 +12517,7 @@ pub(super) fn SUB_683D9(r: &mut Run) {
 }
 
 // OBJ_68452: firmware/lower/660FC-misc-66000.s:2922
-pub(super) fn OBJ_68452(r: &mut Run) {
+pub(crate) fn OBJ_68452(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -12537,7 +12537,7 @@ pub(super) fn OBJ_68452(r: &mut Run) {
 }
 
 // SUB_6845F: firmware/lower/660FC-misc-66000.s:2928
-pub(super) fn SUB_6845F(r: &mut Run) {
+pub(crate) fn SUB_6845F(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -12620,7 +12620,7 @@ pub(super) fn SUB_6845F(r: &mut Run) {
 }
 
 // OBJ_684D4: firmware/lower/660FC-misc-66000.s:2972
-pub(super) fn OBJ_684D4(r: &mut Run) {
+pub(crate) fn OBJ_684D4(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -12656,7 +12656,7 @@ pub(super) fn OBJ_684D4(r: &mut Run) {
 }
 
 // Unlabelled code at #6855A.
-pub(super) fn code_6855A(r: &mut Run) {
+pub(crate) fn code_6855A(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -12684,7 +12684,7 @@ pub(super) fn code_6855A(r: &mut Run) {
 }
 
 // SUB_68573: firmware/lower/660FC-misc-66000.s:3020
-pub(super) fn SUB_68573(r: &mut Run) {
+pub(crate) fn SUB_68573(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -12714,7 +12714,7 @@ pub(super) fn SUB_68573(r: &mut Run) {
 }
 
 // OBJ_68593: firmware/lower/660FC-misc-66000.s:3033
-pub(super) fn OBJ_68593(r: &mut Run) {
+pub(crate) fn OBJ_68593(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -12741,7 +12741,7 @@ pub(super) fn OBJ_68593(r: &mut Run) {
 }
 
 // OBJ_685B2: firmware/lower/660FC-misc-66000.s:3043
-pub(super) fn OBJ_685B2(r: &mut Run) {
+pub(crate) fn OBJ_685B2(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -12780,7 +12780,7 @@ pub(super) fn OBJ_685B2(r: &mut Run) {
 }
 
 // OBJ_685DD: firmware/lower/660FC-misc-66000.s:3059
-pub(super) fn OBJ_685DD(r: &mut Run) {
+pub(crate) fn OBJ_685DD(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -12810,7 +12810,7 @@ pub(super) fn OBJ_685DD(r: &mut Run) {
 }
 
 // OBJ_6860A: firmware/lower/660FC-misc-66000.s:3073
-pub(super) fn OBJ_6860A(r: &mut Run) {
+pub(crate) fn OBJ_6860A(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -12873,7 +12873,7 @@ pub(super) fn OBJ_6860A(r: &mut Run) {
 }
 
 // SUB_68670: firmware/lower/660FC-misc-66000.s:3101
-pub(super) fn SUB_68670(r: &mut Run) {
+pub(crate) fn SUB_68670(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -12892,7 +12892,7 @@ pub(super) fn SUB_68670(r: &mut Run) {
 }
 
 // OBJ_6964D: firmware/lower/69142-misc-66000.s:320
-pub(super) fn OBJ_6964D(r: &mut Run) {
+pub(crate) fn OBJ_6964D(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -12909,7 +12909,7 @@ pub(super) fn OBJ_6964D(r: &mut Run) {
 }
 
 // OBJ_69659: firmware/lower/69142-misc-66000.s:327
-pub(super) fn OBJ_69659(r: &mut Run) {
+pub(crate) fn OBJ_69659(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -13089,7 +13089,7 @@ pub(super) fn OBJ_69659(r: &mut Run) {
 }
 
 // OBJ_6A663: firmware/lower/69142-misc-66000.s:1300
-pub(super) fn OBJ_6A663(r: &mut Run) {
+pub(crate) fn OBJ_6A663(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -13152,7 +13152,7 @@ pub(super) fn OBJ_6A663(r: &mut Run) {
 }
 
 // SUB_6A6C0: firmware/lower/69142-misc-66000.s:1329
-pub(super) fn SUB_6A6C0(r: &mut Run) {
+pub(crate) fn SUB_6A6C0(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -13176,7 +13176,7 @@ pub(super) fn SUB_6A6C0(r: &mut Run) {
 }
 
 // SUB_6A6D4: firmware/lower/69142-misc-66000.s:1338
-pub(super) fn SUB_6A6D4(r: &mut Run) {
+pub(crate) fn SUB_6A6D4(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -13230,7 +13230,7 @@ pub(super) fn SUB_6A6D4(r: &mut Run) {
 }
 
 // OBJ_6A705: firmware/lower/69142-misc-66000.s:1361
-pub(super) fn OBJ_6A705(r: &mut Run) {
+pub(crate) fn OBJ_6A705(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -13301,7 +13301,7 @@ pub(super) fn OBJ_6A705(r: &mut Run) {
 }
 
 // OBJ_6A75D: firmware/lower/69142-misc-66000.s:1395
-pub(super) fn OBJ_6A75D(r: &mut Run) {
+pub(crate) fn OBJ_6A75D(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -13318,7 +13318,7 @@ pub(super) fn OBJ_6A75D(r: &mut Run) {
 }
 
 // OBJ_6A769: firmware/lower/69142-misc-66000.s:1401
-pub(super) fn OBJ_6A769(r: &mut Run) {
+pub(crate) fn OBJ_6A769(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -13377,7 +13377,7 @@ pub(super) fn OBJ_6A769(r: &mut Run) {
 }
 
 // OBJ_6B381: firmware/lower/69142-misc-66000.s:2145
-pub(super) fn OBJ_6B381(r: &mut Run) {
+pub(crate) fn OBJ_6B381(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -13399,7 +13399,7 @@ pub(super) fn OBJ_6B381(r: &mut Run) {
 }
 
 // OBJ_6B39F: firmware/lower/69142-misc-66000.s:2154
-pub(super) fn OBJ_6B39F(r: &mut Run) {
+pub(crate) fn OBJ_6B39F(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -13458,7 +13458,7 @@ pub(super) fn OBJ_6B39F(r: &mut Run) {
 }
 
 // OBJ_6CC10: firmware/lower/6C186-misc-66000.s:674
-pub(super) fn OBJ_6CC10(r: &mut Run) {
+pub(crate) fn OBJ_6CC10(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -13475,7 +13475,7 @@ pub(super) fn OBJ_6CC10(r: &mut Run) {
 }
 
 // OBJ_6CC21: firmware/lower/6C186-misc-66000.s:681
-pub(super) fn OBJ_6CC21(r: &mut Run) {
+pub(crate) fn OBJ_6CC21(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -13492,7 +13492,7 @@ pub(super) fn OBJ_6CC21(r: &mut Run) {
 }
 
 // OBJ_6CC32: firmware/lower/6C186-misc-66000.s:687
-pub(super) fn OBJ_6CC32(r: &mut Run) {
+pub(crate) fn OBJ_6CC32(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -13509,7 +13509,7 @@ pub(super) fn OBJ_6CC32(r: &mut Run) {
 }
 
 // OBJ_6DD6E: firmware/lower/6C186-misc-66000.s:1748
-pub(super) fn OBJ_6DD6E(r: &mut Run) {
+pub(crate) fn OBJ_6DD6E(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -13548,7 +13548,7 @@ pub(super) fn OBJ_6DD6E(r: &mut Run) {
 }
 
 // SUB_6DDA6: firmware/lower/6C186-misc-66000.s:1765
-pub(super) fn SUB_6DDA6(r: &mut Run) {
+pub(crate) fn SUB_6DDA6(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -13565,7 +13565,7 @@ pub(super) fn SUB_6DDA6(r: &mut Run) {
 }
 
 // SUB_6DDAB: firmware/lower/6C186-misc-66000.s:1770
-pub(super) fn SUB_6DDAB(r: &mut Run) {
+pub(crate) fn SUB_6DDAB(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -13603,7 +13603,7 @@ pub(super) fn SUB_6DDAB(r: &mut Run) {
 }
 
 // OBJ_6DDD3: firmware/lower/6C186-misc-66000.s:1783
-pub(super) fn OBJ_6DDD3(r: &mut Run) {
+pub(crate) fn OBJ_6DDD3(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -13706,7 +13706,7 @@ pub(super) fn OBJ_6DDD3(r: &mut Run) {
 }
 
 // SUB_6DE70: firmware/lower/6C186-misc-66000.s:1833
-pub(super) fn SUB_6DE70(r: &mut Run) {
+pub(crate) fn SUB_6DE70(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -13724,7 +13724,7 @@ pub(super) fn SUB_6DE70(r: &mut Run) {
 }
 
 // SUB_6DE76: firmware/lower/6C186-misc-66000.s:1838
-pub(super) fn SUB_6DE76(r: &mut Run) {
+pub(crate) fn SUB_6DE76(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -13745,7 +13745,7 @@ pub(super) fn SUB_6DE76(r: &mut Run) {
 }
 
 // OBJ_6DF1D: firmware/lower/6C186-misc-66000.s:1881
-pub(super) fn OBJ_6DF1D(r: &mut Run) {
+pub(crate) fn OBJ_6DF1D(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -13838,7 +13838,7 @@ pub(super) fn OBJ_6DF1D(r: &mut Run) {
 }
 
 // SUB_6DFC9: firmware/lower/6C186-misc-66000.s:1932
-pub(super) fn SUB_6DFC9(r: &mut Run) {
+pub(crate) fn SUB_6DFC9(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -13862,7 +13862,7 @@ pub(super) fn SUB_6DFC9(r: &mut Run) {
 }
 
 // OBJ_6DFDE: firmware/lower/6C186-misc-66000.s:1942
-pub(super) fn OBJ_6DFDE(r: &mut Run) {
+pub(crate) fn OBJ_6DFDE(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -13896,7 +13896,7 @@ pub(super) fn OBJ_6DFDE(r: &mut Run) {
 }
 
 // OBJ_6DFFD: firmware/lower/6C186-misc-66000.s:1956
-pub(super) fn OBJ_6DFFD(r: &mut Run) {
+pub(crate) fn OBJ_6DFFD(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -13914,7 +13914,7 @@ pub(super) fn OBJ_6DFFD(r: &mut Run) {
 }
 
 // OBJ_6E00B: firmware/lower/6C186-misc-66000.s:1963
-pub(super) fn OBJ_6E00B(r: &mut Run) {
+pub(crate) fn OBJ_6E00B(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -13945,7 +13945,7 @@ pub(super) fn OBJ_6E00B(r: &mut Run) {
 }
 
 // OBJ_6E026: firmware/lower/6C186-misc-66000.s:1975
-pub(super) fn OBJ_6E026(r: &mut Run) {
+pub(crate) fn OBJ_6E026(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -13976,7 +13976,7 @@ pub(super) fn OBJ_6E026(r: &mut Run) {
 }
 
 // OBJ_6E057: firmware/lower/6C186-misc-66000.s:1991
-pub(super) fn OBJ_6E057(r: &mut Run) {
+pub(crate) fn OBJ_6E057(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -14022,7 +14022,7 @@ pub(super) fn OBJ_6E057(r: &mut Run) {
 }
 
 // SUB_6E08F: firmware/lower/6C186-misc-66000.s:2011
-pub(super) fn SUB_6E08F(r: &mut Run) {
+pub(crate) fn SUB_6E08F(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -14042,7 +14042,7 @@ pub(super) fn SUB_6E08F(r: &mut Run) {
 }
 
 // OBJ_6E0A1: firmware/lower/6C186-misc-66000.s:2019
-pub(super) fn OBJ_6E0A1(r: &mut Run) {
+pub(crate) fn OBJ_6E0A1(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -14073,7 +14073,7 @@ pub(super) fn OBJ_6E0A1(r: &mut Run) {
 }
 
 // OBJ_6E0C0: firmware/lower/6C186-misc-66000.s:2031
-pub(super) fn OBJ_6E0C0(r: &mut Run) {
+pub(crate) fn OBJ_6E0C0(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -14098,7 +14098,7 @@ pub(super) fn OBJ_6E0C0(r: &mut Run) {
 }
 
 // OBJ_6E0D2: firmware/lower/6C186-misc-66000.s:2039
-pub(super) fn OBJ_6E0D2(r: &mut Run) {
+pub(crate) fn OBJ_6E0D2(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -14123,7 +14123,7 @@ pub(super) fn OBJ_6E0D2(r: &mut Run) {
 }
 
 // Unlabelled code at #6E0E9.
-pub(super) fn code_6E0E9(r: &mut Run) {
+pub(crate) fn code_6E0E9(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -14154,7 +14154,7 @@ pub(super) fn code_6E0E9(r: &mut Run) {
 }
 
 // OBJ_6F0B8: firmware/lower/6C186-misc-66000.s:2968
-pub(super) fn OBJ_6F0B8(r: &mut Run) {
+pub(crate) fn OBJ_6F0B8(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -14195,7 +14195,7 @@ pub(super) fn OBJ_6F0B8(r: &mut Run) {
 }
 
 // OBJ_6FD85: firmware/lower/6F360-misc-66000.s:601
-pub(super) fn OBJ_6FD85(r: &mut Run) {
+pub(crate) fn OBJ_6FD85(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -14234,7 +14234,7 @@ pub(super) fn OBJ_6FD85(r: &mut Run) {
 }
 
 // OBJ_6FDB6: firmware/lower/6F360-misc-66000.s:620
-pub(super) fn OBJ_6FDB6(r: &mut Run) {
+pub(crate) fn OBJ_6FDB6(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -14251,7 +14251,7 @@ pub(super) fn OBJ_6FDB6(r: &mut Run) {
 }
 
 // OBJ_6FDC6: firmware/lower/6F360-misc-66000.s:626
-pub(super) fn OBJ_6FDC6(r: &mut Run) {
+pub(crate) fn OBJ_6FDC6(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -14268,7 +14268,7 @@ pub(super) fn OBJ_6FDC6(r: &mut Run) {
 }
 
 // OBJ_6FDD6: firmware/lower/6F360-misc-66000.s:632
-pub(super) fn OBJ_6FDD6(r: &mut Run) {
+pub(crate) fn OBJ_6FDD6(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -14285,7 +14285,7 @@ pub(super) fn OBJ_6FDD6(r: &mut Run) {
 }
 
 // OBJ_6FDE2: firmware/lower/6F360-misc-66000.s:638
-pub(super) fn OBJ_6FDE2(r: &mut Run) {
+pub(crate) fn OBJ_6FDE2(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -14370,7 +14370,7 @@ pub(super) fn OBJ_6FDE2(r: &mut Run) {
 }
 
 // L_6FF81: firmware/lower/6F360-misc-66000.s:754
-pub(super) fn L_6FF81(r: &mut Run) {
+pub(crate) fn L_6FF81(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -14419,467 +14419,467 @@ pub(super) fn L_6FF81(r: &mut Run) {
     }
 }
 
-pub const ROUTINES: &[(u32, u32, Block)] = &[
-    (0x601BB, 0x60235, OBJ_601B6),
-    (0x60236, 0x60253, SUB_60236),
-    (0x602C2, 0x603BE, OBJ_602BD),
-    (0x603BF, 0x603C8, SUB_603BF),
-    (0x60EC2, 0x60EE6, RSWAP),
-    (0x60EEC, 0x60F0D, ROTSWAP),
-    (0x60F13, 0x60F20, ROTDROPSWAP),
-    (0x60F26, 0x60F32, ROTDROP),
-    (0x60F38, 0x60F4A, SWAPROT),
-    (0x60F50, 0x60F53, r3DROP),
-    (0x60F59, 0x60F65, r7DROP),
-    (0x60F6B, 0x60F71, r6DROP),
-    (0x60F77, 0x60F7D, r5DROP),
-    (0x60F83, 0x60F9A, r4DROP),
-    (0x60FA0, 0x60FAB, SWAPDROP),
-    (0x60FB1, 0x60FBA, r3UNROLL),
-    (0x60FC0, 0x60FD7, r4ROLL),
-    (0x60FDD, 0x61001, r5ROLL),
-    (0x61007, 0x6103B, r6ROLL),
-    (0x61041, 0x6106A, r8ROLL),
-    (0x61070, 0x61098, r7ROLL),
-    (0x610A3, 0x610C3, r4UNROLL),
-    (0x610C9, 0x610F9, r5UNROLL),
-    (0x610FF, 0x61129, r6UNROLL),
-    (0x6112F, 0x6113B, ROTROT2DROP),
-    (0x61141, 0x6114D, r4UNROLL3DROP),
-    (0x61153, 0x6115F, r2RDROP),
-    (0x61165, 0x61171, r3RDROP),
-    (0x61177, 0x61183, __PICK),
-    (0x61189, 0x6119D, __PICK_61189),
-    (0x611A8, 0x611AF, _1_PICK),
-    (0x611B0, 0x611BD, SUB_611B0),
-    (0x611C3, 0x611D1, _2_PICK),
-    (0x611D7, 0x611E0, _3_PICK),
-    (0x611E6, 0x611F8, _4_PICK),
-    (0x61203, 0x6121B, r3PICK),
-    (0x61221, 0x61239, r4PICK),
-    (0x6123F, 0x6125D, r5PICK),
-    (0x61263, 0x61281, r6PICK),
-    (0x61287, 0x612A8, r7PICK),
-    (0x612AE, 0x612CB, r8PICK),
-    (0x612D1, 0x612DD, __ROLL),
-    (0x612E3, 0x612F2, __ROLL_612E3),
-    (0x612F8, 0x61304, _1_ROLL),
-    (0x6130A, 0x61317, get1),
-    (0x6131D, 0x6132B, _2_ROLL),
-    (0x61331, 0x6133D, __UNROLL),
-    (0x61343, 0x61352, __UNROLL_61343),
-    (0x61358, 0x61364, _1_UNROLL),
-    (0x6136A, 0x6137F, _2_UNROLL),
-    (0x61385, 0x613A7, DUPUNROT),
-    (0x613A8, 0x613B5, SUB_613A8),
-    (0x613BB, 0x613E6, r1GETLAM),
-    (0x613EC, 0x6140D, r2GETLAM),
-    (0x61413, 0x61437, r3GETLAM),
-    (0x6143D, 0x6145B, r4GETLAM),
-    (0x61461, 0x6146B, r5GETLAM),
-    (0x61471, 0x6147B, r6GETLAM),
-    (0x61481, 0x6148B, r7GETLAM),
-    (0x61491, 0x6149B, r8GETLAM),
-    (0x614A1, 0x614AB, r9GETLAM),
-    (0x614B1, 0x614BB, r10GETLAM),
-    (0x614C1, 0x614CB, r11GETLAM),
-    (0x614D1, 0x614DB, r12GETLAM),
-    (0x614E1, 0x614EB, r13GETLAM),
-    (0x614F1, 0x614FB, r14GETLAM),
-    (0x61501, 0x6150B, r15GETLAM),
-    (0x61511, 0x6151B, r16GETLAM),
-    (0x61521, 0x6152B, r17GETLAM),
-    (0x61531, 0x6153B, r18GETLAM),
-    (0x61541, 0x6154B, r19GETLAM),
-    (0x61551, 0x6155B, r20GETLAM),
-    (0x61561, 0x6156B, r21GETLAM),
-    (0x61571, 0x615DF, r22Lget),
-    (0x615E5, 0x615EF, r1PUTLAM),
-    (0x615F5, 0x615FF, r2PUTLAM),
-    (0x61605, 0x6160F, r3PUTLAM),
-    (0x6161A, 0x61624, r4PUTLAM),
-    (0x6162A, 0x61634, r5PUTLAM),
-    (0x6163A, 0x61644, r6PUTLAM),
-    (0x6164A, 0x61654, r7PUTLAM),
-    (0x6165A, 0x61664, r8PUTLAM),
-    (0x6166A, 0x61674, r9PUTLAM),
-    (0x6167A, 0x61684, r10PUTLAM),
-    (0x6168A, 0x61694, r11PUTLAM),
-    (0x6169A, 0x616A4, r12PUTLAM),
-    (0x616AA, 0x616B4, r13PUTLAM),
-    (0x616BA, 0x616C4, r14PUTLAM),
-    (0x616CA, 0x616D4, r15PUTLAM),
-    (0x616DA, 0x616E4, r16PUTLAM),
-    (0x616EA, 0x616F4, r17PUTLAM),
-    (0x616FA, 0x61704, r18PUTLAM),
-    (0x6170A, 0x61714, r19PUTLAM),
-    (0x6171A, 0x61724, r20PUTLAM),
-    (0x6172A, 0x61734, r21PUTLAM),
-    (0x6173A, 0x61744, r22PUTLAM),
-    (0x6174A, 0x617D7, DUPTEMPENV),
-    (0x617DD, 0x6186B, GETLAMPAIR),
-    (0x61871, 0x6187B, __case),
-    (0x61881, 0x61890, OVER__case),
-    (0x6189B, 0x618A7, _0_case),
-    (0x618AD, 0x618B9, DUP_0_csedrp),
-    (0x618BF, 0x618D2, EQcasedrop),
-    (0x618D8, 0x618E7, __casedrop),
-    (0x618ED, 0x618F6, NOTcasedrop),
-    (0x618FC, 0x6190F, casedrop),
-    (0x61915, 0x6191E, NOTcase2drop),
-    (0x61924, 0x61932, case2drop),
-    (0x61938, 0x6194A, EQcase),
-    (0x61950, 0x6195F, caseDROP),
-    (0x61965, 0x6196F, NOTcaseDROP),
-    (0x61975, 0x61983, case2DROP),
-    (0x61989, 0x61992, NOTcase2DROP),
-    (0x61998, 0x619AC, case),
-    (0x619B2, 0x619BB, NOTcase),
-    (0x619C1, 0x619CA, IT),
-    (0x619D0, 0x619DF, GOTO),
-    (0x619E5, 0x619F2, _GOTO),
-    (0x619F8, 0x61A01, NOT_GOTO),
-    (0x61A02, 0x61A17, popflag),
-    (0x61A1D, 0x61A2B, _0__SEMI),
-    (0x61A31, 0x61A3A, NOT_SEMI),
-    (0x61A40, 0x61A46, _SEMI),
-    (0x61A47, 0x61A57, SEMILOOP),
-    (0x61A5D, 0x61A6C, ITE_DROP),
-    (0x61A72, 0x61A8D, COLA_EVAL),
-    (0x61A93, 0x61AD7, COLARPITE),
-    (0x61ADD, 0x61AE8, ITE),
-    (0x61AEE, 0x61B44, r2_RCOLARPITE),
-    (0x61B4A, 0x61B54, r2_REVAL),
-    (0x61B5A, 0x61B71, r3_REVAL),
-    (0x61B77, 0x61B88, NOT_DROP),
-    (0x61B8E, 0x61C1B, ticR),
-    (0x61C21, 0x61CE8, EXPAND),
-    (0x61CEE, 0x61D39, CACHE),
-    (0x61D46, 0x61D85, SAVESTACK),
-    (0x61D86, 0x61EA6, SUB_61D86),
-    (0x61EAC, 0x61F8E, DUMP),
-    (0x61F94, 0x61FA8, OBJ_61F8F),
-    (0x61FAE, 0x61FB5, DUPROM_WORD_),
-    (0x61FBB, 0x61FCE, ROM_WORD_),
-    (0x61FCF, 0x62000, Rom_Word_),
-    (0x62006, 0x6201F, r2SWAP),
-    (0x6202A, 0x62034, TYPECHAR_),
-    (0x6203F, 0x62049, TYPEIDNT_),
-    (0x62054, 0x62072, TYPEEXT_),
-    (0x62073, 0x62075, GPOverWrT_FL),
-    (0x62076, 0x6207C, GPOverWrTLp),
-    (0x6207D, 0x6207F, OverWrF_TLp),
-    (0x62080, 0x62095, OverWrTLoop),
-    (0x62096, 0x6209C, GPOverWrFLp),
-    (0x6209D, 0x6209F, OverWrT_FLp),
-    (0x620A0, 0x620B5, OverWrFLoop),
-    (0x620B6, 0x620B8, GPPushT_FLp),
-    (0x620B9, 0x620BF, GPPushTLoop),
-    (0x620C0, 0x620C2, PushF_TLoop),
-    (0x620C3, 0x620D1, PushTLoop),
-    (0x620D2, 0x620D8, GPPushFLoop),
-    (0x620D9, 0x620DB, PushT_FLoop),
-    (0x620DC, 0x620EA, PushFLoop),
-    (0x620F0, 0x62102, OVER__),
-    (0x62108, 0x6210B, DROPTRUE),
-    (0x62111, 0x62114, DROPFALSE),
-    (0x6211F, 0x62129, TYPELAM_),
-    (0x62134, 0x6213E, TYPEBINT_),
-    (0x62149, 0x62153, TYPEHSTR_),
-    (0x6215E, 0x62168, TYPECSTR_),
-    (0x62173, 0x6217D, TYPEREAL_),
-    (0x62188, 0x62192, TYPECMP_),
-    (0x6219D, 0x621A7, TYPEARRAY_),
-    (0x621B2, 0x621BC, TYPEROMP_),
-    (0x621C7, 0x621D1, TYPERRP_),
-    (0x621DC, 0x621E6, TYPESYMB_),
-    (0x621F1, 0x621FB, TYPECOL_),
-    (0x62206, 0x62210, TYPEGROB_),
-    (0x6221B, 0x62225, TYPELIST_),
-    (0x62230, 0x6223A, TYPETAGGED_),
-    (0x62240, 0x62255, TYPERARRY_),
-    (0x6225B, 0x62265, TYPECARRY_),
-    (0x6226B, 0x62277, DUP_0_),
-    (0x62278, 0x62288, SUB_62278),
-    (0x6228E, 0x62299, _3_),
-    (0x6229F, 0x622A6, _2__6229F),
-    (0x622AC, 0x622B5, _1__622AC),
-    (0x622BB, 0x622C4, _1__),
-    (0x622CA, 0x622D3, DUP_1_),
-    (0x622D9, 0x622E4, DUP_0__),
-    (0x62399, 0x6239F, __insert_),
-    (0x623A5, 0x62473, __append_),
-    (0x62479, 0x6249D, _RSAVEWORD),
-    (0x6249E, 0x624A4, SUB_6249E),
-    (0x624A5, 0x624AB, SUB_624A5),
-    (0x624AC, 0x624B2, SUB_624AC),
-    (0x624B3, 0x624B9, SUB_624B3),
-    (0x624BF, 0x624C5, _MIN),
-    (0x624CB, 0x624FA, _MAX),
-    (0x62500, 0x6250A, ___2_),
-    (0x6250B, 0x62534, SUB_6250B),
-    (0x6253A, 0x6254D, DROPZERO),
-    (0x62553, 0x62569, r2DROP00),
-    (0x6256F, 0x62579, _3__6256F),
-    (0x6257F, 0x62589, _4_),
-    (0x6258F, 0x62599, _5_),
-    (0x6259F, 0x625A9, _6_),
-    (0x625AF, 0x625B9, _7_),
-    (0x625BF, 0x625C9, _8_),
-    (0x625CF, 0x625D9, _9_),
-    (0x625DF, 0x625E9, _10_),
-    (0x625EF, 0x625F9, _12_),
-    (0x625FF, 0x62609, _3__625FF),
-    (0x6260F, 0x62619, _4__6260F),
-    (0x6261F, 0x62629, _5__6261F),
-    (0x6262F, 0x6264D, _6__6262F),
-    (0x62653, 0x62673, _10__62653),
-    (0x62679, 0x62690, _8__62679),
-    (0x62696, 0x626AD, _6__62696),
-    (0x626B3, 0x626DB, r5skipcola),
-    (0x626E1, 0x626E4, r3skipcola),
-    (0x626EA, 0x626ED, r2skipcola),
-    (0x626F3, 0x626F6, skipcola),
-    (0x626FC, 0x6270B, DUP_2_),
-    (0x62711, 0x62725, DROPSWAP),
-    (0x6272B, 0x62746, DROPSWAPDROP),
-    (0x6274C, 0x62774, SWAPDUP),
-    (0x6277A, 0x62793, ROTDUP),
-    (0x62799, 0x627A6, SWAP__),
-    (0x627AC, 0x627BA, DROPDUP),
-    (0x627C0, 0x627D4, DUPLEN_),
-    (0x627DA, 0x627EA, __DUP),
-    (0x627EB, 0x627F7, Push2_aLoop),
-    (0x627FD, 0x62808, __DUP_627FD),
-    (0x6280E, 0x62819, _1_DUP),
-    (0x6281F, 0x62828, _1_DUP_6281F),
-    (0x62829, 0x6282F, SUB_62829),
-    (0x62835, 0x6284A, SWAPDROPDUP),
-    (0x62850, 0x62863, SWAPDROPSWAP),
-    (0x62869, 0x6287F, r4ROLLDROP),
-    (0x62885, 0x6289A, r5ROLLDROP),
-    (0x628A0, 0x628B4, r2DUP__),
-    (0x628BA, 0x628D0, r2DUP___628BA),
-    (0x628D6, 0x628EA, r2DUP___628D6),
-    (0x628F0, 0x62903, DUP_1__628F0),
-    (0x62909, 0x6292E, SWAP_1_),
-    (0x62934, 0x62945, DUP_1__62934),
-    (0x6294B, 0x62957, DROPONE),
-    (0x6295D, 0x6296C, RDROPCOLA),
-    (0x62972, 0x62985, COLACOLA),
-    (0x6298B, 0x629A0, COLAcase),
-    (0x629A6, 0x629BB, COLANOTcase),
-    (0x637D1, 0x637DF, _1___637D1),
-    (0x6380D, 0x6381B, _1___6380D),
-    (0x6384E, 0x6385C, D0_DSKTOP),
-    (0x6385D, 0x6386B, D1_DSKTOP),
-    (0x6412C, 0x6416C, Embedded_),
-    (0x641CC, 0x641FB, DupAndThen),
-    (0x64201, 0x64208, ZEROZERO),
-    (0x6420E, 0x64235, _ZERO_ONE),
-    (0x64236, 0x64279, SUB_64236),
-    (0x6427F, 0x64289, _ZERO_SEVEN),
-    (0x6428F, 0x6429C, _ONE_27),
-    (0x642A2, 0x642AE, _TWO_ONE),
-    (0x642B4, 0x642BE, _TWO_TWO),
-    (0x642C4, 0x642D0, _TWO_FOUR),
-    (0x642D6, 0x642E2, _THREE_FOUR),
-    (0x642FC, 0x64308, code_642FC),
-    (0x645B6, 0x645BC, POS_),
-    (0x645C2, 0x64726, POS_REV),
-    (0x64727, 0x6475B, SUB_64727),
-    (0x64810, 0x648BC, NEXTCOMPOB),
-    (0x648BD, 0x648C9, _LASTRAM_WORD),
-    (0x648F9, 0x64ADB, code_648F9),
-    (0x64ADC, 0x64B0C, SUB_64ADC),
-    (0x657B9, 0x657DE, SUB_657B9),
-    (0x657DF, 0x65806, SUB_657DF),
-    (0x65807, 0x65841, SUB_65807),
-    (0x65842, 0x65862, SUB_65842),
-    (0x65863, 0x6594C, SUB_65863),
-    (0x65953, 0x65959, putnibs),
-    (0x6595F, 0x659DD, getnibs),
-    (0x65A2E, 0x65A37, OBJ_65A29),
-    (0x6670F, 0x66819, OBJ_6670A),
-    (0x668A1, 0x66932, OBJ_6689C),
-    (0x66A0F, 0x66B18, OBJ_66A0A),
-    (0x66B1E, 0x66BAC, OBJ_66B19),
-    (0x66BB2, 0x66BC0, OBJ_66BAD),
-    (0x66BC6, 0x66C2B, OBJ_66BC1),
-    (0x6700F, 0x67030, Code_67005),
-    (0x67036, 0x670ED, SUB_67036),
-    (0x670F3, 0x67128, OBJ_670EE),
-    (0x67129, 0x67135, SUB_67129),
-    (0x67136, 0x67155, SUB_67136),
-    (0x67156, 0x6715C, SUB_67156),
-    (0x67162, 0x67192, OBJ_6715D),
-    (0x67198, 0x671AF, OBJ_67193),
-    (0x671B5, 0x671BE, OBJ_671B0),
-    (0x671C4, 0x672C3, OBJ_671BF),
-    (0x672C4, 0x672D1, SUB_672C4),
-    (0x672D2, 0x672DB, SUB_672D2),
-    (0x672EB, 0x6730E, OBJ_672E6),
-    (0x67340, 0x67347, OBJ_6733B),
-    (0x6734D, 0x67355, OBJ_67348),
-    (0x6735B, 0x67363, OBJ_67356),
-    (0x67369, 0x67370, OBJ_67364),
-    (0x67376, 0x67380, OBJ_67371),
-    (0x67386, 0x673A1, OBJ_67381),
-    (0x673A7, 0x673BA, OBJ_673A2),
-    (0x673C0, 0x673D5, OBJ_673BB),
-    (0x673DB, 0x673E5, OBJ_673D6),
-    (0x673EB, 0x673F5, OBJ_673E6),
-    (0x673FB, 0x67405, OBJ_673F6),
-    (0x6740B, 0x67415, OBJ_67406),
-    (0x6741B, 0x67425, OBJ_67416),
-    (0x6742B, 0x67442, OBJ_67426),
-    (0x6744D, 0x67457, OBJ_67448),
-    (0x6745D, 0x6746A, OBJ_67458),
-    (0x67470, 0x6747A, OBJ_6746B),
-    (0x67480, 0x6748A, OBJ_6747B),
-    (0x67490, 0x6749A, OBJ_6748B),
-    (0x674A0, 0x674AA, OBJ_6749B),
-    (0x674B0, 0x674BA, OBJ_674AB),
-    (0x674C0, 0x674D5, OBJ_674BB),
-    (0x674DB, 0x674E9, OBJ_674D6),
-    (0x674EA, 0x67518, SUB_674EA),
-    (0x6751E, 0x67531, OBJ_67519),
-    (0x6755F, 0x675BD, OBJ_6755A),
-    (0x675BE, 0x675E3, SUB_675BE),
-    (0x6764D, 0x67664, OBJ_67648),
-    (0x6766A, 0x67681, OBJ_67665),
-    (0x67687, 0x676C4, OBJ_67682),
-    (0x676C5, 0x676CE, SUB_676C5),
-    (0x6776A, 0x67799, OBJ_67765),
-    (0x6779F, 0x677C2, OBJ_6779A),
-    (0x677C8, 0x677DD, OBJ_677C3),
-    (0x677E3, 0x677E9, OBJ_677DE),
-    (0x677EF, 0x67877, OBJ_677EA),
-    (0x6787D, 0x678D5, OBJ_67878),
-    (0x678E0, 0x67917, OBJ_678DB),
-    (0x67908, 0x67910, overlap_67908),
-    (0x67918, 0x67968, SUB_67918),
-    (0x67991, 0x6799B, OBJ_6798C),
-    (0x679A6, 0x679AD, OBJ_679A1),
-    (0x679B8, 0x679BF, OBJ_679B3),
-    (0x679CA, 0x679D1, OBJ_679C5),
-    (0x679DC, 0x679E9, OBJ_679D7),
-    (0x679EF, 0x67A1D, OBJ_679EA),
-    (0x67A23, 0x67A3A, OBJ_67A1E),
-    (0x67A3B, 0x67A3C, SUB_67A3B),
-    (0x67A3D, 0x67A49, SUB_67A3D),
-    (0x67A4A, 0x67A50, SUB_67A4A),
-    (0x67A51, 0x67A7D, SUB_67A51),
-    (0x67A83, 0x67A8A, OBJ_67A7E),
-    (0x67A90, 0x67A97, OBJ_67A8B),
-    (0x67AA2, 0x67AA9, OBJ_67A9D),
-    (0x67AB4, 0x67ABB, OBJ_67AAF),
-    (0x67ADA, 0x67AE1, OBJ_67AD5),
-    (0x67AE7, 0x67AEE, OBJ_67AE2),
-    (0x67B1C, 0x67B66, OBJ_67B17),
-    (0x67B6C, 0x67BA0, OBJ_67B67),
-    (0x67BA6, 0x67BAD, OBJ_67BA1),
-    (0x67BB3, 0x67BBA, OBJ_67BAE),
-    (0x67BC0, 0x67BC7, OBJ_67BBB),
-    (0x67BCD, 0x67BD4, OBJ_67BC8),
-    (0x67BDA, 0x67BE1, OBJ_67BD5),
-    (0x67BE7, 0x67BEE, OBJ_67BE2),
-    (0x67BF4, 0x67BFB, OBJ_67BEF),
-    (0x67C01, 0x67C08, OBJ_67BFC),
-    (0x67C0E, 0x67C15, OBJ_67C09),
-    (0x67C1B, 0x67C22, OBJ_67C16),
-    (0x67C41, 0x67C52, OBJ_67C3C),
-    (0x67C53, 0x67C6B, SUB_67C53),
-    (0x67C8A, 0x67CA1, OBJ_67C85),
-    (0x67CA7, 0x67CBD, OBJ_67CA2),
-    (0x67CC3, 0x67D0E, OBJ_67CBE),
-    (0x67D14, 0x67D1A, OBJ_67D0F),
-    (0x67D20, 0x67DCE, OBJ_67D1B),
-    (0x67DD4, 0x67DDE, OBJ_67DCF),
-    (0x67DE4, 0x67DEB, OBJ_67DDF),
-    (0x67DF1, 0x67DFB, OBJ_67DEC),
-    (0x67E01, 0x67E0B, OBJ_67DFC),
-    (0x67E11, 0x67E33, OBJ_67E0C),
-    (0x67E3E, 0x67E44, OBJ_67E39),
-    (0x67E4A, 0x67E53, OBJ_67E45),
-    (0x67E59, 0x67E63, OBJ_67E54),
-    (0x67E69, 0x67E76, OBJ_67E64),
-    (0x67E77, 0x67E7A, SUB_67E77),
-    (0x67E7B, 0x67E9D, SUB_67E7B),
-    (0x67E9E, 0x67EB3, SUB_67E9E),
-    (0x67EB4, 0x67EB7, SUB_67EB4),
-    (0x67EB8, 0x67F0A, SUB_67EB8),
-    (0x67F10, 0x67F23, OBJ_67F0B),
-    (0x67F24, 0x67F30, SUB_67F24),
-    (0x67F36, 0x67F44, OBJ_67F31),
-    (0x67F4A, 0x67FEC, OBJ_67F45),
-    (0x67FF2, 0x67FF9, OBJ_67FED),
-    (0x68001, 0x68016, L_68001),
-    (0x6801C, 0x680B3, OBJ_68017),
-    (0x680B4, 0x680FA, drop_false_true_680B4),
-    (0x680FB, 0x6812B, SUB_680FB),
-    (0x68131, 0x68182, OBJ_6812C),
-    (0x68188, 0x6819C, OBJ_68183),
-    (0x681A2, 0x681B0, OBJ_6819D),
-    (0x681B6, 0x681D7, OBJ_681B1),
-    (0x681DD, 0x681E7, OBJ_681D8),
-    (0x681ED, 0x6821B, OBJ_681E8),
-    (0x68221, 0x6822B, OBJ_6821C),
-    (0x6827C, 0x68282, OBJ_68277),
-    (0x682AB, 0x682D1, OBJ_682A6),
-    (0x682D7, 0x682DD, OBJ_682D2),
-    (0x682E3, 0x682F6, OBJ_682DE),
-    (0x682F7, 0x68328, SUB_682F7),
-    (0x68329, 0x683BA, SUB_68329),
-    (0x683BB, 0x683D1, SUB_683BB),
-    (0x683D2, 0x683D8, SUB_683D2),
-    (0x683D9, 0x683F7, SUB_683D9),
-    (0x68457, 0x6845E, OBJ_68452),
-    (0x6845F, 0x684D3, SUB_6845F),
-    (0x684D9, 0x684FF, OBJ_684D4),
-    (0x6855A, 0x68572, code_6855A),
-    (0x68573, 0x68592, SUB_68573),
-    (0x68598, 0x685B1, OBJ_68593),
-    (0x685B7, 0x685DC, OBJ_685B2),
-    (0x685E2, 0x68609, OBJ_685DD),
-    (0x6860F, 0x6866F, OBJ_6860A),
-    (0x68670, 0x68679, SUB_68670),
-    (0x69652, 0x69658, OBJ_6964D),
-    (0x6965E, 0x6979C, OBJ_69659),
-    (0x6A668, 0x6A6BF, OBJ_6A663),
-    (0x6A6C0, 0x6A6D3, SUB_6A6C0),
-    (0x6A6D4, 0x6A704, SUB_6A6D4),
-    (0x6A70A, 0x6A75C, OBJ_6A705),
-    (0x6A762, 0x6A768, OBJ_6A75D),
-    (0x6A76E, 0x6A7BF, OBJ_6A769),
-    (0x6B386, 0x6B39E, OBJ_6B381),
-    (0x6B3A4, 0x6B3F4, OBJ_6B39F),
-    (0x6CC15, 0x6CC20, OBJ_6CC10),
-    (0x6CC26, 0x6CC31, OBJ_6CC21),
-    (0x6CC37, 0x6CC42, OBJ_6CC32),
-    (0x6DD73, 0x6DDA5, OBJ_6DD6E),
-    (0x6DDA6, 0x6DDAA, SUB_6DDA6),
-    (0x6DDAB, 0x6DDD2, SUB_6DDAB),
-    (0x6DDD8, 0x6DE6F, OBJ_6DDD3),
-    (0x6DE70, 0x6DE75, SUB_6DE70),
-    (0x6DE76, 0x6DE81, SUB_6DE76),
-    (0x6DF22, 0x6DFC8, OBJ_6DF1D),
-    (0x6DFC9, 0x6DFDD, SUB_6DFC9),
-    (0x6DFE3, 0x6DFFC, OBJ_6DFDE),
-    (0x6E002, 0x6E00A, OBJ_6DFFD),
-    (0x6E010, 0x6E025, OBJ_6E00B),
-    (0x6E02B, 0x6E056, OBJ_6E026),
-    (0x6E05C, 0x6E08E, OBJ_6E057),
-    (0x6E08F, 0x6E0A0, SUB_6E08F),
-    (0x6E0A6, 0x6E0BF, OBJ_6E0A1),
-    (0x6E0C5, 0x6E0D1, OBJ_6E0C0),
-    (0x6E0D7, 0x6E0E3, OBJ_6E0D2),
-    (0x6E0E9, 0x6E108, code_6E0E9),
-    (0x6F0BD, 0x6F0FD, OBJ_6F0B8),
-    (0x6FD8A, 0x6FDB5, OBJ_6FD85),
-    (0x6FDBB, 0x6FDC5, OBJ_6FDB6),
-    (0x6FDCB, 0x6FDD5, OBJ_6FDC6),
-    (0x6FDDB, 0x6FDE1, OBJ_6FDD6),
-    (0x6FDE7, 0x6FE68, OBJ_6FDE2),
-    (0x6FF81, 0x6FFB6, L_6FF81),
+pub const ROUTINES: &[(u32, u32, Block, &str)] = &[
+    (0x601BB, 0x60235, OBJ_601B6, "OBJ_601B6"),
+    (0x60236, 0x60253, SUB_60236, "SUB_60236"),
+    (0x602C2, 0x603BE, OBJ_602BD, "OBJ_602BD"),
+    (0x603BF, 0x603C8, SUB_603BF, "SUB_603BF"),
+    (0x60EC2, 0x60EE6, RSWAP, "RSWAP"),
+    (0x60EEC, 0x60F0D, ROTSWAP, "ROTSWAP"),
+    (0x60F13, 0x60F20, ROTDROPSWAP, "ROTDROPSWAP"),
+    (0x60F26, 0x60F32, ROTDROP, "ROTDROP"),
+    (0x60F38, 0x60F4A, SWAPROT, "SWAPROT"),
+    (0x60F50, 0x60F53, r3DROP, "r3DROP"),
+    (0x60F59, 0x60F65, r7DROP, "r7DROP"),
+    (0x60F6B, 0x60F71, r6DROP, "r6DROP"),
+    (0x60F77, 0x60F7D, r5DROP, "r5DROP"),
+    (0x60F83, 0x60F9A, r4DROP, "r4DROP"),
+    (0x60FA0, 0x60FAB, SWAPDROP, "SWAPDROP"),
+    (0x60FB1, 0x60FBA, r3UNROLL, "r3UNROLL"),
+    (0x60FC0, 0x60FD7, r4ROLL, "r4ROLL"),
+    (0x60FDD, 0x61001, r5ROLL, "r5ROLL"),
+    (0x61007, 0x6103B, r6ROLL, "r6ROLL"),
+    (0x61041, 0x6106A, r8ROLL, "r8ROLL"),
+    (0x61070, 0x61098, r7ROLL, "r7ROLL"),
+    (0x610A3, 0x610C3, r4UNROLL, "r4UNROLL"),
+    (0x610C9, 0x610F9, r5UNROLL, "r5UNROLL"),
+    (0x610FF, 0x61129, r6UNROLL, "r6UNROLL"),
+    (0x6112F, 0x6113B, ROTROT2DROP, "ROTROT2DROP"),
+    (0x61141, 0x6114D, r4UNROLL3DROP, "r4UNROLL3DROP"),
+    (0x61153, 0x6115F, r2RDROP, "r2RDROP"),
+    (0x61165, 0x61171, r3RDROP, "r3RDROP"),
+    (0x61177, 0x61183, __PICK, "__PICK"),
+    (0x61189, 0x6119D, __PICK_61189, "__PICK_61189"),
+    (0x611A8, 0x611AF, _1_PICK, "_1_PICK"),
+    (0x611B0, 0x611BD, SUB_611B0, "SUB_611B0"),
+    (0x611C3, 0x611D1, _2_PICK, "_2_PICK"),
+    (0x611D7, 0x611E0, _3_PICK, "_3_PICK"),
+    (0x611E6, 0x611F8, _4_PICK, "_4_PICK"),
+    (0x61203, 0x6121B, r3PICK, "r3PICK"),
+    (0x61221, 0x61239, r4PICK, "r4PICK"),
+    (0x6123F, 0x6125D, r5PICK, "r5PICK"),
+    (0x61263, 0x61281, r6PICK, "r6PICK"),
+    (0x61287, 0x612A8, r7PICK, "r7PICK"),
+    (0x612AE, 0x612CB, r8PICK, "r8PICK"),
+    (0x612D1, 0x612DD, __ROLL, "__ROLL"),
+    (0x612E3, 0x612F2, __ROLL_612E3, "__ROLL_612E3"),
+    (0x612F8, 0x61304, _1_ROLL, "_1_ROLL"),
+    (0x6130A, 0x61317, get1, "get1"),
+    (0x6131D, 0x6132B, _2_ROLL, "_2_ROLL"),
+    (0x61331, 0x6133D, __UNROLL, "__UNROLL"),
+    (0x61343, 0x61352, __UNROLL_61343, "__UNROLL_61343"),
+    (0x61358, 0x61364, _1_UNROLL, "_1_UNROLL"),
+    (0x6136A, 0x6137F, _2_UNROLL, "_2_UNROLL"),
+    (0x61385, 0x613A7, DUPUNROT, "DUPUNROT"),
+    (0x613A8, 0x613B5, SUB_613A8, "SUB_613A8"),
+    (0x613BB, 0x613E6, r1GETLAM, "r1GETLAM"),
+    (0x613EC, 0x6140D, r2GETLAM, "r2GETLAM"),
+    (0x61413, 0x61437, r3GETLAM, "r3GETLAM"),
+    (0x6143D, 0x6145B, r4GETLAM, "r4GETLAM"),
+    (0x61461, 0x6146B, r5GETLAM, "r5GETLAM"),
+    (0x61471, 0x6147B, r6GETLAM, "r6GETLAM"),
+    (0x61481, 0x6148B, r7GETLAM, "r7GETLAM"),
+    (0x61491, 0x6149B, r8GETLAM, "r8GETLAM"),
+    (0x614A1, 0x614AB, r9GETLAM, "r9GETLAM"),
+    (0x614B1, 0x614BB, r10GETLAM, "r10GETLAM"),
+    (0x614C1, 0x614CB, r11GETLAM, "r11GETLAM"),
+    (0x614D1, 0x614DB, r12GETLAM, "r12GETLAM"),
+    (0x614E1, 0x614EB, r13GETLAM, "r13GETLAM"),
+    (0x614F1, 0x614FB, r14GETLAM, "r14GETLAM"),
+    (0x61501, 0x6150B, r15GETLAM, "r15GETLAM"),
+    (0x61511, 0x6151B, r16GETLAM, "r16GETLAM"),
+    (0x61521, 0x6152B, r17GETLAM, "r17GETLAM"),
+    (0x61531, 0x6153B, r18GETLAM, "r18GETLAM"),
+    (0x61541, 0x6154B, r19GETLAM, "r19GETLAM"),
+    (0x61551, 0x6155B, r20GETLAM, "r20GETLAM"),
+    (0x61561, 0x6156B, r21GETLAM, "r21GETLAM"),
+    (0x61571, 0x615DF, r22Lget, "r22Lget"),
+    (0x615E5, 0x615EF, r1PUTLAM, "r1PUTLAM"),
+    (0x615F5, 0x615FF, r2PUTLAM, "r2PUTLAM"),
+    (0x61605, 0x6160F, r3PUTLAM, "r3PUTLAM"),
+    (0x6161A, 0x61624, r4PUTLAM, "r4PUTLAM"),
+    (0x6162A, 0x61634, r5PUTLAM, "r5PUTLAM"),
+    (0x6163A, 0x61644, r6PUTLAM, "r6PUTLAM"),
+    (0x6164A, 0x61654, r7PUTLAM, "r7PUTLAM"),
+    (0x6165A, 0x61664, r8PUTLAM, "r8PUTLAM"),
+    (0x6166A, 0x61674, r9PUTLAM, "r9PUTLAM"),
+    (0x6167A, 0x61684, r10PUTLAM, "r10PUTLAM"),
+    (0x6168A, 0x61694, r11PUTLAM, "r11PUTLAM"),
+    (0x6169A, 0x616A4, r12PUTLAM, "r12PUTLAM"),
+    (0x616AA, 0x616B4, r13PUTLAM, "r13PUTLAM"),
+    (0x616BA, 0x616C4, r14PUTLAM, "r14PUTLAM"),
+    (0x616CA, 0x616D4, r15PUTLAM, "r15PUTLAM"),
+    (0x616DA, 0x616E4, r16PUTLAM, "r16PUTLAM"),
+    (0x616EA, 0x616F4, r17PUTLAM, "r17PUTLAM"),
+    (0x616FA, 0x61704, r18PUTLAM, "r18PUTLAM"),
+    (0x6170A, 0x61714, r19PUTLAM, "r19PUTLAM"),
+    (0x6171A, 0x61724, r20PUTLAM, "r20PUTLAM"),
+    (0x6172A, 0x61734, r21PUTLAM, "r21PUTLAM"),
+    (0x6173A, 0x61744, r22PUTLAM, "r22PUTLAM"),
+    (0x6174A, 0x617D7, DUPTEMPENV, "DUPTEMPENV"),
+    (0x617DD, 0x6186B, GETLAMPAIR, "GETLAMPAIR"),
+    (0x61871, 0x6187B, __case, "__case"),
+    (0x61881, 0x61890, OVER__case, "OVER__case"),
+    (0x6189B, 0x618A7, _0_case, "_0_case"),
+    (0x618AD, 0x618B9, DUP_0_csedrp, "DUP_0_csedrp"),
+    (0x618BF, 0x618D2, EQcasedrop, "EQcasedrop"),
+    (0x618D8, 0x618E7, __casedrop, "__casedrop"),
+    (0x618ED, 0x618F6, NOTcasedrop, "NOTcasedrop"),
+    (0x618FC, 0x6190F, casedrop, "casedrop"),
+    (0x61915, 0x6191E, NOTcase2drop, "NOTcase2drop"),
+    (0x61924, 0x61932, case2drop, "case2drop"),
+    (0x61938, 0x6194A, EQcase, "EQcase"),
+    (0x61950, 0x6195F, caseDROP, "caseDROP"),
+    (0x61965, 0x6196F, NOTcaseDROP, "NOTcaseDROP"),
+    (0x61975, 0x61983, case2DROP, "case2DROP"),
+    (0x61989, 0x61992, NOTcase2DROP, "NOTcase2DROP"),
+    (0x61998, 0x619AC, case, "case"),
+    (0x619B2, 0x619BB, NOTcase, "NOTcase"),
+    (0x619C1, 0x619CA, IT, "IT"),
+    (0x619D0, 0x619DF, GOTO, "GOTO"),
+    (0x619E5, 0x619F2, _GOTO, "_GOTO"),
+    (0x619F8, 0x61A01, NOT_GOTO, "NOT_GOTO"),
+    (0x61A02, 0x61A17, popflag, "popflag"),
+    (0x61A1D, 0x61A2B, _0__SEMI, "_0__SEMI"),
+    (0x61A31, 0x61A3A, NOT_SEMI, "NOT_SEMI"),
+    (0x61A40, 0x61A46, _SEMI, "_SEMI"),
+    (0x61A47, 0x61A57, SEMILOOP, "SEMILOOP"),
+    (0x61A5D, 0x61A6C, ITE_DROP, "ITE_DROP"),
+    (0x61A72, 0x61A8D, COLA_EVAL, "COLA_EVAL"),
+    (0x61A93, 0x61AD7, COLARPITE, "COLARPITE"),
+    (0x61ADD, 0x61AE8, ITE, "ITE"),
+    (0x61AEE, 0x61B44, r2_RCOLARPITE, "r2_RCOLARPITE"),
+    (0x61B4A, 0x61B54, r2_REVAL, "r2_REVAL"),
+    (0x61B5A, 0x61B71, r3_REVAL, "r3_REVAL"),
+    (0x61B77, 0x61B88, NOT_DROP, "NOT_DROP"),
+    (0x61B8E, 0x61C1B, ticR, "ticR"),
+    (0x61C21, 0x61CE8, EXPAND, "EXPAND"),
+    (0x61CEE, 0x61D39, CACHE, "CACHE"),
+    (0x61D46, 0x61D85, SAVESTACK, "SAVESTACK"),
+    (0x61D86, 0x61EA6, SUB_61D86, "SUB_61D86"),
+    (0x61EAC, 0x61F8E, DUMP, "DUMP"),
+    (0x61F94, 0x61FA8, OBJ_61F8F, "OBJ_61F8F"),
+    (0x61FAE, 0x61FB5, DUPROM_WORD_, "DUPROM_WORD_"),
+    (0x61FBB, 0x61FCE, ROM_WORD_, "ROM_WORD_"),
+    (0x61FCF, 0x62000, Rom_Word_, "Rom_Word_"),
+    (0x62006, 0x6201F, r2SWAP, "r2SWAP"),
+    (0x6202A, 0x62034, TYPECHAR_, "TYPECHAR_"),
+    (0x6203F, 0x62049, TYPEIDNT_, "TYPEIDNT_"),
+    (0x62054, 0x62072, TYPEEXT_, "TYPEEXT_"),
+    (0x62073, 0x62075, GPOverWrT_FL, "GPOverWrT_FL"),
+    (0x62076, 0x6207C, GPOverWrTLp, "GPOverWrTLp"),
+    (0x6207D, 0x6207F, OverWrF_TLp, "OverWrF_TLp"),
+    (0x62080, 0x62095, OverWrTLoop, "OverWrTLoop"),
+    (0x62096, 0x6209C, GPOverWrFLp, "GPOverWrFLp"),
+    (0x6209D, 0x6209F, OverWrT_FLp, "OverWrT_FLp"),
+    (0x620A0, 0x620B5, OverWrFLoop, "OverWrFLoop"),
+    (0x620B6, 0x620B8, GPPushT_FLp, "GPPushT_FLp"),
+    (0x620B9, 0x620BF, GPPushTLoop, "GPPushTLoop"),
+    (0x620C0, 0x620C2, PushF_TLoop, "PushF_TLoop"),
+    (0x620C3, 0x620D1, PushTLoop, "PushTLoop"),
+    (0x620D2, 0x620D8, GPPushFLoop, "GPPushFLoop"),
+    (0x620D9, 0x620DB, PushT_FLoop, "PushT_FLoop"),
+    (0x620DC, 0x620EA, PushFLoop, "PushFLoop"),
+    (0x620F0, 0x62102, OVER__, "OVER__"),
+    (0x62108, 0x6210B, DROPTRUE, "DROPTRUE"),
+    (0x62111, 0x62114, DROPFALSE, "DROPFALSE"),
+    (0x6211F, 0x62129, TYPELAM_, "TYPELAM_"),
+    (0x62134, 0x6213E, TYPEBINT_, "TYPEBINT_"),
+    (0x62149, 0x62153, TYPEHSTR_, "TYPEHSTR_"),
+    (0x6215E, 0x62168, TYPECSTR_, "TYPECSTR_"),
+    (0x62173, 0x6217D, TYPEREAL_, "TYPEREAL_"),
+    (0x62188, 0x62192, TYPECMP_, "TYPECMP_"),
+    (0x6219D, 0x621A7, TYPEARRAY_, "TYPEARRAY_"),
+    (0x621B2, 0x621BC, TYPEROMP_, "TYPEROMP_"),
+    (0x621C7, 0x621D1, TYPERRP_, "TYPERRP_"),
+    (0x621DC, 0x621E6, TYPESYMB_, "TYPESYMB_"),
+    (0x621F1, 0x621FB, TYPECOL_, "TYPECOL_"),
+    (0x62206, 0x62210, TYPEGROB_, "TYPEGROB_"),
+    (0x6221B, 0x62225, TYPELIST_, "TYPELIST_"),
+    (0x62230, 0x6223A, TYPETAGGED_, "TYPETAGGED_"),
+    (0x62240, 0x62255, TYPERARRY_, "TYPERARRY_"),
+    (0x6225B, 0x62265, TYPECARRY_, "TYPECARRY_"),
+    (0x6226B, 0x62277, DUP_0_, "DUP_0_"),
+    (0x62278, 0x62288, SUB_62278, "SUB_62278"),
+    (0x6228E, 0x62299, _3_, "_3_"),
+    (0x6229F, 0x622A6, _2__6229F, "_2__6229F"),
+    (0x622AC, 0x622B5, _1__622AC, "_1__622AC"),
+    (0x622BB, 0x622C4, _1__, "_1__"),
+    (0x622CA, 0x622D3, DUP_1_, "DUP_1_"),
+    (0x622D9, 0x622E4, DUP_0__, "DUP_0__"),
+    (0x62399, 0x6239F, __insert_, "__insert_"),
+    (0x623A5, 0x62473, __append_, "__append_"),
+    (0x62479, 0x6249D, _RSAVEWORD, "_RSAVEWORD"),
+    (0x6249E, 0x624A4, SUB_6249E, "SUB_6249E"),
+    (0x624A5, 0x624AB, SUB_624A5, "SUB_624A5"),
+    (0x624AC, 0x624B2, SUB_624AC, "SUB_624AC"),
+    (0x624B3, 0x624B9, SUB_624B3, "SUB_624B3"),
+    (0x624BF, 0x624C5, _MIN, "_MIN"),
+    (0x624CB, 0x624FA, _MAX, "_MAX"),
+    (0x62500, 0x6250A, ___2_, "___2_"),
+    (0x6250B, 0x62534, SUB_6250B, "SUB_6250B"),
+    (0x6253A, 0x6254D, DROPZERO, "DROPZERO"),
+    (0x62553, 0x62569, r2DROP00, "r2DROP00"),
+    (0x6256F, 0x62579, _3__6256F, "_3__6256F"),
+    (0x6257F, 0x62589, _4_, "_4_"),
+    (0x6258F, 0x62599, _5_, "_5_"),
+    (0x6259F, 0x625A9, _6_, "_6_"),
+    (0x625AF, 0x625B9, _7_, "_7_"),
+    (0x625BF, 0x625C9, _8_, "_8_"),
+    (0x625CF, 0x625D9, _9_, "_9_"),
+    (0x625DF, 0x625E9, _10_, "_10_"),
+    (0x625EF, 0x625F9, _12_, "_12_"),
+    (0x625FF, 0x62609, _3__625FF, "_3__625FF"),
+    (0x6260F, 0x62619, _4__6260F, "_4__6260F"),
+    (0x6261F, 0x62629, _5__6261F, "_5__6261F"),
+    (0x6262F, 0x6264D, _6__6262F, "_6__6262F"),
+    (0x62653, 0x62673, _10__62653, "_10__62653"),
+    (0x62679, 0x62690, _8__62679, "_8__62679"),
+    (0x62696, 0x626AD, _6__62696, "_6__62696"),
+    (0x626B3, 0x626DB, r5skipcola, "r5skipcola"),
+    (0x626E1, 0x626E4, r3skipcola, "r3skipcola"),
+    (0x626EA, 0x626ED, r2skipcola, "r2skipcola"),
+    (0x626F3, 0x626F6, skipcola, "skipcola"),
+    (0x626FC, 0x6270B, DUP_2_, "DUP_2_"),
+    (0x62711, 0x62725, DROPSWAP, "DROPSWAP"),
+    (0x6272B, 0x62746, DROPSWAPDROP, "DROPSWAPDROP"),
+    (0x6274C, 0x62774, SWAPDUP, "SWAPDUP"),
+    (0x6277A, 0x62793, ROTDUP, "ROTDUP"),
+    (0x62799, 0x627A6, SWAP__, "SWAP__"),
+    (0x627AC, 0x627BA, DROPDUP, "DROPDUP"),
+    (0x627C0, 0x627D4, DUPLEN_, "DUPLEN_"),
+    (0x627DA, 0x627EA, __DUP, "__DUP"),
+    (0x627EB, 0x627F7, Push2_aLoop, "Push2_aLoop"),
+    (0x627FD, 0x62808, __DUP_627FD, "__DUP_627FD"),
+    (0x6280E, 0x62819, _1_DUP, "_1_DUP"),
+    (0x6281F, 0x62828, _1_DUP_6281F, "_1_DUP_6281F"),
+    (0x62829, 0x6282F, SUB_62829, "SUB_62829"),
+    (0x62835, 0x6284A, SWAPDROPDUP, "SWAPDROPDUP"),
+    (0x62850, 0x62863, SWAPDROPSWAP, "SWAPDROPSWAP"),
+    (0x62869, 0x6287F, r4ROLLDROP, "r4ROLLDROP"),
+    (0x62885, 0x6289A, r5ROLLDROP, "r5ROLLDROP"),
+    (0x628A0, 0x628B4, r2DUP__, "r2DUP__"),
+    (0x628BA, 0x628D0, r2DUP___628BA, "r2DUP___628BA"),
+    (0x628D6, 0x628EA, r2DUP___628D6, "r2DUP___628D6"),
+    (0x628F0, 0x62903, DUP_1__628F0, "DUP_1__628F0"),
+    (0x62909, 0x6292E, SWAP_1_, "SWAP_1_"),
+    (0x62934, 0x62945, DUP_1__62934, "DUP_1__62934"),
+    (0x6294B, 0x62957, DROPONE, "DROPONE"),
+    (0x6295D, 0x6296C, RDROPCOLA, "RDROPCOLA"),
+    (0x62972, 0x62985, COLACOLA, "COLACOLA"),
+    (0x6298B, 0x629A0, COLAcase, "COLAcase"),
+    (0x629A6, 0x629BB, COLANOTcase, "COLANOTcase"),
+    (0x637D1, 0x637DF, _1___637D1, "_1___637D1"),
+    (0x6380D, 0x6381B, _1___6380D, "_1___6380D"),
+    (0x6384E, 0x6385C, D0_DSKTOP, "D0_DSKTOP"),
+    (0x6385D, 0x6386B, D1_DSKTOP, "D1_DSKTOP"),
+    (0x6412C, 0x6416C, Embedded_, "Embedded_"),
+    (0x641CC, 0x641FB, DupAndThen, "DupAndThen"),
+    (0x64201, 0x64208, ZEROZERO, "ZEROZERO"),
+    (0x6420E, 0x64235, _ZERO_ONE, "_ZERO_ONE"),
+    (0x64236, 0x64279, SUB_64236, "SUB_64236"),
+    (0x6427F, 0x64289, _ZERO_SEVEN, "_ZERO_SEVEN"),
+    (0x6428F, 0x6429C, _ONE_27, "_ONE_27"),
+    (0x642A2, 0x642AE, _TWO_ONE, "_TWO_ONE"),
+    (0x642B4, 0x642BE, _TWO_TWO, "_TWO_TWO"),
+    (0x642C4, 0x642D0, _TWO_FOUR, "_TWO_FOUR"),
+    (0x642D6, 0x642E2, _THREE_FOUR, "_THREE_FOUR"),
+    (0x642FC, 0x64308, code_642FC, "code_642FC"),
+    (0x645B6, 0x645BC, POS_, "POS_"),
+    (0x645C2, 0x64726, POS_REV, "POS_REV"),
+    (0x64727, 0x6475B, SUB_64727, "SUB_64727"),
+    (0x64810, 0x648BC, NEXTCOMPOB, "NEXTCOMPOB"),
+    (0x648BD, 0x648C9, _LASTRAM_WORD, "_LASTRAM_WORD"),
+    (0x648F9, 0x64ADB, code_648F9, "code_648F9"),
+    (0x64ADC, 0x64B0C, SUB_64ADC, "SUB_64ADC"),
+    (0x657B9, 0x657DE, SUB_657B9, "SUB_657B9"),
+    (0x657DF, 0x65806, SUB_657DF, "SUB_657DF"),
+    (0x65807, 0x65841, SUB_65807, "SUB_65807"),
+    (0x65842, 0x65862, SUB_65842, "SUB_65842"),
+    (0x65863, 0x6594C, SUB_65863, "SUB_65863"),
+    (0x65953, 0x65959, putnibs, "putnibs"),
+    (0x6595F, 0x659DD, getnibs, "getnibs"),
+    (0x65A2E, 0x65A37, OBJ_65A29, "OBJ_65A29"),
+    (0x6670F, 0x66819, OBJ_6670A, "OBJ_6670A"),
+    (0x668A1, 0x66932, OBJ_6689C, "OBJ_6689C"),
+    (0x66A0F, 0x66B18, OBJ_66A0A, "OBJ_66A0A"),
+    (0x66B1E, 0x66BAC, OBJ_66B19, "OBJ_66B19"),
+    (0x66BB2, 0x66BC0, OBJ_66BAD, "OBJ_66BAD"),
+    (0x66BC6, 0x66C2B, OBJ_66BC1, "OBJ_66BC1"),
+    (0x6700F, 0x67030, Code_67005, "Code_67005"),
+    (0x67036, 0x670ED, SUB_67036, "SUB_67036"),
+    (0x670F3, 0x67128, OBJ_670EE, "OBJ_670EE"),
+    (0x67129, 0x67135, SUB_67129, "SUB_67129"),
+    (0x67136, 0x67155, SUB_67136, "SUB_67136"),
+    (0x67156, 0x6715C, SUB_67156, "SUB_67156"),
+    (0x67162, 0x67192, OBJ_6715D, "OBJ_6715D"),
+    (0x67198, 0x671AF, OBJ_67193, "OBJ_67193"),
+    (0x671B5, 0x671BE, OBJ_671B0, "OBJ_671B0"),
+    (0x671C4, 0x672C3, OBJ_671BF, "OBJ_671BF"),
+    (0x672C4, 0x672D1, SUB_672C4, "SUB_672C4"),
+    (0x672D2, 0x672DB, SUB_672D2, "SUB_672D2"),
+    (0x672EB, 0x6730E, OBJ_672E6, "OBJ_672E6"),
+    (0x67340, 0x67347, OBJ_6733B, "OBJ_6733B"),
+    (0x6734D, 0x67355, OBJ_67348, "OBJ_67348"),
+    (0x6735B, 0x67363, OBJ_67356, "OBJ_67356"),
+    (0x67369, 0x67370, OBJ_67364, "OBJ_67364"),
+    (0x67376, 0x67380, OBJ_67371, "OBJ_67371"),
+    (0x67386, 0x673A1, OBJ_67381, "OBJ_67381"),
+    (0x673A7, 0x673BA, OBJ_673A2, "OBJ_673A2"),
+    (0x673C0, 0x673D5, OBJ_673BB, "OBJ_673BB"),
+    (0x673DB, 0x673E5, OBJ_673D6, "OBJ_673D6"),
+    (0x673EB, 0x673F5, OBJ_673E6, "OBJ_673E6"),
+    (0x673FB, 0x67405, OBJ_673F6, "OBJ_673F6"),
+    (0x6740B, 0x67415, OBJ_67406, "OBJ_67406"),
+    (0x6741B, 0x67425, OBJ_67416, "OBJ_67416"),
+    (0x6742B, 0x67442, OBJ_67426, "OBJ_67426"),
+    (0x6744D, 0x67457, OBJ_67448, "OBJ_67448"),
+    (0x6745D, 0x6746A, OBJ_67458, "OBJ_67458"),
+    (0x67470, 0x6747A, OBJ_6746B, "OBJ_6746B"),
+    (0x67480, 0x6748A, OBJ_6747B, "OBJ_6747B"),
+    (0x67490, 0x6749A, OBJ_6748B, "OBJ_6748B"),
+    (0x674A0, 0x674AA, OBJ_6749B, "OBJ_6749B"),
+    (0x674B0, 0x674BA, OBJ_674AB, "OBJ_674AB"),
+    (0x674C0, 0x674D5, OBJ_674BB, "OBJ_674BB"),
+    (0x674DB, 0x674E9, OBJ_674D6, "OBJ_674D6"),
+    (0x674EA, 0x67518, SUB_674EA, "SUB_674EA"),
+    (0x6751E, 0x67531, OBJ_67519, "OBJ_67519"),
+    (0x6755F, 0x675BD, OBJ_6755A, "OBJ_6755A"),
+    (0x675BE, 0x675E3, SUB_675BE, "SUB_675BE"),
+    (0x6764D, 0x67664, OBJ_67648, "OBJ_67648"),
+    (0x6766A, 0x67681, OBJ_67665, "OBJ_67665"),
+    (0x67687, 0x676C4, OBJ_67682, "OBJ_67682"),
+    (0x676C5, 0x676CE, SUB_676C5, "SUB_676C5"),
+    (0x6776A, 0x67799, OBJ_67765, "OBJ_67765"),
+    (0x6779F, 0x677C2, OBJ_6779A, "OBJ_6779A"),
+    (0x677C8, 0x677DD, OBJ_677C3, "OBJ_677C3"),
+    (0x677E3, 0x677E9, OBJ_677DE, "OBJ_677DE"),
+    (0x677EF, 0x67877, OBJ_677EA, "OBJ_677EA"),
+    (0x6787D, 0x678D5, OBJ_67878, "OBJ_67878"),
+    (0x678E0, 0x67917, OBJ_678DB, "OBJ_678DB"),
+    (0x67908, 0x67910, overlap_67908, "overlap_67908"),
+    (0x67918, 0x67968, SUB_67918, "SUB_67918"),
+    (0x67991, 0x6799B, OBJ_6798C, "OBJ_6798C"),
+    (0x679A6, 0x679AD, OBJ_679A1, "OBJ_679A1"),
+    (0x679B8, 0x679BF, OBJ_679B3, "OBJ_679B3"),
+    (0x679CA, 0x679D1, OBJ_679C5, "OBJ_679C5"),
+    (0x679DC, 0x679E9, OBJ_679D7, "OBJ_679D7"),
+    (0x679EF, 0x67A1D, OBJ_679EA, "OBJ_679EA"),
+    (0x67A23, 0x67A3A, OBJ_67A1E, "OBJ_67A1E"),
+    (0x67A3B, 0x67A3C, SUB_67A3B, "SUB_67A3B"),
+    (0x67A3D, 0x67A49, SUB_67A3D, "SUB_67A3D"),
+    (0x67A4A, 0x67A50, SUB_67A4A, "SUB_67A4A"),
+    (0x67A51, 0x67A7D, SUB_67A51, "SUB_67A51"),
+    (0x67A83, 0x67A8A, OBJ_67A7E, "OBJ_67A7E"),
+    (0x67A90, 0x67A97, OBJ_67A8B, "OBJ_67A8B"),
+    (0x67AA2, 0x67AA9, OBJ_67A9D, "OBJ_67A9D"),
+    (0x67AB4, 0x67ABB, OBJ_67AAF, "OBJ_67AAF"),
+    (0x67ADA, 0x67AE1, OBJ_67AD5, "OBJ_67AD5"),
+    (0x67AE7, 0x67AEE, OBJ_67AE2, "OBJ_67AE2"),
+    (0x67B1C, 0x67B66, OBJ_67B17, "OBJ_67B17"),
+    (0x67B6C, 0x67BA0, OBJ_67B67, "OBJ_67B67"),
+    (0x67BA6, 0x67BAD, OBJ_67BA1, "OBJ_67BA1"),
+    (0x67BB3, 0x67BBA, OBJ_67BAE, "OBJ_67BAE"),
+    (0x67BC0, 0x67BC7, OBJ_67BBB, "OBJ_67BBB"),
+    (0x67BCD, 0x67BD4, OBJ_67BC8, "OBJ_67BC8"),
+    (0x67BDA, 0x67BE1, OBJ_67BD5, "OBJ_67BD5"),
+    (0x67BE7, 0x67BEE, OBJ_67BE2, "OBJ_67BE2"),
+    (0x67BF4, 0x67BFB, OBJ_67BEF, "OBJ_67BEF"),
+    (0x67C01, 0x67C08, OBJ_67BFC, "OBJ_67BFC"),
+    (0x67C0E, 0x67C15, OBJ_67C09, "OBJ_67C09"),
+    (0x67C1B, 0x67C22, OBJ_67C16, "OBJ_67C16"),
+    (0x67C41, 0x67C52, OBJ_67C3C, "OBJ_67C3C"),
+    (0x67C53, 0x67C6B, SUB_67C53, "SUB_67C53"),
+    (0x67C8A, 0x67CA1, OBJ_67C85, "OBJ_67C85"),
+    (0x67CA7, 0x67CBD, OBJ_67CA2, "OBJ_67CA2"),
+    (0x67CC3, 0x67D0E, OBJ_67CBE, "OBJ_67CBE"),
+    (0x67D14, 0x67D1A, OBJ_67D0F, "OBJ_67D0F"),
+    (0x67D20, 0x67DCE, OBJ_67D1B, "OBJ_67D1B"),
+    (0x67DD4, 0x67DDE, OBJ_67DCF, "OBJ_67DCF"),
+    (0x67DE4, 0x67DEB, OBJ_67DDF, "OBJ_67DDF"),
+    (0x67DF1, 0x67DFB, OBJ_67DEC, "OBJ_67DEC"),
+    (0x67E01, 0x67E0B, OBJ_67DFC, "OBJ_67DFC"),
+    (0x67E11, 0x67E33, OBJ_67E0C, "OBJ_67E0C"),
+    (0x67E3E, 0x67E44, OBJ_67E39, "OBJ_67E39"),
+    (0x67E4A, 0x67E53, OBJ_67E45, "OBJ_67E45"),
+    (0x67E59, 0x67E63, OBJ_67E54, "OBJ_67E54"),
+    (0x67E69, 0x67E76, OBJ_67E64, "OBJ_67E64"),
+    (0x67E77, 0x67E7A, SUB_67E77, "SUB_67E77"),
+    (0x67E7B, 0x67E9D, SUB_67E7B, "SUB_67E7B"),
+    (0x67E9E, 0x67EB3, SUB_67E9E, "SUB_67E9E"),
+    (0x67EB4, 0x67EB7, SUB_67EB4, "SUB_67EB4"),
+    (0x67EB8, 0x67F0A, SUB_67EB8, "SUB_67EB8"),
+    (0x67F10, 0x67F23, OBJ_67F0B, "OBJ_67F0B"),
+    (0x67F24, 0x67F30, SUB_67F24, "SUB_67F24"),
+    (0x67F36, 0x67F44, OBJ_67F31, "OBJ_67F31"),
+    (0x67F4A, 0x67FEC, OBJ_67F45, "OBJ_67F45"),
+    (0x67FF2, 0x67FF9, OBJ_67FED, "OBJ_67FED"),
+    (0x68001, 0x68016, L_68001, "L_68001"),
+    (0x6801C, 0x680B3, OBJ_68017, "OBJ_68017"),
+    (0x680B4, 0x680FA, drop_false_true_680B4, "drop_false_true_680B4"),
+    (0x680FB, 0x6812B, SUB_680FB, "SUB_680FB"),
+    (0x68131, 0x68182, OBJ_6812C, "OBJ_6812C"),
+    (0x68188, 0x6819C, OBJ_68183, "OBJ_68183"),
+    (0x681A2, 0x681B0, OBJ_6819D, "OBJ_6819D"),
+    (0x681B6, 0x681D7, OBJ_681B1, "OBJ_681B1"),
+    (0x681DD, 0x681E7, OBJ_681D8, "OBJ_681D8"),
+    (0x681ED, 0x6821B, OBJ_681E8, "OBJ_681E8"),
+    (0x68221, 0x6822B, OBJ_6821C, "OBJ_6821C"),
+    (0x6827C, 0x68282, OBJ_68277, "OBJ_68277"),
+    (0x682AB, 0x682D1, OBJ_682A6, "OBJ_682A6"),
+    (0x682D7, 0x682DD, OBJ_682D2, "OBJ_682D2"),
+    (0x682E3, 0x682F6, OBJ_682DE, "OBJ_682DE"),
+    (0x682F7, 0x68328, SUB_682F7, "SUB_682F7"),
+    (0x68329, 0x683BA, SUB_68329, "SUB_68329"),
+    (0x683BB, 0x683D1, SUB_683BB, "SUB_683BB"),
+    (0x683D2, 0x683D8, SUB_683D2, "SUB_683D2"),
+    (0x683D9, 0x683F7, SUB_683D9, "SUB_683D9"),
+    (0x68457, 0x6845E, OBJ_68452, "OBJ_68452"),
+    (0x6845F, 0x684D3, SUB_6845F, "SUB_6845F"),
+    (0x684D9, 0x684FF, OBJ_684D4, "OBJ_684D4"),
+    (0x6855A, 0x68572, code_6855A, "code_6855A"),
+    (0x68573, 0x68592, SUB_68573, "SUB_68573"),
+    (0x68598, 0x685B1, OBJ_68593, "OBJ_68593"),
+    (0x685B7, 0x685DC, OBJ_685B2, "OBJ_685B2"),
+    (0x685E2, 0x68609, OBJ_685DD, "OBJ_685DD"),
+    (0x6860F, 0x6866F, OBJ_6860A, "OBJ_6860A"),
+    (0x68670, 0x68679, SUB_68670, "SUB_68670"),
+    (0x69652, 0x69658, OBJ_6964D, "OBJ_6964D"),
+    (0x6965E, 0x6979C, OBJ_69659, "OBJ_69659"),
+    (0x6A668, 0x6A6BF, OBJ_6A663, "OBJ_6A663"),
+    (0x6A6C0, 0x6A6D3, SUB_6A6C0, "SUB_6A6C0"),
+    (0x6A6D4, 0x6A704, SUB_6A6D4, "SUB_6A6D4"),
+    (0x6A70A, 0x6A75C, OBJ_6A705, "OBJ_6A705"),
+    (0x6A762, 0x6A768, OBJ_6A75D, "OBJ_6A75D"),
+    (0x6A76E, 0x6A7BF, OBJ_6A769, "OBJ_6A769"),
+    (0x6B386, 0x6B39E, OBJ_6B381, "OBJ_6B381"),
+    (0x6B3A4, 0x6B3F4, OBJ_6B39F, "OBJ_6B39F"),
+    (0x6CC15, 0x6CC20, OBJ_6CC10, "OBJ_6CC10"),
+    (0x6CC26, 0x6CC31, OBJ_6CC21, "OBJ_6CC21"),
+    (0x6CC37, 0x6CC42, OBJ_6CC32, "OBJ_6CC32"),
+    (0x6DD73, 0x6DDA5, OBJ_6DD6E, "OBJ_6DD6E"),
+    (0x6DDA6, 0x6DDAA, SUB_6DDA6, "SUB_6DDA6"),
+    (0x6DDAB, 0x6DDD2, SUB_6DDAB, "SUB_6DDAB"),
+    (0x6DDD8, 0x6DE6F, OBJ_6DDD3, "OBJ_6DDD3"),
+    (0x6DE70, 0x6DE75, SUB_6DE70, "SUB_6DE70"),
+    (0x6DE76, 0x6DE81, SUB_6DE76, "SUB_6DE76"),
+    (0x6DF22, 0x6DFC8, OBJ_6DF1D, "OBJ_6DF1D"),
+    (0x6DFC9, 0x6DFDD, SUB_6DFC9, "SUB_6DFC9"),
+    (0x6DFE3, 0x6DFFC, OBJ_6DFDE, "OBJ_6DFDE"),
+    (0x6E002, 0x6E00A, OBJ_6DFFD, "OBJ_6DFFD"),
+    (0x6E010, 0x6E025, OBJ_6E00B, "OBJ_6E00B"),
+    (0x6E02B, 0x6E056, OBJ_6E026, "OBJ_6E026"),
+    (0x6E05C, 0x6E08E, OBJ_6E057, "OBJ_6E057"),
+    (0x6E08F, 0x6E0A0, SUB_6E08F, "SUB_6E08F"),
+    (0x6E0A6, 0x6E0BF, OBJ_6E0A1, "OBJ_6E0A1"),
+    (0x6E0C5, 0x6E0D1, OBJ_6E0C0, "OBJ_6E0C0"),
+    (0x6E0D7, 0x6E0E3, OBJ_6E0D2, "OBJ_6E0D2"),
+    (0x6E0E9, 0x6E108, code_6E0E9, "code_6E0E9"),
+    (0x6F0BD, 0x6F0FD, OBJ_6F0B8, "OBJ_6F0B8"),
+    (0x6FD8A, 0x6FDB5, OBJ_6FD85, "OBJ_6FD85"),
+    (0x6FDBB, 0x6FDC5, OBJ_6FDB6, "OBJ_6FDB6"),
+    (0x6FDCB, 0x6FDD5, OBJ_6FDC6, "OBJ_6FDC6"),
+    (0x6FDDB, 0x6FDE1, OBJ_6FDD6, "OBJ_6FDD6"),
+    (0x6FDE7, 0x6FE68, OBJ_6FDE2, "OBJ_6FDE2"),
+    (0x6FF81, 0x6FFB6, L_6FF81, "L_6FF81"),
 ];
