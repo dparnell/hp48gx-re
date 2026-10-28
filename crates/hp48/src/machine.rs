@@ -38,12 +38,22 @@ pub struct Lcd {
 /// ROM code would at its RTN (the machine performs the RTN).
 pub type Native = fn(&mut Cpu, &mut Hardware);
 
+/// A native for code that is jumped to rather than called, such as the RPL
+/// inner loop. It either declines, leaving everything untouched (the CPU
+/// then runs the ROM code), or does the work, sets PC to where the ROM code
+/// would go next, and returns the cycles the ROM code would have taken.
+pub type Jump = fn(&mut Cpu, &mut Hardware) -> Option<u32>;
+
 #[derive(Clone)]
 pub struct Machine {
     pub cpu: Cpu,
     pub hw: Hardware,
     /// Native routines by entry address (see crate::hle).
     pub natives: std::collections::HashMap<u32, Native>,
+    /// Jump natives by address (see crate::hle).
+    pub jumps: std::collections::HashMap<u32, Jump>,
+    /// How many times a jump native did the work (it may decline).
+    pub jump_runs: u64,
     /// Elapsed emulated time in CPU cycles.
     pub time: u64,
     next_t1: u64,
@@ -66,6 +76,8 @@ impl Machine {
             cpu: Cpu::new(),
             hw: Hardware::new(rom_packed),
             natives: std::collections::HashMap::new(),
+            jumps: std::collections::HashMap::new(),
+            jump_runs: 0,
             time: 0,
             next_t1: period(16, 1),
             next_t2: period(8192, 1),
@@ -106,7 +118,14 @@ impl Machine {
                 self.cpu.pc = self.cpu.pop();
                 NATIVE_CYCLES
             }
-            None => self.cpu.step(&mut self.hw),
+            None => match self.jumps.get(&self.cpu.pc).and_then(|j| j(&mut self.cpu, &mut self.hw)) {
+                Some(c) => {
+                    self.jump_runs += 1;
+                    self.cpu.cycles += u64::from(c);
+                    c
+                }
+                None => self.cpu.step(&mut self.hw),
+            },
         };
         self.time += u64::from(c);
         self.advance_timers();

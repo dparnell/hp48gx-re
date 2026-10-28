@@ -37,7 +37,8 @@ pub const TC_SRQ: u8 = 8;
 
 #[derive(Clone)]
 pub struct Hardware {
-    pub rom: Box<[u8]>,
+    /// Shared between clones: nothing writes to it.
+    pub rom: std::sync::Arc<[u8]>,
     pub ram: Box<[u8]>,
     pub mmu: Controller,
     /// Raw I/O register nibbles (timers and CRC live in their own fields).
@@ -67,7 +68,7 @@ impl Hardware {
             rom[2 * i + 1] = b >> 4;
         }
         Hardware {
-            rom,
+            rom: rom.into(),
             ram: vec![0u8; RAM_NIBBLES].into_boxed_slice(),
             mmu: Controller::default(),
             io: [0; 64],

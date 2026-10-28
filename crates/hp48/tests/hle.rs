@@ -73,3 +73,96 @@ fn calculator_works_with_natives_installed() {
     // Still reaches the memory-recovery prompt and sleeps waiting for a key.
     assert!(m.cpu.shutdown);
 }
+
+/// Runs a machine with every native installed and checks the jump natives
+/// against the ROM as they are reached: every call at first, then a sample.
+struct Checked {
+    m: Machine,
+    names: std::collections::HashMap<u32, &'static str>,
+    /// Calls and checks per native.
+    counts: std::collections::BTreeMap<&'static str, (u64, u64)>,
+}
+
+impl Checked {
+    fn run(&mut self, cycles: u64) {
+        let end = self.m.time + cycles;
+        while self.m.time < end {
+            let pc = self.m.cpu.pc;
+            if let (false, Some(&f)) = (self.m.cpu.shutdown, self.m.jumps.get(&pc)) {
+                let count = self.counts.entry(self.names[&pc]).or_default();
+                count.0 += 1;
+                if count.0 <= 2000 || count.0.is_multiple_of(97) {
+                    count.1 += 1;
+                    if let Err(e) = hle::verify_jump(&self.m, f) {
+                        panic!("{} (call {}): {e}", self.names[&pc], count.0);
+                    }
+                }
+            }
+            self.m.step(end);
+        }
+    }
+
+    fn tap(&mut self, k: hp48::Key) {
+        self.m.key(k, true);
+        self.run(hp48::CPU_HZ / 20);
+        self.m.key(k, false);
+        self.run(hp48::CPU_HZ / 10);
+    }
+
+    fn enter(&mut self, line: &str) {
+        for k in hp48::typing::keystrokes(line).unwrap_or_else(|c| panic!("cannot type {c:?}")) {
+            self.tap(k);
+        }
+        self.tap(hp48::Key::Enter);
+        self.run(hp48::CPU_HZ);
+    }
+}
+
+const LINES: &[&str] = &["1 2 + 3 *", "« 1 5 FOR I I NEXT » EVAL + + + +", "{ 1 2 3 } REVLIST \"AB\" \"C\" +", "'A' 5 STO A 'A' PURGE"];
+
+#[test]
+fn rpl_inner_loop_matches_rom() {
+    let Some(mut m) = machine() else { return };
+    hle::install(&mut m);
+    let sites = hle::jump_sites(&m);
+    let names = sites.iter().map(|&(a, n, _)| (a, n)).collect();
+    for name in ["DOCOL", "SEMI"] {
+        assert!(sites.iter().any(|s| s.1 == name), "{name} found");
+    }
+    assert!(sites.iter().filter(|s| s.1 == "push prolog").count() >= 20, "prologs found");
+    let mut t = Checked { m, names, counts: Default::default() };
+    t.run(3 * hp48::CPU_HZ);
+    t.tap(hp48::Key::F);
+    t.run(4 * hp48::CPU_HZ);
+    for line in LINES {
+        t.enter(line);
+    }
+    eprintln!("{:?}", t.counts);
+    for name in ["NEXT", "push prolog", "DOCOL", "SEMI"] {
+        assert!(t.counts.get(name).is_some_and(|c| c.1 > 100), "{name} ran: {:?}", t.counts);
+    }
+    // The same lines without natives leave the same stack.
+    let Some(mut plain) = machine() else { return };
+    plain.run(3 * hp48::CPU_HZ);
+    plain.tap(hp48::Key::F);
+    plain.run(4 * hp48::CPU_HZ);
+    for line in LINES {
+        plain.type_text(line).unwrap();
+        plain.tap(hp48::Key::Enter);
+        plain.run(hp48::CPU_HZ);
+    }
+    let objects = |m: &Machine| {
+        let mem = |a: u32| m.hw.peek(a);
+        hp48_rpl::stack(&mem).iter().map(|&a| hp48_rpl::decode(&mem, a).unwrap()).collect::<Vec<_>>()
+    };
+    let ours = objects(&t.m);
+    assert!(ours.len() >= 5, "{ours:?}");
+    assert_eq!(ours, objects(&plain));
+}
+
+#[test]
+fn verify_jump_detects_a_wrong_native() {
+    let Some(m) = machine() else { return };
+    // At reset the CPU is not at SEMI.
+    assert!(hle::verify_jump(&m, hle::semi).is_err());
+}

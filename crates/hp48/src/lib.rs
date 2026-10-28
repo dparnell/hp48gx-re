@@ -9,7 +9,7 @@ pub mod state;
 pub mod typing;
 
 pub use keyboard::Key;
-pub use machine::{Lcd, Machine, Native, CPU_HZ, LCD_HEIGHT, LCD_WIDTH};
+pub use machine::{Jump, Lcd, Machine, Native, CPU_HZ, LCD_HEIGHT, LCD_WIDTH};
 pub use state::StateError;
 
 /// The ROM image to use when none is given: `$HP48_ROM` if set (e.g. a ROM

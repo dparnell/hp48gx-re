@@ -9,9 +9,9 @@
 //! here one at a time, each checked against the original.
 
 use crate::hardware::Hardware;
-use crate::machine::{Machine, Native};
+use crate::machine::{Jump, Machine, Native};
 use saturn::cpu::SB;
-use saturn::{Cpu, Reg};
+use saturn::{Bus, Cpu, Reg};
 
 /// `MUL#` (#03991): B.A = A.A * C.A by shift-and-add.
 ///
@@ -77,6 +77,147 @@ pub fn div5(cpu: &mut Cpu, _hw: &mut Hardware) {
     cpu.carry = false;
 }
 
+// ------------------------------------------------------------ RPL inner loop
+//
+// RPL keeps its state in CPU registers: D0 is the instruction pointer (the
+// next word of the runstream), B.A the top of the return stack, D1 the data
+// stack pointer and D.A the free room in 5-nibble words. Every primitive ends
+// with NEXT (`A=DAT0 A; D0=D0+5; PC=(A)`): fetch the next object pointer
+// and jump through its first word, which is the object's prolog (or, for a
+// primitive code object, its body).
+//
+// These natives replace NEXT and the prologs that only move pointers. Each
+// does what its ROM code does to registers, carry, memory and the CRC (data
+// reads in the same order), and declines where the ROM would take a slow
+// path: garbage collection when D runs out, or decimal mode.
+
+const MASK: u32 = 0xF_FFFF;
+
+/// `A=DAT0 A; D0=D0+5; PC=(A)`.
+const NEXT_CODE: &str = "142164808C";
+/// DOBINT, DOREAL, ... DOEXT4: `D=D-1 A; HST=0 0; GOC gc; D1=D1-5;
+/// DAT1=A A`, then NEXT.
+const PUSH_CODE: &str = "CF8204??1C4141142164808C";
+/// DOCOL (#02D9D): `D=D-1 A; HST=0 0; GOC gc; C=B A; CD0EX; DAT0=C A;
+/// D0=D0+5; AD0EX; B=A A; D0=D0+5`, then NEXT.
+const DOCOL_CODE: &str = "CF820427D9136144164132D8164142164808C";
+/// The body of SEMI (#03130): `C=B A; CD0EX; D0=D0-5; A=DAT0 A; AD0EX;
+/// B=A A; D=D+1 A`, then NEXT.
+const SEMI_CODE: &str = "D9136184142132D8E7142164808C";
+
+const NEXT_CYCLES: u32 = 19 + 5 + 23;
+const PUSH_CYCLES: u32 = 4 + 5 + 5 + 5 + 19 + NEXT_CYCLES;
+const DOCOL_CYCLES: u32 = 4 + 5 + 5 + 4 + 5 + 19 + 5 + 5 + 4 + 5 + NEXT_CYCLES;
+const SEMI_CYCLES: u32 = 4 + 5 + 5 + 19 + 5 + 4 + 4 + NEXT_CYCLES;
+
+/// Does the code at `addr` match `hex` (nibbles in address order, `?` for
+/// any nibble)?
+fn code_at(hw: &mut Hardware, addr: u32, hex: &str) -> bool {
+    hex.chars().zip(addr..).all(|(h, a)| h == '?' || h.to_digit(16) == Some(u32::from(hw.fetch(a & MASK))))
+}
+
+/// Read 5 nibbles as `A=DAT0 A` does: from the lowest address up.
+fn read_a(hw: &mut Hardware, addr: u32) -> u32 {
+    (0..5).fold(0, |v, i| v | u32::from(hw.read((addr + i) & MASK)) << (4 * i))
+}
+
+/// Read the target of `PC=(A)`, which reads from the highest address down.
+fn read_pc(hw: &mut Hardware, addr: u32) -> u32 {
+    (0..5).rev().fold(0, |v, i| (v << 4) | u32::from(hw.read((addr + i) & MASK)))
+}
+
+fn write_a(hw: &mut Hardware, addr: u32, v: u32) {
+    for i in 0..5 {
+        hw.write((addr + i) & MASK, ((v >> (4 * i)) & 0xF) as u8);
+    }
+}
+
+/// NEXT, run natively; returns its cycles.
+fn next(cpu: &mut Cpu, hw: &mut Hardware) -> u32 {
+    let ob = read_a(hw, cpu.d0);
+    cpu.a.set_a(ob);
+    let d0 = cpu.d0 + 5;
+    cpu.carry = d0 > MASK;
+    cpu.d0 = d0 & MASK;
+    cpu.pc = read_pc(hw, ob);
+    NEXT_CYCLES
+}
+
+/// NEXT at any address that holds its code.
+pub fn next_site(cpu: &mut Cpu, hw: &mut Hardware) -> Option<u32> {
+    code_at(hw, cpu.pc, NEXT_CODE).then(|| next(cpu, hw))
+}
+
+/// A prolog that pushes its object (A.A) on the data stack.
+pub fn push_prolog(cpu: &mut Cpu, hw: &mut Hardware) -> Option<u32> {
+    let room = cpu.d.a();
+    if cpu.dec || room == 0 {
+        return None;
+    }
+    cpu.d.set_a(room - 1);
+    cpu.d1 = cpu.d1.wrapping_sub(5) & MASK;
+    write_a(hw, cpu.d1, cpu.a.a());
+    Some(PUSH_CYCLES - NEXT_CYCLES + next(cpu, hw))
+}
+
+/// DOCOL: push the instruction pointer on the return stack and run the
+/// secondary's body.
+pub fn docol(cpu: &mut Cpu, hw: &mut Hardware) -> Option<u32> {
+    let room = cpu.d.a();
+    if cpu.dec || room == 0 {
+        return None;
+    }
+    cpu.d.set_a(room - 1);
+    let (ip, top) = (cpu.d0, cpu.b.a());
+    cpu.c.set_a(ip);
+    write_a(hw, top, ip);
+    let top = (top + 5) & MASK;
+    cpu.d0 = cpu.a.a();
+    cpu.a.set_a(top);
+    cpu.b.set_a(top);
+    cpu.d0 = (cpu.d0 + 5) & MASK;
+    Some(DOCOL_CYCLES - NEXT_CYCLES + next(cpu, hw))
+}
+
+/// SEMI: pop the instruction pointer from the return stack.
+pub fn semi(cpu: &mut Cpu, hw: &mut Hardware) -> Option<u32> {
+    if cpu.dec {
+        return None;
+    }
+    cpu.c.set_a(cpu.d0);
+    let top = cpu.b.a().wrapping_sub(5) & MASK;
+    cpu.d0 = read_a(hw, top);
+    cpu.a.set_a(top);
+    cpu.b.set_a(top);
+    cpu.d.set_a((cpu.d.a() + 1) & MASK);
+    Some(SEMI_CYCLES - NEXT_CYCLES + next(cpu, hw))
+}
+
+/// Every jump native that applies to this machine's ROM, by address: NEXT
+/// wherever lower ROM holds its code, the pushing prologs, DOCOL and SEMI.
+pub fn jump_sites(machine: &Machine) -> Vec<(u32, &'static str, Jump)> {
+    let mut hw = machine.hw.clone();
+    let mut sites = Vec::new();
+    let io = 0x00100..0x00140;
+    for addr in (0..0x7F000).filter(|a| !io.contains(a)) {
+        if code_at(&mut hw, addr, NEXT_CODE) {
+            sites.push((addr, "NEXT", next_site as Jump));
+        }
+    }
+    // The prologs lie between PRLG and DOCOL.
+    for addr in 0x028FC..0x02D9D {
+        if code_at(&mut hw, addr, PUSH_CODE) {
+            sites.push((addr, "push prolog", push_prolog as Jump));
+        }
+    }
+    for (addr, name, f, code) in [(0x02D9D, "DOCOL", docol as Jump, DOCOL_CODE), (0x03130, "SEMI", semi, SEMI_CODE)] {
+        if code_at(&mut hw, addr, code) {
+            sites.push((addr, name, f));
+        }
+    }
+    sites
+}
+
 /// All natives with their ROM entry points.
 pub const NATIVES: &[(u32, &str, Native)] = &[(0x03991, "MUL#", mul_bint), (0x06A8E, "DIV5", div5)];
 
@@ -97,12 +238,16 @@ pub fn install(machine: &mut Machine) {
             machine.natives.insert(addr, f);
         }
     }
+    for (addr, _, f) in jump_sites(machine) {
+        machine.jumps.insert(addr, f);
+    }
 }
 
 /// Snapshot of everything a routine can change in the CPU.
 fn cpu_state(c: &Cpu) -> String {
     format!(
-        "A={:?} B={:?} C={:?} D={:?} R={:?} D0={:05X} D1={:05X} P={} ST={:04X} HST={:X} carry={} RSTK={:05X?}",
+        "PC={:05X} A={:?} B={:?} C={:?} D={:?} R={:?} D0={:05X} D1={:05X} P={} ST={:04X} HST={:X} carry={} RSTK={:05X?}",
+        c.pc,
         c.a,
         c.b,
         c.c,
@@ -140,13 +285,42 @@ pub fn verify(machine: &Machine, entry: u32, f: Native, max_steps: usize) -> Res
     f(&mut native.cpu, &mut native.hw);
     native.cpu.pc = native.cpu.pop();
 
+    compare(&rom, &native).map_err(|e| format!("#{entry:05X} {e}"))
+}
+
+/// Everything a routine can change: the CPU, RAM and the CRC register.
+fn compare(rom: &Machine, native: &Machine) -> Result<(), String> {
     let (a, b) = (cpu_state(&rom.cpu), cpu_state(&native.cpu));
     if a != b {
-        return Err(format!("#{entry:05X} differs\n  rom:    {a}\n  native: {b}"));
+        return Err(format!("differs\n  rom:    {a}\n  native: {b}"));
     }
     if rom.hw.ram != native.hw.ram {
         let i = rom.hw.ram.iter().zip(native.hw.ram.iter()).position(|(x, y)| x != y).unwrap();
-        return Err(format!("#{entry:05X}: RAM differs at offset {i:05X}"));
+        return Err(format!("RAM differs at offset {i:05X}"));
+    }
+    if rom.hw.crc != native.hw.crc {
+        return Err(format!("CRC differs: rom {:04X}, native {:04X}", rom.hw.crc, native.hw.crc));
     }
     Ok(())
+}
+
+/// Run the jump native `f` and the ROM code at PC from the same machine
+/// state. A native that declines must leave the machine untouched; one that
+/// runs must match the ROM after the same number of cycles. Returns whether
+/// the native ran.
+pub fn verify_jump(machine: &Machine, f: Jump) -> Result<bool, String> {
+    let pc = machine.cpu.pc;
+    let mut native = machine.clone();
+    let Some(cycles) = f(&mut native.cpu, &mut native.hw) else {
+        return compare(machine, &native).map(|()| false).map_err(|e| format!("#{pc:05X} declined but {e}"));
+    };
+    let mut rom = machine.clone();
+    let mut spent = 0;
+    while spent < cycles {
+        spent += rom.cpu.step(&mut rom.hw);
+    }
+    if spent != cycles {
+        return Err(format!("#{pc:05X}: the ROM took {spent} cycles, the native {cycles}"));
+    }
+    compare(&rom, &native).map(|()| true).map_err(|e| format!("#{pc:05X} {e}"))
 }
