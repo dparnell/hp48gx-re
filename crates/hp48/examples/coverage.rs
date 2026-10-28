@@ -11,10 +11,12 @@
 //! and of the ROM instructions, overall and per native: the progress figure
 //! for replacing emulation with native code.
 //!
-//! cargo run --release -p hp48 --example coverage -- [ROM]
+//! cargo run --release -p hp48 --example coverage -- [ROM] [--hot N]
 //!
-//! Interrupts taken inside a covered routine count as covered. `hp48-cli
-//! --profile` shows where the remaining cycles go.
+//! Interrupts taken inside a covered routine count as covered. `--hot N`
+//! also lists the N ROM routines (by the nearest name in
+//! data/entries48g.txt) that spend most of the remaining cycles: the
+//! candidates for the next natives.
 
 use hp48::{hle, Key, Machine, CPU_HZ};
 use std::collections::{BTreeMap, HashMap};
@@ -52,6 +54,8 @@ struct Coverage {
     covered: Count,
     per_native: Vec<Count>,
     per_jump: BTreeMap<&'static str, Count>,
+    /// Uncovered cycles by PC.
+    hot: HashMap<u32, u64>,
 }
 
 impl Coverage {
@@ -89,6 +93,8 @@ impl Coverage {
                 j.calls += 1;
             } else if !self.active.is_empty() {
                 add(&mut self.covered, c);
+            } else {
+                *self.hot.entry(pc).or_default() += c.cycles;
             }
             add(&mut self.total, c);
             // A routine nested in another one counts for both.
@@ -137,7 +143,14 @@ fn percent(part: u64, whole: u64) -> f64 {
 }
 
 fn main() {
-    let path = std::env::args().nth(1).unwrap_or_else(|| "ROM/gxrom-r".into());
+    let mut args = std::env::args().skip(1);
+    let (mut path, mut hot) = ("ROM/gxrom-r".to_string(), 0);
+    while let Some(a) = args.next() {
+        match a.as_str() {
+            "--hot" => hot = args.next().and_then(|n| n.parse().ok()).expect("--hot N"),
+            _ => path = a,
+        }
+    }
     let rom = std::fs::read(&path).unwrap_or_else(|e| panic!("{path}: {e}"));
     let mut m = Machine::new(&rom);
     let entries = hle::NATIVES.iter().enumerate()
@@ -153,7 +166,8 @@ fn main() {
     }
     let mut t = Coverage { m, entries, active: Vec::new(), sites, site_instructions: HashMap::new(),
                            total: Count::default(), covered: Count::default(),
-                           per_native: vec![Count::default(); hle::NATIVES.len()], per_jump: BTreeMap::new() };
+                           per_native: vec![Count::default(); hle::NATIVES.len()], per_jump: BTreeMap::new(),
+                           hot: HashMap::new() };
     t.run(3 * CPU_HZ);
     t.tap(Key::F);
     t.run(4 * CPU_HZ);
@@ -173,7 +187,7 @@ fn main() {
     }
 
     let seconds = t.m.time as f64 / CPU_HZ as f64;
-    let Coverage { total, covered, per_native, per_jump, entries, .. } = t;
+    let Coverage { total, covered, per_native, per_jump, entries, hot: hot_pcs, .. } = t;
     println!("Tour: {seconds:.0} s emulated, {} busy cycles ({:.0}%), {} instructions", total.cycles,
              100.0 * total.cycles as f64 / (seconds * CPU_HZ as f64), total.instructions);
     println!("{:<12} {:>9} {:>10} {:>8} {:>8}", "native", "at", "runs", "cycles", "instr");
@@ -195,4 +209,34 @@ fn main() {
     }
     println!("Covered by natives: {:.3}% of cycles, {:.3}% of instructions",
              percent(covered.cycles, total.cycles), percent(covered.instructions, total.instructions));
+    if hot > 0 {
+        print_hot(&hot_pcs, hot, total.cycles);
+    }
+}
+
+/// The routines with the most uncovered cycles, each with its hottest PC.
+fn print_hot(pcs: &HashMap<u32, u64>, n: usize, total: u64) {
+    let names: BTreeMap<u32, String> = std::fs::read_to_string("data/entries48g.txt").unwrap_or_default().lines()
+        .filter_map(|l| {
+            let mut it = l.split('\t');
+            let (a, name) = (it.next()?, it.next()?);
+            Some((u32::from_str_radix(a, 16).ok().filter(|_| a.len() == 5)?, name.to_string()))
+        })
+        .collect();
+    let mut routines: HashMap<u32, (u64, u32, u64)> = HashMap::new();
+    for (&pc, &c) in pcs {
+        let start = names.range(..=pc).next_back().map_or(0, |(&a, _)| a);
+        let r = routines.entry(start).or_default();
+        r.0 += c;
+        if c > r.2 {
+            (r.1, r.2) = (pc, c);
+        }
+    }
+    let mut v: Vec<_> = routines.into_iter().collect();
+    v.sort_by_key(|e| std::cmp::Reverse(e.1 .0));
+    println!("Uncovered, by routine:");
+    for (start, (c, pc, _)) in v.into_iter().take(n) {
+        let name = names.get(&start).map_or("?", String::as_str);
+        println!("  #{start:05X} {name:<24} {:>6.2}%  hottest #{pc:05X}", percent(c, total));
+    }
 }
