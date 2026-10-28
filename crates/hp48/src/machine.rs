@@ -63,8 +63,14 @@ pub struct Machine {
     pub blocks: Option<crate::translated::Blocks>,
     /// How many blocks ran.
     pub block_runs: u64,
-    /// Elapsed emulated time in CPU cycles.
+    /// Elapsed emulated time in cycles of the real CPU's 4 MHz clock.
     pub time: u64,
+    /// The CPU runs this many times faster than the real one: an
+    /// instruction's cycles take 1/speed as long, while the timers and the
+    /// LCD keep their rates. 1 is the real calculator.
+    speed: u32,
+    /// CPU cycles run that don't yet make up a cycle of time (< speed).
+    spare: u32,
     next_t1: u64,
     next_t2: u64,
     t2_count: u64,
@@ -95,6 +101,8 @@ impl Machine {
             blocks: None,
             block_runs: 0,
             time: 0,
+            speed: 1,
+            spare: 0,
             next_t1: period(16, 1),
             next_t2: period(8192, 1),
             t2_count: 1,
@@ -146,7 +154,8 @@ impl Machine {
                 None => match self.block() {
                     Some(block) => {
                         let budget = self.budget(until);
-                        let mut run = crate::translated::Run::new(&mut self.cpu, &mut self.hw, budget, self.time);
+                        let mut run =
+                            crate::translated::Run::new(&mut self.cpu, &mut self.hw, budget, self.time, self.speed, self.spare);
                         block(&mut run);
                         self.block_runs += 1;
                         let spent = run.spent();
@@ -157,9 +166,23 @@ impl Machine {
                 },
             },
         };
-        self.time += u64::from(c);
+        let cycles = u64::from(self.spare) + u64::from(c);
+        self.time += cycles / u64::from(self.speed);
+        self.spare = (cycles % u64::from(self.speed)) as u32;
         self.advance_timers();
         self.service();
+    }
+
+    /// How many times faster than the real CPU this one runs.
+    pub fn speed(&self) -> u32 {
+        self.speed
+    }
+
+    /// Run the CPU `speed` times faster than the real one (at least 1),
+    /// with the timers, the clock and the LCD at their real rates.
+    pub fn set_speed(&mut self, speed: u32) {
+        self.speed = speed.max(1);
+        self.spare = self.spare.min(self.speed - 1);
     }
 
     /// The translated code at PC, if ROM is visible all along it.
@@ -169,11 +192,12 @@ impl Machine {
         self.hw.mmu.rom_visible(first, last).then_some(block)
     }
 
-    /// Cycles left before the next timer tick or `until`, whichever is
+    /// CPU cycles left before the next timer tick or `until`, whichever is
     /// first: the budget passed to jump natives.
     pub fn budget(&self, until: u64) -> u32 {
         let next = self.next_t1.min(self.next_t2).min(until);
-        next.saturating_sub(self.time).min(u64::from(u32::MAX)) as u32
+        let cycles = next.saturating_sub(self.time) * u64::from(self.speed);
+        cycles.saturating_sub(u64::from(self.spare)).min(u64::from(u32::MAX)) as u32
     }
 
     /// Run until the CPU reaches `addr` or `max_cycles` elapse; true if reached.

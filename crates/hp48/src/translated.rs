@@ -34,13 +34,16 @@ pub struct Run<'a> {
     /// reaches this.
     budget: u32,
     spent: u32,
-    /// Machine time when the block started.
+    /// Machine time when the block started, the CPU's speed, and the CPU
+    /// cycles then not yet counted in the time (see `Machine::set_speed`).
     now: u64,
+    speed: u32,
+    spare: u32,
 }
 
 impl<'a> Run<'a> {
-    pub fn new(cpu: &'a mut Cpu, hw: &'a mut Hardware, budget: u32, now: u64) -> Self {
-        Run { cpu, hw, budget, spent: 0, now }
+    pub fn new(cpu: &'a mut Cpu, hw: &'a mut Hardware, budget: u32, now: u64, speed: u32, spare: u32) -> Self {
+        Run { cpu, hw, budget, spent: 0, now, speed, spare }
     }
 
     /// Cycles spent so far.
@@ -52,7 +55,8 @@ impl<'a> Run<'a> {
     /// instruction that uses the bus.
     #[inline]
     pub fn sync(&mut self) {
-        self.hw.scan_line = crate::machine::scan_line(self.now + u64::from(self.spent));
+        let cycles = u64::from(self.spare) + u64::from(self.spent);
+        self.hw.scan_line = crate::machine::scan_line(self.now + cycles / u64::from(self.speed));
     }
 
     /// After an instruction that touches neither PC nor the hardware: may

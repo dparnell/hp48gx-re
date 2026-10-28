@@ -73,3 +73,30 @@ fn state_round_trip_keeps_the_stack() {
     restored.run(CPU_HZ / 2);
     assert_eq!(level1_real(&restored).as_deref(), Some("5E1"));
 }
+
+/// `Machine::set_speed` makes the CPU faster while the timers keep real
+/// time: a busy program finishes sooner, and TIMER2 counts real time.
+#[test]
+fn a_faster_cpu_keeps_the_clock() {
+    let Some(slow) = machine() else { return };
+    let mut fast = slow.clone();
+    fast.set_speed(256);
+    let line = "« 1 2000 FOR I I SIN DROP NEXT » EVAL";
+    let mut busy = Vec::new();
+    for mut m in [slow, fast] {
+        for k in hp48::typing::keystrokes(line).unwrap() {
+            m.tap(k);
+        }
+        m.tap(Key::Enter);
+        let (time, timer2) = (m.time, m.hw.timer2);
+        m.run(2 * CPU_HZ);
+        assert!((2 * CPU_HZ..2 * CPU_HZ + 64).contains(&(m.time - time)));
+        if m.speed() > 1 {
+            // Idle once the program is done, the ROM leaves TIMER2 alone
+            // (while it runs, it may reload it).
+            assert_eq!(timer2.wrapping_sub(m.hw.timer2), 2 * 8192, "TIMER2 counts real time");
+        }
+        busy.push(m.lcd().annunciators & 0x10 != 0);
+    }
+    assert_eq!(busy, [true, false], "BUSY after 2 s at 4 MHz, done at 1 GHz");
+}

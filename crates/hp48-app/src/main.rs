@@ -1,7 +1,7 @@
 //! HP 48GX desktop calculator.
 //!
 //! hp48-app [--rom PATH] [--screenshot OUT.png] [--keys "K ..."] [--type "RPL text"]... [--persist] [--pixels] [--plot-only]
-//!          [--layout auto|calculator|desktop] [--size WxH] [--line "RPL text"]... [--live]
+//!          [--layout auto|calculator|desktop] [--size WxH] [--line "RPL text"]... [--live] [--full-speed]
 //!
 //! The layout follows the window: a narrow window shows the calculator
 //! alone; a wide one adds a desktop panel (desk.rs) with the stack as text,
@@ -16,7 +16,9 @@
 //! set HP48GX_STATE to use another file.
 //!
 //! The calculator runs on a thread of its own (runner.rs), and the window
-//! is drawn again only when what it shows changes. Scripted screenshot runs
+//! is drawn again only when what it shows changes. At full speed (the
+//! LCD's context menu, or --full-speed) the CPU runs as fast as the computer
+//! allows, while the clock keeps real time. Scripted screenshot runs
 //! step it frame by frame instead, unless given --live.
 
 mod desk;
@@ -29,6 +31,7 @@ use eframe::egui::{self, Align2, Color32, CornerRadius, FontId, Pos2, Rect, Sens
 use face::{KeyCap, ShiftColor, Style, ROWS};
 use hp48::{Key, Machine, CPU_HZ, LCD_HEIGHT, LCD_WIDTH};
 use std::collections::{HashSet, VecDeque};
+use std::sync::atomic::Ordering;
 use std::sync::{Arc, Mutex, MutexGuard};
 use std::time::{Duration, Instant};
 
@@ -79,6 +82,7 @@ struct App {
     /// Shared with the thread that runs it (runner.rs).
     machine: Arc<Mutex<Machine>>,
     runner: Option<runner::Runner>,
+    speed: Arc<runner::Speed>,
     plot_open: bool,
     /// Debug: show the plot in the main window (for scripted screenshots).
     plot_only: bool,
@@ -146,6 +150,7 @@ impl App {
             minifont: read_minifont(&machine),
             machine: Arc::new(Mutex::new(machine)),
             runner: None,
+            speed: Arc::default(),
             plot_open: false,
             plot_only: false,
             plot: plot::PlotWindow::default(),
@@ -420,6 +425,13 @@ impl App {
             ui.separator();
             ui.checkbox(&mut self.plot_open, "Plot window");
             ui.checkbox(&mut self.auto_plot, "Open plot window on DRAW");
+            ui.separator();
+            let mut full = self.speed.full.load(Ordering::Relaxed);
+            let mhz = f64::from(self.speed.khz.load(Ordering::Relaxed)) / 1000.0;
+            let label = if full { format!("Full speed (now {mhz:.0} MHz)") } else { "Full speed (else 4 MHz)".to_string() };
+            if ui.checkbox(&mut full, label).changed() {
+                self.speed.full.store(full, Ordering::Relaxed);
+            }
         });
         if self.plot_open {
             self.show_plot(ui.ctx());
@@ -503,7 +515,8 @@ impl App {
         });
         if let Some(image) = shot {
             if self.live.is_some() {
-                eprintln!("{} frames drawn after the script ended", self.idle_frames);
+                let mhz = f64::from(self.speed.khz.load(Ordering::Relaxed)) / 1000.0;
+                eprintln!("{} frames drawn after the script ended; CPU at {mhz:.0} MHz", self.idle_frames);
             }
             save_png(path, &image);
             ctx.send_viewport_cmd(egui::ViewportCommand::Close);
@@ -790,6 +803,7 @@ fn main() -> eframe::Result {
     let mut pixels = false;
     let mut plot_only = false;
     let mut live = false;
+    let mut full_speed = false;
     let mut natives = true;
     let mut layout = Layout::Auto;
     let mut size = [420.0, 784.0];
@@ -801,6 +815,7 @@ fn main() -> eframe::Result {
             "--no-natives" => natives = false,
             "--plot-only" => plot_only = true,
             "--live" => live = true,
+            "--full-speed" => full_speed = true,
             "--layout" => {
                 layout = match args.next().as_deref() {
                     Some("auto") => Layout::Auto,
@@ -871,7 +886,9 @@ fn main() -> eframe::Result {
                 app.live = Some(Instant::now());
             }
             if !scripted || live {
-                app.runner = Some(runner::Runner::start(app.machine.clone(), cc.egui_ctx.clone(), app.persistent));
+                app.speed.full.store(full_speed, Ordering::Relaxed);
+                let speed = app.speed.clone();
+                app.runner = Some(runner::Runner::start(app.machine.clone(), cc.egui_ctx.clone(), app.persistent, speed));
             }
             if pixels {
                 app.display = Display::Pixels;

@@ -69,7 +69,7 @@ Run the Python tests from the repo root with `python -m unittest discover -s tes
 - **`crates/hp48`: the machine.**
   - `memory.rs`: the daisy-chain controller. Modules are configured in the order HDW, RAM, CE1, CE2, NCE3, matched by `(addr & mask) == base`, read with priority HDW > RAM > CE2 > CE1 > NCE3 > ROM. C=ID returns the IDs the ROM checks at #099C0.
   - `hardware.rs`: the I/O page, CRC, timers (SRQ mirrors the sign bit; INT fires when a timer goes negative; WAKE ends SHUTDN) and the bank switcher. It implements `Bus`.
-  - `machine.rs`: time is counted in CPU cycles at 4 MHz. TIMER2 ticks at 8192 Hz and TIMER1 at 16 Hz. SHUTDN fast-forwards to the next timer tick, which is why the emulator runs far faster than real time when idle.
+  - `machine.rs`: time is counted in CPU cycles at 4 MHz. TIMER2 ticks at 8192 Hz and TIMER1 at 16 Hz. `set_speed(n)` makes the CPU n times faster while the timers, clock and LCD keep real time: an instruction's cycles advance time by 1/n (the remainder carries over). SHUTDN fast-forwards to the next timer tick, which is why the emulator runs far faster than real time when idle.
   - `machine.rs` also builds the LCD frame from the display/menu address registers. `keyboard.rs` holds the matrix codes ((OUT line, IN bit); ON is IN bit 15), and `state.rs` does snapshots.
 - **`crates/hp48-rom`: the ROM's machine code translated into Rust** (see "Translated ROM code").
 - **`crates/hp48-vector`: LCD to vector scene.**
@@ -96,7 +96,7 @@ Run the Python tests from the repo root with `python -m unittest discover -s tes
     - the six menu labels, cut from the LCD's bottom 8 rows, as buttons;
     - a command line on the computer's keyboard, with Up/Down history. Esc gives the keyboard back to the calculator.
   - The panel only reads memory and sends keystrokes, so the ROM does all the work. While BUSY is lit, the panel keeps the last stack, because the RAM stack then holds work in progress.
-  - `runner.rs` runs the calculator on its own thread in real time (the machine is behind a mutex) and asks for a repaint only when what the window shows changes: LCD pixels, annunciators, or the stack pointer (`DSKTOP`, for the desktop panel). egui repaints on input too. So an idle calculator costs about 0.3% of a core instead of 24%. The thread also saves continuous memory every minute.
+  - `runner.rs` runs the calculator on its own thread in real time (the machine is behind a mutex) and asks for a repaint only when what the window shows changes: LCD pixels, annunciators, or the stack pointer (`DSKTOP`, for the desktop panel). egui repaints on input too. So an idle calculator costs about 0.3% of a core instead of 24%. The thread also saves continuous memory every minute. At full speed (LCD context menu, or `--full-speed`) it raises `Machine::set_speed` until running the CPU takes half of each 8 ms tick (about 300 MHz here).
   - Typed text runs faster than real time (`App::type_ahead`, about 10 ms of extra work per frame), so the calculator's clock gains a little while typing.
   - `face.rs` holds the key layout and legends (left = purple left-shift, right = green right-shift). The faceplate is drawn with vector primitives scaled to the window.
   - The LCD is drawn either from the vector scene (the default, cached per frame contents) or as pixel rectangles.
