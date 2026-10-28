@@ -82,7 +82,7 @@ fn main() {
     }
     let total = (s.native + s.translated + s.interpreted).max(1);
     let pct = |c: u64| 100.0 * c as f64 / total as f64;
-    println!("{} instructions translated; busy cycles over the tour:", hp48_rom::blocks());
+    println!("{} routines translated; busy cycles over the tour:", hp48_rom::routines());
     println!("  hand-written natives {:6.2}%", pct(s.native));
     println!("  translated ROM code  {:6.2}%", pct(s.translated));
     println!("  interpreted          {:6.3}%", pct(s.interpreted));

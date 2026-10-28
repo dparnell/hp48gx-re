@@ -165,8 +165,8 @@ impl Machine {
     /// The translated code at PC, if ROM is visible all along it.
     fn block(&self) -> Option<crate::translated::Block> {
         let pc = self.cpu.pc;
-        let &(block, end) = self.blocks.as_ref()?.get(pc as usize)?.as_ref()?;
-        self.hw.mmu.rom_visible(pc, end).then_some(block)
+        let &(block, first, last) = self.blocks.as_ref()?.get(pc as usize)?.as_ref()?;
+        self.hw.mmu.rom_visible(first, last).then_some(block)
     }
 
     /// Cycles left before the next timer tick or `until`, whichever is

@@ -4,12 +4,16 @@
 //!
 //! The code translated is every instruction the ROM analysis found
 //! (out/code.txt, written by tools/analyze.py) and every instruction in
-//! data/executed.txt (recorded by execmap over the tour). Each becomes a
-//! function that calls the CPU's method for it with constant operands and,
-//! if execution falls through to another translated instruction, calls that
-//! one's function. An instruction that changes the machine's configuration
-//! or interrupts, or calls a subroutine, ends the run. See hp48::translated
-//! for how the functions run.
+//! data/executed.txt (recorded by execmap over the tour).
+//!
+//! The code is cut into routines the way the firmware source (firmware/)
+//! labels it: a routine starts at a label that isn't local (`L_...`) and
+//! runs on while the code is contiguous. Each becomes a Rust function named
+//! after its label, with the comments above the label. Its basic blocks
+//! are the arms of a `match` on the address to run next, inside a loop, so
+//! branches within the routine stay in the function. Each instruction is a
+//! call of the CPU's method for it with constant operands, commented with
+//! the firmware's text. See hp48::translated for how the functions run.
 
 use hp48::Machine;
 use saturn::op::decode;
@@ -17,18 +21,12 @@ use saturn::{Field, Op, R};
 use std::collections::{BTreeMap, BTreeSet};
 use std::fmt::Write;
 
-/// Instructions after which execution never falls through.
-fn ends(op: &Op) -> bool {
-    matches!(op, Op::Rtn(_) | Op::Jump(_) | Op::PcIndirect(_) | Op::PcFrom(_) | Op::PcEx(_) | Op::Illegal)
-}
-
-/// Instructions that end a block but may fall through: the next one starts
-/// a block of its own.
+/// Instructions after which the run stops and the machine takes over:
+/// they change the configuration or interrupts, or stop the CPU.
 fn breaks(op: &Op) -> bool {
     matches!(
         op,
-        Op::Call(_)
-            | Op::Shutdn
+        Op::Shutdn
             | Op::Config
             | Op::Uncnfg
             | Op::Reset
@@ -39,7 +37,21 @@ fn breaks(op: &Op) -> bool {
             | Op::BusCc
             | Op::BusCd
             | Op::Sreq
+            | Op::Illegal
     )
+}
+
+/// Where a branch can go, if it can be known.
+fn target(op: &Op) -> Option<u32> {
+    match *op {
+        Op::CondJump(_, t) | Op::Jump(t) | Op::Call(t) => Some(t),
+        Op::Test { goyes, .. }
+        | Op::StTest { goyes, .. }
+        | Op::PTest { goyes, .. }
+        | Op::HsTest { goyes, .. }
+        | Op::BitTest { goyes, .. } => goyes,
+        _ => None,
+    }
 }
 
 /// Instructions that use or change PC: PC is set past them first, and
@@ -167,42 +179,208 @@ fn statement(op: &Op) -> String {
     }
 }
 
-/// The body of the function for `op` at `a`: the statement with what must
-/// come before and after it. `follow` is the instruction it falls through
-/// to, if that is translated and the run may go on.
-fn body(a: u32, op: &Op, len: u32, follow: Option<u32>) -> String {
-    let next = (a + len) & 0xF_FFFF;
-    let cycles = match op.cycles(len) {
-        Some(c) => c.to_string(),
-        None => match op {
-            Op::Mem { f: y, .. } => format!("r.cpu.mem_cycles({})", f(*y)),
-            _ => unreachable!("{op}"),
-        },
-    };
+
+/// A label in the firmware source, with the comment lines above it.
+#[derive(Clone)]
+struct Label {
+    name: String,
+    doc: Vec<String>,
+    /// file:line
+    at: String,
+}
+
+/// What the firmware source says about each address.
+#[derive(Default)]
+struct Source {
+    /// An instruction's text, as written there.
+    text: BTreeMap<u32, String>,
+    labels: BTreeMap<u32, Vec<Label>>,
+}
+
+/// Split off the original address the firmware writes in the right-hand
+/// comment (`* 032C9`), if the line has one.
+fn split_addr(line: &str) -> (&str, Option<u32>) {
+    for (pos, _) in line.match_indices('*').collect::<Vec<_>>().into_iter().rev() {
+        let rest = line[pos + 1..].trim_start();
+        let hex = rest.get(..5).filter(|h| h.bytes().all(|b| b.is_ascii_hexdigit()));
+        if let Some(h) = hex {
+            if rest.len() == 5 || rest.as_bytes()[5] == b' ' {
+                return (&line[..pos], u32::from_str_radix(h, 16).ok());
+            }
+        }
+    }
+    (line, None)
+}
+
+fn read_source(path: &std::path::Path, src: &mut Source) {
+    let text = std::fs::read_to_string(path).unwrap_or_else(|e| panic!("{}: {e}", path.display()));
+    let name = path.to_string_lossy().replace('\\', "/");
+    let (mut comments, mut pending) = (Vec::<String>::new(), Vec::<Label>::new());
+    for (no, line) in text.lines().enumerate() {
+        let line = line.trim_end_matches('\r');
+        let trimmed = line.trim();
+        if trimmed.is_empty() {
+            comments.clear();
+            continue;
+        }
+        if let Some(c) = trimmed.strip_prefix('*') {
+            comments.push(c.trim().to_string());
+            continue;
+        }
+        if let Some(inc) = trimmed.strip_prefix("INCLUDE") {
+            let file = inc.split('"').nth(1).expect("INCLUDE \"file\"");
+            read_source(&path.parent().unwrap().join(file), src);
+            continue;
+        }
+        let (code, addr) = split_addr(line);
+        let mut code = code.trim();
+        if !line.starts_with([' ', '\t']) {
+            let (first, rest) = code.split_once(char::is_whitespace).unwrap_or((code, ""));
+            if let Some(label) = first.strip_suffix(':') {
+                let doc = comments.drain(..).filter(|c| !c.starts_with("refs (")).collect();
+                pending.push(Label { name: label.to_string(), doc, at: format!("{name}:{}", no + 1) });
+                code = rest.trim();
+            }
+        }
+        comments.clear();
+        let Some(addr) = addr else { continue };
+        if code.is_empty() {
+            continue;
+        }
+        let text = code.split_whitespace().collect::<Vec<_>>().join(" ");
+        // A code object's header: its label belongs to the code after it.
+        if text.starts_with("CODE") || (text.starts_with("CON(5)") && text.contains("(*)+5")) {
+            continue;
+        }
+        if !pending.is_empty() {
+            src.labels.entry(addr).or_default().append(&mut pending);
+        }
+        src.text.insert(addr, text);
+    }
+}
+
+/// A run of contiguous code under one firmware label.
+struct Routine {
+    label: Option<Label>,
+    /// Synthetic name when there is no label.
+    name: String,
+    insns: Vec<u32>,
+}
+
+/// A label as a Rust identifier, unique among `taken`.
+fn ident(name: &str, a: u32, taken: &mut BTreeSet<String>) -> String {
+    const KEYWORDS: &[&str] = &["as", "break", "const", "continue", "crate", "else", "enum", "extern", "false", "fn", "for", "if",
+        "impl", "in", "let", "loop", "match", "mod", "move", "mut", "pub", "ref", "return", "self", "Self", "static", "struct",
+        "super", "trait", "true", "type", "unsafe", "use", "where", "while", "async", "await", "dyn"];
+    let mut s: String = name.chars().map(|c| if c.is_ascii_alphanumeric() { c } else { '_' }).collect();
+    if s.starts_with(|c: char| c.is_ascii_digit()) || s.chars().all(|c| c == '_') || KEYWORDS.contains(&s.as_str()) {
+        s.insert(0, 'r');
+    }
+    if !taken.insert(s.clone()) {
+        s = format!("{s}_{a:05X}");
+        taken.insert(s.clone());
+    }
+    s
+}
+
+/// The Rust for one routine.
+fn routine(rt: &Routine, fname: &str, code: &BTreeMap<u32, (Op, u32)>, src: &Source) -> String {
+    let members: BTreeSet<u32> = rt.insns.iter().copied().collect();
+    // Basic blocks start at the routine's start, at labels, after
+    // instructions that branch or stop the run, and at branch targets.
+    let mut leaders = BTreeSet::from([rt.insns[0]]);
+    for &a in &rt.insns {
+        let (op, len) = &code[&a];
+        if src.labels.contains_key(&a) {
+            leaders.insert(a);
+        }
+        if uses_pc(op) || breaks(op) {
+            leaders.insert((a + len) & 0xF_FFFF);
+        }
+        if let Some(t) = target(op).filter(|t| members.contains(t)) {
+            leaders.insert(t);
+        }
+    }
+    let mut blocks: Vec<Vec<u32>> = Vec::new();
+    for &a in &rt.insns {
+        match blocks.last_mut() {
+            Some(b) if !leaders.contains(&a) => b.push(a),
+            _ => blocks.push(vec![a]),
+        }
+    }
+
     let mut out = String::new();
-    // Instructions that always set PC don't need it set first.
-    if uses_pc(op) && !matches!(op, Op::Rtn(_) | Op::Jump(_) | Op::PcFrom(_) | Op::PcIndirect(_)) {
-        writeln!(out, "    r.cpu.pc = 0x{next:05X};").unwrap();
+    match &rt.label {
+        Some(l) => {
+            for d in &l.doc {
+                writeln!(out, "// {d}").unwrap();
+            }
+            writeln!(out, "// {}: {}", l.name, l.at).unwrap();
+        }
+        None => writeln!(out, "// Unlabelled code at #{:05X}.", rt.insns[0]).unwrap(),
     }
-    if uses_bus(op) {
-        out.push_str("    r.sync();\n");
+    writeln!(out, "pub(super) fn {fname}(r: &mut Run) {{\n    let mut at = r.cpu.pc;\n    loop {{\n        match at {{").unwrap();
+    for (i, b) in blocks.iter().enumerate() {
+        let (first, last) = (b[0], *b.last().unwrap());
+        if i > 0 {
+            match src.labels.get(&first) {
+                Some(ls) => {
+                    for l in ls {
+                        for d in &l.doc {
+                            writeln!(out, "            // {d}").unwrap();
+                        }
+                        writeln!(out, "            // {}:", l.name).unwrap();
+                    }
+                }
+                None => writeln!(out, "            // #{first:05X}:").unwrap(),
+            }
+        }
+        writeln!(out, "            0x{first:05X}..=0x{last:05X} => {{").unwrap();
+        for &a in b {
+            let (op, len) = &code[&a];
+            let next = (a + len) & 0xF_FFFF;
+            let cycles = match op.cycles(*len) {
+                Some(c) => c.to_string(),
+                None => match op {
+                    Op::Mem { f: y, .. } => format!("r.cpu.mem_cycles({})", f(*y)),
+                    _ => unreachable!("{op}"),
+                },
+            };
+            // The firmware writes a test's GOYES on a line of its own.
+            let text = match src.text.get(&a) {
+                Some(_) => src.text.range(a..a + len).map(|(_, t)| t.as_str()).collect::<Vec<_>>().join(" / "),
+                None => op.to_string(),
+            };
+            let stmt = match statement(op) {
+                s if s.is_empty() => "()".to_string(),
+                s => s.trim_end_matches(';').to_string(),
+            };
+            let ind = "                ";
+            if *op == Op::Rsi {
+                // It may take an interrupt, which pushes PC.
+                writeln!(out, "{ind}r.cpu.pc = 0x{next:05X};\n{ind}r.sync();\n{ind}{stmt}; // {text}\n{ind}r.spend({cycles});\n{ind}return;").unwrap();
+            } else if breaks(op) {
+                let sync = if uses_bus(op) { "r.sync();\n                " } else { "" };
+                writeln!(out, "{ind}{sync}{stmt}; // {text}\n{ind}r.end(0x{next:05X}, {cycles});\n{ind}return;").unwrap();
+            } else if uses_pc(op) {
+                let always = matches!(op, Op::Rtn(_) | Op::Jump(_) | Op::PcFrom(_) | Op::PcIndirect(_));
+                let mac = match (always, uses_bus(op)) {
+                    (true, true) => "jump_io!(r, at, ".to_string(),
+                    (true, false) => "jump!(r, at, ".to_string(),
+                    (false, _) => format!("branch!(r, at, 0x{next:05X}, "),
+                };
+                writeln!(out, "{ind}{mac}{cycles}, {stmt}); // {text}").unwrap();
+            } else {
+                let mac = if uses_bus(op) { "io!" } else { "op!" };
+                writeln!(out, "{ind}{mac}(r, at, 0x{a:05X}..0x{next:05X}, {cycles}, {stmt}); // {text}").unwrap();
+                if a == last {
+                    writeln!(out, "{ind}at = 0x{next:05X};").unwrap();
+                }
+            }
+        }
+        writeln!(out, "            }}").unwrap();
     }
-    match statement(op) {
-        stmt if stmt.is_empty() => writeln!(out, "    // {op}").unwrap(),
-        stmt => writeln!(out, "    {stmt} // {op}").unwrap(),
-    }
-    let check = if uses_pc(op) {
-        "next_pc"
-    } else if uses_bus(op) {
-        "next_io"
-    } else {
-        "next"
-    };
-    match follow {
-        Some(f) => writeln!(out, "    if r.{check}(0x{next:05X}, {cycles}) {{\n        i{f:05x}(r)\n    }}").unwrap(),
-        None if uses_pc(op) => writeln!(out, "    r.spend({cycles});").unwrap(),
-        None => writeln!(out, "    r.end(0x{next:05X}, {cycles});").unwrap(),
-    }
+    out.push_str("            _ => {\n                r.cpu.pc = at;\n                return;\n            }\n        }\n    }\n}\n\n");
     out
 }
 
@@ -226,45 +404,48 @@ fn main() {
     wanted.extend(addrs("out/code.txt"));
     let code: BTreeMap<u32, (Op, u32)> = wanted.iter().map(|&a| (a, decode(a, fetch))).collect();
 
-    // Where execution goes on after each instruction, if it falls through
-    // to translated code, and the last address of the run from each one.
-    let follows = |a: u32, op: &Op, len: u32| {
-        let next = (a + len) & 0xF_FFFF;
-        (!ends(op) && !breaks(op) && next > a && code.contains_key(&next)).then_some(next)
-    };
-    let mut last: BTreeMap<u32, u32> = BTreeMap::new();
-    for (&a, (op, len)) in code.iter().rev() {
-        let end = match follows(a, op, *len) {
-            Some(next) => last[&next],
-            None => a + len - 1,
-        };
-        last.insert(a, end);
+    let mut src = Source::default();
+    read_source(std::path::Path::new("firmware/rom.s"), &mut src);
+
+    // Routines: contiguous code, cut at labels that aren't local. An
+    // instruction that starts inside another (code that overlaps code) is a
+    // routine of its own.
+    let routine_label = |a: u32| src.labels.get(&a).and_then(|ls| ls.iter().find(|l| !l.name.starts_with("L_"))).cloned();
+    let mut routines: Vec<Routine> = Vec::new();
+    // The routine the contiguous code goes on in, and where it goes on.
+    let (mut current, mut expected) = (0, None);
+    for (&a, (_, len)) in &code {
+        let label = routine_label(a);
+        match expected {
+            Some(e) if a == e && label.is_none() => {
+                routines[current].insns.push(a);
+                expected = Some(a + len);
+                continue;
+            }
+            Some(e) if a < e => {
+                let label = label.or_else(|| src.labels.get(&a).map(|ls| ls[0].clone()));
+                routines.push(Routine { label, name: format!("overlap_{a:05X}"), insns: vec![a] });
+                continue;
+            }
+            _ => {}
+        }
+        let label = label.or_else(|| src.labels.get(&a).map(|ls| ls[0].clone()));
+        routines.push(Routine { label, name: format!("code_{a:05X}"), insns: vec![a] });
+        current = routines.len() - 1;
+        expected = Some(a + len);
     }
 
-    let names: BTreeMap<u32, String> = std::fs::read_to_string("data/entries48g.txt")
-        .unwrap_or_default()
-        .lines()
-        .filter_map(|l| {
-            let mut it = l.split('\t');
-            let (a, name) = (it.next()?, it.next()?);
-            Some((u32::from_str_radix(a, 16).ok().filter(|_| a.len() == 5)?, name.to_string()))
-        })
-        .collect();
-
-
     // One file per 64K region.
+    let mut taken = BTreeSet::new();
     let mut files: BTreeMap<u32, String> = BTreeMap::new();
     let mut tables: BTreeMap<u32, String> = BTreeMap::new();
-    for (&a, (op, len)) in &code {
-        let region = a >> 16;
-        let file = files.entry(region).or_default();
-        if let Some(name) = names.get(&a) {
-            writeln!(file, "/// {name}").unwrap();
-        }
-        writeln!(file, "fn i{a:05x}(r: &mut Run) {{").unwrap();
-        file.push_str(&body(a, op, *len, follows(a, op, *len)));
-        file.push_str("}\n\n");
-        writeln!(tables.entry(region).or_default(), "    (0x{a:05X}, 0x{:05X}, i{a:05x}),", last[&a]).unwrap();
+    for rt in &routines {
+        let first = rt.insns[0];
+        let last = rt.insns.last().map(|a| a + code[a].1 - 1).unwrap();
+        let fname = ident(rt.label.as_ref().map_or(&rt.name, |l| &l.name), first, &mut taken);
+        let region = first >> 16;
+        files.entry(region).or_default().push_str(&routine(rt, &fname, &code, &src));
+        writeln!(tables.entry(region).or_default(), "    (0x{first:05X}, 0x{last:05X}, {fname}),").unwrap();
     }
 
     let dir = std::path::Path::new("crates/hp48-rom/src/gen");
@@ -272,22 +453,25 @@ fn main() {
     for old in std::fs::read_dir(dir).unwrap().flatten() {
         std::fs::remove_file(old.path()).unwrap();
     }
-    let header = "// Generated by `cargo run --release -p hp48 --example translate` from ROM revision R.\n";
+    let header = "// Generated by `cargo run --release -p hp48 --example translate` from ROM revision R\n// and the firmware source (firmware/). Don't edit: change the generator.\n";
     let mut module = format!("{header}\n");
-    let mut all = String::from("\n/// Every translated instruction: address, last address of its run, function.\npub const ALL: &[&[(u32, u32, Block)]] = &[\n");
+    let mut all = String::from(
+        "\n/// Every translated routine: the address of its first instruction, its\n/// last address, and its function.\npub const ALL: &[&[(u32, u32, Block)]] = &[\n",
+    );
     for (region, file) in &files {
         let text = format!(
-            "{header}\nuse super::super::prelude::*;\n\n{file}pub const BLOCKS: &[(u32, u32, Block)] = &[\n{}];\n",
+            "{header}\n#![allow(non_snake_case, clippy::no_effect)]\n\nuse super::super::prelude::*;\n\n{file}pub const ROUTINES: &[(u32, u32, Block)] = &[\n{}];\n",
             tables[region]
         );
         std::fs::write(dir.join(format!("r{region:x}.rs")), text).unwrap();
         writeln!(module, "mod r{region:x};").unwrap();
-        writeln!(all, "    r{region:x}::BLOCKS,").unwrap();
+        writeln!(all, "    r{region:x}::ROUTINES,").unwrap();
     }
     writeln!(module, "\n/// `hp48::rom_hash` of the ROM's nibbles.\npub const ROM_HASH: u64 = 0x{:016X};", hp48::rom_hash(rom)).unwrap();
     module.push_str("\nuse hp48::translated::Block;\n");
     module.push_str(&all);
     module.push_str("];\n");
     std::fs::write(dir.join("mod.rs"), module).unwrap();
-    println!("{} instructions translated, {} files", code.len(), files.len());
+    let named = routines.iter().filter(|r| r.label.is_some()).count();
+    println!("{} instructions in {} routines ({named} labelled), {} files", code.len(), routines.len(), files.len());
 }
