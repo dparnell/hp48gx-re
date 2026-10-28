@@ -144,12 +144,12 @@ fn next(cpu: &mut Cpu, hw: &mut Hardware) -> u32 {
 }
 
 /// NEXT at any address that holds its code.
-pub fn next_site(cpu: &mut Cpu, hw: &mut Hardware) -> Option<u32> {
+pub fn next_site(cpu: &mut Cpu, hw: &mut Hardware, _budget: u32) -> Option<u32> {
     code_at(hw, cpu.pc, NEXT_CODE).then(|| next(cpu, hw))
 }
 
 /// A prolog that pushes its object (A.A) on the data stack.
-pub fn push_prolog(cpu: &mut Cpu, hw: &mut Hardware) -> Option<u32> {
+pub fn push_prolog(cpu: &mut Cpu, hw: &mut Hardware, _budget: u32) -> Option<u32> {
     let room = cpu.d.a();
     if cpu.dec || room == 0 {
         return None;
@@ -162,7 +162,7 @@ pub fn push_prolog(cpu: &mut Cpu, hw: &mut Hardware) -> Option<u32> {
 
 /// DOCOL: push the instruction pointer on the return stack and run the
 /// secondary's body.
-pub fn docol(cpu: &mut Cpu, hw: &mut Hardware) -> Option<u32> {
+pub fn docol(cpu: &mut Cpu, hw: &mut Hardware, _budget: u32) -> Option<u32> {
     let room = cpu.d.a();
     if cpu.dec || room == 0 {
         return None;
@@ -185,7 +185,7 @@ fn enter_secondary(cpu: &mut Cpu, hw: &mut Hardware) -> u32 {
 }
 
 /// SEMI: pop the instruction pointer from the return stack.
-pub fn semi(cpu: &mut Cpu, hw: &mut Hardware) -> Option<u32> {
+pub fn semi(cpu: &mut Cpu, hw: &mut Hardware, _budget: u32) -> Option<u32> {
     if cpu.dec {
         return None;
     }
@@ -233,7 +233,7 @@ const SECONDARY_CODE: &str = "184136134067A2207DACF4F1D9136144164132D81641421648
 const SKIPOB_CODE: &str = "84113706D90620D18718014216413114334CF8208A6C01C4133808C34031308A670CD4218ADAC07D5071350318451FE554B16F16F5ED16F16416F1645FC16559C146132C21345BBD214EC6132C213416156A1841321301641F117081478A6E014616CA3E59F1621468AA1A132C2134D214E8AAF0C6132C21341611616C1FD214EC6132C2134161660F";
 
 /// PRLG: jump to the embedded-object handler of the prolog at A.A.
-pub fn prlg(cpu: &mut Cpu, hw: &mut Hardware) -> Option<u32> {
+pub fn prlg(cpu: &mut Cpu, hw: &mut Hardware, _budget: u32) -> Option<u32> {
     if cpu.dec || cpu.p != 0 {
         return None;
     }
@@ -254,7 +254,7 @@ fn push_and_next(cpu: &mut Cpu, hw: &mut Hardware) -> u32 {
 }
 
 /// An embedded object of `SIZE` nibbles, skipped with `ADDS` additions to D0.
-pub fn embedded<const SIZE: u32, const ADDS: u32>(cpu: &mut Cpu, hw: &mut Hardware) -> Option<u32> {
+pub fn embedded<const SIZE: u32, const ADDS: u32>(cpu: &mut Cpu, hw: &mut Hardware, _budget: u32) -> Option<u32> {
     if cpu.dec || cpu.d.a() == 0 {
         return None;
     }
@@ -265,7 +265,7 @@ pub fn embedded<const SIZE: u32, const ADDS: u32>(cpu: &mut Cpu, hw: &mut Hardwa
 }
 
 /// An embedded object with a length field after its prolog.
-pub fn embedded_length(cpu: &mut Cpu, hw: &mut Hardware) -> Option<u32> {
+pub fn embedded_length(cpu: &mut Cpu, hw: &mut Hardware, _budget: u32) -> Option<u32> {
     if cpu.dec || cpu.d.a() == 0 {
         return None;
     }
@@ -432,7 +432,7 @@ fn apply_skip(cpu: &mut Cpu, hw: &mut Hardware, skip: &Skip) -> u32 {
 }
 
 /// SKIPOB (#03019): D0 = the address after the object at D0.
-pub fn skipob(cpu: &mut Cpu, hw: &mut Hardware) -> Option<u32> {
+pub fn skipob(cpu: &mut Cpu, hw: &mut Hardware, _budget: u32) -> Option<u32> {
     if cpu.dec {
         return None;
     }
@@ -460,21 +460,72 @@ fn skip_embedded(cpu: &mut Cpu, hw: &mut Hardware, call: u32) -> Option<u32> {
 }
 
 /// An embedded list, symbolic, unit, tagged object or other composite.
-pub fn embedded_composite(cpu: &mut Cpu, hw: &mut Hardware) -> Option<u32> {
+pub fn embedded_composite(cpu: &mut Cpu, hw: &mut Hardware, _budget: u32) -> Option<u32> {
     let c = skip_embedded(cpu, hw, 0x02D35)?;
     Some(c + push_and_next(cpu, hw))
 }
 
 /// An embedded secondary: run it.
-pub fn embedded_secondary(cpu: &mut Cpu, hw: &mut Hardware) -> Option<u32> {
+pub fn embedded_secondary(cpu: &mut Cpu, hw: &mut Hardware, _budget: u32) -> Option<u32> {
     let c = skip_embedded(cpu, hw, 0x02DEB)?;
     cpu.d.set_a(cpu.d.a() - 1);
     Some(c + 4 + 5 + enter_secondary(cpu, hw))
 }
 
+/// Debounce's wait for TIMER2 to move on (#009B9): `A=DAT0 S; ?C=A S;
+/// GOYES` back, with D0 at the timer's second nibble.
+const WAIT_TIMER_CODE: &str = "15249429F";
+/// The wait for TIMER2 to reach A.P (#00755): `C=DAT0 1; ?C#A P; GOYES`
+/// back, with D0 at the timer's first nibble.
+const WAIT_COUNT_CODE: &str = "15E09069F";
+/// One turn of either loop: the one-nibble read, then the taken test.
+const READ_CYCLES: u32 = 15;
+const TURN_CYCLES: u32 = READ_CYCLES + 7;
+
+/// A loop that reads the nibble at D0 and goes round again while `again`
+/// holds for the value read; `load` puts the value in its register. The
+/// timers change only when they tick and RAM only when the CPU writes it,
+/// so every turn before the next tick reads the same value: the native runs
+/// all the turns whose read ends before the budget, and leaves the rest
+/// (and the turn the tick falls in) to the ROM.
+fn poll(cpu: &mut Cpu, hw: &mut Hardware, budget: u32, again: fn(&Cpu, u8) -> bool, load: fn(&mut Cpu, u8)) -> Option<u32> {
+    let addr = cpu.d0;
+    let steady = match hw.mmu.select(addr) {
+        None => true,
+        Some(m) => m.kind == ModuleKind::Ram || m.kind == ModuleKind::Io && (0x37..0x40).contains(&(addr - m.base)),
+    };
+    let v = hw.peek(addr);
+    if !steady || budget <= READ_CYCLES || !again(cpu, v) {
+        return None;
+    }
+    let turns = (budget - READ_CYCLES - 1) / TURN_CYCLES + 1;
+    for _ in 0..turns {
+        hw.read(addr);
+    }
+    load(cpu, v);
+    cpu.carry = true;
+    Some(turns * TURN_CYCLES)
+}
+
+/// Debounce (#009A5) waiting for the next 2 ms step of TIMER2.
+pub fn wait_timer(cpu: &mut Cpu, hw: &mut Hardware, budget: u32) -> Option<u32> {
+    poll(cpu, hw, budget, |cpu, v| cpu.c.nib(15) == v, |cpu, v| cpu.a.set_nib(15, v))
+}
+
+/// The keyboard scan's short delay (#00735) waiting for TIMER2 to count
+/// down to A.P.
+pub fn wait_count(cpu: &mut Cpu, hw: &mut Hardware, budget: u32) -> Option<u32> {
+    fn again(cpu: &Cpu, v: u8) -> bool {
+        let mut c = cpu.c;
+        c.set_nib(0, v);
+        c.nib(cpu.p.into()) != cpu.a.nib(cpu.p.into())
+    }
+    poll(cpu, hw, budget, again, |cpu, v| cpu.c.set_nib(0, v))
+}
+
 /// Every jump native that applies to this machine's ROM, by address: NEXT
 /// wherever lower ROM holds its code, the pushing prologs, DOCOL, SEMI,
-/// PRLG, the handlers of embedded objects and SKIPOB.
+/// PRLG, the handlers of embedded objects, SKIPOB and two polling loops.
 pub fn jump_sites(machine: &Machine) -> Vec<(u32, &'static str, Jump)> {
     let mut hw = machine.hw.clone();
     let mut sites = Vec::new();
@@ -490,7 +541,7 @@ pub fn jump_sites(machine: &Machine) -> Vec<(u32, &'static str, Jump)> {
             sites.push((addr, "push prolog", push_prolog as Jump));
         }
     }
-    let routines: [(u32, &str, Jump, &str); 13] = [
+    let routines: [(u32, &str, Jump, &str); 15] = [
         (0x02D9D, "DOCOL", docol, DOCOL_CODE),
         (0x03130, "SEMI", semi, SEMI_CODE),
         (PRLG, "PRLG", prlg, PRLG_CODE),
@@ -504,6 +555,8 @@ pub fn jump_sites(machine: &Machine) -> Vec<(u32, &'static str, Jump)> {
         (0x02D2A, "embedded", embedded_composite, COMPOSITE_CODE),
         (0x02DE0, "embedded", embedded_secondary, SECONDARY_CODE),
         (0x03019, "SKIPOB", skipob, SKIPOB_CODE),
+        (0x009B9, "wait timer", wait_timer, WAIT_TIMER_CODE),
+        (0x00755, "wait count", wait_count, WAIT_COUNT_CODE),
     ];
     for (addr, name, f, code) in routines {
         if code_at(&mut hw, addr, code) {
@@ -602,11 +655,12 @@ fn compare(rom: &Machine, native: &Machine) -> Result<(), String> {
 /// Run the jump native `f` and the ROM code at PC from the same machine
 /// state. A native that declines must leave the machine untouched; one that
 /// runs must match the ROM after the same number of cycles. Returns whether
-/// the native ran.
-pub fn verify_jump(machine: &Machine, f: Jump) -> Result<bool, String> {
+/// the native ran. `until` is the end of the run, as for [`Machine::step`];
+/// within its budget no timer ticks, so the ROM code is run without them.
+pub fn verify_jump(machine: &Machine, f: Jump, until: u64) -> Result<bool, String> {
     let pc = machine.cpu.pc;
     let mut native = machine.clone();
-    let Some(cycles) = f(&mut native.cpu, &mut native.hw) else {
+    let Some(cycles) = f(&mut native.cpu, &mut native.hw, machine.budget(until)) else {
         return compare(machine, &native).map(|()| false).map_err(|e| format!("#{pc:05X} declined but {e}"));
     };
     let mut rom = machine.clone();

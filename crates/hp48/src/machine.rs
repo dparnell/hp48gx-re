@@ -42,7 +42,12 @@ pub type Native = fn(&mut Cpu, &mut Hardware);
 /// inner loop. It either declines, leaving everything untouched (the CPU
 /// then runs the ROM code), or does the work, sets PC to where the ROM code
 /// would go next, and returns the cycles the ROM code would have taken.
-pub type Jump = fn(&mut Cpu, &mut Hardware) -> Option<u32>;
+///
+/// The last argument is the budget: the cycles left before the next timer
+/// tick or the end of the run. A native that stands for many instructions
+/// whose outcome depends on time (a polling loop) stops within it, where
+/// the ROM code would also have seen nothing change.
+pub type Jump = fn(&mut Cpu, &mut Hardware, u32) -> Option<u32>;
 
 #[derive(Clone)]
 pub struct Machine {
@@ -118,7 +123,10 @@ impl Machine {
                 self.cpu.pc = self.cpu.pop();
                 NATIVE_CYCLES
             }
-            None => match self.jumps.get(&self.cpu.pc).and_then(|j| j(&mut self.cpu, &mut self.hw)) {
+            None => match self.jumps.get(&self.cpu.pc).copied().and_then(|j| {
+                let budget = self.budget(until);
+                j(&mut self.cpu, &mut self.hw, budget)
+            }) {
                 Some(c) => {
                     self.jump_runs += 1;
                     self.cpu.cycles += u64::from(c);
@@ -130,6 +138,13 @@ impl Machine {
         self.time += u64::from(c);
         self.advance_timers();
         self.service();
+    }
+
+    /// Cycles left before the next timer tick or `until`, whichever is
+    /// first: the budget passed to jump natives.
+    pub fn budget(&self, until: u64) -> u32 {
+        let next = self.next_t1.min(self.next_t2).min(until);
+        next.saturating_sub(self.time).min(u64::from(u32::MAX)) as u32
     }
 
     /// Run until the CPU reaches `addr` or `max_cycles` elapse; true if reached.

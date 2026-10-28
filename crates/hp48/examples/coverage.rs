@@ -44,8 +44,10 @@ struct Coverage {
     active: Vec<Frame>,
     /// Jump native names by address.
     sites: HashMap<u32, &'static str>,
-    /// ROM instructions each jump site stands for when its native runs.
-    site_instructions: HashMap<u32, u64>,
+    /// ROM instructions and cycles of a jump native's first run, by site.
+    /// Other runs are scaled by their cycles: a polling loop runs a varying
+    /// number of identical turns.
+    site_instructions: HashMap<u32, (u64, u32)>,
     total: Count,
     covered: Count,
     per_native: Vec<Count>,
@@ -71,7 +73,7 @@ impl Coverage {
             }
             let jump = self.sites.get(&pc).copied();
             if jump.is_some() && !self.site_instructions.contains_key(&pc) {
-                if let Some(n) = rom_instructions(&self.m) {
+                if let Some(n) = rom_instructions(&self.m, end) {
                     self.site_instructions.insert(pc, n);
                 }
             }
@@ -79,7 +81,8 @@ impl Coverage {
             self.m.step(end);
             let mut c = Count { cycles: self.m.time - time, instructions: 1, calls: 0 };
             if let (Some(name), true) = (jump, self.m.jump_runs > runs) {
-                c.instructions = self.site_instructions[&pc];
+                let (n, cycles) = self.site_instructions[&pc];
+                c.instructions = (n * c.cycles / u64::from(cycles)).max(1);
                 add(&mut self.covered, c);
                 let j = self.per_jump.entry(name).or_default();
                 add(j, c);
@@ -110,18 +113,18 @@ impl Coverage {
     }
 }
 
-/// How many ROM instructions the jump native at PC stands for, if it runs
-/// from this state.
-fn rom_instructions(m: &Machine) -> Option<u64> {
+/// How many ROM instructions the jump native at PC stands for, and their
+/// cycles, if it runs from this state.
+fn rom_instructions(m: &Machine, until: u64) -> Option<(u64, u32)> {
     let f = m.jumps[&m.cpu.pc];
-    let cycles = f(&mut m.cpu.clone(), &mut m.hw.clone())?;
+    let cycles = f(&mut m.cpu.clone(), &mut m.hw.clone(), m.budget(until))?;
     let mut rom = m.clone();
     let (mut spent, mut n) = (0, 0);
     while spent < cycles {
         spent += rom.cpu.step(&mut rom.hw);
         n += 1;
     }
-    Some(n)
+    Some((n, cycles))
 }
 
 fn add(to: &mut Count, c: Count) {

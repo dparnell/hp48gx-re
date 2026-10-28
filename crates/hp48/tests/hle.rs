@@ -95,7 +95,7 @@ impl Checked {
                 count.0 += 1;
                 if self.all || count.0 <= 2000 || count.0.is_multiple_of(97) {
                     count.1 += 1;
-                    if let Err(e) = hle::verify_jump(&self.m, f) {
+                    if let Err(e) = hle::verify_jump(&self.m, f, end) {
                         panic!("{} (call {}): {e}", self.names[&pc], count.0);
                     }
                 }
@@ -150,7 +150,7 @@ fn rpl_inner_loop_matches_rom() {
         t.enter(line);
     }
     eprintln!("{:?}", t.counts);
-    for name in ["NEXT", "push prolog", "DOCOL", "SEMI", "PRLG", "embedded", "SKIPOB"] {
+    for name in ["NEXT", "push prolog", "DOCOL", "SEMI", "PRLG", "embedded", "SKIPOB", "wait timer", "wait count"] {
         assert!(t.counts.get(name).is_some_and(|c| c.1 > 20), "{name} ran: {:?}", t.counts);
     }
     // The same lines without natives leave the same objects on the stack.
@@ -185,7 +185,7 @@ fn without_addresses(text: &str) -> String {
 fn verify_jump_detects_a_wrong_native() {
     let Some(m) = machine() else { return };
     // At reset the CPU is not at SEMI.
-    assert!(hle::verify_jump(&m, hle::semi).is_err());
+    assert!(hle::verify_jump(&m, hle::semi, u64::MAX).is_err());
 }
 
 #[path = "../examples/common/tour.rs"]
