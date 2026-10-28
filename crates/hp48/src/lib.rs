@@ -6,6 +6,7 @@ pub mod keyboard;
 pub mod machine;
 pub mod memory;
 pub mod state;
+pub mod translated;
 pub mod typing;
 
 pub use keyboard::Key;

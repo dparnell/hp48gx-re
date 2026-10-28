@@ -136,4 +136,17 @@ impl Controller {
     pub fn select(&self, addr: u32) -> Option<&Module> {
         PRIORITY.iter().map(|&i| &self.modules[i]).find(|m| m.contains(addr))
     }
+
+    /// Is ROM visible at every address from `start` to `end` inclusive?
+    pub fn rom_visible(&self, start: u32, end: u32) -> bool {
+        self.modules.iter().filter(|m| m.configured()).all(|m| {
+            let size = (!m.mask & 0xF_FFFF) + 1;
+            if size.is_power_of_two() {
+                // A contiguous mask: the module covers one aligned range.
+                end < m.base || start > m.base + size - 1
+            } else {
+                !(start..=end).any(|a| m.contains(a))
+            }
+        })
+    }
 }

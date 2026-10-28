@@ -1,6 +1,6 @@
 [workspace]
 resolver = "2"
-members = ["crates/saturn", "crates/hp48", "crates/hp48-cli", "crates/hp48-app", "crates/hp48-vector", "crates/hp48-rpl"]
+members = ["crates/saturn", "crates/hp48", "crates/hp48-cli", "crates/hp48-app", "crates/hp48-vector", "crates/hp48-rpl", "crates/hp48-rom"]
 
 [workspace.package]
 edition = "2021"

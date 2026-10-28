@@ -6,5 +6,6 @@ license.workspace = true
 
 [dependencies]
 hp48 = { path = "../hp48" }
+hp48-rom = { path = "../hp48-rom" }
 hp48-vector = { version = "0.1.0", path = "../hp48-vector" }
 png = "0.18.1"

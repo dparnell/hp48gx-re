@@ -359,7 +359,9 @@ impl Cpu {
 
     // ------------------------------------------------------------ execute
 
-    fn exec(&mut self, op: Op, len: u32, bus: &mut impl Bus) -> u32 {
+    /// Execute a decoded instruction whose PC has already been advanced
+    /// past it. Returns the cycle count; `step` adds it to `cycles`.
+    pub fn exec(&mut self, op: Op, len: u32, bus: &mut impl Bus) -> u32 {
         use Op::*;
         let mut cycles = 2 + len;
         match op {

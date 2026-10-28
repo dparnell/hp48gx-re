@@ -94,8 +94,10 @@ fn main() {
     let mut m = Machine::new(&image);
     // Native Rust replacements for ROM code, each verified against the
     // original (crates/hp48/tests/hle.rs).
+    // and the rest of the ROM's machine code translated into Rust.
     if natives {
         hp48::hle::install(&mut m);
+        hp48_rom::install(&mut m);
     }
 
     let mut hist: HashMap<u32, u64> = HashMap::new();

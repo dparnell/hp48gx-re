@@ -59,6 +59,10 @@ pub struct Machine {
     pub jumps: std::collections::HashMap<u32, Jump>,
     /// How many times a jump native did the work (it may decline).
     pub jump_runs: u64,
+    /// ROM code translated into Rust (see crate::translated).
+    pub blocks: Option<crate::translated::Blocks>,
+    /// How many blocks ran.
+    pub block_runs: u64,
     /// Elapsed emulated time in CPU cycles.
     pub time: u64,
     next_t1: u64,
@@ -69,6 +73,11 @@ pub struct Machine {
 
 /// Cycles charged for a call to a native routine.
 const NATIVE_CYCLES: u32 = 40;
+
+/// The LCD line being refreshed at `time`: 64 lines, 64 times a second.
+pub(crate) fn scan_line(time: u64) -> u8 {
+    ((time * 64 * 64 / CPU_HZ) % 64) as u8
+}
 
 fn period(hz: u64, n: u64) -> u64 {
     n * CPU_HZ / hz
@@ -83,6 +92,8 @@ impl Machine {
             natives: std::collections::HashMap::new(),
             jumps: std::collections::HashMap::new(),
             jump_runs: 0,
+            blocks: None,
+            block_runs: 0,
             time: 0,
             next_t1: period(16, 1),
             next_t2: period(8192, 1),
@@ -132,12 +143,28 @@ impl Machine {
                     self.cpu.cycles += u64::from(c);
                     c
                 }
-                None => self.cpu.step(&mut self.hw),
+                None => match self.block() {
+                    Some(block) => {
+                        let budget = self.budget(until);
+                        let mut run = crate::translated::Run::new(&mut self.cpu, &mut self.hw, budget, self.time);
+                        block(&mut run);
+                        self.block_runs += 1;
+                        run.spent()
+                    }
+                    None => self.cpu.step(&mut self.hw),
+                },
             },
         };
         self.time += u64::from(c);
         self.advance_timers();
         self.service();
+    }
+
+    /// The translated code at PC, if ROM is visible all along it.
+    fn block(&self) -> Option<crate::translated::Block> {
+        let pc = self.cpu.pc;
+        let &(block, end) = self.blocks.as_ref()?.get(pc as usize)?.as_ref()?;
+        self.hw.mmu.rom_visible(pc, end).then_some(block)
     }
 
     /// Cycles left before the next timer tick or `until`, whichever is
@@ -170,8 +197,7 @@ impl Machine {
             self.t1_count += 1;
             self.next_t1 = period(16, self.t1_count);
         }
-        // 64 lines refreshed 64 times a second.
-        self.hw.scan_line = ((self.time * 64 * 64 / CPU_HZ) % 64) as u8;
+        self.hw.scan_line = scan_line(self.time);
     }
 
     /// Deliver interrupts and wake-ups requested by the hardware.

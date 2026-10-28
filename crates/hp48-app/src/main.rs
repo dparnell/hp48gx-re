@@ -127,6 +127,8 @@ impl App {
         // Native Rust replacements for ROM routines, each verified against
         // the original (crates/hp48/tests/hle.rs).
         hp48::hle::install(&mut machine);
+        // The rest of the ROM's machine code, translated into Rust.
+        hp48_rom::install(&mut machine);
         if persistent {
             persist::load(&mut machine);
         }
@@ -809,6 +811,7 @@ fn main() -> eframe::Result {
             if !natives {
                 app.machine.natives.clear();
                 app.machine.jumps.clear();
+                app.machine.blocks = None;
             }
             if pixels {
                 app.display = Display::Pixels;

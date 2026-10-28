@@ -1,0 +1,10 @@
+[package]
+name = "hp48-rom"
+description = "The HP 48GX ROM's machine code, translated into Rust"
+edition.workspace = true
+version.workspace = true
+license.workspace = true
+
+[dependencies]
+hp48 = { path = "../hp48" }
+saturn = { path = "../saturn" }
