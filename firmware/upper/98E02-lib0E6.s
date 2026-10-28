@@ -36,197 +36,84 @@ ROMP_0E6_000:
 * ROMPTR 0E6 001
 * refs (1): 98E02
 ROMP_0E6_001:
-        ::                                       * 98FB3
-          '                                      * 98FB8
-          ROMPTR  0A9 050                        * 98FBD
-          InitMenu                               * 98FC8
-        ;                                        * 98FCD
+        :: ' ROMPTR 0A9 050 InitMenu ;           * 98FB3
 
 * ROMPTR 0E6 002
 * refs (1): 98E02
 ROMP_0E6_002:
-        ::                                       * 98FD2
-          dIDNTNcase                             * 98FD7
-          StdMenuKeyLS                           * 98FDC
-          DUP                                    * 98FE1
-          ROMPTR  0E6 00C                        * 98FE6
-          SWAP                                   * 98FF1
-          2DUP                                   * 98FF6
-          XEQSTOID                               * 98FFB
-          ID>TAG                                 * 99000
-        ;                                        * 99005
+        :: dIDNTNcase StdMenuKeyLS               * 98FD2
+          DUP ROMPTR 0E6 00C SWAP 2DUP XEQSTOID ID>TAG ; * 98FE1
 
 * ROMPTR 0E6 003
 * refs (1): 98E02
 ROMP_0E6_003:
-        ::                                       * 9900A
-          ROMPTR  0AB 059                        * 9900F  AMORT
-          #       E60D                           * 9901A  58893
-          OBJ_15909                              * 99024
-          ROT                                    * 99029
-          #       E60B                           * 9902E  58891
-          OBJ_15909                              * 99038
-          ROT                                    * 9903D
-          #       E60C                           * 99042  58892
-          OBJ_15909                              * 9904C
-          ROT                                    * 99051
-        ;                                        * 99056
+        :: ROMPTR 0AB 059 # E60D OBJ_15909 ROT # E60B OBJ_15909 ROT # E60C * 9900A  AMORT
+          OBJ_15909 ROT ;                        * 9904C
 
 * ROMPTR 0E6 004
 * refs (1): 98E02
 ROMP_0E6_004:
-        ::                                       * 9905B
-          %0_2A2B4                               * 99060
-          SWAP                                   * 99065
-          ROMPTR  0E6 008                        * 9906A
-          I%YR                                   * 99075
-          ROMPTR  0E6 008                        * 9907A
-          PV                                     * 99085
-          ROMPTR  0E6 008                        * 9908A
-          PMT                                    * 99095
-          4ROLL                                  * 9909A
-          ROMPTR  0E6 008                        * 9909F
-          PYR                                    * 990AA
-          BINT14                                 * 990AF
-          SysITE                                 * 990B4
-          %1                                     * 990B9
-          %0_2A2B4                               * 990BE
-          ROMPTR  0E6 00E                        * 990C3
-        ;                                        * 990CE
+        :: %0_2A2B4 SWAP ROMPTR 0E6 008 I%YR ROMPTR 0E6 008 PV * 9905B
+          ROMPTR 0E6 008 PMT 4ROLL ROMPTR 0E6 008 PYR BINT14 SysITE %1 * 9908A
+          %0_2A2B4 ROMPTR 0E6 00E ;              * 990BE
 
 * ROMPTR 0E6 005
 * refs (1): 98E02
 ROMP_0E6_005:
-        ::                                       * 990D3
-          BINT14                                 * 990D8
-          SetSysFlag                             * 990DD
-        ;                                        * 990E2
+        :: BINT14 SetSysFlag ;                   * 990D3
 
 * ROMPTR 0E6 006
 * refs (1): 98E02
 ROMP_0E6_006:
-        ::                                       * 990E7
-          BINT14                                 * 990EC
-          ClrSysFlag                             * 990F1
-        ;                                        * 990F6
+        :: BINT14 ClrSysFlag ;                   * 990E7
 
 * ROMPTR 0E6 007
 * refs (1): 98E02
 ROMP_0E6_007:
-        ::                                       * 990FB
-          ROMPTR  0E6 008                        * 99100
-          N                                      * 9910B
-          ROMPTR  0E6 008                        * 99110
-          I%YR                                   * 9911B
-          ROMPTR  0E6 008                        * 99120
-          PV                                     * 9912B
-          ROMPTR  0E6 008                        * 99130
-          PMT                                    * 9913B
-          ROMPTR  0E6 008                        * 99140
-          FV                                     * 9914B
-          ROMPTR  0E6 008                        * 99150
-          PYR                                    * 9915B
-          BINT14                                 * 99160
-          SysITE                                 * 99165
-          %1                                     * 9916A
-          %0_2A2B4                               * 9916F
-        ;                                        * 99174
+        :: ROMPTR 0E6 008 N ROMPTR 0E6 008 I%YR ROMPTR 0E6 008 PV * 990FB
+          ROMPTR 0E6 008 PMT ROMPTR 0E6 008 FV ROMPTR 0E6 008 PYR BINT14 * 99130
+          SysITE %1 %0_2A2B4 ;                   * 99165
 
 * ROMPTR 0E6 008
 * refs (1): 98E02
 ROMP_0E6_008:
-        ::                                       * 99179
-          'R                                     * 9917E
-          SAFE@                                  * 99183
-          ?SKIP                                  * 99188
-          %0_2A2B4                               * 9918D
-          DUPTYPEREAL?                           * 99192
-          ?SEMI                                  * 99197
-          DROP                                   * 9919C
-          %0_2A2B4                               * 991A1
-        ;                                        * 991A6
+        :: 'R SAFE@ ?SKIP %0_2A2B4               * 99179
+          DUPTYPEREAL? ?SEMI                     * 99192
+          DROP %0_2A2B4 ;                        * 9919C
 
 * ROMPTR 0E6 009
 * refs (1): 98E02
 ROMP_0E6_009:
-        ::                                       * 991AB
-          'R                                     * 991B0
-          XEQSTOID                               * 991B5
-        ;                                        * 991BA
+        :: 'R XEQSTOID ;                         * 991AB
 
 * ROMPTR 0E6 00A
 * refs (1): 98E02
 ROMP_0E6_00A:
-        ::                                       * 991BF
-          BINT14                                 * 991C4
-          SysITE                                 * 991C9
-          #       E609                           * 991CE  58889
-          #       E608                           * 991D8  58888
-          JstGetTHEMESG                          * 991E2
-          ROMPTR  0E6 008                        * 991E7
-          PYR                                    * 991F2
-          %ABS                                   * 991F7
-          %IP                                    * 991FC
-          DUP                                    * 99201
-          %0>                                    * 99206
-          ?SKIP                                  * 9920B
-          ::                                     * 99210
-            DROP                                 * 99215
-            %12                                  * 9921A
-          ;                                      * 9921F
-          DUP                                    * 99224
-          ROMPTR  0E6 009                        * 99229
-          PYR                                    * 99234
-          EDITDECOMP$                            * 99239
-          #       E60A                           * 9923E  58890
-          JstGetTHEMESG                          * 99248
-          !append$                               * 9924D
-          APPprompt2                             * 99252
-        ;                                        * 99257
+        :: BINT14 SysITE # E609 # E608 JstGetTHEMESG ROMPTR 0E6 008 PYR %ABS * 991BF
+          %IP DUP %0> ?SKIP                      * 991FC
+          :: DROP %12 ;                          * 99210
+          DUP ROMPTR 0E6 009 PYR EDITDECOMP$ # E60A JstGetTHEMESG !append$ * 99224
+          APPprompt2 ;                           * 99252
 
 * ROMPTR 0E6 00B
 * refs (1): 98E02
 ROMP_0E6_00B:
-        ::                                       * 9925C
-          INNERCOMP                              * 99261
-          #1<>                                   * 99266
-          case                                   * 9926B
-          ROMPTR  0E7 006                        * 99270
-          DUPTYPEIDNT?                           * 9927B
-          NOTcase                                * 99280
-          ROMPTR  0E7 006                        * 99285
-          ROMPTR  0E6 00C                        * 99290
-        ;                                        * 9929B
+        :: INNERCOMP #1<> case ROMPTR 0E7 006    * 9925C
+          DUPTYPEIDNT? NOTcase ROMPTR 0E7 006    * 9927B
+          ROMPTR 0E6 00C ;                       * 99290
 
 * ROMPTR 0E6 00C
 * refs (1): 98E02
 ROMP_0E6_00C:
-        ::                                       * 992A0
-          OBJ_7D966                              * 992A5
-          NTHOF                                  * 992AA
-          DUP#0=csedrp                           * 992AF
-          ::                                     * 992B4
-            #       E607                         * 992B9  58887
-            ERROROUT                             * 992C3
-          ;                                      * 992C8
-          ROMPTR  0E6 00D                        * 992CD
-          SWAP                                   * 992D8
-          NTHCOMPDROP                            * 992DD
-          ROMPTR  0E6 007                        * 992E2
-          8ROLL                                  * 992ED
-          EVAL                                   * 992F2
-        ;                                        * 992F7
+        :: OBJ_7D966 NTHOF DUP#0=csedrp          * 992A0
+          :: # E607 ERROROUT ; ROMPTR 0E6 00D SWAP NTHCOMPDROP * 992B4
+          ROMPTR 0E6 007 8ROLL EVAL ;            * 992E2
 
 * ROMPTR 0E6 00D
 * refs (1): 98E02
 ROMP_0E6_00D:
-        {                                        * 992FC
-          ROMPTR  0E6 00F                        * 99301
-          ROMPTR  0E6 010                        * 9930C
-          ROMPTR  0E6 011                        * 99317
-          ROMPTR  0E6 012                        * 99322
-          ROMPTR  0E6 013                        * 9932D
-        }                                        * 99338
+        { ROMPTR 0E6 00F ROMPTR 0E6 010 ROMPTR 0E6 011 ROMPTR 0E6 012 * 992FC
+          ROMPTR 0E6 013 }                       * 9932D
 
 * ROMPTR 0E6 00E
 * refs (1): 98E02

@@ -22,72 +22,30 @@ ROMP_0B3_062:
 * ROMPTR 0B3 063
 * refs (1): BA576
 ROMP_0B3_063:
-        ::                                       * BE5F1
-          OVER                                   * BE5F6
-          NULLCOMP?                              * BE5FB
-          caseSIZEERR                            * BE600
-          COERCE                                 * BE605
-          DUP                                    * BE60A
-          3PICK                                  * BE60F
-          LENCOMP                                * BE614
-          #>                                     * BE619
-          caseSIZEERR                            * BE61E
-          'DROPFALSE                             * BE623
-          4ROLL                                  * BE628
-          BINT91                                 * BE62D
-          ROMPTR  0B0 06F                        * BE632
-          DROP                                   * BE63D
-          '                                      * BE642
-          ROMPTR  0B3 065                        * BE647
-          5ROLL                                  * BE652
-          5ROLL                                  * BE657
-          ROMPTR  0B3 000                        * BE65C  ~Choose
-          NOTcase                                * BE667
-          %0_2A2B4                               * BE66C
-          ::                                     * BE671
-            DUPTYPELIST?                         * BE676
-            NOT?SEMI                             * BE67B
-            DUPLENCOMP                           * BE680
-            BINT2                                * BE685
-            #<                                   * BE68A
-            ?SEMI                                * BE68F
-            ROMPTR  0B0 099                      * BE694
-          ;                                      * BE69F
-          %1                                     * BE6A4
-        ;                                        * BE6A9
+        :: OVER NULLCOMP? caseSIZEERR COERCE     * BE5F1
+          DUP 3PICK LENCOMP #> caseSIZEERR 'DROPFALSE * BE60A
+          4ROLL BINT91 ROMPTR 0B0 06F DROP ' ROMPTR 0B3 065 5ROLL 5ROLL * BE628
+          ROMPTR 0B3 000 NOTcase %0_2A2B4        * BE65C  ~Choose
+          :: DUPTYPELIST? NOT?SEMI               * BE671
+            DUPLENCOMP BINT2 #< ?SEMI            * BE680
+            ROMPTR 0B0 099 ;                     * BE694
+          %1 ;                                   * BE6A4
 
 * ROMPTR 0B3 065
 * refs (2): BA576 BA576
 ROMP_0B3_065:
-        ::                                       * BE6AE
-          DUPTYPELIST?                           * BE6B3
-          IT                                     * BE6B8
-          ::                                     * BE6BD
-            DUPNULLCOMP?                         * BE6C2
-            ?SEMI                                * BE6C7
-            ROMPTR  0B0 098                      * BE6CC
-          ;                                      * BE6D7
-          DUPTYPECSTR?                           * BE6DC
-          ?SEMI                                  * BE6E1
-          BINT4                                  * BE6E6
-          ROMPTR  0B0 074                        * BE6EB
-        ;                                        * BE6F6
+        :: DUPTYPELIST? IT                       * BE6AE
+          :: DUPNULLCOMP? ?SEMI                  * BE6BD
+            ROMPTR 0B0 098 ;                     * BE6CC
+          DUPTYPECSTR? ?SEMI                     * BE6DC
+          BINT4 ROMPTR 0B0 074 ;                 * BE6E6
 
 * ROMPTR 0B3 066
 * refs (1): BA576
 ~ChooseSimple:
-        ::                                       * BE6FB
-          '                                      * BE700
-          DROPFALSE                              * BE705
-          ROT                                    * BE70A
-          BINT17                                 * BE70F
-          4ROLL                                  * BE714
-          BINT1                                  * BE719
-          ROMPTR  0B3 000                        * BE71E  ~Choose
-          NOTcaseFALSE                           * BE729
-          ROMPTR  0B0 099                        * BE72E
-          TRUE                                   * BE739
-        ;                                        * BE73E
+        :: ' DROPFALSE ROT BINT17 4ROLL BINT1 ROMPTR 0B3 000 NOTcaseFALSE * BE6FB  ~Choose
+          ROMPTR 0B0 099                         * BE72E
+          TRUE ;                                 * BE739
 
 LIB0B3.hash:
         CON(5)  DOHSTR                           * BE743  hash table of library 0B3

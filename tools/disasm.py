@@ -43,6 +43,8 @@ SPLIT = 0x3000            # split regions into files of about this many nibbles
 HARDWARE = 0x7E000        # D0=/D1= from here up are I/O windows (bank switcher at #7F000)
 FILL_TO = 32              # zero fill at least this long between entries becomes FILLTO
 COMMENT_COL = 48
+# RPL bodies are written several objects to a line, up to this width.
+RPL_WIDTH = 76
 MAX_XREFS = 6
 
 # (start, rows, first code, count, with width nibble, file, description)
@@ -97,7 +99,7 @@ class Ref:
 
 
 class Line:
-    __slots__ = ("pc", "size", "parts", "comment", "mode", "after", "verify", "indent", "pre", "gap", "head")
+    __slots__ = ("pc", "size", "parts", "comment", "mode", "after", "verify", "indent", "pre", "gap", "head", "value")
 
     def __init__(self, pc, size, parts, comment="", mode=None, indent=0, verify=True, after=None):
         self.pc, self.size = pc, size
@@ -107,6 +109,7 @@ class Line:
         self.pre = []
         self.gap = False      # blank line before
         self.head = None      # print the comments for this address before the line
+        self.value = None     # a pointer's target, or a binary integer's value: ("ptr" | "bint", v)
 
 
 HP_TRANS = {0x80 + i: c for i, c in enumerate(sasm.HP_CHARS)}
@@ -373,7 +376,9 @@ class Generator:
         a = o.addr
         k = o.kind
         if k == "PTR":
-            return [Line(a, 5, self.ptr_parts(o.value, a), mode="RPL", indent=depth)]
+            ln = Line(a, 5, self.ptr_parts(o.value, a), mode="RPL", indent=depth)
+            ln.value = ("ptr", o.value)
+            return [ln]
         if k in COMPOSITE:
             out = [Line(a, 5, OPENER[k], mode="RPL", indent=depth)]
             for c in o.children:
@@ -439,7 +444,10 @@ class Generator:
             if arr:
                 return arr
         if text is not None:
-            return [Line(a, o.size, text, comment=comment, mode="RPL", indent=depth)]
+            ln = Line(a, o.size, text, comment=comment, mode="RPL", indent=depth)
+            if k == "DOBINT":
+                ln.value = ("bint", o.value)
+            return [ln]
         return self.raw_object(o, depth)
 
     def units_table_lines(self, o, depth):
@@ -1047,6 +1055,154 @@ class Generator:
         out.append("%-*s * %s" % (COMMENT_COL, body, com))
         return out
 
+    # Words that act on the objects after them in the runstream: a line
+    # ends after them and that many objects (`DUP#0=case DROP`).
+    RUNSTREAM = {"IT": 1, "RPIT": 1, "COLA": 1, "?SKIP": 1, "ITE": 2, "RPITE": 2,
+                 "?SEMI": 0, "NOT?SEMI": 0, "?SEMIDROP": 0, "NOT?DROP": 0}
+
+    def takes(self, word):
+        """How many following objects `word` acts on, if it is a
+        runstream word."""
+        if word in self.RUNSTREAM:
+            return self.RUNSTREAM[word]
+        return 1 if "case" in word else None
+
+    # Argument type codes of the dispatch words (CK&DISPATCH1), from the
+    # ROM's tables at #19123 and #1916E: one digit per stack level from
+    # level 1 up; F with the digit before it makes a two-digit code.
+    DISPATCH = {"CK&DISPATCH0", "CK&DISPATCH1", "CK1&Dispatch", "CK2&Dispatch", "CK3&Dispatch",
+                "CK4&Dispatch", "CK5&Dispatch"}
+    TYPES = {0x1: "real", 0x2: "complex", 0x3: "string", 0x4: "array", 0x5: "list", 0x6: "name",
+             0x7: "local", 0x8: "program", 0x9: "algebraic", 0xA: "name|local|algebraic",
+             0xB: "binary", 0xC: "grob", 0xD: "tagged", 0xE: "unit"}
+    EXT_TYPES = {0x0: "romptr", 0x1: "bint", 0x2: "directory", 0x3: "%%", 0x4: "C%%", 0x5: "linked-array",
+                 0x6: "char", 0x7: "code", 0x8: "library", 0x9: "backup", 0xA: "library-data",
+                 0xB: "ext1", 0xC: "ext2", 0xD: "ext3", 0xE: "ext4"}
+
+    def word(self, a):
+        return sum(self.n[a + i] << (4 * i) for i in range(5))
+
+    def type_code(self, ln):
+        """The dispatch type code a line holds (a binary integer), if any."""
+        if ln.value is None:
+            return None
+        kind, v = ln.value
+        if kind == "ptr":
+            if v >= len(self.n) - 10 or self.word(v) != sasm.PROLOG["DOBINT"]:
+                return None
+            v = self.word(v + 5)
+        return v
+
+    def describe_types(self, code):
+        """`real real`: the argument types a dispatch code accepts, deepest
+        stack level first."""
+        out = []
+        while code:
+            d = code & 0xF
+            if d == 0xF:
+                out.append(self.EXT_TYPES.get((code >> 4) & 0xF, "?"))
+                code >>= 8
+            else:
+                out.append(self.TYPES.get(d, "?"))
+                code >>= 4
+        return " ".join(reversed(out)) or "any"
+
+    def pack(self, lines):
+        """Join RPL lines into lines of several objects, RPLCOMP style: a
+        composite starts a line, its closer ends the line before, and lines
+        break after runstream words and the objects they act on. Lines with
+        a label, comments of their own or anything else to say stay apart."""
+        out = []
+        cur = None          # the line being built, and its objects' text
+        take = {}           # indent -> objects left after a runstream word there
+        table = None        # [indent, next is a type code] in a dispatch table
+
+        def weak(c):
+            # a binary integer's decimal value: dropped when the line is shared
+            return not c or c.isdigit()
+
+        def finish():
+            if cur is not None:
+                cur[0].parts = [cur[1]]
+                if weak(cur[0].comment) and len(sasm.rpl_objects(sasm.split_line(cur[1]))) > 1:
+                    cur[0].comment = ""
+
+        def alone(ln):
+            """Never shares its line."""
+            return (ln.mode != "RPL" or not ln.size or ln.after or not ln.verify
+                    or ln.parts[0].split()[0] in ("CODE", "GROB", "TAG"))
+
+        def starts(ln):
+            """Starts a line: something is written before it."""
+            return (ln.pc in self.label or ln.pre or ln.gap or ln.head is not None or self.notes.get(ln.pc)
+                    or self.ends.get(ln.pc) or self.major(ln.pc))
+
+        for ln in lines:
+            toks = sasm.split_line(ln.parts[0])
+            text = " ".join(toks)
+            word = toks[0] if toks else ""
+            opener, closer = word in sasm.OPENERS, word in (";", "}")
+            fits = cur is not None and len(" " * (8 + 2 * cur[0].indent) + cur[1] + " " + text) <= RPL_WIDTH
+            # In a dispatch table each type code starts a line, which its
+            # case joins; the code's types become the line's comment.
+            if table is not None and (ln.indent < table[0] or closer and ln.indent == table[0] - 1):
+                table = None
+            is_code = table is not None and ln.indent == table[0] and table[1]
+            code = self.type_code(ln) if is_code else None
+            if is_code:
+                if code is not None:
+                    ln.comment = self.describe_types(code) + ("  " + ln.comment if not weak(ln.comment) else "")
+                table[1] = False
+            join = (cur is not None and not alone(ln) and not starts(ln) and not opener and (fits or closer)
+                    and not is_code and (weak(cur[0].comment) or weak(ln.comment)))
+            if join:
+                cur[0].size += ln.size
+                if weak(cur[0].comment):
+                    cur[0].comment = ln.comment if not weak(ln.comment) else cur[0].comment or ln.comment
+                cur[1] += " " + text
+            else:
+                finish()
+                cur = None if alone(ln) else [ln, text]
+                out.append(ln)
+                if cur is None:
+                    continue
+            if word in self.DISPATCH:
+                table = [ln.indent, True]
+                finish()
+                cur = None
+                continue
+            if table is not None and ln.indent == table[0] and not is_code and not opener:
+                # a case complete: its line ends
+                table[1] = True
+                finish()
+                cur = None
+                continue
+            # Break after a runstream word and the objects it acts on, and
+            # after a composite that began on an earlier line.
+            brk = False
+            if ln.indent in take and not opener:
+                take[ln.indent] -= 1
+                if take[ln.indent] <= 0:
+                    del take[ln.indent]
+                    brk = True
+            if closer:
+                for i in [i for i in take if i > ln.indent]:
+                    del take[i]
+                toks_now = sasm.split_line(cur[1])
+                if sum(t in sasm.OPENERS for t in toks_now) < sum(t in (";", "}") for t in toks_now):
+                    brk = True
+            n = self.takes(word)
+            if n is not None:
+                if n:
+                    take[ln.indent] = n
+                else:
+                    brk = True
+            if brk:
+                finish()
+                cur = None
+        finish()
+        return out
+
     def regions(self):
         """(start, name, description) for every source file region."""
         regs = []
@@ -1137,7 +1293,7 @@ class Generator:
         mode = "ASM"
         self.done = set()
         for _, _, lines in blocks:
-            for k, ln in enumerate(lines):
+            for k, ln in enumerate(self.pack(lines)):
                 if ln.size:
                     for _ in range(self.ends.pop(ln.pc, 0)):
                         out.append("%-*s * %05X" % (COMMENT_COL, "        ENDLENGTH", ln.pc))

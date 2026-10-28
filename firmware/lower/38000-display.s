@@ -110,27 +110,11 @@ L_38118:
 * [F%] -> [F%]'
 * refs (8): 1D3A1 1D3F1 8E2DD 8E300 8F39B 8F3B9 ...
 MATTRN:
-        ::                                       * 3811F
-          DUP                                    * 38124
-          MDIMS                                  * 38129
-          NOT?GOTO                               * 3812E
-          L_37DEB                                * 38133
-          2DROP                                  * 38138
-          CKREF                                  * 3813D
-          OBJ_38185                              * 38142
-        ;                                        * 38147
+        :: DUP MDIMS NOT?GOTO L_37DEB 2DROP CKREF OBJ_38185 ; * 3811F
 
 * refs (1): 1D3D3
 @trn(ar):
-        ::                                       * 3814C
-          DUP                                    * 38151
-          MDIMS                                  * 38156
-          NOT?GOTO                               * 3815B
-          L_37DEB                                * 38160
-          2DROP                                  * 38165
-          FreeRefs                               * 3816A
-          OBJ_38185                              * 3816F
-        ;                                        * 38174
+        :: DUP MDIMS NOT?GOTO L_37DEB 2DROP FreeRefs OBJ_38185 ; * 3814C
 
 * refs (11): CBC7D CBC91 CBFA2 CBFF4 CC216 CC24A ...
 @trn!(ar):
@@ -322,11 +306,7 @@ SUB_3833E:
 
 * refs (219): A280B A2884 A2D6B A34B6 A352F A35A3 ...
 OBJ_38345:
-        ::                                       * 38345
-          'R                                     * 3834A
-          ROMPTR@                                * 3834F
-          DROP                                   * 38354
-        ;                                        * 38359
+        :: 'R ROMPTR@ DROP ;                     * 38345
 
 * refs (6): 0FDB8 0FE62 0FF34 0FFBB CAC27 CAC7C
 OBJ_3835E:
@@ -394,311 +374,126 @@ OBJ_384D0:
 
 * refs (1): 0214E
 StartupProc:
-        ::                                       * 3858E
-          OBJ_385A7                              * 38593
-          ERRTRAP                                * 38598
-          VLM                                    * 3859D
-        ;                                        * 385A2
+        :: OBJ_385A7 ERRTRAP VLM ;               * 3858E
 
 * refs (1): 38593
 OBJ_385A7:
-        ::                                       * 385A7
-          InitSysUI                              * 385AC
+        :: InitSysUI                             * 385A7
 L_385B1:
-          BEGIN                                  * 385B1
-          AtUserStack                            * 385B6
-          SysMenuCheck                           * 385BB
-          SysDisplay                             * 385C0
-          GetKeyOb                               * 385C5
-          ERRSET                                 * 385CA
-          DoKeyOb                                * 385CF
-          ERRTRAP                                * 385D4
-          SysErrorTrap                           * 385D9
-          AGAIN                                  * 385DE
-        ;                                        * 385E3
+          BEGIN AtUserStack SysMenuCheck SysDisplay GetKeyOb ERRSET DoKeyOb * 385B1
+          ERRTRAP SysErrorTrap AGAIN ;           * 385D4
 
 * refs (1): 385AC
 InitSysUI:
-        ::                                       * 385E8
-          CLEARLCD                               * 385ED
-          InitDispModes                          * 385F2
-          OBJ_3FEEE                              * 385F7
-          BINT62                                 * 385FC
-          ClrSysFlag                             * 38601
-          DoMenuMTH                              * 38606
-          InitEd&Modes                           * 3860B
-          InitPOLVars                            * 38610
-          OBJ_6CC32                              * 38615
-          OBJ_17F40                              * 3861A
-          DelLastArg                             * 3861F
-          ?FlashAlert                            * 38624
-          ERROR@                                 * 38629
-          #5=                                    * 3862E
-          IT                                     * 38633
+        :: CLEARLCD InitDispModes OBJ_3FEEE BINT62 ClrSysFlag DoMenuMTH * 385E8
+          InitEd&Modes InitPOLVars OBJ_6CC32 OBJ_17F40 DelLastArg * 3860B
+          ?FlashAlert ERROR@ #5= IT              * 38624
 
 Warning005:
-          ::                                     * 38638
-            ERRORCLR                             * 3863D
-            BINT5                                * 38642
-            JstGetTHEMESG                        * 38647
-            DoWarning                            * 3864C
-          ;                                      * 38651
-          UNDO_ON?                               * 38656
-          IT                                     * 3865B
-          SAVESTACK                              * 38660
-          AtUserStack                            * 38665
-        ;                                        * 3866A
+          :: ERRORCLR BINT5 JstGetTHEMESG DoWarning ; * 38638
+          UNDO_ON? IT SAVESTACK                  * 38656
+          AtUserStack ;                          * 38665
 
 * ->
 * refs (2): 385BB 38B0E
 SysMenuCheck:
-        ::                                       * 3866F
-          DA3NoCh?                               * 38674
-          ?SEMI                                  * 38679
-          OBJ_417D1                              * 3867E
-          IT                                     * 38683
-          OBJ_41787                              * 38688
-          OBJ_41804                              * 3868D
-          NOT?SEMI                               * 38692
-          SetThisRow                             * 38697
-        ;                                        * 3869C
+        :: DA3NoCh? ?SEMI                        * 3866F
+          OBJ_417D1 IT OBJ_41787                 * 3867E
+          OBJ_41804 NOT?SEMI                     * 3868D
+          SetThisRow ;                           * 38697
 
 * ->
 * refs (1): 385C0
 SysDisplay:
-        ::                                       * 386A1
-          DA2aOK?NOTIT                           * 386A6
-          ?DispStack                             * 386AB
-          DA1OK?NOTIT                            * 386B0
-          ?DispStatus                            * 386B5
-          DA2bOK?NOTIT                           * 386BA
-          DispEditLine                           * 386BF
-          DA3OK?NOTIT                            * 386C4
-          ?DispMenu                              * 386C9
-          ClrDAsOK                               * 386CE
-        ;                                        * 386D3
+        :: DA2aOK?NOTIT ?DispStack DA1OK?NOTIT ?DispStatus DA2bOK?NOTIT * 386A1
+          DispEditLine DA3OK?NOTIT ?DispMenu ClrDAsOK ; * 386BF
 
 * ->
 * refs (2): 041CA 38624
 ?FlashAlert:
-        ::                                       * 386D8
-          AlertStatus                            * 386DD
-          OBJ_422C6                              * 386E2
-          ?SKIP                                  * 386E7
+        :: AlertStatus OBJ_422C6 ?SKIP           * 386D8
 
 and(s,<E>):
-          ::                                     * 386EC
-            BINT14                               * 386F1
-            #AND                                 * 386F6
-          ;                                      * 386FB
-          DUP#0=csDROP                           * 38700
-          #132_64E8C                             * 38705
-          JstGetTHEMESG                          * 3870A
-          SWAP                                   * 3870F
-          Alert$                                 * 38714
-          !append$                               * 38719
-          FlashWarning                           * 3871E
-        ;                                        * 38723
+          :: BINT14 #AND ;                       * 386EC
+          DUP#0=csDROP #132_64E8C JstGetTHEMESG SWAP Alert$ !append$ * 38700
+          FlashWarning ;                         * 3871E
 
 * refs (4): 1469F 385D9 3897B DD430
 SysErrorTrap:
-        ::                                       * 38728
-          OBJ_387BE                              * 3872D
-          ERROR@                                 * 38732
-          BINT0                                  * 38737
-          #=casedrop                             * 3873C
-          OBJ_3881D                              * 38741
-          Err#Cont                               * 38746
-          #=casedrop                             * 3874B
-          OBJ_3875F                              * 38750
-          Err#Kill                               * 38755
-          #=casedrop                             * 3875A
+        :: OBJ_387BE ERROR@ BINT0 #=casedrop OBJ_3881D * 38728
+          Err#Cont #=casedrop OBJ_3875F          * 38746
+          Err#Kill #=casedrop                    * 38755
 
 * refs (1): 38750
 OBJ_3875F:
-          ::                                     * 3875F
-            Halted?                              * 38764
-            caseERRJMP                           * 38769
-            OBJ_3881D                            * 3876E
+          :: Halted? caseERRJMP OBJ_3881D        * 3875F
           ;                                      * 38773
-          #CAlarmErr                             * 38778
-          #=case                                 * 3877D
-          OBJ_3894E                              * 38782
-          OBJ_18802                              * 38787
-          ERROR@                                 * 3878C
-          OBJ_3881D                              * 38791
-          ERRBEEP                                * 38796
-          MakeMessage(proc,s)                    * 3879B
-          TOADISP                                * 387A0
-          REDISPHBUFF                            * 387A5
-          DISPROW1                               * 387AA
-          DISPROW2                               * 387AF
-          SetDA1Temp                             * 387B4
-        ;                                        * 387B9
+          #CAlarmErr #=case OBJ_3894E            * 38778
+          OBJ_18802 ERROR@ OBJ_3881D ERRBEEP MakeMessage(proc,s) TOADISP * 38787
+          REDISPHBUFF DISPROW1 DISPROW2 SetDA1Temp ; * 387A5
 
 * refs (3): 23402 3872D D49EA
 OBJ_387BE:
-        ::                                       * 387BE
-          OBJ_18295                              * 387C3
-          OBJ_41837                              * 387C8
-          NOT?SEMI                               * 387CD
-          LastMenuDef@                           * 387D2
-          LastMenuRow@                           * 387D7
-          2DUP                                   * 387DC
-          ERRSET                                 * 387E1
-          ::                                     * 387E6
-            StartMenu                            * 387EB
-            LastMenuRow!                         * 387F0
-            LastMenuDef!                         * 387F5
-          ;                                      * 387FA
-          ERRTRAP                                * 387FF
-          ::                                     * 38804
-            DropSysObs                           * 38809
-            DoMenuMTH                            * 3880E
-          ;                                      * 38813
-        ;                                        * 38818
+        :: OBJ_18295 OBJ_41837 NOT?SEMI          * 387BE
+          LastMenuDef@ LastMenuRow@ 2DUP ERRSET  * 387D2
+          :: StartMenu LastMenuRow! LastMenuDef! ; ERRTRAP * 387E6
+          :: DropSysObs DoMenuMTH ; ;            * 38804
 
 * refs (8): 2340C 38741 3876E 38791 3895D 38967 ...
 OBJ_3881D:
-        ::                                       * 3881D
-          EditLExists?                           * 38822
-          IT                                     * 38827
-          ::                                     * 3882C
-            UnableLastCmd                        * 38831
-            EDITLINE$                            * 38836
-            SaveLastEdit                         * 3883B
-          ;                                      * 38840
-          InitEd&Modes                           * 38845
-          OBJ_38854                              * 3884A
-        ;                                        * 3884F
+        :: EditLExists? IT                       * 3881D
+          :: UnableLastCmd EDITLINE$ SaveLastEdit ; * 3882C
+          InitEd&Modes OBJ_38854 ;               * 38845
 
 * refs (2): 17BAE 3884A
 OBJ_38854:
-        ::                                       * 38854
-          AppError?                              * 38859
-          IT                                     * 3885E
-          ::                                     * 38863
-            InitPOLVars                          * 38868
-            DoMenuMTH                            * 3886D
-            ClrAppError                          * 38872
-          ;                                      * 38877
-          OBJ_3FEEE                              * 3887C
-          InitDispModes                          * 38881
-          0LASTOWDOB!                            * 38886
-          SAVEERRN                               * 3888B
-          ERRORCLR                               * 38890
-          FLUSHKEYS                              * 38895
-        ;                                        * 3889A
+        :: AppError? IT                          * 38854
+          :: InitPOLVars DoMenuMTH ClrAppError ; * 38863
+          OBJ_3FEEE InitDispModes 0LASTOWDOB! SAVEERRN ERRORCLR FLUSHKEYS ; * 3887C
 
 * refs (2): 3879B D4A21
 MakeMessage(proc,s):
-        ::                                       * 3889F
-          DUP                                    * 388A4
-          GETTHEMESG                             * 388A9
-          3UNROLL                                * 388AE
-          #EXITERR                               * 388B3
-          #=                                     * 388B8
-          casedrop                               * 388BD
-          SEP$NL                                 * 388C2
-          REALSTRSTR                             * 388C7
-          JstGetTHEMESG                          * 388CC
-          SWAPDUP                                * 388D1
-          BINT0                                  * 388D6
-          EQUAL                                  * 388DB
-          caseDROP                               * 388E0
-          PTR>ROMPTR                             * 388E5
-          PALPTRDCMP                             * 388EA
-          NOTcaseDROP                            * 388EF
-          APPEND_SPACE                           * 388F4
-          SWAP                                   * 388F9
-          !append$                               * 388FE
-        ;                                        * 38903
+        :: DUP GETTHEMESG 3UNROLL #EXITERR #= casedrop SEP$NL * 3889F
+          REALSTRSTR JstGetTHEMESG SWAPDUP BINT0 EQUAL caseDROP PTR>ROMPTR * 388C7
+          PALPTRDCMP NOTcaseDROP APPEND_SPACE    * 388EA
+          SWAP !append$ ;                        * 388F9
 
 * $ ->
 * refs (7): 3864C 39C84 3DE86 40B42 42C15 4367B ...
 DoWarning:
-        ::                                       * 38908
-          ERRBEEP                                * 3890D
-          TOADISP                                * 38912
-          DISPSTATUS2                            * 38917
-          SetDA1Temp                             * 3891C
-        ;                                        * 38921
+        :: ERRBEEP TOADISP DISPSTATUS2 SetDA1Temp ; * 38908
 
 * $ ->
 * refs (2): 04288 3871E
 FlashWarning:
-        ::                                       * 38926
-          ERRBEEP                                * 3892B
-          Save16                                 * 38930
-          SWAP                                   * 38935
-          DISPSTATUS2                            * 3893A
-          VERYVERYSLOW                           * 3893F
-          Restore16                              * 38944
-        ;                                        * 38949
+        :: ERRBEEP Save16 SWAP DISPSTATUS2 VERYVERYSLOW Restore16 ; * 38926
 
 * refs (1): 38782
 OBJ_3894E:
-        ::                                       * 3894E
-          OBJ_424B4                              * 38953
-          case                                   * 38958
-          OBJ_3881D                              * 3895D
-          CtlAlarm@                              * 38962
-          OBJ_3881D                              * 38967
-          ERRSET                                 * 3896C
-          ExecAlarm(r)                           * 38971
-          ERRTRAP                                * 38976
-          SysErrorTrap                           * 3897B
-        ;                                        * 38980
+        :: OBJ_424B4 case OBJ_3881D              * 3894E
+          CtlAlarm@ OBJ_3881D ERRSET ExecAlarm(r) ERRTRAP SysErrorTrap ; * 38962
 
 * Disp Keys NonAppKeys? DoStdKeys? menu #row suspendOK? ExitCond AppErr ->
 * refs (3): 4CED3 4D934 69C2D
 ParOuterLoop:
-        ::                                       * 38985
-          POLSaveUI                              * 3898A
-          ERRSET                                 * 3898F
+        :: POLSaveUI ERRSET                      * 38985
 
 * <REF>ParOuterLoop
 POLSet&KeyUI:
-          ::                                     * 38994
-            POLSetUI                             * 38999
-            POLKeyUI                             * 3899E
-          ;                                      * 389A3
-          ERRTRAP                                * 389A8
-          POLResUI&Err                           * 389AD
-          POLRestoreUI                           * 389B2
-        ;                                        * 389B7
+          :: POLSetUI POLKeyUI ; ERRTRAP POLResUI&Err POLRestoreUI ; * 38994
 
 * Disp Keys NonAppKeys? DoStdKeys? menu #row suspendOK? ExitCond AppErr ->
 * refs (18): 199F0 3898A 41F6A 42F49 436A8 659E3 ...
 POLSaveUI:
-        ::                                       * 389BC
-          AppMode?                               * 389C1
-          ITE                                    * 389C6
+        :: AppMode? ITE                          * 389BC
 
 RclUI:
-          ::                                     * 389CB
-            LastMenuDef@                         * 389D0
-            LastMenuRow@                         * 389D5
-            AppDisplay@                          * 389DA
-            AppKeys@                             * 389DF
-            NAppKeyOK?                           * 389E4
-            DoStdKeys?                           * 389E9
-            MenuDef@                             * 389EE
-            MenuRow@                             * 389F3
-            AppSuspOK?                           * 389F8
-            AppExitCond@                         * 389FD
-            AppError@                            * 38A02
-            BINT11                               * 38A07
-          ;                                      * 38A0C
+          :: LastMenuDef@ LastMenuRow@ AppDisplay@ AppKeys@ NAppKeyOK? * 389CB
+            DoStdKeys? MenuDef@ MenuRow@ AppSuspOK? AppExitCond@ AppError@ * 389E9
+            BINT11 ;                             * 38A07
 
 RclHPUI:
-          ::                                     * 38A11
-            LastMenuDef@                         * 38A16
-            LastMenuRow@                         * 38A1B
-            MenuDef@                             * 38A20
-            MenuRow@                             * 38A25
-            BINT4                                * 38A2A
-          ;                                      * 38A2F
+          :: LastMenuDef@ LastMenuRow@ MenuDef@ MenuRow@ BINT4 ; * 38A11
           {}N                                    * 38A34
 
 {'SavedUI}:
@@ -706,122 +501,53 @@ RclHPUI:
 
 * refs (1): 38B9A
 LAMSavedUI:
-            LAM     'SavedUI                     * 38A3E
-          }                                      * 38A55
-          BIND                                   * 38A5A
-        ;                                        * 38A5F
+            LAM 'SavedUI }                       * 38A3E
+          BIND ;                                 * 38A5A
 
 * <REF>ParOuterLoop
 * refs (14): 19B21 38999 38AD2 41FBF 43061 4373E ...
 POLSetUI:
-        ::                                       * 38A64
-          AppError!                              * 38A69
-          AppExitCond!                           * 38A6E
-          ITE                                    * 38A73
-          SetAppSuspOK                           * 38A78
-          ClrAppSuspOK                           * 38A7D
-          OVER                                   * 38A82
-          FALSE                                  * 38A87
-          EQITE                                  * 38A8C
-          2DROP                                  * 38A91
-          StartMenu                              * 38A96
-          ITE                                    * 38A9B
-          SetDoStdKeys                           * 38AA0
-          ClrDoStdKeys                           * 38AA5
-          ITE                                    * 38AAA
-          SetNAppKeyOK                           * 38AAF
-          ClrNAppKeyOK                           * 38AB4
-          AppKeys!                               * 38AB9
-          AppDisplay!                            * 38ABE
-          SetAppMode                             * 38AC3
-        ;                                        * 38AC8
+        :: AppError! AppExitCond! ITE SetAppSuspOK ClrAppSuspOK * 38A64
+          OVER FALSE EQITE 2DROP StartMenu ITE SetDoStdKeys ClrDoStdKeys * 38A82
+          ITE SetNAppKeyOK ClrNAppKeyOK          * 38AAA
+          AppKeys! AppDisplay! SetAppMode ;      * 38AB9
 
 * refs (1): 38BB3
 OBJ_38ACD:
-        ::                                       * 38ACD
-          POLSetUI                               * 38AD2
-          LastMenuRow!                           * 38AD7
-          LastMenuDef!                           * 38ADC
-          ClrAppError                            * 38AE1
-        ;                                        * 38AE6
+        :: POLSetUI LastMenuRow! LastMenuDef! ClrAppError ; * 38ACD
 
 * ->
 * refs (14): 19B49 3899E 41FC4 4306B 43748 8D3A5 ...
 POLKeyUI:
-        ::                                       * 38AEB
-          BEGIN                                  * 38AF0
-          AppExitCond@                           * 38AF5
-          EVAL                                   * 38AFA
-          NOT                                    * 38AFF
-          WHILE                                  * 38B04
+        :: BEGIN AppExitCond@ EVAL NOT WHILE     * 38AEB
 
 * ->
 1POLKeyUI:
-          ::                                     * 38B09
-            SysMenuCheck                         * 38B0E
-            AppDisplay@                          * 38B13
-            EVAL                                 * 38B18
-            GetKeyOb                             * 38B1D
-            ERRSET                               * 38B22
-            DoKeyOb                              * 38B27
-            ERRTRAP                              * 38B2C
-            POLErrorTrap                         * 38B31
-          ;                                      * 38B36
-          REPEAT                                 * 38B3B
-        ;                                        * 38B40
+          :: SysMenuCheck AppDisplay@ EVAL GetKeyOb ERRSET DoKeyOb ERRTRAP * 38B09
+            POLErrorTrap ;                       * 38B31
+          REPEAT ;                               * 38B3B
 
 * refs (1): 38B31
 POLErrorTrap:
-        ::                                       * 38B45
-          AppError?                              * 38B4A
-          IT                                     * 38B4F
-          ERRJMP                                 * 38B54
-          OBJ_41837                              * 38B59
-          IT                                     * 38B5E
-          ERRJMP                                 * 38B63
-          AppError@                              * 38B68
-          EVAL                                   * 38B6D
-        ;                                        * 38B72
+        :: AppError? IT ERRJMP                   * 38B45
+          OBJ_41837 IT ERRJMP                    * 38B59
+          AppError@ EVAL ;                       * 38B68
 
 * ->
 * refs (18): 19B62 389AD 41FD8 4307F 4375C 659F7 ...
 POLResUI&Err:
-        ::                                       * 38B77
-          SetAppError                            * 38B7C
-          POLRestoreUI                           * 38B81
-          ERRJMP                                 * 38B86
-        ;                                        * 38B8B
+        :: SetAppError POLRestoreUI ERRJMP ;     * 38B77
 
 * ->
 * refs (19): 19B67 389B2 38B81 41FDD 43084 43761 ...
 POLRestoreUI:
-        ::                                       * 38B90
-          SetAppError                            * 38B95
-          LAMSavedUI                             * 38B9A
-          ABND                                   * 38B9F
-          INNERCOMP                              * 38BA4
-          BINT11                                 * 38BA9
-          #=case                                 * 38BAE
-          OBJ_38ACD                              * 38BB3
-          StartMenu                              * 38BB8
-          LastMenuRow!                           * 38BBD
-          LastMenuDef!                           * 38BC2
-          InitPOLVars                            * 38BC7
-          ClrAppError                            * 38BCC
-        ;                                        * 38BD1
+        :: SetAppError LAMSavedUI ABND INNERCOMP BINT11 #=case OBJ_38ACD * 38B90
+          StartMenu LastMenuRow! LastMenuDef! InitPOLVars ClrAppError ; * 38BB8
 
 * refs (3): 38610 38868 38BC7
 InitPOLVars:
-        ::                                       * 38BD6
-          ClrAppMode                             * 38BDB
-          NoAppDisplay!                          * 38BE0
-          AppKeys0                               * 38BE5
-          ClrNAppKeyOK                           * 38BEA
-          ClrDoStdKeys                           * 38BEF
-          SetAppSuspOK                           * 38BF4
-          NoAppExitCnd!                          * 38BF9
-          NoAppError!                            * 38BFE
-        ;                                        * 38C03
+        :: ClrAppMode NoAppDisplay! AppKeys0 ClrNAppKeyOK ClrDoStdKeys * 38BD6
+          SetAppSuspOK NoAppExitCnd! NoAppError! ; * 38BF4
 
 * ob ->
 * refs (1): 38ABE
@@ -1020,420 +746,245 @@ L_38DA5:
 * -> flag
 * refs (6): 19B80 38F0A 38F2D 8D543 BA717 DD4E0
 DA1OK?:
-        ::                                       * 38DAC
-          DA1Bad?                                * 38DB1
-          caseFALSE                              * 38DB6
-          DA1ValidF?                             * 38DBB
-          caseTRUE                               * 38DC0
-          DA1TempF                               * 38DC5
-          case                                   * 38DCA
-          SetDA1BadT                             * 38DCF
-          DA1NoCh?                               * 38DD4
-          caseTRUE                               * 38DD9
-          FALSE                                  * 38DDE
+        :: DA1Bad? caseFALSE DA1ValidF?          * 38DAC
+          caseTRUE DA1TempF                      * 38DC0
+          case SetDA1BadT                        * 38DCA
+          DA1NoCh? caseTRUE FALSE                * 38DD4
         ;                                        * 38DE3
 
 * -> T
 * refs (1): 38DCF
 SetDA1BadT:
-        ::                                       * 38DE8
-          SetDA1Bad                              * 38DED
-          TRUE                                   * 38DF2
-        ;                                        * 38DF7
+        :: SetDA1Bad TRUE ;                      * 38DE8
 
 * -> flag
 * refs (6): 19C56 38EA1 38F46 8D54D BA737 DD47B
 DA2aOK?:
-        ::                                       * 38DFC
-          DA2aBad?                               * 38E01
-          caseFALSE                              * 38E06
-          DA2aValidF?                            * 38E0B
-          caseTRUE                               * 38E10
-          DA2aTempF?                             * 38E15
-          case                                   * 38E1A
-          SetDA2aBadT                            * 38E1F
-          DA2aNoCh?                              * 38E24
-          caseTRUE                               * 38E29
-          FALSE                                  * 38E2E
+        :: DA2aBad? caseFALSE DA2aValidF?        * 38DFC
+          caseTRUE DA2aTempF?                    * 38E10
+          case SetDA2aBadT                       * 38E1A
+          DA2aNoCh? caseTRUE FALSE               * 38E24
         ;                                        * 38E33
 
 * -> T
 * refs (1): 38E1F
 SetDA2aBadT:
-        ::                                       * 38E38
-          SetDA2aBad                             * 38E3D
-          TRUE                                   * 38E42
-        ;                                        * 38E47
+        :: SetDA2aBad TRUE ;                     * 38E38
 
 * -> flag
 * refs (8): 19BA4 19BC7 38EA6 38F5F 8D616 BA765 ...
 DA2bOK?:
-        ::                                       * 38E4C
-          DA2bBad?                               * 38E51
-          caseFALSE                              * 38E56
-          DA2bValidF?                            * 38E5B
-          caseTRUE                               * 38E60
-          DA2bTemp?                              * 38E65
-          case                                   * 38E6A
-          SetDA2bBadT                            * 38E6F
-          DA2bNoCh?                              * 38E74
-          caseTRUE                               * 38E79
-          FALSE                                  * 38E7E
+        :: DA2bBad? caseFALSE DA2bValidF?        * 38E4C
+          caseTRUE DA2bTemp?                     * 38E60
+          case SetDA2bBadT                       * 38E6A
+          DA2bNoCh? caseTRUE FALSE               * 38E74
         ;                                        * 38E83
 
 * -> T
 * refs (1): 38E6F
 SetDA2bBadT:
-        ::                                       * 38E88
-          SetDA2bBad                             * 38E8D
-          TRUE                                   * 38E92
-        ;                                        * 38E97
+        :: SetDA2bBad TRUE ;                     * 38E88
 
 * -> flag
 * refs (2): 38F0F 43775
 DA2OK?:
-        ::                                       * 38E9C
-          DA2aOK?                                * 38EA1
-          DA2bOK?                                * 38EA6
-          AND                                    * 38EAB
-        ;                                        * 38EB0
+        :: DA2aOK? DA2bOK? AND ;                 * 38E9C
 
 * -> flag
 * refs (11): 19C0F 38F19 38F78 69BBF 8D70B 9CDBC ...
 DA3OK?:
-        ::                                       * 38EB5
-          DA3Bad?                                * 38EBA
-          caseFALSE                              * 38EBF
-          DA3ValidF?                             * 38EC4
-          caseTRUE                               * 38EC9
-          DA3TempF?                              * 38ECE
-          case                                   * 38ED3
-          SetDA3BadT                             * 38ED8
-          DA3NoCh?                               * 38EDD
-          caseTRUE                               * 38EE2
-          FALSE                                  * 38EE7
+        :: DA3Bad? caseFALSE DA3ValidF?          * 38EB5
+          caseTRUE DA3TempF?                     * 38EC9
+          case SetDA3BadT                        * 38ED3
+          DA3NoCh? caseTRUE FALSE                * 38EDD
         ;                                        * 38EEC
 
 * -> T
 * refs (1): 38ED8
 SetDA3BadT:
-        ::                                       * 38EF1
-          SetDA3Bad                              * 38EF6
-          TRUE                                   * 38EFB
-        ;                                        * 38F00
+        :: SetDA3Bad TRUE ;                      * 38EF1
 
 * -> flag
 DAsOK?:
-        ::                                       * 38F05
-          DA1OK?                                 * 38F0A
-          DA2OK?                                 * 38F0F
-          AND                                    * 38F14
-          DA3OK?                                 * 38F19
-          AND                                    * 38F1E
-        ;                                        * 38F23
+        :: DA1OK? DA2OK? AND DA3OK? AND ;        * 38F05
 
 * ->
 * refs (3): 386B0 4309D 43784
 DA1OK?NOTIT:
-        ::                                       * 38F28
-          DA1OK?                                 * 38F2D
-          COLA                                   * 38F32
-          ?SKIP                                  * 38F37
+        :: DA1OK? COLA ?SKIP                     * 38F28
         ;                                        * 38F3C
 
 * ->
 * refs (2): 386A6 430A7
 DA2aOK?NOTIT:
-        ::                                       * 38F41
-          DA2aOK?                                * 38F46
-          COLA                                   * 38F4B
-          ?SKIP                                  * 38F50
+        :: DA2aOK? COLA ?SKIP                    * 38F41
         ;                                        * 38F55
 
 * ->
 * refs (3): 386BA 430B1 DD4A3
 DA2bOK?NOTIT:
-        ::                                       * 38F5A
-          DA2bOK?                                * 38F5F
-          COLA                                   * 38F64
-          ?SKIP                                  * 38F69
+        :: DA2bOK? COLA ?SKIP                    * 38F5A
         ;                                        * 38F6E
 
 * ->
 * refs (3): 386C4 430BB 4378E
 DA3OK?NOTIT:
-        ::                                       * 38F73
-          DA3OK?                                 * 38F78
-          COLA                                   * 38F7D
-          ?SKIP                                  * 38F82
+        :: DA3OK? COLA ?SKIP                     * 38F73
         ;                                        * 38F87
 
 * ->
 * refs (2): 385F2 38881
 InitDispModes:
-        ::                                       * 38F8C
-          ClrDAsOK                               * 38F91
-          SetDA1Bad                              * 38F96
-          SetDA2aBad                             * 38F9B
-          SetDA2bBad                             * 38FA0
-          SetDA3Bad                              * 38FA5
-          ClrNewEditL                            * 38FAA
-          ClrNoRollDA2                           * 38FAF
-        ;                                        * 38FB4
+        :: ClrDAsOK SetDA1Bad SetDA2aBad SetDA2bBad SetDA3Bad ClrNewEditL * 38F8C
+          ClrNoRollDA2 ;                         * 38FAF
 
 * -> flag
 * refs (4): 19C5B 39B94 39BB7 8D552
 DA2aLess1OK?:
-        ::                                       * 38FB9
-          OBJ_53A74                              * 38FBE
-          DA2aBad?                               * 38FC3
-          NOTAND                                 * 38FC8
-        ;                                        * 38FCD
+        :: OBJ_53A74 DA2aBad? NOTAND ;           * 38FB9
 
 * ->
 * refs (12): 1558B 2386F 39176 395D3 4799D 479C5 ...
 SetDA1Valid:
-        ::                                       * 38FD2
-          SetDA1ValidF                           * 38FD7
-          ClrDA1Bad                              * 38FDC
-          ClrDA1IsStat                           * 38FE1
-        ;                                        * 38FE6
+        :: SetDA1ValidF ClrDA1Bad ClrDA1IsStat ; * 38FD2
 
 * ->
 * refs (9): 39162 39BE9 39BF8 430ED 4311A 8D5FD ...
 SetDA2aValid:
-        ::                                       * 38FEB
-          SetDA2aValidF                          * 38FF0
-          ClrDA2aBad                             * 38FF5
-        ;                                        * 38FFA
+        :: SetDA2aValidF ClrDA2aBad ;            * 38FEB
 
 * ->
 * refs (7): 19CE6 39167 3A017 8D701 BA819 D85FD ...
 SetDA2bValid:
-        ::                                       * 38FFF
-          SetDA2bValidF                          * 39004
-          ClrDA2bBad                             * 39009
-          ClrDA2bEdit                            * 3900E
-        ;                                        * 39013
+        :: SetDA2bValidF ClrDA2bBad ClrDA2bEdit ; * 38FFF
 
 * ->
 * refs (5): 39180 3A1F2 9CDD0 9D3BD CF695
 SetDA3Valid:
-        ::                                       * 39018
-          SetDA3ValidF                           * 3901D
-          ClrDA3Bad                              * 39022
-        ;                                        * 39027
+        :: SetDA3ValidF ClrDA3Bad ;              * 39018
 
 * ->
 * refs (11): 1433C 14DA0 15685 387B4 3891C 39220 ...
 SetDA1Temp:
-        ::                                       * 3902C
-          SetDA1TempF                            * 39031
-          ClrDA1Bad                              * 39036
-          ClrDA1IsStat                           * 3903B
-        ;                                        * 39040
+        :: SetDA1TempF ClrDA1Bad ClrDA1IsStat ;  * 3902C
 
 * ->
 * refs (1): 3920C
 SetDA2aTemp:
-        ::                                       * 39045
-          SetDA2aTempF                           * 3904A
-          ClrDA2aBad                             * 3904F
-        ;                                        * 39054
+        :: SetDA2aTempF ClrDA2aBad ;             * 39045
 
 * ->
 * refs (3): 39211 40BA6 D6A01
 SetDA2bTemp:
-        ::                                       * 39059
-          SetDA2bTempF                           * 3905E
-          ClrDA2bBad                             * 39063
-          ClrDA2bEdit                            * 39068
-        ;                                        * 3906D
+        :: SetDA2bTempF ClrDA2bBad ClrDA2bEdit ; * 39059
 
 * ->
 * refs (2): 1436E 3923E
 SetDA3Temp:
-        ::                                       * 39072
-          SetDA3TempF                            * 39077
-          ClrDA3Bad                              * 3907C
-        ;                                        * 39081
+        :: SetDA3TempF ClrDA3Bad ;               * 39072
 
 * :: EditExst?NOT ITE SetDA2RollF SetDA2aNoCh ;
 * refs (5): 3B609 40DDE 40E01 42AEE 42CE7
 ?SetEditRoll:
-        ::                                       * 39086
-          NoEditLine?                            * 3908B
-          ITE                                    * 39090
-          OBJ_53A82                              * 39095
-          SetDA2aNoCh                            * 3909A
+        :: NoEditLine? ITE OBJ_53A82 SetDA2aNoCh * 39086
         ;                                        * 3909F
 
 MENoP&FixDA1:
-        ::                                       * 390A4
-          SetDA1Bad                              * 390A9
-        ;                                        * 390AE
+        :: SetDA1Bad ;                           * 390A4
 
 MENP&FixDA12:
-        ::                                       * 390B3
-          SetDA1Bad                              * 390B8
-          SetDA2aBad                             * 390BD
-          SetDA2bBad                             * 390C2
-        ;                                        * 390C7
+        :: SetDA1Bad SetDA2aBad SetDA2bBad ;     * 390B3
 
 * ->
 * refs (1): 39149
 ClrDA1OK:
-        ::                                       * 390CC
-          ClrDA1ValidF                           * 390D1
-          ClrDA1TempF                            * 390D6
-          ClrDA1NoCh                             * 390DB
-        ;                                        * 390E0
+        :: ClrDA1ValidF ClrDA1TempF ClrDA1NoCh ; * 390CC
 
 * ->
 * refs (1): 3911C
 ClrDA2aOK:
-        ::                                       * 390E5
-          ClrDA2aValidF                          * 390EA
-          ClrDA2aTempF                           * 390EF
-          ClrDA2NoCh                             * 390F4
-        ;                                        * 390F9
+        :: ClrDA2aValidF ClrDA2aTempF ClrDA2NoCh ; * 390E5
 
 * ->
 * refs (3): 39121 BB327 BB3D1
 ClrDA2bOK:
-        ::                                       * 390FE
-          ClrDA2bValidF                          * 39103
-          ClrDA2bTemp                            * 39108
-          ClrDA2bNoCh                            * 3910D
-        ;                                        * 39112
+        :: ClrDA2bValidF ClrDA2bTemp ClrDA2bNoCh ; * 390FE
 
 * ->
 * refs (1): 3914E
 ClrDA2OK:
-        ::                                       * 39117
-          ClrDA2aOK                              * 3911C
-          ClrDA2bOK                              * 39121
-        ;                                        * 39126
+        :: ClrDA2aOK ClrDA2bOK ;                 * 39117
 
 * ->
 * refs (4): 39153 69C28 DCCAA DCD06
 ClrDA3OK:
-        ::                                       * 3912B
-          ClrDA3ValidF                           * 39130
-          ClrDA3TempF                            * 39135
-          ClrDA3NoCh                             * 3913A
-        ;                                        * 3913F
+        :: ClrDA3ValidF ClrDA3TempF ClrDA3NoCh ; * 3912B
 
 * ->
 * refs (44): 17C2B 19B71 19C9F 2DDFB 2E072 2E095 ...
 ClrDAsOK:
-        ::                                       * 39144
-          ClrDA1OK                               * 39149
-          ClrDA2OK                               * 3914E
-          ClrDA3OK                               * 39153
-        ;                                        * 39158
+        :: ClrDA1OK ClrDA2OK ClrDA3OK ;          * 39144
 
 * ->
 * refs (2): 3917B 43838
 SetDA2Valid:
-        ::                                       * 3915D
-          SetDA2aValid                           * 39162
-          SetDA2bValid                           * 39167
-        ;                                        * 3916C
+        :: SetDA2aValid SetDA2bValid ;           * 3915D
 
 * ->
 SetDAsValid:
-        ::                                       * 39171
-          SetDA1Valid                            * 39176
-          SetDA2Valid                            * 3917B
-          SetDA3Valid                            * 39180
-        ;                                        * 39185
+        :: SetDA1Valid SetDA2Valid SetDA3Valid ; * 39171
 
 * ->
 * refs (7): 391A8 391B7 391F8 3C376 43EBD DD795 ...
 SetDA2NoCh:
-        ::                                       * 3918A
-          SetDA2aNoCh                            * 3918F
-          SetDA2bNoCh                            * 39194
-        ;                                        * 39199
+        :: SetDA2aNoCh SetDA2bNoCh ;             * 3918A
 
 * ->
 * refs (14): 3AB80 3E5BE 40193 40DCA 4103A 4A2DA ...
 SetDA12NoCh:
-        ::                                       * 3919E
-          SetDA1NoCh                             * 391A3
-          SetDA2NoCh                             * 391A8
-        ;                                        * 391AD
+        :: SetDA1NoCh SetDA2NoCh ;               * 3919E
 
 * ->
 * refs (5): 3D947 3DFD8 43680 43E86 43EC7
 SetDA23NoCh:
-        ::                                       * 391B2
-          SetDA2NoCh                             * 391B7
-          SetDA3NoCh                             * 391BC
-        ;                                        * 391C1
+        :: SetDA2NoCh SetDA3NoCh ;               * 391B2
 
 * ->
 * refs (21): 391DF 3B604 3B6A4 3B6F9 3DE5E 3E124 ...
 SetDA13NoCh:
-        ::                                       * 391C6
-          SetDA1NoCh                             * 391CB
-          SetDA3NoCh                             * 391D0
-        ;                                        * 391D5
+        :: SetDA1NoCh SetDA3NoCh ;               * 391C6
 
 * ->
 * refs (5): 3B5C8 3B5F0 BAF02 BB86F BB8B2
 SetDA12a3NCh:
-        ::                                       * 391DA
-          SetDA13NoCh                            * 391DF
-          SetDA2aNoCh                            * 391E4
-        ;                                        * 391E9
+        :: SetDA13NoCh SetDA2aNoCh ;             * 391DA
 
 * ->
 * refs (85): 3A9DD 3AA14 3AC2A 3AFA2 3AFF5 3B02A ...
 SetDA123NoCh:
-        ::                                       * 391EE
-          SetDA1NoCh                             * 391F3
-          SetDA2NoCh                             * 391F8
-          SetDA3NoCh                             * 391FD
-        ;                                        * 39202
+        :: SetDA1NoCh SetDA2NoCh SetDA3NoCh ;    * 391EE
 
 * ->
 * refs (10): 14355 39225 39239 45FFD 46116 4A50E ...
 SetDA2OKTemp:
-        ::                                       * 39207
-          SetDA2aTemp                            * 3920C
-          SetDA2bTemp                            * 39211
-        ;                                        * 39216
+        :: SetDA2aTemp SetDA2bTemp ;             * 39207
 
 * ->
 * refs (5): 1547D 2219F 3FBBA 41413 9E47B
 SetDA12Temp:
-        ::                                       * 3921B
-          SetDA1Temp                             * 39220
-          SetDA2OKTemp                           * 39225
-        ;                                        * 3922A
+        :: SetDA1Temp SetDA2OKTemp ;             * 3921B
 
 * ->
 * refs (5): 492F7 C714E C7176 CE3C0 CE41A
 SetDAsTemp:
-        ::                                       * 3922F
-          SetDA1Temp                             * 39234
-          SetDA2OKTemp                           * 39239
-          SetDA3Temp                             * 3923E
-        ;                                        * 39243
+        :: SetDA1Temp SetDA2OKTemp SetDA3Temp ;  * 3922F
 
 * -> flag
 * refs (8): 19B35 3B7D1 4320A 43CF2 8D2A9 8D2EF ...
 DAsBad?:
-        ::                                       * 39248
-          DA1Bad?                                * 3924D
-          caseTRUE                               * 39252
-          DA2aBad?                               * 39257
-          caseTRUE                               * 3925C
-          DA2bBad?                               * 39261
-          caseTRUE                               * 39266
-          DA3Bad?                                * 3926B
+        :: DA1Bad? caseTRUE DA2aBad?             * 39248
+          caseTRUE DA2bBad?                      * 3925C
+          caseTRUE DA3Bad?                       * 39266
         ;                                        * 39270
 
 * -> flag
@@ -1842,117 +1393,49 @@ L_39595:
 * ->
 * refs (3): 386B5 430A2 43789
 ?DispStatus:
-        ::                                       * 3959C
-          KEYINBUFFER?                           * 395A1
-          NOTcase                                * 395A6
-          DispStatus                             * 395AB
-          SetDA1Bad                              * 395B0
-        ;                                        * 395B5
+        :: KEYINBUFFER? NOTcase DispStatus       * 3959C
+          SetDA1Bad ;                            * 395B0
 
 * ->
 * refs (3): 395AB 8D589 DD53D
 DispStatus:
-        ::                                       * 395BA
-          TOADISP                                * 395BF
-          DispStsBound                           * 395C4
-          DispDir?Time                           * 395C9
-          DispAllStatus!                         * 395CE
-          SetDA1Valid                            * 395D3
-          SetDA1IsStat                           * 395D8
-        ;                                        * 395DD
+        :: TOADISP DispStsBound DispDir?Time DispAllStatus! SetDA1Valid * 395BA
+          SetDA1IsStat ;                         * 395D8
 
 * refs (1): 395CE
 DispAllStatus!:
-        ::                                       * 395E2
-          AngleStatus                            * 395E7
-          Blank&GROB!                            * 395EC
-          ComVecStatus                           * 395F1
-          Blank&GROB!                            * 395F6
-          HaltDispStatus                         * 395FB
-          Blank&GROB!                            * 39600
-          UserFlagStat                           * 39605
-          Blank&GROB!                            * 3960A
-          UserKeysStat                           * 3960F
-          Blank&GROB!                            * 39614
-          AlgEntryStat                           * 39619
-          Blank&GROB!                            * 3961E
-          PrgmEntrStat                           * 39623
-          Blank&GROB!                            * 39628
-        ;                                        * 3962D
+        :: AngleStatus Blank&GROB! ComVecStatus Blank&GROB! HaltDispStatus * 395E2
+          Blank&GROB! UserFlagStat Blank&GROB! UserKeysStat Blank&GROB! * 39600
+          AlgEntryStat Blank&GROB! PrgmEntrStat Blank&GROB! ; * 39619
 
 * $ #x #x1 #x2 ->
 * refs (7): 395EC 395F6 39600 3960A 39614 3961E ...
 Blank&GROB!:
-        ::                                       * 39632
-          4ROLL                                  * 39637
-          $>grob                                 * 3963C
-          4UNROLL                                * 39641
-          HARDBUFF                               * 39646
-          3UNROLL                                * 3964B
-          ZEROSWAP                               * 39650
-          BINT6                                  * 39655
-          GROB!ZERO                              * 3965A
-          SWAP                                   * 3965F
-          BINT0                                  * 39664
-          GROB!                                  * 39669
-        ;                                        * 3966E
+        :: 4ROLL $>grob 4UNROLL HARDBUFF 3UNROLL ZEROSWAP BINT6 GROB!ZERO * 39632
+          SWAP BINT0 GROB! ;                     * 3965F
 
 * refs (1): 395E7
 AngleStatus:
-        ::                                       * 39673
-          BINT17                                 * 39678
-          SysITE                                 * 3967D
-          ::                                     * 39682
-            $_RAD                                * 39687
-            BINT4                                * 3968C
-          ;                                      * 39691
-          ::                                     * 39696
-            BINT18                               * 3969B
-            SysITE                               * 396A0
-            $_GRAD                               * 396A5
-            NULL$                                * 396AA
-            BINT2                                * 396AF
-          ;                                      * 396B4
-          BINT0                                  * 396B9
-          BINT20                                 * 396BE
-        ;                                        * 396C3
+        :: BINT17 SysITE                         * 39673
+          :: $_RAD BINT4 ;                       * 39682
+          :: BINT18 SysITE $_GRAD NULL$ BINT2 ; BINT0 BINT20 ; * 39696
 
 * refs (1): 395F1
 ComVecStatus:
-        ::                                       * 396C8
-          BINT16                                 * 396CD
-          SysITE                                 * 396D2
-          ::                                     * 396D7
-            BINT15                               * 396DC
-            SysITE                               * 396E1
-            $_R<<                                * 396E6
-            $_R<Z                                * 396EB
-          ;                                      * 396F0
-          NULL$                                  * 396F5
-          BINT22                                 * 396FA
-          BINT20                                 * 396FF
-          BINT37                                 * 39704
-        ;                                        * 39709
+        :: BINT16 SysITE                         * 396C8
+          :: BINT15 SysITE $_R<< $_R<Z ; NULL$ BINT22 BINT20 BINT37 ; * 396D7
 
 * refs (1): 395FB
 HaltDispStatus:
-        ::                                       * 3970E
-          Halted?                                * 39713
-          ITE                                    * 39718
+        :: Halted? ITE                           * 3970E
 
 _HALT_:
-          $       "HALT"                         * 3971D
-          NULL$                                  * 3972F
-          BINT39                                 * 39734
-          BINT37                                 * 39739
-          BINT56                                 * 3973E
-        ;                                        * 39743
+          $ "HALT" NULL$                         * 3971D
+          BINT39 BINT37 BINT56 ;                 * 39734
 
 * refs (1): 39605
 UserFlagStat:
-        ::                                       * 39748
-          #       3039                           * 3974D  12345
-          #>$                                    * 39757
+        :: # 3039 #>$                            * 39748
           CODE                                   * 3975C  65 nibbles
             GOSBVL  SAVPTR                       * 39766
             A=DAT1  A                            * 3976D
@@ -1975,223 +1458,92 @@ L_39795:
             DAT1=C  10                           * 3979C
             GOVLNG  GETPTRLOOP                   * 397A0
           ENDCODE                                * 397A7
-          BINT58                                 * 397A7
-          BINT56                                 * 397AC
-          BINT79                                 * 397B1
-        ;                                        * 397B6
+          BINT58 BINT56 BINT79 ;                 * 397A7
 
 * refs (1): 3960F
 UserKeysStat:
-        ::                                       * 397BB
-          UserKeys?                              * 397C0
-          ITE                                    * 397C5
-          ::                                     * 397CA
-            1USR?                                * 397CF
-            ITE                                  * 397D4
+        :: UserKeys? ITE                         * 397BB
+          :: 1USR? ITE                           * 397CA
 
 _1USR_:
-            $       "1USR"                       * 397D9
+            $ "1USR"                             * 397D9
 
 _USER_:
-            $       "USER"                       * 397EB
+            $ "USER"                             * 397EB
           ;                                      * 397FD
           NULL$                                  * 39802
-          BINT81                                 * 39807
-          BINT79                                 * 3980C
-          BINT98                                 * 39811
-        ;                                        * 39816
+          BINT81 BINT79 BINT98 ;                 * 39807
 
 * refs (1): 39619
 AlgEntryStat:
-        ::                                       * 3981B
-          AlgEntry?                              * 39820
-          ITE                                    * 39825
+        :: AlgEntry? ITE                         * 3981B
 
 _ALG_:
-          $       "ALG"                          * 3982A
-          NULL$                                  * 3983A
-          BINT100                                * 3983F
-          BINT98                                 * 39844
-          BINT114                                * 39849
-        ;                                        * 3984E
+          $ "ALG" NULL$                          * 3982A
+          BINT100 BINT98 BINT114 ;               * 3983F
 
 * refs (1): 39623
 PrgmEntrStat:
-        ::                                       * 39853
-          PrgmEntry?                             * 39858
-          ITE                                    * 3985D
+        :: PrgmEntry? ITE                        * 39853
 
 _PRG_:
-          $       "PRG"                          * 39862
-          NULL$                                  * 39872
-          BINT116                                * 39877
-          BINT114                                * 3987C
-          BINT131                                * 39881
-        ;                                        * 39886
+          $ "PRG" NULL$                          * 39862
+          BINT116 BINT114 BINT131 ;              * 39877
 
 * refs (1): 395C9
 DispDir?Time:
-        ::                                       * 3988B
-          DispTimeReq?                           * 39890
-          DUP                                    * 39895
-          PathStatus                             * 3989A
-          4ROLL                                  * 3989F
-          ITE                                    * 398A4
-          DispDir?Tim1                           * 398A9
-          DispDir?Tim2                           * 398AE
-          SWAP                                   * 398B3
-          HARDBUFF                               * 398B8
-          BINT0                                  * 398BD
-          BINT7                                  * 398C2
-          GROB!                                  * 398C7
-          HARDBUFF                               * 398CC
-          BINT4                                  * 398D1
-          ROT                                    * 398D6
-          IT                                     * 398DB
-          #2+                                    * 398E0
-          BINT7                                  * 398E5
-          GROB!                                  * 398EA
-        ;                                        * 398EF
+        :: DispTimeReq? DUP PathStatus 4ROLL ITE DispDir?Tim1 DispDir?Tim2 * 3988B
+          SWAP HARDBUFF BINT0 BINT7 GROB! HARDBUFF BINT4 ROT IT #2+ * 398B3
+          BINT7 GROB! ;                          * 398E5
 
 * refs (1): 398A9
 DispDir?Tim1:
-        ::                                       * 398F4
-          HARDBUFF                               * 398F9
-          BINT63                                 * 398FE
-          BINT6                                  * 39903
-          BINT131                                * 39908
-          BINT7                                  * 3990D
-          GROB!ZERO                              * 39912
-          BINT63                                 * 39917
-          BINT13                                 * 3991C
-          BINT131                                * 39921
-          BINT14                                 * 39926
-          GROB!ZERODRP                           * 3992B
-          OBJ_39A83                              * 39930
-          HARDBUFF                               * 39935
-          BINT0                                  * 3993A
-          BINT6                                  * 3993F
-          BINT63                                 * 39944
-          BINT14                                 * 39949
-          GROB!ZERODRP                           * 3994E
-        ;                                        * 39953
+        :: HARDBUFF BINT63 BINT6 BINT131 BINT7 GROB!ZERO BINT63 BINT13 * 398F4
+          BINT131 BINT14 GROB!ZERODRP OBJ_39A83 HARDBUFF BINT0 BINT6 BINT63 * 39921
+          BINT14 GROB!ZERODRP ;                  * 39949
 
 * refs (1): 398AE
 DispDir?Tim2:
-        ::                                       * 39958
-          BINT6                                  * 3995D
-          BINT8                                  * 39962
-          BLANKIT                                * 39967
-        ;                                        * 3996C
+        :: BINT6 BINT8 BLANKIT ;                 * 39958
 
 * refs (1): 3989A
 PathStatus:
-        ::                                       * 39971
-          ITE                                    * 39976
-          BINT53                                 * 3997B
-          #       7D                             * 39980  125
-          $       " }"                           * 3998A
-          CONTEXT@                               * 39998
-          BEGIN                                  * 3999D
-          DUP                                    * 399A2
-          RAM-WORDNAME                           * 399A7
-          DUP                                    * 399AC
-          NULLID                                 * 399B1
-          EQUALNOT                               * 399B6
-          DUP                                    * 399BB
-          ITE                                    * 399C0
-          OBJ_39A4C                              * 399C5
-          OBJ_39A60                              * 399CA
-          4ROLL                                  * 399CF
-          !append$                               * 399D4
-          SPACE$                                 * 399D9
-          !insert$                               * 399DE
-          3UNROLL                                * 399E3
-          3PICK                                  * 399E8
-          LEN$                                   * 399ED
-          BINT63                                 * 399F2
-          #<                                     * 399F7
-          AND                                    * 399FC
+        :: ITE BINT53 # 7D                       * 39971
+          $ " }" CONTEXT@ BEGIN DUP RAM-WORDNAME DUP NULLID EQUALNOT DUP ITE * 3998A
+          OBJ_39A4C OBJ_39A60                    * 399C5
+          4ROLL !append$ SPACE$ !insert$ 3UNROLL 3PICK LEN$ BINT63 #< AND * 399CF
           WHILE                                  * 39A01
-          ::                                     * 39A06
-            MYRAMROMPAIR                         * 39A0B
-            DROP                                 * 39A10
-          ;                                      * 39A15
-          REPEAT                                 * 39A1A
-          DROPSWAP                               * 39A1F
-          RIGHT$3x6                              * 39A24
-          OVER                                   * 39A29
-          ITE                                    * 39A2E
-          _chr(31)_                              * 39A33
-          tok{                                   * 39A38
-          $>grob                                 * 39A3D
-          ROT                                    * 39A42
-        ;                                        * 39A47
+          :: MYRAMROMPAIR DROP ; REPEAT DROPSWAP RIGHT$3x6 OVER ITE * 39A06
+          _chr(31)_ tok{                         * 39A33
+          $>grob ROT ;                           * 39A3D
 
 * refs (1): 399C5
 OBJ_39A4C:
-        ::                                       * 39A4C
-          SWAP                                   * 39A51
-          ID>$                                   * 39A56
-        ;                                        * 39A5B
+        :: SWAP ID>$ ;                           * 39A4C
 
 * refs (1): 399CA
 OBJ_39A60:
-        ::                                       * 39A60
-          SWAPDROP                               * 39A65
-          '                                      * 39A6A
-          xHOME                                  * 39A6F
-          PTR>ROMPTR                             * 39A74
-          ->str(xn)                              * 39A79
-        ;                                        * 39A7E
+        :: SWAPDROP ' xHOME PTR>ROMPTR ->str(xn) ; * 39A60
 
 * refs (2): 39930 39AE7
 OBJ_39A83:
-        ::                                       * 39A83
-          DATE                                   * 39A88
-          Date>d$                                * 39A8D
-          APPEND_SPACE                           * 39A92
-          BINT42                                 * 39A97
-          TestSysFlag                            * 39A9C
-          IT                                     * 39AA1
-          APPEND_SPACE                           * 39AA6
-          TOD                                    * 39AAB
-          TOD>t$                                 * 39AB0
-          !append$                               * 39AB5
-          $>grob                                 * 39ABA
-          HARDBUFF                               * 39ABF
-          BINT63                                 * 39AC4
-          BINT7                                  * 39AC9
-          GROB!                                  * 39ACE
-        ;                                        * 39AD3
+        :: DATE Date>d$ APPEND_SPACE BINT42 TestSysFlag IT APPEND_SPACE * 39A83
+          TOD TOD>t$ !append$ $>grob HARDBUFF BINT63 BINT7 GROB! ; * 39AAB
 
 * refs (2): 048C7 048EA
 OBJ_39AD8:
-        ::                                       * 39AD8
-          DA1IsStat?                             * 39ADD
-          NOT?SEMI                               * 39AE2
-          OBJ_39A83                              * 39AE7
-        ;                                        * 39AEC
+        :: DA1IsStat? NOT?SEMI                   * 39AD8
+          OBJ_39A83 ;                            * 39AE7
 
 * -> flag
 * refs (2): 048FE 39890
 DispTimeReq?:
-        ::                                       * 39AF1
-          Clock?                                 * 39AF6
-          clock?                                 * 39AFB
-          OR                                     * 39B00
-        ;                                        * 39B05
+        :: Clock? clock? OR ;                    * 39AF1
 
 * ->
 * refs (3): 395C4 47993 DD547
 DispStsBound:
-        ::                                       * 39B0A
-          LineGrob                               * 39B0F
-          HARDBUFF                               * 39B14
-          BINT0                                  * 39B19
-          BINT14                                 * 39B1E
-          GROB!                                  * 39B23
-        ;                                        * 39B28
+        :: LineGrob HARDBUFF BINT0 BINT14 GROB! ; * 39B0A
 
 * 131x2 line
 * refs (1): 39B0F
@@ -2206,221 +1558,86 @@ LineGrob:
 * ->
 * refs (2): 386AB DD499
 ?DispStack:
-        ::                                       * 39B85
-          KEYINBUFFER?                           * 39B8A
-          NOT                                    * 39B8F
-          DA2aLess1OK?                           * 39B94
-          ORcase                                 * 39B99
-          OBJ_39BAD                              * 39B9E
-          SetDA2aBad                             * 39BA3
-        ;                                        * 39BA8
+        :: KEYINBUFFER? NOT DA2aLess1OK? ORcase OBJ_39BAD * 39B85
+          SetDA2aBad ;                           * 39BA3
 
 * refs (2): 39B9E 39C75
 OBJ_39BAD:
-        ::                                       * 39BAD
-          TOADISP                                * 39BB2
-          DA2aLess1OK?                           * 39BB7
-          ClrNewEditL                            * 39BBC
-          case                                   * 39BC1
-          ?RollUpDA2                             * 39BC6
-          ClrNoRollDA2                           * 39BCB
-          ClrAbbrevStk                           * 39BD0
-          ERRSET                                 * 39BD5
-          OBJ_39C1B                              * 39BDA
-          ERRTRAP                                * 39BDF
-          OBJ_39C61                              * 39BE4
-          SetDA2aValid                           * 39BE9
-        ;                                        * 39BEE
+        :: TOADISP DA2aLess1OK? ClrNewEditL case ?RollUpDA2 * 39BAD
+          ClrNoRollDA2 ClrAbbrevStk ERRSET OBJ_39C1B ERRTRAP OBJ_39C61 * 39BCB
+          SetDA2aValid ;                         * 39BE9
 
 * refs (1): 39BC6
 ?RollUpDA2:
-        ::                                       * 39BF3
-          SetDA2aValid                           * 39BF8
-          NoRollDA2?                             * 39BFD
-          case                                   * 39C02
-          ClrNoRollDA2                           * 39C07
-          BINT3                                  * 39C0C
-          ScreenUpN                              * 39C11
-        ;                                        * 39C16
+        :: SetDA2aValid NoRollDA2? case ClrNoRollDA2 * 39BF3
+          BINT3 ScreenUpN ;                      * 39C0C
 
 * refs (2): 39BDA 39C8E
 OBJ_39C1B:
-        ::                                       * 39C1B
-          LINESOFSTACK                           * 39C20
-          DUP#0=csDROP                           * 39C25
-          ONESWAP                                * 39C2A
-          ZERO_DO                                * 39C2F
-          ISTOP-INDEX                            * 39C34
-          OVERDUP                                * 39C39
-          #3+                                    * 39C3E
-          pick(s)?                               * 39C43
-          OBJ_39C9D                              * 39C48
-          SWAP#1+SWAP                            * 39C4D
-          +LOOP                                  * 39C52
-          DROP                                   * 39C57
-        ;                                        * 39C5C
+        :: LINESOFSTACK DUP#0=csDROP ONESWAP ZERO_DO ISTOP-INDEX OVERDUP #3+ * 39C1B
+          pick(s)? OBJ_39C9D SWAP#1+SWAP +LOOP DROP ; * 39C43
 
 * refs (1): 39BE4
 OBJ_39C61:
-        ::                                       * 39C61
-          DropSysObs                             * 39C66
-          ERROR@                                 * 39C6B
-          #0=case                                * 39C70
-          OBJ_39BAD                              * 39C75
-          #NoRoomForSt                           * 39C7A
-          JstGetTHEMESG                          * 39C7F
-          DoWarning                              * 39C84
-          SetAbbrevStk                           * 39C89
-          OBJ_39C1B                              * 39C8E
-          ClrAbbrevStk                           * 39C93
-        ;                                        * 39C98
+        :: DropSysObs ERROR@ #0=case OBJ_39BAD   * 39C61
+          #NoRoomForSt JstGetTHEMESG DoWarning SetAbbrevStk OBJ_39C1B * 39C7A
+          ClrAbbrevStk ;                         * 39C93
 
 * refs (1): 39C48
 OBJ_39C9D:
-        ::                                       * 39C9D
-          DUP                                    * 39CA2
-          NOTcase                                * 39CA7
-          OBJ_39F42                              * 39CAC
-          3PICK                                  * 39CB1
-          #1<>                                   * 39CB6
-          case                                   * 39CBB
-          OBJ_39F42                              * 39CC0
-          MLmode?                                * 39CC5
-          NOTcase                                * 39CCA
-          OBJ_39F42                              * 39CCF
-          OVER                                   * 39CD4
-          OBJ_39E0F                              * 39CD9
-          NOTcase                                * 39CDE
-          OBJ_39F42                              * 39CE3
-          AbbrevStack?                           * 39CE8
-          case                                   * 39CED
-          OBJ_39F42                              * 39CF2
-          DROPSWAPDROP                           * 39CF7
-          OBJ_39D06                              * 39CFC
-        ;                                        * 39D01
+        :: DUP NOTcase OBJ_39F42                 * 39C9D
+          3PICK #1<> case OBJ_39F42              * 39CB1
+          MLmode? NOTcase OBJ_39F42              * 39CC5
+          OVER OBJ_39E0F NOTcase OBJ_39F42       * 39CD4
+          AbbrevStack? case OBJ_39F42            * 39CE8
+          DROPSWAPDROP OBJ_39D06 ;               * 39CF7
 
 * refs (1): 39CFC
 OBJ_39D06:
-        ::                                       * 39D06
-          OVERSWAP                               * 39D0B
-          NULL{}                                 * 39D10
-          SWAP3PICK                              * 39D15
-          ZERO_DO                                * 39D1A
-          DUPUNROT                               * 39D1F
-          OBJ_39E78                              * 39D24
-          INDEX@                                 * 39D29
-          #0=ITE                                 * 39D2E
-          OBJ_39EB9                              * 39D33
-          OBJ_39F23                              * 39D38
-          5UNROLL                                * 39D3D
-          DUPNULLCOMP?                           * 39D42
-          IT                                     * 39D47
-          OBJ_39EE1                              * 39D4C
-          SWAPLOOP                               * 39D51
-          2DROP                                  * 39D56
-          DUPDUP                                 * 39D5B
-          #3+                                    * 39D60
-          UNROLL                                 * 39D65
-          ZERO_DO                                * 39D6A
-          ISTOP-INDEX                            * 39D6F
-          #1+ROLL                                * 39D74
-          OVER                                   * 39D79
-          ISTOP@                                 * 39D7E
-          #-                                     * 39D83
-          INDEX@                                 * 39D88
-          #+                                     * 39D8D
-          #1+                                    * 39D92
-          BigDisp(st,s)                          * 39D97
-          LOOP                                   * 39D9C
-          DROPDUP                                * 39DA1
-          BINT4                                  * 39DA6
-          #=                                     * 39DAB
-          IT                                     * 39DB0
+        :: OVERSWAP NULL{} SWAP3PICK ZERO_DO DUPUNROT OBJ_39E78 INDEX@ * 39D06
+          #0=ITE OBJ_39EB9 OBJ_39F23 5UNROLL DUPNULLCOMP? IT OBJ_39EE1 * 39D2E
+          SWAPLOOP 2DROP DUPDUP #3+ UNROLL ZERO_DO ISTOP-INDEX #1+ROLL OVER * 39D51
+          ISTOP@ #- INDEX@ #+ #1+ BigDisp(st,s) LOOP DROPDUP BINT4 #= IT * 39D7E
           SetNoRollDA2                           * 39DB5
         ;                                        * 39DBA
 
 * refs (4): 39F47 43810 43AA4 43B71
 OBJ_39DBF:
-        ::                                       * 39DBF
-          ITE                                    * 39DC4
-          OBJ_39DE2                              * 39DC9
-          #:>$                                   * 39DCE
-          SWAP                                   * 39DD3
-          BigDisp(st,s)                          * 39DD8
-        ;                                        * 39DDD
+        :: ITE OBJ_39DE2 #:>$                    * 39DBF
+          SWAP BigDisp(st,s) ;                   * 39DD3
 
 * refs (1): 39DC9
 OBJ_39DE2:
-        ::                                       * 39DE2
-          AbbrevStack?                           * 39DE7
-          NOTcase                                * 39DEC
-          DoSt:22(s,_)                           * 39DF1
-          SWAP                                   * 39DF6
-          #:>$                                   * 39DFB
-          SWAP                                   * 39E00
-          OBJ_15CCF                              * 39E05
-        ;                                        * 39E0A
+        :: AbbrevStack? NOTcase DoSt:22(s,_)     * 39DE2
+          SWAP #:>$ SWAP OBJ_15CCF ;             * 39DF6
 
 * refs (1): 39CD9
 OBJ_39E0F:
-        ::                                       * 39E0F
-          CK&DISPATCH0                           * 39E14
-          BINT4                                  * 39E19
-          DROPTRUE                               * 39E1E
-          BINT5                                  * 39E23
-          DROPTRUE                               * 39E28
-          BINT8                                  * 39E2D
-          DROPTRUE                               * 39E32
-          BINT9                                  * 39E37
-          DROPTRUE                               * 39E3C
-          BINT14                                 * 39E41
-          DROPTRUE                               * 39E46
-          BINT13                                 * 39E4B
-          DROPTRUE                               * 39E50
-          BINT47                                 * 39E55
-          DROPTRUE                               * 39E5A
-          BINT2                                  * 39E5F
-          DROPTRUE                               * 39E64
-          BINT0                                  * 39E69
-          DROPFALSE                              * 39E6E
+        :: CK&DISPATCH0                          * 39E0F
+          BINT4 DROPTRUE                         * 39E19  array
+          BINT5 DROPTRUE                         * 39E23  list
+          BINT8 DROPTRUE                         * 39E2D  program
+          BINT9 DROPTRUE                         * 39E37  algebraic
+          BINT14 DROPTRUE                        * 39E41  unit
+          BINT13 DROPTRUE                        * 39E4B  tagged
+          BINT47 DROPTRUE                        * 39E55  directory
+          BINT2 DROPTRUE                         * 39E5F  complex
+          BINT0 DROPFALSE                        * 39E69  any
         ;                                        * 39E73
 
 * refs (1): 39D24
 OBJ_39E78:
-        ::                                       * 39E78
-          SWAP                                   * 39E7D
-          ERRSET                                 * 39E82
-          OBJ_53914                              * 39E87
-          OBJ_16A0E                              * 39E8C
-          ERRTRAP                                * 39E91
-          ::                                     * 39E96
-            OBJ_53922                            * 39E9B
-            ERRJMP                               * 39EA0
-          ;                                      * 39EA5
-          OBJ_53922                              * 39EAA
-          SWAP                                   * 39EAF
-        ;                                        * 39EB4
+        :: SWAP ERRSET OBJ_53914 OBJ_16A0E ERRTRAP * 39E78
+          :: OBJ_53922 ERRJMP ; OBJ_53922 SWAP ; * 39E96
 
 * refs (1): 39D33
 OBJ_39EB9:
-        ::                                       * 39EB9
-          OVER                                   * 39EBE
-          NULLCOMP?                              * 39EC3
-          NOTcase                                * 39EC8
-          OBJ_39F04                              * 39ECD
-          BINT1                                  * 39ED2
-          s:str(st,s)                            * 39ED7
-        ;                                        * 39EDC
+        :: OVER NULLCOMP? NOTcase OBJ_39F04      * 39EB9
+          BINT1 s:str(st,s) ;                    * 39ED2
 
 * refs (1): 39D4C
 OBJ_39EE1:
-        ::                                       * 39EE1
-          ROTDROP                                * 39EE6
-          INDEX@                                 * 39EEB
-          #1+                                    * 39EF0
-          3UNROLL                                * 39EF5
-          ExitAtLOOP                             * 39EFA
-        ;                                        * 39EFF
+        :: ROTDROP INDEX@ #1+ 3UNROLL ExitAtLOOP ; * 39EE1
 
 * refs (1): 39ECD
 OBJ_39F04:
@@ -2428,31 +1645,19 @@ OBJ_39F04:
 
 * refs (1): 17CC4
 OBJ_39F09:
-          $       "1: "                          * 39F09
-          !insert$                               * 39F19
-        ;                                        * 39F1E
+          $ "1: " !insert$ ;                     * 39F09
 
 * refs (1): 39D38
 OBJ_39F23:
-        ::                                       * 39F23
-          $       "   "                          * 39F28
-          !insert$                               * 39F38
-        ;                                        * 39F3D
+        :: $ "   " !insert$ ;                    * 39F23
 
 * refs (5): 39CAC 39CC0 39CCF 39CE3 39CF2
 OBJ_39F42:
-        ::                                       * 39F42
-          OBJ_39DBF                              * 39F47
-          BINT1                                  * 39F4C
-        ;                                        * 39F51
+        :: OBJ_39DBF BINT1 ;                     * 39F42
 
 * refs (1): 39CC5
 MLmode?:
-        ::                                       * 39F56
-          BINT52                                 * 39F5B
-          TestSysFlag                            * 39F60
-          NOT                                    * 39F65
-        ;                                        * 39F6A
+        :: BINT52 TestSysFlag NOT ;              * 39F56
 
 * refs (3): 39C20 42836 448A3
 LINESOFSTACK:
@@ -2500,16 +1705,12 @@ ClrAbbrevStk:
 
 * refs (2): 3A04E 3A053
 OBJ_39FE3:
-        ::                                       * 39FE3
-          BINT5                                  * 39FE8
-        ;                                        * 39FED
+        :: BINT5 ;                               * 39FE3
 
 * refs (6): 39A33 3A12F AE62A B21DC BBEDD D6E46
 _chr(31)_:
-        $       "\1F"                            * 39FF2
+        $ "\1F"                                  * 39FF2
 
 * refs (1): 3A143
 begin<16>end:
-        ::                                       * 39FFE
-          BINT22                                 * 3A003
-        ;                                        * 3A008
+        :: BINT22 ;                              * 39FFE

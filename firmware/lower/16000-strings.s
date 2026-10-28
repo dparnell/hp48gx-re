@@ -79,10 +79,7 @@ L_16075:
 
 * refs (3): 15B60 15BC9 160F6
 ->str1(nm):
-        ::                                       * 160D1
-          ID>$                                   * 160D6
-          addtics                                * 160DB
-        ;                                        * 160E0
+        :: ID>$ addtics ;                        * 160D1
 
 * refs (2): 15B65 15BCE
 ->str2(nm):
@@ -99,106 +96,42 @@ L_160FD:
 
 * refs (2): 15BBA 15BE7
 ->str1(ex):
-        ::                                       * 16103
-          MINUSONE                               * 16108
-          NULL$TEMP                              * 1610D
-          OBJ_539CA                              * 16112
-          ERRSET                                 * 16117
-          OBJ_34D3C                              * 1611C
-          ERRTRAP                                * 16121
-          OBJ_159AF                              * 16126
-          OBJ_539D8                              * 1612B
-          ?SEMI                                  * 16130
-          ROTROT2DROP                            * 16135
-        ;                                        * 1613A
+        :: MINUSONE NULL$TEMP OBJ_539CA ERRSET OBJ_34D3C ERRTRAP OBJ_159AF * 16103
+          OBJ_539D8 ?SEMI                        * 1612B
+          ROTROT2DROP ;                          * 16135
 
 * -> $
 * refs (16): 15E88 1610D 161DA 1622F 172F2 17342 ...
 NULL$TEMP:
-        ::                                       * 1613F
-          NULL$                                  * 16144
-          TOTEMPOB                               * 16149
-        ;                                        * 1614E
+        :: NULL$ TOTEMPOB ;                      * 1613F
 
 * refs (1): 15C70
 OBJ_16153:
-        ::                                       * 16153
-          PALPTRDCMP                             * 16158
-          NOTcase                                * 1615D
-          _type(_)_                              * 16162
+        :: PALPTRDCMP NOTcase _type(_)_          * 16153
         ;                                        * 16167
 
 * refs (4): 15C41 15C46 39A79 62B60
 ->str(xn):
-        ::                                       * 1616C
-          DUP                                    * 16171
-          ROMPTRDECOMP                           * 16176
-          case                                   * 1617B
-          ::                                     * 16180
-            SWAPDROP                             * 16185
-            ID>$                                 * 1618A
-          ;                                      * 1618F
-          ROMPTR>#                               * 16194
-          #>$                                    * 16199
-          SWAP                                   * 1619E
-          #>$                                    * 161A3
-          APPEND_SPACE                           * 161A8
-          !!insert$                              * 161AD
-          $       "XLIB "                        * 161B2
-          !!insert$                              * 161C6
-        ;                                        * 161CB
+        :: DUP ROMPTRDECOMP case                 * 1616C
+          :: SWAPDROP ID>$ ;                     * 16180
+          ROMPTR># #>$ SWAP #>$ APPEND_SPACE !!insert$ $ "XLIB " !!insert$ ; * 16194
 
 * refs (7): 15B74 15B83 15B92 15BBF 15BEC 15BFB ...
 ->str2(ar):
-        ::                                       * 161D0
-          OBJ_159B4                              * 161D5
-          NULL$TEMP                              * 161DA
-          SWAP                                   * 161DF
-          NULL{}                                 * 161E4
+        :: OBJ_159B4 NULL$TEMP SWAP NULL{}       * 161D0
 L_161E9:
-          OVERSWAP                               * 161E9
-          OBJ_169E1                              * 161EE
-          4ROLLROT                               * 161F3
-          !append$                               * 161F8
-          OVER                                   * 161FD
-          NULLCOMP?                              * 16202
-          case                                   * 16207
+          OVERSWAP OBJ_169E1 4ROLLROT !append$ OVER NULLCOMP? case * 161E9
           ROTROT2DROP                            * 1620C
-          NEWLINE$&$                             * 16211
-          3UNROLL                                * 16216
-          GOTO                                   * 1621B
-          L_161E9                                * 16220
-        ;                                        * 16225
+          NEWLINE$&$ 3UNROLL GOTO L_161E9 ;      * 16211
 
 * refs (5): 15B6F 15B7E 15B8D 15BF6 15C05
 ->str1(ar):
-        ::                                       * 1622A
-          NULL$TEMP                              * 1622F
-          OVER                                   * 16234
-          NULL{}                                 * 16239
+        :: NULL$TEMP OVER NULL{}                 * 1622A
 L_1623E:
-          OBJ_539CA                              * 1623E
-          ERRSET                                 * 16243
-          OBJ_169E1                              * 16248
-          ERRTRAP                                * 1624D
-          OBJ_159AF                              * 16252
-          OBJ_539D8                              * 16257
-          3UNROLL                                * 1625C
-          !append$                               * 16261
-          DUPLEN$                                * 16266
-          DcompWidth@                            * 1626B
-          #1+                                    * 16270
-          #>                                     * 16275
-          3PICK                                  * 1627A
-          NULLCOMP?                              * 1627F
-          ORcase                                 * 16284
+          OBJ_539CA ERRSET OBJ_169E1 ERRTRAP OBJ_159AF OBJ_539D8 3UNROLL * 1623E
+          !append$ DUPLEN$ DcompWidth@ #1+ #> 3PICK NULLCOMP? ORcase * 16261
           ROTROT2DROP                            * 16289
-          APPEND_SPACE                           * 1628E
-          3PICK                                  * 16293
-          ROT                                    * 16298
-          GOTO                                   * 1629D
-          L_1623E                                * 162A2
-        ;                                        * 162A7
+          APPEND_SPACE 3PICK ROT GOTO L_1623E ;  * 1628E
 
 * refs (2): 15B51 B51D5
 ->str1(r):
@@ -729,11 +662,7 @@ L_167A9:
 * -> flag
 * refs (9): 17559 24FFF 250F4 25D0D 2616C 27FA8 ...
 DPRADIX?:
-        ::                                       * 167BF
-          BINT51                                 * 167C4
-          TestSysFlag                            * 167C9
-          NOT                                    * 167CE
-        ;                                        * 167D3
+        :: BINT51 TestSysFlag NOT ;              * 167BF
 
 * # -> "#:\ "
 * refs (5): 15D4C 31A48 39DCE 39DFB 3F610
@@ -892,989 +821,391 @@ L_1695B:
 
 * refs (3): 1595A 159FF 16A18
 OBJ_16969:
-        #       13                               * 16969  19
+        # 13                                     * 16969  19
 
 * refs (2): 16A54 1709A
 2D/3D(ar)?:
-        ::                                       * 16973
-          DUP                                    * 16978
-          prefix(ar)                             * 1697D
-          TYPEREAL                               * 16982
-          EQ                                     * 16987
-          NOTcsdrpfls                            * 1698C
-          DIMLIMITS                              * 16991
-          INNERDUP                               * 16996
-          ONE_EQ                                 * 1699B
+        :: DUP prefix(ar) TYPEREAL EQ NOTcsdrpfls DIMLIMITS INNERDUP ONE_EQ * 16973
           NOTcase                                * 169A0
 
 * meta -> F
 * refs (1): 496E1
 NDROPFALSE:
-          ::                                     * 169A5
-            NDROP                                * 169AA
-            FALSE                                * 169AF
-          ;                                      * 169B4
-          #1+                                    * 169B9
-          EQcase                                 * 169BE
-          TRUE                                   * 169C3
-          BINT3                                  * 169C8
-          EQcase                                 * 169CD
-          TRUE                                   * 169D2
-          DROPFALSE                              * 169D7
-        ;                                        * 169DC
+          :: NDROP FALSE ;                       * 169A5
+          #1+ EQcase TRUE                        * 169B9
+          BINT3 EQcase TRUE                      * 169C8
+          DROPFALSE ;                            * 169D7
 
 * refs (2): 161EE 16248
 OBJ_169E1:
-        ::                                       * 169E1
-          OBJ_5394C                              * 169E6
-          GOTO                                   * 169EB
-          L_16A22                                * 169F0
-        ;                                        * 169F5
+        :: OBJ_5394C GOTO L_16A22 ;              * 169E1
 
 * refs (2): 319CB 31B15
 OBJ_169FA:
-        ::                                       * 169FA
-          GOTO                                   * 169FF
-          L_16A1D                                * 16A04
-        ;                                        * 16A09
+        :: GOTO L_16A1D ;                        * 169FA
 
 * refs (2): 2FCAE 39E8C
 OBJ_16A0E:
-        ::                                       * 16A0E
-          OBJ_5394C                              * 16A13
-          OBJ_16969                              * 16A18
+        :: OBJ_5394C OBJ_16969                   * 16A0E
 L_16A1D:
           !DcompWidth                            * 16A1D
 L_16A22:
-          ?ATTNQUIT                              * 16A22
-          OVER                                   * 16A27
-          TYPECMP?                               * 16A2C
-          case                                   * 16A31
-          OBJ_17518                              * 16A36
-          OVER                                   * 16A3B
-          TYPEARRAY?                             * 16A40
-          IT                                     * 16A45
-          ::                                     * 16A4A
-            OVER                                 * 16A4F
-            2D/3D(ar)?                           * 16A54
-            case                                 * 16A59
-            ::                                   * 16A5E
-              RDROP                              * 16A63
-              OBJ_1748C                          * 16A68
-            ;                                    * 16A6D
-            OBJ_5395A                            * 16A72
-            case                                 * 16A77
-            ::                                   * 16A7C
-              RDROP                              * 16A81
-              OBJ_31ACA                          * 16A86
-            ;                                    * 16A8B
+          ?ATTNQUIT OVER TYPECMP? case OBJ_17518 * 16A22
+          OVER TYPEARRAY? IT                     * 16A3B
+          :: OVER 2D/3D(ar)? case                * 16A4A
+            :: RDROP OBJ_1748C ;                 * 16A5E
+            OBJ_5395A case                       * 16A72
+            :: RDROP OBJ_31ACA ;                 * 16A7C
           ;                                      * 16A90
           ERRSET                                 * 16A95
-          ::                                     * 16A9A
-            OBJ_172C0                            * 16A9F
-            COLA                                 * 16AA4
+          :: OBJ_172C0 COLA                      * 16A9A
 
 * refs (4): 16BE6 16CD4 16D9F 17202
 OBJ_16AA9:
-            ::                                   * 16AA9
-              4PICK                              * 16AAE
-              DUPROM-WORD?                       * 16AB3
-              SWAP                               * 16AB8
-              TYPECOL?                           * 16ABD
-              NOTAND                             * 16AC2
-              case                               * 16AC7
-              OBJ_16FDE                          * 16ACC
+            :: 4PICK DUPROM-WORD? SWAP TYPECOL? NOTAND case OBJ_16FDE * 16AA9
               CK&DISPATCH0                       * 16AD1
-              #       4000                       * 16AD6  16384
-              OBJ_1700B                          * 16AE0
-              #       5000                       * 16AE5  20480
-              OBJ_16BA3                          * 16AEF
-              #       8000                       * 16AF4  32768
-              OBJ_16E2B                          * 16AFE
-              #       9000                       * 16B03  36864
-              OBJ_16DB3                          * 16B0D
-              #       E000                       * 16B12  57344
-              OBJ_16DB3                          * 16B1C
-              #       D000                       * 16B21  53248
-              OBJ_16D16                          * 16B2B
-              #       2F000                      * 16B30  192512
-              OBJ_16C01                          * 16B3A
-              BINT0                              * 16B3F
-              OBJ_16FDE                          * 16B44
+              # 4000 OBJ_1700B                   * 16AD6  array ? ? ?
+              # 5000 OBJ_16BA3                   * 16AE5  list ? ? ?
+              # 8000 OBJ_16E2B                   * 16AF4  program ? ? ?
+              # 9000 OBJ_16DB3                   * 16B03  algebraic ? ? ?
+              # E000 OBJ_16DB3                   * 16B12  unit ? ? ?
+              # D000 OBJ_16D16                   * 16B21  tagged ? ? ?
+              # 2F000 OBJ_16C01                  * 16B30  directory ? ? ?
+              BINT0 OBJ_16FDE                    * 16B3F  any
             ;                                    * 16B49
           ;                                      * 16B4E
           ERRTRAP                                * 16B53
-          ::                                     * 16B58
-            BEGIN                                * 16B5D
-            FixRRP                               * 16B62
-            OBJ_177B6                            * 16B67
-            UNTIL                                * 16B6C
-            ERRJMP                               * 16B71
-          ;                                      * 16B76
-        ;                                        * 16B7B
+          :: BEGIN FixRRP OBJ_177B6 UNTIL ERRJMP ; ; * 16B58
 
 * refs (2): 16BF7 1707C
 OBJ_16B80:
-        ::                                       * 16B80
-          RDROP                                  * 16B85
-          OBJ_177CA                              * 16B8A
-          COLAITE                                * 16B8F
-          OBJ_171DF                              * 16B94
-          OBJ_1727A                              * 16B99
-        ;                                        * 16B9E
+        :: RDROP OBJ_177CA COLAITE OBJ_171DF OBJ_1727A ; * 16B80
 
 * refs (1): 16AEF
 OBJ_16BA3:
-        ::                                       * 16BA3
-          IT                                     * 16BA8
+        :: IT                                    * 16BA3
           ::                                     * 16BAD
 
 _{_:
-            $       "{"                          * 16BB2
-            OBJ_177CA                            * 16BBE
-            ?SEMI                                * 16BC3
-            RDROP                                * 16BC8
-            XYZ>ZCOLA                            * 16BCD
-            OBJ_1727A                            * 16BD2
-          ;                                      * 16BD7
-          OBJ_17351                              * 16BDC
-          case                                   * 16BE1
-          OBJ_16AA9                              * 16BE6
+            $ "{" OBJ_177CA ?SEMI                * 16BB2
+            RDROP XYZ>ZCOLA OBJ_1727A ;          * 16BC8
+          OBJ_17351 case OBJ_16AA9               * 16BDC
 
 _}_:
-          $       "}"                            * 16BEB
-          OBJ_16B80                              * 16BF7
-        ;                                        * 16BFC
+          $ "}" OBJ_16B80 ;                      * 16BEB
 
 * refs (1): 16B3A
 OBJ_16C01:
-        ::                                       * 16C01
-          OVER                                   * 16C06
-          NULL$?                                 * 16C0B
-          NOTcase                                * 16C10
-          ::                                     * 16C15
-            IT                                   * 16C1A
-            ROTROT2DROP                          * 16C1F
-            COLA                                 * 16C24
-            OBJ_1727A                            * 16C29
+        :: OVER NULL$? NOTcase                   * 16C01
+          :: IT ROTROT2DROP                      * 16C15
+            COLA OBJ_1727A                       * 16C24
           ;                                      * 16C2E
           casedrop                               * 16C33
-          ::                                     * 16C38
-            OBJ_178E2                            * 16C3D
+          :: OBJ_178E2                           * 16C38
 
 _DIR_:
-            $       "DIR"                        * 16C42
-            OBJ_17914                            * 16C52
-            OBJ_178E2                            * 16C57
-            SWAP                                 * 16C5C
-            ONE{}N                               * 16C61
-            SWAPCOLA                             * 16C66
-            OBJ_1727A                            * 16C6B
-          ;                                      * 16C70
-          SWAPDUP                                * 16C75
-          TYPELIST?                              * 16C7A
-          DUPUNROT                               * 16C7F
-          ?CARCOMP                               * 16C84
-          3UNROLL                                * 16C89
-          4UNROLL                                * 16C8E
-          OBJ_17351                              * 16C93
-          case                                   * 16C98
-          ::                                     * 16C9D
-            7ROLL                                * 16CA2
-            IT                                   * 16CA7
-            ::                                   * 16CAC
-              SWAP4PICK                          * 16CB1
-              RAM-WORDNAME                       * 16CB6
-              ID>$                               * 16CBB
-              OBJ_17914                          * 16CC0
-              !append$SWAP                       * 16CC5
-            ;                                    * 16CCA
-            COLA                                 * 16CCF
-            OBJ_16AA9                            * 16CD4
+            $ "DIR" OBJ_17914 OBJ_178E2 SWAP ONE{}N SWAPCOLA OBJ_1727A ; * 16C42
+          SWAPDUP TYPELIST? DUPUNROT ?CARCOMP 3UNROLL 4UNROLL OBJ_17351 case * 16C75
+          :: 7ROLL IT                            * 16C9D
+            :: SWAP4PICK RAM-WORDNAME ID>$ OBJ_17914 !append$SWAP ; * 16CAC
+            COLA OBJ_16AA9                       * 16CCF
           ;                                      * 16CD9
-          4ROLL                                  * 16CDE
-          2DROP                                  * 16CE3
-          OBJ_178FB                              * 16CE8
+          4ROLL 2DROP OBJ_178FB                  * 16CDE
 
 _END_:
-          $       "END"                          * 16CED
-          OBJ_17914                              * 16CFD
-          OBJ_178FB                              * 16D02
-          COLA                                   * 16D07
-          OBJ_17211                              * 16D0C
+          $ "END" OBJ_17914 OBJ_178FB COLA OBJ_17211 * 16CED
         ;                                        * 16D11
 
 * refs (1): 16B2B
 OBJ_16D16:
-        ::                                       * 16D16
-          case                                   * 16D1B
+        :: case                                  * 16D16
           ::                                     * 16D20
 
 _:_:
-            $       ":"                          * 16D25
-            4PICK                                * 16D31
-            ID>$                                 * 16D36
-            OVER                                 * 16D3B
-            !append$SWAP                         * 16D40
-            6PICK                                * 16D45
-            OBJ_177B6                            * 16D4A
-            OBJ_53930                            * 16D4F
-            OBJ_5395A                            * 16D54
-            OR                                   * 16D59
-            AND                                  * 16D5E
-            ITE_DROP                             * 16D63
-            !insert$                             * 16D68
-            OBJ_177CA                            * 16D6D
-            case                                 * 16D72
-            OBJ_171E9                            * 16D77
+            $ ":" 4PICK ID>$ OVER !append$SWAP 6PICK OBJ_177B6 OBJ_53930 * 16D25
+            OBJ_5395A OR AND ITE_DROP !insert$ OBJ_177CA case OBJ_171E9 * 16D54
 L_16D7C:
-            XYZ>ZCOLA                            * 16D7C
-            OBJ_1727A                            * 16D81
-          ;                                      * 16D86
+            XYZ>ZCOLA OBJ_1727A ;                * 16D7C
 
 * refs (1): 16FD4
 OBJ_16D8B:
-          ::                                     * 16D8B
-            RDROP                                * 16D90
-            OBJ_17351                            * 16D95
-            COLAITE                              * 16D9A
-            OBJ_16AA9                            * 16D9F
-            OBJ_171DF                            * 16DA4
-          ;                                      * 16DA9
-        ;                                        * 16DAE
+          :: RDROP OBJ_17351 COLAITE OBJ_16AA9 OBJ_171DF ; ; * 16D8B
 
 * refs (2): 16B0D 16B1C
 OBJ_16DB3:
-        ::                                       * 16DB3
-          IT                                     * 16DB8
+        :: IT                                    * 16DB3
 
 Rep2(<FFFFF>):
-          ::                                     * 16DBD
-            SWAPDROP                             * 16DC2
-            MINUSONE                             * 16DC7
-            SWAP                                 * 16DCC
-          ;                                      * 16DD1
-          SPACE$                                 * 16DD6
-          OBJ_177CA                              * 16DDB
-          NOT?GOTO                               * 16DE0
-          L_16D7C                                * 16DE5
-          OBJ_6B359                              * 16DEA
-          OBJ_34D3C                              * 16DEF
+          :: SWAPDROP MINUSONE SWAP ;            * 16DBD
+          SPACE$ OBJ_177CA NOT?GOTO L_16D7C OBJ_6B359 OBJ_34D3C * 16DD6
 
 * refs (3): 16E21 16FC0 16FFC
 OBJ_16DF4:
-          ::                                     * 16DF4
-            RDROP                                * 16DF9
-            COLAITE                              * 16DFE
-            OBJ_171E9                            * 16E03
-            OBJ_1727A                            * 16E08
-          ;                                      * 16E0D
-        ;                                        * 16E12
+          :: RDROP COLAITE OBJ_171E9 OBJ_1727A ; ; * 16DF4
 
 * refs (3): 16E80 16E8A 16ED5
 OBJ_16E17:
-        ::                                       * 16E17
-          OBJ_177CA                              * 16E1C
-          OBJ_16DF4                              * 16E21
-        ;                                        * 16E26
+        :: OBJ_177CA OBJ_16DF4 ;                 * 16E17
 
 * refs (1): 16AFE
 OBJ_16E2B:
-        ::                                       * 16E2B
-          4PICK                                  * 16E30
-          REQcasedrop                            * 16E35
-          x'                                     * 16E3A
-          OBJ_16EDF                              * 16E3F
-          ROM-WORD?                              * 16E44
-          NOTcase                                * 16E49
-          OBJ_16FCA                              * 16E4E
-          DROPSWAPDROP                           * 16E53
-          SWAP                                   * 16E58
-          OBJ_53930                              * 16E5D
-          case                                   * 16E62
-          OBJ_16FED                              * 16E67
-          MACRODCMP                              * 16E6C
-          NOTcase                                * 16E71
-          OBJ_16FED                              * 16E76
-          NOTcase                                * 16E7B
-          OBJ_16E17                              * 16E80
-          DUP#0=csedrp                           * 16E85
-          OBJ_16E17                              * 16E8A
-          3PICK                                  * 16E8F
-          NULL$?                                 * 16E94
-          NOTcase2drop                           * 16E99
-          OBJ_1727A                              * 16E9E
-          DUP#1=                                 * 16EA3
-          IT                                     * 16EA8
-          OBJ_178E2                              * 16EAD
-          SWAP                                   * 16EB2
-          OBJ_1792D                              * 16EB7
-          SWAP                                   * 16EBC
-          #3=                                    * 16EC1
-          IT                                     * 16EC6
-          OBJ_178FB                              * 16ECB
-          COLA                                   * 16ED0
-          OBJ_16E17                              * 16ED5
+        :: 4PICK REQcasedrop x'                  * 16E2B
+          OBJ_16EDF ROM-WORD? NOTcase OBJ_16FCA  * 16E3F
+          DROPSWAPDROP SWAP OBJ_53930 case OBJ_16FED * 16E53
+          MACRODCMP NOTcase OBJ_16FED            * 16E6C
+          NOTcase OBJ_16E17                      * 16E7B
+          DUP#0=csedrp OBJ_16E17 3PICK NULL$? NOTcase2drop OBJ_1727A * 16E85
+          DUP#1= IT OBJ_178E2                    * 16EA3
+          SWAP OBJ_1792D SWAP #3= IT OBJ_178FB   * 16EB2
+          COLA OBJ_16E17                         * 16ED0
         ;                                        * 16EDA
 
 * refs (1): 16E3F
 OBJ_16EDF:
-        ::                                       * 16EDF
-          DROP                                   * 16EE4
-          ROTROT2DROP                            * 16EE9
-          UNROTDUP                               * 16EEE
-          4UNROLL                                * 16EF3
-          NEXTCOMPOB                             * 16EF8
-          DROP                                   * 16EFD
-          PALPTRDCMP                             * 16F02
-          DROP                                   * 16F07
-          4UNROLL                                * 16F0C
-          OBJ_173A6                              * 16F11
-          ?SKIP                                  * 16F16
-          NULL{}                                 * 16F1B
-          ROT                                    * 16F20
-          3PICK                                  * 16F25
-          OBJ_173A6                              * 16F2A
-          ?SKIP                                  * 16F2F
-          NULL{}                                 * 16F34
-          SWAPDROPSWAP                           * 16F39
-          4UNROLL                                * 16F3E
-          '                                      * 16F43
-          xENDTIC                                * 16F48
-          EQOVER                                 * 16F4D
-          DUPTYPEIDNT?                           * 16F52
-          SWAP                                   * 16F57
-          TYPELAM?                               * 16F5C
-          OR                                     * 16F61
-          ANDITE                                 * 16F66
-          ::                                     * 16F6B
-            5ROLLDROP                            * 16F70
-            ID>$                                 * 16F75
-            addtics                              * 16F7A
-          ;                                      * 16F7F
-          ::                                     * 16F84
-            2DROP                                * 16F89
-            4PICK                                * 16F8E
-            4ROLL                                * 16F93
-          ;                                      * 16F98
-          4ROLLSWAP                              * 16F9D
-          OBJ_177CA                              * 16FA2
-          DUP                                    * 16FA7
-          4ROLL                                  * 16FAC
-          6ROLL                                  * 16FB1
-          RPITE                                  * 16FB6
-          3UNROLL                                * 16FBB
-          OBJ_16DF4                              * 16FC0
+        :: DROP ROTROT2DROP UNROTDUP 4UNROLL NEXTCOMPOB DROP PALPTRDCMP DROP * 16EDF
+          4UNROLL OBJ_173A6 ?SKIP NULL{}         * 16F0C
+          ROT 3PICK OBJ_173A6 ?SKIP NULL{}       * 16F20
+          SWAPDROPSWAP 4UNROLL ' xENDTIC EQOVER DUPTYPEIDNT? SWAP TYPELAM? * 16F39
+          OR ANDITE                              * 16F61
+          :: 5ROLLDROP ID>$ addtics ;            * 16F6B
+          :: 2DROP 4PICK 4ROLL ; 4ROLLSWAP OBJ_177CA DUP 4ROLL 6ROLL RPITE * 16F84
+          3UNROLL OBJ_16DF4                      * 16FBB
         ;                                        * 16FC5
 
 * refs (1): 16E4E
 OBJ_16FCA:
-        ::                                       * 16FCA
-          DROP                                   * 16FCF
-          OBJ_16D8B                              * 16FD4
-        ;                                        * 16FD9
+        :: DROP OBJ_16D8B ;                      * 16FCA
 
 * refs (2): 16ACC 16B44
 OBJ_16FDE:
-        ::                                       * 16FDE
-          DROPSWAPDROP                           * 16FE3
-          SWAPCOLA                               * 16FE8
+        :: DROPSWAPDROP SWAPCOLA                 * 16FDE
 
 * refs (2): 16E67 16E76
 OBJ_16FED:
-          ::                                     * 16FED
-            OBJ_15B3D                            * 16FF2
-            OBJ_177CA                            * 16FF7
-            OBJ_16DF4                            * 16FFC
-          ;                                      * 17001
-        ;                                        * 17006
+          :: OBJ_15B3D OBJ_177CA OBJ_16DF4 ; ;   * 16FED
 
 * refs (1): 16AE0
 OBJ_1700B:
-        ::                                       * 1700B
-          DROP                                   * 17010
-          3PICK                                  * 17015
-          prefix(ar)                             * 1701A
-          DUP                                    * 1701F
-          TYPEREAL                               * 17024
-          EQ                                     * 17029
-          SWAP                                   * 1702E
-          TYPECMP                                * 17033
-          EQOR                                   * 17038
-          NOTcase                                * 1703D
-          ::                                     * 17042
-            $       "Array of "                  * 17047
-            BINT1                                * 17063
-            5PICK                                * 17068
-            GETATELN                             * 1706D
-            IT                                   * 17072
-            OBJ_15CCF                            * 17077
-            OBJ_16B80                            * 1707C
-          ;                                      * 17081
-          DUPNULL$?                              * 17086
-          NOTcase                                * 1708B
-          OBJ_1727A                              * 17090
-          3PICK                                  * 17095
-          2D/3D(ar)?                             * 1709A
-          case                                   * 1709F
-          OBJ_1716C                              * 170A4
-          3PICK                                  * 170A9
-          OBJ_179AC                              * 170AE
-          ?SKIP                                  * 170B3
-          ::                                     * 170B8
-            OVER#0=                              * 170BD
-            ITE                                  * 170C2
-            CHR_[                                * 170C7
-            CHR_Space                            * 170CC
-            >T$                                  * 170D1
-          ;                                      * 170D6
-          lbrac                                  * 170DB
-          !append$                               * 170E0
-          SWAP#1+SWAP                            * 170E5
-          3PICK                                  * 170EA
-          DUPUNROT                               * 170EF
-          MDIMS                                  * 170F4
-          ITE                                    * 170F9
-          SWAP                                   * 170FE
-          BINT1                                  * 17103
-          4UNROLLDUP                             * 17108
-          6PICK                                  * 1710D
-          #*                                     * 17112
-          #1+DUP                                 * 17117
-          ROT#-                                  * 1711C
-          OBJ_17847                              * 17121
+        :: DROP 3PICK prefix(ar) DUP TYPEREAL EQ SWAP TYPECMP EQOR NOTcase * 1700B
+          :: $ "Array of " BINT1 5PICK GETATELN IT OBJ_15CCF * 17042
+            OBJ_16B80 ;                          * 1707C
+          DUPNULL$? NOTcase OBJ_1727A            * 17086
+          3PICK 2D/3D(ar)? case OBJ_1716C        * 17095
+          3PICK OBJ_179AC ?SKIP                  * 170A9
+          :: OVER#0= ITE CHR_[ CHR_Space         * 170B8
+            >T$ ;                                * 170D1
+          lbrac !append$ SWAP#1+SWAP 3PICK DUPUNROT MDIMS ITE SWAP BINT1 * 170DB
+          4UNROLLDUP 6PICK #* #1+DUP ROT#- OBJ_17847 * 17108
 
 * refs (1): 17158
 OBJ_17126:
-          ::                                     * 17126
-            tok]                                 * 1712B
-            !append$                             * 17130
-          ;                                      * 17135
-          SWAP3PICK                              * 1713A
-          #<>case                                * 1713F
-          OBJ_1727A                              * 17144
-          3PICK                                  * 17149
-          OBJ_179AC                              * 1714E
-          ?SKIP                                  * 17153
-          OBJ_17126                              * 17158
-          COLA                                   * 1715D
-          OBJ_17211                              * 17162
+          :: tok] !append$ ; SWAP3PICK #<>case OBJ_1727A * 17126
+          3PICK OBJ_179AC ?SKIP OBJ_17126        * 17149
+          COLA OBJ_17211                         * 1715D
         ;                                        * 17167
 
 * refs (1): 170A4
 OBJ_1716C:
-        ::                                       * 1716C
-          SWAPDROP                               * 17171
-          #3=                                    * 17176
-          3UNROLL                                * 1717B
-          tok[                                   * 17180
-          TRUE                                   * 17185
-          OBJ_174C3                              * 1718A
-          drop;dq                                * 1718F
-          OBJ_1721B                              * 17194
-        ;                                        * 17199
+        :: SWAPDROP #3= 3UNROLL tok[ TRUE OBJ_174C3 drop;dq OBJ_1721B ; * 1716C
 
 * refs (2): 171EE 17220
 OBJ_1719E:
-        ::                                       * 1719E
-          OVER                                   * 171A3
-          OBJ_177B6                              * 171A8
-          case                                   * 171AD
-          ::                                     * 171B2
-            RDROP                                * 171B7
-            SWAPDROP                             * 171BC
-            NULL{}                               * 171C1
-          ;                                      * 171C6
-          3UNROLL                                * 171CB
-          OBJ_173A6                              * 171D0
-          2DROP                                  * 171D5
-        ;                                        * 171DA
+        :: OVER OBJ_177B6 case                   * 1719E
+          :: RDROP SWAPDROP NULL{} ;             * 171B2
+          3UNROLL OBJ_173A6 2DROP ;              * 171CB
 
 * refs (2): 16B94 16DA4
 OBJ_171DF:
-        ::                                       * 171DF
-          XYZ>ZCOLA                              * 171E4
+        :: XYZ>ZCOLA                             * 171DF
 
 * refs (2): 16D77 16E03
 OBJ_171E9:
-          ::                                     * 171E9
-            OBJ_1719E                            * 171EE
-            ROT                                  * 171F3
-            FALSE                                * 171F8
-            COLA                                 * 171FD
-            OBJ_16AA9                            * 17202
+          :: OBJ_1719E ROT FALSE COLA OBJ_16AA9  * 171E9
           ;                                      * 17207
         ;                                        * 1720C
 
 * refs (2): 16D0C 17162
 OBJ_17211:
-        ::                                       * 17211
-          XYZ>ZCOLA                              * 17216
+        :: XYZ>ZCOLA                             * 17211
 
 * refs (2): 17194 1726B
 OBJ_1721B:
-          ::                                     * 1721B
-            OBJ_1719E                            * 17220
-            2DUP                                 * 17225
-            OBJ_1737E                            * 1722A
-            casedrop                             * 1722F
-            ::                                   * 17234
-              ROT                                * 17239
-              COLA                               * 1723E
-              OBJ_1727A                          * 17243
+          :: OBJ_1719E 2DUP OBJ_1737E casedrop   * 1721B
+            :: ROT COLA OBJ_1727A                * 17234
             ;                                    * 17248
-            OVERDUP                              * 1724D
-            TYPERRP?                             * 17252
-            SWAP                                 * 17257
-            TYPELIST?                            * 1725C
-            ORNOT                                * 17261
-            case2drop                            * 17266
-            OBJ_1721B                            * 1726B
-            ROT                                  * 17270
-            COLA                                 * 17275
+            OVERDUP TYPERRP? SWAP TYPELIST? ORNOT case2drop OBJ_1721B * 1724D
+            ROT COLA                             * 17270
 
 * refs (10): 16B99 16BD2 16C29 16C6B 16D81 16E08 ...
 OBJ_1727A:
-            ::                                   * 1727A
-              NULL{}                             * 1727F
-              BEGIN                              * 17284
-              ROT                                * 17289
-              >HCOMP                             * 1728E
-              ROT                                * 17293
-              FixRRP                             * 17298
-              DROP3PICK                          * 1729D
-              OBJ_177B6                          * 172A2
-              UNTIL                              * 172A7
-              ROTDROP                            * 172AC
-            ;                                    * 172B1
+            :: NULL{} BEGIN ROT >HCOMP ROT FixRRP DROP3PICK OBJ_177B6 UNTIL * 1727A
+              ROTDROP ;                          * 172AC
           ;                                      * 172B6
         ;                                        * 172BB
 
 * refs (1): 16A9F
 OBJ_172C0:
-        ::                                       * 172C0
-          OBJ_25CF5                              * 172C5
-          3UNROLL                                * 172CA
-          BINT0                                  * 172CF
-          NEXTCOMPOB                             * 172D4
-          NOTcase                                * 172D9
-          ::                                     * 172DE
-            BINT14                               * 172E3
-            OBJ_11495                            * 172E8
-            DROPZERO                             * 172ED
-            NULL$TEMP                            * 172F2
-            TRUE                                 * 172F7
-          ;                                      * 172FC
-          3UNROLL                                * 17301
-          BEGIN                                  * 17306
-          NEXTCOMPOB                             * 1730B
-          WHILE                                  * 17310
-          ::                                     * 17315
-            5PICK                                * 1731A
-            5PICK                                * 1731F
-            OBJ_1737E                            * 17324
-            DROPSWAP                             * 17329
-            2SWAP                                * 1732E
-          ;                                      * 17333
-          REPEAT                                 * 17338
-          DROP                                   * 1733D
-          NULL$TEMP                              * 17342
-          FALSE                                  * 17347
-        ;                                        * 1734C
+        :: OBJ_25CF5 3UNROLL BINT0 NEXTCOMPOB NOTcase * 172C0
+          :: BINT14 OBJ_11495 DROPZERO NULL$TEMP TRUE ; * 172DE
+          3UNROLL BEGIN NEXTCOMPOB WHILE         * 17301
+          :: 5PICK 5PICK OBJ_1737E DROPSWAP 2SWAP ; REPEAT DROP NULL$TEMP * 17315
+          FALSE ;                                * 17347
 
 * refs (3): 16BDC 16C93 16D95
 OBJ_17351:
-        ::                                       * 17351
-          3PICK3PICK                             * 17356
-          OBJ_1737E                              * 1735B
-          DUP                                    * 17360
-          NOT?SEMI                               * 17365
-          ROT                                    * 1736A
-          ZEROSWAP                               * 1736F
-          ROTDUP                                 * 17374
-        ;                                        * 17379
+        :: 3PICK3PICK OBJ_1737E DUP NOT?SEMI     * 17351
+          ROT ZEROSWAP ROTDUP ;                  * 1736A
 
 * refs (3): 1722A 17324 1735B
 OBJ_1737E:
-        ::                                       * 1737E
-          OBJ_173A6                              * 17383
-          DUP                                    * 17388
-          ITE                                    * 1738D
-          2SWAP                                  * 17392
-          3UNROLL                                * 17397
-          2DROP                                  * 1739C
-        ;                                        * 173A1
+        :: OBJ_173A6 DUP ITE 2SWAP 3UNROLL       * 1737E
+          2DROP ;                                * 1739C
 
 * refs (4): 16F11 16F2A 171D0 17383
 OBJ_173A6:
-        ::                                       * 173A6
-          SWAP2DUP                               * 173AB
-          TYPE                                   * 173B0
-          OBJ_173D3                              * 173B5
-          DUP                                    * 173BA
-          case                                   * 173BF
-          5ROLLDROP                              * 173C4
-          ROTSWAP                                * 173C9
-        ;                                        * 173CE
+        :: SWAP2DUP TYPE OBJ_173D3 DUP case 5ROLLDROP * 173A6
+          ROTSWAP ;                              * 173C9
 
 * refs (1): 173B5
 OBJ_173D3:
-        ::                                       * 173D3
-          TYPECOL                                * 173D8
-          EQcasedrop                             * 173DD
-          NEXTCOMPOB                             * 173E2
-          TYPELIST                               * 173E7
-          EQcasedrop                             * 173EC
-          NEXTCOMPOB                             * 173F1
-          TYPERRP                                * 173F6
-          EQcasedrop                             * 173FB
-          OBJ_1743C                              * 17400
-          DROP                                   * 17405
-          BINT2                                  * 1740A
-          EQcasedrop                             * 1740F
-          FALSE                                  * 17414
-          #1+                                    * 17419
-          2DUP                                   * 1741E
-          ONE_EQ                                 * 17423
-          caseTRUE                               * 17428
-          TAG>                                   * 1742D
-          DROPTRUE                               * 17432
-        ;                                        * 17437
+        :: TYPECOL EQcasedrop NEXTCOMPOB         * 173D3
+          TYPELIST EQcasedrop NEXTCOMPOB         * 173E7
+          TYPERRP EQcasedrop OBJ_1743C           * 173F6
+          DROP BINT2 EQcasedrop FALSE            * 17405
+          #1+ 2DUP ONE_EQ caseTRUE TAG>          * 17419
+          DROPTRUE ;                             * 17432
 
 * refs (1): 17400
 OBJ_1743C:
-        ::                                       * 1743C
-          DUPTYPELIST?                           * 17441
-          casedrpfls                             * 17446
-          NEXTRRPOB                              * 1744B
-          DUP                                    * 17450
-          NOT?SEMI                               * 17455
-          ROT                                    * 1745A
-          ONE{}N                                 * 1745F
-          3UNROLL                                * 17464
-        ;                                        * 17469
+        :: DUPTYPELIST? casedrpfls NEXTRRPOB     * 1743C
+          DUP NOT?SEMI                           * 17450
+          ROT ONE{}N 3UNROLL ;                   * 1745A
 
 * refs (6): 15BAB 15BB0 1785B 352E1 352F0 352FF
 ->str(c):
-        ::                                       * 1746E
-          OBJ_17527                              * 17473
-          TRUE                                   * 17478
-          OBJ_17545                              * 1747D
-          DROP                                   * 17482
-        ;                                        * 17487
+        :: OBJ_17527 TRUE OBJ_17545 DROP ;       * 1746E
 
 * refs (1): 16A68
 OBJ_1748C:
-        ::                                       * 1748C
-          #3=                                    * 17491
-          3UNROLL                                * 17496
-          INNERCOMP                              * 1749B
-          #0=ITE                                 * 174A0
-          ::                                     * 174A5
-            BINT0                                * 174AA
-            tok[                                 * 174AF
-          ;                                      * 174B4
-          NULL$TEMP                              * 174B9
-          FALSE                                  * 174BE
+        :: #3= 3UNROLL INNERCOMP #0=ITE          * 1748C
+          :: BINT0 tok[ ; NULL$TEMP FALSE        * 174A5
 
 * refs (1): 1718A
 OBJ_174C3:
-          ::                                     * 174C3
-            tok]                                 * 174C8
-            SPACE$                               * 174CD
-            6ROLL                                * 174D2
-            OBJ_1DD51                            * 174D7
-            OBJ_34C49                            * 174DC
-            3PICK                                * 174E1
-            TYPEREAL?                            * 174E6
-            IT                                   * 174EB
+          :: tok] SPACE$ 6ROLL OBJ_1DD51 OBJ_34C49 3PICK TYPEREAL? IT * 174C3
 
 * refs (6): 296B0 45213 6D8B9 96565 A9A11 B3F91
 9rolld:
-            ::                                   * 174F0
-              BINT9                              * 174F5
-              UNROLL                             * 174FA
-            ;                                    * 174FF
-            GOTO                                 * 17504
-            L_1757C                              * 17509
-          ;                                      * 1750E
+            :: BINT9 UNROLL ;                    * 174F0
+            GOTO L_1757C ;                       * 17504
         ;                                        * 17513
 
 * refs (3): 16A36 31CEF 31D1C
 OBJ_17518:
-        ::                                       * 17518
-          INNERCOMP                              * 1751D
-          #0=ITE                                 * 17522
+        :: INNERCOMP #0=ITE                      * 17518
 
 * refs (1): 17473
 OBJ_17527:
-          ::                                     * 17527
-            BINT0                                * 1752C
-            toklparen                            * 17531
-          ;                                      * 17536
-          NULL$TEMP                              * 1753B
-          FALSE                                  * 17540
+          :: BINT0 toklparen ; NULL$TEMP FALSE   * 17527
 
 * refs (1): 1747D
 OBJ_17545:
-          ::                                     * 17545
-            FALSE                                * 1754A
-            5UNROLL                              * 1754F
-            tokrparen                            * 17554
-            DPRADIX?                             * 17559
-            tok,                                 * 1755E
-            tok;                                 * 17563
-            RPITE                                * 17568
-            6ROLL                                * 1756D
+          :: FALSE 5UNROLL tokrparen DPRADIX? tok, tok; RPITE 6ROLL * 17545
             OBJ_1DE19                            * 17572
             OBJ_34C49                            * 17577
 L_1757C:
-            6ROLL                                * 1757C
-            7ROLL                                * 17581
-            DUP                                  * 17586
-            OBJ_175C7                            * 1758B
-            >R                                   * 17590
+            6ROLL 7ROLL DUP OBJ_175C7 >R         * 1757C
 L_17595:
-            DUP#0=                               * 17595
-            ?GOTO                                * 1759A
-            L_175B8                              * 1759F
-            RSKIP                                * 175A4
-            #1-                                  * 175A9
-            GOTO                                 * 175AE
-            L_17595                              * 175B3
+            DUP#0= ?GOTO L_175B8 RSKIP #1- GOTO L_17595 * 17595
 L_175B8:
-            DROP                                 * 175B8
-          ;                                      * 175BD
+            DROP ;                               * 175B8
         ;                                        * 175C2
 
 * refs (1): 1758B
 OBJ_175C7:
         {                                        * 175C7
-          ::                                     * 175CC
-            4PICK                                * 175D1
-            a%>$                                 * 175D6
-            OBJ_176EE                            * 175DB
-          ;                                      * 175E0
-          OBJ_1768A                              * 175E5
-          ::                                     * 175EA
-            3PICK                                * 175EF
-            TRUE                                 * 175F4
-            BINT16                               * 175F9
-            OBJ_176AD                            * 175FE
-          ;                                      * 17603
-          ::                                     * 17608
-            8PICK                                * 1760D
-            case                                 * 17612
-            OBJ_1768A                            * 17617
-            #2+                                  * 1761C
-            COLASKIP                             * 17621
-          ;                                      * 17626
-          ::                                     * 1762B
-            BINT9                                * 17630
-            PICK                                 * 17635
-            BINT16                               * 1763A
-            TestSysFlag                          * 1763F
-            BINT15                               * 17644
-            OBJ_176AD                            * 17649
-          ;                                      * 1764E
-          ::                                     * 17653
-            6PICK                                * 17658
-            OBJ_176EE                            * 1765D
-          ;                                      * 17662
-          DROP                                   * 17667
-          7UNROLL                                * 1766C
-          5DROP                                  * 17671
-          IT                                     * 17676
-          SWAPDROP                               * 1767B
-          NULL{}                                 * 17680
-        }                                        * 17685
+          :: 4PICK a%>$ OBJ_176EE ; OBJ_1768A    * 175CC
+          :: 3PICK TRUE BINT16 OBJ_176AD ;       * 175EA
+          :: 8PICK case OBJ_1768A                * 17608
+            #2+ COLASKIP ;                       * 1761C
+          :: BINT9 PICK BINT16 TestSysFlag BINT15 OBJ_176AD ; * 1762B
+          :: 6PICK OBJ_176EE ; DROP 7UNROLL 5DROP IT SWAPDROP * 17653
+          NULL{} }                               * 17680
 
 * refs (2): 175E5 17617
 OBJ_1768A:
-        ::                                       * 1768A
-          5PICK                                  * 1768F
-          SPACE$                                 * 17694
-          EQcasedrop                             * 17699
-          #1+                                    * 1769E
-          OBJ_17734                              * 176A3
-        ;                                        * 176A8
+        :: 5PICK SPACE$ EQcasedrop #1+           * 1768A
+          OBJ_17734 ;                            * 176A3
 
 * refs (2): 175FE 17649
 OBJ_176AD:
-        ::                                       * 176AD
-          RDROP                                  * 176B2
-          TestSysFlag                            * 176B7
-          AND                                    * 176BC
-          SWAP                                   * 176C1
-          a%>$                                   * 176C6
-          SWAP                                   * 176CB
-          ?SKIP                                  * 176D0
-          OBJ_176EE                              * 176D5
-          tokanglesign                           * 176DA
-          !!insert$                              * 176DF
-          OBJ_176EE                              * 176E4
-        ;                                        * 176E9
+        :: RDROP TestSysFlag AND SWAP a%>$ SWAP ?SKIP OBJ_176EE * 176AD
+          tokanglesign !!insert$ OBJ_176EE ;     * 176DA
 
 * refs (4): 175DB 1765D 176D5 176E4
 OBJ_176EE:
-        ::                                       * 176EE
-          RDROP                                  * 176F3
-          3PICK                                  * 176F8
-          NULL$?                                 * 176FD
-          ?SKIP                                  * 17702
-          ::                                     * 17707
-            6PICK                                * 1770C
-            SPACE$                               * 17711
-            EQ                                   * 17716
-            NOT?SEMI                             * 1771B
-            +(sp,st)                             * 17720
-          ;                                      * 17725
-          OBJ_17734                              * 1772A
-        ;                                        * 1772F
+        :: RDROP 3PICK NULL$? ?SKIP              * 176EE
+          :: 6PICK SPACE$ EQ NOT?SEMI            * 17707
+            +(sp,st) ;                           * 17720
+          OBJ_17734 ;                            * 1772A
 
 * refs (2): 176A3 1772A
 OBJ_17734:
-        ::                                       * 17734
-          RDROP                                  * 17739
-          ROTSWAP                                * 1773E
-          8PICK                                  * 17743
-          ?SKIP                                  * 17748
-          ::                                     * 1774D
-            OVER                                 * 17752
-            NULL$?                               * 17757
-            ?SEMI                                * 1775C
-            2LEN$#+                              * 17761
-            DcompWidth@                          * 17766
-            #>                                   * 1776B
-            NOT?SEMI                             * 17770
-            DROP                                 * 17775
-            7UNROLL                              * 1777A
-            6UNROLL                              * 1777F
-            5DROP                                * 17784
-            ROT                                  * 17789
-            IT                                   * 1778E
-            ROTDROP                              * 17793
-            ONE{}N                               * 17798
-            2RDROP                               * 1779D
-          ;                                      * 177A2
-          !append$                               * 177A7
-          SWAP#1+                                * 177AC
-        ;                                        * 177B1
+        :: RDROP ROTSWAP 8PICK ?SKIP             * 17734
+          :: OVER NULL$? ?SEMI                   * 1774D
+            2LEN$#+ DcompWidth@ #> NOT?SEMI      * 17761
+            DROP 7UNROLL 6UNROLL 5DROP ROT IT ROTDROP * 17775
+            ONE{}N 2RDROP ;                      * 17798
+          !append$ SWAP#1+ ;                     * 177A7
 
 * refs (4): 16B67 16D4A 171A8 172A2
 OBJ_177B6:
-        ::                                       * 177B6
-          OBJ_25CF5                              * 177BB
-          EQ                                     * 177C0
-        ;                                        * 177C5
+        :: OBJ_25CF5 EQ ;                        * 177B6
 
 * refs (7): 16B8A 16BBE 16D6D 16DDB 16E1C 16FA2 ...
 OBJ_177CA:
-        ::                                       * 177CA
-          DUPNULL$?                              * 177CF
-          casedrptru                             * 177D4
-          SWAPDUP                                * 177D9
-          NULL$?                                 * 177DE
-          casedrptru                             * 177E3
-          2LEN$#+                                * 177E8
-          #1+                                    * 177ED
-          DcompWidth@                            * 177F2
-          #>case                                 * 177F7
-          drop(2);false                          * 177FC
-          SPACE$                                 * 17801
-          !append$SWAP                           * 17806
-          !append$                               * 1780B
-          TRUE                                   * 17810
-        ;                                        * 17815
+        :: DUPNULL$? casedrptru SWAPDUP          * 177CA
+          NULL$? casedrptru 2LEN$#+              * 177DE
+          #1+ DcompWidth@ #>case drop(2);false   * 177ED
+          SPACE$ !append$SWAP !append$ TRUE ;    * 17801
 
 * refs (3): 177FC 3089D 6FA86
 drop(2);false:
-        ::                                       * 1781A
-          SWAPDROP                               * 1781F
-          FALSE                                  * 17824
-        ;                                        * 17829
+        :: SWAPDROP FALSE ;                      * 1781A
 
 * $ $' -> $ $' #
 * refs (2): 17761 177E8
 2LEN$#+:
-        ::                                       * 1782E
-          OVERLEN$                               * 17833
-          OVERLEN$                               * 17838
-          #+                                     * 1783D
-        ;                                        * 17842
+        :: OVERLEN$ OVERLEN$ #+ ;                * 1782E
 
 * refs (1): 17121
 OBJ_17847:
-        ::                                       * 17847
-          '                                      * 1784C
-          a%>$                                   * 17851
-          '                                      * 17856
-          ->str(c)                               * 1785B
-          6PICK                                  * 17860
-          TYPERARRY?                             * 17865
-          NOT?SWAPDROP                           * 1786A
-          5UNROLL                                * 1786F
-          DO                                     * 17874
-          SWAPINDEX@                             * 17879
-          PULLEL                                 * 1787E
-          4PICK                                  * 17883
-          EVAL                                   * 17888
-          ROTSWAP                                * 1788D
-          !append$                               * 17892
-          APPEND_SPACE                           * 17897
-          OBJ_53930                              * 1789C
-          IT                                     * 178A1
-          OBJ_178BA                              * 178A6
-          LOOP                                   * 178AB
-          ROTROT2DROP                            * 178B0
-        ;                                        * 178B5
+        :: ' a%>$ ' ->str(c) 6PICK TYPERARRY? NOT?SWAPDROP 5UNROLL DO * 17847
+          SWAPINDEX@ PULLEL 4PICK EVAL ROTSWAP !append$ APPEND_SPACE * 17879
+          OBJ_53930 IT OBJ_178BA                 * 1789C
+          LOOP ROTROT2DROP ;                     * 178AB
 
 * refs (1): 178A6
 OBJ_178BA:
-        ::                                       * 178BA
-          DUPLEN$                                * 178BF
-          DcompWidth@                            * 178C4
-          #3+                                    * 178C9
-          #<                                     * 178CE
-          ?SEMI                                  * 178D3
-          ExitAtLOOP                             * 178D8
-        ;                                        * 178DD
+        :: DUPLEN$ DcompWidth@ #3+ #< ?SEMI      * 178BA
+          ExitAtLOOP ;                           * 178D8
 
 * refs (3): 16C3D 16C57 16EAD
 OBJ_178E2:
-        ::                                       * 178E2
-          OBJ_11472                              * 178E7
-          #2+                                    * 178EC
-          OBJ_11495                              * 178F1
-        ;                                        * 178F6
+        :: OBJ_11472 #2+ OBJ_11495 ;             * 178E2
 
 * refs (3): 16CE8 16D02 16ECB
 OBJ_178FB:
-        ::                                       * 178FB
-          OBJ_11472                              * 17900
-          #2-                                    * 17905
-          OBJ_11495                              * 1790A
-        ;                                        * 1790F
+        :: OBJ_11472 #2- OBJ_11495 ;             * 178FB
 
 * refs (3): 16C52 16CC0 16CFD
 OBJ_17914:
-        ::                                       * 17914
-          OBJ_53930                              * 17919
-          ?SEMI                                  * 1791E
-          OBJ_1792D                              * 17923
-        ;                                        * 17928
+        :: OBJ_53930 ?SEMI                       * 17914
+          OBJ_1792D ;                            * 17923
 
 * refs (2): 16EB7 17923
 OBJ_1792D:
-        ::                                       * 1792D
-          OBJ_11472                              * 17932
-          DUP#0=csDROP                           * 17937
-          14SPACES$                              * 1793C
-          BINT1                                  * 17941
-          ROT                                    * 17946
-          SUB$                                   * 1794B
-          !insert$                               * 17950
-        ;                                        * 17955
+        :: OBJ_11472 DUP#0=csDROP 14SPACES$ BINT1 ROT SUB$ !insert$ ; * 1792D
 
 * # ->
 * refs (10): 14092 15973 15A04 16A1D 31980 46897 ...
@@ -2017,9 +1348,7 @@ L_17AD0:
 
 * refs (2): 16B62 17298
 FixRRP:
-        ::                                       * 17ADB
-          DUPTYPERRP?                            * 17AE0
-          IT                                     * 17AE5
+        :: DUPTYPERRP? IT                        * 17ADB
           CODE                                   * 17AEA  141 nibbles
             GOSBVL  SAVPTR                       * 17AF4
             A=DAT1  A                            * 17AFB
@@ -2072,47 +1401,16 @@ L_17B7A:
 
 * refs (3): 17C0D 17C48 3859D
 VLM:
-        ::                                       * 17B86
-          RDROP                                  * 17B8B
-          OBJ_17C55                              * 17B90
-          ClrBusyAnn                             * 17B95
-          RECLAIMDISP                            * 17B9A
-          ClrDA1IsStat                           * 17B9F
-          OBJ_01E5E                              * 17BA4
-          ERROR@                                 * 17BA9
-          OBJ_38854                              * 17BAE
-          #1<>                                   * 17BB3
-          OBJ_18338                              * 17BB8
-          AND                                    * 17BBD
-          ?GOTO                                  * 17BC2
-          L_17BFE                                * 17BC7
-          ERRBEEP                                * 17BCC
-          DoMenuMTH                              * 17BD1
-          ERRORCLR                               * 17BD6
-          #135_64EAA                             * 17BDB
-          JstGetTHEMESG                          * 17BE0
-          DISPROW1                               * 17BE5
-          ERRSET                                 * 17BEA
-          OBJ_17C6A                              * 17BEF
-          ERRTRAP                                * 17BF4
-          OBJ_17C3F                              * 17BF9
+        :: RDROP OBJ_17C55 ClrBusyAnn RECLAIMDISP ClrDA1IsStat OBJ_01E5E * 17B86
+          ERROR@ OBJ_38854 #1<> OBJ_18338 AND ?GOTO L_17BFE ERRBEEP * 17BA9
+          DoMenuMTH ERRORCLR #135_64EAA JstGetTHEMESG DISPROW1 ERRSET * 17BD1
+          OBJ_17C6A ERRTRAP OBJ_17C3F            * 17BEF
 L_17BFE:
-          OBJ_17F40                              * 17BFE
-          OBJ_17C17                              * 17C03
-          ERRTRAP                                * 17C08
-          VLM                                    * 17C0D
-        ;                                        * 17C12
+          OBJ_17F40 OBJ_17C17 ERRTRAP VLM ;      * 17BFE
 
 * refs (1): 17C03
 OBJ_17C17:
-        ::                                       * 17C17
-          HOMEDIR                                * 17C1C
-          ERRSET                                 * 17C21
-          SetThisRow                             * 17C26
-          ClrDAsOK                               * 17C2B
-          GOTO                                   * 17C30
-          L_385B1                                * 17C35
-        ;                                        * 17C3A
+        :: HOMEDIR ERRSET SetThisRow ClrDAsOK GOTO L_385B1 ; * 17C17
 
 * refs (1): 17BF9
 OBJ_17C3F:
@@ -2134,145 +1432,44 @@ OBJ_17C55:
 
 * refs (1): 17BEF
 OBJ_17C6A:
-        ::                                       * 17C6A
-          #134_64EA0                             * 17C6F
-          JstGetTHEMESG                          * 17C74
-          DISPROW3                               * 17C79
-          Y/N-Menu                               * 17C7E
-          BEGIN                                  * 17C83
-          HOMEDIR                                * 17C88
-          NoEditLine?                            * 17C8D
-          ?SKIP                                  * 17C92
-          ::                                     * 17C97
-            #13D_64EF0                           * 17C9C
-            JstGetTHEMESG                        * 17CA1
-            OBJ_17F84                            * 17CA6
-            InitEd&Modes                         * 17CAB
-          ;                                      * 17CB0
+        :: #134_64EA0 JstGetTHEMESG DISPROW3 Y/N-Menu BEGIN HOMEDIR * 17C6A
+          NoEditLine? ?SKIP                      * 17C8D
+          :: #13D_64EF0 JstGetTHEMESG OBJ_17F84 InitEd&Modes ; * 17C97
 L_17CB5:
-          DEPTH                                  * 17CB5
-          #0=?SKIP                               * 17CBA
-          ::                                     * 17CBF
-            OBJ_39F09                            * 17CC4
-            OVER                                 * 17CC9
-            OBJ_15CCF                            * 17CCE
-            OBJ_17F84                            * 17CD3
-            ::                                   * 17CD8
-              DROP                               * 17CDD
-              CK0NOLASTWD                        * 17CE2
-              3RDROP                             * 17CE7
-              GOTO                               * 17CEC
-              L_17CB5                            * 17CF1
-            ;                                    * 17CF6
-          ;                                      * 17CFB
-          NoMemComLine?                          * 17D00
-          ?SKIP                                  * 17D05
-          ::                                     * 17D0A
-            #138_64EC8                           * 17D0F
-            JstGetTHEMESG                        * 17D14
-            OBJ_17F84                            * 17D19
-            DelMemComLine                        * 17D1E
-          ;                                      * 17D23
-          NoLastStack?                           * 17D28
-          ?SKIP                                  * 17D2D
-          ::                                     * 17D32
-            #137_64EBE                           * 17D37
-            JstGetTHEMESG                        * 17D3C
-            OBJ_17F84                            * 17D41
+          DEPTH #0=?SKIP                         * 17CB5
+          :: OBJ_39F09 OVER OBJ_15CCF OBJ_17F84  * 17CBF
+            :: DROP CK0NOLASTWD 3RDROP GOTO L_17CB5 ; ; * 17CD8
+          NoMemComLine? ?SKIP                    * 17D00
+          :: #138_64EC8 JstGetTHEMESG OBJ_17F84 DelMemComLine ; * 17D0A
+          NoLastStack? ?SKIP                     * 17D28
+          :: #137_64EBE JstGetTHEMESG OBJ_17F84  * 17D32
 
 DelLastStack:
-            ::                                   * 17D46
-              ABND                               * 17D4B
-              BINT0                              * 17D50
-              '                                  * 17D55
-              SAVELAM                            * 17D5A
-              CACHE                              * 17D5F
-              ERRSET                             * 17D64
-            ;                                    * 17D69
-          ;                                      * 17D6E
-          NoLastArg?                             * 17D73
-          ?SKIP                                  * 17D78
-          ::                                     * 17D7D
-            #13B_64EE6                           * 17D82
-            JstGetTHEMESG                        * 17D87
-            OBJ_17F84                            * 17D8C
-            DelLastArg                           * 17D91
-          ;                                      * 17D96
-          GBUFF                                  * 17D9B
-          GROBDIM                                * 17DA0
-          DROP                                   * 17DA5
-          #0=?SKIP                               * 17DAA
+            :: ABND BINT0 ' SAVELAM CACHE ERRSET ; ; * 17D46
+          NoLastArg? ?SKIP                       * 17D73
+          :: #13B_64EE6 JstGetTHEMESG OBJ_17F84 DelLastArg ; * 17D7D
+          GBUFF GROBDIM DROP #0=?SKIP            * 17D9B
           ::                                     * 17DAF
 
 _PICT_:
-            $       "PICT"                       * 17DB4
-            OBJ_17F84                            * 17DC6
-            KILLADISP                            * 17DCB
-          ;                                      * 17DD0
-          GetUserKeys                            * 17DD5
-          NULL{}                                 * 17DDA
-          EQUAL                                  * 17DDF
-          ?SKIP                                  * 17DE4
-          ::                                     * 17DE9
-            #139_64ED2                           * 17DEE
-            JstGetTHEMESG                        * 17DF3
-            OBJ_17F84                            * 17DF8
-            ClrUserKeys                          * 17DFD
-          ;                                      * 17E02
-          alarm<>{}?                             * 17E07
-          IT                                     * 17E0C
-          ::                                     * 17E11
-            #13A_64EDC                           * 17E16
-            JstGetTHEMESG                        * 17E1B
-            OBJ_17F84                            * 17E20
-            DelAlarrm(0)                         * 17E25
-          ;                                      * 17E2A
-          DEPTH                                  * 17E2F
-          #0=?SKIP                               * 17E34
-          ::                                     * 17E39
-            #136_64EB4                           * 17E3E
-            JstGetTHEMESG                        * 17E43
-            OBJ_17F84                            * 17E48
-            DelStack                             * 17E4D
-          ;                                      * 17E52
-          CONTEXT@                               * 17E57
-          LastNonNull                            * 17E5C
-          IT                                     * 17E61
-          OBJ_1804C                              * 17E66
-          AdrPort0                               * 17E6B
-          NEXTLIBBAK                             * 17E70
-          IT                                     * 17E75
-          ::                                     * 17E7A
-            BEGIN                                * 17E7F
-            NEXTLIBBAK                           * 17E84
-            DUP                                  * 17E89
-            ITE                                  * 17E8E
-            4ROLL                                * 17E93
-            SWAP                                 * 17E98
-            REFERENCED?                          * 17E9D
-            ITE                                  * 17EA2
-            DROP                                 * 17EA7
-            ::                                   * 17EAC
-              OBJ_18178                          * 17EB1
-              casedrop                           * 17EB6
-              ::                                 * 17EBB
-                IT                               * 17EC0
-                2DROP                            * 17EC5
-                2RDROP                           * 17ECA
-                2RDROP                           * 17ECF
-              ;                                  * 17ED4
-              NOTcaseDROP                        * 17ED9
-              purge(bk,s)                        * 17EDE
+            $ "PICT" OBJ_17F84 KILLADISP ;       * 17DB4
+          GetUserKeys NULL{} EQUAL ?SKIP         * 17DD5
+          :: #139_64ED2 JstGetTHEMESG OBJ_17F84 ClrUserKeys ; * 17DE9
+          alarm<>{}? IT                          * 17E07
+          :: #13A_64EDC JstGetTHEMESG OBJ_17F84 DelAlarrm(0) ; * 17E11
+          DEPTH #0=?SKIP                         * 17E2F
+          :: #136_64EB4 JstGetTHEMESG OBJ_17F84 DelStack ; CONTEXT@ * 17E39
+          LastNonNull IT OBJ_1804C               * 17E5C
+          AdrPort0 NEXTLIBBAK IT                 * 17E6B
+          :: BEGIN NEXTLIBBAK DUP ITE 4ROLL SWAP * 17E7A
+            REFERENCED? ITE DROP                 * 17E9D
+            :: OBJ_18178 casedrop                * 17EAC
+              :: IT 2DROP                        * 17EBB
+                2RDROP 2RDROP ;                  * 17ECA
+              NOTcaseDROP purge(bk,s)            * 17ED9
             ;                                    * 17EE3
-            NOT_UNTIL                            * 17EE8
-          ;                                      * 17EED
-          NULL$                                  * 17EF2
-          DISPROW5                               * 17EF7
-          NULL$                                  * 17EFC
-          DISPROW6                               * 17F01
-          OBJ_18338                              * 17F06
-          UNTIL                                  * 17F0B
-        ;                                        * 17F10
+            NOT_UNTIL ;                          * 17EE8
+          NULL$ DISPROW5 NULL$ DISPROW6 OBJ_18338 UNTIL ; * 17EF2
 
 * refs (1): 17C7E
 Y/N-Menu:
@@ -2288,10 +1485,7 @@ Y/N-Menu:
 
 * refs (2): 17BFE 3861A
 OBJ_17F40:
-        ::                                       * 17F40
-          NULLHXS                                * 17F45
-          #       B8                             * 17F4A  184
-          EXPAND                                 * 17F54
+        :: NULLHXS # B8 EXPAND                   * 17F40
           CODE                                   * 17F59  28 nibbles
             A=DAT1  A                            * 17F63
             LC(5)   leeway                       * 17F66
@@ -2306,42 +1500,18 @@ OBJ_17F40:
 
 * refs (9): 17CA6 17CD3 17D19 17D41 17D8C 17DC6 ...
 OBJ_17F84:
-        ::                                       * 17F84
-          DISPROW5                               * 17F89
-          'R                                     * 17F8E
-          OBJ_17FB1                              * 17F93
-          casedrop                               * 17F98
-          2RDROP                                 * 17F9D
-          NOTcaseDROP                            * 17FA2
-          EVAL                                   * 17FA7
+        :: DISPROW5 'R OBJ_17FB1 casedrop 2RDROP * 17F84
+          NOTcaseDROP EVAL                       * 17FA2
         ;                                        * 17FAC
 
 * refs (2): 17F93 181BE
 OBJ_17FB1:
-        ::                                       * 17FB1
-          NOBLINK                                * 17FB6
+        :: NOBLINK                               * 17FB1
 L_17FBB:
-          OBJ_53AD6                              * 17FBB
-          GETKEY                                 * 17FC0
-          ?GOTO                                  * 17FC5
-          OBJ_1802E                              * 17FCA
-          ATTN?                                  * 17FCF
-          ?GOTO                                  * 17FD4
-          L_18006                                * 17FD9
-          TIMEOUT?                               * 17FDE
-          IT                                     * 17FE3
+          OBJ_53AD6 GETKEY ?GOTO OBJ_1802E ATTN? ?GOTO L_18006 TIMEOUT? IT * 17FBB
           off!                                   * 17FE8
-          UART?                                  * 17FED
-          IT                                     * 17FF2
-          FLUSHRSBUF                             * 17FF7
-          GOTO                                   * 17FFC
-          L_17FBB                                * 18001
+          UART? IT FLUSHRSBUF                    * 17FED
+          GOTO L_17FBB                           * 17FFC
 L_18006:
-          ATTNFLGCLR                             * 18006
-          OBJ_42396                              * 1800B
-          OBJ_18338                              * 18010
-          caseTRUE                               * 18015
-          ERRBEEP                                * 1801A
-          GOTO                                   * 1801F
-          L_17FBB                                * 18024
-        ;                                        * 18029
+          ATTNFLGCLR OBJ_42396 OBJ_18338 caseTRUE ERRBEEP * 18006
+          GOTO L_17FBB ;                         * 1801F

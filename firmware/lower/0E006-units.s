@@ -6,144 +6,74 @@
 
 * refs (1): 0DD08
 DispTstr(b):
-        ::                                       * 0E006
-          tstr(b)                                * 0E00B
-          $>GROB                                 * 0E010
-          HBUFF_X_Y                              * 0E015
-          #8+                                    * 0E01A
-          GROB!                                  * 0E01F
-        ;                                        * 0E024
+        :: tstr(b) $>GROB HBUFF_X_Y #8+ GROB! ;  * 0E006
 
 * $ ->
 * refs (1): 0DD0D
 DISPROW1*!:
-        ::                                       * 0E029
-          COERCE$22                              * 0E02E
-          $>GROB                                 * 0E033
-          HBUFF_X_Y                              * 0E038
-          GROB!                                  * 0E03D
-        ;                                        * 0E042
+        :: COERCE$22 $>GROB HBUFF_X_Y GROB! ;    * 0E029
 
 * -> grob
 * refs (4): 0DCEA 12B8A 38930 46A04
 Save16:
-        ::                                       * 0E047
-          TOP16                                  * 0E04C
-          SUBGROB                                * 0E051
-        ;                                        * 0E056
+        :: TOP16 SUBGROB ;                       * 0E047
 
 * grob ->
 * refs (4): 0DD3F 12BAD 38944 46A36
 Restore16:
-        ::                                       * 0E05B
-          HBUFF_X_Y                              * 0E060
-          GROB!                                  * 0E065
-        ;                                        * 0E06A
+        :: HBUFF_X_Y GROB! ;                     * 0E05B
 
 * ->
 * refs (2): 0DCEF 9DE11
 Clr16:
-        ::                                       * 0E06F
-          TOP16                                  * 0E074
-          GROB!ZERODRP                           * 0E079
-        ;                                        * 0E07E
+        :: TOP16 GROB!ZERODRP ;                  * 0E06F
 
 * ->
 * refs (1): 12739
 Clr8:
-        ::                                       * 0E083
-          TOP8                                   * 0E088
-          GROB!ZERODRP                           * 0E08D
-        ;                                        * 0E092
+        :: TOP8 GROB!ZERODRP ;                   * 0E083
 
 * ->
 * refs (1): 12761
 Clr8-15:
-        ::                                       * 0E097
-          Rows8-15                               * 0E09C
-          GROB!ZERODRP                           * 0E0A1
-        ;                                        * 0E0A6
+        :: Rows8-15 GROB!ZERODRP ;               * 0E097
 
 * -> HBgrob #x1 #y1 #x1+131 #y1+16
 * refs (2): 0E04C 0E074
 TOP16:
-        ::                                       * 0E0AB
-          HBUFF_X_Y                              * 0E0B0
-          2DUP                                   * 0E0B5
-          BINT16                                 * 0E0BA
-          #+SWAP                                 * 0E0BF
-          BINT131                                * 0E0C4
-          #+SWAP                                 * 0E0C9
-        ;                                        * 0E0CE
+        :: HBUFF_X_Y 2DUP BINT16 #+SWAP BINT131 #+SWAP ; * 0E0AB
 
 * -> HBgrob #x1 #y #x1+131 #y1+8
 * refs (1): 0E088
 TOP8:
-        ::                                       * 0E0D3
-          HBUFF_X_Y                              * 0E0D8
-          2DUP                                   * 0E0DD
-          BINT8                                  * 0E0E2
-          #+SWAP                                 * 0E0E7
-          BINT131                                * 0E0EC
-          #+SWAP                                 * 0E0F1
-        ;                                        * 0E0F6
+        :: HBUFF_X_Y 2DUP BINT8 #+SWAP BINT131 #+SWAP ; * 0E0D3
 
 * -> HBgrob #x1 #y1+8 #x1+131 #y1+16
 * refs (1): 0E09C
 Rows8-15:
-        ::                                       * 0E0FB
-          HBUFF_X_Y                              * 0E100
-          #8+                                    * 0E105
-          2DUP                                   * 0E10A
-          BINT8                                  * 0E10F
-          #+SWAP                                 * 0E114
-          BINT131                                * 0E119
-          #+SWAP                                 * 0E11E
-        ;                                        * 0E123
+        :: HBUFF_X_Y #8+ 2DUP BINT8 #+SWAP BINT131 #+SWAP ; * 0E0FB
 
 * -> HBgrob #x #y
 * refs (8): 0E015 0E038 0E060 0E0B0 0E0D8 0E100 ...
 HBUFF_X_Y:
-        ::                                       * 0E128
-          HARDBUFF                               * 0E12D
-          WINDOWCORNER                           * 0E132
-          SWAP                                   * 0E137
-        ;                                        * 0E13C
+        :: HARDBUFF WINDOWCORNER SWAP ;          * 0E128
 
 * refs (1): 38971
 ExecAlarm(r):
-        ::                                       * 0E141
-          DUP                                    * 0E146
-          RCLALARM%                              * 0E14B
-          BINT3                                  * 0E150
-          NTHCOMPDROP                            * 0E155
-          EVAL                                   * 0E15A
-        ;                                        * 0E15F
+        :: DUP RCLALARM% BINT3 NTHCOMPDROP EVAL ; * 0E141
 
 * refs (8): 0CD35 0CD49 0CD5D 0DCCC 0DD94 0DE4D ...
 OBJ_0E164:
-        ::                                       * 0E164
-          OBJ_0E17D                              * 0E169
-          OBJ_0E19B                              * 0E16E
-          OBJ_0E1B9                              * 0E173
-        ;                                        * 0E178
+        :: OBJ_0E17D OBJ_0E19B OBJ_0E1B9 ;       * 0E164
 
 * refs (1): 0E169
 OBJ_0E17D:
-        ::                                       * 0E17D
-          ALARMS@                                * 0E182
-          NextAlarm(li)?                         * 0E187
-          case                                   * 0E18C
-          DROP                                   * 0E191
+        :: ALARMS@ NextAlarm(li)? case DROP      * 0E17D
         ;                                        * 0E196
 
 * refs (1): 0E16E
 OBJ_0E19B:
-        ::                                       * 0E19B
-          ALARMS@                                * 0E1A0
-          OldestPastDue(li)?                     * 0E1A5
-          case                                   * 0E1AA
-          DROP                                   * 0E1AF
+        :: ALARMS@ OldestPastDue(li)? case DROP  * 0E19B
         ;                                        * 0E1B4
 
 * refs (1): 0E173
@@ -162,19 +92,8 @@ OBJ_0E1B9:
 * {} -> {}'
 * refs (2): 0E3F8 B7AEE
 ALRMLS>:
-        ::                                       * 0E1D8
-          INCOMPDROP                             * 0E1DD
-          SWAPDUP                                * 0E1E2
-          Ticks>Date                             * 0E1E7
-          SWAPDUP                                * 0E1EC
-          Ticks>TOD                              * 0E1F1
-          SWAP                                   * 0E1F6
-          Ticks>Rpt                              * 0E1FB
-          4ROLL                                  * 0E200
-          SWAP                                   * 0E205
-          BINT4                                  * 0E20A
-          {}N                                    * 0E20F
-        ;                                        * 0E214
+        :: INCOMPDROP SWAPDUP Ticks>Date SWAPDUP Ticks>TOD SWAP Ticks>Rpt * 0E1D8
+          4ROLL SWAP BINT4 {}N ;                 * 0E200
 
 * refs (2): 0CB39 0DEE8
 OBJ_0E219:
@@ -346,22 +265,13 @@ L_0E3D8:
 * %n -> {}
 * refs (2): 0E14B 19937
 RCLALARM%:
-        ::                                       * 0E3DF
-          COERCE                                 * 0E3E4
-          RCLALM                                 * 0E3E9
-          NOTcase                                * 0E3EE
-          NOALARMERR                             * 0E3F3
-          ALRMLS>                                * 0E3F8
-        ;                                        * 0E3FD
+        :: COERCE RCLALM NOTcase NOALARMERR      * 0E3DF
+          ALRMLS> ;                              * 0E3F8
 
 * #n -> {} T -> F
 * refs (2): 0E3E9 B7AD5
 RCLALM:
-        ::                                       * 0E402
-          ALARMS@                                * 0E407
-          SWAP                                   * 0E40C
-          NTHELCOMP                              * 0E411
-        ;                                        * 0E416
+        :: ALARMS@ SWAP NTHELCOMP ;              * 0E402
 
 * refs (1): 0DCE0
 OBJ_0E41B:
@@ -389,118 +299,64 @@ OBJ_0E43C:
 * {} ob #n -> {}'
 * refs (1): 0DEC5
 INSERTN{}:
-        ::                                       * 0E461
-          ROTDUP                                 * 0E466
-          LENCOMP                                * 0E46B
-          ROT                                    * 0E470
+        :: ROTDUP LENCOMP ROT                    * 0E461
           {                                      * 0E475
 
 ΠM:
-            LAM     M                            * 0E47A
+            LAM M                                * 0E47A
 
 ΠM_0E483:
-            LAM     N                            * 0E483
-          }                                      * 0E48C
-          BIND                                   * 0E491
-          INNERCOMP                              * 0E496
-          #1+ROLL                                * 0E49B
+            LAM N }                              * 0E483
+          BIND INNERCOMP #1+ROLL                 * 0E491
 
 ΠM_0E4A0:
-          LAM     M                              * 0E4A0
-          #2+                                    * 0E4A9
+          LAM M #2+                              * 0E4A0
 
 ΠM_0E4AE:
-          LAM     N                              * 0E4AE
-          #-                                     * 0E4B7
-          UNROLL                                 * 0E4BC
+          LAM N #- UNROLL                        * 0E4AE
 
 ΠM_0E4C1:
-          LAM     M                              * 0E4C1
-          #1+                                    * 0E4CA
-          {}N                                    * 0E4CF
-          ABND                                   * 0E4D4
-        ;                                        * 0E4D9
+          LAM M #1+ {}N ABND ;                   * 0E4C1
 
 * {} #n -> {}'
 * refs (4): 0DD5D 0DE1B 0DE75 0E77E
 REMOVEN{}:
-        ::                                       * 0E4DE
-          SWAPINCOMP                             * 0E4E3
-          DUP#2+                                 * 0E4E8
-          ROLLSWAP                               * 0E4ED
-          DUP#2+                                 * 0E4F2
-          ROT#-                                  * 0E4F7
-          ROLLDROP                               * 0E4FC
-          #1-                                    * 0E501
-          {}N                                    * 0E506
-        ;                                        * 0E50B
+        :: SWAPINCOMP DUP#2+ ROLLSWAP DUP#2+ ROT#- ROLLDROP #1- {}N ; * 0E4DE
 
 * %time -> %
 * refs (1): 1990D
 STOALARM%:
-        ::                                       * 0E510
-          VerifyTOD                              * 0E515
-          DATE                                   * 0E51A
-          SWAP                                   * 0E51F
+        :: VerifyTOD DATE SWAP                   * 0E510
 
 __:
-          $       ""                             * 0E524
+          $ ""                                   * 0E524
 
 %0:
-          %       0E0                            * 0E52E
-          STOALM                                 * 0E543
-        ;                                        * 0E548
+          % 0E0 STOALM ;                         * 0E52E
 
 * {} -> %
 * refs (1): 19917
 STOALARMLS:
-        ::                                       * 0E54D
-          INNERDUP                               * 0E552
-          BINT2                                  * 0E557
-          #<                                     * 0E55C
-          casedrop                               * 0E561
-          SETSIZEERR                             * 0E566
-          DUP                                    * 0E56B
-          BINT4                                  * 0E570
-          #>                                     * 0E575
-          casedrop                               * 0E57A
-          SETSIZEERR                             * 0E57F
-          BINT3                                  * 0E584
-          #=casedrop                             * 0E589
+        :: INNERDUP BINT2 #< casedrop SETSIZEERR * 0E54D
+          DUP BINT4 #> casedrop SETSIZEERR       * 0E56B
+          BINT3 #=casedrop                       * 0E584
           ::                                     * 0E58E
 
 %0_0E593:
-            %       0E0                          * 0E593
-            StoAlarms(2r,_,r)                    * 0E5A8
-          ;                                      * 0E5AD
-          BINT4                                  * 0E5B2
-          #=casedrop                             * 0E5B7
-          StoAlarms(2r,_,r)                      * 0E5BC
+            % 0E0 StoAlarms(2r,_,r) ;            * 0E593
+          BINT4 #=casedrop StoAlarms(2r,_,r)     * 0E5B2
           DROP                                   * 0E5C1
 
 ___0E5C6:
-          $       ""                             * 0E5C6
+          $ ""                                   * 0E5C6
 
 %0_0E5D0:
-          %       0E0                            * 0E5D0
-          StoAlarms(2r,_,r)                      * 0E5E5
-        ;                                        * 0E5EA
+          % 0E0 StoAlarms(2r,_,r) ;              * 0E5D0
 
 * refs (4): 0E5A8 0E5BC 0E5E5 B7398
 StoAlarms(2r,_,r):
-        ::                                       * 0E5EF
-          CKREAL                                 * 0E5F4
-          Ornd(abs(r))                           * 0E5F9
-          4UNROLL                                * 0E5FE
-          4UNROLL                                * 0E603
-          CKREAL                                 * 0E608
-          VerifyTOD                              * 0E60D
-          4UNROLL                                * 0E612
-          CKREAL                                 * 0E617
-          chkdate(r)                             * 0E61C
-          4UNROLL                                * 0E621
-          STOALM                                 * 0E626
-        ;                                        * 0E62B
+        :: CKREAL Ornd(abs(r)) 4UNROLL 4UNROLL CKREAL VerifyTOD 4UNROLL * 0E5EF
+          CKREAL chkdate(r) 4UNROLL STOALM ;     * 0E617
 
 * refs (3): 0E61C 0EB18 0EB45
 chkdate(r):
@@ -559,64 +415,28 @@ L_0E6CC:
 
 * refs (1): 0E5F9
 Ornd(abs(r)):
-        ::                                       * 0E6D4
-          %ABS                                   * 0E6D9
-          %INT                                   * 0E6DE
-          OBJ_0E693                              * 0E6E3
-        ;                                        * 0E6E8
+        :: %ABS %INT OBJ_0E693 ;                 * 0E6D4
 
 * %date %time acti %rep -> %
 * refs (2): 0E543 0E626
 STOALM:
-        ::                                       * 0E6ED
-          SWAP                                   * 0E6F2
-          4UNROLL                                * 0E6F7
-          >ALRMLS                                * 0E6FC
-          ALARMS@                                * 0E701
-          TOTEMPSWAP                             * 0E706
-          InsAlarm(2li)                          * 0E70B
-          NewAlarm(li)                           * 0E710
-          UNCOERCE                               * 0E715
-          OBJ_0172B                              * 0E71A
-        ;                                        * 0E71F
+        :: SWAP 4UNROLL >ALRMLS ALARMS@ TOTEMPSWAP InsAlarm(2li) * 0E6ED
+          NewAlarm(li) UNCOERCE OBJ_0172B ;      * 0E710
 
 * %n ->
 * refs (2): 19981 B7D2D
 DELALARM:
-        ::                                       * 0E724
-          COERCE                                 * 0E729
-          DUP#0=                                 * 0E72E
-          casedrop                               * 0E733
-          DelAlarrm(0)                           * 0E738
-          DUP                                    * 0E73D
-          ALARMS@                                * 0E742
-          LENCOMP                                * 0E747
-          #>                                     * 0E74C
-          case                                   * 0E751
-          NOALARMERR                             * 0E756
-          DelAlarrm(s)                           * 0E75B
-          OBJ_0172B                              * 0E760
-          OBJ_0E164                              * 0E765
-        ;                                        * 0E76A
+        :: COERCE DUP#0= casedrop DelAlarrm(0)   * 0E724
+          DUP ALARMS@ LENCOMP #> case NOALARMERR * 0E73D
+          DelAlarrm(s) OBJ_0172B OBJ_0E164 ;     * 0E75B
 
 * refs (1): 0E75B
 DelAlarrm(s):
-        ::                                       * 0E76F
-          ALARMS@                                * 0E774
-          TOTEMPSWAP                             * 0E779
-          REMOVEN{}                              * 0E77E
-          NewAlarm(li)                           * 0E783
-        ;                                        * 0E788
+        :: ALARMS@ TOTEMPSWAP REMOVEN{} NewAlarm(li) ; * 0E76F
 
 * refs (2): 0E738 17E25
 DelAlarrm(0):
-        ::                                       * 0E78D
-          NULL{}                                 * 0E792
-          TOTEMPOB                               * 0E797
-          NewAlarm(li)                           * 0E79C
-          OBJ_0172B                              * 0E7A1
-          OBJ_0E164                              * 0E7A6
-        ;                                        * 0E7AB
+        :: NULL{} TOTEMPOB NewAlarm(li) OBJ_0172B OBJ_0E164 ; * 0E78D
 
         CON(5)  (*)+5                            * 0E7B0  primitive code object
         ASSEMBLE
@@ -921,61 +741,29 @@ L_0EABA:
 
 * refs (1): 0DEB6
 OBJ_0EABE:
-        ::                                       * 0EABE
-          BINT1                                  * 0EAC3
-          NTHCOMPDROP                            * 0EAC8
-          FindAlarm(li,b)                        * 0EACD
-        ;                                        * 0EAD2
+        :: BINT1 NTHCOMPDROP FindAlarm(li,b) ;   * 0EABE
 
 * %date -> %
 * refs (1): 19957
 FINDALARM%:
-        ::                                       * 0EAD7
-          DUP                                    * 0EADC
-          %0_2A2B4                               * 0EAE1
-          %=                                     * 0EAE6
-          casedrop                               * 0EAEB
-          ::                                     * 0EAF0
-            ALARMS@                              * 0EAF5
-            OldestPastDue(li)?                   * 0EAFA
-            IT                                   * 0EAFF
-            DROP                                 * 0EB04
-            IndexPastDue(li)                     * 0EB09
-            UNCOERCE                             * 0EB0E
-          ;                                      * 0EB13
-          chkdate(r)                             * 0EB18
-          Date>hxs13                             * 0EB1D
-          FindNext                               * 0EB22
-          Alarm(s=>r)                            * 0EB27
-        ;                                        * 0EB2C
+        :: DUP %0_2A2B4 %= casedrop              * 0EAD7
+          :: ALARMS@ OldestPastDue(li)? IT DROP  * 0EAF0
+            IndexPastDue(li) UNCOERCE ;          * 0EB09
+          chkdate(r) Date>hxs13 FindNext Alarm(s=>r) ; * 0EB18
 
 * {} -> %
 * refs (1): 19961
 FINDALARMLS:
-        ::                                       * 0EB31
-          INCOMPDROP                             * 0EB36
-          VerifyTOD                              * 0EB3B
-          SWAP                                   * 0EB40
-          chkdate(r)                             * 0EB45
-          Date>hxs13                             * 0EB4A
-          SWAP                                   * 0EB4F
-          TOD>Ticks                              * 0EB54
-          Date+Time                              * 0EB59
-          FindNext                               * 0EB5E
-          Alarm(s=>r)                            * 0EB63
-        ;                                        * 0EB68
+        :: INCOMPDROP VerifyTOD SWAP chkdate(r) Date>hxs13 SWAP TOD>Ticks * 0EB31
+          Date+Time FindNext Alarm(s=>r) ;       * 0EB59
 
 FindAlarm!:
-        ::                                       * 0EB6D
-          CLKTICKS                               * 0EB72
-          FindNext                               * 0EB77
-        ;                                        * 0EB7C
+        :: CLKTICKS FindNext ;                   * 0EB6D
 
 * -> hxs
 * refs (4): 0EB72 19837 2B062 CE153
 CLKTICKS:
-        ::                                       * 0EB81
-          OBJ_0EDB9                              * 0EB86
+        :: OBJ_0EDB9                             * 0EB81
           CODE                                   * 0EB8B  14 nibbles
             GOSBVL  SavPtrTime*                  * 0EB95
             R0=C                                 * 0EB9C
@@ -985,31 +773,16 @@ CLKTICKS:
 
 * refs (2): 0EB27 0EB63
 Alarm(s=>r):
-        ::                                       * 0EBA8
-          DUP                                    * 0EBAD
-          ALARMS@                                * 0EBB2
-          LENCOMP                                * 0EBB7
-          #>                                     * 0EBBC
-          casedrop                               * 0EBC1
-          %0_2A2B4                               * 0EBC6
-          UNCOERCE                               * 0EBCB
-        ;                                        * 0EBD0
+        :: DUP ALARMS@ LENCOMP #> casedrop %0_2A2B4 * 0EBA8
+          UNCOERCE ;                             * 0EBCB
 
 * refs (3): 0EB22 0EB5E 0EB77
 FindNext:
-        ::                                       * 0EBD5
-          ALARMS@                                * 0EBDA
-          SWAP                                   * 0EBDF
-          FindAlarm(li,b)                        * 0EBE4
-        ;                                        * 0EBE9
+        :: ALARMS@ SWAP FindAlarm(li,b) ;        * 0EBD5
 
 * refs (1): 17E07
 alarm<>{}?:
-        ::                                       * 0EBEE
-          ALARMS@                                * 0EBF3
-          NULLCOMP?                              * 0EBF8
-          NOT                                    * 0EBFD
-        ;                                        * 0EC02
+        :: ALARMS@ NULLCOMP? NOT ;               * 0EBEE
 
 * refs (2): 0EACD 0EBE4
 FindAlarm(li,b):
@@ -1150,33 +923,20 @@ OBJ_0ED95:
 
 * refs (1): 0EED5
 OBJ_0EDA5:
-        ::                                       * 0EDA5
-          BINT10                                 * 0EDAA
-          MAKEHXS                                * 0EDAF
-        ;                                        * 0EDB4
+        :: BINT10 MAKEHXS ;                      * 0EDA5
 
 * refs (3): 0EB86 0EE55 0EE88
 OBJ_0EDB9:
-        ::                                       * 0EDB9
-          BINT13                                 * 0EDBE
-          MAKEHXS                                * 0EDC3
-        ;                                        * 0EDC8
+        :: BINT13 MAKEHXS ;                      * 0EDB9
 
 * refs (1): 0EF68
 OBJ_0EDCD:
-        ::                                       * 0EDCD
-          BINT24                                 * 0EDD2
-          MAKEHXS                                * 0EDD7
-        ;                                        * 0EDDC
+        :: BINT24 MAKEHXS ;                      * 0EDCD
 
 * #nibs -> hxs
 * refs (3): 0EDAF 0EDC3 0EDD7
 MAKEHXS:
-        ::                                       * 0EDE1
-          NULLHXS                                * 0EDE6
-          SWAP                                   * 0EDEB
-          EXPAND                                 * 0EDF0
-        ;                                        * 0EDF5
+        :: NULLHXS SWAP EXPAND ;                 * 0EDE1
         ASSEMBLE
 
 * refs (1): 12673
@@ -1215,9 +975,7 @@ Date+Time:
 * %date -> hxs
 * refs (5): 0D2F5 0EB1D 0EB4A 0EF54 B7185
 Date>hxs13:
-        ::                                       * 0EE50
-          OBJ_0EDB9                              * 0EE55
-          SWAP                                   * 0EE5A
+        :: OBJ_0EDB9 SWAP                        * 0EE50
           CODE                                   * 0EE5F  21 nibbles
             GOSBVL  POPDATE%                     * 0EE69
             GOSBVL  YMD>Ticks                    * 0EE70
@@ -1252,9 +1010,7 @@ L_0EEB0:
 
 * refs (1): 0EF4A
 r=>b10:
-        ::                                       * 0EED0
-          OBJ_0EDA5                              * 0EED5
-          SWAP                                   * 0EEDA
+        :: OBJ_0EDA5 SWAP                        * 0EED0
           CODE                                   * 0EEDF  87 nibbles
             GOSBVL  POP1%                        * 0EEE9
             GOSBVL  SPLITA                       * 0EEF0
@@ -1288,15 +1044,7 @@ L_0EF21:
 * $ %date %time %rpt -> {}
 * refs (1): 0E6FC
 >ALRMLS:
-        ::                                       * 0EF45
-          r=>b10                                 * 0EF4A
-          ROT                                    * 0EF4F
-          Date>hxs13                             * 0EF54
-          ROT                                    * 0EF59
-          TOD>Ticks                              * 0EF5E
-          Date+Time                              * 0EF63
-          OBJ_0EDCD                              * 0EF68
-          3UNROLL                                * 0EF6D
+        :: r=>b10 ROT Date>hxs13 ROT TOD>Ticks Date+Time OBJ_0EDCD 3UNROLL * 0EF45
           CODE                                   * 0EF72  99 nibbles
             GOSBVL  SUB_0D90A                    * 0EF7C
             GOSUB   SUB_0E87B                    * 0EF83
@@ -1329,29 +1077,27 @@ L_0EFD2:
             D1=A                                 * 0EFD6
             GOLONG  L_0E84F                      * 0EFD9
           ENDCODE                                * 0EFDF
-          SWAP                                   * 0EFDF
-          TWO{}N                                 * 0EFE4
-        ;                                        * 0EFE9
+          SWAP TWO{}N ;                          * 0EFDF
 
 * 8192
 %TICKSsec:
-        %       8.192E3                          * 0EFEE
+        % 8.192E3                                * 0EFEE
 
 * 491520
 %TICKSmin:
-        %       4.9152E5                         * 0F003
+        % 4.9152E5                               * 0F003
 
 * 29491200
 %HrTicks:
-        %       2.94912E7                        * 0F018
+        % 2.94912E7                              * 0F018
 
 * 707788800
 %TICKSday:
-        %       7.077888E8                       * 0F02D
+        % 7.077888E8                             * 0F02D
 
 * 4954521600
 %TICKSweek:
-        %       4.9545216E9                      * 0F042
+        % 4.9545216E9                            * 0F042
         ASSEMBLE
         ?C<=A   A                                * 0F057
 * a branch also enters #0F05B, where the nibbles decode as RTNSXM
@@ -1373,54 +1119,23 @@ LIB00B:
 
 * refs (2): 289EA 28AD3
 st=>uo?:
-        ::                                       * 0F075
-          %1                                     * 0F07A
-          SWAP                                   * 0F07F
-          dup;stdunit(st)?                       * 0F084
-          case                                   * 0F089
-          makeuo!(r,st)                          * 0F08E
-          DUP                                    * 0F093
-          CAR$                                   * 0F098
-          OBJ_0C2CD                              * 0F09D
-          NOTcase                                * 0F0A2
-          OBJ_0F106                              * 0F0A7
-          OVER                                   * 0F0AC
-          CDR$                                   * 0F0B1
-          dup;stdunit(st)?                       * 0F0B6
-          NOTcasedrop                            * 0F0BB
-          OBJ_0F106                              * 0F0C0
-          ROTDROPSWAP                            * 0F0C5
-          OBJ_10B1C                              * 0F0CA
-          SWAP                                   * 0F0CF
-          umP                                    * 0F0D4
-          BINT4                                  * 0F0D9
-          OBJ_0F124                              * 0F0DE
-          TRUE                                   * 0F0E3
-        ;                                        * 0F0E8
+        :: %1 SWAP dup;stdunit(st)? case makeuo!(r,st) * 0F075
+          DUP CAR$ OBJ_0C2CD NOTcase OBJ_0F106   * 0F093
+          OVER CDR$ dup;stdunit(st)? NOTcasedrop OBJ_0F106 * 0F0AC
+          ROTDROPSWAP OBJ_10B1C SWAP umP BINT4 OBJ_0F124 TRUE ; * 0F0C5
 
 * refs (2): 0F08E 0F11A
 makeuo!(r,st):
-        ::                                       * 0F0ED
-          BINT2                                  * 0F0F2
-          OBJ_0F124                              * 0F0F7
-          TRUE                                   * 0F0FC
-        ;                                        * 0F101
+        :: BINT2 OBJ_0F124 TRUE ;                * 0F0ED
 
 * refs (2): 0F0A7 0F0C0
 OBJ_0F106:
-        ::                                       * 0F106
-          DROP                                   * 0F10B
-          OBJ_0F164                              * 0F110
-          case2drpfls                            * 0F115
-          makeuo!(r,st)                          * 0F11A
+        :: DROP OBJ_0F164 case2drpfls makeuo!(r,st) * 0F106
         ;                                        * 0F11F
 
 * refs (2): 0F0DE 0F0F7
 OBJ_0F124:
-        ::                                       * 0F124
-          umEND                                  * 0F129
-          SWAP#1+                                * 0F12E
-          PSYMBN                                 * 0F133
+        :: umEND SWAP#1+ PSYMBN                  * 0F124
           CODE                                   * 0F138  29 nibbles
             A=DAT1  A                            * 0F142
             AD1EX                                * 0F145
@@ -1435,328 +1150,138 @@ OBJ_0F124:
 
 * refs (1): 0F110
 OBJ_0F164:
-        ::                                       * 0F164
-          ngsizecase                             * 0F169
-          TRUE                                   * 0F16E
-          OBJ_25F4E                              * 0F173
-          SWAPONE                                * 0F178
-          OVER                                   * 0F17D
-          delimcase                              * 0F182
-          drop(1-2,4);true                       * 0F187
-          DROP                                   * 0F18C
-          OBJ_25A93                              * 0F191
-          DROP                                   * 0F196
-          OBJ_25A93                              * 0F19B
-          nultrior                               * 0F1A0
-          ::                                     * 0F1A5
-            2DROP                                * 0F1AA
-            SWAPDROPDUP                          * 0F1AF
-            $>ID                                 * 0F1B4
-            COMPILEID                            * 0F1B9
-            DROP                                 * 0F1BE
-            NOTROMPcase                          * 0F1C3
+        :: ngsizecase TRUE                       * 0F164
+          OBJ_25F4E SWAPONE OVER delimcase drop(1-2,4);true * 0F173
+          DROP OBJ_25A93 DROP OBJ_25A93 nultrior * 0F18C
+          :: 2DROP SWAPDROPDUP $>ID COMPILEID DROP NOTROMPcase * 0F1A5
 
 <>gn?:
-            ::                                   * 0F1C8
-              TYPEIDNT?                          * 0F1CD
-              NOT                                * 0F1D2
-            ;                                    * 0F1D7
-            ROMPTR@                              * 0F1DC
-            DROP                                 * 0F1E1
-            dup;r?:dq/sk                         * 0F1E6
-            DROPFALSE                            * 0F1EB
-            TYPEEXT?                             * 0F1F0
-            NOT                                  * 0F1F5
-          ;                                      * 0F1FA
+            :: TYPEIDNT? NOT ;                   * 0F1C8
+            ROMPTR@ DROP dup;r?:dq/sk DROPFALSE TYPEEXT? NOT ; * 0F1DC
 
 * refs (1): 0F187
 drop(1-2,4);true:
-          ::                                     * 0F1FF
-            2DROP                                * 0F204
-            SWAPDROPTRUE                         * 0F209
-          ;                                      * 0F20E
-        ;                                        * 0F213
+          :: 2DROP SWAPDROPTRUE ; ;              * 0F1FF
 
 * u -> $
 * refs (2): 41332 5F9F0
 UNIT>$:
-        ::                                       * 0F218
-          >R                                     * 0F21D
-          ticR                                   * 0F222
-          NOT?SEMI                               * 0F227
-          DUPTYPEREAL?                           * 0F22C
-          NOT?GOTO                               * 0F231
-          L_0F24A                                * 0F236
-          a%>$                                   * 0F23B
+        :: >R ticR NOT?SEMI                      * 0F218
+          DUPTYPEREAL? NOT?GOTO L_0F24A a%>$     * 0F22C
 L_0F240:
-          ticR                                   * 0F240
-          NOT?SEMI                               * 0F245
+          ticR NOT?SEMI                          * 0F240
 L_0F24A:
-          DUPTYPECSTR?                           * 0F24A
-          ?GOTO                                  * 0F24F
-          L_0F240                                * 0F254
-          DUPTYPECHAR?                           * 0F259
-          ?GOTO                                  * 0F25E
-          L_0F240                                * 0F263
-          dup;r?:dq/sk                           * 0F268
-          ::                                     * 0F26D
-            OBJ_35264                            * 0F272
-            GOTO                                 * 0F277
-            L_0F240                              * 0F27C
-          ;                                      * 0F281
-          REQcasedrop                            * 0F286
-          umP                                    * 0F28B
-          ::                                     * 0F290
-            SWAP                                 * 0F295
-            >H$                                  * 0F29A
-            GOTO                                 * 0F29F
-            L_0F240                              * 0F2A4
-          ;                                      * 0F2A9
-          REQcasedrop                            * 0F2AE
-          um*                                    * 0F2B3
-          ::                                     * 0F2B8
-            tok*                                 * 0F2BD
-            GOTO                                 * 0F2C2
-            L_0F321                              * 0F2C7
-          ;                                      * 0F2CC
-          REQcasedrop                            * 0F2D1
-          um/                                    * 0F2D6
-          ::                                     * 0F2DB
-            tok/                                 * 0F2E0
-            GOTO                                 * 0F2E5
-            L_0F321                              * 0F2EA
-          ;                                      * 0F2EF
-          REQcasedrop                            * 0F2F4
-          um^                                    * 0F2F9
-          ::                                     * 0F2FE
-            tok^                                 * 0F303
-            GOTO                                 * 0F308
-            L_0F321                              * 0F30D
-          ;                                      * 0F312
-          DROP                                   * 0F317
-          tokuscore                              * 0F31C
+          DUPTYPECSTR? ?GOTO L_0F240 DUPTYPECHAR? ?GOTO L_0F240 dup;r?:dq/sk * 0F24A
+          :: OBJ_35264 GOTO L_0F240 ; REQcasedrop umP * 0F26D
+          :: SWAP >H$ GOTO L_0F240 ; REQcasedrop um* * 0F290
+          :: tok* GOTO L_0F321 ; REQcasedrop um/ * 0F2B8
+          :: tok/ GOTO L_0F321 ; REQcasedrop um^ * 0F2DB
+          :: tok^ GOTO L_0F321 ; DROP tokuscore  * 0F2FE
 L_0F321:
-          SWAP&$                                 * 0F321
-          &$                                     * 0F326
-          GOTO                                   * 0F32B
-          L_0F240                                * 0F330
-        ;                                        * 0F335
+          SWAP&$ &$ GOTO L_0F240 ;               * 0F321
 
 * % u -> u'
 * refs (16): 0F367 0FE1C 10083 1555E 1975E 48CEC ...
 UM>U:
-        ::                                       * 0F33A
-          units(uo)=>(_,s)                       * 0F33F
-          ->unit(_,s)                            * 0F344
-        ;                                        * 0F349
+        :: units(uo)=>(_,s) ->unit(_,s) ;        * 0F33A
 
 * u -> % u'
 * refs (7): 197CD 1CFC6 567D2 56886 72F8E 9C334 ...
 UMU>:
-        ::                                       * 0F34E
-          DUP                                    * 0F353
-          CARCOMP                                * 0F358
-          %1                                     * 0F35D
-          ROT                                    * 0F362
-          UM>U                                   * 0F367
-        ;                                        * 0F36C
+        :: DUP CARCOMP %1 ROT UM>U ;             * 0F34E
 
 * u1 u2 -> u1'
 * refs (14): 0F56B 0FA49 196EA 196F4 196FE 5668D ...
 UMCONV:
-        ::                                       * 0F371
-          OBJ_0FDE5                              * 0F376
-          ROTDROP                                * 0F37B
-          3PICK                                  * 0F380
-          5ROLL                                  * 0F385
-          OBJ_0FDE5                              * 0F38A
-          5UNROLL                                * 0F38F
-          7UNROLL                                * 0F394
-          7UNROLL                                * 0F399
-          2DROP                                  * 0F39E
-          puretemp?                              * 0F3A3
-          ITE                                    * 0F3A8
-          TempConv                               * 0F3AD
-          ::                                     * 0F3B2
-            OBJ_0FCA5                            * 0F3B7
-            %%/                                  * 0F3BC
-            %%*                                  * 0F3C1
-          ;                                      * 0F3C6
-          %%>%                                   * 0F3CB
-          Unbr>U                                 * 0F3D0
-        ;                                        * 0F3D5
+        :: OBJ_0FDE5 ROTDROP 3PICK 5ROLL OBJ_0FDE5 5UNROLL 7UNROLL 7UNROLL * 0F371
+          2DROP puretemp? ITE TempConv           * 0F39E
+          :: OBJ_0FCA5 %%/ %%* ;                 * 0F3B2
+          %%>% Unbr>U ;                          * 0F3CB
         BSS     10                               * 0F3DA
 
 * [] []' -> [] []' flag
 * refs (4): 0F3A3 0F6ED CD63A CD695
 puretemp?:
-        ::                                       * 0F3E4
-          DUP                                    * 0F3E9
-          OBJ_38417                              * 0F3EE
-          EQ                                     * 0F3F3
-          NOTcaseFALSE                           * 0F3F8
-          2DUPEQ                                 * 0F3FD
+        :: DUP OBJ_38417 EQ NOTcaseFALSE 2DUPEQ  * 0F3E4
         ;                                        * 0F402
 
 * refs (9): 9362E 94032 95D56 95EC1 9616E 9632B ...
 4dropn;IU!:
-        ::                                       * 0F407
-          DUP                                    * 0F40C
-          %%0=                                   * 0F411
-        ;                                        * 0F416
+        :: DUP %%0= ;                            * 0F407
 
 * ???
 * refs (2): 0F3AD CD64F
 TempConv:
-        ::                                       * 0F41B
-          2DROP                                  * 0F420
-          2DUPEQ                                 * 0F425
-          case2DROP                              * 0F42A
-          OVER                                   * 0F42F
-          cfC                                    * 0F434
-          jEQcase                                * 0F439
-          OBJ_0F47F                              * 0F43E
-          OVER                                   * 0F443
-          cfF                                    * 0F448
-          jEQcase                                * 0F44D
-          OBJ_0F4C5                              * 0F452
-          3UNROLL                                * 0F457
-          %%*                                    * 0F45C
-          OVER                                   * 0F461
-          %%/                                    * 0F466
-          OBJ_0F510                              * 0F46B
-          %%-                                    * 0F470
-          SWAPDROP                               * 0F475
-        ;                                        * 0F47A
+        :: 2DROP 2DUPEQ case2DROP OVER           * 0F41B
+          cfC jEQcase OBJ_0F47F                  * 0F434
+          OVER cfF jEQcase OBJ_0F4C5             * 0F443
+          3UNROLL %%* OVER %%/ OBJ_0F510 %%- SWAPDROP ; * 0F457
 
 * refs (1): 0F43E
 OBJ_0F47F:
-        ::                                       * 0F47F
-          SWAPDROP                               * 0F484
-          cfF                                    * 0F489
-          EQcase                                 * 0F48E
-          ::                                     * 0F493
-            %%/                                  * 0F498
-            %%3.2E1                              * 0F49D
-            %%+                                  * 0F4A2
-          ;                                      * 0F4A7
-          SWAP                                   * 0F4AC
-          %%KZERO                                * 0F4B1
-          %%+                                    * 0F4B6
-          SWAP%%/                                * 0F4BB
-        ;                                        * 0F4C0
+        :: SWAPDROP cfF EQcase                   * 0F47F
+          :: %%/ %%3.2E1 %%+ ;                   * 0F493
+          SWAP %%KZERO %%+ SWAP%%/ ;             * 0F4AC
 
 * refs (1): 0F452
 OBJ_0F4C5:
-        ::                                       * 0F4C5
-          cfC                                    * 0F4CA
-          EQcasedrop                             * 0F4CF
-          ::                                     * 0F4D4
-            SWAP                                 * 0F4D9
-            %%3.2E1                              * 0F4DE
-            %%-                                  * 0F4E3
-            %%*                                  * 0F4E8
-          ;                                      * 0F4ED
-          %%/                                    * 0F4F2
-          SWAP                                   * 0F4F7
-          %%RZERO                                * 0F4FC
-          %%+                                    * 0F501
-          %%*                                    * 0F506
-        ;                                        * 0F50B
+        :: cfC EQcasedrop                        * 0F4C5
+          :: SWAP %%3.2E1 %%- %%* ;              * 0F4D4
+          %%/ SWAP %%RZERO %%+ %%* ;             * 0F4F2
 
 * refs (1): 0F46B
 OBJ_0F510:
-        ::                                       * 0F510
-          OVER                                   * 0F515
-          cfC                                    * 0F51A
-          jEQcase                                * 0F51F
-          %%KZERO                                * 0F524
-          OVER                                   * 0F529
-          cfF                                    * 0F52E
-          jEQcase                                * 0F533
-          %%RZERO                                * 0F538
-          %%0                                    * 0F53D
-        ;                                        * 0F542
+        :: OVER cfC jEQcase %%KZERO              * 0F510
+          OVER cfF jEQcase %%RZERO               * 0F529
+          %%0 ;                                  * 0F53D
 
 * refs (2): 0F49D 0F4DE
 %%3.2E1:
-        %%      3.2E1                            * 0F547
+        %% 3.2E1                                 * 0F547
 
 * refs (8): 0F589 0F59D 0F5B1 0F5C5 0F5D9 0F5ED ...
 val(2uo):
-        ::                                       * 0F561
-          DUPUNROT                               * 0F566
-          UMCONV                                 * 0F56B
-          U>nbr                                  * 0F570
-          SWAP                                   * 0F575
-          U>nbr                                  * 0F57A
-        ;                                        * 0F57F
+        :: DUPUNROT UMCONV U>nbr SWAP U>nbr ;    * 0F561
 
 * u u' -> %flag
 * refs (3): 1E9D1 1E9DB 1E9E5
 UM=?:
-        ::                                       * 0F584
-          val(2uo)                               * 0F589
-          OBJ_1EA30                              * 0F58E
-        ;                                        * 0F593
+        :: val(2uo) OBJ_1EA30 ;                  * 0F584
 
 * u u' -> %flag
 * refs (3): 1EAFC 1EB06 1EB10
 UM#?:
-        ::                                       * 0F598
-          val(2uo)                               * 0F59D
-          OBJ_1EB51                              * 0F5A2
-        ;                                        * 0F5A7
+        :: val(2uo) OBJ_1EB51 ;                  * 0F598
 
 * u u' -> %flag
 * refs (3): 1EC09 1EC13 1EC1D
 UM<?:
-        ::                                       * 0F5AC
-          val(2uo)                               * 0F5B1
-          <(2r)                                  * 0F5B6
-        ;                                        * 0F5BB
+        :: val(2uo) <(2r) ;                      * 0F5AC
 
 * u u' -> %flag
 * refs (6): 1ECA8 1ECB2 1ECBC D1EB4 D1EC3 D1ED2
 UM>?:
-        ::                                       * 0F5C0
-          val(2uo)                               * 0F5C5
-          >(2r)                                  * 0F5CA
-        ;                                        * 0F5CF
+        :: val(2uo) >(2r) ;                      * 0F5C0
 
 * u u' -> %flag
 * refs (3): 1ED47 1ED51 1ED5B
 UM<=?:
-        ::                                       * 0F5D4
-          val(2uo)                               * 0F5D9
-          ó(2r)                                  * 0F5DE
-        ;                                        * 0F5E3
+        :: val(2uo) ó(2r) ;                      * 0F5D4
 
 * u u' -> %flag
 * refs (3): 1EDE6 1EDF0 1EDFA
 UM>=?:
-        ::                                       * 0F5E8
-          val(2uo)                               * 0F5ED
-          ò(2r)                                  * 0F5F2
-        ;                                        * 0F5F7
+        :: val(2uo) ò(2r) ;                      * 0F5E8
 
 * u -> u'
 * refs (1): 1AA56
 UMABS:
-        ::                                       * 0F5FC
-          dup;uo=>r                              * 0F601
-          %ABS                                   * 0F606
-          Unbr>U                                 * 0F60B
-        ;                                        * 0F610
+        :: dup;uo=>r %ABS Unbr>U ;               * 0F5FC
 
 * u -> u'
 * refs (1): 1A9CC
 UMCHS:
-        ::                                       * 0F615
-          dup;uo=>r                              * 0F61A
-          %CHS                                   * 0F61F
-          Unbr>U                                 * 0F624
-        ;                                        * 0F629
+        :: dup;uo=>r %CHS Unbr>U ;               * 0F615
 
 * u -> u'
 * refs (1): 1B4D9
@@ -1765,704 +1290,334 @@ UMSIN:
 
 * refs (2): 0F665 0F679
 OBJ_0F633:
-          ::                                     * 0F633
-            OBJ_10B90                            * 0F638
-            'REVAL                               * 0F63D
-            %%>%                                 * 0F642
-          ;                                      * 0F647
-          %%SINDEG                               * 0F64C
-        ;                                        * 0F651
+          :: OBJ_10B90 'REVAL %%>% ; %%SINDEG ;  * 0F633
 
 * refs (2): 9028A 934A9
 OBJ_0F656:
-        #       800                              * 0F656  2048
+        # 800                                    * 0F656  2048
 
 * u -> u'
 * refs (1): 1B532
 UMCOS:
-        ::                                       * 0F660
-          OBJ_0F633                              * 0F665
-          %%COSDEG                               * 0F66A
-        ;                                        * 0F66F
+        :: OBJ_0F633 %%COSDEG ;                  * 0F660
 
 * u -> u'
 * refs (1): 1B58B
 UMTAN:
-        ::                                       * 0F674
-          OBJ_0F633                              * 0F679
-          OBJ_10E0E                              * 0F67E
-        ;                                        * 0F683
+        :: OBJ_0F633 OBJ_10E0E ;                 * 0F674
 
 * 2pi
 %%2PI:
-        %%      6.28318530717959E0               * 0F688
+        %% 6.28318530717959E0                    * 0F688
 
 * u u' -> u''
 * refs (3): 1ABBC 1ABC6 1ABD0
 UM+:
-        ::                                       * 0F6A2
-          OBJ_0F6C0                              * 0F6A7
-          %%+                                    * 0F6AC
-          %%>%                                   * 0F6B1
-          Unbr>U                                 * 0F6B6
-        ;                                        * 0F6BB
+        :: OBJ_0F6C0 %%+ %%>% Unbr>U ;           * 0F6A2
 
 * refs (4): 0F6A7 0F779 0FC41 0FCD2
 OBJ_0F6C0:
-        ::                                       * 0F6C0
-          OBJ_0FDE5                              * 0F6C5
-          4PICK                                  * 0F6CA
-          6ROLL                                  * 0F6CF
-          OBJ_0FDE5                              * 0F6D4
-          5UNROLL                                * 0F6D9
-          7UNROLL                                * 0F6DE
-          7UNROLL                                * 0F6E3
-          2DROP                                  * 0F6E8
-          puretemp?                              * 0F6ED
-          ITE                                    * 0F6F2
-          ::                                     * 0F6F7
-            2DROP                                * 0F6FC
-            OBJ_0FC6E                            * 0F701
-            3PICK                                * 0F706
-            OBJ_0FC6E                            * 0F70B
-            SWAPDROP                             * 0F710
-            EQ                                   * 0F715
-            NOTcase                              * 0F71A
+        :: OBJ_0FDE5 4PICK 6ROLL OBJ_0FDE5 5UNROLL 7UNROLL 7UNROLL 2DROP * 0F6C0
+          puretemp? ITE                          * 0F6ED
+          :: 2DROP OBJ_0FC6E 3PICK OBJ_0FC6E SWAPDROP EQ NOTcase * 0F6F7
             CONSTUNITERR                         * 0F71F
           ;                                      * 0F724
           OBJ_0FCA5                              * 0F729
-          %%/                                    * 0F72E
-          %%*SWAP                                * 0F733
-        ;                                        * 0F738
+          %%/ %%*SWAP ;                          * 0F72E
 
 * refs (1): 10C31
 OBJ_0F73D:
-        ::                                       * 0F73D
-          SWAPCKREF                              * 0F742
-          SWAP                                   * 0F747
-          OBJ_7D761                              * 0F74C
-        ;                                        * 0F751
+        :: SWAPCKREF SWAP OBJ_7D761 ;            * 0F73D
 
 * refs (2): 10C4F CAC04
 OBJ_0F756:
-        ::                                       * 0F756
-          SWAPCKREF                              * 0F75B
-          SWAP                                   * 0F760
-          OBJ_7D76D                              * 0F765
-        ;                                        * 0F76A
+        :: SWAPCKREF SWAP OBJ_7D76D ;            * 0F756
         NIBHEX  00000                            * 0F76F  ..
 
 * u u' -> u''
 * refs (3): 1AD9A 1ADA4 1ADAE
 UM-:
-        ::                                       * 0F774
-          OBJ_0F6C0                              * 0F779
-          %%-                                    * 0F77E
-          %%>%                                   * 0F783
-          Unbr>U                                 * 0F788
-        ;                                        * 0F78D
+        :: OBJ_0F6C0 %%- %%>% Unbr>U ;           * 0F774
 
 * u u' -> u''
 * refs (7): 0F922 197E6 1AEA7 1AEB1 1AEBB 56895 ...
 UM*:
-        ::                                       * 0F792
-          OBJ_0F7B0                              * 0F797
-          %*                                     * 0F79C
-          NOP                                    * 0F7A1
-          psh                                    * 0F7A6
-        ;                                        * 0F7AB
+        :: OBJ_0F7B0 %* NOP psh ;                * 0F792
 
 * refs (2): 0F797 0F828
 OBJ_0F7B0:
-        ::                                       * 0F7B0
-          OVER                                   * 0F7B5
-          U>nbr                                  * 0F7BA
-          OVER                                   * 0F7BF
-          U>nbr                                  * 0F7C4
-          'REVAL                                 * 0F7C9
-          3UNROLL                                * 0F7CE
-          units(uo)=>(_,s)                       * 0F7D3
-          OBJ_10100                              * 0F7D8
-          UobROT                                 * 0F7DD
-          units(uo)=>(_,s)                       * 0F7E2
-          OBJ_10100                              * 0F7E7
-          'REVAL                                 * 0F7EC
-          rot                                    * 0F7F1
-          OBJ_107E3                              * 0F7F6
-          psh                                    * 0F7FB
-          rot                                    * 0F800
-          OBJ_107E3                              * 0F805
-          'REVAL                                 * 0F80A
-          OBJ_10194                              * 0F80F
-          OBJ_1086F                              * 0F814
-          ->unit(_,s)                            * 0F819
-        ;                                        * 0F81E
+        :: OVER U>nbr OVER U>nbr 'REVAL 3UNROLL units(uo)=>(_,s) OBJ_10100 * 0F7B0
+          UobROT units(uo)=>(_,s) OBJ_10100 'REVAL rot OBJ_107E3 psh rot * 0F7DD
+          OBJ_107E3 'REVAL OBJ_10194 OBJ_1086F ->unit(_,s) ; * 0F805
 
 * u u' -> u''
 * refs (4): 197DC 1AFAA 1AFB4 1AFBE
 UM/:
-        ::                                       * 0F823
-          OBJ_0F7B0                              * 0F828
-          %/                                     * 0F82D
-          psh                                    * 0F832
-          NOP                                    * 0F837
-        ;                                        * 0F83C
+        :: OBJ_0F7B0 %/ psh NOP ;                * 0F823
 
 * u -> u'
 * refs (1): 1B2AF
 UMINV:
-        ::                                       * 0F841
-          dup;uo=>r                              * 0F846
-          %1/                                    * 0F84B
-          SWAP                                   * 0F850
-          OBJ_10BAF                              * 0F855
-          psh                                    * 0F85A
-          OBJ_10194                              * 0F85F
-          OBJ_1086F                              * 0F864
-          ->unit(_,s)                            * 0F869
-        ;                                        * 0F86E
+        :: dup;uo=>r %1/ SWAP OBJ_10BAF psh OBJ_10194 OBJ_1086F ->unit(_,s) ; * 0F841
 
 * refs (4): 0F93B 1B096 1B0A0 1B0AA
 ^(2uo):
-        ::                                       * 0F873
-          OBJ_0FDAE                              * 0F878
-          FALSE                                  * 0F87D
+        :: OBJ_0FDAE FALSE                       * 0F873
 
 * refs (1): 0F909
 OBJ_0F882:
-          ::                                     * 0F882
-            2NULLLAM{}                           * 0F887
-            BIND                                 * 0F88C
-            dup;uo=>r                            * 0F891
-            2GETLAM                              * 0F896
-            1GETLAM                              * 0F89B
-            ITE                                  * 0F8A0
-            %NROOT                               * 0F8A5
-            %^                                   * 0F8AA
-            SWAP                                 * 0F8AF
-            OBJ_10BAF                            * 0F8B4
-            OBJ_10194                            * 0F8B9
-            OBJ_108F1                            * 0F8BE
-            psh                                  * 0F8C3
-            OBJ_108F1                            * 0F8C8
-            2GETLAM                              * 0F8CD
-            %0<                                  * 0F8D2
-            ?SKIP                                * 0F8D7
-            psh                                  * 0F8DC
-            OBJ_1086F                            * 0F8E1
-            ->unit(_,s)                          * 0F8E6
-            ABND                                 * 0F8EB
-          ;                                      * 0F8F0
+          :: 2NULLLAM{} BIND dup;uo=>r 2GETLAM 1GETLAM ITE %NROOT %^ * 0F882
+            SWAP OBJ_10BAF OBJ_10194 OBJ_108F1 psh OBJ_108F1 2GETLAM %0< * 0F8AF
+            ?SKIP psh                            * 0F8D7
+            OBJ_1086F ->unit(_,s) ABND ;         * 0F8E1
         ;                                        * 0F8F5
 
 * u u' -> u''
 * refs (1): 1B247
 UMXROOT:
-        ::                                       * 0F8FA
-          OBJ_0FDAE                              * 0F8FF
-          TRUE                                   * 0F904
-          OBJ_0F882                              * 0F909
-        ;                                        * 0F90E
+        :: OBJ_0FDAE TRUE OBJ_0F882 ;            * 0F8FA
 
 * u -> u'
 * refs (1): 1B45D
 UMSQ:
-        ::                                       * 0F913
-          DUP                                    * 0F918
-          COLA                                   * 0F91D
-          UM*                                    * 0F922
+        :: DUP COLA UM*                          * 0F913
         ;                                        * 0F927
 
 * u -> u'
 * refs (1): 1B3A1
 UMSQRT:
-        ::                                       * 0F92C
-          %.5                                    * 0F931
-          COLA                                   * 0F936
-          ^(2uo)                                 * 0F93B
+        :: %.5 COLA ^(2uo)                       * 0F92C
         ;                                        * 0F940
 
 * u -> u'
 * refs (2): 19780 197E1
 UMSI:
-        ::                                       * 0F945
-          OBJ_10D78                              * 0F94A
-          >R                                     * 0F94F
-          DUP                                    * 0F954
-          U>NCQ                                  * 0F959
-          %1                                     * 0F95E
-          BINT1                                  * 0F963
-          3UNROLL                                * 0F968
-          FALSE                                  * 0F96D
-          4NULLLAM{}                             * 0F972
-          BIND                                   * 0F977
+        :: OBJ_10D78 >R DUP U>NCQ %1 BINT1 3UNROLL FALSE 4NULLLAM{} BIND * 0F945
           2DROP00                                * 0F97C
 L_0F981:
-          ticR                                   * 0F981
-          NOT?GOTO                               * 0F986
-          L_0FA2B                                * 0F98B
-          3GETLAM                                * 0F990
-          4GETLAM                                * 0F995
-          DUP#1+                                 * 0F99A
-          4PUTLAM                                * 0F99F
-          PULLEL                                 * 0F9A4
-          SWAPDROP                               * 0F9A9
-          DUP                                    * 0F9AE
-          2PUTLAM                                * 0F9B3
-          %0=                                    * 0F9B8
-          ?GOTO                                  * 0F9BD
-          L_0FA1C                                * 0F9C2
-          units(uo)=>(_,s)                       * 0F9C7
-          OBJ_10100                              * 0F9CC
-          OBJ_108F1                              * 0F9D1
-          psh                                    * 0F9D6
-          OBJ_108F1                              * 0F9DB
-          2GETLAM                                * 0F9E0
-          %0<                                    * 0F9E5
-          ?SKIP                                  * 0F9EA
-          psh                                    * 0F9EF
-          rot                                    * 0F9F4
-          psh                                    * 0F9F9
-          OBJ_107E3                              * 0F9FE
-          rot                                    * 0FA03
-          rot                                    * 0FA08
-          OBJ_107E3                              * 0FA0D
-          psh                                    * 0FA12
-          BINT0                                  * 0FA17
+          ticR NOT?GOTO L_0FA2B 3GETLAM 4GETLAM DUP#1+ 4PUTLAM PULLEL * 0F981
+          SWAPDROP DUP 2PUTLAM %0= ?GOTO L_0FA1C units(uo)=>(_,s) OBJ_10100 * 0F9A9
+          OBJ_108F1 psh OBJ_108F1 2GETLAM %0< ?SKIP psh * 0F9D1
+          rot psh OBJ_107E3 rot rot OBJ_107E3 psh BINT0 * 0F9F4
 L_0FA1C:
-          DROP                                   * 0FA1C
-          GOTO                                   * 0FA21
-          L_0F981                                * 0FA26
+          DROP GOTO L_0F981                      * 0FA1C
 L_0FA2B:
-          ABND                                   * 0FA2B
-          %1                                     * 0FA30
-          unrot1                                 * 0FA35
-          OBJ_10194                              * 0FA3A
-          OBJ_1086F                              * 0FA3F
-          ->unit(_,s)                            * 0FA44
-          UMCONV                                 * 0FA49
-        ;                                        * 0FA4E
+          ABND %1 unrot1 OBJ_10194 OBJ_1086F ->unit(_,s) UMCONV ; * 0FA2B
         NIBHEX  00000                            * 0FA53  ..
 
 * refs (1): 10D7D
 1_kg:
-        UNIT                                     * 0FA58
-          %1                                     * 0FA5D
+        UNIT %1                                  * 0FA58
 
 K__k_:
-          CHR     "k"                            * 0FA62
+          CHR "k"                                * 0FA62
 
 * "g"
 * refs (10): A172A A180B A184A A1882 EAD49 EB0D8 ...
 tok_g:
-          $       "g"                            * 0FA69
-          umP                                    * 0FA75
-          umEND                                  * 0FA7A
-        ;                                        * 0FA7F
+          $ "g" umP umEND ;                      * 0FA69
 
 * refs (1): 10D82
 1_m:
-        UNIT                                     * 0FA84
-          %1                                     * 0FA89
+        UNIT %1                                  * 0FA84
 
 * "m"
 * refs (52): A15D0 A1623 A1662 A169C A16CA A1707 ...
 tok_m:
-          $       "m"                            * 0FA8E
-          umEND                                  * 0FA9A
-        ;                                        * 0FA9F
+          $ "m" umEND ;                          * 0FA8E
 
 * refs (1): 10D87
 1_A:
-        UNIT                                     * 0FAA4
-          %1                                     * 0FAA9
+        UNIT %1                                  * 0FAA4
 
 _A_:
-          $       "A"                            * 0FAAE
-          umEND                                  * 0FABA
-        ;                                        * 0FABF
+          $ "A" umEND ;                          * 0FAAE
 
 * refs (1): 10D8C
 1_s:
-        UNIT                                     * 0FAC4
-          %1                                     * 0FAC9
+        UNIT %1                                  * 0FAC4
 
 * "s"
 * refs (30): A11A7 A11ED A1628 A16CF A1716 A176E ...
 tok_s:
-          $       "s"                            * 0FACE
-          umEND                                  * 0FADA
-        ;                                        * 0FADF
+          $ "s" umEND ;                          * 0FACE
 
 * refs (1): 10D91
 1_K:
-        UNIT                                     * 0FAE4
-          %1                                     * 0FAE9
+        UNIT %1                                  * 0FAE4
 
 _K_:
-          $       "K"                            * 0FAEE
-          umEND                                  * 0FAFA
-        ;                                        * 0FAFF
+          $ "K" umEND ;                          * 0FAEE
 
 * refs (1): 10D96
 1_cd:
-        UNIT                                     * 0FB04
-          %1                                     * 0FB09
+        UNIT %1                                  * 0FB04
 
 _cd_:
-          $       "cd"                           * 0FB0E
-          umEND                                  * 0FB1C
-        ;                                        * 0FB21
+          $ "cd" umEND ;                         * 0FB0E
 
 * refs (1): 10D9B
 1_mol:
-        UNIT                                     * 0FB26
-          %1                                     * 0FB2B
+        UNIT %1                                  * 0FB26
 
 _mol_:
-          $       "mol"                          * 0FB30
-          umEND                                  * 0FB40
-        ;                                        * 0FB45
+          $ "mol" umEND ;                        * 0FB30
 
 * refs (1): 10DE2
 1_?:
-        UNIT                                     * 0FB4A
-          %1                                     * 0FB4F
+        UNIT %1                                  * 0FB4A
 
 _?_:
-          $       "?"                            * 0FB54
-          umEND                                  * 0FB60
-        ;                                        * 0FB65
+          $ "?" umEND ;                          * 0FB54
         NIBHEX  00000                            * 0FB6A  ..
 
 * u u' -> u?
 * refs (3): 1BCA8 1BCB2 1BCBC
 UMMAX:
-        ::                                       * 0FB6F
-          2DUP                                   * 0FB74
-          val(2uo)                               * 0FB79
-          %>                                     * 0FB7E
-          NOT?SWAPDROP                           * 0FB83
-        ;                                        * 0FB88
+        :: 2DUP val(2uo) %> NOT?SWAPDROP ;       * 0FB6F
 
 * u u' -> u?
 * refs (3): 1BD1A 1BD24 1BD2E
 UMMIN:
-        ::                                       * 0FB8D
-          2DUP                                   * 0FB92
-          val(2uo)                               * 0FB97
-          %<                                     * 0FB9C
-          NOT?SWAPDROP                           * 0FBA1
-        ;                                        * 0FBA6
+        :: 2DUP val(2uo) %< NOT?SWAPDROP ;       * 0FB8D
 
 * u %percent -> u'
 * refs (2): 1C097 1C0BF
 UM%:
-        ::                                       * 0FBAB
-          SWAP                                   * 0FBB0
-          dup;uo=>r                              * 0FBB5
-          ROT                                    * 0FBBA
-          _*(2r);r=>rr                           * 0FBBF
-          %%1E2                                  * 0FBC4
-          %%/>%                                  * 0FBC9
-          Unbr>U                                 * 0FBCE
-        ;                                        * 0FBD3
+        :: SWAP dup;uo=>r ROT _*(2r);r=>rr %%1E2 %%/>% Unbr>U ; * 0FBAB
         BSS     10                               * 0FBD8
 
 * refs (1): 0FDBD
 OBJ_0FBE2:
-        ::                                       * 0FBE2
-          OBJ_0FBFB                              * 0FBE7
-          case2DROP                              * 0FBEC
-          CONSTUNITERR                           * 0FBF1
+        :: OBJ_0FBFB case2DROP CONSTUNITERR      * 0FBE2
         ;                                        * 0FBF6
 
 * refs (3): 0FBE7 0FCAA CAC6D
 OBJ_0FBFB:
-        ::                                       * 0FBFB
-          2DUP                                   * 0FC00
-          EQUAL                                  * 0FC05
-          caseTRUE                               * 0FC0A
-          %10                                    * 0FC0F
-          MATRND                                 * 0FC14
-          SWAP                                   * 0FC19
-          %10                                    * 0FC1E
-          MATRND                                 * 0FC23
-          SWAP                                   * 0FC28
-          2DUP                                   * 0FC2D
-          EQUAL                                  * 0FC32
-        ;                                        * 0FC37
+        :: 2DUP EQUAL caseTRUE %10               * 0FBFB
+          MATRND SWAP %10 MATRND SWAP 2DUP EQUAL ; * 0FC14
 
 * u u' -> %
 * refs (3): 1C180 1C18A 1C194
 UM%CH:
-        ::                                       * 0FC3C
-          OBJ_0F6C0                              * 0FC41
-          OVER                                   * 0FC46
-          %%-                                    * 0FC4B
+        :: OBJ_0F6C0 OVER %%-                    * 0FC3C
 L_0FC50:
-          SWAP%%/                                * 0FC50
-          %%1E2                                  * 0FC55
-          %%*                                    * 0FC5A
-          %%>%                                   * 0FC5F
-          SWAPDROP                               * 0FC64
-        ;                                        * 0FC69
+          SWAP%%/ %%1E2 %%* %%>% SWAPDROP ;      * 0FC50
 
 * refs (2): 0F701 0F70B
 OBJ_0FC6E:
-        ::                                       * 0FC6E
-          DUP                                    * 0FC73
-          cfC                                    * 0FC78
-          jEQcase                                * 0FC7D
-          %%KZERO                                * 0FC82
-          DUP                                    * 0FC87
-          cfF                                    * 0FC8C
-          jEQcase                                * 0FC91
-          %%RZERO                                * 0FC96
-          %%0                                    * 0FC9B
-        ;                                        * 0FCA0
+        :: DUP cfC jEQcase %%KZERO               * 0FC6E
+          DUP cfF jEQcase %%RZERO                * 0FC87
+          %%0 ;                                  * 0FC9B
 
 * refs (2): 0F3B7 0F729
 OBJ_0FCA5:
-        ::                                       * 0FCA5
-          OBJ_0FBFB                              * 0FCAA
-          case2DROP                              * 0FCAF
-          ROMPTR  0C1 020                        * 0FCB4
+        :: OBJ_0FBFB case2DROP ROMPTR 0C1 020    * 0FCA5
         ;                                        * 0FCBF
         BSS     9                                * 0FCC4
 
 * u u' -> %
 * refs (3): 1C10E 1C118 1C122
 UM%T:
-        ::                                       * 0FCCD
-          OBJ_0F6C0                              * 0FCD2
-          GOTO                                   * 0FCD7
-          L_0FC50                                * 0FCDC
-        ;                                        * 0FCE1
+        :: OBJ_0F6C0 GOTO L_0FC50 ;              * 0FCCD
 
 * u -> %
 * refs (1): 1B357
 UMSIGN:
-        ::                                       * 0FCE6
-          CARCOMP                                * 0FCEB
-          %SGN                                   * 0FCF0
-        ;                                        * 0FCF5
+        :: CARCOMP %SGN ;                        * 0FCE6
 
 * u -> u'
 * refs (1): 1BB90
 UMIP:
-        ::                                       * 0FCFA
-          PTR     UMOPER:                        * 0FCFF
-          %IP                                    * 0FD04
-        ;                                        * 0FD09
+        :: PTR UMOPER: %IP ;                     * 0FCFA
 
 * u -> u'
 * refs (1): 1BBC6
 UMFP:
-        ::                                       * 0FD0E
-          PTR     UMOPER:                        * 0FD13
-          %FP                                    * 0FD18
-        ;                                        * 0FD1D
+        :: PTR UMOPER: %FP ;                     * 0FD0E
 
 * u -> u'
 * refs (1): 1BBFC
 UMFLOOR:
-        ::                                       * 0FD22
-          PTR     UMOPER:                        * 0FD27
-          %FLOOR                                 * 0FD2C
-        ;                                        * 0FD31
+        :: PTR UMOPER: %FLOOR ;                  * 0FD22
 
 * u -> u'
 * refs (1): 1BC32
 UMCEIL:
-        ::                                       * 0FD36
-          PTR     UMOPER:                        * 0FD3B
-          %CEIL                                  * 0FD40
-        ;                                        * 0FD45
+        :: PTR UMOPER: %CEIL ;                   * 0FD36
 
 * u -> u'
 * refs (4): 0FCFF 0FD13 0FD27 0FD3B
 UMOPER::
-        ::                                       * 0FD4A
-          DUP                                    * 0FD4F
-          CARCOMP                                * 0FD54
-          'REVAL                                 * 0FD59
-          Unbr>U                                 * 0FD5E
-        ;                                        * 0FD63
+        :: DUP CARCOMP 'REVAL Unbr>U ;           * 0FD4A
 
 * u -> u'
 * refs (1): 1BDAA
 UMRND:
-        ::                                       * 0FD68
-          OVER                                   * 0FD6D
-          CARCOMP                                * 0FD72
-          SWAP                                   * 0FD77
-          RNDXY                                  * 0FD7C
-          Unbr>U                                 * 0FD81
-        ;                                        * 0FD86
+        :: OVER CARCOMP SWAP RNDXY Unbr>U ;      * 0FD68
 
 * u -> u'
 * refs (1): 1BE26
 UMTRC:
-        ::                                       * 0FD8B
-          OVER                                   * 0FD90
-          CARCOMP                                * 0FD95
-          SWAP                                   * 0FD9A
-          TRCXY                                  * 0FD9F
-          Unbr>U                                 * 0FDA4
-        ;                                        * 0FDA9
+        :: OVER CARCOMP SWAP TRCXY Unbr>U ;      * 0FD8B
 
 * refs (2): 0F878 0F8FF
 OBJ_0FDAE:
-        ::                                       * 0FDAE
-          U>NCQ                                  * 0FDB3
-          OBJ_3835E                              * 0FDB8
-          OBJ_0FBE2                              * 0FDBD
-          %%*                                    * 0FDC2
-          %%>%                                   * 0FDC7
-        ;                                        * 0FDCC
+        :: U>NCQ OBJ_3835E OBJ_0FBE2 %%* %%>% ;  * 0FDAE
 
 * refs (5): B6166 B617B B6195 B61B3 B6204
 OBJ_0FDD1:
-        ::                                       * 0FDD1
-          %0_2A2B4                               * 0FDD6
-          %1                                     * 0FDDB
-        ;                                        * 0FDE0
+        :: %0_2A2B4 %1 ;                         * 0FDD1
 
 * refs (4): 0F376 0F38A 0F6C5 0F6D4
 OBJ_0FDE5:
-        ::                                       * 0FDE5
-          dup;r?:dq/sk                           * 0FDEA
-          OBJ_0FE08                              * 0FDEF
-          DUP                                    * 0FDF4
-          GOTO                                   * 0FDF9
-          L_0FE6C                                * 0FDFE
-        ;                                        * 0FE03
+        :: dup;r?:dq/sk OBJ_0FE08 DUP GOTO L_0FE6C ; * 0FDE5
 
 * refs (1): 0FDEF
 OBJ_0FE08:
-        ::                                       * 0FE08
-          %0=case                                * 0FE0D
-          ::                                     * 0FE12
-            OVER                                 * 0FE17
-            UM>U                                 * 0FE1C
-            DUP                                  * 0FE21
-            GOTO                                 * 0FE26
-            L_0FE6C                              * 0FE2B
-          ;                                      * 0FE30
-          DUP                                    * 0FE35
-          OBJ_0FE53                              * 0FE3A
-        ;                                        * 0FE3F
+        :: %0=case                               * 0FE08
+          :: OVER UM>U DUP GOTO L_0FE6C ;        * 0FE12
+          DUP OBJ_0FE53 ;                        * 0FE35
 
 * u -> n%% cf%% qhxs
 * refs (11): 0F959 0FDB3 0FF52 0FFD4 10B95 9C58C ...
 U>NCQ:
-        ::                                       * 0FE44
-          DUPTYPEEXT?                            * 0FE49
-          NOTcase                                * 0FE4E
+        :: DUPTYPEEXT? NOTcase                   * 0FE44
 
 * refs (1): 0FE3A
 OBJ_0FE53:
-          ::                                     * 0FE53
-            %>%%                                 * 0FE58
-            %%1                                  * 0FE5D
-            OBJ_3835E                            * 0FE62
-          ;                                      * 0FE67
+          :: %>%% %%1 OBJ_3835E ;                * 0FE53
 L_0FE6C:
           >R                                     * 0FE6C
 L_0FE71:
-          ticR                                   * 0FE71
-          NOT?SEMI                               * 0FE76
-          OBJ_0FE8F                              * 0FE7B
-          GOTO                                   * 0FE80
-          L_0FE71                                * 0FE85
-        ;                                        * 0FE8A
+          ticR NOT?SEMI                          * 0FE71
+          OBJ_0FE8F GOTO L_0FE71 ;               * 0FE7B
 
 * refs (1): 0FE7B
 OBJ_0FE8F:
-        ::                                       * 0FE8F
-          DUPTYPECHAR?                           * 0FE94
-          case                                   * 0FE99
-          OBJ_0C24C                              * 0FE9E
-          REQcasedrop                            * 0FEA3
-          um*                                    * 0FEA8
-          OBJ_10C22                              * 0FEAD
-          REQcasedrop                            * 0FEB2
-          um/                                    * 0FEB7
-          OBJ_10C3B                              * 0FEBC
-          REQcasedrop                            * 0FEC1
-          umP                                    * 0FEC6
-          OBJ_10CA9                              * 0FECB
-          REQcasedrop                            * 0FED0
-          um^                                    * 0FED5
-          OBJ_10C59                              * 0FEDA
-          REQcasedrop                            * 0FEDF
-          umEND                                  * 0FEE4
-          OBJ_10CC2                              * 0FEE9
-          DUPTYPECSTR?                           * 0FEEE
-          NOT?SEMI                               * 0FEF3
-          OBJ_0C3A3                              * 0FEF8
-          case                                   * 0FEFD
-          SWAP                                   * 0FF02
-          DUP$>ID                                * 0FF07
-          OBJ_0FFF2                              * 0FF0C
-          NOT?GOTO                               * 0FF11
-          L_0FF66                                * 0FF16
-          DUPTYPEREAL?                           * 0FF1B
-          case                                   * 0FF20
-          ::                                     * 0FF25
-            SWAPDROP                             * 0FF2A
-            %>%%                                 * 0FF2F
-            OBJ_3835E                            * 0FF34
-          ;                                      * 0FF39
-          DUPTYPEEXT?                            * 0FF3E
-          case                                   * 0FF43
-          ::                                     * 0FF48
-            SWAPDROP                             * 0FF4D
-            U>NCQ                                * 0FF52
-            OBJ_10CA9                            * 0FF57
-          ;                                      * 0FF5C
+        :: DUPTYPECHAR? case OBJ_0C24C           * 0FE8F
+          REQcasedrop um*                        * 0FEA3
+          OBJ_10C22 REQcasedrop um/              * 0FEAD
+          OBJ_10C3B REQcasedrop umP              * 0FEBC
+          OBJ_10CA9 REQcasedrop um^              * 0FECB
+          OBJ_10C59 REQcasedrop umEND            * 0FEDA
+          OBJ_10CC2 DUPTYPECSTR? NOT?SEMI        * 0FEE9
+          OBJ_0C3A3 case SWAP                    * 0FEF8
+          DUP$>ID OBJ_0FFF2 NOT?GOTO L_0FF66 DUPTYPEREAL? case * 0FF07
+          :: SWAPDROP %>%% OBJ_3835E ;           * 0FF25
+          DUPTYPEEXT? case                       * 0FF3E
+          :: SWAPDROP U>NCQ OBJ_10CA9 ;          * 0FF48
           DROP                                   * 0FF61
 L_0FF66:
-          DUP                                    * 0FF66
-          CAR$                                   * 0FF6B
-          OBJ_0C2CD                              * 0FF70
-          NOTcase                                * 0FF75
-          INVUNITERR                             * 0FF7A
-          OBJ_0C24C                              * 0FF7F
-          SWAP                                   * 0FF84
-          CDR$                                   * 0FF89
-          $>ID                                   * 0FF8E
-          OBJ_0FFF2                              * 0FF93
-          NOTcase                                * 0FF98
-          INVUNITERR                             * 0FF9D
-          DUPTYPEREAL?                           * 0FFA2
-          case                                   * 0FFA7
-          ::                                     * 0FFAC
-            %>%%                                 * 0FFB1
-            %%*                                  * 0FFB6
-            OBJ_3835E                            * 0FFBB
-          ;                                      * 0FFC0
-          DUPTYPEEXT?                            * 0FFC5
-          NOTcase                                * 0FFCA
-          INVUNITERR                             * 0FFCF
-          U>NCQ                                  * 0FFD4
-          4UNROLL                                * 0FFD9
-          %%*                                    * 0FFDE
-          %%*SWAP                                * 0FFE3
-          TOTEMPOB                               * 0FFE8
-        ;                                        * 0FFED
+          DUP CAR$ OBJ_0C2CD NOTcase INVUNITERR  * 0FF66
+          OBJ_0C24C SWAP CDR$ $>ID OBJ_0FFF2 NOTcase INVUNITERR * 0FF7F
+          DUPTYPEREAL? case                      * 0FFA2
+          :: %>%% %%* OBJ_3835E ;                * 0FFAC
+          DUPTYPEEXT? NOTcase INVUNITERR         * 0FFC5
+          U>NCQ 4UNROLL %%* %%*SWAP TOTEMPOB ;   * 0FFD4
 
 * refs (2): 0FF0C 0FF93
 OBJ_0FFF2:
-        ::                                       * 0FFF2
-          COMPILEID                              * 0FFF7
-          NOTcsdrpfls                            * 0FFFC
-          DUPTYPEIDNT?                           * 10001
-          case                                   * 10006
-          SAFE@                                  * 1000B
-          DUPTYPEROMP?                           * 10010
-          case                                   * 10015
-          ROMPTR@                                * 1001A
-          DROPFALSE                              * 1001F
-        ;                                        * 10024
+        :: COMPILEID NOTcsdrpfls DUPTYPEIDNT? case SAFE@ * 0FFF2
+          DUPTYPEROMP? case ROMPTR@              * 10010
+          DROPFALSE ;                            * 1001F

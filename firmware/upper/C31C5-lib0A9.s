@@ -13,23 +13,22 @@ LIB0A9:
 * ROMPTR 0A9 000
 * refs (1): C31C5
 ROMP_0A9_000:
-        {                                        * C31DC
-        }                                        * C31E1
+        { }                                      * C31DC
 
 * ROMPTR 0A9 001
 * refs (1): C31C5
 ROMP_0A9_001:
-        ROMPTR  0A7 000                          * C31E6
+        ROMPTR 0A7 000                           * C31E6
 
 * ROMPTR 0A9 002
 * refs (1): C31C5
 ROMP_0A9_002:
-        ROMPTR  0A7 001                          * C31F1
+        ROMPTR 0A7 001                           * C31F1
 
 * ROMPTR 0A9 003
 * refs (1): C31C5
 ROMP_0A9_003:
-        ROMPTR  0A7 002                          * C31FC
+        ROMPTR 0A7 002                           * C31FC
 
 * ROMPTR 0A9 004
 * refs (1): C31C5
@@ -198,12 +197,12 @@ ROMP_0A9_014:
 * ROMPTR 0A9 015
 * refs (1): C31C5
 ROMP_0A9_015:
-        ROMPTR  0A7 003                          * C3788
+        ROMPTR 0A7 003                           * C3788
 
 * ROMPTR 0A9 016
 * refs (1): C31C5
 ROMP_0A9_016:
-        ROMPTR  0A7 004                          * C3793
+        ROMPTR 0A7 004                           * C3793
 
 * ROMPTR 0A9 017
 * refs (1): C31C5
@@ -253,9 +252,7 @@ ROMP_0A9_01B:
 * ROMPTR 0A9 01C
 * refs (1): C31C5
 ROMP_0A9_01C:
-        ::                                       * C38DB
-          EditMenu                               * C38E0
-        ;                                        * C38E5
+        :: EditMenu ;                            * C38DB
 
 * ROMPTR 0A9 01D
 * refs (1): C31C5
@@ -269,7 +266,7 @@ ROMP_0A9_01D:
 * ROMPTR 0A9 01E
 * refs (1): C31C5
 ROMP_0A9_01E:
-        ROMPTR  0A7 006                          * C3927
+        ROMPTR 0A7 006                           * C3927
 
 * ROMPTR 0A9 01F
 * refs (1): C31C5
@@ -382,87 +379,87 @@ ROMP_0A9_029:
 * ROMPTR 0A9 02A
 * refs (1): C31C5
 ROMP_0A9_02A:
-        ROMPTR  0A7 012                          * C3CE5
+        ROMPTR 0A7 012                           * C3CE5
 
 * ROMPTR 0A9 02B
 * refs (1): C31C5
 ROMP_0A9_02B:
-        ROMPTR  0A7 013                          * C3CF0
+        ROMPTR 0A7 013                           * C3CF0
 
 * ROMPTR 0A9 02C
 * refs (1): C31C5
 ROMP_0A9_02C:
-        ROMPTR  0A7 014                          * C3CFB
+        ROMPTR 0A7 014                           * C3CFB
 
 * ROMPTR 0A9 02D
 * refs (1): C31C5
 ROMP_0A9_02D:
-        ROMPTR  0A7 015                          * C3D06
+        ROMPTR 0A7 015                           * C3D06
 
 * ROMPTR 0A9 02E
 * refs (1): C31C5
 ROMP_0A9_02E:
-        ROMPTR  0A7 016                          * C3D11
+        ROMPTR 0A7 016                           * C3D11
 
 * ROMPTR 0A9 02F
 * refs (1): C31C5
 ROMP_0A9_02F:
-        ROMPTR  0A7 017                          * C3D1C
+        ROMPTR 0A7 017                           * C3D1C
 
 * ROMPTR 0A9 030
 * refs (1): C31C5
 ROMP_0A9_030:
-        ROMPTR  0A7 018                          * C3D27
+        ROMPTR 0A7 018                           * C3D27
 
 * ROMPTR 0A9 031
 * refs (1): C31C5
 ROMP_0A9_031:
-        ROMPTR  0A7 019                          * C3D32
+        ROMPTR 0A7 019                           * C3D32
 
 * ROMPTR 0A9 032
 * refs (1): C31C5
 ROMP_0A9_032:
-        ROMPTR  0A7 01A                          * C3D3D
+        ROMPTR 0A7 01A                           * C3D3D
 
 * ROMPTR 0A9 033
 * refs (1): C31C5
 ROMP_0A9_033:
-        ROMPTR  0A7 01B                          * C3D48
+        ROMPTR 0A7 01B                           * C3D48
 
 * ROMPTR 0A9 034
 * refs (1): C31C5
 ROMP_0A9_034:
-        ROMPTR  0A7 01C                          * C3D53
+        ROMPTR 0A7 01C                           * C3D53
 
 * ROMPTR 0A9 035
 * refs (1): C31C5
 ROMP_0A9_035:
-        ROMPTR  0A7 01D                          * C3D5E
+        ROMPTR 0A7 01D                           * C3D5E
 
 * ROMPTR 0A9 036
 * refs (1): C31C5
 ROMP_0A9_036:
-        ROMPTR  0A7 01E                          * C3D69
+        ROMPTR 0A7 01E                           * C3D69
 
 * ROMPTR 0A9 037
 * refs (1): C31C5
 ROMP_0A9_037:
-        ROMPTR  0A7 01F                          * C3D74
+        ROMPTR 0A7 01F                           * C3D74
 
 * ROMPTR 0A9 038
 * refs (1): C31C5
 ROMP_0A9_038:
-        ROMPTR  0A7 020                          * C3D7F
+        ROMPTR 0A7 020                           * C3D7F
 
 * ROMPTR 0A9 039
 * refs (1): C31C5
 ROMP_0A9_039:
-        ROMPTR  0A7 021                          * C3D8A
+        ROMPTR 0A7 021                           * C3D8A
 
 * ROMPTR 0A9 03A
 * refs (1): C31C5
 ROMP_0A9_03A:
-        ROMPTR  0A7 022                          * C3D95
+        ROMPTR 0A7 022                           * C3D95
 
 * ROMPTR 0A9 03B
 * refs (1): C31C5
@@ -610,7 +607,7 @@ ROMP_0A9_049:
 * ROMPTR 0A9 04A
 * refs (1): C31C5
 ROMP_0A9_04A:
-        ROMPTR  0A7 005                          * C4247
+        ROMPTR 0A7 005                           * C4247
 
 * ROMPTR 0A9 04B
 * refs (1): C31C5
@@ -661,22 +658,22 @@ ROMP_0A9_04F:
 * ROMPTR 0A9 050
 * refs (1): C31C5
 ROMP_0A9_050:
-        ROMPTR  0A7 007                          * C43A7
+        ROMPTR 0A7 007                           * C43A7
 
 * ROMPTR 0A9 051
 * refs (1): C31C5
 ROMP_0A9_051:
-        ROMPTR  0A7 008                          * C43B2
+        ROMPTR 0A7 008                           * C43B2
 
 * ROMPTR 0A9 052
 * refs (1): C31C5
 ROMP_0A9_052:
-        ROMPTR  0A7 009                          * C43BD
+        ROMPTR 0A7 009                           * C43BD
 
 * ROMPTR 0A9 053
 * refs (1): C31C5
 ROMP_0A9_053:
-        ROMPTR  0A7 00A                          * C43C8
+        ROMPTR 0A7 00A                           * C43C8
 
 * ROMPTR 0A9 054
 * refs (1): C31C5
@@ -690,12 +687,12 @@ ROMP_0A9_054:
 * ROMPTR 0A9 055
 * refs (1): C31C5
 ROMP_0A9_055:
-        ROMPTR  0A7 00B                          * C4410
+        ROMPTR 0A7 00B                           * C4410
 
 * ROMPTR 0A9 056
 * refs (1): C31C5
 ROMP_0A9_056:
-        ROMPTR  0A7 00C                          * C441B
+        ROMPTR 0A7 00C                           * C441B
 
 * ROMPTR 0A9 057
 * refs (1): C31C5
@@ -709,17 +706,17 @@ ROMP_0A9_057:
 * ROMPTR 0A9 058
 * refs (1): C31C5
 ROMP_0A9_058:
-        ROMPTR  0A7 00D                          * C4463
+        ROMPTR 0A7 00D                           * C4463
 
 * ROMPTR 0A9 059
 * refs (1): C31C5
 ROMP_0A9_059:
-        ROMPTR  0A7 00E                          * C446E
+        ROMPTR 0A7 00E                           * C446E
 
 * ROMPTR 0A9 05A
 * refs (1): C31C5
 ROMP_0A9_05A:
-        ROMPTR  0A7 00F                          * C4479
+        ROMPTR 0A7 00F                           * C4479
 
 * ROMPTR 0A9 05B
 * refs (1): C31C5
@@ -791,12 +788,12 @@ ROMP_0A9_061:
 * ROMPTR 0A9 062
 * refs (1): C31C5
 ROMP_0A9_062:
-        ROMPTR  0A7 010                          * C46AD
+        ROMPTR 0A7 010                           * C46AD
 
 * ROMPTR 0A9 063
 * refs (1): C31C5
 ROMP_0A9_063:
-        ROMPTR  0A7 011                          * C46B8
+        ROMPTR 0A7 011                           * C46B8
 
 * ROMPTR 0A9 064
 * refs (1): C31C5
@@ -859,7 +856,7 @@ ROMP_0A9_069:
 * ROMPTR 0A9 06A
 * refs (1): C31C5
 ROMP_0A9_06A:
-        ROMPTR  0A7 023                          * C48C1
+        ROMPTR 0A7 023                           * C48C1
 
 * ROMPTR 0A9 06B
 * refs (1): C31C5
@@ -874,7 +871,7 @@ ROMP_0A9_06B:
 * ROMPTR 0A9 06C
 * refs (1): C31C5
 ROMP_0A9_06C:
-        ROMPTR  0A7 024                          * C492D
+        ROMPTR 0A7 024                           * C492D
 
 * ROMPTR 0A9 06D
 * refs (1): C31C5
@@ -898,17 +895,17 @@ ROMP_0A9_06E:
 * ROMPTR 0A9 06F
 * refs (1): C31C5
 ROMP_0A9_06F:
-        ROMPTR  0A7 026                          * C49E2
+        ROMPTR 0A7 026                           * C49E2
 
 * ROMPTR 0A9 070
 * refs (1): C31C5
 ROMP_0A9_070:
-        ROMPTR  0A7 025                          * C49ED
+        ROMPTR 0A7 025                           * C49ED
 
 * ROMPTR 0A9 071
 * refs (1): C31C5
 ROMP_0A9_071:
-        ROMPTR  0A7 027                          * C49F8
+        ROMPTR 0A7 027                           * C49F8
 
 * ROMPTR 0A9 072
 * refs (1): C31C5

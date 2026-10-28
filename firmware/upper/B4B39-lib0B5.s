@@ -13,2265 +13,994 @@ LIB0B5:
 * ROMPTR 0B5 000
 * refs (1): B4B39
 ROMP_0B5_000:
-        ::                                       * B4B50
-          ROMPTR  0B5 028                        * B4B55
-        ;                                        * B4B60
+        :: ROMPTR 0B5 028 ;                      * B4B50
 
 * ROMPTR 0B5 001
 * refs (1): B4B39
 ROMP_0B5_001:
-        ::                                       * B4B65
-          ROMPTR  0B5 029                        * B4B6A
-        ;                                        * B4B75
+        :: ROMPTR 0B5 029 ;                      * B4B65
 
 * ROMPTR 0B5 002
 * refs (1): B4B39
 ROMP_0B5_002:
-        ::                                       * B4B7A
-          ROMPTR  0B5 02B                        * B4B7F
-          DUP                                    * B4B8A
-          MINUSONE                               * B4B8F
-          EQUAL                                  * B4B94
-          casedrop                               * B4B99
-          NULL{}                                 * B4B9E
-          FINDVAR                                * B4BA3
-        ;                                        * B4BA8
+        :: ROMPTR 0B5 02B DUP MINUSONE EQUAL casedrop NULL{} * B4B7A
+          FINDVAR ;                              * B4BA3
 
 * ROMPTR 0B5 003
 * refs (1): B4B39
 ROMP_0B5_003:
-        ::                                       * B4BAD
-          ROMPTR  0B5 02A                        * B4BB2
-          ROMPTR  0B5 008                        * B4BBD
-          SWAPDUP                                * B4BC8
-          SAFE@                                  * B4BCD
-          ?SKIP                                  * B4BD2
-          %0_2A2B4                               * B4BD7
-          SYMBNUMSOLVE                           * B4BDC
-          case                                   * B4BE1
-          ::                                     * B4BE6
-            JstGetTHEMESG                        * B4BEB
-            SWAPDROP                             * B4BF0
-            TRUE                                 * B4BF5
-          ;                                      * B4BFA
-          DUP                                    * B4BFF
-          JstGetTHEMESG                          * B4C04
-          FALSE                                  * B4C09
-        ;                                        * B4C0E
+        :: ROMPTR 0B5 02A ROMPTR 0B5 008 SWAPDUP SAFE@ ?SKIP %0_2A2B4 * B4BAD
+          SYMBNUMSOLVE case                      * B4BDC
+          :: JstGetTHEMESG SWAPDROP TRUE ;       * B4BE6
+          DUP JstGetTHEMESG FALSE ;              * B4BFF
 
 * ROMPTR 0B5 004
 * refs (1): B4B39
 ROMP_0B5_004:
-        ::                                       * B4C13
-          ROMPTR  0B5 008                        * B4C18
-          DUP                                    * B4C23
-          ALGeq?                                 * B4C28
-          case                                   * B4C2D
-          ::                                     * B4C32
-            SPLITEQ                              * B4C37
-            1LAMBIND                             * B4C3C
-            'EvalNoCK:_sup                       * B4C41
-            xEVAL                                * B4C46
-            CK1NoBlame                           * B4C4B
-            1GETABND                             * B4C50
-            'EvalNoCK:_sup                       * B4C55
-            xEVAL                                * B4C5A
-            CK1NoBlame                           * B4C5F
-            TRUE                                 * B4C64
-          ;                                      * B4C69
-          'EvalNoCK:_sup                         * B4C6E
-          xEVAL                                  * B4C73
-          CK1NoBlame                             * B4C78
-          FALSE                                  * B4C7D
-        ;                                        * B4C82
+        :: ROMPTR 0B5 008 DUP ALGeq? case        * B4C13
+          :: SPLITEQ 1LAMBIND 'EvalNoCK:_sup xEVAL CK1NoBlame 1GETABND * B4C32
+            'EvalNoCK:_sup xEVAL CK1NoBlame TRUE ; * B4C55
+          'EvalNoCK:_sup xEVAL CK1NoBlame FALSE ; * B4C6E
 
 * ROMPTR 0B5 005
 * refs (1): B4B39
 ROMP_0B5_005:
-        ::                                       * B4C87
-          SAFE@                                  * B4C8C
-        ;                                        * B4C91
+        :: SAFE@ ;                               * B4C87
 
 * ROMPTR 0B5 006
 * refs (1): B4B39
 ROMP_0B5_006:
-        ::                                       * B4C96
-          STRIPTAGSl2                            * B4C9B
-          OVER                                   * B4CA0
-          FINDVAR                                * B4CA5
-          OVERSWAP                               * B4CAA
-          matchob?                               * B4CAF
-          ITE                                    * B4CB4
-          SETCIRCERR                             * B4CB9
-          DROP                                   * B4CBE
-          OBJ_1552C                              * B4CC3
-          XEQSTOID                               * B4CC8
-        ;                                        * B4CCD
+        :: STRIPTAGSl2 OVER FINDVAR OVERSWAP matchob? ITE SETCIRCERR DROP * B4C96
+          OBJ_1552C XEQSTOID ;                   * B4CC3
 
 * ROMPTR 0B5 007
 * refs (1): B4B39
 ROMP_0B5_007:
-        ::                                       * B4CD2
-          ROMPTR  0B5 008                        * B4CD7
-          '                                      * B4CE2
-          ID      X                              * B4CE7
-          ROMPTR  0C4 00C                        * B4CF0
-        ;                                        * B4CFB
+        :: ROMPTR 0B5 008 ' ID X ROMPTR 0C4 00C ; * B4CD2
 
 * ROMPTR 0B5 008
 * refs (1): B4B39
 ROMP_0B5_008:
-        ::                                       * B4D00
-          DUP                                    * B4D05
-          MINUSONE                               * B4D0A
-          EQUAL                                  * B4D0F
-          case                                   * B4D14
-          SETTYPEERR                             * B4D19
+        :: DUP MINUSONE EQUAL case SETTYPEERR    * B4D00
         ;                                        * B4D1E
 
 * ROMPTR 0B5 009
 * refs (1): B4B39
 ROMP_0B5_009:
-        ::                                       * B4D23
-          ROMPTR  0B5 008                        * B4D28
-          '                                      * B4D33
-          ID      X                              * B4D38
-          ROMPTR  0C4 00D                        * B4D41
-        ;                                        * B4D4C
+        :: ROMPTR 0B5 008 ' ID X ROMPTR 0C4 00D ; * B4D23
 
 * ROMPTR 0B5 00A
 * refs (1): B4B39
 ROMP_0B5_00A:
-        ::                                       * B4D51
-          ROMPTR  0B5 008                        * B4D56
-          ROMPTR  0C4 009                        * B4D61
-        ;                                        * B4D6C
+        :: ROMPTR 0B5 008 ROMPTR 0C4 009 ;       * B4D51
 
 * ROMPTR 0B5 00B
 * refs (1): B4B39
 ROMP_0B5_00B:
-        ::                                       * B4D71
-          ROMPTR  0B5 008                        * B4D76
-          ROMPTR  0C0 001                        * B4D81
-        ;                                        * B4D8C
+        :: ROMPTR 0B5 008 ROMPTR 0C0 001 ;       * B4D71
 
 * ROMPTR 0B5 00C
 * refs (1): B4B39
 ROMP_0B5_00C:
-        ::                                       * B4D91
-          case                                   * B4D96
-          DoOldMatrix                            * B4D9B
-          DoNewMatrix                            * B4DA0
-          DEPTH                                  * B4DA5
-          #0=case                                * B4DAA
-          FALSE                                  * B4DAF
-          DUPTYPEARRY?                           * B4DB4
-        ;                                        * B4DB9
+        :: case DoOldMatrix                      * B4D91
+          DoNewMatrix DEPTH #0=case FALSE        * B4DA0
+          DUPTYPEARRY? ;                         * B4DB4
 
 * ROMPTR 0B5 00D
 * refs (1): B4B39
 ROMP_0B5_00D:
-        ::                                       * B4DBE
-          SWAPDUP                                * B4DC3
-          MDIMS                                  * B4DC8
-          OBJ_37DE1                              * B4DCD
-          #<>case                                * B4DD2
-          ROMPTR  0C2 022                        * B4DD7
-          DUPUNROT                               * B4DE2
-          ERRSET                                 * B4DE7
-          ROMPTR  0C2 053                        * B4DEC
-          ERRTRAP                                * B4DF7
-          ::                                     * B4DFC
-            ROT                                  * B4E01
-            ROMPTR  0C2 022                      * B4E06
-          ;                                      * B4E11
-          SWAPDROP                               * B4E16
-        ;                                        * B4E1B
+        :: SWAPDUP MDIMS OBJ_37DE1 #<>case ROMPTR 0C2 022 * B4DBE
+          DUPUNROT ERRSET ROMPTR 0C2 053 ERRTRAP * B4DE2
+          :: ROT ROMPTR 0C2 022 ; SWAPDROP ;     * B4DFC
 
 * ROMPTR 0B5 00E
 * refs (1): B4B39
 ROMP_0B5_00E:
-        ::                                       * B4E20
-          MAT*                                   * B4E25
-        ;                                        * B4E2A
+        :: MAT* ;                                * B4E20
 
 * ROMPTR 0B5 00F
 * refs (1): B4B39
 ROMP_0B5_00F:
-        ::                                       * B4E2F
-          ROMPTR  0E6 008                        * B4E34
-          N                                      * B4E3F
-        ;                                        * B4E44
+        :: ROMPTR 0E6 008 N ;                    * B4E2F
 
 * ROMPTR 0B5 010
 * refs (1): B4B39
 ROMP_0B5_010:
-        ::                                       * B4E49
-          ROMPTR  0B5 011                        * B4E4E
-          ROMPTR  0E6 009                        * B4E59
-          N                                      * B4E64
-        ;                                        * B4E69
+        :: ROMPTR 0B5 011 ROMPTR 0E6 009 N ;     * B4E49
 
 * ROMPTR 0B5 011
 * refs (1): B4B39
 ROMP_0B5_011:
-        ::                                       * B4E6E
-          DUP                                    * B4E73
-          MINUSONE                               * B4E78
-          EQUAL                                  * B4E7D
-          case                                   * B4E82
-          drop;q_58A0C                           * B4E87
+        :: DUP MINUSONE EQUAL case drop;q_58A0C  * B4E6E
         ;                                        * B4E8C
 
 * ROMPTR 0B5 012
 * refs (1): B4B39
 ROMP_0B5_012:
-        ::                                       * B4E91
-          ROMPTR  0E6 008                        * B4E96
-          I%YR                                   * B4EA1
-        ;                                        * B4EA6
+        :: ROMPTR 0E6 008 I%YR ;                 * B4E91
 
 * ROMPTR 0B5 013
 * refs (1): B4B39
 ROMP_0B5_013:
-        ::                                       * B4EAB
-          ROMPTR  0B5 011                        * B4EB0
-          ROMPTR  0E6 009                        * B4EBB
-          I%YR                                   * B4EC6
-        ;                                        * B4ECB
+        :: ROMPTR 0B5 011 ROMPTR 0E6 009 I%YR ;  * B4EAB
 
 * ROMPTR 0B5 014
 * refs (1): B4B39
 ROMP_0B5_014:
-        ::                                       * B4ED0
-          ROMPTR  0E6 008                        * B4ED5
-          PV                                     * B4EE0
-        ;                                        * B4EE5
+        :: ROMPTR 0E6 008 PV ;                   * B4ED0
 
 * ROMPTR 0B5 015
 * refs (1): B4B39
 ROMP_0B5_015:
-        ::                                       * B4EEA
-          ROMPTR  0B5 011                        * B4EEF
-          ROMPTR  0E6 009                        * B4EFA
-          PV                                     * B4F05
-        ;                                        * B4F0A
+        :: ROMPTR 0B5 011 ROMPTR 0E6 009 PV ;    * B4EEA
 
 * ROMPTR 0B5 016
 * refs (1): B4B39
 ROMP_0B5_016:
-        ::                                       * B4F0F
-          ROMPTR  0E6 008                        * B4F14
-          PMT                                    * B4F1F
-        ;                                        * B4F24
+        :: ROMPTR 0E6 008 PMT ;                  * B4F0F
 
 * ROMPTR 0B5 017
 * refs (1): B4B39
 ROMP_0B5_017:
-        ::                                       * B4F29
-          ROMPTR  0B5 011                        * B4F2E
-          ROMPTR  0E6 009                        * B4F39
-          PMT                                    * B4F44
-        ;                                        * B4F49
+        :: ROMPTR 0B5 011 ROMPTR 0E6 009 PMT ;   * B4F29
 
 * ROMPTR 0B5 018
 * refs (1): B4B39
 ROMP_0B5_018:
-        ::                                       * B4F4E
-          ROMPTR  0E6 008                        * B4F53
-          FV                                     * B4F5E
-        ;                                        * B4F63
+        :: ROMPTR 0E6 008 FV ;                   * B4F4E
 
 * ROMPTR 0B5 019
 * refs (1): B4B39
 ROMP_0B5_019:
-        ::                                       * B4F68
-          ROMPTR  0B5 011                        * B4F6D
-          ROMPTR  0E6 009                        * B4F78
-          FV                                     * B4F83
-        ;                                        * B4F88
+        :: ROMPTR 0B5 011 ROMPTR 0E6 009 FV ;    * B4F68
 
 * ROMPTR 0B5 01A
 * refs (1): B4B39
 ROMP_0B5_01A:
-        ::                                       * B4F8D
-          ROMPTR  0E6 008                        * B4F92
-          PYR                                    * B4F9D
-          %ABS                                   * B4FA2
-          %IP                                    * B4FA7
-          DUP%0=                                 * B4FAC
-          IT                                     * B4FB1
-          ::                                     * B4FB6
-            DROP                                 * B4FBB
-            %12                                  * B4FC0
-          ;                                      * B4FC5
+        :: ROMPTR 0E6 008 PYR %ABS %IP DUP%0= IT * B4F8D
+          :: DROP %12 ;                          * B4FB6
         ;                                        * B4FCA
 
 * ROMPTR 0B5 01B
 * refs (1): B4B39
 ROMP_0B5_01B:
-        ::                                       * B4FCF
-          ROMPTR  0B5 011                        * B4FD4
-          %ABS                                   * B4FDF
-          %IP                                    * B4FE4
-          DUP%0=                                 * B4FE9
-          IT                                     * B4FEE
-          ::                                     * B4FF3
-            DROP                                 * B4FF8
-            %12                                  * B4FFD
-          ;                                      * B5002
-          ROMPTR  0E6 009                        * B5007
-          PYR                                    * B5012
-        ;                                        * B5017
+        :: ROMPTR 0B5 011 %ABS %IP DUP%0= IT     * B4FCF
+          :: DROP %12 ;                          * B4FF3
+          ROMPTR 0E6 009 PYR ;                   * B5007
 
 * ROMPTR 0B5 01C
 * refs (1): B4B39
 ROMP_0B5_01C:
-        ::                                       * B501C
-          ROMPTR  0B5 025                        * B5021
-          BINT14                                 * B502C
-          SysITE                                 * B5031
-          BINT1                                  * B5036
-          BINT2                                  * B503B
-          NTHCOMPDROP                            * B5040
-        ;                                        * B5045
+        :: ROMPTR 0B5 025 BINT14 SysITE BINT1 BINT2 NTHCOMPDROP ; * B501C
 
 * ROMPTR 0B5 01D
 * refs (1): B4B39
 ROMP_0B5_01D:
-        ::                                       * B504A
-          ROMPTR  0B0 09A                        * B504F
-          ITE                                    * B505A
-          ROMPTR  0E6 005                        * B505F
-          ROMPTR  0E6 006                        * B506A
+        :: ROMPTR 0B0 09A ITE ROMPTR 0E6 005 ROMPTR 0E6 006 * B504A
         ;                                        * B5075
 
 * ROMPTR 0B5 01E
 * refs (1): B4B39
 ROMP_0B5_01E:
-        ::                                       * B507A
-          '                                      * B507F
-          N                                      * B5084
-          ROMPTR  0E6 00C                        * B5089
-          DUP                                    * B5094
-          ROMPTR  0E6 009                        * B5099
-          N                                      * B50A4
-        ;                                        * B50A9
+        :: ' N ROMPTR 0E6 00C DUP ROMPTR 0E6 009 N ; * B507A
 
 * ROMPTR 0B5 01F
 * refs (1): B4B39
 ROMP_0B5_01F:
-        ::                                       * B50AE
-          '                                      * B50B3
-          I%YR                                   * B50B8
-          ROMPTR  0E6 00C                        * B50BD
-          DUP                                    * B50C8
-          ROMPTR  0E6 009                        * B50CD
-          I%YR                                   * B50D8
-        ;                                        * B50DD
+        :: ' I%YR ROMPTR 0E6 00C DUP ROMPTR 0E6 009 I%YR ; * B50AE
 
 * ROMPTR 0B5 020
 * refs (1): B4B39
 ROMP_0B5_020:
-        ::                                       * B50E2
-          '                                      * B50E7
-          PV                                     * B50EC
-          ROMPTR  0E6 00C                        * B50F1
-          DUP                                    * B50FC
-          ROMPTR  0E6 009                        * B5101
-          PV                                     * B510C
-        ;                                        * B5111
+        :: ' PV ROMPTR 0E6 00C DUP ROMPTR 0E6 009 PV ; * B50E2
 
 * ROMPTR 0B5 021
 * refs (1): B4B39
 ROMP_0B5_021:
-        ::                                       * B5116
-          '                                      * B511B
-          PMT                                    * B5120
-          ROMPTR  0E6 00C                        * B5125
-          DUP                                    * B5130
-          ROMPTR  0E6 009                        * B5135
-          PMT                                    * B5140
-        ;                                        * B5145
+        :: ' PMT ROMPTR 0E6 00C DUP ROMPTR 0E6 009 PMT ; * B5116
 
 * ROMPTR 0B5 022
 * refs (1): B4B39
 ROMP_0B5_022:
-        ::                                       * B514A
-          '                                      * B514F
-          FV                                     * B5154
-          ROMPTR  0E6 00C                        * B5159
-          DUP                                    * B5164
-          ROMPTR  0E6 009                        * B5169
-          FV                                     * B5174
-        ;                                        * B5179
+        :: ' FV ROMPTR 0E6 00C DUP ROMPTR 0E6 009 FV ; * B514A
 
 * ROMPTR 0B5 023
 * refs (1): B4B39
 ROMP_0B5_023:
-        ::                                       * B517E
-          ROMPTR  0B5 008                        * B5183
-          ROMPTR  0E6 004                        * B518E
-        ;                                        * B5199
+        :: ROMPTR 0B5 008 ROMPTR 0E6 004 ;       * B517E
 
 * ROMPTR 0B5 024
 * refs (1): B4B39
 ROMP_0B5_024:
-        ::                                       * B519E
-          DUP                                    * B51A3
-          MINUSONE                               * B51A8
-          EQUAL                                  * B51AD
-          casedrop                               * B51B2
-          NULL$                                  * B51B7
-          RCLSYSF                                * B51BC
-          SWAP                                   * B51C1
-          ERRSET                                 * B51C6
-          BINT2                                  * B51CB
-          DOFIX                                  * B51D0
-          ->str1(r)                              * B51D5
-          ERRTRAP                                * B51DA
-          ::                                     * B51DF
-            TYPEBINT?                            * B51E4
-            IT                                   * B51E9
-            DROP                                 * B51EE
-            STOSYSF                              * B51F3
-            ERRJMP                               * B51F8
-          ;                                      * B51FD
-          SWAP                                   * B5202
-          STOSYSF                                * B5207
-        ;                                        * B520C
+        :: DUP MINUSONE EQUAL casedrop NULL$     * B519E
+          RCLSYSF SWAP ERRSET BINT2 DOFIX ->str1(r) ERRTRAP * B51BC
+          :: TYPEBINT? IT DROP                   * B51DF
+            STOSYSF ERRJMP ;                     * B51F3
+          SWAP STOSYSF ;                         * B5202
 
 * ROMPTR 0B5 025
 * refs (1): B4B39
 ROMP_0B5_025:
-        {                                        * B5211
-          ROMPTR  0B5 026                        * B5216
-          ROMPTR  0B5 027                        * B5221
-        }                                        * B522C
+        { ROMPTR 0B5 026 ROMPTR 0B5 027 }        * B5211
 
 * ROMPTR 0B5 026
 * refs (1): B4B39
 ROMP_0B5_026:
-        {                                        * B5231
-          #       BF4C                           * B5236  48972
-          #       BF4D                           * B5240  48973
-          TRUE                                   * B524A
-        }                                        * B524F
+        { # BF4C # BF4D TRUE }                   * B5231
 
 * ROMPTR 0B5 027
 * refs (1): B4B39
 ROMP_0B5_027:
-        {                                        * B5254
-          #       BF4B                           * B5259  48971
-          #       BF4B                           * B5263  48971
-          FALSE                                  * B526D
-        }                                        * B5272
+        { # BF4B # BF4B FALSE }                  * B5254
 
 * ROMPTR 0B5 028
 * refs (1): B4B39
 ROMP_0B5_028:
-        ::                                       * B5277
-          'EQ                                    * B527C
-          SAFE@_HERE                             * B5281
-          NOTcase                                * B5286
-          MINUSONE                               * B528B
+        :: 'EQ SAFE@_HERE NOTcase MINUSONE       * B5277
         ;                                        * B5290
 
 * ROMPTR 0B5 029
 * refs (1): B4B39
 ROMP_0B5_029:
-        ::                                       * B5295
-          DUP                                    * B529A
-          MINUSONE                               * B529F
-          EQUAL                                  * B52A4
-          caseDROP                               * B52A9
-          DOSTOE                                 * B52AE
+        :: DUP MINUSONE EQUAL caseDROP DOSTOE    * B5295
         ;                                        * B52B3
 
 * ROMPTR 0B5 02A
 * refs (1): B4B39
 ROMP_0B5_02A:
-        ::                                       * B52B8
-          'EQ                                    * B52BD
-          SAFE@_HERE                             * B52C2
-          NOTcase                                * B52C7
-          MINUSONE                               * B52CC
-          ROMPTR  0B5 02B                        * B52D1
-        ;                                        * B52DC
+        :: 'EQ SAFE@_HERE NOTcase MINUSONE       * B52B8
+          ROMPTR 0B5 02B ;                       * B52D1
 
 * ROMPTR 0B5 02B
 * refs (1): B4B39
 ROMP_0B5_02B:
-        ::                                       * B52E1
-          DUP                                    * B52E6
-          EqList?                                * B52EB
-          ITE                                    * B52F0
-          ::                                     * B52F5
-            BINT1                                * B52FA
-            NTHELCOMP                            * B52FF
-          ;                                      * B5304
-          TRUE                                   * B5309
-          NOTcase                                * B530E
-          MINUSONE                               * B5313
-          DUPTYPELIST?                           * B5318
-          NOT?SEMI                               * B531D
-          CARCOMP                                * B5322
-        ;                                        * B5327
+        :: DUP EqList? ITE                       * B52E1
+          :: BINT1 NTHELCOMP ; TRUE              * B52F5
+          NOTcase MINUSONE                       * B530E
+          DUPTYPELIST? NOT?SEMI                  * B5318
+          CARCOMP ;                              * B5322
 
 * ROMPTR 0B5 02C
 * refs (1): B4B39
 ROMP_0B5_02C:
-        ::                                       * B532C
-          'EQ                                    * B5331
-          SAFE@_HERE                             * B5336
-          NOTcase                                * B533B
-          ::                                     * B5340
-            MINUSONE                             * B5345
-            DUPDUP                               * B534A
-          ;                                      * B534F
-          DUPTYPELIST?                           * B5354
-          NOTcasedrop                            * B5359
-          ::                                     * B535E
-            MINUSONE                             * B5363
-            DUPDUP                               * B5368
-          ;                                      * B536D
-          INNERCOMP                              * B5372
-          DUP                                    * B5377
-          #3=                                    * B537C
-          case                                   * B5381
-          DROP                                   * B5386
-          NDROP                                  * B538B
-          MINUSONE                               * B5390
-          DUPDUP                                 * B5395
-        ;                                        * B539A
+        :: 'EQ SAFE@_HERE NOTcase                * B532C
+          :: MINUSONE DUPDUP ;                   * B5340
+          DUPTYPELIST? NOTcasedrop               * B5354
+          :: MINUSONE DUPDUP ;                   * B535E
+          INNERCOMP DUP #3= case DROP            * B5372
+          NDROP MINUSONE DUPDUP ;                * B538B
 
 * ROMPTR 0B5 02D
 * refs (1): B4B39
 ROMP_0B5_02D:
-        ::                                       * B539F
-          DUP                                    * B53A4
-          MINUSONE                               * B53A9
-          EQUALcase                              * B53AE
-          3DROP                                  * B53B3
-          OVER                                   * B53B8
-          MINUSONE                               * B53BD
-          EQUALcase                              * B53C2
-          3DROP                                  * B53C7
-          3PICK                                  * B53CC
-          MINUSONE                               * B53D1
-          EQUALcase                              * B53D6
-          3DROP                                  * B53DB
-          BINT3                                  * B53E0
-          {}N                                    * B53E5
-          DOSTOE                                 * B53EA
-        ;                                        * B53EF
+        :: DUP MINUSONE EQUALcase 3DROP          * B539F
+          OVER MINUSONE EQUALcase 3DROP          * B53B8
+          3PICK MINUSONE EQUALcase 3DROP         * B53CC
+          BINT3 {}N DOSTOE ;                     * B53E0
 
 * ROMPTR 0B5 02F
 * refs (2): B4B39 B4B39
 ROMP_0B5_02F:
-        ::                                       * B53F4
-          BINT1                                  * B53F9
-          {}N                                    * B53FE
-          PUTINDEPLIST                           * B5403
-        ;                                        * B5408
+        :: BINT1 {}N PUTINDEPLIST ;              * B53F4
 
 * ROMPTR 0B5 030
 * refs (1): B4B39
 ROMP_0B5_030:
-        ::                                       * B540D
-          dLISTcase                              * B5412
-          ICMPDRPRTDRP                           * B5417
-          DROP                                   * B541C
-          ZEROZERO                               * B5421
-        ;                                        * B5426
+        :: dLISTcase ICMPDRPRTDRP                * B540D
+          DROP ZEROZERO ;                        * B541C
 
 * ROMPTR 0B5 031
 * refs (1): B4B39
 ROMP_0B5_031:
-        ::                                       * B542B
-          dLISTcase                              * B5430
-          ICMPDRPRTDRP                           * B5435
-          DROP                                   * B543A
-          %0_2A2B4                               * B543F
-          1REV                                   * B5444
-        ;                                        * B5449
+        :: dLISTcase ICMPDRPRTDRP                * B542B
+          DROP %0_2A2B4 1REV ;                   * B543A
 
 * ROMPTR 0B5 032
 * refs (1): B4B39
 ROMP_0B5_032:
-        ::                                       * B544E
-          dLISTcase                              * B5453
-          ICMPDRPRTDRP                           * B5458
-          DROP                                   * B545D
-          %0_2A2B4                               * B5462
-          GETXMAX                                * B5467
-        ;                                        * B546C
+        :: dLISTcase ICMPDRPRTDRP                * B544E
+          DROP %0_2A2B4 GETXMAX ;                * B545D
 
 * ROMPTR 0B5 035
 * refs (3): B4B39 B4B39 B4B39
 ROMP_0B5_035:
-        ::                                       * B5471
-          DUPTYPEBINT?                           * B5476
-          case2drop                              * B547B
-          ::                                     * B5480
-            INDEPVAR                             * B5485
-            PUTINDEP                             * B548A
-          ;                                      * B548F
-          TWO{}N                                 * B5494
-          PUTINDEPLIST                           * B5499
-        ;                                        * B549E
+        :: DUPTYPEBINT? case2drop                * B5471
+          :: INDEPVAR PUTINDEP ;                 * B5480
+          TWO{}N PUTINDEPLIST ;                  * B5494
 
 * ROMPTR 0B5 036
 * refs (1): B4B39
 ROMP_0B5_036:
-        ::                                       * B54A3
-          GETXMIN                                * B54A8
-          GETXMAX                                * B54AD
-        ;                                        * B54B2
+        :: GETXMIN GETXMAX ;                     * B54A3
 
 * ROMPTR 0B5 039
 * refs (3): B4B39 B4B39 B4B39
 ROMP_0B5_039:
-        ::                                       * B54B7
-          BINT1                                  * B54BC
-          {}N                                    * B54C1
-          depnd(li)                              * B54C6
-        ;                                        * B54CB
+        :: BINT1 {}N depnd(li) ;                 * B54B7
 
 * ROMPTR 0B5 03A
 * refs (1): B4B39
 ROMP_0B5_03A:
-        ::                                       * B54D0
-          dLISTcase                              * B54D5
-          ::                                     * B54DA
-            ICMPDRPRTDRP                         * B54DF
-            OVER                                 * B54E4
-            TYPEREAL?                            * B54E9
-            ?SEMI                                * B54EE
-            2DROP                                * B54F3
-            ZEROZERO                             * B54F8
-          ;                                      * B54FD
-          DROP                                   * B5502
-          ZEROZERO                               * B5507
-        ;                                        * B550C
+        :: dLISTcase                             * B54D0
+          :: ICMPDRPRTDRP OVER TYPEREAL? ?SEMI   * B54DA
+            2DROP ZEROZERO ;                     * B54F3
+          DROP ZEROZERO ;                        * B5502
 
 * ROMPTR 0B5 03B
 * refs (1): B4B39
 ROMP_0B5_03B:
-        ::                                       * B5511
-          DUPTYPEBINT?                           * B5516
-          case2drop                              * B551B
-          ::                                     * B5520
-            OBJ_4D96B                            * B5525
-            depnd(gn)                            * B552A
-          ;                                      * B552F
-          TWO{}N                                 * B5534
-          depnd(li)                              * B5539
-        ;                                        * B553E
+        :: DUPTYPEBINT? case2drop                * B5511
+          :: OBJ_4D96B depnd(gn) ;               * B5520
+          TWO{}N depnd(li) ;                     * B5534
 
 * ROMPTR 0B5 03C
 * refs (1): B4B39
 ROMP_0B5_03C:
-        ::                                       * B5543
-          GETYMIN                                * B5548
-          GETYMAX                                * B554D
-        ;                                        * B5552
+        :: GETYMIN GETYMAX ;                     * B5543
 
 * ROMPTR 0B5 03E
 * refs (2): B4B39 B4B39
 ROMP_0B5_03E:
-        ::                                       * B5557
-          DUP                                    * B555C
-          TYPEHSTR?                              * B5561
-          case                                   * B5566
-          ::                                     * B556B
-            HXS>#                                * B5570
-            DUP#0=case                           * B5575
-            FALSE                                * B557A
-            UNCOERCE                             * B557F
-            TRUE                                 * B5584
-          ;                                      * B5589
-          DUP                                    * B558E
-          %0<>                                   * B5593
-          case                                   * B5598
-          FALSE                                  * B559D
-          DROPZERO                               * B55A2
-          FALSE                                  * B55A7
-        ;                                        * B55AC
+        :: DUP TYPEHSTR? case                    * B5557
+          :: HXS># DUP#0=case FALSE              * B556B
+            UNCOERCE TRUE ;                      * B557F
+          DUP %0<> case FALSE                    * B558E
+          DROPZERO FALSE ;                       * B55A2
 
 * ROMPTR 0B5 03F
 * refs (1): B4B39
 ROMP_0B5_03F:
-        ::                                       * B55B1
-          SWAP                                   * B55B6
-          DUPTYPEBINT?                           * B55BB
-          case                                   * B55C0
-          ::                                     * B55C5
-            SWAPDROP                             * B55CA
-            #>HXS                                * B55CF
-            PUTRES                               * B55D4
-          ;                                      * B55D9
-          SWAP                                   * B55DE
-          NOTcase                                * B55E3
-          PUTRES                                 * B55E8
-          COERCE                                 * B55ED
-          #>HXS                                  * B55F2
-          PUTRES                                 * B55F7
-        ;                                        * B55FC
+        :: SWAP DUPTYPEBINT? case                * B55B1
+          :: SWAPDROP #>HXS PUTRES ;             * B55C5
+          SWAP NOTcase PUTRES                    * B55DE
+          COERCE #>HXS PUTRES ;                  * B55ED
 
 * ROMPTR 0B5 040
 * refs (1): B4B39
 ROMP_0B5_040:
-        ::                                       * B5601
-          case                                   * B5606
-          ::                                     * B560B
-            2DROP                                * B5610
-            %1                                   * B5615
-          ;                                      * B561A
-          ROMPTR  0B5 041                        * B561F
-          %%1                                    * B562A
-          SWAP                                   * B562F
-          %%/>%                                  * B5634
-        ;                                        * B5639
+        :: case                                  * B5601
+          :: 2DROP %1 ;                          * B560B
+          ROMPTR 0B5 041 %%1 SWAP %%/>% ;        * B561F
 
 * ROMPTR 0B5 041
 * refs (1): B4B39
 ROMP_0B5_041:
-        ::                                       * B563E
-          RclMaxStdPict                          * B5643
-          SWAPDROP                               * B5648
-          #1-                                    * B564D
-          UNCOERCE%%                             * B5652
-          SWAP                                   * B5657
-          %>%%                                   * B565C
-          ROT                                    * B5661
-          %>%%                                   * B5666
-          %%-                                    * B566B
-          %%/                                    * B5670
-        ;                                        * B5675
+        :: RclMaxStdPict SWAPDROP #1- UNCOERCE%% SWAP %>%% ROT %>%% %%- %%/ ; * B563E
 
 * ROMPTR 0B5 042
 * refs (1): B4B39
 ROMP_0B5_042:
-        ::                                       * B567A
-          3PICK3PICK                             * B567F
-          SWAP                                   * B5684
-          %-                                     * B5689
-          %       1.3E2                          * B568E
-          %/                                     * B56A3
-          SWAP                                   * B56A8
-          NOTcase                                * B56AD
-          ROTROT2DROP                            * B56B2
-          %>%%                                   * B56B7
-          3UNROLL                                * B56BC
-          ROMPTR  0B5 041                        * B56C1
-          %%*                                    * B56CC
-          %%>%                                   * B56D1
-        ;                                        * B56D6
+        :: 3PICK3PICK SWAP %- % 1.3E2 %/ SWAP NOTcase ROTROT2DROP * B567A
+          %>%% 3UNROLL ROMPTR 0B5 041 %%* %%>% ; * B56B7
 
 * ROMPTR 0B5 043
 * refs (1): B4B39
 ROMP_0B5_043:
-        ::                                       * B56DB
-          RAD?                                   * B56E0
-          ITE                                    * B56E5
-          %       3.49065850399E-2               * B56EA
-          %2                                     * B56FF
-          SWAP                                   * B5704
-          NOTcase                                * B5709
-          ROTROT2DROP                            * B570E
-          %>%%                                   * B5713
-          3UNROLL                                * B5718
-          ROMPTR  0B5 041                        * B571D
-          %%*                                    * B5728
-          %%>%                                   * B572D
-        ;                                        * B5732
+        :: RAD? ITE % 3.49065850399E-2 %2        * B56DB
+          SWAP NOTcase ROTROT2DROP               * B5704
+          %>%% 3UNROLL ROMPTR 0B5 041 %%* %%>% ; * B5713
 
 * ROMPTR 0B5 045
 * refs (2): B4B39 B4B39
 ROMP_0B5_045:
-        ::                                       * B5737
-          FALSE                                  * B573C
-          ROMPTR  0B5 03F                        * B5741
-        ;                                        * B574C
+        :: FALSE ROMPTR 0B5 03F ;                * B5737
 
 * ROMPTR 0B5 047
 * refs (2): B4B39 B4B39
 ROMP_0B5_047:
-        ::                                       * B5751
-          SWAP                                   * B5756
-          %-                                     * B575B
-          %13                                    * B5760
-          %/                                     * B5765
-        ;                                        * B576A
+        :: SWAP %- %13 %/ ;                      * B5751
 
 * ROMPTR 0B5 049
 * refs (2): B4B39 B4B39
 ROMP_0B5_049:
-        ::                                       * B576F
-          Exist@äDAT?                            * B5774
-          NOTcase                                * B5779
-          MINUSONE                               * B577E
-          OBJ_2D252                              * B5783
-        ;                                        * B5788
+        :: Exist@äDAT? NOTcase MINUSONE          * B576F
+          OBJ_2D252 ;                            * B5783
 
 * ROMPTR 0B5 04A
 * refs (1): B4B39
 ROMP_0B5_04A:
-        ::                                       * B578D
-          ROMPTR  0B5 011                        * B5792
-          STATCLST                               * B579D
-          å-                                     * B57A2
-        ;                                        * B57A7
+        :: ROMPTR 0B5 011 STATCLST å- ;          * B578D
 
 * ROMPTR 0B5 04F
 * refs (5): B4B39 B4B39 B4B39 B4B39 B4B39
 ROMP_0B5_04F:
         ::                                       * B57AC
-          {                                      * B57B1
-            xFUNCTION                            * B57B6
-            ROMPTR  0B5 051                      * B57BB
-            POLAR                                * B57C6
-            ROMPTR  0B5 052                      * B57CB
-            xCONIC                               * B57D6
-            ROMPTR  0B5 053                      * B57DB
-            xTRUTH                               * B57E6
-            ROMPTR  0B5 054                      * B57EB
-            xPARAMETRIC                          * B57F6
-            ROMPTR  0B5 055                      * B57FB
-            ROMPTR  0AB 00E                      * B5806  DIFFEQ
-            ROMPTR  0B5 056                      * B5811
-            xHISTOGRAM                           * B581C
-            ROMPTR  0B5 057                      * B5821
-            xBAR                                 * B582C
-            ROMPTR  0B5 058                      * B5831
-            xSCATTER                             * B583C
-            ROMPTR  0B5 059                      * B5841
-            ROMPTR  0AB 00C                      * B584C  SLOPEFIELD
-            ROMPTR  0B5 05A                      * B5857
-            ROMPTR  0AB 008                      * B5862  WIREFRAME
-            ROMPTR  0B5 05B                      * B586D
-            ROMPTR  0AB 00D                      * B5878  PCONTOUR
-            ROMPTR  0B5 05C                      * B5883
-            ROMPTR  0AB 00B                      * B588E  YSLICE
-            ROMPTR  0B5 05D                      * B5899
-            ROMPTR  0AB 00A                      * B58A4  GRIDMAP
-            ROMPTR  0B5 05E                      * B58AF
-            ROMPTR  0AB 009                      * B58BA  PARSURFACE
-            ROMPTR  0B5 05F                      * B58C5
-          }                                      * B58D0
-          ROMPTR  0B5 07B                        * B58D5
-          NcaseSIZEERR                           * B58E0
-        ;                                        * B58E5
+          { xFUNCTION ROMPTR 0B5 051 POLAR ROMPTR 0B5 052 xCONIC * B57B1
+            ROMPTR 0B5 053 xTRUTH ROMPTR 0B5 054 xPARAMETRIC ROMPTR 0B5 055 * B57DB
+            ROMPTR 0AB 00E ROMPTR 0B5 056 xHISTOGRAM ROMPTR 0B5 057 xBAR * B5806  DIFFEQ
+            ROMPTR 0B5 058 xSCATTER ROMPTR 0B5 059 ROMPTR 0AB 00C * B5831  SLOPEFIELD
+            ROMPTR 0B5 05A ROMPTR 0AB 008 ROMPTR 0B5 05B * B5857  WIREFRAME
+            ROMPTR 0AB 00D ROMPTR 0B5 05C        * B5878  PCONTOUR
+            ROMPTR 0AB 00B ROMPTR 0B5 05D        * B588E  YSLICE
+            ROMPTR 0AB 00A ROMPTR 0B5 05E        * B58A4  GRIDMAP
+            ROMPTR 0AB 009 ROMPTR 0B5 05F }      * B58BA  PARSURFACE
+          ROMPTR 0B5 07B NcaseSIZEERR ;          * B58D5
 
 * ROMPTR 0B5 050
 * refs (1): B4B39
 ROMP_0B5_050:
-        {                                        * B58EA
-          ROMPTR  0B5 051                        * B58EF
-          ROMPTR  0B5 052                        * B58FA
-          ROMPTR  0B5 055                        * B5905
-          ROMPTR  0B5 056                        * B5910
-          ROMPTR  0B5 053                        * B591B
-          ROMPTR  0B5 054                        * B5926
-          ROMPTR  0B5 057                        * B5931
-          ROMPTR  0B5 058                        * B593C
-          ROMPTR  0B5 059                        * B5947
-          ROMPTR  0B5 05A                        * B5952
-          ROMPTR  0B5 05B                        * B595D
-          ROMPTR  0B5 05C                        * B5968
-          ROMPTR  0B5 05D                        * B5973
-          ROMPTR  0B5 05E                        * B597E
-          ROMPTR  0B5 05F                        * B5989
-        }                                        * B5994
+        { ROMPTR 0B5 051 ROMPTR 0B5 052 ROMPTR 0B5 055 ROMPTR 0B5 056 * B58EA
+          ROMPTR 0B5 053 ROMPTR 0B5 054 ROMPTR 0B5 057 ROMPTR 0B5 058 * B591B
+          ROMPTR 0B5 059 ROMPTR 0B5 05A ROMPTR 0B5 05B ROMPTR 0B5 05C * B5947
+          ROMPTR 0B5 05D ROMPTR 0B5 05E ROMPTR 0B5 05F } * B5973
 
 * ROMPTR 0B5 051
 * refs (1): B4B39
 ROMP_0B5_051:
-        {                                        * B5999
-          #       BE69                           * B599E  48745
-          ::                                     * B59A8
-            'IDFUNCTION                          * B59AD
-            PUTPTYPE                             * B59B2
-          ;                                      * B59B7
-        }                                        * B59BC
+        { # BE69                                 * B5999
+          :: 'IDFUNCTION PUTPTYPE ; }            * B59A8
 
 * ROMPTR 0B5 052
 * refs (1): B4B39
 ROMP_0B5_052:
-        {                                        * B59C1
-          #       BE6A                           * B59C6  48746
-          ::                                     * B59D0
-            'IDPOLAR                             * B59D5
-            PUTPTYPE                             * B59DA
-          ;                                      * B59DF
-        }                                        * B59E4
+        { # BE6A                                 * B59C1
+          :: 'IDPOLAR PUTPTYPE ; }               * B59D0
 
 * ROMPTR 0B5 053
 * refs (1): B4B39
 ROMP_0B5_053:
-        {                                        * B59E9
-          #       BE6B                           * B59EE  48747
-          ::                                     * B59F8
-            'IDCONIC                             * B59FD
-            PUTPTYPE                             * B5A02
-          ;                                      * B5A07
-        }                                        * B5A0C
+        { # BE6B                                 * B59E9
+          :: 'IDCONIC PUTPTYPE ; }               * B59F8
 
 * ROMPTR 0B5 054
 * refs (1): B4B39
 ROMP_0B5_054:
-        {                                        * B5A11
-          #       BE6C                           * B5A16  48748
-          ::                                     * B5A20
-            'IDTRUTH                             * B5A25
-            PUTPTYPE                             * B5A2A
-          ;                                      * B5A2F
-        }                                        * B5A34
+        { # BE6C                                 * B5A11
+          :: 'IDTRUTH PUTPTYPE ; }               * B5A20
 
 * ROMPTR 0B5 055
 * refs (1): B4B39
 ROMP_0B5_055:
-        {                                        * B5A39
-          #       BE6D                           * B5A3E  48749
-          ::                                     * B5A48
-            'IDPARAMETER                         * B5A4D
-            PUTPTYPE                             * B5A52
-          ;                                      * B5A57
-        }                                        * B5A5C
+        { # BE6D                                 * B5A39
+          :: 'IDPARAMETER PUTPTYPE ; }           * B5A48
 
 * ROMPTR 0B5 056
 * refs (1): B4B39
 ROMP_0B5_056:
-        {                                        * B5A61
-          #       BE6E                           * B5A66  48750
-          ::                                     * B5A70
-            '                                    * B5A75
-            ROMPTR  0AB 00E                      * B5A7A  DIFFEQ
-            PUTPTYPE                             * B5A85
-          ;                                      * B5A8A
-        }                                        * B5A8F
+        { # BE6E                                 * B5A61
+          :: ' ROMPTR 0AB 00E PUTPTYPE ; }       * B5A70  DIFFEQ
 
 * ROMPTR 0B5 057
 * refs (1): B4B39
 ROMP_0B5_057:
-        {                                        * B5A94
-          #       BE6F                           * B5A99  48751
-          ::                                     * B5AA3
-            'IDHISTOGRAM                         * B5AA8
-            PUTPTYPE                             * B5AAD
-          ;                                      * B5AB2
-        }                                        * B5AB7
+        { # BE6F                                 * B5A94
+          :: 'IDHISTOGRAM PUTPTYPE ; }           * B5AA3
 
 * ROMPTR 0B5 058
 * refs (1): B4B39
 ROMP_0B5_058:
-        {                                        * B5ABC
-          #       BE70                           * B5AC1  48752
-          ::                                     * B5ACB
-            'IDBAR                               * B5AD0
-            PUTPTYPE                             * B5AD5
-          ;                                      * B5ADA
-        }                                        * B5ADF
+        { # BE70                                 * B5ABC
+          :: 'IDBAR PUTPTYPE ; }                 * B5ACB
 
 * ROMPTR 0B5 059
 * refs (1): B4B39
 ROMP_0B5_059:
-        {                                        * B5AE4
-          #       BE71                           * B5AE9  48753
-          ::                                     * B5AF3
-            'IDSCATTER                           * B5AF8
-            PUTPTYPE                             * B5AFD
-          ;                                      * B5B02
-        }                                        * B5B07
+        { # BE71                                 * B5AE4
+          :: 'IDSCATTER PUTPTYPE ; }             * B5AF3
 
 * ROMPTR 0B5 05A
 * refs (1): B4B39
 ROMP_0B5_05A:
-        {                                        * B5B0C
-          #       BE72                           * B5B11  48754
-          ::                                     * B5B1B
-            '                                    * B5B20
-            ROMPTR  0AB 00C                      * B5B25  SLOPEFIELD
-            PUTPTYPE                             * B5B30
-          ;                                      * B5B35
-        }                                        * B5B3A
+        { # BE72                                 * B5B0C
+          :: ' ROMPTR 0AB 00C PUTPTYPE ; }       * B5B1B  SLOPEFIELD
 
 * ROMPTR 0B5 05B
 * refs (1): B4B39
 ROMP_0B5_05B:
-        {                                        * B5B3F
-          #       BE73                           * B5B44  48755
-          ::                                     * B5B4E
-            '                                    * B5B53
-            ROMPTR  0AB 008                      * B5B58  WIREFRAME
-            PUTPTYPE                             * B5B63
-          ;                                      * B5B68
-        }                                        * B5B6D
+        { # BE73                                 * B5B3F
+          :: ' ROMPTR 0AB 008 PUTPTYPE ; }       * B5B4E  WIREFRAME
 
 * ROMPTR 0B5 05C
 * refs (1): B4B39
 ROMP_0B5_05C:
-        {                                        * B5B72
-          #       BE74                           * B5B77  48756
-          ::                                     * B5B81
-            '                                    * B5B86
-            ROMPTR  0AB 00D                      * B5B8B  PCONTOUR
-            PUTPTYPE                             * B5B96
-          ;                                      * B5B9B
-        }                                        * B5BA0
+        { # BE74                                 * B5B72
+          :: ' ROMPTR 0AB 00D PUTPTYPE ; }       * B5B81  PCONTOUR
 
 * ROMPTR 0B5 05D
 * refs (1): B4B39
 ROMP_0B5_05D:
-        {                                        * B5BA5
-          #       BE75                           * B5BAA  48757
-          ::                                     * B5BB4
-            '                                    * B5BB9
-            ROMPTR  0AB 00B                      * B5BBE  YSLICE
-            PUTPTYPE                             * B5BC9
-          ;                                      * B5BCE
-        }                                        * B5BD3
+        { # BE75                                 * B5BA5
+          :: ' ROMPTR 0AB 00B PUTPTYPE ; }       * B5BB4  YSLICE
 
 * ROMPTR 0B5 05E
 * refs (1): B4B39
 ROMP_0B5_05E:
-        {                                        * B5BD8
-          #       BE76                           * B5BDD  48758
-          ::                                     * B5BE7
-            '                                    * B5BEC
-            ROMPTR  0AB 00A                      * B5BF1  GRIDMAP
-            PUTPTYPE                             * B5BFC
-          ;                                      * B5C01
-        }                                        * B5C06
+        { # BE76                                 * B5BD8
+          :: ' ROMPTR 0AB 00A PUTPTYPE ; }       * B5BE7  GRIDMAP
 
 * ROMPTR 0B5 05F
 * refs (1): B4B39
 ROMP_0B5_05F:
-        {                                        * B5C0B
-          #       BE77                           * B5C10  48759
-          ::                                     * B5C1A
-            '                                    * B5C1F
-            ROMPTR  0AB 009                      * B5C24  PARSURFACE
-            PUTPTYPE                             * B5C2F
-          ;                                      * B5C34
-        }                                        * B5C39
+        { # BE77                                 * B5C0B
+          :: ' ROMPTR 0AB 009 PUTPTYPE ; }       * B5C1A  PARSURFACE
 
 * ROMPTR 0B5 060
 * refs (1): B4B39
 ROMP_0B5_060:
-        ::                                       * B5C3E
-          BINT31                                 * B5C43
-          TestSysFlag                            * B5C48
-          NOT                                    * B5C4D
-        ;                                        * B5C52
+        :: BINT31 TestSysFlag NOT ;              * B5C3E
 
 * ROMPTR 0B5 061
 * refs (1): B4B39
 ROMP_0B5_061:
-        ::                                       * B5C57
-          BINT31                                 * B5C5C
-          SWAP                                   * B5C61
-          ITE                                    * B5C66
-          ClrSysFlag                             * B5C6B
-          SetSysFlag                             * B5C70
+        :: BINT31 SWAP ITE ClrSysFlag SetSysFlag * B5C57
         ;                                        * B5C75
 
 * ROMPTR 0B5 062
 * refs (1): B4B39
 ROMP_0B5_062:
-        ::                                       * B5C7A
-          BINT28                                 * B5C7F
-          TestSysFlag                            * B5C84
-        ;                                        * B5C89
+        :: BINT28 TestSysFlag ;                  * B5C7A
 
 * ROMPTR 0B5 063
 * refs (1): B4B39
 ROMP_0B5_063:
-        ::                                       * B5C8E
-          BINT28                                 * B5C93
-          SWAP                                   * B5C98
-          ITE                                    * B5C9D
-          SetSysFlag                             * B5CA2
-          ClrSysFlag                             * B5CA7
+        :: BINT28 SWAP ITE SetSysFlag ClrSysFlag * B5C8E
         ;                                        * B5CAC
 
 * ROMPTR 0B5 064
 * refs (1): B4B39
 ROMP_0B5_064:
-        ::                                       * B5CB1
-          dLISTcase                              * B5CB6
-          ::                                     * B5CBB
-            ICMPDRPRTDRP                         * B5CC0
-            DROP                                 * B5CC5
-          ;                                      * B5CCA
-          DROP                                   * B5CCF
-          %0_2A2B4                               * B5CD4
-        ;                                        * B5CD9
+        :: dLISTcase                             * B5CB1
+          :: ICMPDRPRTDRP DROP ;                 * B5CBB
+          DROP %0_2A2B4 ;                        * B5CCF
 
 * ROMPTR 0B5 065
 * refs (1): B4B39
 ROMP_0B5_065:
-        ::                                       * B5CDE
-          ROMPTR  0B5 011                        * B5CE3
-          RclDepnd                               * B5CEE
-          dLISTcase                              * B5CF3
-          ::                                     * B5CF8
-            INCOMPDROP                           * B5CFD
-            SWAPDROP                             * B5D02
-            ROTSWAP                              * B5D07
-            THREE{}N                             * B5D0C
-            depnd(gn)                            * B5D11
-          ;                                      * B5D16
-          SWAP                                   * B5D1B
-          %       1E-4                           * B5D20
-          THREE{}N                               * B5D35
-          depnd(gn)                              * B5D3A
-        ;                                        * B5D3F
+        :: ROMPTR 0B5 011 RclDepnd dLISTcase     * B5CDE
+          :: INCOMPDROP SWAPDROP ROTSWAP THREE{}N depnd(gn) ; * B5CF8
+          SWAP % 1E-4 THREE{}N depnd(gn) ;       * B5D1B
 
 * ROMPTR 0B5 066
 * refs (1): B4B39
 ROMP_0B5_066:
-        ::                                       * B5D44
-          7ROLL                                  * B5D49
-          7ROLL                                  * B5D4E
-          ROMPTR  0B5 008                        * B5D53
-          OVER                                   * B5D5E
-          XEQSTOID                               * B5D63
-          5ROLL                                  * B5D68
-          5ROLL                                  * B5D6D
-          ROMPTR  0B5 008                        * B5D72
-          OVER                                   * B5D7D
-          XEQSTOID                               * B5D82
-          6ROLL                                  * B5D87
-          ROMPTR  0B5 008                        * B5D8C
-          THREE{}N                               * B5D97
-          3UNROLL                                * B5D9C
-          DUPTYPEBINT?                           * B5DA1
-          ITE                                    * B5DA6
-          DROP                                   * B5DAB
-          TWO{}N                                 * B5DB0
-          ROT                                    * B5DB5
-          ROMPTR  0B5 008                        * B5DBA
-          ROMPTR  0C1 00E                        * B5DC5
-          SWAP                                   * B5DD0
-          BINT2                                  * B5DD5
-          NTHCOMPDROP                            * B5DDA
-          OBJ_36E43                              * B5DDF
-        ;                                        * B5DE4
+        :: 7ROLL 7ROLL ROMPTR 0B5 008 OVER XEQSTOID 5ROLL 5ROLL * B5D44
+          ROMPTR 0B5 008 OVER XEQSTOID 6ROLL ROMPTR 0B5 008 THREE{}N 3UNROLL * B5D72
+          DUPTYPEBINT? ITE DROP TWO{}N           * B5DA1
+          ROT ROMPTR 0B5 008 ROMPTR 0C1 00E SWAP BINT2 NTHCOMPDROP OBJ_36E43 ; * B5DB5
 
 * ROMPTR 0B5 067
 * refs (1): B4B39
 ROMP_0B5_067:
-        ::                                       * B5DE9
-          7ROLL                                  * B5DEE
-          7ROLL                                  * B5DF3
-          ROMPTR  0B5 008                        * B5DF8
-          OVER                                   * B5E03
-          XEQSTOID                               * B5E08
-          5ROLL                                  * B5E0D
-          5ROLL                                  * B5E12
-          ROMPTR  0B5 008                        * B5E17
-          OVER                                   * B5E22
-          XEQSTOID                               * B5E27
-          8ROLL                                  * B5E2C
-          ROMPTR  0B5 008                        * B5E31
-          8ROLL                                  * B5E3C
-          ROMPTR  0B5 008                        * B5E41
-          8ROLL                                  * B5E4C
-          ROMPTR  0B5 008                        * B5E51
-          BINT5                                  * B5E5C
-          {}N                                    * B5E61
-          3UNROLL                                * B5E66
-          DUPTYPEBINT?                           * B5E6B
-          ITE                                    * B5E70
-          DROP                                   * B5E75
-          TWO{}N                                 * B5E7A
-          ROT                                    * B5E7F
-          ROMPTR  0B5 008                        * B5E84
-          ROMPTR  0C1 01D                        * B5E8F
-          SWAP                                   * B5E9A
-          BINT2                                  * B5E9F
-          NTHCOMPDROP                            * B5EA4
-          OBJ_36E43                              * B5EA9
-        ;                                        * B5EAE
+        :: 7ROLL 7ROLL ROMPTR 0B5 008 OVER XEQSTOID 5ROLL 5ROLL * B5DE9
+          ROMPTR 0B5 008 OVER XEQSTOID 8ROLL ROMPTR 0B5 008 8ROLL * B5E17
+          ROMPTR 0B5 008 8ROLL ROMPTR 0B5 008 BINT5 {}N 3UNROLL DUPTYPEBINT? * B5E41
+          ITE DROP TWO{}N                        * B5E70
+          ROT ROMPTR 0B5 008 ROMPTR 0C1 01D SWAP BINT2 NTHCOMPDROP OBJ_36E43 ; * B5E7F
 
 * ROMPTR 0B5 068
 * refs (1): B4B39
 ROMP_0B5_068:
-        ::                                       * B5EB3
-          dLISTcase                              * B5EB8
-          ::                                     * B5EBD
-            ICMPDRPRTDRP                         * B5EC2
-            SWAPDROP                             * B5EC7
-          ;                                      * B5ECC
-          DROP                                   * B5ED1
-          %       1E-4                           * B5ED6
-        ;                                        * B5EEB
+        :: dLISTcase                             * B5EB3
+          :: ICMPDRPRTDRP SWAPDROP ;             * B5EBD
+          DROP % 1E-4 ;                          * B5ED1
 
 * ROMPTR 0B5 069
 * refs (1): B4B39
 ROMP_0B5_069:
-        ::                                       * B5EF0
-          RclDepnd                               * B5EF5
-          dLISTcase                              * B5EFA
-          ::                                     * B5EFF
-            INCOMPDROP                           * B5F04
-            DROP                                 * B5F09
-            ROT                                  * B5F0E
-            THREE{}N                             * B5F13
-            depnd(gn)                            * B5F18
-          ;                                      * B5F1D
-          %0_2A2B4                               * B5F22
-          ROT                                    * B5F27
-          THREE{}N                               * B5F2C
-          depnd(gn)                              * B5F31
-        ;                                        * B5F36
+        :: RclDepnd dLISTcase                    * B5EF0
+          :: INCOMPDROP DROP ROT THREE{}N depnd(gn) ; * B5EFF
+          %0_2A2B4 ROT THREE{}N depnd(gn) ;      * B5F22
 
 * ROMPTR 0B5 06A
 * refs (1): B4B39
 ROMP_0B5_06A:
-        ::                                       * B5F3B
-          DUPTYPELIST?                           * B5F40
-          NOTcasedrop                            * B5F45
-          ::                                     * B5F4A
-            %10                                  * B5F4F
-            %10                                  * B5F54
-            TRUE                                 * B5F59
-          ;                                      * B5F5E
-          DUPLENCOMP                             * B5F63
-          #3=                                    * B5F68
-          casedrop                               * B5F6D
-          ::                                     * B5F72
-            %10                                  * B5F77
-            %10                                  * B5F7C
-            TRUE                                 * B5F81
-          ;                                      * B5F86
-          BINT2                                  * B5F8B
-          NTHCOMPDROP                            * B5F90
-          DUPTYPELIST?                           * B5F95
-          ITE                                    * B5F9A
-          INCOMPDROP                             * B5F9F
-          DUP                                    * B5FA4
-          DUPTYPEREAL?                           * B5FA9
-          case                                   * B5FAE
-          FALSE                                  * B5FB3
-          #>%                                    * B5FB8
-          SWAP                                   * B5FBD
-          #>%                                    * B5FC2
-          SWAPTRUE                               * B5FC7
-        ;                                        * B5FCC
+        :: DUPTYPELIST? NOTcasedrop              * B5F3B
+          :: %10 %10 TRUE ;                      * B5F4A
+          DUPLENCOMP #3= casedrop                * B5F63
+          :: %10 %10 TRUE ;                      * B5F72
+          BINT2 NTHCOMPDROP DUPTYPELIST? ITE INCOMPDROP DUP * B5F8B
+          DUPTYPEREAL? case FALSE                * B5FA9
+          #>% SWAP #>% SWAPTRUE ;                * B5FB8
 
 * ROMPTR 0B5 06B
 * refs (1): B4B39
 ROMP_0B5_06B:
-        ::                                       * B5FD1
-          IT                                     * B5FD6
-          ::                                     * B5FDB
-            %>#                                  * B5FE0
-            SWAP                                 * B5FE5
-            %>#                                  * B5FEA
-            SWAP                                 * B5FEF
-          ;                                      * B5FF4
-          BINT2                                  * B5FF9
-          {}N                                    * B5FFE
-          RclAx*s                                * B6003
-          DUPTYPELIST?                           * B6008
-          IT                                     * B600D
-          CARCOMP                                * B6012
-          SWAP                                   * B6017
-          BINT2                                  * B601C
-          {}N                                    * B6021
-          OBJ_4502E                              * B6026
-        ;                                        * B602B
+        :: IT                                    * B5FD1
+          :: %># SWAP %># SWAP ;                 * B5FDB
+          BINT2 {}N RclAx*s DUPTYPELIST? IT CARCOMP * B5FF9
+          SWAP BINT2 {}N OBJ_4502E ;             * B6017
 
 * ROMPTR 0B5 06C
 * refs (1): B4B39
 ROMP_0B5_06C:
-        ::                                       * B6030
-          RclAx*s                                * B6035
-          DUPTYPELIST?                           * B603A
-          NOTcasedrop                            * B603F
-          ::                                     * B6044
-            NULL$                                * B6049
-            NULL$                                * B604E
-          ;                                      * B6053
-          INNERCOMP                              * B6058
-          DUP                                    * B605D
-          #2=                                    * B6062
-          case2drop                              * B6067
-          ::                                     * B606C
-            DROP                                 * B6071
-            NULL$                                * B6076
-            NULL$                                * B607B
-          ;                                      * B6080
-          #3=                                    * B6085
-          case                                   * B608A
-          ROTDROP                                * B608F
-          2SWAP                                  * B6094
-          2DROP                                  * B6099
-        ;                                        * B609E
+        :: RclAx*s DUPTYPELIST? NOTcasedrop      * B6030
+          :: NULL$ NULL$ ;                       * B6044
+          INNERCOMP DUP #2= case2drop            * B6058
+          :: DROP NULL$ NULL$ ;                  * B606C
+          #3= case ROTDROP                       * B6085
+          2SWAP 2DROP ;                          * B6094
 
 * ROMPTR 0B5 06D
 * refs (1): B4B39
 ROMP_0B5_06D:
-        ::                                       * B60A3
-          BINT2                                  * B60A8
-          {}N                                    * B60AD
-          OBJ_4502E                              * B60B2
-        ;                                        * B60B7
+        :: BINT2 {}N OBJ_4502E ;                 * B60A3
 
 * ROMPTR 0B5 06E
 * refs (1): B4B39
 ROMP_0B5_06E:
-        ::                                       * B60BC
-          BINT5                                  * B60C1
-          PPAR(s);dup;li?                        * B60C6
-          IT                                     * B60CB
-          CARCOMP                                * B60D0
+        :: BINT5 PPAR(s);dup;li? IT CARCOMP      * B60BC
         ;                                        * B60D5
 
 * ROMPTR 0B5 06F
 * refs (1): B4B39
 ROMP_0B5_06F:
-        ::                                       * B60DA
-          BINT5                                  * B60DF
-          PPAR(s);dup;li?                        * B60E4
-          ITE                                    * B60E9
-          ::                                     * B60EE
-            CDRCOMP                              * B60F3
-            SWAP                                 * B60F8
-            >HCOMP                               * B60FD
-          ;                                      * B6102
-          DROP                                   * B6107
-          BINT3                                  * B610C
-          PutBackPPAR(_,s)                       * B6111
-        ;                                        * B6116
+        :: BINT5 PPAR(s);dup;li? ITE             * B60DA
+          :: CDRCOMP SWAP >HCOMP ; DROP          * B60EE
+          BINT3 PutBackPPAR(_,s) ;               * B610C
 
 * ROMPTR 0B5 070
 * refs (1): B4B39
 ROMP_0B5_070:
-        ::                                       * B611B
-          BINT29                                 * B6120
-          TestSysFlag                            * B6125
-          NOT                                    * B612A
-        ;                                        * B612F
+        :: BINT29 TestSysFlag NOT ;              * B611B
 
 * ROMPTR 0B5 071
 * refs (1): B4B39
 ROMP_0B5_071:
-        ::                                       * B6134
-          BINT29                                 * B6139
-          SWAP                                   * B613E
-          ITE                                    * B6143
-          ClrSysFlag                             * B6148
-          SetSysFlag                             * B614D
+        :: BINT29 SWAP ITE ClrSysFlag SetSysFlag * B6134
         ;                                        * B6152
 
 * ROMPTR 0B5 072
 * refs (1): B4B39
 ROMP_0B5_072:
-        ::                                       * B6157
-          OBJ_4681A                              * B615C
-          NOTcase                                * B6161
-          OBJ_0FDD1                              * B6166
-          ROMPTR  0B5 073                        * B616B
-          NOTcasedrop                            * B6176
-          OBJ_0FDD1                              * B617B
-          SWAP                                   * B6180
-          ROMPTR  0B5 073                        * B6185
-          NOTcasedrop                            * B6190
-          OBJ_0FDD1                              * B6195
-          SWAP                                   * B619A
-          2DUP                                   * B619F
-          %MIN                                   * B61A4
-          %0<                                    * B61A9
-          case2drop                              * B61AE
-          OBJ_0FDD1                              * B61B3
-          2DUP                                   * B61B8
-          %MAX                                   * B61BD
-          RclDepnd                               * B61C2
-          ROMPTR  0B5 064                        * B61C7
-          DUPTYPEREAL?                           * B61D2
-          ITE                                    * B61D7
-          ::                                     * B61DC
-            DROP                                 * B61E1
-            BINT1                                * B61E6
-          ;                                      * B61EB
-          ARSIZE                                 * B61F0
-          UNCOERCE                               * B61F5
-          %>                                     * B61FA
-          case2drop                              * B61FF
-          OBJ_0FDD1                              * B6204
+        :: OBJ_4681A NOTcase OBJ_0FDD1           * B6157
+          ROMPTR 0B5 073 NOTcasedrop OBJ_0FDD1   * B616B
+          SWAP ROMPTR 0B5 073 NOTcasedrop OBJ_0FDD1 * B6180
+          SWAP 2DUP %MIN %0< case2drop OBJ_0FDD1 * B619A
+          2DUP %MAX RclDepnd ROMPTR 0B5 064 DUPTYPEREAL? ITE * B61B8
+          :: DROP BINT1 ; ARSIZE                 * B61DC
+          UNCOERCE %> case2drop OBJ_0FDD1        * B61F5
         ;                                        * B6209
 
 * ROMPTR 0B5 073
 * refs (1): B4B39
 ROMP_0B5_073:
-        ::                                       * B620E
-          palparse                               * B6213
-          NOTcasedrop                            * B6218
-          2DROPFALSE                             * B621D
-          DUPTYPEREAL?                           * B6222
-          NOTcasedrop                            * B6227
-          FALSE                                  * B622C
-          TRUE                                   * B6231
-        ;                                        * B6236
+        :: palparse NOTcasedrop 2DROPFALSE       * B620E
+          DUPTYPEREAL? NOTcasedrop FALSE         * B6222
+          TRUE ;                                 * B6231
 
 * ROMPTR 0B5 074
 * refs (1): B4B39
 ROMP_0B5_074:
-        ::                                       * B623B
-          DUP                                    * B6240
-          MINUSONE                               * B6245
-          EQUAL                                  * B624A
-          3PICK                                  * B624F
-          MINUSONE                               * B6254
-          EQUAL                                  * B6259
-          OR                                     * B625E
-          case                                   * B6263
-          2DROP                                  * B6268
-          a%>$                                   * B626D
-          SWAP                                   * B6272
-          a%>$                                   * B6277
-          SWAP                                   * B627C
-          TWO{}N                                 * B6281
-          OBJ_4502E                              * B6286
-        ;                                        * B628B
+        :: DUP MINUSONE EQUAL 3PICK MINUSONE EQUAL OR case 2DROP * B623B
+          a%>$ SWAP a%>$ SWAP TWO{}N OBJ_4502E ; * B626D
 
 * ROMPTR 0B5 075
 * refs (1): B4B39
 ROMP_0B5_075:
-        ::                                       * B6290
-          OBJ_496A0                              * B6295
-          NOTcase                                * B629A
-          ::                                     * B629F
-            %4                                   * B62A4
-            %4                                   * B62A9
-            FALSE                                * B62AE
-          ;                                      * B62B3
-          DROP                                   * B62B8
-          DUPTYPEREAL?                           * B62BD
-          3PICK                                  * B62C2
-          TYPEREAL?                              * B62C7
-          AND                                    * B62CC
-          4PICK                                  * B62D1
-          TYPEREAL?                              * B62D6
-          AND                                    * B62DB
-          NOTcase                                * B62E0
-          ::                                     * B62E5
-            3DROP                                * B62EA
-            %4                                   * B62EF
-            %4                                   * B62F4
-            FALSE                                * B62F9
-          ;                                      * B62FE
-          %0=                                    * B6303
-          NOT                                    * B6308
-        ;                                        * B630D
+        :: OBJ_496A0 NOTcase                     * B6290
+          :: %4 %4 FALSE ;                       * B629F
+          DROP DUPTYPEREAL? 3PICK TYPEREAL? AND 4PICK TYPEREAL? AND NOTcase * B62B8
+          :: 3DROP %4 %4 FALSE ;                 * B62E5
+          %0= NOT ;                              * B6303
 
 * ROMPTR 0B5 076
 * refs (1): B4B39
 ROMP_0B5_076:
-        ::                                       * B6312
-          ITE                                    * B6317
-          %1                                     * B631C
-          %0_2A2B4                               * B6321
-          OBJ_496A0                              * B6326
-          ITE                                    * B632B
-          4UNROLL3DROP                           * B6330
-          NULL{}                                 * B6335
-          OBJ_49A74                              * B633A
-        ;                                        * B633F
+        :: ITE %1 %0_2A2B4                       * B6312
+          OBJ_496A0 ITE 4UNROLL3DROP NULL{}      * B6326
+          OBJ_49A74 ;                            * B633A
 
 * ROMPTR 0B5 077
 * refs (1): B4B39
 ROMP_0B5_077:
-        ::                                       * B6344
-          OBJ_45EC4                              * B6349
-        ;                                        * B634E
+        :: OBJ_45EC4 ;                           * B6344
 
 * ROMPTR 0B5 078
 * refs (1): B4B39
 ROMP_0B5_078:
-        ::                                       * B6353
-          DOERASE                                * B6358
-        ;                                        * B635D
+        :: DOERASE ;                             * B6353
 
 * ROMPTR 0B5 079
 * refs (1): B4B39
 ROMP_0B5_079:
-        ::                                       * B6362
-          SWAP                                   * B6367
-          {                                      * B636C
-            LAM     'SaveAnim                    * B6371
-          }                                      * B638A
-          BIND                                   * B638F
-          IT                                     * B6394
-          AUTOSCALE                              * B6399
-          OBJ_4C2CE                              * B639E
-          ABND                                   * B63A3
-        ;                                        * B63A8
+        :: SWAP                                  * B6362
+          { LAM 'SaveAnim } BIND IT AUTOSCALE    * B636C
+          OBJ_4C2CE ABND ;                       * B639E
 
 * ROMPTR 0B5 07A
 * refs (1): B4B39
 ROMP_0B5_07A:
-        ::                                       * B63AD
-          'EQ                                    * B63B2
-          SAFE@_HERE                             * B63B7
-          NOTcase                                * B63BC
-          ERRJMP                                 * B63C1
-          DUPTYPELIST?                           * B63C6
-          DUPUNROT                               * B63CB
-          ITE                                    * B63D0
-          ::                                     * B63D5
-            INNERCOMP                            * B63DA
-            DUP                                  * B63DF
-            #3=                                  * B63E4
-            NOTcase                              * B63E9
-            doerr607                             * B63EE
+        :: 'EQ SAFE@_HERE NOTcase ERRJMP         * B63AD
+          DUPTYPELIST? DUPUNROT ITE              * B63C6
+          :: INNERCOMP DUP #3= NOTcase doerr607  * B63D5
           ;                                      * B63F3
           BINT1                                  * B63F8
-          INDEPVAR                               * B63FD
-          GETINDEP                               * B6402
-          ROMPTR  0B5 032                        * B6407
-          3UNROLL                                * B6412
-          OVER                                   * B6417
-          XEQSTOID                               * B641C
-          OBJ_4D96B                              * B6421
-          RclDepnd                               * B6426
-          ROMPTR  0B5 064                        * B642B
-          OVER                                   * B6436
-          XEQSTOID                               * B643B
-          4ROLL                                  * B6440
-          #1=                                    * B6445
-          ITE                                    * B644A
-          ::                                     * B644F
-            4ROLL                                * B6454
-            THREE{}N                             * B6459
-          ;                                      * B645E
-          ::                                     * B6463
-            6ROLL                                * B6468
-            6ROLL                                * B646D
-            6ROLL                                * B6472
-            BINT5                                * B6477
-            {}N                                  * B647C
-          ;                                      * B6481
-          ROMPTR  0B5 072                        * B6486
-          DUP                                    * B6491
-          MINUSONE                               * B6496
-          EQUAL                                  * B649B
-          IT                                     * B64A0
-          ::                                     * B64A5
-            2DROP                                * B64AA
-            %0_2A2B4                             * B64AF
-            %1                                   * B64B4
-          ;                                      * B64B9
-          %>C%                                   * B64BE
-          RclDepnd                               * B64C3
-          ROMPTR  0B5 068                        * B64C8
-          GETRES                                 * B64D3
-          DUP                                    * B64D8
-          TYPEHSTR?                              * B64DD
-          IT                                     * B64E2
-          ::                                     * B64E7
-            HXS>#                                * B64EC
-            UNCOERCE                             * B64F1
-          ;                                      * B64F6
-          5ROLL                                  * B64FB
-          6ROLL                                  * B6500
-          case                                   * B6505
-          ROMPTR  0C1 003                        * B650A
-          COLA                                   * B6515
-          ROMPTR  0C1 000                        * B651A
+          INDEPVAR GETINDEP ROMPTR 0B5 032 3UNROLL OVER XEQSTOID OBJ_4D96B * B63FD
+          RclDepnd ROMPTR 0B5 064 OVER XEQSTOID 4ROLL #1= ITE * B6426
+          :: 4ROLL THREE{}N ;                    * B644F
+          :: 6ROLL 6ROLL 6ROLL BINT5 {}N ;       * B6463
+          ROMPTR 0B5 072 DUP MINUSONE EQUAL IT   * B6486
+          :: 2DROP %0_2A2B4 %1 ;                 * B64A5
+          %>C% RclDepnd ROMPTR 0B5 068 GETRES DUP TYPEHSTR? IT * B64BE
+          :: HXS># UNCOERCE ;                    * B64E7
+          5ROLL 6ROLL case ROMPTR 0C1 003        * B64FB
+          COLA ROMPTR 0C1 000                    * B6515
         ;                                        * B6525
 
 * ROMPTR 0B5 07B
 * refs (1): B4B39
 ROMP_0B5_07B:
-        ::                                       * B652A
-          '                                      * B652F
-          ::                                     * B6534
-            OBJ_72AFA                            * B6539
-            SWAP                                 * B653E
-            OBJ_72AFA                            * B6543
-            EQUAL                                * B6548
-          ;                                      * B654D
-          SWAP                                   * B6552
-          Lookup                                 * B6557
-        ;                                        * B655C
+        :: '                                     * B652A
+          :: OBJ_72AFA SWAP OBJ_72AFA EQUAL ; SWAP Lookup ; * B6534
 
 * ROMPTR 0B5 07C
 * refs (1): B4B39
 ROMP_0B5_07C:
-        ::                                       * B6561
-          BINT2                                  * B6566
-          BINT1                                  * B656B
-          ROMPTR  0B5 08F                        * B6570
-        ;                                        * B657B
+        :: BINT2 BINT1 ROMPTR 0B5 08F ;          * B6561
 
 * ROMPTR 0B5 07D
 * refs (1): B4B39
 ROMP_0B5_07D:
-        ::                                       * B6580
-          BINT2                                  * B6585
-          BINT1                                  * B658A
-          ROMPTR  0B5 090                        * B658F
-        ;                                        * B659A
+        :: BINT2 BINT1 ROMPTR 0B5 090 ;          * B6580
 
 * ROMPTR 0B5 07E
 * refs (1): B4B39
 ROMP_0B5_07E:
-        ::                                       * B659F
-          BINT1                                  * B65A4
-          BINT1                                  * B65A9
-          ROMPTR  0B5 08F                        * B65AE
-        ;                                        * B65B9
+        :: BINT1 BINT1 ROMPTR 0B5 08F ;          * B659F
 
 * ROMPTR 0B5 07F
 * refs (1): B4B39
 ROMP_0B5_07F:
-        ::                                       * B65BE
-          BINT1                                  * B65C3
-          BINT1                                  * B65C8
-          ROMPTR  0B5 090                        * B65CD
-        ;                                        * B65D8
+        :: BINT1 BINT1 ROMPTR 0B5 090 ;          * B65BE
 
 * ROMPTR 0B5 080
 * refs (1): B4B39
 ROMP_0B5_080:
-        ::                                       * B65DD
-          BINT15                                 * B65E2
-          BINT14                                 * B65E7
-          BINT2                                  * B65EC
-          ROMPTR  0B5 08F                        * B65F1
-        ;                                        * B65FC
+        :: BINT15 BINT14 BINT2 ROMPTR 0B5 08F ;  * B65DD
 
 * ROMPTR 0B5 081
 * refs (1): B4B39
 ROMP_0B5_081:
-        ::                                       * B6601
-          BINT15                                 * B6606
-          SWAP                                   * B660B
-          BINT14                                 * B6610
-          BINT2                                  * B6615
-          ROMPTR  0B5 090                        * B661A
-        ;                                        * B6625
+        :: BINT15 SWAP BINT14 BINT2 ROMPTR 0B5 090 ; * B6601
 
 * ROMPTR 0B5 082
 * refs (1): B4B39
 ROMP_0B5_082:
-        ::                                       * B662A
-          BINT13                                 * B662F
-          BINT12                                 * B6634
-          BINT2                                  * B6639
-          ROMPTR  0B5 08F                        * B663E
-        ;                                        * B6649
+        :: BINT13 BINT12 BINT2 ROMPTR 0B5 08F ;  * B662A
 
 * ROMPTR 0B5 083
 * refs (1): B4B39
 ROMP_0B5_083:
-        ::                                       * B664E
-          BINT13                                 * B6653
-          SWAP                                   * B6658
-          BINT12                                 * B665D
-          BINT2                                  * B6662
-          ROMPTR  0B5 090                        * B6667
-        ;                                        * B6672
+        :: BINT13 SWAP BINT12 BINT2 ROMPTR 0B5 090 ; * B664E
 
 * ROMPTR 0B5 084
 * refs (1): B4B39
 ROMP_0B5_084:
-        ::                                       * B6677
-          BINT11                                 * B667C
-          BINT10                                 * B6681
-          BINT2                                  * B6686
-          ROMPTR  0B5 08F                        * B668B
-        ;                                        * B6696
+        :: BINT11 BINT10 BINT2 ROMPTR 0B5 08F ;  * B6677
 
 * ROMPTR 0B5 085
 * refs (1): B4B39
 ROMP_0B5_085:
-        ::                                       * B669B
-          BINT11                                 * B66A0
-          SWAP                                   * B66A5
-          BINT10                                 * B66AA
-          BINT2                                  * B66AF
-          ROMPTR  0B5 090                        * B66B4
-        ;                                        * B66BF
+        :: BINT11 SWAP BINT10 BINT2 ROMPTR 0B5 090 ; * B669B
 
 * ROMPTR 0B5 086
 * refs (1): B4B39
 ROMP_0B5_086:
-        ::                                       * B66C4
-          BINT5                                  * B66C9
-          BINT4                                  * B66CE
-          BINT3                                  * B66D3
-          BINT3                                  * B66D8
-          ROMPTR  0B5 08F                        * B66DD
-        ;                                        * B66E8
+        :: BINT5 BINT4 BINT3 BINT3 ROMPTR 0B5 08F ; * B66C4
 
 * ROMPTR 0B5 087
 * refs (1): B4B39
 ROMP_0B5_087:
-        ::                                       * B66ED
-          BINT5                                  * B66F2
-          3UNROLL                                * B66F7
-          BINT4                                  * B66FC
-          SWAP                                   * B6701
-          BINT3                                  * B6706
-          BINT3                                  * B670B
-          ROMPTR  0B5 090                        * B6710
-        ;                                        * B671B
+        :: BINT5 3UNROLL BINT4 SWAP BINT3 BINT3 ROMPTR 0B5 090 ; * B66ED
 
 * ROMPTR 0B5 088
 * refs (1): B4B39
 ROMP_0B5_088:
-        ::                                       * B6720
-          BINT9                                  * B6725
-          BINT8                                  * B672A
-          BINT2                                  * B672F
-          ROMPTR  0B5 08F                        * B6734
-        ;                                        * B673F
+        :: BINT9 BINT8 BINT2 ROMPTR 0B5 08F ;    * B6720
 
 * ROMPTR 0B5 089
 * refs (1): B4B39
 ROMP_0B5_089:
-        ::                                       * B6744
-          BINT9                                  * B6749
-          SWAP                                   * B674E
-          BINT8                                  * B6753
-          BINT2                                  * B6758
-          ROMPTR  0B5 090                        * B675D
-        ;                                        * B6768
+        :: BINT9 SWAP BINT8 BINT2 ROMPTR 0B5 090 ; * B6744
 
 * ROMPTR 0B5 08A
 * refs (1): B4B39
 ROMP_0B5_08A:
-        ::                                       * B676D
-          BINT7                                  * B6772
-          BINT6                                  * B6777
-          BINT2                                  * B677C
-          ROMPTR  0B5 08F                        * B6781
-        ;                                        * B678C
+        :: BINT7 BINT6 BINT2 ROMPTR 0B5 08F ;    * B676D
 
 * ROMPTR 0B5 08B
 * refs (1): B4B39
 ROMP_0B5_08B:
-        ::                                       * B6791
-          BINT7                                  * B6796
-          SWAP                                   * B679B
-          BINT6                                  * B67A0
-          BINT2                                  * B67A5
-          ROMPTR  0B5 090                        * B67AA
-        ;                                        * B67B5
+        :: BINT7 SWAP BINT6 BINT2 ROMPTR 0B5 090 ; * B6791
 
 * ROMPTR 0B5 08C
 * refs (1): B4B39
 ROMP_0B5_08C:
-        ::                                       * B67BA
-          {}_23989                               * B67BF
-          ERRSET                                 * B67C4
-          ROMPTR  0F1 00A                        * B67C9
-          ERRTRAP                                * B67D4
-          ROMPTR  0B5 08D                        * B67D9
-          BINT16                                 * B67E4
-          ROLL                                   * B67E9
-          DROP                                   * B67EE
-        ;                                        * B67F3
+        :: {}_23989 ERRSET ROMPTR 0F1 00A ERRTRAP ROMPTR 0B5 08D BINT16 ROLL * B67BA
+          DROP ;                                 * B67EE
 
 * ROMPTR 0B5 08D
 * refs (1): B4B39
 ROMP_0B5_08D:
-        ::                                       * B67F8
-          BEGIN                                  * B67FD
-          {}_23989                               * B6802
-          EQ                                     * B6807
-          UNTIL                                  * B680C
-          {}_23989                               * B6811
+        :: BEGIN {}_23989 EQ UNTIL {}_23989      * B67F8
 
 * ROMPTR 0B5 08E
 * refs (1): B4B39
 ROMP_0B5_08E:
-          {                                      * B6816
-            %-1                                  * B681B
-            %1                                   * B6820
-            %-1                                  * B6825
-            %1                                   * B682A
-            %-1                                  * B682F
-            %1                                   * B6834
-            %-1                                  * B6839
-            %1                                   * B683E
-            %-1                                  * B6843
-            %1                                   * B6848
-            %0_2A2B4                             * B684D
-            %-3                                  * B6852
-            %0_2A2B4                             * B6857
-            %10                                  * B685C
-            %8                                   * B6861
-          }                                      * B6866
-          INCOMPDROP                             * B686B
-        ;                                        * B6870
+          { %-1 %1 %-1 %1 %-1 %1 %-1 %1 %-1 %1 %0_2A2B4 %-3 %0_2A2B4 %10 %8 } * B6816
+          INCOMPDROP ;                           * B686B
 
 * ROMPTR 0B5 08F
 * refs (1): B4B39
 ROMP_0B5_08F:
-        ::                                       * B6875
-          ROMPTR  0B5 08C                        * B687A
-          BINT16                                 * B6885
-          PICK                                   * B688A
-          ZERO_DO                                * B688F
-          BINT17                                 * B6894
-          ROLL                                   * B6899
-          INDEX@                                 * B689E
-          #-                                     * B68A3
-          ROLL                                   * B68A8
-          BINT15                                 * B68AD
-          UNROLL                                 * B68B2
-          LOOP                                   * B68B7
-          BINT16                                 * B68BC
-          ROLL                                   * B68C1
-          BINT15                                 * B68C6
-          SWAP                                   * B68CB
-          #-                                     * B68D0
-          NDROP                                  * B68D5
-        ;                                        * B68DA
+        :: ROMPTR 0B5 08C BINT16 PICK ZERO_DO BINT17 ROLL INDEX@ #- ROLL * B6875
+          BINT15 UNROLL LOOP BINT16 ROLL BINT15 SWAP #- NDROP ; * B68AD
 
 * ROMPTR 0B5 090
 * refs (1): B4B39
 ROMP_0B5_090:
-        ::                                       * B68DF
-          ROMPTR  0B5 08C                        * B68E4
-          BINT16                                 * B68EF
-          PICK                                   * B68F4
-          ZERO_DO                                * B68F9
-          BINT17                                 * B68FE
-          PICK                                   * B6903
-          ROLL                                   * B6908
-          DROP                                   * B690D
-          BINT17                                 * B6912
-          ROLL                                   * B6917
-          BINT17                                 * B691C
-          ROLL                                   * B6921
-          UNROLL                                 * B6926
-          LOOP                                   * B692B
-          BINT15                                 * B6930
-          {}N                                    * B6935
-          SWAPDROP                               * B693A
+        :: ROMPTR 0B5 08C BINT16 PICK ZERO_DO BINT17 PICK ROLL DROP BINT17 * B68DF
+          ROLL BINT17 ROLL UNROLL LOOP BINT15 {}N SWAPDROP * B6917
 
 * ROMPTR 0B5 091
 * refs (1): B4B39
 ROMP_0B5_091:
-          ::                                     * B693F
-            '                                    * B6944
-            ID      VPAR                         * B6949
-            STOAPPLDATA                          * B6958
-          ;                                      * B695D
-        ;                                        * B6962
+          :: ' ID VPAR STOAPPLDATA ; ;           * B693F
 
 * ROMPTR 0B5 092
 * refs (1): B4B39
 ROMP_0B5_092:
-        ::                                       * B6967
-          '                                      * B696C
-          ID      EXPR                           * B6971
-          SAFE@_HERE                             * B6980
-          ?SEMI                                  * B6985
-          MINUSONE                               * B698A
-        ;                                        * B698F
+        :: ' ID EXPR SAFE@_HERE ?SEMI            * B6967
+          MINUSONE ;                             * B698A
 
 * ROMPTR 0B5 093
 * refs (1): B4B39
 ROMP_0B5_093:
-        ::                                       * B6994
-          DUP                                    * B6999
-          MINUSONE                               * B699E
-          EQUAL                                  * B69A3
-          caseDROP                               * B69A8
-          '                                      * B69AD
-          ID      EXPR                           * B69B2
-          XEQSTOID                               * B69C1
-        ;                                        * B69C6
+        :: DUP MINUSONE EQUAL caseDROP '         * B6994
+          ID EXPR XEQSTOID ;                     * B69B2
 
 * ROMPTR 0B5 094
 * refs (1): B4B39
 ROMP_0B5_094:
-        ::                                       * B69CB
-          BINT3                                  * B69D0
-          TestSysFlag                            * B69D5
-          NOT                                    * B69DA
-        ;                                        * B69DF
+        :: BINT3 TestSysFlag NOT ;               * B69CB
 
 * ROMPTR 0B5 095
 * refs (1): B4B39
 ROMP_0B5_095:
-        ::                                       * B69E4
-          BINT1                                  * B69E9
-          TestSysFlag                            * B69EE
-        ;                                        * B69F3
+        :: BINT1 TestSysFlag ;                   * B69E4
 
 * ROMPTR 0B5 096
 * refs (1): B4B39
 ROMP_0B5_096:
-        ::                                       * B69F8
-          BINT1                                  * B69FD
-          SWAP                                   * B6A02
-          ITE                                    * B6A07
-          SetSysFlag                             * B6A0C
-          ClrSysFlag                             * B6A11
+        :: BINT1 SWAP ITE SetSysFlag ClrSysFlag  * B69F8
         ;                                        * B6A16
 
 * ROMPTR 0B5 097
 * refs (1): B4B39
 ROMP_0B5_097:
-        ::                                       * B6A1B
-          NOTNUM?                                * B6A20
-          SWAP                                   * B6A25
-          ITE                                    * B6A2A
-          SETNUM                                 * B6A2F
-          CLRNUM                                 * B6A34
+        :: NOTNUM? SWAP ITE SETNUM CLRNUM        * B6A1B
           case                                   * B6A39
-          ::                                     * B6A3E
-            2SWAP                                * B6A43
-            ERRSET                               * B6A48
-            XEQINTEGID                           * B6A4D
-            ERRTRAP                              * B6A52
-            cf(-3);error                         * B6A57
-            CLRNUM                               * B6A5C
-          ;                                      * B6A61
-          2SWAP                                  * B6A66
-          ERRSET                                 * B6A6B
-          XEQINTEGID                             * B6A70
-          ERRTRAP                                * B6A75
-          sf(-3);error                           * B6A7A
-          SETNUM                                 * B6A7F
-        ;                                        * B6A84
+          :: 2SWAP ERRSET XEQINTEGID ERRTRAP cf(-3);error CLRNUM ; * B6A3E
+          2SWAP ERRSET XEQINTEGID ERRTRAP sf(-3);error SETNUM ; * B6A66
 
 * ROMPTR 0B5 098
 * refs (1): B4B39
 ROMP_0B5_098:
-        ::                                       * B6A89
-          2DUP                                   * B6A8E
-          ITE                                    * B6A93
-          ::                                     * B6A98
-            MINUSONE                             * B6A9D
-            EQUAL                                * B6AA2
-            NOT?SEMI                             * B6AA7
-            DROPFALSE                            * B6AAC
-          ;                                      * B6AB1
+        :: 2DUP ITE                              * B6A89
+          :: MINUSONE EQUAL NOT?SEMI             * B6A98
+            DROPFALSE ;                          * B6AAC
           DROP                                   * B6AB6
-          2SWAP                                  * B6ABB
-          DUP                                    * B6AC0
-          symcomp                                * B6AC5
-          ROT                                    * B6ACA
-          symcomp                                * B6ACF
-          BINT2                                  * B6AD4
-          Cr                                     * B6AD9
-          xDER                                   * B6ADE
-          2SWAP                                  * B6AE3
-          case                                   * B6AE8
-          ::                                     * B6AED
-            ROTSWAP                              * B6AF2
-            TWO{}N                               * B6AF7
-            WHERE                                * B6AFC
-            CRUNCH                               * B6B01
-          ;                                      * B6B06
-          DROP                                   * B6B0B
-          SWAPDUP                                * B6B10
-          symcomp                                * B6B15
-          TWO{}N                                 * B6B1A
-          uncrunch                               * B6B1F
-          WHERE                                  * B6B24
-        ;                                        * B6B29
+          2SWAP DUP symcomp ROT symcomp BINT2 Cr xDER 2SWAP case * B6ABB
+          :: ROTSWAP TWO{}N WHERE CRUNCH ;       * B6AED
+          DROP SWAPDUP symcomp TWO{}N uncrunch WHERE ; * B6B0B
 
 * ROMPTR 0B5 099
 * refs (1): B4B39
 ROMP_0B5_099:
-        ::                                       * B6B2E
-          2DROP                                  * B6B33
-          ROMPTR  0B5 008                        * B6B38
-          SWAP                                   * B6B43
-          ROMPTR  0B5 008                        * B6B48
-          SWAP                                   * B6B53
-          symcomp                                * B6B58
-          SWAP                                   * B6B5D
-          symcomp                                * B6B62
-          BINT2                                  * B6B67
-          Cr                                     * B6B6C
-          xDER                                   * B6B71
-          uncrunch                               * B6B76
-          COMPEVAL                               * B6B7B
-        ;                                        * B6B80
+        :: 2DROP ROMPTR 0B5 008 SWAP ROMPTR 0B5 008 SWAP symcomp SWAP * B6B2E
+          symcomp BINT2 Cr xDER uncrunch COMPEVAL ; * B6B62
 
 * ROMPTR 0B5 09A
 * refs (1): B4B39
 ROMP_0B5_09A:
-        ::                                       * B6B85
-          NOTcase                                * B6B8A
-          SYMTAYLR                               * B6B8F
-          SYMTAYLR                               * B6B94
-          CRUNCH                                 * B6B99
-        ;                                        * B6B9E
+        :: NOTcase SYMTAYLR                      * B6B85
+          SYMTAYLR CRUNCH ;                      * B6B94
 
 * ROMPTR 0B5 09B
 * refs (1): B4B39
 ROMP_0B5_09B:
-        ::                                       * B6BA3
-          NOTcase                                * B6BA8
-          SYMISOL                                * B6BAD
-          SYMISOL                                * B6BB2
-          OBJ_49B7D                              * B6BB7
-          CRUNCH                                 * B6BBC
-        ;                                        * B6BC1
+        :: NOTcase SYMISOL                       * B6BA3
+          SYMISOL OBJ_49B7D CRUNCH ;             * B6BB2
 
 * ROMPTR 0B5 09C
 * refs (1): B4B39
 ROMP_0B5_09C:
-        ::                                       * B6BC6
-          NOTcase                                * B6BCB
-          SYMQUAD                                * B6BD0
-          SYMQUAD                                * B6BD5
-          OBJ_49B7D                              * B6BDA
-          CRUNCH                                 * B6BDF
-        ;                                        * B6BE4
+        :: NOTcase SYMQUAD                       * B6BC6
+          SYMQUAD OBJ_49B7D CRUNCH ;             * B6BD5
 
 * ROMPTR 0B5 09D
 * refs (1): B4B39
 ROMP_0B5_09D:
-        ::                                       * B6BE9
-          ROMPTR  0B5 008                        * B6BEE
-          SYMCOLCT                               * B6BF9
-        ;                                        * B6BFE
+        :: ROMPTR 0B5 008 SYMCOLCT ;             * B6BE9
 
 * ROMPTR 0B5 09E
 * refs (1): B4B39
 ROMP_0B5_09E:
-        ::                                       * B6C03
-          ROMPTR  0B5 008                        * B6C08
-          SYMEXPAN                               * B6C13
-        ;                                        * B6C18
+        :: ROMPTR 0B5 008 SYMEXPAN ;             * B6C03
 
 * ROMPTR 0B5 09F
 * refs (1): B4B39
 ROMP_0B5_09F:
-        ::                                       * B6C1D
-          SWAP                                   * B6C22
-          4UNROLL                                * B6C27
-          ROT                                    * B6C2C
-          ROMPTR  0B5 008                        * B6C31
-          ROT                                    * B6C3C
-          ROMPTR  0B5 008                        * B6C41
-          ROT                                    * B6C4C
-          DUP                                    * B6C51
-          MINUSONE                               * B6C56
-          EQUAL                                  * B6C5B
-          ITE                                    * B6C60
-          ::                                     * B6C65
-            DROP                                 * B6C6A
-            BINT2                                * B6C6F
-          ;                                      * B6C74
-          BINT3                                  * B6C79
-          {}N                                    * B6C7E
-          ROT                                    * B6C83
-          ROMPTR  0B5 008                        * B6C88
-          SWAPROT                                * B6C93
-          ITE                                    * B6C98
-          xMATCHUP                               * B6C9D
-          xMATCHDN                               * B6CA2
-          DROP                                   * B6CA7
-        ;                                        * B6CAC
+        :: SWAP 4UNROLL ROT ROMPTR 0B5 008 ROT ROMPTR 0B5 008 ROT DUP * B6C1D
+          MINUSONE EQUAL ITE                     * B6C56
+          :: DROP BINT2 ; BINT3                  * B6C65
+          {}N ROT ROMPTR 0B5 008 SWAPROT ITE xMATCHUP xMATCHDN * B6C7E
+          DROP ;                                 * B6CA7
 
 * ROMPTR 0B5 0A0
 * refs (1): B4B39
 ROMP_0B5_0A0:
-        {                                        * B6CB1
-          ROMPTR  0B5 0A1                        * B6CB6
-          ROMPTR  0B5 0A2                        * B6CC1
-        }                                        * B6CCC
+        { ROMPTR 0B5 0A1 ROMPTR 0B5 0A2 }        * B6CB1
 
 * ROMPTR 0B5 0A1
 * refs (1): B4B39
 ROMP_0B5_0A1:
-        {                                        * B6CD1
-          #       BD26                           * B6CD6  48422
-          FALSE                                  * B6CE0
-        }                                        * B6CE5
+        { # BD26 FALSE }                         * B6CD1
 
 * ROMPTR 0B5 0A2
 * refs (1): B4B39
 ROMP_0B5_0A2:
-        {                                        * B6CEA
-          #       BD27                           * B6CEF  48423
-          TRUE                                   * B6CF9
-        }                                        * B6CFE
+        { # BD27 TRUE }                          * B6CEA
 
 * ROMPTR 0B5 0A3
 * refs (1): B4B39
 ROMP_0B5_0A3:
-        ::                                       * B6D03
-          TOD                                    * B6D08
+        :: TOD                                   * B6D03
 
 * ROMPTR 0B5 0A4
 * refs (1): B4B39
 ROMP_0B5_0A4:
-          ::                                     * B6D0D
-            DUP                                  * B6D12
-            %IP                                  * B6D17
-            SWAP                                 * B6D1C
-            %FP                                  * B6D21
-            %100                                 * B6D26
-            %*                                   * B6D2B
-            DUP                                  * B6D30
-            %IP                                  * B6D35
-            SWAP                                 * B6D3A
-            %FP                                  * B6D3F
-            %100                                 * B6D44
-            %*                                   * B6D49
-            %IP                                  * B6D4E
-            ROMPTR  0B5 0B5                      * B6D53
-            ::                                   * B6D5E
-              BINT41                             * B6D63
-              TestSysFlag                        * B6D68
-              case                               * B6D6D
-              BINT3                              * B6D72
-              4PICK                              * B6D77
-              %12                                * B6D7C
-              %>                                 * B6D81
-              ITE                                * B6D86
-              ::                                 * B6D8B
-                4ROLL                            * B6D90
-                %12                              * B6D95
-                %-                               * B6D9A
-                4UNROLL                          * B6D9F
-                BINT2                            * B6DA4
-              ;                                  * B6DA9
-              ::                                 * B6DAE
-                4PICK                            * B6DB3
-                %12                              * B6DB8
-                %=                               * B6DBD
-                case                             * B6DC2
-                BINT2                            * B6DC7
-                4ROLL                            * B6DCC
-                DUP%0=                           * B6DD1
-                IT                               * B6DD6
-                ::                               * B6DDB
-                  DROP                           * B6DE0
-                  %12                            * B6DE5
-                ;                                * B6DEA
-                4UNROLL                          * B6DEF
-                BINT1                            * B6DF4
-              ;                                  * B6DF9
+          :: DUP %IP SWAP %FP %100 %* DUP %IP SWAP %FP %100 %* %IP * B6D0D
+            ROMPTR 0B5 0B5                       * B6D53
+            :: BINT41 TestSysFlag case BINT3     * B6D5E
+              4PICK %12 %> ITE                   * B6D77
+              :: 4ROLL %12 %- 4UNROLL BINT2 ;    * B6D8B
+              :: 4PICK %12 %= case BINT2         * B6DAE
+                4ROLL DUP%0= IT                  * B6DCC
+                :: DROP %12 ;                    * B6DDB
+                4UNROLL BINT1 ;                  * B6DEF
             ;                                    * B6DFE
-            NTHCOMPDROP                          * B6E03
-          ;                                      * B6E08
+            NTHCOMPDROP ;                        * B6E03
         ;                                        * B6E0D
 
 * ROMPTR 0B5 0A5
 * refs (1): B4B39
 ROMP_0B5_0A5:
-        ::                                       * B6E12
-          ROMPTR  0B0 09D                        * B6E17
-          5UNROLL                                * B6E22
-          5UNROLL                                * B6E27
-          %IP                                    * B6E2C
-          %       1E4                            * B6E31
-          %/                                     * B6E46
-          SWAP                                   * B6E4B
-          %IP                                    * B6E50
-          %100                                   * B6E55
-          %/                                     * B6E5A
-          %+                                     * B6E5F
-          SWAP                                   * B6E64
-          %IP                                    * B6E69
-          ::                                     * B6E6E
-            4ROLL                                * B6E73
-            case                                 * B6E78
-            ROTDROP                              * B6E7D
-            3PICK                                * B6E82
-            ?SKIP                                * B6E87
-            ::                                   * B6E8C
-              DUP                                * B6E91
-              %12                                * B6E96
-              %=                                 * B6E9B
-              casedrop                           * B6EA0
-              %0_2A2B4                           * B6EA5
+        :: ROMPTR 0B0 09D 5UNROLL 5UNROLL %IP % 1E4 %/ SWAP %IP %100 %/ %+ * B6E12
+          SWAP %IP                               * B6E64
+          :: 4ROLL case ROTDROP                  * B6E6E
+            3PICK ?SKIP                          * B6E82
+            :: DUP %12 %= casedrop %0_2A2B4      * B6E8C
             ;                                    * B6EAA
-            ROT                                  * B6EAF
-            OVER                                 * B6EB4
-            %12                                  * B6EB9
-            %<                                   * B6EBE
-            AND                                  * B6EC3
-            IT                                   * B6EC8
-            ::                                   * B6ECD
-              %12                                * B6ED2
-              %+                                 * B6ED7
-            ;                                    * B6EDC
+            ROT OVER %12 %< AND IT               * B6EAF
+            :: %12 %+ ;                          * B6ECD
           ;                                      * B6EE1
-          %+                                     * B6EE6
-          >TIME                                  * B6EEB
-        ;                                        * B6EF0
+          %+ >TIME ;                             * B6EE6
 
 * ROMPTR 0B5 0A6
 * refs (1): B4B39
 ROMP_0B5_0A6:
-        ::                                       * B6EF5
-          DATE                                   * B6EFA
+        :: DATE                                  * B6EF5
 
 * ROMPTR 0B5 0A7
 * refs (1): B4B39
 ROMP_0B5_0A7:
-          ::                                     * B6EFF
-            DUP                                  * B6F04
-            %IP                                  * B6F09
-            SWAP                                 * B6F0E
-            %FP                                  * B6F13
-            %100                                 * B6F18
-            %*                                   * B6F1D
-            DUP                                  * B6F22
-            %IP                                  * B6F27
-            SWAP                                 * B6F2C
-            %100                                 * B6F31
-            %*                                   * B6F36
-            %FP                                  * B6F3B
-            %100                                 * B6F40
-            %*                                   * B6F45
-            BINT42                               * B6F4A
-            TestSysFlag                          * B6F4F
-            IT                                   * B6F54
-            ROTSWAP                              * B6F59
+          :: DUP %IP SWAP %FP %100 %* DUP %IP SWAP %100 %* %FP %100 %* * B6EFF
+            BINT42 TestSysFlag IT ROTSWAP        * B6F4A
           ;                                      * B6F5E
         ;                                        * B6F63
 
 * ROMPTR 0B5 0A8
 * refs (1): B4B39
 ROMP_0B5_0A8:
-        ::                                       * B6F68
-          BINT42                                 * B6F6D
-          TestSysFlag                            * B6F72
-          IT                                     * B6F77
-          ROTSWAP                                * B6F7C
-          %IP                                    * B6F81
-          %100                                   * B6F86
-          %/                                     * B6F8B
-          %FP                                    * B6F90
-          %100                                   * B6F95
-          %*                                     * B6F9A
-          COERCE                                 * B6F9F
-          ROMPTR  0B5 0AA                        * B6FA4
-          SWAP                                   * B6FAF
-          %IP                                    * B6FB4
-          %100                                   * B6FB9
-          %/                                     * B6FBE
-          %FP                                    * B6FC3
-          %+                                     * B6FC8
-          %+                                     * B6FCD
-          >DATE                                  * B6FD2
-        ;                                        * B6FD7
+        :: BINT42 TestSysFlag IT ROTSWAP         * B6F68
+          %IP %100 %/ %FP %100 %* COERCE ROMPTR 0B5 0AA SWAP %IP %100 %/ %FP * B6F81
+          %+ %+ >DATE ;                          * B6FC8
 
 * ROMPTR 0B5 0A9
 * refs (1): B4B39
 ROMP_0B5_0A9:
-        ::                                       * B6FDC
-          OVER                                   * B6FE1
+        :: OVER                                  * B6FDC
           CON(5)  DOARRY                         * B6FE6  array 12
           LENGTH                                 * B6FEB  length, to #B703B
           CON(5)  DOBINT                         * B6FF0  element type
@@ -2290,32 +1019,14 @@ ROMP_0B5_0A9:
           NIBHEX  E1000                          * B7031  #1E
           NIBHEX  F1000                          * B7036  #1F
         ENDLENGTH                                * B703B
-          GETATELN                               * B703B
-          DROP                                   * B7040
-          SWAPROT                                * B7045
-          #2<>                                   * B704A
-          caseDROP                               * B704F
-          BINT42                                 * B7054
-          SysITE                                 * B7059
-          %       2.902E1                        * B705E
-          %       2.29E0                         * B7073
-          SWAP                                   * B7088
+          GETATELN DROP SWAPROT #2<> caseDROP BINT42 * B703B
+          SysITE % 2.902E1 % 2.29E0 SWAP         * B7059
 
 * ROMPTR 0B5 0AA
 * refs (1): B4B39
 ROMP_0B5_0AA:
-          ::                                     * B708D
-            DUP                                  * B7092
-            #       5A                           * B7097  90
-            #>                                   * B70A1
-            ITE                                  * B70A6
-            #       76C                          * B70AB  1900
-            #       7D0                          * B70B5  2000
-            #+                                   * B70BF
-            UNCOERCE                             * B70C4
-            %       1E6                          * B70C9
-            %/                                   * B70DE
-          ;                                      * B70E3
+          :: DUP # 5A #> ITE # 76C # 7D0         * B708D
+            #+ UNCOERCE % 1E6 %/ ;               * B70BF
           %+                                     * B70E8
           CODE                                   * B70ED  51 nibbles
             GOSBVL  POP1%                        * B70F7
@@ -2333,27 +1044,13 @@ L_B7123:
             GOVLNG  PushT/FLoop                  * B7123
           ENDCODE                                * B712A
           ?SEMI                                  * B712A
-          #1+                                    * B712F
-        ;                                        * B7134
+          #1+ ;                                  * B712F
 
 * ROMPTR 0B5 0AB
 * refs (1): B4B39
 ROMP_0B5_0AB:
-        ::                                       * B7139
-          ROMPTR  0B5 0AA                        * B713E
-          BINT42                                 * B7149
-          TestSysFlag                            * B714E
-          IT                                     * B7153
-          ROTSWAP                                * B7158
-          SWAP                                   * B715D
-          UNCOERCE                               * B7162
-          %100                                   * B7167
-          %/                                     * B716C
-          %+                                     * B7171
-          SWAP                                   * B7176
-          UNCOERCE                               * B717B
-          %+                                     * B7180
-          Date>hxs13                             * B7185
+        :: ROMPTR 0B5 0AA BINT42 TestSysFlag IT ROTSWAP * B7139
+          SWAP UNCOERCE %100 %/ %+ SWAP UNCOERCE %+ Date>hxs13 * B715D
           CODE                                   * B718A  53 nibbles
             A=DAT1  A                            * B7194
             AD1EX                                * B7197
@@ -2375,573 +1072,253 @@ ROMP_0B5_0AB:
 * ROMPTR 0B5 0AC
 * refs (1): B4B39
 ROMP_0B5_0AC:
-        ::                                       * B71CE
-          ROMPTR  0B0 09A                        * B71D3
-          6ROLL                                  * B71DE
-          ROMPTR  0B0 09D                        * B71E3
-          SWAP                                   * B71EE
-          BINT11                                 * B71F3
-          UNROLL                                 * B71F8
-          4ROLL                                  * B71FD
-          %IP                                    * B7202
-          %100                                   * B7207
-          %/                                     * B720C
-          %FP                                    * B7211
-          %100                                   * B7216
-          %*                                     * B721B
-          COERCE                                 * B7220
-          ROMPTR  0B5 0AA                        * B7225
-          5ROLL                                  * B7230
-          6ROLL                                  * B7235
-          BINT42                                 * B723A
-          TestSysFlag                            * B723F
-          ?SKIP                                  * B7244
-          SWAP                                   * B7249
-          %IP                                    * B724E
-          %100                                   * B7253
-          %/                                     * B7258
-          %FP                                    * B725D
-          ROT                                    * B7262
-          %+                                     * B7267
-          SWAP                                   * B726C
-          %IP                                    * B7271
-          %100                                   * B7276
-          %/                                     * B727B
-          %FP                                    * B7280
-          %100                                   * B7285
-          %*                                     * B728A
-          %+                                     * B728F
-          8UNROLL                                * B7294
-          4ROLL                                  * B7299
-          %IP                                    * B729E
-          %100                                   * B72A3
-          %/                                     * B72A8
-          %FP                                    * B72AD
-          %100                                   * B72B2
-          %/                                     * B72B7
-          5ROLL                                  * B72BC
-          %IP                                    * B72C1
-          %100                                   * B72C6
-          %/                                     * B72CB
-          %FP                                    * B72D0
-          %+                                     * B72D5
-          5ROLL                                  * B72DA
-          %IP                                    * B72DF
-          %100                                   * B72E4
-          %/                                     * B72E9
-          %FP                                    * B72EE
-          %100                                   * B72F3
-          %*                                     * B72F8
-          ::                                     * B72FD
-            ROT                                  * B7302
-            8ROLL                                * B7307
-            caseDROP                             * B730C
-            ITE                                  * B7311
-            ::                                   * B7316
-              DUP                                * B731B
-              %11                                * B7320
-              %>                                 * B7325
-              ?SEMI                              * B732A
-              %12                                * B732F
-              %+                                 * B7334
-            ;                                    * B7339
-            ::                                   * B733E
-              DUP                                * B7343
-              %12                                * B7348
-              %<>                                * B734D
-              ?SEMI                              * B7352
-              DROP                               * B7357
-              %0_2A2B4                           * B735C
-            ;                                    * B7361
+        :: ROMPTR 0B0 09A 6ROLL ROMPTR 0B0 09D SWAP BINT11 UNROLL 4ROLL %IP * B71CE
+          %100 %/ %FP %100 %* COERCE ROMPTR 0B5 0AA 5ROLL 6ROLL BINT42 * B7207
+          TestSysFlag ?SKIP SWAP                 * B723F
+          %IP %100 %/ %FP ROT %+ SWAP %IP %100 %/ %FP %100 %* %+ 8UNROLL * B724E
+          4ROLL %IP %100 %/ %FP %100 %/ 5ROLL %IP %100 %/ %FP %+ 5ROLL %IP * B7299
+          %100 %/ %FP %100 %*                    * B72E4
+          :: ROT 8ROLL caseDROP ITE              * B72FD
+            :: DUP %11 %> ?SEMI                  * B7316
+              %12 %+ ;                           * B732F
+            :: DUP %12 %<> ?SEMI                 * B733E
+              DROP %0_2A2B4 ;                    * B7357
           ;                                      * B7366
-          %+                                     * B736B
-          4UNROLL                                * B7370
-          %*                                     * B7375
-          SWAPDUP                                * B737A
-          MINUSONE                               * B737F
-          EQUAL                                  * B7384
-          IT                                     * B7389
-          DROPNULL$                              * B738E
-          SWAP                                   * B7393
-          StoAlarms(2r,_,r)                      * B7398
-          DROP                                   * B739D
-        ;                                        * B73A2
+          %+ 4UNROLL %* SWAPDUP MINUSONE EQUAL IT DROPNULL$ * B736B
+          SWAP StoAlarms(2r,_,r) DROP ;          * B7393
 
 * ROMPTR 0B5 0AD
 * refs (1): B4B39
 ROMP_0B5_0AD:
-        ::                                       * B73A7
-          ROMPTR  0B0 09D                        * B73AC
-          DROP                                   * B73B7
-          BINT41                                 * B73BC
-          SWAP                                   * B73C1
-          ITE                                    * B73C6
-          SetSysFlag                             * B73CB
-          ClrSysFlag                             * B73D0
+        :: ROMPTR 0B0 09D DROP BINT41 SWAP ITE SetSysFlag ClrSysFlag * B73A7
         ;                                        * B73D5
 
 * ROMPTR 0B5 0AE
 * refs (1): B4B39
 ROMP_0B5_0AE:
-        ::                                       * B73DA
-          BINT42                                 * B73DF
-          SysITE                                 * B73E4
-          ROMPTR  0B5 0D4                        * B73E9
-          ROMPTR  0B5 0D3                        * B73F4
-        ;                                        * B73FF
+        :: BINT42 SysITE ROMPTR 0B5 0D4 ROMPTR 0B5 0D3 ; * B73DA
 
 * ROMPTR 0B5 0AF
 * refs (1): B4B39
 ROMP_0B5_0AF:
-        ::                                       * B7404
-          ROMPTR  0B0 09A                        * B7409
-          BINT42                                 * B7414
-          SWAP                                   * B7419
-          ITE                                    * B741E
-          SetSysFlag                             * B7423
-          ClrSysFlag                             * B7428
+        :: ROMPTR 0B0 09A BINT42 SWAP ITE SetSysFlag ClrSysFlag * B7404
         ;                                        * B742D
 
 * ROMPTR 0B5 0B0
 * refs (1): B4B39
 ROMP_0B5_0B0:
-        ::                                       * B7432
-          2DUP                                   * B7437
-          ROMPTR  0B5 0A9                        * B743C
-          3NULLLAM{}                             * B7447
-          BIND                                   * B744C
-          1GETLAM                                * B7451
-          #1+_ONE_DO                             * B7456
-          INDEX@                                 * B745B
-          DUP                                    * B7460
-          DUP                                    * B7465
-          #>$                                    * B746A
-          SWAP                                   * B746F
-          BINT10                                 * B7474
-          #<                                     * B7479
-          IT                                     * B747E
-          ::                                     * B7483
-            CHR_Space                            * B7488
-            >H$                                  * B748D
-          ;                                      * B7492
+        :: 2DUP ROMPTR 0B5 0A9 3NULLLAM{} BIND 1GETLAM #1+_ONE_DO INDEX@ DUP * B7432
+          DUP #>$ SWAP BINT10 #< IT              * B7465
+          :: CHR_Space >H$ ;                     * B7483
           APPEND_SPACE                           * B7497
-          {                                      * B749C
-            #       BC15                         * B74A1  48149
-            #       BC16                         * B74AB  48150
-            #       BC17                         * B74B5  48151
-            #       BC18                         * B74BF  48152
-            #       BC19                         * B74C9  48153
-            #       BC1A                         * B74D3  48154
-            #       BC1B                         * B74DD  48155
-          }                                      * B74E7
-          3GETLAM                                * B74EC
-          INDEX@                                 * B74F1
-          2GETLAM                                * B74F6
-          ROMPTR  0B5 0AB                        * B74FB
-          NTHCOMPDROP                            * B7506
-          JstGetTHEMESG                          * B750B
-          &$                                     * B7510
-          SWAP                                   * B7515
-          UNCOERCE                               * B751A
-          TWO{}N                                 * B751F
-          LOOP                                   * B7524
-          1GETABND                               * B7529
-          {}N                                    * B752E
-        ;                                        * B7533
+          { # BC15 # BC16 # BC17 # BC18 # BC19 # BC1A # BC1B } 3GETLAM * B749C
+          INDEX@ 2GETLAM ROMPTR 0B5 0AB NTHCOMPDROP JstGetTHEMESG &$ SWAP * B74F1
+          UNCOERCE TWO{}N LOOP 1GETABND {}N ;    * B751A
 
 * ROMPTR 0B5 0B1
 * refs (1): B4B39
 ROMP_0B5_0B1:
-        ::                                       * B7538
-          DUP                                    * B753D
-          COERCE                                 * B7542
-          BINT4                                  * B7547
-          ZERO_DO                                * B754C
-          #1+                                    * B7551
-          BINT100                                * B7556
-          #/                                     * B755B
-          DROP                                   * B7560
-          DUP                                    * B7565
-          UNCOERCE                               * B756A
-          SWAP                                   * B756F
-          LOOP                                   * B7574
-          DROP                                   * B7579
-          BINT5                                  * B757E
-          {}N                                    * B7583
-        ;                                        * B7588
+        :: DUP COERCE BINT4 ZERO_DO #1+ BINT100 #/ DROP DUP UNCOERCE SWAP * B7538
+          LOOP DROP BINT5 {}N ;                  * B7574
 
 * ROMPTR 0B5 0B2
 * refs (1): B4B39
 ROMP_0B5_0B2:
-        ::                                       * B758D
-          BINT60                                 * B7592
-          ZERO_DO                                * B7597
-          INDEX@                                 * B759C
-          UNCOERCE                               * B75A1
-          LOOP                                   * B75A6
-          BINT60                                 * B75AB
-          {}N                                    * B75B0
-        ;                                        * B75B5
+        :: BINT60 ZERO_DO INDEX@ UNCOERCE LOOP BINT60 {}N ; * B758D
 
 * ROMPTR 0B5 0B3
 * refs (1): B4B39
 ROMP_0B5_0B3:
-        {                                        * B75BA
-          %1                                     * B75BF
-          %2                                     * B75C4
-          %3                                     * B75C9
-          %4                                     * B75CE
-          %5                                     * B75D3
-          %6                                     * B75D8
-          %7                                     * B75DD
-          %8                                     * B75E2
-          %9                                     * B75E7
-          %10                                    * B75EC
-        }                                        * B75F1
+        { %1 %2 %3 %4 %5 %6 %7 %8 %9 %10 }       * B75BA
 
 * ROMPTR 0B5 0B4
 * refs (1): B4B39
 ROMP_0B5_0B4:
-        {                                        * B75F6
-          %0_2A2B4                               * B75FB
-          %1                                     * B7600
-          %2                                     * B7605
-          %3                                     * B760A
-          %4                                     * B760F
-          %5                                     * B7614
-          %6                                     * B7619
-          %7                                     * B761E
-          %8                                     * B7623
-          %9                                     * B7628
-          %10                                    * B762D
-          %11                                    * B7632
-          %12                                    * B7637
-          %13                                    * B763C
-          %14                                    * B7641
-          %15                                    * B7646
-          %16                                    * B764B
-          %17                                    * B7650
-          %18                                    * B7655
-          %19                                    * B765A
-          %20                                    * B765F
-          %21                                    * B7664
-          %22                                    * B7669
-          %23                                    * B766E
-        }                                        * B7673
+        { %0_2A2B4 %1 %2 %3 %4 %5 %6 %7 %8 %9 %10 %11 %12 %13 %14 %15 %16 * B75F6
+          %17 %18 %19 %20 %21 %22 %23 }          * B7650
 
 * ROMPTR 0B5 0B5
 * refs (1): B4B39
 ROMP_0B5_0B5:
-        {                                        * B7678
-          ROMPTR  0B5 0B6                        * B767D
-          ROMPTR  0B5 0B7                        * B7688
-          ROMPTR  0B5 0B8                        * B7693
-        }                                        * B769E
+        { ROMPTR 0B5 0B6 ROMPTR 0B5 0B7 ROMPTR 0B5 0B8 } * B7678
 
 * ROMPTR 0B5 0B6
 * refs (1): B4B39
 ROMP_0B5_0B6:
-        {                                        * B76A3
-          #       BC1D                           * B76A8  48157
-          #       BC1D                           * B76B2  48157
-          ::                                     * B76BC
-            FALSE                                * B76C1
-            FALSE                                * B76C6
-          ;                                      * B76CB
-        }                                        * B76D0
+        { # BC1D # BC1D                          * B76A3
+          :: FALSE FALSE ; }                     * B76BC
 
 * ROMPTR 0B5 0B7
 * refs (1): B4B39
 ROMP_0B5_0B7:
-        {                                        * B76D5
-          #       BC1E                           * B76DA  48158
-          #       BC1E                           * B76E4  48158
-          ::                                     * B76EE
-            FALSE                                * B76F3
-            TRUE                                 * B76F8
-          ;                                      * B76FD
-        }                                        * B7702
+        { # BC1E # BC1E                          * B76D5
+          :: FALSE TRUE ; }                      * B76EE
 
 * ROMPTR 0B5 0B8
 * refs (1): B4B39
 ROMP_0B5_0B8:
-        {                                        * B7707
-          #       BC1F                           * B770C  48159
-          #       BC20                           * B7716  48160
-          ::                                     * B7720
-            TRUE                                 * B7725
-            FALSE                                * B772A
-          ;                                      * B772F
-        }                                        * B7734
+        { # BC1F # BC20                          * B7707
+          :: TRUE FALSE ; }                      * B7720
 
 * ROMPTR 0B5 0B9
 * refs (1): B4B39
 ROMP_0B5_0B9:
-        {                                        * B7739
-          ROMPTR  0B5 0BA                        * B773E
-          ROMPTR  0B5 0BB                        * B7749
-          ROMPTR  0B5 0BC                        * B7754
-          ROMPTR  0B5 0BD                        * B775F
-          ROMPTR  0B5 0BE                        * B776A
-          ROMPTR  0B5 0BF                        * B7775
-          ROMPTR  0B5 0C0                        * B7780
-          ROMPTR  0B5 0C1                        * B778B
-          ROMPTR  0B5 0C2                        * B7796
-          ROMPTR  0B5 0C3                        * B77A1
-          ROMPTR  0B5 0C4                        * B77AC
-          ROMPTR  0B5 0C5                        * B77B7
-        }                                        * B77C2
+        { ROMPTR 0B5 0BA ROMPTR 0B5 0BB ROMPTR 0B5 0BC ROMPTR 0B5 0BD * B7739
+          ROMPTR 0B5 0BE ROMPTR 0B5 0BF ROMPTR 0B5 0C0 ROMPTR 0B5 0C1 * B776A
+          ROMPTR 0B5 0C2 ROMPTR 0B5 0C3 ROMPTR 0B5 0C4 ROMPTR 0B5 0C5 } * B7796
 
 * ROMPTR 0B5 0BA
 * refs (1): B4B39
 ROMP_0B5_0BA:
-        {                                        * B77C7
-          #       BC21                           * B77CC  48161
-          %1                                     * B77D6
-        }                                        * B77DB
+        { # BC21 %1 }                            * B77C7
 
 * ROMPTR 0B5 0BB
 * refs (1): B4B39
 ROMP_0B5_0BB:
-        {                                        * B77E0
-          #       BC22                           * B77E5  48162
-          %2                                     * B77EF
-        }                                        * B77F4
+        { # BC22 %2 }                            * B77E0
 
 * ROMPTR 0B5 0BC
 * refs (1): B4B39
 ROMP_0B5_0BC:
-        {                                        * B77F9
-          #       BC23                           * B77FE  48163
-          %3                                     * B7808
-        }                                        * B780D
+        { # BC23 %3 }                            * B77F9
 
 * ROMPTR 0B5 0BD
 * refs (1): B4B39
 ROMP_0B5_0BD:
-        {                                        * B7812
-          #       BC24                           * B7817  48164
-          %4                                     * B7821
-        }                                        * B7826
+        { # BC24 %4 }                            * B7812
 
 * ROMPTR 0B5 0BE
 * refs (1): B4B39
 ROMP_0B5_0BE:
-        {                                        * B782B
-          #       BC25                           * B7830  48165
-          %5                                     * B783A
-        }                                        * B783F
+        { # BC25 %5 }                            * B782B
 
 * ROMPTR 0B5 0BF
 * refs (1): B4B39
 ROMP_0B5_0BF:
-        {                                        * B7844
-          #       BC26                           * B7849  48166
-          %6                                     * B7853
-        }                                        * B7858
+        { # BC26 %6 }                            * B7844
 
 * ROMPTR 0B5 0C0
 * refs (1): B4B39
 ROMP_0B5_0C0:
-        {                                        * B785D
-          #       BC27                           * B7862  48167
-          %7                                     * B786C
-        }                                        * B7871
+        { # BC27 %7 }                            * B785D
 
 * ROMPTR 0B5 0C1
 * refs (1): B4B39
 ROMP_0B5_0C1:
-        {                                        * B7876
-          #       BC28                           * B787B  48168
-          %8                                     * B7885
-        }                                        * B788A
+        { # BC28 %8 }                            * B7876
 
 * ROMPTR 0B5 0C2
 * refs (1): B4B39
 ROMP_0B5_0C2:
-        {                                        * B788F
-          #       BC29                           * B7894  48169
-          %9                                     * B789E
-        }                                        * B78A3
+        { # BC29 %9 }                            * B788F
 
 * ROMPTR 0B5 0C3
 * refs (1): B4B39
 ROMP_0B5_0C3:
-        {                                        * B78A8
-          #       BC2A                           * B78AD  48170
-          %10                                    * B78B7
-        }                                        * B78BC
+        { # BC2A %10 }                           * B78A8
 
 * ROMPTR 0B5 0C4
 * refs (1): B4B39
 ROMP_0B5_0C4:
-        {                                        * B78C1
-          #       BC2B                           * B78C6  48171
-          %11                                    * B78D0
-        }                                        * B78D5
+        { # BC2B %11 }                           * B78C1
 
 * ROMPTR 0B5 0C5
 * refs (1): B4B39
 ROMP_0B5_0C5:
-        {                                        * B78DA
-          #       BC2C                           * B78DF  48172
-          %12                                    * B78E9
-        }                                        * B78EE
+        { # BC2C %12 }                           * B78DA
 
 * ROMPTR 0B5 0C6
 * refs (1): B4B39
 ROMP_0B5_0C6:
-        {                                        * B78F3
-          ROMPTR  0B5 0C7                        * B78F8
-          ROMPTR  0B5 0C9                        * B7903
-          ROMPTR  0B5 0CB                        * B790E
-          ROMPTR  0B5 0CD                        * B7919
-          ROMPTR  0B5 0CF                        * B7924
-        }                                        * B792F
+        { ROMPTR 0B5 0C7 ROMPTR 0B5 0C9 ROMPTR 0B5 0CB ROMPTR 0B5 0CD * B78F3
+          ROMPTR 0B5 0CF }                       * B7924
 
 * ROMPTR 0B5 0C7
 * refs (1): B4B39
 ROMP_0B5_0C7:
-        {                                        * B7934
-          #       BC2D                           * B7939  48173
-          BINT1                                  * B7943
+        { # BC2D BINT1                           * B7934
 
 * ROMPTR 0B5 0C8
 * refs (1): B4B39
 ROMP_0B5_0C8:
-          %       4.9545216E9                    * B7948
-        }                                        * B795D
+          % 4.9545216E9 }                        * B7948
 
 * ROMPTR 0B5 0C9
 * refs (1): B4B39
 ROMP_0B5_0C9:
-        {                                        * B7962
-          #       BC2E                           * B7967  48174
-          BINT2                                  * B7971
+        { # BC2E BINT2                           * B7962
 
 * ROMPTR 0B5 0CA
 * refs (1): B4B39
 ROMP_0B5_0CA:
-          %       7.077888E8                     * B7976
-        }                                        * B798B
+          % 7.077888E8 }                         * B7976
 
 * ROMPTR 0B5 0CB
 * refs (1): B4B39
 ROMP_0B5_0CB:
-        {                                        * B7990
-          #       BC2F                           * B7995  48175
-          BINT3                                  * B799F
+        { # BC2F BINT3                           * B7990
 
 * ROMPTR 0B5 0CC
 * refs (1): B4B39
 ROMP_0B5_0CC:
-          %       2.94912E7                      * B79A4
-        }                                        * B79B9
+          % 2.94912E7 }                          * B79A4
 
 * ROMPTR 0B5 0CD
 * refs (1): B4B39
 ROMP_0B5_0CD:
-        {                                        * B79BE
-          #       BC30                           * B79C3  48176
-          BINT4                                  * B79CD
+        { # BC30 BINT4                           * B79BE
 
 * ROMPTR 0B5 0CE
 * refs (1): B4B39
 ROMP_0B5_0CE:
-          %       4.9152E5                       * B79D2
-        }                                        * B79E7
+          % 4.9152E5 }                           * B79D2
 
 * ROMPTR 0B5 0CF
 * refs (1): B4B39
 ROMP_0B5_0CF:
-        {                                        * B79EC
-          #       BC31                           * B79F1  48177
-          BINT5                                  * B79FB
+        { # BC31 BINT5                           * B79EC
 
 * ROMPTR 0B5 0D0
 * refs (1): B4B39
 ROMP_0B5_0D0:
-          %       8.192E3                        * B7A00
-        }                                        * B7A15
+          % 8.192E3 }                            * B7A00
 
 * ROMPTR 0B5 0D1
 * refs (1): B4B39
 ROMP_0B5_0D1:
-        {                                        * B7A1A
-          #       BC32                           * B7A1F  48178
-          #       BC33                           * B7A29  48179
-          #       BC34                           * B7A33  48180
-          #       BC35                           * B7A3D  48181
-          #       BC36                           * B7A47  48182
-        }                                        * B7A51
+        { # BC32 # BC33 # BC34 # BC35 # BC36 }   * B7A1A
 
 * ROMPTR 0B5 0D2
 * refs (1): B4B39
 ROMP_0B5_0D2:
-        {                                        * B7A56
-          ROMPTR  0B5 0D3                        * B7A5B
-          ROMPTR  0B5 0D4                        * B7A66
-        }                                        * B7A71
+        { ROMPTR 0B5 0D3 ROMPTR 0B5 0D4 }        * B7A56
 
 * ROMPTR 0B5 0D3
 * refs (1): B4B39
 ROMP_0B5_0D3:
-        {                                        * B7A76
-          #       BC37                           * B7A7B  48183
-          #       BC38                           * B7A85  48184
-          FALSE                                  * B7A8F
-        }                                        * B7A94
+        { # BC37 # BC38 FALSE }                  * B7A76
 
 * ROMPTR 0B5 0D4
 * refs (1): B4B39
 ROMP_0B5_0D4:
-        {                                        * B7A99
-          #       BC39                           * B7A9E  48185
-          #       BC3A                           * B7AA8  48186
-          TRUE                                   * B7AB2
-        }                                        * B7AB7
+        { # BC39 # BC3A TRUE }                   * B7A99
 
 * ROMPTR 0B5 0D5
 * refs (1): B4B39
 ROMP_0B5_0D5:
-        ::                                       * B7ABC
-          ALARMS@                                * B7AC1
-          LENCOMP                                * B7AC6
-        ;                                        * B7ACB
+        :: ALARMS@ LENCOMP ;                     * B7ABC
 
 * ROMPTR 0B5 0D6
 * refs (1): B4B39
 ROMP_0B5_0D6:
-        ::                                       * B7AD0
-          RCLALM                                 * B7AD5
-          NOTcase                                * B7ADA
-          NOALARMERR                             * B7ADF
+        :: RCLALM NOTcase NOALARMERR             * B7AD0
         ;                                        * B7AE4
 
 * ROMPTR 0B5 0D7
 * refs (1): B4B39
 ROMP_0B5_0D7:
-        ::                                       * B7AE9
-          ALRMLS>                                * B7AEE
-          INCOMPDROP                             * B7AF3
-          2SWAP                                  * B7AF8
-          TIMESTR                                * B7AFD
-          SWAP                                   * B7B02
-          %0=                                    * B7B07
-          ITE                                    * B7B0C
-          $       "   "                          * B7B11
-          $       " R "                          * B7B21
-          &$                                     * B7B31
-          SWAP                                   * B7B36
-          DUP                                    * B7B3B
-          MINUSONE                               * B7B40
-          EQUAL                                  * B7B45
-          caseDROP                               * B7B4A
-          DUPTYPECSTR?                           * B7B4F
+        :: ALRMLS> INCOMPDROP 2SWAP TIMESTR SWAP %0= ITE $ "   " $ " R " * B7AE9
+          &$ SWAP DUP MINUSONE EQUAL caseDROP DUPTYPECSTR? * B7B31
           ?SKIP                                  * B7B54
-          ::                                     * B7B59
-            BINT4                                * B7B5E
-            ROMPTR  0B0 074                      * B7B63
-          ;                                      * B7B6E
-          &$                                     * B7B73
-        ;                                        * B7B78
+          :: BINT4 ROMPTR 0B0 074 ;              * B7B59
+          &$ ;                                   * B7B73

@@ -866,15 +866,7 @@ L_0AA95:
 * #port -> present? writeable? merged? #size #addr
 * refs (8): 08FAD 0929E 09348 0B5FC 21875 21945 ...
 PORTSTATUS:
-        ::                                       * 0AAB2
-          FalseFalse                             * 0AAB7
-          FALSE                                  * 0AABC
-          OBJ_70280                              * 0AAC1
-          TOTEMPOB                               * 0AAC6
-          OBJ_7028A                              * 0AACB
-          6ROLL                                  * 0AAD0
-          OBJ_09F6A                              * 0AAD5
-        ;                                        * 0AADA
+        :: FalseFalse FALSE OBJ_70280 TOTEMPOB OBJ_7028A 6ROLL OBJ_09F6A ; * 0AAB2
         ASSEMBLE
 L_0AADF:
         A=0     A                                * 0AADF
@@ -906,11 +898,7 @@ L_0AB11:
 * #port -> #addr
 * refs (1): 218E6
 PORTEND:
-        ::                                       * 0AB22
-          OBJ_7028A                              * 0AB27
-          SWAP                                   * 0AB2C
-          OBJ_0AB3B                              * 0AB31
-        ;                                        * 0AB36
+        :: OBJ_7028A SWAP OBJ_0AB3B ;            * 0AB22
 
 * refs (1): 0AB31
 OBJ_0AB3B:
@@ -939,12 +927,7 @@ L_0AB57:
 * #addr -> backup/library #nextaddr
 * refs (5): 08FDF 093D9 17E70 17E84 21981
 NEXTLIBBAK:
-        ::                                       * 0AB82
-          OBJ_09E1A                              * 0AB87
-          TOTEMPOB                               * 0AB8C
-          TRUE                                   * 0AB91
-          OBJ_09E4D                              * 0AB96
-        ;                                        * 0AB9B
+        :: OBJ_09E1A TOTEMPOB TRUE OBJ_09E4D ;   * 0AB82
         ASSEMBLE
 
 * refs (2): 02173 7DFDD
@@ -1383,22 +1366,13 @@ SUB_0B02F:
 
 * refs (2): 0928F 21ADA
 sto0!(bk):
-        ::                                       * 0B062
-          GARBAGE                                * 0B067
-          FREEINTEMP?                            * 0B06C
-          ?SKIP                                  * 0B071
-          TOTEMPOB                               * 0B076
-          OBJ_0B09E                              * 0B07B
-          MEM                                    * 0B080
-          #<                                     * 0B085
-          ?SKIP                                  * 0B08A
-          SETMEMERR                              * 0B08F
-          sto0!(lb)NoChk                         * 0B094
-        ;                                        * 0B099
+        :: GARBAGE FREEINTEMP? ?SKIP TOTEMPOB    * 0B062
+          OBJ_0B09E MEM #< ?SKIP SETMEMERR       * 0B07B
+          sto0!(lb)NoChk ;                       * 0B094
 
 * refs (2): 0B07B 0B638
 OBJ_0B09E:
-        #       36                               * 0B09E  54
+        # 36                                     * 0B09E  54
 
 * refs (1): 0B094
 sto0!(lb)NoChk:
@@ -1452,15 +1426,7 @@ purge(bk,s):
 
 * refs (1): 0B22C
 OBJ_0B152:
-          ::                                     * 0B152
-            BEGIN                                * 0B157
-            DUP                                  * 0B15C
-            OBJ_0B351                            * 0B161
-            NOT                                  * 0B166
-            UNTIL                                * 0B16B
-          ;                                      * 0B170
-          Purge!(lb,s)                           * 0B175
-        ;                                        * 0B17A
+          :: BEGIN DUP OBJ_0B351 NOT UNTIL ; Purge!(lb,s) ; * 0B152
 
 * refs (1): 0B175
 Purge!(lb,s):
@@ -1505,10 +1471,7 @@ Purge!(lb,s):
 
 * refs (1): 0944C
 OBJ_0B227:
-        ::                                       * 0B227
-          OBJ_0B152                              * 0B22C
-          OBJ_0B23B                              * 0B231
-        ;                                        * 0B236
+        :: OBJ_0B152 OBJ_0B23B ;                 * 0B227
 
 * refs (1): 0B231
 OBJ_0B23B:
@@ -1813,81 +1776,24 @@ L_0B5D2:
 
 * refs (2): 85682 856EB
 OBJ_0B5D4:
-        ::                                       * 0B5D4
-          ZEROOVER                               * 0B5D9
-          #0=?SKIP                               * 0B5DE
-          OBJ_0B656                              * 0B5E3
-          OVER                                   * 0B5E8
-          #3+                                    * 0B5ED
-          ROLL                                   * 0B5F2
-          DUP                                    * 0B5F7
-          PORTSTATUS                             * 0B5FC
-          DROP                                   * 0B601
-          4UNROLL3DROP                           * 0B606
-          ROT2DUP                                * 0B60B
-          BINT10                                 * 0B610
-          #+                                     * 0B615
-          #<case                                 * 0B61A
-          SETNOROOM                              * 0B61F
-          #-                                     * 0B624
-          GARBAGE                                * 0B629
-          MEM                                    * 0B62E
-          SWAP                                   * 0B633
-          OBJ_0B09E                              * 0B638
-          #+                                     * 0B63D
-          #<case                                 * 0B642
-          SETMEMERR                              * 0B647
-          OBJ_0B6C4                              * 0B64C
-        ;                                        * 0B651
+        :: ZEROOVER #0=?SKIP OBJ_0B656 OVER #3+ ROLL DUP PORTSTATUS DROP * 0B5D4
+          4UNROLL3DROP ROT2DUP BINT10 #+ #<case SETNOROOM * 0B606
+          #- GARBAGE MEM SWAP OBJ_0B09E #+ #<case SETMEMERR * 0B624
+          OBJ_0B6C4 ;                            * 0B64C
 
 * refs (1): 0B5E3
 OBJ_0B656:
-        ::                                       * 0B656
-          SWAP                                   * 0B65B
-          DUP                                    * 0B660
-          BINT0                                  * 0B665
-          DO                                     * 0B66A
-          get1                                   * 0B66F
-          DUP                                    * 0B674
-          OSIZE                                  * 0B679
-          4ROLL                                  * 0B67E
-          #+                                     * 0B683
-          ROT                                    * 0B688
-          LOOP                                   * 0B68D
-          SWAP                                   * 0B692
-          pshm1                                  * 0B697
-          BEGIN                                  * 0B69C
-          pullrev                                * 0B6A1
-          psh1&                                  * 0B6A6
-          DUP#0=                                 * 0B6AB
-          UNTIL                                  * 0B6B0
-          DROP                                   * 0B6B5
-          #1-SWAP                                * 0B6BA
-        ;                                        * 0B6BF
+        :: SWAP DUP BINT0 DO get1 DUP OSIZE 4ROLL #+ ROT LOOP SWAP pshm1 * 0B656
+          BEGIN pullrev psh1& DUP#0= UNTIL DROP #1-SWAP ; * 0B69C
 
 * refs (1): 0B64C
 OBJ_0B6C4:
-        ::                                       * 0B6C4
-          OBJ_0B71E                              * 0B6C9
-          OVER#2+UNROL                           * 0B6CE
+        :: OBJ_0B71E OVER#2+UNROL                * 0B6C4
 
 * refs (1): 0B6F6
 OBJ_0B6D3:
-          {                                      * 0B6D3
-          }                                      * 0B6D8
-          OVER#2+UNROL                           * 0B6DD
-          DROP                                   * 0B6E2
-          GARBAGE                                * 0B6E7
-          BEGIN                                  * 0B6EC
-          DUP                                    * 0B6F1
-          OBJ_0B6D3                              * 0B6F6
-          EQ                                     * 0B6FB
-          NOT_WHILE                              * 0B700
-          OBJ_0B799                              * 0B705
-          REPEAT                                 * 0B70A
-          DROP                                   * 0B70F
-          OBJ_0B8C4                              * 0B714
-        ;                                        * 0B719
+          { } OVER#2+UNROL DROP GARBAGE BEGIN DUP OBJ_0B6D3 EQ NOT_WHILE * 0B6D3
+          OBJ_0B799 REPEAT DROP OBJ_0B8C4 ;      * 0B705
 
 * refs (1): 0B6C9
 OBJ_0B71E:
@@ -2055,10 +1961,7 @@ L_0B912:
 
 * refs (3): 0BB08 640C3 640D7
 OBJ_0B997:
-        ::                                       * 0B997
-          FALSE                                  * 0B99C
-          OBJ_0B9AB                              * 0B9A1
-        ;                                        * 0B9A6
+        :: FALSE OBJ_0B9AB ;                     * 0B997
 
 * refs (1): 0B9A1
 OBJ_0B9AB:
@@ -2168,13 +2071,8 @@ L_0BAC5:
 
 * refs (1): 028E5
 LIB000.config:
-        ::                                       * 0BB03
-          OBJ_0B997                              * 0BB08
-          DUP                                    * 0BB0D
-          ?SKIP                                  * 0BB12
-          OBJ_0BA40                              * 0BB17
-          IT                                     * 0BB1C
-          DROP                                   * 0BB21
+        :: OBJ_0B997 DUP ?SKIP OBJ_0BA40         * 0BB03
+          IT DROP                                * 0BB1C
         ;                                        * 0BB26
 
 * refs (1): 0942E
@@ -2232,9 +2130,7 @@ L_0BBA0:
 
 * refs (1): 09E40
 OBJ_0BBA7:
-        ::                                       * 0BBA7
-          OBJ_7028A                              * 0BBAC
-          SWAP                                   * 0BBB1
+        :: OBJ_7028A SWAP                        * 0BBA7
 
 Code:
           CODE                                   * 0BBB6  35 nibbles
@@ -2254,42 +2150,21 @@ Code:
 * -> T T
 * refs (113): 09877 0BC33 0BC5B 11179 1877E 234B0 ...
 TrueTrue:
-        ::                                       * 0BBED
-          TRUE                                   * 0BBF2
-          TRUE                                   * 0BBF7
-        ;                                        * 0BBFC
+        :: TRUE TRUE ;                           * 0BBED
 
 * -> F T
 * refs (42): 237CB 23BFA 23D35 23E5C 23F0B 23FA1 ...
 failed:
-        ::                                       * 0BC01
-          FALSE                                  * 0BC06
-          TRUE                                   * 0BC0B
-        ;                                        * 0BC10
+        :: FALSE TRUE ;                          * 0BC01
 
 * refs (2): 247DF 276C0
 OBJ_0BC15:
-        ::                                       * 0BC15
-          OBJ_0BC47                              * 0BC1A
-          !*trior                                * 0BC1F
-          ::                                     * 0BC24
-            DROP                                 * 0BC29
-            GetNextToken                         * 0BC2E
-            TrueTrue                             * 0BC33
-          ;                                      * 0BC38
-          FALSE                                  * 0BC3D
-        ;                                        * 0BC42
+        :: OBJ_0BC47 !*trior                     * 0BC15
+          :: DROP GetNextToken TrueTrue ; FALSE ; * 0BC24
 
 * refs (3): 0BC1A 28922 2894F
 OBJ_0BC47:
-        ::                                       * 0BC47
-          OVER                                   * 0BC4C
-          EQUAL                                  * 0BC51
-          '                                      * 0BC56
-          TrueTrue                               * 0BC5B
-          FALSE                                  * 0BC60
-          COLARPITE                              * 0BC65
-        ;                                        * 0BC6A
+        :: OVER EQUAL ' TrueTrue FALSE COLARPITE ; * 0BC47
 
 * F -> <SKIP> T T -> <COLA>
 * refs (15): 0BC1F 23A47 23A56 23A79 2435C 2436B ...
@@ -2326,11 +2201,7 @@ L_0BCBB:
 * T T -> F T -> F T <SEMI>
 * refs (70): 0BD4A 239F2 23A1A 23AFB 23B4B 23B78 ...
 !*triand:
-        ::                                       * 0BCCF
-          DUP                                    * 0BCD4
-          NOT                                    * 0BCD9
-          DUP                                    * 0BCDE
-          NOT?DROP                               * 0BCE3
+        :: DUP NOT DUP NOT?DROP                  * 0BCCF
           COLA                                   * 0BCE8
           CODE                                   * 0BCED  53 nibbles
             LC(5)   TRUE                         * 0BCF7
@@ -2353,12 +2224,8 @@ L_0BD1A:
           ENDCODE                                * 0BD2C
         ;                                        * 0BD2C
 
-        ::                                       * 0BD31
-          ?SKIP                                  * 0BD36
-          TRUE                                   * 0BD3B
-          TRUE                                   * 0BD40
-          COLA                                   * 0BD45
-          !*triand                               * 0BD4A
+        :: ?SKIP TRUE                            * 0BD31
+          TRUE COLA !*triand                     * 0BD40
         ;                                        * 0BD4F
 
 * $1 $1 -> :: $1 <Ob1> ; $1 $2 -> :: $1 <Ob2> <Rest> ;
@@ -2429,11 +2296,7 @@ L_0BDF0:
 
 * refs (1): 0BDDD
 OBJ_0BDF6:
-        ::                                       * 0BDF6
-          DROP                                   * 0BDFB
-          GetNextToken                           * 0BE00
-          COLACOLA                               * 0BE05
-        ;                                        * 0BE0A
+        :: DROP GetNextToken COLACOLA ;          * 0BDF6
         NIBHEX  AAC0000                          * 0BE0F  ª..
 
 LIB019:

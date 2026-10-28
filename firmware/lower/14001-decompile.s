@@ -34,84 +34,42 @@ ERRN:
 * -> hxs
 * refs (1): 1A392
 ERRN>HXS:
-        ::                                       * 1404C
-          ERRN                                   * 14051
-          UNCOERCE                               * 14056
-          %>#                                    * 1405B
-        ;                                        * 14060
+        :: ERRN UNCOERCE %># ;                   * 1404C
 
 * -> $
 * refs (1): 1A3AD
 ERRM:
-        ::                                       * 14065
-          ERRN                                   * 1406A
-          BINT0                                  * 1406F
-          #=casedrop                             * 14074
-          NULL$                                  * 14079
-          GETTHEMESG                             * 1407E
-        ;                                        * 14083
+        :: ERRN BINT0 #=casedrop NULL$           * 14065
+          GETTHEMESG ;                           * 1407E
 
 * $ -> $ ob -> $
 * refs (12): 140B5 1CB15 26895 9F7A1 9F83B A0CAE ...
 DO>STR:
-        ::                                       * 14088
-          BINT0                                  * 1408D
-          !DcompWidth                            * 14092
-          DUPTYPECSTR?                           * 14097
-          ?SEMI                                  * 1409C
-          editdecomp$w                           * 140A1
-        ;                                        * 140A6
+        :: BINT0 !DcompWidth DUPTYPECSTR? ?SEMI  * 14088
+          editdecomp$w ;                         * 140A1
 
 * ob %row ->
 * refs (1): 1A593
 DODISP:
-        ::                                       * 140AB
-          SWAP                                   * 140B0
-          DO>STR                                 * 140B5
-          SWAP                                   * 140BA
-          COERCE                                 * 140BF
-          DUP#0=IT                               * 140C4
-          #1+                                    * 140C9
-          BINT7                                  * 140CE
-          DUPROT                                 * 140D3
-          #MIN                                   * 140D8
-          SWAPOVER#-                             * 140DD
-          #1+                                    * 140E2
-          Disp5x7                                * 140E7
-        ;                                        * 140EC
+        :: SWAP DO>STR SWAP COERCE DUP#0=IT #1+ BINT7 DUPROT #MIN SWAPOVER#- * 140AB
+          #1+ Disp5x7 ;                          * 140E2
 
 * % -> $
 * refs (1): 1CB75
 DOCHR:
-        ::                                       * 140F1
-          COERCE                                 * 140F6
-          #>CHR                                  * 140FB
-          NULL$SWAP                              * 14100
-          >T$                                    * 14105
-        ;                                        * 1410A
+        :: COERCE #>CHR NULL$SWAP >T$ ;          * 140F1
 
 * $ -> CHR
 * refs (1): 1CB55
 DONUM:
-        ::                                       * 1410F
-          DUPNULL$?                              * 14114
-          ITE                                    * 14119
-          DROPZERO                               * 1411E
-          CAR$                                   * 14123
-          CHR>#                                  * 14128
-          UNCOERCE                               * 1412D
-        ;                                        * 14132
+        :: DUPNULL$? ITE DROPZERO CAR$           * 1410F
+          CHR># UNCOERCE ;                       * 14128
 
 * $ -> ?
 * refs (3): 1CB35 1CF9E D14D2
 DOSTR>:
-        ::                                       * 14137
-          palparse                               * 1413C
-          case                                   * 14141
-          EVAL                                   * 14146
-          2DROP                                  * 1414B
-          SYNTAXERR                              * 14150
-        ;                                        * 14155
+        :: palparse case EVAL                    * 14137
+          2DROP SYNTAXERR ;                      * 1414B
 
 * %freq %dur ->
 * refs (1): 1A5D3
@@ -135,11 +93,7 @@ L_1418A:
 L_14192:
             GOVLNG  PUSH%LOOP                    * 14192
           ENDCODE                                * 14199
-          COERCESWAP                             * 14199
-          COERCE                                 * 1419E
-          setbeep                                * 141A3
-          OBJ_4241B                              * 141A8
-        ;                                        * 141AD
+          COERCESWAP COERCE setbeep OBJ_4241B ;  * 14199
 
 * #ms #Hz ->
 * refs (3): 141A3 3FDE5 D0EBB
@@ -237,71 +191,35 @@ L_1429B:
 * $ $' -> flag
 * refs (2): 142BF 1EBE1
 $<$?:
-        ::                                       * 142A6
-          SWAP                                   * 142AB
-          $>$?                                   * 142B0
-        ;                                        * 142B5
+        :: SWAP $>$? ;                           * 142A6
 
 * $ $' -> flag
 * refs (1): 1EDBE
 $>=$?:
-        ::                                       * 142BA
-          $<$?                                   * 142BF
+        :: $<$?                                  * 142BA
 L_142C4:
-          %1                                     * 142C4
-          %=                                     * 142C9
-          case                                   * 142CE
-          %0_2A2B4                               * 142D3
-          %1                                     * 142D8
-        ;                                        * 142DD
+          %1 %= case %0_2A2B4                    * 142C4
+          %1 ;                                   * 142D8
 
 * $ $' -> flag
 * refs (1): 1ED1F
 $<=$?:
-        ::                                       * 142E2
-          $>$?                                   * 142E7
-          GOTO                                   * 142EC
-          L_142C4                                * 142F1
-        ;                                        * 142F6
+        :: $>$? GOTO L_142C4 ;                   * 142E2
 
 * % ->
 * refs (1): 1A5B3
 Ck&Freeze:
-        ::                                       * 142FB
-          COERCE                                 * 14300
-          BINT7                                  * 14305
-          #MIN                                   * 1430A
-          DUP#0=IT                               * 1430F
+        :: COERCE BINT7 #MIN DUP#0=IT            * 142FB
 
 drop;<7>:
-          ::                                     * 14314
-            DROP                                 * 14319
-            BINT7                                * 1431E
-          ;                                      * 14323
-          DUPONE                                 * 14328
-          #AND                                   * 1432D
-          #0<>                                   * 14332
-          IT                                     * 14337
-          SetDA1Temp                             * 1433C
-          DUPTWO                                 * 14341
-          #AND                                   * 14346
-          #0<>                                   * 1434B
-          IT                                     * 14350
-          SetDA2OKTemp                           * 14355
-          BINT4                                  * 1435A
-          #AND                                   * 1435F
-          #0<>                                   * 14364
-          IT                                     * 14369
-          SetDA3Temp                             * 1436E
+          :: DROP BINT7 ; DUPONE #AND #0<> IT SetDA1Temp * 14314
+          DUPTWO #AND #0<> IT SetDA2OKTemp       * 14341
+          BINT4 #AND #0<> IT SetDA3Temp          * 1435A
         ;                                        * 14373
 
 * refs (3): 15124 23481 23851
 halt:
-        ::                                       * 14378
-          CK0NOLASTWD                            * 1437D
-          SuspendOK?                             * 14382
-          NOTcase                                * 14387
-          NOHALTERR                              * 1438C
+        :: CK0NOLASTWD SuspendOK? NOTcase NOHALTERR * 14378
 L_14391:
           UNDO_ON?                               * 14391
 
@@ -310,115 +228,54 @@ L_14391:
 
 * refs (3): 1440B 14451 15075
 Π'halt:
-            LAM     'halt                        * 1439B
-          }                                      * 143AC
-          BIND                                   * 143B1
-          ERRSET                                 * 143B6
-          ::                                     * 143BB
-            UNDO_ON?                             * 143C0
-            IT                                   * 143C5
-            SAVESTACK                            * 143CA
-            GOTO                                 * 143CF
-            L_385B1                              * 143D4
-          ;                                      * 143D9
+            LAM 'halt }                          * 1439B
+          BIND ERRSET                            * 143B1
+          :: UNDO_ON? IT SAVESTACK               * 143BB
+            GOTO L_385B1 ;                       * 143CF
 L_143DE:
-          ERRTRAP                                * 143DE
-          OBJ_14E54                              * 143E3
-          OBJ_1444C                              * 143E8
-          DropSysObs                             * 143ED
-          ERROR@                                 * 143F2
-          Err#Cont                               * 143F7
-          #=                                     * 143FC
-          ?SEMI                                  * 14401
-          '                                      * 14406
-          Π'halt                                 * 1440B
-          DRPExitAtLOOP                          * 14410
-          casedrop                               * 14415
-          ERRJMP                                 * 1441A
-          ERROR@                                 * 1441F
-          Err#Kill                               * 14424
-          #<>case                                * 14429
-          ERRJMP                                 * 1442E
-          OBJ_14EEC                              * 14433
-          #0=case                                * 14438
-          ABORT                                  * 1443D
-          ERRJMP                                 * 14442
-        ;                                        * 14447
+          ERRTRAP OBJ_14E54 OBJ_1444C DropSysObs ERROR@ Err#Cont #= ?SEMI * 143DE
+          ' Π'halt DRPExitAtLOOP casedrop ERRJMP * 14406
+          ERROR@ Err#Kill #<>case ERRJMP         * 1441F
+          OBJ_14EEC #0=case ABORT                * 14433
+          ERRJMP ;                               * 14442
 
 * refs (2): 143E8 14560
 OBJ_1444C:
-        ::                                       * 1444C
-          Π'halt                                 * 14451
-          UNDO_ON                                * 14456
-          ?SKIP                                  * 1445B
-          UNDO_OFF                               * 14460
-          ABND                                   * 14465
-        ;                                        * 1446A
+        :: Π'halt UNDO_ON ?SKIP UNDO_OFF         * 1444C
+          ABND ;                                 * 14465
 
 * -> flag
 * refs (8): 14382 144B6 144E3 1450B 3DE4A 40CF8 ...
 SuspendOK?:
-        ::                                       * 1446F
-          AppSuspOK?                             * 14474
-          NOTcaseFALSE                           * 14479
-          '                                      * 1447E
+        :: AppSuspOK? NOTcaseFALSE '             * 1446F
 
 * -> ob
 * refs (13): 1453D 155F4 15658 15662 15671 2DA27 ...
 nohalt:
-          LAM     'nohalt                        * 14483
-          DRPExitAtLOOP                          * 14498
-          NOTcaseTRUE                            * 1449D
-          DROPFALSE                              * 144A2
+          LAM 'nohalt DRPExitAtLOOP NOTcaseTRUE DROPFALSE * 14483
         ;                                        * 144A7
 
 * refs (1): C5DB1
 next:
-        ::                                       * 144AC
-          TakeOver                               * 144B1
-          SuspendOK?                             * 144B6
-          NOTcase                                * 144BB
-          DoBadKey                               * 144C0
-          CK0NOLASTWD                            * 144C5
-          BINT2                                  * 144CA
-          COLA                                   * 144CF
-          OBJ_14533                              * 144D4
+        :: TakeOver SuspendOK? NOTcase DoBadKey  * 144AC
+          CK0NOLASTWD BINT2 COLA OBJ_14533       * 144C5
         ;                                        * 144D9
 
 * refs (1): C5D90
 sstdown:
-        ::                                       * 144DE
-          SuspendOK?                             * 144E3
-          NOTcase                                * 144E8
-          DoBadKey                               * 144ED
-          CK0NOLASTWD                            * 144F2
-          ONECOLA                                * 144F7
-          OBJ_14533                              * 144FC
-        ;                                        * 14501
+        :: SuspendOK? NOTcase DoBadKey           * 144DE
+          CK0NOLASTWD ONECOLA OBJ_14533 ;        * 144F2
 
 * refs (1): C5D6F
 sst:
-        ::                                       * 14506
-          SuspendOK?                             * 1450B
-          NOTcase                                * 14510
-          DoBadKey                               * 14515
-          CK0NOLASTWD                            * 1451A
-          BINT0                                  * 1451F
-          COLA                                   * 14524
-          OBJ_14533                              * 14529
+        :: SuspendOK? NOTcase DoBadKey           * 14506
+          CK0NOLASTWD BINT0 COLA OBJ_14533       * 1451A
         ;                                        * 1452E
 
 * refs (3): 144D4 144FC 14529
 OBJ_14533:
-        ::                                       * 14533
-          '                                      * 14538
-          nohalt                                 * 1453D
-          DRPExitAtLOOP                          * 14542
-          casedrop                               * 14547
-          NOHALTERR                              * 1454C
-          Halted?                                * 14551
-          NOTcaseDROP                            * 14556
-          OBJ_14E54                              * 1455B
+        :: ' nohalt DRPExitAtLOOP casedrop NOHALTERR * 14533
+          Halted? NOTcaseDROP OBJ_14E54          * 14551
           OBJ_1444C                              * 14560
           CODE                                   * 14565  55 nibbles
             C=B     A                            * 1456F
@@ -442,9 +299,7 @@ L_1457D:
             GOLONG  L_14F86                      * 145A0
           ENDCODE                                * 145A6
 L_145A6:
-          ticR                                   * 145A6
-          case                                   * 145AB
-          OBJ_14613                              * 145B0
+          ticR case OBJ_14613                    * 145A6
           RDROP                                  * 145B5
           CODE                                   * 145BA  49 nibbles
             C=B     A                            * 145C4
@@ -463,59 +318,27 @@ L_145EF:
             A=C     A                            * 145EF
             PC=(A)                               * 145F1
           ENDCODE                                * 145F5
-          caseDROP                               * 145F5
-          RDROP                                  * 145FA
-          RDUP                                   * 145FF
-          GOTO                                   * 14604
-          L_145A6                                * 14609
-        ;                                        * 1460E
+          caseDROP RDROP                         * 145F5
+          RDUP GOTO L_145A6 ;                    * 145FF
 
 * refs (1): 145B0
 OBJ_14613:
-        ::                                       * 14613
-          '                                      * 14618
-          OBJ_14640                              * 1461D
-          >R                                     * 14622
-          RSWAP                                  * 14627
-          ERRSET                                 * 1462C
-          COLA                                   * 14631
-          OBJ_1470D                              * 14636
+        :: ' OBJ_14640 >R RSWAP ERRSET COLA OBJ_1470D * 14613
         ;                                        * 1463B
 
 * refs (1): 1461D
 OBJ_14640:
         ::                                       * 14640
 L_14645:
-          ERRTRAP                                * 14645
-          OBJ_14654                              * 1464A
-        ;                                        * 1464F
+          ERRTRAP OBJ_14654 ;                    * 14645
 
 * refs (1): 1464A
 OBJ_14654:
-        ::                                       * 14654
-          DropSysObs                             * 14659
-          RDROP                                  * 1465E
-          ERROR@                                 * 14663
-          BINT1                                  * 14668
-          #=                                     * 1466D
-          caseERRJMP                             * 14672
-          ERROR@                                 * 14677
-          #0=case                                * 1467C
-          ERRJMP                                 * 14681
-          ERROR@                                 * 14686
-          Err#Kill                               * 1468B
-          #=                                     * 14690
-          ?GOTO                                  * 14695
-          L_146AE                                * 1469A
-          SysErrorTrap                           * 1469F
-          GOTO                                   * 146A4
-          L_14391                                * 146A9
+        :: DropSysObs RDROP ERROR@ BINT1 #= caseERRJMP ERROR@ * 14654
+          #0=case ERRJMP                         * 1467C
+          ERROR@ Err#Kill #= ?GOTO L_146AE SysErrorTrap GOTO L_14391 * 14686
 L_146AE:
-          OBJ_14EEC                              * 146AE
-          #0=?SKIP                               * 146B3
-          ERRJMP                                 * 146B8
-          kill                                   * 146BD
-        ;                                        * 146C2
+          OBJ_14EEC #0=?SKIP ERRJMP kill ;       * 146AE
 
 L_146C7:
         CON(5)  OBJ_14EEC                        * 146C7  address (the code jumps or points through it)
@@ -549,76 +372,33 @@ L_146DB:
 
 * refs (2): 14636 14C8F
 OBJ_1470D:
-        ::                                       * 1470D
-          SWAP                                   * 14712
-          BINT0                                  * 14717
-          #=casedrop                             * 1471C
-          OBJ_14762                              * 14721
-          #1=case                                * 14726
-          OBJ_147C1                              * 1472B
-          'R                                     * 14730
-          2Ob>Seco                               * 14735
-          ->StkStr22!                            * 1473A
-          OBJ_14D8C                              * 1473F
-          RDROP                                  * 14744
-          BINT2                                  * 14749
-          OBJ_14F8C                              * 1474E
-          GOTO                                   * 14753
-          L_146DB                                * 14758
-        ;                                        * 1475D
+        :: SWAP BINT0 #=casedrop OBJ_14762       * 1470D
+          #1=case OBJ_147C1                      * 14726
+          'R 2Ob>Seco ->StkStr22! OBJ_14D8C RDROP BINT2 OBJ_14F8C GOTO * 14730
+          L_146DB ;                              * 14758
 
 * refs (5): 14721 147D0 147DF 14802 14811
 OBJ_14762:
-        ::                                       * 14762
-          DUP                                    * 14767
-          OBJ_271C5                              * 1476C
-          case                                   * 14771
-          EVAL                                   * 14776
-          DROP                                   * 1477B
-          REQcase                                * 14780
-          xKILL                                  * 14785
-          OBJ_1482A                              * 1478A
-          DUPTYPECOL?                            * 1478F
-          NOTcase                                * 14794
-          OBJ_14DFA                              * 14799
-          INHARDROM?                             * 1479E
-          case                                   * 147A3
-          OBJ_14DFA                              * 147A8
-          ZEROSWAP                               * 147AD
-          COLA                                   * 147B2
-          OBJ_14DAA                              * 147B7
+        :: DUP OBJ_271C5 case EVAL               * 14762
+          DROP REQcase xKILL                     * 1477B
+          OBJ_1482A DUPTYPECOL? NOTcase OBJ_14DFA * 1478A
+          INHARDROM? case OBJ_14DFA              * 1479E
+          ZEROSWAP COLA OBJ_14DAA                * 147AD
         ;                                        * 147BC
 
 * refs (1): 1472B
 OBJ_147C1:
-        ::                                       * 147C1
-          DUPTYPEIDNT?                           * 147C6
-          NOTcase                                * 147CB
-          OBJ_14762                              * 147D0
-          DUPSAFE@                               * 147D5
-          NOTcase                                * 147DA
-          OBJ_14762                              * 147DF
-          DUPTYPERRP?                            * 147E4
-          ITE                                    * 147E9
-          DROPDUP                                * 147EE
-          SWAPDROPDUP                            * 147F3
-          TYPECOL?                               * 147F8
-          NOTcase                                * 147FD
-          OBJ_14762                              * 14802
-          INHARDROM?                             * 14807
-          case                                   * 1480C
-          OBJ_14762                              * 14811
-          debug(rpl)!                            * 14816
-          GsstFIN                                * 1481B
-        ;                                        * 14820
+        :: DUPTYPEIDNT? NOTcase OBJ_14762        * 147C1
+          DUPSAFE@ NOTcase OBJ_14762             * 147D5
+          DUPTYPERRP? ITE DROPDUP SWAPDROPDUP    * 147E4
+          TYPECOL? NOTcase OBJ_14762             * 147F8
+          INHARDROM? case OBJ_14762              * 14807
+          debug(rpl)! GsstFIN ;                  * 14816
         NIBHEX  E8E60                            * 14825  ←n
 
 * refs (1): 1478A
 OBJ_1482A:
-        ::                                       * 1482A
-          sstDISP                                * 1482F
-          kill                                   * 14834
-        ;                                        * 14839
+        :: sstDISP kill ;                        * 1482A
 
 * refs (1): 23434
 OBJ_1483E:
@@ -626,99 +406,35 @@ OBJ_1483E:
 
 * refs (2): 149C9 14B18
 OBJ_14843:
-          ::                                     * 14843
-            DUP                                  * 14848
-            PALPTRDCMP                           * 1484D
-            DROP                                 * 14852
-          ;                                      * 14857
-          OBJ_148C0                              * 1485C
-          OBJ_148C0                              * 14861
-          OBJ_148C0                              * 14866
-          OBJ_148C0                              * 1486B
-          BINT5                                  * 14870
-          '                                      * 14875
-          xIFEND                                 * 1487A
-          4PICK                                  * 1487F
-          EQ                                     * 14884
-          ?GOTO                                  * 14889
-          L_148A7                                * 1488E
-          DROP                                   * 14893
-          OBJ_148C0                              * 14898
-          OBJ_148C0                              * 1489D
+          :: DUP PALPTRDCMP DROP ; OBJ_148C0 OBJ_148C0 OBJ_148C0 OBJ_148C0 * 14843
+          BINT5 ' xIFEND 4PICK EQ ?GOTO L_148A7 DROP OBJ_148C0 OBJ_148C0 * 14870
           BINT7                                  * 148A2
 L_148A7:
-          SWAP                                   * 148A7
-          OBJ_14D8C                              * 148AC
-          ::NEVAL                                * 148B1
-          GsstFIN                                * 148B6
-        ;                                        * 148BB
+          SWAP OBJ_14D8C ::NEVAL GsstFIN ;       * 148A7
 
 * refs (6): 1485C 14861 14866 1486B 14898 1489D
 OBJ_148C0:
-        ::                                       * 148C0
-          RSWAP                                  * 148C5
-          'R                                     * 148CA
-          RSWAP                                  * 148CF
-          DUPUNROT                               * 148D4
-          OBJ_15156                              * 148D9
-          SPACE$                                 * 148DE
-          !insert$                               * 148E3
-          !append$                               * 148E8
-        ;                                        * 148ED
+        :: RSWAP 'R RSWAP DUPUNROT OBJ_15156 SPACE$ !insert$ !append$ ; * 148C0
 
 * refs (2): 23051 230E1
 OBJ_148F2:
-        ::                                       * 148F2
-          sstDISP                                * 148F7
-          RDUP                                   * 148FC
-          GsstFIN                                * 14901
-        ;                                        * 14906
+        :: sstDISP RDUP GsstFIN ;                * 148F2
 
 * refs (1): 236DC
 OBJ_1490B:
-        ::                                       * 1490B
-          sstDISP                                * 14910
-          ::                                     * 14915
-            xENDDO                               * 1491A
-            GOTO                                 * 1491F
-            L_146C7                              * 14924
-          ;                                      * 14929
-          2RDROP                                 * 1492E
+        :: sstDISP                               * 1490B
+          :: xENDDO GOTO L_146C7 ; 2RDROP        * 14915
 L_14933:
-          OBJ_14EEC                              * 14933
-          #1+                                    * 14938
-          OBJ_14F8C                              * 1493D
-          GsstFIN                                * 14942
-        ;                                        * 14947
+          OBJ_14EEC #1+ OBJ_14F8C GsstFIN ;      * 14933
 
 * refs (1): 23080
 OBJ_1494C:
-        ::                                       * 1494C
-          sstDISP                                * 14951
-          xREPEAT                                * 14956
-          GOTO                                   * 1495B
-          L_146DB                                * 14960
-          OBJ_14EEC                              * 14965
-          #1+                                    * 1496A
-          RROLL                                  * 1496F
-          RDROP                                  * 14974
-          OBJ_14EEC                              * 14979
-          OBJ_14F8C                              * 1497E
-          RSKIP                                  * 14983
-          RSKIP                                  * 14988
-          RSKIP                                  * 1498D
-          GsstFIN                                * 14992
-        ;                                        * 14997
+        :: sstDISP xREPEAT GOTO L_146DB OBJ_14EEC #1+ RROLL RDROP OBJ_14EEC * 1494C
+          OBJ_14F8C RSKIP RSKIP RSKIP GsstFIN ;  * 1497E
 
 * refs (1): 236AD
 OBJ_1499C:
-        ::                                       * 1499C
-          sstDISP                                * 149A1
-          OBJ_14EEC                              * 149A6
-          RDROP                                  * 149AB
-          OBJ_14F8C                              * 149B0
-          GsstFIN                                * 149B5
-        ;                                        * 149BA
+        :: sstDISP OBJ_14EEC RDROP OBJ_14F8C GsstFIN ; * 1499C
 
 * refs (1): 234FD
 OBJ_149BF:
@@ -726,221 +442,78 @@ OBJ_149BF:
 
 * refs (1): 14A5A
 OBJ_149C4:
-          ::                                     * 149C4
-            OBJ_14843                            * 149C9
-            ONESWAP                              * 149CE
-          ;                                      * 149D3
-          GOTO                                   * 149D8
-          L_14A0F                                * 149DD
+          :: OBJ_14843 ONESWAP ; GOTO L_14A0F    * 149C4
 L_149E2:
-          RSWAP                                  * 149E2
-          RDROP                                  * 149E7
-          3UNROLL                                * 149EC
-          3PICK                                  * 149F1
-          ID>$                                   * 149F6
-          SPACE$                                 * 149FB
-          !insert$                               * 14A00
-          !append$                               * 14A05
+          RSWAP RDROP 3UNROLL 3PICK ID>$ SPACE$ !insert$ !append$ * 149E2
           SWAP#1+SWAP                            * 14A0A
 L_14A0F:
-          RDUP                                   * 14A0F
-          ticR                                   * 14A14
-          DROPDUP                                * 14A19
-          TYPELAM?                               * 14A1E
-          ?GOTO                                  * 14A23
-          L_149E2                                * 14A28
-          RDROP                                  * 14A2D
-          DROP                                   * 14A32
-          OBJ_14D8C                              * 14A37
-          ::NEVAL                                * 14A3C
-          ERRSET                                 * 14A41
-          OBJ_14FC3                              * 14A46
-          GsstFIN                                * 14A4B
-        ;                                        * 14A50
+          RDUP ticR DROPDUP TYPELAM? ?GOTO L_149E2 RDROP DROP OBJ_14D8C * 14A0F
+          ::NEVAL ERRSET OBJ_14FC3 GsstFIN ;     * 14A3C
 
 * refs (1): 23027
 OBJ_14A55:
-        ::                                       * 14A55
-          OBJ_149C4                              * 14A5A
+        :: OBJ_149C4                             * 14A55
 L_14A5F:
-          SWAP#1+SWAP                            * 14A5F
-          'R                                     * 14A64
-          3UNROLL                                * 14A69
-          3PICK                                  * 14A6E
-          DUP                                    * 14A73
-          TYPELAM?                               * 14A78
-          NOT?GOTO                               * 14A7D
-          L_14AA5                                * 14A82
-          ID>$                                   * 14A87
-          SPACE$                                 * 14A8C
-          !insert$                               * 14A91
-          !append$                               * 14A96
-          GOTO                                   * 14A9B
-          L_14A5F                                * 14AA0
+          SWAP#1+SWAP 'R 3UNROLL 3PICK DUP TYPELAM? NOT?GOTO L_14AA5 ID>$ * 14A5F
+          SPACE$ !insert$ !append$ GOTO L_14A5F  * 14A8C
 L_14AA5:
-          ->StkStr22!                            * 14AA5
-          CHR_Space                              * 14AAA
-          >H$                                    * 14AAF
-          CHR_Newline                            * 14AB4
-          >H$                                    * 14AB9
-          !append$                               * 14ABE
-          CHR_Space                              * 14AC3
-          >H$                                    * 14AC8
-          DISPSTATUS2                            * 14ACD
-          VERYSLOW                               * 14AD2
-          ::NEVAL                                * 14AD7
-          GsstFIN                                * 14ADC
-        ;                                        * 14AE1
+          ->StkStr22! CHR_Space >H$ CHR_Newline >H$ !append$ CHR_Space >H$ * 14AA5
+          DISPSTATUS2 VERYSLOW ::NEVAL GsstFIN ; * 14ACD
 
 * refs (1): 2313F
 OBJ_14AE6:
-        ::                                       * 14AE6
-          sstDISP                                * 14AEB
-          xSTART                                 * 14AF0
-          RDROP                                  * 14AF5
-          ERRSET                                 * 14AFA
-          OBJ_14FC3                              * 14AFF
-          RDUP                                   * 14B04
-          GsstFIN                                * 14B09
-        ;                                        * 14B0E
+        :: sstDISP xSTART RDROP ERRSET OBJ_14FC3 RDUP GsstFIN ; * 14AE6
 
 * refs (1): 231DC
 OBJ_14B13:
-        ::                                       * 14B13
-          OBJ_14843                              * 14B18
-          SPACE$                                 * 14B1D
-          &$                                     * 14B22
-          'R                                     * 14B27
-          DUPUNROT                               * 14B2C
-          DUPTYPELIST?                           * 14B31
-          ITE                                    * 14B36
-          ->StkStr22!                            * 14B3B
-          ID>$                                   * 14B40
-          !append$                               * 14B45
-          OBJ_14D8C                              * 14B4A
-          2Ob>Seco                               * 14B4F
-          EVAL                                   * 14B54
-          ERRSET                                 * 14B59
-          OBJ_14FC3                              * 14B5E
-          RDUP                                   * 14B63
-          GsstFIN                                * 14B68
-        ;                                        * 14B6D
+        :: OBJ_14843 SPACE$ &$ 'R DUPUNROT DUPTYPELIST? ITE ->StkStr22! ID>$ * 14B13
+          !append$ OBJ_14D8C 2Ob>Seco EVAL ERRSET OBJ_14FC3 RDUP GsstFIN ; * 14B45
 
-        ::                                       * 14B72
-          DUP                                    * 14B77
-          sstDISP                                * 14B7C
-          ::                                     * 14B81
-            EVAL                                 * 14B86
-            ERRSET                               * 14B8B
-            GOTO                                 * 14B90
-            L_146C7                              * 14B95
-          ;                                      * 14B9A
-          2RDROP                                 * 14B9F
-          GOTO                                   * 14BA4
-          L_14933                                * 14BA9
-        ;                                        * 14BAE
+        :: DUP sstDISP                           * 14B72
+          :: EVAL ERRSET GOTO L_146C7 ; 2RDROP GOTO L_14933 ; * 14B81
 
 * refs (1): 2366D
 OBJ_14BB3:
-        ::                                       * 14BB3
-          'R'R                                   * 14BB8
-          OVER                                   * 14BBD
-          DECOMP$                                * 14BC2
-          addtics                                * 14BC7
-          OBJ_14D8C                              * 14BCC
-          BINT3                                  * 14BD1
-          ::NEVAL                                * 14BD6
-          GsstFIN                                * 14BDB
-        ;                                        * 14BE0
+        :: 'R'R OVER DECOMP$ addtics OBJ_14D8C BINT3 ::NEVAL GsstFIN ; * 14BB3
 
 * refs (1): 23490
 OBJ_14BE5:
-        ::                                       * 14BE5
-          sstDISP                                * 14BEA
-          CK0NOLASTWD                            * 14BEF
-          GsstFIN                                * 14BF4
-        ;                                        * 14BF9
+        :: sstDISP CK0NOLASTWD GsstFIN ;         * 14BE5
 
 * refs (1): 23860
 OBJ_14BFE:
-        ::                                       * 14BFE
-          sstDISP                                * 14C03
-          Chk1&2Disp!(st)Fr                      * 14C08
-          GsstFIN                                * 14C0D
-        ;                                        * 14C12
+        :: sstDISP Chk1&2Disp!(st)Fr GsstFIN ;   * 14BFE
 
 * ob ->
 * refs (13): 1482F 148F7 14910 14951 149A1 14AEB ...
 sstDISP:
-        ::                                       * 14C17
-          PALPTRDCMP                             * 14C1C
-          DROP                                   * 14C21
-          OBJ_14D8C                              * 14C26
-        ;                                        * 14C2B
+        :: PALPTRDCMP DROP OBJ_14D8C ;           * 14C17
 
 * refs (1): 22F1D
 OBJ_14C30:
-        ::                                       * 14C30
-          EVAL                                   * 14C35
-          GOTO                                   * 14C3A
-          L_14C58                                * 14C3F
-          RSKIP                                  * 14C44
-          'R                                     * 14C49
-          GOTO                                   * 14C4E
-          L_14C62                                * 14C53
+        :: EVAL GOTO L_14C58 RSKIP 'R GOTO L_14C62 * 14C30
 L_14C58:
-          '                                      * 14C58
-          xTHEN                                  * 14C5D
+          ' xTHEN                                * 14C58
 L_14C62:
-          sstDISP                                * 14C62
-          GsstFIN                                * 14C67
-        ;                                        * 14C6C
+          sstDISP GsstFIN ;                      * 14C62
 
 * refs (1): 22FC9
 OBJ_14C71:
-        ::                                       * 14C71
-          DROP                                   * 14C76
-          RSKIP                                  * 14C7B
-          'R                                     * 14C80
-          ZEROSWAP                               * 14C85
-          COLA                                   * 14C8A
-          OBJ_1470D                              * 14C8F
+        :: DROP RSKIP 'R ZEROSWAP COLA OBJ_1470D * 14C71
         ;                                        * 14C94
 
 * refs (1): 237D0
 OBJ_14C99:
-        ::                                       * 14C99
-          sstDISP                                * 14C9E
-          xTHENCASE                              * 14CA3
-          ::                                     * 14CA8
-            'R'R                                 * 14CAD
-            RDROP                                * 14CB2
-            2Ob>Seco                             * 14CB7
-            >R                                   * 14CBC
-            GsstFIN                              * 14CC1
-          ;                                      * 14CC6
-          xIFEND                                 * 14CCB
-          RSKIP                                  * 14CD0
-          GsstFIN                                * 14CD5
-        ;                                        * 14CDA
+        :: sstDISP xTHENCASE                     * 14C99
+          :: 'R'R RDROP 2Ob>Seco >R GsstFIN ; xIFEND RSKIP GsstFIN ; * 14CA8
 
 * refs (1): 23612
 OBJ_14CDF:
-        ::                                       * 14CDF
-          ABND                                   * 14CE4
-          ERRSET                                 * 14CE9
-          sstDISP                                * 14CEE
-          OBJ_14D1B                              * 14CF3
-          GsstFIN                                * 14CF8
-        ;                                        * 14CFD
+        :: ABND ERRSET sstDISP OBJ_14D1B GsstFIN ; * 14CDF
 
 * refs (1): 23648
 OBJ_14D02:
-        ::                                       * 14D02
-          sstDISP                                * 14D07
-          OBJ_14D1B                              * 14D0C
-          GsstFIN                                * 14D11
-        ;                                        * 14D16
+        :: sstDISP OBJ_14D1B GsstFIN ;           * 14D02
 
 * refs (2): 14CF3 14D0C
 OBJ_14D1B:
@@ -975,75 +548,34 @@ L_14D44:
 
 * refs (1): 14D61
 OBJ_14D6E:
-        ::                                       * 14D6E
-          RDROP                                  * 14D73
-          3RDROP                                 * 14D78
-          ERRTRAP                                * 14D7D
-          NOP                                    * 14D82
-        ;                                        * 14D87
+        :: RDROP 3RDROP ERRTRAP NOP ;            * 14D6E
 
 * refs (8): 1473F 148AC 14A37 14B4A 14BCC 14C26 ...
 OBJ_14D8C:
-        ::                                       * 14D8C
-          CHR_Space                              * 14D91
-          >H$                                    * 14D96
-          DISPSTATUS2                            * 14D9B
-          SetDA1Temp                             * 14DA0
-        ;                                        * 14DA5
+        :: CHR_Space >H$ DISPSTATUS2 SetDA1Temp ; * 14D8C
 
 * refs (1): 147B7
 OBJ_14DAA:
-        ::                                       * 14DAA
-          '                                      * 14DAF
-          ®nop¯                                  * 14DB4
-          >R                                     * 14DB9
-          >R                                     * 14DBE
-          OBJ_14EEC                              * 14DC3
-          DUP                                    * 14DC8
-          RROLL                                  * 14DCD
-          RROLL                                  * 14DD2
-          2RDROP                                 * 14DD7
-          RDUP                                   * 14DDC
-          ERRTRAP                                * 14DE1
-          NOP                                    * 14DE6
-          GOTO                                   * 14DEB
-          L_145A6                                * 14DF0
-        ;                                        * 14DF5
+        :: ' ®nop¯ >R >R OBJ_14EEC DUP RROLL RROLL 2RDROP RDUP ERRTRAP NOP * 14DAA
+          GOTO L_145A6 ;                         * 14DEB
 
 * refs (2): 14799 147A8
 OBJ_14DFA:
-        ::                                       * 14DFA
-          DUP                                    * 14DFF
-          OBJ_15156                              * 14E04
-          OBJ_14D8C                              * 14E09
-          EVAL                                   * 14E0E
-          GsstFIN                                * 14E13
-        ;                                        * 14E18
+        :: DUP OBJ_15156 OBJ_14D8C EVAL GsstFIN ; * 14DFA
 
 * refs (1): 14DB4
 ®nop¯:
         ::                                       * 14E1D
 L_14E22:
-          NOP                                    * 14E22
-        ;                                        * 14E27
+          NOP ;                                  * 14E22
 
 * refs (1): 234B5
 OBJ_14E2C:
-        ::                                       * 14E2C
-          DROP                                   * 14E31
-          'R                                     * 14E36
-          DUP                                    * 14E3B
-          OBJ_15156                              * 14E40
-          OBJ_14D8C                              * 14E45
-          GsstFIN                                * 14E4A
-        ;                                        * 14E4F
+        :: DROP 'R DUP OBJ_15156 OBJ_14D8C GsstFIN ; * 14E2C
 
 * refs (2): 143E3 1455B
 OBJ_14E54:
-        ::                                       * 14E54
-          OBJ_14E6D                              * 14E59
-          case                                   * 14E5E
-          ABND                                   * 14E63
+        :: OBJ_14E6D case ABND                   * 14E54
         ;                                        * 14E68
 
 * refs (2): 14E59 40D02
@@ -1209,118 +741,65 @@ L_14FFC:
 * % ->
 * refs (1): 1A348
 DO%EXIT:
-        ::                                       * 15007
-          COERCE                                 * 1500C
-          DO#EXIT                                * 15011
-        ;                                        * 15016
+        :: COERCE DO#EXIT ;                      * 15007
 
 * hxs ->
 * refs (1): 1A35C
 DOHXSEXIT:
-        ::                                       * 1501B
-          HXS>#                                  * 15020
-          DO#EXIT                                * 15025
-        ;                                        * 1502A
+        :: HXS># DO#EXIT ;                       * 1501B
 
 * # ->
 * refs (2): 15011 15025
 DO#EXIT:
-        ::                                       * 1502F
-          ERRORSTO                               * 15034
-          AtUserStack                            * 15039
-          ERRJMP                                 * 1503E
-        ;                                        * 15043
+        :: ERRORSTO AtUserStack ERRJMP ;         * 1502F
 
 * $ ->
 * refs (2): 1A352 8E217
 DO$EXIT:
-        ::                                       * 15048
-          EXITMSGSTO                             * 1504D
-          #EXITERR                               * 15052
-          ERRORSTO                               * 15057
-          AtUserStack                            * 1505C
-          ERRJMP                                 * 15061
-        ;                                        * 15066
+        :: EXITMSGSTO #EXITERR ERRORSTO AtUserStack ERRJMP ; * 15048
 
 * refs (3): 14551 38764 39713
 Halted?:
-        ::                                       * 1506B
-          '                                      * 15070
-          Π'halt                                 * 15075
-          DRPExitAtLOOP                          * 1507A
-          NOTcaseFALSE                           * 1507F
-          DROPTRUE                               * 15084
+        :: ' Π'halt DRPExitAtLOOP NOTcaseFALSE DROPTRUE * 1506B
         ;                                        * 15089
 
 * prog -> name ->
 * refs (1): C5D50
 xDBUG:
-        ::                                       * 1508E
-          CK1NOLASTWD                            * 15093
-          CK&DISPATCH1                           * 15098
-          BINT8                                  * 1509D
-          debug(rpl)                             * 150A2
-          BINT6                                  * 150A7
-          debug(nm)                              * 150AC
-          BINT7                                  * 150B1
-          debug(nm)                              * 150B6
+        :: CK1NOLASTWD CK&DISPATCH1              * 1508E
+          BINT8 debug(rpl)                       * 1509D  program
+          BINT6 debug(nm)                        * 150A7  name
+          BINT7 debug(nm)                        * 150B1  local
         ;                                        * 150BB
 
 * refs (2): 150A2 1514C
 debug(rpl):
-        ::                                       * 150C0
-          INHARDROM?                             * 150C5
-          case                                   * 150CA
-          SETTYPEERR                             * 150CF
-          COLA                                   * 150D4
-          debug(rpl)!                            * 150D9
+        :: INHARDROM? case SETTYPEERR            * 150C0
+          COLA debug(rpl)!                       * 150D4
         ;                                        * 150DE
 
 * refs (2): 14816 150D9
 debug(rpl)!:
-        ::                                       * 150E3
-          DUP                                    * 150E8
-          >R                                     * 150ED
-          CARCOMP                                * 150F2
-          '                                      * 150F7
-          x<<                                    * 150FC
-          EQIT                                   * 15101
-          ::                                     * 15106
-            RSWAP                                * 1510B
-            RSKIP                                * 15110
-            RSWAP                                * 15115
-          ;                                      * 1511A
-          COLA                                   * 1511F
-          halt                                   * 15124
+        :: DUP >R CARCOMP ' x<< EQIT             * 150E3
+          :: RSWAP RSKIP RSWAP ; COLA halt       * 15106
         ;                                        * 15129
 
 * refs (2): 150AC 150B6
 debug(nm):
-        ::                                       * 1512E
-          SAFE@                                  * 15133
-          NOTcase                                * 15138
-          SETNONEXTERR                           * 1513D
+        :: SAFE@ NOTcase SETNONEXTERR            * 1512E
           CK&DISPATCH1                           * 15142
-          BINT8                                  * 15147
-          debug(rpl)                             * 1514C
+          BINT8 debug(rpl)                       * 15147  program
         ;                                        * 15151
 
 * refs (3): 148D9 14E04 14E40
 OBJ_15156:
         ::                                       * 15156
-          ::                                     * 1515B
-            DUPTYPECOL?                          * 15160
-            ?SEMI                                * 15165
-            Ob>Seco                              * 1516A
-          ;                                      * 1516F
+          :: DUPTYPECOL? ?SEMI                   * 1515B
+            Ob>Seco ;                            * 1516A
 
 * refs (13): 1473A 14AA5 14B3B 1527D 153CF 1540B ...
 ->StkStr22!:
-          ::                                     * 15174
-            setStdWid                            * 15179
-            1stkdecomp$w                         * 1517E
-          ;                                      * 15183
-        ;                                        * 15188
+          :: setStdWid 1stkdecomp$w ; ;          * 15174
 
 * refs (20): 1481B 148B6 14901 14942 14992 149B5 ...
 GsstFIN:
@@ -1336,319 +815,132 @@ GsstFIN:
 * ->
 * refs (2): 1528C 3FB5F
 SolvMenuInit:
-        ::                                       * 151A6
-          '                                      * 151AB
-          OBJ_154CD                              * 151B0
-          MenuKeyNS!                             * 151B5
-          '                                      * 151BA
-          OBJ_155B3                              * 151BF
-          MenuKeyLS!                             * 151C4
-          '                                      * 151C9
-          OBJ_1559A                              * 151CE
-          MenuKeyRS!                             * 151D3
-          '                                      * 151D8
-          PutStoLabel(s,_)                       * 151DD
-          LabelDef!                              * 151E2
-          '                                      * 151E7
-          EQReview                               * 151EC
-          ReviewKey!                             * 151F1
-          OBJ_3BCE2                              * 151F6
-        ;                                        * 151FB
+        :: ' OBJ_154CD MenuKeyNS! ' OBJ_155B3 MenuKeyLS! ' OBJ_1559A * 151A6
+          MenuKeyRS! ' PutStoLabel(s,_) LabelDef! ' EQReview ReviewKey! * 151D3
+          OBJ_3BCE2 ;                            * 151F6
 
 * refs (3): 15352 3BE68 3C329
 OBJ_15200:
-        ::                                       * 15200
-          PTR     InitTrack:                     * 15205
-          OBJ_3AE0C                              * 1520A
-          DORCLE                                 * 1520F
-          DUP                                    * 15214
-          EqList?                                * 15219
-          NOTcase                                * 1521E
+        :: PTR InitTrack: OBJ_3AE0C DORCLE DUP EqList? NOTcase * 15200
 
 * refs (1): 1529B
 OBJ_15223:
-          ::                                     * 15223
-            DUPTYPELIST?                         * 15228
-            ITE                                  * 1522D
-            ::                                   * 15232
-              INNERCOMP                          * 15237
-              #2=                                * 1523C
-              NcaseSIZEERR                       * 15241
-              DUPTYPELIST?                       * 15246
-              NcaseSIZEERR                       * 1524B
-              SWAPDROP                           * 15250
+          :: DUPTYPELIST? ITE                    * 15223
+            :: INNERCOMP #2= NcaseSIZEERR DUPTYPELIST? * 15232
+              NcaseSIZEERR SWAPDROP              * 1524B
             ;                                    * 15255
             FINDVAR                              * 1525A
-            {EXPR}                               * 1525F
-            >TCOMP                               * 15264
-            OBJ_479D4                            * 15269
-            ?SKIP                                * 1526E
+            {EXPR} >TCOMP OBJ_479D4 ?SKIP        * 1525F
 
 1FrDispEQ:
-            ::                                   * 15273
-              Trceq                              * 15278
-              ->StkStr22!                        * 1527D
-              1FrDisp(st)                        * 15282
-            ;                                    * 15287
-            SolvMenuInit                         * 1528C
-          ;                                      * 15291
-          OBJ_15366                              * 15296
-          OBJ_15223                              * 1529B
-          BINT6                                  * 152A0
-          OVER                                   * 152A5
-          LENCOMP                                * 152AA
-          OVER                                   * 152AF
-          #/                                     * 152B4
-          DROP                                   * 152B9
-          #-DUP                                  * 152BE
-          #1=                                    * 152C3
-          ITE                                    * 152C8
+            :: Trceq ->StkStr22! 1FrDisp(st) ;   * 15273
+            SolvMenuInit ;                       * 1528C
+          OBJ_15366 OBJ_15223 BINT6 OVER LENCOMP OVER #/ DROP #-DUP #1= ITE * 15296
           DROP                                   * 152CD
 
 +NullEntries(li,s):
-          ::                                     * 152D2
-            ONE_DO                               * 152D7
-            NullMenuKey                          * 152DC
-            >TCOMP                               * 152E1
-            LOOP                                 * 152E6
-          ;                                      * 152EB
-          {NXEQ}                                 * 152F0
-          >TCOMP                                 * 152F5
-        ;                                        * 152FA
+          :: ONE_DO NullMenuKey >TCOMP LOOP ;    * 152D2
+          {NXEQ} >TCOMP ;                        * 152F0
 
 * ob ->
 * refs (10): 15219 47885 498A8 49AF6 4A0BE 4B797 ...
 EqList?:
-        ::                                       * 152FF
-          DUPTYPELIST?                           * 15304
-          NOTcsdrpfls                            * 15309
-          BINT2                                  * 1530E
-          NTHELCOMP                              * 15313
-          NOTcaseTRUE                            * 15318
-          TYPELIST?                              * 1531D
-          NOT                                    * 15322
-        ;                                        * 15327
+        :: DUPTYPELIST? NOTcsdrpfls BINT2 NTHELCOMP NOTcaseTRUE TYPELIST? * 152FF
+          NOT ;                                  * 15322
 
 * refs (1): 152F0
 {NXEQ}:
         {                                        * 1532C
 
 _NXEQ_:
-          $       "NXEQ"                         * 15331
+          $ "NXEQ"                               * 15331
 
 \NXEQ:
-          ::                                     * 15343
-            NextInEQ!                            * 15348
-            '                                    * 1534D
-            OBJ_15200                            * 15352
-            InitMenu                             * 15357
-          ;                                      * 1535C
-        }                                        * 15361
+          :: NextInEQ! ' OBJ_15200 InitMenu ; }  * 15343
 
 * refs (1): 15296
 OBJ_15366:
-        ::                                       * 15366
-          BINT1                                  * 1536B
-          NTHELCOMP                              * 15370
-          NOTcase                                * 15375
-          NOEQERR                                * 1537A
-          OBJ_15389                              * 1537F
-        ;                                        * 15384
+        :: BINT1 NTHELCOMP NOTcase NOEQERR       * 15366
+          OBJ_15389 ;                            * 1537F
 
 * refs (3): 1537F 4A0EB 4A113
 OBJ_15389:
-        ::                                       * 15389
-          DUPTYPEIDNT?                           * 1538E
-          NOT?SEMI                               * 15393
-          OBJ_473E6                              * 15398
-          OVER                                   * 1539D
-          EQUAL                                  * 153A2
-          ?SEMI                                  * 153A7
-          DUPSAFE@                               * 153AC
-          NOT?SEMI                               * 153B1
-          SWAPDROP                               * 153B6
-        ;                                        * 153BB
+        :: DUPTYPEIDNT? NOT?SEMI                 * 15389
+          OBJ_473E6 OVER EQUAL ?SEMI             * 15398
+          DUPSAFE@ NOT?SEMI                      * 153AC
+          SWAPDROP ;                             * 153B6
 
 * refs (1): 151EC
 EQReview:
-        ::                                       * 153C0
-          BlankDA12                              * 153C5
-          Trceq                                  * 153CA
-          ->StkStr22!                            * 153CF
-          DISPSTATUS2                            * 153D4
-          ::                                     * 153D9
-            BINT7                                * 153DE
-            ONE_DO                               * 153E3
-            INDEX@                               * 153E8
-            GETPROC                              * 153ED
-            DUPTYPEIDNT?                         * 153F2
-            ITE                                  * 153F7
+        :: BlankDA12 Trceq ->StkStr22! DISPSTATUS2 * 153C0
+          :: BINT7 ONE_DO INDEX@ GETPROC DUPTYPEIDNT? ITE * 153D9
 
 DispVarsUtil:
-            ::                                   * 153FC
-              DUPSAFE@                           * 15401
-              ITE                                * 15406
-              ->StkStr22!                        * 1540B
+            :: DUPSAFE@ ITE ->StkStr22!          * 153FC
 
 * refs (5): 46946 8C59A 8C871 8CA70 8CBB4
 Message60E:
-              ::                                 * 15410
-                OBJ_49171                        * 15415
-                JstGetTHEMESG                    * 1541A
-              ;                                  * 1541F
+              :: OBJ_49171 JstGetTHEMESG ;       * 15410
 
 DoSt:(nm,st):
-              ::                                 * 15424
-                SWAP                             * 15429
-                ID>$                             * 1542E
-                BINT1                            * 15433
-                BINT8                            * 15438
-                SUB$                             * 1543D
-                $       ": "                     * 15442
-                !append$SWAP                     * 15450
-                !append$                         * 15455
-              ;                                  * 1545A
-              INDEX@                             * 1545F
-              #1+                                * 15464
-              DISPN                              * 15469
-            ;                                    * 1546E
+              :: SWAP ID>$ BINT1 BINT8 SUB$ $ ": " !append$SWAP !append$ ; * 15424
+              INDEX@ #1+ DISPN ;                 * 1545F
             DROP                                 * 15473
-            LOOP                                 * 15478
-            SetDA12Temp                          * 1547D
-          ;                                      * 15482
+            LOOP SetDA12Temp ;                   * 15478
         ;                                        * 15487
 
 * refs (1): 151DD
 PutStoLabel(s,_):
-        ::                                       * 1548C
-          DUPTYPEIDNT?                           * 15491
-          OVER                                   * 15496
-          NULL$                                  * 1549B
-          EQUALOR                                * 154A0
-          NOTcase                                * 154A5
-          >MENU                                  * 154AA
-          DUPTYPEIDNT?                           * 154AF
-          IT                                     * 154B4
-          ID>$                                   * 154B9
-          MakeInvLabel                           * 154BE
-          Grob>Menu                              * 154C3
-        ;                                        * 154C8
+        :: DUPTYPEIDNT? OVER NULL$ EQUALOR NOTcase >MENU * 1548C
+          DUPTYPEIDNT? IT ID>$                   * 154AF
+          MakeInvLabel Grob>Menu ;               * 154BE
 
 * refs (1): 151B0
 OBJ_154CD:
-        ::                                       * 154CD
-          DUPTYPEIDNT?                           * 154D2
-          ImmedEntry?                            * 154D7
-          ANDNOTcase                             * 154DC
-          StdMenuKeyNS                           * 154E1
-          '                                      * 154E6
-          OBJ_154FA                              * 154EB
-          DoNameKeyLRS                           * 154F0
-        ;                                        * 154F5
+        :: DUPTYPEIDNT? ImmedEntry? ANDNOTcase StdMenuKeyNS * 154CD
+          ' OBJ_154FA DoNameKeyLRS ;             * 154E6
 
 * refs (1): 154EB
 OBJ_154FA:
-        ::                                       * 154FA
-          CK2NOLASTWD                            * 154FF
-          STRIPTAGSl2                            * 15504
-          OVER                                   * 15509
-          FINDVAR                                * 1550E
-          OVERSWAP                               * 15513
-          matchob?                               * 15518
-          ITE                                    * 1551D
-          SETCIRCERR                             * 15522
-          DROP                                   * 15527
+        :: CK2NOLASTWD STRIPTAGSl2 OVER FINDVAR OVERSWAP matchob? ITE * 154FA
+          SETCIRCERR DROP                        * 15522
 
 * refs (2): 49BB9 B4CC3
 OBJ_1552C:
-          ::                                     * 1552C
-            dup;RclInVars(gn)?                   * 15531
-            IT                                   * 15536
+          :: dup;RclInVars(gn)? IT               * 1552C
 
 * % ob ob' -> % ob % ob u -> u' ob
 * refs (3): 490F3 49130 9E58B
 KeepUnit:
-            ::                                   * 1553B
-              DUPTYPEEXT?                        * 15540
-              4PICK                              * 15545
-              TYPEREAL?                          * 1554A
-              ANDNOTcase                         * 1554F
-              DROP                               * 15554
-              ROTSWAP                            * 15559
-              UM>U                               * 1555E
-              SWAP                               * 15563
-            ;                                    * 15568
+            :: DUPTYPEEXT? 4PICK TYPEREAL? ANDNOTcase DROP * 1553B
+              ROTSWAP UM>U SWAP ;                * 15559
           ;                                      * 1556D
-          2DUP                                   * 15572
-          XEQStoKey                              * 15577
-          SWAP                                   * 1557C
-          PromptIdUtil                           * 15581
-          APPprompt1!                            * 15586
-          SetDA1Valid                            * 1558B
-          SetDA3NoCh                             * 15590
-        ;                                        * 15595
+          2DUP XEQStoKey SWAP PromptIdUtil APPprompt1! SetDA1Valid * 15572
+          SetDA3NoCh ;                           * 15590
 
 * refs (1): 151CE
 OBJ_1559A:
-        ::                                       * 1559A
-          dIDNTNcase                             * 1559F
-          StdRightShift                          * 155A4
-          DoNameKeyRS                            * 155A9
-        ;                                        * 155AE
+        :: dIDNTNcase StdRightShift              * 1559A
+          DoNameKeyRS ;                          * 155A9
 
 * refs (1): 151BF
 OBJ_155B3:
-        ::                                       * 155B3
-          DUPTYPEIDNT?                           * 155B8
-          ImmedEntry?                            * 155BD
-          ANDNOTcase                             * 155C2
-          StdMenuKeyLS                           * 155C7
-          '                                      * 155CC
-          SolvEQ(nm)                             * 155D1
-          DoNameKeyLRS                           * 155D6
-        ;                                        * 155DB
+        :: DUPTYPEIDNT? ImmedEntry? ANDNOTcase StdMenuKeyLS * 155B3
+          ' SolvEQ(nm) DoNameKeyLRS ;            * 155CC
 
 * refs (1): 155D1
 SolvEQ(nm):
-        ::                                       * 155E0
-          rceq!                                  * 155E5
-          OVERDUP                                * 155EA
+        :: rceq! OVERDUP                         * 155E0
 
 {'nohalt}:
-          {                                      * 155EF
-            nohalt                               * 155F4
-          }                                      * 155F9
-          BIND                                   * 155FE
-          ID>$                                   * 15603
-          OBJ_4918F                              * 15608
-          JstGetTHEMESG                          * 1560D
-          SWAP&$                                 * 15612
-          APPprompt1!                            * 15617
-          SWAPDUP                                * 1561C
-          SAFE@                                  * 15621
-          ?SKIP                                  * 15626
-          %0_2A2B4                               * 1562B
-          SYMBNUMSOLVE                           * 15630
-          ?SKIP                                  * 15635
+          { nohalt } BIND ID>$ OBJ_4918F JstGetTHEMESG SWAP&$ APPprompt1! * 155EF
+          SWAPDUP SAFE@ ?SKIP %0_2A2B4           * 1561C
+          SYMBNUMSOLVE ?SKIP                     * 15630
 
 Lpop;error(s):
-          ::                                     * 1563A
-            ABND                                 * 1563F
-            ERRORSTO                             * 15644
-            CK0NOLASTWD                          * 15649
-            ERRJMP                               * 1564E
-          ;                                      * 15653
-          nohalt                                 * 15658
-          SWAP'                                  * 1565D
-          nohalt                                 * 15662
-          STO                                    * 15667
-          ID>TAG                                 * 1566C
-          nohalt                                 * 15671
-          ABND                                   * 15676
-          GETTHEMESG                             * 1567B
-          APPprompt1!                            * 15680
-          SetDA1Temp                             * 15685
-        ;                                        * 1568A
+          :: ABND ERRORSTO CK0NOLASTWD ERRJMP ;  * 1563A
+          nohalt SWAP' nohalt STO ID>TAG nohalt ABND GETTHEMESG APPprompt1! * 15658
+          SetDA1Temp ;                           * 15685
 
 * refs (10): 15891 47862 4894F 4899F 49D8F 49DDA ...
 ALGeq?:
@@ -1676,223 +968,125 @@ L_156DF:
             A=C     A                            * 156DF
             PC=(A)                               * 156E1
           ENDCODE                                * 156E5
-          DUP                                    * 156E5
-          NOTcase                                * 156EA
-          SWAPDROP                               * 156EF
-          DROP                                   * 156F4
-          DUPLENCOMP                             * 156F9
-          NTHCOMPDROP                            * 156FE
-          '                                      * 15703
-          x=                                     * 15708
-          EQ                                     * 1570D
-        ;                                        * 15712
+          DUP NOTcase SWAPDROP                   * 156E5
+          DROP DUPLENCOMP NTHCOMPDROP ' x= EQ ;  * 156F4
 
 * ob ->
 * refs (15): 1F15D 44F7C 48FC2 49B3C 8A315 8A6E8 ...
 DOSTOE:
-        ::                                       * 15717
-          'EQ                                    * 1571C
-          XEQSTOID                               * 15721
-        ;                                        * 15726
+        :: 'EQ XEQSTOID ;                        * 15717
 
 * -> ob
 * refs (12): 1520F 1F13D 498A3 49AEC 4B78D 8AB2C ...
 DORCLE:
-        ::                                       * 1572B
-          EQUATION                               * 15730
-          ?SKIP                                  * 15735
-          NOEQERR                                * 1573A
+        :: EQUATION ?SKIP NOEQERR                * 1572B
         ;                                        * 1573F
 
 * -> ob T -> F
 * refs (6): 15730 4690A 4A0AF 4A606 4BF76 50E1D
 EQUATION:
-        ::                                       * 15744
-          'EQ                                    * 15749
-          OBJ_4735A                              * 1574E
-        ;                                        * 15753
+        :: 'EQ OBJ_4735A ;                       * 15744
 
 * refs (13): 1571C 15749 47391 47871 478A8 49B0F ...
 'EQ:
-        ::                                       * 15758
-          '                                      * 1575D
-          CUREQ                                  * 15762
-        ;                                        * 15767
+        :: ' CUREQ ;                             * 15758
 
 * ID EQ
 * refs (3): 15762 C5362 C536C
 CUREQ:
-        ID      EQ                               * 1576C
+        ID EQ                                    * 1576C
 
 * -> id
 * refs (2): 399B1 8555A
 NULLID:
-        ::                                       * 15777
-          '                                      * 1577C
+        :: '                                     * 15777
 
 '':
-          ID      ""                             * 15781
-        ;                                        * 15788
+          ID "" ;                                * 15781
 
 * ob -> %
 * refs (11): 15850 1A5F3 1DF76 22F7C 33D23 36D9E ...
 CRUNCH:
-        ::                                       * 1578D
-          NOTNUM?                                * 15792
-          SETNUM                                 * 15797
-          ITE                                    * 1579C
-          OBJ_157B0                              * 157A1
-          OBJ_157E2                              * 157A6
+        :: NOTNUM? SETNUM ITE OBJ_157B0 OBJ_157E2 * 1578D
         ;                                        * 157AB
 
 * refs (1): 157A1
 OBJ_157B0:
-        ::                                       * 157B0
-          ERRSET                                 * 157B5
-          ::                                     * 157BA
-            EVAL                                 * 157BF
-            ->num(ex)                            * 157C4
-          ;                                      * 157C9
-          ERRTRAP                                * 157CE
-          cf(-3);error                           * 157D3
-          CLRNUM                                 * 157D8
-        ;                                        * 157DD
+        :: ERRSET                                * 157B0
+          :: EVAL ->num(ex) ; ERRTRAP cf(-3);error CLRNUM ; * 157BA
 
 * refs (1): 157A6
 OBJ_157E2:
-        ::                                       * 157E2
-          ERRSET                                 * 157E7
-          ::                                     * 157EC
-            EVAL                                 * 157F1
-            ->num(ex)                            * 157F6
-          ;                                      * 157FB
-          ERRTRAP                                * 15800
-          sf(-3);error                           * 15805
-          SETNUM                                 * 1580A
-        ;                                        * 1580F
+        :: ERRSET                                * 157E2
+          :: EVAL ->num(ex) ; ERRTRAP sf(-3);error SETNUM ; * 157EC
 
 * refs (4): 157D3 5A063 B6A57 D20C8
 cf(-3);error:
-        ::                                       * 15814
-          CLRNUM                                 * 15819
-          ERRJMP                                 * 1581E
-        ;                                        * 15823
+        :: CLRNUM ERRJMP ;                       * 15814
 
 * refs (4): 15805 5A081 B6A7A D20E6
 sf(-3);error:
-        ::                                       * 15828
-          SETNUM                                 * 1582D
-          ERRJMP                                 * 15832
-        ;                                        * 15837
+        :: SETNUM ERRJMP ;                       * 15828
 
 * refs (6): 15946 4696E 495DD 4EF87 51369 8C581
 EVALCRUNCH:
-        ::                                       * 1583C
-          EVAL                                   * 15841
-          DEPTH                                  * 15846
-          #0=?SKIP                               * 1584B
-          CRUNCH                                 * 15850
-        ;                                        * 15855
+        :: EVAL DEPTH #0=?SKIP CRUNCH ;          * 1583C
 
 * refs (1): 1525F
 {EXPR}:
         {                                        * 1585A
 
 _EXPR_:
-          $       "EXPR="                        * 1585F
-          Trceq!                                 * 15873
-        }                                        * 15878
+          $ "EXPR=" Trceq! }                     * 1585F
 
 * refs (1): 15873
 Trceq!:
-        ::                                       * 1587D
-          AtUserStack                            * 15882
-          rceq!                                  * 15887
-          DUP                                    * 1588C
-          ALGeq?                                 * 15891
-          case                                   * 15896
+        :: AtUserStack rceq! DUP ALGeq? case     * 1587D
 
 2tag(eq):
-          ::                                     * 1589B
-            SPLITEQ                              * 158A0
-            1LAMBIND                             * 158A5
-            'EvalNoCK:_sup                       * 158AA
-            xEVAL                                * 158AF
-            CK1NoBlame                           * 158B4
+          :: SPLITEQ 1LAMBIND 'EvalNoCK:_sup xEVAL CK1NoBlame * 1589B
 
 * refs (1): A306E
 OBJ_158B9:
-            #       A07                          * 158B9  2567
-            OBJ_15909                            * 158C3
-            1GETABND                             * 158C8
-            'EvalNoCK:_sup                       * 158CD
-            xEVAL                                * 158D2
-            CK1NoBlame                           * 158D7
+            # A07 OBJ_15909 1GETABND 'EvalNoCK:_sup xEVAL CK1NoBlame * 158B9
 
 * refs (1): A307D
 OBJ_158DC:
-            #       A08                          * 158DC  2568
-            OBJ_15909                            * 158E6
-          ;                                      * 158EB
-          'EvalNoCK:_sup                         * 158F0
-          xEVAL                                  * 158F5
-          CK1NoBlame                             * 158FA
+            # A08 OBJ_15909 ;                    * 158DC
+          'EvalNoCK:_sup xEVAL CK1NoBlame        * 158F0
 
 * refs (1): A3091
 OBJ_158FF:
-          #       A09                            * 158FF  2569
+          # A09                                  * 158FF  2569
 
 * refs (30): 158C3 158E6 99024 99038 9904C A3073 ...
 OBJ_15909:
-          ::                                     * 15909
-            JstGetTHEMESG                        * 1590E
-            >TAG                                 * 15913
-          ;                                      * 15918
-        ;                                        * 1591D
+          :: JstGetTHEMESG >TAG ; ;              * 15909
         BSS     11                               * 15922
 
 * ->
 * refs (10): 158B4 158D7 158FA 1594B 1DF7B 49623 ...
 CK1NoBlame:
-        ::                                       * 1592D
-          0LASTOWDOB!                            * 15932
-          CK1NOLASTWD                            * 15937
-        ;                                        * 1593C
+        :: 0LASTOWDOB! CK1NOLASTWD ;             * 1592D
 
 * refs (5): 47642 49753 49846 499D6 49E52
 CRUNCHNoBlame:
-        ::                                       * 15941
-          EVALCRUNCH                             * 15946
-          CK1NoBlame                             * 1594B
-        ;                                        * 15950
+        :: EVALCRUNCH CK1NoBlame ;               * 15941
 
 * refs (1): 39DF1
 DoSt:22(s,_):
-        ::                                       * 15955
-          OBJ_16969                              * 1595A
-          COLA                                   * 1595F
-          DoSt:(s,_,s)                           * 15964
+        :: OBJ_16969 COLA DoSt:(s,_,s)           * 15955
         ;                                        * 15969
 
 * refs (3): 15964 2D974 318D1
 DoSt:(s,_,s):
-        ::                                       * 1596E
-          !DcompWidth                            * 15973
+        :: !DcompWidth                           * 1596E
 
 * ob -> $
 * refs (8): 1517E 31985 4689C 468D3 49871 4A019 ...
 1stkdecomp$w:
-          ::                                     * 15978
-            OBJ_53914                            * 1597D
-            ERRSET                               * 15982
-            stkdecomp$w                          * 15987
-            ERRTRAP                              * 1598C
-            OBJ_159AF                            * 15991
-            OBJ_159B4                            * 15996
-          ;                                      * 1599B
-          SWAP                                   * 159A0
-          stackitw                               * 159A5
-        ;                                        * 159AA
+          :: OBJ_53914 ERRSET stkdecomp$w ERRTRAP OBJ_159AF OBJ_159B4 ; SWAP * 15978
+          stackitw ;                             * 159A5
 
 * refs (3): 15991 16126 16252
 OBJ_159AF:
@@ -1900,19 +1094,11 @@ OBJ_159AF:
 
 * refs (4): 15996 15A13 15B18 161D5
 OBJ_159B4:
-          ::                                     * 159B4
-            OBJ_53922                            * 159B9
-            OBJ_539D8                            * 159BE
-          ;                                      * 159C3
-          ERRJMP                                 * 159C8
-        ;                                        * 159CD
+          :: OBJ_53922 OBJ_539D8 ; ERRJMP ;      * 159B4
 
 * refs (2): 4EBC2 8D6AC
 OBJ_159D2:
-        ::                                       * 159D2
-          setStdWid                              * 159D7
-          COLA                                   * 159DC
-          stkdecomp$w                            * 159E1
+        :: setStdWid COLA stkdecomp$w            * 159D2
         ;                                        * 159E6
 
 * ob -> $
@@ -1928,32 +1114,18 @@ stkdecomp$w:
 * ->
 * refs (4): 15179 159D7 15A18 15B1D
 setStdWid:
-        ::                                       * 159FA
-          OBJ_16969                              * 159FF
-          !DcompWidth                            * 15A04
-        ;                                        * 15A09
+        :: OBJ_16969 !DcompWidth ;               * 159FA
 
 * ob -> $
 * refs (21): 20E89 222F8 2DC7A 2DCA2 31C7C 408E6 ...
 EDITDECOMP$:
-        ::                                       * 15A0E
-          OBJ_159B4                              * 15A13
-          setStdWid                              * 15A18
-          savefmt1                               * 15A1D
-          ERRSET                                 * 15A22
-          editdecomp$w                           * 15A27
-          ERRTRAP                                * 15A2C
-          ederr                                  * 15A31
-          rstfmt1                                * 15A36
-        ;                                        * 15A3B
+        :: OBJ_159B4 setStdWid savefmt1 ERRSET editdecomp$w ERRTRAP ederr * 15A0E
+          rstfmt1 ;                              * 15A36
 
 * ->
 * refs (4): 15A31 2FCB8 45DE3 468E2
 ederr:
-        ::                                       * 15A40
-          rstfmt1                                * 15A45
-          ERRJMP                                 * 15A4A
-        ;                                        * 15A4F
+        :: rstfmt1 ERRJMP ;                      * 15A40
 
 * refs (3): 352A5 352B4 3530E
 RclOldMode:
@@ -2033,11 +1205,7 @@ SUB_15AFD:
 * ob -> $
 * refs (14): 14BC2 1ACAC 1ACC5 2261D 268A9 2F15D ...
 DECOMP$:
-        ::                                       * 15B13
-          OBJ_159B4                              * 15B18
-          setStdWid                              * 15B1D
-          COLA                                   * 15B22
-          OBJ_15B3D                              * 15B27
+        :: OBJ_159B4 setStdWid COLA OBJ_15B3D    * 15B13
         ;                                        * 15B2C
 
 * ob -> $
@@ -2155,199 +1323,80 @@ L_15CB4:
 
 * refs (2): 15C9F 16162
 _type(_)_:
-        ::                                       * 15CBB
-          NULL$SWAP                              * 15CC0
-          OBJ_15CCF                              * 15CC5
-        ;                                        * 15CCA
+        :: NULL$SWAP OBJ_15CCF ;                 * 15CBB
 
 * refs (6): 15CC5 17077 17CCE 181A5 2DC8E 39E05
 OBJ_15CCF:
-        ::                                       * 15CCF
-          XEQTYPE                                * 15CD4
-          SWAPDROP                               * 15CD9
-          COERCE                                 * 15CDE
-          BINT27                                 * 15CE3
-          #MIN                                   * 15CE8
-          BINT_263d                              * 15CED
-          #+                                     * 15CF2
-          JstGetTHEMESG                          * 15CF7
-          &$                                     * 15CFC
-        ;                                        * 15D01
+        :: XEQTYPE SWAPDROP COERCE BINT27 #MIN BINT_263d #+ JstGetTHEMESG &$ ; * 15CCF
 
 * refs (2): 15C50 15C55
 ->str(s):
-        ::                                       * 15D06
-          #>HXS                                  * 15D0B
-          HXS>$                                  * 15D10
-          BINT3                                  * 15D15
-          LAST$                                  * 15D1A
-          CHR_<                                  * 15D1F
-          >H$                                    * 15D24
-          CHR_>                                  * 15D29
-          >T$                                    * 15D2E
-        ;                                        * 15D33
+        :: #>HXS HXS>$ BINT3 LAST$ CHR_< >H$ CHR_> >T$ ; * 15D06
 
 * refs (2): 15C14 15C19
 ->str(lb):
-        ::                                       * 15D38
-          DUP                                    * 15D3D
-          LIB>#                                  * 15D42
-          DROP                                   * 15D47
-          #:>$                                   * 15D4C
-          APPEND_SPACE                           * 15D51
-          SWAP                                   * 15D56
-          BAKNAME                                * 15D5B
-          DROP                                   * 15D60
-          ID>$                                   * 15D65
-          !!append$                              * 15D6A
+        :: DUP LIB># DROP #:>$ APPEND_SPACE SWAP BAKNAME DROP ID>$ !!append$ * 15D38
 
 * 279d 117h
 BINT_117h:
-          #       117                            * 15D6F  279
+          # 117                                  * 15D6F  279
 
 * refs (2): 15DB5 15E15
 AddMessage(st,s):
-          ::                                     * 15D79
-            GETTHEMESG                           * 15D7E
-            APPEND_SPACE                         * 15D83
-            !!insert$                            * 15D88
-          ;                                      * 15D8D
-        ;                                        * 15D92
+          :: GETTHEMESG APPEND_SPACE !!insert$ ; ; * 15D79
 
 * refs (2): 15C23 15C28
 ->Str(bk):
-        ::                                       * 15D97
-          BAKNAME                                * 15D9C
-          DROP                                   * 15DA1
-          ID>$                                   * 15DA6
-          #       118                            * 15DAB  280
-          AddMessage(st,s)                       * 15DB5
-        ;                                        * 15DBA
+        :: BAKNAME DROP ID>$ # 118 AddMessage(st,s) ; * 15D97
 
 * refs (2): 15E06 15E3D
 OBJ_15DBF:
-        ::                                       * 15DBF
-          SWAP                                   * 15DC4
-          GROBDIM                                * 15DC9
-          #>$                                    * 15DCE
-          SWAP                                   * 15DD3
-          #>$                                    * 15DD8
-          SWAPROT                                * 15DDD
-          !!append$                              * 15DE2
-          !!insert$                              * 15DE7
-        ;                                        * 15DEC
+        :: SWAP GROBDIM #>$ SWAP #>$ SWAPROT !!append$ !!insert$ ; * 15DBF
 
 * refs (4): 15C32 15E2E 31A75 41323
 ->str1(go):
         ::                                       * 15DF1
 
 _chr(215)_:
-          $       " × "                          * 15DF6
-          OBJ_15DBF                              * 15E06
-          #       112                            * 15E0B  274
-          AddMessage(st,s)                       * 15E15
-        ;                                        * 15E1A
+          $ " × " OBJ_15DBF # 112 AddMessage(st,s) ; * 15DF6
 
 * refs (1): 15C37
 ->str2(go):
-        ::                                       * 15E1F
-          OBJ_53930                              * 15E24
-          case                                   * 15E29
-          ->str1(go)                             * 15E2E
-          DUP                                    * 15E33
-          SPACE$                                 * 15E38
-          OBJ_15DBF                              * 15E3D
-          APPEND_SPACE                           * 15E42
-          $       "GROB "                        * 15E47
-          !!insert$                              * 15E5B
-          SWAP                                   * 15E60
-          BINT11                                 * 15E65
-          MINUSONE                               * 15E6A
-          SUBHXS                                 * 15E6F
-          longhxs                                * 15E74
-          !!append$                              * 15E79
-        ;                                        * 15E7E
+        :: OBJ_53930 case ->str1(go)             * 15E1F
+          DUP SPACE$ OBJ_15DBF APPEND_SPACE $ "GROB " !!insert$ SWAP BINT11 * 15E33
+          MINUSONE SUBHXS longhxs !!append$ ;    * 15E6A
 
 * refs (2): 15E74 15FB0
 longhxs:
-        ::                                       * 15E83
-          NULL$TEMP                              * 15E88
-          OVER                                   * 15E8D
-          LENHXS                                 * 15E92
-          #2*                                    * 15E97
-          EXPAND                                 * 15E9C
-          OBJ_15FCF                              * 15EA1
-        ;                                        * 15EA6
+        :: NULL$TEMP OVER LENHXS #2* EXPAND OBJ_15FCF ; * 15E83
 
 * refs (2): 15F33 15FC5
 OBJ_15EAB:
-        ::                                       * 15EAB
-          OVERLEN$                               * 15EB0
-          #>$                                    * 15EB5
-          APPEND_SPACE                           * 15EBA
-          SWAP                                   * 15EBF
-          !!insert$                              * 15EC4
-          SWAP                                   * 15EC9
-          !!append$                              * 15ECE
-        ;                                        * 15ED3
+        :: OVERLEN$ #>$ APPEND_SPACE SWAP !!insert$ SWAP !!append$ ; * 15EAB
 
 * refs (1): 15BA1
 ->str2(st):
-        ::                                       * 15ED8
-          OBJ_53930                              * 15EDD
-          case                                   * 15EE2
-          ->str1(st)                             * 15EE7
-          DUP                                    * 15EEC
-          CHR_DblQuote                           * 15EF1
+        :: OBJ_53930 case ->str1(st)             * 15ED8
+          DUP CHR_DblQuote                       * 15EEC
 
 * $ $find/chr -> #pos -> #0
 * refs (1): 42C4C
 ONEPOS$:
-          ::                                     * 15EF6
-            BINT1                                * 15EFB
-            POS$                                 * 15F00
-          ;                                      * 15F05
-          #0=case                                * 15F0A
-          add2_(st)                              * 15F0F
-          OBJ_5395A                              * 15F14
-          case                                   * 15F19
-          add2_(st)                              * 15F1E
-          $       "C$ "                          * 15F23
-          OBJ_15EAB                              * 15F33
-        ;                                        * 15F38
+          :: BINT1 POS$ ; #0=case add2_(st)      * 15EF6
+          OBJ_5395A case add2_(st)               * 15F14
+          $ "C$ " OBJ_15EAB ;                    * 15F23
 
 * refs (2): 15B9C 15EE7
 ->str1(st):
-        ::                                       * 15F3D
-          OBJ_53930                              * 15F42
-          NOTcase                                * 15F47
-          add2_(st)                              * 15F4C
-          BINT1                                  * 15F51
-          DcompWidth@                            * 15F56
-          DUP                                    * 15F5B
-          BINT255d                               * 15F60
-          #>                                     * 15F65
-          ITE                                    * 15F6A
-          2DROP                                  * 15F6F
-          SUB$                                   * 15F74
-          add2_(st)                              * 15F79
-        ;                                        * 15F7E
+        :: OBJ_53930 NOTcase add2_(st)           * 15F3D
+          BINT1 DcompWidth@ DUP BINT255d #> ITE 2DROP SUB$ * 15F51
+          add2_(st) ;                            * 15F79
 
 * refs (1): 15BDD
 ->str2(b):
-        ::                                       * 15F83
-          OBJ_53930                              * 15F88
-          case                                   * 15F8D
-          HXS>$                                  * 15F92
-          DUP                                    * 15F97
-          LENHXS                                 * 15F9C
-          BINT17                                 * 15FA1
-          #<case                                 * 15FA6
-          HXS>$                                  * 15FAB
-          longhxs                                * 15FB0
-          $       "C# "                          * 15FB5
-          OBJ_15EAB                              * 15FC5
-        ;                                        * 15FCA
+        :: OBJ_53930 case HXS>$                  * 15F83
+          DUP LENHXS BINT17 #<case HXS>$         * 15F97
+          longhxs $ "C# " OBJ_15EAB ;            * 15FB0
 
 * refs (1): 15EA1
 OBJ_15FCF:

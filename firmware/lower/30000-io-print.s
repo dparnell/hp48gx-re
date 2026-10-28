@@ -86,9 +86,7 @@ L_30139:
 * $ -> $' $''
 * refs (4): 2DD83 2F5AB 2F67D 2FBAA
 KINVISLF:
-        ::                                       * 3016B
-          CKREF                                  * 30170
-          ChkTransio                             * 30175
+        :: CKREF ChkTransio                      * 3016B
           CODE                                   * 3017A  487 nibbles
             C=0     A                            * 30184
             R3=C                                 * 30186
@@ -283,26 +281,16 @@ L_30358:
 
 * refs (5): 2FECE 2FEE2 30175 303B1 3047C
 ChkTransio:
-        ::                                       * 30370
-          GetIOPAR                               * 30375
+        :: GetIOPAR                              * 30370
 
 * $ -> $ flag
 VERSTRING?:
-          6UNROLL                                * 3037A
-          5DROP                                  * 3037F
-          IOCheckReal                            * 30384
-          %IP>#                                  * 30389
-          DUP                                    * 3038E
-          BINT4                                  * 30393
-          #<                                     * 30398
-          ?SEMI                                  * 3039D
-          SetIOPARerr                            * 303A2
-        ;                                        * 303A7
+          6UNROLL 5DROP IOCheckReal %IP># DUP BINT4 #< ?SEMI * 3037A
+          SetIOPARerr ;                          * 303A2
 
 * refs (2): 2F176 2F3E2
 HeadIOString:
-        ::                                       * 303AC
-          ChkTransio                             * 303B1
+        :: ChkTransio                            * 303AC
 
 HeadIOString(s):
           CODE                                   * 303B6  178 nibbles
@@ -359,9 +347,7 @@ L_30467:
 
 * refs (2): 2F489 2F588
 OBJ_30477:
-        ::                                       * 30477
-          ChkTransio                             * 3047C
-          TOTEMPSWAP                             * 30481
+        :: ChkTransio TOTEMPSWAP                 * 30477
           CODE                                   * 30486  299 nibbles
             GOSBVL  SAVPTR                       * 30490
             A=DAT1  A                            * 30497
@@ -465,15 +451,7 @@ L_30587:
             GOYES   L_30580                      * 305B6
             GONC    L_30583                      * 305B8
           ENDCODE                                * 305BB
-          GetIOPAR                               * 305BB
-          DROP                                   * 305C0
-          7ROLL                                  * 305C5
-          UNCOERCE                               * 305CA
-          BINT6                                  * 305CF
-          {}N                                    * 305D4
-          OVER                                   * 305D9
-          NOTcaseDROP                            * 305DE
-          StoIOPAR                               * 305E3
+          GetIOPAR DROP 7ROLL UNCOERCE BINT6 {}N OVER NOTcaseDROP StoIOPAR * 305BB
         ;                                        * 305E8
         ASSEMBLE
 
@@ -494,15 +472,8 @@ L_305F8:
 
 * refs (2): 2F65F D45AB
 OBJ_30607:
-        ::                                       * 30607
-          OBJ_3073A                              * 3060C
-          NOT?SEMI                               * 30611
-          DUPLEN$                                * 30616
-          VERSTRING                              * 3061B
-          LEN$                                   * 30620
-          SWAPOVER#-                             * 30625
-          #<3                                    * 3062A
-          caseDROP                               * 3062F
+        :: OBJ_3073A NOT?SEMI                    * 30607
+          DUPLEN$ VERSTRING LEN$ SWAPOVER#- #<3 caseDROP * 30616
           CODE                                   * 30634  237 nibbles
             GOSBVL  POP#                         * 3063E
             A=A+A   A                            * 30645
@@ -579,22 +550,11 @@ L_306AD:
             NIBHEX  00                           * 30729  .
           ENDCODE                                * 3072B
           NOT?SEMI                               * 3072B
-          ?ROMPTR>                               * 30730
-        ;                                        * 30735
+          ?ROMPTR> ;                             * 30730
 
 * refs (2): 2F3D8 3060C
 OBJ_3073A:
-        ::                                       * 3073A
-          VERSTRING                              * 3073F
-          BINT1                                  * 30744
-          BINT6                                  * 30749
-          SUB$                                   * 3074E
-          OVER                                   * 30753
-          BINT1                                  * 30758
-          BINT6                                  * 3075D
-          SUB$                                   * 30762
-          EQUAL                                  * 30767
-        ;                                        * 3076C
+        :: VERSTRING BINT1 BINT6 SUB$ OVER BINT1 BINT6 SUB$ EQUAL ; * 3073A
 
 * refs (2): 2F144 2F419
 OBJ_30771:
@@ -634,12 +594,7 @@ VERSTRING:
 
 * refs (6): 2E10D 2E296 2E2B9 2F2D9 30BC3 30D3B
 GETKP:
-        ::                                       * 307E2
-          '                                      * 307E7
-          LAMKP                                  * 307EC
-          DRPExitAtLOOP                          * 307F1
-          NOTcase                                * 307F6
-          OBJ_2D37C                              * 307FB
+        :: ' LAMKP DRPExitAtLOOP NOTcase OBJ_2D37C * 307E2
         ;                                        * 30800
 
 * $ #pos -> #'
@@ -662,17 +617,9 @@ SUB$1#:
 
 * refs (2): 2D613 30865
 OBJ_30833:
-        ::                                       * 30833
-          LAMPACKET                              * 30838
-          OBJ_30E44                              * 3083D
-          OBJ_2E2B4                              * 30842
-          caseTRUE                               * 30847
-          LAMMaxR                                * 3084C
-          OBJ_2D7AD                              * 30851
-          NOTcaseFALSE                           * 30856
-          DROP                                   * 3085B
-          COLA                                   * 30860
-          OBJ_30833                              * 30865
+        :: LAMPACKET OBJ_30E44 OBJ_2E2B4 caseTRUE LAMMaxR * 30833
+          OBJ_2D7AD NOTcaseFALSE DROP            * 30851
+          COLA OBJ_30833                         * 30860
         ;                                        * 3086A
         ASSEMBLE
 
@@ -693,10 +640,7 @@ SUB_3086F:
 
 * refs (1): 2D503
 OBJ_3088E:
-        ::                                       * 3088E
-          OBJ_309EC                              * 30893
-          NOTcase                                * 30898
-          drop(2);false                          * 3089D
+        :: OBJ_309EC NOTcase drop(2);false       * 3088E
           SWAP                                   * 308A2
           CODE                                   * 308A7  94 nibbles
             GOSUB   SUB_3086F                    * 308B1
@@ -739,10 +683,7 @@ L_30908:
 
 * refs (2): 2DE46 2F70E
 ACK_INIT:
-        ::                                       * 30914
-          OBJ_309EC                              * 30919
-          NOTcaseFALSE                           * 3091E
-          CHOOSE_INIT                            * 30923
+        :: OBJ_309EC NOTcaseFALSE CHOOSE_INIT    * 30914
           CODE                                   * 30928  181 nibbles
             GOSUB   SUB_3086F                    * 30932
             D0=D0-  10                           * 30936
@@ -818,12 +759,7 @@ L_309DD:
 
 * refs (2): 30893 30919
 OBJ_309EC:
-        ::                                       * 309EC
-          OBJ_2D37C                              * 309F1
-          OVERLEN$                               * 309F6
-          #1+LAST$                               * 309FB
-          &$                                     * 30A00
-          CKREF                                  * 30A05
+        :: OBJ_2D37C OVERLEN$ #1+LAST$ &$ CKREF  * 309EC
           CODE                                   * 30A0A  218 nibbles
             GOSUB   SUB_30B16                    * 30A14
             C=DAT1  A                            * 30A18
@@ -923,22 +859,9 @@ SUB_30B16:
 
 * refs (7): 2D526 2D9FF 2DA95 2DE5F 2E713 30923 ...
 CHOOSE_INIT:
-        ::                                       * 30B1D
-          $       "~* @-#Y"                      * 30B22
-          TOTEMPOB                               * 30B3A
-          GetIOPAR                               * 30B3F
-          DROP                                   * 30B44
-          5UNROLL                                * 30B49
-          4DROP                                  * 30B4E
-          IOCheckReal                            * 30B53
-          OBJ_2ED74                              * 30B58
-          NOTcase                                * 30B5D
-          SetIOPARerr                            * 30B62
-          COERCE                                 * 30B67
-          BINT48                                 * 30B6C
-          #+                                     * 30B71
-          #>CHR                                  * 30B76
-          >T$                                    * 30B7B
+        :: $ "~* @-#Y" TOTEMPOB GetIOPAR DROP 5UNROLL 4DROP IOCheckReal * 30B1D
+          OBJ_2ED74 NOTcase SetIOPARerr          * 30B58
+          COERCE BINT48 #+ #>CHR >T$             * 30B67
           CODE                                   * 30B80  47 nibbles
             GOSUB   SUB_30B16                    * 30B8A
             C=DAT1  A                            * 30B8E
@@ -958,10 +881,7 @@ L_30BB2:
 
 * refs (4): 2E0DB 2E935 2F234 2F907
 ENCODE1PKT:
-        ::                                       * 30BBE
-          GETKP                                  * 30BC3
-          ENCODE                                 * 30BC8
-          ?SEMIDROP                              * 30BCD
+        :: GETKP ENCODE ?SEMIDROP                * 30BBE
         ;                                        * 30BD2
 
 * refs (2): 2F2DE 30BC8
@@ -1097,9 +1017,7 @@ L_30D2C:
 
 * refs (5): 2DB99 2EFF5 2F86C 2FA33 2FA74
 DECODE:
-        ::                                       * 30D31
-          CKREF                                  * 30D36
-          GETKP                                  * 30D3B
+        :: CKREF GETKP                           * 30D31
           CODE                                   * 30D40  245 nibbles
             GOSUB   SUB_30B16                    * 30D4A
             A=DAT1  A                            * 30D4E
@@ -1197,17 +1115,12 @@ L_30E3D:
 
 * refs (2): 2E0FE 3083D
 OBJ_30E44:
-        ::                                       * 30E44
-          FLUSHRSBUF                             * 30E49
+        :: FLUSHRSBUF                            * 30E44
 
 * refs (1): 323AF
 PutSerialECk:
-          PUTSERIAL                              * 30E4E
-          ?SEMI                                  * 30E53
-          SWAPDROP                               * 30E58
-          OBJ_2E4A5                              * 30E5D
-          ERROROUT                               * 30E62
-        ;                                        * 30E67
+          PUTSERIAL ?SEMI                        * 30E4E
+          SWAPDROP OBJ_2E4A5 ERROROUT ;          * 30E58
 
 * refs (3): 2DBE9 2EFFA 2F4C0
 OBJ_30E6C:
@@ -1758,11 +1671,8 @@ L_314AF:
             GOSBVL  PUSH2#                       * 314BE
             GOVLNG  PushFLoop                    * 314C5
           ENDCODE                                * 314CC
-          casedrptru                             * 314CC
-          3UNROLL                                * 314D1
-          LAST$                                  * 314D6
-          swap;false                             * 314DB
-        ;                                        * 314E0
+          casedrptru 3UNROLL                     * 314CC
+          LAST$ swap;false ;                     * 314D6
 
 * refs (1): 2EEAB
 GETSERIAL:
@@ -1857,8 +1767,7 @@ L_315DE:
             D0=A                                 * 315E8
             GOTO    L_315BC                      * 315EB
           ENDCODE                                * 315EF
-          FLUSHRSBUF                             * 315EF
-        ;                                        * 315F4
+          FLUSHRSBUF ;                           * 315EF
         ASSEMBLE
 
 * refs (2): 315D8 324BF
@@ -2025,384 +1934,152 @@ L_317C3:
 
 * refs (4): 318C7 31976 319A3 319E4
 OBJ_317E6:
-        ::                                       * 317E6
-          BINT34                                 * 317EB
-          TestSysFlag                            * 317F0
-          NOTcase                                * 317F5
-          BINT24                                 * 317FA
-          GetChkPRTPAR                           * 317FF
-          ROTROT2DROP                            * 31804
-        ;                                        * 31809
+        :: BINT34 TestSysFlag NOTcase BINT24     * 317E6
+          GetChkPRTPAR ROTROT2DROP ;             * 317FF
 
 * refs (3): 318A9 31903 31A2A
 OBJ_3180E:
-        ::                                       * 3180E
-          SetEcma94                              * 31813
-          DEPTH                                  * 31818
-          #0<>                                   * 3181D
-          ?SEMI                                  * 31822
+        :: SetEcma94 DEPTH #0<> ?SEMI            * 3180E
 
 * refs (2): 2D93D 43676
 MessageC15:
-          ::                                     * 31827
-            #       C15                          * 3182C  3093
-            JstGetTHEMESG                        * 31836
-          ;                                      * 3183B
-          PRINT                                  * 31840
-          docr                                   * 31845
-          RDROP                                  * 3184A
-        ;                                        * 3184F
+          :: # C15 JstGetTHEMESG ; PRINT docr RDROP ; * 31827
 
 * refs (6): 1EF0F 31845 318E0 31921 31A9D 31DA1
 docr:
-        ::                                       * 31854
-          NULL$                                  * 31859
-          PrintRC(st)                            * 3185E
-        ;                                        * 31863
+        :: NULL$ PrintRC(st) ;                   * 31854
 
 * ->
 * refs (2): 1EEAE B83AA
 DOCR:
-        ::                                       * 31868
-          BINT34                                 * 3186D
-          TestSysFlag                            * 31872
-          IT                                     * 31877
+        :: BINT34 TestSysFlag IT                 * 31868
 
 * refs (1): 32596
 OpenIOPrt:
-          ::                                     * 3187C
-            OpenIO                               * 31881
-            OpenIO_324C8                         * 31886
-          ;                                      * 3188B
-          NULL$                                  * 31890
-          FALSE                                  * 31895
-          PrintNoRC?(st,?)                       * 3189A
-        ;                                        * 3189F
+          :: OpenIO OpenIO_324C8 ;               * 3187C
+          NULL$ FALSE PrintNoRC?(st,?) ;         * 31890
 
 * refs (1): 1EE78
 prstc:
-        ::                                       * 318A4
-          OBJ_3180E                              * 318A9
-          DEPTH                                  * 318AE
-          ZERO_DO                                * 318B3
-          ?ATTNQUIT                              * 318B8
-          ISTOP-INDEX                            * 318BD
-          DUP#1+PICK                             * 318C2
-          OBJ_317E6                              * 318C7
-          #3-                                    * 318CC
-          DoSt:(s,_,s)                           * 318D1
-          PRINT                                  * 318D6
-          LOOP                                   * 318DB
-          docr                                   * 318E0
-        ;                                        * 318E5
+        :: OBJ_3180E DEPTH ZERO_DO ?ATTNQUIT ISTOP-INDEX DUP#1+PICK * 318A4
+          OBJ_317E6 #3- DoSt:(s,_,s) PRINT LOOP docr ; * 318C7
 
 * refs (1): 31930
 dup;print!(st):
-        ::                                       * 318EA
-          DUP                                    * 318EF
-          PRINT                                  * 318F4
-        ;                                        * 318F9
+        :: DUP PRINT ;                           * 318EA
 
 * refs (2): 1EE5D B83AF
 pr1:
-        ::                                       * 318FE
-          OBJ_3180E                              * 31903
-          DUPTYPECSTR?                           * 31908
-          OVER                                   * 3190D
-          NULL$?                                 * 31912
-          AND                                    * 31917
-          case                                   * 3191C
-          docr                                   * 31921
+        :: OBJ_3180E DUPTYPECSTR? OVER NULL$? AND case docr * 318FE
           CK&DISPATCH1                           * 31926
-          BINT3                                  * 3192B
-          dup;print!(st)                         * 31930
-          BINT12                                 * 31935
-          PrintGrob                              * 3193A
-          BINT0                                  * 3193F
-          OBJ_3194E                              * 31944
+          BINT3 dup;print!(st)                   * 3192B  string
+          BINT12 PrintGrob                       * 31935  grob
+          BINT0 OBJ_3194E                        * 3193F  any
         ;                                        * 31949
 
 * refs (2): 31944 31D92
 OBJ_3194E:
-        ::                                       * 3194E
-          BINT0                                  * 31953
+        :: BINT0                                 * 3194E
 
 * refs (1): 31A89
 OBJ_31958:
-          ::                                     * 31958
-            OVER                                 * 3195D
-            dup;#nm?                             * 31962
-            NOTcase                              * 31967
+          :: OVER dup;#nm? NOTcase               * 31958
 
 * refs (1): 31999
 OBJ_3196C:
-            ::                                   * 3196C
-              SWAPDROP                           * 31971
-              OBJ_317E6                          * 31976
-              #3-                                * 3197B
-              !DcompWidth                        * 31980
-              1stkdecomp$w                       * 31985
-              PRINT                              * 3198A
-            ;                                    * 3198F
-            dup;r?:dq/sk                         * 31994
-            OBJ_3196C                            * 31999
-            NULL{}                               * 3199E
-            OBJ_317E6                            * 319A3
-            4ROLL                                * 319A8
-            #-                                   * 319AD
-            ERRSET                               * 319B2
-            ::                                   * 319B7
-              BEGIN                              * 319BC
-              ?ATTNQUIT                          * 319C1
-              OBJ_5393E                          * 319C6
-              OBJ_169FA                          * 319CB
-              SWAP                               * 319D0
-              PRINT                              * 319D5
-              OVERSWAP                           * 319DA
-              DUPNULLCOMP?                       * 319DF
-              OBJ_317E6                          * 319E4
-              SWAP                               * 319E9
-              UNTIL                              * 319EE
-            ;                                    * 319F3
+            :: SWAPDROP OBJ_317E6 #3- !DcompWidth 1stkdecomp$w PRINT ; * 3196C
+            dup;r?:dq/sk OBJ_3196C NULL{} OBJ_317E6 4ROLL #- ERRSET * 31994
+            :: BEGIN ?ATTNQUIT OBJ_5393E OBJ_169FA SWAP PRINT OVERSWAP * 319B7
+              DUPNULLCOMP? OBJ_317E6 SWAP UNTIL ; * 319DF
             ERRTRAP                              * 319F8
-            ::                                   * 319FD
-              OBJ_5394C                          * 31A02
-              ERRJMP                             * 31A07
-            ;                                    * 31A0C
-            OBJ_5394C                            * 31A11
-            3DROP                                * 31A16
-          ;                                      * 31A1B
+            :: OBJ_5394C ERRJMP ; OBJ_5394C 3DROP ; * 319FD
         ;                                        * 31A20
 
 * refs (1): 1EE93
 prst:
-        ::                                       * 31A25
-          OBJ_3180E                              * 31A2A
-          DEPTH                                  * 31A2F
-          ZERO_DO                                * 31A34
-          ISTOP-INDEX                            * 31A39
-          PICK                                   * 31A3E
-          ISTOP-INDEX                            * 31A43
-          #:>$                                   * 31A48
-          DUPLEN$                                * 31A4D
-          SWAP                                   * 31A52
-          PRINTxNLF                              * 31A57
-          OVER                                   * 31A5C
-          TYPEGROB?                              * 31A61
-          ITE                                    * 31A66
-          ::                                     * 31A6B
-            DROP                                 * 31A70
-            ->str1(go)                           * 31A75
-            PRINT                                * 31A7A
-          ;                                      * 31A7F
-          ::                                     * 31A84
-            OBJ_31958                            * 31A89
-            DROP                                 * 31A8E
-          ;                                      * 31A93
-          LOOP                                   * 31A98
-          docr                                   * 31A9D
-        ;                                        * 31AA2
+        :: OBJ_3180E DEPTH ZERO_DO ISTOP-INDEX PICK ISTOP-INDEX #:>$ DUPLEN$ * 31A25
+          SWAP PRINTxNLF OVER TYPEGROB? ITE      * 31A52
+          :: DROP ->str1(go) PRINT ;             * 31A6B
+          :: OBJ_31958 DROP ;                    * 31A84
+          LOOP docr ;                            * 31A98
 
 * refs (2): 31B6F 31B92
 OBJ_31AA7:
-        ::                                       * 31AA7
-          BINT64                                 * 31AAC
-          Π'IWrap                                * 31AB1
-          case                                   * 31AB6
-          SetSysFlag                             * 31ABB
-          ClrSysFlag                             * 31AC0
-        ;                                        * 31AC5
+        :: BINT64 Π'IWrap case SetSysFlag        * 31AA7
+          ClrSysFlag ;                           * 31AC0
 
 * refs (1): 16A86
 OBJ_31ACA:
-        ::                                       * 31ACA
-          ?ATTNQUIT                              * 31ACF
-          DUPNULLCOMP?                           * 31AD4
-          BINT34                                 * 31AD9
-          TestSysFlag                            * 31ADE
-          case                                   * 31AE3
-          ::                                     * 31AE8
-            IT                                   * 31AED
-            ::                                   * 31AF2
-              SWAP                               * 31AF7
-              OBJ_31C59                          * 31AFC
-              SWAP                               * 31B01
-            ;                                    * 31B06
-            DcompWidth@                          * 31B0B
-            OBJ_5394C                            * 31B10
-            OBJ_169FA                            * 31B15
-          ;                                      * 31B1A
-          IT                                     * 31B1F
-          OBJ_31C23                              * 31B24
-          DUP                                    * 31B29
-          INNER#1=                               * 31B2E
-          ?SKIP                                  * 31B33
-          SWAPDROP                               * 31B38
-          COERCE                                 * 31B3D
-          #>$                                    * 31B42
-          tok]                                   * 31B47
-          &$                                     * 31B4C
-          APPEND_SPACE                           * 31B51
-          3UNROLL                                * 31B56
-          ERRSET                                 * 31B5B
-          geti(cp,lr)                            * 31B60
-          ERRTRAP                                * 31B65
-          ::                                     * 31B6A
-            OBJ_31AA7                            * 31B6F
-            ERRJMP                               * 31B74
-          ;                                      * 31B79
-          ROTDROP                                * 31B7E
-          BINT64                                 * 31B83
-          TestSysFlag                            * 31B88
-          SWAP                                   * 31B8D
-          OBJ_31AA7                              * 31B92
-          OBJ_31CD6                              * 31B97
-          4ROLL                                  * 31B9C
-          !insert$                               * 31BA1
-          3UNROLL                                * 31BA6
-          casedrop                               * 31BAB
-          ::                                     * 31BB0
-            NEWLINE$&$                           * 31BB5
-            NULL{}                               * 31BBA
-            ABND                                 * 31BBF
-          ;                                      * 31BC4
-          DUP                                    * 31BC9
-          INNER#1=                               * 31BCE
-          caseDROP                               * 31BD3
-          %1                                     * 31BD8
-          EQ                                     * 31BDD
-          NOTcaseDROP                            * 31BE2
-          COERCE                                 * 31BE7
+        :: ?ATTNQUIT DUPNULLCOMP? BINT34 TestSysFlag case * 31ACA
+          :: IT                                  * 31AE8
+            :: SWAP OBJ_31C59 SWAP ;             * 31AF2
+            DcompWidth@ OBJ_5394C OBJ_169FA ;    * 31B0B
+          IT OBJ_31C23                           * 31B1F
+          DUP INNER#1= ?SKIP SWAPDROP            * 31B29
+          COERCE #>$ tok] &$ APPEND_SPACE 3UNROLL ERRSET geti(cp,lr) ERRTRAP * 31B3D
+          :: OBJ_31AA7 ERRJMP ; ROTDROP BINT64 TestSysFlag SWAP OBJ_31AA7 * 31B6A
+          OBJ_31CD6 4ROLL !insert$ 3UNROLL casedrop * 31B97
+          :: NEWLINE$&$ NULL{} ABND ;            * 31BB0
+          DUP INNER#1= caseDROP %1               * 31BC9
+          EQ NOTcaseDROP COERCE                  * 31BDD
           #>$                                    * 31BEC
 
 * refs (1): 31C90
 OBJ_31BF1:
-          #       C16                            * 31BF1  3094
-          JstGetTHEMESG                          * 31BFB
-          !insert$                               * 31C00
-          ROT                                    * 31C05
-          NEWLINE$&$                             * 31C0A
-          NEWLINE$&$                             * 31C0F
-          SWAP                                   * 31C14
-          &$SWAP                                 * 31C19
-        ;                                        * 31C1E
+          # C16 JstGetTHEMESG !insert$ ROT NEWLINE$&$ NEWLINE$&$ SWAP &$SWAP ; * 31BF1
 
 * refs (1): 31B24
 OBJ_31C23:
-        ::                                       * 31C23
-          BINT64                                 * 31C28
-          TestSysFlag                            * 31C2D
+        :: BINT64 TestSysFlag                    * 31C23
 
 {Π'IWrap}:
           {                                      * 31C32
 
 * refs (1): 31AB1
 Π'IWrap:
-            LAM     'IWrap                       * 31C37
-          }                                      * 31C4A
-          BIND                                   * 31C4F
-          DROP                                   * 31C54
+            LAM 'IWrap }                         * 31C37
+          BIND DROP                              * 31C4F
 
 * refs (1): 31AFC
 OBJ_31C59:
-          ::                                     * 31C59
-            #       127                          * 31C5E  295
-            JstGetTHEMESG                        * 31C68
-            APPEND_SPACE                         * 31C6D
-            OVER                                 * 31C72
-            size(ar)                             * 31C77
-            EDITDECOMP$                          * 31C7C
-            &$                                   * 31C81
-            PrintRC(st)                          * 31C86
-          ;                                      * 31C8B
-          OBJ_31BF1                              * 31C90
-          JstGetTHEMESG                          * 31C95
-          tok1                                   * 31C9A
-          &$                                     * 31C9F
-          PrintRC(st)                            * 31CA4
+          :: # 127 JstGetTHEMESG APPEND_SPACE OVER size(ar) EDITDECOMP$ &$ * 31C59
+            PrintRC(st) ;                        * 31C86
+          OBJ_31BF1 JstGetTHEMESG tok1 &$ PrintRC(st) * 31C90
 
 {1}:
-          {                                      * 31CA9
-            %1                                   * 31CAE
-          }                                      * 31CB3
-          %1                                     * 31CB8
-          3PICK                                  * 31CBD
-          OBJ_179AC                              * 31CC2
-          caseDROP                               * 31CC7
-          >TCOMP                                 * 31CCC
+          { %1 } %1 3PICK OBJ_179AC caseDROP >TCOMP * 31CA9
         ;                                        * 31CD1
 
 * refs (1): 31B97
 OBJ_31CD6:
-        ::                                       * 31CD6
-          dup;r?:dq/sk                           * 31CDB
-          a%>$                                   * 31CE0
-          DUP                                    * 31CE5
-          NULL{}                                 * 31CEA
-          OBJ_17518                              * 31CEF
-          BEGIN                                  * 31CF4
-          DUPNULLCOMP?                           * 31CF9
+        :: dup;r?:dq/sk a%>$ DUP NULL{} OBJ_17518 BEGIN DUPNULLCOMP? * 31CD6
           NOT_WHILE                              * 31CFE
-          ::                                     * 31D03
-            SWAP                                 * 31D08
-            NEWLINE$&$                           * 31D0D
-            SWAP                                 * 31D12
-            3PICKSWAP                            * 31D17
-            OBJ_17518                            * 31D1C
-            3UNROLL                              * 31D21
-            $       "    "                       * 31D26
-            !insert$                             * 31D38
-            &$SWAP                               * 31D3D
-          ;                                      * 31D42
-          REPEAT                                 * 31D47
-          DROPSWAPDROP                           * 31D4C
-        ;                                        * 31D51
+          :: SWAP NEWLINE$&$ SWAP 3PICKSWAP OBJ_17518 3UNROLL $ "    " * 31D03
+            !insert$ &$SWAP ;                    * 31D38
+          REPEAT DROPSWAPDROP ;                  * 31D47
 
 * refs (2): 1EECE 1EED8
 prvar(nm):
-        ::                                       * 31D56
-          DUPSAFE@                               * 31D5B
-          ?SKIP                                  * 31D60
-          SETNONEXTERR                           * 31D65
-          SetEcma94                              * 31D6A
-          SWAP                                   * 31D6F
-          ID>$                                   * 31D74
-          PRINT                                  * 31D79
+        :: DUPSAFE@ ?SKIP SETNONEXTERR           * 31D56
+          SetEcma94 SWAP ID>$ PRINT              * 31D6A
 
 * refs (2): 1EF05 1EF0A
 OBJ_31D7E:
-          ::                                     * 31D7E
-            DUPTYPEGROB?                         * 31D83
-            ITE                                  * 31D88
-            PrintGrob                            * 31D8D
-            OBJ_3194E                            * 31D92
-            DROP                                 * 31D97
-          ;                                      * 31D9C
-          docr                                   * 31DA1
-        ;                                        * 31DA6
+          :: DUPTYPEGROB? ITE PrintGrob OBJ_3194E * 31D7E
+            DROP ;                               * 31D97
+          docr ;                                 * 31DA1
 
 * refs (1): 1EE42
 oldprt:
-        ::                                       * 31DAB
-          ChkPRTPAR                              * 31DB0
-          DUPROLL                                * 31DB5
-          DROP                                   * 31DBA
+        :: ChkPRTPAR DUPROLL DROP                * 31DAB
 
 _chr(128)_:
-          $       "\A0\7F\7F√∫Σ▶π∂≤≥≠α→←v^\7F\7F\7F\7F\7F\7F\7F\7F\7F\7F\7F\7F\7Fü\7F ¸¿¯º¼|½«cùδ~-R°³þρσ¨↓ôò,1úε÷øõ¹¡à¢áØÐÓ´£Ü¤¥æå¦§ã¶èçßéÚ∇Ò\ADí®Û±ðÞÈÄÀâÌÔ×µÉÅÁÍÙÕÑÝä·ÊÆÂêÎāÖËÇÃÏ²ñï" * 31DBF
-          OVER                                   * 31EC9
-          UNROLL                                 * 31ECE
-          {}N                                    * 31ED3
-          StoPRTPAR                              * 31ED8
-        ;                                        * 31EDD
+          $ "\A0\7F\7F√∫Σ▶π∂≤≥≠α→←v^\7F\7F\7F\7F\7F\7F\7F\7F\7F\7F\7F\7F\7Fü\7F ¸¿¯º¼|½«cùδ~-R°³þρσ¨↓ôò,1úε÷øõ¹¡à¢áØÐÓ´£Ü¤¥æå¦§ã¶èçßéÚ∇Ò\ADí®Û±ðÞÈÄÀâÌÔ×µÉÅÁÍÙÕÑÝä·ÊÆÂêÎāÖËÇÃÏ²ñï" * 31DBF
+          OVER UNROLL {}N StoPRTPAR ;            * 31EC9
 
 * refs (2): 1EF6D AFDC4
 DOPRLCD:
-        ::                                       * 31EE2
-          SetEcma94                              * 31EE7
-          GetChkPRTPAR                           * 31EEC
-          3DROP                                  * 31EF1
-          BINT0                                  * 31EF6
+        :: SetEcma94 GetChkPRTPAR 3DROP BINT0    * 31EE2
           CODE                                   * 31EFB  54 nibbles
             GOSBVL  SAVPTR                       * 31F05
             GOSUBL  ChkGrHook                    * 31F0C
@@ -2415,8 +2092,7 @@ DOPRLCD:
 L_31F34:
             GOVLNG  GPErrjmpC                    * 31F34
           ENDCODE                                * 31F3B
-          DROP                                   * 31F3B
-        ;                                        * 31F40
+          DROP ;                                 * 31F3B
 
 * refs (5): 31FD5 B8B7D B8B8C B8BAF B8BC3
 Reset&BreakPRTPAR:
@@ -2428,112 +2104,51 @@ StdPRTPAR:
 
 * refs (2): B01C5 B82DA
 %1.8:
-            %       1.8E0                        * 31F4F
-            NULL$                                * 31F64
-            %80                                  * 31F69
-            CRLF$                                * 31F6E
-          }                                      * 31F73
+            % 1.8E0 NULL$ %80 CRLF$ }            * 31F4F
           DUP                                    * 31F78
 
 * refs (4): 31ED8 32048 B8387 C7530
 StoPRTPAR:
-          ::                                     * 31F7D
-            '                                    * 31F82
+          :: '                                   * 31F7D
 
 PRTPAR:
-            ID      PRTPAR                       * 31F87
-            SysSTO                               * 31F9A
-          ;                                      * 31F9F
-          INNERCOMP                              * 31FA4
-        ;                                        * 31FA9
+            ID PRTPAR SysSTO ;                   * 31F87
+          INNERCOMP ;                            * 31FA4
 
 * refs (4): 31DB0 32025 32061 4A51D
 ChkPRTPAR:
-        ::                                       * 31FAE
-          '                                      * 31FB3
+        :: '                                     * 31FAE
 
 PRTPAR_31FB8:
-          ID      PRTPAR                         * 31FB8
-          Sys@                                   * 31FCB
-          NOTcase                                * 31FD0
-          Reset&BreakPRTPAR                      * 31FD5
-          DUPTYPELIST?                           * 31FDA
-          OBJ_320C6                              * 31FDF
-          INNERDUP                               * 31FE4
-          BINT3                                  * 31FE9
-          #>                                     * 31FEE
-          OBJ_320C6                              * 31FF3
-        ;                                        * 31FF8
+          ID PRTPAR Sys@ NOTcase Reset&BreakPRTPAR * 31FB8
+          DUPTYPELIST? OBJ_320C6 INNERDUP BINT3 #> OBJ_320C6 ; * 31FDA
 
 * % ->
 * refs (2): 1EF52 B8293
 DODELAY:
-        ::                                       * 31FFD
-          %ABS                                   * 32002
-          DUP                                    * 32007
-          %10*                                   * 3200C
-          COERCE                                 * 32011
-          BINT70                                 * 32016
-          #>                                     * 3201B
-          caseSIZEERR                            * 32020
-          ChkPRTPAR                              * 32025
-          get1                                   * 3202A
-          OVER                                   * 3202F
-          #2+ROLL                                * 32034
-          DROPOVER                               * 32039
-          #1+UNROLL                              * 3203E
-          {}N                                    * 32043
-          StoPRTPAR                              * 32048
-          GetChkPRTPAR                           * 3204D
-          3DROP                                  * 32052
-        ;                                        * 32057
+        :: %ABS DUP %10* COERCE BINT70 #> caseSIZEERR ChkPRTPAR * 31FFD
+          get1 OVER #2+ROLL DROPOVER #1+UNROLL {}N StoPRTPAR GetChkPRTPAR * 3202A
+          3DROP ;                                * 32052
 
 * refs (7): 317FF 31EEC 3204D 32193 32288 32391 ...
 GetChkPRTPAR:
-        ::                                       * 3205C
-          ChkPRTPAR                              * 32061
-          #4-                                    * 32066
-          NDROP                                  * 3206B
-          DUPTYPECSTR?                           * 32070
+        :: ChkPRTPAR #4- NDROP DUPTYPECSTR?      * 3205C
 
 dropn(s-4):
-          3PICK                                  * 32075
-          TYPEREAL?                              * 3207A
-          AND                                    * 3207F
-          4PICK                                  * 32084
-          TYPECSTR?                              * 32089
-          AND                                    * 3208E
-          5PICK                                  * 32093
-          TYPEREAL?                              * 32098
-          AND                                    * 3209D
-          GOTO                                   * 320A2
-          OBJ_320C6                              * 320A7
-          NOP                                    * 320AC
+          3PICK TYPEREAL? AND 4PICK TYPECSTR? AND 5PICK TYPEREAL? AND GOTO * 32075
+          OBJ_320C6 NOP                          * 320A7
 
 * 80
 * refs (4): 31F69 B0395 B82C6 B834F
 %80:
-          %       8E1                            * 320B1
+          % 8E1                                  * 320B1
 
 * refs (5): 31FDF 31FF3 320A7 320F3 32111
 OBJ_320C6:
-          ::                                     * 320C6
-            ?SEMI                                * 320CB
-            #       C13                          * 320D0  3091
-            ERROROUT                             * 320DA
-          ;                                      * 320DF
-          4UNROLL                                * 320E4
-          COERCEDUP                              * 320E9
-          #0<>                                   * 320EE
-          OBJ_320C6                              * 320F3
-          ROT                                    * 320F8
-          %10*                                   * 320FD
-          COERCEDUP                              * 32102
-          BINT70                                 * 32107
-          #<                                     * 3210C
-          OBJ_320C6                              * 32111
-          OBJ_3234D                              * 32116
-        ;                                        * 3211B
+          :: ?SEMI                               * 320C6
+            # C13 ERROROUT ;                     * 320D0
+          4UNROLL COERCEDUP #0<> OBJ_320C6 ROT %10* COERCEDUP BINT70 #< * 320E4
+          OBJ_320C6 OBJ_3234D ;                  * 32111
         ASSEMBLE
 
 * refs (1): 3135D
@@ -2566,105 +2181,41 @@ SUB_3214B:
 
 * refs (12): 31840 318D6 318F4 3198A 319D5 31A7A ...
 PRINT:
-        ::                                       * 32161
-          BINT34                                 * 32166
-          TestSysFlag                            * 3216B
-          NOTcase                                * 32170
-          PrintRC(st)                            * 32175
-          KVIS                                   * 3217A
-          BINT38                                 * 3217F
-          TestSysFlag                            * 32184
+        :: BINT34 TestSysFlag NOTcase PrintRC(st) * 32161
+          KVIS BINT38 TestSysFlag                * 3217A
 
 PopBufA:
-          case                                   * 32189
-          PrintRC(st)                            * 3218E
-          GetChkPRTPAR                           * 32193
-          4UNROLL                                * 32198
-          2DROP                                  * 3219D
-          BEGIN                                  * 321A2
-          ?ATTNQUIT                              * 321A7
-          DUP                                    * 321AC
-          NEWLINE$                               * 321B1
-          XEQPOS$                                * 321B6
-          COERCE                                 * 321BB
-          DUP#0=ITE                              * 321C0
-          OBJ_321E3                              * 321C5
-          OBJ_3221F                              * 321CA
-          DUPNULL$?                              * 321CF
-          UNTIL                                  * 321D4
-          2DROP                                  * 321D9
-        ;                                        * 321DE
+          case PrintRC(st)                       * 32189
+          GetChkPRTPAR 4UNROLL 2DROP BEGIN ?ATTNQUIT DUP NEWLINE$ XEQPOS$ * 32193
+          COERCE DUP#0=ITE OBJ_321E3 OBJ_3221F DUPNULL$? UNTIL 2DROP ; * 321BB
 
 * refs (2): 321C5 32233
 OBJ_321E3:
-        ::                                       * 321E3
-          DROPDUP                                * 321E8
-          BINT1                                  * 321ED
-          4PICK                                  * 321F2
-          SUB$                                   * 321F7
-          PrintRC(st)                            * 321FC
-          OVER                                   * 32201
-          #1+                                    * 32206
-          DUP#0=IT                               * 3220B
-          #1-                                    * 32210
-          LAST$                                  * 32215
-        ;                                        * 3221A
+        :: DROPDUP BINT1 4PICK SUB$ PrintRC(st) OVER #1+ DUP#0=IT #1- LAST$ ; * 321E3
 
 * refs (1): 321CA
 OBJ_3221F:
-        ::                                       * 3221F
-          DUP                                    * 32224
-          4PICK                                  * 32229
-          #>case                                 * 3222E
-          OBJ_321E3                              * 32233
-          2DUP                                   * 32238
-          1_#1-SUB$                              * 3223D
-          PrintRC(st)                            * 32242
-          #1+LAST$                               * 32247
-        ;                                        * 3224C
+        :: DUP 4PICK #>case OBJ_321E3            * 3221F
+          2DUP 1_#1-SUB$ PrintRC(st) #1+LAST$ ;  * 32238
 
 * refs (7): 3185E 31C86 31CA4 32175 3218E 321FC ...
 PrintRC(st):
-        ::                                       * 32251
-          BINT38                                 * 32256
-          TestSysFlag                            * 3225B
+        :: BINT38 TestSysFlag                    * 32251
 
 * refs (1): 3189A
 PrintNoRC?(st,?):
-          ::                                     * 32260
-            DUPUNROT                             * 32265
-            ITE                                  * 3226A
-            NULL$                                * 3226F
-            ::                                   * 32274
-              BINT34                             * 32279
-              SysITE                             * 3227E
-              ::                                 * 32283
-                GetChkPRTPAR                     * 32288
-                2DROP                            * 3228D
-                BINT37                           * 32292
-                TestSysFlag                      * 32297
-                IT                               * 3229C
+          :: DUPUNROT ITE NULL$                  * 32260
+            :: BINT34 SysITE                     * 32274
+              :: GetChkPRTPAR 2DROP BINT37 TestSysFlag IT * 32283
 
 dup;+(2st):
-                ::                               * 322A1
-                  DUP                            * 322A6
-                  &$                             * 322AB
-                ;                                * 322B0
+                :: DUP &$ ;                      * 322A1
               ;                                  * 322B5
-              _chr(4)_                           * 322BA
-            ;                                    * 322BF
-            !append$                             * 322C4
-            PRINTxNLF                            * 322C9
-            ?SEMI                                * 322CE
-            BINT34                               * 322D3
-            TestSysFlag                          * 322D8
-            NOT?SEMI                             * 322DD
-            OBJ_32305                            * 322E2
-            BINT37                               * 322E7
-            TestSysFlag                          * 322EC
-            NOT?SEMI                             * 322F1
-            OBJ_32305                            * 322F6
-          ;                                      * 322FB
+              _chr(4)_ ;                         * 322BA
+            !append$ PRINTxNLF ?SEMI             * 322C4
+            BINT34 TestSysFlag NOT?SEMI          * 322D3
+            OBJ_32305 BINT37 TestSysFlag NOT?SEMI * 322E2
+            OBJ_32305 ;                          * 322F6
         ;                                        * 32300
 
 * refs (2): 322E2 322F6
@@ -2692,7 +2243,7 @@ L_32336:
 
 * refs (1): 322BA
 _chr(4)_:
-        $       "\04"                            * 32341
+        $ "\04"                                  * 32341
 
 * refs (1): 32116
 OBJ_3234D:
@@ -2718,14 +2269,7 @@ L_32380:
 
 * refs (2): 31A57 322C9
 PRINTxNLF:
-        ::                                       * 32387
-          CKREF                                  * 3238C
-          GetChkPRTPAR                           * 32391
-          DROPSWAPDROP                           * 32396
-          REMAP                                  * 3239B
-          BINT34                                 * 323A0
-          TestSysFlag                            * 323A5
-          ?GOTO                                  * 323AA
+        :: CKREF GetChkPRTPAR DROPSWAPDROP REMAP BINT34 TestSysFlag ?GOTO * 32387
           PutSerialECk                           * 323AF
 
 IRprint(st):
@@ -3514,10 +3058,7 @@ L_32B6F:
 
 * refs (2): 3193A 31D8D
 PrintGrob:
-        ::                                       * 32B74
-          GetChkPRTPAR                           * 32B79
-          3DROP                                  * 32B7E
-          BINT1                                  * 32B83
+        :: GetChkPRTPAR 3DROP BINT1              * 32B74
           CODE                                   * 32B88  275 nibbles
             GOSUB   SUB_32524                    * 32B92
             GOSUB   ChkGrHook                    * 32B96
@@ -3623,8 +3164,7 @@ L_32C9A:
             B=C     A                            * 32C9F
             GOTO    L_32BDA                      * 32CA1
           ENDCODE                                * 32CA5
-          DROP                                   * 32CA5
-        ;                                        * 32CAA
+          DROP ;                                 * 32CA5
         ASSEMBLE
 
 * refs (2): 31F0C 32B96
@@ -3897,39 +3437,15 @@ LIB00A:
 
 * refs (8): 1F17D 1F187 1F191 1F19B 1F1A5 1F1AF ...
 root:
-        ::                                       * 32F77
-          OVER                                   * 32F7C
-          SAFE@_HERE                             * 32F81
-          IT                                     * 32F86
-          dir?:DNA!                              * 32F8B
-          TRUE                                   * 32F90
-          4UNROLL                                * 32F95
-          TRUE                                   * 32F9A
+        :: OVER SAFE@_HERE IT dir?:DNA!          * 32F77
+          TRUE 4UNROLL TRUE                      * 32F90
 
 {'nohalt}_32F9F:
-          {                                      * 32F9F
-            nohalt                               * 32FA4
-          }                                      * 32FA9
-          BIND                                   * 32FAE
-          NUMSOLVE                               * 32FB3
-          ABND                                   * 32FB8
-          ?SKIP                                  * 32FBD
-          ::                                     * 32FC2
-            ERRORSTO                             * 32FC7
-            CK0NOLASTWD                          * 32FCC
-            ERRJMP                               * 32FD1
-          ;                                      * 32FD6
-          ATTN#                                  * 32FDB
-          #<>                                    * 32FE0
-          ?SEMI                                  * 32FE5
-          CK0NOLASTWD                            * 32FEA
-          ABORT                                  * 32FEF
-        ;                                        * 32FF4
+          { nohalt } BIND NUMSOLVE ABND ?SKIP    * 32F9F
+          :: ERRORSTO CK0NOLASTWD ERRJMP ;       * 32FC2
+          ATTN# #<> ?SEMI                        * 32FDB
+          CK0NOLASTWD ABORT ;                    * 32FEA
 
 * refs (5): 15630 48B3E 49BD7 9F15D B4BDC
 SYMBNUMSOLVE:
-        ::                                       * 32FF9
-          FALSE                                  * 32FFE
-          4UNROLL                                * 33003
-          NUMSOLVE                               * 33008
-        ;                                        * 3300D
+        :: FALSE 4UNROLL NUMSOLVE ;              * 32FF9

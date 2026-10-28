@@ -22,13 +22,7 @@ L_70050:
         GOVLNG  Loop                             * 70061
         RPL
 
-        ::                                       * 70068
-          DROPOVER                               * 7006D
-          #3+                                    * 70072
-          SINNERMETA                             * 70077
-          IMPLODE                                * 7007C
-          TRUE                                   * 70081
-        ;                                        * 70086
+        :: DROPOVER #3+ SINNERMETA IMPLODE TRUE ; * 70068
         ASSEMBLE
 
 * refs (1): 17F2B
@@ -183,7 +177,7 @@ L_70250:
 
 * refs (1): 0AAC1
 OBJ_70280:
-        #       40000                            * 70280  262144
+        # 40000                                  * 70280  262144
 
 * refs (4): 08072 0AACB 0AB27 0BBAC
 OBJ_7028A:
@@ -370,34 +364,34 @@ RomLibTable:
         RPL
 
 LIB000.message:
-        ACPTR   MsgTab(0) Reset                  * 7056B
+        ACPTR MsgTab(0) Reset                    * 7056B
 
 LIB001.message:
-        ACPTR   MsgTab(1) Reset                  * 7057A
+        ACPTR MsgTab(1) Reset                    * 7057A
 
 LIB002.message:
-        ACPTR   MsgTab(2) Reset                  * 70589
+        ACPTR MsgTab(2) Reset                    * 70589
 
 LIB003.message:
-        ACPTR   MsgTab(3) Reset                  * 70598
+        ACPTR MsgTab(3) Reset                    * 70598
 
 LIB005.message:
-        ACPTR   MsgTab(5) Reset                  * 705A7
+        ACPTR MsgTab(5) Reset                    * 705A7
 
 LIB006.message:
-        ACPTR   MsgTab(6) Reset                  * 705B6
+        ACPTR MsgTab(6) Reset                    * 705B6
 
 LIB00A.message:
-        ACPTR   MsgTab(10) Reset                 * 705C5
+        ACPTR MsgTab(10) Reset                   * 705C5
 
 LIB00B.message:
-        ACPTR   MsgTab(11) Reset                 * 705D4
+        ACPTR MsgTab(11) Reset                   * 705D4
 
 LIB00C.message:
-        ACPTR   MsgTab(12) Reset                 * 705E3
+        ACPTR MsgTab(12) Reset                   * 705E3
 
 LIB00D.message:
-        ACPTR   MsgTab(13) Reset                 * 705F2
+        ACPTR MsgTab(13) Reset                   * 705F2
 
 BANKMTHDS:
         NIBHEX  F3707                            * 70601  ?.
@@ -1595,10 +1589,7 @@ L_71583:
 
 * refs (1): 71590
 OBJ_7159D:
-        ::                                       * 7159D
-          TOTEMPOB                               * 715A2
-          TRUE                                   * 715A7
-        ;                                        * 715AC
+        :: TOTEMPOB TRUE ;                       * 7159D
 
 * refs (7): 09307 27061 2707F 71650 721AB 8552D ...
 ?ACCPTR>:
@@ -1655,16 +1646,8 @@ L_7162C:
 
 * refs (1): 0222D
 OBJ_71646:
-        ::                                       * 71646
-          ERRSET                                 * 7164B
-          ?ACCPTR>                               * 71650
-          ERRTRAP                                * 71655
-          ::                                     * 7165A
-            DROP                                 * 7165F
-            COLASKIP                             * 71664
-          ;                                      * 71669
-          EVAL                                   * 7166E
-        ;                                        * 71673
+        :: ERRSET ?ACCPTR> ERRTRAP               * 71646
+          :: DROP COLASKIP ; EVAL ;              * 7165A
         ASSEMBLE
 L_71678:
         D0=D0+  5                                * 71678
@@ -2220,10 +2203,7 @@ L_71D97:
         GOVLNG  GPMEMERR                         * 71D97
         RPL
 
-        ::                                       * 71D9E
-          rNTHELCOMP                             * 71DA3
-          DROP                                   * 71DA8
-        ;                                        * 71DAD
+        :: rNTHELCOMP DROP ;                     * 71D9E
 
 * refs (5): 268F9 2693A 71E09 72BAA 8D241
 RPTRACC:
@@ -2250,11 +2230,7 @@ L_71DE4:
 
 * refs (5): 26ACD 26C1F 270DE 271E8 72A07
 OBJ_71DFF:
-        ::                                       * 71DFF
-          DUP                                    * 71E04
-          RPTRACC                                * 71E09
-          COLA                                   * 71E0E
-          NOTcase                                * 71E13
+        :: DUP RPTRACC COLA NOTcase              * 71DFF
         ;                                        * 71E18
         ASSEMBLE
 L_71E1D:
@@ -2540,12 +2516,7 @@ L_7219F:
 
 * refs (1): 26C81
 OBJ_721A6:
-        ::                                       * 721A6
-          ?ACCPTR>                               * 721AB
-          EVAL                                   * 721B0
-          SWAP                                   * 721B5
-          TRUE                                   * 721BA
-        ;                                        * 721BF
+        :: ?ACCPTR> EVAL SWAP TRUE ;             * 721A6
         ASSEMBLE
 L_721C4:
         C=R3.F  A                                * 721C4
@@ -2647,22 +2618,9 @@ L_722E9:
 
 * refs (1): 09016
 OBJ_72300:
-        ::                                       * 72300
-          SWAPDROP                               * 72305
-          2DUP                                   * 7230A
-          #>case                                 * 7230F
-          SETCORPORT                             * 72314
-          2DUP                                   * 72319
-          SWAP#-                                 * 7231E
-          4ROLL                                  * 72323
-          2DUP                                   * 72328
-          #>case                                 * 7232D
-          SETCORPORT                             * 72332
-          SWAP#-                                 * 72337
-          ROTDROP                                * 7233C
-          ROTDUP                                 * 72341
-          OSIZE                                  * 72346
-        ;                                        * 7234B
+        :: SWAPDROP 2DUP #>case SETCORPORT       * 72300
+          2DUP SWAP#- 4ROLL 2DUP #>case SETCORPORT * 72319
+          SWAP#- ROTDROP ROTDUP OSIZE ;          * 72337
         ASSEMBLE
 
 * refs (1): 723BD
@@ -3165,11 +3123,8 @@ OBJ_7295C:
 
 * refs (2): 4045E 72FF7
 OBJ_729F8:
-        ::                                       * 729F8
-          NOTROMPcase                            * 729FD
-          ROM-WORD?                              * 72A02
-          OBJ_71DFF                              * 72A07
-          DROPFALSE                              * 72A0C
+        :: NOTROMPcase ROM-WORD?                 * 729F8
+          OBJ_71DFF DROPFALSE                    * 72A07
 
 Code_72A11:
           CODE                                   * 72A11  83 nibbles
@@ -3204,50 +3159,25 @@ L_72A61:
 
 * refs (1): 2121A
 OBJ_72A73:
-        ::                                       * 72A73
-          BINT33                                 * 72A78
-          #>                                     * 72A7D
-          COLAcase                               * 72A82
-        ;                                        * 72A87
+        :: BINT33 #> COLAcase ;                  * 72A73
 
 * refs (2): 097C0 72AF0
 OBJ_72A8C:
-        ::                                       * 72A8C
-          BEGIN                                  * 72A91
-          DUP                                    * 72A96
-          LASTRAM-WORD                           * 72A9B
-          WHILE                                  * 72AA0
-          ::                                     * 72AA5
-            DUP                                  * 72AAA
-            TYPERRP?                             * 72AAF
-            ITE                                  * 72AB4
-            pgdir!(di)                           * 72AB9
-            purge(_)                             * 72ABE
+        :: BEGIN DUP LASTRAM-WORD WHILE          * 72A8C
+          :: DUP TYPERRP? ITE pgdir!(di) purge(_) * 72AA5
           ;                                      * 72AC3
-          REPEAT                                 * 72AC8
-          DROP                                   * 72ACD
-        ;                                        * 72AD2
+          REPEAT DROP ;                          * 72AC8
 
 * refs (1): 8554B
 OBJ_72AD7:
-        ::                                       * 72AD7
-          HOMEDIR                                * 72ADC
-          SYSSTOPSIGN                            * 72AE1
-          CONTEXT@                               * 72AE6
-          COLA                                   * 72AEB
-          OBJ_72A8C                              * 72AF0
+        :: HOMEDIR SYSSTOPSIGN CONTEXT@ COLA OBJ_72A8C * 72AD7
         ;                                        * 72AF5
 
 * refs (44): 1A025 1A034 5B31B 5B3C0 5B40B 5B46F ...
 OBJ_72AFA:
-        ::                                       * 72AFA
-          DUPTYPEROMP?                           * 72AFF
-          NOT?SEMI                               * 72B04
-          DUP                                    * 72B09
-          ROMPTR@                                * 72B0E
-          NOT?SEMI                               * 72B13
-          SWAPDROP                               * 72B18
-        ;                                        * 72B1D
+        :: DUPTYPEROMP? NOT?SEMI                 * 72AFA
+          DUP ROMPTR@ NOT?SEMI                   * 72B09
+          SWAPDROP ;                             * 72B18
 
 * refs (2): 8574A 85BA7
 OBJ_72B22:
@@ -3299,18 +3229,12 @@ SUB_72BA1:
 
 * refs (1): 72BC3
 OBJ_72BA5:
-        ::                                       * 72BA5
-          RPTRACC                                * 72BAA
-          ?SEMI                                  * 72BAF
-          SETROMPERR                             * 72BB4
-        ;                                        * 72BB9
+        :: RPTRACC ?SEMI                         * 72BA5
+          SETROMPERR ;                           * 72BB4
 
 * refs (1): 3A604
 OBJ_72BBE:
-        ::                                       * 72BBE
-          OBJ_72BA5                              * 72BC3
-          OBJ_72BD2                              * 72BC8
-        ;                                        * 72BCD
+        :: OBJ_72BA5 OBJ_72BD2 ;                 * 72BBE
 
 * refs (2): 72BC8 8D24B
 OBJ_72BD2:
@@ -3544,24 +3468,13 @@ L_72E80:
 
 * refs (1): 72E33
 OBJ_72E87:
-        ::                                       * 72E87
-          ROMPTR@                                * 72E8C
-          NOTcase                                * 72E91
-          DoErrUXM                               * 72E96
-          EvalNoCK                               * 72E9B
-        ;                                        * 72EA0
+        :: ROMPTR@ NOTcase DoErrUXM              * 72E87
+          EvalNoCK ;                             * 72E9B
 
 * refs (1): 18F44
 OBJ_72EA5:
-        ::                                       * 72EA5
-          OBJ_18802                              * 72EAA
-          DUP                                    * 72EAF
-          PTR>ROMPTR                             * 72EB4
-          OBJ_2699F                              * 72EB9
-          case                                   * 72EBE
-          SETTYPEERR                             * 72EC3
-          ROMPTR  0E8 00D                        * 72EC8
-        ;                                        * 72ED3
+        :: OBJ_18802 DUP PTR>ROMPTR OBJ_2699F case SETTYPEERR * 72EA5
+          ROMPTR 0E8 00D ;                       * 72EC8
 
 * refs (1): 3A256
 OBJ_72ED8:
@@ -3588,72 +3501,35 @@ Code_72EDD:
 
 * refs (1): 1FA43
 OBJ_72F1F:
-        ::                                       * 72F1F
-          CK&DISPATCH1                           * 72F24
-          BINT10                                 * 72F29
-          NOP                                    * 72F2E
-          BINT14                                 * 72F33
-          OBJ_72F89                              * 72F38
-          BINT5                                  * 72F3D
-          ::                                     * 72F42
-            '                                    * 72F47
-            ::                                   * 72F4C
-              OBJ_1FA07                          * 72F51
-              ABND                               * 72F56
-            ;                                    * 72F5B
-            1GETLAM                              * 72F60
-            >HCOMP                               * 72F65
-            BINT1                                * 72F6A
-            FALSE                                * 72F6F
-            ROMPTR  0E8 00F                      * 72F74
-          ;                                      * 72F7F
+        :: CK&DISPATCH1                          * 72F1F
+          BINT10 NOP                             * 72F29  name|local|algebraic
+          BINT14 OBJ_72F89                       * 72F33  unit
+          BINT5                                  * 72F3D  list
+          :: '                                   * 72F42
+            :: OBJ_1FA07 ABND ; 1GETLAM >HCOMP BINT1 FALSE ROMPTR 0E8 00F ; * 72F4C
         ;                                        * 72F84
 
 * refs (2): 72F38 72FD9
 OBJ_72F89:
-        ::                                       * 72F89
-          UMU>                                   * 72F8E
-          SWAP                                   * 72F93
-          OBJ_5A9F5                              * 72F98
-          DUPUNROT                               * 72F9D
-          TYPEREAL?                              * 72FA2
-          case                                   * 72FA7
-          UM>U                                   * 72FAC
-          BINT2                                  * 72FB1
-          SINNERMETA                             * 72FB6
-          Cr                                     * 72FBB
-          x*                                     * 72FC0
-        ;                                        * 72FC5
+        :: UMU> SWAP OBJ_5A9F5 DUPUNROT TYPEREAL? case UM>U * 72F89
+          BINT2 SINNERMETA Cr x* ;               * 72FB1
 
 * refs (1): 5AA9A
 OBJ_72FCA:
-        ::                                       * 72FCA
-          CK&DISPATCH0                           * 72FCF
-          BINT14                                 * 72FD4
-          OBJ_72F89                              * 72FD9
-          BINT0                                  * 72FDE
-          NOP                                    * 72FE3
+        :: CK&DISPATCH0                          * 72FCA
+          BINT14 OBJ_72F89                       * 72FD4  unit
+          BINT0 NOP                              * 72FDE  any
         ;                                        * 72FE8
 
 * refs (1): 6BE0C
 OBJ_72FED:
-        ::                                       * 72FED
-          DUP                                    * 72FF2
-          OBJ_729F8                              * 72FF7
-          ?SKIP                                  * 72FFC
-          OBJ_72AFA                              * 73001
-          DUPTYPECSTR?                           * 73006
-        ;                                        * 7300B
+        :: DUP OBJ_729F8 ?SKIP OBJ_72AFA         * 72FED
+          DUPTYPECSTR? ;                         * 73006
 
 * refs (1): 28B78
 OBJ_73010:
-        ::                                       * 73010
-          BINT27                                 * 73015
-          TestSysFlag                            * 7301A
-          case                                   * 7301F
-          OBJ_28BAF                              * 73024
-          COLA                                   * 73029
-          OBJ_73038                              * 7302E
+        :: BINT27 TestSysFlag case OBJ_28BAF     * 73010
+          COLA OBJ_73038                         * 73029
         ;                                        * 73033
 
 * refs (1): 7302E
@@ -3661,18 +3537,5 @@ OBJ_73038:
         ::                                       * 73038
 
 {{}}_7303D:
-          {                                      * 7303D
-            {}_600F3                             * 73042
-          }                                      * 73047
-          >R                                     * 7304C
-          >R                                     * 73051
-          BEGIN                                  * 73056
-          OBJ_73088                              * 7305B
-          DUP                                    * 73060
-          {}_600F3                               * 73065
-          EQ                                     * 7306A
-          NOT_WHILE                              * 7306F
-          OBJ_28BFF                              * 73074
-          REPEAT                                 * 73079
-          DROP                                   * 7307E
-        ;                                        * 73083
+          { {}_600F3 } >R >R BEGIN OBJ_73088 DUP {}_600F3 EQ NOT_WHILE * 7303D
+          OBJ_28BFF REPEAT DROP ;                * 73074

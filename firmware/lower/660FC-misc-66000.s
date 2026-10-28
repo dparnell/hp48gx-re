@@ -6,352 +6,90 @@
 
 * refs (1): 68443
 OBJ_660FC:
-        ::                                       * 660FC
-          OBJ_66C8B                              * 66101
-          OBJ_679B3                              * 66106
-          OBJ_67AAF                              * 6610B
-          #9+                                    * 66110
-        ;                                        * 66115
+        :: OBJ_66C8B OBJ_679B3 OBJ_67AAF #9+ ;   * 660FC
 
 * refs (1): 68448
 OBJ_6611A:
-        ::                                       * 6611A
-          OBJ_66C8B                              * 6611F
-          OBJ_6799C                              * 66124
-          OBJ_679B3                              * 66129
-          OBJ_67AAF                              * 6612E
-          #9+                                    * 66133
-          OVER                                   * 66138
-          OBJ_679B3                              * 6613D
-          OBJ_67987                              * 66142
-          DUP                                    * 66147
-          OBJ_67AE2                              * 6614C
-          SWAP                                   * 66151
-          4UNROLL                                * 66156
-          ROTOVER                                * 6615B
-          2DUP#<                                 * 66160
-          IT                                     * 66165
-          DROPDUP                                * 6616A
-          #-                                     * 6616F
-          ROTOVER                                * 66174
-          OBJ_65EC7                              * 66179
-          DUPUNROT                               * 6617E
-          #+                                     * 66183
-          4UNROLL                                * 66188
-          SWAP                                   * 6618D
-          OBJ_67AAF                              * 66192
-          #+                                     * 66197
-          OBJ_67BBB                              * 6619C
-        ;                                        * 661A1
+        :: OBJ_66C8B OBJ_6799C OBJ_679B3 OBJ_67AAF #9+ OVER OBJ_679B3 * 6611A
+          OBJ_67987 DUP OBJ_67AE2 SWAP 4UNROLL ROTOVER 2DUP#< IT DROPDUP * 66142
+          #- ROTOVER OBJ_65EC7 DUPUNROT #+ 4UNROLL SWAP OBJ_67AAF #+ * 6616F
+          OBJ_67BBB ;                            * 6619C
 
 * refs (1): 65EFE
 OBJ_661A6:
-        ::                                       * 661A6
-          SKIP                                   * 661AB
-          OBJ_66331                              * 661B0
-          OBJ_6FD85                              * 661B5
-          ::                                     * 661BA
-            OBJ_6DFDE                            * 661BF
-            OBJ_67416                            * 661C4
-            OBJ_6F42D                            * 661C9
-            OBJ_44DFE                            * 661CE
-          ;                                      * 661D3
-          OBJ_6FDB6                              * 661D8
-          OBJ_66255                              * 661DD
-          OBJ_6FDC6                              * 661E2
-          OBJ_662B9                              * 661E7
-          BINT8                                  * 661EC
-          OBJ_6E433                              * 661F1
-          OBJ_6E00B                              * 661F6
-          OBJ_67E0C                              * 661FB
-          OBJ_65D14                              * 66200
-          OBJ_679AE                              * 66205
-          DUP                                    * 6620A
-          OBJ_6733B                              * 6620F
-          OBJ_67BE2                              * 66214
-          BINT0                                  * 66219
-          3PICK                                  * 6621E
-          BINT9                                  * 66223
-          BINT7                                  * 66228
-          OBJ_6DD2D                              * 6622D
-          OBJ_682D2                              * 66232
-          OBJ_67381                              * 66237
-          OBJ_67BFC                              * 6623C
-          OBJ_67381                              * 66241
-          OBJ_67448                              * 66246
-          OBJ_6E4F6                              * 6624B
-        ;                                        * 66250
+        :: SKIP OBJ_66331 OBJ_6FD85              * 661A6
+          :: OBJ_6DFDE OBJ_67416 OBJ_6F42D OBJ_44DFE ; OBJ_6FDB6 OBJ_66255 * 661BA
+          OBJ_6FDC6 OBJ_662B9 BINT8 OBJ_6E433 OBJ_6E00B OBJ_67E0C OBJ_65D14 * 661E2
+          OBJ_679AE DUP OBJ_6733B OBJ_67BE2 BINT0 3PICK BINT9 BINT7 * 66205
+          OBJ_6DD2D OBJ_682D2 OBJ_67381 OBJ_67BFC OBJ_67381 OBJ_67448 * 6622D
+          OBJ_6E4F6 ;                            * 6624B
 
 * refs (1): 661DD
 OBJ_66255:
-        ::                                       * 66255
-          OBJ_6E1C7                              * 6625A
-          DUP                                    * 6625F
-          tok=                                   * 66264
-          OBJ_6CB70                              * 66269
-          OBJ_68245                              * 6626E
-          DUPZERO                                * 66273
-          OVER                                   * 66278
-          OBJ_678DB                              * 6627D
-          BINT5                                  * 66282
-          OBJ_6DAE9                              * 66287
-          OBJ_67381                              * 6628C
-          OVER                                   * 66291
-          OBJ_678DB                              * 66296
-          OVER                                   * 6629B
-          OBJ_67BFC                              * 662A0
-          DUPUNROT                               * 662A5
-          OBJ_67BE2                              * 662AA
-          OBJ_67448                              * 662AF
-        ;                                        * 662B4
+        :: OBJ_6E1C7 DUP tok= OBJ_6CB70 OBJ_68245 DUPZERO OVER OBJ_678DB * 66255
+          BINT5 OBJ_6DAE9 OBJ_67381 OVER OBJ_678DB OVER OBJ_67BFC DUPUNROT * 66282
+          OBJ_67BE2 OBJ_67448 ;                  * 662AA
 
 * refs (1): 661E7
 OBJ_662B9:
-        ::                                       * 662B9
-          OBJ_67E0C                              * 662BE
-          OBJ_679B3                              * 662C3
-          OBJ_679B3                              * 662C8
-          DUPZERO                                * 662CD
-          OBJ_67C3C                              * 662D2
-          OBJ_6DD6E                              * 662D7
-          4PICK                                  * 662DC
-          #1+                                    * 662E1
-          OBJ_678D6                              * 662E6
-          BINT7                                  * 662EB
-          BINT6                                  * 662F0
-          OBJ_6DD2D                              * 662F5
-          OBJ_682DE                              * 662FA
-          OBJ_67381                              * 662FF
-          SWAPDUP                                * 66304
-          OBJ_678DB                              * 66309
-          3PICK                                  * 6630E
-          OBJ_67BEF                              * 66313
-          #1+                                    * 66318
-          OVER                                   * 6631D
-          OBJ_67BD5                              * 66322
-          OBJ_67448                              * 66327
-        ;                                        * 6632C
+        :: OBJ_67E0C OBJ_679B3 OBJ_679B3 DUPZERO OBJ_67C3C OBJ_6DD6E 4PICK * 662B9
+          #1+ OBJ_678D6 BINT7 BINT6 OBJ_6DD2D OBJ_682DE OBJ_67381 SWAPDUP * 662E1
+          OBJ_678DB 3PICK OBJ_67BEF #1+ OVER OBJ_67BD5 OBJ_67448 ; * 66309
 
 * refs (1): 661B0
 OBJ_66331:
-        ::                                       * 66331
-          OBJ_65E13                              * 66336
-          OBJ_67E34                              * 6633B
-          #2+                                    * 66340
-          BINT9                                  * 66345
-          #=casedrop                             * 6634A
-          ::                                     * 6634F
-            OBJ_67E64                            * 66354
-            OBJ_65D14                            * 66359
-            OBJ_679AE                            * 6635E
-            OBJ_6D523                            * 66363
-            OBJ_67BFC                            * 66368
-          ;                                      * 6636D
-          BINT7                                  * 66372
-          #=casedrop                             * 66377
-          ::                                     * 6637C
-            OBJ_67E64                            * 66381
-            OBJ_679B3                            * 66386
-            DUP#1+                               * 6638B
-            DUPUNROT                             * 66390
-            OBJ_67BEF                            * 66395
-            DUP#1+                               * 6639A
-            SWAP                                 * 6639F
-            OBJ_67BD5                            * 663A4
-          ;                                      * 663A9
-          SWAPDROP                               * 663AE
-          #5=                                    * 663B3
-          NOT?SEMI                               * 663B8
-          OBJ_6E1C7                              * 663BD
-          OBJ_6D523                              * 663C2
-          OBJ_678D6                              * 663C7
-          OVER                                   * 663CC
-          OBJ_67BFC                              * 663D1
-          OBJ_6E057                              * 663D6
-          OBJ_65EC7                              * 663DB
-        ;                                        * 663E0
+        :: OBJ_65E13 OBJ_67E34 #2+ BINT9 #=casedrop * 66331
+          :: OBJ_67E64 OBJ_65D14 OBJ_679AE OBJ_6D523 OBJ_67BFC ; * 6634F
+          BINT7 #=casedrop                       * 66372
+          :: OBJ_67E64 OBJ_679B3 DUP#1+ DUPUNROT OBJ_67BEF DUP#1+ SWAP * 6637C
+            OBJ_67BD5 ;                          * 663A4
+          SWAPDROP #5= NOT?SEMI                  * 663AE
+          OBJ_6E1C7 OBJ_6D523 OBJ_678D6 OVER OBJ_67BFC OBJ_6E057 OBJ_65EC7 ; * 663BD
 
 * refs (1): 1B233
 OBJ_663E5:
-        ::                                       * 663E5
-          SKIP                                   * 663EA
-          OBJ_6656B                              * 663EF
-          OBJ_67356                              * 663F4
-          OBJ_6733B                              * 663F9
-          OBJ_6CFB5                              * 663FE
-          SWAPDROP                               * 66403
-          OBJ_6E0D2                              * 66408
-          #+                                     * 6640D
-          #6+                                    * 66412
-          SWAP                                   * 66417
-          #2+                                    * 6641C
-          OBJ_6C873                              * 66421
-          #1+                                    * 66426
-          OBJ_6D8DC                              * 6642B
-          OBJ_67381                              * 66430
-          #5+                                    * 66435
-          DUPZERO                                * 6643A
-          OBJ_67348                              * 6643F
-          OBJ_67416                              * 66444
-          OBJ_6D39D                              * 66449
-          OBJ_6E0D2                              * 6644E
-          OBJ_6E0C0                              * 66453
-          OBJ_6C873                              * 66458
-          #3+                                    * 6645D
-          OBJ_6D990                              * 66462
-          OBJ_682DE                              * 66467
-          OBJ_67381                              * 6646C
-          OBJ_67348                              * 66471
-          OBJ_67416                              * 66476
-          BINT1                                  * 6647B
-          BINT4                                  * 66480
-          BINT0                                  * 66485
-          OBJ_6D779                              * 6648A
-          BINT4                                  * 6648F
-          OBJ_6DC51                              * 66494
-          4ROLL                                  * 66499
-          #1+                                    * 6649E
-          4UNROLL                                * 664A3
-          OBJ_682D2                              * 664A8
-          OBJ_67348                              * 664AD
-          DUP                                    * 664B2
-          OBJ_67381                              * 664B7
-          BINT0                                  * 664BC
-          OBJ_67416                              * 664C1
-          OBJ_6D39D                              * 664C6
-          OBJ_6D7DD                              * 664CB
-          OBJ_6D779                              * 664D0
-          OBJ_6C873                              * 664D5
-          #1+                                    * 664DA
-          OBJ_6D990                              * 664DF
-          OBJ_6DD6E                              * 664E4
-          BINT0                                  * 664E9
-          OBJ_6733B                              * 664EE
-          BINT0                                  * 664F3
-          #THREE#FOUR                            * 664F8
-          BINT2                                  * 664FD
-          OBJ_6D7DD                              * 66502
-          OBJ_6DC51                              * 66507
-          OBJ_6DFDE                              * 6650C
-          ZEROZERO                               * 66511
-          ZEROZERO                               * 66516
-          OBJ_67364                              * 6651B
-          OBJ_6D163                              * 66520
-          OBJ_6D4CE                              * 66525
-          OBJ_6D5EB                              * 6652A
-        ;                                        * 6652F
+        :: SKIP OBJ_6656B OBJ_67356 OBJ_6733B OBJ_6CFB5 SWAPDROP OBJ_6E0D2 * 663E5
+          #+ #6+ SWAP #2+ OBJ_6C873 #1+ OBJ_6D8DC OBJ_67381 #5+ DUPZERO * 6640D
+          OBJ_67348 OBJ_67416 OBJ_6D39D OBJ_6E0D2 OBJ_6E0C0 OBJ_6C873 #3+ * 6643F
+          OBJ_6D990 OBJ_682DE OBJ_67381 OBJ_67348 OBJ_67416 BINT1 BINT4 * 66462
+          BINT0 OBJ_6D779 BINT4 OBJ_6DC51 4ROLL #1+ 4UNROLL OBJ_682D2 * 66485
+          OBJ_67348 DUP OBJ_67381 BINT0 OBJ_67416 OBJ_6D39D OBJ_6D7DD * 664AD
+          OBJ_6D779 OBJ_6C873 #1+ OBJ_6D990 OBJ_6DD6E BINT0 OBJ_6733B BINT0 * 664D0
+          #THREE#FOUR BINT2 OBJ_6D7DD OBJ_6DC51 OBJ_6DFDE ZEROZERO ZEROZERO * 664F8
+          OBJ_67364 OBJ_6D163 OBJ_6D4CE OBJ_6D5EB ; * 6651B
 
 * refs (1): 68439
 OBJ_66534:
-        ::                                       * 66534
-          SWAPDROP                               * 66539
-          ZEROSWAP                               * 6653E
-          OBJ_66C8B                              * 66543
-          OBJ_679AE                              * 66548
-          SWAP                                   * 6654D
-          OBJ_679C5                              * 66552
-          OBJ_67AE2                              * 66557
-          DUPUNROT                               * 6655C
-          OBJ_67C16                              * 66561
-        ;                                        * 66566
+        :: SWAPDROP ZEROSWAP OBJ_66C8B OBJ_679AE SWAP OBJ_679C5 OBJ_67AE2 * 66534
+          DUPUNROT OBJ_67C16 ;                   * 6655C
 
 * refs (1): 663EF
 OBJ_6656B:
-        ::                                       * 6656B
-          SKIP                                   * 66570
-          ::                                     * 66575
-            OBJ_65E13                            * 6657A
-            OBJ_6F36A                            * 6657F
-            OBJ_679AE                            * 66584
-            OBJ_6D523                            * 66589
-            DUP                                  * 6658E
-            OBJ_6F42D                            * 66593
-            OBJ_68245                            * 66598
-            OVER                                 * 6659D
-            OBJ_679A1                            * 665A2
-            DUP                                  * 665A7
-            OBJ_6F42D                            * 665AC
-            OBJ_68245                            * 665B1
-            ZEROSWAP                             * 665B6
-            OBJ_68593                            * 665BB
-            OBJ_67BFC                            * 665C0
-          ;                                      * 665C5
-          BINT4                                  * 665CA
-          OBJ_6E433                              * 665CF
-          OBJ_6E00B                              * 665D4
-          OBJ_67E0C                              * 665D9
-          OBJ_679C5                              * 665DE
-          OBJ_679AE                              * 665E3
-          DUPZERO                                * 665E8
-          4PICK                                  * 665ED
-          BINT5                                  * 665F2
-          OBJ_6DAE9                              * 665F7
-          2DUP                                   * 665FC
-          OBJ_67381                              * 66601
-          OBJ_67BE2                              * 66606
-          OBJ_67381                              * 6660B
-          OBJ_67BFC                              * 66610
-          BINT7                                  * 66615
-          3PICK                                  * 6661A
-          OBJ_679A1                              * 6661F
-          OBJ_68593                              * 66624
-          OBJ_6D7DD                              * 66629
-          OBJ_66FF1                              * 6662E
-          OBJ_68245                              * 66633
-          OBJ_678D6                              * 66638
-          SWAP                                   * 6663D
-          OBJ_679A1                              * 66642
-          OBJ_66660                              * 66647
-          2DROP                                  * 6664C
-          OBJ_67381                              * 66651
-          OBJ_67448                              * 66656
-        ;                                        * 6665B
+        :: SKIP                                  * 6656B
+          :: OBJ_65E13 OBJ_6F36A OBJ_679AE OBJ_6D523 DUP OBJ_6F42D OBJ_68245 * 66575
+            OVER OBJ_679A1 DUP OBJ_6F42D OBJ_68245 ZEROSWAP OBJ_68593 * 6659D
+            OBJ_67BFC ;                          * 665C0
+          BINT4 OBJ_6E433 OBJ_6E00B OBJ_67E0C OBJ_679C5 OBJ_679AE DUPZERO * 665CA
+          4PICK BINT5 OBJ_6DAE9 2DUP OBJ_67381 OBJ_67BE2 OBJ_67381 OBJ_67BFC * 665ED
+          BINT7 3PICK OBJ_679A1 OBJ_68593 OBJ_6D7DD OBJ_66FF1 OBJ_68245 * 66615
+          OBJ_678D6 SWAP OBJ_679A1 OBJ_66660 2DROP OBJ_67381 OBJ_67448 ; * 66638
 
 * refs (2): 66647 6841B
 OBJ_66660:
-        ::                                       * 66660
-          OBJ_6799C                              * 66665
-          OVER                                   * 6666A
-          OBJ_6798C                              * 6666F
-          DUP                                    * 66674
-          OBJ_67AE2                              * 66679
-          OVER                                   * 6667E
+        :: OBJ_6799C OVER OBJ_6798C DUP OBJ_67AE2 OVER * 66660
 
 * refs (1): 666A6
 OBJ_66683:
-          ::                                     * 66683
-            OBJ_67AAA                            * 66688
-            SWAP                                 * 6668D
-            OBJ_67AE2                            * 66692
-            OBJ_6C339                            * 66697
-          ;                                      * 6669C
-          4ROLL                                  * 666A1
-          OBJ_66683                              * 666A6
-          #MAX                                   * 666AB
-          #+OVER                                 * 666B0
-          OBJ_67AAF                              * 666B5
-          #MAX                                   * 666BA
-          OBJ_44CD2                              * 666BF
-          OBJ_44DB3                              * 666C4
-          OBJ_44D9A                              * 666C9
-        ;                                        * 666CE
+          :: OBJ_67AAA SWAP OBJ_67AE2 OBJ_6C339 ; 4ROLL OBJ_66683 #MAX * 66683
+          #+OVER OBJ_67AAF #MAX OBJ_44CD2 OBJ_44DB3 OBJ_44D9A ; * 666B0
 
 * refs (5): 69DB1 6A159 6B115 6B7B3 6C4C4
 OBJ_666D3:
-        ::                                       * 666D3
-          OBJ_66CD6                              * 666D8
-          BINT1                                  * 666DD
-          OBJ_6670A                              * 666E2
-        ;                                        * 666E7
+        :: OBJ_66CD6 BINT1 OBJ_6670A ;           * 666D3
 
 * refs (1): 66769
 OBJ_666EC:
-        ::                                       * 666EC
-          BEGIN                                  * 666F1
-          DUP                                    * 666F6
-          OBJ_6670A                              * 666FB
-          OBJ_6FEE1                              * 66700
-        ;                                        * 66705
+        :: BEGIN DUP OBJ_6670A OBJ_6FEE1 ;       * 666EC
 
 * refs (2): 666E2 666FB
 OBJ_6670A:
@@ -438,34 +176,16 @@ L_6678A:
 
 * refs (8): 68E2C 68EE5 692F1 69A27 6A14F 6D546 ...
 OBJ_6681A:
-        ::                                       * 6681A
-          BEGIN                                  * 6681F
-          OBJ_678DB                              * 66824
-          DUP#0=                                 * 66829
-          case                                   * 6682E
-          drop;q_58A0C                           * 66833
-          ::                                     * 66838
-            OBJ_679AE                            * 6683D
-            BEGIN                                * 66842
-            OBJ_6689C                            * 66847
+        :: BEGIN OBJ_678DB DUP#0= case drop;q_58A0C * 6681A
+          :: OBJ_679AE BEGIN OBJ_6689C           * 66838
 L_6684C:
             OBJ_6FEE1                            * 6684C
 L_66851:
           ;                                      * 66851
-          ZEROSWAP                               * 66856
-          OBJ_679AE                              * 6685B
-          ZEROZERO                               * 66860
-          4PICK                                  * 66865
-          OBJ_679D7                              * 6686A
-          #1=                                    * 6686F
-          ITE                                    * 66874
-          OBJ_66933                              * 66879
+          ZEROSWAP OBJ_679AE ZEROZERO 4PICK OBJ_679D7 #1= ITE OBJ_66933 * 66856
           OBJ_66956                              * 6687E
-          DUP                                    * 66883
-          ?SKIP                                  * 66888
-          SWAPDROP                               * 6688D
-          NOT_UNTIL                              * 66892
-        ;                                        * 66897
+          DUP ?SKIP SWAPDROP                     * 66883
+          NOT_UNTIL ;                            * 66892
 
 * refs (1): 66847
 OBJ_6689C:
@@ -515,54 +235,18 @@ L_66919:
 
 * refs (1): 66879
 OBJ_66933:
-        ::                                       * 66933
-          BINT0                                  * 66938
-          4ROLL                                  * 6693D
-          OBJ_66A0A                              * 66942
-          OVER#+                                 * 66947
-          OBJ_669B5                              * 6694C
-        ;                                        * 66951
+        :: BINT0 4ROLL OBJ_66A0A OVER#+ OBJ_669B5 ; * 66933
 
 * refs (1): 6687E
 OBJ_66956:
-        ::                                       * 66956
-          ROT                                    * 6695B
-          BEGIN                                  * 66960
-          OBJ_68550                              * 66965
-          #0=?SKIP                               * 6696A
-          ::                                     * 6696F
-            5ROLLDROP                            * 66974
-            OBJ_68550                            * 66979
-            5UNROLL                              * 6697E
-          ;                                      * 66983
-          OBJ_67A98                              * 66988
-          4ROLL                                  * 6698D
-          #MAX                                   * 66992
-          3UNROLL                                * 66997
-          OBJ_67AAA                              * 6699C
-          ROT#+                                  * 669A1
-          SWAP                                   * 669A6
-          OBJ_6FEE1                              * 669AB
-          ZEROSWAP                               * 669B0
+        :: ROT BEGIN OBJ_68550 #0=?SKIP          * 66956
+          :: 5ROLLDROP OBJ_68550 5UNROLL ; OBJ_67A98 4ROLL #MAX 3UNROLL * 6696F
+          OBJ_67AAA ROT#+ SWAP OBJ_6FEE1 ZEROSWAP * 6699C
 
 * refs (1): 6694C
 OBJ_669B5:
-          ::                                     * 669B5
-            OBJ_66B19                            * 669BA
-            6UNROLL                              * 669BF
-            4PICK                                * 669C4
-            4ROLLROT                             * 669C9
-            OBJ_6CE8E                            * 669CE
-            OVER                                 * 669D3
-            4ROLL                                * 669D8
-            OBJ_684D4                            * 669DD
-            ROT                                  * 669E2
-            DUP#0=ITE                            * 669E7
-            DROP                                 * 669EC
-            SWAPDROP                             * 669F1
-            OBJ_66BC1                            * 669F6
-            SWAP                                 * 669FB
-          ;                                      * 66A00
+          :: OBJ_66B19 6UNROLL 4PICK 4ROLLROT OBJ_6CE8E OVER 4ROLL OBJ_684D4 * 669B5
+            ROT DUP#0=ITE DROP SWAPDROP OBJ_66BC1 SWAP ; * 669E2
         ;                                        * 66A05
 
 * refs (1): 66942
@@ -750,27 +434,12 @@ L_66C18:
 
 * refs (1): 6842A
 OBJ_66C2C:
-        ::                                       * 66C2C
-          OBJ_66C8B                              * 66C31
-          OBJ_679B3                              * 66C36
-          OBJ_67AAF                              * 66C3B
-          #1+                                    * 66C40
-        ;                                        * 66C45
+        :: OBJ_66C8B OBJ_679B3 OBJ_67AAF #1+ ;   * 66C2C
 
 * refs (1): 6842F
 OBJ_66C4A:
-        ::                                       * 66C4A
-          OBJ_679AE                              * 66C4F
-          OBJ_67ABC                              * 66C54
-          SWAP                                   * 66C59
-          #2/                                    * 66C5E
-          SWAPROT                                * 66C63
-          OBJ_678DB                              * 66C68
-          OBJ_679B3                              * 66C6D
-          OBJ_67AE2                              * 66C72
-          #+                                     * 66C77
-          #2-                                    * 66C7C
-        ;                                        * 66C81
+        :: OBJ_679AE OBJ_67ABC SWAP #2/ SWAPROT OBJ_678DB OBJ_679B3 * 66C4A
+          OBJ_67AE2 #+ #2- ;                     * 66C72
 
 * refs (1): 68434
 OBJ_66C86:
@@ -778,128 +447,47 @@ OBJ_66C86:
 
 * refs (5): 66101 6611F 66543 66C31 66CBD
 OBJ_66C8B:
-          ::                                     * 66C8B
-            OBJ_67A98                            * 66C90
-            #2/                                  * 66C95
-            SWAP                                 * 66C9A
-          ;                                      * 66C9F
-          OBJ_679C5                              * 66CA4
-          OBJ_67AE2                              * 66CA9
-          #2+                                    * 66CAE
-        ;                                        * 66CB3
+          :: OBJ_67A98 #2/ SWAP ; OBJ_679C5 OBJ_67AE2 #2+ ; * 66C8B
 
 * refs (1): 6843E
 OBJ_66CB8:
-        ::                                       * 66CB8
-          OBJ_66C8B                              * 66CBD
-          OBJ_679A1                              * 66CC2
-          OBJ_679A1                              * 66CC7
-          OBJ_67AE2                              * 66CCC
-        ;                                        * 66CD1
+        :: OBJ_66C8B OBJ_679A1 OBJ_679A1 OBJ_67AE2 ; * 66CB8
 
 * refs (2): 666D8 69BF1
 OBJ_66CD6:
-        ::                                       * 66CD6
-          BINT1                                  * 66CDB
-          BINT27                                 * 66CE0
-          OVER                                   * 66CE5
-          OBJ_67AE2                              * 66CEA
-          2DUP#>                                 * 66CEF
-          ITE                                    * 66CF4
-          ::                                     * 66CF9
-            DUPUNROT                             * 66CFE
-            #-                                   * 66D03
-          ;                                      * 66D08
-          ::                                     * 66D0D
-            SWAPDROP                             * 66D12
-            BINT0                                * 66D17
-          ;                                      * 66D1C
+        :: BINT1 BINT27 OVER OBJ_67AE2 2DUP#> ITE * 66CD6
+          :: DUPUNROT #- ;                       * 66CF9
+          :: SWAPDROP BINT0 ;                    * 66D0D
           3PICKOVER                              * 66D21
 
 * refs (1): 44DF4
 OBJ_66D26:
-          ::                                     * 66D26
-            OVER                                 * 66D2B
-            BINT0                                * 66D30
-            OBJ_67B67                            * 66D35
-            OBJ_67BA1                            * 66D3A
-          ;                                      * 66D3F
-          #+                                     * 66D44
-          BINT0                                  * 66D49
-          ROT                                    * 66D4E
-          OBJ_679B3                              * 66D53
-          GOTO                                   * 66D58
-          L_66D76                                * 66D5D
-        ;                                        * 66D62
+          :: OVER BINT0 OBJ_67B67 OBJ_67BA1 ; #+ BINT0 ROT OBJ_679B3 GOTO * 66D26
+          L_66D76 ;                              * 66D5D
 
 * refs (1): 66DDA
 OBJ_66D67:
-        ::                                       * 66D67
-          OBJ_6812C                              * 66D6C
-          3UNROLL                                * 66D71
+        :: OBJ_6812C 3UNROLL                     * 66D67
 L_66D76:
-          BEGIN                                  * 66D76
-          3PICKOVER                              * 66D7B
-          OBJ_67AE2                              * 66D80
-          #-                                     * 66D85
-          OVERSWAP                               * 66D8A
-          4PICKSWAP                              * 66D8F
-          OBJ_66E61                              * 66D94
-          OBJ_67A98                              * 66D99
-          OBJ_66DB2                              * 66D9E
-          NOT_UNTIL                              * 66DA3
-          2DROP                                  * 66DA8
-        ;                                        * 66DAD
+          BEGIN 3PICKOVER OBJ_67AE2 #- OVERSWAP 4PICKSWAP OBJ_66E61 * 66D76
+          OBJ_67A98 OBJ_66DB2 NOT_UNTIL 2DROP ;  * 66D99
 
 * refs (2): 66D9E 66E4D
 OBJ_66DB2:
-        ::                                       * 66DB2
-          ROT#+SWAP                              * 66DB7
-          OBJ_679EA                              * 66DBC
-          ?SKIP                                  * 66DC1
-          ::                                     * 66DC6
-            DUP                                  * 66DCB
-            OBJ_679D2                            * 66DD0
-            #1=case                              * 66DD5
-            OBJ_66D67                            * 66DDA
-            OBJ_66DF3                            * 66DDF
-          ;                                      * 66DE4
-          OBJ_67969                              * 66DE9
-        ;                                        * 66DEE
+        :: ROT#+SWAP OBJ_679EA ?SKIP             * 66DB2
+          :: DUP OBJ_679D2 #1=case OBJ_66D67     * 66DC6
+            OBJ_66DF3 ;                          * 66DDF
+          OBJ_67969 ;                            * 66DE9
 
 * refs (1): 66DDF
 OBJ_66DF3:
-        ::                                       * 66DF3
-          DUP                                    * 66DF8
-          OBJ_67AD5                              * 66DFD
-          OVER                                   * 66E02
-          OBJ_67A7E                              * 66E07
-          #+SWAP                                 * 66E0C
-          OBJ_679AE                              * 66E11
-          SWAP                                   * 66E16
-          OBJ_67A8B                              * 66E1B
-          SWAP                                   * 66E20
-          BEGIN                                  * 66E25
-          3PICKOVER                              * 66E2A
-          OBJ_67AD5                              * 66E2F
-          #-                                     * 66E34
-          OVERSWAP                               * 66E39
-          4PICK                                  * 66E3E
-          OBJ_66E61                              * 66E43
-          OBJ_67AAA                              * 66E48
-          OBJ_66DB2                              * 66E4D
-          NOT_UNTIL                              * 66E52
-          2DROP                                  * 66E57
-        ;                                        * 66E5C
+        :: DUP OBJ_67AD5 OVER OBJ_67A7E #+SWAP OBJ_679AE SWAP OBJ_67A8B SWAP * 66DF3
+          BEGIN 3PICKOVER OBJ_67AD5 #- OVERSWAP 4PICK OBJ_66E61 OBJ_67AAA * 66E25
+          OBJ_66DB2 NOT_UNTIL 2DROP ;            * 66E4D
 
 * refs (2): 66D94 66E43
 OBJ_66E61:
-        ::                                       * 66E61
-          OBJ_68017                              * 66E66
-          3PICK                                  * 66E6B
-          OBJ_67CA2                              * 66E70
-          OBJ_44DD6                              * 66E75
-        ;                                        * 66E7A
+        :: OBJ_68017 3PICK OBJ_67CA2 OBJ_44DD6 ; * 66E61
 
 * refs (2): 6E0F3 6F44B
 OBJ_66E7F:
@@ -943,10 +531,7 @@ OBJ_66FD5:
 
 * refs (6): 44D31 6662E 6CE20 6CF38 6D828 6DA3F
 OBJ_66FF1:
-        ::                                       * 66FF1
-          BINT2                                  * 66FF6
-          SWAP                                   * 66FFB
-          MAKEGROB                               * 67000
+        :: BINT2 SWAP MAKEGROB                   * 66FF1
 
 Code_67005:
           CODE                                   * 67005  34 nibbles
@@ -1227,7 +812,7 @@ SUB_672D2:
 
 * refs (2): 2DFEB 2F8C1
 OBJ_672DC:
-        #       C17                              * 672DC  3095
+        # C17                                    * 672DC  3095
 
 * refs (11): 68909 69599 695E9 69950 699EB 69AF4 ...
 OBJ_672E6:
@@ -1248,12 +833,7 @@ OBJ_672E6:
 
 * refs (2): 6AC8F 6C3DE
 OBJ_6731D:
-        ::                                       * 6731D
-          OBJ_67519                              * 67322
-          OBJ_6773D                              * 67327
-          OBJ_673D6                              * 6732C
-          #+                                     * 67331
-        ;                                        * 67336
+        :: OBJ_67519 OBJ_6773D OBJ_673D6 #+ ;    * 6731D
 
 * refs (14): 65C22 65DD7 65DE1 65F0D 6620F 663F9 ...
 OBJ_6733B:
@@ -1456,14 +1036,7 @@ OBJ_67519:
 
 * refs (5): 68F62 6947C 6C82D 6EF55 6F02C
 OBJ_67532:
-        ::                                       * 67532
-          OBJ_673F6                              * 67537
-          DUP#0=IT                               * 6753C
-          OBJ_675E4                              * 67541
-          DUP#1-                                 * 67546
-          OBJ_6749B                              * 6754B
-          OBJ_6755A                              * 67550
-        ;                                        * 67555
+        :: OBJ_673F6 DUP#0=IT OBJ_675E4 DUP#1- OBJ_6749B OBJ_6755A ; * 67532
 
 * refs (1): 67550
 OBJ_6755A:
@@ -1511,29 +1084,11 @@ SUB_675BE:
 
 * refs (1): 67541
 OBJ_675E4:
-        ::                                       * 675E4
-          #6+                                    * 675E9
-          DUP                                    * 675EE
-          OBJ_6749B                              * 675F3
-          OBJ_67406                              * 675F8
-          #6+                                    * 675FD
-          OBJ_674AB                              * 67602
-          OBJ_67519                              * 67607
-          #1+                                    * 6760C
-          BINT30                                 * 67611
+        :: #6+ DUP OBJ_6749B OBJ_67406 #6+ OBJ_674AB OBJ_67519 #1+ BINT30 * 675E4
 
 * refs (2): 6771F 6A4FB
 OBJ_67616:
-          ::                                     * 67616
-            OBJ_67682                            * 6761B
-            ZERO_DO                              * 67620
-            OBJ_6C7F6                            * 67625
-            OVER                                 * 6762A
-            UNROLL                               * 6762F
-            LOOP                                 * 67634
-            DROP                                 * 67639
-          ;                                      * 6763E
-        ;                                        * 67643
+          :: OBJ_67682 ZERO_DO OBJ_6C7F6 OVER UNROLL LOOP DROP ; ; * 67616
 
 * refs (2): 6A06E 6C819
 OBJ_67648:
@@ -1590,38 +1145,14 @@ OBJ_676CF:
 
 * refs (4): 6894F 68E72 690F2 6910B
 OBJ_676D4:
-        ::                                       * 676D4
-          OBJ_673D6                              * 676D9
-          DUP#0=IT                               * 676DE
-          ::                                     * 676E3
-            DROP                                 * 676E8
-            BINT15                               * 676ED
-            OBJ_6747B                            * 676F2
-            OBJ_673E6                            * 676F7
-            BINT15                               * 676FC
-            #+                                   * 67701
-            OBJ_6748B                            * 67706
-            OBJ_67519                            * 6770B
-            #1+                                  * 67710
-            OBJ_6773D                            * 67715
-            BINT15                               * 6771A
-            OBJ_67616                            * 6771F
-            BINT15                               * 67724
-          ;                                      * 67729
-          #1-DUP                                 * 6772E
-          OBJ_6747B                              * 67733
-          OBJ_67381                              * 67738
+        :: OBJ_673D6 DUP#0=IT                    * 676D4
+          :: DROP BINT15 OBJ_6747B OBJ_673E6 BINT15 #+ OBJ_6748B OBJ_67519 * 676E3
+            #1+ OBJ_6773D BINT15 OBJ_67616 BINT15 ; * 67710
+          #1-DUP OBJ_6747B OBJ_67381             * 6772E
 
 * refs (5): 67327 67715 691A6 6A03C 6C1CC
 OBJ_6773D:
-          ::                                     * 6773D
-            OBJ_67406                            * 67742
-            OBJ_68183                            * 67747
-            #+                                   * 6774C
-          ;                                      * 67751
-          #+                                     * 67756
-          OBJ_67765                              * 6775B
-        ;                                        * 67760
+          :: OBJ_67406 OBJ_68183 #+ ; #+ OBJ_67765 ; * 6773D
 
 * refs (1): 6775B
 OBJ_67765:
@@ -1829,11 +1360,7 @@ L_6794A:
 
 * refs (2): 66DE9 6FEE6
 OBJ_67969:
-        ::                                       * 67969
-          OBJ_6798C                              * 6796E
-          DUP#0=                                 * 67973
-          casedrpfls                             * 67978
-          TRUE                                   * 6797D
+        :: OBJ_6798C DUP#0= casedrpfls TRUE      * 67969
         ;                                        * 67982
 
 * refs (7): 44C91 44CFF 44D4F 65DCD 66142 6A19A ...
@@ -1988,11 +1515,7 @@ OBJ_67AAF:
 
 * refs (5): 65A0B 66C54 6AD25 6CE4D 6FB45
 OBJ_67ABC:
-        ::                                       * 67ABC
-          OBJ_67A98                              * 67AC1
-          SWAP                                   * 67AC6
-          OBJ_67AAF                              * 67ACB
-        ;                                        * 67AD0
+        :: OBJ_67A98 SWAP OBJ_67AAF ;            * 67ABC
 
 * refs (5): 65D5A 66DFD 66E2F 6CD8A 6D3CA
 OBJ_67AD5:
@@ -2014,12 +1537,7 @@ OBJ_67AEF:
 
 * refs (1): 6E7B2
 OBJ_67AF4:
-        ::                                       * 67AF4
-          DUP                                    * 67AF9
-          OBJ_67A7E                              * 67AFE
-          SWAP                                   * 67B03
-          OBJ_67A8B                              * 67B08
-        ;                                        * 67B0D
+        :: DUP OBJ_67A7E SWAP OBJ_67A8B ;        * 67AF4
 
 * refs (11): 694D6 69FA1 6A2B2 6A32A 6AD02 6EA1E ...
 OBJ_67B12:
@@ -2138,11 +1656,7 @@ OBJ_67C16:
 
 * refs (3): 44E17 6CE75 6DBBB
 OBJ_67C23:
-        ::                                       * 67C23
-          3PICKSWAP                              * 67C28
-          OBJ_67C16                              * 67C2D
-          OBJ_67C09                              * 67C32
-        ;                                        * 67C37
+        :: 3PICKSWAP OBJ_67C16 OBJ_67C09 ;       * 67C23
 
 * refs (11): 662D2 6953F 6A2E9 6A384 6CEBB 6D221 ...
 OBJ_67C3C:
@@ -2166,11 +1680,7 @@ SUB_67C53:
 
 * refs (3): 6B7DB 6FAF0 6FBFE
 OBJ_67C6C:
-        ::                                       * 67C6C
-          OBJ_67519                              * 67C71
-          #1-SWAP                                * 67C76
-          #-PICK                                 * 67C7B
-        ;                                        * 67C80
+        :: OBJ_67519 #1-SWAP #-PICK ;            * 67C6C
 
 * refs (2): 6CDFD 6D212
 OBJ_67C85:
@@ -2714,24 +2224,11 @@ OBJ_6821C:
 
 * refs (4): 6CE34 6D648 6DEEB 6E9EC
 OBJ_6822C:
-        ::                                       * 6822C
-          DUP                                    * 68231
-          BINT11                                 * 68236
-          UNROLL                                 * 6823B
-          OBJ_68277                              * 68240
+        :: DUP BINT11 UNROLL OBJ_68277           * 6822C
 
 * refs (11): 44E2B 4B90E 65CF6 65EEA 6626E 66598 ...
 OBJ_68245:
-          ::                                     * 68245
-            SWAPDUP                              * 6824A
-            OBJ_67CA2                            * 6824F
-            OBJ_67519                            * 68254
-            SWAP#-                               * 68259
-            dup;drop(s)                          * 6825E
-            #2-                                  * 68263
-            UNROLL                               * 68268
-          ;                                      * 6826D
-        ;                                        * 68272
+          :: SWAPDUP OBJ_67CA2 OBJ_67519 SWAP#- dup;drop(s) #2- UNROLL ; ; * 68245
 
 * refs (1): 68240
 OBJ_68277:
@@ -2743,13 +2240,7 @@ OBJ_68277:
 
 * refs (3): 65F76 6CF10 6D5AA
 OBJ_68283:
-        ::                                       * 68283
-          DUP                                    * 68288
-          BINT18                                 * 6828D
-          UNROLL                                 * 68292
-          OBJ_682A6                              * 68297
-          OBJ_68245                              * 6829C
-        ;                                        * 682A1
+        :: DUP BINT18 UNROLL OBJ_682A6 OBJ_68245 ; * 68283
 
 * refs (1): 68297
 OBJ_682A6:
@@ -2985,22 +2476,9 @@ L_684F1:
 
 * refs (1): 684E7
 OBJ_68500:
-        ::                                       * 68500
-          OBJ_679AE                              * 68505
-          OBJ_6FE78                              * 6850A
-          OBJ_2708E                              * 6850F
-          ?SKIP                                  * 68514
-          ::                                     * 68519
-            DROPDUP                              * 6851E
-            OBJ_65D14                            * 68523
-            OBJ_6FE78                            * 68528
-            OBJ_2708E                            * 6852D
-            DROP                                 * 68532
-          ;                                      * 68537
-          BINT6                                  * 6853C
-          NTHCOMPDROP                            * 68541
-          EVAL                                   * 68546
-        ;                                        * 6854B
+        :: OBJ_679AE OBJ_6FE78 OBJ_2708E ?SKIP   * 68500
+          :: DROPDUP OBJ_65D14 OBJ_6FE78 OBJ_2708E DROP ; * 68519
+          BINT6 NTHCOMPDROP EVAL ;               * 6853C
 
 * refs (3): 66965 66979 6A186
 OBJ_68550:
@@ -3107,657 +2585,231 @@ SUB_68670:
 
 * refs (2): 682C5 685FF
 OBJ_6867A:
-        ::                                       * 6867A
-          OBJ_673A2                              * 6867F
-          BINT20                                 * 68684
-          #+                                     * 68689
-          OBJ_67458                              * 6868E
-          OBJ_681E8                              * 68693
-          BINT20                                 * 68698
+        :: OBJ_673A2 BINT20 #+ OBJ_67458 OBJ_681E8 BINT20 * 6867A
 
 * refs (4): 6A0A0 6A46F 6A492 6C83C
 OBJ_6869D:
-          ::                                     * 6869D
-            BINT42                               * 686A2
-            #*                                   * 686A7
-          ;                                      * 686AC
-          EXPAND                                 * 686B1
-          OBJ_681B1                              * 686B6
-        ;                                        * 686BB
+          :: BINT42 #* ; EXPAND OBJ_681B1 ;      * 6869D
 
 * refs (4): 69237 6B88A 6BC0F 6C0EB
 OBJ_686C0:
-        ::                                       * 686C0
-          OBJ_4DA58                              * 686C5
-          18PUTLAM                               * 686CA
+        :: OBJ_4DA58 18PUTLAM                    * 686C0
 
 * refs (1): 6892C
 OBJ_686CF:
-          ::                                     * 686CF
-            BEGIN                                * 686D4
-            ?ATTNQUIT                            * 686D9
-            OBJ_68701                            * 686DE
-            AGAIN                                * 686E3
-          ;                                      * 686E8
-          DROP                                   * 686ED
-          5UNROLL                                * 686F2
-          OBJ_2840F                              * 686F7
-        ;                                        * 686FC
+          :: BEGIN ?ATTNQUIT OBJ_68701 AGAIN ; DROP 5UNROLL OBJ_2840F ; * 686CF
 
 * refs (1): 686DE
 OBJ_68701:
-        ::                                       * 68701
-          OBJ_69A31                              * 68706
-          OBJ_6979D                              * 6870B
-          OBJ_69323                              * 68710
-          OBJ_688C3                              * 68715
-          8GETLAM                                * 6871A
-          nultrior                               * 6871F
+        :: OBJ_69A31 OBJ_6979D OBJ_69323 OBJ_688C3 8GETLAM nultrior * 68701
 
 * refs (1): 697B6
 OBJ_68724:
-          ::                                     * 68724
-            DROP                                 * 68729
-            2RDROP                               * 6872E
-            7GETLAM                              * 68733
-            OBJ_6BC03                            * 68738
-            EQ                                   * 6873D
-            case                                 * 68742
-            OBJ_68873                            * 68747
-            OBJ_688EB                            * 6874C
-          ;                                      * 68751
-          TRUE                                   * 68756
-          18PUTLAM                               * 6875B
-          tok'                                   * 68760
-          tok=casedrop                           * 68765
-          OBJ_69020                              * 6876A
-          OBJ_68B3E                              * 6876F
-          casedrop                               * 68774
-          ::                                     * 68779
-            2RDROP                               * 6877E
-            5ROLL                                * 68783
-            6ROLL                                * 68788
-          ;                                      * 6878D
+          :: DROP 2RDROP 7GETLAM OBJ_6BC03 EQ case OBJ_68873 * 68724
+            OBJ_688EB ;                          * 6874C
+          TRUE 18PUTLAM tok' tok=casedrop OBJ_69020 * 68756
+          OBJ_68B3E casedrop                     * 6876F
+          :: 2RDROP 5ROLL 6ROLL ;                * 68779
           ?SEMI                                  * 68792
-          DROPZERO                               * 68797
-          OBJ_283F1                              * 6879C
-          OBJ_25D03                              * 687A1
-          case                                   * 687A6
-          ::                                     * 687AB
-            case                                 * 687B0
-            OBJ_68E45                            * 687B5
-            COLA                                 * 687BA
-            OBJ_687FB                            * 687BF
+          DROPZERO OBJ_283F1 OBJ_25D03 case      * 68797
+          :: case OBJ_68E45                      * 687AB
+            COLA OBJ_687FB                       * 687BA
           ;                                      * 687C4
-          ngsizecase                             * 687C9
-          OBJ_687FB                              * 687CE
-          OBJ_24609                              * 687D3
-          !*trior                                * 687D8
-          OBJ_68E45                              * 687DD
-          SWAP                                   * 687E2
-          COMPILEID                              * 687E7
-          ROT                                    * 687EC
+          ngsizecase OBJ_687FB                   * 687C9
+          OBJ_24609 !*trior OBJ_68E45 SWAP COMPILEID ROT * 687D3
 L_687F1:
-          ORNOT                                  * 687F1
-          casedrop                               * 687F6
+          ORNOT casedrop                         * 687F1
 
 * refs (3): 687BF 687CE 68823
 OBJ_687FB:
-          ::                                     * 687FB
-            5ROLLDROP                            * 68800
-            COLA                                 * 68805
-            OBJ_697CA                            * 6880A
+          :: 5ROLLDROP COLA OBJ_697CA            * 687FB
           ;                                      * 6880F
-          OBJ_274D1                              * 68814
-          OBJ_6E026                              * 68819
-          NOTcasedrop                            * 6881E
-          OBJ_687FB                              * 68823
-          OBJ_26BED                              * 68828
-          NOTcase                                * 6882D
-          ::                                     * 68832
-            OBJ_24681                            * 68837
-            2DROP                                * 6883C
-            COLA                                 * 68841
-            OBJ_68E45                            * 68846
+          OBJ_274D1 OBJ_6E026 NOTcasedrop OBJ_687FB * 68814
+          OBJ_26BED NOTcase                      * 68828
+          :: OBJ_24681 2DROP COLA OBJ_68E45      * 68832
           ;                                      * 6884B
-          8UNROLL                                * 68850
-          8UNROLL                                * 68855
-          8UNROLL                                * 6885A
-          5DROP                                  * 6885F
-          COLA                                   * 68864
-          OBJ_68CF6                              * 68869
+          8UNROLL 8UNROLL 8UNROLL 5DROP COLA OBJ_68CF6 * 68850
         ;                                        * 6886E
 
 * refs (2): 68747 68B20
 OBJ_68873:
-        ::                                       * 68873
-          OBJ_69147                              * 68878
-          OBJ_27797                              * 6887D
-          OBJ_69495                              * 68882
-          OBJ_28602                              * 68887
-          BEGIN                                  * 6888C
-          OBJ_67DDF                              * 68891
-          #0=                                    * 68896
-          WHILE                                  * 6889B
-          ::                                     * 688A0
-            OBJ_283F1                            * 688A5
-            DROP                                 * 688AA
-            tokrparen                            * 688AF
-            DUP                                  * 688B4
-            OBJ_6934B                            * 688B9
-            OBJ_2840F                            * 688BE
+        :: OBJ_69147 OBJ_27797 OBJ_69495 OBJ_28602 BEGIN OBJ_67DDF #0= WHILE * 68873
+          :: OBJ_283F1 DROP tokrparen DUP OBJ_6934B OBJ_2840F * 688A0
 
 * refs (3): 68715 68B0C 69057
 OBJ_688C3:
-            ::                                   * 688C3
-              OBJ_690C0                          * 688C8
-              OBJ_285EE                          * 688CD
-            ;                                    * 688D2
-          ;                                      * 688D7
-          REPEAT                                 * 688DC
-          OBJ_67DDF                              * 688E1
-          #1=case                                * 688E6
+            :: OBJ_690C0 OBJ_285EE ; ;           * 688C3
+          REPEAT OBJ_67DDF #1=case               * 688DC
 
 * refs (3): 6874C 6894A 68968
 OBJ_688EB:
-          ::                                     * 688EB
-            OBJ_283F1                            * 688F0
-            TrueTrue                             * 688F5
-          ;                                      * 688FA
-          OBJ_67F45                              * 688FF
-          OBJ_69941                              * 68904
-          OBJ_672E6                              * 68909
-          #1=                                    * 6890E
-          OBJ_67DDF                              * 68913
-          BINT4                                  * 68918
-          #=                                     * 6891D
-          AND                                    * 68922
-          NOTcase                                * 68927
+          :: OBJ_283F1 TrueTrue ;                * 688EB
+          OBJ_67F45 OBJ_69941 OBJ_672E6 #1= OBJ_67DDF BINT4 #= AND NOTcase * 688FF
           OBJ_686CF                              * 6892C
-          OBJ_69594                              * 68931
-          OBJ_285EE                              * 68936
-          OBJ_67DEC                              * 6893B
-          OBJ_69188                              * 68940
-          EQcasedrop                             * 68945
-          OBJ_688EB                              * 6894A
-          OBJ_676D4                              * 6894F
-          OBJ_67416                              * 68954
-          OBJ_679A1                              * 68959
-          OBJ_67448                              * 6895E
-          OBJ_69495                              * 68963
-          OBJ_688EB                              * 68968
-        ;                                        * 6896D
+          OBJ_69594 OBJ_285EE OBJ_67DEC OBJ_69188 EQcasedrop OBJ_688EB * 68931
+          OBJ_676D4 OBJ_67416 OBJ_679A1 OBJ_67448 OBJ_69495 OBJ_688EB ; * 6894F
 
 * refs (2): 6C4BF 8D3F5
 OBJ_68972:
-        ::                                       * 68972
-          TRUE                                   * 68977
-          BINT33                                 * 6897C
-          PUTLAM                                 * 68981
-          FALSE                                  * 68986
-          SWAP                                   * 6898B
-          OBJ_28B41                              * 68990
-          ZERO_DO                                * 68995
-          ?ATTNQUIT                              * 6899A
+        :: TRUE BINT33 PUTLAM FALSE SWAP OBJ_28B41 ZERO_DO ?ATTNQUIT * 68972
           OBJ_68BE3                              * 6899F
-          ::                                     * 689A4
-            '                                    * 689A9
-            x=                                   * 689AE
-            EQcasedrop                           * 689B3
-            ::                                   * 689B8
-              OBJ_698CE                          * 689BD
-              DUP                                * 689C2
-              NOT?SEMI                           * 689C7
-              6DROP                              * 689CC
-              SYNTAXERR                          * 689D1
-            ;                                    * 689D6
-            DUP                                  * 689DB
-            OBJ_6F8AB                            * 689E0
-            caseDROP                             * 689E5
-            tokuscore                            * 689EA
-            EQcasedrop                           * 689EF
-            OBJ_68CE2                            * 689F4
-            DUPTYPECSTR?                         * 689F9
-            case                                 * 689FE
-            ::                                   * 68A03
-              OBJ_68B3E                          * 68A08
-              DROP                               * 68A0D
-              ?SEMI                              * 68A12
-              $>ID                               * 68A17
-              OBJ_68AC1                          * 68A1C
-            ;                                    * 68A21
-            DUPTYPECHAR?                         * 68A26
-            case                                 * 68A2B
-            ::                                   * 68A30
-              CHR>$                              * 68A35
-              OBJ_68BE3                          * 68A3A
-              &$                                 * 68A3F
-              ISTOP-INDEX                        * 68A44
-              #1-                                * 68A49
-              UNROLL                             * 68A4E
-            ;                                    * 68A53
-            DUPTYPECMP?                          * 68A58
-            case                                 * 68A5D
-            OBJ_68C47                            * 68A62
-            DUPTYPEREAL?                         * 68A67
-            case                                 * 68A6C
-            ::                                   * 68A71
-              DUP                                * 68A76
-              %0<                                * 68A7B
-              case                               * 68A80
-              OBJ_68C06                          * 68A85
-              OBJ_68AC1                          * 68A8A
-            ;                                    * 68A8F
-            DUPTYPEIDNT?                         * 68A94
-            case                                 * 68A99
-            OBJ_68AC1                            * 68A9E
-            OBJ_274D1                            * 68AA3
-            OBJ_26BED                            * 68AA8
-            case                                 * 68AAD
-            OBJ_68CF6                            * 68AB2
-            DUPTYPEROMP?                         * 68AB7
-            NOTcase                              * 68ABC
+          :: ' x= EQcasedrop                     * 689A4
+            :: OBJ_698CE DUP NOT?SEMI            * 689B8
+              6DROP SYNTAXERR ;                  * 689CC
+            DUP OBJ_6F8AB caseDROP tokuscore     * 689DB
+            EQcasedrop OBJ_68CE2                 * 689EF
+            DUPTYPECSTR? case                    * 689F9
+            :: OBJ_68B3E DROP ?SEMI              * 68A03
+              $>ID OBJ_68AC1 ;                   * 68A17
+            DUPTYPECHAR? case                    * 68A26
+            :: CHR>$ OBJ_68BE3 &$ ISTOP-INDEX #1- UNROLL ; * 68A30
+            DUPTYPECMP? case OBJ_68C47           * 68A58
+            DUPTYPEREAL? case                    * 68A67
+            :: DUP %0< case OBJ_68C06            * 68A71
+              OBJ_68AC1 ;                        * 68A8A
+            DUPTYPEIDNT? case OBJ_68AC1          * 68A94
+            OBJ_274D1 OBJ_26BED case OBJ_68CF6   * 68AA3
+            DUPTYPEROMP? NOTcase                 * 68AB7
 
 * refs (4): 68A1C 68A8A 68A9E 68AE4
 OBJ_68AC1:
-            ::                                   * 68AC1
-              OBJ_285EE                          * 68AC6
-              OBJ_676CF                          * 68ACB
-              OBJ_6DE96                          * 68AD0
-            ;                                    * 68AD5
-            DUPROMPTR@                           * 68ADA
-            casedrop                             * 68ADF
-            OBJ_68AC1                            * 68AE4
-            BINT4                                * 68AE9
-            ERROROUT                             * 68AEE
-          ;                                      * 68AF3
+            :: OBJ_285EE OBJ_676CF OBJ_6DE96 ;   * 68AC1
+            DUPROMPTR@ casedrop OBJ_68AC1        * 68ADA
+            BINT4 ERROROUT ;                     * 68AE9
 
 * refs (2): 68BCF 68BFC
 OBJ_68AF8:
-          ::                                     * 68AF8
-            OBJ_69A31                            * 68AFD
-            OBJ_68BD9                            * 68B02
-            OBJ_68BB6                            * 68B07
-            OBJ_688C3                            * 68B0C
-            NOP                                  * 68B11
-          ;                                      * 68B16
-          LOOP                                   * 68B1B
-          OBJ_68873                              * 68B20
-          6DROP                                  * 68B25
-          FALSE                                  * 68B2A
-          BINT33                                 * 68B2F
-          PUTLAM                                 * 68B34
-        ;                                        * 68B39
+          :: OBJ_69A31 OBJ_68BD9 OBJ_68BB6 OBJ_688C3 NOP ; LOOP OBJ_68873 * 68AF8
+          6DROP FALSE BINT33 PUTLAM ;            * 68B25
 
 * refs (2): 6876F 68A08
 OBJ_68B3E:
-        ::                                       * 68B3E
-          TrueFalse                              * 68B43
-          ROT                                    * 68B48
-          NoDecSep                               * 68B4D
-          tok=casedrop                           * 68B52
-          OBJ_6940E                              * 68B57
-          toklparen                              * 68B5C
-          tok=casedrop                           * 68B61
-          OBJ_69142                              * 68B66
-          tokrparen                              * 68B6B
-          tok=casedrop                           * 68B70
-          OBJ_69002                              * 68B75
-          tok;                                   * 68B7A
-          tok=casedrop                           * 68B7F
-          OBJ_6940E                              * 68B84
-          tok=                                   * 68B89
-          tok=casedrop                           * 68B8E
-          OBJ_698CE                              * 68B93
-          tokanglesign                           * 68B98
-          tok=casedrop                           * 68B9D
-          OBJ_699B4                              * 68BA2
-          ROTROT2DROP                            * 68BA7
-          FalseFalse                             * 68BAC
-        ;                                        * 68BB1
+        :: TrueFalse ROT NoDecSep tok=casedrop OBJ_6940E * 68B3E
+          toklparen tok=casedrop OBJ_69142       * 68B5C
+          tokrparen tok=casedrop OBJ_69002       * 68B6B
+          tok; tok=casedrop OBJ_6940E            * 68B7A
+          tok= tok=casedrop OBJ_698CE            * 68B89
+          tokanglesign tok=casedrop OBJ_699B4    * 68B98
+          ROTROT2DROP FalseFalse ;               * 68BA7
 
 * refs (1): 68B07
 OBJ_68BB6:
-        ::                                       * 68BB6
-          OBJ_68BE3                              * 68BBB
-          2DROP                                  * 68BC0
-          OBJ_6EEC4                              * 68BC5
-          OBJ_69941                              * 68BCA
-          OBJ_68AF8                              * 68BCF
-        ;                                        * 68BD4
+        :: OBJ_68BE3 2DROP OBJ_6EEC4 OBJ_69941 OBJ_68AF8 ; * 68BB6
 
 * refs (1): 68B02
 OBJ_68BD9:
-        ::                                       * 68BD9
-          OBJ_6EEC4                              * 68BDE
+        :: OBJ_6EEC4                             * 68BD9
 
 * refs (4): 6899F 68A3A 68BBB 69106
 OBJ_68BE3:
-          ::                                     * 68BE3
-            ISTOP-INDEX                          * 68BE8
-            ROLL                                 * 68BED
-          ;                                      * 68BF2
-          OBJ_6986F                              * 68BF7
-          OBJ_68AF8                              * 68BFC
-        ;                                        * 68C01
+          :: ISTOP-INDEX ROLL ; OBJ_6986F OBJ_68AF8 ; * 68BE3
 
 * refs (1): 68A85
 OBJ_68C06:
-        ::                                       * 68C06
-          %CHS                                   * 68C0B
-          OBJ_68C7E                              * 68C10
-          '                                      * 68C15
-          xNEG                                   * 68C1A
+        :: %CHS OBJ_68C7E ' xNEG                 * 68C06
 
 * refs (3): 68C51 68C60 68C79
 OBJ_68C1F:
-          ::                                     * 68C1F
-            ISTOP-INDEX                          * 68C24
-            #1+UNROLL                            * 68C29
-          ;                                      * 68C2E
-          ISTOP@                                 * 68C33
-          #2+                                    * 68C38
-          ISTOPSTO                               * 68C3D
-        ;                                        * 68C42
+          :: ISTOP-INDEX #1+UNROLL ; ISTOP@ #2+ ISTOPSTO ; * 68C1F
 
 * refs (1): 68A62
 OBJ_68C47:
-        ::                                       * 68C47
-          toklparen                              * 68C4C
-          OBJ_68C1F                              * 68C51
-          v->(c)                                 * 68C56
-          SWAP                                   * 68C5B
-          OBJ_68C1F                              * 68C60
-          DPRADIX?                               * 68C65
-          tok,                                   * 68C6A
-          tok;                                   * 68C6F
-          RPITE                                  * 68C74
-          OBJ_68C1F                              * 68C79
+        :: toklparen OBJ_68C1F v->(c) SWAP OBJ_68C1F DPRADIX? tok, tok; * 68C47
+          RPITE OBJ_68C1F                        * 68C74
 
 * refs (2): 68C10 68C97
 OBJ_68C7E:
-          ::                                     * 68C7E
-            ISTOP-INDEX                          * 68C83
-            UNROLL                               * 68C88
-          ;                                      * 68C8D
-          tokrparen                              * 68C92
-          OBJ_68C7E                              * 68C97
-          ISTOP@                                 * 68C9C
-          #5+                                    * 68CA1
-          ISTOPSTO                               * 68CA6
-          BINT16                                 * 68CAB
-          TestSysFlag                            * 68CB0
+          :: ISTOP-INDEX UNROLL ;                * 68C7E
+          tokrparen OBJ_68C7E ISTOP@ #5+ ISTOPSTO BINT16 TestSysFlag * 68C92
           NOT?SEMI                               * 68CB5
-          tokanglesign                           * 68CBA
-          ISTOP-INDEX                            * 68CBF
-          #3-                                    * 68CC4
-          UNROLL                                 * 68CC9
-          ISTOP@                                 * 68CCE
-          #1+                                    * 68CD3
-          ISTOPSTO                               * 68CD8
-        ;                                        * 68CDD
+          tokanglesign ISTOP-INDEX #3- UNROLL ISTOP@ #1+ ISTOPSTO ; * 68CBA
 
 * refs (1): 689F4
 OBJ_68CE2:
-        ::                                       * 68CE2
-          OBJ_6BC91                              * 68CE7
-          #72109h                                * 68CEC
-          BINT2                                  * 68CF1
+        :: OBJ_6BC91 #72109h BINT2               * 68CE2
 
 * refs (2): 68869 68AB2
 OBJ_68CF6:
-          ::                                     * 68CF6
-            OBJ_6EE65                            * 68CFB
-            6PUTLAM                              * 68D00
-            SWAP                                 * 68D05
-            5PUTLAM                              * 68D0A
-            DUP4PUTLAM                           * 68D0F
-            OBJ_26E61                            * 68D14
-            DROP                                 * 68D19
-            7PUTLAM                              * 68D1E
-            2PUTLAM                              * 68D23
-            NOTcase                              * 68D28
-            OBJ_68E90                            * 68D2D
+          :: OBJ_6EE65 6PUTLAM SWAP 5PUTLAM DUP4PUTLAM OBJ_26E61 DROP * 68CF6
+            7PUTLAM 2PUTLAM NOTcase OBJ_68E90    * 68D1E
             OBJ_69147                            * 68D32
-            ::                                   * 68D37
-              2RDROP                             * 68D3C
-              OBJ_27797                          * 68D41
-            ;                                    * 68D46
+            :: 2RDROP OBJ_27797 ;                * 68D37
 L_68D4B:
-            OBJ_67DCF                            * 68D4B
-            2GETLAM                              * 68D50
-            #<                                   * 68D55
-            ?GOTO                                * 68D5A
-            L_68D78                              * 68D5F
-            OBJ_67F45                            * 68D64
-            OBJ_690C0                            * 68D69
-            GOTO                                 * 68D6E
+            OBJ_67DCF 2GETLAM #< ?GOTO L_68D78 OBJ_67F45 OBJ_690C0 GOTO * 68D4B
             L_68D4B                              * 68D73
 L_68D78:
-            BINT2                                * 68D78
-            5GETLAM                              * 68D7D
-            OBJ_6E2D0                            * 68D82
-            BINT3                                * 68D87
-            3PUTLAM                              * 68D8C
-            OBJ_69495                            * 68D91
-            5GETLAM                              * 68D96
+            BINT2 5GETLAM OBJ_6E2D0 BINT3 3PUTLAM OBJ_69495 5GETLAM * 68D78
 
 * refs (1): 68EC2
 OBJ_68D9B:
-            ::                                   * 68D9B
-              BINT33                             * 68DA0
-              GETLAM                             * 68DA5
-              NOTcase                            * 68DAA
-              8GETLAM                            * 68DAF
-              DUP                                * 68DB4
-              ->StrExpr(_)                       * 68DB9
-            ;                                    * 68DBE
-            DUPLEN$                              * 68DC3
-            #>1                                  * 68DC8
-            IT                                   * 68DCD
-            ::                                   * 68DD2
-              SPACE$                             * 68DD7
-              DUPROT                             * 68DDC
-              &$                                 * 68DE1
-              SWAP&$                             * 68DE6
-            ;                                    * 68DEB
-            OBJ_6D62A                            * 68DF0
-            DUP                                  * 68DF5
-            OBJ_2708E                            * 68DFA
-            ITE                                  * 68DFF
-            EVAL                                 * 68E04
-            ::                                   * 68E09
-              DROP                               * 68E0E
-              OBJ_6CCCC                          * 68E13
-            ;                                    * 68E18
-            OBJ_6DF1D                            * 68E1D
-            OBJ_67448                            * 68E22
-            DUP                                  * 68E27
-            OBJ_6681A                            * 68E2C
-            OBJ_68EEF                            * 68E31
-            OBJ_67F45                            * 68E36
-          ;                                      * 68E3B
+            :: BINT33 GETLAM NOTcase 8GETLAM     * 68D9B
+              DUP ->StrExpr(_) ;                 * 68DB4
+            DUPLEN$ #>1 IT                       * 68DC3
+            :: SPACE$ DUPROT &$ SWAP&$ ;         * 68DD2
+            OBJ_6D62A DUP OBJ_2708E ITE EVAL     * 68DF0
+            :: DROP OBJ_6CCCC ;                  * 68E09
+            OBJ_6DF1D OBJ_67448 DUP OBJ_6681A OBJ_68EEF OBJ_67F45 ; * 68E1D
         ;                                        * 68E40
 
 * refs (3): 687B5 687DD 68846
 OBJ_68E45:
-        ::                                       * 68E45
-          OBJ_69147                              * 68E4A
-          ::                                     * 68E4F
-            OBJ_285EE                            * 68E54
-            OBJ_69824                            * 68E59
-            8GETLAM                              * 68E5E
-            OBJ_6D62A                            * 68E63
-            OBJ_2840F                            * 68E68
-            DROPDUP                              * 68E6D
-            OBJ_676D4                            * 68E72
-            OBJ_6DEAA                            * 68E77
-          ;                                      * 68E7C
-          6DROP                                  * 68E81
-          OBJ_691E7                              * 68E86
-        ;                                        * 68E8B
+        :: OBJ_69147                             * 68E45
+          :: OBJ_285EE OBJ_69824 8GETLAM OBJ_6D62A OBJ_2840F DROPDUP * 68E4F
+            OBJ_676D4 OBJ_6DEAA ;                * 68E72
+          6DROP OBJ_691E7 ;                      * 68E81
 
 * refs (1): 68D2D
 OBJ_68E90:
-        ::                                       * 68E90
-          OBJ_4EC49                              * 68E95
-          NOTcase                                * 68E9A
-          OBJ_691E7                              * 68E9F
-          BINT2                                  * 68EA4
-          3PUTLAM                                * 68EA9
-          5GETLAM                                * 68EAE
-          BINT1                                  * 68EB3
-          OVER                                   * 68EB8
-          OBJ_6E2D0                              * 68EBD
-          OBJ_68D9B                              * 68EC2
-          OBJ_6D62A                              * 68EC7
-          OBJ_2708E                              * 68ECC
-          ?SKIP                                  * 68ED1
-          OBJ_6E311                              * 68ED6
-          EVAL                                   * 68EDB
-          OVER                                   * 68EE0
-          OBJ_6681A                              * 68EE5
-          OBJ_67448                              * 68EEA
+        :: OBJ_4EC49 NOTcase OBJ_691E7           * 68E90
+          BINT2 3PUTLAM 5GETLAM BINT1 OVER OBJ_6E2D0 OBJ_68D9B OBJ_6D62A * 68EA4
+          OBJ_2708E ?SKIP OBJ_6E311              * 68ECC
+          EVAL OVER OBJ_6681A OBJ_67448          * 68EDB
 
 * refs (2): 68E31 69319
 OBJ_68EEF:
-          ::                                     * 68EEF
-            5GETLAM                              * 68EF4
-            dup;#nm?                             * 68EF9
-            NOT                                  * 68EFE
-            OVER                                 * 68F03
-            TYPEROMP?                            * 68F08
-            OR                                   * 68F0D
-            ITE                                  * 68F12
-            ::                                   * 68F17
-              BINT0                              * 68F1C
-              '                                  * 68F21
-              xFCNAPPLY                          * 68F26
-              THREE{}N                           * 68F2B
-            ;                                    * 68F30
-            ::                                   * 68F35
-              6GETLAM                            * 68F3A
-              NOT?SEMI                           * 68F3F
-              ZEROSWAP                           * 68F44
-              TWO{}N                             * 68F49
-            ;                                    * 68F4E
-            4GETLAM                              * 68F53
-            7GETLAM                              * 68F58
-            3GETLAM                              * 68F5D
-            OBJ_67532                            * 68F62
-            OBJ_69020                            * 68F67
-            OBJ_28602                            * 68F6C
-          ;                                      * 68F71
+          :: 5GETLAM dup;#nm? NOT OVER TYPEROMP? OR ITE * 68EEF
+            :: BINT0 ' xFCNAPPLY THREE{}N ;      * 68F17
+            :: 6GETLAM NOT?SEMI                  * 68F35
+              ZEROSWAP TWO{}N ;                  * 68F44
+            4GETLAM 7GETLAM 3GETLAM OBJ_67532 OBJ_69020 OBJ_28602 ; * 68F53
         ;                                        * 68F76
 
 * refs (5): 68FDA 694FE 6A1B3 6EC58 6F392
 OBJ_68F7B:
-        ::                                       * 68F7B
-          OBJ_679EA                              * 68F80
-          case                                   * 68F85
-          DUP                                    * 68F8A
-          DUPDUP                                 * 68F8F
-          OBJ_6A75D                              * 68F94
-          #MAX                                   * 68F99
-          OVER                                   * 68F9E
-          OBJ_6A705                              * 68FA3
-          ROTOVER                                * 68FA8
-          #=                                     * 68FAD
-          IT                                     * 68FB2
-          OBJ_679B3                              * 68FB7
-          DUP                                    * 68FBC
-          BEGIN                                  * 68FC1
-          DUP                                    * 68FC6
-          OBJ_679EA                              * 68FCB
-          ITE                                    * 68FD0
-          DUP                                    * 68FD5
-          OBJ_68F7B                              * 68FDA
-          4ROLL                                  * 68FDF
-          #MIN                                   * 68FE4
-          SWAP4ROLL                              * 68FE9
-          #MAX                                   * 68FEE
-          SWAPROT                                * 68FF3
-          OBJ_6FEE1                              * 68FF8
-        ;                                        * 68FFD
+        :: OBJ_679EA case DUP                    * 68F7B
+          DUPDUP OBJ_6A75D #MAX OVER OBJ_6A705 ROTOVER #= IT OBJ_679B3 * 68F8F
+          DUP BEGIN DUP OBJ_679EA ITE DUP OBJ_68F7B * 68FBC
+          4ROLL #MIN SWAP4ROLL #MAX SWAPROT OBJ_6FEE1 ; * 68FDF
 
 * refs (1): 68B75
 OBJ_69002:
-        ::                                       * 69002
-          OBJ_698D3                              * 69007
-          BINT5                                  * 6900C
-          OBJ_69659                              * 69011
-          OBJ_698FB                              * 69016
-          OBJ_698FB                              * 6901B
+        :: OBJ_698D3 BINT5 OBJ_69659 OBJ_698FB OBJ_698FB * 69002
 
 * refs (7): 6876A 68F67 6917E 6942C 69919 699E6 ...
 OBJ_69020:
-          ::                                     * 69020
-            OBJ_283F1                            * 69025
-            DROP                                 * 6902A
-            GetNextToken                         * 6902F
-            OBJ_69824                            * 69034
-            OBJ_2840F                            * 69039
-          ;                                      * 6903E
+          :: OBJ_283F1 DROP GetNextToken OBJ_69824 OBJ_2840F ; * 69020
 
 * refs (1): 69061
 OBJ_69043:
-          ::                                     * 69043
-            RDROP                                * 69048
-            OBJ_67DDF                            * 6904D
-            #0=case                              * 69052
-            OBJ_688C3                            * 69057
-            OBJ_69098                            * 6905C
-            OBJ_69043                            * 69061
-            OBJ_69941                            * 69066
-            OBJ_69553                            * 6906B
-            2DROP                                * 69070
-            BINT5                                * 69075
-            #=?SKIP                              * 6907A
-            OBJ_6994B                            * 6907F
-            OBJ_6996E                            * 69084
-            OBJ_69996                            * 69089
-          ;                                      * 6908E
+          :: RDROP OBJ_67DDF #0=case OBJ_688C3   * 69043
+            OBJ_69098 OBJ_69043 OBJ_69941 OBJ_69553 2DROP BINT5 #=?SKIP * 6905C
+            OBJ_6994B OBJ_6996E OBJ_69996 ;      * 6907F
         ;                                        * 69093
 
 * refs (3): 6905C 6948B 69932
 OBJ_69098:
-        ::                                       * 69098
-          'R                                     * 6909D
-          OBJ_69553                              * 690A2
-          NOT?GOTO                               * 690A7
-          OBJ_690C0                              * 690AC
-          SWAPDROP                               * 690B1
-          caseDROP                               * 690B6
-          OBJ_67F45                              * 690BB
+        :: 'R OBJ_69553 NOT?GOTO OBJ_690C0 SWAPDROP caseDROP OBJ_67F45 * 69098
 
 * refs (3): 688C8 68D69 690AC
 OBJ_690C0:
-          ::                                     * 690C0
-            OBJ_6996E                            * 690C5
-            OBJ_69495                            * 690CA
-            OBJ_67DDF                            * 690CF
-            #0=?SKIP                             * 690D4
-            ::                                   * 690D9
-              OBJ_67DEC                          * 690DE
-              ::                                 * 690E3
-                DUPTYPELIST?                     * 690E8
-                NOTcase                          * 690ED
-                OBJ_676D4                        * 690F2
+          :: OBJ_6996E OBJ_69495 OBJ_67DDF #0=?SKIP * 690C0
+            :: OBJ_67DEC                         * 690D9
+              :: DUPTYPELIST? NOTcase OBJ_676D4  * 690E3
                 INNERCOMP                        * 690F7
 
 * refs (1): 6A109
 OBJ_690FC:
-                ::                               * 690FC
-                  ZERO_DO                        * 69101
-                  OBJ_68BE3                      * 69106
-                  OBJ_676D4                      * 6910B
-                  LOOP                           * 69110
-                ;                                * 69115
-              ;                                  * 6911A
+                :: ZERO_DO OBJ_68BE3 OBJ_676D4 LOOP ; ; * 690FC
             ;                                    * 6911F
-            OBJ_67E0C                            * 69124
-            OBJ_67448                            * 69129
-            OBJ_674BB                            * 6912E
-          ;                                      * 69133
-          COLA_EVAL                              * 69138
-        ;                                        * 6913D
+            OBJ_67E0C OBJ_67448 OBJ_674BB ;      * 69124
+          COLA_EVAL ;                            * 69138

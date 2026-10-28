@@ -6,108 +6,44 @@
 
 * refs (1): 5FFEF
 OBJ_6001C:
-        ::                                       * 6001C
-          nonopcase                              * 60021
-          BINT0                                  * 60026
-          REQcase                                * 6002B
-          xFCNAPPLY                              * 60030
-          ::                                     * 60035
-            OVER                                 * 6003A
-            #3+PICK                              * 6003F
-            #2+                                  * 60044
-          ;                                      * 60049
-          infarg?                                * 6004E
-          case                                   * 60053
+        :: nonopcase BINT0                       * 6001C
+          REQcase xFCNAPPLY                      * 6002B
+          :: OVER #3+PICK #2+ ; infarg? case     * 60035
 
 over;pick(s+3);1+(s):
-          ::                                     * 60058
-            OVER                                 * 6005D
-            #3+PICK                              * 60062
-            #1+                                  * 60067
-          ;                                      * 6006C
-          argum                                  * 60071
-        ;                                        * 60076
+          :: OVER #3+PICK #1+ ;                  * 60058
+          argum ;                                * 60071
 
 * refs (3): 5FE1A 5FEA1 60161
 OBJ_6007B:
-        ::                                       * 6007B
-          Π'ct                                   * 60080
-          Π'ep                                   * 60085
-          Π'pp                                   * 6008A
-          ABND                                   * 6008F
-          RDROP                                  * 60094
-          FALSE                                  * 60099
-        ;                                        * 6009E
+        :: Π'ct Π'ep Π'pp ABND RDROP FALSE ;     * 6007B
 
 * refs (10): 5B325 5B384 5B3E8 5B442 5B555 5B5AF ...
 OBJ_600A3:
-        ::                                       * 600A3
-          #1+DUP                                 * 600A8
-          #1+SWAP                                * 600AD
-          BEGIN                                  * 600B2
-          OVER                                   * 600B7
-          PICK                                   * 600BC
-          OBJ_5FF73                              * 600C1
-          ITE                                    * 600C6
-          OBJ_6029A                              * 600CB
-          DROP                                   * 600D0
-          SWAP#1-                                * 600D5
-          DUPUNROT                               * 600DA
-          #2=                                    * 600DF
-          UNTIL                                  * 600E4
-          SWAPDROP#1-                            * 600E9
-        ;                                        * 600EE
+        :: #1+DUP #1+SWAP BEGIN OVER PICK OBJ_5FF73 ITE OBJ_6029A DROP * 600A3
+          SWAP#1- DUPUNROT #2= UNTIL SWAPDROP#1- ; * 600D5
 
 * refs (7): 28BB9 28BDC 5FE79 60A04 60A36 73042 ...
 {}_600F3:
-        {                                        * 600F3
-        }                                        * 600F8
+        { }                                      * 600F3
 
 * refs (1): 5FE6F
 OBJ_600FD:
-        ::                                       * 600FD
-          Π'ep                                   * 60102
-          OBJ_5FFD6                              * 60107
-          Π'ep                                   * 6010C
-          OVER                                   * 60111
-          '                                      * 60116
-          Π'ep                                   * 6011B
-          STO                                    * 60120
-          SWAPOVER#-                             * 60125
-          COLA                                   * 6012A
-          OBJ_60254                              * 6012F
+        :: Π'ep OBJ_5FFD6 Π'ep OVER ' Π'ep STO SWAPOVER#- COLA OBJ_60254 * 600FD
         ;                                        * 60134
 
 * refs (1): 5FE7E
 OBJ_60139:
-        ::                                       * 60139
-          Π'ep                                   * 6013E
-          PICK                                   * 60143
-          ::                                     * 60148
-            idntlamcase                          * 6014D
-            DROP                                 * 60152
-            DROPRDROP                            * 60157
-            COLA                                 * 6015C
-            OBJ_6007B                            * 60161
+        :: Π'ep PICK                             * 60139
+          :: idntlamcase DROP                    * 60148
+            DROPRDROP COLA OBJ_6007B             * 60157
           ;                                      * 60166
-          Π'ep                                   * 6016B
-          DUP                                    * 60170
-          #1+                                    * 60175
-          '                                      * 6017A
-          Π'ep                                   * 6017F
-          STO                                    * 60184
-          BINT1                                  * 60189
-          COLA                                   * 6018E
-          OBJ_60254                              * 60193
+          Π'ep DUP #1+ ' Π'ep STO BINT1 COLA OBJ_60254 * 6016B
         ;                                        * 60198
 
 * refs (1): 5FE88
 OBJ_6019D:
-        ::                                       * 6019D
-          2DUPSWAP                               * 601A2
-          INCOMPDROP                             * 601A7
-          OBJ_601B6                              * 601AC
-        ;                                        * 601B1
+        :: 2DUPSWAP INCOMPDROP OBJ_601B6 ;       * 6019D
 
 * refs (1): 601AC
 OBJ_601B6:
@@ -156,30 +92,12 @@ L_60240:
 
 * refs (2): 6012F 60193
 OBJ_60254:
-        ::                                       * 60254
-          TWO{}N                                 * 60259
-          Π'pp                                   * 6025E
-          #1+                                    * 60263
-          DUPUNROT                               * 60268
-          #1+PICK                                * 6026D
-          STOLAM                                 * 60272
-          '                                      * 60277
-          Π'pp                                   * 6027C
-          STO                                    * 60281
-          OBJ_5FEFB                              * 60286
-          UNTIL                                  * 6028B
-          OBJ_5FE2E                              * 60290
-        ;                                        * 60295
+        :: TWO{}N Π'pp #1+ DUPUNROT #1+PICK STOLAM ' Π'pp STO OBJ_5FEFB * 60254
+          UNTIL OBJ_5FE2E ;                      * 6028B
 
 * refs (1): 600CB
 OBJ_6029A:
-        ::                                       * 6029A
-          undo                                   * 6029F
-          DROP                                   * 602A4
-          INCOMPDROP                             * 602A9
-          4PICK                                  * 602AE
-          OBJ_602BD                              * 602B3
-        ;                                        * 602B8
+        :: undo DROP INCOMPDROP 4PICK OBJ_602BD ; * 6029A
 
 * refs (1): 602B3
 OBJ_602BD:
@@ -251,256 +169,73 @@ SUB_603BF:
 
 * refs (2): 60B6C 60DA1
 OBJ_603C9:
-        ::                                       * 603C9
-          BEGIN                                  * 603CE
-          Π'sur                                  * 603D3
-          Π'cts                                  * 603D8
-          #=case                                 * 603DD
+        :: BEGIN Π'sur Π'cts #=case              * 603C9
 
 * refs (1): 6068F
 OBJ_603E2:
-          ::                                     * 603E2
-            NDROP                                * 603E7
-            RDROP                                * 603EC
-          ;                                      * 603F1
-          Π'sun                                  * 603F6
-          OVER                                   * 603FB
-          #<case                                 * 60400
+          :: NDROP RDROP ;                       * 603E2
+          Π'sun OVER #<case                      * 603F6
 
 * refs (3): 60455 604F5 60590
 OBJ_60405:
-          ::                                     * 60405
-            OBJ_60487                            * 6040A
-            Π'sur                                * 6040F
-            OBJ_6045F                            * 60414
-            Π'sun                                * 60419
-            AGAIN                                * 6041E
-          ;                                      * 60423
-          DUPTWO                                 * 60428
-          Π'sur                                  * 6042D
-          DUPTEMPENV                             * 60432
-          OBJ_5FDB7                              * 60437
-          case                                   * 6043C
-          OBJ_604AF                              * 60441
-          3DROP                                  * 60446
-          ABND                                   * 6044B
-          COLA                                   * 60450
-          OBJ_60405                              * 60455
+          :: OBJ_60487 Π'sur OBJ_6045F Π'sun AGAIN ; * 60405
+          DUPTWO Π'sur DUPTEMPENV OBJ_5FDB7 case OBJ_604AF * 60428
+          3DROP ABND COLA OBJ_60405              * 60446
         ;                                        * 6045A
 
 * refs (2): 60414 606D0
 OBJ_6045F:
-        ::                                       * 6045F
-          'R                                     * 60464
-          DUP                                    * 60469
-          undo                                   * 6046E
-          DROP                                   * 60473
-          #1+SWAP                                * 60478
-          STOLAM                                 * 6047D
-        ;                                        * 60482
+        :: 'R DUP undo DROP #1+SWAP STOLAM ;     * 6045F
 
 * refs (1): 6040A
 OBJ_60487:
-        ::                                       * 60487
-          'R                                     * 6048C
-          DUP                                    * 60491
-          undo                                   * 60496
-          DROP                                   * 6049B
-          #1-SWAP                                * 604A0
-          STOLAM                                 * 604A5
-        ;                                        * 604AA
+        :: 'R DUP undo DROP #1-SWAP STOLAM ;     * 60487
 
 * refs (1): 60441
 OBJ_604AF:
-        ::                                       * 604AF
-          ROTROT2DROP                            * 604B4
-          Π'sur                                  * 604B9
-          #-                                     * 604BE
-          '                                      * 604C3
-          Π'mlg                                  * 604C8
-          STO                                    * 604CD
-          OBJ_60E3C                              * 604D2
-          Π'ckd                                  * 604D7
-          EVAL                                   * 604DC
-          NOTcase                                * 604E1
+        :: ROTROT2DROP Π'sur #- ' Π'mlg STO OBJ_60E3C Π'ckd EVAL NOTcase * 604AF
 
 * refs (1): 60522
 OBJ_604E6:
-          ::                                     * 604E6
-            ABND                                 * 604EB
-            COLA                                 * 604F0
-            OBJ_60405                            * 604F5
+          :: ABND COLA OBJ_60405                 * 604E6
           ;                                      * 604FA
-          OBJ_60E3C                              * 604FF
-          Π'rhs                                  * 60504
-          EXPLODE                                * 60509
-          OBJ_600A3                              * 6050E
-          Π'sur                                  * 60513
-          Π'mlg                                  * 60518
-          OBJ_60DB5                              * 6051D
-          OBJ_604E6                              * 60522
-          DUP                                    * 60527
-          4PICK                                  * 6052C
-          SWAP#-                                 * 60531
-          '                                      * 60536
-          Π'mlg                                  * 6053B
-          STO                                    * 60540
-          OBJ_5ED82                              * 60545
-          get1                                   * 6054A
-          Π'mlg                                  * 6054F
-          #+OVER                                 * 60554
-          #2+UNROLL                              * 60559
-          BINT0                                  * 6055E
-          '                                      * 60563
-          Π'sun                                  * 60568
-          STO                                    * 6056D
-          TRUE                                   * 60572
-          '                                      * 60577
-          Π'reg                                  * 6057C
-          STO                                    * 60581
-          ABND                                   * 60586
-          COLA                                   * 6058B
-          OBJ_60405                              * 60590
+          OBJ_60E3C Π'rhs EXPLODE OBJ_600A3 Π'sur Π'mlg OBJ_60DB5 OBJ_604E6 * 604FF
+          DUP 4PICK SWAP#- ' Π'mlg STO OBJ_5ED82 get1 Π'mlg #+OVER #2+UNROLL * 60527
+          BINT0 ' Π'sun STO TRUE ' Π'reg STO ABND COLA OBJ_60405 * 6055E
         ;                                        * 60595
 
 * refs (1): 60A90
 OBJ_6059A:
-        ::                                       * 6059A
-          Π'prd                                  * 6059F
-          EXPLODE                                * 605A4
-          OBJ_600A3                              * 605A9
-          IMPLODE                                * 605AE
-          symcomp                                * 605B3
-          '                                      * 605B8
-          Π'prp                                  * 605BD
-          STO                                    * 605C2
-          DUPTEMPENV                             * 605C7
-          DUP#2+PICK                             * 605CC
-          OVER#+                                 * 605D1
-          #2+                                    * 605D6
-          '                                      * 605DB
-          NULLLAM                                * 605E0
-          CACHE                                  * 605E5
-          Π'prp                                  * 605EA
-          COMPEVAL                               * 605EF
-          CK1NOLASTWD                            * 605F4
-          '                                      * 605F9
-          Π'prp                                  * 605FE
-          STO                                    * 60603
-          '                                      * 60608
-          NULLLAM                                * 6060D
-          DUMP                                   * 60612
-          ABND                                   * 60617
-          ABND                                   * 6061C
-          DROP                                   * 60621
-          Π'prp                                  * 60626
-          DUPTYPEREAL?                           * 6062B
-          ITE                                    * 60630
-          %0<>                                   * 60635
-          DROPFALSE                              * 6063A
+        :: Π'prd EXPLODE OBJ_600A3 IMPLODE symcomp ' Π'prp STO DUPTEMPENV * 6059A
+          DUP#2+PICK OVER#+ #2+ ' NULLLAM CACHE Π'prp COMPEVAL CK1NOLASTWD ' * 605CC
+          Π'prp STO ' NULLLAM DUMP ABND ABND DROP Π'prp DUPTYPEREAL? ITE * 605FE
+          %0<> DROPFALSE                         * 60635
         ;                                        * 6063F
 
 * refs (1): 60B71
 OBJ_60644:
-        ::                                       * 60644
-          Π'sur                                  * 60649
-          Π'cts                                  * 6064E
-          #1+                                    * 60653
-          '                                      * 60658
-          Π'sur                                  * 6065D
-          STOLAM                                 * 60662
-          #1+                                    * 60667
-          '                                      * 6066C
-          Π'cts                                  * 60671
-          STOLAM                                 * 60676
-          BEGIN                                  * 6067B
-          Π'sur                                  * 60680
-          Π'cts                                  * 60685
-          #=case                                 * 6068A
-          OBJ_603E2                              * 6068F
-          DUPTWO                                 * 60694
-          Π'sur                                  * 60699
-          DUPTEMPENV                             * 6069E
-          OBJ_5FDB7                              * 606A3
-          case                                   * 606A8
-          OBJ_606E4                              * 606AD
-          3DROP                                  * 606B2
-          ABND                                   * 606B7
-          COLA                                   * 606BC
-          OBJ_606CB                              * 606C1
+        :: Π'sur Π'cts #1+ ' Π'sur STOLAM #1+ ' Π'cts STOLAM BEGIN Π'sur * 60644
+          Π'cts #=case OBJ_603E2                 * 60685
+          DUPTWO Π'sur DUPTEMPENV OBJ_5FDB7 case OBJ_606E4 * 60694
+          3DROP ABND COLA OBJ_606CB              * 606B2
         ;                                        * 606C6
 
 * refs (2): 606C1 6072A
 OBJ_606CB:
-        ::                                       * 606CB
-          OBJ_6045F                              * 606D0
-          Π'sur                                  * 606D5
-          AGAIN                                  * 606DA
-        ;                                        * 606DF
+        :: OBJ_6045F Π'sur AGAIN ;               * 606CB
 
 * refs (1): 606AD
 OBJ_606E4:
-        ::                                       * 606E4
-          ROTROT2DROP                            * 606E9
-          Π'sur                                  * 606EE
-          #-                                     * 606F3
-          '                                      * 606F8
-          Π'mlg                                  * 606FD
-          STOLAM                                 * 60702
-          OBJ_60E3C                              * 60707
-          Π'ckd                                  * 6070C
-          EVAL                                   * 60711
-          NOTcase                                * 60716
+        :: ROTROT2DROP Π'sur #- ' Π'mlg STOLAM OBJ_60E3C Π'ckd EVAL NOTcase * 606E4
 
 * refs (1): 60757
 OBJ_6071B:
-          ::                                     * 6071B
-            ABND                                 * 60720
-            COLA                                 * 60725
-            OBJ_606CB                            * 6072A
+          :: ABND COLA OBJ_606CB                 * 6071B
           ;                                      * 6072F
-          OBJ_60E3C                              * 60734
-          Π'rhs                                  * 60739
-          EXPLODE                                * 6073E
-          OBJ_600A3                              * 60743
-          Π'sur                                  * 60748
-          Π'mlg                                  * 6074D
-          OBJ_60DB5                              * 60752
-          OBJ_6071B                              * 60757
-          2DUP#+                                 * 6075C
-          '                                      * 60761
-          Π'sur                                  * 60766
-          STOLAM                                 * 6076B
-          DUP                                    * 60770
-          4PICKSWAP                              * 60775
-          #-                                     * 6077A
-          '                                      * 6077F
-          Π'mlg                                  * 60784
-          STOLAM                                 * 60789
-          OBJ_5ED82                              * 6078E
-          get1                                   * 60793
-          Π'mlg                                  * 60798
-          #+OVER                                 * 6079D
-          #2+UNROLL                              * 607A2
-          Π'sur                                  * 607A7
-          Π'mlg                                  * 607AC
-          #+                                     * 607B1
-          '                                      * 607B6
-          Π'sur                                  * 607BB
-          STOLAM                                 * 607C0
-          Π'cts                                  * 607C5
-          Π'mlg                                  * 607CA
-          #+                                     * 607CF
-          '                                      * 607D4
-          Π'cts                                  * 607D9
-          STOLAM                                 * 607DE
-          TRUE                                   * 607E3
-          '                                      * 607E8
-          Π'reg                                  * 607ED
-          STOLAM                                 * 607F2
-          ABND                                   * 607F7
-          AGAIN                                  * 607FC
-        ;                                        * 60801
+          OBJ_60E3C Π'rhs EXPLODE OBJ_600A3 Π'sur Π'mlg OBJ_60DB5 OBJ_6071B * 60734
+          2DUP#+ ' Π'sur STOLAM DUP 4PICKSWAP #- ' Π'mlg STOLAM OBJ_5ED82 * 6075C
+          get1 Π'mlg #+OVER #2+UNROLL Π'sur Π'mlg #+ ' Π'sur STOLAM Π'cts * 60793
+          Π'mlg #+ ' Π'cts STOLAM TRUE ' Π'reg STOLAM ABND AGAIN ; * 607CA
 
 * refs (4): 608A6 608B0 60C36 60C40
 OBJ_60806:
@@ -508,52 +243,44 @@ OBJ_60806:
 
 * refs (6): 6057C 607ED 608D8 60B7B 60C98 60DAB
 Π'reg:
-          LAM     'reg                           * 6080B
+          LAM 'reg                               * 6080B
 
 * refs (17): 603D3 6040F 6042D 604B9 60513 60649 ...
 Π'sur:
-          LAM     'sur                           * 6081A
+          LAM 'sur                               * 6081A
 
 * refs (8): 603D8 6064E 60671 60685 607C5 607D9 ...
 Π'cts:
-          LAM     'cts                           * 60829
+          LAM 'cts                               * 60829
 
 * refs (5): 603F6 60419 60568 6095A 60D34
 Π'sun:
-          LAM     'sun                           * 60838
+          LAM 'sun                               * 60838
 
 * refs (12): 604C8 60518 6053B 6054F 606FD 6074D ...
 Π'mlg:
-          LAM     'mlg                           * 60847
+          LAM 'mlg                               * 60847
 
 * refs (4): 604D7 6070C 608F6 60AE5
 Π'ckd:
-          LAM     'ckd                           * 60856
+          LAM 'ckd                               * 60856
 
 * refs (3): 6059F 608E7 60AFE
 Π'prd:
-          LAM     'prd                           * 60865
+          LAM 'prd                               * 60865
 
 * refs (4): 605BD 605EA 605FE 60626
 Π'prp:
-          LAM     'prp                           * 60874
+          LAM 'prp                               * 60874
 
 * refs (7): 5B52D 5B5E1 5B640 60504 60739 60905 ...
 Π'rhs:
-          LAM     'rhs                           * 60883
-        }                                        * 60892
+          LAM 'rhs }                             * 60883
 
 * refs (1): 60A9F
 OBJ_60897:
-        ::                                       * 60897
-          ?SKIP                                  * 6089C
-          TrueTrue                               * 608A1
-          OBJ_60806                              * 608A6
-          INCOMPDROP                             * 608AB
-          OBJ_60806                              * 608B0
-          BIND                                   * 608B5
-          OBJ_608C4                              * 608BA
-        ;                                        * 608BF
+        :: ?SKIP TrueTrue                        * 60897
+          OBJ_60806 INCOMPDROP OBJ_60806 BIND OBJ_608C4 ; * 608A6
 
 * refs (1): 608BA
 OBJ_608C4:
@@ -561,341 +288,124 @@ OBJ_608C4:
 
 * refs (1): 60D02
 OBJ_608C9:
-          ::                                     * 608C9
-            FALSE                                * 608CE
-            '                                    * 608D3
-            Π'reg                                * 608D8
-            STO                                  * 608DD
-            '                                    * 608E2
-            Π'prd                                * 608E7
-            STO                                  * 608EC
-            '                                    * 608F1
-            Π'ckd                                * 608F6
-            STO                                  * 608FB
-            '                                    * 60900
-            Π'rhs                                * 60905
-            STO                                  * 6090A
-            ?ROMPTR>                             * 6090F
-            EXPLODE                              * 60914
-          ;                                      * 60919
-          DUP#2+PICK                             * 6091E
-          OVER#+                                 * 60923
-          #2+                                    * 60928
-          '                                      * 6092D
-          Π'sur                                  * 60932
-          STO                                    * 60937
-          DUP#2+                                 * 6093C
-          '                                      * 60941
-          Π'cts                                  * 60946
-          STO                                    * 6094B
-          BINT1                                  * 60950
-          '                                      * 60955
-          Π'sun                                  * 6095A
-          STO                                    * 6095F
-          BINT0                                  * 60964
-          '                                      * 60969
-          Π'mlg                                  * 6096E
-          STO                                    * 60973
-        ;                                        * 60978
+          :: FALSE ' Π'reg STO ' Π'prd STO ' Π'ckd STO ' Π'rhs STO ?ROMPTR> * 608C9
+            EXPLODE ;                            * 60914
+          DUP#2+PICK OVER#+ #2+ ' Π'sur STO DUP#2+ ' Π'cts STO BINT1 ' Π'sun * 6091E
+          STO BINT0 ' Π'mlg STO ;                * 6095F
 
 * refs (1): 60AA4
 OBJ_6097D:
-        ::                                       * 6097D
-          dup                                    * 60982
-          pshzer                                 * 60987
-          BEGIN                                  * 6098C
-          #1-SWAP                                * 60991
-          OBJ_5FF73                              * 60996
-          ITE                                    * 6099B
-          psh1&                                  * 609A0
-          DROP                                   * 609A5
-          #0=UNTIL                               * 609AA
-          DROP                                   * 609AF
-        ;                                        * 609B4
+        :: dup pshzer BEGIN #1-SWAP OBJ_5FF73 ITE psh1& DROP * 6097D
+          #0=UNTIL DROP ;                        * 609AA
 
 * refs (2): 60AE0 60B08
 OBJ_609B9:
-        ::                                       * 609B9
-          BEGIN                                  * 609BE
-          pullrev                                * 609C3
-          OBJ_5FF73                              * 609C8
-          ITE                                    * 609CD
-          OBJ_609EB                              * 609D2
-          DROP                                   * 609D7
-          #0=UNTIL                               * 609DC
-          DROP                                   * 609E1
-        ;                                        * 609E6
+        :: BEGIN pullrev OBJ_5FF73 ITE OBJ_609EB DROP * 609B9
+          #0=UNTIL DROP ;                        * 609DC
 
 * refs (1): 609D2
 OBJ_609EB:
-        ::                                       * 609EB
-          DUP                                    * 609F0
-          FIRST@LAM                              * 609F5
-          NOTcase                                * 609FA
-          SETNONEXTERR                           * 609FF
-          {}_600F3                               * 60A04
-          EQ                                     * 60A09
-          caseDROP                               * 60A0E
-          OVER#0=                                * 60A13
-          caseDROP                               * 60A18
-          OVER                                   * 60A1D
-          #3+                                    * 60A22
-          OBJ_5F5AD                              * 60A27
-          ITE                                    * 60A2C
-          ::                                     * 60A31
-            {}_600F3                             * 60A36
-            SWAP                                 * 60A3B
-            STOLAM                               * 60A40
-          ;                                      * 60A45
-          DROP                                   * 60A4A
+        :: DUP FIRST@LAM NOTcase SETNONEXTERR    * 609EB
+          {}_600F3 EQ caseDROP OVER#0=           * 60A04
+          caseDROP OVER                          * 60A18
+          #3+ OBJ_5F5AD ITE                      * 60A22
+          :: {}_600F3 SWAP STOLAM ; DROP         * 60A31
         ;                                        * 60A4F
 
 * refs (1): 60B5D
 OBJ_60A54:
-        ::                                       * 60A54
-          DUP                                    * 60A59
-          BINT4                                  * 60A5E
-          BINT3                                  * 60A63
-          RPITE                                  * 60A68
-          get1                                   * 60A6D
-          EXPLODE                                * 60A72
-          psh                                    * 60A77
-          DROPDUP                                * 60A7C
-          IT                                     * 60A81
-          ::                                     * 60A86
-            '                                    * 60A8B
-            OBJ_6059A                            * 60A90
-            3UNROLL                              * 60A95
-          ;                                      * 60A9A
-          OBJ_60897                              * 60A9F
-          OBJ_6097D                              * 60AA4
-          PTR     addt:                          * 60AA9
-          NULLLAM                                * 60AAE
-          NULL{}                                 * 60AB3
-          OVER                                   * 60AB8
-          NDUPN                                  * 60ABD
-          psh                                    * 60AC2
-          get1                                   * 60AC7
-          DROP                                   * 60ACC
-          DOBIND                                 * 60AD1
-          Π'rhs                                  * 60AD6
-          EXPLODE                                * 60ADB
-          OBJ_609B9                              * 60AE0
-          Π'ckd                                  * 60AE5
-          TRUE                                   * 60AEA
-          EQ                                     * 60AEF
-          ?SKIP                                  * 60AF4
-          ::                                     * 60AF9
-            Π'prd                                * 60AFE
-            EXPLODE                              * 60B03
-            OBJ_609B9                            * 60B08
-          ;                                      * 60B0D
+        :: DUP BINT4 BINT3 RPITE get1 EXPLODE    * 60A54
+          psh DROPDUP IT                         * 60A77
+          :: ' OBJ_6059A 3UNROLL ;               * 60A86
+          OBJ_60897 OBJ_6097D PTR addt: NULLLAM NULL{} OVER NDUPN psh get1 * 60A9F
+          DROP DOBIND Π'rhs EXPLODE OBJ_609B9 Π'ckd TRUE EQ ?SKIP * 60ACC
+          :: Π'prd EXPLODE OBJ_609B9 ;           * 60AF9
         ;                                        * 60B12
 
 * refs (2): 1FABF 1FAD3
 match'(ex,li):
-        ::                                       * 60B17
-          INNERCOMP                              * 60B1C
-          DUP                                    * 60B21
-          #2=                                    * 60B26
-          OVER                                   * 60B2B
-          #3=                                    * 60B30
-          OR                                     * 60B35
-          ?SKIP                                  * 60B3A
-          SETSIZEERR                             * 60B3F
-          DUP                                    * 60B44
-          dvarlsBIND                             * 60B49
-          nmetasyms                              * 60B4E
-          1GETABND                               * 60B53
-          #3=                                    * 60B58
-          OBJ_60A54                              * 60B5D
-          'R                                     * 60B62
-          ITE                                    * 60B67
-          OBJ_603C9                              * 60B6C
+        :: INNERCOMP DUP #2= OVER #3= OR ?SKIP SETSIZEERR * 60B17
+          DUP dvarlsBIND nmetasyms 1GETABND #3= OBJ_60A54 'R ITE OBJ_603C9 * 60B44
           OBJ_60644                              * 60B71
-          ABND                                   * 60B76
-          Π'reg                                  * 60B7B
-          ITE                                    * 60B80
-          %1                                     * 60B85
-          %0_2A2B4                               * 60B8A
-          ABND                                   * 60B8F
-          pshm1                                  * 60B94
-          IMPLODE                                * 60B99
-          SWAPDROPSWAP                           * 60B9E
-        ;                                        * 60BA3
+          ABND Π'reg ITE %1 %0_2A2B4             * 60B76
+          ABND pshm1 IMPLODE SWAPDROPSWAP ;      * 60B8F
 
-        ::                                       * 60BA8
-          OBJ_5FF73                              * 60BAD
-          NOTcase                                * 60BB2
-          EQUALNOTcase                           * 60BB7
+        :: OBJ_5FF73 NOTcase EQUALNOTcase        * 60BA8
           2DROP                                  * 60BBC
-          COLASKIP                               * 60BC1
-        ;                                        * 60BC6
+          COLASKIP ;                             * 60BC1
 
 * refs (1): 5B357
 OBJ_60BCB:
-        ::                                       * 60BCB
-          BINT5                                  * 60BD0
-          NEXTCOMPOB                             * 60BD5
-          DROP                                   * 60BDA
-          OBJ_72AFA                              * 60BDF
+        :: BINT5 NEXTCOMPOB DROP OBJ_72AFA       * 60BCB
 
 {'patternls,'compos,'varls}:
           {                                      * 60BE4
 
 Π'patternls:
-            LAM     'patternls                   * 60BE9
+            LAM 'patternls                       * 60BE9
 
 Π'compos:
-            LAM     'compos                      * 60C04
+            LAM 'compos                          * 60C04
 
 Π'varls:
-            LAM     'varls                       * 60C19
-          }                                      * 60C2C
-          BIND                                   * 60C31
-          OBJ_60806                              * 60C36
-          INCOMPDROP                             * 60C3B
-          OBJ_60806                              * 60C40
-          BIND                                   * 60C45
-          BEGIN                                  * 60C4A
+            LAM 'varls }                         * 60C19
+          BIND OBJ_60806 INCOMPDROP OBJ_60806 BIND BEGIN * 60C31
 
 Π'patternls_60C4F:
-          LAM     'patternls                     * 60C4F
+          LAM 'patternls                         * 60C4F
 
 Π'compos_60C6A:
-          LAM     'compos                        * 60C6A
-          NEXTCOMPOB                             * 60C7F
-          ITE                                    * 60C84
-          OBJ_60CBB                              * 60C89
-          DROPTRUE                               * 60C8E
-          UNTIL                                  * 60C93
-          Π'reg                                  * 60C98
-          ABND                                   * 60C9D
-          ABND                                   * 60CA2
-          NOT                                    * 60CA7
-          ?SKIP                                  * 60CAC
-          RDROP                                  * 60CB1
+          LAM 'compos NEXTCOMPOB ITE OBJ_60CBB DROPTRUE * 60C6A
+          UNTIL Π'reg ABND ABND NOT ?SKIP RDROP  * 60C93
         ;                                        * 60CB6
 
 * refs (1): 60C89
 OBJ_60CBB:
-        ::                                       * 60CBB
-          SWAP                                   * 60CC0
-          '                                      * 60CC5
+        :: SWAP '                                * 60CBB
 
 Π'compos_60CCA:
-          LAM     'compos                        * 60CCA
-          STOLAM                                 * 60CDF
-          SWAPDROP                               * 60CE4
-          OBJ_72AFA                              * 60CE9
-          INNERCOMP                              * 60CEE
-          #2=                                    * 60CF3
-          IT                                     * 60CF8
-          TrueTrue                               * 60CFD
-          OBJ_608C9                              * 60D02
-          DUP#2+PICK                             * 60D07
-          2DUPSWAP                               * 60D0C
-          #<                                     * 60D11
-          casedrop                               * 60D16
+          LAM 'compos STOLAM SWAPDROP OBJ_72AFA INNERCOMP #2= IT TrueTrue * 60CCA
+          OBJ_608C9 DUP#2+PICK 2DUPSWAP #< casedrop * 60D02
 
 dropB;false_60D1B:
-          ::                                     * 60D1B
-            NDROP                                * 60D20
-            FALSE                                * 60D25
-          ;                                      * 60D2A
-          '                                      * 60D2F
-          Π'sun                                  * 60D34
-          STOLAM                                 * 60D39
-          DUP#2+                                 * 60D3E
-          DUP                                    * 60D43
-          '                                      * 60D48
-          Π'cts                                  * 60D4D
-          STO                                    * 60D52
-          #1+                                    * 60D57
-          '                                      * 60D5C
-          Π'sur                                  * 60D61
-          STOLAM                                 * 60D66
-          BINT0                                  * 60D6B
-          '                                      * 60D70
-          Π'mlg                                  * 60D75
-          STO                                    * 60D7A
+          :: NDROP FALSE ;                       * 60D1B
+          ' Π'sun STOLAM DUP#2+ DUP ' Π'cts STO #1+ ' Π'sur STOLAM BINT0 ' * 60D2F
+          Π'mlg STO                              * 60D75
 
 Π'varls_60D7F:
-          LAM     'varls                         * 60D7F
-          INNERCOMP                              * 60D92
-          #2/                                    * 60D97
-          DOBIND                                 * 60D9C
-          OBJ_603C9                              * 60DA1
-          ABND                                   * 60DA6
-          Π'reg                                  * 60DAB
-        ;                                        * 60DB0
+          LAM 'varls INNERCOMP #2/ DOBIND OBJ_603C9 ABND Π'reg ; * 60D7F
 
 * refs (2): 6051D 60752
 OBJ_60DB5:
-        ::                                       * 60DB5
-          DUPONE                                 * 60DBA
-          #>case                                 * 60DBF
-          SKIP                                   * 60DC4
-          4PICK                                  * 60DC9
-          idntlamcase                            * 60DCE
-          ::                                     * 60DD3
-            drop;dq                              * 60DD8
-            SKIP                                 * 60DDD
-          ;                                      * 60DE2
-          DROP                                   * 60DE7
-          3PICK                                  * 60DEC
-          #4+PICK                                * 60DF1
-          #3+                                    * 60DF6
-          3PICK                                  * 60DFB
-          #=case                                 * 60E00
-          SKIP                                   * 60E05
-          3PICK3PICK                             * 60E0A
-          #+                                     * 60E0F
-          #3+                                    * 60E14
-          OBJ_5F5AD                              * 60E19
-          NOTcase                                * 60E1E
-          SKIP                                   * 60E23
-          2DROP                                  * 60E28
-          NDROP                                  * 60E2D
-          COLACOLA                               * 60E32
-        ;                                        * 60E37
+        :: DUPONE #>case SKIP                    * 60DB5
+          4PICK idntlamcase                      * 60DC9
+          :: drop;dq SKIP ;                      * 60DD3
+          DROP 3PICK #4+PICK #3+ 3PICK #=case SKIP * 60DE7
+          3PICK3PICK #+ #3+ OBJ_5F5AD NOTcase SKIP * 60E0A
+          2DROP NDROP COLACOLA ;                 * 60E28
 
 * refs (4): 604D2 604FF 60707 60734
 OBJ_60E3C:
-        ::                                       * 60E3C
-          'R                                     * 60E41
-          DUP                                    * 60E46
-          EVAL                                   * 60E4B
-          DUPTYPEROMP?                           * 60E50
-          NOTcase                                * 60E55
-          SWAPDROP                               * 60E5A
-          OBJ_72AFA                              * 60E5F
-          DUPROT                                 * 60E64
-          STOLAM                                 * 60E69
-        ;                                        * 60E6E
+        :: 'R DUP EVAL DUPTYPEROMP? NOTcase SWAPDROP * 60E3C
+          OBJ_72AFA DUPROT STOLAM ;              * 60E5F
 
 * refs (20): 5B942 5BA4B 5BB7C 824CE 82664 82740 ...
 OBJ_60E73:
-        {                                        * 60E73
-          NULL{}                                 * 60E78
-          NULL{}                                 * 60E7D
-          NULL{}                                 * 60E82
-          NULL{}                                 * 60E87
+        { NULL{} NULL{} NULL{} NULL{}            * 60E73
 
 * refs (162): 5B50A 5B951 5B979 5B9A1 5B9D3 5B9E2 ...
 Π&1:
-          LAM     &1                             * 60E8C
+          LAM &1                                 * 60E8C
 
 * refs (10): 5B9A6 5BA00 5BA14 5BA5F 5BAA0 5BAB9 ...
 Π&2:
-          LAM     &2                             * 60E97
+          LAM &2                                 * 60E97
 
 Π&3:
-          LAM     &3                             * 60EA2
+          LAM &3                                 * 60EA2
 
 Π&4:
-          LAM     &4                             * 60EAD
-        }                                        * 60EB8
+          LAM &4 }                               * 60EAD
 
 * ->
 * refs (37): 14627 148C5 148CF 149E2 1510B 15115 ...
@@ -2528,7 +2038,7 @@ CACHE:
 
 * refs (4): 14E8B 17D5A 61D4D 61F9E
 SAVELAM:
-        LAM     ""                               * 61D3A
+        LAM ""                                   * 61D3A
 
 * ->
 * refs (4): 143CA 38660 40D11 C63E8
@@ -3199,53 +2709,26 @@ L_622DD:
 * $ $' -> $'+$
 * refs (22): 148E3 14A00 14A91 16D68 17950 2D997 ...
 !insert$:
-        ::                                       * 622E5
-          ERRSET                                 * 622EA
+        :: ERRSET                                * 622E5
 
 * $ $' -> $'+$
 * refs (23): 0D33F 0F321 15612 1ACCA 2632E 414D0 ...
 SWAP&$:
-          ::                                     * 622EF
-            SWAP                                 * 622F4
-            &$                                   * 622F9
-          ;                                      * 622FE
-          ERRTRAP                                * 62303
-          !!append$?                             * 62308
-        ;                                        * 6230D
+          :: SWAP &$ ; ERRTRAP !!append$? ;      * 622EF
 
 * $ $' -> $+$'
 * refs (2): 62308 6238A
 !!append$?:
-        ::                                       * 62312
-          INTEMNOTREF?                           * 62317
-          ROTSWAP                                * 6231C
-          case                                   * 62321
-          ::                                     * 62326
-            INTEMNOTREF?                         * 6232B
-            NOTcase                              * 62330
-            !!insert$                            * 62335
-            OVERLEN$                             * 6233A
-            OVERLEN$                             * 6233F
-            #>                                   * 62344
-            case                                 * 62349
-            !!insert$                            * 6234E
-            SWAP                                 * 62353
-            !!append$                            * 62358
-          ;                                      * 6235D
-          CKREF                                  * 62362
-          SWAP                                   * 62367
-          !!append$                              * 6236C
-        ;                                        * 62371
+        :: INTEMNOTREF? ROTSWAP case             * 62312
+          :: INTEMNOTREF? NOTcase !!insert$      * 62326
+            OVERLEN$ OVERLEN$ #> case !!insert$  * 6233A
+            SWAP !!append$ ;                     * 62353
+          CKREF SWAP !!append$ ;                 * 62362
 
 * $ $' -> $+$'
 * refs (47): 04283 148E8 14A05 14A96 14ABE 14B45 ...
 !append$:
-        ::                                       * 62376
-          ERRSET                                 * 6237B
-          &$                                     * 62380
-          ERRTRAP                                * 62385
-          !!append$?                             * 6238A
-        ;                                        * 6238F
+        :: ERRSET &$ ERRTRAP !!append$? ;        * 62376
 
 * $ $' -> $'+$
 * refs (9): 15D88 15DE7 15E5B 15EC4 161AD 161C6 ...
@@ -3907,41 +3390,25 @@ COLANOTcase:
 * f1 f2 -> :: <ob1> ; f1 f2 -> :: <ob2> <rest> ;
 * refs (22): 16284 1942F 1F3B3 39B99 3AFB6 4B24C ...
 ORcase:
-        ::                                       * 629BC
-          OR                                     * 629C1
-          COLAcase                               * 629C6
-        ;                                        * 629CB
+        :: OR COLAcase ;                         * 629BC
 
 * ob -> :: ob <ob2> ; -> :: ob <ob3> <rest> ;
 * refs (8): 10207 10991 14780 3512B 5AD53 5B1A4 ...
 REQcase:
-        ::                                       * 629D0
-          'R                                     * 629D5
-          COLA                                   * 629DA
-          EQcase                                 * 629DF
+        :: 'R COLA EQcase                        * 629D0
         ;                                        * 629E4
 
 * ob -> <ob2> ; -> <ob3> <rest> ;
 * refs (52): 0F286 0F2AE 0F2D1 0F2F4 0FEA3 0FEB2 ...
 REQcasedrop:
-        ::                                       * 629E9
-          'R                                     * 629EE
-          COLA                                   * 629F3
-          EQcasedrop                             * 629F8
+        :: 'R COLA EQcasedrop                    * 629E9
         ;                                        * 629FD
 
 * ob id/lam ->
 * refs (3): 1852C 1956A 1D73D
 SAFESTO:
-        ::                                       * 62A02
-          DUPTYPELAM?                            * 62A07
-          case                                   * 62A0C
-          STO                                    * 62A11
-          SWAP                                   * 62A16
-          ?>ROMPTR                               * 62A1B
-          SWAP                                   * 62A20
-          STO                                    * 62A25
-        ;                                        * 62A2A
+        :: DUPTYPELAM? case STO                  * 62A02
+          SWAP ?>ROMPTR SWAP STO ;               * 62A16
 
 * id/lam -> id/lam ob T -> id/lam F
 * refs (12): 147D5 153AC 15401 31D5B 3540A 4149F ...
@@ -3951,562 +3418,341 @@ DUPSAFE@:
 * id/lam -> ob T -> F
 * refs (33): 1000B 15133 15621 18545 1CE5A 20B86 ...
 SAFE@:
-        ::                                       * 62A34
-          DUPTYPELAM?                            * 62A39
-          case                                   * 62A3E
-          DRPExitAtLOOP                          * 62A43
-          DRPExitAtLOOP                          * 62A48
-          NOTcaseFALSE                           * 62A4D
-          ?ROMPTR>                               * 62A52
-          TRUE                                   * 62A57
-        ;                                        * 62A5C
+        :: DUPTYPELAM? case DRPExitAtLOOP        * 62A34
+          DRPExitAtLOOP NOTcaseFALSE ?ROMPTR>    * 62A48
+          TRUE ;                                 * 62A57
 
 * ob -> ob'
 * refs (4): 08F8F 216AB 2F199 62A1B
 ?>ROMPTR:
-        ::                                       * 62A61
-          DUPROM-WORD?                           * 62A66
-          NOT?SEMI                               * 62A6B
-          DUPTYPECOL?                            * 62A70
-          case                                   * 62A75
-          PTR>ROMPTR                             * 62A7A
+        :: DUPROM-WORD? NOT?SEMI                 * 62A61
+          DUPTYPECOL? case PTR>ROMPTR            * 62A70
         ;                                        * 62A7F
 
 * ob -> ob'
 * refs (8): 093B6 1874C 30730 6090F 62A52 8550A ...
 ?ROMPTR>:
-        ::                                       * 62A84
-          DUP                                    * 62A89
-          TYPEROMP?                              * 62A8E
-          NOT?SEMI                               * 62A93
-          DUP                                    * 62A98
-          ROMPTR@                                * 62A9D
-          NOT?SEMI                               * 62AA2
-          INHARDROM?                             * 62AA7
-          NOTcaseDROP                            * 62AAC
-          SWAPDROP                               * 62AB1
+        :: DUP TYPEROMP? NOT?SEMI                * 62A84
+          DUP ROMPTR@ NOT?SEMI                   * 62A98
+          INHARDROM? NOTcaseDROP SWAPDROP        * 62AA7
         ;                                        * 62AB6
 
 * refs (1): 16E6C
 MACRODCMP:
-        ::                                       * 62ABB
-          DUP                                    * 62AC0
-          OBJ_2699F                              * 62AC5
-          NOTcase                                * 62ACA
-          ::                                     * 62ACF
-            PALPTRDCMP                           * 62AD4
-            NOTcaseFALSE                         * 62AD9
-            failed                               * 62ADE
+        :: DUP OBJ_2699F NOTcase                 * 62ABB
+          :: PALPTRDCMP NOTcaseFALSE failed      * 62ACF
           ;                                      * 62AE3
-          DUP                                    * 62AE8
-          OBJ_268D6                              * 62AED
-          SWAP                                   * 62AF2
-          PALPTRDCMP                             * 62AF7
-          ROTSWAP                                * 62AFC
-          TRUE                                   * 62B01
-        ;                                        * 62B06
+          DUP OBJ_268D6 SWAP PALPTRDCMP ROTSWAP TRUE ; * 62AE8
 
 * ob1 ob2 -> F
 * refs (13): 27E8B 2FE1B 3FBD8 4498F 46842 4F1B5 ...
 2DROPFALSE:
-        ::                                       * 62B0B
-          2DROP                                  * 62B10
-          FALSE                                  * 62B15
-        ;                                        * 62B1A
+        :: 2DROP FALSE ;                         * 62B0B
 
 * refs (11): 1484D 14C1C 16158 16F02 388EA 40A01 ...
 PALPTRDCMP:
-        ::                                       * 62B1F
-          DUPTYPEROMP?                           * 62B24
-          case                                   * 62B29
-          palrompdcmp                            * 62B2E
-          DUPROM-WORD?                           * 62B33
-          NOTcaseFALSE                           * 62B38
-          PTR>ID                                 * 62B3D
-          ITE                                    * 62B42
-          ID>$                                   * 62B47
-          NULL$                                  * 62B4C
-          TRUE                                   * 62B51
-        ;                                        * 62B56
+        :: DUPTYPEROMP? case palrompdcmp         * 62B1F
+          DUPROM-WORD? NOTcaseFALSE PTR>ID       * 62B33
+          ITE ID>$ NULL$                         * 62B42
+          TRUE ;                                 * 62B51
 
 * romptr -> $ T
 * refs (1): 62B2E
 palrompdcmp:
-        ::                                       * 62B5B
-          ->str(xn)                              * 62B60
-          TRUE                                   * 62B65
-        ;                                        * 62B6A
+        :: ->str(xn) TRUE ;                      * 62B5B
 
 * # -> #
 * refs (26): 1F924 21C33 3F497 42CC9 56746 58E31 ...
 #0=UNTIL:
-        ::                                       * 62B6F
-          DUP#0=                                 * 62B74
-          COLA                                   * 62B79
-          UNTIL                                  * 62B7E
+        :: DUP#0= COLA UNTIL                     * 62B6F
         ;                                        * 62B83
 
 * comp -> obn..ob1
 * refs (74): 05ED8 0DCFE 0E1DD 0EB36 2EA45 2F28E ...
 INCOMPDROP:
-        ::                                       * 62B88
-          INNERCOMP                              * 62B8D
-          DROP                                   * 62B92
-        ;                                        * 62B97
+        :: INNERCOMP DROP ;                      * 62B88
 
 * comp #i -> ob
 * refs (161): 0DF70 0E155 0EAC8 156FE 1A02F 1D8B1 ...
 NTHCOMPDROP:
-        ::                                       * 62B9C
-          NTHELCOMP                              * 62BA1
-          DROP                                   * 62BA6
-        ;                                        * 62BAB
+        :: NTHELCOMP DROP ;                      * 62B9C
 
 * $ -> $'
 * refs (23): 15D51 15D83 15E42 15EBA 161A8 1628E ...
 APPEND_SPACE:
-        ::                                       * 62BB0
-          SPACE$                                 * 62BB5
-          !append$                               * 62BBA
-        ;                                        * 62BBF
+        :: SPACE$ !append$ ;                     * 62BB0
 
 * 1..7 -> 7 1..6
 * refs (39): 0F394 0F399 0F6DE 0F6E3 1766C 1777A ...
 7UNROLL:
-        ::                                       * 62BC4
-          BINT7                                  * 62BC9
-          UNROLL                                 * 62BCE
-        ;                                        * 62BD3
+        :: BINT7 UNROLL ;                        * 62BC4
 
 * -> ob
 * refs (84): 8A324 8A33E 8BDF1 9046A 9047F 9094F ...
 RESOROMP:
-        ::                                       * 62BD8
-          'R                                     * 62BDD
-          ROMPTR@                                * 62BE2
-          DROP                                   * 62BE7
-        ;                                        * 62BEC
+        :: 'R ROMPTR@ DROP ;                     * 62BD8
 
 * % -> %*10
 * refs (5): 2EDFA 3200C 320FD 41D65 41E1E
 %10*:
-        ::                                       * 62BF1
-          %10                                    * 62BF6
-          %*                                     * 62BFB
-        ;                                        * 62C00
+        :: %10 %* ;                              * 62BF1
 
 * id/lam -> id/lam ob T -> id/lam F
 * refs (5): 02F51 08C6D 2101A 24631 2E5C4
 DUP@:
-        ::                                       * 62C05
-          DUP                                    * 62C0A
-          DRPExitAtLOOP                          * 62C0F
-        ;                                        * 62C14
+        :: DUP DRPExitAtLOOP ;                   * 62C05
 
 * ROMPTR -> ROMPTR ob T -> ROMPTR F
 * refs (4): 29207 5F41F 68ADA 84EAE
 DUPROMPTR@:
-        ::                                       * 62C19
-          DUP                                    * 62C1E
-          ROMPTR@                                * 62C23
-        ;                                        * 62C28
+        :: DUP ROMPTR@ ;                         * 62C19
 
 * #m #n -> :: <ob1> <ob3> <rest> ; #m #n -> :: <ob2> <rest> ;
 * refs (14): 1DA70 1F82F 2C49B 33A49 43A72 43B3F ...
 #=ITE:
-        ::                                       * 62C2D
-          #=                                     * 62C32
-          2'RCOLARPITE                           * 62C37
-        ;                                        * 62C3C
+        :: #= 2'RCOLARPITE ;                     * 62C2D
 
 * comp -> obn..ob1 #n #n
 * refs (15): 0E552 16996 1DC14 1F395 1F594 2E682 ...
 INNERDUP:
-        ::                                       * 62C41
-          INNERCOMP                              * 62C46
-          DUP                                    * 62C4B
-        ;                                        * 62C50
+        :: INNERCOMP DUP ;                       * 62C41
 
 * flag1 flag2 -> flag
 * refs (21): 08FBC 092D5 0935C 0DFA7 16AC2 21959 ...
 NOTAND:
-        ::                                       * 62C55
-          NOT                                    * 62C5A
-          AND                                    * 62C5F
-        ;                                        * 62C64
+        :: NOT AND ;                             * 62C55
 
 * ob1 ob2 -> ob2' ob1
 * refs (15): 05ABD 064C7 0DE6B 0E706 0E779 188C8 ...
 TOTEMPSWAP:
-        ::                                       * 62C69
-          TOTEMPOB                               * 62C6E
-          SWAP                                   * 62C73
-        ;                                        * 62C78
+        :: TOTEMPOB SWAP ;                       * 62C69
 
 * 1 2 3 -> 2 3 1 3 1
 * refs (5): 0B60B 2618A 4CAEB 51AE4 CD063
 ROT2DUP:
-        ::                                       * 62C7D
-          ROT                                    * 62C82
-          2DUP                                   * 62C87
-        ;                                        * 62C8C
+        :: ROT 2DUP ;                            * 62C7D
 
 * flag1 ob flag2 -> ob flag
 * refs (4): 092B2 0DF9D 21038 8BB19
 ROTAND:
-        ::                                       * 62C91
-          ROT                                    * 62C96
-          AND                                    * 62C9B
-        ;                                        * 62CA0
+        :: ROT AND ;                             * 62C91
 
 * 1 2 3 -> 2 3 1 3
 * refs (36): 08FCB 0908E 10C63 2C437 37AA4 41DE7 ...
 ROTOVER:
-        ::                                       * 62CA5
-          ROT                                    * 62CAA
-          OVER                                   * 62CAF
-        ;                                        * 62CB4
+        :: ROT OVER ;                            * 62CA5
 
 * ob -> ob ob ob
 * refs (52): 103B0 10509 1D045 24217 285A3 2EA74 ...
 DUPDUP:
-        ::                                       * 62CB9
-          DUP                                    * 62CBE
-          DUP                                    * 62CC3
-        ;                                        * 62CC8
+        :: DUP DUP ;                             * 62CB9
 
 * 1 2 -> 1 2 1 1
 * refs (13): 155EA 1724D 23EC0 254BB 27A49 39C39 ...
 OVERDUP:
-        ::                                       * 62CCD
-          OVER                                   * 62CD2
-          DUP                                    * 62CD7
-        ;                                        * 62CDC
+        :: OVER DUP ;                            * 62CCD
 
 * % -> # #
 * refs (10): 2130D 214AE 2C9F4 320E9 32102 3F4C9 ...
 COERCEDUP:
-        ::                                       * 62CE1
-          COERCE                                 * 62CE6
-          DUP                                    * 62CEB
-        ;                                        * 62CF0
+        :: COERCE DUP ;                          * 62CE1
 
 * 1 2 3 -> 3 1 2 1
 * refs (7): 10ABD 16EEE 2F2D4 362FF 52A25 595FB ...
 UNROTDUP:
-        ::                                       * 62CF5
-          3UNROLL                                * 62CFA
-          DUP                                    * 62CFF
-        ;                                        * 62D04
+        :: 3UNROLL DUP ;                         * 62CF5
 
 * 1 2 3 4 -> 4 1 2 3 3
 * refs (3): 17108 45254 CD07C
 4UNROLLDUP:
-        ::                                       * 62D09
-          4UNROLL                                * 62D0E
-          DUP                                    * 62D13
-        ;                                        * 62D18
+        :: 4UNROLL DUP ;                         * 62D09
 
 * comp #i -> ob ob
 * refs (8): 2DC61 50F9C 9AB16 9AEF3 9AF9E 9B0A3 ...
 NTHCOMDDUP:
-        ::                                       * 62D1D
-          NTHCOMPDROP                            * 62D22
-          DUP                                    * 62D27
-        ;                                        * 62D2C
+        :: NTHCOMPDROP DUP ;                     * 62D1D
 
 * 1 2 -> 1 1 2
 * refs (24): 0936B 15513 161E9 22491 224A0 319DA ...
 OVERSWAP:
-        ::                                       * 62D31
-          OVER                                   * 62D36
-          SWAP                                   * 62D3B
-        ;                                        * 62D40
+        :: OVER SWAP ;                           * 62D31
 
 * 1..n #n -> 2..n-1 1 n
 * refs (4): 0E4ED 41B0F 49CEF 9AD79
 ROLLSWAP:
-        ::                                       * 62D45
-          ROLL                                   * 62D4A
-          SWAP                                   * 62D4F
-        ;                                        * 62D54
+        :: ROLL SWAP ;                           * 62D45
 
 * ob -> $ ob
 * refs (9): 14100 15CC0 2DE05 2FEBA 42D91 6B21E ...
 NULL$SWAP:
-        ::                                       * 62D59
-          NULL$                                  * 62D5E
-          SWAP                                   * 62D63
-        ;                                        * 62D68
+        :: NULL$ SWAP ;                          * 62D59
 
 * ob $ # #' -> $' ob
 * refs (4): 1280B 256DA 3A193 6B925
 SUB$SWAP:
-        ::                                       * 62D6D
-          SUB$                                   * 62D72
-          SWAP                                   * 62D77
-        ;                                        * 62D7C
+        :: SUB$ SWAP ;                           * 62D6D
 
 * % %' -> %max %min
 * refs (11): 33026 3336E 4774A 4784E 47A1F 47A47 ...
 %MAXorder:
-        ::                                       * 62D81
-          2DUP                                   * 62D86
-          %>                                     * 62D8B
-          ?SEMI                                  * 62D90
-          SWAP                                   * 62D95
-        ;                                        * 62D9A
+        :: 2DUP %> ?SEMI                         * 62D81
+          SWAP ;                                 * 62D95
 
 * ob1 ob2 T -> :: ob1 ob2 <ob1> <rest> ; ob1 ob2 F -> :: ob2 ob1 <ob1> <rest> ;
 * refs (5): 36309 3B627 3EE33 4CC2B 52953
 ?SKIPSWAP:
-        ::                                       * 62D9F
-          ?SEMI                                  * 62DA4
-          SWAP                                   * 62DA9
-        ;                                        * 62DAE
+        :: ?SEMI                                 * 62D9F
+          SWAP ;                                 * 62DA9
 
 * ob -> 1lamob ob
 * refs (11): 1D1FE 1E034 1F84D 1F8AC 2D4FE 330D0 ...
 1ABNDSWAP:
-        ::                                       * 62DB3
-          1GETLAM                                * 62DB8
-          ABND                                   * 62DBD
-          SWAP                                   * 62DC2
-        ;                                        * 62DC7
+        :: 1GETLAM ABND SWAP ;                   * 62DB3
 
 * # ob #' -> #'+# ob
 * refs (15): 66DB7 7D03A 7D09E 902A8 9057F 91C7F ...
 ROT#+SWAP:
-        ::                                       * 62DCC
-          ROT                                    * 62DD1
-          #+                                     * 62DD6
-          SWAP                                   * 62DDB
-        ;                                        * 62DE0
+        :: ROT #+ SWAP ;                         * 62DCC
 
 * # ob1 ob2 #' -> # ob1 #'+# ob2
 * refs (3): 4E4EC 4E537 4F7AF
 4PICK#+SWAP:
-        ::                                       * 62DE5
-          4PICK                                  * 62DEA
-          #+                                     * 62DEF
-          SWAP                                   * 62DF4
-        ;                                        * 62DF9
+        :: 4PICK #+ SWAP ;                       * 62DE5
 
 * ob # #' -> #+#' ob
 * refs (14): 0E0BF 0E0C9 0E0E7 0E0F1 0E114 0E11E ...
 #+SWAP:
-        ::                                       * 62DFE
-          #+                                     * 62E03
-          SWAP                                   * 62E08
-        ;                                        * 62E0D
+        :: #+ SWAP ;                             * 62DFE
 
 * ob # #' -> #-#' ob
 * refs (10): 40B97 4E31F 693FA 6A514 8DE2B 8F127 ...
 #-SWAP:
-        ::                                       * 62E12
-          #-                                     * 62E17
-          SWAP                                   * 62E1C
-        ;                                        * 62E21
+        :: #- SWAP ;                             * 62E12
 
 * ob # -> #+1 ob
 * refs (14): 3F782 5A7CE 5E6A2 5F500 600AD 60478 ...
 #1+SWAP:
-        ::                                       * 62E26
-          #1+                                    * 62E2B
-          SWAP                                   * 62E30
-        ;                                        * 62E35
+        :: #1+ SWAP ;                            * 62E26
 
 * ob -> #0 ob
 * refs (34): 147AD 14C85 1736F 1F390 21977 27C29 ...
 ZEROSWAP:
-        ::                                       * 62E3A
-          BINT0                                  * 62E3F
-          SWAP                                   * 62E44
-        ;                                        * 62E49
+        :: BINT0 SWAP ;                          * 62E3A
 
 * # -> 1 #-1
 * refs (3): 6325E 6B363 9AB4E
 #1-1SWAP:
-        ::                                       * 62E4E
-          #1-                                    * 62E53
-          BINT1                                  * 62E58
-          SWAP                                   * 62E5D
-        ;                                        * 62E62
+        :: #1- BINT1 SWAP ;                      * 62E4E
 
 * ob -> #1 ob
 * refs (22): 127ED 149CE 24A23 2943A 2C3A6 39C2A ...
 ONESWAP:
-        ::                                       * 62E67
-          BINT1                                  * 62E6C
-          SWAP                                   * 62E71
-        ;                                        * 62E76
+        :: BINT1 SWAP ;                          * 62E67
 
 * ob % -> # ob
 * refs (7): 14199 194FC 19501 25B79 4CC53 4F205 ...
 COERCESWAP:
-        ::                                       * 62E7B
-          COERCE                                 * 62E80
-          SWAP                                   * 62E85
-        ;                                        * 62E8A
+        :: COERCE SWAP ;                         * 62E7B
 
 * ob % -> %% ob
 * refs (10): 2B461 2B466 4ACD4 4AD24 4AD6F 4AE19 ...
 %>%%SWAP:
-        ::                                       * 62E8F
-          %>%%                                   * 62E94
-          SWAP                                   * 62E99
-        ;                                        * 62E9E
+        :: %>%% SWAP ;                           * 62E8F
 
 * ob %% %%' -> %%+%%' ob
 * refs (17): 0F733 0FFE3 10CB3 2CB16 4AD83 4F33B ...
 %%*SWAP:
-        ::                                       * 62EA3
-          %%*                                    * 62EA8
-          SWAP                                   * 62EAD
-        ;                                        * 62EB2
+        :: %%* SWAP ;                            * 62EA3
 
 * ob1 ob2 ob3 -> ob3 T
 * refs (4): 093F2 2FE2F 2FE48 3FB01
 XYZ>ZTRUE:
-        ::                                       * 62EB7
-          ROTROT2DROP                            * 62EBC
-          TRUE                                   * 62EC1
-        ;                                        * 62EC6
+        :: ROTROT2DROP TRUE ;                    * 62EB7
 
 * 1 2 3 4 -> 2 3 1 4
 * refs (25): 16F9D 41C61 4529F 4539E 453C1 45443 ...
 4ROLLSWAP:
-        ::                                       * 62ECB
-          4ROLL                                  * 62ED0
-          SWAP                                   * 62ED5
-        ;                                        * 62EDA
+        :: 4ROLL SWAP ;                          * 62ECB
 
 * 1 2 3 -> 1 2 1 3
 * refs (23): 31D17 44DB8 47B0A 4862A 48689 4879C ...
 3PICKSWAP:
-        ::                                       * 62EDF
-          3PICK                                  * 62EE4
-          SWAP                                   * 62EE9
-        ;                                        * 62EEE
+        :: 3PICK SWAP ;                          * 62EDF
 
 * 1 2 3 4 -> 1 2 3 1 4
 * refs (5): 2CAC1 4F359 60775 66D8F CB8C4
 4PICKSWAP:
-        ::                                       * 62EF3
-          4PICK                                  * 62EF8
-          SWAP                                   * 62EFD
-        ;                                        * 62F02
+        :: 4PICK SWAP ;                          * 62EF3
 
 * ob -> 1lamob ob
 * refs (4): 1F83E 555D5 56D0B 86565
 1GETSWAP:
-        ::                                       * 62F07
-          1GETLAM                                * 62F0C
-          SWAP                                   * 62F11
-        ;                                        * 62F16
+        :: 1GETLAM SWAP ;                        * 62F07
 
 * ob1 ob2 T -> :: ob2 ob1 <ob1> <rest> ; ob1 ob2 F -> :: ob1 ob2 <ob1> <rest> ;
 * refs (3): 22FA4 4DC8F 4DCAD
 ?SWAP:
-        ::                                       * 62F1B
-          NOT?SEMI                               * 62F20
-          SWAP                                   * 62F25
-        ;                                        * 62F2A
+        :: NOT?SEMI                              * 62F1B
+          SWAP ;                                 * 62F25
 
 * ob $ $' -> $+$' ob
 * refs (7): 15450 16CC5 16D40 17806 4972B 9F7F5 ...
 !append$SWAP:
-        ::                                       * 62F2F
-          !append$                               * 62F34
-          SWAP                                   * 62F39
-        ;                                        * 62F3E
+        :: !append$ SWAP ;                       * 62F2F
 
 * ob1 ob2 T -> :: ob2 <ob1> <rest> ; ob1 ob2 F -> :: ob1 <ob1> <rest> ;
 * refs (10): 0FB83 0FBA1 1786A 2A6EB 2A704 2A71D ...
 NOT?SWAPDROP:
-        ::                                       * 62F43
-          ?SKIP                                  * 62F48
-          SWAP                                   * 62F4D
-          DROP                                   * 62F52
-        ;                                        * 62F57
+        :: ?SKIP SWAP                            * 62F43
+          DROP ;                                 * 62F52
 
 * ob1 ob2 T -> :: ob1 <ob1> <rest> ; ob1 ob2 F -> :: ob2 <ob1> <rest> ;
 * refs (1): 1A4B2
 ?SWAPDROP:
-        ::                                       * 62F5C
-          IT                                     * 62F61
-          SWAP                                   * 62F66
-          DROP                                   * 62F6B
-        ;                                        * 62F70
+        :: IT SWAP                               * 62F5C
+          DROP ;                                 * 62F6B
 
 * ob meta ->
 * refs (10): 24BFE 293FE 34F5C 34FA7 44048 5A167 ...
 #1+NDROP:
-        ::                                       * 62F75
-          NDROP                                  * 62F7A
-          DROP                                   * 62F7F
-        ;                                        * 62F84
+        :: NDROP DROP ;                          * 62F75
 
 * 1..n #n -> 2..n
 * refs (15): 0E4FC 10586 262AC 44089 5104E 5146E ...
 ROLLDROP:
-        ::                                       * 62F89
-          ROLL                                   * 62F8E
-          DROP                                   * 62F93
-        ;                                        * 62F98
+        :: ROLL DROP ;                           * 62F89
 
 * [2D] -> #m #n
 * refs (6): 2C310 2C3B0 2C432 2C602 4C8E0 4CBC2
 MDIMSDROP:
-        ::                                       * 62F9D
-          MDIMS                                  * 62FA2
-          DROP                                   * 62FA7
-        ;                                        * 62FAC
+        :: MDIMS DROP ;                          * 62F9D
 
 * 1 2 -> 2 2 1
 * refs (22): 140D3 1D9D0 20994 209FF 353B5 36EAC ...
 DUPROT:
-        ::                                       * 62FB1
-          DUP                                    * 62FB6
-          ROT                                    * 62FBB
-        ;                                        * 62FC0
+        :: DUP ROT ;                             * 62FB1
 
 * 1 2 3 4 -> 2 3 1
 * refs (2): 2F2A7 4F845
 DROPROT:
-        ::                                       * 62FC5
-          DROP                                   * 62FCA
-          ROT                                    * 62FCF
-        ;                                        * 62FD4
+        :: DROP ROT ;                            * 62FC5
 
 * ob ob' # -> ob' #-1 ob
 * refs (7): 5F46F 5F4B5 90DC3 92358 92515 927D1 ...
 #1-ROT:
-        ::                                       * 62FD9
-          #1-                                    * 62FDE
-          ROT                                    * 62FE3
-        ;                                        * 62FE8
+        :: #1- ROT ;                             * 62FD9
 
 * ob ob' %% %%' -> ob' %%+%%' ob
 * refs (11): 33F4D 33FE8 521C5 525E4 5261B 96CC8 ...
 %%*ROT:
-        ::                                       * 62FED
-          %%*                                    * 62FF2
-          ROT                                    * 62FF7
-        ;                                        * 62FFC
+        :: %%* ROT ;                             * 62FED
 
 * 1 2 3 4 -> 2 4 1 3
 * refs (20): 10C27 10C40 161F3 2C86E 34092 3545A ...
 4ROLLROT:
-        ::                                       * 63001
-          4ROLL                                  * 63006
-          ROT                                    * 6300B
-        ;                                        * 63010
+        :: 4ROLL ROT ;                           * 63001
 
 * 1 2 3 4 -> 4 3 2 1
 * refs (8): 4CA41 4E91A 4F147 4F1BA 4F1FB 4F746 ...
 4UNROLLROT:
-        ::                                       * 63015
-          4UNROLL                                * 6301A
-          ROT                                    * 6301F
-        ;                                        * 63024
+        :: 4UNROLL ROT ;                         * 63015

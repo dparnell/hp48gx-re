@@ -40,10 +40,7 @@ L_08066:
 
 * refs (1): 8573B
 OBJ_0806D:
-        ::                                       * 0806D
-          OBJ_7028A                              * 08072
-          ROMPART>ADDR                           * 08077
-        ;                                        * 0807C
+        :: OBJ_7028A ROMPART>ADDR ;              * 0806D
 
 * #libnum -> #addr T -> F
 * refs (1): 08077
@@ -1168,45 +1165,21 @@ SUB_08BF6:
 * id ->
 * refs (7): 1858B 21051 4BC24 64096 9C63C CF0F0 ...
 PURGE:
-        ::                                       * 08C27
-          DRPExitAtLOOP                          * 08C2C
-          '                                      * 08C31
-          purge(_)                               * 08C36
-          COLA                                   * 08C3B
-          RPIT                                   * 08C40
+        :: DRPExitAtLOOP ' purge(_) COLA RPIT    * 08C27
         ;                                        * 08C45
 
 * refs (6): 08C36 097E3 1810A 1811E 210EB 72ABE
 purge(_):
-        ::                                       * 08C4A
-          OBJ_079D7                              * 08C4F
-          REFERENCED?                            * 08C54
-          COLA                                   * 08C59
-          OBJ_089D8                              * 08C5E
+        :: OBJ_079D7 REFERENCED? COLA OBJ_089D8  * 08C4A
         ;                                        * 08C63
 
 * refs (1): 07D95
 OBJ_08C68:
-        ::                                       * 08C68
-          DUP@                                   * 08C6D
-          '                                      * 08C72
-          ::                                     * 08C77
-            SWAPDROP                             * 08C7C
-            OBJ_079D7                            * 08C81
-            REFERENCED?                          * 08C86
-            '                                    * 08C8B
-            ::                                   * 08C90
-              TOTEMPOBADJ                        * 08C95
-              SWAPDROP                           * 08C9A
-            ;                                    * 08C9F
-            RPIT                                 * 08CA4
-            REPLACE                              * 08CA9
-            DROP                                 * 08CAE
-          ;                                      * 08CB3
-          '                                      * 08CB8
-          CREATE                                 * 08CBD
-          COLARPITE                              * 08CC2
-        ;                                        * 08CC7
+        :: DUP@ '                                * 08C68
+          :: SWAPDROP OBJ_079D7 REFERENCED? '    * 08C77
+            :: TOTEMPOBADJ SWAPDROP ; RPIT REPLACE * 08C90
+            DROP ;                               * 08CAE
+          ' CREATE COLARPITE ;                   * 08CB8
 
 * ROMPTR -> #lib #cmd
 * refs (2): 16194 4161F
@@ -1332,28 +1305,12 @@ SYSRRP?:
 * id ->
 * refs (1): 184F0
 CREATERRP:
-        ::                                       * 08DF2
-          #       7FF                            * 08DF7  2047
-          MAKERRP                                * 08E01
-          SWAP                                   * 08E06
-          CREATE                                 * 08E0B
-        ;                                        * 08E10
+        :: # 7FF MAKERRP SWAP CREATE ;           * 08DF2
 
 * refs (1): 021F1
 RclKnownLibs:
-        ::                                       * 08E15
-          NULL{}                                 * 08E1A
-          BINT0                                  * 08E1F
-          BEGIN                                  * 08E24
-          NEXTROMPID                             * 08E29
-          WHILE                                  * 08E2E
-          ::                                     * 08E33
-            DUPUNROT                             * 08E38
-            >TCOMP                               * 08E3D
-            SWAP#1+                              * 08E42
-          ;                                      * 08E47
-          REPEAT                                 * 08E4C
-        ;                                        * 08E51
+        :: NULL{} BINT0 BEGIN NEXTROMPID WHILE   * 08E15
+          :: DUPUNROT >TCOMP SWAP#1+ ; REPEAT ;  * 08E33
 
 * refs (2): 08FF8 093E8
 dup2;idem(nm,bk)?:
@@ -1460,73 +1417,28 @@ L_08F70:
 
 * refs (2): 215B5 21A85
 sto12(bk,nm,s):
-        ::                                       * 08F85
-          ROT                                    * 08F8A
-          ?>ROMPTR                               * 08F8F
-          3UNROLL                                * 08F94
-          OVER                                   * 08F99
-          dvarlsBIND                             * 08F9E
-          DUP4UNROLL                             * 08FA3
+        :: ROT ?>ROMPTR 3UNROLL OVER dvarlsBIND DUP4UNROLL * 08F85
 
 * refs (1): 09410
 OBJ_08FA8:
-          ::                                     * 08FA8
-            PORTSTATUS                           * 08FAD
-            5UNROLL                              * 08FB2
-            5UNROLL                              * 08FB7
-            NOTAND                               * 08FBC
-            ANDNOTcase                           * 08FC1
-            SETPORTNOTAV                         * 08FC6
-            ROTOVER                              * 08FCB
-          ;                                      * 08FD0
-          BEGIN                                  * 08FD5
-          DUP                                    * 08FDA
-          NEXTLIBBAK                             * 08FDF
-          WHILE                                  * 08FE4
-          ::                                     * 08FE9
-            ROTDROP                              * 08FEE
-            3UNROLL                              * 08FF3
-            dup2;idem(nm,bk)?                    * 08FF8
-            case                                 * 08FFD
-            SETOBINUSE                           * 09002
-            DROPSWAP                             * 09007
-          ;                                      * 0900C
-          REPEAT                                 * 09011
-          OBJ_72300                              * 09016
-          #5+                                    * 0901B
-          SWAP                                   * 09020
-          ::                                     * 09025
-            DNOTBAKcase                          * 0902A
-            ::                                   * 0902F
-              DNOTLIBcase                        * 09034
-              ::                                 * 09039
-                SWAP                             * 0903E
-                1GETLAM                          * 09043
-                OSIZE                            * 09048
+          :: PORTSTATUS 5UNROLL 5UNROLL NOTAND ANDNOTcase SETPORTNOTAV * 08FA8
+            ROTOVER ;                            * 08FCB
+          BEGIN DUP NEXTLIBBAK WHILE             * 08FD5
+          :: ROTDROP 3UNROLL dup2;idem(nm,bk)? case SETOBINUSE * 08FE9
+            DROPSWAP ;                           * 09007
+          REPEAT OBJ_72300 #5+ SWAP              * 09011
+          :: DNOTBAKcase                         * 09025
+            :: DNOTLIBcase                       * 0902F
+              :: SWAP 1GETLAM OSIZE              * 09039
 
 dup;=7(s)?:BAT!:
-                ::                               * 0904D
-                  BINT7                          * 09052
-                  #=casedrop                     * 09057
-                  SETTYPEERR                     * 0905C
+                :: BINT7 #=casedrop SETTYPEERR   * 0904D
                 ;                                * 09061
-                #+                               * 09066
-                BINT17                           * 0906B
-                #+                               * 09070
-              ;                                  * 09075
-              SWAP                               * 0907A
-            ;                                    * 0907F
-            SWAP                                 * 09084
-          ;                                      * 09089
-          ROTOVER                                * 0908E
-          #<case                                 * 09093
-          SETNOROOM                              * 09098
-          ROTSWAP                                * 0909D
-          4ROLL                                  * 090A2
-          1GETABND                               * 090A7
-          5UNROLL                                * 090AC
-          OBJ_090BE                              * 090B1
-        ;                                        * 090B6
+                #+ BINT17 #+ ;                   * 09066
+              SWAP ;                             * 0907A
+            SWAP ;                               * 09084
+          ROTOVER #<case SETNOROOM               * 0908E
+          ROTSWAP 4ROLL 1GETABND 5UNROLL OBJ_090BE ; * 0909D
         NIBHEX  000                              * 090BB  .
 
 * refs (1): 090B1
@@ -1664,43 +1576,19 @@ SUB_09277:
 
 * refs (1): 215B0
 sto0(bk,nm):
-        ::                                       * 0927B
-          RclBkp0(nm)?                           * 09280
-          case                                   * 09285
-          SETOBINUSE                             * 0928A
-          sto0!(bk)                              * 0928F
-        ;                                        * 09294
+        :: RclBkp0(nm)? case SETOBINUSE          * 0927B
+          sto0!(bk) ;                            * 0928F
 
 * refs (3): 21A62 21B11 85810
 RclBkp12(nm,s)?:
-        ::                                       * 09299
-          PORTSTATUS                             * 0929E
-          5UNROLL                                * 092A3
-          5UNROLL                                * 092A8
-          NOT                                    * 092AD
-          ROTAND                                 * 092B2
-          NOTcase                                * 092B7
-          SETPORTNOTAV                           * 092BC
-          ROTDROP                                * 092C1
-          ROTDUP                                 * 092C6
-          TYPEBINT?                              * 092CB
-          ROT                                    * 092D0
-          NOTAND                                 * 092D5
-          case                                   * 092DA
-          SETPORTNOTAV                           * 092DF
-          SWAPCOLA                               * 092E4
-          RclBkp(nm,adr)?                        * 092E9
-        ;                                        * 092EE
+        :: PORTSTATUS 5UNROLL 5UNROLL NOT ROTAND NOTcase SETPORTNOTAV * 09299
+          ROTDROP ROTDUP TYPEBINT? ROT NOTAND case SETPORTNOTAV * 092C1
+          SWAPCOLA RclBkp(nm,adr)? ;             * 092E4
 
 * refs (6): 09280 0945B 21AC1 21B0C 21B9D 85806
 RclBkp0(nm)?:
-        ::                                       * 092F3
-          AdrPort0                               * 092F8
-          RclBkp(nm,adr)?                        * 092FD
-          NOTcaseFALSE                           * 09302
-          ?ACCPTR>                               * 09307
-          TRUE                                   * 0930C
-        ;                                        * 09311
+        :: AdrPort0 RclBkp(nm,adr)? NOTcaseFALSE ?ACCPTR> * 092F3
+          TRUE ;                                 * 0930C
 
 * refs (4): 092F8 09334 17E6B 21936
 AdrPort0:
@@ -1708,87 +1596,34 @@ AdrPort0:
 
 * refs (3): 858E2 859F8 85B1C
 X@:
-        ::                                       * 0931B
-          DUP#0=                                 * 09320
-          ITE                                    * 09325
-          ::                                     * 0932A
-            DROP                                 * 0932F
-            AdrPort0                             * 09334
-            TRUE                                 * 09339
-          ;                                      * 0933E
-          ::                                     * 09343
-            PORTSTATUS                           * 09348
-            SWAPDROP                             * 0934D
-            ROTDROP                              * 09352
-            3UNROLL                              * 09357
-            NOTAND                               * 0935C
-          ;                                      * 09361
-          NOTcsdrpfls                            * 09366
-          OVERSWAP                               * 0936B
-          OVER                                   * 09370
-          TYPELIST?                              * 09375
-          NOTcase                                * 0937A
-          RclBkp(nm,adr)?                        * 0937F
-          SWAP                                   * 09384
-          CARCOMP                                * 09389
-          SWAP                                   * 0938E
-          RclBkp(nm,adr)?                        * 09393
-          NOTcaseFALSE                           * 09398
-          OVER                                   * 0939D
-          LENCOMP                                * 093A2
-          #1=                                    * 093A7
-          caseTRUE                               * 093AC
-          BAK>OB                                 * 093B1
-          ?ROMPTR>                               * 093B6
-          DUPTYPERRP?                            * 093BB
-          NOTcsdrpfls                            * 093C0
-          OVER                                   * 093C5
-          rcl(di,li)?                            * 093CA
-        ;                                        * 093CF
+        :: DUP#0= ITE                            * 0931B
+          :: DROP AdrPort0 TRUE ;                * 0932A
+          :: PORTSTATUS SWAPDROP ROTDROP 3UNROLL NOTAND ; * 09343
+          NOTcsdrpfls OVERSWAP OVER TYPELIST? NOTcase RclBkp(nm,adr)? * 09366
+          SWAP CARCOMP SWAP RclBkp(nm,adr)? NOTcaseFALSE OVER * 09384
+          LENCOMP #1= caseTRUE BAK>OB            * 093A2
+          ?ROMPTR> DUPTYPERRP? NOTcsdrpfls OVER rcl(di,li)? ; * 093B6
 
 * refs (7): 092E9 092FD 0937F 09393 09401 09415 ...
 RclBkp(nm,adr)?:
-        ::                                       * 093D4
-          NEXTLIBBAK                             * 093D9
-          NOTcsdrpfls                            * 093DE
-          3UNROLL                                * 093E3
-          dup2;idem(nm,bk)?                      * 093E8
-          case                                   * 093ED
-          XYZ>ZTRUE                              * 093F2
-          DROPSWAP                               * 093F7
-          COLA                                   * 093FC
-          RclBkp(nm,adr)?                        * 09401
+        :: NEXTLIBBAK NOTcsdrpfls 3UNROLL dup2;idem(nm,bk)? case XYZ>ZTRUE * 093D4
+          DROPSWAP COLA RclBkp(nm,adr)?          * 093F7
         ;                                        * 09406
 
 * refs (1): 85AA7
 PurgeBkp12(nm,s):
-        ::                                       * 0940B
-          OBJ_08FA8                              * 09410
-          RclBkp(nm,adr)?                        * 09415
-          NOTcase2DROP                           * 0941A
+        :: OBJ_08FA8 RclBkp(nm,adr)? NOTcase2DROP * 0940B
 
 * refs (1): 09465
 OBJ_0941F:
-          ::                                     * 0941F
-            OBJ_71A3C                            * 09424
-            SWAP                                 * 09429
-            OBJ_0BB2B                            * 0942E
-            ROT                                  * 09433
-            OR                                   * 09438
-            case                                 * 0943D
-            SETOBINUSE                           * 09442
+          :: OBJ_71A3C SWAP OBJ_0BB2B ROT OR case SETOBINUSE * 0941F
           ;                                      * 09447
-          OBJ_0B227                              * 0944C
-        ;                                        * 09451
+          OBJ_0B227 ;                            * 0944C
 
 * refs (1): 85A9D
 PurgeBkp0(nm):
-        ::                                       * 09456
-          RclBkp0(nm)?                           * 0945B
-          NOT?SEMI                               * 09460
-          OBJ_0941F                              * 09465
-          purge(bk,s)                            * 0946A
-        ;                                        * 0946F
+        :: RclBkp0(nm)? NOT?SEMI                 * 09456
+          OBJ_0941F purge(bk,s) ;                * 09465
         ASSEMBLE
 
 * refs (2): 09493 71AC0
@@ -2009,93 +1844,31 @@ OBJ_09730:
 
 * refs (2): 185BD 72AB9
 pgdir!(di):
-        ::                                       * 09752
-          DUP                                    * 09757
-          CONTEXT@                               * 0975C
-          EQIT                                   * 09761
-          HOMEDIR                                * 09766
-          DUP                                    * 0976B
-          STOPSIGN@                              * 09770
-          EQIT                                   * 09775
-          SYSSTOPSIGN                            * 0977A
-          PTRREFD?                               * 0977F
+        :: DUP CONTEXT@ EQIT HOMEDIR DUP STOPSIGN@ EQIT SYSSTOPSIGN PTRREFD? * 09752
           ITE                                    * 09784
-          ::                                     * 09789
-            DUP                                  * 0978E
-            TOTEMPOB                             * 09793
-            FALSE                                * 09798
-            ROT                                  * 0979D
-          ;                                      * 097A2
+          :: DUP TOTEMPOB FALSE ROT ;            * 09789
 
 true;swap:
-          ::                                     * 097A7
-            TRUE                                 * 097AC
-            SWAP                                 * 097B1
-          ;                                      * 097B6
-          DUP                                    * 097BB
-          OBJ_72A8C                              * 097C0
-          SWAP                                   * 097C5
-          ?SKIP                                  * 097CA
-          ::                                     * 097CF
-            DOADJ1                               * 097D4
-            SWAPDROP                             * 097D9
-          ;                                      * 097DE
-          purge(_)                               * 097E3
-        ;                                        * 097E8
+          :: TRUE SWAP ;                         * 097A7
+          DUP OBJ_72A8C SWAP ?SKIP               * 097BB
+          :: DOADJ1 SWAPDROP ;                   * 097CF
+          purge(_) ;                             * 097E3
         NIBHEX  000                              * 097ED  .
 
 * refs (3): 093CA 20C58 85862
 rcl(di,li)?:
-        ::                                       * 097F0
-          INNERCOMP                              * 097F5
-          pullrev                                * 097FA
-          OVER                                   * 097FF
-          #3+                                    * 09804
-          ROLL                                   * 09809
-          BEGIN                                  * 0980E
-          DUPTYPERRP?                            * 09813
-          NOTcasedrop                            * 09818
+        :: INNERCOMP pullrev OVER #3+ ROLL BEGIN DUPTYPERRP? NOTcasedrop * 097F0
           drop;dropB;false                       * 0981D
-          SWAPDROP                               * 09822
-          SWAP                                   * 09827
-          get1                                   * 0982C
-          SWAP                                   * 09831
-          #1-                                    * 09836
-          SWAPROT                                * 0983B
-          LASTRAM-WORD                           * 09840
-          NOTcase                                * 09845
+          SWAPDROP SWAP get1 SWAP #1- SWAPROT LASTRAM-WORD NOTcase * 09822
           drop;dropB;false                       * 0984A
-          DUP                                    * 0984F
-          BEGIN                                  * 09854
-          DROP                                   * 09859
-          DUP                                    * 0985E
-          RAM-WORDNAME                           * 09863
-          3PICK                                  * 09868
-          EQUAL                                  * 0986D
-          ITE                                    * 09872
-          TrueTrue                               * 09877
-          ::                                     * 0987C
-            PREVRAM-WORD                         * 09881
-            DUP                                  * 09886
-            NOT                                  * 0988B
-          ;                                      * 09890
-          UNTIL                                  * 09895
-          NOTcase                                * 0989A
-          drop;dropB;false                       * 0989F
-          3PICK                                  * 098A4
-          #0=                                    * 098A9
-          UNTIL                                  * 098AE
-          ROTROT2DROP                            * 098B3
-          TRUE                                   * 098B8
-        ;                                        * 098BD
+          DUP BEGIN DROP DUP RAM-WORDNAME 3PICK EQUAL ITE TrueTrue * 0984F
+          :: PREVRAM-WORD DUP NOT ;              * 0987C
+          UNTIL NOTcase drop;dropB;false         * 09895
+          3PICK #0= UNTIL ROTROT2DROP TRUE ;     * 098A4
 
 * refs (3): 0981D 0984A 0989F
 drop;dropB;false:
-        ::                                       * 098C2
-          DROPRDROP                              * 098C7
-          NDROP                                  * 098CC
-          FALSE                                  * 098D1
-        ;                                        * 098D6
+        :: DROPRDROP NDROP FALSE ;               * 098C2
         ASSEMBLE
 
 * refs (2): 02075 0421D

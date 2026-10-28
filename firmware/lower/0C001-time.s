@@ -176,16 +176,9 @@ SUB_0C1C5:
 
 * refs (1): 6E91A
 OBJ_0C204:
-        ::                                       * 0C204
-          palparse                               * 0C209
-          NOTcase2drop                           * 0C20E
-          DROPFALSE                              * 0C213
-          OBJ_26BED                              * 0C218
-          NOTcasedrop                            * 0C21D
-          TRUE                                   * 0C222
-          3DROP                                  * 0C227
-          FALSE                                  * 0C22C
-        ;                                        * 0C231
+        :: palparse NOTcase2drop DROPFALSE       * 0C204
+          OBJ_26BED NOTcasedrop TRUE             * 0C218
+          3DROP FALSE ;                          * 0C227
         BSS     22                               * 0C236
 
 * refs (2): 0FE9E 0FF7F
@@ -436,11 +429,7 @@ L_0C4D6:
 
 * refs (16): 69512 69DB6 69E06 69E42 6A019 6A055 ...
 OBJ_0C4E3:
-        ::                                       * 0C4E3
-          OBJ_673E6                              * 0C4E8
-          OBJ_673D6                              * 0C4ED
-          #-                                     * 0C4F2
-        ;                                        * 0C4F7
+        :: OBJ_673E6 OBJ_673D6 #- ;              * 0C4E3
         NIBHEX  00000                            * 0C4FC  ..
 
 * #i [] -> ob T -> F
@@ -543,254 +532,108 @@ L_0C60B:
 
 * refs (1): 8CA39
 OBJ_0C622:
-        ::                                       * 0C622
-          BINT3                                  * 0C627
-          EQcasedrop                             * 0C62C
-          OBJ_7395E                              * 0C631
-          BINT4                                  * 0C636
-          EQcasedrop                             * 0C63B
-          OBJ_7399A                              * 0C640
-          15GETLAM                               * 0C645
-          DUP                                    * 0C64A
-          21GETLAM                               * 0C64F
-          4ROLL                                  * 0C654
-          DUP#0=ITE                              * 0C659
-          2DROP                                  * 0C65E
+        :: BINT3 EQcasedrop OBJ_7395E            * 0C622
+          BINT4 EQcasedrop OBJ_7399A             * 0C636
+          15GETLAM DUP 21GETLAM 4ROLL DUP#0=ITE 2DROP * 0C645
 
 * refs (1): 0C6FE
 OBJ_0C663:
-          ::                                     * 0C663
-            #1=                                  * 0C668
-            ITE                                  * 0C66D
-            %+                                   * 0C672
-            %-                                   * 0C677
+          :: #1= ITE %+ %-                       * 0C663
           ;                                      * 0C67C
-          OBJ_46955                              * 0C681
-          NOTcase                                * 0C686
-          OBJ_46C1B                              * 0C68B
-          DUPTYPEREAL?                           * 0C690
-          NOTcasedrop                            * 0C695
-          OBJ_46C1B                              * 0C69A
-          DUP                                    * 0C69F
-          OBJ_468F1                              * 0C6A4
-          15GETLAM                               * 0C6A9
-          %POL>%REC                              * 0C6AE
-          OBJ_46C43                              * 0C6B3
-        ;                                        * 0C6B8
+          OBJ_46955 NOTcase OBJ_46C1B            * 0C681
+          DUPTYPEREAL? NOTcasedrop OBJ_46C1B     * 0C690
+          DUP OBJ_468F1 15GETLAM %POL>%REC OBJ_46C43 ; * 0C69F
 
 * refs (1): 8CB7D
 OBJ_0C6BD:
-        ::                                       * 0C6BD
-          BINT3                                  * 0C6C2
-          EQcasedrop                             * 0C6C7
-          OBJ_7395E                              * 0C6CC
-          BINT4                                  * 0C6D1
-          EQcasedrop                             * 0C6D6
-          OBJ_7399A                              * 0C6DB
-          15GETLAM                               * 0C6E0
-          DUP                                    * 0C6E5
-          21GETLAM                               * 0C6EA
-          4ROLL                                  * 0C6EF
-          DUP#0=ITE                              * 0C6F4
-          2DROP                                  * 0C6F9
-          OBJ_0C663                              * 0C6FE
-          OBJ_46955                              * 0C703
+        :: BINT3 EQcasedrop OBJ_7395E            * 0C6BD
+          BINT4 EQcasedrop OBJ_7399A             * 0C6D1
+          15GETLAM DUP 21GETLAM 4ROLL DUP#0=ITE 2DROP OBJ_0C663 OBJ_46955 * 0C6E0
           ITE                                    * 0C708
-          ::                                     * 0C70D
-            DUP                                  * 0C712
-            OBJ_468F1                            * 0C717
-          ;                                      * 0C71C
-          OBJ_46C7A                              * 0C721
-          DUPTYPECMP?                            * 0C726
-          NOTcasedrop                            * 0C72B
-          OBJ_46C7A                              * 0C730
-          C%>%                                   * 0C735
-          OBJ_46C43                              * 0C73A
-        ;                                        * 0C73F
+          :: DUP OBJ_468F1 ; OBJ_46C7A           * 0C70D
+          DUPTYPECMP? NOTcasedrop OBJ_46C7A      * 0C726
+          C%>% OBJ_46C43 ;                       * 0C735
 
-        ::                                       * 0C744
-          1GETLAM                                * 0C749
-          TYPEBINT?                              * 0C74E
-        ;                                        * 0C753
+        :: 1GETLAM TYPEBINT? ;                   * 0C744
 
 * refs (1): 4B487
 OBJ_0C758:
-        ::                                       * 0C758
-          OBJ_6F595                              * 0C75D
-          #1<>                                   * 0C762
-          FALSE                                  * 0C767
-          GOTO                                   * 0C76C
-          L_6F86F                                * 0C771
-        ;                                        * 0C776
+        :: OBJ_6F595 #1<> FALSE GOTO L_6F86F ;   * 0C758
 
 * refs (1): 734E0
 OBJ_0C77B:
-        ::                                       * 0C77B
-          OBJ_0C7C6                              * 0C780
-          NOTcase                                * 0C785
-          NULL$                                  * 0C78A
+        :: OBJ_0C7C6 NOTcase NULL$               * 0C77B
 
 _STATL_:
-          $       "STATL"                        * 0C78F
-        ;                                        * 0C7A3
+          $ "STATL" ;                            * 0C78F
 
 * refs (1): 734F4
 OBJ_0C7A8:
-        ::                                       * 0C7A8
-          OBJ_0C7C6                              * 0C7AD
-          NOTcase                                * 0C7B2
-          DoBadKey                               * 0C7B7
-          OBJ_48FB8                              * 0C7BC
-        ;                                        * 0C7C1
+        :: OBJ_0C7C6 NOTcase DoBadKey            * 0C7A8
+          OBJ_48FB8 ;                            * 0C7BC
 
 * refs (2): 0C780 0C7AD
 OBJ_0C7C6:
-        ::                                       * 0C7C6
-          GETPTYPE                               * 0C7CB
-          'IDSCATTER                             * 0C7D0
-          EQUAL                                  * 0C7D5
-          NOTcaseFALSE                           * 0C7DA
-          Exist@äDAT?                            * 0C7DF
-          NOTcaseFALSE                           * 0C7E4
-          DROPTRUE                               * 0C7E9
+        :: GETPTYPE 'IDSCATTER EQUAL NOTcaseFALSE Exist@äDAT? * 0C7C6
+          NOTcaseFALSE DROPTRUE                  * 0C7E4
         ;                                        * 0C7EE
 
 * refs (2): 0C81B 4BF67
 OBJ_0C7F3:
-        ::                                       * 0C7F3
-          '                                      * 0C7F8
-          OBJ_47209                              * 0C7FD
-          '                                      * 0C802
-          OBJ_47236                              * 0C807
-        ;                                        * 0C80C
+        :: ' OBJ_47209 ' OBJ_47236 ;             * 0C7F3
 
 * refs (2): 4D4DE 4D5CE
 OBJ_0C811:
-        ::                                       * 0C811
-          NOT?SEMI                               * 0C816
-          OBJ_0C7F3                              * 0C81B
-          SWAP                                   * 0C820
-        ;                                        * 0C825
+        :: NOT?SEMI                              * 0C811
+          OBJ_0C7F3 SWAP ;                       * 0C81B
 
-        ::                                       * 0C82A
-          TakeOver                               * 0C82F
-          OBJ_470E9                              * 0C834
-          OBJ_5102B                              * 0C839
-          IT                                     * 0C83E
-          ::                                     * 0C843
-            OBJ_47209                            * 0C848
-            OBJ_47236                            * 0C84D
-          ;                                      * 0C852
-          BINT16                                 * 0C857
-          REPKEY?                                * 0C85C
-          NOT?SEMI                               * 0C861
-          OBJ_5102B                              * 0C866
-          NOTcase                                * 0C86B
-          ::                                     * 0C870
-            BEGIN                                * 0C875
-            BINT16                               * 0C87A
-            REPKEY?                              * 0C87F
-            WHILE                                * 0C884
-            ::                                   * 0C889
-              OBJ_470E9                          * 0C88E
-            ;                                    * 0C893
-            REPEAT                               * 0C898
-          ;                                      * 0C89D
-          BEGIN                                  * 0C8A2
-          BINT16                                 * 0C8A7
-          REPKEY?                                * 0C8AC
-          WHILE                                  * 0C8B1
+        :: TakeOver OBJ_470E9 OBJ_5102B IT       * 0C82A
+          :: OBJ_47209 OBJ_47236 ;               * 0C843
+          BINT16 REPKEY? NOT?SEMI                * 0C857
+          OBJ_5102B NOTcase                      * 0C866
+          :: BEGIN BINT16 REPKEY? WHILE          * 0C870
+            :: OBJ_470E9 ; REPEAT ;              * 0C889
+          BEGIN BINT16 REPKEY? WHILE             * 0C8A2
           ::                                     * 0C8B6
-            ::                                   * 0C8BB
-              OBJ_470E9                          * 0C8C0
-              OBJ_47209                          * 0C8C5
-            ;                                    * 0C8CA
-          ;                                      * 0C8CF
-          REPEAT                                 * 0C8D4
-        ;                                        * 0C8D9
+            :: OBJ_470E9 OBJ_47209 ; ;           * 0C8BB
+          REPEAT ;                               * 0C8D4
 
-        ::                                       * 0C8DE
-          #1=case                                * 0C8E3
-          OBJ_4DDE6                              * 0C8E8
-          OBJ_4DDAF                              * 0C8ED
-        ;                                        * 0C8F2
+        :: #1=case OBJ_4DDE6                     * 0C8DE
+          OBJ_4DDAF ;                            * 0C8ED
 
 * refs (1): 0C988
 OBJ_0C8F7:
-        ::                                       * 0C8F7
-          CHECKMENU                              * 0C8FC
-          OBJ_73684                              * 0C901
-          OBJ_48305                              * 0C906
-          '                                      * 0C90B
-          OBJ_47D93                              * 0C910
-          InitMenu                               * 0C915
-          DispMenu                               * 0C91A
-        ;                                        * 0C91F
+        :: CHECKMENU OBJ_73684 OBJ_48305 ' OBJ_47D93 InitMenu DispMenu ; * 0C8F7
 
 * refs (1): 47DFA
 OBJ_0C924:
-        ::                                       * 0C924
-          CHECKMENU                              * 0C929
-          CURRENTMARK?                           * 0C92E
-          IT                                     * 0C933
-          OBJ_48288                              * 0C938
-          BINT3                                  * 0C93D
-          3PUTLAM                                * 0C942
-          OBJ_517B2                              * 0C947
-          12PUTLAM                               * 0C94C
-          2PUTLAM                                * 0C951
-          {                                      * 0C956
-            OBJ_456C2                            * 0C95B
-            OBJ_456C2                            * 0C960
-            OBJ_456C2                            * 0C965
-            OBJ_456C2                            * 0C96A
+        :: CHECKMENU CURRENTMARK? IT OBJ_48288   * 0C924
+          BINT3 3PUTLAM OBJ_517B2 12PUTLAM 2PUTLAM * 0C93D
+          { OBJ_456C2 OBJ_456C2 OBJ_456C2 OBJ_456C2 * 0C956
 
 {CANCEL}:
             {                                    * 0C96F
 
 _CANCL_:
-              $       "(AN(L"                    * 0C974
-              OBJ_0C8F7                          * 0C988
-            }                                    * 0C98D
+              $ "(AN(L" OBJ_0C8F7 }              * 0C974
 
 {ZOOM}:
             {                                    * 0C992
 
 _ZOOM_:
-              $       "ZOOM"                     * 0C997
-              ::                                 * 0C9A9
-                CHECKMENU                        * 0C9AE
-                OBJ_4EEBF                        * 0C9B3
-                2GETLAM                          * 0C9B8
-                12GETLAM                         * 0C9BD
-                OBJ_4E799                        * 0C9C2
-              ;                                  * 0C9C7
-            }                                    * 0C9CC
+              $ "ZOOM"                           * 0C997
+              :: CHECKMENU OBJ_4EEBF 2GETLAM 12GETLAM OBJ_4E799 ; } * 0C9A9
           }                                      * 0C9D1
-          InitMenu                               * 0C9D6
-          DispMenu.1                             * 0C9DB
-          OBJ_4EE6F                              * 0C9E0
-          CROSS_OFF                              * 0C9E5
-          OBJ_517B2                              * 0C9EA
-          PIXON3                                 * 0C9EF
-          CROSS_HAIRS                            * 0C9F4
-        ;                                        * 0C9F9
+          InitMenu DispMenu.1 OBJ_4EE6F CROSS_OFF OBJ_517B2 PIXON3 * 0C9D6
+          CROSS_HAIRS ;                          * 0C9F4
 
 * refs (5): 48B57 48B89 49876 4A000 4A01E
 OBJ_0C9FE:
-        ::                                       * 0C9FE
-          DispCoord1                             * 0CA03
-          BINT2                                  * 0CA08
-          16PUTLAM                               * 0CA0D
-        ;                                        * 0CA12
+        :: DispCoord1 BINT2 16PUTLAM ;           * 0C9FE
 
 * refs (1): 4E293
 OBJ_0CA17:
-        ::                                       * 0CA17
-          16GETLAM                               * 0CA1C
-          BINT0                                  * 0CA21
-          #<>                                    * 0CA26
-        ;                                        * 0CA2B
+        :: 16GETLAM BINT0 #<> ;                  * 0CA17
         BSS     10                               * 0CA30
         ASSEMBLE
 L_0CA3A:
@@ -843,12 +686,8 @@ LIB00D:
 
 * refs (1): 0CAC0
 LIB00D.config:
-        ::                                       * 0CAD7
-          OBJ_0CAF5                              * 0CADC
-          IT                                     * 0CAE1
-          OBJ_0CB16                              * 0CAE6
-          OBJ_0CB48                              * 0CAEB
-        ;                                        * 0CAF0
+        :: OBJ_0CAF5 IT OBJ_0CB16                * 0CAD7
+          OBJ_0CB48 ;                            * 0CAEB
 
 * refs (1): 0CADC
 OBJ_0CAF5:
@@ -866,32 +705,17 @@ L_0CB0F:
 
 * refs (1): 0CAE6
 OBJ_0CB16:
-        ::                                       * 0CB16
-          RclAlarms?                             * 0CB1B
-          NOTcase                                * 0CB20
+        :: RclAlarms? NOTcase                    * 0CB16
 
 DelAlarms:
-          ::                                     * 0CB25
-            NULL{}                               * 0CB2A
-            NewAlarm(li)                         * 0CB2F
-          ;                                      * 0CB34
-          OBJ_0E219                              * 0CB39
-          DROP                                   * 0CB3E
-        ;                                        * 0CB43
+          :: NULL{} NewAlarm(li) ;               * 0CB25
+          OBJ_0E219 DROP ;                       * 0CB39
 
 * refs (1): 0CAEB
 OBJ_0CB48:
-        ::                                       * 0CB48
-          RclAlarms?                             * 0CB4D
-          NOTcase                                * 0CB52
-          TRM?                                   * 0CB57
-          ALARMS@                                * 0CB5C
-          EQ                                     * 0CB61
-          NOTcase                                * 0CB66
-          TRM?                                   * 0CB6B
-          OBJ_0CB84                              * 0CB70
-          case                                   * 0CB75
-          TRM?                                   * 0CB7A
+        :: RclAlarms? NOTcase TRM?               * 0CB48
+          ALARMS@ EQ NOTcase TRM?                * 0CB5C
+          OBJ_0CB84 case TRM?                    * 0CB70
         ;                                        * 0CB7F
 
 * refs (1): 0CB70
@@ -980,11 +804,7 @@ DDAYS:
 * %date %days -> %date'
 * refs (1): 199E1
 DATE+DAYS:
-        ::                                       * 0CC5B
-          #       1                              * 0CC60  1
-          OBJ_2B551                              * 0CC6A
-          date+(r,n)                             * 0CC6F
-        ;                                        * 0CC74
+        :: # 1 OBJ_2B551 date+(r,n) ;            * 0CC5B
 
 * refs (1): 0CC6F
 date+(r,n):
@@ -1045,26 +865,17 @@ L_0CCF0:
 * %date ->
 * refs (2): 198AD B6FD2
 >DATE:
-        ::                                       * 0CD2B
-          ->date!(r)                             * 0CD30
-          OBJ_0E164                              * 0CD35
-        ;                                        * 0CD3A
+        :: ->date!(r) OBJ_0E164 ;                * 0CD2B
 
 * %time ->
 * refs (1): 198ED
 CLKADJ:
-        ::                                       * 0CD3F
-          clkadj!(r)                             * 0CD44
-          OBJ_0E164                              * 0CD49
-        ;                                        * 0CD4E
+        :: clkadj!(r) OBJ_0E164 ;                * 0CD3F
 
 * %time ->
 * refs (2): 198CD B6EEB
 >TIME:
-        ::                                       * 0CD53
-          ->time!(r)                             * 0CD58
-          OBJ_0E164                              * 0CD5D
-        ;                                        * 0CD62
+        :: ->time!(r) OBJ_0E164 ;                * 0CD53
 
 * refs (1): 0CD30
 ->date!(r):
@@ -1531,23 +1342,11 @@ L_0D298:
 * -> $4 $3 $2 $1
 * refs (1): 19852
 WSLOG:
-        ::                                       * 0D2A3
-          BINT4                                  * 0D2A8
-          WSLOGN                                 * 0D2AD
-          BINT3                                  * 0D2B2
-          WSLOGN                                 * 0D2B7
-          BINT2                                  * 0D2BC
-          WSLOGN                                 * 0D2C1
-          BINT1                                  * 0D2C6
-          WSLOGN                                 * 0D2CB
-        ;                                        * 0D2D0
+        :: BINT4 WSLOGN BINT3 WSLOGN BINT2 WSLOGN BINT1 WSLOGN ; * 0D2A3
 
 * refs (1): 39AFB
 clock?:
-        ::                                       * 0D2D5
-          BINT40                                 * 0D2DA
-          TestSysFlag                            * 0D2DF
-        ;                                        * 0D2E4
+        :: BINT40 TestSysFlag ;                  * 0D2D5
         ASSEMBLE
 
 * refs (2): 0CBFF 0CC13
@@ -1558,41 +1357,22 @@ SUB_0D2E9:
 * %date -> $weekday
 * refs (1): 0D313
 Date>wd$:
-        ::                                       * 0D2F0
-          Date>hxs13                             * 0D2F5
-          Ticks>wd$                              * 0D2FA
-        ;                                        * 0D2FF
+        :: Date>hxs13 Ticks>wd$ ;                * 0D2F0
 
 * %dt %tm -> "dy dt tm"
 * refs (3): 0D362 199A1 B7AFD
 TIMESTR:
-        ::                                       * 0D304
-          TOD>t$                                 * 0D309
-          SWAPDUP                                * 0D30E
-          Date>wd$                               * 0D313
+        :: TOD>t$ SWAPDUP Date>wd$               * 0D304
 
 K_space:
-          CHR     " "                            * 0D318
-          >T$                                    * 0D31F
-          SWAP                                   * 0D324
-          Date>d$                                * 0D329
-          &$                                     * 0D32E
+          CHR " " >T$ SWAP Date>d$ &$            * 0D318
 
 K_space_0D333:
-          CHR     " "                            * 0D333
-          >T$                                    * 0D33A
-          SWAP&$                                 * 0D33F
-        ;                                        * 0D344
+          CHR " " >T$ SWAP&$ ;                   * 0D333
 
 * refs (1): 0E00B
 tstr(b):
-        ::                                       * 0D349
-          DUP                                    * 0D34E
-          Ticks>Date                             * 0D353
-          SWAP                                   * 0D358
-          Ticks>TOD                              * 0D35D
-          TIMESTR                                * 0D362
-        ;                                        * 0D367
+        :: DUP Ticks>Date SWAP Ticks>TOD TIMESTR ; * 0D349
         ASSEMBLE
 
 * refs (7): 0CCD8 0D256 0D700 0D711 0D937 0E64F ...
@@ -2509,189 +2289,69 @@ L_0DC31:
 
 * refs (1): 42122
 OBJ_0DC3B:
-        ::                                       * 0DC3B
-          ALARMS@                                * 0DC40
-          TOTEMPOB                               * 0DC45
-          DUP                                    * 0DC4A
-          NextAlarm(li)?                         * 0DC4F
-          NOTcase                                * 0DC54
-          DROPFALSE                              * 0DC59
-          DUP                                    * 0DC5E
-          OBJ_0DF66                              * 0DC63
-          case                                   * 0DC68
-          ::                                     * 0DC6D
-            OBJ_0DC90                            * 0DC72
-            TRUE                                 * 0DC77
-          ;                                      * 0DC7C
-          OBJ_0DCDB                              * 0DC81
-          FALSE                                  * 0DC86
-        ;                                        * 0DC8B
+        :: ALARMS@ TOTEMPOB DUP NextAlarm(li)? NOTcase DROPFALSE * 0DC3B
+          DUP OBJ_0DF66 case                     * 0DC5E
+          :: OBJ_0DC90 TRUE ;                    * 0DC6D
+          OBJ_0DCDB FALSE ;                      * 0DC81
 
 * refs (1): 0DC72
 OBJ_0DC90:
-        ::                                       * 0DC90
-          OBJ_0E802                              * 0DC95
-          OBJ_0E7F7                              * 0DC9A
-          OBJ_0E820                              * 0DC9F
-          OBJ_0DFD9                              * 0DCA4
-          ITE                                    * 0DCA9
-          OBJ_0DE61                              * 0DCAE
-          DROP                                   * 0DCB3
-          NewAlarm(li)                           * 0DCB8
-          OBJ_0E26D                              * 0DCBD
-          UNCOERCE                               * 0DCC2
-          OBJ_0172B                              * 0DCC7
-          OBJ_0E164                              * 0DCCC
-          OBJ_47445                              * 0DCD1
-        ;                                        * 0DCD6
+        :: OBJ_0E802 OBJ_0E7F7 OBJ_0E820 OBJ_0DFD9 ITE OBJ_0DE61 DROP * 0DC90
+          NewAlarm(li) OBJ_0E26D UNCOERCE OBJ_0172B OBJ_0E164 OBJ_47445 ; * 0DCB8
 
 * refs (1): 0DC81
 OBJ_0DCDB:
-        ::                                       * 0DCDB
-          OBJ_0E41B                              * 0DCE0
-          OBJ_0CEEA                              * 0DCE5
-          Save16                                 * 0DCEA
-          Clr16                                  * 0DCEF
-          SWAP                                   * 0DCF4
-          DUP                                    * 0DCF9
-          INCOMPDROP                             * 0DCFE
-          SWAP                                   * 0DD03
-          DispTstr(b)                            * 0DD08
-          DISPROW1*!                             * 0DD0D
-          OBJ_0E802                              * 0DD12
-          OBJ_0E820                              * 0DD17
-          OBJ_0EC9D                              * 0DD1C
-          IT                                     * 0DD21
-          ::                                     * 0DD26
-            OBJ_0E7F7                            * 0DD2B
-            OBJ_0E836                            * 0DD30
-          ;                                      * 0DD35
-          SWAP                                   * 0DD3A
-          Restore16                              * 0DD3F
-          OBJ_0DF84                              * 0DD44
-          ITE                                    * 0DD49
-          ::                                     * 0DD4E
-            DROP                                 * 0DD53
-            OBJ_0E26D                            * 0DD58
-            REMOVEN{}                            * 0DD5D
-          ;                                      * 0DD62
-          ::                                     * 0DD67
-            OBJ_0DFD9                            * 0DD6C
-            ITE                                  * 0DD71
-            OBJ_0DE61                            * 0DD76
-            DROP                                 * 0DD7B
+        :: OBJ_0E41B OBJ_0CEEA Save16 Clr16 SWAP DUP INCOMPDROP SWAP * 0DCDB
+          DispTstr(b) DISPROW1*! OBJ_0E802 OBJ_0E820 OBJ_0EC9D IT * 0DD08
+          :: OBJ_0E7F7 OBJ_0E836 ;               * 0DD26
+          SWAP Restore16 OBJ_0DF84 ITE           * 0DD3A
+          :: DROP OBJ_0E26D REMOVEN{} ;          * 0DD4E
+          :: OBJ_0DFD9 ITE OBJ_0DE61 DROP        * 0DD67
           ;                                      * 0DD80
-          NewAlarm(li)                           * 0DD85
-          OBJ_0E43C                              * 0DD8A
-          OBJ_0172B                              * 0DD8F
-          OBJ_0E164                              * 0DD94
-          OBJ_47445                              * 0DD99
-          FLUSHKEYS                              * 0DD9E
-        ;                                        * 0DDA3
+          NewAlarm(li) OBJ_0E43C OBJ_0172B OBJ_0E164 OBJ_47445 FLUSHKEYS ; * 0DD85
 
 * ->
 * refs (1): 1986D
 ACKALLALMS:
-        ::                                       * 0DDA8
-          BEGIN                                  * 0DDAD
-          ACKALM                                 * 0DDB2
-          UNTIL                                  * 0DDB7
-        ;                                        * 0DDBC
+        :: BEGIN ACKALM UNTIL ;                  * 0DDA8
 
 * -> flag
 * refs (2): 0DDB2 19888
 ACKALM:
-        ::                                       * 0DDC1
-          ALARMS@                                * 0DDC6
-          TOTEMPOB                               * 0DDCB
-          DUP                                    * 0DDD0
-          OldestPastDue(li)?                     * 0DDD5
-          NOTcase                                * 0DDDA
-          DROPTRUE                               * 0DDDF
-          IndexPastDue(li)                       * 0DDE4
-          OBJ_0E248                              * 0DDE9
-          DROP                                   * 0DDEE
-          OBJ_0E7F7                              * 0DDF3
-          OBJ_0E836                              * 0DDF8
-          OBJ_0E820                              * 0DDFD
-          OBJ_0DF84                              * 0DE02
-          ITE                                    * 0DE07
-          ::                                     * 0DE0C
-            DROP                                 * 0DE11
-            OBJ_0E26D                            * 0DE16
-            REMOVEN{}                            * 0DE1B
-          ;                                      * 0DE20
-          ::                                     * 0DE25
-            OBJ_0DFD9                            * 0DE2A
-            ITE                                  * 0DE2F
-            OBJ_0DE61                            * 0DE34
-            DROP                                 * 0DE39
+        :: ALARMS@ TOTEMPOB DUP OldestPastDue(li)? NOTcase DROPTRUE * 0DDC1
+          IndexPastDue(li) OBJ_0E248 DROP OBJ_0E7F7 OBJ_0E836 OBJ_0E820 * 0DDE4
+          OBJ_0DF84 ITE                          * 0DE02
+          :: DROP OBJ_0E26D REMOVEN{} ;          * 0DE0C
+          :: OBJ_0DFD9 ITE OBJ_0DE61 DROP        * 0DE25
           ;                                      * 0DE3E
-          NewAlarm(li)                           * 0DE43
-          OBJ_0172B                              * 0DE48
-          OBJ_0E164                              * 0DE4D
-          OBJ_47445                              * 0DE52
-          FALSE                                  * 0DE57
-        ;                                        * 0DE5C
+          NewAlarm(li) OBJ_0172B OBJ_0E164 OBJ_47445 FALSE ; * 0DE43
 
 * refs (3): 0DCAE 0DD76 0DE34
 OBJ_0DE61:
-        ::                                       * 0DE61
-          OBJ_0DFB1                              * 0DE66
-          TOTEMPSWAP                             * 0DE6B
-          OBJ_0E26D                              * 0DE70
-          REMOVEN{}                              * 0DE75
-          SWAP                                   * 0DE7A
-          OBJ_0E836                              * 0DE7F
-          OBJ_0E82B                              * 0DE84
-          OBJ_0E820                              * 0DE89
-          OBJ_0E302                              * 0DE8E
-          InsAlarm(2li)                          * 0DE93
-          SWAP                                   * 0DE98
-          OBJ_0E248                              * 0DE9D
-          DROP                                   * 0DEA2
-        ;                                        * 0DEA7
+        :: OBJ_0DFB1 TOTEMPSWAP OBJ_0E26D REMOVEN{} SWAP OBJ_0E836 OBJ_0E82B * 0DE61
+          OBJ_0E820 OBJ_0E302 InsAlarm(2li) SWAP OBJ_0E248 DROP ; * 0DE89
 
 * refs (2): 0DE93 0E70B
 InsAlarm(2li):
-        ::                                       * 0DEAC
-          2DUP                                   * 0DEB1
-          OBJ_0EABE                              * 0DEB6
-          DUP                                    * 0DEBB
-          4UNROLL                                * 0DEC0
-          INSERTN{}                              * 0DEC5
-        ;                                        * 0DECA
+        :: 2DUP OBJ_0EABE DUP 4UNROLL INSERTN{} ; * 0DEAC
 
 * refs (7): 0CB2F 0DCB8 0DD85 0DE43 0E710 0E783 ...
 NewAlarm(li):
-        ::                                       * 0DECF
-          OBJ_0DF45                              * 0DED4
-          StoAlarms(_)                           * 0DED9
-          RclAlarms?                             * 0DEDE
-          DROP                                   * 0DEE3
-          OBJ_0E219                              * 0DEE8
-          DROP                                   * 0DEED
-        ;                                        * 0DEF2
+        :: OBJ_0DF45 StoAlarms(_) RclAlarms? DROP OBJ_0E219 DROP ; * 0DECF
 
 * refs (1): 0DED9
 StoAlarms(_):
-        ::                                       * 0DEF7
-          '                                      * 0DEFC
+        :: '                                     * 0DEF7
 
 Alarms:
-          ID      Alarms                         * 0DF01
-          StoHiddenVar                           * 0DF14
-        ;                                        * 0DF19
+          ID Alarms StoHiddenVar ;               * 0DF01
 
 * refs (3): 0CB1B 0CB4D 0DEDE
 RclAlarms?:
-        ::                                       * 0DF1E
-          '                                      * 0DF23
+        :: '                                     * 0DF1E
 
 Alarms_0DF28:
-          ID      Alarms                         * 0DF28
-          RclHiddenVar                           * 0DF3B
-        ;                                        * 0DF40
+          ID Alarms RclHiddenVar ;               * 0DF28
 
 * refs (1): 0DED4
 OBJ_0DF45:
@@ -2710,44 +2370,21 @@ L_0DF5C:
 
 * refs (1): 0DC63
 OBJ_0DF66:
-        ::                                       * 0DF66
-          BINT2                                  * 0DF6B
-          NTHCOMPDROP                            * 0DF70
-          TYPECSTR?                              * 0DF75
-          NOT                                    * 0DF7A
-        ;                                        * 0DF7F
+        :: BINT2 NTHCOMPDROP TYPECSTR? NOT ;     * 0DF66
 
 * refs (2): 0DD44 0DE02
 OBJ_0DF84:
-        ::                                       * 0DF84
-          OBJ_0E7BB                              * 0DF89
-          SWAP                                   * 0DF8E
-          OBJ_0E2D1                              * 0DF93
-          NOT                                    * 0DF98
-          ROTAND                                 * 0DF9D
-          OBJ_0E2A1                              * 0DFA2
-          NOTAND                                 * 0DFA7
-        ;                                        * 0DFAC
+        :: OBJ_0E7BB SWAP OBJ_0E2D1 NOT ROTAND OBJ_0E2A1 NOTAND ; * 0DF84
 
 * refs (1): 0DE66
 OBJ_0DFB1:
-        ::                                       * 0DFB1
-          OBJ_0ED95                              * 0DFB6
-          IT                                     * 0DFBB
-          ::                                     * 0DFC0
-            OBJ_0E80D                            * 0DFC5
-            ClrDouseAlm                          * 0DFCA
-          ;                                      * 0DFCF
+        :: OBJ_0ED95 IT                          * 0DFB1
+          :: OBJ_0E80D ClrDouseAlm ;             * 0DFC0
         ;                                        * 0DFD4
 
 * refs (3): 0DCA4 0DD6C 0DE2A
 OBJ_0DFD9:
-        ::                                       * 0DFD9
-          OBJ_0E2D1                              * 0DFDE
-          NOTcaseFALSE                           * 0DFE3
-          OBJ_0E7BB                              * 0DFE8
-          caseTRUE                               * 0DFED
-          OBJ_0E2B9                              * 0DFF2
-          caseFALSE                              * 0DFF7
-          TRUE                                   * 0DFFC
+        :: OBJ_0E2D1 NOTcaseFALSE OBJ_0E7BB      * 0DFD9
+          caseTRUE OBJ_0E2B9                     * 0DFED
+          caseFALSE TRUE                         * 0DFF7
         ;                                        * 0E001

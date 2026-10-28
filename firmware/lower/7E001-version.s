@@ -7,9 +7,6 @@
 
 * Version and copyright strings (VERSION reads them through # VersionStrings)
 VersionStrings:
-        ::                                       * 7FFA0
-          $       "Version HP48-R"               * 7FFA5
-          $       "Copyright HP 1993"            * 7FFCB
-        ;                                        * 7FFF7
+        :: $ "Version HP48-R" $ "Copyright HP 1993" ; * 7FFA0
 
         CRC                                      * 7FFFC  self-test CRC correction (computed by the assembler)

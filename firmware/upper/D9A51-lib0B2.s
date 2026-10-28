@@ -13,896 +13,282 @@ LIB0B2:
 * ROMPTR 0B2 000
 * refs (1): D9A51
 ROMP_0B2_000:
-        ::                                       * D9A68
-          TakeOver                               * D9A6D
-          '                                      * D9A72
-          DROPFALSE                              * D9A77
-          NULL$                                  * D9A7C
-          BINT1                                  * D9A81
-          OBJ_40CC3                              * D9A86
-          BINT4                                  * D9A8B
-          ZERO_DO                                * D9A90
-          GetLastEdit                            * D9A95
-          ?SKIP                                  * D9A9A
-          NULL$                                  * D9A9F
-          LOOP                                   * D9AA4
-          BINT4                                  * D9AA9
-          {}N                                    * D9AAE
-          BINT1                                  * D9AB3
-          ROMPTR  0B3 000                        * D9AB8  ~Choose
-          NOTcase                                * D9AC3
-          SetDA123NoCh                           * D9AC8
-          InitEdLine                             * D9ACD
-          EditString                             * D9AD2
-          SetDA13NoCh                            * D9AD7
-        ;                                        * D9ADC
+        :: TakeOver ' DROPFALSE NULL$ BINT1 OBJ_40CC3 BINT4 ZERO_DO * D9A68
+          GetLastEdit ?SKIP NULL$                * D9A95
+          LOOP BINT4 {}N BINT1 ROMPTR 0B3 000 NOTcase SetDA123NoCh * D9AA4  ~Choose
+          InitEdLine EditString SetDA13NoCh ;    * D9ACD
 
 * ROMPTR 0B2 001
 * refs (1): D9A51
 ROMP_0B2_001:
-        ::                                       * D9AE1
-          TakeOver                               * D9AE6
-          ROMPTR  0B2 002                        * D9AEB
-          DUPNULL$?                              * D9AF6
-          caseDROP                               * D9AFB
-          Echo$NoChr00                           * D9B00
+        :: TakeOver ROMPTR 0B2 002 DUPNULL$? caseDROP Echo$NoChr00 * D9AE1
         ;                                        * D9B05
 
 * ROMPTR 0B2 002
 * refs (1): D9A51
 ROMP_0B2_002:
-        ::                                       * D9B0A
-          BINT128                                * D9B0F
-          BINT0                                  * D9B14
-          NULL$                                  * D9B19
-          {                                      * D9B1E
-            LAM     '1C                          * D9B23
-            LAM     'CF                          * D9B30
-            LAM     'EC                          * D9B3D
-          }                                      * D9B4A
-          BIND                                   * D9B4F
-          EditLExists?                           * D9B54
-          EDITLINE$                              * D9B59
-          CURSOR@                                * D9B5E
-          INSERT?                                * D9B63
-          PrgmEntry?                             * D9B68
-          AlgEntry?                              * D9B6D
-          MinusMo                                * D9B72
-          BINT7                                  * D9B77
-          ROMPTR  0B0 0DB                        * D9B7C  ~nNullBind
-          InitEd&Modes                           * D9B87
-          ROMPTR  0B2 003                        * D9B8C
-          DoInputForm                            * D9B97
-          IT                                     * D9B9C
-          DROP                                   * D9BA1
-          8GETLAM                                * D9BA6
-          IT                                     * D9BAB
-          ::                                     * D9BB0
-            7GETLAM                              * D9BB5
-            EditString                           * D9BBA
-            6GETLAM                              * D9BBF
-            #1+                                  * D9BC4
-            SetCursPos(s)                        * D9BC9
-          ;                                      * D9BCE
-          5GETLAM                                * D9BD3
-          ?SKIP                                  * D9BD8
-          REPLACE_MODE                           * D9BDD
-          4GETLAM                                * D9BE2
-          IT                                     * D9BE7
-          SetPrgmEntry                           * D9BEC
-          3GETLAM                                * D9BF1
-          IT                                     * D9BF6
-          SetAlgEntry                            * D9BFB
-          2GETLAM                                * D9C00
-          IT                                     * D9C05
-          MinusMo_539A0                          * D9C0A
-          ABND                                   * D9C0F
-          LAM     'EC                            * D9C14
-          ABND                                   * D9C21
-        ;                                        * D9C26
+        :: BINT128 BINT0 NULL$                   * D9B0A
+          { LAM '1C LAM 'CF LAM 'EC } BIND EditLExists? EDITLINE$ CURSOR@ * D9B1E
+          INSERT? PrgmEntry? AlgEntry? MinusMo BINT7 ROMPTR 0B0 0DB * D9B63  ~nNullBind
+          InitEd&Modes ROMPTR 0B2 003 DoInputForm IT DROP * D9B87
+          8GETLAM IT                             * D9BA6
+          :: 7GETLAM EditString 6GETLAM #1+ SetCursPos(s) ; * D9BB0
+          5GETLAM ?SKIP REPLACE_MODE             * D9BD3
+          4GETLAM IT SetPrgmEntry                * D9BE2
+          3GETLAM IT SetAlgEntry                 * D9BF1
+          2GETLAM IT MinusMo_539A0               * D9C00
+          ABND LAM 'EC ABND ;                    * D9C0F
 
 * ROMPTR 0B2 003
 * refs (1): D9A51
 ROMP_0B2_003:
-        ::                                       * D9C2B
-          OBJ_38345                              * D9C30
-          ROMPTR  0B2 006                        * D9C35
-          BINT0                                  * D9C40
-          BINT0                                  * D9C45
-          BINT7                                  * D9C4A
-          BINT9                                  * D9C4F
-          BINT0                                  * D9C54
-          MINUSONE                               * D9C59
-          MINUSONE                               * D9C5E
-          NULL$                                  * D9C63
-          MINUSONE                               * D9C68
-          MINUSONE                               * D9C6D
-          MINUSONE                               * D9C72
-          DUP                                    * D9C77
-          BINT0                                  * D9C7C
-          BINT1                                  * D9C81
-          OBJ_38345                              * D9C86
-          ROMPTR  0B2 004                        * D9C8B
-          #       B998                           * D9C96  47512
-        ;                                        * D9CA0
+        :: OBJ_38345 ROMPTR 0B2 006 BINT0 BINT0 BINT7 BINT9 BINT0 MINUSONE * D9C2B
+          MINUSONE NULL$ MINUSONE MINUSONE MINUSONE DUP BINT0 BINT1 * D9C5E
+          OBJ_38345 ROMPTR 0B2 004 # B998 ;      * D9C86
 
 * ROMPTR 0B2 004
 * refs (1): D9A51
 ROMP_0B2_004:
         ::                                       * D9CA5
-          {                                      * D9CAA
-            BINT5                                * D9CAF
-            ::                                   * D9CB4
-              BINT39                             * D9CB9
-              BINT131                            * D9CBE
-              MAKEGROB                           * D9CC3
-              TRUE                               * D9CC8
-            ;                                    * D9CCD
-            BINT15                               * D9CD2
-            ::                                   * D9CD7
-              '                                  * D9CDC
-              ROMPTR  0B2 01A                    * D9CE1
-            ;                                    * D9CEC
-            BINT2                                * D9CF1
-            ROMPTR  0B2 005                      * D9CF6
-          }                                      * D9D01
-          EQLookup                               * D9D06
-          case                                   * D9D0B
-          ::                                     * D9D10
-            EVAL                                 * D9D15
-            TRUE                                 * D9D1A
-          ;                                      * D9D1F
-          DROPFALSE                              * D9D24
-        ;                                        * D9D29
+          { BINT5                                * D9CAA
+            :: BINT39 BINT131 MAKEGROB TRUE ; BINT15 * D9CB4
+            :: ' ROMPTR 0B2 01A ; BINT2 ROMPTR 0B2 005 } * D9CD7
+          EQLookup case                          * D9D06
+          :: EVAL TRUE ;                         * D9D10
+          DROPFALSE ;                            * D9D24
 
 * ROMPTR 0B2 005
 * refs (1): D9A51
 ROMP_0B2_005:
-        ::                                       * D9D2E
-          ROMPTR  0B0 0AE                        * D9D33
-          LAM     '1C                            * D9D3E
-          DUP                                    * D9D4B
-          #>$                                    * D9D50
-          CHR_-                                  * D9D55
-          >T$                                    * D9D5A
-          SWAP                                   * D9D5F
-          BINT63                                 * D9D64
-          #+                                     * D9D69
-          #>$                                    * D9D6E
-          &$                                     * D9D73
-          &$                                     * D9D78
-          ROMPTR  0B0 0A5                        * D9D7D
-        ;                                        * D9D88
+        :: ROMPTR 0B0 0AE LAM '1C DUP #>$ CHR_- >T$ SWAP BINT63 #+ #>$ &$ &$ * D9D2E
+          ROMPTR 0B0 0A5 ;                       * D9D7D
 
 * ROMPTR 0B2 006
 * refs (1): D9A51
 ROMP_0B2_006:
         ::                                       * D9D8D
-          {                                      * D9D92
-            BINT8                                * D9D97
-            ::                                   * D9D9C
-              2DUP                               * D9DA1
-              ROMPTR  0B2 00A                    * D9DA6
-              ITE                                * D9DB1
-              ::                                 * D9DB6
-                3UNROLL                          * D9DBB
-                2DROP                            * D9DC0
-                TrueTrue                         * D9DC5
-              ;                                  * D9DCA
-              FALSE                              * D9DCF
+          { BINT8                                * D9D92
+            :: 2DUP ROMPTR 0B2 00A ITE           * D9D9C
+              :: 3UNROLL 2DROP TrueTrue ; FALSE  * D9DB6
             ;                                    * D9DD4
           }                                      * D9DD9
-          EQLookup                               * D9DDE
-          case                                   * D9DE3
-          EVAL                                   * D9DE8
-          {                                      * D9DED
-            BINT7                                * D9DF2
-            ROMPTR  0B2 007                      * D9DF7
-            BINT11                               * D9E02
-            ::                                   * D9E07
-              DROP                               * D9E0C
-              ROMPTR  0B2 008                    * D9E11
-            ;                                    * D9E1C
-          }                                      * D9E21
-          EQLookup                               * D9E26
-          case                                   * D9E2B
-          ::                                     * D9E30
-            EVAL                                 * D9E35
-            TRUE                                 * D9E3A
-          ;                                      * D9E3F
-          DROPFALSE                              * D9E44
-        ;                                        * D9E49
+          EQLookup case EVAL                     * D9DDE
+          { BINT7 ROMPTR 0B2 007 BINT11          * D9DED
+            :: DROP ROMPTR 0B2 008 ; }           * D9E07
+          EQLookup case                          * D9E26
+          :: EVAL TRUE ;                         * D9E30
+          DROPFALSE ;                            * D9E44
 
 * ROMPTR 0B2 007
 * refs (1): D9A51
 ROMP_0B2_007:
         ::                                       * D9E4E
-          {                                      * D9E53
-            ROMPTR  0B2 02B                      * D9E58
-            ROMPTR  0B2 02C                      * D9E63
-            ROMPTR  0B2 02D                      * D9E6E
-            ROMPTR  0B2 02E                      * D9E79
-          }                                      * D9E84
-          LAM     '1C                            * D9E89
-          BINT64                                 * D9E96
-          #/                                     * D9E9B
-          SWAPDROP                               * D9EA0
-          #1+                                    * D9EA5
-          OBJ_1A01B                              * D9EAA
-          HARDBUFF                               * D9EAF
-          BINT9                                  * D9EB4
-          BINT8                                  * D9EB9
-          BINT46                                 * D9EBE
-          BINT2                                  * D9EC3
-          BLANKIT                                * D9EC8
-          GROB!                                  * D9ECD
-          SetDA2aValid                           * D9ED2
-          BINT1                                  * D9ED7
-          ROMPTR  0B0 0A1                        * D9EDC
-          LAM     'CF                            * D9EE7
-          ROMPTR  0B2 020                        * D9EF4
-        ;                                        * D9EFF
+          { ROMPTR 0B2 02B ROMPTR 0B2 02C ROMPTR 0B2 02D ROMPTR 0B2 02E } * D9E53
+          LAM '1C BINT64 #/ SWAPDROP #1+ OBJ_1A01B HARDBUFF BINT9 BINT8 * D9E89
+          BINT46 BINT2 BLANKIT GROB! SetDA2aValid BINT1 ROMPTR 0B0 0A1 * D9EBE
+          LAM 'CF ROMPTR 0B2 020 ;               * D9EE7
 
 * ROMPTR 0B2 008
 * refs (1): D9A51
 ROMP_0B2_008:
-        ::                                       * D9F04
-          LAM     '1C                            * D9F09
-          LAM     'CF                            * D9F16
-          #+                                     * D9F23
-          DUP                                    * D9F28
-          #>$                                    * D9F2D
-          $>grob                                 * D9F32
-          SWAP                                   * D9F37
-          #1+                                    * D9F3C
-          ROMPTR  0B2 02F                        * D9F41
-          GETATELN                               * D9F4C
-          DROP                                   * D9F51
-          ROMPTR  0B2 009                        * D9F56
-          #       B99A                           * D9F61  47514
-          JstGetTHEMESG                          * D9F6B
-          $>grob                                 * D9F70
-          #       B999                           * D9F75  47513
-          JstGetTHEMESG                          * D9F7F
-          $>grob                                 * D9F84
-          BINT48                                 * D9F89
-          BINT8                                  * D9F8E
-          BLANKIT                                * D9F93
-          HARDBUFF                               * D9F98
-          BINT1                                  * D9F9D
-          BINT50                                 * D9FA2
-          GROB!                                  * D9FA7
-          HARDBUFF                               * D9FAC
-          #       63                             * D9FB1  99
-          BINT50                                 * D9FBB
-          GROB!                                  * D9FC0
-          HARDBUFF                               * D9FC5
-          BINT19                                 * D9FCA
-          BINT50                                 * D9FCF
-          GROB!                                  * D9FD4
-          HARDBUFF                               * D9FD9
-          #       77                             * D9FDE  119
-          BINT50                                 * D9FE8
-          GROB!                                  * D9FED
-        ;                                        * D9FF2
+        :: LAM '1C LAM 'CF #+ DUP #>$ $>grob SWAP #1+ ROMPTR 0B2 02F * D9F04
+          GETATELN DROP ROMPTR 0B2 009 # B99A JstGetTHEMESG $>grob # B999 * D9F4C
+          JstGetTHEMESG $>grob BINT48 BINT8 BLANKIT HARDBUFF BINT1 BINT50 * D9F7F
+          GROB! HARDBUFF # 63 BINT50 GROB! HARDBUFF BINT19 BINT50 GROB! * D9FA7
+          HARDBUFF # 77 BINT50 GROB! ;           * D9FD9
 
 * ROMPTR 0B2 009
 * refs (1): D9A51
 ROMP_0B2_009:
-        ::                                       * D9FF7
-          DUPNULL$?                              * D9FFC
-          casedrop                               * DA001
-          ::                                     * DA006
-            #       B99B                         * DA00B  47515
-            JstGetTHEMESG                        * DA015
-            $>grob                               * DA01A
-          ;                                      * DA01F
-          BINT6                                  * DA024
-          BINT40                                 * DA029
-          MAKEGROB                               * DA02E
-          BINT0                                  * DA033
-          ROT                                    * DA038
-          DUPLEN$                                * DA03D
-          #1+_ONE_DO                             * DA042
-          DUP                                    * DA047
-          INDEX@                                 * DA04C
-          DUP                                    * DA051
-          SUB$                                   * DA056
-          DUP                                    * DA05B
-          CAR$                                   * DA060
-          CHR>#                                  * DA065
-          DUP                                    * DA06A
-          BINT9                                  * DA06F
-          #>                                     * DA074
-          ITE                                    * DA079
-          ::                                     * DA07E
-            DROP                                 * DA083
-            $>grob                               * DA088
-          ;                                      * DA08D
-          ::                                     * DA092
-            SWAPDROP                             * DA097
-            {                                    * DA09C
-              ROMPTR  0B2 022                    * DA0A1
-              ROMPTR  0B2 023                    * DA0AC
-              ROMPTR  0B2 024                    * DA0B7
-              ROMPTR  0B2 025                    * DA0C2
-              ROMPTR  0B2 026                    * DA0CD
-              ROMPTR  0B2 027                    * DA0D8
-              ROMPTR  0B2 028                    * DA0E3
-              ROMPTR  0B2 029                    * DA0EE
-              ROMPTR  0B2 02A                    * DA0F9
-            }                                    * DA104
-            SWAP                                 * DA109
-            OBJ_1A01B                            * DA10E
-          ;                                      * DA113
-          DUP                                    * DA118
-          5PICK                                  * DA11D
-          5PICK                                  * DA122
-          BINT0                                  * DA127
-          GROB!                                  * DA12C
-          GROBDIMw                               * DA131
-          ROT                                    * DA136
-          #+                                     * DA13B
-          SWAP                                   * DA140
-          LOOP                                   * DA145
-          2DROP                                  * DA14A
-        ;                                        * DA14F
+        :: DUPNULL$? casedrop                    * D9FF7
+          :: # B99B JstGetTHEMESG $>grob ;       * DA006
+          BINT6 BINT40 MAKEGROB BINT0 ROT DUPLEN$ #1+_ONE_DO DUP INDEX@ DUP * DA024
+          SUB$ DUP CAR$ CHR># DUP BINT9 #> ITE   * DA056
+          :: DROP $>grob ;                       * DA07E
+          :: SWAPDROP                            * DA092
+            { ROMPTR 0B2 022 ROMPTR 0B2 023 ROMPTR 0B2 024 ROMPTR 0B2 025 * DA09C
+              ROMPTR 0B2 026 ROMPTR 0B2 027 ROMPTR 0B2 028 ROMPTR 0B2 029 * DA0CD
+              ROMPTR 0B2 02A }                   * DA0F9
+            SWAP OBJ_1A01B ;                     * DA109
+          DUP 5PICK 5PICK BINT0 GROB! GROBDIMw ROT #+ SWAP LOOP 2DROP ; * DA118
 
 * ROMPTR 0B2 00A
 * refs (1): D9A51
 ROMP_0B2_00A:
-        ::                                       * DA154
-          BINT1                                  * DA159
-          #=casedrop                             * DA15E
-          ROMPTR  0B2 00B                        * DA163
-          BINT2                                  * DA16E
-          #=casedrop                             * DA173
-          ROMPTR  0B2 00C                        * DA178
-          BINT3                                  * DA183
-          #=casedrop                             * DA188
-          ROMPTR  0B2 00D                        * DA18D
-          2DROP                                  * DA198
-          'DoBadKeyT                             * DA19D
-        ;                                        * DA1A2
+        :: BINT1 #=casedrop ROMPTR 0B2 00B       * DA154
+          BINT2 #=casedrop ROMPTR 0B2 00C        * DA16E
+          BINT3 #=casedrop ROMPTR 0B2 00D        * DA183
+          2DROP 'DoBadKeyT ;                     * DA198
 
 * ROMPTR 0B2 00B
 * refs (1): D9A51
 ROMP_0B2_00B:
         ::                                       * DA1A7
-          {                                      * DA1AC
-            BINT17                               * DA1B1
-            ROMPTR  0B2 00E                      * DA1B6
-            BINT11                               * DA1C1
-            ROMPTR  0B2 011                      * DA1C6
-            BINT16                               * DA1D1
-            ROMPTR  0B2 017                      * DA1D6
-            BINT18                               * DA1E1
-            ROMPTR  0B2 014                      * DA1E6
-          }                                      * DA1F1
-          OBJ_19FE4                              * DA1F6
-          caseTRUE                               * DA1FB
-          DUP#<7                                 * DA200
-          casedrop                               * DA205
-          FALSE                                  * DA20A
-          {                                      * DA20F
-            BINT25                               * DA214
-            BINT45                               * DA219
-            BINT12                               * DA21E
-            BINT35                               * DA223
-            BINT40                               * DA228
-          }                                      * DA22D
-          SWAP                                   * DA232
-          #=POSCOMP                              * DA237
-          #0<>                                   * DA23C
-          caseFALSE                              * DA241
-          'DoBadKeyT                             * DA246
+          { BINT17 ROMPTR 0B2 00E BINT11 ROMPTR 0B2 011 BINT16 * DA1AC
+            ROMPTR 0B2 017 BINT18 ROMPTR 0B2 014 } * DA1D6
+          OBJ_19FE4 caseTRUE DUP#<7              * DA1F6
+          casedrop FALSE                         * DA205
+          { BINT25 BINT45 BINT12 BINT35 BINT40 } SWAP #=POSCOMP #0<> * DA20F
+          caseFALSE 'DoBadKeyT                   * DA241
         ;                                        * DA24B
 
 * ROMPTR 0B2 00C
 * refs (1): D9A51
 ROMP_0B2_00C:
-        ::                                       * DA250
-          DUP#<7                                 * DA255
-          casedrop                               * DA25A
-          FALSE                                  * DA25F
-          {                                      * DA264
-            BINT12                               * DA269
-            BINT35                               * DA26E
-            BINT40                               * DA273
-          }                                      * DA278
-          SWAP                                   * DA27D
-          #=POSCOMP                              * DA282
-          #0<>                                   * DA287
-          caseFALSE                              * DA28C
-          'DoBadKeyT                             * DA291
+        :: DUP#<7 casedrop FALSE                 * DA250
+          { BINT12 BINT35 BINT40 } SWAP #=POSCOMP #0<> caseFALSE 'DoBadKeyT * DA264
         ;                                        * DA296
 
 * ROMPTR 0B2 00D
 * refs (1): D9A51
 ROMP_0B2_00D:
         ::                                       * DA29B
-          {                                      * DA2A0
-            BINT17                               * DA2A5
-            ROMPTR  0B2 010                      * DA2AA
-            BINT11                               * DA2B5
-            ROMPTR  0B2 013                      * DA2BA
-            BINT16                               * DA2C5
-            ROMPTR  0B2 019                      * DA2CA
-            BINT18                               * DA2D5
-            ROMPTR  0B2 016                      * DA2DA
-          }                                      * DA2E5
-          OBJ_19FE4                              * DA2EA
-          caseTRUE                               * DA2EF
-          DUP#<7                                 * DA2F4
-          casedrop                               * DA2F9
-          FALSE                                  * DA2FE
-          {                                      * DA303
-            BINT45                               * DA308
-            BINT35                               * DA30D
-            BINT40                               * DA312
-          }                                      * DA317
-          SWAP                                   * DA31C
-          #=POSCOMP                              * DA321
-          #0<>                                   * DA326
-          caseFALSE                              * DA32B
-          'DoBadKeyT                             * DA330
+          { BINT17 ROMPTR 0B2 010 BINT11 ROMPTR 0B2 013 BINT16 * DA2A0
+            ROMPTR 0B2 019 BINT18 ROMPTR 0B2 016 } * DA2CA
+          OBJ_19FE4 caseTRUE DUP#<7              * DA2EA
+          casedrop FALSE                         * DA2F9
+          { BINT45 BINT35 BINT40 } SWAP #=POSCOMP #0<> caseFALSE 'DoBadKeyT * DA303
         ;                                        * DA335
 
 * ROMPTR 0B2 00E
 * refs (1): D9A51
 ROMP_0B2_00E:
-        ::                                       * DA33A
-          TakeOver                               * DA33F
-          REPEATERCH                             * DA344
-          BINT17                                 * DA349
-          ROMPTR  0B2 00F                        * DA34E
-          ::                                     * DA359
-            SetDA1NoCh                           * DA35E
-            SetDA2aNoCh                          * DA363
-            SetDA3NoCh                           * DA368
-          ;                                      * DA36D
-        ;                                        * DA372
+        :: TakeOver REPEATERCH BINT17 ROMPTR 0B2 00F * DA33A
+          :: SetDA1NoCh SetDA2aNoCh SetDA3NoCh ; ; * DA359
 
 * ROMPTR 0B2 00F
 * refs (1): D9A51
 ROMP_0B2_00F:
-        ::                                       * DA377
-          LAM     'CF                            * DA37C
-          DUP                                    * DA389
-          BINT16                                 * DA38E
-          #/                                     * DA393
-          #1+                                    * DA398
-          DUP                                    * DA39D
-          BINT3                                  * DA3A2
-          #>                                     * DA3A7
-          IT                                     * DA3AC
-          ::                                     * DA3B1
-            DROP                                 * DA3B6
-            BINT0                                * DA3BB
-          ;                                      * DA3C0
-          BINT16                                 * DA3C5
-          #*                                     * DA3CA
-          #+                                     * DA3CF
-          DUP                                    * DA3D4
-          '                                      * DA3D9
-          LAM     'CF                            * DA3DE
-          STOLAM                                 * DA3EB
-          SWAP                                   * DA3F0
-          ROMPTR  0B2 021                        * DA3F5
-          ROMPTR  0B2 020                        * DA400
-        ;                                        * DA40B
+        :: LAM 'CF DUP BINT16 #/ #1+ DUP BINT3 #> IT * DA377
+          :: DROP BINT0 ;                        * DA3B1
+          BINT16 #* #+ DUP ' LAM 'CF STOLAM SWAP ROMPTR 0B2 021 * DA3C5
+          ROMPTR 0B2 020 ;                       * DA400
 
 * ROMPTR 0B2 010
 * refs (1): D9A51
 ROMP_0B2_010:
-        ::                                       * DA410
-          TakeOver                               * DA415
-          LAM     'CF                            * DA41A
-          DUP                                    * DA427
-          BINT16                                 * DA42C
-          #/                                     * DA431
-          BINT3                                  * DA436
-          #=                                     * DA43B
-          case2drop                              * DA440
-          SetDA123NoCh                           * DA445
-          BINT48                                 * DA44A
-          #+                                     * DA44F
-          DUP                                    * DA454
-          '                                      * DA459
-          LAM     'CF                            * DA45E
-          STOLAM                                 * DA46B
-          SWAP                                   * DA470
-          ROMPTR  0B2 021                        * DA475
-          ROMPTR  0B2 020                        * DA480
-          ::                                     * DA48B
-            SetDA1NoCh                           * DA490
-            SetDA2aNoCh                          * DA495
-            SetDA3NoCh                           * DA49A
-          ;                                      * DA49F
-        ;                                        * DA4A4
+        :: TakeOver LAM 'CF DUP BINT16 #/ BINT3 #= case2drop SetDA123NoCh * DA410
+          BINT48 #+ DUP ' LAM 'CF STOLAM SWAP ROMPTR 0B2 021 ROMPTR 0B2 020 * DA44A
+          :: SetDA1NoCh SetDA2aNoCh SetDA3NoCh ; ; * DA48B
 
 * ROMPTR 0B2 011
 * refs (1): D9A51
 ROMP_0B2_011:
-        ::                                       * DA4A9
-          TakeOver                               * DA4AE
-          REPEATERCH                             * DA4B3
-          BINT11                                 * DA4B8
-          ROMPTR  0B2 012                        * DA4BD
-          ::                                     * DA4C8
-            SetDA1NoCh                           * DA4CD
-            SetDA2aNoCh                          * DA4D2
-            SetDA3NoCh                           * DA4D7
-          ;                                      * DA4DC
-        ;                                        * DA4E1
+        :: TakeOver REPEATERCH BINT11 ROMPTR 0B2 012 * DA4A9
+          :: SetDA1NoCh SetDA2aNoCh SetDA3NoCh ; ; * DA4C8
 
 * ROMPTR 0B2 012
 * refs (1): D9A51
 ROMP_0B2_012:
-        ::                                       * DA4E6
-          LAM     'CF                            * DA4EB
-          DUP                                    * DA4F8
-          BINT16                                 * DA4FD
-          #/                                     * DA502
-          DUP#0=                                 * DA507
-          IT                                     * DA50C
-          ::                                     * DA511
-            DROP                                 * DA516
-            BINT4                                * DA51B
-          ;                                      * DA520
-          #1-                                    * DA525
-          BINT16                                 * DA52A
-          #*                                     * DA52F
-          #+                                     * DA534
-          DUP                                    * DA539
-          '                                      * DA53E
-          LAM     'CF                            * DA543
-          STOLAM                                 * DA550
-          SWAP                                   * DA555
-          ROMPTR  0B2 021                        * DA55A
-          ROMPTR  0B2 020                        * DA565
-        ;                                        * DA570
+        :: LAM 'CF DUP BINT16 #/ DUP#0= IT       * DA4E6
+          :: DROP BINT4 ;                        * DA511
+          #1- BINT16 #* #+ DUP ' LAM 'CF STOLAM SWAP ROMPTR 0B2 021 * DA525
+          ROMPTR 0B2 020 ;                       * DA565
 
 * ROMPTR 0B2 013
 * refs (1): D9A51
 ROMP_0B2_013:
-        ::                                       * DA575
-          TakeOver                               * DA57A
-          LAM     'CF                            * DA57F
-          DUP                                    * DA58C
-          BINT16                                 * DA591
-          #/                                     * DA596
-          #0=                                    * DA59B
-          case2drop                              * DA5A0
-          SetDA123NoCh                           * DA5A5
-          DUP                                    * DA5AA
-          '                                      * DA5AF
-          LAM     'CF                            * DA5B4
-          STOLAM                                 * DA5C1
-          SWAP                                   * DA5C6
-          ROMPTR  0B2 021                        * DA5CB
-          ROMPTR  0B2 020                        * DA5D6
-          ::                                     * DA5E1
-            SetDA1NoCh                           * DA5E6
-            SetDA2aNoCh                          * DA5EB
-            SetDA3NoCh                           * DA5F0
-          ;                                      * DA5F5
-        ;                                        * DA5FA
+        :: TakeOver LAM 'CF DUP BINT16 #/ #0= case2drop SetDA123NoCh * DA575
+          DUP ' LAM 'CF STOLAM SWAP ROMPTR 0B2 021 ROMPTR 0B2 020 * DA5AA
+          :: SetDA1NoCh SetDA2aNoCh SetDA3NoCh ; ; * DA5E1
 
 * ROMPTR 0B2 014
 * refs (1): D9A51
 ROMP_0B2_014:
-        ::                                       * DA5FF
-          TakeOver                               * DA604
-          REPEATERCH                             * DA609
-          BINT18                                 * DA60E
-          ROMPTR  0B2 015                        * DA613
-          ::                                     * DA61E
-            SetDA1NoCh                           * DA623
-            SetDA2aNoCh                          * DA628
-            SetDA3NoCh                           * DA62D
-          ;                                      * DA632
-        ;                                        * DA637
+        :: TakeOver REPEATERCH BINT18 ROMPTR 0B2 015 * DA5FF
+          :: SetDA1NoCh SetDA2aNoCh SetDA3NoCh ; ; * DA61E
 
 * ROMPTR 0B2 015
 * refs (1): D9A51
 ROMP_0B2_015:
-        ::                                       * DA63C
-          LAM     'CF                            * DA641
-          DUP                                    * DA64E
-          #1+                                    * DA653
-          DUP                                    * DA658
-          BINT63                                 * DA65D
-          #>                                     * DA662
-          IT                                     * DA667
-          DROPZERO                               * DA66C
-          DUP                                    * DA671
-          '                                      * DA676
-          LAM     'CF                            * DA67B
-          STOLAM                                 * DA688
-          SWAP                                   * DA68D
-          ROMPTR  0B2 021                        * DA692
-          ROMPTR  0B2 020                        * DA69D
-        ;                                        * DA6A8
+        :: LAM 'CF DUP #1+ DUP BINT63 #> IT DROPZERO * DA63C
+          DUP ' LAM 'CF STOLAM SWAP ROMPTR 0B2 021 ROMPTR 0B2 020 ; * DA671
 
 * ROMPTR 0B2 016
 * refs (1): D9A51
 ROMP_0B2_016:
-        ::                                       * DA6AD
-          TakeOver                               * DA6B2
-          LAM     'CF                            * DA6B7
-          DUP                                    * DA6C4
-          BINT16                                 * DA6C9
-          #/                                     * DA6CE
-          SWAP                                   * DA6D3
-          BINT15                                 * DA6D8
-          #=                                     * DA6DD
-          case2drop                              * DA6E2
+        :: TakeOver LAM 'CF DUP BINT16 #/ SWAP BINT15 #= case2drop * DA6AD
           SetDA123NoCh                           * DA6E7
-          BINT16                                 * DA6EC
-          #*                                     * DA6F1
-          BINT15                                 * DA6F6
-          #+                                     * DA6FB
-          DUP                                    * DA700
-          '                                      * DA705
-          LAM     'CF                            * DA70A
-          STOLAM                                 * DA717
-          SWAP                                   * DA71C
-          ROMPTR  0B2 021                        * DA721
-          ROMPTR  0B2 020                        * DA72C
-          ::                                     * DA737
-            SetDA1NoCh                           * DA73C
-            SetDA2aNoCh                          * DA741
-            SetDA3NoCh                           * DA746
-          ;                                      * DA74B
-        ;                                        * DA750
+          BINT16 #* BINT15 #+ DUP ' LAM 'CF STOLAM SWAP ROMPTR 0B2 021 * DA6EC
+          ROMPTR 0B2 020                         * DA72C
+          :: SetDA1NoCh SetDA2aNoCh SetDA3NoCh ; ; * DA737
 
 * ROMPTR 0B2 017
 * refs (1): D9A51
 ROMP_0B2_017:
-        ::                                       * DA755
-          TakeOver                               * DA75A
-          REPEATERCH                             * DA75F
-          BINT16                                 * DA764
-          ROMPTR  0B2 018                        * DA769
-          ::                                     * DA774
-            SetDA1NoCh                           * DA779
-            SetDA2aNoCh                          * DA77E
-            SetDA3NoCh                           * DA783
-          ;                                      * DA788
-        ;                                        * DA78D
+        :: TakeOver REPEATERCH BINT16 ROMPTR 0B2 018 * DA755
+          :: SetDA1NoCh SetDA2aNoCh SetDA3NoCh ; ; * DA774
 
 * ROMPTR 0B2 018
 * refs (1): D9A51
 ROMP_0B2_018:
-        ::                                       * DA792
-          LAM     'CF                            * DA797
-          DUP                                    * DA7A4
-          DUP#0=                                 * DA7A9
-          IT                                     * DA7AE
-          ::                                     * DA7B3
-            DROP                                 * DA7B8
-            BINT64                               * DA7BD
-          ;                                      * DA7C2
-          #1-                                    * DA7C7
-          DUP                                    * DA7CC
-          '                                      * DA7D1
-          LAM     'CF                            * DA7D6
-          STOLAM                                 * DA7E3
-          SWAP                                   * DA7E8
-          ROMPTR  0B2 021                        * DA7ED
-          ROMPTR  0B2 020                        * DA7F8
-        ;                                        * DA803
+        :: LAM 'CF DUP DUP#0= IT                 * DA792
+          :: DROP BINT64 ;                       * DA7B3
+          #1- DUP ' LAM 'CF STOLAM SWAP ROMPTR 0B2 021 ROMPTR 0B2 020 ; * DA7C7
 
 * ROMPTR 0B2 019
 * refs (1): D9A51
 ROMP_0B2_019:
-        ::                                       * DA808
-          TakeOver                               * DA80D
-          LAM     'CF                            * DA812
-          DUP                                    * DA81F
-          BINT16                                 * DA824
-          #/                                     * DA829
-          SWAP                                   * DA82E
-          #0=                                    * DA833
-          case2drop                              * DA838
-          SetDA123NoCh                           * DA83D
-          BINT16                                 * DA842
-          #*                                     * DA847
-          DUP                                    * DA84C
-          '                                      * DA851
-          LAM     'CF                            * DA856
-          STOLAM                                 * DA863
-          SWAP                                   * DA868
-          ROMPTR  0B2 021                        * DA86D
-          ROMPTR  0B2 020                        * DA878
-          ::                                     * DA883
-            SetDA1NoCh                           * DA888
-            SetDA2aNoCh                          * DA88D
-            SetDA3NoCh                           * DA892
-          ;                                      * DA897
-        ;                                        * DA89C
+        :: TakeOver LAM 'CF DUP BINT16 #/ SWAP #0= case2drop SetDA123NoCh * DA808
+          BINT16 #* DUP ' LAM 'CF STOLAM SWAP ROMPTR 0B2 021 ROMPTR 0B2 020 * DA842
+          :: SetDA1NoCh SetDA2aNoCh SetDA3NoCh ; ; * DA883
 
 * ROMPTR 0B2 01A
 * refs (1): D9A51
 ROMP_0B2_01A:
-        ::                                       * DA8A1
-          NoExitAction                           * DA8A6
-          {                                      * DA8AB
-            NullMenuKey                          * DA8B0
-            NullMenuKey                          * DA8B5
-            NullMenuKey                          * DA8BA
-            {                                    * DA8BF
-              $       "-64"                      * DA8C4
-              {                                  * DA8D4
-                ROMPTR  0B2 01B                  * DA8D9
-                DoBadKey                         * DA8E4
-                ROMPTR  0B2 01C                  * DA8E9
-              }                                  * DA8F4
-            }                                    * DA8F9
-            {                                    * DA8FE
-              $       "+64"                      * DA903
-              {                                  * DA913
-                ROMPTR  0B2 01D                  * DA918
-                DoBadKey                         * DA923
-                ROMPTR  0B2 01E                  * DA928
-              }                                  * DA933
-            }                                    * DA938
-            {                                    * DA93D
-              $       "ECHO"                     * DA942
-              ROMPTR  0B2 01F                    * DA954
-            }                                    * DA95F
-            NullMenuKey                          * DA964
-            NullMenuKey                          * DA969
-            NullMenuKey                          * DA96E
+        :: NoExitAction                          * DA8A1
+          { NullMenuKey NullMenuKey NullMenuKey  * DA8AB
+            { $ "-64"                            * DA8BF
+              { ROMPTR 0B2 01B DoBadKey ROMPTR 0B2 01C } } * DA8D4
+            { $ "+64"                            * DA8FE
+              { ROMPTR 0B2 01D DoBadKey ROMPTR 0B2 01E } } * DA913
+            { $ "ECHO" ROMPTR 0B2 01F } NullMenuKey NullMenuKey NullMenuKey * DA93D
             NullMenuKey                          * DA973
-            {                                    * DA978
-              $       "(AN(L"                    * DA97D
-              ROMPTR  0B0 059                    * DA991  DoKeyCancel
-            }                                    * DA99C
-            {                                    * DA9A1
-              $       "OK"                       * DA9A6
-              ROMPTR  0B0 05A                    * DA9B4  DoKeyOK
-            }                                    * DA9BF
-          }                                      * DA9C4
+            { $ "(AN(L" ROMPTR 0B0 059 }         * DA978  DoKeyCancel
+            { $ "OK" ROMPTR 0B0 05A } }          * DA9A1  DoKeyOK
         ;                                        * DA9C9
 
 * ROMPTR 0B2 01B
 * refs (1): D9A51
 ROMP_0B2_01B:
-        ::                                       * DA9CE
-          TakeOver                               * DA9D3
-          LAM     '1C                            * DA9D8
-          DUP#0=                                 * DA9E5
-          IT                                     * DA9EA
-          ::                                     * DA9EF
-            DROP                                 * DA9F4
-            REALOBOB                             * DA9F9
-          ;                                      * DA9FE
-          BINT64                                 * DAA03
-          #-                                     * DAA08
-          '                                      * DAA0D
-          LAM     '1C                            * DAA12
-          STOLAM                                 * DAA1F
-          SetDA3NoCh                             * DAA24
-        ;                                        * DAA29
+        :: TakeOver LAM '1C DUP#0= IT            * DA9CE
+          :: DROP REALOBOB ;                     * DA9EF
+          BINT64 #- ' LAM '1C STOLAM SetDA3NoCh ; * DAA03
 
 * ROMPTR 0B2 01C
 * refs (1): D9A51
 ROMP_0B2_01C:
-        ::                                       * DAA2E
-          TakeOver                               * DAA33
-          LAM     '1C                            * DAA38
-          #0=case                                * DAA45
-          SetDA123NoCh                           * DAA4A
-          BINT0                                  * DAA4F
-          '                                      * DAA54
-          LAM     '1C                            * DAA59
-          STOLAM                                 * DAA66
-          SetDA3NoCh                             * DAA6B
-        ;                                        * DAA70
+        :: TakeOver LAM '1C #0=case SetDA123NoCh * DAA2E
+          BINT0 ' LAM '1C STOLAM SetDA3NoCh ;    * DAA4F
 
 * ROMPTR 0B2 01D
 * refs (1): D9A51
 ROMP_0B2_01D:
-        ::                                       * DAA75
-          TakeOver                               * DAA7A
-          LAM     '1C                            * DAA7F
-          BINT64                                 * DAA8C
-          #+                                     * DAA91
-          DUP                                    * DAA96
-          REALOBOB                               * DAA9B
-          #=                                     * DAAA0
-          IT                                     * DAAA5
-          DROPZERO                               * DAAAA
-          '                                      * DAAAF
-          LAM     '1C                            * DAAB4
-          STOLAM                                 * DAAC1
-          SetDA3NoCh                             * DAAC6
-        ;                                        * DAACB
+        :: TakeOver LAM '1C BINT64 #+ DUP REALOBOB #= IT DROPZERO * DAA75
+          ' LAM '1C STOLAM SetDA3NoCh ;          * DAAAF
 
 * ROMPTR 0B2 01E
 * refs (1): D9A51
 ROMP_0B2_01E:
-        ::                                       * DAAD0
-          TakeOver                               * DAAD5
-          LAM     '1C                            * DAADA
-          BINTC0h                                * DAAE7
-          #=case                                 * DAAEC
-          SetDA123NoCh                           * DAAF1
-          BINTC0h                                * DAAF6
-          '                                      * DAAFB
-          LAM     '1C                            * DAB00
-          STOLAM                                 * DAB0D
-          SetDA3NoCh                             * DAB12
-        ;                                        * DAB17
+        :: TakeOver LAM '1C BINTC0h #=case SetDA123NoCh * DAAD0
+          BINTC0h ' LAM '1C STOLAM SetDA3NoCh ;  * DAAF6
 
 * ROMPTR 0B2 01F
 * refs (1): D9A51
 ROMP_0B2_01F:
-        ::                                       * DAB1C
-          TakeOver                               * DAB21
-          SetDA123NoCh                           * DAB26
-          LAM     'CF                            * DAB2B
-          DUP                                    * DAB38
-          ROMPTR  0B2 021                        * DAB3D
-          LAM     'EC                            * DAB48
-          OVER                                   * DAB55
-          LAM     '1C                            * DAB5A
-          #+                                     * DAB67
-          DUP#0=                                 * DAB6C
-          ITE                                    * DAB71
-          ::                                     * DAB76
-            2DROP                                * DAB7B
-            #_102                                * DAB80
-            ROMPTR  0B0 091                      * DAB85  DoAlert
-          ;                                      * DAB90
-          ::                                     * DAB95
-            #>CHR                                * DAB9A
-            >T$                                  * DAB9F
-            '                                    * DABA4
-            LAM     'EC                          * DABA9
-            STOLAM                               * DABB6
-          ;                                      * DABBB
-          ROMPTR  0B2 020                        * DABC0
-        ;                                        * DABCB
+        :: TakeOver SetDA123NoCh LAM 'CF DUP ROMPTR 0B2 021 LAM 'EC OVER * DAB1C
+          LAM '1C #+ DUP#0= ITE                  * DAB5A
+          :: 2DROP #_102 ROMPTR 0B0 091 ;        * DAB76  DoAlert
+          :: #>CHR >T$ ' LAM 'EC STOLAM ;        * DAB95
+          ROMPTR 0B2 020 ;                       * DABC0
 
 * ROMPTR 0B2 021
 * refs (2): D9A51 D9A51
 ROMP_0B2_021:
-        ::                                       * DABD0
-          DA2aBad?                               * DABD5
-          caseDROP                               * DABDA
-          BINT16                                 * DABDF
-          #/                                     * DABE4
-          SWAP                                   * DABE9
-          BINT7                                  * DABEE
-          #*                                     * DABF3
-          BINT10                                 * DABF8
-          #+                                     * DABFD
-          #1-                                    * DAC02
-          SWAP                                   * DAC07
-          BINT10                                 * DAC0C
-          #*                                     * DAC11
-          BINT8                                  * DAC16
-          #+                                     * DAC1B
-          2DUP                                   * DAC20
-          2DUP                                   * DAC25
-          SWAP                                   * DAC2A
-          BINT7                                  * DAC2F
-          #+                                     * DAC34
-          SWAP                                   * DAC39
-          BINT10                                 * DAC3E
-          #+                                     * DAC43
-          HARDBUFF                               * DAC48
-          5UNROLL                                * DAC4D
-          SUBGROB                                * DAC52
-          INVGROB                                * DAC57
-          HARDBUFF                               * DAC5C
-          4ROLL                                  * DAC61
-          4ROLL                                  * DAC66
-          GROB!                                  * DAC6B
-        ;                                        * DAC70
+        :: DA2aBad? caseDROP BINT16              * DABD0
+          #/ SWAP BINT7 #* BINT10 #+ #1- SWAP BINT10 #* BINT8 #+ 2DUP 2DUP * DABE4
+          SWAP BINT7 #+ SWAP BINT10 #+ HARDBUFF 5UNROLL SUBGROB INVGROB * DAC2A
+          HARDBUFF 4ROLL 4ROLL GROB! ;           * DAC5C
 
 * ROMPTR 0B2 022
 * refs (1): D9A51

@@ -442,11 +442,7 @@ L_064B9:
 * ob -> ob ob'
 * refs (5): 08C95 1DBDD 20949 36246 37B6C
 TOTEMPOBADJ:
-        ::                                       * 064BD
-          DUP                                    * 064C2
-          TOTEMPSWAP                             * 064C7
-          DOADJ                                  * 064CC
-        ;                                        * 064D1
+        :: DUP TOTEMPSWAP DOADJ ;                * 064BD
 
 * ob1 ob2 -> ob1 ob'
 * refs (1): 097D4
@@ -1148,10 +1144,7 @@ L_06B9C:
 * ob -> ob flag
 * refs (1): 06B53
 NOTREF?:
-        ::                                       * 06BC2
-          REFERENCED?                            * 06BC7
-          NOT                                    * 06BCC
-        ;                                        * 06BD1
+        :: REFERENCED? NOT ;                     * 06BC2
         ASSEMBLE
 
 * refs (3): 06E50 0B101 0B88F
@@ -2014,10 +2007,7 @@ ABND:
 * obn..ob1 {lamn..lam1} ->
 * refs (169): 0E491 0F88C 0F977 143B1 155FE 19A1B ...
 BIND:
-        ::                                       * 074D0
-          INNERCOMP                              * 074D5
-          DOBIND                                 * 074DA
-        ;                                        * 074DF
+        :: INNERCOMP DOBIND ;                    * 074D0
 
 * obn..ob1 lamn..lam1 #n ->
 * refs (13): 074DA 23452 234E4 23ECA 28B69 4B94F ...

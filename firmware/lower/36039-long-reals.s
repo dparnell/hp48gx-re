@@ -7,241 +7,109 @@
 * [%re] [%im] -> [C%]
 * refs (1): 1C7B7
 MATR>C:
-        ::                                       * 36039
-          dup;ra?#BAT!                           * 3603E
-          SWAP                                   * 36043
-          dup;ra?#BAT!                           * 36048
-          SWAP                                   * 3604D
-          idsize(2ar)?                           * 36052
-          DUP                                    * 36057
-          DIMLIMITS                              * 3605C
-          C%0                                    * 36061
-          MAKEARRY                               * 36066
-          ONE_DO_ARRY                            * 3606B
-          3PICK                                  * 36070
-          INDEX@                                 * 36075
-          PULLREALEL                             * 3607A
-          SWAPDROP                               * 3607F
-          3PICK                                  * 36084
-          INDEX@                                 * 36089
-          PULLREALEL                             * 3608E
-          SWAPDROP                               * 36093
-          %>C%                                   * 36098
-          INDEX@                                 * 3609D
-          PUTCMPEL                               * 360A2
-          NextInArray                            * 360A7
-          ROTROT2DROP                            * 360AC
-        ;                                        * 360B1
+        :: dup;ra?#BAT! SWAP dup;ra?#BAT! SWAP idsize(2ar)? DUP DIMLIMITS * 36039
+          C%0 MAKEARRY ONE_DO_ARRY 3PICK INDEX@ PULLREALEL SWAPDROP 3PICK * 36061
+          INDEX@ PULLREALEL SWAPDROP %>C% INDEX@ PUTCMPEL NextInArray * 36089
+          ROTROT2DROP ;                          * 360AC
 
 * [C%] -> [%re] [%im]
 * refs (1): 1C9A7
 MATC>R:
-        ::                                       * 360B6
-          dup;ca?#BAT!                           * 360BB
-          DUP%0CON                               * 360C0
-          DUP                                    * 360C5
-          TOTEMPOB                               * 360CA
-          ONE_DO_ARRY                            * 360CF
-          ROT                                    * 360D4
-          INDEX@                                 * 360D9
-          PULLCMPEL                              * 360DE
-          C%>%                                   * 360E3
-          5ROLL                                  * 360E8
-          SWAPINDEX@                             * 360ED
-          PUTREALEL                              * 360F2
-          4ROLLROT                               * 360F7
-          INDEX@                                 * 360FC
-          PUTREALEL                              * 36101
-          NextInArray                            * 36106
-          ROTDROPSWAP                            * 3610B
-        ;                                        * 36110
+        :: dup;ca?#BAT! DUP%0CON DUP TOTEMPOB ONE_DO_ARRY ROT INDEX@ * 360B6
+          PULLCMPEL C%>% 5ROLL SWAPINDEX@ PUTREALEL 4ROLLROT INDEX@ * 360DE
+          PUTREALEL NextInArray ROTDROPSWAP ;    * 36101
 
 * [F%] [F%]' -> [F%]''
 * refs (1): 1AC20
 MAT+:
-        ::                                       * 36115
-          '                                      * 3611A
-          L%+                                    * 3611F
-          DUP                                    * 36124
+        :: ' L%+ DUP                             * 36115
 
 * refs (1): 362A0
 OBJ_36129:
-          ::                                     * 36129
-            2SWAP                                * 3612E
-            idsize(2ar)?                         * 36133
-            OBJ_35AEE                            * 36138
-            OBJ_3615B                            * 3613D
-            OBJ_36197                            * 36142
-            OBJ_361A6                            * 36147
-            OBJ_3615B                            * 3614C
-          ;                                      * 36151
+          :: 2SWAP idsize(2ar)? OBJ_35AEE OBJ_3615B OBJ_36197 OBJ_361A6 * 36129
+            OBJ_3615B ;                          * 3614C
         ;                                        * 36156
 
 * refs (2): 3613D 3614C
 OBJ_3615B:
-        ::                                       * 3615B
-          2DUPEQ                                 * 36160
-          casedrop                               * 36165
-          ::                                     * 3616A
-            ROTDROP                              * 3616F
-            CKREF                                * 36174
-            DUP                                  * 36179
-            DOARRYPRG2                           * 3617E
-          ;                                      * 36183
-          INTEMNOTREF?                           * 36188
-          case                                   * 3618D
-          OBJ_361A6                              * 36192
+        :: 2DUPEQ casedrop                       * 3615B
+          :: ROTDROP CKREF DUP DOARRYPRG2 ;      * 3616A
+          INTEMNOTREF? case OBJ_361A6            * 36188
 
 * refs (1): 36142
 OBJ_36197:
-          ::                                     * 36197
-            SWAPROT                              * 3619C
-            4UNROLL                              * 361A1
+          :: SWAPROT 4UNROLL                     * 36197
 
 * refs (2): 36147 36192
 OBJ_361A6:
-            ::                                   * 361A6
-              ROTDROP                            * 361AB
-              CKREF                              * 361B0
-              DOARRYPRG2                         * 361B5
-            ;                                    * 361BA
-          ;                                      * 361BF
+            :: ROTDROP CKREF DOARRYPRG2 ; ;      * 361A6
         ;                                        * 361C4
 
 * refs (1): 20522
 1@+(2ar):
-        ::                                       * 361C9
-          '                                      * 361CE
-          L%+                                    * 361D3
+        :: ' L%+                                 * 361C9
 
 * refs (2): 362B9 362D2
 OBJ_361D8:
-          ::                                     * 361D8
-            3UNROLL                              * 361DD
-            idsize(2ar)?                         * 361E2
-            OBJ_35AEE                            * 361E7
-            OBJ_361FB                            * 361EC
-            OBJ_36241                            * 361F1
-            OBJ_3620A                            * 361F6
+          :: 3UNROLL idsize(2ar)? OBJ_35AEE OBJ_361FB OBJ_36241 OBJ_3620A * 361D8
 
 * refs (1): 361EC
 OBJ_361FB:
-            ::                                   * 361FB
-              2DUPEQ                             * 36200
-              NOTcase                            * 36205
+            :: 2DUPEQ NOTcase                    * 361FB
 
 * refs (1): 361F6
 OBJ_3620A:
-              ::                                 * 3620A
-                FreeRefs                         * 3620F
-                DOARRYPRG2                       * 36214
-              ;                                  * 36219
-              DROP                               * 3621E
-              FreeRefs                           * 36223
-              DUP                                * 36228
-              DOARRYPRG2                         * 3622D
-            ;                                    * 36232
+              :: FreeRefs DOARRYPRG2 ;           * 3620A
+              DROP FreeRefs DUP DOARRYPRG2 ;     * 3621E
           ;                                      * 36237
         ;                                        * 3623C
 
 * refs (1): 361F1
 OBJ_36241:
-        ::                                       * 36241
-          TOTEMPOBADJ                            * 36246
-          ROTSWAP                                * 3624B
-          REPLACE                                * 36250
-          '                                      * 36255
-          SWAP                                   * 3625A
-          4ROLL                                  * 3625F
-          2Ob>Seco                               * 36264
-          3UNROLL                                * 36269
-          DOARRYPRG2                             * 3626E
-        ;                                        * 36273
+        :: TOTEMPOBADJ ROTSWAP REPLACE ' SWAP 4ROLL 2Ob>Seco 3UNROLL * 36241
+          DOARRYPRG2 ;                           * 3626E
 
 * [F%] [F%]' -> [F%]''
 * refs (1): 1AD5E
 MAT-:
-        ::                                       * 36278
-          '                                      * 3627D
-          L%-                                    * 36282
-          '                                      * 36287
+        :: ' L%- '                               * 36278
 
 * refs (1): 362CD
 OBJ_3628C:
-          ::                                     * 3628C
-            SWAP                                 * 36291
-            L%-                                  * 36296
-          ;                                      * 3629B
-          OBJ_36129                              * 362A0
-        ;                                        * 362A5
+          :: SWAP L%- ; OBJ_36129 ;              * 3628C
 
 * refs (1): 205D3
 1@-(2ar):
-        ::                                       * 362AA
-          '                                      * 362AF
-          L%-                                    * 362B4
-          OBJ_361D8                              * 362B9
-        ;                                        * 362BE
+        :: ' L%- OBJ_361D8 ;                     * 362AA
 
 * refs (1): 205F6
 2@-(2ar):
-        ::                                       * 362C3
-          SWAP'                                  * 362C8
-          OBJ_3628C                              * 362CD
-          OBJ_361D8                              * 362D2
-        ;                                        * 362D7
+        :: SWAP' OBJ_3628C OBJ_361D8 ;           * 362C3
 
 * [F%] F% -> [F%]'
 * refs (4): 1AE43 1AE4D 1AE57 1AE61
 MATFLOAT*:
-        ::                                       * 362DC
-          '                                      * 362E1
+        :: '                                     * 362DC
 
 * refs (1): 36336
 OBJ_362E6:
-          ::                                     * 362E6
-            4PICK                                * 362EB
-            L%*                                  * 362F0
-          ;                                      * 362F5
+          :: 4PICK L%* ;                         * 362E6
 
 * refs (1): 363FE
 OBJ_362FA:
-          ::                                     * 362FA
-            UNROTDUP                             * 362FF
-            TYPEARRAY?                           * 36304
-            ?SKIPSWAP                            * 36309
-            OBJ_36395                            * 3630E
-            3UNROLL                              * 36313
-            DOARRYPRG1                           * 36318
-            SWAPDROP                             * 3631D
-          ;                                      * 36322
+          :: UNROTDUP TYPEARRAY? ?SKIPSWAP OBJ_36395 3UNROLL DOARRYPRG1 * 362FA
+            SWAPDROP ;                           * 3631D
         ;                                        * 36327
 
 * refs (1): 2085C
 1@*(nb,ar):
-        ::                                       * 3632C
-          '                                      * 36331
-          OBJ_362E6                              * 36336
+        :: ' OBJ_362E6                           * 3632C
 
 * refs (1): 3641C
 OBJ_3633B:
-          ::                                     * 3633B
-            3UNROLL                              * 36340
-            OBJ_3639A                            * 36345
-            ITE                                  * 3634A
-            FreeRefs                             * 3634F
-            ::                                   * 36354
-              DUP                                * 36359
-              r->c(ar)                           * 3635E
-              OBJ_35C18                          * 36363
-              REPLACE                            * 36368
-            ;                                    * 3636D
-            SWAP                                 * 36372
-            F%>L%                                * 36377
-            3UNROLL                              * 3637C
-            DOARRYPRG1                           * 36381
-            SWAPDROP                             * 36386
-          ;                                      * 3638B
+          :: 3UNROLL OBJ_3639A ITE FreeRefs      * 3633B
+            :: DUP r->c(ar) OBJ_35C18 REPLACE ;  * 36354
+            SWAP F%>L% 3UNROLL DOARRYPRG1 SWAPDROP ; * 36372
         ;                                        * 36390
 
 * refs (3): 3630E CBCE1 CBD9F
@@ -250,364 +118,133 @@ OBJ_36395:
 
 * refs (1): 36345
 OBJ_3639A:
-          ::                                     * 3639A
-            OVER                                 * 3639F
-            TYPEREAL?                            * 363A4
-            OVER                                 * 363A9
-            TYPECARRY?                           * 363AE
-            OR                                   * 363B3
-          ;                                      * 363B8
-          ITE                                    * 363BD
-          CKREF                                  * 363C2
-          r->c(ar)                               * 363C7
-          SWAP                                   * 363CC
-          F%>L%                                  * 363D1
-        ;                                        * 363D6
+          :: OVER TYPEREAL? OVER TYPECARRY? OR ; ITE CKREF r->c(ar) * 3639A
+          SWAP F%>L% ;                           * 363CC
 
 * [F%] F% -> [F%]'
 * refs (2): 1AF5A 1AF64
 MATFLOAT/:
-        ::                                       * 363DB
-          dup;=0?:UR!                            * 363E0
-          '                                      * 363E5
+        :: dup;=0?:UR! '                         * 363DB
 
 * refs (1): 36417
 OBJ_363EA:
-          ::                                     * 363EA
-            4PICK                                * 363EF
-            L%/                                  * 363F4
-          ;                                      * 363F9
-          OBJ_362FA                              * 363FE
-        ;                                        * 36403
+          :: 4PICK L%/ ; OBJ_362FA ;             * 363EA
 
 * refs (1): 206D9
 1@/(ar,nb):
-        ::                                       * 36408
-          dup;=0?:UR!                            * 3640D
-          SWAP'                                  * 36412
-          OBJ_363EA                              * 36417
-          OBJ_3633B                              * 3641C
-        ;                                        * 36421
+        :: dup;=0?:UR! SWAP' OBJ_363EA OBJ_3633B ; * 36408
 
 * refs (2): 363E0 3640D
 dup;=0?:UR!:
-        ::                                       * 36426
-          DUP                                    * 3642B
-          =0?(nb)                                * 36430
-          case2drop                              * 36435
-          SETIVLERR                              * 3643A
+        :: DUP =0?(nb) case2drop SETIVLERR       * 36426
         ;                                        * 3643F
 
 * [F%] -> [F%]'
 * refs (1): 1B449
 MATSQ:
-        ::                                       * 36444
-          DUP                                    * 36449
+        :: DUP                                   * 36444
 
 * [F%] [F%]' -> [F%]''
 * refs (2): 1AE6B B4E25
 MAT*:
-          ::                                     * 3644E
-            dup2;*(2ar)                          * 36453
-            ROTROT2DROP                          * 36458
-          ;                                      * 3645D
-        ;                                        * 36462
+          :: dup2;*(2ar) ROTROT2DROP ; ;         * 3644E
 
 * refs (1): 2089D
 1@*(2ar):
-        ::                                       * 36467
-          dup2;*(2ar)                            * 3646C
-          ROTDROPSWAP                            * 36471
-          FreeRefs                               * 36476
-          REPLACE                                * 3647B
-        ;                                        * 36480
+        :: dup2;*(2ar) ROTDROPSWAP FreeRefs REPLACE ; * 36467
 
 * refs (1): 208DE
 2@*(2ar):
-        ::                                       * 36485
-          dup2;*(2ar)                            * 3648A
-          SWAPDROPSWAP                           * 3648F
-          FreeRefs                               * 36494
-          REPLACE                                * 36499
-        ;                                        * 3649E
+        :: dup2;*(2ar) SWAPDROPSWAP FreeRefs REPLACE ; * 36485
 
 * refs (3): 36453 3646C 3648A
 dup2;*(2ar):
-        ::                                       * 364A3
-          0ChkType(2ar)                          * 364A8
-          3PICK                                  * 364AD
-          MDIMS                                  * 364B2
-          OBJ_37DE1                              * 364B7
-          4PICK                                  * 364BC
-          MDIMS                                  * 364C1
-          ITE                                    * 364C6
+        :: 0ChkType(2ar) 3PICK MDIMS OBJ_37DE1 4PICK MDIMS ITE * 364A3
 
 4pick;over;<2>:
-          ::                                     * 364CB
-            4PICKOVER                            * 364D0
-            BINT2                                * 364D5
-          ;                                      * 364DA
-          ::                                     * 364DF
-            BINT1                                * 364E4
-            4PICKOVER                            * 364E9
-          ;                                      * 364EE
-          {}N                                    * 364F3
-          ROT                                    * 364F8
-          4PICK                                  * 364FD
-          #=                                     * 36502
-          OBJ_37DE1                              * 36507
-          5ROLL                                  * 3650C
-          MAKEARRY                               * 36511
-          OBJ_36525                              * 36516
-          ROTSWAP                                * 3651B
-        ;                                        * 36520
+          :: 4PICKOVER BINT2 ;                   * 364CB
+          :: BINT1 4PICKOVER ;                   * 364DF
+          {}N ROT 4PICK #= OBJ_37DE1 5ROLL MAKEARRY OBJ_36525 ROTSWAP ; * 364F3
 
 * refs (2): 36516 36679
 OBJ_36525:
-        ::                                       * 36525
-          BINT1                                  * 3652A
-          7ROLL                                  * 3652F
-          7ROLL                                  * 36534
-          7ROLL                                  * 36539
-          7PICK                                  * 3653E
-          #*                                     * 36543
-          #1+_ONE_DO                             * 36548
-          5PICK                                  * 3654D
-          #1+_ONE_DO                             * 36552
-          JINDEX@                                * 36557
-          INDEX@                                 * 3655C
-          8PICK                                  * 36561
-          OBJ_3582F                              * 36566
-          5ROLL                                  * 3656B
-          5ROLL                                  * 36570
-          DUP#1+                                 * 36575
-          6UNROLL                                * 3657A
-          3@REVAL                                * 3657F
-          PUTEL                                  * 36584
-          4UNROLL                                * 36589
-          NextInArray                            * 3658E
-          6PICK                                  * 36593
-          +LOOP                                  * 36598
-          5ROLLDROP                              * 3659D
-          5ROLLDROP                              * 365A2
-          2SWAP                                  * 365A7
-          DROP                                   * 365AC
-          COLASKIP                               * 365B1
-        ;                                        * 365B6
+        :: BINT1 7ROLL 7ROLL 7ROLL 7PICK #* #1+_ONE_DO 5PICK #1+_ONE_DO * 36525
+          JINDEX@ INDEX@ 8PICK OBJ_3582F 5ROLL 5ROLL DUP#1+ 6UNROLL 3@REVAL * 36557
+          PUTEL 4UNROLL NextInArray 6PICK +LOOP 5ROLLDROP 5ROLLDROP 2SWAP * 36584
+          DROP COLASKIP ;                        * 365AC
 
 * [F%] [F%] [F%] -> [F%]
 * refs (1): 1C04D
 MATRSD:
-        ::                                       * 365BB
-          OVER                                   * 365C0
-          MDIMS                                  * 365C5
-          OBJ_37DE1                              * 365CA
-          3PICK                                  * 365CF
-          MDIMS                                  * 365D4
-          ITE                                    * 365D9
-          ::                                     * 365DE
-            SWAP3PICK                            * 365E3
-            #=                                   * 365E8
-            OBJ_37DE1                            * 365ED
-            6PICK                                * 365F2
-            MDIMS                                * 365F7
-            OBJ_37DE1                            * 365FC
-            3PICK                                * 36601
-            #=                                   * 36606
-            OBJ_37DE1                            * 3660B
-            4PICK                                * 36610
-            #=                                   * 36615
-            OBJ_37DE1                            * 3661A
-          ;                                      * 3661F
-          ::                                     * 36624
-            OVER#=                               * 36629
-            OBJ_37DE1                            * 3662E
-            5PICK                                * 36633
-            MDIMS                                * 36638
-            NOT                                  * 3663D
-            OBJ_37DE1                            * 36642
-            3PICK                                * 36647
-            #=                                   * 3664C
-            OBJ_37DE1                            * 36651
-            BINT1                                * 36656
-          ;                                      * 3665B
-          6ROLL                                  * 36660
-          6PICK                                  * 36665
-          6PICK                                  * 3666A
-          OBJ_366AB                              * 3666F
-          ROTROT2DROP                            * 36674
-          OBJ_36525                              * 36679
-          ::                                     * 3667E
-            DUPUNROT                             * 36683
-            PULLLONGEL                           * 36688
-            4ROLL                                * 3668D
-            L%-                                  * 36692
-            ROT                                  * 36697
-          ;                                      * 3669C
-          ROTROT2DROP                            * 366A1
-        ;                                        * 366A6
+        :: OVER MDIMS OBJ_37DE1 3PICK MDIMS ITE  * 365BB
+          :: SWAP3PICK #= OBJ_37DE1 6PICK MDIMS OBJ_37DE1 3PICK #= OBJ_37DE1 * 365DE
+            4PICK #= OBJ_37DE1 ;                 * 36610
+          :: OVER#= OBJ_37DE1 5PICK MDIMS NOT OBJ_37DE1 3PICK #= OBJ_37DE1 * 36624
+            BINT1 ;                              * 36656
+          6ROLL 6PICK 6PICK OBJ_366AB ROTROT2DROP OBJ_36525 * 36660
+          :: DUPUNROT PULLLONGEL 4ROLL L%- ROT ; ROTROT2DROP ; * 3667E
 
 * refs (1): 3666F
 OBJ_366AB:
-        ::                                       * 366AB
-          OBJ_35AEE                              * 366B0
-          rot;NewobIfNotFree                     * 366B5
-          OBJ_366E2                              * 366BA
-          OBJ_366E2                              * 366BF
-          OBJ_366E2                              * 366C4
-        ;                                        * 366C9
+        :: OBJ_35AEE rot;NewobIfNotFree OBJ_366E2 OBJ_366E2 OBJ_366E2 ; * 366AB
 
 * refs (5): 366B5 4F99E 4F9F8 CBBFF CBC78
 rot;NewobIfNotFree:
-        ::                                       * 366CE
-          ROT                                    * 366D3
-          CKREF                                  * 366D8
-        ;                                        * 366DD
+        :: ROT CKREF ;                           * 366CE
 
 * refs (3): 366BA 366BF 366C4
 OBJ_366E2:
-        ::                                       * 366E2
-          ROTDUP                                 * 366E7
-          TYPERARRY?                             * 366EC
-          case                                   * 366F1
-          r->c(ar)                               * 366F6
-          CKREF                                  * 366FB
-        ;                                        * 36700
+        :: ROTDUP TYPERARRY? case r->c(ar)       * 366E2
+          CKREF ;                                * 366FB
 
 * [F%] [F%]' -> F%
 * refs (1): 1C00D
 MATDOT:
-        ::                                       * 36705
-          OVERARSIZE                             * 3670A
-          OVERARSIZE                             * 3670F
-          OVER#=                                 * 36714
-          OBJ_37DE1                              * 36719
-          %%0                                    * 3671E
-          SWAP                                   * 36723
-          #1+_ONE_DO                             * 36728
-          INDEX@                                 * 3672D
-          4ROLLOVER                              * 36732
-          PULLLONGEL                             * 36737
-          5ROLL                                  * 3673C
-          4ROLL                                  * 36741
-          PULLLONGEL                             * 36746
-          ROT                                    * 3674B
-          L%*                                    * 36750
-          4ROLL                                  * 36755
-          L%+                                    * 3675A
-          NextInArray                            * 3675F
-          ROTROT2DROP                            * 36764
+        :: OVERARSIZE OVERARSIZE OVER#= OBJ_37DE1 %%0 SWAP #1+_ONE_DO INDEX@ * 36705
+          4ROLLOVER PULLLONGEL 5ROLL 4ROLL PULLLONGEL ROT L%* 4ROLL L%+ * 36732
+          NextInArray ROTROT2DROP                * 3675F
 
 * refs (4): 36A8A 97968 97F17 CBA04
 ToNorm(nb):
-          ::                                     * 36769
-            SWITCHFLOATS                         * 3676E
-            NOP                                  * 36773
-            NOP                                  * 36778
-            %%>%                                 * 3677D
-            C%%>C%                               * 36782
-          ;                                      * 36787
-        ;                                        * 3678C
+          :: SWITCHFLOATS NOP NOP %%>% C%%>C% ; ; * 36769
 
 * [F%] [F%]' -> [F%]''
 * refs (1): 1C02D
 MATCROSS:
-        ::                                       * 36791
-          OBJ_3689A                              * 36796
-          OBJ_3689A                              * 3679B
-          0ChkType(2ar)                          * 367A0
+        :: OBJ_3689A OBJ_3689A 0ChkType(2ar)     * 36791
 
 {<3>}:
-          {                                      * 367A5
-            BINT3                                * 367AA
-          }                                      * 367AF
-          SWAP                                   * 367B4
-          MAKEARRY                               * 367B9
-          BINT2                                  * 367BE
-          BINT3                                  * 367C3
+          { BINT3 } SWAP MAKEARRY BINT2 BINT3    * 367A5
 
 * refs (2): 36845 3685E
 OBJ_367C8:
-          ::                                     * 367C8
-            5PICK                                * 367CD
+          :: 5PICK                               * 367C8
 
 * refs (3): 367FF 36A62 36A7B
 OBJ_367D2:
-            ::                                   * 367D2
-              3PICK                              * 367D7
-              PULLLONGEL                         * 367DC
-              SWAP3PICK                          * 367E1
-              PULLLONGEL                         * 367E6
-              SWAPDROP                           * 367EB
-              2SWAP                              * 367F0
-            ;                                    * 367F5
-            6PICK                                * 367FA
-            OBJ_367D2                            * 367FF
-            2DROP                                * 36804
+            :: 3PICK PULLLONGEL SWAP3PICK PULLLONGEL SWAPDROP 2SWAP ; 6PICK * 367D2
+            OBJ_367D2 2DROP                      * 367FF
 
 * refs (1): 36A85
 OBJ_36809:
-            ::                                   * 36809
-              4ROLL                              * 3680E
-              L%*                                * 36813
-              3UNROLL                            * 36818
-              L%*                                * 3681D
-              L%-                                * 36822
-            ;                                    * 36827
-          ;                                      * 3682C
-          BINT1                                  * 36831
-          PUTEL                                  * 36836
-          BINT3                                  * 3683B
-          BINT1                                  * 36840
-          OBJ_367C8                              * 36845
-          BINT2                                  * 3684A
-          PUTEL                                  * 3684F
-          BINT1                                  * 36854
-          BINT2                                  * 36859
-          OBJ_367C8                              * 3685E
-          BINT3                                  * 36863
-          PUTEL                                  * 36868
-          ROTROT2DROP                            * 3686D
-        ;                                        * 36872
+            :: 4ROLL L%* 3UNROLL L%* L%- ; ;     * 36809
+          BINT1 PUTEL BINT3 BINT1 OBJ_367C8 BINT2 PUTEL BINT1 BINT2 * 36831
+          OBJ_367C8 BINT3 PUTEL ROTROT2DROP ;    * 3685E
 
 * refs (2): 364A8 367A0
 0ChkType(2ar):
-        ::                                       * 36877
-          OBJ_35AEE                              * 3687C
-          %0_2A2B4                               * 36881
-          C%0                                    * 36886
-          C%0                                    * 3688B
-          C%0                                    * 36890
-        ;                                        * 36895
+        :: OBJ_35AEE %0_2A2B4 C%0 C%0 C%0 ;      * 36877
 
 * refs (2): 36796 3679B
 OBJ_3689A:
-        ::                                       * 3689A
-          SWAPDUP                                * 3689F
-          MDIMS                                  * 368A4
-          NOT                                    * 368A9
-          OBJ_37DE1                              * 368AE
-          DUP                                    * 368B3
-          #3=                                    * 368B8
-          caseDROP                               * 368BD
-          #2=                                    * 368C2
-          NOTcase                                * 368C7
-          doerr501                               * 368CC
-          DOARRY>                                * 368D1
-          DROP%0                                 * 368D6
-          {                                      * 368DB
-            %3                                   * 368E0
-          }                                      * 368E5
-          XEQ>ARRAY                              * 368EA
-        ;                                        * 368EF
+        :: SWAPDUP MDIMS NOT OBJ_37DE1 DUP #3= caseDROP #2= * 3689A
+          NOTcase doerr501                       * 368C7
+          DOARRY> DROP%0                         * 368D1
+          { %3 } XEQ>ARRAY ;                     * 368DB
 
 * refs (1): 1BFAD
 MATRNRM:
-        ::                                       * 368F4
-          OBJ_36930                              * 368F9
-          NOP                                    * 368FE
-          %%>%                                   * 36903
-        ;                                        * 36908
+        :: OBJ_36930 NOP %%>% ;                  * 368F4
 
 * [F%] -> F%
 * refs (1): 1BFCD
@@ -616,115 +253,45 @@ MATCNRM:
 
 * refs (4): 97981 C7CB2 C9484 CA45F
 OBJ_36912:
-          ::                                     * 36912
-            OBJ_36930                            * 36917
-            2SWAP                                * 3691C
-          ;                                      * 36921
-          %%>%                                   * 36926
-        ;                                        * 3692B
+          :: OBJ_36930 2SWAP ; %%>% ;            * 36912
 
 * refs (2): 368F9 36917
 OBJ_36930:
-        ::                                       * 36930
-          BINT1                                  * 36935
-          OVER                                   * 3693A
-          MDIMS                                  * 3693F
-          ?SKIP                                  * 36944
-          BINT1                                  * 36949
-          SWAPDROPDUP                            * 3694E
-          4PICK                                  * 36953
-          ARSIZE                                 * 36958
-          'REVAL                                 * 3695D
-          5ROLL                                  * 36962
-          %%0                                    * 36967
-          ROT                                    * 3696C
-          #1+_ONE_DO                             * 36971
-          %%0                                    * 36976
-          ROT                                    * 3697B
-          INDEX@                                 * 36980
-          DUP                                    * 36985
-          7PICK                                  * 3698A
-          #+SWAP                                 * 3698F
-          DO                                     * 36994
-          INDEX@                                 * 36999
-          PULLLONGEL                             * 3699E
-          B%ABS                                  * 369A3
-          ROT                                    * 369A8
-          %%+                                    * 369AD
-          SWAP                                   * 369B2
-          6PICK                                  * 369B7
-          OBJ_357F0                              * 369BC
-          +LOOP                                  * 369C1
-          3UNROLL                                * 369C6
-          %%MAX                                  * 369CB
-          3PICK                                  * 369D0
-          +LOOP                                  * 369D5
-          5UNROLL                                * 369DA
-          4DROP                                  * 369DF
-        ;                                        * 369E4
+        :: BINT1 OVER MDIMS ?SKIP BINT1          * 36930
+          SWAPDROPDUP 4PICK ARSIZE 'REVAL 5ROLL %%0 ROT #1+_ONE_DO %%0 ROT * 3694E
+          INDEX@ DUP 7PICK #+SWAP DO INDEX@ PULLLONGEL B%ABS ROT %%+ SWAP * 36980
+          6PICK OBJ_357F0 +LOOP 3UNROLL %%MAX 3PICK +LOOP 5UNROLL 4DROP ; * 369B7
 
 * [F%] -> F%
 * refs (2): 1AA42 952C1
 MATABS:
-        ::                                       * 369E9
-          %%0                                    * 369EE
-          OVERARSIZE                             * 369F3
-          3PICK                                  * 369F8
-          TYPERARRY?                             * 369FD
-          ?SKIP                                  * 36A02
-          #2*                                    * 36A07
-          #1+_ONE_DO                             * 36A0C
-          SWAPINDEX@                             * 36A11
-          PULLREALEL                             * 36A16
-          DUP                                    * 36A1B
-          _*(2r);r=>rr                           * 36A20
-          ROT                                    * 36A25
-          %%+                                    * 36A2A
-          NextInArray                            * 36A2F
-          SWAPDROP                               * 36A34
-          %%SQRT                                 * 36A39
-          %%>%                                   * 36A3E
-        ;                                        * 36A43
+        :: %%0 OVERARSIZE 3PICK TYPERARRY? ?SKIP #2* * 369E9
+          #1+_ONE_DO SWAPINDEX@ PULLREALEL DUP _*(2r);r=>rr ROT %%+ * 36A0C
+          NextInArray SWAPDROP %%SQRT %%>% ;     * 36A2F
 
 * [F%] -> F%
 * refs (1): 1BFED
 MATDET:
-        ROMPTR  0C2 051                          * 36A48
+        ROMPTR 0C2 051                           * 36A48
 
 * refs (1): 97ED9
 OBJ_36A53:
-        ::                                       * 36A53
-          BINT1                                  * 36A58
-          SWAP3PICK                              * 36A5D
-          OBJ_367D2                              * 36A62
-          2DROP                                  * 36A67
-          BINT3                                  * 36A6C
-          BINT4                                  * 36A71
-          5PICK                                  * 36A76
-          OBJ_367D2                              * 36A7B
-          2DROP                                  * 36A80
-          OBJ_36809                              * 36A85
-          ToNorm(nb)                             * 36A8A
-          SWAPDROP                               * 36A8F
-        ;                                        * 36A94
+        :: BINT1 SWAP3PICK OBJ_367D2 2DROP BINT3 BINT4 5PICK OBJ_367D2 2DROP * 36A53
+          OBJ_36809 ToNorm(nb) SWAPDROP ;        * 36A85
 
 * [F%] -> [F%]'
 * refs (1): 1B29B
 MATINV:
-        ROMPTR  0C2 055                          * 36A99
+        ROMPTR 0C2 055                           * 36A99
 
 * refs (1): 20337
 @inv(ar):
-        ::                                       * 36AA4
-          sqmat(ar)?                             * 36AA9
-          OBJ_35C18                              * 36AAE
-          ROMPTR  0C2 056                        * 36AB3
-        ;                                        * 36ABE
+        :: sqmat(ar)? OBJ_35C18 ROMPTR 0C2 056 ; * 36AA4
 
 * [F%] [F%]' -> [F%]''
 * refs (1): 1AF6E
 MAT/:
-        ROMPTR  0C2 053                          * 36AC3
+        ROMPTR 0C2 053                           * 36AC3
 
 * refs (1): 2071A
 1@/(2ar):
@@ -732,327 +299,166 @@ MAT/:
 
 * refs (2): 36B60 97FB9
 OBJ_36AD3:
-          ::                                     * 36AD3
-            sqmat(ar)?                           * 36AD8
-            3PICK                                * 36ADD
-            MDIMS                                * 36AE2
-            ?SKIP                                * 36AE7
-            BINT1                                * 36AEC
-            SWAP3PICK                            * 36AF1
-            #=                                   * 36AF6
-            OBJ_37DE1                            * 36AFB
-            2SWAP                                * 36B00
-          ;                                      * 36B05
-          FreeRefs                               * 36B0A
-          SWAP                                   * 36B0F
+          :: sqmat(ar)? 3PICK MDIMS ?SKIP BINT1  * 36AD3
+            SWAP3PICK #= OBJ_37DE1 2SWAP ;       * 36AF1
+          FreeRefs SWAP                          * 36B0A
 
 * refs (2): 937E2 97FC3
 OBJ_36B14:
-          ::                                     * 36B14
-            OBJ_35AEE                            * 36B19
-            CKREF                                * 36B1E
-            r->c(ar)                             * 36B23
-            CKREF                                * 36B28
-            CKREF                                * 36B2D
-          ;                                      * 36B32
-          OVER                                   * 36B37
-          5UNROLL                                * 36B3C
-          ROMPTR  0C2 054                        * 36B41
-          SWAP                                   * 36B4C
-          REPLACE                                * 36B51
-        ;                                        * 36B56
+          :: OBJ_35AEE CKREF r->c(ar) CKREF CKREF ; OVER 5UNROLL * 36B14
+          ROMPTR 0C2 054 SWAP REPLACE ;          * 36B41
 
 * refs (1): 2073D
 2@/(2ar):
-        ::                                       * 36B5B
-          OBJ_36AD3                              * 36B60
-          CKREF                                  * 36B65
-          SWAP                                   * 36B6A
-          OBJ_35AEE                              * 36B6F
-          OBJ_36B8D                              * 36B74
-          OBJ_36BA7                              * 36B79
-          OBJ_36B8D                              * 36B7E
-          OBJ_36B8D                              * 36B83
-        ;                                        * 36B88
+        :: OBJ_36AD3 CKREF SWAP OBJ_35AEE OBJ_36B8D OBJ_36BA7 OBJ_36B8D * 36B5B
+          OBJ_36B8D ;                            * 36B83
 
 * refs (3): 36B74 36B7E 36B83
 OBJ_36B8D:
-        ::                                       * 36B8D
-          FreeRefs                               * 36B92
-          ROMPTR  0C2 054                        * 36B97
-        ;                                        * 36BA2
+        :: FreeRefs ROMPTR 0C2 054 ;             * 36B8D
 
 * refs (1): 36B79
 OBJ_36BA7:
-        ::                                       * 36BA7
-          FreeRefs                               * 36BAC
-          DUP                                    * 36BB1
-          r->c(ar)                               * 36BB6
-          SWAP                                   * 36BBB
-          REPLACE                                * 36BC0
-          ROMPTR  0C2 054                        * 36BC5
-        ;                                        * 36BD0
+        :: FreeRefs DUP r->c(ar) SWAP REPLACE ROMPTR 0C2 054 ; * 36BA7
 
 * refs (3): 92ED0 9662D 96637
 OBJ_36BD5:
-        ::                                       * 36BD5
-          %%0>=                                  * 36BDA
-          ?SEMI                                  * 36BDF
-          %%CHS                                  * 36BE4
-        ;                                        * 36BE9
+        :: %%0>= ?SEMI                           * 36BD5
+          %%CHS ;                                * 36BE4
 
 * refs (2): 911F3 915DB
 OBJ_36BEE:
-        ::                                       * 36BEE
-          %%0<                                   * 36BF3
-          ?SEMI                                  * 36BF8
-          %%CHS                                  * 36BFD
-        ;                                        * 36C02
+        :: %%0< ?SEMI                            * 36BEE
+          %%CHS ;                                * 36BFD
 
 * refs (5): 9062E 93EF2 9442F 95919 95AFE
 OBJ_36C07:
-        ::                                       * 36C07
-          %%0<                                   * 36C0C
-          ?SEMI                                  * 36C11
-          ROT                                    * 36C16
-          %%CHS                                  * 36C1B
-          3UNROLL                                * 36C20
-        ;                                        * 36C25
+        :: %%0< ?SEMI                            * 36C07
+          ROT %%CHS 3UNROLL ;                    * 36C16
 
 * refs (9): 965A6 965B0 965BF 965DD 965E7 965F1 ...
 OBJ_36C2A:
-        ::                                       * 36C2A
-          %%0>=                                  * 36C2F
-          ?SEMI                                  * 36C34
-          %%CHS                                  * 36C39
-          SWAP                                   * 36C3E
-          %%CHS                                  * 36C43
-          SWAP                                   * 36C48
-        ;                                        * 36C4D
+        :: %%0>= ?SEMI                           * 36C2A
+          %%CHS SWAP %%CHS SWAP ;                * 36C39
 
 * refs (2): 94A40 953B9
 OBJ_36C52:
-        ::                                       * 36C52
-          BINT54                                 * 36C57
-          TestSysFlag                            * 36C5C
-          ITE                                    * 36C61
-          %%0                                    * 36C66
-          %%1E-14                                * 36C6B
+        :: BINT54 TestSysFlag ITE %%0 %%1E-14    * 36C52
         ;                                        * 36C70
 
 * refs (19): 37A27 7CDA1 900C2 90169 90178 903C2 ...
 ((0,0)):
-        C%%     0E0 0E0                          * 36C75
+        C%% 0E0 0E0                              * 36C75
 
 * refs (2): 37AD6 CAC45
 %%-1:
-        %%      -1E0                             * 36CA4
+        %% -1E0                                  * 36CA4
 
 * refs (1): 92218
 %%1E-514:
-        %%      1E-514                           * 36CBE
+        %% 1E-514                                * 36CBE
 
 * refs (11): 36C6B 9220E 928A3 928B2 94B80 94BE9 ...
 %%1E-14:
-        %%      1E-14                            * 36CD8
+        %% 1E-14                                 * 36CD8
 
 * refs (6): 90D78 91135 91ED2 9302E 966E6 9685D
 %%1E-13:
-        %%      1E-13                            * 36CF2
+        %% 1E-13                                 * 36CF2
 
 * refs (3): 95F3E 96790 96907
 %%3E-13:
-        %%      3E-13                            * 36D0C
+        %% 3E-13                                 * 36D0C
 
 * refs (2): C9239 CA947
 OBJ_36D26:
-        ::                                       * 36D26
-          DUPUNROT                               * 36D2B
-          OBJ_36DDF                              * 36D30
+        :: DUPUNROT OBJ_36DDF                    * 36D26
 
 * refs (1): 36D76
 OBJ_36D35:
-          ::                                     * 36D35
-            %>%%                                 * 36D3A
-            %%+                                  * 36D3F
-            %%>%                                 * 36D44
-            SWAP                                 * 36D49
-            OBJ_36EBB                            * 36D4E
-          ;                                      * 36D53
-        ;                                        * 36D58
+          :: %>%% %%+ %%>% SWAP OBJ_36EBB ; ;    * 36D35
 
 * refs (2): C9229 CA937
 OBJ_36D5D:
-        ::                                       * 36D5D
-          DUPUNROT                               * 36D62
-          OBJ_36E5C                              * 36D67
-          DUPTYPEREAL?                           * 36D6C
-          case                                   * 36D71
-          OBJ_36D35                              * 36D76
-          TOTEMPOB                               * 36D7B
-          SWAP                                   * 36D80
-          OBJ_7D6D2                              * 36D85
-          SWAP                                   * 36D8A
-          OBJ_36EE3                              * 36D8F
-        ;                                        * 36D94
+        :: DUPUNROT OBJ_36E5C DUPTYPEREAL? case OBJ_36D35 * 36D5D
+          TOTEMPOB SWAP OBJ_7D6D2 SWAP OBJ_36EE3 ; * 36D7B
 
 * refs (3): 36DBC 36E25 36E4D
 OBJ_36D99:
-        ::                                       * 36D99
-          CRUNCH                                 * 36D9E
-          0LASTOWDOB!                            * 36DA3
-          ?ATTNQUIT                              * 36DA8
-          CK1NOLASTWD                            * 36DAD
-        ;                                        * 36DB2
+        :: CRUNCH 0LASTOWDOB! ?ATTNQUIT CK1NOLASTWD ; * 36D99
 
 * refs (15): 36DD5 C7C94 C8187 C82A6 C8360 C843E ...
 OBJ_36DB7:
-        ::                                       * 36DB7
-          OBJ_36D99                              * 36DBC
-          OBJ_36DF8                              * 36DC1
-        ;                                        * 36DC6
+        :: OBJ_36D99 OBJ_36DF8 ;                 * 36DB7
 
 * refs (6): C7BDE C8139 C9092 C93E7 C9744 CA62C
 OBJ_36DCB:
-        ::                                       * 36DCB
-          OBJ_36E93                              * 36DD0
-          OBJ_36DB7                              * 36DD5
-        ;                                        * 36DDA
+        :: OBJ_36E93 OBJ_36DB7 ;                 * 36DCB
 
 * refs (5): 36D30 C7A6A C7F7C C935E CAAB8
 OBJ_36DDF:
-        ::                                       * 36DDF
-          SAFE@_HERE                             * 36DE4
-          DROP                                   * 36DE9
-          OBJ_36DF8                              * 36DEE
-        ;                                        * 36DF3
+        :: SAFE@_HERE DROP OBJ_36DF8 ;           * 36DDF
 
 * refs (3): 36DC1 36DEE 36E89
 OBJ_36DF8:
-        ::                                       * 36DF8
-          DUPTYPEREAL?                           * 36DFD
-          ?SEMI                                  * 36E02
-          DUPTYPEEXT?                            * 36E07
-          NOTcase                                * 36E0C
-          SETTYPEERR                             * 36E11
-          U>nbr                                  * 36E16
-        ;                                        * 36E1B
+        :: DUPTYPEREAL? ?SEMI                    * 36DF8
+          DUPTYPEEXT? NOTcase SETTYPEERR         * 36E07
+          U>nbr ;                                * 36E16
 
 * refs (14): C7CAD C880A C8942 C8A15 C8B0C C8C21 ...
 OBJ_36E20:
-        ::                                       * 36E20
-          OBJ_36D99                              * 36E25
-          DUP                                    * 36E2A
-          TYPERARRY?                             * 36E2F
-          NOTcase                                * 36E34
-          SETTYPEERR                             * 36E39
+        :: OBJ_36D99 DUP TYPERARRY? NOTcase SETTYPEERR * 36E20
         ;                                        * 36E3E
 
 * refs (12): B5DDF B5EA9 C7C07 C814E C8FBB C90A7 ...
 OBJ_36E43:
-        ::                                       * 36E43
-          OBJ_36E93                              * 36E48
-          OBJ_36D99                              * 36E4D
-          OBJ_36E75                              * 36E52
-        ;                                        * 36E57
+        :: OBJ_36E93 OBJ_36D99 OBJ_36E75 ;       * 36E43
 
 * refs (3): 36D67 C7A7F C7F91
 OBJ_36E5C:
-        ::                                       * 36E5C
-          SAFE@_HERE                             * 36E61
-          DROP                                   * 36E66
-          OBJ_36E75                              * 36E6B
-        ;                                        * 36E70
+        :: SAFE@_HERE DROP OBJ_36E75 ;           * 36E5C
 
 * refs (2): 36E52 36E6B
 OBJ_36E75:
-        ::                                       * 36E75
-          DUP                                    * 36E7A
-          TYPERARRY?                             * 36E7F
-          ?SEMI                                  * 36E84
-          OBJ_36DF8                              * 36E89
-        ;                                        * 36E8E
+        :: DUP TYPERARRY? ?SEMI                  * 36E75
+          OBJ_36DF8 ;                            * 36E89
 
 * refs (2): 36DD0 36E48
 OBJ_36E93:
-        ::                                       * 36E93
-          dup;RclInVars(gn)?                     * 36E98
-          case                                   * 36E9D
-          SWAPDROP                               * 36EA2
-          %0_2A2B4                               * 36EA7
-          DUPROT                                 * 36EAC
-          OBJ_36EE3                              * 36EB1
-        ;                                        * 36EB6
+        :: dup;RclInVars(gn)? case SWAPDROP      * 36E93
+          %0_2A2B4 DUPROT OBJ_36EE3 ;            * 36EA7
 
 * refs (28): 36D4E C8253 C8296 C82E9 C8350 C83A3 ...
 OBJ_36EBB:
-        ::                                       * 36EBB
-          dup;RclInVars(gn)?                     * 36EC0
-          IT                                     * 36EC5
-          ::                                     * 36ECA
-            ROT                                  * 36ECF
-            Unbr>U                               * 36ED4
-            SWAP                                 * 36ED9
-          ;                                      * 36EDE
+        :: dup;RclInVars(gn)? IT                 * 36EBB
+          :: ROT Unbr>U SWAP ;                   * 36ECA
 
 * refs (11): 36D8F 36EB1 C8932 C8A05 C8AFC C8C11 ...
 OBJ_36EE3:
-          ::                                     * 36EE3
-            PTR     DoHere:                      * 36EE8
-            STO                                  * 36EED
-          ;                                      * 36EF2
-        ;                                        * 36EF7
+          :: PTR DoHere: STO ; ;                 * 36EE3
 
 * refs (3): C7A8E C7D77 C7FA0
 OBJ_36EFC:
-        ::                                       * 36EFC
-          4UNROLL                                * 36F01
-          OBJ_36F24                              * 36F06
-          3UNROLL                                * 36F0B
-          4ROLL                                  * 36F10
-          OBJ_36F24                              * 36F15
-          ROTROT2DROP                            * 36F1A
-        ;                                        * 36F1F
+        :: 4UNROLL OBJ_36F24 3UNROLL 4ROLL OBJ_36F24 ROTROT2DROP ; * 36EFC
 
 * refs (2): 36F06 36F15
 OBJ_36F24:
-        ::                                       * 36F24
-          DUP#0=                                 * 36F29
-          casedrop                               * 36F2E
-          OVER                                   * 36F33
-          OVER                                   * 36F38
-          TYPEREAL?                              * 36F3D
-          casedrop                               * 36F42
-          DUP                                    * 36F47
-          PULLEL                                 * 36F4C
-        ;                                        * 36F51
+        :: DUP#0= casedrop OVER                  * 36F24
+          OVER TYPEREAL? casedrop DUP            * 36F38
+          PULLEL ;                               * 36F4C
 
 * refs (4): C90C0 CA655 CA6F2 CA7A9
 OBJ_36F56:
-        ::                                       * 36F56
-          OBJ_3798C                              * 36F5B
-          case                                   * 36F60
-          %%ABS                                  * 36F65
-          OBJ_7D7A9                              * 36F6A
-        ;                                        * 36F6F
+        :: OBJ_3798C case %%ABS                  * 36F56
+          OBJ_7D7A9 ;                            * 36F6A
 
 * refs (5): CC059 CC0D3 CC202 CC295 CC569
 OBJ_36F74:
-        ::                                       * 36F74
-          OBJ_35AEE                              * 36F79
-          NOP                                    * 36F7E
-          r->c(ar)                               * 36F83
-          OBJ_36F97                              * 36F88
-          NOP                                    * 36F8D
-        ;                                        * 36F92
+        :: OBJ_35AEE NOP r->c(ar) OBJ_36F97 NOP ; * 36F74
 
 * refs (1): 36F88
 OBJ_36F97:
-        ::                                       * 36F97
-          SWAP                                   * 36F9C
-          r->c(ar)                               * 36FA1
-          SWAP                                   * 36FA6
-        ;                                        * 36FAB
+        :: SWAP r->c(ar) SWAP ;                  * 36F97
 
 * refs (12): 904F8 905A2 90778 90BBB 9100E 92CF0 ...
 OBJ_36FB0:
@@ -1955,259 +1361,122 @@ L_37934:
 
 * refs (1): 7CF81
 OBJ_37941:
-        ::                                       * 37941
-          OBJ_3798C                              * 37946
-          case                                   * 3794B
-          %%*                                    * 37950
-          SWAP2C%%>%%                            * 37955
-          2DUP                                   * 3795A
-          %%ANGLEDEG                             * 3795F
-          3UNROLL                                * 37964
-          %%SQR                                  * 37969
-          %%SQRT                                 * 3796E
-          4ROLL                                  * 37973
-          %%*UNROT                               * 37978
-          %%+                                    * 3797D
-          %%>C%%                                 * 37982
-        ;                                        * 37987
+        :: OBJ_3798C case %%*                    * 37941
+          SWAP2C%%>%% 2DUP %%ANGLEDEG 3UNROLL %%SQR %%SQRT 4ROLL %%*UNROT * 37955
+          %%+ %%>C%% ;                           * 3797D
 
 * refs (14): 36F5B 37946 37A77 37AE5 37D3C 37D6E ...
 OBJ_3798C:
-        ::                                       * 3798C
-          DUP                                    * 37991
-          TYPE                                   * 37996
-          TYPEEREL                               * 3799B
-          #=                                     * 379A0
-        ;                                        * 379A5
+        :: DUP TYPE TYPEEREL #= ;                * 3798C
 
 * refs (8): 3635E 363C7 366F6 36B23 36BB6 36F83 ...
 r->c(ar):
-        ::                                       * 379AA
-          DUP                                    * 379AF
-          DIMLIMITS                              * 379B4
-          C%0                                    * 379B9
-          MAKEARRY                               * 379BE
-          '                                      * 379C3
-          ::                                     * 379C8
-            DROP                                 * 379CD
-            %%0                                  * 379D2
-            %%>C%                                * 379D7
-          ;                                      * 379DC
-          3UNROLL                                * 379E1
-          DOARRYPRG2                             * 379E6
-        ;                                        * 379EB
+        :: DUP DIMLIMITS C%0 MAKEARRY '          * 379AA
+          :: DROP %%0 %%>C% ; 3UNROLL DOARRYPRG2 ; * 379C8
 
 * refs (10): 93A3F 93A9C 97DB2 CBE77 CBF8E CC139 ...
 OBJ_379F0:
-        ::                                       * 379F0
-          TYPERARRY?                             * 379F5
-          case                                   * 379FA
-          %0_2A2B4                               * 379FF
-          C%0                                    * 37A04
-        ;                                        * 37A09
+        :: TYPERARRY? case %0_2A2B4              * 379F0
+          C%0 ;                                  * 37A04
 
 * refs (3): 938FB 93A4E 97B02
 OBJ_37A0E:
-        ::                                       * 37A0E
-          prefix(ar)                             * 37A13
-          TYPEEREL                               * 37A18
-          #=case                                 * 37A1D
-          %%0                                    * 37A22
-          ((0,0))                                * 37A27
-        ;                                        * 37A2C
+        :: prefix(ar) TYPEEREL #=case %%0        * 37A0E
+          ((0,0)) ;                              * 37A27
 
 * refs (1): 97DA8
 OBJ_37A31:
-        ::                                       * 37A31
-          TYPERARRY?                             * 37A36
-          case                                   * 37A3B
-          %1                                     * 37A40
-          C%1                                    * 37A45
-        ;                                        * 37A4A
+        :: TYPERARRY? case %1                    * 37A31
+          C%1 ;                                  * 37A45
 
 * refs (5): 7CEE1 97A84 97B0C 97C21 98132
 OBJ_37A4F:
-        ::                                       * 37A4F
-          prefix(ar)                             * 37A54
-          TYPEEREL                               * 37A59
-          #=case                                 * 37A5E
-          %%1                                    * 37A63
-          C%%1                                   * 37A68
-        ;                                        * 37A6D
+        :: prefix(ar) TYPEEREL #=case %%1        * 37A4F
+          C%%1 ;                                 * 37A68
 
 * refs (1): 983DF
 OBJ_37A72:
-        ::                                       * 37A72
-          OBJ_3798C                              * 37A77
-          case                                   * 37A7C
-          OBJ_37AC2                              * 37A81
-          DUP                                    * 37A86
-          C%%0=                                  * 37A8B
-          case                                   * 37A90
-          %%1                                    * 37A95
-          C%%>%%                                 * 37A9A
-          2DUP%%R                                * 37A9F
-          ROTOVER                                * 37AA4
-          %%/                                    * 37AA9
-          3UNROLL                                * 37AAE
-          %%/                                    * 37AB3
-          %%>C%%                                 * 37AB8
-        ;                                        * 37ABD
+        :: OBJ_3798C case OBJ_37AC2              * 37A72
+          DUP C%%0= case %%1                     * 37A86
+          C%%>%% 2DUP%%R ROTOVER %%/ 3UNROLL %%/ %%>C%% ; * 37A9A
 
 * refs (9): 37A81 91CFC 91D06 91D9C 91F8B 91F95 ...
 OBJ_37AC2:
-        ::                                       * 37AC2
-          %%0>=                                  * 37AC7
-          case                                   * 37ACC
-          %%1                                    * 37AD1
-          %%-1                                   * 37AD6
-        ;                                        * 37ADB
+        :: %%0>= case %%1                        * 37AC2
+          %%-1 ;                                 * 37AD6
 
 * refs (5): 905F2 93E98 943D5 958CE 95AB3
 dup;cc?:
-        ::                                       * 37AE0
-          OBJ_3798C                              * 37AE5
-          case                                   * 37AEA
-          TRUE                                   * 37AEF
-          C%%>%%                                 * 37AF4
-          %%0=                                   * 37AF9
-        ;                                        * 37AFE
+        :: OBJ_3798C case TRUE                   * 37AE0
+          C%%>%% %%0= ;                          * 37AF4
 
 * refs (17): 7D1D4 7D283 9114E 924AC 9296B 967AE ...
 OBJ_37B03:
-        ::                                       * 37B03
-          ROTDROP                                * 37B08
-          ROTDROP                                * 37B0D
-        ;                                        * 37B12
+        :: ROTDROP ROTDROP ;                     * 37B03
 
 * -> {}
 * refs (17): 49E48 6CC70 7CEEB B7447 B80C5 C797C ...
 3NULLLAM{}:
-        {                                        * 37B17
-          NULLLAM                                * 37B1C
-          NULLLAM                                * 37B21
-          NULLLAM                                * 37B26
-        }                                        * 37B2B
+        { NULLLAM NULLLAM NULLLAM }              * 37B17
 
 * refs (14): 7CE23 7CE55 91D6A 91D79 91EB4 92E8F ...
 OBJ_37B30:
-        ::                                       * 37B30
-          %%.5                                   * 37B35
-          %%*                                    * 37B3A
-        ;                                        * 37B3F
+        :: %%.5 %%* ;                            * 37B30
 
 * ob -> ob'
 * refs (37): 1DBB5 2FC27 30170 30A05 30D36 3238C ...
 CKREF:
-        ::                                       * 37B44
-          INTEMNOTREF?                           * 37B49
-          ?SEMI                                  * 37B4E
-          TOTEMPOB                               * 37B53
-        ;                                        * 37B58
+        :: INTEMNOTREF? ?SEMI                    * 37B44
+          TOTEMPOB ;                             * 37B53
 
 * refs (13): 35C22 35D62 35E04 35F67 3620F 36223 ...
 FreeRefs:
-        ::                                       * 37B5D
-          REFERENCED?                            * 37B62
-          NOT?SEMI                               * 37B67
-          TOTEMPOBADJ                            * 37B6C
-          SWAPDROP                               * 37B71
-        ;                                        * 37B76
+        :: REFERENCED? NOT?SEMI                  * 37B5D
+          TOTEMPOBADJ SWAPDROP ;                 * 37B6C
 
 * refs (11): 35D3A 35D58 36AA9 36AD8 9311B 97922 ...
 sqmat(ar)?:
-        ::                                       * 37B7B
-          DUP                                    * 37B80
-          MDIMS                                  * 37B85
-          OBJ_37DE1                              * 37B8A
-          OVER#=                                 * 37B8F
-          OBJ_37DE1                              * 37B94
-        ;                                        * 37B99
+        :: DUP MDIMS OBJ_37DE1 OVER#= OBJ_37DE1 ; * 37B7B
 
 * refs (3): 36052 36133 361E2
 idsize(2ar)?:
-        ::                                       * 37B9E
-          OVER                                   * 37BA3
-          DIMLIMITS                              * 37BA8
-          OVER                                   * 37BAD
-          DIMLIMITS                              * 37BB2
-          EQUAL                                  * 37BB7
-          ?SEMI                                  * 37BBC
-          doerr501                               * 37BC1
-        ;                                        * 37BC6
+        :: OVER DIMLIMITS OVER DIMLIMITS EQUAL ?SEMI * 37B9E
+          doerr501 ;                             * 37BC1
 
 * [] -> []
 * refs (10): 10C77 1D0B0 35C31 35C68 3606B 360CF ...
 ONE_DO_ARRY:
-        ::                                       * 37BCB
-          DUP                                    * 37BD0
-          ARSIZE                                 * 37BD5
-          COLA                                   * 37BDA
-          #1+_ONE_DO                             * 37BDF
+        :: DUP ARSIZE COLA #1+_ONE_DO            * 37BCB
         ;                                        * 37BE4
 
 * L% L% -> L%
 * refs (39): 3611F 361D3 3675A 906EC 907FA 908E5 ...
 L%+:
-        ::                                       * 37BE9
-          SWITCH2FLOATS                          * 37BEE
-          %%+                                    * 37BF3
-          C%%C+R                                 * 37BF8
-          C%%R+C                                 * 37BFD
-          C%%C+C                                 * 37C02
-        ;                                        * 37C07
+        :: SWITCH2FLOATS %%+ C%%C+R C%%R+C C%%C+C ; * 37BE9
 
 * L% L% -> L%
 * refs (28): 36282 36296 362B4 36692 36822 7D008 ...
 L%-:
-        ::                                       * 37C0C
-          SWITCH2FLOATS                          * 37C11
-          %%-                                    * 37C16
-          C%%C-R                                 * 37C1B
-          C%%R-C                                 * 37C20
-          C%%C-C                                 * 37C25
-        ;                                        * 37C2A
+        :: SWITCH2FLOATS %%- C%%C-R C%%R-C C%%C-C ; * 37C0C
 
 * L% L% -> L%
 * refs (68): 362F0 36750 36813 3681D 90336 90656 ...
 L%*:
-        ::                                       * 37C2F
-          SWITCH2FLOATS                          * 37C34
-          %%*                                    * 37C39
-          C%%C*R                                 * 37C3E
-          C%%R*C                                 * 37C43
-          C%%C*C                                 * 37C48
-        ;                                        * 37C4D
+        :: SWITCH2FLOATS %%* C%%C*R C%%R*C C%%C*C ; * 37C2F
 
 * L% L% -> L%
 * refs (51): 363F4 7D026 7D193 906A1 907AA 9089F ...
 L%/:
-        ::                                       * 37C52
-          SWITCH2FLOATS                          * 37C57
-          %%/                                    * 37C5C
-          C%%C/R                                 * 37C61
-          C%%R/C                                 * 37C66
-          C%%C/C                                 * 37C6B
-        ;                                        * 37C70
+        :: SWITCH2FLOATS %%/ C%%C/R C%%R/C C%%C/C ; * 37C52
 
 * B% -> B%'
 * refs (12): 369A3 7CE82 90051 90D41 93051 949C3 ...
 B%ABS:
-        ::                                       * 37C75
-          SWITCHFLOATS                           * 37C7A
-          %ABS                                   * 37C7F
-          C%ABS                                  * 37C84
-          %%ABS                                  * 37C89
-          C%%ABS                                 * 37C8E
-        ;                                        * 37C93
+        :: SWITCHFLOATS %ABS C%ABS %%ABS C%%ABS ; * 37C75
 
 * refs (14): 90C7E 90C97 90D87 92209 922F9 92D77 ...
 OBJ_37C98:
-        ::                                       * 37C98
-          SWITCHFLOATS                           * 37C9D
-          %ABS                                   * 37CA2
-          C%ABS                                  * 37CA7
-          %%ABS                                  * 37CAC
+        :: SWITCHFLOATS %ABS C%ABS %%ABS         * 37C98
           CODE                                   * 37CB1  19 nibbles
             GOSBVL  POPC%%                       * 37CBB
             A=0     S                            * 37CC2
@@ -2219,125 +1488,67 @@ OBJ_37C98:
 * B% -> B%'
 * refs (8): 35E13 9224A 92704 94C9D 97C62 98150 ...
 B%NEG:
-        ::                                       * 37CD3
-          SWITCHFLOATS                           * 37CD8
-          %CHS                                   * 37CDD
-          C%CHS                                  * 37CE2
-          %%CHS                                  * 37CE7
-          C%%CHS                                 * 37CEC
-        ;                                        * 37CF1
+        :: SWITCHFLOATS %CHS C%CHS %%CHS C%%CHS ; * 37CD3
 
 * refs (13): 36430 52021 90C47 922CC 9288F 931ED ...
 =0?(nb):
-        ::                                       * 37CF6
-          SWITCHFLOATS                           * 37CFB
-          %0=                                    * 37D00
-          C%0=                                   * 37D05
-          %%0=                                   * 37D0A
-          C%%0=                                  * 37D0F
-        ;                                        * 37D14
+        :: SWITCHFLOATS %0= C%0= %%0= C%%0= ;    * 37CF6
 
 * %  -> %% C% -> C%%
 * refs (3): 36377 363D1 CB900
 F%>L%:
-        ::                                       * 37D19
-          dup;r?:dq/sk                           * 37D1E
-          %>%%                                   * 37D23
-          C%>%%                                  * 37D28
-          %%>C%%                                 * 37D2D
-        ;                                        * 37D32
+        :: dup;r?:dq/sk %>%% C%>%% %%>C%% ;      * 37D19
 
 * refs (13): 90615 915B8 915C2 92A4C 93ED4 94064 ...
 OBJ_37D37:
-        ::                                       * 37D37
-          OBJ_3798C                              * 37D3C
-          case                                   * 37D41
-          ::                                     * 37D46
-            DUP                                  * 37D4B
-            %%*                                  * 37D50
-          ;                                      * 37D55
-          C%%>%%                                 * 37D5A
-          %%SQR                                  * 37D5F
-        ;                                        * 37D64
+        :: OBJ_3798C case                        * 37D37
+          :: DUP %%* ;                           * 37D46
+          C%%>%% %%SQR ;                         * 37D5A
 
 * refs (9): 905D9 915D6 93E7F 9402D 94091 943BC ...
 OBJ_37D69:
-        ::                                       * 37D69
-          OBJ_3798C                              * 37D6E
-          ?SEMI                                  * 37D73
-          C%%>%%                                 * 37D78
-          DROP                                   * 37D7D
-        ;                                        * 37D82
+        :: OBJ_3798C ?SEMI                       * 37D69
+          C%%>%% DROP ;                          * 37D78
 
 * refs (25): 9066A 906CE 907D7 91676 916E9 916FD ...
 OBJ_37D87:
-        ::                                       * 37D87
-          OBJ_3798C                              * 37D8C
-          ?SEMI                                  * 37D91
-          C%%CONJ                                * 37D96
-        ;                                        * 37D9B
+        :: OBJ_3798C ?SEMI                       * 37D87
+          C%%CONJ ;                              * 37D96
 
 * refs (12): 7CE28 935BC 94C48 95018 95F25 96812 ...
 OBJ_37DA0:
-        ::                                       * 37DA0
-          2DUP                                   * 37DA5
-          %%<                                    * 37DAA
-          NOT?SWAPDROP                           * 37DAF
-        ;                                        * 37DB4
+        :: 2DUP %%< NOT?SWAPDROP ;               * 37DA0
 
 * -> {}
 * refs (12): 0F887 1DC0A 640AF 7CED2 986EA B8723 ...
 2NULLLAM{}:
-        {                                        * 37DB9
-          NULLLAM                                * 37DBE
-          NULLLAM                                * 37DC3
-        }                                        * 37DC8
+        { NULLLAM NULLLAM }                      * 37DB9
 
 * refs (28): 368CC 370B4 37BC1 37DEB 7CEBE 8830A ...
 doerr501:
-        ::                                       * 37DCD
-          #       501                            * 37DD2  1281
-          ERROROUT                               * 37DDC
+        :: # 501 ERROROUT                        * 37DCD
 
 * refs (25): 1DD6A 364B7 36507 365CA 365ED 365FC ...
 OBJ_37DE1:
-          ::                                     * 37DE1
-            ?SEMI                                * 37DE6
+          :: ?SEMI                               * 37DE1
 L_37DEB:
-            doerr501                             * 37DEB
-          ;                                      * 37DF0
+            doerr501 ;                           * 37DEB
         ;                                        * 37DF5
         BSS     21                               * 37DFA
 
 * [F%] {#n #m} -> [F%]'
 * refs (19): 1D11B 1D170 8D8BE 8E277 8E2FB 8E4D1 ...
 MATREDIM:
-        ::                                       * 37E0F
-          SWAPCKREF                              * 37E14
-          SWAP                                   * 37E19
-          OBJ_37E4B                              * 37E1E
-          OBJ_37E73                              * 37E23
-        ;                                        * 37E28
+        :: SWAPCKREF SWAP OBJ_37E4B OBJ_37E73 ;  * 37E0F
 
 * refs (3): 1D143 2C3D3 2C478
 @rdm(ar,ls):
-        ::                                       * 37E2D
-          OBJ_35C18                              * 37E32
-          SWAP                                   * 37E37
-          OBJ_37E4B                              * 37E3C
-          OBJ_37E7F                              * 37E41
-        ;                                        * 37E46
+        :: OBJ_35C18 SWAP OBJ_37E4B OBJ_37E7F ;  * 37E2D
 
 * refs (2): 37E1E 37E3C
 OBJ_37E4B:
-        ::                                       * 37E4B
-          OVERARSIZE                             * 37E50
-          SWAPDUP                                * 37E55
-          INNER#1=                               * 37E5A
-          ?SKIP                                  * 37E5F
-          #*OVF                                  * 37E64
-          SWAPINCOMP                             * 37E69
-        ;                                        * 37E6E
+        :: OVERARSIZE SWAPDUP INNER#1= ?SKIP #*OVF * 37E4B
+          SWAPINCOMP ;                           * 37E69
 
 * refs (1): 37E23
 OBJ_37E73:

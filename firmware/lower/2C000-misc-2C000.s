@@ -70,26 +70,11 @@ LIB006:
 
 * refs (1): 20049
 utpn(3r):
-        ::                                       * 2C09F
-          OVER                                   * 2C0A4
-          %0<                                    * 2C0A9
-          case                                   * 2C0AE
-          SETSIZEERR                             * 2C0B3
-          OVER                                   * 2C0B8
-          %0=                                    * 2C0BD
-          case                                   * 2C0C2
-          ::                                     * 2C0C7
-            SWAPDROP                             * 2C0CC
-            %>                                   * 2C0D1
-            case                                 * 2C0D6
-            %1                                   * 2C0DB
-            %0_2A2B4                             * 2C0E0
-          ;                                      * 2C0E5
-          ROT                                    * 2C0EA
-          %>%%-                                  * 2C0EF
-          SWAP                                   * 2C0F4
-          %>%%SQRT                               * 2C0F9
-          %%/                                    * 2C0FE
+        :: OVER %0< case SETSIZEERR              * 2C09F
+          OVER %0= case                          * 2C0B8
+          :: SWAPDROP %> case %1                 * 2C0C7
+            %0_2A2B4 ;                           * 2C0E0
+          ROT %>%%- SWAP %>%%SQRT %%/            * 2C0EA
           CODE                                   * 2C103  28 nibbles
             GOSBVL  SUB_77EA8                    * 2C10D
             GOSBVL  SUB_77EBC                    * 2C114
@@ -101,9 +86,7 @@ L_2C11B:
 
 * refs (1): 20029
 utpn(2r):
-        ::                                       * 2C12E
-          SWAP                                   * 2C133
-          %0_2A2B4                               * 2C138
+        :: SWAP %0_2A2B4                         * 2C12E
           CODE                                   * 2C13D  18 nibbles
             GOSBVL  SUB_77E62                    * 2C147
             GOSBVL  SUB_78167                    * 2C14E
@@ -113,8 +96,7 @@ utpn(2r):
 
 * refs (1): 20069
 utpf(3r):
-        ::                                       * 2C15E
-          3UNROLL                                * 2C163
+        :: 3UNROLL                               * 2C15E
           CODE                                   * 2C168  18 nibbles
             GOSBVL  SUB_77E62                    * 2C172
             GOSBVL  SUB_7827D                    * 2C179
@@ -124,9 +106,7 @@ utpf(3r):
 
 * refs (1): 20089
 utpt(2r):
-        ::                                       * 2C189
-          SWAP                                   * 2C18E
-          %0_2A2B4                               * 2C193
+        :: SWAP %0_2A2B4                         * 2C189
           CODE                                   * 2C198  18 nibbles
             GOSBVL  SUB_77E62                    * 2C1A2
             GOSBVL  SUB_78077                    * 2C1A9
@@ -136,212 +116,95 @@ utpt(2r):
 
 * refs (2): 0FBC4 0FC55
 %%1E2:
-        %%      1E2                              * 2C1B9
+        %% 1E2                                   * 2C1B9
 
 * refs (20): 2B25F 2B28C 2B2C8 528A4 912B6 91D65 ...
 1+(rr):
-        ::                                       * 2C1D3
-          %%1                                    * 2C1D8
-          %%+                                    * 2C1DD
-        ;                                        * 2C1E2
+        :: %%1 %%+ ;                             * 2C1D3
         BSS     12                               * 2C1E7
 
 * ob ->
 * refs (1): 1FD1A
 STATSTO:
-        ::                                       * 2C1F3
-          '                                      * 2C1F8
+        :: '                                     * 2C1F3
 
 * ID SIGMADAT
 * refs (6): 2C220 2C239 2C252 2C29D C5399 C53A3
 ID_SIGMADAT:
-          ID      ΣDAT                           * 2C1FD
-          XEQSTOID                               * 2C20C
-        ;                                        * 2C211
+          ID ΣDAT XEQSTOID ;                     * 2C1FD
 
 * refs (3): 2C301 2C356 2C374
 Sto@ä:
-        ::                                       * 2C216
-          '                                      * 2C21B
-          ID_SIGMADAT                            * 2C220
-          STOAPPLDATA                            * 2C225
-        ;                                        * 2C22A
+        :: ' ID_SIGMADAT STOAPPLDATA ;           * 2C216
 
 * ->
 * refs (4): 1FD35 2C45F B579D B7D65
 STATCLST:
-        ::                                       * 2C22F
-          '                                      * 2C234
-          ID_SIGMADAT                            * 2C239
-          ?PURGE_HERE                            * 2C23E
-        ;                                        * 2C243
+        :: ' ID_SIGMADAT ?PURGE_HERE ;           * 2C22F
 
 * refs (1): 2C45A
 OBJ_2C248:
-        ::                                       * 2C248
-          '                                      * 2C24D
-          ID_SIGMADAT                            * 2C252
-          dup;Vector*­Rcl(nm)?                   * 2C257
-          SWAPDROP                               * 2C25C
-          NOT?SEMI                               * 2C261
-          ?PURGE_HERE                            * 2C266
-        ;                                        * 2C26B
+        :: ' ID_SIGMADAT dup;Vector*­Rcl(nm)? SWAPDROP NOT?SEMI * 2C248
+          ?PURGE_HERE ;                          * 2C266
 
 * -> ob
 * refs (5): 2C2DE 2C338 2C379 2C53A 50E18
 STATRCL:
-        ::                                       * 2C270
-          Exist@äDAT?                            * 2C275
-          NOTcaseFALSE                           * 2C27A
-          DUPTYPEIDNT?                           * 2C27F
-          casedrpfls                             * 2C284
-          TRUE                                   * 2C289
+        :: Exist@äDAT? NOTcaseFALSE DUPTYPEIDNT? * 2C270
+          casedrpfls TRUE                        * 2C284
         ;                                        * 2C28E
 
 * refs (5): 0C7DF 2C275 2C2B1 B5774 B7D3C
 Exist@äDAT?:
-        ::                                       * 2C293
-          '                                      * 2C298
-          ID_SIGMADAT                            * 2C29D
-          OBJ_4735A                              * 2C2A2
-        ;                                        * 2C2A7
+        :: ' ID_SIGMADAT OBJ_4735A ;             * 2C293
 
 * refs (3): 1FD50 2C2CA 4B779
 rclä!:
-        ::                                       * 2C2AC
-          Exist@äDAT?                            * 2C2B1
-          ?SEMI                                  * 2C2B6
-          OBJ_2D2C7                              * 2C2BB
-        ;                                        * 2C2C0
+        :: Exist@äDAT? ?SEMI                     * 2C2AC
+          OBJ_2D2C7 ;                            * 2C2BB
 
 * refs (8): 200CE 2C428 2C5F8 2C7EC 2C9F9 48E32 ...
 rclä:
-        ::                                       * 2C2C5
-          rclä!                                  * 2C2CA
-          OBJ_2D252                              * 2C2CF
-        ;                                        * 2C2D4
+        :: rclä! OBJ_2D252 ;                     * 2C2C5
 
 * refs (1): 1FD70
 ä+(r):
-        ::                                       * 2C2D9
-          STATRCL                                * 2C2DE
-          NOTcase                                * 2C2E3
+        :: STATRCL NOTcase                       * 2C2D9
 
 Stoä(r):
-          ::                                     * 2C2E8
-            ONEONE                               * 2C2ED
-            TWO{}N                               * 2C2F2
-            SWAP                                 * 2C2F7
-            MAKEARRY                             * 2C2FC
-            Sto@ä                                * 2C301
-          ;                                      * 2C306
-          OBJ_2D252                              * 2C30B
-          MDIMSDROP                              * 2C310
-          SWAPDROP                               * 2C315
-          UNCOERCE                               * 2C31A
-          XEQ>VECTOR                             * 2C31F
-          xSIGMA+                                * 2C324
-        ;                                        * 2C329
+          :: ONEONE TWO{}N SWAP MAKEARRY Sto@ä ; * 2C2E8
+          OBJ_2D252 MDIMSDROP SWAPDROP UNCOERCE XEQ>VECTOR xSIGMA+ ; * 2C30B
 
 * refs (3): 1FD7A B57A2 B7D6A
 å-:
-        ::                                       * 2C32E
-          dup;ra?#BAT!                           * 2C333
-          STATRCL                                * 2C338
-          ?GOTO                                  * 2C33D
-          L_2C392                                * 2C342
-          DUP                                    * 2C347
-          MDIMS                                  * 2C34C
-          case2drop                              * 2C351
-          Sto@ä                                  * 2C356
-          BINT1                                  * 2C35B
-          OVER                                   * 2C360
-          TWO{}N                                 * 2C365
-          %0_2A2B4                               * 2C36A
-          MAKEARRY                               * 2C36F
-          Sto@ä                                  * 2C374
-          STATRCL                                * 2C379
-          DROPSWAP                               * 2C37E
-          BINT0                                  * 2C383
-          GOTO                                   * 2C388
-          L_2C3E7                                * 2C38D
+        :: dup;ra?#BAT! STATRCL ?GOTO L_2C392 DUP MDIMS case2drop Sto@ä * 2C32E
+          BINT1 OVER TWO{}N %0_2A2B4 MAKEARRY Sto@ä STATRCL DROPSWAP BINT0 * 2C35B
+          GOTO L_2C3E7                           * 2C388
 L_2C392:
-          OBJ_2D252                              * 2C392
-          OVER                                   * 2C397
-          MDIMS                                  * 2C39C
-          ?SKIP                                  * 2C3A1
-          ONESWAP                                * 2C3A6
-          3PICK                                  * 2C3AB
-          MDIMSDROP                              * 2C3B0
-          3PICK                                  * 2C3B5
-          #<>                                    * 2C3BA
-          caseSIZEERR                            * 2C3BF
-          ROT#+                                  * 2C3C4
-          SWAP                                   * 2C3C9
-          TWO{}N                                 * 2C3CE
-          @rdm(ar,ls)                            * 2C3D3
-          OVERARSIZE                             * 2C3D8
-          OVERARSIZE                             * 2C3DD
-          OVER#-                                 * 2C3E2
+          OBJ_2D252 OVER MDIMS ?SKIP ONESWAP     * 2C392
+          3PICK MDIMSDROP 3PICK #<> caseSIZEERR ROT#+ * 2C3AB
+          SWAP TWO{}N @rdm(ar,ls) OVERARSIZE OVERARSIZE OVER#- * 2C3C9
 L_2C3E7:
-          4UNROLL                                * 2C3E7
-          #1+_ONE_DO                             * 2C3EC
-          SWAPINDEX@                             * 2C3F1
-          PULLREALEL                             * 2C3F6
-          ROTSWAP                                * 2C3FB
-          4PICK                                  * 2C400
-          INDEX@                                 * 2C405
-          #+                                     * 2C40A
-          PUTREALEL                              * 2C40F
-          NextInArray                            * 2C414
-          3DROP                                  * 2C419
-        ;                                        * 2C41E
+          4UNROLL #1+_ONE_DO SWAPINDEX@ PULLREALEL ROTSWAP 4PICK INDEX@ #+ * 2C3E7
+          PUTREALEL NextInArray 3DROP ;          * 2C40F
 
 * refs (1): 1FD95
 OBJ_2C423:
-        ::                                       * 2C423
-          rclä                                   * 2C428
-          DUP                                    * 2C42D
-          MDIMSDROP                              * 2C432
-          ROTOVER                                * 2C437
-          lastv(ra,s)                            * 2C43C
-          SWAP4ROLL                              * 2C441
-          4ROLLOVER                              * 2C446
+        :: rclä DUP MDIMSDROP ROTOVER lastv(ra,s) SWAP4ROLL 4ROLLOVER * 2C423
           #1=case                                * 2C44B
-          ::                                     * 2C450
-            3DROP                                * 2C455
-            OBJ_2C248                            * 2C45A
-            STATCLST                             * 2C45F
-          ;                                      * 2C464
-          SWAP#1-                                * 2C469
-          SWAP                                   * 2C46E
-          TWO{}N                                 * 2C473
-          @rdm(ar,ls)                            * 2C478
-          DROP                                   * 2C47D
-        ;                                        * 2C482
+          :: 3DROP OBJ_2C248 STATCLST ;          * 2C450
+          SWAP#1- SWAP TWO{}N @rdm(ar,ls) DROP ; * 2C469
 
 * refs (1): 2C43C
 lastv(ra,s):
-        ::                                       * 2C487
-          DUP                                    * 2C48C
-          #       1                              * 2C491  1
-          #=ITE                                  * 2C49B
+        :: DUP # 1 #=ITE                         * 2C487
 
 0;newob:
-          ::                                     * 2C4A0
-            %0_2A2B4                             * 2C4A5
-            TOTEMPOB                             * 2C4AA
-          ;                                      * 2C4AF
+          :: %0_2A2B4 TOTEMPOB ;                 * 2C4A0
 
 * refs (1): 2C639
 nulv(s):
-          ::                                     * 2C4B4
-            DUPONE                               * 2C4B9
-            {}N                                  * 2C4BE
-            %0_2A2B4                             * 2C4C3
-            MAKEARRY                             * 2C4C8
-          ;                                      * 2C4CD
-          SWAP                                   * 2C4D2
+          :: DUPONE {}N %0_2A2B4 MAKEARRY ; SWAP * 2C4B4
           CODE                                   * 2C4D7  79 nibbles
             GOSBVL  POP#                         * 2C4E1
             GOSUBL  SUB_2CE75                    * 2C4E8
@@ -369,393 +232,161 @@ nulv(s):
 * -> N
 * refs (4): 1FDB0 48EBE 48EE6 B7F68
 STATN:
-        ::                                       * 2C535
-          STATRCL                                * 2C53A
-          NOTcase                                * 2C53F
-          %0_2A2B4                               * 2C544
-          OBJ_2D252                              * 2C549
-          OBJ_2CC92                              * 2C54E
-        ;                                        * 2C553
+        :: STATRCL NOTcase %0_2A2B4              * 2C535
+          OBJ_2D252 OBJ_2CC92 ;                  * 2C549
 
 * -> %
 * refs (1): 1FE88
 STATSMAX:
-        ::                                       * 2C558
-          BINT0                                  * 2C55D
-          OBJ_2C5EE                              * 2C562
-          ColumnMAX                              * 2C567
-        ;                                        * 2C56C
+        :: BINT0 OBJ_2C5EE ColumnMAX ;           * 2C558
 
 * -> % -> []
 * refs (1): 1FEA3
 STATMEAN:
-        ::                                       * 2C571
-          BINT0                                  * 2C576
-          OBJ_2C5EE                              * 2C57B
-          ColumnMEAN                             * 2C580
-        ;                                        * 2C585
+        :: BINT0 OBJ_2C5EE ColumnMEAN ;          * 2C571
 
 * -> %
 * refs (1): 1FEBE
 STATSMIN:
-        ::                                       * 2C58A
-          BINT0                                  * 2C58F
-          OBJ_2C5EE                              * 2C594
-          ColumnMIN                              * 2C599
-        ;                                        * 2C59E
+        :: BINT0 OBJ_2C5EE ColumnMIN ;           * 2C58A
 
 * -> % -> []
 * refs (1): 1FED9
 STATSTDEV:
-        ::                                       * 2C5A3
-          BINT1                                  * 2C5A8
-          OBJ_2C5EE                              * 2C5AD
-          ColumnTDEV                             * 2C5B2
-        ;                                        * 2C5B7
+        :: BINT1 OBJ_2C5EE ColumnTDEV ;          * 2C5A3
 
 * -> % -> []
 * refs (1): 1FEF4
 STATTOT:
-        ::                                       * 2C5BC
-          BINT0                                  * 2C5C1
-          OBJ_2C5EE                              * 2C5C6
-          ColumnTOT                              * 2C5CB
-        ;                                        * 2C5D0
+        :: BINT0 OBJ_2C5EE ColumnTOT ;           * 2C5BC
 
 * -> % -> []
 * refs (1): 1FF0F
 STATVAR:
-        ::                                       * 2C5D5
-          BINT1                                  * 2C5DA
-          OBJ_2C5EE                              * 2C5DF
-          ColumnVAR                              * 2C5E4
-        ;                                        * 2C5E9
+        :: BINT1 OBJ_2C5EE ColumnVAR ;           * 2C5D5
 
 * refs (8): 2C562 2C57B 2C594 2C5AD 2C5C6 2C5DF ...
 OBJ_2C5EE:
-        ::                                       * 2C5EE
-          'R                                     * 2C5F3
-          rclä                                   * 2C5F8
-          DUP                                    * 2C5FD
-          MDIMSDROP                              * 2C602
-          SWAP                                   * 2C607
-          5ROLL                                  * 2C60C
-          #>?SKIP                                * 2C611
-          OBJ_2D2D7                              * 2C616
-          DUPONE                                 * 2C61B
-          #=case                                 * 2C620
-          ::                                     * 2C625
-            SWAPROT                              * 2C62A
-            EVAL                                 * 2C62F
-          ;                                      * 2C634
-          nulv(s)                                * 2C639
-          SWAP                                   * 2C63E
-          #1+_ONE_DO                             * 2C643
-          INDEX@                                 * 2C648
-          3PICK                                  * 2C64D
-          5PICK                                  * 2C652
-          EVAL                                   * 2C657
-          INDEX@                                 * 2C65C
-          PUTREALEL                              * 2C661
-          LOOP                                   * 2C666
-          ROTROT2DROP                            * 2C66B
-        ;                                        * 2C670
+        :: 'R rclä DUP MDIMSDROP SWAP 5ROLL #>?SKIP OBJ_2D2D7 DUPONE #=case * 2C5EE
+          :: SWAPROT EVAL ;                      * 2C625
+          nulv(s) SWAP #1+_ONE_DO INDEX@ 3PICK 5PICK EVAL INDEX@ PUTREALEL * 2C639
+          LOOP ROTROT2DROP ;                     * 2C666
 
 * % %' ->
 * refs (2): 200A9 B7E0A
 STATCOL:
-        ::                                       * 2C675
-          ChkReakäPAR                            * 2C67A
-          4ROLLDROP                              * 2C67F
-          4ROLLDROP                              * 2C684
-          StoäPAR(5_)                            * 2C689
-        ;                                        * 2C68E
+        :: ChkReakäPAR 4ROLLDROP 4ROLLDROP StoäPAR(5_) ; * 2C675
 
 * refs (5): 20248 2C689 2C6C5 2C6E8 2CAD0
 StoäPAR(5_):
-        ::                                       * 2C693
-          BINT5                                  * 2C698
-          {}N                                    * 2C69D
-          '                                      * 2C6A2
-          äPAR                                   * 2C6A7
-          XEQSTOID                               * 2C6AC
-        ;                                        * 2C6B1
+        :: BINT5 {}N ' äPAR XEQSTOID ;           * 2C693
 
 * n ->
 * refs (3): 1FFE9 A7794 A7D04
 STATXCOL:
-        ::                                       * 2C6B6
-          ChkReakäPAR                            * 2C6BB
-          5ROLLDROP                              * 2C6C0
-          StoäPAR(5_)                            * 2C6C5
-        ;                                        * 2C6CA
+        :: ChkReakäPAR 5ROLLDROP StoäPAR(5_) ;   * 2C6B6
 
 * n ->
 * refs (2): 20009 A7CFF
 STATYCOL:
-        ::                                       * 2C6CF
-          ChkReakäPAR                            * 2C6D4
-          4ROLLDROP                              * 2C6D9
-          4ROLL                                  * 2C6DE
-          5UNROLL                                * 2C6E3
-          StoäPAR(5_)                            * 2C6E8
-        ;                                        * 2C6ED
+        :: ChkReakäPAR 4ROLLDROP 4ROLL 5UNROLL StoäPAR(5_) ; * 2C6CF
 
 * refs (6): 2C945 2C977 4CA05 4D9D9 A76F5 A7C80
 STATGETXCOL:
-        ::                                       * 2C6F2
-          ChkReakäPAR                            * 2C6F7
-          4DROP                                  * 2C6FC
-        ;                                        * 2C701
+        :: ChkReakäPAR 4DROP ;                   * 2C6F2
 
 * refs (3): 2C95E 2C99F A7C85
 STATGETYCOL:
-        ::                                       * 2C706
-          ChkReakäPAR                            * 2C70B
-          3DROP                                  * 2C710
-          SWAPDROP                               * 2C715
-        ;                                        * 2C71A
+        :: ChkReakäPAR 3DROP SWAPDROP ;          * 2C706
 
 * refs (18): 200D3 20239 2C67A 2C6BB 2C6D4 2C6F7 ...
 ChkReakäPAR:
-        ::                                       * 2C71F
-          '                                      * 2C724
+        :: '                                     * 2C71F
 
 * refs (3): 2C6A7 2C76F C6D1E
 äPAR:
-          ID      ΣPAR                           * 2C729
-          SAFE@_HERE                             * 2C738
-          ?SKIP                                  * 2C73D
+          ID ΣPAR SAFE@_HERE ?SKIP               * 2C729
 
 ResetäPAR:
           ::                                     * 2C742
-            {                                    * 2C747
-              %1                                 * 2C74C
-              %2                                 * 2C751
-              %0_2A2B4                           * 2C756
-              %0_2A2B4                           * 2C75B
-              xLINFIT                            * 2C760
-            }                                    * 2C765
-            DUP'                                 * 2C76A
-            äPAR                                 * 2C76F
-            XEQSTOID                             * 2C774
-          ;                                      * 2C779
-          DUPTYPELIST?                           * 2C77E
-          NOTcase                                * 2C783
-          OBJ_2D2E7                              * 2C788
-          INNERCOMP                              * 2C78D
-          BINT5                                  * 2C792
-          EQ                                     * 2C797
-          NOTcase                                * 2C79C
-          OBJ_2D2E7                              * 2C7A1
-          DUP                                    * 2C7A6
-          OBJ_4A177                              * 2C7AB
-          matchob?                               * 2C7B0
-          NOTcase                                * 2C7B5
-          OBJ_2D2E7                              * 2C7BA
+            { %1 %2 %0_2A2B4 %0_2A2B4 xLINFIT } DUP' äPAR XEQSTOID ; * 2C747
+          DUPTYPELIST? NOTcase OBJ_2D2E7         * 2C77E
+          INNERCOMP BINT5 EQ NOTcase OBJ_2D2E7   * 2C78D
+          DUP OBJ_4A177 matchob? NOTcase OBJ_2D2E7 * 2C7A6
           CK&DISPATCH0                           * 2C7BF
-          OBJ_2C7DD                              * 2C7C4
-          NOP                                    * 2C7C9
-          BINT0                                  * 2C7CE
-          OBJ_2D2E7                              * 2C7D3
+          OBJ_2C7DD NOP                          * 2C7C4  real real real real program
+          BINT0 OBJ_2D2E7                        * 2C7CE  any
         ;                                        * 2C7D8
 
 * refs (1): 2C7C4
 OBJ_2C7DD:
-        #       11118                            * 2C7DD  69912
+        # 11118                                  * 2C7DD  69912
 
 * refs (6): 2C814 2C841 2C9C7 2CA12 4C8D6 CB529
 RclXYCol&äDAT:
-        ::                                       * 2C7E7
-          rclä                                   * 2C7EC
-          ChkReakäPAR                            * 2C7F1
-          3DROP                                  * 2C7F6
-          COERCE2                                * 2C7FB
-          ROT                                    * 2C800
-          OBJ_2CF08                              * 2C805
-        ;                                        * 2C80A
+        :: rclä ChkReakäPAR 3DROP COERCE2 ROT OBJ_2CF08 ; * 2C7E7
 
 * refs (1): 2C8EB
 RclXYCol&äDAT!:
-        ::                                       * 2C80F
-          RclXYCol&äDAT                          * 2C814
-          DUP                                    * 2C819
-          OBJ_2CC92                              * 2C81E
-          %1                                     * 2C823
-          %=                                     * 2C828
-          case                                   * 2C82D
-          OBJ_2D2D7                              * 2C832
+        :: RclXYCol&äDAT DUP OBJ_2CC92 %1 %= case OBJ_2D2D7 * 2C80F
         ;                                        * 2C837
 
 * -> %
 * refs (3): 1FDCB 4A1C7 B7EEB
 STATCORR:
-        ::                                       * 2C83C
-          RclXYCol&äDAT                          * 2C841
-          2DUP                                   * 2C846
-          OBJ_2CC06                              * 2C84B
-          OBJ_2CDA5                              * 2C850
-          BINT3                                  * 2C855
-          NDUP                                   * 2C85A
-          OBJ_2CC06                              * 2C85F
-          OBJ_2CDFA                              * 2C864
-          5UNROLL                                * 2C869
-          4ROLLROT                               * 2C86E
-          2DUP                                   * 2C873
-          OBJ_2CC4C                              * 2C878
-          OBJ_2CDA5                              * 2C87D
-          BINT3                                  * 2C882
-          NDUP                                   * 2C887
-          OBJ_2CC4C                              * 2C88C
-          OBJ_2CDFA                              * 2C891
-          6UNROLL                                * 2C896
-          4ROLL                                  * 2C89B
-          5ROLL                                  * 2C8A0
-          4UNROLL                                * 2C8A5
-          OBJ_2CC4C                              * 2C8AA
-          OBJ_2CC06                              * 2C8AF
-          OBJ_2CE7C                              * 2C8B4
-          3UNROLL                                * 2C8B9
-          %%*                                    * 2C8BE
-          DUP                                    * 2C8C3
-          %%0=                                   * 2C8C8
-          case2drop                              * 2C8CD
-          %1                                     * 2C8D2
-          %%SQRT                                 * 2C8D7
-          %%/>%                                  * 2C8DC
-        ;                                        * 2C8E1
+        :: RclXYCol&äDAT 2DUP OBJ_2CC06 OBJ_2CDA5 BINT3 NDUP OBJ_2CC06 * 2C83C
+          OBJ_2CDFA 5UNROLL 4ROLLROT 2DUP OBJ_2CC4C OBJ_2CDA5 BINT3 NDUP * 2C864
+          OBJ_2CC4C OBJ_2CDFA 6UNROLL 4ROLL 5ROLL 4UNROLL OBJ_2CC4C * 2C88C
+          OBJ_2CC06 OBJ_2CE7C 3UNROLL %%* DUP %%0= case2drop %1 * 2C8AF
+          %%SQRT %%/>% ;                         * 2C8D7
 
 * -> %
 * refs (2): 1FDE6 B7EF0
 STATCOV:
-        ::                                       * 2C8E6
-          RclXYCol&äDAT!                         * 2C8EB
-          DUP4UNROLL                             * 2C8F0
-          3PICKOVER                              * 2C8F5
-          OBJ_2CC4C                              * 2C8FA
-          OBJ_2CDA5                              * 2C8FF
-          3PICK3PICK                             * 2C904
-          OBJ_2CC06                              * 2C909
-          OBJ_2CDA5                              * 2C90E
-          OBJ_2CC4C                              * 2C913
-          OBJ_2CC06                              * 2C918
-          OBJ_2CE7C                              * 2C91D
-          SWAP                                   * 2C922
-          OBJ_2CC92                              * 2C927
-          %1                                     * 2C92C
-          %>%%-                                  * 2C931
-          %%/>%                                  * 2C936
-        ;                                        * 2C93B
+        :: RclXYCol&äDAT! DUP4UNROLL 3PICKOVER OBJ_2CC4C OBJ_2CDA5 * 2C8E6
+          3PICK3PICK OBJ_2CC06 OBJ_2CDA5 OBJ_2CC4C OBJ_2CC06 OBJ_2CE7C SWAP * 2C904
+          OBJ_2CC92 %1 %>%%- %%/>% ;             * 2C927
 
 * -> %
 * refs (2): 1FE01 B7F1D
 STATX:
-        ::                                       * 2C940
-          STATGETXCOL                            * 2C945
-          OBJ_2C9EF                              * 2C94A
-          ColumnTOT                              * 2C94F
-        ;                                        * 2C954
+        :: STATGETXCOL OBJ_2C9EF ColumnTOT ;     * 2C940
 
 * -> %
 * refs (2): 1FE1C B7F2C
 STATY:
-        ::                                       * 2C959
-          STATGETYCOL                            * 2C95E
-          OBJ_2C9EF                              * 2C963
-          ColumnTOT                              * 2C968
-        ;                                        * 2C96D
+        :: STATGETYCOL OBJ_2C9EF ColumnTOT ;     * 2C959
 
 * -> %
 * refs (2): 1FE37 B7F3B
 STATXX:
-        ::                                       * 2C972
-          STATGETXCOL                            * 2C977
-          OBJ_2C9EF                              * 2C97C
-          %%0                                    * 2C981
-          FALSE                                  * 2C986
-          OBJ_2CDFA                              * 2C98B
-          %%>%                                   * 2C990
-        ;                                        * 2C995
+        :: STATGETXCOL OBJ_2C9EF %%0 FALSE OBJ_2CDFA %%>% ; * 2C972
 
 * -> %
 * refs (2): 1FE52 B7F4A
 STATYY:
-        ::                                       * 2C99A
-          STATGETYCOL                            * 2C99F
-          OBJ_2C9EF                              * 2C9A4
-          %%0                                    * 2C9A9
-          FALSE                                  * 2C9AE
-          OBJ_2CDFA                              * 2C9B3
-          %%>%                                   * 2C9B8
-        ;                                        * 2C9BD
+        :: STATGETYCOL OBJ_2C9EF %%0 FALSE OBJ_2CDFA %%>% ; * 2C99A
 
 * -> %
 * refs (2): 1FE6D B7F59
 STATXY:
-        ::                                       * 2C9C2
-          RclXYCol&äDAT                          * 2C9C7
-          %%0                                    * 2C9CC
-          DUP                                    * 2C9D1
-          FALSE                                  * 2C9D6
-          DUP                                    * 2C9DB
-          OBJ_2CE7C                              * 2C9E0
-          %%>%                                   * 2C9E5
-        ;                                        * 2C9EA
+        :: RclXYCol&äDAT %%0 DUP FALSE DUP OBJ_2CE7C %%>% ; * 2C9C2
 
 * refs (10): 2C94A 2C963 2C97C 2C9A4 B7E1E B7E37 ...
 OBJ_2C9EF:
-        ::                                       * 2C9EF
-          COERCEDUP                              * 2C9F4
-          rclä                                   * 2C9F9
-          OBJ_2CF08                              * 2C9FE
-          SWAPDROP                               * 2CA03
-        ;                                        * 2CA08
+        :: COERCEDUP rclä OBJ_2CF08 SWAPDROP ;   * 2C9EF
 
 * refs (4): 1FF2A 48BC0 4A20D AF85F
 STATLR:
-        ::                                       * 2CA0D
-          RclXYCol&äDAT                          * 2CA12
-          3PICKOVER                              * 2CA17
-          OBJ_2CC4C                              * 2CA1C
-          OBJ_2CDA5                              * 2CA21
-          3PICK3PICK                             * 2CA26
-          OBJ_2CC06                              * 2CA2B
-          OBJ_2CDA5                              * 2CA30
-          BINT5                                  * 2CA35
-          NDUP                                   * 2CA3A
-          OBJ_2CC4C                              * 2CA3F
-          OBJ_2CC06                              * 2CA44
-          OBJ_2CE7C                              * 2CA49
-          6PICK                                  * 2CA4E
-          5ROLL                                  * 2CA53
-          5PICK                                  * 2CA58
-          OBJ_2CC4C                              * 2CA5D
-          OBJ_2CDFA                              * 2CA62
-          DUP                                    * 2CA67
-          %%0=                                   * 2CA6C
-          case                                   * 2CA71
-          OBJ_2D2D7                              * 2CA76
-          %%/                                    * 2CA7B
-          SWAPROT                                * 2CA80
-          3PICK                                  * 2CA85
-          OBJ_372BC                              * 2CA8A
-          OBJ_2CC06                              * 2CA8F
-          IT                                     * 2CA94
-          %%EXP                                  * 2CA99
-          %%>%                                   * 2CA9E
-          SWAP                                   * 2CAA3
-          %%>%                                   * 2CAA8
-          2SWAP                                  * 2CAAD
-          2DROP                                  * 2CAB2
-          ChkReakäPAR                            * 2CAB7
-          ROTROT2DROP                            * 2CABC
-          4PICKSWAP                              * 2CAC1
-          6PICK                                  * 2CAC6
+        :: RclXYCol&äDAT 3PICKOVER OBJ_2CC4C OBJ_2CDA5 3PICK3PICK OBJ_2CC06 * 2CA0D
+          OBJ_2CDA5 BINT5 NDUP OBJ_2CC4C OBJ_2CC06 OBJ_2CE7C 6PICK 5ROLL * 2CA30
+          5PICK OBJ_2CC4C OBJ_2CDFA DUP %%0= case OBJ_2D2D7 * 2CA58
+          %%/ SWAPROT 3PICK OBJ_372BC OBJ_2CC06 IT %%EXP * 2CA7B
+          %%>% SWAP %%>% 2SWAP 2DROP ChkReakäPAR ROTROT2DROP 4PICKSWAP 6PICK * 2CA9E
           3UNROLL                                * 2CACB
 
 predy(r):
-          StoäPAR(5_)                            * 2CAD0
-        ;                                        * 2CAD5
+          StoäPAR(5_) ;                          * 2CAD0
 
 * % -> %'
 * refs (3): 1FF89 1FFA9 B7F0E
@@ -763,28 +394,10 @@ STATPREDY:
         ::                                       * 2CADA
 
 predx(r):
-          ChkReakäPAR                            * 2CADF
-          DROP                                   * 2CAE4
-          ROTDROP                                * 2CAE9
-          ROTDROP                                * 2CAEE
-          ROT                                    * 2CAF3
-          %>%%                                   * 2CAF8
-          OBJ_2CC4C                              * 2CAFD
-          IT                                     * 2CB02
-          OBJ_2CBC5                              * 2CB07
-          SWAP                                   * 2CB0C
-          %>%%                                   * 2CB11
-          %%*SWAP                                * 2CB16
-          %>%%                                   * 2CB1B
-          OBJ_2CC06                              * 2CB20
-          IT                                     * 2CB25
-          OBJ_2CBC5                              * 2CB2A
-          %%+                                    * 2CB2F
-          OBJ_2CC06                              * 2CB34
-          IT                                     * 2CB39
-          %%EXP                                  * 2CB3E
-          %%>%                                   * 2CB43
-        ;                                        * 2CB48
+          ChkReakäPAR DROP ROTDROP ROTDROP ROT %>%% OBJ_2CC4C IT OBJ_2CBC5 * 2CADF
+          SWAP %>%% %%*SWAP %>%% OBJ_2CC06 IT OBJ_2CBC5 * 2CB0C
+          %%+ OBJ_2CC06 IT %%EXP                 * 2CB2F
+          %%>% ;                                 * 2CB43
 
 * % -> %'
 * refs (2): 1FFC9 B7EFF
@@ -792,86 +405,36 @@ STATPREDX:
         ::                                       * 2CB4D
 
 PwrExpFIT?:
-          ChkReakäPAR                            * 2CB52
-          DROP                                   * 2CB57
-          ROTDROP                                * 2CB5C
-          ROTDROP                                * 2CB61
-          ROT                                    * 2CB66
-          %>%%                                   * 2CB6B
-          OBJ_2CC06                              * 2CB70
-          IT                                     * 2CB75
-          OBJ_2CBC5                              * 2CB7A
-          ROT                                    * 2CB7F
-          %>%%                                   * 2CB84
-          OBJ_2CC06                              * 2CB89
-          IT                                     * 2CB8E
-          OBJ_2CBC5                              * 2CB93
-          %%-                                    * 2CB98
-          SWAP                                   * 2CB9D
-          %>%%                                   * 2CBA2
-          %%/                                    * 2CBA7
-          OBJ_2CC4C                              * 2CBAC
-          IT                                     * 2CBB1
-          %%EXP                                  * 2CBB6
-          %%>%                                   * 2CBBB
-        ;                                        * 2CBC0
+          ChkReakäPAR DROP ROTDROP ROTDROP ROT %>%% OBJ_2CC06 IT OBJ_2CBC5 * 2CB52
+          ROT %>%% OBJ_2CC06 IT OBJ_2CBC5        * 2CB7F
+          %%- SWAP %>%% %%/ OBJ_2CC4C IT %%EXP   * 2CB98
+          %%>% ;                                 * 2CBBB
 
 * refs (4): 2CB07 2CB2A 2CB7A 2CB93
 OBJ_2CBC5:
-        ::                                       * 2CBC5
-          DUP                                    * 2CBCA
-          %%0>                                   * 2CBCF
-          ?SKIP                                  * 2CBD4
-          OBJ_2CBE8                              * 2CBD9
-          %%LN                                   * 2CBDE
-        ;                                        * 2CBE3
+        :: DUP %%0> ?SKIP OBJ_2CBE8              * 2CBC5
+          %%LN ;                                 * 2CBDE
 
 * refs (1): 2CBD9
 OBJ_2CBE8:
-        ::                                       * 2CBE8
-          %%0<                                   * 2CBED
-          ?SKIP                                  * 2CBF2
-          OBJ_2D307                              * 2CBF7
-          OBJ_2D2F7                              * 2CBFC
-        ;                                        * 2CC01
+        :: %%0< ?SKIP OBJ_2D307                  * 2CBE8
+          OBJ_2D2F7 ;                            * 2CBFC
 
 * refs (14): 2C84B 2C85F 2C8AF 2C909 2C918 2CA2B ...
 OBJ_2CC06:
         ::                                       * 2CC06
 
 PwrLogFIT?:
-          ChkReakäPAR                            * 2CC0B
-          5UNROLL                                * 2CC10
-          4DROP                                  * 2CC15
-          DUP                                    * 2CC1A
-          '                                      * 2CC1F
-          xPWRFIT                                * 2CC24
-          EQUAL                                  * 2CC29
-          SWAP                                   * 2CC2E
-          '                                      * 2CC33
-          xEXPFIT                                * 2CC38
-          EQUAL                                  * 2CC3D
-          OR                                     * 2CC42
-        ;                                        * 2CC47
+          ChkReakäPAR 5UNROLL 4DROP DUP ' xPWRFIT EQUAL SWAP ' xEXPFIT EQUAL * 2CC0B
+          OR ;                                   * 2CC42
 
 * refs (12): 2C878 2C88C 2C8AA 2C8FA 2C913 2CA1C ...
 OBJ_2CC4C:
         ::                                       * 2CC4C
 
 nrows(ar):
-          ChkReakäPAR                            * 2CC51
-          5UNROLL                                * 2CC56
-          4DROP                                  * 2CC5B
-          DUP                                    * 2CC60
-          '                                      * 2CC65
-          xPWRFIT                                * 2CC6A
-          EQUAL                                  * 2CC6F
-          SWAP                                   * 2CC74
-          '                                      * 2CC79
-          xLOGFIT                                * 2CC7E
-          EQUAL                                  * 2CC83
-          OR                                     * 2CC88
-        ;                                        * 2CC8D
+          ChkReakäPAR 5UNROLL 4DROP DUP ' xPWRFIT EQUAL SWAP ' xLOGFIT EQUAL * 2CC51
+          OR ;                                   * 2CC88
 
 * refs (4): 2C54E 2C81E 2C927 CB565
 OBJ_2CC92:
@@ -1548,121 +1111,88 @@ LIB00C:
 
 * refs (1): 2D342
 LIB00C.config:
-        ::                                       * 2D359
-          CLOSEUART                              * 2D35E
-          ClrServMode                            * 2D363
-          OBJ_11387                              * 2D368
-          OBJ_5394C                              * 2D36D
-          OpenIO_324C8                           * 2D372
-        ;                                        * 2D377
+        :: CLOSEUART ClrServMode OBJ_11387 OBJ_5394C OpenIO_324C8 ; * 2D359
 
 * refs (7): 2D82F 2DA04 2DA90 2E6C3 2E8DB 307FB ...
 OBJ_2D37C:
-        $       "p% @-# 1"                       * 2D37C
+        $ "p% @-# 1"                             * 2D37C
 
 * refs (5): 2D5E6 2D85C 2F6B4 2F6EB 2F9A2
 MAXRETRY:
-        #       A                                * 2D396  10
+        # A                                      * 2D396  10
 
 * refs (11): 2D6B8 2D843 2DA22 2DABD 2E0E0 2E6D7 ...
 LAMPKNO:
-        LAM     'PKNO                            * 2D3A0
+        LAM 'PKNO                                * 2D3A0
 
 * refs (5): 2D5FA 2EEE2 2F103 2F112 30838
 LAMPACKET:
-        LAM     'PACKET                          * 2D3B1
+        LAM 'PACKET                              * 2D3B1
 
 * refs (6): 2D5FF 2D7B2 2D7C1 2D7E4 2D875 2F6F5
 LAMRETRY:
-        LAM     'RETRY                           * 2D3C6
+        LAM 'RETRY                               * 2D3C6
 
 * refs (3): 2D992 2DD3D 2DD5B
 LAMERRMSG:
-        LAM     'ERRMSG                          * 2D3D9
+        LAM 'ERRMSG                              * 2D3D9
 
 * refs (7): 2D44B 2D83E 2DA1D 2E6D2 2E8EA 2FD0D ...
 LAMKP:
-        LAM     'KP                              * 2D3EE
+        LAM 'KP                                  * 2D3EE
 
 * refs (13): 2D870 2DF06 2E912 2EED8 2F0EF 2F0FE ...
 LAMLNAME:
-        LAM     'LNAME                           * 2D3FB
+        LAM 'LNAME                               * 2D3FB
 
 * refs (6): 2E5D8 2EEDD 2F10D 2F1C1 2F284 2FC72
 LAMOBJ:
-        LAM     'OBJ                             * 2D40E
+        LAM 'OBJ                                 * 2D40E
 
 * refs (3): 2F20C 2F26B 2F338
 LAMOPOS:
-        LAM     'OPOS                            * 2D41D
+        LAM 'OPOS                                * 2D41D
 
 * refs (3): 2DA18 2DA9F 2EF23
 LAMEXCHP:
-        LAM     'EXCHP                           * 2D42E
+        LAM 'EXCHP                               * 2D42E
 
 * refs (4): 2D56E 2DAA9 2EF0F 2F73B
 'LamKPSto:
-        ::                                       * 2D441
-          '                                      * 2D446
-          LAMKP                                  * 2D44B
-          STO                                    * 2D450
-        ;                                        * 2D455
+        :: ' LAMKP STO ;                         * 2D441
 
 * refs (3): 2F207 2F289 2F31F
 LAMKLIST:
-        LAM     'KLIST                           * 2D45A
+        LAM 'KLIST                               * 2D45A
 
 * refs (5): 2D87A 2DF0B 2E917 2F3EC 2F484
 LAMKMODE:
-        LAM     'KMODE                           * 2D46D
+        LAM 'KMODE                               * 2D46D
 
 * refs (6): 2F574 2F5B5 2FBA0 2FBB4 2FBC8 2FBEB
 LAMKPTRN:
-        LAM     'KPTRN                           * 2D480
+        LAM 'KPTRN                               * 2D480
 
 * refs (7): 2D807 2D87F 2DF10 2E91C 2EEE7 2F068 ...
 LAMKRM:
-        LAM     'KRM                             * 2D493
+        LAM 'KRM                                 * 2D493
 
 * refs (3): 2D604 2D672 3084C
 LAMMaxR:
-        LAM     'MaxR                            * 2D4A2
+        LAM 'MaxR                                * 2D4A2
 
 * refs (2): 2D52B 2EF00
 OBJ_2D4B3:
-        ::                                       * 2D4B3
-          DUPZERO                                * 2D4B8
-          4ROLL                                  * 2D4BD
-          BUILDKPACKET                           * 2D4C2
-          Connecting                             * 2D4C7
-          JstGetTHEMESG                          * 2D4CC
-          KDispStatus2                           * 2D4D1
+        :: DUPZERO 4ROLL BUILDKPACKET Connecting JstGetTHEMESG KDispStatus2 * 2D4B3
           SWAP                                   * 2D4D6
 
 {local''}:
-          {                                      * 2D4DB
-            NULLLAM                              * 2D4E0
-          }                                      * 2D4E5
-          BIND                                   * 2D4EA
-          SEND_PACKET                            * 2D4EF
-          NOTcase                                * 2D4F4
-          false;Lpop                             * 2D4F9
-          1ABNDSWAP                              * 2D4FE
-          OBJ_3088E                              * 2D503
-          DUP                                    * 2D508
-          NOTcaseFALSE                           * 2D50D
-        ;                                        * 2D512
+          { NULLLAM } BIND SEND_PACKET NOTcase false;Lpop * 2D4DB
+          1ABNDSWAP OBJ_3088E DUP NOTcaseFALSE ; * 2D4FE
 
 * refs (1): 2E92B
 EXCHINITPK:
-        ::                                       * 2D517
-          KERMOPEN                               * 2D51C
-          CHR_I                                  * 2D521
-          CHOOSE_INIT                            * 2D526
-          OBJ_2D4B3                              * 2D52B
-          BINT0                                  * 2D530
-          OBJ_2DAB3                              * 2D535
-          case                                   * 2D53A
+        :: KERMOPEN CHR_I CHOOSE_INIT OBJ_2D4B3 BINT0 OBJ_2DAB3 case * 2D517
           ::                                     * 2D53F
             CODE                                 * 2D544  32 nibbles
               A=DAT1  A                          * 2D54E
@@ -1679,265 +1209,104 @@ Loop:
               D0=D0+  5                          * 2D567
               PC=(A)                             * 2D56A
             ENDCODE                              * 2D56E
-            'LamKPSto                            * 2D56E
-          ;                                      * 2D573
-          case                                   * 2D578
-          3DROP                                  * 2D57D
-          ERROROUT                               * 2D582
-        ;                                        * 2D587
+            'LamKPSto ;                          * 2D56E
+          case 3DROP                             * 2D578
+          ERROROUT ;                             * 2D582
 
 * refs (2): 2E754 2EF46
 SENDEOT:
-        ::                                       * 2D58C
-          NULL$                                  * 2D591
-          GetKermPkt#                            * 2D596
-          CHR_B                                  * 2D59B
-          BUILDKPACKET                           * 2D5A0
-          BINT2                                  * 2D5A5
-          OBJ_2D5EB                              * 2D5AA
-          casedrptru                             * 2D5AF
+        :: NULL$ GetKermPkt# CHR_B BUILDKPACKET BINT2 OBJ_2D5EB casedrptru * 2D58C
           case                                   * 2D5B4
           TrueFalse                              * 2D5B9
-          DUP                                    * 2D5BE
-          #       C02                            * 2D5C3  3074
-          #=case                                 * 2D5CD
-          DROPTRUE                               * 2D5D2
-          FalseFalse                             * 2D5D7
-        ;                                        * 2D5DC
+          DUP # C02 #=case DROPTRUE              * 2D5BE
+          FalseFalse ;                           * 2D5D7
 
 * refs (4): 2D4EF 2E94E 2F24D 2F36F
 SEND_PACKET:
-        ::                                       * 2D5E1
-          MAXRETRY                               * 2D5E6
+        :: MAXRETRY                              * 2D5E1
 
 * refs (1): 2D5AA
 OBJ_2D5EB:
-          ::                                     * 2D5EB
-            DUP                                  * 2D5F0
-            {                                    * 2D5F5
-              LAMPACKET                          * 2D5FA
-              LAMRETRY                           * 2D5FF
-              LAMMaxR                            * 2D604
-            }                                    * 2D609
-            BIND                                 * 2D60E
+          :: DUP                                 * 2D5EB
+            { LAMPACKET LAMRETRY LAMMaxR } BIND  * 2D5F5
 L_2D613:
-            OBJ_30833                            * 2D613
-            NOTcase                              * 2D618
-            Lpop;2false                          * 2D61D
-            DUP                                  * 2D622
-            CHR_Y                                * 2D627
-            EQUALcase                            * 2D62C
-            ::                                   * 2D631
-              OVER                               * 2D636
-              GetKermPkt#                        * 2D63B
-              #=case                             * 2D640
+            OBJ_30833 NOTcase Lpop;2false        * 2D613
+            DUP CHR_Y EQUALcase                  * 2D622
+            :: OVER GetKermPkt# #=case           * 2D631
 
 * refs (1): 2D6DB
 OBJ_2D645:
-              ::                                 * 2D645
-                2DROP                            * 2D64A
-                IncrLAMPKNO                      * 2D64F
-                Lpop;true                        * 2D654
-              ;                                  * 2D659
-              OBJ_2F957                          * 2D65E
-              case                               * 2D663
+              :: 2DROP IncrLAMPKNO Lpop;true ;   * 2D645
+              OBJ_2F957 case                     * 2D65E
 
 * refs (1): 2D6EF
 OBJ_2D668:
-              ::                                 * 2D668
-                3DROP                            * 2D66D
-                LAMMaxR                          * 2D672
-                OBJ_2D7AD                        * 2D677
-                ?GOTO                            * 2D67C
-                L_2D613                          * 2D681
-                XFERFAIL                         * 2D686
-                Lpop;2false                      * 2D68B
-              ;                                  * 2D690
-              Lpop;true;false                    * 2D695
-            ;                                    * 2D69A
-            DUP                                  * 2D69F
-            CHR_N                                * 2D6A4
-            EQUALcase                            * 2D6A9
-            ::                                   * 2D6AE
-              OVER                               * 2D6B3
-              LAMPKNO                            * 2D6B8
-              #1+                                * 2D6BD
-              #       40                         * 2D6C2  64
-              #/                                 * 2D6CC
-              DROP                               * 2D6D1
-              #=case                             * 2D6D6
-              OBJ_2D645                          * 2D6DB
-              OVER                               * 2D6E0
-              GetKermPkt#                        * 2D6E5
-              #=case                             * 2D6EA
-              OBJ_2D668                          * 2D6EF
-              Lpop;true;false                    * 2D6F4
-            ;                                    * 2D6F9
+              :: 3DROP LAMMaxR OBJ_2D7AD ?GOTO L_2D613 XFERFAIL Lpop;2false ; * 2D668
+              Lpop;true;false ;                  * 2D695
+            DUP CHR_N EQUALcase                  * 2D69F
+            :: OVER LAMPKNO #1+ # 40 #/ DROP #=case OBJ_2D645 * 2D6AE
+              OVER GetKermPkt# #=case OBJ_2D668  * 2D6E0
+              Lpop;true;false ;                  * 2D6F4
 
 * refs (3): 2D695 2D6F4 2F858
 Lpop;true;false:
-            ::                                   * 2D6FE
-              ABND                               * 2D703
-              TrueFalse                          * 2D708
-            ;                                    * 2D70D
-          ;                                      * 2D712
+            :: ABND TrueFalse ; ;                * 2D6FE
         ;                                        * 2D717
 
 * refs (5): 2D61D 2D68B 2F812 2F9BB 2FB3C
 Lpop;2false:
-        ::                                       * 2D71C
-          ABND                                   * 2D721
-          FalseFalse                             * 2D726
-        ;                                        * 2D72B
+        :: ABND FalseFalse ;                     * 2D71C
 
 * refs (6): 2D7F8 2DD7E 2F05E 2F22A 2F51A 2FAAB
 KDispRow2:
-        ::                                       * 2D730
-          BINT39                                 * 2D735
-          TestSysFlag                            * 2D73A
-          caseDROP                               * 2D73F
-          DISPROW2                               * 2D744
+        :: BINT39 TestSysFlag caseDROP DISPROW2  * 2D730
         ;                                        * 2D749
 
 * refs (6): 2D4D1 2D82A 2DA8B 2F027 2F0F9 2F902
 KDispStatus2:
-        ::                                       * 2D74E
-          BINT39                                 * 2D753
-          TestSysFlag                            * 2D758
-          caseDROP                               * 2D75D
-          DISPSTATUS2                            * 2D762
+        :: BINT39 TestSysFlag caseDROP DISPSTATUS2 * 2D74E
         ;                                        * 2D767
 
 * refs (2): 2D799 2D8B1
 OBJ_2D76C:
-        ::                                       * 2D76C
-          3PICK                                  * 2D771
-          EQUAL                                  * 2D776
-          SWAP4PICK                              * 2D77B
-          #=                                     * 2D780
-          AND                                    * 2D785
-        ;                                        * 2D78A
+        :: 3PICK EQUAL SWAP4PICK #= AND ;        * 2D76C
 
 * refs (5): 2DB7B 2DB8A 2DBA8 2DBB7 2DBC6
 OBJ_2D78F:
-        ::                                       * 2D78F
-          ZEROSWAP                               * 2D794
-          OBJ_2D76C                              * 2D799
-          COLA                                   * 2D79E
-          ?GOTO                                  * 2D7A3
+        :: ZEROSWAP OBJ_2D76C COLA ?GOTO         * 2D78F
         ;                                        * 2D7A8
 
 * refs (4): 2D677 2F6B9 2F9A7 30851
 OBJ_2D7AD:
-        ::                                       * 2D7AD
-          LAMRETRY                               * 2D7B2
-          #1-DUP                                 * 2D7B7
-          '                                      * 2D7BC
-          LAMRETRY                               * 2D7C1
-          STO                                    * 2D7C6
-          #0=case                                * 2D7CB
-          DROPFALSE                              * 2D7D0
-          Retry                                  * 2D7D5
-          JstGetTHEMESG                          * 2D7DA
-          SWAP                                   * 2D7DF
-          LAMRETRY                               * 2D7E4
-          #-                                     * 2D7E9
-          #>$                                    * 2D7EE
-          &$                                     * 2D7F3
-          KDispRow2                              * 2D7F8
-          TrueTrue                               * 2D7FD
-          '                                      * 2D802
-          LAMKRM                                 * 2D807
-          STO                                    * 2D80C
-        ;                                        * 2D811
+        :: LAMRETRY #1-DUP ' LAMRETRY STO #0=case DROPFALSE * 2D7AD
+          Retry JstGetTHEMESG SWAP LAMRETRY #- #>$ &$ KDispRow2 TrueTrue ' * 2D7D5
+          LAMKRM STO ;                           * 2D807
 
 * $/id/lam ->
 * refs (6): 21F71 21F7B 21F85 21FA5 B81D3 B8AC6
 DORECN:
-        ::                                       * 2D816
-          nm=>st!                                * 2D81B
-          Connecting                             * 2D820
-          JstGetTHEMESG                          * 2D825
-          KDispStatus2                           * 2D82A
-          OBJ_2D37C                              * 2D82F
-          BINT0                                  * 2D834
-          {                                      * 2D839
-            LAMKP                                * 2D83E
-            LAMPKNO                              * 2D843
-          }                                      * 2D848
-          BIND                                   * 2D84D
-          ERRSET                                 * 2D852
-          ::                                     * 2D857
-            MAXRETRY                             * 2D85C
-            NULL$                                * 2D861
-            FALSE                                * 2D866
-            {                                    * 2D86B
-              LAMLNAME                           * 2D870
-              LAMRETRY                           * 2D875
-              LAMKMODE                           * 2D87A
-              LAMKRM                             * 2D87F
-            }                                    * 2D884
-            BIND                                 * 2D889
-            KERMOPEN                             * 2D88E
-            RecvNextPkt                          * 2D893
-            NOTcasedrop                          * 2D898
-            ERROROUT                             * 2D89D
+        :: nm=>st! Connecting JstGetTHEMESG KDispStatus2 OBJ_2D37C BINT0 * 2D816
+          { LAMKP LAMPKNO } BIND ERRSET          * 2D839
+          :: MAXRETRY NULL$ FALSE                * 2D857
+            { LAMLNAME LAMRETRY LAMKMODE LAMKRM } BIND KERMOPEN RecvNextPkt * 2D86B
+            NOTcasedrop ERROROUT                 * 2D898
 
 * refs (1): 2E97B
 OBJ_2D8A2:
-            ::                                   * 2D8A2
-              BINT0                              * 2D8A7
-              CHR_S                              * 2D8AC
-              OBJ_2D76C                          * 2D8B1
-              NOTcase                            * 2D8B6
-              TRPACKETFAIL                       * 2D8BB
-              2DROP                              * 2D8C0
-              OBJ_2F709                          * 2D8C5
-              case                               * 2D8CA
-              AllowPrlcdCl                       * 2D8CF
-              ABND                               * 2D8D4
-              case                               * 2D8D9
-              TRPACKETFAIL                       * 2D8DE
-              DUP                                * 2D8E3
-              #SyntaxErr                         * 2D8E8
-              #<>case                            * 2D8ED
-              ERROROUT                           * 2D8F2
-              JstGetTHEMESG                      * 2D8F7
-              Conc:RC(2st)                       * 2D8FC
-              EXITMSGSTO                         * 2D901
-              #EXITERR                           * 2D906
-              ERROROUT                           * 2D90B
-            ;                                    * 2D910
+            :: BINT0 CHR_S OBJ_2D76C NOTcase TRPACKETFAIL * 2D8A2
+              2DROP OBJ_2F709 case AllowPrlcdCl  * 2D8C0
+              ABND case TRPACKETFAIL             * 2D8D4
+              DUP #SyntaxErr #<>case ERROROUT    * 2D8E3
+              JstGetTHEMESG Conc:RC(2st) EXITMSGSTO #EXITERR ERROROUT ; * 2D8F7
           ;                                      * 2D915
-          ERRTRAP                                * 2D91A
-          OBJ_2E763                              * 2D91F
-          ABND                                   * 2D924
-        ;                                        * 2D929
+          ERRTRAP OBJ_2E763 ABND ;               * 2D91A
 
 * refs (1): 2DDBA
 OBJ_2D92E:
-        ::                                       * 2D92E
-          DEPTH                                  * 2D933
-          #0=ITE                                 * 2D938
-          MessageC15                             * 2D93D
-          ::                                     * 2D942
-            NULL$TEMP                            * 2D947
-            DEPTH                                * 2D94C
-            ONE_DO                               * 2D951
-            ?ATTNQUIT                            * 2D956
-            ISTOP-INDEX                          * 2D95B
-            DUP#2+                               * 2D960
-            PICK                                 * 2D965
-            #       4B                           * 2D96A  75
-            DoSt:(s,_,s)                         * 2D974
-            !!append$                            * 2D979
-            CRLF$                                * 2D97E
-            !!append$                            * 2D983
-            LOOP                                 * 2D988
-          ;                                      * 2D98D
-          LAMERRMSG                              * 2D992
-          !insert$                               * 2D997
-        ;                                        * 2D99C
+        :: DEPTH #0=ITE MessageC15               * 2D92E
+          :: NULL$TEMP DEPTH ONE_DO ?ATTNQUIT ISTOP-INDEX DUP#2+ PICK # 4B * 2D942
+            DoSt:(s,_,s) !!append$ CRLF$ !!append$ LOOP ; * 2D974
+          LAMERRMSG !insert$ ;                   * 2D992
 
 * refs (3): 2DA40 2DB58 2DE1E
 SetServMode:
@@ -1955,268 +1324,83 @@ ClrServMode:
 
 * refs (2): 2D9EB 2DAEA
 OBJ_2D9C3:
-        ::                                       * 2D9C3
-          NoIgnoreAlm                            * 2D9C8
-          GETKEY                                 * 2D9CD
-          NOT?SEMI                               * 2D9D2
-          DROP                                   * 2D9D7
-          FLUSHKEYS                              * 2D9DC
-          DoBadKey                               * 2D9E1
-          COLA                                   * 2D9E6
-          OBJ_2D9C3                              * 2D9EB
+        :: NoIgnoreAlm GETKEY NOT?SEMI           * 2D9C3
+          DROP FLUSHKEYS DoBadKey COLA OBJ_2D9C3 * 2D9D7
         ;                                        * 2D9F0
 
 * refs (2): 21FDB AFE1B
 DOSERVER:
-        ::                                       * 2D9F5
-          KERMOPEN                               * 2D9FA
-          CHOOSE_INIT                            * 2D9FF
-          OBJ_2D37C                              * 2DA04
-          BINT0                                  * 2DA09
-          TRUE                                   * 2DA0E
-          {                                      * 2DA13
-            LAMEXCHP                             * 2DA18
-            LAMKP                                * 2DA1D
-            LAMPKNO                              * 2DA22
-            nohalt                               * 2DA27
-          }                                      * 2DA2C
-          BIND                                   * 2DA31
-          ERRSET                                 * 2DA36
-          ::                                     * 2DA3B
-            SetServMode                          * 2DA40
+        :: KERMOPEN CHOOSE_INIT OBJ_2D37C BINT0 TRUE * 2D9F5
+          { LAMEXCHP LAMKP LAMPKNO nohalt } BIND ERRSET * 2DA13
+          :: SetServMode                         * 2DA3B
 L_2DA45:
             ClrDA1IsStat                         * 2DA45
 
 * refs (4): 2DDE7 2E06D 2E090 2EB14
 OBJ_2DA4A:
-            ::                                   * 2DA4A
-              BINT39                             * 2DA4F
-              TestSysFlag                        * 2DA54
-              COLA                               * 2DA59
-              ?SKIP                              * 2DA5E
+            :: BINT39 TestSysFlag COLA ?SKIP     * 2DA4A
             ;                                    * 2DA63
-            ::                                   * 2DA68
-              CLEARVDISP                         * 2DA6D
-              CLEARMENU                          * 2DA72
-            ;                                    * 2DA77
-            #       C0C                          * 2DA7C  3084
-            JstGetTHEMESG                        * 2DA86
-            KDispStatus2                         * 2DA8B
-            OBJ_2D37C                            * 2DA90
-            CHOOSE_INIT                          * 2DA95
+            :: CLEARVDISP CLEARMENU ; # C0C JstGetTHEMESG KDispStatus2 * 2DA68
+            OBJ_2D37C CHOOSE_INIT                * 2DA90
 L_2DA9A:
-            '                                    * 2DA9A
-            LAMEXCHP                             * 2DA9F
-            STO                                  * 2DAA4
-            'LamKPSto                            * 2DAA9
-            BINT0                                * 2DAAE
+            ' LAMEXCHP STO 'LamKPSto BINT0       * 2DA9A
 
 * refs (4): 2D535 2DB71 2F392 2F835
 OBJ_2DAB3:
-            ::                                   * 2DAB3
-              '                                  * 2DAB8
-              LAMPKNO                            * 2DABD
-              STO                                * 2DAC2
-            ;                                    * 2DAC7
-            BEGIN                                * 2DACC
-            OBJ_2E2B4                            * 2DAD1
-            NOT_WHILE                            * 2DAD6
-            ::                                   * 2DADB
-              DROP                               * 2DAE0
-              SENDNAK                            * 2DAE5
-              OBJ_2D9C3                          * 2DAEA
-              ATTN?                              * 2DAEF
-              case                               * 2DAF4
-              ::                                 * 2DAF9
-                ATTNFLGCLR                       * 2DAFE
-                2RDROP                           * 2DB03
-              ;                                  * 2DB08
-              ALARM?                             * 2DB0D
-              case                               * 2DB12
-              ::                                 * 2DB17
-                ALARMxcp                         * 2DB1C
-                DROP                             * 2DB21
-                NOT?SEMI                         * 2DB26
-                CtlAlarm!                        * 2DB2B
-                DoCAlarmKey                      * 2DB30
-              ;                                  * 2DB35
-              TIMEOUT?                           * 2DB3A
-              IT                                 * 2DB3F
-              ::                                 * 2DB44
-                TurnOff                          * 2DB49
-                ClrServMode                      * 2DB4E
-                KERMOPEN                         * 2DB53
-                SetServMode                      * 2DB58
-              ;                                  * 2DB5D
+            :: ' LAMPKNO STO ; BEGIN OBJ_2E2B4 NOT_WHILE * 2DAB3
+            :: DROP SENDNAK OBJ_2D9C3 ATTN? case * 2DADB
+              :: ATTNFLGCLR 2RDROP ;             * 2DAF9
+              ALARM? case                        * 2DB0D
+              :: ALARMxcp DROP NOT?SEMI          * 2DB17
+                CtlAlarm! DoCAlarmKey ;          * 2DB2B
+              TIMEOUT? IT                        * 2DB3A
+              :: TurnOff ClrServMode KERMOPEN SetServMode ; * 2DB44
             ;                                    * 2DB62
             REPEAT                               * 2DB67
 L_2DB6C:
-            BINT0                                * 2DB6C
-            OBJ_2DAB3                            * 2DB71
-            CHR_S                                * 2DB76
-            OBJ_2D78F                            * 2DB7B
-            L_2DEED                              * 2DB80
-            CHR_I                                * 2DB85
-            OBJ_2D78F                            * 2DB8A
-            L_2DE41                              * 2DB8F
-            ROT                                  * 2DB94
-            DECODE                               * 2DB99
-            3UNROLL                              * 2DB9E
-            CHR_R                                * 2DBA3
-            OBJ_2D78F                            * 2DBA8
-            L_2DFB4                              * 2DBAD
-            CHR_C                                * 2DBB2
-            OBJ_2D78F                            * 2DBB7
-            L_2DD4C                              * 2DBBC
-            CHR_G                                * 2DBC1
-            OBJ_2D78F                            * 2DBC6
-            L_2DE98                              * 2DBCB
-            DUP                                  * 2DBD0
-            CHR_E                                * 2DBD5
-            EQUALcase                            * 2DBDA
-            ::                                   * 2DBDF
-              2DROP                              * 2DBE4
-              OBJ_30E6C                          * 2DBE9
-              GOTO                               * 2DBEE
-              L_2DFA5                            * 2DBF3
-            ;                                    * 2DBF8
+            BINT0 OBJ_2DAB3 CHR_S OBJ_2D78F L_2DEED CHR_I OBJ_2D78F L_2DE41 * 2DB6C
+            ROT DECODE 3UNROLL CHR_R OBJ_2D78F L_2DFB4 CHR_C OBJ_2D78F * 2DB94
+            L_2DD4C CHR_G OBJ_2D78F L_2DE98 DUP CHR_E EQUALcase * 2DBBC
+            :: 2DROP OBJ_30E6C GOTO L_2DFA5 ;    * 2DBDF
             3DROP                                * 2DBFD
 L_2DC02:
             InvalServCmd                         * 2DC02
 L_2DC07:
-            OBJ_2EFA0                            * 2DC07
-            DUP                                  * 2DC0C
-            OBJ_2F01D                            * 2DC11
-            %2                                   * 2DC16
-            dowait                               * 2DC1B
-            SENDERROR                            * 2DC20
-            GOTO                                 * 2DC25
-            L_2DA45                              * 2DC2A
+            OBJ_2EFA0 DUP OBJ_2F01D %2 dowait SENDERROR GOTO L_2DA45 * 2DC07
 L_2DC2F:
-            OBJ_26886                            * 2DC2F
-            ERRSET                               * 2DC34
+            OBJ_26886 ERRSET                     * 2DC2F
 
 StringVarsBytes(st):
-            ::                                   * 2DC39
-              DOVARS                             * 2DC3E
-              DUPLENCOMP                         * 2DC43
-              DUP#0=ITE                          * 2DC48
-              2DROP                              * 2DC4D
-              ::                                 * 2DC52
-                #1+_ONE_DO                       * 2DC57
-                DUPINDEX@                        * 2DC5C
-                NTHCOMDDUP                       * 2DC61
-                ID>$                             * 2DC66
-                APPEND_SPACE                     * 2DC6B
-                OVER                             * 2DC70
-                VARSIZE                          * 2DC75
-                EDITDECOMP$                      * 2DC7A
-                APPEND_SPACE                     * 2DC7F
-                4ROLL                            * 2DC84
-                XEQRCL                           * 2DC89
-                OBJ_15CCF                        * 2DC8E
-                APPEND_SPACE                     * 2DC93
-                SWAP                             * 2DC98
-                #>%                              * 2DC9D
-                EDITDECOMP$                      * 2DCA2
-                !append$                         * 2DCA7
-                !append$                         * 2DCAC
-                APNDCRLF                         * 2DCB1
-                ROT                              * 2DCB6
-                !insert$                         * 2DCBB
-                SWAPLOOP                         * 2DCC0
-                DROP                             * 2DCC5
-              ;                                  * 2DCCA
+            :: DOVARS DUPLENCOMP DUP#0=ITE 2DROP * 2DC39
+              :: #1+_ONE_DO DUPINDEX@ NTHCOMDDUP ID>$ APPEND_SPACE OVER * 2DC52
+                VARSIZE EDITDECOMP$ APPEND_SPACE 4ROLL XEQRCL OBJ_15CCF * 2DC75
+                APPEND_SPACE SWAP #>% EDITDECOMP$ !append$ !append$ APNDCRLF * 2DC93
+                ROT !insert$ SWAPLOOP DROP ;     * 2DCB6
             ;                                    * 2DCCF
-            ERRTRAP                              * 2DCD4
-            DropSysErr$                          * 2DCD9
-            GOTO                                 * 2DCDE
-            L_2DE05                              * 2DCE3
+            ERRTRAP DropSysErr$ GOTO L_2DE05     * 2DCD4
 
 * refs (1): 2DDA1
 OBJ_2DCE8:
-            ::                                   * 2DCE8
-              ERRN                               * 2DCED
-              DUP#0=case                         * 2DCF2
-              ::                                 * 2DCF7
-                OBJ_2EFA0                        * 2DCFC
-                APNDCRLF                         * 2DD01
-                SENDERROR                        * 2DD06
-                ERRJMP                           * 2DD0B
-              ;                                  * 2DD10
-              GETTHEMESG                         * 2DD15
-              REALSTRSTR                         * 2DD1A
-              JstGetTHEMESG                      * 2DD1F
-              APPEND_SPACE                       * 2DD24
-              !insert$                           * 2DD29
-              NEWLINE$                           * 2DD2E
-              !append$                           * 2DD33
-              '                                  * 2DD38
-              LAMERRMSG                          * 2DD3D
-              STO                                * 2DD42
-            ;                                    * 2DD47
+            :: ERRN DUP#0=case                   * 2DCE8
+              :: OBJ_2EFA0 APNDCRLF SENDERROR ERRJMP ; * 2DCF7
+              GETTHEMESG REALSTRSTR JstGetTHEMESG APPEND_SPACE !insert$ * 2DD15
+              NEWLINE$ !append$ ' LAMERRMSG STO ; * 2DD2E
 L_2DD4C:
-            TWODROPNULL$                         * 2DD4C
-            BINT0                                * 2DD51
-            {                                    * 2DD56
-              LAMERRMSG                          * 2DD5B
-              NULLLAM                            * 2DD60
-            }                                    * 2DD65
-            BIND                                 * 2DD6A
-            #       C11                          * 2DD6F  3089
-            JstGetTHEMESG                        * 2DD79
-            KDispRow2                            * 2DD7E
-            KINVISLF                             * 2DD83
-            &$                                   * 2DD88
-            FLUSHKEYS                            * 2DD8D
-            xIFERR                               * 2DD92
-            xSTR>                                * 2DD97
-            xERRTHEN                             * 2DD9C
-            OBJ_2DCE8                            * 2DDA1
-            xIFEND                               * 2DDA6
-            CK0NOLASTWD                          * 2DDAB
-            0LASTOWDOB!                          * 2DDB0
-            ERRSET                               * 2DDB5
-            OBJ_2D92E                            * 2DDBA
-            ERRTRAP                              * 2DDBF
+            TWODROPNULL$ BINT0                   * 2DD4C
+            { LAMERRMSG NULLLAM } BIND # C11 JstGetTHEMESG KDispRow2 * 2DD56
+            KINVISLF &$ FLUSHKEYS xIFERR xSTR> xERRTHEN OBJ_2DCE8 xIFEND * 2DD83
+            CK0NOLASTWD 0LASTOWDOB! ERRSET OBJ_2D92E ERRTRAP * 2DDAB
 
 * refs (2): 2DCD9 2E768
 DropSysErr$:
-            ::                                   * 2DDC4
-              DropSysObs                         * 2DDC9
-              ERROR@                             * 2DDCE
-              OBJ_2EFA0                          * 2DDD3
-              APNDCRLF                           * 2DDD8
-            ;                                    * 2DDDD
-            ABND                                 * 2DDE2
-            OBJ_2DA4A                            * 2DDE7
-            ::                                   * 2DDEC
-              TOADISP                            * 2DDF1
-              REDISPHBUFF                        * 2DDF6
-              ClrDAsOK                           * 2DDFB
-            ;                                    * 2DE00
+            :: DropSysObs ERROR@ OBJ_2EFA0 APNDCRLF ; ABND OBJ_2DA4A * 2DDC4
+            :: TOADISP REDISPHBUFF ClrDAsOK ;    * 2DDEC
 L_2DE05:
-            NULL$SWAP                            * 2DE05
-            CHR_X                                * 2DE0A
-            OBJ_2EF1E                            * 2DE0F
-            ClrServMode                          * 2DE14
-            KERMOPEN                             * 2DE19
-            SetServMode                          * 2DE1E
+            NULL$SWAP CHR_X OBJ_2EF1E ClrServMode KERMOPEN SetServMode * 2DE05
 L_2DE23:
-            ?GOTO                                * 2DE23
-            L_2DA45                              * 2DE28
-            ?GOTO                                * 2DE2D
-            L_2DB6C                              * 2DE32
-            GOTO                                 * 2DE37
-            L_2DC07                              * 2DE3C
+            ?GOTO L_2DA45 ?GOTO L_2DB6C GOTO L_2DC07 * 2DE23
 L_2DE41:
-            2DROP                                * 2DE41
-            ACK_INIT                             * 2DE46
-            NOT?GOTO                             * 2DE4B
-            L_2DC07                              * 2DE50
-            BINT0                                * 2DE55
-            SENDACK                              * 2DE5A
-            CHOOSE_INIT                          * 2DE5F
+            2DROP ACK_INIT NOT?GOTO L_2DC07 BINT0 SENDACK CHOOSE_INIT * 2DE41
             CODE                                 * 2DE64  32 nibbles
               GOSUBL  SUB_3086F                  * 2DE6E
               D0=D0+  2                          * 2DE74
@@ -2227,121 +1411,38 @@ L_2DE41:
               DAT1=C  B                          * 2DE84
               GOVLNG  GETPTRLOOP                 * 2DE87
             ENDCODE                              * 2DE8E
-            GOTO                                 * 2DE8E
-            L_2DA9A                              * 2DE93
+            GOTO L_2DA9A                         * 2DE8E
 L_2DE98:
-            DROPSWAP                             * 2DE98
-            CAR$                                 * 2DE9D
-            DUP                                  * 2DEA2
-            CHR_F                                * 2DEA7
-            EQUAL                                * 2DEAC
-            OVER                                 * 2DEB1
-            CHR_L                                * 2DEB6
-            EQUALOR                              * 2DEBB
-            casedrop                             * 2DEC0
+            DROPSWAP CAR$ DUP CHR_F EQUAL OVER CHR_L EQUALOR casedrop * 2DE98
             SENDNULLACK                          * 2DEC5
-            CHR_D                                * 2DECA
-            EQUAL                                * 2DECF
-            ?GOTO                                * 2DED4
-            L_2DC2F                              * 2DED9
-            DROP                                 * 2DEDE
-            GOTO                                 * 2DEE3
-            L_2DC02                              * 2DEE8
+            CHR_D EQUAL ?GOTO L_2DC2F DROP GOTO L_2DC02 * 2DECA
 L_2DEED:
-            2DROP                                * 2DEED
-            NULL$                                * 2DEF2
-            DUP                                  * 2DEF7
-            FALSE                                * 2DEFC
-            {                                    * 2DF01
-              LAMLNAME                           * 2DF06
-              LAMKMODE                           * 2DF0B
-              LAMKRM                             * 2DF10
-            }                                    * 2DF15
-            BIND                                 * 2DF1A
-            ERRSET                               * 2DF1F
-            OBJ_2F709                            * 2DF24
-            ERRTRAP                              * 2DF29
-            ::                                   * 2DF2E
-              DropSysObs                         * 2DF33
-              ERROR@                             * 2DF38
-              OBJ_2E4BE                          * 2DF3D
-              FALSE                              * 2DF42
-            ;                                    * 2DF47
-            ABND                                 * 2DF4C
-            ?GOTO                                * 2DF51
-            L_2DA45                              * 2DF56
-            ?GOTO                                * 2DF5B
-            L_2DB6C                              * 2DF60
-            DUP                                  * 2DF65
-            OBJ_2EFA0                            * 2DF6A
-            SWAP                                 * 2DF6F
-            #SyntaxErr                           * 2DF74
-            #=                                   * 2DF79
-            IT                                   * 2DF7E
+            2DROP NULL$ DUP FALSE                * 2DEED
+            { LAMLNAME LAMKMODE LAMKRM } BIND ERRSET OBJ_2F709 ERRTRAP * 2DF01
+            :: DropSysObs ERROR@ OBJ_2E4BE FALSE ; ABND ?GOTO L_2DA45 ?GOTO * 2DF2E
+            L_2DB6C DUP OBJ_2EFA0 SWAP #SyntaxErr #= IT * 2DF60
 
 * refs (1): 2D8FC
 Conc:RC(2st):
             ::                                   * 2DF83
 
 _:chr(10)_:
-              $       ":\0A"                     * 2DF88
-              !append$                           * 2DF96
-              !insert$                           * 2DF9B
-            ;                                    * 2DFA0
+              $ ":\0A" !append$ !insert$ ;       * 2DF88
 L_2DFA5:
-            OBJ_2F01D                            * 2DFA5
-            GOTO                                 * 2DFAA
-            L_2DA45                              * 2DFAF
+            OBJ_2F01D GOTO L_2DA45               * 2DFA5
 L_2DFB4:
-            2DROP                                * 2DFB4
-            DUP                                  * 2DFB9
-            palparse                             * 2DFBE
-            NOTcase                              * 2DFC3
-            ::                                   * 2DFC8
-              4DROP                              * 2DFCD
-              OBJ_2DFE6                          * 2DFD2
-            ;                                    * 2DFD7
-            dup;#nm?                             * 2DFDC
-            case2drop                            * 2DFE1
+            2DROP DUP palparse NOTcase           * 2DFB4
+            :: 4DROP OBJ_2DFE6 ;                 * 2DFC8
+            dup;#nm? case2drop                   * 2DFDC
 
 * refs (1): 2DFD2
 OBJ_2DFE6:
-            ::                                   * 2DFE6
-              OBJ_672DC                          * 2DFEB
-              GOTO                               * 2DFF0
-              L_2DC07                            * 2DFF5
-            ;                                    * 2DFFA
-            DRPExitAtLOOP                        * 2DFFF
-            NOTcasedrop                          * 2E004
-            ::                                   * 2E009
-              OBJ_2E7D6                          * 2E00E
-              GOTO                               * 2E013
-              L_2DC07                            * 2E018
-            ;                                    * 2E01D
-            CHR_F                                * 2E022
-            OBJ_2EF1E                            * 2E027
-            GOTO                                 * 2E02C
-            L_2DE23                              * 2E031
-          ;                                      * 2E036
+            :: OBJ_672DC GOTO L_2DC07 ;          * 2DFE6
+            DRPExitAtLOOP NOTcasedrop            * 2DFFF
+            :: OBJ_2E7D6 GOTO L_2DC07 ;          * 2E009
+            CHR_F OBJ_2EF1E GOTO L_2DE23 ;       * 2E022
           ERRTRAP                                * 2E03B
-          ::                                     * 2E040
-            ERROR@                               * 2E045
-            DUP                                  * 2E04A
-            #0=?SEMI                             * 2E04F
-            FLUSHKEYS                            * 2E054
-            ClrServMode                          * 2E059
-            GETTHEMESG                           * 2E05E
-            SENDERROR                            * 2E063
-            AllowPrlcdCl                         * 2E068
-            OBJ_2DA4A                            * 2E06D
-            ClrDAsOK                             * 2E072
-            ERRJMP                               * 2E077
-          ;                                      * 2E07C
-          FLUSHKEYS                              * 2E081
-          ClrServMode                            * 2E086
-          AllowPrlcdCl                           * 2E08B
-          OBJ_2DA4A                              * 2E090
-          ClrDAsOK                               * 2E095
-          ABND                                   * 2E09A
-          DropSysObs                             * 2E09F
-        ;                                        * 2E0A4
+          :: ERROR@ DUP #0=?SEMI FLUSHKEYS ClrServMode GETTHEMESG SENDERROR * 2E040
+            AllowPrlcdCl OBJ_2DA4A ClrDAsOK ERRJMP ; * 2E068
+          FLUSHKEYS ClrServMode AllowPrlcdCl OBJ_2DA4A ClrDAsOK ABND * 2E081
+          DropSysObs ;                           * 2E09F

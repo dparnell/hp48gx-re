@@ -694,106 +694,45 @@ L_126A1:
 * #startrow #rows ->
 * refs (21): 39967 3A555 3A56E 3A587 3A5C3 A420C ...
 BLANKIT:
-        ::                                       * 126DF
-          HARDBUFF                               * 126E4
-          BINT0                                  * 126E9
-          4ROLL                                  * 126EE
-          BINT131                                * 126F3
-          5ROLL                                  * 126F8
-          3PICK#+                                * 126FD
-          GROB!ZERODRP                           * 12702
-        ;                                        * 12707
+        :: HARDBUFF BINT0 4ROLL BINT131 5ROLL 3PICK#+ GROB!ZERODRP ; * 126DF
 
 * $ ->
 * refs (11): 12B94 14ACD 14D9B 153D4 2386A 2D762 ...
 DISPSTATUS2:
-        ::                                       * 1270C
-          SEP$NL                                 * 12711
-          DISPROW1*                              * 12716
-          DISPROW2*                              * 1271B
-        ;                                        * 12720
+        :: SEP$NL DISPROW1* DISPROW2* ;          * 1270C
 
 * $ ->
 * refs (1): 12716
 DISPROW1*:
-        ::                                       * 12725
-          COERCE$22                              * 1272A
-          $>GROB                                 * 1272F
-          HBUFF_X_Y                              * 12734
-          Clr8                                   * 12739
-          GROB!                                  * 1273E
-        ;                                        * 12743
+        :: COERCE$22 $>GROB HBUFF_X_Y Clr8 GROB! ; * 12725
 
 * $ ->
 * refs (1): 1271B
 DISPROW2*:
-        ::                                       * 12748
-          COERCE$22                              * 1274D
-          $>GROB                                 * 12752
-          HBUFF_X_Y                              * 12757
-          #8+                                    * 1275C
-          Clr8-15                                * 12761
-          GROB!                                  * 12766
-        ;                                        * 1276B
+        :: COERCE$22 $>GROB HBUFF_X_Y #8+ Clr8-15 GROB! ; * 12748
 
 * $ -> $'
 * refs (3): 0E02E 1272A 1274D
 COERCE$22:
-        ::                                       * 12770
-          DUPLEN$                                * 12775
-          BINT22                                 * 1277A
-          #>                                     * 1277F
-          NOT?SEMI                               * 12784
-          BINT1                                  * 12789
-          BINT21                                 * 1278E
-          SUB$                                   * 12793
-          CHR_...                                * 12798
-          >T$                                    * 1279D
-        ;                                        * 127A2
+        :: DUPLEN$ BINT22 #> NOT?SEMI            * 12770
+          BINT1 BINT21 SUB$ CHR_... >T$ ;        * 12789
 
 * $ -> $' $''
 * refs (2): 12711 388C2
 SEP$NL:
-        ::                                       * 127A7
-          DUP                                    * 127AC
-          CHR_Newline                            * 127B1
-          BINT1                                  * 127B6
-          POS$                                   * 127BB
-          DUP#0=                                 * 127C0
-          IT                                     * 127C5
+        :: DUP CHR_Newline BINT1 POS$ DUP#0= IT  * 127A7
 
 * $ ob -> $ #len+1
 DROPDUPLEN$1+:
-          ::                                     * 127CA
-            DROPDUP                              * 127CF
-            LEN$                                 * 127D4
-            #1+                                  * 127D9
-          ;                                      * 127DE
-          2DUP                                   * 127E3
-          #1-                                    * 127E8
-          ONESWAP                                * 127ED
-          SUB$                                   * 127F2
-          BINT3                                  * 127F7
-          UNROLL                                 * 127FC
-          #1+                                    * 12801
-          OVERLEN$                               * 12806
-          SUB$SWAP                               * 1280B
-        ;                                        * 12810
+          :: DROPDUP LEN$ #1+ ;                  * 127CA
+          2DUP #1- ONESWAP SUB$ BINT3 UNROLL #1+ OVERLEN$ SUB$SWAP ; * 127E3
 
 repl(go,2s,st):
-        ::                                       * 12815
-          $>grob                                 * 1281A
-          repl(go,2s,go)                         * 1281F
-        ;                                        * 12824
+        :: $>grob repl(go,2s,go) ;               * 12815
 
 * refs (1): 1281F
 repl(go,2s,go):
-        ::                                       * 12829
-          4UNROLL                                * 1282E
-          3PICK                                  * 12833
-          5UNROLL                                * 12838
-          GROB!                                  * 1283D
-        ;                                        * 12842
+        :: 4UNROLL 3PICK 5UNROLL GROB! ;         * 12829
 
 * refs (1): 3A206
 OBJ_12847:
@@ -839,8 +778,7 @@ SUB_128A1:
 * #x #y grob ->
 * refs (28): 6680D 6AD57 6C37A 6C9A4 6CBFC 6CCA8 ...
 XYGROBDISP:
-        ::                                       * 128B0
-          3UNROLL                                * 128B5
+        :: 3UNROLL                               * 128B0
           CODE                                   * 128BA  31 nibbles
             GOSUB   SUB_12FB2                    * 128C4
             GOSBVL  POP#                         * 128C8
@@ -880,28 +818,17 @@ L_12937:
             A=R1.F  A                            * 12946
             PC=(A)                               * 1294C
           ENDCODE                                * 12950
-          HARDBUFF                               * 12950
-          3UNROLL                                * 12955
-          GROB!                                  * 1295A
-        ;                                        * 1295F
+          HARDBUFF 3UNROLL GROB! ;               * 12950
 
 * #rows ->
 * refs (1): 128D9
 HEIGHTENHBUFF:
-        ::                                       * 12964
-          HARDBUFF                               * 12969
-          SWAP                                   * 1296E
-          HEIGHTENGROB                           * 12973
-        ;                                        * 12978
+        :: HARDBUFF SWAP HEIGHTENGROB ;          * 12964
 
 * #cols ->
 * refs (1): 12900
 BROADENHBUFF:
-        ::                                       * 1297D
-          HARDBUFF                               * 12982
-          SWAP                                   * 12987
-          BROADENGROB                            * 1298C
-        ;                                        * 12991
+        :: HARDBUFF SWAP BROADENGROB ;           * 1297D
 
 * (#n -> ) moves stk displ up #n lines
 * refs (2): 39C11 43B4E
@@ -1057,33 +984,17 @@ L_12B14:
 * -> #width
 * refs (1): 51712
 HBUFFDIMw:
-        ::                                       * 12B58
-          HARDBUFF                               * 12B5D
-          GROBDIMw                               * 12B62
-        ;                                        * 12B67
+        :: HARDBUFF GROBDIMw ;                   * 12B58
 
 * -> #height
 * refs (2): 4E2D9 516B8
 HARDHEIGHT:
-        ::                                       * 12B6C
-          HARDBUFF                               * 12B71
-          GROBDIM                                * 12B76
-          DROP                                   * 12B7B
-        ;                                        * 12B80
+        :: HARDBUFF GROBDIM DROP ;               * 12B6C
 
 * $ ->
 * refs (4): 4694B 6B902 6BA97 6BC3C
 FlashMsg:
-        ::                                       * 12B85
-          Save16                                 * 12B8A
-          SWAP                                   * 12B8F
-          DISPSTATUS2                            * 12B94
-          OBJ_64C34                              * 12B99
-          ZERO_DO                                * 12B9E
-          SLOW                                   * 12BA3
-          LOOP                                   * 12BA8
-          Restore16                              * 12BAD
-        ;                                        * 12BB2
+        :: Save16 SWAP DISPSTATUS2 OBJ_64C34 ZERO_DO SLOW LOOP Restore16 ; * 12B85
 
 * grob #cols ->
 * refs (2): 1298C 511CA
@@ -1385,11 +1296,7 @@ L_12F85:
 * grob ->
 * refs (5): 4B35A 4F3B3 5119D 9D513 9D5F2
 GROB>GDISP:
-        ::                                       * 12F94
-          GDISPON?                               * 12F99
-          ITE                                    * 12F9E
-          StoCurGrob(go)                         * 12FA3
-          StoNoCurGrob(go)                       * 12FA8
+        :: GDISPON? ITE StoCurGrob(go) StoNoCurGrob(go) * 12F94
         ;                                        * 12FAD
         ASSEMBLE
 
@@ -1480,12 +1387,7 @@ SUB_13075:
 * ->
 * refs (10): 17B9A 492B6 6A905 6AE47 6B219 6C913 ...
 RECLAIMDISP:
-        ::                                       * 130AC
-          TOADISP                                * 130B1
-          CLEARVDISP                             * 130B6
-          REDISPHBUFF                            * 130BB
-          RSZVDISP                               * 130C0
-        ;                                        * 130C5
+        :: TOADISP CLEARVDISP REDISPHBUFF RSZVDISP ; * 130AC
 
 * ->
 * refs (1): 130C0
@@ -2387,29 +2289,12 @@ L_13B11:
 
 * refs (2): 42976 42B4D
 DISPCHAR+PC:
-        ::                                       * 13B51
-          SWAP                                   * 13B56
-          3->grob(s)                             * 13B5B
-          HARDBUFF                               * 13B60
-          CURSOR_OFF                             * 13B65
-          #1-                                    * 13B6A
-          #6*                                    * 13B6F
-          4PICK                                  * 13B74
-          #1-                                    * 13B79
-          #10*                                   * 13B7E
-          BINT16                                 * 13B83
-          #+                                     * 13B88
-          GROB!                                  * 13B8D
-          OBJ_13B9C                              * 13B92
-        ;                                        * 13B97
+        :: SWAP 3->grob(s) HARDBUFF CURSOR_OFF #1- #6* 4PICK #1- #10* BINT16 * 13B51
+          #+ GROB! OBJ_13B9C ;                   * 13B88
 
 * refs (2): 13B92 42854
 OBJ_13B9C:
-        ::                                       * 13B9C
-          OBJ_13BB5                              * 13BA1
-          OBJ_13BF1                              * 13BA6
-          OBJ_13E22                              * 13BAB
-        ;                                        * 13BB0
+        :: OBJ_13BB5 OBJ_13BF1 OBJ_13E22 ;       * 13B9C
 
 * refs (1): 13BA1
 OBJ_13BB5:
@@ -2492,39 +2377,23 @@ SUB_13C5A:
 
 * refs (2): 42186 421B8
 OBJ_13CB0:
-        ::                                       * 13CB0
-          OBJ_13E63                              * 13CB5
-          case                                   * 13CBA
-          ::                                     * 13CBF
-            OBJ_13CE2                            * 13CC4
-            OBJ_13E2E                            * 13CC9
-          ;                                      * 13CCE
-          OBJ_13CFB                              * 13CD3
-          OBJ_13E22                              * 13CD8
-        ;                                        * 13CDD
+        :: OBJ_13E63 case                        * 13CB0
+          :: OBJ_13CE2 OBJ_13E2E ;               * 13CBF
+          OBJ_13CFB OBJ_13E22 ;                  * 13CD3
 
 * refs (1): 13CC4
 OBJ_13CE2:
-        ::                                       * 13CE2
-          OBJ_13D14                              * 13CE7
-          NOT?SEMI                               * 13CEC
-          cursorblink+                           * 13CF1
-        ;                                        * 13CF6
+        :: OBJ_13D14 NOT?SEMI                    * 13CE2
+          cursorblink+ ;                         * 13CF1
 
 * refs (1): 13CD3
 OBJ_13CFB:
-        ::                                       * 13CFB
-          OBJ_13D14                              * 13D00
-          NOT?SEMI                               * 13D05
-          cursorblink-                           * 13D0A
-        ;                                        * 13D0F
+        :: OBJ_13D14 NOT?SEMI                    * 13CFB
+          cursorblink- ;                         * 13D0A
 
 * refs (2): 13CE7 13D00
 OBJ_13D14:
-        ::                                       * 13D14
-          OBJ_13E05                              * 13D19
-          OBJ_53906                              * 13D1E
-        ;                                        * 13D23
+        :: OBJ_13E05 OBJ_53906 ;                 * 13D14
 
 * refs (5): 13CF1 427FA 42999 429C1 42B52
 cursorblink+:

@@ -13,696 +13,205 @@ LIB0C3:
 * ROMPTR 0C3 000
 * refs (1): CBACE
 ROMP_0C3_000:
-        ::                                       * CBAE5
-          CKREF                                  * CBAEA
-          DUP                                    * CBAEF
-          TYPERARRY?                             * CBAF4
-          SWAP                                   * CBAF9
-          RESOROMP                               * CBAFE
-          ROMPTR  0C3 001                        * CBB03
-          3UNROLL                                * CBB0E
-          ONE_DO_ARRY                            * CBB13
-          3PICK                                  * CBB18
-          EVAL                                   * CBB1D
-          3PICK                                  * CBB22
-          ?SKIP                                  * CBB27
-          ::                                     * CBB2C
-            4PICK                                * CBB31
-            EVAL                                 * CBB36
-            %>C%                                 * CBB3B
-          ;                                      * CBB40
-          INDEX@                                 * CBB45
-          PUTEL                                  * CBB4A
-          NextInArray                            * CBB4F
-          ROTROT2DROP                            * CBB54
-        ;                                        * CBB59
+        :: CKREF DUP TYPERARRY? SWAP RESOROMP ROMPTR 0C3 001 3UNROLL * CBAE5
+          ONE_DO_ARRY 3PICK EVAL 3PICK ?SKIP     * CBB13
+          :: 4PICK EVAL %>C% ;                   * CBB2C
+          INDEX@ PUTEL NextInArray ROTROT2DROP ; * CBB45
 
 * ROMPTR 0C3 001
 * refs (1): CBACE
 ROMP_0C3_001:
-        ::                                       * CBB5E
-          %RAN                                   * CBB63
-          %10                                    * CBB68
-          %*                                     * CBB6D
-          %FLOOR                                 * CBB72
-          %RAN                                   * CBB77
-          %.5                                    * CBB7C
-          %>=                                    * CBB81
-          ?SKIP                                  * CBB86
-          %CHS                                   * CBB8B
+        :: %RAN %10 %* %FLOOR %RAN %.5 %>= ?SKIP %CHS * CBB5E
         ;                                        * CBB90
 
 * ROMPTR 0C3 002
 * refs (1): CBACE
 ROMP_0C3_002:
-        ::                                       * CBB95
-          COERCE2                                * CBB9A
-          OVER#0=                                * CBB9F
-          OVER#0=                                * CBBA4
-          ORcase                                 * CBBA9
-          SETSIZEERR                             * CBBAE
-          3PICK                                  * CBBB3
-          MDIMS                                  * CBBB8
-          IT                                     * CBBBD
-          DROP                                   * CBBC2
-          ROMPTR  0C3 003                        * CBBC7
-        ;                                        * CBBD2
+        :: COERCE2 OVER#0= OVER#0= ORcase SETSIZEERR * CBB95
+          3PICK MDIMS IT DROP                    * CBBB3
+          ROMPTR 0C3 003 ;                       * CBBC7
 
 * ROMPTR 0C3 003
 * refs (1): CBACE
 ROMP_0C3_003:
-        ::                                       * CBBD7
-          2DUP#>                                 * CBBDC
-          caseSIZEERR                            * CBBE1
-          3PICK                                  * CBBE6
-          #<                                     * CBBEB
-          caseSIZEERR                            * CBBF0
-          2DUP#=                                 * CBBF5
-          case2DROP                              * CBBFA
-          rot;NewobIfNotFree                     * CBBFF
-          3UNROLL                                * CBC04
-          SWAPROWS                               * CBC09
-          2DROP                                  * CBC0E
-        ;                                        * CBC13
+        :: 2DUP#> caseSIZEERR 3PICK              * CBBD7
+          #< caseSIZEERR 2DUP#=                  * CBBEB
+          case2DROP rot;NewobIfNotFree           * CBBFA
+          3UNROLL SWAPROWS 2DROP ;               * CBC04
 
 * ROMPTR 0C3 004
 * refs (1): CBACE
 ROMP_0C3_004:
-        ::                                       * CBC18
-          COERCE2                                * CBC1D
-          OVER#0=                                * CBC22
-          OVER#0=                                * CBC27
-          ORcase                                 * CBC2C
-          SETSIZEERR                             * CBC31
-          3PICK                                  * CBC36
-          MDIMS                                  * CBC3B
-          NOTcase                                * CBC40
-          ROMPTR  0C3 003                        * CBC45
-          SWAPDROP                               * CBC50
-          2DUP#>                                 * CBC55
-          caseSIZEERR                            * CBC5A
-          3PICK                                  * CBC5F
-          #<                                     * CBC64
-          caseSIZEERR                            * CBC69
-          2DUP#=                                 * CBC6E
-          case2DROP                              * CBC73
-          rot;NewobIfNotFree                     * CBC78
-          @trn!(ar)                              * CBC7D
-          3UNROLL                                * CBC82
-          SWAPROWS                               * CBC87
-          2DROP                                  * CBC8C
-          @trn!(ar)                              * CBC91
-        ;                                        * CBC96
+        :: COERCE2 OVER#0= OVER#0= ORcase SETSIZEERR * CBC18
+          3PICK MDIMS NOTcase ROMPTR 0C3 003     * CBC36
+          SWAPDROP 2DUP#> caseSIZEERR 3PICK      * CBC50
+          #< caseSIZEERR 2DUP#=                  * CBC64
+          case2DROP rot;NewobIfNotFree           * CBC73
+          @trn!(ar) 3UNROLL SWAPROWS 2DROP @trn!(ar) ; * CBC7D
 
 * ROMPTR 0C3 005
 * refs (1): CBACE
 ROMP_0C3_005:
-        ::                                       * CBC9B
-          COERCE                                 * CBCA0
-          DUP#0=                                 * CBCA5
-          case                                   * CBCAA
-          SETSIZEERR                             * CBCAF
-          3PICK                                  * CBCB4
-          MDIMS                                  * CBCB9
-          ?SKIP                                  * CBCBE
-          BINT1                                  * CBCC3
-          3UNROLL                                * CBCC8
-          OVER#<                                 * CBCCD
-          caseSIZEERR                            * CBCD2
-          ROT                                    * CBCD7
-          4ROLL                                  * CBCDC
-          OBJ_36395                              * CBCE1
-          4UNROLL                                * CBCE6
-          3UNROLL                                * CBCEB
-          #1-                                    * CBCF0
-          OVER                                   * CBCF5
-          #*                                     * CBCFA
-          SWAP                                   * CBCFF
-          ZERO_DO                                * CBD04
-          #1+                                    * CBD09
-          DUPUNROT                               * CBD0E
-          PULLLONGEL                             * CBD13
-          4PICK                                  * CBD18
-          L%*                                    * CBD1D
-          3PICK                                  * CBD22
-          PUTEL                                  * CBD27
-          SWAP                                   * CBD2C
-          NextInArray                            * CBD31
-          DROPSWAPDROP                           * CBD36
-        ;                                        * CBD3B
+        :: COERCE DUP#0= case SETSIZEERR         * CBC9B
+          3PICK MDIMS ?SKIP BINT1                * CBCB4
+          3UNROLL OVER#< caseSIZEERR ROT         * CBCC8
+          4ROLL OBJ_36395 4UNROLL 3UNROLL #1- OVER #* SWAP ZERO_DO #1+ * CBCDC
+          DUPUNROT PULLLONGEL 4PICK L%* 3PICK PUTEL SWAP NextInArray * CBD0E
+          DROPSWAPDROP ;                         * CBD36
 
 * ROMPTR 0C3 006
 * refs (1): CBACE
 ROMP_0C3_006:
-        ::                                       * CBD40
-          COERCE2                                * CBD45
-          OVER#0=                                * CBD4A
-          OVER#0=                                * CBD4F
-          ORcase                                 * CBD54
-          SETSIZEERR                             * CBD59
-          4PICK                                  * CBD5E
-          MDIMS                                  * CBD63
-          ?SKIP                                  * CBD68
-          BINT1                                  * CBD6D
-          4UNROLL                                * CBD72
-          3PICK                                  * CBD77
-          OVER                                   * CBD7C
-          #>                                     * CBD81
-          caseSIZEERR                            * CBD86
-          OVER#<                                 * CBD8B
-          caseSIZEERR                            * CBD90
-          4ROLL                                  * CBD95
-          5ROLL                                  * CBD9A
-          OBJ_36395                              * CBD9F
-          5UNROLL                                * CBDA4
-          4UNROLL                                * CBDA9
-          #1-                                    * CBDAE
-          3PICK                                  * CBDB3
-          #*                                     * CBDB8
-          3UNROLL                                * CBDBD
-          #1-                                    * CBDC2
-          OVER                                   * CBDC7
-          #*                                     * CBDCC
-          SWAP                                   * CBDD1
-          ZERO_DO                                * CBDD6
-          #1+                                    * CBDDB
-          3UNROLL                                * CBDE0
-          #1+                                    * CBDE5
-          3UNROLL                                * CBDEA
-          OVER                                   * CBDEF
-          PULLLONGEL                             * CBDF4
-          5PICK                                  * CBDF9
-          L%*                                    * CBDFE
-          SWAP                                   * CBE03
-          4PICK                                  * CBE08
-          PULLLONGEL                             * CBE0D
-          ROT                                    * CBE12
-          L%+                                    * CBE17
-          4PICK                                  * CBE1C
-          PUTEL                                  * CBE21
-          3UNROLL                                * CBE26
-          NextInArray                            * CBE2B
-          2DROP                                  * CBE30
-          SWAPDROP                               * CBE35
-        ;                                        * CBE3A
+        :: COERCE2 OVER#0= OVER#0= ORcase SETSIZEERR * CBD40
+          4PICK MDIMS ?SKIP BINT1                * CBD5E
+          4UNROLL 3PICK OVER #> caseSIZEERR OVER#< * CBD72
+          caseSIZEERR 4ROLL                      * CBD90
+          5ROLL OBJ_36395 5UNROLL 4UNROLL #1- 3PICK #* 3UNROLL #1- OVER #* * CBD9A
+          SWAP ZERO_DO #1+ 3UNROLL #1+ 3UNROLL OVER PULLLONGEL 5PICK L%* * CBDD1
+          SWAP 4PICK PULLLONGEL ROT L%+ 4PICK PUTEL 3UNROLL NextInArray * CBE03
+          2DROP SWAPDROP ;                       * CBE30
 
 * ROMPTR 0C3 007
 * refs (1): CBACE
 ROMP_0C3_007:
-        ::                                       * CBE3F
-          COERCE                                 * CBE44
-          OVER                                   * CBE49
-          MDIMS                                  * CBE4E
-          NOTcase                                * CBE53
-          ROMPTR  0C3 008                        * CBE58
-          DUP                                    * CBE63
-          BINT1                                  * CBE68
-          {}N                                    * CBE6D
-          5PICK                                  * CBE72
-          OBJ_379F0                              * CBE77
-          MAKEARRY                               * CBE7C
-          5ROLL                                  * CBE81
-          SWAP                                   * CBE86
-          5PICK                                  * CBE8B
-          FALSE                                  * CBE90
-          ROMPTR  0C3 01B                        * CBE95
-          4ROLL                                  * CBEA0
-          #1-                                    * CBEA5
-          4ROLL                                  * CBEAA
-          TWO{}N                                 * CBEAF
-          ROT                                    * CBEB4
-          CKREF                                  * CBEB9
-          4ROLL                                  * CBEBE
-          ROMPTR  0C3 019                        * CBEC3
-          SWAP                                   * CBECE
-          MATREDIM                               * CBED3
-          SWAP                                   * CBED8
-        ;                                        * CBEDD
+        :: COERCE OVER MDIMS NOTcase ROMPTR 0C3 008 * CBE3F
+          DUP BINT1 {}N 5PICK OBJ_379F0 MAKEARRY 5ROLL SWAP 5PICK FALSE * CBE63
+          ROMPTR 0C3 01B 4ROLL #1- 4ROLL TWO{}N ROT CKREF 4ROLL * CBE95
+          ROMPTR 0C3 019 SWAP MATREDIM SWAP ;    * CBEC3
 
 * ROMPTR 0C3 008
 * refs (1): CBACE
 ROMP_0C3_008:
-        ::                                       * CBEE2
-          2DUP#>                                 * CBEE7
-          case                                   * CBEEC
-          SETSIZEERR                             * CBEF1
-          #1-                                    * CBEF6
-          BINT1                                  * CBEFB
-          {}N                                    * CBF00
-          3UNROLL                                * CBF05
-          DUPUNROT                               * CBF0A
-          #0=                                    * CBF0F
-          case                                   * CBF14
-          SETSIZEERR                             * CBF19
-          OVER                                   * CBF1E
-          PULLEL                                 * CBF23
-          4UNROLL                                * CBF28
-          CKREF                                  * CBF2D
-          SWAP                                   * CBF32
-          ROMPTR  0C3 019                        * CBF37
-          SWAP                                   * CBF42
-          MATREDIM                               * CBF47
-          SWAP                                   * CBF4C
-        ;                                        * CBF51
+        :: 2DUP#> case SETSIZEERR                * CBEE2
+          #1- BINT1 {}N 3UNROLL DUPUNROT #0= case SETSIZEERR * CBEF6
+          OVER PULLEL 4UNROLL CKREF SWAP ROMPTR 0C3 019 SWAP MATREDIM SWAP ; * CBF1E
 
 * ROMPTR 0C3 009
 * refs (1): CBACE
 ROMP_0C3_009:
-        ::                                       * CBF56
-          COERCE                                 * CBF5B
-          OVER                                   * CBF60
-          MDIMS                                  * CBF65
-          NOTcase                                * CBF6A
-          ROMPTR  0C3 008                        * CBF6F
-          OVER                                   * CBF7A
-          BINT1                                  * CBF7F
-          {}N                                    * CBF84
-          5PICK                                  * CBF89
-          OBJ_379F0                              * CBF8E
-          MAKEARRY                               * CBF93
-          5ROLL                                  * CBF98
-          CKREF                                  * CBF9D
-          @trn!(ar)                              * CBFA2
-          SWAP                                   * CBFA7
-          5PICK                                  * CBFAC
-          FALSE                                  * CBFB1
-          ROMPTR  0C3 01B                        * CBFB6
-          ROT                                    * CBFC1
-          #1-                                    * CBFC6
-          4ROLL                                  * CBFCB
-          TWO{}N                                 * CBFD0
-          ROT                                    * CBFD5
-          4ROLL                                  * CBFDA
-          ROMPTR  0C3 019                        * CBFDF
-          SWAP                                   * CBFEA
-          MATREDIM                               * CBFEF
-          @trn!(ar)                              * CBFF4
-          SWAP                                   * CBFF9
-        ;                                        * CBFFE
+        :: COERCE OVER MDIMS NOTcase ROMPTR 0C3 008 * CBF56
+          OVER BINT1 {}N 5PICK OBJ_379F0 MAKEARRY 5ROLL CKREF @trn!(ar) SWAP * CBF7A
+          5PICK FALSE ROMPTR 0C3 01B ROT #1- 4ROLL TWO{}N ROT 4ROLL * CBFAC
+          ROMPTR 0C3 019 SWAP MATREDIM @trn!(ar) SWAP ; * CBFDF
 
 * ROMPTR 0C3 00A
 * refs (1): CBACE
 ROMP_0C3_00A:
-        ::                                       * CC003
-          COERCE                                 * CC008
-          3PICK                                  * CC00D
-          MDIMS                                  * CC012
-          NOTcase                                * CC017
-          doerr501                               * CC01C
-          4PICK                                  * CC021
-          MDIMS                                  * CC026
-          case                                   * CC02B
-          ROMPTR  0C3 00B                        * CC030
-          OVER                                   * CC03B
-          #<>case                                * CC040
-          doerr501                               * CC045
-          SWAP#1+SWAP                            * CC04A
-          TWO{}N                                 * CC04F
-          2SWAP                                  * CC054
-          OBJ_36F74                              * CC059
-          2SWAP                                  * CC05E
-          4ROLLSWAP                              * CC063
-          MATREDIM                               * CC068
-          ROMPTR  0C3 01A                        * CC06D
-          3UNROLL                                * CC078
-          TRUE                                   * CC07D
-          ROMPTR  0C3 01B                        * CC082
-          DROP                                   * CC08D
-        ;                                        * CC092
+        :: COERCE 3PICK MDIMS NOTcase doerr501   * CC003
+          4PICK MDIMS case ROMPTR 0C3 00B        * CC021
+          OVER #<>case doerr501                  * CC03B
+          SWAP#1+SWAP TWO{}N 2SWAP OBJ_36F74 2SWAP 4ROLLSWAP MATREDIM * CC04A
+          ROMPTR 0C3 01A 3UNROLL TRUE ROMPTR 0C3 01B DROP ; * CC06D
 
 * ROMPTR 0C3 00B
 * refs (1): CBACE
 ROMP_0C3_00B:
-        ::                                       * CC097
-          3PICK                                  * CC09C
-          #<>case                                * CC0A1
-          doerr501                               * CC0A6
-          2OVER                                  * CC0AB
-          #1+                                    * CC0B0
-          #>                                     * CC0B5
-          case                                   * CC0BA
-          SETSIZEERR                             * CC0BF
-          ROT#+SWAP                              * CC0C4
-          TWO{}N                                 * CC0C9
-          2SWAP                                  * CC0CE
-          OBJ_36F74                              * CC0D3
-          2SWAP                                  * CC0D8
-          4ROLLSWAP                              * CC0DD
-          MATREDIM                               * CC0E2
-          ROT                                    * CC0E7
+        :: 3PICK #<>case doerr501                * CC097
+          2OVER #1+ #> case SETSIZEERR           * CC0AB
+          ROT#+SWAP TWO{}N 2SWAP OBJ_36F74 2SWAP 4ROLLSWAP MATREDIM ROT * CC0C4
 
 * ROMPTR 0C3 00C
 * refs (1): CBACE
 ROMP_0C3_00C:
-          ::                                     * CC0EC
-            RESOROMP                             * CC0F1
-            ROMPTR  0C3 01A                      * CC0F6
-            4UNROLL                              * CC101
-            RESOROMP                             * CC106
-            ROMPTR  0C3 01B                      * CC10B
-            4UNROLL                              * CC116
-            DUP                                  * CC11B
-            MDIMS                                * CC120
-            DROP                                 * CC125
-            BINT1                                * CC12A
-            {}N                                  * CC12F
-            3PICK                                * CC134
-            OBJ_379F0                            * CC139
-            MAKEARRY                             * CC13E
-            SWAP                                 * CC143
-            #1+_ONE_DO                           * CC148
-            ISTOP@                               * CC14D
-            INDEX@#-                             * CC152
-            FALSE                                * CC157
-            7PICK                                * CC15C
-            EVAL                                 * CC161
-            4PICK                                * CC166
-            4ROLL                                * CC16B
-            7PICK                                * CC170
-            EVAL                                 * CC175
-            3UNROLL                              * CC17A
-            TRUE                                 * CC17F
-            7PICK                                * CC184
-            EVAL                                 * CC189
-            ROTSWAP                              * CC18E
-            NextInArray                          * CC193
-            2DROP                                * CC198
-            4UNROLL3DROP                         * CC19D
-          ;                                      * CC1A2
+          :: RESOROMP ROMPTR 0C3 01A 4UNROLL RESOROMP ROMPTR 0C3 01B 4UNROLL * CC0EC
+            DUP MDIMS DROP BINT1 {}N 3PICK OBJ_379F0 MAKEARRY SWAP * CC11B
+            #1+_ONE_DO ISTOP@ INDEX@#- FALSE 7PICK EVAL 4PICK 4ROLL 7PICK * CC148
+            EVAL 3UNROLL TRUE 7PICK EVAL ROTSWAP NextInArray 2DROP * CC175
+            4UNROLL3DROP ;                       * CC19D
         ;                                        * CC1A7
 
 * ROMPTR 0C3 00D
 * refs (1): CBACE
 ROMP_0C3_00D:
-        ::                                       * CC1AC
-          COERCE                                 * CC1B1
-          3PICK                                  * CC1B6
-          MDIMS                                  * CC1BB
-          NOTcase                                * CC1C0
-          doerr501                               * CC1C5
-          4PICK                                  * CC1CA
-          MDIMS                                  * CC1CF
-          case                                   * CC1D4
-          ROMPTR  0C3 00E                        * CC1D9
-          3PICK                                  * CC1E4
-          #<>case                                * CC1E9
-          doerr501                               * CC1EE
-          #1+SWAP                                * CC1F3
-          TWO{}N                                 * CC1F8
-          2SWAP                                  * CC1FD
-          OBJ_36F74                              * CC202
-          2SWAP                                  * CC207
-          4ROLL                                  * CC20C
-          CKREF                                  * CC211
-          @trn!(ar)                              * CC216
-          SWAP                                   * CC21B
-          MATREDIM                               * CC220
-          ROMPTR  0C3 01A                        * CC225
-          3UNROLL                                * CC230
-          TRUE                                   * CC235
-          ROMPTR  0C3 01B                        * CC23A
-          DROP                                   * CC245
-          @trn!(ar)                              * CC24A
-        ;                                        * CC24F
+        :: COERCE 3PICK MDIMS NOTcase doerr501   * CC1AC
+          4PICK MDIMS case ROMPTR 0C3 00E        * CC1CA
+          3PICK #<>case doerr501                 * CC1E4
+          #1+SWAP TWO{}N 2SWAP OBJ_36F74 2SWAP 4ROLL CKREF @trn!(ar) SWAP * CC1F3
+          MATREDIM ROMPTR 0C3 01A 3UNROLL TRUE ROMPTR 0C3 01B DROP @trn!(ar) ; * CC220
 
 * ROMPTR 0C3 00E
 * refs (1): CBACE
 ROMP_0C3_00E:
-        ::                                       * CC254
-          SWAP4PICK                              * CC259
-          #<>case                                * CC25E
-          doerr501                               * CC263
-          4PICK                                  * CC268
-          3PICK                                  * CC26D
-          #1+                                    * CC272
-          #>                                     * CC277
-          case                                   * CC27C
-          SETSIZEERR                             * CC281
-          #+SWAP                                 * CC286
-          TWO{}N                                 * CC28B
-          2SWAP                                  * CC290
-          OBJ_36F74                              * CC295
-          2SWAP                                  * CC29A
-          4ROLL                                  * CC29F
-          CKREF                                  * CC2A4
-          @trn!(ar)                              * CC2A9
-          SWAP                                   * CC2AE
-          MATREDIM                               * CC2B3
-          ROT                                    * CC2B8
-          CKREF                                  * CC2BD
-          @trn!(ar)                              * CC2C2
-          ROMPTR  0C3 00C                        * CC2C7
-          @trn!(ar)                              * CC2D2
-        ;                                        * CC2D7
+        :: SWAP4PICK #<>case doerr501            * CC254
+          4PICK 3PICK #1+ #> case SETSIZEERR     * CC268
+          #+SWAP TWO{}N 2SWAP OBJ_36F74 2SWAP 4ROLL CKREF @trn!(ar) SWAP * CC286
+          MATREDIM ROT CKREF @trn!(ar) ROMPTR 0C3 00C @trn!(ar) ; * CC2B3
 
 * ROMPTR 0C3 00F
 * refs (1): CBACE
 ROMP_0C3_00F:
-        ::                                       * CC2DC
-          UNROTOVER                              * CC2E1
-          TYPERARRY?                             * CC2E6
-          ?SKIP                                  * CC2EB
-          Re>C%                                  * CC2F0
-          ROMPTR  0C3 011                        * CC2F5
-        ;                                        * CC300
+        :: UNROTOVER TYPERARRY? ?SKIP Re>C%      * CC2DC
+          ROMPTR 0C3 011 ;                       * CC2F5
 
 * ROMPTR 0C3 010
 * refs (1): CBACE
 ROMP_0C3_010:
-        ::                                       * CC305
-          ROTDUP                                 * CC30A
-          TYPERARRY?                             * CC30F
-          IT                                     * CC314
-          r->c(ar)                               * CC319
-          ROT                                    * CC31E
-          ROMPTR  0C3 011                        * CC323
-        ;                                        * CC32E
+        :: ROTDUP TYPERARRY? IT r->c(ar)         * CC305
+          ROT ROMPTR 0C3 011 ;                   * CC31E
 
 * ROMPTR 0C3 011
 * refs (1): CBACE
 ROMP_0C3_011:
-        ::                                       * CC333
-          ROT                                    * CC338
-          COERCE                                 * CC33D
-          3PICK                                  * CC342
-          MDIMS                                  * CC347
-          case                                   * CC34C
-          doerr501                               * CC351
-          #1+                                    * CC356
-          BINT1                                  * CC35B
-          {}N                                    * CC360
-          4ROLLSWAP                              * CC365
-          MATREDIM                               * CC36A
-          ROMPTR  0C3 01A                        * CC36F
-          3UNROLL                                * CC37A
-          PUTEL                                  * CC37F
-        ;                                        * CC384
+        :: ROT COERCE 3PICK MDIMS case doerr501  * CC333
+          #1+ BINT1 {}N 4ROLLSWAP MATREDIM ROMPTR 0C3 01A 3UNROLL PUTEL ; * CC356
 
 * ROMPTR 0C3 012
 * refs (1): CBACE
 ROMP_0C3_012:
-        ::                                       * CC389
-          DUP                                    * CC38E
-          MDIMS                                  * CC393
-          NOTcase                                * CC398
-          ROMPTR  0C3 013                        * CC39D
-          BINT1                                  * CC3A8
-          {}N                                    * CC3AD
-          3PICK                                  * CC3B2
-          OBJ_379F0                              * CC3B7
-          MAKEARRY                               * CC3BC
-          ROTSWAP                                * CC3C1
-          BINT1                                  * CC3C6
-          3UNROLL                                * CC3CB
-          RESOROMP                               * CC3D0
-          ROMPTR  0C3 01B                        * CC3D5
-          4UNROLL                                * CC3E0
-          BEGIN                                  * CC3E5
-          3PICK                                  * CC3EA
-          FALSE                                  * CC3EF
-          6PICK                                  * CC3F4
-          EVAL                                   * CC3F9
-          ROT                                    * CC3FE
-          5PICK                                  * CC403
-          OVER                                   * CC408
-          #>                                     * CC40D
-          WHILE                                  * CC412
-          ::                                     * CC417
-            #1+                                  * CC41C
-            3UNROLL                              * CC421
-            5UNROLL                              * CC426
-            5PICK                                * CC42B
-            TOTEMPOB                             * CC430
-            OBJ_357F0                            * CC435
-          ;                                      * CC43A
-          REPEAT                                 * CC43F
-          DROPSWAPDROP                           * CC444
-          SWAPDROPSWAP                           * CC449
-          UNCOERCE                               * CC44E
-        ;                                        * CC453
+        :: DUP MDIMS NOTcase ROMPTR 0C3 013      * CC389
+          BINT1 {}N 3PICK OBJ_379F0 MAKEARRY ROTSWAP BINT1 3UNROLL RESOROMP * CC3A8
+          ROMPTR 0C3 01B 4UNROLL BEGIN 3PICK FALSE 6PICK EVAL ROT 5PICK OVER * CC3D5
+          #> WHILE                               * CC40D
+          :: #1+ 3UNROLL 5UNROLL 5PICK TOTEMPOB OBJ_357F0 ; REPEAT * CC417
+          DROPSWAPDROP SWAPDROPSWAP UNCOERCE ;   * CC444
 
 * ROMPTR 0C3 013
 * refs (1): CBACE
 ROMP_0C3_013:
-        ::                                       * CC458
-          #1+_ONE_DO                             * CC45D
-          INDEX@                                 * CC462
-          PULLEL                                 * CC467
-          SWAP                                   * CC46C
-          NextInArray                            * CC471
-          ARSIZE                                 * CC476
-          UNCOERCE                               * CC47B
-        ;                                        * CC480
+        :: #1+_ONE_DO INDEX@ PULLEL SWAP NextInArray ARSIZE UNCOERCE ; * CC458
 
 * ROMPTR 0C3 014
 * refs (1): CBACE
 ROMP_0C3_014:
-        ::                                       * CC485
-          DUP                                    * CC48A
-          MDIMS                                  * CC48F
-          NOTcase                                * CC494
-          ROMPTR  0C3 013                        * CC499
-          2DROP                                  * CC4A4
-          CKREF                                  * CC4A9
-          @trn!(ar)                              * CC4AE
-          ROMPTR  0C3 012                        * CC4B3
-        ;                                        * CC4BE
+        :: DUP MDIMS NOTcase ROMPTR 0C3 013      * CC485
+          2DROP CKREF @trn!(ar) ROMPTR 0C3 012 ; * CC4A4
 
 * ROMPTR 0C3 015
 * refs (1): CBACE
 ROMP_0C3_015:
-        ::                                       * CC4C3
-          DUP#0=                                 * CC4C8
-          case                                   * CC4CD
-          SETSIZEERR                             * CC4D2
-          OVER                                   * CC4D7
-          TYPEARRAY?                             * CC4DC
-          NOTcase                                * CC4E1
-          ::                                     * CC4E6
-            UNCOERCE                             * CC4EB
-            XEQ>VECTOR                           * CC4F0
-          ;                                      * CC4F5
-          DUP                                    * CC4FA
-          3PICK                                  * CC4FF
-          MDIMS                                  * CC504
-          case                                   * CC509
-          doerr501                               * CC50E
-          TWO{}N                                 * CC513
-          3PICK                                  * CC518
-          OBJ_379F0                              * CC51D
-          MAKEARRY                               * CC522
-          RESOROMP                               * CC527
-          ROMPTR  0C3 01B                        * CC52C
-          SWAP                                   * CC537
-          3PICK                                  * CC53C
-          #1+_ONE_DO                             * CC541
-          ISTOP@                                 * CC546
-          INDEX@#-                               * CC54B
-          #3+PICK                                * CC550
-          DUP                                    * CC555
-          TYPEARRAY?                             * CC55A
-          NOTcase                                * CC55F
+        :: DUP#0= case SETSIZEERR                * CC4C3
+          OVER TYPEARRAY? NOTcase                * CC4D7
+          :: UNCOERCE XEQ>VECTOR ;               * CC4E6
+          DUP 3PICK MDIMS case doerr501          * CC4FA
+          TWO{}N 3PICK OBJ_379F0 MAKEARRY RESOROMP ROMPTR 0C3 01B SWAP 3PICK * CC513
+          #1+_ONE_DO ISTOP@ INDEX@#- #3+PICK DUP TYPEARRAY? NOTcase * CC541
           SETTYPEERR                             * CC564
-          OBJ_36F74                              * CC569
-          INDEX@                                 * CC56E
-          TRUE                                   * CC573
-          5PICK                                  * CC578
-          EVAL                                   * CC57D
-          DROP                                   * CC582
-          NextInArray                            * CC587
-          SWAPDROP                               * CC58C
-          OVER                                   * CC591
-          #2+UNROLL                              * CC596
-          NDROP                                  * CC59B
-        ;                                        * CC5A0
+          OBJ_36F74 INDEX@ TRUE 5PICK EVAL DROP NextInArray SWAPDROP OVER * CC569
+          #2+UNROLL NDROP ;                      * CC596
 
 * ROMPTR 0C3 016
 * refs (1): CBACE
 ROMP_0C3_016:
-        ::                                       * CC5A5
-          DUP#0=                                 * CC5AA
-          case                                   * CC5AF
-          SETSIZEERR                             * CC5B4
-          OVER                                   * CC5B9
-          TYPEARRAY?                             * CC5BE
-          NOTcase                                * CC5C3
-          ::                                     * CC5C8
-            UNCOERCE                             * CC5CD
-            XEQ>VECTOR                           * CC5D2
-          ;                                      * CC5D7
-          ROMPTR  0C3 015                        * CC5DC
-          @trn!(ar)                              * CC5E7
-        ;                                        * CC5EC
+        :: DUP#0= case SETSIZEERR                * CC5A5
+          OVER TYPEARRAY? NOTcase                * CC5B9
+          :: UNCOERCE XEQ>VECTOR ;               * CC5C8
+          ROMPTR 0C3 015 @trn!(ar) ;             * CC5DC
 
 * ROMPTR 0C3 017
 * refs (1): CBACE
 ROMP_0C3_017:
-        ::                                       * CC5F1
-          DUP                                    * CC5F6
-          MDIMS                                  * CC5FB
-          NOTcase                                * CC600
-          doerr501                               * CC605
-          DUP#1+                                 * CC60A
-          3UNROLL                                * CC60F
-          #MIN                                   * CC614
-          DUP                                    * CC619
-          BINT1                                  * CC61E
-          {}N                                    * CC623
-          4PICK                                  * CC628
-          OBJ_379F0                              * CC62D
-          MAKEARRY                               * CC632
-          BINT1                                  * CC637
-          5ROLL                                  * CC63C
-          4ROLL                                  * CC641
-          #1+_ONE_DO                             * CC646
-          OVER                                   * CC64B
-          PULLEL                                 * CC650
-          4ROLLSWAP                              * CC655
-          INDEX@                                 * CC65A
-          PUTEL                                  * CC65F
-          ROT                                    * CC664
-          4PICK#+                                * CC669
-          ROT                                    * CC66E
-          NextInArray                            * CC673
-          4ROLL                                  * CC678
-          3DROP                                  * CC67D
-        ;                                        * CC682
+        :: DUP MDIMS NOTcase doerr501            * CC5F1
+          DUP#1+ 3UNROLL #MIN DUP BINT1 {}N 4PICK OBJ_379F0 MAKEARRY BINT1 * CC60A
+          5ROLL 4ROLL #1+_ONE_DO OVER PULLEL 4ROLLSWAP INDEX@ PUTEL ROT * CC63C
+          4PICK#+ ROT NextInArray 4ROLL 3DROP ;  * CC669
 
 * ROMPTR 0C3 018
 * refs (1): CBACE
 ROMP_0C3_018:
-        ::                                       * CC687
-          OVERARSIZE                             * CC68C
-          OVER                                   * CC691
-          INNERCOMP                              * CC696
-          #2=                                    * CC69B
-          NOTcase                                * CC6A0
-          SETSIZEERR                             * CC6A5
-          DUPUNROT                               * CC6AA
-          #MIN                                   * CC6AF
-          ROT                                    * CC6B4
-          #MIN                                   * CC6B9
-          SWAP#1+                                * CC6BE
-          4UNROLL                                * CC6C3
-          SWAP                                   * CC6C8
-          3PICK                                  * CC6CD
-          OBJ_379F0                              * CC6D2
-          MAKEARRY                               * CC6D7
-          BINT1                                  * CC6DC
-          ROT                                    * CC6E1
-          #1+_ONE_DO                             * CC6E6
-          ROT                                    * CC6EB
-          INDEX@                                 * CC6F0
-          PULLEL                                 * CC6F5
-          4ROLL                                  * CC6FA
-          SWAP4PICK                              * CC6FF
-          PUTEL                                  * CC704
-          ROT                                    * CC709
-          4PICK#+                                * CC70E
-          NextInArray                            * CC713
-          DROP                                   * CC718
-          ROTROT2DROP                            * CC71D
-        ;                                        * CC722
+        :: OVERARSIZE OVER INNERCOMP #2= NOTcase SETSIZEERR * CC687
+          DUPUNROT #MIN ROT #MIN SWAP#1+ 4UNROLL SWAP 3PICK OBJ_379F0 * CC6AA
+          MAKEARRY BINT1 ROT #1+_ONE_DO ROT INDEX@ PULLEL 4ROLL SWAP4PICK * CC6D7
+          PUTEL ROT 4PICK#+ NextInArray DROP ROTROT2DROP ; * CC704
 
 * ROMPTR 0C3 019
 * refs (1): CBACE

@@ -6,113 +6,31 @@
 * ROMPTR 0C1 01D
 * refs (1): C78DB
 ROMP_0C1_01D:
-        ::                                       * CA95B
-          DEPTH                                  * CA960
-          #3-                                    * CA965
-          4PICK                                  * CA96A
-          ROMPTR  0C1 01F                        * CA96F
-          ROTDROP                                * CA97A
-          ERRSET                                 * CA97F
-          ROMPTR  0C1 01E                        * CA984
-          ERRTRAP                                * CA98F
-          ROMPTR  0C1 014                        * CA994
-          1PUTLAM                                * CA99F
-          7GETLAM                                * CA9A4
-          RESETDEPTH                             * CA9A9
-          6GETLAM                                * CA9AE
-          1GETABND                               * CA9B3
-          ATTNFLGCLR                             * CA9B8
-        ;                                        * CA9BD
+        :: DEPTH #3- 4PICK ROMPTR 0C1 01F ROTDROP ERRSET ROMPTR 0C1 01E * CA95B
+          ERRTRAP ROMPTR 0C1 014 1PUTLAM 7GETLAM RESETDEPTH 6GETLAM 1GETABND * CA98F
+          ATTNFLGCLR ;                           * CA9B8
 
 * ROMPTR 0C1 01E
 * refs (1): C78DB
 ROMP_0C1_01E:
-        ::                                       * CA9C2
-          ROMPTR  0C1 010                        * CA9C7
-          case                                   * CA9D2
-          ABND                                   * CA9D7
-          %0_2A2B4                               * CA9DC
-          %0_2A2B4                               * CA9E1
-          %0_2A2B4                               * CA9E6
-          %0_2A2B4                               * CA9EB
-          %0_2A2B4                               * CA9F0
-          %0_2A2B4                               * CA9F5
-          8ROLL                                  * CA9FA
-          8NULLLAM{}                             * CA9FF
-          BIND                                   * CAA04
-          LAM     'W                             * CAA09
-          OBJ_36E43                              * CAA14
-          ROMPTR  0C1 01A                        * CAA19
-          5PUTLAM                                * CAA24
-          4PUTLAM                                * CAA29
-          3PUTLAM                                * CAA2E
-          RESOROMP                               * CAA33
-          ROMPTR  0C1 00D                        * CAA38
-          6PUTLAM                                * CAA43
-          2GETLAM                                * CAA48
-          8GETLAM                                * CAA4D
-          11GETLAM                               * CAA52
-          RESOROMP                               * CAA57
-          ROMPTR  0C1 01B                        * CAA5C
-          11PUTLAM                               * CAA67
-          OVER                                   * CAA6C
-          %%0>                                   * CAA71
-          12PUTLAM                               * CAA76
-          BEGIN                                  * CAA7B
-          10GETLAM                               * CAA80
-          12GETLAM                               * CAA85
-          ITE                                    * CAA8A
-          OBJ_7CE00                              * CAA8F
-          OBJ_7CE32                              * CAA94
-          SWAP                                   * CAA99
-          11GETLAM                               * CAA9E
-          EVAL                                   * CAAA3
-          SWAP                                   * CAAA8
-          LAM     'T                             * CAAAD
-          OBJ_36DDF                              * CAAB8
-          10GETLAM                               * CAABD
-          OVER                                   * CAAC2
-          12GETLAM                               * CAAC7
-          ITE                                    * CAACC
-          %<=                                    * CAAD1
-          %>=                                    * CAAD6
-          UNTIL                                  * CAADB
-          3DROP                                  * CAAE0
-          1GETABND                               * CAAE5
-          ABND                                   * CAAEA
-        ;                                        * CAAEF
+        :: ROMPTR 0C1 010 case ABND              * CA9C2
+          %0_2A2B4 %0_2A2B4 %0_2A2B4 %0_2A2B4 %0_2A2B4 %0_2A2B4 8ROLL * CA9DC
+          8NULLLAM{} BIND LAM 'W OBJ_36E43 ROMPTR 0C1 01A 5PUTLAM 4PUTLAM * CA9FF
+          3PUTLAM RESOROMP ROMPTR 0C1 00D 6PUTLAM 2GETLAM 8GETLAM 11GETLAM * CAA2E
+          RESOROMP ROMPTR 0C1 01B 11PUTLAM OVER %%0> 12PUTLAM BEGIN 10GETLAM * CAA57
+          12GETLAM ITE OBJ_7CE00 OBJ_7CE32       * CAA85
+          SWAP 11GETLAM EVAL SWAP LAM 'T OBJ_36DDF 10GETLAM OVER 12GETLAM * CAA99
+          ITE %<= %>=                            * CAACC
+          UNTIL 3DROP 1GETABND ABND ;            * CAADB
 
 * ROMPTR 0C1 01F
 * refs (1): C78DB
 ROMP_0C1_01F:
-        ::                                       * CAAF4
-          DUPLENCOMP                             * CAAF9
-          BINT5                                  * CAAFE
-          #<                                     * CAB03
-          case2drop                              * CAB08
-          SETSIZEERR                             * CAB0D
-          DUPINCOMP                              * CAB12
-          BINT5                                  * CAB17
-          #-                                     * CAB1C
-          NDROP                                  * CAB21
-          {                                      * CAB26
-            NULLLAM                              * CAB2B
-            NULLLAM                              * CAB30
-            LAM     'T                           * CAB35
-            LAM     'W                           * CAB40
-            LAM     'F                           * CAB4B
-            LAM     'FW                          * CAB56
-            LAM     'FT                          * CAB63
-          }                                      * CAB70
-          BIND                                   * CAB75
-          5GETLAM                                * CAB7A
-          TYPEIDNT?                              * CAB7F
-          NOTcase                                * CAB84
-          SETTYPEERR                             * CAB89
-          4GETLAM                                * CAB8E
-          TYPEIDNT?                              * CAB93
-          NOTcase                                * CAB98
-          SETTYPEERR                             * CAB9D
+        :: DUPLENCOMP BINT5 #< case2drop SETSIZEERR * CAAF4
+          DUPINCOMP BINT5 #- NDROP               * CAB12
+          { NULLLAM NULLLAM LAM 'T LAM 'W LAM 'F LAM 'FW LAM 'FT } BIND * CAB26
+          5GETLAM TYPEIDNT? NOTcase SETTYPEERR   * CAB7A
+          4GETLAM TYPEIDNT? NOTcase SETTYPEERR   * CAB8E
         ;                                        * CABA2
 
 * ROMPTR 0C1 020
@@ -144,41 +62,18 @@ L_CABF5:
             B=C     W                            * CABF5
             GOVLNG  L_2A235                      * CABF8
           ENDCODE                                * CABFF
-          SWAPROT                                * CABFF
-          OBJ_0F756                              * CAC04
-          BINT8                                  * CAC09
-          PULLEREALEL                            * CAC0E
-          SWAP                                   * CAC13
-          %0_2A2B4                               * CAC18
-          BINT8                                  * CAC1D
-          PUTREALEL                              * CAC22
-          OBJ_3835E                              * CAC27
-          EQUALNOTcase                           * CAC2C
-          CONSTUNITERR                           * CAC31
-          %%1                                    * CAC36
-          EQUALcasedrop                          * CAC3B
-          %%*                                    * CAC40
-          %%-1                                   * CAC45
-          EQUALcasedrop                          * CAC4A
-          %%/                                    * CAC4F
-          %%^                                    * CAC54
-          %%*                                    * CAC59
-        ;                                        * CAC5E
+          SWAPROT OBJ_0F756 BINT8 PULLEREALEL SWAP %0_2A2B4 BINT8 PUTREALEL * CABFF
+          OBJ_3835E EQUALNOTcase CONSTUNITERR    * CAC27
+          %%1 EQUALcasedrop %%*                  * CAC36
+          %%-1 EQUALcasedrop %%/                 * CAC45
+          %%^ %%* ;                              * CAC54
 
 * ROMPTR 0C1 022
 * refs (1): C78DB
 ROMP_0C1_022:
-        ::                                       * CAC63
-          OBJ_384D0                              * CAC68
-          OBJ_0FBFB                              * CAC6D
-          case2DROP                              * CAC72
-          DROP                                   * CAC77
-          OBJ_3835E                              * CAC7C
-          EQUALNOTcase                           * CAC81
-          CONSTUNITERR                           * CAC86
-          ROMPTR  0C1 021                        * CAC8B
-          %%*                                    * CAC96
-        ;                                        * CAC9B
+        :: OBJ_384D0 OBJ_0FBFB case2DROP DROP    * CAC63
+          OBJ_3835E EQUALNOTcase CONSTUNITERR    * CAC7C
+          ROMPTR 0C1 021 %%* ;                   * CAC8B
 
 LIB0C1.hash:
         CON(5)  DOHSTR                           * CACA0  hash table of library 0C1

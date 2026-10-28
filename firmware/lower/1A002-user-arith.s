@@ -6,50 +6,23 @@
 
 * refs (11): B2733 B31D5 B3A23 BBC99 BC1AA BC7B5 ...
 OBJ_1A002:
-        ::                                       * 1A002
-          DUPTYPEBINT?                           * 1A007
-          case                                   * 1A00C
-          JstGetTHEMESG                          * 1A011
+        :: DUPTYPEBINT? case JstGetTHEMESG       * 1A002
         ;                                        * 1A016
 
 * refs (13): AA1D8 B31D0 BC1A5 BC3D1 D6B9E D7FB2 ...
 OBJ_1A01B:
-        ::                                       * 1A01B
-          SWAP                                   * 1A020
-          OBJ_72AFA                              * 1A025
-          SWAP                                   * 1A02A
-          NTHCOMPDROP                            * 1A02F
-          OBJ_72AFA                              * 1A034
-        ;                                        * 1A039
+        :: SWAP OBJ_72AFA SWAP NTHCOMPDROP OBJ_72AFA ; * 1A01B
 
 * refs (6): 19B26 B15FC B2E81 D6886 D8627 D8729
 OBJ_1A03E:
-        ::                                       * 1A03E
-          SetDA1Bad                              * 1A043
-          SetDA2aBad                             * 1A048
-          SetDA2bBad                             * 1A04D
-          SetDA3Bad                              * 1A052
-        ;                                        * 1A057
+        :: SetDA1Bad SetDA2aBad SetDA2bBad SetDA3Bad ; * 1A03E
 
 * refs (1): 19EBC
 OBJ_1A05C:
-        ::                                       * 1A05C
-          2DUP                                   * 1A061
-          Key>U/SKeyOb                           * 1A066
-          OBJ_4080F                              * 1A06B
-          SWAPDROP                               * 1A070
-          case2drop                              * 1A075
-          'DoBadKeyT                             * 1A07A
-          5GETLAM                                * 1A07F
-          DUP                                    * 1A084
-          ROMPTR  0B0 088                        * 1A089
-          casedrop                               * 1A094
-          OBJ_19F0F                              * 1A099
-          ROMPTR  0B0 08B                        * 1A09E
-          NOTcase2drop                           * 1A0A9
-          'DoBadKeyT                             * 1A0AE
-          ROMPTR  0B0 052                        * 1A0B3
-        ;                                        * 1A0BE
+        :: 2DUP Key>U/SKeyOb OBJ_4080F SWAPDROP case2drop 'DoBadKeyT * 1A05C
+          5GETLAM DUP ROMPTR 0B0 088 casedrop OBJ_19F0F * 1A07F
+          ROMPTR 0B0 08B NOTcase2drop 'DoBadKeyT * 1A09E
+          ROMPTR 0B0 052 ;                       * 1A0B3
         FILLTO  #1A0FE                           * 1A0C3  59 zero nibbles: the next entry stays at #1A0FE
 
 * name ->
@@ -59,10 +32,8 @@ OBJ_1A05C:
         CON(3)  #002                             * 1A0FF  library
         CON(3)  #020                             * 1A102  command
 xCRDIR:
-        ::                                       * 1A105
-          CK1&Dispatch                           * 1A10A
-          BINT6                                  * 1A10F
-          CREATEDIR                              * 1A114
+        :: CK1&Dispatch                          * 1A105
+          BINT6 CREATEDIR                        * 1A10F  name
         ;                                        * 1A119
 
 * -> {HOME dir1 .. dirn}
@@ -72,10 +43,7 @@ xCRDIR:
         CON(3)  #002                             * 1A11F  library
         CON(3)  #021                             * 1A122  command
 xPATH:
-        ::                                       * 1A125
-          CK0                                    * 1A12A
-          PATHDIR                                * 1A12F
-        ;                                        * 1A134
+        :: CK0 PATHDIR ;                         * 1A125
 
 * ->
 * ROMPTR 002 022 HOME
@@ -84,10 +52,7 @@ xPATH:
         CON(3)  #002                             * 1A13A  library
         CON(3)  #022                             * 1A13D  command
 xHOME:
-        ::                                       * 1A140
-          CK0                                    * 1A145
-          HOMEDIR                                * 1A14A
-        ;                                        * 1A14F
+        :: CK0 HOMEDIR ;                         * 1A140
 
 * ->
 * ROMPTR 002 023 UPDIR
@@ -96,20 +61,13 @@ xHOME:
         CON(3)  #002                             * 1A155  library
         CON(3)  #023                             * 1A158  command
 xUPDIR:
-        ::                                       * 1A15B
-          CK0                                    * 1A160
-          UPDIR                                  * 1A165
-        ;                                        * 1A16A
+        :: CK0 UPDIR ;                           * 1A15B
 
 * ->
 * refs (3): 1A165 D2BDF D2E0F
 UPDIR:
-        ::                                       * 1A16F
-          CONTEXT@                               * 1A174
-          MYRAMROMPAIR                           * 1A179
-          NOT?SEMI                               * 1A17E
-          CONTEXT!                               * 1A183
-        ;                                        * 1A188
+        :: CONTEXT@ MYRAMROMPAIR NOT?SEMI        * 1A16F
+          CONTEXT! ;                             * 1A183
 
 * -> {}
 * ROMPTR 002 024 VARS
@@ -118,10 +76,7 @@ UPDIR:
         CON(3)  #002                             * 1A18E  library
         CON(3)  #024                             * 1A191  command
 xVARS:
-        ::                                       * 1A194
-          CK0                                    * 1A199
-          DOVARS                                 * 1A19E
-        ;                                        * 1A1A3
+        :: CK0 DOVARS ;                          * 1A194
 
 * ntype -> {} {n...} -> {}
 * ROMPTR 002 025 TVARS
@@ -130,12 +85,9 @@ xVARS:
         CON(3)  #002                             * 1A1A9  library
         CON(3)  #025                             * 1A1AC  command
 xTVARS:
-        ::                                       * 1A1AF
-          CK1&Dispatch                           * 1A1B4
-          BINT1                                  * 1A1B9
-          DOTVARS%                               * 1A1BE
-          BINT5                                  * 1A1C3
-          tvars(li)                              * 1A1C8
+        :: CK1&Dispatch                          * 1A1AF
+          BINT1 DOTVARS%                         * 1A1B9  real
+          BINT5 tvars(li)                        * 1A1C3  list
         ;                                        * 1A1CD
 
 * obj -> chksum size
@@ -145,58 +97,31 @@ xTVARS:
         CON(3)  #002                             * 1A1D3  library
         CON(3)  #026                             * 1A1D6  command
 xBYTES:
-        ::                                       * 1A1D9
-          CK1&Dispatch                           * 1A1DE
-          BINT6                                  * 1A1E3
-          VARSIZE                                * 1A1E8
-          BINT0                                  * 1A1ED
-          OCRC%                                  * 1A1F2
+        :: CK1&Dispatch                          * 1A1D9
+          BINT6 VARSIZE                          * 1A1E3  name
+          BINT0 OCRC%                            * 1A1ED  any
         ;                                        * 1A1F7
 
 * ob -> hxs %bytes
 * refs (1): 1A1F2
 OCRC%:
-        ::                                       * 1A1FC
-          INHARDROM?                             * 1A201
-          ITE                                    * 1A206
-          ::                                     * 1A20B
-            DROP                                 * 1A210
+        :: INHARDROM? ITE                        * 1A1FC
+          :: DROP                                * 1A20B
 
 #0000h:
-            HXS     0000                         * 1A215
+            HXS 0000                             * 1A215
 
 %2.5:
-            %       2.5E0                        * 1A223
-          ;                                      * 1A238
+            % 2.5E0 ;                            * 1A223
 
 bytes!(_):
-          ::                                     * 1A23D
-            OCRC                                 * 1A242
-            SWAP                                 * 1A247
-            UNCOERCE                             * 1A24C
-            %2                                   * 1A251
-            %/                                   * 1A256
-          ;                                      * 1A25B
+          :: OCRC SWAP UNCOERCE %2 %/ ;          * 1A23D
         ;                                        * 1A260
 
 * id -> hxs %bytes
 * refs (3): 1A1E8 2DC75 B9DB3
 VARSIZE:
-        ::                                       * 1A265
-          DUP                                    * 1A26A
-          XEQRCL                                 * 1A26F
-          OCRC                                   * 1A274
-          SWAPROT                                * 1A279
-          ID>$                                   * 1A27E
-          LEN$                                   * 1A283
-          #2*                                    * 1A288
-          #+                                     * 1A28D
-          #       9                              * 1A292  9
-          #+                                     * 1A29C
-          UNCOERCE                               * 1A2A1
-          %2                                     * 1A2A6
-          %/                                     * 1A2AB
-        ;                                        * 1A2B0
+        :: DUP XEQRCL OCRC SWAPROT ID>$ LEN$ #2* #+ # 9 #+ UNCOERCE %2 %/ ; * 1A265
 
 * ob -> ob
 * ROMPTR 002 027 NEWOB
@@ -205,12 +130,8 @@ VARSIZE:
         CON(3)  #002                             * 1A2B6  library
         CON(3)  #027                             * 1A2B9  command
 xNEWOB:
-        ::                                       * 1A2BC
-          CK1                                    * 1A2C1
-          INHARDROM?                             * 1A2C6
-          ?SEMI                                  * 1A2CB
-          TOTEMPOB                               * 1A2D0
-        ;                                        * 1A2D5
+        :: CK1 INHARDROM? ?SEMI                  * 1A2BC
+          TOTEMPOB ;                             * 1A2D0
 
 * ob -> ob flag
 * refs (9): 1479E 14807 150C5 1A201 1A2C6 216B0 ...
@@ -233,10 +154,7 @@ L_1A2F5:
         CON(3)  #028                             * 1A300  command
         RPL
 xKILL:
-        ::                                       * 1A303
-          CK0                                    * 1A308
-          kill                                   * 1A30D
-        ;                                        * 1A312
+        :: CK0 kill ;                            * 1A303
 
 * ->
 * ROMPTR 002 029 OFF
@@ -245,10 +163,7 @@ xKILL:
         CON(3)  #002                             * 1A318  library
         CON(3)  #029                             * 1A31B  command
 xOFF:
-        ::                                       * 1A31E
-          CK0                                    * 1A323
-          TurnOff                                * 1A328
-        ;                                        * 1A32D
+        :: CK0 TurnOff ;                         * 1A31E
 
 * n -> #n -> $ -> 0 ->
 * ROMPTR 002 02A DOERR
@@ -257,14 +172,10 @@ xOFF:
         CON(3)  #002                             * 1A333  library
         CON(3)  #02A                             * 1A336  command
 xDOERR:
-        ::                                       * 1A339
-          CK1&Dispatch                           * 1A33E
-          BINT1                                  * 1A343
-          DO%EXIT                                * 1A348
-          BINT3                                  * 1A34D
-          DO$EXIT                                * 1A352
-          BINT11                                 * 1A357
-          DOHXSEXIT                              * 1A35C
+        :: CK1&Dispatch                          * 1A339
+          BINT1 DO%EXIT                          * 1A343  real
+          BINT3 DO$EXIT                          * 1A34D  string
+          BINT11 DOHXSEXIT                       * 1A357  binary
         ;                                        * 1A361
 
 * ->
@@ -274,10 +185,7 @@ xDOERR:
         CON(3)  #002                             * 1A367  library
         CON(3)  #02B                             * 1A36A  command
 xERR0:
-        ::                                       * 1A36D
-          CK0                                    * 1A372
-          ERR0                                   * 1A377
-        ;                                        * 1A37C
+        :: CK0 ERR0 ;                            * 1A36D
 
 * -> $nerr
 * ROMPTR 002 02C ERRN
@@ -286,10 +194,7 @@ xERR0:
         CON(3)  #002                             * 1A382  library
         CON(3)  #02C                             * 1A385  command
 xERRN:
-        ::                                       * 1A388
-          CK0                                    * 1A38D
-          ERRN>HXS                               * 1A392
-        ;                                        * 1A397
+        :: CK0 ERRN>HXS ;                        * 1A388
 
 * -> $msg
 * ROMPTR 002 02D ERRM
@@ -298,10 +203,7 @@ xERRN:
         CON(3)  #002                             * 1A39D  library
         CON(3)  #02D                             * 1A3A0  command
 xERRM:
-        ::                                       * 1A3A3
-          CK0                                    * 1A3A8
-          ERRM                                   * 1A3AD
-        ;                                        * 1A3B2
+        :: CK0 ERRM ;                            * 1A3A3
 
 * ob -> ?
 * ROMPTR 002 02E EVAL
@@ -310,16 +212,11 @@ xERRM:
         CON(3)  #002                             * 1A3B8  library
         CON(3)  #02E                             * 1A3BB  command
 xEVAL:
-        ::                                       * 1A3BE
-          CK1&Dispatch                           * 1A3C3
-          BINT9                                  * 1A3C8
-          COMPEVAL                               * 1A3CD
-          BINT5                                  * 1A3D2
-          COMPEVAL                               * 1A3D7
-          BINT13                                 * 1A3DC
-          eval(to)                               * 1A3E1
-          BINT0                                  * 1A3E6
-          EVAL                                   * 1A3EB
+        :: CK1&Dispatch                          * 1A3BE
+          BINT9 COMPEVAL                         * 1A3C8  algebraic
+          BINT5 COMPEVAL                         * 1A3D2  list
+          BINT13 eval(to)                        * 1A3DC  tagged
+          BINT0 EVAL                             * 1A3E6  any
         ;                                        * 1A3F0
 
 * slots of 002 02E (derivative, inverse, ...: used by the symbolic code)
@@ -332,35 +229,24 @@ xEVAL:
         CON(3)  #002                             * 1A3F8  library
         CON(3)  #02F                             * 1A3FB  command
 xIFTE:
-        ::                                       * 1A3FE
-          CK3&Dispatch                           * 1A403
-          REALOBOB                               * 1A408
-          %IFTE                                  * 1A40D
-          SYMREALREAL                            * 1A412
-          ifte(ex,2_)                            * 1A417
-          SYMREALCMP                             * 1A41C
-          ifte(ex,2_)                            * 1A421
-          SYMCMPREAL                             * 1A426
-          ifte(ex,2_)                            * 1A42B
-          SYMCMPCMP                              * 1A430
-          ifte(ex,2_)                            * 1A435
-          SYMSYMREAL                             * 1A43A
-          ifte(ex,2_)                            * 1A43F
-          SYMSYMCMP                              * 1A444
-          ifte(ex,2_)                            * 1A449
-          SYMREALSYM                             * 1A44E
-          ifte(ex,2_)                            * 1A453
-          SYMCMPSYM                              * 1A458
-          ifte(ex,2_)                            * 1A45D
-          3SYM                                   * 1A462
-          ifte(ex,2_)                            * 1A467
+        :: CK3&Dispatch                          * 1A3FE
+          REALOBOB %IFTE                         * 1A408  real ? ?
+          SYMREALREAL ifte(ex,2_)                * 1A412  name|local|algebraic real real
+          SYMREALCMP ifte(ex,2_)                 * 1A41C  name|local|algebraic real complex
+          SYMCMPREAL ifte(ex,2_)                 * 1A426  name|local|algebraic complex real
+          SYMCMPCMP ifte(ex,2_)                  * 1A430  name|local|algebraic complex complex
+          SYMSYMREAL ifte(ex,2_)                 * 1A43A  name|local|algebraic name|local|algebraic real
+          SYMSYMCMP ifte(ex,2_)                  * 1A444  name|local|algebraic name|local|algebraic complex
+          SYMREALSYM ifte(ex,2_)                 * 1A44E  name|local|algebraic real name|local|algebraic
+          SYMCMPSYM ifte(ex,2_)                  * 1A458  name|local|algebraic complex name|local|algebraic
+          3SYM ifte(ex,2_)                       * 1A462  name|local|algebraic name|local|algebraic name|local|algebraic
         ;                                        * 1A46C
 
 #0526260410h:
-        HXS     0140626250                       * 1A471
+        HXS 0140626250                           * 1A471
         NIBHEX  28DD7                            * 1A485  ∇Ý
 
-        ROMPTR  0F0 095                          * 1A48A
+        ROMPTR 0F0 095                           * 1A48A
 
         CON(5)  nWHEREIFTE                       * 1A495  address (the code jumps or points through it)
 
@@ -370,13 +256,7 @@ xIFTE:
 * % ob1 ob2 -> ?
 * refs (1): 1A40D
 %IFTE:
-        ::                                       * 1A4A3
-          ROT                                    * 1A4A8
-          %0=                                    * 1A4AD
-          ?SWAPDROP                              * 1A4B2
-          'EvalNoCK:_sup                         * 1A4B7
-          xEVAL                                  * 1A4BC
-        ;                                        * 1A4C1
+        :: ROT %0= ?SWAPDROP 'EvalNoCK:_sup xEVAL ; * 1A4A3
 
 * 0/1 obj -> ?
 * ROMPTR 002 030 IFT
@@ -385,30 +265,19 @@ xIFTE:
         CON(3)  #002                             * 1A4C7  library
         CON(3)  #030                             * 1A4CA  command
 xIFT:
-        ::                                       * 1A4CD
-          CK2&Dispatch                           * 1A4D2
-          BINT16                                 * 1A4D7
-          ift(r,_)                               * 1A4DC
-          SYMOB                                  * 1A4E1
-          ift(ex,_)                              * 1A4E6
+        :: CK2&Dispatch                          * 1A4CD
+          BINT16 ift(r,_)                        * 1A4D7  real ?
+          SYMOB ift(ex,_)                        * 1A4E1  name|local|algebraic ?
         ;                                        * 1A4EB
 
 * refs (1): 1A4DC
 ift(r,_):
-        ::                                       * 1A4F0
-          SWAP                                   * 1A4F5
-          %0=                                    * 1A4FA
-          caseDROP                               * 1A4FF
-          'EvalNoCK:_sup                         * 1A504
-          xEVAL                                  * 1A509
-        ;                                        * 1A50E
+        :: SWAP %0= caseDROP 'EvalNoCK:_sup      * 1A4F0
+          xEVAL ;                                * 1A509
 
 * refs (1): 1A4E6
 ift(ex,_):
-        ::                                       * 1A513
-          SYMCRUNCH2                             * 1A518
-          xIFT                                   * 1A51D
-        ;                                        * 1A522
+        :: SYMCRUNCH2 xIFT ;                     * 1A513
 
 * # -> ?
 * ROMPTR 002 031 SYSEVAL
@@ -417,17 +286,13 @@ ift(ex,_):
         CON(3)  #002                             * 1A528  library
         CON(3)  #031                             * 1A52B  command
 xSYSEVAL:
-        ::                                       * 1A52E
-          CK1&Dispatch                           * 1A533
-          BINT11                                 * 1A538
-          syseval(b)                             * 1A53D
+        :: CK1&Dispatch                          * 1A52E
+          BINT11 syseval(b)                      * 1A538  binary
         ;                                        * 1A542
 
 * refs (1): 1A53D
 syseval(b):
-        ::                                       * 1A547
-          HXS>#                                  * 1A54C
-          COLA                                   * 1A551
+        :: HXS># COLA                            * 1A547
 
 syseval(s):
           CODE                                   * 1A556  24 nibbles
@@ -449,10 +314,8 @@ syseval(s):
         CON(3)  #002                             * 1A57E  library
         CON(3)  #032                             * 1A581  command
 xDISP:
-        ::                                       * 1A584
-          CK2&Dispatch                           * 1A589
-          BINT1                                  * 1A58E
-          DODISP                                 * 1A593
+        :: CK2&Dispatch                          * 1A584
+          BINT1 DODISP                           * 1A58E  real
         ;                                        * 1A598
 
 * n ->
@@ -462,10 +325,8 @@ xDISP:
         CON(3)  #002                             * 1A59E  library
         CON(3)  #033                             * 1A5A1  command
 xFREEZE:
-        ::                                       * 1A5A4
-          CK1&Dispatch                           * 1A5A9
-          BINT1                                  * 1A5AE
-          Ck&Freeze                              * 1A5B3
+        :: CK1&Dispatch                          * 1A5A4
+          BINT1 Ck&Freeze                        * 1A5AE  real
         ;                                        * 1A5B8
 
 * freq dur ->
@@ -475,10 +336,8 @@ xFREEZE:
         CON(3)  #002                             * 1A5BE  library
         CON(3)  #034                             * 1A5C1  command
 xBEEP:
-        ::                                       * 1A5C4
-          CK2&Dispatch                           * 1A5C9
-          BINT17                                 * 1A5CE
-          DOBEEP                                 * 1A5D3
+        :: CK2&Dispatch                          * 1A5C4
+          BINT17 DOBEEP                          * 1A5CE  real real
         ;                                        * 1A5D8
 
 * x -> x'
@@ -488,11 +347,7 @@ xBEEP:
         CON(3)  #002                             * 1A5DE  library
         CON(3)  #035                             * 1A5E1  command
 x>NUM:
-        ::                                       * 1A5E4
-          CK1                                    * 1A5E9
-          STRIPTAGS                              * 1A5EE
-          CRUNCH                                 * 1A5F3
-        ;                                        * 1A5F8
+        :: CK1 STRIPTAGS CRUNCH ;                * 1A5E4
 
 * -> ob1 .. obn
 * ROMPTR 002 036 LASTARG
@@ -501,15 +356,8 @@ x>NUM:
         CON(3)  #002                             * 1A5FE  library
         CON(3)  #036                             * 1A601  command
 xLAST:
-        ::                                       * 1A604
-          CK0                                    * 1A609
-          BINT55                                 * 1A60E
-          TestSysFlag                            * 1A613
-          NOTcase                                * 1A618
-          lastarg                                * 1A61D
-          Err#NoLstArg                           * 1A622
-          ERROROUT                               * 1A627
-        ;                                        * 1A62C
+        :: CK0 BINT55 TestSysFlag NOTcase lastarg * 1A604
+          Err#NoLstArg ERROROUT ;                * 1A622
 
 * refs (1): 1A61D
 lastarg:
@@ -600,48 +448,23 @@ L_1A6F7:
         CON(3)  #037                             * 1A71C  command
         RPL
 xWAIT:
-        ::                                       * 1A71F
-          CK1&Dispatch                           * 1A724
-          BINT1                                  * 1A729
-          Wait/GetKey                            * 1A72E
+        :: CK1&Dispatch                          * 1A71F
+          BINT1 Wait/GetKey                      * 1A729  real
         ;                                        * 1A733
 
 * % -> ?
 * refs (1): 1A72E
 Wait/GetKey:
-        ::                                       * 1A738
-          DUP                                    * 1A73D
-          %0>                                    * 1A742
-          case                                   * 1A747
-          dowait/quit?                           * 1A74C
-          %0<>                                   * 1A751
-          IT                                     * 1A756
-          DispMenu.1                             * 1A75B
-          WaitForKey                             * 1A760
-          InitEdModes                            * 1A765
-          OVER                                   * 1A76A
-          BINT45                                 * 1A76F
-          #=                                     * 1A774
-          OVER                                   * 1A779
-          BINT1                                  * 1A77E
-          #=                                     * 1A783
-          3PICK                                  * 1A788
-          BINT4                                  * 1A78D
-          #=                                     * 1A792
-          OR                                     * 1A797
-          AND                                    * 1A79C
-          case2drop                              * 1A7A1
-          ABORT                                  * 1A7A6
-          CodePl>%rc.p                           * 1A7AB
-        ;                                        * 1A7B0
+        :: DUP %0> case dowait/quit?             * 1A738
+          %0<> IT DispMenu.1                     * 1A751
+          WaitForKey InitEdModes OVER BINT45 #= OVER BINT1 #= 3PICK BINT4 #= * 1A760
+          OR AND case2drop ABORT                 * 1A797
+          CodePl>%rc.p ;                         * 1A7AB
 
 * %secs ->
 * refs (1): 1A74C
 dowait/quit?:
-        ::                                       * 1A7B5
-          dowait                                 * 1A7BA
-          OBJ_4241B                              * 1A7BF
-        ;                                        * 1A7C4
+        :: dowait OBJ_4241B ;                    * 1A7B5
 
 * %secs ->
 * refs (5): 1A7BA 2DC1B 2E0D1 2F031 C0BA9
@@ -649,9 +472,7 @@ dowait:
         ::                                       * 1A7C9
 
 %8.192E3:
-          %       8.192E3                        * 1A7CE
-          %*                                     * 1A7E3
-          %>#                                    * 1A7E8
+          % 8.192E3 %* %>#                       * 1A7CE
 
 * hxs ->
 wait:
@@ -691,10 +512,7 @@ L_1A843:
         CON(3)  #002                             * 1A852  library
         CON(3)  #038                             * 1A855  command
 xCLLCD:
-        ::                                       * 1A858
-          CK0                                    * 1A85D
-          DOCLLCD                                * 1A862
-        ;                                        * 1A867
+        :: CK0 DOCLLCD ;                         * 1A858
 
 * -> rc 1 -> 0
 * ROMPTR 002 039 KEY
@@ -703,19 +521,8 @@ xCLLCD:
         CON(3)  #002                             * 1A86D  library
         CON(3)  #039                             * 1A870  command
 xKEY:
-        ::                                       * 1A873
-          CK0                                    * 1A878
-          GETTOUCH                               * 1A87D
-          NOTcase                                * 1A882
-          %0_2A2B4                               * 1A887
-          H/W>KeyCode                            * 1A88C
-          BINT63                                 * 1A891
-          #AND                                   * 1A896
-          BINT1                                  * 1A89B
-          CodePl>%rc.p                           * 1A8A0
-          %IP                                    * 1A8A5
-          %1                                     * 1A8AA
-        ;                                        * 1A8AF
+        :: CK0 GETTOUCH NOTcase %0_2A2B4         * 1A873
+          H/W>KeyCode BINT63 #AND BINT1 CodePl>%rc.p %IP %1 ; * 1A88C
 
 * ->
 * ROMPTR 002 03A CONT
@@ -724,10 +531,7 @@ xKEY:
         CON(3)  #002                             * 1A8B5  library
         CON(3)  #03A                             * 1A8B8  command
 xCONT:
-        ::                                       * 1A8BB
-          CK0                                    * 1A8C0
-          cont                                   * 1A8C5
-        ;                                        * 1A8CA
+        :: CK0 cont ;                            * 1A8BB
 
 * slots of 002 03A (derivative, inverse, ...: used by the symbolic code)
         CON(2)  #C8                              * 1A8CF  end of the slots: property byte (meaning not yet known)
@@ -739,36 +543,21 @@ xCONT:
         CON(3)  #002                             * 1A8D2  library
         CON(3)  #03B                             * 1A8D5  command
 x=:
-        ::                                       * 1A8D8
-          CK2&Dispatch                           * 1A8DD
-          BINT17                                 * 1A8E2
-          OBJ_55927                              * 1A8E7
-          BINT18                                 * 1A8EC
-          OBJ_55927                              * 1A8F1
-          BINT33                                 * 1A8F6
-          OBJ_55927                              * 1A8FB
-          BINT34                                 * 1A900
-          OBJ_55927                              * 1A905
-          BINT26                                 * 1A90A
-          OBJ_55927                              * 1A90F
-          BINT42                                 * 1A914
-          OBJ_55927                              * 1A919
-          SYMREAL                                * 1A91E
-          OBJ_55927                              * 1A923
-          OBJ_64D7E                              * 1A928
-          OBJ_55927                              * 1A92D
-          SYMSYM                                 * 1A932
-          OBJ_55927                              * 1A937
-          2EXT                                   * 1A93C
-          OBJ_55927                              * 1A941
-          BINT30                                 * 1A946
-          OBJ_55927                              * 1A94B
-          EXTREAL                                * 1A950
-          OBJ_55927                              * 1A955
-          SYMEXT                                 * 1A95A
-          OBJ_55927                              * 1A95F
-          EXTSYM                                 * 1A964
-          OBJ_55927                              * 1A969
+        :: CK2&Dispatch                          * 1A8D8
+          BINT17 OBJ_55927                       * 1A8E2  real real
+          BINT18 OBJ_55927                       * 1A8EC  real complex
+          BINT33 OBJ_55927                       * 1A8F6  complex real
+          BINT34 OBJ_55927                       * 1A900  complex complex
+          BINT26 OBJ_55927                       * 1A90A  real name|local|algebraic
+          BINT42 OBJ_55927                       * 1A914  complex name|local|algebraic
+          SYMREAL OBJ_55927                      * 1A91E  name|local|algebraic real
+          OBJ_64D7E OBJ_55927                    * 1A928  name|local|algebraic complex
+          SYMSYM OBJ_55927                       * 1A932  name|local|algebraic name|local|algebraic
+          2EXT OBJ_55927                         * 1A93C  unit unit
+          BINT30 OBJ_55927                       * 1A946  real unit
+          EXTREAL OBJ_55927                      * 1A950  unit real
+          SYMEXT OBJ_55927                       * 1A95A  name|local|algebraic unit
+          EXTSYM OBJ_55927                       * 1A964  unit name|local|algebraic
         ;                                        * 1A96E
 
 * slots of 002 03B (derivative, inverse, ...: used by the symbolic code)
@@ -786,24 +575,15 @@ x=:
         CON(3)  #002                             * 1A98F  library
         CON(3)  #03C                             * 1A992  command
 xNEG:
-        ::                                       * 1A995
-          CK1&Dispatch                           * 1A99A
-          BINT1                                  * 1A99F
-          %CHS                                   * 1A9A4
-          BINT2                                  * 1A9A9
-          C%CHS                                  * 1A9AE
-          BINT4                                  * 1A9B3
-          MATNEG                                 * 1A9B8
-          BINT10                                 * 1A9BD
-          SYMNEG                                 * 1A9C2
-          BINT14                                 * 1A9C7
-          UMCHS                                  * 1A9CC
-          BINT11                                 * 1A9D1
-          bitNEG                                 * 1A9D6
-          BINT12                                 * 1A9DB
-          inv(go)                                * 1A9E0
-          BINT8                                  * 1A9E5
-          neg(PICT)                              * 1A9EA
+        :: CK1&Dispatch                          * 1A995
+          BINT1 %CHS                             * 1A99F  real
+          BINT2 C%CHS                            * 1A9A9  complex
+          BINT4 MATNEG                           * 1A9B3  array
+          BINT10 SYMNEG                          * 1A9BD  name|local|algebraic
+          BINT14 UMCHS                           * 1A9C7  unit
+          BINT11 bitNEG                          * 1A9D1  binary
+          BINT12 inv(go)                         * 1A9DB  grob
+          BINT8 neg(PICT)                        * 1A9E5  program
         ;                                        * 1A9EF
 
 * slots of 002 03C (derivative, inverse, ...: used by the symbolic code)
@@ -811,7 +591,7 @@ xNEG:
 
 * refs (1): 1ACFB
 #8010h:
-        HXS     0108                             * 1A9F9  slot 1
+        HXS 0108                                 * 1A9F9  slot 1
         CON(5)  D/DCHS                           * 1AA07  slot 2
         CON(5)  OBJ_57488                        * 1AA0C  slot 3
         CON(5)  MANMENUCSIV                      * 1AA11  slot 4
@@ -824,18 +604,12 @@ xNEG:
         CON(3)  #002                             * 1AA19  library
         CON(3)  #03D                             * 1AA1C  command
 xABS:
-        ::                                       * 1AA1F
-          CK1&Dispatch                           * 1AA24
-          BINT1                                  * 1AA29
-          %ABS                                   * 1AA2E
-          BINT2                                  * 1AA33
-          C%ABS                                  * 1AA38
-          BINT4                                  * 1AA3D
-          MATABS                                 * 1AA42
-          BINT10                                 * 1AA47
-          SYMABS                                 * 1AA4C
-          BINT14                                 * 1AA51
-          UMABS                                  * 1AA56
+        :: CK1&Dispatch                          * 1AA1F
+          BINT1 %ABS                             * 1AA29  real
+          BINT2 C%ABS                            * 1AA33  complex
+          BINT4 MATABS                           * 1AA3D  array
+          BINT10 SYMABS                          * 1AA47  name|local|algebraic
+          BINT14 UMABS                           * 1AA51  unit
         ;                                        * 1AA5B
 
 * slots of 002 03D (derivative, inverse, ...: used by the symbolic code)
@@ -849,16 +623,11 @@ xABS:
         CON(3)  #002                             * 1AA68  library
         CON(3)  #03E                             * 1AA6B  command
 xCONJ:
-        ::                                       * 1AA6E
-          CK1&Dispatch                           * 1AA73
-          BINT1                                  * 1AA78
-          NOP                                    * 1AA7D
-          BINT2                                  * 1AA82
-          C%CONJ                                 * 1AA87
-          BINT4                                  * 1AA8C
-          MATCONJ                                * 1AA91
-          BINT10                                 * 1AA96
-          SYMCONJ                                * 1AA9B
+        :: CK1&Dispatch                          * 1AA6E
+          BINT1 NOP                              * 1AA78  real
+          BINT2 C%CONJ                           * 1AA82  complex
+          BINT4 MATCONJ                          * 1AA8C  array
+          BINT10 SYMCONJ                         * 1AA96  name|local|algebraic
         ;                                        * 1AAA0
 
 * slots of 002 03E (derivative, inverse, ...: used by the symbolic code)
@@ -874,10 +643,7 @@ xCONJ:
         CON(3)  #002                             * 1AAB7  library
         CON(3)  #03F                             * 1AABA  command
 xPI:
-        ::                                       * 1AABD
-          CK0                                    * 1AAC2
-          pi                                     * 1AAC7
-        ;                                        * 1AACC
+        :: CK0 pi ;                              * 1AABD
 
 * slots of 002 03F (derivative, inverse, ...: used by the symbolic code)
         CON(5)  OBJ_56B87                        * 1AAD1  slot 0
@@ -890,10 +656,7 @@ xPI:
         CON(3)  #002                             * 1AAD9  library
         CON(3)  #040                             * 1AADC  command
 xMAXR:
-        ::                                       * 1AADF
-          CK0                                    * 1AAE4
-          maxr                                   * 1AAE9
-        ;                                        * 1AAEE
+        :: CK0 maxr ;                            * 1AADF
 
 * slots of 002 040 (derivative, inverse, ...: used by the symbolic code)
         CON(5)  OBJ_56B87                        * 1AAF3  slot 0
@@ -906,10 +669,7 @@ xMAXR:
         CON(3)  #002                             * 1AAFB  library
         CON(3)  #041                             * 1AAFE  command
 xMINR:
-        ::                                       * 1AB01
-          CK0                                    * 1AB06
-          OBJ_54CDB                              * 1AB0B
-        ;                                        * 1AB10
+        :: CK0 OBJ_54CDB ;                       * 1AB01
 
 * slots of 002 041 (derivative, inverse, ...: used by the symbolic code)
         CON(5)  OBJ_56B87                        * 1AB15  slot 0
@@ -922,10 +682,7 @@ xMINR:
         CON(3)  #002                             * 1AB1D  library
         CON(3)  #042                             * 1AB20  command
 xCONSTANTe:
-        ::                                       * 1AB23
-          CK0                                    * 1AB28
-          e                                      * 1AB2D
-        ;                                        * 1AB32
+        :: CK0 e ;                               * 1AB23
 
 * slots of 002 042 (derivative, inverse, ...: used by the symbolic code)
         CON(5)  OBJ_56B87                        * 1AB37  slot 0
@@ -938,10 +695,7 @@ xCONSTANTe:
         CON(3)  #002                             * 1AB3F  library
         CON(3)  #043                             * 1AB42  command
 xi:
-        ::                                       * 1AB45
-          CK0                                    * 1AB4A
-          i                                      * 1AB4F
-        ;                                        * 1AB54
+        :: CK0 i ;                               * 1AB45
 
 * slots of 002 043 (derivative, inverse, ...: used by the symbolic code)
         CON(5)  OBJ_56B87                        * 1AB59  slot 0
@@ -954,58 +708,32 @@ xi:
         CON(3)  #002                             * 1AB61  library
         CON(3)  #044                             * 1AB64  command
 x+:
-        ::                                       * 1AB67
-          CK2&Dispatch                           * 1AB6C
-          BINT17                                 * 1AB71
-          %+                                     * 1AB76
-          BINT18                                 * 1AB7B
-          C%R+C                                  * 1AB80
-          BINT33                                 * 1AB85
-          C%C+R                                  * 1AB8A
-          BINT34                                 * 1AB8F
-          C%C+C                                  * 1AB94
-          BINT27                                 * 1AB99
-          bit%#+                                 * 1AB9E
-          HXSREAL                                * 1ABA3
-          bit#%+                                 * 1ABA8
-          2HXS                                   * 1ABAD
-          bit+                                   * 1ABB2
-          2EXT                                   * 1ABB7
-          UM+                                    * 1ABBC
-          BINT30                                 * 1ABC1
-          UM+                                    * 1ABC6
-          EXTREAL                                * 1ABCB
-          UM+                                    * 1ABD0
-          SYMSYM                                 * 1ABD5
-          SYM+                                   * 1ABDA
-          BINT26                                 * 1ABDF
-          O+SYM                                  * 1ABE4
-          SYMREAL                                * 1ABE9
-          SYM+O                                  * 1ABEE
-          BINT42                                 * 1ABF3
-          O+SYM                                  * 1ABF8
-          OBJ_64D7E                              * 1ABFD
-          SYM+O                                  * 1AC02
-          SYMEXT                                 * 1AC07
-          SYM+O                                  * 1AC0C
-          EXTSYM                                 * 1AC11
-          O+SYM                                  * 1AC16
-          BINT68                                 * 1AC1B
-          MAT+                                   * 1AC20
-          2GROB                                  * 1AC25
-          +(2go)                                 * 1AC2A
-          BINT85                                 * 1AC2F
-          &COMP                                  * 1AC34
-          BINT51                                 * 1AC39
-          &$                                     * 1AC3E
-          OBJ_64C34                              * 1AC43
-          >TCOMP                                 * 1AC48
-          BINT5                                  * 1AC4D
-          SWAP>HCOMP                             * 1AC52
-          BINT48                                 * 1AC57
-          +(st,_)                                * 1AC5C
-          BINT3                                  * 1AC61
-          +(_,st)                                * 1AC66
+        :: CK2&Dispatch                          * 1AB67
+          BINT17 %+                              * 1AB71  real real
+          BINT18 C%R+C                           * 1AB7B  real complex
+          BINT33 C%C+R                           * 1AB85  complex real
+          BINT34 C%C+C                           * 1AB8F  complex complex
+          BINT27 bit%#+                          * 1AB99  real binary
+          HXSREAL bit#%+                         * 1ABA3  binary real
+          2HXS bit+                              * 1ABAD  binary binary
+          2EXT UM+                               * 1ABB7  unit unit
+          BINT30 UM+                             * 1ABC1  real unit
+          EXTREAL UM+                            * 1ABCB  unit real
+          SYMSYM SYM+                            * 1ABD5  name|local|algebraic name|local|algebraic
+          BINT26 O+SYM                           * 1ABDF  real name|local|algebraic
+          SYMREAL SYM+O                          * 1ABE9  name|local|algebraic real
+          BINT42 O+SYM                           * 1ABF3  complex name|local|algebraic
+          OBJ_64D7E SYM+O                        * 1ABFD  name|local|algebraic complex
+          SYMEXT SYM+O                           * 1AC07  name|local|algebraic unit
+          EXTSYM O+SYM                           * 1AC11  unit name|local|algebraic
+          BINT68 MAT+                            * 1AC1B  array array
+          2GROB +(2go)                           * 1AC25  grob grob
+          BINT85 &COMP                           * 1AC2F  list list
+          BINT51 &$                              * 1AC39  string string
+          OBJ_64C34 >TCOMP                       * 1AC43  list ?
+          BINT5 SWAP>HCOMP                       * 1AC4D  list
+          BINT48 +(st,_)                         * 1AC57  string ?
+          BINT3 +(_,st)                          * 1AC61  string
         ;                                        * 1AC6B
 
 * slots of 002 044 (derivative, inverse, ...: used by the symbolic code)
@@ -1013,7 +741,7 @@ x+:
 
 * refs (1): 1ADD1
 #70107h:
-        HXS     70107                            * 1AC75  slot 1
+        HXS 70107                                * 1AC75  slot 1
         CON(5)  D/D+                             * 1AC84  slot 2
         CON(5)  OBJ_57446                        * 1AC89  slot 3
         CON(5)  MANMENU+-                        * 1AC8E  slot 4
@@ -1021,25 +749,15 @@ x+:
 * ob comp -> ob+comp
 * refs (2): 1AC52 49B0A
 SWAP>HCOMP:
-        ::                                       * 1AC93  slot 5
-          SWAP                                   * 1AC98
-          >HCOMP                                 * 1AC9D
-        ;                                        * 1ACA2
+        :: SWAP >HCOMP ;                         * 1AC93  slot 5
 
 * refs (1): 1AC5C
 +(st,_):
-        ::                                       * 1ACA7  slot 6
-          DECOMP$                                * 1ACAC
-          &$                                     * 1ACB1
-        ;                                        * 1ACB6
+        :: DECOMP$ &$ ;                          * 1ACA7  slot 6
 
 * refs (1): 1AC66
 +(_,st):
-        ::                                       * 1ACBB  slot 7
-          SWAP                                   * 1ACC0
-          DECOMP$                                * 1ACC5
-          SWAP&$                                 * 1ACCA
-        ;                                        * 1ACCF
+        :: SWAP DECOMP$ SWAP&$ ;                 * 1ACBB  slot 7
         CON(2)  #00                              * 1ACD4  end of the slots: property byte (meaning not yet known)
 
 * ->
@@ -1049,10 +767,8 @@ SWAP>HCOMP:
         CON(3)  #002                             * 1ACD7  library
         CON(3)  #045                             * 1ACDA  command
 xNEGNEG:
-        ::                                       * 1ACDD
-          CK1&Dispatch                           * 1ACE2
-          BINT0                                  * 1ACE7
-          NOP                                    * 1ACEC
+        :: CK1&Dispatch                          * 1ACDD
+          BINT0 NOP                              * 1ACE7  any
         ;                                        * 1ACF1
 
 * slots of 002 045 (derivative, inverse, ...: used by the symbolic code)
@@ -1067,44 +783,25 @@ xNEGNEG:
         CON(3)  #002                             * 1AD03  library
         CON(3)  #046                             * 1AD06  command
 x-:
-        ::                                       * 1AD09
-          CK2&Dispatch                           * 1AD0E
-          BINT17                                 * 1AD13
-          %-                                     * 1AD18
-          BINT18                                 * 1AD1D
-          C%R-C                                  * 1AD22
-          BINT33                                 * 1AD27
-          C%C-R                                  * 1AD2C
-          BINT34                                 * 1AD31
-          C%C-C                                  * 1AD36
-          BINT27                                 * 1AD3B
-          bit%#-                                 * 1AD40
-          HXSREAL                                * 1AD45
-          bit#%-                                 * 1AD4A
-          2HXS                                   * 1AD4F
-          bit-                                   * 1AD54
-          BINT68                                 * 1AD59
-          MAT-                                   * 1AD5E
-          BINT26                                 * 1AD63
-          SYM-                                   * 1AD68
-          BINT42                                 * 1AD6D
-          SYM-                                   * 1AD72
-          SYMREAL                                * 1AD77
-          SYM-O                                  * 1AD7C
-          OBJ_64D7E                              * 1AD81
-          SYM-O                                  * 1AD86
-          SYMSYM                                 * 1AD8B
-          -(2ex)                                 * 1AD90
-          2EXT                                   * 1AD95
-          UM-                                    * 1AD9A
-          BINT30                                 * 1AD9F
-          UM-                                    * 1ADA4
-          EXTREAL                                * 1ADA9
-          UM-                                    * 1ADAE
-          SYMEXT                                 * 1ADB3
-          SYM-O                                  * 1ADB8
-          EXTSYM                                 * 1ADBD
-          SYM-                                   * 1ADC2
+        :: CK2&Dispatch                          * 1AD09
+          BINT17 %-                              * 1AD13  real real
+          BINT18 C%R-C                           * 1AD1D  real complex
+          BINT33 C%C-R                           * 1AD27  complex real
+          BINT34 C%C-C                           * 1AD31  complex complex
+          BINT27 bit%#-                          * 1AD3B  real binary
+          HXSREAL bit#%-                         * 1AD45  binary real
+          2HXS bit-                              * 1AD4F  binary binary
+          BINT68 MAT-                            * 1AD59  array array
+          BINT26 SYM-                            * 1AD63  real name|local|algebraic
+          BINT42 SYM-                            * 1AD6D  complex name|local|algebraic
+          SYMREAL SYM-O                          * 1AD77  name|local|algebraic real
+          OBJ_64D7E SYM-O                        * 1AD81  name|local|algebraic complex
+          SYMSYM -(2ex)                          * 1AD8B  name|local|algebraic name|local|algebraic
+          2EXT UM-                               * 1AD95  unit unit
+          BINT30 UM-                             * 1AD9F  real unit
+          EXTREAL UM-                            * 1ADA9  unit real
+          SYMEXT SYM-O                           * 1ADB3  name|local|algebraic unit
+          EXTSYM SYM-                            * 1ADBD  unit name|local|algebraic
         ;                                        * 1ADC7
 
 * slots of 002 046 (derivative, inverse, ...: used by the symbolic code)
@@ -1122,52 +819,29 @@ x-:
         CON(3)  #002                             * 1ADE8  library
         CON(3)  #047                             * 1ADEB  command
 x*:
-        ::                                       * 1ADEE
-          CK2&Dispatch                           * 1ADF3
-          BINT17                                 * 1ADF8
-          %*                                     * 1ADFD
-          BINT18                                 * 1AE02
-          C%R*C                                  * 1AE07
-          BINT33                                 * 1AE0C
-          C%C*R                                  * 1AE11
-          BINT34                                 * 1AE16
-          C%C*C_51D88                            * 1AE1B
-          BINT27                                 * 1AE20
-          bit%#*                                 * 1AE25
-          HXSREAL                                * 1AE2A
-          bit#%*                                 * 1AE2F
-          2HXS                                   * 1AE34
-          bit*                                   * 1AE39
-          BINT20                                 * 1AE3E
-          MATFLOAT*                              * 1AE43
-          BINT36                                 * 1AE48
-          MATFLOAT*                              * 1AE4D
-          BINT65                                 * 1AE52
-          MATFLOAT*                              * 1AE57
-          BINT66                                 * 1AE5C
-          MATFLOAT*                              * 1AE61
-          BINT68                                 * 1AE66
-          MAT*                                   * 1AE6B
-          BINT26                                 * 1AE70
-          O*SYM                                  * 1AE75
-          BINT42                                 * 1AE7A
-          O*SYM                                  * 1AE7F
-          SYMREAL                                * 1AE84
-          SYM*O                                  * 1AE89
-          OBJ_64D7E                              * 1AE8E
-          SYM*O                                  * 1AE93
-          SYMSYM                                 * 1AE98
-          SYM*                                   * 1AE9D
-          2EXT                                   * 1AEA2
-          UM*                                    * 1AEA7
-          BINT30                                 * 1AEAC
-          UM*                                    * 1AEB1
-          EXTREAL                                * 1AEB6
-          UM*                                    * 1AEBB
-          SYMEXT                                 * 1AEC0
-          SYM*O                                  * 1AEC5
-          EXTSYM                                 * 1AECA
-          O*SYM                                  * 1AECF
+        :: CK2&Dispatch                          * 1ADEE
+          BINT17 %*                              * 1ADF8  real real
+          BINT18 C%R*C                           * 1AE02  real complex
+          BINT33 C%C*R                           * 1AE0C  complex real
+          BINT34 C%C*C_51D88                     * 1AE16  complex complex
+          BINT27 bit%#*                          * 1AE20  real binary
+          HXSREAL bit#%*                         * 1AE2A  binary real
+          2HXS bit*                              * 1AE34  binary binary
+          BINT20 MATFLOAT*                       * 1AE3E  real array
+          BINT36 MATFLOAT*                       * 1AE48  complex array
+          BINT65 MATFLOAT*                       * 1AE52  array real
+          BINT66 MATFLOAT*                       * 1AE5C  array complex
+          BINT68 MAT*                            * 1AE66  array array
+          BINT26 O*SYM                           * 1AE70  real name|local|algebraic
+          BINT42 O*SYM                           * 1AE7A  complex name|local|algebraic
+          SYMREAL SYM*O                          * 1AE84  name|local|algebraic real
+          OBJ_64D7E SYM*O                        * 1AE8E  name|local|algebraic complex
+          SYMSYM SYM*                            * 1AE98  name|local|algebraic name|local|algebraic
+          2EXT UM*                               * 1AEA2  unit unit
+          BINT30 UM*                             * 1AEAC  real unit
+          EXTREAL UM*                            * 1AEB6  unit real
+          SYMEXT SYM*O                           * 1AEC0  name|local|algebraic unit
+          EXTSYM O*SYM                           * 1AECA  unit name|local|algebraic
         ;                                        * 1AED4
 
 * slots of 002 047 (derivative, inverse, ...: used by the symbolic code)
@@ -1175,7 +849,7 @@ x*:
 
 * refs (1): 1B004
 #80108h:
-        HXS     80108                            * 1AEDE  slot 1
+        HXS 80108                                * 1AEDE  slot 1
         CON(5)  D/D*                             * 1AEED  slot 2
         CON(5)  OBJ_5745C                        * 1AEF2  slot 3
         CON(5)  MANMENU*/                        * 1AEF7  slot 4
@@ -1188,48 +862,27 @@ x*:
         CON(3)  #002                             * 1AEFF  library
         CON(3)  #048                             * 1AF02  command
 x/:
-        ::                                       * 1AF05
-          CK2&Dispatch                           * 1AF0A
-          BINT17                                 * 1AF0F
-          %/                                     * 1AF14
-          BINT18                                 * 1AF19
-          C%R/C                                  * 1AF1E
-          BINT33                                 * 1AF23
-          C%C/R                                  * 1AF28
-          BINT34                                 * 1AF2D
-          C%C/C                                  * 1AF32
-          BINT27                                 * 1AF37
-          bit%#/                                 * 1AF3C
-          HXSREAL                                * 1AF41
-          bit#%/                                 * 1AF46
-          2HXS                                   * 1AF4B
-          bit/                                   * 1AF50
-          BINT65                                 * 1AF55
-          MATFLOAT/                              * 1AF5A
-          BINT66                                 * 1AF5F
-          MATFLOAT/                              * 1AF64
-          BINT68                                 * 1AF69
-          MAT/                                   * 1AF6E
-          BINT26                                 * 1AF73
-          O/SYM                                  * 1AF78
-          BINT42                                 * 1AF7D
-          O/SYM                                  * 1AF82
-          SYMREAL                                * 1AF87
-          SYM/O                                  * 1AF8C
-          OBJ_64D7E                              * 1AF91
-          SYM/O                                  * 1AF96
-          SYMSYM                                 * 1AF9B
-          SYM/                                   * 1AFA0
-          2EXT                                   * 1AFA5
-          UM/                                    * 1AFAA
-          BINT30                                 * 1AFAF
-          UM/                                    * 1AFB4
-          EXTREAL                                * 1AFB9
-          UM/                                    * 1AFBE
-          SYMEXT                                 * 1AFC3
-          SYM/O                                  * 1AFC8
-          EXTSYM                                 * 1AFCD
-          O/SYM                                  * 1AFD2
+        :: CK2&Dispatch                          * 1AF05
+          BINT17 %/                              * 1AF0F  real real
+          BINT18 C%R/C                           * 1AF19  real complex
+          BINT33 C%C/R                           * 1AF23  complex real
+          BINT34 C%C/C                           * 1AF2D  complex complex
+          BINT27 bit%#/                          * 1AF37  real binary
+          HXSREAL bit#%/                         * 1AF41  binary real
+          2HXS bit/                              * 1AF4B  binary binary
+          BINT65 MATFLOAT/                       * 1AF55  array real
+          BINT66 MATFLOAT/                       * 1AF5F  array complex
+          BINT68 MAT/                            * 1AF69  array array
+          BINT26 O/SYM                           * 1AF73  real name|local|algebraic
+          BINT42 O/SYM                           * 1AF7D  complex name|local|algebraic
+          SYMREAL SYM/O                          * 1AF87  name|local|algebraic real
+          OBJ_64D7E SYM/O                        * 1AF91  name|local|algebraic complex
+          SYMSYM SYM/                            * 1AF9B  name|local|algebraic name|local|algebraic
+          2EXT UM/                               * 1AFA5  unit unit
+          BINT30 UM/                             * 1AFAF  real unit
+          EXTREAL UM/                            * 1AFB9  unit real
+          SYMEXT SYM/O                           * 1AFC3  name|local|algebraic unit
+          EXTSYM O/SYM                           * 1AFCD  unit name|local|algebraic
         ;                                        * 1AFD7
 
 * slots of 002 048 (derivative, inverse, ...: used by the symbolic code)
@@ -1241,16 +894,11 @@ x/:
 
 * refs (1): 1AFE1
 OBJ_1AFF5:
-        ::                                       * 1AFF5  slot 5
-          OBJ_6CC10                              * 1AFFA
-          #0504108h                              * 1AFFF
-          #80108h                                * 1B004
-          RPITE                                  * 1B009
-        ;                                        * 1B00E
+        :: OBJ_6CC10 #0504108h #80108h RPITE ;   * 1AFF5  slot 5
 
 * refs (1): 1AFFF
 #0504108h:
-        HXS     8014050                          * 1B013  slot 6
+        HXS 8014050                              * 1B013  slot 6
         CON(2)  #CC                              * 1B024  end of the slots: property byte (meaning not yet known)
 
 * y x -> y^x
@@ -1260,36 +908,21 @@ OBJ_1AFF5:
         CON(3)  #002                             * 1B027  library
         CON(3)  #049                             * 1B02A  command
 x^:
-        ::                                       * 1B02D
-          CK2&Dispatch                           * 1B032
-          BINT17                                 * 1B037
-          ^(2r)                                  * 1B03C
-          BINT18                                 * 1B041
-          C%R^C                                  * 1B046
-          BINT33                                 * 1B04B
-          C%C^R                                  * 1B050
-          BINT34                                 * 1B055
-          C%C^C                                  * 1B05A
-          BINT26                                 * 1B05F
-          O^SYM                                  * 1B064
-          BINT42                                 * 1B069
-          O^SYM                                  * 1B06E
-          SYMREAL                                * 1B073
-          SYM^O                                  * 1B078
-          OBJ_64D7E                              * 1B07D
-          SYM^O                                  * 1B082
-          SYMSYM                                 * 1B087
-          SYM^                                   * 1B08C
-          2EXT                                   * 1B091
-          ^(2uo)                                 * 1B096
-          BINT30                                 * 1B09B
-          ^(2uo)                                 * 1B0A0
-          EXTREAL                                * 1B0A5
-          ^(2uo)                                 * 1B0AA
-          SYMEXT                                 * 1B0AF
-          SYM^O                                  * 1B0B4
-          EXTSYM                                 * 1B0B9
-          O^SYM                                  * 1B0BE
+        :: CK2&Dispatch                          * 1B02D
+          BINT17 ^(2r)                           * 1B037  real real
+          BINT18 C%R^C                           * 1B041  real complex
+          BINT33 C%C^R                           * 1B04B  complex real
+          BINT34 C%C^C                           * 1B055  complex complex
+          BINT26 O^SYM                           * 1B05F  real name|local|algebraic
+          BINT42 O^SYM                           * 1B069  complex name|local|algebraic
+          SYMREAL SYM^O                          * 1B073  name|local|algebraic real
+          OBJ_64D7E SYM^O                        * 1B07D  name|local|algebraic complex
+          SYMSYM SYM^                            * 1B087  name|local|algebraic name|local|algebraic
+          2EXT ^(2uo)                            * 1B091  unit unit
+          BINT30 ^(2uo)                          * 1B09B  real unit
+          EXTREAL ^(2uo)                         * 1B0A5  unit real
+          SYMEXT SYM^O                           * 1B0AF  name|local|algebraic unit
+          EXTSYM O^SYM                           * 1B0B9  unit name|local|algebraic
         ;                                        * 1B0C3
 
 * slots of 002 049 (derivative, inverse, ...: used by the symbolic code)
@@ -1302,40 +935,21 @@ x^:
 
 * refs (1): 1B0CD
 OBJ_1B0E6:
-        ::                                       * 1B0E6  slot 6
-          OBJ_6CC10                              * 1B0EB
-          #0504109h                              * 1B0F0
-          #90109h                                * 1B0F5
-          RPITE                                  * 1B0FA
-        ;                                        * 1B0FF
+        :: OBJ_6CC10 #0504109h #90109h RPITE ;   * 1B0E6  slot 6
 
 * refs (1): 1B0F5
 #90109h:
-        HXS     90109                            * 1B104  slot 7
+        HXS 90109                                * 1B104  slot 7
 
 * refs (1): 1B0F0
 #0504109h:
-        HXS     9014050                          * 1B113  slot 8
+        HXS 9014050                              * 1B113  slot 8
 
 * refs (1): 1B03C
 ^(2r):
-        ::                                       * 1B124  slot 9
-          2DUP                                   * 1B129
-          ERRSET                                 * 1B12E
-          %^                                     * 1B133
-          ERRTRAP                                * 1B138
-          ::                                     * 1B13D
-            ERROR@                               * 1B142
-            #       304                          * 1B147  772
-            #=?SKIP                              * 1B151
-            ERRJMP                               * 1B156
-            RDROP                                * 1B15B
-            ERRORCLR                             * 1B160
-            Re>C%                                * 1B165
-            C%R^C                                * 1B16A
-          ;                                      * 1B16F
-          ROTROT2DROP                            * 1B174
-        ;                                        * 1B179
+        :: 2DUP ERRSET %^ ERRTRAP                * 1B124  slot 9
+          :: ERROR@ # 304 #=?SKIP ERRJMP RDROP ERRORCLR Re>C% C%R^C ; * 1B13D
+          ROTROT2DROP ;                          * 1B174
 
 * ROMPTR 002 04A XROOT
 * refs (3): 189EA 21DC8 5A2CF
@@ -1343,14 +957,10 @@ OBJ_1B0E6:
         CON(3)  #002                             * 1B17F  library
         CON(3)  #04A                             * 1B182  command
 rpnXROOT:
-        ::                                       * 1B185
-          CK2&Dispatch                           * 1B18A
-          BINT5                                  * 1B18F
-          OBJ_21DBE                              * 1B194
-          OBJ_64C34                              * 1B199
-          OBJ_21DBE                              * 1B19E
-          BINT0                                  * 1B1A3
-          OBJ_19EEC                              * 1B1A8
+        :: CK2&Dispatch                          * 1B185
+          BINT5 OBJ_21DBE                        * 1B18F  list
+          OBJ_64C34 OBJ_21DBE                    * 1B199  list ?
+          BINT0 OBJ_19EEC                        * 1B1A3  any
         ;                                        * 1B1AD
 
 * slots of 002 04A (derivative, inverse, ...: used by the symbolic code)
@@ -1366,26 +976,16 @@ rpnXROOT:
         CON(3)  #002                             * 1B1C4  library
         CON(3)  #04B                             * 1B1C7  command
 xXROOT:
-        ::                                       * 1B1CA
-          CK2&Dispatch                           * 1B1CF
-          BINT17                                 * 1B1D4
-          OBJ_1B251                              * 1B1D9
-          BINT30                                 * 1B1DE
-          OBJ_1B23D                              * 1B1E3
-          EXTREAL                                * 1B1E8
-          OBJ_1B23D                              * 1B1ED
-          2EXT                                   * 1B1F2
-          OBJ_1B23D                              * 1B1F7
-          BINT26                                 * 1B1FC
-          %SYMXROOT                              * 1B201
-          SYMREAL                                * 1B206
-          SYM%XROOT                              * 1B20B
-          SYMSYM                                 * 1B210
-          SYMXROOT                               * 1B215
-          SYMEXT                                 * 1B21A
-          SYM%XROOT                              * 1B21F
-          EXTSYM                                 * 1B224
-          %SYMXROOT                              * 1B229
+        :: CK2&Dispatch                          * 1B1CA
+          BINT17 OBJ_1B251                       * 1B1D4  real real
+          BINT30 OBJ_1B23D                       * 1B1DE  real unit
+          EXTREAL OBJ_1B23D                      * 1B1E8  unit real
+          2EXT OBJ_1B23D                         * 1B1F2  unit unit
+          BINT26 %SYMXROOT                       * 1B1FC  real name|local|algebraic
+          SYMREAL SYM%XROOT                      * 1B206  name|local|algebraic real
+          SYMSYM SYMXROOT                        * 1B210  name|local|algebraic name|local|algebraic
+          SYMEXT SYM%XROOT                       * 1B21A  name|local|algebraic unit
+          EXTSYM %SYMXROOT                       * 1B224  unit name|local|algebraic
         ;                                        * 1B22E
 
 * slots of 002 04B (derivative, inverse, ...: used by the symbolic code)
@@ -1394,17 +994,11 @@ xXROOT:
 
 * refs (3): 1B1E3 1B1ED 1B1F7
 OBJ_1B23D:
-        ::                                       * 1B23D  slot 2
-          SWAP                                   * 1B242
-          UMXROOT                                * 1B247
-        ;                                        * 1B24C
+        :: SWAP UMXROOT ;                        * 1B23D  slot 2
 
 * refs (1): 1B1D9
 OBJ_1B251:
-        ::                                       * 1B251  slot 3
-          SWAP                                   * 1B256
-          %NROOT                                 * 1B25B
-        ;                                        * 1B260
+        :: SWAP %NROOT ;                         * 1B251  slot 3
         CON(5)  NOP                              * 1B265  slot 4
         CON(5)  NOP                              * 1B26A  slot 5
         CON(2)  #CC                              * 1B26F  end of the slots: property byte (meaning not yet known)
@@ -1416,18 +1010,12 @@ OBJ_1B251:
         CON(3)  #002                             * 1B272  library
         CON(3)  #04C                             * 1B275  command
 xINV:
-        ::                                       * 1B278
-          CK1&Dispatch                           * 1B27D
-          BINT1                                  * 1B282
-          %1/                                    * 1B287
-          BINT2                                  * 1B28C
-          C%1/                                   * 1B291
-          BINT4                                  * 1B296
-          MATINV                                 * 1B29B
-          BINT10                                 * 1B2A0
-          SYMINV                                 * 1B2A5
-          BINT14                                 * 1B2AA
-          UMINV                                  * 1B2AF
+        :: CK1&Dispatch                          * 1B278
+          BINT1 %1/                              * 1B282  real
+          BINT2 C%1/                             * 1B28C  complex
+          BINT4 MATINV                           * 1B296  array
+          BINT10 SYMINV                          * 1B2A0  name|local|algebraic
+          BINT14 UMINV                           * 1B2AA  unit
         ;                                        * 1B2B4
 
 * slots of 002 04C (derivative, inverse, ...: used by the symbolic code)
@@ -1445,14 +1033,10 @@ xINV:
         CON(3)  #002                             * 1B2D5  library
         CON(3)  #04D                             * 1B2D8  command
 xARG:
-        ::                                       * 1B2DB
-          CK1&Dispatch                           * 1B2E0
-          BINT1                                  * 1B2E5
-          %ARG                                   * 1B2EA
-          BINT2                                  * 1B2EF
-          C%ARG                                  * 1B2F4
-          BINT10                                 * 1B2F9
-          SYMARG                                 * 1B2FE
+        :: CK1&Dispatch                          * 1B2DB
+          BINT1 %ARG                             * 1B2E5  real
+          BINT2 C%ARG                            * 1B2EF  complex
+          BINT10 SYMARG                          * 1B2F9  name|local|algebraic
         ;                                        * 1B303
 
 * slots of 002 04D (derivative, inverse, ...: used by the symbolic code)
@@ -1461,10 +1045,7 @@ xARG:
 * % %' -> %rem
 * refs (1): 1B2EA
 %ARG:
-        ::                                       * 1B30D  slot 1
-          %0_2A2B4                               * 1B312
-          %ANGLE                                 * 1B317
-        ;                                        * 1B31C
+        :: %0_2A2B4 %ANGLE ;                     * 1B30D  slot 1
         CON(2)  #04                              * 1B321  end of the slots: property byte (meaning not yet known)
 
 * x -> x'
@@ -1474,16 +1055,11 @@ xARG:
         CON(3)  #002                             * 1B324  library
         CON(3)  #04E                             * 1B327  command
 xSIGN:
-        ::                                       * 1B32A
-          CK1&Dispatch                           * 1B32F
-          BINT1                                  * 1B334
-          %SGN                                   * 1B339
-          BINT2                                  * 1B33E
-          C%SGN                                  * 1B343
-          BINT10                                 * 1B348
-          SYMSIGN                                * 1B34D
-          BINT14                                 * 1B352
-          UMSIGN                                 * 1B357
+        :: CK1&Dispatch                          * 1B32A
+          BINT1 %SGN                             * 1B334  real
+          BINT2 C%SGN                            * 1B33E  complex
+          BINT10 SYMSIGN                         * 1B348  name|local|algebraic
+          BINT14 UMSIGN                          * 1B352  unit
         ;                                        * 1B35C
 
 * slots of 002 04E (derivative, inverse, ...: used by the symbolic code)
@@ -1498,16 +1074,11 @@ xSIGN:
         CON(3)  #002                             * 1B36E  library
         CON(3)  #04F                             * 1B371  command
 xSQRT:
-        ::                                       * 1B374
-          CK1&Dispatch                           * 1B379
-          BINT1                                  * 1B37E
-          CK%SQRT                                * 1B383
-          BINT2                                  * 1B388
-          C%SQRT                                 * 1B38D
-          BINT10                                 * 1B392
-          SYMSQRT                                * 1B397
-          BINT14                                 * 1B39C
-          UMSQRT                                 * 1B3A1
+        :: CK1&Dispatch                          * 1B374
+          BINT1 CK%SQRT                          * 1B37E  real
+          BINT2 C%SQRT                           * 1B388  complex
+          BINT10 SYMSQRT                         * 1B392  name|local|algebraic
+          BINT14 UMSQRT                          * 1B39C  unit
         ;                                        * 1B3A6
 
 * slots of 002 04F (derivative, inverse, ...: used by the symbolic code)
@@ -1520,28 +1091,17 @@ xSQRT:
 
 * refs (1): 1B3B0
 OBJ_1B3C9:
-        ::                                       * 1B3C9  slot 6
-          OBJ_6CC10                              * 1B3CE
-          #050410h                               * 1B3D3
-          #C010h                                 * 1B3D8
-          RPITE                                  * 1B3DD
-        ;                                        * 1B3E2
+        :: OBJ_6CC10 #050410h #C010h RPITE ;     * 1B3C9  slot 6
 
 * refs (1): 1B3D8
 #C010h:
-        HXS     010C                             * 1B3E7  slot 7
+        HXS 010C                                 * 1B3E7  slot 7
 
 * % -> SQRT%%
 * refs (1): 1B383
 CK%SQRT:
-        ::                                       * 1B3F5  slot 8
-          DUP                                    * 1B3FA
-          %0<                                    * 1B3FF
-          NOTcase                                * 1B404
-          %SQRT                                  * 1B409
-          Re>C%                                  * 1B40E
-          C%SQRT                                 * 1B413
-        ;                                        * 1B418
+        :: DUP %0< NOTcase %SQRT                 * 1B3F5  slot 8
+          Re>C% C%SQRT ;                         * 1B40E
         CON(2)  #C4                              * 1B41D  end of the slots: property byte (meaning not yet known)
 
 * x -> x'
@@ -1551,18 +1111,12 @@ CK%SQRT:
         CON(3)  #002                             * 1B420  library
         CON(3)  #050                             * 1B423  command
 xSQ:
-        ::                                       * 1B426
-          CK1&Dispatch                           * 1B42B
-          BINT1                                  * 1B430
-          %SQ                                    * 1B435
-          BINT2                                  * 1B43A
-          C%C*C                                  * 1B43F
-          BINT4                                  * 1B444
-          MATSQ                                  * 1B449
-          BINT10                                 * 1B44E
-          SYMSQ                                  * 1B453
-          BINT14                                 * 1B458
-          UMSQ                                   * 1B45D
+        :: CK1&Dispatch                          * 1B426
+          BINT1 %SQ                              * 1B430  real
+          BINT2 C%C*C                            * 1B43A  complex
+          BINT4 MATSQ                            * 1B444  array
+          BINT10 SYMSQ                           * 1B44E  name|local|algebraic
+          BINT14 UMSQ                            * 1B458  unit
         ;                                        * 1B462
 
 * slots of 002 050 (derivative, inverse, ...: used by the symbolic code)
@@ -1574,18 +1128,12 @@ xSQ:
 * % -> %'
 * refs (1): 1B435
 %SQ:
-        ::                                       * 1B47B  slot 4
-          DUP                                    * 1B480
-          %*                                     * 1B485
-        ;                                        * 1B48A
+        :: DUP %* ;                              * 1B47B  slot 4
 
 * C% -> C%^2
 * refs (1): 1B43F
 C%C*C:
-        ::                                       * 1B48F  slot 5
-          DUP                                    * 1B494
-          C%C*C_51D88                            * 1B499
-        ;                                        * 1B49E
+        :: DUP C%C*C_51D88 ;                     * 1B48F  slot 5
         CON(2)  #CC                              * 1B4A3  end of the slots: property byte (meaning not yet known)
 
 * x -> x'
@@ -1595,16 +1143,11 @@ C%C*C:
         CON(3)  #002                             * 1B4A6  library
         CON(3)  #051                             * 1B4A9  command
 xSIN:
-        ::                                       * 1B4AC
-          CK1&Dispatch                           * 1B4B1
-          BINT1                                  * 1B4B6
-          %SIN                                   * 1B4BB
-          BINT2                                  * 1B4C0
-          C%SIN                                  * 1B4C5
-          BINT10                                 * 1B4CA
-          SYMSIN                                 * 1B4CF
-          BINT14                                 * 1B4D4
-          UMSIN                                  * 1B4D9
+        :: CK1&Dispatch                          * 1B4AC
+          BINT1 %SIN                             * 1B4B6  real
+          BINT2 C%SIN                            * 1B4C0  complex
+          BINT10 SYMSIN                          * 1B4CA  name|local|algebraic
+          BINT14 UMSIN                           * 1B4D4  unit
         ;                                        * 1B4DE
 
 * slots of 002 051 (derivative, inverse, ...: used by the symbolic code)
@@ -1622,16 +1165,11 @@ xSIN:
         CON(3)  #002                             * 1B4FF  library
         CON(3)  #052                             * 1B502  command
 xCOS:
-        ::                                       * 1B505
-          CK1&Dispatch                           * 1B50A
-          BINT1                                  * 1B50F
-          %COS                                   * 1B514
-          BINT2                                  * 1B519
-          C%COS                                  * 1B51E
-          BINT10                                 * 1B523
-          SYMCOS                                 * 1B528
-          BINT14                                 * 1B52D
-          UMCOS                                  * 1B532
+        :: CK1&Dispatch                          * 1B505
+          BINT1 %COS                             * 1B50F  real
+          BINT2 C%COS                            * 1B519  complex
+          BINT10 SYMCOS                          * 1B523  name|local|algebraic
+          BINT14 UMCOS                           * 1B52D  unit
         ;                                        * 1B537
 
 * slots of 002 052 (derivative, inverse, ...: used by the symbolic code)
@@ -1649,16 +1187,11 @@ xCOS:
         CON(3)  #002                             * 1B558  library
         CON(3)  #053                             * 1B55B  command
 xTAN:
-        ::                                       * 1B55E
-          CK1&Dispatch                           * 1B563
-          BINT1                                  * 1B568
-          %TAN                                   * 1B56D
-          BINT2                                  * 1B572
-          C%TAN                                  * 1B577
-          BINT10                                 * 1B57C
-          SYMTAN                                 * 1B581
-          BINT14                                 * 1B586
-          UMTAN                                  * 1B58B
+        :: CK1&Dispatch                          * 1B55E
+          BINT1 %TAN                             * 1B568  real
+          BINT2 C%TAN                            * 1B572  complex
+          BINT10 SYMTAN                          * 1B57C  name|local|algebraic
+          BINT14 UMTAN                           * 1B586  unit
         ;                                        * 1B590
 
 * slots of 002 053 (derivative, inverse, ...: used by the symbolic code)
@@ -1676,14 +1209,10 @@ xTAN:
         CON(3)  #002                             * 1B5B1  library
         CON(3)  #054                             * 1B5B4  command
 xSINH:
-        ::                                       * 1B5B7
-          CK1&Dispatch                           * 1B5BC
-          BINT1                                  * 1B5C1
-          %SINH                                  * 1B5C6
-          BINT2                                  * 1B5CB
-          C%SINH                                 * 1B5D0
-          BINT10                                 * 1B5D5
-          SYMSINH                                * 1B5DA
+        :: CK1&Dispatch                          * 1B5B7
+          BINT1 %SINH                            * 1B5C1  real
+          BINT2 C%SINH                           * 1B5CB  complex
+          BINT10 SYMSINH                         * 1B5D5  name|local|algebraic
         ;                                        * 1B5DF
 
 * slots of 002 054 (derivative, inverse, ...: used by the symbolic code)
@@ -1701,14 +1230,10 @@ xSINH:
         CON(3)  #002                             * 1B600  library
         CON(3)  #055                             * 1B603  command
 xCOSH:
-        ::                                       * 1B606
-          CK1&Dispatch                           * 1B60B
-          BINT1                                  * 1B610
-          %COSH                                  * 1B615
-          BINT2                                  * 1B61A
-          C%COSH                                 * 1B61F
-          BINT10                                 * 1B624
-          SYMCOSH                                * 1B629
+        :: CK1&Dispatch                          * 1B606
+          BINT1 %COSH                            * 1B610  real
+          BINT2 C%COSH                           * 1B61A  complex
+          BINT10 SYMCOSH                         * 1B624  name|local|algebraic
         ;                                        * 1B62E
 
 * slots of 002 055 (derivative, inverse, ...: used by the symbolic code)
@@ -1726,14 +1251,10 @@ xCOSH:
         CON(3)  #002                             * 1B64F  library
         CON(3)  #056                             * 1B652  command
 xTANH:
-        ::                                       * 1B655
-          CK1&Dispatch                           * 1B65A
-          BINT1                                  * 1B65F
-          %TANH                                  * 1B664
-          BINT2                                  * 1B669
-          C%TANH                                 * 1B66E
-          BINT10                                 * 1B673
-          SYMTANH                                * 1B678
+        :: CK1&Dispatch                          * 1B655
+          BINT1 %TANH                            * 1B65F  real
+          BINT2 C%TANH                           * 1B669  complex
+          BINT10 SYMTANH                         * 1B673  name|local|algebraic
         ;                                        * 1B67D
 
 * slots of 002 056 (derivative, inverse, ...: used by the symbolic code)
@@ -1751,14 +1272,10 @@ xTANH:
         CON(3)  #002                             * 1B69E  library
         CON(3)  #057                             * 1B6A1  command
 xASIN:
-        ::                                       * 1B6A4
-          CK1&Dispatch                           * 1B6A9
-          BINT1                                  * 1B6AE
-          CK%ASIN                                * 1B6B3
-          BINT2                                  * 1B6B8
-          C%ASIN                                 * 1B6BD
-          BINT10                                 * 1B6C2
-          SYMASIN                                * 1B6C7
+        :: CK1&Dispatch                          * 1B6A4
+          BINT1 CK%ASIN                          * 1B6AE  real
+          BINT2 C%ASIN                           * 1B6B8  complex
+          BINT10 SYMASIN                         * 1B6C2  name|local|algebraic
         ;                                        * 1B6CC
 
 * slots of 002 057 (derivative, inverse, ...: used by the symbolic code)
@@ -1775,17 +1292,7 @@ CK%ASIN:
 
 * refs (2): 1B77A 1B8E3
 dup;|r|ó1?:dq/sk:
-          ::                                     * 1B6EF
-            DUP                                  * 1B6F4
-            %ABS                                 * 1B6F9
-            %1                                   * 1B6FE
-            %>                                   * 1B703
-            COLANOTcase                          * 1B708
-          ;                                      * 1B70D
-          %ASIN                                  * 1B712
-          Re>C%                                  * 1B717
-          C%ASIN                                 * 1B71C
-        ;                                        * 1B721
+          :: DUP %ABS %1 %> COLANOTcase ; %ASIN Re>C% C%ASIN ; * 1B6EF
         CON(2)  #CC                              * 1B726  end of the slots: property byte (meaning not yet known)
 
 * x -> x'
@@ -1795,14 +1302,10 @@ dup;|r|ó1?:dq/sk:
         CON(3)  #002                             * 1B729  library
         CON(3)  #058                             * 1B72C  command
 xACOS:
-        ::                                       * 1B72F
-          CK1&Dispatch                           * 1B734
-          BINT1                                  * 1B739
-          CK%ACOS                                * 1B73E
-          BINT2                                  * 1B743
-          C%ACOS                                 * 1B748
-          BINT10                                 * 1B74D
-          SYMACOS                                * 1B752
+        :: CK1&Dispatch                          * 1B72F
+          BINT1 CK%ACOS                          * 1B739  real
+          BINT2 C%ACOS                           * 1B743  complex
+          BINT10 SYMACOS                         * 1B74D  name|local|algebraic
         ;                                        * 1B757
 
 * slots of 002 058 (derivative, inverse, ...: used by the symbolic code)
@@ -1815,12 +1318,7 @@ xACOS:
 * % -> ACOS%
 * refs (1): 1B73E
 CK%ACOS:
-        ::                                       * 1B775  slot 5
-          dup;|r|ó1?:dq/sk                       * 1B77A
-          %ACOS                                  * 1B77F
-          Re>C%                                  * 1B784
-          C%ACOS                                 * 1B789
-        ;                                        * 1B78E
+        :: dup;|r|ó1?:dq/sk %ACOS Re>C% C%ACOS ; * 1B775  slot 5
         CON(2)  #CC                              * 1B793  end of the slots: property byte (meaning not yet known)
 
 * x -> x'
@@ -1830,14 +1328,10 @@ CK%ACOS:
         CON(3)  #002                             * 1B796  library
         CON(3)  #059                             * 1B799  command
 xATAN:
-        ::                                       * 1B79C
-          CK1&Dispatch                           * 1B7A1
-          BINT1                                  * 1B7A6
-          %ATAN                                  * 1B7AB
-          BINT2                                  * 1B7B0
-          C%ATAN                                 * 1B7B5
-          BINT10                                 * 1B7BA
-          SYMATAN                                * 1B7BF
+        :: CK1&Dispatch                          * 1B79C
+          BINT1 %ATAN                            * 1B7A6  real
+          BINT2 C%ATAN                           * 1B7B0  complex
+          BINT10 SYMATAN                         * 1B7BA  name|local|algebraic
         ;                                        * 1B7C4
 
 * slots of 002 059 (derivative, inverse, ...: used by the symbolic code)
@@ -1855,14 +1349,10 @@ xATAN:
         CON(3)  #002                             * 1B7E5  library
         CON(3)  #05A                             * 1B7E8  command
 xASINH:
-        ::                                       * 1B7EB
-          CK1&Dispatch                           * 1B7F0
-          BINT1                                  * 1B7F5
-          %ASINH                                 * 1B7FA
-          BINT2                                  * 1B7FF
-          C%ASINH                                * 1B804
-          BINT10                                 * 1B809
-          SYMASINH                               * 1B80E
+        :: CK1&Dispatch                          * 1B7EB
+          BINT1 %ASINH                           * 1B7F5  real
+          BINT2 C%ASINH                          * 1B7FF  complex
+          BINT10 SYMASINH                        * 1B809  name|local|algebraic
         ;                                        * 1B813
 
 * slots of 002 05A (derivative, inverse, ...: used by the symbolic code)
@@ -1878,14 +1368,10 @@ xASINH:
         CON(3)  #002                             * 1B82A  library
         CON(3)  #05B                             * 1B82D  command
 xACOSH:
-        ::                                       * 1B830
-          CK1&Dispatch                           * 1B835
-          BINT1                                  * 1B83A
-          CK%ACOSH                               * 1B83F
-          BINT2                                  * 1B844
-          C%ACOSH                                * 1B849
-          BINT10                                 * 1B84E
-          SYMACOSH                               * 1B853
+        :: CK1&Dispatch                          * 1B830
+          BINT1 CK%ACOSH                         * 1B83A  real
+          BINT2 C%ACOSH                          * 1B844  complex
+          BINT10 SYMACOSH                        * 1B84E  name|local|algebraic
         ;                                        * 1B858
 
 * slots of 002 05B (derivative, inverse, ...: used by the symbolic code)
@@ -1896,15 +1382,8 @@ xACOSH:
 * % -> ACOSH%
 * refs (1): 1B83F
 CK%ACOSH:
-        ::                                       * 1B86C  slot 3
-          DUP                                    * 1B871
-          %1                                     * 1B876
-          %<                                     * 1B87B
-          NOTcase                                * 1B880
-          %ACOSH                                 * 1B885
-          Re>C%                                  * 1B88A
-          C%ACOSH                                * 1B88F
-        ;                                        * 1B894
+        :: DUP %1 %< NOTcase %ACOSH              * 1B86C  slot 3
+          Re>C% C%ACOSH ;                        * 1B88A
         CON(2)  #C8                              * 1B899  end of the slots: property byte (meaning not yet known)
 
 * x -> x'
@@ -1914,14 +1393,10 @@ CK%ACOSH:
         CON(3)  #002                             * 1B89C  library
         CON(3)  #05C                             * 1B89F  command
 xATANH:
-        ::                                       * 1B8A2
-          CK1&Dispatch                           * 1B8A7
-          BINT1                                  * 1B8AC
-          CK%ATANH                               * 1B8B1
-          BINT2                                  * 1B8B6
-          C%ATANH                                * 1B8BB
-          BINT10                                 * 1B8C0
-          SYMATANH                               * 1B8C5
+        :: CK1&Dispatch                          * 1B8A2
+          BINT1 CK%ATANH                         * 1B8AC  real
+          BINT2 C%ATANH                          * 1B8B6  complex
+          BINT10 SYMATANH                        * 1B8C0  name|local|algebraic
         ;                                        * 1B8CA
 
 * slots of 002 05C (derivative, inverse, ...: used by the symbolic code)
@@ -1932,12 +1407,7 @@ xATANH:
 * % -> ATANH%
 * refs (1): 1B8B1
 CK%ATANH:
-        ::                                       * 1B8DE  slot 3
-          dup;|r|ó1?:dq/sk                       * 1B8E3
-          %ATANH                                 * 1B8E8
-          Re>C%                                  * 1B8ED
-          C%ATANH                                * 1B8F2
-        ;                                        * 1B8F7
+        :: dup;|r|ó1?:dq/sk %ATANH Re>C% C%ATANH ; * 1B8DE  slot 3
         CON(2)  #CC                              * 1B8FC  end of the slots: property byte (meaning not yet known)
 
 * x -> x'
@@ -1947,14 +1417,10 @@ CK%ATANH:
         CON(3)  #002                             * 1B8FF  library
         CON(3)  #05D                             * 1B902  command
 xEXP:
-        ::                                       * 1B905
-          CK1&Dispatch                           * 1B90A
-          BINT1                                  * 1B90F
-          %EXP                                   * 1B914
-          BINT2                                  * 1B919
-          C%EXP                                  * 1B91E
-          BINT10                                 * 1B923
-          SYMEXP                                 * 1B928
+        :: CK1&Dispatch                          * 1B905
+          BINT1 %EXP                             * 1B90F  real
+          BINT2 C%EXP                            * 1B919  complex
+          BINT10 SYMEXP                          * 1B923  name|local|algebraic
         ;                                        * 1B92D
 
 * slots of 002 05D (derivative, inverse, ...: used by the symbolic code)
@@ -1971,14 +1437,10 @@ xEXP:
         CON(3)  #002                             * 1B949  library
         CON(3)  #05E                             * 1B94C  command
 xLN:
-        ::                                       * 1B94F
-          CK1&Dispatch                           * 1B954
-          BINT1                                  * 1B959
-          CK%LN                                  * 1B95E
-          BINT2                                  * 1B963
-          C%LN                                   * 1B968
-          BINT10                                 * 1B96D
-          SYMLN                                  * 1B972
+        :: CK1&Dispatch                          * 1B94F
+          BINT1 CK%LN                            * 1B959  real
+          BINT2 C%LN                             * 1B963  complex
+          BINT10 SYMLN                           * 1B96D  name|local|algebraic
         ;                                        * 1B977
 
 * slots of 002 05E (derivative, inverse, ...: used by the symbolic code)
@@ -1991,14 +1453,8 @@ xLN:
 * % -> LN%
 * refs (1): 1B95E
 CK%LN:
-        ::                                       * 1B995  slot 5
-          DUP                                    * 1B99A
-          %0<                                    * 1B99F
-          NOTcase                                * 1B9A4
-          %LN                                    * 1B9A9
-          Re>C%                                  * 1B9AE
-          C%LN                                   * 1B9B3
-        ;                                        * 1B9B8
+        :: DUP %0< NOTcase %LN                   * 1B995  slot 5
+          Re>C% C%LN ;                           * 1B9AE
         CON(2)  #CC                              * 1B9BD  end of the slots: property byte (meaning not yet known)
 
 * x -> x'
@@ -2008,14 +1464,10 @@ CK%LN:
         CON(3)  #002                             * 1B9C0  library
         CON(3)  #05F                             * 1B9C3  command
 xLOG:
-        ::                                       * 1B9C6
-          CK1&Dispatch                           * 1B9CB
-          BINT1                                  * 1B9D0
-          CK%LOG                                 * 1B9D5
-          BINT2                                  * 1B9DA
-          C%LOG                                  * 1B9DF
-          BINT10                                 * 1B9E4
-          SYMLOG                                 * 1B9E9
+        :: CK1&Dispatch                          * 1B9C6
+          BINT1 CK%LOG                           * 1B9D0  real
+          BINT2 C%LOG                            * 1B9DA  complex
+          BINT10 SYMLOG                          * 1B9E4  name|local|algebraic
         ;                                        * 1B9EE
 
 * slots of 002 05F (derivative, inverse, ...: used by the symbolic code)
@@ -2028,14 +1480,8 @@ xLOG:
 * % -> LOG%
 * refs (1): 1B9D5
 CK%LOG:
-        ::                                       * 1BA0C  slot 5
-          DUP                                    * 1BA11
-          %0<                                    * 1BA16
-          NOTcase                                * 1BA1B
-          %LOG                                   * 1BA20
-          Re>C%                                  * 1BA25
-          C%LOG                                  * 1BA2A
-        ;                                        * 1BA2F
+        :: DUP %0< NOTcase %LOG                  * 1BA0C  slot 5
+          Re>C% C%LOG ;                          * 1BA25
         CON(2)  #CC                              * 1BA34  end of the slots: property byte (meaning not yet known)
 
 * x -> x'
@@ -2045,14 +1491,10 @@ CK%LOG:
         CON(3)  #002                             * 1BA37  library
         CON(3)  #060                             * 1BA3A  command
 xALOG:
-        ::                                       * 1BA3D
-          CK1&Dispatch                           * 1BA42
-          BINT1                                  * 1BA47
-          %ALOG                                  * 1BA4C
-          BINT2                                  * 1BA51
-          C%ALOG                                 * 1BA56
-          BINT10                                 * 1BA5B
-          SYMALOG                                * 1BA60
+        :: CK1&Dispatch                          * 1BA3D
+          BINT1 %ALOG                            * 1BA47  real
+          BINT2 C%ALOG                           * 1BA51  complex
+          BINT10 SYMALOG                         * 1BA5B  name|local|algebraic
         ;                                        * 1BA65
 
 * slots of 002 060 (derivative, inverse, ...: used by the symbolic code)
@@ -2070,12 +1512,9 @@ xALOG:
         CON(3)  #002                             * 1BA86  library
         CON(3)  #061                             * 1BA89  command
 xLNP1:
-        ::                                       * 1BA8C
-          CK1&Dispatch                           * 1BA91
-          BINT1                                  * 1BA96
-          %LNP1                                  * 1BA9B
-          BINT10                                 * 1BAA0
-          SYMLNP1                                * 1BAA5
+        :: CK1&Dispatch                          * 1BA8C
+          BINT1 %LNP1                            * 1BA96  real
+          BINT10 SYMLNP1                         * 1BAA0  name|local|algebraic
         ;                                        * 1BAAA
 
 * slots of 002 061 (derivative, inverse, ...: used by the symbolic code)
@@ -2090,12 +1529,9 @@ xLNP1:
         CON(3)  #002                             * 1BABC  library
         CON(3)  #062                             * 1BABF  command
 xEXPM:
-        ::                                       * 1BAC2
-          CK1&Dispatch                           * 1BAC7
-          BINT1                                  * 1BACC
-          %EXPM1                                 * 1BAD1
-          BINT10                                 * 1BAD6
-          SYMEXPM                                * 1BADB
+        :: CK1&Dispatch                          * 1BAC2
+          BINT1 %EXPM1                           * 1BACC  real
+          BINT10 SYMEXPM                         * 1BAD6  name|local|algebraic
         ;                                        * 1BAE0
 
 * slots of 002 062 (derivative, inverse, ...: used by the symbolic code)
@@ -2112,19 +1548,16 @@ xEXPM:
         CON(3)  #002                             * 1BAFC  library
         CON(3)  #063                             * 1BAFF  command
 xFACT:
-        ::                                       * 1BB02
-          CK1&Dispatch                           * 1BB07
-          BINT1                                  * 1BB0C
-          %FACT                                  * 1BB11
-          BINT10                                 * 1BB16
-          SYMFACT                                * 1BB1B
+        :: CK1&Dispatch                          * 1BB02
+          BINT1 %FACT                            * 1BB0C  real
+          BINT10 SYMFACT                         * 1BB16  name|local|algebraic
         ;                                        * 1BB20
 
 * slots of 002 063 (derivative, inverse, ...: used by the symbolic code)
         CON(5)  OBJ_6CCBD                        * 1BB25  slot 0
 
 #010Ah:
-        HXS     A010                             * 1BB2A  slot 1
+        HXS A010                                 * 1BB2A  slot 1
         CON(2)  #00                              * 1BB38  end of the slots: property byte (meaning not yet known)
 
 * ROMPTR 002 064 FACT
@@ -2133,12 +1566,9 @@ xFACT:
         CON(3)  #002                             * 1BB3B  library
         CON(3)  #064                             * 1BB3E  command
 preFACT:
-        ::                                       * 1BB41
-          CK1&Dispatch                           * 1BB46
-          BINT1                                  * 1BB4B
-          %FACT                                  * 1BB50
-          BINT10                                 * 1BB55
-          SYMFACT                                * 1BB5A
+        :: CK1&Dispatch                          * 1BB41
+          BINT1 %FACT                            * 1BB4B  real
+          BINT10 SYMFACT                         * 1BB55  name|local|algebraic
         ;                                        * 1BB5F
 
 * slots of 002 064 (derivative, inverse, ...: used by the symbolic code)
@@ -2151,14 +1581,10 @@ preFACT:
         CON(3)  #002                             * 1BB67  library
         CON(3)  #065                             * 1BB6A  command
 xIP:
-        ::                                       * 1BB6D
-          CK1&Dispatch                           * 1BB72
-          BINT1                                  * 1BB77
-          %IP                                    * 1BB7C
-          BINT10                                 * 1BB81
-          SYMIP                                  * 1BB86
-          BINT14                                 * 1BB8B
-          UMIP                                   * 1BB90
+        :: CK1&Dispatch                          * 1BB6D
+          BINT1 %IP                              * 1BB77  real
+          BINT10 SYMIP                           * 1BB81  name|local|algebraic
+          BINT14 UMIP                            * 1BB8B  unit
         ;                                        * 1BB95
 
 * slots of 002 065 (derivative, inverse, ...: used by the symbolic code)
@@ -2171,14 +1597,10 @@ xIP:
         CON(3)  #002                             * 1BB9D  library
         CON(3)  #066                             * 1BBA0  command
 xFP:
-        ::                                       * 1BBA3
-          CK1&Dispatch                           * 1BBA8
-          BINT1                                  * 1BBAD
-          %FP                                    * 1BBB2
-          BINT10                                 * 1BBB7
-          SYMFP                                  * 1BBBC
-          BINT14                                 * 1BBC1
-          UMFP                                   * 1BBC6
+        :: CK1&Dispatch                          * 1BBA3
+          BINT1 %FP                              * 1BBAD  real
+          BINT10 SYMFP                           * 1BBB7  name|local|algebraic
+          BINT14 UMFP                            * 1BBC1  unit
         ;                                        * 1BBCB
 
 * slots of 002 066 (derivative, inverse, ...: used by the symbolic code)
@@ -2191,14 +1613,10 @@ xFP:
         CON(3)  #002                             * 1BBD3  library
         CON(3)  #067                             * 1BBD6  command
 xFLOOR:
-        ::                                       * 1BBD9
-          CK1&Dispatch                           * 1BBDE
-          BINT1                                  * 1BBE3
-          %FLOOR                                 * 1BBE8
-          BINT10                                 * 1BBED
-          SYMFLOOR                               * 1BBF2
-          BINT14                                 * 1BBF7
-          UMFLOOR                                * 1BBFC
+        :: CK1&Dispatch                          * 1BBD9
+          BINT1 %FLOOR                           * 1BBE3  real
+          BINT10 SYMFLOOR                        * 1BBED  name|local|algebraic
+          BINT14 UMFLOOR                         * 1BBF7  unit
         ;                                        * 1BC01
 
 * slots of 002 067 (derivative, inverse, ...: used by the symbolic code)
@@ -2211,14 +1629,10 @@ xFLOOR:
         CON(3)  #002                             * 1BC09  library
         CON(3)  #068                             * 1BC0C  command
 xCEIL:
-        ::                                       * 1BC0F
-          CK1&Dispatch                           * 1BC14
-          BINT1                                  * 1BC19
-          %CEIL                                  * 1BC1E
-          BINT10                                 * 1BC23
-          SYMCEIL                                * 1BC28
-          BINT14                                 * 1BC2D
-          UMCEIL                                 * 1BC32
+        :: CK1&Dispatch                          * 1BC0F
+          BINT1 %CEIL                            * 1BC19  real
+          BINT10 SYMCEIL                         * 1BC23  name|local|algebraic
+          BINT14 UMCEIL                          * 1BC2D  unit
         ;                                        * 1BC37
 
 * slots of 002 068 (derivative, inverse, ...: used by the symbolic code)
@@ -2231,12 +1645,9 @@ xCEIL:
         CON(3)  #002                             * 1BC3F  library
         CON(3)  #069                             * 1BC42  command
 xXPON:
-        ::                                       * 1BC45
-          CK1&Dispatch                           * 1BC4A
-          BINT1                                  * 1BC4F
-          %EXPONENT                              * 1BC54
-          BINT10                                 * 1BC59
-          SYMEXPONENT                            * 1BC5E
+        :: CK1&Dispatch                          * 1BC45
+          BINT1 %EXPONENT                        * 1BC4F  real
+          BINT10 SYMEXPONENT                     * 1BC59  name|local|algebraic
         ;                                        * 1BC63
 
 * slots of 002 069 (derivative, inverse, ...: used by the symbolic code)
@@ -2249,26 +1660,16 @@ xXPON:
         CON(3)  #002                             * 1BC6B  library
         CON(3)  #06A                             * 1BC6E  command
 xMAX:
-        ::                                       * 1BC71
-          CK2&Dispatch                           * 1BC76
-          BINT17                                 * 1BC7B
-          %MAX                                   * 1BC80
-          BINT26                                 * 1BC85
-          %SYMMAX                                * 1BC8A
-          SYMREAL                                * 1BC8F
-          SYM%MAX                                * 1BC94
-          SYMSYM                                 * 1BC99
-          SYMMAX                                 * 1BC9E
-          BINT30                                 * 1BCA3
-          UMMAX                                  * 1BCA8
-          EXTREAL                                * 1BCAD
-          UMMAX                                  * 1BCB2
-          2EXT                                   * 1BCB7
-          UMMAX                                  * 1BCBC
-          EXTSYM                                 * 1BCC1
-          %SYMMAX                                * 1BCC6
-          SYMEXT                                 * 1BCCB
-          SYM%MAX                                * 1BCD0
+        :: CK2&Dispatch                          * 1BC71
+          BINT17 %MAX                            * 1BC7B  real real
+          BINT26 %SYMMAX                         * 1BC85  real name|local|algebraic
+          SYMREAL SYM%MAX                        * 1BC8F  name|local|algebraic real
+          SYMSYM SYMMAX                          * 1BC99  name|local|algebraic name|local|algebraic
+          BINT30 UMMAX                           * 1BCA3  real unit
+          EXTREAL UMMAX                          * 1BCAD  unit real
+          2EXT UMMAX                             * 1BCB7  unit unit
+          EXTSYM %SYMMAX                         * 1BCC1  unit name|local|algebraic
+          SYMEXT SYM%MAX                         * 1BCCB  name|local|algebraic unit
         ;                                        * 1BCD5
 
 * slots of 002 06A (derivative, inverse, ...: used by the symbolic code)
@@ -2281,26 +1682,16 @@ xMAX:
         CON(3)  #002                             * 1BCDD  library
         CON(3)  #06B                             * 1BCE0  command
 xMIN:
-        ::                                       * 1BCE3
-          CK2&Dispatch                           * 1BCE8
-          BINT17                                 * 1BCED
-          %MIN                                   * 1BCF2
-          BINT26                                 * 1BCF7
-          %SYMMIN                                * 1BCFC
-          SYMREAL                                * 1BD01
-          SYM%MIN                                * 1BD06
-          SYMSYM                                 * 1BD0B
-          SYMMIN                                 * 1BD10
-          BINT30                                 * 1BD15
-          UMMIN                                  * 1BD1A
-          EXTREAL                                * 1BD1F
-          UMMIN                                  * 1BD24
-          2EXT                                   * 1BD29
-          UMMIN                                  * 1BD2E
-          EXTSYM                                 * 1BD33
-          %SYMMIN                                * 1BD38
-          SYMEXT                                 * 1BD3D
-          SYM%MIN                                * 1BD42
+        :: CK2&Dispatch                          * 1BCE3
+          BINT17 %MIN                            * 1BCED  real real
+          BINT26 %SYMMIN                         * 1BCF7  real name|local|algebraic
+          SYMREAL SYM%MIN                        * 1BD01  name|local|algebraic real
+          SYMSYM SYMMIN                          * 1BD0B  name|local|algebraic name|local|algebraic
+          BINT30 UMMIN                           * 1BD15  real unit
+          EXTREAL UMMIN                          * 1BD1F  unit real
+          2EXT UMMIN                             * 1BD29  unit unit
+          EXTSYM %SYMMIN                         * 1BD33  unit name|local|algebraic
+          SYMEXT SYM%MIN                         * 1BD3D  name|local|algebraic unit
         ;                                        * 1BD47
 
 * slots of 002 06B (derivative, inverse, ...: used by the symbolic code)
@@ -2313,26 +1704,16 @@ xMIN:
         CON(3)  #002                             * 1BD4F  library
         CON(3)  #06C                             * 1BD52  command
 xRND:
-        ::                                       * 1BD55
-          CK2&Dispatch                           * 1BD5A
-          BINT17                                 * 1BD5F
-          RNDXY                                  * 1BD64
-          BINT26                                 * 1BD69
-          SYMRND                                 * 1BD6E
-          BINT33                                 * 1BD73
-          trunc(c,r)                             * 1BD78
-          BINT42                                 * 1BD7D
-          SYMRND                                 * 1BD82
-          BINT65                                 * 1BD87
-          MATRND                                 * 1BD8C
-          SYMREAL                                * 1BD91
-          SYM%RND                                * 1BD96
-          SYMSYM                                 * 1BD9B
-          RNDSYM                                 * 1BDA0
-          EXTREAL                                * 1BDA5
-          UMRND                                  * 1BDAA
-          EXTSYM                                 * 1BDAF
-          SYMRND                                 * 1BDB4
+        :: CK2&Dispatch                          * 1BD55
+          BINT17 RNDXY                           * 1BD5F  real real
+          BINT26 SYMRND                          * 1BD69  real name|local|algebraic
+          BINT33 trunc(c,r)                      * 1BD73  complex real
+          BINT42 SYMRND                          * 1BD7D  complex name|local|algebraic
+          BINT65 MATRND                          * 1BD87  array real
+          SYMREAL SYM%RND                        * 1BD91  name|local|algebraic real
+          SYMSYM RNDSYM                          * 1BD9B  name|local|algebraic name|local|algebraic
+          EXTREAL UMRND                          * 1BDA5  unit real
+          EXTSYM SYMRND                          * 1BDAF  unit name|local|algebraic
         ;                                        * 1BDB9
 
 * slots of 002 06C (derivative, inverse, ...: used by the symbolic code)
@@ -2347,26 +1728,16 @@ xRND:
         CON(3)  #002                             * 1BDCB  library
         CON(3)  #06D                             * 1BDCE  command
 xTRNC:
-        ::                                       * 1BDD1
-          CK2&Dispatch                           * 1BDD6
-          BINT17                                 * 1BDDB
-          TRCXY                                  * 1BDE0
-          BINT26                                 * 1BDE5
-          TRCNYM                                 * 1BDEA
-          BINT33                                 * 1BDEF
-          conj(ar)                               * 1BDF4
-          BINT42                                 * 1BDF9
-          TRCNYM                                 * 1BDFE
-          BINT65                                 * 1BE03
-          MATTRNC                                * 1BE08
-          SYMREAL                                * 1BE0D
-          SYM%TRNC                               * 1BE12
-          SYMSYM                                 * 1BE17
-          SYMTRCN                                * 1BE1C
-          EXTREAL                                * 1BE21
-          UMTRC                                  * 1BE26
-          EXTSYM                                 * 1BE2B
-          TRCNYM                                 * 1BE30
+        :: CK2&Dispatch                          * 1BDD1
+          BINT17 TRCXY                           * 1BDDB  real real
+          BINT26 TRCNYM                          * 1BDE5  real name|local|algebraic
+          BINT33 conj(ar)                        * 1BDEF  complex real
+          BINT42 TRCNYM                          * 1BDF9  complex name|local|algebraic
+          BINT65 MATTRNC                         * 1BE03  array real
+          SYMREAL SYM%TRNC                       * 1BE0D  name|local|algebraic real
+          SYMSYM SYMTRCN                         * 1BE17  name|local|algebraic name|local|algebraic
+          EXTREAL UMTRC                          * 1BE21  unit real
+          EXTSYM TRCNYM                          * 1BE2B  unit name|local|algebraic
         ;                                        * 1BE35
 
 * slots of 002 06D (derivative, inverse, ...: used by the symbolic code)
@@ -2381,21 +1752,16 @@ xTRNC:
         CON(3)  #002                             * 1BE47  library
         CON(3)  #06E                             * 1BE4A  command
 xMOD:
-        ::                                       * 1BE4D
-          CK2&Dispatch                           * 1BE52
-          BINT17                                 * 1BE57
-          %MOD                                   * 1BE5C
-          BINT26                                 * 1BE61
-          %SYMMOD                                * 1BE66
-          SYMREAL                                * 1BE6B
-          SYM%MOD                                * 1BE70
-          SYMSYM                                 * 1BE75
-          SYMMOD                                 * 1BE7A
+        :: CK2&Dispatch                          * 1BE4D
+          BINT17 %MOD                            * 1BE57  real real
+          BINT26 %SYMMOD                         * 1BE61  real name|local|algebraic
+          SYMREAL SYM%MOD                        * 1BE6B  name|local|algebraic real
+          SYMSYM SYMMOD                          * 1BE75  name|local|algebraic name|local|algebraic
         ;                                        * 1BE7F
 
 * slots of 002 06E (derivative, inverse, ...: used by the symbolic code)
 #80108h_1BE84:
-        HXS     80108                            * 1BE84  slot 0
+        HXS 80108                                * 1BE84  slot 0
         CON(2)  #00                              * 1BE93  end of the slots: property byte (meaning not yet known)
 
 * x -> x'
@@ -2405,12 +1771,9 @@ xMOD:
         CON(3)  #002                             * 1BE96  library
         CON(3)  #06F                             * 1BE99  command
 xMANT:
-        ::                                       * 1BE9C
-          CK1&Dispatch                           * 1BEA1
-          BINT1                                  * 1BEA6
-          %MANTISSA                              * 1BEAB
-          BINT10                                 * 1BEB0
-          SYMMANT                                * 1BEB5
+        :: CK1&Dispatch                          * 1BE9C
+          BINT1 %MANTISSA                        * 1BEA6  real
+          BINT10 SYMMANT                         * 1BEB0  name|local|algebraic
         ;                                        * 1BEBA
 
 * slots of 002 06F (derivative, inverse, ...: used by the symbolic code)
@@ -2423,12 +1786,9 @@ xMANT:
         CON(3)  #002                             * 1BEC2  library
         CON(3)  #070                             * 1BEC5  command
 xD>R:
-        ::                                       * 1BEC8
-          CK1&Dispatch                           * 1BECD
-          BINT1                                  * 1BED2
-          %D>R                                   * 1BED7
-          BINT10                                 * 1BEDC
-          SYMD>R                                 * 1BEE1
+        :: CK1&Dispatch                          * 1BEC8
+          BINT1 %D>R                             * 1BED2  real
+          BINT10 SYMD>R                          * 1BEDC  name|local|algebraic
         ;                                        * 1BEE6
 
 * slots of 002 070 (derivative, inverse, ...: used by the symbolic code)
@@ -2441,12 +1801,9 @@ xD>R:
         CON(3)  #002                             * 1BEEE  library
         CON(3)  #071                             * 1BEF1  command
 xR>D:
-        ::                                       * 1BEF4
-          CK1&Dispatch                           * 1BEF9
-          BINT1                                  * 1BEFE
-          %R>D                                   * 1BF03
-          BINT10                                 * 1BF08
-          SYMR>D                                 * 1BF0D
+        :: CK1&Dispatch                          * 1BEF4
+          BINT1 %R>D                             * 1BEFE  real
+          BINT10 SYMR>D                          * 1BF08  name|local|algebraic
         ;                                        * 1BF12
 
 * x -> x'
@@ -2456,10 +1813,8 @@ xR>D:
         CON(3)  #002                             * 1BF18  library
         CON(3)  #072                             * 1BF1B  command
 x>HMS:
-        ::                                       * 1BF1E
-          CK1&Dispatch                           * 1BF23
-          BINT1                                  * 1BF28
-          %>HMS                                  * 1BF2D
+        :: CK1&Dispatch                          * 1BF1E
+          BINT1 %>HMS                            * 1BF28  real
         ;                                        * 1BF32
 
 * x -> x'
@@ -2469,10 +1824,8 @@ x>HMS:
         CON(3)  #002                             * 1BF38  library
         CON(3)  #073                             * 1BF3B  command
 xHMS>:
-        ::                                       * 1BF3E
-          CK1&Dispatch                           * 1BF43
-          BINT1                                  * 1BF48
-          %HMS>                                  * 1BF4D
+        :: CK1&Dispatch                          * 1BF3E
+          BINT1 %HMS>                            * 1BF48  real
         ;                                        * 1BF52
 
 * hms1 hms2 -> hms3
@@ -2482,10 +1835,8 @@ xHMS>:
         CON(3)  #002                             * 1BF58  library
         CON(3)  #074                             * 1BF5B  command
 xHMS+:
-        ::                                       * 1BF5E
-          CK2&Dispatch                           * 1BF63
-          BINT17                                 * 1BF68
-          %HMS+                                  * 1BF6D
+        :: CK2&Dispatch                          * 1BF5E
+          BINT17 %HMS+                           * 1BF68  real real
         ;                                        * 1BF72
 
 * hms1 hms2 -> hms3
@@ -2495,10 +1846,8 @@ xHMS+:
         CON(3)  #002                             * 1BF78  library
         CON(3)  #075                             * 1BF7B  command
 xHMS-:
-        ::                                       * 1BF7E
-          CK2&Dispatch                           * 1BF83
-          BINT17                                 * 1BF88
-          %HMS-                                  * 1BF8D
+        :: CK2&Dispatch                          * 1BF7E
+          BINT17 %HMS-                           * 1BF88  real real
         ;                                        * 1BF92
 
 * [] -> x
@@ -2508,10 +1857,8 @@ xHMS-:
         CON(3)  #002                             * 1BF98  library
         CON(3)  #076                             * 1BF9B  command
 xRNRM:
-        ::                                       * 1BF9E
-          CK1&Dispatch                           * 1BFA3
-          BINT4                                  * 1BFA8
-          MATRNRM                                * 1BFAD
+        :: CK1&Dispatch                          * 1BF9E
+          BINT4 MATRNRM                          * 1BFA8  array
         ;                                        * 1BFB2
 
 * [] -> col_norm
@@ -2521,10 +1868,8 @@ xRNRM:
         CON(3)  #002                             * 1BFB8  library
         CON(3)  #077                             * 1BFBB  command
 xCNRM:
-        ::                                       * 1BFBE
-          CK1&Dispatch                           * 1BFC3
-          BINT4                                  * 1BFC8
-          MATCNRM                                * 1BFCD
+        :: CK1&Dispatch                          * 1BFBE
+          BINT4 MATCNRM                          * 1BFC8  array
         ;                                        * 1BFD2
 
 * [[]] -> x
@@ -2534,10 +1879,8 @@ xCNRM:
         CON(3)  #002                             * 1BFD8  library
         CON(3)  #078                             * 1BFDB  command
 xDET:
-        ::                                       * 1BFDE
-          CK1&Dispatch                           * 1BFE3
-          BINT4                                  * 1BFE8
-          MATDET                                 * 1BFED
+        :: CK1&Dispatch                          * 1BFDE
+          BINT4 MATDET                           * 1BFE8  array
         ;                                        * 1BFF2
 
 * [1] [2] -> x
@@ -2547,8 +1890,6 @@ xDET:
         CON(3)  #002                             * 1BFF8  library
         CON(3)  #079                             * 1BFFB  command
 xDOT:
-        ::                                       * 1BFFE
-          CK2&Dispatch                           * 1C003
-          BINT68                                 * 1C008
-          MATDOT                                 * 1C00D
+        :: CK2&Dispatch                          * 1BFFE
+          BINT68 MATDOT                          * 1C008  array array
         ;                                        * 1C012

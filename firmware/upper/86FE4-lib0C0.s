@@ -22,12 +22,7 @@ LIB0C0.message:
 * ROMPTR 0C0 000
 * refs (1): 86FE4
 ROMP_0C0_000:
-        ::                                       * 8703F
-          #       54                             * 87044  84
-          #*                                     * 8704E
-          #       272                            * 87053  626
-          #+                                     * 8705D
-          !MAKEHXS                               * 87062
+        :: # 54 #* # 272 #+ !MAKEHXS             * 8703F
           CODE                                   * 87067  4726 nibbles
             HST=0   3                            * 87071
             D1=D1+  10                           * 87074
@@ -1705,38 +1700,16 @@ SUB_882D1:
 * ROMPTR 0C0 001
 * refs (1): 86FE4
 ROMP_0C0_001:
-        ::                                       * 882EC
-          DUP                                    * 882F1
-          ARSIZE                                 * 882F6
-          DUPTWO                                 * 882FB
-          #<                                     * 88300
-          casedrop                               * 88305
-          doerr501                               * 8830A
-          DUP#1-                                 * 8830F
-          ONE{}N                                 * 88314
-          C%0                                    * 88319
-          MAKEARRY                               * 8831E
-          3UNROLL                                * 88323
-          OVER                                   * 88328
-          OBJ_7D7F9                              * 8832D
-          ITE                                    * 88332
-          ROMPTR  0C0 002                        * 88337
-          ROMPTR  0C0 000                        * 88342
-          DUP                                    * 8834D
-          OBJ_7D7F9                              * 88352
-          case                                   * 88357
-          MATRE                                  * 8835C
+        :: DUP ARSIZE DUPTWO #< casedrop doerr501 * 882EC
+          DUP#1- ONE{}N C%0 MAKEARRY 3UNROLL OVER OBJ_7D7F9 ITE * 8830F
+          ROMPTR 0C0 002 ROMPTR 0C0 000          * 88337
+          DUP OBJ_7D7F9 case MATRE               * 8834D
         ;                                        * 88361
 
 * ROMPTR 0C0 002
 * refs (1): 86FE4
 ROMP_0C0_002:
-        ::                                       * 88366
-          #       2A                             * 8836B  42
-          #*                                     * 88375
-          #       272                            * 8837A  626
-          #+                                     * 88384
-          !MAKEHXS                               * 88389
+        :: # 2A #* # 272 #+ !MAKEHXS             * 88366
           CODE                                   * 8838E  5492 nibbles
             HST=0   3                            * 88398
             D1=D1+  10                           * 8839B

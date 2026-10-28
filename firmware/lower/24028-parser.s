@@ -6,127 +6,55 @@
 
 * refs (2): 23FFB 2400A
 OBJ_24028:
-        ::                                       * 24028
-          OBJ_252CD                              * 2402D
-          'Rapndit                               * 24032
-          xWHILEEND                              * 24037
-          TrueTrue                               * 2403C
-        ;                                        * 24041
+        :: OBJ_252CD 'Rapndit xWHILEEND TrueTrue ; * 24028
 
 * refs (1): 2342F
 OBJ_24046:
-        ::                                       * 24046
-          'Rapndit                               * 2404B
-          xIFERR                                 * 24050
-          OBJ_2530E                              * 24055
-          COLA                                   * 2405A
-          OBJ_24069                              * 2405F
+        :: 'Rapndit xIFERR OBJ_2530E COLA OBJ_24069 * 24046
         ;                                        * 24064
 
 * refs (2): 2405F 24096
 OBJ_24069:
-        ::                                       * 24069
-          nultrior                               * 2406E
-          failed                                 * 24073
-          _THEN_                                 * 24078
-          tok8trior                              * 2407D
-          OBJ_240A0                              * 24082
-          OBJ_23A2E                              * 24087
-          !*triand                               * 2408C
-          COLA                                   * 24091
-          OBJ_24069                              * 24096
+        :: nultrior failed _THEN_ tok8trior OBJ_240A0 OBJ_23A2E !*triand * 24069
+          COLA OBJ_24069                         * 24091
         ;                                        * 2409B
 
 * refs (1): 24082
 OBJ_240A0:
-        ::                                       * 240A0
-          OBJ_2525A                              * 240A5
-          4psh                                   * 240AA
-          DROP                                   * 240AF
-          drop2;6rolld;1+(s5)                    * 240B4
-          'Rapndit                               * 240B9
-          xERRTHEN                               * 240BE
-          OBJ_2530E                              * 240C3
-          COLA                                   * 240C8
-          OBJ_240D7                              * 240CD
+        :: OBJ_2525A 4psh DROP drop2;6rolld;1+(s5) 'Rapndit xERRTHEN * 240A0
+          OBJ_2530E COLA OBJ_240D7               * 240C3
         ;                                        * 240D2
 
 * refs (2): 240CD 24113
 OBJ_240D7:
-        ::                                       * 240D7
-          nultrior                               * 240DC
-          OBJ_2417C                              * 240E1
-          _END__253D6                            * 240E6
-          tok8trior                              * 240EB
-          OBJ_2417C                              * 240F0
-          _ELSE_                                 * 240F5
-          tok8trior                              * 240FA
-          OBJ_2411D                              * 240FF
-          OBJ_23A2E                              * 24104
-          !*triand                               * 24109
-          COLA                                   * 2410E
-          OBJ_240D7                              * 24113
+        :: nultrior OBJ_2417C _END__253D6 tok8trior OBJ_2417C _ELSE_ * 240D7
+          tok8trior OBJ_2411D OBJ_23A2E !*triand COLA OBJ_240D7 * 240FA
         ;                                        * 24118
 
 * refs (1): 240FF
 OBJ_2411D:
-        ::                                       * 2411D
-          OBJ_252CD                              * 24122
-          'Rapndit                               * 24127
-          xELSE                                  * 2412C
-          OBJ_2530E                              * 24131
-          COLA                                   * 24136
-          OBJ_24145                              * 2413B
+        :: OBJ_252CD 'Rapndit xELSE OBJ_2530E COLA OBJ_24145 * 2411D
         ;                                        * 24140
 
 * refs (2): 2413B 24172
 OBJ_24145:
-        ::                                       * 24145
-          nultrior                               * 2414A
-          OBJ_2417C                              * 2414F
-          _END__253D6                            * 24154
-          tok8trior                              * 24159
-          OBJ_2417C                              * 2415E
-          OBJ_23A2E                              * 24163
-          !*triand                               * 24168
-          COLA                                   * 2416D
-          OBJ_24145                              * 24172
+        :: nultrior OBJ_2417C _END__253D6 tok8trior OBJ_2417C OBJ_23A2E * 24145
+          !*triand COLA OBJ_24145                * 24168
         ;                                        * 24177
 
 * refs (4): 240E1 240F0 2414F 2415E
 OBJ_2417C:
-        ::                                       * 2417C
-          OBJ_252CD                              * 24181
-          'Rapndit                               * 24186
-          xIFEND                                 * 2418B
-          TrueTrue                               * 24190
-        ;                                        * 24195
+        :: OBJ_252CD 'Rapndit xIFEND TrueTrue ;  * 2417C
 
 * refs (2): 23022 234F8
 OBJ_2419A:
-        ::                                       * 2419A
-          OBJ_2530E                              * 2419F
-          OBJ_23E52                              * 241A4
-          !*triand                               * 241A9
-          COLA                                   * 241AE
-          OBJ_241BD                              * 241B3
+        :: OBJ_2530E OBJ_23E52 !*triand COLA OBJ_241BD * 2419A
         ;                                        * 241B8
 
 * refs (2): 241B3 241F9
 OBJ_241BD:
-        ::                                       * 241BD
-          nultrior                               * 241C2
-          failed                                 * 241C7
-          tok'                                   * 241CC
-          tok8cktrior                            * 241D1
-          OBJ_24203                              * 241D6
-          tok<<                                  * 241DB
-          tok8trior                              * 241E0
-          OBJ_24280                              * 241E5
-          OBJ_23E52                              * 241EA
-          !*triand                               * 241EF
-          COLA                                   * 241F4
-          OBJ_241BD                              * 241F9
+        :: nultrior failed tok' tok8cktrior OBJ_24203 tok<< tok8trior * 241BD
+          OBJ_24280 OBJ_23E52 !*triand COLA OBJ_241BD * 241E5
         ;                                        * 241FE
 
 * refs (1): 241D6
@@ -135,273 +63,99 @@ OBJ_24203:
 
 * refs (1): 24285
 OBJ_24208:
-          ::                                     * 24208
-            4psh                                 * 2420D
-            P{}N                                 * 24212
-            DUPDUP                               * 24217
-            INNERCOMP                            * 2421C
-            #1+ROLL                              * 24221
-            BIND                                 * 24226
-            INNERCOMP                            * 2422B
-          ;                                      * 24230
-          SWAPUnDROP                             * 24235
-          OBJ_2472B                              * 2423A
-          ABND                                   * 2423F
-          !*triand                               * 24244
-          BINT4                                  * 24249
-          '                                      * 2424E
-          xALG->                                 * 24253
-          psh1&                                  * 24258
-          unrot                                  * 2425D
-          SWAP                                   * 24262
-          symcomp                                * 24267
-          SWAP                                   * 2426C
-          top&                                   * 24271
-          swapB;drop;2true                       * 24276
-        ;                                        * 2427B
+          :: 4psh P{}N DUPDUP INNERCOMP #1+ROLL BIND INNERCOMP ; SWAPUnDROP * 24208
+          OBJ_2472B ABND !*triand BINT4 ' xALG-> psh1& unrot SWAP symcomp * 2423A
+          SWAP top& swapB;drop;2true ;           * 2426C
 
 * refs (1): 241E5
 OBJ_24280:
-        ::                                       * 24280
-          OBJ_24208                              * 24285
-          '                                      * 2428A
-          x<<                                    * 2428F
-          SWAP#1+                                * 24294
-          SWAPUnDROP                             * 24299
-          OBJ_242D0                              * 2429E
-          ABND                                   * 242A3
-          !*triand                               * 242A8
-          BINT4                                  * 242AD
-          '                                      * 242B2
-          xRPN->                                 * 242B7
-          psh1&                                  * 242BC
-          roll2top&                              * 242C1
-          swapB;drop;2true                       * 242C6
-        ;                                        * 242CB
+        :: OBJ_24208 ' x<< SWAP#1+ SWAPUnDROP OBJ_242D0 ABND !*triand BINT4 * 24280
+          ' xRPN-> psh1& roll2top& swapB;drop;2true ; * 242B2
 
 * refs (2): 2429E 242FD
 OBJ_242D0:
-        ::                                       * 242D0
-          nultrior                               * 242D5
-          OBJ_24307                              * 242DA
-          tok>>                                  * 242DF
-          tok8trior                              * 242E4
-          OBJ_24307                              * 242E9
-          OBJ_23A2E                              * 242EE
-          !*triand                               * 242F3
-          COLA                                   * 242F8
-          OBJ_242D0                              * 242FD
+        :: nultrior OBJ_24307 tok>> tok8trior OBJ_24307 OBJ_23A2E !*triand * 242D0
+          COLA OBJ_242D0                         * 242F8
         ;                                        * 24302
 
 * refs (2): 242DA 242E9
 OBJ_24307:
-        ::                                       * 24307
-          'Rapndit                               * 2430C
-          x>>ABND                                * 24311
-          TrueTrue                               * 24316
-        ;                                        * 2431B
+        :: 'Rapndit x>>ABND TrueTrue ;           * 24307
 
 * refs (1): 2348B
 OBJ_24320:
-        ::                                       * 24320
-          'Rapndit                               * 24325
-          xHALT                                  * 2432A
-          TrueTrue                               * 2432F
-        ;                                        * 24334
+        :: 'Rapndit xHALT TrueTrue ;             * 24320
 
 * refs (1): 2385B
 OBJ_24339:
-        ::                                       * 24339
-          'Rapndit                               * 2433E
-          xPROMPT                                * 24343
-          TrueTrue                               * 24348
-        ;                                        * 2434D
+        :: 'Rapndit xPROMPT TrueTrue ;           * 24339
 
 * refs (3): 2452D 24C5D 24E1F
 OBJ_24352:
-        ::                                       * 24352
-          OBJ_24384                              * 24357
-          !*trior                                * 2435C
-          TrueTrue                               * 24361
-          OBJ_24537                              * 24366
-          !*trior                                * 2436B
-          TrueTrue                               * 24370
-          COLA                                   * 24375
+        :: OBJ_24384 !*trior TrueTrue OBJ_24537 !*trior TrueTrue COLA * 24352
           OBJ_2469F                              * 2437A
         ;                                        * 2437F
 
 * refs (2): 23A42 24357
 OBJ_24384:
-        ::                                       * 24384
-          ?ATTNQUIT                              * 24389
-          nultrior                               * 2438E
-          FALSE                                  * 24393
-          OBJ_25D03                              * 24398
-          !*trior                                * 2439D
-          OBJ_24447                              * 243A2
-          tok'                                   * 243A7
-          tok8cktrior                            * 243AC
-          OBJ_2472B                              * 243B1
-          toklparen                              * 243B6
-          tok8trior                              * 243BB
-          OBJ_2478A                              * 243C0
-          tok[                                   * 243C5
-          tok8trior                              * 243CA
-          OBJ_24816                              * 243CF
-          tok{                                   * 243D4
-          tok8trior                              * 243D9
-          List                                   * 243DE
-          toksharp                               * 243E3
-          tok8cktrior                            * 243E8
-          OBJ_24C9E                              * 243ED
-          tokquote                               * 243F2
-          tok8cktrior                            * 243F7
-          OBJ_24FD2                              * 243FC
-          _:__253B8                              * 24401
-          tok8cktrior                            * 24406
-          OBJ_244A1                              * 2440B
-          _DIR                                   * 24410
-          tok8trior                              * 24415
-          OBJ_24D20                              * 2441A
-          tokCTSTR                               * 2441F
-          tok8trior                              * 24424
-          OBJ_24FE6                              * 24429
-          tokCTGROB                              * 2442E
-          tok8trior                              * 24433
-          OBJ_25B3D                              * 24438
-          FALSE                                  * 2443D
-        ;                                        * 24442
+        :: ?ATTNQUIT nultrior FALSE OBJ_25D03 !*trior OBJ_24447 tok' * 24384
+          tok8cktrior OBJ_2472B toklparen tok8trior OBJ_2478A tok[ tok8trior * 243AC
+          OBJ_24816 tok{ tok8trior List toksharp tok8cktrior OBJ_24C9E * 243CF
+          tokquote tok8cktrior OBJ_24FD2 _:__253B8 tok8cktrior OBJ_244A1 * 243F2
+          _DIR tok8trior OBJ_24D20 tokCTSTR tok8trior OBJ_24FE6 tokCTGROB * 24410
+          tok8trior OBJ_25B3D FALSE ;            * 24433
 
 * refs (1): 243A2
 OBJ_24447:
-        ::                                       * 24447
-          tokuscore                              * 2444C
-          tok8cktrior                            * 24451
-          OBJ_24465                              * 24456
-          TrueTrue                               * 2445B
-        ;                                        * 24460
+        :: tokuscore tok8cktrior OBJ_24465 TrueTrue ; * 24447
 
 * refs (1): 24456
 OBJ_24465:
-        ::                                       * 24465
-          OBJ_26058                              * 2446A
-          OBJ_25AB6                              * 2446F
-          OBJ_28706                              * 24474
-          !*triand                               * 24479
-          OBJ_28972                              * 2447E
-          x*                                     * 24483
-          !*triand                               * 24488
-          OBJ_25D3A                              * 2448D
-          OBJ_25AD4                              * 24492
-          TrueTrue                               * 24497
-        ;                                        * 2449C
+        :: OBJ_26058 OBJ_25AB6 OBJ_28706 !*triand OBJ_28972 x* !*triand * 24465
+          OBJ_25D3A OBJ_25AD4 TrueTrue ;         * 2448D
 
 * refs (1): 2440B
 OBJ_244A1:
-        ::                                       * 244A1
-          getmatchtok                            * 244A6
-          DUPLEN$                                * 244AB
-          BINT253                                * 244B0
-          #>case                                 * 244B5
-          failed                                 * 244BA
-          DaDGNTc                                * 244BF
-          2DROP                                  * 244C4
-          OBJ_244F6                              * 244C9
-          !*triand                               * 244CE
-          4psh                                   * 244D3
-          #1-                                    * 244D8
-          SWAPROT                                * 244DD
-          >TAG                                   * 244E2
-          SWAP                                   * 244E7
-          swapB;drop;2true                       * 244EC
-        ;                                        * 244F1
+        :: getmatchtok DUPLEN$ BINT253 #>case failed * 244A1
+          DaDGNTc 2DROP OBJ_244F6 !*triand 4psh #1- SWAPROT >TAG SWAP * 244BF
+          swapB;drop;2true ;                     * 244EC
 
 * refs (1): 244C9
 OBJ_244F6:
-        ::                                       * 244F6
-          tok<<                                  * 244FB
-          tok8trior                              * 24500
-          ::                                     * 24505
-            OBJ_2530E                            * 2450A
-            'Rapndit                             * 2450F
-            x<<                                  * 24514
-            COLA                                 * 24519
-            OBJ_23DFD                            * 2451E
+        :: tok<< tok8trior                       * 244F6
+          :: OBJ_2530E 'Rapndit x<< COLA OBJ_23DFD * 24505
           ;                                      * 24523
-          COLA                                   * 24528
-          OBJ_24352                              * 2452D
+          COLA OBJ_24352                         * 24528
         ;                                        * 24532
 
 * refs (1): 24366
 OBJ_24537:
-        ::                                       * 24537
-          ~;eval;q                               * 2453C
+        :: ~;eval;q                              * 24537
 
 * refs (1): 245E6
 OBJ_24541:
-          ::                                     * 24541
-            ngsizecase                           * 24546
-            FALSE                                * 2454B
-            OBJ_24609                            * 24550
-            !*trior                              * 24555
-            TrueTrue                             * 2455A
-            DROP                                 * 2455F
-            COMPILEID                            * 24564
-            NOTcsdrpfls                          * 24569
-            DUP                                  * 2456E
-            OBJ_2699F                            * 24573
-            NOTcase                              * 24578
-            OBJ_24681                            * 2457D
-            OBJ_26917                            * 24582
-            NOTcase                              * 24587
-            failed                               * 2458C
-            RDROP                                * 24591
-          ;                                      * 24596
-          BINT5                                  * 2459B
-          pshzer                                 * 245A0
+          :: ngsizecase FALSE                    * 24541
+            OBJ_24609 !*trior TrueTrue DROP COMPILEID NOTcsdrpfls DUP * 24550
+            OBJ_2699F NOTcase OBJ_24681          * 24573
+            OBJ_26917 NOTcase failed             * 24582
+            RDROP ;                              * 24591
+          BINT5 pshzer                           * 2459B
 
 * refs (1): 245F0
 OBJ_245A5:
-          ::                                     * 245A5
-            UNROLL                               * 245AA
-            DROP                                 * 245AF
-            GetNextToken                         * 245B4
-            5ROLL                                * 245B9
-          ;                                      * 245BE
-          EVAL                                   * 245C3
-          !*triand                               * 245C8
-          OBJ_252B4                              * 245CD
-          TrueTrue                               * 245D2
-        ;                                        * 245D7
+          :: UNROLL DROP GetNextToken 5ROLL ; EVAL !*triand OBJ_252B4 * 245A5
+          TrueTrue ;                             * 245D2
 
 * refs (1): 23A51
 OBJ_245DC:
-        ::                                       * 245DC
-          ~;eval;q                               * 245E1
-          OBJ_24541                              * 245E6
-          BINT5                                  * 245EB
-          OBJ_245A5                              * 245F0
-          EVAL                                   * 245F5
-          !*triand                               * 245FA
-          TrueTrue                               * 245FF
-        ;                                        * 24604
+        :: ~;eval;q OBJ_24541 BINT5 OBJ_245A5 EVAL !*triand TrueTrue ; * 245DC
 
 * refs (3): 24550 2745E 687D3
 OBJ_24609:
-        ::                                       * 24609
-          delimcase                              * 2460E
-          ::                                     * 24613
-            DUP$>ID                              * 24618
-            FalseFalse                           * 2461D
-          ;                                      * 24622
-          DUP$>ID                                * 24627
-          OBJ_72DC5                              * 2462C
-          DUP@                                   * 24631
-          casedrop                               * 24636
-          OBJ_24681                              * 2463B
-          OBJ_2464F                              * 24640
-          TrueFalse                              * 24645
-        ;                                        * 2464A
+        :: delimcase                             * 24609
+          :: DUP$>ID FalseFalse ;                * 24613
+          DUP$>ID OBJ_72DC5 DUP@ casedrop OBJ_24681 * 24627
+          OBJ_2464F TrueFalse ;                  * 24640
 
 * refs (1): 24640
 OBJ_2464F:
@@ -424,517 +178,194 @@ L_2466B:
 
 * refs (5): 2457D 2463B 27675 68837 72E01
 OBJ_24681:
-        ::                                       * 24681
-          6rolld;1+(s5)                          * 24686
-          DROP                                   * 2468B
-          GetNextToken                           * 24690
-          TrueTrue                               * 24695
-        ;                                        * 2469A
+        :: 6rolld;1+(s5) DROP GetNextToken TrueTrue ; * 24681
 
 * refs (2): 23A65 2437A
 OBJ_2469F:
-        ::                                       * 2469F
-          OBJ_246BD                              * 246A4
-          !*trior                                * 246A9
-          DaDGNTc                                * 246AE
-          failed                                 * 246B3
-        ;                                        * 246B8
+        :: OBJ_246BD !*trior DaDGNTc failed ;    * 2469F
 
 * refs (2): 23E61 246A4
 OBJ_246BD:
-        ::                                       * 246BD
-          ~;eval;q                               * 246C2
-          OBJ_27EE0                              * 246C7
-          OBJ_25F4E                              * 246CC
-          SWAPONE                                * 246D1
-          OBJ_25A93                              * 246D6
-          delimcase                              * 246DB
+        :: ~;eval;q OBJ_27EE0 OBJ_25F4E SWAPONE OBJ_25A93 delimcase * 246BD
           4dropn;false;true                      * 246E0
-          DROP                                   * 246E5
-          OBJ_25A93                              * 246EA
-          nultrior                               * 246EF
-          ::                                     * 246F4
-            4DROP                                * 246F9
-            $>ID                                 * 246FE
-            TrueTrue                             * 24703
-          ;                                      * 24708
-          4dropn;false;true                      * 2470D
-        ;                                        * 24712
+          DROP OBJ_25A93 nultrior                * 246E5
+          :: 4DROP $>ID TrueTrue ; 4dropn;false;true ; * 246F4
 
 * refs (2): 246E0 2470D
 4dropn;false;true:
-        ::                                       * 24717
-          4DROP                                  * 2471C
-          failed                                 * 24721
-        ;                                        * 24726
+        :: 4DROP failed ;                        * 24717
 
 * refs (3): 23A74 2423A 243B1
 OBJ_2472B:
-        ::                                       * 2472B
-          OBJ_25F4E                              * 24730
-          OBJ_25AB6                              * 24735
-          nultrior                               * 2473A
-          OBJ_24771                              * 2473F
-          tok'                                   * 24744
-          tok8cktrior                            * 24749
-          OBJ_24771                              * 2474E
-          OBJ_2729B                              * 24753
-          !*triand                               * 24758
-          OBJ_25D3A                              * 2475D
-          OBJ_25AB6                              * 24762
-          TrueTrue                               * 24767
-        ;                                        * 2476C
+        :: OBJ_25F4E OBJ_25AB6 nultrior OBJ_24771 tok' tok8cktrior OBJ_24771 * 2472B
+          OBJ_2729B !*triand OBJ_25D3A OBJ_25AB6 TrueTrue ; * 24753
 
 * refs (2): 2473F 2474E
 OBJ_24771:
-        ::                                       * 24771
-          OBJ_25D3A                              * 24776
-          OBJ_25AB6                              * 2477B
-          FALSE                                  * 24780
-        ;                                        * 24785
+        :: OBJ_25D3A OBJ_25AB6 FALSE ;           * 24771
 
 * refs (2): 243C0 24997
 OBJ_2478A:
-        ::                                       * 2478A
-          OBJ_2530E                              * 2478F
-          OBJ_25D03                              * 24794
-          !*triand                               * 24799
-          ::                                     * 2479E
-            tokanglesign                         * 247A3
-            tok8trior                            * 247A8
-            FALSE                                * 247AD
-            TRUE                                 * 247B2
-          ;                                      * 247B7
-          6rolld;1+(s5)                          * 247BC
-          OBJ_25D03                              * 247C1
+        :: OBJ_2530E OBJ_25D03 !*triand          * 2478A
+          :: tokanglesign tok8trior FALSE TRUE ; 6rolld;1+(s5) OBJ_25D03 * 2479E
           !*triand                               * 247C6
-          ::                                     * 247CB
-            nultrior                             * 247D0
-            TrueTrue                             * 247D5
-            tokrparen                            * 247DA
-            OBJ_0BC15                            * 247DF
-          ;                                      * 247E4
-          !*triand                               * 247E9
-          4psh                                   * 247EE
-          DROPSWAP                               * 247F3
-          ?SKIP                                  * 247F8
-          %POL>%REC                              * 247FD
-          %>C%                                   * 24802
-          drop2;6rolld;1+(s5)                    * 24807
-          TrueTrue                               * 2480C
-        ;                                        * 24811
+          :: nultrior TrueTrue tokrparen OBJ_0BC15 ; !*triand 4psh DROPSWAP * 247CB
+          ?SKIP %POL>%REC                        * 247F8
+          %>C% drop2;6rolld;1+(s5) TrueTrue ;    * 24802
 
 * refs (1): 243CF
 OBJ_24816:
-        ::                                       * 24816
-          nultrior                               * 2481B
-          failed                                 * 24820
-          tok[                                   * 24825
-          tok8trior                              * 2482A
-          OBJ_249C9                              * 2482F
-          tok]                                   * 24834
-          tok8trior                              * 24839
-          failed                                 * 2483E
-          OBJ_2530E                              * 24843
-          OBJ_2489D                              * 24848
-          !*triand                               * 2484D
-          4psh                                   * 24852
-          UNCOERCE                               * 24857
-          ONE{}N                                 * 2485C
-          XEQ>ARRAY                              * 24861
-          drop2;6rolld;1+(s5)                    * 24866
-          TrueTrue                               * 2486B
-        ;                                        * 24870
+        :: nultrior failed tok[ tok8trior OBJ_249C9 tok] tok8trior failed * 24816
+          OBJ_2530E OBJ_2489D !*triand 4psh UNCOERCE ONE{}N XEQ>ARRAY * 24843
+          drop2;6rolld;1+(s5) TrueTrue ;         * 24866
 
-        ::                                       * 24875
-          nultrior                               * 2487A
-          TrueTrue                               * 2487F
-          tok]                                   * 24884
-          tok8trior                              * 24889
-          TrueTrue                               * 2488E
-          FALSE                                  * 24893
-        ;                                        * 24898
+        :: nultrior TrueTrue tok] tok8trior TrueTrue FALSE ; * 24875
 
 * refs (1): 24848
 OBJ_2489D:
-        ::                                       * 2489D
-          toklparen                              * 248A2
-          tok8trior                              * 248A7
-          OBJ_24992                              * 248AC
-          OBJ_25D03                              * 248B1
-          !*triand                               * 248B6
-          tokanglesign                           * 248BB
-          tok8trior                              * 248C0
-          OBJ_248D9                              * 248C5
-          COLA                                   * 248CA
-          OBJ_24956                              * 248CF
+        :: toklparen tok8trior OBJ_24992 OBJ_25D03 !*triand tokanglesign * 2489D
+          tok8trior OBJ_248D9 COLA OBJ_24956     * 248C0
         ;                                        * 248D4
 
 * refs (1): 248C5
 OBJ_248D9:
-        ::                                       * 248D9
-          OBJ_25D03                              * 248DE
-          !*triand                               * 248E3
-          tokanglesign                           * 248E8
-          tok8trior                              * 248ED
-          OBJ_2491F                              * 248F2
-          4psh                                   * 248F7
-          3UNROLL                                * 248FC
-          %POL>%REC                              * 24901
-          ROT                                    * 24906
-          SWAPUnDROP                             * 2490B
-          COLA                                   * 24910
-          OBJ_24956                              * 24915
+        :: OBJ_25D03 !*triand tokanglesign tok8trior OBJ_2491F 4psh 3UNROLL * 248D9
+          %POL>%REC ROT SWAPUnDROP COLA OBJ_24956 * 24901
         ;                                        * 2491A
 
 * refs (1): 248F2
 OBJ_2491F:
-        ::                                       * 2491F
-          OBJ_25D03                              * 24924
-          !*triand                               * 24929
-          4psh                                   * 2492E
-          DROP                                   * 24933
-          %SPH>%REC                              * 24938
-          BINT3                                  * 2493D
-          SWAPUnDROP                             * 24942
-          COLA                                   * 24947
+        :: OBJ_25D03 !*triand 4psh DROP %SPH>%REC BINT3 SWAPUnDROP COLA * 2491F
           OBJ_24956                              * 2494C
         ;                                        * 24951
 
 * refs (8): 248CF 24915 2494C 249A6 249BF 249FB ...
 OBJ_24956:
-        ::                                       * 24956
-          ?ATTNQUIT                              * 2495B
-          tok]                                   * 24960
-          tok8trior                              * 24965
-          TrueTrue                               * 2496A
-          tok[                                   * 2496F
-          tok8cktrior                            * 24974
-          TrueTrue                               * 24979
-          nultrior                               * 2497E
-          TrueTrue                               * 24983
-          toklparen                              * 24988
-          tok8trior                              * 2498D
+        :: ?ATTNQUIT tok] tok8trior TrueTrue tok[ tok8cktrior TrueTrue * 24956
+          nultrior TrueTrue toklparen tok8trior  * 2497E
 
 * refs (1): 248AC
 OBJ_24992:
-          ::                                     * 24992
-            OBJ_2478A                            * 24997
-            !*triand                             * 2499C
-            COLA                                 * 249A1
-            OBJ_24956                            * 249A6
+          :: OBJ_2478A !*triand COLA OBJ_24956   * 24992
           ;                                      * 249AB
-          OBJ_25D03                              * 249B0
-          !*triand                               * 249B5
-          COLA                                   * 249BA
-          OBJ_24956                              * 249BF
+          OBJ_25D03 !*triand COLA OBJ_24956      * 249B0
         ;                                        * 249C4
 
 * refs (1): 2482F
 OBJ_249C9:
-        ::                                       * 249C9
-          tok]                                   * 249CE
-          tok8trior                              * 249D3
-          failed                                 * 249D8
-          tok[                                   * 249DD
-          tok8trior                              * 249E2
-          failed                                 * 249E7
-          nultrior                               * 249EC
-          failed                                 * 249F1
-          OBJ_2530E                              * 249F6
-          OBJ_24956                              * 249FB
-          !*triand                               * 24A00
-          COLA                                   * 24A05
-          OBJ_24A14                              * 24A0A
+        :: tok] tok8trior failed tok[ tok8trior failed nultrior failed * 249C9
+          OBJ_2530E OBJ_24956 !*triand COLA OBJ_24A14 * 249F6
         ;                                        * 24A0F
 
 * refs (1): 24A0A
 OBJ_24A14:
-        ::                                       * 24A14
-          4psh                                   * 24A19
-          DUP                                    * 24A1E
-          ONESWAP                                * 24A23
+        :: 4psh DUP ONESWAP                      * 24A14
           {                                      * 24A28
 
 Πi:
-            LAM     i                            * 24A2D
+            LAM i                                * 24A2D
 
 Πj:
-            LAM     j                            * 24A36
-          }                                      * 24A3F
-          BIND                                   * 24A44
-          SWAPUnDROP                             * 24A49
-          OBJ_24AC9                              * 24A4E
-          ::                                     * 24A53
-            !*triand                             * 24A58
+            LAM j }                              * 24A36
+          BIND SWAPUnDROP OBJ_24AC9              * 24A44
+          :: !*triand                            * 24A53
 
 Πi_24A5D:
-            LAM     i                            * 24A5D
-            6rolld;1+(s5)                        * 24A66
+            LAM i 6rolld;1+(s5)                  * 24A5D
 
 Πj_24A6B:
-            LAM     j                            * 24A6B
-            6rolld;1+(s5)                        * 24A74
-            ABND                                 * 24A79
-            RDROPCOLA                            * 24A7E
-            OBJ_24A97                            * 24A83
-          ;                                      * 24A88
-          ABND                                   * 24A8D
-        ;                                        * 24A92
+            LAM j 6rolld;1+(s5) ABND RDROPCOLA OBJ_24A97 ; * 24A6B
+          ABND ;                                 * 24A8D
 
 * refs (1): 24A83
 OBJ_24A97:
-        ::                                       * 24A97
-          4psh                                   * 24A9C
-          DROP                                   * 24AA1
-          UNCOERCE2                              * 24AA6
-          BINT2                                  * 24AAB
-          P{}N                                   * 24AB0
-          XEQ>ARRAY                              * 24AB5
-          drop2;6rolld;1+(s5)                    * 24ABA
-          TrueTrue                               * 24ABF
-        ;                                        * 24AC4
+        :: 4psh DROP UNCOERCE2 BINT2 P{}N XEQ>ARRAY drop2;6rolld;1+(s5) * 24A97
+          TrueTrue ;                             * 24ABF
 
 * refs (2): 24A4E 24BF4
 OBJ_24AC9:
-        ::                                       * 24AC9
-          tok]                                   * 24ACE
-          tok8trior                              * 24AD3
-          TrueTrue                               * 24AD8
-          nultrior                               * 24ADD
-          TrueTrue                               * 24AE2
-          tok[                                   * 24AE7
-          tok8trior                              * 24AEC
-          OBJ_24B70                              * 24AF1
-          OBJ_2530E                              * 24AF6
-          OBJ_24956                              * 24AFB
-          !*triand                               * 24B00
-          5PICK                                  * 24B05
+        :: tok] tok8trior TrueTrue nultrior TrueTrue tok[ tok8trior * 24AC9
+          OBJ_24B70 OBJ_2530E OBJ_24956 !*triand 5PICK * 24AF1
 
 Πj_24B0A:
-          LAM     j                              * 24B0A
-          #/                                     * 24B13
-          DUPUNROT                               * 24B18
+          LAM j #/ DUPUNROT                      * 24B0A
 
 Πi_24B1D:
-          LAM     i                              * 24B1D
-          #+                                     * 24B26
-          '                                      * 24B2B
+          LAM i #+ '                             * 24B1D
 
 Πi_24B30:
-          LAM     i                              * 24B30
-          STO                                    * 24B39
-          #0=                                    * 24B3E
-          SWAP                                   * 24B43
-          #0<>                                   * 24B48
-          ANDNOTcase                             * 24B4D
-          failed                                 * 24B52
-          BINT4                                  * 24B57
-          over&                                  * 24B5C
-          DROP                                   * 24B61
-          TrueTrue                               * 24B66
-        ;                                        * 24B6B
+          LAM i STO #0= SWAP #0<> ANDNOTcase failed * 24B30
+          BINT4 over& DROP TrueTrue ;            * 24B57
 
 * refs (1): 24AF1
 OBJ_24B70:
-        ::                                       * 24B70
-          nultrior                               * 24B75
-          failed                                 * 24B7A
-          tok]                                   * 24B7F
-          tok8trior                              * 24B84
-          failed                                 * 24B89
-          tok[                                   * 24B8E
-          tok8trior                              * 24B93
-          failed                                 * 24B98
-          OBJ_2530E                              * 24B9D
-          OBJ_24956                              * 24BA2
-          !*triand                               * 24BA7
-          4psh                                   * 24BAC
-          DUP                                    * 24BB1
+        :: nultrior failed tok] tok8trior failed tok[ tok8trior failed * 24B70
+          OBJ_2530E OBJ_24956 !*triand 4psh DUP  * 24B9D
 
 Πj_24BB6:
-          LAM     j                              * 24BB6
-          #=case                                 * 24BBF
-          ::                                     * 24BC4
-            psh&                                 * 24BC9
-            DROP                                 * 24BCE
+          LAM j #=case                           * 24BB6
+          :: psh& DROP                           * 24BC4
 
 Πi_24BD3:
-            LAM     i                            * 24BD3
-            #1+'                                 * 24BDC
+            LAM i #1+'                           * 24BD3
 
 Πi_24BE1:
-            LAM     i                            * 24BE1
-            STO                                  * 24BEA
-            COLA                                 * 24BEF
-            OBJ_24AC9                            * 24BF4
+            LAM i STO COLA OBJ_24AC9             * 24BE1
           ;                                      * 24BF9
-          #1+NDROP                               * 24BFE
-          failed                                 * 24C03
-        ;                                        * 24C08
+          #1+NDROP failed ;                      * 24BFE
 
 * refs (1): 243DE
 List:
-        ::                                       * 24C0D
-          OBJ_2530E                              * 24C12
-          OBJ_24C30                              * 24C17
-          !*triand                               * 24C1C
-          OBJ_252F5                              * 24C21
-          TrueTrue                               * 24C26
-        ;                                        * 24C2B
+        :: OBJ_2530E OBJ_24C30 !*triand OBJ_252F5 TrueTrue ; * 24C0D
 
 * refs (3): 24C17 24C67 24C94
 OBJ_24C30:
-        ::                                       * 24C30
-          nultrior                               * 24C35
-          TrueTrue                               * 24C3A
-          tok}                                   * 24C3F
-          tok8trior                              * 24C44
-          TrueTrue                               * 24C49
-          tok<<                                  * 24C4E
-          tok8trior                              * 24C53
-          OBJ_24C71                              * 24C58
-          OBJ_24352                              * 24C5D
-          !*triand                               * 24C62
-          OBJ_24C30                              * 24C67
-        ;                                        * 24C6C
+        :: nultrior TrueTrue tok} tok8trior TrueTrue tok<< tok8trior * 24C30
+          OBJ_24C71 OBJ_24352 !*triand OBJ_24C30 ; * 24C58
 
 * refs (1): 24C58
 OBJ_24C71:
-        ::                                       * 24C71
-          OBJ_2530E                              * 24C76
-          'Rapndit                               * 24C7B
-          x<<                                    * 24C80
-          OBJ_23DFD                              * 24C85
-          !*triand                               * 24C8A
-          COLA                                   * 24C8F
-          OBJ_24C30                              * 24C94
+        :: OBJ_2530E 'Rapndit x<< OBJ_23DFD !*triand COLA OBJ_24C30 * 24C71
         ;                                        * 24C99
 
 * refs (1): 243ED
 OBJ_24C9E:
-        ::                                       * 24C9E
-          DROP                                   * 24CA3
-          OBJ_254F7                              * 24CA8
-          newBASE                                * 24CAD
-          BINT64                                 * 24CB2
-          Null#                                  * 24CB7
-          OVER                                   * 24CBC
-          #1-                                    * 24CC1
-          BINT4                                  * 24CC6
-          #/                                     * 24CCB
-          SWAPDROP                               * 24CD0
-          #1+                                    * 24CD5
-          EXPAND                                 * 24CDA
-          SWAPROT                                * 24CDF
-          convertbase                            * 24CE4
-          OVER                                   * 24CE9
-          ?SKIP                                  * 24CEE
-          ::                                     * 24CF3
-            ROTDROP                              * 24CF8
-            3GETLAM                              * 24CFD
-            3UNROLL                              * 24D02
-          ;                                      * 24D07
-          ABND                                   * 24D0C
-          !*triand                               * 24D11
-          DaDGNTc                                * 24D16
-        ;                                        * 24D1B
+        :: DROP OBJ_254F7 newBASE BINT64 Null# OVER #1- BINT4 #/ SWAPDROP * 24C9E
+          #1+ EXPAND SWAPROT convertbase OVER ?SKIP * 24CD5
+          :: ROTDROP 3GETLAM 3UNROLL ;           * 24CF3
+          ABND !*triand DaDGNTc ;                * 24D0C
 
 * refs (1): 2441A
 OBJ_24D20:
-        ::                                       * 24D20
-          OBJ_2530E                              * 24D25
-          NULLHXS                                * 24D2A
-          BINT3                                  * 24D2F
-          EXPAND                                 * 24D34
-          6rolld;1+(s5)                          * 24D39
-          OBJ_24D75                              * 24D3E
-          !*triand                               * 24D43
-          4psh                                   * 24D48
-          #1-SWAP                                * 24D4D
-          pshm1                                  * 24D52
-          top&                                   * 24D57
-          P{}N                                   * 24D5C
-          {}>DIR                                 * 24D61
-          drop2;6rolld;1+(s5)                    * 24D66
-          TrueTrue                               * 24D6B
-        ;                                        * 24D70
+        :: OBJ_2530E NULLHXS BINT3 EXPAND 6rolld;1+(s5) OBJ_24D75 !*triand * 24D20
+          4psh #1-SWAP pshm1 top& P{}N {}>DIR drop2;6rolld;1+(s5) TrueTrue ; * 24D48
 
 * refs (2): 24D3E 24DFC
 OBJ_24D75:
-        ::                                       * 24D75
-          nultrior                               * 24D7A
-          TrueTrue                               * 24D7F
-          _END__253D6                            * 24D84
-          tok8trior                              * 24D89
-          TrueTrue                               * 24D8E
-          OBJ_24E47                              * 24D93
-          !*triand                               * 24D98
-          OBJ_24E06                              * 24D9D
-          !*triand                               * 24DA2
-          4psh                                   * 24DA7
-          SWAP                                   * 24DAC
-          NOTINHARDROM?                          * 24DB1
-          ?SKIP                                  * 24DB6
-          ::                                     * 24DBB
-            DUPROM-WORD?                         * 24DC0
-            ITE                                  * 24DC5
-            PTR>ROMPTR                           * 24DCA
-            TOTEMPOB                             * 24DCF
+        :: nultrior TrueTrue _END__253D6 tok8trior TrueTrue OBJ_24E47 * 24D75
+          !*triand OBJ_24E06 !*triand 4psh SWAP NOTINHARDROM? ?SKIP * 24D98
+          :: DUPROM-WORD? ITE PTR>ROMPTR TOTEMPOB * 24DBB
           ;                                      * 24DD4
-          SWAP                                   * 24DD9
-          #1-SWAP                                * 24DDE
-          pshm1                                  * 24DE3
-          pullpsh1&                              * 24DE8
-          top&                                   * 24DED
-          psh                                    * 24DF2
-          drop;dq                                * 24DF7
-          OBJ_24D75                              * 24DFC
-        ;                                        * 24E01
+          SWAP #1-SWAP pshm1 pullpsh1& top& psh drop;dq OBJ_24D75 ; * 24DD9
 
 * refs (1): 24D9D
 OBJ_24E06:
-        ::                                       * 24E06
-          tok<<                                  * 24E0B
-          tok8trior                              * 24E10
-          OBJ_24E29                              * 24E15
-          COLA                                   * 24E1A
-          OBJ_24352                              * 24E1F
+        :: tok<< tok8trior OBJ_24E29 COLA OBJ_24352 * 24E06
         ;                                        * 24E24
 
 * refs (1): 24E15
 OBJ_24E29:
-        ::                                       * 24E29
-          OBJ_2530E                              * 24E2E
-          'Rapndit                               * 24E33
-          x<<                                    * 24E38
-          OBJ_23DFD                              * 24E3D
-        ;                                        * 24E42
+        :: OBJ_2530E 'Rapndit x<< OBJ_23DFD ;    * 24E29
 
 * refs (1): 24D93
 OBJ_24E47:
-        ::                                       * 24E47
-          ~;eval;q                               * 24E4C
-          OBJ_27EE0                              * 24E51
-          $>ID                                   * 24E56
-          COMPILEID                              * 24E5B
-          NOTcase                                * 24E60
-          OBJ_24E83                              * 24E65
-          idntcase                               * 24E6A
-          OBJ_24E83                              * 24E6F
-          DROP                                   * 24E74
-          failed                                 * 24E79
-        ;                                        * 24E7E
+        :: ~;eval;q OBJ_27EE0 $>ID COMPILEID NOTcase OBJ_24E83 * 24E47
+          idntcase OBJ_24E83                     * 24E6A
+          DROP failed ;                          * 24E74
 
 * refs (2): 24E65 24E6F
 OBJ_24E83:
-        ::                                       * 24E83
-          DROP                                   * 24E88
-          toklparen                              * 24E8D
-          &$                                     * 24E92
-          $>ID                                   * 24E97
-          DaDGNTc                                * 24E9C
-        ;                                        * 24EA1
+        :: DROP toklparen &$ $>ID DaDGNTc ;      * 24E83
 
 * refs (1): 24D61
 {}>DIR:
@@ -1021,82 +452,35 @@ L_24F5C:
 
 * refs (1): 243FC
 OBJ_24FD2:
-        ::                                       * 24FD2
-          getmatchtok                            * 24FD7
-          DaDGNTc                                * 24FDC
-        ;                                        * 24FE1
+        :: getmatchtok DaDGNTc ;                 * 24FD2
 
 * refs (1): 24429
 OBJ_24FE6:
-        ::                                       * 24FE6
-          tok$                                   * 24FEB
-          tok=casedrop                           * 24FF0
-          OBJ_250D1                              * 24FF5
-          tokexponent                            * 24FFA
-          DPRADIX?                               * 24FFF
-          tok.                                   * 25004
-          tok,                                   * 25009
-          RPITE                                  * 2500E
-          realPAcode                             * 25013
-          !*triand                               * 25018
-          COERCE                                 * 2501D
-          DUP#0=                                 * 25022
-          casedrop                               * 25027
-          ::                                     * 2502C
-            NULL$                                * 25031
-            DaDGNTc                              * 25036
-          ;                                      * 2503B
-          #1-                                    * 25040
-          SWAP#1+                                * 25045
-          SWAPCOLA                               * 2504A
-          OBJ_25059                              * 2504F
-        ;                                        * 25054
+        :: tok$ tok=casedrop OBJ_250D1           * 24FE6
+          tokexponent DPRADIX? tok. tok, RPITE realPAcode !*triand * 24FFA
+          COERCE DUP#0= casedrop                 * 2501D
+          :: NULL$ DaDGNTc ;                     * 2502C
+          #1- SWAP#1+ SWAPCOLA OBJ_25059 ;       * 25040
 
 * refs (3): 2504F 250C7 250E5
 OBJ_25059:
-        ::                                       * 25059
-          2DUP5ROLL                              * 2505E
-          UNROTOVER                              * 25063
-          #+OVF                                  * 25068
-          TRUE                                   * 2506D
-          OBJ_261AD                              * 25072
-          OBJ_250B8                              * 25077
-          DROP                                   * 2507C
-          4ROLLDROP                              * 25081
-          BINT3                                  * 25086
-          NDUP                                   * 2508B
-          SUB$                                   * 25090
-          SWAPDROPDUP                            * 25095
-          6rolld;1+(s5)                          * 2509A
-          LEN$                                   * 2509F
-          #+                                     * 250A4
-          GetNextToken                           * 250A9
-          TrueTrue                               * 250AE
-        ;                                        * 250B3
+        :: 2DUP5ROLL UNROTOVER #+OVF TRUE OBJ_261AD OBJ_250B8 DROP 4ROLLDROP * 25059
+          BINT3 NDUP SUB$ SWAPDROPDUP 6rolld;1+(s5) LEN$ #+ GetNextToken * 25086
+          TrueTrue ;                             * 250AE
 
 * refs (1): 25077
 OBJ_250B8:
-        ::                                       * 250B8
-          ROT                                    * 250BD
-          COLA                                   * 250C2
-          OBJ_25059                              * 250C7
+        :: ROT COLA OBJ_25059                    * 250B8
         ;                                        * 250CC
 
 * refs (1): 24FF5
 OBJ_250D1:
-        ::                                       * 250D1
-          #1+                                    * 250D6
-          MINUSONE                               * 250DB
-          COLA                                   * 250E0
-          OBJ_25059                              * 250E5
+        :: #1+ MINUSONE COLA OBJ_25059           * 250D1
         ;                                        * 250EA
 
 * refs (2): 69833 6B632
 OBJ_250EF:
-        ::                                       * 250EF
-          DPRADIX?                               * 250F4
-          COLA                                   * 250F9
-          OBJ_25108                              * 250FE
+        :: DPRADIX? COLA OBJ_25108               * 250EF
         ;                                        * 25103
 
 * refs (1): 250FE
@@ -1192,114 +576,61 @@ L_251E4:
 
 * refs (12): 24686 247BC 24A66 24A74 24D39 2509A ...
 6rolld;1+(s5):
-        ::                                       * 251EC
-          6UNROLL                                * 251F1
-          5ROLL                                  * 251F6
-          #1+                                    * 251FB
-          5UNROLL                                * 25200
-        ;                                        * 25205
+        :: 6UNROLL 5ROLL #1+ 5UNROLL ;           * 251EC
 
 * meta ob1...ob4 -> meta&ob ob1...ob4
 * refs (30): 23AE7 23B05 23B64 23B82 23BD7 23C2C ...
 'Rapndit:
-        ::                                       * 2520A
-          'R                                     * 2520F
-          COLA                                   * 25214
-          6rolld;1+(s5)                          * 25219
+        :: 'R COLA 6rolld;1+(s5)                 * 2520A
         ;                                        * 2521E
 
 * refs (9): 23E75 244BF 246AE 24D16 24E9C 24FDC ...
 DaDGNTc:
-        ::                                       * 25223
-          DUP                                    * 25228
-          6rolld;1+(s5)                          * 2522D
-          DROP                                   * 25232
-          GetNextToken                           * 25237
-          TrueTrue                               * 2523C
-        ;                                        * 25241
+        :: DUP 6rolld;1+(s5) DROP GetNextToken TrueTrue ; * 25223
 
 * refs (4): 23AD8 24276 242C6 244EC
 swapB;drop;2true:
-        ::                                       * 25246
-          SWAPUnDROP                             * 2524B
-          TrueTrue                               * 25250
-        ;                                        * 25255
+        :: SWAPUnDROP TrueTrue ;                 * 25246
 
 * refs (2): 239F7 240A5
 OBJ_2525A:
-        ::                                       * 2525A
-          4psh                                   * 2525F
-          DUP#1=                                 * 25264
-          ITE                                    * 25269
-          OBJ_25282                              * 2526E
-          OBJ_252A0                              * 25273
-          SWAPUnDROP                             * 25278
-        ;                                        * 2527D
+        :: 4psh DUP#1= ITE OBJ_25282 OBJ_252A0   * 2525A
+          SWAPUnDROP ;                           * 25278
 
 * refs (1): 2526E
 OBJ_25282:
-        ::                                       * 25282
-          OVER                                   * 25287
-          OBJ_2699F                              * 2528C
-          case                                   * 25291
-          OBJ_252A0                              * 25296
+        :: OVER OBJ_2699F case OBJ_252A0         * 25282
         ;                                        * 2529B
 
 * refs (2): 25273 25296
 OBJ_252A0:
-        ::                                       * 252A0
-          P::N                                   * 252A5
-          BINT1                                  * 252AA
-        ;                                        * 252AF
+        :: P::N BINT1 ;                          * 252A0
 
 * refs (2): 23E43 245CD
 OBJ_252B4:
-        ::                                       * 252B4
-          4psh                                   * 252B9
-          P::N                                   * 252BE
-          drop2;6rolld;1+(s5)                    * 252C3
-        ;                                        * 252C8
+        :: 4psh P::N drop2;6rolld;1+(s5) ;       * 252B4
 
 * refs (7): 23B00 23B7D 23C95 23CF4 2402D 24122 ...
 OBJ_252CD:
-        ::                                       * 252CD
-          4psh                                   * 252D2
-          DUP#1=                                 * 252D7
-          ITE                                    * 252DC
-          DROP                                   * 252E1
-          P::N                                   * 252E6
-          drop2;6rolld;1+(s5)                    * 252EB
-        ;                                        * 252F0
+        :: 4psh DUP#1= ITE DROP P::N             * 252CD
+          drop2;6rolld;1+(s5) ;                  * 252EB
 
 * refs (1): 24C21
 OBJ_252F5:
-        ::                                       * 252F5
-          4psh                                   * 252FA
-          P{}N                                   * 252FF
-          drop2;6rolld;1+(s5)                    * 25304
-        ;                                        * 25309
+        :: 4psh P{}N drop2;6rolld;1+(s5) ;       * 252F5
 
 * refs (21): 239E8 23AF1 23B6E 23C36 23CA4 23DDF ...
 OBJ_2530E:
-        ::                                       * 2530E
-          BINT0                                  * 25313
-          5UNROLL                                * 25318
-        ;                                        * 2531D
+        :: BINT0 5UNROLL ;                       * 2530E
 
 * meta1 ob1..ob4 -> ob1&..ob4 meta1
 * refs (18): 23ABA 23EAC 240AA 2420D 244D3 247EE ...
 4psh:
-        ::                                       * 25322
-          BINT4                                  * 25327
-          psh                                    * 2532C
-        ;                                        * 25331
+        :: BINT4 psh ;                           * 25322
 
 * refs (8): 240B4 24807 24866 24ABA 24D66 252C3 ...
 drop2;6rolld;1+(s5):
-        ::                                       * 25336
-          SWAPDROP                               * 2533B
-          6rolld;1+(s5)                          * 25340
-        ;                                        * 25345
+        :: SWAPDROP 6rolld;1+(s5) ;              * 25336
 
 * NULL$ -> :: ; $ -> :: $ <Ob1> <Rest> ;
 * refs (39): 0F1A0 23A0B 23B1E 23BA0 23BF5 23C4F ...
@@ -1322,110 +653,72 @@ L_25375:
         PC=(A)                                   * 25378
         RPL
 
-        ::                                       * 2537C
-          tok8trior                              * 25381
-          NOP                                    * 25386
-          failed                                 * 2538B
-          RDROP                                  * 25390
-        ;                                        * 25395
+        :: tok8trior NOP failed RDROP ;          * 2537C
 
 _TO_:
-        $       "TO"                             * 2539A
+        $ "TO"                                   * 2539A
 
 * refs (1): 24410
 _DIR:
-        $       "DIR"                            * 253A8
+        $ "DIR"                                  * 253A8
 
 * refs (2): 24401 3F615
 _:__253B8:
-        $       ":"                              * 253B8
+        $ ":"                                    * 253B8
 
 * refs (2): 23C68 240F5
 _ELSE_:
-        $       "ELSE"                           * 253C4
+        $ "ELSE"                                 * 253C4
 
 * refs (9): 23B28 23BAA 23C59 23CC7 23D8F 24000 ...
 _END__253D6:
-        $       "END"                            * 253D6
+        $ "END"                                  * 253D6
 
 * refs (1): 23D3A
 _UNTIL_:
-        $       "UNTIL"                          * 253E6
+        $ "UNTIL"                                * 253E6
 
 * refs (1): 23FA6
 _REPEAT_:
-        $       "REPEAT"                         * 253FA
+        $ "REPEAT"                               * 253FA
 
 * refs (1): 23F10
 _NEXT_:
-        $       "NEXT"                           * 25410
+        $ "NEXT"                                 * 25410
 
 * refs (1): 23F1F
 _STEP_:
-        $       "STEP"                           * 25422
+        $ "STEP"                                 * 25422
 
 * refs (3): 23B37 23BFF 24078
 _THEN_:
-        $       "THEN"                           * 25434
+        $ "THEN"                                 * 25434
 
 * "->"
 * refs (1): 20E37
 tok->:
-        $       "→"                              * 25446
+        $ "→"                                    * 25446
 
 * hxs-mask $ #loc $_tok -> hxs-mask $ #next $match
 * refs (3): 244A6 24FD7 254ED
 getmatchtok:
-        ::                                       * 25452
-          2DUP5ROLL                              * 25457
-          3UNROLL                                * 2545C
-          OBJ_2551F                              * 25461
-          OBJ_2549D                              * 25466
-          4ROLLDROP                              * 2546B
-          4ROLLDROP                              * 25470
-          BINT3                                  * 25475
-          NDUP                                   * 2547A
-          #1-                                    * 2547F
-          SUB$                                   * 25484
-          ROTDROP                                * 25489
-          SWAP#1+                                * 2548E
-          SWAP                                   * 25493
-        ;                                        * 25498
+        :: 2DUP5ROLL 3UNROLL OBJ_2551F OBJ_2549D 4ROLLDROP 4ROLLDROP BINT3 * 25452
+          NDUP #1- SUB$ ROTDROP SWAP#1+ SWAP ;   * 2547A
 
 * refs (1): 25466
 OBJ_2549D:
-        ::                                       * 2549D
-          FALSE                                  * 254A2
-          OBJ_2622F                              * 254A7
-          OBJ_254DE                              * 254AC
-          DROP                                   * 254B1
-          ROTDROP                                * 254B6
-          OVERDUP                                * 254BB
-          LEN$                                   * 254C0
-          ROTSWAP                                * 254C5
-          #1+DUP                                 * 254CA
-          4UNROLL                                * 254CF
-          SUB$                                   * 254D4
-        ;                                        * 254D9
+        :: FALSE OBJ_2622F OBJ_254DE DROP ROTDROP OVERDUP LEN$ ROTSWAP * 2549D
+          #1+DUP 4UNROLL SUB$ ;                  * 254CA
 
 * refs (1): 254AC
 OBJ_254DE:
-        ::                                       * 254DE
-          ROT                                    * 254E3
-          COLA                                   * 254E8
-          getmatchtok                            * 254ED
+        :: ROT COLA getmatchtok                  * 254DE
         ;                                        * 254F2
 
 * refs (1): 24CA8
 OBJ_254F7:
-        ::                                       * 254F7
-          OBJ_25E44                              * 254FC
-          ::                                     * 25501
-            3UNROLL                              * 25506
-            GetNextToken                         * 2550B
-            4ROLLDROP                            * 25510
-          ;                                      * 25515
-        ;                                        * 2551A
+        :: OBJ_25E44                             * 254F7
+          :: 3UNROLL GetNextToken 4ROLLDROP ; ;  * 25501
 
 * refs (1): 25461
 OBJ_2551F:
@@ -1522,41 +815,13 @@ L_2562B:
 
 * refs (1): 24CAD
 newBASE:
-        ::                                       * 25632
-          DUPLEN$                                * 25637
-          DUP                                    * 2563C
-          OBJ_56FD1                              * 25641
-          BIND                                   * 25646
-          3GETLAM                                * 2564B
-          2GETLAM                                * 25650
-          BINT2                                  * 25655
-          #<case                                 * 2565A
-          BASE                                   * 2565F
-          DUP                                    * 25664
-          2GETLAM                                * 25669
-          DUP                                    * 2566E
-          SUB$                                   * 25673
+        :: DUPLEN$ DUP OBJ_56FD1 BIND 3GETLAM 2GETLAM BINT2 #<case BASE * 25632
+          DUP 2GETLAM DUP SUB$                   * 25664
 
 _bodh_:
-          $       "bodh"                         * 25678
-          SWAP                                   * 2568A
-          XEQPOS$                                * 2568F
-          COERCE                                 * 25694
-          {                                      * 25699
-            BINT2                                * 2569E
-            BINT8                                * 256A3
-            BINT10                               * 256A8
-            BINT16                               * 256AD
-          }                                      * 256B2
-          SWAP                                   * 256B7
-          NTHELCOMP                              * 256BC
-          NOTcase                                * 256C1
-          BASE                                   * 256C6
-          SWAPONE                                * 256CB
-          2GETLAM                                * 256D0
-          #1-                                    * 256D5
-          SUB$SWAP                               * 256DA
-        ;                                        * 256DF
+          $ "bodh" SWAP XEQPOS$ COERCE           * 25678
+          { BINT2 BINT8 BINT10 BINT16 } SWAP NTHELCOMP NOTcase BASE * 25699
+          SWAPONE 2GETLAM #1- SUB$SWAP ;         * 256CB
 
 * refs (1): 24CE4
 convertbase:
@@ -1739,152 +1004,73 @@ Null#:
 
 * refs (1): 2F5C4
 OBJ_258DA:
-        ::                                       * 258DA
-          TRUE                                   * 258DF
-          {'ioinprogress}                        * 258E4
-          BIND                                   * 258E9
+        :: TRUE {'ioinprogress} BIND             * 258DA
 
 * refs (1): 259E3
 {}_258EE:
-          {                                      * 258EE
-          }                                      * 258F3
-          SWAP                                   * 258F8
-          ERRSET                                 * 258FD
-          OBJ_238B8                              * 25902
-          ERRTRAP                                * 25907
-          OBJ_259C0                              * 2590C
-          ABND                                   * 25911
-          case                                   * 25916
-          OBJ_25934                              * 2591B
-          4ROLLDROP                              * 25920
-          FALSE                                  * 25925
-          TRUE                                   * 2592A
-        ;                                        * 2592F
+          { } SWAP ERRSET OBJ_238B8 ERRTRAP OBJ_259C0 ABND case OBJ_25934 * 258EE
+          4ROLLDROP FALSE TRUE ;                 * 25920
 
 * refs (1): 2591B
 OBJ_25934:
-        ::                                       * 25934
-          SWAPDROP                               * 25939
-          DUPTYPECOL?                            * 2593E
-          NOTcase                                * 25943
-          3true                                  * 25948
-          DUPLENCOMP                             * 2594D
-          BINT2                                  * 25952
-          #=casedrop                             * 25957
-          OBJ_25984                              * 2595C
+        :: SWAPDROP DUPTYPECOL? NOTcase 3true    * 25934
+          DUPLENCOMP BINT2 #=casedrop OBJ_25984  * 2594D
           DROP                                   * 25961
 
 * refs (3): 25948 259A7 259B6
 3true:
-          ::                                     * 25966
-            TRUE                                 * 2596B
-            TRUE                                 * 25970
-            TRUE                                 * 25975
-          ;                                      * 2597A
-        ;                                        * 2597F
+          :: TRUE TRUE TRUE ; ;                  * 25966
 
 * refs (1): 2595C
 OBJ_25984:
-        ::                                       * 25984
-          DUP                                    * 25989
-          CARCOMP                                * 2598E
-          '                                      * 25993
-          xSILENT'                               * 25998
-          EQ                                     * 2599D
-          NOTcase                                * 259A2
-          3true                                  * 259A7
-          BINT2                                  * 259AC
-          NTHCOMPDROP                            * 259B1
-          3true                                  * 259B6
-        ;                                        * 259BB
+        :: DUP CARCOMP ' xSILENT' EQ NOTcase 3true * 25984
+          BINT2 NTHCOMPDROP 3true ;              * 259AC
 
 * refs (1): 2590C
 OBJ_259C0:
-        ::                                       * 259C0
-          ERROR@                                 * 259C5
-          OBJ_26289                              * 259CA
-          #<>case                                * 259CF
+        :: ERROR@ OBJ_26289 #<>case              * 259C0
           ::                                     * 259D4
 
 * refs (1): 25A36
 OBJ_259D9:
-            ::                                   * 259D9
-              BEGIN                              * 259DE
-              {}_258EE                           * 259E3
-              EQ                                 * 259E8
-              UNTIL                              * 259ED
-            ;                                    * 259F2
-            ERRJMP                               * 259F7
-          ;                                      * 259FC
+            :: BEGIN {}_258EE EQ UNTIL ; ERRJMP ; * 259D9
           ERRORCLR                               * 25A01
           {                                      * 25A06
 
 Π'1:
-            LAM     '1                           * 25A0B
+            LAM '1                               * 25A0B
 
 Π'2:
-            LAM     '2                           * 25A16
+            LAM '2                               * 25A16
 
 Π'3:
-            LAM     '3                           * 25A21
-          }                                      * 25A2C
-          BIND                                   * 25A31
-          OBJ_259D9                              * 25A36
+            LAM '3 }                             * 25A21
+          BIND OBJ_259D9                         * 25A31
 
 Π'1_25A3B:
-          LAM     '1                             * 25A3B
+          LAM '1                                 * 25A3B
 
 Π'2_25A46:
-          LAM     '2                             * 25A46
+          LAM '2                                 * 25A46
 
 Π'3_25A51:
-          LAM     '3                             * 25A51
-          DUP                                    * 25A5C
-          IT                                     * 25A61
+          LAM '3 DUP IT                          * 25A51
 
 drop2;2true:
-          ::                                     * 25A66
-            2DROP                                * 25A6B
-            TRUE                                 * 25A70
-            TRUE                                 * 25A75
-          ;                                      * 25A7A
-          ABND                                   * 25A7F
-          RDROP                                  * 25A84
-          ABND                                   * 25A89
-        ;                                        * 25A8E
+          :: 2DROP TRUE TRUE ;                   * 25A66
+          ABND RDROP ABND ;                      * 25A7F
 
 * refs (4): 0F191 0F19B 246D6 246EA
 OBJ_25A93:
-        ::                                       * 25A93
-          FALSE                                  * 25A98
-          {'ioinprogress}                        * 25A9D
-          BIND                                   * 25AA2
-          GetNextToken                           * 25AA7
-          ABND                                   * 25AAC
-        ;                                        * 25AB1
+        :: FALSE {'ioinprogress} BIND GetNextToken ABND ; * 25A93
 
 * refs (5): 2446F 24735 24762 2477B 25BEC
 OBJ_25AB6:
-        ::                                       * 25AB6
-          4UNROLL                                * 25ABB
-          5ROLL                                  * 25AC0
-          2DROP                                  * 25AC5
-          GetNextToken                           * 25ACA
-        ;                                        * 25ACF
+        :: 4UNROLL 5ROLL 2DROP GetNextToken ;    * 25AB6
 
 * refs (2): 24492 25B5B
 OBJ_25AD4:
-        ::                                       * 25AD4
-          4UNROLL                                * 25AD9
-          5ROLLDROP                              * 25ADE
-          LEN$                                   * 25AE3
-          2DUP#>                                 * 25AE8
-          3UNROLL                                * 25AED
-          #-                                     * 25AF2
-          BINT1                                  * 25AF7
-          RPITE                                  * 25AFC
-          GetNextToken                           * 25B01
-        ;                                        * 25B06
+        :: 4UNROLL 5ROLLDROP LEN$ 2DUP#> 3UNROLL #- BINT1 RPITE GetNextToken ; * 25AD4
 
 * # #' -> #+#'
 * refs (1): 25068
@@ -1905,46 +1091,16 @@ L_25B30:
 
 * refs (1): 24438
 OBJ_25B3D:
-        ::                                       * 25B3D
-          OBJ_25D03                              * 25B42
-          !*triand                               * 25B47
-          OBJ_25D03                              * 25B4C
-          !*triand                               * 25B51
-          OBJ_25E44                              * 25B56
-          OBJ_25AD4                              * 25B5B
-          5ROLL                                  * 25B60
-          #2-                                    * 25B65
-          5UNROLL                                * 25B6A
-          7ROLL                                  * 25B6F
-          7ROLL                                  * 25B74
-          COERCESWAP                             * 25B79
-          COERCE                                 * 25B7E
-          MAKEGROB                               * 25B83
-          DUP                                    * 25B88
-          BINT15                                 * 25B8D
-          #-                                     * 25B92
-          3PICK                                  * 25B97
-          LEN$                                   * 25B9C
-          #<case                                 * 25BA1
-          ::                                     * 25BA6
-            DROP                                 * 25BAB
-            failed                               * 25BB0
-          ;                                      * 25BB5
+        :: OBJ_25D03 !*triand OBJ_25D03 !*triand OBJ_25E44 OBJ_25AD4 5ROLL * 25B3D
+          #2- 5UNROLL 7ROLL 7ROLL COERCESWAP COERCE MAKEGROB DUP BINT15 #- * 25B65
+          3PICK LEN$ #<case                      * 25B97
+          :: DROP failed ;                       * 25BA6
           BINT20                                 * 25BBA
 
 3dropn;false;true:
-          OBJ_25C37                              * 25BBF
-          Extobcode                              * 25BC4
-          NOTcase                                * 25BC9
-          ::                                     * 25BCE
-            DROP                                 * 25BD3
-            failed                               * 25BD8
-          ;                                      * 25BDD
-          6rolld;1+(s5)                          * 25BE2
-          OBJ_25D3A                              * 25BE7
-          OBJ_25AB6                              * 25BEC
-          TrueTrue                               * 25BF1
-        ;                                        * 25BF6
+          OBJ_25C37 Extobcode NOTcase            * 25BBF
+          :: DROP failed ;                       * 25BCE
+          6rolld;1+(s5) OBJ_25D3A OBJ_25AB6 TrueTrue ; * 25BE2
 
 * refs (1): 6F43C
 OBJ_25BFB:
@@ -1952,14 +1108,11 @@ OBJ_25BFB:
 
 * refs (4): 69BFB 6AC5D 6B11F 6F60D
 OBJ_25C23:
-        ::                                       * 25C23
-          'LB                                    * 25C28
-          OBJ_6FACC                              * 25C2D
-        ;                                        * 25C32
+        :: 'LB OBJ_6FACC ;                       * 25C23
 
 * refs (1): 25BBF
 OBJ_25C37:
-        #       DOGROB                           * 25C37  address
+        # DOGROB                                 * 25C37  address
 
 * refs (1): 25BC4
 Extobcode:
@@ -2024,21 +1177,12 @@ GETPTRTRUE:
 
 * refs (2): 172C5 177BB
 OBJ_25CF5:
-        $       "  "                             * 25CF5
+        $ "  "                                   * 25CF5
 
 * refs (13): 24398 24794 247C1 248B1 248DE 24924 ...
 OBJ_25D03:
-        ::                                       * 25D03
-          tokexponent                            * 25D08
-          DPRADIX?                               * 25D0D
-          tok.                                   * 25D12
-          tok,                                   * 25D17
-          RPITE                                  * 25D1C
-          realPAcode                             * 25D21
-          !*trior                                * 25D26
-          DaDGNTc                                * 25D2B
-          FALSE                                  * 25D30
-        ;                                        * 25D35
+        :: tokexponent DPRADIX? tok. tok, RPITE realPAcode !*trior * 25D03
+          DaDGNTc FALSE ;                        * 25D2B
 
 * refs (5): 238D1 2448D 2475D 24776 25BE7
 OBJ_25D3A:
@@ -2104,21 +1248,9 @@ OBJ_26058:
 * hxs-mask $ #start -> hxs-mask $ #next $token
 * refs (23): 0BC2E 0BE00 238DB 245B4 24690 250A9 ...
 GetNextToken:
-        ::                                       * 26162
-          DUP4UNROLL                             * 26167
-          DPRADIX?                               * 2616C
-          OBJ_2635E                              * 26171
-          OBJ_261AD                              * 26176
-          GetNextToken                           * 2617B
-          NOTcase                                * 26180
+        :: DUP4UNROLL DPRADIX? OBJ_2635E OBJ_261AD GetNextToken NOTcase * 26162
           NULL$                                  * 26185
-          ROT2DUP                                * 2618A
-          SWAP#1+                                * 2618F
-          5UNROLL                                * 26194
-          5UNROLL                                * 26199
-          3UNROLL                                * 2619E
-          SUB$                                   * 261A3
-        ;                                        * 261A8
+          ROT2DUP SWAP#1+ 5UNROLL 5UNROLL 3UNROLL SUB$ ; * 2618A
 
 * refs (2): 25072 26176
 OBJ_261AD:
@@ -2169,72 +1301,30 @@ L_26224:
 
 * refs (2): 254A7 26224
 OBJ_2622F:
-        ::                                       * 2622F
-          '                                      * 26234
-          Π'ioinprogress                         * 26239
-          undo                                   * 2623E
-          NOTcase                                * 26243
-          OBJ_26293                              * 26248
-          NOTcase                                * 2624D
-          OBJ_26293                              * 26252
-          OBJ_2FB64                              * 26257
-          case                                   * 2625C
-          OBJ_262BB                              * 26261
-          FALSE                                  * 26266
-          FALSE'                                 * 2626B
-          Π'ioinprogress                         * 26270
-          STOLAM                                 * 26275
-          OBJ_26289                              * 2627A
-          ERROROUT                               * 2627F
-        ;                                        * 26284
+        :: ' Π'ioinprogress undo NOTcase OBJ_26293 * 2622F
+          NOTcase OBJ_26293                      * 2624D
+          OBJ_2FB64 case OBJ_262BB               * 26257
+          FALSE FALSE' Π'ioinprogress STOLAM OBJ_26289 ERROROUT ; * 26266
 
 * refs (4): 2399D 259CA 2627A 262F2
 OBJ_26289:
-        #       CFF                              * 26289  3327
+        # CFF                                    * 26289  3327
 
 * refs (3): 26248 26252 262DE
 OBJ_26293:
-        ::                                       * 26293
-          DUP                                    * 26298
-          BINT6                                  * 2629D
-          BINT5                                  * 262A2
-          RPITE                                  * 262A7
-          ROLLDROP                               * 262AC
-          COLASKIP                               * 262B1
+        :: DUP BINT6 BINT5 RPITE ROLLDROP COLASKIP * 26293
         ;                                        * 262B6
 
 * refs (1): 26261
 OBJ_262BB:
-        ::                                       * 262BB
-          case                                   * 262C0
-          OBJ_26301                              * 262C5
-          FALSE'                                 * 262CA
-          Π'ioinprogress                         * 262CF
-          STOLAM                                 * 262D4
-          case                                   * 262D9
-          OBJ_26293                              * 262DE
-          FALSE                                  * 262E3
-          FALSE                                  * 262E8
-          TRUE                                   * 262ED
-          OBJ_26289                              * 262F2
-          ERROROUT                               * 262F7
-        ;                                        * 262FC
+        :: case OBJ_26301                        * 262BB
+          FALSE' Π'ioinprogress STOLAM case OBJ_26293 * 262CA
+          FALSE FALSE TRUE OBJ_26289 ERROROUT ;  * 262E3
 
 * refs (1): 262C5
 OBJ_26301:
-        ::                                       * 26301
-          SWAP                                   * 26306
-          ITE                                    * 2630B
-          ROTROT2DROP                            * 26310
-          SWAPDROP                               * 26315
-          SWAP                                   * 2631A
-          4ROLL                                  * 2631F
-          OVERLEN$                               * 26324
-          SUB$                                   * 26329
-          SWAP&$                                 * 2632E
-          BINT1                                  * 26333
-          COLACOLA                               * 26338
-        ;                                        * 2633D
+        :: SWAP ITE ROTROT2DROP SWAPDROP         * 26301
+          SWAP 4ROLL OVERLEN$ SUB$ SWAP&$ BINT1 COLACOLA ; * 2631A
         ASSEMBLE
 
 * refs (1): 26363
@@ -2494,17 +1584,11 @@ L_265B8:
 
 * refs (1): 2645C
 dup;true:
-        ::                                       * 265C5
-          DUP                                    * 265CA
-          TRUE                                   * 265CF
-        ;                                        * 265D4
+        :: DUP TRUE ;                            * 265C5
 
 * refs (1): 26477
 1+(s);true:
-        ::                                       * 265D9
-          #1+                                    * 265DE
-          TRUE                                   * 265E3
-        ;                                        * 265E8
+        :: #1+ TRUE ;                            * 265D9
 
 * refs (2): 25013 25D21
 realPAcode:
@@ -2783,42 +1867,23 @@ L_26867:
 
 * refs (1): 2DC2F
 OBJ_26886:
-        ::                                       * 26886
-          DROP                                   * 2688B
-          PATHDIR                                * 26890
-          DO>STR                                 * 26895
-          APPEND_SPACE                           * 2689A
-          'EvalNoCK:_sup                         * 2689F
-          xMEM                                   * 268A4
-          DECOMP$                                * 268A9
-          &$                                     * 268AE
-          NEWLINE$&$                             * 268B3
-        ;                                        * 268B8
+        :: DROP PATHDIR DO>STR APPEND_SPACE 'EvalNoCK:_sup xMEM DECOMP$ &$ * 26886
+          NEWLINE$&$ ;                           * 268B3
 
 * refs (1): 22DE7
 LIB700.config:
-        ::                                       * 268BD
-          #       700                            * 268C2  1792
-          TOSRRP                                 * 268CC
-        ;                                        * 268D1
+        :: # 700 TOSRRP ;                        * 268BD
 
 * refs (1): 62AED
 OBJ_268D6:
-        ::                                       * 268D6
-          NOTROMPcase                            * 268DB
-          OBJ_26912                              * 268E0
-          COLA                                   * 268E5
-          OBJ_268F4                              * 268EA
+        :: NOTROMPcase OBJ_26912                 * 268D6
+          COLA OBJ_268F4                         * 268E5
         ;                                        * 268EF
 
 * refs (1): 268EA
 OBJ_268F4:
-        ::                                       * 268F4
-          RPTRACC                                * 268F9
-          NOTcase                                * 268FE
-          BINT2                                  * 26903
-          OBJ_26912                              * 26908
-        ;                                        * 2690D
+        :: RPTRACC NOTcase BINT2                 * 268F4
+          OBJ_26912 ;                            * 26908
 
 * refs (2): 268E0 26908
 OBJ_26912:
@@ -2826,21 +1891,14 @@ OBJ_26912:
 
 * refs (1): 24582
 OBJ_26917:
-        ::                                       * 26917
-          NOTROMPcase                            * 2691C
-          OBJ_26953                              * 26921
-          COLA                                   * 26926
-          OBJ_26935                              * 2692B
+        :: NOTROMPcase OBJ_26953                 * 26917
+          COLA OBJ_26935                         * 26926
         ;                                        * 26930
 
 * refs (1): 2692B
 OBJ_26935:
-        ::                                       * 26935
-          RPTRACC                                * 2693A
-          case                                   * 2693F
-          OBJ_26953                              * 26944
-          FALSE                                  * 26949
-        ;                                        * 2694E
+        :: RPTRACC case OBJ_26953                * 26935
+          FALSE ;                                * 26949
 
 * refs (2): 26921 26944
 OBJ_26953:
@@ -2870,21 +1928,14 @@ L_26988:
 
 * refs (7): 24573 2528C 271CF 40549 62AC5 72EB9 ...
 OBJ_2699F:
-        ::                                       * 2699F
-          NOTROMPcase                            * 269A4
-          OBJ_269BD                              * 269A9
-          COLA                                   * 269AE
-          OBJ_269E7                              * 269B3
+        :: NOTROMPcase OBJ_269BD                 * 2699F
+          COLA OBJ_269E7                         * 269AE
         ;                                        * 269B8
 
 * refs (1): 269A9
 OBJ_269BD:
-        ::                                       * 269BD
-          DUPROM-WORD?                           * 269C2
-          case                                   * 269C7
-          OBJ_269DB                              * 269CC
-          DROPFALSE                              * 269D1
-        ;                                        * 269D6
+        :: DUPROM-WORD? case OBJ_269DB           * 269BD
+          DROPFALSE ;                            * 269D1
 
 * refs (2): 269CC 26A96
 OBJ_269DB:
@@ -2922,58 +1973,32 @@ L_26A20:
 * ob -> ob flag
 * refs (11): 1CDE8 1F87A 27490 2923E 40576 405E9 ...
 ?OKINALG:
-        ::                                       * 26A2D
-          CK&DISPATCH0                           * 26A32
-          BINT8                                  * 26A37
-          OBJ_26A82                              * 26A3C
-          BINT15                                 * 26A41
-          OBJ_26AB9                              * 26A46
-          BINT1                                  * 26A4B
-          TRUE                                   * 26A50
-          BINT2                                  * 26A55
-          TRUE                                   * 26A5A
-          BINT14                                 * 26A5F
-          TRUE                                   * 26A64
-          BINT10                                 * 26A69
-          TRUE                                   * 26A6E
-          BINT0                                  * 26A73
-          FALSE                                  * 26A78
+        :: CK&DISPATCH0                          * 26A2D
+          BINT8 OBJ_26A82                        * 26A37  program
+          BINT15 OBJ_26AB9                       * 26A41  romptr
+          BINT1 TRUE                             * 26A4B  real
+          BINT2 TRUE                             * 26A55  complex
+          BINT14 TRUE                            * 26A5F  unit
+          BINT10 TRUE                            * 26A69  name|local|algebraic
+          BINT0 FALSE                            * 26A73  any
         ;                                        * 26A7D
 
 * refs (2): 26A3C 6E04D
 OBJ_26A82:
-        ::                                       * 26A82
-          DUPROM-WORD?                           * 26A87
-          NOTcaseFALSE                           * 26A8C
-          DUP                                    * 26A91
-          OBJ_269DB                              * 26A96
-          caseFALSE                              * 26A9B
-          OBJ_26B04                              * 26AA0
-          NOTcase                                * 26AA5
-          OBJ_26B2E                              * 26AAA
-          TRUE                                   * 26AAF
-        ;                                        * 26AB4
+        :: DUPROM-WORD? NOTcaseFALSE DUP         * 26A82
+          OBJ_269DB caseFALSE OBJ_26B04          * 26A96
+          NOTcase OBJ_26B2E                      * 26AA5
+          TRUE ;                                 * 26AAF
 
 * refs (1): 26A46
 OBJ_26AB9:
-        ::                                       * 26AB9
-          DUP                                    * 26ABE
-          OBJ_269E7                              * 26AC3
-          caseFALSE                              * 26AC8
-          OBJ_71DFF                              * 26ACD
-          FALSE                                  * 26AD2
-          OBJ_71F0E                              * 26AD7
-        ;                                        * 26ADC
+        :: DUP OBJ_269E7 caseFALSE OBJ_71DFF     * 26AB9
+          FALSE OBJ_71F0E ;                      * 26AD2
 
 * refs (1): 71F51
 OBJ_26AE1:
-        ::                                       * 26AE1
-          OBJ_26B04                              * 26AE6
-          casedrptru                             * 26AEB
-          OBJ_26B2E                              * 26AF0
-          NOTcsdrpfls                            * 26AF5
-          SWAPDROPTRUE                           * 26AFA
-        ;                                        * 26AFF
+        :: OBJ_26B04 casedrptru OBJ_26B2E        * 26AE1
+          NOTcsdrpfls SWAPDROPTRUE ;             * 26AF5
 
 * refs (2): 26AA0 26AE6
 OBJ_26B04:
@@ -3018,27 +2043,15 @@ L_26B5E:
 
 * refs (15): 0C218 1F889 2749F 40643 5E9E6 68828 ...
 OBJ_26BED:
-        ::                                       * 26BED
-          CK&DISPATCH0                           * 26BF2
-          BINT15                                 * 26BF7
-          OBJ_26C1A                              * 26BFC
-          BINT8                                  * 26C01
-          OBJ_26C72                              * 26C06
-          BINT0                                  * 26C0B
-          FALSE                                  * 26C10
+        :: CK&DISPATCH0                          * 26BED
+          BINT15 OBJ_26C1A                       * 26BF7  romptr
+          BINT8 OBJ_26C72                        * 26C01  program
+          BINT0 FALSE                            * 26C0B  any
         ;                                        * 26C15
 
 * refs (2): 26BFC 29270
 OBJ_26C1A:
-        ::                                       * 26C1A
-          OBJ_71DFF                              * 26C1F
-          FALSE                                  * 26C24
-          OBJ_720D4                              * 26C29
-          OBJ_26C72                              * 26C2E
-          NOTcsdrpfls                            * 26C33
-          ROTDROP                                * 26C38
-          TRUE                                   * 26C3D
-        ;                                        * 26C42
+        :: OBJ_71DFF FALSE OBJ_720D4 OBJ_26C72 NOTcsdrpfls ROTDROP TRUE ; * 26C1A
 
 * refs (1): 26C7C
 OBJ_26C47:
@@ -3059,11 +2072,7 @@ L_26C65:
 
 * refs (3): 26C06 26C2E 28C22
 OBJ_26C72:
-        ::                                       * 26C72
-          OBJ_26C8B                              * 26C77
-          OBJ_26C47                              * 26C7C
-          OBJ_721A6                              * 26C81
-        ;                                        * 26C86
+        :: OBJ_26C8B OBJ_26C47 OBJ_721A6 ;       * 26C72
 
 * refs (1): 26C77
 OBJ_26C8B:
@@ -3192,31 +2201,31 @@ L_26DBF:
 
 * refs (4): 26DBF 27A85 2921B 692FB
 #0590410h:
-        HXS     0140950                          * 26DDD
+        HXS 0140950                              * 26DDD
 
 * refs (1): 1B3D3
 #050410h:
-        HXS     014050                           * 26DEE
+        HXS 014050                               * 26DEE
 
 * refs (4): 1FB7B 26DC9 28491 6946D
 #05060410h:
-        HXS     01406050                         * 26DFE
+        HXS 01406050                             * 26DFE
 
 * refs (1): 26DCE
 #0506060410h:
-        HXS     0140606050                       * 26E10
+        HXS 0140606050                           * 26E10
 
 * refs (1): 26DD3
 #050606060410h:
-        HXS     014060606050                     * 26E24
+        HXS 014060606050                         * 26E24
 
 * refs (1): 26DD8
 #05060606060410h:
-        HXS     01406060606050                   * 26E3A
+        HXS 01406060606050                       * 26E3A
 
 * refs (2): 1A978 285D5
 #00700h:
-        HXS     00700                            * 26E52
+        HXS 00700                                * 26E52
 
 * refs (8): 27B2F 28C72 28E52 40666 68D14 6E2FD ...
 OBJ_26E61:

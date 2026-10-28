@@ -7,233 +7,222 @@
 * 2d 2h
 * refs (515): 05158 05171 0CA08 0D2BC 0DF6B 0E557 ...
 BINT2:
-        #       2                                * 04003  2
+        # 2                                      * 04003  2
 
 * 3d 3h
 * refs (398): 0C627 0C6C2 0C93D 0D2B2 0E150 0E584 ...
 BINT3:
-        #       3                                * 0400D  3
+        # 3                                      * 0400D  3
 
 * 4d 4h
 * refs (420): 0C636 0C6D1 0D2A8 0E20A 0E570 0E5B2 ...
 BINT4:
-        #       4                                * 04017  4
+        # 4                                      * 04017  4
 
 * 5d 5h
 * refs (250): 10329 14870 19912 1995C 19D57 1A1C3 ...
 BINT5:
-        #       5                                * 04021  5
+        # 5                                      * 04021  5
 
 * 6d 6h
 * refs (283): 10617 1062B 150A7 152A0 19D6C 1A10F ...
 BINT6:
-        #       6                                * 0402B  6
+        # 6                                      * 0402B  6
 
 * 7d 7h
 * refs (224): 021E7 09052 10383 104A5 104DC 140CE ...
 BINT7:
-        #       7                                * 04035  7
+        # 7                                      * 04035  7
 
 * 8d 8h
 * refs (191): 04279 0E0E2 0E10F 1509D 15147 15438 ...
 BINT8:
-        #       8                                * 0403F  8
+        # 8                                      * 0403F  8
 
 * 9d 9h
 * refs (346): 174F5 17630 1A3C8 1CBEA 1CEED 1CFB7 ...
 BINT9:
-        #       9                                * 04049  9
+        # 9                                      * 04049  9
 
 * 10d  Ah
 * refs (172): 0B610 0EDAA 19739 1978F 1A9BD 1AA47 ...
 BINT10:
-        #       A                                * 04053  10
+        # A                                      * 04053  10
 
 * 11d  Bh
 * refs (104): 15E65 19585 195A5 195C5 195E5 19605 ...
 BINT11:
-        #       B                                * 0405D  11
+        # B                                      * 0405D  11
 
 * 12d  Ch
 * refs (80): 19E85 1A9DB 1C9EA 1CBFE 1E597 31935 ...
 BINT12:
-        #       C                                * 04067  12
+        # C                                      * 04067  12
 
 * 13d  Dh
 * refs (99): 0EDBE 19A43 19A4D 1A3DC 1CC18 1CE46 ...
 BINT13:
-        #       D                                * 04071  13
+        # D                                      * 04071  13
 
 * 14d  Eh
 * refs (83): 172E3 19725 1977B 19A89 1A9C7 1AA51 ...
 BINT14:
-        #       E                                * 0407B  14
+        # E                                      * 0407B  14
 
 * 15d  Fh
 * refs (62): 17644 1CC4C 1DDB5 1DEF4 25B8D 26A41 ...
 BINT15:
-        #       F                                * 04085  15
+        # F                                      * 04085  15
 
 * 16d 10h
 * refs (124): 0C857 0C87A 0C8A7 0E0BA 13B83 175F9 ...
 BINT16:
-        #       10                               * 0408F  16
+        # 10                                     * 0408F  16
 
 * 17d 11h
 * refs (210): 0906B 15FA1 19703 1999C 199BC 199DC ...
 BINT17:
-        #       11                               * 04099  17
+        # 11                                     * 04099  17
 
 * 18d 12h
 * refs (57): 19E0E 19F19 1A8EC 1AB7B 1AD1D 1AE02 ...
 BINT18:
-        #       12                               * 040A3  18
+        # 12                                     * 040A3  18
 
 * 19d 13h
 * refs (79): 1DE98 6CD17 8BAA5 8BCEF 8F536 A2D66 ...
 BINT19:
-        #       13                               * 040AD  19
+        # 13                                     * 040AD  19
 
 * 20d 14h
 * refs (20): 1AE3E 25BBA 33B98 396BE 396FF 3A32D ...
 BINT20:
-        #       14                               * 040B7  20
+        # 14                                     * 040B7  20
 
 * 21d 15h
 * refs (27): 1278E 1F368 1FA63 1FA97 57185 57199 ...
 BINT21:
-        #       15                               * 040C1  21
+        # 15                                     * 040C1  21
 
 * 22d 16h
 * refs (20): 1277A 2075D 396FA 3A003 3A22E 47D3D ...
 BINT22:
-        #       16                               * 040CB  22
+        # 16                                     * 040CB  22
 
 * 23d 17h
 * refs (28): 456EA 46391 571C7 6AE51 6AE83 6C3BB ...
 BINT23:
-        #       17                               * 040D5  23
+        # 17                                     * 040D5  23
 
 * 24d 18h
 * refs (25): 0EDD2 317FA 41DCE 463A5 4695F 476E7 ...
 BINT24:
-        #       18                               * 040DF  24
+        # 18                                     * 040DF  24
 
 * 25d 19h
 * refs (113): 19DB0 41DAB 43151 438CE 449A8 44A45 ...
 BINT25:
-        #       19                               * 040E9  25
+        # 19                                     * 040E9  25
 
 * 26d 1Ah
 * refs (131): 19E2E 1A90A 1ABDF 1AD63 1AE70 1AF73 ...
 BINT26:
-        #       1A                               * 040F3  26
+        # 1A                                     * 040F3  26
 
 * 27d 1Bh
 * refs (16): 15CE3 1AB99 1AD3B 1AE20 1AF37 46B8E ...
 BINT27:
-        #       1B                               * 040FD  27
+        # 1B                                     * 040FD  27
 
 * 28d 1Ch
 * refs (89): 19E3E 47777 477B8 4BB4D 4D2A9 4D7F4 ...
 BINT28:
-        #       1C                               * 04107  28
+        # 1C                                     * 04107  28
 
 * 29d 1Dh
 * refs (12): 19E4E 438BF 44A5A 4C2E7 5709F AF97D ...
 BINT29:
-        #       1D                               * 04111  29
+        # 1D                                     * 04111  29
 
 * 30d 1Eh
 * refs (51): 196EF 19759 197B9 19E8A 1A946 1ABC1 ...
 BINT30:
-        #       1E                               * 0411B  30
+        # 1E                                     * 0411B  30
 
 * 31d 1Fh
 * refs (62): 1CC66 4123D 463C8 4BA12 4BA62 4BCC9 ...
 BINT31:
-        #       1F                               * 04125  31
+        # 1F                                     * 04125  31
 
 * 32d 20h
 * refs (69): 2E2C8 44925 463CD 4D218 4EC62 50EF2 ...
 BINT32:
-        #       20                               * 0412F  32
+        # 20                                     * 0412F  32
 
 * 33d 21h
 * refs (49): 1A8F6 1AB85 1AD27 1AE0C 1AF23 1B04B ...
 BINT33:
-        #       21                               * 04139  33
+        # 21                                     * 04139  33
 
 * 34d 22h
 * refs (30): 1A900 1AB8F 1AD31 1AE16 1AF2D 1B055 ...
 BINT34:
-        #       22                               * 04143  34
+        # 22                                     * 04143  34
 
 * 35d 23h
 * refs (105): 19E8F 22161 22311 33161 3338C 33477 ...
 BINT35:
-        #       23                               * 0414D  35
+        # 23                                     * 0414D  35
 
 * 36d 24h
 * refs (18): 1AE48 2FE39 33247 33404 335C6 337AB ...
 BINT36:
-        #       24                               * 04157  36
+        # 24                                     * 04157  36
 
 * 37d 25h
 * refs (79): 1F372 1FA6D 1FAA1 32292 322E7 39704 ...
 BINT37:
-        #       25                               * 04161  37
+        # 25                                     * 04161  37
 
 * 38d 26h
 * refs (13): 20767 3217F 32256 73D9D 8F68F 8F91F ...
 BINT38:
-        #       26                               * 0416B  38
+        # 26                                     * 0416B  38
 
 * 39d 27h
 * refs (26): 2D735 2D753 2DA4F 2F07C 39734 44AF4 ...
 BINT39:
-        #       27                               * 04175  39
+        # 27                                     * 04175  39
 
 * 40d 28h
 * refs (66): 0D2DA 19E94 3A569 3FE71 3FE9E 43900 ...
 BINT40:
-        #       28                               * 0417F  40
+        # 28                                     * 0417F  40
 
 * 41d 29h
 * refs (17): 463E1 491E9 A40E1 A788A A7A33 A83E9 ...
 BINT41:
-        #       29                               * 04189  41
+        # 29                                     * 04189  41
 
 * 42d 2Ah
 * refs (25): 1A914 1ABF3 1AD6D 1AE7A 1AF7D 1B069 ...
 BINT42:
-        #       2A                               * 04193  42
+        # 2A                                     * 04193  42
 
 * 43d 2Bh
 * refs (22): 463E6 6A096 A3FE0 A505A A50BB A511C ...
 BINT43:
-        #       2B                               * 0419D  43
+        # 2B                                     * 0419D  43
 
 * ->
 * refs (6): 1A328 2DB49 3A9D8 3AC25 3E0FB 42136
 TurnOff:
-        ::                                       * 041A7
-          OBJ_4231A                              * 041AC
-          ALARM?                                 * 041B1
-          ?SEMI                                  * 041B6
-          DEEPSLEEP                              * 041BB
-          InitEnab                               * 041C0
-          OBJ_4B643                              * 041C5
-          ?FlashAlert                            * 041CA
-        ;                                        * 041CF
+        :: OBJ_4231A ALARM? ?SEMI                * 041A7
+          DEEPSLEEP InitEnab OBJ_4B643 ?FlashAlert ; * 041BB
 
 * refs (1): 17FE8
 off!:
-        ::                                       * 041D4
-          OBJ_4231A                              * 041D9
-          DEEPSLEEP                              * 041DE
-          DROP                                   * 041E3
-        ;                                        * 041E8
+        :: OBJ_4231A DEEPSLEEP DROP ;            * 041D4
 
 * -> flag
 * refs (2): 041BB 041DE
@@ -277,14 +266,8 @@ L_04263:
 * ->
 * refs (1): 4B64D
 ShowInvRomp:
-        ::                                       * 0426A
-          #132_64E8C                             * 0426F
-          JstGetTHEMESG                          * 04274
-          BINT8                                  * 04279
-          JstGetTHEMESG                          * 0427E
-          !append$                               * 04283
-          FlashWarning                           * 04288
-        ;                                        * 0428D
+        :: #132_64E8C JstGetTHEMESG BINT8 JstGetTHEMESG !append$ * 0426A
+          FlashWarning ;                         * 04288
         ASSEMBLE
 
 * Puts calc into "deep sleep" Low power mode, display off Wakeup on ON key or interrupt
@@ -800,38 +783,20 @@ POPKEY:
 
 * refs (1): 421BD
 OBJ_04890:
-        ::                                       * 04890
-          OBJ_01E5E                              * 04895
-          OBJ_048A9                              * 0489A
-          LiteSlp                                * 0489F
-        ;                                        * 048A4
+        :: OBJ_01E5E OBJ_048A9 LiteSlp ;         * 04890
 
 * refs (1): 0489A
 OBJ_048A9:
-        ::                                       * 048A9
-          OBJ_0E7CE                              * 048AE
-          case                                   * 048B3
-          ::                                     * 048B8
-            OBJ_048F9                            * 048BD
-            case                                 * 048C2
-            OBJ_39AD8                            * 048C7
-            OBJ_0CEEA                            * 048CC
-          ;                                      * 048D1
-          OBJ_048F9                              * 048D6
-          case                                   * 048DB
-          ::                                     * 048E0
-            OBJ_0CED9                            * 048E5
-            OBJ_39AD8                            * 048EA
-          ;                                      * 048EF
+        :: OBJ_0E7CE case                        * 048A9
+          :: OBJ_048F9 case OBJ_39AD8            * 048B8
+            OBJ_0CEEA ;                          * 048CC
+          OBJ_048F9 case                         * 048D6
+          :: OBJ_0CED9 OBJ_39AD8 ;               * 048E0
         ;                                        * 048F4
 
 * refs (2): 048BD 048D6
 OBJ_048F9:
-        ::                                       * 048F9
-          DispTimeReq?                           * 048FE
-          DA1IsStat?                             * 04903
-          AND                                    * 04908
-        ;                                        * 0490D
+        :: DispTimeReq? DA1IsStat? AND ;         * 048F9
 
 * ->
 * refs (1): 0489F
@@ -1270,33 +1235,14 @@ TWODROPNULL$:
 * # -> $
 * refs (13): 1407E 1567B 15D7E 2DD15 2E05E 2EFBE ...
 GETTHEMESG:
-        ::                                       * 04D64
-          #EXITERR                               * 04D69
-          OVER#=                                 * 04D6E
-          ITE                                    * 04D73
-          GETEXITMSG                             * 04D78
-          JstGetTHEMESG                          * 04D7D
+        :: #EXITERR OVER#= ITE GETEXITMSG JstGetTHEMESG * 04D64
         ;                                        * 04D82
 
 * # -> $
 * refs (100): 04274 0427E 04D7D 1541A 1560D 1590E ...
 JstGetTHEMESG:
-        ::                                       * 04D87
-          SPLITmsg                               * 04D8C
-          GETMSG                                 * 04D91
-          '                                      * 04D96
-          ::                                     * 04D9B
-            GETEL                                * 04DA0
-            '                                    * 04DA5
-            TOTEMPOB                             * 04DAA
-            '                                    * 04DAF
-            NULL$                                * 04DB4
-            RPITE                                * 04DB9
-          ;                                      * 04DBE
-          '                                      * 04DC3
-          DROPNULL$                              * 04DC8
-          RPITE                                  * 04DCD
-        ;                                        * 04DD2
+        :: SPLITmsg GETMSG '                     * 04D87
+          :: GETEL ' TOTEMPOB ' NULL$ RPITE ; ' DROPNULL$ RPITE ; * 04D9B
 
 * #msg -> #error #libnum
 * refs (1): 04D8C
@@ -1382,10 +1328,7 @@ SUB_04E89:
 * ->
 * refs (9): 1443D 1A7A6 2E4B4 32FEF 42434 42452 ...
 ABORT:
-        ::                                       * 04EA4
-          ERRORCLR                               * 04EA9
-          ERRJMP                                 * 04EAE
-        ;                                        * 04EB3
+        :: ERRORCLR ERRJMP ;                     * 04EA4
 
 * ->
 * refs (158): 04EDA 143DE 14645 146F4 14D7D 14DE1 ...
@@ -1697,23 +1640,16 @@ L_05149:
 * comp -> comp-ob_head comp_null -> comp_null
 * refs (11): 184C8 20C7B 4506A 467AC 6B8DA 6C131 ...
 CDRCOMP:
-        ::                                       * 05153
-          BINT2                                  * 05158
-          OBJ_05176                              * 0515D
-          SUBCOMP                                * 05162
-        ;                                        * 05167
+        :: BINT2 OBJ_05176 SUBCOMP ;             * 05153
 
 * $ -> $'
 * refs (6): 0F0B1 0FF89 6B33B 9F7BA 9F8F2 C19CD
 CDR$:
-        ::                                       * 0516C
-          BINT2                                  * 05171
+        :: BINT2                                 * 0516C
 
 * refs (1): 0515D
 OBJ_05176:
-          #       FFFFF                          * 05176  1048575
-          SUB$                                   * 05180
-        ;                                        * 05185
+          # FFFFF SUB$ ;                         * 05176
 
 * hxs hxs' -> hxs''
 * refs (4): 4F90D 4F93A 6A47E 6A4A6
@@ -1776,18 +1712,7 @@ SUB_05204:
 * comp comp' -> comp''
 * refs (17): 1AC34 3F1FC 4FAA7 4FAE8 4FAED A0116 ...
 &COMP:
-        ::                                       * 0521F
-          DUP                                    * 05224
-          TYPE                                   * 05229
-          SWAPROT                                * 0522E
-          INNERCOMP                              * 05233
-          get1                                   * 05238
-          INNERCOMP                              * 0523D
-          get1                                   * 05242
-          #+                                     * 05247
-          get1                                   * 0524C
-          COMPN                                  * 05251
-        ;                                        * 05256
+        :: DUP TYPE SWAPROT INNERCOMP get1 INNERCOMP get1 #+ get1 COMPN ; * 0521F
 
 * $ chr -> $'
 * refs (20): 0F29A 14AAF 14AB9 14AC8 14D96 15D24 ...
@@ -1834,14 +1759,7 @@ L_052BA:
 * comp ob -> ob+comp
 * refs (23): 1728E 184AF 184D7 1AC9D 225AD 45074 ...
 >HCOMP:
-        ::                                       * 052C6
-          OVER                                   * 052CB
-          INNERCOMP                              * 052D0
-          #1+                                    * 052D5
-          get1                                   * 052DA
-          TYPE                                   * 052DF
-          COMPN                                  * 052E4
-        ;                                        * 052E9
+        :: OVER INNERCOMP #1+ get1 TYPE COMPN ;  * 052C6
 
 * $ chr -> $'
 * refs (35): 0D31F 0D33A 1279D 14105 15D2E 170D1 ...
@@ -1855,17 +1773,7 @@ L_052BA:
 * comp ob -> comp+ob
 * refs (35): 08E3D 15264 152E1 152F5 186C0 1AC48 ...
 >TCOMP:
-        ::                                       * 052FA
-          OVER                                   * 052FF
-          TYPE                                   * 05304
-          SWAPROT                                * 05309
-          INNERCOMP                              * 0530E
-          #1+DUP                                 * 05313
-          #1+ROLL                                * 05318
-          SWAP                                   * 0531D
-          get1                                   * 05322
-          COMPN                                  * 05327
-        ;                                        * 0532C
+        :: OVER TYPE SWAPROT INNERCOMP #1+DUP #1+ROLL SWAP get1 COMPN ; * 052FA
 
 * obn..ob1 #n #prolog -> comp
 * refs (7): 05251 052E4 05327 0544F 05463 05477 ...
@@ -1970,34 +1878,22 @@ L_05416:
 * ob1..obn #n -> :: ob1..obn ;
 * refs (42): 21565 3F4F1 3F6D8 40378 40436 46E50 ...
 ::N:
-        ::                                       * 05445
-          TYPECOL                                * 0544A
-          COMPN                                  * 0544F
-        ;                                        * 05454
+        :: TYPECOL COMPN ;                       * 05445
 
 * obn..ob1 #n -> { obn..ob1 }
 * refs (152): 0E20F 0E4CF 0E506 1C78D 1DC4B 1F848 ...
 {}N:
-        ::                                       * 05459
-          TYPELIST                               * 0545E
-          COMPN                                  * 05463
-        ;                                        * 05468
+        :: TYPELIST COMPN ;                      * 05459
 
 * ob1..obn #n -> symb
 * refs (45): 476D8 48C01 48C42 48C83 48CB0 49B91 ...
 SYMBN:
-        ::                                       * 0546D
-          TYPESYMB                               * 05472
-          COMPN                                  * 05477
-        ;                                        * 0547C
+        :: TYPESYMB COMPN ;                      * 0546D
 
 * ob1..obn #n -> u
 * refs (1): 100F6
 EXTN:
-        ::                                       * 05481
-          TYPEEXT                                * 05486
-          COMPN                                  * 0548B
-        ;                                        * 05490
+        :: TYPEEXT COMPN ;                       * 05481
         ASSEMBLE
 L_05495:
         D0=(5)  DSKTOP                           * 05495
@@ -2128,28 +2024,23 @@ NULLHXS:
 * ""
 * refs (145): 04D43 04DB4 04E21 0C78A 10248 112CE ...
 NULL$:
-        $       ""                               * 055DF
+        $ ""                                     * 055DF
 
 * -> {}
 * refs (189): 021E2 08E1A 0CB2A 0E792 110E0 161E4 ...
 NULL{}:
-        {                                        * 055E9
-        }                                        * 055EE
+        { }                                      * 055E9
 
 * -> sym
 * refs (2): 5E0C6 6AFFA
 NULLSYMB:
-        SYMBOL                                   * 055F3
-        ;                                        * 055F8
+        SYMBOL ;                                 * 055F3
 
 * -> :: ;
 * refs (8): 06F23 46C20 46C84 5E134 8C867 8CA66 ...
 NULL:::
-        ::                                       * 055FD
-          '                                      * 05602
-          ::                                     * 05607
-          ;                                      * 0560C
-        ;                                        * 05611
+        :: '                                     * 055FD
+          :: ; ;                                 * 05607
 
 * hxs -> #nibs
 * refs (5): 15E92 15F9C 4B896 4F953 C0DDA
@@ -2601,11 +2492,7 @@ CHR>#:
 * ob #prolog -> ob'
 * refs (2): 05AF7 05B0B
 CHANGETYPE:
-        ::                                       * 05AB3
-          SWAP                                   * 05AB8
-          TOTEMPSWAP                             * 05ABD
-          !CHANGETYPE                            * 05AC2
-        ;                                        * 05AC7
+        :: SWAP TOTEMPSWAP !CHANGETYPE ;         * 05AB3
 
 * ob #prolog -> ob'
 * refs (1): 05AC2
@@ -2625,18 +2512,12 @@ CHANGETYPE:
 * id -> lam
 * refs (6): 23E6B 27F26 566E7 8385B 8389C D2082
 ID>LAM:
-        ::                                       * 05AED
-          TYPELAM                                * 05AF2
-          CHANGETYPE                             * 05AF7
-        ;                                        * 05AFC
+        :: TYPELAM CHANGETYPE ;                  * 05AED
 
 * lam -> id
 * refs (2): 57013 D2013
 LAM>ID:
-        ::                                       * 05B01
-          TYPEIDNT                               * 05B06
-          CHANGETYPE                             * 05B0B
-        ;                                        * 05B10
+        :: TYPEIDNT CHANGETYPE ;                 * 05B01
 
 * $ -> ID
 * refs (18): 05E86 0F1B4 0FF8E 216A1 246FE 24E56 ...
@@ -2931,12 +2812,7 @@ L_05E65:
 * ob $tag -> tagged
 * refs (17): 05F38 15913 21A0D 2260E 22622 244E2 ...
 >TAG:
-        ::                                       * 05E81
-          $>ID                                   * 05E86
-          SWAP                                   * 05E8B
-          TWO{}N                                 * 05E90
-          {}>TAG                                 * 05E95
-        ;                                        * 05E9A
+        :: $>ID SWAP TWO{}N {}>TAG ;             * 05E81
 
 * { id ob } -> tagged
 * refs (1): 05E95
@@ -2962,13 +2838,7 @@ SUB_05EBE:
 * tagged -> ob $tag
 * refs (9): 1742D 1CF8A 21278 21350 21514 3F0AC ...
 TAG>:
-        ::                                       * 05EC9
-          ONE{}N                                 * 05ECE
-          {:tag:_}=>{tag,_}                      * 05ED3
-          INCOMPDROP                             * 05ED8
-          SWAP                                   * 05EDD
-          ID>$                                   * 05EE2
-        ;                                        * 05EE7
+        :: ONE{}N {:tag:_}=>{tag,_} INCOMPDROP SWAP ID>$ ; * 05EC9
 
 * refs (1): 05ED3
 {:tag:_}=>{tag,_}:
@@ -2999,10 +2869,7 @@ D=0ErrIM:
 * ob id/lam -> tagged
 * refs (9): 1566C 225D7 225E1 478A3 478B2 99000 ...
 ID>TAG:
-        ::                                       * 05F2E
-          ID>$                                   * 05F33
-          >TAG                                   * 05F38
-        ;                                        * 05F3D
+        :: ID>$ >TAG ;                           * 05F2E
 
 * ->
 * refs (6): 0B067 0B629 0B6E7 20FB4 B9DD6 D4273

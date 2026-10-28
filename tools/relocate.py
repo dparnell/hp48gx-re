@@ -50,7 +50,9 @@ def padding_point(lines):
                 if m and not lines[j].split()[0].endswith(":"):
                     return k, int(m.group(1), 16)
         if not t[0].endswith(":") and t[0] not in ("RPL", "ASSEMBLE"):
-            prev = t[0]
+            # an RPL line may hold several objects: its last one ends it
+            code = sasm.split_line(ln)
+            prev = code[-1] if code and code[-1] in (";", "}") else t[0]
     raise SystemExit("no place to pad")
 
 

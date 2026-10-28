@@ -6,665 +6,245 @@
 
 * refs (2): 51F9F 51FB8
 OBJ_52017:
-        ::                                       * 52017
-          DROPDUP                                * 5201C
-          =0?(nb)                                * 52021
-          NOTcase                                * 52026
-          OBJ_5203A                              * 5202B
-          drop;doerr304                          * 52030
-        ;                                        * 52035
+        :: DROPDUP =0?(nb) NOTcase OBJ_5203A     * 52017
+          drop;doerr304 ;                        * 52030
 
 * refs (8): 2B18A 51FE0 51FFE 5202B 52526 97A00 ...
 OBJ_5203A:
-        ::                                       * 5203A
-          BINT22                                 * 5203F
-          TestSysFlag                            * 52044
-          NOTcasedrop                            * 52049
-          INFRESERR                              * 5204E
-          BINT26                                 * 52053
-          SetSysFlag                             * 52058
-        ;                                        * 5205D
+        :: BINT22 TestSysFlag NOTcasedrop INFRESERR * 5203A
+          BINT26 SetSysFlag ;                    * 52053
 
 * C% -> %
 * refs (4): 1AA38 37C84 37CA7 4FCD7
 C%ABS:
-        ::                                       * 52062
-          C%>%                                   * 52067
-          2%>%%SQR                               * 5206C
-          %%SQRT                                 * 52071
-          %%>%                                   * 52076
-        ;                                        * 5207B
+        :: C%>% 2%>%%SQR %%SQRT %%>% ;           * 52062
 
 * C%% -> %%
 * refs (1): 37C8E
 C%%ABS:
-        ::                                       * 52080
-          C%%>%%                                 * 52085
-          %%SQR                                  * 5208A
-          %%SQRT                                 * 5208F
-        ;                                        * 52094
+        :: C%%>%% %%SQR %%SQRT ;                 * 52080
 
 * C% -> %
 * refs (1): 1B2F4
 C%ARG:
-        ::                                       * 52099
-          C%>%                                   * 5209E
-          %>%%ANGLE                              * 520A3
-          %%>%                                   * 520A8
-        ;                                        * 520AD
+        :: C%>% %>%%ANGLE %%>% ;                 * 52099
 
 * refs (6): 2B49D 37A9F 520E4 52120 91D4C 92E7B
 2DUP%%R:
-        ::                                       * 520B2
-          2DUP                                   * 520B7
-          %%SQR                                  * 520BC
-          %%SQRT                                 * 520C1
-        ;                                        * 520C6
+        :: 2DUP %%SQR %%SQRT ;                   * 520B2
 
 * C% -> C%/C%ABS
 * refs (1): 1B343
 C%SGN:
-        ::                                       * 520CB
-          DUP                                    * 520D0
-          C%0=                                   * 520D5
-          ?SEMI                                  * 520DA
-          C%>%%                                  * 520DF
-          2DUP%%R                                * 520E4
-          ROTOVER                                * 520E9
-          %%/                                    * 520EE
-          3UNROLL                                * 520F3
-          %%/                                    * 520F8
-          %%>C%                                  * 520FD
-        ;                                        * 52102
+        :: DUP C%0= ?SEMI                        * 520CB
+          C%>%% 2DUP%%R ROTOVER %%/ 3UNROLL %%/ %%>C% ; * 520DF
 
 * C% -> SQRTC%
 * refs (2): 1B38D 1B413
 C%SQRT:
-        ::                                       * 52107
-          DUP                                    * 5210C
-          C%0=                                   * 52111
-          ?SEMI                                  * 52116
-          C%>%%                                  * 5211B
-          2DUP%%R                                * 52120
-          3PICK                                  * 52125
-          %%ABS                                  * 5212A
-          %%+                                    * 5212F
-          %%2                                    * 52134
-          %%/                                    * 52139
-          %%SQRT                                 * 5213E
-          DUPDUP                                 * 52143
-          %%+                                    * 52148
-          ROTSWAP                                * 5214D
-          %%/                                    * 52152
-          ROT                                    * 52157
-          %%0>=                                  * 5215C
-          case                                   * 52161
-          %%>C%                                  * 52166
-          DUP                                    * 5216B
-          %%ABS                                  * 52170
-          3UNROLL                                * 52175
-          %%0>=                                  * 5217A
-          ?SKIP                                  * 5217F
-          %%CHS                                  * 52184
-          %%>C%                                  * 52189
-        ;                                        * 5218E
+        :: DUP C%0= ?SEMI                        * 52107
+          C%>%% 2DUP%%R 3PICK %%ABS %%+ %%2 %%/ %%SQRT DUPDUP %%+ ROTSWAP * 5211B
+          %%/ ROT %%0>= case %%>C%               * 52152
+          DUP %%ABS 3UNROLL %%0>= ?SKIP %%CHS    * 5216B
+          %%>C% ;                                * 52189
 
 * C% -> e^C%
 * refs (1): 1B91E
 C%EXP:
-        ::                                       * 52193
-          C%>%%                                  * 52198
-          exp(,i)(2rr)                           * 5219D
-        ;                                        * 521A2
+        :: C%>%% exp(,i)(2rr) ;                  * 52193
 
 * refs (3): 5219D 52338 523BF
 exp(,i)(2rr):
-        ::                                       * 521A7
-          SWAP                                   * 521AC
-          %%EXP                                  * 521B1
-          OVER                                   * 521B6
-          %%COSRAD                               * 521BB
-          OVER                                   * 521C0
-          %%*ROT                                 * 521C5
-          %%SINRAD                               * 521CA
-          ROT                                    * 521CF
-          %%*                                    * 521D4
-          %%>C%                                  * 521D9
-        ;                                        * 521DE
+        :: SWAP %%EXP OVER %%COSRAD OVER %%*ROT %%SINRAD ROT %%* %%>C% ; * 521A7
 
 * C% -> ln C%
 * refs (2): 1B968 1B9B3
 C%LN:
-        ::                                       * 521E3
-          DUP                                    * 521E8
-          C%0=                                   * 521ED
-          case                                   * 521F2
-          OBJ_51FDB                              * 521F7
-          C%>%%                                  * 521FC
-          OBJ_52215                              * 52201
-          %%ANGLERAD                             * 52206
-          %%>C%                                  * 5220B
-        ;                                        * 52210
+        :: DUP C%0= case OBJ_51FDB               * 521E3
+          C%>%% OBJ_52215 %%ANGLERAD %%>C% ;     * 521FC
 
 * refs (4): 52201 522D3 523B0 523E7
 OBJ_52215:
-        ::                                       * 52215
-          2DUP                                   * 5221A
-          OVER                                   * 5221F
-          %%ABS                                  * 52224
-          %%7E-1                                 * 52229
-          %%>=                                   * 5222E
-          ITE                                    * 52233
-          OBJ_52283                              * 52238
-          ::                                     * 5223D
-            DUPUNROT                             * 52242
-            %%ABS                                * 52247
-            %%7E-1                               * 5224C
-            %%>=                                 * 52251
-            case                                 * 52256
-            OBJ_52283                            * 5225B
-            %%SQR                                * 52260
-            %%LN                                 * 52265
-          ;                                      * 5226A
+        :: 2DUP OVER %%ABS %%7E-1 %%>= ITE OBJ_52283 * 52215
+          :: DUPUNROT %%ABS %%7E-1 %%>= case OBJ_52283 * 5223D
+            %%SQR %%LN ;                         * 52260
 
 SYMUVAL:
-          %%2                                    * 5226F
-          %%/                                    * 52274
-          3UNROLL                                * 52279
-        ;                                        * 5227E
+          %%2 %%/ 3UNROLL ;                      * 5226F
 
 * refs (2): 52238 5225B
 OBJ_52283:
-        ::                                       * 52283
-          DUP                                    * 52288
-          %%*SWAP                                * 5228D
-          %%1                                    * 52292
-          2DUP                                   * 52297
-          %%+                                    * 5229C
-          3UNROLL                                * 522A1
-          %%-                                    * 522A6
-          %%*                                    * 522AB
-          %%+                                    * 522B0
-          %%LNP1                                 * 522B5
-        ;                                        * 522BA
+        :: DUP %%*SWAP %%1 2DUP %%+ 3UNROLL %%- %%* %%+ %%LNP1 ; * 52283
 
 * C% -> log C%
 * refs (2): 1B9DF 1BA2A
 C%LOG:
-        ::                                       * 522BF
-          C%0=case                               * 522C4
-          OBJ_51FDB                              * 522C9
-          C%>%%                                  * 522CE
-          OBJ_52215                              * 522D3
-          %%ANGLERAD                             * 522D8
-          %%2.30258509299405                     * 522DD
-          %%/                                    * 522E2
-          SWAP                                   * 522E7
-          %%2.30258509299405                     * 522EC
-          %%/                                    * 522F1
-          SWAP                                   * 522F6
-          %%>C%                                  * 522FB
-        ;                                        * 52300
+        :: C%0=case OBJ_51FDB                    * 522BF
+          C%>%% OBJ_52215 %%ANGLERAD %%2.30258509299405 %%/ SWAP * 522CE
+          %%2.30258509299405 %%/ SWAP %%>C% ;    * 522EC
 
 * C% -> 10^C%
 * refs (1): 1BA56
 C%ALOG:
-        ::                                       * 52305
-          C%>%%                                  * 5230A
+        :: C%>%%                                 * 52305
 
 * refs (3): 522DD 522EC 5232E
 %%2.30258509299405:
-          %%      2.30258509299405E0             * 5230F
-          %%*SWAP                                * 52329
-          %%2.30258509299405                     * 5232E
-          %%*SWAP                                * 52333
-          exp(,i)(2rr)                           * 52338
-        ;                                        * 5233D
+          %% 2.30258509299405E0 %%*SWAP %%2.30258509299405 %%*SWAP * 5230F
+          exp(,i)(2rr) ;                         * 52338
 
 * % C% -> C%'
 * refs (2): 1B046 1B16A
 C%R^C:
-        ::                                       * 52342
-          SWAP                                   * 52347
-          Re>C%                                  * 5234C
-          SWAP                                   * 52351
-          C%C^C                                  * 52356
-        ;                                        * 5235B
+        :: SWAP Re>C% SWAP C%C^C ;               * 52342
 
 * C% % -> C%'
 * refs (1): 1B050
 C%C^R:
-        ::                                       * 52360
-          Re>C%                                  * 52365
-          C%C^C                                  * 5236A
-        ;                                        * 5236F
+        :: Re>C% C%C^C ;                         * 52360
 
 * C% C%' -> C%''
 * refs (3): 1B05A 52356 5236A
 C%C^C:
-        ::                                       * 52374
-          OVER                                   * 52379
-          C%0=                                   * 5237E
-          case                                   * 52383
-          OBJ_52491                              * 52388
-          C%>%%                                  * 5238D
-          DUP                                    * 52392
-          %%0<>                                  * 52397
-          case                                   * 5239C
-          ::                                     * 523A1
-            ROT                                  * 523A6
-            C%>%%                                * 523AB
-            OBJ_52215                            * 523B0
-            %%ANGLERAD                           * 523B5
-            ãcplx(4rr)                           * 523BA
-            exp(,i)(2rr)                         * 523BF
-          ;                                      * 523C4
-          DROPSWAP                               * 523C9
-          C%>%%                                  * 523CE
-          DUP                                    * 523D3
-          %%0<>                                  * 523D8
-          ITE                                    * 523DD
-          ::                                     * 523E2
-            OBJ_52215                            * 523E7
-            %%ANGLEDEG                           * 523EC
-            UNROTOVER                            * 523F1
-            %%*UNROT                             * 523F6
-            %%*SWAP                              * 523FB
-            %%EXP                                * 52400
-            OVER                                 * 52405
-            %%COSDEG                             * 5240A
-            OVER                                 * 5240F
-            %%*                                  * 52414
-            ROT                                  * 52419
-            %%SINDEG                             * 5241E
-            ROT                                  * 52423
-          ;                                      * 52428
-          ::                                     * 5242D
-            DROP                                 * 52432
-            2DUP                                 * 52437
-            %%ABS                                * 5243C
-            SWAP                                 * 52441
-            %%^                                  * 52446
-            3UNROLL                              * 5244B
-            %%0                                  * 52450
-            %%ANGLEDEG                           * 52455
-            %%*                                  * 5245A
-            DUP                                  * 5245F
-            %%COSDEG                             * 52464
-            SWAP                                 * 52469
-            %%SINDEG                             * 5246E
-            UNROTOVER                            * 52473
-            %%*UNROT                             * 52478
-          ;                                      * 5247D
-          %%*                                    * 52482
-          %%>C%                                  * 52487
-        ;                                        * 5248C
+        :: OVER C%0= case OBJ_52491              * 52374
+          C%>%% DUP %%0<> case                   * 5238D
+          :: ROT C%>%% OBJ_52215 %%ANGLERAD ãcplx(4rr) exp(,i)(2rr) ; * 523A1
+          DROPSWAP C%>%% DUP %%0<> ITE           * 523C9
+          :: OBJ_52215 %%ANGLEDEG UNROTOVER %%*UNROT %%*SWAP %%EXP OVER * 523E2
+            %%COSDEG OVER %%* ROT %%SINDEG ROT ; * 5240A
+          :: DROP 2DUP %%ABS SWAP %%^ 3UNROLL %%0 %%ANGLEDEG %%* DUP * 5242D
+            %%COSDEG SWAP %%SINDEG UNROTOVER %%*UNROT ; * 52464
+          %%* %%>C% ;                            * 52482
 
 * refs (1): 52388
 OBJ_52491:
-        ::                                       * 52491
-          SWAPDROP                               * 52496
-          C%>%                                   * 5249B
-          OVER                                   * 524A0
-          %0>                                    * 524A5
-          case2drop                              * 524AA
+        :: SWAPDROP C%>% OVER %0> case2drop      * 52491
 
 * (0,0)
 * refs (17): 19271 36061 36886 3688B 36890 379B9 ...
 C%0:
-          C%      0E0 0E0                        * 524AF
-          %0=                                    * 524D4
-          NOTcase                                * 524D9
+          C% 0E0 0E0                             * 524AF
+          %0= NOTcase                            * 524D4
 
 * refs (1): 52030
 drop;doerr304:
-          ::                                     * 524DE
-            DROP                                 * 524E3
-            SETIVLERR                            * 524E8
-          ;                                      * 524ED
+          :: DROP SETIVLERR ;                    * 524DE
           j%0=case                               * 524F2
 
 * (1,0)
 * refs (3): 37A45 56494 5F1A9
 C%1:
-          C%      1E0 0E0                        * 524F7
-          %MAXREAL                               * 5251C
-          Re>C%                                  * 52521
-          OBJ_5203A                              * 52526
-        ;                                        * 5252B
+          C% 1E0 0E0                             * 524F7
+          %MAXREAL Re>C% OBJ_5203A ;             * 5251C
 
 * C% -> sin C%
 * refs (2): 1B4C5 52639
 C%SIN:
-        ::                                       * 52530
-          C%>%%                                  * 52535
-          2DUP                                   * 5253A
-          %%COSH                                 * 5253F
-          SWAP                                   * 52544
-          %%SINRAD                               * 52549
-          %%*UNROT                               * 5254E
-          %%SINH                                 * 52553
-          SWAP                                   * 52558
-          %%COSRAD                               * 5255D
-          %%*                                    * 52562
-          %%>C%                                  * 52567
-        ;                                        * 5256C
+        :: C%>%% 2DUP %%COSH SWAP %%SINRAD %%*UNROT %%SINH SWAP %%COSRAD %%* * 52530
+          %%>C% ;                                * 52567
 
 * C% -> cos C%
 * refs (2): 1B51E 52652
 C%COS:
-        ::                                       * 52571
-          C%>%%                                  * 52576
-          2DUP                                   * 5257B
-          %%COSH                                 * 52580
-          SWAP                                   * 52585
-          %%COSRAD                               * 5258A
-          %%*UNROT                               * 5258F
-          %%SINH                                 * 52594
-          SWAP                                   * 52599
-          %%SINRAD                               * 5259E
-          %%*                                    * 525A3
-          %%CHS                                  * 525A8
-          %%>C%                                  * 525AD
-        ;                                        * 525B2
+        :: C%>%% 2DUP %%COSH SWAP %%COSRAD %%*UNROT %%SINH SWAP %%SINRAD %%* * 52571
+          %%CHS %%>C% ;                          * 525A8
 
 * C% -> tan C%
 * refs (2): 1B577 52666
 C%TAN:
-        ::                                       * 525B7
-          C%>%%                                  * 525BC
-          DUP                                    * 525C1
-          %%SINH                                 * 525C6
-          DUPDUP                                 * 525CB
-          %%*                                    * 525D0
-          4PICK                                  * 525D5
-          %%COSRAD                               * 525DA
-          DUPDUP                                 * 525DF
-          %%*ROT                                 * 525E4
-          %%+                                    * 525E9
-          5ROLL                                  * 525EE
-          %%SINRAD                               * 525F3
-          ROT                                    * 525F8
-          %%*                                    * 525FD
-          OVER                                   * 52602
-          %%/                                    * 52607
-          4ROLL                                  * 5260C
-          %%COSH                                 * 52611
-          4ROLL                                  * 52616
-          %%*ROT                                 * 5261B
-          %%/                                    * 52620
-          %%>C%                                  * 52625
-        ;                                        * 5262A
+        :: C%>%% DUP %%SINH DUPDUP %%* 4PICK %%COSRAD DUPDUP %%*ROT %%+ * 525B7
+          5ROLL %%SINRAD ROT %%* OVER %%/ 4ROLL %%COSH 4ROLL %%*ROT %%/ * 525EE
+          %%>C% ;                                * 52625
 
 * C% -> sinh C%
 * refs (1): 1B5D0
 C%SINH:
-        ::                                       * 5262F
-          C%*i                                   * 52634
-          C%SIN                                  * 52639
-          C/i                                    * 5263E
-        ;                                        * 52643
+        :: C%*i C%SIN C/i ;                      * 5262F
 
 * C% -> cosh C%
 * refs (1): 1B61F
 C%COSH:
-        ::                                       * 52648
-          C%*i                                   * 5264D
-          C%COS                                  * 52652
-        ;                                        * 52657
+        :: C%*i C%COS ;                          * 52648
 
 * C% -> tanh C%
 * refs (1): 1B66E
 C%TANH:
-        ::                                       * 5265C
-          C%*i                                   * 52661
-          C%TAN                                  * 52666
-          C/i                                    * 5266B
-        ;                                        * 52670
+        :: C%*i C%TAN C/i ;                      * 5265C
 
 * C% -> atan C%
 * refs (2): 1B7B5 527F5
 C%ATAN:
-        ::                                       * 52675
-          DUP                                    * 5267A
+        :: DUP                                   * 52675
 
 * (0,1)
 * refs (3): 3C0BC 54D62 8A2FC
 C%i:
-          C%      0E0 1E0                        * 5267F
-          EQUAL                                  * 526A4
-          OVER                                   * 526A9
+          C% 0E0 1E0 EQUAL OVER                  * 5267F
 
 * (0,-1)
 C%-i:
-          C%      0E0 -1E0                       * 526AE
-          EQUAL                                  * 526D3
-          ORcase                                 * 526D8
-          OBJ_51FF9                              * 526DD
-          C%>%%                                  * 526E2
-          %%1                                    * 526E7
-          2DUP                                   * 526EC
-          OVER                                   * 526F1
-          %%-                                    * 526F6
-          3UNROLL                                * 526FB
-          %%+                                    * 52700
-          %%*                                    * 52705
-          OVER                                   * 5270A
-          %%ABS                                  * 5270F
-          DUP                                    * 52714
-          %%4                                    * 52719
-          %%*SWAP                                * 5271E
-          %%1                                    * 52723
-          %%-                                    * 52728
-          DUP                                    * 5272D
-          %%*                                    * 52732
-          5PICK                                  * 52737
-          DUP                                    * 5273C
-          %%*                                    * 52741
-          DUPUNROT                               * 52746
-          %%+                                    * 5274B
-          4ROLLROT                               * 52750
-          %%-                                    * 52755
-          5ROLL                                  * 5275A
-          DUPDUP                                 * 5275F
-          %%+                                    * 52764
-          ROTSWAP                                * 52769
-          %%ANGLERAD                             * 5276E
-          %%2                                    * 52773
-          %%/                                    * 52778
-          SWAP                                   * 5277D
-          %%0<>                                  * 52782
-          ?SKIP                                  * 52787
-          ::                                     * 5278C
-            %%ABS                                * 52791
-            4PICK                                * 52796
-            %%0>=                                * 5279B
-            ?SKIP                                * 527A0
-            %%CHS                                * 527A5
+          C% 0E0 -1E0 EQUAL ORcase OBJ_51FF9     * 526AE
+          C%>%% %%1 2DUP OVER %%- 3UNROLL %%+ %%* OVER %%ABS DUP %%4 %%*SWAP * 526E2
+          %%1 %%- DUP %%* 5PICK DUP %%* DUPUNROT %%+ 4ROLLROT %%- 5ROLL * 52723
+          DUPDUP %%+ ROTSWAP %%ANGLERAD %%2 %%/ SWAP %%0<> ?SKIP * 5275F
+          :: %%ABS 4PICK %%0>= ?SKIP %%CHS       * 5278C
           ;                                      * 527AA
-          4UNROLL                                * 527AF
-          %%/                                    * 527B4
-          %%LNP1                                 * 527B9
-          %%4                                    * 527BE
-          %%/                                    * 527C3
-          %%ABS                                  * 527C8
-          SWAP                                   * 527CD
-          %%0>=                                  * 527D2
-          ?SKIP                                  * 527D7
-          %%CHS                                  * 527DC
-          %%>C%                                  * 527E1
-        ;                                        * 527E6
+          4UNROLL %%/ %%LNP1 %%4 %%/ %%ABS SWAP %%0>= ?SKIP %%CHS * 527AF
+          %%>C% ;                                * 527E1
 
 * C% -> atanh C%
 * refs (2): 1B8BB 1B8F2
 C%ATANH:
-        ::                                       * 527EB
-          C%*i                                   * 527F0
-          C%ATAN                                 * 527F5
-          C/i                                    * 527FA
-        ;                                        * 527FF
+        :: C%*i C%ATAN C/i ;                     * 527EB
 
 * C% -> asin C%
 * refs (3): 1B6BD 1B71C 52827
 C%ASIN:
-        ::                                       * 52804
-          OBJ_52881                              * 52809
-          SWAPDROPSWAP                           * 5280E
-          %%>C%                                  * 52813
-        ;                                        * 52818
+        :: OBJ_52881 SWAPDROPSWAP %%>C% ;        * 52804
 
 * C% -> asinh C%
 * refs (1): 1B804
 C%ASINH:
-        ::                                       * 5281D
-          C%*i                                   * 52822
-          C%ASIN                                 * 52827
-          C/i                                    * 5282C
-        ;                                        * 52831
+        :: C%*i C%ASIN C/i ;                     * 5281D
 
 * C% -> acosh C%
 * refs (2): 1B849 1B88F
 C%ACOSH:
-        ::                                       * 52836
-          C%ACOS                                 * 5283B
-          DUP                                    * 52840
-          C>Im%                                  * 52845
-          %0>                                    * 5284A
-          case                                   * 5284F
-          C/i                                    * 52854
-          C%*i                                   * 52859
-        ;                                        * 5285E
+        :: C%ACOS DUP C>Im% %0> case C/i         * 52836
+          C%*i ;                                 * 52859
 
 * C% -> acos C%
 * refs (3): 1B748 1B789 5283B
 C%ACOS:
-        ::                                       * 52863
-          OBJ_52881                              * 52868
-          DROPSWAP                               * 5286D
-          %%CHS                                  * 52872
-          %%>C%                                  * 52877
-        ;                                        * 5287C
+        :: OBJ_52881 DROPSWAP %%CHS %%>C% ;      * 52863
 
 * refs (2): 52809 52868
 OBJ_52881:
-        ::                                       * 52881
-          C%>%%                                  * 52886
-          2DUP                                   * 5288B
-          DUP                                    * 52890
-          %%*SWAP                                * 52895
-          %%ABS                                  * 5289A
-          DUP                                    * 5289F
-          1+(rr)                                 * 528A4
-          DUPDUP                                 * 528A9
-          %%*                                    * 528AE
-          4PICK                                  * 528B3
-          %%+                                    * 528B8
-          %%SQRT                                 * 528BD
-          %%+                                    * 528C2
-          3PICKSWAP                              * 528C7
-          %%/                                    * 528CC
-          OVER                                   * 528D1
-          %%1                                    * 528D6
-          %%-                                    * 528DB
-          %%ABS                                  * 528E0
-          DUPDUP                                 * 528E5
-          %%*                                    * 528EA
-          5PICK                                  * 528EF
-          %%+                                    * 528F4
-          %%SQRT                                 * 528F9
-          %%+                                    * 528FE
-          4ROLLOVER                              * 52903
-          DUP                                    * 52908
-          %%0<>                                  * 5290D
-          ITE                                    * 52912
-          %%/                                    * 52917
+        :: C%>%% 2DUP DUP %%*SWAP %%ABS DUP 1+(rr) DUPDUP %%* 4PICK %%+ * 52881
+          %%SQRT %%+ 3PICKSWAP %%/ OVER %%1 %%- %%ABS DUPDUP %%* 5PICK %%+ * 528BD
+          %%SQRT %%+ 4ROLLOVER DUP %%0<> ITE %%/ * 528F9
 
 drop2;%%0:
-          ::                                     * 5291C
-            2DROP                                * 52921
-            %%0                                  * 52926
-          ;                                      * 5292B
-          UNROTOVER                              * 52930
-          %%+                                    * 52935
-          3UNROLL                                * 5293A
-          %%+                                    * 5293F
-          ROT                                    * 52944
-          %%1                                    * 52949
-          %%<                                    * 5294E
-          ?SKIPSWAP                              * 52953
-          DUP                                    * 52958
-          %%2                                    * 5295D
-          %%+                                    * 52962
-          ROTOVER                                * 52967
-          %%/                                    * 5296C
-          %%2                                    * 52971
-          OVER                                   * 52976
-          %%-                                    * 5297B
-          %%*                                    * 52980
-          %%SQRT                                 * 52985
-          5PICK                                  * 5298A
-          DUP                                    * 5298F
-          %%+                                    * 52994
-          ROT                                    * 52999
-          %%/                                    * 5299E
-          ROT                                    * 529A3
-          %%2                                    * 529A8
-          %%/                                    * 529AD
-          DUP                                    * 529B2
-          %%2                                    * 529B7
-          %%+                                    * 529BC
-          OVER                                   * 529C1
-          %%*                                    * 529C6
-          %%SQRT                                 * 529CB
-          %%+                                    * 529D0
-          %%LNP1                                 * 529D5
-          5ROLL                                  * 529DA
-          5ROLL                                  * 529DF
-          DUP                                    * 529E4
-          %%0=                                   * 529E9
+          :: 2DROP %%0 ;                         * 5291C
+          UNROTOVER %%+ 3UNROLL %%+ ROT %%1 %%< ?SKIPSWAP DUP %%2 %%+ * 52930
+          ROTOVER %%/ %%2 OVER %%- %%* %%SQRT 5PICK DUP %%+ ROT %%/ ROT %%2 * 52967
+          %%/ DUP %%2 %%+ OVER %%* %%SQRT %%+ %%LNP1 5ROLL 5ROLL DUP %%0= * 529AD
           ITE                                    * 529EE
 
 drop;<0(rr)?:
-          ::                                     * 529F3
-            DROP                                 * 529F8
-            %%0<                                 * 529FD
-          ;                                      * 52A02
+          :: DROP %%0< ;                         * 529F3
 
 drop(2);ò0(rr)?:
-          ::                                     * 52A07
-            SWAPDROP                             * 52A0C
-            %%0>=                                * 52A11
-          ;                                      * 52A16
-          ?SKIP                                  * 52A1B
-          %%CHS                                  * 52A20
-          UNROTDUP                               * 52A25
-          %%ABS                                  * 52A2A
+          :: SWAPDROP %%0>= ;                    * 52A07
+          ?SKIP %%CHS                            * 52A1B
+          UNROTDUP %%ABS                         * 52A25
 
 * refs (2): 52229 5224C
 %%7E-1:
-          %%      7E-1                           * 52A2F
-          %%<=                                   * 52A49
-          case                                   * 52A4E
-          ::                                     * 52A53
-            SWAPDROPDUP                          * 52A58
-            %%ACOSRAD                            * 52A5D
-            SWAP                                 * 52A62
-            %%ASINRAD                            * 52A67
-          ;                                      * 52A6C
-          SWAPDUP                                * 52A71
-          %%ASINRAD                              * 52A76
-          SWAP                                   * 52A7B
-          %%ACOSRAD                              * 52A80
-          %%ABS                                  * 52A85
-          ROT                                    * 52A8A
-          %%0>=                                  * 52A8F
-          ?SEMI                                  * 52A94
-          %%CHS                                  * 52A99
-          %%PI                                   * 52A9E
-          ROT                                    * 52AA3
-          %%-                                    * 52AA8
-          SWAP                                   * 52AAD
-        ;                                        * 52AB2
+          %% 7E-1 %%<= case                      * 52A2F
+          :: SWAPDROPDUP %%ACOSRAD SWAP %%ASINRAD ; * 52A53
+          SWAPDUP %%ASINRAD SWAP %%ACOSRAD %%ABS ROT %%0>= ?SEMI * 52A71
+          %%CHS %%PI ROT %%- SWAP ;              * 52A99
         ASSEMBLE
 
 * ( C%pop -> A:C ) Pop C% (<REF>SETDEC )
@@ -808,22 +388,12 @@ L_52C2B:
 * seco %precision %lo %hi -> %integral %error
 * refs (1): 5682C
 CALCINTEG:
-        ::                                       * 52C36
-          2DUP                                   * 52C3B
-          %=                                     * 52C40
-          case                                   * 52C45
-          ::                                     * 52C4A
-            4DROP                                * 52C4F
-            %0_2A2B4                             * 52C54
-            %0_2A2B4                             * 52C59
-          ;                                      * 52C5E
-          SWAPROT                                * 52C63
-          %1                                     * 52C68
-          %MIN                                   * 52C6D
+        :: 2DUP %= case                          * 52C36
+          :: 4DROP %0_2A2B4 %0_2A2B4 ;           * 52C4A
+          SWAPROT %1 %MIN                        * 52C63
 
 %1E-12:
-          %       1E-12                          * 52C72
-          %MAX                                   * 52C87
+          % 1E-12 %MAX                           * 52C72
           CODE                                   * 52C8C  139 nibbles
             GOSBVL  POP2%                        * 52C96
             R0=C                                 * 52C9D
@@ -868,13 +438,7 @@ CALCINTEG:
 * -> {}
 * refs (9): 0F972 1DF4E 40FB3 43020 436D5 98703 ...
 4NULLLAM{}:
-          {                                      * 52D26
-            NULLLAM                              * 52D2B
-            NULLLAM                              * 52D30
-            NULLLAM                              * 52D35
-            NULLLAM                              * 52D3A
-          }                                      * 52D3F
-          BIND                                   * 52D44
+          { NULLLAM NULLLAM NULLLAM NULLLAM } BIND * 52D26
           CODE                                   * 52D49  50 nibbles
             GOSUBL  SUB_5356F                    * 52D53
             GOSUBL  SUB_5360F                    * 52D59
@@ -901,8 +465,7 @@ CALCINTEG:
             A=0     W                            * 52DB4
             GOTO    L_5346C                      * 52DB7
           ENDCODE                                * 52DBB
-          BINT16                                 * 52DBB
-          ONE_DO                                 * 52DC0
+          BINT16 ONE_DO                          * 52DBB
           CODE                                   * 52DC5  60 nibbles
             CD1EX                                * 52DCF
             RSTK=C                               * 52DD2
@@ -923,13 +486,7 @@ CALCINTEG:
             D0=D0+  5                            * 52E04
             PC=(A)                               * 52E07
           ENDCODE                                * 52E0B
-          INDEX@                                 * 52E0B
-          OBJ_536AC                              * 52E10
-          ONE_DO                                 * 52E15
-          INDEX@                                 * 52E1A
-          UNCOERCE                               * 52E1F
-          ISTOP@                                 * 52E24
-          UNCOERCE                               * 52E29
+          INDEX@ OBJ_536AC ONE_DO INDEX@ UNCOERCE ISTOP@ UNCOERCE * 52E0B
           CODE                                   * 52E2E  230 nibbles
             GOSBVL  POP2%                        * 52E38
             R4=A                                 * 52E3F
@@ -1010,11 +567,7 @@ L_52F17:
             DAT1=C  W                            * 52F4F
             GOTO    L_52F17                      * 52F53
           ENDCODE                                * 52F57
-          OBJ_535D8                              * 52F57
-          INDEX@                                 * 52F5C
-          UNCOERCE                               * 52F61
-          ISTOP@                                 * 52F66
-          UNCOERCE                               * 52F6B
+          OBJ_535D8 INDEX@ UNCOERCE ISTOP@ UNCOERCE * 52F57
           CODE                                   * 52F70  211 nibbles
             GOSBVL  POP1%                        * 52F7A
             R2=A                                 * 52F81
@@ -1076,11 +629,7 @@ L_52F17:
             GOSUB   SUB_5366E                    * 53045
             GOTO    L_53470                      * 53049
           ENDCODE                                * 5304D
-          BINT2                                  * 5304D
-          +LOOP                                  * 53052
-          INDEX@                                 * 53057
-          OBJ_536AC                              * 5305C
-          UNCOERCE                               * 53061
+          BINT2 +LOOP INDEX@ OBJ_536AC UNCOERCE  * 5304D
           CODE                                   * 53066  354 nibbles
             GOSBVL  POP1%                        * 53070
             R4=A                                 * 53077
@@ -1174,8 +723,7 @@ L_52F17:
             GOSUB   SUB_535A7                    * 531CA
             GOTO    L_5346C                      * 531CE
           ENDCODE                                * 531D2
-          INDEX@                                 * 531D2
-          DUP                                    * 531D7
+          INDEX@ DUP                             * 531D2
           CODE                                   * 531DC  559 nibbles
             GOSBVL  POP#                         * 531E6
             GOSUB   SUB_5356F                    * 531ED
@@ -1339,10 +887,7 @@ L_53404:
             A=C     A                            * 5340F
             PC=(A)                               * 53411
           ENDCODE                                * 53415
-          DUP                                    * 53415
-          1PUTLAM                                * 5341A
-          ITE                                    * 5341F
-          ISTOPSTO                               * 53424
+          DUP 1PUTLAM ITE ISTOPSTO               * 53415
           CODE                                   * 53429  79 nibbles
             GOSBVL  POP#                         * 53433
             GOSUB   SUB_5356F                    * 5343A
@@ -1371,8 +916,7 @@ L_53470:
             PC=(A)                               * 5347E
           ENDCODE                                * 53482
           LOOP                                   * 53482
-          1GETLAM                                * 53487
-          ?SKIP                                  * 5348C
+          1GETLAM ?SKIP                          * 53487
           CODE                                   * 53491  38 nibbles
             AD1EX                                * 5349B
             GOSUB   SUB_53647                    * 5349E
@@ -1497,17 +1041,9 @@ SUB_535D1:
 
 * refs (3): 52D85 52F1E 52F57
 OBJ_535D8:
-        ::                                       * 535D8
-          OBJ_4241B                              * 535DD
-          4GETLAM                                * 535E2
-          CRUNCH                                 * 535E7
-          CK1NoBlame                             * 535EC
-          DUP                                    * 535F1
-          TYPEREAL?                              * 535F6
-          ?SKIP                                  * 535FB
+        :: OBJ_4241B 4GETLAM CRUNCH CK1NoBlame DUP TYPEREAL? ?SKIP * 535D8
           SETNONERAL                             * 53600
-          OBJ_4241B                              * 53605
-        ;                                        * 5360A
+          OBJ_4241B ;                            * 53605
         ASSEMBLE
 
 * refs (12): 52D59 52DD4 52E9F 52F36 52FD9 53287 ...
@@ -1732,12 +1268,8 @@ L_53832:
 
 * refs (3): 1C2A6 1C6ED 40062
 ChkDelLastArg:
-        ::                                       * 53842
-          BINT55                                 * 53847
-          TestSysFlag                            * 5384C
-          NOT?SEMI                               * 53851
-          DelLastArg                             * 53856
-        ;                                        * 5385B
+        :: BINT55 TestSysFlag NOT?SEMI           * 53842
+          DelLastArg ;                           * 53856
 
 * refs (3): 40C7B C644E C6462
 HISTON?:
@@ -1761,10 +1293,7 @@ DisLastCmd:
 
 * refs (1): C646C
 DisLastCmd!:
-        ::                                       * 5388A
-          DisLastCmd                             * 5388F
-          DelMemComLine                          * 53894
-        ;                                        * 53899
+        :: DisLastCmd DelMemComLine ;            * 5388A
 
 * refs (2): 17D1E 53894
 DelMemComLine:
@@ -2093,68 +1622,41 @@ NumbMode:
 * ->
 * refs (12): 157D8 15819 2867A 2869D 286D9 5A045 ...
 CLRNUM:
-        ::                                       * 53B88
-          BINT3                                  * 53B8D
-          ClrSysFlag                             * 53B92
-        ;                                        * 53B97
+        :: BINT3 ClrSysFlag ;                    * 53B88
 
 * ->
 * refs (12): 15797 1580A 1582D 286C0 286F2 5A086 ...
 SETNUM:
-        ::                                       * 53B9C
-          BINT3                                  * 53BA1
-          SetSysFlag                             * 53BA6
-        ;                                        * 53BAB
+        :: BINT3 SetSysFlag ;                    * 53B9C
 
 * -> flag
 * refs (15): 15792 1F293 1F744 1F78F 1F7DA 20DC4 ...
 NOTNUM?:
-        ::                                       * 53BB0
-          BINT3                                  * 53BB5
-          TestSysFlag                            * 53BBA
-          NOT                                    * 53BBF
-        ;                                        * 53BC4
+        :: BINT3 TestSysFlag NOT ;               * 53BB0
 
 * -> flag
 * refs (10): 51500 56C22 56C81 57793 577F2 5B4AB ...
 DEG?:
-        ::                                       * 53BC9
-          rad?;fs?(-18)?                         * 53BCE
-          ORNOT                                  * 53BD3
-        ;                                        * 53BD8
+        :: rad?;fs?(-18)? ORNOT ;                * 53BC9
 
 * -> flag
 * refs (15): 514E1 53BF6 54E61 56C18 56C77 5775C ...
 RAD?:
-        ::                                       * 53BDD
-          BINT17                                 * 53BE2
-          TestSysFlag                            * 53BE7
-        ;                                        * 53BEC
+        :: BINT17 TestSysFlag ;                  * 53BDD
 
 * refs (2): 53BCE C6272
 rad?;fs?(-18)?:
-        ::                                       * 53BF1
-          RAD?                                   * 53BF6
-          BINT18                                 * 53BFB
-          TestSysFlag                            * 53C00
-        ;                                        * 53C05
+        :: RAD? BINT18 TestSysFlag ;             * 53BF1
 
 * -> flag
 * refs (1): 5EA77
 NOTCONST?:
-        ::                                       * 53C0A
-          BINT2                                  * 53C0F
-          TestSysFlag                            * 53C14
-          NOT                                    * 53C19
-        ;                                        * 53C1E
+        :: BINT2 TestSysFlag NOT ;               * 53C0A
 
 * -> flag
 * refs (5): 57644 592F5 86D4E 86DDA 86E20
 PRSOL?:
-        ::                                       * 53C23
-          BINT1                                  * 53C28
-          TestSysFlag                            * 53C2D
-        ;                                        * 53C32
+        :: BINT1 TestSysFlag ;                   * 53C23
 
 * ->
 * refs (1): 1C599
@@ -2204,10 +1706,7 @@ L_53C62:
 * % ->
 * refs (2): 1C5D4 D13C7
 XEQSTWS:
-        ::                                       * 53C96
-          COERCE                                 * 53C9B
-          dostws                                 * 53CA0
-        ;                                        * 53CA5
+        :: COERCE dostws ;                       * 53C96
 
 * # ->
 * refs (2): 1C5E8 53CA0
@@ -2239,10 +1738,7 @@ L_53CCE:
 * -> %
 * refs (1): 1C608
 XEQRCWS:
-        ::                                       * 53CF0
-          WORDSIZE                               * 53CF5
-          UNCOERCE                               * 53CFA
-        ;                                        * 53CFF
+        :: WORDSIZE UNCOERCE ;                   * 53CF0
 
 * hxs hxs' -> hxs''
 * refs (1): 1E79C

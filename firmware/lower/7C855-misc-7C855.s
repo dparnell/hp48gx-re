@@ -537,291 +537,73 @@ OBJ_7CD79:
 
 * refs (5): 93806 97D80 9802A 98086 98712
 OBJ_7CD7E:
-          ::                                     * 7CD7E
-            DUP                                  * 7CD83
-            DIMLIMITS                            * 7CD88
-            OVER                                 * 7CD8D
-            TYPERARRY?                           * 7CD92
-            ITE                                  * 7CD97
-            %%0                                  * 7CD9C
-            ((0,0))                              * 7CDA1
-            MAKEARRY                             * 7CDA6
-            OBJ_7CDBF                            * 7CDAB
-          ;                                      * 7CDB0
-          SWAPDROP                               * 7CDB5
-        ;                                        * 7CDBA
+          :: DUP DIMLIMITS OVER TYPERARRY? ITE %%0 ((0,0)) * 7CD7E
+            MAKEARRY OBJ_7CDBF ;                 * 7CDA6
+          SWAPDROP ;                             * 7CDB5
 
 * refs (4): 7CDAB 93C6E 951E4 CAE2F
 OBJ_7CDBF:
-        ::                                       * 7CDBF
-          OVERARSIZE                             * 7CDC4
-          OBJ_7D4C5                              * 7CDC9
-        ;                                        * 7CDCE
+        :: OVERARSIZE OBJ_7D4C5 ;                * 7CDBF
 
 * refs (4): C80B1 C80CA C96BC C96D5
 OBJ_7CDD3:
-        ::                                       * 7CDD3
-          DUP%0CON                               * 7CDD8
-          SWAP                                   * 7CDDD
+        :: DUP%0CON SWAP                         * 7CDD3
 
 * refs (10): 93947 93A73 93A92 95220 954EB 955ED ...
 OBJ_7CDE2:
-          ::                                     * 7CDE2
-            OVERARSIZE                           * 7CDE7
-            OBJ_7D5CF                            * 7CDEC
-            DROP                                 * 7CDF1
-          ;                                      * 7CDF6
-        ;                                        * 7CDFB
+          :: OVERARSIZE OBJ_7D5CF DROP ; ;       * 7CDE2
 
 * refs (4): C7A4B C7F53 C933F CAA8F
 OBJ_7CE00:
-        ::                                       * 7CE00
-          SWAP                                   * 7CE05
-          %>%%-                                  * 7CE0A
-          2DUP                                   * 7CE0F
-          %%>                                    * 7CE14
-          case                                   * 7CE19
-          SWAPDROP                               * 7CE1E
-          OBJ_37B30                              * 7CE23
-          OBJ_37DA0                              * 7CE28
-        ;                                        * 7CE2D
+        :: SWAP %>%%- 2DUP %%> case SWAPDROP     * 7CE00
+          OBJ_37B30 OBJ_37DA0 ;                  * 7CE23
 
 * refs (4): C7A50 C7F58 C9344 CAA94
 OBJ_7CE32:
-        ::                                       * 7CE32
-          SWAP                                   * 7CE37
-          %>%%-                                  * 7CE3C
-          2DUP                                   * 7CE41
-          %%<                                    * 7CE46
-          case                                   * 7CE4B
-          SWAPDROP                               * 7CE50
-          OBJ_37B30                              * 7CE55
-          %%MAX                                  * 7CE5A
-        ;                                        * 7CE5F
+        :: SWAP %>%%- 2DUP %%< case SWAPDROP     * 7CE32
+          OBJ_37B30 %%MAX ;                      * 7CE55
 
 * refs (3): 97AAC 97B66 97C80
 OBJ_7CE64:
-        ::                                       * 7CE64
-          %%0                                    * 7CE69
-          SWAP                                   * 7CE6E
-          ONE_DO_ARRY                            * 7CE73
-          INDEX@                                 * 7CE78
-          OBJ_372EF                              * 7CE7D
-          B%ABS                                  * 7CE82
-          ROT                                    * 7CE87
-          %%+                                    * 7CE8C
-          SWAP                                   * 7CE91
-          NextInArray                            * 7CE96
-          SWAP                                   * 7CE9B
-        ;                                        * 7CEA0
+        :: %%0 SWAP ONE_DO_ARRY INDEX@ OBJ_372EF B%ABS ROT %%+ SWAP * 7CE64
+          NextInArray SWAP ;                     * 7CE96
 
 * refs (8): 9242A 92885 979DC 97D8A 97EFD 97FFC ...
 OBJ_7CEA5:
-        ::                                       * 7CEA5
-          #       FFF                            * 7CEAA  4095
-          OVER#<                                 * 7CEB4
-          case                                   * 7CEB9
-          doerr501                               * 7CEBE
-          DUP                                    * 7CEC3
-          #8*                                    * 7CEC8
-          !MAKEHXS                               * 7CECD
-          2NULLLAM{}                             * 7CED2
-          BIND                                   * 7CED7
-          DUP                                    * 7CEDC
-          OBJ_37A4F                              * 7CEE1
-          #ZERO#ONE                              * 7CEE6
-          3NULLLAM{}                             * 7CEEB
-          BIND                                   * 7CEF0
-          5GETLAM                                * 7CEF5
-          OBJ_7D28D                              * 7CEFA
-          OBJ_357F0                              * 7CEFF
-          BEGIN                                  * 7CF04
-          1GETLAM                                * 7CF09
-          DUP                                    * 7CF0E
-          OBJ_376C1                              * 7CF13
-          5GETLAM                                * 7CF18
-          OBJ_37013                              * 7CF1D
-          2DUP#=                                 * 7CF22
-          ?SKIP                                  * 7CF27
-          ::                                     * 7CF2C
-            SWAPCOLUMNS                          * 7CF31
-            3GETLAM                              * 7CF36
-            OBJ_3798C                            * 7CF3B
-            ITE                                  * 7CF40
-            %%CHS                                * 7CF45
-            ::                                   * 7CF4A
-              C%%CHS                             * 7CF4F
-              C%%CONJ                            * 7CF54
-            ;                                    * 7CF59
-            3PUTLAM                              * 7CF5E
-          ;                                      * 7CF63
-          DROP                                   * 7CF68
-          5GETLAM                                * 7CF6D
-          FALSE                                  * 7CF72
-          OBJ_7D3CB                              * 7CF77
-          3GETLAM                                * 7CF7C
-          OBJ_37941                              * 7CF81
-          2GETLAM                                * 7CF86
-          OBJ_377DD                              * 7CF8B
-          2PUTLAM                                * 7CF90
-          3PUTLAM                                * 7CF95
-          1GETLAM                                * 7CF9A
-          6GETLAM                                * 7CF9F
-          #<                                     * 7CFA4
-          WHILE                                  * 7CFA9
-          ::                                     * 7CFAE
-            1GETLAM                              * 7CFB3
-            #1+                                  * 7CFB8
-            1PUTLAM                              * 7CFBD
-            ONESWAP                              * 7CFC2
-            1GETLAM                              * 7CFC7
-            ONE_DO                               * 7CFCC
-            OVER                                 * 7CFD1
-            1GETLAM                              * 7CFD6
-            2DUP                                 * 7CFDB
-            #1-+                                 * 7CFE0
-            4UNROLL                              * 7CFE5
-            INDEX@                               * 7CFEA
-            #1-                                  * 7CFEF
-            OBJ_7C855                            * 7CFF4
-            SWAP3PICK                            * 7CFF9
-            OBJ_372EF                            * 7CFFE
-            ROT                                  * 7D003
-            L%-                                  * 7D008
-            SWAPINDEX@                           * 7D00D
-            5GETLAM                              * 7D012
-            TRUE                                 * 7D017
-            OBJ_7D3CB                            * 7D01C
-            ROTSWAP                              * 7D021
-            L%/                                  * 7D026
-            ROT                                  * 7D02B
-            OBJ_37361                            * 7D030
-            6GETLAM                              * 7D035
-            ROT#+SWAP                            * 7D03A
-            NextInArray                          * 7D03F
-            6GETLAM                              * 7D044
-            #1+                                  * 7D049
-            1GETLAM                              * 7D04E
-            DO                                   * 7D053
-            OVER                                 * 7D058
-            1GETLAM                              * 7D05D
-            2DUP                                 * 7D062
-            #1-+                                 * 7D067
-            4UNROLL                              * 7D06C
-            DUP#1-                               * 7D071
-            OBJ_7C855                            * 7D076
-            SWAP3PICK                            * 7D07B
-            OBJ_372EF                            * 7D080
-            ROT                                  * 7D085
-            L%-                                  * 7D08A
-            ROT                                  * 7D08F
-            OBJ_37361                            * 7D094
-            6GETLAM                              * 7D099
-            ROT#+SWAP                            * 7D09E
-            NextInArray                          * 7D0A3
-            SWAPDROP                             * 7D0A8
-          ;                                      * 7D0AD
-          REPEAT                                 * 7D0B2
-          3GETLAM                                * 7D0B7
-          2GETLAM                                * 7D0BC
-          ABND                                   * 7D0C1
-        ;                                        * 7D0C6
+        :: # FFF OVER#< case doerr501            * 7CEA5
+          DUP #8* !MAKEHXS 2NULLLAM{} BIND DUP OBJ_37A4F #ZERO#ONE * 7CEC3
+          3NULLLAM{} BIND 5GETLAM OBJ_7D28D OBJ_357F0 BEGIN 1GETLAM DUP * 7CEEB
+          OBJ_376C1 5GETLAM OBJ_37013 2DUP#= ?SKIP * 7CF13
+          :: SWAPCOLUMNS 3GETLAM OBJ_3798C ITE %%CHS * 7CF2C
+            :: C%%CHS C%%CONJ ;                  * 7CF4A
+            3PUTLAM ;                            * 7CF5E
+          DROP 5GETLAM FALSE OBJ_7D3CB 3GETLAM OBJ_37941 2GETLAM OBJ_377DD * 7CF68
+          2PUTLAM 3PUTLAM 1GETLAM 6GETLAM #< WHILE * 7CF90
+          :: 1GETLAM #1+ 1PUTLAM ONESWAP 1GETLAM ONE_DO OVER 1GETLAM 2DUP * 7CFAE
+            #1-+ 4UNROLL INDEX@ #1- OBJ_7C855 SWAP3PICK OBJ_372EF ROT L%- * 7CFE0
+            SWAPINDEX@ 5GETLAM TRUE OBJ_7D3CB ROTSWAP L%/ ROT OBJ_37361 * 7D00D
+            6GETLAM ROT#+SWAP NextInArray 6GETLAM #1+ 1GETLAM DO OVER * 7D035
+            1GETLAM 2DUP #1-+ 4UNROLL DUP#1- OBJ_7C855 SWAP3PICK OBJ_372EF * 7D05D
+            ROT L%- ROT OBJ_37361 6GETLAM ROT#+SWAP NextInArray SWAPDROP ; * 7D085
+          REPEAT 3GETLAM 2GETLAM ABND ;          * 7D0B2
 
 * refs (7): 92439 928EE 98039 C9E0F C9EF0 CA057 ...
 OBJ_7D0CB:
-        ::                                       * 7D0CB
-          3UNROLL                                * 7D0D0
-          2GETLAM                                * 7D0D5
-          ONE_DO                                 * 7D0DA
-          INDEX@                                 * 7D0DF
-          1GETLAM                                * 7D0E4
-          OBJ_36FDB                              * 7D0E9
-          2DUP#=                                 * 7D0EE
-          ?SKIP                                  * 7D0F3
+        :: 3UNROLL 2GETLAM ONE_DO INDEX@ 1GETLAM OBJ_36FDB 2DUP#= ?SKIP * 7D0CB
           SWAPCOLUMNS                            * 7D0F8
-          2DROP                                  * 7D0FD
-          NextInArray                            * 7D102
-          ROT                                    * 7D107
-          OBJ_7D11B                              * 7D10C
-          ROTROT2DROP                            * 7D111
-        ;                                        * 7D116
+          2DROP NextInArray ROT OBJ_7D11B ROTROT2DROP ; * 7D0FD
 
 * refs (4): 7D10C 97AA2 97B5C 97C76
 OBJ_7D11B:
-        ::                                       * 7D11B
-          3UNROLL                                * 7D120
-          ONEONE                                 * 7D125
-          2SWAP                                  * 7D12A
-          2GETLAM                                * 7D12F
-          #1+_ONE_DO                             * 7D134
-          SWAPINDEX@                             * 7D139
-          1GETLAM                                * 7D13E
-          TRUE                                   * 7D143
-          OBJ_7D3CB                              * 7D148
-          SWAPROT                                * 7D14D
-          6PICK                                  * 7D152
-          #1+_ONE_DO                             * 7D157
-          5PICK                                  * 7D15C
-          INDEX@                                 * 7D161
-          JINDEX@                                * 7D166
-          #1-                                    * 7D16B
-          OBJ_7C861                              * 7D170
-          SWAP                                   * 7D175
-          5PICK                                  * 7D17A
-          OBJ_372EF                              * 7D17F
-          ROT                                    * 7D184
-          L%-                                    * 7D189
-          4PICK                                  * 7D18E
-          L%/                                    * 7D193
-          5PICK                                  * 7D198
-          OBJ_37361                              * 7D19D
-          4ROLL                                  * 7D1A2
-          #1+                                    * 7D1A7
-          4UNROLL                                * 7D1AC
-          NextInArray                            * 7D1B1
-          ROTDROP                                * 7D1B6
-          4ROLL                                  * 7D1BB
-          2GETLAM                                * 7D1C0
-          #+                                     * 7D1C5
-          4UNROLL                                * 7D1CA
-          LOOP                                   * 7D1CF
-          OBJ_37B03                              * 7D1D4
-          2GETLAM                                * 7D1D9
-          DUP#1=                                 * 7D1DE
-          caseDROP                               * 7D1E3
-          DUP#1-                                 * 7D1E8
-          OVER                                   * 7D1ED
-          #*                                     * 7D1F2
-          4UNROLL                                * 7D1F7
-          DUP#1-                                 * 7D1FC
-          6PICK                                  * 7D201
-          #*                                     * 7D206
-          4UNROLL                                * 7D20B
-          ONE_DO                                 * 7D210
-          5PICK                                  * 7D215
-          ZERO_DO                                * 7D21A
-          2OVER                                  * 7D21F
-          7PICK                                  * 7D224
-          #+                                     * 7D229
-          JINDEX@                                * 7D22E
-          OBJ_7C861                              * 7D233
-          SWAP                                   * 7D238
-          4PICK                                  * 7D23D
-          OBJ_372EF                              * 7D242
-          ROT                                    * 7D247
-          L%-                                    * 7D24C
-          4PICK                                  * 7D251
-          OBJ_37361                              * 7D256
-          ROT                                    * 7D25B
-          #1-UNROT                               * 7D260
-          NextInArray                            * 7D265
-          4ROLL                                  * 7D26A
-          2GETLAM                                * 7D26F
-          OBJ_36FC4                              * 7D274
-          4UNROLL                                * 7D279
-          LOOP                                   * 7D27E
-          OBJ_37B03                              * 7D283
-        ;                                        * 7D288
+        :: 3UNROLL ONEONE 2SWAP 2GETLAM #1+_ONE_DO SWAPINDEX@ 1GETLAM TRUE * 7D11B
+          OBJ_7D3CB SWAPROT 6PICK #1+_ONE_DO 5PICK INDEX@ JINDEX@ #1- * 7D148
+          OBJ_7C861 SWAP 5PICK OBJ_372EF ROT L%- 4PICK L%/ 5PICK OBJ_37361 * 7D170
+          4ROLL #1+ 4UNROLL NextInArray ROTDROP 4ROLL 2GETLAM #+ 4UNROLL * 7D1A2
+          LOOP OBJ_37B03 2GETLAM DUP#1= caseDROP DUP#1- * 7D1CF
+          OVER #* 4UNROLL DUP#1- 6PICK #* 4UNROLL ONE_DO 5PICK ZERO_DO 2OVER * 7D1ED
+          7PICK #+ JINDEX@ OBJ_7C861 SWAP 4PICK OBJ_372EF ROT L%- 4PICK * 7D224
+          OBJ_37361 ROT #1-UNROT NextInArray 4ROLL 2GETLAM OBJ_36FC4 4UNROLL * 7D256
+          LOOP OBJ_37B03 ;                       * 7D27E
 
 * refs (2): 7CEFA 9871C
 OBJ_7D28D:
@@ -1479,28 +1261,27 @@ OBJ_7D966:
 
 * refs (6): 3C3AA 9910B B4E3F B4E64 B5084 B50A4
 N:
-          ID      N                              * 7D96B
+          ID N                                   * 7D96B
 
 * refs (7): 3C3AF 99075 9911B B4EA1 B4EC6 B50B8 ...
 I%YR:
-          ID      I%YR                           * 7D974
+          ID I%YR                                * 7D974
 
 * refs (7): 3C3B4 99085 9912B B4EE0 B4F05 B50EC ...
 PV:
-          ID      PV                             * 7D983
+          ID PV                                  * 7D983
 
 * refs (7): 3C3B9 99095 9913B B4F1F B4F44 B5120 ...
 PMT:
-          ID      PMT                            * 7D98E
+          ID PMT                                 * 7D98E
 
 * refs (6): 3C3BE 9914B B4F5E B4F83 B5154 B5174
 FV:
-          ID      FV                             * 7D99B
-        }                                        * 7D9A6
+          ID FV }                                * 7D99B
 
 * refs (9): 990AA 9915B 991F2 99234 B4F9D B5012 ...
 PYR:
-        ID      PYR                              * 7D9AB
+        ID PYR                                   * 7D9AB
         ASSEMBLE
 
 * refs (6): 99347 995BC 9971C 99D35 99DD2 99E84
@@ -1683,353 +1464,322 @@ L_7DB95:
 
 * refs (1): 1A495
 nWHEREIFTE:
-        ROMPTR  0F0 079                          * 7DBA0
+        ROMPTR 0F0 079                           * 7DBA0
 
 * refs (1): 1F03A
 nWHEREDER:
-        ROMPTR  0F0 078                          * 7DBAB
+        ROMPTR 0F0 078                           * 7DBAB
 
 * refs (1): 1F26C
 nWHEREINTG:
-        ROMPTR  0F0 07C                          * 7DBB6
+        ROMPTR 0F0 07C                           * 7DBB6
 
 * refs (1): 1F33F
 nWHERESUM:
-        ROMPTR  0F0 07D                          * 7DBC1
+        ROMPTR 0F0 07D                           * 7DBC1
 
 * refs (1): 1F42A
 nWHEREWHERE:
-        ROMPTR  0F0 07A                          * 7DBCC
+        ROMPTR 0F0 07A                           * 7DBCC
 
 nWHEREFCNAPP:
-        ROMPTR  0F0 077                          * 7DBD7
+        ROMPTR 0F0 077                           * 7DBD7
 
 * refs (1): 1AEED
 D/D*:
-        ROMPTR  0F0 098                          * 7DBE2
+        ROMPTR 0F0 098                           * 7DBE2
 
 * refs (1): 1AC84
 D/D+:
-        ROMPTR  0F0 099                          * 7DBED
+        ROMPTR 0F0 099                           * 7DBED
 
 * refs (1): 1ADD6
 D/D-:
-        ROMPTR  0F0 09A                          * 7DBF8
+        ROMPTR 0F0 09A                           * 7DBF8
 
 * refs (1): 1AFE6
 D/D/:
-        ROMPTR  0F0 09B                          * 7DC03
+        ROMPTR 0F0 09B                           * 7DC03
 
 * refs (2): 85FFC 86056
 derquot:
-        ::                                       * 7DC0E
-          psh                                    * 7DC13
-          dup                                    * 7DC18
-          OBJ_56D01                              * 7DC1D
-          addt*                                  * 7DC22
-          pshtop&                                * 7DC27
-          {                                      * 7DC2C
-            %2                                   * 7DC31
-            x^                                   * 7DC36
-            x/                                   * 7DC3B
-          }                                      * 7DC40
-          INNERCOMP                              * 7DC45
-          2top&                                  * 7DC4A
-        ;                                        * 7DC4F
+        :: psh dup OBJ_56D01 addt* pshtop&       * 7DC0E
+          { %2 x^ x/ } INNERCOMP 2top& ;         * 7DC2C
 
 * refs (4): 85EDF 85EFD 86024 86047
 derprod1:
-        ::                                       * 7DC54
-          psh                                    * 7DC59
-          OBJ_56D01                              * 7DC5E
-          pshtop&                                * 7DC63
-          addt*                                  * 7DC68
-        ;                                        * 7DC6D
+        :: psh OBJ_56D01 pshtop& addt* ;         * 7DC54
 
 * refs (1): 1A97D
 D/D=:
-        ROMPTR  0F0 09D                          * 7DC72
+        ROMPTR 0F0 09D                           * 7DC72
 
 * refs (1): 1AA60
 D/DABS:
-        ROMPTR  0F0 09E                          * 7DC7D
+        ROMPTR 0F0 09E                           * 7DC7D
 
 * refs (1): 860B5
 easyabs:
-        ::                                       * 7DC88
-          DROP                                   * 7DC8D
-          Cr                                     * 7DC92
-          xSIGN                                  * 7DC97
-        ;                                        * 7DC9C
+        :: DROP Cr xSIGN ;                       * 7DC88
 
 * refs (1): 1B75C
 D/DACOS:
-        ROMPTR  0F0 09F                          * 7DCA1
+        ROMPTR 0F0 09F                           * 7DCA1
 
 * refs (1): 1B85D
 D/DACOSH:
-        ROMPTR  0F0 0A0                          * 7DCAC
+        ROMPTR 0F0 0A0                           * 7DCAC
 
 * refs (1): 1BA6A
 D/DALOG:
-        ROMPTR  0F0 0A1                          * 7DCB7
+        ROMPTR 0F0 0A1                           * 7DCB7
 
 * refs (1): 1B308
 D/DARG:
-        ROMPTR  0F0 0A2                          * 7DCC2
+        ROMPTR 0F0 0A2                           * 7DCC2
 
 * refs (1): 1B6D1
 D/DASIN:
-        ROMPTR  0F0 0A3                          * 7DCCD
+        ROMPTR 0F0 0A3                           * 7DCCD
 
 * refs (1): 1B818
 D/DASINH:
-        ROMPTR  0F0 0A4                          * 7DCD8
+        ROMPTR 0F0 0A4                           * 7DCD8
 
 * refs (1): 1B7C9
 D/DATAN:
-        ROMPTR  0F0 0A5                          * 7DCE3
+        ROMPTR 0F0 0A5                           * 7DCE3
 
 * refs (1): 1B8CF
 D/DATANH:
-        ROMPTR  0F0 0A6                          * 7DCEE
+        ROMPTR 0F0 0A6                           * 7DCEE
 
 * refs (1): 1AA07
 D/DCHS:
-        ::                                       * 7DCF9
-          OBJ_56CD1                              * 7DCFE
-          OBJ_56BEB                              * 7DD03
-          Cr                                     * 7DD08
-          xNEG                                   * 7DD0D
-        ;                                        * 7DD12
+        :: OBJ_56CD1 OBJ_56BEB Cr xNEG ;         * 7DCF9
 
 * refs (1): 1AAA5
 D/DCONJ:
-        ::                                       * 7DD17
-          OBJ_56CD1                              * 7DD1C
-          OBJ_56BEB                              * 7DD21
-          Cr                                     * 7DD26
-          xCONJ                                  * 7DD2B
-        ;                                        * 7DD30
+        :: OBJ_56CD1 OBJ_56BEB Cr xCONJ ;        * 7DD17
 
 * refs (1): 1B53C
 D/DCOS:
-        ROMPTR  0F0 0A7                          * 7DD35
+        ROMPTR 0F0 0A7                           * 7DD35
 
 * refs (1): 1B633
 D/DCOSH:
-        ROMPTR  0F0 0A8                          * 7DD40
+        ROMPTR 0F0 0A8                           * 7DD40
 
 * refs (2): 1B932 1BAE5
 D/DEXP:
-        ROMPTR  0F0 0A9                          * 7DD4B
+        ROMPTR 0F0 0A9                           * 7DD4B
 
 * refs (1): 1B2B9
 D/DINV:
-        ROMPTR  0F0 0AA                          * 7DD56
+        ROMPTR 0F0 0AA                           * 7DD56
 
 * refs (1): 1B97C
 D/DLN:
-        ROMPTR  0F0 0AB                          * 7DD61
+        ROMPTR 0F0 0AB                           * 7DD61
 
 * refs (1): 1BAAF
 D/DLNP1:
-        ROMPTR  0F0 0AC                          * 7DD6C
+        ROMPTR 0F0 0AC                           * 7DD6C
 
 * refs (1): 1B9F3
 D/DLOG:
-        ROMPTR  0F0 0AD                          * 7DD77
+        ROMPTR 0F0 0AD                           * 7DD77
 
 D/DIFTE:
-        ROMPTR  0F0 0AE                          * 7DD82
+        ROMPTR 0F0 0AE                           * 7DD82
 
 * refs (1): 1B4E3
 D/DSIN:
-        ROMPTR  0F0 0AF                          * 7DD8D
+        ROMPTR 0F0 0AF                           * 7DD8D
 
 * refs (1): 1B5E4
 D/DSINH:
-        ROMPTR  0F0 0B0                          * 7DD98
+        ROMPTR 0F0 0B0                           * 7DD98
 
 * refs (1): 1B467
 D/DSQ:
-        ROMPTR  0F0 0B1                          * 7DDA3
+        ROMPTR 0F0 0B1                           * 7DDA3
 
 * refs (1): 1B3B5
 D/DSQRT:
-        ROMPTR  0F0 0B2                          * 7DDAE
+        ROMPTR 0F0 0B2                           * 7DDAE
 
 * refs (1): 1B595
 D/DTAN:
-        ROMPTR  0F0 0B3                          * 7DDB9
+        ROMPTR 0F0 0B3                           * 7DDB9
 
 * refs (1): 1B682
 D/DTANH:
-        ROMPTR  0F0 0B4                          * 7DDC4
+        ROMPTR 0F0 0B4                           * 7DDC4
 
 * refs (1): 1B0D2
 D/D^:
-        ROMPTR  0F0 0B5                          * 7DDCF
+        ROMPTR 0F0 0B5                           * 7DDCF
 
 * refs (2): 8672C 8674A
 D/D^X:
-        ROMPTR  0F0 0B6                          * 7DDDA
+        ROMPTR 0F0 0B6                           * 7DDDA
 
 * refs (2): 8670E 86754
 D/D^Y:
-        ROMPTR  0F0 0B7                          * 7DDE5
+        ROMPTR 0F0 0B7                           * 7DDE5
 
 D/DDER:
-        ROMPTR  0F0 0B8                          * 7DDF0
+        ROMPTR 0F0 0B8                           * 7DDF0
 
 * refs (1): 1F420
 D/DWHERE:
-        ROMPTR  0F0 0B9                          * 7DDFB
+        ROMPTR 0F0 0B9                           * 7DDFB
 
 D/DINTEGRAL:
-        ROMPTR  0F0 0BA                          * 7DE06
+        ROMPTR 0F0 0BA                           * 7DE06
 
 D/DSUM:
-        ROMPTR  0F0 0BB                          * 7DE11
+        ROMPTR 0F0 0BB                           * 7DE11
 
 * refs (1): 1F5EC
 D/DAPPLY:
-        ROMPTR  0F0 0BC                          * 7DE1C
+        ROMPTR 0F0 0BC                           * 7DE1C
 
 * refs (1): 1B2C8
 nINTGINV:
-        ROMPTR  0F0 012                          * 7DE27
+        ROMPTR 0F0 012                           * 7DE27
 
 * refs (1): 1B361
 nINTGSIGN:
-        ROMPTR  0F0 018                          * 7DE32
+        ROMPTR 0F0 018                           * 7DE32
 
 * refs (1): 1B3BF
 nINTGSQRT:
-        ROMPTR  0F0 015                          * 7DE3D
+        ROMPTR 0F0 015                           * 7DE3D
 
 * refs (1): 1B471
 nINTGSQ:
-        ROMPTR  0F0 014                          * 7DE48
+        ROMPTR 0F0 014                           * 7DE48
 
 * refs (1): 1B4F2
 nINTGSIN:
-        ROMPTR  0F0 000                          * 7DE53
+        ROMPTR 0F0 000                           * 7DE53
 
 * refs (1): 1B54B
 nINTGCOS:
-        ROMPTR  0F0 002                          * 7DE5E
+        ROMPTR 0F0 002                           * 7DE5E
 
 * refs (1): 1B5A4
 nINTGTAN:
-        ROMPTR  0F0 004                          * 7DE69
+        ROMPTR 0F0 004                           * 7DE69
 
 * refs (1): 1B5F3
 nINTGSINH:
-        ROMPTR  0F0 008                          * 7DE74
+        ROMPTR 0F0 008                           * 7DE74
 
 * refs (1): 1B642
 nINTGCOSH:
-        ROMPTR  0F0 00B                          * 7DE7F
+        ROMPTR 0F0 00B                           * 7DE7F
 
 * refs (1): 1B691
 nINTGTANH:
-        ROMPTR  0F0 00D                          * 7DE8A
+        ROMPTR 0F0 00D                           * 7DE8A
 
 * refs (1): 1B6E0
 nINTGASIN:
-        ROMPTR  0F0 005                          * 7DE95
+        ROMPTR 0F0 005                           * 7DE95
 
 * refs (1): 1B76B
 nINTGACOS:
-        ROMPTR  0F0 006                          * 7DEA0
+        ROMPTR 0F0 006                           * 7DEA0
 
 * refs (1): 1B7D8
 nINTGATAN:
-        ROMPTR  0F0 007                          * 7DEAB
+        ROMPTR 0F0 007                           * 7DEAB
 
 * refs (1): 1B98B
 nINTGLN:
-        ROMPTR  0F0 010                          * 7DEB6
+        ROMPTR 0F0 010                           * 7DEB6
 
 * refs (1): 1BA02
 nINTGLOG:
-        ROMPTR  0F0 011                          * 7DEC1
+        ROMPTR 0F0 011                           * 7DEC1
 
 * refs (1): 1BA79
 nINTGALOG:
-        ROMPTR  0F0 00F                          * 7DECC
+        ROMPTR 0F0 00F                           * 7DECC
 
 * refs (1): 1BAEF
 nINTGEXPM:
-        ROMPTR  0F0 00E                          * 7DED7
+        ROMPTR 0F0 00E                           * 7DED7
 
 * ->
 * refs (1): 211CB
 nCustomMenu:
-        ROMPTR  0A9 001                          * 7DEE2
+        ROMPTR 0A9 001                           * 7DEE2
 
 * refs (1): 1F533
 nCOLCTQUOTE:
-        ROMPTR  0F0 096                          * 7DEED
+        ROMPTR 0F0 096                           * 7DEED
 
 * refs (1): 56E8C
 SPLITWHERE:
-        ROMPTR  0F0 07B                          * 7DEF8
+        ROMPTR 0F0 07B                           * 7DEF8
 
 * refs (2): 1AC8E 1ADE0
 MANMENU+-:
-        ROMPTR  0F0 0BD                          * 7DF03
+        ROMPTR 0F0 0BD                           * 7DF03
 
 * refs (2): 1AEF7 1AFF0
 MANMENU*/:
-        ROMPTR  0F0 0BE                          * 7DF0E
+        ROMPTR 0F0 0BE                           * 7DF0E
 
 * refs (1): 1B0DC
 MANMENU^:
-        ROMPTR  0F0 0BF                          * 7DF19
+        ROMPTR 0F0 0BF                           * 7DF19
 
 * refs (2): 1B93C 1BA74
 MANMENUEXP:
-        ROMPTR  0F0 0C0                          * 7DF24
+        ROMPTR 0F0 0C0                           * 7DF24
 
 * refs (2): 1B986 1B9FD
 MANMENULN:
-        ROMPTR  0F0 0C1                          * 7DF2F
+        ROMPTR 0F0 0C1                           * 7DF2F
 
 * refs (2): 1AA11 1B2C3
 MANMENUCSIV:
-        ROMPTR  0F0 0C2                          * 7DF3A
+        ROMPTR 0F0 0C2                           * 7DF3A
 
 * refs (1): 1A987
 MANMENUEQ:
-        ROMPTR  0F0 0C3                          * 7DF45
+        ROMPTR 0F0 0C3                           * 7DF45
 
 * refs (3): 1AAAF 1C80B 1C850
 MANMENUCX:
-        ROMPTR  0F0 0C4                          * 7DF50
+        ROMPTR 0F0 0C4                           * 7DF50
 
 * refs (6): 1B4ED 1B546 1B59F 1B5EE 1B63D 1B68C
 MANMENUTRG:
-        ROMPTR  0F0 0C5                          * 7DF5B
+        ROMPTR 0F0 0C5                           * 7DF5B
 
 * refs (6): 1B6DB 1B766 1B7D3 1B822 1B867 1B8D9
 MANMENUATG:
-        ROMPTR  0F0 0C6                          * 7DF66
+        ROMPTR 0F0 0C6                           * 7DF66
 
 * refs (13): 48DA1 73135 73149 7315D 73176 7318F ...
 PTYPE>PINFO:
-        ROMPTR  0F1 03B                          * 7DF71
+        ROMPTR 0F1 03B                           * 7DF71
 
 MOVEVAR:
-        ROMPTR  0B5 167                          * 7DF7C
+        ROMPTR 0B5 167                           * 7DF7C
 
 COPYVAR:
-        ROMPTR  0B5 164                          * 7DF87
+        ROMPTR 0B5 164                           * 7DF87
 
 * refs (1): 5FAC2
 OBJ_7DF92:
-        ROMPTR  0F1 041                          * 7DF92
+        ROMPTR 0F1 041                           * 7DF92
         ASSEMBLE
 L_7DF9D:
         C=DAT0  B                                * 7DF9D

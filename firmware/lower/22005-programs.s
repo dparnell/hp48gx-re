@@ -11,10 +11,8 @@
         CON(3)  #172                             * 22009  command
         RPL
 xBAUD:
-        ::                                       * 2200C
-          CK1&Dispatch                           * 22011
-          BINT1                                  * 22016
-          DOBAUD                                 * 2201B
+        :: CK1&Dispatch                          * 2200C
+          BINT1 DOBAUD                           * 22016  real
         ;                                        * 22020
 
 * n ->
@@ -24,10 +22,8 @@ xBAUD:
         CON(3)  #002                             * 22026  library
         CON(3)  #173                             * 22029  command
 xPARITY:
-        ::                                       * 2202C
-          CK1&Dispatch                           * 22031
-          BINT1                                  * 22036
-          DOPARITY                               * 2203B
+        :: CK1&Dispatch                          * 2202C
+          BINT1 DOPARITY                         * 22036  real
         ;                                        * 22040
 
 * n ->
@@ -37,10 +33,8 @@ xPARITY:
         CON(3)  #002                             * 22046  library
         CON(3)  #174                             * 22049  command
 xTRANSIO:
-        ::                                       * 2204C
-          CK1&Dispatch                           * 22051
-          BINT1                                  * 22056
-          DOTRANSIO                              * 2205B
+        :: CK1&Dispatch                          * 2204C
+          BINT1 DOTRANSIO                        * 22056  real
         ;                                        * 22060
 
 * -> msg
@@ -50,10 +44,7 @@ xTRANSIO:
         CON(3)  #002                             * 22066  library
         CON(3)  #175                             * 22069  command
 xKERRM:
-        ::                                       * 2206C
-          CK0                                    * 22071
-          DOKERRM                                * 22076
-        ;                                        * 2207B
+        :: CK0 DOKERRM ;                         * 2206C
 
 * -> nchars 0/1
 * ROMPTR 002 176 BUFLEN
@@ -62,10 +53,7 @@ xKERRM:
         CON(3)  #002                             * 22081  library
         CON(3)  #176                             * 22084  command
 xBUFLEN:
-        ::                                       * 22087
-          CK0                                    * 2208C
-          DOBUFLEN                               * 22091
-        ;                                        * 22096
+        :: CK0 DOBUFLEN ;                        * 22087
 
 * x/0 ->
 * ROMPTR 002 177 STIME
@@ -74,10 +62,8 @@ xBUFLEN:
         CON(3)  #002                             * 2209C  library
         CON(3)  #177                             * 2209F  command
 xSTIME:
-        ::                                       * 220A2
-          CK1&Dispatch                           * 220A7
-          BINT1                                  * 220AC
-          DOSTIME                                * 220B1
+        :: CK1&Dispatch                          * 220A2
+          BINT1 DOSTIME                          * 220AC  real
         ;                                        * 220B6
 
 * ->
@@ -87,10 +73,7 @@ xSTIME:
         CON(3)  #002                             * 220BC  library
         CON(3)  #178                             * 220BF  command
 xSBRK:
-        ::                                       * 220C2
-          CK0                                    * 220C7
-          DOSBRK                                 * 220CC
-        ;                                        * 220D1
+        :: CK0 DOSBRK ;                          * 220C2
 
 * $data $type -> $response
 * ROMPTR 002 179 PKT
@@ -99,204 +82,104 @@ xSBRK:
         CON(3)  #002                             * 220D7  library
         CON(3)  #179                             * 220DA  command
 xPKT:
-        ::                                       * 220DD
-          CK2&Dispatch                           * 220E2
-          BINT51                                 * 220E7
-          DOPKT                                  * 220EC
+        :: CK2&Dispatch                          * 220DD
+          BINT51 DOPKT                           * 220E7  string string
         ;                                        * 220F1
 
 * refs (2): 2231B 22339
 IOSetup:
-        ::                                       * 220F6
-          OBJ_479D4                              * 220FB
-          ?SEMI                                  * 22100
+        :: OBJ_479D4 ?SEMI                       * 220F6
 
 IOSetup!:
-          ::                                     * 22105
-            OBJ_4792F                            * 2210A
-            JstGetTHEMESG                        * 2210F
-            DISPROW1                             * 22114
-            OBJ_49A38                            * 22119
-            JstGetTHEMESG                        * 2211E
-            BINT33                               * 22123
+          :: OBJ_4792F JstGetTHEMESG DISPROW1 OBJ_49A38 JstGetTHEMESG BINT33 * 22105
             SysITE                               * 22128
 
 _IR_:
-            $       "IR"                         * 2212D
+            $ "IR"                               * 2212D
 
 _wire_:
-            $       "wire"                       * 2213B
-            !append$                             * 2214D
-            DISPROW2                             * 22152
-            OBJ_49A42                            * 22157
-            JstGetTHEMESG                        * 2215C
-            BINT35                               * 22161
-            SysITE                               * 22166
+            $ "wire" !append$ DISPROW2 OBJ_49A42 JstGetTHEMESG BINT35 SysITE * 2213B
 
 _binary_:
-            $       "binary"                     * 2216B
+            $ "binary"                           * 2216B
 
 _ASCII_:
-            $       "ASCII"                      * 22181
-            !append$                             * 22195
-            DISPROW3                             * 2219A
-            SetDA12Temp                          * 2219F
-            GetIOPAR                             * 221A4
-            SWAP                                 * 221A9
-            6UNROLL                              * 221AE
-            6UNROLL                              * 221B3
-            2DROP                                * 221B8
-            SWAP                                 * 221BD
-            OBJ_49A4C                            * 221C2
-            JstGetTHEMESG                        * 221C7
-            swap;->EditStr;+(2st)                * 221CC
-            DISPROW4                             * 221D1
-            OBJ_49A56                            * 221D6
-            JstGetTHEMESG                        * 221DB
-            SWAP                                 * 221E0
-            DUPTYPEREAL?                         * 221E5
-            ITE                                  * 221EA
+            $ "ASCII" !append$ DISPROW3 SetDA12Temp GetIOPAR SWAP 6UNROLL * 22181
+            6UNROLL 2DROP SWAP OBJ_49A4C JstGetTHEMESG swap;->EditStr;+(2st) * 221B3
+            DISPROW4 OBJ_49A56 JstGetTHEMESG SWAP DUPTYPEREAL? ITE * 221D1
             ::                                   * 221EF
               {                                  * 221F4
 
 _none_:
-                $       "none "                  * 221F9
+                $ "none "                        * 221F9
 
 _odd_:
-                $       "odd "                   * 2220D
+                $ "odd "                         * 2220D
 
 _even_:
-                $       "even "                  * 2221F
+                $ "even "                        * 2221F
 
 _mark_:
-                $       "mark "                  * 22233
-              }                                  * 22247
-              OVER                               * 2224C
-              %ABS                               * 22251
-              COERCE                             * 22256
-              #1+                                * 2225B
-              NTHELCOMP                          * 22260
-              ?SKIP                              * 22265
+                $ "mark " }                      * 22233
+              OVER %ABS COERCE #1+ NTHELCOMP ?SKIP * 2224C
 
 _space_:
-              $       "spc "                     * 2226A
-              swap;->EditStr;+(2st)              * 2227C
-            ;                                    * 22281
-            ::                                   * 22286
-              DROP                               * 2228B
+              $ "spc "                           * 2226A
+              swap;->EditStr;+(2st) ;            * 2227C
+            :: DROP                              * 22286
 
 _invalid_:
-              $       "invalid"                  * 22290
-            ;                                    * 222A8
-            !append$                             * 222AD
-            DISPROW5                             * 222B2
-            OBJ_49A60                            * 222B7
-            JstGetTHEMESG                        * 222BC
-            swap;->EditStr;+(2st)                * 222C1
-            DISPROW6                             * 222C6
-            OBJ_49A6A                            * 222CB
-            JstGetTHEMESG                        * 222D0
-            swap;->EditStr;+(2st)                * 222D5
-            DISPROW7                             * 222DA
-          ;                                      * 222DF
-          SetDA3NoCh                             * 222E4
-        ;                                        * 222E9
+              $ "invalid" ;                      * 22290
+            !append$ DISPROW5 OBJ_49A60 JstGetTHEMESG swap;->EditStr;+(2st) * 222AD
+            DISPROW6 OBJ_49A6A JstGetTHEMESG swap;->EditStr;+(2st) DISPROW7 ; * 222C6
+          SetDA3NoCh ;                           * 222E4
 
 * refs (10): 221CC 2227C 222C1 222D5 4A4A0 4A781 ...
 swap;->EditStr;+(2st):
-        ::                                       * 222EE
-          SWAP                                   * 222F3
-          EDITDECOMP$                            * 222F8
-          !append$                               * 222FD
-        ;                                        * 22302
+        :: SWAP EDITDECOMP$ !append$ ;           * 222EE
 
 SetupA/B:
-        ::                                       * 22307
-          AtUserStack                            * 2230C
-          BINT35                                 * 22311
-          TogSysFlag                             * 22316
-          IOSetup                                * 2231B
-        ;                                        * 22320
+        :: AtUserStack BINT35 TogSysFlag IOSetup ; * 22307
 
 SetupIR/W:
-        ::                                       * 22325
-          AtUserStack                            * 2232A
-          BINT33                                 * 2232F
-          TogSysFlag                             * 22334
-          IOSetup                                * 22339
-        ;                                        * 2233E
+        :: AtUserStack BINT33 TogSysFlag IOSetup ; * 22325
 
 SetupBaud:
-        ::                                       * 22343
-          AtUserStack                            * 22348
+        :: AtUserStack                           * 22343
           {                                      * 2234D
 
 * 1200
 * refs (1): B8CEB
 %1200:
-            %       1.2E3                        * 22352
+            % 1.2E3                              * 22352
 
 * 2400
 * refs (1): B8CF0
 %2400:
-            %       2.4E3                        * 22367
+            % 2.4E3                              * 22367
 
 * 4800
 * refs (1): B8CF5
 %4800:
-            %       4.8E3                        * 2237C
+            % 4.8E3                              * 2237C
 
 * 9600
 * refs (5): 2E9A3 B02CE B8521 B8535 B8CFA
 %9600:
-            %       9.6E3                        * 22391
-          }                                      * 223A6
-          BINT6                                  * 223AB
-          L_22473                                * 223B0
-          DOBAUD                                 * 223B5
-        ;                                        * 223BA
+            % 9.6E3 }                            * 22391
+          BINT6 L_22473 DOBAUD ;                 * 223AB
 
 SetupCKSM:
-        ::                                       * 223BF
-          AtUserStack                            * 223C4
-          {                                      * 223C9
-            %1                                   * 223CE
-            %2                                   * 223D3
-            %3                                   * 223D8
-          }                                      * 223DD
-          BINT2                                  * 223E2
-          L_22473                                * 223E7
-          DOCKSM                                 * 223EC
-        ;                                        * 223F1
+        :: AtUserStack                           * 223BF
+          { %1 %2 %3 } BINT2 L_22473 DOCKSM ;    * 223C9
 
 SetupParit:
-        ::                                       * 223F6
-          AtUserStack                            * 223FB
-          {                                      * 22400
-            %0_2A2B4                             * 22405
-            %1                                   * 2240A
-            %2                                   * 2240F
-            %3                                   * 22414
-            %4                                   * 22419
-          }                                      * 2241E
-          BINT5                                  * 22423
-          L_22473                                * 22428
-          DOPARITY                               * 2242D
-        ;                                        * 22432
+        :: AtUserStack                           * 223F6
+          { %0_2A2B4 %1 %2 %3 %4 } BINT5 L_22473 DOPARITY ; * 22400
 
 SetupTrans:
-        ::                                       * 22437
-          AtUserStack                            * 2243C
-          {                                      * 22441
-            %0_2A2B4                             * 22446
-            %1                                   * 2244B
-            %2                                   * 22450
-            %3                                   * 22455
-          }                                      * 2245A
-          BINT1                                  * 2245F
-          L_22473                                * 22464
-          DOTRANSIO                              * 22469
-        ;                                        * 2246E
+        :: AtUserStack                           * 22437
+          { %0_2A2B4 %1 %2 %3 } BINT1 L_22473 DOTRANSIO ; * 22441
 
 L_22473:
         CON(5)  DOCOL                            * 22473  address (the code jumps or points through it)
@@ -338,12 +221,9 @@ INPUT:
 * ROMPTR 002 17A INPUT
 * refs (1): 189EA
 xINPUT:
-        ::                                       * 224CA
-          CK2&Dispatch                           * 224CF
-          BINT51                                 * 224D4
-          input(2st)                             * 224D9
-          BINT53                                 * 224DE
-          input(st,li)                           * 224E3
+        :: CK2&Dispatch                          * 224CA
+          BINT51 input(2st)                      * 224D4  string string
+          BINT53 input(st,li)                    * 224DE  string list
         ;                                        * 224E8
 
 * obj key -> 'SKEY' ->
@@ -353,10 +233,8 @@ xINPUT:
         CON(3)  #002                             * 224EE  library
         CON(3)  #17B                             * 224F1  command
 xASN:
-        ::                                       * 224F4
-          CK2&Dispatch                           * 224F9
-          BINT1                                  * 224FE
-          XEQAsnKey                              * 22503
+        :: CK2&Dispatch                          * 224F4
+          BINT1 XEQAsnKey                        * 224FE  real
         ;                                        * 22508
 
 * {ob key ...} -> {'S' ob key ...} -> 'S' ->
@@ -366,14 +244,10 @@ xASN:
         CON(3)  #002                             * 2250E  library
         CON(3)  #17C                             * 22511  command
 xSTOKEYS:
-        ::                                       * 22514
-          CK1&Dispatch                           * 22519
-          BINT5                                  * 2251E
-          Ck&AsnUKeys                            * 22523
-          BINT6                                  * 22528
-          StoKeys(nm)                            * 2252D
-          BINT7                                  * 22532
-          StoKeys(nm)                            * 22537
+        :: CK1&Dispatch                          * 22514
+          BINT5 Ck&AsnUKeys                      * 2251E  list
+          BINT6 StoKeys(nm)                      * 22528  name
+          BINT7 StoKeys(nm)                      * 22532  local
         ;                                        * 2253C
 
 * rc.p -> { rc.p ... n } -> 0 -> 'S' ->
@@ -383,16 +257,11 @@ xSTOKEYS:
         CON(3)  #002                             * 22542  library
         CON(3)  #17D                             * 22545  command
 xDELKEYS:
-        ::                                       * 22548
-          CK1&Dispatch                           * 2254D
-          BINT1                                  * 22552
-          Ck&ClrUKey                             * 22557
-          BINT5                                  * 2255C
-          XEQDelKeys                             * 22561
-          BINT6                                  * 22566
-          DelKeys(nm)                            * 2256B
-          BINT7                                  * 22570
-          DelKeys(nm)                            * 22575
+        :: CK1&Dispatch                          * 22548
+          BINT1 Ck&ClrUKey                       * 22552  real
+          BINT5 XEQDelKeys                       * 2255C  list
+          BINT6 DelKeys(nm)                      * 22566  name
+          BINT7 DelKeys(nm)                      * 22570  local
         ;                                        * 2257A
 
 * -> {ob ... key ...} -> {S ob ... key ...}
@@ -402,18 +271,12 @@ xDELKEYS:
         CON(3)  #002                             * 22580  library
         CON(3)  #17E                             * 22583  command
 xRCLKEYS:
-        ::                                       * 22586
-          CK0                                    * 2258B
-          XEQRclKeys                             * 22590
-          NonUsrKeyOK?                           * 22595
-          NOT?SEMI                               * 2259A
+        :: CK0 XEQRclKeys NonUsrKeyOK? NOT?SEMI  * 22586
           '                                      * 2259F
 
 * ID S
 ID_S:
-          ID      S                              * 225A4
-          >HCOMP                                 * 225AD
-        ;                                        * 225B2
+          ID S >HCOMP ;                          * 225A4
 
 * ob tag -> :tag:ob
 * ROMPTR 002 17F →TAG
@@ -422,36 +285,23 @@ ID_S:
         CON(3)  #002                             * 225B8  library
         CON(3)  #17F                             * 225BB  command
 x->TAG:
-        ::                                       * 225BE
-          CK2&Dispatch                           * 225C3
-          BINT3                                  * 225C8
-          USER$>TAG                              * 225CD
-          BINT6                                  * 225D2
-          ID>TAG                                 * 225D7
-          BINT7                                  * 225DC
-          ID>TAG                                 * 225E1
-          BINT1                                  * 225E6
-          %>TAG                                  * 225EB
+        :: CK2&Dispatch                          * 225BE
+          BINT3 USER$>TAG                        * 225C8  string
+          BINT6 ID>TAG                           * 225D2  name
+          BINT7 ID>TAG                           * 225DC  local
+          BINT1 %>TAG                            * 225E6  real
         ;                                        * 225F0
 
 * ob $tag -> tagged
 * refs (1): 225CD
 USER$>TAG:
-        ::                                       * 225F5
-          DUPLEN$                                * 225FA
-          BINT255d                               * 225FF
-          #>case                                 * 22604
-          SETSIZEERR                             * 22609
-          >TAG                                   * 2260E
-        ;                                        * 22613
+        :: DUPLEN$ BINT255d #>case SETSIZEERR    * 225F5
+          >TAG ;                                 * 2260E
 
 * ob % -> tagged
 * refs (1): 225EB
 %>TAG:
-        ::                                       * 22618
-          DECOMP$                                * 2261D
-          >TAG                                   * 22622
-        ;                                        * 22627
+        :: DECOMP$ >TAG ;                        * 22618
 
 * tag:obj -> obj
 * ROMPTR 002 180 DTAG
@@ -460,12 +310,10 @@ USER$>TAG:
         CON(3)  #002                             * 2262D  library
         CON(3)  #180                             * 22630  command
 xDTAG:
-        ::                                       * 22633
-          OBJ_214FB                              * 22638
-        ;                                        * 2263D
+        :: OBJ_214FB ;                           * 22633
 
 LIB002.hash:
-        ACPTR   L_7633B Reset                    * 22642
+        ACPTR L_7633B Reset                      * 22642
 
 LIB002.link:
         CON(5)  DOHSTR                           * 22651  link table of library 002
@@ -872,7 +720,7 @@ LIB700:
         RPL
 
 LIB700.hash:
-        ACPTR   L_7612D Reset                    * 22DFE
+        ACPTR L_7612D Reset                      * 22DFE
 
 LIB700.link:
         CON(5)  DOHSTR                           * 22E0D  link table of library 700
@@ -916,15 +764,13 @@ LIB700.link:
         CON(3)  #700                             * 22EBD  library
         CON(3)  #000                             * 22EC0  command
 xIF:
-        ::                                       * 22EC3
-          CK0ATTNABORT                           * 22EC8
-        ;                                        * 22ECD
+        :: CK0ATTNABORT ;                        * 22EC3
 
 * slots of 700 000 (derivative, inverse, ...: used by the symbolic code)
         CON(5)  OBJ_23BD2                        * 22ED2  slot 0
 
 _IF-prompt_:
-        $       "IF-prompt"                      * 22ED7  slot 1
+        $ "IF-prompt"                            * 22ED7  slot 1
 
 * 0/1 ->
 * ROMPTR 700 001 THEN
@@ -933,12 +779,9 @@ _IF-prompt_:
         CON(3)  #700                             * 22EF4  library
         CON(3)  #001                             * 22EF7  command
 xTHEN:
-        ::                                       * 22EFA
-          CK1&Dispatch                           * 22EFF
-          BINT1                                  * 22F04
-          then(r)                                * 22F09
-          BINT10                                 * 22F0E
-          then(ex)                               * 22F13
+        :: CK1&Dispatch                          * 22EFA
+          BINT1 then(r)                          * 22F04  real
+          BINT10 then(ex)                        * 22F0E  name|local|algebraic
         ;                                        * 22F18
 
 * slots of 700 001 (derivative, inverse, ...: used by the symbolic code)
@@ -946,48 +789,28 @@ xTHEN:
 
 * refs (1): 22F09
 then(r):
-        ::                                       * 22F22  slot 1
-          j%0=case                               * 22F27
-          OBJ_22F3B                              * 22F2C
-          OBJ_4241B                              * 22F31
-        ;                                        * 22F36
+        :: j%0=case OBJ_22F3B                    * 22F22  slot 1
+          OBJ_4241B ;                            * 22F31
 
 * refs (3): 22F2C 237DF 5E050
 OBJ_22F3B:
-        ::                                       * 22F3B  slot 2
-          RSKIP                                  * 22F40
-          COLASKIP                               * 22F45
-        ;                                        * 22F4A
+        :: RSKIP COLASKIP ;                      * 22F3B  slot 2
 
 * refs (1): 22F13
 then(ex):
-        ::                                       * 22F4F  slot 3
-          SYMCRUNCH1                             * 22F54
-          COLA                                   * 22F59
-          xTHEN                                  * 22F5E
+        :: SYMCRUNCH1 COLA xTHEN                 * 22F4F  slot 3
         ;                                        * 22F63
 
 * ob -> %
 * refs (9): 22F54 22F95 230A8 2316C 23218 233AD ...
 SYMCRUNCH1:
-        ::                                       * 22F68  slot 4
-          DUPTYPEIDNT?                           * 22F6D
-          IT                                     * 22F72
-          XEQRCL                                 * 22F77
-          CRUNCH                                 * 22F7C
-        ;                                        * 22F81
+        :: DUPTYPEIDNT? IT XEQRCL                * 22F68  slot 4
+          CRUNCH ;                               * 22F7C
 
 * ob1 ob2 -> % ob2
 * refs (4): 1A518 23185 23231 5691C
 SYMCRUNCH2:
-        ::                                       * 22F86  slot 5
-          SWAP                                   * 22F8B
-          CK1NOLASTWD                            * 22F90
-          SYMCRUNCH1                             * 22F95
-          DEPTH                                  * 22F9A
-          #>1                                    * 22F9F
-          ?SWAP                                  * 22FA4
-        ;                                        * 22FA9
+        :: SWAP CK1NOLASTWD SYMCRUNCH1 DEPTH #>1 ?SWAP ; * 22F86  slot 5
 
 * ->
 * ROMPTR 700 002 ELSE
@@ -996,10 +819,7 @@ SYMCRUNCH2:
         CON(3)  #700                             * 22FAF  library
         CON(3)  #002                             * 22FB2  command
 xELSE:
-        ::                                       * 22FB5
-          CK0                                    * 22FBA
-          COLASKIP                               * 22FBF
-        ;                                        * 22FC4
+        :: CK0 COLASKIP ;                        * 22FB5
 
 * slots of 700 002 (derivative, inverse, ...: used by the symbolic code)
         CON(5)  OBJ_14C71                        * 22FC9  slot 0
@@ -1010,9 +830,7 @@ xELSE:
         CON(3)  #700                             * 22FCF  library
         CON(3)  #003                             * 22FD2  command
 xIFEND:
-        ::                                       * 22FD5
-          CK0ATTNABORT                           * 22FDA
-        ;                                        * 22FDF
+        :: CK0ATTNABORT ;                        * 22FD5
 
 * ROMPTR 700 004 →
 * refs (5): 22DE7 24253 5DF0D 8C1B8 D184B
@@ -1020,17 +838,8 @@ xIFEND:
         CON(3)  #700                             * 22FE5  library
         CON(3)  #004                             * 22FE8  command
 xALG->:
-        ::                                       * 22FEB
-          CK0ATTNABORT                           * 22FF0
-          OBJ_23502                              * 22FF5
-          DEPTH                                  * 22FFA
-          OVER                                   * 22FFF
-          #2*                                    * 23004
-          #>case                                 * 23009
-          OBJ_54693                              * 2300E
-          NDROP                                  * 23013
-          SETSTACKERR                            * 23018
-        ;                                        * 2301D
+        :: CK0ATTNABORT OBJ_23502 DEPTH OVER #2* #>case OBJ_54693 * 22FEB
+          NDROP SETSTACKERR ;                    * 23013
 
 * slots of 700 004 (derivative, inverse, ...: used by the symbolic code)
         CON(5)  OBJ_2419A                        * 23022  slot 0
@@ -1043,10 +852,7 @@ xALG->:
         CON(3)  #700                             * 2302D  library
         CON(3)  #005                             * 23030  command
 xWHILE:
-        ::                                       * 23033
-          CK0ATTNABORT                           * 23038
-          COLA                                   * 2303D
-          BEGIN                                  * 23042
+        :: CK0ATTNABORT COLA BEGIN               * 23033
         ;                                        * 23047
 
 * slots of 700 005 (derivative, inverse, ...: used by the symbolic code)
@@ -1060,12 +866,9 @@ xWHILE:
         CON(3)  #700                             * 23057  library
         CON(3)  #006                             * 2305A  command
 xREPEAT:
-        ::                                       * 2305D
-          CK1&Dispatch                           * 23062
-          BINT1                                  * 23067
-          repeat(r)                              * 2306C
-          BINT10                                 * 23071
-          repeat(ex)                             * 23076
+        :: CK1&Dispatch                          * 2305D
+          BINT1 repeat(r)                        * 23067  real
+          BINT10 repeat(ex)                      * 23071  name|local|algebraic
         ;                                        * 2307B
 
 * slots of 700 006 (derivative, inverse, ...: used by the symbolic code)
@@ -1073,19 +876,12 @@ xREPEAT:
 
 * refs (1): 2306C
 repeat(r):
-        ::                                       * 23085  slot 1
-          OBJ_4241B                              * 2308A
-          %0<>                                   * 2308F
-          COLA                                   * 23094
-          WHILE                                  * 23099
+        :: OBJ_4241B %0<> COLA WHILE             * 23085  slot 1
         ;                                        * 2309E
 
 * refs (1): 23076
 repeat(ex):
-        ::                                       * 230A3  slot 2
-          SYMCRUNCH1                             * 230A8
-          COLA                                   * 230AD
-          xREPEAT                                * 230B2
+        :: SYMCRUNCH1 COLA xREPEAT               * 230A3  slot 2
         ;                                        * 230B7
 
 * ->
@@ -1095,10 +891,7 @@ repeat(ex):
         CON(3)  #700                             * 230BD  library
         CON(3)  #007                             * 230C0  command
 xDO:
-        ::                                       * 230C3
-          CK0ATTNABORT                           * 230C8
-          COLA                                   * 230CD
-          BEGIN                                  * 230D2
+        :: CK0ATTNABORT COLA BEGIN               * 230C3
         ;                                        * 230D7
 
 * slots of 700 007 (derivative, inverse, ...: used by the symbolic code)
@@ -1112,9 +905,7 @@ xDO:
         CON(3)  #700                             * 230E7  library
         CON(3)  #008                             * 230EA  command
 xUNTIL:
-        ::                                       * 230ED
-          CK0ATTNABORT                           * 230F2
-        ;                                        * 230F7
+        :: CK0ATTNABORT ;                        * 230ED
 
 * start finish ->
 * ROMPTR 700 009 START
@@ -1123,16 +914,11 @@ xUNTIL:
         CON(3)  #700                             * 230FD  library
         CON(3)  #009                             * 23100  command
 xSTART:
-        ::                                       * 23103
-          CK2&Dispatch                           * 23108
-          BINT17                                 * 2310D
-          start(2r)                              * 23112
-          BINT26                                 * 23117
-          start(2ex)                             * 2311C
-          SYMREAL                                * 23121
-          start(ex,r)                            * 23126
-          SYMSYM                                 * 2312B
-          start(2ex)                             * 23130
+        :: CK2&Dispatch                          * 23103
+          BINT17 start(2r)                       * 2310D  real real
+          BINT26 start(2ex)                      * 23117  real name|local|algebraic
+          SYMREAL start(ex,r)                    * 23121  name|local|algebraic real
+          SYMSYM start(2ex)                      * 2312B  name|local|algebraic name|local|algebraic
         ;                                        * 23135
 
 * slots of 700 009 (derivative, inverse, ...: used by the symbolic code)
@@ -1141,28 +927,17 @@ xSTART:
 
 * refs (1): 23112
 start(2r):
-        ::                                       * 23144  slot 2
-          OBJ_23754                              * 23149
-          BIND                                   * 2314E
-          OBJ_4241B                              * 23153
-          COLA                                   * 23158
-          BEGIN                                  * 2315D
+        :: OBJ_23754 BIND OBJ_4241B COLA BEGIN   * 23144  slot 2
         ;                                        * 23162
 
 * refs (2): 2311C 23130
 start(2ex):
-        ::                                       * 23167  slot 3
-          SYMCRUNCH1                             * 2316C
-          COLA                                   * 23171
-          xSTART                                 * 23176
+        :: SYMCRUNCH1 COLA xSTART                * 23167  slot 3
         ;                                        * 2317B
 
 * refs (1): 23126
 start(ex,r):
-        ::                                       * 23180  slot 4
-          SYMCRUNCH2                             * 23185
-          COLA                                   * 2318A
-          xSTART                                 * 2318F
+        :: SYMCRUNCH2 COLA xSTART                * 23180  slot 4
         ;                                        * 23194
 
 * start finish ->
@@ -1172,16 +947,11 @@ start(ex,r):
         CON(3)  #700                             * 2319A  library
         CON(3)  #00A                             * 2319D  command
 xSTARTVAR:
-        ::                                       * 231A0
-          CK2&Dispatch                           * 231A5
-          BINT17                                 * 231AA
-          for(2r)                                * 231AF
-          BINT26                                 * 231B4
-          for(2ex)                               * 231B9
-          SYMREAL                                * 231BE
-          for(ex,r)                              * 231C3
-          SYMSYM                                 * 231C8
-          for(2ex)                               * 231CD
+        :: CK2&Dispatch                          * 231A0
+          BINT17 for(2r)                         * 231AA  real real
+          BINT26 for(2ex)                        * 231B4  real name|local|algebraic
+          SYMREAL for(ex,r)                      * 231BE  name|local|algebraic real
+          SYMSYM for(2ex)                        * 231C8  name|local|algebraic name|local|algebraic
         ;                                        * 231D2
 
 * slots of 700 00A (derivative, inverse, ...: used by the symbolic code)
@@ -1190,31 +960,17 @@ xSTARTVAR:
 
 * refs (1): 231AF
 for(2r):
-        ::                                       * 231E1  slot 2
-          'R                                     * 231E6
-          '                                      * 231EB
-          Π'stop                                 * 231F0
-          TWO{}N                                 * 231F5
-          BIND                                   * 231FA
-          OBJ_4241B                              * 231FF
-          COLA                                   * 23204
-          BEGIN                                  * 23209
+        :: 'R ' Π'stop TWO{}N BIND OBJ_4241B COLA BEGIN * 231E1  slot 2
         ;                                        * 2320E
 
 * refs (2): 231B9 231CD
 for(2ex):
-        ::                                       * 23213  slot 3
-          SYMCRUNCH1                             * 23218
-          COLA                                   * 2321D
-          xSTARTVAR                              * 23222
+        :: SYMCRUNCH1 COLA xSTARTVAR             * 23213  slot 3
         ;                                        * 23227
 
 * refs (1): 231C3
 for(ex,r):
-        ::                                       * 2322C  slot 4
-          SYMCRUNCH2                             * 23231
-          COLA                                   * 23236
-          xSTARTVAR                              * 2323B
+        :: SYMCRUNCH2 COLA xSTARTVAR             * 2322C  slot 4
         ;                                        * 23240
 
 * ->
@@ -1224,10 +980,7 @@ for(ex,r):
         CON(3)  #700                             * 23246  library
         CON(3)  #00B                             * 23249  command
 xNEXT:
-        ::                                       * 2324C
-          CK0                                    * 23251
-          COLA                                   * 23256
-          next_2326A                             * 2325B
+        :: CK0 COLA next_2326A                   * 2324C
         ;                                        * 23260
         NIBHEX  27B41                            * 23265  rK
 
@@ -1330,21 +1083,15 @@ L_23356:
         CON(3)  #00C                             * 2337D  command
         RPL
 xSTEP:
-        ::                                       * 23380
-          CK1&Dispatch                           * 23385
-          BINT1                                  * 2338A
-          OBJ_233C1                              * 2338F
-          BINT10                                 * 23394
-          OBJ_233A8                              * 23399
+        :: CK1&Dispatch                          * 23380
+          BINT1 OBJ_233C1                        * 2338A  real
+          BINT10 OBJ_233A8                       * 23394  name|local|algebraic
         ;                                        * 2339E
         NIBHEX  27B41                            * 233A3  rK
 
 * refs (1): 23399
 OBJ_233A8:
-        ::                                       * 233A8
-          SYMCRUNCH1                             * 233AD
-          COLA                                   * 233B2
-          xSTEP                                  * 233B7
+        :: SYMCRUNCH1 COLA xSTEP                 * 233A8
         ;                                        * 233BC
 
 * refs (1): 2338F
@@ -1363,22 +1110,8 @@ OBJ_233C1:
         CON(3)  #00D                             * 233DC  command
         RPL
 xIFERR:
-        ::                                       * 233DF
-          CK0                                    * 233E4
-          'R                                     * 233E9
-          ERRSET                                 * 233EE
-          EVAL                                   * 233F3
-          ERRTRAP                                * 233F8
-          ::                                     * 233FD
-            OBJ_387BE                            * 23402
-            Sig?ErrJmp                           * 23407
-            OBJ_3881D                            * 2340C
-            RDROP                                * 23411
-          ;                                      * 23416
-          RSKIP                                  * 2341B
-          RSKIP                                  * 23420
-          COLASKIP                               * 23425
-        ;                                        * 2342A
+        :: CK0 'R ERRSET EVAL ERRTRAP            * 233DF
+          :: OBJ_387BE Sig?ErrJmp OBJ_3881D RDROP ; RSKIP RSKIP COLASKIP ; * 233FD
 
 * slots of 700 00D (derivative, inverse, ...: used by the symbolic code)
         CON(5)  OBJ_24046                        * 2342F  slot 0
@@ -1386,16 +1119,7 @@ xIFERR:
 
 * refs (2): 40976 4099E
 OBJ_23439:
-        ::                                       * 23439  slot 2
-          KeyOb@                                 * 2343E
-          '                                      * 23443
-          Π'est                                  * 23448
-          BINT1                                  * 2344D
-          DOBIND                                 * 23452
-          EVAL                                   * 23457
-          1GETABND                               * 2345C
-          KeyOb!                                 * 23461
-        ;                                        * 23466
+        :: KeyOb@ ' Π'est BINT1 DOBIND EVAL 1GETABND KeyOb! ; * 23439  slot 2
 
 * ->
 * ROMPTR 700 00E HALT
@@ -1404,10 +1128,7 @@ OBJ_23439:
         CON(3)  #700                             * 2346C  library
         CON(3)  #00E                             * 2346F  command
 xHALT:
-        ::                                       * 23472
-          CK0                                    * 23477
-          COLA                                   * 2347C
-          halt                                   * 23481
+        :: CK0 COLA halt                         * 23472
         ;                                        * 23486
 
 * slots of 700 00E (derivative, inverse, ...: used by the symbolic code)
@@ -1421,10 +1142,7 @@ xHALT:
         CON(3)  #700                             * 23496  library
         CON(3)  #00F                             * 23499  command
 xSILENT':
-        ::                                       * 2349C
-          CK0ATTNABORT                           * 234A1
-          'R                                     * 234A6
-        ;                                        * 234AB
+        :: CK0ATTNABORT 'R ;                     * 2349C
 
 * slots of 700 00F (derivative, inverse, ...: used by the symbolic code)
         CON(5)  TrueTrue                         * 234B0  slot 0
@@ -1437,17 +1155,8 @@ xSILENT':
         CON(3)  #700                             * 234BB  library
         CON(3)  #010                             * 234BE  command
 xRPN->:
-        ::                                       * 234C1
-          CK0ATTNABORT                           * 234C6
-          OBJ_23502                              * 234CB
-          DEPTH                                  * 234D0
-          OVER                                   * 234D5
-          #2*                                    * 234DA
-          #>case                                 * 234DF
-          DOBIND                                 * 234E4
-          NDROP                                  * 234E9
-          SETSTACKERR                            * 234EE
-        ;                                        * 234F3
+        :: CK0ATTNABORT OBJ_23502 DEPTH OVER #2* #>case DOBIND * 234C1
+          NDROP SETSTACKERR ;                    * 234E9
 
         CON(5)  OBJ_2419A                        * 234F8  address (the code jumps or points through it)
 
@@ -1550,10 +1259,7 @@ L_235D6:
         CON(3)  #011                             * 235FB  command
         RPL
 x>>ABND:
-        ::                                       * 235FE
-          CK0ATTNABORT                           * 23603
-          ABND                                   * 23608
-        ;                                        * 2360D
+        :: CK0ATTNABORT ABND ;                   * 235FE
 
 * slots of 700 011 (derivative, inverse, ...: used by the symbolic code)
         CON(5)  OBJ_14CDF                        * 23612  slot 0
@@ -1564,9 +1270,7 @@ x>>ABND:
         CON(3)  #700                             * 23618  library
         CON(3)  #012                             * 2361B  command
 x<<:
-        ::                                       * 2361E
-          CK0ATTNABORT                           * 23623
-        ;                                        * 23628
+        :: CK0ATTNABORT ;                        * 2361E
 
 * slots of 700 012 (derivative, inverse, ...: used by the symbolic code)
         CON(5)  OBJ_23DD0                        * 2362D  slot 0
@@ -1577,9 +1281,7 @@ x<<:
         CON(3)  #700                             * 23633  library
         CON(3)  #013                             * 23636  command
 x>>:
-        ::                                       * 23639
-          CK0ATTNABORT                           * 2363E
-        ;                                        * 23643
+        :: CK0ATTNABORT ;                        * 23639
 
 * slots of 700 013 (derivative, inverse, ...: used by the symbolic code)
         CON(5)  OBJ_14D02                        * 23648  slot 0
@@ -1590,10 +1292,7 @@ x>>:
         CON(3)  #700                             * 2364E  library
         CON(3)  #014                             * 23651  command
 x':
-        ::                                       * 23654
-          CK0ATTNABORT                           * 23659
-          'R                                     * 2365E
-        ;                                        * 23663
+        :: CK0ATTNABORT 'R ;                     * 23654
 
 * slots of 700 014 (derivative, inverse, ...: used by the symbolic code)
         CON(5)  OBJ_23A6F                        * 23668  slot 0
@@ -1605,9 +1304,7 @@ x':
         CON(3)  #700                             * 23673  library
         CON(3)  #015                             * 23676  command
 xENDTIC:
-        ::                                       * 23679
-          CK0ATTNABORT                           * 2367E
-        ;                                        * 23683
+        :: CK0ATTNABORT ;                        * 23679
 
 * slots of 700 015 (derivative, inverse, ...: used by the symbolic code)
         CON(5)  OBJ_23A6F                        * 23688  slot 0
@@ -1618,10 +1315,7 @@ xENDTIC:
         CON(3)  #700                             * 2368E  library
         CON(3)  #016                             * 23691  command
 xWHILEEND:
-        ::                                       * 23694
-          CK0ATTNABORT                           * 23699
-          COLA                                   * 2369E
-          REPEAT                                 * 236A3
+        :: CK0ATTNABORT COLA REPEAT              * 23694
         ;                                        * 236A8
 
 * slots of 700 016 (derivative, inverse, ...: used by the symbolic code)
@@ -1634,12 +1328,9 @@ xWHILEEND:
         CON(3)  #700                             * 236B3  library
         CON(3)  #017                             * 236B6  command
 xENDDO:
-        ::                                       * 236B9
-          CK1&Dispatch                           * 236BE
-          BINT1                                  * 236C3
-          enddo(r)                               * 236C8
-          BINT10                                 * 236CD
-          enddo(ex)                              * 236D2
+        :: CK1&Dispatch                          * 236B9
+          BINT1 enddo(r)                         * 236C3  real
+          BINT10 enddo(ex)                       * 236CD  name|local|algebraic
         ;                                        * 236D7
 
 * slots of 700 017 (derivative, inverse, ...: used by the symbolic code)
@@ -1647,19 +1338,12 @@ xENDDO:
 
 * refs (1): 236C8
 enddo(r):
-        ::                                       * 236E1  slot 1
-          OBJ_4241B                              * 236E6
-          %0<>                                   * 236EB
-          COLA                                   * 236F0
-          UNTIL                                  * 236F5
+        :: OBJ_4241B %0<> COLA UNTIL             * 236E1  slot 1
         ;                                        * 236FA
 
 * refs (1): 236D2
 enddo(ex):
-        ::                                       * 236FF  slot 2
-          SYMCRUNCH1                             * 23704
-          COLA                                   * 23709
-          xENDDO                                 * 2370E
+        :: SYMCRUNCH1 COLA xENDDO                * 236FF  slot 2
         ;                                        * 23713
 
 * ROMPTR 700 018
@@ -1668,33 +1352,24 @@ enddo(ex):
         CON(3)  #700                             * 23719  library
         CON(3)  #018                             * 2371C  command
 xERRTHEN:
-        ::                                       * 2371F
-          CK0ATTNABORT                           * 23724
-        ;                                        * 23729
+        :: CK0ATTNABORT ;                        * 2371F
 
 * refs (3): 231F0 2375E 56B41
 Π'stop:
-        LAM     'stop                            * 2372E
+        LAM 'stop                                * 2372E
 
 * refs (1): 23759
 Π'noname:
-        LAM     'noname                          * 2373F
+        LAM 'noname                              * 2373F
 
 * refs (1): 23149
 OBJ_23754:
-        {                                        * 23754
-          Π'noname                               * 23759
-          Π'stop                                 * 2375E
-        }                                        * 23763
+        { Π'noname Π'stop }                      * 23754
 
 * ->
 * refs (16): 22EC8 22FDA 22FF0 23038 230C8 230F2 ...
 CK0ATTNABORT:
-        ::                                       * 23768
-          'RSAVEWORD                             * 2376D
-          CK0NOLASTWD                            * 23772
-          COLA                                   * 23777
-          ?ATTNQUIT                              * 2377C
+        :: 'RSAVEWORD CK0NOLASTWD COLA ?ATTNQUIT * 23768
         ;                                        * 23781
 
 * ->
@@ -1704,9 +1379,7 @@ CK0ATTNABORT:
         CON(3)  #700                             * 23787  library
         CON(3)  #019                             * 2378A  command
 xCASE:
-        ::                                       * 2378D
-          CK0ATTNABORT                           * 23792
-        ;                                        * 23797
+        :: CK0ATTNABORT ;                        * 2378D
 
 * slots of 700 019 (derivative, inverse, ...: used by the symbolic code)
         CON(5)  OBJ_23AE2                        * 2379C  slot 0
@@ -1717,12 +1390,9 @@ xCASE:
         CON(3)  #700                             * 237A2  library
         CON(3)  #01A                             * 237A5  command
 xTHENCASE:
-        ::                                       * 237A8
-          CK1&Dispatch                           * 237AD
-          BINT1                                  * 237B2
-          thencase(r)                            * 237B7
-          BINT10                                 * 237BC
-          thencase(ex)                           * 237C1
+        :: CK1&Dispatch                          * 237A8
+          BINT1 thencase(r)                      * 237B2  real
+          BINT10 thencase(ex)                    * 237BC  name|local|algebraic
         ;                                        * 237C6
 
 * slots of 700 01A (derivative, inverse, ...: used by the symbolic code)
@@ -1731,19 +1401,12 @@ xTHENCASE:
 
 * refs (1): 237B7
 thencase(r):
-        ::                                       * 237D5  slot 2
-          j%0=case                               * 237DA
-          OBJ_22F3B                              * 237DF
-          OBJ_4241B                              * 237E4
-          COLACOLA                               * 237E9
-        ;                                        * 237EE
+        :: j%0=case OBJ_22F3B                    * 237D5  slot 2
+          OBJ_4241B COLACOLA ;                   * 237E4
 
 * refs (1): 237C1
 thencase(ex):
-        ::                                       * 237F3  slot 3
-          SYMCRUNCH1                             * 237F8
-          COLA                                   * 237FD
-          xTHENCASE                              * 23802
+        :: SYMCRUNCH1 COLA xTHENCASE             * 237F3  slot 3
         ;                                        * 23807
 
 * ROMPTR 700 01B XLIB
@@ -1752,8 +1415,7 @@ thencase(ex):
         CON(3)  #700                             * 2380D  library
         CON(3)  #01B                             * 23810  command
 xDIR:
-        ::                                       * 23813
-        ;                                        * 23818
+        :: ;                                     * 23813
 
 * $ ->
 * ROMPTR 700 01C PROMPT
@@ -1762,19 +1424,14 @@ xDIR:
         CON(3)  #700                             * 2381E  library
         CON(3)  #01C                             * 23821  command
 xPROMPT:
-        ::                                       * 23824
-          CK1                                    * 23829
+        :: CK1                                   * 23824
 
 * refs (1): 14C08
 Chk1&2Disp!(st)Fr:
-          ::                                     * 2382E
-            CK1NOLASTWD                          * 23833
-            CK&DISPATCH1                         * 23838
-            BINT3                                * 2383D
-            1&2Disp!(st)Fr                       * 23842
+          :: CK1NOLASTWD CK&DISPATCH1            * 2382E
+            BINT3 1&2Disp!(st)Fr                 * 2383D  string
           ;                                      * 23847
-          COLA                                   * 2384C
-          halt                                   * 23851
+          COLA halt                              * 2384C
         ;                                        * 23856
 
         CON(5)  OBJ_24339                        * 2385B  address (the code jumps or points through it)
@@ -1783,10 +1440,7 @@ Chk1&2Disp!(st)Fr:
 
 * refs (1): 23842
 1&2Disp!(st)Fr:
-        ::                                       * 23865
-          DISPSTATUS2                            * 2386A
-          SetDA1Valid                            * 2386F
-        ;                                        * 23874
+        :: DISPSTATUS2 SetDA1Valid ;             * 23865
 
 * refs (3): 238AE 258E4 25A9D
 {'ioinprogress}:
@@ -1794,520 +1448,236 @@ Chk1&2Disp!(st)Fr:
 
 * refs (3): 26239 26270 262CF
 Π'ioinprogress:
-          LAM     'ioinprogress                  * 2387E
-        }                                        * 2389F
+          LAM 'ioinprogress }                    * 2387E
 
 * $ -> ob T               \ -> $ #pos $' F
 * refs (13): 0C209 1413C 20E93 212EF 21519 2DFBE ...
 palparse:
-        ::                                       * 238A4
-          FALSE                                  * 238A9
-          {'ioinprogress}                        * 238AE
-          BIND                                   * 238B3
+        :: FALSE {'ioinprogress} BIND            * 238A4
 
 * refs (1): 25902
 OBJ_238B8:
-          ::                                     * 238B8
-            {}_23989                             * 238BD
-            SWAP                                 * 238C2
-            ERRSET                               * 238C7
-            ::                                   * 238CC
-              OBJ_25D3A                          * 238D1
-              SWAPONE                            * 238D6
-              GetNextToken                       * 238DB
-              OBJ_239E3                          * 238E0
-            ;                                    * 238E5
-            ERRTRAP                              * 238EA
-            OBJ_23993                            * 238EF
-            DROP                                 * 238F4
-            case                                 * 238F9
-            drop(1-5,7);true                     * 238FE
+          :: {}_23989 SWAP ERRSET                * 238B8
+            :: OBJ_25D3A SWAPONE GetNextToken OBJ_239E3 ; ERRTRAP OBJ_23993 * 238CC
+            DROP case drop(1-5,7);true           * 238F4
 
 {st,ofs,tok}:
             {                                    * 23903
 
 Πst:
-              LAM     st                         * 23908
+              LAM st                             * 23908
 
 Πofs:
-              LAM     ofs                        * 23913
+              LAM ofs                            * 23913
 
 Πtok:
-              LAM     tok                        * 23920
-            }                                    * 2392D
-            BIND                                 * 23932
-            BEGIN                                * 23937
-            {}_23989                             * 2393C
-            EQ                                   * 23941
-            UNTIL                                * 23946
+              LAM tok }                          * 23920
+            BIND BEGIN {}_23989 EQ UNTIL         * 23932
 
 Πst_2394B:
-            LAM     st                           * 2394B
+            LAM st                               * 2394B
 
 Πofs_23956:
-            LAM     ofs                          * 23956
+            LAM ofs                              * 23956
 
 Πtok_23963:
-            LAM     tok                          * 23963
-            ABND                                 * 23970
-            FALSE                                * 23975
-          ;                                      * 2397A
-          ABND                                   * 2397F
-        ;                                        * 23984
+            LAM tok ABND FALSE ;                 * 23963
+          ABND ;                                 * 2397F
 
 * refs (8): 238BD 2393C 239B1 28977 289C7 B67BF ...
 {}_23989:
-        {                                        * 23989
-        }                                        * 2398E
+        { }                                      * 23989
 
 * refs (1): 238EF
 OBJ_23993:
-        ::                                       * 23993
-          ERROR@                                 * 23998
-          OBJ_26289                              * 2399D
-          #=?SKIP                                * 239A2
-          ::                                     * 239A7
-            BEGIN                                * 239AC
-            {}_23989                             * 239B1
-            EQ                                   * 239B6
-            UNTIL                                * 239BB
-          ;                                      * 239C0
-          ERRJMP                                 * 239C5
-        ;                                        * 239CA
+        :: ERROR@ OBJ_26289 #=?SKIP              * 23993
+          :: BEGIN {}_23989 EQ UNTIL ; ERRJMP ;  * 239A7
 
 * refs (1): 238FE
 drop(1-5,7);true:
-        ::                                       * 239CF
-          5DROP                                  * 239D4
-          SWAPDROPTRUE                           * 239D9
-        ;                                        * 239DE
+        :: 5DROP SWAPDROPTRUE ;                  * 239CF
 
 * refs (1): 238E0
 OBJ_239E3:
-        ::                                       * 239E3
-          OBJ_2530E                              * 239E8
-          OBJ_23A06                              * 239ED
-          !*triand                               * 239F2
-          OBJ_2525A                              * 239F7
-          TrueTrue                               * 239FC
-        ;                                        * 23A01
+        :: OBJ_2530E OBJ_23A06 !*triand OBJ_2525A TrueTrue ; * 239E3
 
 * refs (2): 239ED 23A24
 OBJ_23A06:
-        ::                                       * 23A06
-          nultrior                               * 23A0B
-          TrueTrue                               * 23A10
-          OBJ_23A2E                              * 23A15
-          !*triand                               * 23A1A
-          COLA                                   * 23A1F
-          OBJ_23A06                              * 23A24
+        :: nultrior TrueTrue OBJ_23A2E !*triand COLA OBJ_23A06 * 23A06
         ;                                        * 23A29
 
 * refs (16): 23A15 23B46 23BB9 23C0E 23C77 23CD6 ...
 OBJ_23A2E:
-        ::                                       * 23A2E
-          tok'                                   * 23A33
-          tok8cktrior                            * 23A38
-          OBJ_23A6F                              * 23A3D
-          OBJ_24384                              * 23A42
-          !*trior                                * 23A47
-          TrueTrue                               * 23A4C
-          OBJ_245DC                              * 23A51
-          !*trior                                * 23A56
-          TrueTrue                               * 23A5B
-          COLA                                   * 23A60
-          OBJ_2469F                              * 23A65
+        :: tok' tok8cktrior OBJ_23A6F OBJ_24384 !*trior TrueTrue OBJ_245DC * 23A2E
+          !*trior TrueTrue COLA OBJ_2469F        * 23A56
         ;                                        * 23A6A
 
 * refs (3): 23668 23688 23A3D
 OBJ_23A6F:
-        ::                                       * 23A6F
-          OBJ_2472B                              * 23A74
-          !*trior                                * 23A79
-          OBJ_23A8D                              * 23A7E
-          TrueTrue                               * 23A83
-        ;                                        * 23A88
+        :: OBJ_2472B !*trior OBJ_23A8D TrueTrue ; * 23A6F
 
 * refs (1): 23A7E
 OBJ_23A8D:
-        ::                                       * 23A8D
-          6PICK                                  * 23A92
-          need'case                              * 23A97
-          OBJ_23AB0                              * 23A9C
-          DROP                                   * 23AA1
-          TrueTrue                               * 23AA6
-        ;                                        * 23AAB
+        :: 6PICK need'case OBJ_23AB0             * 23A8D
+          DROP TrueTrue ;                        * 23AA1
 
 * refs (1): 23A9C
 OBJ_23AB0:
-        ::                                       * 23AB0
-          DROP                                   * 23AB5
-          4psh                                   * 23ABA
-          PTR     addt:                          * 23ABF
-          x'                                     * 23AC4
-          ROTSWAP                                * 23AC9
-          PTR     addt:                          * 23ACE
-          xENDTIC                                * 23AD3
-          swapB;drop;2true                       * 23AD8
-        ;                                        * 23ADD
+        :: DROP 4psh PTR addt: x' ROTSWAP PTR addt: xENDTIC swapB;drop;2true ; * 23AB0
 
 * refs (1): 2379C
 OBJ_23AE2:
-        ::                                       * 23AE2
-          'Rapndit                               * 23AE7
-          xCASE                                  * 23AEC
-          OBJ_2530E                              * 23AF1
-          OBJ_23B19                              * 23AF6
-          !*triand                               * 23AFB
-          OBJ_252CD                              * 23B00
-          'Rapndit                               * 23B05
-          xIFEND                                 * 23B0A
-          TrueTrue                               * 23B0F
-        ;                                        * 23B14
+        :: 'Rapndit xCASE OBJ_2530E OBJ_23B19 !*triand OBJ_252CD 'Rapndit * 23AE2
+          xIFEND TrueTrue ;                      * 23B0A
 
 * refs (3): 23AF6 23B55 23B91
 OBJ_23B19:
-        ::                                       * 23B19
-          nultrior                               * 23B1E
-          TrueTrue                               * 23B23
-          _END__253D6                            * 23B28
-          tok8trior                              * 23B2D
-          TrueTrue                               * 23B32
-          _THEN_                                 * 23B37
-          tok8trior                              * 23B3C
-          OBJ_23B5F                              * 23B41
-          OBJ_23A2E                              * 23B46
-          !*triand                               * 23B4B
-          COLA                                   * 23B50
-          OBJ_23B19                              * 23B55
+        :: nultrior TrueTrue _END__253D6 tok8trior TrueTrue _THEN_ tok8trior * 23B19
+          OBJ_23B5F OBJ_23A2E !*triand COLA OBJ_23B19 * 23B41
         ;                                        * 23B5A
 
 * refs (1): 23B41
 OBJ_23B5F:
-        ::                                       * 23B5F
-          'Rapndit                               * 23B64
-          xTHENCASE                              * 23B69
-          OBJ_2530E                              * 23B6E
-          OBJ_23B9B                              * 23B73
-          !*triand                               * 23B78
-          OBJ_252CD                              * 23B7D
-          'Rapndit                               * 23B82
-          xIFEND                                 * 23B87
-          COLA                                   * 23B8C
-          OBJ_23B19                              * 23B91
+        :: 'Rapndit xTHENCASE OBJ_2530E OBJ_23B9B !*triand OBJ_252CD * 23B5F
+          'Rapndit xIFEND COLA OBJ_23B19         * 23B82
         ;                                        * 23B96
 
 * refs (2): 23B73 23BC8
 OBJ_23B9B:
-        ::                                       * 23B9B
-          nultrior                               * 23BA0
-          TrueTrue                               * 23BA5
-          _END__253D6                            * 23BAA
-          tok8trior                              * 23BAF
-          TrueTrue                               * 23BB4
-          OBJ_23A2E                              * 23BB9
-          !*triand                               * 23BBE
-          COLA                                   * 23BC3
-          OBJ_23B9B                              * 23BC8
+        :: nultrior TrueTrue _END__253D6 tok8trior TrueTrue OBJ_23A2E * 23B9B
+          !*triand COLA OBJ_23B9B                * 23BBE
         ;                                        * 23BCD
 
 * refs (1): 22ED2
 OBJ_23BD2:
-        ::                                       * 23BD2
-          'Rapndit                               * 23BD7
-          xIF                                    * 23BDC
-          COLA                                   * 23BE1
-          OBJ_23BF0                              * 23BE6
+        :: 'Rapndit xIF COLA OBJ_23BF0           * 23BD2
         ;                                        * 23BEB
 
 * refs (2): 23BE6 23C1D
 OBJ_23BF0:
-        ::                                       * 23BF0
-          nultrior                               * 23BF5
-          failed                                 * 23BFA
-          _THEN_                                 * 23BFF
-          tok8trior                              * 23C04
-          OBJ_23C27                              * 23C09
-          OBJ_23A2E                              * 23C0E
-          !*triand                               * 23C13
-          COLA                                   * 23C18
-          OBJ_23BF0                              * 23C1D
+        :: nultrior failed _THEN_ tok8trior OBJ_23C27 OBJ_23A2E !*triand * 23BF0
+          COLA OBJ_23BF0                         * 23C18
         ;                                        * 23C22
 
 * refs (1): 23C09
 OBJ_23C27:
-        ::                                       * 23C27
-          'Rapndit                               * 23C2C
-          xTHEN                                  * 23C31
-          OBJ_2530E                              * 23C36
-          COLA                                   * 23C3B
-          OBJ_23C4A                              * 23C40
+        :: 'Rapndit xTHEN OBJ_2530E COLA OBJ_23C4A * 23C27
         ;                                        * 23C45
 
 * refs (2): 23C40 23C86
 OBJ_23C4A:
-        ::                                       * 23C4A
-          nultrior                               * 23C4F
-          OBJ_23CEF                              * 23C54
-          _END__253D6                            * 23C59
-          tok8trior                              * 23C5E
-          OBJ_23CEF                              * 23C63
-          _ELSE_                                 * 23C68
-          tok8trior                              * 23C6D
-          OBJ_23C90                              * 23C72
-          OBJ_23A2E                              * 23C77
-          !*triand                               * 23C7C
-          COLA                                   * 23C81
-          OBJ_23C4A                              * 23C86
+        :: nultrior OBJ_23CEF _END__253D6 tok8trior OBJ_23CEF _ELSE_ * 23C4A
+          tok8trior OBJ_23C90 OBJ_23A2E !*triand COLA OBJ_23C4A * 23C6D
         ;                                        * 23C8B
 
 * refs (1): 23C72
 OBJ_23C90:
-        ::                                       * 23C90
-          OBJ_252CD                              * 23C95
-          'Rapndit                               * 23C9A
-          xELSE                                  * 23C9F
-          OBJ_2530E                              * 23CA4
-          COLA                                   * 23CA9
-          OBJ_23CB8                              * 23CAE
+        :: OBJ_252CD 'Rapndit xELSE OBJ_2530E COLA OBJ_23CB8 * 23C90
         ;                                        * 23CB3
 
 * refs (2): 23CAE 23CE5
 OBJ_23CB8:
-        ::                                       * 23CB8
-          nultrior                               * 23CBD
-          OBJ_23CEF                              * 23CC2
-          _END__253D6                            * 23CC7
-          tok8trior                              * 23CCC
-          OBJ_23CEF                              * 23CD1
-          OBJ_23A2E                              * 23CD6
-          !*triand                               * 23CDB
-          COLA                                   * 23CE0
-          OBJ_23CB8                              * 23CE5
+        :: nultrior OBJ_23CEF _END__253D6 tok8trior OBJ_23CEF OBJ_23A2E * 23CB8
+          !*triand COLA OBJ_23CB8                * 23CDB
         ;                                        * 23CEA
 
 * refs (4): 23C54 23C63 23CC2 23CD1
 OBJ_23CEF:
-        ::                                       * 23CEF
-          OBJ_252CD                              * 23CF4
-          'Rapndit                               * 23CF9
-          xIFEND                                 * 23CFE
-          TrueTrue                               * 23D03
-        ;                                        * 23D08
+        :: OBJ_252CD 'Rapndit xIFEND TrueTrue ;  * 23CEF
 
 * refs (1): 230DC
 OBJ_23D0D:
-        ::                                       * 23D0D
-          'Rapndit                               * 23D12
-          xDO                                    * 23D17
-          COLA                                   * 23D1C
-          OBJ_23D2B                              * 23D21
+        :: 'Rapndit xDO COLA OBJ_23D2B           * 23D0D
         ;                                        * 23D26
 
 * refs (2): 23D21 23D58
 OBJ_23D2B:
-        ::                                       * 23D2B
-          nultrior                               * 23D30
-          failed                                 * 23D35
-          _UNTIL_                                * 23D3A
-          tok8trior                              * 23D3F
-          OBJ_23D62                              * 23D44
-          OBJ_23A2E                              * 23D49
-          !*triand                               * 23D4E
-          COLA                                   * 23D53
-          OBJ_23D2B                              * 23D58
+        :: nultrior failed _UNTIL_ tok8trior OBJ_23D62 OBJ_23A2E !*triand * 23D2B
+          COLA OBJ_23D2B                         * 23D53
         ;                                        * 23D5D
 
 * refs (1): 23D44
 OBJ_23D62:
-        ::                                       * 23D62
-          'Rapndit                               * 23D67
-          xUNTIL                                 * 23D6C
-          COLA                                   * 23D71
-          OBJ_23D80                              * 23D76
+        :: 'Rapndit xUNTIL COLA OBJ_23D80        * 23D62
         ;                                        * 23D7B
 
 * refs (2): 23D76 23DAD
 OBJ_23D80:
-        ::                                       * 23D80
-          nultrior                               * 23D85
-          OBJ_23DB7                              * 23D8A
-          _END__253D6                            * 23D8F
-          tok8trior                              * 23D94
-          OBJ_23DB7                              * 23D99
-          OBJ_23A2E                              * 23D9E
-          !*triand                               * 23DA3
-          COLA                                   * 23DA8
-          OBJ_23D80                              * 23DAD
+        :: nultrior OBJ_23DB7 _END__253D6 tok8trior OBJ_23DB7 OBJ_23A2E * 23D80
+          !*triand COLA OBJ_23D80                * 23DA3
         ;                                        * 23DB2
 
 * refs (2): 23D8A 23D99
 OBJ_23DB7:
-        ::                                       * 23DB7
-          'Rapndit                               * 23DBC
-          xENDDO                                 * 23DC1
-          TrueTrue                               * 23DC6
-        ;                                        * 23DCB
+        :: 'Rapndit xENDDO TrueTrue ;            * 23DB7
 
 * refs (1): 2362D
 OBJ_23DD0:
-        ::                                       * 23DD0
-          'Rapndit                               * 23DD5
-          xSILENT'                               * 23DDA
-          OBJ_2530E                              * 23DDF
-          'Rapndit                               * 23DE4
-          x<<                                    * 23DE9
-          COLA                                   * 23DEE
-          OBJ_23DFD                              * 23DF3
+        :: 'Rapndit xSILENT' OBJ_2530E 'Rapndit x<< COLA OBJ_23DFD * 23DD0
         ;                                        * 23DF8
 
 * refs (5): 23DF3 23E2A 2451E 24C85 24E3D
 OBJ_23DFD:
-        ::                                       * 23DFD
-          nultrior                               * 23E02
-          OBJ_23E34                              * 23E07
-          tok>>                                  * 23E0C
-          tok8trior                              * 23E11
-          OBJ_23E34                              * 23E16
-          OBJ_23A2E                              * 23E1B
-          !*triand                               * 23E20
-          COLA                                   * 23E25
-          OBJ_23DFD                              * 23E2A
+        :: nultrior OBJ_23E34 tok>> tok8trior OBJ_23E34 OBJ_23A2E !*triand * 23DFD
+          COLA OBJ_23DFD                         * 23E25
         ;                                        * 23E2F
 
 * refs (2): 23E07 23E16
 OBJ_23E34:
-        ::                                       * 23E34
-          'Rapndit                               * 23E39
-          x>>                                    * 23E3E
-          OBJ_252B4                              * 23E43
-          TrueTrue                               * 23E48
-        ;                                        * 23E4D
+        :: 'Rapndit x>> OBJ_252B4 TrueTrue ;     * 23E34
 
 * refs (3): 23EA2 241A4 241EA
 OBJ_23E52:
-        ::                                       * 23E52
-          nultrior                               * 23E57
-          failed                                 * 23E5C
-          OBJ_246BD                              * 23E61
-          !*triand                               * 23E66
-          ID>LAM                                 * 23E6B
-          COLA                                   * 23E70
-          DaDGNTc                                * 23E75
+        :: nultrior failed OBJ_246BD !*triand ID>LAM COLA DaDGNTc * 23E52
         ;                                        * 23E7A
 
 * refs (1): 2313A
 OBJ_23E7F:
-        ::                                       * 23E7F
-          'Rapndit                               * 23E84
-          xSTART                                 * 23E89
-          COLA                                   * 23E8E
-          OBJ_23F01                              * 23E93
+        :: 'Rapndit xSTART COLA OBJ_23F01        * 23E7F
         ;                                        * 23E98
 
 * refs (1): 231D7
 OBJ_23E9D:
-        ::                                       * 23E9D
-          OBJ_23E52                              * 23EA2
-          !*triand                               * 23EA7
-          4psh                                   * 23EAC
-          PTR     addt:                          * 23EB1
-          xSTARTVAR                              * 23EB6
-          ROTSWAP                                * 23EBB
-          OVERDUP                                * 23EC0
-          BINT1                                  * 23EC5
-          DOBIND                                 * 23ECA
-          SWAPUnDROP                             * 23ECF
-          OBJ_23F01                              * 23ED4
-          ABND                                   * 23ED9
-          !*triand                               * 23EDE
-          TrueTrue                               * 23EE3
-        ;                                        * 23EE8
+        :: OBJ_23E52 !*triand 4psh PTR addt: xSTARTVAR ROTSWAP OVERDUP BINT1 * 23E9D
+          DOBIND SWAPUnDROP OBJ_23F01 ABND !*triand TrueTrue ; * 23ECA
 
 * ob -> { ob }
 * refs (31): 05ECE 16C61 1745F 17798 186ED 19416 ...
 ONE{}N:
-        ::                                       * 23EED
-          BINT1                                  * 23EF2
-          P{}N                                   * 23EF7
-        ;                                        * 23EFC
+        :: BINT1 P{}N ;                          * 23EED
 
 * refs (3): 23E93 23ED4 23F3D
 OBJ_23F01:
-        ::                                       * 23F01
-          nultrior                               * 23F06
-          failed                                 * 23F0B
-          _NEXT_                                 * 23F10
-          tok8trior                              * 23F15
-          OBJ_23F47                              * 23F1A
-          _STEP_                                 * 23F1F
-          tok8trior                              * 23F24
-          OBJ_23F60                              * 23F29
-          OBJ_23A2E                              * 23F2E
-          !*triand                               * 23F33
-          COLA                                   * 23F38
-          OBJ_23F01                              * 23F3D
+        :: nultrior failed _NEXT_ tok8trior OBJ_23F47 _STEP_ tok8trior * 23F01
+          OBJ_23F60 OBJ_23A2E !*triand COLA OBJ_23F01 * 23F29
         ;                                        * 23F42
 
 * refs (1): 23F1A
 OBJ_23F47:
-        ::                                       * 23F47
-          'Rapndit                               * 23F4C
-          xNEXT                                  * 23F51
-          TrueTrue                               * 23F56
-        ;                                        * 23F5B
+        :: 'Rapndit xNEXT TrueTrue ;             * 23F47
 
 * refs (1): 23F29
 OBJ_23F60:
-        ::                                       * 23F60
-          'Rapndit                               * 23F65
-          xSTEP                                  * 23F6A
-          TrueTrue                               * 23F6F
-        ;                                        * 23F74
+        :: 'Rapndit xSTEP TrueTrue ;             * 23F60
 
 * refs (1): 2304C
 OBJ_23F79:
-        ::                                       * 23F79
-          'Rapndit                               * 23F7E
-          xWHILE                                 * 23F83
-          COLA                                   * 23F88
-          OBJ_23F97                              * 23F8D
+        :: 'Rapndit xWHILE COLA OBJ_23F97        * 23F79
         ;                                        * 23F92
 
 * refs (2): 23F8D 23FC4
 OBJ_23F97:
-        ::                                       * 23F97
-          nultrior                               * 23F9C
-          failed                                 * 23FA1
-          _REPEAT_                               * 23FA6
-          tok8trior                              * 23FAB
-          OBJ_23FCE                              * 23FB0
-          OBJ_23A2E                              * 23FB5
-          !*triand                               * 23FBA
-          COLA                                   * 23FBF
-          OBJ_23F97                              * 23FC4
+        :: nultrior failed _REPEAT_ tok8trior OBJ_23FCE OBJ_23A2E !*triand * 23F97
+          COLA OBJ_23F97                         * 23FBF
         ;                                        * 23FC9
 
 * refs (1): 23FB0
 OBJ_23FCE:
-        ::                                       * 23FCE
-          'Rapndit                               * 23FD3
-          xREPEAT                                * 23FD8
-          OBJ_2530E                              * 23FDD
-          COLA                                   * 23FE2
-          OBJ_23FF1                              * 23FE7
+        :: 'Rapndit xREPEAT OBJ_2530E COLA OBJ_23FF1 * 23FCE
         ;                                        * 23FEC
 
 * refs (2): 23FE7 2401E
 OBJ_23FF1:
-        ::                                       * 23FF1
-          nultrior                               * 23FF6
-          OBJ_24028                              * 23FFB
-          _END__253D6                            * 24000
-          tok8trior                              * 24005
-          OBJ_24028                              * 2400A
-          OBJ_23A2E                              * 2400F
-          !*triand                               * 24014
-          COLA                                   * 24019
-          OBJ_23FF1                              * 2401E
+        :: nultrior OBJ_24028 _END__253D6 tok8trior OBJ_24028 OBJ_23A2E * 23FF1
+          !*triand COLA OBJ_23FF1                * 24014
         ;                                        * 24023

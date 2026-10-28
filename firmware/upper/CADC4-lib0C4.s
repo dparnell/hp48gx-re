@@ -13,37 +13,18 @@ LIB0C4:
 * ROMPTR 0C4 000
 * refs (1): CADC4
 ROMP_0C4_000:
-        ::                                       * CADDB
-          ROMPTR  0C4 001                        * CADE0
-          FALSE                                  * CADEB
-          ROMPTR  0C4 004                        * CADF0
-          ROMPTR  0C2 032                        * CADFB
-        ;                                        * CAE06
+        :: ROMPTR 0C4 001 FALSE ROMPTR 0C4 004 ROMPTR 0C2 032 ; * CADDB
 
 * ROMPTR 0C4 001
 * refs (1): CADC4
 ROMP_0C4_001:
-        ::                                       * CAE0B
-          ROMPTR  0C4 003                        * CAE10
-          DUP                                    * CAE1B
-          DIMLIMITS                              * CAE20
-          ((0,0))                                * CAE25
-          MAKEARRY                               * CAE2A
-          OBJ_7CDBF                              * CAE2F
-          SWAPDROP                               * CAE34
-          #       6A                             * CAE39  106
-          !MAKEHXS                               * CAE43
-        ;                                        * CAE48
+        :: ROMPTR 0C4 003 DUP DIMLIMITS ((0,0)) MAKEARRY OBJ_7CDBF SWAPDROP * CAE0B
+          # 6A !MAKEHXS ;                        * CAE39
 
 * ROMPTR 0C4 002
 * refs (1): CADC4
 ROMP_0C4_002:
-        ::                                       * CAE4D
-          ROMPTR  0C4 001                        * CAE52
-          TRUE                                   * CAE5D
-          ROMPTR  0C4 004                        * CAE62
-          ROMPTR  0C2 032                        * CAE6D
-        ;                                        * CAE78
+        :: ROMPTR 0C4 001 TRUE ROMPTR 0C4 004 ROMPTR 0C2 032 ; * CAE4D
 
 * ROMPTR 0C4 003
 * refs (1): CADC4
@@ -607,282 +588,76 @@ SUB_CB439:
 * ROMPTR 0C4 005
 * refs (1): CADC4
 ROMP_0C4_005:
-        ::                                       * CB450
-          OVER                                   * CB455
-          %0>                                    * CB45A
-          NOTcase                                * CB45F
-          SETSIZEERR                             * CB464
-          ROT                                    * CB469
-          %>%%-                                  * CB46E
-          DUP                                    * CB473
-          %%*                                    * CB478
-          SWAP                                   * CB47D
-          %>%%                                   * CB482
-          SWAP                                   * CB487
-          OVER                                   * CB48C
-          %%/                                    * CB491
-          %%      -5E-1                          * CB496
-          %%*                                    * CB4B0
-          %%EXP                                  * CB4B5
-          SWAP                                   * CB4BA
-          %%      6.28318530717959E0             * CB4BF
-          %%*                                    * CB4D9
-          %%SQRT                                 * CB4DE
-          %%/                                    * CB4E3
-          %%>%                                   * CB4E8
-        ;                                        * CB4ED
+        :: OVER %0> NOTcase SETSIZEERR           * CB450
+          ROT %>%%- DUP %%* SWAP %>%% SWAP OVER %%/ %% -5E-1 %%* %%EXP SWAP * CB469
+          %% 6.28318530717959E0 %%* %%SQRT %%/ %%>% ; * CB4BF
 
 * ROMPTR 0C4 006
 * refs (1): CADC4
 ROMP_0C4_006:
-        ::                                       * CB4F2
-          BINT0                                  * CB4F7
-          OBJ_2C5EE                              * CB4FC
-          OBJ_2CD27                              * CB501
-        ;                                        * CB506
+        :: BINT0 OBJ_2C5EE OBJ_2CD27 ;           * CB4F2
 
 * ROMPTR 0C4 007
 * refs (1): CADC4
 ROMP_0C4_007:
-        ::                                       * CB50B
-          BINT0                                  * CB510
-          OBJ_2C5EE                              * CB515
-          OBJ_2CD1B                              * CB51A
-        ;                                        * CB51F
+        :: BINT0 OBJ_2C5EE OBJ_2CD1B ;           * CB50B
 
 * ROMPTR 0C4 008
 * refs (1): CADC4
 ROMP_0C4_008:
-        ::                                       * CB524
-          RclXYCol&äDAT                          * CB529
-          DUP4UNROLL                             * CB52E
-          3PICKOVER                              * CB533
-          OBJ_2CC4C                              * CB538
-          OBJ_2CDA5                              * CB53D
-          3PICK3PICK                             * CB542
-          OBJ_2CC06                              * CB547
-          OBJ_2CDA5                              * CB54C
-          OBJ_2CC4C                              * CB551
-          OBJ_2CC06                              * CB556
-          OBJ_2CE7C                              * CB55B
-          SWAP                                   * CB560
-          OBJ_2CC92                              * CB565
-          %>%%                                   * CB56A
-          %%/>%                                  * CB56F
-        ;                                        * CB574
+        :: RclXYCol&äDAT DUP4UNROLL 3PICKOVER OBJ_2CC4C OBJ_2CDA5 3PICK3PICK * CB524
+          OBJ_2CC06 OBJ_2CDA5 OBJ_2CC4C OBJ_2CC06 OBJ_2CE7C SWAP OBJ_2CC92 * CB547
+          %>%% %%/>% ;                           * CB56A
 
 * ROMPTR 0C4 009
 * refs (1): CADC4
 ROMP_0C4_009:
-        ::                                       * CB579
-          DUP                                    * CB57E
-          ARSIZE                                 * CB583
-          RESOROMP                               * CB588
-          ROMPTR  0C4 00B                        * CB58D
-          RESOROMP                               * CB598
-          ROMPTR  0C4 00A                        * CB59D
-          3PICK                                  * CB5A8
-          3NULLLAM{}                             * CB5AD
-          BIND                                   * CB5B2
-          #1+                                    * CB5B7
-          DUP                                    * CB5BC
-          BINT1                                  * CB5C1
-          {}N                                    * CB5C6
-          3PICK                                  * CB5CB
-          TYPERARRY?                             * CB5D0
-          ITE                                    * CB5D5
-          %%0                                    * CB5DA
-          ((0,0))                                * CB5DF
-          MAKEARRY                               * CB5E4
-          %%1                                    * CB5E9
-          3PICK                                  * CB5EE
-          OBJ_37361                              * CB5F3
-          3UNROLL                                * CB5F8
-          ONE_DO                                 * CB5FD
-          INDEX@                                 * CB602
-          PULLLONGEL                             * CB607
-          ::                                     * CB60C
-            OBJ_3798C                            * CB611
-            case                                 * CB616
-            2GETLAM                              * CB61B
-            INDEX@                               * CB620
-            1GETLAM                              * CB625
-            #=case                               * CB62A
-            2GETLAM                              * CB62F
-            SWAP                                 * CB634
-            INDEX@                               * CB639
-            #1+                                  * CB63E
-            PULLLONGEL                           * CB643
-            C%%CONJ                              * CB648
-            ROT                                  * CB64D
-            DUPUNROT                             * CB652
-            EQUAL                                * CB657
-            ITE                                  * CB65C
-            3GETLAM                              * CB661
-            2GETLAM                              * CB666
+        :: DUP ARSIZE RESOROMP ROMPTR 0C4 00B RESOROMP ROMPTR 0C4 00A 3PICK * CB579
+          3NULLLAM{} BIND #1+ DUP BINT1 {}N 3PICK TYPERARRY? ITE %%0 ((0,0)) * CB5AD
+          MAKEARRY %%1 3PICK OBJ_37361 3UNROLL ONE_DO INDEX@ PULLLONGEL * CB5E4
+          :: OBJ_3798C case 2GETLAM              * CB60C
+            INDEX@ 1GETLAM #=case 2GETLAM        * CB620
+            SWAP INDEX@ #1+ PULLLONGEL C%%CONJ ROT DUPUNROT EQUAL ITE * CB634
+            3GETLAM 2GETLAM                      * CB661
           ;                                      * CB66B
-          EVAL                                   * CB670
-          LOOP                                   * CB675
-          ABND                                   * CB67A
-          DROP                                   * CB67F
-          ROMPTR  0C2 032                        * CB684
-        ;                                        * CB68F
+          EVAL LOOP ABND DROP ROMPTR 0C2 032 ;   * CB670
 
 * ROMPTR 0C4 00A
 * refs (1): CADC4
 ROMP_0C4_00A:
-        ::                                       * CB694
-          B%NEG                                  * CB699
-          %%0                                    * CB69E
-          4ROLL                                  * CB6A3
-          ISTOP@                                 * CB6A8
-          DUP                                    * CB6AD
-          INDEX@                                 * CB6B2
-          #-                                     * CB6B7
-          DO                                     * CB6BC
-          SWAP                                   * CB6C1
-          3PICK                                  * CB6C6
-          L%*                                    * CB6CB
-          SWAP                                   * CB6D0
-          INDEX@                                 * CB6D5
-          #1+                                    * CB6DA
-          OBJ_372EF                              * CB6DF
-          DUPUNROT                               * CB6E4
-          4ROLL                                  * CB6E9
-          L%+                                    * CB6EE
-          INDEX@                                 * CB6F3
-          OBJ_37361                              * CB6F8
-          NextInArray                            * CB6FD
-          3UNROLL                                * CB702
-          L%*                                    * CB707
-          ISTOP@                                 * CB70C
-          OBJ_37361                              * CB711
-          SWAP                                   * CB716
-        ;                                        * CB71B
+        :: B%NEG %%0 4ROLL ISTOP@ DUP INDEX@ #- DO SWAP 3PICK L%* SWAP * CB694
+          INDEX@ #1+ OBJ_372EF DUPUNROT 4ROLL L%+ INDEX@ OBJ_37361 * CB6D5
+          NextInArray 3UNROLL L%* ISTOP@ OBJ_37361 SWAP ; * CB6FD
 
 * ROMPTR 0C4 00B
 * refs (1): CADC4
 ROMP_0C4_00B:
-        ::                                       * CB720
-          C%%>%%                                 * CB725
-          OVER                                   * CB72A
-          %%SQR                                  * CB72F
-          SWAP                                   * CB734
-          DUP                                    * CB739
-          %%+                                    * CB73E
-          ((0,0))                                * CB743
-          ((0,0))                                * CB748
-          6ROLL                                  * CB74D
-          1GETLAM                                * CB752
-          DUP                                    * CB757
-          INDEX@                                 * CB75C
-          #-                                     * CB761
-          DO                                     * CB766
-          INDEX@                                 * CB76B
-          #2+                                    * CB770
-          OBJ_372EF                              * CB775
-          SWAP                                   * CB77A
-          4ROLL                                  * CB77F
-          6PICK                                  * CB784
-          C%%C*R                                 * CB789
-          4PICK                                  * CB78E
-          6PICK                                  * CB793
-          C%%C*R                                 * CB798
-          C%%C-C                                 * CB79D
-          3PICK                                  * CB7A2
-          C%%C+C                                 * CB7A7
-          INDEX@                                 * CB7AC
-          OBJ_37361                              * CB7B1
-          NextInArray                            * CB7B6
-          ROT                                    * CB7BB
-          5PICK                                  * CB7C0
-          C%%C*R                                 * CB7C5
-          3PICK                                  * CB7CA
-          5ROLL                                  * CB7CF
-          C%%C*R                                 * CB7D4
-          C%%C-C                                 * CB7D9
-          1GETLAM                                * CB7DE
-          OBJ_37361                              * CB7E3
-          3UNROLL                                * CB7E8
-          C%%R*C                                 * CB7ED
-          1GETLAM                                * CB7F2
-          #1+                                    * CB7F7
-          OBJ_37361                              * CB7FC
-          SWAP                                   * CB801
-          INDEX@                                 * CB806
-          #1+                                    * CB80B
-          INDEXSTO                               * CB810
-        ;                                        * CB815
+        :: C%%>%% OVER %%SQR SWAP DUP %%+ ((0,0)) ((0,0)) 6ROLL 1GETLAM DUP * CB720
+          INDEX@ #- DO INDEX@ #2+ OBJ_372EF SWAP 4ROLL 6PICK C%%C*R 4PICK * CB75C
+          6PICK C%%C*R C%%C-C 3PICK C%%C+C INDEX@ OBJ_37361 NextInArray ROT * CB793
+          5PICK C%%C*R 3PICK 5ROLL C%%C*R C%%C-C 1GETLAM OBJ_37361 3UNROLL * CB7C0
+          C%%R*C 1GETLAM #1+ OBJ_37361 SWAP INDEX@ #1+ INDEXSTO ; * CB7ED
 
 * ROMPTR 0C4 00C
 * refs (1): CADC4
 ROMP_0C4_00C:
-        ::                                       * CB81A
-          NOTNUM?                                * CB81F
-          SWAP                                   * CB824
-          CLRNUM                                 * CB829
-          %0_2A2B4                               * CB82E
-          4ROLL                                  * CB833
-          ONE_DO_ARRY                            * CB838
-          INDEX@                                 * CB83D
-          PULLEL                                 * CB842
-          ROTSWAP                                * CB847
-          4PICK                                  * CB84C
-          ISTOP@                                 * CB851
-          INDEX@                                 * CB856
-          OBJ_36FC4                              * CB85B
-          UNCOERCE                               * CB860
-          x^                                     * CB865
-          x*                                     * CB86A
-          x+                                     * CB86F
-          SWAP                                   * CB874
-          NextInArray                            * CB879
-          DROPSWAPDROP                           * CB87E
-          SWAP                                   * CB883
-          ?SKIP                                  * CB888
-          SETNUM                                 * CB88D
+        :: NOTNUM? SWAP CLRNUM %0_2A2B4 4ROLL ONE_DO_ARRY INDEX@ PULLEL * CB81A
+          ROTSWAP 4PICK ISTOP@ INDEX@ OBJ_36FC4 UNCOERCE x^ x* x+ SWAP * CB847
+          NextInArray DROPSWAPDROP SWAP ?SKIP SETNUM * CB879
         ;                                        * CB892
 
 * ROMPTR 0C4 00D
 * refs (1): CADC4
 ROMP_0C4_00D:
-        ::                                       * CB897
-          NOTNUM?                                * CB89C
-          SWAP                                   * CB8A1
-          CLRNUM                                 * CB8A6
-          %1                                     * CB8AB
-          4ROLL                                  * CB8B0
-          ONE_DO_ARRY                            * CB8B5
-          INDEX@                                 * CB8BA
-          PULLEL                                 * CB8BF
-          4PICKSWAP                              * CB8C4
-          x-                                     * CB8C9
-          ROTSWAP                                * CB8CE
-          x*                                     * CB8D3
-          SWAP                                   * CB8D8
-          NextInArray                            * CB8DD
-          DROPSWAPDROP                           * CB8E2
-          SWAP                                   * CB8E7
-          ?SKIP                                  * CB8EC
-          SETNUM                                 * CB8F1
+        :: NOTNUM? SWAP CLRNUM %1 4ROLL ONE_DO_ARRY INDEX@ PULLEL 4PICKSWAP * CB897
+          x- ROTSWAP x* SWAP NextInArray DROPSWAPDROP SWAP ?SKIP SETNUM * CB8C9
         ;                                        * CB8F6
 
 * ROMPTR 0C4 00E
 * refs (1): CADC4
 ROMP_0C4_00E:
-        ::                                       * CB8FB
-          F%>L%                                  * CB900
-          SWAP                                   * CB905
-          %%0                                    * CB90A
-          OVERARSIZE                             * CB90F
-          #1+_ONE_DO                             * CB914
-          3PICK                                  * CB919
-          L%*                                    * CB91E
-          SWAP                                   * CB923
-          INDEX@                                 * CB928
-          PULLLONGEL                             * CB92D
-          ROT                                    * CB932
-          L%+                                    * CB937
+        :: F%>L% SWAP %%0 OVERARSIZE #1+_ONE_DO 3PICK L%* SWAP INDEX@ * CB8FB
+          PULLLONGEL ROT L%+                     * CB92D
           CODE                                   * CB93C  180 nibbles
             C=DAT1  A                            * CB946
             CD1EX                                * CB949
@@ -936,10 +711,7 @@ L_CB9EA:
             A=C     A                            * CB9F6
             RTNCC                                * CB9F8
           ENDCODE                                * CB9FA
-          NextInArray                            * CB9FA
-          ROTROT2DROP                            * CB9FF
-          ToNorm(nb)                             * CBA04
-        ;                                        * CBA09
+          NextInArray ROTROT2DROP ToNorm(nb) ;   * CB9FA
 
 LIB0C4.hash:
         CON(5)  DOHSTR                           * CBA0E  hash table of library 0C4

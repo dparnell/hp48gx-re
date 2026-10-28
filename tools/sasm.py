@@ -47,7 +47,9 @@ Source format
   `C% re im`, `C%% re im`, `CHR "c"` or `CHR #xx`, `$ "text"`, `HXS hex`,
   `ID name`, `LAM name`, `TAG "text"`, `ROMPTR lib cmd`, `ACPTR expr expr`,
   `GROB "png"`, `CODE` ... `ENDCODE` (Saturn lines in between). Any other
-  token is a pointer to that symbol; `PTR expr` says so explicitly.
+  token is a pointer to that symbol; `PTR expr` says so explicitly. A line
+  may hold several objects (`:: DUP # 3F ROMPTR 0C2 000 ;`); `CODE` ends its
+  line.
 """
 import re
 import struct
@@ -76,6 +78,26 @@ RPL_WORDS = set(OPENERS) | {";", "}", "#", "%", "%%", "C%", "C%%", "CHR", "$", "
 DIRECTIVES = {"ORG", "INCLUDE", "ASSEMBLE", "RPL", "NIBHEX", "NIBASC", "BSS", "EQU",
               "GLYPHS", "$BODY", "LENGTH", "ENDLENGTH", "FILLTO", "PIN", "CRC"}
 KEYWORDS = RPL_WORDS | DIRECTIVES
+
+# Operands each RPL word takes, so that a line can hold several objects
+# (`:: DUP # 3F ROMPTR 0C2 000 ;`). Pointers and the rest take none.
+RPL_OPERANDS = {"#": 1, "%": 1, "%%": 1, "C%": 2, "C%%": 2, "CHR": 1, "$": 1, "HXS": 1, "ID": 1,
+                "LAM": 1, "TAG": 1, "ROMPTR": 2, "ACPTR": 2, "GROB": 1, "PTR": 1}
+
+
+def rpl_objects(toks):
+    """The objects on an RPL line, each as its tokens."""
+    out = []
+    i = 0
+    while i < len(toks):
+        n = RPL_OPERANDS.get(toks[i], 0)
+        if toks[i] == "HXS" and (i + 1 >= len(toks) or not re.fullmatch(r"[0-9A-Fa-f]+", toks[i + 1])):
+            n = 0       # an empty hex string
+        if i + n >= len(toks) and n:
+            raise AsmError("%s needs %d operand%s" % (toks[i], n, "s" if n > 1 else ""))
+        out.append(toks[i:i + n + 1])
+        i += n + 1
+    return out
 
 
 class AsmError(Exception):
@@ -702,6 +724,14 @@ class Assembler:
             start = state["code"].pop()
             self.put(start + 5, digits(self.pc - start - 5, 5), overwrite=True)
             state["mode"] = "RPL"
+            return
+        raw = op in ("NIBHEX", "NIBASC", "$BODY", "BSS", "GLYPHS") or re.fullmatch(r"(CON|REL)\(\d+\)", op)
+        if state["mode"] == "RPL" and op not in DIRECTIVES and not raw:
+            objs = rpl_objects(toks)
+            for k, obj in enumerate(objs):
+                if obj[0] == "CODE" and k < len(objs) - 1:
+                    raise AsmError("CODE must end its line")
+                self.put(self.pc, self.encode(obj, self.pc, state))
             return
         self.put(self.pc, self.encode(toks, self.pc, state))
 

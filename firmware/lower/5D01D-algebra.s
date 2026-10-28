@@ -6,404 +6,174 @@
 
 * refs (2): 5CFFA 5D00E
 OBJ_5D01D:
-        ::                                       * 5D01D
-          'R                                     * 5D022
-          RDROP                                  * 5D027
-          dvarlsBIND                             * 5D02C
-          BEGIN                                  * 5D031
-          ::                                     * 5D036
-            1GETLAM                              * 5D03B
-            EVAL                                 * 5D040
-          ;                                      * 5D045
-          BINT1                                  * 5D04A
-          OBJ_69B30                              * 5D04F
-          OBJ_69B30                              * 5D054
-          PICK                                   * 5D059
-          #0<>                                   * 5D05E
-          WHILE                                  * 5D063
-          ::                                     * 5D068
-            top&                                 * 5D06D
-            psh                                  * 5D072
-            DUP                                  * 5D077
-            #2+                                  * 5D07C
-            BINT1                                * 5D081
-            splitdown                            * 5D086
-            DROP                                 * 5D08B
-            #1-                                  * 5D090
-            tailpsh                              * 5D095
-            rotswap                              * 5D09A
-            top&                                 * 5D09F
-            larg                                 * 5D0A4
-          ;                                      * 5D0A9
-          REPEAT                                 * 5D0AE
-          ABND                                   * 5D0B3
-          RDROP                                  * 5D0B8
-        ;                                        * 5D0BD
+        :: 'R RDROP dvarlsBIND BEGIN             * 5D01D
+          :: 1GETLAM EVAL ; BINT1 OBJ_69B30 OBJ_69B30 PICK #0<> WHILE * 5D036
+          :: top& psh DUP #2+ BINT1 splitdown DROP #1- tailpsh rotswap top& * 5D068
+            larg ;                               * 5D0A4
+          REPEAT ABND RDROP ;                    * 5D0AE
 
 * meta -> meta'
 * refs (6): 5ACD1 5D176 83919 840A3 841E3 844B3
 forceadd:
-        ::                                       * 5D0C2
-          M1st+case                              * 5D0C7
-          OBJ_5D167                              * 5D0CC
-          M1st-case                              * 5D0D1
-          OBJ_5D0EA                              * 5D0D6
-          M1stNEGcase                            * 5D0DB
-          OBJ_5D10D                              * 5D0E0
+        :: M1st+case OBJ_5D167                   * 5D0C2
+          M1st-case OBJ_5D0EA                    * 5D0D1
+          M1stNEGcase OBJ_5D10D                  * 5D0DB
         ;                                        * 5D0E5
 
 * refs (2): 5D0D6 5D130
 OBJ_5D0EA:
-        ::                                       * 5D0EA
-          SWAPDROP#1-                            * 5D0EF
-          metaneg                                * 5D0F4
-          OBJ_5CD02                              * 5D0F9
-          COLA                                   * 5D0FE
-          OBJ_5D167                              * 5D103
+        :: SWAPDROP#1- metaneg OBJ_5CD02 COLA OBJ_5D167 * 5D0EA
         ;                                        * 5D108
 
 * refs (1): 5D0E0
 OBJ_5D10D:
-        ::                                       * 5D10D
-          3PICK                                  * 5D112
-          REQcasedrop                            * 5D117
-          x+                                     * 5D11C
-          ::                                     * 5D121
-            OBJ_5CC58                            * 5D126
-            COLA                                 * 5D12B
-            OBJ_5D0EA                            * 5D130
+        :: 3PICK REQcasedrop x+                  * 5D10D
+          :: OBJ_5CC58 COLA OBJ_5D0EA            * 5D121
           ;                                      * 5D135
-          REQcasedrop                            * 5D13A
-          x-                                     * 5D13F
-          ::                                     * 5D144
-            OBJ_5CC71                            * 5D149
-            COLA                                 * 5D14E
-            OBJ_5D167                            * 5D153
+          REQcasedrop x-                         * 5D13A
+          :: OBJ_5CC71 COLA OBJ_5D167            * 5D144
           ;                                      * 5D158
-          DROP                                   * 5D15D
-        ;                                        * 5D162
+          DROP ;                                 * 5D15D
 
 * refs (3): 5D0CC 5D103 5D153
 OBJ_5D167:
-        ::                                       * 5D167
-          SWAPDROP#1-                            * 5D16C
-          larg                                   * 5D171
-          forceadd                               * 5D176
-          OVER'                                  * 5D17B
-          x+                                     * 5D180
-          EQIT                                   * 5D185
-          ::                                     * 5D18A
-            plDRPpZparg                          * 5D18F
-            meta+                                * 5D194
-            pshtop&                              * 5D199
-          ;                                      * 5D19E
-          top&                                   * 5D1A3
-          OBJ_5CD02                              * 5D1A8
-        ;                                        * 5D1AD
+        :: SWAPDROP#1- larg forceadd OVER' x+ EQIT * 5D167
+          :: plDRPpZparg meta+ pshtop& ; top& OBJ_5CD02 ; * 5D18A
 
 * refs (5): 5D261 839BE 840B2 84355 844A9
 OBJ_5D1B2:
-        ::                                       * 5D1B2
-          M1st+case                              * 5D1B7
-          OBJ_5D257                              * 5D1BC
-          M1st-case                              * 5D1C1
-          OBJ_5D234                              * 5D1C6
-          M1stNEGcase                            * 5D1CB
-          OBJ_5D1DA                              * 5D1D0
+        :: M1st+case OBJ_5D257                   * 5D1B2
+          M1st-case OBJ_5D234                    * 5D1C1
+          M1stNEGcase OBJ_5D1DA                  * 5D1CB
         ;                                        * 5D1D5
 
 * refs (1): 5D1D0
 OBJ_5D1DA:
-        ::                                       * 5D1DA
-          3PICK                                  * 5D1DF
-          REQcasedrop                            * 5D1E4
-          x+                                     * 5D1E9
-          ::                                     * 5D1EE
-            OBJ_5CC58                            * 5D1F3
-            COLA                                 * 5D1F8
-            OBJ_5D234                            * 5D1FD
+        :: 3PICK REQcasedrop x+                  * 5D1DA
+          :: OBJ_5CC58 COLA OBJ_5D234            * 5D1EE
           ;                                      * 5D202
-          REQcasedrop                            * 5D207
-          x-                                     * 5D20C
-          ::                                     * 5D211
-            OBJ_5CC71                            * 5D216
-            COLA                                 * 5D21B
-            OBJ_5D257                            * 5D220
+          REQcasedrop x-                         * 5D207
+          :: OBJ_5CC71 COLA OBJ_5D257            * 5D211
           ;                                      * 5D225
-          DROP                                   * 5D22A
-        ;                                        * 5D22F
+          DROP ;                                 * 5D22A
 
 * refs (2): 5D1C6 5D1FD
 OBJ_5D234:
-        ::                                       * 5D234
-          SWAPDROP#1-                            * 5D239
-          metaneg                                * 5D23E
-          OBJ_5CD02                              * 5D243
-          COLA                                   * 5D248
-          OBJ_5D257                              * 5D24D
+        :: SWAPDROP#1- metaneg OBJ_5CD02 COLA OBJ_5D257 * 5D234
         ;                                        * 5D252
 
 * refs (3): 5D1BC 5D220 5D24D
 OBJ_5D257:
-        ::                                       * 5D257
-          plDRPpZparg                            * 5D25C
-          OBJ_5D1B2                              * 5D261
-          OVER'                                  * 5D266
-          x+                                     * 5D26B
-          EQIT                                   * 5D270
-          ::                                     * 5D275
-            SWAPDROP#1-                          * 5D27A
-            pshtop&                              * 5D27F
-            meta+                                * 5D284
-            pshzer                               * 5D289
-          ;                                      * 5D28E
-          pshtop&                                * 5D293
-          OBJ_5CD02                              * 5D298
-        ;                                        * 5D29D
+        :: plDRPpZparg OBJ_5D1B2 OVER' x+ EQIT   * 5D257
+          :: SWAPDROP#1- pshtop& meta+ pshzer ; pshtop& OBJ_5CD02 ; * 5D275
 
 * refs (1): 5D7AE
 OBJ_5D2A2:
-        ::                                       * 5D2A2
-          SWAPDROP#1-                            * 5D2A7
-          metaneg                                * 5D2AC
-          OBJ_5CD02                              * 5D2B1
-          COLA                                   * 5D2B6
-          ROMPTR  0F0 055                        * 5D2BB
+        :: SWAPDROP#1- metaneg OBJ_5CD02 COLA ROMPTR 0F0 055 * 5D2A2
         ;                                        * 5D2C6
 
 * refs (2): 840A8 844B8
 OBJ_5D2CB:
-        ::                                       * 5D2CB
-          M1st+case                              * 5D2D0
-          ::                                     * 5D2D5
-            #1-SWAP                              * 5D2DA
-            pshm1                                * 5D2DF
-            pshzerpsharg                         * 5D2E4
-            unrot                                * 5D2E9
-          ;                                      * 5D2EE
-          pshzer                                 * 5D2F3
-          pshzer                                 * 5D2F8
-        ;                                        * 5D2FD
+        :: M1st+case                             * 5D2CB
+          :: #1-SWAP pshm1 pshzerpsharg unrot ;  * 5D2D5
+          pshzer pshzer ;                        * 5D2F3
 
 * refs (2): 840B7 844C2
 OBJ_5D302:
-        ::                                       * 5D302
-          M1st+case                              * 5D307
-          ::                                     * 5D30C
-            #1-SWAP                              * 5D311
-            pshm1                                * 5D316
-            pshzerpsharg                         * 5D31B
-            rotswap                              * 5D320
-          ;                                      * 5D325
-          pshzer                                 * 5D32A
-          pshzer                                 * 5D32F
-        ;                                        * 5D334
+        :: M1st+case                             * 5D302
+          :: #1-SWAP pshm1 pshzerpsharg rotswap ; * 5D30C
+          pshzer pshzer ;                        * 5D32A
 
 * refs (5): 5D3ED 838EC 840F8 8429C 8454E
 OBJ_5D339:
-        ::                                       * 5D339
-          M1st*case                              * 5D33E
-          OBJ_5D3DE                              * 5D343
-          M1st/case                              * 5D348
-          OBJ_5D361                              * 5D34D
-          M1stINVcase                            * 5D352
-          OBJ_5D384                              * 5D357
+        :: M1st*case OBJ_5D3DE                   * 5D339
+          M1st/case OBJ_5D361                    * 5D348
+          M1stINVcase OBJ_5D384                  * 5D352
         ;                                        * 5D35C
 
 * refs (2): 5D34D 5D3A7
 OBJ_5D361:
-        ::                                       * 5D361
-          SWAPDROP#1-                            * 5D366
-          metainv                                * 5D36B
-          addt*                                  * 5D370
-          COLA                                   * 5D375
-          OBJ_5D3DE                              * 5D37A
+        :: SWAPDROP#1- metainv addt* COLA OBJ_5D3DE * 5D361
         ;                                        * 5D37F
 
 * refs (1): 5D357
 OBJ_5D384:
-        ::                                       * 5D384
-          3PICK                                  * 5D389
-          REQcasedrop                            * 5D38E
-          x*                                     * 5D393
-          ::                                     * 5D398
-            OBJ_5CCBC                            * 5D39D
-            COLA                                 * 5D3A2
-            OBJ_5D361                            * 5D3A7
+        :: 3PICK REQcasedrop x*                  * 5D384
+          :: OBJ_5CCBC COLA OBJ_5D361            * 5D398
           ;                                      * 5D3AC
-          REQcasedrop                            * 5D3B1
-          x/                                     * 5D3B6
-          ::                                     * 5D3BB
-            OBJ_5CCD5                            * 5D3C0
-            COLA                                 * 5D3C5
-            OBJ_5D3DE                            * 5D3CA
+          REQcasedrop x/                         * 5D3B1
+          :: OBJ_5CCD5 COLA OBJ_5D3DE            * 5D3BB
           ;                                      * 5D3CF
-          DROP                                   * 5D3D4
-        ;                                        * 5D3D9
+          DROP ;                                 * 5D3D4
 
 * refs (3): 5D343 5D37A 5D3CA
 OBJ_5D3DE:
-        ::                                       * 5D3DE
-          SWAPDROP#1-                            * 5D3E3
-          larg                                   * 5D3E8
-          OBJ_5D339                              * 5D3ED
-          OVER'                                  * 5D3F2
-          x*                                     * 5D3F7
-          EQIT                                   * 5D3FC
-          ::                                     * 5D401
-            plDRPpZparg                          * 5D406
-            meta*                                * 5D40B
-            pshtop&                              * 5D410
-          ;                                      * 5D415
-          top&                                   * 5D41A
-          addt*                                  * 5D41F
-        ;                                        * 5D424
+        :: SWAPDROP#1- larg OBJ_5D339 OVER' x* EQIT * 5D3DE
+          :: plDRPpZparg meta* pshtop& ; top& addt* ; * 5D401
 
 * refs (5): 5D4D8 83987 84107 8440E 84544
 OBJ_5D429:
-        ::                                       * 5D429
-          M1st*case                              * 5D42E
-          OBJ_5D4CE                              * 5D433
-          M1st/case                              * 5D438
-          OBJ_5D4AB                              * 5D43D
-          M1stINVcase                            * 5D442
-          OBJ_5D451                              * 5D447
+        :: M1st*case OBJ_5D4CE                   * 5D429
+          M1st/case OBJ_5D4AB                    * 5D438
+          M1stINVcase OBJ_5D451                  * 5D442
         ;                                        * 5D44C
 
 * refs (1): 5D447
 OBJ_5D451:
-        ::                                       * 5D451
-          3PICK                                  * 5D456
-          REQcasedrop                            * 5D45B
-          x*                                     * 5D460
-          ::                                     * 5D465
-            OBJ_5CCBC                            * 5D46A
-            COLA                                 * 5D46F
-            OBJ_5D4AB                            * 5D474
+        :: 3PICK REQcasedrop x*                  * 5D451
+          :: OBJ_5CCBC COLA OBJ_5D4AB            * 5D465
           ;                                      * 5D479
-          REQcasedrop                            * 5D47E
-          x/                                     * 5D483
-          ::                                     * 5D488
-            OBJ_5CCD5                            * 5D48D
-            COLA                                 * 5D492
-            OBJ_5D4CE                            * 5D497
+          REQcasedrop x/                         * 5D47E
+          :: OBJ_5CCD5 COLA OBJ_5D4CE            * 5D488
           ;                                      * 5D49C
-          DROP                                   * 5D4A1
-        ;                                        * 5D4A6
+          DROP ;                                 * 5D4A1
 
 * refs (2): 5D43D 5D474
 OBJ_5D4AB:
-        ::                                       * 5D4AB
-          SWAPDROP#1-                            * 5D4B0
-          metainv                                * 5D4B5
-          addt*                                  * 5D4BA
-          COLA                                   * 5D4BF
-          OBJ_5D4CE                              * 5D4C4
+        :: SWAPDROP#1- metainv addt* COLA OBJ_5D4CE * 5D4AB
         ;                                        * 5D4C9
 
 * refs (3): 5D433 5D497 5D4C4
 OBJ_5D4CE:
-        ::                                       * 5D4CE
-          plDRPpZparg                            * 5D4D3
-          OBJ_5D429                              * 5D4D8
-          OVER'                                  * 5D4DD
-          x*                                     * 5D4E2
-          EQIT                                   * 5D4E7
-          ::                                     * 5D4EC
-            SWAPDROP#1-                          * 5D4F1
-            pshtop&                              * 5D4F6
-            meta*                                * 5D4FB
-            pshzer                               * 5D500
-          ;                                      * 5D505
-          pshtop&                                * 5D50A
-          addt*                                  * 5D50F
-        ;                                        * 5D514
+        :: plDRPpZparg OBJ_5D429 OVER' x* EQIT   * 5D4CE
+          :: SWAPDROP#1- pshtop& meta* pshzer ; pshtop& addt* ; * 5D4EC
 
 * refs (1): 5D809
 OBJ_5D519:
-        ::                                       * 5D519
-          SWAPDROP#1-                            * 5D51E
-          metainv                                * 5D523
-          addt*                                  * 5D528
-          COLA                                   * 5D52D
-          ROMPTR  0F0 056                        * 5D532
+        :: SWAPDROP#1- metainv addt* COLA ROMPTR 0F0 056 * 5D519
         ;                                        * 5D53D
 
 * refs (2): 840FD 84553
 OBJ_5D542:
-        ::                                       * 5D542
-          M1st*case                              * 5D547
-          ::                                     * 5D54C
-            #1-SWAP                              * 5D551
-            pshm1                                * 5D556
-            pshzerpsharg                         * 5D55B
-            unrot                                * 5D560
-          ;                                      * 5D565
-          pshzer                                 * 5D56A
-          pshzer                                 * 5D56F
-        ;                                        * 5D574
+        :: M1st*case                             * 5D542
+          :: #1-SWAP pshm1 pshzerpsharg unrot ;  * 5D54C
+          pshzer pshzer ;                        * 5D56A
 
 * refs (2): 8410C 8455D
 OBJ_5D579:
-        ::                                       * 5D579
-          M1st*case                              * 5D57E
-          ::                                     * 5D583
-            #1-SWAP                              * 5D588
-            pshm1                                * 5D58D
-            pshzerpsharg                         * 5D592
-            rotswap                              * 5D597
-          ;                                      * 5D59C
-          pshzer                                 * 5D5A1
-          pshzer                                 * 5D5A6
-        ;                                        * 5D5AB
+        :: M1st*case                             * 5D579
+          :: #1-SWAP pshm1 pshzerpsharg rotswap ; * 5D583
+          pshzer pshzer ;                        * 5D5A1
 
 * refs (3): 5D6EA 5D75D 5D877
 OBJ_5D5B0:
-        ::                                       * 5D5B0
-          DUP#0=case                             * 5D5B5
-          FALSE                                  * 5D5BA
-          DUP#2+                                 * 5D5BF
-          BINT1                                  * 5D5C4
-          BEGIN                                  * 5D5C9
-          splitdown                              * 5D5CE
-          OVER                                   * 5D5D3
-          #2+PICK                                * 5D5D8
-          1GETLAM                                * 5D5DD
-          EQcasedrop                             * 5D5E2
+        :: DUP#0=case FALSE                      * 5D5B0
+          DUP#2+ BINT1 BEGIN splitdown OVER #2+PICK 1GETLAM EQcasedrop * 5D5BF
           OBJ_5D62D                              * 5D5E7
-          2GETLAM                                * 5D5EC
-          EQcasedrop                             * 5D5F1
-          OBJ_5D62D                              * 5D5F6
-          REQcasedrop                            * 5D5FB
-          x=                                     * 5D600
-          OBJ_5D62D                              * 5D605
-          2DROP                                  * 5D60A
-          BINT2                                  * 5D60F
-          #=casedrop                             * 5D614
-          RDROPFALSE                             * 5D619
-          BINT1                                  * 5D61E
-          AGAIN                                  * 5D623
-        ;                                        * 5D628
+          2GETLAM EQcasedrop OBJ_5D62D           * 5D5EC
+          REQcasedrop x=                         * 5D5FB
+          OBJ_5D62D 2DROP BINT2 #=casedrop RDROPFALSE * 5D605
+          BINT1 AGAIN ;                          * 5D61E
 
 * refs (3): 5D5E7 5D5F6 5D605
 OBJ_5D62D:
-        ::                                       * 5D62D
-          3GETLAM                                * 5D632
-          #=casedrop                             * 5D637
-          COLATRUE                               * 5D63C
-          DROP                                   * 5D641
-          BINT2                                  * 5D646
-          #=casedrop                             * 5D64B
-          RDROPFALSE                             * 5D650
-          BINT1                                  * 5D655
-          AGAIN                                  * 5D65A
-        ;                                        * 5D65F
+        :: 3GETLAM #=casedrop COLATRUE           * 5D62D
+          DROP BINT2 #=casedrop RDROPFALSE       * 5D641
+          BINT1 AGAIN ;                          * 5D655
 
 * refs (2): 5D7BD 5D818
 OBJ_5D664:
-        ::                                       * 5D664
-          BINT1                                  * 5D669
-          'R'R                                   * 5D66E
+        :: BINT1 'R'R                            * 5D664
 
 * refs (4): 5D730 5D86D 5D935 5DA0C
 OBJ_5D673:
@@ -411,64 +181,28 @@ OBJ_5D673:
             {                                    * 5D678
 
 Π'which:
-              LAM     'which                     * 5D67D
+              LAM 'which                         * 5D67D
 
 Π'op1:
-              LAM     'op1                       * 5D690
+              LAM 'op1                           * 5D690
 
 Π'op2:
-              LAM     'op2                       * 5D69F
-            }                                    * 5D6AE
-            BIND                                 * 5D6B3
-          ;                                      * 5D6B8
-          3PICK                                  * 5D6BD
-          2GETLAM                                * 5D6C2
-          EQcasedrop                             * 5D6C7
-          pullpsh1&                              * 5D6CC
-          1GETLAM                                * 5D6D1
-          EQcasedrop                             * 5D6D6
-          pullpsh1&                              * 5D6DB
-          DROP                                   * 5D6E0
-          psh                                    * 5D6E5
-          OBJ_5D5B0                              * 5D6EA
-          NOTcase                                * 5D6EF
+              LAM 'op2 }                         * 5D69F
+            BIND ;                               * 5D6B3
+          3PICK 2GETLAM EQcasedrop pullpsh1&     * 5D6BD
+          1GETLAM EQcasedrop pullpsh1&           * 5D6D1
+          DROP psh OBJ_5D5B0 NOTcase             * 5D6E0
 
 swapB;B2[n]=>B1[1]:
-          ::                                     * 5D6F4
-            psh                                  * 5D6F9
-            pullpsh1&                            * 5D6FE
-          ;                                      * 5D703
-          #1-                                    * 5D708
-          tailpsh                                * 5D70D
-          rotswap                                * 5D712
-          top&                                   * 5D717
-        ;                                        * 5D71C
+          :: psh pullpsh1& ;                     * 5D6F4
+          #1- tailpsh rotswap top& ;             * 5D708
 
 * refs (2): 84152 8417A
 OBJ_5D721:
-        ::                                       * 5D721
-          BINT2                                  * 5D726
-          'R'R                                   * 5D72B
-          OBJ_5D673                              * 5D730
-          pargop                                 * 5D735
-          2GETLAM                                * 5D73A
-          MEQ1stcase                             * 5D73F
-          overev&                                * 5D744
-          1GETLAM                                * 5D749
-          MEQ1stcase                             * 5D74E
-          overev&                                * 5D753
-          rot                                    * 5D758
-          OBJ_5D5B0                              * 5D75D
-          NOTcase                                * 5D762
-          psh&                                   * 5D767
-          SWAP#1+                                * 5D76C
-          overev&                                * 5D771
-          #1-SWAP                                * 5D776
-          #1-                                    * 5D77B
-          tailpsh                                * 5D780
-          rotswap                                * 5D785
-          top&                                   * 5D78A
-        ;                                        * 5D78F
+        :: BINT2 'R'R OBJ_5D673 pargop 2GETLAM MEQ1stcase overev& * 5D721
+          1GETLAM MEQ1stcase overev&             * 5D749
+          rot OBJ_5D5B0 NOTcase psh&             * 5D758
+          SWAP#1+ overev& #1-SWAP #1- tailpsh rotswap top& ; * 5D76C
 
 * refs (2): 5C6A5 5C6AF
 OBJ_5D794:
@@ -476,25 +210,13 @@ OBJ_5D794:
 
 * refs (1): 84148
 OBJ_5D799:
-          ::                                     * 5D799
-            M1st+case                            * 5D79E
-            ROMPTR  0F0 055                      * 5D7A3
-            OBJ_5D2A2                            * 5D7AE
-          ;                                      * 5D7B3
-          rotswap                                * 5D7B8
-          OBJ_5D664                              * 5D7BD
-          x+                                     * 5D7C2
-          x-                                     * 5D7C7
+          :: M1st+case ROMPTR 0F0 055            * 5D799
+            OBJ_5D2A2 ;                          * 5D7AE
+          rotswap OBJ_5D664 x+ x-                * 5D7B8
 
 * refs (3): 5D827 84161 84189
 OBJ_5D7CC:
-          ::                                     * 5D7CC
-            ABND                                 * 5D7D1
-            rotswap                              * 5D7D6
-            top&                                 * 5D7DB
-            larg                                 * 5D7E0
-          ;                                      * 5D7E5
-        ;                                        * 5D7EA
+          :: ABND rotswap top& larg ; ;          * 5D7CC
 
 * refs (2): 5C6B9 5C6C3
 OBJ_5D7EF:
@@ -502,441 +224,152 @@ OBJ_5D7EF:
 
 * refs (1): 84170
 OBJ_5D7F4:
-          ::                                     * 5D7F4
-            M1st*case                            * 5D7F9
-            ROMPTR  0F0 056                      * 5D7FE
-            OBJ_5D519                            * 5D809
-          ;                                      * 5D80E
-          rotswap                                * 5D813
-          OBJ_5D664                              * 5D818
-          x*                                     * 5D81D
-          x/                                     * 5D822
-          OBJ_5D7CC                              * 5D827
-        ;                                        * 5D82C
+          :: M1st*case ROMPTR 0F0 056            * 5D7F4
+            OBJ_5D519 ;                          * 5D809
+          rotswap OBJ_5D664 x* x/ OBJ_5D7CC ;    * 5D813
 
 * refs (2): 84198 84251
 OBJ_5D831:
-        ::                                       * 5D831
-          BINT2                                  * 5D836
-          COLA                                   * 5D83B
-          OBJ_5D863                              * 5D840
+        :: BINT2 COLA OBJ_5D863                  * 5D831
         ;                                        * 5D845
 
 * refs (2): 8430A 843C3
 OBJ_5D84A:
-        ::                                       * 5D84A
-          BINT1                                  * 5D84F
-          COLA                                   * 5D854
-          OBJ_5D863                              * 5D859
+        :: BINT1 COLA OBJ_5D863                  * 5D84A
         ;                                        * 5D85E
 
 * refs (2): 5D840 5D859
 OBJ_5D863:
-        ::                                       * 5D863
-          'R'R                                   * 5D868
-          OBJ_5D673                              * 5D86D
-          rot                                    * 5D872
-          OBJ_5D5B0                              * 5D877
-          ABND                                   * 5D87C
-          NOTcase                                * 5D881
-          ::                                     * 5D886
-            unrot                                * 5D88B
-            FALSE                                * 5D890
-          ;                                      * 5D895
-          #1-                                    * 5D89A
-          tailpsh                                * 5D89F
-          psh                                    * 5D8A4
-          over&                                  * 5D8A9
-          over&                                  * 5D8AE
-          psh                                    * 5D8B3
-          larg                                   * 5D8B8
-          TRUE                                   * 5D8BD
-        ;                                        * 5D8C2
+        :: 'R'R OBJ_5D673 rot OBJ_5D5B0 ABND NOTcase * 5D863
+          :: unrot FALSE ;                       * 5D886
+          #1- tailpsh psh over& over& psh larg TRUE ; * 5D89A
 
 * refs (2): 841CF 84288
 OBJ_5D8C7:
-        ::                                       * 5D8C7
-          RDUP                                   * 5D8CC
-          'R'R                                   * 5D8D1
-          RDROP                                  * 5D8D6
-          4PICK                                  * 5D8DB
-          EQ                                     * 5D8E0
-          SWAP                                   * 5D8E5
-          4PICK                                  * 5D8EA
-          EQ                                     * 5D8EF
-          SWAP                                   * 5D8F4
-          OR                                     * 5D8F9
-          case                                   * 5D8FE
-          OBJ_5D926                              * 5D903
-          RDROP                                  * 5D908
-          1GETABND                               * 5D90D
-          SWAP#1+                                * 5D912
-          top&                                   * 5D917
-          larg&                                  * 5D91C
-        ;                                        * 5D921
+        :: RDUP 'R'R RDROP 4PICK EQ SWAP 4PICK EQ SWAP OR case OBJ_5D926 * 5D8C7
+          RDROP 1GETABND SWAP#1+ top& larg& ;    * 5D908
 
 * refs (1): 5D903
 OBJ_5D926:
-        ::                                       * 5D926
-          BINT0                                  * 5D92B
-          'R'R                                   * 5D930
-          OBJ_5D673                              * 5D935
-          pshzer                                 * 5D93A
-          pshzer                                 * 5D93F
-          BEGIN                                  * 5D944
-          1GETLAM                                * 5D949
-          3PICK                                  * 5D94E
-          EQ                                     * 5D953
-          2GETLAM                                * 5D958
-          4PICK                                  * 5D95D
-          EQ                                     * 5D962
-          OR                                     * 5D967
-          WHILE                                  * 5D96C
-          ::                                     * 5D971
-            overev&                              * 5D976
-            pargop                               * 5D97B
-          ;                                      * 5D980
-          REPEAT                                 * 5D985
-          pshtop&                                * 5D98A
-          ABND                                   * 5D98F
-        ;                                        * 5D994
+        :: BINT0 'R'R OBJ_5D673 pshzer pshzer BEGIN 1GETLAM 3PICK EQ 2GETLAM * 5D926
+          4PICK EQ OR WHILE                      * 5D95D
+          :: overev& pargop ; REPEAT pshtop& ABND ; * 5D971
 
 * refs (2): 84341 843FA
 OBJ_5D999:
-        ::                                       * 5D999
-          RDUP                                   * 5D99E
-          'R'R                                   * 5D9A3
-          RDROP                                  * 5D9A8
-          4PICK                                  * 5D9AD
-          EQ                                     * 5D9B2
-          SWAP                                   * 5D9B7
-          4PICK                                  * 5D9BC
-          EQ                                     * 5D9C1
-          SWAP                                   * 5D9C6
-          OR                                     * 5D9CB
-          case                                   * 5D9D0
-          OBJ_5D9FD                              * 5D9D5
-          psh                                    * 5D9DA
-          RDROP                                  * 5D9DF
-          1GETABND                               * 5D9E4
-          SWAP#1+                                * 5D9E9
-          top&                                   * 5D9EE
-          larg&                                  * 5D9F3
-        ;                                        * 5D9F8
+        :: RDUP 'R'R RDROP 4PICK EQ SWAP 4PICK EQ SWAP OR case OBJ_5D9FD * 5D999
+          psh RDROP 1GETABND SWAP#1+ top& larg& ; * 5D9DA
 
 * refs (1): 5D9D5
 OBJ_5D9FD:
-        ::                                       * 5D9FD
-          BINT0                                  * 5DA02
-          'R'R                                   * 5DA07
-          OBJ_5D673                              * 5DA0C
-          pshzer                                 * 5DA11
-          pshzer                                 * 5DA16
-          BEGIN                                  * 5DA1B
-          1GETLAM                                * 5DA20
-          3PICK                                  * 5DA25
-          EQ                                     * 5DA2A
-          2GETLAM                                * 5DA2F
-          4PICK                                  * 5DA34
-          EQ                                     * 5DA39
-          OR                                     * 5DA3E
-          WHILE                                  * 5DA43
-          ::                                     * 5DA48
-            overev&                              * 5DA4D
-            #1-SWAP                              * 5DA52
-            pshm1                                * 5DA57
-          ;                                      * 5DA5C
-          REPEAT                                 * 5DA61
-          pshtop&                                * 5DA66
-          ABND                                   * 5DA6B
-        ;                                        * 5DA70
+        :: BINT0 'R'R OBJ_5D673 pshzer pshzer BEGIN 1GETLAM 3PICK EQ 2GETLAM * 5D9FD
+          4PICK EQ OR WHILE                      * 5DA34
+          :: overev& #1-SWAP pshm1 ; REPEAT pshtop& ABND ; * 5DA48
 
 * refs (2): 841FC 8422E
 OBJ_5DA75:
-        ::                                       * 5DA75
-          1GETLAM                                * 5DA7A
-          '                                      * 5DA7F
-          x+                                     * 5DA84
-          EQ                                     * 5DA89
-          ?SKIP                                  * 5DA8E
-          [X]=>[NEG(X)]!                         * 5DA93
-          pshtop&                                * 5DA98
-          pargop                                 * 5DA9D
-          meta+                                  * 5DAA2
-          overev&                                * 5DAA7
-          psh                                    * 5DAAC
-          1GETABND                               * 5DAB1
-          '                                      * 5DAB6
-          x+                                     * 5DABB
-          EQ                                     * 5DAC0
-          ?SKIP                                  * 5DAC5
-          addtNEG                                * 5DACA
+        :: 1GETLAM ' x+ EQ ?SKIP [X]=>[NEG(X)]!  * 5DA75
+          pshtop& pargop meta+ overev& psh 1GETABND ' x+ EQ ?SKIP addtNEG * 5DA98
         ;                                        * 5DACF
 
 * refs (2): 842B5 842E7
 OBJ_5DAD4:
-        ::                                       * 5DAD4
-          1GETLAM                                * 5DAD9
-          '                                      * 5DADE
-          x*                                     * 5DAE3
-          EQ                                     * 5DAE8
-          ?SKIP                                  * 5DAED
-          [X]=>[INV(X)]!                         * 5DAF2
-          pshtop&                                * 5DAF7
-          pargop                                 * 5DAFC
-          meta*                                  * 5DB01
-          overev&                                * 5DB06
-          psh                                    * 5DB0B
-          1GETABND                               * 5DB10
-          '                                      * 5DB15
-          x*                                     * 5DB1A
-          EQ                                     * 5DB1F
-          ?SKIP                                  * 5DB24
-          addtINV                                * 5DB29
+        :: 1GETLAM ' x* EQ ?SKIP [X]=>[INV(X)]!  * 5DAD4
+          pshtop& pargop meta* overev& psh 1GETABND ' x* EQ ?SKIP addtINV * 5DAF7
         ;                                        * 5DB2E
 
 * refs (2): 841AC 84265
 OBJ_5DB33:
-        ::                                       * 5DB33
-          pargop                                 * 5DB38
-          psh                                    * 5DB3D
-          4roll                                  * 5DB42
-          top&                                   * 5DB47
-          unrot                                  * 5DB4C
-        ;                                        * 5DB51
+        :: pargop psh 4roll top& unrot ;         * 5DB33
 
 * refs (2): 8436E 843B4
 OBJ_5DB56:
-        ::                                       * 5DB56
-          1GETABND                               * 5DB5B
-          '                                      * 5DB60
-          x+                                     * 5DB65
-          EQ                                     * 5DB6A
-          ?SKIP                                  * 5DB6F
-          [X]=>[NEG(X)]!                         * 5DB74
-          rot                                    * 5DB79
-          dup                                    * 5DB7E
-          rotswap                                * 5DB83
-          BEGIN                                  * 5DB88
-          DUP#0<>WHILE                           * 5DB8D
-          ::                                     * 5DB92
-            OVER                                 * 5DB97
-            '                                    * 5DB9C
-            x-                                   * 5DBA1
-            EQ                                   * 5DBA6
-            IT                                   * 5DBAB
-            ::                                   * 5DBB0
-              psh                                * 5DBB5
-              [X]=>[NEG(X)]!                     * 5DBBA
-              psh                                * 5DBBF
-            ;                                    * 5DBC4
-            SWAPDROP#1-                          * 5DBC9
-          ;                                      * 5DBCE
-          REPEAT                                 * 5DBD3
-          DROP                                   * 5DBD8
-          meta+                                  * 5DBDD
-          psh                                    * 5DBE2
-          over&                                  * 5DBE7
-          over&                                  * 5DBEC
-          rot                                    * 5DBF1
-          top&                                   * 5DBF6
-          psh                                    * 5DBFB
-          larg                                   * 5DC00
-        ;                                        * 5DC05
+        :: 1GETABND ' x+ EQ ?SKIP [X]=>[NEG(X)]! * 5DB56
+          rot dup rotswap BEGIN DUP#0<>WHILE     * 5DB79
+          :: OVER ' x- EQ IT                     * 5DB92
+            :: psh [X]=>[NEG(X)]! psh ;          * 5DBB0
+            SWAPDROP#1- ;                        * 5DBC9
+          REPEAT DROP meta+ psh over& over& rot top& psh larg ; * 5DBD3
 
 * refs (2): 84427 8446D
 OBJ_5DC0A:
-        ::                                       * 5DC0A
-          1GETABND                               * 5DC0F
-          '                                      * 5DC14
-          x*                                     * 5DC19
-          EQ                                     * 5DC1E
-          ?SKIP                                  * 5DC23
-          [X]=>[INV(X)]!                         * 5DC28
-          rot                                    * 5DC2D
-          dup                                    * 5DC32
-          rotswap                                * 5DC37
-          BEGIN                                  * 5DC3C
-          DUP#0<>WHILE                           * 5DC41
-          ::                                     * 5DC46
-            OVER                                 * 5DC4B
-            '                                    * 5DC50
-            x/                                   * 5DC55
-            EQ                                   * 5DC5A
-            IT                                   * 5DC5F
-            ::                                   * 5DC64
-              psh                                * 5DC69
-              [X]=>[INV(X)]!                     * 5DC6E
-              psh                                * 5DC73
-            ;                                    * 5DC78
-            SWAPDROP#1-                          * 5DC7D
-          ;                                      * 5DC82
-          REPEAT                                 * 5DC87
-          DROP                                   * 5DC8C
-          meta*                                  * 5DC91
-          psh                                    * 5DC96
-          over&                                  * 5DC9B
-          over&                                  * 5DCA0
-          rot                                    * 5DCA5
-          top&                                   * 5DCAA
-          psh                                    * 5DCAF
-          larg                                   * 5DCB4
-        ;                                        * 5DCB9
+        :: 1GETABND ' x* EQ ?SKIP [X]=>[INV(X)]! * 5DC0A
+          rot dup rotswap BEGIN DUP#0<>WHILE     * 5DC2D
+          :: OVER ' x/ EQ IT                     * 5DC46
+            :: psh [X]=>[INV(X)]! psh ;          * 5DC64
+            SWAPDROP#1- ;                        * 5DC7D
+          REPEAT DROP meta* psh over& over& rot top& psh larg ; * 5DC87
 
 * refs (2): 8431E 843D7
 OBJ_5DCBE:
-        ::                                       * 5DCBE
-          #1-SWAP                                * 5DCC3
-          BINT1                                  * 5DCC8
-          4roll                                  * 5DCCD
-          top&                                   * 5DCD2
-          unrot                                  * 5DCD7
-          larg                                   * 5DCDC
-          over&                                  * 5DCE1
-        ;                                        * 5DCE6
+        :: #1-SWAP BINT1 4roll top& unrot larg over& ; * 5DCBE
 
 * refs (1): 5C835
 OBJ_5DCEB:
-        ::                                       * 5DCEB
-          ROMPTR  0F0 062                        * 5DCF0
-          rot                                    * 5DCFB
-          top&                                   * 5DD00
-          overev&                                * 5DD05
-          top&                                   * 5DD0A
-          meta-                                  * 5DD0F
-        ;                                        * 5DD14
+        :: ROMPTR 0F0 062 rot top& overev& top& meta- ; * 5DCEB
 
 * refs (1): 5C83F
 OBJ_5DD19:
-        ::                                       * 5DD19
-          ROMPTR  0F0 062                        * 5DD1E
-          overev&                                * 5DD29
-          top&                                   * 5DD2E
-          pshtop&                                * 5DD33
-          meta+                                  * 5DD38
-        ;                                        * 5DD3D
+        :: ROMPTR 0F0 062 overev& top& pshtop& meta+ ; * 5DD19
 
 * refs (3): 847F1 84869 84A99
 {2,^,-,û,I}:
-        {                                        * 5DD42
-          %2                                     * 5DD47
-          x^                                     * 5DD4C
-          x-                                     * 5DD51
-          xSQRT                                  * 5DD56
-          xi                                     * 5DD5B
-        }                                        * 5DD60
+        { %2 x^ x- xSQRT xi }                    * 5DD42
 
 * meta1 meta2 -> meta1&ob meta2&ob
 * refs (2): 846CF 84724
 2psh1&rev::
-        ::                                       * 5DD65
-          'R                                     * 5DD6A
-          SWAP#1+                                * 5DD6F
-          OVER                                   * 5DD74
-          psh1&rev                               * 5DD79
-        ;                                        * 5DD7E
+        :: 'R SWAP#1+ OVER psh1&rev ;            * 5DD65
 
 * refs (3): 5DDA6 8467A 846A7
 Addi*[_]:
-        ::                                       * 5DD83
-          PTR     addt2:                         * 5DD88
-          xi                                     * 5DD8D
-          x*                                     * 5DD92
-        ;                                        * 5DD97
+        :: PTR addt2: xi x* ;                    * 5DD83
 
 * refs (3): 846C0 84715 84760
 Addã180/*i[_]:
-        ::                                       * 5DD9C
-          Addã180/*[_]                           * 5DDA1
-          Addi*[_]                               * 5DDA6
-        ;                                        * 5DDAB
+        :: Addã180/*[_] Addi*[_] ;               * 5DD9C
 
 * refs (1): 5DDA1
 Addã180/*[_]:
-        ::                                       * 5DDB0
-          RAD?                                   * 5DDB5
-          ?SEMI                                  * 5DDBA
-          PTR     addt:                          * 5DDBF
-          xPI                                    * 5DDC4
-          DEG?                                   * 5DDC9
-          %180                                   * 5DDCE
-          %200                                   * 5DDD3
-          RPITE                                  * 5DDD8
-          SWAP#1+                                * 5DDDD
-          PTR     addt2:                         * 5DDE2
-          x/                                     * 5DDE7
-          x*                                     * 5DDEC
-        ;                                        * 5DDF1
+        :: RAD? ?SEMI                            * 5DDB0
+          PTR addt: xPI DEG? %180 %200 RPITE SWAP#1+ PTR addt2: * 5DDBF
+          x/ x* ;                                * 5DDE7
 
 * refs (7): 84675 84823 848A0 84936 8494A 8498B ...
 Add180ã/*[_]:
-        ::                                       * 5DDF6
-          RAD?                                   * 5DDFB
-          ?SEMI                                  * 5DE00
-          DEG?                                   * 5DE05
-          %180                                   * 5DE0A
-          %200                                   * 5DE0F
-          RPITE                                  * 5DE14
-          SWAP#1+                                * 5DE19
+        :: RAD? ?SEMI                            * 5DDF6
+          DEG? %180 %200 RPITE SWAP#1+           * 5DE05
 
 {PI,/,*}:
-          {                                      * 5DE1E
-            xPI                                  * 5DE23
-            x/                                   * 5DE28
-            x*                                   * 5DE2D
-          }                                      * 5DE32
-          INNERtop&                              * 5DE37
-        ;                                        * 5DE3C
+          { xPI x/ x* }                          * 5DE1E
+          INNERtop& ;                            * 5DE37
 
 * -> T
 * refs (3): 5D63C 634ED B978E
 COLATRUE:
-        ::                                       * 5DE41
-          TRUE                                   * 5DE46
-          RDROP                                  * 5DE4B
-        ;                                        * 5DE50
+        :: TRUE RDROP ;                          * 5DE41
 
 * -> F
 * refs (6): 2F646 5AD26 5D619 5D650 5FB53 635A6
 RDROPFALSE:
-        ::                                       * 5DE55
-          FALSE                                  * 5DE5A
-          RDROP                                  * 5DE5F
-        ;                                        * 5DE64
+        :: FALSE RDROP ;                         * 5DE55
         BSS     20                               * 5DE69
 
 * 1..n #n -> n..1 #n
 * refs (4): 45119 465B3 9FDBF C1E92
 reversym:
-        ::                                       * 5DE7D
-          DUP#0=                                 * 5DE82
-          ?SEMI                                  * 5DE87
-          pshzer                                 * 5DE8C
-          DUP#0_DO                               * 5DE91
-          pullrev1&                              * 5DE96
-          LOOP                                   * 5DE9B
-          DROP                                   * 5DEA0
-        ;                                        * 5DEA5
+        :: DUP#0= ?SEMI                          * 5DE7D
+          pshzer DUP#0_DO pullrev1& LOOP DROP ;  * 5DE8C
 
 * refs (1): 58F85
 dup;ex?:
-        ::                                       * 5DEAA
-          DUPTYPESYMB?                           * 5DEAF
-        ;                                        * 5DEB4
+        :: DUPTYPESYMB? ;                        * 5DEAA
 
 * refs (1): 1F762
 OBJ_5DEB9:
-        ::                                       * 5DEB9
-          OBJ_5DEEB                              * 5DEBE
-          ARGNUMERR                              * 5DEC3
-          INVFUNCERR                             * 5DEC8
-        ;                                        * 5DECD
+        :: OBJ_5DEEB ARGNUMERR INVFUNCERR ;      * 5DEB9
 
-        ::                                       * 5DED2
-          OBJ_5DEF7                              * 5DED7
-          ARGNUMERR                              * 5DEDC
-          INVFUNCERR                             * 5DEE1
-        ;                                        * 5DEE6
+        :: OBJ_5DEF7 ARGNUMERR INVFUNCERR ;      * 5DED2
 
 * refs (1): 5DEBE
 OBJ_5DEEB:
@@ -1075,116 +508,59 @@ L_5E061:
 * sym -> meta ob -> ob #1
 * refs (24): 1F547 1F8D4 2812E 547BF 54986 54E02 ...
 SINNER:
-        ::                                       * 5E067
-          DUPTYPESYMB?                           * 5E06C
-          ITE                                    * 5E071
-          INNERCOMP                              * 5E076
-          BINT1                                  * 5E07B
+        :: DUPTYPESYMB? ITE INNERCOMP BINT1      * 5E067
         ;                                        * 5E080
 
 * meta -> ob
 * refs (22): 1CF4C 1CF56 1CF65 1F54C 1F91A 27652 ...
 CKSYMBN:
-        ::                                       * 5E085
-          BINT1                                  * 5E08A
-          OVER#=case                             * 5E08F
-          DROPSYM                                * 5E094
-          SYMBN                                  * 5E099
-        ;                                        * 5E09E
+        :: BINT1 OVER#=case DROPSYM              * 5E085
+          SYMBN ;                                * 5E099
 
 * ob1..obn #n -> sym
 * refs (3): 0F133 27657 282C3
 PSYMBN:
-        ::                                       * 5E0A3
-          ERRSET                                 * 5E0A8
-          SYMBN                                  * 5E0AD
-          ERRTRAP                                * 5E0B2
-          OBJ_5E0C1                              * 5E0B7
-        ;                                        * 5E0BC
+        :: ERRSET SYMBN ERRTRAP OBJ_5E0C1 ;      * 5E0A3
 
 * refs (1): 5E0B7
 OBJ_5E0C1:
-        ::                                       * 5E0C1
-          NULLSYMB                               * 5E0C6
-          COLA                                   * 5E0CB
-          prepend(_,s,cp)                        * 5E0D0
+        :: NULLSYMB COLA prepend(_,s,cp)         * 5E0C1
         ;                                        * 5E0D5
 
 * ob1..obn #n -> {}
 * refs (7): 216C9 23EF7 24212 24AB0 24D5C 252FF ...
 P{}N:
-        ::                                       * 5E0DA
-          ERRSET                                 * 5E0DF
-          {}N                                    * 5E0E4
-          ERRTRAP                                * 5E0E9
-          OBJ_5E0F8                              * 5E0EE
-        ;                                        * 5E0F3
+        :: ERRSET {}N ERRTRAP OBJ_5E0F8 ;        * 5E0DA
 
 * refs (1): 5E0EE
 OBJ_5E0F8:
-        ::                                       * 5E0F8
-          NULL{}                                 * 5E0FD
-          COLA                                   * 5E102
-          prepend(_,s,cp)                        * 5E107
+        :: NULL{} COLA prepend(_,s,cp)           * 5E0F8
         ;                                        * 5E10C
 
 * ob1..obn #n -> seco
 * refs (3): 252A5 252BE 252E6
 P::N:
-        ::                                       * 5E111
-          ERRSET                                 * 5E116
-          ::N                                    * 5E11B
-          ERRTRAP                                * 5E120
-          OBJ_5E12F                              * 5E125
-        ;                                        * 5E12A
+        :: ERRSET ::N ERRTRAP OBJ_5E12F ;        * 5E111
 
 * refs (1): 5E125
 OBJ_5E12F:
-        ::                                       * 5E12F
-          PTR     NULL::                         * 5E134
-          COLA                                   * 5E139
-          prepend(_,s,cp)                        * 5E13E
+        :: PTR NULL:: COLA prepend(_,s,cp)       * 5E12F
         ;                                        * 5E143
 
 * refs (3): 5E0D0 5E107 5E13E
 prepend(_,s,cp):
-        ::                                       * 5E148
-          ERRORCLR                               * 5E14D
-          OVER                                   * 5E152
-          #0=case                                * 5E157
-          SWAPDROP                               * 5E15C
-          TOTEMPSWAP                             * 5E161
-          ZERO_DO                                * 5E166
-          SWAP                                   * 5E16B
-          prepend(cp,_)                          * 5E170
-          LOOP                                   * 5E175
-        ;                                        * 5E17A
+        :: ERRORCLR OVER #0=case SWAPDROP        * 5E148
+          TOTEMPSWAP ZERO_DO SWAP prepend(cp,_) LOOP ; * 5E161
 
 * refs (1): 5E170
 prepend(cp,_):
-        ::                                       * 5E17F
-          FREEINTEMP?                            * 5E184
-          NOTcase                                * 5E189
-          OBJ_5E1B1                              * 5E18E
-          >TOPTEMP                               * 5E193
-          SWAP                                   * 5E198
-          >TOPTEMP                               * 5E19D
-          SWAP                                   * 5E1A2
-          OBJ_5E1E3                              * 5E1A7
-        ;                                        * 5E1AC
+        :: FREEINTEMP? NOTcase OBJ_5E1B1         * 5E17F
+          >TOPTEMP SWAP >TOPTEMP SWAP OBJ_5E1E3 ; * 5E193
 
 * refs (1): 5E18E
 OBJ_5E1B1:
-        ::                                       * 5E1B1
-          INHARDROM?                             * 5E1B6
-          case                                   * 5E1BB
-          OBJ_5E29C                              * 5E1C0
-          TOTEMPOB                               * 5E1C5
-          SWAP                                   * 5E1CA
-          >TOPTEMP                               * 5E1CF
-          SWAP                                   * 5E1D4
-          OBJ_5E1E3                              * 5E1D9
-        ;                                        * 5E1DE
+        :: INHARDROM? case OBJ_5E29C             * 5E1B1
+          TOTEMPOB SWAP >TOPTEMP SWAP OBJ_5E1E3 ; * 5E1C5
 
 * refs (2): 5E1A7 5E1D9
 OBJ_5E1E3:
@@ -1259,95 +635,49 @@ OBJ_5E29C:
 * ob1 ob2 -> meta
 * refs (8): 85D3B 85D8B 8AE28 8AE80 8AF5B 8B004 ...
 2SINNERtop&:
-        ::                                       * 5E2F8
-          2SINNER                                * 5E2FD
-          top&                                   * 5E302
-        ;                                        * 5E307
+        :: 2SINNER top& ;                        * 5E2F8
 
 * ob1 ob2 -> meta1 meta2
 * refs (5): 55832 5595E 5E2FD 86957 869C5
 2SINNER:
-        ::                                       * 5E30C
-          SWAP                                   * 5E311
-          SINNER                                 * 5E316
-          get1                                   * 5E31B
-          SINNER                                 * 5E320
-        ;                                        * 5E325
+        :: SWAP SINNER get1 SINNER ;             * 5E30C
 
 * meta -> meta'
 * refs (4): 1F72B 5AC18 70077 72FB6
 SINNERMETA:
-        ::                                       * 5E32A
-          BINT0                                  * 5E32F
-          DUPUNROT                               * 5E334
-          DO                                     * 5E339
-          get1                                   * 5E33E
-          SINNER                                 * 5E343
-          psh                                    * 5E348
-          top&                                   * 5E34D
-          LOOP                                   * 5E352
-        ;                                        * 5E357
+        :: BINT0 DUPUNROT DO get1 SINNER psh top& LOOP ; * 5E32A
 
 * meta -> meta meta
 * refs (62): 1F6F9 28075 28250 558D2 56EFA 5704F ...
 dup:
-        ::                                       * 5E35C
-          DUP#1+                                 * 5E361
-          NDUP                                   * 5E366
-        ;                                        * 5E36B
+        :: DUP#1+ NDUP ;                         * 5E35C
 
 * ob #n -> ob..ob #n ob #0 -> #0
 * refs (18): 19A2F 272BE 28B64 4A883 4C9C9 58068 ...
 NDUPN:
-        ::                                       * 5E370
-          DUP#0=case                             * 5E375
-          SWAPDROP                               * 5E37A
-          DUP                                    * 5E37F
-          #1-                                    * 5E384
-          DUP#0=case                             * 5E389
-          DROP                                   * 5E38E
-          ZERO_DO                                * 5E393
-          OVER                                   * 5E398
-          SWAP                                   * 5E39D
-          LOOP                                   * 5E3A2
-        ;                                        * 5E3A7
+        :: DUP#0=case SWAPDROP                   * 5E370
+          DUP #1- DUP#0=case DROP                * 5E37F
+          ZERO_DO OVER SWAP LOOP ;               * 5E393
 
 * meta1 meta2 meta3 -> meta1&meta3 meta2
 * refs (20): 24BC9 29462 2947B 2948A 5AB5F 5AB8C ...
 psh&:
-        ::                                       * 5E3AC
-          psh                                    * 5E3B1
-          over&                                  * 5E3B6
-        ;                                        * 5E3BB
+        :: psh over& ;                           * 5E3AC
 
 * meta1 meta2 meta3 -> meta1&meta2 meta3
 * refs (42): 24B5C 27AA3 29700 547A1 57A84 57CC1 ...
 over&:
-        ::                                       * 5E3C0
-          get1                                   * 5E3C5
-          2DUP#+                                 * 5E3CA
-          #3+                                    * 5E3CF
-          ROLL                                   * 5E3D4
-          #+OVER                                 * 5E3D9
-          #2+UNROLL                              * 5E3DE
-        ;                                        * 5E3E3
+        :: get1 2DUP#+ #3+ ROLL #+OVER #2+UNROLL ; * 5E3C0
 
 * meta ob -> ob #1 meta
 * refs (74): 0B697 1CF51 1F461 1F906 21BB6 24D52 ...
 pshm1:
-        ::                                       * 5E3E8
-          OVER#2+UNROL                           * 5E3ED
-          BINT1                                  * 5E3F2
-          OVER#2+UNROL                           * 5E3F7
-        ;                                        * 5E3FC
+        :: OVER#2+UNROL BINT1 OVER#2+UNROL ;     * 5E3E8
 
 * meta ob -> ob&meta
 * refs (1): 1F4CF
 psh1top&:
-        ::                                       * 5E401
-          OVER#2+UNROL                           * 5E406
-          #1+                                    * 5E40B
-        ;                                        * 5E410
+        :: OVER#2+UNROL #1+ ;                    * 5E401
 
 * meta1 meta2 -> meta1&meta2
 * refs (177): 1F466 24271 24D57 24DED 27C56 27C60 ...
@@ -1397,217 +727,128 @@ top&:
 * meta1 meta2 meta3 -> meta1&meta2&meta3
 * refs (6): 582FA 7DC4A 85F11 8632B 863C6 86650
 2top&:
-        ::                                       * 5E490
-          top&                                   * 5E495
-          COLA                                   * 5E49A
-          top&                                   * 5E49F
+        :: top& COLA top&                        * 5E490
         ;                                        * 5E4A4
 
 * ob # -> #-1 ob
 * refs (111): 0B6BA 105D6 1F493 1F4A7 1F712 21B93 ...
 #1-SWAP:
-        ::                                       * 5E4A9
-          #1-                                    * 5E4AE
-          SWAP                                   * 5E4B3
-        ;                                        * 5E4B8
+        :: #1- SWAP ;                            * 5E4A9
 
 * ob&meta -> meta ob
 * refs (15): 0221E 097FA 0B6A1 1F443 1F60F 28DEE ...
 pullrev:
-        ::                                       * 5E4BD
-          #1-                                    * 5E4C2
-          get1                                   * 5E4C7
-        ;                                        * 5E4CC
+        :: #1- get1 ;                            * 5E4BD
 
 * meta1 meta2 -> meta2&meta1
 * refs (124): 1F730 296F1 55986 56110 561EC 56200 ...
 pshtop&:
-        ::                                       * 5E4D1
-          psh                                    * 5E4D6
-          COLA                                   * 5E4DB
-          top&                                   * 5E4E0
+        :: psh COLA top&                         * 5E4D1
         ;                                        * 5E4E5
 
 * meta1 meta2&ob -> ob&meta1 meta2
 * refs (24): 1F3C2 24DE8 29005 548B4 57C7B 58A52 ...
 pullpsh1&:
-        ::                                       * 5E4EA
-          #1-                                    * 5E4EF
-          SWAPCOLA                               * 5E4F4
-          psh1&                                  * 5E4F9
-        ;                                        * 5E4FE
+        :: #1- SWAPCOLA psh1& ;                  * 5E4EA
 
 * meta1 meta2&ob -> meta1&ob meta2
 * refs (11): 27AF8 27F85 57E35 57E62 586ED 587F0 ...
 pullrev1&:
-        ::                                       * 5E503
-          #1-                                    * 5E508
-          SWAPCOLA                               * 5E50D
-          psh1&rev                               * 5E512
-        ;                                        * 5E517
+        :: #1- SWAPCOLA psh1&rev ;               * 5E503
 
 * meta -> meta&ob
 * refs (74): 23ABF 23ACE 23EB1 28EBB 54644 548E1 ...
 addt::
-        ::                                       * 5E51C
-          'R                                     * 5E521
-          SWAP#1+                                * 5E526
-        ;                                        * 5E52B
+        :: 'R SWAP#1+ ;                          * 5E51C
 
 * meta -> meta&ob1&ob2
 * refs (42): 28255 28269 57838 57CE4 582FF 58A7F ...
 addt2::
-        ::                                       * 5E530
-          'R'R                                   * 5E535
-          ROT                                    * 5E53A
-          #2+                                    * 5E53F
-        ;                                        * 5E544
+        :: 'R'R ROT #2+ ;                        * 5E530
 
 * meta1 meta2 -> meta1&ob meta2
 * refs (6): 58809 58831 5887C 588EF 58944 589A3
 psh1&rev::
-        ::                                       * 5E549
-          'R                                     * 5E54E
-          COLA                                   * 5E553
-          psh1&rev                               * 5E558
+        :: 'R COLA psh1&rev                      * 5E549
         ;                                        * 5E55D
 
 * meta1 meta2 -> meta1&ob1&ob2 meta2
 * refs (1): 589F3
 psh1&rev2::
-        ::                                       * 5E562
-          'R                                     * 5E567
-          psh1&rev                               * 5E56C
-          'R                                     * 5E571
-          COLA                                   * 5E576
-          psh1&rev                               * 5E57B
+        :: 'R psh1&rev 'R COLA psh1&rev          * 5E562
         ;                                        * 5E580
 
 * obn..ob1 #n comp -> obm..ob1 #m
 * refs (44): 281EC 56C68 56CC7 59084 59937 5AB50 ...
 INNERtop&:
-        ::                                       * 5E585
-          INNERCOMP                              * 5E58A
-          COLA                                   * 5E58F
-          top&                                   * 5E594
+        :: INNERCOMP COLA top&                   * 5E585
         ;                                        * 5E599
 
 * meta&ob -> meta&ob'
 * refs (5): 5BCC6 5BCF3 83C0D 83E4C 83EB5
 repl::
-        ::                                       * 5E59E
-          SWAPDROP                               * 5E5A3
-          'R                                     * 5E5A8
-          SWAP                                   * 5E5AD
-        ;                                        * 5E5B2
+        :: SWAPDROP 'R SWAP ;                    * 5E59E
 
 * ROMPTR -> ob F -> ROMPTR T ob -> ob T
 * refs (7): 1F677 54AB5 56DA1 58E63 58F5D 59171 ...
 ROMPTR@NOT:
-        ::                                       * 5E5B7
-          CK&DISPATCH0                           * 5E5BC
-          BINT6                                  * 5E5C1
-          SAFE@NOT                               * 5E5C6
-          BINT7                                  * 5E5CB
-          LISTRCL                                * 5E5D0
-          BINT15                                 * 5E5D5
-          UnKnown(xn)?                           * 5E5DA
-          BINT0                                  * 5E5DF
-          TRUE                                   * 5E5E4
+        :: CK&DISPATCH0                          * 5E5B7
+          BINT6 SAFE@NOT                         * 5E5C1  name
+          BINT7 LISTRCL                          * 5E5CB  local
+          BINT15 UnKnown(xn)?                    * 5E5D5  romptr
+          BINT0 TRUE                             * 5E5DF  any
         ;                                        * 5E5E9
 
 * id -> ob F -> T
 * refs (1): 5E5C6
 SAFE@NOT:
-        ::                                       * 5E5EE
-          OBJ_5E62A                              * 5E5F3
-          SAFE@                                  * 5E5F8
-        ;                                        * 5E5FD
+        :: OBJ_5E62A SAFE@ ;                     * 5E5EE
 
 * {path id} -> ob -> lam T
 * refs (1): 5E5D0
 LISTRCL:
-        ::                                       * 5E602
-          OBJ_5E62A                              * 5E607
-          undo                                   * 5E60C
-        ;                                        * 5E611
+        :: OBJ_5E62A undo ;                      * 5E602
 
 * refs (1): 5E5DA
 UnKnown(xn)?:
-        ::                                       * 5E616
-          OBJ_5E62A                              * 5E61B
-          ROMPTR@                                * 5E620
-        ;                                        * 5E625
+        :: OBJ_5E62A ROMPTR@ ;                   * 5E616
 
 * refs (3): 5E5F3 5E607 5E61B
 OBJ_5E62A:
-        ::                                       * 5E62A
-          DUP                                    * 5E62F
-          'R                                     * 5E634
-          EVAL                                   * 5E639
-          NOTcaseTRUE                            * 5E63E
-          SWAPDROP                               * 5E643
-          FALSE                                  * 5E648
-        ;                                        * 5E64D
+        :: DUP 'R EVAL NOTcaseTRUE SWAPDROP      * 5E62A
+          FALSE ;                                * 5E648
 
 * ob -> ob'
 * refs (54): 1CFD5 1F206 1F45C 1F4AC 1F4CA 1F58A ...
 symcomp:
-        ::                                       * 5E652
-          DUPTYPESYMB?                           * 5E657
-          ?SKIP                                  * 5E65C
+        :: DUPTYPESYMB? ?SKIP                    * 5E652
 
 * ob1..obn #n -> symb
 * refs (1): 594EF
 ONESYMBN:
-          ::                                     * 5E661
-            BINT1                                * 5E666
-            SYMBN                                * 5E66B
-          ;                                      * 5E670
+          :: BINT1 SYMBN ;                       * 5E661
         ;                                        * 5E675
 
 * meta -> #0 meta
 * refs (45): 1F47F 1F90B 21BCA 245A0 27396 28FBA ...
 pshzer:
-        ::                                       * 5E67A
-          BINT0                                  * 5E67F
-          OVER#2+UNROL                           * 5E684
-        ;                                        * 5E689
+        :: BINT0 OVER#2+UNROL ;                  * 5E67A
 
 * meta -> M_last&op M_rest
 * refs (25): 5A441 5B6F9 5BC08 5BC26 5CA1E 5CA37 ...
 pargop:
-        ::                                       * 5E68E
-          #1-SWAP                                * 5E693
-          OBJ_5E889                              * 5E698
-          ROT                                    * 5E69D
-          #1+SWAP                                * 5E6A2
-          DUP#0=case                             * 5E6A7
-          psh                                    * 5E6AC
-          BINT1                                  * 5E6B1
-          #=casedrop                             * 5E6B6
+        :: #1-SWAP OBJ_5E889 ROT #1+SWAP DUP#0=case psh * 5E68E
+          BINT1 #=casedrop                       * 5E6B1
 
 * meta&ob -> ob #1 meta
 pullpshm1:
-          ::                                     * 5E6BB
-            #1-SWAP                              * 5E6C0
-            pshm1                                * 5E6C5
-          ;                                      * 5E6CA
-          #1-                                    * 5E6CF
-          BINT3                                  * 5E6D4
-          SWAP                                   * 5E6D9
-          splitup                                * 5E6DE
-          #1-                                    * 5E6E3
-          tailpsh                                * 5E6E8
-        ;                                        * 5E6ED
+          :: #1-SWAP pshm1 ;                     * 5E6BB
+          #1- BINT3 SWAP splitup #1- tailpsh ;   * 5E6CF
 
 * meta1 meta2 -> meta1&M_last M_rest
 * refs (8): 28246 57031 57E8F 580E5 58675 586DE ...
 parg&:
-        ::                                       * 5E6F2
-          pshzerpsharg                           * 5E6F7
-          overev&                                * 5E6FC
-        ;                                        * 5E701
+        :: pshzerpsharg overev& ;                * 5E6F2
 
 * meta1 meta2 ob -> ob&meta1 meta2
 * refs (47): 0B6A6 1F4A2 1F4B6 1F91F 21C2E 24258 ...
@@ -1727,61 +968,37 @@ psh1&rev:
 * meta1 meta2 meta3 -> meta2&meta1 meta3
 * refs (18): 5494A 57CC6 5CBE0 5CBE5 5D744 5D753 ...
 overev&:
-        ::                                       * 5E843
-          rotswap                                * 5E848
-          over&                                  * 5E84D
-        ;                                        * 5E852
+        :: rotswap over& ;                       * 5E843
 
 * meta1 meta2 meta3 -> meta2 meta1 meta3
 * refs (34): 27FD5 28995 58031 58269 586BB 58AC5 ...
 rotswap:
-        ::                                       * 5E857
-          rot                                    * 5E85C
-          COLA                                   * 5E861
-          psh                                    * 5E866
+        :: rot COLA psh                          * 5E857
         ;                                        * 5E86B
 
 * meta1 meta2 meta3 meta4 -> meta2 meta1 meta3 meta4
 4rollunrot:
-        ::                                       * 5E870
-          4roll                                  * 5E875
-          COLA                                   * 5E87A
-          unrot                                  * 5E87F
+        :: 4roll COLA unrot                      * 5E870
         ;                                        * 5E884
 
 * refs (1): 5E698
 OBJ_5E889:
-        ::                                       * 5E889
-          nonopcase                              * 5E88E
-          BINT0                                  * 5E893
-          REQcase                                * 5E898
-          xFCNAPPLY                              * 5E89D
+        :: nonopcase BINT0                       * 5E889
+          REQcase xFCNAPPLY                      * 5E898
 
 * refs (1): 21A12
 3pick;2+(s):
-          ::                                     * 5E8A2
-            3PICK                                * 5E8A7
-            #2+                                  * 5E8AC
-          ;                                      * 5E8B1
-          infarg?                                * 5E8B6
-          case                                   * 5E8BB
+          :: 3PICK #2+ ; infarg? case            * 5E8A2
 
 * refs (3): 6D299 8F145 8F2AF
 3pick;1+(s):
-          ::                                     * 5E8C0
-            3PICK                                * 5E8C5
-            #1+                                  * 5E8CA
-          ;                                      * 5E8CF
-          argum                                  * 5E8D4
-        ;                                        * 5E8D9
+          :: 3PICK #1+ ;                         * 5E8C0
+          argum ;                                * 5E8D4
 
 * seco -> seco #args
 * refs (3): 54B87 5E8D4 60071
 argum:
-        ::                                       * 5E8DE
-          TRUE                                   * 5E8E3
-          OBJ_5E8F2                              * 5E8E8
-        ;                                        * 5E8ED
+        :: TRUE OBJ_5E8F2 ;                      * 5E8DE
 
 * refs (1): 5E8E8
 OBJ_5E8F2:
@@ -1835,12 +1052,9 @@ L_5E957:
 * seco -> :: seco <ob2> <rest> ; ob -> :: ob <ob1> ;
 * refs (7): 5736A 58D3E 58DF5 59FD7 5E88E 5F334 ...
 nonopcase:
-        ::                                       * 5E984
-          CK&DISPATCH0                           * 5E989
-          BINT8                                  * 5E98E
-          SKIP                                   * 5E993
-          BINT0                                  * 5E998
-          COLA                                   * 5E99D
+        :: CK&DISPATCH0                          * 5E984
+          BINT8 SKIP                             * 5E98E  program
+          BINT0 COLA                             * 5E998  any
         ;                                        * 5E9A2
 
 * seco -> seco flag
@@ -1867,94 +1081,46 @@ L_5E9D4:
 
 * refs (3): 573D3 5F451 5F6D4
 OBJ_5E9E1:
-        ::                                       * 5E9E1
-          OBJ_26BED                              * 5E9E6
-          NOTcase                                * 5E9EB
-          SETROMPERR                             * 5E9F0
-          ROTROT2DROP                            * 5E9F5
-          MINUSONE                               * 5E9FA
-          #=                                     * 5E9FF
-        ;                                        * 5EA04
+        :: OBJ_26BED NOTcase SETROMPERR          * 5E9E1
+          ROTROT2DROP MINUSONE #= ;              * 5E9F5
 
 * ->
 * refs (5): 1F3F8 1F5CA 28526 5E9BB 5F850
 CKINFARGS:
-        ::                                       * 5EA09
-          'RSAVEWORD                             * 5EA0E
-          ::                                     * 5EA13
-            DEPTH                                * 5EA18
-            OVER                                 * 5EA1D
-            #1+                                  * 5EA22
-            #<case                               * 5EA27
-            SETSTACKERR                          * 5EA2C
-            OBJ_5EA40                            * 5EA31
-          ;                                      * 5EA36
+        :: 'RSAVEWORD                            * 5EA09
+          :: DEPTH OVER #1+ #<case SETSTACKERR   * 5EA13
+            OBJ_5EA40 ;                          * 5EA31
         ;                                        * 5EA3B
 
 * refs (1): 5EA31
 OBJ_5EA40:
-        ::                                       * 5EA40
-          dup                                    * 5EA45
-          P{}N                                   * 5EA4A
-          OVER                                   * 5EA4F
-          #2+                                    * 5EA54
-          UNROLL                                 * 5EA59
-          NDROP                                  * 5EA5E
-          CK1NOLASTWD                            * 5EA63
-          INNERCOMP                              * 5EA68
-        ;                                        * 5EA6D
+        :: dup P{}N OVER #2+ UNROLL NDROP CK1NOLASTWD INNERCOMP ; * 5EA40
 
 * refs (5): 54CE0 54D17 54D3A 54D5D 54D80
 OBJ_5EA72:
-        ::                                       * 5EA72
-          NOTCONST?                              * 5EA77
-          NOTcase                                * 5EA7C
-          COLA                                   * 5EA81
+        :: NOTCONST? NOTcase COLA                * 5EA72
           NOTNUM?                                * 5EA86
-          case                                   * 5EA8B
-          SKIP                                   * 5EA90
-          COLACOLA                               * 5EA95
-        ;                                        * 5EA9A
+          case SKIP                              * 5EA8B
+          COLACOLA ;                             * 5EA95
 
 * meta -> M_last M_rest
 * refs (49): 28241 54E34 562AA 57C80 57F55 586C0 ...
 pshzerpsharg:
-        ::                                       * 5EA9F
-          BINT2                                  * 5EAA4
-          BINT1                                  * 5EAA9
-          splitup                                * 5EAAE
-          #1-                                    * 5EAB3
-          tailpsh                                * 5EAB8
-        ;                                        * 5EABD
+        :: BINT2 BINT1 splitup #1- tailpsh ;     * 5EA9F
 
 * meta -> M_rest M_last
 * refs (55): 1F915 28070 2808E 282BE 28990 54936 ...
 larg:
-        ::                                       * 5EAC2
-          BINT2                                  * 5EAC7
-          BINT1                                  * 5EACC
-          splitup                                * 5EAD1
-          #2-                                    * 5EAD6
-          2DUP                                   * 5EADB
-          #-                                     * 5EAE0
-          ROTDROP                                * 5EAE5
-          OVER#2+UNROL                           * 5EAEA
-        ;                                        * 5EAEF
+        :: BINT2 BINT1 splitup #2- 2DUP #- ROTDROP OVER#2+UNROL ; * 5EAC2
 
 * ob # -> #-1
 * refs (110): 1011E 1F8E3 28007 28089 28192 281FB ...
 SWAPDROP#1-:
-        ::                                       * 5EAF4
-          SWAPDROP                               * 5EAF9
-          #1-                                    * 5EAFE
-        ;                                        * 5EB03
+        :: SWAPDROP #1- ;                        * 5EAF4
 
 * refs (3): 57BCC 57C17 57C44
 delB[1-2]:
-        ::                                       * 5EB08
-          #2-                                    * 5EB0D
-          ROTROT2DROP                            * 5EB12
-        ;                                        * 5EB17
+        :: #2- ROTROT2DROP ;                     * 5EB08
 
 * meta1 meta2 -> meta2 meta1
 * refs (206): 0F7A6 0F7FB 0F832 0F85A 0F8C3 0F8DC ...
@@ -2211,18 +1377,7 @@ N+1unroll:
 
 * refs (2): 60545 6078E
 OBJ_5ED82:
-        ::                                       * 5ED82
-          3PICK3PICK                             * 5ED87
-          #+                                     * 5ED8C
-          #2+UNROLL                              * 5ED91
-          #1-                                    * 5ED96
-          OVER#2+UNROL                           * 5ED9B
-          rot                                    * 5EDA0
-          NDROP                                  * 5EDA5
-          psh                                    * 5EDAA
-          get1                                   * 5EDAF
-          2DROP                                  * 5EDB4
-        ;                                        * 5EDB9
+        :: 3PICK3PICK #+ #2+UNROLL #1- OVER#2+UNROL rot NDROP psh get1 2DROP ; * 5ED82
         ASSEMBLE
 
 * refs (1): 5EE01
@@ -2338,10 +1493,7 @@ REALNEGcase:
 * meta&ob -> ob=nob ? case
 * refs (40): 1CF38 27FFD 2800C 2801B 2802A 28039 ...
 AEQ1stcase:
-        ::                                       * 5EF15
-          'R                                     * 5EF1A
-          COLA                                   * 5EF1F
-          MEQ1stcase                             * 5EF24
+        :: 'R COLA MEQ1stcase                    * 5EF15
         ;                                        * 5EF29
 
 * Meta&+ ? case
@@ -2471,10 +1623,7 @@ MEQopscase:
 * meta1&ob1 meta2&ob2
 * refs (1): 561CE
 AEQopscase:
-        ::                                       * 5F048
-          'R                                     * 5F04D
-          COLA                                   * 5F052
-          MEQopscase                             * 5F057
+        :: 'R COLA MEQopscase                    * 5F048
         ;                                        * 5F05C
 
 * meta&ob -> ob is id lam ? case
@@ -2513,321 +1662,155 @@ docola:
 * id -> :: id <ob1> ; ob -> :: ob <ob2> <rest> ;
 * refs (1): 24E6A
 idntcase:
-        ::                                       * 5F0AA
-          CK&DISPATCH0                           * 5F0AF
-          BINT6                                  * 5F0B4
-          COLA                                   * 5F0B9
-          BINT0                                  * 5F0BE
-          SKIP                                   * 5F0C3
+        :: CK&DISPATCH0                          * 5F0AA
+          BINT6 COLA                             * 5F0B4  name
+          BINT0 SKIP                             * 5F0BE  any
         ;                                        * 5F0C8
 
 * id/lam -> :: id <ob1> ; ob -> :: ob <ob2> <rest> ;
 * refs (7): 212DB 58F6C 59043 6014D 60DCE 852DD ...
 idntlamcase:
-        ::                                       * 5F0CD
-          CK&DISPATCH0                           * 5F0D2
-          BINT6                                  * 5F0D7
-          COLA                                   * 5F0DC
-          BINT7                                  * 5F0E1
-          COLA                                   * 5F0E6
-          BINT0                                  * 5F0EB
-          SKIP                                   * 5F0F0
+        :: CK&DISPATCH0                          * 5F0CD
+          BINT6 COLA                             * 5F0D7  name
+          BINT7 COLA                             * 5F0E1  local
+          BINT0 SKIP                             * 5F0EB  any
         ;                                        * 5F0F5
 
 * 0 -> :: 0 <ob1> ; ob -> :: ob <ob2> <rest> ;
 * refs (12): 5633B 56363 5639A 563E5 56435 56467 ...
 num0=case:
-        ::                                       * 5F0FA
-          CK&DISPATCH0                           * 5F0FF
-          BINT1                                  * 5F104
-          %0=case                                * 5F109
-          BINT2                                  * 5F10E
-          C%0=case                               * 5F113
-          BINT0                                  * 5F118
-          SKIP                                   * 5F11D
+        :: CK&DISPATCH0                          * 5F0FA
+          BINT1 %0=case                          * 5F104  real
+          BINT2 C%0=case                         * 5F10E  complex
+          BINT0 SKIP                             * 5F118  any
         ;                                        * 5F122
 
 * %0 -> :: %0 <ob1> ; ob -> :: ob <ob2> <rest> ;
 * refs (4): 0FE0D 51E69 5A72F 5F109
 %0=case:
-        ::                                       * 5F127
-          DUP%0=                                 * 5F12C
-          COLAcase                               * 5F131
-        ;                                        * 5F136
+        :: DUP%0= COLAcase ;                     * 5F127
 
 * C%0 -> :: C%0 <ob1> ; ob -> :: ob <ob2> <rest> ;
 * refs (4): 51E1E 51ECD 522C4 5F113
 C%0=case:
-        ::                                       * 5F13B
-          DUP                                    * 5F140
-          C%0=                                   * 5F145
-          COLAcase                               * 5F14A
-        ;                                        * 5F14F
+        :: DUP C%0= COLAcase ;                   * 5F13B
 
 * 1 -> :: 1 <ob1> ; ob -> :: ob <ob2> <rest> ;
 * refs (9): 56304 563A4 563EF 564A8 5659D 565D9 ...
 num1=case:
-        ::                                       * 5F154
-          CK&DISPATCH0                           * 5F159
-          BINT1                                  * 5F15E
-          %1=case                                * 5F163
-          BINT2                                  * 5F168
-          C%1=case                               * 5F16D
-          BINT0                                  * 5F172
-          SKIP                                   * 5F177
+        :: CK&DISPATCH0                          * 5F154
+          BINT1 %1=case                          * 5F15E  real
+          BINT2 C%1=case                         * 5F168  complex
+          BINT0 SKIP                             * 5F172  any
         ;                                        * 5F17C
 
 * %1 -> :: %1 <ob1> ; ob -> :: ob <ob2> <rest> ;
 * refs (2): 594B8 5F163
 %1=case:
-        ::                                       * 5F181
-          DUP                                    * 5F186
-          %1                                     * 5F18B
-          %=                                     * 5F190
-          COLAcase                               * 5F195
-        ;                                        * 5F19A
+        :: DUP %1 %= COLAcase ;                  * 5F181
 
 * C%1 -> :: C%1 <ob1> ; ob -> :: ob <ob2> <rest> ;
 * refs (1): 5F16D
 C%1=case:
-        ::                                       * 5F19F
-          DUP                                    * 5F1A4
-          C%1                                    * 5F1A9
-          EQUAL                                  * 5F1AE
-          COLAcase                               * 5F1B3
-        ;                                        * 5F1B8
+        :: DUP C%1 EQUAL COLAcase ;              * 5F19F
 
 * 2 -> :: 2 <ob1> ; ob -> :: ob <ob2> <rest> ;
 * refs (3): 564CB 57BD6 86DBC
 num2=case:
-        ::                                       * 5F1BD
-          CK&DISPATCH0                           * 5F1C2
-          BINT1                                  * 5F1C7
-          %2=case                                * 5F1CC
-          BINT2                                  * 5F1D1
-          C%2=case                               * 5F1D6
-          BINT0                                  * 5F1DB
-          SKIP                                   * 5F1E0
+        :: CK&DISPATCH0                          * 5F1BD
+          BINT1 %2=case                          * 5F1C7  real
+          BINT2 C%2=case                         * 5F1D1  complex
+          BINT0 SKIP                             * 5F1DB  any
         ;                                        * 5F1E5
 
 * %2 -> :: %2 <ob1> ; ob -> :: ob <ob2> <rest> ;
 * refs (2): 594C2 5F1CC
 %2=case:
-        ::                                       * 5F1EA
-          DUP                                    * 5F1EF
-          %2                                     * 5F1F4
-          %=                                     * 5F1F9
-          COLAcase                               * 5F1FE
-        ;                                        * 5F203
+        :: DUP %2 %= COLAcase ;                  * 5F1EA
 
 * C%2 -> :: C%2 <ob1> ; ob -> :: ob <ob2> <rest> ;
 * refs (1): 5F1D6
 C%2=case:
-        ::                                       * 5F208
-          DUP                                    * 5F20D
-          C%>%                                   * 5F212
-          %0=                                    * 5F217
-          SWAP                                   * 5F21C
-          %2                                     * 5F221
-          %=                                     * 5F226
-          AND                                    * 5F22B
-          COLAcase                               * 5F230
-        ;                                        * 5F235
+        :: DUP C%>% %0= SWAP %2 %= AND COLAcase ; * 5F208
 
 * -1 -> :: -1 <ob1> ; ob -> :: ob <ob2> <rest> ;
 * refs (5): 563AE 5640D 564B2 565A7 565E3
 num-1=case:
-        ::                                       * 5F23A
-          CK&DISPATCH0                           * 5F23F
-          BINT1                                  * 5F244
-          %-1=case                               * 5F249
-          BINT2                                  * 5F24E
-          C%-1=case                              * 5F253
-          BINT0                                  * 5F258
-          SKIP                                   * 5F25D
+        :: CK&DISPATCH0                          * 5F23A
+          BINT1 %-1=case                         * 5F244  real
+          BINT2 C%-1=case                        * 5F24E  complex
+          BINT0 SKIP                             * 5F258  any
         ;                                        * 5F262
 
 * %-1 -> :: %-1 <ob1> ; ob -> :: ob <ob2> <rest> ;
 * refs (3): 48ABC 4C27E 5F249
 %-1=case:
-        ::                                       * 5F267
-          DUP                                    * 5F26C
-          %-1                                    * 5F271
-          %=                                     * 5F276
-          COLAcase                               * 5F27B
-        ;                                        * 5F280
+        :: DUP %-1 %= COLAcase ;                 * 5F267
 
 * C%-1 -> :: C%-1 <ob1> ; ob -> ob <ob2> <rest> ;
 * refs (1): 5F253
 C%-1=case:
-        ::                                       * 5F285
-          DUP                                    * 5F28A
-          C%-1                                   * 5F28F
-          EQUAL                                  * 5F294
-          COLAcase                               * 5F299
-        ;                                        * 5F29E
+        :: DUP C%-1 EQUAL COLAcase ;             * 5F285
 
 * ob -> meta
 * refs (33): 1CFDA 28098 280AC 546F2 56705 56B19 ...
 EXPLODE:
-        ::                                       * 5F2A3
-          ZEROSWAP                               * 5F2A8
-          SINNER                                 * 5F2AD
-          BEGIN                                  * 5F2B2
-          DUP#0<>WHILE                           * 5F2B7
-          ::                                     * 5F2BC
-            #1-SWAP                              * 5F2C1
-            DUPTYPESYMB?                         * 5F2C6
-            ITE                                  * 5F2CB
-            INNERtop&                            * 5F2D0
-            psh1&                                * 5F2D5
+        :: ZEROSWAP SINNER BEGIN DUP#0<>WHILE    * 5F2A3
+          :: #1-SWAP DUPTYPESYMB? ITE INNERtop& psh1& * 5F2BC
           ;                                      * 5F2DA
-          REPEAT                                 * 5F2DF
-          DROP                                   * 5F2E4
-        ;                                        * 5F2E9
+          REPEAT DROP ;                          * 5F2DF
 
 * meta -> ob
 * refs (19): 2809D 280B1 28124 56755 57A20 57A34 ...
 IMPLODE:
-        ::                                       * 5F2EE
-          BINT1                                  * 5F2F3
-          OVER#=case                             * 5F2F8
-          DROPSYM                                * 5F2FD
-          pshzer                                 * 5F302
-          OBJ_5F31B                              * 5F307
-          DROP                                   * 5F30C
-          CKSYMBN                                * 5F311
-        ;                                        * 5F316
+        :: BINT1 OVER#=case DROPSYM              * 5F2EE
+          pshzer OBJ_5F31B DROP CKSYMBN ;        * 5F302
 
 * refs (1): 5F307
 OBJ_5F31B:
-        ::                                       * 5F31B
-          BEGIN                                  * 5F320
-          pullrev                                * 5F325
-          OBJ_5F537                              * 5F32A
-          OBJ_5F571                              * 5F32F
-          nonopcase                              * 5F334
-          OBJ_5F370                              * 5F339
-          DUP                                    * 5F33E
-          M1stFNCcase                            * 5F343
-          OBJ_5F3D4                              * 5F348
-          OBJ_26F7A                              * 5F34D
-          case                                   * 5F352
-          OBJ_5F4F6                              * 5F357
-          DROP                                   * 5F35C
-          psh1&rev                               * 5F361
-          #0=UNTIL                               * 5F366
-        ;                                        * 5F36B
+        :: BEGIN pullrev OBJ_5F537 OBJ_5F571 nonopcase OBJ_5F370 * 5F31B
+          DUP M1stFNCcase OBJ_5F3D4              * 5F33E
+          OBJ_26F7A case OBJ_5F4F6               * 5F34D
+          DROP psh1&rev #0=UNTIL ;               * 5F35C
 
 * refs (1): 5F339
 OBJ_5F370:
-        ::                                       * 5F370
-          psh1&rev                               * 5F375
-          #0=UNTIL                               * 5F37A
-        ;                                        * 5F37F
+        :: psh1&rev #0=UNTIL ;                   * 5F370
 
 * ob1 ob2 -> ob
 * refs (3): 54819 5E094 5F2FD
 DROPSYM:
-        ::                                       * 5F384
-          DROP                                   * 5F389
-          CK&DISPATCH0                           * 5F38E
-          BINT6                                  * 5F393
-          NOP                                    * 5F398
-          BINT7                                  * 5F39D
-          NOP                                    * 5F3A2
-          BINT1                                  * 5F3A7
-          NOP                                    * 5F3AC
-          BINT2                                  * 5F3B1
-          NOP                                    * 5F3B6
-          BINT14                                 * 5F3BB
-          NOP                                    * 5F3C0
-          BINT0                                  * 5F3C5
-          symcomp                                * 5F3CA
+        :: DROP CK&DISPATCH0                     * 5F384
+          BINT6 NOP                              * 5F393  name
+          BINT7 NOP                              * 5F39D  local
+          BINT1 NOP                              * 5F3A7  real
+          BINT2 NOP                              * 5F3B1  complex
+          BINT14 NOP                             * 5F3BB  unit
+          BINT0 symcomp                          * 5F3C5  any
         ;                                        * 5F3CF
 
 * refs (1): 5F348
 OBJ_5F3D4:
-        ::                                       * 5F3D4
-          2DROP                                  * 5F3D9
-          psh                                    * 5F3DE
-          ROT                                    * 5F3E3
-          symcomp                                * 5F3E8
-          DUP4UNROLL                             * 5F3ED
-          CARCOMP                                * 5F3F2
-          NOTROMPcase                            * 5F3F7
+        :: 2DROP psh ROT symcomp DUP4UNROLL CARCOMP NOTROMPcase * 5F3D4
 
 * refs (1): 5F43D
 OBJ_5F3FC:
-          ::                                     * 5F3FC
-            DROP                                 * 5F401
-            PTR     addt:                        * 5F406
-            xFCNAPPLY                            * 5F40B
-            psh                                  * 5F410
-            #0=UNTIL                             * 5F415
-          ;                                      * 5F41A
-          DUPROMPTR@                             * 5F41F
-          ?SKIP                                  * 5F424
-          SETROMPERR                             * 5F429
-          DROP                                   * 5F42E
-          OBJ_26F7A                              * 5F433
-          NOTcase                                * 5F438
-          OBJ_5F3FC                              * 5F43D
-          CARCOMP                                * 5F442
-          4PICK                                  * 5F447
-          CARCOMP                                * 5F44C
-          OBJ_5E9E1                              * 5F451
-          NOTcase                                * 5F456
-          OBJ_5F4A6                              * 5F45B
-          4ROLLSWAP                              * 5F460
-          4UNROLL                                * 5F465
-          psh1&rev                               * 5F46A
-          #1-ROT                                 * 5F46F
-          EVAL                                   * 5F474
-          #1+DUP                                 * 5F479
-          #2+PICK                                * 5F47E
-          3UNROLL                                * 5F483
-          PTR     addt:                          * 5F488
-          xFCNAPPLY                              * 5F48D
-          psh                                    * 5F492
-          SWAPDROP#1-                            * 5F497
-          #0=UNTIL                               * 5F49C
-        ;                                        * 5F4A1
+          :: DROP PTR addt: xFCNAPPLY psh #0=UNTIL ; * 5F3FC
+          DUPROMPTR@ ?SKIP SETROMPERR            * 5F41F
+          DROP OBJ_26F7A NOTcase OBJ_5F3FC       * 5F42E
+          CARCOMP 4PICK CARCOMP OBJ_5E9E1 NOTcase OBJ_5F4A6 * 5F442
+          4ROLLSWAP 4UNROLL psh1&rev #1-ROT EVAL #1+DUP #2+PICK 3UNROLL * 5F460
+          PTR addt: xFCNAPPLY psh SWAPDROP#1- #0=UNTIL ; * 5F488
 
 * refs (1): 5F45B
 OBJ_5F4A6:
-        ::                                       * 5F4A6
-          SWAPROT                                * 5F4AB
-          psh1&rev                               * 5F4B0
-          #1-ROT                                 * 5F4B5
-          psh1&rev                               * 5F4BA
-          #1-SWAP                                * 5F4BF
-          EVAL                                   * 5F4C4
-          psh                                    * 5F4C9
-          #1-SWAP                                * 5F4CE
-          psh1&rev                               * 5F4D3
-          pullrev1&                              * 5F4D8
-          '                                      * 5F4DD
-          xFCNAPPLY                              * 5F4E2
-          psh1&rev                               * 5F4E7
-          #0=UNTIL                               * 5F4EC
-        ;                                        * 5F4F1
+        :: SWAPROT psh1&rev #1-ROT psh1&rev #1-SWAP EVAL psh #1-SWAP * 5F4A6
+          psh1&rev pullrev1& ' xFCNAPPLY psh1&rev #0=UNTIL ; * 5F4D3
 
 * refs (1): 5F357
 OBJ_5F4F6:
-        ::                                       * 5F4F6
-          ROT                                    * 5F4FB
-          #1+SWAP                                * 5F500
-          psh1&rev                               * 5F505
-          psh                                    * 5F50A
-          #1-SWAP                                * 5F50F
-          CARCOMP                                * 5F514
-          EVAL                                   * 5F519
-          psh                                    * 5F51E
-          #1-SWAP                                * 5F523
-          psh1&rev                               * 5F528
-          #0=UNTIL                               * 5F52D
-        ;                                        * 5F532
+        :: ROT #1+SWAP psh1&rev psh #1-SWAP CARCOMP EVAL psh #1-SWAP * 5F4F6
+          psh1&rev #0=UNTIL ;                    * 5F528
 
 * refs (1): 5F32A
 OBJ_5F537:
@@ -2852,101 +1835,41 @@ L_5F564:
 
 * refs (1): 5F32F
 OBJ_5F571:
-        ::                                       * 5F571
-          psh1&rev                               * 5F576
-          psh                                    * 5F57B
-          OVER                                   * 5F580
-          '                                      * 5F585
-          ROMP_002_105                           * 5F58A
-          EQITE                                  * 5F58F
-          OBJ_2818D                              * 5F594
-          OBJ_281F6                              * 5F599
-          psh                                    * 5F59E
-          #0=UNTIL                               * 5F5A3
-        ;                                        * 5F5A8
+        :: psh1&rev psh OVER ' ROMP_002_105 EQITE OBJ_2818D OBJ_281F6 psh * 5F571
+          #0=UNTIL ;                             * 5F5A3
 
 * refs (5): 590E3 59F7D 60A27 60E19 6B15B
 OBJ_5F5AD:
-        ::                                       * 5F5AD
-          BINT1                                  * 5F5B2
-          splitdown                              * 5F5B7
-          OVER                                   * 5F5BC
-          #2+PICK                                * 5F5C1
-          REQcasedrop                            * 5F5C6
-          xFCNAPPLY                              * 5F5CB
-          OBJ_5F63E                              * 5F5D0
-          DUP                                    * 5F5D5
-          OBJ_26F7A                              * 5F5DA
-          NOTcase                                * 5F5DF
+        :: BINT1 splitdown OVER #2+PICK REQcasedrop xFCNAPPLY * 5F5AD
+          OBJ_5F63E DUP OBJ_26F7A NOTcase        * 5F5D0
 
 * ob1..ob4 -> F
 4DROPFALSE:
-          ::                                     * 5F5E4
-            4DROP                                * 5F5E9
-            FALSE                                * 5F5EE
-          ;                                      * 5F5F3
-          BINT2                                  * 5F5F8
-          NTHCOMPDROP                            * 5F5FD
-          SWAP                                   * 5F602
-          infarg?                                * 5F607
-          SWAPDROP                               * 5F60C
-          IT                                     * 5F611
-          ::                                     * 5F616
-            3PICK                                * 5F61B
-            #4+PICK                              * 5F620
-            SWAP                                 * 5F625
-          ;                                      * 5F62A
-          EVAL                                   * 5F62F
-          SWAPDROP                               * 5F634
-        ;                                        * 5F639
+          :: 4DROP FALSE ;                       * 5F5E4
+          BINT2 NTHCOMPDROP SWAP infarg? SWAPDROP IT * 5F5F8
+          :: 3PICK #4+PICK SWAP ;                * 5F616
+          EVAL SWAPDROP ;                        * 5F62F
 
 * refs (1): 5F5D0
 OBJ_5F63E:
-        ::                                       * 5F63E
-          OVER                                   * 5F643
-          #3+PICK                                * 5F648
-          2DUP                                   * 5F64D
-          #>case                                 * 5F652
+        :: OVER #3+PICK 2DUP #>case              * 5F63E
 
 * ob1 ob2 ob3 -> T
 3DROPTRUE:
-          ::                                     * 5F657
-            3DROP                                * 5F65C
-            TRUE                                 * 5F661
-          ;                                      * 5F666
-          3PICK                                  * 5F66B
-          #5+                                    * 5F670
-          PICK                                   * 5F675
-          NOTROMPcase                            * 5F67A
+          :: 3DROP TRUE ;                        * 5F657
+          3PICK #5+ PICK NOTROMPcase             * 5F66B
 
 4dropn;false:
-          ::                                     * 5F67F
-            4DROP                                * 5F684
-            FALSE                                * 5F689
-          ;                                      * 5F68E
-          ?OKINALG                               * 5F693
-          NOTcase                                * 5F698
-          SETROMPERR                             * 5F69D
-          DUP                                    * 5F6A2
-          OBJ_26F7A                              * 5F6A7
-          NOTcase                                * 5F6AC
+          :: 4DROP FALSE ;                       * 5F67F
+          ?OKINALG NOTcase SETROMPERR            * 5F693
+          DUP OBJ_26F7A NOTcase                  * 5F6A2
 
 * ob1..ob5 -> F
 * refs (1): 2FDF8
 5DROPFALSE:
-          ::                                     * 5F6B1
-            5DROP                                * 5F6B6
-            FALSE                                * 5F6BB
-          ;                                      * 5F6C0
-          BINT2                                  * 5F6C5
-          NTHCOMPDROP                            * 5F6CA
-          SWAP                                   * 5F6CF
-          OBJ_5E9E1                              * 5F6D4
-          ?SKIP                                  * 5F6D9
-          SWAPDROP                               * 5F6DE
-          EVAL                                   * 5F6E3
-          SWAPDROP                               * 5F6E8
-        ;                                        * 5F6ED
+          :: 5DROP FALSE ;                       * 5F6B1
+          BINT2 NTHCOMPDROP SWAP OBJ_5E9E1 ?SKIP SWAPDROP * 5F6C5
+          EVAL SWAPDROP ;                        * 5F6E3
         ASSEMBLE
 
 * refs (23): 54E84 57B51 5BE5B 5BE86 5BED3 5BF58 ...
@@ -3198,129 +2121,65 @@ splitdown:
 * meta #n -> meta1 meta2
 * refs (15): 5AEC5 5B028 5B14A 5B24E 5B2A3 5B87F ...
 tailpsh:
-        ::                                       * 5F996
-          #1-DUP                                 * 5F99B
-          3UNROLL                                * 5F9A0
-          #-OVER                                 * 5F9A5
-          #2+UNROLL                              * 5F9AA
-          psh                                    * 5F9AF
-        ;                                        * 5F9B4
+        :: #1-DUP 3UNROLL #-OVER #2+UNROLL psh ; * 5F996
 
 * refs (3): 35144 68DB9 6DEA0
 ->StrExpr(_):
-        ::                                       * 5F9B9
-          CK&DISPATCH1                           * 5F9BE
-          BINT1                                  * 5F9C3
-          OBJ_35264                              * 5F9C8
-          BINT2                                  * 5F9CD
-          ->StdStr(c)                            * 5F9D2
-          BINT6                                  * 5F9D7
-          ID>$                                   * 5F9DC
-          BINT7                                  * 5F9E1
-          ID>$                                   * 5F9E6
-          BINT14                                 * 5F9EB
-          UNIT>$                                 * 5F9F0
-          BINT0                                  * 5F9F5
-          ->StrOp(_)                             * 5F9FA
+        :: CK&DISPATCH1                          * 5F9B9
+          BINT1 OBJ_35264                        * 5F9C3  real
+          BINT2 ->StdStr(c)                      * 5F9CD  complex
+          BINT6 ID>$                             * 5F9D7  name
+          BINT7 ID>$                             * 5F9E1  local
+          BINT14 UNIT>$                          * 5F9EB  unit
+          BINT0 ->StrOp(_)                       * 5F9F5  any
         ;                                        * 5F9FF
 
 * refs (2): 40675 5F9FA
 ->StrOp(_):
-        ::                                       * 5FA04
-          REQcasedrop                            * 5FA09
-          xNEG                                   * 5FA0E
-          tok-                                   * 5FA13
-          PALPTRDCMP                             * 5FA18
-          ?SEMIDROP                              * 5FA1D
-          tokUNKNOWN                             * 5FA22
-        ;                                        * 5FA27
+        :: REQcasedrop xNEG                      * 5FA04
+          tok- PALPTRDCMP ?SEMIDROP              * 5FA13
+          tokUNKNOWN ;                           * 5FA22
 
 * refs (1): 1CFDF
 OBJ_5FA2C:
-        ::                                       * 5FA2C
-          #1-SWAP                                * 5FA31
-          ::                                     * 5FA36
-            REQcasedrop                          * 5FA3B
-            xFCNAPPLY                            * 5FA40
+        :: #1-SWAP                               * 5FA2C
+          :: REQcasedrop xFCNAPPLY               * 5FA36
 
 * meta&ob1&ob2 -> meta ob1
 pulldroppull:
-            ::                                   * 5FA45
-              SWAPDROP#1-                        * 5FA4A
-              #1-SWAP                            * 5FA4F
-            ;                                    * 5FA54
-            infarg?                              * 5FA59
-            case                                 * 5FA5E
+            :: SWAPDROP#1- #1-SWAP ; infarg? case * 5FA45
 
 * meta&ob1 ob2 -> meta ob2
 revpulldrop:
-            ::                                   * 5FA63
-              3UNROLL                            * 5FA68
-              SWAPDROP#1-                        * 5FA6D
-              SWAP                               * 5FA72
-            ;                                    * 5FA77
+            :: 3UNROLL SWAPDROP#1- SWAP ;        * 5FA63
           ;                                      * 5FA7C
-          pshm1                                  * 5FA81
-          BEGIN                                  * 5FA86
-          DUP#0<>WHILE                           * 5FA8B
-          ::                                     * 5FA90
-            larg                                 * 5FA95
-            IMPLODE                              * 5FA9A
-            psh1&                                * 5FA9F
-          ;                                      * 5FAA4
-          REPEAT                                 * 5FAA9
-          DROP                                   * 5FAAE
-          #1-SWAP                                * 5FAB3
-          CK&DISPATCH0                           * 5FAB8
-          BINT15                                 * 5FABD
-          OBJ_7DF92                              * 5FAC2
-          BINT8                                  * 5FAC7
-          OBJ_5FAE0                              * 5FACC
-          BINT0                                  * 5FAD1
-          TRUE                                   * 5FAD6
+          pshm1 BEGIN DUP#0<>WHILE               * 5FA81
+          :: larg IMPLODE psh1& ; REPEAT DROP #1-SWAP CK&DISPATCH0 * 5FA90
+          BINT15 OBJ_7DF92                       * 5FABD  romptr
+          BINT8 OBJ_5FAE0                        * 5FAC7  program
+          BINT0 TRUE                             * 5FAD1  any
         ;                                        * 5FADB
 
 * refs (2): 5FACC 8D25A
 OBJ_5FAE0:
-        ::                                       * 5FAE0
-          DUP                                    * 5FAE5
-          OBJ_26F7A                              * 5FAEA
-          IT                                     * 5FAEF
-          ::                                     * 5FAF4
-            BINT3                                * 5FAF9
-            NTHELCOMP                            * 5FAFE
-            case                                 * 5FB03
+        :: DUP OBJ_26F7A IT                      * 5FAE0
+          :: BINT3 NTHELCOMP case                * 5FAF4
 
 eval;tq:
-            ::                                   * 5FB08
-              EVAL                               * 5FB0D
-              RDROP                              * 5FB12
-              TRUE                               * 5FB17
-            ;                                    * 5FB1C
-            DUP                                  * 5FB21
-          ;                                      * 5FB26
-          DROP                                   * 5FB2B
-          PALPTRDCMP                             * 5FB30
-          NOTcaseFALSE                           * 5FB35
-          $>ID                                   * 5FB3A
-          COMPILEID                              * 5FB3F
-        ;                                        * 5FB44
+            :: EVAL RDROP TRUE ;                 * 5FB08
+            DUP ;                                * 5FB21
+          DROP PALPTRDCMP NOTcaseFALSE $>ID      * 5FB2B
+          COMPILEID ;                            * 5FB3F
 
 * T -> :: <ob1> <rest> ; F -> F
 * refs (71): 09302 09398 0C7DA 0C7E4 0DFE3 0F3F8 ...
 NOTcaseFALSE:
-        ::                                       * 5FB49
-          NOTcase                                * 5FB4E
-          RDROPFALSE                             * 5FB53
+        :: NOTcase RDROPFALSE                    * 5FB49
         ;                                        * 5FB58
 
 * refs (5): 2453C 245E1 246C2 24E4C 27EDB
 ~;eval;q:
-        ::                                       * 5FB5D
-          'R                                     * 5FB62
-          EVAL                                   * 5FB67
-          RDROP                                  * 5FB6C
-        ;                                        * 5FB71
+        :: 'R EVAL RDROP ;                       * 5FB5D
 
 * # ob ob' -> #+1 ob ob'
 * refs (19): 275E4 27760 278AA 27981 279D6 27F8F ...
@@ -3394,39 +2253,21 @@ L_5FC20:
 * n..1 #n -> n..1 #n n+1
 * refs (9): 10AE0 572DE 59F50 605CC 6091E 60D07 ...
 DUP#2+PICK:
-        ::                                       * 5FC24
-          DUP                                    * 5FC29
-          #2+PICK                                * 5FC2E
-        ;                                        * 5FC33
+        :: DUP #2+PICK ;                         * 5FC24
 
 * meta -> %1 #1 meta
 * refs (1): 86687
 %1pshm1:
-        ::                                       * 5FC38
-          %1                                     * 5FC3D
-          pshm1                                  * 5FC42
-        ;                                        * 5FC47
+        :: %1 pshm1 ;                            * 5FC38
 
 * refs (1): 1F3C7
 B2(n)<='B1(1)':
-        ::                                       * 5FC4C
-          #1-SWAP                                * 5FC51
-          symcomp                                * 5FC56
-          psh1&                                  * 5FC5B
-        ;                                        * 5FC60
+        :: #1-SWAP symcomp psh1& ;               * 5FC4C
 
 * refs (1): 83F00
 OBJ_5FC65:
-        ::                                       * 5FC65
-          pargop                                 * 5FC6A
-          ROMPTR  0F0 04B                        * 5FC6F
-          psh                                    * 5FC7A
-          #1-SWAP                                * 5FC7F
-          pshm1                                  * 5FC84
-          ROMPTR  0F0 04B                        * 5FC89
-          pshtop&                                * 5FC94
-          top&                                   * 5FC99
-        ;                                        * 5FC9E
+        :: pargop ROMPTR 0F0 04B psh #1-SWAP pshm1 ROMPTR 0F0 04B pshtop& * 5FC65
+          top& ;                                 * 5FC99
         ASSEMBLE
 
 * refs (1): 60219
@@ -3539,109 +2380,44 @@ OBJ_5FDB7:
 
 * refs (4): 5FE33 5FF00 5FF0F 60080
 Π'ct:
-            LAM     'ct                          * 5FDC1
+            LAM 'ct                              * 5FDC1
 
 * refs (9): 5FDF7 5FE38 5FECE 5FEDD 5FF28 5FF37 ...
 Π'pp:
-            LAM     'pp                          * 5FDCE
+            LAM 'pp                              * 5FDCE
 
 * refs (13): 5FE0B 5FE3D 5FE83 5FEC4 5FF41 5FF50 ...
 Π'ep:
-            LAM     'ep                          * 5FDDB
-          }                                      * 5FDE8
-          BIND                                   * 5FDED
-          BEGIN                                  * 5FDF2
-          Π'pp                                   * 5FDF7
-          PICK                                   * 5FDFC
-          OBJ_5FF5F                              * 5FE01
-          OBJ_5FE56                              * 5FE06
-          Π'ep                                   * 5FE0B
-          #1+PICK                                * 5FE10
-          EQUALNOTcase                           * 5FE15
+            LAM 'ep }                            * 5FDDB
+          BIND BEGIN Π'pp PICK OBJ_5FF5F OBJ_5FE56 Π'ep #1+PICK EQUALNOTcase * 5FDED
           OBJ_6007B                              * 5FE1A
-          OBJ_5FF23                              * 5FE1F
-          OBJ_5FEFB                              * 5FE24
-          UNTIL                                  * 5FE29
+          OBJ_5FF23 OBJ_5FEFB UNTIL              * 5FE1F
 
 * refs (2): 5FEF1 60290
 OBJ_5FE2E:
-          ::                                     * 5FE2E
-            Π'ct                                 * 5FE33
-            Π'pp                                 * 5FE38
-            Π'ep                                 * 5FE3D
-            ABND                                 * 5FE42
-            TRUE                                 * 5FE47
-          ;                                      * 5FE4C
-        ;                                        * 5FE51
+          :: Π'ct Π'pp Π'ep ABND TRUE ; ;        * 5FE2E
 
 * refs (1): 5FE06
 OBJ_5FE56:
-        ::                                       * 5FE56
-          undo                                   * 5FE5B
-          DROP                                   * 5FE60
-          REQcasedrop                            * 5FE65
-          NULL{}                                 * 5FE6A
-          OBJ_600FD                              * 5FE6F
-          REQcasedrop                            * 5FE74
-          {}_600F3                               * 5FE79
-          OBJ_60139                              * 5FE7E
-          Π'ep                                   * 5FE83
-          OBJ_6019D                              * 5FE88
-          NOTcase                                * 5FE8D
-          ::                                     * 5FE92
-            2DROP                                * 5FE97
-            COLA                                 * 5FE9C
-            OBJ_6007B                            * 5FEA1
+        :: undo DROP REQcasedrop NULL{}          * 5FE56
+          OBJ_600FD REQcasedrop {}_600F3         * 5FE6F
+          OBJ_60139 Π'ep OBJ_6019D NOTcase       * 5FE7E
+          :: 2DROP COLA OBJ_6007B                * 5FE92
           ;                                      * 5FEA6
-          SWAP                                   * 5FEAB
-          BINT2                                  * 5FEB0
-          NTHCOMPDROP                            * 5FEB5
-          #+                                     * 5FEBA
-          '                                      * 5FEBF
-          Π'ep                                   * 5FEC4
-          STO                                    * 5FEC9
-          Π'pp                                   * 5FECE
-          #1+                                    * 5FED3
-          '                                      * 5FED8
-          Π'pp                                   * 5FEDD
-          STO                                    * 5FEE2
-          OBJ_5FEFB                              * 5FEE7
-          UNTIL                                  * 5FEEC
-          OBJ_5FE2E                              * 5FEF1
-        ;                                        * 5FEF6
+          SWAP BINT2 NTHCOMPDROP #+ ' Π'ep STO Π'pp #1+ ' Π'pp STO OBJ_5FEFB * 5FEAB
+          UNTIL OBJ_5FE2E ;                      * 5FEEC
 
 * refs (3): 5FE24 5FEE7 60286
 OBJ_5FEFB:
-        ::                                       * 5FEFB
-          Π'ct                                   * 5FF00
-          #1-DUP                                 * 5FF05
-          '                                      * 5FF0A
-          Π'ct                                   * 5FF0F
-          STO                                    * 5FF14
-          #0=                                    * 5FF19
-        ;                                        * 5FF1E
+        :: Π'ct #1-DUP ' Π'ct STO #0= ;          * 5FEFB
 
 * refs (1): 5FE1F
 OBJ_5FF23:
-        ::                                       * 5FF23
-          Π'pp                                   * 5FF28
-          #1+                                    * 5FF2D
-          '                                      * 5FF32
-          Π'pp                                   * 5FF37
-          STO                                    * 5FF3C
-          Π'ep                                   * 5FF41
-          #1+                                    * 5FF46
-          '                                      * 5FF4B
-          Π'ep                                   * 5FF50
-          STO                                    * 5FF55
-        ;                                        * 5FF5A
+        :: Π'pp #1+ ' Π'pp STO Π'ep #1+ ' Π'ep STO ; * 5FF23
 
 * refs (1): 5FE01
 OBJ_5FF5F:
-        ::                                       * 5FF5F
-          OBJ_5FF73                              * 5FF64
-          COLAcase                               * 5FF69
-        ;                                        * 5FF6E
+        :: OBJ_5FF73 COLAcase ;                  * 5FF5F
 
 * refs (5): 5FF64 600C1 60996 609C8 60BAD
 OBJ_5FF73:
@@ -3679,17 +2455,5 @@ L_5FFAE:
 
 * refs (1): 60107
 OBJ_5FFD6:
-        ::                                       * 5FFD6
-          BINT1                                  * 5FFDB
-          SWAP#1+                                * 5FFE0
-          BEGIN                                  * 5FFE5
-          DUP#1+PICK                             * 5FFEA
-          OBJ_6001C                              * 5FFEF
-          SWAPDROP                               * 5FFF4
-          ROT#+                                  * 5FFF9
-          #1-                                    * 5FFFE
-          SWAP#1+                                * 60003
-          OVER#0=                                * 60008
-          UNTIL                                  * 6000D
-          SWAPDROP#1-                            * 60012
-        ;                                        * 60017
+        :: BINT1 SWAP#1+ BEGIN DUP#1+PICK OBJ_6001C SWAPDROP ROT#+ #1- * 5FFD6
+          SWAP#1+ OVER#0= UNTIL SWAPDROP#1- ;    * 60003

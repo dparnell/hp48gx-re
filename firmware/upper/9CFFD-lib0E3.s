@@ -7,145 +7,50 @@
 * ROMPTR 0E3 05C
 * refs (1): 99FF5
 ROMP_0E3_05C:
-        ::                                       * 9CFFD
-          TakeOver                               * 9D002
-          ROMPTR  0E3 04F                        * 9D007
-          BINT2                                  * 9D012
-          NTHCOMPDROP                            * 9D017
-          COLA_EVAL                              * 9D01C
-        ;                                        * 9D021
+        :: TakeOver ROMPTR 0E3 04F BINT2 NTHCOMPDROP COLA_EVAL ; * 9CFFD
 
 * ROMPTR 0E3 05D
 * refs (1): 99FF5
 ROMP_0E3_05D:
-        ::                                       * 9D026
-          TakeOver                               * 9D02B
-          ROMPTR  0E3 04F                        * 9D030
-          BINT3                                  * 9D03B
-          NTHCOMPDROP                            * 9D040
-          COLA_EVAL                              * 9D045
-        ;                                        * 9D04A
+        :: TakeOver ROMPTR 0E3 04F BINT3 NTHCOMPDROP COLA_EVAL ; * 9D026
 
 * ROMPTR 0E3 05E
 * refs (1): 99FF5
 ROMP_0E3_05E:
-        ::                                       * 9D04F
-          '                                      * 9D054
-          LAM     'PC1                           * 9D059
-          STO                                    * 9D068
-        ;                                        * 9D06D
+        :: ' LAM 'PC1 STO ;                      * 9D04F
 
 * ROMPTR 0E3 05F
 * refs (1): 99FF5
 ROMP_0E3_05F:
-        ::                                       * 9D072
-          '                                      * 9D077
-          LAM     'PC2                           * 9D07C
-          STO                                    * 9D08B
-        ;                                        * 9D090
+        :: ' LAM 'PC2 STO ;                      * 9D072
 
 * ROMPTR 0E3 060
 * refs (1): 99FF5
 ROMP_0E3_060:
-        ::                                       * 9D095
-          SWAP                                   * 9D09A
-          FALSE                                  * 9D09F
+        :: SWAP FALSE                            * 9D095
           {                                      * 9D0A4
 
 * ROMPTR 0E3 061
 * refs (1): 99FF5
 ROMP_0E3_061:
-            LAM     'PC2                         * 9D0A9
+            LAM 'PC2                             * 9D0A9
 
 * ROMPTR 0E3 062
 * refs (1): 99FF5
 ROMP_0E3_062:
-            LAM     'PC1                         * 9D0B8
-          }                                      * 9D0C7
-          BIND                                   * 9D0CC
-          CLCD10                                 * 9D0D1
-          DUP                                    * 9D0D6
-          ROMPTR  0E2 02A                        * 9D0DB
-          EQITE                                  * 9D0E6
-          ::                                     * 9D0EB
-            DROP                                 * 9D0F0
-            BINT0                                * 9D0F5
-            BINT36                               * 9D0FA
-            #       E304                         * 9D0FF  58116
-            JstGetTHEMESG                        * 9D109
-            $>GROB                               * 9D10E
-            XYGROBDISP                           * 9D113
-            BINT0                                * 9D118
-            BINT21                               * 9D11D
-            ROMPTR  0E3 00F                      * 9D122
-            CARCOMP                              * 9D12D
-            EVAL                                 * 9D132
-            ROMPTR  0E3 011                      * 9D137
-            SWAP                                 * 9D142
-            GETATELN                             * 9D147
-            DROP                                 * 9D14C
-            PTR     CHR_:                        * 9D151
-            >T$                                  * 9D156
-            $>GROB                               * 9D15B
-            XYGROBDISP                           * 9D160
-          ;                                      * 9D165
-          ::                                     * 9D16A
-            DUP                                  * 9D16F
-            LENCOMP                              * 9D174
-            DUP                                  * 9D179
-            BINT3                                * 9D17E
-            #=                                   * 9D183
-            ITE                                  * 9D188
-            ::                                   * 9D18D
-              DROP                               * 9D192
-              INCOMPDROP                         * 9D197
-              ROMPTR  0E3 063                    * 9D19C  ~PCunpack
-              XYGROBDISP                         * 9D1A7
-            ;                                    * 9D1AC
-            ::                                   * 9D1B1
-              SWAP                               * 9D1B6
-              BINT21                             * 9D1BB
-              BINT1                              * 9D1C0
-              DO                                 * 9D1C5
-              OVER                               * 9D1CA
-              #1+                                * 9D1CF
-              BINT1                              * 9D1D4
-              DO                                 * 9D1D9
-              DUP                                * 9D1DE
-              INDEX@                             * 9D1E3
-              NTHCOMPDROP                        * 9D1E8
-              EVAL                               * 9D1ED
-              INCOMPDROP                         * 9D1F2
-              ROMPTR  0E3 063                    * 9D1F7  ~PCunpack
-              XYGROBDISP                         * 9D202
-              SLOW                               * 9D207
-              SLOW                               * 9D20C
-              SLOW                               * 9D211
-              SLOW                               * 9D216
-              LOOP                               * 9D21B
-              LOOP                               * 9D220
-              2DROP                              * 9D225
-            ;                                    * 9D22A
+            LAM 'PC1 }                           * 9D0B8
+          BIND CLCD10 DUP ROMPTR 0E2 02A EQITE   * 9D0CC
+          :: DROP BINT0 BINT36 # E304 JstGetTHEMESG $>GROB XYGROBDISP BINT0 * 9D0EB
+            BINT21 ROMPTR 0E3 00F CARCOMP EVAL ROMPTR 0E3 011 SWAP GETATELN * 9D11D
+            DROP PTR CHR_: >T$ $>GROB XYGROBDISP ; * 9D14C
+          :: DUP LENCOMP DUP BINT3 #= ITE        * 9D16A
+            :: DROP INCOMPDROP ROMPTR 0E3 063 XYGROBDISP ; * 9D18D  ~PCunpack
+            :: SWAP BINT21 BINT1 DO OVER #1+ BINT1 DO DUP INDEX@ NTHCOMPDROP * 9D1B1
+              EVAL INCOMPDROP ROMPTR 0E3 063 XYGROBDISP SLOW SLOW SLOW SLOW * 9D1ED  ~PCunpack
+              LOOP LOOP 2DROP ;                  * 9D21B
           ;                                      * 9D22F
-          ClrDAsOK                               * 9D234
-          '                                      * 9D239
-          ROMPTR  0E3 064                        * 9D23E
-          RESOROMP                               * 9D249
-          ROMPTR  0E3 066                        * 9D24E
-          TRUE                                   * 9D259
-          TRUE                                   * 9D25E
-          5ROLL                                  * 9D263
-          BINT1                                  * 9D268
-          FALSE                                  * 9D26D
-          '                                      * 9D272
-          LAM     'PC1                           * 9D277
-          '                                      * 9D286
-          ERRJMP                                 * 9D28B
-          POLSetUI                               * 9D290
-          POLKeyUI                               * 9D295
-          ABND                                   * 9D29A
-          ClrDAsOK                               * 9D29F
-        ;                                        * 9D2A4
+          ClrDAsOK ' ROMPTR 0E3 064 RESOROMP ROMPTR 0E3 066 TRUE TRUE 5ROLL * 9D234
+          BINT1 FALSE ' LAM 'PC1 ' ERRJMP POLSetUI POLKeyUI ABND ClrDAsOK ; * 9D268
 
 * ROMPTR 0E3 063
 * refs (1): 99FF5
@@ -240,183 +145,69 @@ L_9D38D:
 * ROMPTR 0E3 064
 * refs (1): 99FF5
 ROMP_0E3_064:
-        ::                                       * 9D3A4
-          DA3OK?                                 * 9D3A9
-          ?SKIP                                  * 9D3AE
-          ::                                     * 9D3B3
-            DispMenu                             * 9D3B8
-            SetDA3Valid                          * 9D3BD
-          ;                                      * 9D3C2
+        :: DA3OK? ?SKIP                          * 9D3A4
+          :: DispMenu SetDA3Valid ;              * 9D3B3
         ;                                        * 9D3C7
 
 * ROMPTR 0E3 065
 * refs (1): 99FF5
 ROMP_0E3_065:
-        ::                                       * 9D3CC
-          TRUE                                   * 9D3D1
-          ROMPTR  0E3 05E                        * 9D3D6
-        ;                                        * 9D3E1
+        :: TRUE ROMPTR 0E3 05E ;                 * 9D3CC
 
 * ROMPTR 0E3 066
 * refs (1): 99FF5
 ROMP_0E3_066:
-        ::                                       * 9D3E6
-          BINT1                                  * 9D3EB
-          #=casedrop                             * 9D3F0
-          ROMPTR  0E3 067                        * 9D3F5
-          BINT3                                  * 9D400
-          #=casedrop                             * 9D405
-          ROMPTR  0E3 068                        * 9D40A
-          2DROP                                  * 9D415
-          'DoBadKeyT                             * 9D41A
-        ;                                        * 9D41F
+        :: BINT1 #=casedrop ROMPTR 0E3 067       * 9D3E6
+          BINT3 #=casedrop ROMPTR 0E3 068        * 9D400
+          2DROP 'DoBadKeyT ;                     * 9D415
 
 * ROMPTR 0E3 067
 * refs (1): 99FF5
 ROMP_0E3_067:
-        ::                                       * 9D424
-          BINT25                                 * 9D429
-          ?CaseRomptr@                           * 9D42E
-          ROMPTR  0E3 069                        * 9D433
-          BINT45                                 * 9D43E
-          ?CaseRomptr@                           * 9D443
-          ROMPTR  0E3 06A                        * 9D448
-          BINT40                                 * 9D453
-          #=casedrop                             * 9D458
-          FALSE                                  * 9D45D
-          BINT7                                  * 9D462
-          #<case                                 * 9D467
-          FALSE                                  * 9D46C
-          'DoBadKeyT                             * 9D471
-        ;                                        * 9D476
+        :: BINT25 ?CaseRomptr@ ROMPTR 0E3 069 BINT45 ?CaseRomptr@ * 9D424
+          ROMPTR 0E3 06A BINT40 #=casedrop FALSE * 9D448
+          BINT7 #<case FALSE                     * 9D462
+          'DoBadKeyT ;                           * 9D471
 
 * ROMPTR 0E3 068
 * refs (1): 99FF5
 ROMP_0E3_068:
-        ::                                       * 9D47B
-          BINT40                                 * 9D480
-          #=casedrpfls                           * 9D485
-          BINT45                                 * 9D48A
-          #=casedrpfls                           * 9D48F
-          DROP                                   * 9D494
-          'DoBadKeyT                             * 9D499
-        ;                                        * 9D49E
+        :: BINT40 #=casedrpfls BINT45            * 9D47B
+          #=casedrpfls DROP                      * 9D48F
+          'DoBadKeyT ;                           * 9D499
 
 * ROMPTR 0E3 069
 * refs (1): 99FF5
 ROMP_0E3_069:
-        ::                                       * 9D4A3
-          TakeOver                               * 9D4A8
-          ROMPTR  0E3 061                        * 9D4AD
-          CARCOMP                                * 9D4B8
-          COLA_EVAL                              * 9D4BD
-        ;                                        * 9D4C2
+        :: TakeOver ROMPTR 0E3 061 CARCOMP COLA_EVAL ; * 9D4A3
 
 * ROMPTR 0E3 06A
 * refs (1): 99FF5
 ROMP_0E3_06A:
-        ::                                       * 9D4C7
-          TakeOver                               * 9D4CC
-          ROMPTR  0E3 061                        * 9D4D1
-          BINT2                                  * 9D4DC
-          NTHCOMPDROP                            * 9D4E1
-          COLA_EVAL                              * 9D4E6
-        ;                                        * 9D4EB
+        :: TakeOver ROMPTR 0E3 061 BINT2 NTHCOMPDROP COLA_EVAL ; * 9D4C7
 
 * ROMPTR 0E3 06B
 * refs (1): 99FF5
 ROMP_0E3_06B:
-        ::                                       * 9D4F0
-          KILLGDISP                              * 9D4F5
-          #       40                             * 9D4FA  64
-          #       83                             * 9D504  131
-          MAKEGROB                               * 9D50E
-          GROB>GDISP                             * 9D513
-          HARDBUFF                               * 9D518
-          TOTEMPOB                               * 9D51D
-          GBUFF                                  * 9D522
-          ZEROZERO                               * 9D527
-          GROB!                                  * 9D52C
-        ;                                        * 9D531
+        :: KILLGDISP # 40 # 83 MAKEGROB GROB>GDISP HARDBUFF TOTEMPOB GBUFF * 9D4F0
+          ZEROZERO GROB! ;                       * 9D527
 
 * ROMPTR 0E3 06C
 * refs (1): 99FF5
 ROMP_0E3_06C:
-        ::                                       * 9D536
-          3UNROLL                                * 9D53B
-          COERCESWAP                             * 9D540
-          COERCE                                 * 9D545
-          ROMPTR  0E2 015                        * 9D54A
-          SWAP                                   * 9D555
-          NTHELCOMP                              * 9D55A
-          NOTcase                                * 9D55F
-          ROMPTR  0E7 007                        * 9D564
-          EVAL                                   * 9D56F
-          INCOMPDROP                             * 9D574
-          4PICK                                  * 9D579
-          NTHELCOMP                              * 9D57E
-          NOTcase                                * 9D583
-          ROMPTR  0E7 007                        * 9D588
-          SWAPDROP                               * 9D593
-          DUP                                    * 9D598
-          4UNROLL                                * 9D59D
-          4UNROLL                                * 9D5A2
-          EVAL                                   * 9D5A7
-          GETATELN                               * 9D5AC
-          DROP                                   * 9D5B1
-          4UNROLL                                * 9D5B6
-          ROT                                    * 9D5BB
-          %0=                                    * 9D5C0
-          ITE                                    * 9D5C5
-          DROP                                   * 9D5CA
-          ::                                     * 9D5CF
-            KILLGDISP                            * 9D5D4
-            #       40                           * 9D5D9  64
-            #       83                           * 9D5E3  131
-            MAKEGROB                             * 9D5ED
-            GROB>GDISP                           * 9D5F2
-            BINT3                                * 9D5F7
-            NTHCOMPDROP                          * 9D5FC
-            EVAL                                 * 9D601
-            DUP                                  * 9D606
-            ROMPTR  0E2 02A                      * 9D60B
-            EQITE                                * 9D616
-            ::                                   * 9D61B
-              #       E304                       * 9D620  58116
-              JstGetTHEMESG                      * 9D62A
-              $>GROB                             * 9D62F
-              GBUFF                              * 9D634
-              BINT0                              * 9D639
-              BINT36                             * 9D63E
-              GROB!                              * 9D643
-              DROP                               * 9D648
-              OVER                               * 9D64D
-              PTR     CHR_:                      * 9D652
-              >T$                                * 9D657
-              $>GROB                             * 9D65C
-              GBUFF                              * 9D661
-              BINT0                              * 9D666
-              BINT21                             * 9D66B
-            ;                                    * 9D670
-            ::                                   * 9D675
-              DUPLENCOMP                         * 9D67A
-              DUP                                * 9D67F
-              #3=                                * 9D684
-              ITE_DROP                           * 9D689
-              ::                                 * 9D68E
-                NTHCOMPDROP                      * 9D693
-                EVAL                             * 9D698
-              ;                                  * 9D69D
-              INCOMPDROP                         * 9D6A2
-              ROMPTR  0E3 063                    * 9D6A7  ~PCunpack
-              GBUFF                              * 9D6B2
-              2SWAP                              * 9D6B7
-            ;                                    * 9D6BC
-            GROB!                                * 9D6C1
-          ;                                      * 9D6C6
-          ROMPTR  0E3 046                        * 9D6CB
-          COLA_EVAL                              * 9D6D6
-        ;                                        * 9D6DB
+        :: 3UNROLL COERCESWAP COERCE ROMPTR 0E2 015 SWAP NTHELCOMP NOTcase * 9D536
+          ROMPTR 0E7 007                         * 9D564
+          EVAL INCOMPDROP 4PICK NTHELCOMP NOTcase ROMPTR 0E7 007 * 9D56F
+          SWAPDROP DUP 4UNROLL 4UNROLL EVAL GETATELN DROP 4UNROLL ROT %0= * 9D593
+          ITE DROP                               * 9D5C5
+          :: KILLGDISP # 40 # 83 MAKEGROB GROB>GDISP BINT3 NTHCOMPDROP EVAL * 9D5CF
+            DUP ROMPTR 0E2 02A EQITE             * 9D606
+            :: # E304 JstGetTHEMESG $>GROB GBUFF BINT0 BINT36 GROB! DROP * 9D61B
+              OVER PTR CHR_: >T$ $>GROB GBUFF BINT0 BINT21 ; * 9D64D
+            :: DUPLENCOMP DUP #3= ITE_DROP       * 9D675
+              :: NTHCOMPDROP EVAL ; INCOMPDROP ROMPTR 0E3 063 GBUFF 2SWAP ; * 9D68E  ~PCunpack
+            GROB! ;                              * 9D6C1
+          ROMPTR 0E3 046 COLA_EVAL ;             * 9D6CB
 
 * ROMPTR 0E3 06D
 * refs (1): 99FF5

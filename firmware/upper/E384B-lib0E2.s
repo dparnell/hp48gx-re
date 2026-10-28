@@ -15,10 +15,7 @@ LIB0E2:
         CON(5)  0                                * E3869  config
         RPL
 
-        ::                                       * E386E
-          #       E2                             * E3873  226
-          TOSRRP                                 * E387D
-        ;                                        * E3882
+        :: # E2 TOSRRP ;                         * E386E
 
 LIB0E2.hash:
         CON(5)  DOHSTR                           * E3887  hash table of library 0E2
@@ -158,17 +155,17 @@ LIB0E2.link:
 * ROMPTR 0E2 000
 * refs (1): E3857
 ROMP_0E2_000:
-        #       10                               * E3B07  16
+        # 10                                     * E3B07  16
 
 * ROMPTR 0E2 001
 * refs (1): E3857
 ROMP_0E2_001:
-        #       F                                * E3B11  15
+        # F                                      * E3B11  15
 
 * ROMPTR 0E2 002
 * refs (1): E3857
 ROMP_0E2_002:
-        #       11                               * E3B1B  17
+        # 11                                     * E3B1B  17
 
 * ROMPTR 0E2 003
 * refs (1): E3857

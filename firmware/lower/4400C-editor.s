@@ -6,195 +6,91 @@
 
 * refs (1): 43DFA
 \KEEP:
-        ::                                       * 4400C
-          TakeOver                               * 44011
-          DEPTH                                  * 44016
-          UNCOERCE                               * 4401B
-          CKNNOLASTWD                            * 44020
-          DROP                                   * 44025
-          3GETLAM                                * 4402A
-          DEPTH                                  * 4402F
-          #1-                                    * 44034
-          OVER#-                                 * 44039
-          OVER#2+UNROL                           * 4403E
-          psh                                    * 44043
-          #1+NDROP                               * 44048
-          OBJ_440CF                              * 4404D
-          SetDA13NoCh                            * 44052
-        ;                                        * 44057
+        :: TakeOver DEPTH UNCOERCE CKNNOLASTWD DROP 3GETLAM DEPTH #1- OVER#- * 4400C
+          OVER#2+UNROL psh #1+NDROP OBJ_440CF SetDA13NoCh ; * 4403E
 
 * refs (1): 43DA4
 \->LIST:
-        ::                                       * 4405C
-          OBJ_4409D                              * 44061
-          {}N                                    * 44066
-          OBJ_440CF                              * 4406B
-          SetDA13NoCh                            * 44070
-        ;                                        * 44075
+        :: OBJ_4409D {}N OBJ_440CF SetDA13NoCh ; * 4405C
 
 * refs (1): 438C9
 OBJ_4407A:
-        ::                                       * 4407A
-          ComLine?:(bip;q)                       * 4407F
-          OBJ_4409D                              * 44084
-          ROLLDROP                               * 44089
-          OBJ_440CF                              * 4408E
-          SetDA13NoCh                            * 44093
-        ;                                        * 44098
+        :: ComLine?:(bip;q) OBJ_4409D ROLLDROP OBJ_440CF SetDA13NoCh ; * 4407A
 
 * refs (7): 43F71 43F8A 43FA3 43FDA 43FF3 44061 ...
 OBJ_4409D:
-        ::                                       * 4409D
-          TakeOver                               * 440A2
-          3GETLAM                                * 440A7
-          UNCOERCE                               * 440AC
-          CKNNOLASTWD                            * 440B1
-        ;                                        * 440B6
+        :: TakeOver 3GETLAM UNCOERCE CKNNOLASTWD ; * 4409D
 
 * refs (5): 43F7B 43F94 43FAD 43FCB 43FE4
 OBJ_440BB:
-        ::                                       * 440BB
-          AtUserStack                            * 440C0
-          SetDA13NoCh                            * 440C5
-        ;                                        * 440CA
+        :: AtUserStack SetDA13NoCh ;             * 440BB
 
 * refs (8): 43EF9 43F1C 43F3F 43F62 43FFD 4404D ...
 OBJ_440CF:
-        ::                                       * 440CF
-          AtUserStack                            * 440D4
-          DEPTH                                  * 440D9
-          BINT0                                  * 440DE
-          #=casedrop                             * 440E3
-          OBJ_44259                              * 440E8
-          DUP                                    * 440ED
-          3GETLAM                                * 440F2
-          #<ITE                                  * 440F7
-          3PUTLAM                                * 440FC
-          DROP                                   * 44101
-          OBJ_44110                              * 44106
-        ;                                        * 4410B
+        :: AtUserStack DEPTH BINT0 #=casedrop OBJ_44259 * 440CF
+          DUP 3GETLAM #<ITE 3PUTLAM DROP OBJ_44110 ; * 440ED
 
 * refs (4): 43C07 43C75 43C9D 44106
 OBJ_44110:
-        ::                                       * 44110
-          OBJ_4417E                              * 44115
-          3GETLAM                                * 4411A
-          #-                                     * 4411F
-          BINT3                                  * 44124
-          #MIN                                   * 44129
-          #1+                                    * 4412E
-          BINT5                                  * 44133
-          3GETLAM                                * 44138
-          BINT4                                  * 4413D
-          #MIN                                   * 44142
-          #-                                     * 44147
-          2GETLAM                                * 4414C
-          ROT                                    * 44151
-          #MIN                                   * 44156
-          #MAX                                   * 4415B
-          2PUTLAM                                * 44160
-        ;                                        * 44165
+        :: OBJ_4417E 3GETLAM #- BINT3 #MIN #1+ BINT5 3GETLAM BINT4 #MIN #- * 44110
+          2GETLAM ROT #MIN #MAX 2PUTLAM ;        * 4414C
 
 * refs (4): 43806 43A9A 43B67 43E4F
 OBJ_4416A:
-        ::                                       * 4416A
-          4GETLAM                                * 4416F
-          #+                                     * 44174
-        ;                                        * 44179
+        :: 4GETLAM #+ ;                          * 4416A
 
 * refs (5): 43A04 43A40 43BA8 43C93 44115
 OBJ_4417E:
-        ::                                       * 4417E
-          DEPTH                                  * 44183
-          4GETLAM                                * 44188
-          #-                                     * 4418D
-        ;                                        * 44192
+        :: DEPTH 4GETLAM #- ;                    * 4417E
 
 * refs (4): 39C43 4380B 43A9F 43B6C
 pick(s)?:
-        ::                                       * 44197
-          DEPTH                                  * 4419C
-          #1-                                    * 441A1
-          OVER#<                                 * 441A6
-          casedrpfls                             * 441AB
-          PICK                                   * 441B0
-          TRUE                                   * 441B5
-        ;                                        * 441BA
+        :: DEPTH #1- OVER#< casedrpfls PICK      * 44197
+          TRUE ;                                 * 441B5
 
 * refs (3): 43829 43AC7 43B94
 OBJ_441BF:
-        ::                                       * 441BF
-          OBJ_44223                              * 441C4
-          OBJ_441E7                              * 441C9
-        ;                                        * 441CE
+        :: OBJ_44223 OBJ_441E7 ;                 * 441BF
 
 * refs (2): 43A54 43B21
 OBJ_441D3:
-        ::                                       * 441D3
-          OBJ_4423E                              * 441D8
-          OBJ_441E7                              * 441DD
-        ;                                        * 441E2
+        :: OBJ_4423E OBJ_441E7 ;                 * 441D3
 
 * refs (2): 441C9 441DD
 OBJ_441E7:
-        ::                                       * 441E7
-          HARDBUFF                               * 441EC
-          3GETLAM                                * 441F1
-          #>$                                    * 441F6
-          LEN$                                   * 441FB
-          #6*                                    * 44200
-          BINT6                                  * 44205
-          2GETLAM                                * 4420A
-          #10*                                   * 4420F
-          #+                                     * 44214
-          GROB!                                  * 44219
-        ;                                        * 4421E
+        :: HARDBUFF 3GETLAM #>$ LEN$ #6* BINT6 2GETLAM #10* #+ GROB! ; * 441E7
 
 * refs (1): 441C4
 OBJ_44223:
         ::                                       * 44223
 
 _chr(134)_:
-          $       "▶"                            * 44228
-          $>BIGGROB                              * 44234
-        ;                                        * 44239
+          $ "▶" $>BIGGROB ;                      * 44228
 
 * refs (1): 441D8
 OBJ_4423E:
         ::                                       * 4423E
 
 _:__44243:
-          $       ":"                            * 44243
-          $>BIGGROB                              * 4424F
-        ;                                        * 44254
+          $ ":" $>BIGGROB ;                      * 44243
 
 * refs (3): 43CDE 43CFC 440E8
 OBJ_44259:
-        ::                                       * 44259
-          TRUE                                   * 4425E
-          1PUTLAM                                * 44263
-        ;                                        * 44268
+        :: TRUE 1PUTLAM ;                        * 44259
 
 * refs (3): 40B79 4261F 426CE
 OBJ_4426D:
-        #       15                               * 4426D  21
+        # 15                                     * 4426D  21
 
 * ->
 * refs (17): 17CAB 19B6C 3860B 38845 3B7DB 4096C ...
 InitEd&Modes:
-        ::                                       * 44277
-          InitEdLine                             * 4427C
-          InitEdModes                            * 44281
-        ;                                        * 44286
+        :: InitEdLine InitEdModes ;              * 44277
 
 * ->
 * refs (9): 40AE8 42F6C 43246 4427C D5F60 D62AF ...
 InitEdLine:
-        ::                                       * 4428B
-          OBJ_442A4                              * 44290
-          OBJ_4434F                              * 44295
-          OBJ_53A66                              * 4429A
-        ;                                        * 4429F
+        :: OBJ_442A4 OBJ_4434F OBJ_53A66 ;       * 4428B
 
 * refs (1): 44290
 OBJ_442A4:
@@ -265,42 +161,24 @@ OBJ_4434F:
 * ->
 * refs (8): 1A765 4090E 40B1F 40DB1 431C9 4369E ...
 InitEdModes:
-        ::                                       * 44394
-          OBJ_443A8                              * 44399
-          OBJ_40CC3                              * 4439E
-        ;                                        * 443A3
+        :: OBJ_443A8 OBJ_40CC3 ;                 * 44394
 
 * refs (1): 44399
 OBJ_443A8:
-        ::                                       * 443A8
-          ClrAlgEntry                            * 443AD
-          ClrPrgmEntry                           * 443B2
-          MajusMo                                * 443B7
-          UnLockAlpha                            * 443BC
-          INSERT_MODE                            * 443C1
-        ;                                        * 443C6
+        :: ClrAlgEntry ClrPrgmEntry MajusMo UnLockAlpha INSERT_MODE ; * 443A8
 
 * $ ->
 * refs (10): 40B60 42F71 43250 8F0F5 D5F6A D62B4 ...
 EditString:
-        ::                                       * 443CB
-          OBJ_42BA2                              * 443D0
-          OBJ_4434F                              * 443D5
-        ;                                        * 443DA
+        :: OBJ_42BA2 OBJ_4434F ;                 * 443CB
 
 * refs (6): 3E68E 3E6A2 3F288 4278C 44473 4448C
 NextChrInComLine:
-        ::                                       * 443DF
-          BINT2                                  * 443E4
-          ChrInComLine(s)                        * 443E9
-        ;                                        * 443EE
+        :: BINT2 ChrInComLine(s) ;               * 443DF
 
 * refs (3): 3E643 406A7 40747
 PrevChrInComLine:
-        ::                                       * 443F3
-          BINT0                                  * 443F8
-          ChrInComLine(s)                        * 443FD
-        ;                                        * 44402
+        :: BINT0 ChrInComLine(s) ;               * 443F3
 
 * refs (2): 443E9 443FD
 ChrInComLine(s):
@@ -335,30 +213,16 @@ ChrInComLine(s):
 
 * refs (3): 3E69D 40710 4075B
 NextChrInComLine=space?:
-        ::                                       * 4446E
-          NextChrInComLine                       * 44473
-          CHR_Space                              * 44478
-          EQUAL                                  * 4447D
-        ;                                        * 44482
+        :: NextChrInComLine CHR_Space EQUAL ;    * 4446E
 
 * refs (2): 43345 444AA
 OBJ_44487:
-        ::                                       * 44487
-          NextChrInComLine                       * 4448C
-          DUP                                    * 44491
-          CHR_00                                 * 44496
-          EQUAL                                  * 4449B
-        ;                                        * 444A0
+        :: NextChrInComLine DUP CHR_00 EQUAL ;   * 44487
 
 * -> flag
 * refs (13): 3B4FF 3B690 3DEF4 3E559 3E6BB 3F27E ...
 CURSOR_END?:
-        ::                                       * 444A5
-          OBJ_44487                              * 444AA
-          SWAP                                   * 444AF
-          CHR_Newline                            * 444B4
-          EQUALOR                                * 444B9
-        ;                                        * 444BE
+        :: OBJ_44487 SWAP CHR_Newline EQUALOR ;  * 444A5
 
 * refs (7): 3EF0A 40E10 42BC5 42CB0 42CD8 42CF1 ...
 AddInComLine(st):
@@ -715,158 +579,55 @@ L_44883:
 * -> flag
 * refs (13): 17C8D 19B9A 3908B 3A035 3DE6D 3F26F ...
 NoEditLine?:
-        ::                                       * 4488A
-          EditLExists?                           * 4488F
-          NOT                                    * 44894
-        ;                                        * 44899
+        :: EditLExists? NOT ;                    * 4488A
 
 * refs (3): 40B83 42971 42B48
 ROWNUM:
-        ::                                       * 4489E
-          LINESOFSTACK                           * 448A3
-          CurrentRow                             * 448A8
-          OBJ_113F2                              * 448AD
-          #1--                                   * 448B2
-          #+                                     * 448B7
-        ;                                        * 448BC
+        :: LINESOFSTACK CurrentRow OBJ_113F2 #1-- #+ ; * 4489E
 
 * chr -> chr'
 * refs (2): 42AF3 6BE84
 ?TogU/LCase:
-        ::                                       * 448C1
-          MinusMo                                * 448C6
-          NOT?SEMI                               * 448CB
-          DUP                                    * 448D0
-          CHR>#                                  * 448D5
-          BINT65                                 * 448DA
-          OVER#>                                 * 448DF
-          caseDROP                               * 448E4
-          BINT122                                * 448E9
-          OVER#<                                 * 448EE
-          caseDROP                               * 448F3
-          BINT91                                 * 448F8
-          OVER#>                                 * 448FD
-          OVER                                   * 44902
-          BINT96                                 * 44907
-          #>                                     * 4490C
-          OVER                                   * 44911
-          OR                                     * 44916
-          NOTcase2DROP                           * 4491B
-          ROTDROP                                * 44920
-          BINT32                                 * 44925
-          SWAP                                   * 4492A
-          ITE                                    * 4492F
-          #+                                     * 44934
-          #-                                     * 44939
-          #>CHR                                  * 4493E
-        ;                                        * 44943
+        :: MinusMo NOT?SEMI                      * 448C1
+          DUP CHR># BINT65 OVER#> caseDROP BINT122 * 448D0
+          OVER#< caseDROP BINT91                 * 448EE
+          OVER#> OVER BINT96 #> OVER OR NOTcase2DROP ROTDROP * 448FD
+          BINT32 SWAP ITE #+ #-                  * 44925
+          #>CHR ;                                * 4493E
 
 * refs (1): 8D363
 OBJ_44948:
-        ::                                       * 44948
-          BINT1                                  * 4494D
-          #=casedrop                             * 44952
-          OBJ_44999                              * 44957
-          BINT2                                  * 4495C
-          #=casedrop                             * 44961
-          OBJ_44AAC                              * 44966
-          BINT3                                  * 4496B
-          #=casedrop                             * 44970
-          OBJ_44AD0                              * 44975
-          BINT4                                  * 4497A
-          #=casedrop                             * 4497F
-          ROMPTR  0EA 007                        * 44984
-          2DROPFALSE                             * 4498F
-        ;                                        * 44994
+        :: BINT1 #=casedrop OBJ_44999            * 44948
+          BINT2 #=casedrop OBJ_44AAC             * 4495C
+          BINT3 #=casedrop OBJ_44AD0             * 4496B
+          BINT4 #=casedrop ROMPTR 0EA 007        * 4497A
+          2DROPFALSE ;                           * 4498F
 
 * refs (1): 44957
 OBJ_44999:
-        ::                                       * 44999
-          EditExstCase                           * 4499E
-          ::                                     * 449A3
-            BINT25                               * 449A8
-            ?CaseKeyDef                          * 449AD
-            ROMPTR  0EA 028                      * 449B2
-            BINT45                               * 449BD
-            ?CaseKeyDef                          * 449C2
-            ROMPTR  0EA 000                      * 449C7
-            BINT13                               * 449D2
-            ?CaseKeyDef                          * 449D7
-            ROMPTR  0EA 063                      * 449DC
-            DROPFALSE                            * 449E7
-          ;                                      * 449EC
-          BINT11                                 * 449F1
-          ?CaseKeyDef                            * 449F6
-          ROMPTR  0EA 055                        * 449FB
-          BINT16                                 * 44A06
-          ?CaseKeyDef                            * 44A0B
-          ROMPTR  0EA 037                        * 44A10
-          BINT17                                 * 44A1B
-          ?CaseKeyDef                            * 44A20
-          ROMPTR  0EA 026                        * 44A25
-          BINT18                                 * 44A30
-          ?CaseKeyDef                            * 44A35
-          ROMPTR  0EA 01D                        * 44A3A
-          BINT25                                 * 44A45
-          ?CaseKeyDef                            * 44A4A
-          ROMPTR  0EA 033                        * 44A4F
-          BINT29                                 * 44A5A
-          ?CaseKeyDef                            * 44A5F
-          DoBadKey                               * 44A64
-          BINT45                                 * 44A69
-          ?CaseKeyDef                            * 44A6E
-          ROMPTR  0EA 002                        * 44A73
-          BINT13                                 * 44A7E
-          ?CaseKeyDef                            * 44A83
-          ROMPTR  0EA 063                        * 44A88
-          BINT26                                 * 44A93
-          ?CaseKeyDef                            * 44A98
-          DoBadKey                               * 44A9D
-          DROPFALSE                              * 44AA2
-        ;                                        * 44AA7
+        :: EditExstCase                          * 44999
+          :: BINT25 ?CaseKeyDef ROMPTR 0EA 028 BINT45 ?CaseKeyDef * 449A3
+            ROMPTR 0EA 000 BINT13 ?CaseKeyDef ROMPTR 0EA 063 DROPFALSE ; * 449C7
+          BINT11 ?CaseKeyDef ROMPTR 0EA 055 BINT16 ?CaseKeyDef * 449F1
+          ROMPTR 0EA 037 BINT17 ?CaseKeyDef ROMPTR 0EA 026 BINT18 * 44A10
+          ?CaseKeyDef ROMPTR 0EA 01D BINT25 ?CaseKeyDef ROMPTR 0EA 033 * 44A35
+          BINT29 ?CaseKeyDef DoBadKey BINT45 ?CaseKeyDef ROMPTR 0EA 002 * 44A5A
+          BINT13 ?CaseKeyDef ROMPTR 0EA 063 BINT26 ?CaseKeyDef DoBadKey * 44A7E
+          DROPFALSE ;                            * 44AA2
 
 * refs (1): 44966
 OBJ_44AAC:
-        ::                                       * 44AAC
-          BINT26                                 * 44AB1
-          ?CaseKeyDef                            * 44AB6
-          ROMPTR  0EA 066                        * 44ABB
-          DROPFALSE                              * 44AC6
-        ;                                        * 44ACB
+        :: BINT26 ?CaseKeyDef ROMPTR 0EA 066 DROPFALSE ; * 44AAC
 
 * refs (1): 44975
 OBJ_44AD0:
-        ::                                       * 44AD0
-          EditExstCase                           * 44AD5
-          ::                                     * 44ADA
-            BINT25                               * 44ADF
-            ?CaseKeyDef                          * 44AE4
-            ROMPTR  0EA 065                      * 44AE9
-            BINT39                               * 44AF4
-            ?CaseKeyDef                          * 44AF9
-            ROMPTR  0EA 064                      * 44AFE
-            OBJ_463B4                            * 44B09
-          ;                                      * 44B0E
-          BINT11                                 * 44B13
-          ?CaseKeyDef                            * 44B18
-          ROMPTR  0EA 019                        * 44B1D
-          BINT16                                 * 44B28
-          ?CaseKeyDef                            * 44B2D
-          ROMPTR  0EA 01B                        * 44B32
-          BINT17                                 * 44B3D
-          ?CaseKeyDef                            * 44B42
-          ROMPTR  0EA 01A                        * 44B47
-          BINT18                                 * 44B52
-          ?CaseKeyDef                            * 44B57
-          ROMPTR  0EA 01C                        * 44B5C
-          BINT25                                 * 44B67
-          ?CaseKeyDef                            * 44B6C
-          ROMPTR  0EA 065                        * 44B71
-          BINT39                                 * 44B7C
-          ?CaseKeyDef                            * 44B81
-          ROMPTR  0EA 064                        * 44B86
-          OBJ_463B4                              * 44B91
-        ;                                        * 44B96
+        :: EditExstCase                          * 44AD0
+          :: BINT25 ?CaseKeyDef ROMPTR 0EA 065 BINT39 ?CaseKeyDef * 44ADA
+            ROMPTR 0EA 064 OBJ_463B4 ;           * 44AFE
+          BINT11 ?CaseKeyDef ROMPTR 0EA 019 BINT16 ?CaseKeyDef * 44B13
+          ROMPTR 0EA 01B BINT17 ?CaseKeyDef ROMPTR 0EA 01A BINT18 * 44B32
+          ?CaseKeyDef ROMPTR 0EA 01C BINT25 ?CaseKeyDef ROMPTR 0EA 065 * 44B57
+          BINT39 ?CaseKeyDef ROMPTR 0EA 064 OBJ_463B4 ; * 44B7C
 
 * refs (7): 8DA69 8DB7F 8DF3D 8E730 8ED7A 8F1D1 ...
 OBJ_44B9B:
@@ -914,28 +675,16 @@ L_44BF9:
 * -> []/[[]]
 * refs (3): 3DF63 B4DA0 D75DD
 DoNewMatrix:
-        ROMPTR  0EA 006                          * 44C31
+        ROMPTR 0EA 006                           * 44C31
 
 * refs (2): 683FD 6AAC8
 OBJ_44C3C:
-        ::                                       * 44C3C
-          OBJ_44C8C                              * 44C41
-          #2+                                    * 44C46
+        :: OBJ_44C8C #2+                         * 44C3C
 
 * refs (2): 4B909 6D05A
 OBJ_44C4B:
-          ::                                     * 44C4B
-            OBJ_6FDC6                            * 44C50
-            OBJ_66F91                            * 44C55
-            BINT6                                * 44C5A
-            MAKEGROB                             * 44C5F
-            OBJ_671BF                            * 44C64
-          ;                                      * 44C69
-          OBJ_44DB3                              * 44C6E
-          OBJ_67AE2                              * 44C73
-          #1+                                    * 44C78
-          OBJ_67C16                              * 44C7D
-        ;                                        * 44C82
+          :: OBJ_6FDC6 OBJ_66F91 BINT6 MAKEGROB OBJ_671BF ; OBJ_44DB3 * 44C4B
+          OBJ_67AE2 #1+ OBJ_67C16 ;              * 44C73
 
 * refs (1): 68411
 OBJ_44C87:
@@ -943,128 +692,58 @@ OBJ_44C87:
 
 * refs (2): 44C41 44CCD
 OBJ_44C8C:
-          ::                                     * 44C8C
-            OBJ_67987                            * 44C91
-            OBJ_67AAA                            * 44C96
-          ;                                      * 44C9B
+          :: OBJ_67987 OBJ_67AAA ;               * 44C8C
 
 * refs (1): 65ABF
 OBJ_44CA0:
-          ::                                     * 44CA0
-            BINT6                                * 44CA5
-            MAKEGROB                             * 44CAA
-            OBJ_670EE                            * 44CAF
-          ;                                      * 44CB4
-          GOTO                                   * 44CB9
-          L_44CEB                                * 44CBE
-        ;                                        * 44CC3
+          :: BINT6 MAKEGROB OBJ_670EE ; GOTO L_44CEB ; * 44CA0
 
 * refs (1): 68416
 OBJ_44CC8:
-        ::                                       * 44CC8
-          OBJ_44C8C                              * 44CCD
+        :: OBJ_44C8C                             * 44CC8
 
 * refs (2): 666BF 6D792
 OBJ_44CD2:
-          ::                                     * 44CD2
-            BINT4                                * 44CD7
-            MAKEGROB                             * 44CDC
-            OBJ_6715D                            * 44CE1
-          ;                                      * 44CE6
+          :: BINT4 MAKEGROB OBJ_6715D ;          * 44CD2
 L_44CEB:
-          OBJ_44DB3                              * 44CEB
-          OBJ_44D9A                              * 44CF0
-        ;                                        * 44CF5
+          OBJ_44DB3 OBJ_44D9A ;                  * 44CEB
 
 * refs (1): 68407
 OBJ_44CFA:
-        ::                                       * 44CFA
-          OBJ_67987                              * 44CFF
-          DUP#0=                                 * 44D04
-          ?SKIP                                  * 44D09
-          OBJ_67A9D                              * 44D0E
-          3PICK                                  * 44D13
-          OBJ_679B3                              * 44D18
-          OBJ_67A9D                              * 44D1D
-          #MAX                                   * 44D22
+        :: OBJ_67987 DUP#0= ?SKIP OBJ_67A9D      * 44CFA
+          3PICK OBJ_679B3 OBJ_67A9D #MAX         * 44D13
 L_44D27:
-          #2+                                    * 44D27
-          DUP                                    * 44D2C
-          OBJ_66FF1                              * 44D31
-          OBJ_44DB3                              * 44D36
-          #2/                                    * 44D3B
-          OBJ_67C09                              * 44D40
-        ;                                        * 44D45
+          #2+ DUP OBJ_66FF1 OBJ_44DB3 #2/ OBJ_67C09 ; * 44D27
 
 * refs (1): 6840C
 OBJ_44D4A:
-        ::                                       * 44D4A
-          OBJ_67987                              * 44D4F
-          OBJ_67A9D                              * 44D54
-          GOTO                                   * 44D59
-          L_44D27                                * 44D5E
-        ;                                        * 44D63
+        :: OBJ_67987 OBJ_67A9D GOTO L_44D27 ;    * 44D4A
 
 * refs (1): 68420
 OBJ_44D68:
-        ::                                       * 44D68
-          OVER                                   * 44D6D
-          OBJ_679C5                              * 44D72
-          OBJ_67AAA                              * 44D77
+        :: OVER OBJ_679C5 OBJ_67AAA              * 44D68
 
 * refs (1): 6DB8E
 OBJ_44D7C:
-          ::                                     * 44D7C
-            BINT2                                * 44D81
-            MAKEGROB                             * 44D86
-            OBJ_67193                            * 44D8B
-          ;                                      * 44D90
-          OBJ_44DB3                              * 44D95
+          :: BINT2 MAKEGROB OBJ_67193 ; OBJ_44DB3 * 44D7C
 
 * refs (4): 44CF0 666C9 6D325 6DB57
 OBJ_44D9A:
-          ::                                     * 44D9A
-            OBJ_67AE2                            * 44D9F
-            OBJ_67C16                            * 44DA4
-          ;                                      * 44DA9
-        ;                                        * 44DAE
+          :: OBJ_67AE2 OBJ_67C16 ; ;             * 44D9A
 
 * refs (5): 44C6E 44CEB 44D36 44D95 666C4
 OBJ_44DB3:
-        ::                                       * 44DB3
-          3PICKSWAP                              * 44DB8
-          OVERDUP                                * 44DBD
-          OBJ_67AEF                              * 44DC2
-          2DUP#+                                 * 44DC7
-          #0=ITE                                 * 44DCC
-          3DROP                                  * 44DD1
+        :: 3PICKSWAP OVERDUP OBJ_67AEF 2DUP#+ #0=ITE 3DROP * 44DB3
 
 * refs (1): 66E75
 OBJ_44DD6:
-          ::                                     * 44DD6
-            OBJ_6AD1B                            * 44DDB
-            GROB!ZERO                            * 44DE0
-            3DROP                                * 44DE5
-          ;                                      * 44DEA
-          DUPZERO                                * 44DEF
-          OBJ_66D26                              * 44DF4
-          SWAP                                   * 44DF9
+          :: OBJ_6AD1B GROB!ZERO 3DROP ; DUPZERO OBJ_66D26 SWAP * 44DD6
 
 * refs (8): 65D91 65ED6 661CE 69A22 6D203 6E145 ...
 OBJ_44DFE:
-          ::                                     * 44DFE
-            OBJ_6CF3D                            * 44E03
-            OBJ_6C873                            * 44E08
-            6PICK                                * 44E0D
-            3UNROLL                              * 44E12
-            OBJ_67C23                            * 44E17
-            4PICK                                * 44E1C
-            3UNROLL                              * 44E21
-            OBJ_6CE8E                            * 44E26
-            OBJ_68245                            * 44E2B
-          ;                                      * 44E30
-          SWAP                                   * 44E35
-        ;                                        * 44E3A
+          :: OBJ_6CF3D OBJ_6C873 6PICK 3UNROLL OBJ_67C23 4PICK 3UNROLL * 44DFE
+            OBJ_6CE8E OBJ_68245 ;                * 44E26
+          SWAP ;                                 * 44E35
 
 * refs (2): 6D1FE 6FAF5
 OBJ_44E3F:
@@ -1076,585 +755,197 @@ OBJ_44E3F:
 
 * refs (1): 8D344
 BindMatVars:
-        ROMPTR  0EA 00D                          * 44F42
+        ROMPTR 0EA 00D                           * 44F42
 
 * refs (1): 5711C
 OBJ_44F4D:
-        ::                                       * 44F4D
-          OBJ_57216                              * 44F52
-          FALSE                                  * 44F57
-          ROMPTR  0F1 00E                        * 44F5C
-        ;                                        * 44F67
+        :: OBJ_57216 FALSE ROMPTR 0F1 00E ;      * 44F4D
 
 * refs (1): 5713F
 OBJ_44F6C:
-        ::                                       * 44F6C
-          ROMPTR  0F1 011                        * 44F71
-          DOSTOE                                 * 44F7C
-          OBJ_57216                              * 44F81
-          TRUE                                   * 44F86
-          ROMPTR  0F1 00E                        * 44F8B
-        ;                                        * 44F96
+        :: ROMPTR 0F1 011 DOSTOE OBJ_57216 TRUE ROMPTR 0F1 00E ; * 44F6C
 
 * refs (1): 45C4E
 OBJ_44F9B:
-        ::                                       * 44F9B
-          ROMPTR  0F1 01A                        * 44FA0
+        :: ROMPTR 0F1 01A                        * 44F9B
 
 * refs (1): 458DF
 OBJ_44FAB:
-          ::                                     * 44FAB
-            ROMPTR  0F1 003                      * 44FB0
-            BIND                                 * 44FBB
-            ROMPTR  0F1 01C                      * 44FC0
-            ROMPTR  0F1 01D                      * 44FCB
-          ;                                      * 44FD6
-        ;                                        * 44FDB
+          :: ROMPTR 0F1 003 BIND ROMPTR 0F1 01C ROMPTR 0F1 01D ; ; * 44FAB
         BSS     7                                * 44FE0
 
 * [] -> []'
 * refs (2): 42DEB B4D9B
 DoOldMatrix:
-        ROMPTR  0EA 00F                          * 44FE7
+        ROMPTR 0EA 00F                           * 44FE7
 
 * refs (2): C0602 C06F6
 OBJ_44FF2:
-        ::                                       * 44FF2
-          OBJ_459E8                              * 44FF7
-          OBJ_45A63                              * 44FFC
-        ;                                        * 45001
+        :: OBJ_459E8 OBJ_45A63 ;                 * 44FF2
 
 * refs (1): C0326
 OBJ_45006:
-        ::                                       * 45006
-          OBJ_459E8                              * 4500B
-          OBJ_45A25                              * 45010
-        ;                                        * 45015
+        :: OBJ_459E8 OBJ_45A25 ;                 * 45006
         BSS     9                                * 4501A
 
 * refs (1): 8D84E
 InitOldMat:
-        ROMPTR  0EA 010                          * 45023
+        ROMPTR 0EA 010                           * 45023
 
 * refs (4): 4B053 B6026 B60B2 B6286
 OBJ_4502E:
-        ::                                       * 4502E
-          INNERCOMP                              * 45033
-          ::                                     * 45038
-            BINT1                                * 4503D
-            #=casedrop                           * 45042
-            ::                                   * 45047
-              DUPTYPECMP?                        * 4504C
-              case                               * 45051
-              ::                                 * 45056
-                BINT5                            * 4505B
-                PPAR(s);dup;li?                  * 45060
-                NOTcaseDROP                      * 45065
-                CDRCOMP                          * 4506A
-                SWAP                             * 4506F
-                >HCOMP                           * 45074
-              ;                                  * 45079
-              DUP                                * 4507E
-              OBJ_4C64D                          * 45083
-              NcaseTYPEERR                       * 45088
-              BINT5                              * 4508D
-              PPAR(s);dup;li?                    * 45092
-              NOTcase                            * 45097
-              ::                                 * 4509C
-                SWAP                             * 450A1
-                TWO{}N                           * 450A6
-              ;                                  * 450AB
-              ZEROSWAP                           * 450B0
-              INNERCOMP                          * 450B5
-              DUP                                * 450BA
-              ZERO_DO                            * 450BF
-              ::                                 * 450C4
-                #1-SWAP                          * 450C9
-                DUPTYPECMP?                      * 450CE
-                case                             * 450D3
-                psh1&rev                         * 450D8
-                DUPTYPECSTR?                     * 450DD
-                case                             * 450E2
-                psh1&rev                         * 450E7
-                DROP                             * 450EC
-              ;                                  * 450F1
-              LOOP                               * 450F6
-              DROP                               * 450FB
-              DUP                                * 45100
-              #2+                                * 45105
-              ROLL                               * 4510A
-              3UNROLL                            * 4510F
-              #1+                                * 45114
-              reversym                           * 45119
-              {}N                                * 4511E
-            ;                                    * 45123
-            BINT2                                * 45128
-            #=casedrop                           * 4512D
-            OBJ_46527                            * 45132
-            BINT3                                * 45137
-            #=casedrop                           * 4513C
-            ::                                   * 45141
-              DUPTYPECSTR?                       * 45146
-              NcaseTYPEERR                       * 4514B
-              OVER                               * 45150
-              TYPECSTR?                          * 45155
-              NcaseTYPEERR                       * 4515A
-              3PICK                              * 4515F
-              TYPECMP?                           * 45164
-              NcaseTYPEERR                       * 45169
-              BINT3                              * 4516E
-              {}N                                * 45173
-            ;                                    * 45178
-            BINT4                                * 4517D
-            #=                                   * 45182
-            NcaseTYPEERR                         * 45187
-            DUPTYPECSTR?                         * 4518C
-            NcaseTYPEERR                         * 45191
-            OVER                                 * 45196
-            TYPECSTR?                            * 4519B
-            NcaseTYPEERR                         * 451A0
-            3PICK                                * 451A5
-            OBJ_4C64D                            * 451AA
-            NcaseTYPEERR                         * 451AF
-            4PICK                                * 451B4
-            TYPECMP?                             * 451B9
-            NcaseTYPEERR                         * 451BE
-            BINT4                                * 451C3
-            {}N                                  * 451C8
-          ;                                      * 451CD
-          BINT3                                  * 451D2
-          PutBackPPAR(_,s)                       * 451D7
-        ;                                        * 451DC
+        :: INNERCOMP                             * 4502E
+          :: BINT1 #=casedrop                    * 45038
+            :: DUPTYPECMP? case                  * 45047
+              :: BINT5 PPAR(s);dup;li? NOTcaseDROP CDRCOMP * 45056
+                SWAP >HCOMP ;                    * 4506F
+              DUP OBJ_4C64D NcaseTYPEERR BINT5   * 4507E
+              PPAR(s);dup;li? NOTcase            * 45092
+              :: SWAP TWO{}N ;                   * 4509C
+              ZEROSWAP INNERCOMP DUP ZERO_DO     * 450B0
+              :: #1-SWAP DUPTYPECMP? case psh1&rev * 450C4
+                DUPTYPECSTR? case psh1&rev       * 450DD
+                DROP ;                           * 450EC
+              LOOP DROP DUP #2+ ROLL 3UNROLL #1+ reversym {}N ; * 450F6
+            BINT2 #=casedrop OBJ_46527           * 45128
+            BINT3 #=casedrop                     * 45137
+            :: DUPTYPECSTR? NcaseTYPEERR OVER    * 45141
+              TYPECSTR? NcaseTYPEERR 3PICK       * 45155
+              TYPECMP? NcaseTYPEERR BINT3        * 45164
+              {}N ;                              * 45173
+            BINT4 #= NcaseTYPEERR DUPTYPECSTR?   * 4517D
+            NcaseTYPEERR OVER                    * 45191
+            TYPECSTR? NcaseTYPEERR 3PICK         * 4519B
+            OBJ_4C64D NcaseTYPEERR 4PICK         * 451AA
+            TYPECMP? NcaseTYPEERR BINT4          * 451B9
+            {}N ;                                * 451C8
+          BINT3 PutBackPPAR(_,s) ;               * 451D2
 
 * refs (1): 4C643
 OBJ_451E1:
-        ::                                       * 451E1
-          2DUP                                   * 451E6
-          5PICK                                  * 451EB
-          DUPTYPELIST?                           * 451F0
-          IT                                     * 451F5
-          CARCOMP                                * 451FA
-          C%>%                                   * 451FF
-          DUP                                    * 45204
-          8UNROLL                                * 45209
-          OVER                                   * 4520E
-          9rolld                                 * 45213
-          OBJ_4FE08                              * 45218
-          DUP                                    * 4521D
-          %0>=                                   * 45222
-          OVER                                   * 45227
-          6PICK                                  * 4522C
-          #1-                                    * 45231
-          UNCOERCE                               * 45236
-          %<=                                    * 4523B
-          AND                                    * 45240
-          IT                                     * 45245
-          ::                                     * 4524A
-            SWAP                                 * 4524F
-            4UNROLLDUP                           * 45254
-            COERCE                               * 45259
-            BINT0                                * 4525E
-            OVER5PICK                            * 45263
-            #1-                                  * 45268
-            OVER                                 * 4526D
-            DRAWLINE#3                           * 45272
-            6PICK                                * 45277
-            OBJ_46789                            * 4527C
-            DROP                                 * 45281
-            DUPTYPEREAL?                         * 45286
-            ITE                                  * 4528B
-            ::                                   * 45290
-              DUP%0=                             * 45295
-              case2drop                          * 4529A
-              4ROLLSWAP                          * 4529F
-              6ROLL                              * 452A4
-              4UNROLL                            * 452A9
-              DUP                                * 452AE
-              %>%%                               * 452B3
-              10GETLAM                           * 452B8
-              %%*                                * 452BD
-              BINT10                             * 452C2
-              PICK                               * 452C7
-              GETXMIN                            * 452CC
-              %-                                 * 452D1
-              ROT                                * 452D6
-              %MOD                               * 452DB
-              GETXMIN                            * 452E0
-              %+                                 * 452E5
-              %>%%                               * 452EA
-              10GETLAM                           * 452EF
-              %%*                                * 452F4
-              6GETLAM                            * 452F9
-              %%+                                * 452FE
-              GETXMAX                            * 45303
-              %>%%                               * 45308
-              10GETLAM                           * 4530D
-              %%*                                * 45312
-              6GETLAM                            * 45317
-              %%+                                * 4531C
-              SWAP                               * 45321
-              BEGIN                              * 45326
-              2DUP                               * 4532B
-              %%>=                               * 45330
-              OBJ_45641                          * 45335
-              WHILE                              * 4533A
-              ::                                 * 4533F
-                8PICK                            * 45344
-                OVER                             * 45349
-                %%>%                             * 4534E
-                #       2A01                     * 45353  10753
-                OBJ_2B551                        * 4535D
-                COERCE                           * 45362
-                6PICK                            * 45367
-                OBJ_4C742                        * 4536C
-                3PICK                            * 45371
-                %%+                              * 45376
-              ;                                  * 4537B
-              REPEAT                             * 45380
-              4DROP                              * 45385
-            ;                                    * 4538A
-            ::                                   * 4538F
-              DUP#0=                             * 45394
-              case2drop                          * 45399
-              4ROLLSWAP                          * 4539E
-              4PICK                              * 453A3
-              2DUP                               * 453A8
-              #>                                 * 453AD
-              case                               * 453B2
-              ::                                 * 453B7
-                3DROP                            * 453BC
-                4ROLLSWAP                        * 453C1
-              ;                                  * 453C6
-              7PICK                              * 453CB
-              DUP                                * 453D0
-              %0<                                * 453D5
-              DUPUNROT                           * 453DA
-              IT                                 * 453DF
-              %CHS                               * 453E4
-              COERCE                             * 453E9
-              4PICK                              * 453EE
-              #/                                 * 453F3
-              DROP                               * 453F8
-              4PICK                              * 453FD
-              SWAP                               * 45402
-              ROT                                * 45407
-              ITE                                * 4540C
-              #-                                 * 45411
-              SWAPDROP                           * 45416
-              DO                                 * 4541B
-              5PICK                              * 45420
-              INDEX@                             * 45425
-              4PICK                              * 4542A
-              OBJ_4C742                          * 4542F
-              DUP                                * 45434
-              +LOOP                              * 45439
-              2DROP                              * 4543E
-              4ROLLSWAP                          * 45443
-            ;                                    * 45448
+        :: 2DUP 5PICK DUPTYPELIST? IT CARCOMP    * 451E1
+          C%>% DUP 8UNROLL OVER 9rolld OBJ_4FE08 DUP %0>= OVER 6PICK #1- * 451FF
+          UNCOERCE %<= AND IT                    * 45236
+          :: SWAP 4UNROLLDUP COERCE BINT0 OVER5PICK #1- OVER DRAWLINE#3 * 4524A
+            6PICK OBJ_46789 DROP DUPTYPEREAL? ITE * 45277
+            :: DUP%0= case2drop 4ROLLSWAP        * 45290
+              6ROLL 4UNROLL DUP %>%% 10GETLAM %%* BINT10 PICK GETXMIN %- ROT * 452A4
+              %MOD GETXMIN %+ %>%% 10GETLAM %%* 6GETLAM %%+ GETXMAX %>%% * 452DB
+              10GETLAM %%* 6GETLAM %%+ SWAP BEGIN 2DUP %%>= OBJ_45641 WHILE * 4530D
+              :: 8PICK OVER %%>% # 2A01 OBJ_2B551 COERCE 6PICK OBJ_4C742 * 4533F
+                3PICK %%+ ;                      * 45371
+              REPEAT 4DROP ;                     * 45380
+            :: DUP#0= case2drop 4ROLLSWAP        * 4538F
+              4PICK 2DUP #> case                 * 453A3
+              :: 3DROP 4ROLLSWAP ;               * 453B7
+              7PICK DUP %0< DUPUNROT IT %CHS     * 453CB
+              COERCE 4PICK #/ DROP 4PICK SWAP ROT ITE #- SWAPDROP * 453E9
+              DO 5PICK INDEX@ 4PICK OBJ_4C742 DUP +LOOP 2DROP 4ROLLSWAP ; * 4541B
           ;                                      * 4544D
-          SWAPDUP                                * 45452
-          %0>=                                   * 45457
-          OVER5PICK                              * 4545C
-          #1-                                    * 45461
-          UNCOERCE                               * 45466
-          %<=                                    * 4546B
-          AND                                    * 45470
-          NOTcase                                * 45475
-          7DROP                                  * 4547A
-          SWAP                                   * 4547F
-          4UNROLL                                * 45484
-          COERCEDUP                              * 45489
-          ZEROOVER                               * 4548E
-          6PICK                                  * 45493
-          #1-                                    * 45498
-          DRAWLINE#3                             * 4549D
-          5ROLL                                  * 454A2
-          OBJ_46789                              * 454A7
-          SWAPDROP                               * 454AC
-          DUPTYPEREAL?                           * 454B1
-          case                                   * 454B6
-          ::                                     * 454BB
-            DUP%0=                               * 454C0
-            case                                 * 454C5
-            7DROP                                * 454CA
-            DUP                                  * 454CF
-            %>%%                                 * 454D4
-            9GETLAM                              * 454D9
-            %%*                                  * 454DE
-            7PICK                                * 454E3
-            GETYMIN                              * 454E8
-            %-                                   * 454ED
-            ROT                                  * 454F2
-            %MOD                                 * 454F7
-            GETYMIN                              * 454FC
-            %+                                   * 45501
-            %>%%                                 * 45506
-            9GETLAM                              * 4550B
-            %%*                                  * 45510
-            5GETLAM                              * 45515
-            SWAP                                 * 4551A
-            %%-                                  * 4551F
-            BEGIN                                * 45524
-            DUP                                  * 45529
-            %%0>=                                * 4552E
-            OBJ_45641                            * 45533
-            WHILE                                * 45538
-            ::                                   * 4553D
-              4PICK                              * 45542
-              4PICK                              * 45547
-              3PICK                              * 4554C
-              %%>%                               * 45551
-              #       2A01                       * 45556  10753
-              OBJ_2B551                          * 45560
-              COERCE                             * 45565
-              OBJ_4C783                          * 4556A
-              DROP                               * 4556F
-              OVER                               * 45574
-              %%-                                * 45579
-            ;                                    * 4557E
-            REPEAT                               * 45583
-            BINT8                                * 45588
-            NDROP                                * 4558D
-          ;                                      * 45592
-          DUP#0=case                             * 45597
-          7DROP                                  * 4559C
-          DUP                                    * 455A1
-          5PICK                                  * 455A6
-          #>                                     * 455AB
-          case                                   * 455B0
-          7DROP                                  * 455B5
-          5UNROLL                                * 455BA
-          SWAP                                   * 455BF
-          4ROLL                                  * 455C4
-          DUP                                    * 455C9
-          %0<                                    * 455CE
-          DUPUNROT                               * 455D3
-          IT                                     * 455D8
-          %CHS                                   * 455DD
-          COERCE                                 * 455E2
-          6PICK                                  * 455E7
-          #/                                     * 455EC
-          DROP                                   * 455F1
-          6PICK                                  * 455F6
-          SWAP                                   * 455FB
-          ROT                                    * 45600
-          ITE                                    * 45605
-          #-                                     * 4560A
-          SWAPDROP                               * 4560F
-          4ROLL                                  * 45614
-          SWAP                                   * 45619
-          DO                                     * 4561E
-          OVERINDEX@                             * 45623
-          OBJ_4C783                              * 45628
-          3PICK                                  * 4562D
-          +LOOP                                  * 45632
-          5DROP                                  * 45637
-        ;                                        * 4563C
+          SWAPDUP %0>= OVER5PICK #1- UNCOERCE %<= AND NOTcase 7DROP * 45452
+          SWAP 4UNROLL COERCEDUP ZEROOVER 6PICK #1- DRAWLINE#3 5ROLL * 4547F
+          OBJ_46789 SWAPDROP DUPTYPEREAL? case   * 454A7
+          :: DUP%0= case 7DROP                   * 454BB
+            DUP %>%% 9GETLAM %%* 7PICK GETYMIN %- ROT %MOD GETYMIN %+ %>%% * 454CF
+            9GETLAM %%* 5GETLAM SWAP %%- BEGIN DUP %%0>= OBJ_45641 WHILE * 4550B
+            :: 4PICK 4PICK 3PICK %%>% # 2A01 OBJ_2B551 COERCE OBJ_4C783 DROP * 4553D
+              OVER %%- ;                         * 45574
+            REPEAT BINT8 NDROP ;                 * 45583
+          DUP#0=case 7DROP                       * 45597
+          DUP 5PICK #> case 7DROP                * 455A1
+          5UNROLL SWAP 4ROLL DUP %0< DUPUNROT IT %CHS * 455BA
+          COERCE 6PICK #/ DROP 6PICK SWAP ROT ITE #- SWAPDROP * 455E2
+          4ROLL SWAP DO OVERINDEX@ OBJ_4C783 3PICK +LOOP 5DROP ; * 45614
 
 * refs (2): 45335 45533
 OBJ_45641:
-        ::                                       * 45641
-          NoAttn?Semi                            * 45646
-          ATTNFLGCLR                             * 4564B
-          FLUSHKEYS                              * 45650
-          DROPFALSE                              * 45655
-        ;                                        * 4565A
+        :: NoAttn?Semi ATTNFLGCLR FLUSHKEYS DROPFALSE ; * 45641
         BSS     23                               * 4565F
 
 * #len -> $
 * refs (4): 8E767 AE482 B99F7 D09FD
 Blank$:
-        ROMPTR  0EA 027                          * 45676
+        ROMPTR 0EA 027                           * 45676
 
 * refs (2): 46B01 4D8B2
 OBJ_45681:
-        ::                                       * 45681
-          TakeOver                               * 45686
-          OBJ_4E6C7                              * 4568B
-          GBUFF                                  * 45690
-          TOTEMPOB                               * 45695
-          CK0NOLASTWD                            * 4569A
-          Π'SAVEDDEPTH                           * 4569F
-          #1+                                    * 456A4
-          '                                      * 456A9
-          Π'SAVEDDEPTH                           * 456AE
-          STO                                    * 456B3
-          CROSSMARKON                            * 456B8
-        ;                                        * 456BD
+        :: TakeOver OBJ_4E6C7 GBUFF TOTEMPOB CK0NOLASTWD Π'SAVEDDEPTH #1+ ' * 45681
+          Π'SAVEDDEPTH STO CROSSMARKON ;         * 456AE
 
 * refs (6): 0C95B 0C960 0C965 0C96A 46B40 47FE0
 OBJ_456C2:
-        {                                        * 456C2
-          NULL$                                  * 456C7
-          ::                                     * 456CC
-            CHECKMENU                            * 456D1
-            DoBadKey                             * 456D6
-          ;                                      * 456DB
-        }                                        * 456E0
+        { NULL$                                  * 456C2
+          :: CHECKMENU DoBadKey ; }              * 456CC
 
 * refs (6): 45BC0 4EC26 4EEA6 735D0 737D8 7381E
 OBJ_456E5:
-        ::                                       * 456E5
-          BINT23                                 * 456EA
-          GETLAM                                 * 456EF
-        ;                                        * 456F4
+        :: BINT23 GETLAM ;                       * 456E5
 
 * refs (1): 3E7AB
 OBJ_456F9:
-        ::                                       * 456F9
-          CHECKMENU                              * 456FE
-          OBJ_4579E                              * 45703
-          OBJ_4E6C7                              * 45708
-          OBJ_517B2                              * 4570D
-          ORDERXY#                               * 45712
-          #1+                                    * 45717
-          SWAP#1+SWAP                            * 4571C
-          GBUFF                                  * 45721
-          5UNROLL                                * 45726
-          SUBGROB                                * 4572B
-          CK0NOLASTWD                            * 45730
-          Π'SAVEDDEPTH                           * 45735
-          #1+                                    * 4573A
-          '                                      * 4573F
-          Π'SAVEDDEPTH                           * 45744
-          STO                                    * 45749
-          CROSSMARKON                            * 4574E
-        ;                                        * 45753
+        :: CHECKMENU OBJ_4579E OBJ_4E6C7 OBJ_517B2 ORDERXY# #1+ SWAP#1+SWAP * 456F9
+          GBUFF 5UNROLL SUBGROB CK0NOLASTWD Π'SAVEDDEPTH #1+ ' Π'SAVEDDEPTH * 45721
+          STO CROSSMARKON ;                      * 45749
 
 * refs (1): 3E7CA
 OBJ_45758:
-        ::                                       * 45758
-          CHECKMENU                              * 4575D
-          OBJ_4EBD1                              * 45762
-        ;                                        * 45767
+        :: CHECKMENU OBJ_4EBD1 ;                 * 45758
 
 * refs (2): 46AA4 4D80D
 OBJ_4576C:
-        ::                                       * 4576C
-          TakeOver                               * 45771
-          OBJ_4E6C7                              * 45776
-          GBUFF                                  * 4577B
-          ZEROZERO                               * 45780
-          GBUFFGROBDIM                           * 45785
-          SWAP                                   * 4578A
-          GROB!ZERODRP                           * 4578F
-          CROSSMARKON                            * 45794
-        ;                                        * 45799
+        :: TakeOver OBJ_4E6C7 GBUFF ZEROZERO GBUFFGROBDIM SWAP GROB!ZERODRP * 4576C
+          CROSSMARKON ;                          * 45794
 
 * refs (9): 45703 477E5 4E3ED 4E564 4E5F0 4E63B ...
 OBJ_4579E:
-        ::                                       * 4579E
-          CURRENTMARK?                           * 457A3
-          ?SEMI                                  * 457A8
-          RDROP                                  * 457AD
-          NEWMARK                                * 457B2
-        ;                                        * 457B7
+        :: CURRENTMARK? ?SEMI                    * 4579E
+          RDROP NEWMARK ;                        * 457AD
 
 * refs (1): C01A7
 OBJ_457BC:
-        ::                                       * 457BC
-          15GETLAM                               * 457C1
-          DUP                                    * 457C6
-          21GETLAM                               * 457CB
+        :: 15GETLAM DUP 21GETLAM                 * 457BC
 
 Π'dependvar:
-          LAM     'dependvar                     * 457D0
-          '                                      * 457EB
+          LAM 'dependvar '                       * 457D0
 
 Π'u:
-          LAM     'u                             * 457F0
+          LAM 'u                                 * 457F0
 
 Π'Ystp:
-          LAM     'Ystp                          * 457FB
-          7ROLL                                  * 4580C
-          ::                                     * 45811
-            OBJ_45BE8                            * 45816
-            ::                                   * 4581B
-              4DROP                              * 45820
-              RDROP                              * 45825
-            ;                                    * 4582A
-            ::                                   * 4582F
-              4ROLL                              * 45834
-              %CHS                               * 45839
-              4UNROLL                            * 4583E
-            ;                                    * 45843
-            ::                                   * 45848
-              3DROP                              * 4584D
-              %-                                 * 45852
-              RDROP                              * 45857
-            ;                                    * 4585C
-            %CHS                                 * 45861
-            DUP                                  * 45866
-            ROT                                  * 4586B
-            'EvalNoCK:_sup                       * 45870
-            xSTO+                                * 45875
-            'EvalNoCK:_sup                       * 4587A
-            xSTO+                                * 4587F
-            DROP                                 * 45884
-          ;                                      * 45889
+          LAM 'Ystp 7ROLL                        * 457FB
+          :: OBJ_45BE8                           * 45811
+            :: 4DROP RDROP ;                     * 4581B
+            :: 4ROLL %CHS 4UNROLL ;              * 4582F
+            :: 3DROP %- RDROP ; %CHS DUP ROT 'EvalNoCK:_sup xSTO+ * 45848
+            'EvalNoCK:_sup xSTO+ DROP ;          * 4587A
 
 * refs (2): 4597C 462BC
 OBJ_4588E:
-          ::                                     * 4588E
-            OBJ_46955                            * 45893
-            ?SKIP                                * 45898
-            OBJ_46C7A                            * 4589D
-            DUPTYPECMP?                          * 458A2
-            NOTcasedrop                          * 458A7
-            OBJ_46C7A                            * 458AC
-            DUP                                  * 458B1
-            OBJ_468F1                            * 458B6
-            C%>%                                 * 458BB
-            OBJ_46C43                            * 458C0
-          ;                                      * 458C5
+          :: OBJ_46955 ?SKIP OBJ_46C7A           * 4588E
+            DUPTYPECMP? NOTcasedrop OBJ_46C7A    * 458A2
+            DUP OBJ_468F1 C%>% OBJ_46C43 ;       * 458B1
         ;                                        * 458CA
 
 * refs (1): 57162
 OBJ_458CF:
-        ::                                       * 458CF
-          ROMPTR  0F1 021                        * 458D4
-          OBJ_44FAB                              * 458DF
-        ;                                        * 458E4
+        :: ROMPTR 0F1 021 OBJ_44FAB ;            * 458CF
 
 * refs (1): 45C71
 OBJ_458E9:
-        ::                                       * 458E9
-          OBJ_57216                              * 458EE
-          ROMPTR  0F1 014                        * 458F3
-          ROMPTR  0F1 016                        * 458FE
-        ;                                        * 45909
+        :: OBJ_57216 ROMPTR 0F1 014 ROMPTR 0F1 016 ; * 458E9
 
 * refs (2): C029B C038F
 OBJ_4590E:
-        ::                                       * 4590E
-          15GETLAM                               * 45913
-          DUP                                    * 45918
-          21GETLAM                               * 4591D
-          4ROLL                                  * 45922
-          ::                                     * 45927
-            OBJ_45BE8                            * 4592C
-            ::                                   * 45931
-              DROP                               * 45936
-              RDROP                              * 4593B
-            ;                                    * 45940
-            %CHS                                 * 45945
-            ::                                   * 4594A
-              %-                                 * 4594F
-              RDROP                              * 45954
-            ;                                    * 45959
-            %CHS                                 * 4595E
-            ::                                   * 45963
-              %-                                 * 45968
-              RDROP                              * 4596D
-            ;                                    * 45972
-          ;                                      * 45977
-          OBJ_4588E                              * 4597C
-        ;                                        * 45981
+        :: 15GETLAM DUP 21GETLAM 4ROLL           * 4590E
+          :: OBJ_45BE8                           * 45927
+            :: DROP RDROP ; %CHS                 * 45931
+            :: %- RDROP ; %CHS                   * 4594A
+            :: %- RDROP ; ;                      * 45963
+          OBJ_4588E ;                            * 4597C
 
 * refs (1): C0415
 OBJ_45986:
-        ::                                       * 45986
-          OBJ_45AF0                              * 4598B
+        :: OBJ_45AF0                             * 45986
 
 * refs (1): 45A11
 OBJ_45990:
@@ -1662,20 +953,13 @@ OBJ_45990:
 
 * refs (3): 45A2A 45A68 45C8F
 OBJ_45995:
-            ::                                   * 45995
-              '                                  * 4599A
+            :: '                                 * 45995
 
 Π'PPAR:
-              LAM     'PPAR                      * 4599F
-              undo                               * 459B0
-              casedrop                           * 459B5
-              NOP                                * 459BA
-              RDROP                              * 459BF
-            ;                                    * 459C4
-            ROMPTR  0F1 00F                      * 459C9
-          ;                                      * 459D4
-          ABND                                   * 459D9
-        ;                                        * 459DE
+              LAM 'PPAR undo casedrop NOP        * 4599F
+              RDROP ;                            * 459BF
+            ROMPTR 0F1 00F ;                     * 459C9
+          ABND ;                                 * 459D9
 
 * refs (1): C041A
 OBJ_459E3:
@@ -1683,52 +967,30 @@ OBJ_459E3:
 
 * refs (3): 44FF7 4500B 45CB3
 OBJ_459E8:
-          ::                                     * 459E8
-            ERRSET                               * 459ED
-            ROMPTR  0F1 03F                      * 459F2
-            ERRTRAP                              * 459FD
-            COLA                                 * 45A02
-            OBJ_472B8                            * 45A07
+          :: ERRSET ROMPTR 0F1 03F ERRTRAP COLA OBJ_472B8 * 459E8
           ;                                      * 45A0C
-          OBJ_45990                              * 45A11
-        ;                                        * 45A16
+          OBJ_45990 ;                            * 45A11
 
 * refs (1): C0321
 OBJ_45A1B:
-        ::                                       * 45A1B
-          OBJ_45AF0                              * 45A20
+        :: OBJ_45AF0                             * 45A1B
 
 * refs (1): 45010
 OBJ_45A25:
-          ::                                     * 45A25
-            OBJ_45995                            * 45A2A
-            ROMPTR  0F1 00F                      * 45A2F
-            ROMPTR  0F1 012                      * 45A3A
-          ;                                      * 45A45
-          ABND                                   * 45A4A
-          ABND                                   * 45A4F
-        ;                                        * 45A54
+          :: OBJ_45995 ROMPTR 0F1 00F ROMPTR 0F1 012 ; ABND ABND ; * 45A25
 
 * refs (2): C05FD C06F1
 OBJ_45A59:
-        ::                                       * 45A59
-          OBJ_45AF0                              * 45A5E
+        :: OBJ_45AF0                             * 45A59
 
 * refs (1): 44FFC
 OBJ_45A63:
-          ::                                     * 45A63
-            OBJ_45995                            * 45A68
-            ROMPTR  0F1 01E                      * 45A6D
-            ROMPTR  0F1 01F                      * 45A78
-          ;                                      * 45A83
-          ABND                                   * 45A88
-          ABND                                   * 45A8D
-        ;                                        * 45A92
+          :: OBJ_45995 ROMPTR 0F1 01E ROMPTR 0F1 01F ; ABND ABND ; * 45A63
         FILLTO  #45AE0                           * 45A97  73 zero nibbles: the next entry stays at #45AE0
 
 * refs (3): 8D308 8D3C8 8E463
 GetMat/Vec:
-        ROMPTR  0EA 034                          * 45AE0
+        ROMPTR 0EA 034                           * 45AE0
 
 * refs (1): C022D
 OBJ_45AEB:
@@ -1736,61 +998,30 @@ OBJ_45AEB:
 
 * refs (4): 4598B 45A20 45A5E 45C85
 OBJ_45AF0:
-          ::                                     * 45AF0
-            GraphicExit                          * 45AF5
-            DUP                                  * 45AFA
-            NOTcase                              * 45AFF
-            ::                                   * 45B04
-              RDROP                              * 45B09
-            ;                                    * 45B0E
-            ROMPTR  0F1 040                      * 45B13
-            '                                    * 45B1E
+          :: GraphicExit DUP NOTcase             * 45AF0
+            :: RDROP ;                           * 45B04
+            ROMPTR 0F1 040 '                     * 45B13
 
 'Nx:
-            LAM     'Nx                          * 45B23
-            undo                                 * 45B30
-            caseDROP                             * 45B35
-            RDROP                                * 45B3A
+            LAM 'Nx undo caseDROP RDROP          * 45B23
           ;                                      * 45B3F
 
 * refs (1): 45BA7
 OBJ_45B44:
-          ::                                     * 45B44
-            '                                    * 45B49
+          :: '                                   * 45B44
 
 'Ystp:
-            LAM     'Ystp                        * 45B4E
-            undo                                 * 45B5F
-            NOT?SEMI                             * 45B64
-            DROP                                 * 45B69
-            ROMPTR  0F1 007                      * 45B6E
-          ;                                      * 45B79
-          ABND                                   * 45B7E
-          ABND                                   * 45B83
-        ;                                        * 45B88
+            LAM 'Ystp undo NOT?SEMI              * 45B4E
+            DROP ROMPTR 0F1 007 ;                * 45B69
+          ABND ABND ;                            * 45B7E
 
 * refs (1): C0232
 OBJ_45B8D:
-        ::                                       * 45B8D
-          ERRSET                                 * 45B92
-          ROMPTR  0F1 03F                        * 45B97
-          ERRTRAP                                * 45BA2
-          OBJ_45B44                              * 45BA7
-          ERRJMP                                 * 45BAC
-        ;                                        * 45BB1
+        :: ERRSET ROMPTR 0F1 03F ERRTRAP OBJ_45B44 ERRJMP ; * 45B8D
 
 * refs (6): C01AC C02A0 C0394 C0488 C057C C0670
 OBJ_45BB6:
-        ::                                       * 45BB6
-          DROP                                   * 45BBB
-          OBJ_456E5                              * 45BC0
-          BINT4                                  * 45BC5
-          NTHCOMPDROP                            * 45BCA
-          BINT26                                 * 45BCF
-          PUTLAM                                 * 45BD4
-          OBJ_47268                              * 45BD9
-          TRUE                                   * 45BDE
-        ;                                        * 45BE3
+        :: DROP OBJ_456E5 BINT4 NTHCOMPDROP BINT26 PUTLAM OBJ_47268 TRUE ; * 45BB6
 
 * refs (3): 45816 4592C 46258
 OBJ_45BE8:
@@ -1817,212 +1048,84 @@ L_45C0F:
 
 * refs (8): 8E374 8E6F9 8EEF6 8F044 8F14F 8F18B ...
 RowElt#:
-        ROMPTR  0EA 038                          * 45C2F
+        ROMPTR 0EA 038                           * 45C2F
 
 * refs (1): C05F8
 OBJ_45C3A:
-        ::                                       * 45C3A
-          OBJ_73230                              * 45C3F
-          ::                                     * 45C44
-            OBJ_57171                            * 45C49
-            OBJ_44F9B                            * 45C4E
-          ;                                      * 45C53
-        ;                                        * 45C58
+        :: OBJ_73230                             * 45C3A
+          :: OBJ_57171 OBJ_44F9B ; ;             * 45C44
 
 * refs (1): C0504
 OBJ_45C5D:
-        ::                                       * 45C5D
-          OBJ_73230                              * 45C62
-          ::                                     * 45C67
-            OBJ_57171                            * 45C6C
-            OBJ_458E9                            * 45C71
-          ;                                      * 45C76
-        ;                                        * 45C7B
+        :: OBJ_73230                             * 45C5D
+          :: OBJ_57171 OBJ_458E9 ; ;             * 45C67
 
 * refs (1): C0509
 OBJ_45C80:
-        ::                                       * 45C80
-          OBJ_45AF0                              * 45C85
+        :: OBJ_45AF0                             * 45C80
 
 * refs (1): 45CB8
 OBJ_45C8A:
-          ::                                     * 45C8A
-            OBJ_45995                            * 45C8F
-            ROMPTR  0F1 015                      * 45C94
-          ;                                      * 45C9F
-          ABND                                   * 45CA4
-        ;                                        * 45CA9
+          :: OBJ_45995 ROMPTR 0F1 015 ; ABND ;   * 45C8A
 
 * refs (1): C050E
 OBJ_45CAE:
-        ::                                       * 45CAE
-          OBJ_459E8                              * 45CB3
-          OBJ_45C8A                              * 45CB8
-        ;                                        * 45CBD
+        :: OBJ_459E8 OBJ_45C8A ;                 * 45CAE
 
 * refs (1): 462D0
 OBJ_45CC2:
-        ::                                       * 45CC2
-          BINT3                                  * 45CC7
-          #<                                     * 45CCC
-        ;                                        * 45CD1
+        :: BINT3 #< ;                            * 45CC2
         FILLTO  #45D1F                           * 45CD6  73 zero nibbles: the next entry stays at #45D1F
 
 * refs (7): 8DD84 8DDAE 8E71C 8EEE2 8F02B 8F140 ...
 GetElt:
-        ROMPTR  0EA 03D                          * 45D1F
+        ROMPTR 0EA 03D                           * 45D1F
 
 * refs (1): 4612A
 OBJ_45D2A:
-        ::                                       * 45D2A
-          OVER                                   * 45D2F
-          %0=                                    * 45D34
-          case2drop                              * 45D39
-          tok0                                   * 45D3E
-          2DUPSWAP                               * 45D43
-          %0<                                    * 45D48
-          IT                                     * 45D4D
-          #1-                                    * 45D52
-          3PICK                                  * 45D57
-          %EXPONENT                              * 45D5C
-          DUPUNROT                               * 45D61
-          %ABSCOERCE                             * 45D66
-          DUPUNROT                               * 45D6B
-          OVER#<                                 * 45D70
-          case                                   * 45D75
-          OBJ_45DF2                              * 45D7A
-          #3-                                    * 45D7F
-          ROT                                    * 45D84
-          %0<                                    * 45D89
-          IT                                     * 45D8E
-          #1-                                    * 45D93
-          SWAP                                   * 45D98
-          OBJ_45E33                              * 45D9D
-          #-                                     * 45DA2
-          SWAPDROP                               * 45DA7
-          BINT12                                 * 45DAC
-          OVER#<                                 * 45DB1
-          IT                                     * 45DB6
-          DROPZERO                               * 45DBB
-          savefmt1                               * 45DC0
-          ERRSET                                 * 45DC5
-          ::                                     * 45DCA
-            DOSCI                                * 45DCF
-            ->StkStr22!                          * 45DD4
-          ;                                      * 45DD9
-          ERRTRAP                                * 45DDE
-          ederr                                  * 45DE3
-          rstfmt1                                * 45DE8
-        ;                                        * 45DED
+        :: OVER %0= case2drop tok0               * 45D2A
+          2DUPSWAP %0< IT #1-                    * 45D43
+          3PICK %EXPONENT DUPUNROT %ABSCOERCE DUPUNROT OVER#< case OBJ_45DF2 * 45D57
+          #3- ROT %0< IT #1-                     * 45D7F
+          SWAP OBJ_45E33 #- SWAPDROP BINT12 OVER#< IT DROPZERO * 45D98
+          savefmt1 ERRSET                        * 45DC0
+          :: DOSCI ->StkStr22! ; ERRTRAP ederr rstfmt1 ; * 45DCA
 
 * refs (1): 45D7A
 OBJ_45DF2:
-        ::                                       * 45DF2
-          3DROP                                  * 45DF7
-          SWAP                                   * 45DFC
-          EDITDECOMP$                            * 45E01
-          DUPLEN$                                * 45E06
-          3PICK                                  * 45E0B
-          #>                                     * 45E10
-          NOTcase                                * 45E15
-          SWAPDROP                               * 45E1A
-          BINT1                                  * 45E1F
-          ROT                                    * 45E24
-          SUB$                                   * 45E29
-        ;                                        * 45E2E
+        :: 3DROP SWAP EDITDECOMP$ DUPLEN$ 3PICK #> NOTcase SWAPDROP * 45DF2
+          BINT1 ROT SUB$ ;                       * 45E1F
 
 * refs (1): 45D9D
 OBJ_45E33:
-        ::                                       * 45E33
-          BINT10                                 * 45E38
-          OVER#>                                 * 45E3D
-          casedrop                               * 45E42
-          BINT1                                  * 45E47
-          BINT100                                * 45E4C
-          OVER#>                                 * 45E51
-          casedrop                               * 45E56
-          BINT2                                  * 45E5B
-          DROP                                   * 45E60
-          BINT3                                  * 45E65
-        ;                                        * 45E6A
+        :: BINT10 OVER#> casedrop BINT1          * 45E33
+          BINT100 OVER#> casedrop BINT2          * 45E4C
+          DROP BINT3 ;                           * 45E60
 
 * refs (1): 46134
 OBJ_45E6F:
-        ::                                       * 45E6F
-          OVER                                   * 45E74
-          LEN$                                   * 45E79
-          2DUP#>                                 * 45E7E
-          NOTcase2DROP                           * 45E83
-          #-                                     * 45E88
-          14SPACES$                              * 45E8D
-          BINT1                                  * 45E92
-          ROT                                    * 45E97
-          SUB$                                   * 45E9C
-          SWAP                                   * 45EA1
-          !!append$                              * 45EA6
-        ;                                        * 45EAB
+        :: OVER LEN$ 2DUP#> NOTcase2DROP #-      * 45E6F
+          14SPACES$ BINT1 ROT SUB$ SWAP !!append$ ; * 45E8D
 
 * refs (15): 45F3B 45F62 45FF3 46148 4A3DD 4A4D1 ...
 OBJ_45EB0:
-        ::                                       * 45EB0
-          EDITDECOMP$                            * 45EB5
-          &$                                     * 45EBA
-        ;                                        * 45EBF
+        :: EDITDECOMP$ &$ ;                      * 45EB0
 
 * refs (2): B6349 C6A04
 OBJ_45EC4:
-        ::                                       * 45EC4
-          AtUserStack                            * 45EC9
-          ERRSET                                 * 45ECE
-          GETPTYPE                               * 45ED3
-          ERRTRAP                                * 45ED8
-          ::                                     * 45EDD
-            ERRORCLR                             * 45EE2
-            DropSysObs                           * 45EE7
-            'IDFUNCTION                          * 45EEC
-          ;                                      * 45EF1
-          MAKEPVARS                              * 45EF6
-          DROP                                   * 45EFB
-          PUTPTYPE                               * 45F00
-          ZEROZERO                               * 45F05
-          MAKEPICT#                              * 45F0A
-        ;                                        * 45F0F
+        :: AtUserStack ERRSET GETPTYPE ERRTRAP   * 45EC4
+          :: ERRORCLR DropSysObs 'IDFUNCTION ; MAKEPVARS DROP PUTPTYPE * 45EDD
+          ZEROZERO MAKEPICT# ;                   * 45F05
 
 * refs (1): 3C491
 OBJ_45F14:
-        ::                                       * 45F14
-          Chk&BreakPPAR                          * 45F19
-          $       "Indep: "                      * 45F1E
-          6ROLL                                  * 45F36
-          OBJ_45EB0                              * 45F3B
-          DISPROW3                               * 45F40
-          $       "Depnd: "                      * 45F45
-          SWAP                                   * 45F5D
-          OBJ_45EB0                              * 45F62
-          DISPROW4                               * 45F67
-          2DROP                                  * 45F6C
-          3UNROLL                                * 45F71
-          DUPTYPECMP?                            * 45F76
-          OBJ_514C3                              * 45F7B
-          C%>%                                   * 45F80
-          ROT                                    * 45F85
-          DUPTYPECMP?                            * 45F8A
-          OBJ_514C3                              * 45F8F
-          C%>%                                   * 45F94
-          4ROLLROT                               * 45F99
+        :: Chk&BreakPPAR $ "Indep: " 6ROLL OBJ_45EB0 DISPROW3 $ "Depnd: " * 45F14
+          SWAP OBJ_45EB0 DISPROW4 2DROP 3UNROLL DUPTYPECMP? OBJ_514C3 C%>% * 45F5D
+          ROT DUPTYPECMP? OBJ_514C3 C%>% 4ROLLROT * 45F85
 
 _Xrng:_:
-          $       "Xrng:"                        * 45F9E
-          OBJ_4A834                              * 45FB2
-          DISPROW5                               * 45FB7
+          $ "Xrng:" OBJ_4A834 DISPROW5           * 45F9E
 
 _Yrng:_:
-          $       "Yrng:"                        * 45FBC
-          OBJ_4A834                              * 45FD0
-          DISPROW6                               * 45FD5
-          $       "Res: "                        * 45FDA
-          SWAP                                   * 45FEE
-          OBJ_45EB0                              * 45FF3
-          DISPROW7                               * 45FF8
-          SetDA2OKTemp                           * 45FFD
-        ;                                        * 46002
+          $ "Yrng:" OBJ_4A834 DISPROW6 $ "Res: " SWAP OBJ_45EB0 DISPROW7 * 45FBC
+          SetDA2OKTemp ;                         * 45FFD

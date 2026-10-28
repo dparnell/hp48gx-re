@@ -52,15 +52,16 @@ build for each bug.
 | `fonts/` | The three system fonts as glyph sheets (PNG), one glyph per cell. |
 
 Each file starts with its address range and a description. On each line, the
-comment on the right gives that line's address in the original ROM. These
-stay as they are after edits, so you can still find things in the original.
+comment on the right gives that line's address in the original ROM (for a
+line of several RPL objects, the first one's). These stay as they are after
+edits, so you can still find things in the original.
 
 ## Source format
 
 The format is described at the top of `tools/sasm.py`. In short:
 
 - **Saturn assembly** uses SASM-style mnemonics: `A=DAT1 A`, `GOSBVL POP#`, `?C=0 A` and then `GOYES label` on the next line.
-- **RPL** uses RPLCOMP-like syntax: `::` … `;`, `{ }`, `# 3F`, `% 1.5`, `$ "text"`, `ROMPTR 0AB 00F`, and `CODE` … `ENDCODE` for machine code inside RPL. Any other word is a pointer to that label.
+- **RPL** uses RPLCOMP-like syntax: `::` … `;`, `{ }`, `# 3F`, `% 1.5`, `$ "text"`, `ROMPTR 0AB 00F`, and `CODE` … `ENDCODE` for machine code inside RPL. Any other word is a pointer to that label. A line holds several objects. A nested `::` starts a line; a line ends after words that act on the objects that follow them (`IT`, `ITE`, `?SKIP`, the `…case` words) and those objects. Argument-type dispatch tables (`CK2&Dispatch`) put one case per line, with its argument types as the comment (`real real`; the codes are those of the ROM's tables at #19123).
 - **Comments** start with `*`.
 - **Data directives** are `CON(n)`, `REL(n)`, `NIBHEX`, `NIBASC` and `BSS`.
 

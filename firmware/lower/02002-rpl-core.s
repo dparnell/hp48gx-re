@@ -133,29 +133,13 @@ OBJ_021C5:
 * ->
 * refs (1): 021B8
 ROMPOLL:
-        ::                                       * 021DD
-          NULL{}                                 * 021E2
-          BINT7                                  * 021E7
-          OBJ_04A4C                              * 021EC
-          RclKnownLibs                           * 021F1
-          INNERCOMP                              * 021F6
-          DUP#0=case                             * 021FB
-          DROP                                   * 02200
-          RunConfig(s)                           * 02205
-        ;                                        * 0220A
+        :: NULL{} BINT7 OBJ_04A4C RclKnownLibs INNERCOMP DUP#0=case DROP * 021DD
+          RunConfig(s) ;                         * 02205
 
 * refs (1): 02205
 RunConfig(s):
-        ::                                       * 0220F
-          DUP                                    * 02214
-          ZERO_DO                                * 02219
-          pullrev                                * 0221E
-          GETCONFIG                              * 02223
-          IT                                     * 02228
-          OBJ_71646                              * 0222D
-          LOOP                                   * 02232
-          DROP                                   * 02237
-        ;                                        * 0223C
+        :: DUP ZERO_DO pullrev GETCONFIG IT OBJ_71646 * 0220F
+          LOOP DROP ;                            * 02232
         ASSEMBLE
 
 * refs (2): 011B5 70193
@@ -1270,12 +1254,7 @@ L_02F39:
 
 * refs (2): 02E56 02EEE
 Eval(nm):
-        ::                                       * 02F4C
-          DUP@                                   * 02F51
-          '                                      * 02F56
-          OBJ_02F6F                              * 02F5B
-          COLA                                   * 02F60
-          RPIT                                   * 02F65
+        :: DUP@ ' OBJ_02F6F COLA RPIT            * 02F4C
         ;                                        * 02F6A
 
 * refs (1): 02F5B
@@ -1319,21 +1298,14 @@ L_02FBF:
 * lam -> ob -> !error!
 * refs (2): 02E7B 02F1B
 DoLam:
-        ::                                       * 02FD6
-          DRPExitAtLOOP                          * 02FDB
-          ?SKIP                                  * 02FE0
-          SETLAMERR                              * 02FE5
+        :: DRPExitAtLOOP ?SKIP SETLAMERR         * 02FD6
         ;                                        * 02FEA
 
 * ROMPTR -> ?
 * refs (2): 02EA0 02F3F
 ROMSEC:
-        ::                                       * 02FEF
-          ROMPTR@                                * 02FF4
-          ?SKIP                                  * 02FF9
-          SETROMPERR                             * 02FFE
-          COLA                                   * 03003
-          EVAL                                   * 03008
+        :: ROMPTR@ ?SKIP SETROMPERR              * 02FEF
+          COLA EVAL                              * 03003
         ;                                        * 0300D
         ASSEMBLE
 
@@ -3000,59 +2972,59 @@ L_03F85:
 * 10547d 2933h
 * refs (6): 16982 17024 193EE 56485 56502 57B86
 TYPEREAL:
-        #       DOREAL                           * 03F8B  address
+        # DOREAL                                 * 03F8B  address
 
 * 10615d 2977h
 * refs (1): 17033
 TYPECMP:
-        #       DOCMP                            * 03F95  address
+        # DOCMP                                  * 03F95  address
 
 * 10868d 2A74h
 * refs (2): 0545E 173E7
 TYPELIST:
-        #       DOLIST                           * 03F9F  address
+        # DOLIST                                 * 03F9F  address
 
 * 10568d 2948h
 * refs (2): 05B06 20FF7
 TYPEIDNT:
-        #       DOIDNT                           * 03FA9  address
+        # DOIDNT                                 * 03FA9  address
 
 * 11677d 2D9Dh
 * refs (3): 0544A 173D8 8D250
 TYPECOL:
-        #       DOCOL                            * 03FB3  address
+        # DOCOL                                  * 03FB3  address
 
 * 10936d 2AB8h
 * refs (1): 05472
 TYPESYMB:
-        #       DOSYMB                           * 03FBD  address
+        # DOSYMB                                 * 03FBD  address
 
 * 10902d 2A96h
 * refs (1): 173F6
 TYPERRP:
-        #       DORRP                            * 03FC7  address
+        # DORRP                                  * 03FC7  address
 
 * 11885d 2E6Dh
 * refs (1): 05AF2
 TYPELAM:
-        #       DOLAM                            * 03FD1  address
+        # DOLAM                                  * 03FD1  address
 
 * 10581d 2955h
 * refs (6): 3799B 37A18 37A59 90116 901D2 90406
 TYPEEREL:
-        #       DOEREL                           * 03FDB  address
+        # DOEREL                                 * 03FDB  address
 
 * 10970d 2ADAh
 * refs (1): 05486
 TYPEEXT:
-        #       DOEXT                            * 03FE5  address
+        # DOEXT                                  * 03FE5  address
 
 * 0d 0h
 * refs (565): 03659 065BE 08E1F 0B665 0CA21 0FA17 ...
 BINT0:
-        #       0                                * 03FEF  0
+        # 0                                      * 03FEF  0
 
 * 1d 1h
 * refs (972): 0D2C6 0EAC3 0F963 100AB 10590 1065D ...
 BINT1:
-        #       1                                * 03FF9  1
+        # 1                                      * 03FF9  1

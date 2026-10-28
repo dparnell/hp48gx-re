@@ -7,84 +7,42 @@
 * ob1..ob4 -> T
 * refs (1): 104FF
 4DROPTRUE:
-        ::                                       * 10029
-          4DROP                                  * 1002E
-          TRUE                                   * 10033
-        ;                                        * 10038
+        :: 4DROP TRUE ;                          * 10029
 
 * refs (5): 0F601 0F61A 0F846 0F891 0FBB5
 dup;uo=>r:
-        ::                                       * 1003D
-          DUP                                    * 10042
+        :: DUP                                   * 1003D
 
 * u -> %
 * refs (16): 0F570 0F57A 0F7BA 0F7C4 1DFAD 33D6E ...
 U>nbr:
-          ::                                     * 10047
-            DUPTYPEEXT?                          * 1004C
-            case                                 * 10051
-            CARCOMP                              * 10056
+          :: DUPTYPEEXT? case CARCOMP            * 10047
           ;                                      * 1005B
         ;                                        * 10060
 
 * u % -> u'
 * refs (14): 0F3D0 0F60B 0F624 0F6B6 0F788 0FBCE ...
 Unbr>U:
-        ::                                       * 10065
-          OVER                                   * 1006A
-          TYPEEXT?                               * 1006F
-          NOTcase                                * 10074
-          SWAPDROP                               * 10079
-          SWAP                                   * 1007E
-          UM>U                                   * 10083
-        ;                                        * 10088
+        :: OVER TYPEEXT? NOTcase SWAPDROP        * 10065
+          SWAP UM>U ;                            * 1007E
 
 * refs (5): 0F33F 0F7D3 0F7E2 0F9C7 10BB4
 units(uo)=>(_,s):
-        ::                                       * 1008D
-          DUPTYPEEXT?                            * 10092
-          case                                   * 10097
-          OBJ_100B5                              * 1009C
-          DROP                                   * 100A1
-          tok1                                   * 100A6
-          BINT1                                  * 100AB
-        ;                                        * 100B0
+        :: DUPTYPEEXT? case OBJ_100B5            * 1008D
+          DROP tok1 BINT1 ;                      * 100A1
 
 * refs (1): 1009C
 OBJ_100B5:
-        ::                                       * 100B5
-          INNERCOMP                              * 100BA
-          SWAPDROP                               * 100BF
-          dup;drop(s)                            * 100C4
-          #2-                                    * 100C9
-        ;                                        * 100CE
+        :: INNERCOMP SWAPDROP dup;drop(s) #2- ;  * 100B5
 
 * refs (5): 0F344 0F819 0F869 0F8E6 0FA44
 ->unit(_,s):
-        ::                                       * 100D3
-          BINT0                                  * 100D8
-          over;=?:drq                            * 100DD
-          '                                      * 100E2
-          umEND                                  * 100E7
-          SWAP                                   * 100EC
-          #2+                                    * 100F1
-          EXTN                                   * 100F6
-        ;                                        * 100FB
+        :: BINT0 over;=?:drq ' umEND SWAP #2+ EXTN ; * 100D3
 
 * refs (4): 0F7D8 0F7E7 0F9CC 10BB9
 OBJ_10100:
-        ::                                       * 10100
-          OVER                                   * 10105
-          um/                                    * 1010A
-          EQ                                     * 1010F
-          NOTcase                                * 10114
-          BINT0                                  * 10119
-          SWAPDROP#1-                            * 1011E
-          OBJ_1013C                              * 10123
-          DUPUNROT                               * 10128
-          #-OVER                                 * 1012D
-          #2+UNROLL                              * 10132
-        ;                                        * 10137
+        :: OVER um/ EQ NOTcase BINT0             * 10100
+          SWAPDROP#1- OBJ_1013C DUPUNROT #-OVER #2+UNROLL ; * 1011E
 
 * refs (1): 10123
 OBJ_1013C:
@@ -121,17 +79,8 @@ L_10184:
 
 * refs (4): 0F80F 0F85F 0F8B9 0FA3A
 OBJ_10194:
-        ::                                       * 10194
-          OBJ_101CB                              * 10199
-          OBJ_10324                              * 1019E
-          psh                                    * 101A3
-          OBJ_101CB                              * 101A8
-          OBJ_10324                              * 101AD
-          OBJ_10478                              * 101B2
-          OBJ_106DF                              * 101B7
-          psh                                    * 101BC
-          OBJ_106DF                              * 101C1
-        ;                                        * 101C6
+        :: OBJ_101CB OBJ_10324 psh OBJ_101CB OBJ_10324 OBJ_10478 OBJ_106DF * 10194
+          psh OBJ_106DF ;                        * 101BC
 
 * refs (2): 10199 101A8
 OBJ_101CB:
@@ -139,568 +88,179 @@ OBJ_101CB:
 
 * refs (3): 1021B 106EE 10748
 {}:
-          {                                      * 101D0
-          }                                      * 101D5
-          SWAP                                   * 101DA
-          #2+                                    * 101DF
-          DUPROLL                                * 101E4
-          BEGIN                                  * 101E9
-          OBJ_10202                              * 101EE
-          UNTIL                                  * 101F3
-          #2-                                    * 101F8
-        ;                                        * 101FD
+          { } SWAP #2+ DUPROLL BEGIN OBJ_10202 UNTIL #2- ; * 101D0
 
 * refs (1): 101EE
 OBJ_10202:
-        ::                                       * 10202
-          REQcase                                * 10207
-          um*                                    * 1020C
-          OBJ_10310                              * 10211
-          REQcasedrop                            * 10216
-          {}                                     * 1021B
-          TRUE                                   * 10220
-          tok1                                   * 10225
-          OVER                                   * 1022A
-          EQUALcase                              * 1022F
-          OBJ_102D9                              * 10234
-          DUPTYPECSTR?                           * 10239
-          ITE                                    * 1023E
-          ::                                     * 10243
-            NULL$                                * 10248
-            SWAPROT                              * 1024D
-            #1+                                  * 10252
-          ;                                      * 10257
-          ::                                     * 1025C
-            SWAP                                 * 10261
-            dup;roll(s);swap                     * 10266
-            dup;drop(s)                          * 1026B
-            #1-                                  * 10270
-          ;                                      * 10275
-          DUPROLL                                * 1027A
-          dREALNcase                             * 1027F
-          ::                                     * 10284
-            %1                                   * 10289
-            ROT#1+                               * 1028E
-            ROT                                  * 10293
-            FALSE                                * 10298
-          ;                                      * 1029D
-          DUP%0=                                 * 102A2
-          ITE                                    * 102A7
-          ::                                     * 102AC
-            DROPSWAPDROP                         * 102B1
-            SWAPDROP                             * 102B6
-            #3-                                  * 102BB
-          ;                                      * 102C0
-          SWAP                                   * 102C5
-          DUPROLL                                * 102CA
-          OBJ_10310                              * 102CF
-        ;                                        * 102D4
+        :: REQcase um*                           * 10202
+          OBJ_10310 REQcasedrop {}               * 10211
+          TRUE tok1 OVER EQUALcase OBJ_102D9     * 10220
+          DUPTYPECSTR? ITE                       * 10239
+          :: NULL$ SWAPROT #1+ ;                 * 10243
+          :: SWAP dup;roll(s);swap dup;drop(s) #1- ; * 1025C
+          DUPROLL dREALNcase                     * 1027A
+          :: %1 ROT#1+ ROT FALSE ;               * 10284
+          DUP%0= ITE                             * 102A2
+          :: DROPSWAPDROP SWAPDROP #3- ; SWAP    * 102AC
+          DUPROLL OBJ_10310 ;                    * 102CA
 
 * refs (1): 10234
 OBJ_102D9:
-        ::                                       * 102D9
-          drop;1-(s);dup;roll(s)                 * 102DE
-          dREALNcase                             * 102E3
-          FALSE                                  * 102E8
-          drop;1-(s);dup;roll(s)                 * 102ED
-          OBJ_10310                              * 102F2
-        ;                                        * 102F7
+        :: drop;1-(s);dup;roll(s) dREALNcase FALSE * 102D9
+          drop;1-(s);dup;roll(s) OBJ_10310 ;     * 102ED
 
 * refs (3): 102DE 102ED 10315
 drop;1-(s);dup;roll(s):
-        ::                                       * 102FC
-          DROP#1-                                * 10301
-          DUPROLL                                * 10306
-        ;                                        * 1030B
+        :: DROP#1- DUPROLL ;                     * 102FC
 
 * refs (3): 10211 102CF 102F2
 OBJ_10310:
-        ::                                       * 10310
-          drop;1-(s);dup;roll(s)                 * 10315
-          FALSE                                  * 1031A
-        ;                                        * 1031F
+        :: drop;1-(s);dup;roll(s) FALSE ;        * 10310
 
 * refs (2): 1019E 101AD
 OBJ_10324:
-        ::                                       * 10324
-          BINT5                                  * 10329
-          BEGIN                                  * 1032E
-          2DUP#>                                 * 10333
-          WHILE                                  * 10338
-          ::                                     * 1033D
-            pick3(s-3)                           * 10342
-            4PICK                                * 10347
-            #4+                                  * 1034C
-            BEGIN                                * 10351
-            OBJ_10374                            * 10356
-            UNTIL                                * 1035B
-          ;                                      * 10360
-          REPEAT                                 * 10365
-          DROP                                   * 1036A
-        ;                                        * 1036F
+        :: BINT5 BEGIN 2DUP#> WHILE              * 10324
+          :: pick3(s-3) 4PICK #4+ BEGIN OBJ_10374 UNTIL ; REPEAT DROP ; * 1033D
 
 * refs (1): 10356
 OBJ_10374:
-        ::                                       * 10374
-          #3+                                    * 10379
-          6PICK                                  * 1037E
-          BINT7                                  * 10383
-          #+OVER                                 * 10388
-          #>                                     * 1038D
-          NOTcase                                * 10392
-          ::                                     * 10397
-            4DROP                                * 1039C
-            #3+                                  * 103A1
-            TRUE                                 * 103A6
-          ;                                      * 103AB
-          DUPDUP                                 * 103B0
-          PICK                                   * 103B5
-          5PICK                                  * 103BA
-          EQUAL                                  * 103BF
-          NOTcsdrpfls                            * 103C4
-          PICK                                   * 103C9
-          5PICK                                  * 103CE
-          3PICK                                  * 103D3
-          PICK                                   * 103D8
-          UNROTOVER                              * 103DD
-          EQUALNOT                               * 103E2
-          case2drpfls                            * 103E7
-          DROP                                   * 103EC
-          5ROLL                                  * 103F1
-          5ROLL                                  * 103F6
-          2DROP                                  * 103FB
-          ROT                                    * 10400
-          %+                                     * 10405
-          SWAP                                   * 1040A
-          #4-                                    * 1040F
-          dup;drop(s)                            * 10414
-          BINT2                                  * 10419
-          #-UNROLL                               * 1041E
-          dup;drop(s)                            * 10423
-          DUPONE                                 * 10428
-          #-ROLL                                 * 1042D
-          DROPDUP                                * 10432
-          BINT2                                  * 10437
-          #-ROLL                                 * 1043C
-          DROPSWAP                               * 10441
-          #3-                                    * 10446
-          SWAPTRUE                               * 1044B
-        ;                                        * 10450
+        :: #3+ 6PICK BINT7 #+OVER #> NOTcase     * 10374
+          :: 4DROP #3+ TRUE ;                    * 10397
+          DUPDUP PICK 5PICK EQUAL NOTcsdrpfls PICK 5PICK 3PICK PICK * 103B0
+          UNROTOVER EQUALNOT case2drpfls DROP    * 103DD
+          5ROLL 5ROLL 2DROP ROT %+ SWAP #4- dup;drop(s) BINT2 #-UNROLL * 103F1
+          dup;drop(s) DUPONE #-ROLL DROPDUP BINT2 #-ROLL DROPSWAP #3- * 10423
+          SWAPTRUE ;                             * 1044B
 
 * refs (2): 10342 1049B
 pick3(s-3):
-        ::                                       * 10455
-          DUPPICK                                * 1045A
-          OVER                                   * 1045F
-          PICK                                   * 10464
-          3PICK                                  * 10469
-          PICK                                   * 1046E
-        ;                                        * 10473
+        :: DUPPICK OVER PICK 3PICK PICK ;        * 10455
 
 * refs (1): 101B2
 OBJ_10478:
-        ::                                       * 10478
-          BINT2                                  * 1047D
-          BEGIN                                  * 10482
-          2DUP#>                                 * 10487
-          WHILE                                  * 1048C
-          ::                                     * 10491
-            #3+                                  * 10496
-            pick3(s-3)                           * 1049B
-            5PICK                                * 104A0
-            BINT7                                * 104A5
-            #+                                   * 104AA
-            BEGIN                                * 104AF
-            OBJ_104D2                            * 104B4
-            UNTIL                                * 104B9
-          ;                                      * 104BE
-          REPEAT                                 * 104C3
-          DROP                                   * 104C8
-        ;                                        * 104CD
+        :: BINT2 BEGIN 2DUP#> WHILE              * 10478
+          :: #3+ pick3(s-3) 5PICK BINT7 #+ BEGIN OBJ_104D2 UNTIL ; REPEAT * 10491
+          DROP ;                                 * 104C8
 
 * refs (1): 104B4
 OBJ_104D2:
-        ::                                       * 104D2
-          6PICK                                  * 104D7
-          BINT7                                  * 104DC
-          #+PICK                                 * 104E1
-          7PICK                                  * 104E6
-          #+                                     * 104EB
-          #5+                                    * 104F0
-          OVER#>                                 * 104F5
-          NOTcase                                * 104FA
-          4DROPTRUE                              * 104FF
-          #3+                                    * 10504
-          DUPDUP                                 * 10509
-          PICK                                   * 1050E
-          5PICK                                  * 10513
-          EQUAL                                  * 10518
-          NOTcsdrpfls                            * 1051D
-          PICK                                   * 10522
-          5PICK                                  * 10527
-          3PICK                                  * 1052C
-          PICK                                   * 10531
-          UNROTOVER                              * 10536
-          EQUALNOT                               * 1053B
-          case2drpfls                            * 10540
-          DROP                                   * 10545
-          5ROLL                                  * 1054A
-          5ROLL                                  * 1054F
-          DROPOVER                               * 10554
-          5PICK                                  * 10559
-          %=                                     * 1055E
-          case                                   * 10563
-          OBJ_10680                              * 10568
-          OVER5PICK                              * 1056D
-          %<                                     * 10572
-          case                                   * 10577
-          OBJ_105EA                              * 1057C
-          3PICK                                  * 10581
-          ROLLDROP                               * 10586
-          3PICK                                  * 1058B
-          BINT1                                  * 10590
-          #-UNROLL                               * 10595
-          ROT                                    * 1059A
-          %-                                     * 1059F
-          SWAP                                   * 105A4
-          #4-                                    * 105A9
-          dup;drop(s)                            * 105AE
-          BINT2                                  * 105B3
-          #-UNROLL                               * 105B8
+        :: 6PICK BINT7 #+PICK 7PICK #+ #5+ OVER#> NOTcase 4DROPTRUE * 104D2
+          #3+ DUPDUP PICK 5PICK EQUAL NOTcsdrpfls PICK 5PICK 3PICK PICK * 10504
+          UNROTOVER EQUALNOT case2drpfls DROP    * 10536
+          5ROLL 5ROLL DROPOVER 5PICK %= case OBJ_10680 * 1054A
+          OVER5PICK %< case OBJ_105EA            * 1056D
+          3PICK ROLLDROP 3PICK BINT1 #-UNROLL ROT %- SWAP #4- dup;drop(s) * 10581
+          BINT2 #-UNROLL                         * 105B3
 L_105BD:
-          dup;drop(s)                            * 105BD
-          #1-                                    * 105C2
-          dup;drop(s)                            * 105C7
-          #1-                                    * 105CC
-          dup;drop(s)                            * 105D1
-          #1-SWAP                                * 105D6
-          #3-                                    * 105DB
-          SWAPTRUE                               * 105E0
-        ;                                        * 105E5
+          dup;drop(s) #1- dup;drop(s) #1- dup;drop(s) #1-SWAP #3- SWAPTRUE ; * 105BD
 
 * refs (1): 1057C
 OBJ_105EA:
-        ::                                       * 105EA
-          ROT                                    * 105EF
-          dup;drop(s)                            * 105F4
-          #1-                                    * 105F9
-          dup;drop(s)                            * 105FE
-          BINT2                                  * 10603
-          #-ROLL                                 * 10608
-          DROP                                   * 1060D
-          5PICK                                  * 10612
-          BINT6                                  * 10617
-          #+ROLL                                 * 1061C
-          #3-                                    * 10621
-          6PICK                                  * 10626
-          BINT6                                  * 1062B
-          #+UNROLL                               * 10630
-          4PICK                                  * 10635
-          BINT3                                  * 1063A
-          #+ROLL                                 * 1063F
-          DROP                                   * 10644
-          4PICK                                  * 10649
-          #2+UNROLL                              * 1064E
-          %-                                     * 10653
-          OVER                                   * 10658
-          BINT1                                  * 1065D
-          #-ROLL                                 * 10662
-          DROPOVER                               * 10667
-          BINT2                                  * 1066C
-          #-UNROLL                               * 10671
-          TRUE                                   * 10676
-        ;                                        * 1067B
+        :: ROT dup;drop(s) #1- dup;drop(s) BINT2 #-ROLL DROP 5PICK BINT6 * 105EA
+          #+ROLL #3- 6PICK BINT6 #+UNROLL 4PICK BINT3 #+ROLL DROP 4PICK * 1061C
+          #2+UNROLL %- OVER BINT1 #-ROLL DROPOVER BINT2 #-UNROLL TRUE ; * 1064E
 
 * refs (1): 10568
 OBJ_10680:
-        ::                                       * 10680
-          2DROP                                  * 10685
-          SWAPDROP                               * 1068A
-          #3-                                    * 1068F
-          dup;drop(s)                            * 10694
-          #1-                                    * 10699
-          dup;drop(s)                            * 1069E
-          BINT2                                  * 106A3
-          #-ROLL                                 * 106A8
-          DROPOVER                               * 106AD
-          BINT3                                  * 106B2
-          #+ROLL                                 * 106B7
-          #3-                                    * 106BC
-          3PICK                                  * 106C1
-          BINT3                                  * 106C6
-          #+UNROLL                               * 106CB
-          GOTO                                   * 106D0
-          L_105BD                                * 106D5
-        ;                                        * 106DA
+        :: 2DROP SWAPDROP #3- dup;drop(s) #1- dup;drop(s) BINT2 #-ROLL * 10680
+          DROPOVER BINT3 #+ROLL #3- 3PICK BINT3 #+UNROLL GOTO L_105BD ; * 106AD
 
 * refs (2): 101B7 101C1
 OBJ_106DF:
-        ::                                       * 106DF
-          DUP#0=                                 * 106E4
-          ?SEMI                                  * 106E9
-          {}                                     * 106EE
-          SWAP                                   * 106F3
-          #2+                                    * 106F8
-          OBJ_10739                              * 106FD
-          DROP                                   * 10702
-          BEGIN                                  * 10707
-          OBJ_10739                              * 1070C
-          WHILE                                  * 10711
+        :: DUP#0= ?SEMI                          * 106DF
+          {} SWAP #2+ OBJ_10739 DROP BEGIN OBJ_10739 WHILE * 106EE
 
 {};swap;1+(s):
-          ::                                     * 10716
-            um*                                  * 1071B
-            SWAP#1+                              * 10720
-          ;                                      * 10725
-          REPEAT                                 * 1072A
-          #2-                                    * 1072F
-        ;                                        * 10734
+          :: um* SWAP#1+ ; REPEAT #2- ;          * 10716
 
 * refs (2): 106FD 1070C
 OBJ_10739:
-        ::                                       * 10739
-          DUPROLL                                * 1073E
-          REQcasedrop                            * 10743
-          {}                                     * 10748
-          FALSE                                  * 1074D
-          DUPTYPECSTR?                           * 10752
-          ITE                                    * 10757
-          ::                                     * 1075C
-            DROP#1-                              * 10761
-            dup;roll(s);swap                     * 10766
-          ;                                      * 1076B
-          ::                                     * 10770
-            SWAP                                 * 10775
-            dup;roll(s);swap                     * 1077A
-            umP                                  * 1077F
-            SWAP#1+                              * 10784
-          ;                                      * 10789
-          DUPROLL                                * 1078E
-          REQcasedrop                            * 10793
-          %1                                     * 10798
+        :: DUPROLL REQcasedrop {}                * 10739
+          FALSE DUPTYPECSTR? ITE                 * 1074D
+          :: DROP#1- dup;roll(s);swap ;          * 1075C
+          :: SWAP dup;roll(s);swap umP SWAP#1+ ; * 10770
+          DUPROLL REQcasedrop %1                 * 1078E
 
 1-(s);true:
-          ::                                     * 1079D
-            #1-                                  * 107A2
-            TRUE                                 * 107A7
-          ;                                      * 107AC
-          SWAP                                   * 107B1
-          um^                                    * 107B6
-          SWAP#1+                                * 107BB
-          TRUE                                   * 107C0
-        ;                                        * 107C5
+          :: #1- TRUE ; SWAP um^ SWAP#1+ TRUE ;  * 1079D
 
 * refs (18): 100C4 1026B 10414 10423 105AE 105BD ...
 dup;drop(s):
-        ::                                       * 107CA
-          DUP                                    * 107CF
-          ROLL                                   * 107D4
-          DROP                                   * 107D9
-        ;                                        * 107DE
+        :: DUP ROLL DROP ;                       * 107CA
 
 * refs (4): 0F7F6 0F805 0F9FE 0FA0D
 OBJ_107E3:
-        ::                                       * 107E3
-          BINT0                                  * 107E8
-          over;=?:drq                            * 107ED
-          OBJ_108C9                              * 107F2
-          case2DROP                              * 107F7
-          get1                                   * 107FC
-          BINT0                                  * 10801
-          over;=?:drq                            * 10806
-          BINT1                                  * 1080B
-          OVER                                   * 10810
-          #<>case                                * 10815
+        :: BINT0 over;=?:drq OBJ_108C9 case2DROP get1 * 107E3
+          BINT0 over;=?:drq BINT1 OVER #<>case   * 10801
 
 +(2s);1+(s);{};swap:
-          ::                                     * 1081A
-            #+                                   * 1081F
-            um*                                  * 10824
-            SWAP#1+                              * 10829
-          ;                                      * 1082E
-          DROPDUP                                * 10833
-          #2+PICK                                * 10838
-          tok1                                   * 1083D
-          EQUALNOTcase                           * 10842
+          :: #+ um* SWAP#1+ ;                    * 1081A
+          DROPDUP #2+PICK tok1 EQUALNOTcase      * 10833
 
 {};swap;2+(s):
-          ::                                     * 10847
-            um*                                  * 1084C
-            SWAP                                 * 10851
-            #2+                                  * 10856
-          ;                                      * 1085B
-          get1                                   * 10860
-          DROP                                   * 10865
-        ;                                        * 1086A
+          :: um* SWAP #2+ ;                      * 10847
+          get1 DROP ;                            * 10860
 
 * refs (4): 0F814 0F864 0F8E1 0FA3F
 OBJ_1086F:
-        ::                                       * 1086F
-          BINT0                                  * 10874
-          over;=?:drq                            * 10879
-          OBJ_108C9                              * 1087E
-          case2DROP                              * 10883
-          get1                                   * 10888
-          DUP#0<>                                * 1088D
-          ?SKIP                                  * 10892
-          ::                                     * 10897
-            DROP                                 * 1089C
-            tok1                                 * 108A1
-            OVER#2+UNROL                         * 108A6
-            BINT1                                * 108AB
-          ;                                      * 108B0
-          #+                                     * 108B5
-          um/                                    * 108BA
-          SWAP#1+                                * 108BF
-        ;                                        * 108C4
+        :: BINT0 over;=?:drq OBJ_108C9 case2DROP get1 * 1086F
+          DUP#0<> ?SKIP                          * 1088D
+          :: DROP tok1 OVER#2+UNROL BINT1 ;      * 10897
+          #+ um/ SWAP#1+ ;                       * 108B5
 
 * refs (2): 107F2 1087E
 OBJ_108C9:
-        ::                                       * 108C9
-          DUP                                    * 108CE
-          #1<>                                   * 108D3
-          caseFALSE                              * 108D8
-          OVER                                   * 108DD
-          tok1                                   * 108E2
-          EQUAL                                  * 108E7
-        ;                                        * 108EC
+        :: DUP #1<> caseFALSE OVER               * 108C9
+          tok1 EQUAL ;                           * 108E2
 
 * refs (4): 0F8BE 0F8C8 0F9D1 0F9DB
 OBJ_108F1:
-        ::                                       * 108F1
-          DUP#0=                                 * 108F6
-          ?SEMI                                  * 108FB
-          2GETLAM                                * 10900
-          %ABS                                   * 10905
-          DUP%0=                                 * 1090A
-          casedrop                               * 1090F
-          ::                                     * 10914
-            NDROP                                * 10919
-            BINT0                                * 1091E
-            1GETLAM                              * 10923
-            caseSIZEERR                          * 10928
-          ;                                      * 1092D
-          DUP                                    * 10932
-          %1                                     * 10937
-          %=                                     * 1093C
-          caseDROP                               * 10941
-          BINT4                                  * 10946
-          BEGIN                                  * 1094B
-          3PICK                                  * 10950
-          #4+                                    * 10955
-          OVER#>                                 * 1095A
-          WHILE                                  * 1095F
-          ::                                     * 10964
-            DUPPICK                              * 10969
-            OBJ_1098C                            * 1096E
-            #1+                                  * 10973
-          ;                                      * 10978
-          REPEAT                                 * 1097D
-          2DROP                                  * 10982
-        ;                                        * 10987
+        :: DUP#0= ?SEMI                          * 108F1
+          2GETLAM %ABS DUP%0= casedrop           * 10900
+          :: NDROP BINT0 1GETLAM caseSIZEERR ;   * 10914
+          DUP %1 %= caseDROP BINT4               * 10932
+          BEGIN 3PICK #4+ OVER#> WHILE           * 1094B
+          :: DUPPICK OBJ_1098C #1+ ; REPEAT 2DROP ; * 10964
 
 * refs (1): 1096E
 OBJ_1098C:
-        ::                                       * 1098C
-          REQcase                                * 10991
-          um*                                    * 10996
-          DROP                                   * 1099B
-          REQcasedrop                            * 109A0
-          um^                                    * 109A5
-          OBJ_109D7                              * 109AA
-          REQcasedrop                            * 109AF
-          umP                                    * 109B4
-          OBJ_10A45                              * 109B9
-          tok1                                   * 109BE
-          EQUAL                                  * 109C3
-          ?SEMI                                  * 109C8
-          OBJ_10A59                              * 109CD
-        ;                                        * 109D2
+        :: REQcase um*                           * 1098C
+          DROP REQcasedrop um^                   * 1099B
+          OBJ_109D7 REQcasedrop umP              * 109AA
+          OBJ_10A45 tok1 EQUAL ?SEMI             * 109B9
+          OBJ_10A59 ;                            * 109CD
 
 * refs (1): 109AA
 OBJ_109D7:
-        ::                                       * 109D7
-          #1+DUP                                 * 109DC
-          ROLL                                   * 109E1
-          3PICK                                  * 109E6
-          1GETLAM                                * 109EB
-          ITE                                    * 109F0
-          %/                                     * 109F5
-          %*                                     * 109FA
-          %1                                     * 109FF
-          EQcasedrop                             * 10A04
-          OBJ_10AA4                              * 10A09
-          %0_2A2B4                               * 10A0E
-          EQcasedrop                             * 10A13
-          OBJ_10BC3                              * 10A18
-          OVER                                   * 10A1D
-          UNROLL                                 * 10A22
-          #1+DUP                                 * 10A27
-          PICK                                   * 10A2C
-          TYPECSTR?                              * 10A31
-          ?SEMI                                  * 10A36
-          #2+                                    * 10A3B
-        ;                                        * 10A40
+        :: #1+DUP ROLL 3PICK 1GETLAM ITE %/ %*   * 109D7
+          %1 EQcasedrop OBJ_10AA4                * 109FF
+          %0_2A2B4 EQcasedrop OBJ_10BC3          * 10A0E
+          OVER UNROLL #1+DUP PICK TYPECSTR? ?SEMI * 10A1D
+          #2+ ;                                  * 10A3B
 
 * refs (1): 109B9
 OBJ_10A45:
-        ::                                       * 10A45
-          OBJ_10A59                              * 10A4A
-          #2+                                    * 10A4F
-        ;                                        * 10A54
+        :: OBJ_10A59 #2+ ;                       * 10A45
 
 * refs (2): 109CD 10A4A
 OBJ_10A59:
-        ::                                       * 10A59
-          OVER                                   * 10A5E
-          1GETLAM                                * 10A63
-          IT                                     * 10A68
-          %1/                                    * 10A6D
-          OVER                                   * 10A72
-          UNROLL                                 * 10A77
-          um^                                    * 10A7C
-          OVER                                   * 10A81
-          UNROLL                                 * 10A86
-          ROT                                    * 10A8B
-          #2+                                    * 10A90
-          3UNROLL                                * 10A95
-          #2+                                    * 10A9A
-        ;                                        * 10A9F
+        :: OVER 1GETLAM IT %1/                   * 10A59
+          OVER UNROLL um^ OVER UNROLL ROT #2+ 3UNROLL #2+ ; * 10A72
 
 * refs (1): 10A09
 OBJ_10AA4:
-        ::                                       * 10AA4
-          #1-                                    * 10AA9
-          dup;drop(s)                            * 10AAE
-          ROT                                    * 10AB3
-          #2-                                    * 10AB8
-          UNROTDUP                               * 10ABD
-          PICK                                   * 10AC2
-          TYPECSTR?                              * 10AC7
-          ?SEMI                                  * 10ACC
-          #2+                                    * 10AD1
-        ;                                        * 10AD6
+        :: #1- dup;drop(s) ROT #2- UNROTDUP PICK TYPECSTR? ?SEMI * 10AA4
+          #2+ ;                                  * 10AD1
 
 * ob meta1 meta2 -> meta1 meta2 ob
 * refs (1): 0F7DD
 UobROT:
-        ::                                       * 10ADB
-          DUP#2+PICK                             * 10AE0
-          OVER#+                                 * 10AE5
-          BINT3                                  * 10AEA
-          #+ROLL                                 * 10AEF
-        ;                                        * 10AF4
+        :: DUP#2+PICK OVER#+ BINT3 #+ROLL ;      * 10ADB
 
 * meta1 meta2 ob -> ob meta1 meta2
 * refs (1): 0FA35
 unrot1:
-        ::                                       * 10AF9
-          OVER                                   * 10AFE
-          #3+PICK                                * 10B03
-          3PICK#+                                * 10B08
-          BINT3                                  * 10B0D
-          #+UNROLL                               * 10B12
-        ;                                        * 10B17
+        :: OVER #3+PICK 3PICK#+ BINT3 #+UNROLL ; * 10AF9
 
 * refs (1): 0F0CA
 OBJ_10B1C:
@@ -734,121 +294,63 @@ L_10B4F:
 * * marker
 * refs (46): 0F2B3 0FEA8 1020C 1071B 10824 1084C ...
 um*:
-        {                                        * 10B5E
-        }                                        * 10B63
+        { }                                      * 10B5E
 
 * / marker
 * refs (90): 0F2D6 0FEB7 1010A 108BA 28E07 A0FB9 ...
 um/:
-        {                                        * 10B68
-        }                                        * 10B6D
+        { }                                      * 10B68
 
 * ^ marker
 * refs (60): 0F2F9 0FED5 107B6 109A5 10A7C 28FEC ...
 um^:
-        {                                        * 10B72
-        }                                        * 10B77
+        { }                                      * 10B72
 
 * Char prefix operator
 * refs (54): 0F0D4 0F28B 0FA75 0FEC6 1077F 109B4 ...
 umP:
-        {                                        * 10B7C
-        }                                        * 10B81
+        { }                                      * 10B7C
 
 * Unit end operator
 * refs (208): 0F129 0FA7A 0FA9A 0FABA 0FADA 0FAFA ...
 umEND:
-        {                                        * 10B86
-        }                                        * 10B8B
+        { }                                      * 10B86
 
 * refs (1): 0F638
 OBJ_10B90:
-        ::                                       * 10B90
-          U>NCQ                                  * 10B95
-          ROMPTR  0C1 022                        * 10B9A
-          %%*                                    * 10BA5
-        ;                                        * 10BAA
+        :: U>NCQ ROMPTR 0C1 022 %%* ;            * 10B90
 
 * refs (2): 0F855 0F8B4
 OBJ_10BAF:
-        ::                                       * 10BAF
-          units(uo)=>(_,s)                       * 10BB4
-          OBJ_10100                              * 10BB9
-        ;                                        * 10BBE
+        :: units(uo)=>(_,s) OBJ_10100 ;          * 10BAF
 
 * refs (1): 10A18
 OBJ_10BC3:
-        ::                                       * 10BC3
-          #1-                                    * 10BC8
-          dup;drop(s)                            * 10BCD
-          DUPROLL                                * 10BD2
-          TYPECSTR?                              * 10BD7
-          ITE                                    * 10BDC
-          ::                                     * 10BE1
-            ROT                                  * 10BE6
-            #3-                                  * 10BEB
-          ;                                      * 10BF0
-          ::                                     * 10BF5
-            dup;drop(s)                          * 10BFA
-            dup;drop(s)                          * 10BFF
-            ROT                                  * 10C04
-            #5-                                  * 10C09
-          ;                                      * 10C0E
-          3UNROLL                                * 10C13
-          #1-                                    * 10C18
-        ;                                        * 10C1D
+        :: #1- dup;drop(s) DUPROLL TYPECSTR? ITE * 10BC3
+          :: ROT #3- ;                           * 10BE1
+          :: dup;drop(s) dup;drop(s) ROT #5- ;   * 10BF5
+          3UNROLL #1- ;                          * 10C13
 
 * refs (1): 0FEAD
 OBJ_10C22:
-        ::                                       * 10C22
-          4ROLLROT                               * 10C27
-          %%*UNROT                               * 10C2C
-          OBJ_0F73D                              * 10C31
-        ;                                        * 10C36
+        :: 4ROLLROT %%*UNROT OBJ_0F73D ;         * 10C22
 
 * refs (1): 0FEBC
 OBJ_10C3B:
-        ::                                       * 10C3B
-          4ROLLROT                               * 10C40
-          %%/                                    * 10C45
-          3UNROLL                                * 10C4A
-          OBJ_0F756                              * 10C4F
-        ;                                        * 10C54
+        :: 4ROLLROT %%/ 3UNROLL OBJ_0F756 ;      * 10C3B
 
 * refs (1): 0FEDA
 OBJ_10C59:
-        ::                                       * 10C59
-          %>%%                                   * 10C5E
-          ROTOVER                                * 10C63
-          %%^                                    * 10C68
-          3UNROLL                                * 10C6D
-          SWAPCKREF                              * 10C72
-          ONE_DO_ARRY                            * 10C77
-          INDEX@                                 * 10C7C
-          PULLLONGEL                             * 10C81
-          3PICK                                  * 10C86
-          %%*                                    * 10C8B
-          INDEX@                                 * 10C90
-          PUTEL                                  * 10C95
-          NextInArray                            * 10C9A
-          SWAPDROP                               * 10C9F
-        ;                                        * 10CA4
+        :: %>%% ROTOVER %%^ 3UNROLL SWAPCKREF ONE_DO_ARRY INDEX@ PULLLONGEL * 10C59
+          3PICK %%* INDEX@ PUTEL NextInArray SWAPDROP ; * 10C86
 
 * refs (2): 0FECB 0FF57
 OBJ_10CA9:
-        ::                                       * 10CA9
-          3UNROLL                                * 10CAE
-          %%*SWAP                                * 10CB3
-          TOTEMPOB                               * 10CB8
-        ;                                        * 10CBD
+        :: 3UNROLL %%*SWAP TOTEMPOB ;            * 10CA9
 
 * refs (1): 0FEE9
 OBJ_10CC2:
-        ::                                       * 10CC2
-          ROT                                    * 10CC7
-          %>%%                                   * 10CCC
-          3UNROLL                                * 10CD1
-        ;                                        * 10CD6
+        :: ROT %>%% 3UNROLL ;                    * 10CC2
         ASSEMBLE
 
 * refs (1): 0C44D
@@ -902,43 +404,26 @@ L_10D59:
 
 * refs (1): 0F94A
 OBJ_10D78:
-        {                                        * 10D78
-          1_kg                                   * 10D7D
-          1_m                                    * 10D82
-          1_A                                    * 10D87
-          1_s                                    * 10D8C
-          1_K                                    * 10D91
-          1_cd                                   * 10D96
-          1_mol                                  * 10D9B
+        { 1_kg 1_m 1_A 1_s 1_K 1_cd 1_mol        * 10D78
 
 '1_r':
-          UNIT                                   * 10DA0
-            %1                                   * 10DA5
+          UNIT %1                                * 10DA0
 
 r:
-            $       "r"                          * 10DAA
-            umEND                                * 10DB6
-          ;                                      * 10DBB
+            $ "r" umEND ;                        * 10DAA
 
 '1_sr':
-          UNIT                                   * 10DC0
-            %1                                   * 10DC5
+          UNIT %1                                * 10DC0
 
 sr:
-            $       "sr"                         * 10DCA
-            umEND                                * 10DD8
-          ;                                      * 10DDD
-          1_?                                    * 10DE2
-        }                                        * 10DE7
+            $ "sr" umEND ;                       * 10DCA
+          1_? }                                  * 10DE2
 
 '1_°R':
-        UNIT                                     * 10DEC
-          %1                                     * 10DF1
+        UNIT %1                                  * 10DEC
 
 °R:
-          $       "°R"                           * 10DF6
-          umEND                                  * 10E04
-        ;                                        * 10E09
+          $ "°R" umEND ;                         * 10DF6
 
 * refs (1): 0F67E
 OBJ_10E0E:
@@ -955,39 +440,30 @@ OBJ_10E0E:
 * -> {}
 * refs (9): 49149 93C32 C7E65 C8124 C907D C972F ...
 8NULLLAM{}:
-        {                                        * 10E36
-          NULLLAM                                * 10E3B
-          NULLLAM                                * 10E40
-          NULLLAM                                * 10E45
-          NULLLAM                                * 10E4A
-          NULLLAM                                * 10E4F
-          NULLLAM                                * 10E54
-          NULLLAM                                * 10E59
-          NULLLAM                                * 10E5E
-        }                                        * 10E63
+        { NULLLAM NULLLAM NULLLAM NULLLAM NULLLAM NULLLAM NULLLAM NULLLAM } * 10E36
 
 * 0.555...
 * refs (6): 0F448 0F489 0F52E 0FC8C CD6FF CD740
 cfF:
-        %%      5.55555555555556E-1              * 10E68
+        %% 5.55555555555556E-1                   * 10E68
 
 * 1
 * refs (7): 0F434 0F4CA 0F51A 0FC78 CD6B4 CD6DC ...
 cfC:
-        %%      1E0                              * 10E82
+        %% 1E0                                   * 10E82
 
 * 273.15
 * refs (3): 0F4B1 0F524 0FC82
 %%KZERO:
-        %%      2.7315E2                         * 10E9C
+        %% 2.7315E2                              * 10E9C
 
 * 459.67
 * refs (3): 0F4FC 0F538 0FC96
 %%RZERO:
-        %%      4.5967E2                         * 10EB6
+        %% 4.5967E2                              * 10EB6
 
 %%1.31E2:
-        %%      1.31E2                           * 10ED0
+        %% 1.31E2                                * 10ED0
 
 * Error B01h
 * refs (3): 0FF7A 0FF9D 0FFCF
@@ -1208,30 +684,14 @@ Cont:
 
 * refs (1): 10F16
 ChkUserKeys:
-        ::                                       * 11086
-          'idUserKeys.                           * 1108B
-          RclHiddenVar                           * 11090
-          NOTcase                                * 11095
-          NoUserKeys                             * 1109A
-          'idUserKeys                            * 1109F
-          RclHiddenVar                           * 110A4
-          NOTcasedrop                            * 110A9
-          NoUserKeys                             * 110AE
-          DUPUNROT                               * 110B3
-          OCRC                                   * 110B8
-          SWAPDROP                               * 110BD
-          EQUAL                                  * 110C2
-          NOTcasedrop                            * 110C7
-          NoUserKeys                             * 110CC
-          UserKeys!                              * 110D1
-        ;                                        * 110D6
+        :: 'idUserKeys. RclHiddenVar NOTcase NoUserKeys * 11086
+          'idUserKeys RclHiddenVar NOTcasedrop NoUserKeys * 1109F
+          DUPUNROT OCRC SWAPDROP EQUAL NOTcasedrop NoUserKeys * 110B3
+          UserKeys! ;                            * 110D1
 
 * refs (3): 1109A 110AE 110CC
 NoUserKeys:
-        ::                                       * 110DB
-          NULL{}                                 * 110E0
-          StoUserKeys                            * 110E5
-        ;                                        * 110EA
+        :: NULL{} StoUserKeys ;                  * 110DB
 
 * refs (1): 3B5A0
 OBJ_110EF:
@@ -1362,7 +822,7 @@ L_11226:
 
 * refs (1): 112A8
 _1E_:
-        $       "1E"                             * 11231
+        $ "1E"                                   * 11231
 
 * refs (1): 3B60E
 OBJ_1123F:

@@ -6,9 +6,7 @@
 * ROMPTR 0E2 05E
 * refs (1): E3857
 ROMP_0E2_05E:
-        {                                        * FD2DB
-          BINT40                                 * FD2E0
-          BINT5                                  * FD2E5
+        { BINT40 BINT5                           * FD2DB
           CON(5)  DOHSTR                         * FD2EA  DOHSTR
           LENGTH                                 * FD2EF  length, to #FD5DB
           NIBHEX  E2057000800F02090204079801883803 * FD2F4  .P...ð ↑ @p≤.∂√0
@@ -41,9 +39,7 @@ ROMP_0E2_05E:
 * ROMPTR 0E2 05F
 * refs (1): E3857
 ROMP_0E2_05F:
-        {                                        * FD5E0
-          BINT40                                 * FD5E5
-          BINT3                                  * FD5EA
+        { BINT40 BINT3                           * FD5E0
           CON(5)  DOHSTR                         * FD5EF  DOHSTR
           LENGTH                                 * FD5F4  length, to #FD916
           NIBHEX  13057000800F0209020407F8030820A0 * FD5F9  1P...ð ↑ @p↓0∡..
@@ -77,9 +73,7 @@ ROMP_0E2_05F:
 * ROMPTR 0E2 060
 * refs (1): E3857
 ROMP_0E2_060:
-        {                                        * FD91B
-          BINT16                                 * FD920
-          BINT3                                  * FD925
+        { BINT16 BINT3                           * FD91B
           CON(5)  DOHSTR                         * FD92A  DOHSTR
           LENGTH                                 * FD92F  length, to #FDD27
           NIBHEX  138678030E003780182D801081580303 * FD934  1hπ0à.s.āÒ...Σ00
@@ -120,9 +114,7 @@ ROMP_0E2_060:
 * ROMPTR 0E2 061
 * refs (1): E3857
 ROMP_0E2_061:
-        {                                        * FDD2C
-          BINT48                                 * FDD31
-          BINT6                                  * FDD36
+        { BINT48 BINT6                           * FDD2C
           CON(5)  DOHSTR                         * FDD3B  DOHSTR
           LENGTH                                 * FDD40  length, to #FDFD7
 L_FDD45:
@@ -153,9 +145,7 @@ L_FDD45:
 * ROMPTR 0E2 062
 * refs (1): E3857
 ROMP_0E2_062:
-        {                                        * FDFDC
-          BINT8                                  * FDFE1
-          BINT7                                  * FDFE6
+        { BINT8 BINT7                            * FDFDC
           CON(5)  DOHSTR                         * FDFEB  DOHSTR
           LENGTH                                 * FDFF0  length, to #FE304
           NIBHEX  A207D8030900479030B00AF801885807 * FDFF5  *p→0↑.t....↓.∂Σp
@@ -189,9 +179,7 @@ ROMP_0E2_062:
 * ROMPTR 0E2 063
 * refs (1): E3857
 ROMP_0E2_063:
-        {                                        * FE309
-          BINT32                                 * FE30E
-          BINT5                                  * FE313
+        { BINT32 BINT5                           * FE309
           CON(5)  DOHSTR                         * FE318  DOHSTR
           LENGTH                                 * FE31D  length, to #FE5A0
           NIBHEX  C28478050A79C01B8030A74258020652 * FE322  ,HπP.ρ.±..z$Σ `%
@@ -220,9 +208,7 @@ ROMP_0E2_063:
 * ROMPTR 0E2 064
 * refs (1): E3857
 ROMP_0E2_064:
-        {                                        * FE5A5
-          BINT16                                 * FE5AA
-          BINT9                                  * FE5AF
+        { BINT16 BINT9                           * FE5A5
           CON(5)  DOHSTR                         * FE5B4  DOHSTR
           LENGTH                                 * FE5B9  length, to #FE8DD
           NIBHEX  528658030103778030C0999803010527 * FE5BE  %hΣ0.0w...τ≤0.Pr
@@ -256,9 +242,7 @@ ROMP_0E2_064:
 * ROMPTR 0E2 065
 * refs (1): E3857
 ROMP_0E2_065:
-        {                                        * FE8E2
-          BINT16                                 * FE8E7
-          BINT4                                  * FE8EC
+        { BINT16 BINT4                           * FE8E2
           CON(5)  DOHSTR                         * FE8F1  DOHSTR
           LENGTH                                 * FE8F6  length, to #FEC77
           NIBHEX  03064000CA4480A294330000A8310000 * FE8FB  0`..¬D.*I3..≥...
@@ -295,9 +279,7 @@ ROMP_0E2_065:
 * ROMPTR 0E2 066
 * refs (1): E3857
 ROMP_0E2_066:
-        {                                        * FEC7C
-          BINT24                                 * FEC81
-          BINT16                                 * FEC86
+        { BINT24 BINT16                          * FEC7C
           CON(5)  DOHSTR                         * FEC8B  DOHSTR
           LENGTH                                 * FEC90  length, to #FEE11
           NIBHEX  818538010F878F30DF36880008780201 * FEC95  .X√.ðxø.ýc∂.∡π .
@@ -318,9 +300,7 @@ ROMP_0E2_066:
 * ROMPTR 0E2 067
 * refs (1): E3857
 ROMP_0E2_067:
-        {                                        * FEE16
-          BINT32                                 * FEE1B
-          BINT13                                 * FEE20
+        { BINT32 BINT13                          * FEE16
           CON(5)  DOHSTR                         * FEE25  DOHSTR
           LENGTH                                 * FEE2A  length, to #FF06B
           NIBHEX  2284303CC098F600100303880904C060 * FEE2F  "H.Ã.≤o..00∂↑@..
@@ -347,9 +327,7 @@ ROMP_0E2_067:
 * ROMPTR 0E2 068
 * refs (1): E3857
 ROMP_0E2_068:
-        {                                        * FF070
-          BINT8                                  * FF075
-          BINT5                                  * FF07A
+        { BINT8 BINT5                            * FF070
           CON(5)  DOHSTR                         * FF07F  DOHSTR
           LENGTH                                 * FF084  length, to #FF4C6
           NIBHEX  F20750005004B80F014819A1A0000500 * FF089  /p...@≠ð.∫γ...P.
@@ -392,9 +370,7 @@ ROMP_0E2_068:
 * ROMPTR 0E2 069
 * refs (1): E3857
 ROMP_0E2_069:
-        {                                        * FF4CB
-          BINT0                                  * FF4D0
-          BINT1                                  * FF4D5
+        { BINT0 BINT1                            * FF4CB
           CON(5)  DOHSTR                         * FF4DA  DOHSTR
           LENGTH                                 * FF4DF  length, to #FF950
           NIBHEX  538709060200884A690607C0D95A3909 * FF4E4  5x↑` .∂¤λ`p.Ω¥ε↑

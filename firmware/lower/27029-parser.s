@@ -29,53 +29,29 @@ L_27048:
 
 * refs (1): 27022
 OBJ_2705C:
-        ::                                       * 2705C
-          ?ACCPTR>                               * 27061
-          NOTROMPcase                            * 27066
-          TRUE                                   * 2706B
-          OBJ_29202                              * 27070
-          FALSE                                  * 27075
-          SWAPDROP                               * 2707A
-          ?ACCPTR>                               * 2707F
-          TRUE                                   * 27084
-        ;                                        * 27089
+        :: ?ACCPTR> NOTROMPcase TRUE             * 2705C
+          OBJ_29202 FALSE SWAPDROP ?ACCPTR> TRUE ; * 27070
 
 * refs (10): 4ABE4 6850F 6852D 68DFA 68ECC 6DEAF ...
 OBJ_2708E:
-        ::                                       * 2708E
-          CK&DISPATCH0                           * 27093
-          BINT8                                  * 27098
-          OBJ_270BB                              * 2709D
-          BINT15                                 * 270A2
-          OBJ_270D9                              * 270A7
-          BINT0                                  * 270AC
-          FALSE                                  * 270B1
+        :: CK&DISPATCH0                          * 2708E
+          BINT8 OBJ_270BB                        * 27098  program
+          BINT15 OBJ_270D9                       * 270A2  romptr
+          BINT0 FALSE                            * 270AC  any
         ;                                        * 270B6
 
 * refs (1): 2709D
 OBJ_270BB:
-        ::                                       * 270BB
-          DUPROM-WORD?                           * 270C0
-          case                                   * 270C5
-          OBJ_2710B                              * 270CA
-          FALSE                                  * 270CF
-        ;                                        * 270D4
+        :: DUPROM-WORD? case OBJ_2710B           * 270BB
+          FALSE ;                                * 270CF
 
 * refs (1): 270A7
 OBJ_270D9:
-        ::                                       * 270D9
-          OBJ_71DFF                              * 270DE
-          FALSE                                  * 270E3
-          OBJ_7221F                              * 270E8
-        ;                                        * 270ED
+        :: OBJ_71DFF FALSE OBJ_7221F ;           * 270D9
 
 * refs (1): 7222C
 OBJ_270F2:
-        ::                                       * 270F2
-          OBJ_2710B                              * 270F7
-          NOTcsdrpfls                            * 270FC
-          SWAPDROPTRUE                           * 27101
-        ;                                        * 27106
+        :: OBJ_2710B NOTcsdrpfls SWAPDROPTRUE ;  * 270F2
 
 * refs (2): 270CA 270F7
 OBJ_2710B:
@@ -123,19 +99,9 @@ L_27168:
 
 * refs (1): 1476C
 OBJ_271C5:
-        ::                                       * 271C5
-          DUP                                    * 271CA
-          OBJ_2699F                              * 271CF
-          NOTcaseFALSE                           * 271D4
-          DUPTYPECOL?                            * 271D9
-          case                                   * 271DE
-          OBJ_27206                              * 271E3
-          OBJ_71DFF                              * 271E8
-          FALSE                                  * 271ED
-          OBJ_27206                              * 271F2
-          NOTcsdrpfls                            * 271F7
-          SWAPDROPTRUE                           * 271FC
-        ;                                        * 27201
+        :: DUP OBJ_2699F NOTcaseFALSE DUPTYPECOL? * 271C5
+          case OBJ_27206                         * 271DE
+          OBJ_71DFF FALSE OBJ_27206 NOTcsdrpfls SWAPDROPTRUE ; * 271E8
 
 * refs (2): 271E3 271F2
 OBJ_27206:
@@ -202,623 +168,260 @@ L_27295:
 
 * refs (1): 24753
 OBJ_2729B:
-        ::                                       * 2729B
-          BINT4                                  * 272A0
-          OBJ_285C6                              * 272A5
-          DUP#1+                                 * 272AA
-          SWAPUnDROP                             * 272AF
-          BINT0                                  * 272B4
-          BINT7                                  * 272B9
-          NDUPN                                  * 272BE
-          DROP                                   * 272C3
+        :: BINT4 OBJ_285C6 DUP#1+ SWAPUnDROP BINT0 BINT7 NDUPN DROP * 2729B
           {                                      * 272C8
 
 Π'ttt:
-            LAM     'ttt                         * 272CD
+            LAM 'ttt                             * 272CD
 
 Π'str:
-            LAM     'str                         * 272DC
+            LAM 'str                             * 272DC
 
 Π'ofs:
-            LAM     'ofs                         * 272EB
+            LAM 'ofs                             * 272EB
 
 Π'tok:
-            LAM     'tok                         * 272FA
+            LAM 'tok                             * 272FA
 
 Π'rbv:
-            LAM     'rbv                         * 27309
+            LAM 'rbv                             * 27309
 
 Π'idfflg:
-            LAM     'idfflg                      * 27318
+            LAM 'idfflg                          * 27318
 
 Π'tmpop:
-            LAM     'tmpop                       * 2732D
+            LAM 'tmpop                           * 2732D
 
 Π'tmppdat:
-            LAM     'tmppdat                     * 27340
+            LAM 'tmppdat                         * 27340
 
 Π'ploc:
-            LAM     'ploc                        * 27357
+            LAM 'ploc                            * 27357
 
 Π'bv:
-            LAM     'bv                          * 27368
+            LAM 'bv                              * 27368
 
 Π'unbound:
-            LAM     'unbound                     * 27375
-          }                                      * 2738C
-          BIND                                   * 27391
-          pshzer                                 * 27396
-          OBJ_273AA                              * 2739B
-          ABND                                   * 273A0
-        ;                                        * 273A5
+            LAM 'unbound }                       * 27375
+          BIND pshzer OBJ_273AA ABND ;           * 27391
 
 * refs (12): 2739B 276B1 27814 2792C 27A3A 27ABC ...
 OBJ_273AA:
-        ::                                       * 273AA
-          check_pdata                            * 273AF
-          OBJ_27ED1                              * 273B4
-          OBJ_2768E                              * 273B9
-          OBJ_27CCE                              * 273BE
-          8GETLAM                                * 273C3
-          nultrior                               * 273C8
-          ::                                     * 273CD
-            drop;dq                              * 273D2
-            OBJ_27530                            * 273D7
-          ;                                      * 273DC
-          tok'                                   * 273E1
-          tok=casedrop                           * 273E6
-          OBJ_27530                              * 273EB
-          toklparen                              * 273F0
-          tok=casedrop                           * 273F5
-          OBJ_27A03                              * 273FA
-          tokrparen                              * 273FF
-          tok=casedrop                           * 27404
-          OBJ_278D7                              * 27409
-          NoDecSep                               * 2740E
-          tok=casedrop                           * 27413
-          OBJ_276D4                              * 27418
-          tok;                                   * 2741D
-          tok=casedrop                           * 27422
-          OBJ_276D4                              * 27427
-          tok=                                   * 2742C
-          tok=casedrop                           * 27431
-          OBJ_2781E                              * 27436
-          DROP                                   * 2743B
-          OBJ_283F1                              * 27440
-          OBJ_25D03                              * 27445
-          !*trior                                * 2744A
-          OBJ_27AC6                              * 2744F
-          ngsizecase                             * 27454
-          failed                                 * 27459
-          OBJ_24609                              * 2745E
-          !*trior                                * 27463
-          OBJ_27AC6                              * 27468
-          SWAP                                   * 2746D
-          COMPILEID                              * 27472
-          ROT                                    * 27477
-          ORNOT                                  * 2747C
-          casedrop                               * 27481
+        :: check_pdata OBJ_27ED1 OBJ_2768E OBJ_27CCE 8GETLAM nultrior * 273AA
+          :: drop;dq OBJ_27530 ; tok' tok=casedrop OBJ_27530 * 273CD
+          toklparen tok=casedrop OBJ_27A03       * 273F0
+          tokrparen tok=casedrop OBJ_278D7       * 273FF
+          NoDecSep tok=casedrop OBJ_276D4        * 2740E
+          tok; tok=casedrop OBJ_276D4            * 2741D
+          tok= tok=casedrop OBJ_2781E            * 2742C
+          DROP OBJ_283F1 OBJ_25D03 !*trior OBJ_27AC6 ngsizecase failed * 2743B
+          OBJ_24609 !*trior OBJ_27AC6 SWAP COMPILEID ROT ORNOT casedrop * 2745E
           failed                                 * 27486
-          OBJ_274D1                              * 2748B
-          ?OKINALG                               * 27490
-          NOTcasedrop                            * 27495
-          failed                                 * 2749A
-          OBJ_26BED                              * 2749F
-          NOTcase                                * 274A4
-          OBJ_27670                              * 274A9
-          7UNROLL                                * 274AE
-          7UNROLL                                * 274B3
-          7UNROLL                                * 274B8
-          4DROP                                  * 274BD
-          COLA                                   * 274C2
-          OBJ_27B0C                              * 274C7
+          OBJ_274D1 ?OKINALG NOTcasedrop failed  * 2748B
+          OBJ_26BED NOTcase OBJ_27670            * 2749F
+          7UNROLL 7UNROLL 7UNROLL 4DROP COLA OBJ_27B0C * 274AE
         ;                                        * 274CC
 
 * refs (3): 2748B 68814 68AA3
 OBJ_274D1:
-        ::                                       * 274D1
-          1GETLAM                                * 274D6
-          #0<>                                   * 274DB
-          ?SEMI                                  * 274E0
-          DUP                                    * 274E5
-          M1st-case                              * 274EA
-          ::                                     * 274EF
-            2DROP                                * 274F4
-            '                                    * 274F9
-            xNEG                                 * 274FE
-          ;                                      * 27503
+        :: 1GETLAM #0<> ?SEMI                    * 274D1
+          DUP M1st-case                          * 274E5
+          :: 2DROP ' xNEG ;                      * 274EF
           M1st+case                              * 27508
-          ::                                     * 2750D
-            2DROP                                * 27512
-            '                                    * 27517
-            xNEGNEG                              * 2751C
-          ;                                      * 27521
-          DROP                                   * 27526
-        ;                                        * 2752B
+          :: 2DROP ' xNEGNEG ;                   * 2750D
+          DROP ;                                 * 27526
 
 * refs (2): 273D7 273EB
 OBJ_27530:
-        ::                                       * 27530
-          1GETLAM                                * 27535
-          #0=case                                * 2753A
-          OBJ_27797                              * 2753F
-          COLA                                   * 27544
-          OBJ_27553                              * 27549
+        :: 1GETLAM #0=case OBJ_27797             * 27530
+          COLA OBJ_27553                         * 27544
         ;                                        * 2754E
 
 * refs (3): 27549 2757B 275A3
 OBJ_27553:
-        ::                                       * 27553
-          DUP#0=case                             * 27558
-          OBJ_2763E                              * 2755D
-          OBJ_282D7                              * 27562
-          NOTcase                                * 27567
-          ::                                     * 2756C
-            OBJ_27FC1                            * 27571
-            COLA                                 * 27576
-            OBJ_27553                            * 2757B
+        :: DUP#0=case OBJ_2763E                  * 27553
+          OBJ_282D7 NOTcase                      * 27562
+          :: OBJ_27FC1 COLA OBJ_27553            * 2756C
           ;                                      * 27580
-          OBJ_28616                              * 27585
-          IT                                     * 2758A
-          OBJ_275AD                              * 2758F
-          OBJ_284C3                              * 27594
-          OBJ_27FC1                              * 27599
-          COLA                                   * 2759E
-          OBJ_27553                              * 275A3
+          OBJ_28616 IT OBJ_275AD                 * 27585
+          OBJ_284C3 OBJ_27FC1 COLA OBJ_27553     * 27594
         ;                                        * 275A8
 
 * refs (1): 2758F
 OBJ_275AD:
-        ::                                       * 275AD
-          DUP                                    * 275B2
-          BINT5                                  * 275B7
-          #=case                                 * 275BC
-          ::                                     * 275C1
-            NDROP                                * 275C6
-            BINT0                                * 275CB
-            RDROPCOLA                            * 275D0
-            OBJ_2763E                            * 275D5
-          ;                                      * 275DA
-          BEGIN                                  * 275DF
-          ROT#1+UNROT                            * 275E4
-          OBJ_282FA                              * 275E9
-          DROP                                   * 275EE
-          SWAPDUP                                * 275F3
-          BINT5                                  * 275F8
-          #=                                     * 275FD
-          SWAP                                   * 27602
-          BINT7                                  * 27607
-          #>                                     * 2760C
-          OR                                     * 27611
+        :: DUP BINT5 #=case                      * 275AD
+          :: NDROP BINT0 RDROPCOLA OBJ_2763E ;   * 275C1
+          BEGIN ROT#1+UNROT OBJ_282FA DROP SWAPDUP BINT5 #= SWAP BINT7 #> OR * 275DF
           NOTcase                                * 27616
-          ::                                     * 2761B
-            2RDROP                               * 27620
-            DROP                                 * 27625
-            OBJ_27797                            * 2762A
-          ;                                      * 2762F
-          NOT_UNTIL                              * 27634
-        ;                                        * 27639
+          :: 2RDROP DROP OBJ_27797 ;             * 2761B
+          NOT_UNTIL ;                            * 27634
 
 * refs (2): 2755D 275D5
 OBJ_2763E:
-        ::                                       * 2763E
-          DROPONE                                * 27643
-          OVER#=                                 * 27648
-          ITE                                    * 2764D
-          CKSYMBN                                * 27652
-          PSYMBN                                 * 27657
-          SWAP#1+                                * 2765C
-          OBJ_283F1                              * 27661
-          TrueTrue                               * 27666
-        ;                                        * 2766B
+        :: DROPONE OVER#= ITE CKSYMBN PSYMBN     * 2763E
+          SWAP#1+ OBJ_283F1 TrueTrue ;           * 2765C
 
 * refs (1): 274A9
 OBJ_27670:
-        ::                                       * 27670
-          OBJ_24681                              * 27675
-          2DROP                                  * 2767A
-          COLA                                   * 2767F
-          OBJ_27AC6                              * 27684
+        :: OBJ_24681 2DROP COLA OBJ_27AC6        * 27670
         ;                                        * 27689
 
 * refs (1): 273B9
 OBJ_2768E:
-        ::                                       * 2768E
-          OBJ_283F1                              * 27693
-          5ROLL                                  * 27698
-          tok8trior                              * 2769D
+        :: OBJ_283F1 5ROLL tok8trior             * 2768E
 
 * refs (1): 276CA
 OBJ_276A2:
-          ::                                     * 276A2
-            OBJ_2840F                            * 276A7
-            COLA                                 * 276AC
-            OBJ_273AA                            * 276B1
+          :: OBJ_2840F COLA OBJ_273AA            * 276A2
           ;                                      * 276B6
-          tok;                                   * 276BB
-          OBJ_0BC15                              * 276C0
-          !*triand                               * 276C5
-          OBJ_276A2                              * 276CA
-        ;                                        * 276CF
+          tok; OBJ_0BC15 !*triand OBJ_276A2 ;    * 276BB
 
 * refs (2): 27418 27427
 OBJ_276D4:
-        ::                                       * 276D4
-          1GETLAM                                * 276D9
-          #0=case                                * 276DE
-          OBJ_27797                              * 276E3
-          COLA                                   * 276E8
-          OBJ_276F7                              * 276ED
+        :: 1GETLAM #0=case OBJ_27797             * 276D4
+          COLA OBJ_276F7                         * 276E8
         ;                                        * 276F2
 
 * refs (3): 276ED 2772E 27756
 OBJ_276F7:
-        ::                                       * 276F7
-          DUP#0=case                             * 276FC
-          OBJ_27797                              * 27701
-          3PICK                                  * 27706
-          #0=case                                * 2770B
-          OBJ_2842D                              * 27710
-          OBJ_282FA                              * 27715
-          NOTcase                                * 2771A
-          ::                                     * 2771F
-            OBJ_27FC1                            * 27724
-            COLA                                 * 27729
-            OBJ_276F7                            * 2772E
+        :: DUP#0=case OBJ_27797                  * 276F7
+          3PICK #0=case OBJ_2842D                * 27706
+          OBJ_282FA NOTcase                      * 27715
+          :: OBJ_27FC1 COLA OBJ_276F7            * 2771F
           ;                                      * 27733
-          OBJ_28616                              * 27738
-          NOTcase                                * 2773D
-          ::                                     * 27742
-            OBJ_284C3                            * 27747
-            OBJ_27FC1                            * 2774C
-            COLA                                 * 27751
-            OBJ_276F7                            * 27756
+          OBJ_28616 NOTcase                      * 27738
+          :: OBJ_284C3 OBJ_27FC1 COLA OBJ_276F7  * 27742
           ;                                      * 2775B
-          ROT#1+UNROT                            * 27760
-          OBJ_282FA                              * 27765
-          2DROP                                  * 2776A
-          BINT6                                  * 2776F
-          EQcasedrop                             * 27774
-          OBJ_277B0                              * 27779
-          DUP                                    * 2777E
-          BINT7                                  * 27783
-          #>case                                 * 27788
-          OBJ_277C9                              * 2778D
+          ROT#1+UNROT OBJ_282FA 2DROP BINT6 EQcasedrop OBJ_277B0 * 27760
+          DUP BINT7 #>case OBJ_277C9             * 2777E
           DROP                                   * 27792
 
 * refs (22): 2753F 2762A 276E3 27701 2782D 2784B ...
 OBJ_27797:
-          ::                                     * 27797
-            OBJ_283F1                            * 2779C
-            failed                               * 277A1
-          ;                                      * 277A6
-        ;                                        * 277AB
+          :: OBJ_283F1 failed ; ;                * 27797
 
 * refs (4): 27779 278C3 279A9 279F4
 OBJ_277B0:
-        ::                                       * 277B0
-          BINT7                                  * 277B5
-          COLA                                   * 277BA
-          OBJ_277C9                              * 277BF
+        :: BINT7 COLA OBJ_277C9                  * 277B0
         ;                                        * 277C4
 
 * refs (2): 2778D 277BF
 OBJ_277C9:
-        ::                                       * 277C9
-          BINT8                                  * 277CE
-          #-                                     * 277D3
-          4ROLL                                  * 277D8
-          SWAP#-                                 * 277DD
-          3UNROLL                                * 277E2
-          OBJ_284C3                              * 277E7
+        :: BINT8 #- 4ROLL SWAP#- 3UNROLL OBJ_284C3 * 277C9
 
 * refs (5): 27922 27A30 27AB2 27C65 27EB8
 OBJ_277EC:
-          ::                                     * 277EC
-            OBJ_283F1                            * 277F1
-            DROP                                 * 277F6
-            GetNextToken                         * 277FB
-            OBJ_2840F                            * 27800
-          ;                                      * 27805
-          OBJ_28602                              * 2780A
-          COLA                                   * 2780F
+          :: OBJ_283F1 DROP GetNextToken OBJ_2840F ; OBJ_28602 COLA * 277EC
           OBJ_273AA                              * 27814
         ;                                        * 27819
 
 * refs (1): 27436
 OBJ_2781E:
-        ::                                       * 2781E
-          1GETLAM                                * 27823
-          #0=case                                * 27828
-          OBJ_27797                              * 2782D
-          COLA                                   * 27832
-          OBJ_27841                              * 27837
+        :: 1GETLAM #0=case OBJ_27797             * 2781E
+          COLA OBJ_27841                         * 27832
         ;                                        * 2783C
 
 * refs (3): 27837 27878 278A0
 OBJ_27841:
-        ::                                       * 27841
-          DUP#0=case                             * 27846
-          OBJ_27797                              * 2784B
-          3PICK                                  * 27850
-          #0=case                                * 27855
-          OBJ_27797                              * 2785A
-          OBJ_282FA                              * 2785F
-          NOTcase                                * 27864
-          ::                                     * 27869
-            OBJ_27FC1                            * 2786E
-            COLA                                 * 27873
-            OBJ_27841                            * 27878
+        :: DUP#0=case OBJ_27797                  * 27841
+          3PICK #0=case OBJ_27797                * 27850
+          OBJ_282FA NOTcase                      * 2785F
+          :: OBJ_27FC1 COLA OBJ_27841            * 27869
           ;                                      * 2787D
-          OBJ_28616                              * 27882
-          NOTcase                                * 27887
-          ::                                     * 2788C
-            OBJ_284C3                            * 27891
-            OBJ_27FC1                            * 27896
-            COLA                                 * 2789B
-            OBJ_27841                            * 278A0
+          OBJ_28616 NOTcase                      * 27882
+          :: OBJ_284C3 OBJ_27FC1 COLA OBJ_27841  * 2788C
           ;                                      * 278A5
-          ROT#1+UNROT                            * 278AA
-          OBJ_282FA                              * 278AF
-          2DROP                                  * 278B4
-          BINT7                                  * 278B9
-          #=casedrop                             * 278BE
-          OBJ_277B0                              * 278C3
-          DROP                                   * 278C8
-          OBJ_27797                              * 278CD
-        ;                                        * 278D2
+          ROT#1+UNROT OBJ_282FA 2DROP BINT7 #=casedrop OBJ_277B0 * 278AA
+          DROP OBJ_27797 ;                       * 278C8
 
 * refs (1): 27409
 OBJ_278D7:
-        ::                                       * 278D7
-          1GETLAM                                * 278DC
-          #0=case                                * 278E1
-          OBJ_27797                              * 278E6
-          COLA                                   * 278EB
-          OBJ_278FA                              * 278F0
+        :: 1GETLAM #0=case OBJ_27797             * 278D7
+          COLA OBJ_278FA                         * 278EB
         ;                                        * 278F5
 
 * refs (3): 278F0 2794F 27977
 OBJ_278FA:
-        ::                                       * 278FA
-          DUP#0=case                             * 278FF
-          OBJ_27797                              * 27904
-          3PICK                                  * 27909
-          #0=case                                * 2790E
-          ::                                     * 27913
-            metatail                             * 27918
-            NDROP                                * 2791D
-            OBJ_277EC                            * 27922
-            COLA                                 * 27927
-            OBJ_273AA                            * 2792C
+        :: DUP#0=case OBJ_27797                  * 278FA
+          3PICK #0=case                          * 27909
+          :: metatail NDROP OBJ_277EC COLA OBJ_273AA * 27913
           ;                                      * 27931
-          OBJ_282FA                              * 27936
-          NOTcase                                * 2793B
-          ::                                     * 27940
-            OBJ_27FC1                            * 27945
-            COLA                                 * 2794A
-            OBJ_278FA                            * 2794F
+          OBJ_282FA NOTcase                      * 27936
+          :: OBJ_27FC1 COLA OBJ_278FA            * 27940
           ;                                      * 27954
-          OBJ_28616                              * 27959
-          NOTcase                                * 2795E
-          ::                                     * 27963
-            OBJ_284C3                            * 27968
-            OBJ_27FC1                            * 2796D
-            COLA                                 * 27972
-            OBJ_278FA                            * 27977
+          OBJ_28616 NOTcase                      * 27959
+          :: OBJ_284C3 OBJ_27FC1 COLA OBJ_278FA  * 27963
           ;                                      * 2797C
-          ROT#1+UNROT                            * 27981
-          OBJ_282FA                              * 27986
-          DROPOVER                               * 2798B
-          BINT5                                  * 27990
-          #=case                                 * 27995
-          ::                                     * 2799A
-            2DROP                                * 2799F
-            COLA                                 * 279A4
-            OBJ_277B0                            * 279A9
+          ROT#1+UNROT OBJ_282FA DROPOVER BINT5 #=case * 27981
+          :: 2DROP COLA OBJ_277B0                * 2799A
           ;                                      * 279AE
-          SWAP                                   * 279B3
-          BINT9                                  * 279B8
-          #<                                     * 279BD
-          casedrop                               * 279C2
-          OBJ_27797                              * 279C7
-          NOTcase                                * 279CC
-          OBJ_27797                              * 279D1
-          ROT#1+UNROT                            * 279D6
-          OBJ_282FA                              * 279DB
-          2DROP                                  * 279E0
-          BINT5                                  * 279E5
-          #=                                     * 279EA
-          case                                   * 279EF
-          OBJ_277B0                              * 279F4
-          OBJ_27797                              * 279F9
-        ;                                        * 279FE
+          SWAP BINT9 #< casedrop OBJ_27797       * 279B3
+          NOTcase OBJ_27797                      * 279CC
+          ROT#1+UNROT OBJ_282FA 2DROP BINT5 #= case OBJ_277B0 * 279D6
+          OBJ_27797 ;                            * 279F9
 
 * refs (1): 273FA
 OBJ_27A03:
-        ::                                       * 27A03
-          1GETLAM                                * 27A08
-          #0=case                                * 27A0D
-          ::                                     * 27A12
-            NULLHXS                              * 27A17
-            ZEROZERO                             * 27A1C
-            BINT3                                * 27A21
-            5ROLL                                * 27A26
-            #4+                                  * 27A2B
-            OBJ_277EC                            * 27A30
-            COLA                                 * 27A35
-            OBJ_273AA                            * 27A3A
+        :: 1GETLAM #0=case                       * 27A03
+          :: NULLHXS ZEROZERO BINT3 5ROLL #4+ OBJ_277EC COLA OBJ_273AA * 27A12
           ;                                      * 27A3F
-          psh                                    * 27A44
-          OVERDUP                                * 27A49
-          TYPEIDNT?                              * 27A4E
-          SWAP                                   * 27A53
-          TYPELAM?                               * 27A58
-          OR                                     * 27A5D
-          NOTcase                                * 27A62
-          OBJ_27797                              * 27A67
-          #1-SWAP                                * 27A6C
-          symcomp                                * 27A71
-          BINT0                                  * 27A76
-          '                                      * 27A7B
-          xFCNAPPLY                              * 27A80
-          #0590410h                              * 27A85
-          BINT0                                  * 27A8A
-          BINT3                                  * 27A8F
-          BINT6                                  * 27A94
-          BINT7                                  * 27A99
-          psh                                    * 27A9E
-          over&                                  * 27AA3
-          psh                                    * 27AA8
-          OBJ_28602                              * 27AAD
-          OBJ_277EC                              * 27AB2
-          COLA                                   * 27AB7
-          OBJ_273AA                              * 27ABC
+          psh OVERDUP TYPEIDNT? SWAP TYPELAM? OR NOTcase OBJ_27797 * 27A44
+          #1-SWAP symcomp BINT0 ' xFCNAPPLY #0590410h BINT0 BINT3 BINT6 * 27A6C
+          BINT7 psh over& psh OBJ_28602 OBJ_277EC COLA OBJ_273AA * 27A99
         ;                                        * 27AC1
 
 * refs (3): 2744F 27468 27684
 OBJ_27AC6:
-        ::                                       * 27AC6
-          1GETLAM                                * 27ACB
-          OBJ_285EE                              * 27AD0
-          #0=                                    * 27AD5
-          NOTcase                                * 27ADA
-          ::                                     * 27ADF
-            4DROP                                * 27AE4
-            OBJ_27797                            * 27AE9
-          ;                                      * 27AEE
-          OBJ_2840F                              * 27AF3
-          pullrev1&                              * 27AF8
-          COLA                                   * 27AFD
-          OBJ_273AA                              * 27B02
+        :: 1GETLAM OBJ_285EE #0= NOTcase         * 27AC6
+          :: 4DROP OBJ_27797 ;                   * 27ADF
+          OBJ_2840F pullrev1& COLA OBJ_273AA     * 27AF3
         ;                                        * 27B07
 
 * refs (1): 274C7
 OBJ_27B0C:
-        ::                                       * 27B0C
-          #1+                                    * 27B11
-          #0=                                    * 27B16
-          6PUTLAM                                * 27B1B
-          SWAP                                   * 27B20
-          5PUTLAM                                * 27B25
-          DUP4PUTLAM                             * 27B2A
-          OBJ_26E61                              * 27B2F
-          DROP                                   * 27B34
-          7PUTLAM                                * 27B39
-          2PUTLAM                                * 27B3E
-          NOTcase                                * 27B43
-          OBJ_27BA2                              * 27B48
-          1GETLAM                                * 27B4D
-          #0=case                                * 27B52
-          OBJ_27797                              * 27B57
-          OBJ_27C74                              * 27B5C
-          BINT3                                  * 27B61
-          3PUTLAM                                * 27B66
-          4GETLAM                                * 27B6B
-          OBJ_28599                              * 27B70
-          BINT2                                  * 27B75
-          #<>                                    * 27B7A
-          ?SKIP                                  * 27B7F
+        :: #1+ #0= 6PUTLAM SWAP 5PUTLAM DUP4PUTLAM OBJ_26E61 DROP 7PUTLAM * 27B0C
+          2PUTLAM NOTcase OBJ_27BA2              * 27B3E
+          1GETLAM #0=case OBJ_27797              * 27B4D
+          OBJ_27C74 BINT3 3PUTLAM 4GETLAM OBJ_28599 BINT2 #<> ?SKIP * 27B5C
           OBJ_282B4                              * 27B84
-          OBJ_27BD9                              * 27B89
-          OBJ_284C3                              * 27B8E
-          COLA                                   * 27B93
-          OBJ_273AA                              * 27B98
+          OBJ_27BD9 OBJ_284C3 COLA OBJ_273AA     * 27B89
         ;                                        * 27B9D
 
 * refs (1): 27B48
 OBJ_27BA2:
-        ::                                       * 27BA2
-          1GETLAM                                * 27BA7
-          #0=                                    * 27BAC
-          NOTcase                                * 27BB1
-          OBJ_27797                              * 27BB6
-          BINT2                                  * 27BBB
-          3PUTLAM                                * 27BC0
-          OBJ_27BD9                              * 27BC5
-          COLA                                   * 27BCA
-          OBJ_273AA                              * 27BCF
+        :: 1GETLAM #0= NOTcase OBJ_27797         * 27BA2
+          BINT2 3PUTLAM OBJ_27BD9 COLA OBJ_273AA * 27BBB
         ;                                        * 27BD4
 
 * refs (2): 27B89 27BC5
 OBJ_27BD9:
-        ::                                       * 27BD9
-          5GETLAM                                * 27BDE
-          DUP                                    * 27BE3
-          TYPEROMP?                              * 27BE8
-          ITE                                    * 27BED
-          ::                                     * 27BF2
-            symcomp                              * 27BF7
-            BINT0                                * 27BFC
-            '                                    * 27C01
-            xFCNAPPLY                            * 27C06
-            BINT3                                * 27C0B
-          ;                                      * 27C10
-          ::                                     * 27C15
-            6GETLAM                              * 27C1A
-            ITE                                  * 27C1F
-            ::                                   * 27C24
-              ZEROSWAP                           * 27C29
-              BINT2                              * 27C2E
-            ;                                    * 27C33
-            BINT1                                * 27C38
+        :: 5GETLAM DUP TYPEROMP? ITE             * 27BD9
+          :: symcomp BINT0 ' xFCNAPPLY BINT3 ;   * 27BF2
+          :: 6GETLAM ITE                         * 27C15
+            :: ZEROSWAP BINT2 ; BINT1            * 27C24
           ;                                      * 27C3D
-          4GETLAM                                * 27C42
-          7GETLAM                                * 27C47
-          3GETLAM                                * 27C4C
-          BINT3                                  * 27C51
-          top&                                   * 27C56
-          DUP#1+                                 * 27C5B
-          top&                                   * 27C60
-          OBJ_277EC                              * 27C65
-          OBJ_28602                              * 27C6A
-        ;                                        * 27C6F
+          4GETLAM 7GETLAM 3GETLAM BINT3 top& DUP#1+ top& OBJ_277EC OBJ_28602 ; * 27C42
 
 * refs (2): 27B5C 27CC4
 OBJ_27C74:
-        ::                                       * 27C74
-          DUP#0=                                 * 27C79
-          ?SEMI                                  * 27C7E
-          4PICK                                  * 27C83
-          2GETLAM                                * 27C88
-          #<                                     * 27C8D
-          ?SEMI                                  * 27C92
-          OBJ_282FA                              * 27C97
-          IT                                     * 27C9C
-          ::                                     * 27CA1
-            OBJ_28616                            * 27CA6
-            DROP                                 * 27CAB
-          ;                                      * 27CB0
-          OBJ_284C3                              * 27CB5
-          OBJ_27FC1                              * 27CBA
-          COLA                                   * 27CBF
-          OBJ_27C74                              * 27CC4
+        :: DUP#0= ?SEMI                          * 27C74
+          4PICK 2GETLAM #< ?SEMI                 * 27C83
+          OBJ_282FA IT                           * 27C97
+          :: OBJ_28616 DROP ;                    * 27CA1
+          OBJ_284C3 OBJ_27FC1 COLA OBJ_27C74     * 27CB5
         ;                                        * 27CC9
 
 * refs (1): 273BE
 OBJ_27CCE:
-        ::                                       * 27CCE
-          1GETLAM                                * 27CD3
-          #0=                                    * 27CD8
-          NOTcase                                * 27CDD
-          OBJ_27797                              * 27CE2
-          OBJ_285EE                              * 27CE7
-          OBJ_27FC1                              * 27CEC
-          COLA                                   * 27CF1
-          OBJ_273AA                              * 27CF6
+        :: 1GETLAM #0= NOTcase OBJ_27797         * 27CCE
+          OBJ_285EE OBJ_27FC1 COLA OBJ_273AA     * 27CE7
         ;                                        * 27CFB
 
 * refs (2): 273AF 27EC7
 check_pdata:
-        ::                                       * 27D00
-          DUP#0=case                             * 27D05
-          3SKIP                                  * 27D0A
-          3PICK                                  * 27D0F
-          #0=case                                * 27D14
-          3SKIP                                  * 27D19
-          OBJ_282FA                              * 27D1E
-          NOTcase                                * 27D23
-          2skipcola                              * 27D28
+        :: DUP#0=case 3SKIP                      * 27D00
+          3PICK #0=case 3SKIP                    * 27D0F
+          OBJ_282FA NOTcase 2skipcola            * 27D1E
           DROP                                   * 27D2D
 
 * refs (1): 69A59
@@ -846,11 +449,8 @@ L_27D74:
             A=C     A                            * 27D7B
             PC=(A)                               * 27D7D
           ENDCODE                                * 27D81
-          3SKIP                                  * 27D81
-          COLA                                   * 27D86
-          4ROLL                                  * 27D8B
-          #1+                                    * 27D90
-          4UNROLL                                * 27D95
+          3SKIP COLA 4ROLL                       * 27D81
+          #1+ 4UNROLL                            * 27D90
 
 * refs (1): 69A68
 OBJ_27D9A:
@@ -891,295 +491,126 @@ L_27DFC:
             D0=D0+  5                            * 27E07
             PC=(A)                               * 27E0A
           ENDCODE                                * 27E0E
-          ::                                     * 27E0E
-            toklparen                            * 27E13
-            COLAskipcola                         * 27E18
-          ;                                      * 27E1D
-          ::                                     * 27E22
-            tokrparen                            * 27E27
-            COLAskipcola                         * 27E2C
-          ;                                      * 27E31
-          ::                                     * 27E36
-            NoDecSep                             * 27E3B
-            COLAskipcola                         * 27E40
-          ;                                      * 27E45
-          ::                                     * 27E4A
-            tok=                                 * 27E4F
-            COLAskipcola                         * 27E54
-          ;                                      * 27E59
-          3SKIP                                  * 27E5E
-          8GETLAM                                * 27E63
+          :: toklparen COLAskipcola ;            * 27E0E
+          :: tokrparen COLAskipcola ;            * 27E22
+          :: NoDecSep COLAskipcola ;             * 27E36
+          :: tok= COLAskipcola ; 3SKIP 8GETLAM   * 27E4A
 
 * refs (1): 69AC7
 OBJ_27E68:
-          ::                                     * 27E68
-            NoDecSep                             * 27E6D
-            tok=casedrop                         * 27E72
-            TRUE                                 * 27E77
-            tok;                                 * 27E7C
-            tok=casedrop                         * 27E81
-            TRUE                                 * 27E86
-            2DROPFALSE                           * 27E8B
-          ;                                      * 27E90
+          :: NoDecSep tok=casedrop TRUE          * 27E68
+            tok; tok=casedrop TRUE               * 27E7C
+            2DROPFALSE ;                         * 27E8B
           IT                                     * 27E95
-          ::                                     * 27E9A
-            BINT7                                * 27E9F
-            #-                                   * 27EA4
-            4ROLL                                * 27EA9
-            SWAP#-                               * 27EAE
-            3UNROLL                              * 27EB3
-            OBJ_277EC                            * 27EB8
-          ;                                      * 27EBD
-          COLA                                   * 27EC2
-          check_pdata                            * 27EC7
+          :: BINT7 #- 4ROLL SWAP#- 3UNROLL OBJ_277EC ; * 27E9A
+          COLA check_pdata                       * 27EC2
         ;                                        * 27ECC
 
 * refs (1): 273B4
 OBJ_27ED1:
-        ::                                       * 27ED1
-          OBJ_283F1                              * 27ED6
-          ~;eval;q                               * 27EDB
+        :: OBJ_283F1 ~;eval;q                    * 27ED1
 
 * refs (2): 246C7 24E51
 OBJ_27EE0:
-          ::                                     * 27EE0
-            ngsizecase                           * 27EE5
-            failed                               * 27EEA
-            delimcase                            * 27EEF
-            failed                               * 27EF4
-            DUP                                  * 27EF9
-            RDROP                                * 27EFE
-          ;                                      * 27F03
-          $>ID                                   * 27F08
-          DUP                                    * 27F0D
-          undo                                   * 27F12
-          ITE                                    * 27F17
+          :: ngsizecase failed                   * 27EE0
+            delimcase failed                     * 27EEF
+            DUP RDROP ;                          * 27EF9
+          $>ID DUP undo ITE                      * 27F08
 
 * refs (1): 69801
 OBJ_27F1C:
-          ::                                     * 27F1C
-            DROP                                 * 27F21
-            ID>LAM                               * 27F26
-            TRUE                                 * 27F2B
-          ;                                      * 27F30
+          :: DROP ID>LAM TRUE ;                  * 27F1C
 
 * refs (1): 69806
 OBJ_27F35:
-          ::                                     * 27F35
-            DUP                                  * 27F3A
-            COMPILEID                            * 27F3F
-            DROP                                 * 27F44
-            TYPEIDNT?                            * 27F49
-          ;                                      * 27F4E
+          :: DUP COMPILEID DROP TYPEIDNT? ;      * 27F35
           NOTcase                                * 27F53
 
 drop;false;true:
-          ::                                     * 27F58
-            DROP                                 * 27F5D
-            failed                               * 27F62
-          ;                                      * 27F67
-          symcomp                                * 27F6C
-          6rolld;1+(s5)                          * 27F71
-          DROP                                   * 27F76
-          GetNextToken                           * 27F7B
-          OBJ_2840F                              * 27F80
-          pullrev1&                              * 27F85
-          OBJ_284C3                              * 27F8A
-          ROT#1+UNROT                            * 27F8F
-          COLA                                   * 27F94
-          OBJ_273AA                              * 27F99
+          :: DROP failed ;                       * 27F58
+          symcomp 6rolld;1+(s5) DROP GetNextToken OBJ_2840F pullrev1& * 27F6C
+          OBJ_284C3 ROT#1+UNROT COLA OBJ_273AA   * 27F8A
         ;                                        * 27F9E
 
 * refs (6): 2740E 27E3B 27E6D 68B4D 69616 69A9A
 NoDecSep:
-        ::                                       * 27FA3
-          DPRADIX?                               * 27FA8
-          tok,                                   * 27FAD
-          tok.                                   * 27FB2
-          RPITE                                  * 27FB7
-        ;                                        * 27FBC
+        :: DPRADIX? tok, tok. RPITE ;            * 27FA3
 
 * refs (10): 27571 27599 27724 2774C 2786E 27896 ...
 OBJ_27FC1:
-        ::                                       * 27FC1
-          metatail                               * 27FC6
-          #3-                                    * 27FCB
-          4UNROLL3DROP                           * 27FD0
-          rotswap                                * 27FD5
-          top&                                   * 27FDA
-          OBJ_27FEE                              * 27FDF
-          psh                                    * 27FE4
-        ;                                        * 27FE9
+        :: metatail #3- 4UNROLL3DROP rotswap top& OBJ_27FEE psh ; * 27FC1
 
 * refs (2): 27FDF 6B018
 OBJ_27FEE:
-        ::                                       * 27FEE
-          M1stNEGcase                            * 27FF3
-          OBJ_2813D                              * 27FF8
-          AEQ1stcase                             * 27FFD
-          xNEGNEG                                * 28002
-          SWAPDROP#1-                            * 28007
-          AEQ1stcase                             * 2800C
-          ROMP_002_105                           * 28011
-          OBJ_2818D                              * 28016
-          AEQ1stcase                             * 2801B
-          ROMP_002_106                           * 28020
-          OBJ_281F6                              * 28025
-          AEQ1stcase                             * 2802A
-          xFORMUNIT                              * 2802F
-          OBJ_2806B                              * 28034
-          AEQ1stcase                             * 28039
-          xPREDIV                                * 2803E
-          OBJ_2804D                              * 28043
-        ;                                        * 28048
+        :: M1stNEGcase OBJ_2813D                 * 27FEE
+          AEQ1stcase xNEGNEG                     * 27FFD
+          SWAPDROP#1- AEQ1stcase ROMP_002_105    * 28007
+          OBJ_2818D AEQ1stcase ROMP_002_106      * 28016
+          OBJ_281F6 AEQ1stcase xFORMUNIT         * 28025
+          OBJ_2806B AEQ1stcase xPREDIV           * 28034
+          OBJ_2804D ;                            * 28043
 
 * refs (2): 28043 6AFB9
 OBJ_2804D:
-        ::                                       * 2804D
-          SWAPDROP                               * 28052
-          '                                      * 28057
-          x/                                     * 2805C
-          SWAP                                   * 28061
-        ;                                        * 28066
+        :: SWAPDROP ' x/ SWAP ;                  * 2804D
 
 * refs (1): 28034
 OBJ_2806B:
-        ::                                       * 2806B
-          larg                                   * 28070
-          dup                                    * 28075
+        :: larg dup                              * 2806B
 
 * refs (1): 28115
 {}_2807A:
-          {                                      * 2807A
-          }                                      * 2807F
-          OVER#2+UNROL                           * 28084
-          SWAPDROP#1-                            * 28089
-          larg                                   * 2808E
-          CKSYMBN                                * 28093
-          EXPLODE                                * 28098
-          IMPLODE                                * 2809D
-          pshm1                                  * 280A2
-          CKSYMBN                                * 280A7
-          EXPLODE                                * 280AC
-          IMPLODE                                * 280B1
-          SWAPDROPSWAP                           * 280B6
-          ERRSET                                 * 280BB
-          ::                                     * 280C0
-            '                                    * 280C5
-            OBJ_28A65                            * 280CA
-            parameval                            * 280CF
-            ChkEvalNext?                         * 280D4
-            x*                                   * 280D9
-            NOTcase                              * 280DE
-            doerrB01                             * 280E3
-            SWAPDROP                             * 280E8
-            pshm1                                * 280ED
-            NDROP                                * 280F2
-            DROP                                 * 280F7
-          ;                                      * 280FC
+          { } OVER#2+UNROL SWAPDROP#1- larg CKSYMBN EXPLODE IMPLODE pshm1 * 2807A
+          CKSYMBN EXPLODE IMPLODE SWAPDROPSWAP ERRSET * 280A7
+          :: ' OBJ_28A65 parameval ChkEvalNext? x* NOTcase doerrB01 * 280C0
+            SWAPDROP pshm1 NDROP DROP ;          * 280E8
           ERRTRAP                                * 28101
-          ::                                     * 28106
-            ERRORCLR                             * 2810B
-            BEGIN                                * 28110
-            {}_2807A                             * 28115
-            EQ                                   * 2811A
-            UNTIL                                * 2811F
-            IMPLODE                              * 28124
-          ;                                      * 28129
-          SINNER                                 * 2812E
-          top&                                   * 28133
-        ;                                        * 28138
+          :: ERRORCLR BEGIN {}_2807A EQ UNTIL IMPLODE ; SINNER top& ; * 28106
 
 * refs (1): 27FF8
 OBJ_2813D:
-        ::                                       * 2813D
-          CK&DISPATCH0                           * 28142
-          REALOBOB                               * 28147
-          OBJ_28174                              * 2814C
-          CMPOBOB                                * 28151
-          OBJ_28174                              * 28156
-          EXTOBOB                                * 2815B
-          OBJ_28174                              * 28160
-          BINT0                                  * 28165
-          NOP                                    * 2816A
+        :: CK&DISPATCH0                          * 2813D
+          REALOBOB OBJ_28174                     * 28147  real ? ?
+          CMPOBOB OBJ_28174                      * 28151  complex ? ?
+          EXTOBOB OBJ_28174                      * 2815B  unit ? ?
+          BINT0 NOP                              * 28165  any
         ;                                        * 2816F
 
 * refs (3): 2814C 28156 28160
 OBJ_28174:
-        ::                                       * 28174
-          #1-UNROT                               * 28179
-          EvalNoCK                               * 2817E
-          SWAP                                   * 28183
-        ;                                        * 28188
+        :: #1-UNROT EvalNoCK SWAP ;              * 28174
 
 * refs (2): 28016 5F594
 OBJ_2818D:
-        ::                                       * 2818D
-          SWAPDROP#1-                            * 28192
-          CK&DISPATCH0                           * 28197
-          REALREALOB                             * 2819C
-          OBJ_281B5                              * 281A1
-          BINT0                                  * 281A6
-          Addi*+[_]                              * 281AB
+        :: SWAPDROP#1- CK&DISPATCH0              * 2818D
+          REALREALOB OBJ_281B5                   * 2819C  real real ?
+          BINT0 Addi*+[_]                        * 281A6  any
         ;                                        * 281B0
 
 * refs (1): 281A1
 OBJ_281B5:
-        ::                                       * 281B5
-          #1-UNROT                               * 281BA
-          %>C%                                   * 281BF
-          SWAP                                   * 281C4
-        ;                                        * 281C9
+        :: #1-UNROT %>C% SWAP ;                  * 281B5
 
 * refs (2): 281AB 28282
 Addi*+[_]:
         ::                                       * 281CE
-          {                                      * 281D3
-            xi                                   * 281D8
-            x*                                   * 281DD
-            x+                                   * 281E2
-          }                                      * 281E7
-          INNERtop&                              * 281EC
-        ;                                        * 281F1
+          { xi x* x+ } INNERtop& ;               * 281D3
 
 * refs (2): 28025 5F599
 OBJ_281F6:
-        ::                                       * 281F6
-          SWAPDROP#1-                            * 281FB
-          CK&DISPATCH0                           * 28200
-          REALREALOB                             * 28205
-          OBJ_2821E                              * 2820A
-          BINT0                                  * 2820F
-          OBJ_2823C                              * 28214
+        :: SWAPDROP#1- CK&DISPATCH0              * 281F6
+          REALREALOB OBJ_2821E                   * 28205  real real ?
+          BINT0 OBJ_2823C                        * 2820F  any
         ;                                        * 28219
 
 * refs (1): 2820A
 OBJ_2821E:
-        ::                                       * 2821E
-          #1-UNROT                               * 28223
-          %POL>%REC                              * 28228
-          %>C%                                   * 2822D
-          SWAP                                   * 28232
-        ;                                        * 28237
+        :: #1-UNROT %POL>%REC %>C% SWAP ;        * 2821E
 
 * refs (1): 28214
 OBJ_2823C:
-        ::                                       * 2823C
-          pshzerpsharg                           * 28241
-          parg&                                  * 28246
-          psh                                    * 2824B
-          dup                                    * 28250
-          PTR     addt2:                         * 28255
-          xCOS                                   * 2825A
-          x*                                     * 2825F
-          psh                                    * 28264
-          PTR     addt2:                         * 28269
-          xSIN                                   * 2826E
-          x*                                     * 28273
-          top&                                   * 28278
-          top&                                   * 2827D
-          Addi*+[_]                              * 28282
-        ;                                        * 28287
+        :: pshzerpsharg parg& psh dup PTR addt2: xCOS x* psh PTR addt2: xSIN * 2823C
+          x* top& top& Addi*+[_] ;               * 28273
 
         CON(5)  NOP                              * 2828C  address (the code jumps or points through it)
 
@@ -1188,40 +619,21 @@ OBJ_2823C:
 * ob1..obn-i..obn #i #n+1 -> ob1..ob..obn-i #n-i obn-i+1..obn #i
 * refs (3): 27918 27FC6 28432
 metatail:
-        ::                                       * 28296
-          OVER#-                                 * 2829B
-          #1-                                    * 282A0
-          OVER                                   * 282A5
-          #2+UNROLL                              * 282AA
-        ;                                        * 282AF
+        :: OVER#- #1- OVER #2+UNROLL ;           * 28296
 
 * refs (3): 27B84 28639 28648
 OBJ_282B4:
-        ::                                       * 282B4
-          psh                                    * 282B9
-          larg                                   * 282BE
-          PSYMBN                                 * 282C3
-          SWAP#1+                                * 282C8
-          psh                                    * 282CD
-        ;                                        * 282D2
+        :: psh larg PSYMBN SWAP#1+ psh ;         * 282B4
 
 * refs (1): 27562
 OBJ_282D7:
-        ::                                       * 282D7
-          3PICK                                  * 282DC
-          #0=case                                * 282E1
-          FALSE                                  * 282E6
-          COLA                                   * 282EB
-          OBJ_282FA                              * 282F0
+        :: 3PICK #0=case FALSE                   * 282D7
+          COLA OBJ_282FA                         * 282EB
         ;                                        * 282F5
 
 * refs (13): 275E9 27715 27765 2785F 278AF 27936 ...
 OBJ_282FA:
-        ::                                       * 282FA
-          FALSE                                  * 282FF
-          BINT0                                  * 28304
-          COLA                                   * 28309
-          OBJ_28318                              * 2830E
+        :: FALSE BINT0 COLA OBJ_28318            * 282FA
         ;                                        * 28313
 
 * refs (1): 2830E
@@ -1292,86 +704,41 @@ L_283BD:
 * Drops rest of current stream, skipcola in the above.
 * refs (8): 27E18 27E2C 27E40 27E54 69A77 69A8B ...
 COLAskipcola:
-        ::                                       * 283C4
-          RDROPCOLA                              * 283C9
-          skipcola                               * 283CE
-        ;                                        * 283D3
+        :: RDROPCOLA skipcola ;                  * 283C4
 
 * Skips 3 objs in the runstream.
 * refs (7): 27D0A 27D19 27D81 27E5E 69A40 69A5E ...
 3SKIP:
-        ::                                       * 283D8
-          RSKIP                                  * 283DD
-          RSKIP                                  * 283E2
-          RSKIP                                  * 283E7
-        ;                                        * 283EC
+        :: RSKIP RSKIP RSKIP ;                   * 283D8
 
 * refs (19): 27440 27661 27693 2779C 277F1 27ED6 ...
 OBJ_283F1:
-        ::                                       * 283F1
-          11GETLAM                               * 283F6
-          10GETLAM                               * 283FB
-          9GETLAM                                * 28400
-          8GETLAM                                * 28405
-        ;                                        * 2840A
+        :: 11GETLAM 10GETLAM 9GETLAM 8GETLAM ;   * 283F1
 
 * refs (18): 276A7 27800 27AF3 27F80 2848C 686F7 ...
 OBJ_2840F:
-        ::                                       * 2840F
-          8PUTLAM                                * 28414
-          9PUTLAM                                * 28419
-          10PUTLAM                               * 2841E
-          11PUTLAM                               * 28423
-        ;                                        * 28428
+        :: 8PUTLAM 9PUTLAM 10PUTLAM 11PUTLAM ;   * 2840F
 
 * refs (1): 27710
 OBJ_2842D:
-        ::                                       * 2842D
-          metatail                               * 28432
-          NDROP                                  * 28437
-          OBJ_283F1                              * 2843C
-          DROP                                   * 28441
-          GetNextToken                           * 28446
-          ::                                     * 2844B
-            tokanglesign                         * 28450
-            tok8trior                            * 28455
+        :: metatail NDROP OBJ_283F1 DROP GetNextToken * 2842D
+          :: tokanglesign tok8trior              * 2844B
 
 * refs (3): 699F0 6F1B7 6F8C4
 OBJ_2845A:
-            ::                                   * 2845A
-              '                                  * 2845F
-              ROMP_002_106                       * 28464
-            ;                                    * 28469
+            :: ' ROMP_002_106 ;                  * 2845A
 
 * refs (5): 69468 699D7 6F144 6F1F8 6F8B5
 OBJ_2846E:
-            ::                                   * 2846E
-              '                                  * 28473
-              ROMP_002_105                       * 28478
-            ;                                    * 2847D
-          ;                                      * 28482
-          5UNROLL                                * 28487
-          OBJ_2840F                              * 2848C
-          #05060410h                             * 28491
-          BINT0                                  * 28496
-          BINT5                                  * 2849B
-          BINT4                                  * 284A0
-          BINT5                                  * 284A5
-          top&                                   * 284AA
-          OBJ_28602                              * 284AF
-          COLA                                   * 284B4
-          OBJ_273AA                              * 284B9
+            :: ' ROMP_002_105 ; ;                * 2846E
+          5UNROLL OBJ_2840F #05060410h BINT0 BINT5 BINT4 BINT5 top& * 28487
+          OBJ_28602 COLA OBJ_273AA               * 284AF
         ;                                        * 284BE
 
 * refs (8): 27594 27747 277E7 27891 27968 27B8E ...
 OBJ_284C3:
-        ::                                       * 284C3
-          OBJ_284E6                              * 284C8
-          ?SEMI                                  * 284CD
-          7ROLL                                  * 284D2
-          #1+                                    * 284D7
-          7UNROLL                                * 284DC
-        ;                                        * 284E1
+        :: OBJ_284E6 ?SEMI                       * 284C3
+          7ROLL #1+ 7UNROLL ;                    * 284D2
 
 * refs (1): 284C8
 OBJ_284E6:
@@ -1416,512 +783,215 @@ L_2854B:
 * ob ob' # -> #-1 ob ob'
 * refs (9): 28179 281BA 28223 56D79 56D88 6F3DD ...
 #1-UNROT:
-        ::                                       * 28558
-          #1-                                    * 2855D
-          3UNROLL                                * 28562
-        ;                                        * 28567
+        :: #1- 3UNROLL ;                         * 28558
 
 * $ $' -> :: <ob1> ; -> :: $ <ob2> <rest> ;
 * refs (20): 24FF0 273E6 273F5 27404 27413 27422 ...
 tok=casedrop:
-        ::                                       * 2856C
-          tok8cktrior                            * 28571
-          drop;dq                                * 28576
-          COLASKIP                               * 2857B
-        ;                                        * 28580
+        :: tok8cktrior drop;dq COLASKIP ;        * 2856C
 
 * refs (14): 1718F 181EB 24DF7 273D2 28576 34EE4 ...
 drop;dq:
-        ::                                       * 28585
-          DROP                                   * 2858A
-          COLACOLA                               * 2858F
-        ;                                        * 28594
+        :: DROP COLACOLA ;                       * 28585
 
 * refs (1): 27B70
 OBJ_28599:
-        ::                                       * 28599
-          BINT1                                  * 2859E
-          DUPDUP                                 * 285A3
-          DUP                                    * 285A8
-          OBJ_282FA                              * 285AD
-          2DROP                                  * 285B2
-          6UNROLL                                * 285B7
-          5DROP                                  * 285BC
-        ;                                        * 285C1
+        :: BINT1 DUPDUP DUP OBJ_282FA 2DROP 6UNROLL 5DROP ; * 28599
 
 * refs (2): 272A5 6C823
 OBJ_285C6:
-        ::                                       * 285C6
-          '                                      * 285CB
-          x=                                     * 285D0
-          #00700h                                * 285D5
-          BINT0                                  * 285DA
-          BINT1                                  * 285DF
-          BINT4                                  * 285E4
-        ;                                        * 285E9
+        :: ' x= #00700h BINT0 BINT1 BINT4 ;      * 285C6
 
 * refs (7): 27AD0 27CE7 688CD 68936 68AC6 68E54 ...
 OBJ_285EE:
-        ::                                       * 285EE
-          BINT1                                  * 285F3
-          1PUTLAM                                * 285F8
-        ;                                        * 285FD
+        :: BINT1 1PUTLAM ;                       * 285EE
 
 * refs (10): 2780A 27AAD 27C6A 284AF 68887 68F6C ...
 OBJ_28602:
-        ::                                       * 28602
-          BINT0                                  * 28607
-          1PUTLAM                                * 2860C
-        ;                                        * 28611
+        :: BINT0 1PUTLAM ;                       * 28602
 
 * refs (5): 27585 27738 27882 27959 27CA6
 OBJ_28616:
-        ::                                       * 28616
-          SWAP                                   * 2861B
-          BINT2                                  * 28620
-          #<>                                    * 28625
-          ?SEMI                                  * 2862A
+        :: SWAP BINT2 #<> ?SEMI                  * 28616
           case                                   * 2862F
-          ::                                     * 28634
-            OBJ_282B4                            * 28639
-            TRUE                                 * 2863E
-          ;                                      * 28643
-          OBJ_282B4                              * 28648
-          FALSE                                  * 2864D
-        ;                                        * 28652
+          :: OBJ_282B4 TRUE ;                    * 28634
+          OBJ_282B4 FALSE ;                      * 28648
 
 * refs (1): 280D4
 ChkEvalNext?:
-        ::                                       * 28657
-          'R                                     * 2865C
-          COLA                                   * 28661
-          ChkEval?                               * 28666
+        :: 'R COLA ChkEval?                      * 28657
         ;                                        * 2866B
 
 * refs (3): 28666 2899F 28B28
 ChkEval?:
-        ::                                       * 28670
-          NOTNUM?                                * 28675
-          CLRNUM                                 * 2867A
-          ERRSET                                 * 2867F
-          ITE                                    * 28684
-          ::                                     * 28689
-            EvalNoCK                             * 2868E
-            ERRTRAP                              * 28693
-            OBJ_286D4                            * 28698
-            CLRNUM                               * 2869D
-            TRUE                                 * 286A2
-          ;                                      * 286A7
-          ::                                     * 286AC
-            EvalNoCK                             * 286B1
-            ERRTRAP                              * 286B6
-            OBJ_286ED                            * 286BB
-            SETNUM                               * 286C0
-            TRUE                                 * 286C5
-          ;                                      * 286CA
+        :: NOTNUM? CLRNUM ERRSET ITE             * 28670
+          :: EvalNoCK ERRTRAP OBJ_286D4 CLRNUM TRUE ; * 28689
+          :: EvalNoCK ERRTRAP OBJ_286ED SETNUM TRUE ; * 286AC
         ;                                        * 286CF
 
 * refs (1): 28698
 OBJ_286D4:
-        ::                                       * 286D4
-          CLRNUM                                 * 286D9
-          RDROP                                  * 286DE
-          FALSE                                  * 286E3
-        ;                                        * 286E8
+        :: CLRNUM RDROP FALSE ;                  * 286D4
 
 * refs (1): 286BB
 OBJ_286ED:
-        ::                                       * 286ED
-          SETNUM                                 * 286F2
-          RDROP                                  * 286F7
-          FALSE                                  * 286FC
-        ;                                        * 28701
+        :: SETNUM RDROP FALSE ;                  * 286ED
 
 * refs (3): 24474 28747 3EFA5
 OBJ_28706:
-        ::                                       * 28706
-          OBJ_28724                              * 2870B
-          !*triand                               * 28710
-          COLA                                   * 28715
-          OBJ_287C4                              * 2871A
+        :: OBJ_28724 !*triand COLA OBJ_287C4     * 28706
         ;                                        * 2871F
 
 * refs (2): 2870B 28828
 OBJ_28724:
-        ::                                       * 28724
-          toklparen                              * 28729
-          tok8trior                              * 2872E
-          OBJ_28742                              * 28733
-          OBJ_28774                              * 28738
-        ;                                        * 2873D
+        :: toklparen tok8trior OBJ_28742 OBJ_28774 ; * 28724
 
 * refs (1): 28733
 OBJ_28742:
-        ::                                       * 28742
-          OBJ_28706                              * 28747
-          !*triand                               * 2874C
-          nultrior                               * 28751
-          TrueTrue                               * 28756
-          tokrparen                              * 2875B
-          tok8trior                              * 28760
-          TrueTrue                               * 28765
-          failed                                 * 2876A
-        ;                                        * 2876F
+        :: OBJ_28706 !*triand nultrior TrueTrue tokrparen tok8trior TrueTrue * 28742
+          failed ;                               * 2876A
 
 * refs (1): 28738
 OBJ_28774:
-        ::                                       * 28774
-          OBJ_25D03                              * 28779
-          !*trior                                * 2877E
-          TrueTrue                               * 28783
-          _SQRT_                                 * 28788
-          tok8trior                              * 2878D
-          OBJ_288FA                              * 28792
-          _SQ_                                   * 28797
-          tok8trior                              * 2879C
-          OBJ_28918                              * 287A1
-          _INV_                                  * 287A6
-          tok8trior                              * 287AB
-          OBJ_28945                              * 287B0
-          COLA                                   * 287B5
-          OBJ_289E0                              * 287BA
+        :: OBJ_25D03 !*trior TrueTrue _SQRT_ tok8trior OBJ_288FA _SQ_ * 28774
+          tok8trior OBJ_28918 _INV_ tok8trior OBJ_28945 COLA OBJ_289E0 * 2879C
         ;                                        * 287BF
 
 * refs (2): 2871A 28814
 OBJ_287C4:
-        ::                                       * 287C4
-          nultrior                               * 287C9
-          TrueTrue                               * 287CE
-          ::                                     * 287D3
-            tok*                                 * 287D8
-            tok8trior                            * 287DD
-            OBJ_28878                            * 287E2
-            tok/                                 * 287E7
-            tok8trior                            * 287EC
-            OBJ_28896                            * 287F1
-            tok^                                 * 287F6
-            tok8trior                            * 287FB
-            OBJ_288B4                            * 28800
-            FALSE                                * 28805
-          ;                                      * 2880A
-          !*trior                                * 2880F
-          OBJ_287C4                              * 28814
-          TrueTrue                               * 28819
-        ;                                        * 2881E
+        :: nultrior TrueTrue                     * 287C4
+          :: tok* tok8trior OBJ_28878 tok/ tok8trior OBJ_28896 tok^ * 287D3
+            tok8trior OBJ_288B4 FALSE ;          * 287FB
+          !*trior OBJ_287C4 TrueTrue ;           * 2880F
 
 * refs (5): 2887D 2889B 288FF 2892C 28959
 OBJ_28823:
-        ::                                       * 28823
-          OBJ_28724                              * 28828
-          !*triand                               * 2882D
-          COLA                                   * 28832
-          OBJ_28841                              * 28837
+        :: OBJ_28724 !*triand COLA OBJ_28841     * 28823
         ;                                        * 2883C
 
 * refs (2): 28837 28864
 OBJ_28841:
-        ::                                       * 28841
-          tok^                                   * 28846
-          tok8trior                              * 2884B
-          ::                                     * 28850
-            OBJ_288B4                            * 28855
-            !*triand                             * 2885A
-            COLA                                 * 2885F
-            OBJ_28841                            * 28864
+        :: tok^ tok8trior                        * 28841
+          :: OBJ_288B4 !*triand COLA OBJ_28841   * 28850
           ;                                      * 28869
-          TrueTrue                               * 2886E
-        ;                                        * 28873
+          TrueTrue ;                             * 2886E
 
 * refs (1): 287E2
 OBJ_28878:
-        ::                                       * 28878
-          OBJ_28823                              * 2887D
-          !*triand                               * 28882
-          OBJ_28972                              * 28887
-          x*                                     * 2888C
-        ;                                        * 28891
+        :: OBJ_28823 !*triand OBJ_28972 x* ;     * 28878
 
 * refs (1): 287F1
 OBJ_28896:
-        ::                                       * 28896
-          OBJ_28823                              * 2889B
-          !*triand                               * 288A0
-          OBJ_28972                              * 288A5
-          x/                                     * 288AA
-        ;                                        * 288AF
+        :: OBJ_28823 !*triand OBJ_28972 x/ ;     * 28896
 
 * refs (3): 28800 28855 288C8
 OBJ_288B4:
-        ::                                       * 288B4
-          tok-                                   * 288B9
-          tok8trior                              * 288BE
-          ::                                     * 288C3
-            OBJ_288B4                            * 288C8
-            !*triand                             * 288CD
-            OBJ_28972                            * 288D2
-            xINV                                 * 288D7
-          ;                                      * 288DC
-          OBJ_25D03                              * 288E1
-          !*triand                               * 288E6
-          OBJ_28972                              * 288EB
-          x^                                     * 288F0
-        ;                                        * 288F5
+        :: tok- tok8trior                        * 288B4
+          :: OBJ_288B4 !*triand OBJ_28972 xINV ; OBJ_25D03 !*triand * 288C3
+          OBJ_28972 x^ ;                         * 288EB
 
 * refs (1): 28792
 OBJ_288FA:
-        ::                                       * 288FA
-          OBJ_28823                              * 288FF
-          !*triand                               * 28904
-          OBJ_28972                              * 28909
-          xSQRT                                  * 2890E
-        ;                                        * 28913
+        :: OBJ_28823 !*triand OBJ_28972 xSQRT ;  * 288FA
 
 * refs (1): 287A1
 OBJ_28918:
-        ::                                       * 28918
-          toklparen                              * 2891D
-          OBJ_0BC47                              * 28922
-          !*triand                               * 28927
-          OBJ_28823                              * 2892C
-          !*triand                               * 28931
-          OBJ_28972                              * 28936
-          xSQ                                    * 2893B
-        ;                                        * 28940
+        :: toklparen OBJ_0BC47 !*triand OBJ_28823 !*triand OBJ_28972 xSQ ; * 28918
 
 * refs (1): 287B0
 OBJ_28945:
-        ::                                       * 28945
-          toklparen                              * 2894A
-          OBJ_0BC47                              * 2894F
-          !*triand                               * 28954
-          OBJ_28823                              * 28959
-          !*triand                               * 2895E
-          OBJ_28972                              * 28963
-          xINV                                   * 28968
-        ;                                        * 2896D
+        :: toklparen OBJ_0BC47 !*triand OBJ_28823 !*triand OBJ_28972 xINV ; * 28945
 
 * refs (8): 2447E 28887 288A5 288D2 288EB 28909 ...
 OBJ_28972:
-        ::                                       * 28972
-          {}_23989                               * 28977
-          BINT5                                  * 2897C
-          psh                                    * 28981
-          'R                                     * 28986
-          SWAP#1+                                * 2898B
-          larg                                   * 28990
-          rotswap                                * 28995
-          DROP                                   * 2899A
-          ChkEval?                               * 2899F
-          case                                   * 289A4
-          ::                                     * 289A9
-            ROTROT2DROP                          * 289AE
-            6rolld;1+(s5)                        * 289B3
-            TrueTrue                             * 289B8
-          ;                                      * 289BD
-          BEGIN                                  * 289C2
-          {}_23989                               * 289C7
-          EQ                                     * 289CC
-          UNTIL                                  * 289D1
-          failed                                 * 289D6
-        ;                                        * 289DB
+        :: {}_23989 BINT5 psh 'R SWAP#1+ larg rotswap DROP ChkEval? case * 28972
+          :: ROTROT2DROP 6rolld;1+(s5) TrueTrue ; * 289A9
+          BEGIN {}_23989 EQ UNTIL failed ;       * 289C2
 
 * refs (1): 287BA
 OBJ_289E0:
-        ::                                       * 289E0
-          DUP                                    * 289E5
-          st=>uo?                                * 289EA
-          NOTcase                                * 289EF
-          failed                                 * 289F4
-          SWAPDROP                               * 289F9
-          DaDGNTc                                * 289FE
-        ;                                        * 28A03
+        :: DUP st=>uo? NOTcase failed            * 289E0
+          SWAPDROP DaDGNTc ;                     * 289F9
 
 * refs (1): 28788
 _SQRT_:
-        $       "SQRT"                           * 28A08
+        $ "SQRT"                                 * 28A08
 
 * refs (1): 28797
 _SQ_:
-        $       "SQ"                             * 28A1A
+        $ "SQ"                                   * 28A1A
 
 * refs (1): 287A6
 _INV_:
-        $       "INV"                            * 28A28
+        $ "INV"                                  * 28A28
 
 * refs (1): 1FB0E
 OBJ_28A38:
-        ::                                       * 28A38
-          BINT2                                  * 28A3D
-          nmetasyms                              * 28A42
-          '                                      * 28A47
-          OBJ_28A65                              * 28A4C
-          parameval                              * 28A51
-          COLA                                   * 28A56
-          x*                                     * 28A5B
+        :: BINT2 nmetasyms ' OBJ_28A65 parameval COLA x* * 28A38
         ;                                        * 28A60
 
 * refs (2): 280CA 28A4C
 OBJ_28A65:
-        ::                                       * 28A65
-          CK&DISPATCH0                           * 28A6A
-          BINT6                                  * 28A6F
-          nm=>uo?                                * 28A74
-          BINT7                                  * 28A79
-          nm=>uo?                                * 28A7E
-          BINT8                                  * 28A83
-          OBJ_28B05                              * 28A88
-          BINT15                                 * 28A8D
-          OBJ_28AA6                              * 28A92
-          BINT0                                  * 28A97
-          TRUE                                   * 28A9C
+        :: CK&DISPATCH0                          * 28A65
+          BINT6 nm=>uo?                          * 28A6F  name
+          BINT7 nm=>uo?                          * 28A79  local
+          BINT8 OBJ_28B05                        * 28A83  program
+          BINT15 OBJ_28AA6                       * 28A8D  romptr
+          BINT0 TRUE                             * 28A97  any
         ;                                        * 28AA1
 
 * refs (1): 28A92
 OBJ_28AA6:
-        ::                                       * 28AA6
-          ROMPTRDECOMP                           * 28AAB
-          ?SKIP                                  * 28AB0
-          doerrB01                               * 28AB5
-          COLA                                   * 28ABA
-          nm=>uo?                                * 28ABF
+        :: ROMPTRDECOMP ?SKIP doerrB01           * 28AA6
+          COLA nm=>uo?                           * 28ABA
         ;                                        * 28AC4
 
 * refs (3): 28A74 28A7E 28ABF
 nm=>uo?:
-        ::                                       * 28AC9
-          ID>$                                   * 28ACE
-          st=>uo?                                * 28AD3
-          case                                   * 28AD8
-          TRUE                                   * 28ADD
+        :: ID>$ st=>uo? case TRUE                * 28AC9
 
 * refs (4): 280E3 28AB5 28B14 28B23
 doerrB01:
-          ::                                     * 28AE2
-            #       B01                          * 28AE7  2817
-            ERRORSTO                             * 28AF1
-            ERRJMP                               * 28AF6
-          ;                                      * 28AFB
-        ;                                        * 28B00
+          :: # B01 ERRORSTO ERRJMP ; ;           * 28AE2
 
 * refs (1): 28A88
 OBJ_28B05:
-        ::                                       * 28B05
-          REQcasedrop                            * 28B0A
-          xFCNAPPLY                              * 28B0F
-          doerrB01                               * 28B14
-          OBJ_26F7A                              * 28B19
-          case                                   * 28B1E
-          doerrB01                               * 28B23
-          ChkEval?                               * 28B28
-          ?SKIP                                  * 28B2D
-          ERRJMP                                 * 28B32
-          TRUE                                   * 28B37
-        ;                                        * 28B3C
+        :: REQcasedrop xFCNAPPLY                 * 28B05
+          doerrB01 OBJ_26F7A case doerrB01       * 28B14
+          ChkEval? ?SKIP ERRJMP                  * 28B28
+          TRUE ;                                 * 28B37
 
 * refs (2): 34E85 68990
 OBJ_28B41:
-        ::                                       * 28B41
-          FALSE                                  * 28B46
-          OBJ_29A51                              * 28B4B
-          ZEROFALSE                              * 28B50
-          '                                      * 28B55
-          NULLLAM                                * 28B5A
-          BINT4                                  * 28B5F
-          NDUPN                                  * 28B64
-          DOBIND                                 * 28B69
-          DUPTYPESYMB?                           * 28B6E
-          ITE                                    * 28B73
-          OBJ_73010                              * 28B78
-          OBJ_28BFF                              * 28B7D
-          2GETLAM                                * 28B82
-          #1<>                                   * 28B87
-          1GETLAM                                * 28B8C
-          OR                                     * 28B91
-          ITE                                    * 28B96
-          OBJ_290E6                              * 28B9B
-          OBJ_290BE                              * 28BA0
-          ABND                                   * 28BA5
-        ;                                        * 28BAA
+        :: FALSE OBJ_29A51 ZEROFALSE ' NULLLAM BINT4 NDUPN DOBIND * 28B41
+          DUPTYPESYMB? ITE OBJ_73010 OBJ_28BFF   * 28B6E
+          2GETLAM #1<> 1GETLAM OR ITE OBJ_290E6 OBJ_290BE * 28B82
+          ABND ;                                 * 28BA5
 
 * refs (1): 73024
 OBJ_28BAF:
         ::                                       * 28BAF
 
 {{}}:
-          {                                      * 28BB4
-            {}_600F3                             * 28BB9
-          }                                      * 28BBE
-          >R                                     * 28BC3
-          >R                                     * 28BC8
-          BEGIN                                  * 28BCD
-          nextsym'R                              * 28BD2
-          DUP                                    * 28BD7
-          {}_600F3                               * 28BDC
-          EQ                                     * 28BE1
-          NOT_WHILE                              * 28BE6
-          OBJ_28BFF                              * 28BEB
-          REPEAT                                 * 28BF0
-          DROP                                   * 28BF5
-        ;                                        * 28BFA
+          { {}_600F3 } >R >R BEGIN nextsym'R DUP {}_600F3 EQ NOT_WHILE * 28BB4
+          OBJ_28BFF REPEAT DROP ;                * 28BEB
 
 * refs (3): 28B7D 28BEB 73074
 OBJ_28BFF:
-        ::                                       * 28BFF
-          subpdcdptch                            * 28C04
-          OBJ_291B7                              * 28C09
-          OBJ_28D99                              * 28C0E
-          OBJ_28DCB                              * 28C13
-          OBJ_28DB7                              * 28C18
-          drop;true;1Lput                        * 28C1D
-          OBJ_26C72                              * 28C22
-          NOTcase                                * 28C27
-          OBJ_28DB7                              * 28C2C
-          MINUSONE                               * 28C31
-          #=casedrop                             * 28C36
-          OBJ_293A4                              * 28C3B
-          OBJ_28C4A                              * 28C40
-        ;                                        * 28C45
+        :: subpdcdptch OBJ_291B7 OBJ_28D99 OBJ_28DCB OBJ_28DB7 * 28BFF
+          drop;true;1Lput OBJ_26C72 NOTcase OBJ_28DB7 * 28C1D
+          MINUSONE #=casedrop OBJ_293A4          * 28C31
+          OBJ_28C4A ;                            * 28C40
 
 * refs (5): 28C40 2922A 292A7 292BB 2940D
 OBJ_28C4A:
-        ::                                       * 28C4A
-          2GETLAM                                * 28C4F
-          2DUP                                   * 28C54
-          #>case                                 * 28C59
-          OBJ_28D7B                              * 28C5E
-          OBJ_2957A                              * 28C63
-          OBJ_28D7B                              * 28C68
-          OBJ_29CC7                              * 28C6D
-          OBJ_26E61                              * 28C72
-          DROP                                   * 28C77
-          5ROLL                                  * 28C7C
-          #2+                                    * 28C81
-          6UNROLL                                * 28C86
-          5ROLL                                  * 28C8B
-          SWAP                                   * 28C90
-          BINT1                                  * 28C95
-          BINT6                                  * 28C9A
-          BINT7                                  * 28C9F
-          7ROLL                                  * 28CA4
-          ITE                                    * 28CA9
-          OBJ_29692                              * 28CAE
-          OBJ_2965B                              * 28CB3
-          BEGIN                                  * 28CB8
-          OBJ_282FA                              * 28CBD
-          WHILE                                  * 28CC2
-          ::                                     * 28CC7
-            SWAP                                 * 28CCC
-            OBJ_28D08                            * 28CD1
-            OBJ_29417                            * 28CD6
-            OBJ_29494                            * 28CDB
-            OBJ_294CB                            * 28CE0
-            OBJ_294DF                            * 28CE5
-            OBJ_294F3                            * 28CEA
-            OBJ_29525                            * 28CEF
-          ;                                      * 28CF4
-          REPEAT                                 * 28CF9
-          OBJ_29D5F                              * 28CFE
-        ;                                        * 28D03
+        :: 2GETLAM 2DUP #>case OBJ_28D7B         * 28C4A
+          OBJ_2957A OBJ_28D7B OBJ_29CC7 OBJ_26E61 DROP 5ROLL #2+ 6UNROLL * 28C63
+          5ROLL SWAP BINT1 BINT6 BINT7 7ROLL ITE OBJ_29692 OBJ_2965B * 28C8B
+          BEGIN OBJ_282FA WHILE                  * 28CB8
+          :: SWAP OBJ_28D08 OBJ_29417 OBJ_29494 OBJ_294CB OBJ_294DF * 28CC7
+            OBJ_294F3 OBJ_29525 ;                * 28CEA
+          REPEAT OBJ_29D5F ;                     * 28CF9
 
 * refs (1): 28CD1
 OBJ_28D08:
@@ -1969,253 +1039,103 @@ L_28D71:
 
 * refs (2): 28C5E 28C68
 OBJ_28D7B:
-        ::                                       * 28D7B
-          3DROP                                  * 28D80
-          true;1Lput                             * 28D85
-          COLA                                   * 28D8A
-          OBJ_28DB7                              * 28D8F
+        :: 3DROP true;1Lput COLA OBJ_28DB7       * 28D7B
         ;                                        * 28D94
 
 * refs (1): 28C0E
 OBJ_28D99:
-        ::                                       * 28D99
-          BINT0                                  * 28D9E
-          3GETLAM                                * 28DA3
-          BINT3                                  * 28DA8
-          OBJ_29140                              * 28DAD
-        ;                                        * 28DB2
+        :: BINT0 3GETLAM BINT3 OBJ_29140 ;       * 28D99
 
 * refs (3): 28C18 28C2C 28D8F
 OBJ_28DB7:
-        ::                                       * 28DB7
-          BINT1                                  * 28DBC
-          OBJ_29140                              * 28DC1
-        ;                                        * 28DC6
+        :: BINT1 OBJ_29140 ;                     * 28DB7
 
 * refs (1): 28C13
 OBJ_28DCB:
-        ::                                       * 28DCB
-          DUPLENCOMP                             * 28DD0
-          BINT3                                  * 28DD5
-          #<case                                 * 28DDA
-          drop;true;1Lput                        * 28DDF
-          INNERCOMP                              * 28DE4
-          SWAPDROP#1-                            * 28DE9
-          pullrev                                * 28DEE
-          tokuscore                              * 28DF3
-          BINT2                                  * 28DF8
-          psh                                    * 28DFD
-          AEQ1stcase                             * 28E02
-          um/                                    * 28E07
-          OBJ_28E7A                              * 28E0C
-          OBJ_28FB5                              * 28E11
-          DUPZERO                                * 28E16
-          #>case                                 * 28E1B
+        :: DUPLENCOMP BINT3 #<case drop;true;1Lput * 28DCB
+          INNERCOMP SWAPDROP#1- pullrev tokuscore BINT2 psh AEQ1stcase um/ * 28DE4
+          OBJ_28E7A OBJ_28FB5 DUPZERO #>case     * 28E0C
 
 * refs (2): 28E8E 28EAC
 OBJ_28E20:
-          ::                                     * 28E20
-            NDROP                                * 28E25
-            NDROP                                * 28E2A
-            NDROP                                * 28E2F
-            true;1Lput                           * 28E34
-          ;                                      * 28E39
+          :: NDROP NDROP NDROP true;1Lput ;      * 28E20
           DROP                                   * 28E3E
 
 * refs (1): 28ED4
 OBJ_28E43:
-          ::                                     * 28E43
-            top&                                 * 28E48
-            #72109h                              * 28E4D
-            OBJ_26E61                            * 28E52
-            DROP                                 * 28E57
-            ROTDROP                              * 28E5C
-            BINT2                                * 28E61
-            top&                                 * 28E66
-            OBJ_29140                            * 28E6B
-          ;                                      * 28E70
-        ;                                        * 28E75
+          :: top& #72109h OBJ_26E61 DROP ROTDROP BINT2 top& OBJ_29140 ; ; * 28E43
 
 * refs (1): 28E0C
 OBJ_28E7A:
-        ::                                       * 28E7A
-          SWAPDROP#1-                            * 28E7F
-          OBJ_28FB5                              * 28E84
-          DUP#0=case                             * 28E89
-          OBJ_28E20                              * 28E8E
-          OBJ_28FB5                              * 28E93
-          DUPZERO                                * 28E98
-          #>case                                 * 28E9D
-          ::                                     * 28EA2
-            NDROP                                * 28EA7
-            OBJ_28E20                            * 28EAC
-          ;                                      * 28EB1
-          DROP                                   * 28EB6
-          PTR     addt:                          * 28EBB
-          x/                                     * 28EC0
-          psh                                    * 28EC5
-          OBJ_28EDE                              * 28ECA
-          top&                                   * 28ECF
-          OBJ_28E43                              * 28ED4
-        ;                                        * 28ED9
+        :: SWAPDROP#1- OBJ_28FB5 DUP#0=case OBJ_28E20 * 28E7A
+          OBJ_28FB5 DUPZERO #>case               * 28E93
+          :: NDROP OBJ_28E20 ;                   * 28EA2
+          DROP PTR addt: x/ psh OBJ_28EDE top& OBJ_28E43 ; * 28EB6
 
 * refs (1): 28ECA
 OBJ_28EDE:
-        ::                                       * 28EDE
-          OBJ_6CC10                              * 28EE3
-          case                                   * 28EE8
-          OBJ_28F92                              * 28EED
-          DUP                                    * 28EF2
-          #<3                                    * 28EF7
-          ?SEMI                                  * 28EFC
-          3PICK                                  * 28F01
-          REQcasedrop                            * 28F06
-          x*                                     * 28F0B
-          OBJ_28F92                              * 28F10
-          DROPDUP                                * 28F15
-          #3=                                    * 28F1A
-          ?SEMI                                  * 28F1F
-          4PICK                                  * 28F24
-          REQcasedrop                            * 28F29
-          x*                                     * 28F2E
-          OBJ_28F92                              * 28F33
-          DROPDUP                                * 28F38
-          BINT4                                  * 28F3D
-          #=                                     * 28F42
-          ?SEMI                                  * 28F47
-          5PICK                                  * 28F4C
-          REQcasedrop                            * 28F51
-          x*                                     * 28F56
-          OBJ_28F92                              * 28F5B
-          DROPDUP                                * 28F60
-          BINT5                                  * 28F65
-          #=                                     * 28F6A
-          ?SEMI                                  * 28F6F
-          6PICK                                  * 28F74
-          REQcasedrop                            * 28F79
-          x*                                     * 28F7E
-          OBJ_28F92                              * 28F83
-          DROP                                   * 28F88
-        ;                                        * 28F8D
+        :: OBJ_6CC10 case OBJ_28F92              * 28EDE
+          DUP #<3 ?SEMI                          * 28EF2
+          3PICK REQcasedrop x*                   * 28F01
+          OBJ_28F92 DROPDUP #3= ?SEMI            * 28F10
+          4PICK REQcasedrop x*                   * 28F24
+          OBJ_28F92 DROPDUP BINT4 #= ?SEMI       * 28F33
+          5PICK REQcasedrop x*                   * 28F4C
+          OBJ_28F92 DROPDUP BINT5 #= ?SEMI       * 28F5B
+          6PICK REQcasedrop x*                   * 28F74
+          OBJ_28F92 DROP ;                       * 28F83
 
 * refs (5): 28EED 28F10 28F33 28F5B 28F83
 OBJ_28F92:
-        ::                                       * 28F92
-          toklparen                              * 28F97
-          pshm1                                  * 28F9C
-          top&                                   * 28FA1
-          tokrparen                              * 28FA6
-          SWAP#1+                                * 28FAB
-        ;                                        * 28FB0
+        :: toklparen pshm1 top& tokrparen SWAP#1+ ; * 28F92
 
 * refs (3): 28E11 28E84 28E93
 OBJ_28FB5:
-        ::                                       * 28FB5
-          pshzer                                 * 28FBA
-          OBJ_28FC9                              * 28FBF
-        ;                                        * 28FC4
+        :: pshzer OBJ_28FC9 ;                    * 28FB5
 
 * refs (7): 28FBF 2905A 29078 2908C 29091 290A5 ...
 OBJ_28FC9:
-        ::                                       * 28FC9
-          DUP#0=case                             * 28FCE
-          true;1Lput                             * 28FD3
-          AEQ1stcase                             * 28FD8
-          um*                                    * 28FDD
-          OBJ_2900F                              * 28FE2
-          AEQ1stcase                             * 28FE7
-          um^                                    * 28FEC
-          OBJ_29023                              * 28FF1
-          AEQ1stcase                             * 28FF6
-          umP                                    * 28FFB
-          OBJ_29082                              * 29000
-          pullpsh1&                              * 29005
-        ;                                        * 2900A
+        :: DUP#0=case true;1Lput                 * 28FC9
+          AEQ1stcase um*                         * 28FD8
+          OBJ_2900F AEQ1stcase um^               * 28FE2
+          OBJ_29023 AEQ1stcase umP               * 28FF1
+          OBJ_29082 pullpsh1& ;                  * 29000
 
 * refs (1): 28FE2
 OBJ_2900F:
-        ::                                       * 2900F
-          OBJ_2909B                              * 29014
-          x*                                     * 29019
-        ;                                        * 2901E
+        :: OBJ_2909B x* ;                        * 2900F
 
 * refs (1): 28FF1
 OBJ_29023:
-        ::                                       * 29023
-          OBJ_6CC10                              * 29028
-          case                                   * 2902D
-          OBJ_29046                              * 29032
-          OBJ_2909B                              * 29037
-          x^                                     * 2903C
-        ;                                        * 29041
+        :: OBJ_6CC10 case OBJ_29046              * 29023
+          OBJ_2909B x^ ;                         * 29037
 
 * refs (1): 29032
 OBJ_29046:
-        ::                                       * 29046
-          SWAPDROP#1-                            * 2904B
-          tokrparen                              * 29050
-          psh1&                                  * 29055
-          OBJ_28FC9                              * 2905A
-          toklparen                              * 2905F
-          psh1&                                  * 29064
-          '                                      * 29069
-          x^                                     * 2906E
-          psh1&                                  * 29073
-          OBJ_28FC9                              * 29078
-        ;                                        * 2907D
+        :: SWAPDROP#1- tokrparen psh1& OBJ_28FC9 toklparen psh1& ' x^ psh1& * 29046
+          OBJ_28FC9 ;                            * 29078
 
 * refs (1): 29000
 OBJ_29082:
-        ::                                       * 29082
-          SWAPDROP#1-                            * 29087
-          OBJ_28FC9                              * 2908C
-          OBJ_28FC9                              * 29091
-        ;                                        * 29096
+        :: SWAPDROP#1- OBJ_28FC9 OBJ_28FC9 ;     * 29082
 
 * refs (2): 29014 29037
 OBJ_2909B:
-        ::                                       * 2909B
-          SWAPDROP#1-                            * 290A0
-          OBJ_28FC9                              * 290A5
-          'R                                     * 290AA
-          psh1&                                  * 290AF
-          OBJ_28FC9                              * 290B4
-        ;                                        * 290B9
+        :: SWAPDROP#1- OBJ_28FC9 'R psh1& OBJ_28FC9 ; * 2909B
 
 * refs (1): 28BA0
 OBJ_290BE:
-        ::                                       * 290BE
-          DUP#1=                                 * 290C3
-          ?SKIP                                  * 290C8
-          2pull2DROP                             * 290CD
-          get1                                   * 290D2
-          IT                                     * 290D7
-          OBJ_2911D                              * 290DC
+        :: DUP#1= ?SKIP 2pull2DROP               * 290BE
+          get1 IT OBJ_2911D                      * 290D2
         ;                                        * 290E1
 
 * refs (1): 28B9B
 OBJ_290E6:
-        ::                                       * 290E6
-          2GETLAM                                * 290EB
-          ZERO_DO                                * 290F0
-          NDROP                                  * 290F5
-          LOOP                                   * 290FA
-          DROP                                   * 290FF
-          tok'                                   * 29104
-          OBJ_2970A                              * 29109
-          tok'                                   * 2910E
-          BINT3                                  * 29113
-        ;                                        * 29118
+        :: 2GETLAM ZERO_DO NDROP LOOP DROP tok' OBJ_2970A tok' BINT3 ; * 290E6
 
 * refs (1): 290DC
 OBJ_2911D:
-        ::                                       * 2911D
-          tok'                                   * 29122
-          SWAP#1+                                * 29127
-          tok'                                   * 2912C
-          pshm1                                  * 29131
-          top&                                   * 29136
-        ;                                        * 2913B
+        :: tok' SWAP#1+ tok' pshm1 top& ;        * 2911D
 
 * refs (3): 28DAD 28DC1 28E6B
 OBJ_29140:
@@ -2261,87 +1181,41 @@ OBJ_291AB:
 
 * refs (1): 28C09
 OBJ_291B7:
-        ::                                       * 291B7
-          DROP                                   * 291BC
-          2GETLAM                                * 291C1
-          BINT3                                  * 291C6
-          #<case                                 * 291CB
-          true;1Lput                             * 291D0
-          OBJ_292F7                              * 291D5
-          case                                   * 291DA
-          true;1Lput                             * 291DF
-          DROPSWAPDROP                           * 291E4
-          OBJ_291AB                              * 291E9
-          OBJ_291AB                              * 291EE
-          SWAP                                   * 291F3
-          NOTROMPcase                            * 291F8
-          OBJ_29216                              * 291FD
+        :: DROP 2GETLAM BINT3 #<case true;1Lput  * 291B7
+          OBJ_292F7 case true;1Lput              * 291D5
+          DROPSWAPDROP OBJ_291AB OBJ_291AB SWAP NOTROMPcase OBJ_29216 * 291E4
 
 * refs (1): 27070
 OBJ_29202:
-          ::                                     * 29202
-            DUPROMPTR@                           * 29207
-            COLANOTcase                          * 2920C
-          ;                                      * 29211
+          :: DUPROMPTR@ COLANOTcase ;            * 29202
 
 * refs (1): 291FD
 OBJ_29216:
-          ::                                     * 29216
-            #0590410h                            * 2921B
-            ROT                                  * 29220
-            COLA                                 * 29225
-            OBJ_28C4A                            * 2922A
+          :: #0590410h ROT COLA OBJ_28C4A        * 29216
           ;                                      * 2922F
-          DROPSWAP                               * 29234
-          OVER                                   * 29239
-          ?OKINALG                               * 2923E
-          NOTcase                                * 29243
+          DROPSWAP OVER ?OKINALG NOTcase         * 29234
 
 3dropn;true;1Lput:
-          ::                                     * 29248
-            3DROP                                * 2924D
-            true;1Lput                           * 29252
-          ;                                      * 29257
-          3PICK                                  * 2925C
-          EQUALNOTcase                           * 29261
-          drop2;true;1Lput                       * 29266
-          SWAP                                   * 2926B
-          OBJ_26C1A                              * 29270
-          NOTcase                                * 29275
+          :: 3DROP true;1Lput ;                  * 29248
+          3PICK EQUALNOTcase drop2;true;1Lput    * 2925C
+          SWAP OBJ_26C1A NOTcase                 * 2926B
 
 * refs (5): 29266 293B3 293C7 293DB 293EF
 drop2;true;1Lput:
-          ::                                     * 2927A
-            2DROP                                * 2927F
-            true;1Lput                           * 29284
-          ;                                      * 29289
-          MINUSONE                               * 2928E
-          #=casedrop                             * 29293
-          ::                                     * 29298
-            ROT                                  * 2929D
-            COLA                                 * 292A2
-            OBJ_28C4A                            * 292A7
+          :: 2DROP true;1Lput ;                  * 2927A
+          MINUSONE #=casedrop                    * 2928E
+          :: ROT COLA OBJ_28C4A                  * 29298
           ;                                      * 292AC
-          4ROLLOVER                              * 292B1
-          #=casedrop                             * 292B6
-          OBJ_28C4A                              * 292BB
-          4DROP                                  * 292C0
-          true;1Lput                             * 292C5
-        ;                                        * 292CA
+          4ROLLOVER #=casedrop OBJ_28C4A         * 292B1
+          4DROP true;1Lput ;                     * 292C0
 
 * refs (9): 28D85 28E34 28FD3 291D0 291DF 29252 ...
 true;1Lput:
-        ::                                       * 292CF
-          TRUE                                   * 292D4
-          1PUTLAM                                * 292D9
-        ;                                        * 292DE
+        :: TRUE 1PUTLAM ;                        * 292CF
 
 * refs (2): 28C1D 28DDF
 drop;true;1Lput:
-        ::                                       * 292E3
-          DROP                                   * 292E8
-          true;1Lput                             * 292ED
-        ;                                        * 292F2
+        :: DROP true;1Lput ;                     * 292E3
 
 * refs (1): 291D5
 OBJ_292F7:
@@ -2409,121 +1283,45 @@ SUB_29393:
 
 * refs (1): 28C3B
 OBJ_293A4:
-        ::                                       * 293A4
-          2GETLAM                                * 293A9
-          #0=case                                * 293AE
-          drop2;true;1Lput                       * 293B3
-          3PICK                                  * 293B8
-          BINT1                                  * 293BD
-          #<>case                                * 293C2
-          drop2;true;1Lput                       * 293C7
-          4PICK                                  * 293CC
-          BINT0                                  * 293D1
-          #=casedrop                             * 293D6
-          drop2;true;1Lput                       * 293DB
-          DUP                                    * 293E0
-          TYPEBINT?                              * 293E5
-          NOTcasedrop                            * 293EA
-          drop2;true;1Lput                       * 293EF
-          BINT3                                  * 293F4
-          psh                                    * 293F9
-          #1+NDROP                               * 293FE
-          OBJ_291AB                              * 29403
-          COLA                                   * 29408
-          OBJ_28C4A                              * 2940D
+        :: 2GETLAM #0=case drop2;true;1Lput      * 293A4
+          3PICK BINT1 #<>case drop2;true;1Lput   * 293B8
+          4PICK BINT0 #=casedrop drop2;true;1Lput * 293CC
+          DUP TYPEBINT? NOTcasedrop drop2;true;1Lput * 293E0
+          BINT3 psh #1+NDROP OBJ_291AB COLA OBJ_28C4A * 293F4
         ;                                        * 29412
 
 * refs (1): 28CD6
 OBJ_29417:
-        ::                                       * 29417
-          OBJ_29C7C                              * 2941C
-          BINT9                                  * 29421
-          ROLL                                   * 29426
-          DUP                                    * 2942B
-          #1-                                    * 29430
-          10UNROLL                               * 29435
-          ONESWAP                                * 2943A
-          N+1roll                                * 2943F
-          get1                                   * 29444
-          DROP                                   * 29449
-          get1                                   * 2944E
-          OVER                                   * 29453
-          #1=                                    * 29458
-          casedrop                               * 2945D
-          psh&                                   * 29462
-          SWAP                                   * 29467
-          #2-                                    * 2946C
-          4UNROLL                                * 29471
-          case2drop                              * 29476
-          psh&                                   * 2947B
-          OBJ_29829                              * 29480
-          OBJ_296D8                              * 29485
-          psh&                                   * 2948A
-        ;                                        * 2948F
+        :: OBJ_29C7C BINT9 ROLL DUP #1- 10UNROLL ONESWAP N+1roll get1 DROP * 29417
+          get1 OVER #1= casedrop psh&            * 2944E
+          SWAP #2- 4UNROLL case2drop psh&        * 29467
+          OBJ_29829 OBJ_296D8 psh& ;             * 29480
 
 * refs (1): 28CDB
 OBJ_29494:
-        ::                                       * 29494
-          OBJ_294A8                              * 29499
-          toklparen                              * 2949E
-        ;                                        * 294A3
+        :: OBJ_294A8 toklparen ;                 * 29494
 
 * refs (4): 29499 294D0 294E4 294F8
 OBJ_294A8:
-        ::                                       * 294A8
-          DROP                                   * 294AD
-          'R                                     * 294B2
-          psh1&rev                               * 294B7
-          ROT#1+                                 * 294BC
-          3UNROLL                                * 294C1
-        ;                                        * 294C6
+        :: DROP 'R psh1&rev ROT#1+ 3UNROLL ;     * 294A8
 
 * refs (1): 28CE0
 OBJ_294CB:
-        ::                                       * 294CB
-          OBJ_294A8                              * 294D0
-          tokrparen                              * 294D5
-        ;                                        * 294DA
+        :: OBJ_294A8 tokrparen ;                 * 294CB
 
 * refs (1): 28CE5
 OBJ_294DF:
-        ::                                       * 294DF
-          OBJ_294A8                              * 294E4
-          tok=                                   * 294E9
-        ;                                        * 294EE
+        :: OBJ_294A8 tok= ;                      * 294DF
 
 * refs (1): 28CEA
 OBJ_294F3:
-        ::                                       * 294F3
-          OBJ_294A8                              * 294F8
-          tok;                                   * 294FD
-          4GETLAM                                * 29502
-          NOT?SEMI                               * 29507
-          tokanglesign                           * 2950C
-          psh1&rev                               * 29511
-          FALSE                                  * 29516
-          4PUTLAM                                * 2951B
-        ;                                        * 29520
+        :: OBJ_294A8 tok; 4GETLAM NOT?SEMI       * 294F3
+          tokanglesign psh1&rev FALSE 4PUTLAM ;  * 2950C
 
 * refs (1): 28CEF
 OBJ_29525:
-        ::                                       * 29525
-          SWAPDROP                               * 2952A
-          OBJ_29C7C                              * 2952F
-          8PICK                                  * 29534
-          #0=case                                * 29539
-          DROP                                   * 2953E
-          8ROLL                                  * 29543
-          #1-                                    * 29548
-          8UNROLL                                * 2954D
-          BINT7                                  * 29552
-          #-                                     * 29557
-          4ROLL                                  * 2955C
-          SWAP#-                                 * 29561
-          3UNROLL                                * 29566
-          tok;                                   * 2956B
-          psh1&rev                               * 29570
-        ;                                        * 29575
+        :: SWAPDROP OBJ_29C7C 8PICK #0=case DROP * 29525
+          8ROLL #1- 8UNROLL BINT7 #- 4ROLL SWAP#- 3UNROLL tok; psh1&rev ; * 29543
 
 * refs (1): 28C63
 OBJ_2957A:
@@ -2609,51 +1407,21 @@ L_2963F:
 
 * refs (1): 28CB3
 OBJ_2965B:
-        ::                                       * 2965B
-          ROTDROP                                * 29660
-          BINT2                                  * 29665
-          3UNROLL                                * 2966A
-          DUP                                    * 2966F
-          #3+PICK                                * 29674
-          '                                      * 29679
-          ROMP_002_106                           * 2967E
-          EQ                                     * 29683
-          4PUTLAM                                * 29688
-        ;                                        * 2968D
+        :: ROTDROP BINT2 3UNROLL DUP #3+PICK ' ROMP_002_106 EQ 4PUTLAM ; * 2965B
 
 * refs (1): 28CAE
 OBJ_29692:
-        ::                                       * 29692
-          ROTDROP                                * 29697
-          BINT3                                  * 2969C
-          3UNROLL                                * 296A1
-          8ROLL                                  * 296A6
-          #1-DUP                                 * 296AB
-          9rolld                                 * 296B0
-          N+1roll                                * 296B5
-          BINT1                                  * 296BA
-          #=casedrop                             * 296BF
-          psh1&                                  * 296C4
-          #2-                                    * 296C9
-          3UNROLL                                * 296CE
-          OBJ_29738                              * 296D3
+        :: ROTDROP BINT3 3UNROLL 8ROLL #1-DUP 9rolld N+1roll BINT1 * 29692
+          #=casedrop psh1&                       * 296BF
+          #2- 3UNROLL OBJ_29738                  * 296C9
 
 * refs (1): 29485
 OBJ_296D8:
-          ::                                     * 296D8
-            tokrparen                            * 296DD
-            SWAP#1+                              * 296E2
-            toklparen                            * 296E7
-            BINT1                                * 296EC
-            pshtop&                              * 296F1
-          ;                                      * 296F6
-          unrot                                  * 296FB
-          over&                                  * 29700
-        ;                                        * 29705
+          :: tokrparen SWAP#1+ toklparen BINT1 pshtop& ; unrot over& ; * 296D8
 
 * refs (1): 29109
 OBJ_2970A:
-        $       "Invalid Expression"             * 2970A
+        $ "Invalid Expression"                   * 2970A
 
 * refs (1): 296D3
 OBJ_29738:
@@ -2787,15 +1555,7 @@ L_298A1:
 
 * refs (1): 34FED
 OBJ_298AA:
-        ::                                       * 298AA
-          NULLHXS                                * 298AF
-          3PICK                                  * 298B4
-          BINT5                                  * 298B9
-          #*                                     * 298BE
-          EXPAND                                 * 298C3
-          SWAP                                   * 298C8
-          OBJ_298D7                              * 298CD
-        ;                                        * 298D2
+        :: NULLHXS 3PICK BINT5 #* EXPAND SWAP OBJ_298D7 ; * 298AA
 
 * refs (1): 298CD
 OBJ_298D7:

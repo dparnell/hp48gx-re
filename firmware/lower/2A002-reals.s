@@ -246,166 +246,166 @@ L_2A28A:
 
 * refs (360): 0EAE1 0EBC6 0FDD6 10A0E 1427B 142D3 ...
 %0_2A2B4:
-        %       0E0                              * 2A2B4
+        % 0E0                                    * 2A2B4
 
 * 1
 * refs (241): 0F07A 0F35D 0F95E 0FA30 0FA5D 0FA89 ...
 %1:
-        %       1E0                              * 2A2C9
+        % 1E0                                    * 2A2C9
 
 * 2
 * refs (145): 1A251 1A2A6 1CBB3 1DD6F 1DEAC 20FC3 ...
 %2:
-        %       2E0                              * 2A2DE
+        % 2E0                                    * 2A2DE
 
 * 3
 * refs (52): 1CDC5 1DD7E 1DF21 223D8 22414 22455 ...
 %3:
-        %       3E0                              * 2A2F3
+        % 3E0                                    * 2A2F3
 
 * 4
 * refs (30): 1CDCA 22419 2EBCB 2ED88 47C95 47C9A ...
 %4:
-        %       4E0                              * 2A308
+        % 4E0                                    * 2A308
 
 * 5
 * refs (10): 1CBC7 2EBA3 2ECDE B75D3 B7614 B783A ...
 %5:
-        %       5E0                              * 2A31D
+        % 5E0                                    * 2A31D
 
 * 6
 * refs (8): 1CBD1 B75D8 B7619 B7853 B9257 CCDDC ...
 %6:
-        %       6E0                              * 2A332
+        % 6E0                                    * 2A332
 
 * 7
 * refs (5): 1CBDB B75DD B761E B786C B925C
 %7:
-        %       7E0                              * 2A347
+        % 7E0                                    * 2A347
 
 * 8
 * refs (8): 1CDE3 AAB8B B6861 B75E2 B7623 B7885 ...
 %8:
-        %       8E0                              * 2A35C
+        % 8E0                                    * 2A35C
 
 * 9
 * refs (8): 1CBEF AE3CC AE409 B75E7 B7628 B789E ...
 %9:
-        %       9E0                              * 2A371
+        % 9E0                                    * 2A371
 
 * -1
 * refs (30): 1CE69 494A5 4A987 4C238 5140E 55558 ...
 %-1:
-        %       -1E0                             * 2A386
+        % -1E0                                   * 2A386
 
 * -2
 * refs (8): 82D90 D31B4 D34DF D34F4 D35E7 D35FC ...
 %-2:
-        %       -2E0                             * 2A39B
+        % -2E0                                   * 2A39B
 
 * -3
 * refs (2): AB2CB B6852
 %-3:
-        %       -3E0                             * 2A3B0
+        % -3E0                                   * 2A3B0
 
 * -4
 %-4:
-        %       -4E0                             * 2A3C5
+        % -4E0                                   * 2A3C5
 
 * -5
 %-5:
-        %       -5E0                             * 2A3DA
+        % -5E0                                   * 2A3DA
 
 * -6
 %-6:
-        %       -6E0                             * 2A3EF
+        % -6E0                                   * 2A3EF
 
 * -7
 %-7:
-        %       -7E0                             * 2A404
+        % -7E0                                   * 2A404
 
 * -8
 * refs (1): D3702
 %-8:
-        %       -8E0                             * 2A419
+        % -8E0                                   * 2A419
 
 * -9
 %-9:
-        %       -9E0                             * 2A42E
+        % -9E0                                   * 2A42E
 
 * pi
 * refs (5): 3C0C6 54D3F 5A6C6 A1E46 D3724
 %PI:
-        %       3.14159265359E0                  * 2A443
+        % 3.14159265359E0                        * 2A443
 
 * pi
 * refs (2): 48058 52A9E
 %%PI:
-        %%      3.14159265358979E0               * 2A458
+        %% 3.14159265358979E0                    * 2A458
 
 * 9.99E499
 * refs (8): 3C0DA 494FB 51AD0 5251C 54D1C 89D6C ...
 %MAXREAL:
-        %       9.99999999999E499                * 2A472
+        % 9.99999999999E499                      * 2A472
 
 * -9.99E499
 * refs (3): 2B194 51AD5 51FEA
 %-MAXREAL:
-        %       -9.99999999999E499               * 2A487
+        % -9.99999999999E499                     * 2A487
 
 * 1E-499
 * refs (3): 3C0D0 47B91 54CE5
 %MINREAL:
-        %       1E-499                           * 2A49C
+        % 1E-499                                 * 2A49C
 
 * -1E-499
 %-MINREAL:
-        %       -1E-499                          * 2A4B1
+        % -1E-499                                * 2A4B1
 
 * 0
 * refs (82): 0F53D 0FC9B 2C981 2C9A9 2C9CC 3671E ...
 %%0:
-        %%      0E0                              * 2A4C6
+        %% 0E0                                   * 2A4C6
 
 * 1
 * refs (57): 0FE5D 2C1D8 37A63 37A95 37AD1 4B819 ...
 %%1:
-        %%      1E0                              * 2A4E0
+        %% 1E0                                   * 2A4E0
 
 * 2
 * refs (13): 4805D 52134 5226F 52773 5295D 52971 ...
 %%2:
-        %%      2E0                              * 2A4FA
+        %% 2E0                                   * 2A4FA
 
 * 3
 * refs (1): C994D
 %%3:
-        %%      3E0                              * 2A514
+        %% 3E0                                   * 2A514
 
 * 4
 * refs (4): 52719 527BE 964C5 C993E
 %%4:
-        %%      4E0                              * 2A52E
+        %% 4E0                                   * 2A52E
 
 * 5
 * refs (2): C904B C90F7
 %%5:
-        %%      5E0                              * 2A548
+        %% 5E0                                   * 2A548
 
 * 0.1
 * refs (1): C9153
 %%.1:
-        %%      1E-1                             * 2A562
+        %% 1E-1                                  * 2A562
 
 * 0.5
 * refs (5): 2B43E 37B35 92E44 C8544 C8C3F
 %%.5:
-        %%      5E-1                             * 2A57C
+        %% 5E-1                                  * 2A57C
 
 * 10
 * refs (5): 4AE00 4AE28 4AE7D 4AE91 9363D
 %%10:
-        %%      1E1                              * 2A596
+        %% 1E1                                   * 2A596
 
 * %% -> %
 * refs (77): 0F3CB 0F642 0F6B1 0F783 0FC5F 0FDC7 ...
@@ -426,118 +426,67 @@ L_2A28A:
 * ->
 * refs (3): 1C3A3 B9127 B92C3
 SETDEG:
-        ::                                       * 2A5D2
-          BINT18                                 * 2A5D7
-          ClrSysFlag                             * 2A5DC
-          BINT17                                 * 2A5E1
-          ClrSysFlag                             * 2A5E6
-        ;                                        * 2A5EB
+        :: BINT18 ClrSysFlag BINT17 ClrSysFlag ; * 2A5D2
 
 * ->
 * refs (3): 1C3BE B9131 B92E6
 SETRAD:
-        ::                                       * 2A5F0
-          BINT17                                 * 2A5F5
-          SetSysFlag                             * 2A5FA
-        ;                                        * 2A5FF
+        :: BINT17 SetSysFlag ;                   * 2A5F0
 
 * ->
 * refs (3): 1C3D9 B913B B9309
 SETGRAD:
-        ::                                       * 2A604
-          BINT18                                 * 2A609
-          SetSysFlag                             * 2A60E
-          BINT17                                 * 2A613
-          ClrSysFlag                             * 2A618
-        ;                                        * 2A61D
+        :: BINT18 SetSysFlag BINT17 ClrSysFlag ; * 2A604
 
 * %deg -> %rad
 * refs (1): 1BED7
 %D>R:
-        ::                                       * 2A622
-          %>%%                                   * 2A627
+        :: %>%%                                  * 2A622
 
 * pi/180
 * refs (1): 2A65F
 PI/180:
-          %%      1.74532925199433E-2            * 2A62C
-          %%*                                    * 2A646
-          %%>%                                   * 2A64B
-        ;                                        * 2A650
+          %% 1.74532925199433E-2 %%* %%>% ;      * 2A62C
 
 * %rad -> %deg
 * refs (1): 1BF03
 %R>D:
-        ::                                       * 2A655
-          %>%%                                   * 2A65A
-          PI/180                                 * 2A65F
-          %%/                                    * 2A664
-          %%>%                                   * 2A669
-        ;                                        * 2A66E
+        :: %>%% PI/180 %%/ %%>% ;                * 2A655
 
 * % -> %hms
 * refs (1): 1BF2D
 %>HMS:
-        ::                                       * 2A673
-          %>%%                                   * 2A678
-          %%H>HMS                                * 2A67D
-          %%>%                                   * 2A682
-        ;                                        * 2A687
+        :: %>%% %%H>HMS %%>% ;                   * 2A673
 
 * %hms -> %
 * refs (1): 1BF4D
 %HMS>:
-        ::                                       * 2A68C
-          hm->(r);r=>rr                          * 2A691
-          OBJ_35BCD                              * 2A696
-        ;                                        * 2A69B
+        :: hm->(r);r=>rr OBJ_35BCD ;             * 2A68C
 
 * %hms1 %hms2 -> %hms
 * refs (2): 1BF6D 2A6D2
 %HMS+:
-        ::                                       * 2A6A0
-          hm->(r);r=>rr                          * 2A6A5
-          SWAP                                   * 2A6AA
-          hm->(r);r=>rr                          * 2A6AF
-          %%+                                    * 2A6B4
-          OBJ_35BE1                              * 2A6B9
-          %%>%                                   * 2A6BE
-        ;                                        * 2A6C3
+        :: hm->(r);r=>rr SWAP hm->(r);r=>rr %%+ OBJ_35BE1 %%>% ; * 2A6A0
 
 * %hms1 %hms2 -> %hms
 * refs (1): 1BF8D
 %HMS-:
-        ::                                       * 2A6C8
-          %CHS                                   * 2A6CD
-          %HMS+                                  * 2A6D2
-        ;                                        * 2A6D7
+        :: %CHS %HMS+ ;                          * 2A6C8
 
 * %% %%' -> %%max
 * refs (15): 369CB 7CE5A 9005B 90D5F 9221D 94078 ...
 %%MAX:
-        ::                                       * 2A6DC
-          2DUP                                   * 2A6E1
-          %%>                                    * 2A6E6
-          NOT?SWAPDROP                           * 2A6EB
-        ;                                        * 2A6F0
+        :: 2DUP %%> NOT?SWAPDROP ;               * 2A6DC
 
 * % %' -> %greater
 * refs (6): 1BC80 4C069 52C87 89DA6 B61BD C7C57
 %MAX:
-        ::                                       * 2A6F5
-          2DUP                                   * 2A6FA
-          %>                                     * 2A6FF
-          NOT?SWAPDROP                           * 2A704
-        ;                                        * 2A709
+        :: 2DUP %> NOT?SWAPDROP ;                * 2A6F5
 
 * % %' -> %lesser
 * refs (5): 1BCF2 52C6D 89DB5 B61A4 C7C43
 %MIN:
-        ::                                       * 2A70E
-          2DUP                                   * 2A713
-          %<                                     * 2A718
-          NOT?SWAPDROP                           * 2A71D
-        ;                                        * 2A722
+        :: 2DUP %< NOT?SWAPDROP ;                * 2A70E
 
 * %% -> flag
 * refs (5): 2A7E8 2CBED 36BF3 36C0C 529FD
@@ -618,43 +567,29 @@ L_2A7A7:
 * %% -> flag
 * refs (4): 52397 523D8 52782 5290D
 %%0<>:
-        ::                                       * 2A7BB
-          %%0=                                   * 2A7C0
-          NOT                                    * 2A7C5
-        ;                                        * 2A7CA
+        :: %%0= NOT ;                            * 2A7BB
 
 * % -> flag
 * refs (19): 1A751 1E7E2 1E7EC 1E868 1E872 1E94B ...
 %0<>:
-        ::                                       * 2A7CF
-          %0=                                    * 2A7D4
-          NOT                                    * 2A7D9
-        ;                                        * 2A7DE
+        :: %0= NOT ;                             * 2A7CF
 
 * %% -> flag
 * refs (14): 36BDA 36C2F 37AC7 4552E 5215C 5217A ...
 %%0>=:
-        ::                                       * 2A7E3
-          %%0<                                   * 2A7E8
-          NOT                                    * 2A7ED
-        ;                                        * 2A7F2
+        :: %%0< NOT ;                            * 2A7E3
 
 * % -> flag
 * refs (4): 2B17B 45222 45457 4F291
 %0>=:
-        ::                                       * 2A7F7
-          %0<                                    * 2A7FC
-          NOT                                    * 2A801
+        :: %0< NOT                               * 2A7F7
 L_2A806:
         ;                                        * 2A806
 
 * %% -> flag
 * refs (1): 2B22D
 %%0<=:
-        ::                                       * 2A80B
-          %%0>                                   * 2A810
-          NOT                                    * 2A815
-        ;                                        * 2A81A
+        :: %%0> NOT ;                            * 2A80B
 
 * %% %%' -> flag
 * refs (14): 33995 37DAA 5294E 7CE46 91F18 92303 ...
@@ -1591,17 +1526,8 @@ L_2B03D:
 * %seed ->
 * refs (1): 1C1E3
 %RANDOMIZE:
-        ::                                       * 2B044
-          DUP                                    * 2B049
-          %0<>                                   * 2B04E
-          case                                   * 2B053
-          DORANDOMIZE                            * 2B058
-          DROP                                   * 2B05D
-          CLKTICKS                               * 2B062
-          HXS>#                                  * 2B067
-          UNCOERCE                               * 2B06C
-          DORANDOMIZE                            * 2B071
-        ;                                        * 2B076
+        :: DUP %0<> case DORANDOMIZE             * 2B044
+          DROP CLKTICKS HXS># UNCOERCE DORANDOMIZE ; * 2B05D
 
 * % ->
 * refs (3): 2B058 2B071 CE162
@@ -1637,65 +1563,36 @@ L_2B0A6:
 * % -> gamma(%+1)
 * refs (2): 1BB11 1BB50
 %FACT:
-        ::                                       * 2B0C4
-          DUP                                    * 2B0C9
+        :: DUP                                   * 2B0C4
 
 %2.6E2:
-          %       2.6E2                          * 2B0CE
-          %>=                                    * 2B0E3
-          casedrop                               * 2B0E8
+          % 2.6E2 %>= casedrop                   * 2B0CE
           ::                                     * 2B0ED
 
 %%1E10000:
-            %%      1E10000                      * 2B0F2
-            %%>%                                 * 2B10C
-          ;                                      * 2B111
-          DUP                                    * 2B116
-          %IP                                    * 2B11B
-          OVER                                   * 2B120
-          %=                                     * 2B125
-          case                                   * 2B12A
-          OBJ_2B171                              * 2B12F
+            %% 1E10000 %%>% ;                    * 2B0F2
+          DUP %IP OVER %= case OBJ_2B171         * 2B116
           DUP                                    * 2B134
 
 %-2.6E2:
-          %       -2.6E2                         * 2B139
-          %<                                     * 2B14E
-          case                                   * 2B153
-          OBJ_2B19E                              * 2B158
-          %>%%                                   * 2B15D
-          fact(rr)                               * 2B162
-          %%>%                                   * 2B167
-        ;                                        * 2B16C
+          % -2.6E2 %< case OBJ_2B19E             * 2B139
+          %>%% fact(rr) %%>% ;                   * 2B15D
 
 * refs (1): 2B12F
 OBJ_2B171:
-        ::                                       * 2B171
-          DUP                                    * 2B176
-          %0>=                                   * 2B17B
-          case                                   * 2B180
-          %NFACT                                 * 2B185
-          OBJ_5203A                              * 2B18A
-          DROP                                   * 2B18F
-          %-MAXREAL                              * 2B194
-        ;                                        * 2B199
+        :: DUP %0>= case %NFACT                  * 2B171
+          OBJ_5203A DROP %-MAXREAL ;             * 2B18A
 
 * refs (1): 2B158
 OBJ_2B19E:
-        ::                                       * 2B19E
-          %IP                                    * 2B1A3
-          %2                                     * 2B1A8
-          %MOD                                   * 2B1AD
-          %0=                                    * 2B1B2
-          ITE                                    * 2B1B7
+        :: %IP %2 %MOD %0= ITE                   * 2B19E
 
 %%1E-10000:
-          %%      1E-10000                       * 2B1BC
+          %% 1E-10000                            * 2B1BC
 
 %%-1E-10000:
-          %%      -1E-10000                      * 2B1D6
-          %%>%                                   * 2B1F0
-        ;                                        * 2B1F5
+          %% -1E-10000                           * 2B1D6
+          %%>% ;                                 * 2B1F0
 
 * refs (1): 2B162
 fact(rr):
@@ -1703,193 +1600,88 @@ fact(rr):
 
 * 7
 %%7:
-          %%      7E0                            * 2B1FF
-          OVER                                   * 2B219
-          %%-                                    * 2B21E
-          %%FLOOR                                * 2B223
-          DUP                                    * 2B228
-          %%0<=                                  * 2B22D
-          casedrop                               * 2B232
-          OBJ_2B2C3                              * 2B237
-          2DUP                                   * 2B23C
-          %%+                                    * 2B241
-          OBJ_2B2C3                              * 2B246
-          SWAP                                   * 2B24B
-          %%>%                                   * 2B250
-          COERCE                                 * 2B255
-          ROT                                    * 2B25A
-          1+(rr)                                 * 2B25F
-          DUP                                    * 2B264
-          ROT                                    * 2B269
-          BEGIN                                  * 2B26E
-          #1-                                    * 2B273
-          DUP#0<>                                * 2B278
-          WHILE                                  * 2B27D
-          ::                                     * 2B282
-            ROT                                  * 2B287
-            1+(rr)                               * 2B28C
-            ROT                                  * 2B291
-            OVER                                 * 2B296
-            %%*                                  * 2B29B
-            ROT                                  * 2B2A0
-          ;                                      * 2B2A5
-          REPEAT                                 * 2B2AA
-          ROT                                    * 2B2AF
-          2DROP                                  * 2B2B4
-          %%/                                    * 2B2B9
-        ;                                        * 2B2BE
+          %% 7E0 OVER %%- %%FLOOR DUP %%0<= casedrop OBJ_2B2C3 * 2B1FF
+          2DUP %%+ OBJ_2B2C3 SWAP %%>% COERCE ROT 1+(rr) DUP ROT BEGIN #1- * 2B23C
+          DUP#0<> WHILE                          * 2B278
+          :: ROT 1+(rr) ROT OVER %%* ROT ; REPEAT ROT 2DROP %%/ ; * 2B282
 
 * refs (2): 2B237 2B246
 OBJ_2B2C3:
-        ::                                       * 2B2C3
-          1+(rr)                                 * 2B2C8
-          DUP                                    * 2B2CD
-          2DUP                                   * 2B2D2
-          %%*                                    * 2B2D7
+        :: 1+(rr) DUP 2DUP %%*                   * 2B2C3
 
 * 12
 %%12:
-          %%      1.2E1                          * 2B2DC
-          %%*                                    * 2B2F6
-          DUP                                    * 2B2FB
+          %% 1.2E1 %%* DUP                       * 2B2DC
 
 * 60
 %%60:
-          %%      6E1                            * 2B300
-          %%+                                    * 2B31A
+          %% 6E1 %%+                             * 2B300
 
 %%-4.95920119017593E2:
-          %%      -4.95920119017593E2            * 2B31F
-          SWAP                                   * 2B339
-          %%/                                    * 2B33E
+          %% -4.95920119017593E2 SWAP %%/        * 2B31F
 
 %%3.03479606073615E1:
-          %%      3.03479606073615E1             * 2B343
-          %%+                                    * 2B35D
-          OVER                                   * 2B362
-          %%+                                    * 2B367
+          %% 3.03479606073615E1 %%+ OVER %%+     * 2B343
 
 %%-7.65594818140208E1:
-          %%      -7.65594818140208E1            * 2B36C
-          SWAP                                   * 2B386
-          %%/                                    * 2B38B
+          %% -7.65594818140208E1 SWAP %%/        * 2B36C
 
 %%9.33584905660377:
-          %%      9.33584905660377E0             * 2B390
-          %%+                                    * 2B3AA
-          OVER                                   * 2B3AF
-          %%+                                    * 2B3B4
+          %% 9.33584905660377E0 %%+ OVER %%+     * 2B390
 
 %%-1.21142857142857:
-          %%      -1.21142857142857E0            * 2B3B9
-          SWAP                                   * 2B3D3
-          %%/                                    * 2B3D8
+          %% -1.21142857142857E0 SWAP %%/        * 2B3B9
 
 * 0.4
 %%.4:
-          %%      4E-1                           * 2B3DD
-          %%+                                    * 2B3F7
-          %%+                                    * 2B3FC
-          %%/                                    * 2B401
-          OVER                                   * 2B406
-          %%-                                    * 2B40B
+          %% 4E-1 %%+ %%+ %%/ OVER %%-           * 2B3DD
 
 %%9.18938533204673E-1:
-          %%      9.18938533204673E-1            * 2B410
-          %%+                                    * 2B42A
-          OVER                                   * 2B42F
-          %%LN                                   * 2B434
-          ROT                                    * 2B439
-          %%.5                                   * 2B43E
-          %%-                                    * 2B443
-          %%*                                    * 2B448
-          %%+                                    * 2B44D
-          %%EXP                                  * 2B452
-        ;                                        * 2B457
+          %% 9.18938533204673E-1 %%+ OVER %%LN ROT %%.5 %%- %%* %%+ %%EXP ; * 2B410
 
 * % % -> %% %%
 * refs (6): 1DDAB 1DE41 2B493 2B4C0 2B4FC 4F0CA
 2%>%%:
-        ::                                       * 2B45C
-          %>%%SWAP                               * 2B461
-          %>%%SWAP                               * 2B466
-        ;                                        * 2B46B
+        :: %>%%SWAP %>%%SWAP ;                   * 2B45C
 
 * %% %%' -> % %'
 * refs (4): 2B4B1 2B4E8 2B515 6FFE4
 2%%>%:
-        ::                                       * 2B470
-          %%>%                                   * 2B475
-          SWAP                                   * 2B47A
-          %%>%                                   * 2B47F
-          SWAP                                   * 2B484
-        ;                                        * 2B489
+        :: %%>% SWAP %%>% SWAP ;                 * 2B470
 
 * %r %ang -> %x %y
 %REC>%POL:
-        ::                                       * 2B48E
-          2%>%%                                  * 2B493
+        :: 2%>%%                                 * 2B48E
 
 * %%x %%y -> %%radius %%angle
 * refs (3): 1DDB0 1DDD8 1DE46
 %%R>P:
-          ::                                     * 2B498
-            2DUP%%R                              * 2B49D
-            3UNROLL                              * 2B4A2
-            %%ANGLE                              * 2B4A7
-          ;                                      * 2B4AC
-          2%%>%                                  * 2B4B1
-        ;                                        * 2B4B6
+          :: 2DUP%%R 3UNROLL %%ANGLE ; 2%%>% ;   * 2B498
 
 * %x %y -> %r %ang
 * refs (11): 0C6AE 1DE93 1DF0D 247FD 24901 28228 ...
 %POL>%REC:
-        ::                                       * 2B4BB
-          2%>%%                                  * 2B4C0
+        :: 2%>%%                                 * 2B4BB
 
 * %%r %%ang -> %%x %%y
 * refs (2): 2B501 2B510
 %%P>R:
-          ::                                     * 2B4C5
-            2DUP                                 * 2B4CA
-            %%COS                                * 2B4CF
-            %%*UNROT                             * 2B4D4
-            %%SIN                                * 2B4D9
-            %%*                                  * 2B4DE
-          ;                                      * 2B4E3
-          2%%>%                                  * 2B4E8
-        ;                                        * 2B4ED
+          :: 2DUP %%COS %%*UNROT %%SIN %%* ; 2%%>% ; * 2B4C5
 
 * %r %ang %ph -> %x %y %z
 * refs (2): 1DEFE 24938
 %SPH>%REC:
-        ::                                       * 2B4F2
-          ROTSWAP                                * 2B4F7
-          2%>%%                                  * 2B4FC
-          %%P>R                                  * 2B501
-          ROT                                    * 2B506
-          %>%%                                   * 2B50B
-          %%P>R                                  * 2B510
-          2%%>%                                  * 2B515
-          ROT                                    * 2B51A
-          %%>%                                   * 2B51F
-        ;                                        * 2B524
+        :: ROTSWAP 2%>%% %%P>R ROT %>%% %%P>R 2%%>% ROT %%>% ; * 2B4F2
 
 * % %places -> %'
 * refs (4): 0FD7C 1BD64 4FD86 4FD9A
 RNDXY:
-        ::                                       * 2B529
-          OBJ_2B590                              * 2B52E
-          OBJ_2B551                              * 2B533
-        ;                                        * 2B538
+        :: OBJ_2B590 OBJ_2B551 ;                 * 2B529
 
 * % %places -> %'
 * refs (2): 0FD9F 1BDE0
 TRCXY:
-        ::                                       * 2B53D
-          OBJ_2B590                              * 2B542
-          OBJ_2B55D                              * 2B547
-        ;                                        * 2B54C
+        :: OBJ_2B590 OBJ_2B55D ;                 * 2B53D
 
 * refs (6): 0CC6A 2B533 35E36 35ECC 4535D 45560
 OBJ_2B551:
