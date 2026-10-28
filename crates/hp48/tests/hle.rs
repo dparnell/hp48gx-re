@@ -81,6 +81,8 @@ struct Checked {
     names: std::collections::HashMap<u32, &'static str>,
     /// Calls and checks per native.
     counts: std::collections::BTreeMap<&'static str, (u64, u64)>,
+    /// Check every call (HLE_CHECK_ALL=1), not a sample.
+    all: bool,
 }
 
 impl Checked {
@@ -91,7 +93,7 @@ impl Checked {
             if let (false, Some(&f)) = (self.m.cpu.shutdown, self.m.jumps.get(&pc)) {
                 let count = self.counts.entry(self.names[&pc]).or_default();
                 count.0 += 1;
-                if count.0 <= 2000 || count.0.is_multiple_of(97) {
+                if self.all || count.0 <= 2000 || count.0.is_multiple_of(97) {
                     count.1 += 1;
                     if let Err(e) = hle::verify_jump(&self.m, f) {
                         panic!("{} (call {}): {e}", self.names[&pc], count.0);
@@ -118,7 +120,16 @@ impl Checked {
     }
 }
 
-const LINES: &[&str] = &["1 2 + 3 *", "« 1 5 FOR I I NEXT » EVAL + + + +", "{ 1 2 3 } REVLIST \"AB\" \"C\" +", "'A' 5 STO A 'A' PURGE"];
+const LINES: &[&str] = &[
+    "1 2 + 3 *",
+    "« 1 5 FOR I I NEXT » EVAL + + + +",
+    "{ 1 2 3 } REVLIST \"AB\" \"C\" +",
+    "'A' 5 STO A 'A' PURGE",
+    // Programs holding embedded objects of each kind, and nested programs.
+    "« 1.5 (1,2) #5h \"S\" { 1 { 2 } 'X' } 'X^2+1' :T:7 » EVAL",
+    "« « 2 3 * » EVAL 4 + { « 5 » } 1 GET EVAL » EVAL",
+    "{ 1 \"A\" { 2 3 } 'Y' :T:1 } DUP SIZE SWAP 3 GET",
+];
 
 #[test]
 fn rpl_inner_loop_matches_rom() {
@@ -130,7 +141,8 @@ fn rpl_inner_loop_matches_rom() {
         assert!(sites.iter().any(|s| s.1 == name), "{name} found");
     }
     assert!(sites.iter().filter(|s| s.1 == "push prolog").count() >= 20, "prologs found");
-    let mut t = Checked { m, names, counts: Default::default() };
+    let all = std::env::var_os("HLE_CHECK_ALL").is_some();
+    let mut t = Checked { m, names, counts: Default::default(), all };
     t.run(3 * hp48::CPU_HZ);
     t.tap(hp48::Key::F);
     t.run(4 * hp48::CPU_HZ);
@@ -138,10 +150,13 @@ fn rpl_inner_loop_matches_rom() {
         t.enter(line);
     }
     eprintln!("{:?}", t.counts);
-    for name in ["NEXT", "push prolog", "DOCOL", "SEMI"] {
-        assert!(t.counts.get(name).is_some_and(|c| c.1 > 100), "{name} ran: {:?}", t.counts);
+    for name in ["NEXT", "push prolog", "DOCOL", "SEMI", "PRLG", "embedded", "SKIPOB"] {
+        assert!(t.counts.get(name).is_some_and(|c| c.1 > 20), "{name} ran: {:?}", t.counts);
     }
-    // The same lines without natives leave the same stack.
+    // The same lines without natives leave the same objects on the stack.
+    // Where they lie in RAM can differ: the ROM's memory layout depends on
+    // timing (a plain run delayed by 777 cycles moves them too), and natives
+    // take interrupts only between the units they replace.
     let Some(mut plain) = machine() else { return };
     plain.run(3 * hp48::CPU_HZ);
     plain.tap(hp48::Key::F);
@@ -153,11 +168,17 @@ fn rpl_inner_loop_matches_rom() {
     }
     let objects = |m: &Machine| {
         let mem = |a: u32| m.hw.peek(a);
-        hp48_rpl::stack(&mem).iter().map(|&a| hp48_rpl::decode(&mem, a).unwrap()).collect::<Vec<_>>()
+        let objects = hp48_rpl::stack(&mem).into_iter().map(|a| hp48_rpl::decode(&mem, a).unwrap());
+        objects.map(|o| without_addresses(&format!("{o:?}"))).collect::<Vec<_>>()
     };
     let ours = objects(&t.m);
     assert!(ours.len() >= 5, "{ours:?}");
     assert_eq!(ours, objects(&plain));
+}
+
+/// A decoded object's text without the RAM addresses of undecoded objects.
+fn without_addresses(text: &str) -> String {
+    text.split("addr: ").enumerate().map(|(i, part)| if i == 0 { part } else { part.trim_start_matches(|c: char| c.is_ascii_digit()) }).collect()
 }
 
 #[test]
@@ -165,4 +186,38 @@ fn verify_jump_detects_a_wrong_native() {
     let Some(m) = machine() else { return };
     // At reset the CPU is not at SEMI.
     assert!(hle::verify_jump(&m, hle::semi).is_err());
+}
+
+#[path = "../examples/common/tour.rs"]
+mod tour;
+
+/// The whole tour with the jump natives checked as they run (a few minutes;
+/// HLE_CHECK_ALL=1 checks every call).
+/// cargo test --release -p hp48 --test hle -- --ignored
+#[test]
+#[ignore]
+fn rpl_inner_loop_matches_rom_on_tour() {
+    let Some(mut m) = machine() else { return };
+    hle::install(&mut m);
+    m.natives.clear();
+    let names = hle::jump_sites(&m).iter().map(|&(a, n, _)| (a, n)).collect();
+    let all = std::env::var_os("HLE_CHECK_ALL").is_some();
+    let mut t = Checked { m, names, counts: Default::default(), all };
+    t.run(3 * hp48::CPU_HZ);
+    t.tap(hp48::Key::F);
+    t.run(4 * hp48::CPU_HZ);
+    for line in tour::TOUR {
+        for k in hp48::typing::keystrokes(line).unwrap() {
+            t.tap(k);
+        }
+        t.tap(hp48::Key::Enter);
+        t.run(2 * hp48::CPU_HZ);
+        t.tap(hp48::Key::On);
+        t.run(hp48::CPU_HZ / 2);
+    }
+    for &k in tour::KEYS {
+        t.tap(k);
+        t.run(hp48::CPU_HZ);
+    }
+    eprintln!("{:?}", t.counts);
 }

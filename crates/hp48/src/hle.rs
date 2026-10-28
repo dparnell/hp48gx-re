@@ -10,6 +10,7 @@
 
 use crate::hardware::Hardware;
 use crate::machine::{Jump, Machine, Native};
+use crate::memory::ModuleKind;
 use saturn::cpu::SB;
 use saturn::{Bus, Cpu, Reg};
 
@@ -107,7 +108,6 @@ const SEMI_CODE: &str = "D9136184142132D8E7142164808C";
 
 const NEXT_CYCLES: u32 = 19 + 5 + 23;
 const PUSH_CYCLES: u32 = 4 + 5 + 5 + 5 + 19 + NEXT_CYCLES;
-const DOCOL_CYCLES: u32 = 4 + 5 + 5 + 4 + 5 + 19 + 5 + 5 + 4 + 5 + NEXT_CYCLES;
 const SEMI_CYCLES: u32 = 4 + 5 + 5 + 19 + 5 + 4 + 4 + NEXT_CYCLES;
 
 /// Does the code at `addr` match `hex` (nibbles in address order, `?` for
@@ -168,15 +168,20 @@ pub fn docol(cpu: &mut Cpu, hw: &mut Hardware) -> Option<u32> {
         return None;
     }
     cpu.d.set_a(room - 1);
+    Some(4 + 5 + 5 + enter_secondary(cpu, hw))
+}
+
+/// The common tail of DOCOL and an embedded secondary, from `C=B A`: push
+/// D0 on the return stack, then NEXT in the body of the secondary at A.A.
+fn enter_secondary(cpu: &mut Cpu, hw: &mut Hardware) -> u32 {
     let (ip, top) = (cpu.d0, cpu.b.a());
     cpu.c.set_a(ip);
     write_a(hw, top, ip);
     let top = (top + 5) & MASK;
-    cpu.d0 = cpu.a.a();
+    cpu.d0 = (cpu.a.a() + 5) & MASK;
     cpu.a.set_a(top);
     cpu.b.set_a(top);
-    cpu.d0 = (cpu.d0 + 5) & MASK;
-    Some(DOCOL_CYCLES - NEXT_CYCLES + next(cpu, hw))
+    4 + 5 + 19 + 5 + 5 + 4 + 5 + next(cpu, hw)
 }
 
 /// SEMI: pop the instruction pointer from the return stack.
@@ -193,8 +198,283 @@ pub fn semi(cpu: &mut Cpu, hw: &mut Hardware) -> Option<u32> {
     Some(SEMI_CYCLES - NEXT_CYCLES + next(cpu, hw))
 }
 
+// ------------------------------------------------------------ embedded objects
+//
+// An object can sit inside a secondary instead of being pointed to. NEXT then
+// fetches its prolog address and jumps through the prolog's first word,
+// whose code nibbles `CF820` read as #028FC: PRLG. PRLG jumps through the
+// word 10 nibbles before the prolog, the type's handler for an embedded
+// object. The handler pushes the object (or runs it, for a secondary) and
+// continues after it. The word 5 nibbles before the prolog is the type's
+// handler in SKIPOB, which skips an object of any type.
+
+const PRLG: u32 = 0x028FC;
+const SEMI_BODY: u32 = 0x03130;
+
+/// PRLG (#028FC): `LC(2) #0A; A=A-C B; PC=(A)`.
+const PRLG_CODE: &str = "31A0B6A808C";
+/// Handlers of embedded objects of fixed size: `D0=D0-5; AD0EX; D0=A`, one
+/// or more `D0=D0+n`, then the push and NEXT of a prolog.
+const BINT_CODE: &str = "184132130169CF4A51C4141142164808C";
+const REAL_CODE: &str = "18413213016416FCF4631C4141142164808C";
+const EREL_CODE: &str = "18413213016916FCF4211C4141142164808C";
+const CMP_CODE: &str = "18413213016416F16FCF47E1C4141142164808C";
+const ECMP_CODE: &str = "18413213016E16F16FCF40C1C4141142164808C";
+const CHAR_CODE: &str = "184132130166CF4F91C4141142164808C";
+/// Objects with a length field (strings, arrays, grobs, ...): `C=DAT0 A;
+/// D0=D0-5; AD0EX; C=C+A A; D0=C; D0=D0+5`, then push and NEXT.
+const LENGTH_CODE: &str = "146184132C2134164CF4A31C4141142164808C";
+/// Composites (lists, symbolics, ...): `D0=D0-5; CD0EX; D0=C; RSTK=C;
+/// GOSUB SKIPOB; C=RSTK; A=C A`, then push and NEXT.
+const COMPOSITE_CODE: &str = "1841361340670E207DACF4211C4141142164808C";
+/// A secondary: skipped as a composite, then entered as by DOCOL.
+const SECONDARY_CODE: &str = "184136134067A2207DACF4F1D9136144164132D8164142164808C";
+/// SKIPOB (#03019) and its type handlers, up to the tagged-object handler.
+const SKIPOB_CODE: &str = "84113706D90620D18718014216413114334CF8208A6C01C4133808C34031308A670CD4218ADAC07D5071350318451FE554B16F16F5ED16F16416F1645FC16559C146132C21345BBD214EC6132C213416156A1841321301641F117081478A6E014616CA3E59F1621468AA1A132C2134D214E8AAF0C6132C21341611616C1FD214EC6132C2134161660F";
+
+/// PRLG: jump to the embedded-object handler of the prolog at A.A.
+pub fn prlg(cpu: &mut Cpu, hw: &mut Hardware) -> Option<u32> {
+    if cpu.dec || cpu.p != 0 {
+        return None;
+    }
+    cpu.c.0 = (cpu.c.0 & !0xFF) | 0x0A;
+    let low = cpu.a.0 & 0xFF;
+    cpu.carry = low < 0x0A;
+    cpu.a.0 = (cpu.a.0 & !0xFF) | (low.wrapping_sub(0x0A) & 0xFF);
+    cpu.pc = read_pc(hw, cpu.a.a());
+    Some(6 + 5 + 23)
+}
+
+/// Push the object at A.A and NEXT: the end of every embedded handler.
+fn push_and_next(cpu: &mut Cpu, hw: &mut Hardware) -> u32 {
+    cpu.d.set_a(cpu.d.a() - 1);
+    cpu.d1 = cpu.d1.wrapping_sub(5) & MASK;
+    write_a(hw, cpu.d1, cpu.a.a());
+    4 + 5 + 5 + 19 + next(cpu, hw)
+}
+
+/// An embedded object of `SIZE` nibbles, skipped with `ADDS` additions to D0.
+pub fn embedded<const SIZE: u32, const ADDS: u32>(cpu: &mut Cpu, hw: &mut Hardware) -> Option<u32> {
+    if cpu.dec || cpu.d.a() == 0 {
+        return None;
+    }
+    let ob = cpu.d0.wrapping_sub(5) & MASK;
+    cpu.a.set_a(ob);
+    cpu.d0 = (ob + SIZE) & MASK;
+    Some(5 + 5 + 5 + 5 * ADDS + push_and_next(cpu, hw))
+}
+
+/// An embedded object with a length field after its prolog.
+pub fn embedded_length(cpu: &mut Cpu, hw: &mut Hardware) -> Option<u32> {
+    if cpu.dec || cpu.d.a() == 0 {
+        return None;
+    }
+    let len = read_a(hw, cpu.d0);
+    let ob = cpu.d0.wrapping_sub(5) & MASK;
+    let end = (len + ob) & MASK;
+    cpu.c.set_a(end);
+    cpu.a.set_a(ob);
+    cpu.d0 = (end + 5) & MASK;
+    Some(19 + 5 + 5 + 4 + 5 + 5 + push_and_next(cpu, hw))
+}
+
+/// Data reads of a dry run. Values come from `peek`; the addresses are kept
+/// so that the committed run makes the same reads (for the CRC). Only ROM
+/// and RAM may be read: elsewhere a read can have side effects.
+struct DryReads<'a> {
+    hw: &'a Hardware,
+    addrs: Vec<u32>,
+}
+
+impl DryReads<'_> {
+    fn nib(&mut self, addr: u32) -> Option<u32> {
+        let addr = addr & MASK;
+        if self.hw.mmu.select(addr).is_some_and(|m| m.kind != ModuleKind::Ram) {
+            return None;
+        }
+        self.addrs.push(addr);
+        Some(u32::from(self.hw.peek(addr)))
+    }
+
+    /// `A=DAT0 A`: lowest address first.
+    fn a(&mut self, addr: u32) -> Option<u32> {
+        (0..5).try_fold(0, |v, i| Some(v | self.nib(addr + i)? << (4 * i)))
+    }
+
+    /// `C=DAT0 B`.
+    fn b(&mut self, addr: u32) -> Option<u32> {
+        Some(self.nib(addr)? | self.nib(addr + 1)? << 4)
+    }
+
+    /// `PC=(A)`: highest address first.
+    fn pc(&mut self, addr: u32) -> Option<u32> {
+        (0..5).rev().try_fold(0, |v, i| Some((v << 4) | self.nib(addr + i)?))
+    }
+}
+
+/// What SKIPOB does from a given D0: where it leaves D0 and A.A, its cycles
+/// (its RTNCC included) and its data reads.
+struct Skip {
+    d0: u32,
+    a: u32,
+    cycles: u32,
+    reads: Vec<u32>,
+}
+
+/// Work out SKIPOB without side effects. None where the ROM code would do
+/// anything unusual: a type without a handler here (directories, access
+/// pointers), an address that wraps, a read outside ROM and RAM.
+fn skip_plan(hw: &Hardware, d0: u32) -> Option<Skip> {
+    let mut r = DryReads { hw, addrs: Vec::new() };
+    let add = |d0: u32, n: u32| Some(d0 + n).filter(|&v| v <= MASK);
+    // ST=0 1; CD1EX; RSTK=C; C=B A; RSTK=C; P=0; B=0 A; ?ST=1 1 (not taken)
+    let mut cycles = 5 + 5 + 4 + 4 + 4 + 4 + 4 + 7;
+    let (mut d0, mut depth) = (d0, 0);
+    let mut a;
+    loop {
+        // A=DAT0 A; D0=D0+5; D1=A; A=DAT1 A; LC(5) PRLG; ?C#A A
+        let word = r.a(d0)?;
+        d0 = add(d0, 5)?;
+        a = r.a(word)?;
+        cycles += 19 + 5 + 5 + 19 + 9 + 7;
+        // Whether the handler goes straight on to the next object.
+        let mut inner = false;
+        if a == PRLG {
+            // An embedded object: D1=D1-5; AD1EX; PC=(A) to the type's handler.
+            a = word.wrapping_sub(5) & MASK;
+            let handler = r.pc(a)?;
+            cycles += 5 + 5 + 23;
+            // D0=D0+n for each n, then GONC.
+            let mut fixed = |adds: &[u32]| -> Option<u32> {
+                for &n in adds {
+                    d0 = add(d0, n)?;
+                }
+                Some(5 * adds.len() as u32 + 5)
+            };
+            cycles += match handler {
+                // B=B+1 A; GONC: one level deeper
+                0x03077 => {
+                    depth = add(depth, 1)?;
+                    inner = true;
+                    4 + 5
+                }
+                0x0307C => fixed(&[16, 16])?,
+                0x0307F => fixed(&[16])?,
+                0x03085 => fixed(&[16, 5, 16, 5])?,
+                0x0308B => fixed(&[16, 5])?,
+                0x0308E => fixed(&[5])?,
+                0x03094 => fixed(&[6])?,
+                0x030B7 => fixed(&[2])?,
+                // C=DAT0 A; AD0EX; C=C+A A; D0=C; GONC
+                0x0309A => {
+                    let len = r.a(d0)?;
+                    a = d0;
+                    d0 = add(len, d0)?;
+                    19 + 5 + 4 + 5 + 5
+                }
+                // C=0 A; C=DAT0 B; C=C+C A; AD0EX; C=C+A A; D0=C; D0=D0+2;
+                // then GONC (names), or GOTO the next object (a tag's object).
+                0x030A8 | 0x03115 => {
+                    let chars = r.b(d0)?;
+                    a = d0;
+                    d0 = add(add(2 * chars, d0)?, 2)?;
+                    inner = handler == 0x03115;
+                    4 + 16 + 4 + 5 + 4 + 5 + 5 + if inner { 6 } else { 5 }
+                }
+                _ => return None,
+            };
+        } else {
+            // LC(5) SEMI; ?C#A A
+            cycles += 9 + 7;
+            if a == SEMI_BODY {
+                // B=B-1 A; GOC
+                cycles += 4 + 5;
+                if depth == 0 {
+                    // The object was SEMI itself: D0=D0-5; GONC to the exit.
+                    d0 = d0.checked_sub(5)?;
+                    cycles += 5 + 5;
+                    break;
+                }
+                depth -= 1;
+            }
+        }
+        if !inner {
+            // ?B#0 A
+            cycles += 7;
+            if depth == 0 {
+                break;
+            }
+        }
+    }
+    // C=RSTK; B=C A; C=RSTK; D1=C; RTNCC
+    cycles += 4 + 4 + 4 + 5 + 9;
+    Some(Skip { d0, a, cycles, reads: r.addrs })
+}
+
+/// Commit a planned SKIPOB, its RTNCC included; returns the return address.
+fn apply_skip(cpu: &mut Cpu, hw: &mut Hardware, skip: &Skip) -> u32 {
+    for &addr in &skip.reads {
+        hw.read(addr);
+    }
+    // It saves D1 and B.A on the return stack and restores them.
+    let (d1, b) = (cpu.d1, cpu.b.a());
+    cpu.push(d1);
+    cpu.push(b);
+    cpu.pop();
+    cpu.pop();
+    cpu.st &= !2;
+    cpu.p = 0;
+    cpu.a.set_a(skip.a);
+    cpu.c.set_a(d1);
+    cpu.d0 = skip.d0;
+    cpu.carry = false;
+    cpu.pop()
+}
+
+/// SKIPOB (#03019): D0 = the address after the object at D0.
+pub fn skipob(cpu: &mut Cpu, hw: &mut Hardware) -> Option<u32> {
+    if cpu.dec {
+        return None;
+    }
+    let skip = skip_plan(hw, cpu.d0)?;
+    cpu.pc = apply_skip(cpu, hw, &skip);
+    Some(skip.cycles)
+}
+
+/// The start of an embedded composite or secondary: `D0=D0-5; CD0EX; D0=C;
+/// RSTK=C; GOSUB SKIPOB; C=RSTK; A=C A`, with the GOSUB at `call`.
+fn skip_embedded(cpu: &mut Cpu, hw: &mut Hardware, call: u32) -> Option<u32> {
+    if cpu.dec || cpu.d.a() == 0 {
+        return None;
+    }
+    let ob = cpu.d0.checked_sub(5)?;
+    let skip = skip_plan(hw, ob)?;
+    cpu.d0 = ob;
+    cpu.push(ob);
+    cpu.push(call + 4);
+    apply_skip(cpu, hw, &skip);
+    let ob = cpu.pop();
+    cpu.c.set_a(ob);
+    cpu.a.set_a(ob);
+    Some(5 + 5 + 5 + 4 + 6 + skip.cycles + 4 + 4)
+}
+
+/// An embedded list, symbolic, unit, tagged object or other composite.
+pub fn embedded_composite(cpu: &mut Cpu, hw: &mut Hardware) -> Option<u32> {
+    let c = skip_embedded(cpu, hw, 0x02D35)?;
+    Some(c + push_and_next(cpu, hw))
+}
+
+/// An embedded secondary: run it.
+pub fn embedded_secondary(cpu: &mut Cpu, hw: &mut Hardware) -> Option<u32> {
+    let c = skip_embedded(cpu, hw, 0x02DEB)?;
+    cpu.d.set_a(cpu.d.a() - 1);
+    Some(c + 4 + 5 + enter_secondary(cpu, hw))
+}
+
 /// Every jump native that applies to this machine's ROM, by address: NEXT
-/// wherever lower ROM holds its code, the pushing prologs, DOCOL and SEMI.
+/// wherever lower ROM holds its code, the pushing prologs, DOCOL, SEMI,
+/// PRLG, the handlers of embedded objects and SKIPOB.
 pub fn jump_sites(machine: &Machine) -> Vec<(u32, &'static str, Jump)> {
     let mut hw = machine.hw.clone();
     let mut sites = Vec::new();
@@ -210,7 +490,22 @@ pub fn jump_sites(machine: &Machine) -> Vec<(u32, &'static str, Jump)> {
             sites.push((addr, "push prolog", push_prolog as Jump));
         }
     }
-    for (addr, name, f, code) in [(0x02D9D, "DOCOL", docol as Jump, DOCOL_CODE), (0x03130, "SEMI", semi, SEMI_CODE)] {
+    let routines: [(u32, &str, Jump, &str); 13] = [
+        (0x02D9D, "DOCOL", docol, DOCOL_CODE),
+        (0x03130, "SEMI", semi, SEMI_CODE),
+        (PRLG, "PRLG", prlg, PRLG_CODE),
+        (0x02C28, "embedded", embedded::<10, 1>, BINT_CODE),
+        (0x02C49, "embedded", embedded::<21, 2>, REAL_CODE),
+        (0x02C6D, "embedded", embedded::<26, 2>, EREL_CODE),
+        (0x02C95, "embedded", embedded::<37, 3>, CMP_CODE),
+        (0x02CBC, "embedded", embedded::<47, 3>, ECMP_CODE),
+        (0x02CE3, "embedded", embedded::<7, 1>, CHAR_CODE),
+        (0x02D04, "embedded", embedded_length, LENGTH_CODE),
+        (0x02D2A, "embedded", embedded_composite, COMPOSITE_CODE),
+        (0x02DE0, "embedded", embedded_secondary, SECONDARY_CODE),
+        (0x03019, "SKIPOB", skipob, SKIPOB_CODE),
+    ];
+    for (addr, name, f, code) in routines {
         if code_at(&mut hw, addr, code) {
             sites.push((addr, name, f));
         }
