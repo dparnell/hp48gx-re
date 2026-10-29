@@ -314,15 +314,15 @@ ROMP_0F0_097:
 * refs (1): 82007
 D/D*~1:
         :: OBJ_57022                             * 85EA8
-          :: psh OBJ_56BEB top&Cr x* ; psh MetaConcase * 85EB2
+          :: psh derargABND top&Cr x* ; psh MetaConcase * 85EB2
           :: derprod1 ~ABND;SYMBN ;              * 85EDA
-          dup metaROTDUP rot derprod1 unrot psh OBJ_56BEB 2top& addt* Cr x+ ; * 85EEE
+          dup metaROTDUP rot derprod1 unrot psh derargABND 2top& addt* Cr x+ ; * 85EEE
 
 * ROMPTR 0F0 099
 * refs (1): 82007
 D/D+~1:
         :: OBJ_57022                             * 85F2A
-          :: NDROP OBJ_56BEB SYMBN ; OBJ_56D01 psh MetaConcase * 85F34
+          :: NDROP derargABND SYMBN ; OBJ_56D01 psh MetaConcase * 85F34
           :: NDROP ~ABND;SYMBN ;                 * 85F5C
           OBJ_56D01 ABND top&Cr x+ ;             * 85F70
 
@@ -330,7 +330,7 @@ D/D+~1:
 * refs (1): 82007
 D/D-~1:
         :: OBJ_57022                             * 85F89
-          :: NDROP OBJ_56BEB Cr xNEG ; OBJ_56D01 psh MetaConcase * 85F93
+          :: NDROP derargABND Cr xNEG ; OBJ_56D01 psh MetaConcase * 85F93
           :: NDROP ~ABND;SYMBN ;                 * 85FC0
           OBJ_56D01 ABND top&Cr x- ;             * 85FD4
 
@@ -345,13 +345,13 @@ D/D/~1:
 * ROMPTR 0F0 09D
 * refs (2): 82007 82007
 D/D=~1:
-        :: OBJ_56CD1 pshzerpsharg OBJ_56D01 psh OBJ_56BEB top&Cr x= ; * 8606F
+        :: OBJ_56CD1 pshzerpsharg OBJ_56D01 psh derargABND top&Cr x= ; * 8606F
 
 * ROMPTR 0F0 09E
 * refs (1): 82007
 D/DABS~1:
         :: 3PICK OVER CARCOMP EQUALcase easyabs  * 8609C
-          OBJ_57045 OBJ_56BEB dup metaROTDUP unrot PTR addt2: xCONJ x* top& * 860BA
+          BindDvDup derargABND dup metaROTDUP unrot PTR addt2: xCONJ x* top& * 860BA
           unrot dup ROTUntop&                    * 860E7
           { xCONJ x* x+ } INNERtop& pshtop& top& * 860F6
           { xABS %2 x* x/ } INNERtop& SYMBN ;    * 8611E
@@ -359,88 +359,88 @@ D/DABS~1:
 * ROMPTR 0F0 09F
 * refs (1): 82007
 D/DACOS~1:
-        :: OBJ_57045 psh %1 pshm1                * 8614B
+        :: BindDvDup psh %1 pshm1                * 8614B
           { %2 x^ x- xSQRT xINV xNEG } INNERtop& top& OBJ_56BC3 ; * 86164
 
 * ROMPTR 0F0 0A0
 * refs (1): 82007
 D/DACOSH~1:
-        :: OBJ_57045 OBJ_56BEB psh               * 861A0
+        :: BindDvDup derargABND psh              * 861A0
           { %1 x- xSQRT } INNERtop& dup ROTDROP ' x+ 3UNROLL PTR addt2: x* * 861B4
           x/ top& top& SYMBN ;                   * 861F5
 
 * ROMPTR 0F0 0A1
 * refs (1): 82007
 D/DALOG~1:
-        :: OBJ_57045 OBJ_56BEB %10 ' xLN BINT2 unrot addt* pshtop& top& * 8620E
+        :: BindDvDup derargABND %10 ' xLN BINT2 unrot addt* pshtop& top& * 8620E
           PTR addt2: xALOG x* SYMBN ;            * 86245
 
 * ROMPTR 0F0 0A2
 * refs (1): 82007
 D/DARG~1:
-        :: OBJ_57045 OBJ_56BEB pshtop& PTR addt: x/ dup top& * 8625E
+        :: BindDvDup derargABND pshtop& PTR addt: x/ dup top& * 8625E
           { xCONJ x- %2 xi x* x/ } INNERtop& OBJ_56C72 SYMBN ; * 86286
 
 * ROMPTR 0F0 0A3
 * refs (1): 82007
 D/DASIN~1:
-        :: OBJ_57045 %1 pshm1                    * 862C2
+        :: BindDvDup %1 pshm1                    * 862C2
           { %2 x^ x- xSQRT xINV } INNERtop& top& OBJ_56BC3 ; * 862D6
 
 * ROMPTR 0F0 0A4
 * refs (1): 82007
 D/DASINH~1:
-        :: OBJ_57045 OBJ_56BEB psh %1 pshm1 2top& * 8630D
+        :: BindDvDup derargABND psh %1 pshm1 2top& * 8630D
           { %2 x^ x+ xSQRT x/ } INNERtop& SYMBN ; * 86330
 
 * ROMPTR 0F0 0A5
 * refs (1): 82007
 D/DATAN~1:
-        :: OBJ_57045 %1 pshm1                    * 86362
+        :: BindDvDup %1 pshm1                    * 86362
           { %2 x^ x+ xINV } INNERtop& top& OBJ_56BC3 ; * 86376
 
 * ROMPTR 0F0 0A6
 * refs (1): 82007
 D/DATANH~1:
-        :: OBJ_57045 OBJ_56BEB psh %1 pshm1 2top& * 863A8
+        :: BindDvDup derargABND psh %1 pshm1 2top& * 863A8
           { %2 x^ x- x/ } INNERtop& SYMBN ;      * 863CB
 
 * ROMPTR 0F0 0A7
 * refs (1): 82007
 D/DCOS~1:
-        :: OBJ_57045 PTR addt2: xSIN xNEG OBJ_56B9B ; * 863F8
+        :: BindDvDup PTR addt2: xSIN xNEG OBJ_56B9B ; * 863F8
 
 * ROMPTR 0F0 0A8
 * refs (1): 82007
 D/DCOSH~1:
-        :: OBJ_57045 OBJ_56BEB psh PTR addt: xSINH pshtop& Cr x* ; * 8641B
+        :: BindDvDup derargABND psh PTR addt: xSINH pshtop& Cr x* ; * 8641B
 
 * ROMPTR 0F0 0A9
 * refs (1): 82007
 D/DEXP~1:
-        :: OBJ_57045 OBJ_56BEB pshtop& PTR addt2: xEXP x* SYMBN ; * 8644D
+        :: BindDvDup derargABND pshtop& PTR addt2: xEXP x* SYMBN ; * 8644D
 
 * ROMPTR 0F0 0AA
 * refs (1): 82007
 D/DINV~1:
-        :: OBJ_57045 OBJ_56BEB metaneg pshtop& %2 SWAP#1+ PTR addt2: x^ x/ * 8647A
+        :: BindDvDup derargABND metaneg pshtop& %2 SWAP#1+ PTR addt2: x^ x/ * 8647A
           SYMBN ;                                * 864AC
 
 * ROMPTR 0F0 0AB
 * refs (1): 82007
 D/DLN~1:
-        :: OBJ_57045 OBJ_56BEB pshtop& Cr x/ ;   * 864B6
+        :: BindDvDup derargABND pshtop& Cr x/ ;  * 864B6
 
 * ROMPTR 0F0 0AC
 * refs (1): 82007
 D/DLNP1~1:
-        :: OBJ_57045 OBJ_56BEB pshtop&           * 864D9
+        :: BindDvDup derargABND pshtop&          * 864D9
           { %1 x+ x/ } INNERtop& SYMBN ;         * 864ED
 
 * ROMPTR 0F0 0AD
 * refs (1): 82007
 D/DLOG~1:
-        :: OBJ_57045 OBJ_56BEB pshtop&           * 86515
+        :: BindDvDup derargABND pshtop&          * 86515
           { %10 xLN x* x/ } INNERtop& SYMBN ;    * 86529
 
 * ROMPTR 0F0 0AE
@@ -452,34 +452,34 @@ D/DIFTE~1:
 * ROMPTR 0F0 0AF
 * refs (1): 82007
 D/DSIN~1:
-        :: OBJ_57045 PTR addt: xCOS OBJ_56B9B ;  * 865B0
+        :: BindDvDup PTR addt: xCOS OBJ_56B9B ;  * 865B0
 
 * ROMPTR 0F0 0B0
 * refs (1): 82007
 D/DSINH~1:
-        :: OBJ_57045 PTR addt: xCOSH psh OBJ_56BEB top&Cr x* ; * 865CE
+        :: BindDvDup PTR addt: xCOSH psh derargABND top&Cr x* ; * 865CE
 
 * ROMPTR 0F0 0B1
 * refs (1): 82007
 D/DSQ~1:
-        :: OBJ_57045 %2 pshm1 top& addt* psh OBJ_56BEB top&Cr x* ; * 865FB
+        :: BindDvDup %2 pshm1 top& addt* psh derargABND top&Cr x* ; * 865FB
 
 * ROMPTR 0F0 0B2
 * refs (1): 82007
 D/DSQRT~1:
-        :: OBJ_57045 OBJ_56BEB psh %2 pshm1 2top& * 86632
+        :: BindDvDup derargABND psh %2 pshm1 2top& * 86632
           { xSQRT x* x/ } INNERtop& SYMBN ;      * 86655
 
 * ROMPTR 0F0 0B3
 * refs (1): 82007
 D/DTAN~1:
-        :: OBJ_57045 %1pshm1 top&                * 8667D
+        :: BindDvDup %1pshm1 top&                * 8667D
           { xTAN %2 x^ x+ } INNERtop& OBJ_56B9B ; * 86691
 
 * ROMPTR 0F0 0B4
 * refs (1): 82007
 D/DTANH~1:
-        :: OBJ_57045 OBJ_56BEB pshtop&           * 866BE
+        :: BindDvDup derargABND pshtop&          * 866BE
           { xCOSH %2 x^ x/ } INNERtop& SYMBN ;   * 866D2
 
 * ROMPTR 0F0 0B5
@@ -505,7 +505,7 @@ D/D^Y~1:
 * ROMPTR 0F0 0B8
 * refs (1): 82007
 D/DDER~1:
-        :: OBJ_56CD1 DROP SYMDERSTEP SINNER OBJ_56BEB SYMBN ; * 8680D
+        :: OBJ_56CD1 DROP SYMDERSTEP SINNER derargABND SYMBN ; * 8680D
 
 * ROMPTR 0F0 0B9
 * refs (1): 82007
@@ -596,7 +596,7 @@ MANMENUATG~1:
 * refs (1): 82007
 ROMP_0F0_0C7:
         :: pshm1 pshzerpsharg rot DROP OBJ_57676 ITE addtpsh psh1&rev * 86B91
-          rotswap top& meta- OBJ_5760D ;         * 86BBE
+          rotswap top& meta- IsolContinue ;      * 86BBE
 
 * ROMPTR 0F0 0C9
 * refs (2): 82007 82007
@@ -604,7 +604,7 @@ ROMP_0F0_0C9:
         :: pshm1 pshzerpsharg rot DROP OBJ_57676 ITE * 86BD7
           :: SWAP#1+ roll2top& ' x+ ;            * 86BFA
           :: psh1&rev ROTUntop& ' x- ;           * 86C18
-          SWAP#1+ OBJ_5760D ;                    * 86C36
+          SWAP#1+ IsolContinue ;                 * 86C36
 
 * ROMPTR 0F0 0CA
 * refs (1): 82007
@@ -612,7 +612,7 @@ ROMP_0F0_0CA:
         :: pshm1 pshzerpsharg rot DROP OBJ_57676 ITE * 86C45
           :: SWAP#1+ roll2top& ;                 * 86C68
           :: psh1&rev rot pshtop& ;              * 86C7C
-          meta/ OBJ_5760D ;                      * 86C95
+          meta/ IsolContinue ;                   * 86C95
 
 * ROMPTR 0F0 0CB
 * refs (1): 82007
@@ -620,7 +620,7 @@ ROMP_0F0_0CB:
         :: pshm1 pshzerpsharg rot DROP OBJ_57676 ITE * 86CA4
           :: SWAP#1+ roll2top& ' x* ;            * 86CC7
           :: psh1&rev ROTUntop& ' x/ ;           * 86CE5
-          SWAP#1+ OBJ_5760D ;                    * 86D03
+          SWAP#1+ IsolContinue ;                 * 86D03
 
 * ROMPTR 0F0 0CC
 * refs (1): 82007
@@ -628,7 +628,7 @@ ROMP_0F0_0CC:
         :: pshm1 pshzerpsharg rot DROP OBJ_57676 case OBJ_5747D * 86D12
           psh1&rev rot PTR addt: xLN PRSOL? ?SKIP * 86D3A
           :: OBJ_57716 ~top&;meta+ ;             * 86D58
-          pshtop& PTR addt2: xLN x/ OBJ_5760D ;  * 86D6C
+          pshtop& PTR addt2: xLN x/ IsolContinue ; * 86D6C
 
 * ROMPTR 0F0 0CD
 * refs (1): 82007
@@ -637,55 +637,55 @@ ROMP_0F0_0CD:
           :: DROPNDROP #1-SWAP COLA OBJ_57324    * 86D9E
           ;                                      * 86DB7
           num2=case                              * 86DBC
-          :: DROPNDROP psh PTR addt: xSQRT PRSOL? IT OBJ_5760D * 86DC1
-            OBJ_57856 OBJ_5760D ;                * 86DE9
+          :: DROPNDROP psh PTR addt: xSQRT PRSOL? IT IsolContinue * 86DC1
+            OBJ_57856 IsolContinue ;             * 86DE9
           DROP rot psh dup roll2top& PTR addt2: xINV x^ PRSOL? case * 86DF8
-          :: SWAPUnNDROP OBJ_5760D ;             * 86E2A
-          OBJ_57716 ROTUntop& PTR addt2: x/ xEXP pshtop& meta* OBJ_5760D ; * 86E3E
+          :: SWAPUnNDROP IsolContinue ;          * 86E2A
+          OBJ_57716 ROTUntop& PTR addt2: x/ xEXP pshtop& meta* IsolContinue ; * 86E3E
 
 * ROMPTR 0F0 0CE
 * refs (1): 82007
 ROMP_0F0_0CE:
-        :: OBJ_57630 xLN OBJ_57716 top& meta+ OBJ_5760D ; * 86E6B
+        :: OBJ_57630 xLN OBJ_57716 top& meta+ IsolContinue ; * 86E6B
 
 * ROMPTR 0F0 0CF
 * refs (1): 82007
 ROMP_0F0_0CF:
-        :: OBJ_57630 xASIN OBJ_577C0 OBJ_5781A OBJ_5760D ; * 86E93
+        :: OBJ_57630 xASIN OBJ_577C0 OBJ_5781A IsolContinue ; * 86E93
 
 * ROMPTR 0F0 0D0
 * refs (1): 82007
 ROMP_0F0_0D0:
-        :: OBJ_57630 xACOS OBJ_57856 OBJ_57757 ~top&;meta+ OBJ_5760D ; * 86EB6
+        :: OBJ_57630 xACOS OBJ_57856 OBJ_57757 ~top&;meta+ IsolContinue ; * 86EB6
 
 * ROMPTR 0F0 0D1
 * refs (1): 82007
 ROMP_0F0_0D1:
-        :: OBJ_57630 xATAN OBJ_577C0 ~top&;meta+ OBJ_5760D ; * 86EDE
+        :: OBJ_57630 xATAN OBJ_577C0 ~top&;meta+ IsolContinue ; * 86EDE
 
 * ROMPTR 0F0 0D2
 * refs (1): 82007
 ROMP_0F0_0D2:
-        :: OBJ_57630 xASINH OBJ_576DF OBJ_5781A OBJ_5760D ; * 86F01
+        :: OBJ_57630 xASINH OBJ_576DF OBJ_5781A IsolContinue ; * 86F01
 
 * ROMPTR 0F0 0D3
 * refs (1): 82007
 ROMP_0F0_0D3:
-        :: OBJ_57630 xACOSH OBJ_57856 OBJ_57716 ~top&;meta+ OBJ_5760D ; * 86F24
+        :: OBJ_57630 xACOSH OBJ_57856 OBJ_57716 ~top&;meta+ IsolContinue ; * 86F24
 
 * ROMPTR 0F0 0D4
 * refs (1): 82007
 ROMP_0F0_0D4:
-        :: OBJ_57630 xATANH OBJ_576DF ~top&;meta+ OBJ_5760D ; * 86F4C
+        :: OBJ_57630 xATANH OBJ_576DF ~top&;meta+ IsolContinue ; * 86F4C
 
 * ROMPTR 0F0 0D5
 * refs (1): 82007
 ROMP_0F0_0D5:
         :: OBJ_57630 xLOG OBJ_57716 top&         * 86F6F
-          { %10 xLN x/ x+ } INNERtop& OBJ_5760D ; * 86F88
+          { %10 xLN x/ x+ } INNERtop& IsolContinue ; * 86F88
 
 * ROMPTR 0F0 0D6
 * refs (1): 82007
 ROMP_0F0_0D6:
-        :: OBJ_57630 xLNP1 OBJ_57716 top& meta+ OBJ_5760D ; * 86FB5
+        :: OBJ_57630 xLNP1 OBJ_57716 top& meta+ IsolContinue ; * 86FB5
         NIBHEX  1B92000                          * 86FDD  ±).

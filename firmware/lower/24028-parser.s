@@ -1182,6 +1182,7 @@ OBJ_25CF5:
         $ "  "                                   * 25CF5
 
 * refs (13): 24398 24794 247C1 248B1 248DE 24924 ...
+* Probably: parser: read the current token as a real number
 OBJ_25D03:
         :: tokexponent DPRADIX? tok. tok, RPITE realPAcode !*trior * 25D03
           DaDGNTc FALSE ;                        * 25D2B

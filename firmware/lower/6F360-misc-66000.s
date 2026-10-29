@@ -10,7 +10,7 @@ OBJ_6F360:
 
 * refs (8): 65E81 65EA9 6657F 6F1CB 6F2F2 6F338 ...
 OBJ_6F36A:
-          :: OBJ_67E64 OBJ_679C5 ; OBJ_6D1C7 3PICK * 6F36A
+          :: OBJ_67E64 EqwBoxLast@ ; OBJ_6D1C7 3PICK * 6F36A
           :: OBJ_67E64 OBJ_68F7B DROP OBJ_6ECF8 NOT ; OVER NOTAND case 3DROP * 6F388
           3PICK                                  * 6F3BF
 
@@ -40,14 +40,15 @@ OBJ_6F42D:
 * refs (4): 65E22 6F2C0 6F310 6F54A
 OBJ_6F46E:
           :: OVERSWAP #2- OBJ_67F0B ; SWAP BINT4 #<>case OBJ_6F41E * 6F46E
-          OBJ_67E64 OBJ_65D14 GOTO L_6F428 ;     * 6F49B
+          OBJ_67E64 EqwBoxSecond@ GOTO L_6F428 ; * 6F49B
 
 * refs (1): 6E3ED
 OBJ_6F4B4:
-        :: OVER OBJ_6F36A OBJ_679C5 OBJ_67416 BEGIN OBJ_678D6 3PICK OVER#= * 6F4B4
-          NOT_WHILE SWAPDROP REPEAT DROPSWAPDROP OBJ_67987 OBJ_6ECF8 case * 6F4E1
-          :: UNROTOVER OBJ_6F3C4 #2+ OBJ_67F0B OBJ_6D523 OBJ_678D6 SWAP * 6F504
-            OBJ_67BFC ;                          * 6F52C
+        :: OVER OBJ_6F36A EqwBoxLast@ EqwCurBox@ BEGIN EqwDupBoxParent@ * 6F4B4
+          3PICK OVER#= NOT_WHILE SWAPDROP REPEAT DROPSWAPDROP OBJ_67987 * 6F4D7
+          OBJ_6ECF8 case                         * 6F4FA
+          :: UNROTOVER OBJ_6F3C4 #2+ OBJ_67F0B OBJ_6D523 EqwDupBoxParent@ * 6F504
+            SWAP EqwBoxLast! ;                   * 6F527
           DROP 7GETLAM NOTcase                   * 6F536
           :: OBJ_6F46E OBJ_6F3C4 ;               * 6F545
           DROPDUP OBJ_67E54 INNERCOMP ROT DUPTWO #/ DROP #- 3UNROLL {}N * 6F559
@@ -69,7 +70,7 @@ OBJ_6F5B3:
 
 * refs (4): 6F838 6F955 6FA1D 6FA4F
 OBJ_6F5E5:
-          :: OBJ_678D6 DUP#0= ; NOTcase OBJ_679D7 * 6F5E5
+          :: EqwDupBoxParent@ DUP#0= ; NOTcase OBJ_679D7 * 6F5E5
           drop;q_58A0C                           * 6F603
 
 * refs (5): 461AA 6F82E 6F842 6F879 6F946
@@ -82,9 +83,9 @@ OBJ_6F621:
           NOTcase2drop 2DROPFALSE                * 6F649
           SWAPDROP BEGIN OBJ_679EA OVER OBJ_67B17 #0<> AND NOT_WHILE * 6F653
           :: OBJ_679EA ITE                       * 6F67B
-            :: 2DUPSWAP ITE OBJ_6798C OBJ_679A1  * 6F68A
+            :: 2DUPSWAP ITE EqwBoxNext@ EqwBoxPrev@ * 6F68A
               DUP#0<> case SWAPDROP              * 6F6A3
-              DROP OBJ_678D6 OBJ_679D7 5ROLL #=?SKIP * 6F6B2
+              DROP EqwDupBoxParent@ OBJ_679D7 5ROLL #=?SKIP * 6F6B2
 
 rot;not(?);3rolld:
               :: ROT NOT 3UNROLL ; 3RDROP 3UNROLL COLA OBJ_6F621 * 6F6CB
@@ -97,9 +98,9 @@ rot;not(?);3rolld:
 OBJ_6F71B:
         :: OBJ_679D2 5PICK #= 4PICK ?SKIP NOT    * 6F71B
           case                                   * 6F73E
-          :: OVER case OBJ_679B3                 * 6F743
-            OBJ_679C5 ;                          * 6F757
-          ZEROSWAP OBJ_679B3 DUP BEGIN OBJ_67B12 DUP OBJ_66BAD ITE * 6F761
+          :: OVER case EqwBoxFirst@              * 6F743
+            EqwBoxLast@ ;                        * 6F757
+          ZEROSWAP EqwBoxFirst@ DUP BEGIN OBJ_67B12 DUP OBJ_66BAD ITE * 6F761
           :: DUP OBJ_6EE65 casedrop BINT0        * 6F789
           ;                                      * 6F7A2
           DROPZERO                               * 6F7A7
@@ -107,7 +108,7 @@ OBJ_6F71B:
           :: 4ROLLDROP 3UNROLL SWAPDROPDUP ; DROP OBJ_6FEE1 SWAP #0= * 6F7B6
           NOT?SEMI                               * 6F7E3
           BEGIN OBJ_679EA WHILE                  * 6F7E8
-          :: OBJ_6798C ; REPEAT ;                * 6F7F7
+          :: EqwBoxNext@ ; REPEAT ;              * 6F7F7
 
 * refs (1): 4B4A5
 OBJ_6F810:
@@ -163,7 +164,7 @@ OBJ_6F9B4:
 * refs (2): 6F644 6FAC2
 OBJ_6F9D2:
         :: DUP4UNROLL IT                         * 6F9D2
-          :: 2DUP ITE OBJ_6798C OBJ_679A1        * 6F9E1
+          :: 2DUP ITE EqwBoxNext@ EqwBoxPrev@    * 6F9E1
             DUP#0=csDROP SWAPDROP ROTDROP TRUE RDROP ; * 6F9FA
           SWAP OBJ_6F5E5 casedrop                * 6FA18
           :: ROTROT2DROP FALSE ;                 * 6FA27
@@ -179,8 +180,8 @@ OBJ_6F9D2:
 * refs (5): 25C2D 6F8DD 6F8F1 6F9AA 6F9C8
 OBJ_6FACC:
         :: DUP ROMPTR 0EA 03C 'LB OBJ_67AEF ROTDUP OBJ_67C6C OBJ_44E3F EQITE * 6FACC
-          :: SWAPDROPSWAP #3- SWAP OBJ_679A1 OBJ_67A8B #1- OBJ_66FD5 3UNROLL * 6FAFF
-            BINT4 BINT5 ;                        * 6FB2C
+          :: SWAPDROPSWAP #3- SWAP EqwBoxPrev@ OBJ_67A8B #1- OBJ_66FD5 * 6FAFF
+            3UNROLL BINT4 BINT5 ;                * 6FB27
           :: DUP OBJ_67ABC 2DUP #2= case         * 6FB3B
             :: 4UNROLL3DROP BINT3 SWAP2DUP MAKEGROB INVGROB BINT1 3PICK #2- * 6FB59
               OBJ_6FBD1 ROT #1-UNROT ;           * 6FB86
@@ -302,14 +303,15 @@ OBJ_6FE78:
 * refs (1): 6FED7
 OBJ_6FE8C:
               :: OBJ_67B17 OBJ_6B381 OBJ_6AC80 ; * 6FE8C
-              OBJ_678D6 OBJ_679B3 BEGIN OBJ_67B12 #1+ OBJ_66BAD case * 6FEA5
+              EqwDupBoxParent@ EqwBoxFirst@ BEGIN OBJ_67B12 #1+ OBJ_66BAD * 6FEA5
+              case                               * 6FEC3
               :: SWAPDROP RDROP OBJ_6FE8C ;      * 6FEC8
 
 * refs (6): 66700 6684C 669AB 68FF8 6F7D4 6FF45
 OBJ_6FEE1:
               :: OBJ_67969 COLA NOT_UNTIL        * 6FEE1
               ;                                  * 6FEF5
-              OBJ_672E6 DUP OBJ_67E64 BEGIN OBJ_679B3 BEGIN 3PICK OVER#= * 6FEFA
+              OBJ_672E6 DUP OBJ_67E64 BEGIN EqwBoxFirst@ BEGIN 3PICK OVER#= * 6FEFA
               case                               * 6FF22
               :: 2RDROP DROPSWAPDROP OBJ_67E54 OBJ_6EF6E ; * 6FF27
               OBJ_6FEE1 #1-DUP OBJ_67E64 AGAIN ; * 6FF45

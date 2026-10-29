@@ -1,6 +1,6 @@
 * HP 48GX ROM revision R, #86FE4-#8998D: Library part 0C0
 * Addresses in the right-hand comments are those of the original ROM.
-* Most referenced: Get2ABR0 D0Back2%%
+* Most referenced: Get2ABR0 Save2ABR0 D0Back2%% PUTAB0Back MulD0%% Get2ABR0b SubCDTestb SubCDTest HypotABR0
 * Follows on from the previous file (at #86FE4 in the original ROM).
 
 LIB0C0:
@@ -170,7 +170,7 @@ L_87220:
             D1=A                                 * 87224
             GOSUBL  SUB_87BC4                    * 87227
             GOSUBL  Get2ABR0                     * 8722D
-            GOSUBL  SUB_87B01                    * 87233
+            GOSUBL  Save2ABR0                    * 87233
             GOSUBL  SUB_87B95                    * 87239
             GOSUBL  Get2ABR0                     * 8723F
             GOSUBL  SUB_88207                    * 87245
@@ -187,14 +187,14 @@ L_87255:
             C=0     A                            * 8727B
             GOSUBL  SUB_87DC6                    * 8727D
             GOSUBL  SUB_87B4C                    * 87283
-            GOSUBL  SUB_87B01                    * 87289
+            GOSUBL  Save2ABR0                    * 87289
             C=R4                                 * 8728F
             D1=C                                 * 87292
             C=DAT1  A                            * 87295
             GOSUBL  SUB_87DC6                    * 87298
             GOSUBL  SUB_87B4C                    * 8729E
             GOSUBL  SUB_87EA7                    * 872A4
-            GOSUBL  SUB_88283                    * 872AA
+            GOSUBL  HypotABR0                    * 872AA
             GOSUBL  STAB0~jump_6                 * 872B0
             GOSUBL  SUB_87D83                    * 872B6
             GOSUB   STAB2~jump_6                 * 872BC
@@ -226,7 +226,7 @@ L_87309:
             GOSUBL  SUB_87C16                    * 8731E
             GOSUBL  Get2ABR0                     * 87324
             SETDEC                               * 8732A
-            GOSUBL  SUB_88283                    * 8732C
+            GOSUBL  HypotABR0                    * 8732C
             D0=D0-  16                           * 87332
             D0=D0-  5                            * 87335
             GOSUBL  SUB_87C16                    * 87338
@@ -239,7 +239,7 @@ L_8733E:
             GOSUB   L_87961                      * 87356
             GOSUBL  PUTAB0~jump_2                * 8735A
             GOSUB   Get2ABR0                     * 87360
-            GOSUBL  SUB_88283                    * 87364
+            GOSUBL  HypotABR0                    * 87364
             CR3EX                                * 8736A
             ?C#0    A                            * 8736D
             GOYES   L_87375                      * 87370
@@ -269,7 +269,7 @@ L_87375:
             D0=D0-  16                           * 873D4
             D0=D0-  5                            * 873D7
             GOSUB   RCCD0~jump_6                 * 873DA
-            GOSUB   SUB_87AD7                    * 873DE
+            GOSUB   SubCDTest                    * 873DE
             GOC     L_873E9                      * 873E2
             GOTO    L_87309                      * 873E5
 L_873E9:
@@ -301,7 +301,7 @@ L_873E9:
             GOSUBL  SUB_87DC6                    * 87449
             GOSUB   SUB_87B4C                    * 8744F
             SETDEC                               * 87453
-            GOSUBL  SUB_88283                    * 87455
+            GOSUBL  HypotABR0                    * 87455
             GOSUBL  SUB_87CDE                    * 8745B
             C=R4                                 * 87461
             D1=C                                 * 87464
@@ -314,7 +314,7 @@ L_87470:
             GOSUB   SUB_87BB2                    * 8747C
             GOSUB   Get1%CD~jump                 * 87480
             GOSBVL  STCD2                        * 87484
-            GOSUB   SUB_87AD7                    * 8748B
+            GOSUB   SubCDTest                    * 8748B
             GOC     L_87496                      * 8748F
             GOTO    L_87744                      * 87492
 L_87496:
@@ -322,7 +322,7 @@ L_87496:
             GOSUB   SUB_879A0                    * 8749A
             GOSUBL  STAB0~jump_6                 * 8749E
             GOSUB   RCCD2~jump_6                 * 874A4
-            GOSUB   SUB_87AD7                    * 874A8
+            GOSUB   SubCDTest                    * 874A8
             GOC     L_874F1                      * 874AC
             C=R4                                 * 874AF
             D1=C                                 * 874B2
@@ -333,7 +333,7 @@ L_87496:
             GOSUBL  SUB_87D8E                    * 874C0
             GOSUB   SUB_87913                    * 874C6
             GOSUB   RCAB0~jump                   * 874CA
-            GOSUB   SUB_87AD7                    * 874CE
+            GOSUB   SubCDTest                    * 874CE
             GONC    L_874F1                      * 874D2
 L_874D5:
             GOSUB   RCAB0~jump                   * 874D5
@@ -398,7 +398,7 @@ L_87573:
             D1=D1+  5                            * 87596
             GOSUB   Get1%CD~jump                 * 87599
             C=0     S                            * 8759D
-            GOSUB   SUB_87AD7                    * 875A0
+            GOSUB   SubCDTest                    * 875A0
             GONC    L_875BB                      * 875A4
             A=0     W                            * 875A7
             B=0     W                            * 875AA
@@ -410,7 +410,7 @@ L_875BB:
             GOSUB   RCAB0~jump                   * 875BB
             GOSUB   Get1%CD~jump                 * 875BF
             C=0     S                            * 875C3
-            GOSUB   SUB_87AD7                    * 875C6
+            GOSUB   SubCDTest                    * 875C6
             GONC    L_875D7                      * 875CA
             A=0     W                            * 875CD
             B=0     W                            * 875D0
@@ -449,11 +449,11 @@ L_8762B:
             RSTK=C                               * 87634
             GOSUB   SUB_87D15                    * 87636
             GOSUB   SUB_87B4C                    * 8763A
-            GOSUB   SUB_87B01                    * 8763E
+            GOSUB   Save2ABR0                    * 8763E
             GOSUB   SUB_87BC4                    * 87642
             GOSUB   Get2ABR0                     * 87646
             GOSUBL  SUB_87E4C                    * 8764A
-            GOSUB   SUB_87B01                    * 87650
+            GOSUB   Save2ABR0                    * 87650
             GOSUB   SUB_87B95                    * 87654
             GOSUB   Get2ABR0                     * 87658
             GOSUB   SUB_87E34                    * 8765C
@@ -466,10 +466,10 @@ L_8762B:
             GOC     L_876C4                      * 87677
             GOSUB   PutAB%1~jump                 * 8767A
             GOSUB   Get2ABR0                     * 8767E
-            GOSUB   SUB_87B01                    * 87682
+            GOSUB   Save2ABR0                    * 87682
             GOSUB   Get2ABR0                     * 87686
             GOSUB   SUB_87E4C                    * 8768A
-            GOSUB   SUB_87B01                    * 8768E
+            GOSUB   Save2ABR0                    * 8768E
             GOSUB   SUB_87B95                    * 87692
             C=RSTK                               * 87696
             CD1EX                                * 87698
@@ -491,11 +491,11 @@ L_876C8:
             GOSUB   PUTAB0~jump_2                * 876C8
 L_876CC:
             GOSUB   SUB_87B38                    * 876CC
-            GOSUB   SUB_87B01                    * 876D0
+            GOSUB   Save2ABR0                    * 876D0
             GOSUB   SUB_87BA1                    * 876D4
             GOSUB   Get2ABR0                     * 876D8
             GOSUB   SUB_87E4C                    * 876DC
-            GOSUB   SUB_87B01                    * 876E0
+            GOSUB   Save2ABR0                    * 876E0
             C=RSTK                               * 876E4
             D0=C                                 * 876E6
             GOSUB   SUB_87B38                    * 876E9
@@ -521,7 +521,7 @@ L_8772A:
             GOSUB   SUB_87CA7                    * 8772A
             GOSUB   SUB_87B2C                    * 8772E
             SETDEC                               * 87732
-            GOSUBL  SUB_88283                    * 87734
+            GOSUBL  HypotABR0                    * 87734
             GOSUB   SUB_87CDE                    * 8773A
             GOLONG  L_87F49                      * 8773E
 L_87744:
@@ -552,12 +552,12 @@ L_8775A:
             D1=D1+  16                           * 8778D
             D1=D1+  5                            * 87790
             GOSUB   Get2ABR0                     * 87793
-            GOSUBL  SUB_88283                    * 87797
+            GOSUBL  HypotABR0                    * 87797
             GOSUB   STAB0~jump_6                 * 8779D
             GOSUB   RCCD2~jump_6                 * 877A1
             GOSUB   L_87961                      * 877A5
             GOSUB   RCCD0~jump_6                 * 877A9
-            GOSUB   SUB_87AD7                    * 877AD
+            GOSUB   SubCDTest                    * 877AD
             ?B=0    WP                           * 877B1
             GOYES   L_877BA                      * 877B4
             GOTO    L_87541                      * 877B6
@@ -575,7 +575,7 @@ L_877BA:
             GOSUB   MULTF~jump_5                 * 877E0
             GOSUB   RCCD0~jump_6                 * 877E4
             GOSUB   XYEX~jump_4                  * 877E8
-            GOSUB   SUB_87AD7                    * 877EC
+            GOSUB   SubCDTest                    * 877EC
             GOC     L_877F7                      * 877F0
             GOTO    L_878BF                      * 877F3
 L_877F7:
@@ -612,7 +612,7 @@ L_87807:
 L_87866:
             GOSUB   SUB_87D57                    * 87866
             GOSUB   SUB_87B4C                    * 8786A
-            GOSUB   SUB_87B01                    * 8786E
+            GOSUB   Save2ABR0                    * 8786E
             GOSUB   SUB_87BB2                    * 87872
             GOSUB   GETAB1~jump                  * 87876
             C=0     W                            * 8787A
@@ -862,7 +862,8 @@ L_87ACF:
             RTNCC                                * 87AD5
 
 * refs (12): 873DE 8748B 874A8 874CE 875A0 875C6 ...
-SUB_87AD7:
+* A/B = A/B - C/D; carry set when the result is >= 0; decimal mode
+SubCDTest:
             SETDEC                               * 87AD7
             C=-C-1  S                            * 87AD9
             GOSUB   L_87961                      * 87ADC
@@ -885,8 +886,8 @@ EXAB0~jump_3:
             GOVLNG  EXAB0                        * 87AFA
 
 * refs (16): 87233 87289 8763E 87650 87682 8768E ...
-* Probably: counterpart of Get2ABR0: store A/B, then R0/R1, as two %% at R4+#1F4
-SUB_87B01:
+* Store A/B, then R0/R1, as two %% at R4+#1F4 (R4: the library's workspace hex string); A/B and R0/R1 come back unchanged
+Save2ABR0:
             GOSUB   SUB_87C4B                    * 87B01
             GOTO    L_87AF2                      * 87B05
 
@@ -1426,7 +1427,7 @@ L_87F49:
             GOSUB   SUB_87B8F                    * 87F49
             GOSUB   Get2ABR0                     * 87F4D
             SETDEC                               * 87F51
-            GOSUB   SUB_88283                    * 87F53
+            GOSUB   HypotABR0                    * 87F53
             GOSUB   SUB_87C4B                    * 87F57
             C=R4                                 * 87F5B
             D1=C                                 * 87F5E
@@ -1438,7 +1439,7 @@ L_87F49:
             GOSUB   SUB_87E01                    * 87F6C
             GOSUB   SUB_87B4C                    * 87F70
             SETDEC                               * 87F74
-            GOSUB   SUB_88283                    * 87F76
+            GOSUB   HypotABR0                    * 87F76
 L_87F7A:
             SETDEC                               * 87F7A
             D0=D0-  16                           * 87F7C
@@ -1446,7 +1447,7 @@ L_87F7A:
             GOSUB   SUB_87982                    * 87F82
             GOSUB   STAB2~jump_6                 * 87F86
             GOSUB   Get2ABR0                     * 87F8A
-            GOSUB   SUB_88283                    * 87F8E
+            GOSUB   HypotABR0                    * 87F8E
             GOSUB   RCCD2~jump_6                 * 87F92
             GOSUB   L_87961                      * 87F96
             GOSBVL  CkATTNcode                   * 87F9A
@@ -1464,7 +1465,7 @@ L_87F7A:
             GOSUB   SUB_87D6D                    * 87FC3
             GOSUB   SUB_87913                    * 87FC7
             GOSBVL  EXAB2                        * 87FCB
-            GOSUB   SUB_87AD7                    * 87FD2
+            GOSUB   SubCDTest                    * 87FD2
             GONC    L_87FDD                      * 87FD6
             GOTO    L_878BF                      * 87FD9
 L_87FDD:
@@ -1477,7 +1478,7 @@ L_87FDD:
             GOSUB   SUB_87D36                    * 87FEF
             GOSUB   RCCD2~jump_6                 * 87FF3
             GOSUB   XYEX~jump_4                  * 87FF7
-            GOSUB   SUB_87AD7                    * 87FFB
+            GOSUB   SubCDTest                    * 87FFB
             GONC    L_88008                      * 87FFF
             GOLONG  L_87744                      * 88002
 L_88008:
@@ -1487,12 +1488,12 @@ L_88008:
             GOSUB   STAB2~jump_6                 * 88014
             GOSUB   SUB_87B89                    * 88018
             GOSUB   Get2ABR0                     * 8801C
-            GOSUB   SUB_88283                    * 88020
+            GOSUB   HypotABR0                    * 88020
             GOSUB   SUB_87913                    * 88024
             GOSBVL  EXAB2                        * 88028
             GOSUB   L_87961                      * 8802F
             GOSUB   RCCD2~jump_6                 * 88033
-            GOSUB   SUB_87AD7                    * 88037
+            GOSUB   SubCDTest                    * 88037
             ?B#0    WP                           * 8803B
             GOYES   L_88044                      * 8803E
             GOTO    L_878BF                      * 88040
@@ -1503,7 +1504,7 @@ L_88044:
 SUB_8804A:
             GOSUB   SUB_87D20                    * 8804A
             GOSUB   SUB_87B4C                    * 8804E
-            GOSUB   SUB_87B01                    * 88052
+            GOSUB   Save2ABR0                    * 88052
             GOSUB   Get2ABR0                     * 88056
             GOSUB   SUB_87EA7                    * 8805A
             GOSUB   SUB_87CD3                    * 8805E
@@ -1528,7 +1529,7 @@ SUB_8804A:
             GOSUB   SUB_879A0                    * 880AF
             GOSUB   L_87B63                      * 880B3
             GOSUB   SUB_8813B                    * 880B7
-            GOSUB   SUB_87B01                    * 880BB
+            GOSUB   Save2ABR0                    * 880BB
             GOSUB   SUB_87D62                    * 880BF
             GOSUB   SUB_87B4C                    * 880C3
             GOSUB   SUB_87E4C                    * 880C7
@@ -1541,7 +1542,7 @@ SUB_8804A:
             GOSUB   SUB_87EA7                    * 880E4
             GOSUB   SUB_87B89                    * 880E8
             GOSUB   SUB_87B28                    * 880EC
-            GOSUB   SUB_88283                    * 880F0
+            GOSUB   HypotABR0                    * 880F0
             D1=D1+  16                           * 880F4
             D1=D1+  5                            * 880F7
             GOSUB   PutAB%1~jump                 * 880FA
@@ -1560,7 +1561,7 @@ SUB_88120:
             GOSUB   STAB0~jump_6                 * 88120
             GOSUB   SUB_87D78                    * 88124
             GOSUB   RCCD0~jump_6                 * 88128
-            GOSUB   SUB_87AD7                    * 8812C
+            GOSUB   SubCDTest                    * 8812C
             RTNNC                                * 88130
             GOSUB   RCAB0~jump                   * 88133
             GOTO    SUB_87C09                    * 88137
@@ -1573,7 +1574,7 @@ SUB_8813B:
             GOSUB   SUB_87B58                    * 88147
             GOSUB   SUB_87B89                    * 8814B
             GOSUB   Get2ABR0                     * 8814F
-            GOSUB   SUB_87B01                    * 88153
+            GOSUB   Save2ABR0                    * 88153
             GOSUB   SUB_87BC4                    * 88157
             GOSUB   Get2ABR0                     * 8815B
             GOSUB   SUB_87E4C                    * 8815F
@@ -1582,9 +1583,9 @@ SUB_8813B:
             GOSUB   SUB_87AEE                    * 8816B
             GOSUB   SUB_87B95                    * 8816F
             GOSUB   Get2ABR0                     * 88173
-            GOSUB   SUB_87B01                    * 88177
+            GOSUB   Save2ABR0                    * 88177
             GOSUB   SUB_87E4C                    * 8817B
-            GOSUB   SUB_87B01                    * 8817F
+            GOSUB   Save2ABR0                    * 8817F
             GOSUB   SUB_87B38                    * 88183
             GOSUB   SUB_87E34                    * 88187
             GOSUB   SUB_88215                    * 8818B
@@ -1594,7 +1595,7 @@ SUB_8813B:
             GOSUB   SUB_87BA1                    * 88199
             GOSUB   Get2ABR0                     * 8819D
             GOSUB   SUB_88207                    * 881A1
-            GOSUB   SUB_87B01                    * 881A5
+            GOSUB   Save2ABR0                    * 881A5
             GOSUBL  SUB_87982                    * 881A9
             GOSUB   EXAB0~jump_3                 * 881AF
             GOSUBL  SUB_87982                    * 881B3
@@ -1607,7 +1608,7 @@ SUB_8813B:
             GOSUB   SUB_88207                    * 881CF
 L_881D3:
             GOSUB   SUB_87E34                    * 881D3
-            GOSUB   SUB_87B01                    * 881D7
+            GOSUB   Save2ABR0                    * 881D7
             GOSUB   SUB_87B95                    * 881DB
             GOSUB   Get2ABR0                     * 881DF
             GOSUB   SUB_87EA7                    * 881E3
@@ -1633,7 +1634,7 @@ SUB_88215:
             GOSUBL  STAB2~jump_6                 * 88215
             GOSUB   EXAB0~jump_3                 * 8821B
             GOSUB   SUB_87C4B                    * 8821F
-            GOSUB   SUB_88283                    * 88223
+            GOSUB   HypotABR0                    * 88223
             ?B#0    W                            * 88227
             GOYES   L_88230                      * 8822A
             GOTO    STAB0~jump_6                 * 8822C
@@ -1662,7 +1663,8 @@ L_8827F:
             GOTO    EXAB0~jump_3                 * 8827F
 
 * refs (12): 872AA 8732C 87364 87455 87734 87797 ...
-SUB_88283:
+* A/B = sqrt(x^2+y^2) for x in A/B and y in R0/R1 (the modulus of a complex number held as two %%)
+HypotABR0:
             P=      14                           * 88283
             C=R1                                 * 88285
             ?C#0    WP                           * 88288
@@ -1913,24 +1915,24 @@ L_8862E:
             D1=A                                 * 88639
             A=0     W                            * 8863C
             B=0     W                            * 8863F
-            GOSUBL  SUB_8921F                    * 88642
+            GOSUBL  PUTAB0Back                   * 88642
             GOSUBL  GETAB1~jump_2                * 88648
             A=0     S                            * 8864E
             D0=D0-  16                           * 88651
             D0=D0-  5                            * 88654
-            GOSUBL  SUB_8921F                    * 88657
+            GOSUBL  PUTAB0Back                   * 88657
 L_8865D:
             R3=C                                 * 8865D
             GOSUBL  GETAB0~jump_2                * 88660
             SETDEC                               * 88666
-            GOSUBL  SUB_88F99                    * 88668
+            GOSUBL  MulD0%%                      * 88668
             GOSUBL  SUB_891EA                    * 8866E
             GOSUBL  GETCD0~jump_2                * 88674
             GOSUBL  L_88F78                      * 8867A
             GOSUBL  PUTAB0~jump_3                * 88680
             GOSUBL  GETAB0~jump_2                * 88686
             GOSUBL  SUB_891EA                    * 8868C
-            GOSUBL  SUB_88F99                    * 88692
+            GOSUBL  MulD0%%                      * 88692
             GOSUBL  Get1%CD~jump_2               * 88698
             C=0     S                            * 8869E
             AR3EX                                * 886A1
@@ -1940,7 +1942,7 @@ L_8865D:
 L_886AC:
             AR3EX                                * 886AC
             GOSUBL  L_88F78                      * 886AF
-            GOSUBL  SUB_8921F                    * 886B5
+            GOSUBL  PUTAB0Back                   * 886B5
             GOSBVL  CkATTNcode                   * 886BB
             C=R3                                 * 886C2
             C=C-1   A                            * 886C5
@@ -1952,11 +1954,11 @@ L_886AC:
             GOSUBL  GETCD0~jump_2                * 886DB
             GOSBVL  STCD0                        * 886E1
             GOSUBL  L_88F78                      * 886E8
-            GOSUBL  SUB_8921F                    * 886EE
+            GOSUBL  PUTAB0Back                   * 886EE
             D0=D0-  16                           * 886F4
             D0=D0-  5                            * 886F7
             GOSUBL  RCCD0~jump_7                 * 886FA
-            GOSUBL  SUB_890E0                    * 88700
+            GOSUBL  SubCDTestb                   * 88700
             GOC     L_8870D                      * 88706
             GOTO    L_8862E                      * 88709
 L_8870D:
@@ -1970,7 +1972,7 @@ L_8870D:
             GOSUBL  SUB_891AA                    * 8872A
             GOSUBL  GETAB1~jump_2                * 88730
             SETDEC                               * 88736
-            GOSUBL  SUB_88F99                    * 88738
+            GOSUBL  MulD0%%                      * 88738
             D=0     W                            * 8873E
             C=0     W                            * 88741
             P=      11                           * 88744
@@ -1999,7 +2001,7 @@ L_88799:
             GOSUBL  SUB_891BB                    * 887A5
             GOSUBL  Get1%CD~jump_2               * 887AB
             GOSBVL  STCD2                        * 887B1
-            GOSUBL  SUB_890E0                    * 887B8
+            GOSUBL  SubCDTestb                   * 887B8
             GOC     L_887C5                      * 887BE
             GOTO    L_88D40                      * 887C1
 L_887C5:
@@ -2007,7 +2009,7 @@ L_887C5:
             GOSUB   SUB_88FB7                    * 887C9
             GOSUBL  STAB0~jump_7                 * 887CD
             GOSUB   RCCD2~jump_7                 * 887D3
-            GOSUBL  SUB_890E0                    * 887D7
+            GOSUBL  SubCDTestb                   * 887D7
             GOC     L_88828                      * 887DD
             C=R4                                 * 887E0
             D1=C                                 * 887E3
@@ -2018,7 +2020,7 @@ L_887C5:
             GOSUBL  SUB_893C3                    * 887F1
             GOSUB   SUB_88F2A                    * 887F7
             GOSUB   RCAB0~jump_2                 * 887FB
-            GOSUBL  SUB_890E0                    * 887FF
+            GOSUBL  SubCDTestb                   * 887FF
             GONC    L_88828                      * 88805
 L_88808:
             GOSUB   RCAB0~jump_2                 * 88808
@@ -2059,7 +2061,7 @@ L_8887A:
             GOSUB   SUB_88F2A                    * 88880
             GOSUBL  GETAB1~jump_2                * 88884
             GOSUB   STAB2~jump_7                 * 8888A
-            GOSUBL  SUB_89151                    * 8888E
+            GOSUBL  Get2ABR0b                    * 8888E
             SETDEC                               * 88894
             GOSUB   L_88F78                      * 88896
             GOSUBL  EXAB0~jump_4                 * 8889A
@@ -2082,13 +2084,13 @@ L_888BA:
             GOSUBL  SUB_891CD                    * 888DC
             GOSUBL  Get1%CD~jump_2               * 888E2
             C=0     S                            * 888E8
-            GOSUB   SUB_890E0                    * 888EB
+            GOSUB   SubCDTestb                   * 888EB
             GOC     L_88922                      * 888EF
             GOSUB   RCAB0~jump_2                 * 888F2
             GOSUBL  SUB_891AA                    * 888F6
             GOSUBL  Get1%CD~jump_2               * 888FC
             C=0     S                            * 88902
-            GOSUB   SUB_890E0                    * 88905
+            GOSUB   SubCDTestb                   * 88905
             GONC    L_88918                      * 88909
             A=0     W                            * 8890C
             B=0     W                            * 8890F
@@ -2116,7 +2118,7 @@ L_88922:
             CD1EX                                * 88960
             R3=C                                 * 88963
             CD1EX                                * 88966
-            GOSUBL  SUB_8921F                    * 88969
+            GOSUBL  PUTAB0Back                   * 88969
             GOSUBL  SUB_8942E                    * 8896F
             GOTO    L_889D3                      * 88975
 L_88979:
@@ -2141,7 +2143,7 @@ L_88979:
 L_889C9:
             GOTO    L_884C4                      * 889C9
 L_889CD:
-            GOSUBL  SUB_8921F                    * 889CD
+            GOSUBL  PUTAB0Back                   * 889CD
 L_889D3:
             GOSUBL  SUB_8922C                    * 889D3
             SETDEC                               * 889D9
@@ -2182,7 +2184,7 @@ L_88A18:
             GOLONG  L_89574                      * 88A5B
 L_88A61:
             GOSUB   SUB_891AA                    * 88A61
-            GOSUB   SUB_89151                    * 88A65
+            GOSUB   Get2ABR0b                    * 88A65
             GOSUB   STAB2~jump_7                 * 88A69
             GOSUBL  SUB_898F6                    * 88A6D
             GOSUBL  STAB0~jump_7                 * 88A73
@@ -2247,13 +2249,13 @@ L_88B2C:
             GOSUB   GETCD0~jump_2                * 88B2C
             GOSUB   SUB_891D8                    * 88B30
             GOSUB   SUB_89141                    * 88B34
-            GOSUB   SUB_8921F                    * 88B38
+            GOSUB   PUTAB0Back                   * 88B38
             SETDEC                               * 88B3C
             GOSUB   EXAB0~jump_4                 * 88B3E
             GOSUB   MULTF~jump_6                 * 88B42
             GOSUB   EXAB0~jump_4                 * 88B46
             GOSUB   SUB_89207                    * 88B4A
-            GOSUB   SUB_88F99                    * 88B4E
+            GOSUB   MulD0%%                      * 88B4E
             A=-A-1  S                            * 88B52
             GOSUB   SUB_88F74                    * 88B55
             A=-A-1  S                            * 88B59
@@ -2269,14 +2271,14 @@ L_88B77:
             D0=D0+  16                           * 88B7B
             D0=D0+  5                            * 88B7E
             GOSUB   SUB_89141                    * 88B81
-            GOSUB   SUB_8921F                    * 88B85
+            GOSUB   PUTAB0Back                   * 88B85
             GOSUB   EXAB0~jump_4                 * 88B89
             D0=D0+  16                           * 88B8D
             D0=D0+  5                            * 88B90
-            GOSUB   SUB_88F99                    * 88B93
+            GOSUB   MulD0%%                      * 88B93
             GOSUB   EXAB0~jump_4                 * 88B97
             GOSUB   D0Back2%%                    * 88B9B
-            GOSUB   SUB_88F99                    * 88B9F
+            GOSUB   MulD0%%                      * 88B9F
             A=-A-1  S                            * 88BA3
             GOSUB   SUB_88F74                    * 88BA6
             A=-A-1  S                            * 88BAA
@@ -2294,7 +2296,7 @@ L_88BC8:
 L_88BD2:
             GOSUB   GETAB1~jump_2                * 88BD2
             SETDEC                               * 88BD6
-            GOSUB   SUB_88F99                    * 88BD8
+            GOSUB   MulD0%%                      * 88BD8
             AR3EX                                * 88BDC
             AD1EX                                * 88BDF
             GOSUB   Get1%CD~jump_2               * 88BE2
@@ -2357,7 +2359,7 @@ L_88C4B:
             GOSUB   GETAB1~jump_2                * 88CA5
             GOSUB   GETCD0~jump_2                * 88CA9
             GOSUB   L_88F78                      * 88CAD
-            GOSUB   SUB_8921F                    * 88CB1
+            GOSUB   PUTAB0Back                   * 88CB1
             GOSUB   GETAB1~jump_2                * 88CB5
             C=0     W                            * 88CB9
             D=0     W                            * 88CBC
@@ -2373,18 +2375,18 @@ L_88C4B:
             CD0EX                                * 88CDE
             CD1EX                                * 88CE1
             GOSUB   D0Back2%%                    * 88CE4
-            GOSUB   SUB_8921F                    * 88CE8
+            GOSUB   PUTAB0Back                   * 88CE8
             GOSUB   RCAB2~jump_4                 * 88CEC
             GOSUB   SUB_88FB0                    * 88CF0
             A=-A-1  S                            * 88CF4
             D0=D0+  16                           * 88CF7
             D0=D0+  5                            * 88CFA
-            GOSUB   SUB_88F99                    * 88CFD
+            GOSUB   MulD0%%                      * 88CFD
             GOSUB   Get1%CD~jump_2               * 88D01
             GOSUB   L_88F78                      * 88D05
             GOSUB   D0Back2%%                    * 88D09
             GOSUB   GETCD0~jump_2                * 88D0D
-            GOSUB   SUB_8921F                    * 88D11
+            GOSUB   PUTAB0Back                   * 88D11
             GOSUB   SUB_891AA                    * 88D15
             GOSUB   GETAB1~jump_2                * 88D19
             GOSUB   MULTF~jump_6                 * 88D1D
@@ -2422,13 +2424,13 @@ L_88D56:
             GOSUB   STAB2~jump_7                 * 88D85
             D1=D1+  16                           * 88D89
             D1=D1+  5                            * 88D8C
-            GOSUB   SUB_89151                    * 88D8F
+            GOSUB   Get2ABR0b                    * 88D8F
             GOSUBL  SUB_898A8                    * 88D93
             GOSUB   STAB0~jump_7                 * 88D99
             GOSUB   RCCD2~jump_7                 * 88D9D
             GOSUB   L_88F78                      * 88DA1
             GOSUB   RCCD0~jump_7                 * 88DA5
-            GOSUB   SUB_890E0                    * 88DA9
+            GOSUB   SubCDTestb                   * 88DA9
             ?B=0    WP                           * 88DAD
             GOYES   L_88DB6                      * 88DB0
             GOTO    L_8887A                      * 88DB2
@@ -2446,7 +2448,7 @@ L_88DB6:
             GOSUB   MULTF~jump_6                 * 88DDC
             GOSUB   RCCD0~jump_7                 * 88DE0
             GOSUB   XYEX~jump_5                  * 88DE4
-            GOSUB   SUB_890E0                    * 88DE8
+            GOSUB   SubCDTestb                   * 88DE8
             GOC     L_88DF3                      * 88DEC
             GOTO    L_88EBB                      * 88DEF
 L_88DF3:
@@ -2469,7 +2471,7 @@ L_88E03:
             GOSUB   DIVF~jump_4                  * 88E2C
             GOSUB   SUB_892C6                    * 88E30
             GOSUB   SUB_891C7                    * 88E34
-            GOSUB   SUB_89151                    * 88E38
+            GOSUB   Get2ABR0b                    * 88E38
             GOSUB   SUB_8919E                    * 88E3C
             GOSUB   SUB_89131                    * 88E40
             GOSUB   SUB_891C7                    * 88E44
@@ -2604,7 +2606,8 @@ MULTF~jump_6:
             GOVLNG  MULTF                        * 88F92
 
 * refs (13): 88668 88692 88738 88B4E 88B93 88B9F ...
-SUB_88F99:
+* A/B *= the %% at D0 (GETCD0, MULTF); D0 past it
+MulD0%%:
             GOSUB   GETCD0~jump_2                * 88F99
             GOTO    MULTF~jump_6                 * 88F9D
 
@@ -2737,7 +2740,8 @@ L_890D8:
             RTNCC                                * 890DE
 
 * refs (12): 88700 887B8 887D7 887FF 888EB 88905 ...
-SUB_890E0:
+* A copy of SubCDTest in the library's second code part
+SubCDTestb:
             SETDEC                               * 890E0
             C=-C-1  S                            * 890E2
             GOSUB   L_88F78                      * 890E5
@@ -2767,10 +2771,10 @@ SUB_8910A:
 * refs (1): 8981C
 SUB_89112:
             GOSUB   SUB_8927C                    * 89112
-            GOSUB   SUB_8921F                    * 89116
+            GOSUB   PUTAB0Back                   * 89116
             GOSUB   GETAB0~jump_2                * 8911A
             GOSUB   EXAB0~jump_4                 * 8911E
-            GOSUB   SUB_8921F                    * 89122
+            GOSUB   PUTAB0Back                   * 89122
 
 * refs (1): 88A3F
 SUB_89126:
@@ -2797,7 +2801,8 @@ SUB_89141:
             GOTO    EXAB0~jump_4                 * 8914D
 
 * refs (13): 8888E 88A65 88D8F 88E38 89578 89639 ...
-SUB_89151:
+* A copy of Get2ABR0 in the library's second code part
+Get2ABR0b:
             GOSUB   GETAB1~jump_2                * 89151
 
 * refs (7): 88554 88E66 88EBF 88EDE 8966B 896E0 ...
@@ -2931,7 +2936,8 @@ PutAB%1~jump_2:
             GOVLNG  PutAB%1                      * 89218
 
 * refs (13): 88642 88657 886B5 886EE 88969 889CD ...
-SUB_8921F:
+* D0 -= 21, then PUTAB0: store A/B as the %% before D0, leaving D0 there
+PUTAB0Back:
             D0=D0-  16                           * 8921F
             D0=D0-  5                            * 89222
 
@@ -3257,7 +3263,7 @@ SUB_89485:
             GOSUB   STAB2~jump_7                 * 8948D
             GOSUB   RCAB0~jump_2                 * 89491
             GOSUB   D0Back2%%                    * 89495
-            GOSUB   SUB_88F99                    * 89499
+            GOSUB   MulD0%%                      * 89499
             GOSUB   RCCD2~jump_7                 * 8949D
             CD0EX                                * 894A1
             RSTK=C                               * 894A4
@@ -3267,12 +3273,12 @@ SUB_89485:
             D0=C                                 * 894B2
             GOSUB   EXAB0~jump_4                 * 894B5
             A=-A-1  S                            * 894B9
-            GOSUB   SUB_88F99                    * 894BC
+            GOSUB   MulD0%%                      * 894BC
             GOSUB   STAB2~jump_7                 * 894C0
             GOSUB   D0Back2%%                    * 894C4
             GOSUB   GETAB0~jump_2                * 894C8
             GOSUB   SUB_891FB                    * 894CC
-            GOSUB   SUB_88F99                    * 894D0
+            GOSUB   MulD0%%                      * 894D0
             GOSUB   RCCD2~jump_7                 * 894D4
             GOTO    L_88F78                      * 894D8
 
@@ -3331,7 +3337,7 @@ L_89565:
             RTN                                  * 89572
 L_89574:
             GOSUB   SUB_89198                    * 89574
-            GOSUB   SUB_89151                    * 89578
+            GOSUB   Get2ABR0b                    * 89578
             SETDEC                               * 8957C
             GOSUB   SUB_898A8                    * 8957E
             GOSUB   STAB0~jump_7                 * 89582
@@ -3368,7 +3374,7 @@ L_895CD:
             GOSUB   SUB_893A2                    * 895E0
             GOSUB   SUB_88F2A                    * 895E4
             GOSBVL  EXAB2                        * 895E8
-            GOSUB   SUB_890E0                    * 895EF
+            GOSUB   SubCDTestb                   * 895EF
             GONC    L_895FA                      * 895F3
             GOTO    L_88EBB                      * 895F6
 L_895FA:
@@ -3381,7 +3387,7 @@ L_895FA:
             GOSUB   SUB_89360                    * 8960C
             GOSUB   RCCD2~jump_7                 * 89610
             GOSUB   XYEX~jump_5                  * 89614
-            GOSUB   SUB_890E0                    * 89618
+            GOSUB   SubCDTestb                   * 89618
             GONC    L_89625                      * 8961C
             GOLONG  L_88D40                      * 8961F
 L_89625:
@@ -3390,13 +3396,13 @@ L_89625:
             GOSUB   GETAB1~jump_2                * 8962D
             GOSUB   STAB2~jump_7                 * 89631
             GOSUB   SUB_89192                    * 89635
-            GOSUB   SUB_89151                    * 89639
+            GOSUB   Get2ABR0b                    * 89639
             GOSUB   SUB_898A8                    * 8963D
             GOSUB   SUB_88F2A                    * 89641
             GOSBVL  EXAB2                        * 89645
             GOSUB   L_88F78                      * 8964C
             GOSUB   RCCD2~jump_7                 * 89650
-            GOSUB   SUB_890E0                    * 89654
+            GOSUB   SubCDTestb                   * 89654
             ?B#0    WP                           * 89658
             GOYES   L_89661                      * 8965B
             GOTO    L_88EBB                      * 8965D
@@ -3408,7 +3414,7 @@ SUB_89667:
             GOSUB   SUB_8934A                    * 89667
             GOSUB   SUB_89155                    * 8966B
             GOSUB   SUB_8910A                    * 8966F
-            GOSUB   SUB_89151                    * 89673
+            GOSUB   Get2ABR0b                    * 89673
             GOSUB   SUB_894DC                    * 89677
             GOSUB   SUB_892E7                    * 8967B
             GOSUB   SUB_89135                    * 8967F
@@ -3466,7 +3472,7 @@ SUB_89743:
             GOSUB   STAB0~jump_7                 * 89743
             GOSUB   SUB_893AD                    * 89747
             GOSUB   RCCD0~jump_7                 * 8974B
-            GOSUB   SUB_890E0                    * 8974F
+            GOSUB   SubCDTestb                   * 8974F
             RTNNC                                * 89753
             GOSUBL  RCAB0~jump_2                 * 89756
             GOTO    SUB_89212                    * 8975C
@@ -3478,16 +3484,16 @@ SUB_89760:
             GOSUB   SUB_891CD                    * 89768
             GOSUB   SUB_89161                    * 8976C
             GOSUB   SUB_89192                    * 89770
-            GOSUB   SUB_89151                    * 89774
+            GOSUB   Get2ABR0b                    * 89774
             GOSUB   SUB_8910A                    * 89778
             GOSUB   SUB_891CD                    * 8977C
-            GOSUB   SUB_89151                    * 89780
+            GOSUB   Get2ABR0b                    * 89780
             GOSUB   SUB_89481                    * 89784
             GOSUB   SUB_8982C                    * 89788
             GOSUB   SUB_891E4                    * 8978C
             GOSUB   SUB_890F7                    * 89790
             GOSUB   SUB_8919E                    * 89794
-            GOSUB   SUB_89151                    * 89798
+            GOSUB   Get2ABR0b                    * 89798
             GOSUB   SUB_8910A                    * 8979C
             GOSUB   SUB_89481                    * 897A0
             GOSUB   SUB_8910A                    * 897A4
@@ -3498,12 +3504,12 @@ SUB_89760:
             D0=D0+  5                            * 897B7
             GOSUB   SUB_890F7                    * 897BA
             GOSUB   SUB_891AA                    * 897BE
-            GOSUB   SUB_89151                    * 897C2
+            GOSUB   Get2ABR0b                    * 897C2
             GOSUB   SUB_8982C                    * 897C6
             GOSUB   SUB_8910A                    * 897CA
-            GOSUBL  SUB_88F99                    * 897CE
+            GOSUBL  MulD0%%                      * 897CE
             GOSUB   EXAB0~jump_4                 * 897D4
-            GOSUBL  SUB_88F99                    * 897D8
+            GOSUBL  MulD0%%                      * 897D8
             GOSUBL  SUB_88F74                    * 897DE
             C=A     S                            * 897E4
             GOSUB   D0Back2%%                    * 897E7
@@ -3515,12 +3521,12 @@ L_897F8:
             GOSUB   SUB_89469                    * 897F8
             GOSUB   SUB_8910A                    * 897FC
             GOSUB   SUB_8919E                    * 89800
-            GOSUB   SUB_89151                    * 89804
+            GOSUB   Get2ABR0b                    * 89804
             GOSUB   SUB_894DC                    * 89808
             GOSUB   SUB_891AA                    * 8980C
             GOSUB   SUB_89131                    * 89810
             GOSUB   SUB_891CD                    * 89814
-            GOSUB   SUB_89151                    * 89818
+            GOSUB   Get2ABR0b                    * 89818
             GOSUB   SUB_89112                    * 8981C
             GOSUB   SUB_894DC                    * 89820
             GOSUB   SUB_8919E                    * 89824

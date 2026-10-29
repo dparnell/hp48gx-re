@@ -441,7 +441,7 @@ CALCINTEG:
           { NULLLAM NULLLAM NULLLAM NULLLAM } BIND * 52D26
           CODE                                   * 52D49  50 nibbles
             GOSUBL  SAVPTR~jump_18               * 52D53
-            GOSUBL  SUB_5360F                    * 52D59
+            GOSUBL  D1=IntgWS                    * 52D59
             D1=D1+  10                           * 52D5F
             A=DAT1  W                            * 52D62
             D1=D1+  16                           * 52D66
@@ -469,7 +469,7 @@ CALCINTEG:
           CODE                                   * 52DC5  60 nibbles
             CD1EX                                * 52DCF
             RSTK=C                               * 52DD2
-            GOSUBL  SUB_5360F                    * 52DD4
+            GOSUBL  D1=IntgWS                    * 52DD4
             A=C     A                            * 52DDA
             LC(5)   #0016A                       * 52DDC
             C=C+A   A                            * 52DE3
@@ -516,7 +516,7 @@ CALCINTEG:
             GOSUB   RCCD2~jump_2                 * 52E93
             GOSUB   CALCINTEG~3                  * 52E97
             GOSUB   STAB2~jump_2                 * 52E9B
-            GOSUB   SUB_5360F                    * 52E9F
+            GOSUB   D1=IntgWS                    * 52E9F
             D1=D1+  10                           * 52EA3
             A=DAT1  W                            * 52EA6
             D1=D1+  16                           * 52EAA
@@ -557,7 +557,7 @@ L_52F17:
           CODE                                   * 52F23  42 nibbles
             GOSBVL  POP1%                        * 52F2D
             SETHEX                               * 52F34
-            GOSUB   SUB_5360F                    * 52F36
+            GOSUB   D1=IntgWS                    * 52F36
             B=C     A                            * 52F3A
             LC(5)   #0015A                       * 52F3C
             C=C+B   A                            * 52F43
@@ -595,7 +595,7 @@ L_52F17:
             DCEX    W                            * 52FCE
             GOSUB   MULTF~jump_3                 * 52FD1
             GOSUB   STAB0~jump_2                 * 52FD5
-            GOSUB   SUB_5360F                    * 52FD9
+            GOSUB   D1=IntgWS                    * 52FD9
             B=C     A                            * 52FDD
             P=      0                            * 52FDF
             LC(5)   #0015A                       * 52FE1
@@ -769,7 +769,7 @@ L_53271:
             C=0     W                            * 5327A
             D=0     W                            * 5327D
             GOSBVL  STCD2                        * 53280
-            GOSUB   SUB_5360F                    * 53287
+            GOSUB   D1=IntgWS                    * 53287
             B=C     A                            * 5328B
             P=      0                            * 5328D
             LC(5)   #0005A                       * 5328F
@@ -818,7 +818,7 @@ L_532D2:
             GOSUB   CALCINTEG~5                  * 5331F
             GOSUB   RADDF~jump_2                 * 53323
             GOSUB   STAB0~jump_2                 * 53327
-            GOSUB   SUB_5360F                    * 5332B
+            GOSUB   D1=IntgWS                    * 5332B
             D1=D1+  10                           * 5332F
             D1=D1+  16                           * 53332
             D1=D1+  16                           * 53335
@@ -892,13 +892,13 @@ L_53404:
             GOSBVL  POP#                         * 53433
             GOSUB   SAVPTR~jump_18               * 5343A
             B=A     A                            * 5343E
-            GOSUB   SUB_5360F                    * 53440
+            GOSUB   D1=IntgWS                    * 53440
             D=C     A                            * 53444
             LC(5)   #0016A                       * 53446
             C=C+D   A                            * 5344D
             D1=C                                 * 5344F
             A=DAT1  W                            * 53452
-            GOSUB   SUB_5360F                    * 53456
+            GOSUB   D1=IntgWS                    * 53456
             D=C     A                            * 5345A
             LC(5)   #0005A                       * 5345C
             C=C+D   A                            * 53463
@@ -933,7 +933,7 @@ L_53470:
           ENDCODE                                * 534C1
           CODE                                   * 534C1  154 nibbles
             GOSUB   SAVPTR~jump_18               * 534CB
-            GOSUB   SUB_5360F                    * 534CF
+            GOSUB   D1=IntgWS                    * 534CF
             D1=D1+  10                           * 534D3
             A=DAT1  W                            * 534D6
             D1=D1+  16                           * 534DA
@@ -1041,13 +1041,14 @@ RCCD2~jump_2:
 
 * refs (3): 52D85 52F1E 52F57
 CALCINTEG~6:
-        :: OBJ_4241B 4GETLAM CRUNCH CK1NoBlame DUP TYPEREAL? ?SKIP * 535D8
+        :: ?ATTNQUIT0 4GETLAM CRUNCH CK1NoBlame DUP TYPEREAL? ?SKIP * 535D8
           SETNONERAL                             * 53600
-          OBJ_4241B ;                            * 53605
+          ?ATTNQUIT0 ;                           * 53605
         ASSEMBLE
 
 * refs (12): 52D59 52DD4 52E9F 52F36 52FD9 53287 ...
-SUB_5360F:
+* D1 = CALCINTEG's workspace (the hex string in lam 3)
+D1=IntgWS:
         D1=(5)  TEMPENV                          * 5360F
         C=DAT1  A                                * 53616
         D1=C                                     * 53619
@@ -1060,7 +1061,7 @@ SUB_5360F:
 
 * refs (4): 531FF 532D2 53369 5339E
 CALCINTEG~7:
-        GOSUB   SUB_5360F                        * 5362D
+        GOSUB   D1=IntgWS                        * 5362D
         B=C     A                                * 53631
         P=      0                                * 53633
         LC(5)   #0017A                           * 53635
@@ -1072,7 +1073,7 @@ CALCINTEG~7:
 
 * refs (5): 52D9D 53085 53158 53241 5349E
 CALCINTEG~8:
-        GOSUB   SUB_5360F                        * 53647
+        GOSUB   D1=IntgWS                        * 53647
         D1=D1+  10                               * 5364B
         D1=D1+  16                               * 5364E
         D1=D1+  16                               * 53651

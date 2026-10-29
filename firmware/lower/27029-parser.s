@@ -206,6 +206,7 @@ OBJ_2729B:
           BIND pshzer OBJ_273AA ABND ;           * 27391
 
 * refs (12): 2739B 276B1 27814 2792C 27A3A 27ABC ...
+* Probably: the algebraic parser's main loop
 OBJ_273AA:
         :: check_pdata OBJ_27ED1 OBJ_2768E OBJ_27CCE 8GETLAM nultrior * 273AA
           :: drop;dq OBJ_27530 ; tok' tok=casedrop OBJ_27530 * 273CD
@@ -634,6 +635,7 @@ OBJ_282D7:
         ;                                        * 282F5
 
 * refs (13): 275E9 27715 27765 2785F 278AF 27936 ...
+* Probably: algebraic parser: nibble #i of its context hex string
 OBJ_282FA:
         :: FALSE BINT0 COLA OBJ_28318            * 282FA
         ;                                        * 28313
@@ -1078,7 +1080,7 @@ OBJ_28E7A:
 
 * refs (1): 28ECA
 OBJ_28EDE:
-        :: OBJ_6CC10 case OBJ_28F92              * 28EDE
+        :: EqwImplicit()? case OBJ_28F92         * 28EDE
           DUP #<3 ?SEMI                          * 28EF2
           3PICK REQcasedrop x*                   * 28F01
           OBJ_28F92 DROPDUP #3= ?SEMI            * 28F10
@@ -1111,7 +1113,7 @@ OBJ_2900F:
 
 * refs (1): 28FF1
 OBJ_29023:
-        :: OBJ_6CC10 case OBJ_29046              * 29023
+        :: EqwImplicit()? case OBJ_29046         * 29023
           OBJ_2909B x^ ;                         * 29037
 
 * refs (1): 29032

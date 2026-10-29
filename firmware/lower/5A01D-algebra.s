@@ -1,6 +1,6 @@
 * HP 48GX ROM revision R, #5A01D-#5D01C: Symbolic algebra
 * Addresses in the right-hand comments are those of the original ROM.
-* Most referenced: meta+ meta* metaneg evalcase: addt* metainv meta/ addtNEG uncrunch meta- dvars? drpmeta/
+* Most referenced: meta+ meta* intgLinArg metaneg evalcase: addt* metainv meta/ addtNEG uncrunch meta- dvars?
 * Follows on from the previous file (at #5A01D in the original ROM).
         RPL
 
@@ -642,6 +642,7 @@ OBJ_5B2D0:
         CON(5)  SEMI                             * 5B32A  address (the code jumps or points through it)
 
 * refs (11): 5B90B 5BB72 82921 829C1 82A61 82F96 ...
+* Probably: integral slots: go on only when the function is at position 2 of the integrand
 OBJ_5B32F:
         :: #2= ?SEMI                             * 5B32F
           FALSE RDROP ;                          * 5B33E
@@ -653,8 +654,8 @@ OBJ_5B34D:
           :: OBJ_60BCB FALSE RDROP ; TRUE ;      * 5B352
 
 * refs (26): 5BBA4 82B3D 82BA1 82C0A 82C78 82CF0 ...
-* Probably: integration tables: rule body for an argument linear in the variable
-OBJ_5B375:
+* Integration tables: rule body for F(u) with u linear in the variable: G(u)/u'
+intgLinArg:
         :: 'R BINT1 OBJ_600A3                    * 5B375
 
 * refs (3): 5B3ED 5B5B4 5B6FE
@@ -841,7 +842,7 @@ OBJ_5BB6D:
 
 'EXP(&1)':
               SYMBOL Π&1 xEXP ; NULL{}           * 5BB86
-              :: OBJ_5B375 Π&1                   * 5BB9F
+              :: intgLinArg Π&1                  * 5BB9F
 
 'EXP(&1)'_5BBAE:
                 SYMBOL Π&1 xEXP ; ;              * 5BBAE

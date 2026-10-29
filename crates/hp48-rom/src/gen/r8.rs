@@ -1421,7 +1421,7 @@ pub(crate) fn SUB_807E9(r: &mut Run) {
                 op!(r, at, 0x807E9..0x807EB, 4, r.cpu.p = 0); // P= 0
                 op!(r, at, 0x807EB..0x807F2, 9, r.cpu.load_const(R::C, 5, 0xF000)); // LC(5) #0F000
                 op!(r, at, 0x807F2..0x807F4, 4, r.cpu.copy(R::B, R::C, Field::A)); // B=C A
-                branch!(r, at, 0x807F8, 6, r.cpu.call(0x80EAE)); // GOSUB SUB_80EAE
+                branch!(r, at, 0x807F8, 6, r.cpu.call(0x80EAE)); // GOSUB D0=IRAM~jump_3
             }
             // #807F8:
             0x807F8..=0x80800 => {
@@ -1434,7 +1434,7 @@ pub(crate) fn SUB_807E9(r: &mut Run) {
                 op!(r, at, 0x80804..0x80806, 4, r.cpu.p = 0); // P= 0
                 op!(r, at, 0x80806..0x8080D, 9, r.cpu.load_const(R::C, 5, 0x10000)); // LC(5) #10000
                 op!(r, at, 0x8080D..0x8080F, 4, r.cpu.copy(R::B, R::C, Field::A)); // B=C A
-                branch!(r, at, 0x80813, 6, r.cpu.call(0x80EAE)); // GOSUB SUB_80EAE
+                branch!(r, at, 0x80813, 6, r.cpu.call(0x80EAE)); // GOSUB D0=IRAM~jump_3
             }
             // #80813:
             0x80813..=0x80818 => {
@@ -2008,7 +2008,7 @@ pub(crate) fn SUB_80BCB(r: &mut Run) {
     loop {
         match at {
             0x80BCB..=0x80BCB => {
-                branch!(r, at, 0x80BCF, 6, r.cpu.call(0x80EB5)); // GOSUB SUB_80EB5
+                branch!(r, at, 0x80BCF, 6, r.cpu.call(0x80EB5)); // GOSUB D1=IRAM~jump_5
             }
             // #80BCF:
             0x80BCF..=0x80BD5 => {
@@ -2535,7 +2535,7 @@ pub(crate) fn SUB_80DF4(r: &mut Run) {
                 op!(r, at, 0x80E28..0x80E2A, 4, r.cpu.zero(R::A, Field::A)); // A=0 A
                 io!(r, at, 0x80E2A..0x80E2D, 16, r.cpu.load(0, R::A, Field::B, r.hw)); // A=DAT0 B
                 op!(r, at, 0x80E2D..0x80E2F, 4, r.cpu.copy(R::B, R::A, Field::A)); // B=A A
-                branch!(r, at, 0x80E33, 6, r.cpu.call(0x80EB5)); // GOSUB SUB_80EB5
+                branch!(r, at, 0x80E33, 6, r.cpu.call(0x80EB5)); // GOSUB D1=IRAM~jump_5
             }
             // #80E33:
             0x80E33..=0x80E3C => {
@@ -2607,13 +2607,13 @@ pub(crate) fn SUB_80DF4(r: &mut Run) {
     }
 }
 
-// SUB_80EAE: firmware/upper/80000-selftest.s:1199
-pub(crate) fn SUB_80EAE(r: &mut Run) {
+// D0=IRAM~jump_3: firmware/upper/80000-selftest.s:1199
+pub(crate) fn D0_IRAM_jump_3(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
             0x80EAE..=0x80EAE => {
-                jump!(r, at, 9, r.cpu.pc = 0x0C1A7); // GOVLNG SUB_0C1A7
+                jump!(r, at, 9, r.cpu.pc = 0x0C1A7); // GOVLNG D0=IRAM
             }
             _ => {
                 r.cpu.pc = at;
@@ -2623,13 +2623,13 @@ pub(crate) fn SUB_80EAE(r: &mut Run) {
     }
 }
 
-// SUB_80EB5: firmware/upper/80000-selftest.s:1203
-pub(crate) fn SUB_80EB5(r: &mut Run) {
+// D1=IRAM~jump_5: firmware/upper/80000-selftest.s:1203
+pub(crate) fn D1_IRAM_jump_5(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
             0x80EB5..=0x80EB5 => {
-                jump!(r, at, 9, r.cpu.pc = 0x0C198); // GOVLNG SUB_0C198
+                jump!(r, at, 9, r.cpu.pc = 0x0C198); // GOVLNG D1=IRAM
             }
             _ => {
                 r.cpu.pc = at;
@@ -2729,7 +2729,7 @@ pub(crate) fn SUB_80EF3(r: &mut Run) {
             }
             // #80F29:
             0x80F29..=0x80F29 => {
-                branch!(r, at, 0x80F2D, 6, r.cpu.call(0x80EB5)); // GOSUB SUB_80EB5
+                branch!(r, at, 0x80F2D, 6, r.cpu.call(0x80EB5)); // GOSUB D1=IRAM~jump_5
             }
             // #80F2D:
             0x80F2D..=0x80F36 => {
@@ -2900,7 +2900,7 @@ pub(crate) fn SUB_80FA6(r: &mut Run) {
             }
             // L_8100E:
             0x8100E..=0x8100E => {
-                branch!(r, at, 0x81012, 6, r.cpu.call(0x80EB5)); // GOSUB SUB_80EB5
+                branch!(r, at, 0x81012, 6, r.cpu.call(0x80EB5)); // GOSUB D1=IRAM~jump_5
             }
             // #81012:
             0x81012..=0x8101B => {
@@ -3774,7 +3774,7 @@ pub(crate) fn SUB_8148B(r: &mut Run) {
         match at {
             0x8148B..=0x8148E => {
                 op!(r, at, 0x8148B..0x8148E, 5, r.cpu.copy(R::B, R::C, Field::W)); // B=C W
-                branch!(r, at, 0x81492, 6, r.cpu.call(0x80EB5)); // GOSUB SUB_80EB5
+                branch!(r, at, 0x81492, 6, r.cpu.call(0x80EB5)); // GOSUB D1=IRAM~jump_5
             }
             // #81492:
             0x81492..=0x814A7 => {
@@ -4113,7 +4113,7 @@ pub(crate) fn SUB_815FE(r: &mut Run) {
             0x8161B..=0x81620 => {
                 op!(r, at, 0x8161B..0x8161D, 4, r.cpu.pop_c()); // C=RSTK
                 op!(r, at, 0x8161D..0x81620, 5, r.cpu.scratch(ScratchOp::ToScratch, R::C, 0, Field::W)); // R0=C
-                branch!(r, at, 0x81624, 6, r.cpu.call(0x80EB5)); // GOSUB SUB_80EB5
+                branch!(r, at, 0x81624, 6, r.cpu.call(0x80EB5)); // GOSUB D1=IRAM~jump_5
             }
             // #81624:
             0x81624..=0x8163A => {
@@ -4233,7 +4233,7 @@ pub(crate) fn SUB_816AD(r: &mut Run) {
     loop {
         match at {
             0x816AD..=0x816AD => {
-                branch!(r, at, 0x816B3, 8, r.cpu.call(0x80EB5)); // GOSUBL SUB_80EB5
+                branch!(r, at, 0x816B3, 8, r.cpu.call(0x80EB5)); // GOSUBL D1=IRAM~jump_5
             }
             // #816B3:
             0x816B3..=0x816D5 => {
@@ -4309,7 +4309,7 @@ pub(crate) fn SUB_816E5(r: &mut Run) {
                 op!(r, at, 0x81716..0x81718, 4, r.cpu.add(R::C, R::C, Field::A)); // C=C+C A
                 op!(r, at, 0x81718..0x8171A, 4, r.cpu.dec(R::C, Field::A)); // C=C-1 A
                 op!(r, at, 0x8171A..0x8171E, 6, r.cpu.p_from_c(0)); // P=C 0
-                branch!(r, at, 0x81724, 8, r.cpu.call(0x80EB5)); // GOSUBL SUB_80EB5
+                branch!(r, at, 0x81724, 8, r.cpu.call(0x80EB5)); // GOSUBL D1=IRAM~jump_5
             }
             // #81724:
             0x81724..=0x81732 => {
@@ -4326,7 +4326,8 @@ pub(crate) fn SUB_816E5(r: &mut Run) {
     }
 }
 
-// SUB_81736: firmware/upper/80000-selftest.s:1923
+// Probably: self-test: report a failure (message at D0, the hex value at RAM #0091) on the display and the serial port
+// SUB_81736: firmware/upper/80000-selftest.s:1924
 pub(crate) fn SUB_81736(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -4377,7 +4378,7 @@ pub(crate) fn SUB_81736(r: &mut Run) {
     }
 }
 
-// SUB_81769: firmware/upper/80000-selftest.s:1941
+// SUB_81769: firmware/upper/80000-selftest.s:1942
 pub(crate) fn SUB_81769(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -4409,7 +4410,7 @@ pub(crate) fn SUB_81769(r: &mut Run) {
             }
             // #8179D:
             0x8179D..=0x8179D => {
-                branch!(r, at, 0x817A3, 8, r.cpu.call(0x80EB5)); // GOSUBL SUB_80EB5
+                branch!(r, at, 0x817A3, 8, r.cpu.call(0x80EB5)); // GOSUBL D1=IRAM~jump_5
             }
             // #817A3:
             0x817A3..=0x817AE => {
@@ -4460,7 +4461,7 @@ pub(crate) fn SUB_81769(r: &mut Run) {
     }
 }
 
-// SUB_817E9: firmware/upper/80000-selftest.s:1984
+// SUB_817E9: firmware/upper/80000-selftest.s:1985
 pub(crate) fn SUB_817E9(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -4576,7 +4577,7 @@ pub(crate) fn code_81990(r: &mut Run) {
     }
 }
 
-// SUB_819E2: firmware/upper/80000-selftest.s:2109
+// SUB_819E2: firmware/upper/80000-selftest.s:2110
 pub(crate) fn SUB_819E2(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -4684,7 +4685,7 @@ pub(crate) fn SUB_819E2(r: &mut Run) {
     }
 }
 
-// SUB_81A7E: firmware/upper/80000-selftest.s:2163
+// SUB_81A7E: firmware/upper/80000-selftest.s:2164
 pub(crate) fn SUB_81A7E(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -4786,7 +4787,7 @@ pub(crate) fn SUB_81A7E(r: &mut Run) {
     }
 }
 
-// SUB_81B3D: firmware/upper/80000-selftest.s:2234
+// SUB_81B3D: firmware/upper/80000-selftest.s:2235
 pub(crate) fn SUB_81B3D(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -4811,7 +4812,7 @@ pub(crate) fn SUB_81B3D(r: &mut Run) {
     }
 }
 
-// SUB_81B6B: firmware/upper/80000-selftest.s:2247
+// SUB_81B6B: firmware/upper/80000-selftest.s:2248
 pub(crate) fn SUB_81B6B(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -4836,7 +4837,7 @@ pub(crate) fn SUB_81B6B(r: &mut Run) {
     }
 }
 
-// SUB_81B99: firmware/upper/80000-selftest.s:2260
+// SUB_81B99: firmware/upper/80000-selftest.s:2261
 pub(crate) fn SUB_81B99(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -4853,7 +4854,7 @@ pub(crate) fn SUB_81B99(r: &mut Run) {
     }
 }
 
-// SUB_81BA2: firmware/upper/80000-selftest.s:2265
+// SUB_81BA2: firmware/upper/80000-selftest.s:2266
 pub(crate) fn SUB_81BA2(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -5086,7 +5087,7 @@ pub(crate) fn SUB_81BA2(r: &mut Run) {
     }
 }
 
-// SUB_81D6E: firmware/upper/80000-selftest.s:2400
+// SUB_81D6E: firmware/upper/80000-selftest.s:2401
 pub(crate) fn SUB_81D6E(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -5121,7 +5122,7 @@ pub(crate) fn SUB_81D6E(r: &mut Run) {
     }
 }
 
-// SUB_81DE7: firmware/upper/80000-selftest.s:2461
+// SUB_81DE7: firmware/upper/80000-selftest.s:2462
 pub(crate) fn SUB_81DE7(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -5146,7 +5147,7 @@ pub(crate) fn SUB_81DE7(r: &mut Run) {
     }
 }
 
-// SUB_81E00: firmware/upper/80000-selftest.s:2468
+// SUB_81E00: firmware/upper/80000-selftest.s:2469
 pub(crate) fn SUB_81E00(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -5171,7 +5172,7 @@ pub(crate) fn SUB_81E00(r: &mut Run) {
     }
 }
 
-// SUB_81E19: firmware/upper/80000-selftest.s:2475
+// SUB_81E19: firmware/upper/80000-selftest.s:2476
 pub(crate) fn SUB_81E19(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -5191,7 +5192,7 @@ pub(crate) fn SUB_81E19(r: &mut Run) {
     }
 }
 
-// SUB_81E27: firmware/upper/80000-selftest.s:2480
+// SUB_81E27: firmware/upper/80000-selftest.s:2481
 pub(crate) fn SUB_81E27(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -5224,7 +5225,7 @@ pub(crate) fn SUB_81E27(r: &mut Run) {
     }
 }
 
-// SUB_81E4C: firmware/upper/80000-selftest.s:2489
+// SUB_81E4C: firmware/upper/80000-selftest.s:2490
 pub(crate) fn SUB_81E4C(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -5637,7 +5638,7 @@ pub(crate) fn code_87071(r: &mut Run) {
             }
             // #87233:
             0x87233..=0x87233 => {
-                branch!(r, at, 0x87239, 8, r.cpu.call(0x87B01)); // GOSUBL SUB_87B01
+                branch!(r, at, 0x87239, 8, r.cpu.call(0x87B01)); // GOSUBL Save2ABR0
             }
             // #87239:
             0x87239..=0x87239 => {
@@ -5695,7 +5696,7 @@ pub(crate) fn code_87071(r: &mut Run) {
             }
             // #87289:
             0x87289..=0x87289 => {
-                branch!(r, at, 0x8728F, 8, r.cpu.call(0x87B01)); // GOSUBL SUB_87B01
+                branch!(r, at, 0x8728F, 8, r.cpu.call(0x87B01)); // GOSUBL Save2ABR0
             }
             // #8728F:
             0x8728F..=0x87298 => {
@@ -5714,7 +5715,7 @@ pub(crate) fn code_87071(r: &mut Run) {
             }
             // #872AA:
             0x872AA..=0x872AA => {
-                branch!(r, at, 0x872B0, 8, r.cpu.call(0x88283)); // GOSUBL SUB_88283
+                branch!(r, at, 0x872B0, 8, r.cpu.call(0x88283)); // GOSUBL HypotABR0
             }
             // #872B0:
             0x872B0..=0x872B0 => {
@@ -5800,7 +5801,7 @@ pub(crate) fn code_87071(r: &mut Run) {
             // #8732A:
             0x8732A..=0x8732C => {
                 op!(r, at, 0x8732A..0x8732C, 4, r.cpu.dec = true); // SETDEC
-                branch!(r, at, 0x87332, 8, r.cpu.call(0x88283)); // GOSUBL SUB_88283
+                branch!(r, at, 0x87332, 8, r.cpu.call(0x88283)); // GOSUBL HypotABR0
             }
             // #87332:
             0x87332..=0x87338 => {
@@ -5839,7 +5840,7 @@ pub(crate) fn code_87071(r: &mut Run) {
             }
             // #87364:
             0x87364..=0x87364 => {
-                branch!(r, at, 0x8736A, 8, r.cpu.call(0x88283)); // GOSUBL SUB_88283
+                branch!(r, at, 0x8736A, 8, r.cpu.call(0x88283)); // GOSUBL HypotABR0
             }
             // #8736A:
             0x8736A..=0x8736D => {
@@ -5925,7 +5926,7 @@ pub(crate) fn code_87071(r: &mut Run) {
             }
             // #873DE:
             0x873DE..=0x873DE => {
-                branch!(r, at, 0x873E2, 6, r.cpu.call(0x87AD7)); // GOSUB SUB_87AD7
+                branch!(r, at, 0x873E2, 6, r.cpu.call(0x87AD7)); // GOSUB SubCDTest
             }
             // #873E2:
             0x873E2..=0x873E2 => {
@@ -6007,7 +6008,7 @@ pub(crate) fn code_87071(r: &mut Run) {
             // #87453:
             0x87453..=0x87455 => {
                 op!(r, at, 0x87453..0x87455, 4, r.cpu.dec = true); // SETDEC
-                branch!(r, at, 0x8745B, 8, r.cpu.call(0x88283)); // GOSUBL SUB_88283
+                branch!(r, at, 0x8745B, 8, r.cpu.call(0x88283)); // GOSUBL HypotABR0
             }
             // #8745B:
             0x8745B..=0x8745B => {
@@ -6044,7 +6045,7 @@ pub(crate) fn code_87071(r: &mut Run) {
             }
             // #8748B:
             0x8748B..=0x8748B => {
-                branch!(r, at, 0x8748F, 6, r.cpu.call(0x87AD7)); // GOSUB SUB_87AD7
+                branch!(r, at, 0x8748F, 6, r.cpu.call(0x87AD7)); // GOSUB SubCDTest
             }
             // #8748F:
             0x8748F..=0x8748F => {
@@ -6072,7 +6073,7 @@ pub(crate) fn code_87071(r: &mut Run) {
             }
             // #874A8:
             0x874A8..=0x874A8 => {
-                branch!(r, at, 0x874AC, 6, r.cpu.call(0x87AD7)); // GOSUB SUB_87AD7
+                branch!(r, at, 0x874AC, 6, r.cpu.call(0x87AD7)); // GOSUB SubCDTest
             }
             // #874AC:
             0x874AC..=0x874AC => {
@@ -6100,7 +6101,7 @@ pub(crate) fn code_87071(r: &mut Run) {
             }
             // #874CE:
             0x874CE..=0x874CE => {
-                branch!(r, at, 0x874D2, 6, r.cpu.call(0x87AD7)); // GOSUB SUB_87AD7
+                branch!(r, at, 0x874D2, 6, r.cpu.call(0x87AD7)); // GOSUB SubCDTest
             }
             // #874D2:
             0x874D2..=0x874D2 => {
@@ -6245,7 +6246,7 @@ pub(crate) fn code_87071(r: &mut Run) {
             // #8759D:
             0x8759D..=0x875A0 => {
                 op!(r, at, 0x8759D..0x875A0, 5, r.cpu.zero(R::C, Field::S)); // C=0 S
-                branch!(r, at, 0x875A4, 6, r.cpu.call(0x87AD7)); // GOSUB SUB_87AD7
+                branch!(r, at, 0x875A4, 6, r.cpu.call(0x87AD7)); // GOSUB SubCDTest
             }
             // #875A4:
             0x875A4..=0x875A4 => {
@@ -6274,7 +6275,7 @@ pub(crate) fn code_87071(r: &mut Run) {
             // #875C3:
             0x875C3..=0x875C6 => {
                 op!(r, at, 0x875C3..0x875C6, 5, r.cpu.zero(R::C, Field::S)); // C=0 S
-                branch!(r, at, 0x875CA, 6, r.cpu.call(0x87AD7)); // GOSUB SUB_87AD7
+                branch!(r, at, 0x875CA, 6, r.cpu.call(0x87AD7)); // GOSUB SubCDTest
             }
             // #875CA:
             0x875CA..=0x875CA => {
@@ -6365,7 +6366,7 @@ pub(crate) fn code_87071(r: &mut Run) {
             }
             // #8763E:
             0x8763E..=0x8763E => {
-                branch!(r, at, 0x87642, 6, r.cpu.call(0x87B01)); // GOSUB SUB_87B01
+                branch!(r, at, 0x87642, 6, r.cpu.call(0x87B01)); // GOSUB Save2ABR0
             }
             // #87642:
             0x87642..=0x87642 => {
@@ -6381,7 +6382,7 @@ pub(crate) fn code_87071(r: &mut Run) {
             }
             // #87650:
             0x87650..=0x87650 => {
-                branch!(r, at, 0x87654, 6, r.cpu.call(0x87B01)); // GOSUB SUB_87B01
+                branch!(r, at, 0x87654, 6, r.cpu.call(0x87B01)); // GOSUB Save2ABR0
             }
             // #87654:
             0x87654..=0x87654 => {
@@ -6433,7 +6434,7 @@ pub(crate) fn code_87071(r: &mut Run) {
             }
             // #87682:
             0x87682..=0x87682 => {
-                branch!(r, at, 0x87686, 6, r.cpu.call(0x87B01)); // GOSUB SUB_87B01
+                branch!(r, at, 0x87686, 6, r.cpu.call(0x87B01)); // GOSUB Save2ABR0
             }
             // #87686:
             0x87686..=0x87686 => {
@@ -6445,7 +6446,7 @@ pub(crate) fn code_87071(r: &mut Run) {
             }
             // #8768E:
             0x8768E..=0x8768E => {
-                branch!(r, at, 0x87692, 6, r.cpu.call(0x87B01)); // GOSUB SUB_87B01
+                branch!(r, at, 0x87692, 6, r.cpu.call(0x87B01)); // GOSUB Save2ABR0
             }
             // #87692:
             0x87692..=0x87692 => {
@@ -6506,7 +6507,7 @@ pub(crate) fn code_87071(r: &mut Run) {
             }
             // #876D0:
             0x876D0..=0x876D0 => {
-                branch!(r, at, 0x876D4, 6, r.cpu.call(0x87B01)); // GOSUB SUB_87B01
+                branch!(r, at, 0x876D4, 6, r.cpu.call(0x87B01)); // GOSUB Save2ABR0
             }
             // #876D4:
             0x876D4..=0x876D4 => {
@@ -6522,7 +6523,7 @@ pub(crate) fn code_87071(r: &mut Run) {
             }
             // #876E0:
             0x876E0..=0x876E0 => {
-                branch!(r, at, 0x876E4, 6, r.cpu.call(0x87B01)); // GOSUB SUB_87B01
+                branch!(r, at, 0x876E4, 6, r.cpu.call(0x87B01)); // GOSUB Save2ABR0
             }
             // #876E4:
             0x876E4..=0x876E9 => {
@@ -6595,7 +6596,7 @@ pub(crate) fn code_87071(r: &mut Run) {
             // #87732:
             0x87732..=0x87734 => {
                 op!(r, at, 0x87732..0x87734, 4, r.cpu.dec = true); // SETDEC
-                branch!(r, at, 0x8773A, 8, r.cpu.call(0x88283)); // GOSUBL SUB_88283
+                branch!(r, at, 0x8773A, 8, r.cpu.call(0x88283)); // GOSUBL HypotABR0
             }
             // #8773A:
             0x8773A..=0x8773A => {
@@ -6656,7 +6657,7 @@ pub(crate) fn code_87071(r: &mut Run) {
             }
             // #87797:
             0x87797..=0x87797 => {
-                branch!(r, at, 0x8779D, 8, r.cpu.call(0x88283)); // GOSUBL SUB_88283
+                branch!(r, at, 0x8779D, 8, r.cpu.call(0x88283)); // GOSUBL HypotABR0
             }
             // #8779D:
             0x8779D..=0x8779D => {
@@ -6676,7 +6677,7 @@ pub(crate) fn code_87071(r: &mut Run) {
             }
             // #877AD:
             0x877AD..=0x877AD => {
-                branch!(r, at, 0x877B1, 6, r.cpu.call(0x87AD7)); // GOSUB SUB_87AD7
+                branch!(r, at, 0x877B1, 6, r.cpu.call(0x87AD7)); // GOSUB SubCDTest
             }
             // #877B1:
             0x877B1..=0x877B1 => {
@@ -6737,7 +6738,7 @@ pub(crate) fn code_87071(r: &mut Run) {
             }
             // #877EC:
             0x877EC..=0x877EC => {
-                branch!(r, at, 0x877F0, 6, r.cpu.call(0x87AD7)); // GOSUB SUB_87AD7
+                branch!(r, at, 0x877F0, 6, r.cpu.call(0x87AD7)); // GOSUB SubCDTest
             }
             // #877F0:
             0x877F0..=0x877F0 => {
@@ -6845,7 +6846,7 @@ pub(crate) fn code_87071(r: &mut Run) {
             }
             // #8786E:
             0x8786E..=0x8786E => {
-                branch!(r, at, 0x87872, 6, r.cpu.call(0x87B01)); // GOSUB SUB_87B01
+                branch!(r, at, 0x87872, 6, r.cpu.call(0x87B01)); // GOSUB Save2ABR0
             }
             // #87872:
             0x87872..=0x87872 => {
@@ -7496,8 +7497,9 @@ pub(crate) fn SUB_87AAD(r: &mut Run) {
     }
 }
 
-// SUB_87AD7: firmware/upper/86FE4-lib0C0.s:865
-pub(crate) fn SUB_87AD7(r: &mut Run) {
+// A/B = A/B - C/D; carry set when the result is >= 0; decimal mode
+// SubCDTest: firmware/upper/86FE4-lib0C0.s:866
+pub(crate) fn SubCDTest(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -7527,7 +7529,7 @@ pub(crate) fn SUB_87AD7(r: &mut Run) {
     }
 }
 
-// SUB_87AEE: firmware/upper/86FE4-lib0C0.s:877
+// SUB_87AEE: firmware/upper/86FE4-lib0C0.s:878
 pub(crate) fn SUB_87AEE(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -7551,7 +7553,7 @@ pub(crate) fn SUB_87AEE(r: &mut Run) {
     }
 }
 
-// EXAB0~jump_3: firmware/upper/86FE4-lib0C0.s:884
+// EXAB0~jump_3: firmware/upper/86FE4-lib0C0.s:885
 pub(crate) fn EXAB0_jump_3(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -7567,9 +7569,9 @@ pub(crate) fn EXAB0_jump_3(r: &mut Run) {
     }
 }
 
-// Probably: counterpart of Get2ABR0: store A/B, then R0/R1, as two %% at R4+#1F4
-// SUB_87B01: firmware/upper/86FE4-lib0C0.s:889
-pub(crate) fn SUB_87B01(r: &mut Run) {
+// Store A/B, then R0/R1, as two %% at R4+#1F4 (R4: the library's workspace hex string); A/B and R0/R1 come back unchanged
+// Save2ABR0: firmware/upper/86FE4-lib0C0.s:890
+pub(crate) fn Save2ABR0(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -7588,7 +7590,7 @@ pub(crate) fn SUB_87B01(r: &mut Run) {
     }
 }
 
-// SUB_87B09: firmware/upper/86FE4-lib0C0.s:894
+// SUB_87B09: firmware/upper/86FE4-lib0C0.s:895
 pub(crate) fn SUB_87B09(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -7627,7 +7629,7 @@ pub(crate) fn SUB_87B09(r: &mut Run) {
     }
 }
 
-// SUB_87B28: firmware/upper/86FE4-lib0C0.s:906
+// SUB_87B28: firmware/upper/86FE4-lib0C0.s:907
 pub(crate) fn SUB_87B28(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -7643,7 +7645,7 @@ pub(crate) fn SUB_87B28(r: &mut Run) {
     }
 }
 
-// SUB_87B2C: firmware/upper/86FE4-lib0C0.s:910
+// SUB_87B2C: firmware/upper/86FE4-lib0C0.s:911
 pub(crate) fn SUB_87B2C(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -7667,7 +7669,7 @@ pub(crate) fn SUB_87B2C(r: &mut Run) {
     }
 }
 
-// SUB_87B38: firmware/upper/86FE4-lib0C0.s:916
+// SUB_87B38: firmware/upper/86FE4-lib0C0.s:917
 pub(crate) fn SUB_87B38(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -7696,7 +7698,7 @@ pub(crate) fn SUB_87B38(r: &mut Run) {
 }
 
 // D1 -> two unsplit %%: first into A/B, second into R0/R1, D1 past both
-// Get2ABR0: firmware/upper/86FE4-lib0C0.s:924
+// Get2ABR0: firmware/upper/86FE4-lib0C0.s:925
 pub(crate) fn Get2ABR0(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -7712,7 +7714,7 @@ pub(crate) fn Get2ABR0(r: &mut Run) {
     }
 }
 
-// SUB_87B4C: firmware/upper/86FE4-lib0C0.s:928
+// SUB_87B4C: firmware/upper/86FE4-lib0C0.s:929
 pub(crate) fn SUB_87B4C(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -7736,7 +7738,7 @@ pub(crate) fn SUB_87B4C(r: &mut Run) {
     }
 }
 
-// SUB_87B58: firmware/upper/86FE4-lib0C0.s:934
+// SUB_87B58: firmware/upper/86FE4-lib0C0.s:935
 pub(crate) fn SUB_87B58(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -7756,7 +7758,7 @@ pub(crate) fn SUB_87B58(r: &mut Run) {
     }
 }
 
-// SUB_87B5F: firmware/upper/86FE4-lib0C0.s:939
+// SUB_87B5F: firmware/upper/86FE4-lib0C0.s:940
 pub(crate) fn SUB_87B5F(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -7781,7 +7783,7 @@ pub(crate) fn SUB_87B5F(r: &mut Run) {
     }
 }
 
-// SUB_87B6D: firmware/upper/86FE4-lib0C0.s:947
+// SUB_87B6D: firmware/upper/86FE4-lib0C0.s:948
 pub(crate) fn SUB_87B6D(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -7805,7 +7807,7 @@ pub(crate) fn SUB_87B6D(r: &mut Run) {
     }
 }
 
-// SUB_87B79: firmware/upper/86FE4-lib0C0.s:953
+// SUB_87B79: firmware/upper/86FE4-lib0C0.s:954
 pub(crate) fn SUB_87B79(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -7826,7 +7828,7 @@ pub(crate) fn SUB_87B79(r: &mut Run) {
     }
 }
 
-// SUB_87B89: firmware/upper/86FE4-lib0C0.s:962
+// SUB_87B89: firmware/upper/86FE4-lib0C0.s:963
 pub(crate) fn SUB_87B89(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -7844,7 +7846,7 @@ pub(crate) fn SUB_87B89(r: &mut Run) {
     }
 }
 
-// SUB_87B8F: firmware/upper/86FE4-lib0C0.s:967
+// SUB_87B8F: firmware/upper/86FE4-lib0C0.s:968
 pub(crate) fn SUB_87B8F(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -7862,7 +7864,7 @@ pub(crate) fn SUB_87B8F(r: &mut Run) {
     }
 }
 
-// SUB_87B95: firmware/upper/86FE4-lib0C0.s:972
+// SUB_87B95: firmware/upper/86FE4-lib0C0.s:973
 pub(crate) fn SUB_87B95(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -7882,7 +7884,7 @@ pub(crate) fn SUB_87B95(r: &mut Run) {
     }
 }
 
-// SUB_87BA1: firmware/upper/86FE4-lib0C0.s:979
+// SUB_87BA1: firmware/upper/86FE4-lib0C0.s:980
 pub(crate) fn SUB_87BA1(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -7901,7 +7903,7 @@ pub(crate) fn SUB_87BA1(r: &mut Run) {
     }
 }
 
-// SUB_87BAC: firmware/upper/86FE4-lib0C0.s:986
+// SUB_87BAC: firmware/upper/86FE4-lib0C0.s:987
 pub(crate) fn SUB_87BAC(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -7919,7 +7921,7 @@ pub(crate) fn SUB_87BAC(r: &mut Run) {
     }
 }
 
-// SUB_87BB2: firmware/upper/86FE4-lib0C0.s:991
+// SUB_87BB2: firmware/upper/86FE4-lib0C0.s:992
 pub(crate) fn SUB_87BB2(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -7939,7 +7941,7 @@ pub(crate) fn SUB_87BB2(r: &mut Run) {
     }
 }
 
-// SUB_87BBE: firmware/upper/86FE4-lib0C0.s:998
+// SUB_87BBE: firmware/upper/86FE4-lib0C0.s:999
 pub(crate) fn SUB_87BBE(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -7957,7 +7959,7 @@ pub(crate) fn SUB_87BBE(r: &mut Run) {
     }
 }
 
-// SUB_87BC4: firmware/upper/86FE4-lib0C0.s:1003
+// SUB_87BC4: firmware/upper/86FE4-lib0C0.s:1004
 pub(crate) fn SUB_87BC4(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -7976,7 +7978,7 @@ pub(crate) fn SUB_87BC4(r: &mut Run) {
     }
 }
 
-// SUB_87BDB: firmware/upper/86FE4-lib0C0.s:1011
+// SUB_87BDB: firmware/upper/86FE4-lib0C0.s:1012
 pub(crate) fn SUB_87BDB(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -7994,7 +7996,7 @@ pub(crate) fn SUB_87BDB(r: &mut Run) {
     }
 }
 
-// SUB_87BE1: firmware/upper/86FE4-lib0C0.s:1016
+// SUB_87BE1: firmware/upper/86FE4-lib0C0.s:1017
 pub(crate) fn SUB_87BE1(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -8012,7 +8014,7 @@ pub(crate) fn SUB_87BE1(r: &mut Run) {
     }
 }
 
-// SUB_87BE7: firmware/upper/86FE4-lib0C0.s:1021
+// SUB_87BE7: firmware/upper/86FE4-lib0C0.s:1022
 pub(crate) fn SUB_87BE7(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -8031,7 +8033,7 @@ pub(crate) fn SUB_87BE7(r: &mut Run) {
     }
 }
 
-// SUB_87BF2: firmware/upper/86FE4-lib0C0.s:1028
+// SUB_87BF2: firmware/upper/86FE4-lib0C0.s:1029
 pub(crate) fn SUB_87BF2(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -8054,7 +8056,7 @@ pub(crate) fn SUB_87BF2(r: &mut Run) {
     }
 }
 
-// SUB_87C09: firmware/upper/86FE4-lib0C0.s:1039
+// SUB_87C09: firmware/upper/86FE4-lib0C0.s:1040
 pub(crate) fn SUB_87C09(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -8072,7 +8074,7 @@ pub(crate) fn SUB_87C09(r: &mut Run) {
     }
 }
 
-// PutAB%1~jump: firmware/upper/86FE4-lib0C0.s:1044
+// PutAB%1~jump: firmware/upper/86FE4-lib0C0.s:1045
 pub(crate) fn PutAB_1_jump(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -8088,7 +8090,7 @@ pub(crate) fn PutAB_1_jump(r: &mut Run) {
     }
 }
 
-// SUB_87C16: firmware/upper/86FE4-lib0C0.s:1048
+// SUB_87C16: firmware/upper/86FE4-lib0C0.s:1049
 pub(crate) fn SUB_87C16(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -8106,7 +8108,7 @@ pub(crate) fn SUB_87C16(r: &mut Run) {
     }
 }
 
-// PUTAB0~jump_2: firmware/upper/86FE4-lib0C0.s:1053
+// PUTAB0~jump_2: firmware/upper/86FE4-lib0C0.s:1054
 pub(crate) fn PUTAB0_jump_2(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -8122,7 +8124,7 @@ pub(crate) fn PUTAB0_jump_2(r: &mut Run) {
     }
 }
 
-// SUB_87C23: firmware/upper/86FE4-lib0C0.s:1057
+// SUB_87C23: firmware/upper/86FE4-lib0C0.s:1058
 pub(crate) fn SUB_87C23(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -8140,7 +8142,7 @@ pub(crate) fn SUB_87C23(r: &mut Run) {
     }
 }
 
-// GETAB1~jump: firmware/upper/86FE4-lib0C0.s:1062
+// GETAB1~jump: firmware/upper/86FE4-lib0C0.s:1063
 pub(crate) fn GETAB1_jump(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -8156,7 +8158,7 @@ pub(crate) fn GETAB1_jump(r: &mut Run) {
     }
 }
 
-// GETAB0~jump: firmware/upper/86FE4-lib0C0.s:1066
+// GETAB0~jump: firmware/upper/86FE4-lib0C0.s:1067
 pub(crate) fn GETAB0_jump(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -8172,7 +8174,7 @@ pub(crate) fn GETAB0_jump(r: &mut Run) {
     }
 }
 
-// Get1%CD~jump: firmware/upper/86FE4-lib0C0.s:1070
+// Get1%CD~jump: firmware/upper/86FE4-lib0C0.s:1071
 pub(crate) fn Get1_CD_jump(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -8188,7 +8190,7 @@ pub(crate) fn Get1_CD_jump(r: &mut Run) {
     }
 }
 
-// SUB_87C3E: firmware/upper/86FE4-lib0C0.s:1074
+// SUB_87C3E: firmware/upper/86FE4-lib0C0.s:1075
 pub(crate) fn SUB_87C3E(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -8206,7 +8208,7 @@ pub(crate) fn SUB_87C3E(r: &mut Run) {
     }
 }
 
-// SUB_87C4B: firmware/upper/86FE4-lib0C0.s:1080
+// SUB_87C4B: firmware/upper/86FE4-lib0C0.s:1081
 pub(crate) fn SUB_87C4B(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -8234,7 +8236,7 @@ pub(crate) fn SUB_87C4B(r: &mut Run) {
     }
 }
 
-// SUB_87C66: firmware/upper/86FE4-lib0C0.s:1093
+// SUB_87C66: firmware/upper/86FE4-lib0C0.s:1094
 pub(crate) fn SUB_87C66(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -8252,7 +8254,7 @@ pub(crate) fn SUB_87C66(r: &mut Run) {
     }
 }
 
-// SUB_87C73: firmware/upper/86FE4-lib0C0.s:1099
+// SUB_87C73: firmware/upper/86FE4-lib0C0.s:1100
 pub(crate) fn SUB_87C73(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -8280,7 +8282,7 @@ pub(crate) fn SUB_87C73(r: &mut Run) {
     }
 }
 
-// GETCD0~jump: firmware/upper/86FE4-lib0C0.s:1111
+// GETCD0~jump: firmware/upper/86FE4-lib0C0.s:1112
 pub(crate) fn GETCD0_jump(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -8296,7 +8298,7 @@ pub(crate) fn GETCD0_jump(r: &mut Run) {
     }
 }
 
-// SUB_87C91: firmware/upper/86FE4-lib0C0.s:1115
+// SUB_87C91: firmware/upper/86FE4-lib0C0.s:1116
 pub(crate) fn SUB_87C91(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -8314,7 +8316,7 @@ pub(crate) fn SUB_87C91(r: &mut Run) {
     }
 }
 
-// SUB_87C9C: firmware/upper/86FE4-lib0C0.s:1121
+// SUB_87C9C: firmware/upper/86FE4-lib0C0.s:1122
 pub(crate) fn SUB_87C9C(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -8332,7 +8334,7 @@ pub(crate) fn SUB_87C9C(r: &mut Run) {
     }
 }
 
-// SUB_87CA7: firmware/upper/86FE4-lib0C0.s:1127
+// SUB_87CA7: firmware/upper/86FE4-lib0C0.s:1128
 pub(crate) fn SUB_87CA7(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -8350,7 +8352,7 @@ pub(crate) fn SUB_87CA7(r: &mut Run) {
     }
 }
 
-// SUB_87CB2: firmware/upper/86FE4-lib0C0.s:1133
+// SUB_87CB2: firmware/upper/86FE4-lib0C0.s:1134
 pub(crate) fn SUB_87CB2(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -8368,7 +8370,7 @@ pub(crate) fn SUB_87CB2(r: &mut Run) {
     }
 }
 
-// SUB_87CBD: firmware/upper/86FE4-lib0C0.s:1139
+// SUB_87CBD: firmware/upper/86FE4-lib0C0.s:1140
 pub(crate) fn SUB_87CBD(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -8386,7 +8388,7 @@ pub(crate) fn SUB_87CBD(r: &mut Run) {
     }
 }
 
-// SUB_87CC8: firmware/upper/86FE4-lib0C0.s:1145
+// SUB_87CC8: firmware/upper/86FE4-lib0C0.s:1146
 pub(crate) fn SUB_87CC8(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -8404,7 +8406,7 @@ pub(crate) fn SUB_87CC8(r: &mut Run) {
     }
 }
 
-// SUB_87CD3: firmware/upper/86FE4-lib0C0.s:1151
+// SUB_87CD3: firmware/upper/86FE4-lib0C0.s:1152
 pub(crate) fn SUB_87CD3(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -8422,7 +8424,7 @@ pub(crate) fn SUB_87CD3(r: &mut Run) {
     }
 }
 
-// SUB_87CDE: firmware/upper/86FE4-lib0C0.s:1157
+// SUB_87CDE: firmware/upper/86FE4-lib0C0.s:1158
 pub(crate) fn SUB_87CDE(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -8440,7 +8442,7 @@ pub(crate) fn SUB_87CDE(r: &mut Run) {
     }
 }
 
-// SUB_87CE9: firmware/upper/86FE4-lib0C0.s:1163
+// SUB_87CE9: firmware/upper/86FE4-lib0C0.s:1164
 pub(crate) fn SUB_87CE9(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -8458,7 +8460,7 @@ pub(crate) fn SUB_87CE9(r: &mut Run) {
     }
 }
 
-// SUB_87CF4: firmware/upper/86FE4-lib0C0.s:1169
+// SUB_87CF4: firmware/upper/86FE4-lib0C0.s:1170
 pub(crate) fn SUB_87CF4(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -8476,7 +8478,7 @@ pub(crate) fn SUB_87CF4(r: &mut Run) {
     }
 }
 
-// SUB_87CFF: firmware/upper/86FE4-lib0C0.s:1175
+// SUB_87CFF: firmware/upper/86FE4-lib0C0.s:1176
 pub(crate) fn SUB_87CFF(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -8494,7 +8496,7 @@ pub(crate) fn SUB_87CFF(r: &mut Run) {
     }
 }
 
-// SUB_87D0A: firmware/upper/86FE4-lib0C0.s:1181
+// SUB_87D0A: firmware/upper/86FE4-lib0C0.s:1182
 pub(crate) fn SUB_87D0A(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -8512,7 +8514,7 @@ pub(crate) fn SUB_87D0A(r: &mut Run) {
     }
 }
 
-// SUB_87D15: firmware/upper/86FE4-lib0C0.s:1187
+// SUB_87D15: firmware/upper/86FE4-lib0C0.s:1188
 pub(crate) fn SUB_87D15(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -8530,7 +8532,7 @@ pub(crate) fn SUB_87D15(r: &mut Run) {
     }
 }
 
-// SUB_87D20: firmware/upper/86FE4-lib0C0.s:1193
+// SUB_87D20: firmware/upper/86FE4-lib0C0.s:1194
 pub(crate) fn SUB_87D20(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -8548,7 +8550,7 @@ pub(crate) fn SUB_87D20(r: &mut Run) {
     }
 }
 
-// SUB_87D2B: firmware/upper/86FE4-lib0C0.s:1199
+// SUB_87D2B: firmware/upper/86FE4-lib0C0.s:1200
 pub(crate) fn SUB_87D2B(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -8566,7 +8568,7 @@ pub(crate) fn SUB_87D2B(r: &mut Run) {
     }
 }
 
-// SUB_87D36: firmware/upper/86FE4-lib0C0.s:1205
+// SUB_87D36: firmware/upper/86FE4-lib0C0.s:1206
 pub(crate) fn SUB_87D36(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -8584,7 +8586,7 @@ pub(crate) fn SUB_87D36(r: &mut Run) {
     }
 }
 
-// SUB_87D41: firmware/upper/86FE4-lib0C0.s:1211
+// SUB_87D41: firmware/upper/86FE4-lib0C0.s:1212
 pub(crate) fn SUB_87D41(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -8602,7 +8604,7 @@ pub(crate) fn SUB_87D41(r: &mut Run) {
     }
 }
 
-// SUB_87D4C: firmware/upper/86FE4-lib0C0.s:1217
+// SUB_87D4C: firmware/upper/86FE4-lib0C0.s:1218
 pub(crate) fn SUB_87D4C(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -8620,7 +8622,7 @@ pub(crate) fn SUB_87D4C(r: &mut Run) {
     }
 }
 
-// SUB_87D57: firmware/upper/86FE4-lib0C0.s:1223
+// SUB_87D57: firmware/upper/86FE4-lib0C0.s:1224
 pub(crate) fn SUB_87D57(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -8638,7 +8640,7 @@ pub(crate) fn SUB_87D57(r: &mut Run) {
     }
 }
 
-// SUB_87D62: firmware/upper/86FE4-lib0C0.s:1229
+// SUB_87D62: firmware/upper/86FE4-lib0C0.s:1230
 pub(crate) fn SUB_87D62(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -8656,7 +8658,7 @@ pub(crate) fn SUB_87D62(r: &mut Run) {
     }
 }
 
-// SUB_87D6D: firmware/upper/86FE4-lib0C0.s:1235
+// SUB_87D6D: firmware/upper/86FE4-lib0C0.s:1236
 pub(crate) fn SUB_87D6D(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -8674,7 +8676,7 @@ pub(crate) fn SUB_87D6D(r: &mut Run) {
     }
 }
 
-// SUB_87D78: firmware/upper/86FE4-lib0C0.s:1241
+// SUB_87D78: firmware/upper/86FE4-lib0C0.s:1242
 pub(crate) fn SUB_87D78(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -8692,7 +8694,7 @@ pub(crate) fn SUB_87D78(r: &mut Run) {
     }
 }
 
-// SUB_87D83: firmware/upper/86FE4-lib0C0.s:1247
+// SUB_87D83: firmware/upper/86FE4-lib0C0.s:1248
 pub(crate) fn SUB_87D83(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -8710,7 +8712,7 @@ pub(crate) fn SUB_87D83(r: &mut Run) {
     }
 }
 
-// SUB_87D8E: firmware/upper/86FE4-lib0C0.s:1253
+// SUB_87D8E: firmware/upper/86FE4-lib0C0.s:1254
 pub(crate) fn SUB_87D8E(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -8744,7 +8746,7 @@ pub(crate) fn SUB_87D8E(r: &mut Run) {
     }
 }
 
-// SUB_87DA9: firmware/upper/86FE4-lib0C0.s:1265
+// SUB_87DA9: firmware/upper/86FE4-lib0C0.s:1266
 pub(crate) fn SUB_87DA9(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -8762,7 +8764,7 @@ pub(crate) fn SUB_87DA9(r: &mut Run) {
     }
 }
 
-// SUB_87DB0: firmware/upper/86FE4-lib0C0.s:1270
+// SUB_87DB0: firmware/upper/86FE4-lib0C0.s:1271
 pub(crate) fn SUB_87DB0(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -8786,7 +8788,7 @@ pub(crate) fn SUB_87DB0(r: &mut Run) {
     }
 }
 
-// SUB_87DC6: firmware/upper/86FE4-lib0C0.s:1282
+// SUB_87DC6: firmware/upper/86FE4-lib0C0.s:1283
 pub(crate) fn SUB_87DC6(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -8806,7 +8808,7 @@ pub(crate) fn SUB_87DC6(r: &mut Run) {
     }
 }
 
-// SUB_87DCE: firmware/upper/86FE4-lib0C0.s:1287
+// SUB_87DCE: firmware/upper/86FE4-lib0C0.s:1288
 pub(crate) fn SUB_87DCE(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -8842,7 +8844,7 @@ pub(crate) fn SUB_87DCE(r: &mut Run) {
     }
 }
 
-// SUB_87DF9: firmware/upper/86FE4-lib0C0.s:1305
+// SUB_87DF9: firmware/upper/86FE4-lib0C0.s:1306
 pub(crate) fn SUB_87DF9(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -8862,7 +8864,7 @@ pub(crate) fn SUB_87DF9(r: &mut Run) {
     }
 }
 
-// SUB_87E01: firmware/upper/86FE4-lib0C0.s:1310
+// SUB_87E01: firmware/upper/86FE4-lib0C0.s:1311
 pub(crate) fn SUB_87E01(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -8882,7 +8884,7 @@ pub(crate) fn SUB_87E01(r: &mut Run) {
     }
 }
 
-// SUB_87E09: firmware/upper/86FE4-lib0C0.s:1315
+// SUB_87E09: firmware/upper/86FE4-lib0C0.s:1316
 pub(crate) fn SUB_87E09(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -8913,7 +8915,7 @@ pub(crate) fn SUB_87E09(r: &mut Run) {
     }
 }
 
-// SUB_87E34: firmware/upper/86FE4-lib0C0.s:1331
+// SUB_87E34: firmware/upper/86FE4-lib0C0.s:1332
 pub(crate) fn SUB_87E34(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -8949,7 +8951,7 @@ pub(crate) fn SUB_87E34(r: &mut Run) {
     }
 }
 
-// SUB_87E4C: firmware/upper/86FE4-lib0C0.s:1340
+// SUB_87E4C: firmware/upper/86FE4-lib0C0.s:1341
 pub(crate) fn SUB_87E4C(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -8965,7 +8967,7 @@ pub(crate) fn SUB_87E4C(r: &mut Run) {
     }
 }
 
-// SUB_87E50: firmware/upper/86FE4-lib0C0.s:1344
+// SUB_87E50: firmware/upper/86FE4-lib0C0.s:1345
 pub(crate) fn SUB_87E50(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -9051,7 +9053,7 @@ pub(crate) fn SUB_87E50(r: &mut Run) {
     }
 }
 
-// SUB_87EA7: firmware/upper/86FE4-lib0C0.s:1370
+// SUB_87EA7: firmware/upper/86FE4-lib0C0.s:1371
 pub(crate) fn SUB_87EA7(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -9095,7 +9097,7 @@ pub(crate) fn SUB_87EA7(r: &mut Run) {
     }
 }
 
-// STAB0~jump_6: firmware/upper/86FE4-lib0C0.s:1387
+// STAB0~jump_6: firmware/upper/86FE4-lib0C0.s:1388
 pub(crate) fn STAB0_jump_6(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -9167,7 +9169,7 @@ pub(crate) fn STAB0_jump_6(r: &mut Run) {
     }
 }
 
-// SUB_87F14: firmware/upper/86FE4-lib0C0.s:1406
+// SUB_87F14: firmware/upper/86FE4-lib0C0.s:1407
 pub(crate) fn SUB_87F14(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -9215,7 +9217,7 @@ pub(crate) fn SUB_87F14(r: &mut Run) {
             // #87F51:
             0x87F51..=0x87F53 => {
                 op!(r, at, 0x87F51..0x87F53, 4, r.cpu.dec = true); // SETDEC
-                branch!(r, at, 0x87F57, 6, r.cpu.call(0x88283)); // GOSUB SUB_88283
+                branch!(r, at, 0x87F57, 6, r.cpu.call(0x88283)); // GOSUB HypotABR0
             }
             // #87F57:
             0x87F57..=0x87F57 => {
@@ -9239,7 +9241,7 @@ pub(crate) fn SUB_87F14(r: &mut Run) {
             // #87F74:
             0x87F74..=0x87F76 => {
                 op!(r, at, 0x87F74..0x87F76, 4, r.cpu.dec = true); // SETDEC
-                branch!(r, at, 0x87F7A, 6, r.cpu.call(0x88283)); // GOSUB SUB_88283
+                branch!(r, at, 0x87F7A, 6, r.cpu.call(0x88283)); // GOSUB HypotABR0
             }
             // L_87F7A:
             0x87F7A..=0x87F82 => {
@@ -9258,7 +9260,7 @@ pub(crate) fn SUB_87F14(r: &mut Run) {
             }
             // #87F8E:
             0x87F8E..=0x87F8E => {
-                branch!(r, at, 0x87F92, 6, r.cpu.call(0x88283)); // GOSUB SUB_88283
+                branch!(r, at, 0x87F92, 6, r.cpu.call(0x88283)); // GOSUB HypotABR0
             }
             // #87F92:
             0x87F92..=0x87F92 => {
@@ -9309,7 +9311,7 @@ pub(crate) fn SUB_87F14(r: &mut Run) {
             }
             // #87FD2:
             0x87FD2..=0x87FD2 => {
-                branch!(r, at, 0x87FD6, 6, r.cpu.call(0x87AD7)); // GOSUB SUB_87AD7
+                branch!(r, at, 0x87FD6, 6, r.cpu.call(0x87AD7)); // GOSUB SubCDTest
             }
             // #87FD6:
             0x87FD6..=0x87FD6 => {
@@ -9341,7 +9343,7 @@ pub(crate) fn SUB_87F14(r: &mut Run) {
             }
             // #87FFB:
             0x87FFB..=0x87FFB => {
-                branch!(r, at, 0x87FFF, 6, r.cpu.call(0x87AD7)); // GOSUB SUB_87AD7
+                branch!(r, at, 0x87FFF, 6, r.cpu.call(0x87AD7)); // GOSUB SubCDTest
             }
             // #87FFF:
             0x87FFF..=0x87FFF => {
@@ -9377,7 +9379,7 @@ pub(crate) fn SUB_87F14(r: &mut Run) {
             }
             // #88020:
             0x88020..=0x88020 => {
-                branch!(r, at, 0x88024, 6, r.cpu.call(0x88283)); // GOSUB SUB_88283
+                branch!(r, at, 0x88024, 6, r.cpu.call(0x88283)); // GOSUB HypotABR0
             }
             // #88024:
             0x88024..=0x88024 => {
@@ -9397,7 +9399,7 @@ pub(crate) fn SUB_87F14(r: &mut Run) {
             }
             // #88037:
             0x88037..=0x88037 => {
-                branch!(r, at, 0x8803B, 6, r.cpu.call(0x87AD7)); // GOSUB SUB_87AD7
+                branch!(r, at, 0x8803B, 6, r.cpu.call(0x87AD7)); // GOSUB SubCDTest
             }
             // #8803B:
             0x8803B..=0x8803B => {
@@ -9419,7 +9421,7 @@ pub(crate) fn SUB_87F14(r: &mut Run) {
     }
 }
 
-// SUB_8804A: firmware/upper/86FE4-lib0C0.s:1503
+// SUB_8804A: firmware/upper/86FE4-lib0C0.s:1504
 pub(crate) fn SUB_8804A(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -9433,7 +9435,7 @@ pub(crate) fn SUB_8804A(r: &mut Run) {
             }
             // #88052:
             0x88052..=0x88052 => {
-                branch!(r, at, 0x88056, 6, r.cpu.call(0x87B01)); // GOSUB SUB_87B01
+                branch!(r, at, 0x88056, 6, r.cpu.call(0x87B01)); // GOSUB Save2ABR0
             }
             // #88056:
             0x88056..=0x88056 => {
@@ -9521,7 +9523,7 @@ pub(crate) fn SUB_8804A(r: &mut Run) {
             }
             // #880BB:
             0x880BB..=0x880BB => {
-                branch!(r, at, 0x880BF, 6, r.cpu.call(0x87B01)); // GOSUB SUB_87B01
+                branch!(r, at, 0x880BF, 6, r.cpu.call(0x87B01)); // GOSUB Save2ABR0
             }
             // #880BF:
             0x880BF..=0x880BF => {
@@ -9570,7 +9572,7 @@ pub(crate) fn SUB_8804A(r: &mut Run) {
             }
             // #880F0:
             0x880F0..=0x880F0 => {
-                branch!(r, at, 0x880F4, 6, r.cpu.call(0x88283)); // GOSUB SUB_88283
+                branch!(r, at, 0x880F4, 6, r.cpu.call(0x88283)); // GOSUB HypotABR0
             }
             // #880F4:
             0x880F4..=0x880FA => {
@@ -9616,7 +9618,7 @@ pub(crate) fn SUB_8804A(r: &mut Run) {
     }
 }
 
-// SUB_88120: firmware/upper/86FE4-lib0C0.s:1559
+// SUB_88120: firmware/upper/86FE4-lib0C0.s:1560
 pub(crate) fn SUB_88120(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -9634,7 +9636,7 @@ pub(crate) fn SUB_88120(r: &mut Run) {
             }
             // #8812C:
             0x8812C..=0x8812C => {
-                branch!(r, at, 0x88130, 6, r.cpu.call(0x87AD7)); // GOSUB SUB_87AD7
+                branch!(r, at, 0x88130, 6, r.cpu.call(0x87AD7)); // GOSUB SubCDTest
             }
             // #88130:
             0x88130..=0x88130 => {
@@ -9656,7 +9658,7 @@ pub(crate) fn SUB_88120(r: &mut Run) {
     }
 }
 
-// SUB_8813B: firmware/upper/86FE4-lib0C0.s:1569
+// SUB_8813B: firmware/upper/86FE4-lib0C0.s:1570
 pub(crate) fn SUB_8813B(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -9686,7 +9688,7 @@ pub(crate) fn SUB_8813B(r: &mut Run) {
             }
             // #88153:
             0x88153..=0x88153 => {
-                branch!(r, at, 0x88157, 6, r.cpu.call(0x87B01)); // GOSUB SUB_87B01
+                branch!(r, at, 0x88157, 6, r.cpu.call(0x87B01)); // GOSUB Save2ABR0
             }
             // #88157:
             0x88157..=0x88157 => {
@@ -9722,7 +9724,7 @@ pub(crate) fn SUB_8813B(r: &mut Run) {
             }
             // #88177:
             0x88177..=0x88177 => {
-                branch!(r, at, 0x8817B, 6, r.cpu.call(0x87B01)); // GOSUB SUB_87B01
+                branch!(r, at, 0x8817B, 6, r.cpu.call(0x87B01)); // GOSUB Save2ABR0
             }
             // #8817B:
             0x8817B..=0x8817B => {
@@ -9730,7 +9732,7 @@ pub(crate) fn SUB_8813B(r: &mut Run) {
             }
             // #8817F:
             0x8817F..=0x8817F => {
-                branch!(r, at, 0x88183, 6, r.cpu.call(0x87B01)); // GOSUB SUB_87B01
+                branch!(r, at, 0x88183, 6, r.cpu.call(0x87B01)); // GOSUB Save2ABR0
             }
             // #88183:
             0x88183..=0x88183 => {
@@ -9764,7 +9766,7 @@ pub(crate) fn SUB_8813B(r: &mut Run) {
             }
             // #881A5:
             0x881A5..=0x881A5 => {
-                branch!(r, at, 0x881A9, 6, r.cpu.call(0x87B01)); // GOSUB SUB_87B01
+                branch!(r, at, 0x881A9, 6, r.cpu.call(0x87B01)); // GOSUB Save2ABR0
             }
             // #881A9:
             0x881A9..=0x881A9 => {
@@ -9805,7 +9807,7 @@ pub(crate) fn SUB_8813B(r: &mut Run) {
             }
             // #881D7:
             0x881D7..=0x881D7 => {
-                branch!(r, at, 0x881DB, 6, r.cpu.call(0x87B01)); // GOSUB SUB_87B01
+                branch!(r, at, 0x881DB, 6, r.cpu.call(0x87B01)); // GOSUB Save2ABR0
             }
             // #881DB:
             0x881DB..=0x881DB => {
@@ -9859,7 +9861,7 @@ pub(crate) fn SUB_8813B(r: &mut Run) {
     }
 }
 
-// SUB_88207: firmware/upper/86FE4-lib0C0.s:1624
+// SUB_88207: firmware/upper/86FE4-lib0C0.s:1625
 pub(crate) fn SUB_88207(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -9879,7 +9881,7 @@ pub(crate) fn SUB_88207(r: &mut Run) {
     }
 }
 
-// SUB_88215: firmware/upper/86FE4-lib0C0.s:1632
+// SUB_88215: firmware/upper/86FE4-lib0C0.s:1633
 pub(crate) fn SUB_88215(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -9897,7 +9899,7 @@ pub(crate) fn SUB_88215(r: &mut Run) {
             }
             // #88223:
             0x88223..=0x88223 => {
-                branch!(r, at, 0x88227, 6, r.cpu.call(0x88283)); // GOSUB SUB_88283
+                branch!(r, at, 0x88227, 6, r.cpu.call(0x88283)); // GOSUB HypotABR0
             }
             // #88227:
             0x88227..=0x88227 => {
@@ -9971,8 +9973,9 @@ pub(crate) fn SUB_88215(r: &mut Run) {
     }
 }
 
-// SUB_88283: firmware/upper/86FE4-lib0C0.s:1665
-pub(crate) fn SUB_88283(r: &mut Run) {
+// A/B = sqrt(x^2+y^2) for x in A/B and y in R0/R1 (the modulus of a complex number held as two %%)
+// HypotABR0: firmware/upper/86FE4-lib0C0.s:1667
+pub(crate) fn HypotABR0(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -10035,7 +10038,7 @@ pub(crate) fn SUB_88283(r: &mut Run) {
     }
 }
 
-// SQRF~jump_2: firmware/upper/86FE4-lib0C0.s:1691
+// SQRF~jump_2: firmware/upper/86FE4-lib0C0.s:1693
 pub(crate) fn SQRF_jump_2(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -10051,7 +10054,7 @@ pub(crate) fn SQRF_jump_2(r: &mut Run) {
     }
 }
 
-// SUB_882D1: firmware/upper/86FE4-lib0C0.s:1695
+// SUB_882D1: firmware/upper/86FE4-lib0C0.s:1697
 pub(crate) fn SUB_882D1(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -10471,7 +10474,7 @@ pub(crate) fn code_88398(r: &mut Run) {
                 op!(r, at, 0x88639..0x8863C, 5, r.cpu.d_from_r(1, R::A, false)); // D1=A
                 op!(r, at, 0x8863C..0x8863F, 5, r.cpu.zero(R::A, Field::W)); // A=0 W
                 op!(r, at, 0x8863F..0x88642, 5, r.cpu.zero(R::B, Field::W)); // B=0 W
-                branch!(r, at, 0x88648, 8, r.cpu.call(0x8921F)); // GOSUBL SUB_8921F
+                branch!(r, at, 0x88648, 8, r.cpu.call(0x8921F)); // GOSUBL PUTAB0Back
             }
             // #88648:
             0x88648..=0x88648 => {
@@ -10482,7 +10485,7 @@ pub(crate) fn code_88398(r: &mut Run) {
                 op!(r, at, 0x8864E..0x88651, 5, r.cpu.zero(R::A, Field::S)); // A=0 S
                 op!(r, at, 0x88651..0x88654, 5, r.cpu.d_sub(0, 16)); // D0=D0- 16
                 op!(r, at, 0x88654..0x88657, 5, r.cpu.d_sub(0, 5)); // D0=D0- 5
-                branch!(r, at, 0x8865D, 8, r.cpu.call(0x8921F)); // GOSUBL SUB_8921F
+                branch!(r, at, 0x8865D, 8, r.cpu.call(0x8921F)); // GOSUBL PUTAB0Back
             }
             // L_8865D:
             0x8865D..=0x88660 => {
@@ -10492,7 +10495,7 @@ pub(crate) fn code_88398(r: &mut Run) {
             // #88666:
             0x88666..=0x88668 => {
                 op!(r, at, 0x88666..0x88668, 4, r.cpu.dec = true); // SETDEC
-                branch!(r, at, 0x8866E, 8, r.cpu.call(0x88F99)); // GOSUBL SUB_88F99
+                branch!(r, at, 0x8866E, 8, r.cpu.call(0x88F99)); // GOSUBL MulD0%%
             }
             // #8866E:
             0x8866E..=0x8866E => {
@@ -10520,7 +10523,7 @@ pub(crate) fn code_88398(r: &mut Run) {
             }
             // #88692:
             0x88692..=0x88692 => {
-                branch!(r, at, 0x88698, 8, r.cpu.call(0x88F99)); // GOSUBL SUB_88F99
+                branch!(r, at, 0x88698, 8, r.cpu.call(0x88F99)); // GOSUBL MulD0%%
             }
             // #88698:
             0x88698..=0x88698 => {
@@ -10544,7 +10547,7 @@ pub(crate) fn code_88398(r: &mut Run) {
             }
             // #886B5:
             0x886B5..=0x886B5 => {
-                branch!(r, at, 0x886BB, 8, r.cpu.call(0x8921F)); // GOSUBL SUB_8921F
+                branch!(r, at, 0x886BB, 8, r.cpu.call(0x8921F)); // GOSUBL PUTAB0Back
             }
             // #886BB:
             0x886BB..=0x886BB => {
@@ -10580,7 +10583,7 @@ pub(crate) fn code_88398(r: &mut Run) {
             }
             // #886EE:
             0x886EE..=0x886EE => {
-                branch!(r, at, 0x886F4, 8, r.cpu.call(0x8921F)); // GOSUBL SUB_8921F
+                branch!(r, at, 0x886F4, 8, r.cpu.call(0x8921F)); // GOSUBL PUTAB0Back
             }
             // #886F4:
             0x886F4..=0x886FA => {
@@ -10590,7 +10593,7 @@ pub(crate) fn code_88398(r: &mut Run) {
             }
             // #88700:
             0x88700..=0x88700 => {
-                branch!(r, at, 0x88706, 8, r.cpu.call(0x890E0)); // GOSUBL SUB_890E0
+                branch!(r, at, 0x88706, 8, r.cpu.call(0x890E0)); // GOSUBL SubCDTestb
             }
             // #88706:
             0x88706..=0x88706 => {
@@ -10627,7 +10630,7 @@ pub(crate) fn code_88398(r: &mut Run) {
             // #88736:
             0x88736..=0x88738 => {
                 op!(r, at, 0x88736..0x88738, 4, r.cpu.dec = true); // SETDEC
-                branch!(r, at, 0x8873E, 8, r.cpu.call(0x88F99)); // GOSUBL SUB_88F99
+                branch!(r, at, 0x8873E, 8, r.cpu.call(0x88F99)); // GOSUBL MulD0%%
             }
             // #8873E:
             0x8873E..=0x8874F => {
@@ -10701,7 +10704,7 @@ pub(crate) fn code_88398(r: &mut Run) {
             }
             // #887B8:
             0x887B8..=0x887B8 => {
-                branch!(r, at, 0x887BE, 8, r.cpu.call(0x890E0)); // GOSUBL SUB_890E0
+                branch!(r, at, 0x887BE, 8, r.cpu.call(0x890E0)); // GOSUBL SubCDTestb
             }
             // #887BE:
             0x887BE..=0x887BE => {
@@ -10729,7 +10732,7 @@ pub(crate) fn code_88398(r: &mut Run) {
             }
             // #887D7:
             0x887D7..=0x887D7 => {
-                branch!(r, at, 0x887DD, 8, r.cpu.call(0x890E0)); // GOSUBL SUB_890E0
+                branch!(r, at, 0x887DD, 8, r.cpu.call(0x890E0)); // GOSUBL SubCDTestb
             }
             // #887DD:
             0x887DD..=0x887DD => {
@@ -10757,7 +10760,7 @@ pub(crate) fn code_88398(r: &mut Run) {
             }
             // #887FF:
             0x887FF..=0x887FF => {
-                branch!(r, at, 0x88805, 8, r.cpu.call(0x890E0)); // GOSUBL SUB_890E0
+                branch!(r, at, 0x88805, 8, r.cpu.call(0x890E0)); // GOSUBL SubCDTestb
             }
             // #88805:
             0x88805..=0x88805 => {
@@ -10843,7 +10846,7 @@ pub(crate) fn code_88398(r: &mut Run) {
             }
             // #8888E:
             0x8888E..=0x8888E => {
-                branch!(r, at, 0x88894, 8, r.cpu.call(0x89151)); // GOSUBL SUB_89151
+                branch!(r, at, 0x88894, 8, r.cpu.call(0x89151)); // GOSUBL Get2ABR0b
             }
             // #88894:
             0x88894..=0x88896 => {
@@ -10904,7 +10907,7 @@ pub(crate) fn code_88398(r: &mut Run) {
             // #888E8:
             0x888E8..=0x888EB => {
                 op!(r, at, 0x888E8..0x888EB, 5, r.cpu.zero(R::C, Field::S)); // C=0 S
-                branch!(r, at, 0x888EF, 6, r.cpu.call(0x890E0)); // GOSUB SUB_890E0
+                branch!(r, at, 0x888EF, 6, r.cpu.call(0x890E0)); // GOSUB SubCDTestb
             }
             // #888EF:
             0x888EF..=0x888EF => {
@@ -10925,7 +10928,7 @@ pub(crate) fn code_88398(r: &mut Run) {
             // #88902:
             0x88902..=0x88905 => {
                 op!(r, at, 0x88902..0x88905, 5, r.cpu.zero(R::C, Field::S)); // C=0 S
-                branch!(r, at, 0x88909, 6, r.cpu.call(0x890E0)); // GOSUB SUB_890E0
+                branch!(r, at, 0x88909, 6, r.cpu.call(0x890E0)); // GOSUB SubCDTestb
             }
             // #88909:
             0x88909..=0x88909 => {
@@ -10984,7 +10987,7 @@ pub(crate) fn code_88398(r: &mut Run) {
                 op!(r, at, 0x88960..0x88963, 5, r.cpu.d_ex_r(1, R::C, false)); // CD1EX
                 op!(r, at, 0x88963..0x88966, 5, r.cpu.scratch(ScratchOp::ToScratch, R::C, 3, Field::W)); // R3=C
                 op!(r, at, 0x88966..0x88969, 5, r.cpu.d_ex_r(1, R::C, false)); // CD1EX
-                branch!(r, at, 0x8896F, 8, r.cpu.call(0x8921F)); // GOSUBL SUB_8921F
+                branch!(r, at, 0x8896F, 8, r.cpu.call(0x8921F)); // GOSUBL PUTAB0Back
             }
             // #8896F:
             0x8896F..=0x8896F => {
@@ -11063,7 +11066,7 @@ pub(crate) fn code_88398(r: &mut Run) {
             }
             // L_889CD:
             0x889CD..=0x889CD => {
-                branch!(r, at, 0x889D3, 8, r.cpu.call(0x8921F)); // GOSUBL SUB_8921F
+                branch!(r, at, 0x889D3, 8, r.cpu.call(0x8921F)); // GOSUBL PUTAB0Back
             }
             // L_889D3:
             0x889D3..=0x889D3 => {
@@ -11170,7 +11173,7 @@ pub(crate) fn code_88398(r: &mut Run) {
             }
             // #88A65:
             0x88A65..=0x88A65 => {
-                branch!(r, at, 0x88A69, 6, r.cpu.call(0x89151)); // GOSUB SUB_89151
+                branch!(r, at, 0x88A69, 6, r.cpu.call(0x89151)); // GOSUB Get2ABR0b
             }
             // #88A69:
             0x88A69..=0x88A69 => {
@@ -11308,7 +11311,7 @@ pub(crate) fn code_88398(r: &mut Run) {
             }
             // #88B38:
             0x88B38..=0x88B38 => {
-                branch!(r, at, 0x88B3C, 6, r.cpu.call(0x8921F)); // GOSUB SUB_8921F
+                branch!(r, at, 0x88B3C, 6, r.cpu.call(0x8921F)); // GOSUB PUTAB0Back
             }
             // #88B3C:
             0x88B3C..=0x88B3E => {
@@ -11329,7 +11332,7 @@ pub(crate) fn code_88398(r: &mut Run) {
             }
             // #88B4E:
             0x88B4E..=0x88B4E => {
-                branch!(r, at, 0x88B52, 6, r.cpu.call(0x88F99)); // GOSUB SUB_88F99
+                branch!(r, at, 0x88B52, 6, r.cpu.call(0x88F99)); // GOSUB MulD0%%
             }
             // #88B52:
             0x88B52..=0x88B55 => {
@@ -11377,7 +11380,7 @@ pub(crate) fn code_88398(r: &mut Run) {
             }
             // #88B85:
             0x88B85..=0x88B85 => {
-                branch!(r, at, 0x88B89, 6, r.cpu.call(0x8921F)); // GOSUB SUB_8921F
+                branch!(r, at, 0x88B89, 6, r.cpu.call(0x8921F)); // GOSUB PUTAB0Back
             }
             // #88B89:
             0x88B89..=0x88B89 => {
@@ -11387,7 +11390,7 @@ pub(crate) fn code_88398(r: &mut Run) {
             0x88B8D..=0x88B93 => {
                 op!(r, at, 0x88B8D..0x88B90, 5, r.cpu.d_add(0, 16)); // D0=D0+ 16
                 op!(r, at, 0x88B90..0x88B93, 5, r.cpu.d_add(0, 5)); // D0=D0+ 5
-                branch!(r, at, 0x88B97, 6, r.cpu.call(0x88F99)); // GOSUB SUB_88F99
+                branch!(r, at, 0x88B97, 6, r.cpu.call(0x88F99)); // GOSUB MulD0%%
             }
             // #88B97:
             0x88B97..=0x88B97 => {
@@ -11399,7 +11402,7 @@ pub(crate) fn code_88398(r: &mut Run) {
             }
             // #88B9F:
             0x88B9F..=0x88B9F => {
-                branch!(r, at, 0x88BA3, 6, r.cpu.call(0x88F99)); // GOSUB SUB_88F99
+                branch!(r, at, 0x88BA3, 6, r.cpu.call(0x88F99)); // GOSUB MulD0%%
             }
             // #88BA3:
             0x88BA3..=0x88BA6 => {
@@ -11452,7 +11455,7 @@ pub(crate) fn code_88398(r: &mut Run) {
             // #88BD6:
             0x88BD6..=0x88BD8 => {
                 op!(r, at, 0x88BD6..0x88BD8, 4, r.cpu.dec = true); // SETDEC
-                branch!(r, at, 0x88BDC, 6, r.cpu.call(0x88F99)); // GOSUB SUB_88F99
+                branch!(r, at, 0x88BDC, 6, r.cpu.call(0x88F99)); // GOSUB MulD0%%
             }
             // #88BDC:
             0x88BDC..=0x88BE2 => {
@@ -11628,7 +11631,7 @@ pub(crate) fn code_88398(r: &mut Run) {
             }
             // #88CB1:
             0x88CB1..=0x88CB1 => {
-                branch!(r, at, 0x88CB5, 6, r.cpu.call(0x8921F)); // GOSUB SUB_8921F
+                branch!(r, at, 0x88CB5, 6, r.cpu.call(0x8921F)); // GOSUB PUTAB0Back
             }
             // #88CB5:
             0x88CB5..=0x88CB5 => {
@@ -11668,7 +11671,7 @@ pub(crate) fn code_88398(r: &mut Run) {
             }
             // #88CE8:
             0x88CE8..=0x88CE8 => {
-                branch!(r, at, 0x88CEC, 6, r.cpu.call(0x8921F)); // GOSUB SUB_8921F
+                branch!(r, at, 0x88CEC, 6, r.cpu.call(0x8921F)); // GOSUB PUTAB0Back
             }
             // #88CEC:
             0x88CEC..=0x88CEC => {
@@ -11683,7 +11686,7 @@ pub(crate) fn code_88398(r: &mut Run) {
                 op!(r, at, 0x88CF4..0x88CF7, 5, r.cpu.not(R::A, Field::S)); // A=-A-1 S
                 op!(r, at, 0x88CF7..0x88CFA, 5, r.cpu.d_add(0, 16)); // D0=D0+ 16
                 op!(r, at, 0x88CFA..0x88CFD, 5, r.cpu.d_add(0, 5)); // D0=D0+ 5
-                branch!(r, at, 0x88D01, 6, r.cpu.call(0x88F99)); // GOSUB SUB_88F99
+                branch!(r, at, 0x88D01, 6, r.cpu.call(0x88F99)); // GOSUB MulD0%%
             }
             // #88D01:
             0x88D01..=0x88D01 => {
@@ -11703,7 +11706,7 @@ pub(crate) fn code_88398(r: &mut Run) {
             }
             // #88D11:
             0x88D11..=0x88D11 => {
-                branch!(r, at, 0x88D15, 6, r.cpu.call(0x8921F)); // GOSUB SUB_8921F
+                branch!(r, at, 0x88D15, 6, r.cpu.call(0x8921F)); // GOSUB PUTAB0Back
             }
             // #88D15:
             0x88D15..=0x88D15 => {
@@ -11789,7 +11792,7 @@ pub(crate) fn code_88398(r: &mut Run) {
             0x88D89..=0x88D8F => {
                 op!(r, at, 0x88D89..0x88D8C, 5, r.cpu.d_add(1, 16)); // D1=D1+ 16
                 op!(r, at, 0x88D8C..0x88D8F, 5, r.cpu.d_add(1, 5)); // D1=D1+ 5
-                branch!(r, at, 0x88D93, 6, r.cpu.call(0x89151)); // GOSUB SUB_89151
+                branch!(r, at, 0x88D93, 6, r.cpu.call(0x89151)); // GOSUB Get2ABR0b
             }
             // #88D93:
             0x88D93..=0x88D93 => {
@@ -11813,7 +11816,7 @@ pub(crate) fn code_88398(r: &mut Run) {
             }
             // #88DA9:
             0x88DA9..=0x88DA9 => {
-                branch!(r, at, 0x88DAD, 6, r.cpu.call(0x890E0)); // GOSUB SUB_890E0
+                branch!(r, at, 0x88DAD, 6, r.cpu.call(0x890E0)); // GOSUB SubCDTestb
             }
             // #88DAD:
             0x88DAD..=0x88DAD => {
@@ -11874,7 +11877,7 @@ pub(crate) fn code_88398(r: &mut Run) {
             }
             // #88DE8:
             0x88DE8..=0x88DE8 => {
-                branch!(r, at, 0x88DEC, 6, r.cpu.call(0x890E0)); // GOSUB SUB_890E0
+                branch!(r, at, 0x88DEC, 6, r.cpu.call(0x890E0)); // GOSUB SubCDTestb
             }
             // #88DEC:
             0x88DEC..=0x88DEC => {
@@ -11933,7 +11936,7 @@ pub(crate) fn code_88398(r: &mut Run) {
             }
             // #88E38:
             0x88E38..=0x88E38 => {
-                branch!(r, at, 0x88E3C, 6, r.cpu.call(0x89151)); // GOSUB SUB_89151
+                branch!(r, at, 0x88E3C, 6, r.cpu.call(0x89151)); // GOSUB Get2ABR0b
             }
             // #88E3C:
             0x88E3C..=0x88E3C => {
@@ -12118,7 +12121,7 @@ pub(crate) fn code_88398(r: &mut Run) {
     }
 }
 
-// SUB_88F2A: firmware/upper/86FE4-lib0C0.s:2546
+// SUB_88F2A: firmware/upper/86FE4-lib0C0.s:2548
 pub(crate) fn SUB_88F2A(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -12137,7 +12140,7 @@ pub(crate) fn SUB_88F2A(r: &mut Run) {
     }
 }
 
-// SUB_88F35: firmware/upper/86FE4-lib0C0.s:2553
+// SUB_88F35: firmware/upper/86FE4-lib0C0.s:2555
 pub(crate) fn SUB_88F35(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -12159,7 +12162,7 @@ pub(crate) fn SUB_88F35(r: &mut Run) {
     }
 }
 
-// XYEX~jump_5: firmware/upper/86FE4-lib0C0.s:2563
+// XYEX~jump_5: firmware/upper/86FE4-lib0C0.s:2565
 pub(crate) fn XYEX_jump_5(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -12175,7 +12178,7 @@ pub(crate) fn XYEX_jump_5(r: &mut Run) {
     }
 }
 
-// STAB2~jump_7: firmware/upper/86FE4-lib0C0.s:2567
+// STAB2~jump_7: firmware/upper/86FE4-lib0C0.s:2569
 pub(crate) fn STAB2_jump_7(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -12191,7 +12194,7 @@ pub(crate) fn STAB2_jump_7(r: &mut Run) {
     }
 }
 
-// RCAB0~jump_2: firmware/upper/86FE4-lib0C0.s:2571
+// RCAB0~jump_2: firmware/upper/86FE4-lib0C0.s:2573
 pub(crate) fn RCAB0_jump_2(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -12207,7 +12210,7 @@ pub(crate) fn RCAB0_jump_2(r: &mut Run) {
     }
 }
 
-// RCAB2~jump_4: firmware/upper/86FE4-lib0C0.s:2575
+// RCAB2~jump_4: firmware/upper/86FE4-lib0C0.s:2577
 pub(crate) fn RCAB2_jump_4(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -12223,7 +12226,7 @@ pub(crate) fn RCAB2_jump_4(r: &mut Run) {
     }
 }
 
-// RCCD0~jump_7: firmware/upper/86FE4-lib0C0.s:2579
+// RCCD0~jump_7: firmware/upper/86FE4-lib0C0.s:2581
 pub(crate) fn RCCD0_jump_7(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -12239,7 +12242,7 @@ pub(crate) fn RCCD0_jump_7(r: &mut Run) {
     }
 }
 
-// RCCD2~jump_7: firmware/upper/86FE4-lib0C0.s:2583
+// RCCD2~jump_7: firmware/upper/86FE4-lib0C0.s:2585
 pub(crate) fn RCCD2_jump_7(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -12255,7 +12258,7 @@ pub(crate) fn RCCD2_jump_7(r: &mut Run) {
     }
 }
 
-// SUB_88F74: firmware/upper/86FE4-lib0C0.s:2587
+// SUB_88F74: firmware/upper/86FE4-lib0C0.s:2589
 pub(crate) fn SUB_88F74(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -12284,7 +12287,7 @@ pub(crate) fn SUB_88F74(r: &mut Run) {
     }
 }
 
-// SUB_88F8E: firmware/upper/86FE4-lib0C0.s:2599
+// SUB_88F8E: firmware/upper/86FE4-lib0C0.s:2601
 pub(crate) fn SUB_88F8E(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -12300,7 +12303,7 @@ pub(crate) fn SUB_88F8E(r: &mut Run) {
     }
 }
 
-// MULTF~jump_6: firmware/upper/86FE4-lib0C0.s:2603
+// MULTF~jump_6: firmware/upper/86FE4-lib0C0.s:2605
 pub(crate) fn MULTF_jump_6(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -12316,8 +12319,9 @@ pub(crate) fn MULTF_jump_6(r: &mut Run) {
     }
 }
 
-// SUB_88F99: firmware/upper/86FE4-lib0C0.s:2607
-pub(crate) fn SUB_88F99(r: &mut Run) {
+// A/B *= the %% at D0 (GETCD0, MULTF); D0 past it
+// MulD0%%: firmware/upper/86FE4-lib0C0.s:2610
+pub(crate) fn MulD0__(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -12336,7 +12340,7 @@ pub(crate) fn SUB_88F99(r: &mut Run) {
     }
 }
 
-// SUB_88FA1: firmware/upper/86FE4-lib0C0.s:2612
+// SUB_88FA1: firmware/upper/86FE4-lib0C0.s:2615
 pub(crate) fn SUB_88FA1(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -12356,7 +12360,7 @@ pub(crate) fn SUB_88FA1(r: &mut Run) {
     }
 }
 
-// DIVF~jump_4: firmware/upper/86FE4-lib0C0.s:2617
+// DIVF~jump_4: firmware/upper/86FE4-lib0C0.s:2620
 pub(crate) fn DIVF_jump_4(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -12372,7 +12376,7 @@ pub(crate) fn DIVF_jump_4(r: &mut Run) {
     }
 }
 
-// SUB_88FB0: firmware/upper/86FE4-lib0C0.s:2621
+// SUB_88FB0: firmware/upper/86FE4-lib0C0.s:2624
 pub(crate) fn SUB_88FB0(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -12388,7 +12392,7 @@ pub(crate) fn SUB_88FB0(r: &mut Run) {
     }
 }
 
-// SUB_88FB7: firmware/upper/86FE4-lib0C0.s:2625
+// SUB_88FB7: firmware/upper/86FE4-lib0C0.s:2628
 pub(crate) fn SUB_88FB7(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -12404,7 +12408,7 @@ pub(crate) fn SUB_88FB7(r: &mut Run) {
     }
 }
 
-// SUB_88FBE: firmware/upper/86FE4-lib0C0.s:2629
+// SUB_88FBE: firmware/upper/86FE4-lib0C0.s:2632
 pub(crate) fn SUB_88FBE(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -12459,7 +12463,7 @@ pub(crate) fn SUB_88FBE(r: &mut Run) {
     }
 }
 
-// SUB_8901B: firmware/upper/86FE4-lib0C0.s:2658
+// SUB_8901B: firmware/upper/86FE4-lib0C0.s:2661
 pub(crate) fn SUB_8901B(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -12534,7 +12538,7 @@ pub(crate) fn SUB_8901B(r: &mut Run) {
     }
 }
 
-// SUB_8907E: firmware/upper/86FE4-lib0C0.s:2694
+// SUB_8907E: firmware/upper/86FE4-lib0C0.s:2697
 pub(crate) fn SUB_8907E(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -12587,7 +12591,7 @@ pub(crate) fn SUB_8907E(r: &mut Run) {
     }
 }
 
-// SUB_890B6: firmware/upper/86FE4-lib0C0.s:2719
+// SUB_890B6: firmware/upper/86FE4-lib0C0.s:2722
 pub(crate) fn SUB_890B6(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -12631,8 +12635,9 @@ pub(crate) fn SUB_890B6(r: &mut Run) {
     }
 }
 
-// SUB_890E0: firmware/upper/86FE4-lib0C0.s:2740
-pub(crate) fn SUB_890E0(r: &mut Run) {
+// A copy of SubCDTest in the library's second code part
+// SubCDTestb: firmware/upper/86FE4-lib0C0.s:2744
+pub(crate) fn SubCDTestb(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -12662,7 +12667,7 @@ pub(crate) fn SUB_890E0(r: &mut Run) {
     }
 }
 
-// SUB_890F7: firmware/upper/86FE4-lib0C0.s:2752
+// SUB_890F7: firmware/upper/86FE4-lib0C0.s:2756
 pub(crate) fn SUB_890F7(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -12686,7 +12691,7 @@ pub(crate) fn SUB_890F7(r: &mut Run) {
     }
 }
 
-// EXAB0~jump_4: firmware/upper/86FE4-lib0C0.s:2759
+// EXAB0~jump_4: firmware/upper/86FE4-lib0C0.s:2763
 pub(crate) fn EXAB0_jump_4(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -12702,7 +12707,7 @@ pub(crate) fn EXAB0_jump_4(r: &mut Run) {
     }
 }
 
-// SUB_8910A: firmware/upper/86FE4-lib0C0.s:2763
+// SUB_8910A: firmware/upper/86FE4-lib0C0.s:2767
 pub(crate) fn SUB_8910A(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -12722,7 +12727,7 @@ pub(crate) fn SUB_8910A(r: &mut Run) {
     }
 }
 
-// SUB_89112: firmware/upper/86FE4-lib0C0.s:2768
+// SUB_89112: firmware/upper/86FE4-lib0C0.s:2772
 pub(crate) fn SUB_89112(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -12732,7 +12737,7 @@ pub(crate) fn SUB_89112(r: &mut Run) {
             }
             // #89116:
             0x89116..=0x89116 => {
-                branch!(r, at, 0x8911A, 6, r.cpu.call(0x8921F)); // GOSUB SUB_8921F
+                branch!(r, at, 0x8911A, 6, r.cpu.call(0x8921F)); // GOSUB PUTAB0Back
             }
             // #8911A:
             0x8911A..=0x8911A => {
@@ -12744,7 +12749,7 @@ pub(crate) fn SUB_89112(r: &mut Run) {
             }
             // #89122:
             0x89122..=0x89122 => {
-                branch!(r, at, 0x89126, 6, r.cpu.call(0x8921F)); // GOSUB SUB_8921F
+                branch!(r, at, 0x89126, 6, r.cpu.call(0x8921F)); // GOSUB PUTAB0Back
             }
             _ => {
                 r.cpu.pc = at;
@@ -12754,7 +12759,7 @@ pub(crate) fn SUB_89112(r: &mut Run) {
     }
 }
 
-// SUB_89126: firmware/upper/86FE4-lib0C0.s:2776
+// SUB_89126: firmware/upper/86FE4-lib0C0.s:2780
 pub(crate) fn SUB_89126(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -12773,7 +12778,7 @@ pub(crate) fn SUB_89126(r: &mut Run) {
     }
 }
 
-// SUB_89131: firmware/upper/86FE4-lib0C0.s:2783
+// SUB_89131: firmware/upper/86FE4-lib0C0.s:2787
 pub(crate) fn SUB_89131(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -12789,7 +12794,7 @@ pub(crate) fn SUB_89131(r: &mut Run) {
     }
 }
 
-// SUB_89135: firmware/upper/86FE4-lib0C0.s:2787
+// SUB_89135: firmware/upper/86FE4-lib0C0.s:2791
 pub(crate) fn SUB_89135(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -12813,7 +12818,7 @@ pub(crate) fn SUB_89135(r: &mut Run) {
     }
 }
 
-// SUB_89141: firmware/upper/86FE4-lib0C0.s:2793
+// SUB_89141: firmware/upper/86FE4-lib0C0.s:2797
 pub(crate) fn SUB_89141(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -12841,8 +12846,9 @@ pub(crate) fn SUB_89141(r: &mut Run) {
     }
 }
 
-// SUB_89151: firmware/upper/86FE4-lib0C0.s:2800
-pub(crate) fn SUB_89151(r: &mut Run) {
+// A copy of Get2ABR0 in the library's second code part
+// Get2ABR0b: firmware/upper/86FE4-lib0C0.s:2805
+pub(crate) fn Get2ABR0b(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -12857,7 +12863,7 @@ pub(crate) fn SUB_89151(r: &mut Run) {
     }
 }
 
-// SUB_89155: firmware/upper/86FE4-lib0C0.s:2804
+// SUB_89155: firmware/upper/86FE4-lib0C0.s:2809
 pub(crate) fn SUB_89155(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -12881,7 +12887,7 @@ pub(crate) fn SUB_89155(r: &mut Run) {
     }
 }
 
-// SUB_89161: firmware/upper/86FE4-lib0C0.s:2810
+// SUB_89161: firmware/upper/86FE4-lib0C0.s:2815
 pub(crate) fn SUB_89161(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -12901,7 +12907,7 @@ pub(crate) fn SUB_89161(r: &mut Run) {
     }
 }
 
-// SUB_89168: firmware/upper/86FE4-lib0C0.s:2815
+// SUB_89168: firmware/upper/86FE4-lib0C0.s:2820
 pub(crate) fn SUB_89168(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -12926,7 +12932,7 @@ pub(crate) fn SUB_89168(r: &mut Run) {
     }
 }
 
-// SUB_89176: firmware/upper/86FE4-lib0C0.s:2823
+// SUB_89176: firmware/upper/86FE4-lib0C0.s:2828
 pub(crate) fn SUB_89176(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -12950,7 +12956,7 @@ pub(crate) fn SUB_89176(r: &mut Run) {
     }
 }
 
-// SUB_89182: firmware/upper/86FE4-lib0C0.s:2829
+// SUB_89182: firmware/upper/86FE4-lib0C0.s:2834
 pub(crate) fn SUB_89182(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -12971,7 +12977,7 @@ pub(crate) fn SUB_89182(r: &mut Run) {
     }
 }
 
-// SUB_89192: firmware/upper/86FE4-lib0C0.s:2838
+// SUB_89192: firmware/upper/86FE4-lib0C0.s:2843
 pub(crate) fn SUB_89192(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -12989,7 +12995,7 @@ pub(crate) fn SUB_89192(r: &mut Run) {
     }
 }
 
-// SUB_89198: firmware/upper/86FE4-lib0C0.s:2843
+// SUB_89198: firmware/upper/86FE4-lib0C0.s:2848
 pub(crate) fn SUB_89198(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -13007,7 +13013,7 @@ pub(crate) fn SUB_89198(r: &mut Run) {
     }
 }
 
-// SUB_8919E: firmware/upper/86FE4-lib0C0.s:2848
+// SUB_8919E: firmware/upper/86FE4-lib0C0.s:2853
 pub(crate) fn SUB_8919E(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -13027,7 +13033,7 @@ pub(crate) fn SUB_8919E(r: &mut Run) {
     }
 }
 
-// SUB_891AA: firmware/upper/86FE4-lib0C0.s:2855
+// SUB_891AA: firmware/upper/86FE4-lib0C0.s:2860
 pub(crate) fn SUB_891AA(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -13046,7 +13052,7 @@ pub(crate) fn SUB_891AA(r: &mut Run) {
     }
 }
 
-// SUB_891B5: firmware/upper/86FE4-lib0C0.s:2862
+// SUB_891B5: firmware/upper/86FE4-lib0C0.s:2867
 pub(crate) fn SUB_891B5(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -13064,7 +13070,7 @@ pub(crate) fn SUB_891B5(r: &mut Run) {
     }
 }
 
-// SUB_891BB: firmware/upper/86FE4-lib0C0.s:2867
+// SUB_891BB: firmware/upper/86FE4-lib0C0.s:2872
 pub(crate) fn SUB_891BB(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -13084,7 +13090,7 @@ pub(crate) fn SUB_891BB(r: &mut Run) {
     }
 }
 
-// SUB_891C7: firmware/upper/86FE4-lib0C0.s:2874
+// SUB_891C7: firmware/upper/86FE4-lib0C0.s:2879
 pub(crate) fn SUB_891C7(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -13102,7 +13108,7 @@ pub(crate) fn SUB_891C7(r: &mut Run) {
     }
 }
 
-// SUB_891CD: firmware/upper/86FE4-lib0C0.s:2879
+// SUB_891CD: firmware/upper/86FE4-lib0C0.s:2884
 pub(crate) fn SUB_891CD(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -13121,7 +13127,7 @@ pub(crate) fn SUB_891CD(r: &mut Run) {
     }
 }
 
-// SUB_891D8: firmware/upper/86FE4-lib0C0.s:2886
+// SUB_891D8: firmware/upper/86FE4-lib0C0.s:2891
 pub(crate) fn SUB_891D8(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -13141,7 +13147,7 @@ pub(crate) fn SUB_891D8(r: &mut Run) {
     }
 }
 
-// SUB_891E4: firmware/upper/86FE4-lib0C0.s:2893
+// SUB_891E4: firmware/upper/86FE4-lib0C0.s:2898
 pub(crate) fn SUB_891E4(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -13159,7 +13165,7 @@ pub(crate) fn SUB_891E4(r: &mut Run) {
     }
 }
 
-// SUB_891EA: firmware/upper/86FE4-lib0C0.s:2898
+// SUB_891EA: firmware/upper/86FE4-lib0C0.s:2903
 pub(crate) fn SUB_891EA(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -13178,7 +13184,7 @@ pub(crate) fn SUB_891EA(r: &mut Run) {
 }
 
 // D0 -= 42: back two extended reals
-// D0Back2%%: firmware/upper/86FE4-lib0C0.s:2904
+// D0Back2%%: firmware/upper/86FE4-lib0C0.s:2909
 pub(crate) fn D0Back2__(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -13197,7 +13203,7 @@ pub(crate) fn D0Back2__(r: &mut Run) {
     }
 }
 
-// SUB_891FB: firmware/upper/86FE4-lib0C0.s:2911
+// SUB_891FB: firmware/upper/86FE4-lib0C0.s:2916
 pub(crate) fn SUB_891FB(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -13217,7 +13223,7 @@ pub(crate) fn SUB_891FB(r: &mut Run) {
     }
 }
 
-// SUB_89207: firmware/upper/86FE4-lib0C0.s:2918
+// SUB_89207: firmware/upper/86FE4-lib0C0.s:2923
 pub(crate) fn SUB_89207(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -13236,7 +13242,7 @@ pub(crate) fn SUB_89207(r: &mut Run) {
     }
 }
 
-// SUB_89212: firmware/upper/86FE4-lib0C0.s:2925
+// SUB_89212: firmware/upper/86FE4-lib0C0.s:2930
 pub(crate) fn SUB_89212(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -13254,7 +13260,7 @@ pub(crate) fn SUB_89212(r: &mut Run) {
     }
 }
 
-// PutAB%1~jump_2: firmware/upper/86FE4-lib0C0.s:2930
+// PutAB%1~jump_2: firmware/upper/86FE4-lib0C0.s:2935
 pub(crate) fn PutAB_1_jump_2(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -13270,8 +13276,9 @@ pub(crate) fn PutAB_1_jump_2(r: &mut Run) {
     }
 }
 
-// SUB_8921F: firmware/upper/86FE4-lib0C0.s:2934
-pub(crate) fn SUB_8921F(r: &mut Run) {
+// D0 -= 21, then PUTAB0: store A/B as the %% before D0, leaving D0 there
+// PUTAB0Back: firmware/upper/86FE4-lib0C0.s:2940
+pub(crate) fn PUTAB0Back(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -13288,7 +13295,7 @@ pub(crate) fn SUB_8921F(r: &mut Run) {
     }
 }
 
-// PUTAB0~jump_3: firmware/upper/86FE4-lib0C0.s:2939
+// PUTAB0~jump_3: firmware/upper/86FE4-lib0C0.s:2945
 pub(crate) fn PUTAB0_jump_3(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -13304,7 +13311,7 @@ pub(crate) fn PUTAB0_jump_3(r: &mut Run) {
     }
 }
 
-// SUB_8922C: firmware/upper/86FE4-lib0C0.s:2943
+// SUB_8922C: firmware/upper/86FE4-lib0C0.s:2949
 pub(crate) fn SUB_8922C(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -13322,7 +13329,7 @@ pub(crate) fn SUB_8922C(r: &mut Run) {
     }
 }
 
-// GETAB1~jump_2: firmware/upper/86FE4-lib0C0.s:2948
+// GETAB1~jump_2: firmware/upper/86FE4-lib0C0.s:2954
 pub(crate) fn GETAB1_jump_2(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -13338,7 +13345,7 @@ pub(crate) fn GETAB1_jump_2(r: &mut Run) {
     }
 }
 
-// GETAB0~jump_2: firmware/upper/86FE4-lib0C0.s:2952
+// GETAB0~jump_2: firmware/upper/86FE4-lib0C0.s:2958
 pub(crate) fn GETAB0_jump_2(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -13354,7 +13361,7 @@ pub(crate) fn GETAB0_jump_2(r: &mut Run) {
     }
 }
 
-// Get1%CD~jump_2: firmware/upper/86FE4-lib0C0.s:2956
+// Get1%CD~jump_2: firmware/upper/86FE4-lib0C0.s:2962
 pub(crate) fn Get1_CD_jump_2(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -13370,7 +13377,7 @@ pub(crate) fn Get1_CD_jump_2(r: &mut Run) {
     }
 }
 
-// SUB_89247: firmware/upper/86FE4-lib0C0.s:2960
+// SUB_89247: firmware/upper/86FE4-lib0C0.s:2966
 pub(crate) fn SUB_89247(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -13388,7 +13395,7 @@ pub(crate) fn SUB_89247(r: &mut Run) {
     }
 }
 
-// SUB_89254: firmware/upper/86FE4-lib0C0.s:2966
+// SUB_89254: firmware/upper/86FE4-lib0C0.s:2972
 pub(crate) fn SUB_89254(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -13416,7 +13423,7 @@ pub(crate) fn SUB_89254(r: &mut Run) {
     }
 }
 
-// SUB_8926F: firmware/upper/86FE4-lib0C0.s:2979
+// SUB_8926F: firmware/upper/86FE4-lib0C0.s:2985
 pub(crate) fn SUB_8926F(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -13434,7 +13441,7 @@ pub(crate) fn SUB_8926F(r: &mut Run) {
     }
 }
 
-// SUB_8927C: firmware/upper/86FE4-lib0C0.s:2985
+// SUB_8927C: firmware/upper/86FE4-lib0C0.s:2991
 pub(crate) fn SUB_8927C(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -13462,7 +13469,7 @@ pub(crate) fn SUB_8927C(r: &mut Run) {
     }
 }
 
-// GETCD0~jump_2: firmware/upper/86FE4-lib0C0.s:2997
+// GETCD0~jump_2: firmware/upper/86FE4-lib0C0.s:3003
 pub(crate) fn GETCD0_jump_2(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -13478,7 +13485,7 @@ pub(crate) fn GETCD0_jump_2(r: &mut Run) {
     }
 }
 
-// SUB_8929A: firmware/upper/86FE4-lib0C0.s:3001
+// SUB_8929A: firmware/upper/86FE4-lib0C0.s:3007
 pub(crate) fn SUB_8929A(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -13496,7 +13503,7 @@ pub(crate) fn SUB_8929A(r: &mut Run) {
     }
 }
 
-// SUB_892A5: firmware/upper/86FE4-lib0C0.s:3007
+// SUB_892A5: firmware/upper/86FE4-lib0C0.s:3013
 pub(crate) fn SUB_892A5(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -13514,7 +13521,7 @@ pub(crate) fn SUB_892A5(r: &mut Run) {
     }
 }
 
-// SUB_892B0: firmware/upper/86FE4-lib0C0.s:3013
+// SUB_892B0: firmware/upper/86FE4-lib0C0.s:3019
 pub(crate) fn SUB_892B0(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -13532,7 +13539,7 @@ pub(crate) fn SUB_892B0(r: &mut Run) {
     }
 }
 
-// SUB_892BB: firmware/upper/86FE4-lib0C0.s:3019
+// SUB_892BB: firmware/upper/86FE4-lib0C0.s:3025
 pub(crate) fn SUB_892BB(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -13550,7 +13557,7 @@ pub(crate) fn SUB_892BB(r: &mut Run) {
     }
 }
 
-// SUB_892C6: firmware/upper/86FE4-lib0C0.s:3025
+// SUB_892C6: firmware/upper/86FE4-lib0C0.s:3031
 pub(crate) fn SUB_892C6(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -13568,7 +13575,7 @@ pub(crate) fn SUB_892C6(r: &mut Run) {
     }
 }
 
-// SUB_892D1: firmware/upper/86FE4-lib0C0.s:3031
+// SUB_892D1: firmware/upper/86FE4-lib0C0.s:3037
 pub(crate) fn SUB_892D1(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -13586,7 +13593,7 @@ pub(crate) fn SUB_892D1(r: &mut Run) {
     }
 }
 
-// SUB_892DC: firmware/upper/86FE4-lib0C0.s:3037
+// SUB_892DC: firmware/upper/86FE4-lib0C0.s:3043
 pub(crate) fn SUB_892DC(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -13604,7 +13611,7 @@ pub(crate) fn SUB_892DC(r: &mut Run) {
     }
 }
 
-// SUB_892E7: firmware/upper/86FE4-lib0C0.s:3043
+// SUB_892E7: firmware/upper/86FE4-lib0C0.s:3049
 pub(crate) fn SUB_892E7(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -13622,7 +13629,7 @@ pub(crate) fn SUB_892E7(r: &mut Run) {
     }
 }
 
-// SUB_892F2: firmware/upper/86FE4-lib0C0.s:3049
+// SUB_892F2: firmware/upper/86FE4-lib0C0.s:3055
 pub(crate) fn SUB_892F2(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -13640,7 +13647,7 @@ pub(crate) fn SUB_892F2(r: &mut Run) {
     }
 }
 
-// SUB_892FD: firmware/upper/86FE4-lib0C0.s:3055
+// SUB_892FD: firmware/upper/86FE4-lib0C0.s:3061
 pub(crate) fn SUB_892FD(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -13658,7 +13665,7 @@ pub(crate) fn SUB_892FD(r: &mut Run) {
     }
 }
 
-// SUB_89308: firmware/upper/86FE4-lib0C0.s:3061
+// SUB_89308: firmware/upper/86FE4-lib0C0.s:3067
 pub(crate) fn SUB_89308(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -13676,7 +13683,7 @@ pub(crate) fn SUB_89308(r: &mut Run) {
     }
 }
 
-// SUB_89313: firmware/upper/86FE4-lib0C0.s:3067
+// SUB_89313: firmware/upper/86FE4-lib0C0.s:3073
 pub(crate) fn SUB_89313(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -13694,7 +13701,7 @@ pub(crate) fn SUB_89313(r: &mut Run) {
     }
 }
 
-// SUB_8931E: firmware/upper/86FE4-lib0C0.s:3073
+// SUB_8931E: firmware/upper/86FE4-lib0C0.s:3079
 pub(crate) fn SUB_8931E(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -13712,7 +13719,7 @@ pub(crate) fn SUB_8931E(r: &mut Run) {
     }
 }
 
-// SUB_89329: firmware/upper/86FE4-lib0C0.s:3079
+// SUB_89329: firmware/upper/86FE4-lib0C0.s:3085
 pub(crate) fn SUB_89329(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -13730,7 +13737,7 @@ pub(crate) fn SUB_89329(r: &mut Run) {
     }
 }
 
-// SUB_89334: firmware/upper/86FE4-lib0C0.s:3085
+// SUB_89334: firmware/upper/86FE4-lib0C0.s:3091
 pub(crate) fn SUB_89334(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -13748,7 +13755,7 @@ pub(crate) fn SUB_89334(r: &mut Run) {
     }
 }
 
-// SUB_8933F: firmware/upper/86FE4-lib0C0.s:3091
+// SUB_8933F: firmware/upper/86FE4-lib0C0.s:3097
 pub(crate) fn SUB_8933F(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -13766,7 +13773,7 @@ pub(crate) fn SUB_8933F(r: &mut Run) {
     }
 }
 
-// SUB_8934A: firmware/upper/86FE4-lib0C0.s:3097
+// SUB_8934A: firmware/upper/86FE4-lib0C0.s:3103
 pub(crate) fn SUB_8934A(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -13784,7 +13791,7 @@ pub(crate) fn SUB_8934A(r: &mut Run) {
     }
 }
 
-// SUB_89355: firmware/upper/86FE4-lib0C0.s:3103
+// SUB_89355: firmware/upper/86FE4-lib0C0.s:3109
 pub(crate) fn SUB_89355(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -13802,7 +13809,7 @@ pub(crate) fn SUB_89355(r: &mut Run) {
     }
 }
 
-// SUB_89360: firmware/upper/86FE4-lib0C0.s:3109
+// SUB_89360: firmware/upper/86FE4-lib0C0.s:3115
 pub(crate) fn SUB_89360(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -13820,7 +13827,7 @@ pub(crate) fn SUB_89360(r: &mut Run) {
     }
 }
 
-// SUB_8936B: firmware/upper/86FE4-lib0C0.s:3115
+// SUB_8936B: firmware/upper/86FE4-lib0C0.s:3121
 pub(crate) fn SUB_8936B(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -13838,7 +13845,7 @@ pub(crate) fn SUB_8936B(r: &mut Run) {
     }
 }
 
-// SUB_89376: firmware/upper/86FE4-lib0C0.s:3121
+// SUB_89376: firmware/upper/86FE4-lib0C0.s:3127
 pub(crate) fn SUB_89376(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -13856,7 +13863,7 @@ pub(crate) fn SUB_89376(r: &mut Run) {
     }
 }
 
-// SUB_89381: firmware/upper/86FE4-lib0C0.s:3127
+// SUB_89381: firmware/upper/86FE4-lib0C0.s:3133
 pub(crate) fn SUB_89381(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -13874,7 +13881,7 @@ pub(crate) fn SUB_89381(r: &mut Run) {
     }
 }
 
-// SUB_8938C: firmware/upper/86FE4-lib0C0.s:3133
+// SUB_8938C: firmware/upper/86FE4-lib0C0.s:3139
 pub(crate) fn SUB_8938C(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -13892,7 +13899,7 @@ pub(crate) fn SUB_8938C(r: &mut Run) {
     }
 }
 
-// SUB_89397: firmware/upper/86FE4-lib0C0.s:3139
+// SUB_89397: firmware/upper/86FE4-lib0C0.s:3145
 pub(crate) fn SUB_89397(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -13910,7 +13917,7 @@ pub(crate) fn SUB_89397(r: &mut Run) {
     }
 }
 
-// SUB_893A2: firmware/upper/86FE4-lib0C0.s:3145
+// SUB_893A2: firmware/upper/86FE4-lib0C0.s:3151
 pub(crate) fn SUB_893A2(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -13928,7 +13935,7 @@ pub(crate) fn SUB_893A2(r: &mut Run) {
     }
 }
 
-// SUB_893AD: firmware/upper/86FE4-lib0C0.s:3151
+// SUB_893AD: firmware/upper/86FE4-lib0C0.s:3157
 pub(crate) fn SUB_893AD(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -13946,7 +13953,7 @@ pub(crate) fn SUB_893AD(r: &mut Run) {
     }
 }
 
-// SUB_893B8: firmware/upper/86FE4-lib0C0.s:3157
+// SUB_893B8: firmware/upper/86FE4-lib0C0.s:3163
 pub(crate) fn SUB_893B8(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -13964,7 +13971,7 @@ pub(crate) fn SUB_893B8(r: &mut Run) {
     }
 }
 
-// SUB_893C3: firmware/upper/86FE4-lib0C0.s:3163
+// SUB_893C3: firmware/upper/86FE4-lib0C0.s:3169
 pub(crate) fn SUB_893C3(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -13998,7 +14005,7 @@ pub(crate) fn SUB_893C3(r: &mut Run) {
     }
 }
 
-// SUB_893DE: firmware/upper/86FE4-lib0C0.s:3175
+// SUB_893DE: firmware/upper/86FE4-lib0C0.s:3181
 pub(crate) fn SUB_893DE(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -14016,7 +14023,7 @@ pub(crate) fn SUB_893DE(r: &mut Run) {
     }
 }
 
-// SUB_893E5: firmware/upper/86FE4-lib0C0.s:3180
+// SUB_893E5: firmware/upper/86FE4-lib0C0.s:3186
 pub(crate) fn SUB_893E5(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -14040,7 +14047,7 @@ pub(crate) fn SUB_893E5(r: &mut Run) {
     }
 }
 
-// SUB_893FB: firmware/upper/86FE4-lib0C0.s:3192
+// SUB_893FB: firmware/upper/86FE4-lib0C0.s:3198
 pub(crate) fn SUB_893FB(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -14060,7 +14067,7 @@ pub(crate) fn SUB_893FB(r: &mut Run) {
     }
 }
 
-// SUB_89403: firmware/upper/86FE4-lib0C0.s:3197
+// SUB_89403: firmware/upper/86FE4-lib0C0.s:3203
 pub(crate) fn SUB_89403(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -14096,7 +14103,7 @@ pub(crate) fn SUB_89403(r: &mut Run) {
     }
 }
 
-// SUB_8942E: firmware/upper/86FE4-lib0C0.s:3215
+// SUB_8942E: firmware/upper/86FE4-lib0C0.s:3221
 pub(crate) fn SUB_8942E(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -14116,7 +14123,7 @@ pub(crate) fn SUB_8942E(r: &mut Run) {
     }
 }
 
-// SUB_89436: firmware/upper/86FE4-lib0C0.s:3220
+// SUB_89436: firmware/upper/86FE4-lib0C0.s:3226
 pub(crate) fn SUB_89436(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -14136,7 +14143,7 @@ pub(crate) fn SUB_89436(r: &mut Run) {
     }
 }
 
-// SUB_8943E: firmware/upper/86FE4-lib0C0.s:3225
+// SUB_8943E: firmware/upper/86FE4-lib0C0.s:3231
 pub(crate) fn SUB_8943E(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -14167,7 +14174,7 @@ pub(crate) fn SUB_8943E(r: &mut Run) {
     }
 }
 
-// SUB_89469: firmware/upper/86FE4-lib0C0.s:3241
+// SUB_89469: firmware/upper/86FE4-lib0C0.s:3247
 pub(crate) fn SUB_89469(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -14203,7 +14210,7 @@ pub(crate) fn SUB_89469(r: &mut Run) {
     }
 }
 
-// SUB_89481: firmware/upper/86FE4-lib0C0.s:3250
+// SUB_89481: firmware/upper/86FE4-lib0C0.s:3256
 pub(crate) fn SUB_89481(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -14219,7 +14226,7 @@ pub(crate) fn SUB_89481(r: &mut Run) {
     }
 }
 
-// SUB_89485: firmware/upper/86FE4-lib0C0.s:3254
+// SUB_89485: firmware/upper/86FE4-lib0C0.s:3260
 pub(crate) fn SUB_89485(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -14245,7 +14252,7 @@ pub(crate) fn SUB_89485(r: &mut Run) {
             }
             // #89499:
             0x89499..=0x89499 => {
-                branch!(r, at, 0x8949D, 6, r.cpu.call(0x88F99)); // GOSUB SUB_88F99
+                branch!(r, at, 0x8949D, 6, r.cpu.call(0x88F99)); // GOSUB MulD0%%
             }
             // #8949D:
             0x8949D..=0x8949D => {
@@ -14267,7 +14274,7 @@ pub(crate) fn SUB_89485(r: &mut Run) {
             // #894B9:
             0x894B9..=0x894BC => {
                 op!(r, at, 0x894B9..0x894BC, 5, r.cpu.not(R::A, Field::S)); // A=-A-1 S
-                branch!(r, at, 0x894C0, 6, r.cpu.call(0x88F99)); // GOSUB SUB_88F99
+                branch!(r, at, 0x894C0, 6, r.cpu.call(0x88F99)); // GOSUB MulD0%%
             }
             // #894C0:
             0x894C0..=0x894C0 => {
@@ -14287,7 +14294,7 @@ pub(crate) fn SUB_89485(r: &mut Run) {
             }
             // #894D0:
             0x894D0..=0x894D0 => {
-                branch!(r, at, 0x894D4, 6, r.cpu.call(0x88F99)); // GOSUB SUB_88F99
+                branch!(r, at, 0x894D4, 6, r.cpu.call(0x88F99)); // GOSUB MulD0%%
             }
             // #894D4:
             0x894D4..=0x894D4 => {
@@ -14305,7 +14312,7 @@ pub(crate) fn SUB_89485(r: &mut Run) {
     }
 }
 
-// SUB_894DC: firmware/upper/86FE4-lib0C0.s:3280
+// SUB_894DC: firmware/upper/86FE4-lib0C0.s:3286
 pub(crate) fn SUB_894DC(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -14349,7 +14356,7 @@ pub(crate) fn SUB_894DC(r: &mut Run) {
     }
 }
 
-// STAB0~jump_7: firmware/upper/86FE4-lib0C0.s:3297
+// STAB0~jump_7: firmware/upper/86FE4-lib0C0.s:3303
 pub(crate) fn STAB0_jump_7(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -14421,7 +14428,7 @@ pub(crate) fn STAB0_jump_7(r: &mut Run) {
     }
 }
 
-// SUB_89549: firmware/upper/86FE4-lib0C0.s:3316
+// SUB_89549: firmware/upper/86FE4-lib0C0.s:3322
 pub(crate) fn SUB_89549(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -14467,7 +14474,7 @@ pub(crate) fn SUB_89549(r: &mut Run) {
             }
             // #89578:
             0x89578..=0x89578 => {
-                branch!(r, at, 0x8957C, 6, r.cpu.call(0x89151)); // GOSUB SUB_89151
+                branch!(r, at, 0x8957C, 6, r.cpu.call(0x89151)); // GOSUB Get2ABR0b
             }
             // #8957C:
             0x8957C..=0x8957E => {
@@ -14553,7 +14560,7 @@ pub(crate) fn SUB_89549(r: &mut Run) {
             }
             // #895EF:
             0x895EF..=0x895EF => {
-                branch!(r, at, 0x895F3, 6, r.cpu.call(0x890E0)); // GOSUB SUB_890E0
+                branch!(r, at, 0x895F3, 6, r.cpu.call(0x890E0)); // GOSUB SubCDTestb
             }
             // #895F3:
             0x895F3..=0x895F3 => {
@@ -14585,7 +14592,7 @@ pub(crate) fn SUB_89549(r: &mut Run) {
             }
             // #89618:
             0x89618..=0x89618 => {
-                branch!(r, at, 0x8961C, 6, r.cpu.call(0x890E0)); // GOSUB SUB_890E0
+                branch!(r, at, 0x8961C, 6, r.cpu.call(0x890E0)); // GOSUB SubCDTestb
             }
             // #8961C:
             0x8961C..=0x8961C => {
@@ -14617,7 +14624,7 @@ pub(crate) fn SUB_89549(r: &mut Run) {
             }
             // #89639:
             0x89639..=0x89639 => {
-                branch!(r, at, 0x8963D, 6, r.cpu.call(0x89151)); // GOSUB SUB_89151
+                branch!(r, at, 0x8963D, 6, r.cpu.call(0x89151)); // GOSUB Get2ABR0b
             }
             // #8963D:
             0x8963D..=0x8963D => {
@@ -14641,7 +14648,7 @@ pub(crate) fn SUB_89549(r: &mut Run) {
             }
             // #89654:
             0x89654..=0x89654 => {
-                branch!(r, at, 0x89658, 6, r.cpu.call(0x890E0)); // GOSUB SUB_890E0
+                branch!(r, at, 0x89658, 6, r.cpu.call(0x890E0)); // GOSUB SubCDTestb
             }
             // #89658:
             0x89658..=0x89658 => {
@@ -14663,7 +14670,7 @@ pub(crate) fn SUB_89549(r: &mut Run) {
     }
 }
 
-// SUB_89667: firmware/upper/86FE4-lib0C0.s:3407
+// SUB_89667: firmware/upper/86FE4-lib0C0.s:3413
 pub(crate) fn SUB_89667(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -14681,7 +14688,7 @@ pub(crate) fn SUB_89667(r: &mut Run) {
             }
             // #89673:
             0x89673..=0x89673 => {
-                branch!(r, at, 0x89677, 6, r.cpu.call(0x89151)); // GOSUB SUB_89151
+                branch!(r, at, 0x89677, 6, r.cpu.call(0x89151)); // GOSUB Get2ABR0b
             }
             // #89677:
             0x89677..=0x89677 => {
@@ -14868,7 +14875,7 @@ pub(crate) fn SUB_89667(r: &mut Run) {
     }
 }
 
-// SUB_89743: firmware/upper/86FE4-lib0C0.s:3465
+// SUB_89743: firmware/upper/86FE4-lib0C0.s:3471
 pub(crate) fn SUB_89743(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -14886,7 +14893,7 @@ pub(crate) fn SUB_89743(r: &mut Run) {
             }
             // #8974F:
             0x8974F..=0x8974F => {
-                branch!(r, at, 0x89753, 6, r.cpu.call(0x890E0)); // GOSUB SUB_890E0
+                branch!(r, at, 0x89753, 6, r.cpu.call(0x890E0)); // GOSUB SubCDTestb
             }
             // #89753:
             0x89753..=0x89753 => {
@@ -14908,7 +14915,7 @@ pub(crate) fn SUB_89743(r: &mut Run) {
     }
 }
 
-// SUB_89760: firmware/upper/86FE4-lib0C0.s:3475
+// SUB_89760: firmware/upper/86FE4-lib0C0.s:3481
 pub(crate) fn SUB_89760(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -14934,7 +14941,7 @@ pub(crate) fn SUB_89760(r: &mut Run) {
             }
             // #89774:
             0x89774..=0x89774 => {
-                branch!(r, at, 0x89778, 6, r.cpu.call(0x89151)); // GOSUB SUB_89151
+                branch!(r, at, 0x89778, 6, r.cpu.call(0x89151)); // GOSUB Get2ABR0b
             }
             // #89778:
             0x89778..=0x89778 => {
@@ -14946,7 +14953,7 @@ pub(crate) fn SUB_89760(r: &mut Run) {
             }
             // #89780:
             0x89780..=0x89780 => {
-                branch!(r, at, 0x89784, 6, r.cpu.call(0x89151)); // GOSUB SUB_89151
+                branch!(r, at, 0x89784, 6, r.cpu.call(0x89151)); // GOSUB Get2ABR0b
             }
             // #89784:
             0x89784..=0x89784 => {
@@ -14970,7 +14977,7 @@ pub(crate) fn SUB_89760(r: &mut Run) {
             }
             // #89798:
             0x89798..=0x89798 => {
-                branch!(r, at, 0x8979C, 6, r.cpu.call(0x89151)); // GOSUB SUB_89151
+                branch!(r, at, 0x8979C, 6, r.cpu.call(0x89151)); // GOSUB Get2ABR0b
             }
             // #8979C:
             0x8979C..=0x8979C => {
@@ -15008,7 +15015,7 @@ pub(crate) fn SUB_89760(r: &mut Run) {
             }
             // #897C2:
             0x897C2..=0x897C2 => {
-                branch!(r, at, 0x897C6, 6, r.cpu.call(0x89151)); // GOSUB SUB_89151
+                branch!(r, at, 0x897C6, 6, r.cpu.call(0x89151)); // GOSUB Get2ABR0b
             }
             // #897C6:
             0x897C6..=0x897C6 => {
@@ -15020,7 +15027,7 @@ pub(crate) fn SUB_89760(r: &mut Run) {
             }
             // #897CE:
             0x897CE..=0x897CE => {
-                branch!(r, at, 0x897D4, 8, r.cpu.call(0x88F99)); // GOSUBL SUB_88F99
+                branch!(r, at, 0x897D4, 8, r.cpu.call(0x88F99)); // GOSUBL MulD0%%
             }
             // #897D4:
             0x897D4..=0x897D4 => {
@@ -15028,7 +15035,7 @@ pub(crate) fn SUB_89760(r: &mut Run) {
             }
             // #897D8:
             0x897D8..=0x897D8 => {
-                branch!(r, at, 0x897DE, 8, r.cpu.call(0x88F99)); // GOSUBL SUB_88F99
+                branch!(r, at, 0x897DE, 8, r.cpu.call(0x88F99)); // GOSUBL MulD0%%
             }
             // #897DE:
             0x897DE..=0x897DE => {
@@ -15065,7 +15072,7 @@ pub(crate) fn SUB_89760(r: &mut Run) {
             }
             // #89804:
             0x89804..=0x89804 => {
-                branch!(r, at, 0x89808, 6, r.cpu.call(0x89151)); // GOSUB SUB_89151
+                branch!(r, at, 0x89808, 6, r.cpu.call(0x89151)); // GOSUB Get2ABR0b
             }
             // #89808:
             0x89808..=0x89808 => {
@@ -15085,7 +15092,7 @@ pub(crate) fn SUB_89760(r: &mut Run) {
             }
             // #89818:
             0x89818..=0x89818 => {
-                branch!(r, at, 0x8981C, 6, r.cpu.call(0x89151)); // GOSUB SUB_89151
+                branch!(r, at, 0x8981C, 6, r.cpu.call(0x89151)); // GOSUB Get2ABR0b
             }
             // #8981C:
             0x8981C..=0x8981C => {
@@ -15111,7 +15118,7 @@ pub(crate) fn SUB_89760(r: &mut Run) {
     }
 }
 
-// SUB_8982C: firmware/upper/86FE4-lib0C0.s:3530
+// SUB_8982C: firmware/upper/86FE4-lib0C0.s:3536
 pub(crate) fn SUB_8982C(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -15131,7 +15138,7 @@ pub(crate) fn SUB_8982C(r: &mut Run) {
     }
 }
 
-// SUB_8983A: firmware/upper/86FE4-lib0C0.s:3538
+// SUB_8983A: firmware/upper/86FE4-lib0C0.s:3544
 pub(crate) fn SUB_8983A(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -15223,7 +15230,7 @@ pub(crate) fn SUB_8983A(r: &mut Run) {
     }
 }
 
-// SUB_898A8: firmware/upper/86FE4-lib0C0.s:3571
+// SUB_898A8: firmware/upper/86FE4-lib0C0.s:3577
 pub(crate) fn SUB_898A8(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -15287,7 +15294,7 @@ pub(crate) fn SUB_898A8(r: &mut Run) {
     }
 }
 
-// SQRF~jump_3: firmware/upper/86FE4-lib0C0.s:3597
+// SQRF~jump_3: firmware/upper/86FE4-lib0C0.s:3603
 pub(crate) fn SQRF_jump_3(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -15303,7 +15310,7 @@ pub(crate) fn SQRF_jump_3(r: &mut Run) {
     }
 }
 
-// SUB_898F6: firmware/upper/86FE4-lib0C0.s:3601
+// SUB_898F6: firmware/upper/86FE4-lib0C0.s:3607
 pub(crate) fn SUB_898F6(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -15557,8 +15564,8 @@ pub const ROUTINES: &[(u32, u32, Block, &str)] = &[
     (0x80D8B, 0x80DEC, SUB_80D8B, "SUB_80D8B"),
     (0x80DED, 0x80DF3, SUB_80DED, "SUB_80DED"),
     (0x80DF4, 0x80EAD, SUB_80DF4, "SUB_80DF4"),
-    (0x80EAE, 0x80EB4, SUB_80EAE, "SUB_80EAE"),
-    (0x80EB5, 0x80EBB, SUB_80EB5, "SUB_80EB5"),
+    (0x80EAE, 0x80EB4, D0_IRAM_jump_3, "D0_IRAM_jump_3"),
+    (0x80EB5, 0x80EBB, D1_IRAM_jump_5, "D1_IRAM_jump_5"),
     (0x80EBC, 0x80EF2, SUB_80EBC, "SUB_80EBC"),
     (0x80EF3, 0x80FA5, SUB_80EF3, "SUB_80EF3"),
     (0x80FA6, 0x81049, SUB_80FA6, "SUB_80FA6"),
@@ -15629,10 +15636,10 @@ pub const ROUTINES: &[(u32, u32, Block, &str)] = &[
     (0x87A04, 0x87A6D, SUB_87A04, "SUB_87A04"),
     (0x87A6E, 0x87AAC, SUB_87A6E, "SUB_87A6E"),
     (0x87AAD, 0x87AD6, SUB_87AAD, "SUB_87AAD"),
-    (0x87AD7, 0x87AED, SUB_87AD7, "SUB_87AD7"),
+    (0x87AD7, 0x87AED, SubCDTest, "SubCDTest"),
     (0x87AEE, 0x87AF9, SUB_87AEE, "SUB_87AEE"),
     (0x87AFA, 0x87B00, EXAB0_jump_3, "EXAB0_jump_3"),
-    (0x87B01, 0x87B08, SUB_87B01, "SUB_87B01"),
+    (0x87B01, 0x87B08, Save2ABR0, "Save2ABR0"),
     (0x87B09, 0x87B27, SUB_87B09, "SUB_87B09"),
     (0x87B28, 0x87B2B, SUB_87B28, "SUB_87B28"),
     (0x87B2C, 0x87B37, SUB_87B2C, "SUB_87B2C"),
@@ -15710,7 +15717,7 @@ pub const ROUTINES: &[(u32, u32, Block, &str)] = &[
     (0x8813B, 0x88206, SUB_8813B, "SUB_8813B"),
     (0x88207, 0x88214, SUB_88207, "SUB_88207"),
     (0x88215, 0x88282, SUB_88215, "SUB_88215"),
-    (0x88283, 0x882C9, SUB_88283, "SUB_88283"),
+    (0x88283, 0x882C9, HypotABR0, "HypotABR0"),
     (0x882CA, 0x882D0, SQRF_jump_2, "SQRF_jump_2"),
     (0x882D1, 0x882E6, SUB_882D1, "SUB_882D1"),
     (0x88398, 0x88F29, code_88398, "code_88398"),
@@ -15725,7 +15732,7 @@ pub const ROUTINES: &[(u32, u32, Block, &str)] = &[
     (0x88F74, 0x88F8D, SUB_88F74, "SUB_88F74"),
     (0x88F8E, 0x88F91, SUB_88F8E, "SUB_88F8E"),
     (0x88F92, 0x88F98, MULTF_jump_6, "MULTF_jump_6"),
-    (0x88F99, 0x88FA0, SUB_88F99, "SUB_88F99"),
+    (0x88F99, 0x88FA0, MulD0__, "MulD0__"),
     (0x88FA1, 0x88FA8, SUB_88FA1, "SUB_88FA1"),
     (0x88FA9, 0x88FAF, DIVF_jump_4, "DIVF_jump_4"),
     (0x88FB0, 0x88FB6, SUB_88FB0, "SUB_88FB0"),
@@ -15734,7 +15741,7 @@ pub const ROUTINES: &[(u32, u32, Block, &str)] = &[
     (0x8901B, 0x8907D, SUB_8901B, "SUB_8901B"),
     (0x8907E, 0x890B5, SUB_8907E, "SUB_8907E"),
     (0x890B6, 0x890DF, SUB_890B6, "SUB_890B6"),
-    (0x890E0, 0x890F6, SUB_890E0, "SUB_890E0"),
+    (0x890E0, 0x890F6, SubCDTestb, "SubCDTestb"),
     (0x890F7, 0x89102, SUB_890F7, "SUB_890F7"),
     (0x89103, 0x89109, EXAB0_jump_4, "EXAB0_jump_4"),
     (0x8910A, 0x89111, SUB_8910A, "SUB_8910A"),
@@ -15743,7 +15750,7 @@ pub const ROUTINES: &[(u32, u32, Block, &str)] = &[
     (0x89131, 0x89134, SUB_89131, "SUB_89131"),
     (0x89135, 0x89140, SUB_89135, "SUB_89135"),
     (0x89141, 0x89150, SUB_89141, "SUB_89141"),
-    (0x89151, 0x89154, SUB_89151, "SUB_89151"),
+    (0x89151, 0x89154, Get2ABR0b, "Get2ABR0b"),
     (0x89155, 0x89160, SUB_89155, "SUB_89155"),
     (0x89161, 0x89167, SUB_89161, "SUB_89161"),
     (0x89168, 0x89175, SUB_89168, "SUB_89168"),
@@ -15765,7 +15772,7 @@ pub const ROUTINES: &[(u32, u32, Block, &str)] = &[
     (0x89207, 0x89211, SUB_89207, "SUB_89207"),
     (0x89212, 0x89217, SUB_89212, "SUB_89212"),
     (0x89218, 0x8921E, PutAB_1_jump_2, "PutAB_1_jump_2"),
-    (0x8921F, 0x89224, SUB_8921F, "SUB_8921F"),
+    (0x8921F, 0x89224, PUTAB0Back, "PUTAB0Back"),
     (0x89225, 0x8922B, PUTAB0_jump_3, "PUTAB0_jump_3"),
     (0x8922C, 0x89231, SUB_8922C, "SUB_8922C"),
     (0x89232, 0x89238, GETAB1_jump_2, "GETAB1_jump_2"),

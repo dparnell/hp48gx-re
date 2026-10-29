@@ -1426,7 +1426,7 @@ pub(crate) fn clrtimeout(r: &mut Run) {
     }
 }
 
-// CtlAlarm!: firmware/lower/42023-input.s:260
+// CtlAlarm!: firmware/lower/42023-input.s:261
 pub(crate) fn CtlAlarm_(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -1443,7 +1443,7 @@ pub(crate) fn CtlAlarm_(r: &mut Run) {
     }
 }
 
-// CtlAlarm@: firmware/lower/42023-input.s:267
+// CtlAlarm@: firmware/lower/42023-input.s:268
 pub(crate) fn CtlAlarm__424A6(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -1460,7 +1460,7 @@ pub(crate) fn CtlAlarm__424A6(r: &mut Run) {
     }
 }
 
-// SysErrorTrap~2: firmware/lower/42023-input.s:273
+// SysErrorTrap~2: firmware/lower/42023-input.s:274
 pub(crate) fn SysErrorTrap_2(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -1477,7 +1477,7 @@ pub(crate) fn SysErrorTrap_2(r: &mut Run) {
     }
 }
 
-// OBJ_424C7: firmware/lower/42023-input.s:279
+// OBJ_424C7: firmware/lower/42023-input.s:280
 pub(crate) fn OBJ_424C7(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -1494,8 +1494,8 @@ pub(crate) fn OBJ_424C7(r: &mut Run) {
     }
 }
 
-// OBJ_42A07: firmware/lower/42023-input.s:434
-pub(crate) fn OBJ_42A07(r: &mut Run) {
+// DelCursChr~1: firmware/lower/42023-input.s:436
+pub(crate) fn DelCursChr_1(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -1605,7 +1605,7 @@ pub(crate) fn OBJ_42A07(r: &mut Run) {
     }
 }
 
-// SUB_42AC4: firmware/lower/42023-input.s:499
+// SUB_42AC4: firmware/lower/42023-input.s:501
 pub(crate) fn SUB_42AC4(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -2513,8 +2513,9 @@ pub(crate) fn OBJ_44BAB(r: &mut Run) {
     }
 }
 
-// OBJ_44BBB: firmware/lower/4400C-editor.s:646
-pub(crate) fn OBJ_44BBB(r: &mut Run) {
+// -> #: the MatrixWriter's entry direction (ENTRWISE, #80916)
+// ENTRWISE@: firmware/lower/4400C-editor.s:647
+pub(crate) fn ENTRWISE_(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -2530,7 +2531,7 @@ pub(crate) fn OBJ_44BBB(r: &mut Run) {
     }
 }
 
-// OBJ_44BCB: firmware/lower/4400C-editor.s:652
+// OBJ_44BCB: firmware/lower/4400C-editor.s:653
 pub(crate) fn OBJ_44BCB(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -2571,7 +2572,7 @@ pub(crate) fn OBJ_44BCB(r: &mut Run) {
     }
 }
 
-// OBJ_45BE8: firmware/lower/4400C-editor.s:1028
+// OBJ_45BE8: firmware/lower/4400C-editor.s:1029
 pub(crate) fn OBJ_45BE8(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -2687,7 +2688,7 @@ pub(crate) fn OBJ_4C0D4(r: &mut Run) {
     }
 }
 
-// doerr607: firmware/lower/4C082-plot.s:217
+// doerr607: firmware/lower/4C082-plot.s:221
 pub(crate) fn doerr607(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -2704,7 +2705,7 @@ pub(crate) fn doerr607(r: &mut Run) {
     }
 }
 
-// SUB_4DAFD: firmware/lower/4C082-plot.s:554
+// SUB_4DAFD: firmware/lower/4C082-plot.s:558
 pub(crate) fn SUB_4DAFD(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -2729,7 +2730,7 @@ pub(crate) fn SUB_4DAFD(r: &mut Run) {
 }
 
 // Probably: write 4 to TIMER1, shortening the wait before the next key repeat
-// OBJ_4DCC6: firmware/lower/4C082-plot.s:608
+// OBJ_4DCC6: firmware/lower/4C082-plot.s:612
 pub(crate) fn OBJ_4DCC6(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -2752,7 +2753,7 @@ pub(crate) fn OBJ_4DCC6(r: &mut Run) {
     }
 }
 
-// OBJ_4DF67: firmware/lower/4C082-plot.s:673
+// OBJ_4DF67: firmware/lower/4C082-plot.s:679
 pub(crate) fn OBJ_4DF67(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -2834,7 +2835,7 @@ pub(crate) fn OBJ_4DF67(r: &mut Run) {
     }
 }
 
-// OBJ_4DFFD: firmware/lower/4C082-plot.s:724
+// OBJ_4DFFD: firmware/lower/4C082-plot.s:730
 pub(crate) fn OBJ_4DFFD(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -2901,7 +2902,7 @@ pub(crate) fn OBJ_4DFFD(r: &mut Run) {
     }
 }
 
-// SUB_4E06F: firmware/lower/4C082-plot.s:757
+// SUB_4E06F: firmware/lower/4C082-plot.s:763
 pub(crate) fn SUB_4E06F(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -2921,7 +2922,7 @@ pub(crate) fn SUB_4E06F(r: &mut Run) {
     }
 }
 
-// SUB_4E07D: firmware/lower/4C082-plot.s:765
+// SUB_4E07D: firmware/lower/4C082-plot.s:771
 pub(crate) fn SUB_4E07D(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -2953,8 +2954,9 @@ pub(crate) fn SUB_4E07D(r: &mut Run) {
     }
 }
 
-// OBJ_4E0BA: firmware/lower/4C082-plot.s:782
-pub(crate) fn OBJ_4E0BA(r: &mut Run) {
+// #x #y -> #x-2 #y-2 (floored at 0): the corner of the 5x5 area under the PICTURE cursor
+// CursCorner: firmware/lower/4C082-plot.s:789
+pub(crate) fn CursCorner(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -3011,7 +3013,7 @@ pub(crate) fn OBJ_4E0BA(r: &mut Run) {
     }
 }
 
-// OBJ_4E10C: firmware/lower/4C082-plot.s:810
+// OBJ_4E10C: firmware/lower/4C082-plot.s:817
 pub(crate) fn OBJ_4E10C(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -3122,7 +3124,7 @@ pub(crate) fn OBJ_4E10C(r: &mut Run) {
     }
 }
 
-// SUB_4E210: firmware/lower/4C082-plot.s:865
+// SUB_4E210: firmware/lower/4C082-plot.s:872
 pub(crate) fn SUB_4E210(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -3146,7 +3148,7 @@ pub(crate) fn SUB_4E210(r: &mut Run) {
     }
 }
 
-// SUB_4E227: firmware/lower/4C082-plot.s:875
+// SUB_4E227: firmware/lower/4C082-plot.s:882
 pub(crate) fn SUB_4E227(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -3173,7 +3175,7 @@ pub(crate) fn SUB_4E227(r: &mut Run) {
     }
 }
 
-// SUB_4E235: firmware/lower/4C082-plot.s:885
+// SUB_4E235: firmware/lower/4C082-plot.s:892
 pub(crate) fn SUB_4E235(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -3196,7 +3198,7 @@ pub(crate) fn SUB_4E235(r: &mut Run) {
     }
 }
 
-// LINECHANGE: firmware/lower/4C082-plot.s:931
+// LINECHANGE: firmware/lower/4C082-plot.s:938
 pub(crate) fn LINECHANGE(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -3307,7 +3309,7 @@ pub const ROUTINES: &[(u32, u32, Block, &str)] = &[
     (0x424A6, 0x424B3, CtlAlarm__424A6, "CtlAlarm__424A6"),
     (0x424B9, 0x424C6, SysErrorTrap_2, "SysErrorTrap_2"),
     (0x424CC, 0x424D9, OBJ_424C7, "OBJ_424C7"),
-    (0x42A0C, 0x42AC3, OBJ_42A07, "OBJ_42A07"),
+    (0x42A0C, 0x42AC3, DelCursChr_1, "DelCursChr_1"),
     (0x42AC4, 0x42AE3, SUB_42AC4, "SUB_42AC4"),
     (0x442A9, 0x4434E, InitEdLine_1, "InitEdLine_1"),
     (0x44354, 0x44393, OBJ_4434F, "OBJ_4434F"),
@@ -3327,7 +3329,7 @@ pub const ROUTINES: &[(u32, u32, Block, &str)] = &[
     (0x44832, 0x44889, OBJ_4482D, "OBJ_4482D"),
     (0x44BA0, 0x44BAA, OBJ_44B9B, "OBJ_44B9B"),
     (0x44BB0, 0x44BBA, OBJ_44BAB, "OBJ_44BAB"),
-    (0x44BC0, 0x44BCA, OBJ_44BBB, "OBJ_44BBB"),
+    (0x44BC0, 0x44BCA, ENTRWISE_, "ENTRWISE_"),
     (0x44BD0, 0x44C0A, OBJ_44BCB, "OBJ_44BCB"),
     (0x45BED, 0x45C20, OBJ_45BE8, "OBJ_45BE8"),
     (0x4C0A0, 0x4C0BD, NEWINDEP, "NEWINDEP"),
@@ -3340,7 +3342,7 @@ pub const ROUTINES: &[(u32, u32, Block, &str)] = &[
     (0x4E002, 0x4E06E, OBJ_4DFFD, "OBJ_4DFFD"),
     (0x4E06F, 0x4E07C, SUB_4E06F, "SUB_4E06F"),
     (0x4E07D, 0x4E091, SUB_4E07D, "SUB_4E07D"),
-    (0x4E0BF, 0x4E10B, OBJ_4E0BA, "OBJ_4E0BA"),
+    (0x4E0BF, 0x4E10B, CursCorner, "CursCorner"),
     (0x4E111, 0x4E20F, OBJ_4E10C, "OBJ_4E10C"),
     (0x4E210, 0x4E226, SUB_4E210, "SUB_4E210"),
     (0x4E227, 0x4E234, SUB_4E227, "SUB_4E227"),

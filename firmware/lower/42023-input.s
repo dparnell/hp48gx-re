@@ -1,6 +1,6 @@
 * HP 48GX ROM revision R, #42023-#4400B: Key input and the cursor
 * Addresses in the right-hand comments are those of the original ROM.
-* Most referenced: ?ATTNQUIT KEYINBUFFER? Cursor&Disp OnTheFirstCol? NoAttn?Semi LCursor ATTN? ToTheEndOfRow UCursor ->OnTheRow SetCursPos(s) dup2;spos(st,RC)
+* Most referenced: ?ATTNQUIT KEYINBUFFER? ?ATTNQUIT0 Cursor&Disp DelCursChr OnTheFirstCol? NoAttn?Semi LCursor ATTN? ToTheEndOfRow UCursor ->OnTheRow
 * Follows on from the previous file (at #42023 in the original ROM).
         RPL
 
@@ -238,7 +238,8 @@ KEYINBUFFER?:
         ;                                        * 42416
 
 * refs (13): 141A8 18E27 1A7BF 22F31 2308A 23153 ...
-OBJ_4241B:
+* -> : if ATTN was pressed, clear it, flush the keys, clear the command name and ABORT (?ATTNQUIT plus CK0NOLASTWD)
+?ATTNQUIT0:
         :: NoAttn?Semi ATTNFLGCLR FLUSHKEYS CK0NOLASTWD ABORT ; * 4241B
 
 * ->
@@ -415,23 +416,24 @@ OBJ_42935:
         :: OnTheFirstCol? ?SEMI                  * 42935
           cursorblink- CURSOR_END? CURSOR_OFF #>1 AND DUP IT * 42944
           :: CHR_Space ROWNUM DISPCHAR+PC ;      * 42967
-          LCursor OBJ_429CB ?SKIP DispEditLine   * 42980
+          LCursor DelCursChr ?SKIP DispEditLine  * 42980
           OBJ_42831 cursorblink+ ;               * 42994
 
 * refs (1): 3B6BD
 OBJ_429A3:
         :: CURSOR_END? ?SEMI                     * 429A3
-          OBJ_429CB DispEditLine OBJ_42831 cursorblink+ ; * 429B2
+          DelCursChr DispEditLine OBJ_42831 cursorblink+ ; * 429B2
 
 * refs (11): 3B69F 3B6F4 3E42F 3E45C 3E4A7 3E50E ...
-OBJ_429CB:
-        :: OBJ_42A07 NOT?SEMI                    * 429CB
+* -> : delete the character at the edit-line cursor and redisplay (DEL)
+DelCursChr:
+        :: DelCursChr~1 NOT?SEMI                 * 429CB
           OBJ_113F2 DUP#1= caseDROP #3+          * 429DA
           EDITPARTS #> NOT?SEMI                  * 429EE
           OBJ_11412 ;                            * 429FD
 
 * refs (1): 429D0
-OBJ_42A07:
+DelCursChr~1:
         CON(5)  (*)+5                            * 42A07  primitive code object
         ASSEMBLE
         GOSBVL  SAVPTR                           * 42A0C

@@ -43,15 +43,9 @@
 72AFA	?ROMPTR@	ob -> ob': a ROMPTR whose library is present becomes its object; anything else is left alone
 71603	CallC	Call the routine at C.A (RSTK=C, RTN): it returns to CallC's caller
 517B2		Probably: PICTURE cursor position: -> #x #y (lams 8 and 7)
-56BEB		Probably: derivatives: wrap the inner argument as d/d'dv(arg) for the chain rule, then ABND the 'dv environment
-57045		Probably: derivatives: bind the variable to 'dv and duplicate the argument meta
-5760D		Probably: SYMISOL: carry on isolating with the next inverse (tail call into the isolation loop)
-5B375		Probably: integration tables: rule body for an argument linear in the variable
 67381	EqwBoxCount	-> #n: EquationWriter layout: the number of boxes in use (also the newest box's index)
 67A4A	EqwPOP#>Box	POP# -> D0 at box n's fields (table at ITEM1STATE, 42 nibbles a box); the RPL IP saved in R2
 6DD6E	Push3Zeros	-> #0 #0 #0, collecting garbage if memory is short
-67416		Probably: EquationWriter: -> #box, the current box (kept in FONTHEIGHT)
-67448		Probably: EquationWriter: #box -> , set the current box (kept in FONTHEIGHT)
 # Second round.
 36DB7	CRUNCH>%	ob -> %: evaluate to a number (honouring ATTN), strip units; anything else is Bad Argument Type
 37247	%+%%*	% %%2 %%1 -> %: %+%%2*%%1, rounded to a real
@@ -68,7 +62,6 @@
 891F0	D0Back2%%	D0 -= 42: back two extended reals
 35AA8	GetAbs%%AB1	D1 -> %% body: A.A = exponent, B.W = mantissa with the sign cleared; D1 unchanged
 7CD79		Probably: [array] -> [%%array]: convert a real or complex array to an extended one of the same dimensions
-87B01		Probably: counterpart of Get2ABR0: store A/B, then R0/R1, as two %% at R4+#1F4
 0CA81	CkATTNcode	From machine code, with the RPL pointers saved: carry set and back if ATTNFLG is 0; else GETPTR and ?ATTNQUIT (abort)
 19FE4	#=Lookup	# {#1 ob1 #2 ob2 ...} -> ob TRUE | # FALSE
 204FF	'REvalSto	name args -> : evaluate the next runstream object on the arguments and store the result in name (STO+, SINV, ...)
@@ -99,15 +92,85 @@
 67356	EqwBoxCount#3+	-> #n+3
 678DB	EqwBoxParent@	#box -> #parent: the box's parent link (field #1B), 0 at the root
 682DE	EqwNewBox	#27 #24 #21 #1E #1B #18 #b16 #b14 obj #11 #0E #0B #08 #05 #02 #type -> obj: take a free box record and fill it (fields by offset; see EqwPOP#>Box)
-67A4A		EquationWriter box record, 42 nibbles, offsets from D0: +00 type; +01 size level (low); +02/+05 position y/x (low); +08 vertical reference (medium-low); +0B horizontal centre (medium); +0E height, +11 width (medium-high); +14/+16 size and placement handler indexes; +18 unknown; +1B parent (high); +1E/+21 next/previous sibling and +24/+27 first/last child (medium)
+67A4A		EquationWriter box record, 42 nibbles, offsets from D0: +00 type; +01 size level (low 3 bits; bit 3 a flag); +02/+05 position y/x (low); +08 vertical reference (medium-low); +0B horizontal centre (medium); +0E height, +11 width (medium-high); +14/+16 size and placement handler indexes; +18 a 12-bit field (#800 marks a value from #8xxxx, FFF is -1); +1B parent; +1E next sibling, +21 previous sibling, +24 first child, +27 last child. Size handlers are called with the parent below the box
 6819D	#3*	#n -> #3n
-6798C		Probably: EquationWriter: #box -> next-sibling link (field #1E)
-679A1		Probably: EquationWriter: #box -> previous-sibling link (field #21)
-679B3		Probably: EquationWriter: #box -> first-child link (field #24)
-679C5		Probably: EquationWriter: #box -> last-child link (field #27)
 67AE2		Probably: EquationWriter: #box -> vertical reference (field #08)
-67BE2		Probably: EquationWriter: #box #box' -> , set the next-sibling link (field #1E)
-67BFC		Probably: EquationWriter: #box #child -> , set the last-child link (field #27)
 00A89	KeyBitCodes	
 80946	KeyTestAll	
 809AA	KeyTestDiag	
+# Third round.
+2CC06	PwrExpFIT?	-> flag: TRUE when the statistics model (in ΣPAR) is PWRFIT or EXPFIT, the models that fit ln(y). The VBL puts this name one object off, at #2CB52
+2CC4C	PwrLogFIT?	-> flag: TRUE when the statistics model (in ΣPAR) is PWRFIT or LOGFIT, the models that fit ln(x). The VBL puts this name one object off, at #2CC0B
+87B01	Save2ABR0	Store A/B, then R0/R1, as two %% at R4+#1F4 (R4: the library's workspace hex string); A/B and R0/R1 come back unchanged
+8921F	PUTAB0Back	D0 -= 21, then PUTAB0: store A/B as the %% before D0, leaving D0 there
+88F99	MulD0%%	A/B *= the %% at D0 (GETCD0, MULTF); D0 past it
+89151	Get2ABR0b	A copy of Get2ABR0 in the library's second code part
+88283	HypotABR0	A/B = sqrt(x^2+y^2) for x in A/B and y in R0/R1 (the modulus of a complex number held as two %%)
+87AD7	SubCDTest	A/B = A/B - C/D; carry set when the result is >= 0; decimal mode
+890E0	SubCDTestb	A copy of SubCDTest in the library's second code part
+81736		Probably: self-test: report a failure (message at D0, the hex value at RAM #0091) on the display and the serial port
+4241B	?ATTNQUIT0	-> : if ATTN was pressed, clear it, flush the keys, clear the command name and ABORT (?ATTNQUIT plus CK0NOLASTWD)
+429CB	DelCursChr	-> : delete the character at the edit-line cursor and redisplay (DEL)
+44BBB	ENTRWISE@	-> #: the MatrixWriter's entry direction (ENTRWISE, #80916)
+4735A	RclPlotVar?	id -> ob TRUE | FALSE: recall a plot variable (EQ, ΣDAT, PPAR, ZPAR)
+4C0E4	PurgePlotVars	-> : after DRAW, purge the independent variable it created (and the dependent one for some plot types)
+4C22E	ClrLastPt	#i -> : break curve i (store -1 as its last point, so the next one is not joined)
+4C34B	PlotFcnPt	%y #i -> : FUNCTION plot: plot y of curve i at the current x, joined to the last point; a non-real y breaks the curve
+4E0BA	CursCorner	#x #y -> #x-2 #y-2 (floored at 0): the corner of the 5x5 area under the PICTURE cursor
+46E28		Probably: run the next runstream object, and again after each key-repeat delay while key #kc (from the runstream) is held
+4C314		Probably: create the independent variable for plotting in the current directory and point lam 15 at the stored copy
+08400	SKIPVARNAME	D0 at a directory entry's name (length, characters, length) -> D0 at its object
+07ED8	ROMPTR>ADDR	A.A = a ROMPTR object -> carry clear and A.A = the object's address, or carry set if there is no such library or command (the body of ROMPTR@)
+0C198	D1=IRAM	D1 = the internal RAM base (from #0011B); then D1=(4) reaches a system variable
+0C1A7	D0=IRAM	D0 = the internal RAM base (from #0011B)
+18C77	SetLastRomWrd	LASTROMWDOB := the running command (D0-10), for error messages; called first by CK0-CK5 and CKN
+1A01B	NTHCOMPROM@	comp #n -> ob: the nth element of a composite (or of a ROMPTR's), itself resolved if a ROMPTR
+1DF30	{}>%sBIND	{} ob2 ob1 -> {}: bind 4 lams: the list's elements as reals (complex: real part; unit: number, the unit in 2LAM), the last unit, ob1, ob2; the caller ABNDs
+19F0F		Probably: input forms: key handler that starts editing the current field
+2AEF6	GetAngleST	Read the angle mode (flags -17/-18) into ST9 (radians) and ST4 (grads); decimal mode
+36E20	CRUNCH>RARRY	ob -> [%]: evaluate (honouring ATTN) and require a real array
+36E43	RCLCRUNCH>%ARRY	id -> % or [%]: recall (creating the variable as 0 if needed), evaluate, and require a number or a real array
+36EE3	STO_HERE	ob id -> : STO in the current directory (the counterpart of SAFE@_HERE)
+36FB0	#+#1+	#a #b -> #a+#b+1
+37D37	L%ABSSQ	L% -> %%: |x|^2 (re^2+im^2 for an extended complex number)
+25D03		Probably: parser: read the current token as a real number
+282FA		Probably: algebraic parser: nibble #i of its context hex string
+273AA		Probably: the algebraic parser's main loop
+3A640		Probably: build a menu row from a menu array: the six soft keys and their labels
+5135F	PlotEval	fn -> %: evaluate a plot function to a number; a math error marks a break in the curve and skips the point
+5360F	D1=IntgWS	D1 = CALCINTEG's workspace (the hex string in lam 3)
+57658	IsolInv1	Isolation step for an inverse with one value: the inverse function follows in the runstream (:: IsolInv1 xNEG ;)
+785B8	RCLtmp1%%	A/B = the %% in scratch slot 1 of IRAMBUFF
+35A82	MACCF0	R0/R1 += A/B * (the %% at D0); nothing when either is 0; decimal mode
+35A95	MACCF2	R2/R3 += A/B * (the %% at D0); nothing when either is 0; decimal mode
+56BEB	derargABND	Derivatives: wrap the argument as d/d'dv(arg) for the chain rule, then ABND the 'dv environment
+57045	BindDvDup	Derivatives: bind the variable to 'dv, then duplicate the argument meta
+5760D	IsolContinue	SYMISOL: carry on isolating with the next inverse (tail call into the isolation loop)
+5B375	intgLinArg	Integration tables: rule body for F(u) with u linear in the variable: G(u)/u'
+5B32F		Probably: integral slots: go on only when the function is at position 2 of the integrand
+678D6	EqwDupBoxParent@	#b -> #b #parent
+679AE	EqwDupBoxFirst@	#b -> #b #first
+67364	EqwBoxCount#1-	-> #n-1
+67C3C	EqwBox#18!	#b #v -> : set field +18 (12 bits; #800 marks a value from #8xxxx, FFF is -1)
+6798C	EqwBoxNext@	#b -> #next sibling (field #1E)
+679A1	EqwBoxPrev@	#b -> #previous sibling (field #21)
+679B3	EqwBoxFirst@	#b -> #first child (field #24)
+679C5	EqwBoxLast@	#b -> #last child (field #27)
+67BD5	EqwBoxPrev!	#b #prev -> : set the previous-sibling link
+67BE2	EqwBoxNext!	#b #next -> : set the next-sibling link
+67BEF	EqwBoxFirst!	#b #first -> : set the first-child link
+67BFC	EqwBoxLast!	#b #last -> : set the last-child link
+67416	EqwCurBox@	-> #box: the current (cursor) box, kept in FONTHEIGHT
+67448	EqwCurBox!	#box -> : make a box current
+682D2	EqwNewLeafBox	Like EqwNewBox, for a box without children (#24/#27 zero)
+65D14	EqwBoxSecond@	#b -> #c: the second child (first child's next sibling)
+68245	EqwBoxObj!	#b obj -> : put obj into box b's slot on the data stack and clear the flag in +01
+6CC10	EqwImplicit()?	-> flag: implicit parentheses are on (internal flag #10B)
+65807	IntDivW	A C -> A C = quotient, B = remainder: 64-bit division in the current mode (hex or decimal); C=0 does not return
+64C34	BINT80	# 50 (80), also the dispatch code list/any. entries48g.txt puts this name at #64C3A, inside the object
+6C339	#-Floor0	#a #b -> #a-#b if a > b, else #0
+67DDF		Probably: EquationWriter: item 1 (a state code) of the top 5-object frame on its work stack
+67E0C		Probably: EquationWriter: item 5 (a box number) of the top frame on its work stack
+67E64		Probably: EquationWriter: #n -> item 5 of frame n of its work stack
+6D39D		Probably: EquationWriter: -> #-1 #0 #0 NULLPAINT, the arguments of EqwNewBox for a plain box
+6DAE9		Probably: EquationWriter: create a childless box with a blank cell for the current size level

@@ -1,16 +1,16 @@
 * HP 48GX ROM revision R, #660FC-#69141: not yet identified
 * Addresses in the right-hand comments are those of the original ROM.
-* Most referenced: EqwBoxCount EqwPOP#>Box EqwNewBox EqwBoxCount#2+ EqwBoxParent@ EqwBoxCount#3+ #3* EqwBoxCount#1+ drop;false;true_680B4 SmallCursor MediumCursor BigCursor
+* Most referenced: EqwBoxCount EqwCurBox@ EqwBoxFirst@ EqwPOP#>Box EqwNewBox EqwCurBox! EqwBoxCount#2+ EqwBoxParent@ EqwBoxCount#3+ EqwBoxNext@ EqwBoxLast! #3*
 * Follows on from the previous file (at #660FC in the original ROM).
         RPL
 
 * refs (1): 68443
 OBJ_660FC:
-        :: OBJ_66C8B OBJ_679B3 OBJ_67AAF #9+ ;   * 660FC
+        :: OBJ_66C8B EqwBoxFirst@ OBJ_67AAF #9+ ; * 660FC
 
 * refs (1): 68448
 OBJ_6611A:
-        :: OBJ_66C8B OBJ_6799C OBJ_679B3 OBJ_67AAF #9+ OVER OBJ_679B3 * 6611A
+        :: OBJ_66C8B OBJ_6799C EqwBoxFirst@ OBJ_67AAF #9+ OVER EqwBoxFirst@ * 6611A
           OBJ_67987 DUP OBJ_67AE2 SWAP 4UNROLL ROTOVER 2DUP#< IT DROPDUP * 66142
           #- ROTOVER OBJ_65EC7 DUPUNROT #+ 4UNROLL SWAP OBJ_67AAF #+ * 6616F
           OBJ_67BBB ;                            * 6619C
@@ -18,73 +18,74 @@ OBJ_6611A:
 * refs (1): 65EFE
 OBJ_661A6:
         :: SKIP OBJ_66331 OBJ_6FD85              * 661A6
-          :: OBJ_6DFDE OBJ_67416 OBJ_6F42D OBJ_44DFE ; OBJ_6FDB6 OBJ_66255 * 661BA
-          OBJ_6FDC6 OBJ_662B9 BINT8 OBJ_6E433 OBJ_6E00B OBJ_67E0C OBJ_65D14 * 661E2
-          OBJ_679AE DUP EqwBoxCount#1+ OBJ_67BE2 BINT0 3PICK BINT9 BINT7 * 66205
-          OBJ_6DD2D OBJ_682D2 EqwBoxCount OBJ_67BFC EqwBoxCount OBJ_67448 * 6622D
-          OBJ_6E4F6 ;                            * 6624B
+          :: OBJ_6DFDE EqwCurBox@ OBJ_6F42D OBJ_44DFE ; OBJ_6FDB6 OBJ_66255 * 661BA
+          OBJ_6FDC6 OBJ_662B9 BINT8 OBJ_6E433 OBJ_6E00B OBJ_67E0C * 661E2
+          EqwBoxSecond@ EqwDupBoxFirst@ DUP EqwBoxCount#1+ EqwBoxNext! BINT0 * 66200
+          3PICK BINT9 BINT7 OBJ_6DD2D EqwNewLeafBox EqwBoxCount EqwBoxLast! * 6621E
+          EqwBoxCount EqwCurBox! OBJ_6E4F6 ;     * 66241
 
 * refs (1): 661DD
 OBJ_66255:
-        :: OBJ_6E1C7 DUP tok= OBJ_6CB70 OBJ_68245 DUPZERO OVER EqwBoxParent@ * 66255
-          BINT5 OBJ_6DAE9 EqwBoxCount OVER EqwBoxParent@ OVER OBJ_67BFC * 66282
-          DUPUNROT OBJ_67BE2 OBJ_67448 ;         * 662A5
+        :: OBJ_6E1C7 DUP tok= OBJ_6CB70 EqwBoxObj! DUPZERO OVER * 66255
+          EqwBoxParent@ BINT5 OBJ_6DAE9 EqwBoxCount OVER EqwBoxParent@ OVER * 6627D
+          EqwBoxLast! DUPUNROT EqwBoxNext! EqwCurBox! ; * 662A0
 
 * refs (1): 661E7
 OBJ_662B9:
-        :: OBJ_67E0C OBJ_679B3 OBJ_679B3 DUPZERO OBJ_67C3C Push3Zeros 4PICK * 662B9
-          #1+ OBJ_678D6 BINT7 BINT6 OBJ_6DD2D EqwNewBox EqwBoxCount SWAPDUP * 662E1
-          EqwBoxParent@ 3PICK OBJ_67BEF #1+ OVER OBJ_67BD5 OBJ_67448 ; * 66309
+        :: OBJ_67E0C EqwBoxFirst@ EqwBoxFirst@ DUPZERO EqwBox#18! Push3Zeros * 662B9
+          4PICK #1+ EqwDupBoxParent@ BINT7 BINT6 OBJ_6DD2D EqwNewBox * 662DC
+          EqwBoxCount SWAPDUP EqwBoxParent@ 3PICK EqwBoxFirst! #1+ OVER * 662FF
+          EqwBoxPrev! EqwCurBox! ;               * 66322
 
 * refs (1): 661B0
 OBJ_66331:
         :: OBJ_65E13 OBJ_67E34 #2+ BINT9 #=casedrop * 66331
-          :: OBJ_67E64 OBJ_65D14 OBJ_679AE OBJ_6D523 OBJ_67BFC ; * 6634F
+          :: OBJ_67E64 EqwBoxSecond@ EqwDupBoxFirst@ OBJ_6D523 EqwBoxLast! ; * 6634F
           BINT7 #=casedrop                       * 66372
-          :: OBJ_67E64 OBJ_679B3 DUP#1+ DUPUNROT OBJ_67BEF DUP#1+ SWAP * 6637C
-            OBJ_67BD5 ;                          * 663A4
+          :: OBJ_67E64 EqwBoxFirst@ DUP#1+ DUPUNROT EqwBoxFirst! DUP#1+ SWAP * 6637C
+            EqwBoxPrev! ;                        * 663A4
           SWAPDROP #5= NOT?SEMI                  * 663AE
-          OBJ_6E1C7 OBJ_6D523 OBJ_678D6 OVER OBJ_67BFC EqwFontHeight * 663BD
-          OBJ_65EC7 ;                            * 663DB
+          OBJ_6E1C7 OBJ_6D523 EqwDupBoxParent@ OVER EqwBoxLast! * 663BD
+          EqwFontHeight OBJ_65EC7 ;              * 663D6
 
 * refs (1): 1B233
 OBJ_663E5:
         :: SKIP OBJ_6656B EqwBoxCount#3+ EqwBoxCount#1+ OBJ_6CFB5 SWAPDROP * 663E5
           OBJ_6E0D2 #+ #6+ SWAP #2+ 2DUPHALF #1+ OBJ_6D8DC EqwBoxCount #5+ * 66408
-          DUPZERO EqwBoxCount#2+ OBJ_67416 OBJ_6D39D OBJ_6E0D2 OBJ_6E0C0 * 6643A
+          DUPZERO EqwBoxCount#2+ EqwCurBox@ OBJ_6D39D OBJ_6E0D2 OBJ_6E0C0 * 6643A
           2DUPHALF #3+ OBJ_6D990 EqwNewBox EqwBoxCount EqwBoxCount#2+ * 66458
-          OBJ_67416 BINT1 BINT4 BINT0 OBJ_6D779 BINT4 OBJ_6DC51 4ROLL #1+ * 66476
-          4UNROLL OBJ_682D2 EqwBoxCount#2+ DUP EqwBoxCount BINT0 OBJ_67416 * 664A3
-          OBJ_6D39D OBJ_6D7DD OBJ_6D779 2DUPHALF #1+ OBJ_6D990 Push3Zeros * 664C6
-          BINT0 EqwBoxCount#1+ BINT0 #THREE#FOUR BINT2 OBJ_6D7DD OBJ_6DC51 * 664E9
-          OBJ_6DFDE ZEROZERO ZEROZERO OBJ_67364 OBJ_6D163 OBJ_6D4CE * 6650C
-          OBJ_6D5EB ;                            * 6652A
+          EqwCurBox@ BINT1 BINT4 BINT0 OBJ_6D779 BINT4 OBJ_6DC51 4ROLL #1+ * 66476
+          4UNROLL EqwNewLeafBox EqwBoxCount#2+ DUP EqwBoxCount BINT0 * 664A3
+          EqwCurBox@ OBJ_6D39D OBJ_6D7DD OBJ_6D779 2DUPHALF #1+ OBJ_6D990 * 664C1
+          Push3Zeros BINT0 EqwBoxCount#1+ BINT0 #THREE#FOUR BINT2 OBJ_6D7DD * 664E4
+          OBJ_6DC51 OBJ_6DFDE ZEROZERO ZEROZERO EqwBoxCount#1- OBJ_6D163 * 66507
+          OBJ_6D4CE OBJ_6D5EB ;                  * 66525
 
 * refs (1): 68439
 OBJ_66534:
-        :: SWAPDROP ZEROSWAP OBJ_66C8B OBJ_679AE SWAP OBJ_679C5 OBJ_67AE2 * 66534
-          DUPUNROT OBJ_67C16 ;                   * 6655C
+        :: SWAPDROP ZEROSWAP OBJ_66C8B EqwDupBoxFirst@ SWAP EqwBoxLast@ * 66534
+          OBJ_67AE2 DUPUNROT OBJ_67C16 ;         * 66557
 
 * refs (1): 663EF
 OBJ_6656B:
         :: SKIP                                  * 6656B
-          :: OBJ_65E13 OBJ_6F36A OBJ_679AE OBJ_6D523 DUP OBJ_6F42D OBJ_68245 * 66575
-            OVER OBJ_679A1 DUP OBJ_6F42D OBJ_68245 ZEROSWAP OBJ_68593 * 6659D
-            OBJ_67BFC ;                          * 665C0
-          BINT4 OBJ_6E433 OBJ_6E00B OBJ_67E0C OBJ_679C5 OBJ_679AE DUPZERO * 665CA
-          4PICK BINT5 OBJ_6DAE9 2DUP EqwBoxCount OBJ_67BE2 EqwBoxCount * 665ED
-          OBJ_67BFC BINT7 3PICK OBJ_679A1 OBJ_68593 OBJ_6D7DD OBJ_66FF1 * 66610
-          OBJ_68245 OBJ_678D6 SWAP OBJ_679A1 OBJ_66660 2DROP EqwBoxCount * 66633
-          OBJ_67448 ;                            * 66656
+          :: OBJ_65E13 OBJ_6F36A EqwDupBoxFirst@ OBJ_6D523 DUP OBJ_6F42D * 66575
+            EqwBoxObj! OVER EqwBoxPrev@ DUP OBJ_6F42D EqwBoxObj! ZEROSWAP * 66598
+            OBJ_68593 EqwBoxLast! ;              * 665BB
+          BINT4 OBJ_6E433 OBJ_6E00B OBJ_67E0C EqwBoxLast@ EqwDupBoxFirst@ * 665CA
+          DUPZERO 4PICK BINT5 OBJ_6DAE9 2DUP EqwBoxCount EqwBoxNext! * 665E8
+          EqwBoxCount EqwBoxLast! BINT7 3PICK EqwBoxPrev@ OBJ_68593 * 6660B
+          OBJ_6D7DD OBJ_66FF1 EqwBoxObj! EqwDupBoxParent@ SWAP EqwBoxPrev@ * 66629
+          OBJ_66660 2DROP EqwBoxCount EqwCurBox! ; * 66647
 
 * refs (2): 66647 6841B
 OBJ_66660:
-        :: OBJ_6799C OVER OBJ_6798C DUP OBJ_67AE2 OVER * 66660
+        :: OBJ_6799C OVER EqwBoxNext@ DUP OBJ_67AE2 OVER * 66660
 
 * refs (1): 666A6
 OBJ_66683:
-          :: OBJ_67AAA SWAP OBJ_67AE2 OBJ_6C339 ; 4ROLL OBJ_66683 #MAX * 66683
-          #+OVER OBJ_67AAF #MAX OBJ_44CD2 OBJ_44DB3 OBJ_44D9A ; * 666B0
+          :: OBJ_67AAA SWAP OBJ_67AE2 #-Floor0 ; 4ROLL OBJ_66683 #MAX #+OVER * 66683
+          OBJ_67AAF #MAX OBJ_44CD2 OBJ_44DB3 OBJ_44D9A ; * 666B5
 
 * refs (5): 69DB1 6A159 6B115 6B7B3 6C4C4
 OBJ_666D3:
@@ -180,13 +181,13 @@ L_6678A:
 * refs (8): 68E2C 68EE5 692F1 69A27 6A14F 6D546 ...
 OBJ_6681A:
         :: BEGIN EqwBoxParent@ DUP#0= case drop;q_58A0C * 6681A
-          :: OBJ_679AE BEGIN OBJ_6689C           * 66838
+          :: EqwDupBoxFirst@ BEGIN OBJ_6689C     * 66838
 L_6684C:
             OBJ_6FEE1                            * 6684C
 L_66851:
           ;                                      * 66851
-          ZEROSWAP OBJ_679AE ZEROZERO 4PICK OBJ_679D7 #1= ITE OBJ_66933 * 66856
-          OBJ_66956                              * 6687E
+          ZEROSWAP EqwDupBoxFirst@ ZEROZERO 4PICK OBJ_679D7 #1= ITE * 66856
+          OBJ_66933 OBJ_66956                    * 66879
           DUP ?SKIP SWAPDROP                     * 66883
           NOT_UNTIL ;                            * 66892
 
@@ -437,12 +438,12 @@ L_66C18:
 
 * refs (1): 6842A
 OBJ_66C2C:
-        :: OBJ_66C8B OBJ_679B3 OBJ_67AAF #1+ ;   * 66C2C
+        :: OBJ_66C8B EqwBoxFirst@ OBJ_67AAF #1+ ; * 66C2C
 
 * refs (1): 6842F
 OBJ_66C4A:
-        :: OBJ_679AE OBJ_67ABC SWAP #2/ SWAPROT EqwBoxParent@ OBJ_679B3 * 66C4A
-          OBJ_67AE2 #+ #2- ;                     * 66C72
+        :: EqwDupBoxFirst@ OBJ_67ABC SWAP #2/ SWAPROT EqwBoxParent@ * 66C4A
+          EqwBoxFirst@ OBJ_67AE2 #+ #2- ;        * 66C6D
 
 * refs (1): 68434
 OBJ_66C86:
@@ -450,11 +451,11 @@ OBJ_66C86:
 
 * refs (5): 66101 6611F 66543 66C31 66CBD
 OBJ_66C8B:
-          :: OBJ_67A98 #2/ SWAP ; OBJ_679C5 OBJ_67AE2 #2+ ; * 66C8B
+          :: OBJ_67A98 #2/ SWAP ; EqwBoxLast@ OBJ_67AE2 #2+ ; * 66C8B
 
 * refs (1): 6843E
 OBJ_66CB8:
-        :: OBJ_66C8B OBJ_679A1 OBJ_679A1 OBJ_67AE2 ; * 66CB8
+        :: OBJ_66C8B EqwBoxPrev@ EqwBoxPrev@ OBJ_67AE2 ; * 66CB8
 
 * refs (2): 666D8 69BF1
 OBJ_66CD6:
@@ -465,7 +466,7 @@ OBJ_66CD6:
 
 * refs (1): 44DF4
 OBJ_66D26:
-          :: OVER BINT0 OBJ_67B67 OBJ_67BA1 ; #+ BINT0 ROT OBJ_679B3 GOTO * 66D26
+          :: OVER BINT0 OBJ_67B67 OBJ_67BA1 ; #+ BINT0 ROT EqwBoxFirst@ GOTO * 66D26
           L_66D76 ;                              * 66D5D
 
 * refs (1): 66DDA
@@ -484,9 +485,9 @@ OBJ_66DB2:
 
 * refs (1): 66DDF
 OBJ_66DF3:
-        :: DUP OBJ_67AD5 OVER OBJ_67A7E #+SWAP OBJ_679AE SWAP OBJ_67A8B SWAP * 66DF3
-          BEGIN 3PICKOVER OBJ_67AD5 #- OVERSWAP 4PICK OBJ_66E61 OBJ_67AAA * 66E25
-          OBJ_66DB2 NOT_UNTIL 2DROP ;            * 66E4D
+        :: DUP OBJ_67AD5 OVER OBJ_67A7E #+SWAP EqwDupBoxFirst@ SWAP * 66DF3
+          OBJ_67A8B SWAP BEGIN 3PICKOVER OBJ_67AD5 #- OVERSWAP 4PICK * 66E1B
+          OBJ_66E61 OBJ_67AAA OBJ_66DB2 NOT_UNTIL 2DROP ; * 66E43
 
 * refs (2): 66D94 66E43
 OBJ_66E61:
@@ -864,7 +865,8 @@ EqwBoxCount#3+:
         GOTO    L_67388                          * 67360
 
 * refs (11): 65AF1 65BF5 660D9 6651B 6A028 6CD49 ...
-OBJ_67364:
+* -> #n-1
+EqwBoxCount#1-:
         CON(5)  (*)+5                            * 67364  primitive code object
         C=0     A                                * 67369
         C=C-1   A                                * 6736B
@@ -937,8 +939,8 @@ OBJ_67406:
         GOTO    L_673AE                          * 67412
 
 * refs (61): 4B8F0 65AA6 65B8C 65F99 660AC 661C4 ...
-* Probably: EquationWriter: -> #box, the current box (kept in FONTHEIGHT)
-OBJ_67416:
+* -> #box: the current (cursor) box, kept in FONTHEIGHT
+EqwCurBox@:
         CON(5)  (*)+5                            * 67416  primitive code object
         LC(5)   FONTHEIGHT                       * 6741B
         GOTO    L_673AE                          * 67422
@@ -957,8 +959,8 @@ OBJ_67443:
         CON(5)  DupAndThen                       * 67443  code object: the address of its machine code
 
 * refs (22): 65D00 65D9B 65E04 66246 662AF 66327 ...
-* Probably: EquationWriter: #box -> , set the current box (kept in FONTHEIGHT)
-OBJ_67448:
+* #box -> : make a box current
+EqwCurBox!:
         CON(5)  (*)+5                            * 67448  primitive code object
         LC(5)   FONTHEIGHT                       * 6744D
         GOTO    L_67464                          * 67454
@@ -1304,7 +1306,8 @@ L_678BB:
         GOTO    L_67907                          * 678D2
 
 * refs (13): 461B4 662E6 663C7 66638 6A190 6E28A ...
-OBJ_678D6:
+* #b -> #b #parent
+EqwDupBoxParent@:
         CON(5)  DupAndThen                       * 678D6  code object: the address of its machine code
 
 * refs (20): 6627D 66296 66309 66824 66C68 6945E ...
@@ -1370,7 +1373,7 @@ L_6794A:
 
 * refs (2): 66DE9 6FEE6
 OBJ_67969:
-        :: OBJ_6798C DUP#0= casedrpfls TRUE      * 67969
+        :: EqwBoxNext@ DUP#0= casedrpfls TRUE    * 67969
         ;                                        * 67982
 
 * refs (7): 44C91 44CFF 44D4F 65DCD 66142 6A19A ...
@@ -1378,8 +1381,8 @@ OBJ_67987:
         CON(5)  DupAndThen                       * 67987  code object: the address of its machine code
 
 * refs (17): 65CD6 65CDB 65D1E 65D55 65EB3 65EB8 ...
-* Probably: EquationWriter: #box -> next-sibling link (field #1E)
-OBJ_6798C:
+* #b -> #next sibling (field #1E)
+EqwBoxNext@:
         CON(5)  (*)+5                            * 6798C  primitive code object
         ASSEMBLE
         LC(2)   #1E                              * 67991
@@ -1391,19 +1394,20 @@ OBJ_6799C:
         CON(5)  DupAndThen                       * 6799C  code object: the address of its machine code
 
 * refs (15): 4B8FF 665A2 6661F 66642 66CC2 66CC7 ...
-* Probably: EquationWriter: #box -> previous-sibling link (field #21)
-OBJ_679A1:
+* #b -> #previous sibling (field #21)
+EqwBoxPrev@:
         CON(5)  (*)+5                            * 679A1  primitive code object
         LC(2)   #21                              * 679A6
         GOTO    L_678E4                          * 679AA
 
 * refs (12): 65D28 66205 6635E 66548 66584 665E3 ...
-OBJ_679AE:
+* #b -> #b #first
+EqwDupBoxFirst@:
         CON(5)  DupAndThen                       * 679AE  code object: the address of its machine code
 
 * refs (23): 44D18 65D19 65DC8 66106 66129 6613D ...
-* Probably: EquationWriter: #box -> first-child link (field #24)
-OBJ_679B3:
+* #b -> #first child (field #24)
+EqwBoxFirst@:
         CON(5)  (*)+5                            * 679B3  primitive code object
         LC(2)   #24                              * 679B8
         GOTO    L_678E4                          * 679BC
@@ -1413,8 +1417,8 @@ OBJ_679C0:
         CON(5)  DupAndThen                       * 679C0  code object: the address of its machine code
 
 * refs (14): 44D72 65CCC 65DB9 66552 665DE 66CA4 ...
-* Probably: EquationWriter: #box -> last-child link (field #27)
-OBJ_679C5:
+* #b -> #last child (field #27)
+EqwBoxLast@:
         CON(5)  (*)+5                            * 679C5  primitive code object
         LC(2)   #27                              * 679CA
         GOTO    L_678E4                          * 679CE
@@ -1473,7 +1477,7 @@ SUB_67A3D:
 
 * refs (22): 668A1 66A0F 66B64 66BC9 678E7 679DC ...
 * POP# -> D0 at box n's fields (table at ITEM1STATE, 42 nibbles a box); the RPL IP saved in R2
-* EquationWriter box record, 42 nibbles, offsets from D0: +00 type; +01 size level (low); +02/+05 position y/x (low); +08 vertical reference (medium-low); +0B horizontal centre (medium); +0E height, +11 width (medium-high); +14/+16 size and placement handler indexes; +18 unknown; +1B parent (high); +1E/+21 next/previous sibling and +24/+27 first/last child (medium)
+* EquationWriter box record, 42 nibbles, offsets from D0: +00 type; +01 size level (low 3 bits; bit 3 a flag); +02/+05 position y/x (low); +08 vertical reference (medium-low); +0B horizontal centre (medium); +0E height, +11 width (medium-high); +14/+16 size and placement handler indexes; +18 a 12-bit field (#800 marks a value from #8xxxx, FFF is -1); +1B parent; +1E next sibling, +21 previous sibling, +24 first child, +27 last child. Size handlers are called with the parent below the box
 EqwPOP#>Box:
         GOSBVL  POP#                             * 67A4A
 
@@ -1635,27 +1639,29 @@ OBJ_67BC8:
         GOTO    L_67B70                          * 67BD1
 
 * refs (7): 65D7D 65DDC 65E68 65E9F 66322 663A4 ...
-OBJ_67BD5:
+* #b #prev -> : set the previous-sibling link
+EqwBoxPrev!:
         CON(5)  (*)+5                            * 67BD5  primitive code object
         LC(2)   #21                              * 67BDA
         GOTO    L_67B70                          * 67BDE
 
 * refs (15): 65DE6 65E95 66214 662AA 66606 6A60E ...
-* Probably: EquationWriter: #box #box' -> , set the next-sibling link (field #1E)
-OBJ_67BE2:
+* #b #next -> : set the next-sibling link
+EqwBoxNext!:
         CON(5)  (*)+5                            * 67BE2  primitive code object
         LC(2)   #1E                              * 67BE7
         GOTO    L_67B70                          * 67BEB
 
 * refs (6): 65D6E 65E5E 66313 66395 6D230 6E9FB
-OBJ_67BEF:
+* #b #first -> : set the first-child link
+EqwBoxFirst!:
         CON(5)  (*)+5                            * 67BEF  primitive code object
         LC(2)   #24                              * 67BF4
         GOTO    L_67B70                          * 67BF8
 
 * refs (17): 6623C 662A0 66368 663D1 665C0 66610 ...
-* Probably: EquationWriter: #box #child -> , set the last-child link (field #27)
-OBJ_67BFC:
+* #b #last -> : set the last-child link
+EqwBoxLast!:
         CON(5)  (*)+5                            * 67BFC  primitive code object
         LC(2)   #27                              * 67C01
         GOTO    L_67B70                          * 67C05
@@ -1678,16 +1684,17 @@ OBJ_67C23:
         :: 3PICKSWAP OBJ_67C16 OBJ_67C09 ;       * 67C23
 
 * refs (11): 662D2 6953F 6A2E9 6A384 6CEBB 6D221 ...
-OBJ_67C3C:
+* #b #v -> : set field +18 (12 bits; #800 marks a value from #8xxxx, FFF is -1)
+EqwBox#18!:
         CON(5)  (*)+5                            * 67C3C  primitive code object
         ASSEMBLE
-        GOSUB   SUB_67C53                        * 67C41
+        GOSUB   EqwBox#18!~1                     * 67C41
         LC(2)   #18                              * 67C45
         R1=C.F  B                                * 67C49
         GOTO    L_67B7D                          * 67C4F
 
 * refs (1): 67C41
-SUB_67C53:
+EqwBox#18!~1:
         GOSBVL  POP#                             * 67C53
         C=A     A                                * 67C5A
         C=C+C   A                                * 67C5C
@@ -1833,6 +1840,7 @@ OBJ_67DCF:
         GOTO    L_67E1B                          * 67DDB
 
 * refs (13): 68891 688E1 68913 6904D 690CF 6943B ...
+* Probably: EquationWriter: item 1 (a state code) of the top 5-object frame on its work stack
 OBJ_67DDF:
         CON(5)  (*)+5                            * 67DDF  primitive code object
         GOSUB   SUB_67E77                        * 67DE4
@@ -1853,6 +1861,7 @@ OBJ_67DFC:
         GOTO    L_67E1B                          * 67E08
 
 * refs (13): 4B8E1 65CC7 65D0F 65DB4 661FB 662BE ...
+* Probably: EquationWriter: item 5 (a box number) of the top frame on its work stack
 OBJ_67E0C:
         CON(5)  (*)+5                            * 67E0C  primitive code object
         GOSUB   SUB_67E77                        * 67E11
@@ -1893,6 +1902,7 @@ OBJ_67E54:
         GOTO    L_67E1B                          * 67E60
 
 * refs (12): 65E4A 66354 66381 6C069 6E253 6F180 ...
+* Probably: EquationWriter: #n -> item 5 of frame n of its work stack
 OBJ_67E64:
         CON(5)  (*)+5                            * 67E64  primitive code object
         GOSUB   SUB_67EB4                        * 67E69
@@ -2247,7 +2257,8 @@ OBJ_6822C:
         :: DUP BINT11 UNROLL OBJ_68277           * 6822C
 
 * refs (11): 44E2B 4B90E 65CF6 65EEA 6626E 66598 ...
-OBJ_68245:
+* #b obj -> : put obj into box b's slot on the data stack and clear the flag in +01
+EqwBoxObj!:
           :: SWAPDUP OBJ_67CA2 OBJ_67519 SWAP#- dup;drop(s) #2- UNROLL ; ; * 68245
 
 * refs (1): 68240
@@ -2260,7 +2271,7 @@ OBJ_68277:
 
 * refs (3): 65F76 6CF10 6D5AA
 OBJ_68283:
-        :: DUP BINT18 UNROLL OBJ_682A6 OBJ_68245 ; * 68283
+        :: DUP BINT18 UNROLL OBJ_682A6 EqwBoxObj! ; * 68283
 
 * refs (1): 68297
 OBJ_682A6:
@@ -2280,7 +2291,8 @@ L_682BF:
         PC=(A)                                   * 682CE
 
 * refs (10): 65C81 66232 664A8 6CF56 6D0C8 6D2DF ...
-OBJ_682D2:
+* Like EqwNewBox, for a box without children (#24/#27 zero)
+EqwNewLeafBox:
         CON(5)  (*)+5                            * 682D2  primitive code object
         ST=1    4                                * 682D7
         GOTO    L_682E6                          * 682DA
@@ -2497,8 +2509,8 @@ L_684F1:
 
 * refs (1): 684E7
 OBJ_68500:
-        :: OBJ_679AE OBJ_6FE78 OBJ_2708E ?SKIP   * 68500
-          :: DROPDUP OBJ_65D14 OBJ_6FE78 OBJ_2708E DROP ; * 68519
+        :: EqwDupBoxFirst@ OBJ_6FE78 OBJ_2708E ?SKIP * 68500
+          :: DROPDUP EqwBoxSecond@ OBJ_6FE78 OBJ_2708E DROP ; * 68519
           BINT6 NTHCOMPDROP EVAL ;               * 6853C
 
 * refs (3): 66965 66979 6A186
@@ -2669,7 +2681,7 @@ OBJ_688EB:
           OBJ_67F45 OBJ_69941 OBJ_672E6 #1= OBJ_67DDF BINT4 #= AND NOTcase * 688FF
           OBJ_686CF                              * 6892C
           OBJ_69594 ~BINT1;1PUTLAM OBJ_67DEC OBJ_69188 EQcasedrop OBJ_688EB * 68931
-          OBJ_676D4 OBJ_67416 OBJ_679A1 OBJ_67448 OBJ_69495 OBJ_688EB ; * 6894F
+          OBJ_676D4 EqwCurBox@ EqwBoxPrev@ EqwCurBox! OBJ_69495 OBJ_688EB ; * 6894F
 
 * refs (2): 6C4BF 8D3F5
 OBJ_68972:
@@ -2770,7 +2782,7 @@ OBJ_68D9B:
             :: SPACE$ DUPROT &$ SWAP&$ ;         * 68DD2
             OBJ_6D62A DUP OBJ_2708E ITE EVAL     * 68DF0
             :: DROP OBJ_6CCCC ;                  * 68E09
-            OBJ_6DF1D OBJ_67448 DUP OBJ_6681A OBJ_68EEF OBJ_67F45 ; * 68E1D
+            OBJ_6DF1D EqwCurBox! DUP OBJ_6681A OBJ_68EEF OBJ_67F45 ; * 68E1D
         ;                                        * 68E40
 
 * refs (3): 687B5 687DD 68846
@@ -2785,7 +2797,7 @@ OBJ_68E90:
         :: OBJ_4EC49 NOTcase OBJ_691E7           * 68E90
           BINT2 3PUTLAM 5GETLAM BINT1 OVER OBJ_6E2D0 OBJ_68D9B OBJ_6D62A * 68EA4
           OBJ_2708E ?SKIP OBJ_6E311              * 68ECC
-          EVAL OVER OBJ_6681A OBJ_67448          * 68EDB
+          EVAL OVER OBJ_6681A EqwCurBox!         * 68EDB
 
 * refs (2): 68E31 69319
 OBJ_68EEF:
@@ -2799,7 +2811,7 @@ OBJ_68EEF:
 * refs (5): 68FDA 694FE 6A1B3 6EC58 6F392
 OBJ_68F7B:
         :: OBJ_679EA case DUP                    * 68F7B
-          DUPDUP OBJ_6A75D #MAX OVER OBJ_6A705 ROTOVER #= IT OBJ_679B3 * 68F8F
+          DUPDUP OBJ_6A75D #MAX OVER OBJ_6A705 ROTOVER #= IT EqwBoxFirst@ * 68F8F
           DUP BEGIN DUP OBJ_679EA ITE DUP OBJ_68F7B * 68FBC
           4ROLL #MIN SWAP4ROLL #MAX SWAPROT OBJ_6FEE1 ; * 68FDF
 
@@ -2833,5 +2845,5 @@ OBJ_690C0:
 EqwRuleKey0~11:
                 :: ZERO_DO OBJ_68BE3 OBJ_676D4 LOOP ; ; * 690FC
             ;                                    * 6911F
-            OBJ_67E0C OBJ_67448 OBJ_674BB ;      * 69124
+            OBJ_67E0C EqwCurBox! OBJ_674BB ;     * 69124
           COLA_EVAL ;                            * 69138

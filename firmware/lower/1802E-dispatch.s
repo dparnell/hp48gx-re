@@ -613,7 +613,7 @@ CK0NOLASTWD:
 * refs (139): 197FC 19817 19832 1984D 19868 19883 ...
 CK0:
         CON(5)  (*)+5                            * 18A1E  primitive code object
-        GOSUB   SUB_18C77                        * 18A23
+        GOSUB   SetLastRomWrd                    * 18A23
 CK0NOLASTWD~1:
         CD1EX                                    * 18A27
         D1=(5)  EDITLINE                         * 18A2A
@@ -634,7 +634,7 @@ L_18A51:
 * refs (1): 1FC13
 CK3:
         CON(5)  (*)+5                            * 18A5B  primitive code object
-        GOSUB   SUB_18C77                        * 18A60
+        GOSUB   SetLastRomWrd                    * 18A60
         GOTO    L_18A6D                          * 18A64
 
 * ob1...ob3 -> ob1...ob3
@@ -656,7 +656,7 @@ SUB_18A75:
 * refs (5): 1E766 1FBA7 1FBC2 1FBF8 1FC2E
 CK2:
         CON(5)  (*)+5                            * 18A80  primitive code object
-        GOSUB   SUB_18C77                        * 18A85
+        GOSUB   SetLastRomWrd                    * 18A85
         GOTO    L_18A92                          * 18A89
 
 * ob1 ob2 -> ob1 ob2
@@ -678,7 +678,7 @@ SUB_18A9A:
 * refs (13): 1A2C1 1A5E9 1CB10 1CB8B 1F153 1F9C9 ...
 CK1:
         CON(5)  (*)+5                            * 18AA5  primitive code object
-        GOSUB   SUB_18C77                        * 18AAA
+        GOSUB   SetLastRomWrd                    * 18AAA
         GOTO    L_18AB7                          * 18AAE
 
 * ob -> ob
@@ -748,7 +748,7 @@ L_18B57:
 * ob1...ob5 -> ob1...ob5
 CK5:
         CON(5)  (*)+5                            * 18B6D  primitive code object
-        GOSUB   SUB_18C77                        * 18B72
+        GOSUB   SetLastRomWrd                    * 18B72
         GOTO    L_18B7F                          * 18B76
 
 * ob1...ob5 -> ob1...ob5
@@ -768,7 +768,7 @@ SUB_18B87:
 * ob1...ob5 -> ob1...ob5
 CK4:
         CON(5)  (*)+5                            * 18B92  primitive code object
-        GOSUB   SUB_18C77                        * 18B97
+        GOSUB   SetLastRomWrd                    * 18B97
         GOTO    L_18BA4                          * 18B9B
 
 * ob1...ob4 -> ob1...ob4
@@ -827,7 +827,7 @@ L_18C30:
 * refs (8): 1C788 1FC69 1FC84 1FC9F 1FCBA 1FCD5 ...
 CKN:
         CON(5)  (*)+5                            * 18C34  primitive code object
-        GOSUB   SUB_18C77                        * 18C39
+        GOSUB   SetLastRomWrd                    * 18C39
         LC(5)   CKNNOLASTWD                      * 18C3D
         A=C     A                                * 18C44
         PC=(A)                                   * 18C46
@@ -841,7 +841,8 @@ CKNNOLASTWD:
         ASSEMBLE
 
 * refs (12): 18A23 18A60 18A85 18AAA 18B72 18B97 ...
-SUB_18C77:
+* LASTROMWDOB := the running command (D0-10), for error messages; called first by CK0-CK5 and CKN
+SetLastRomWrd:
         AD0EX                                    * 18C77
         D0=A                                     * 18C7A
         D0=D0-  10                               * 18C7D
@@ -1027,7 +1028,7 @@ L_18DF3:
 
 * refs (6): 157C4 157F6 20DE2 545BE 5568E 556A7
 ->num(ex):
-        :: DNOTSYMB?SEMI BEGIN OBJ_4241B ->num(ex)~1 WHILE COMPEVAL REPEAT ; * 18E18
+        :: DNOTSYMB?SEMI BEGIN ?ATTNQUIT0 ->num(ex)~1 WHILE COMPEVAL REPEAT ; * 18E18
 
 * symb -> :: symb <ob1> <rest> ; ob -> :: ob ;
 * refs (1): 18E1D
@@ -1086,7 +1087,7 @@ COMPEVAL:
 * refs (209): 19580 195A0 195C0 195E0 19600 19620 ...
 CK1&Dispatch:
         CON(5)  (*)+5                            * 18ECE  primitive code object
-        GOSUB   SUB_18C77                        * 18ED3
+        GOSUB   SetLastRomWrd                    * 18ED3
         GOSUB   SUB_18ABF                        * 18ED7
         GOTO    L_18F5C                          * 18EDB
 
@@ -1094,7 +1095,7 @@ CK1&Dispatch:
 * refs (111): 196E0 19754 197AA 19997 199B7 199D7 ...
 CK2&Dispatch:
         CON(5)  (*)+5                            * 18EDF  primitive code object
-        GOSUB   SUB_18C77                        * 18EE4
+        GOSUB   SetLastRomWrd                    * 18EE4
         GOSUB   SUB_18A9A                        * 18EE8
         GOTO    L_18F5C                          * 18EEC
 
@@ -1102,7 +1103,7 @@ CK2&Dispatch:
 * refs (30): 1A403 1C043 1C861 1C8EF 1D40C 1D5E4 ...
 CK3&Dispatch:
         CON(5)  (*)+5                            * 18EF0  primitive code object
-        GOSUB   SUB_18C77                        * 18EF5
+        GOSUB   SetLastRomWrd                    * 18EF5
         GOSUB   SUB_18A75                        * 18EF9
         GOTO    L_18F5C                          * 18EFD
 
@@ -1110,7 +1111,7 @@ CK3&Dispatch:
 * refs (10): 1E5D7 1F1D9 1F228 1F2CE 26DA6 5E945 ...
 CK4&Dispatch:
         CON(5)  (*)+5                            * 18F01  primitive code object
-        GOSUB   SUB_18C77                        * 18F06
+        GOSUB   SetLastRomWrd                    * 18F06
         GOSUB   SUB_18BAC                        * 18F0A
         GOTO    L_18F5C                          * 18F0E
 
@@ -1118,7 +1119,7 @@ CK4&Dispatch:
 * refs (6): 26DA1 5F921 72E6A C181C C19E3 D1957
 CK5&Dispatch:
         CON(5)  (*)+5                            * 18F12  primitive code object
-        GOSUB   SUB_18C77                        * 18F17
+        GOSUB   SetLastRomWrd                    * 18F17
         GOSUB   SUB_18B87                        * 18F1B
         GOTO    L_18F5C                          * 18F1F
 
@@ -2054,6 +2055,7 @@ rpnXROOT~any:
         ;                                        * 19F0A
 
 * refs (12): 19F89 1A099 D6FC1 D7115 D71F7 D72A5 ...
+* Probably: input forms: key handler that starts editing the current field
 OBJ_19F0F:
         :: 5GETLAM BINT18 IFECallFieldMH ?SEMI   * 19F0F
           EditLExists? case2drop FALSE           * 19F28

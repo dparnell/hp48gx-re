@@ -1010,11 +1010,11 @@ L_70E86:
         A=R3.F  A                                * 70E8D
         ?ST=0   11                               * 70E93
         GOYES   L_70EA6                          * 70E96
-        GOSBVL  SUB_07ED8                        * 70E98
+        GOSBVL  ROMPTR>ADDR                      * 70E98
         ST=1    11                               * 70E9F
         GOTO    L_70EB0                          * 70EA2
 L_70EA6:
-        GOSBVL  SUB_07ED8                        * 70EA6
+        GOSBVL  ROMPTR>ADDR                      * 70EA6
         ST=0    11                               * 70EAD
 L_70EB0:
         GOC     L_70EC8                          * 70EB0
@@ -1698,7 +1698,7 @@ L_716FE:
 rGETATELN~1:
         A=DAT1  A                                * 71705
         GOSBVL  SAVPTR                           * 71708
-        GOSBVL  SUB_07ED8                        * 7170F
+        GOSBVL  ROMPTR>ADDR                      * 7170F
         GONC    L_71736                          * 71716
         GOSBVL  GETPTR                           * 71719
         D1=D1+  10                               * 71720
@@ -2102,7 +2102,7 @@ rNTHELCOMP:
         GOSBVL  SAVPTR                           * 71C40
         D1=D1+  5                                * 71C47
         A=DAT1  A                                * 71C4A
-        GOSBVL  SUB_07ED8                        * 71C4D
+        GOSBVL  ROMPTR>ADDR                      * 71C4D
         GONC    L_71C74                          * 71C54
 L_71C57:
         GOSBVL  GETPTR                           * 71C57
@@ -2214,7 +2214,7 @@ RPTRACC:
         ASSEMBLE
         A=DAT1  A                                * 71DB7
         GOSBVL  SAVPTR                           * 71DBA
-        GOSBVL  SUB_07ED8                        * 71DC1
+        GOSBVL  ROMPTR>ADDR                      * 71DC1
         GOC     L_71DE4                          * 71DC8
         ?ST=0   1                                * 71DCB
         GOYES   L_71DDD                          * 71DCE
@@ -2375,7 +2375,7 @@ L_71FCD:
 L_71FDB:
         GOVLNG  L_26FC2                          * 71FDB
 L_71FE2:
-        GOSBVL  SUB_07ED8                        * 71FE2
+        GOSBVL  ROMPTR>ADDR                      * 71FE2
         GONC    L_71FF3                          * 71FE9
         GOVLNG  GETPTRFALSE                      * 71FEC
 L_71FF3:
@@ -3298,7 +3298,7 @@ L_72C47:
         D1=D1+  5                                * 72C68
         C=DAT1  A                                * 72C6B
         R0=C.F  A                                * 72C6E
-        GOSBVL  SUB_07ED8                        * 72C74
+        GOSBVL  ROMPTR>ADDR                      * 72C74
         ?ST=0   1                                * 72C7B
         GOYES   L_72C93                          * 72C7E
         LC(5)   #800FF                           * 72C80
@@ -3326,7 +3326,7 @@ L_72C93:
         DAT1=C  W                                * 72CC7
         GOSUB   SUB_72D01                        * 72CCB
         AD1EX                                    * 72CCF
-        GOSBVL  SUB_07ED8                        * 72CD2
+        GOSBVL  ROMPTR>ADDR                      * 72CD2
         GOC     L_72CF6                          * 72CD9
         ?ST=0   1                                * 72CDC
         GOYES   L_72CEB                          * 72CDF

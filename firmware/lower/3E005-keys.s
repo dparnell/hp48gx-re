@@ -221,8 +221,8 @@ _<-DEL_:
               OBJ_3E634 AND WHILE                * 3E416
 
 <-del!:
-              :: <-Skip! OBJ_429CB ; REPEAT BEGIN OBJ_3E634 NOTAND WHILE * 3E425
-              :: <-Skip! OBJ_429CB ; REPEAT SetDA13NoCh OBJ_3E6D4 ; * 3E452
+              :: <-Skip! DelCursChr ; REPEAT BEGIN OBJ_3E634 NOTAND WHILE * 3E425
+              :: <-Skip! DelCursChr ; REPEAT SetDA13NoCh OBJ_3E6D4 ; * 3E452
             DoBadKey                             * 3E47A
 
 * refs (1): 3DFA1
@@ -230,7 +230,7 @@ OBJ_3E47F:
             :: NoComLine?:(bip;q) BEGIN OnTheFirstCol? NOT WHILE * 3E47F
 
 DelLeftChr:
-              :: LCursor OBJ_429CB ; REPEAT SetDA13NoCh ; * 3E49D
+              :: LCursor DelCursChr ; REPEAT SetDA13NoCh ; * 3E49D
           }                                      * 3E4C0
         }                                        * 3E4C5
 
@@ -243,13 +243,13 @@ _DEL->_:
           $ "DEL→"                               * 3E4CF
           {                                      * 3E4E1
             :: NoComLine?:(bip;q) EndComLine?:(bip;q) EDITPARTS BEGIN * 3E4E6
-              ChkSkip-> NOTAND WHILE OBJ_429CB REPEAT BEGIN ChkSkip-> AND * 3E4FF
-              WHILE OBJ_429CB REPEAT SetDA13NoCh OBJ_3E6D4 ; * 3E527
+              ChkSkip-> NOTAND WHILE DelCursChr REPEAT BEGIN ChkSkip-> AND * 3E4FF
+              WHILE DelCursChr REPEAT SetDA13NoCh OBJ_3E6D4 ; * 3E527
             DoBadKey                             * 3E545
 
 * refs (1): 3DF8D
 OBJ_3E54A:
-            :: NoComLine?:(bip;q) BEGIN CURSOR_END? NOT WHILE OBJ_429CB * 3E54A
+            :: NoComLine?:(bip;q) BEGIN CURSOR_END? NOT WHILE DelCursChr * 3E54A
               REPEAT SetDA13NoCh ;               * 3E56D
           }                                      * 3E57C
         }                                        * 3E581

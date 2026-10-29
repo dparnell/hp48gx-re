@@ -1,6 +1,6 @@
 * HP 48GX ROM revision R, #4C082-#4F0AB: Plotting
 * Addresses in the right-hand comments are those of the original ROM.
-* Most referenced: CHECKMENU CROSS_OFF CROSS_HAIRS PPAR>ZPAR EXITFCNsto NEWINDEP CROSSMARKOFF CROSSMARKON TURNMENUOFF DROPDEADTRUE GDISPCENTER CURRENTMARK?
+* Most referenced: CHECKMENU CROSS_OFF CROSS_HAIRS PPAR>ZPAR EXITFCNsto NEWINDEP CROSSMARKOFF ClrLastPt CROSSMARKON TURNMENUOFF PurgePlotVars PlotFcnPt
 * Follows on from the previous file (at #4C082 in the original ROM).
         RPL
 
@@ -41,7 +41,8 @@ OBJ_4C0D4:
         RPL
 
 * refs (11): 48B2A 4B701 4C553 8A656 8A665 8B2C0 ...
-OBJ_4C0E4:
+* -> : after DRAW, purge the independent variable it created (and the dependent one for some plot types)
+PurgePlotVars:
         :: INDEPVAR ?PURGE_HERE GETPTYPE ~BINT11;PTYPE>PINFO;NOTcaseFALSE * 4C0E4
           NOT?SEMI                               * 4C0FD
           ~RclDepnd;1get(li)? ?PURGE_HERE ;      * 4C102
@@ -58,7 +59,7 @@ OBJ_4C12A:
 * refs (2): 4C508 4C526
 OBJ_4C166:
         :: 3GETLAM 1GETLAM NEWINDEP BEGIN 2GETLAM * 4C166
-          :: OBJ_5135F DUPTYPEREAL? IT           * 4C184
+          :: PlotEval DUPTYPEREAL? IT            * 4C184
             :: %0= ?SEMI                         * 4C198
               15GETLAM GETXPOS 3GETLAM GETYPOS PIXON3 ; * 4C1A7
           ;                                      * 4C1C5
@@ -71,12 +72,13 @@ OBJ_4C1F2:
           #0<> ;                                 * 4C224
 
 * refs (13): 48A62 4C25B 4C35F 4C396 4C3CD 4C3FF ...
-OBJ_4C22E:
+* #i -> : break curve i (store -1 as its last point, so the next one is not joined)
+ClrLastPt:
         :: 20GETLAM %-1 ROT PUTEL DROP ;         * 4C22E
 
 * refs (2): 513B4 8B298
-OBJ_4C251:
-        :: BINT1 OBJ_4C22E ;                     * 4C251
+~BINT1;ClrLastPt:
+        :: BINT1 ClrLastPt ;                     * 4C251
 
 * refs (4): 4C378 4C3AF 4C413 4C8A5
 OBJ_4C265:
@@ -93,28 +95,30 @@ OBJ_4C2CE:
           draw OBJ_4DA3F ;                       * 4C305
 
 * refs (11): 488FA 48B2F 4BB0C 4BC88 4C4BD 57285 ...
+* Probably: create the independent variable for plotting in the current directory and point lam 15 at the stored copy
 OBJ_4C314:
         :: 15GETLAM 17GETLAM NEWINDEP INDEPVAR 15GETLAM OVER CREATE * 4C314
           rcl(nm)?;drop 15PUTLAM ;               * 4C33C
 
 * refs (11): 4BA8F 8B794 8C8CB 8C99B 8CACA 8CC0E ...
-OBJ_4C34B:
-        :: SWAP DUPTYPEREAL? NOTcasedrop OBJ_4C22E * 4C34B
+* %y #i -> : FUNCTION plot: plot y of curve i at the current x, joined to the last point; a non-real y breaks the curve
+PlotFcnPt:
+        :: SWAP DUPTYPEREAL? NOTcasedrop ClrLastPt * 4C34B
           GETYPOS 1GETLAM SWAP2DUP PIXON3 OBJ_4C265 ; * 4C364
 
 * refs (1): 4BA3F
 OBJ_4C382:
-        :: SWAP DUPTYPEREAL? NOTcasedrop OBJ_4C22E * 4C382
+        :: SWAP DUPTYPEREAL? NOTcasedrop ClrLastPt * 4C382
           15GETLAM PtoR 2DUP PIXON3 OBJ_4C265 ;  * 4C39B
 
 * refs (1): 4BEBD
 OBJ_4C3B9:
-        :: SWAPDUP TYPECMP? NOTcasedrop OBJ_4C22E * 4C3B9
+        :: SWAPDUP TYPECMP? NOTcasedrop ClrLastPt * 4C3B9
           OBJ_4C41D PIXON3 DROP ;                * 4C3D2
 
 * refs (3): 4BED1 8A4D2 8B1E2
 OBJ_4C3E6:
-        :: SWAP DUP TYPECMP? NOTcasedrop OBJ_4C22E * 4C3E6
+        :: SWAP DUP TYPECMP? NOTcasedrop ClrLastPt * 4C3E6
           OBJ_4C41D 2DUP PIXON3 OBJ_4C265 ;      * 4C404
 
 * refs (2): 4C3D2 4C404
@@ -138,7 +142,7 @@ OBJ_4C4B8:
             NOT?SEMI                             * 4C521
             OBJ_4C166 ;                          * 4C526
           ERRTRAP PLOTERR ~ATTNFLG@;#0=?SEMI;ExitAtLOOP LOOP ATTNFLGCLR * 4C530
-          18GETLAM RESETDEPTH OBJ_4C0E4 ;        * 4C549
+          18GETLAM RESETDEPTH PurgePlotVars ;    * 4C549
 
 * refs (1): 4C4C2
 OBJ_4C55D:
@@ -200,18 +204,18 @@ OBJ_4C7D3:
         :: SWAPDUP TYPECMP? ITE                  * 4C7D3
           :: C%>% %0= ; TRUE                     * 4C7E7
           case                                   * 4C800
-          :: DUPTYPEREAL? NOTcasedrop OBJ_4C22E  * 4C805
+          :: DUPTYPEREAL? NOTcasedrop ClrLastPt  * 4C805
             GETYPOS 1GETLAM SWAP PIXON3 DROP ;   * 4C819
-          DROP OBJ_4C22E ;                       * 4C837
+          DROP ClrLastPt ;                       * 4C837
 
 * refs (1): 4BCF6
 OBJ_4C846:
         :: SWAP DUP TYPECMP? ITE                 * 4C846
           :: C%>% %0= ; TRUE                     * 4C85F
           case                                   * 4C878
-          :: DUPTYPEREAL? NOTcasedrop OBJ_4C22E  * 4C87D
+          :: DUPTYPEREAL? NOTcasedrop ClrLastPt  * 4C87D
             GETYPOS 1GETLAM SWAP2DUP PIXON3 OBJ_4C265 ; * 4C891
-          DROP OBJ_4C22E ;                       * 4C8AF
+          DROP ClrLastPt ;                       * 4C8AF
 
 * refs (3): 4BCC4 4C4F9 B63EE
 doerr607:
@@ -293,12 +297,12 @@ OBJ_4CCF8:
 
 * refs (1): 4BA2B
 OBJ_4CDD9:
-        :: SWAP DUPTYPEREAL? NOTcasedrop OBJ_4C22E * 4CDD9
+        :: SWAP DUPTYPEREAL? NOTcasedrop ClrLastPt * 4CDD9
           15GETLAM PtoR PIXON3 DROP ;            * 4CDF2
 
 * refs (10): 4BA7B 8C8B7 8C987 8CAB6 8CBFA 8CCDE ...
 OBJ_4CE0B:
-        :: SWAP DUPTYPEREAL? NOTcasedrop OBJ_4C22E * 4CE0B
+        :: SWAP DUPTYPEREAL? NOTcasedrop ClrLastPt * 4CE0B
           SWAPDROP GETYPOS 1GETLAM SWAP PIXON3 ; * 4CE24
         BSS     10                               * 4CE42
 
@@ -621,7 +625,7 @@ OBJ_4DCC6:
 * refs (1): 4D3F8
 OBJ_4DCEC:
         :: OBJ_4DCC6 WINDOWTOP? IT WINDOWUP      * 4DCEC
-          ~8GETLAM;7GETLAM OBJ_4E0BA 7GETLAM !#1-IF>0 * 4DD05
+          ~8GETLAM;7GETLAM CursCorner 7GETLAM !#1-IF>0 * 4DD05
 
 * refs (3): 4DDA5 4DDDC 4DE18
 OBJ_4DD19:
@@ -632,17 +636,19 @@ OBJ_4DD19:
 * refs (1): 4D713
 OBJ_4DD73:
         :: OBJ_4DCC6 WINDOWBOT? IT WINDOWDOWN    * 4DD73
-          ~8GETLAM;7GETLAM OBJ_4E0BA 7GETLAM 13GETLAM !#1+IF<dim-1 OBJ_4DD19 ; * 4DD8C
+          ~8GETLAM;7GETLAM CursCorner 7GETLAM 13GETLAM !#1+IF<dim-1 * 4DD8C
+          OBJ_4DD19 ;                            * 4DDA5
 
 * refs (2): 0C8ED 4D51F
 OBJ_4DDAF:
         :: OBJ_4DCC6 WINDOWLEFT? IT WINDOWLEFT   * 4DDAF
-          ~8GETLAM;7GETLAM OBJ_4E0BA 8GETLAM !#1-IF>0 OBJ_4DD19 ; * 4DDC8
+          ~8GETLAM;7GETLAM CursCorner 8GETLAM !#1-IF>0 OBJ_4DD19 ; * 4DDC8
 
 * refs (2): 0C8E8 4D60F
 OBJ_4DDE6:
         :: OBJ_4DCC6 WINDOWRIGHT? IT WINDOWRIGHT * 4DDE6
-          ~8GETLAM;7GETLAM OBJ_4E0BA 8GETLAM 14GETLAM !#1+IF<dim-1 OBJ_4DD19 ; * 4DDFF
+          ~8GETLAM;7GETLAM CursCorner 8GETLAM 14GETLAM !#1+IF<dim-1 * 4DDFF
+          OBJ_4DD19 ;                            * 4DE18
 
 * refs (1): 3E8B6
 {GRAPH\DOT+}~1:
@@ -776,10 +782,11 @@ SUB_4E07D:
 
 * refs (2): 4DA85 4E4A6
 OBJ_4E092:
-        :: OBJ_4E0BA ROT GETLAM GBUFF 2SWAP GROB! ; * 4E092
+        :: CursCorner ROT GETLAM GBUFF 2SWAP GROB! ; * 4E092
 
 * refs (11): 4820B 48260 4845E 4884B 4DD0A 4DD91 ...
-OBJ_4E0BA:
+* #x #y -> #x-2 #y-2 (floored at 0): the corner of the 5x5 area under the PICTURE cursor
+CursCorner:
         CON(5)  (*)+5                            * 4E0BA  primitive code object
         ASSEMBLE
         GOSBVL  POP2#                            * 4E0BF
@@ -975,12 +982,12 @@ PREMARKON:
 * refs (3): 457B2 4980F 4E438
 NEWMARK:
         :: ~8GETLAM;7GETLAM 2DUP TOTEMPOB 12PUTLAM TOTEMPOB 1PUTLAM * 4E4B0
-          OBJ_4E0BA 4GETLAM DUP 11PUTLAM GROBDIM 4PICK#+SWAP 3PICK#+ * 4E4D3
+          CursCorner 4GETLAM DUP 11PUTLAM GROBDIM 4PICK#+SWAP 3PICK#+ * 4E4D3
           HARDBUFF 5UNROLL SUBGROB 4PUTLAM CROSSMARKOFF CROSSMARKON ; * 4E4F6
 
 * refs (2): 4E64F 4ECC1
 OBJ_4E519:
-        :: 1GETLAM 12GETLAM OBJ_4E0BA 11GETLAM GROBDIM 4PICK#+SWAP 3PICK#+ * 4E519
+        :: 1GETLAM 12GETLAM CursCorner 11GETLAM GROBDIM 4PICK#+SWAP 3PICK#+ * 4E519
           HARDBUFF 5UNROLL SUBGROB 11PUTLAM ;    * 4E541
 
 * refs (1): 3E85C
@@ -1166,7 +1173,7 @@ OBJ_4ED70:
           BINT1 OBJ_4A96E DROP ' ' OBJ_4BF71 ITE OBJ_4C616 OBJ_4B747 * 4EDA7
           BINT1 BINT31 TestSysFlag ITE           * 4EDD4
           :: '                                   * 4EDE8
-            :: DROP COLA OBJ_5135F               * 4EDF2
+            :: DROP COLA PlotEval                * 4EDF2
             ;                                    * 4EE06
           ;                                      * 4EE0B
           :: ' OBJ_4EF73 ;                       * 4EE10
@@ -1194,7 +1201,7 @@ OBJ_4EEA1:
 PPAR>ZPAR:
         :: OBJ_496A0 ITE DROP                    * 4EEBF
           :: %4 %4 %0_2A2B4 ;                    * 4EED3
-          'IDPAR OBJ_4735A ?SKIP MAKEPVARS       * 4EEEC
+          'IDPAR RclPlotVar? ?SKIP MAKEPVARS     * 4EEEC
           OBJ_49A74 ;                            * 4EF00
 
 * refs (2): 4A9F6 4B540
@@ -1212,7 +1219,7 @@ OBJ_4EF73:
         :: BINT28 PUTLAM ERRSET EVALCRUNCH ERRTRAP * 4EF73
           :: ERROR@ # 100 #/ SWAPDROP BINT3 #<>case ERRJMP * 4EF91
             ERRORCLR BINT31 TestSysFlag ?SKIP    * 4EFBE
-            :: BINT28 GETLAM OBJ_4C22E ;         * 4EFD2
+            :: BINT28 GETLAM ClrLastPt ;         * 4EFD2
             2RDROP ;                             * 4EFEB
           0LASTOWDOB! CK1NOLASTWD U>nbr ;        * 4EFF5
 

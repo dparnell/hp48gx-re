@@ -192,7 +192,7 @@ L_99448:
           RTNCC                                  * 9944F
 L_99451:
           GOSBVL  STAB0                          * 99451
-          GOSBVL  SUB_785B8                      * 99458
+          GOSBVL  RCLtmp1%%                      * 99458
           GOSBVL  GETCD0                         * 9945F
           GOSBVL  MULTF                          * 99466
           GOSUB   SUB_99534                      * 9946D
@@ -520,7 +520,7 @@ L_9987A:
           GOSUB   STAB0~jump_8                   * 9990F
           GOSBVL  SUB_78629                      * 99913
           GOSBVL  STCD2                          * 9991A
-          GOSBVL  SUB_785B8                      * 99921
+          GOSBVL  RCLtmp1%%                      * 99921
           GOSUB   RADD1~jump_3                   * 99928
           GOSBVL  SUB_78688                      * 9992C
           GOSUB   RCCD0~jump_8                   * 99933
@@ -676,7 +676,7 @@ L_99AD9:
 * refs (1): 9998C
 SUB_99B04:
           GOSUB   STAB0~jump_8                   * 99B04
-          GOSBVL  SUB_785B8                      * 99B08
+          GOSBVL  RCLtmp1%%                      * 99B08
           GOSUB   RADD1~jump_3                   * 99B0F
           GOSBVL  SUB_78688                      * 99B13
           GOSUB   RCAB0~jump_3                   * 99B1A

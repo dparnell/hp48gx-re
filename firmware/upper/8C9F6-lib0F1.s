@@ -18,10 +18,10 @@ POLAR_8C9FD:
             :: BINT25 GETLAM PTR NULL:: EQUALcasedrop Message60E * 8CA57
               15GETLAM SWAP %>C% ;               * 8CA75
           }                                      * 8CA89
-          FALSE OBJ_4B6C5                        * 8CA8E
+          FALSE ~';PlotEval                      * 8CA8E
           :: BINT31 TestSysFlag ITE              * 8CA98
             :: ' OBJ_4CE0B ;                     * 8CAAC
-            :: ' OBJ_4C34B ;                     * 8CAC0
+            :: ' PlotFcnPt ;                     * 8CAC0
           ;                                      * 8CAD4
           :: RAD? ITE % 3.49065850399E-2 %2      * 8CAD9
           ;                                      * 8CB02
@@ -42,10 +42,10 @@ PARAMETRIC:
             :: BINT25 GETLAM PTR NULL:: EQUALcasedrop Message60E * 8CB9B
               15GETLAM SWAP TWO{}N ;             * 8CBB9
           }                                      * 8CBCD
-          FALSE OBJ_4B6C5                        * 8CBD2
+          FALSE ~';PlotEval                      * 8CBD2
           :: BINT31 TestSysFlag ITE              * 8CBDC
             :: ' OBJ_4CE0B ;                     * 8CBF0
-            :: ' OBJ_4C34B ;                     * 8CC04
+            :: ' PlotFcnPt ;                     * 8CC04
           ;                                      * 8CC18
           :: 16GETLAM 15GETLAM %- BINT130 UNCOERCE %/ ; FALSE FALSE FALSE * 8CC1D
           OBJ_73211 OBJ_73270 ROMPTR 0F1 03F OBJ_73526 OBJ_48DCE } * 8CC54
@@ -58,10 +58,10 @@ PARAMETRIC:
 TRUTH:
         :: CK0 'IDTRUTH PUTPTYPE ;               * 8CC7F
 
-        { FALSE OBJ_4C4B8 NOP TRUE NULL{} FALSE OBJ_4B6C5 * 8CC98
+        { FALSE OBJ_4C4B8 NOP TRUE NULL{} FALSE ~';PlotEval * 8CC98
           :: BINT31 TestSysFlag ITE              * 8CCC0
             :: ' OBJ_4CE0B ;                     * 8CCD4
-            :: ' OBJ_4C34B ;                     * 8CCE8
+            :: ' PlotFcnPt ;                     * 8CCE8
           ;                                      * 8CCFC
           :: %%1 10GETLAM %%/>% ; FALSE TRUE TRUE OBJ_73211 OBJ_73270 * 8CD01
           ROMPTR 0F1 03F OBJ_73594 NOP }         * 8CD33
@@ -75,10 +75,10 @@ SCATTER:
         :: CK0 'IDSCATTER PUTPTYPE ;             * 8CD54
 
         { FALSE                                  * 8CD6D
-          :: DROP OBJ_4C8D1 ; NOP TRUE NULL{} TRUE OBJ_4B6C5 * 8CD77
+          :: DROP OBJ_4C8D1 ; NOP TRUE NULL{} TRUE ~';PlotEval * 8CD77
           :: BINT31 TestSysFlag ITE              * 8CDA4
             :: ' OBJ_4CE0B ;                     * 8CDB8
-            :: ' OBJ_4C34B ;                     * 8CDCC
+            :: ' PlotFcnPt ;                     * 8CDCC
           ;                                      * 8CDE0
           :: %%1 10GETLAM %%/>% ; TRUE FALSE FALSE OBJ_73211 OBJ_73270 * 8CDE5
           ROMPTR 0F1 03F OBJ_7355D OBJ_48E28 }   * 8CE17
@@ -92,10 +92,10 @@ HISTOGRAM:
         :: CK0 'IDHISTOGRAM PUTPTYPE ;           * 8CE38
 
         { FALSE                                  * 8CE51
-          :: DROP OBJ_4D993 ; NOP TRUE NULL{} FALSE OBJ_4B6C5 * 8CE5B
+          :: DROP OBJ_4D993 ; NOP TRUE NULL{} FALSE ~';PlotEval * 8CE5B
           :: BINT31 TestSysFlag ITE              * 8CE88
             :: ' OBJ_4CE0B ;                     * 8CE9C
-            :: ' OBJ_4C34B ;                     * 8CEB0
+            :: ' PlotFcnPt ;                     * 8CEB0
           ;                                      * 8CEC4
           :: 16GETLAM 15GETLAM %- %13 %/ ; FALSE FALSE FALSE OBJ_73211 * 8CEC9
           OBJ_73270 ROMPTR 0F1 03F OBJ_73594 OBJ_48E8C } * 8CF00
@@ -109,10 +109,10 @@ BAR:
         :: CK0 'IDBAR PUTPTYPE ;                 * 8CF26
 
         { FALSE                                  * 8CF3F
-          :: DROP OBJ_4D9CF ; NOP TRUE NULL{} FALSE OBJ_4B6C5 * 8CF49
+          :: DROP OBJ_4D9CF ; NOP TRUE NULL{} FALSE ~';PlotEval * 8CF49
           :: BINT31 TestSysFlag ITE              * 8CF76
             :: ' OBJ_4CE0B ;                     * 8CF8A
-            :: ' OBJ_4C34B ;                     * 8CF9E
+            :: ' PlotFcnPt ;                     * 8CF9E
           ;                                      * 8CFB2
           %1 FALSE FALSE FALSE OBJ_73211 OBJ_73270 ROMPTR 0F1 03F OBJ_73594 * 8CFB7
           OBJ_48ECD }                            * 8CFE5

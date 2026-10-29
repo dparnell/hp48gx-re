@@ -388,7 +388,7 @@ OBJ_36D35:
 * refs (2): C9229 CA937
 OBJ_36D5D:
         :: DUPUNROT OBJ_36E5C DUPTYPEREAL? case OBJ_36D35 * 36D5D
-          TOTEMPOB SWAP OBJ_7D6D2 SWAP OBJ_36EE3 ; * 36D7B
+          TOTEMPOB SWAP OBJ_7D6D2 SWAP STO_HERE ; * 36D7B
 
 * refs (3): 36DBC 36E25 36E4D
 OBJ_36D99:
@@ -414,12 +414,14 @@ OBJ_36DF8:
           U>nbr ;                                * 36E16
 
 * refs (14): C7CAD C880A C8942 C8A15 C8B0C C8C21 ...
-OBJ_36E20:
+* ob -> [%]: evaluate (honouring ATTN) and require a real array
+CRUNCH>RARRY:
         :: OBJ_36D99 DUP TYPERARRY? NOTcase SETTYPEERR * 36E20
         ;                                        * 36E3E
 
 * refs (12): B5DDF B5EA9 C7C07 C814E C8FBB C90A7 ...
-OBJ_36E43:
+* id -> % or [%]: recall (creating the variable as 0 if needed), evaluate, and require a number or a real array
+RCLCRUNCH>%ARRY:
         :: OBJ_36E93 OBJ_36D99 OBJ_36E75 ;       * 36E43
 
 * refs (3): 36D67 C7A7F C7F91
@@ -434,7 +436,7 @@ OBJ_36E75:
 * refs (2): 36DD0 36E48
 OBJ_36E93:
         :: dup;RclInVars(gn)? case SWAPDROP      * 36E93
-          %0_2A2B4 DUPROT OBJ_36EE3 ;            * 36EA7
+          %0_2A2B4 DUPROT STO_HERE ;             * 36EA7
 
 * refs (28): 36D4E C8253 C8296 C82E9 C8350 C83A3 ...
 * Probably: ob id -> : store ob in id, keeping the units of a unit object already stored there
@@ -443,7 +445,8 @@ OBJ_36EBB:
           :: ROT Unbr>U SWAP ;                   * 36ECA
 
 * refs (11): 36D8F 36EB1 C8932 C8A05 C8AFC C8C11 ...
-OBJ_36EE3:
+* ob id -> : STO in the current directory (the counterpart of SAFE@_HERE)
+STO_HERE:
           :: PTR DoHere: STO ; ;                 * 36EE3
 
 * refs (3): C7A8E C7D77 C7FA0
@@ -470,7 +473,8 @@ OBJ_36F74:
         :: SWAP r->c(ar) SWAP ;                  * 36F97
 
 * refs (12): 904F8 905A2 90778 90BBB 9100E 92CF0 ...
-OBJ_36FB0:
+* #a #b -> #a+#b+1
+#+#1+:
         CON(5)  (*)+5                            * 36FB0  primitive code object
         ASSEMBLE
         GOSUB   POP2#~jump                       * 36FB5
@@ -1522,7 +1526,8 @@ F%>L%:
         :: dup;r?:dq/sk %>%% C%>%% %%>C%% ;      * 37D19
 
 * refs (13): 90615 915B8 915C2 92A4C 93ED4 94064 ...
-OBJ_37D37:
+* L% -> %%: |x|^2 (re^2+im^2 for an extended complex number)
+L%ABSSQ:
         :: DUPTYPEEREL? case                     * 37D37
           :: DUP %%* ;                           * 37D46
           C%%>%% %%SQR ;                         * 37D5A

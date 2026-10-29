@@ -162,7 +162,7 @@ L_00218:
 L_00236:
         GOSUB   L_00768                          * 00236
 L_0023A:
-        GOSUB   SUB_008D8                        * 0023A
+        GOSUB   D1=IRAM~jump                     * 0023A
         D1=(4)  #0608                            * 0023E
         C=DAT1  W                                * 00244
         B=C     W                                * 00248
@@ -517,7 +517,7 @@ SUB_00672:
         GOSUB   SUB_006ED                        * 00683
         B=A     B                                * 00687
         BSR     A                                * 0068A
-        GOSUB   SUB_008D8                        * 0068C
+        GOSUB   D1=IRAM~jump                     * 0068C
         D1=(4)  #0840                            * 00690
         C=DAT1  1                                * 00696
         C=C&B   P                                * 0069A
@@ -586,7 +586,7 @@ L_00755:
         C=DAT0  XS                               * 00762
         RTNCC                                    * 00766
 L_00768:
-        GOSUB   SUB_008D8                        * 00768
+        GOSUB   D1=IRAM~jump                     * 00768
         D1=(4)  #065B                            * 0076C
         C=DAT1  S                                * 00772
         ?C=0    S                                * 00776
@@ -616,7 +616,7 @@ L_007A6:
 * ( A.W -> ) Sets KEYSTATE and KEYBUFFER
 * refs (2): 007AA 02818
 SrvcKbdAB:
-        GOSUB   SUB_008D8                        * 007B5
+        GOSUB   D1=IRAM~jump                     * 007B5
         LC(1)   #3                               * 007B9
 L_007BC:
         ?B=0    W                                * 007BC
@@ -724,8 +724,8 @@ L_008C9:
         GOTO    L_00768                          * 008D4
 
 * refs (11): 0023A 0068C 00768 007B5 00D8E 00FF8 ...
-SUB_008D8:
-        GOVLNG  SUB_0C198                        * 008D8
+D1=IRAM~jump:
+        GOVLNG  D1=IRAM                          * 008D8
 
 * refs (1): 00604
 SUB_008DF:
@@ -1221,7 +1221,7 @@ FLUSHKEYS:
 * Flushes attn counter.
 * refs (4): 02053 027BF 0442C 81061
 FlushAttn:
-        GOSUB   SUB_008D8                        * 00D8E
+        GOSUB   D1=IRAM~jump                     * 00D8E
         D1=(4)  #07F7                            * 00D92
         C=0     A                                * 00D98
         DAT1=C  A                                * 00D9A
@@ -1410,7 +1410,7 @@ L_00FE5:
         LC(5)   L_0023A                          * 00FED
         GOTO    L_00ECF                          * 00FF4
 L_00FF8:
-        GOSUB   SUB_008D8                        * 00FF8
+        GOSUB   D1=IRAM~jump                     * 00FF8
         D1=(4)  #07F7                            * 00FFC
         C=DAT1  A                                * 01002
         C=C+1   A                                * 01005
@@ -1419,7 +1419,7 @@ L_00FF8:
 L_0100D:
         GOTO    L_01081                          * 0100D
 L_01011:
-        GOSUB   SUB_008D8                        * 01011
+        GOSUB   D1=IRAM~jump                     * 01011
         D1=(4)  #069C                            * 01015
         P=      10                               * 0101B
 L_0101D:
@@ -1434,7 +1434,7 @@ L_0101D:
         C=R1.F  A                                * 01037
         DAT1=C  11                               * 0103D
         GOSBVL  SUB_32A4D                        * 01041
-        GOSUB   SUB_008D8                        * 01048
+        GOSUB   D1=IRAM~jump                     * 01048
         D1=(4)  #06BA                            * 0104C
         C=DAT1  11                               * 01052
         R1=C.F  A                                * 01056
@@ -1463,7 +1463,7 @@ L_01087:
 
 * refs (2): 0109D 80C9A
 SUB_010A9:
-        GOSUBL  SUB_008D8                        * 010A9
+        GOSUBL  D1=IRAM~jump                     * 010A9
         D1=(4)  #0010                            * 010AF
         C=0     W                                * 010B5
         P=      12                               * 010B8
@@ -1476,7 +1476,7 @@ L_010BA:
         GONC    L_010BA                          * 010C9
         RTN                                      * 010CC
 L_010CE:
-        GOSUBL  SUB_008D8                        * 010CE
+        GOSUBL  D1=IRAM~jump                     * 010CE
         D1=(4)  #0834                            * 010D4
         LC(1)   #F                               * 010DA
         DAT1=C  1                                * 010DD
@@ -1556,7 +1556,7 @@ L_01176:
         GOSUB   SUB_0119D                        * 01176
         ST=0    6                                * 0117A
 L_0117D:
-        GOSUBL  SUB_008D8                        * 0117D
+        GOSUBL  D1=IRAM~jump                     * 0117D
         D1=(4)  #065A                            * 01183
         LC(1)   #F                               * 01189
         DAT1=C  1                                * 0118C
@@ -1717,7 +1717,7 @@ L_01333:
 L_01348:
         ST=0    2                                * 01348
         B=C     W                                * 0134B
-        GOSUB   SUB_016DB                        * 0134E
+        GOSUB   D1=IRAM~jump_2                   * 0134E
         D1=(4)  #0835                            * 01352
         C=DAT1  P                                * 01358
         ?C#0    P                                * 0135C
@@ -1795,7 +1795,7 @@ L_01445:
         GOSBVL  CSRW5                            * 0144A
         RSTK=C                                   * 01451
 L_01453:
-        GOSUB   SUB_016DB                        * 01453
+        GOSUB   D1=IRAM~jump_2                   * 01453
         D1=(4)  #0069                            * 01457
         C=0     W                                * 0145D
         C=DAT1  13                               * 01460
@@ -1833,7 +1833,7 @@ L_014B2:
         LC(8)   #7E900000                        * 014B7
         A=C     W                                * 014C1
         A=A+B   W                                * 014C4
-        GOSUB   SUB_016E2                        * 014C7
+        GOSUB   D0=IRAM~jump                     * 014C7
         D0=(4)  #0077                            * 014CB
         C=DAT0  1                                * 014D1
         ?C=0    P                                * 014D5
@@ -1951,7 +1951,7 @@ L_01607:
         GOYES   L_01634                          * 0162F
         A=C     W                                * 01631
 L_01634:
-        GOSUB   SUB_016E2                        * 01634
+        GOSUB   D0=IRAM~jump                     * 01634
         GOSUB   SUB_01750                        * 01638
         ?C<A    W                                * 0163C
         GOYES   L_01660                          * 0163F
@@ -2011,12 +2011,12 @@ L_016B5:
         RTNSC                                    * 016D9
 
 * refs (2): 0134E 01453
-SUB_016DB:
-        GOVLNG  SUB_0C198                        * 016DB
+D1=IRAM~jump_2:
+        GOVLNG  D1=IRAM                          * 016DB
 
 * refs (2): 014C7 01634
-SUB_016E2:
-        GOVLNG  SUB_0C1A7                        * 016E2
+D0=IRAM~jump:
+        GOVLNG  D0=IRAM                          * 016E2
 
 * refs (3): 01698 01A82 027EA
 SUB_016E9:
@@ -2111,7 +2111,7 @@ makebeep:
         R2=A                                     * 017D8
         A=A+C   W                                * 017DB
         C=C+C   W                                * 017DE
-        GOSBVL  SUB_65807                        * 017E1
+        GOSBVL  IntDivW                          * 017E1
         C=0     W                                * 017E8
         P=      0                                * 017EB
         LC(2)   #7C                              * 017ED
@@ -2120,7 +2120,7 @@ makebeep:
         A=0     W                                * 017F7
 L_017FA:
         LC(2)   #1A                              * 017FA
-        GOSBVL  SUB_65807                        * 017FE
+        GOSBVL  IntDivW                          * 017FE
         C=0     W                                * 01805
         C=C-1   X                                * 01808
         ?C>=A   W                                * 0180B
@@ -2144,7 +2144,7 @@ L_01813:
         A=R0                                     * 0184C
         A=A+C   W                                * 0184F
         C=D     W                                * 01852
-        GOSBVL  SUB_65807                        * 01855
+        GOSBVL  IntDivW                          * 01855
         A=A-1   W                                * 0185C
         GONC    L_01865                          * 0185F
         A=0     W                                * 01862
@@ -2262,7 +2262,7 @@ L_0195C:
         GOSUB   SUB_01A33                        * 019AB
         GOSBVL  SUB_00E0B                        * 019AF
         INTON                                    * 019B6
-        GOSBVL  SUB_0C1A7                        * 019BA
+        GOSBVL  D0=IRAM                          * 019BA
         D0=(4)  #065B                            * 019C1
         C=0     A                                * 019C7
         DAT0=C  1                                * 019C9
@@ -2542,7 +2542,7 @@ L_01CD9:
 
 * refs (1): 0198E
 SUB_01CEC:
-        GOSBVL  SUB_0C1A7                        * 01CEC
+        GOSBVL  D0=IRAM                          * 01CEC
         C=0     A                                * 01CF3
         D0=(4)  #06C5                            * 01CF5
         DAT0=C  1                                * 01CFB
@@ -2557,7 +2557,7 @@ L_01D44:
         GOSBVL  SUB_12690                        * 01D44
         GOSUB   SUB_019DA                        * 01D4B
         GOSUB   DispOff                          * 01D4F
-        GOSBVL  SUB_0C1A7                        * 01D53
+        GOSBVL  D0=IRAM                          * 01D53
         D0=(4)  #068D                            * 01D5A
         D1=(5)  DISPADDR                         * 01D60
         C=DAT0  A                                * 01D67
@@ -2687,14 +2687,14 @@ L_01EB9:
         GOYES   L_01EC5                          * 01EC1
         A=0     A                                * 01EC3
 L_01EC5:
-        GOSUB   SUB_01EF6                        * 01EC5
+        GOSUB   D1=IRAM~jump_3                   * 01EC5
         D1=(4)  #0841                            * 01EC9
         C=DAT1  B                                * 01ECF
         A=A!C   B                                * 01ED2
         GOSUB   SUB_01EFD                        * 01ED6
         C=B     A                                * 01EDA
         RSTK=C                                   * 01EDC
-        GOSUB   SUB_01EF6                        * 01EDE
+        GOSUB   D1=IRAM~jump_3                   * 01EDE
         D1=(4)  #0642                            * 01EE2
         C=DAT1  X                                * 01EE8
 
@@ -2703,8 +2703,8 @@ OUT=CC=in:
         GOVLNG  CINRTN                           * 01EEF
 
 * refs (2): 01EC5 01EDE
-SUB_01EF6:
-        GOVLNG  SUB_0C198                        * 01EF6
+D1=IRAM~jump_3:
+        GOVLNG  D1=IRAM                          * 01EF6
 
 * refs (2): 01ED6 804B9
 SUB_01EFD:

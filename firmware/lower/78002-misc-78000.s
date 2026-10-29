@@ -1,5 +1,6 @@
 * HP 48GX ROM revision R, #78002-#7A2B2: not yet identified
 * Addresses in the right-hand comments are those of the original ROM.
+* Most referenced: RCLtmp1%%
 * Follows on from the previous file (at #78002 in the original ROM).
         GOSUB   L_787E6                          * 78002
         GOSUB   RCCD0~jump_3                     * 78006
@@ -285,7 +286,7 @@ L_78350:
         C=R0                                     * 78350
         R4=C                                     * 78353
         GOSUB   XYEX~jump_2                      * 78356
-        GOSUB   SUB_785B8                        * 7835A
+        GOSUB   RCLtmp1%%                        * 7835A
         ?ST=1   3                                * 7835E
         GOYES   L_78367                          * 78361
         GOSUB   SUB_785BE                        * 78363
@@ -330,7 +331,7 @@ SUB_783B6:
         GOSUB   SUB_785BE                        * 783BF
         GOTO    L_783CB                          * 783C3
 L_783C7:
-        GOSUB   SUB_785B8                        * 783C7
+        GOSUB   RCLtmp1%%                        * 783C7
 L_783CB:
         GOSUB   L_78760                          * 783CB
 
@@ -365,7 +366,7 @@ SUB_78405:
 SUB_78411:
         GOSUB   SUB_78591                        * 78411
         GOSUB   SUB_7868E                        * 78415
-        GOSUB   SUB_785B8                        * 78419
+        GOSUB   RCLtmp1%%                        * 78419
         GOSUB   SUB_78987                        * 7841D
         GOSUB   SUB_7866A                        * 78421
         C=R4                                     * 78425
@@ -383,7 +384,7 @@ XYEX~jump_2:
 
 * refs (6): 78340 783E9 783F5 784FD 7888E 78903
 SUB_7843F:
-        GOSUB   SUB_785B8                        * 7843F
+        GOSUB   RCLtmp1%%                        * 7843F
         GOSUB   SUB_78611                        * 78443
         GOSUB   L_7858A                          * 78447
         GOSUB   SUB_78605                        * 7844B
@@ -434,7 +435,7 @@ SUB_784A2:
 SUB_784B2:
         GOSUB   SUB_784E2                        * 784B2
 L_784B6:
-        GOSUB   SUB_785B8                        * 784B6
+        GOSUB   RCLtmp1%%                        * 784B6
         GOSUB   SUB_786C7                        * 784BA
         GOSUB   SUB_78782                        * 784BE
         R4=C                                     * 784C2
@@ -556,7 +557,8 @@ L_785B2:
         GOTO    L_785EA                          * 785B4
 
 * refs (12): 7835A 783C7 78419 7843F 784B6 78820 ...
-SUB_785B8:
+* A/B = the %% in scratch slot 1 of IRAMBUFF
+RCLtmp1%%:
         P=      1                                * 785B8
         GOTO    L_785EA                          * 785BA
 
@@ -921,7 +923,7 @@ SUB_78818:
 
 * refs (6): 780C9 780DC 781D6 78809 78829 7887F
 SUB_78820:
-        GOSUB   SUB_785B8                        * 78820
+        GOSUB   RCLtmp1%%                        * 78820
 L_78824:
         A=B     M                                * 78824
         RTN                                      * 78827
@@ -1088,7 +1090,7 @@ SUB_78943:
 
 * refs (2): 7829C 782AF
 SUB_78955:
-        GOSUB   SUB_785B8                        * 78955
+        GOSUB   RCLtmp1%%                        * 78955
         GOSUB   SUB_78611                        * 78959
         GOSUB   SUB_78670                        * 7895D
         GOSUB   XYEX~jump_2                      * 78961
@@ -1101,7 +1103,7 @@ L_7896C:
 
 * refs (1): 7807E
 SUB_7897B:
-        GOSUB   SUB_785B8                        * 7897B
+        GOSUB   RCLtmp1%%                        * 7897B
         GOSUB   SUB_78987                        * 7897F
         GOTO    SUB_7866A                        * 78983
 

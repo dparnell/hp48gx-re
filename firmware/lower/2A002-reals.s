@@ -1069,7 +1069,7 @@ L_2AAFF:
 %SIN:
         CON(5)  (*)+5                            * 2ABEF  primitive code object
         GOSUB   POP1%SPLITA~jump                 * 2ABF4
-        GOSUB   SUB_2AEF6                        * 2ABF8
+        GOSUB   GetAngleST                       * 2ABF8
         GOSUBL  SUB_2B6E0                        * 2ABFC
         GOTO    L_2AEE9                          * 2AC02
 
@@ -1078,7 +1078,7 @@ L_2AAFF:
 %%SIN:
         CON(5)  (*)+5                            * 2AC06  primitive code object
         GOSUB   POP1%%~jump                      * 2AC0B
-        GOSUB   SUB_2AEF6                        * 2AC0F
+        GOSUB   GetAngleST                       * 2AC0F
         GOTO    L_2AC36                          * 2AC13
 
 * %%deg -> %%sin
@@ -1106,7 +1106,7 @@ L_2AC36:
 %COS:
         CON(5)  (*)+5                            * 2AC40  primitive code object
         GOSUB   POP1%SPLITA~jump                 * 2AC45
-        GOSUB   SUB_2AEF6                        * 2AC49
+        GOSUB   GetAngleST                       * 2AC49
         GOSUBL  SUB_2B6E9                        * 2AC4D
         GOTO    L_2AEE9                          * 2AC53
 
@@ -1115,7 +1115,7 @@ L_2AC36:
 %%COS:
         CON(5)  (*)+5                            * 2AC57  primitive code object
         GOSUB   POP1%%~jump                      * 2AC5C
-        GOSUB   SUB_2AEF6                        * 2AC60
+        GOSUB   GetAngleST                       * 2AC60
         GOTO    L_2AC87                          * 2AC64
 
 * %%deg -> %%cos
@@ -1143,7 +1143,7 @@ L_2AC87:
 %TAN:
         CON(5)  (*)+5                            * 2AC91  primitive code object
         GOSUB   POP1%SPLITA~jump                 * 2AC96
-        GOSUB   SUB_2AEF6                        * 2AC9A
+        GOSUB   GetAngleST                       * 2AC9A
         GOSUBL  SUB_2B6F2                        * 2AC9E
         GOTO    L_2AEE5                          * 2ACA4
 
@@ -1161,7 +1161,7 @@ L_2AC87:
 %ASIN:
         CON(5)  (*)+5                            * 2ACC1  primitive code object
         GOSUB   POP1%SPLITA~jump                 * 2ACC6
-        GOSUB   SUB_2AEF6                        * 2ACCA
+        GOSUB   GetAngleST                       * 2ACCA
         GOSUBL  SUB_2B704                        * 2ACCE
         GOTO    L_2AEE5                          * 2ACD4
 
@@ -1180,7 +1180,7 @@ L_2AC87:
 %ACOS:
         CON(5)  (*)+5                            * 2ACF1  primitive code object
         GOSUB   POP1%SPLITA~jump                 * 2ACF6
-        GOSUB   SUB_2AEF6                        * 2ACFA
+        GOSUB   GetAngleST                       * 2ACFA
         GOSUBL  SUB_2B70D                        * 2ACFE
         GOTO    L_2AEE5                          * 2AD04
 
@@ -1199,7 +1199,7 @@ L_2AC87:
 %ATAN:
         CON(5)  (*)+5                            * 2AD21  primitive code object
         GOSUB   POP1%SPLITA~jump                 * 2AD26
-        GOSUB   SUB_2AEF6                        * 2AD2A
+        GOSUB   GetAngleST                       * 2AD2A
         GOSUBL  SUB_2B6FB                        * 2AD2E
         GOTO    L_2AEE9                          * 2AD34
 
@@ -1208,7 +1208,7 @@ L_2AC87:
 %ANGLE:
         CON(5)  (*)+5                            * 2AD38  primitive code object
         GOSUB   Pop%ACSrSep~jump                 * 2AD3D
-        GOSUB   SUB_2AEF6                        * 2AD41
+        GOSUB   GetAngleST                       * 2AD41
         GOSUBL  SUB_2B6D7                        * 2AD45
         GOTO    L_2AEE9                          * 2AD4B
 
@@ -1227,7 +1227,7 @@ L_2AC87:
         P=      7                                * 2AD5F
         GONC    L_2AD75+1                        * 2AD61  never taken
 L_2AD64:
-        GOSUB   SUB_2AEF6                        * 2AD64
+        GOSUB   GetAngleST                       * 2AD64
         GOTO    L_2AD8B                          * 2AD68
 
 * %%x %%y -> %%deg
@@ -1401,7 +1401,8 @@ L_2AEEF:
         GOVLNG  PUSH%LOOP                        * 2AEEF
 
 * refs (11): 2ABF8 2AC0F 2AC49 2AC60 2AC9A 2ACCA ...
-SUB_2AEF6:
+* Read the angle mode (flags -17/-18) into ST9 (radians) and ST4 (grads); decimal mode
+GetAngleST:
         SETDEC                                   * 2AEF6
         ST=0    4                                * 2AEF8
         ST=1    9                                * 2AEFB

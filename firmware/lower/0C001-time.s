@@ -1,6 +1,6 @@
 * HP 48GX ROM revision R, #0C001-#0E005: Clock and alarms
 * Addresses in the right-hand comments are those of the original ROM.
-* Most referenced: CkATTNcode CSRW5 CSLW5 HXDCW NewAlarm(li) DAY# rGETATELN WSLOGN DATE CKTIME ASLW5 Ticks>TOD
+* Most referenced: CkATTNcode CSRW5 D1=IRAM D0=IRAM CSLW5 HXDCW NewAlarm(li) DAY# rGETATELN WSLOGN DATE CKTIME
 * Follows on from the previous file (at #0C001 in the original ROM).
         LC(1)   #B                               * 0C001
         ?C<=A   P                                * 0C004
@@ -136,14 +136,16 @@ L_0C169:
         RTN                                      * 0C196
 
 * refs (11): 008D8 016DB 01EF6 04999 0CA67 133AF ...
-SUB_0C198:
+* D1 = the internal RAM base (from #0011B); then D1=(4) reaches a system variable
+D1=IRAM:
         D1=(5)  =IR_16Hz_Clock                   * 0C198
         C=DAT1  A                                * 0C19F
         D1=C                                     * 0C1A2
         RTN                                      * 0C1A5
 
 * refs (11): 016E2 019BA 01CEC 01D53 02708 0276A ...
-SUB_0C1A7:
+* D0 = the internal RAM base (from #0011B)
+D0=IRAM:
         D0=(5)  =IR_16Hz_Clock                   * 0C1A7
         C=DAT0  A                                * 0C1AE
         D0=C                                     * 0C1B1
@@ -654,7 +656,7 @@ ATTNchk:
         SETHEX                                   * 0CA60
         CD1EX                                    * 0CA62
         D=C     A                                * 0CA65
-        GOSBVL  SUB_0C198                        * 0CA67
+        GOSBVL  D1=IRAM                          * 0CA67
         D1=(4)  #07F7                            * 0CA6E
         C=DAT1  A                                * 0CA74
         DCEX    A                                * 0CA77
@@ -1592,7 +1594,7 @@ L_0D549:
         ASL     W                                * 0D54C
         ASL     W                                * 0D54F
         LC(7)   #3652425                         * 0D552
-        GOVLNG  SUB_65807                        * 0D55B
+        GOVLNG  IntDivW                          * 0D55B
 
 * refs (2): 0D4D1 0D669
 SUB_0D562:
@@ -1765,7 +1767,7 @@ L_0D683:
         C=0     W                                * 0D68D
         LC(6)   #306001                          * 0D690
         GOSUB   AslW4                            * 0D698
-        GOSBVL  SUB_65807                        * 0D69C
+        GOSBVL  IntDivW                          * 0D69C
         B=A     W                                * 0D6A3
         GOSUB   SUB_0D5D2                        * 0D6A6
         B=A     W                                * 0D6AA
@@ -1869,7 +1871,7 @@ L_0D77E:
         LC(1)   #5                               * 0D78A
         A=A+C   W                                * 0D78D
         LC(1)   #7                               * 0D790
-        GOSBVL  SUB_65807                        * 0D793
+        GOSBVL  IntDivW                          * 0D793
         A=B     W                                * 0D79A
         A=A+1   A                                * 0D79D
         RTNCC                                    * 0D79F
@@ -2149,8 +2151,8 @@ SUB_0DA77:
         LC(2)   #60                              * 0DA7C
 
 * refs (2): 0DA92 0DAB7
-SUB_0DA80:
-        GOVLNG  SUB_65807                        * 0DA80
+IntDivW~jump:
+        GOVLNG  IntDivW                          * 0DA80
 
 * refs (1): 0CC03
 SUB_0DA87:
@@ -2160,7 +2162,7 @@ SUB_0DA87:
 * refs (1): 0D278
 SUB_0DA8E:
         GOSUB   SUB_0D9B4                        * 0DA8E
-        GOSUB   SUB_0DA80                        * 0DA92
+        GOSUB   IntDivW~jump                     * 0DA92
         R0=A                                     * 0DA96
         A=B     W                                * 0DA99
         GOSUB   HXDCW                            * 0DA9C
@@ -2168,7 +2170,7 @@ SUB_0DA8E:
         GOSBVL  ASLW5                            * 0DAA7
         C=0     W                                * 0DAAE
         LC(4)   #8192                            * 0DAB1
-        GOSUB   SUB_0DA80                        * 0DAB7
+        GOSUB   IntDivW~jump                     * 0DAB7
         AR0EX                                    * 0DABB
         GOSUB   SUB_0DA5F                        * 0DABE
         SETDEC                                   * 0DAC2
@@ -2249,7 +2251,7 @@ SUB_0DB7B:
         C=0     W                                * 0DB80
         P=      5                                * 0DB83
         LC(3)   #2A3                             * 0DB85
-        GOVLNG  SUB_65807                        * 0DB8A
+        GOVLNG  IntDivW                          * 0DB8A
 
 * Converts hex in A.W to BCD in A.W B.W C.W. See <REF>DCHXW Uses P CRY
 * refs (8): 0CC27 0D178 0D24B 0D3AC 0D991 0DA5F ...

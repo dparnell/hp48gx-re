@@ -383,7 +383,7 @@ nINTGSINH~1:
           { IntgPatVars                          * 82B10
             {                                    * 82B1A
               SYMBOL Π&1 xSINH ; NULL{}          * 82B1F
-              :: OBJ_5B375 Π&1                   * 82B38
+              :: intgLinArg Π&1                  * 82B38
                 SYMBOL Π&1 xCOSH ; ;             * 82B47
               NULL{} }                           * 82B60
             {                                    * 82B6A
@@ -392,12 +392,12 @@ nINTGSINH~1:
 * ROMPTR 0F0 009
 * refs (1): 82007
 nINTGTANH~2:
-              :: OBJ_5B375 Π&1                   * 82B9C
+              :: intgLinArg Π&1                  * 82B9C
                 SYMBOL Π&1 xSINH xINV xNEG ; ;   * 82BAB
               NULL{} }                           * 82BCE
             {                                    * 82BD8
               SYMBOL Π&1 xSINH %2 x^ xINV ; NULL{} * 82BDD
-              :: OBJ_5B375 Π&1                   * 82C05
+              :: intgLinArg Π&1                  * 82C05
                 SYMBOL Π&1 xTANH xINV xNEG ; ;   * 82C14
               NULL{} }                           * 82C37
             {                                    * 82C41
@@ -406,7 +406,7 @@ nINTGTANH~2:
 * ROMPTR 0F0 00A
 * refs (1): 82007
 nINTGCOSH~2:
-              :: OBJ_5B375 Π&1                   * 82C73
+              :: intgLinArg Π&1                  * 82C73
                 SYMBOL Π&1 xTANH xLN ; ;         * 82C82
               NULL{} }                           * 82CA0
           }                                      * 82CAA
@@ -419,7 +419,7 @@ nINTGCOSH~1:
           { IntgPatVars                          * 82CC3
             {                                    * 82CCD
               SYMBOL Π&1 xCOSH ; NULL{}          * 82CD2
-              :: OBJ_5B375 Π&1                   * 82CEB
+              :: intgLinArg Π&1                  * 82CEB
                 SYMBOL Π&1 xSINH ; ;             * 82CFA
               NULL{} }                           * 82D13
             {                                    * 82D1D
@@ -428,7 +428,7 @@ nINTGCOSH~1:
 * ROMPTR 0F0 00C
 * refs (1): 82007
 ROMP_0F0_00C:
-              :: OBJ_5B375 Π&1                   * 82D4A
+              :: intgLinArg Π&1                  * 82D4A
                 SYMBOL Π&1 xTANH ; ;             * 82D59
               NULL{} }                           * 82D72
             {                                    * 82D7C
@@ -446,7 +446,7 @@ nINTGTANH~1:
           { IntgPatVars                          * 82E19
             {                                    * 82E23
               SYMBOL Π&1 xTANH ; NULL{}          * 82E28
-              :: OBJ_5B375 Π&1                   * 82E41
+              :: intgLinArg Π&1                  * 82E41
                 SYMBOL Π&1 xCOSH xLN ; ;         * 82E50
               NULL{} }                           * 82E6E
             {                                    * 82E78
@@ -454,12 +454,12 @@ nINTGTANH~1:
               NULL{} }                           * 82EB5
             {                                    * 82EBF
               SYMBOL Π&1 xTANH Π&1 xCOSH xINV x* ; NULL{} * 82EC4
-              :: OBJ_5B375 Π&1                   * 82EF1
+              :: intgLinArg Π&1                  * 82EF1
                 SYMBOL Π&1 xCOSH xINV ; ;        * 82F00
               NULL{} }                           * 82F1E
             {                                    * 82F28
               SYMBOL Π&1 xTANH xINV ; NULL{}     * 82F2D
-              :: OBJ_5B375 Π&1                   * 82F4B
+              :: intgLinArg Π&1                  * 82F4B
                 SYMBOL Π&1 xSINH xLN ; ;         * 82F5A
               NULL{} }                           * 82F78
           }                                      * 82F82
@@ -472,7 +472,7 @@ nINTGEXPM~1:
           { IntgPatVars                          * 82F9B
             {                                    * 82FA5
               SYMBOL Π&1 xEXPM ; NULL{}          * 82FAA
-              :: OBJ_5B375 Π&1                   * 82FC3
+              :: intgLinArg Π&1                  * 82FC3
                 SYMBOL Π&1 xEXP Π&1 x- ; ;       * 82FD2
               NULL{} }                           * 82FF5
           }                                      * 82FFF
@@ -485,7 +485,7 @@ nINTGALOG~1:
           { IntgPatVars                          * 83018
             {                                    * 83022
               SYMBOL Π&1 xALOG ; NULL{}          * 83027
-              :: OBJ_5B375 Π&1                   * 83040
+              :: intgLinArg Π&1                  * 83040
                 SYMBOL % 4.34294481904E-1 Π&1 xALOG x* ; ; * 8304F
               NULL{} }                           * 83082
           }                                      * 8308C
@@ -498,7 +498,7 @@ nINTGLN~1:
           { IntgPatVars                          * 830A5
             {                                    * 830AF
               SYMBOL Π&1 xLN ; NULL{}            * 830B4
-              :: OBJ_5B375 Π&1                   * 830CD
+              :: intgLinArg Π&1                  * 830CD
                 SYMBOL Π&1 Π&1 xLN x* Π&1 x- ; ; * 830DC
               NULL{} }                           * 83109
           }                                      * 83113
@@ -511,7 +511,7 @@ nINTGLOG~1:
           { IntgPatVars                          * 8312C
             {                                    * 83136
               SYMBOL Π&1 xLOG ; NULL{}           * 8313B
-              :: OBJ_5B375 Π&1                   * 83154
+              :: intgLinArg Π&1                  * 83154
                 SYMBOL % 4.34294481904E-1 Π&1 Π&1 xLN x* Π&1 x- x* ; ; * 83163
               NULL{} }                           * 831AA
           }                                      * 831B4
@@ -524,17 +524,17 @@ nINTGINV~1:
           { IntgPatVars                          * 831CD
             {                                    * 831D7
               SYMBOL Π&1 xINV ; NULL{}           * 831DC
-              :: OBJ_5B375 Π&1                   * 831F5
+              :: intgLinArg Π&1                  * 831F5
                 SYMBOL Π&1 xLN ; ;               * 83204
               NULL{} }                           * 8321D
             {                                    * 83227
               SYMBOL Π&1 %2 x^ xINV ; NULL{}     * 8322C
-              :: OBJ_5B375 Π&1                   * 8324F
+              :: intgLinArg Π&1                  * 8324F
                 SYMBOL Π&1 xINV xNEG ; ;         * 8325E
               NULL{} }                           * 8327C
             {                                    * 83286
               SYMBOL Π&1 xSQ xINV ; NULL{}       * 8328B
-              :: OBJ_5B375 Π&1                   * 832A9
+              :: intgLinArg Π&1                  * 832A9
                 SYMBOL Π&1 xINV xNEG ; ;         * 832B8
               NULL{} }                           * 832D6
             {                                    * 832E0
@@ -543,14 +543,14 @@ nINTGINV~1:
 * ROMPTR 0F0 013
 * refs (1): 82007
 ROMP_0F0_013:
-              :: OBJ_5B375 Π&1                   * 83312
+              :: intgLinArg Π&1                  * 83312
                 SYMBOL Π&1 xATAN ; ;             * 83321
               NULL{} }                           * 8333A
             {                                    * 83344
               SYMBOL Π&1 %2 x^ %1 x+ xINV ; NULL{} ROMPTR 0F0 013 NULL{} } * 83349
             {                                    * 8338B
               SYMBOL %1 Π&1 %2 x^ x- xINV ; NULL{} * 83390
-              :: OBJ_5B375 Π&1                   * 833BD
+              :: intgLinArg Π&1                  * 833BD
                 SYMBOL Π&1 xATANH ; ;            * 833CC
               NULL{} }                           * 833E5
           }                                      * 833EF
@@ -563,7 +563,7 @@ nINTGSQ~1:
           { IntgPatVars                          * 83408
             {                                    * 83412
               SYMBOL Π&1 xSQ ; NULL{}            * 83417
-              :: OBJ_5B375 Π&1                   * 83430
+              :: intgLinArg Π&1                  * 83430
                 SYMBOL Π&1 %3 x^ %3 x/ ; ;       * 8343F
               NULL{} }                           * 83467
           }                                      * 83471
@@ -576,7 +576,7 @@ nINTGSQRT~1:
           { IntgPatVars                          * 8348A
             {                                    * 83494
               SYMBOL %1 Π&1 %2 x^ x- xSQRT xINV ; NULL{} * 83499
-              :: OBJ_5B375 Π&1                   * 834CB
+              :: intgLinArg Π&1                  * 834CB
                 SYMBOL Π&1 xASIN ; ;             * 834DA
               NULL{} }                           * 834F3
             {                                    * 834FD
@@ -585,7 +585,7 @@ nINTGSQRT~1:
 * ROMPTR 0F0 016
 * refs (1): 82007
 ROMP_0F0_016:
-              :: OBJ_5B375 Π&1                   * 83534
+              :: intgLinArg Π&1                  * 83534
                 SYMBOL Π&1 xASINH ; ;            * 83543
               NULL{} }                           * 8355C
             {                                    * 83566
@@ -597,7 +597,7 @@ ROMP_0F0_016:
 * ROMPTR 0F0 017
 * refs (1): 82007
 ROMP_0F0_017:
-              :: OBJ_5B375 Π&1                   * 835FD
+              :: intgLinArg Π&1                  * 835FD
                 SYMBOL Π&1 xACOSH ; ;            * 8360C
               NULL{} }                           * 83625
             {                                    * 8362F
@@ -605,12 +605,12 @@ ROMP_0F0_017:
               ROMPTR 0F0 017 NULL{} }            * 83675
             {                                    * 8368A
               SYMBOL Π&1 xSQRT ; NULL{}          * 8368F
-              :: OBJ_5B375 Π&1                   * 836A8
+              :: intgLinArg Π&1                  * 836A8
                 SYMBOL %2 Π&1 %3 %2 x/ x^ x* %3 x/ ; ; * 836B7
               NULL{} }                           * 836F3
             {                                    * 836FD
               SYMBOL Π&1 xSQRT xINV ; NULL{}     * 83702
-              :: OBJ_5B375 Π&1                   * 83720
+              :: intgLinArg Π&1                  * 83720
                 SYMBOL %2 Π&1 xSQRT x* ; ;       * 8372F
               NULL{} }                           * 83752
           }                                      * 8375C
@@ -623,7 +623,7 @@ nINTGSIGN~1:
           { IntgPatVars                          * 83775
             {                                    * 8377F
               SYMBOL Π&1 xSIGN ; NULL{}          * 83784
-              :: OBJ_5B375 Π&1                   * 8379D
+              :: intgLinArg Π&1                  * 8379D
                 SYMBOL Π&1 xABS ; ;              * 837AC
               NULL{} }                           * 837C5
           }                                      * 837CF

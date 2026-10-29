@@ -168,7 +168,7 @@ ROMP_0E8_011:
         :: 5ROLL STRIPTAGS 5ROLL STRIPTAGS CK&DISPATCH0 * D1B95
           BINT85                                 * D1BB3  list list
           :: 5UNROLL 5UNROLL ROMPTR 0E8 010 ;    * D1BB8
-          OBJ_64C34 ROMPTR 0E8 012               * D1BD7  list any
+          BINT80 ROMPTR 0E8 012                  * D1BD7  list any
           BINT5 ROMPTR 0E8 013                   * D1BE7  list
         ;                                        * D1BF7
 
@@ -357,7 +357,7 @@ xREPL~2:
 * ROMPTR 0E8 022
 * refs (1): D136E
 xREPL~3:
-        :: ROT OBJ_1DF30 4GETLAM 3GETLAM 1GETABND INNERCOMP BINT2 #<>case * D23A6
+        :: ROT {}>%sBIND 4GETLAM 3GETLAM 1GETABND INNERCOMP BINT2 #<>case * D23A6
           SETSIZEERR                             * D23D3
           COERCE2 ROMPTR 0E8 023 ;               * D23D8
 
@@ -384,7 +384,7 @@ xSUB~2:
 * ROMPTR 0E8 025
 * refs (1): D136E
 xSUB~3:
-          :: 3UNROLL OBJ_1DF30 4GETLAM 3GETLAM 1GETABND INNERCOMP BINT2 * D2562
+          :: 3UNROLL {}>%sBIND 4GETLAM 3GETLAM 1GETABND INNERCOMP BINT2 * D2562
             #<>case SETSIZEERR                   * D258A
             COERCE2 ROT COERCE 4PICK ROMPTR 0E8 02B ROMPTR 0E8 027 ; * D2594
         ;                                        * D25C3
@@ -392,7 +392,7 @@ xSUB~3:
 * ROMPTR 0E8 026
 * refs (1): D136E
 xSUB~4:
-        :: ROT OBJ_1DF30 4GETLAM 3GETLAM 1GETABND OBJ_1DF30 4GETLAM 3GETLAM * D25C8
+        :: ROT {}>%sBIND 4GETLAM 3GETLAM 1GETABND {}>%sBIND 4GETLAM 3GETLAM * D25C8
           1GETABND INNERCOMP BINT2 #<>case SETSIZEERR * D25F5
           COERCE2 ROT INNERCOMP BINT2 #<>case SETSIZEERR * D260E
           COERCE2 ROMPTR 0E8 027 ;               * D262C

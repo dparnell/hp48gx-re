@@ -249,7 +249,7 @@ ROMP_0F1_004:
               { x- LAM 'u x/ x+ } INNERCOMP 6PICK 3UNROLL #2+ top& * 8A2BA
               PTR addt2: C%i x* Cr x+ DUP DOSTOE ; * 8A2F7
             SINNER RESOROMP ROMPTR 0F1 008 SWAP#1+ SYMBN RESOROMP * 8A31F
-            ROMPTR 0F1 009 ' OBJ_5135F BINT2 ::N * 8A343
+            ROMPTR 0F1 009 ' PlotEval BINT2 ::N  * 8A343
 
 * ROMPTR 0F1 005
 * refs (1): 8999A
@@ -275,8 +275,8 @@ ROMP_0F1_006:
               FALSE ' LAM 'fscsbar STO LOOP ;    * 8A60D
             ERRTRAP                              * 8A63D
             :: ERROR@ #0= ?SEMI                  * 8A642
-              OBJ_4C0E4 ERRJMP ;                 * 8A656
-            OBJ_4C0E4 18GETLAM RESETDEPTH ABND ABND ABND ; * 8A665
+              PurgePlotVars ERRJMP ;             * 8A656
+            PurgePlotVars 18GETLAM RESETDEPTH ABND ABND ABND ; * 8A665
           ERRTRAP ~'R;EVAL;ERRJMP                * 8A688
 
 * ROMPTR 0F1 007
@@ -318,7 +318,7 @@ ROMP_0F1_009:
 * ROMPTR 0F1 00A
 * refs (1): 8999A
 ROMP_0F1_00A:
-        :: ' ID VPAR OBJ_4735A NOTcase           * 8A93C
+        :: ' ID VPAR RclPlotVar? NOTcase         * 8A93C
           :: ROMPTR 0B5 08E INCOMPDROP ;         * 8A95F
           DUPTYPELIST? NOTcase SETTYPEERR        * 8A979
           INNERCOMP BINT15 #= NOTcase SETSIZEERR * 8A988
@@ -382,16 +382,16 @@ ROMP_0F1_00E:
                 SYMBOL x* xFP x+ x* x+ x* x+ ; 2SINNERtop& top& %.5 LAM 'dy * 8B0E8
                 LAM 'Ny %1- %/ %* SWAP#1+ Cr x- ' LAM 'ymin STO LAM 'nxny * 8B131
                 %1- %1/ ABND DUP res(r) ' ID 'TTT %0_2A2B4 %1 BINT3 {}N * 8B188
-                PUTINDEPLIST DORCLE ' OBJ_5135F ' OBJ_4C3E6 4ROLL * 8B1C9
+                PUTINDEPLIST DORCLE ' PlotEval ' OBJ_4C3E6 4ROLL * 8B1C9
                 ROMPTR 0F1 006 OBJ_4C314 DORCLE ; * 8B1EC
               DROP ERRSET                        * 8B206
               :: BINT1 OBJ_4A96E DROP OBJ_4C12A 15GETLAM 17GETLAM NEWINDEP * 8B210
                 LAM 'xmin LAM 'indepvar STO LAM 'ymin LAM 'dependvar STO * 8B238
-                OBJ_4C251 OBJ_4C12A ;            * 8B298
+                ~BINT1;ClrLastPt OBJ_4C12A ;     * 8B298
               ERRTRAP                            * 8B2A7
               :: ERROR@ #0= ?SEMI                * 8B2AC
-                OBJ_4C0E4 ERRJMP ;               * 8B2C0
-              OBJ_4C0E4 18GETLAM RESETDEPTH ABND ABND ; * 8B2CF
+                PurgePlotVars ERRJMP ;           * 8B2C0
+              PurgePlotVars 18GETLAM RESETDEPTH ABND ABND ; * 8B2CF
             ERRTRAP ~'R;EVAL;ERRJMP              * 8B2ED
 
 * ROMPTR 0F1 00F
@@ -438,10 +438,10 @@ ROMP_0F1_014:
             :: 'IDFUNCTION PUTPTYPE LAM 'Xleft LAM 'Xright xrng(2r) * 8B5C5
               LAM 'Zlow LAM 'Zhigh yrng(2r) LAM 'indepvar PUTINDEP * 8B601
               LAM 'Xright LAM 'Xleft %- LAM 'Nx %1- %/ res(r) LAM 'EQ DUP * 8B648
-              DOSTOE ' OBJ_5135F LAM 'Yfar LAM 'Ynear OVER %- LAM 'Ny %1- %/ * 8B6A3
+              DOSTOE ' PlotEval LAM 'Yfar LAM 'Ynear OVER %- LAM 'Ny %1- %/ * 8B6A3
               SWAP LAM 'dependvar CREATE LAM 'Ny COERCE NULLHXS SWAP NDUPN * 8B6F7
               get1 ' NULLLAM 3PICK NDUPN ' LAM '#ny ' LAM 'Ystp ROT #2+ * 8B73D
-              DOBIND ' OBJ_4C34B %0_2A2B4 ROMPTR 0F1 006 GETRES GetRes * 8B78A
+              DOBIND ' PlotFcnPt %0_2A2B4 ROMPTR 0F1 006 GETRES GetRes * 8B78A
               4PUTLAM OBJ_4C314 DORCLE ;         * 8B7B3
             DROP ERRSET                          * 8B7C7
             :: LAM '#ny #2+ BINT1 ' LAM '#ny STOLAM BINT2 DO DOERASE BINT1 * 8B7D1
@@ -450,8 +450,8 @@ ROMP_0F1_014:
               NEWINDEP LAM 'Ystp LAM 'dependvar 'EvalNoCK:_sup xSTO+ LOOP ; * 8B883
             ERRTRAP                              * 8B8C8
             :: ERROR@ BINT2 #< ?SEMI             * 8B8CD
-              OBJ_4C0E4 ERRJMP ;                 * 8B8E6
-            OBJ_4C0E4 18GETLAM RESETDEPTH ABND ABND LAM '#ny #1- DUP #0= * 8B8F5
+              PurgePlotVars ERRJMP ;             * 8B8E6
+            PurgePlotVars 18GETLAM RESETDEPTH ABND ABND LAM '#ny #1- DUP #0= * 8B8F5
             ?SKIP                                * 8B92C
             :: #3+ BINT3 DO INDEX@ GETLAM LOOP LAM '#ny #1- ; * 8B931
             UNCOERCE CK0NOLASTWD ABND ;          * 8B96D
@@ -518,9 +518,9 @@ ROMP_0F1_01B:
 ROMP_0F1_01C:
               :: LAM 'Xleft LAM 'Xright xrng(2r) LAM 'Ynear LAM 'Yfar * 8BD37
                 yrng(2r) LAM 'indepvar PUTINDEP LAM 'dependvar depnd(gn) * 8BD8D
-                LAM 'EQ DUP DOSTOE ' OBJ_5135F RESOROMP ROMPTR 0F1 023 * 8BDD0
-                % 4E-1 LAM 'Xright LAM 'Xleft %- LAM 'Nx %/ DUP res(r) OVER * 8BE01
-                OVER %* LAM 'Yfar LAM 'Ynear %- LAM 'Ny %/ 4ROLL OVER %* * 8BE64
+                LAM 'EQ DUP DOSTOE ' PlotEval RESOROMP ROMPTR 0F1 023 % 4E-1 * 8BDD0
+                LAM 'Xright LAM 'Xleft %- LAM 'Nx %/ DUP res(r) OVER OVER %* * 8BE16
+                LAM 'Yfar LAM 'Ynear %- LAM 'Ny %/ 4ROLL OVER %* * 8BE6E
                 { LAM 'hstp LAM 'hofs LAM 'vstp LAM 'vofs } BIND LAM 'hstp * 8BEB8
                 ROMPTR 0F1 006 LAM 'Yfar LAM 'vstp %.5 %* %- LAM 'dependvar * 8BF1C
                 CREATE ;                         * 8BF73
@@ -538,8 +538,8 @@ ROMP_0F1_01D:
                   LOOP ;                         * 8C091
                 ERRTRAP                          * 8C09B
                 :: ERROR@ #0= ?SEMI              * 8C0A0
-                  OBJ_4C0E4 ERRJMP ;             * 8C0B4
-                OBJ_4C0E4 18GETLAM RESETDEPTH ;  * 8C0C3
+                  PurgePlotVars ERRJMP ;         * 8C0B4
+                PurgePlotVars 18GETLAM RESETDEPTH ; * 8C0C3
               ERRTRAP ~'R;EVAL;ERRJMP            * 8C0D7
 
 * ROMPTR 0F1 01E
@@ -749,10 +749,10 @@ FUNCTION:
             :: BINT25 GETLAM PTR NULL:: EQUALcasedrop Message60E * 8C858
               15GETLAM SWAP %>C% ;               * 8C876
           }                                      * 8C88A
-          TRUE OBJ_4B6C5                         * 8C88F
+          TRUE ~';PlotEval                       * 8C88F
           :: BINT31 TestSysFlag ITE              * 8C899
             :: ' OBJ_4CE0B ;                     * 8C8AD
-            :: ' OBJ_4C34B ;                     * 8C8C1
+            :: ' PlotFcnPt ;                     * 8C8C1
           ;                                      * 8C8D5
           :: %%1 10GETLAM %%/>% ; FALSE FALSE TRUE OBJ_73211 OBJ_73270 * 8C8DA
           ROMPTR 0F1 03F OBJ_732E5 }             * 8C90C
@@ -765,10 +765,10 @@ FUNCTION:
 CONIC:
         :: CK0 'IDCONIC PUTPTYPE ;               * 8C928
 
-        { FALSE OBJ_4BC83 NOP TRUE NULL{} FALSE OBJ_4B6C5 * 8C941
+        { FALSE OBJ_4BC83 NOP TRUE NULL{} FALSE ~';PlotEval * 8C941
           :: BINT31 TestSysFlag ITE              * 8C969
             :: ' OBJ_4CE0B ;                     * 8C97D
-            :: ' OBJ_4C34B ;                     * 8C991
+            :: ' PlotFcnPt ;                     * 8C991
           ;                                      * 8C9A5
           :: %%1 10GETLAM %%/>% ; FALSE FALSE TRUE OBJ_73211 OBJ_73270 * 8C9AA
           ROMPTR 0F1 03F OBJ_73594 OBJ_48E0A }   * 8C9DC

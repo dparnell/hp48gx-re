@@ -790,7 +790,7 @@ xTHEN:
 * refs (1): 22F09
 then(r):
         :: j%0=case OBJ_22F3B                    * 22F22  slot 1
-          OBJ_4241B ;                            * 22F31
+          ?ATTNQUIT0 ;                           * 22F31
 
 * refs (3): 22F2C 237DF 5E050
 OBJ_22F3B:
@@ -876,7 +876,7 @@ xREPEAT:
 
 * refs (1): 2306C
 repeat(r):
-        :: OBJ_4241B %0<> COLA WHILE             * 23085  slot 1
+        :: ?ATTNQUIT0 %0<> COLA WHILE            * 23085  slot 1
         ;                                        * 2309E
 
 * refs (1): 23076
@@ -927,7 +927,7 @@ xSTART:
 
 * refs (1): 23112
 start(2r):
-        :: OBJ_23754 BIND OBJ_4241B COLA BEGIN   * 23144  slot 2
+        :: OBJ_23754 BIND ?ATTNQUIT0 COLA BEGIN  * 23144  slot 2
         ;                                        * 23162
 
 * refs (2): 2311C 23130
@@ -960,7 +960,7 @@ xSTARTVAR:
 
 * refs (1): 231AF
 for(2r):
-        :: 'R ' Π'stop TWO{}N BIND OBJ_4241B COLA BEGIN * 231E1  slot 2
+        :: 'R ' Π'stop TWO{}N BIND ?ATTNQUIT0 COLA BEGIN * 231E1  slot 2
         ;                                        * 2320E
 
 * refs (2): 231B9 231CD
@@ -1061,7 +1061,7 @@ L_23309:
         D0=A                                     * 23341
         C=RSTK                                   * 23344
         D1=C                                     * 23346
-        LC(5)   OBJ_4241B                        * 23349
+        LC(5)   ?ATTNQUIT0                       * 23349
         A=C     A                                * 23350
         PC=(A)                                   * 23352
 L_23356:
@@ -1338,7 +1338,7 @@ xENDDO:
 
 * refs (1): 236C8
 enddo(r):
-        :: OBJ_4241B %0<> COLA UNTIL             * 236E1  slot 1
+        :: ?ATTNQUIT0 %0<> COLA UNTIL            * 236E1  slot 1
         ;                                        * 236FA
 
 * refs (1): 236D2
@@ -1402,7 +1402,7 @@ xTHENCASE:
 * refs (1): 237B7
 thencase(r):
         :: j%0=case OBJ_22F3B                    * 237D5  slot 2
-          OBJ_4241B COLACOLA ;                   * 237E4
+          ?ATTNQUIT0 COLACOLA ;                  * 237E4
 
 * refs (1): 237C1
 thencase(ex):

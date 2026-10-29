@@ -121,9 +121,9 @@ ROMP_0B0_074:
         :: DUPTYPEBINT? NOTcase EVAL             * D7F71
           SWAP                                   * D7F85
           :: OVER BINT16 #AND #0<> case          * D7F8A
-            :: BINT1 OBJ_1A01B ;                 * D7FA8
+            :: BINT1 NTHCOMPROM@ ;               * D7FA8
             OVER BINT32 #AND #0<> case           * D7FBC
-            :: BINT2 OBJ_1A01B ;                 * D7FD5
+            :: BINT2 NTHCOMPROM@ ;               * D7FD5
           ;                                      * D7FE9
           DUP MINUSONE EQUAL case2drop NULL$     * D7FEE
           ~DUPTYPEBINT?;case;JstGetTHEMESG       * D8007
@@ -347,18 +347,18 @@ DoInputForm~32:
 
 * ROMPTR 0B0 098
 * refs (1): D49CE
-ROMP_0B0_098:
-        :: BINT1 OBJ_1A01B ;                     * D8967
+~BINT1;NTHCOMPROM@:
+        :: BINT1 NTHCOMPROM@ ;                   * D8967
 
 * ROMPTR 0B0 099
 * refs (1): D49CE
-ROMP_0B0_099:
-        :: BINT2 OBJ_1A01B ;                     * D897B
+~BINT2;NTHCOMPROM@:
+        :: BINT2 NTHCOMPROM@ ;                   * D897B
 
 * ROMPTR 0B0 09A
 * refs (1): D49CE
-ROMP_0B0_09A:
-        :: BINT3 OBJ_1A01B ;                     * D898F
+~BINT3;NTHCOMPROM@:
+        :: BINT3 NTHCOMPROM@ ;                   * D898F
 
 * ROMPTR 0B0 09B
 * refs (1): D49CE
@@ -900,9 +900,9 @@ LIB0B0.link:
         REL(5)  ROMP_0B0_095                     * D98E7  095 
         REL(5)  ROMP_0B0_096                     * D98EC  096 
         REL(5)  DoInputForm~32                   * D98F1  097 
-        REL(5)  ROMP_0B0_098                     * D98F6  098 
-        REL(5)  ROMP_0B0_099                     * D98FB  099 
-        REL(5)  ROMP_0B0_09A                     * D9900  09A 
+        REL(5)  ~BINT1;NTHCOMPROM@               * D98F6  098 
+        REL(5)  ~BINT2;NTHCOMPROM@               * D98FB  099 
+        REL(5)  ~BINT3;NTHCOMPROM@               * D9900  09A 
         REL(5)  ROMP_0B0_09B                     * D9905  09B 
         REL(5)  ROMP_0B0_09C                     * D990A  09C 
         REL(5)  ROMP_0B0_09D                     * D990F  09D 

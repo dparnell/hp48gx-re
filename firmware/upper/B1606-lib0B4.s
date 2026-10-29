@@ -176,8 +176,8 @@ ROMP_0B4_1CF:
 * refs (1): A2437
 ROMP_0B4_1D0:
         ::                                       * B2113
-          { BINT60 TRUE BINT62 ROMPTR 0B5 155 OBJ_64C34 ROMPTR 0B5 156 * B2118
-            BINT81 ROMPTR 0B4 1D2 BINT83         * B2147
+          { BINT60 TRUE BINT62 ROMPTR 0B5 155 BINT80 ROMPTR 0B5 156 BINT81 * B2118
+            ROMPTR 0B4 1D2 BINT83                * B214C
             :: ' ROMPTR 0B4 1D3 ; }              * B215C
           EQLookup case                          * B217B
           :: EVAL TRUE ;                         * B2185
@@ -252,7 +252,7 @@ ROMP_0B4_1D8:
 * refs (1): A2437
 ROMP_0B4_1D9:
         ::                                       * B2612
-          { OBJ_64C34 ROMPTR 0B4 1E4 BINT70 ROMPTR 0B4 1DA BINT62 * B2617
+          { BINT80 ROMPTR 0B4 1E4 BINT70 ROMPTR 0B4 1DA BINT62 * B2617
             :: LAM 'O ROMPTR 0B5 159 ; BINT60 LAM 'V BINT61 LAM 'p BINT83 * B2641
             :: 14GETLAM ITE                      * B2686
               :: ' ROMPTR 0B4 1DD ;              * B2695
@@ -392,7 +392,7 @@ ROMP_0B4_1E1:
 * refs (1): A2437
 ROMP_0B4_1E2:
         ::                                       * B2F4C
-          { OBJ_64C34 ROMPTR 0B4 1E3 BINT62 LAM 'DC } EQLookup case * B2F51
+          { BINT80 ROMPTR 0B4 1E3 BINT62 LAM 'DC } EQLookup case * B2F51
           :: EVAL TRUE ;                         * B2F87
           DROPFALSE ;                            * B2F9B
 
@@ -415,7 +415,7 @@ ROMP_0B4_1E4:
           :: DUPDUP 11GETLAM #+ #1- 12GETLAM #MIN 2DUP ' LAM 'E STOLAM ' * B3120
             LAM 'B STOLAM LAM 'O ' ROMPTR 0B5 15A 4ROLL 4ROLL ROMPTR 0B4 1DB * B3162
             {}N 19PUTLAM ;                       * B31A2
-          LAM 'B #- #1+ 19GETLAM SWAP OBJ_1A01B  * B31B1
+          LAM 'B #- #1+ 19GETLAM SWAP NTHCOMPROM@ * B31B1
           ~DUPTYPEBINT?;case;JstGetTHEMESG ;     * B31D5
 
 * ROMPTR 0B4 1E5

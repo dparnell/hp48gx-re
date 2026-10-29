@@ -7,8 +7,8 @@
 * refs (1): A2437
 ROMP_0B4_16F:
         ::                                       * AE566
-          { BINT60 TRUE BINT62 ROMPTR 0B5 0D5 OBJ_64C34 ROMPTR 0B5 0D6 * AE56B
-            BINT81 ROMPTR 0B4 170 BINT83         * AE59A
+          { BINT60 TRUE BINT62 ROMPTR 0B5 0D5 BINT80 ROMPTR 0B5 0D6 BINT81 * AE56B
+            ROMPTR 0B4 170 BINT83                * AE59F
             :: ' ROMPTR 0B4 171 ; BINT96         * AE5AF
             :: ROMPTR 0B3 03E TRUE ; }           * AE5CE  ~BBReReadNElems
           EQLookup case                          * AE5ED

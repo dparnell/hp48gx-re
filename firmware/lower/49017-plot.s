@@ -170,7 +170,7 @@ OBJ_4965A:
 
 * refs (5): 47B3C 49664 4EEC4 B6295 B6326
 OBJ_496A0:
-        :: ' ID ZPAR OBJ_4735A NOTcaseFALSE DUPTYPELIST? * 496A0
+        :: ' ID ZPAR RclPlotVar? NOTcaseFALSE DUPTYPELIST? * 496A0
           NOTcsdrpfls INNERDUP BINT4 #= NOTcase NDROPFALSE * 496C8
           DROPTRUE ;                             * 496E6
 
@@ -611,7 +611,7 @@ CHECKPVARS:
             CHECKPVARS~2 ;                       * 4A9FB
           TYPECMP? NOT?INVPPAR DUPTYPEREAL? SWAP TYPEHSTR? OR NOT?INVPPAR * 4AA05
           ChkIndep TYPECMP? NOT?INVPPAR TYPECMP? NOT?INVPPAR 'IDPAR * 4AA28
-          OBJ_4735A DROP ;                       * 4AA46
+          RclPlotVar? DROP ;                     * 4AA46
         NIBHEX  0000                             * 4AA55  ..
 
 * refs (1): 4AA28
@@ -623,7 +623,7 @@ ChkIndep:
 
 * refs (5): 45F19 4A632 4A9B4 4B0DF 51044
 Chk&BreakPPAR:
-        :: 'IDPAR OBJ_4735A ?SKIP MAKEPVARS      * 4AAA9
+        :: 'IDPAR RclPlotVar? ?SKIP MAKEPVARS    * 4AAA9
           DUPTYPELIST? NOT?INVPPAR DUPLENCOMP BINT7 #= NOT?INVPPAR * 4AAC2
           INCOMPDROP ;                           * 4AAE0
 
@@ -644,7 +644,7 @@ PvarsC%0:
 * ID Y
 * refs (1): 481A7
 ID_Y:
-          ID Y StoInPPAR(7_) 'IDPAR OBJ_4735A DROP ; * 4AB59
+          ID Y StoInPPAR(7_) 'IDPAR RclPlotVar? DROP ; * 4AB59
 
 * refs (4): 47C36 47C40 4AAF4 4AAFE
 MakeRange(s):
@@ -944,18 +944,18 @@ draw:
           DROP PLOTPREP DROP draw~1 ABND ABND ;  * 4B6A2
 
 * refs (9): 8C894 8C964 8CA93 8CBD7 8CCBB 8CD9F ...
-OBJ_4B6C5:
-        :: ' OBJ_5135F ;                         * 4B6C5
+~';PlotEval:
+        :: ' PlotEval ;                          * 4B6C5
 
 * refs (1): 4C535
 PLOTERR:
         :: ERROR@ #0=case ExitAtLOOP             * 4B6D9
-          18GETLAM ABND ABND RESETDEPTH OBJ_4C0E4 ERRJMP ; * 4B6ED
+          18GETLAM ABND ABND RESETDEPTH PurgePlotVars ERRJMP ; * 4B6ED
 
 * ob1..obn obn+1..obx #n -> ob1..obn
 * refs (22): 48A30 4B50E 4B6FC 4BB84 4BE86 4C54E ...
 RESETDEPTH:
-        :: DEPTH #1-SWAP OBJ_6C339 NDROP CK0NOLASTWD ; * 4B710
+        :: DEPTH #1-SWAP #-Floor0 NDROP CK0NOLASTWD ; * 4B710
 
 * refs (2): 4C62F 73882
 ~1stArgRpn(ex);SYMBN:
@@ -998,8 +998,8 @@ OBJ_4B882:
 * refs (1): 6D89B
 OBJ_4B8BE:
         :: SKIP OBJ_6F40F BINT3 #=casedrop       * 4B8BE
-          :: BINT1 OBJ_67E0C OBJ_65D14 OBJ_68593 OBJ_67416 #1+ OBJ_67443 * 4B8D7
-            OBJ_679A1 OBJ_6D779 OBJ_44C4B OBJ_68245 ; * 4B8FF
+          :: BINT1 OBJ_67E0C EqwBoxSecond@ OBJ_68593 EqwCurBox@ #1+ * 4B8D7
+            OBJ_67443 EqwBoxPrev@ OBJ_6D779 OBJ_44C4B EqwBoxObj! ; * 4B8FA
           BINT5 OBJ_6E113 ;                      * 4B918
 
 * refs (1): 3FE3A
@@ -1045,7 +1045,7 @@ OBJ_4BA0D:
 OBJ_4BA5D:
         :: BINT31 TestSysFlag ITE                * 4BA5D
           :: ' OBJ_4CE0B ;                       * 4BA71
-          :: ' OBJ_4C34B ;                       * 4BA85
+          :: ' PlotFcnPt ;                       * 4BA85
           3PUTLAM COLA OBJ_4BAAD                 * 4BA99
         ;                                        * 4BAA8
 
@@ -1116,7 +1116,7 @@ OBJ_4BE9F:
 OBJ_4BEEF:
         :: INDEX@ #1+ BINT31 TestSysFlag ITE     * 4BEEF
           :: '                                   * 4BF0D
-            :: DROP COLA OBJ_5135F               * 4BF17
+            :: DROP COLA PlotEval                * 4BF17
             ;                                    * 4BF2B
           ;                                      * 4BF30
           :: ' OBJ_4EF73 ;                       * 4BF35

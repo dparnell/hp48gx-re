@@ -1,6 +1,6 @@
 * HP 48GX ROM revision R, #2C000-#2E0A8: not yet identified
 * Addresses in the right-hand comments are those of the original ROM.
-* Most referenced: 1+(rr) ChkReakäPAR LAMLNAME LAMPKNO rclä PUTAB0 LAMKRM LAMKP GETCD0 STATGETXCOL RclXYCol&äDAT LAMRETRY
+* Most referenced: 1+(rr) ChkReakäPAR PwrExpFIT? LAMLNAME PwrLogFIT? LAMPKNO rclä PUTAB0 LAMKRM LAMKP GETCD0 STATGETXCOL
 * Follows on from the previous file (at #2C000 in the original ROM).
         D0=D0+  5                                * 2C000
         B=A     A                                * 2C003
@@ -156,7 +156,7 @@ STATRCL:
 
 * refs (5): 0C7DF 2C275 2C2B1 B5774 B7D3C
 Exist@äDAT?:
-        :: ' ID_SIGMADAT OBJ_4735A ;             * 2C293
+        :: ' ID_SIGMADAT RclPlotVar? ;           * 2C293
 
 * refs (3): 1FD50 2C2CA 4B779
 rclä!:
@@ -334,18 +334,18 @@ RclXYCol&äDAT!:
 * -> %
 * refs (3): 1FDCB 4A1C7 B7EEB
 STATCORR:
-        :: RclXYCol&äDAT 2DUP OBJ_2CC06 OBJ_2CDA5 BINT3 NDUP OBJ_2CC06 * 2C83C
-          OBJ_2CDFA 5UNROLL 4ROLLROT 2DUP OBJ_2CC4C OBJ_2CDA5 BINT3 NDUP * 2C864
-          OBJ_2CC4C OBJ_2CDFA 6UNROLL 4ROLL 5ROLL 4UNROLL OBJ_2CC4C * 2C88C
-          OBJ_2CC06 OBJ_2CE7C 3UNROLL %%* DUP %%0= case2drop %1 * 2C8AF
+        :: RclXYCol&äDAT 2DUP PwrExpFIT? OBJ_2CDA5 BINT3 NDUP PwrExpFIT? * 2C83C
+          OBJ_2CDFA 5UNROLL 4ROLLROT 2DUP PwrLogFIT? OBJ_2CDA5 BINT3 NDUP * 2C864
+          PwrLogFIT? OBJ_2CDFA 6UNROLL 4ROLL 5ROLL 4UNROLL PwrLogFIT? * 2C88C
+          PwrExpFIT? OBJ_2CE7C 3UNROLL %%* DUP %%0= case2drop %1 * 2C8AF
           %%SQRT %%/>% ;                         * 2C8D7
 
 * -> %
 * refs (2): 1FDE6 B7EF0
 STATCOV:
-        :: RclXYCol&äDAT! DUP4UNROLL 3PICKOVER OBJ_2CC4C OBJ_2CDA5 * 2C8E6
-          3PICK3PICK OBJ_2CC06 OBJ_2CDA5 OBJ_2CC4C OBJ_2CC06 OBJ_2CE7C SWAP * 2C904
-          OBJ_2CC92 %1 %>%%- %%/>% ;             * 2C927
+        :: RclXYCol&äDAT! DUP4UNROLL 3PICKOVER PwrLogFIT? OBJ_2CDA5 * 2C8E6
+          3PICK3PICK PwrExpFIT? OBJ_2CDA5 PwrLogFIT? PwrExpFIT? OBJ_2CE7C * 2C904
+          SWAP OBJ_2CC92 %1 %>%%- %%/>% ;        * 2C922
 
 * -> %
 * refs (2): 1FE01 B7F1D
@@ -378,10 +378,10 @@ OBJ_2C9EF:
 
 * refs (4): 1FF2A 48BC0 4A20D AF85F
 STATLR:
-        :: RclXYCol&äDAT 3PICKOVER OBJ_2CC4C OBJ_2CDA5 3PICK3PICK OBJ_2CC06 * 2CA0D
-          OBJ_2CDA5 BINT5 NDUP OBJ_2CC4C OBJ_2CC06 OBJ_2CE7C 6PICK 5ROLL * 2CA30
-          5PICK OBJ_2CC4C OBJ_2CDFA DUP %%0= case OBJ_2D2D7 * 2CA58
-          %%/ SWAPROT 3PICK %%-* OBJ_2CC06 IT %%EXP * 2CA7B
+        :: RclXYCol&äDAT 3PICKOVER PwrLogFIT? OBJ_2CDA5 3PICK3PICK * 2CA0D
+          PwrExpFIT? OBJ_2CDA5 BINT5 NDUP PwrLogFIT? PwrExpFIT? OBJ_2CE7C * 2CA2B
+          6PICK 5ROLL 5PICK PwrLogFIT? OBJ_2CDFA DUP %%0= case OBJ_2D2D7 * 2CA4E
+          %%/ SWAPROT 3PICK %%-* PwrExpFIT? IT %%EXP * 2CA7B
           %%>% SWAP %%>% 2SWAP 2DROP ChkReakäPAR ROTROT2DROP 4PICKSWAP 6PICK * 2CA9E
           3UNROLL                                * 2CACB
 * The Very Big List names this address predy(r), but it is a pointer inside an object; the name is not used
@@ -392,9 +392,9 @@ STATLR:
 STATPREDY:
         ::                                       * 2CADA
 * The Very Big List names this address predx(r), but it is a pointer inside an object; the name is not used
-          ChkReakäPAR DROP ROTDROP ROTDROP ROT %>%% OBJ_2CC4C IT OBJ_2CBC5 * 2CADF
-          SWAP %>%% %%*SWAP %>%% OBJ_2CC06 IT OBJ_2CBC5 * 2CB0C
-          %%+ OBJ_2CC06 IT %%EXP                 * 2CB2F
+          ChkReakäPAR DROP ROTDROP ROTDROP ROT %>%% PwrLogFIT? IT OBJ_2CBC5 * 2CADF
+          SWAP %>%% %%*SWAP %>%% PwrExpFIT? IT OBJ_2CBC5 * 2CB0C
+          %%+ PwrExpFIT? IT %%EXP                * 2CB2F
           %%>% ;                                 * 2CB43
 
 * % -> %'
@@ -402,9 +402,9 @@ STATPREDY:
 STATPREDX:
         ::                                       * 2CB4D
 * The Very Big List names this address PwrExpFIT?, but it is a pointer inside an object; the name is not used
-          ChkReakäPAR DROP ROTDROP ROTDROP ROT %>%% OBJ_2CC06 IT OBJ_2CBC5 * 2CB52
-          ROT %>%% OBJ_2CC06 IT OBJ_2CBC5        * 2CB7F
-          %%- SWAP %>%% %%/ OBJ_2CC4C IT %%EXP   * 2CB98
+          ChkReakäPAR DROP ROTDROP ROTDROP ROT %>%% PwrExpFIT? IT OBJ_2CBC5 * 2CB52
+          ROT %>%% PwrExpFIT? IT OBJ_2CBC5       * 2CB7F
+          %%- SWAP %>%% %%/ PwrLogFIT? IT %%EXP  * 2CB98
           %%>% ;                                 * 2CBBB
 
 * refs (4): 2CB07 2CB2A 2CB7A 2CB93
@@ -418,14 +418,16 @@ OBJ_2CBE8:
           OBJ_2D2F7 ;                            * 2CBFC
 
 * refs (14): 2C84B 2C85F 2C8AF 2C909 2C918 2CA2B ...
-OBJ_2CC06:
+* -> flag: TRUE when the statistics model (in ΣPAR) is PWRFIT or EXPFIT, the models that fit ln(y). The VBL puts this name one object off, at #2CB52
+PwrExpFIT?:
         ::                                       * 2CC06
 * The Very Big List names this address PwrLogFIT?, but it is a pointer inside an object; the name is not used
           ChkReakäPAR 5UNROLL 4DROP DUP ' xPWRFIT EQUAL SWAP ' xEXPFIT EQUAL * 2CC0B
           OR ;                                   * 2CC42
 
 * refs (12): 2C878 2C88C 2C8AA 2C8FA 2C913 2CA1C ...
-OBJ_2CC4C:
+* -> flag: TRUE when the statistics model (in ΣPAR) is PWRFIT or LOGFIT, the models that fit ln(x). The VBL puts this name one object off, at #2CC0B
+PwrLogFIT?:
         ::                                       * 2CC4C
 * The Very Big List names this address nrows(ar), but it is a pointer inside an object; the name is not used
           ChkReakäPAR 5UNROLL 4DROP DUP ' xPWRFIT EQUAL SWAP ' xLOGFIT EQUAL * 2CC51

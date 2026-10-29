@@ -852,7 +852,7 @@ Attn?:
 * Carry if true
 * refs (3): 0281F 0493A 814B2
 KeyInBuff?:
-        GOSBVL  SUB_0C198                        * 04999
+        GOSBVL  D1=IRAM                          * 04999
         D1=(4)  #0669                            * 049A0
         A=DAT1  S                                * 049A6
         D1=D1+  1                                * 049AA

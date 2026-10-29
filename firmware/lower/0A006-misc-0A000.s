@@ -1294,7 +1294,7 @@ L_0AEDB:
         C=C+A   A                                * 0AEDB
         R3=C.F  A                                * 0AEDD
         D0=D0+  5                                * 0AEE3
-        GOSUBL  SUB_08400                        * 0AEE6
+        GOSUBL  SKIPVARNAME                      * 0AEE6
         A=R3                                     * 0AEEC
         AD0EX                                    * 0AEEF
         D0=A                                     * 0AEF2

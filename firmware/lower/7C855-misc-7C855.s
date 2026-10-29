@@ -45,7 +45,7 @@ L_7C8A9:
         C=C+A   A                                * 7C8B4
         RSTK=C                                   * 7C8B6
         GOSUB   GetAbs%%AB1~jump                 * 7C8B8
-        GOSUB   SUB_7CC56                        * 7C8BC
+        GOSUB   MACCF0~jump                      * 7C8BC
         SETHEX                                   * 7C8C0
         D1=D1+  5                                * 7C8C2
         D1=D1+  16                               * 7C8C5
@@ -73,7 +73,7 @@ L_7C8F5:
         C=RSTK                                   * 7C8F9
         RSTK=C                                   * 7C8FB
         D0=C                                     * 7C8FD
-        GOSUB   SUB_7CC56                        * 7C900
+        GOSUB   MACCF0~jump                      * 7C900
         GOSUB   SUB_7CC64                        * 7C904
         A=-A-1  S                                * 7C908
         C=RSTK                                   * 7C90B
@@ -81,7 +81,7 @@ L_7C8F5:
         D0=C                                     * 7C90F
         D0=D0+  5                                * 7C912
         D0=D0+  16                               * 7C915
-        GOSUB   SUB_7CC56                        * 7C918
+        GOSUB   MACCF0~jump                      * 7C918
         D1=D1-  5                                * 7C91C
         D1=D1-  16                               * 7C91F
         GOSUB   GetAbs%%AB1~jump                 * 7C922
@@ -90,12 +90,12 @@ L_7C8F5:
         D0=C                                     * 7C92A
         D0=D0+  5                                * 7C92D
         D0=D0+  16                               * 7C930
-        GOSUB   SUB_7CC5D                        * 7C933
+        GOSUB   MACCF2~jump                      * 7C933
         GOSUB   SUB_7CC64                        * 7C937
         C=RSTK                                   * 7C93B
         RSTK=C                                   * 7C93D
         D0=C                                     * 7C93F
-        GOSUB   SUB_7CC5D                        * 7C942
+        GOSUB   MACCF2~jump                      * 7C942
         D1=D1+  5                                * 7C946
         D1=D1+  16                               * 7C949
         SETHEX                                   * 7C94C
@@ -124,14 +124,14 @@ L_7C982:
         C=RSTK                                   * 7C986
         RSTK=C                                   * 7C988
         D0=C                                     * 7C98A
-        GOSUB   SUB_7CC56                        * 7C98D
+        GOSUB   MACCF0~jump                      * 7C98D
         GOSUB   GetAbs%%AB1~jump                 * 7C991
         C=RSTK                                   * 7C995
         RSTK=C                                   * 7C997
         D0=C                                     * 7C999
         D0=D0+  5                                * 7C99C
         D0=D0+  16                               * 7C99F
-        GOSUB   SUB_7CC5D                        * 7C9A2
+        GOSUB   MACCF2~jump                      * 7C9A2
         D1=D1+  5                                * 7C9A6
         D1=D1+  16                               * 7C9A9
         SETHEX                                   * 7C9AC
@@ -149,12 +149,12 @@ L_7C9C1:
         C=RSTK                                   * 7C9C5
         RSTK=C                                   * 7C9C7
         D0=C                                     * 7C9C9
-        GOSUB   SUB_7CC56                        * 7C9CC
+        GOSUB   MACCF0~jump                      * 7C9CC
         GOSUB   SUB_7CC64                        * 7C9D0
         C=RSTK                                   * 7C9D4
         RSTK=C                                   * 7C9D6
         D0=C                                     * 7C9D8
-        GOSUB   SUB_7CC5D                        * 7C9DB
+        GOSUB   MACCF2~jump                      * 7C9DB
         D1=D1+  5                                * 7C9DF
         D1=D1+  16                               * 7C9E2
         SETHEX                                   * 7C9E5
@@ -276,7 +276,7 @@ L_7CAFB:
         C=RSTK                                   * 7CAFF
         RSTK=C                                   * 7CB01
         D0=C                                     * 7CB03
-        GOSUB   SUB_7CC56                        * 7CB06
+        GOSUB   MACCF0~jump                      * 7CB06
         SETHEX                                   * 7CB0A
         C=RSTK                                   * 7CB0C
         A=C     A                                * 7CB0E
@@ -306,14 +306,14 @@ L_7CB3E:
         C=RSTK                                   * 7CB42
         RSTK=C                                   * 7CB44
         D0=C                                     * 7CB46
-        GOSUB   SUB_7CC56                        * 7CB49
+        GOSUB   MACCF0~jump                      * 7CB49
         GOSUB   SUB_7CC64                        * 7CB4D
         C=RSTK                                   * 7CB51
         RSTK=C                                   * 7CB53
         D0=C                                     * 7CB55
         D0=D0+  5                                * 7CB58
         D0=D0+  16                               * 7CB5B
-        GOSUB   SUB_7CC56                        * 7CB5E
+        GOSUB   MACCF0~jump                      * 7CB5E
         D1=D1-  5                                * 7CB62
         D1=D1-  16                               * 7CB65
         GOSUB   GetAbs%%AB1~jump                 * 7CB68
@@ -322,7 +322,7 @@ L_7CB3E:
         D0=C                                     * 7CB70
         D0=D0+  5                                * 7CB73
         D0=D0+  16                               * 7CB76
-        GOSUB   SUB_7CC5D                        * 7CB79
+        GOSUB   MACCF2~jump                      * 7CB79
         GOSUB   SUB_7CC64                        * 7CB7D
         A=-A-1  S                                * 7CB81
         D1=D1-  5                                * 7CB84
@@ -330,7 +330,7 @@ L_7CB3E:
         C=RSTK                                   * 7CB8A
         RSTK=C                                   * 7CB8C
         D0=C                                     * 7CB8E
-        GOSUB   SUB_7CC5D                        * 7CB91
+        GOSUB   MACCF2~jump                      * 7CB91
         SETHEX                                   * 7CB95
         C=RSTK                                   * 7CB97
         A=C     A                                * 7CB99
@@ -354,14 +354,14 @@ L_7CBBD:
         C=RSTK                                   * 7CBC1
         RSTK=C                                   * 7CBC3
         D0=C                                     * 7CBC5
-        GOSUB   SUB_7CC56                        * 7CBC8
+        GOSUB   MACCF0~jump                      * 7CBC8
         GOSUB   GetAbs%%AB1~jump                 * 7CBCC
         C=RSTK                                   * 7CBD0
         RSTK=C                                   * 7CBD2
         D0=C                                     * 7CBD4
         D0=D0+  5                                * 7CBD7
         D0=D0+  16                               * 7CBDA
-        GOSUB   SUB_7CC5D                        * 7CBDD
+        GOSUB   MACCF2~jump                      * 7CBDD
         SETHEX                                   * 7CBE1
         C=RSTK                                   * 7CBE3
         A=C     A                                * 7CBE5
@@ -385,7 +385,7 @@ L_7CC08:
         C=RSTK                                   * 7CC0C
         RSTK=C                                   * 7CC0E
         D0=C                                     * 7CC10
-        GOSUB   SUB_7CC56                        * 7CC13
+        GOSUB   MACCF0~jump                      * 7CC13
         GOSUB   SUB_7CC64                        * 7CC17
         A=-A-1  S                                * 7CC1B
         D1=D1-  5                                * 7CC1E
@@ -393,7 +393,7 @@ L_7CC08:
         C=RSTK                                   * 7CC24
         RSTK=C                                   * 7CC26
         D0=C                                     * 7CC28
-        GOSUB   SUB_7CC5D                        * 7CC2B
+        GOSUB   MACCF2~jump                      * 7CC2B
         SETHEX                                   * 7CC2F
         C=RSTK                                   * 7CC31
         A=C     A                                * 7CC33
@@ -414,12 +414,12 @@ L_7CC4F:
         GONC    L_7CC08                          * 7CC53
 
 * refs (13): 7C8BC 7C900 7C918 7C98D 7C9CC 7CB06 ...
-SUB_7CC56:
-        GOVLNG  L_35A82                          * 7CC56
+MACCF0~jump:
+        GOVLNG  MACCF0                           * 7CC56
 
 * refs (10): 7C933 7C942 7C9A2 7C9DB 7CB79 7CB91 ...
-SUB_7CC5D:
-        GOVLNG  L_35A95                          * 7CC5D
+MACCF2~jump:
+        GOVLNG  MACCF2                           * 7CC5D
 
 * refs (8): 7C904 7C937 7C9D0 7CB4D 7CB7D 7CC17 ...
 SUB_7CC64:
@@ -475,7 +475,7 @@ L_7CCD7:
         C=RSTK                                   * 7CCDB
         RSTK=C                                   * 7CCDD
         D0=C                                     * 7CCDF
-        GOSUB   SUB_7CC56                        * 7CCE2
+        GOSUB   MACCF0~jump                      * 7CCE2
         D1=D1+  16                               * 7CCE6
         D1=D1+  5                                * 7CCE9
         C=RSTK                                   * 7CCEC
@@ -493,14 +493,14 @@ L_7CD05:
         C=RSTK                                   * 7CD09
         RSTK=C                                   * 7CD0B
         D0=C                                     * 7CD0D
-        GOSUB   SUB_7CC56                        * 7CD10
+        GOSUB   MACCF0~jump                      * 7CD10
         GOSUB   SUB_7CC64                        * 7CD14
         C=RSTK                                   * 7CD18
         RSTK=C                                   * 7CD1A
         D0=C                                     * 7CD1C
         D0=D0+  5                                * 7CD1F
         D0=D0+  16                               * 7CD22
-        GOSUB   SUB_7CC56                        * 7CD25
+        GOSUB   MACCF0~jump                      * 7CD25
         D1=D1-  5                                * 7CD29
         D1=D1-  16                               * 7CD2C
         GOSUB   GetAbs%%AB1~jump                 * 7CD2F
@@ -509,7 +509,7 @@ L_7CD05:
         D0=C                                     * 7CD37
         D0=D0+  5                                * 7CD3A
         D0=D0+  16                               * 7CD3D
-        GOSUB   SUB_7CC5D                        * 7CD40
+        GOSUB   MACCF2~jump                      * 7CD40
         GOSUB   SUB_7CC64                        * 7CD44
         A=-A-1  S                                * 7CD48
         D1=D1+  5                                * 7CD4B
@@ -517,7 +517,7 @@ L_7CD05:
         C=RSTK                                   * 7CD51
         RSTK=C                                   * 7CD53
         D0=C                                     * 7CD55
-        GOSUB   SUB_7CC5D                        * 7CD58
+        GOSUB   MACCF2~jump                      * 7CD58
         C=RSTK                                   * 7CD5C
         D0=C                                     * 7CD5E
         D0=D0+  16                               * 7CD61
@@ -1326,7 +1326,7 @@ SUB_7DA1D:
 
 * refs (5): 7DA1D 993F5 99605 99A83 99AB5
 SUB_7DA2B:
-        GOSBVL  SUB_785B8                        * 7DA2B
+        GOSBVL  RCLtmp1%%                        * 7DA2B
         GOSBVL  SUB_78623                        * 7DA32
         GOSUB   SUB_7DA74                        * 7DA39
         RTNC                                     * 7DA3D
@@ -1557,11 +1557,11 @@ D/DATANH:
 
 * refs (1): 1AA07
 D/DCHS:
-        :: OBJ_56CD1 OBJ_56BEB Cr xNEG ;         * 7DCF9
+        :: OBJ_56CD1 derargABND Cr xNEG ;        * 7DCF9
 
 * refs (1): 1AAA5
 D/DCONJ:
-        :: OBJ_56CD1 OBJ_56BEB Cr xCONJ ;        * 7DD17
+        :: OBJ_56CD1 derargABND Cr xCONJ ;       * 7DD17
 
 * refs (1): 1B53C
 D/DCOS:

@@ -359,11 +359,11 @@ ROMP_0EA_02F:
 ROMP_0EA_030:
         :: ROMPTR 0EA 012 ZERO_DO 8GETLAM 20GETLAM #> IT * 8E22B
           :: 22Lget 8GETLAM 21GETLAM DUP#0=IT DROPONE TWO{}N MATREDIM * 8E254
-            22PUTLAM 8GETLAM 20PUTLAM OBJ_44BBB #0=?SEMI 21GETLAM #1= ?SEMI * 8E27C
+            22PUTLAM 8GETLAM 20PUTLAM ENTRWISE@ #0=?SEMI 21GETLAM #1= ?SEMI * 8E27C
             ROMPTR 0EA 031 ROMPTR 0EA 03A ;      * 8E2A4
           9GETLAM 21GETLAM #> IT                 * 8E2BF
           :: 22Lget MATTRN 9GETLAM 20GETLAM DUP#0=IT DROPONE TWO{}N MATREDIM * 8E2D3
-            MATTRN 22PUTLAM 9GETLAM 21PUTLAM OBJ_44BBB #1= ?SEMI * 8E300
+            MATTRN 22PUTLAM 9GETLAM 21PUTLAM ENTRWISE@ #1= ?SEMI * 8E300
             20GETLAM #1= ?SEMI                   * 8E323
 
 * ROMPTR 0EA 031
@@ -440,9 +440,9 @@ ROMP_0EA_03A:
 * ROMPTR 0EA 03B
 * refs (1): 8D288
 ROMP_0EA_03B:
-        :: OBJ_44BBB #2= case2drop               * 8E67C
+        :: ENTRWISE@ #2= case2drop               * 8E67C
           :: 21GETLAM 20GETLAM #* ;              * 8E690
-          OBJ_44BBB #0=ITE                       * 8E6A9
+          ENTRWISE@ #0=ITE                       * 8E6A9
           :: SWAP 21GETLAM ; 20GETLAM SWAP#1- #* #+ ; * 8E6B3
 
 * ROMPTR 0EA 03C
@@ -466,8 +466,8 @@ ROMP_0EA_03E:
 * ROMPTR 0EA 03F
 * refs (1): 8D288
 ROMP_0EA_03F:
-        :: OBJ_44BBB #0=case ROMPTR 0EA 036      * 8E776
-          OBJ_44BBB #1=case ROMPTR 0EA 039       * 8E790
+        :: ENTRWISE@ #0=case ROMPTR 0EA 036      * 8E776
+          ENTRWISE@ #1=case ROMPTR 0EA 039       * 8E790
         ;                                        * 8E7A5
 
 * ROMPTR 0EA 040
@@ -551,12 +551,12 @@ ROMP_0EA_049:
 * ROMPTR 0EA 04A
 * refs (1): 8D288
 ROMP_0EA_04A:
-        :: TakeOver $ "GO→" OBJ_44BBB #0= Box/StdLabel ; * 8EBD5
+        :: TakeOver $ "GO→" ENTRWISE@ #0= Box/StdLabel ; * 8EBD5
 
 * ROMPTR 0EA 04B
 * refs (1): 8D288
 ROMP_0EA_04B:
-        :: TakeOver $ "GO↓" OBJ_44BBB #1= Box/StdLabel ; * 8EC03
+        :: TakeOver $ "GO↓" ENTRWISE@ #1= Box/StdLabel ; * 8EC03
 
 * ROMPTR 0EA 04C
 * refs (1): 8D288
@@ -566,12 +566,12 @@ ROMP_0EA_04C:
 * ROMPTR 0EA 04D
 * refs (1): 8D288
 ROMP_0EA_04D:
-        :: TakeOver OBJ_44BBB #0=ITE BINT2 BINT0 OBJ_44BCB ROMPTR 0EA 04F ; * 8EC5F
+        :: TakeOver ENTRWISE@ #0=ITE BINT2 BINT0 OBJ_44BCB ROMPTR 0EA 04F ; * 8EC5F
 
 * ROMPTR 0EA 04E
 * refs (1): 8D288
 ROMP_0EA_04E:
-        :: TakeOver OBJ_44BBB #1= ITE BINT2 BINT1 * 8EC92
+        :: TakeOver ENTRWISE@ #1= ITE BINT2 BINT1 * 8EC92
           OBJ_44BCB ROMPTR 0EA 04F ;             * 8ECB5
 
 * ROMPTR 0EA 04F
@@ -763,7 +763,7 @@ ROMP_0EA_068:
 * ROMPTR 0EA 069
 * refs (1): 8D288
 ROMP_0EA_069:
-        :: 17GETLAM #0= 8GETLAM 20GETLAM #> OR caseDoBadKey OBJ_44BBB * 8F7AC
+        :: 17GETLAM #0= 8GETLAM 20GETLAM #> OR caseDoBadKey ENTRWISE@ * 8F7AC
           #0= 18GETLAM #0= ANDcase               * 8F7D9
           :: ONEONE 20PUTLAM 9PUTLAM BINT2 8PUTLAM * 8F7ED
 
@@ -803,7 +803,7 @@ ROMP_0EA_06C:
 * ROMPTR 0EA 06D
 * refs (1): 8D288
 ROMP_0EA_06D:
-        :: 17GETLAM #0= 9GETLAM 21GETLAM #> OR caseDoBadKey OBJ_44BBB * 8FB12
+        :: 17GETLAM #0= 9GETLAM 21GETLAM #> OR caseDoBadKey ENTRWISE@ * 8FB12
           #1= 18GETLAM #0= ANDcase               * 8FB3F
 
 * ROMPTR 0EA 06E

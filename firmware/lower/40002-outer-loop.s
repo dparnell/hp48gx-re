@@ -222,7 +222,7 @@ _()_;+(2st):
           :: OVER ?SEMI                          * 406D4
             DUPDUP $_XYZ OBJ_3516C 4UNROLL3DROP NOT?SEMI * 406E3
             CHR_Space >T$ ;                      * 406FC
-          OBJ_42CE2 NextChrInComLine=space? IT OBJ_429CB * 4070B
+          OBJ_42CE2 NextChrInComLine=space? IT DelCursChr * 4070B
           NOT?SEMI                               * 4071F
           LCursor ;                              * 40724
 

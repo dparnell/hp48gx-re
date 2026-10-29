@@ -4170,7 +4170,7 @@ pub(crate) fn Rom_Word_(r: &mut Run) {
                 op!(r, at, 0x61FE2..0x61FE4, 4, r.cpu.copy(R::C, R::A, Field::A)); // C=A A
                 op!(r, at, 0x61FE4..0x61FE6, 4, r.cpu.push_c()); // RSTK=C
                 op!(r, at, 0x61FE6..0x61FEC, 8, r.cpu.sub_con(R::A, Field::A, 11)); // A=A-CON A,11
-                branch!(r, at, 0x61FF3, 9, r.cpu.call(0x07ED8)); // GOSBVL SUB_07ED8
+                branch!(r, at, 0x61FF3, 9, r.cpu.call(0x07ED8)); // GOSBVL ROMPTR>ADDR
             }
             // #61FF3:
             0x61FF3..=0x61FF7 => {
@@ -7753,7 +7753,7 @@ pub(crate) fn SUB_64ADC(r: &mut Run) {
     }
 }
 
-// SUB_657B9: firmware/lower/63029-rpl-utils.s:3259
+// SUB_657B9: firmware/lower/63029-rpl-utils.s:3260
 pub(crate) fn SUB_657B9(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -7794,7 +7794,7 @@ pub(crate) fn SUB_657B9(r: &mut Run) {
     }
 }
 
-// SUB_657DF: firmware/lower/63029-rpl-utils.s:3277
+// SUB_657DF: firmware/lower/63029-rpl-utils.s:3278
 pub(crate) fn SUB_657DF(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -7839,8 +7839,9 @@ pub(crate) fn SUB_657DF(r: &mut Run) {
     }
 }
 
-// SUB_65807: firmware/lower/63029-rpl-utils.s:3298
-pub(crate) fn SUB_65807(r: &mut Run) {
+// A C -> A C = quotient, B = remainder: 64-bit division in the current mode (hex or decimal); C=0 does not return
+// IntDivW: firmware/lower/63029-rpl-utils.s:3300
+pub(crate) fn IntDivW(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -7904,7 +7905,7 @@ pub(crate) fn SUB_65807(r: &mut Run) {
     }
 }
 
-// SUB_65842: firmware/lower/63029-rpl-utils.s:3328
+// SUB_65842: firmware/lower/63029-rpl-utils.s:3330
 pub(crate) fn SUB_65842(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -7945,7 +7946,7 @@ pub(crate) fn SUB_65842(r: &mut Run) {
     }
 }
 
-// SUB_65863: firmware/lower/63029-rpl-utils.s:3346
+// SUB_65863: firmware/lower/63029-rpl-utils.s:3348
 pub(crate) fn SUB_65863(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -8117,7 +8118,7 @@ pub(crate) fn SUB_65863(r: &mut Run) {
 }
 
 // hxs hxs ->
-// putnibs: firmware/lower/63029-rpl-utils.s:3425
+// putnibs: firmware/lower/63029-rpl-utils.s:3427
 pub(crate) fn putnibs(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -8135,7 +8136,7 @@ pub(crate) fn putnibs(r: &mut Run) {
 }
 
 // hxs hxs -> hxs'
-// getnibs: firmware/lower/63029-rpl-utils.s:3431
+// getnibs: firmware/lower/63029-rpl-utils.s:3433
 pub(crate) fn getnibs(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -8222,7 +8223,7 @@ pub(crate) fn getnibs(r: &mut Run) {
     }
 }
 
-// OBJ_65A29: firmware/lower/63029-rpl-utils.s:3488
+// OBJ_65A29: firmware/lower/63029-rpl-utils.s:3490
 pub(crate) fn OBJ_65A29(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -8240,7 +8241,7 @@ pub(crate) fn OBJ_65A29(r: &mut Run) {
     }
 }
 
-// OBJ_6670A: firmware/lower/660FC-misc-66000.s:98
+// OBJ_6670A: firmware/lower/660FC-misc-66000.s:99
 pub(crate) fn OBJ_6670A(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -8367,7 +8368,7 @@ pub(crate) fn OBJ_6670A(r: &mut Run) {
     }
 }
 
-// OBJ_6689C: firmware/lower/660FC-misc-66000.s:194
+// OBJ_6689C: firmware/lower/660FC-misc-66000.s:195
 pub(crate) fn OBJ_6689C(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -8452,7 +8453,7 @@ pub(crate) fn OBJ_6689C(r: &mut Run) {
     }
 }
 
-// OBJ_66A0A: firmware/lower/660FC-misc-66000.s:256
+// OBJ_66A0A: firmware/lower/660FC-misc-66000.s:257
 pub(crate) fn OBJ_66A0A(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -8606,7 +8607,7 @@ pub(crate) fn OBJ_66A0A(r: &mut Run) {
     }
 }
 
-// OBJ_66B19: firmware/lower/660FC-misc-66000.s:345
+// OBJ_66B19: firmware/lower/660FC-misc-66000.s:346
 pub(crate) fn OBJ_66B19(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -8683,7 +8684,7 @@ pub(crate) fn OBJ_66B19(r: &mut Run) {
     }
 }
 
-// OBJ_66BAD: firmware/lower/660FC-misc-66000.s:396
+// OBJ_66BAD: firmware/lower/660FC-misc-66000.s:397
 pub(crate) fn OBJ_66BAD(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -8708,7 +8709,7 @@ pub(crate) fn OBJ_66BAD(r: &mut Run) {
     }
 }
 
-// OBJ_66BC1: firmware/lower/660FC-misc-66000.s:404
+// OBJ_66BC1: firmware/lower/660FC-misc-66000.s:405
 pub(crate) fn OBJ_66BC1(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -8765,7 +8766,7 @@ pub(crate) fn OBJ_66BC1(r: &mut Run) {
     }
 }
 
-// Code_67005: firmware/lower/660FC-misc-66000.s:539
+// Code_67005: firmware/lower/660FC-misc-66000.s:540
 pub(crate) fn Code_67005(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -8792,7 +8793,7 @@ pub(crate) fn Code_67005(r: &mut Run) {
     }
 }
 
-// SUB_67036: firmware/lower/660FC-misc-66000.s:555
+// SUB_67036: firmware/lower/660FC-misc-66000.s:556
 pub(crate) fn SUB_67036(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -8914,7 +8915,7 @@ pub(crate) fn SUB_67036(r: &mut Run) {
     }
 }
 
-// OBJ_670EE: firmware/lower/660FC-misc-66000.s:623
+// OBJ_670EE: firmware/lower/660FC-misc-66000.s:624
 pub(crate) fn OBJ_670EE(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -8954,7 +8955,7 @@ pub(crate) fn OBJ_670EE(r: &mut Run) {
     }
 }
 
-// SUB_67129: firmware/lower/660FC-misc-66000.s:643
+// SUB_67129: firmware/lower/660FC-misc-66000.s:644
 pub(crate) fn SUB_67129(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -8977,7 +8978,7 @@ pub(crate) fn SUB_67129(r: &mut Run) {
     }
 }
 
-// SUB_67136: firmware/lower/660FC-misc-66000.s:651
+// SUB_67136: firmware/lower/660FC-misc-66000.s:652
 pub(crate) fn SUB_67136(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -9008,7 +9009,7 @@ pub(crate) fn SUB_67136(r: &mut Run) {
     }
 }
 
-// SAVPTR~jump_21: firmware/lower/660FC-misc-66000.s:664
+// SAVPTR~jump_21: firmware/lower/660FC-misc-66000.s:665
 pub(crate) fn SAVPTR_jump_21(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -9024,7 +9025,7 @@ pub(crate) fn SAVPTR_jump_21(r: &mut Run) {
     }
 }
 
-// OBJ_6715D: firmware/lower/660FC-misc-66000.s:668
+// OBJ_6715D: firmware/lower/660FC-misc-66000.s:669
 pub(crate) fn OBJ_6715D(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -9060,7 +9061,7 @@ pub(crate) fn OBJ_6715D(r: &mut Run) {
     }
 }
 
-// OBJ_67193: firmware/lower/660FC-misc-66000.s:687
+// OBJ_67193: firmware/lower/660FC-misc-66000.s:688
 pub(crate) fn OBJ_67193(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -9087,7 +9088,7 @@ pub(crate) fn OBJ_67193(r: &mut Run) {
     }
 }
 
-// OBJ_671B0: firmware/lower/660FC-misc-66000.s:697
+// OBJ_671B0: firmware/lower/660FC-misc-66000.s:698
 pub(crate) fn OBJ_671B0(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -9105,7 +9106,7 @@ pub(crate) fn OBJ_671B0(r: &mut Run) {
     }
 }
 
-// OBJ_671BF: firmware/lower/660FC-misc-66000.s:704
+// OBJ_671BF: firmware/lower/660FC-misc-66000.s:705
 pub(crate) fn OBJ_671BF(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -9297,7 +9298,7 @@ pub(crate) fn OBJ_671BF(r: &mut Run) {
     }
 }
 
-// SUB_672C4: firmware/lower/660FC-misc-66000.s:802
+// SUB_672C4: firmware/lower/660FC-misc-66000.s:803
 pub(crate) fn SUB_672C4(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -9316,7 +9317,7 @@ pub(crate) fn SUB_672C4(r: &mut Run) {
     }
 }
 
-// SUB_672D2: firmware/lower/660FC-misc-66000.s:809
+// SUB_672D2: firmware/lower/660FC-misc-66000.s:810
 pub(crate) fn SUB_672D2(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -9335,7 +9336,7 @@ pub(crate) fn SUB_672D2(r: &mut Run) {
     }
 }
 
-// OBJ_672E6: firmware/lower/660FC-misc-66000.s:821
+// OBJ_672E6: firmware/lower/660FC-misc-66000.s:822
 pub(crate) fn OBJ_672E6(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -9361,7 +9362,7 @@ pub(crate) fn OBJ_672E6(r: &mut Run) {
 }
 
 // -> #n+1: boxes in use + 1, the index the next new box gets
-// EqwBoxCount#1+: firmware/lower/660FC-misc-66000.s:843
+// EqwBoxCount#1+: firmware/lower/660FC-misc-66000.s:844
 pub(crate) fn EqwBoxCount_1_(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -9380,7 +9381,7 @@ pub(crate) fn EqwBoxCount_1_(r: &mut Run) {
 }
 
 // -> #n+2
-// EqwBoxCount#2+: firmware/lower/660FC-misc-66000.s:852
+// EqwBoxCount#2+: firmware/lower/660FC-misc-66000.s:853
 pub(crate) fn EqwBoxCount_2_(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -9399,7 +9400,7 @@ pub(crate) fn EqwBoxCount_2_(r: &mut Run) {
 }
 
 // -> #n+3
-// EqwBoxCount#3+: firmware/lower/660FC-misc-66000.s:860
+// EqwBoxCount#3+: firmware/lower/660FC-misc-66000.s:861
 pub(crate) fn EqwBoxCount_3_(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -9417,8 +9418,9 @@ pub(crate) fn EqwBoxCount_3_(r: &mut Run) {
     }
 }
 
-// OBJ_67364: firmware/lower/660FC-misc-66000.s:867
-pub(crate) fn OBJ_67364(r: &mut Run) {
+// -> #n-1
+// EqwBoxCount#1-: firmware/lower/660FC-misc-66000.s:869
+pub(crate) fn EqwBoxCount_1__67369(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -9435,7 +9437,7 @@ pub(crate) fn OBJ_67364(r: &mut Run) {
     }
 }
 
-// OBJ_67371: firmware/lower/660FC-misc-66000.s:874
+// OBJ_67371: firmware/lower/660FC-misc-66000.s:876
 pub(crate) fn OBJ_67371(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -9453,7 +9455,7 @@ pub(crate) fn OBJ_67371(r: &mut Run) {
 }
 
 // -> #n: EquationWriter layout: the number of boxes in use (also the newest box's index)
-// EqwBoxCount: firmware/lower/660FC-misc-66000.s:881
+// EqwBoxCount: firmware/lower/660FC-misc-66000.s:883
 pub(crate) fn EqwBoxCount(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -9485,7 +9487,7 @@ pub(crate) fn EqwBoxCount(r: &mut Run) {
     }
 }
 
-// OBJ_673A2: firmware/lower/660FC-misc-66000.s:896
+// OBJ_673A2: firmware/lower/660FC-misc-66000.s:898
 pub(crate) fn OBJ_673A2(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -9509,7 +9511,7 @@ pub(crate) fn OBJ_673A2(r: &mut Run) {
     }
 }
 
-// OBJ_673BB: firmware/lower/660FC-misc-66000.s:906
+// OBJ_673BB: firmware/lower/660FC-misc-66000.s:908
 pub(crate) fn OBJ_673BB(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -9530,7 +9532,7 @@ pub(crate) fn OBJ_673BB(r: &mut Run) {
     }
 }
 
-// OBJ_673D6: firmware/lower/660FC-misc-66000.s:916
+// OBJ_673D6: firmware/lower/660FC-misc-66000.s:918
 pub(crate) fn OBJ_673D6(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -9547,7 +9549,7 @@ pub(crate) fn OBJ_673D6(r: &mut Run) {
     }
 }
 
-// OBJ_673E6: firmware/lower/660FC-misc-66000.s:922
+// OBJ_673E6: firmware/lower/660FC-misc-66000.s:924
 pub(crate) fn OBJ_673E6(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -9564,7 +9566,7 @@ pub(crate) fn OBJ_673E6(r: &mut Run) {
     }
 }
 
-// OBJ_673F6: firmware/lower/660FC-misc-66000.s:928
+// OBJ_673F6: firmware/lower/660FC-misc-66000.s:930
 pub(crate) fn OBJ_673F6(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -9581,7 +9583,7 @@ pub(crate) fn OBJ_673F6(r: &mut Run) {
     }
 }
 
-// OBJ_67406: firmware/lower/660FC-misc-66000.s:934
+// OBJ_67406: firmware/lower/660FC-misc-66000.s:936
 pub(crate) fn OBJ_67406(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -9598,9 +9600,9 @@ pub(crate) fn OBJ_67406(r: &mut Run) {
     }
 }
 
-// Probably: EquationWriter: -> #box, the current box (kept in FONTHEIGHT)
-// OBJ_67416: firmware/lower/660FC-misc-66000.s:941
-pub(crate) fn OBJ_67416(r: &mut Run) {
+// -> #box: the current (cursor) box, kept in FONTHEIGHT
+// EqwCurBox@: firmware/lower/660FC-misc-66000.s:943
+pub(crate) fn EqwCurBox_(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -9616,7 +9618,7 @@ pub(crate) fn OBJ_67416(r: &mut Run) {
     }
 }
 
-// OBJ_67426: firmware/lower/660FC-misc-66000.s:947
+// OBJ_67426: firmware/lower/660FC-misc-66000.s:949
 pub(crate) fn OBJ_67426(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -9639,9 +9641,9 @@ pub(crate) fn OBJ_67426(r: &mut Run) {
     }
 }
 
-// Probably: EquationWriter: #box -> , set the current box (kept in FONTHEIGHT)
-// OBJ_67448: firmware/lower/660FC-misc-66000.s:961
-pub(crate) fn OBJ_67448(r: &mut Run) {
+// #box -> : make a box current
+// EqwCurBox!: firmware/lower/660FC-misc-66000.s:963
+pub(crate) fn EqwCurBox__6744D(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -9657,7 +9659,7 @@ pub(crate) fn OBJ_67448(r: &mut Run) {
     }
 }
 
-// OBJ_67458: firmware/lower/660FC-misc-66000.s:967
+// OBJ_67458: firmware/lower/660FC-misc-66000.s:969
 pub(crate) fn OBJ_67458(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -9678,7 +9680,7 @@ pub(crate) fn OBJ_67458(r: &mut Run) {
     }
 }
 
-// OBJ_6746B: firmware/lower/660FC-misc-66000.s:974
+// OBJ_6746B: firmware/lower/660FC-misc-66000.s:976
 pub(crate) fn OBJ_6746B(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -9695,7 +9697,7 @@ pub(crate) fn OBJ_6746B(r: &mut Run) {
     }
 }
 
-// OBJ_6747B: firmware/lower/660FC-misc-66000.s:980
+// OBJ_6747B: firmware/lower/660FC-misc-66000.s:982
 pub(crate) fn OBJ_6747B(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -9712,7 +9714,7 @@ pub(crate) fn OBJ_6747B(r: &mut Run) {
     }
 }
 
-// OBJ_6748B: firmware/lower/660FC-misc-66000.s:986
+// OBJ_6748B: firmware/lower/660FC-misc-66000.s:988
 pub(crate) fn OBJ_6748B(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -9729,7 +9731,7 @@ pub(crate) fn OBJ_6748B(r: &mut Run) {
     }
 }
 
-// OBJ_6749B: firmware/lower/660FC-misc-66000.s:992
+// OBJ_6749B: firmware/lower/660FC-misc-66000.s:994
 pub(crate) fn OBJ_6749B(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -9746,7 +9748,7 @@ pub(crate) fn OBJ_6749B(r: &mut Run) {
     }
 }
 
-// OBJ_674AB: firmware/lower/660FC-misc-66000.s:998
+// OBJ_674AB: firmware/lower/660FC-misc-66000.s:1000
 pub(crate) fn OBJ_674AB(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -9763,7 +9765,7 @@ pub(crate) fn OBJ_674AB(r: &mut Run) {
     }
 }
 
-// OBJ_674BB: firmware/lower/660FC-misc-66000.s:1004
+// OBJ_674BB: firmware/lower/660FC-misc-66000.s:1006
 pub(crate) fn OBJ_674BB(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -9784,7 +9786,7 @@ pub(crate) fn OBJ_674BB(r: &mut Run) {
     }
 }
 
-// OBJ_674D6: firmware/lower/660FC-misc-66000.s:1014
+// OBJ_674D6: firmware/lower/660FC-misc-66000.s:1016
 pub(crate) fn OBJ_674D6(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -9808,7 +9810,7 @@ pub(crate) fn OBJ_674D6(r: &mut Run) {
     }
 }
 
-// SUB_674EA: firmware/lower/660FC-misc-66000.s:1022
+// SUB_674EA: firmware/lower/660FC-misc-66000.s:1024
 pub(crate) fn SUB_674EA(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -9841,7 +9843,7 @@ pub(crate) fn SUB_674EA(r: &mut Run) {
     }
 }
 
-// OBJ_67519: firmware/lower/660FC-misc-66000.s:1037
+// OBJ_67519: firmware/lower/660FC-misc-66000.s:1039
 pub(crate) fn OBJ_67519(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -9864,7 +9866,7 @@ pub(crate) fn OBJ_67519(r: &mut Run) {
     }
 }
 
-// OBJ_6755A: firmware/lower/660FC-misc-66000.s:1051
+// OBJ_6755A: firmware/lower/660FC-misc-66000.s:1053
 pub(crate) fn OBJ_6755A(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -9919,7 +9921,7 @@ pub(crate) fn OBJ_6755A(r: &mut Run) {
     }
 }
 
-// SUB_675BE: firmware/lower/660FC-misc-66000.s:1081
+// SUB_675BE: firmware/lower/660FC-misc-66000.s:1083
 pub(crate) fn SUB_675BE(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -9944,7 +9946,7 @@ pub(crate) fn SUB_675BE(r: &mut Run) {
     }
 }
 
-// OBJ_67648: firmware/lower/660FC-misc-66000.s:1103
+// OBJ_67648: firmware/lower/660FC-misc-66000.s:1105
 pub(crate) fn OBJ_67648(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -9967,7 +9969,7 @@ pub(crate) fn OBJ_67648(r: &mut Run) {
     }
 }
 
-// EqwRuleKey0~9: firmware/lower/660FC-misc-66000.s:1113
+// EqwRuleKey0~9: firmware/lower/660FC-misc-66000.s:1115
 pub(crate) fn EqwRuleKey0_9(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -9989,7 +9991,7 @@ pub(crate) fn EqwRuleKey0_9(r: &mut Run) {
     }
 }
 
-// OBJ_67682: firmware/lower/660FC-misc-66000.s:1121
+// OBJ_67682: firmware/lower/660FC-misc-66000.s:1123
 pub(crate) fn OBJ_67682(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -10025,7 +10027,7 @@ pub(crate) fn OBJ_67682(r: &mut Run) {
     }
 }
 
-// SUB_676C5: firmware/lower/660FC-misc-66000.s:1143
+// SUB_676C5: firmware/lower/660FC-misc-66000.s:1145
 pub(crate) fn SUB_676C5(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -10045,7 +10047,7 @@ pub(crate) fn SUB_676C5(r: &mut Run) {
     }
 }
 
-// OBJ_67765: firmware/lower/660FC-misc-66000.s:1167
+// OBJ_67765: firmware/lower/660FC-misc-66000.s:1169
 pub(crate) fn OBJ_67765(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -10095,7 +10097,7 @@ pub(crate) fn OBJ_67765(r: &mut Run) {
     }
 }
 
-// OBJ_6779A: firmware/lower/660FC-misc-66000.s:1189
+// OBJ_6779A: firmware/lower/660FC-misc-66000.s:1191
 pub(crate) fn OBJ_6779A(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -10129,7 +10131,7 @@ pub(crate) fn OBJ_6779A(r: &mut Run) {
     }
 }
 
-// OBJ_677C3: firmware/lower/660FC-misc-66000.s:1203
+// OBJ_677C3: firmware/lower/660FC-misc-66000.s:1205
 pub(crate) fn OBJ_677C3(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -10153,7 +10155,7 @@ pub(crate) fn OBJ_677C3(r: &mut Run) {
     }
 }
 
-// OBJ_677DE: firmware/lower/660FC-misc-66000.s:1213
+// OBJ_677DE: firmware/lower/660FC-misc-66000.s:1215
 pub(crate) fn OBJ_677DE(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -10170,7 +10172,7 @@ pub(crate) fn OBJ_677DE(r: &mut Run) {
     }
 }
 
-// OBJ_677EA: firmware/lower/660FC-misc-66000.s:1219
+// OBJ_677EA: firmware/lower/660FC-misc-66000.s:1221
 pub(crate) fn OBJ_677EA(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -10271,7 +10273,7 @@ pub(crate) fn OBJ_677EA(r: &mut Run) {
     }
 }
 
-// OBJ_67878: firmware/lower/660FC-misc-66000.s:1271
+// OBJ_67878: firmware/lower/660FC-misc-66000.s:1273
 pub(crate) fn OBJ_67878(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -10338,7 +10340,7 @@ pub(crate) fn OBJ_67878(r: &mut Run) {
 }
 
 // #box -> #parent: the box's parent link (field #1B), 0 at the root
-// EqwBoxParent@: firmware/lower/660FC-misc-66000.s:1312
+// EqwBoxParent@: firmware/lower/660FC-misc-66000.s:1315
 pub(crate) fn EqwBoxParent_(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -10406,7 +10408,7 @@ pub(crate) fn overlap_67908(r: &mut Run) {
     }
 }
 
-// SUB_67918: firmware/lower/660FC-misc-66000.s:1341
+// SUB_67918: firmware/lower/660FC-misc-66000.s:1344
 pub(crate) fn SUB_67918(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -10463,9 +10465,9 @@ pub(crate) fn SUB_67918(r: &mut Run) {
     }
 }
 
-// Probably: EquationWriter: #box -> next-sibling link (field #1E)
-// OBJ_6798C: firmware/lower/660FC-misc-66000.s:1382
-pub(crate) fn OBJ_6798C(r: &mut Run) {
+// #b -> #next sibling (field #1E)
+// EqwBoxNext@: firmware/lower/660FC-misc-66000.s:1385
+pub(crate) fn EqwBoxNext_(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -10482,9 +10484,9 @@ pub(crate) fn OBJ_6798C(r: &mut Run) {
     }
 }
 
-// Probably: EquationWriter: #box -> previous-sibling link (field #21)
-// OBJ_679A1: firmware/lower/660FC-misc-66000.s:1395
-pub(crate) fn OBJ_679A1(r: &mut Run) {
+// #b -> #previous sibling (field #21)
+// EqwBoxPrev@: firmware/lower/660FC-misc-66000.s:1398
+pub(crate) fn EqwBoxPrev_(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -10500,9 +10502,9 @@ pub(crate) fn OBJ_679A1(r: &mut Run) {
     }
 }
 
-// Probably: EquationWriter: #box -> first-child link (field #24)
-// OBJ_679B3: firmware/lower/660FC-misc-66000.s:1406
-pub(crate) fn OBJ_679B3(r: &mut Run) {
+// #b -> #first child (field #24)
+// EqwBoxFirst@: firmware/lower/660FC-misc-66000.s:1410
+pub(crate) fn EqwBoxFirst_(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -10518,9 +10520,9 @@ pub(crate) fn OBJ_679B3(r: &mut Run) {
     }
 }
 
-// Probably: EquationWriter: #box -> last-child link (field #27)
-// OBJ_679C5: firmware/lower/660FC-misc-66000.s:1417
-pub(crate) fn OBJ_679C5(r: &mut Run) {
+// #b -> #last child (field #27)
+// EqwBoxLast@: firmware/lower/660FC-misc-66000.s:1421
+pub(crate) fn EqwBoxLast_(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -10536,7 +10538,7 @@ pub(crate) fn OBJ_679C5(r: &mut Run) {
     }
 }
 
-// OBJ_679D7: firmware/lower/660FC-misc-66000.s:1427
+// OBJ_679D7: firmware/lower/660FC-misc-66000.s:1431
 pub(crate) fn OBJ_679D7(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -10558,7 +10560,7 @@ pub(crate) fn OBJ_679D7(r: &mut Run) {
     }
 }
 
-// OBJ_679EA: firmware/lower/660FC-misc-66000.s:1435
+// OBJ_679EA: firmware/lower/660FC-misc-66000.s:1439
 pub(crate) fn OBJ_679EA(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -10598,7 +10600,7 @@ pub(crate) fn OBJ_679EA(r: &mut Run) {
     }
 }
 
-// EqwRuleKey0~10: firmware/lower/660FC-misc-66000.s:1454
+// EqwRuleKey0~10: firmware/lower/660FC-misc-66000.s:1458
 pub(crate) fn EqwRuleKey0_10(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -10623,7 +10625,7 @@ pub(crate) fn EqwRuleKey0_10(r: &mut Run) {
     }
 }
 
-// SUB_67A3B: firmware/lower/660FC-misc-66000.s:1465
+// SUB_67A3B: firmware/lower/660FC-misc-66000.s:1469
 pub(crate) fn SUB_67A3B(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -10640,7 +10642,7 @@ pub(crate) fn SUB_67A3B(r: &mut Run) {
     }
 }
 
-// SUB_67A3D: firmware/lower/660FC-misc-66000.s:1469
+// SUB_67A3D: firmware/lower/660FC-misc-66000.s:1473
 pub(crate) fn SUB_67A3D(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -10659,8 +10661,8 @@ pub(crate) fn SUB_67A3D(r: &mut Run) {
 }
 
 // POP# -> D0 at box n's fields (table at ITEM1STATE, 42 nibbles a box); the RPL IP saved in R2
-// EquationWriter box record, 42 nibbles, offsets from D0: +00 type; +01 size level (low); +02/+05 position y/x (low); +08 vertical reference (medium-low); +0B horizontal centre (medium); +0E height, +11 width (medium-high); +14/+16 size and placement handler indexes; +18 unknown; +1B parent (high); +1E/+21 next/previous sibling and +24/+27 first/last child (medium)
-// EqwPOP#>Box: firmware/lower/660FC-misc-66000.s:1477
+// EquationWriter box record, 42 nibbles, offsets from D0: +00 type; +01 size level (low 3 bits; bit 3 a flag); +02/+05 position y/x (low); +08 vertical reference (medium-low); +0B horizontal centre (medium); +0E height, +11 width (medium-high); +14/+16 size and placement handler indexes; +18 a 12-bit field (#800 marks a value from #8xxxx, FFF is -1); +1B parent; +1E next sibling, +21 previous sibling, +24 first child, +27 last child. Size handlers are called with the parent below the box
+// EqwPOP#>Box: firmware/lower/660FC-misc-66000.s:1481
 pub(crate) fn EqwPOP__Box(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -10676,7 +10678,7 @@ pub(crate) fn EqwPOP__Box(r: &mut Run) {
     }
 }
 
-// SUB_67A51: firmware/lower/660FC-misc-66000.s:1481
+// SUB_67A51: firmware/lower/660FC-misc-66000.s:1485
 pub(crate) fn SUB_67A51(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -10707,7 +10709,7 @@ pub(crate) fn SUB_67A51(r: &mut Run) {
     }
 }
 
-// OBJ_67A7E: firmware/lower/660FC-misc-66000.s:1500
+// OBJ_67A7E: firmware/lower/660FC-misc-66000.s:1504
 pub(crate) fn OBJ_67A7E(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -10724,7 +10726,7 @@ pub(crate) fn OBJ_67A7E(r: &mut Run) {
     }
 }
 
-// OBJ_67A8B: firmware/lower/660FC-misc-66000.s:1506
+// OBJ_67A8B: firmware/lower/660FC-misc-66000.s:1510
 pub(crate) fn OBJ_67A8B(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -10741,7 +10743,7 @@ pub(crate) fn OBJ_67A8B(r: &mut Run) {
     }
 }
 
-// OBJ_67A9D: firmware/lower/660FC-misc-66000.s:1516
+// OBJ_67A9D: firmware/lower/660FC-misc-66000.s:1520
 pub(crate) fn OBJ_67A9D(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -10758,7 +10760,7 @@ pub(crate) fn OBJ_67A9D(r: &mut Run) {
     }
 }
 
-// OBJ_67AAF: firmware/lower/660FC-misc-66000.s:1526
+// OBJ_67AAF: firmware/lower/660FC-misc-66000.s:1530
 pub(crate) fn OBJ_67AAF(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -10775,7 +10777,7 @@ pub(crate) fn OBJ_67AAF(r: &mut Run) {
     }
 }
 
-// OBJ_67AD5: firmware/lower/660FC-misc-66000.s:1537
+// OBJ_67AD5: firmware/lower/660FC-misc-66000.s:1541
 pub(crate) fn OBJ_67AD5(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -10793,7 +10795,7 @@ pub(crate) fn OBJ_67AD5(r: &mut Run) {
 }
 
 // Probably: EquationWriter: #box -> vertical reference (field #08)
-// OBJ_67AE2: firmware/lower/660FC-misc-66000.s:1545
+// OBJ_67AE2: firmware/lower/660FC-misc-66000.s:1549
 pub(crate) fn OBJ_67AE2(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -10810,7 +10812,7 @@ pub(crate) fn OBJ_67AE2(r: &mut Run) {
     }
 }
 
-// OBJ_67B17: firmware/lower/660FC-misc-66000.s:1564
+// OBJ_67B17: firmware/lower/660FC-misc-66000.s:1568
 pub(crate) fn OBJ_67B17(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -10862,7 +10864,7 @@ pub(crate) fn OBJ_67B17(r: &mut Run) {
     }
 }
 
-// OBJ_67B67: firmware/lower/660FC-misc-66000.s:1594
+// OBJ_67B67: firmware/lower/660FC-misc-66000.s:1598
 pub(crate) fn OBJ_67B67(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -10901,7 +10903,7 @@ pub(crate) fn OBJ_67B67(r: &mut Run) {
     }
 }
 
-// OBJ_67BA1: firmware/lower/660FC-misc-66000.s:1614
+// OBJ_67BA1: firmware/lower/660FC-misc-66000.s:1618
 pub(crate) fn OBJ_67BA1(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -10918,7 +10920,7 @@ pub(crate) fn OBJ_67BA1(r: &mut Run) {
     }
 }
 
-// OBJ_67BAE: firmware/lower/660FC-misc-66000.s:1620
+// OBJ_67BAE: firmware/lower/660FC-misc-66000.s:1624
 pub(crate) fn OBJ_67BAE(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -10935,7 +10937,7 @@ pub(crate) fn OBJ_67BAE(r: &mut Run) {
     }
 }
 
-// OBJ_67BBB: firmware/lower/660FC-misc-66000.s:1626
+// OBJ_67BBB: firmware/lower/660FC-misc-66000.s:1630
 pub(crate) fn OBJ_67BBB(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -10952,7 +10954,7 @@ pub(crate) fn OBJ_67BBB(r: &mut Run) {
     }
 }
 
-// OBJ_67BC8: firmware/lower/660FC-misc-66000.s:1632
+// OBJ_67BC8: firmware/lower/660FC-misc-66000.s:1636
 pub(crate) fn OBJ_67BC8(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -10969,8 +10971,9 @@ pub(crate) fn OBJ_67BC8(r: &mut Run) {
     }
 }
 
-// OBJ_67BD5: firmware/lower/660FC-misc-66000.s:1638
-pub(crate) fn OBJ_67BD5(r: &mut Run) {
+// #b #prev -> : set the previous-sibling link
+// EqwBoxPrev!: firmware/lower/660FC-misc-66000.s:1643
+pub(crate) fn EqwBoxPrev__67BDA(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -10986,9 +10989,9 @@ pub(crate) fn OBJ_67BD5(r: &mut Run) {
     }
 }
 
-// Probably: EquationWriter: #box #box' -> , set the next-sibling link (field #1E)
-// OBJ_67BE2: firmware/lower/660FC-misc-66000.s:1645
-pub(crate) fn OBJ_67BE2(r: &mut Run) {
+// #b #next -> : set the next-sibling link
+// EqwBoxNext!: firmware/lower/660FC-misc-66000.s:1650
+pub(crate) fn EqwBoxNext__67BE7(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -11004,8 +11007,9 @@ pub(crate) fn OBJ_67BE2(r: &mut Run) {
     }
 }
 
-// OBJ_67BEF: firmware/lower/660FC-misc-66000.s:1651
-pub(crate) fn OBJ_67BEF(r: &mut Run) {
+// #b #first -> : set the first-child link
+// EqwBoxFirst!: firmware/lower/660FC-misc-66000.s:1657
+pub(crate) fn EqwBoxFirst__67BF4(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -11021,9 +11025,9 @@ pub(crate) fn OBJ_67BEF(r: &mut Run) {
     }
 }
 
-// Probably: EquationWriter: #box #child -> , set the last-child link (field #27)
-// OBJ_67BFC: firmware/lower/660FC-misc-66000.s:1658
-pub(crate) fn OBJ_67BFC(r: &mut Run) {
+// #b #last -> : set the last-child link
+// EqwBoxLast!: firmware/lower/660FC-misc-66000.s:1664
+pub(crate) fn EqwBoxLast__67C01(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -11039,7 +11043,7 @@ pub(crate) fn OBJ_67BFC(r: &mut Run) {
     }
 }
 
-// OBJ_67C09: firmware/lower/660FC-misc-66000.s:1664
+// OBJ_67C09: firmware/lower/660FC-misc-66000.s:1670
 pub(crate) fn OBJ_67C09(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -11056,7 +11060,7 @@ pub(crate) fn OBJ_67C09(r: &mut Run) {
     }
 }
 
-// OBJ_67C16: firmware/lower/660FC-misc-66000.s:1670
+// OBJ_67C16: firmware/lower/660FC-misc-66000.s:1676
 pub(crate) fn OBJ_67C16(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -11073,13 +11077,14 @@ pub(crate) fn OBJ_67C16(r: &mut Run) {
     }
 }
 
-// OBJ_67C3C: firmware/lower/660FC-misc-66000.s:1681
-pub(crate) fn OBJ_67C3C(r: &mut Run) {
+// #b #v -> : set field +18 (12 bits; #800 marks a value from #8xxxx, FFF is -1)
+// EqwBox#18!: firmware/lower/660FC-misc-66000.s:1688
+pub(crate) fn EqwBox_18_(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
             0x67C41..=0x67C41 => {
-                branch!(r, at, 0x67C45, 6, r.cpu.call(0x67C53)); // GOSUB SUB_67C53
+                branch!(r, at, 0x67C45, 6, r.cpu.call(0x67C53)); // GOSUB EqwBox#18!~1
             }
             // #67C45:
             0x67C45..=0x67C4F => {
@@ -11095,8 +11100,8 @@ pub(crate) fn OBJ_67C3C(r: &mut Run) {
     }
 }
 
-// SUB_67C53: firmware/lower/660FC-misc-66000.s:1690
-pub(crate) fn SUB_67C53(r: &mut Run) {
+// EqwBox#18!~1: firmware/lower/660FC-misc-66000.s:1697
+pub(crate) fn EqwBox_18__1(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -11123,7 +11128,7 @@ pub(crate) fn SUB_67C53(r: &mut Run) {
     }
 }
 
-// OBJ_67C85: firmware/lower/660FC-misc-66000.s:1705
+// OBJ_67C85: firmware/lower/660FC-misc-66000.s:1712
 pub(crate) fn OBJ_67C85(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -11149,7 +11154,7 @@ pub(crate) fn OBJ_67C85(r: &mut Run) {
     }
 }
 
-// OBJ_67CA2: firmware/lower/660FC-misc-66000.s:1716
+// OBJ_67CA2: firmware/lower/660FC-misc-66000.s:1723
 pub(crate) fn OBJ_67CA2(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -11173,7 +11178,7 @@ pub(crate) fn OBJ_67CA2(r: &mut Run) {
     }
 }
 
-// OBJ_67CBE: firmware/lower/660FC-misc-66000.s:1726
+// OBJ_67CBE: firmware/lower/660FC-misc-66000.s:1733
 pub(crate) fn OBJ_67CBE(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -11220,7 +11225,7 @@ pub(crate) fn OBJ_67CBE(r: &mut Run) {
     }
 }
 
-// OBJ_67D0F: firmware/lower/660FC-misc-66000.s:1754
+// OBJ_67D0F: firmware/lower/660FC-misc-66000.s:1761
 pub(crate) fn OBJ_67D0F(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -11237,7 +11242,7 @@ pub(crate) fn OBJ_67D0F(r: &mut Run) {
     }
 }
 
-// OBJ_67D1B: firmware/lower/660FC-misc-66000.s:1760
+// OBJ_67D1B: firmware/lower/660FC-misc-66000.s:1767
 pub(crate) fn OBJ_67D1B(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -11357,7 +11362,7 @@ pub(crate) fn OBJ_67D1B(r: &mut Run) {
     }
 }
 
-// OBJ_67DCF: firmware/lower/660FC-misc-66000.s:1829
+// OBJ_67DCF: firmware/lower/660FC-misc-66000.s:1836
 pub(crate) fn OBJ_67DCF(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -11378,7 +11383,8 @@ pub(crate) fn OBJ_67DCF(r: &mut Run) {
     }
 }
 
-// OBJ_67DDF: firmware/lower/660FC-misc-66000.s:1836
+// Probably: EquationWriter: item 1 (a state code) of the top 5-object frame on its work stack
+// OBJ_67DDF: firmware/lower/660FC-misc-66000.s:1844
 pub(crate) fn OBJ_67DDF(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -11398,7 +11404,7 @@ pub(crate) fn OBJ_67DDF(r: &mut Run) {
     }
 }
 
-// OBJ_67DEC: firmware/lower/660FC-misc-66000.s:1842
+// OBJ_67DEC: firmware/lower/660FC-misc-66000.s:1850
 pub(crate) fn OBJ_67DEC(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -11419,7 +11425,7 @@ pub(crate) fn OBJ_67DEC(r: &mut Run) {
     }
 }
 
-// OBJ_67DFC: firmware/lower/660FC-misc-66000.s:1849
+// OBJ_67DFC: firmware/lower/660FC-misc-66000.s:1857
 pub(crate) fn OBJ_67DFC(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -11440,7 +11446,8 @@ pub(crate) fn OBJ_67DFC(r: &mut Run) {
     }
 }
 
-// OBJ_67E0C: firmware/lower/660FC-misc-66000.s:1856
+// Probably: EquationWriter: item 5 (a box number) of the top frame on its work stack
+// OBJ_67E0C: firmware/lower/660FC-misc-66000.s:1865
 pub(crate) fn OBJ_67E0C(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -11473,7 +11480,7 @@ pub(crate) fn OBJ_67E0C(r: &mut Run) {
     }
 }
 
-// OBJ_67E39: firmware/lower/660FC-misc-66000.s:1876
+// OBJ_67E39: firmware/lower/660FC-misc-66000.s:1885
 pub(crate) fn OBJ_67E39(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -11493,7 +11500,7 @@ pub(crate) fn OBJ_67E39(r: &mut Run) {
     }
 }
 
-// OBJ_67E45: firmware/lower/660FC-misc-66000.s:1882
+// OBJ_67E45: firmware/lower/660FC-misc-66000.s:1891
 pub(crate) fn OBJ_67E45(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -11514,7 +11521,7 @@ pub(crate) fn OBJ_67E45(r: &mut Run) {
     }
 }
 
-// OBJ_67E54: firmware/lower/660FC-misc-66000.s:1889
+// OBJ_67E54: firmware/lower/660FC-misc-66000.s:1898
 pub(crate) fn OBJ_67E54(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -11535,7 +11542,8 @@ pub(crate) fn OBJ_67E54(r: &mut Run) {
     }
 }
 
-// OBJ_67E64: firmware/lower/660FC-misc-66000.s:1896
+// Probably: EquationWriter: #n -> item 5 of frame n of its work stack
+// OBJ_67E64: firmware/lower/660FC-misc-66000.s:1906
 pub(crate) fn OBJ_67E64(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -11557,7 +11565,7 @@ pub(crate) fn OBJ_67E64(r: &mut Run) {
     }
 }
 
-// SUB_67E77: firmware/lower/660FC-misc-66000.s:1904
+// SUB_67E77: firmware/lower/660FC-misc-66000.s:1914
 pub(crate) fn SUB_67E77(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -11573,7 +11581,7 @@ pub(crate) fn SUB_67E77(r: &mut Run) {
     }
 }
 
-// SUB_67E7B: firmware/lower/660FC-misc-66000.s:1908
+// SUB_67E7B: firmware/lower/660FC-misc-66000.s:1918
 pub(crate) fn SUB_67E7B(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -11598,7 +11606,7 @@ pub(crate) fn SUB_67E7B(r: &mut Run) {
     }
 }
 
-// SUB_67E9E: firmware/lower/660FC-misc-66000.s:1921
+// SUB_67E9E: firmware/lower/660FC-misc-66000.s:1931
 pub(crate) fn SUB_67E9E(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -11626,7 +11634,7 @@ pub(crate) fn SUB_67E9E(r: &mut Run) {
     }
 }
 
-// SUB_67EB4: firmware/lower/660FC-misc-66000.s:1931
+// SUB_67EB4: firmware/lower/660FC-misc-66000.s:1941
 pub(crate) fn SUB_67EB4(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -11642,7 +11650,7 @@ pub(crate) fn SUB_67EB4(r: &mut Run) {
     }
 }
 
-// SUB_67EB8: firmware/lower/660FC-misc-66000.s:1935
+// SUB_67EB8: firmware/lower/660FC-misc-66000.s:1945
 pub(crate) fn SUB_67EB8(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -11695,7 +11703,7 @@ pub(crate) fn SUB_67EB8(r: &mut Run) {
     }
 }
 
-// OBJ_67F0B: firmware/lower/660FC-misc-66000.s:1961
+// OBJ_67F0B: firmware/lower/660FC-misc-66000.s:1971
 pub(crate) fn OBJ_67F0B(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -11721,7 +11729,7 @@ pub(crate) fn OBJ_67F0B(r: &mut Run) {
     }
 }
 
-// SUB_67F24: firmware/lower/660FC-misc-66000.s:1971
+// SUB_67F24: firmware/lower/660FC-misc-66000.s:1981
 pub(crate) fn SUB_67F24(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -11741,7 +11749,7 @@ pub(crate) fn SUB_67F24(r: &mut Run) {
     }
 }
 
-// OBJ_67F31: firmware/lower/660FC-misc-66000.s:1979
+// OBJ_67F31: firmware/lower/660FC-misc-66000.s:1989
 pub(crate) fn OBJ_67F31(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -11766,7 +11774,7 @@ pub(crate) fn OBJ_67F31(r: &mut Run) {
     }
 }
 
-// OBJ_67F45: firmware/lower/660FC-misc-66000.s:1987
+// OBJ_67F45: firmware/lower/660FC-misc-66000.s:1997
 pub(crate) fn OBJ_67F45(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -11851,7 +11859,7 @@ pub(crate) fn OBJ_67F45(r: &mut Run) {
     }
 }
 
-// OBJ_67FED: firmware/lower/660FC-misc-66000.s:2040
+// OBJ_67FED: firmware/lower/660FC-misc-66000.s:2050
 pub(crate) fn OBJ_67FED(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -11871,7 +11879,7 @@ pub(crate) fn OBJ_67FED(r: &mut Run) {
     }
 }
 
-// L_68001: firmware/lower/660FC-misc-66000.s:2045
+// L_68001: firmware/lower/660FC-misc-66000.s:2055
 pub(crate) fn L_68001(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -11891,7 +11899,7 @@ pub(crate) fn L_68001(r: &mut Run) {
     }
 }
 
-// OBJ_68017: firmware/lower/660FC-misc-66000.s:2053
+// OBJ_68017: firmware/lower/660FC-misc-66000.s:2063
 pub(crate) fn OBJ_68017(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -11988,7 +11996,7 @@ pub(crate) fn OBJ_68017(r: &mut Run) {
     }
 }
 
-// drop;false;true_680B4: firmware/lower/660FC-misc-66000.s:2106
+// drop;false;true_680B4: firmware/lower/660FC-misc-66000.s:2116
 pub(crate) fn drop_false_true_680B4(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -12043,7 +12051,7 @@ pub(crate) fn drop_false_true_680B4(r: &mut Run) {
     }
 }
 
-// SUB_680FB: firmware/lower/660FC-misc-66000.s:2133
+// SUB_680FB: firmware/lower/660FC-misc-66000.s:2143
 pub(crate) fn SUB_680FB(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -12075,7 +12083,7 @@ pub(crate) fn SUB_680FB(r: &mut Run) {
     }
 }
 
-// OBJ_6812C: firmware/lower/660FC-misc-66000.s:2150
+// OBJ_6812C: firmware/lower/660FC-misc-66000.s:2160
 pub(crate) fn OBJ_6812C(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -12122,7 +12130,7 @@ pub(crate) fn OBJ_6812C(r: &mut Run) {
     }
 }
 
-// OBJ_68183: firmware/lower/660FC-misc-66000.s:2177
+// OBJ_68183: firmware/lower/660FC-misc-66000.s:2187
 pub(crate) fn OBJ_68183(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -12151,7 +12159,7 @@ pub(crate) fn OBJ_68183(r: &mut Run) {
 }
 
 // #n -> #3n
-// #3*: firmware/lower/660FC-misc-66000.s:2189
+// #3*: firmware/lower/660FC-misc-66000.s:2199
 pub(crate) fn _3__681A2(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -12173,7 +12181,7 @@ pub(crate) fn _3__681A2(r: &mut Run) {
     }
 }
 
-// OBJ_681B1: firmware/lower/660FC-misc-66000.s:2197
+// OBJ_681B1: firmware/lower/660FC-misc-66000.s:2207
 pub(crate) fn OBJ_681B1(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -12206,7 +12214,7 @@ pub(crate) fn OBJ_681B1(r: &mut Run) {
     }
 }
 
-// OBJ_681D8: firmware/lower/660FC-misc-66000.s:2213
+// OBJ_681D8: firmware/lower/660FC-misc-66000.s:2223
 pub(crate) fn OBJ_681D8(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -12223,7 +12231,7 @@ pub(crate) fn OBJ_681D8(r: &mut Run) {
     }
 }
 
-// OBJ_681E8: firmware/lower/660FC-misc-66000.s:2219
+// OBJ_681E8: firmware/lower/660FC-misc-66000.s:2229
 pub(crate) fn OBJ_681E8(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -12268,7 +12276,7 @@ pub(crate) fn OBJ_681E8(r: &mut Run) {
     }
 }
 
-// OBJ_6821C: firmware/lower/660FC-misc-66000.s:2239
+// OBJ_6821C: firmware/lower/660FC-misc-66000.s:2249
 pub(crate) fn OBJ_6821C(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -12285,7 +12293,7 @@ pub(crate) fn OBJ_6821C(r: &mut Run) {
     }
 }
 
-// OBJ_68277: firmware/lower/660FC-misc-66000.s:2254
+// OBJ_68277: firmware/lower/660FC-misc-66000.s:2265
 pub(crate) fn OBJ_68277(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -12302,7 +12310,7 @@ pub(crate) fn OBJ_68277(r: &mut Run) {
     }
 }
 
-// OBJ_682A6: firmware/lower/660FC-misc-66000.s:2266
+// OBJ_682A6: firmware/lower/660FC-misc-66000.s:2277
 pub(crate) fn OBJ_682A6(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -12340,8 +12348,9 @@ pub(crate) fn OBJ_682A6(r: &mut Run) {
     }
 }
 
-// OBJ_682D2: firmware/lower/660FC-misc-66000.s:2283
-pub(crate) fn OBJ_682D2(r: &mut Run) {
+// Like EqwNewBox, for a box without children (#24/#27 zero)
+// EqwNewLeafBox: firmware/lower/660FC-misc-66000.s:2295
+pub(crate) fn EqwNewLeafBox(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -12358,7 +12367,7 @@ pub(crate) fn OBJ_682D2(r: &mut Run) {
 }
 
 // #27 #24 #21 #1E #1B #18 #b16 #b14 obj #11 #0E #0B #08 #05 #02 #type -> obj: take a free box record and fill it (fields by offset; see EqwPOP#>Box)
-// EqwNewBox: firmware/lower/660FC-misc-66000.s:2290
+// EqwNewBox: firmware/lower/660FC-misc-66000.s:2302
 pub(crate) fn EqwNewBox(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -12385,7 +12394,7 @@ pub(crate) fn EqwNewBox(r: &mut Run) {
     }
 }
 
-// SUB_682F7: firmware/lower/660FC-misc-66000.s:2300
+// SUB_682F7: firmware/lower/660FC-misc-66000.s:2312
 pub(crate) fn SUB_682F7(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -12416,7 +12425,7 @@ pub(crate) fn SUB_682F7(r: &mut Run) {
     }
 }
 
-// SUB_68329: firmware/lower/660FC-misc-66000.s:2317
+// SUB_68329: firmware/lower/660FC-misc-66000.s:2329
 pub(crate) fn SUB_68329(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -12509,7 +12518,7 @@ pub(crate) fn SUB_68329(r: &mut Run) {
     }
 }
 
-// SUB_683BB: firmware/lower/660FC-misc-66000.s:2366
+// SUB_683BB: firmware/lower/660FC-misc-66000.s:2378
 pub(crate) fn SUB_683BB(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -12537,7 +12546,7 @@ pub(crate) fn SUB_683BB(r: &mut Run) {
     }
 }
 
-// SUB_683D2: firmware/lower/660FC-misc-66000.s:2376
+// SUB_683D2: firmware/lower/660FC-misc-66000.s:2388
 pub(crate) fn SUB_683D2(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -12554,7 +12563,7 @@ pub(crate) fn SUB_683D2(r: &mut Run) {
     }
 }
 
-// SUB_683D9: firmware/lower/660FC-misc-66000.s:2380
+// SUB_683D9: firmware/lower/660FC-misc-66000.s:2392
 pub(crate) fn SUB_683D9(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -12582,7 +12591,7 @@ pub(crate) fn SUB_683D9(r: &mut Run) {
     }
 }
 
-// OBJ_68452: firmware/lower/660FC-misc-66000.s:2434
+// OBJ_68452: firmware/lower/660FC-misc-66000.s:2446
 pub(crate) fn OBJ_68452(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -12602,7 +12611,7 @@ pub(crate) fn OBJ_68452(r: &mut Run) {
     }
 }
 
-// SUB_6845F: firmware/lower/660FC-misc-66000.s:2440
+// SUB_6845F: firmware/lower/660FC-misc-66000.s:2452
 pub(crate) fn SUB_6845F(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -12685,7 +12694,7 @@ pub(crate) fn SUB_6845F(r: &mut Run) {
     }
 }
 
-// OBJ_684D4: firmware/lower/660FC-misc-66000.s:2484
+// OBJ_684D4: firmware/lower/660FC-misc-66000.s:2496
 pub(crate) fn OBJ_684D4(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -12749,7 +12758,7 @@ pub(crate) fn code_6855A(r: &mut Run) {
     }
 }
 
-// SUB_68573: firmware/lower/660FC-misc-66000.s:2519
+// SUB_68573: firmware/lower/660FC-misc-66000.s:2531
 pub(crate) fn SUB_68573(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -12779,7 +12788,7 @@ pub(crate) fn SUB_68573(r: &mut Run) {
     }
 }
 
-// OBJ_68593: firmware/lower/660FC-misc-66000.s:2532
+// OBJ_68593: firmware/lower/660FC-misc-66000.s:2544
 pub(crate) fn OBJ_68593(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -12806,7 +12815,7 @@ pub(crate) fn OBJ_68593(r: &mut Run) {
     }
 }
 
-// OBJ_685B2: firmware/lower/660FC-misc-66000.s:2542
+// OBJ_685B2: firmware/lower/660FC-misc-66000.s:2554
 pub(crate) fn OBJ_685B2(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -12845,7 +12854,7 @@ pub(crate) fn OBJ_685B2(r: &mut Run) {
     }
 }
 
-// OBJ_685DD: firmware/lower/660FC-misc-66000.s:2558
+// OBJ_685DD: firmware/lower/660FC-misc-66000.s:2570
 pub(crate) fn OBJ_685DD(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -12875,7 +12884,7 @@ pub(crate) fn OBJ_685DD(r: &mut Run) {
     }
 }
 
-// OBJ_6860A: firmware/lower/660FC-misc-66000.s:2572
+// OBJ_6860A: firmware/lower/660FC-misc-66000.s:2584
 pub(crate) fn OBJ_6860A(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -12938,7 +12947,7 @@ pub(crate) fn OBJ_6860A(r: &mut Run) {
     }
 }
 
-// SUB_68670: firmware/lower/660FC-misc-66000.s:2600
+// SUB_68670: firmware/lower/660FC-misc-66000.s:2612
 pub(crate) fn SUB_68670(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -13523,8 +13532,9 @@ pub(crate) fn OBJ_6B39F(r: &mut Run) {
     }
 }
 
-// OBJ_6CC10: firmware/lower/6C186-misc-66000.s:310
-pub(crate) fn OBJ_6CC10(r: &mut Run) {
+// -> flag: implicit parentheses are on (internal flag #10B)
+// EqwImplicit()?: firmware/lower/6C186-misc-66000.s:312
+pub(crate) fn EqwImplicit___(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -13540,7 +13550,7 @@ pub(crate) fn OBJ_6CC10(r: &mut Run) {
     }
 }
 
-// OBJ_6CC21: firmware/lower/6C186-misc-66000.s:317
+// OBJ_6CC21: firmware/lower/6C186-misc-66000.s:319
 pub(crate) fn OBJ_6CC21(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -13557,7 +13567,7 @@ pub(crate) fn OBJ_6CC21(r: &mut Run) {
     }
 }
 
-// OBJ_6CC32: firmware/lower/6C186-misc-66000.s:323
+// OBJ_6CC32: firmware/lower/6C186-misc-66000.s:325
 pub(crate) fn OBJ_6CC32(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -13575,7 +13585,7 @@ pub(crate) fn OBJ_6CC32(r: &mut Run) {
 }
 
 // -> #0 #0 #0, collecting garbage if memory is short
-// Push3Zeros: firmware/lower/6C186-misc-66000.s:663
+// Push3Zeros: firmware/lower/6C186-misc-66000.s:667
 pub(crate) fn Push3Zeros(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -13614,7 +13624,7 @@ pub(crate) fn Push3Zeros(r: &mut Run) {
     }
 }
 
-// SUB_6DDA6: firmware/lower/6C186-misc-66000.s:680
+// SUB_6DDA6: firmware/lower/6C186-misc-66000.s:684
 pub(crate) fn SUB_6DDA6(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -13631,7 +13641,7 @@ pub(crate) fn SUB_6DDA6(r: &mut Run) {
     }
 }
 
-// SUB_6DDAB: firmware/lower/6C186-misc-66000.s:685
+// SUB_6DDAB: firmware/lower/6C186-misc-66000.s:689
 pub(crate) fn SUB_6DDAB(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -13669,7 +13679,7 @@ pub(crate) fn SUB_6DDAB(r: &mut Run) {
     }
 }
 
-// OBJ_6DDD3: firmware/lower/6C186-misc-66000.s:698
+// OBJ_6DDD3: firmware/lower/6C186-misc-66000.s:702
 pub(crate) fn OBJ_6DDD3(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -13772,7 +13782,7 @@ pub(crate) fn OBJ_6DDD3(r: &mut Run) {
     }
 }
 
-// SUB_6DE70: firmware/lower/6C186-misc-66000.s:748
+// SUB_6DE70: firmware/lower/6C186-misc-66000.s:752
 pub(crate) fn SUB_6DE70(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -13790,7 +13800,7 @@ pub(crate) fn SUB_6DE70(r: &mut Run) {
     }
 }
 
-// SUB_6DE76: firmware/lower/6C186-misc-66000.s:753
+// SUB_6DE76: firmware/lower/6C186-misc-66000.s:757
 pub(crate) fn SUB_6DE76(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -13811,7 +13821,7 @@ pub(crate) fn SUB_6DE76(r: &mut Run) {
     }
 }
 
-// OBJ_6DF1D: firmware/lower/6C186-misc-66000.s:788
+// OBJ_6DF1D: firmware/lower/6C186-misc-66000.s:792
 pub(crate) fn OBJ_6DF1D(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -13904,7 +13914,7 @@ pub(crate) fn OBJ_6DF1D(r: &mut Run) {
     }
 }
 
-// SUB_6DFC9: firmware/lower/6C186-misc-66000.s:839
+// SUB_6DFC9: firmware/lower/6C186-misc-66000.s:843
 pub(crate) fn SUB_6DFC9(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -13928,7 +13938,7 @@ pub(crate) fn SUB_6DFC9(r: &mut Run) {
     }
 }
 
-// OBJ_6DFDE: firmware/lower/6C186-misc-66000.s:849
+// OBJ_6DFDE: firmware/lower/6C186-misc-66000.s:853
 pub(crate) fn OBJ_6DFDE(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -13962,7 +13972,7 @@ pub(crate) fn OBJ_6DFDE(r: &mut Run) {
     }
 }
 
-// OBJ_6DFFD: firmware/lower/6C186-misc-66000.s:863
+// OBJ_6DFFD: firmware/lower/6C186-misc-66000.s:867
 pub(crate) fn OBJ_6DFFD(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -13980,7 +13990,7 @@ pub(crate) fn OBJ_6DFFD(r: &mut Run) {
     }
 }
 
-// OBJ_6E00B: firmware/lower/6C186-misc-66000.s:870
+// OBJ_6E00B: firmware/lower/6C186-misc-66000.s:874
 pub(crate) fn OBJ_6E00B(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -14011,7 +14021,7 @@ pub(crate) fn OBJ_6E00B(r: &mut Run) {
     }
 }
 
-// OBJ_6E026: firmware/lower/6C186-misc-66000.s:882
+// OBJ_6E026: firmware/lower/6C186-misc-66000.s:886
 pub(crate) fn OBJ_6E026(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -14043,7 +14053,7 @@ pub(crate) fn OBJ_6E026(r: &mut Run) {
 }
 
 // -> #h: EquationWriter character height for the size level in AppCount: 10, 8 or 6
-// EqwFontHeight: firmware/lower/6C186-misc-66000.s:899
+// EqwFontHeight: firmware/lower/6C186-misc-66000.s:903
 pub(crate) fn EqwFontHeight(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -14089,7 +14099,7 @@ pub(crate) fn EqwFontHeight(r: &mut Run) {
     }
 }
 
-// SUB_6E08F: firmware/lower/6C186-misc-66000.s:919
+// SUB_6E08F: firmware/lower/6C186-misc-66000.s:923
 pub(crate) fn SUB_6E08F(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -14110,7 +14120,7 @@ pub(crate) fn SUB_6E08F(r: &mut Run) {
 }
 
 // -> #w: EquationWriter character width for the size level in AppCount: 6, 6 or 4
-// EqwFontWidth: firmware/lower/6C186-misc-66000.s:928
+// EqwFontWidth: firmware/lower/6C186-misc-66000.s:932
 pub(crate) fn EqwFontWidth(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -14141,7 +14151,7 @@ pub(crate) fn EqwFontWidth(r: &mut Run) {
     }
 }
 
-// OBJ_6E0C0: firmware/lower/6C186-misc-66000.s:940
+// OBJ_6E0C0: firmware/lower/6C186-misc-66000.s:944
 pub(crate) fn OBJ_6E0C0(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -14166,7 +14176,7 @@ pub(crate) fn OBJ_6E0C0(r: &mut Run) {
     }
 }
 
-// OBJ_6E0D2: firmware/lower/6C186-misc-66000.s:948
+// OBJ_6E0D2: firmware/lower/6C186-misc-66000.s:952
 pub(crate) fn OBJ_6E0D2(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -14222,7 +14232,7 @@ pub(crate) fn code_6E0E9(r: &mut Run) {
     }
 }
 
-// OBJ_6F0B8: firmware/lower/6C186-misc-66000.s:1236
+// OBJ_6F0B8: firmware/lower/6C186-misc-66000.s:1242
 pub(crate) fn OBJ_6F0B8(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -14263,7 +14273,7 @@ pub(crate) fn OBJ_6F0B8(r: &mut Run) {
     }
 }
 
-// OBJ_6FD85: firmware/lower/6F360-misc-66000.s:208
+// OBJ_6FD85: firmware/lower/6F360-misc-66000.s:209
 pub(crate) fn OBJ_6FD85(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -14302,7 +14312,7 @@ pub(crate) fn OBJ_6FD85(r: &mut Run) {
     }
 }
 
-// OBJ_6FDB6: firmware/lower/6F360-misc-66000.s:227
+// OBJ_6FDB6: firmware/lower/6F360-misc-66000.s:228
 pub(crate) fn OBJ_6FDB6(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -14319,7 +14329,7 @@ pub(crate) fn OBJ_6FDB6(r: &mut Run) {
     }
 }
 
-// OBJ_6FDC6: firmware/lower/6F360-misc-66000.s:233
+// OBJ_6FDC6: firmware/lower/6F360-misc-66000.s:234
 pub(crate) fn OBJ_6FDC6(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -14336,7 +14346,7 @@ pub(crate) fn OBJ_6FDC6(r: &mut Run) {
     }
 }
 
-// OBJ_6FDD6: firmware/lower/6F360-misc-66000.s:239
+// OBJ_6FDD6: firmware/lower/6F360-misc-66000.s:240
 pub(crate) fn OBJ_6FDD6(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -14353,7 +14363,7 @@ pub(crate) fn OBJ_6FDD6(r: &mut Run) {
     }
 }
 
-// OBJ_6FDE2: firmware/lower/6F360-misc-66000.s:245
+// OBJ_6FDE2: firmware/lower/6F360-misc-66000.s:246
 pub(crate) fn OBJ_6FDE2(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -14438,7 +14448,7 @@ pub(crate) fn OBJ_6FDE2(r: &mut Run) {
     }
 }
 
-// L_6FF81: firmware/lower/6F360-misc-66000.s:319
+// L_6FF81: firmware/lower/6F360-misc-66000.s:321
 pub(crate) fn L_6FF81(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -14767,7 +14777,7 @@ pub const ROUTINES: &[(u32, u32, Block, &str)] = &[
     (0x64ADC, 0x64B0C, SUB_64ADC, "SUB_64ADC"),
     (0x657B9, 0x657DE, SUB_657B9, "SUB_657B9"),
     (0x657DF, 0x65806, SUB_657DF, "SUB_657DF"),
-    (0x65807, 0x65841, SUB_65807, "SUB_65807"),
+    (0x65807, 0x65841, IntDivW, "IntDivW"),
     (0x65842, 0x65862, SUB_65842, "SUB_65842"),
     (0x65863, 0x6594C, SUB_65863, "SUB_65863"),
     (0x65953, 0x65959, putnibs, "putnibs"),
@@ -14795,7 +14805,7 @@ pub const ROUTINES: &[(u32, u32, Block, &str)] = &[
     (0x67340, 0x67347, EqwBoxCount_1_, "EqwBoxCount_1_"),
     (0x6734D, 0x67355, EqwBoxCount_2_, "EqwBoxCount_2_"),
     (0x6735B, 0x67363, EqwBoxCount_3_, "EqwBoxCount_3_"),
-    (0x67369, 0x67370, OBJ_67364, "OBJ_67364"),
+    (0x67369, 0x67370, EqwBoxCount_1__67369, "EqwBoxCount_1__67369"),
     (0x67376, 0x67380, OBJ_67371, "OBJ_67371"),
     (0x67386, 0x673A1, EqwBoxCount, "EqwBoxCount"),
     (0x673A7, 0x673BA, OBJ_673A2, "OBJ_673A2"),
@@ -14804,9 +14814,9 @@ pub const ROUTINES: &[(u32, u32, Block, &str)] = &[
     (0x673EB, 0x673F5, OBJ_673E6, "OBJ_673E6"),
     (0x673FB, 0x67405, OBJ_673F6, "OBJ_673F6"),
     (0x6740B, 0x67415, OBJ_67406, "OBJ_67406"),
-    (0x6741B, 0x67425, OBJ_67416, "OBJ_67416"),
+    (0x6741B, 0x67425, EqwCurBox_, "EqwCurBox_"),
     (0x6742B, 0x67442, OBJ_67426, "OBJ_67426"),
-    (0x6744D, 0x67457, OBJ_67448, "OBJ_67448"),
+    (0x6744D, 0x67457, EqwCurBox__6744D, "EqwCurBox__6744D"),
     (0x6745D, 0x6746A, OBJ_67458, "OBJ_67458"),
     (0x67470, 0x6747A, OBJ_6746B, "OBJ_6746B"),
     (0x67480, 0x6748A, OBJ_6747B, "OBJ_6747B"),
@@ -14832,10 +14842,10 @@ pub const ROUTINES: &[(u32, u32, Block, &str)] = &[
     (0x678E0, 0x67917, EqwBoxParent_, "EqwBoxParent_"),
     (0x67908, 0x67910, overlap_67908, "overlap_67908"),
     (0x67918, 0x67968, SUB_67918, "SUB_67918"),
-    (0x67991, 0x6799B, OBJ_6798C, "OBJ_6798C"),
-    (0x679A6, 0x679AD, OBJ_679A1, "OBJ_679A1"),
-    (0x679B8, 0x679BF, OBJ_679B3, "OBJ_679B3"),
-    (0x679CA, 0x679D1, OBJ_679C5, "OBJ_679C5"),
+    (0x67991, 0x6799B, EqwBoxNext_, "EqwBoxNext_"),
+    (0x679A6, 0x679AD, EqwBoxPrev_, "EqwBoxPrev_"),
+    (0x679B8, 0x679BF, EqwBoxFirst_, "EqwBoxFirst_"),
+    (0x679CA, 0x679D1, EqwBoxLast_, "EqwBoxLast_"),
     (0x679DC, 0x679E9, OBJ_679D7, "OBJ_679D7"),
     (0x679EF, 0x67A1D, OBJ_679EA, "OBJ_679EA"),
     (0x67A23, 0x67A3A, EqwRuleKey0_10, "EqwRuleKey0_10"),
@@ -14855,14 +14865,14 @@ pub const ROUTINES: &[(u32, u32, Block, &str)] = &[
     (0x67BB3, 0x67BBA, OBJ_67BAE, "OBJ_67BAE"),
     (0x67BC0, 0x67BC7, OBJ_67BBB, "OBJ_67BBB"),
     (0x67BCD, 0x67BD4, OBJ_67BC8, "OBJ_67BC8"),
-    (0x67BDA, 0x67BE1, OBJ_67BD5, "OBJ_67BD5"),
-    (0x67BE7, 0x67BEE, OBJ_67BE2, "OBJ_67BE2"),
-    (0x67BF4, 0x67BFB, OBJ_67BEF, "OBJ_67BEF"),
-    (0x67C01, 0x67C08, OBJ_67BFC, "OBJ_67BFC"),
+    (0x67BDA, 0x67BE1, EqwBoxPrev__67BDA, "EqwBoxPrev__67BDA"),
+    (0x67BE7, 0x67BEE, EqwBoxNext__67BE7, "EqwBoxNext__67BE7"),
+    (0x67BF4, 0x67BFB, EqwBoxFirst__67BF4, "EqwBoxFirst__67BF4"),
+    (0x67C01, 0x67C08, EqwBoxLast__67C01, "EqwBoxLast__67C01"),
     (0x67C0E, 0x67C15, OBJ_67C09, "OBJ_67C09"),
     (0x67C1B, 0x67C22, OBJ_67C16, "OBJ_67C16"),
-    (0x67C41, 0x67C52, OBJ_67C3C, "OBJ_67C3C"),
-    (0x67C53, 0x67C6B, SUB_67C53, "SUB_67C53"),
+    (0x67C41, 0x67C52, EqwBox_18_, "EqwBox_18_"),
+    (0x67C53, 0x67C6B, EqwBox_18__1, "EqwBox_18__1"),
     (0x67C8A, 0x67CA1, OBJ_67C85, "OBJ_67C85"),
     (0x67CA7, 0x67CBD, OBJ_67CA2, "OBJ_67CA2"),
     (0x67CC3, 0x67D0E, OBJ_67CBE, "OBJ_67CBE"),
@@ -14900,7 +14910,7 @@ pub const ROUTINES: &[(u32, u32, Block, &str)] = &[
     (0x68221, 0x6822B, OBJ_6821C, "OBJ_6821C"),
     (0x6827C, 0x68282, OBJ_68277, "OBJ_68277"),
     (0x682AB, 0x682D1, OBJ_682A6, "OBJ_682A6"),
-    (0x682D7, 0x682DD, OBJ_682D2, "OBJ_682D2"),
+    (0x682D7, 0x682DD, EqwNewLeafBox, "EqwNewLeafBox"),
     (0x682E3, 0x682F6, EqwNewBox, "EqwNewBox"),
     (0x682F7, 0x68328, SUB_682F7, "SUB_682F7"),
     (0x68329, 0x683BA, SUB_68329, "SUB_68329"),
@@ -14927,7 +14937,7 @@ pub const ROUTINES: &[(u32, u32, Block, &str)] = &[
     (0x6A76E, 0x6A7BF, EqwRuleKey0_7, "EqwRuleKey0_7"),
     (0x6B386, 0x6B39E, OBJ_6B381, "OBJ_6B381"),
     (0x6B3A4, 0x6B3F4, OBJ_6B39F, "OBJ_6B39F"),
-    (0x6CC15, 0x6CC20, OBJ_6CC10, "OBJ_6CC10"),
+    (0x6CC15, 0x6CC20, EqwImplicit___, "EqwImplicit___"),
     (0x6CC26, 0x6CC31, OBJ_6CC21, "OBJ_6CC21"),
     (0x6CC37, 0x6CC42, OBJ_6CC32, "OBJ_6CC32"),
     (0x6DD73, 0x6DDA5, Push3Zeros, "Push3Zeros"),

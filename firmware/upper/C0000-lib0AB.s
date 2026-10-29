@@ -197,10 +197,10 @@ PCONTOUR:
 DIFFEQ:
         :: CK0 ' ROMPTR 0AB 00E PUTPTYPE ;       * C0712  DIFFEQ
 
-        { TRUE ROMPTR 0B5 07A NOP TRUE NULL{} FALSE OBJ_4B6C5 * C0736
+        { TRUE ROMPTR 0B5 07A NOP TRUE NULL{} FALSE ~';PlotEval * C0736
           :: BINT31 TestSysFlag ITE              * C0764
             :: ' OBJ_4CE0B ;                     * C0778
-            :: ' OBJ_4C34B ;                     * C078C
+            :: ' PlotFcnPt ;                     * C078C
           ;                                      * C07A0
           %0_2A2B4 FALSE FALSE FALSE OBJ_73211 OBJ_73270 ROMPTR 0F1 03F * C07A5
           OBJ_73594 NOP }                        * C07CE
@@ -868,7 +868,7 @@ DIAG→~2:
 * ROMPTR 0AB 051
 * refs (1): C0007
 RANM~1:
-        :: %0_2A2B4 %0_2A2B4 OBJ_1DF30 1GETLAM ABND CK1NOLASTWD COERCE{}2 * C1668
+        :: %0_2A2B4 %0_2A2B4 {}>%sBIND 1GETLAM ABND CK1NOLASTWD COERCE{}2 * C1668
           %0_2A2B4 MAKEARRY ROMPTR 0C3 000 ;     * C1690
 
 * ROMPTR 0AB 052
@@ -1177,7 +1177,7 @@ DOLIST_C1D41:
 ADD:
         :: CK2&Dispatch                          * C1DE1
           BINT85 ROMPTR 0E8 015                  * C1DEB  list list
-          OBJ_64C34 ROMPTR 0E8 015               * C1DFB  list any
+          BINT80 ROMPTR 0E8 015                  * C1DFB  list any
           BINT5 ROMPTR 0E8 015                   * C1E0B  list
           BINT13                                 * C1E1B  tagged
           :: STRIPTAGS 'EvalNoCK:_sup ROMPTR 0AB 06C ; * C1E20  ADD

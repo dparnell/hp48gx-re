@@ -1266,7 +1266,7 @@ L_30F7C:
         P=      12                               * 30F89
         C=C-D   WP                               * 30F8B
         P=      0                                * 30F8E
-        GOSBVL  SUB_0C198                        * 30F90
+        GOSBVL  D1=IRAM                          * 30F90
         GOC     L_30F38                          * 30F97
         LC(5)   timeouterr                       * 30F9A
         RTNSC                                    * 30FA1
@@ -1471,7 +1471,7 @@ SUB_311D1:
 L_311D4:
         P=      0                                * 311D4
         SETHEX                                   * 311D6
-        GOSBVL  SUB_0C198                        * 311D8
+        GOSBVL  D1=IRAM                          * 311D8
         D1=(4)  #07F7                            * 311DF
         GOSUB   SUB_30FC9                        * 311E5
         GOSUB   SUB_30FE1                        * 311E9
@@ -1626,7 +1626,7 @@ L_31383:
         CBIT=1  3                                * 3139E
         C=C&A   B                                * 313A3
         DAT0=C  1                                * 313A7
-        GOSBVL  SUB_0C1A7                        * 313AB
+        GOSBVL  D0=IRAM                          * 313AB
         D0=(4)  #0927                            * 313B2
         DAT0=A  1                                * 313B8
         RTN                                      * 313BC
@@ -1638,7 +1638,7 @@ SUB_313C2:
         C=DAT0  B                                * 313C9
         ?CBIT=0 2                                * 313CC
         GOYES   L_313FC                          * 313D1
-        GOSBVL  SUB_0C1A7                        * 313D3
+        GOSBVL  D0=IRAM                          * 313D3
         D0=(4)  #0927                            * 313DA
         A=DAT0  1                                * 313E0
         GOSUB   WaitTbz0                         * 313E4
@@ -1872,7 +1872,7 @@ L_31684:
 
 * refs (2): 3166F 3233A
 SUB_31692:
-        GOSBVL  SUB_0C1A7                        * 31692
+        GOSBVL  D0=IRAM                          * 31692
         D0=(4)  #084B                            * 31699
         C=DAT0  B                                * 3169F
         ST=C                                     * 316A2
@@ -2554,7 +2554,7 @@ SUB_32604:
         GOSUB   OnKeyDown?~jump                  * 3260D
         LC(5)   intrptderr                       * 32611
         RTNC                                     * 32618
-        GOSUB   SUB_32A46                        * 3261B
+        GOSUB   D1=IRAM~jump_4                   * 3261B
         D1=(4)  #084B                            * 3261F
         C=DAT1  B                                * 32625
         ?CBIT=1 1                                * 32628
@@ -2568,7 +2568,7 @@ SUB_32632:
 * refs (3): 32570 3257B 32EFA
 SUB_32634:
         A=C     A                                * 32634
-        GOSUB   SUB_32A3F                        * 32636
+        GOSUB   D0=IRAM~jump_2                   * 32636
 L_3263A:
         ST=0    4                                * 3263A
         ST=0    5                                * 3263D
@@ -2771,7 +2771,7 @@ SUB_32832:
         C=B     A                                * 32832
         D=C     A                                * 32834
         GOSUB   SUB_3282B                        * 32836
-        GOSUB   SUB_32A3F                        * 3283A
+        GOSUB   D0=IRAM~jump_2                   * 3283A
         C=D     A                                * 3283E
         B=C     A                                * 32840
         RTNCC                                    * 32842
@@ -2796,14 +2796,14 @@ SUB_32856:
 SUB_32868:
         LC(2)   #04                              * 32868
         A=C     A                                * 3286C
-        GOSUB   SUB_32A3F                        * 3286E
+        GOSUB   D0=IRAM~jump_2                   * 3286E
         GOSUB   SUB_32856                        * 32872
         C=0     A                                * 32876
         RTNC                                     * 32878
 
 * refs (6): 32153 3246B 32553 32B1E 32CAF 32ED1
 SUB_3287B:
-        GOSUB   SUB_32A3F                        * 3287B
+        GOSUB   D0=IRAM~jump_2                   * 3287B
         D0=(4)  #084B                            * 3287F
         C=DAT0  B                                * 32885
         ?CBIT=1 1                                * 32888
@@ -2875,7 +2875,7 @@ L_328EC:
 L_3292C:
         A=C     W                                * 3292C
         D=C     W                                * 3292F
-        GOSUB   SUB_32A3F                        * 32932
+        GOSUB   D0=IRAM~jump_2                   * 32932
         D0=(4)  #092C                            * 32936
         C=0     W                                * 3293C
         C=DAT0  11                               * 3293F
@@ -2888,7 +2888,7 @@ L_3292C:
         GOYES   L_3295E                          * 32958
         LC(2)   #3A                              * 3295A
 L_3295E:
-        GOSBVL  SUB_65807                        * 3295E
+        GOSBVL  IntDivW                          * 3295E
         P=      10                               * 32965
         ?C#0    WP                               * 32967
         GOYES   L_32975                          * 3296A
@@ -2948,7 +2948,7 @@ AllowIntr~jump_2:
 SUB_329E9:
         ?C=0    A                                * 329E9
         RTNYES                                   * 329EC
-        GOSUB   SUB_32A3F                        * 329EE
+        GOSUB   D0=IRAM~jump_2                   * 329EE
         D0=(4)  #0850                            * 329F2
         C=DAT0  B                                * 329F8
         ?CBIT=1 3                                * 329FB
@@ -2966,7 +2966,7 @@ SUB_32A0D:
 
 * refs (6): 3248C 324D0 32534 32A4D 32B52 32D27
 SUB_32A1D:
-        GOSUB   SUB_32A3F                        * 32A1D
+        GOSUB   D0=IRAM~jump_2                   * 32A1D
 
 * refs (3): 3255A 32801 32B2F
 SUB_32A21:
@@ -2977,7 +2977,7 @@ L_32A2A:
 
 * refs (1): 325B8
 SUB_32A2C:
-        GOSUB   SUB_32A3F                        * 32A2C
+        GOSUB   D0=IRAM~jump_2                   * 32A2C
 
 * refs (1): 32EDA
 SUB_32A30:
@@ -2988,12 +2988,12 @@ SUB_32A30:
         RTN                                      * 32A3D
 
 * refs (8): 32636 3283A 3286E 3287B 32932 329EE ...
-SUB_32A3F:
-        GOVLNG  SUB_0C1A7                        * 32A3F
+D0=IRAM~jump_2:
+        GOVLNG  D0=IRAM                          * 32A3F
 
 * refs (3): 3261B 32A7D 32F3C
-SUB_32A46:
-        GOVLNG  SUB_0C198                        * 32A46
+D1=IRAM~jump_4:
+        GOVLNG  D1=IRAM                          * 32A46
 
 * refs (1): 01041
 SUB_32A4D:
@@ -3014,7 +3014,7 @@ DOPRLCD~1:
         LC(2)   #22                              * 32A75
         A=A+C   A                                * 32A79
         B=A     A                                * 32A7B
-        GOSUB   SUB_32A46                        * 32A7D
+        GOSUB   D1=IRAM~jump_4                   * 32A7D
         D1=(4)  #068D                            * 32A81
         GOSUB   SUB_32B60                        * 32A87
         D0=(5)  DISPIO                           * 32A8B
@@ -3232,7 +3232,7 @@ L_32CCC:
         RTN                                      * 32CDA
 L_32CDC:
         AD0EX                                    * 32CDC
-        GOSBVL  SUB_07ED8                        * 32CDF
+        GOSBVL  ROMPTR>ADDR                      * 32CDF
         GOC     L_32CCC                          * 32CE6
         GOSBVL  GETPTR                           * 32CE9
         D0=D0+  5                                * 32CF0
@@ -3463,7 +3463,7 @@ L_32F0A:
 
 * refs (2): 32A63 32ACE
 SUB_32F3C:
-        GOSUB   SUB_32A46                        * 32F3C
+        GOSUB   D1=IRAM~jump_4                   * 32F3C
         D1=(4)  #069A                            * 32F40
         A=DAT1  B                                * 32F46
         C=0     A                                * 32F49

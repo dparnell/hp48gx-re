@@ -1,6 +1,6 @@
 * HP 48GX ROM revision R, #4400C-#46006: Command line editor
 * Addresses in the right-hand comments are those of the original ROM.
-* Most referenced: EDITPARTS InitEd&Modes DECOMP&$ NoEditLine? CURSOR_END? EditString InitEdLine RowElt# InitEdModes GetElt EDITLINE$ AddInComLine(st)
+* Most referenced: EDITPARTS InitEd&Modes DECOMP&$ NoEditLine? CURSOR_END? ENTRWISE@ EditString InitEdLine RowElt# InitEdModes GetElt EDITLINE$
 * Follows on from the previous file (at #4400C in the original ROM).
         RPL
 
@@ -643,7 +643,8 @@ OBJ_44BAB:
         GOTO    L_44BDB                          * 44BB7
 
 * refs (12): 8E28B 8E314 8E681 8E6A9 8E77B 8E790 ...
-OBJ_44BBB:
+* -> #: the MatrixWriter's entry direction (ENTRWISE, #80916)
+ENTRWISE@:
         CON(5)  (*)+5                            * 44BBB  primitive code object
         LC(5)   ENTRWISE                         * 44BC0
         GOTO    L_44BF9                          * 44BC7
@@ -711,7 +712,7 @@ L_44CEB:
 * refs (1): 68407
 OBJ_44CFA:
         :: OBJ_67987 DUP#0= ?SKIP OBJ_67A9D      * 44CFA
-          3PICK OBJ_679B3 OBJ_67A9D #MAX         * 44D13
+          3PICK EqwBoxFirst@ OBJ_67A9D #MAX      * 44D13
 L_44D27:
           #2+ DUP OBJ_66FF1 OBJ_44DB3 #2/ OBJ_67C09 ; * 44D27
 
@@ -721,7 +722,7 @@ OBJ_44D4A:
 
 * refs (1): 68420
 OBJ_44D68:
-        :: OVER OBJ_679C5 OBJ_67AAA              * 44D68
+        :: OVER EqwBoxLast@ OBJ_67AAA            * 44D68
 
 * refs (1): 6DB8E
 OBJ_44D7C:
@@ -742,7 +743,7 @@ OBJ_44DD6:
 * refs (8): 65D91 65ED6 661CE 69A22 6D203 6E145 ...
 OBJ_44DFE:
           :: OBJ_6CF3D 2DUPHALF 6PICK 3UNROLL OBJ_67C23 4PICK 3UNROLL * 44DFE
-            OBJ_6CE8E OBJ_68245 ;                * 44E26
+            OBJ_6CE8E EqwBoxObj! ;               * 44E26
           SWAP ;                                 * 44E35
 
 * refs (2): 6D1FE 6FAF5

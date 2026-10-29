@@ -1,6 +1,6 @@
 * HP 48GX ROM revision R, #08001-#0A005: Directories, variables and memory management
 * Addresses in the right-hand comments are those of the original ROM.
-* Most referenced: CONTEXT@ CREATE CONTEXT! HOMEDIR SysPtr@ RAM-WORDNAME REPLACE MYRAMROMPAIR RclBkp(nm,adr)? PURGE InitEnab purge(_)
+* Most referenced: CONTEXT@ CREATE CONTEXT! SKIPVARNAME HOMEDIR SysPtr@ RAM-WORDNAME REPLACE MYRAMROMPAIR RclBkp(nm,adr)? PURGE InitEnab
 * Follows on from the previous file (at #08001 in the original ROM).
         GOSUBL  GETTEMP                          * 08001
         AD0EX                                    * 08007
@@ -170,7 +170,7 @@ L_081B4:
 L_081C3:
         CD1EX                                    * 081C3
         D0=C                                     * 081C6
-        GOSUB   SUB_08400                        * 081C9
+        GOSUB   SKIPVARNAME                      * 081C9
         GONC    L_0818F                          * 081CD
         RTNSXM                                   * 081D0
         BSS     7                                * 081D2
@@ -327,7 +327,7 @@ L_0835A:
         C=C+A   A                                * 0835D
 L_0835F:
         D0=C                                     * 0835F
-        GOSUB   SUB_08400                        * 08362
+        GOSUB   SKIPVARNAME                      * 08362
         AD0EX                                    * 08366
         DAT1=A  A                                * 08369
         A=R0                                     * 0836C
@@ -394,7 +394,8 @@ L_083FE:
         RTNCC                                    * 083FE
 
 * refs (12): 078BD 081C9 08362 087C5 0947F 095B8 ...
-SUB_08400:
+* D0 at a directory entry's name (length, characters, length) -> D0 at its object
+SKIPVARNAME:
         C=0     A                                * 08400
         C=DAT0  B                                * 08402
         ?C=0    A                                * 08405
@@ -782,7 +783,7 @@ L_087BD:
         CD0EX                                    * 087BD
         C=C+A   A                                * 087C0
         D0=C                                     * 087C2
-        GOSUB   SUB_08400                        * 087C5
+        GOSUB   SKIPVARNAME                      * 087C5
         GOSUBL  SKIPOB                           * 087C9
 L_087CF:
         AD0EX                                    * 087CF
@@ -1636,7 +1637,7 @@ SUB_09477:
         CD0EX                                    * 09477
         RSTK=C                                   * 0947A
         D0=D0+  10                               * 0947C
-        GOSUBL  SUB_08400                        * 0947F
+        GOSUBL  SKIPVARNAME                      * 0947F
         C=RSTK                                   * 09485
         CD0EX                                    * 09487
         A=C     A                                * 0948A
@@ -1730,7 +1731,7 @@ L_095B0:
         AD1EX                                    * 095B0
         A=A+C   A                                * 095B3
         D0=A                                     * 095B5
-        GOSUBL  SUB_08400                        * 095B8
+        GOSUBL  SKIPVARNAME                      * 095B8
         GOSBVL  SKIPOB                           * 095BE
         AD0EX                                    * 095C5
 L_095C8:
@@ -1807,7 +1808,7 @@ OBJ_09699:
         R0=A.F  A                                * 096A9
         D0=A                                     * 096AF
         D0=D0+  10                               * 096B2
-        GOSUBL  SUB_08400                        * 096B5
+        GOSUBL  SKIPVARNAME                      * 096B5
         D0=D0+  5                                * 096BB
         C=DAT0  A                                * 096BE
         AD0EX                                    * 096C1
@@ -1815,7 +1816,7 @@ OBJ_09699:
         D0=A                                     * 096C6
         R1=C.F  A                                * 096C9
         D0=D0+  5                                * 096CF
-        GOSUBL  SUB_08400                        * 096D2
+        GOSUBL  SKIPVARNAME                      * 096D2
         D0=D0+  8                                * 096D8
         A=R0.F  A                                * 096DB
         CD0EX                                    * 096E1
@@ -2283,7 +2284,7 @@ L_09D8D:
 L_09DAB:
         CD1EX                                    * 09DAB
         D0=C                                     * 09DAE
-        GOSBVL  SUB_08400                        * 09DB1
+        GOSBVL  SKIPVARNAME                      * 09DB1
         A=0     A                                * 09DB8
         A=DAT0  X                                * 09DBA
         C=R3.F  A                                * 09DBE

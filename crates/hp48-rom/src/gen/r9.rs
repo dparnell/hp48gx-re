@@ -519,7 +519,7 @@ pub(crate) fn code_98542(r: &mut Run) {
 }
 
 // ROMPTR 0C2 05A
-// ROMP_0C2_05A: firmware/upper/96268-lib0C2.s:434
+// ROMP_0C2_05A: firmware/upper/96268-lib0C2.s:433
 pub(crate) fn ROMP_0C2_05A(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -595,7 +595,7 @@ pub(crate) fn ROMP_0C2_05A(r: &mut Run) {
 }
 
 // ROMPTR 0C2 05E
-// RREF~4: firmware/upper/96268-lib0C2.s:526
+// RREF~4: firmware/upper/96268-lib0C2.s:525
 pub(crate) fn RREF_4(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -889,7 +889,7 @@ pub(crate) fn SUB_993B0(r: &mut Run) {
             }
             // #99458:
             0x99458..=0x99458 => {
-                branch!(r, at, 0x9945F, 9, r.cpu.call(0x785B8)); // GOSBVL SUB_785B8
+                branch!(r, at, 0x9945F, 9, r.cpu.call(0x785B8)); // GOSBVL RCLtmp1%%
             }
             // #9945F:
             0x9945F..=0x9945F => {
@@ -1813,7 +1813,7 @@ pub(crate) fn SUB_9973F(r: &mut Run) {
             }
             // #99921:
             0x99921..=0x99921 => {
-                branch!(r, at, 0x99928, 9, r.cpu.call(0x785B8)); // GOSBVL SUB_785B8
+                branch!(r, at, 0x99928, 9, r.cpu.call(0x785B8)); // GOSBVL RCLtmp1%%
             }
             // #99928:
             0x99928..=0x99928 => {
@@ -2254,7 +2254,7 @@ pub(crate) fn SUB_99B04(r: &mut Run) {
             }
             // #99B08:
             0x99B08..=0x99B08 => {
-                branch!(r, at, 0x99B0F, 9, r.cpu.call(0x785B8)); // GOSBVL SUB_785B8
+                branch!(r, at, 0x99B0F, 9, r.cpu.call(0x785B8)); // GOSBVL RCLtmp1%%
             }
             // #99B0F:
             0x99B0F..=0x99B0F => {

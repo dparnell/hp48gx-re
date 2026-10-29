@@ -615,14 +615,14 @@ SUB_807E9:
         P=      0                                * 807E9
         LC(5)   #0F000                           * 807EB
         B=C     A                                * 807F2
-        GOSUB   SUB_80EAE                        * 807F4
+        GOSUB   D0=IRAM~jump_3                   * 807F4
         LC(4)   #1000                            * 807F8
         B=B+C   A                                * 807FE
         GOTO    SUB_8081A                        * 80800
         P=      0                                * 80804
         LC(5)   #10000                           * 80806
         B=C     A                                * 8080D
-        GOSUB   SUB_80EAE                        * 8080F
+        GOSUB   D0=IRAM~jump_3                   * 8080F
         P=      3                                * 80813
         C=0     WP                               * 80815
         B=B+C   A                                * 80818
@@ -942,7 +942,7 @@ L_80BB7:
 
 * refs (2): 80B5C 80C38
 SUB_80BCB:
-        GOSUB   SUB_80EB5                        * 80BCB
+        GOSUB   D1=IRAM~jump_5                   * 80BCB
         D1=(4)  #0069                            * 80BCF
         GOSBVL  SUB_01702                        * 80BD5
         D1=D1+  13                               * 80BDC
@@ -1148,7 +1148,7 @@ L_80E23:
         A=0     A                                * 80E28
         A=DAT0  B                                * 80E2A
         B=A     A                                * 80E2D
-        GOSUB   SUB_80EB5                        * 80E2F
+        GOSUB   D1=IRAM~jump_5                   * 80E2F
         D1=(4)  #0519                            * 80E33
         A=DAT1  B                                * 80E39
         ?A=0    B                                * 80E3C
@@ -1196,12 +1196,12 @@ L_80EA3:
         RTNCC                                    * 80EAC
 
 * refs (2): 807F4 8080F
-SUB_80EAE:
-        GOVLNG  SUB_0C1A7                        * 80EAE
+D0=IRAM~jump_3:
+        GOVLNG  D0=IRAM                          * 80EAE
 
 * refs (9): 80BCB 80E2F 80F29 8100E 8148E 81620 ...
-SUB_80EB5:
-        GOVLNG  SUB_0C198                        * 80EB5
+D1=IRAM~jump_5:
+        GOVLNG  D1=IRAM                          * 80EB5
 
 * refs (7): 80174 8034A 8088F 80FD2 810D2 81747 ...
 SUB_80EBC:
@@ -1238,7 +1238,7 @@ L_80F15:
         LC(1)   #A                               * 80F1F
         DAT0=C  1                                * 80F22
         GONC    L_80F62                          * 80F26
-        GOSUB   SUB_80EB5                        * 80F29
+        GOSUB   D1=IRAM~jump_5                   * 80F29
         D1=(4)  #07F7                            * 80F2D
         C=DAT1  A                                * 80F33
         ?C#0    A                                * 80F36
@@ -1313,7 +1313,7 @@ L_80FFD:
         GONC    L_80FFD                          * 81007
         GOSUB   SUB_81051                        * 8100A
 L_8100E:
-        GOSUB   SUB_80EB5                        * 8100E
+        GOSUB   D1=IRAM~jump_5                   * 8100E
         D1=(4)  #07F7                            * 81012
         C=DAT1  A                                * 81018
         ?C#0    A                                * 8101B
@@ -1677,7 +1677,7 @@ L_81483:
 * refs (3): 806A4 8113F 819BA
 SUB_8148B:
         B=C     W                                * 8148B
-        GOSUB   SUB_80EB5                        * 8148E
+        GOSUB   D1=IRAM~jump_5                   * 8148E
         LC(4)   #00B6                            * 81492
         D1=C                                     * 81498
         C=B     W                                * 8149B
@@ -1818,7 +1818,7 @@ L_81609:
         GOSBVL  CSLW5                            * 81614
         C=RSTK                                   * 8161B
         R0=C                                     * 8161D
-        GOSUB   SUB_80EB5                        * 81620
+        GOSUB   D1=IRAM~jump_5                   * 81620
         D1=(4)  #0092                            * 81624
         P=      0                                * 8162A
         C=0     A                                * 8162C
@@ -1873,7 +1873,7 @@ L_816A6:
 
 * refs (2): 80313 81736
 SUB_816AD:
-        GOSUBL  SUB_80EB5                        * 816AD
+        GOSUBL  D1=IRAM~jump_5                   * 816AD
         D1=(4)  #009C                            * 816B3
         AD0EX                                    * 816B9
         DAT1=A  A                                * 816BC
@@ -1913,13 +1913,14 @@ L_81710:
         C=C+C   A                                * 81716
         C=C-1   A                                * 81718
         P=C     0                                * 8171A
-        GOSUBL  SUB_80EB5                        * 8171E
+        GOSUBL  D1=IRAM~jump_5                   * 8171E
         D1=(4)  #009C                            * 81724
         C=DAT0  WP                               * 8172A
         DAT1=C  WP                               * 8172E
         GOTO    L_81765                          * 81732
 
 * refs (12): 80547 806C5 808F4 80AB4 80BC5 80D85 ...
+* Probably: self-test: report a failure (message at D0, the hex value at RAM #0091) on the display and the serial port
 SUB_81736:
         GOSUB   SUB_816AD                        * 81736
         GOSBVL  SUB_012F9                        * 8173A
@@ -1953,7 +1954,7 @@ SUB_81769:
         SETHEX                                   * 81792
         LC(1)   #6                               * 81794
         GOSUBL  SUB_80DED                        * 81797
-        GOSUBL  SUB_80EB5                        * 8179D
+        GOSUBL  D1=IRAM~jump_5                   * 8179D
         LC(4)   #0092                            * 817A3
         R3=C                                     * 817A9
         C=0     A                                * 817AC

@@ -1285,7 +1285,7 @@ L_17A25:
         C=C+B   A                                * 17A2C
         D0=C                                     * 17A2E
 L_17A31:
-        GOSBVL  SUB_08400                        * 17A31
+        GOSBVL  SKIPVARNAME                      * 17A31
         AD0EX                                    * 17A38
         C=B     A                                * 17A3B
         R0=C                                     * 17A3D
@@ -1371,7 +1371,7 @@ L_17B29:
             R1=C                                 * 17B29
             D0=A                                 * 17B2C
             B=A     A                            * 17B2F
-            GOSBVL  SUB_08400                    * 17B31
+            GOSBVL  SKIPVARNAME                  * 17B31
             GOSBVL  SKIPOB                       * 17B38
             C=0     M                            * 17B3F
             C=DAT0  7                            * 17B42

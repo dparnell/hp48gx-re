@@ -1,6 +1,6 @@
 * HP 48GX ROM revision R, #1C017-#1F01E: User commands
 * Addresses in the right-hand comments are those of the original ROM.
-* Most referenced: xDER %12 xPICT xGRAPH xDRAW PUTLIST xRAD xOBJ> xPARAMETRIC xFUNCTION x>LIST POLAR
+* Most referenced: xDER %12 xPICT xGRAPH xDRAW PUTLIST xRAD xOBJ> {}>%sBIND xPARAMETRIC xFUNCTION x>LIST
 * Follows on from the previous file (at #1C017 in the original ROM).
 
 * [1] [2] -> [3]
@@ -704,7 +704,7 @@ size(PICT):
         CON(3)  #0A1                             * 1CAB1  command
 xPOS:
         :: CK2&Dispatch                          * 1CAB4
-          OBJ_64C34 pos(cp,_)                    * 1CABE  list any
+          BINT80 pos(cp,_)                       * 1CABE  list any
           BINT51 XEQPOS$                         * 1CAC8  string string
         ;                                        * 1CAD2
 
@@ -992,7 +992,7 @@ XEQ>VECTOR:
 
 * refs (1): 1D018
 ->arry(li):
-        :: DUPDUP OBJ_1DF30 1GETABND             * 1D040
+        :: DUPDUP {}>%sBIND 1GETABND             * 1D040
 
 * F%..F% {#n #m} -> [F%]
 * refs (5): 1D036 24861 24AB5 368EA 4CB4F
@@ -1064,7 +1064,7 @@ xCON:
 
 * refs (2): 1D195 1D19F
 con(li,nb):
-        :: DUP OBJ_1DF30 3GETLAM 1ABNDSWAP CK2NOLASTWD SWAP COERCE{}2 SWAP * 1D1EA
+        :: DUP {}>%sBIND 3GETLAM 1ABNDSWAP CK2NOLASTWD SWAP COERCE{}2 SWAP * 1D1EA
           MAKEARRY ;                             * 1D217
 
 * refs (1): 1D1B3
@@ -1506,7 +1506,8 @@ x>V3:
           %3 XEQ>VECTOR ;                        * 1DF21
 
 * refs (11): 1D04A 1D1F4 1DFF3 1E025 330C6 C1677 ...
-OBJ_1DF30:
+* {} ob2 ob1 -> {}: bind 4 lams: the list's elements as reals (complex: real part; unit: number, the unit in 2LAM), the last unit, ob1, ob2; the caller ABNDs
+{}>%sBIND:
         :: 3PICK NULLCOMP? caseSIZEERR NULL{}    * 1DF30
           DUP 4NULLLAM{} BIND >R                 * 1DF49
 L_1DF5D:
@@ -1523,12 +1524,12 @@ L_1DF5D:
 * refs (10): 1D111 1D12A 1D157 1D82A 1D870 1D89D ...
 OBJ_1DFDF:
         :: DUPTYPEREAL? ?SEMI                    * 1DFDF
-          SWAPDUP OBJ_1DF30 3GETLAM 1GETABND CK2NOLASTWD ; * 1DFEE
+          SWAPDUP {}>%sBIND 3GETLAM 1GETABND CK2NOLASTWD ; * 1DFEE
 
 * refs (8): 1D489 1D4E3 1D529 1D56A 1D661 1D6BB ...
 OBJ_1E00C:
         :: OVER TYPEREAL? ?SEMI                  * 1E00C
-          ROT OBJ_1DF30 3GETLAM 4GETLAM 1ABNDSWAP CK3NOLASTWD ; * 1E020
+          ROT {}>%sBIND 3GETLAM 4GETLAM 1ABNDSWAP CK3NOLASTWD ; * 1E020
 
 * name -> {name} -> {name x1 x2} -> {x1 x2} -> x1 x2 ->
 * ROMPTR 002 0B7 INDEP

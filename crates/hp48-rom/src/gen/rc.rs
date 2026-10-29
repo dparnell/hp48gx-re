@@ -16,7 +16,7 @@ pub(crate) fn UMSIN_4(r: &mut Run) {
             }
             // #CABBD:
             0xCABBD..=0xCABBD => {
-                branch!(r, at, 0xCABC4, 9, r.cpu.call(0x2AEF6)); // GOSBVL SUB_2AEF6
+                branch!(r, at, 0xCABC4, 9, r.cpu.call(0x2AEF6)); // GOSBVL GetAngleST
             }
             // #CABC4:
             0xCABC4..=0xCABD1 => {

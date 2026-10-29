@@ -2276,7 +2276,7 @@ L_61FE2:
         C=A     A                                * 61FE2
         RSTK=C                                   * 61FE4
         A=A-CON A,11                             * 61FE6
-        GOSBVL  SUB_07ED8                        * 61FEC
+        GOSBVL  ROMPTR>ADDR                      * 61FEC
         C=RSTK                                   * 61FF3
         CAEX    A                                * 61FF5
         GOC     L_61FFF                          * 61FF7

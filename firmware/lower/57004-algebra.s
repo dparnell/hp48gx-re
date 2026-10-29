@@ -1,6 +1,6 @@
 * HP 48GX ROM revision R, #57004-#5A01C: Symbolic algebra
 * Addresses in the right-hand comments are those of the original ROM.
-* Most referenced: drop;q_58A0C MEQU? Π'+s Π'*s SYMCOLCT NoIdsInMeta? {RULES\D->} swappargunrot nm=>st addtpsh SYMSHOW SYMEXPAN
+* Most referenced: BindDvDup IsolContinue IsolInv1 drop;q_58A0C MEQU? Π'+s Π'*s SYMCOLCT NoIdsInMeta? {RULES\D->} swappargunrot nm=>st
 * Follows on from the previous file (at #57004 in the original ROM).
         RPL
 
@@ -15,8 +15,8 @@ OBJ_57022:
         ;                                        * 57040
 
 * refs (22): 860BA 86150 861A5 86213 86263 862C7 ...
-* Probably: derivatives: bind the variable to 'dv and duplicate the argument meta
-OBJ_57045:
+* Derivatives: bind the variable to 'dv, then duplicate the argument meta
+BindDvDup:
         :: OBJ_56CD1 dup ;                       * 57045
 
 * refs (1): 571D1
@@ -62,7 +62,7 @@ OBJ_57211:
 * refs (5): 44F52 44F81 458EE 8AB90 8B5B6
 OBJ_57216:
           :: ROMPTR 0F1 001 ROMPTR 0F1 00B ROMPTR 0F1 003 BIND ; * 57216
-          ROMPTR 0F1 004 DUP ' OBJ_5135F ROMPTR 0F1 005 ' NOP %1 * 57246
+          ROMPTR 0F1 004 DUP ' PlotEval ROMPTR 0F1 005 ' NOP %1 * 57246
           ROMPTR 0F1 006 OBJ_4C314 ;             * 5727A
         NIBHEX  0000                             * 5728F  ..
 
@@ -134,20 +134,20 @@ OBJ_5747D:
         ROMPTR 0F0 0CD                           * 5747D
 
 * refs (1): 1AA0C
-OBJ_57488:
-        :: OBJ_57658 xNEG ;                      * 57488
+~IsolInv1;xNEG:
+        :: IsolInv1 xNEG ;                       * 57488
 
 * refs (1): 1B2BE
-OBJ_5749C:
-        :: OBJ_57658 xINV ;                      * 5749C
+~IsolInv1;xINV:
+        :: IsolInv1 xINV ;                       * 5749C
 
 * refs (1): 1B937
 OBJ_574B0:
         ROMPTR 0F0 0CE                           * 574B0
 
 * refs (1): 1B981
-OBJ_574BB:
-        :: OBJ_57658 xEXP ;                      * 574BB
+~IsolInv1;xEXP:
+        :: IsolInv1 xEXP ;                       * 574BB
 
 * refs (1): 1B4E8
 OBJ_574CF:
@@ -174,71 +174,72 @@ OBJ_57506:
         ROMPTR 0F0 0D4                           * 57506
 
 * refs (1): 1B6D6
-OBJ_57511:
-        :: OBJ_57658 xSIN ;                      * 57511
+~IsolInv1;xSIN:
+        :: IsolInv1 xSIN ;                       * 57511
 
 * refs (1): 1B761
-OBJ_57525:
-        :: OBJ_57658 xCOS ;                      * 57525
+~IsolInv1;xCOS:
+        :: IsolInv1 xCOS ;                       * 57525
 
 * refs (1): 1B7CE
-OBJ_57539:
-        :: OBJ_57658 xTAN ;                      * 57539
+~IsolInv1;xTAN:
+        :: IsolInv1 xTAN ;                       * 57539
 
 * refs (1): 1B81D
-OBJ_5754D:
-        :: OBJ_57658 xSINH ;                     * 5754D
+~IsolInv1;xSINH:
+        :: IsolInv1 xSINH ;                      * 5754D
 
 * refs (1): 1B862
-OBJ_57561:
-        :: OBJ_57658 xCOSH ;                     * 57561
+~IsolInv1;xCOSH:
+        :: IsolInv1 xCOSH ;                      * 57561
 
 * refs (1): 1B8D4
-OBJ_57575:
-        :: OBJ_57658 xTANH ;                     * 57575
+~IsolInv1;xTANH:
+        :: IsolInv1 xTANH ;                      * 57575
 
 * refs (1): 1B46C
 OBJ_57589:
-        :: OBJ_57630 xSQRT OBJ_57856 OBJ_5760D ; * 57589
+        :: OBJ_57630 xSQRT OBJ_57856 IsolContinue ; * 57589
 
 * refs (1): 1B3BA
-OBJ_575A7:
-        :: OBJ_57658 xSQ ;                       * 575A7
+~IsolInv1;xSQ:
+        :: IsolInv1 xSQ ;                        * 575A7
 
 * refs (1): 1B9F8
-OBJ_575BB:
-        :: OBJ_57658 xALOG ;                     * 575BB
+~IsolInv1;xALOG:
+        :: IsolInv1 xALOG ;                      * 575BB
 
 * refs (1): 1BAB4
-OBJ_575CF:
-        :: OBJ_57658 xEXPM ;                     * 575CF
+~IsolInv1;xEXPM:
+        :: IsolInv1 xEXPM ;                      * 575CF
 
 * refs (1): 1BA6F
 OBJ_575E3:
         ROMPTR 0F0 0D5                           * 575E3
 
 * refs (1): 1AAAA
-OBJ_575EE:
-        :: OBJ_57658 xCONJ ;                     * 575EE
+~IsolInv1;xCONJ:
+        :: IsolInv1 xCONJ ;                      * 575EE
 
 * refs (1): 1BAEA
 OBJ_57602:
         ROMPTR 0F0 0D6                           * 57602
 
 * refs (21): 5759D 5764E 5766C 86BCD 86C3B 86C9A ...
-* Probably: SYMISOL: carry on isolating with the next inverse (tail call into the isolation loop)
-OBJ_5760D:
+* SYMISOL: carry on isolating with the next inverse (tail call into the isolation loop)
+IsolContinue:
         :: RDROP psh #1-SWAP COLA OBJ_57324      * 5760D
         ;                                        * 5762B
 
 * refs (10): 5758E 86E70 86E98 86EBB 86EE3 86F06 ...
 OBJ_57630:
-        :: addtpsh 'R SWAP#1+ PRSOL? case OBJ_5760D * 57630
+        :: addtpsh 'R SWAP#1+ PRSOL? case IsolContinue * 57630
         ;                                        * 57653
 
 * refs (13): 5748D 574A1 574C0 57516 5752A 5753E ...
-OBJ_57658:
-        :: addtpsh 'RRDROP SWAP#1+ OBJ_5760D ;   * 57658
+* Isolation step for an inverse with one value: the inverse function follows in the runstream (:: IsolInv1 xNEG ;)
+IsolInv1:
+        :: addtpsh 'RRDROP SWAP#1+ IsolContinue ; * 57658
 
 * refs (8): 572E3 57329 5A1D0 86BAA 86BF0 86C5E ...
 OBJ_57676:
@@ -1252,7 +1253,7 @@ OBJ_593AF:
         :: DUP %0_2A2B4 lam'dvar XEQSTOID xEVAL OBJ_54BAF xSWAP 1GETLAM * 593AF
           lam'dvar XEQSTOID 2GETLAM #0=case DROPONE * 593DC
           2GETLAM #1=?SKIP                       * 593F5
-          :: 2GETLAM ONE_DO OBJ_4241B lam'dvar DERIV xEVAL xDUP %0_2A2B4 * 593FF
+          :: 2GETLAM ONE_DO ?ATTNQUIT0 lam'dvar DERIV xEVAL xDUP %0_2A2B4 * 593FF
             lam'dvar XEQSTOID xEVAL 1GETLAM lam'dvar XEQSTOID INDEX@ * 5942C
             OBJ_594AE xSWAP LOOP ;               * 5944F
           %0_2A2B4 lam'dvar XEQSTOID lam'dvar DERIV 2GETLAM OBJ_594AE DEPTH * 59463

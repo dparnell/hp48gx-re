@@ -10,7 +10,8 @@
         ;                                        * 1A016
 
 * refs (13): AA1D8 B31D0 BC1A5 BC3D1 D6B9E D7FB2 ...
-OBJ_1A01B:
+* comp #n -> ob: the nth element of a composite (or of a ROMPTR's), itself resolved if a ROMPTR
+NTHCOMPROM@:
         :: SWAP ?ROMPTR@ SWAP NTHCOMPDROP ?ROMPTR@ ; * 1A01B
 
 * refs (6): 19B26 B15FC B2E81 D6886 D8627 D8729
@@ -465,7 +466,7 @@ Wait/GetKey:
 * %secs ->
 * refs (1): 1A74C
 dowait/quit?:
-        :: dowait OBJ_4241B ;                    * 1A7B5
+        :: dowait ?ATTNQUIT0 ;                   * 1A7B5
 
 * %secs ->
 * refs (5): 1A7BA 2DC1B 2E0D1 2F031 C0BA9
@@ -594,7 +595,7 @@ xNEG:
 #8010h:
         HXS 0108                                 * 1A9F9  slot 1
         CON(5)  D/DCHS                           * 1AA07  slot 2
-        CON(5)  OBJ_57488                        * 1AA0C  slot 3
+        CON(5)  ~IsolInv1;xNEG                   * 1AA0C  slot 3
         CON(5)  MANMENUCSIV                      * 1AA11  slot 4
         CON(2)  #80                              * 1AA16  end of the slots: property byte (meaning not yet known)
 
@@ -633,7 +634,7 @@ xCONJ:
 
 * slots of 002 03E (derivative, inverse, ...: used by the symbolic code)
         CON(5)  D/DCONJ                          * 1AAA5  slot 0
-        CON(5)  OBJ_575EE                        * 1AAAA  slot 1
+        CON(5)  ~IsolInv1;xCONJ                  * 1AAAA  slot 1
         CON(5)  MANMENUCX                        * 1AAAF  slot 2
         CON(2)  #80                              * 1AAB4  end of the slots: property byte (meaning not yet known)
 
@@ -731,7 +732,7 @@ x+:
           2GROB +(2go)                           * 1AC25  grob grob
           BINT85 &COMP                           * 1AC2F  list list
           BINT51 &$                              * 1AC39  string string
-          OBJ_64C34 >TCOMP                       * 1AC43  list any
+          BINT80 >TCOMP                          * 1AC43  list any
           BINT5 SWAP>HCOMP                       * 1AC4D  list
           BINT48 +(st,_)                         * 1AC57  string any
           BINT3 +(_,st)                          * 1AC61  string
@@ -895,7 +896,7 @@ x/:
 
 * refs (1): 1AFE1
 OBJ_1AFF5:
-        :: OBJ_6CC10 #0504108h #80108h RPITE ;   * 1AFF5  slot 5
+        :: EqwImplicit()? #0504108h #80108h RPITE ; * 1AFF5  slot 5
 
 * refs (1): 1AFFF
 #0504108h:
@@ -936,7 +937,7 @@ x^:
 
 * refs (1): 1B0CD
 OBJ_1B0E6:
-        :: OBJ_6CC10 #0504109h #90109h RPITE ;   * 1B0E6  slot 6
+        :: EqwImplicit()? #0504109h #90109h RPITE ; * 1B0E6  slot 6
 
 * refs (1): 1B0F5
 #90109h:
@@ -960,7 +961,7 @@ OBJ_1B0E6:
 rpnXROOT:
         :: CK2&Dispatch                          * 1B185
           BINT5 rpnXROOT~1                       * 1B18F  list
-          OBJ_64C34 rpnXROOT~1                   * 1B199  list any
+          BINT80 rpnXROOT~1                      * 1B199  list any
           BINT0 rpnXROOT~any                     * 1B1A3  any
         ;                                        * 1B1AD
 
@@ -1021,7 +1022,7 @@ xINV:
 
 * slots of 002 04C (derivative, inverse, ...: used by the symbolic code)
         CON(5)  D/DINV                           * 1B2B9  slot 0
-        CON(5)  OBJ_5749C                        * 1B2BE  slot 1
+        CON(5)  ~IsolInv1;xINV                   * 1B2BE  slot 1
         CON(5)  MANMENUCSIV                      * 1B2C3  slot 2
         CON(5)  nINTGINV                         * 1B2C8  slot 3
         CON(5)  0                                * 1B2CD  slot 4: none
@@ -1086,13 +1087,13 @@ xSQRT:
         CON(5)  OBJ_6D729                        * 1B3AB  slot 0
         CON(5)  OBJ_1B3C9                        * 1B3B0  slot 1
         CON(5)  D/DSQRT                          * 1B3B5  slot 2
-        CON(5)  OBJ_575A7                        * 1B3BA  slot 3
+        CON(5)  ~IsolInv1;xSQ                    * 1B3BA  slot 3
         CON(5)  nINTGSQRT                        * 1B3BF  slot 4
         CON(5)  0                                * 1B3C4  slot 5: none
 
 * refs (1): 1B3B0
 OBJ_1B3C9:
-        :: OBJ_6CC10 #050410h #C010h RPITE ;     * 1B3C9  slot 6
+        :: EqwImplicit()? #050410h #C010h RPITE ; * 1B3C9  slot 6
 
 * refs (1): 1B3D8
 #C010h:
@@ -1281,7 +1282,7 @@ xASIN:
 
 * slots of 002 057 (derivative, inverse, ...: used by the symbolic code)
         CON(5)  D/DASIN                          * 1B6D1  slot 0
-        CON(5)  OBJ_57511                        * 1B6D6  slot 1
+        CON(5)  ~IsolInv1;xSIN                   * 1B6D6  slot 1
         CON(5)  MANMENUATG                       * 1B6DB  slot 2
         CON(5)  nINTGASIN                        * 1B6E0  slot 3
         CON(5)  0                                * 1B6E5  slot 4: none
@@ -1311,7 +1312,7 @@ xACOS:
 
 * slots of 002 058 (derivative, inverse, ...: used by the symbolic code)
         CON(5)  D/DACOS                          * 1B75C  slot 0
-        CON(5)  OBJ_57525                        * 1B761  slot 1
+        CON(5)  ~IsolInv1;xCOS                   * 1B761  slot 1
         CON(5)  MANMENUATG                       * 1B766  slot 2
         CON(5)  nINTGACOS                        * 1B76B  slot 3
         CON(5)  0                                * 1B770  slot 4: none
@@ -1337,7 +1338,7 @@ xATAN:
 
 * slots of 002 059 (derivative, inverse, ...: used by the symbolic code)
         CON(5)  D/DATAN                          * 1B7C9  slot 0
-        CON(5)  OBJ_57539                        * 1B7CE  slot 1
+        CON(5)  ~IsolInv1;xTAN                   * 1B7CE  slot 1
         CON(5)  MANMENUATG                       * 1B7D3  slot 2
         CON(5)  nINTGATAN                        * 1B7D8  slot 3
         CON(5)  0                                * 1B7DD  slot 4: none
@@ -1358,7 +1359,7 @@ xASINH:
 
 * slots of 002 05A (derivative, inverse, ...: used by the symbolic code)
         CON(5)  D/DASINH                         * 1B818  slot 0
-        CON(5)  OBJ_5754D                        * 1B81D  slot 1
+        CON(5)  ~IsolInv1;xSINH                  * 1B81D  slot 1
         CON(5)  MANMENUATG                       * 1B822  slot 2
         CON(2)  #C8                              * 1B827  end of the slots: property byte (meaning not yet known)
 
@@ -1377,7 +1378,7 @@ xACOSH:
 
 * slots of 002 05B (derivative, inverse, ...: used by the symbolic code)
         CON(5)  D/DACOSH                         * 1B85D  slot 0
-        CON(5)  OBJ_57561                        * 1B862  slot 1
+        CON(5)  ~IsolInv1;xCOSH                  * 1B862  slot 1
         CON(5)  MANMENUATG                       * 1B867  slot 2
 
 * % -> ACOSH%
@@ -1402,7 +1403,7 @@ xATANH:
 
 * slots of 002 05C (derivative, inverse, ...: used by the symbolic code)
         CON(5)  D/DATANH                         * 1B8CF  slot 0
-        CON(5)  OBJ_57575                        * 1B8D4  slot 1
+        CON(5)  ~IsolInv1;xTANH                  * 1B8D4  slot 1
         CON(5)  MANMENUATG                       * 1B8D9  slot 2
 
 * % -> ATANH%
@@ -1446,7 +1447,7 @@ xLN:
 
 * slots of 002 05E (derivative, inverse, ...: used by the symbolic code)
         CON(5)  D/DLN                            * 1B97C  slot 0
-        CON(5)  OBJ_574BB                        * 1B981  slot 1
+        CON(5)  ~IsolInv1;xEXP                   * 1B981  slot 1
         CON(5)  MANMENULN                        * 1B986  slot 2
         CON(5)  nINTGLN                          * 1B98B  slot 3
         CON(5)  0                                * 1B990  slot 4: none
@@ -1473,7 +1474,7 @@ xLOG:
 
 * slots of 002 05F (derivative, inverse, ...: used by the symbolic code)
         CON(5)  D/DLOG                           * 1B9F3  slot 0
-        CON(5)  OBJ_575BB                        * 1B9F8  slot 1
+        CON(5)  ~IsolInv1;xALOG                  * 1B9F8  slot 1
         CON(5)  MANMENULN                        * 1B9FD  slot 2
         CON(5)  nINTGLOG                         * 1BA02  slot 3
         CON(5)  0                                * 1BA07  slot 4: none
@@ -1520,7 +1521,7 @@ xLNP1:
 
 * slots of 002 061 (derivative, inverse, ...: used by the symbolic code)
         CON(5)  D/DLNP1                          * 1BAAF  slot 0
-        CON(5)  OBJ_575CF                        * 1BAB4  slot 1
+        CON(5)  ~IsolInv1;xEXPM                  * 1BAB4  slot 1
         CON(2)  #C4                              * 1BAB9  end of the slots: property byte (meaning not yet known)
 
 * x -> x'

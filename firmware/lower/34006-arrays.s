@@ -1941,7 +1941,10 @@ SUB_35A70:
         ?C=0    M                                * 35A7B
         RTNYES                                   * 35A7E
         RTNCC                                    * 35A80
-L_35A82:
+
+* refs (1): 7CC56
+* R0/R1 += A/B * (the %% at D0); nothing when either is 0; decimal mode
+MACCF0:
         SETDEC                                   * 35A82
         ?B=0    M                                * 35A84
         RTNYES                                   * 35A87
@@ -1949,7 +1952,10 @@ L_35A82:
         ?D=0    M                                * 35A8D
         RTNYES                                   * 35A90
         GONC    L_35A2D                          * 35A92
-L_35A95:
+
+* refs (1): 7CC5D
+* R2/R3 += A/B * (the %% at D0); nothing when either is 0; decimal mode
+MACCF2:
         SETDEC                                   * 35A95
         ?B=0    M                                * 35A97
         RTNYES                                   * 35A9A

@@ -5792,7 +5792,7 @@ pub(crate) fn SUB_12DB1(r: &mut Run) {
             0x12DB1..=0x12DBA => {
                 op!(r, at, 0x12DB1..0x12DB4, 5, r.cpu.zero(R::C, Field::W)); // C=0 W
                 op!(r, at, 0x12DB4..0x12DBA, 8, r.cpu.scratch(ScratchOp::FromScratch, R::C, 1, Field::A)); // C=R1.F A
-                branch!(r, at, 0x12DC1, 9, r.cpu.call(0x65807)); // GOSBVL SUB_65807
+                branch!(r, at, 0x12DC1, 9, r.cpu.call(0x65807)); // GOSBVL IntDivW
             }
             // #12DC1:
             0x12DC1..=0x12DCA => {
@@ -6637,7 +6637,7 @@ pub(crate) fn disprange(r: &mut Run) {
             0x133AB..=0x133AF => {
                 op!(r, at, 0x133AB..0x133AD, 4, r.cpu.dec = false); // SETHEX
                 op!(r, at, 0x133AD..0x133AF, 4, r.cpu.p = 0); // P= 0
-                branch!(r, at, 0x133B6, 9, r.cpu.call(0x0C198)); // GOSBVL SUB_0C198
+                branch!(r, at, 0x133B6, 9, r.cpu.call(0x0C198)); // GOSBVL D1=IRAM
             }
             // #133B6:
             0x133B6..=0x133C8 => {
@@ -6864,7 +6864,7 @@ pub(crate) fn WINDOWLEFT(r: &mut Run) {
             0x13534..=0x1353D => {
                 op!(r, at, 0x13534..0x13537, 5, r.cpu.zero(R::C, Field::W)); // C=0 W
                 op!(r, at, 0x13537..0x1353D, 8, r.cpu.scratch(ScratchOp::FromScratch, R::C, 0, Field::A)); // C=R0.F A
-                branch!(r, at, 0x13544, 9, r.cpu.call(0x65807)); // GOSBVL SUB_65807
+                branch!(r, at, 0x13544, 9, r.cpu.call(0x65807)); // GOSBVL IntDivW
             }
             // #13544:
             0x13544..=0x13544 => {
@@ -7315,7 +7315,7 @@ pub(crate) fn corner(r: &mut Run) {
                 op!(r, at, 0x137E0..0x137E2, 4, r.cpu.copy(R::C, R::B, Field::A)); // C=B A
                 op!(r, at, 0x137E2..0x137E4, 4, r.cpu.push_c()); // RSTK=C
                 op!(r, at, 0x137E4..0x137E7, 5, r.cpu.scratch(ScratchOp::FromScratch, R::C, 0, Field::W)); // C=R0
-                branch!(r, at, 0x137EE, 9, r.cpu.call(0x65807)); // GOSBVL SUB_65807
+                branch!(r, at, 0x137EE, 9, r.cpu.call(0x65807)); // GOSBVL IntDivW
             }
             // #137EE:
             0x137EE..=0x1380D => {
@@ -8046,7 +8046,7 @@ pub(crate) fn SUB_13C5A(r: &mut Run) {
             // #13C65:
             0x13C65..=0x13C68 => {
                 op!(r, at, 0x13C65..0x13C68, 5, r.cpu.d_from_r(0, R::C, false)); // D0=C
-                branch!(r, at, 0x13C6F, 9, r.cpu.call(0x0C198)); // GOSBVL SUB_0C198
+                branch!(r, at, 0x13C6F, 9, r.cpu.call(0x0C198)); // GOSBVL D1=IRAM
             }
             // #13C6F:
             0x13C6F..=0x13CAE => {
@@ -11372,7 +11372,7 @@ pub(crate) fn addrTEMPTOP(r: &mut Run) {
             }
             // L_17A31:
             0x17A31..=0x17A31 => {
-                branch!(r, at, 0x17A38, 9, r.cpu.call(0x08400)); // GOSBVL SUB_08400
+                branch!(r, at, 0x17A38, 9, r.cpu.call(0x08400)); // GOSBVL SKIPVARNAME
             }
             // #17A38:
             0x17A38..=0x17A40 => {
@@ -11515,7 +11515,7 @@ pub(crate) fn code_17AF4(r: &mut Run) {
                 op!(r, at, 0x17B29..0x17B2C, 5, r.cpu.scratch(ScratchOp::ToScratch, R::C, 1, Field::W)); // R1=C
                 op!(r, at, 0x17B2C..0x17B2F, 5, r.cpu.d_from_r(0, R::A, false)); // D0=A
                 op!(r, at, 0x17B2F..0x17B31, 4, r.cpu.copy(R::B, R::A, Field::A)); // B=A A
-                branch!(r, at, 0x17B38, 9, r.cpu.call(0x08400)); // GOSBVL SUB_08400
+                branch!(r, at, 0x17B38, 9, r.cpu.call(0x08400)); // GOSBVL SKIPVARNAME
             }
             // #17B38:
             0x17B38..=0x17B38 => {
@@ -12504,7 +12504,7 @@ pub(crate) fn CK0(r: &mut Run) {
     loop {
         match at {
             0x18A23..=0x18A23 => {
-                branch!(r, at, 0x18A27, 6, r.cpu.call(0x18C77)); // GOSUB SUB_18C77
+                branch!(r, at, 0x18A27, 6, r.cpu.call(0x18C77)); // GOSUB SetLastRomWrd
             }
             _ => {
                 r.cpu.pc = at;
@@ -12553,7 +12553,7 @@ pub(crate) fn CK3(r: &mut Run) {
     loop {
         match at {
             0x18A60..=0x18A60 => {
-                branch!(r, at, 0x18A64, 6, r.cpu.call(0x18C77)); // GOSUB SUB_18C77
+                branch!(r, at, 0x18A64, 6, r.cpu.call(0x18C77)); // GOSUB SetLastRomWrd
             }
             // #18A64:
             0x18A64..=0x18A64 => {
@@ -12614,7 +12614,7 @@ pub(crate) fn CK2(r: &mut Run) {
     loop {
         match at {
             0x18A85..=0x18A85 => {
-                branch!(r, at, 0x18A89, 6, r.cpu.call(0x18C77)); // GOSUB SUB_18C77
+                branch!(r, at, 0x18A89, 6, r.cpu.call(0x18C77)); // GOSUB SetLastRomWrd
             }
             // #18A89:
             0x18A89..=0x18A89 => {
@@ -12675,7 +12675,7 @@ pub(crate) fn CK1(r: &mut Run) {
     loop {
         match at {
             0x18AAA..=0x18AAA => {
-                branch!(r, at, 0x18AAE, 6, r.cpu.call(0x18C77)); // GOSUB SUB_18C77
+                branch!(r, at, 0x18AAE, 6, r.cpu.call(0x18C77)); // GOSUB SetLastRomWrd
             }
             // #18AAE:
             0x18AAE..=0x18AAE => {
@@ -12804,7 +12804,7 @@ pub(crate) fn CK5(r: &mut Run) {
     loop {
         match at {
             0x18B72..=0x18B72 => {
-                branch!(r, at, 0x18B76, 6, r.cpu.call(0x18C77)); // GOSUB SUB_18C77
+                branch!(r, at, 0x18B76, 6, r.cpu.call(0x18C77)); // GOSUB SetLastRomWrd
             }
             // #18B76:
             0x18B76..=0x18B76 => {
@@ -12865,7 +12865,7 @@ pub(crate) fn CK4(r: &mut Run) {
     loop {
         match at {
             0x18B97..=0x18B97 => {
-                branch!(r, at, 0x18B9B, 6, r.cpu.call(0x18C77)); // GOSUB SUB_18C77
+                branch!(r, at, 0x18B9B, 6, r.cpu.call(0x18C77)); // GOSUB SetLastRomWrd
             }
             // #18B9B:
             0x18B9B..=0x18B9B => {
@@ -12974,7 +12974,7 @@ pub(crate) fn CKN(r: &mut Run) {
     loop {
         match at {
             0x18C39..=0x18C39 => {
-                branch!(r, at, 0x18C3D, 6, r.cpu.call(0x18C77)); // GOSUB SUB_18C77
+                branch!(r, at, 0x18C3D, 6, r.cpu.call(0x18C77)); // GOSUB SetLastRomWrd
             }
             // #18C3D:
             0x18C3D..=0x18C46 => {
@@ -12990,8 +12990,9 @@ pub(crate) fn CKN(r: &mut Run) {
     }
 }
 
-// SUB_18C77: firmware/lower/1802E-dispatch.s:844
-pub(crate) fn SUB_18C77(r: &mut Run) {
+// LASTROMWDOB := the running command (D0-10), for error messages; called first by CK0-CK5 and CKN
+// SetLastRomWrd: firmware/lower/1802E-dispatch.s:845
+pub(crate) fn SetLastRomWrd(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -13014,7 +13015,7 @@ pub(crate) fn SUB_18C77(r: &mut Run) {
 }
 
 // Error 204h
-// SETNONEXTERR: firmware/lower/1802E-dispatch.s:856
+// SETNONEXTERR: firmware/lower/1802E-dispatch.s:857
 pub(crate) fn SETNONEXTERR(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -13032,7 +13033,7 @@ pub(crate) fn SETNONEXTERR(r: &mut Run) {
 }
 
 // Error 203h
-// SETSIZEERR: firmware/lower/1802E-dispatch.s:866
+// SETSIZEERR: firmware/lower/1802E-dispatch.s:867
 pub(crate) fn SETSIZEERR(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -13050,7 +13051,7 @@ pub(crate) fn SETSIZEERR(r: &mut Run) {
 }
 
 // Error 202h
-// SETTYPEERR: firmware/lower/1802E-dispatch.s:877
+// SETTYPEERR: firmware/lower/1802E-dispatch.s:878
 pub(crate) fn SETTYPEERR(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -13068,7 +13069,7 @@ pub(crate) fn SETTYPEERR(r: &mut Run) {
 }
 
 // Error 201h
-// SETSTACKERR: firmware/lower/1802E-dispatch.s:887
+// SETSTACKERR: firmware/lower/1802E-dispatch.s:888
 pub(crate) fn SETSTACKERR(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -13091,7 +13092,7 @@ pub(crate) fn SETSTACKERR(r: &mut Run) {
 }
 
 // % -> #
-// %ABSCOERCE: firmware/lower/1802E-dispatch.s:899
+// %ABSCOERCE: firmware/lower/1802E-dispatch.s:900
 pub(crate) fn _ABSCOERCE(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -13113,7 +13114,7 @@ pub(crate) fn _ABSCOERCE(r: &mut Run) {
 }
 
 // % -> #
-// COERCE: firmware/lower/1802E-dispatch.s:907
+// COERCE: firmware/lower/1802E-dispatch.s:908
 pub(crate) fn COERCE(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -13268,7 +13269,7 @@ pub(crate) fn COERCE(r: &mut Run) {
 }
 
 // # -> %
-// UNCOERCE: firmware/lower/1802E-dispatch.s:996
+// UNCOERCE: firmware/lower/1802E-dispatch.s:997
 pub(crate) fn UNCOERCE(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -13338,7 +13339,7 @@ pub(crate) fn UNCOERCE(r: &mut Run) {
 }
 
 // symb -> :: symb <ob1> <rest> ; ob -> :: ob ;
-// DNOTSYMB?SEMI: firmware/lower/1802E-dispatch.s:1034
+// DNOTSYMB?SEMI: firmware/lower/1802E-dispatch.s:1035
 pub(crate) fn DNOTSYMB_SEMI(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -13375,7 +13376,7 @@ pub(crate) fn DNOTSYMB_SEMI(r: &mut Run) {
     }
 }
 
-// ->num(ex)~1: firmware/lower/1802E-dispatch.s:1056
+// ->num(ex)~1: firmware/lower/1802E-dispatch.s:1057
 pub(crate) fn __num_ex__1(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -13413,7 +13414,7 @@ pub(crate) fn __num_ex__1(r: &mut Run) {
 }
 
 // comp ->
-// COMPEVAL: firmware/lower/1802E-dispatch.s:1078
+// COMPEVAL: firmware/lower/1802E-dispatch.s:1079
 pub(crate) fn COMPEVAL(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -13433,13 +13434,13 @@ pub(crate) fn COMPEVAL(r: &mut Run) {
 }
 
 // ->
-// CK1&Dispatch: firmware/lower/1802E-dispatch.s:1087
+// CK1&Dispatch: firmware/lower/1802E-dispatch.s:1088
 pub(crate) fn CK1_Dispatch(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
             0x18ED3..=0x18ED3 => {
-                branch!(r, at, 0x18ED7, 6, r.cpu.call(0x18C77)); // GOSUB SUB_18C77
+                branch!(r, at, 0x18ED7, 6, r.cpu.call(0x18C77)); // GOSUB SetLastRomWrd
             }
             // #18ED7:
             0x18ED7..=0x18ED7 => {
@@ -13458,13 +13459,13 @@ pub(crate) fn CK1_Dispatch(r: &mut Run) {
 }
 
 // ->
-// CK2&Dispatch: firmware/lower/1802E-dispatch.s:1095
+// CK2&Dispatch: firmware/lower/1802E-dispatch.s:1096
 pub(crate) fn CK2_Dispatch(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
             0x18EE4..=0x18EE4 => {
-                branch!(r, at, 0x18EE8, 6, r.cpu.call(0x18C77)); // GOSUB SUB_18C77
+                branch!(r, at, 0x18EE8, 6, r.cpu.call(0x18C77)); // GOSUB SetLastRomWrd
             }
             // #18EE8:
             0x18EE8..=0x18EE8 => {
@@ -13483,13 +13484,13 @@ pub(crate) fn CK2_Dispatch(r: &mut Run) {
 }
 
 // ->
-// CK3&Dispatch: firmware/lower/1802E-dispatch.s:1103
+// CK3&Dispatch: firmware/lower/1802E-dispatch.s:1104
 pub(crate) fn CK3_Dispatch(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
             0x18EF5..=0x18EF5 => {
-                branch!(r, at, 0x18EF9, 6, r.cpu.call(0x18C77)); // GOSUB SUB_18C77
+                branch!(r, at, 0x18EF9, 6, r.cpu.call(0x18C77)); // GOSUB SetLastRomWrd
             }
             // #18EF9:
             0x18EF9..=0x18EF9 => {
@@ -13508,13 +13509,13 @@ pub(crate) fn CK3_Dispatch(r: &mut Run) {
 }
 
 // ->
-// CK4&Dispatch: firmware/lower/1802E-dispatch.s:1111
+// CK4&Dispatch: firmware/lower/1802E-dispatch.s:1112
 pub(crate) fn CK4_Dispatch(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
             0x18F06..=0x18F06 => {
-                branch!(r, at, 0x18F0A, 6, r.cpu.call(0x18C77)); // GOSUB SUB_18C77
+                branch!(r, at, 0x18F0A, 6, r.cpu.call(0x18C77)); // GOSUB SetLastRomWrd
             }
             // #18F0A:
             0x18F0A..=0x18F0A => {
@@ -13533,13 +13534,13 @@ pub(crate) fn CK4_Dispatch(r: &mut Run) {
 }
 
 // ->
-// CK5&Dispatch: firmware/lower/1802E-dispatch.s:1119
+// CK5&Dispatch: firmware/lower/1802E-dispatch.s:1120
 pub(crate) fn CK5_Dispatch(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
             0x18F17..=0x18F17 => {
-                branch!(r, at, 0x18F1B, 6, r.cpu.call(0x18C77)); // GOSUB SUB_18C77
+                branch!(r, at, 0x18F1B, 6, r.cpu.call(0x18C77)); // GOSUB SetLastRomWrd
             }
             // #18F1B:
             0x18F1B..=0x18F1B => {
@@ -13557,7 +13558,7 @@ pub(crate) fn CK5_Dispatch(r: &mut Run) {
     }
 }
 
-// L_18F3F: firmware/lower/1802E-dispatch.s:1130
+// L_18F3F: firmware/lower/1802E-dispatch.s:1131
 pub(crate) fn L_18F3F(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -13598,7 +13599,7 @@ pub(crate) fn L_18F3F(r: &mut Run) {
     }
 }
 
-// L_18F83: firmware/lower/1802E-dispatch.s:1155
+// L_18F83: firmware/lower/1802E-dispatch.s:1156
 pub(crate) fn L_18F83(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -13628,7 +13629,7 @@ pub(crate) fn L_18F83(r: &mut Run) {
 }
 
 // ->
-// CK&DISPATCH0: firmware/lower/1802E-dispatch.s:1169
+// CK&DISPATCH0: firmware/lower/1802E-dispatch.s:1170
 pub(crate) fn CK_DISPATCH0(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -13646,7 +13647,7 @@ pub(crate) fn CK_DISPATCH0(r: &mut Run) {
 }
 
 // ->
-// CK&DISPATCH2: firmware/lower/1802E-dispatch.s:1175
+// CK&DISPATCH2: firmware/lower/1802E-dispatch.s:1176
 pub(crate) fn CK_DISPATCH2(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -13662,7 +13663,7 @@ pub(crate) fn CK_DISPATCH2(r: &mut Run) {
     }
 }
 
-// L_18FB7: firmware/lower/1802E-dispatch.s:1183
+// L_18FB7: firmware/lower/1802E-dispatch.s:1184
 pub(crate) fn L_18FB7(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -13888,7 +13889,7 @@ pub(crate) fn L_18FB7(r: &mut Run) {
 }
 
 // # #' -> #*#'
-// #*OVF: firmware/lower/1802E-dispatch.s:1356
+// #*OVF: firmware/lower/1802E-dispatch.s:1357
 pub(crate) fn __OVF(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -13953,7 +13954,7 @@ pub(crate) fn __OVF(r: &mut Run) {
 }
 
 // ->
-// CKNFLOATS: firmware/lower/1802E-dispatch.s:1386
+// CKNFLOATS: firmware/lower/1802E-dispatch.s:1387
 pub(crate) fn CKNFLOATS(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -14045,7 +14046,7 @@ pub(crate) fn CKNFLOATS(r: &mut Run) {
 }
 
 // F%..F% #n [%F] -> [F%]'
-// >ARRY: firmware/lower/1802E-dispatch.s:1432
+// >ARRY: firmware/lower/1802E-dispatch.s:1433
 pub(crate) fn _ARRY(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -14154,7 +14155,7 @@ pub(crate) fn _ARRY(r: &mut Run) {
 }
 
 // ob -> ob flag
-// NOTINHARDROM?: firmware/lower/1802E-dispatch.s:1505
+// NOTINHARDROM?: firmware/lower/1802E-dispatch.s:1506
 pub(crate) fn NOTINHARDROM_(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -14343,7 +14344,7 @@ pub(crate) fn code_19748(r: &mut Run) {
 }
 
 // ob -> ob flag
-// INHARDROM?: firmware/lower/1A002-user-arith.s:139
+// INHARDROM?: firmware/lower/1A002-user-arith.s:140
 pub(crate) fn INHARDROM_(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -14369,7 +14370,7 @@ pub(crate) fn INHARDROM_(r: &mut Run) {
     }
 }
 
-// syseval(s): firmware/lower/1A002-user-arith.s:298
+// syseval(s): firmware/lower/1A002-user-arith.s:299
 pub(crate) fn syseval_s_(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -14392,7 +14393,7 @@ pub(crate) fn syseval_s_(r: &mut Run) {
     }
 }
 
-// lastarg: firmware/lower/1A002-user-arith.s:364
+// lastarg: firmware/lower/1A002-user-arith.s:365
 pub(crate) fn lastarg(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -14534,7 +14535,7 @@ pub(crate) fn lastarg(r: &mut Run) {
 }
 
 // hxs ->
-// wait: firmware/lower/1A002-user-arith.s:479
+// wait: firmware/lower/1A002-user-arith.s:480
 pub(crate) fn wait(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -15264,7 +15265,7 @@ pub const ROUTINES: &[(u32, u32, Block, &str)] = &[
     (0x18BA4, 0x18BAB, CK4NOLASTWD, "CK4NOLASTWD"),
     (0x18BAC, 0x18C33, SUB_18BAC, "SUB_18BAC"),
     (0x18C39, 0x18C49, CKN, "CKN"),
-    (0x18C77, 0x18C91, SUB_18C77, "SUB_18C77"),
+    (0x18C77, 0x18C91, SetLastRomWrd, "SetLastRomWrd"),
     (0x18C97, 0x18CA1, SETNONEXTERR, "SETNONEXTERR"),
     (0x18CA7, 0x18CB1, SETSIZEERR, "SETSIZEERR"),
     (0x18CB7, 0x18CC1, SETTYPEERR, "SETTYPEERR"),

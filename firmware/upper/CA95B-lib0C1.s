@@ -15,10 +15,10 @@ ROMP_0C1_01D:
 ROMP_0C1_01E:
         :: ROMPTR 0C1 010 case ABND              * CA9C2
           %0_2A2B4 %0_2A2B4 %0_2A2B4 %0_2A2B4 %0_2A2B4 %0_2A2B4 8ROLL * CA9DC
-          8NULLLAM{} BIND LAM 'W OBJ_36E43 ROMPTR 0C1 01A 5PUTLAM 4PUTLAM * CA9FF
-          3PUTLAM RESOROMP ROMPTR 0C1 00D 6PUTLAM 2GETLAM 8GETLAM 11GETLAM * CAA2E
-          RESOROMP ROMPTR 0C1 01B 11PUTLAM OVER %%0> 12PUTLAM BEGIN 10GETLAM * CAA57
-          12GETLAM ITE OBJ_7CE00 OBJ_7CE32       * CAA85
+          8NULLLAM{} BIND LAM 'W RCLCRUNCH>%ARRY ROMPTR 0C1 01A 5PUTLAM * CA9FF
+          4PUTLAM 3PUTLAM RESOROMP ROMPTR 0C1 00D 6PUTLAM 2GETLAM 8GETLAM * CAA29
+          11GETLAM RESOROMP ROMPTR 0C1 01B 11PUTLAM OVER %%0> 12PUTLAM BEGIN * CAA52
+          10GETLAM 12GETLAM ITE OBJ_7CE00 OBJ_7CE32 * CAA80
           SWAP 11GETLAM EVAL SWAP LAM 'T OBJ_36DDF 10GETLAM OVER 12GETLAM * CAA99
           ITE %<= %>=                            * CAACC
           UNTIL 3DROP 1GETABND ABND ;            * CAADB
@@ -43,7 +43,7 @@ ROMP_0C1_020:
 UMSIN~4:
           CODE                                   * CABAC  73 nibbles
             GOSBVL  SAVPTR                       * CABB6
-            GOSBVL  SUB_2AEF6                    * CABBD
+            GOSBVL  GetAngleST                   * CABBD
             A=0     W                            * CABC4
             A=A-1   A                            * CABC7
             C=0     W                            * CABC9

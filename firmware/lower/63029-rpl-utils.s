@@ -1926,7 +1926,8 @@ BINT79:
         # 4F                                     * 64C2A  79
 
 * refs (11): 12B99 1AC43 1B199 1CABE AE58A B2137 ...
-OBJ_64C34:
+* # 50 (80), also the dispatch code list/any. entries48g.txt puts this name at #64C3A, inside the object
+BINT80:
         # 50                                     * 64C34  80
 
 * 81d 51h
@@ -3295,7 +3296,8 @@ L_657FC:
         RTNCC                                    * 65805
 
 * refs (12): 017E1 017FE 01855 0D55B 0D69C 0D793 ...
-SUB_65807:
+* A C -> A C = quotient, B = remainder: 64-bit division in the current mode (hex or decimal); C=0 does not return
+IntDivW:
         P=      0                                * 65807
 L_65809:
         ?C#0    S                                * 65809
@@ -3501,54 +3503,56 @@ OBJ_65A38:
 OBJ_65A51:
         :: SKIP OBJ_65C90 OBJ_6CFA1 3DROP BINT10 ROLL #1+ 10UNROLL * 65A51
           EqwFontWidth OBJ_68183 #3+ OBJ_65B0A 2DUPHALF OBJ_6D8DC Push3Zeros * 65A7E
-          EqwBoxCount#2+ OBJ_67416 OBJ_6D9C2 BINT5 OBJ_65B0A DUP OBJ_44CA0 * 65AA1
+          EqwBoxCount#2+ EqwCurBox@ OBJ_6D9C2 BINT5 OBJ_65B0A DUP OBJ_44CA0 * 65AA1
           BINT6 ROT OBJ_6DA4E EqwNewBox EqwBoxCount #9+ EqwBoxCount#2+ * 65AC4
-          EqwBoxCount EqwBoxCount#3+ OBJ_67364 MINUSONE ZEROZERO NULLPAINT * 65AE7
-          EqwFontWidth                           * 65B05
+          EqwBoxCount EqwBoxCount#3+ EqwBoxCount#1- MINUSONE ZEROZERO * 65AE7
+          NULLPAINT EqwFontWidth                 * 65B00
 
 * refs (2): 65A8D 65AB5
 OBJ_65B0A:
           :: OBJ_6E0C0 #2* EqwFontHeight #+ ; 2DUPHALF OBJ_6D990 EqwNewBox * 65B0A
           Push3Zeros EqwBoxCount #8+ EqwBoxCount Push3Zeros OBJ_6E0C0 * 65B37
           EqwFontHeight #+ EqwFontWidth OBJ_6DC51 EqwNewBox EqwBoxCount #6+ * 65B55
-          EqwBoxCount#2+ DUP #3- BINT0 OBJ_67416 OBJ_6D39D EqwFontWidth #3* * 65B78
+          EqwBoxCount#2+ DUP #3- BINT0 EqwCurBox@ OBJ_6D39D EqwFontWidth #3* * 65B78
           #1+ EqwFontHeight OBJ_6DCA6 EqwNewBox Push3Zeros EqwBoxCount#2+ * 65BA0
           EqwBoxCount                            * 65BBE
 
 * refs (1): 65BFA
 OBJ_65BC3:
           :: Push3Zeros EqwFontHeight BINT2 OBJ_6DC51 EqwNewBox ; ZEROZERO * 65BC3
-          EqwBoxCount EqwBoxCount#2+ OBJ_67364 OBJ_65BC3 OBJ_6D451 DUP#2+ * 65BEB
-          OVER #2- BINT0 OBJ_6D136 ZEROZERO EqwBoxCount#1+ DUP#2+ OVER #3- * 65C09
-          BINT9 OBJ_6D136 OBJ_6D9F9 ZEROOVER #4- BINT0 OBJ_6D136 OBJ_6D4CE * 65C36
-          EqwBoxCount #6- BINT0 OBJ_6DCE7 BINT3 BINT0 OBJ_6DD23 OBJ_682D2 * 65C5E
-          OBJ_6D5EB ;                            * 65C86
+          EqwBoxCount EqwBoxCount#2+ EqwBoxCount#1- OBJ_65BC3 OBJ_6D451 * 65BEB
+          DUP#2+ OVER #2- BINT0 OBJ_6D136 ZEROZERO EqwBoxCount#1+ DUP#2+ * 65C04
+          OVER #3- BINT9 OBJ_6D136 OBJ_6D9F9 ZEROOVER #4- BINT0 OBJ_6D136 * 65C2C
+          OBJ_6D4CE EqwBoxCount #6- BINT0 OBJ_6DCE7 BINT3 BINT0 OBJ_6DD23 * 65C59
+          EqwNewLeafBox OBJ_6D5EB ;              * 65C81
 
 * refs (1): 65A5B
 OBJ_65C90:
         :: SKIP OBJ_65E0E OBJ_6FD85 OBJ_6DFDE OBJ_6FDB6 OBJ_65D0A OBJ_6FDC6 * 65C90
-          OBJ_65DAA BINT7 OBJ_6E433 OBJ_67E0C OBJ_679C5 OBJ_65D14 OBJ_6798C * 65CB8
-          OBJ_6798C DUP                          * 65CDB
+          OBJ_65DAA BINT7 OBJ_6E433 OBJ_67E0C EqwBoxLast@ EqwBoxSecond@ * 65CB8
+          EqwBoxNext@ EqwBoxNext@ DUP            * 65CD6
 
 d:
-          $ "d" OBJ_6CB70 OBJ_68245 #1+ OBJ_67448 ; * 65CE5
+          $ "d" OBJ_6CB70 EqwBoxObj! #1+ EqwCurBox! ; * 65CE5
 
 * refs (1): 65CAE
 OBJ_65D0A:
         :: OBJ_67E0C                             * 65D0A
 
 * refs (12): 4B8E6 65CD1 65E4F 65EAE 66200 66359 ...
-OBJ_65D14:
-          :: OBJ_679B3 OBJ_6798C ; OBJ_679AE Push3Zeros 4PICK DUP#1- BINT5 * 65D14
-          OBJ_6D136 EqwNewBox EqwBoxCount OVER OBJ_6798C OBJ_67AD5 OBJ_67C09 * 65D41
-          SWAP EqwBoxCount OBJ_67BEF DUP EqwBoxCount OBJ_67BD5 OBJ_6E00B * 65D64
-          OBJ_6F42D OBJ_6DFDE OBJ_44DFE EqwBoxCount OBJ_67448 OBJ_6E4F6 ; * 65D87
+* #b -> #c: the second child (first child's next sibling)
+EqwBoxSecond@:
+          :: EqwBoxFirst@ EqwBoxNext@ ; EqwDupBoxFirst@ Push3Zeros 4PICK * 65D14
+          DUP#1- BINT5 OBJ_6D136 EqwNewBox EqwBoxCount OVER EqwBoxNext@ * 65D37
+          OBJ_67AD5 OBJ_67C09 SWAP EqwBoxCount EqwBoxFirst! DUP EqwBoxCount * 65D5A
+          EqwBoxPrev! OBJ_6E00B OBJ_6F42D OBJ_6DFDE OBJ_44DFE EqwBoxCount * 65D7D
+          EqwCurBox! OBJ_6E4F6 ;                 * 65D9B
 
 * refs (1): 65CB8
 OBJ_65DAA:
-        :: OBJ_6E00B OBJ_67E0C OBJ_679C5 ZEROZERO 3PICK OBJ_679B3 OBJ_67987 * 65DAA
-          2DUP EqwBoxCount#1+ OBJ_67BD5 EqwBoxCount#1+ OBJ_67BE2 5ROLL BINT7 * 65DD2
-          OBJ_6D136 EqwNewBox EqwBoxCount OBJ_67448 ; * 65DF5
+        :: OBJ_6E00B OBJ_67E0C EqwBoxLast@ ZEROZERO 3PICK EqwBoxFirst@ * 65DAA
+          OBJ_67987 2DUP EqwBoxCount#1+ EqwBoxPrev! EqwBoxCount#1+ * 65DCD
+          EqwBoxNext! 5ROLL BINT7 OBJ_6D136 EqwNewBox EqwBoxCount EqwCurBox! ; * 65DE6
 
 * refs (1): 65C9A
 OBJ_65E0E:
@@ -3559,19 +3563,21 @@ OBJ_65E13:
           :: 7GETLAM NOTcase OBJ_6F46E           * 65E13
             RDROP 2DROP ;                        * 65E27
           OBJ_67E34 BINT3 #=casedrop             * 65E36
-          :: OBJ_67E64 OBJ_65D14 DUP#1+ DUPUNROT OBJ_67BEF BINT0 OBJ_67BD5 ; * 65E45
+          :: OBJ_67E64 EqwBoxSecond@ DUP#1+ DUPUNROT EqwBoxFirst! BINT0 * 65E45
+            EqwBoxPrev! ;                        * 65E68
           #5= case                               * 65E72
-          :: OBJ_6F36A #1+ DUP#1+ 2DUP OBJ_67BE2 SWAP OBJ_67BD5 ; * 65E7C
-          OBJ_6F36A OBJ_65D14 OBJ_6798C OBJ_6798C DUP EqwFontHeight * 65EA9
+          :: OBJ_6F36A #1+ DUP#1+ 2DUP EqwBoxNext! SWAP EqwBoxPrev! ; * 65E7C
+          OBJ_6F36A EqwBoxSecond@ EqwBoxNext@ EqwBoxNext@ DUP EqwFontHeight * 65EA9
 
 * refs (2): 66179 663DB
 OBJ_65EC7:
-          :: EqwFontWidth MAKEGROB OBJ_44DFE ; OBJ_6798C OBJ_6F42D OBJ_68245 ; * 65EC7
+          :: EqwFontWidth MAKEGROB OBJ_44DFE ; EqwBoxNext@ OBJ_6F42D * 65EC7
+          EqwBoxObj! ;                           * 65EEA
 
         :: SKIP OBJ_661A6 EqwBoxCount #9+ EqwBoxCount#1+ OBJ_6CFB5 3DROP * 65EF4
           BINT16 EqwFontWidth #2* #+ BINT18 OBJ_6E0C0 #2* #+ BINT9 * 65F1C
           EqwFontWidth #2/ #+ BINT9 OBJ_6E0C0 #+ OBJ_6D909 BINT15 ROLL * 65F49
-          OBJ_68283 EqwBoxCount #4+ DUP#2- BINT0 3PICK #3+ OBJ_67416 * 65F76
+          OBJ_68283 EqwBoxCount #4+ DUP#2- BINT0 3PICK #3+ EqwCurBox@ * 65F76
           OBJ_6D39D EqwFontHeight BINT8 #=ITE BINT16 BINT18 OBJ_6E0C0 #2* * 65F9E
           BINT18 #+ 2DUPHALF OBJ_6D990 Push3Zeros EqwBoxCount#3+ DUP#2- * 65FC6
           BINT7 BINT6 OBJ_6DD23 OBJ_6D9F9 DUP#2+ OBJ_6DCE7 BINT1 ZEROZERO * 65FE9
@@ -3579,6 +3585,6 @@ OBJ_65EC7:
           DUP#2- ZEROOVER #2- OBJ_6D39D OBJ_6E0D2 #3* OBJ_6E0C0 OBJ_6DCA6 * 66034
           Push3Zeros EqwBoxCount#3+ DUP#2- BINT3 OBJ_6DD19 OBJ_6D9F9 BINT0 * 6605C
           OBJ_6DCE7 BINT0 OBJ_6DD19 OBJ_6D4CE EqwBoxCount#2+ DUP EqwBoxCount * 6607F
-          #5- EqwBoxCount#3+ OBJ_67416 OBJ_6D39D OBJ_6C85F 2DUPHALF * 660A2
-          OBJ_6D990 EqwNewBox OBJ_6D451 BINT0 OBJ_6DAE9 OBJ_67364 BINT0 * 660C0
+          #5- EqwBoxCount#3+ EqwCurBox@ OBJ_6D39D OBJ_6C85F 2DUPHALF * 660A2
+          OBJ_6D990 EqwNewBox OBJ_6D451 BINT0 OBJ_6DAE9 EqwBoxCount#1- BINT0 * 660C0
           OBJ_6F199 OBJ_6DAE9 OBJ_6D5EB #4- ;    * 660E3

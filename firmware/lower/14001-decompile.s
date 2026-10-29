@@ -93,7 +93,7 @@ L_1418A:
 L_14192:
             GOVLNG  PUSH%LOOP                    * 14192
           ENDCODE                                * 14199
-          COERCESWAP COERCE setbeep OBJ_4241B ;  * 14199
+          COERCESWAP COERCE setbeep ?ATTNQUIT0 ; * 14199
 
 * #ms #Hz ->
 * refs (3): 141A3 3FDE5 D0EBB
@@ -987,7 +987,7 @@ DORCLE:
 * -> ob T -> F
 * refs (6): 15730 4690A 4A0AF 4A606 4BF76 50E1D
 EQUATION:
-        :: 'EQ OBJ_4735A ;                       * 15744
+        :: 'EQ RclPlotVar? ;                     * 15744
 
 * refs (13): 1571C 15749 47391 47871 478A8 49B0F ...
 'EQ:

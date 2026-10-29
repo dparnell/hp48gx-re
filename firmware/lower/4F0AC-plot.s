@@ -1122,7 +1122,7 @@ ChkEQ(eq)~1:
 * ob meta -> F
 dropDROPf:
           :: NDROP DROPFALSE ;                   * 50F60
-          DROP 'IDPAR OBJ_4735A ITE              * 50F74
+          DROP 'IDPAR RclPlotVar? ITE            * 50F74
           :: DROP CHECKPVARS ROT NTHCOMDDUP TYPELIST? ?CARCOMP ; * 50F88
           :: SWAP #3= ITE                        * 50FB0
 
@@ -1271,10 +1271,11 @@ PtoR:
         :: %POL>%REC SWAP GETXPOS SWAP GETYPOS ; * 5133C
 
 * refs (11): 489B8 489D6 4B6CF 4BF26 4C189 4EE01 ...
-OBJ_5135F:
+* fn -> %: evaluate a plot function to a number; a math error marks a break in the curve and skips the point
+PlotEval:
         :: ERRSET EVALCRUNCH ERRTRAP             * 5135F
           :: ERROR@ # 100 #/ SWAPDROP BINT3 #<>case ERRJMP * 51373
-            ERRORCLR BINT31 TestSysFlag ?SKIP OBJ_4C251 * 513A0
+            ERRORCLR BINT31 TestSysFlag ?SKIP ~BINT1;ClrLastPt * 513A0
             2RDROP ;                             * 513B9
           0LASTOWDOB! CK1NOLASTWD U>nbr ;        * 513C3
 

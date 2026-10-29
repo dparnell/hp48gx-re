@@ -2404,7 +2404,7 @@ D01<>WP:
         C=D     A                                * 078B5
         D0=C                                     * 078B7
         GOC     GrclR01A                         * 078BA
-        GOLONG  SUB_08400                        * 078BD
+        GOLONG  SKIPVARNAME                      * 078BD
 
 * refs (1): 078BA
 GrclR01A:
@@ -2997,7 +2997,7 @@ ROMPTR@:
         CON(5)  (*)+5                            * 07E99  primitive code object
         A=DAT1  A                                * 07E9E
         GOSUBL  SAVPTR                           * 07EA1
-        GOSUB   SUB_07ED8                        * 07EA7
+        GOSUB   ROMPTR>ADDR                      * 07EA7
         GOC     L_07EBE                          * 07EAB
         ?ST=0   1                                * 07EAE
         GOYES   L_07EBA                          * 07EB1
@@ -3013,7 +3013,8 @@ L_07EBE:
         PC=(A)                                   * 07ED4
 
 * refs (12): 07EA7 32CDF 3A7B5 61FEC 70E98 70EA6 ...
-SUB_07ED8:
+* A.A = a ROMPTR object -> carry clear and A.A = the object's address, or carry set if there is no such library or command (the body of ROMPTR@)
+ROMPTR>ADDR:
         ST=0    1                                * 07ED8
         D0=A                                     * 07EDB
 

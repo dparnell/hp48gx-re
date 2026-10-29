@@ -1,6 +1,6 @@
 * HP 48GX ROM revision R, #46007-#49016: Plotting
 * Addresses in the right-hand comments are those of the original ROM.
-* Most referenced: Π'SAVEDDEPTH xrng(2r) yrng(2r) STOAPPLDATA 'IDX dup;Vector*­Rcl(nm)? APPprompt1! Trceq SORTASLOW indep(2r) PlotScr*en FastCat?
+* Most referenced: Π'SAVEDDEPTH xrng(2r) yrng(2r) STOAPPLDATA RclPlotVar? 'IDX dup;Vector*­Rcl(nm)? APPprompt1! Trceq SORTASLOW indep(2r) PlotScr*en
 * Follows on from the previous file (at #46007 in the original ROM).
         RPL
 
@@ -50,7 +50,7 @@ OBJ_4618C:
         :: OBJ_6F595                             * 4618C
 L_46196:
           #1= TRUE OBJ_6F621 NOTcase OBJ_6F608   * 46196
-          OBJ_6F883 OBJ_678D6 OBJ_679D7 GOTO L_46196 ; * 461AF
+          OBJ_6F883 EqwDupBoxParent@ OBJ_679D7 GOTO L_46196 ; * 461AF
 
 * refs (2): 6B482 6F59F
 OBJ_461CD:
@@ -186,7 +186,7 @@ OBJ_46905:
 OBJ_46955:
         :: NEWINDEP BINT24 GETLAM ERRSET EVALCRUNCH ERRTRAP * 46955
           :: ERROR@ # 100 #/ SWAPDROP BINT3 #<>case ERRJMP * 46978
-            ERRORCLR Π'SAVEDDEPTH DEPTH #1-SWAP OBJ_6C339 NDROP FALSE RDROP ; * 469A5
+            ERRORCLR Π'SAVEDDEPTH DEPTH #1-SWAP #-Floor0 NDROP FALSE RDROP ; * 469A5
           0LASTOWDOB! CK1NOLASTWD U>nbr TRUE ;   * 469D2
         BSS     20                               * 469EB
 
@@ -321,6 +321,7 @@ OBJ_46E0F:
         :: OBJ_4DCC6 BINT1 OBJ_735CB ;           * 46E0F
 
 * refs (12): 4D3CB 4D3EE 4D402 4D4F2 4D515 4D529 ...
+* Probably: run the next runstream object, and again after each key-repeat delay while key #kc (from the runstream) is held
 OBJ_46E28:
         :: TakeOver 'R'R ~16GETLAM;#1= IT        * 46E28
           :: ROT BINT2 ::N ;                     * 46E41
@@ -425,7 +426,8 @@ OBJ_4728B:
         FILLTO  #4735A                           * 472E5  117 zero nibbles: the next entry stays at #4735A
 
 * refs (11): 1574E 2C2A2 473F0 47C86 496B9 4AA46 ...
-OBJ_4735A:
+* id -> ob TRUE | FALSE: recall a plot variable (EQ, ΣDAT, PPAR, ZPAR)
+RclPlotVar?:
         :: dup;Vector*­Rcl(nm)? DUP case ROTDROP * 4735A
           SWAPDROP ;                             * 47373
 
@@ -442,7 +444,7 @@ L_473C3:
 
 * refs (3): 15398 473A0 478D5
 OBJ_473E6:
-        :: 'IDPAR OBJ_4735A NOTcase 'IDX         * 473E6
+        :: 'IDPAR RclPlotVar? NOTcase 'IDX       * 473E6
           DUPTYPELIST? NOTcasedrop 'IDX          * 473FF
           BINT3 NTHELCOMP NOTcase 'IDX           * 4740E
           1get(li)? ;                            * 47422
@@ -719,7 +721,7 @@ OBJ_47C6D:
         :: '                                     * 47C6D
 
 ZPAR:
-          ID ZPAR OBJ_4735A NOTcase              * 47C77
+          ID ZPAR RclPlotVar? NOTcase            * 47C77
 
 * refs (3): 47CAE 47CD6 47D03
 OBJ_47C90:
@@ -865,14 +867,14 @@ OBJ_48161:
 * refs (1): 4D6F0
 OBJ_481D9:
         :: OBJ_4DCC6 WINDOWBOT? IT WINDOWDOWN    * 481D9
-          ~8GETLAM;7GETLAM DUP 13GETLAM #= 3UNROLL OBJ_4E0BA 7GETLAM * 481F2
+          ~8GETLAM;7GETLAM DUP 13GETLAM #= 3UNROLL CursCorner 7GETLAM * 481F2
           13GETLAM !#1+IF<dim-1 OBJ_48472 ?SKIP OBJ_48503 * 48215
           OBJ_484BD ;                            * 4822E
 
 * refs (1): 4D3D5
 OBJ_48238:
         :: OBJ_4DCC6 WINDOWTOP? IT WINDOWUP      * 48238
-          ~8GETLAM;7GETLAM DUP#0= 3UNROLL OBJ_4E0BA 7GETLAM !#1-IF>0 * 48251
+          ~8GETLAM;7GETLAM DUP#0= 3UNROLL CursCorner 7GETLAM !#1-IF>0 * 48251
           OBJ_48472 ?SKIP OBJ_4853F              * 4826F
           OBJ_484BD ;                            * 4827E
 
@@ -906,7 +908,7 @@ OBJ_48305:
 * refs (2): 4841D 4D5EC
 OBJ_4842C:
         :: OBJ_4DCC6 WINDOWRIGHT? IT WINDOWRIGHT * 4842C
-          ~8GETLAM;7GETLAM OVER 14GETLAM #= 3UNROLL OBJ_4E0BA 8GETLAM * 48445
+          ~8GETLAM;7GETLAM OVER 14GETLAM #= 3UNROLL CursCorner 8GETLAM * 48445
           14GETLAM !#1+IF<dim-1                  * 48468
 
 * refs (3): 4821F 4826F 4885A
@@ -927,7 +929,7 @@ OBJ_48503:
 
 * refs (1): 48517
 OBJ_48521:
-        :: 7GETLAM BINT1 OBJ_6C339 OBJ_486D9 ;   * 48521
+        :: 7GETLAM BINT1 #-Floor0 OBJ_486D9 ;    * 48521
 
 * refs (1): 48279
 OBJ_4853F:
@@ -939,7 +941,7 @@ OBJ_4855D:
 
 * refs (1): 48571
 OBJ_4857B:
-        :: 8GETLAM BINT1 OBJ_6C339 OBJ_485D0 ;   * 4857B
+        :: 8GETLAM BINT1 #-Floor0 OBJ_485D0 ;    * 4857B
 
 * refs (1): 48864
 OBJ_48599:
@@ -983,7 +985,7 @@ OBJ_487F6:
 * refs (2): 48422 4D4FC
 OBJ_4881E:
         :: OBJ_4DCC6 WINDOWLEFT? IT WINDOWLEFT   * 4881E
-          ~8GETLAM;7GETLAM OVER #0= 3UNROLL OBJ_4E0BA 8GETLAM !#1-IF>0 * 48837
+          ~8GETLAM;7GETLAM OVER #0= 3UNROLL CursCorner 8GETLAM !#1-IF>0 * 48837
           OBJ_48472 ?SKIP OBJ_48599              * 4885A
           OBJ_484BD ;                            * 48869
 
@@ -1007,7 +1009,7 @@ PlotScr*en~4:
             :: BINT2 GetEqN NOTcase ERRJMP       * 48981
               DUP ALGeq? IT GETRHS               * 4899A
             ;                                    * 489AE
-            ' OBJ_5135F BINT1 ' PlotScr*en~5 4ROLL ' OBJ_5135F BINT2 ' * 489B3
+            ' PlotEval BINT1 ' PlotScr*en~5 4ROLL ' PlotEval BINT2 ' * 489B3
             PlotScr*en~5 BINT11 ::N 2PUTLAM 19GETLAM TYPEEXT? ITE OBJ_4BC06 * 489E5
             OBJ_4C12A                            * 48A0D
           ;                                      * 48A12
@@ -1016,7 +1018,7 @@ PlotScr*en~4:
 
 * refs (2): 489C7 489E5
 PlotScr*en~5:
-        :: SWAP DUPTYPEREAL? NOTcasedrop OBJ_4C22E * 48A4E
+        :: SWAP DUPTYPEREAL? NOTcasedrop ClrLastPt * 48A4E
           GETYPOS 1GETLAM SWAP2DUP PIXON3 3PICK #2= NOTcase OBJ_4C440 * 48A67
           ROTDROP PlotScr*en~6 ;                 * 48A8F
 
@@ -1029,7 +1031,7 @@ PlotScr*en~6:
 
 * refs (7): 48D05 48D1E 48D2D 48D41 48D5A 48D6E ...
 OBJ_48B25:
-        :: OBJ_4C0E4 OBJ_4C314 ;                 * 48B25
+        :: PurgePlotVars OBJ_4C314 ;             * 48B25
 
 * refs (3): 497A3 49925 49981
 OBJ_48B39:

@@ -180,6 +180,7 @@ StartMenu~1~romptr:
           :: MenuDef@ OBJ_3A640 ; ;              * 3A627
 
 * refs (13): 3A631 3C426 3C478 3C4B0 3C502 3C53A ...
+* Probably: build a menu row from a menu array: the six soft keys and their labels
 OBJ_3A640:
         :: 2RDROP MenuRow@ OBJ_3A753 MenuRow! OBJ_41826 OBJ_3A939 OBJ_3A929 * 3A640
           OBJ_3A919 OBJ_3A909 OBJ_3A8F9 OBJ_3A8E9 BINT7 ONE_DO OBJ_3A6AE * 3A668
@@ -227,7 +228,7 @@ OBJ_3A753:
         DAT0=C  11                               * 3A7AA
         D0=D0+  11                               * 3A7AE
         DAT0=C  11                               * 3A7B1
-        GOSBVL  SUB_07ED8                        * 3A7B5
+        GOSBVL  ROMPTR>ADDR                      * 3A7B5
         ?ST=1   1                                * 3A7BC
         GOYES   L_3A7D6                          * 3A7BF
         GOSUB   SUB_3A83B                        * 3A7C1
@@ -1345,7 +1346,7 @@ ROMP_0A1_01A:
 ROMP_0A1_01B:
         :: NoEdit?case xCLEAR                    * 3B67C
           EndComLine?:(bip;q) CURSOR_END? case   * 3B68B
-          :: OBJ_429CB SetDA13NoCh ;             * 3B69A
+          :: DelCursChr SetDA13NoCh ;            * 3B69A
           REPEATER # 1C OBJ_429A3 SetDA123NoCh ; * 3B6AE
 
 * ROMPTR 0A1 01C
@@ -1353,7 +1354,7 @@ ROMP_0A1_01B:
 ROMP_0A1_01C:
         :: NoEdit?case xDROP                     * 3B6CC
           BegComLine?:(bip;q) OnTheFirstCol? case * 3B6DB
-          :: PrevLineIfStart OBJ_429CB SetDA13NoCh ; * 3B6EA
+          :: PrevLineIfStart DelCursChr SetDA13NoCh ; * 3B6EA
           REPEATER # 1D OBJ_42935 SetDA123NoCh ; * 3B703
 
 * ROMPTR 0A1 01D

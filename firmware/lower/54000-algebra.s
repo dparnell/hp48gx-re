@@ -1,6 +1,6 @@
 * HP 48GX ROM revision R, #54000-#57003: Symbolic algebra
 * Addresses in the right-hand comments are those of the original ROM.
-* Most referenced: cknumdsptch1 Cr 1GETLAMSWP1+ sscknum2 sncknum2 nscknum2 lam'dvar xssgeneral xsngeneral xnsgeneral nmetasyms %>#
+* Most referenced: cknumdsptch1 Cr 1GETLAMSWP1+ sscknum2 sncknum2 nscknum2 lam'dvar derargABND xssgeneral xsngeneral xnsgeneral nmetasyms
 * Follows on from the previous file (at #54000 in the original ROM).
         ?D>=C   B                                * 54000
         GOYES   L_5400D                          * 54003
@@ -1894,15 +1894,15 @@ DROP%0b:
 
 * refs (3): 86411 865C4 866B4
 OBJ_56B9B:
-        :: psh OBJ_56BEB top& OBJ_56C13 Cr x* ;  * 56B9B
+        :: psh derargABND top& OBJ_56C13 Cr x* ; * 56B9B
 
 * refs (3): 86196 86303 8639E
 OBJ_56BC3:
-        :: psh OBJ_56BEB top& OBJ_56C72 Cr x* ;  * 56BC3
+        :: psh derargABND top& OBJ_56C72 Cr x* ; * 56BC3
 
 * refs (26): 56BA5 56BCD 7DD03 7DD21 85EBC 85F0C ...
-* Probably: derivatives: wrap the inner argument as d/d'dv(arg) for the chain rule, then ABND the 'dv environment
-OBJ_56BEB:
+* Derivatives: wrap the argument as d/d'dv(arg) for the chain rule, then ABND the 'dv environment
+derargABND:
         :: OBJ_56D01 ABND ;                      * 56BEB
 
 * refs (6): 85EE4 85F66 85FCA 8602E 86713 86731

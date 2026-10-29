@@ -994,7 +994,7 @@ HARDHEIGHT:
 * $ ->
 * refs (4): 4694B 6B902 6BA97 6BC3C
 FlashMsg:
-        :: Save16 SWAP DISPSTATUS2 OBJ_64C34 ZERO_DO SLOW LOOP Restore16 ; * 12B85
+        :: Save16 SWAP DISPSTATUS2 BINT80 ZERO_DO SLOW LOOP Restore16 ; * 12B85
 
 * grob #cols ->
 * refs (2): 1298C 511CA
@@ -1159,7 +1159,7 @@ SUB_12D85:
 SUB_12DB1:
         C=0     W                                * 12DB1
         C=R1.F  A                                * 12DB4
-        GOSBVL  SUB_65807                        * 12DBA
+        GOSBVL  IntDivW                          * 12DBA
         C=0     W                                * 12DC1
         C=R2.F  A                                * 12DC4
         GOVLNG  SUB_0DB9B                        * 12DCA
@@ -1624,7 +1624,7 @@ L_132ED:
 disprange:
         SETHEX                                   * 133AB
         P=      0                                * 133AD
-        GOSBVL  SUB_0C198                        * 133AF
+        GOSBVL  D1=IRAM                          * 133AF
         D1=(4)  #0692                            * 133B6
         C=0     W                                * 133BC
         C=DAT1  X                                * 133BF
@@ -1751,7 +1751,7 @@ L_13530:
         GOSUB   SUB_13606                        * 13530
         C=0     W                                * 13534
         C=R0.F  A                                * 13537
-        GOSBVL  SUB_65807                        * 1353D
+        GOSBVL  IntDivW                          * 1353D
         ?B#0    W                                * 13544
         GOYES   L_1354D                          * 13547
         GOTO    L_1305A                          * 13549
@@ -1989,7 +1989,7 @@ corner:
         C=B     A                                * 137E0
         RSTK=C                                   * 137E2
         C=R0                                     * 137E4
-        GOSBVL  SUB_65807                        * 137E7
+        GOSBVL  IntDivW                          * 137E7
         B=B+B   A                                * 137EE
         B=B+B   A                                * 137F0
         D0=(5)  DISPIO                           * 137F2
@@ -2357,7 +2357,7 @@ SUB_13C5A:
         GOSUB   SUB_13C58                        * 13C5A
         GOSBVL  SUB_11F28                        * 13C5E
         D0=C                                     * 13C65
-        GOSBVL  SUB_0C198                        * 13C68
+        GOSBVL  D1=IRAM                          * 13C68
         D1=(4)  #0891                            * 13C6F
         LC(5)   DOGROB                           * 13C75
         DAT1=C  A                                * 13C7C
