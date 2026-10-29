@@ -1767,7 +1767,7 @@ L_095C8:
         D0=D0+  5                                * 09646
         PC=(A)                                   * 09649
 
-* HomeInBkp(nm): the start of a backup object, copied with MOVEDOWN (22 nibbles; the length at +7 is filled in later, then a CRC); the first 7 nibbles are not yet understood
+* HomeInBkp(nm) (ARCHIVE's backup of HOME): 22 nibbles copied with MOVEDOWN. The backup object starts at +12 (DOBAK); its length at +17 is filled in at the end through R0+7, R0 being the template's address before MOVEDSD moved the block down 10 nibbles. The backup then gets the name, the directory and a DOBINT holding its CRC. The first 12 nibbles precede the object and are not read here (probably temporary-object bookkeeping); the 4 nibbles after the template are never copied
 L_0964D:
         CON(5)  #0000A                           * 0964D  entry 0
         CON(5)  #00000                           * 09652

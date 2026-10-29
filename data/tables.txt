@@ -51,7 +51,7 @@
 6DEFF	2a	#2	Key dispatch for OBJ_6E311 (through OBJ_6FDE2): keycode byte and object to run
 80946	2	0	Self-test: keycodes to press for the full keyboard test, in order (read at #8085C)
 809AA	2	0	Self-test: keycodes for the short (diagonal) keyboard test, read at #8085C when ST11 is set
-0964D	552a5	1	HomeInBkp(nm): the start of a backup object, copied with MOVEDOWN (22 nibbles; the length at +7 is filled in later, then a CRC); the first 7 nibbles are not yet understood
+0964D	552a5	1	HomeInBkp(nm) (ARCHIVE's backup of HOME): 22 nibbles copied with MOVEDOWN. The backup object starts at +12 (DOBAK); its length at +17 is filled in at the end through R0+7, R0 being the template's address before MOVEDSD moved the block down 10 nibbles. The backup then gets the name, the directory and a DOBINT holding its CRC. The first 12 nibbles precede the object and are not read here (probably temporary-object bookkeeping); the 4 nibbles after the template are never copied
 09667	a3	1	HomeInBkp(nm): a directory with no libraries (DORRP, #7FF), copied after the name
 5792B	a2t3	1	ISOL's fresh-name template: ID "n0" and a spare byte for a second digit (SUB_57956 counts it up: n1, n2, ...)
 57949	a2t3	1	ISOL's fresh-name template: ID "s0" and a spare byte for a second digit
