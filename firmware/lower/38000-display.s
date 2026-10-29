@@ -316,16 +316,16 @@ OBJ_3835E:
         CON(5)  DOREAL                           * 38368  element type
         CON(5)  1                                * 3836D  dimensions
         CON(5)  10                               * 38372
-        NIBHEX  0000000000000000                 * 38377  0E0
-        NIBHEX  0000000000000000                 * 38387  0E0
-        NIBHEX  0000000000000000                 * 38397  0E0
-        NIBHEX  0000000000000000                 * 383A7  0E0
-        NIBHEX  0000000000000000                 * 383B7  0E0
-        NIBHEX  0000000000000000                 * 383C7  0E0
-        NIBHEX  0000000000000000                 * 383D7  0E0
-        NIBHEX  0000000000000000                 * 383E7  0E0
-        NIBHEX  0000000000000000                 * 383F7  0E0
-        NIBHEX  0000000000000000                 * 38407  0E0
+        %BODY   0E0                              * 38377
+        %BODY   0E0                              * 38387
+        %BODY   0E0                              * 38397
+        %BODY   0E0                              * 383A7
+        %BODY   0E0                              * 383B7
+        %BODY   0E0                              * 383C7
+        %BODY   0E0                              * 383D7
+        %BODY   0E0                              * 383E7
+        %BODY   0E0                              * 383F7
+        %BODY   0E0                              * 38407
         ENDLENGTH                                * 38417
 
 * refs (1): 0F3EE
@@ -335,16 +335,16 @@ puretemp?~1:
         CON(5)  DOREAL                           * 38421  element type
         CON(5)  1                                * 38426  dimensions
         CON(5)  10                               * 3842B
-        NIBHEX  0000000000000000                 * 38430  0E0
-        NIBHEX  0000000000000000                 * 38440  0E0
-        NIBHEX  0000000000000000                 * 38450  0E0
-        NIBHEX  0000000000000000                 * 38460  0E0
-        NIBHEX  0000000000000010                 * 38470  1E0
-        NIBHEX  0000000000000000                 * 38480  0E0
-        NIBHEX  0000000000000000                 * 38490  0E0
-        NIBHEX  0000000000000000                 * 384A0  0E0
-        NIBHEX  0000000000000000                 * 384B0  0E0
-        NIBHEX  0000000000000000                 * 384C0  0E0
+        %BODY   0E0                              * 38430
+        %BODY   0E0                              * 38440
+        %BODY   0E0                              * 38450
+        %BODY   0E0                              * 38460
+        %BODY   1E0                              * 38470
+        %BODY   0E0                              * 38480
+        %BODY   0E0                              * 38490
+        %BODY   0E0                              * 384A0
+        %BODY   0E0                              * 384B0
+        %BODY   0E0                              * 384C0
         ENDLENGTH                                * 384D0
 
 * refs (1): CAC68
@@ -354,16 +354,16 @@ UMSIN~1~1~1:
         CON(5)  DOREAL                           * 384DA  element type
         CON(5)  1                                * 384DF  dimensions
         CON(5)  10                               * 384E4
-        NIBHEX  0000000000000000                 * 384E9  0E0
-        NIBHEX  0000000000000000                 * 384F9  0E0
-        NIBHEX  0000000000000000                 * 38509  0E0
-        NIBHEX  0000000000000000                 * 38519  0E0
-        NIBHEX  0000000000000000                 * 38529  0E0
-        NIBHEX  0000000000000000                 * 38539  0E0
-        NIBHEX  0000000000000000                 * 38549  0E0
-        NIBHEX  0000000000000010                 * 38559  1E0
-        NIBHEX  0000000000000000                 * 38569  0E0
-        NIBHEX  0000000000000000                 * 38579  0E0
+        %BODY   0E0                              * 384E9
+        %BODY   0E0                              * 384F9
+        %BODY   0E0                              * 38509
+        %BODY   0E0                              * 38519
+        %BODY   0E0                              * 38529
+        %BODY   0E0                              * 38539
+        %BODY   0E0                              * 38549
+        %BODY   1E0                              * 38559
+        %BODY   0E0                              * 38569
+        %BODY   0E0                              * 38579
         ENDLENGTH                                * 38589
         NIBHEX  00000                            * 38589  ..
 
@@ -1544,12 +1544,7 @@ DispStsBound:
 * 131x2 line
 * refs (1): 39B0F
 LineGrob:
-        CON(5)  DOGROB                           * 39B2D  DOGROB
-        LENGTH                                   * 39B32  length, to #39B85
-        NIBHEX  2000038000FFFFFFFFFFFFFFFFFFFFFF * 39B37  ..0..ÿÿÿÿÿÿÿÿÿÿÿ
-        NIBHEX  FFFFFFFFFFFF                     * 39B57  ÿÿÿÿÿÿ
-        FILLTO  #39B85                           * 39B63  34 zero nibbles: the next entry stays at #39B85
-        ENDLENGTH                                * 39B85
+        GROBW   "images/39B2D-LineGrob.png" 131  * 39B2D  131 x 2; the padding (gray) is not zero
 
 * ->
 * refs (2): 386AB DD499

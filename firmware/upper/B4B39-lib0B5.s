@@ -1007,18 +1007,18 @@ ROMP_0B5_0A9:
           CON(5)  DOBINT                         * B6FF0  element type
           CON(5)  1                              * B6FF5  dimensions
           CON(5)  12                             * B6FFA
-          NIBHEX  F1000                          * B6FFF  #1F
-          NIBHEX  C1000                          * B7004  #1C
-          NIBHEX  F1000                          * B7009  #1F
-          NIBHEX  E1000                          * B700E  #1E
-          NIBHEX  F1000                          * B7013  #1F
-          NIBHEX  E1000                          * B7018  #1E
-          NIBHEX  F1000                          * B701D  #1F
-          NIBHEX  F1000                          * B7022  #1F
-          NIBHEX  E1000                          * B7027  #1E
-          NIBHEX  F1000                          * B702C  #1F
-          NIBHEX  E1000                          * B7031  #1E
-          NIBHEX  F1000                          * B7036  #1F
+          CON(5)  #1F                            * B6FFF
+          CON(5)  #1C                            * B7004
+          CON(5)  #1F                            * B7009
+          CON(5)  #1E                            * B700E
+          CON(5)  #1F                            * B7013
+          CON(5)  #1E                            * B7018
+          CON(5)  #1F                            * B701D
+          CON(5)  #1F                            * B7022
+          CON(5)  #1E                            * B7027
+          CON(5)  #1F                            * B702C
+          CON(5)  #1E                            * B7031
+          CON(5)  #1F                            * B7036
         ENDLENGTH                                * B703B
           GETATELN DROP SWAPROT #2<> caseDROP BINT42 * B703B
           SysITE % 2.902E1 % 2.29E0 SWAP         * B7059

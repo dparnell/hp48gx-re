@@ -21,3 +21,5 @@
 81E00	self-test
 81E74	self-test
 87BCF	library 0C0, unexecuted
+81CBC	memory recovery: shows "Recovering Memory", entered from lower ROM at #023ED through SUB_026CA
+81EB1	self-test, unreferenced (a variant of the end of #81E74)

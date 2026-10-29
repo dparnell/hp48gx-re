@@ -46,3 +46,12 @@
 5B3D4	a	1	Unreferenced NOP between objects: padding
 5B42E	a	1	Unreferenced NOP between objects: padding
 5B541	a	1	Unreferenced NOP between objects: padding
+00A89	2	49	Keycode for each bit of BITMAP's key map (bit 0 ON, then OUT0-OUT8 by IN line); read at #00880 from the table plus 2 (bit 0 is dropped)
+00C11	2	0	Keycodes in keyboard order without ON, shifts as #80/#40/#C0: nothing reads it (a copy of the self-test's list)
+6DEFF	2a	#2	Key dispatch for OBJ_6E311 (through OBJ_6FDE2): keycode byte and object to run
+80946	2	0	Self-test: keycodes to press for the full keyboard test, in order (read at #8085C)
+809AA	2	0	Self-test: keycodes for the short (diagonal) keyboard test, read at #8085C when ST11 is set
+0964D	552a5	1	HomeInBkp(nm): the start of a backup object, copied with MOVEDOWN (22 nibbles; the length at +7 is filled in later, then a CRC); the first 7 nibbles are not yet understood
+09667	a3	1	HomeInBkp(nm): a directory with no libraries (DORRP, #7FF), copied after the name
+5792B	a2t3	1	ISOL's fresh-name template: ID "n0" and a spare byte for a second digit (SUB_57956 counts it up: n1, n2, ...)
+57949	a2t3	1	ISOL's fresh-name template: ID "s0" and a spare byte for a second digit

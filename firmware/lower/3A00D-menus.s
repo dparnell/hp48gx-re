@@ -100,11 +100,7 @@ MakeStdLabel:
 * 21x8 normal menu key
 * refs (1): 412FB
 NullMenuLbl:
-          CON(5)  DOGROB                         * 3A337  DOGROB
-          LENGTH                                 * 3A33C  length, to #3A37B
-          NIBHEX  8000051000FFFFFF               * 3A341  ..P..ÿÿÿ
-          BSS     42                             * 3A351
-        ENDLENGTH                                * 3A37B
+          GROBW   "images/3A337-NullMenuLbl.png" 21 * 3A337  21 x 8; the padding (gray) is not zero
           MakeLabel INVGROB ;                    * 3A37B
 
 * $ -> grob
@@ -114,12 +110,7 @@ MakeBoxLabel:
 
 * 21x8 menu key with box
 BoxLabelGrob:
-          CON(5)  DOGROB                         * 3A399  DOGROB
-          LENGTH                                 * 3A39E  length, to #3A3DD
-          NIBHEX  8000051000FFFFFF               * 3A3A3  ..P..ÿÿÿ
-          BSS     16                             * 3A3B3
-          NIBHEX  E00000E00000E0000000000000     * 3A3C3  .............
-        ENDLENGTH                                * 3A3DD
+          GROBW   "images/3A399-BoxLabelGrob.png" 21 * 3A399  21 x 8; the padding (gray) is not zero
           MakeLabel INVGROB ;                    * 3A3DD
 
 * $ -> grob
@@ -129,11 +120,7 @@ MakeDirLabel:
 
 * 21x8 directory menu key
 DirLabelGrob:
-          CON(5)  DOGROB                         * 3A3FB  DOGROB
-          LENGTH                                 * 3A400  length, to #3A43F
-          NIBHEX  80000510001CFFFF               * 3A405  ..P..Áÿÿ
-          BSS     42                             * 3A415
-        ENDLENGTH                                * 3A43F
+          GROBW   "images/3A3FB-DirLabelGrob.png" 21 * 3A3FB  21 x 8; the padding (gray) is not zero
           MakeLabel INVGROB ;                    * 3A43F
 
 * $ -> grob
@@ -143,11 +130,7 @@ MakeInvLabel:
 
 * 21x8 inverse menu key
 InvLabelGrob:
-          CON(5)  DOGROB                         * 3A45D  DOGROB
-          LENGTH                                 * 3A462  length, to #3A4A1
-          NIBHEX  8000051000FFFFFF1000011000011000 * 3A467  ..P..ÿÿÿ........
-          NIBHEX  01100001100001100001FFFFFF     * 3A487  ..........ÿÿÿ
-        ENDLENGTH                                * 3A4A1
+          GROBW   "images/3A45D-InvLabelGrob.png" 21 * 3A45D  21 x 8; the padding (gray) is not zero
           MakeLabel ;                            * 3A4A1
 
 * $ #w #x grob -> grob'

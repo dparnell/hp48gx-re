@@ -385,7 +385,7 @@ OBJ_6CF3D:
           OBJ_6F199 OBJ_6DAE9 Push3Zeros OBJ_67364 OBJ_67416 OBJ_6D163 * 6CF65
           EqwNewBox OBJ_6D5EB ;                  * 6CF83
 
-* refs (1): 6D10E
+* refs (2): 6D10E 6DF0A
 OBJ_6CF92:
         :: SKIP OBJ_6E109                        * 6CF92
 
@@ -416,13 +416,15 @@ OBJ_6D087:
           :: Push3Zeros OBJ_6D779 BINT6 MAKEGROB GOTO L_6D05F ; OBJ_6D4CE * 6D087
           OBJ_67364 DUP#1+ OBJ_67416 OBJ_6D163 OBJ_682D2 OBJ_6D5EB ; * 6D0B4
 
-* refs (2): 1F6C2 692E7
+* refs (3): 1F6C2 692E7 6DF03
 OBJ_6D0D7:
         :: SKIP OBJ_6E352 OBJ_6D0FF ;            * 6D0D7
 
+* refs (1): 6DF18
+OBJ_6D0F0:
         :: SKIP OBJ_6E195                        * 6D0F0
 
-* refs (1): 6D0E6
+* refs (2): 6D0E6 6DF11
 OBJ_6D0FF:
           :: SKIP OBJ_6E177 OBJ_6CF92 OBJ_6CDA8 #1+ DUPDUP #3- DUP#1+ 5PICK * 6D0FF
             MINUSONE                             * 6D131
@@ -769,8 +771,18 @@ OBJ_6DEAA:
               :: SKIP OBJ_6DFFD OBJ_6D014 ; ;    * 6DEC3
             EVAL OBJ_67416 OBJ_6822C OBJ_6E4F6 ; * 6DEE1
         ;                                        * 6DEFA
+
+* Key dispatch for OBJ_6E311 (through OBJ_6FDE2): keycode byte and object to run
 L_6DEFF:
-        NIBHEX  40007D0D62029FC630FF0D6400F0D6   * 6DEFF  ..×Ð& ùl.ÿÐF..m
+        CON(2)  #04                              * 6DEFF  entries
+        CON(2)  #00                              * 6DF01  entry 0
+        CON(5)  OBJ_6D0D7                        * 6DF03
+        CON(2)  #02                              * 6DF08  entry 1
+        CON(5)  OBJ_6CF92                        * 6DF0A
+        CON(2)  #03                              * 6DF0F  entry 2
+        CON(5)  OBJ_6D0FF                        * 6DF11
+        CON(2)  #04                              * 6DF16  entry 3
+        CON(5)  OBJ_6D0F0                        * 6DF18
 
 * refs (2): 68E1D 6D519
 OBJ_6DF1D:

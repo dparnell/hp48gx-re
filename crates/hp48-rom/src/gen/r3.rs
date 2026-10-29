@@ -2531,7 +2531,7 @@ pub(crate) fn SUB_311D1(r: &mut Run) {
             }
             // #31215:
             0x31215..=0x3121C => {
-                op!(r, at, 0x31215..0x3121C, 9, r.cpu.d_load(1, 5, 0xC05)); // D1=(5) L_00C05
+                op!(r, at, 0x31215..0x3121C, 9, r.cpu.d_load(1, 5, 0xC05)); // D1=(5) #00C05
                 branch!(r, at, 0x31221, 7, r.cpu.test(Test::Regs(Cmp::Ne, R::A, R::B), Field::B, Some(0x3124D))); // ?A#B B / GOYES L_3124D
             }
             // L_31221:
@@ -2564,13 +2564,13 @@ pub(crate) fn SUB_31239(r: &mut Run) {
     loop {
         match at {
             0x31239..=0x31243 => {
-                op!(r, at, 0x31239..0x31240, 9, r.cpu.d_load(1, 5, 0xC04)); // D1=(5) L_00C02+2
+                op!(r, at, 0x31239..0x31240, 9, r.cpu.d_load(1, 5, 0xC04)); // D1=(5) #00C04
                 op!(r, at, 0x31240..0x31243, 5, r.cpu.add(R::A, R::A, Field::XS)); // A=A+A XS
                 branch!(r, at, 0x31246, 5, r.cpu.jump_if(Cond::Carry, 0x3124D)); // GOC L_3124D
             }
             // #31246:
             0x31246..=0x31246 => {
-                op!(r, at, 0x31246..0x3124D, 9, r.cpu.d_load(1, 5, 0xC03)); // D1=(5) L_00C02+1
+                op!(r, at, 0x31246..0x3124D, 9, r.cpu.d_load(1, 5, 0xC03)); // D1=(5) #00C03
                 at = 0x3124D;
             }
             // L_3124D:
@@ -14704,7 +14704,7 @@ pub(crate) fn code_39766(r: &mut Run) {
     }
 }
 
-// LINESOFSTACK: firmware/lower/38000-display.s:1659
+// LINESOFSTACK: firmware/lower/38000-display.s:1654
 pub(crate) fn LINESOFSTACK(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -14735,7 +14735,7 @@ pub(crate) fn LINESOFSTACK(r: &mut Run) {
     }
 }
 
-// SUB_39F93: firmware/lower/38000-display.s:1671
+// SUB_39F93: firmware/lower/38000-display.s:1666
 pub(crate) fn SUB_39F93(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -14767,7 +14767,7 @@ pub(crate) fn SUB_39F93(r: &mut Run) {
     }
 }
 
-// AbbrevStack?: firmware/lower/38000-display.s:1684
+// AbbrevStack?: firmware/lower/38000-display.s:1679
 pub(crate) fn AbbrevStack_(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -14784,7 +14784,7 @@ pub(crate) fn AbbrevStack_(r: &mut Run) {
     }
 }
 
-// SetAbbrevStk: firmware/lower/38000-display.s:1690
+// SetAbbrevStk: firmware/lower/38000-display.s:1685
 pub(crate) fn SetAbbrevStk(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -14801,7 +14801,7 @@ pub(crate) fn SetAbbrevStk(r: &mut Run) {
     }
 }
 
-// ClrAbbrevStk: firmware/lower/38000-display.s:1696
+// ClrAbbrevStk: firmware/lower/38000-display.s:1691
 pub(crate) fn ClrAbbrevStk(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -14818,7 +14818,7 @@ pub(crate) fn ClrAbbrevStk(r: &mut Run) {
     }
 }
 
-// OBJ_3A753: firmware/lower/3A00D-menus.s:222
+// OBJ_3A753: firmware/lower/3A00D-menus.s:205
 pub(crate) fn OBJ_3A753(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -14915,7 +14915,7 @@ pub(crate) fn OBJ_3A753(r: &mut Run) {
     }
 }
 
-// SUB_3A837: firmware/lower/3A00D-menus.s:282
+// SUB_3A837: firmware/lower/3A00D-menus.s:265
 pub(crate) fn SUB_3A837(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -14932,7 +14932,7 @@ pub(crate) fn SUB_3A837(r: &mut Run) {
     }
 }
 
-// SUB_3A83B: firmware/lower/3A00D-menus.s:287
+// SUB_3A83B: firmware/lower/3A00D-menus.s:270
 pub(crate) fn SUB_3A83B(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -14988,7 +14988,7 @@ pub(crate) fn SUB_3A83B(r: &mut Run) {
     }
 }
 
-// SUB_3A883: firmware/lower/3A00D-menus.s:318
+// SUB_3A883: firmware/lower/3A00D-menus.s:301
 pub(crate) fn SUB_3A883(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -15028,7 +15028,7 @@ pub(crate) fn SUB_3A883(r: &mut Run) {
     }
 }
 
-// SUB_3A8B9: firmware/lower/3A00D-menus.s:339
+// SUB_3A8B9: firmware/lower/3A00D-menus.s:322
 pub(crate) fn SUB_3A8B9(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -15069,7 +15069,7 @@ pub(crate) fn SUB_3A8B9(r: &mut Run) {
     }
 }
 
-// OBJ_3A8E9: firmware/lower/3A00D-menus.s:358
+// OBJ_3A8E9: firmware/lower/3A00D-menus.s:341
 pub(crate) fn OBJ_3A8E9(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -15086,7 +15086,7 @@ pub(crate) fn OBJ_3A8E9(r: &mut Run) {
     }
 }
 
-// OBJ_3A8F9: firmware/lower/3A00D-menus.s:364
+// OBJ_3A8F9: firmware/lower/3A00D-menus.s:347
 pub(crate) fn OBJ_3A8F9(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -15103,7 +15103,7 @@ pub(crate) fn OBJ_3A8F9(r: &mut Run) {
     }
 }
 
-// OBJ_3A909: firmware/lower/3A00D-menus.s:370
+// OBJ_3A909: firmware/lower/3A00D-menus.s:353
 pub(crate) fn OBJ_3A909(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -15120,7 +15120,7 @@ pub(crate) fn OBJ_3A909(r: &mut Run) {
     }
 }
 
-// OBJ_3A919: firmware/lower/3A00D-menus.s:376
+// OBJ_3A919: firmware/lower/3A00D-menus.s:359
 pub(crate) fn OBJ_3A919(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -15153,7 +15153,7 @@ pub(crate) fn overlap_3A921(r: &mut Run) {
     }
 }
 
-// OBJ_3A929: firmware/lower/3A00D-menus.s:384
+// OBJ_3A929: firmware/lower/3A00D-menus.s:367
 pub(crate) fn OBJ_3A929(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -15170,7 +15170,7 @@ pub(crate) fn OBJ_3A929(r: &mut Run) {
     }
 }
 
-// OBJ_3A939: firmware/lower/3A00D-menus.s:390
+// OBJ_3A939: firmware/lower/3A00D-menus.s:373
 pub(crate) fn OBJ_3A939(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -15192,7 +15192,7 @@ pub(crate) fn OBJ_3A939(r: &mut Run) {
     }
 }
 
-// Key>StdKeyOb~1: firmware/lower/3A00D-menus.s:398
+// Key>StdKeyOb~1: firmware/lower/3A00D-menus.s:381
 pub(crate) fn Key_StdKeyOb_1(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -15236,7 +15236,7 @@ pub(crate) fn Key_StdKeyOb_1(r: &mut Run) {
 }
 
 // -> DROPFALSE
-// 'DROPFALSE: firmware/lower/3A00D-menus.s:428
+// 'DROPFALSE: firmware/lower/3A00D-menus.s:411
 pub(crate) fn _DROPFALSE(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -15254,7 +15254,7 @@ pub(crate) fn _DROPFALSE(r: &mut Run) {
     }
 }
 
-// OBJ_3AA50: firmware/lower/3A00D-menus.s:454
+// OBJ_3AA50: firmware/lower/3A00D-menus.s:437
 pub(crate) fn OBJ_3AA50(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {

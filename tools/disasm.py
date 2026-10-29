@@ -55,8 +55,22 @@ MAX_XREFS = 6
 FONT_TABLES = [
     (0x7A2B3, 10, 0x1F, 0xE1, False, "font10", "10-row font (used when XM=1): code c at #7A047 + 20*c"),
     (0x7B447, 8, 0x1F, 0xE1, False, "font8", "8-row font (used when XM=0): code c at #7B257 + 16*c"),
-    (0x7C257, 5, 0x1F, 0x66, True, "minifont", "minifont: index i at #7C102 + 11*i, an advance-width nibble then 5 rows"),
+    (0x7C257, 5, 0x1F, 0x79, True, "minifont", "minifont: index i at #7C102 + 11*i, an advance-width nibble then 5 rows"),
 ]
+# The minifont's last glyph (#98: Ø, ø) is cut short: its fifth row is the
+# first byte of MINI_REMAP.
+MINI_TAIL = (0x7C78A, 0x7C793)
+
+# The parser's character-class tables (hex strings, one nibble per character
+# code 0-255), read by GetNextToken~1 (#263D4, #264BC) and OBJ_3516C.
+PARSER_CLASSES = {
+    0x25D3A: "Parser character classes, table 1",
+    0x25E44: "Parser character classes, table 2: digits and E are name characters",
+    0x25F4E: "Parser character classes, table 3",
+    0x26058: "Parser character classes, table 4 (used at #2446A): CR, LF and space are tokens",
+}
+CLASS_LEGEND = ("Classes: 0 separator, 1 name character, 2 digit, 3 opener ' ( [ { <<, 4 closer, 5 one-character "
+                "token, 6 ESC, 8/10 '.', 9/11 ',', 12 '=', 13 '@' (comment), 14 newline, 15 'E' (exponent)")
 MINI_REMAP = (0x7C793, 0x7C855)    # minifont index for codes #9F-#FF, one byte each
 
 # Upper ROM is covered by RAM; the library access handlers (#726A1, #72386,
@@ -525,6 +539,10 @@ class Generator:
         text = None
         comment = ""
         romp = None
+        if k == "DOHSTR" and a in PARSER_CLASSES:
+            tab = self.class_table_lines(o, depth)
+            if tab:
+                return tab
         if k == "DOHSTR" and (EQLIB[0] <= a < EQLIB[1] or a in self.pc_strings):
             pic = self.pc_picture_lines(o, depth)
             if pic:
@@ -707,18 +725,26 @@ class Generator:
         if esize is None or p + count * esize != a + o.size:
             return None
         out = self.array_head(o, depth, dims)
+        kind = PROLOGS[ep]
         for i in range(count):
             nb = list(self.n[p:p + esize])
-            kind = PROLOGS[ep]
+            text = None
             if kind == "DOREAL":
                 v = sasm.format_real(nb, 3, 12)
+                text = v and op("%BODY", v)
+            elif kind == "DOEREL":
+                v = sasm.format_real(nb, 5, 15)
+                text = v and op("%%BODY", v)
             elif kind == "DOCMP":
-                v = "(%s, %s)" % (sasm.format_real(nb[:16], 3, 12), sasm.format_real(nb[16:], 3, 12))
+                re_, im = sasm.format_real(nb[:16], 3, 12), sasm.format_real(nb[16:], 3, 12)
+                text = re_ and im and op("C%BODY", re_, im)
+            elif kind == "DOECMP":
+                re_, im = sasm.format_real(nb[:21], 5, 15), sasm.format_real(nb[21:], 5, 15)
+                text = re_ and im and op("C%%BODY", re_, im)
             elif kind == "DOBINT":
-                v = "#%X" % self.rom.addr(p)
-            else:
-                v = ""
-            out.append(Line(p, esize, op("NIBHEX", hexs(nb)), comment=v or "", indent=depth))
+                text = op("CON(5)", "#%X" % self.rom.addr(p))
+            out.append(Line(p, esize, text or op("NIBHEX", hexs(nb)), comment="" if text else "not a canonical number",
+                            indent=depth))
             p += esize
         return out
 
@@ -910,14 +936,20 @@ class Generator:
         h, w = o.value
         body = list(self.n[a + 20:a + o.size])
         stride = (w + 7) // 8 * 2
-        rows = sasm.grob_png_rows(h, w, body) if h and w and len(body) == h * stride else None
-        if rows is None:
+        if not (h and w and len(body) == h * stride):
             return self.raw_object(o, depth)
+        rows = sasm.grob_png_rows(h, w, body)
         nm = self.symbol_name(a)
         fname = "images/%05X%s.png" % (a, "-" + re.sub(r"[^\w.-]", "_", nm) if nm else "")
         (SRC / "images").mkdir(parents=True, exist_ok=True)
-        sasm.png_write(SRC / fname, rows)
-        return [Line(a, o.size, op("GROB", '"%s"' % fname), comment="%d x %d" % (w, h), mode="RPL", indent=depth)]
+        if rows is not None:
+            sasm.png_write(SRC / fname, rows)
+            return [Line(a, o.size, op("GROB", '"%s"' % fname), comment="%d x %d" % (w, h), mode="RPL", indent=depth)]
+        # padding bits set: the PNG holds the whole rows, the padding in gray
+        full = sasm.grob_png_rows(h, stride * 4, body)
+        sasm.png_write(SRC / fname, [[2 if v and x >= w else v for x, v in enumerate(r)] for r in full])
+        return [Line(a, o.size, op("GROBW", '"%s"' % fname, str(w)),
+                     comment="%d x %d; the padding (gray) is not zero" % (w, h), mode="RPL", indent=depth)]
 
     # ================================================================ structures
     def lib_header_lines(self, it):
@@ -1115,8 +1147,33 @@ class Generator:
         out = []
         for i, p in enumerate(range(lo, hi, 2)):
             code = 0x9F + i
+            note = ("the last row of glyph #98; never read as a remap (codes above #9F are)" if i == 0
+                    else "code #%02X %s" % (code, sasm.hp_char(code) or ""))
+            out.append(Line(p, 2, op("CON(2)", "#%02X" % self.rom.byte(p)), comment=note))
+        return out
+
+    def mini_tail_lines(self):
+        lo, _ = MINI_TAIL
+        out = [Line(lo, 1, op("CON(1)", "%X" % self.n[lo]), comment="minifont glyph #98 (Ø ø): advance width")]
+        for y in range(4):
+            p = lo + 1 + 2 * y
             out.append(Line(p, 2, op("CON(2)", "#%02X" % self.rom.byte(p)),
-                            comment="code #%02X %s" % (code, sasm.hp_char(code) or "")))
+                            comment="row %d; row 5 is the first byte of MiniRemap" % (y + 1) if y == 3 else "row %d" % (y + 1)))
+        return out
+
+    def class_table_lines(self, o, depth):
+        """A parser character-class table: 16 characters to a line."""
+        a = o.addr
+        if o.size != 266:
+            return None
+        if CLASS_LEGEND not in self.notes[a]:
+            self.notes[a] += [PARSER_CLASSES[a], CLASS_LEGEND]
+        out = [Line(a, 5, op("CON(5)", Ref(0x02A4E, a, "rom")), indent=depth), self.length(a + 5, depth)]
+        for row in range(16):
+            p = a + 10 + 16 * row
+            chars = "".join(sasm.hp_char(c) or (chr(c) if 0x20 < c < 0x7F or c > 0xA0 else ".") for c in range(16 * row, 16 * row + 16))
+            out.append(Line(p, 16, op("NIBHEX", hexs(self.n[p:p + 16])), comment="#%02X-#%02X %s" % (16 * row, 16 * row + 15, chars),
+                            indent=depth + 1))
         return out
 
     # ================================================================ units
@@ -1127,6 +1184,7 @@ class Generator:
             step = 2 * f[1] + (1 if f[4] else 0)
             special.append((f[0], f[0] + step * f[3], "font", f))
         special.append((MINI_REMAP[0], MINI_REMAP[1], "remap", None))
+        special.append((MINI_TAIL[0], MINI_TAIL[1], "minitail", None))
         special += [(a, a + 4, "crc", None) for a in CRC_WORDS]
         for lib in self.s["libs"]:
             if lib.obj_start is not None:
@@ -1206,6 +1264,8 @@ class Generator:
             return self.font_lines(*x)
         if kind == "remap":
             return self.remap_lines()
+        if kind == "minitail":
+            return self.mini_tail_lines()
         if kind == "libobj":
             return self.library_object_lines(x)
         if kind == "code":
@@ -1456,7 +1516,7 @@ class Generator:
         def alone(ln):
             """Never shares its line."""
             return (ln.mode != "RPL" or not ln.size or ln.after or not ln.verify
-                    or ln.parts[0].split()[0] in ("CODE", "GROB", "TAG"))
+                    or ln.parts[0].split()[0] in ("CODE", "GROB", "GROBW", "PCGROB", "PCGROBS", "TAG"))
 
         def starts(ln):
             """Starts a line: something is written before it."""

@@ -6495,40 +6495,8 @@ pub(crate) fn OBJ_54E7F(r: &mut Run) {
     }
 }
 
-// SYMISOL~1~1: firmware/lower/57004-algebra.s:326
-pub(crate) fn SYMISOL_1_1(r: &mut Run) {
-    let mut at = r.cpu.pc;
-    loop {
-        match at {
-            0x57924..=0x57924 => {
-                branch!(r, at, 0x5792B, 9, r.cpu.call(0x57956)); // GOSBVL SUB_57956
-            }
-            _ => {
-                r.cpu.pc = at;
-                return;
-            }
-        }
-    }
-}
-
-// SYMISOL~1~2: firmware/lower/57004-algebra.s:335
-pub(crate) fn SYMISOL_1_2(r: &mut Run) {
-    let mut at = r.cpu.pc;
-    loop {
-        match at {
-            0x57942..=0x57942 => {
-                branch!(r, at, 0x57949, 9, r.cpu.call(0x57956)); // GOSBVL SUB_57956
-            }
-            _ => {
-                r.cpu.pc = at;
-                return;
-            }
-        }
-    }
-}
-
-// SUB_57956: firmware/lower/57004-algebra.s:345
-pub(crate) fn SUB_57956(r: &mut Run) {
+// Unlabelled code at #57956.
+pub(crate) fn code_57956(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -6609,7 +6577,7 @@ pub(crate) fn SUB_57956(r: &mut Run) {
     }
 }
 
-// ?expanneginv: firmware/lower/57004-algebra.s:443
+// ?expanneginv: firmware/lower/57004-algebra.s:442
 pub(crate) fn _expanneginv(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -6626,7 +6594,7 @@ pub(crate) fn _expanneginv(r: &mut Run) {
 }
 
 // % -> flag %' T % -> % F
-// NXTPOT%: firmware/lower/57004-algebra.s:490
+// NXTPOT%: firmware/lower/57004-algebra.s:489
 pub(crate) fn NXTPOT_(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -6722,7 +6690,7 @@ pub(crate) fn NXTPOT_(r: &mut Run) {
 }
 
 // ob1 ob2 -> flag
-// BodyMore?: firmware/lower/57004-algebra.s:735
+// BodyMore?: firmware/lower/57004-algebra.s:734
 pub(crate) fn BodyMore_(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -6793,7 +6761,7 @@ pub(crate) fn BodyMore_(r: &mut Run) {
 }
 
 // meta -> meta flag
-// NoIdsInMeta?: firmware/lower/57004-algebra.s:794
+// NoIdsInMeta?: firmware/lower/57004-algebra.s:793
 pub(crate) fn NoIdsInMeta_(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -6874,7 +6842,7 @@ pub(crate) fn NoIdsInMeta_(r: &mut Run) {
 }
 
 // Meta&-1&^ ? case
-// M-1potcase: firmware/lower/57004-algebra.s:946
+// M-1potcase: firmware/lower/57004-algebra.s:945
 pub(crate) fn M_1potcase(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -6909,7 +6877,7 @@ pub(crate) fn M_1potcase(r: &mut Run) {
 }
 
 // meta -> meta #0 meta &+&+..&+ -> meta #n
-// count+: firmware/lower/57004-algebra.s:1002
+// count+: firmware/lower/57004-algebra.s:1001
 pub(crate) fn count_(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -6927,7 +6895,7 @@ pub(crate) fn count_(r: &mut Run) {
 }
 
 // meta -> meta #0 meta &*&*..&* -> meta #n
-// count*: firmware/lower/57004-algebra.s:1010
+// count*: firmware/lower/57004-algebra.s:1009
 pub(crate) fn count__58C13(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -10365,9 +10333,7 @@ pub const ROUTINES: &[(u32, u32, Block, &str)] = &[
     (0x54557, 0x54564, HXS_HXS_54557, "HXS_HXS_54557"),
     (0x549F1, 0x54A6E, MetaConcase, "MetaConcase"),
     (0x54E84, 0x54E8A, OBJ_54E7F, "OBJ_54E7F"),
-    (0x57924, 0x5792A, SYMISOL_1_1, "SYMISOL_1_1"),
-    (0x57942, 0x57948, SYMISOL_1_2, "SYMISOL_1_2"),
-    (0x57956, 0x579F7, SUB_57956, "SUB_57956"),
+    (0x57956, 0x579F7, code_57956, "code_57956"),
     (0x57B51, 0x57B57, _expanneginv, "_expanneginv"),
     (0x57CFD, 0x57D8F, NXTPOT_, "NXTPOT_"),
     (0x585AC, 0x5861F, BodyMore_, "BodyMore_"),

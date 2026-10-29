@@ -1485,7 +1485,7 @@ L_311D4:
         GONC    L_31221                          * 3120B
         B=A     B                                * 3120E
         GOSUB   SUB_3113D                        * 31211
-        D1=(5)  L_00C05                          * 31215
+        D1=(5)  #00C05                           * 31215  I/O error number #C05, returned in D1
         ?A#B    B                                * 3121C
         GOYES   L_3124D                          * 3121F
 L_31221:
@@ -1501,10 +1501,10 @@ L_31228:
 
 * refs (1): 32127
 SUB_31239:
-        D1=(5)  L_00C02+2                        * 31239
+        D1=(5)  #00C04                           * 31239  I/O error number #C03, returned in D1
         A=A+A   XS                               * 31240
         GOC     L_3124D                          * 31243
-        D1=(5)  L_00C02+1                        * 31246
+        D1=(5)  #00C03                           * 31246  I/O error number #C04, returned in D1
 L_3124D:
         CD1EX                                    * 3124D
         RTNSC                                    * 31250

@@ -13,18 +13,17 @@ Font8:
 
 * Minifont glyphs
 Minifont:
-        GLYPHS  "fonts/minifont.png" 5 #1F 102 642466462334434244444444444234444544444454245465445444446444343443424545464454655566556654454555566654 * 7C257  minifont: index i at #7C102 + 11*i, an advance-width nibble then 5 rows, codes #1F-#84
-        NIBHEX  600A051A000210001010104207010702 * 7C6B9  ..P¡. .....$p.p 
-        NIBHEX  0560207020F050090606090611E040E0 * 7C6D9  P......↑``↑`....
-        NIBHEX  4045000000000641A050A04147050700 * 7C6F9  .T....`.....tPp.
-        NIBHEX  00040020702070320100000005005050 * 7C719  .@.....#....P...
-        NIBHEX  F01020000100000650A041A050420201 * 7C739  .......`.....$ .
-        NIBHEX  05020400502050004107050701042050 * 7C759  P @......pPp.@..
-        NIBHEX  30503042000700020680E051E0       * 7C779  ...$.p. `....
+        GLYPHS  "fonts/minifont.png" 5 #1F 121 6424664623344342444444444442344445444444542454654454444464443434434245454644546555665566544545555666546245564644352644444 * 7C257  minifont: index i at #7C102 + 11*i, an advance-width nibble then 5 rows, codes #1F-#97
+
+        CON(1)  6                                * 7C78A  minifont glyph #98 (Ø ø): advance width
+        CON(2)  #08                              * 7C78B  row 1
+        CON(2)  #0E                              * 7C78D  row 2
+        CON(2)  #15                              * 7C78F  row 3
+        CON(2)  #0E                              * 7C791  row 4; row 5 is the first byte of MiniRemap
 
 * Minifont index for codes #9F-#FF
 MiniRemap:
-        CON(2)  #02                              * 7C793  code #9F ∞
+        CON(2)  #02                              * 7C793  the last row of glyph #98; never read as a remap (codes above #9F are)
         CON(2)  #20                              * 7C795  code #A0 
         CON(2)  #86                              * 7C797  code #A1 ¡
         CON(2)  #87                              * 7C799  code #A2 ¢

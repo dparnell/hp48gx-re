@@ -785,7 +785,7 @@ DOLIST:
         CON(5)  L_030BD                          * 02A91
 
 * Directory prologue
-* refs (17): 023BE 02F82 077FD 079E8 0A15E 0A1DF ...
+* refs (18): 023BE 02F82 077FD 079E8 09667 0A15E ...
 DORRP:
         D=D-1   A                                * 02A96
         HST=0   0                                * 02A98
@@ -875,7 +875,7 @@ DOLIB:
         CON(5)  L_0309A                          * 02B5D
 
 * Backup prologue 5  size 2  # of chars in name .. name .. object 5  DOBINT 5  CRC
-* refs (10): 09130 09ED8 0A0EE 0AF07 15C1E 1919B ...
+* refs (11): 09130 09659 09ED8 0A0EE 0AF07 15C1E ...
 DOBAK:
         D=D-1   A                                * 02B62
         HST=0   0                                * 02B64
@@ -1158,7 +1158,7 @@ L_02E20:
         CON(5)  L_030A8                          * 02E43
 
 * Global name (ID) prologue 2  # of characters .. characters
-* refs (19): 05B54 05EF1 07998 07BCB 07D54 15B5B ...
+* refs (21): 05B54 05EF1 07998 07BCB 07D54 15B5B ...
 DOIDNT:
         D=D-1   A                                * 02E48
         HST=0   0                                * 02E4A

@@ -313,64 +313,90 @@ ROMP_0E2_02A:
 * ROMPTR 0E2 02B
 * refs (1): E3857
 ROMP_0E2_02B:
-        { BINT32 BINT3 PCGROB "images/F4AC7-packed.png" } * F4AB8  72 x 49, packed
+        { BINT32 BINT3                           * F4AB8
+          PCGROB  "images/F4AC7-packed.png"      * F4AC7  72 x 49, packed
+        }                                        * F4DCA
 
 * ROMPTR 0E2 02C
 * refs (1): E3857
 ROMP_0E2_02C:
-        { BINT32 BINT3 PCGROB "images/F4DDE-packed.png" } * F4DCF  72 x 49, packed
+        { BINT32 BINT3                           * F4DCF
+          PCGROB  "images/F4DDE-packed.png"      * F4DDE  72 x 49, packed
+        }                                        * F50C8
 
 * ROMPTR 0E2 02D
 * refs (1): E3857
 ROMP_0E2_02D:
-        { BINT8 BINT2 PCGROB "images/F50DC-packed.png" } * F50CD  104 x 52, packed
+        { BINT8 BINT2                            * F50CD
+          PCGROB  "images/F50DC-packed.png"      * F50DC  104 x 52, packed
+        }                                        * F559E
 
 * ROMPTR 0E2 02E
 * refs (1): E3857
 ROMP_0E2_02E:
-        { BINT48 BINT5 PCGROB "images/F55B2-packed.png" } * F55A3  32 x 49, packed
+        { BINT48 BINT5                           * F55A3
+          PCGROB  "images/F55B2-packed.png"      * F55B2  32 x 49, packed
+        }                                        * F5745
 
 * ROMPTR 0E2 02F
 * refs (1): E3857
 ROMP_0E2_02F:
-        { BINT32 BINT8 PCGROB "images/F5759-packed.png" } * F574A  64 x 38, packed
+        { BINT32 BINT8                           * F574A
+          PCGROB  "images/F5759-packed.png"      * F5759  64 x 38, packed
+        }                                        * F5931
 
 * ROMPTR 0E2 030
 * refs (1): E3857
 ROMP_0E2_030:
-        { BINT32 BINT9 PCGROB "images/F5945-packed.png" } * F5936  72 x 37, packed
+        { BINT32 BINT9                           * F5936
+          PCGROB  "images/F5945-packed.png"      * F5945  72 x 37, packed
+        }                                        * F5B6E
 
 * ROMPTR 0E2 031
 * refs (1): E3857
 ROMP_0E2_031:
-        { BINT8 BINT5 PCGROB "images/F5B82-packed.png" } * F5B73  120 x 45, packed
+        { BINT8 BINT5                            * F5B73
+          PCGROB  "images/F5B82-packed.png"      * F5B82  120 x 45, packed
+        }                                        * F5EED
 
 * ROMPTR 0E2 032
 * refs (1): E3857
 ROMP_0E2_032:
-        { BINT8 BINT3 PCGROB "images/F5F01-packed.png" } * F5EF2  120 x 49, packed
+        { BINT8 BINT3                            * F5EF2
+          PCGROB  "images/F5F01-packed.png"      * F5F01  120 x 49, packed
+        }                                        * F628B
 
 * ROMPTR 0E2 033
 * refs (1): E3857
 ROMP_0E2_033:
-        { BINT8 BINT4 PCGROB "images/F629F-packed.png" } * F6290  120 x 45, packed
+        { BINT8 BINT4                            * F6290
+          PCGROB  "images/F629F-packed.png"      * F629F  120 x 45, packed
+        }                                        * F65F9
 
 * ROMPTR 0E2 034
 * refs (1): E3857
 ROMP_0E2_034:
-        { BINT16 BINT10 PCGROB "images/F660D-packed.png" } * F65FE  104 x 36, packed
+        { BINT16 BINT10                          * F65FE
+          PCGROB  "images/F660D-packed.png"      * F660D  104 x 36, packed
+        }                                        * F6916
 
 * ROMPTR 0E2 035
 * refs (1): E3857
 ROMP_0E2_035:
-        { BINT8 BINT8 PCGROB "images/F692A-packed.png" } * F691B  96 x 38, packed
+        { BINT8 BINT8                            * F691B
+          PCGROB  "images/F692A-packed.png"      * F692A  96 x 38, packed
+        }                                        * F6B90
 
 * ROMPTR 0E2 036
 * refs (1): E3857
 ROMP_0E2_036:
-        { BINT16 BINT8 PCGROB "images/F6BA4-packed.png" } * F6B95  88 x 38, packed
+        { BINT16 BINT8                           * F6B95
+          PCGROB  "images/F6BA4-packed.png"      * F6BA4  88 x 38, packed
+        }                                        * F6DAE
 
 * ROMPTR 0E2 037
 * refs (1): E3857
 ROMP_0E2_037:
-        { BINT24 BINT6 PCGROB "images/F6DC2-packed.png" } * F6DB3  72 x 44, packed
+        { BINT24 BINT6                           * F6DB3
+          PCGROB  "images/F6DC2-packed.png"      * F6DC2  72 x 44, packed
+        }                                        * F6FB3

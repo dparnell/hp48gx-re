@@ -27,6 +27,8 @@ Source format
     $BODY "text"      a string body without prolog: length (5), then bytes
     ROMPBODY lib cmd  a ROMPTR body without prolog: library and command (3+3)
     IDBODY name       an identifier body without prolog: length (2), then bytes
+    %BODY r, %%BODY r, C%BODY re im, C%%BODY re im
+                      a number without its prolog (an array element)
     BSS n             n zero nibbles
     FILLTO expr       zero nibbles up to address expr: free space that
                       absorbs code growing or shrinking before it. If the
@@ -53,7 +55,10 @@ Source format
   `EQ$ "text"` is an Equation Library string, written expanded and packed
   with its tokens (EQ_TOKENS). `PCGROB "png"` is a hex string holding a
   picture packed for ~PCunpack by HP's packer's rule (pc_split);
-  `PCGROBS "png" L4,R11,...` gives the packing commands instead. A line
+  `PCGROBS "png" L4,R11,...` gives the packing commands instead.
+  `GROBW "png" w` is a grob w pixels wide whose PNG holds the whole rows,
+  padding bits included (gray where set), for grobs whose padding is not
+  zero. A line
   may hold several objects (`:: DUP # 3F ROMPTR 0C2 000 ;`); `CODE` ends its
   line.
 """
@@ -80,15 +85,16 @@ SEMI = 0x0312B
 OPENERS = {"::": "DOCOL", "{": "DOLIST", "SYMBOL": "DOSYMB", "UNIT": "DOEXT"}
 RPL_WORDS = set(OPENERS) | {";", "}", "#", "%", "%%", "C%", "C%%", "CHR", "$", "HXS",
                             "ID", "LAM", "TAG", "ROMPTR", "ACPTR", "GROB", "CODE",
-                            "ENDCODE", "PTR", "EQ$", "PCGROB", "PCGROBS"}
-DIRECTIVES = {"ORG", "INCLUDE", "ASSEMBLE", "RPL", "NIBHEX", "NIBASC", "ROMPBODY", "IDBODY", "BSS", "EQU",
+                            "ENDCODE", "PTR", "EQ$", "PCGROB", "PCGROBS", "GROBW"}
+DIRECTIVES = {"ORG", "INCLUDE", "ASSEMBLE", "RPL", "NIBHEX", "NIBASC", "ROMPBODY", "IDBODY", "%BODY", "%%BODY",
+              "C%BODY", "C%%BODY", "BSS", "EQU",
               "GLYPHS", "$BODY", "LENGTH", "ENDLENGTH", "FILLTO", "PIN", "CRC"}
 KEYWORDS = RPL_WORDS | DIRECTIVES
 
 # Operands each RPL word takes, so that a line can hold several objects
 # (`:: DUP # 3F ROMPTR 0C2 000 ;`). Pointers and the rest take none.
 RPL_OPERANDS = {"#": 1, "%": 1, "%%": 1, "C%": 2, "C%%": 2, "CHR": 1, "$": 1, "HXS": 1, "ID": 1,
-                "EQ$": 1, "PCGROB": 1, "PCGROBS": 2,
+                "EQ$": 1, "PCGROB": 1, "PCGROBS": 2, "GROBW": 2,
                 "LAM": 1, "TAG": 1, "ROMPTR": 2, "ACPTR": 2, "GROB": 1, "PTR": 1}
 
 
@@ -285,7 +291,7 @@ def png_write(path, rows, gray=None):
     Path(path).write_bytes(png)
 
 
-def png_read(path):
+def png_read(path, dark=100):
     """Rows of 0/1 (dark = 1) from an 8-bit or 1-bit gray, RGB or RGBA PNG."""
     data = Path(path).read_bytes()
     if data[:8] != b"\x89PNG\r\n\x1a\n":
@@ -329,7 +335,7 @@ def png_read(path):
         if depth == 1:
             rows.append([0 if (line[x // 8] >> (7 - x % 8)) & 1 else 1 for x in range(w)])
         else:
-            rows.append([1 if line[x * chans] < 100 else 0 for x in range(w)])
+            rows.append([1 if line[x * chans] < dark else 0 for x in range(w)])
     return rows
 
 
@@ -632,6 +638,12 @@ class Assembler:
             return digits(len(body) + 5, 5) + body
         if op == "BSS":
             return [0] * self.value(arg(), pc)
+        if op in ("%BODY", "%%BODY"):
+            # a real without its prolog (an array element)
+            return encode_real(arg(), *((3, 12) if op == "%BODY" else (5, 15)))
+        if op in ("C%BODY", "C%%BODY"):
+            sz = (3, 12) if op == "C%BODY" else (5, 15)
+            return encode_real(arg(0), *sz) + encode_real(arg(1), *sz)
         if op == "IDBODY":
             # an identifier without its prolog (an element of a name array)
             a = " ".join(args)
@@ -743,6 +755,16 @@ class Assembler:
             h, w = len(rows), len(rows[0])
             body = digits(h, 5) + digits(w, 5) + grob_nibs(rows, w)
             return p("DOGROB") + digits(len(body) + 5, 5) + body
+        if op == "GROBW":
+            # the PNG holds whole rows, padding included (in gray where set);
+            # the grob is w pixels wide
+            rows = png_read(self.root / unquote(args[0]), dark=250)   # gray is set too
+            h, full = len(rows), len(rows[0])
+            w = self.value(args[1], pc)
+            if (w + 7) // 8 * 8 != full:
+                raise AsmError("GROBW: a %d-pixel row is %d pixels with padding, not %d" % (w, (w + 7) // 8 * 8, full))
+            body = digits(h, 5) + digits(w, 5) + grob_nibs([[1 if x else 0 for x in r] for r in rows], full)
+            return p("DOGROB") + digits(len(body) + 5, 5) + body
         if op == "CODE":
             state["code"].append(pc)
             state["mode"] = "ASM"
@@ -849,7 +871,8 @@ class Assembler:
             self.put(start + 5, digits(self.pc - start - 5, 5), overwrite=True)
             state["mode"] = "RPL"
             return
-        raw = op in ("NIBHEX", "NIBASC", "$BODY", "ROMPBODY", "IDBODY", "BSS", "GLYPHS") or re.fullmatch(r"(CON|REL)\(\d+\)", op)
+        raw = op in ("NIBHEX", "NIBASC", "$BODY", "ROMPBODY", "IDBODY", "%BODY", "%%BODY", "C%BODY",
+                     "C%%BODY", "BSS", "GLYPHS") or re.fullmatch(r"(CON|REL)\(\d+\)", op)
         if state["mode"] == "RPL" and op not in DIRECTIVES and not raw:
             objs = rpl_objects(toks)
             for k, obj in enumerate(objs):

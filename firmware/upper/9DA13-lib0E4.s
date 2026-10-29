@@ -116,11 +116,7 @@ ROMP_0E4_00D:
           DUP ROMPTR 0E4 00F SWAP ID>$ OVER BINT2 #AND #0<> ITE * 9DF6C
           :: SWAP BINT1 #AND #0<> ITE MakeBoxLabel * 9DF9F
             :: BINT14 BINT10                     * 9DFC2
-              CON(5)  DOGROB                     * 9DFD1  DOGROB
-              LENGTH                             * 9DFD6  length, to #9E015
-              NIBHEX  8000051000FFFFFF1000011000011000 * 9DFDB  ..P..ÿÿÿ........
-              NIBHEX  E11000E11000E1100001FFFFFF * 9DFFB  ..........ÿÿÿ
-        ENDLENGTH                                * 9E015
+              GROBW   "images/9DFD1.png" 21      * 9DFD1  21 x 8; the padding (gray) is not zero
               MakeLabel ;                        * 9E015
           ;                                      * 9E01F
           :: SWAP BINT1 #AND #0<> ITE MakeStdLabel MakeInvLabel * 9E024

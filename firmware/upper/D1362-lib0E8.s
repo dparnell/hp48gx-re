@@ -604,8 +604,8 @@ TEACH~1~8:
             CON(5)  DOREAL                       * D374B  element type
             CON(5)  1                            * D3750  dimensions
             CON(5)  2                            * D3755
-            NIBHEX  0000000000000000             * D375A  0E0
-            NIBHEX  0000000000000000             * D376A  0E0
+            %BODY   0E0                          * D375A
+            %BODY   0E0                          * D376A
         ENDLENGTH                                * D377A
             % 1E-3 }                             * D377A
           xDEPND                                 * D3794

@@ -1,5 +1,6 @@
 * HP 48GX ROM revision R, #80000-#82006: Self-test code (runs with RAM unconfigured)
 * Addresses in the right-hand comments are those of the original ROM.
+* Most referenced: KeyTestDiag KeyTestAll
 
         ORG     #80000
 L_80000:
@@ -641,10 +642,10 @@ L_8082B:
         GOSBVL  SUB_00E0B                        * 80838
         INTON                                    * 8083F
         GOSUBL  Flush~jump                       * 80843
-        D0=(5)  L_80946                          * 80849
+        D0=(5)  KeyTestAll                       * 80849
         ?ST=0   11                               * 80850
         GOYES   L_8085C                          * 80853
-        D0=(5)  L_809A6+4                        * 80855
+        D0=(5)  KeyTestDiag                      * 80855
 L_8085C:
         C=DAT0  B                                * 8085C
         D=C     A                                * 8085F
@@ -717,12 +718,72 @@ L_80938:
         A=R4                                     * 8093E
         D0=A                                     * 80941
         RTNCC                                    * 80944
-L_80946:
-        NIBHEX  102030405060708090A0B0C0D0E0F001 * 80946  ................
-        NIBHEX  112131415161718191A1B1C1D108F102 * 80966  .............∡. 
-        NIBHEX  122204425262720C92A2B2C2D2E2F203 * 80986  !"@$%&'À)*+,-./0
-L_809A6:
-        NIBHEX  130020900171D10842A20300         * 809A6  1......∡$*0.
+
+* Self-test: keycodes to press for the full keyboard test, in order (read at #8085C)
+KeyTestAll:
+        CON(2)  #01                              * 80946  entry 0
+        CON(2)  #02                              * 80948  entry 1
+        CON(2)  #03                              * 8094A  entry 2
+        CON(2)  #04                              * 8094C  entry 3
+        CON(2)  #05                              * 8094E  entry 4
+        CON(2)  #06                              * 80950  entry 5
+        CON(2)  #07                              * 80952  entry 6
+        CON(2)  #08                              * 80954  entry 7
+        CON(2)  #09                              * 80956  entry 8
+        CON(2)  #0A                              * 80958  entry 9
+        CON(2)  #0B                              * 8095A  entry 10
+        CON(2)  #0C                              * 8095C  entry 11
+        CON(2)  #0D                              * 8095E  entry 12
+        CON(2)  #0E                              * 80960  entry 13
+        CON(2)  #0F                              * 80962  entry 14
+        CON(2)  #10                              * 80964  entry 15
+        CON(2)  #11                              * 80966  entry 16
+        CON(2)  #12                              * 80968  entry 17
+        CON(2)  #13                              * 8096A  entry 18
+        CON(2)  #14                              * 8096C  entry 19
+        CON(2)  #15                              * 8096E  entry 20
+        CON(2)  #16                              * 80970  entry 21
+        CON(2)  #17                              * 80972  entry 22
+        CON(2)  #18                              * 80974  entry 23
+        CON(2)  #19                              * 80976  entry 24
+        CON(2)  #1A                              * 80978  entry 25
+        CON(2)  #1B                              * 8097A  entry 26
+        CON(2)  #1C                              * 8097C  entry 27
+        CON(2)  #1D                              * 8097E  entry 28
+        CON(2)  #80                              * 80980  entry 29
+        CON(2)  #1F                              * 80982  entry 30
+        CON(2)  #20                              * 80984  entry 31
+        CON(2)  #21                              * 80986  entry 32
+        CON(2)  #22                              * 80988  entry 33
+        CON(2)  #40                              * 8098A  entry 34
+        CON(2)  #24                              * 8098C  entry 35
+        CON(2)  #25                              * 8098E  entry 36
+        CON(2)  #26                              * 80990  entry 37
+        CON(2)  #27                              * 80992  entry 38
+        CON(2)  #C0                              * 80994  entry 39
+        CON(2)  #29                              * 80996  entry 40
+        CON(2)  #2A                              * 80998  entry 41
+        CON(2)  #2B                              * 8099A  entry 42
+        CON(2)  #2C                              * 8099C  entry 43
+        CON(2)  #2D                              * 8099E  entry 44
+        CON(2)  #2E                              * 809A0  entry 45
+        CON(2)  #2F                              * 809A2  entry 46
+        CON(2)  #30                              * 809A4  entry 47
+        CON(2)  #31                              * 809A6  entry 48
+        CON(2)  0                                * 809A8  end of table
+
+* Self-test: keycodes for the short (diagonal) keyboard test, read at #8085C when ST11 is set
+KeyTestDiag:
+        CON(2)  #02                              * 809AA  entry 0
+        CON(2)  #09                              * 809AC  entry 1
+        CON(2)  #10                              * 809AE  entry 2
+        CON(2)  #17                              * 809B0  entry 3
+        CON(2)  #1D                              * 809B2  entry 4
+        CON(2)  #80                              * 809B4  entry 5
+        CON(2)  #24                              * 809B6  entry 6
+        CON(2)  #2A                              * 809B8  entry 7
+        CON(2)  #30                              * 809BA  entry 8
+        CON(2)  0                                * 809BC  end of table
 L_809BE:
         GOSUBL  ClrScrMn~jump                    * 809BE
         D0=(5)  L_81867                          * 809C4
@@ -1400,7 +1461,7 @@ L_811ED:
 
 * refs (6): 806B3 806BF 8114A 81158 811E3 811ED
 SUB_8120A:
-        GOVLNG  L_011AC                          * 8120A
+        GOVLNG  SUB_011AC                        * 8120A
 
 * refs (2): 806AA 81143
 SUB_81211:
@@ -2292,8 +2353,14 @@ L_81CAD:
         LC(5)   #0000F                           * 81CB1
         GOTO    SUB_81DE7                        * 81CB8
 L_81CBC:
-        NIBHEX  8FFFB1034D000079111FB010014F8089 * 81CBC  øÿ.0Ô..ρ.ñ...ô.σ
-        NIBHEX  414D01                           * 81CDC  .Ô.
+        GOSBVL  ClrScrMn                         * 81CBC
+        LC(5)   #0000D                           * 81CC3
+        GOSUB   SUB_81DE7                        * 81CCA
+        D1=(5)  ANNCTRL                          * 81CCE
+        C=DAT1  B                                * 81CD5
+        CBIT=1  4                                * 81CD8
+        DAT1=C  B                                * 81CDD
+        RTN                                      * 81CE0
 L_81CE2:
         GOSUB   SUB_81E27                        * 81CE2
         LC(5)   #00007                           * 81CE6
@@ -2390,7 +2457,7 @@ L_81DBD:
         CON(5)  L_FFFFC                          * 81DE1  address (the code jumps or points through it)
         NIBHEX  3                                * 81DE6
 
-* refs (4): 81CB8 81CED 81D07 81D2F
+* refs (5): 81CB8 81CCA 81CED 81D07 81D2F
 SUB_81DE7:
         D0=(5)  L_73E79                          * 81DE7
         GOSUB   SUB_81E4C                        * 81DEE
@@ -2448,6 +2515,10 @@ L_81E6D:
         LC(5)   #A0000                           * 81EA0
         CONFIG                                   * 81EA7
         GOVLNG  AllowIntr                        * 81EAA
-        NIBHEX  8FCA1108F5E010078FFFB108D76A08   * 81EB1  ø¬.∡_..pøÿ.∡}¦∡
+        GOSBVL  SUB_011AC                        * 81EB1
+        GOSBVL  AllowIntr                        * 81EB8
+        C=RSTK                                   * 81EBF
+        GOSBVL  ClrScrMn                         * 81EC1
+        GOVLNG  L_80A67                          * 81EC8
         FILLTO  #82000                           * 81ECF  305 zero nibbles: the next entry stays at #82000
         NIBHEX  DDF4000                          * 82000  ÝO.

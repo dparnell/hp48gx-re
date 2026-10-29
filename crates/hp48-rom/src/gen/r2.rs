@@ -1533,7 +1533,7 @@ pub(crate) fn GETPTRTRUE(r: &mut Run) {
     }
 }
 
-// OBJ_261AD: firmware/lower/24028-parser.s:1256
+// OBJ_261AD: firmware/lower/24028-parser.s:1292
 pub(crate) fn OBJ_261AD(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -1601,7 +1601,7 @@ pub(crate) fn OBJ_261AD(r: &mut Run) {
     }
 }
 
-// GetNextToken~1~1: firmware/lower/24028-parser.s:1331
+// GetNextToken~1~1: firmware/lower/24028-parser.s:1367
 pub(crate) fn GetNextToken_1_1(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -1627,7 +1627,7 @@ pub(crate) fn GetNextToken_1_1(r: &mut Run) {
     }
 }
 
-// GetNextToken~1: firmware/lower/24028-parser.s:1343
+// GetNextToken~1: firmware/lower/24028-parser.s:1379
 pub(crate) fn GetNextToken_1(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -1922,7 +1922,7 @@ pub(crate) fn GetNextToken_1(r: &mut Run) {
     }
 }
 
-// SUB_2653C: firmware/lower/24028-parser.s:1516
+// SUB_2653C: firmware/lower/24028-parser.s:1552
 pub(crate) fn SUB_2653C(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -1961,7 +1961,7 @@ pub(crate) fn SUB_2653C(r: &mut Run) {
     }
 }
 
-// SUB_2655F: firmware/lower/24028-parser.s:1533
+// SUB_2655F: firmware/lower/24028-parser.s:1569
 pub(crate) fn SUB_2655F(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -2058,7 +2058,7 @@ pub(crate) fn SUB_2655F(r: &mut Run) {
     }
 }
 
-// realPAcode: firmware/lower/24028-parser.s:1594
+// realPAcode: firmware/lower/24028-parser.s:1630
 pub(crate) fn realPAcode(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -2250,7 +2250,7 @@ pub(crate) fn realPAcode(r: &mut Run) {
     }
 }
 
-// SUB_2670F: firmware/lower/24028-parser.s:1704
+// SUB_2670F: firmware/lower/24028-parser.s:1740
 pub(crate) fn SUB_2670F(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -2413,7 +2413,7 @@ pub(crate) fn SUB_2670F(r: &mut Run) {
 }
 
 // <REF>GETPTR , Loop to FalseTrue
-// GPPushFTLp: firmware/lower/24028-parser.s:1793
+// GPPushFTLp: firmware/lower/24028-parser.s:1829
 pub(crate) fn GPPushFTLp(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -2430,7 +2430,7 @@ pub(crate) fn GPPushFTLp(r: &mut Run) {
 }
 
 // Loop to False/True
-// PushFTLp: firmware/lower/24028-parser.s:1797
+// PushFTLp: firmware/lower/24028-parser.s:1833
 pub(crate) fn PushFTLp(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -2474,7 +2474,7 @@ pub(crate) fn PushFTLp(r: &mut Run) {
     }
 }
 
-// SUB_2681A: firmware/lower/24028-parser.s:1819
+// SUB_2681A: firmware/lower/24028-parser.s:1855
 pub(crate) fn SUB_2681A(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -2564,7 +2564,7 @@ pub(crate) fn SUB_2681A(r: &mut Run) {
     }
 }
 
-// L_26958: firmware/lower/24028-parser.s:1907
+// L_26958: firmware/lower/24028-parser.s:1943
 pub(crate) fn L_26958(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -2608,7 +2608,7 @@ pub(crate) fn L_26958(r: &mut Run) {
     }
 }
 
-// OBJ_269DB: firmware/lower/24028-parser.s:1941
+// OBJ_269DB: firmware/lower/24028-parser.s:1977
 pub(crate) fn OBJ_269DB(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -2625,7 +2625,7 @@ pub(crate) fn OBJ_269DB(r: &mut Run) {
     }
 }
 
-// OBJ_269E7: firmware/lower/24028-parser.s:1948
+// OBJ_269E7: firmware/lower/24028-parser.s:1984
 pub(crate) fn OBJ_269E7(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -2675,7 +2675,7 @@ pub(crate) fn OBJ_269E7(r: &mut Run) {
     }
 }
 
-// L_26B09: firmware/lower/24028-parser.s:2007
+// L_26B09: firmware/lower/24028-parser.s:2043
 pub(crate) fn L_26B09(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -2705,7 +2705,7 @@ pub(crate) fn L_26B09(r: &mut Run) {
     }
 }
 
-// L_26B33: firmware/lower/24028-parser.s:2022
+// L_26B33: firmware/lower/24028-parser.s:2058
 pub(crate) fn L_26B33(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -2750,7 +2750,7 @@ pub(crate) fn L_26B33(r: &mut Run) {
     }
 }
 
-// OBJ_26C47: firmware/lower/24028-parser.s:2058
+// OBJ_26C47: firmware/lower/24028-parser.s:2094
 pub(crate) fn OBJ_26C47(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -2780,7 +2780,7 @@ pub(crate) fn OBJ_26C47(r: &mut Run) {
     }
 }
 
-// L_26C90: firmware/lower/24028-parser.s:2082
+// L_26C90: firmware/lower/24028-parser.s:2118
 pub(crate) fn L_26C90(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -2948,7 +2948,7 @@ pub(crate) fn L_26C90(r: &mut Run) {
     }
 }
 
-// OBJ_26E61: firmware/lower/24028-parser.s:2232
+// OBJ_26E61: firmware/lower/24028-parser.s:2268
 pub(crate) fn OBJ_26E61(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -3035,7 +3035,7 @@ pub(crate) fn OBJ_26E61(r: &mut Run) {
     }
 }
 
-// OBJ_26F18: firmware/lower/24028-parser.s:2286
+// OBJ_26F18: firmware/lower/24028-parser.s:2322
 pub(crate) fn OBJ_26F18(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -3053,7 +3053,7 @@ pub(crate) fn OBJ_26F18(r: &mut Run) {
     }
 }
 
-// OBJ_26F26: firmware/lower/24028-parser.s:2293
+// OBJ_26F26: firmware/lower/24028-parser.s:2329
 pub(crate) fn OBJ_26F26(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -3071,7 +3071,7 @@ pub(crate) fn OBJ_26F26(r: &mut Run) {
     }
 }
 
-// OBJ_26F34: firmware/lower/24028-parser.s:2300
+// OBJ_26F34: firmware/lower/24028-parser.s:2336
 pub(crate) fn OBJ_26F34(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -3089,7 +3089,7 @@ pub(crate) fn OBJ_26F34(r: &mut Run) {
     }
 }
 
-// ?expanapp~1~1: firmware/lower/24028-parser.s:2307
+// ?expanapp~1~1: firmware/lower/24028-parser.s:2343
 pub(crate) fn _expanapp_1_1(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -3107,7 +3107,7 @@ pub(crate) fn _expanapp_1_1(r: &mut Run) {
     }
 }
 
-// OBJ_26F50: firmware/lower/24028-parser.s:2314
+// OBJ_26F50: firmware/lower/24028-parser.s:2350
 pub(crate) fn OBJ_26F50(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -3125,7 +3125,7 @@ pub(crate) fn OBJ_26F50(r: &mut Run) {
     }
 }
 
-// intg1~1~1: firmware/lower/24028-parser.s:2321
+// intg1~1~1: firmware/lower/24028-parser.s:2357
 pub(crate) fn intg1_1_1(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -3143,7 +3143,7 @@ pub(crate) fn intg1_1_1(r: &mut Run) {
     }
 }
 
-// OBJ_26F6C: firmware/lower/24028-parser.s:2328
+// OBJ_26F6C: firmware/lower/24028-parser.s:2364
 pub(crate) fn OBJ_26F6C(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -3161,7 +3161,7 @@ pub(crate) fn OBJ_26F6C(r: &mut Run) {
     }
 }
 
-// OBJ_26F7A: firmware/lower/24028-parser.s:2335
+// OBJ_26F7A: firmware/lower/24028-parser.s:2371
 pub(crate) fn OBJ_26F7A(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -3195,7 +3195,7 @@ pub(crate) fn OBJ_26F7A(r: &mut Run) {
 }
 
 // <REF>GETPTR , Do FALSE
-// GETPTRFALSE: firmware/lower/24028-parser.s:2352
+// GETPTRFALSE: firmware/lower/24028-parser.s:2388
 pub(crate) fn GETPTRFALSE(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {

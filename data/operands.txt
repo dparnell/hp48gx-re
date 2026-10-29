@@ -82,3 +82,6 @@ C07EE	addr	the version object, read by VERSION
 023ED	addr	in the self-test area
 17F24	addr	code in the self-test area
 40F17	num	delay count
+31215	num	I/O error number #C05, returned in D1
+31239	num	I/O error number #C03, returned in D1
+31246	num	I/O error number #C04, returned in D1

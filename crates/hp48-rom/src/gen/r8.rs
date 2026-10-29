@@ -5,7 +5,7 @@
 
 use crate::prelude::*;
 
-// L_80000: firmware/upper/80000-selftest.s:5
+// L_80000: firmware/upper/80000-selftest.s:6
 pub(crate) fn L_80000(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -100,7 +100,7 @@ pub(crate) fn L_80000(r: &mut Run) {
     }
 }
 
-// SUB_80081: firmware/upper/80000-selftest.s:41
+// SUB_80081: firmware/upper/80000-selftest.s:42
 pub(crate) fn SUB_80081(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -267,7 +267,7 @@ pub(crate) fn SUB_80081(r: &mut Run) {
     }
 }
 
-// SUB_80167: firmware/upper/80000-selftest.s:113
+// SUB_80167: firmware/upper/80000-selftest.s:114
 pub(crate) fn SUB_80167(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -371,7 +371,7 @@ pub(crate) fn SUB_80167(r: &mut Run) {
     }
 }
 
-// SUB_80215: firmware/upper/80000-selftest.s:160
+// SUB_80215: firmware/upper/80000-selftest.s:161
 pub(crate) fn SUB_80215(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -398,7 +398,7 @@ pub(crate) fn SUB_80215(r: &mut Run) {
     }
 }
 
-// L_802BE: firmware/upper/80000-selftest.s:202
+// L_802BE: firmware/upper/80000-selftest.s:203
 pub(crate) fn L_802BE(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -416,7 +416,7 @@ pub(crate) fn L_802BE(r: &mut Run) {
     }
 }
 
-// SUB_802C8: firmware/upper/80000-selftest.s:208
+// SUB_802C8: firmware/upper/80000-selftest.s:209
 pub(crate) fn SUB_802C8(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -434,7 +434,7 @@ pub(crate) fn SUB_802C8(r: &mut Run) {
     }
 }
 
-// SUB_802D2: firmware/upper/80000-selftest.s:214
+// SUB_802D2: firmware/upper/80000-selftest.s:215
 pub(crate) fn SUB_802D2(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -456,7 +456,7 @@ pub(crate) fn SUB_802D2(r: &mut Run) {
     }
 }
 
-// SUB_802DF: firmware/upper/80000-selftest.s:221
+// SUB_802DF: firmware/upper/80000-selftest.s:222
 pub(crate) fn SUB_802DF(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -511,7 +511,7 @@ pub(crate) fn SUB_802DF(r: &mut Run) {
     }
 }
 
-// SUB_80329: firmware/upper/80000-selftest.s:242
+// SUB_80329: firmware/upper/80000-selftest.s:243
 pub(crate) fn SUB_80329(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -551,7 +551,7 @@ pub(crate) fn SUB_80329(r: &mut Run) {
     }
 }
 
-// SUB_80360: firmware/upper/80000-selftest.s:255
+// SUB_80360: firmware/upper/80000-selftest.s:256
 pub(crate) fn SUB_80360(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -587,7 +587,7 @@ pub(crate) fn SUB_80360(r: &mut Run) {
     }
 }
 
-// SUB_80389: firmware/upper/80000-selftest.s:264
+// SUB_80389: firmware/upper/80000-selftest.s:265
 pub(crate) fn SUB_80389(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -680,7 +680,7 @@ pub(crate) fn SUB_80389(r: &mut Run) {
     }
 }
 
-// ClrScrMn~jump: firmware/upper/80000-selftest.s:297
+// ClrScrMn~jump: firmware/upper/80000-selftest.s:298
 pub(crate) fn ClrScrMn_jump(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -696,7 +696,7 @@ pub(crate) fn ClrScrMn_jump(r: &mut Run) {
     }
 }
 
-// SUB_80414: firmware/upper/80000-selftest.s:301
+// SUB_80414: firmware/upper/80000-selftest.s:302
 pub(crate) fn SUB_80414(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -734,7 +734,7 @@ pub(crate) fn SUB_80414(r: &mut Run) {
     }
 }
 
-// SUB_8043F: firmware/upper/80000-selftest.s:315
+// SUB_8043F: firmware/upper/80000-selftest.s:316
 pub(crate) fn SUB_8043F(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -765,7 +765,7 @@ pub(crate) fn SUB_8043F(r: &mut Run) {
     }
 }
 
-// SUB_8044F: firmware/upper/80000-selftest.s:325
+// SUB_8044F: firmware/upper/80000-selftest.s:326
 pub(crate) fn SUB_8044F(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -803,7 +803,7 @@ pub(crate) fn SUB_8044F(r: &mut Run) {
     }
 }
 
-// SUB_8047D: firmware/upper/80000-selftest.s:340
+// SUB_8047D: firmware/upper/80000-selftest.s:341
 pub(crate) fn SUB_8047D(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -847,7 +847,7 @@ pub(crate) fn SUB_8047D(r: &mut Run) {
     }
 }
 
-// SUB_8049F: firmware/upper/80000-selftest.s:357
+// SUB_8049F: firmware/upper/80000-selftest.s:358
 pub(crate) fn SUB_8049F(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -869,7 +869,7 @@ pub(crate) fn SUB_8049F(r: &mut Run) {
     }
 }
 
-// SUB_804B6: firmware/upper/80000-selftest.s:367
+// SUB_804B6: firmware/upper/80000-selftest.s:368
 pub(crate) fn SUB_804B6(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -886,7 +886,7 @@ pub(crate) fn SUB_804B6(r: &mut Run) {
     }
 }
 
-// SUB_804C0: firmware/upper/80000-selftest.s:372
+// SUB_804C0: firmware/upper/80000-selftest.s:373
 pub(crate) fn SUB_804C0(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -955,7 +955,7 @@ pub(crate) fn SUB_804C0(r: &mut Run) {
     }
 }
 
-// SUB_8054D: firmware/upper/80000-selftest.s:406
+// SUB_8054D: firmware/upper/80000-selftest.s:407
 pub(crate) fn SUB_8054D(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -1027,7 +1027,7 @@ pub(crate) fn SUB_8054D(r: &mut Run) {
     }
 }
 
-// SUB_805B7: firmware/upper/80000-selftest.s:448
+// SUB_805B7: firmware/upper/80000-selftest.s:449
 pub(crate) fn SUB_805B7(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -1100,7 +1100,7 @@ pub(crate) fn SUB_805B7(r: &mut Run) {
     }
 }
 
-// SUB_805FE: firmware/upper/80000-selftest.s:469
+// SUB_805FE: firmware/upper/80000-selftest.s:470
 pub(crate) fn SUB_805FE(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -1205,7 +1205,7 @@ pub(crate) fn SUB_805FE(r: &mut Run) {
     }
 }
 
-// SUB_8066D: firmware/upper/80000-selftest.s:498
+// SUB_8066D: firmware/upper/80000-selftest.s:499
 pub(crate) fn SUB_8066D(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -1284,7 +1284,7 @@ pub(crate) fn SUB_8066D(r: &mut Run) {
     }
 }
 
-// SUB_806DE: firmware/upper/80000-selftest.s:525
+// SUB_806DE: firmware/upper/80000-selftest.s:526
 pub(crate) fn SUB_806DE(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -1412,7 +1412,7 @@ pub(crate) fn SUB_806DE(r: &mut Run) {
     }
 }
 
-// SUB_807E9: firmware/upper/80000-selftest.s:613
+// SUB_807E9: firmware/upper/80000-selftest.s:614
 pub(crate) fn SUB_807E9(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -1451,7 +1451,7 @@ pub(crate) fn SUB_807E9(r: &mut Run) {
     }
 }
 
-// SUB_8081A: firmware/upper/80000-selftest.s:630
+// SUB_8081A: firmware/upper/80000-selftest.s:631
 pub(crate) fn SUB_8081A(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -1494,12 +1494,12 @@ pub(crate) fn SUB_8081A(r: &mut Run) {
             }
             // #80849:
             0x80849..=0x80850 => {
-                op!(r, at, 0x80849..0x80850, 9, r.cpu.d_load(0, 5, 0x80946)); // D0=(5) L_80946
+                op!(r, at, 0x80849..0x80850, 9, r.cpu.d_load(0, 5, 0x80946)); // D0=(5) KeyTestAll
                 branch!(r, at, 0x80855, 7, r.cpu.st_test(11, false, Some(0x8085C))); // ?ST=0 11 / GOYES L_8085C
             }
             // #80855:
             0x80855..=0x80855 => {
-                op!(r, at, 0x80855..0x8085C, 9, r.cpu.d_load(0, 5, 0x809AA)); // D0=(5) L_809A6+4
+                op!(r, at, 0x80855..0x8085C, 9, r.cpu.d_load(0, 5, 0x809AA)); // D0=(5) KeyTestDiag
                 at = 0x8085C;
             }
             // L_8085C:
@@ -1626,7 +1626,7 @@ pub(crate) fn SUB_8081A(r: &mut Run) {
     }
 }
 
-// SUB_80916: firmware/upper/80000-selftest.s:707
+// SUB_80916: firmware/upper/80000-selftest.s:708
 pub(crate) fn SUB_80916(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -1664,7 +1664,7 @@ pub(crate) fn SUB_80916(r: &mut Run) {
     }
 }
 
-// L_809BE: firmware/upper/80000-selftest.s:726
+// L_809BE: firmware/upper/80000-selftest.s:787
 pub(crate) fn L_809BE(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -1802,7 +1802,7 @@ pub(crate) fn L_809BE(r: &mut Run) {
     }
 }
 
-// SUB_80ABA: firmware/upper/80000-selftest.s:792
+// SUB_80ABA: firmware/upper/80000-selftest.s:853
 pub(crate) fn SUB_80ABA(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -2002,7 +2002,7 @@ pub(crate) fn SUB_80ABA(r: &mut Run) {
     }
 }
 
-// SUB_80BCB: firmware/upper/80000-selftest.s:883
+// SUB_80BCB: firmware/upper/80000-selftest.s:944
 pub(crate) fn SUB_80BCB(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -2030,7 +2030,7 @@ pub(crate) fn SUB_80BCB(r: &mut Run) {
     }
 }
 
-// SUB_80BE7: firmware/upper/80000-selftest.s:893
+// SUB_80BE7: firmware/upper/80000-selftest.s:954
 pub(crate) fn SUB_80BE7(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -2074,7 +2074,7 @@ pub(crate) fn SUB_80BE7(r: &mut Run) {
     }
 }
 
-// SUB_80C13: firmware/upper/80000-selftest.s:913
+// SUB_80C13: firmware/upper/80000-selftest.s:974
 pub(crate) fn SUB_80C13(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -2192,7 +2192,7 @@ pub(crate) fn SUB_80C13(r: &mut Run) {
     }
 }
 
-// SUB_80CC0: firmware/upper/80000-selftest.s:960
+// SUB_80CC0: firmware/upper/80000-selftest.s:1021
 pub(crate) fn SUB_80CC0(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -2232,7 +2232,7 @@ pub(crate) fn SUB_80CC0(r: &mut Run) {
     }
 }
 
-// SUB_80CE3: firmware/upper/80000-selftest.s:976
+// SUB_80CE3: firmware/upper/80000-selftest.s:1037
 pub(crate) fn SUB_80CE3(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -2254,7 +2254,7 @@ pub(crate) fn SUB_80CE3(r: &mut Run) {
     }
 }
 
-// SUB_80CF0: firmware/upper/80000-selftest.s:983
+// SUB_80CF0: firmware/upper/80000-selftest.s:1044
 pub(crate) fn SUB_80CF0(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -2276,7 +2276,7 @@ pub(crate) fn SUB_80CF0(r: &mut Run) {
     }
 }
 
-// SUB_80CFD: firmware/upper/80000-selftest.s:990
+// SUB_80CFD: firmware/upper/80000-selftest.s:1051
 pub(crate) fn SUB_80CFD(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -2296,7 +2296,7 @@ pub(crate) fn SUB_80CFD(r: &mut Run) {
     }
 }
 
-// SUB_80D13: firmware/upper/80000-selftest.s:998
+// SUB_80D13: firmware/upper/80000-selftest.s:1059
 pub(crate) fn SUB_80D13(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -2316,7 +2316,7 @@ pub(crate) fn SUB_80D13(r: &mut Run) {
     }
 }
 
-// SUB_80D29: firmware/upper/80000-selftest.s:1006
+// SUB_80D29: firmware/upper/80000-selftest.s:1067
 pub(crate) fn SUB_80D29(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -2340,7 +2340,7 @@ pub(crate) fn SUB_80D29(r: &mut Run) {
     }
 }
 
-// SUB_80D39: firmware/upper/80000-selftest.s:1012
+// SUB_80D39: firmware/upper/80000-selftest.s:1073
 pub(crate) fn SUB_80D39(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -2398,7 +2398,7 @@ pub(crate) fn SUB_80D39(r: &mut Run) {
     }
 }
 
-// SUB_80D8B: firmware/upper/80000-selftest.s:1035
+// SUB_80D8B: firmware/upper/80000-selftest.s:1096
 pub(crate) fn SUB_80D8B(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -2472,7 +2472,7 @@ pub(crate) fn SUB_80D8B(r: &mut Run) {
     }
 }
 
-// SUB_80DED: firmware/upper/80000-selftest.s:1062
+// SUB_80DED: firmware/upper/80000-selftest.s:1123
 pub(crate) fn SUB_80DED(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -2488,7 +2488,7 @@ pub(crate) fn SUB_80DED(r: &mut Run) {
     }
 }
 
-// SUB_80DF4: firmware/upper/80000-selftest.s:1066
+// SUB_80DF4: firmware/upper/80000-selftest.s:1127
 pub(crate) fn SUB_80DF4(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -2607,7 +2607,7 @@ pub(crate) fn SUB_80DF4(r: &mut Run) {
     }
 }
 
-// SUB_80EAE: firmware/upper/80000-selftest.s:1138
+// SUB_80EAE: firmware/upper/80000-selftest.s:1199
 pub(crate) fn SUB_80EAE(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -2623,7 +2623,7 @@ pub(crate) fn SUB_80EAE(r: &mut Run) {
     }
 }
 
-// SUB_80EB5: firmware/upper/80000-selftest.s:1142
+// SUB_80EB5: firmware/upper/80000-selftest.s:1203
 pub(crate) fn SUB_80EB5(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -2639,7 +2639,7 @@ pub(crate) fn SUB_80EB5(r: &mut Run) {
     }
 }
 
-// SUB_80EBC: firmware/upper/80000-selftest.s:1146
+// SUB_80EBC: firmware/upper/80000-selftest.s:1207
 pub(crate) fn SUB_80EBC(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -2684,7 +2684,7 @@ pub(crate) fn SUB_80EBC(r: &mut Run) {
     }
 }
 
-// SUB_80EF3: firmware/upper/80000-selftest.s:1163
+// SUB_80EF3: firmware/upper/80000-selftest.s:1224
 pub(crate) fn SUB_80EF3(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -2820,7 +2820,7 @@ pub(crate) fn SUB_80EF3(r: &mut Run) {
     }
 }
 
-// SUB_80FA6: firmware/upper/80000-selftest.s:1221
+// SUB_80FA6: firmware/upper/80000-selftest.s:1282
 pub(crate) fn SUB_80FA6(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -2954,7 +2954,7 @@ pub(crate) fn SUB_80FA6(r: &mut Run) {
     }
 }
 
-// SUB_81051: firmware/upper/80000-selftest.s:1277
+// SUB_81051: firmware/upper/80000-selftest.s:1338
 pub(crate) fn SUB_81051(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -2973,7 +2973,7 @@ pub(crate) fn SUB_81051(r: &mut Run) {
     }
 }
 
-// FlushAttn~jump: firmware/upper/80000-selftest.s:1284
+// FlushAttn~jump: firmware/upper/80000-selftest.s:1345
 pub(crate) fn FlushAttn_jump(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -2989,7 +2989,7 @@ pub(crate) fn FlushAttn_jump(r: &mut Run) {
     }
 }
 
-// OUTUART~jump: firmware/upper/80000-selftest.s:1288
+// OUTUART~jump: firmware/upper/80000-selftest.s:1349
 pub(crate) fn OUTUART_jump(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -3005,7 +3005,7 @@ pub(crate) fn OUTUART_jump(r: &mut Run) {
     }
 }
 
-// Flush~jump: firmware/upper/80000-selftest.s:1292
+// Flush~jump: firmware/upper/80000-selftest.s:1353
 pub(crate) fn Flush_jump(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -3021,7 +3021,7 @@ pub(crate) fn Flush_jump(r: &mut Run) {
     }
 }
 
-// POPUART~jump: firmware/upper/80000-selftest.s:1296
+// POPUART~jump: firmware/upper/80000-selftest.s:1357
 pub(crate) fn POPUART_jump(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -3097,7 +3097,7 @@ pub(crate) fn POPUART_jump(r: &mut Run) {
     }
 }
 
-// SUB_810E6: firmware/upper/80000-selftest.s:1327
+// SUB_810E6: firmware/upper/80000-selftest.s:1388
 pub(crate) fn SUB_810E6(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -3266,13 +3266,13 @@ pub(crate) fn SUB_810E6(r: &mut Run) {
     }
 }
 
-// SUB_8120A: firmware/upper/80000-selftest.s:1402
+// SUB_8120A: firmware/upper/80000-selftest.s:1463
 pub(crate) fn SUB_8120A(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
             0x8120A..=0x8120A => {
-                jump!(r, at, 9, r.cpu.pc = 0x011AC); // GOVLNG L_011AC
+                jump!(r, at, 9, r.cpu.pc = 0x011AC); // GOVLNG SUB_011AC
             }
             _ => {
                 r.cpu.pc = at;
@@ -3282,7 +3282,7 @@ pub(crate) fn SUB_8120A(r: &mut Run) {
     }
 }
 
-// SUB_81211: firmware/upper/80000-selftest.s:1406
+// SUB_81211: firmware/upper/80000-selftest.s:1467
 pub(crate) fn SUB_81211(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -3390,7 +3390,7 @@ pub(crate) fn SUB_81211(r: &mut Run) {
     }
 }
 
-// SUB_812AB: firmware/upper/80000-selftest.s:1460
+// SUB_812AB: firmware/upper/80000-selftest.s:1521
 pub(crate) fn SUB_812AB(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -3459,7 +3459,7 @@ pub(crate) fn SUB_812AB(r: &mut Run) {
     }
 }
 
-// SUB_812FA: firmware/upper/80000-selftest.s:1481
+// SUB_812FA: firmware/upper/80000-selftest.s:1542
 pub(crate) fn SUB_812FA(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -3528,7 +3528,7 @@ pub(crate) fn SUB_812FA(r: &mut Run) {
     }
 }
 
-// SUB_81349: firmware/upper/80000-selftest.s:1502
+// SUB_81349: firmware/upper/80000-selftest.s:1563
 pub(crate) fn SUB_81349(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -3569,7 +3569,7 @@ pub(crate) fn SUB_81349(r: &mut Run) {
     }
 }
 
-// SUB_8136B: firmware/upper/80000-selftest.s:1513
+// SUB_8136B: firmware/upper/80000-selftest.s:1574
 pub(crate) fn SUB_8136B(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -3586,7 +3586,7 @@ pub(crate) fn SUB_8136B(r: &mut Run) {
     }
 }
 
-// SUB_81374: firmware/upper/80000-selftest.s:1518
+// SUB_81374: firmware/upper/80000-selftest.s:1579
 pub(crate) fn SUB_81374(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -3644,7 +3644,7 @@ pub(crate) fn SUB_81374(r: &mut Run) {
     }
 }
 
-// SUB_813BE: firmware/upper/80000-selftest.s:1540
+// SUB_813BE: firmware/upper/80000-selftest.s:1601
 pub(crate) fn SUB_813BE(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -3665,7 +3665,7 @@ pub(crate) fn SUB_813BE(r: &mut Run) {
     }
 }
 
-// SUB_813CC: firmware/upper/80000-selftest.s:1546
+// SUB_813CC: firmware/upper/80000-selftest.s:1607
 pub(crate) fn SUB_813CC(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -3767,7 +3767,7 @@ pub(crate) fn SUB_813CC(r: &mut Run) {
     }
 }
 
-// SUB_8148B: firmware/upper/80000-selftest.s:1617
+// SUB_8148B: firmware/upper/80000-selftest.s:1678
 pub(crate) fn SUB_8148B(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -3816,7 +3816,7 @@ pub(crate) fn SUB_8148B(r: &mut Run) {
     }
 }
 
-// SUB_814C5: firmware/upper/80000-selftest.s:1637
+// SUB_814C5: firmware/upper/80000-selftest.s:1698
 pub(crate) fn SUB_814C5(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -3850,7 +3850,7 @@ pub(crate) fn SUB_814C5(r: &mut Run) {
     }
 }
 
-// SUB_814E8: firmware/upper/80000-selftest.s:1649
+// SUB_814E8: firmware/upper/80000-selftest.s:1710
 pub(crate) fn SUB_814E8(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -3884,7 +3884,7 @@ pub(crate) fn SUB_814E8(r: &mut Run) {
     }
 }
 
-// SUB_8150C: firmware/upper/80000-selftest.s:1665
+// SUB_8150C: firmware/upper/80000-selftest.s:1726
 pub(crate) fn SUB_8150C(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -3916,7 +3916,7 @@ pub(crate) fn SUB_8150C(r: &mut Run) {
     }
 }
 
-// SUB_81529: firmware/upper/80000-selftest.s:1675
+// SUB_81529: firmware/upper/80000-selftest.s:1736
 pub(crate) fn SUB_81529(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -3957,7 +3957,7 @@ pub(crate) fn SUB_81529(r: &mut Run) {
     }
 }
 
-// SUB_8155D: firmware/upper/80000-selftest.s:1698
+// SUB_8155D: firmware/upper/80000-selftest.s:1759
 pub(crate) fn SUB_8155D(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -4027,7 +4027,7 @@ pub(crate) fn SUB_8155D(r: &mut Run) {
     }
 }
 
-// SUB_815C6: firmware/upper/80000-selftest.s:1727
+// SUB_815C6: firmware/upper/80000-selftest.s:1788
 pub(crate) fn SUB_815C6(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -4045,7 +4045,7 @@ pub(crate) fn SUB_815C6(r: &mut Run) {
     }
 }
 
-// SUB_815D3: firmware/upper/80000-selftest.s:1733
+// SUB_815D3: firmware/upper/80000-selftest.s:1794
 pub(crate) fn SUB_815D3(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -4087,7 +4087,7 @@ pub(crate) fn SUB_815D3(r: &mut Run) {
     }
 }
 
-// SUB_815FE: firmware/upper/80000-selftest.s:1749
+// SUB_815FE: firmware/upper/80000-selftest.s:1810
 pub(crate) fn SUB_815FE(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -4149,7 +4149,7 @@ pub(crate) fn SUB_815FE(r: &mut Run) {
     }
 }
 
-// SUB_8165A: firmware/upper/80000-selftest.s:1777
+// SUB_8165A: firmware/upper/80000-selftest.s:1838
 pub(crate) fn SUB_8165A(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -4168,7 +4168,7 @@ pub(crate) fn SUB_8165A(r: &mut Run) {
     }
 }
 
-// SUB_81662: firmware/upper/80000-selftest.s:1783
+// SUB_81662: firmware/upper/80000-selftest.s:1844
 pub(crate) fn SUB_81662(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -4227,7 +4227,7 @@ pub(crate) fn SUB_81662(r: &mut Run) {
     }
 }
 
-// SUB_816AD: firmware/upper/80000-selftest.s:1814
+// SUB_816AD: firmware/upper/80000-selftest.s:1875
 pub(crate) fn SUB_816AD(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -4270,7 +4270,7 @@ pub(crate) fn SUB_816AD(r: &mut Run) {
     }
 }
 
-// SUB_816E5: firmware/upper/80000-selftest.s:1833
+// SUB_816E5: firmware/upper/80000-selftest.s:1894
 pub(crate) fn SUB_816E5(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -4326,7 +4326,7 @@ pub(crate) fn SUB_816E5(r: &mut Run) {
     }
 }
 
-// SUB_81736: firmware/upper/80000-selftest.s:1862
+// SUB_81736: firmware/upper/80000-selftest.s:1923
 pub(crate) fn SUB_81736(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -4377,7 +4377,7 @@ pub(crate) fn SUB_81736(r: &mut Run) {
     }
 }
 
-// SUB_81769: firmware/upper/80000-selftest.s:1880
+// SUB_81769: firmware/upper/80000-selftest.s:1941
 pub(crate) fn SUB_81769(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -4460,7 +4460,7 @@ pub(crate) fn SUB_81769(r: &mut Run) {
     }
 }
 
-// SUB_817E9: firmware/upper/80000-selftest.s:1923
+// SUB_817E9: firmware/upper/80000-selftest.s:1984
 pub(crate) fn SUB_817E9(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -4576,7 +4576,7 @@ pub(crate) fn code_81990(r: &mut Run) {
     }
 }
 
-// SUB_819E2: firmware/upper/80000-selftest.s:2048
+// SUB_819E2: firmware/upper/80000-selftest.s:2109
 pub(crate) fn SUB_819E2(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -4684,7 +4684,7 @@ pub(crate) fn SUB_819E2(r: &mut Run) {
     }
 }
 
-// SUB_81A7E: firmware/upper/80000-selftest.s:2102
+// SUB_81A7E: firmware/upper/80000-selftest.s:2163
 pub(crate) fn SUB_81A7E(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -4786,7 +4786,7 @@ pub(crate) fn SUB_81A7E(r: &mut Run) {
     }
 }
 
-// SUB_81B3D: firmware/upper/80000-selftest.s:2173
+// SUB_81B3D: firmware/upper/80000-selftest.s:2234
 pub(crate) fn SUB_81B3D(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -4811,7 +4811,7 @@ pub(crate) fn SUB_81B3D(r: &mut Run) {
     }
 }
 
-// SUB_81B6B: firmware/upper/80000-selftest.s:2186
+// SUB_81B6B: firmware/upper/80000-selftest.s:2247
 pub(crate) fn SUB_81B6B(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -4836,7 +4836,7 @@ pub(crate) fn SUB_81B6B(r: &mut Run) {
     }
 }
 
-// SUB_81B99: firmware/upper/80000-selftest.s:2199
+// SUB_81B99: firmware/upper/80000-selftest.s:2260
 pub(crate) fn SUB_81B99(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -4853,7 +4853,7 @@ pub(crate) fn SUB_81B99(r: &mut Run) {
     }
 }
 
-// SUB_81BA2: firmware/upper/80000-selftest.s:2204
+// SUB_81BA2: firmware/upper/80000-selftest.s:2265
 pub(crate) fn SUB_81BA2(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -4982,19 +4982,24 @@ pub(crate) fn SUB_81BA2(r: &mut Run) {
                 op!(r, at, 0x81CB1..0x81CB8, 9, r.cpu.load_const(R::C, 5, 0xF)); // LC(5) #0000F
                 jump!(r, at, 6, r.cpu.pc = 0x81DE7); // GOTO SUB_81DE7
             }
-            _ => {
-                r.cpu.pc = at;
-                return;
+            // L_81CBC:
+            0x81CBC..=0x81CBC => {
+                branch!(r, at, 0x81CC3, 9, r.cpu.call(0x01BFF)); // GOSBVL ClrScrMn
             }
-        }
-    }
-}
-
-// L_81CE2: firmware/upper/80000-selftest.s:2297
-pub(crate) fn L_81CE2(r: &mut Run) {
-    let mut at = r.cpu.pc;
-    loop {
-        match at {
+            // #81CC3:
+            0x81CC3..=0x81CCA => {
+                op!(r, at, 0x81CC3..0x81CCA, 9, r.cpu.load_const(R::C, 5, 0xD)); // LC(5) #0000D
+                branch!(r, at, 0x81CCE, 6, r.cpu.call(0x81DE7)); // GOSUB SUB_81DE7
+            }
+            // #81CCE:
+            0x81CCE..=0x81CE0 => {
+                op!(r, at, 0x81CCE..0x81CD5, 9, r.cpu.d_load(1, 5, 0x10B)); // D1=(5) ANNCTRL
+                io!(r, at, 0x81CD5..0x81CD8, 16, r.cpu.load(1, R::C, Field::B, r.hw)); // C=DAT1 B
+                op!(r, at, 0x81CD8..0x81CDD, 7, r.cpu.bit_set(R::C, 4, true)); // CBIT=1 4
+                io!(r, at, 0x81CDD..0x81CE0, 16, r.cpu.store(1, R::C, Field::B, r.hw)); // DAT1=C B
+                jump!(r, at, 9, r.cpu.rtn(RtnKind::Plain)); // RTN
+            }
+            // L_81CE2:
             0x81CE2..=0x81CE2 => {
                 branch!(r, at, 0x81CE6, 6, r.cpu.call(0x81E27)); // GOSUB SUB_81E27
             }
@@ -5081,7 +5086,7 @@ pub(crate) fn L_81CE2(r: &mut Run) {
     }
 }
 
-// SUB_81D6E: firmware/upper/80000-selftest.s:2333
+// SUB_81D6E: firmware/upper/80000-selftest.s:2400
 pub(crate) fn SUB_81D6E(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -5116,7 +5121,7 @@ pub(crate) fn SUB_81D6E(r: &mut Run) {
     }
 }
 
-// SUB_81DE7: firmware/upper/80000-selftest.s:2394
+// SUB_81DE7: firmware/upper/80000-selftest.s:2461
 pub(crate) fn SUB_81DE7(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -5141,7 +5146,7 @@ pub(crate) fn SUB_81DE7(r: &mut Run) {
     }
 }
 
-// SUB_81E00: firmware/upper/80000-selftest.s:2401
+// SUB_81E00: firmware/upper/80000-selftest.s:2468
 pub(crate) fn SUB_81E00(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -5166,7 +5171,7 @@ pub(crate) fn SUB_81E00(r: &mut Run) {
     }
 }
 
-// SUB_81E19: firmware/upper/80000-selftest.s:2408
+// SUB_81E19: firmware/upper/80000-selftest.s:2475
 pub(crate) fn SUB_81E19(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -5186,7 +5191,7 @@ pub(crate) fn SUB_81E19(r: &mut Run) {
     }
 }
 
-// SUB_81E27: firmware/upper/80000-selftest.s:2413
+// SUB_81E27: firmware/upper/80000-selftest.s:2480
 pub(crate) fn SUB_81E27(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -5219,7 +5224,7 @@ pub(crate) fn SUB_81E27(r: &mut Run) {
     }
 }
 
-// SUB_81E4C: firmware/upper/80000-selftest.s:2422
+// SUB_81E4C: firmware/upper/80000-selftest.s:2489
 pub(crate) fn SUB_81E4C(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -5285,6 +5290,23 @@ pub(crate) fn SUB_81E4C(r: &mut Run) {
             // #81EAA:
             0x81EAA..=0x81EAA => {
                 jump!(r, at, 9, r.cpu.pc = 0x010E5); // GOVLNG AllowIntr
+            }
+            // #81EB1:
+            0x81EB1..=0x81EB1 => {
+                branch!(r, at, 0x81EB8, 9, r.cpu.call(0x011AC)); // GOSBVL SUB_011AC
+            }
+            // #81EB8:
+            0x81EB8..=0x81EB8 => {
+                branch!(r, at, 0x81EBF, 9, r.cpu.call(0x010E5)); // GOSBVL AllowIntr
+            }
+            // #81EBF:
+            0x81EBF..=0x81EC1 => {
+                op!(r, at, 0x81EBF..0x81EC1, 4, r.cpu.pop_c()); // C=RSTK
+                branch!(r, at, 0x81EC8, 9, r.cpu.call(0x01BFF)); // GOSBVL ClrScrMn
+            }
+            // #81EC8:
+            0x81EC8..=0x81EC8 => {
+                jump!(r, at, 9, r.cpu.pc = 0x80A67); // GOVLNG L_80A67
             }
             _ => {
                 r.cpu.pc = at;
@@ -15577,14 +15599,13 @@ pub const ROUTINES: &[(u32, u32, Block, &str)] = &[
     (0x81B3D, 0x81B6A, SUB_81B3D, "SUB_81B3D"),
     (0x81B6B, 0x81B98, SUB_81B6B, "SUB_81B6B"),
     (0x81B99, 0x81BA1, SUB_81B99, "SUB_81B99"),
-    (0x81BA2, 0x81CBB, SUB_81BA2, "SUB_81BA2"),
-    (0x81CE2, 0x81D6D, L_81CE2, "L_81CE2"),
+    (0x81BA2, 0x81D6D, SUB_81BA2, "SUB_81BA2"),
     (0x81D6E, 0x81D92, SUB_81D6E, "SUB_81D6E"),
     (0x81DE7, 0x81DFF, SUB_81DE7, "SUB_81DE7"),
     (0x81E00, 0x81E18, SUB_81E00, "SUB_81E00"),
     (0x81E19, 0x81E26, SUB_81E19, "SUB_81E19"),
     (0x81E27, 0x81E4B, SUB_81E27, "SUB_81E27"),
-    (0x81E4C, 0x81EB0, SUB_81E4C, "SUB_81E4C"),
+    (0x81E4C, 0x81ECE, SUB_81E4C, "SUB_81E4C"),
     (0x85C25, 0x85C32, code_85C25, "code_85C25"),
     (0x85C60, 0x85CA8, code_85C60, "code_85C60"),
     (0x87071, 0x87912, code_87071, "code_87071"),

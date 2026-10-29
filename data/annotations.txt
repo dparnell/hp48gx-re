@@ -108,3 +108,6 @@
 67AE2		Probably: EquationWriter: #box -> vertical reference (field #08)
 67BE2		Probably: EquationWriter: #box #box' -> , set the next-sibling link (field #1E)
 67BFC		Probably: EquationWriter: #box #child -> , set the last-child link (field #27)
+00A89	KeyBitCodes	
+80946	KeyTestAll	
+809AA	KeyTestDiag	

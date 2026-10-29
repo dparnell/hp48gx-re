@@ -1,6 +1,6 @@
 * HP 48GX ROM revision R, #00000-#02001: Reset and interrupt entries, keyboard, timers, low-level system code
 * Addresses in the right-hand comments are those of the original ROM.
-* Most referenced: AllowIntr FLUSHKEYS DisableIntr D0->Sft1 D0->Row1 ClrScrMn TryToRM? GetTimChk RCKBp OnKeyDown? Flush CINRTN
+* Most referenced: AllowIntr FLUSHKEYS DisableIntr ClrScrMn D0->Sft1 D0->Row1 TryToRM? GetTimChk RCKBp OnKeyDown? Flush CINRTN
 
         ORG     #00000
 
@@ -890,20 +890,59 @@ L_00A82:
         ?C>=A   X                                * 00A82
         RTNYES                                   * 00A85
         RTNCC                                    * 00A87
-        C=0     A                                * 00A89
-        D0=A                                     * 00A8B
-        LC(16)  #001292A2B2C0D2E2                * 00A8E
-        D=D+D   A                                * 00AA0
-        P=      6                                * 00AA2
-        P=      5                                * 00AA4
-        P=      4                                * 00AA6
-        P=      7                                * 00AA8
-        RTNSXM                                   * 00AAA
-        NIBHEX  4221202F13108D1C1                * 00AAC  $..ò1.ØÁ
-        NIBHEX  B1A1918171615141211101F0E0C0B0A0 * 00ABD  ................
-        NIBHEX  90806050                         * 00ADD  ....
+
+* Keycode for each bit of BITMAP's key map (bit 0 ON, then OUT0-OUT8 by IN line); read at #00880 from the table plus 2 (bit 0 is dropped)
+KeyBitCodes:
+        CON(2)  #2D                              * 00A89  entry 0
+        CON(2)  #31                              * 00A8B  entry 1
+        CON(2)  #30                              * 00A8D  entry 2
+        CON(2)  #2F                              * 00A8F  entry 3
+        CON(2)  #2E                              * 00A91  entry 4
+        CON(2)  #0D                              * 00A93  entry 5
+        CON(2)  #2C                              * 00A95  entry 6
+        CON(2)  #2B                              * 00A97  entry 7
+        CON(2)  #2A                              * 00A99  entry 8
+        CON(2)  #29                              * 00A9B  entry 9
+        CON(2)  #01                              * 00A9D  entry 10
+        CON(2)  #C0                              * 00A9F  entry 11
+        CON(2)  #27                              * 00AA1  entry 12
+        CON(2)  #26                              * 00AA3  entry 13
+        CON(2)  #25                              * 00AA5  entry 14
+        CON(2)  #24                              * 00AA7  entry 15
+        CON(2)  #07                              * 00AA9  entry 16
+        CON(2)  #40                              * 00AAB  entry 17
+        CON(2)  #22                              * 00AAD  entry 18
+        CON(2)  #21                              * 00AAF  entry 19
+        CON(2)  #20                              * 00AB1  entry 20
+        CON(2)  #1F                              * 00AB3  entry 21
+        CON(2)  #13                              * 00AB5  entry 22
+        CON(2)  #80                              * 00AB7  entry 23
+        CON(2)  #1D                              * 00AB9  entry 24
+        CON(2)  #1C                              * 00ABB  entry 25
+        CON(2)  #1B                              * 00ABD  entry 26
+        CON(2)  #1A                              * 00ABF  entry 27
+        CON(2)  #19                              * 00AC1  entry 28
+        CON(2)  #18                              * 00AC3  entry 29
+        CON(2)  #17                              * 00AC5  entry 30
+        CON(2)  #16                              * 00AC7  entry 31
+        CON(2)  #15                              * 00AC9  entry 32
+        CON(2)  #14                              * 00ACB  entry 33
+        CON(2)  #12                              * 00ACD  entry 34
+        CON(2)  #11                              * 00ACF  entry 35
+        CON(2)  #10                              * 00AD1  entry 36
+        CON(2)  #0F                              * 00AD3  entry 37
+        CON(2)  #0E                              * 00AD5  entry 38
+        CON(2)  #0C                              * 00AD7  entry 39
+        CON(2)  #0B                              * 00AD9  entry 40
+        CON(2)  #0A                              * 00ADB  entry 41
+        CON(2)  #09                              * 00ADD  entry 42
+        CON(2)  #08                              * 00ADF  entry 43
+        CON(2)  #06                              * 00AE1  entry 44
+        CON(2)  #05                              * 00AE3  entry 45
 L_00AE5:
-        NIBHEX  403020                           * 00AE5  ...
+        CON(2)  #04                              * 00AE5  entry 46
+        CON(2)  #03                              * 00AE7  entry 47
+        CON(2)  #02                              * 00AE9  entry 48
 
 * Key matrix by keycode 1-49: OUT mask and IN mask (read at #00CD3); key 45 (ON) is 0
         CON(3)  #002                             * 00AEB  entry 0
@@ -1001,15 +1040,62 @@ L_00AE5:
         CON(3)  #001                             * 00BFF  entry 46
 L_00C02:
         CON(3)  #004                             * 00C02
-L_00C05:
         CON(3)  #001                             * 00C05  entry 47
         CON(3)  #002                             * 00C08
         CON(3)  #001                             * 00C0B  entry 48
         CON(3)  #001                             * 00C0E
-        NIBHEX  102                              * 00C11  .
-        NIBHEX  030405060708090A0B0C0D0E0F001112 * 00C14  0@P`p∡↑.°ÀÐàð..!
-        NIBHEX  131415161718191A1B1C1D108F102122 * 00C34  1AQaqāγ¡±ÁÑ.ø.."
-        NIBHEX  204425262720C92A2B2C2E2F20313000 * 00C54  .DRbr.Π¢²Ââò....
+
+* Keycodes in keyboard order without ON, shifts as #80/#40/#C0: nothing reads it (a copy of the self-test's list)
+        CON(2)  #01                              * 00C11  entry 0
+        CON(2)  #02                              * 00C13  entry 1
+        CON(2)  #03                              * 00C15  entry 2
+        CON(2)  #04                              * 00C17  entry 3
+        CON(2)  #05                              * 00C19  entry 4
+        CON(2)  #06                              * 00C1B  entry 5
+        CON(2)  #07                              * 00C1D  entry 6
+        CON(2)  #08                              * 00C1F  entry 7
+        CON(2)  #09                              * 00C21  entry 8
+        CON(2)  #0A                              * 00C23  entry 9
+        CON(2)  #0B                              * 00C25  entry 10
+        CON(2)  #0C                              * 00C27  entry 11
+        CON(2)  #0D                              * 00C29  entry 12
+        CON(2)  #0E                              * 00C2B  entry 13
+        CON(2)  #0F                              * 00C2D  entry 14
+        CON(2)  #10                              * 00C2F  entry 15
+        CON(2)  #11                              * 00C31  entry 16
+        CON(2)  #12                              * 00C33  entry 17
+        CON(2)  #13                              * 00C35  entry 18
+        CON(2)  #14                              * 00C37  entry 19
+        CON(2)  #15                              * 00C39  entry 20
+        CON(2)  #16                              * 00C3B  entry 21
+        CON(2)  #17                              * 00C3D  entry 22
+        CON(2)  #18                              * 00C3F  entry 23
+        CON(2)  #19                              * 00C41  entry 24
+        CON(2)  #1A                              * 00C43  entry 25
+        CON(2)  #1B                              * 00C45  entry 26
+        CON(2)  #1C                              * 00C47  entry 27
+        CON(2)  #1D                              * 00C49  entry 28
+        CON(2)  #80                              * 00C4B  entry 29
+        CON(2)  #1F                              * 00C4D  entry 30
+        CON(2)  #20                              * 00C4F  entry 31
+        CON(2)  #21                              * 00C51  entry 32
+        CON(2)  #22                              * 00C53  entry 33
+        CON(2)  #40                              * 00C55  entry 34
+        CON(2)  #24                              * 00C57  entry 35
+        CON(2)  #25                              * 00C59  entry 36
+        CON(2)  #26                              * 00C5B  entry 37
+        CON(2)  #27                              * 00C5D  entry 38
+        CON(2)  #C0                              * 00C5F  entry 39
+        CON(2)  #29                              * 00C61  entry 40
+        CON(2)  #2A                              * 00C63  entry 41
+        CON(2)  #2B                              * 00C65  entry 42
+        CON(2)  #2C                              * 00C67  entry 43
+        CON(2)  #2E                              * 00C69  entry 44
+        CON(2)  #2F                              * 00C6B  entry 45
+        CON(2)  #30                              * 00C6D  entry 46
+        CON(2)  #31                              * 00C6F  entry 47
+        CON(2)  0                                * 00C71  end of table
+        NIBHEX  0                                * 00C73
 
 * Carry if true
 * refs (6): 00227 0441D 30F42 328D9 D448A D4518
@@ -1397,7 +1483,7 @@ L_010CE:
         GOTO    L_01081                          * 010E1
 
 * Allow interrupts.
-* refs (33): 01199 01300 0173E 01E6E 02165 04557 ...
+* refs (34): 01199 01300 0173E 01E6E 02165 04557 ...
 AllowIntr:
         ST=1    15                               * 010E5
         INTON                                    * 010E8
@@ -1480,10 +1566,12 @@ L_0117D:
 
 * refs (2): 0116B 01176
 SUB_0119D:
-        GOSUB   L_011AC                          * 0119D
+        GOSUB   SUB_011AC                        * 0119D
         GOSUB   SUB_011CA                        * 011A1
         GOVLNG  SUB_01929                        * 011A5
-L_011AC:
+
+* refs (3): 0119D 8120A 81EB1
+SUB_011AC:
         ST=0    15                               * 011AC
         RESET                                    * 011AF
         MP=0                                     * 011B2
@@ -2371,7 +2459,7 @@ SUB_01BEB:
         DAT0=C  B                                * 01BFA
         RTN                                      * 01BFD
 
-* refs (8): 019CD 01FB0 02395 80005 8020E 8040D ...
+* refs (10): 019CD 01FB0 02395 80005 8020E 8040D ...
 ClrScrMn:
         P=      0                                * 01BFF
         SETHEX                                   * 01C01

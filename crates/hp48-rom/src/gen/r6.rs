@@ -13575,7 +13575,7 @@ pub(crate) fn OBJ_6CC32(r: &mut Run) {
 }
 
 // -> #0 #0 #0, collecting garbage if memory is short
-// Push3Zeros: firmware/lower/6C186-misc-66000.s:661
+// Push3Zeros: firmware/lower/6C186-misc-66000.s:663
 pub(crate) fn Push3Zeros(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -13614,7 +13614,7 @@ pub(crate) fn Push3Zeros(r: &mut Run) {
     }
 }
 
-// SUB_6DDA6: firmware/lower/6C186-misc-66000.s:678
+// SUB_6DDA6: firmware/lower/6C186-misc-66000.s:680
 pub(crate) fn SUB_6DDA6(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -13631,7 +13631,7 @@ pub(crate) fn SUB_6DDA6(r: &mut Run) {
     }
 }
 
-// SUB_6DDAB: firmware/lower/6C186-misc-66000.s:683
+// SUB_6DDAB: firmware/lower/6C186-misc-66000.s:685
 pub(crate) fn SUB_6DDAB(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -13669,7 +13669,7 @@ pub(crate) fn SUB_6DDAB(r: &mut Run) {
     }
 }
 
-// OBJ_6DDD3: firmware/lower/6C186-misc-66000.s:696
+// OBJ_6DDD3: firmware/lower/6C186-misc-66000.s:698
 pub(crate) fn OBJ_6DDD3(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -13772,7 +13772,7 @@ pub(crate) fn OBJ_6DDD3(r: &mut Run) {
     }
 }
 
-// SUB_6DE70: firmware/lower/6C186-misc-66000.s:746
+// SUB_6DE70: firmware/lower/6C186-misc-66000.s:748
 pub(crate) fn SUB_6DE70(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -13790,7 +13790,7 @@ pub(crate) fn SUB_6DE70(r: &mut Run) {
     }
 }
 
-// SUB_6DE76: firmware/lower/6C186-misc-66000.s:751
+// SUB_6DE76: firmware/lower/6C186-misc-66000.s:753
 pub(crate) fn SUB_6DE76(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -13811,7 +13811,7 @@ pub(crate) fn SUB_6DE76(r: &mut Run) {
     }
 }
 
-// OBJ_6DF1D: firmware/lower/6C186-misc-66000.s:776
+// OBJ_6DF1D: firmware/lower/6C186-misc-66000.s:788
 pub(crate) fn OBJ_6DF1D(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -13904,7 +13904,7 @@ pub(crate) fn OBJ_6DF1D(r: &mut Run) {
     }
 }
 
-// SUB_6DFC9: firmware/lower/6C186-misc-66000.s:827
+// SUB_6DFC9: firmware/lower/6C186-misc-66000.s:839
 pub(crate) fn SUB_6DFC9(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -13928,7 +13928,7 @@ pub(crate) fn SUB_6DFC9(r: &mut Run) {
     }
 }
 
-// OBJ_6DFDE: firmware/lower/6C186-misc-66000.s:837
+// OBJ_6DFDE: firmware/lower/6C186-misc-66000.s:849
 pub(crate) fn OBJ_6DFDE(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -13962,7 +13962,7 @@ pub(crate) fn OBJ_6DFDE(r: &mut Run) {
     }
 }
 
-// OBJ_6DFFD: firmware/lower/6C186-misc-66000.s:851
+// OBJ_6DFFD: firmware/lower/6C186-misc-66000.s:863
 pub(crate) fn OBJ_6DFFD(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -13980,7 +13980,7 @@ pub(crate) fn OBJ_6DFFD(r: &mut Run) {
     }
 }
 
-// OBJ_6E00B: firmware/lower/6C186-misc-66000.s:858
+// OBJ_6E00B: firmware/lower/6C186-misc-66000.s:870
 pub(crate) fn OBJ_6E00B(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -14011,7 +14011,7 @@ pub(crate) fn OBJ_6E00B(r: &mut Run) {
     }
 }
 
-// OBJ_6E026: firmware/lower/6C186-misc-66000.s:870
+// OBJ_6E026: firmware/lower/6C186-misc-66000.s:882
 pub(crate) fn OBJ_6E026(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -14043,7 +14043,7 @@ pub(crate) fn OBJ_6E026(r: &mut Run) {
 }
 
 // -> #h: EquationWriter character height for the size level in AppCount: 10, 8 or 6
-// EqwFontHeight: firmware/lower/6C186-misc-66000.s:887
+// EqwFontHeight: firmware/lower/6C186-misc-66000.s:899
 pub(crate) fn EqwFontHeight(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -14089,7 +14089,7 @@ pub(crate) fn EqwFontHeight(r: &mut Run) {
     }
 }
 
-// SUB_6E08F: firmware/lower/6C186-misc-66000.s:907
+// SUB_6E08F: firmware/lower/6C186-misc-66000.s:919
 pub(crate) fn SUB_6E08F(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -14110,7 +14110,7 @@ pub(crate) fn SUB_6E08F(r: &mut Run) {
 }
 
 // -> #w: EquationWriter character width for the size level in AppCount: 6, 6 or 4
-// EqwFontWidth: firmware/lower/6C186-misc-66000.s:916
+// EqwFontWidth: firmware/lower/6C186-misc-66000.s:928
 pub(crate) fn EqwFontWidth(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -14141,7 +14141,7 @@ pub(crate) fn EqwFontWidth(r: &mut Run) {
     }
 }
 
-// OBJ_6E0C0: firmware/lower/6C186-misc-66000.s:928
+// OBJ_6E0C0: firmware/lower/6C186-misc-66000.s:940
 pub(crate) fn OBJ_6E0C0(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -14166,7 +14166,7 @@ pub(crate) fn OBJ_6E0C0(r: &mut Run) {
     }
 }
 
-// OBJ_6E0D2: firmware/lower/6C186-misc-66000.s:936
+// OBJ_6E0D2: firmware/lower/6C186-misc-66000.s:948
 pub(crate) fn OBJ_6E0D2(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -14222,7 +14222,7 @@ pub(crate) fn code_6E0E9(r: &mut Run) {
     }
 }
 
-// OBJ_6F0B8: firmware/lower/6C186-misc-66000.s:1224
+// OBJ_6F0B8: firmware/lower/6C186-misc-66000.s:1236
 pub(crate) fn OBJ_6F0B8(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {

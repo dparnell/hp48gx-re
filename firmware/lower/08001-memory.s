@@ -1766,10 +1766,20 @@ L_095C8:
         A=DAT0  A                                * 09643
         D0=D0+  5                                * 09646
         PC=(A)                                   * 09649
+
+* HomeInBkp(nm): the start of a backup object, copied with MOVEDOWN (22 nibbles; the length at +7 is filled in later, then a CRC); the first 7 nibbles are not yet understood
 L_0964D:
-        NIBHEX  A0000000000026B20000004040       * 0964D  ......b+.....
+        CON(5)  #0000A                           * 0964D  entry 0
+        CON(5)  #00000                           * 09652
+        CON(2)  #00                              * 09657
+        CON(5)  DOBAK                            * 09659
+        CON(5)  #00000                           * 0965E
+        NIBHEX  4040                             * 09663  ..
+
+* HomeInBkp(nm): a directory with no libraries (DORRP, #7FF), copied after the name
 L_09667:
-        NIBHEX  69A20FF7                         * 09667  λ*ð.
+        CON(5)  DORRP                            * 09667  entry 0
+        CON(3)  #7FF                             * 0966C
 
 * refs (2): 09515 096A5
 SUB_0966F:

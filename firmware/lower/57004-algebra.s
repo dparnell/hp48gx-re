@@ -321,28 +321,27 @@ SYMISOL~1~3:
 * refs (1): 572C0
 SYMISOL~1:
         :: ' SYMISOL~1~1 TOTEMPOB ' SYMISOL~1~2 TOTEMPOB SYMISOL~1~3 BIND ; * 578E8
-
-* refs (1): 578F2
 SYMISOL~1~1:
-        CODE                                     * 5791A  20 nibbles
-          GOSBVL  SUB_57956                      * 57924  inline data follows
+        CON(5)  DOCODE                           * 5791A  address
+        NIBHEX  910008F65                        * 5791F  ..∡o
+        NIBHEX  975                              * 57928  y
 
+* ISOL's fresh-name template: ID "n0" and a spare byte for a second digit (SUB_57956 counts it up: n1, n2, ...)
 n0:
-          NIBHEX  84E2020E60303                  * 5792B  H. à..
-        ENDCODE                                  * 57938
-
-* refs (1): 57901
+        CON(5)  DOIDNT                           * 5792B  entry 0
+        CON(2)  #02                              * 57930
+        NIBASC  "n00"                            * 57932
 SYMISOL~1~2:
-        CODE                                     * 57938  20 nibbles
-          GOSBVL  SUB_57956                      * 57942  inline data follows
+        CON(5)  DOCODE                           * 57938  address
+        NIBHEX  910008F65                        * 5793D  ..∡o
+        NIBHEX  975                              * 57946  y
 
+* ISOL's fresh-name template: ID "s0" and a spare byte for a second digit
 s0:
-          NIBHEX  84E2020370303                  * 57949  H. 0..
-        ENDCODE                                  * 57956
+        CON(5)  DOIDNT                           * 57949  entry 0
+        CON(2)  #02                              * 5794E
+        NIBASC  "s00"                            * 57950
         ASSEMBLE
-
-* refs (2): 57924 57942
-SUB_57956:
         C=RSTK                                   * 57956
         CD1EX                                    * 57958
         RSTK=C                                   * 5795B

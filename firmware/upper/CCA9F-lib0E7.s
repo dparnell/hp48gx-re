@@ -373,13 +373,13 @@ ROMP_0E7_038:
 * ROMPTR 0E7 039
 * refs (1): CCAAB
 ROMP_0E7_039:
-              PCGROB "images/CDE97-packed.png"   * CDE97  16 x 63, packed
+              PCGROB  "images/CDE97-packed.png"  * CDE97  16 x 63, packed
               ROMPTR 0E3 063 XYGROBDISP # 78 BINT1 * CDF81  ~PCunpack
 
 * ROMPTR 0E7 03A
 * refs (1): CCAAB
 ROMP_0E7_03A:
-              PCGROB "images/CDFA0-packed.png"   * CDFA0  16 x 63, packed
+              PCGROB  "images/CDFA0-packed.png"  * CDFA0  16 x 63, packed
               ROMPTR 0E3 063 XYGROBDISP TURNMENUOFF BINT10 ONE_DO BINT9 * CE093  ~PCunpack
               INDEX@ BINT1 #- BINT7 #* BINT7 #+ # 78 OVER LINEON LOOP BINT18 * CE0B7
               ONE_DO INDEX@ #1- BINT7 #* BINT9 #+ BINT7 OVER BINT63 LINEON * CE0F8
