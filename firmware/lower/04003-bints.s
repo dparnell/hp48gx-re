@@ -229,7 +229,7 @@ off!:
 DEEPSLEEP:
         CON(5)  (*)+5                            * 041ED  primitive code object
         ASSEMBLE
-        GOSUB   SUB_04691                        * 041F2
+        GOSUB   SAVPTR~jump_04691                * 041F2
         ST=0    15                               * 041F6
         GOSBVL  SUB_00672                        * 041F9
         GOSUBL  SUB_049B8                        * 04200
@@ -505,7 +505,7 @@ L_04508:
 * refs (1): 386DD
 AlertStatus:
         CON(5)  (*)+5                            * 04544  primitive code object
-        GOSUB   SUB_04691                        * 04549
+        GOSUB   SAVPTR~jump_04691                * 04549
         ST=0    15                               * 0454D
         GOSBVL  SUB_00672                        * 04550
         GOSBVL  AllowIntr                        * 04557
@@ -521,7 +521,7 @@ Alert$:
         CON(5)  (*)+5                            * 04575  primitive code object
         GOSBVL  POP#                             * 0457A
         R1=A                                     * 04581
-        GOSUB   SUB_04691                        * 04584
+        GOSUB   SAVPTR~jump_04691                * 04584
         C=0     A                                * 04588
         LC(2)   #16                              * 0458A
         GOSBVL  MAKE$                            * 0458E
@@ -616,7 +616,7 @@ SUB_04684:
         RTN                                      * 0468F
 
 * refs (4): 041F2 04549 04584 04763
-SUB_04691:
+SAVPTR~jump_04691:
         GOVLNG  SAVPTR                           * 04691
 L_04698:
         P=      0                                * 04698
@@ -683,7 +683,7 @@ L_0474A:
         C=DAT1  B                                * 0475A
         D1=A                                     * 0475D
         R0=C                                     * 04760
-        GOSUB   SUB_04691                        * 04763
+        GOSUB   SAVPTR~jump_04691                * 04763
         GOSUBL  PUSH#                            * 04767
         GOVLNG  PushTLoop                        * 0476D
 L_04774:

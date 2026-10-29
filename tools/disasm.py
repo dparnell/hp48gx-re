@@ -228,7 +228,8 @@ class Generator:
 
     def derive_names(self):
         """Names for objects and routines with no known name, from where they
-        are used: `xSUB~grob,list,list` for the case of a dispatch table
+        are used: `GETAB1~jump` for a veneer (one jump to GETAB1),
+        `xSUB~grob,list,list` for the case of a dispatch table
         (the command and the argument types), and `ROMPOLL~1` for the first
         helper (by address) only ROMPOLL uses. Repeated, so helpers of named
         helpers get names too. These are our names, not HP's or the entry
@@ -280,10 +281,20 @@ class Generator:
             return a in self.starts_set and not self.symbol_name(a) and a not in self.messages
 
         self.starts_set = {ln.pc for ln in self.lines if ln.size}
+        # Veneers: subroutines that are one long jump to a named routine
+        # (a library part's way to reach lower ROM) are named after it.
+        veneers = {a: i.target for a, i in self.insns.items()
+                   if self.s["labels"].get(a) == "sub" and i.target is not None
+                   and i.text.split()[0] in ("GOVLNG", "GOLONG", "GOTO")}
         count = defaultdict(int)
         changed = True
         while changed:
             changed = False
+            for a, t in sorted(veneers.items()):
+                target = self.symbol_name(t) or self.derived.get(t)
+                if a not in self.derived and wanted(a) and target:
+                    self.derived[a] = "%s~jump" % target
+                    changed = True
             for a in sorted(uses):
                 if a in self.derived or not wanted(a):
                     continue

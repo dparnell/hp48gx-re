@@ -225,7 +225,7 @@ L_CB097:
           D0=D0+  16                             * CB097
           D0=D0+  16                             * CB09A
           D0=D0+  11                             * CB09D
-          GOSUB   SUB_CB3FD                      * CB0A0
+          GOSUB   PUTAB0~jump_CB3FD              * CB0A0
           SETHEX                                 * CB0A4
           D0=D0-  16                             * CB0A6
           D0=D0-  6                              * CB0A9
@@ -269,9 +269,9 @@ L_CB0E1:
           C=RSTK                                 * CB11B
           D0=C                                   * CB11D
           A=-A-1  S                              * CB120
-          GOSUB   SUB_CB3FD                      * CB123
+          GOSUB   PUTAB0~jump_CB3FD              * CB123
           GOSBVL  RCAB0                          * CB127
-          GOSUB   SUB_CB3FD                      * CB12E
+          GOSUB   PUTAB0~jump_CB3FD              * CB12E
           SETHEX                                 * CB132
           GOSUB   SUB_CB3D4                      * CB134
           C=0     A                              * CB138
@@ -291,12 +291,12 @@ L_CB13A:
           C=C+D   A                              * CB161
           D1=C                                   * CB163
           SETDEC                                 * CB166
-          GOSUB   SUB_CB40A                      * CB168
+          GOSUB   GETAB1~jump_CB40A              * CB168
           GOSUB   SUB_CB3E5                      * CB16C
           D0=D0+  16                             * CB170
           GOSUB   SUB_CB42E                      * CB173
           GOSBVL  STAB0                          * CB177
-          GOSUB   SUB_CB40A                      * CB17E
+          GOSUB   GETAB1~jump_CB40A              * CB17E
           GOSUB   SUB_CB3DA                      * CB182
           GOSUB   SUB_CB42E                      * CB186
           A=-A-1  S                              * CB18A
@@ -306,7 +306,7 @@ L_CB13A:
           GOSUB   SUB_CB42E                      * CB19C
           GOSBVL  STAB0                          * CB1A0
           GOSUB   SUB_CB3C9                      * CB1A7
-          GOSUB   SUB_CB40A                      * CB1AB
+          GOSUB   GETAB1~jump_CB40A              * CB1AB
           GOSUB   SUB_CB3DA                      * CB1AF
           GOSUB   SUB_CB42E                      * CB1B3
           GOSUB   SUB_CB411                      * CB1B7
@@ -319,13 +319,13 @@ L_CB13A:
           D0=D0+  16                             * CB1D1
           D0=D0+  5                              * CB1D4
           GOSUB   SUB_CB439                      * CB1D7
-          GOSUB   SUB_CB3F0                      * CB1DB
+          GOSUB   PutAB%1~jump_CB3F0             * CB1DB
           GOSBVL  RCAB2                          * CB1DF
           A=-A-1  S                              * CB1E6
           GOSUB   SUB_CB3DA                      * CB1E9
           GOSUB   SUB_CB439                      * CB1ED
           GOSUB   SUB_CB3C9                      * CB1F1
-          GOSUB   SUB_CB3F0                      * CB1F5
+          GOSUB   PutAB%1~jump_CB3F0             * CB1F5
           GOSBVL  RCAB2                          * CB1F9
           D0=D0-  16                             * CB200
           D0=D0-  5                              * CB203
@@ -536,7 +536,7 @@ SUB_CB3E5:
           RTN                                    * CB3EE
 
 * refs (2): CB1DB CB1F5
-SUB_CB3F0:
+PutAB%1~jump_CB3F0:
           GOVLNG  PutAB%1                        * CB3F0
 
 * refs (2): CB20A CB219
@@ -545,7 +545,7 @@ SUB_CB3F7:
           D0=D0-  5                              * CB3FA
 
 * refs (3): CB0A0 CB123 CB12E
-SUB_CB3FD:
+PUTAB0~jump_CB3FD:
           GOVLNG  PUTAB0                         * CB3FD
 
 * refs (1): CB198
@@ -554,7 +554,7 @@ SUB_CB404:
           D1=D1-  5                              * CB407
 
 * refs (3): CB168 CB17E CB1AB
-SUB_CB40A:
+GETAB1~jump_CB40A:
           GOVLNG  GETAB1                         * CB40A
 
 * refs (2): CB18D CB1B7
@@ -614,7 +614,7 @@ PCOV~1:
 ROMP_0C4_009:
         :: DUP ARSIZE RESOROMP ROMPTR 0C4 00B RESOROMP ROMPTR 0C4 00A 3PICK * CB579
           3NULLLAM{} BIND #1+ DUP BINT1 {}N 3PICK TYPERARRY? ITE %%0 ((0,0)) * CB5AD
-          MAKEARRY %%1 3PICK OBJ_37361 3UNROLL ONE_DO INDEX@ PULLLONGEL * CB5E4
+          MAKEARRY %%1 3PICK PUT%%EL 3UNROLL ONE_DO INDEX@ PULLLONGEL * CB5E4
           :: OBJ_3798C case 2GETLAM              * CB60C
             INDEX@ 1GETLAM #=case 2GETLAM        * CB620
             SWAP INDEX@ #1+ PULLLONGEL C%%CONJ ROT DUPUNROT EQUAL ITE * CB634
@@ -626,23 +626,23 @@ ROMP_0C4_009:
 * refs (1): CADC4
 ROMP_0C4_00A:
         :: B%NEG %%0 4ROLL ISTOP@ DUP INDEX@ #- DO SWAP 3PICK L%* SWAP * CB694
-          INDEX@ #1+ OBJ_372EF DUPUNROT 4ROLL L%+ INDEX@ OBJ_37361 * CB6D5
-          NextInArray 3UNROLL L%* ISTOP@ OBJ_37361 SWAP ; * CB6FD
+          INDEX@ #1+ PULL%%EL DUPUNROT 4ROLL L%+ INDEX@ PUT%%EL NextInArray * CB6D5
+          3UNROLL L%* ISTOP@ PUT%%EL SWAP ;      * CB702
 
 * ROMPTR 0C4 00B
 * refs (1): CADC4
 ROMP_0C4_00B:
         :: C%%>%% OVER %%SQR SWAP DUP %%+ ((0,0)) ((0,0)) 6ROLL 1GETLAM DUP * CB720
-          INDEX@ #- DO INDEX@ #2+ OBJ_372EF SWAP 4ROLL 6PICK C%%C*R 4PICK * CB75C
-          6PICK C%%C*R C%%C-C 3PICK C%%C+C INDEX@ OBJ_37361 NextInArray ROT * CB793
-          5PICK C%%C*R 3PICK 5ROLL C%%C*R C%%C-C 1GETLAM OBJ_37361 3UNROLL * CB7C0
-          C%%R*C 1GETLAM #1+ OBJ_37361 SWAP INDEX@ #1+ INDEXSTO ; * CB7ED
+          INDEX@ #- DO INDEX@ #2+ PULL%%EL SWAP 4ROLL 6PICK C%%C*R 4PICK * CB75C
+          6PICK C%%C*R C%%C-C 3PICK C%%C+C INDEX@ PUT%%EL NextInArray ROT * CB793
+          5PICK C%%C*R 3PICK 5ROLL C%%C*R C%%C-C 1GETLAM PUT%%EL 3UNROLL * CB7C0
+          C%%R*C 1GETLAM #1+ PUT%%EL SWAP INDEX@ #1+ INDEXSTO ; * CB7ED
 
 * ROMPTR 0C4 00C
 * refs (1): CADC4
 ROMP_0C4_00C:
         :: NOTNUM? SWAP CLRNUM %0_2A2B4 4ROLL ONE_DO_ARRY INDEX@ PULLEL * CB81A
-          ROTSWAP 4PICK ISTOP@ INDEX@ OBJ_36FC4 UNCOERCE x^ x* x+ SWAP * CB847
+          ROTSWAP 4PICK ISTOP@ INDEX@ #-#1- UNCOERCE x^ x* x+ SWAP * CB847
           NextInArray DROPSWAPDROP SWAP ?SKIP SETNUM * CB879
         ;                                        * CB892
 

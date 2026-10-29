@@ -1,6 +1,6 @@
 * HP 48GX ROM revision R, #70039-#73087: Library table, access pointers, bank switching
 * Addresses in the right-hand comments are those of the original ROM.
-* Most referenced: ?ACCPTR> RPTRACC rNTHELCOMP -0.26480225202E-23 {{}}_7303D RomLibTable Code_72EDD Code_72A11 BANKMTHDS (-0.26650264802E-740,-4.16487E
+* Most referenced: ?ROMPTR@ CallC ?ACCPTR> RPTRACC rNTHELCOMP -0.26480225202E-23 {{}}_7303D RomLibTable Code_72EDD Code_72A11 BANKMTHDS (-0.26650264802E-740,-4.16487E
 * Follows on from the previous file (at #70039 in the original ROM).
 
 * refs (1): 855DD
@@ -691,16 +691,16 @@ L_70A20:
         ST=1    10                               * 70A25
         D0=D0-  6                                * 70A28
         C=RSTK                                   * 70A2B
-        GOSUB   SUB_71215                        * 70A2D
+        GOSUB   CSLW5~jump                       * 70A2D
         CD0EX                                    * 70A31
-        GOSUB   SUB_71215                        * 70A34
+        GOSUB   CSLW5~jump                       * 70A34
         C=R1.F  A                                * 70A38
         R1=C                                     * 70A3E
         GOSBVL  GARBAGECOL                       * 70A41  inline data follows
         C=R1                                     * 70A48
-        GOSUB   SUB_7121C                        * 70A4B
+        GOSUB   CSRW5~jump                       * 70A4B
         A=C     A                                * 70A4F
-        GOSUB   SUB_7121C                        * 70A51
+        GOSUB   CSRW5~jump                       * 70A51
         RSTK=C                                   * 70A55
         GONC    L_709E9                          * 70A57
 L_70A5A:
@@ -898,16 +898,16 @@ L_70CF4:
         ST=1    10                               * 70CF9
         D0=D0-  6                                * 70CFC
         C=RSTK                                   * 70CFF
-        GOSUB   SUB_71215                        * 70D01
+        GOSUB   CSLW5~jump                       * 70D01
         CD0EX                                    * 70D05
-        GOSUB   SUB_71215                        * 70D08
+        GOSUB   CSLW5~jump                       * 70D08
         C=R1.F  A                                * 70D0C
         R1=C                                     * 70D12
         GOSBVL  GARBAGECOL                       * 70D15  inline data follows
         C=R1                                     * 70D1C
-        GOSUB   SUB_7121C                        * 70D1F
+        GOSUB   CSRW5~jump                       * 70D1F
         A=C     A                                * 70D23
-        GOSUB   SUB_7121C                        * 70D25
+        GOSUB   CSRW5~jump                       * 70D25
         RSTK=C                                   * 70D29
         GONC    L_70CC3                          * 70D2B
 L_70D2E:
@@ -1099,7 +1099,7 @@ L_70FA9:
         C=DAT0  A                                * 70FB9
         R4=C.F  A                                * 70FBC
         P=      5                                * 70FC2
-        GOSUB   SUB_71603                        * 70FC4
+        GOSUB   CallC                            * 70FC4
         C=0     A                                * 70FC8
         LC(1)   #B                               * 70FCA
         A=A+C   A                                * 70FCD
@@ -1108,7 +1108,7 @@ L_70FA9:
         AR0EX.F A                                * 70FD7
         P=      3                                * 70FDD
         C=R4.F  A                                * 70FDF
-        GOSUB   SUB_71603                        * 70FE5
+        GOSUB   CallC                            * 70FE5
         GOC     L_70FFF                          * 70FE9
         C=R0.F  A                                * 70FEC
         D0=C                                     * 70FF2
@@ -1160,14 +1160,14 @@ L_7106E:
         GOVLNG  L_07719                          * 71080
 L_71087:
         RSTK=C                                   * 71087
-        GOSUB   SUB_71603                        * 71089
+        GOSUB   CallC                            * 71089
         C=R3.F  A                                * 7108D
         D0=C                                     * 71093
         A=DAT0  13                               * 71096
         P=      1                                * 7109A
         C=RSTK                                   * 7109C
         RSTK=C                                   * 7109E
-        GOSUB   SUB_71603                        * 710A0
+        GOSUB   CallC                            * 710A0
         D0=(5)  IRAMBUFF                         * 710A4
         DAT0=A  13                               * 710AB
         D0=D0+  3                                * 710AF
@@ -1292,11 +1292,11 @@ L_7120B:
         NIBHEX  000                              * 71212  .
 
 * refs (5): 70A2D 70A34 70D01 70D08 71281
-SUB_71215:
+CSLW5~jump:
         GOVLNG  CSLW5                            * 71215
 
 * refs (4): 70A4B 70A51 70D1F 70D25
-SUB_7121C:
+CSRW5~jump:
         GOVLNG  CSRW5                            * 7121C
 L_71223:
         GOSUB   SUB_7122B                        * 71223
@@ -1319,7 +1319,7 @@ SUB_7122B:
 L_7124D:
         AD0EX                                    * 7124D
         RSTK=C                                   * 71250
-        GOSUB   SUB_71603                        * 71252
+        GOSUB   CallC                            * 71252
         D0=A                                     * 71256
         GOSUB   SUB_7127A                        * 71259
         D0=D0-  5                                * 7125D
@@ -1330,7 +1330,7 @@ L_7124D:
         C=RSTK                                   * 7126C
         RSTK=C                                   * 7126E
         P=      1                                * 71270
-        GOSUB   SUB_71603                        * 71272
+        GOSUB   CallC                            * 71272
         C=RSTK                                   * 71276
         RTN                                      * 71278
 
@@ -1338,7 +1338,7 @@ L_7124D:
 SUB_7127A:
         GOVLNG  SUB_0841E                        * 7127A
 L_71281:
-        GOSUB   SUB_71215                        * 71281
+        GOSUB   CSLW5~jump                       * 71281
         C=A     A                                * 71285
         A=C     W                                * 71287
         GOSBVL  GETPTR                           * 7128A
@@ -1363,7 +1363,7 @@ L_712C5:
         ?C=0    A                                * 712CD
         GOYES   L_71317                          * 712D0
         RSTK=C                                   * 712D2
-        GOSUB   SUB_71603                        * 712D4
+        GOSUB   CallC                            * 712D4
         D0=A                                     * 712D8
         B=A     A                                * 712DB
         GOSBVL  SUB_0841E                        * 712DD
@@ -1377,7 +1377,7 @@ L_712F1:
         C=RSTK                                   * 712FE
         C=0     S                                * 71300
         P=      2                                * 71303
-        GOSUB   SUB_71603                        * 71305
+        GOSUB   CallC                            * 71305
         D0=(5)  IRAMBUFF                         * 71309
 L_71310:
         GOVLNG  L_081B4                          * 71310
@@ -1417,7 +1417,7 @@ L_7135C:
         ?C=0    A                                * 71392
         GOYES   L_7139E                          * 71395
         ST=1    1                                * 71397
-        GOSUB   SUB_71603                        * 7139A
+        GOSUB   CallC                            * 7139A
 L_7139E:
         C=R0.F  A                                * 7139E
         C=C+A   A                                * 713A4
@@ -1437,7 +1437,7 @@ L_7139E:
         GOYES   L_713E7                          * 713DC
         ST=1    1                                * 713DE
         P=      1                                * 713E1
-        GOSUB   SUB_71603                        * 713E3
+        GOSUB   CallC                            * 713E3
 L_713E7:
         C=R2.F  A                                * 713E7
         C=C-A   A                                * 713ED
@@ -1506,7 +1506,7 @@ L_714A1:
         CSR     WP                               * 714AA
         CSR     WP                               * 714AD
         P=      4                                * 714B0
-        GOSUB   SUB_71603                        * 714B2
+        GOSUB   CallC                            * 714B2
         P=      9                                * 714B6
         C=C+1   A                                * 714B8
         GONC    L_714C1                          * 714BA
@@ -1620,7 +1620,8 @@ L_715D8:
         GOVLNG  GETPTRLOOP                       * 715FC
 
 * refs (31): 70FC4 70FE5 71089 710A0 71252 71272 ...
-SUB_71603:
+* Call the routine at C.A (RSTK=C, RTN): it returns to CallC's caller
+CallC:
         RSTK=C                                   * 71603
         RTN                                      * 71605
 L_71607:
@@ -1629,10 +1630,10 @@ L_71607:
         R0=A.F  A                                * 7160C
         RSTK=C                                   * 71612
         P=      5                                * 71614
-        GOSUB   SUB_71603                        * 71616
+        GOSUB   CallC                            * 71616
         C=RSTK                                   * 7161A
         P=      3                                * 7161C
-        GOSUB   SUB_71603                        * 7161E
+        GOSUB   CallC                            * 7161E
         GONC    L_7162C                          * 71622
         GOVLNG  GPMEMERR                         * 71625
 L_7162C:
@@ -1689,7 +1690,7 @@ L_716D3:
         GOYES   L_716FE                          * 716F3
         ST=1    4                                * 716F5
         C=A     A                                * 716F8
-        GOSUB   SUB_71603                        * 716FA
+        GOSUB   CallC                            * 716FA
 L_716FE:
         GOVLNG  L_0C50F                          * 716FE
 rGETATELN~1:
@@ -1734,7 +1735,7 @@ NumEntryLin(b)~1:
         R2=C.F  A                                * 71793
         ?C=0    A                                * 71799
         GOYES   L_717A8                          * 7179C
-        GOSUB   SUB_71603                        * 7179E
+        GOSUB   CallC                            * 7179E
         D0=A                                     * 717A2
 L_717A5:
         AD0EX                                    * 717A5
@@ -1786,7 +1787,7 @@ L_71818:
         D1=C                                     * 71828
         GOSBVL  SAVPTR                           * 7182B
         C=R3.F  A                                * 71832
-        GOSUB   SUB_71603                        * 71838
+        GOSUB   CallC                            * 71838
         GOVLNG  L_08E5B                          * 7183C
 L_71843:
         A=C     A                                * 71843
@@ -1797,7 +1798,7 @@ L_71843:
         P=      2                                * 7185B
         C=0     S                                * 7185D
         C=R3.F  A                                * 71860
-        GOSUB   SUB_71603                        * 71866
+        GOSUB   CallC                            * 71866
         GOSBVL  GETPTR                           * 7186A
         D1=(5)  #80104                           * 71871
         GOTO    L_71811                          * 71878
@@ -1861,12 +1862,12 @@ L_71917:
         C=RSTK                                   * 71946
         A=C     A                                * 71948
         C=R2.F  A                                * 7194A
-        GOSUB   SUB_71603                        * 71950
+        GOSUB   CallC                            * 71950
         P=      2                                * 71954
         C=0     S                                * 71956
         C=C+1   S                                * 71959
         C=R2.F  A                                * 7195C
-        GOSUB   SUB_71603                        * 71962
+        GOSUB   CallC                            * 71962
         D1=(5)  IRAMBUFF                         * 71966
         C=DAT1  A                                * 7196D
         D1=D1+  5                                * 71970
@@ -1897,7 +1898,7 @@ PurgeBkp12(nm,s)~3~1:
         D0=A                                     * 719CB
         ?C=0    A                                * 719CE
         GOYES   L_719E0                          * 719D1
-        GOSUB   SUB_71603                        * 719D3
+        GOSUB   CallC                            * 719D3
         A=R0.F  A                                * 719D7
         D0=A                                     * 719DD
 L_719E0:
@@ -1907,7 +1908,7 @@ L_719E0:
         ?C=0    A                                * 719F0
         GOYES   L_719FB                          * 719F3
         P=      1                                * 719F5
-        GOSUB   SUB_71603                        * 719F7
+        GOSUB   CallC                            * 719F7
 L_719FB:
         B=A     A                                * 719FB
         A=R0.F  A                                * 719FD
@@ -1989,14 +1990,14 @@ L_71AD9:
         D=D+1   A                                * 71AEA
         GOSBVL  SAVPTR                           * 71AEC
         C=A     A                                * 71AF3
-        GOSUB   SUB_71603                        * 71AF5
+        GOSUB   CallC                            * 71AF5
         AR0EX.F A                                * 71AF9
         GOSBVL  SUB_09477                        * 71AFF
         AR0EX.F A                                * 71B06
         R1=A.F  A                                * 71B0C
         C=A     A                                * 71B12
         P=      1                                * 71B14
-        GOSUB   SUB_71603                        * 71B16
+        GOSUB   CallC                            * 71B16
         GOSBVL  SUB_706B7                        * 71B1A
         A=DAT0  A                                * 71B21
         D0=D0+  5                                * 71B24
@@ -2035,7 +2036,7 @@ L_71B6A:
         GOSBVL  SAVPTR                           * 71B84
         C=R2.F  A                                * 71B8B
         RSTK=C                                   * 71B91
-        GOSUB   SUB_71603                        * 71B93
+        GOSUB   CallC                            * 71B93
         A=R0.F  A                                * 71B97
         D1=A                                     * 71B9D
         A=0     A                                * 71BA0
@@ -2079,7 +2080,7 @@ L_71BF7:
         B=C     A                                * 71C0F
         ?C=0    A                                * 71C11
         GOYES   L_71C1A                          * 71C14
-        GOSUB   SUB_71603                        * 71C16
+        GOSUB   CallC                            * 71C16
 L_71C1A:
         D1=A                                     * 71C1A
         A=DAT1  A                                * 71C1D
@@ -2087,7 +2088,7 @@ L_71C1A:
         ?C=0    A                                * 71C22
         GOYES   L_71C2D                          * 71C25
         P=      1                                * 71C27
-        GOSUB   SUB_71603                        * 71C29
+        GOSUB   CallC                            * 71C29
 L_71C2D:
         GOSBVL  GETPTR                           * 71C2D
         GOVLNG  L_2727E                          * 71C34
@@ -2128,7 +2129,7 @@ L_71CA9:
         R3=C.F  A                                * 71CA9
         ?C=0    A                                * 71CAF
         GOYES   L_71CB8                          * 71CB2
-        GOSUB   SUB_71603                        * 71CB4
+        GOSUB   CallC                            * 71CB4
 L_71CB8:
         A=R0.F  A                                * 71CB8
         D0=A                                     * 71CBE
@@ -2155,7 +2156,7 @@ L_71CE9:
         GOSUB   SUB_71D8A                        * 71CFE
         GOC     L_71D0B                          * 71D02
         P=      1                                * 71D05
-        GOSUB   SUB_71603                        * 71D07
+        GOSUB   CallC                            * 71D07
 L_71D0B:
         GOSBVL  GETPTR                           * 71D0B
         D1=D1+  5                                * 71D12
@@ -2170,7 +2171,7 @@ L_71D2F:
         GOSUB   SUB_71D8A                        * 71D2F
         GOC     L_71D3C                          * 71D33
         P=      1                                * 71D36
-        GOSUB   SUB_71603                        * 71D38
+        GOSUB   CallC                            * 71D38
 L_71D3C:
         GOTO    L_71C57                          * 71D3C
 L_71D40:
@@ -2185,10 +2186,10 @@ L_71D40:
         A=A-C   A                                * 71D63
         C=R3.F  A                                * 71D65
         P=      1                                * 71D6B
-        GOSUB   SUB_71603                        * 71D6D
+        GOSUB   CallC                            * 71D6D
         P=      3                                * 71D71
         C=R3.F  A                                * 71D73
-        GOSUB   SUB_71603                        * 71D79
+        GOSUB   CallC                            * 71D79
         A=R0.F  A                                * 71D7D
         GONC    L_71D0B                          * 71D83
         GOTO    L_71D97                          * 71D86
@@ -2767,16 +2768,16 @@ L_72529:
         ST=1    10                               * 7252E
         D0=D0-  6                                * 72531
         C=RSTK                                   * 72534
-        GOSUB   SUB_7265D                        * 72536
+        GOSUB   CSLW5~jump_7265D                 * 72536
         CD0EX                                    * 7253A
-        GOSUB   SUB_7265D                        * 7253D
+        GOSUB   CSLW5~jump_7265D                 * 7253D
         C=R1.F  A                                * 72541
         R1=C                                     * 72547
         GOSBVL  GARBAGECOL                       * 7254A  inline data follows
         C=R1                                     * 72551
-        GOSUB   SUB_72664                        * 72554
+        GOSUB   CSRW5~jump_72664                 * 72554
         A=C     A                                * 72558
-        GOSUB   SUB_72664                        * 7255A
+        GOSUB   CSRW5~jump_72664                 * 7255A
         RSTK=C                                   * 7255E
         GONC    L_724FA                          * 72560
 L_72563:
@@ -2851,11 +2852,11 @@ L_7263A:
         GOTO    L_72407                          * 72659
 
 * refs (4): 72536 7253D 72849 72850
-SUB_7265D:
+CSLW5~jump_7265D:
         GOVLNG  CSLW5                            * 7265D
 
 * refs (4): 72554 7255A 72867 7286D
-SUB_72664:
+CSRW5~jump_72664:
         GOVLNG  CSRW5                            * 72664
 
 * refs (1): 726C8
@@ -3001,16 +3002,16 @@ L_7283C:
         ST=1    10                               * 72841
         D0=D0-  6                                * 72844
         C=RSTK                                   * 72847
-        GOSUB   SUB_7265D                        * 72849
+        GOSUB   CSLW5~jump_7265D                 * 72849
         CD0EX                                    * 7284D
-        GOSUB   SUB_7265D                        * 72850
+        GOSUB   CSLW5~jump_7265D                 * 72850
         C=R1.F  A                                * 72854
         R1=C                                     * 7285A
         GOSBVL  GARBAGECOL                       * 7285D  inline data follows
         C=R1                                     * 72864
-        GOSUB   SUB_72664                        * 72867
+        GOSUB   CSRW5~jump_72664                 * 72867
         A=C     A                                * 7286B
-        GOSUB   SUB_72664                        * 7286D
+        GOSUB   CSRW5~jump_72664                 * 7286D
         RSTK=C                                   * 72871
         GONC    L_7281D                          * 72873
 L_72876:
@@ -3174,7 +3175,8 @@ restore(nm,s)~1~2:
         ;                                        * 72AF5
 
 * refs (44): 1A025 1A034 5B31B 5B3C0 5B40B 5B46F ...
-OBJ_72AFA:
+* ob -> ob': a ROMPTR whose library is present becomes its object; anything else is left alone
+?ROMPTR@:
         :: DUPTYPEROMP? NOT?SEMI                 * 72AFA
           DUP ROMPTR@ NOT?SEMI                   * 72B09
           SWAPDROP ;                             * 72B18
@@ -3523,7 +3525,7 @@ OBJ_72FCA:
 
 * refs (1): 6BE0C
 OBJ_72FED:
-        :: DUP OBJ_729F8 ?SKIP OBJ_72AFA         * 72FED
+        :: DUP OBJ_729F8 ?SKIP ?ROMPTR@          * 72FED
           DUPTYPECSTR? ;                         * 73006
 
 * refs (1): 28B78

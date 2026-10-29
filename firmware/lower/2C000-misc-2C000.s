@@ -207,7 +207,7 @@ nulv(s):
           :: DUPONE {}N %0_2A2B4 MAKEARRY ; SWAP * 2C4B4
           CODE                                   * 2C4D7  79 nibbles
             GOSBVL  POP#                         * 2C4E1
-            GOSUBL  SUB_2CE75                    * 2C4E8
+            GOSUBL  SAVPTR~jump_2CE75            * 2C4E8
             A=A+A   A                            * 2C4EE
             A=A+A   A                            * 2C4F0
             A=A+A   A                            * 2C4F2
@@ -381,7 +381,7 @@ STATLR:
         :: RclXYCol&äDAT 3PICKOVER OBJ_2CC4C OBJ_2CDA5 3PICK3PICK OBJ_2CC06 * 2CA0D
           OBJ_2CDA5 BINT5 NDUP OBJ_2CC4C OBJ_2CC06 OBJ_2CE7C 6PICK 5ROLL * 2CA30
           5PICK OBJ_2CC4C OBJ_2CDFA DUP %%0= case OBJ_2D2D7 * 2CA58
-          %%/ SWAPROT 3PICK OBJ_372BC OBJ_2CC06 IT %%EXP * 2CA7B
+          %%/ SWAPROT 3PICK %%-* OBJ_2CC06 IT %%EXP * 2CA7B
           %%>% SWAP %%>% 2SWAP 2DROP ChkReakäPAR ROTROT2DROP 4PICKSWAP 6PICK * 2CA9E
           3UNROLL                                * 2CACB
 
@@ -446,7 +446,7 @@ maxcols(s,ra):
         A=DAT1  A                                * 2CC97
         D1=D1+  5                                * 2CC9A
         D=D+1   A                                * 2CC9D
-        GOSUB   SUB_2CE75                        * 2CC9F
+        GOSUB   SAVPTR~jump_2CE75                * 2CC9F
         D0=A                                     * 2CCA3
         D0=D0+  15                               * 2CCA6
         D0=D0+  5                                * 2CCA9
@@ -581,7 +581,7 @@ L_2CDDB:
         A=C     A                                * 2CDDD
         P=      0                                * 2CDDF
         SETHEX                                   * 2CDE1
-        GOSUB   SUB_2CE6E                        * 2CDE3
+        GOSUB   GETPTR~jump_2CE6E                * 2CDE3
         C=A     A                                * 2CDE7
         GOTO    L_2D313                          * 2CDE9
 L_2CDED:
@@ -629,11 +629,11 @@ SUB_2CE52:
         GOVLNG  DIVF                             * 2CE67
 
 * refs (3): 2CDE3 2CF14 2CF25
-SUB_2CE6E:
+GETPTR~jump_2CE6E:
         GOVLNG  GETPTR                           * 2CE6E
 
 * refs (3): 2C4E8 2CC9F 2CF38
-SUB_2CE75:
+SAVPTR~jump_2CE75:
         GOVLNG  SAVPTR                           * 2CE75
 
 * refs (5): 2C8B4 2C91D 2C9E0 2CA49 CB55B
@@ -695,14 +695,14 @@ OBJ_2CF08:
         CON(5)  (*)+5                            * 2CF08  primitive code object
         GOSUB   SUB_2CF8B                        * 2CF0D
         GOC     L_2CF25                          * 2CF11
-        GOSUB   SUB_2CE6E                        * 2CF14
+        GOSUB   GETPTR~jump_2CE6E                * 2CF14
         D1=D1-  15                               * 2CF18
         D=D-1   A                                * 2CF1B
         D=D-1   A                                * 2CF1D
         D=D-1   A                                * 2CF1F
         GOTO    L_2D2BD                          * 2CF21
 L_2CF25:
-        GOSUB   SUB_2CE6E                        * 2CF25
+        GOSUB   GETPTR~jump_2CE6E                * 2CF25
         GOTO    L_2D2EC                          * 2CF29
 
 * refs (4): 2CCC2 2CD35 2CDB1 2CE0D
@@ -713,7 +713,7 @@ SUB_2CF2D:
 SUB_2CF31:
         GOSUB   SUB_2CEF2                        * 2CF31
         R4=C                                     * 2CF35
-        GOSUB   SUB_2CE75                        * 2CF38
+        GOSUB   SAVPTR~jump_2CE75                * 2CF38
         D0=A                                     * 2CF3C
         D0=D0+  5                                * 2CF3F
         AD0EX                                    * 2CF42
@@ -772,7 +772,7 @@ SUB_2CF8B:
 SUB_2CFC0:
         RSTK=C                                   * 2CFC0
         A=DAT0  W                                * 2CFC2
-        GOSUB   SUB_2D084                        * 2CFC6
+        GOSUB   SPLITA~jump                      * 2CFC6
 L_2CFCA:
         CD0EX                                    * 2CFCA
         D=C     A                                * 2CFCD
@@ -851,7 +851,7 @@ SUB_2D080:
         A=DAT1  W                                * 2D080
 
 * refs (2): 2CFC6 2D148
-SUB_2D084:
+SPLITA~jump:
         GOVLNG  SPLITA                           * 2D084
 
 * refs (4): 2D033 2D0CA 2D151 2D1B8
@@ -932,7 +932,7 @@ L_2D13D:
         A=DAT0  W                                * 2D13F
         CD0EX                                    * 2D143
         RSTK=C                                   * 2D146
-        GOSUB   SUB_2D084                        * 2D148
+        GOSUB   SPLITA~jump                      * 2D148
         ?ST=0   0                                * 2D14C
         GOYES   L_2D160                          * 2D14F
         GOSUB   SUB_2D08B                        * 2D151

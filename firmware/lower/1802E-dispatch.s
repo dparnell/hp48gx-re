@@ -1,6 +1,6 @@
 * HP 48GX ROM revision R, #1802E-#1A001: Argument checks and type dispatch
 * Addresses in the right-hand comments are those of the original ROM.
-* Most referenced: CK1&Dispatch CK0 COERCE CK2&Dispatch UNCOERCE SETSIZEERR XEQSTOID SETTYPEERR CK&DISPATCH0 DoInputForm CK1NOLASTWD 'EvalNoCK:_sup
+* Most referenced: CK1&Dispatch CK0 COERCE CK2&Dispatch UNCOERCE SETSIZEERR XEQSTOID SETTYPEERR CK&DISPATCH0 IFECallFieldMH DoInputForm CK1NOLASTWD
 * Follows on from the previous file (at #1802E in the original ROM).
 
 * refs (1): 17FCA
@@ -2024,7 +2024,7 @@ DoInputForm~1~1:
 
 * refs (1): 19AF3
 DoInputForm~2:
-        :: 5GETLAM BINT8 OBJ_19FBB ?SEMI         * 19CF0
+        :: 5GETLAM BINT8 IFECallFieldMH ?SEMI    * 19CF0
           BINT1 #=casedrop DoInputForm~2~1       * 19D09
           BINT2 #=casedrop ROMPTR 0B0 047        * 19D18
           BINT3 #=casedrop ROMPTR 0B0 048        * 19D2D
@@ -2059,7 +2059,7 @@ rpnXROOT~any:
 
 * refs (12): 19F89 1A099 D6FC1 D7115 D71F7 D72A5 ...
 OBJ_19F0F:
-        :: 5GETLAM BINT18 OBJ_19FBB ?SEMI        * 19F0F
+        :: 5GETLAM BINT18 IFECallFieldMH ?SEMI   * 19F0F
           EditLExists? case2drop FALSE           * 19F28
           5GETLAM ROMPTR 0B0 089 NOT case2drop FALSE * 19F37
           Key>U/SKeyOb 6PUTLAM ' ROMPTR 0B0 04C TRUE ; * 19F56
@@ -2078,7 +2078,8 @@ OBJ_19FA7:
         :: 13GETLAM EVAL ;                       * 19FA7
 
 * refs (42): 19CFF 19F1E D5545 D55B0 D55E3 D5681 ...
-OBJ_19FBB:
+* #msg #field -> ... flag: input forms: make #field current and send #msg to its message handler
+IFECallFieldMH:
         :: SWAP DUP 4PUTLAM ROMPTR 0B0 0B9 EVAL ; * 19FBB
 
 * refs (16): 19DD5 19E5D B23B2 BAAB0 BAB30 BABA6 ...

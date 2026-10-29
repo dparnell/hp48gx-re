@@ -2102,7 +2102,7 @@ SUB_01ABD:
         RTN                                      * 01ACE
 
 * refs (2): 01E63 01FAC
-SUB_01AD0:
+SAVPTR~jump:
         GOVLNG  SAVPTR                           * 01AD0
 
 * refs (6): 008B9 0108D 0238E 0E88E 32A06 802D8
@@ -2410,7 +2410,7 @@ L_01E5A:
 * refs (3): 04895 113A3 17BA4
 OBJ_01E5E:
         CON(5)  (*)+5                            * 01E5E  primitive code object
-        GOSUB   SUB_01AD0                        * 01E63
+        GOSUB   SAVPTR~jump                      * 01E63
         ST=0    15                               * 01E67
         GOSUB   L_01E79                          * 01E6A  inline data follows
         GOSBVL  AllowIntr                        * 01E6E
@@ -2523,7 +2523,7 @@ L_01F9D:
 * refs (2): 385ED 9C655
 CLEARLCD:
         CON(5)  (*)+5                            * 01FA7  primitive code object
-        GOSUB   SUB_01AD0                        * 01FAC
+        GOSUB   SAVPTR~jump                      * 01FAC
         GOSUBL  ClrScrMn                         * 01FB0
 L_01FB6:
         GOVLNG  GETPTRLOOP                       * 01FB6

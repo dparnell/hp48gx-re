@@ -625,7 +625,7 @@ SEND_PACKET~1:
 
 * refs (3): 2DE6E 308B1 30932
 SUB_3086F:
-        GOSUB   SUB_30B16                        * 3086F
+        GOSUB   SAVPTR~jump_30B16                * 3086F
         A=DAT1  A                                * 30873
         C=0     A                                * 30876
         LC(2)   #16                              * 30878
@@ -761,7 +761,7 @@ L_309DD:
 OBJ_309EC:
         :: OBJ_2D37C OVERLEN$ #1+LAST$ &$ CKREF  * 309EC
           CODE                                   * 30A0A  218 nibbles
-            GOSUB   SUB_30B16                    * 30A14
+            GOSUB   SAVPTR~jump_30B16            * 30A14
             C=DAT1  A                            * 30A18
             D1=C                                 * 30A1B
             D1=D1+  10                           * 30A1E
@@ -853,7 +853,7 @@ L_30B11:
         RTNCC                                    * 30B14
 
 * refs (5): 3086F 30A14 30B8A 30BDC 30D4A
-SUB_30B16:
+SAVPTR~jump_30B16:
         GOVLNG  SAVPTR                           * 30B16
         RPL
 
@@ -863,7 +863,7 @@ CHOOSE_INIT:
           OBJ_2ED74 NOTcase SetIOPARerr          * 30B58
           COERCE BINT48 #+ #>CHR >T$             * 30B67
           CODE                                   * 30B80  47 nibbles
-            GOSUB   SUB_30B16                    * 30B8A
+            GOSUB   SAVPTR~jump_30B16            * 30B8A
             C=DAT1  A                            * 30B8E
             D1=C                                 * 30B91
             D1=D1+  10                           * 30B94
@@ -888,7 +888,7 @@ ENCODE1PKT:
 ENCODE:
         CON(5)  (*)+5                            * 30BD7  primitive code object
         ASSEMBLE
-        GOSUB   SUB_30B16                        * 30BDC
+        GOSUB   SAVPTR~jump_30B16                * 30BDC
         A=DAT1  A                                * 30BE0
         D0=A                                     * 30BE3
         D0=D0+  10                               * 30BE6
@@ -1019,7 +1019,7 @@ L_30D2C:
 DECODE:
         :: CKREF GETKP                           * 30D31
           CODE                                   * 30D40  245 nibbles
-            GOSUB   SUB_30B16                    * 30D4A
+            GOSUB   SAVPTR~jump_30B16            * 30D4A
             A=DAT1  A                            * 30D4E
             D0=A                                 * 30D51
             D0=D0+  10                           * 30D54
@@ -1229,7 +1229,7 @@ L_30FA3:
         RTNCC                                    * 30FB1
 
 * refs (2): 31623 31796
-SUB_30FB3:
+SAVPTR~jump_30FB3:
         GOVLNG  SAVPTR                           * 30FB3
         BSS     8                                * 30FBA
 
@@ -1789,7 +1789,7 @@ OpenUart?Clr:
 * refs (1): 2EB2D
 OpenUartClr:
         CON(5)  (*)+5                            * 3161E  primitive code object
-        GOSUB   SUB_30FB3                        * 31623
+        GOSUB   SAVPTR~jump_30FB3                * 31623
 L_31627:
         D0=(5)  IOC                              * 31627
         C=0     W                                * 3162E
@@ -1908,7 +1908,7 @@ L_31788:
 * refs (1): 2EE22
 DOSBRK~1:
         CON(5)  (*)+5                            * 31791  primitive code object
-        GOSUB   SUB_30FB3                        * 31796
+        GOSUB   SAVPTR~jump_30FB3                * 31796
         GOSUB   WaitTbz0                         * 3179A
         GOSUB   L_31383                          * 3179E
         D1=(5)  NOP1MASK18                       * 317A2
@@ -2166,7 +2166,7 @@ SUB_32120:
 PUTSERIAL~1:
         ST=0    15                               * 3213E
         GOSUB   ChkLowBat                        * 32141
-        GOLONG  SUB_329E2                        * 32145
+        GOLONG  AllowIntr~jump_329E2             * 32145
 
 * refs (1): 32A5A
 SUB_3214B:
@@ -2222,7 +2222,7 @@ dup;+(2st):
 PrintRC(st)~1:
         CON(5)  (*)+5                            * 32305  primitive code object
         ASSEMBLE
-        GOSUB   SUB_32524                        * 3230A
+        GOSUB   SAVPTR~jump_32524                * 3230A
         D1=(5)  uart_handshk                     * 3230E
         C=DAT1  XS                               * 32315
         C=C+C   XS                               * 32319
@@ -2230,7 +2230,7 @@ PrintRC(st)~1:
         ST=1    5                                * 3231F
         ST=0    15                               * 32322
         GOSUB   SUB_328E0                        * 32325
-        GOSUB   SUB_329E2                        * 32329
+        GOSUB   AllowIntr~jump_329E2             * 32329
         GONC    L_32380                          * 3232D
         C=0     A                                * 32330
         GOTO    L_323ED                          * 32332
@@ -2250,7 +2250,7 @@ GetChkPRTPAR~1:
         CON(5)  (*)+5                            * 3234D  primitive code object
         ASSEMBLE
         GOSBVL  POP#                             * 32352
-        GOSUB   SUB_32524                        * 32359
+        GOSUB   SAVPTR~jump_32524                * 32359
         ASL     A                                * 3235D
         A=A+1   A                                * 3235F
         A=A+1   A                                * 32361
@@ -2285,7 +2285,7 @@ L_323D7:
             GOTO    L_32380                      * 323DB
 L_323DF:
             GOSUBL  SUB_32EC1                    * 323DF
-            GOSUB   SUB_329E2                    * 323E5
+            GOSUB   AllowIntr~jump_329E2         * 323E5
 
 * refs (1): 32C28
 PSubErr:
@@ -2394,7 +2394,7 @@ L_324E9:
         GOSUBL  SUB_30FC2                        * 324FB
         GOSUB   SUB_32602                        * 32501
         RTNC                                     * 32505
-        GOSUB   SUB_329E2                        * 32508
+        GOSUB   AllowIntr~jump_329E2             * 32508
         C=R2                                     * 3250C
         D1=C                                     * 3250F
         C=R1                                     * 32512
@@ -2417,20 +2417,20 @@ PopSavptr:
         D=D+1   A                                * 32522
 
 * refs (4): 3230A 32359 32530 32B92
-SUB_32524:
+SAVPTR~jump_32524:
         GOVLNG  SAVPTR                           * 32524
 
 * refs (5): 1EF00 31813 31D6A 31EE7 9F863
 SetEcma94:
         CON(5)  (*)+5                            * 3252B  primitive code object
-        GOSUB   SUB_32524                        * 32530
+        GOSUB   SAVPTR~jump_32524                * 32530
         GOSUB   SUB_32A1D                        * 32534
         CBIT=0  7                                * 32538
         CBIT=0  9                                * 3253D
         DAT0=C  A                                * 32542
         ST=0    15                               * 32545
         GOSUB   ChkLowBat                        * 32548
-        GOSUB   SUB_329E2                        * 3254C
+        GOSUB   AllowIntr~jump_329E2             * 3254C
         GOC     L_3258E                          * 32550
         GOSUB   SUB_3287B                        * 32553
         GOC     L_32596                          * 32557
@@ -2446,7 +2446,7 @@ SetEcma94:
         GOSUB   SUB_32634                        * 3257B
         GOC     L_3258A                          * 3257F
 PrintGrob~1:
-        GOSUB   SUB_329E2                        * 32582
+        GOSUB   AllowIntr~jump_329E2             * 32582
         GOTO    L_323D7                          * 32586
 L_3258A:
         GOTO    L_323DF                          * 3258A
@@ -2504,7 +2504,7 @@ SUB_32604:
         GOSUB   ChkLowBat                        * 32604
         RTNC                                     * 32608
         A=C     A                                * 3260B
-        GOSUB   SUB_328D9                        * 3260D
+        GOSUB   OnKeyDown?~jump                  * 3260D
         LC(5)   intrptderr                       * 32611
         RTNC                                     * 32618
         GOSUB   SUB_32A46                        * 3261B
@@ -2790,7 +2790,7 @@ L_328D2:
         GOVLNG  L_01315                          * 328D2
 
 * refs (4): 3260D 328F4 32E3F 32EA1
-SUB_328D9:
+OnKeyDown?~jump:
         GOVLNG  OnKeyDown?                       * 328D9
 
 * refs (3): 32325 32665 327B8
@@ -2808,7 +2808,7 @@ L_328EC:
         D=C     A                                * 328EE
         P=      0                                * 328F0
         C=0     A                                * 328F2
-        GOSUB   SUB_328D9                        * 328F4
+        GOSUB   OnKeyDown?~jump                  * 328F4
         GOC     L_328C2                          * 328F8
         GOSUB   SUB_329E9                        * 328FB
         GOSUB   SUB_32A0D                        * 328FF
@@ -2894,7 +2894,7 @@ L_329D6:
         RTNCC                                    * 329E0
 
 * refs (8): 32145 32329 323E5 32508 3254C 32582 ...
-SUB_329E2:
+AllowIntr~jump_329E2:
         GOVLNG  AllowIntr                        * 329E2
 
 * refs (2): 328FB 32E46
@@ -3060,7 +3060,7 @@ L_32B6F:
 PrintGrob:
         :: GetChkPRTPAR 3DROP BINT1              * 32B74
           CODE                                   * 32B88  275 nibbles
-            GOSUB   SUB_32524                    * 32B92
+            GOSUB   SAVPTR~jump_32524            * 32B92
             GOSUB   ChkGrHook                    * 32B96
             GOSUB   SUB_3246B                    * 32B9A
             D1=D1+  5                            * 32B9E
@@ -3114,7 +3114,7 @@ L_32C13:
             GOYES   L_32C24                      * 32C20
             C=0     A                            * 32C22
 L_32C24:
-            GOSUB   SUB_329E2                    * 32C24
+            GOSUB   AllowIntr~jump_329E2         * 32C24
             GOLONG  PSubErr                      * 32C28
 L_32C2E:
             ST=0    9                            * 32C2E
@@ -3141,7 +3141,7 @@ L_32C4E:
 L_32C67:
             GOSUB   PrintGrob~2                  * 32C67
             GOC     L_32C13                      * 32C6B
-            GOSUB   SUB_329E2                    * 32C6E
+            GOSUB   AllowIntr~jump_329E2         * 32C6E
             C=R3                                 * 32C72
             D=C     A                            * 32C75
             D=D-1   A                            * 32C77
@@ -3319,7 +3319,7 @@ L_32E09:
         GONC    L_32E09                          * 32E38
         C=0     A                                * 32E3B
         P=      0                                * 32E3D
-        GOSUB   SUB_328D9                        * 32E3F
+        GOSUB   OnKeyDown?~jump                  * 32E3F
         GOC     L_32E60                          * 32E43
         GOSUB   SUB_329E9                        * 32E46
         GOSUB   SUB_32A0D                        * 32E4A
@@ -3354,7 +3354,7 @@ L_32E92:
         D=C     A                                * 32E9A
         C=A     A                                * 32E9C
         GOC     SUB_32EC1                        * 32E9E
-        GOSUB   SUB_328D9                        * 32EA1
+        GOSUB   OnKeyDown?~jump                  * 32EA1
         GOC     L_32ECF                          * 32EA5
         ?D#0    A                                * 32EA8
         GOYES   L_32F0A                          * 32EAB

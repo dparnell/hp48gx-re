@@ -2,19 +2,19 @@
 * Addresses in the right-hand comments are those of the original ROM.
 * Follows on from the previous file (at #78002 in the original ROM).
         GOSUB   L_787E6                          * 78002
-        GOSUB   SUB_787ED                        * 78006
+        GOSUB   RCCD0~jump_787ED                 * 78006
         GOSUB   L_78760                          * 7800A
-        GOSUB   SUB_78751                        * 7800E
+        GOSUB   STAB0~jump_78751                 * 7800E
         GOSUB   SUB_786C7                        * 78012
         GOSUB   SUB_785D6                        * 78016
         GOSUB   SUB_78772                        * 7801A
-        GOSUBL  SUB_7892B                        * 7801E
+        GOSUBL  EXAB2~jump                       * 7801E
         GOSUB   SUB_78688                        * 78024
         GOSUB   SUB_78605                        * 78028
         GOSUB   L_787E6                          * 7802C
-        GOSUB   SUB_7870C                        * 78030
+        GOSUB   RCCD2~jump_7870C                 * 78030
         GOSUB   L_78760                          * 78034
-        GOSUB   SUB_786FD                        * 78038
+        GOSUB   STAB2~jump_786FD                 * 78038
         GOTO    L_77FB5                          * 7803C
         NIBHEX  7F15                             * 78040  ÷Q
 
@@ -42,7 +42,7 @@ SUB_78077:
         ST=1    1                                * 78077
         GOSUB   SUB_78591                        * 7807A
         GOSUBL  SUB_7897B                        * 7807E
-        GOSUB   SUB_786FD                        * 78084
+        GOSUB   STAB2~jump_786FD                 * 78084
         GOSUB   SUB_787F4                        * 78088
         GOSUB   SUB_78534                        * 7808C
         A=R4                                     * 78090
@@ -61,7 +61,7 @@ L_780A7:
         GOSUB   SUB_787BF                        * 780B9
         GOSUB   SUB_787C7                        * 780BD
         GOSUB   SUB_786ED                        * 780C1
-        GOSUB   SUB_786FD                        * 780C5
+        GOSUB   STAB2~jump_786FD                 * 780C5
         GOSUB   SUB_78820                        * 780C9
         GOSUB   SUB_786C7                        * 780CD
         GOSUB   SUB_7857E                        * 780D1
@@ -79,11 +79,11 @@ L_780A7:
 L_780FC:
         GOSUB   L_7856F                          * 780FC
 L_78100:
-        GOSUB   SUB_78163                        * 78100
+        GOSUB   DIV2~jump~jump                   * 78100
         GOTO    L_77F83                          * 78104
 L_78108:
         GOSUBL  SUB_78943                        * 78108
-        GOSUB   SUB_78892                        * 7810E
+        GOSUB   SQRF~jump                        * 7810E
         GOSUB   SUB_7874D                        * 78112
         GOSUB   SUB_7887F                        * 78116
         C=C-1   A                                * 7811A
@@ -110,11 +110,11 @@ L_78157:
         GOYES   L_7815F                          * 7815A
         A=-A-1  S                                * 7815C
 L_7815F:
-        GOSUB   SUB_7838F                        * 7815F
+        GOSUB   RADD1~jump                       * 7815F
 
 * refs (1): 78100
-SUB_78163:
-        GOTO    SUB_7826A                        * 78163
+DIV2~jump~jump:
+        GOTO    DIV2~jump                        * 78163
 
 * refs (1): 2C14E
 utpn(2r)~1:
@@ -122,10 +122,10 @@ utpn(2r)~1:
         GOSUB   SUB_78797                        * 7816B
         GOSUB   SUB_77EBC                        * 7816F
         GOSUBL  SUB_78A18                        * 78173
-        GOSUB   SUB_78751                        * 78179
+        GOSUB   STAB0~jump_78751                 * 78179
         GOSUB   SUB_7862F                        * 7817D
         GOSUB   SUB_7868E                        * 78181
-        GOSUB   SUB_78438                        * 78185
+        GOSUB   XYEX~jump_78438                  * 78185
         GOSUB   SUB_78664                        * 78189
         GOSUB   SUB_78829                        * 7818D
         GONC    L_78198                          * 78191
@@ -170,15 +170,15 @@ L_781F6:
         GOYES   L_78217                          * 78201
         GOSUB   L_7856F                          * 78203
         GOSUB   SUB_783AA                        * 78207
-        GOSUB   SUB_786FD                        * 7820B
+        GOSUB   STAB2~jump_786FD                 * 7820B
         GOSUB   SUB_7824E                        * 7820F
         GOTO    L_781F6                          * 78213
 L_78217:
         GOSUB   L_7856F                          * 78217
-        GOSUB   SUB_786FD                        * 7821B
+        GOSUB   STAB2~jump_786FD                 * 7821B
         GOSUB   SUB_7873C                        * 7821F
         GOSUB   SUB_786ED                        * 78223
-        GOSUB   SUB_78751                        * 78227
+        GOSUB   STAB0~jump_78751                 * 78227
 L_7822B:
         GOSUB   SUB_78809                        * 7822B
         GOSUB   L_7856F                          * 7822F
@@ -193,24 +193,24 @@ SUB_78242:
         GOTO    L_78760                          * 78246
 
 * refs (1): 77E97
-SUB_7824A:
-        GOTO    SUB_788A0                        * 7824A
+SPLITA~jump~jump:
+        GOTO    SPLITA~jump_788A0                * 7824A
 
 * refs (2): 781E6 7820F
 SUB_7824E:
         GOSUB   SUB_78899                        * 7824E
         GOSUB   SUB_786C7                        * 78252
         GOSUB   SUB_786E9                        * 78256
-        GOSUB   SUB_786FD                        * 7825A
+        GOSUB   STAB2~jump_786FD                 * 7825A
         GOSUB   SUB_7875C                        * 7825E
-        GOTO    SUB_78751                        * 78262
+        GOTO    STAB0~jump_78751                 * 78262
 
 * refs (1): 7880D
 SUB_78266:
-        GOSUB   SUB_788A0                        * 78266
+        GOSUB   SPLITA~jump_788A0                * 78266
 
 * refs (2): 78163 78740
-SUB_7826A:
+DIV2~jump:
         GOVLNG  DIV2                             * 7826A
 L_78271:
         GOSUB   SUB_78396                        * 78271
@@ -265,7 +265,7 @@ L_782F9:
         GOSUB   SUB_78396                        * 78315
         GOSUB   SUB_785BE                        * 78319
         GOSUB   SUB_787E2                        * 7831D
-        GOSUB   SUB_78751                        * 78321
+        GOSUB   STAB0~jump_78751                 * 78321
         GOSUB   L_78492                          * 78325
         GOTO    SUB_78242                        * 78329
 L_7832D:
@@ -278,22 +278,22 @@ L_7832D:
 * refs (1): 78388
 SUB_78340:
         GOSUB   SUB_7843F                        * 78340
-        GOSUB   SUB_786FD                        * 78344
-        GOSUB   SUB_7838F                        * 78348
+        GOSUB   STAB2~jump_786FD                 * 78344
+        GOSUB   RADD1~jump                       * 78348
         GOSUB   SUB_78582                        * 7834C
 L_78350:
         C=R0                                     * 78350
         R4=C                                     * 78353
-        GOSUB   SUB_78438                        * 78356
+        GOSUB   XYEX~jump_78438                  * 78356
         GOSUB   SUB_785B8                        * 7835A
         ?ST=1   3                                * 7835E
         GOYES   L_78367                          * 78361
         GOSUB   SUB_785BE                        * 78363
 L_78367:
-        GOSUB   SUB_78438                        * 78367
+        GOSUB   XYEX~jump_78438                  * 78367
         GOSUBL  L_79303                          * 7836B
-        GOSUB   SUB_78892                        * 78371
-        GOSUB   SUB_787ED                        * 78375
+        GOSUB   SQRF~jump                        * 78371
+        GOSUB   RCCD0~jump_787ED                 * 78375
         C=R4                                     * 78379
         GOTO    L_787E6                          * 7837C
 L_78380:
@@ -304,7 +304,7 @@ L_7838C:
         A=-A-1  S                                * 7838C
 
 * refs (3): 7815F 78348 787CF
-SUB_7838F:
+RADD1~jump:
         GOVLNG  RADD1                            * 7838F
 
 * refs (2): 78271 78315
@@ -324,7 +324,7 @@ SUB_783AA:
 
 * refs (2): 783A2 7848A
 SUB_783B6:
-        GOSUB   SUB_78438                        * 783B6
+        GOSUB   XYEX~jump_78438                  * 783B6
         ?ST=1   3                                * 783BA
         GOYES   L_783C7                          * 783BD
         GOSUB   SUB_785BE                        * 783BF
@@ -339,14 +339,14 @@ SUB_783CF:
         GOSUB   SUB_786C7                        * 783CF
         GOSUB   SUB_787BF                        * 783D3
         GOSUB   SUB_787E2                        * 783D7
-        GOSUB   SUB_78751                        * 783DB
+        GOSUB   STAB0~jump_78751                 * 783DB
         ?ST=1   1                                * 783DF
         GOYES   L_783FD                          * 783E2
         ?ST=1   3                                * 783E4
         GOYES   L_783F5                          * 783E7
         GOSUB   SUB_7843F                        * 783E9
         GOSUB   SUB_787E2                        * 783ED
-        GOSUB   SUB_78751                        * 783F1
+        GOSUB   STAB0~jump_78751                 * 783F1
 L_783F5:
         GOSUB   SUB_7843F                        * 783F5
         GOTO    L_78401                          * 783F9
@@ -359,7 +359,7 @@ L_78401:
 SUB_78405:
         GOSUB   SUB_787E2                        * 78405
         GOSUB   SUB_78576                        * 78409
-        GOTO    SUB_78751                        * 7840D
+        GOTO    STAB0~jump_78751                 * 7840D
 
 * refs (2): 78167 78291
 SUB_78411:
@@ -378,7 +378,7 @@ L_78432:
         GOSUB   SUB_78466                        * 78434
 
 * refs (8): 77FD0 78185 78356 78367 783B6 78586 ...
-SUB_78438:
+XYEX~jump_78438:
         GOVLNG  XYEX                             * 78438
 
 * refs (6): 78340 783E9 783F5 784FD 7888E 78903
@@ -426,7 +426,7 @@ L_78492:
 * refs (1): 78301
 SUB_784A2:
         GOSUB   SUB_787E2                        * 784A2
-        GOSUB   SUB_78751                        * 784A6
+        GOSUB   STAB0~jump_78751                 * 784A6
         GOSUB   SUB_784FD                        * 784AA
         GOTO    SUB_787E2                        * 784AE
 
@@ -506,7 +506,7 @@ L_78543:
 
 * refs (1): 7857E
 SUB_7854A:
-        GOSUB   SUB_788A0                        * 7854A
+        GOSUB   SPLITA~jump_788A0                * 7854A
 L_7854E:
         GOSUB   SUB_78556                        * 7854E
         GOTO    L_78760                          * 78552
@@ -516,7 +516,7 @@ SUB_78556:
         GOVLNG  SUB_2BCAC                        * 78556
         C=R4                                     * 7855D
         A=C     W                                * 78560
-        GOSUB   SUB_788A0                        * 78563
+        GOSUB   SPLITA~jump_788A0                * 78563
         GOSUB   SUB_78556                        * 78567
         GOTO    L_787E6                          * 7856B
 L_7856F:
@@ -524,7 +524,7 @@ L_7856F:
 
 * refs (1): 78409
 SUB_78576:
-        GOSUB   SUB_7870C                        * 78576
+        GOSUB   RCCD2~jump_7870C                 * 78576
         GOTO    L_78760                          * 7857A
 
 * refs (1): 780D1
@@ -533,8 +533,8 @@ SUB_7857E:
 
 * refs (1): 7834C
 SUB_78582:
-        GOSUB   SUB_7870C                        * 78582
-        GOSUB   SUB_78438                        * 78586
+        GOSUB   RCCD2~jump_7870C                 * 78582
+        GOSUB   XYEX~jump_78438                  * 78586
 L_7858A:
         GOVLNG  DIVF                             * 7858A
 
@@ -547,7 +547,7 @@ SUB_78591:
         A=0     S                                * 7859D
         ST=1    0                                * 785A0
 L_785A3:
-        GOSUB   SUB_786FD                        * 785A3
+        GOSUB   STAB2~jump_786FD                 * 785A3
         GOSUB   SUB_78044                        * 785A7
         R4=C                                     * 785AB
         GOTO    SUB_78664                        * 785AE
@@ -695,7 +695,7 @@ L_786AF:
         P=      0                                * 786BA
 
 * refs (2): 77E9B 77EB6
-SUB_786BC:
+PUTAB0~jump:
         GOVLNG  PUTAB0                           * 786BC
 
 * refs (2): 77F22 784CD
@@ -731,7 +731,7 @@ SUB_786E9:
 
 * refs (4): 780B1 780C1 78223 784C9
 SUB_786ED:
-        GOSUB   SUB_7870C                        * 786ED
+        GOSUB   RCCD2~jump_7870C                 * 786ED
         GOTO    L_787E6                          * 786F1
 
 * refs (1): 782AB
@@ -740,23 +740,23 @@ SUB_786F5:
         GOSUB   SUB_78772                        * 786F9
 
 * refs (12): 77F2E 78038 78084 780C5 7820B 7821B ...
-SUB_786FD:
+STAB2~jump_786FD:
         GOVLNG  STAB2                            * 786FD
         NIBHEX  7A817360                         * 78704  §.7.
 
 * refs (6): 77F2A 77F7B 78030 78576 78582 786ED
-SUB_7870C:
+RCCD2~jump_7870C:
         GOVLNG  RCCD2                            * 7870C
 
 * refs (1): 784D9
 SUB_78713:
-        GOSUB   SUB_786FD                        * 78713
+        GOSUB   STAB2~jump_786FD                 * 78713
 
 * refs (1): 780D5
 SUB_78717:
         GOSUB   SUB_7875C                        * 78717
-        GOSUB   SUB_78924                        * 7871B
-        GOSUB   SUB_787ED                        * 7871F
+        GOSUB   EXAB0~jump                       * 7871B
+        GOSUB   RCCD0~jump_787ED                 * 7871F
         ?C#A    A                                * 78723
         GOYES   L_7873A                          * 78726
         ?C#A    S                                * 78728
@@ -776,22 +776,22 @@ SUB_7873C:
 
 * refs (1): 7804E
 SUB_78740:
-        GOSUB   SUB_7826A                        * 78740
+        GOSUB   DIV2~jump                        * 78740
         A=-A-1  S                                * 78744
         GOLONG  L_78FCB                          * 78747
 
 * refs (3): 77F02 78112 781CE
 SUB_7874D:
-        GOSUB   SUB_786FD                        * 7874D
+        GOSUB   STAB2~jump_786FD                 * 7874D
 
 * refs (11): 77EC4 7800E 78179 78227 78262 78321 ...
-SUB_78751:
+STAB0~jump_78751:
         GOVLNG  STAB0                            * 78751
         NIBHEX  7610                             * 78758  g.
 
 * refs (2): 7825E 78717
 SUB_7875C:
-        GOSUB   SUB_787ED                        * 7875C
+        GOSUB   RCCD0~jump_787ED                 * 7875C
 L_78760:
         GOVLNG  RADDF                            * 78760
         NIBHEX  76EF7EED                         * 78767  gþçÞ
@@ -809,7 +809,7 @@ L_78776:
 * refs (1): 78865
 SUB_7877A:
         GOSUB   SUB_7890D                        * 7877A
-        GOSUB   SUB_788A0                        * 7877E
+        GOSUB   SPLITA~jump_788A0                * 7877E
 
 * refs (1): 784BE
 SUB_78782:
@@ -826,7 +826,7 @@ SUB_7878C:
 * refs (2): 7816B 782A0
 SUB_78797:
         GOSUB   L_785B2                          * 78797
-        GOSUB   SUB_78892                        * 7879B
+        GOSUB   SQRF~jump                        * 7879B
         GOTO    SUB_78664                        * 7879F
 
 * refs (2): 7839A 7884B
@@ -853,7 +853,7 @@ SUB_787BF:
 
 * refs (2): 780BD 78143
 SUB_787C7:
-        GOSUB   SUB_786FD                        * 787C7
+        GOSUB   STAB2~jump_786FD                 * 787C7
 
 * refs (1): 787DA
 SUB_787CB:
@@ -861,7 +861,7 @@ SUB_787CB:
 
 * refs (2): 78401 78501
 SUB_787CF:
-        GOSUB   SUB_7838F                        * 787CF
+        GOSUB   RADD1~jump                       * 787CF
         GOVLNG  1/X15                            * 787D3
 
 * refs (2): 780F0 78153
@@ -870,16 +870,16 @@ SUB_787DA:
 
 * refs (1): 7823E
 SUB_787DE:
-        GOSUB   SUB_78892                        * 787DE
+        GOSUB   SQRF~jump                        * 787DE
 
 * refs (6): 7831D 783D7 783ED 78405 784A2 784AE
 SUB_787E2:
-        GOSUB   SUB_787ED                        * 787E2
+        GOSUB   RCCD0~jump_787ED                 * 787E2
 L_787E6:
         GOVLNG  MULTF                            * 787E6
 
 * refs (6): 77F3A 78006 78375 7871F 7875C 787E2
-SUB_787ED:
+RCCD0~jump_787ED:
         GOVLNG  RCCD0                            * 787ED
 
 * refs (5): 77F98 78088 781A3 783AA 7882D
@@ -905,7 +905,7 @@ SUB_7880D:
         GOSUB   SUB_78266                        * 7880D
 
 * refs (1): 78993
-SUB_78811:
+CLRFRC~jump:
         GOVLNG  CLRFRC                           * 78811
 
 * refs (3): 784E9 78861 788F2
@@ -988,7 +988,7 @@ SUB_7888E:
         GOSUB   SUB_7843F                        * 7888E
 
 * refs (5): 7810E 78371 7879B 787DE 78917
-SUB_78892:
+SQRF~jump:
         GOVLNG  SQRF                             * 78892
 
 * refs (3): 78236 7824E 7873C
@@ -998,7 +998,7 @@ L_7889D:
         A=C     W                                * 7889D
 
 * refs (5): 7824A 78266 7854A 78563 7877E
-SUB_788A0:
+SPLITA~jump_788A0:
         GOVLNG  SPLITA                           * 788A0
 
 * refs (2): 77EE4 781B5
@@ -1055,19 +1055,19 @@ SUB_7890D:
         P=      14                               * 78910
         LC(1)   #2                               * 78912
         RTN                                      * 78915
-        GOSUB   SUB_78892                        * 78917
+        GOSUB   SQRF~jump                        * 78917
         GOSUB   L_789E8                          * 7891B
         R4=C                                     * 7891F
         RTNCC                                    * 78922
 
 * refs (4): 77F10 77F16 77FF4 7871B
-SUB_78924:
+EXAB0~jump:
         GOVLNG  EXAB0                            * 78924
 
 * refs (2): 77F1C 7801E
-SUB_7892B:
+EXAB2~jump:
         GOVLNG  EXAB2                            * 7892B
-        GOSUB   SUB_78751                        * 78932
+        GOSUB   STAB0~jump_78751                 * 78932
         GOSUB   SUB_78524                        * 78936
         P=      10                               * 7893A
 L_7893C:
@@ -1085,11 +1085,11 @@ SUB_78955:
         GOSUB   SUB_785B8                        * 78955
         GOSUB   SUB_78611                        * 78959
         GOSUB   SUB_78670                        * 7895D
-        GOSUB   SUB_78438                        * 78961
+        GOSUB   XYEX~jump_78438                  * 78961
         GOTO    SUB_7866A                        * 78965
         NIBHEX  BCC                              * 78969  Ë
 L_7896C:
-        GOSUB   SUB_789E1                        * 7896C
+        GOSUB   RADDF~jump_789E1                 * 7896C
         GOTO    L_789E8                          * 78970
         NIBHEX  BCE64FF                          * 78974  Ënô
 
@@ -1103,8 +1103,8 @@ SUB_7897B:
 SUB_78987:
         GOSUB   SUB_78524                        * 78987
         GOSUB   SUB_78556                        * 7898B
-        GOSUB   SUB_789E1                        * 7898F
-        GOSUB   SUB_78811                        * 78993
+        GOSUB   RADDF~jump_789E1                 * 7898F
+        GOSUB   CLRFRC~jump                      * 78993
         ?B=0    M                                * 78997
         GOYES   L_789BA                          * 7899A
         ?A#0    S                                * 7899C
@@ -1130,12 +1130,12 @@ L_789C3:
         GOVLNG  Errjmp                           * 789D0
 
 * refs (2): 77FBF 77FDA
-SUB_789D7:
+TST15~jump_789D7:
         GOVLNG  TST15                            * 789D7
         NIBHEX  BCE                              * 789DE  Ë
 
 * refs (2): 7896C 7898F
-SUB_789E1:
+RADDF~jump_789E1:
         GOVLNG  RADDF                            * 789E1
 L_789E8:
         C=B     W                                * 789E8
@@ -1144,7 +1144,7 @@ L_789E8:
         GOSBVL  SUB_29F76                        * 789F1
         CD0EX                                    * 789F8
         C=A     S                                * 789FB
-        GOLONG  SUB_78438                        * 789FE
+        GOLONG  XYEX~jump_78438                  * 789FE
         NIBHEX  789E8CBF301107FEFBCC             * 78A04  πéÈû..pï¿Ì
 
 * refs (1): 78173
@@ -1358,14 +1358,14 @@ L_78BEF:
         LC(2)   #18                              * 78BF1
         GOTO    L_78DFE                          * 78BF5
 L_78BF9:
-        GOSUBL  SUB_79616                        * 78BF9
+        GOSUBL  EXAB0~jump_79616                 * 78BF9
         GOSUB   SUB_78D1D                        * 78BFF
         GONC    L_78BEF                          * 78C03
-        GOSUBL  SUB_79616                        * 78C06
-        GOSUBL  SUB_795EC                        * 78C0C
-        GOSUBL  SUB_79608                        * 78C12
+        GOSUBL  EXAB0~jump_79616                 * 78C06
+        GOSUBL  STAB2~jump_795EC                 * 78C0C
+        GOSUBL  RCCD0~jump_79608                 * 78C12
         P=      1                                * 78C18
-        GOSUBL  SUB_79632                        * 78C1A
+        GOSUBL  TST15~jump_79632                 * 78C1A
         GOC     L_78BEF                          * 78C20
         ?ST=0   9                                * 78C23
         GOYES   L_78C4F                          * 78C26
@@ -1377,30 +1377,30 @@ L_78BF9:
         P=      14                               * 78C3E
         ?B#0    P                                * 78C40
         GOYES   L_78C4F                          * 78C43
-        GOSUBL  SUB_79601                        * 78C45
+        GOSUBL  RCAB2~jump_79601                 * 78C45
 L_78C4B:
         GOTO    L_78AEB                          * 78C4B
 L_78C4F:
-        GOSUBL  SUB_79601                        * 78C4F
+        GOSUBL  RCAB2~jump_79601                 * 78C4F
         P=      0                                * 78C55
         LC(5)   #00012                           * 78C57
         ?C<=A   A                                * 78C5E
         GOYES   L_78BEF                          * 78C61
-        GOSUBL  SUB_79608                        * 78C63
+        GOSUBL  RCCD0~jump_79608                 * 78C63
         C=-C-1  S                                * 78C69
         GOSBVL  RADDF                            * 78C6C
-        GOSUBL  SUB_79608                        * 78C73
+        GOSUBL  RCCD0~jump_79608                 * 78C73
         ?ST=1   9                                * 78C79
         GOYES   L_78C8F                          * 78C7C
         P=      6                                * 78C7E
-        GOSUBL  SUB_79632                        * 78C80
+        GOSUBL  TST15~jump_79632                 * 78C80
         GOC     L_78C8F                          * 78C86
-        GOSUBL  SUB_79624                        * 78C89
+        GOSUBL  XYEX~jump_79624                  * 78C89
 L_78C8F:
-        GOSUBL  SUB_795F3                        * 78C8F
+        GOSUBL  STCD0~jump                       * 78C8F
         A=B     M                                * 78C95
         R3=A                                     * 78C98
-        GOSUBL  SUB_79616                        * 78C9B
+        GOSUBL  EXAB0~jump_79616                 * 78C9B
         A=B     M                                * 78CA1
         R2=A                                     * 78CA4
         A=0     W                                * 78CA7
@@ -1409,7 +1409,7 @@ L_78C8F:
         B=B+1   P                                * 78CAF
         R4=A                                     * 78CB2
 L_78CB5:
-        GOSUBL  SUB_795E5                        * 78CB5
+        GOSUBL  STAB0~jump_795E5                 * 78CB5
         A=R4                                     * 78CBB
         C=R2                                     * 78CBE
         ?C#A    W                                * 78CC1
@@ -1433,7 +1433,7 @@ L_78CCC:
         DCEX    M                                * 78CFD
         GOSBVL  DIVF                             * 78D00
 L_78D07:
-        GOSUBL  SUB_79608                        * 78D07
+        GOSUBL  RCCD0~jump_79608                 * 78D07
         GOSBVL  MULTF                            * 78D0D
         P=      3                                * 78D14
         ?A=0    P                                * 78D16
@@ -1875,9 +1875,9 @@ L_790FB:
 L_7911C:
         ?ST=0   11                               * 7911C
         GOYES   L_79130                          * 7911F
-        GOSUB   SUB_795E5                        * 79121
+        GOSUB   STAB0~jump_795E5                 * 79121
         GOSBVL  RSUB1                            * 79125
-        GOSUB   SUB_79616                        * 7912C
+        GOSUB   EXAB0~jump_79616                 * 7912C
 L_79130:
         RTNCC                                    * 79130
 L_79132:
@@ -1890,7 +1890,7 @@ L_79132:
 L_79143:
         ?ST=0   11                               * 79143
         GOYES   L_7914C                          * 79146
-        GOSUB   SUB_795E5                        * 79148
+        GOSUB   STAB0~jump_795E5                 * 79148
 L_7914C:
         ?B=0    W                                * 7914C
         GOYES   L_7915B                          * 7914F
@@ -1953,9 +1953,9 @@ L_7925F:
         B=C     W                                * 7925F
         ?ST=0   11                               * 79262
         RTNYES                                   * 79265
-        GOSUB   SUB_795E5                        * 79267
+        GOSUB   STAB0~jump_795E5                 * 79267
         GOSBVL  RSUB1                            * 7926B
-        GOSUB   SUB_79616                        * 79272
+        GOSUB   EXAB0~jump_79616                 * 79272
         RTNSC                                    * 79276
 L_79278:
         GOSUB   L_78D44                          * 79278
@@ -2013,7 +2013,7 @@ L_792EE:
 L_792F8:
         ?C=0    B                                * 792F8
         GOYES   L_792EC                          * 792FB
-        GOSUB   SUB_79624                        * 792FD
+        GOSUB   XYEX~jump_79624                  * 792FD
         RTNSC                                    * 79301
 L_79303:
         HST=0   3                                * 79303
@@ -2040,20 +2040,20 @@ L_7933D:
 L_79346:
         GOSUB   SUB_795D6                        * 79346
         GONC    L_79377                          * 7934A
-        GOSUB   SUB_7960F                        * 7934D
+        GOSUB   RCCD2~jump_7960F                 * 7934D
         GOSBVL  SUB_2BD0E                        * 79351
         GOC     L_79377                          * 79358
-        GOSUB   SUB_79624                        * 7935B
+        GOSUB   XYEX~jump_79624                  * 7935B
         D=C     A                                * 7935F
         GOSBVL  CLRFRC                           * 79361
         C=D     A                                * 79368
         D=0     A                                * 7936A
-        GOSUB   SUB_79624                        * 7936C
+        GOSUB   XYEX~jump_79624                  * 7936C
         GONC    L_79377                          * 79370
         GOTO    L_79278                          * 79373
 L_79377:
         GOSUB   SUB_78DE9                        * 79377
-        GOSUB   SUB_7960F                        * 7937B
+        GOSUB   RCCD2~jump_7960F                 * 7937B
         GOSBVL  SUB_2B915                        * 7937F
         ?XM=0                                    * 79386
         GOYES   L_793AD                          * 79389
@@ -2081,12 +2081,12 @@ L_793B6:
         BCEX    W                                * 793BB
         GOTO    L_78FDB                          * 793BE
 L_793C2:
-        GOSUB   SUB_7961D                        * 793C2
+        GOSUB   EXAB2~jump_7961D                 * 793C2
         C=A     A                                * 793C6
         C=C+C   A                                * 793C8
         GONC    L_793E2                          * 793CA
 L_793CD:
-        GOSUB   SUB_7961D                        * 793CD
+        GOSUB   EXAB2~jump_7961D                 * 793CD
         ?B=0    W                                * 793D1
         GOYES   L_79418                          * 793D4
         P=      0                                * 793D6
@@ -2107,7 +2107,7 @@ L_793FB:
         P=P+1                                    * 793FB
         GOSUB   SUB_794FD                        * 793FD
 L_79401:
-        GOSUB   SUB_7961D                        * 79401
+        GOSUB   EXAB2~jump_7961D                 * 79401
         A=0     S                                * 79405
         GONC    L_7940F                          * 79408
         GOTO    L_7933D                          * 7940B
@@ -2116,7 +2116,7 @@ L_7940F:
         A=-A-1  S                                * 79413
         RTN                                      * 79416
 L_79418:
-        GOSUB   SUB_7960F                        * 79418
+        GOSUB   RCCD2~jump_7960F                 * 79418
         P=      0                                * 7941C
         ?D#0    W                                * 7941E
         GOYES   L_7942D                          * 79421
@@ -2174,14 +2174,14 @@ L_79497:
 L_7949A:
         GOVLNG  L_2B9A3                          * 7949A
 L_794A1:
-        GOSUB   SUB_795E5                        * 794A1
-        GOSUB   SUB_79624                        * 794A5
+        GOSUB   STAB0~jump_795E5                 * 794A1
+        GOSUB   XYEX~jump_79624                  * 794A5
         ?C#0    S                                * 794A9
         GOYES   L_794C1                          * 794AC
 L_794AE:
         GOSBVL  1/X15                            * 794AE
-        GOSUB   SUB_79608                        * 794B5
-        GOSUB   SUB_79624                        * 794B9
+        GOSUB   RCCD0~jump_79608                 * 794B5
+        GOSUB   XYEX~jump_79624                  * 794B9
         GOTO    L_7930D                          * 794BD
 L_794C1:
         GOSBVL  SUB_2BBFC                        * 794C1
@@ -2237,7 +2237,7 @@ L_79529:
         R0=A                                     * 79533
         R1=C                                     * 79536
         GOSUB   SUB_7962B                        * 79539
-        GOSUB   SUB_79624                        * 7953D
+        GOSUB   XYEX~jump_79624                  * 7953D
         GONC    L_7954D                          * 79541
         ?C#A    XS                               * 79544
         GOYES   L_79560                          * 79547
@@ -2314,41 +2314,41 @@ SUB_795D6:
         RTN                                      * 795E3
 
 * refs (7): 78CB5 79121 79148 79267 794A1 7990F ...
-SUB_795E5:
+STAB0~jump_795E5:
         GOVLNG  STAB0                            * 795E5
 
 * refs (2): 78C0C 79BDA
-SUB_795EC:
+STAB2~jump_795EC:
         GOVLNG  STAB2                            * 795EC
 
 * refs (1): 78C8F
-SUB_795F3:
+STCD0~jump:
         GOVLNG  STCD0                            * 795F3
 L_795FA:
         GOVLNG  RCAB0                            * 795FA
 
 * refs (2): 78C45 78C4F
-SUB_79601:
+RCAB2~jump_79601:
         GOVLNG  RCAB2                            * 79601
 
 * refs (7): 78C12 78C63 78C73 78D07 794B5 79913 ...
-SUB_79608:
+RCCD0~jump_79608:
         GOVLNG  RCCD0                            * 79608
 
 * refs (4): 7934D 7937B 79418 79C03
-SUB_7960F:
+RCCD2~jump_7960F:
         GOVLNG  RCCD2                            * 7960F
 
 * refs (6): 78BF9 78C06 78C9B 7912C 79272 79BE4
-SUB_79616:
+EXAB0~jump_79616:
         GOVLNG  EXAB0                            * 79616
 
 * refs (3): 793C2 793CD 79401
-SUB_7961D:
+EXAB2~jump_7961D:
         GOVLNG  EXAB2                            * 7961D
 
 * refs (8): 78C89 792FD 7935B 7936C 794A5 794B9 ...
-SUB_79624:
+XYEX~jump_79624:
         GOVLNG  XYEX                             * 79624
 
 * refs (4): 78A3A 792C8 79539 7954D
@@ -2356,7 +2356,7 @@ SUB_7962B:
         GOVLNG  SUB_2BD02                        * 7962B
 
 * refs (2): 78C1A 78C80
-SUB_79632:
+TST15~jump_79632:
         GOVLNG  TST15                            * 79632
 
 * refs (1): 7968D
@@ -2649,8 +2649,8 @@ L_798FE:
         GOYES   L_7990F                          * 79909
         GOSUB   SUB_79AD7                        * 7990B
 L_7990F:
-        GOSUB   SUB_795E5                        * 7990F
-        GOSUB   SUB_79608                        * 79913
+        GOSUB   STAB0~jump_795E5                 * 7990F
+        GOSUB   RCCD0~jump_79608                 * 79913
         GOSBVL  SUB_2B915                        * 79917
         GOSBVL  SUB_78A28                        * 7991E
         GOSBVL  SUB_2B9F3                        * 79925
@@ -2855,7 +2855,7 @@ L_79B3A:
         GOTO    L_7967B                          * 79B3A
 L_79B3E:
         GOSUB   SUB_79AB2                        * 79B3E
-        GOSUB   SUB_79624                        * 79B42
+        GOSUB   XYEX~jump_79624                  * 79B42
         A=C     S                                * 79B46
         ?ST=1   4                                * 79B49
         GOYES   L_79B56                          * 79B4C
@@ -2918,16 +2918,16 @@ L_79BCA:
         GONC    L_79C27                          * 79BCE
         ?ST=0   6                                * 79BD1
         GOYES   L_79C23                          * 79BD4
-        GOSUB   SUB_795E5                        * 79BD6
-        GOSUB   SUB_795EC                        * 79BDA
+        GOSUB   STAB0~jump_795E5                 * 79BD6
+        GOSUB   STAB2~jump_795EC                 * 79BDA
         GOSUBL  SUB_78A28                        * 79BDE
-        GOSUB   SUB_79616                        * 79BE4
+        GOSUB   EXAB0~jump_79616                 * 79BE4
         GOSUBL  SUB_78A1F                        * 79BE8
-        GOSUB   SUB_79608                        * 79BEE
+        GOSUB   RCCD0~jump_79608                 * 79BEE
         GOSBVL  MULTF                            * 79BF2
         A=0     S                                * 79BF9
         GOSBVL  SQRF                             * 79BFC
-        GOSUB   SUB_7960F                        * 79C03
+        GOSUB   RCCD2~jump_7960F                 * 79C03
         GOSBVL  SUB_2B797                        * 79C07
         A=0     S                                * 79C0E
         C=A     A                                * 79C11
@@ -3081,48 +3081,48 @@ SUB_79D58:
         RTNCC                                    * 79D7D
 
 * refs (5): 79DC8 79E02 79E51 79EB8 79F6D
-SUB_79D7F:
+MULTF~jump_79D7F:
         GOVLNG  MULTF                            * 79D7F
 
 * refs (3): 79F5C 79F93 79FA9
-SUB_79D86:
+CLRFRC~jump_79D86:
         GOVLNG  CLRFRC                           * 79D86
 
 * refs (7): 79DC4 79DE6 79DFE 79E4D 79E5C 79E93 ...
-SUB_79D8D:
+RCCD0~jump_79D8D:
         GOVLNG  RCCD0                            * 79D8D
 
 * refs (2): 79DD7 79E19
-SUB_79D94:
+RCCD2~jump_79D94:
         GOVLNG  RCCD2                            * 79D94
 
 * refs (5): 79DD0 79DFA 79E30 79E73 79F58
-SUB_79D9B:
+STAB0~jump_79D9B:
         GOVLNG  STAB0                            * 79D9B
 
 * refs (2): 79DBC 79E06
-SUB_79DA2:
+STAB2~jump_79DA2:
         GOVLNG  STAB2                            * 79DA2
 L_79DA9:
         R4=A                                     * 79DA9
         A=0     S                                * 79DAC
         GOSUBL  L_78FD5                          * 79DAF
         GOSBVL  1/X15                            * 79DB5
-        GOSUB   SUB_79DA2                        * 79DBC
-        GOSUB   SUB_79F9F                        * 79DC0
-        GOSUB   SUB_79D8D                        * 79DC4
-        GOSUB   SUB_79D7F                        * 79DC8
+        GOSUB   STAB2~jump_79DA2                 * 79DBC
+        GOSUB   RADD1~jump_79F9F                 * 79DC0
+        GOSUB   RCCD0~jump_79D8D                 * 79DC4
+        GOSUB   MULTF~jump_79D7F                 * 79DC8
         GOSUB   SUB_79EA8                        * 79DCC
-        GOSUB   SUB_79D9B                        * 79DD0
+        GOSUB   STAB0~jump_79D9B                 * 79DD0
         A=0     S                                * 79DD4
-        GOSUB   SUB_79D94                        * 79DD7
+        GOSUB   RCCD2~jump_79D94                 * 79DD7
 
 * refs (2): 79E60 79F8C
-SUB_79DDB:
+RADDF~jump_79DDB:
         GOVLNG  RADDF                            * 79DDB
 L_79DE2:
         GOSUB   L_79DA9                          * 79DE2
-        GOSUB   SUB_79D8D                        * 79DE6
+        GOSUB   RCCD0~jump_79D8D                 * 79DE6
 
 * refs (2): 79E1D 79E97
 SUB_79DEA:
@@ -3131,14 +3131,14 @@ L_79DF1:
         HST=0   3                                * 79DF1
         R4=A                                     * 79DF4
         A=0     S                                * 79DF7
-        GOSUB   SUB_79D9B                        * 79DFA
-        GOSUB   SUB_79D8D                        * 79DFE
-        GOSUB   SUB_79D7F                        * 79E02
-        GOSUB   SUB_79DA2                        * 79E06
-        GOSUB   SUB_79F9F                        * 79E0A
+        GOSUB   STAB0~jump_79D9B                 * 79DFA
+        GOSUB   RCCD0~jump_79D8D                 * 79DFE
+        GOSUB   MULTF~jump_79D7F                 * 79E02
+        GOSUB   STAB2~jump_79DA2                 * 79E06
+        GOSUB   RADD1~jump_79F9F                 * 79E0A
         GOSBVL  SQRF                             * 79E0E
-        GOSUB   SUB_79F9F                        * 79E15
-        GOSUB   SUB_79D94                        * 79E19
+        GOSUB   RADD1~jump_79F9F                 * 79E15
+        GOSUB   RCCD2~jump_79D94                 * 79E19
         GOSUB   SUB_79DEA                        * 79E1D
         GOSUB   SUB_79E5C                        * 79E21
         C=R4                                     * 79E25
@@ -3146,34 +3146,34 @@ L_79DF1:
         RTN                                      * 79E2B
 L_79E2D:
         HST=0   3                                * 79E2D
-        GOSUB   SUB_79D9B                        * 79E30
-        GOSUB   SUB_79FB5                        * 79E34
+        GOSUB   STAB0~jump_79D9B                 * 79E30
+        GOSUB   RSUB1~jump                       * 79E34
         ?B=0    M                                * 79E38
         GOYES   L_79E42                          * 79E3B
         ?A#0    S                                * 79E3D
         GOYES   L_79E88                          * 79E40
 L_79E42:
         GOSBVL  EXAB0                            * 79E42
-        GOSUB   SUB_79F9F                        * 79E49
-        GOSUB   SUB_79D8D                        * 79E4D
-        GOSUB   SUB_79D7F                        * 79E51
+        GOSUB   RADD1~jump_79F9F                 * 79E49
+        GOSUB   RCCD0~jump_79D8D                 * 79E4D
+        GOSUB   MULTF~jump_79D7F                 * 79E51
         GOSBVL  SQRF                             * 79E55
 
 * refs (1): 79E21
 SUB_79E5C:
-        GOSUB   SUB_79D8D                        * 79E5C
+        GOSUB   RCCD0~jump_79D8D                 * 79E5C
 
 * refs (1): 79EA4
 SUB_79E60:
-        GOSUB   SUB_79DDB                        * 79E60
+        GOSUB   RADDF~jump_79DDB                 * 79E60
         GOLONG  L_78DBC                          * 79E64
 L_79E6A:
         HST=0   3                                * 79E6A
         R4=A                                     * 79E6D
         A=0     S                                * 79E70
-        GOSUB   SUB_79D9B                        * 79E73
+        GOSUB   STAB0~jump_79D9B                 * 79E73
         A=-A-1  S                                * 79E77
-        GOSUB   SUB_79F9F                        * 79E7A
+        GOSUB   RADD1~jump_79F9F                 * 79E7A
         ?B=0    M                                * 79E7E
         GOYES   L_79E8C                          * 79E81
         ?A=0    S                                * 79E83
@@ -3186,7 +3186,7 @@ L_79E8C:
         P=      3                                * 79E8F
         RTNSXM                                   * 79E91
 L_79E93:
-        GOSUB   SUB_79D8D                        * 79E93
+        GOSUB   RCCD0~jump_79D8D                 * 79E93
         GOSUB   SUB_79DEA                        * 79E97
         C=B     W                                * 79E9B
         D=C     W                                * 79E9E
@@ -3201,7 +3201,7 @@ SUB_79EA8:
         LC(1)   #5                               * 79EB0
         DCEX    P                                * 79EB3
         C=-C-1  A                                * 79EB6
-        GOSUB   SUB_79D7F                        * 79EB8
+        GOSUB   MULTF~jump_79D7F                 * 79EB8
         C=R4                                     * 79EBC
         A=C     S                                * 79EBF
         RTN                                      * 79EC2
@@ -3273,14 +3273,14 @@ SUB_79F51:
 
 * refs (1): 79F54
 SUB_79F58:
-        GOSUB   SUB_79D9B                        * 79F58
-        GOSUB   SUB_79D86                        * 79F5C
+        GOSUB   STAB0~jump_79D9B                 * 79F58
+        GOSUB   CLRFRC~jump_79D86                * 79F5C
         C=0     W                                * 79F60
         P=      14                               * 79F63
         LC(1)   #6                               * 79F65
         D=C     W                                * 79F68
         C=C+1   A                                * 79F6B
-        GOSUB   SUB_79D7F                        * 79F6D
+        GOSUB   MULTF~jump_79D7F                 * 79F6D
         GOSBVL  EXAB0                            * 79F71
         GOSBVL  SUB_78A3A                        * 79F78
         ?B=0    M                                * 79F7F
@@ -3288,27 +3288,27 @@ SUB_79F58:
         A=A+1   A                                * 79F84
         A=A+1   A                                * 79F86
 L_79F88:
-        GOSUB   SUB_79D8D                        * 79F88
-        GOTO    SUB_79DDB                        * 79F8C
+        GOSUB   RCCD0~jump_79D8D                 * 79F88
+        GOTO    RADDF~jump_79DDB                 * 79F8C
 L_79F90:
         HST=0   3                                * 79F90
-        GOSUB   SUB_79D86                        * 79F93
+        GOSUB   CLRFRC~jump_79D86                * 79F93
         RTNC                                     * 79F97
         ?A#0    S                                * 79F9A
         RTNYES                                   * 79F9D
 
 * refs (5): 79DC0 79E0A 79E15 79E49 79E7A
-SUB_79F9F:
+RADD1~jump_79F9F:
         GOVLNG  RADD1                            * 79F9F
 L_79FA6:
         HST=0   3                                * 79FA6
-        GOSUB   SUB_79D86                        * 79FA9
+        GOSUB   CLRFRC~jump_79D86                * 79FA9
         RTNC                                     * 79FAD
         ?A=0    S                                * 79FB0
         RTNYES                                   * 79FB3
 
 * refs (1): 79E34
-SUB_79FB5:
+RSUB1~jump:
         GOVLNG  RSUB1                            * 79FB5
         BSS     22                               * 79FBC
 

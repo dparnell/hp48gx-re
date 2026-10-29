@@ -173,7 +173,7 @@ OBJ_4C64D:
 
 * refs (2): 4A9E7 4B53B
 OBJ_4C6E3:
-        :: TYPECSTR? OBJ_514C3 TYPECSTR? OBJ_514C3 ; * 4C6E3
+        :: TYPECSTR? NOT?INVPPAR TYPECSTR? NOT?INVPPAR ; * 4C6E3
 
 * refs (1): 4A8A6
 OBJ_4C701:
@@ -1191,7 +1191,7 @@ OBJ_4EEBF:
 
 * refs (2): 4A9F6 4B540
 OBJ_4EF0A:
-        :: OBJ_4C64D OBJ_514C3 ;                 * 4EF0A
+        :: OBJ_4C64D NOT?INVPPAR ;               * 4EF0A
 
 * refs (1): 4CA91
 bins(3r)~1~1:

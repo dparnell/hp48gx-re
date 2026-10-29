@@ -1,6 +1,6 @@
 * HP 48GX ROM revision R, #4F0AC-#52016: Plotting
 * Addresses in the right-hand comments are those of the original ROM.
-* Most referenced: ISTOP-INDEX SWAP#1+SWAP CHECKPICT INDEPVAR GROBDIM C%>%% 1get(li)? Re>C% %1- %%>C% RclMaxStdPict REPEATERCH
+* Most referenced: ISTOP-INDEX SWAP#1+SWAP NOT?INVPPAR CHECKPICT INDEPVAR GROBDIM C%>%% 1get(li)? Re>C% %1- %%>C% RclMaxStdPict
 * Follows on from the previous file (at #4F0AC in the original ROM).
         RPL
 
@@ -1305,7 +1305,8 @@ GETRHS:
         :: 1stArgRpn(ex) ::N ;                   * 514AF
 
 * refs (24): 45F7B 45F8F 4AA0A 4AA23 4AA32 4AA3C ...
-OBJ_514C3:
+* flag -> : Invalid PPAR error unless the flag is TRUE
+NOT?INVPPAR:
         :: ?SKIP SETINVPPAR                      * 514C3
         ;                                        * 514D2
         NIBHEX  00000                            * 514D7  ..
@@ -1432,6 +1433,7 @@ DUPGROBDIM:
         :: DUP GROBDIM ;                         * 5179E
 
 * refs (29): 0C947 0C9EA 4570D 481F2 48251 48328 ...
+* Probably: PICTURE cursor position: -> #x #y (lams 8 and 7)
 OBJ_517B2:
         :: 8GETLAM 7GETLAM ;                     * 517B2
 

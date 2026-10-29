@@ -526,7 +526,7 @@ OBJ_3EFC8:
 * refs (5): 3BF17 3C0EE 3C26A 3C6B9 3D498
 OBJ_3EFE6:
         :: '                                     * 3EFE6
-          :: OBJ_3EFB4 OBJ_40184 ; OnlyDefNoShift! ; * 3EFF0
+          :: OBJ_3EFB4 InitMenuNoExit ; OnlyDefNoShift! ; * 3EFF0
 
 * refs (8): 3C459 3C4E3 3C56D 3C5F7 3C681 3D434 ...
 OnlyDefNoShift!:

@@ -11,8 +11,8 @@ L_12002:
 * refs (2): 39A24 46879
 RIGHT$3x6:
         CON(5)  (*)+5                            * 1200C  primitive code object
-        GOSUB   SUB_11CC5                        * 12011
-        GOSUB   SUB_11CBE                        * 12015
+        GOSUB   SAVPTR~jump_11CC5                * 12011
+        GOSUB   POP#~jump                        * 12015
         R0=A                                     * 12019
         A=DAT1  A                                * 1201C
         GOSUB   SUB_120CC                        * 1201F
@@ -85,7 +85,7 @@ SUB_120CC:
         RTN                                      * 120E5
 
 * refs (3): 11919 11D18 11FFB
-SUB_120E7:
+GETPTR~jump_120E7:
         GOVLNG  GETPTR                           * 120E7
         NIBHEX  8DF7530                          * 120EE  Ø.5
 
@@ -135,7 +135,7 @@ L_1212F:
 * refs (1): 3A4C4
 CENTER$3x5:
         CON(5)  (*)+5                            * 1215E  primitive code object
-        GOSUB   SUB_11CBE                        * 12163
+        GOSUB   POP#~jump                        * 12163
         R0=A                                     * 12167
         A=DAT1  A                                * 1216A
         R1=A                                     * 1216D
@@ -148,7 +148,7 @@ CENTER$3x5:
 L_12187:
         R2=C                                     * 12187
         R3=A                                     * 1218A
-        GOSUB   SUB_11CC5                        * 1218D
+        GOSUB   SAVPTR~jump_11CC5                * 1218D
         A=DAT1  A                                * 12191
         R4=A                                     * 12194
         A=R1                                     * 12197
@@ -300,7 +300,7 @@ L_122CA:
 * refs (24): 3A380 3A3E2 3A444 4CDC0 4DBBD 4FC32 ...
 INVGROB:
         CON(5)  (*)+5                            * 122FF  primitive code object
-        GOSUB   SUB_11CC5                        * 12304
+        GOSUB   SAVPTR~jump_11CC5                * 12304
         C=DAT1  A                                * 12308
         D1=C                                     * 1230B
         D1=D1+  5                                * 1230E
@@ -377,7 +377,7 @@ L_123C2:
 * refs (3): 39D97 39DD8 3A0C6
 BigDisp(st,s):
         CON(5)  (*)+5                            * 123C8  primitive code object
-        GOSUB   SUB_11CBE                        * 123CD
+        GOSUB   POP#~jump                        * 123CD
         A=A-1   A                                * 123D1
         A=A-1   A                                * 123D3
         GOC     L_1241A                          * 123D5
@@ -418,7 +418,7 @@ L_12421:
 * refs (7): 15469 3A532 3FBB0 413FA 4140E 492ED ...
 DISPN:
         CON(5)  (*)+5                            * 12429  primitive code object
-        GOSUB   SUB_11CBE                        * 1242E
+        GOSUB   POP#~jump                        * 1242E
         A=A-1   A                                * 12432
         A=A-1   A                                * 12434
         GOC     L_12460                          * 12436
@@ -504,7 +504,7 @@ L_124DA:
         A=DAT1  A                                * 124DC
         D1=D1+  5                                * 124DF
         D=D+1   A                                * 124E2
-        GOSUBL  SUB_11CC5                        * 124E4
+        GOSUBL  SAVPTR~jump_11CC5                * 124E4
         GOSUB   SUB_120CC                        * 124EA
         LC(5)   #00016                           * 124EE
         ST=0    1                                * 124F5
@@ -780,7 +780,7 @@ SUB_128A1:
 XYGROBDISP:
         :: 3UNROLL                               * 128B0
           CODE                                   * 128BA  31 nibbles
-            GOSUB   SUB_12FB2                    * 128C4
+            GOSUB   SAVPTR~jump_12FB2            * 128C4
             GOSBVL  POP#                         * 128C8
             D1=D1+  5                            * 128CF
             C=0     A                            * 128D2
@@ -790,7 +790,7 @@ XYGROBDISP:
             GONC    L_12907                      * 128E0  always taken
           ENDCODE                                * 128E3
           CODE                                   * 128E3  99 nibbles
-            GOSUB   SUB_12FB2                    * 128ED
+            GOSUB   SAVPTR~jump_12FB2            * 128ED
             D1=D1+  5                            * 128F1
             GOSBVL  POP#                         * 128F4
             B=0     A                            * 128FB
@@ -836,7 +836,7 @@ ScreenUpN:
         CON(5)  (*)+5                            * 12996  primitive code object
         ASSEMBLE
         GOSBVL  POP#                             * 1299B
-        GOSUB   SUB_12FB2                        * 129A2
+        GOSUB   SAVPTR~jump_12FB2                * 129A2
         A=A-1   A                                * 129A6
         D0=(5)  VDISP                            * 129A8
         C=DAT0  A                                * 129AF
@@ -874,7 +874,7 @@ L_129D7:
 * moves stk displ up 1 line
 ScreenUp:
         CON(5)  (*)+5                            * 12A0D  primitive code object
-        GOSUB   SUB_12FB2                        * 12A12
+        GOSUB   SAVPTR~jump_12FB2                * 12A12
         C=0     A                                * 12A16
         LC(1)   #3                               * 12A18
         A=C     A                                * 12A1B
@@ -896,7 +896,7 @@ ScreenUp:
 ScreenDnN:
         CON(5)  (*)+5                            * 12A4A  primitive code object
         GOSBVL  POP#                             * 12A4F
-        GOSUB   SUB_12FB2                        * 12A56
+        GOSUB   SAVPTR~jump_12FB2                * 12A56
         A=A-1   A                                * 12A5A
         B=A     A                                * 12A5C
         LC(5)   #00154                           * 12A5E
@@ -953,7 +953,7 @@ L_12AAD:
 * moves stk displ down 1 line
 ScreenDn:
         CON(5)  (*)+5                            * 12AF6  primitive code object
-        GOSUB   SUB_12FB2                        * 12AFB
+        GOSUB   SAVPTR~jump_12FB2                * 12AFB
         LA(5)   #00003                           * 12AFF
         B=A     A                                * 12B09
         LC(5)   #00110                           * 12B0B
@@ -1004,7 +1004,7 @@ BROADENGROB:
         GOSBVL  POP#                             * 12BBC
         R4=A                                     * 12BC3
         ST=0    10                               * 12BC6
-        GOSUB   SUB_12FB2                        * 12BC9
+        GOSUB   SAVPTR~jump_12FB2                * 12BC9
 L_12BCD:
         A=R4.F  A                                * 12BCD
         B=A     A                                * 12BD3
@@ -1141,7 +1141,7 @@ L_12D7E:
 
 * refs (2): 12C3A 12CCE
 SUB_12D85:
-        GOSUB   SUB_12FB9                        * 12D85
+        GOSUB   GETPTR~jump_12FB9                * 12D85
         C=DAT1  A                                * 12D89
         D1=C                                     * 12D8C
         D1=D1+  5                                * 12D8F
@@ -1171,7 +1171,7 @@ HEIGHTENGROB:
         GOSBVL  POP#                             * 12DD6
         R4=A.F  A                                * 12DDD
         ST=0    10                               * 12DE3
-        GOSUB   SUB_12FB2                        * 12DE6
+        GOSUB   SAVPTR~jump_12FB2                * 12DE6
 L_12DEA:
         B=A     A                                * 12DEA
         C=DAT1  A                                * 12DEC
@@ -1210,7 +1210,7 @@ L_12E49:
         RSTK=C                                   * 12E4E
         GOSBVL  WIPEOUT                          * 12E50
 L_12E57:
-        GOSUB   SUB_12FB9                        * 12E57
+        GOSUB   GETPTR~jump_12FB9                * 12E57
         C=RSTK                                   * 12E5B
         A=DAT1  A                                * 12E5D
         AD1EX                                    * 12E60
@@ -1287,7 +1287,7 @@ StoNoCurGrob(go):
         D1=(5)  SAVE_LC                          * 12F7B
         DAT1=A  B                                * 12F82
 L_12F85:
-        GOSUB   SUB_12FB9                        * 12F85
+        GOSUB   GETPTR~jump_12FB9                * 12F85
         D1=D1+  5                                * 12F89
         D=D+1   A                                * 12F8C
         GOLONG  L_137D2                          * 12F8E
@@ -1301,20 +1301,20 @@ GROB>GDISP:
         ASSEMBLE
 
 * refs (22): 128C4 128ED 129A2 12A12 12A56 12AFB ...
-SUB_12FB2:
+SAVPTR~jump_12FB2:
         GOVLNG  SAVPTR                           * 12FB2
 
 * refs (5): 12D85 12E57 12F85 12FD5 1301A
-SUB_12FB9:
+GETPTR~jump_12FB9:
         GOVLNG  GETPTR                           * 12FB9
 
 * refs (2): 12E95 12F16
 SUB_12FC0:
         R0=C.F  A                                * 12FC0
-        GOSUB   SUB_12FB2                        * 12FC6
+        GOSUB   SAVPTR~jump_12FB2                * 12FC6
         GOSUB   SUB_13075                        * 12FCA
         GOSBVL  GARBAGECOL                       * 12FCE  inline data follows
-        GOSUB   SUB_12FB9                        * 12FD5
+        GOSUB   GETPTR~jump_12FB9                * 12FD5
         A=DAT1  A                                * 12FD9
         R1=A.F  A                                * 12FDC
         A=R0.F  A                                * 12FE2
@@ -1331,7 +1331,7 @@ SUB_12FC0:
         GONC    L_1301A                          * 13013
         GOTO    L_12D7E                          * 13016
 L_1301A:
-        GOSUB   SUB_12FB9                        * 1301A
+        GOSUB   GETPTR~jump_12FB9                * 1301A
         C=DAT1  A                                * 1301E
         D0=C                                     * 13021
         C=R0.F  A                                * 13024
@@ -1347,7 +1347,7 @@ L_1301A:
 * refs (1): 17DCB
 KILLADISP:
         CON(5)  (*)+5                            * 13043  primitive code object
-        GOSUB   SUB_12FB2                        * 13048
+        GOSUB   SAVPTR~jump_12FB2                * 13048
         LC(5)   VDISP3                           * 1304C
 L_13053:
         R0=C                                     * 13053
@@ -1359,7 +1359,7 @@ L_1305A:
 * refs (5): 20F99 4B350 4F3A9 9D4F5 9D5D4
 KILLGDISP:
         CON(5)  (*)+5                            * 13061  primitive code object
-        GOSUB   SUB_12FB2                        * 13066
+        GOSUB   SAVPTR~jump_12FB2                * 13066
         LC(5)   GDISP                            * 1306A
         GOTO    L_13053                          * 13071
 
@@ -1394,7 +1394,7 @@ RECLAIMDISP:
 RSZVDISP:
         CON(5)  (*)+5                            * 130CA  primitive code object
         ASSEMBLE
-        GOSUB   SUB_12FB2                        * 130CF
+        GOSUB   SAVPTR~jump_12FB2                * 130CF
         LC(5)   VDISP                            * 130D3
         NOP4                                     * 130DA
         A=0     A                                * 130DE
@@ -1423,7 +1423,7 @@ RSZVDISP:
 * refs (4): 47D7F 4CF32 4F093 C0A90
 TOGDISP:
         CON(5)  (*)+5                            * 13135  primitive code object
-        GOSUB   SUB_12FB2                        * 1313A
+        GOSUB   SAVPTR~jump_12FB2                * 1313A
         GOSUB   SUB_13197                        * 1313E
         GOC     L_13161                          * 13142
         GOSUB   SUB_132C5                        * 13145
@@ -1433,7 +1433,7 @@ TOGDISP:
 * refs (31): 130B1 19CCC 2DDF1 2EB1E 387A0 38912 ...
 TOADISP:
         CON(5)  (*)+5                            * 1314D  primitive code object
-        GOSUB   SUB_12FB2                        * 13152
+        GOSUB   SAVPTR~jump_12FB2                * 13152
         GOSUB   SUB_13197                        * 13156
         GONC    L_13161                          * 1315A
         GOSUB   SUB_132C5                        * 1315D
@@ -1478,7 +1478,7 @@ L_131C1:
 * refs (4): 4824C 4D146 4D41B 4DD00
 WINDOWUP:
         CON(5)  (*)+5                            * 131C8  primitive code object
-        GOSUB   SUB_12FB2                        * 131CD
+        GOSUB   SAVPTR~jump_12FB2                * 131CD
         D0=(5)  VDISP                            * 131D1
         A=DAT0  A                                * 131D8
         LC(5)   #00014                           * 131DB
@@ -1507,7 +1507,7 @@ L_13218:
 * refs (4): 481ED 4D182 4D736 4DD87
 WINDOWDOWN:
         CON(5)  (*)+5                            * 13220  primitive code object
-        GOSUB   SUB_12FB2                        * 13225
+        GOSUB   SAVPTR~jump_12FB2                * 13225
         D0=(5)  VDISP                            * 13229
         A=DAT0  A                                * 13230
         D0=A                                     * 13233
@@ -1712,7 +1712,7 @@ L_134A1:
 CLEARVDISP:
         CON(5)  (*)+5                            * 134AE  primitive code object
         LA(5)   VDISP                            * 134B3
-        GOSUB   SUB_12FB2                        * 134BD
+        GOSUB   SAVPTR~jump_12FB2                * 134BD
         D1=A                                     * 134C1
         A=DAT1  A                                * 134C4
         D1=A                                     * 134C7
@@ -1727,7 +1727,7 @@ CLEARVDISP:
 * refs (4): 470F8 48832 4D164 4DDC3
 WINDOWLEFT:
         CON(5)  (*)+5                            * 134E4  primitive code object
-        GOSUB   SUB_12FB2                        * 134E9
+        GOSUB   SAVPTR~jump_12FB2                * 134E9
         D0=(5)  DISPIO                           * 134ED
         A=DAT0  1                                * 134F4
         B=A     A                                * 134F8
@@ -1774,7 +1774,7 @@ L_1354D:
 * refs (4): 470C6 48440 4D1A0 4DDFA
 WINDOWRIGHT:
         CON(5)  (*)+5                            * 1357F  primitive code object
-        GOSUB   SUB_12FB2                        * 13584
+        GOSUB   SAVPTR~jump_12FB2                * 13584
         GOSUB   corner                           * 13588
         B=B-C   A                                * 1358C
         C=0     A                                * 1358E
@@ -1864,7 +1864,7 @@ WINDOWXY:
         CON(5)  (*)+5                            * 13679  primitive code object
         GOSBVL  POP2#                            * 1367E
         RSTK=C                                   * 13685
-        GOSUB   SUB_12FB2                        * 13687
+        GOSUB   SAVPTR~jump_12FB2                * 13687
         C=RSTK                                   * 1368B
         GOSUB   WindowXY                         * 1368D
         GOTO    L_1305A                          * 13691
@@ -1873,7 +1873,7 @@ WINDOWXY:
 * refs (9): 130BB 2DDF6 2EB23 387A5 69CFC 6B4CA ...
 REDISPHBUFF:
         CON(5)  (*)+5                            * 13695  primitive code object
-        GOSUB   SUB_12FB2                        * 1369A
+        GOSUB   SAVPTR~jump_12FB2                * 1369A
         A=0     A                                * 1369E
         C=0     A                                * 136A0
         GOSUB   WindowXY                         * 136A2
@@ -1973,7 +1973,7 @@ L_13780:
 * refs (10): 0E132 49F65 4D1FA 4E2E3 515A5 515FF ...
 WINDOWCORNER:
         CON(5)  (*)+5                            * 137B6  primitive code object
-        GOSUBL  SUB_12FB2                        * 137BB
+        GOSUBL  SAVPTR~jump_12FB2                * 137BB
         GOSUB   corner                           * 137C1
         R1=C                                     * 137C5
         R0=A                                     * 137C8
@@ -2300,7 +2300,7 @@ OBJ_13B9C:
 OBJ_13BB5:
         CON(5)  (*)+5                            * 13BB5  primitive code object
         ASSEMBLE
-        GOSUB   SUB_13FDE                        * 13BBA
+        GOSUB   SAVPTR~jump_13FDE                * 13BBA
         GOSBVL  SUB_42AC4                        * 13BBE
         D0=C                                     * 13BC5
         A=DAT0  B                                * 13BC8
@@ -2322,7 +2322,7 @@ L_13BEA:
 OBJ_13BF1:
         CON(5)  (*)+5                            * 13BF1  primitive code object
         GOSBVL  POP#                             * 13BF6
-        GOSUB   SUB_13FDE                        * 13BFD
+        GOSUB   SAVPTR~jump_13FDE                * 13BFD
         A=A-1   A                                * 13C01
         A=A+A   A                                * 13C03
         C=A     A                                * 13C05
@@ -2399,7 +2399,7 @@ OBJ_13D14:
 cursorblink+:
         CON(5)  (*)+5                            * 13D28  primitive code object
         ASSEMBLE
-        GOSUB   SUB_13FDE                        * 13D2D
+        GOSUB   SAVPTR~jump_13FDE                * 13D2D
         LC(3)   #203                             * 13D31
         GOSBVL  L_53AF2                          * 13D36
         GOSUB   SUB_13DDC                        * 13D3D
@@ -2411,7 +2411,7 @@ cursorblink+:
 * refs (5): 13D0A 40922 427E1 42944 42B43
 cursorblink-:
         CON(5)  (*)+5                            * 13D55  primitive code object
-        GOSUB   SUB_13FDE                        * 13D5A
+        GOSUB   SAVPTR~jump_13FDE                * 13D5A
         GOSUB   SUB_13DDC                        * 13D5E
         D0=(5)  CURSORGROB                       * 13D62
 L_13D69:
@@ -2505,7 +2505,7 @@ L_13E7E:
 * refs (9): 13B65 40B8D 4257F 42624 426C9 42719 ...
 CURSOR_OFF:
         CON(5)  (*)+5                            * 13E85  primitive code object
-        GOSUB   SUB_13FDE                        * 13E8A
+        GOSUB   SAVPTR~jump_13FDE                * 13E8A
         D0=(5)  CURSOROFFSET                     * 13E8E
         A=0     A                                * 13E95
         A=DAT0  B                                * 13E97
@@ -2582,7 +2582,7 @@ CurrentRow:
         LC(5)   CURSORPART                       * 13F4C
 L_13F53:
         A=C     A                                * 13F53
-        GOSUB   SUB_13FDE                        * 13F55
+        GOSUB   SAVPTR~jump_13FDE                * 13F55
         D0=A                                     * 13F59
         A=DAT0  A                                * 13F5C
 L_13F5F:
@@ -2637,7 +2637,7 @@ L_13FD4:
         PC=(A)                                   * 13FDA
 
 * refs (6): 13BBA 13BFD 13D2D 13D5A 13E8A 13F55
-SUB_13FDE:
+SAVPTR~jump_13FDE:
         GOVLNG  SAVPTR                           * 13FDE
 
 * ->

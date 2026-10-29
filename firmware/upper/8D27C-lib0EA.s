@@ -602,7 +602,7 @@ DoNewMatrix~1~1:
 InitOldMat~1~1:
             :: OBJ_44B9B #0= NOT?SEMI            * 8ED75
               BINT5 OBJ_44BAB ;                  * 8ED89
-            NULL{} OBJ_6D909 OBJ_6DD6E           * 8ED98
+            NULL{} OBJ_6D909 Push3Zeros          * 8ED98
 
 * ROMPTR 0EA 054
 * refs (1): 8D288

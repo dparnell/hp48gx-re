@@ -1450,8 +1450,8 @@ v->(ar):
 
 * refs (2): 174D7 1DD42
 OBJ_1DD51:
-        :: dup;ra?#BAT! DOARRY> INNERCOMP #1= OBJ_37DE1 %2 EQcasedrop * 1DD51
-          OBJ_1DE28                              * 1DD79
+        :: dup;ra?#BAT! DOARRY> INNERCOMP #1= NcaseDIMERR %2 * 1DD51
+          EQcasedrop OBJ_1DE28                   * 1DD74
           %3 %<> case SKIP                       * 1DD7E
           BINT16 TestSysFlag NOTcase SKIP        * 1DD92
           3UNROLL 2%>%% %%R>P BINT15 TestSysFlag IT * 1DDA6

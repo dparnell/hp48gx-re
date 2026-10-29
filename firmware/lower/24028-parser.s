@@ -620,6 +620,7 @@ List~1:
         :: 4psh P{}N drop2;6rolld;1+(s5) ;       * 252F5
 
 * refs (21): 239E8 23AF1 23B6E 23C36 23CA4 23DDF ...
+* Probably: compiler: open an empty meta under the four objects on top (BINT0 5UNROLL), for 4psh to collect a clause into
 OBJ_2530E:
         :: BINT0 5UNROLL ;                       * 2530E
 

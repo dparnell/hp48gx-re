@@ -627,7 +627,7 @@ OBJ_5B2D0:
 
         CON(5)  'R                               * 5B316  address (the code jumps or points through it)
 
-        CON(5)  OBJ_72AFA                        * 5B31B  address (the code jumps or points through it)
+        CON(5)  ?ROMPTR@                         * 5B31B  address (the code jumps or points through it)
 
         CON(5)  EXPLODE                          * 5B320  address (the code jumps or points through it)
 
@@ -646,6 +646,7 @@ OBJ_5B34D:
           :: OBJ_60BCB FALSE RDROP ; TRUE ;      * 5B352
 
 * refs (26): 5BBA4 82B3D 82BA1 82C0A 82C78 82CF0 ...
+* Probably: integration tables: rule body for an argument linear in the variable
 OBJ_5B375:
         :: 'R BINT1 OBJ_600A3                    * 5B375
 
@@ -653,20 +654,20 @@ OBJ_5B375:
 OBJ_5B389:
           :: dvars? ITE linear! FALSE            * 5B389
           ;                                      * 5B3A2
-          pshm1 #1+NDROP 'R SWAP NOTcsdrpfls OBJ_72AFA SINNER OBJ_5B4FB ; * 5B3A7
+          pshm1 #1+NDROP 'R SWAP NOTcsdrpfls ?ROMPTR@ SINNER OBJ_5B4FB ; * 5B3A7
         NIBHEX  E8E60                            * 5B3D4  ←n
 
 * refs (9): 824F6 8255F 825C8 8268C 826F0 82772 ...
 OBJ_5B3D9:
         :: 'R BINT1 OBJ_600A3 OBJ_5B389 pshm1 #1+NDROP 'R SWAP NOTcsdrpfls * 5B3D9
-          OBJ_72AFA SINNER RAD? ?SKIP OBJ_5B4A6  * 5B40B
+          ?ROMPTR@ SINNER RAD? ?SKIP OBJ_5B4A6   * 5B40B
           OBJ_5B4FB ;                            * 5B424
         NIBHEX  E8E60                            * 5B42E  ←n
 
 * refs (3): 82953 829F3 82A93
 OBJ_5B433:
         :: 'R BINT1 OBJ_600A3 dvars? DROP linear! pshm1 #1+NDROP 'R SWAP * 5B433
-          NOTcsdrpfls OBJ_72AFA SINNER RAD? ?SKIP * 5B46A
+          NOTcsdrpfls ?ROMPTR@ SINNER RAD? ?SKIP * 5B46A
           :: OBJ_5B4A6 6ROLL SWAP ;              * 5B483
           OBJ_5B4FB ;                            * 5B49C
 
@@ -1012,7 +1013,7 @@ L_5BE2E:
 MetaMulInv:
         CON(5)  (*)+5                            * 5BE56  primitive code object
         ASSEMBLE
-        GOSBVL  SUB_5F6F2                        * 5BE5B  inline data follows
+        GOSBVL  RuleMatch                        * 5BE5B  inline data follows
 
 * rewrite rules, read by the interpreter called just before (SUB_5F6F2)
         NIBHEX  37070                            * 5BE62  pattern: op2 op6 arg op6
@@ -1027,7 +1028,7 @@ MetaMulInv:
 * refs (1): 5996D
 Meta<-->:
         CON(5)  (*)+5                            * 5BE81  primitive code object
-        GOSBVL  SUB_5F6F2                        * 5BE86  inline data follows
+        GOSBVL  RuleMatch                        * 5BE86  inline data follows
 
 * rewrite rules, read by the interpreter called just before (SUB_5F6F2)
         NIBHEX  10000                            * 5BE8D  pattern: op0
@@ -1046,7 +1047,7 @@ Meta<-->:
 Meta<-A:
         CON(5)  (*)+5                            * 5BECE  primitive code object
         ASSEMBLE
-        GOSBVL  SUB_5F6F2                        * 5BED3  inline data follows
+        GOSBVL  RuleMatch                        * 5BED3  inline data follows
 
 * rewrite rules, read by the interpreter called just before (SUB_5F6F2)
         NIBHEX  11000                            * 5BEDA  pattern: op0 op0
@@ -1075,7 +1076,7 @@ Meta<-A:
 MetaA->:
         CON(5)  (*)+5                            * 5BF53  primitive code object
         ASSEMBLE
-        GOSBVL  SUB_5F6F2                        * 5BF58  inline data follows
+        GOSBVL  RuleMatch                        * 5BF58  inline data follows
 
 * rewrite rules, read by the interpreter called just before (SUB_5F6F2)
         NIBHEX  10100                            * 5BF5F  pattern: op0 arg op0
@@ -1104,7 +1105,7 @@ MetaA->:
 MetaD->:
         CON(5)  (*)+5                            * 5BFD8  primitive code object
         ASSEMBLE
-        GOSBVL  SUB_5F6F2                        * 5BFDD  inline data follows
+        GOSBVL  RuleMatch                        * 5BFDD  inline data follows
 
 * rewrite rules, read by the interpreter called just before (SUB_5F6F2)
         NIBHEX  31000                            * 5BFE4  pattern: op2 op0
@@ -1143,7 +1144,7 @@ MetaD->:
 Meta<-D:
         CON(5)  (*)+5                            * 5C0B9  primitive code object
         ASSEMBLE
-        GOSBVL  SUB_5F6F2                        * 5C0BE  inline data follows
+        GOSBVL  RuleMatch                        * 5C0BE  inline data follows
 
 * rewrite rules, read by the interpreter called just before (SUB_5F6F2)
         NIBHEX  30100                            * 5C0C5  pattern: op2 arg op0
@@ -1164,7 +1165,7 @@ Meta<-D:
 * refs (1): 5B663
 Meta<-D!:
         CON(5)  (*)+5                            * 5C102  primitive code object
-        GOSBVL  SUB_5F6F2                        * 5C107  inline data follows
+        GOSBVL  RuleMatch                        * 5C107  inline data follows
 
 * rewrite rules, read by the interpreter called just before (SUB_5F6F2)
         NIBHEX  30100                            * 5C10E  pattern: op2 arg op0
@@ -1181,7 +1182,7 @@ Meta<-D!:
 * refs (6): 57AED 59D86 5BD1B 5BD34 5CF9B 5CFAA
 Meta->():
         CON(5)  (*)+5                            * 5C137  primitive code object
-        GOSBVL  SUB_5F6F2                        * 5C13C  inline data follows
+        GOSBVL  RuleMatch                        * 5C13C  inline data follows
 
 * rewrite rules, read by the interpreter called just before (SUB_5F6F2)
         NIBHEX  61000                            * 5C143  pattern: op5 op0
@@ -1222,7 +1223,7 @@ Meta->():
 Meta1/():
         CON(5)  (*)+5                            * 5C204  primitive code object
         ASSEMBLE
-        GOSBVL  SUB_5F6F2                        * 5C209  inline data follows
+        GOSBVL  RuleMatch                        * 5C209  inline data follows
 
 * rewrite rules, read by the interpreter called just before (SUB_5F6F2)
         NIBHEX  30000                            * 5C210  pattern: op2
@@ -1243,7 +1244,7 @@ Meta1/():
 Meta-():
         CON(5)  (*)+5                            * 5C261  primitive code object
         ASSEMBLE
-        GOSBVL  SUB_5F6F2                        * 5C266  inline data follows
+        GOSBVL  RuleMatch                        * 5C266  inline data follows
 
 * rewrite rules, read by the interpreter called just before (SUB_5F6F2)
         NIBHEX  A0000                            * 5C26D  pattern: op9
@@ -1266,7 +1267,7 @@ Meta-():
 MetaE^:
         CON(5)  (*)+5                            * 5C2CE  primitive code object
         ASSEMBLE
-        GOSBVL  SUB_5F6F2                        * 5C2D3  inline data follows
+        GOSBVL  RuleMatch                        * 5C2D3  inline data follows
 
 * rewrite rules, read by the interpreter called just before (SUB_5F6F2)
         NIBHEX  83000                            * 5C2DA  pattern: op7 op2
@@ -1285,7 +1286,7 @@ MetaE^:
 MetaE():
         CON(5)  (*)+5                            * 5C31B  primitive code object
         ASSEMBLE
-        GOSBVL  SUB_5F6F2                        * 5C320  inline data follows
+        GOSBVL  RuleMatch                        * 5C320  inline data follows
 
 * rewrite rules, read by the interpreter called just before (SUB_5F6F2)
         NIBHEX  50800                            * 5C327  pattern: op4 arg op7
@@ -1300,7 +1301,7 @@ MetaE():
 MetaL*:
         CON(5)  (*)+5                            * 5C348  primitive code object
         ASSEMBLE
-        GOSBVL  SUB_5F6F2                        * 5C34D  inline data follows
+        GOSBVL  RuleMatch                        * 5C34D  inline data follows
 
 * rewrite rules, read by the interpreter called just before (SUB_5F6F2)
         NIBHEX  A5000                            * 5C354  pattern: op9 op4
@@ -1315,7 +1316,7 @@ MetaL*:
 MetaL():
         CON(5)  (*)+5                            * 5C375  primitive code object
         ASSEMBLE
-        GOSBVL  SUB_5F6F2                        * 5C37A  inline data follows
+        GOSBVL  RuleMatch                        * 5C37A  inline data follows
 
 * rewrite rules, read by the interpreter called just before (SUB_5F6F2)
         NIBHEX  30A00                            * 5C381  pattern: op2 arg op9
@@ -1334,7 +1335,7 @@ MetaL():
 Meta<-M:
         CON(5)  (*)+5                            * 5C3C2  primitive code object
         ASSEMBLE
-        GOSBVL  SUB_5F6F2                        * 5C3C7  inline data follows
+        GOSBVL  RuleMatch                        * 5C3C7  inline data follows
 
 * rewrite rules, read by the interpreter called just before (SUB_5F6F2)
         NIBHEX  35005                            * 5C3CE  pattern: op2 op4 arg arg op4
@@ -1377,7 +1378,7 @@ Meta<-M:
 MetaM->:
         CON(5)  (*)+5                            * 5C4CF  primitive code object
         ASSEMBLE
-        GOSBVL  SUB_5F6F2                        * 5C4D4  inline data follows
+        GOSBVL  RuleMatch                        * 5C4D4  inline data follows
 
 * rewrite rules, read by the interpreter called just before (SUB_5F6F2)
         NIBHEX  13003                            * 5C4DB  pattern: op0 op2 arg arg op2
@@ -1400,7 +1401,7 @@ MetaM->:
 MetaAF:
         CON(5)  (*)+5                            * 5C53C  primitive code object
         ASSEMBLE
-        GOSBVL  SUB_5F6F2                        * 5C541  inline data follows
+        GOSBVL  RuleMatch                        * 5C541  inline data follows
 
 * rewrite rules, read by the interpreter called just before (SUB_5F6F2)
         NIBHEX  14000                            * 5C548  pattern: op0 op3
@@ -1419,7 +1420,7 @@ MetaAF:
 Meta(<-:
         CON(5)  (*)+5                            * 5C589  primitive code object
         ASSEMBLE
-        GOSBVL  SUB_5F6F2                        * 5C58E  inline data follows
+        GOSBVL  RuleMatch                        * 5C58E  inline data follows
 
 * rewrite rules, read by the interpreter called just before (SUB_5F6F2)
         NIBHEX  10000                            * 5C595  pattern: op0
@@ -1438,7 +1439,7 @@ Meta(<-:
 Meta->):
         CON(5)  (*)+5                            * 5C5D6  primitive code object
         ASSEMBLE
-        GOSBVL  SUB_5F6F2                        * 5C5DB  inline data follows
+        GOSBVL  RuleMatch                        * 5C5DB  inline data follows
 
 * rewrite rules, read by the interpreter called just before (SUB_5F6F2)
         NIBHEX  10000                            * 5C5E2  pattern: op0
@@ -1457,7 +1458,7 @@ Meta->):
 Meta(()):
         CON(5)  (*)+5                            * 5C623  primitive code object
         ASSEMBLE
-        GOSBVL  SUB_5F6F2                        * 5C628  inline data follows
+        GOSBVL  RuleMatch                        * 5C628  inline data follows
 
 * rewrite rules, read by the interpreter called just before (SUB_5F6F2)
         NIBHEX  10000                            * 5C62F  pattern: op0
@@ -1476,7 +1477,7 @@ Meta(()):
 Meta->TRG:
         CON(5)  (*)+5                            * 5C670  primitive code object
         ASSEMBLE
-        GOSBVL  SUB_5F6F2                        * 5C675  inline data follows
+        GOSBVL  RuleMatch                        * 5C675  inline data follows
 
 * rewrite rules, read by the interpreter called just before (SUB_5F6F2)
         NIBHEX  80000                            * 5C67C  pattern: op7

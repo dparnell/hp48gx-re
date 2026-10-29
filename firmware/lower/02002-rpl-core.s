@@ -315,13 +315,13 @@ SUB_0245E:
         LC(8)   #000003F0                        * 02473
         DAT0=C  W                                * 0247D
         LC(3)   #40A                             * 02481
-        GOSUB   SUB_02498                        * 02486
+        GOSUB   setflag~jump                     * 02486
         LC(3)   #105                             * 0248A
-        GOSUB   SUB_02498                        * 0248F
+        GOSUB   setflag~jump                     * 0248F
         LC(3)   #103                             * 02493
 
 * refs (2): 02486 0248F
-SUB_02498:
+setflag~jump:
         GOVLNG  setflag                          * 02498
 
 * refs (4): 02041 02402 0A0A2 0AC6A

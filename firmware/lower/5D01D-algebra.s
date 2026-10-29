@@ -1264,28 +1264,28 @@ L_5EC72:
 L_5EC7F:
         ?C>A    A                                * 5EC7F
         GOYES   L_5EC72                          * 5EC82
-        GOSUB   SUB_5ECA4                        * 5EC84
+        GOSUB   MOVEDOWN~jump                    * 5EC84
         CD0EX                                    * 5EC88
         D0=C                                     * 5EC8B
         C=C-D   A                                * 5EC8E
         CD1EX                                    * 5EC90
         RSTK=C                                   * 5EC93
         C=B     A                                * 5EC95
-        GOSUB   SUB_5ECA4                        * 5EC97
+        GOSUB   MOVEDOWN~jump                    * 5EC97
         C=RSTK                                   * 5EC9B
         C=C-D   A                                * 5EC9D
         CD0EX                                    * 5EC9F
         C=D     A                                * 5ECA2
 
 * refs (3): 5EC84 5EC97 5ECB5
-SUB_5ECA4:
+MOVEDOWN~jump:
         GOVLNG  MOVEDOWN                         * 5ECA4
 L_5ECAB:
         CD0EX                                    * 5ECAB
         C=C+D   A                                * 5ECAE
         D0=C                                     * 5ECB0
         C=B     A                                * 5ECB3
-        GOSUB   SUB_5ECA4                        * 5ECB5
+        GOSUB   MOVEDOWN~jump                    * 5ECB5
         CD1EX                                    * 5ECB9
         RSTK=C                                   * 5ECBC
         CD0EX                                    * 5ECBE
@@ -1293,13 +1293,13 @@ L_5ECAB:
         C=C-B   A                                * 5ECC4
         D0=C                                     * 5ECC6
         C=D     A                                * 5ECC9
-        GOSUB   SUB_5ECD6                        * 5ECCB
+        GOSUB   MOVEUP~jump                      * 5ECCB
         C=RSTK                                   * 5ECCF
         CD0EX                                    * 5ECD1
         C=B     A                                * 5ECD4
 
 * refs (1): 5ECCB
-SUB_5ECD6:
+MOVEUP~jump:
         GOVLNG  MOVEUP                           * 5ECD6
 L_5ECDD:
         C=C-1   A                                * 5ECDD
@@ -1873,7 +1873,8 @@ OBJ_5F63E:
         ASSEMBLE
 
 * refs (23): 54E84 57B51 5BE5B 5BE86 5BED3 5BF58 ...
-SUB_5F6F2:
+* Rewrite rules with the default operator table: the inline pattern/action pairs after the call are matched against the meta (see SUB_5F6F9)
+RuleMatch:
         LC(5)   L_5F7E0                          * 5F6F2
 
 * refs (5): 5C699 5C6E5 5C749 5C851 5C929

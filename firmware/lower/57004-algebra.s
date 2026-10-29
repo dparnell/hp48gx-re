@@ -15,6 +15,7 @@ OBJ_57022:
         ;                                        * 57040
 
 * refs (22): 860BA 86150 861A5 86213 86263 862C7 ...
+* Probably: derivatives: bind the variable to 'dv and duplicate the argument meta
 OBJ_57045:
         :: OBJ_56CD1 dup ;                       * 57045
 
@@ -225,6 +226,7 @@ OBJ_57602:
         ROMPTR 0F0 0D6                           * 57602
 
 * refs (21): 5759D 5764E 5766C 86BCD 86C3B 86C9A ...
+* Probably: SYMISOL: carry on isolating with the next inverse (tail call into the isolation loop)
 OBJ_5760D:
         :: RDROP psh #1-SWAP COLA OBJ_57324      * 5760D
         ;                                        * 5762B
@@ -441,7 +443,7 @@ expansq:
 ?expanneginv:
         CON(5)  (*)+5                            * 57B4C  primitive code object
         ASSEMBLE
-        GOSBVL  SUB_5F6F2                        * 57B51  inline data follows
+        GOSBVL  RuleMatch                        * 57B51  inline data follows
 
 * rewrite rules, read by the interpreter called just before (SUB_5F6F2)
         NIBHEX  67000                            * 57B58  pattern: op5 op6

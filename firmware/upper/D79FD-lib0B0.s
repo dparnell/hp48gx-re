@@ -66,7 +66,7 @@ DoKeyOK~2~6:
 ROMP_0B0_06D:
         :: DUPROT ROMPTR 0B0 078 NOTcasedrop BINT0 * D7C71
           DUP4UNROLL '                           * D7C90
-          :: OBJ_72AFA SWAP OBJ_72AFA EQUAL ; POSCOMP DUP#0<> case ROTDROP * D7C9A
+          :: ?ROMPTR@ SWAP ?ROMPTR@ EQUAL ; POSCOMP DUP#0<> case ROTDROP * D7C9A
           DROPSWAP >HCOMP BINT1 ;                * D7CCC
 
 * ROMPTR 0B0 06E

@@ -80,10 +80,10 @@ OBJ_0E19B:
 OBJ_0E1B9:
         CON(5)  (*)+5                            * 0E1B9  primitive code object
         ASSEMBLE
-        GOSUB   SUB_0E39F                        * 0E1BE
+        GOSUB   SAVPTR~jump_0E39F                * 0E1BE
         ST=0    15                               * 0E1C2
         GOSBVL  SUB_00672                        * 0E1C5
-        GOSUB   SUB_0E391                        * 0E1CC
+        GOSUB   AllowIntr~jump                   * 0E1CC
         P=      0                                * 0E1D0
         SETHEX                                   * 0E1D2
         GOTO    L_0E370                          * 0E1D4
@@ -138,7 +138,7 @@ IndexPastDue(li):
         LC(5)   PASTDUE#                         * 0E282
 L_0E289:
         RSTK=C                                   * 0E289
-        GOSUB   SUB_0E39F                        * 0E28B
+        GOSUB   SAVPTR~jump_0E39F                * 0E28B
         C=RSTK                                   * 0E28F
         D0=C                                     * 0E291
         A=DAT0  A                                * 0E294
@@ -183,7 +183,7 @@ L_0E2FB:
 * refs (1): 0DE8E
 OBJ_0E302:
         CON(5)  (*)+5                            * 0E302  primitive code object
-        GOSUB   SUB_0E39F                        * 0E307
+        GOSUB   SAVPTR~jump_0E39F                * 0E307
         C=DAT1  A                                * 0E30B
         D0=C                                     * 0E30E
         D0=D0+  15                               * 0E311
@@ -235,12 +235,12 @@ SUB_0E377:
         B=B+C   W                                * 0E38E
 
 * refs (1): 0E1CC
-SUB_0E391:
+AllowIntr~jump:
         GOVLNG  AllowIntr                        * 0E391
         NIBHEX  8D2D760                          * 0E398  ØÒg
 
 * refs (7): 0E1BE 0E28B 0E307 0E3B3 0E635 0E66F ...
-SUB_0E39F:
+SAVPTR~jump_0E39F:
         GOVLNG  SAVPTR                           * 0E39F
 
 pastdue(li)?:
@@ -248,7 +248,7 @@ pastdue(li)?:
         A=DAT1  A                                * 0E3AB
         D1=D1+  5                                * 0E3AE
         D=D+1   A                                * 0E3B1
-        GOSUB   SUB_0E39F                        * 0E3B3
+        GOSUB   SAVPTR~jump_0E39F                * 0E3B3
         LC(5)   #00026                           * 0E3B7
         A=A+C   A                                * 0E3BE
         D0=A                                     * 0E3C0
@@ -362,7 +362,7 @@ StoAlarms(2r,_,r):
 chkdate(r):
         CON(5)  (*)+5                            * 0E630  primitive code object
         ASSEMBLE
-        GOSUB   SUB_0E39F                        * 0E635
+        GOSUB   SAVPTR~jump_0E39F                * 0E635
         C=DAT1  A                                * 0E639
         D1=C                                     * 0E63C
         D1=D1+  5                                * 0E63F
@@ -380,7 +380,7 @@ L_0E663:
 * refs (3): 0E515 0E60D 0EB3B
 VerifyTOD:
         CON(5)  (*)+5                            * 0E66A  primitive code object
-        GOSUB   SUB_0E39F                        * 0E66F
+        GOSUB   SAVPTR~jump_0E39F                * 0E66F
         C=DAT1  A                                * 0E673
         D1=C                                     * 0E676
         D1=D1+  5                                * 0E679
@@ -393,7 +393,7 @@ VerifyTOD:
 * refs (1): 0E6E3
 Ornd(abs(r))~1:
         CON(5)  (*)+5                            * 0E693  primitive code object
-        GOSUB   SUB_0E39F                        * 0E698
+        GOSUB   SAVPTR~jump_0E39F                * 0E698
         C=DAT1  A                                * 0E69C
         D1=C                                     * 0E69F
         D1=D1+  5                                * 0E6A2
@@ -533,11 +533,11 @@ L_0E874:
         GOVLNG  GETPTRLOOP                       * 0E874
 
 * refs (7): 0EA37 0EC13 0EE1B 0EEB0 0EF25 0EF83 ...
-SUB_0E87B:
+GETPTR~jump_0E87B:
         GOVLNG  GETPTR                           * 0E87B
 
 * refs (5): 0E932 0E9BF 0EC22 0ECA5 0EE10
-SUB_0E882:
+SAVPTR~jump_0E882:
         GOVLNG  SAVPTR                           * 0E882
 
 * refs (4): 0ECC2 0ECD8 0ECF3 0ED09
@@ -547,7 +547,7 @@ SUB_0E889:
         GOVLNG  RCKBp                            * 0E88E
 
 * refs (5): 0E8E3 0E999 0EA4D 0EAB3 0EC60
-SUB_0E895:
+SAFESKIPOB~jump:
         GOVLNG  SAFESKIPOB                       * 0E895
 
 * refs (1): 0CB90
@@ -575,7 +575,7 @@ L_0E8B6:
         RTNC                                     * 0E8DA
         D0=D0+  16                               * 0E8DD
         D0=D0+  13                               * 0E8E0
-        GOSUB   SUB_0E895                        * 0E8E3
+        GOSUB   SAFESKIPOB~jump                  * 0E8E3
         RTNC                                     * 0E8E7
         GOSUB   SUB_0E8F3                        * 0E8EA
         GONC    L_0E8B6                          * 0E8EE
@@ -611,7 +611,7 @@ OldestPastDue(li)?:
         A=DAT1  A                                * 0E92A
         D=D+1   A                                * 0E92D
         D1=D1+  5                                * 0E92F
-        GOSUB   SUB_0E882                        * 0E932
+        GOSUB   SAVPTR~jump_0E882                * 0E932
         ST=0    15                               * 0E936
         D0=(5)  PASTDUE#                         * 0E939
         C=0     A                                * 0E940
@@ -641,7 +641,7 @@ L_0E955:
         GOTO    L_0EA1F                          * 0E992
 L_0E996:
         D0=D0+  1                                * 0E996
-        GOSUB   SUB_0E895                        * 0E999
+        GOSUB   SAFESKIPOB~jump                  * 0E999
         GONC    L_0E955                          * 0E99D
         GOTO    L_0EC4E                          * 0E9A0
 L_0E9A4:
@@ -654,7 +654,7 @@ NextAlarm(li)?:
         A=DAT1  A                                * 0E9B7
         D=D+1   A                                * 0E9BA
         D1=D1+  5                                * 0E9BC
-        GOSUB   SUB_0E882                        * 0E9BF
+        GOSUB   SAVPTR~jump_0E882                * 0E9BF
         ST=0    15                               * 0E9C3
         D0=(5)  ALARM#                           * 0E9C6
         C=0     A                                * 0E9CD
@@ -688,14 +688,14 @@ L_0EA1F:
         LC(5)   #00026                           * 0EA27
         A=A-C   A                                * 0EA2E
         GOSBVL  AllowIntr                        * 0EA30
-        GOSUB   SUB_0E87B                        * 0EA37
+        GOSUB   GETPTR~jump_0E87B                * 0EA37
         D1=D1-  5                                * 0EA3B
         D=D-1   A                                * 0EA3E
         DAT1=A  A                                * 0EA40
         GOVLNG  PushTLoop                        * 0EA43
 L_0EA4A:
         D0=D0+  1                                * 0EA4A
-        GOSUB   SUB_0E895                        * 0EA4D
+        GOSUB   SAFESKIPOB~jump                  * 0EA4D
         GONC    L_0E9E2                          * 0EA51
         GOTO    L_0EC4E                          * 0EA54
 
@@ -733,7 +733,7 @@ L_0EAAA:
 L_0EAAE:
         P=      0                                * 0EAAE
         D0=D0+  1                                * 0EAB0
-        GOSUB   SUB_0E895                        * 0EAB3
+        GOSUB   SAFESKIPOB~jump                  * 0EAB3
         GONC    L_0EA74                          * 0EAB7
 L_0EABA:
         GOTO    L_0EC4E                          * 0EABA
@@ -789,12 +789,12 @@ FindAlarm(li,b):
         CON(5)  (*)+5                            * 0EC07  primitive code object
         ASSEMBLE
         GOSBVL  SUB_0D90A                        * 0EC0C
-        GOSUB   SUB_0E87B                        * 0EC13
+        GOSUB   GETPTR~jump_0E87B                * 0EC13
         C=DAT1  A                                * 0EC17
         R1=C                                     * 0EC1A
         D1=D1+  5                                * 0EC1D
         D=D+1   A                                * 0EC20
-        GOSUB   SUB_0E882                        * 0EC22
+        GOSUB   SAVPTR~jump_0E882                * 0EC22
         C=R0                                     * 0EC26
         D=C     W                                * 0EC29
         C=R1                                     * 0EC2C
@@ -816,7 +816,7 @@ L_0EC55:
         GOYES   L_0EC6A                          * 0EC58
         D0=D0+  13                               * 0EC5A
         D0=D0+  11                               * 0EC5D
-        GOSUB   SUB_0E895                        * 0EC60
+        GOSUB   SAFESKIPOB~jump                  * 0EC60
         GOC     L_0EC4E                          * 0EC64
         GONC    L_0EC3B                          * 0EC67
 L_0EC6A:
@@ -843,7 +843,7 @@ SUB_0EC76:
 ALARMxcp~1~2~3:
         CON(5)  (*)+5                            * 0EC9D  primitive code object
         ST=0    15                               * 0ECA2
-        GOSUB   SUB_0E882                        * 0ECA5
+        GOSUB   SAVPTR~jump_0E882                * 0ECA5
         GOSBVL  SUB_0D840                        * 0ECA9
         LC(5)   #00199                           * 0ECB0
         GOSUB   SUB_0ED45                        * 0ECB7
@@ -950,9 +950,9 @@ L_0EDFD:
         GOYES   L_0EE10                          * 0EE07
         GOVLNG  DOMEMERR                         * 0EE09
 L_0EE10:
-        GOSUB   SUB_0E882                        * 0EE10
+        GOSUB   SAVPTR~jump_0E882                * 0EE10
         GOSBVL  GARBAGECOL                       * 0EE14  inline data follows
-        GOSUB   SUB_0E87B                        * 0EE1B
+        GOSUB   GETPTR~jump_0E87B                * 0EE1B
         ST=1    10                               * 0EE1F
         GOTO    L_0EDFD                          * 0EE22
 
@@ -997,7 +997,7 @@ TOD>Ticks:
         NIBHEX  430008F849D01085908D4CBC0        * 0EE97  4.∡↓η..X.ØÄË
         ASSEMBLE
 L_0EEB0:
-        GOSUB   SUB_0E87B                        * 0EEB0
+        GOSUB   GETPTR~jump_0E87B                * 0EEB0
         A=DAT1  A                                * 0EEB4
         AD1EX                                    * 0EEB7
         D1=D1+  10                               * 0EEBA
@@ -1030,7 +1030,7 @@ L_0EF0F:
 L_0EF21:
             P=      0                            * 0EF21
             SETHEX                               * 0EF23
-            GOSUB   SUB_0E87B                    * 0EF25
+            GOSUB   GETPTR~jump_0E87B            * 0EF25
             A=DAT1  A                            * 0EF29
             AD1EX                                * 0EF2C
             D1=D1+  10                           * 0EF2F
@@ -1047,7 +1047,7 @@ L_0EF21:
         :: r=>b10 ROT Date>hxs13 ROT TOD>Ticks Date+Time >ALRMLS~2 3UNROLL * 0EF45
           CODE                                   * 0EF72  99 nibbles
             GOSBVL  SUB_0D90A                    * 0EF7C
-            GOSUB   SUB_0E87B                    * 0EF83
+            GOSUB   GETPTR~jump_0E87B            * 0EF83
             GOSBVL  >ALRMLS~1                    * 0EF87
             GOSBVL  SUB_012F9                    * 0EF8E
             A=R0                                 * 0EF95
@@ -1058,7 +1058,7 @@ L_0EF21:
             ST=1    8                            * 0EFA2
 L_0EFA5:
             P=      0                            * 0EFA5
-            GOSUB   SUB_0E87B                    * 0EFA7
+            GOSUB   GETPTR~jump_0E87B            * 0EFA7
             A=DAT1  A                            * 0EFAB
             AD1EX                                * 0EFAE
             D1=D1+  10                           * 0EFB1

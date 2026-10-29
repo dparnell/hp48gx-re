@@ -1,6 +1,6 @@
 * HP 48GX ROM revision R, #14001-#15FFF: Decompiling and displaying objects
 * Addresses in the right-hand comments are those of the original ROM.
-* Most referenced: EDITDECOMP$ GsstFIN DOSTOE DECOMP$ sstDISP nohalt ->StkStr22! 'EQ DORCLE DO>STR CRUNCH RDUP
+* Most referenced: msg>TAG EDITDECOMP$ GsstFIN DOSTOE DECOMP$ sstDISP nohalt ->StkStr22! 'EQ DORCLE DO>STR CRUNCH
 * Follows on from the previous file (at #14001 in the original ROM).
         D0=C                                     * 14001
 L_14004:
@@ -104,7 +104,7 @@ setbeep:
         C=A     A                                * 141BE
         RSTK=C                                   * 141C0
         GOSBVL  POP#                             * 141C2
-        GOSUB   SUB_141DE                        * 141C9
+        GOSUB   SAVPTR~jump_141DE                * 141C9
         C=RSTK                                   * 141CD
         D=C     A                                * 141CF
         C=A     A                                * 141D1
@@ -112,14 +112,14 @@ setbeep:
         GOTO    L_14203                          * 141DA
 
 * refs (3): 141C9 141EA 1420F
-SUB_141DE:
+SAVPTR~jump_141DE:
         GOVLNG  SAVPTR                           * 141DE
 
 * ->
 * refs (9): 17BCC 1801A 2F022 38796 3890D 3892B ...
 ERRBEEP:
         CON(5)  (*)+5                            * 141E5  primitive code object
-        GOSUB   SUB_141DE                        * 141EA
+        GOSUB   SAVPTR~jump_141DE                * 141EA
         C=0     A                                * 141EE
         LC(3)   #578                             * 141F0
         D=C     A                                * 141F5
@@ -132,7 +132,7 @@ L_14203:
 * refs (6): 142B0 142E7 1EC80 D1E96 D1EFA D1F27
 $>$?:
         CON(5)  (*)+5                            * 1420A  primitive code object
-        GOSUB   SUB_141DE                        * 1420F
+        GOSUB   SAVPTR~jump_141DE                * 1420F
         C=DAT1  A                                * 14213
         D0=C                                     * 14216
         D0=D0+  5                                * 14219
@@ -1048,11 +1048,11 @@ Trceq!:
 
 * refs (1): A306E
 OBJ_158B9:
-            # A07 OBJ_15909 1GETABND 'EvalNoCK:_sup xEVAL CK1NoBlame * 158B9
+            # A07 msg>TAG 1GETABND 'EvalNoCK:_sup xEVAL CK1NoBlame * 158B9
 
 * refs (1): A307D
 OBJ_158DC:
-            # A08 OBJ_15909 ;                    * 158DC
+            # A08 msg>TAG ;                      * 158DC
           'EvalNoCK:_sup xEVAL CK1NoBlame        * 158F0
 
 * refs (1): A3091
@@ -1060,7 +1060,8 @@ OBJ_158FF:
           # A09                                  * 158FF  2569
 
 * refs (30): 158C3 158E6 99024 99038 9904C A3073 ...
-OBJ_15909:
+* ob #msg -> :msg:ob: tag ob with message text #msg
+msg>TAG:
           :: JstGetTHEMESG >TAG ; ;              * 15909
         BSS     11                               * 15922
 

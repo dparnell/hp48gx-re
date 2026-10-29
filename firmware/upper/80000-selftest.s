@@ -16,7 +16,7 @@ L_8001D:
 L_8002B:
         GOSUBL  SUB_802BE                        * 8002B
         GOSBVL  SUB_00D3B                        * 80031
-        GOSUBL  SUB_8106F                        * 80038
+        GOSUBL  Flush~jump                       * 80038
         ?ST=1   6                                * 8003E
         GOYES   L_80091                          * 80041
         RSI                                      * 80043
@@ -24,7 +24,7 @@ L_80048:
         GOSBVL  POPKEY                           * 80048
         GOC     L_80048                          * 8004F
         B=C     A                                * 80052
-        GOSUBL  SUB_8040D                        * 80054
+        GOSUBL  ClrScrMn~jump                    * 80054
         C=0     A                                * 8005A
         LC(2)   #1C                              * 8005C
         ?B>C    A                                * 80060
@@ -48,7 +48,7 @@ SUB_80081:
         A=A+C   A                                * 8008D
         RTN                                      * 8008F
 L_80091:
-        GOSUBL  SUB_8040D                        * 80091
+        GOSUBL  ClrScrMn~jump                    * 80091
         GOSUBL  SUB_80329                        * 80097
         GOSUBL  SUB_8155D                        * 8009D
         GOSUBL  SUB_80389                        * 800A3
@@ -77,7 +77,7 @@ L_800FE:
         GOSUB   SUB_802DF                        * 80102
         GOSUBL  SUB_8155D                        * 80106
         GOSUBL  SUB_815D3                        * 8010C
-        GOSUBL  SUB_8040D                        * 80112
+        GOSUBL  ClrScrMn~jump                    * 80112
         GOTO    L_8002B                          * 80118
 L_8011C:
         ST=0    8                                * 8011C
@@ -204,13 +204,13 @@ L_80232:
 SUB_802BE:
         P=      0                                * 802BE
         LC(2)   #E4                              * 802C0
-        GOTO    SUB_802D8                        * 802C4
+        GOTO    RCKBp~jump                       * 802C4
 
 * refs (2): 800FE 809F0
 SUB_802C8:
         P=      0                                * 802C8
         LC(2)   #DA                              * 802CA
-        GOTO    SUB_802D8                        * 802CE
+        GOTO    RCKBp~jump                       * 802CE
 
 * refs (10): 80329 80389 804C0 8066D 80832 80B2D ...
 SUB_802D2:
@@ -218,12 +218,12 @@ SUB_802D2:
         LC(2)   #F4                              * 802D4
 
 * refs (6): 802C4 802CE 808E9 80908 80B9C 81599
-SUB_802D8:
+RCKBp~jump:
         GOVLNG  RCKBp                            * 802D8
 
 * refs (2): 80102 802B9
 SUB_802DF:
-        GOSUBL  SUB_8040D                        * 802DF
+        GOSUBL  ClrScrMn~jump                    * 802DF
         C=R1                                     * 802E5
         ?C#0    A                                * 802E8
         GOYES   L_80300                          * 802EB
@@ -269,7 +269,7 @@ SUB_80389:
         GOSUBL  SUB_802D2                        * 80389
         C=0     A                                * 8038F
         GOSUB   SUB_804B6                        * 80391
-        GOSUB   SUB_8040D                        * 80395
+        GOSUB   ClrScrMn~jump                    * 80395
         D0=(5)  L_81823+10                       * 80399
         GOSUBL  SUB_815FE                        * 803A0
         GOSUBL  SUB_8155D                        * 803A6
@@ -298,7 +298,7 @@ SUB_80389:
         GOSUB   SUB_8044F                        * 80409
 
 * refs (14): 80054 80091 80112 802DF 80395 80673 ...
-SUB_8040D:
+ClrScrMn~jump:
         GOVLNG  ClrScrMn                         * 8040D
 
 * refs (3): 803C9 803D5 803E1
@@ -501,7 +501,7 @@ L_8061B:
 * refs (2): 800BB 80241
 SUB_8066D:
         GOSUBL  SUB_802D2                        * 8066D
-        GOSUB   SUB_8040D                        * 80673
+        GOSUB   ClrScrMn~jump                    * 80673
         D0=(5)  L_81823+30                       * 80677
         GOSUBL  SUB_8165A                        * 8067E
         ST=0    15                               * 80684
@@ -638,7 +638,7 @@ L_8082B:
         GOSUBL  SUB_802D2                        * 80832
         GOSBVL  SUB_00E0B                        * 80838
         INTON                                    * 8083F
-        GOSUBL  SUB_8106F                        * 80843
+        GOSUBL  Flush~jump                       * 80843
         D0=(5)  L_80946                          * 80849
         ?ST=0   11                               * 80850
         GOYES   L_8085C                          * 80853
@@ -688,7 +688,7 @@ L_808CB:
         C=D     B                                * 808E0
         RSTK=C                                   * 808E3
         LC(2)   #F4                              * 808E5
-        GOSUBL  SUB_802D8                        * 808E9
+        GOSUBL  RCKBp~jump                       * 808E9
         C=RSTK                                   * 808EF
         D0=C                                     * 808F1
         GOSUBL  SUB_81736                        * 808F4
@@ -697,7 +697,7 @@ L_808CB:
         GOTO    L_8085C                          * 80900
 L_80904:
         LC(2)   #94                              * 80904
-        GOSUBL  SUB_802D8                        * 80908
+        GOSUBL  RCKBp~jump                       * 80908
         GOSUB   SUB_80916                        * 8090E
         GOTO    L_8085C                          * 80912
 
@@ -705,7 +705,7 @@ L_80904:
 SUB_80916:
         AD0EX                                    * 80916
         R4=A.F  A                                * 80919
-        GOSUBL  SUB_8040D                        * 8091F
+        GOSUBL  ClrScrMn~jump                    * 8091F
         D0=(5)  L_81843+8                        * 80925
         ?ST=0   11                               * 8092C
         GOYES   L_80938                          * 8092F
@@ -722,7 +722,7 @@ L_80946:
 L_809A6:
         NIBHEX  130020900171D10842A20300         * 809A6  1......∡$*0.
 L_809BE:
-        GOSUBL  SUB_8040D                        * 809BE
+        GOSUBL  ClrScrMn~jump                    * 809BE
         D0=(5)  L_81863+4                        * 809C4
         GOSUBL  SUB_815FE                        * 809CB
         ST=0    15                               * 809D1
@@ -764,7 +764,7 @@ L_809F0:
         D1=(5)  DA1BadMASK                       * 80A53
         LC(1)   #4                               * 80A5A
         DAT1=C  1                                * 80A5D
-        GOSUBL  SUB_8040D                        * 80A61
+        GOSUBL  ClrScrMn~jump                    * 80A61
 L_80A67:
         GOSBVL  SUB_00E0B                        * 80A67
         GOC     L_80A67                          * 80A6E
@@ -775,7 +775,7 @@ L_80A73:
         D1=(5)  DA1BadMASK                       * 80A79
         LC(1)   #4                               * 80A80
         DAT1=C  1                                * 80A83
-        GOSUBL  SUB_8040D                        * 80A87
+        GOSUBL  ClrScrMn~jump                    * 80A87
         D0=(5)  L_81883+2                        * 80A8D
         GOSUBL  SUB_815FE                        * 80A94
         C=RSTK                                   * 80A9A
@@ -830,7 +830,7 @@ L_80B26:
         GOVLNG  AllowIntr                        * 80B26
 L_80B2D:
         GOSUBL  SUB_802D2                        * 80B2D
-        GOSUBL  SUB_8040D                        * 80B33
+        GOSUBL  ClrScrMn~jump                    * 80B33
         GOSUBL  SUB_815D3                        * 80B39
         GOTO    L_80A67                          * 80B3F
 L_80B43:
@@ -852,14 +852,14 @@ L_80B43:
         GOSUB   SUB_80C13                        * 80B78
         GOSUB   SUB_80CE3                        * 80B7C
         GOSUBL  SUB_815C6                        * 80B80
-        GOSUB   SUB_81076                        * 80B86
+        GOSUB   POPUART~jump                     * 80B86
         C=0     A                                * 80B8A
         GOC     L_80BA8                          * 80B8C
         LC(2)   #06                              * 80B8F
         ?C#A    B                                * 80B93
         GOYES   L_80BAE                          * 80B96
         LC(2)   #94                              * 80B98
-        GOSUBL  SUB_802D8                        * 80B9C
+        GOSUBL  RCKBp~jump                       * 80B9C
         GOLONG  SUB_816FE                        * 80BA2
 L_80BA8:
         C=C+1   A                                * 80BA8
@@ -898,7 +898,7 @@ L_80BED:
         ASR     W                                * 80BF6
         R1=A                                     * 80BF9
         A=C     A                                * 80BFC
-        GOSUB   SUB_81068                        * 80BFE
+        GOSUB   OUTUART~jump                     * 80BFE
         A=C     A                                * 80C02
         C=RSTK                                   * 80C04
         RTNC                                     * 80C06
@@ -939,7 +939,7 @@ L_80C59:
         GOSUB   SUB_80CF0                        * 80C80
         LC(2)   #06                              * 80C84
         A=C     A                                * 80C88
-        GOSUB   SUB_81068                        * 80C8A
+        GOSUB   OUTUART~jump                     * 80C8A
         GONC    L_80C97                          * 80C8E
         A=C     A                                * 80C91
         GOTO    L_80BB5                          * 80C93
@@ -958,7 +958,7 @@ L_80C97:
 SUB_80CC0:
         B=0     W                                * 80CC0
 L_80CC3:
-        GOSUB   SUB_81076                        * 80CC3
+        GOSUB   POPUART~jump                     * 80CC3
         GOC     L_80CC3                          * 80CC7
         ASRC                                     * 80CCA
         B=A     S                                * 80CCD
@@ -1002,7 +1002,7 @@ SUB_80D13:
 
 * refs (6): 80B4A 80C27 80D40 80D92 80ECA 80F80
 SUB_80D29:
-        GOSUB   SUB_81061                        * 80D29
+        GOSUB   FlushAttn~jump                   * 80D29
         GOSUBL  SUB_802D2                        * 80D2D
         GOLONG  SUB_815FE                        * 80D33
 
@@ -1073,7 +1073,7 @@ L_80E03:
         A=DAT0  B                                * 80E0A
         CD0EX                                    * 80E0D
         RSTK=C                                   * 80E10
-        GOSUB   SUB_81068                        * 80E12
+        GOSUB   OUTUART~jump                     * 80E12
         A=C     A                                * 80E16
         C=RSTK                                   * 80E18
         D0=C                                     * 80E1A
@@ -1160,9 +1160,9 @@ L_80EE2:
 * refs (1): 80ED5
 SUB_80EF3:
         ST=0    15                               * 80EF3
-        GOSUB   SUB_8106F                        * 80EF6
+        GOSUB   Flush~jump                       * 80EF6
         GOSBVL  SUB_00D3B                        * 80EFA
-        GOSUB   SUB_81061                        * 80F01
+        GOSUB   FlushAttn~jump                   * 80F01
         GOSUB   L_80B26                          * 80F05
 L_80F09:
         P=      0                                * 80F09
@@ -1171,7 +1171,7 @@ L_80F09:
 L_80F15:
         P=      0                                * 80F15
         GOSUB   SUB_81051                        * 80F17
-        GOSUB   SUB_81076                        * 80F1B
+        GOSUB   POPUART~jump                     * 80F1B
         LC(1)   #A                               * 80F1F
         DAT0=C  1                                * 80F22
         GONC    L_80F62                          * 80F26
@@ -1198,7 +1198,7 @@ L_80F62:
         GOYES   L_80F6D                          * 80F69
         RTNCC                                    * 80F6B
 L_80F6D:
-        GOSUB   SUB_81068                        * 80F6D
+        GOSUB   OUTUART~jump                     * 80F6D
         GONC    L_80F09                          * 80F71
         D0=C                                     * 80F74
         RTNSC                                    * 80F77
@@ -1222,9 +1222,9 @@ SUB_80FA6:
         LC(1)   #2                               * 80FAB
         GOSUB   SUB_80DED                        * 80FAE
         GOSUB   SUB_80CFD                        * 80FB2
-        GOSUB   SUB_8106F                        * 80FB6
+        GOSUB   Flush~jump                       * 80FB6
         GOSBVL  SUB_00D3B                        * 80FBA
-        GOSUB   SUB_81061                        * 80FC1
+        GOSUB   FlushAttn~jump                   * 80FC1
         GOSUB   L_80B26                          * 80FC5
         P=      0                                * 80FC9
         LC(5)   #85225                           * 80FCB
@@ -1261,11 +1261,11 @@ L_8102A:
         D0=(5)  #00001                           * 8102A
         RTNSC                                    * 81031
 L_81033:
-        GOSUB   SUB_81076                        * 81033
+        GOSUB   POPUART~jump                     * 81033
         GONC    L_8103E                          * 81037
         GOTO    SUB_80FA6                        * 8103A
 L_8103E:
-        GOSUB   SUB_81068                        * 8103E
+        GOSUB   OUTUART~jump                     * 8103E
         GONC    L_8100E                          * 81042
         D0=C                                     * 81045
         RTNSC                                    * 81048
@@ -1279,23 +1279,23 @@ SUB_81051:
         RTN                                      * 8105F
 
 * refs (3): 80D29 80F01 80FC1
-SUB_81061:
+FlushAttn~jump:
         GOVLNG  FlushAttn                        * 81061
 
 * refs (8): 80BFE 80C8A 80E12 80F6D 8103E 817C4 ...
-SUB_81068:
+OUTUART~jump:
         GOVLNG  OUTUART                          * 81068
 
 * refs (5): 80038 80843 80EF6 80FB6 81583
-SUB_8106F:
+Flush~jump:
         GOVLNG  Flush                            * 8106F
 
 * refs (4): 80B86 80CC3 80F1B 81033
-SUB_81076:
+POPUART~jump:
         GOVLNG  POPUART                          * 81076
 L_8107D:
         GOSUBL  SUB_802D2                        * 8107D
-        GOSUBL  SUB_8040D                        * 81083
+        GOSUBL  ClrScrMn~jump                    * 81083
         D0=(5)  L_81903+2                        * 81089
         GOSUBL  SUB_8165A                        * 81090
         ST=0    15                               * 81096
@@ -1324,7 +1324,7 @@ L_810D0:
 * refs (2): 800F2 80264
 SUB_810E6:
         GOSUBL  SUB_802D2                        * 810E6
-        GOSUBL  SUB_8040D                        * 810EC
+        GOSUBL  ClrScrMn~jump                    * 810EC
         D0=(5)  L_81903+12                       * 810F2
         GOSUBL  SUB_8165A                        * 810F9
         ST=0    15                               * 810FF
@@ -1700,13 +1700,13 @@ L_81577:
         GOSBVL  POPKEY                           * 81577
         GOC     L_8156C                          * 8157E
         RSTK=C                                   * 81581
-        GOSUB   SUB_8106F                        * 81583
+        GOSUB   Flush~jump                       * 81583
         C=R1                                     * 81587
         CBIT=1  3                                * 8158A
         R1=C.F  A                                * 8158F
         LC(2)   #F4                              * 81595
-        GOSUBL  SUB_802D8                        * 81599
-        GOSUBL  SUB_8040D                        * 8159F
+        GOSUBL  RCKBp~jump                       * 81599
+        GOSUBL  ClrScrMn~jump                    * 8159F
         D0=(5)  L_81843+28                       * 815A5
         GOSUBL  SUB_815FE                        * 815AC
         C=RSTK                                   * 815B2
@@ -1894,16 +1894,16 @@ L_817B2:
         C=C+1   A                                * 817BD
         C=C+1   A                                * 817BF
         R3=C                                     * 817C1
-        GOSUB   SUB_81068                        * 817C4
+        GOSUB   OUTUART~jump                     * 817C4
         C=RSTK                                   * 817C8
         C=C-1   A                                * 817CA
         GONC    L_817B2                          * 817CC
         LC(2)   #0D                              * 817CF
         A=C     A                                * 817D3
-        GOSUB   SUB_81068                        * 817D5
+        GOSUB   OUTUART~jump                     * 817D5
         LC(2)   #0A                              * 817D9
         A=C     A                                * 817DD
-        GOSUB   SUB_81068                        * 817DF
+        GOSUB   OUTUART~jump                     * 817DF
         GOTO    L_8180D                          * 817E3
 L_817E7:
         NIBHEX  A0                               * 817E7  .

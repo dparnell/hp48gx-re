@@ -129,7 +129,7 @@ L_2A15E:
         RTN                                      * 2A17F
 
 * refs (2): 2A1E9 2A223
-SUB_2A181:
+GETPTR~jump_2A181:
         GOVLNG  GETPTR                           * 2A181
 
 * ( A -> %push ) Push A as %, <REF>GETPTR
@@ -167,7 +167,7 @@ L_2A1DC:
         D0=D0+  5                                * 2A1DF
         C=R0                                     * 2A1E2
         DAT0=C  W                                * 2A1E5
-        GOSUB   SUB_2A181                        * 2A1E9
+        GOSUB   GETPTR~jump_2A181                * 2A1E9
         D=D-1   A                                * 2A1ED
 L_2A1EF:
         D1=D1-  5                                * 2A1EF
@@ -191,11 +191,11 @@ L_2A20C:
         P=      0                                * 2A218
         LC(5)   %0_2A2B4                         * 2A21A
         A=A+C   A                                * 2A221
-        GOSUB   SUB_2A181                        * 2A223
+        GOSUB   GETPTR~jump_2A181                * 2A223
         D=D-1   A                                * 2A227
         GONC    L_2A1EF                          * 2A229
         D=D+1   A                                * 2A22C
-        GOSUB   SUB_29FF1                        * 2A22E
+        GOSUB   SAVPTR~jump_29FF1                * 2A22E
         GONC    L_2A1B9                          * 2A232
 L_2A235:
         GOSUB   SUB_2A24B                        * 2A235
@@ -419,7 +419,7 @@ L_2A28A:
 * refs (86): 0FE58 0FF2F 0FFB1 10C5E 10CCC 1DDCE ...
 %>%%:
         CON(5)  (*)+5                            * 2A5C1  primitive code object
-        GOSUBL  SUB_2AEA2                        * 2A5C6
+        GOSUBL  POP1%SPLITA~jump                 * 2A5C6
         GOLONG  L_2AED0                          * 2A5CC
         RPL
 
@@ -629,7 +629,7 @@ L_2A867:
         CON(5)  (*)+5                            * 2A871  primitive code object
         P=      1                                * 2A876
 L_2A878:
-        GOSUB   SUB_2AEA9                        * 2A878
+        GOSUB   Pop%ACSrSep~jump                 * 2A878
         GONC    L_2A82A                          * 2A87C
 
 * %% %%' -> flag
@@ -691,7 +691,7 @@ L_2A878:
 * refs (6): 0FCF0 1B339 4FC82 501F9 5021C 89D67
 %SGN:
         CON(5)  (*)+5                            * 2A8D7  primitive code object
-        GOSUB   SUB_2AE9B                        * 2A8DC
+        GOSUB   POP1%~jump                       * 2A8DC
         ?A=0    W                                * 2A8E0
         GOYES   L_2A90C                          * 2A8E3
         P=      14                               * 2A8E5
@@ -711,7 +711,7 @@ L_2A878:
 * refs (51): 0E6D9 0F606 10905 1AA2E 1B6F9 22251 ...
 %ABS:
         CON(5)  (*)+5                            * 2A900  primitive code object
-        GOSUB   SUB_2AE9B                        * 2A905
+        GOSUB   POP1%~jump                       * 2A905
         A=0     S                                * 2A909
 L_2A90C:
         GOTO    L_2AEEF                          * 2A90C
@@ -728,7 +728,7 @@ L_2A90C:
 * refs (28): 0F61F 1A9A4 2A6CD 37CDD 40085 400B2 ...
 %CHS:
         CON(5)  (*)+5                            * 2A920  primitive code object
-        GOSUB   SUB_2AE9B                        * 2A925
+        GOSUB   POP1%~jump                       * 2A925
         A=-A-1  S                                * 2A929
         GOTO    L_2AEEF                          * 2A92C
 
@@ -736,7 +736,7 @@ L_2A90C:
 * refs (1): 1BEAB
 %MANTISSA:
         CON(5)  (*)+5                            * 2A930  primitive code object
-        GOSUB   SUB_2AE9B                        * 2A935
+        GOSUB   POP1%~jump                       * 2A935
         A=0     X                                * 2A939
         A=0     S                                * 2A93C
         GOTO    L_2AEEF                          * 2A93F
@@ -773,14 +773,14 @@ L_2A967:
 * refs (69): 0C672 10405 1AB76 20921 2EBD0 41610 ...
 %+:
         CON(5)  (*)+5                            * 2A974  primitive code object
-        GOSUB   SUB_2AEA9                        * 2A979
+        GOSUB   Pop%ACSrSep~jump                 * 2A979
         GOTO    L_2A98D                          * 2A97D
 
 * % %' -> %-%'
 * refs (74): 0C677 1059F 10653 1AD18 209D7 452D1 ...
 %-:
         CON(5)  (*)+5                            * 2A981  primitive code object
-        GOSUB   SUB_2AEA9                        * 2A986
+        GOSUB   Pop%ACSrSep~jump                 * 2A986
         C=-C-1  S                                * 2A98A
 L_2A98D:
         HST=0   3                                * 2A98D
@@ -797,7 +797,7 @@ L_2A98D:
 * refs (10): 0FBBF 36A20 51A7B 51A85 51E41 51E4B ...
 _*(2r);r=>rr:
         CON(5)  (*)+5                            * 2A9A6  primitive code object
-        GOSUB   SUB_2AEA9                        * 2A9AB
+        GOSUB   Pop%ACSrSep~jump                 * 2A9AB
 L_2A9AF:
         HST=0   3                                * 2A9AF
 * a branch also enters #2A9B7, where the nibbles decode as RSTK=C
@@ -813,14 +813,14 @@ L_2A9B2:
 * refs (99): 0F79C 109FA 1A7E3 1ADFD 1B485 41683 ...
 %*:
         CON(5)  (*)+5                            * 2A9BC  primitive code object
-        GOSUB   SUB_2AEA9                        * 2A9C1
+        GOSUB   Pop%ACSrSep~jump                 * 2A9C1
         GOTO    L_2A9DB                          * 2A9C5
 
 * % %' -> %'/% * 100
 * refs (1): 1C06F
 %OF:
         CON(5)  (*)+5                            * 2A9C9  primitive code object
-        GOSUB   SUB_2AEA9                        * 2A9CE
+        GOSUB   Pop%ACSrSep~jump                 * 2A9CE
         ?B=0    M                                * 2A9D2
         GOYES   L_2A9DB                          * 2A9D5
         A=A-1   A                                * 2A9D7
@@ -843,14 +843,14 @@ L_2A9DB:
 * refs (77): 0F82D 109F5 1A256 1A2AB 1AF14 20FC8 ...
 %/:
         CON(5)  (*)+5                            * 2A9FE  primitive code object
-        GOSUB   SUB_2AEA9                        * 2AA03
+        GOSUB   Pop%ACSrSep~jump                 * 2AA03
         GOTO    L_2AA1E                          * 2AA07
 
 * % %' -> %pctotal
 * refs (1): 1C0E6
 %T:
         CON(5)  (*)+5                            * 2AA0B  primitive code object
-        GOSUB   SUB_2AEA9                        * 2AA10
+        GOSUB   Pop%ACSrSep~jump                 * 2AA10
         GOSUBL  XYEX                             * 2AA14
         GOSUB   SUB_2AA25                        * 2AA1A
 L_2AA1E:
@@ -869,7 +869,7 @@ SUB_2AA25:
 * refs (1): 1C158
 %CH:
         CON(5)  (*)+5                            * 2AA30  primitive code object
-        GOSUB   SUB_2AEA9                        * 2AA35
+        GOSUB   Pop%ACSrSep~jump                 * 2AA35
         GOSUBL  STAB0                            * 2AA39
         A=-A-1  S                                * 2AA3F
         HST=0   3                                * 2AA42
@@ -892,7 +892,7 @@ L_2AA55:
 * refs (5): 0F8AA 1B133 4C036 4C078 CD57E
 %^:
         CON(5)  (*)+5                            * 2AA70  primitive code object
-        GOSUB   SUB_2AEA9                        * 2AA75
+        GOSUB   Pop%ACSrSep~jump                 * 2AA75
 L_2AA79:
         GOSUB   SUB_2AAC0                        * 2AA79
         GOTO    L_2AEE5                          * 2AA7D
@@ -901,7 +901,7 @@ L_2AA79:
 * refs (2): 0F8A5 1B25B
 %NROOT:
         CON(5)  (*)+5                            * 2AA81  primitive code object
-        GOSUB   SUB_2AEA9                        * 2AA86
+        GOSUB   Pop%ACSrSep~jump                 * 2AA86
         GOSUB   SUB_2AAD5                        * 2AA8A
         GOTO    L_2AEE5                          * 2AA8E
 
@@ -916,17 +916,17 @@ L_2AA79:
 * refs (3): 33EC1 33ECB 33ED5
 %>%%1/:
         CON(5)  (*)+5                            * 2AA9E  primitive code object
-        GOSUB   SUB_2AEA2                        * 2AAA3
+        GOSUB   POP1%SPLITA~jump                 * 2AAA3
 L_2AAA7:
-        GOSUB   SUB_2AEBE                        * 2AAA7
+        GOSUB   1/X15~jump                       * 2AAA7
         GOTO    L_2AECC                          * 2AAAB
 
 * % -> 1/%
 * refs (9): 0F84B 10A6D 1B287 5A85A 8ACE3 8ADD0 ...
 %1/:
         CON(5)  (*)+5                            * 2AAAF  primitive code object
-        GOSUB   SUB_2AEA2                        * 2AAB4
-        GOSUB   SUB_2AEBE                        * 2AAB8
+        GOSUB   POP1%SPLITA~jump                 * 2AAB4
+        GOSUB   1/X15~jump                       * 2AAB8
         GOTO    L_2AEE5                          * 2AABC
 
 * refs (2): 2AA68 2AA79
@@ -972,7 +972,7 @@ L_2AAFF:
 * refs (1): 1B409
 %SQRT:
         CON(5)  (*)+5                            * 2AB09  primitive code object
-        GOSUB   SUB_2AEA2                        * 2AB0E
+        GOSUB   POP1%SPLITA~jump                 * 2AB0E
         GOSUBL  SUB_2B9F3                        * 2AB12
         GOTO    L_2AEE5                          * 2AB18
 
@@ -988,7 +988,7 @@ L_2AAFF:
 * refs (4): 1B914 CCD00 CD3DF CD545
 %EXP:
         CON(5)  (*)+5                            * 2AB2F  primitive code object
-        GOSUB   SUB_2AEA2                        * 2AB34
+        GOSUB   POP1%SPLITA~jump                 * 2AB34
         GOSUBL  SUB_2B6AA                        * 2AB38
         GOTO    L_2AEE9                          * 2AB3E
 
@@ -996,7 +996,7 @@ L_2AAFF:
 * refs (1): 1BAD1
 %EXPM1:
         CON(5)  (*)+5                            * 2AB42  primitive code object
-        GOSUB   SUB_2AEA2                        * 2AB47
+        GOSUB   POP1%SPLITA~jump                 * 2AB47
         GOSUBL  SUB_2B6B3                        * 2AB4B
         GOSUBL  RCAB0                            * 2AB51
         GOTO    L_2AEE9                          * 2AB57
@@ -1013,7 +1013,7 @@ L_2AAFF:
 * refs (1): 1B9A9
 %LN:
         CON(5)  (*)+5                            * 2AB6E  primitive code object
-        GOSUB   SUB_2AEA2                        * 2AB73
+        GOSUB   POP1%SPLITA~jump                 * 2AB73
         GOSUBL  SUB_2B698                        * 2AB77
         GOTO    L_2AEE5                          * 2AB7D
 
@@ -1021,7 +1021,7 @@ L_2AAFF:
 * refs (2): 1BA20 CD0F1
 %LOG:
         CON(5)  (*)+5                            * 2AB81  primitive code object
-        GOSUB   SUB_2AEA2                        * 2AB86
+        GOSUB   POP1%SPLITA~jump                 * 2AB86
         GOSUBL  SUB_2B6A1                        * 2AB8A
         GOTO    L_2AEE5                          * 2AB90
 
@@ -1037,7 +1037,7 @@ L_2AAFF:
 * refs (1): 1BA9B
 %LNP1:
         CON(5)  (*)+5                            * 2ABA7  primitive code object
-        GOSUB   SUB_2AEA2                        * 2ABAC
+        GOSUB   POP1%SPLITA~jump                 * 2ABAC
         GOSUBL  SUB_2B68F                        * 2ABB0
         GOTO    L_2AEE5                          * 2ABB6
 
@@ -1045,7 +1045,7 @@ L_2AAFF:
 * refs (1): 1BA4C
 %ALOG:
         CON(5)  (*)+5                            * 2ABBA  primitive code object
-        GOSUB   SUB_2AEA2                        * 2ABBF
+        GOSUB   POP1%SPLITA~jump                 * 2ABBF
         C=0     W                                * 2ABC3
         D=0     W                                * 2ABC6
         P=      14                               * 2ABC9
@@ -1059,7 +1059,7 @@ L_2AAFF:
 * refs (4): 1BE5C 2B1AD 452DB 454F7
 %MOD:
         CON(5)  (*)+5                            * 2ABDC  primitive code object
-        GOSUB   SUB_2AEA9                        * 2ABE1
+        GOSUB   Pop%ACSrSep~jump                 * 2ABE1
         GOSUBL  aMODF                            * 2ABE5
         GOTO    L_2AEE9                          * 2ABEB
 
@@ -1067,7 +1067,7 @@ L_2AAFF:
 * refs (1): 1B4BB
 %SIN:
         CON(5)  (*)+5                            * 2ABEF  primitive code object
-        GOSUB   SUB_2AEA2                        * 2ABF4
+        GOSUB   POP1%SPLITA~jump                 * 2ABF4
         GOSUB   SUB_2AEF6                        * 2ABF8
         GOSUBL  SUB_2B6E0                        * 2ABFC
         GOTO    L_2AEE9                          * 2AC02
@@ -1104,7 +1104,7 @@ L_2AC36:
 * refs (1): 1B514
 %COS:
         CON(5)  (*)+5                            * 2AC40  primitive code object
-        GOSUB   SUB_2AEA2                        * 2AC45
+        GOSUB   POP1%SPLITA~jump                 * 2AC45
         GOSUB   SUB_2AEF6                        * 2AC49
         GOSUBL  SUB_2B6E9                        * 2AC4D
         GOTO    L_2AEE9                          * 2AC53
@@ -1141,7 +1141,7 @@ L_2AC87:
 * refs (1): 1B56D
 %TAN:
         CON(5)  (*)+5                            * 2AC91  primitive code object
-        GOSUB   SUB_2AEA2                        * 2AC96
+        GOSUB   POP1%SPLITA~jump                 * 2AC96
         GOSUB   SUB_2AEF6                        * 2AC9A
         GOSUBL  SUB_2B6F2                        * 2AC9E
         GOTO    L_2AEE5                          * 2ACA4
@@ -1159,7 +1159,7 @@ L_2AC87:
 * refs (1): 1B712
 %ASIN:
         CON(5)  (*)+5                            * 2ACC1  primitive code object
-        GOSUB   SUB_2AEA2                        * 2ACC6
+        GOSUB   POP1%SPLITA~jump                 * 2ACC6
         GOSUB   SUB_2AEF6                        * 2ACCA
         GOSUBL  SUB_2B704                        * 2ACCE
         GOTO    L_2AEE5                          * 2ACD4
@@ -1178,7 +1178,7 @@ L_2AC87:
 * refs (1): 1B77F
 %ACOS:
         CON(5)  (*)+5                            * 2ACF1  primitive code object
-        GOSUB   SUB_2AEA2                        * 2ACF6
+        GOSUB   POP1%SPLITA~jump                 * 2ACF6
         GOSUB   SUB_2AEF6                        * 2ACFA
         GOSUBL  SUB_2B70D                        * 2ACFE
         GOTO    L_2AEE5                          * 2AD04
@@ -1197,7 +1197,7 @@ L_2AC87:
 * refs (1): 1B7AB
 %ATAN:
         CON(5)  (*)+5                            * 2AD21  primitive code object
-        GOSUB   SUB_2AEA2                        * 2AD26
+        GOSUB   POP1%SPLITA~jump                 * 2AD26
         GOSUB   SUB_2AEF6                        * 2AD2A
         GOSUBL  SUB_2B6FB                        * 2AD2E
         GOTO    L_2AEE9                          * 2AD34
@@ -1206,7 +1206,7 @@ L_2AC87:
 * refs (1): 1B317
 %ANGLE:
         CON(5)  (*)+5                            * 2AD38  primitive code object
-        GOSUB   SUB_2AEA9                        * 2AD3D
+        GOSUB   Pop%ACSrSep~jump                 * 2AD3D
         GOSUB   SUB_2AEF6                        * 2AD41
         GOSUBL  SUB_2B6D7                        * 2AD45
         GOTO    L_2AEE9                          * 2AD4B
@@ -1263,7 +1263,7 @@ L_2AD8B:
 * refs (1): 1B5C6
 %SINH:
         CON(5)  (*)+5                            * 2ADAE  primitive code object
-        GOSUB   SUB_2AEA2                        * 2ADB3
+        GOSUB   POP1%SPLITA~jump                 * 2ADB3
         GOSUBL  SUB_2B731                        * 2ADB7
         GOSUBL  RCAB0                            * 2ADBD
         GOTO    L_2AEDB                          * 2ADC3
@@ -1280,7 +1280,7 @@ L_2AD8B:
 * refs (1): 1B615
 %COSH:
         CON(5)  (*)+5                            * 2ADDA  primitive code object
-        GOSUB   SUB_2AEA2                        * 2ADDF
+        GOSUB   POP1%SPLITA~jump                 * 2ADDF
         GOSUBL  SUB_2B731                        * 2ADE3
         GOTO    L_2AEDB                          * 2ADE9
 
@@ -1288,7 +1288,7 @@ L_2AD8B:
 * refs (1): 1B664
 %TANH:
         CON(5)  (*)+5                            * 2ADED  primitive code object
-        GOSUB   SUB_2AEA2                        * 2ADF2
+        GOSUB   POP1%SPLITA~jump                 * 2ADF2
         GOSUBL  SUB_2B73A                        * 2ADF6
         GOTO    L_2AEDB                          * 2ADFC
 
@@ -1296,7 +1296,7 @@ L_2AD8B:
 * refs (1): 1B7FA
 %ASINH:
         CON(5)  (*)+5                            * 2AE00  primitive code object
-        GOSUB   SUB_2AEA2                        * 2AE05
+        GOSUB   POP1%SPLITA~jump                 * 2AE05
         GOSUBL  SUB_2B743                        * 2AE09
         GOTO    L_2AEDB                          * 2AE0F
 
@@ -1304,7 +1304,7 @@ L_2AD8B:
 * refs (1): 1B885
 %ACOSH:
         CON(5)  (*)+5                            * 2AE13  primitive code object
-        GOSUB   SUB_2AEA2                        * 2AE18
+        GOSUB   POP1%SPLITA~jump                 * 2AE18
         GOSUBL  SUB_2B74C                        * 2AE1C
         GOTO    L_2AED7                          * 2AE22
 
@@ -1312,7 +1312,7 @@ L_2AD8B:
 * refs (1): 1B8E8
 %ATANH:
         CON(5)  (*)+5                            * 2AE26  primitive code object
-        GOSUB   SUB_2AEA2                        * 2AE2B
+        GOSUB   POP1%SPLITA~jump                 * 2AE2B
         GOSUBL  SUB_2B755                        * 2AE2F
         GOTO    L_2AED7                          * 2AE35
 
@@ -1320,7 +1320,7 @@ L_2AD8B:
 * refs (5): 1BC54 45D5C 4C040 5A752 5A823
 %EXPONENT:
         CON(5)  (*)+5                            * 2AE39  primitive code object
-        GOSUB   SUB_2AEA2                        * 2AE3E
+        GOSUB   POP1%SPLITA~jump                 * 2AE3E
         GOSUBL  SUB_2B686                        * 2AE42
         GOTO    L_2AEE5                          * 2AE48
 
@@ -1328,7 +1328,7 @@ L_2AD8B:
 * refs (1): 2B185
 %NFACT:
         CON(5)  (*)+5                            * 2AE4C  primitive code object
-        GOSUB   SUB_2AEA2                        * 2AE51
+        GOSUB   POP1%SPLITA~jump                 * 2AE51
         HST=0   3                                * 2AE55
         GOSUBL  SUB_2B716                        * 2AE58
         GOTO    L_2AEE9                          * 2AE5E
@@ -1337,7 +1337,7 @@ L_2AD8B:
 * refs (1): 1C205
 %COMB:
         CON(5)  (*)+5                            * 2AE62  primitive code object
-        GOSUB   SUB_2AEA9                        * 2AE67
+        GOSUB   Pop%ACSrSep~jump                 * 2AE67
         GOSUBL  SUB_2B728                        * 2AE6B
         GOTO    L_2AE84                          * 2AE71
 
@@ -1345,7 +1345,7 @@ L_2AD8B:
 * refs (1): 1C245
 %PERM:
         CON(5)  (*)+5                            * 2AE75  primitive code object
-        GOSUB   SUB_2AEA9                        * 2AE7A
+        GOSUB   Pop%ACSrSep~jump                 * 2AE7A
         GOSUBL  SUB_2B71F                        * 2AE7E
 L_2AE84:
         ?XM=0                                    * 2AE84
@@ -1357,15 +1357,15 @@ L_2AE89:
         GOVLNG  DOSIZEERR                        * 2AE94
 
 * refs (5): 2A8DC 2A905 2A925 2A935 2B080
-SUB_2AE9B:
+POP1%~jump:
         GOVLNG  POP1%                            * 2AE9B
 
 * refs (32): 2A5C6 2AAA3 2AAB4 2AB0E 2AB34 2AB47 ...
-SUB_2AEA2:
+POP1%SPLITA~jump:
         GOVLNG  POP1%SPLITA                      * 2AEA2
 
 * refs (15): 2A878 2A979 2A986 2A9AB 2A9C1 2A9CE ...
-SUB_2AEA9:
+Pop%ACSrSep~jump:
         GOVLNG  Pop%ACSrSep                      * 2AEA9
 
 * refs (20): 2A5B5 2A8F5 2A915 2AA97 2AAEF 2AB21 ...
@@ -1377,7 +1377,7 @@ SUB_2AEB7:
         GOVLNG  SUB_2A0B1                        * 2AEB7
 
 * refs (2): 2AAA7 2AAB8
-SUB_2AEBE:
+1/X15~jump:
         GOVLNG  1/X15                            * 2AEBE
 
 * refs (3): 2AECC 2AED7 2AEE5
@@ -1428,7 +1428,7 @@ L_2AF21:
 * refs (3): 2A691 2A6A5 2A6AF
 hm->(r);r=>rr:
         CON(5)  (*)+5                            * 2AF3A  primitive code object
-        GOSUB   SUB_2AEA2                        * 2AF3F
+        GOSUB   POP1%SPLITA~jump                 * 2AF3F
         GOSUBL  SUB_2B779                        * 2AF43
         GOTO    L_2AECC                          * 2AF49
 
@@ -1436,7 +1436,7 @@ hm->(r);r=>rr:
 * refs (17): 0FD18 1BBB2 4160B 41D60 5A7C4 B6D21 ...
 %FP:
         CON(5)  (*)+5                            * 2AF4D  primitive code object
-        GOSUB   SUB_2AEA2                        * 2AF52
+        GOSUB   POP1%SPLITA~jump                 * 2AF52
         GOSUBL  SUB_2B674                        * 2AF56
         GOTO    L_2AEDB                          * 2AF5C
 
@@ -1444,7 +1444,7 @@ hm->(r);r=>rr:
 * refs (29): 0FD04 1A8A5 1BB7C 2B11B 2B1A3 2EC16 ...
 %IP:
         CON(5)  (*)+5                            * 2AF60  primitive code object
-        GOSUB   SUB_2AEA2                        * 2AF65
+        GOSUB   POP1%SPLITA~jump                 * 2AF65
         GOSUBL  CLRFRC                           * 2AF69
         GOTO    L_2AEDB                          * 2AF6F
 
@@ -1452,7 +1452,7 @@ hm->(r);r=>rr:
 * refs (3): 0FD40 1BC1E 4C949
 %CEIL:
         CON(5)  (*)+5                            * 2AF73  primitive code object
-        GOSUB   SUB_2AEA2                        * 2AF78
+        GOSUB   POP1%SPLITA~jump                 * 2AF78
         GOSUBL  SUB_2B75E                        * 2AF7C
         GOTO    L_2AEDB                          * 2AF82
 
@@ -1460,7 +1460,7 @@ hm->(r);r=>rr:
 * refs (3): 0FD2C 1BBE8 CBB72
 %FLOOR:
         CON(5)  (*)+5                            * 2AF86  primitive code object
-        GOSUB   SUB_2AEA2                        * 2AF8B
+        GOSUB   POP1%SPLITA~jump                 * 2AF8B
         GOSUBL  SUB_2B767                        * 2AF8F
         GOTO    L_2AEDB                          * 2AF95
 
@@ -1476,7 +1476,7 @@ hm->(r);r=>rr:
 * refs (1): 0E6DE
 %INT:
         CON(5)  (*)+5                            * 2AFAC  primitive code object
-        GOSUB   SUB_2AEA2                        * 2AFB1
+        GOSUB   POP1%SPLITA~jump                 * 2AFB1
         ST=0    1                                * 2AFB5
         P=      0                                * 2AFB8
         LC(2)   #01                              * 2AFBA
@@ -1534,7 +1534,7 @@ L_2B03D:
 DORANDOMIZE:
         CON(5)  (*)+5                            * 2B07B  primitive code object
         ASSEMBLE
-        GOSUB   SUB_2AE9B                        * 2B080
+        GOSUB   POP1%~jump                       * 2B080
         A=0     S                                * 2B084
         B=0     A                                * 2B087
         ABEX    X                                * 2B089
@@ -1698,7 +1698,7 @@ L_2B565:
         GOSBVL  POP#                             * 2B565
         C=A     A                                * 2B56C
         RSTK=C                                   * 2B56E
-        GOSUB   SUB_2AEA2                        * 2B570
+        GOSUB   POP1%SPLITA~jump                 * 2B570
         C=RSTK                                   * 2B574
 L_2B576:
         HST=0   3                                * 2B576
@@ -1710,7 +1710,7 @@ L_2B576:
 * refs (4): 2B52E 2B542 35E45 35EDB
 OBJ_2B590:
         CON(5)  (*)+5                            * 2B590  primitive code object
-        GOSUB   SUB_2AEA2                        * 2B595
+        GOSUB   POP1%SPLITA~jump                 * 2B595
         GOSBVL  CCSB1                            * 2B599
         ST=0    1                                * 2B5A0
         ST=1    2                                * 2B5A3
@@ -2902,7 +2902,7 @@ L_2BF11:
         GOSUB   SUB_2BF83                        * 2BF11
 
 * refs (1): 2BF73
-SUB_2BF15:
+XYEX~jump:
         GOVLNG  XYEX                             * 2BF15
 L_2BF1C:
         P=      2                                * 2BF1C
@@ -2949,7 +2949,7 @@ L_2BF6A:
         GONC    L_2BF65                          * 2BF6C
 L_2BF6F:
         GOSUB   SUB_2BF83                        * 2BF6F
-        GOSUB   SUB_2BF15                        * 2BF73
+        GOSUB   XYEX~jump                        * 2BF73
         ?ST=1   7                                * 2BF77
         GOYES   L_2BF5A                          * 2BF7A
         SB=0                                     * 2BF7C

@@ -609,22 +609,23 @@ CHECKPVARS:
           :: INNERCOMP BINT3 EQUALcasedrop OBJ_4C6E3 * 4A9D3
             BINT2 EQUALcasedrop OBJ_4EF0A        * 4A9EC
             CHECKPVARS~2 ;                       * 4A9FB
-          TYPECMP? OBJ_514C3 DUPTYPEREAL? SWAP TYPEHSTR? OR OBJ_514C3 * 4AA05
-          ChkIndep TYPECMP? OBJ_514C3 TYPECMP? OBJ_514C3 'IDPAR OBJ_4735A * 4AA28
-          DROP ;                                 * 4AA4B
+          TYPECMP? NOT?INVPPAR DUPTYPEREAL? SWAP TYPEHSTR? OR NOT?INVPPAR * 4AA05
+          ChkIndep TYPECMP? NOT?INVPPAR TYPECMP? NOT?INVPPAR 'IDPAR * 4AA28
+          OBJ_4735A DROP ;                       * 4AA46
         NIBHEX  0000                             * 4AA55  ..
 
 * refs (1): 4AA28
 ChkIndep:
         :: DUPTYPELIST? IT                       * 4AA59
-          :: INNERCOMP BINT3 EQUAL OBJ_514C3 TYPEREAL? OBJ_514C3 TYPEREAL? * 4AA68
-            OBJ_514C3 ;                          * 4AA90
-          TYPEIDNT? OBJ_514C3 ;                  * 4AA9A
+          :: INNERCOMP BINT3 EQUAL NOT?INVPPAR TYPEREAL? NOT?INVPPAR * 4AA68
+            TYPEREAL? NOT?INVPPAR ;              * 4AA8B
+          TYPEIDNT? NOT?INVPPAR ;                * 4AA9A
 
 * refs (5): 45F19 4A632 4A9B4 4B0DF 51044
 Chk&BreakPPAR:
         :: 'IDPAR OBJ_4735A ?SKIP MAKEPVARS      * 4AAA9
-          DUPTYPELIST? OBJ_514C3 DUPLENCOMP BINT7 #= OBJ_514C3 INCOMPDROP ; * 4AAC2
+          DUPTYPELIST? NOT?INVPPAR DUPLENCOMP BINT7 #= NOT?INVPPAR * 4AAC2
+          INCOMPDROP ;                           * 4AAE0
 
 * -> {}
 * refs (4): 45EF6 481B6 4AABD 4EEFB
@@ -781,8 +782,8 @@ pmax(c):
 * -> C% C%
 * refs (15): 47740 4ACE8 4B256 4B56C 4B5C6 4C59E ...
 GETPMIN&MAX:
-        :: Chk&BreakPPAR 5DROP DUP TYPECMP? OBJ_514C3 OVER TYPECMP? * 4B0DA
-          OBJ_514C3 ;                            * 4B102
+        :: Chk&BreakPPAR 5DROP DUP TYPECMP? NOT?INVPPAR OVER TYPECMP? * 4B0DA
+          NOT?INVPPAR ;                          * 4B102
 
 * -> %
 * refs (4): 452CC 452E0 4908F B54A8
@@ -897,7 +898,7 @@ OBJ_4B4EB:
 
 * refs (1): 4A9FB
 CHECKPVARS~2:
-        :: BINT4 EQUAL OBJ_514C3 OBJ_4C6E3 OBJ_4EF0A ; * 4B527
+        :: BINT4 EQUAL NOT?INVPPAR OBJ_4C6E3 OBJ_4EF0A ; * 4B527
         BSS     9                                * 4B54A
 
 * refs (3): 1E15F 47B14 4812F

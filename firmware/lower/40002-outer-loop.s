@@ -1,6 +1,6 @@
 * HP 48GX ROM revision R, #40002-#42022: Parameterized outer loop and menus
 * Addresses in the right-hand comments are those of the original ROM.
-* Most referenced: TakeOver MenuMaker AtUserStack InitMenu DoMenuKey %100 REPEATER MenuKey DoKeyOb Modifier MenuRow@ NoEdit?case
+* Most referenced: TakeOver MenuMaker InitMenuNoExit AtUserStack InitMenu DoMenuKey %100 REPEATER MenuKey DoKeyOb Modifier MenuRow@
 * Follows on from the previous file (at #40002 in the original ROM).
         RPL
 
@@ -54,7 +54,8 @@ OBJ_4015C:
           PutInComLine!!(_) ;                    * 4017A
 
 * refs (70): 3EFFA C5542 C558C C55D8 C5620 C5668 ...
-OBJ_40184:
+* menu -> : NoExitAction InitMenu SetDA12NoCh
+InitMenuNoExit:
         :: NoExitAction InitMenu SetDA12NoCh ;   * 40184
 
 * ob-NS -> ? {ob-NS ob-LS ob-RS} -> ?

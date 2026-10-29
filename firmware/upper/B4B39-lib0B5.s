@@ -89,7 +89,8 @@ ROMP_0B5_00C:
 * ROMPTR 0B5 00D
 * refs (1): B4B39
 ROMP_0B5_00D:
-        :: SWAPDUP MDIMS OBJ_37DE1 #<>case ROMPTR 0C2 022 * B4DBE
+        :: SWAPDUP MDIMS NcaseDIMERR #<>case     * B4DBE
+          ROMPTR 0C2 022                         * B4DD7
           DUPUNROT ERRSET ROMPTR 0C2 053 ERRTRAP * B4DE2
           :: ROT ROMPTR 0C2 022 ; SWAPDROP ;     * B4DFC
 
@@ -721,7 +722,7 @@ ROMP_0B5_07A:
 * refs (1): B4B39
 ROMP_0B5_07B:
         :: '                                     * B652A
-          :: OBJ_72AFA SWAP OBJ_72AFA EQUAL ; SWAP Lookup ; * B6534
+          :: ?ROMPTR@ SWAP ?ROMPTR@ EQUAL ; SWAP Lookup ; * B6534
 
 * ROMPTR 0B5 07C
 * refs (1): B4B39

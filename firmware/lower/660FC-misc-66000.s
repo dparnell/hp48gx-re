@@ -1,6 +1,6 @@
 * HP 48GX ROM revision R, #660FC-#69141: not yet identified
 * Addresses in the right-hand comments are those of the original ROM.
-* Most referenced: drop;false;true_680B4 SmallCursor MediumCursor BigCursor Code_67005
+* Most referenced: EqwBoxCount EqwPOP#>Box drop;false;true_680B4 SmallCursor MediumCursor BigCursor Code_67005
 * Follows on from the previous file (at #660FC in the original ROM).
         RPL
 
@@ -21,19 +21,19 @@ OBJ_661A6:
           :: OBJ_6DFDE OBJ_67416 OBJ_6F42D OBJ_44DFE ; OBJ_6FDB6 OBJ_66255 * 661BA
           OBJ_6FDC6 OBJ_662B9 BINT8 OBJ_6E433 OBJ_6E00B OBJ_67E0C OBJ_65D14 * 661E2
           OBJ_679AE DUP OBJ_6733B OBJ_67BE2 BINT0 3PICK BINT9 BINT7 * 66205
-          OBJ_6DD2D OBJ_682D2 OBJ_67381 OBJ_67BFC OBJ_67381 OBJ_67448 * 6622D
+          OBJ_6DD2D OBJ_682D2 EqwBoxCount OBJ_67BFC EqwBoxCount OBJ_67448 * 6622D
           OBJ_6E4F6 ;                            * 6624B
 
 * refs (1): 661DD
 OBJ_66255:
         :: OBJ_6E1C7 DUP tok= OBJ_6CB70 OBJ_68245 DUPZERO OVER OBJ_678DB * 66255
-          BINT5 OBJ_6DAE9 OBJ_67381 OVER OBJ_678DB OVER OBJ_67BFC DUPUNROT * 66282
+          BINT5 OBJ_6DAE9 EqwBoxCount OVER OBJ_678DB OVER OBJ_67BFC DUPUNROT * 66282
           OBJ_67BE2 OBJ_67448 ;                  * 662AA
 
 * refs (1): 661E7
 OBJ_662B9:
-        :: OBJ_67E0C OBJ_679B3 OBJ_679B3 DUPZERO OBJ_67C3C OBJ_6DD6E 4PICK * 662B9
-          #1+ OBJ_678D6 BINT7 BINT6 OBJ_6DD2D OBJ_682DE OBJ_67381 SWAPDUP * 662E1
+        :: OBJ_67E0C OBJ_679B3 OBJ_679B3 DUPZERO OBJ_67C3C Push3Zeros 4PICK * 662B9
+          #1+ OBJ_678D6 BINT7 BINT6 OBJ_6DD2D OBJ_682DE EqwBoxCount SWAPDUP * 662E1
           OBJ_678DB 3PICK OBJ_67BEF #1+ OVER OBJ_67BD5 OBJ_67448 ; * 66309
 
 * refs (1): 661B0
@@ -49,12 +49,12 @@ OBJ_66331:
 * refs (1): 1B233
 OBJ_663E5:
         :: SKIP OBJ_6656B OBJ_67356 OBJ_6733B OBJ_6CFB5 SWAPDROP OBJ_6E0D2 * 663E5
-          #+ #6+ SWAP #2+ OBJ_6C873 #1+ OBJ_6D8DC OBJ_67381 #5+ DUPZERO * 6640D
+          #+ #6+ SWAP #2+ OBJ_6C873 #1+ OBJ_6D8DC EqwBoxCount #5+ DUPZERO * 6640D
           OBJ_67348 OBJ_67416 OBJ_6D39D OBJ_6E0D2 OBJ_6E0C0 OBJ_6C873 #3+ * 6643F
-          OBJ_6D990 OBJ_682DE OBJ_67381 OBJ_67348 OBJ_67416 BINT1 BINT4 * 66462
+          OBJ_6D990 OBJ_682DE EqwBoxCount OBJ_67348 OBJ_67416 BINT1 BINT4 * 66462
           BINT0 OBJ_6D779 BINT4 OBJ_6DC51 4ROLL #1+ 4UNROLL OBJ_682D2 * 66485
-          OBJ_67348 DUP OBJ_67381 BINT0 OBJ_67416 OBJ_6D39D OBJ_6D7DD * 664AD
-          OBJ_6D779 OBJ_6C873 #1+ OBJ_6D990 OBJ_6DD6E BINT0 OBJ_6733B BINT0 * 664D0
+          OBJ_67348 DUP EqwBoxCount BINT0 OBJ_67416 OBJ_6D39D OBJ_6D7DD * 664AD
+          OBJ_6D779 OBJ_6C873 #1+ OBJ_6D990 Push3Zeros BINT0 OBJ_6733B BINT0 * 664D0
           #THREE#FOUR BINT2 OBJ_6D7DD OBJ_6DC51 OBJ_6DFDE ZEROZERO ZEROZERO * 664F8
           OBJ_67364 OBJ_6D163 OBJ_6D4CE OBJ_6D5EB ; * 6651B
 
@@ -70,9 +70,10 @@ OBJ_6656B:
             OVER OBJ_679A1 DUP OBJ_6F42D OBJ_68245 ZEROSWAP OBJ_68593 * 6659D
             OBJ_67BFC ;                          * 665C0
           BINT4 OBJ_6E433 OBJ_6E00B OBJ_67E0C OBJ_679C5 OBJ_679AE DUPZERO * 665CA
-          4PICK BINT5 OBJ_6DAE9 2DUP OBJ_67381 OBJ_67BE2 OBJ_67381 OBJ_67BFC * 665ED
-          BINT7 3PICK OBJ_679A1 OBJ_68593 OBJ_6D7DD OBJ_66FF1 OBJ_68245 * 66615
-          OBJ_678D6 SWAP OBJ_679A1 OBJ_66660 2DROP OBJ_67381 OBJ_67448 ; * 66638
+          4PICK BINT5 OBJ_6DAE9 2DUP EqwBoxCount OBJ_67BE2 EqwBoxCount * 665ED
+          OBJ_67BFC BINT7 3PICK OBJ_679A1 OBJ_68593 OBJ_6D7DD OBJ_66FF1 * 66610
+          OBJ_68245 OBJ_678D6 SWAP OBJ_679A1 OBJ_66660 2DROP EqwBoxCount * 66633
+          OBJ_67448 ;                            * 66656
 
 * refs (2): 66647 6841B
 OBJ_66660:
@@ -191,7 +192,7 @@ L_66851:
 OBJ_6689C:
         CON(5)  (*)+5                            * 6689C  primitive code object
         ASSEMBLE
-        GOSBVL  SUB_67A4A                        * 668A1
+        GOSBVL  EqwPOP#>Box                      * 668A1
         D1=D1-  5                                * 668A8
         D=D-1   A                                * 668AB
 L_668AD:
@@ -254,7 +255,7 @@ OBJ_66A0A:
         CON(5)  (*)+5                            * 66A0A  primitive code object
         ASSEMBLE
 L_66A0F:
-        GOSBVL  SUB_67A4A                        * 66A0F
+        GOSBVL  EqwPOP#>Box                      * 66A0F
         D1=D1+  15                               * 66A16
         D1=D1+  10                               * 66A19
         D0=D0+  10                               * 66A1C
@@ -364,7 +365,7 @@ L_66B3D:
         R3=C                                     * 66B5B
         D0=A                                     * 66B5E
         D1=D1+  15                               * 66B61
-        GOSBVL  SUB_67A4A                        * 66B64
+        GOSBVL  EqwPOP#>Box                      * 66B64
         D=D-1   A                                * 66B6B
         D1=D1-  10                               * 66B6D
         D1=D1-  10                               * 66B70
@@ -401,7 +402,7 @@ OBJ_66BAD:
 OBJ_66BC1:
         CON(5)  (*)+5                            * 66BC1  primitive code object
         D1=D1+  10                               * 66BC6
-        GOSBVL  SUB_67A4A                        * 66BC9
+        GOSBVL  EqwPOP#>Box                      * 66BC9
         D1=D1-  15                               * 66BD0
         D0=D0+  8                                * 66BD3
         C=0     A                                * 66BD6
@@ -646,7 +647,7 @@ SUB_67129:
 
 * refs (3): 670F3 67162 67198
 SUB_67136:
-        GOSUB   SUB_67156                        * 67136
+        GOSUB   SAVPTR~jump_67156                * 67136
         A=DAT1  A                                * 6713A
         D1=A                                     * 6713D
         D1=D1+  10                               * 67140
@@ -658,7 +659,7 @@ SUB_67136:
         RTN                                      * 67154
 
 * refs (1): 67136
-SUB_67156:
+SAVPTR~jump_67156:
         GOVLNG  SAVPTR                           * 67156
 
 * refs (1): 44CE1
@@ -871,7 +872,8 @@ OBJ_67371:
         GOTO    L_67388                          * 6737D
 
 * refs (62): 65AD8 65AE7 65B3C 65B46 65B6E 65BBE ...
-OBJ_67381:
+* -> #n: EquationWriter layout: the number of boxes in use (also the newest box's index)
+EqwBoxCount:
         CON(5)  (*)+5                            * 67381  primitive code object
         C=0     A                                * 67386
 L_67388:
@@ -930,6 +932,7 @@ OBJ_67406:
         GOTO    L_673AE                          * 67412
 
 * refs (61): 4B8F0 65AA6 65B8C 65F99 660AC 661C4 ...
+* Probably: EquationWriter: -> #box, the current box (kept in FONTHEIGHT)
 OBJ_67416:
         CON(5)  (*)+5                            * 67416  primitive code object
         LC(5)   FONTHEIGHT                       * 6741B
@@ -949,6 +952,7 @@ OBJ_67443:
         CON(5)  DupAndThen                       * 67443  code object: the address of its machine code
 
 * refs (22): 65D00 65D9B 65E04 66246 662AF 66327 ...
+* Probably: EquationWriter: #box -> , set the current box (kept in FONTHEIGHT)
 OBJ_67448:
         CON(5)  (*)+5                            * 67448  primitive code object
         LC(5)   FONTHEIGHT                       * 6744D
@@ -1148,7 +1152,7 @@ OBJ_676D4:
         :: OBJ_673D6 DUP#0=IT                    * 676D4
           :: DROP BINT15 OBJ_6747B OBJ_673E6 BINT15 #+ OBJ_6748B OBJ_67519 * 676E3
             #1+ OBJ_6773D BINT15 OBJ_67616 BINT15 ; * 67710
-          #1-DUP OBJ_6747B OBJ_67381             * 6772E
+          #1-DUP OBJ_6747B EqwBoxCount           * 6772E
 
 * refs (5): 67327 67715 691A6 6A03C 6C1CC
 OBJ_6773D:
@@ -1304,7 +1308,7 @@ OBJ_678DB:
         LC(2)   #1B                              * 678E0
 L_678E4:
         R1=C                                     * 678E4
-        GOSUB   SUB_67A4A                        * 678E7
+        GOSUB   EqwPOP#>Box                      * 678E7
         AD0EX                                    * 678EB
         C=0     A                                * 678EE
         C=R1.F  B                                * 678F0
@@ -1412,7 +1416,7 @@ OBJ_679D2:
 * refs (8): 461B9 6686A 6B7C7 6F5FE 6F630 6F6BC ...
 OBJ_679D7:
         CON(5)  (*)+5                            * 679D7  primitive code object
-        GOSUB   SUB_67A4A                        * 679DC
+        GOSUB   EqwPOP#>Box                      * 679DC
         A=0     A                                * 679E0
         A=DAT0  1                                * 679E2
         GOTO    L_67901                          * 679E6
@@ -1420,7 +1424,7 @@ OBJ_679D7:
 * refs (10): 66DBC 68F80 68FCB 694C7 6E8E8 6E9BA ...
 OBJ_679EA:
         CON(5)  (*)+5                            * 679EA  primitive code object
-        GOSUB   SUB_67A4A                        * 679EF
+        GOSUB   EqwPOP#>Box                      * 679EF
         D1=D1-  5                                * 679F3
         D=D-1   A                                * 679F6
         A=DAT0  S                                * 679F8
@@ -1439,7 +1443,7 @@ L_67A18:
 * refs (1): 6A005
 OBJ_67A1E:
         CON(5)  (*)+5                            * 67A1E  primitive code object
-        GOSUB   SUB_67A4A                        * 67A23
+        GOSUB   EqwPOP#>Box                      * 67A23
         D0=D0+  1                                * 67A27
         A=0     A                                * 67A2A
         A=DAT0  1                                * 67A2C
@@ -1458,7 +1462,8 @@ SUB_67A3D:
         GOTO    SUB_67A51                        * 67A46
 
 * refs (22): 668A1 66A0F 66B64 66BC9 678E7 679DC ...
-SUB_67A4A:
+* POP# -> D0 at box n's fields (table at ITEM1STATE, 42 nibbles a box); the RPL IP saved in R2
+EqwPOP#>Box:
         GOSBVL  POP#                             * 67A4A
 
 * refs (6): 66737 67893 67A46 68323 6B3B2 6DF47
@@ -1547,7 +1552,7 @@ OBJ_67B12:
 OBJ_67B17:
         CON(5)  (*)+5                            * 67B17  primitive code object
         ASSEMBLE
-        GOSUB   SUB_67A4A                        * 67B1C
+        GOSUB   EqwPOP#>Box                      * 67B1C
         D0=D0+  12                               * 67B20
         D0=D0+  12                               * 67B23
         A=0     A                                * 67B26
@@ -1583,7 +1588,7 @@ L_67B70:
 L_67B7D:
         C=A     A                                * 67B7D
         RSTK=C                                   * 67B7F
-        GOSUB   SUB_67A4A                        * 67B81
+        GOSUB   EqwPOP#>Box                      * 67B81
         AD0EX                                    * 67B85
         C=0     A                                * 67B88
         C=R1.F  B                                * 67B8A
@@ -1688,7 +1693,7 @@ OBJ_67C85:
         ASSEMBLE
         GOSBVL  POP#                             * 67C8A
         ASRC                                     * 67C91
-        GOSUB   SUB_67A4A                        * 67C94
+        GOSUB   EqwPOP#>Box                      * 67C94
 L_67C98:
         DAT0=A  S                                * 67C98
         GOLONG  L_685CD                          * 67C9C
@@ -1696,7 +1701,7 @@ L_67C98:
 * refs (2): 66E70 6824F
 OBJ_67CA2:
         CON(5)  (*)+5                            * 67CA2  primitive code object
-        GOSUBL  SUB_67A4A                        * 67CA7
+        GOSUBL  EqwPOP#>Box                      * 67CA7
         D0=D0+  1                                * 67CAD
         A=DAT0  S                                * 67CB0
         A=A+A   S                                * 67CB4
@@ -2034,7 +2039,7 @@ L_68001:
 OBJ_68017:
         CON(5)  (*)+5                            * 68017  primitive code object
         D1=D1+  10                               * 6801C
-        GOSUBL  SUB_67A4A                        * 6801F
+        GOSUBL  EqwPOP#>Box                      * 6801F
         D1=D1-  15                               * 68025
         D0=D0+  2                                * 68028
         C=0     A                                * 6802B
@@ -2130,7 +2135,7 @@ SUB_680FB:
 * refs (1): 66D6C
 OBJ_6812C:
         CON(5)  (*)+5                            * 6812C  primitive code object
-        GOSUBL  SUB_67A4A                        * 68131
+        GOSUBL  EqwPOP#>Box                      * 68131
         D0=D0+  5                                * 68137
         A=0     A                                * 6813A
         A=DAT0  X                                * 6813C
@@ -2248,7 +2253,7 @@ OBJ_682A6:
         ASSEMBLE
         ST=0    3                                * 682AB
 L_682AE:
-        GOSUBL  SUB_67A4A                        * 682AE
+        GOSUBL  EqwPOP#>Box                      * 682AE
         ST=0    4                                * 682B4
         GOSUB   SUB_68329                        * 682B7
         GOTO    L_685D3                          * 682BB
@@ -2266,6 +2271,7 @@ OBJ_682D2:
         GOTO    L_682E6                          * 682DA
 
 * refs (22): 65AD3 65B32 65B69 65BAF 65BDC 65D46 ...
+* Probably: EquationWriter: allocate a box record and fill it from 15 bints
 OBJ_682DE:
         CON(5)  (*)+5                            * 682DE  primitive code object
         ST=0    4                                * 682E3
@@ -2417,7 +2423,7 @@ OBJ_68452:
 
 * refs (1): 68457
 SUB_6845F:
-        GOSUBL  SUB_67A4A                        * 6845F
+        GOSUBL  EqwPOP#>Box                      * 6845F
         D0=D0+  10                               * 68465
         D0=D0+  10                               * 68468
         C=DAT0  B                                * 6846B
@@ -2486,7 +2492,7 @@ OBJ_68550:
 
         CON(5)  (*)+5                            * 68555  primitive code object
         ASSEMBLE
-        GOSUBL  SUB_67A4A                        * 6855A
+        GOSUBL  EqwPOP#>Box                      * 6855A
         D0=D0+  10                               * 68560
         D0=D0+  12                               * 68563
         A=0     A                                * 68566
@@ -2510,7 +2516,7 @@ L_6858A:
 * refs (6): 4B8EB 665BB 66624 6DBD4 6E154 6F45F
 OBJ_68593:
         CON(5)  (*)+5                            * 68593  primitive code object
-        GOSUBL  SUB_67A4A                        * 68598
+        GOSUBL  EqwPOP#>Box                      * 68598
         GOSBVL  POP#                             * 6859E
         D0=D0+  10                               * 685A5
         D0=D0+  10                               * 685A8
@@ -2520,7 +2526,7 @@ OBJ_68593:
 * refs (2): 6A3B1 6CE43
 OBJ_685B2:
         CON(5)  (*)+5                            * 685B2  primitive code object
-        GOSUBL  SUB_67A4A                        * 685B7
+        GOSUBL  EqwPOP#>Box                      * 685B7
         GOSBVL  POP#                             * 685BD
         D0=D0+  10                               * 685C4
         D0=D0+  12                               * 685C7

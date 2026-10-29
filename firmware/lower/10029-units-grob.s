@@ -1169,10 +1169,10 @@ L_11585:
 * refs (51): 25B83 44C5F 44CAA 44CDC 44D86 46B63 ...
 MAKEGROB:
         CON(5)  (*)+5                            * 1158F  primitive code object
-        GOSUB   SUB_11CBE                        * 11594
+        GOSUB   POP#~jump                        * 11594
         R0=A                                     * 11598
-        GOSUB   SUB_11CC5                        * 1159B
-        GOSUB   SUB_11CBE                        * 1159F
+        GOSUB   SAVPTR~jump_11CC5                * 1159B
+        GOSUB   POP#~jump                        * 1159F
         R1=A                                     * 115A3
         GOSUB   makegrob                         * 115A6
         AD0EX                                    * 115AA
@@ -1258,9 +1258,9 @@ w->W:
 * refs (119): 0E01F 0E03D 0E065 1273E 12766 1283D ...
 GROB!:
         CON(5)  (*)+5                            * 11679  primitive code object
-        GOSUB   SUB_11CBE                        * 1167E
+        GOSUB   POP#~jump                        * 1167E
         R0=A                                     * 11682
-        GOSUB   SUB_11CBE                        * 11685
+        GOSUB   POP#~jump                        * 11685
         R1=A                                     * 11689
         C=DAT1  A                                * 1168C
         RSTK=C                                   * 1168F
@@ -1269,7 +1269,7 @@ GROB!:
         A=DAT1  A                                * 11696
         D1=D1+  5                                * 11699
         D=D+1   A                                * 1169C
-        GOSUB   SUB_11CC5                        * 1169E
+        GOSUB   SAVPTR~jump_11CC5                * 1169E
         D0=A                                     * 116A2
         C=RSTK                                   * 116A5
         D1=C                                     * 116A7
@@ -1517,7 +1517,7 @@ SUB_118F3:
         B=B-C   A                                * 11915
         RTNCC                                    * 11917
 L_11919:
-        GOSUBL  SUB_120E7                        * 11919
+        GOSUBL  GETPTR~jump_120E7                * 11919
         LC(5)   NULLPAINT                        * 1191F
         DAT1=C  A                                * 11926
         GOLONG  L_12002                          * 11929
@@ -1755,15 +1755,15 @@ L_11BA6:
 
 * refs (2): 11934 11A72
 SUB_11BAA:
-        GOSUB   SUB_11CBE                        * 11BAA
+        GOSUB   POP#~jump                        * 11BAA
         R0=A                                     * 11BAE
-        GOSUB   SUB_11CBE                        * 11BB1
+        GOSUB   POP#~jump                        * 11BB1
         R1=A                                     * 11BB5
-        GOSUB   SUB_11CBE                        * 11BB8
+        GOSUB   POP#~jump                        * 11BB8
         R2=A                                     * 11BBC
-        GOSUB   SUB_11CBE                        * 11BBF
+        GOSUB   POP#~jump                        * 11BBF
         R4=A                                     * 11BC3
-        GOSUB   SUB_11CC5                        * 11BC6
+        GOSUB   SAVPTR~jump_11CC5                * 11BC6
         C=R0                                     * 11BCA
         B=C     A                                * 11BCD
         A=R2                                     * 11BCF
@@ -1875,11 +1875,11 @@ L_11CAD:
         RTN                                      * 11CBC
 
 * refs (12): 11594 1159F 1167E 11685 11BAA 11BB1 ...
-SUB_11CBE:
+POP#~jump:
         GOVLNG  POP#                             * 11CBE
 
 * refs (10): 1159B 1169E 11BC6 11CD3 11D08 11F88 ...
-SUB_11CC5:
+SAVPTR~jump_11CC5:
         GOVLNG  SAVPTR                           * 11CC5
 
 * refs (4): 11CDB 11CF8 11D83 12421
@@ -1889,7 +1889,7 @@ SUB_11CCC:
 * refs (1): 13B5B
 3->grob(s):
         CON(5)  (*)+5                            * 11CCE  primitive code object
-        GOSUB   SUB_11CC5                        * 11CD3
+        GOSUB   SAVPTR~jump_11CC5                * 11CD3
         A=0     A                                * 11CD7
         A=A+1   A                                * 11CD9
         GOSUB   SUB_11CCC                        * 11CDB
@@ -1914,13 +1914,13 @@ $>GROB:
         CON(5)  (*)+5                            * 11D00  primitive code object
         XM=0                                     * 11D05
 L_11D08:
-        GOSUB   SUB_11CC5                        * 11D08
+        GOSUB   SAVPTR~jump_11CC5                * 11D08
         A=DAT1  A                                * 11D0C
         GOSUB   SUB_120CC                        * 11D0F
         ?A#0    A                                * 11D13
         GOYES   L_11D2A                          * 11D16
 L_11D18:
-        GOSUB   SUB_120E7                        * 11D18
+        GOSUB   GETPTR~jump_120E7                * 11D18
         LC(5)   NULLPAINT                        * 11D1C
         DAT1=C  A                                * 11D23
         GOTO    L_12002                          * 11D26
@@ -2167,7 +2167,7 @@ L_11F6D:
 $>grob:
         CON(5)  (*)+5                            * 11F80  primitive code object
         ST=1    3                                * 11F85
-        GOSUB   SUB_11CC5                        * 11F88
+        GOSUB   SAVPTR~jump_11CC5                * 11F88
         A=DAT1  A                                * 11F8C
         GOSUB   SUB_120CC                        * 11F8F
         ?A#0    A                                * 11F93
@@ -2206,6 +2206,6 @@ L_11FF1:
         C=0     A                                * 11FF3
         LC(2)   #14                              * 11FF5
         A=A-C   A                                * 11FF9
-        GOSUB   SUB_120E7                        * 11FFB
+        GOSUB   GETPTR~jump_120E7                * 11FFB
 L_11FFF:
         DAT1=A  A                                * 11FFF

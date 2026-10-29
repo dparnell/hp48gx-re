@@ -19,3 +19,38 @@
 7B447	Font8	8-row font
 7C257	Minifont	Minifont glyphs
 7C793	MiniRemap	Minifont index for codes #9F-#FF
+# Named from the code, by reading each and its callers (most-used unnamed objects first).
+372EF	PULL%%EL	[%%] #n -> [%%] %%  (or [C%%] #n -> [C%%] C%%): element n of an extended real or complex array; the array stays
+37361	PUT%%EL	[%%] %% #n -> [%%]'  (or C%%): store element n of an extended array in place, without copying it
+3727E	%%+*	%%3 %%2 %%1 -> %%3+%%2*%%1: extended-real multiply-add
+372BC	%%-*	%%3 %%2 %%1 -> %%3-%%2*%%1: extended-real multiply-subtract
+37167	[%%]AXPY	[%%]v [%%]w %%s -> [%%]v': in place, v[i] := v[i] + s*w[i] (zero w[i] skipped)
+38345	'RROMPTR@	-> ob: recall the object of the ROMPTR that follows in the caller's runstream, and skip it (no check that it exists)
+37DE1	NcaseDIMERR	flag -> : Invalid Dimension error (#501) unless the flag is TRUE
+37D87	L%CONJ	L% -> L%': conjugate an extended complex number; an extended real is left alone
+370C1	L%ARRY*%%	[%%] %% -> [%%]': multiply an extended-real array by a scalar, in place
+36FC4	#-#1-	#a #b -> #a-#b-1
+36EBB		Probably: ob id -> : store ob in id, keeping the units of a unit object already stored there
+40184	InitMenuNoExit	menu -> : NoExitAction InitMenu SetDA12NoCh
+19FBB	IFECallFieldMH	#msg #field -> ... flag: input forms: make #field current and send #msg to its message handler
+15909	msg>TAG	ob #msg -> :msg:ob: tag ob with message text #msg
+357F0	CkATTNQUIT	-> : abort if ATTN was pressed (?ATTNQUIT), else go on
+27797		Probably: parser failure exit: restore the saved token and parser state (lams 11..8), FALSE TRUE
+2530E		Probably: compiler: open an empty meta under the four objects on top (BINT0 5UNROLL), for 4psh to collect a clause into
+87B48	Get2ABR0	D1 -> two unsplit %%: first into A/B, second into R0/R1, D1 past both
+514C3	NOT?INVPPAR	flag -> : Invalid PPAR error unless the flag is TRUE
+5F6F2	RuleMatch	Rewrite rules with the default operator table: the inline pattern/action pairs after the call are matched against the meta (see SUB_5F6F9)
+72AFA	?ROMPTR@	ob -> ob': a ROMPTR whose library is present becomes its object; anything else is left alone
+71603	CallC	Call the routine at C.A (RSTK=C, RTN): it returns to CallC's caller
+517B2		Probably: PICTURE cursor position: -> #x #y (lams 8 and 7)
+56BEB		Probably: derivatives: wrap the inner argument as d/d'dv(arg) for the chain rule, then ABND the 'dv environment
+57045		Probably: derivatives: bind the variable to 'dv and duplicate the argument meta
+5760D		Probably: SYMISOL: carry on isolating with the next inverse (tail call into the isolation loop)
+5B375		Probably: integration tables: rule body for an argument linear in the variable
+67381	EqwBoxCount	-> #n: EquationWriter layout: the number of boxes in use (also the newest box's index)
+67A4A	EqwPOP#>Box	POP# -> D0 at box n's fields (table at ITEM1STATE, 42 nibbles a box); the RPL IP saved in R2
+6DD6E	Push3Zeros	-> #0 #0 #0, collecting garbage if memory is short
+67416		Probably: EquationWriter: -> #box, the current box (kept in FONTHEIGHT)
+67448		Probably: EquationWriter: #box -> , set the current box (kept in FONTHEIGHT)
+682DE		Probably: EquationWriter: allocate a box record and fill it from 15 bints
+69C64		Probably: EquationWriter RULES menu key: run the next runstream object as the rule

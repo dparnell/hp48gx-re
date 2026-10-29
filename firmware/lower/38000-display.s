@@ -1,6 +1,6 @@
 * HP 48GX ROM revision R, #38000-#3A00C: Status area and annunciators
 * Addresses in the right-hand comments are those of the original ROM.
-* Most referenced: SetDA123NoCh ClrDAsOK SetDA3NoCh SetDA1NoCh SetDA2aNoCh SetDA13NoCh POLRestoreUI POLSaveUI POLResUI&Err ClrDA1IsStat SetDA3Bad SetDA12NoCh
+* Most referenced: 'RROMPTR@ SetDA123NoCh ClrDAsOK SetDA3NoCh SetDA1NoCh SetDA2aNoCh SetDA13NoCh POLRestoreUI POLSaveUI POLResUI&Err ClrDA1IsStat SetDA3Bad
 * Follows on from the previous file (at #38000 in the original ROM).
         A=DAT0  A                                * 38000
         D0=A                                     * 38003
@@ -296,7 +296,7 @@ SUB_38327:
         RTN                                      * 38335
 
 * refs (5): 37EA2 37EB3 37EBA 37EC1 37ED4
-SUB_38337:
+POP#~jump_38337:
         GOVLNG  POP#                             * 38337
 
 * refs (3): 38208 382E5 38302
@@ -305,7 +305,8 @@ SUB_3833E:
         RPL
 
 * refs (219): A280B A2884 A2D6B A34B6 A352F A35A3 ...
-OBJ_38345:
+* -> ob: recall the object of the ROMPTR that follows in the caller's runstream, and skip it (no check that it exists)
+'RROMPTR@:
         :: 'R ROMPTR@ DROP ;                     * 38345
 
 * refs (6): 0FDB8 0FE62 0FF34 0FFBB CAC27 CAC7C

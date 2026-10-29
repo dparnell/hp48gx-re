@@ -47,8 +47,8 @@ ROMP_0E6_002:
 * ROMPTR 0E6 003
 * refs (1): 98E02
 ROMP_0E6_003:
-        :: ROMPTR 0AB 059 # E60D OBJ_15909 ROT # E60B OBJ_15909 ROT # E60C * 9900A  AMORT
-          OBJ_15909 ROT ;                        * 9904C
+        :: ROMPTR 0AB 059 # E60D msg>TAG ROT # E60B msg>TAG ROT # E60C * 9900A  AMORT
+          msg>TAG ROT ;                          * 9904C
 
 * ROMPTR 0E6 004
 * refs (1): 98E02
@@ -321,7 +321,7 @@ SUB_995DF:
           GOSBVL  SUB_7DABE                      * 99616
           GOSBVL  EXAB0                          * 9961D
           GOSBVL  RCCD2                          * 99624
-          GOSUB   SUB_9970B                      * 9962B
+          GOSUB   MULTF~jump_9970B               * 9962B
           GOSBVL  RCCD0                          * 9962F
           C=-C-1  S                              * 99636
           GOSBVL  RADDF                          * 99639
@@ -338,14 +338,14 @@ SUB_995DF:
 L_9966B:
           RTNCC                                  * 9966B
 L_9966D:
-          GOSUB   SUB_9970B                      * 9966D
+          GOSUB   MULTF~jump_9970B               * 9966D
           ST=1    2                              * 99671
           ?A#0    S                              * 99674
           GOYES   L_996BF                        * 99677
           ST=0    2                              * 99679
           GOSBVL  RCAB2                          * 9967C
           GOSBVL  SUB_78611                      * 99683
-          GOSUB   SUB_9970B                      * 9968A
+          GOSUB   MULTF~jump_9970B               * 9968A
           GOSBVL  RCCD0                          * 9968E
           GOSBVL  RADDF                          * 99695
           GOSBVL  SUB_78605                      * 9969C
@@ -353,7 +353,7 @@ L_9966D:
           GOSBVL  SUB_7DB73                      * 996AA
           RTNC                                   * 996B1
           GOSBVL  RCCD2                          * 996B4
-          GOSUB   SUB_9970B                      * 996BB
+          GOSUB   MULTF~jump_9970B               * 996BB
 L_996BF:
           A=-A-1  S                              * 996BF
           GOSUB   SUB_996FD                      * 996C2
@@ -378,7 +378,7 @@ SUB_996FD:
           GOVLNG  L_7DB4E                        * 99704
 
 * refs (4): 9962B 9966D 9968A 996BB
-SUB_9970B:
+MULTF~jump_9970B:
           GOVLNG  MULTF                          * 9970B
         ENDCODE                                  * 99712
 
@@ -408,14 +408,14 @@ SUB_9973F:
           GOSBVL  STCD2                          * 99768
           ?ST=0   8                              * 9976F
           GOYES   L_99778                        * 99772
-          GOSUB   SUB_99D08                      * 99774
+          GOSUB   RADDF~jump_99D08               * 99774
 L_99778:
           GOSBVL  SUB_78670                      * 99778
           GOSBVL  SUB_785CA                      * 9977F
           ?ST=1   8                              * 99786
           GOYES   L_99793                        * 99789
-          GOSUB   SUB_99D01                      * 9978B
-          GOSUB   SUB_99D08                      * 9978F
+          GOSUB   RCCD2~jump_99D01               * 9978B
+          GOSUB   RADDF~jump_99D08               * 9978F
 L_99793:
           GOSBVL  SUB_7867C                      * 99793
           GOSBVL  L_785B2                        * 9979A
@@ -424,7 +424,7 @@ L_99793:
           GOYES   L_997D3                        * 997A6
           ?A#0    S                              * 997A8
           GOYES   L_997D3                        * 997AB
-          GOSUB   SUB_99D01                      * 997AD
+          GOSUB   RCCD2~jump_99D01               * 997AD
           ?D=0    P                              * 997B1
           GOYES   L_997FA                        * 997B4
           C=0     W                              * 997B6
@@ -454,7 +454,7 @@ L_997EE:
           GOYES   L_997D3                        * 997F8
 L_997FA:
           GOSBVL  SUB_78664                      * 997FA
-          GOSUB   SUB_99CDE                      * 99801
+          GOSUB   STAB0~jump_99CDE               * 99801
           C=0     W                              * 99805
           D=0     W                              * 99808
           P=      14                             * 9980B
@@ -462,7 +462,7 @@ L_997FA:
           P=      2                              * 99810
           GOSBVL  TST15                          * 99812
           GOC     L_99825                        * 99819
-          GOSUB   SUB_99CF3                      * 9981C
+          GOSUB   RCAB2~jump_99CF3               * 9981C
           ?B#0    W                              * 99820
           GOYES   L_9986F                        * 99823
 L_99825:
@@ -476,12 +476,12 @@ L_99825:
 L_9983D:
           GOVLNG  L_7DB95                        * 9983D
 L_99844:
-          GOSUB   SUB_99D16                      * 99844
+          GOSUB   DIVF~jump_99D16                * 99844
           A=-A-1  S                              * 99848
           GOSBVL  EXAB0                          * 9984B
           GOSBVL  1/X15                          * 99852
-          GOSUB   SUB_99CFA                      * 99859
-          GOSUB   SUB_99CE5                      * 9985D
+          GOSUB   RCCD0~jump_99CFA               * 99859
+          GOSUB   XYEX~jump_99CE5                * 9985D
           GOSBVL  SUB_7DA8D                      * 99861
           RTNC                                   * 99868
           GOTO    L_999EC                        * 9986B
@@ -493,23 +493,23 @@ L_9987A:
           GOSBVL  SUB_0CA81                      * 9987A
           SETDEC                                 * 99881
           GOSBVL  SUB_7866A                      * 99883
-          GOSUB   SUB_99D1D                      * 9988A
+          GOSUB   RADD1~jump_99D1D               * 9988A
           GOSBVL  SUB_78688                      * 9988E
           GOSBVL  L_785B2                        * 99895
-          GOSUB   SUB_99D24                      * 9989C
+          GOSUB   RSUB1~jump_99D24               * 9989C
           GOSBVL  SUB_7860B                      * 998A0
-          GOSUB   SUB_99CE5                      * 998A7
+          GOSUB   XYEX~jump_99CE5                * 998A7
           GOSBVL  SUB_7DAE2                      * 998AB
           RTNC                                   * 998B2
           GOSBVL  SUB_78617                      * 998B5
-          GOSUB   SUB_99D0F                      * 998BC
+          GOSUB   MULTF~jump_99D0F               * 998BC
           GOSBVL  EXAB0                          * 998C0
           GOSBVL  SUB_78611                      * 998C7
-          GOSUB   SUB_99D0F                      * 998CE
-          GOSUB   SUB_99CFA                      * 998D2
-          GOSUB   SUB_99D08                      * 998D6
+          GOSUB   MULTF~jump_99D0F               * 998CE
+          GOSUB   RCCD0~jump_99CFA               * 998D2
+          GOSUB   RADDF~jump_99D08               * 998D6
           GOSBVL  SUB_78629                      * 998DA
-          GOSUB   SUB_99D0F                      * 998E1
+          GOSUB   MULTF~jump_99D0F               * 998E1
           GOSBVL  SUB_78688                      * 998E5
           GOSBVL  SUB_78605                      * 998EC
           GOSBVL  GETAB0                         * 998F3
@@ -517,29 +517,29 @@ L_9987A:
           RTNC                                   * 99901
           GOSBVL  SUB_78605                      * 99904
           GOSUB   SUB_99BEF                      * 9990B
-          GOSUB   SUB_99CDE                      * 9990F
+          GOSUB   STAB0~jump_99CDE               * 9990F
           GOSBVL  SUB_78629                      * 99913
           GOSBVL  STCD2                          * 9991A
           GOSBVL  SUB_785B8                      * 99921
-          GOSUB   SUB_99D1D                      * 99928
+          GOSUB   RADD1~jump_99D1D               * 99928
           GOSBVL  SUB_78688                      * 9992C
-          GOSUB   SUB_99CFA                      * 99933
-          GOSUB   SUB_99D0F                      * 99937
+          GOSUB   RCCD0~jump_99CFA               * 99933
+          GOSUB   MULTF~jump_99D0F               * 99937
           GOSBVL  SUB_78617                      * 9993B
-          GOSUB   SUB_99D0F                      * 99942
-          GOSUB   SUB_99CDE                      * 99946
-          GOSUB   SUB_99CF3                      * 9994A
+          GOSUB   MULTF~jump_99D0F               * 99942
+          GOSUB   STAB0~jump_99CDE               * 99946
+          GOSUB   RCAB2~jump_99CF3               * 9994A
           GOSBVL  SUB_78605                      * 9994E
-          GOSUB   SUB_99D0F                      * 99955
-          GOSUB   SUB_99CFA                      * 99959
-          GOSUB   SUB_99D08                      * 9995D
-          GOSUB   SUB_99D01                      * 99961
-          GOSUB   SUB_99CE5                      * 99965
+          GOSUB   MULTF~jump_99D0F               * 99955
+          GOSUB   RCCD0~jump_99CFA               * 99959
+          GOSUB   RADDF~jump_99D08               * 9995D
+          GOSUB   RCCD2~jump_99D01               * 99961
+          GOSUB   XYEX~jump_99CE5                * 99965
           GOSUB   SUB_999DE                      * 99969
           RTNC                                   * 9996D
           GOSBVL  EXAB2                          * 99970
           GOSBVL  SUB_7861D                      * 99977
-          GOSUB   SUB_99CE5                      * 9997E
+          GOSUB   XYEX~jump_99CE5                * 9997E
           A=-A-1  S                              * 99982
           GOSUB   SUB_999DE                      * 99985
           RTNC                                   * 99989
@@ -561,9 +561,9 @@ L_9999E:
           GONC    L_999C4                        * 999BA
           GOVLNG  L_7DA9C                        * 999BD
 L_999C4:
-          GOSUB   SUB_99D1D                      * 999C4
-          GOSUB   SUB_99CFA                      * 999C8
-          GOSUB   SUB_99CE5                      * 999CC
+          GOSUB   RADD1~jump_99D1D               * 999C4
+          GOSUB   RCCD0~jump_99CFA               * 999C8
+          GOSUB   XYEX~jump_99CE5                * 999CC
           GOSUB   SUB_999DE                      * 999D0
           RTNC                                   * 999D4
           A=-A-1  S                              * 999D7
@@ -573,15 +573,15 @@ L_999DA:
 * refs (3): 99969 99985 999D0
 SUB_999DE:
           XM=0                                   * 999DE
-          GOSUB   SUB_99D16                      * 999E1
+          GOSUB   DIVF~jump_99D16                * 999E1
           GOVLNG  L_7DB4E                        * 999E5
 L_999EC:
-          GOSUB   SUB_99D24                      * 999EC
+          GOSUB   RSUB1~jump_99D24               * 999EC
 L_999F0:
           A=A+1   A                              * 999F0
           A=A+1   A                              * 999F2
           GOSBVL  SUB_78623                      * 999F4
-          GOSUB   SUB_99D0F                      * 999FB
+          GOSUB   MULTF~jump_99D0F               * 999FB
           RTNCC                                  * 999FF
 
 * refs (1): 9986F
@@ -599,7 +599,7 @@ SUB_99A01:
 L_99A25:
           GOVLNG  L_7DB95                        * 99A25
 L_99A2C:
-          GOSUB   SUB_99CE5                      * 99A2C
+          GOSUB   XYEX~jump_99CE5                * 99A2C
 L_99A30:
           GOSBVL  SUB_78617                      * 99A30
           P=      14                             * 99A37
@@ -642,19 +642,19 @@ L_99A8D:
           RTNCC                                  * 99A93
 L_99A95:
           ST=1    6                              * 99A95
-          GOSUB   SUB_99CE5                      * 99A98
+          GOSUB   XYEX~jump_99CE5                * 99A98
           GOSBVL  SUB_7861D                      * 99A9C
           GOSBVL  SUB_7867C                      * 99AA3
-          GOSUB   SUB_99CE5                      * 99AAA
+          GOSUB   XYEX~jump_99CE5                * 99AAA
           GOSBVL  SUB_78670                      * 99AAE
           GOSBVL  SUB_7DA2B                      * 99AB5
           GOC     L_99A8D                        * 99ABC
           GOSBVL  STAB2                          * 99ABF
-          GOSUB   SUB_99D1D                      * 99AC6
-          GOSUB   SUB_99D01                      * 99ACA
+          GOSUB   RADD1~jump_99D1D               * 99AC6
+          GOSUB   RCCD2~jump_99D01               * 99ACA
           C=-C-1  S                              * 99ACE
-          GOSUB   SUB_99CE5                      * 99AD1
-          GOSUB   SUB_99D16                      * 99AD5
+          GOSUB   XYEX~jump_99CE5                * 99AD1
+          GOSUB   DIVF~jump_99D16                * 99AD5
 L_99AD9:
           C=A     A                              * 99AD9
           C=C+C   A                              * 99ADB
@@ -675,15 +675,15 @@ L_99AD9:
 
 * refs (1): 9998C
 SUB_99B04:
-          GOSUB   SUB_99CDE                      * 99B04
+          GOSUB   STAB0~jump_99CDE               * 99B04
           GOSBVL  SUB_785B8                      * 99B08
-          GOSUB   SUB_99D1D                      * 99B0F
+          GOSUB   RADD1~jump_99D1D               * 99B0F
           GOSBVL  SUB_78688                      * 99B13
-          GOSUB   SUB_99CEC                      * 99B1A
+          GOSUB   RCAB0~jump_99CEC               * 99B1A
           GOSUB   SUB_99B85                      * 99B1E
           RTNC                                   * 99B22
-          GOSUB   SUB_99D01                      * 99B25
-          GOSUB   SUB_99D0F                      * 99B29
+          GOSUB   RCCD2~jump_99D01               * 99B25
+          GOSUB   MULTF~jump_99D0F               * 99B29
           ST=1    11                             * 99B2D
           GOSBVL  L_793AD                        * 99B30
           GONC    L_99B41                        * 99B37
@@ -698,15 +698,15 @@ L_99B41:
           C=C+C   A                              * 99B53
           GOC     L_99B6D                        * 99B55
           GOSBVL  SUB_78629                      * 99B58
-          GOSUB   SUB_99CEC                      * 99B5F
-          GOSUB   SUB_99D0F                      * 99B63
-          GOSUB   SUB_99D24                      * 99B67
+          GOSUB   RCAB0~jump_99CEC               * 99B5F
+          GOSUB   MULTF~jump_99D0F               * 99B63
+          GOSUB   RSUB1~jump_99D24               * 99B67
           RTNCC                                  * 99B6B
 L_99B6D:
           GOSBVL  SUB_78629                      * 99B6D
-          GOSUB   SUB_99D0F                      * 99B74
+          GOSUB   MULTF~jump_99D0F               * 99B74
           GOSBVL  SUB_7860B                      * 99B78
-          GOSUB   SUB_99D08                      * 99B7F
+          GOSUB   RADDF~jump_99D08               * 99B7F
           RTNCC                                  * 99B83
 
 * refs (1): 99B1E
@@ -717,17 +717,17 @@ SUB_99B85:
 
 * refs (1): 99993
 SUB_99B96:
-          GOSUB   SUB_99CDE                      * 99B96
+          GOSUB   STAB0~jump_99CDE               * 99B96
           GOSBVL  SUB_7860B                      * 99B9A
           C=-C-1  S                              * 99BA1
-          GOSUB   SUB_99D08                      * 99BA4
+          GOSUB   RADDF~jump_99D08               * 99BA4
           P=      14                             * 99BA8
           ?B=0    P                              * 99BAA
           GOYES   L_99BE9                        * 99BAD
-          GOSUB   SUB_99CFA                      * 99BAF
+          GOSUB   RCCD0~jump_99CFA               * 99BAF
           ?D=0    P                              * 99BB3
           GOYES   L_99BE3                        * 99BB6
-          GOSUB   SUB_99D16                      * 99BB8
+          GOSUB   DIVF~jump_99D16                * 99BB8
           C=A     A                              * 99BBC
           C=C+C   A                              * 99BBE
           GONC    L_99BE3                        * 99BC0
@@ -745,17 +745,17 @@ SUB_99B96:
           CSTEX                                  * 99BDE
           GOC     L_99BE9                        * 99BE0
 L_99BE3:
-          GOSUB   SUB_99CEC                      * 99BE3
+          GOSUB   RCAB0~jump_99CEC               * 99BE3
           RTNCC                                  * 99BE7
 L_99BE9:
-          GOSUB   SUB_99CEC                      * 99BE9
+          GOSUB   RCAB0~jump_99CEC               * 99BE9
           RTNSC                                  * 99BED
 
 * refs (1): 9990B
 SUB_99BEF:
           GOSBVL  STCD2                          * 99BEF
           A=-A-1  S                              * 99BF6
-          GOSUB   SUB_99D08                      * 99BF9
+          GOSUB   RADDF~jump_99D08               * 99BF9
           GOSBVL  SUB_7860B                      * 99BFD
           GOSBVL  STCD0                          * 99C04
           P=      14                             * 99C0B
@@ -774,100 +774,100 @@ SUB_99BEF:
           GOYES   L_99C35                        * 99C30
           GONC    L_99C3F                        * 99C32
 L_99C35:
-          GOSUB   SUB_99CFA                      * 99C35
-          GOSUB   SUB_99D16                      * 99C39
+          GOSUB   RCCD0~jump_99CFA               * 99C35
+          GOSUB   DIVF~jump_99D16                * 99C39
           RTNCC                                  * 99C3D
 L_99C3F:
-          GOSUB   SUB_99CF3                      * 99C3F
+          GOSUB   RCAB2~jump_99CF3               * 99C3F
           C=0     W                              * 99C43
           P=      14                             * 99C46
           LC(1)   #3                             * 99C48
           R4=C                                   * 99C4B
           D=C     W                              * 99C4E
           C=-C-1  S                              * 99C51
-          GOSUB   SUB_99D08                      * 99C54
+          GOSUB   RADDF~jump_99D08               * 99C54
           C=R4                                   * 99C58
           P=      14                             * 99C5B
           C=C+1   P                              * 99C5D
           D=C     W                              * 99C60
-          GOSUB   SUB_99D16                      * 99C63
-          GOSUB   SUB_99CFA                      * 99C67
-          GOSUB   SUB_99D0F                      * 99C6B
-          GOSUB   SUB_99D1D                      * 99C6F
-          GOSUB   SUB_99CFA                      * 99C73
-          GOSUB   SUB_99D0F                      * 99C77
-          GOSUB   SUB_99CDE                      * 99C7B
-          GOSUB   SUB_99CF3                      * 99C7F
+          GOSUB   DIVF~jump_99D16                * 99C63
+          GOSUB   RCCD0~jump_99CFA               * 99C67
+          GOSUB   MULTF~jump_99D0F               * 99C6B
+          GOSUB   RADD1~jump_99D1D               * 99C6F
+          GOSUB   RCCD0~jump_99CFA               * 99C73
+          GOSUB   MULTF~jump_99D0F               * 99C77
+          GOSUB   STAB0~jump_99CDE               * 99C7B
+          GOSUB   RCAB2~jump_99CF3               * 99C7F
           C=R4                                   * 99C83
           P=      14                             * 99C86
           C=C-1   P                              * 99C88
           D=C     W                              * 99C8B
           C=-C-1  S                              * 99C8E
-          GOSUB   SUB_99D08                      * 99C91
+          GOSUB   RADDF~jump_99D08               * 99C91
           C=R4                                   * 99C95
           D=C     W                              * 99C98
-          GOSUB   SUB_99D16                      * 99C9B
-          GOSUB   SUB_99CFA                      * 99C9F
-          GOSUB   SUB_99D0F                      * 99CA3
-          GOSUB   SUB_99D1D                      * 99CA7
-          GOSUB   SUB_99CDE                      * 99CAB
-          GOSUB   SUB_99CF3                      * 99CAF
+          GOSUB   DIVF~jump_99D16                * 99C9B
+          GOSUB   RCCD0~jump_99CFA               * 99C9F
+          GOSUB   MULTF~jump_99D0F               * 99CA3
+          GOSUB   RADD1~jump_99D1D               * 99CA7
+          GOSUB   STAB0~jump_99CDE               * 99CAB
+          GOSUB   RCAB2~jump_99CF3               * 99CAF
           GOSUB   SUB_99CC4                      * 99CB3
           A=-A-1  S                              * 99CB7
-          GOSUB   SUB_99CFA                      * 99CBA
-          GOSUB   SUB_99D0F                      * 99CBE
+          GOSUB   RCCD0~jump_99CFA               * 99CBA
+          GOSUB   MULTF~jump_99D0F               * 99CBE
           RTNCC                                  * 99CC2
 
 * refs (1): 99CB3
 SUB_99CC4:
           GOSBVL  STAB2                          * 99CC4
-          GOSUB   SUB_99D24                      * 99CCB
-          GOSUB   SUB_99D01                      * 99CCF
-          GOSUB   SUB_99D0F                      * 99CD3
+          GOSUB   RSUB1~jump_99D24               * 99CCB
+          GOSUB   RCCD2~jump_99D01               * 99CCF
+          GOSUB   MULTF~jump_99D0F               * 99CD3
           GOVLNG  DIV2                           * 99CD7
 
 * refs (7): 99801 9990F 99946 99B04 99B96 99C7B ...
-SUB_99CDE:
+STAB0~jump_99CDE:
           GOVLNG  STAB0                          * 99CDE
 
 * refs (9): 9985D 998A7 99965 9997E 999CC 99A2C ...
-SUB_99CE5:
+XYEX~jump_99CE5:
           GOVLNG  XYEX                           * 99CE5
 
 * refs (4): 99B1A 99B5F 99BE3 99BE9
-SUB_99CEC:
+RCAB0~jump_99CEC:
           GOVLNG  RCAB0                          * 99CEC
 
 * refs (5): 9981C 9994A 99C3F 99C7F 99CAF
-SUB_99CF3:
+RCAB2~jump_99CF3:
           GOVLNG  RCAB2                          * 99CF3
 
 * refs (11): 99859 998D2 99933 99959 999C8 99BAF ...
-SUB_99CFA:
+RCCD0~jump_99CFA:
           GOVLNG  RCCD0                          * 99CFA
 
 * refs (6): 9978B 997AD 99961 99ACA 99B25 99CCF
-SUB_99D01:
+RCCD2~jump_99D01:
           GOVLNG  RCCD2                          * 99D01
 
 * refs (9): 99774 9978F 998D6 9995D 99B7F 99BA4 ...
-SUB_99D08:
+RADDF~jump_99D08:
           GOVLNG  RADDF                          * 99D08
 
 * refs (15): 998BC 998CE 998E1 99937 99942 99955 ...
-SUB_99D0F:
+MULTF~jump_99D0F:
           GOVLNG  MULTF                          * 99D0F
 
 * refs (7): 99844 999E1 99AD5 99BB8 99C39 99C63 ...
-SUB_99D16:
+DIVF~jump_99D16:
           GOVLNG  DIVF                           * 99D16
 
 * refs (7): 9988A 99928 999C4 99AC6 99B0F 99C6F ...
-SUB_99D1D:
+RADD1~jump_99D1D:
           GOVLNG  RADD1                          * 99D1D
 
 * refs (4): 9989C 999EC 99B67 99CCB
-SUB_99D24:
+RSUB1~jump_99D24:
           GOVLNG  RSUB1                          * 99D24
         ENDCODE                                  * 99D2B
 

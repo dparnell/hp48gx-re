@@ -226,7 +226,7 @@ ROMP_0B0_012:
 * ROMPTR 0B0 013
 * refs (1): D49CE
 IFEDispField:
-        :: BINT7 OBJ_19FBB ?SEMI                 * D553B
+        :: BINT7 IFECallFieldMH ?SEMI            * D553B
           4GETLAM DUP ROMPTR 0B0 044 OVER 5GETLAM #= IT INVGROB * D554F
           HARDBUFF ROT ROMPTR 0B0 0C6 GROB! ;    * D557D
 
@@ -234,14 +234,14 @@ IFEDispField:
 * refs (1): D49CE
 ROMP_0B0_014:
         :: DA2aBad? caseDROP BINT21              * D559C
-          OBJ_19FBB ?SEMI                        * D55B0
+          IFECallFieldMH ?SEMI                   * D55B0
           4GETLAM ROMPTR 0B0 016 ;               * D55BA
 
 * ROMPTR 0B0 015
 * refs (1): D49CE
 ROMP_0B0_015:
         :: DA2aBad? caseDROP BINT22              * D55CF
-          OBJ_19FBB ?SEMI                        * D55E3
+          IFECallFieldMH ?SEMI                   * D55E3
           4GETLAM ROMPTR 0B0 016 ;               * D55ED
 
 * ROMPTR 0B0 016
@@ -254,7 +254,7 @@ ROMP_0B0_016:
 * ROMPTR 0B0 017
 * refs (1): D49CE
 ROMP_0B0_017:
-        :: BINT11 OBJ_19FBB ?SEMI                * D5677
+        :: BINT11 IFECallFieldMH ?SEMI           * D5677
           4GETLAM ROMPTR 0B0 018 HARDBUFF BINT1 4ROLL ITE * D568B
           :: BINT50 ROMPTR 0B0 094 ;             * D56AF
           :: BINT8 ROMPTR 0B0 093 ;              * D56C9
@@ -263,26 +263,26 @@ ROMP_0B0_017:
 * ROMPTR 0B0 018
 * refs (1): D49CE
 ROMP_0B0_018:
-        :: BINT12 OBJ_19FBB ?SEMI                * D56ED
+        :: BINT12 IFECallFieldMH ?SEMI           * D56ED
           4GETLAM ROMPTR 0B0 019 $>grob ;        * D5701
 
 * ROMPTR 0B0 019
 * refs (1): D49CE
 ROMP_0B0_019:
-        :: BINT13 OBJ_19FBB ?SEMI                * D571B
+        :: BINT13 IFECallFieldMH ?SEMI           * D571B
           4GETLAM ROMPTR 0B0 0C1 ;               * D572F
 
 * ROMPTR 0B0 01A
 * refs (1): D49CE
 ROMP_0B0_01A:
-        :: BINT31 OBJ_19FBB ?SEMI                * D5744
+        :: BINT31 IFECallFieldMH ?SEMI           * D5744
           NULL$ 4GETLAM ROMPTR 0B0 01B ROMPTR 0B3 066 NOTcase SetDA123NoCh * D5758  ~ChooseSimple
           EVAL ;                                 * D5782
 
 * ROMPTR 0B0 01B
 * refs (1): D49CE
 ROMP_0B0_01B:
-        :: BINT32 OBJ_19FBB ?SEMI                * D578C
+        :: BINT32 IFECallFieldMH ?SEMI           * D578C
           4GETLAM ROMPTR 0B0 07D ITE             * D57A0
           :: DROP                                * D57B5
             { # B903 ROMPTR 0B0 01C } ;          * D57BF
@@ -311,7 +311,7 @@ ROMP_0B0_01E:
 * ROMPTR 0B0 01F
 * refs (1): D49CE
 ROMP_0B0_01F:
-        :: BINT33 OBJ_19FBB ?SEMI                * D58E6
+        :: BINT33 IFECallFieldMH ?SEMI           * D58E6
           4GETLAM DUP DUP ROMPTR 0B0 0C4 SWAP ROMPTR 0B0 0D5 ROMPTR 0B0 041 ; * D58FA  ~sFldVal
 
 * ROMPTR 0B0 020
@@ -324,43 +324,43 @@ ROMP_0B0_020:
 * refs (1): D49CE
 ROMP_0B0_021:
         :: DUP MINUSONE #=case DROP              * D5952
-          BINT19 OBJ_19FBB DROP ;                * D596B
+          BINT19 IFECallFieldMH DROP ;           * D596B
 
 * ROMPTR 0B0 022
 * refs (1): D49CE
 ROMP_0B0_022:
-        :: BINT20 OBJ_19FBB DROP ;               * D597F
+        :: BINT20 IFECallFieldMH DROP ;          * D597F
 
 * ROMPTR 0B0 023
 * refs (1): D49CE
 ROMP_0B0_023:
-        :: BINT55 OBJ_19FBB ?SEMI                * D5998
+        :: BINT55 IFECallFieldMH ?SEMI           * D5998
           TRUE ;                                 * D59AC
 
 * ROMPTR 0B0 024
 * refs (1): D49CE
 ROMP_0B0_024:
-        :: BINT54 OBJ_19FBB ?SEMI                * D59B6
+        :: BINT54 IFECallFieldMH ?SEMI           * D59B6
           4GETLAM ROMPTR 0B0 025 ;               * D59CA
 
 * ROMPTR 0B0 025
 * refs (1): D49CE
 ROMP_0B0_025:
-        :: BINT52 OBJ_19FBB ?SEMI                * D59DF
+        :: BINT52 IFECallFieldMH ?SEMI           * D59DF
           4GETLAM BEGIN ROMPTR 0B0 072 ?SKIP BINT1 * D59F3
           DUP ROMPTR 0B0 023 UNTIL ;             * D5A12
 
 * ROMPTR 0B0 026
 * refs (1): D49CE
 ROMP_0B0_026:
-        :: BINT53 OBJ_19FBB ?SEMI                * D5A2C
+        :: BINT53 IFECallFieldMH ?SEMI           * D5A2C
           4GETLAM BEGIN ROMPTR 0B0 073 ?SKIP 14GETLAM * D5A40
           DUP ROMPTR 0B0 023 UNTIL ;             * D5A5F
 
 * ROMPTR 0B0 027
 * refs (1): D49CE
 ROMP_0B0_027:
-        :: BINT48 OBJ_19FBB ?SEMI                * D5A79
+        :: BINT48 IFECallFieldMH ?SEMI           * D5A79
           4GETLAM DUP ROMPTR 0B0 0C6 SWAP 3UNROLL OVER BEGIN * D5A8D
           :: BEGIN ROMPTR 0B0 072 ?SKIP BINT1    * D5AB6
             DUP ROMPTR 0B0 023 UNTIL DUP 4PICK #=case FalseTrue * D5AD5
@@ -378,7 +378,7 @@ ROMP_0B0_027:
 * ROMPTR 0B0 028
 * refs (1): D49CE
 ROMP_0B0_028:
-        :: BINT49 OBJ_19FBB ?SEMI                * D5C1C
+        :: BINT49 IFECallFieldMH ?SEMI           * D5C1C
           4GETLAM DUP ROMPTR 0B0 0C6 SWAP 3UNROLL OVER BEGIN * D5C30
           :: BEGIN ROMPTR 0B0 073 ?SKIP 14GETLAM * D5C59
             DUP ROMPTR 0B0 023 UNTIL DUP 4PICK #=case FalseTrue * D5C78
@@ -396,21 +396,21 @@ ROMP_0B0_028:
 * ROMPTR 0B0 029
 * refs (1): D49CE
 DoInputForm~2~3~4~1:
-        :: BINT50 OBJ_19FBB ?SEMI                * D5DA5
+        :: BINT50 IFECallFieldMH ?SEMI           * D5DA5
           14GETLAM BEGIN DUP ROMPTR 0B0 023 NOT WHILE * D5DB9
           :: ROMPTR 0B0 073 DROP ; REPEAT ;      * D5DDD
 
 * ROMPTR 0B0 02A
 * refs (1): D49CE
 DoInputForm~2~3~3~1:
-        :: BINT51 OBJ_19FBB ?SEMI                * D5E01
+        :: BINT51 IFECallFieldMH ?SEMI           * D5E01
           BINT1 BEGIN DUP ROMPTR 0B0 023 NOT WHILE * D5E15
           :: ROMPTR 0B0 072 DROP ; REPEAT ;      * D5E39
 
 * ROMPTR 0B0 02B
 * refs (1): D49CE
 ROMP_0B0_02B:
-        :: BINT40 OBJ_19FBB ?SEMI                * D5E5D
+        :: BINT40 IFECallFieldMH ?SEMI           * D5E5D
           4GETLAM DUP ROMPTR 0B0 08B NOTcasedrop * D5E71
           :: NULL{} BINT0 ;                      * D5E8B
           DUP ROMPTR 0B0 07B ROMPTR 0B0 06D ;    * D5E9F
@@ -418,7 +418,7 @@ ROMP_0B0_02B:
 * ROMPTR 0B0 02C
 * refs (1): D49CE
 DoKeyEdit~1:
-        :: BINT23 OBJ_19FBB ?SEMI                * D5EBF
+        :: BINT23 IFECallFieldMH ?SEMI           * D5EBF
           4GETLAM DUP ROMPTR 0B0 046 ITE         * D5ED3
           :: SWAPDROP AdjEdModes EDITDECOMP$ BINT1 ; * D5EED
           :: ROMPTR 0B0 089 ITE                  * D5F0B
@@ -433,7 +433,7 @@ DoKeyEdit~1:
 * ROMPTR 0B0 02D
 * refs (1): D49CE
 ROMP_0B0_02D:
-        :: BINT42 OBJ_19FBB ?SEMI                * D5FA6
+        :: BINT42 IFECallFieldMH ?SEMI           * D5FA6
           4GETLAM ROMPTR 0B0 02E NOTcase         * D5FBA
           :: ' ROMPTR 0B0 007 ;                  * D5FCF
           ' NoExitAction SWAP ROMPTR 0B0 008 &COMP BINT2 ::N ; * D5FE9
@@ -441,13 +441,13 @@ ROMP_0B0_02D:
 * ROMPTR 0B0 02E
 * refs (1): D49CE
 ROMP_0B0_02E:
-        :: BINT43 OBJ_19FBB ?SEMI                * D6017
+        :: BINT43 IFECallFieldMH ?SEMI           * D6017
           FALSE ;                                * D602B
 
 * ROMPTR 0B0 02F
 * refs (1): D49CE
 ROMP_0B0_02F:
-        :: BINT26 OBJ_19FBB ?SEMI                * D6035
+        :: BINT26 IFECallFieldMH ?SEMI           * D6035
           4GETLAM ROMPTR 0B0 030 NOT?SEMI        * D6049
           4GETLAM DUPUNROT ROMPTR 0B0 0D5 DUP ROMPTR 0B0 041 * D605E  ~sFldVal
           ROMPTR 0B0 013 ;                       * D6083  IFEDispField
@@ -455,7 +455,7 @@ ROMP_0B0_02F:
 * ROMPTR 0B0 030
 * refs (1): D49CE
 ROMP_0B0_030:
-        :: BINT37 OBJ_19FBB ?SEMI                * D6093
+        :: BINT37 IFECallFieldMH ?SEMI           * D6093
           4GETLAM DUP ROMPTR 0B0 08C case        * D60A7
           :: FALSE SWAP ROMPTR 0B0 077 ROMPTR 0B4 1D8 SetDA123NoCh ; * D60C1
           ROMPTR 0B0 02B OVER NULL{} EQUAL case2drop * D60F0
@@ -468,15 +468,15 @@ ROMP_0B0_030:
 * ROMPTR 0B0 031
 * refs (1): D49CE
 ROMP_0B0_031:
-        :: BINT27 OBJ_19FBB ?SEMI                * D6185
+        :: BINT27 IFECallFieldMH ?SEMI           * D6185
           4GETLAM DUP ROMPTR 0B0 0C5 NOT OVER    * D6199  ~gFldVal
           ROMPTR 0B0 0D5 ROMPTR 0B0 041 ;        * D61B8  ~sFldVal
 
 * ROMPTR 0B0 032
 * refs (1): D49CE
 ROMP_0B0_032:
-        :: BINT35 OBJ_19FBB ?SEMI                * D61D3
-          ' ROMPTR 0B0 033 OBJ_72AFA 4GETLAM ROMPTR 0B0 0B9 >TCOMP BINT17 * D61E7
+        :: BINT35 IFECallFieldMH ?SEMI           * D61D3
+          ' ROMPTR 0B0 033 ?ROMPTR@ 4GETLAM ROMPTR 0B0 0B9 >TCOMP BINT17 * D61E7
           4GETLAM ROMPTR 0B0 035 DUPLENCOMP #1= ITE # B907 # B906 * D6216
           3UNROLL BINT1 ROMPTR 0B3 000 DUP BINT0 EQ NOTcase * D6249  ~Choose
           :: IT DROP                             * D6272
@@ -513,7 +513,7 @@ ROMP_0B0_034:
 * ROMPTR 0B0 035
 * refs (1): D49CE
 ROMP_0B0_035:
-        :: BINT36 OBJ_19FBB ?SEMI                * D63F2
+        :: BINT36 IFECallFieldMH ?SEMI           * D63F2
           4GETLAM ROMPTR 0B0 07A ?SKIP           * D6406
           { MINUSONE }                           * D641B
           DUPNULLCOMP? casedrop NULL{}           * D642A
@@ -573,7 +573,7 @@ DoKeyOK~1:
 * ROMPTR 0B0 038
 * refs (1): D49CE
 ROMP_0B0_038:
-        :: BINT30 OBJ_19FBB ?SEMI                * D6770
+        :: BINT30 IFECallFieldMH ?SEMI           * D6770
           4GETLAM ROMPTR 0B0 046 DROP ROMPTR 0B0 010 5GETLAM ROMPTR 0B0 0C1 * D6784
           ' ROMPTR 0B1 014 FALSE ' LAM 'IF STOLAM ROMPTR 0B1 00F TRUE ' * D67B4
           LAM 'IF STOLAM NOTcase                 * D67F5
@@ -588,7 +588,7 @@ ROMP_0B0_038:
 * ROMPTR 0B0 039
 * refs (1): D49CE
 DoKeyOK~2:
-        :: 5GETLAM BINT44 OBJ_19FBB ?SEMI        * D68A5
+        :: 5GETLAM BINT44 IFECallFieldMH ?SEMI   * D68A5
           EDITPARTS #>1 NOT ROMPTR 0B0 03F Parse.1 NOTcase ROMPTR 0B0 03A * D68BE
           PTR NULL:: EQUALcasedrop ROMPTR 0B0 03B * D68ED
           ROMPTR 0B0 040 ROMPTR 0B0 03C 5GETLAM ROMPTR 0B0 096 NOTcase * D6902
@@ -624,7 +624,7 @@ DoKeyOK~2~3:
 * ROMPTR 0B0 03D
 * refs (1): D49CE
 DoInputForm~2~1~7~1:
-        :: 5GETLAM BINT38 OBJ_19FBB ?SEMI        * D6AB3
+        :: 5GETLAM BINT38 IFECallFieldMH ?SEMI   * D6AB3
           SetDA123NoCh 4GETLAM DUP ROMPTR 0B0 02B OVER NULL{} EQUAL case * D6ACC
           3DROP                                  * D6AFA
           #1+ 2DUP SWAP LENCOMP #> IT DROPONE    * D6AFF
@@ -634,7 +634,7 @@ DoInputForm~2~1~7~1:
 * ROMPTR 0B0 03E
 * refs (1): D49CE
 ROMP_0B0_03E:
-        :: 5GETLAM BINT39 OBJ_19FBB ?SEMI        * D6B57
+        :: 5GETLAM BINT39 IFECallFieldMH ?SEMI   * D6B57
           4GETLAM DUP ROMPTR 0B0 02B OVER LENCOMP ' * D6B70
           :: SWAP OBJ_1A01B ; 4ROLL >HCOMP DUP 4UNROLL SWAP ROT #1+ 5PICK * D6B94
           ROMPTR 0B0 0C0 SWAP 7ROLL ROMPTR 0B0 09E NOTcase2drop DoBadKey * D6BD0
@@ -644,35 +644,35 @@ ROMP_0B0_03E:
 * ROMPTR 0B0 03F
 * refs (1): D49CE
 DoKeyOK~2~4:
-        :: 5GETLAM BINT24 OBJ_19FBB DROP ;       * D6C39
+        :: 5GETLAM BINT24 IFECallFieldMH DROP ;  * D6C39
 
 * ROMPTR 0B0 040
 * refs (1): D49CE
 DoKeyOK~2~5:
-        :: 5GETLAM BINT25 OBJ_19FBB DROP ;       * D6C57
+        :: 5GETLAM BINT25 IFECallFieldMH DROP ;  * D6C57
 
 * ROMPTR 0B0 041
 * refs (1): D49CE
 ROMP_0B0_041:
-        :: BINT47 OBJ_19FBB DROP ;               * D6C75
+        :: BINT47 IFECallFieldMH DROP ;          * D6C75
 
 * ROMPTR 0B0 042
 * refs (1): D49CE
 ROMP_0B0_042:
-        :: BINT45 OBJ_19FBB ?SEMI                * D6C8E
+        :: BINT45 IFECallFieldMH ?SEMI           * D6C8E
           4GETLAM ROMPTR 0B0 07A NOTcasedrop TRUE * D6CA2
           SWAP XEQTYPE COERCE SWAPDROP EQUALPOSCOMP #0<> ; * D6CBC
 
 * ROMPTR 0B0 043
 * refs (1): D49CE
 ROMP_0B0_043:
-        :: BINT46 OBJ_19FBB ?SEMI                * D6CDF
+        :: BINT46 IFECallFieldMH ?SEMI           * D6CDF
           DROP TRUE ;                            * D6CF3
 
 * ROMPTR 0B0 044
 * refs (1): D49CE
 IFEDispField~1:
-        :: BINT9 OBJ_19FBB ?SEMI                 * D6D02
+        :: BINT9 IFECallFieldMH ?SEMI            * D6D02
           4GETLAM DUP ROMPTR 0B0 08D case        * D6D16
           :: DUP ROMPTR 0B0 0A1 ROMPTR 0B0 0C5 ITE ROMPTR 0B0 07F * D6D30  ~gFldVal
             ROMPTR 0B0 082                       * D6D60
@@ -688,13 +688,13 @@ IFEDispField~1~1:
         :: KEYINBUFFER? case                     * D6E0D
           :: DUP ROMPTR 0B0 0A2 ROMPTR 0B0 079 ITE NULL$ _chr(31)_ * D6E1C
           ;                                      * D6E4B
-          DUP ROMPTR 0B0 0A1 BINT10 OBJ_19FBB ?SEMI * D6E50
+          DUP ROMPTR 0B0 0A1 BINT10 IFECallFieldMH ?SEMI * D6E50
           4GETLAM DUP ROMPTR 0B0 0C5 SWAP ROMPTR 0B0 0C0 ROMPTR 0B0 074 ; * D6E6F  ~gFldVal
 
 * ROMPTR 0B0 046
 * refs (1): D49CE
 ROMP_0B0_046:
-        :: BINT41 OBJ_19FBB ?SEMI                * D6EA4
+        :: BINT41 IFECallFieldMH ?SEMI           * D6EA4
           4GETLAM ROMPTR 0B0 078 ;               * D6EB8
 
 * ROMPTR 0B0 047

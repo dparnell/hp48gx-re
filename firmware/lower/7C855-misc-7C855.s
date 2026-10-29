@@ -565,14 +565,14 @@ OBJ_7CE32:
 
 * refs (3): 97AAC 97B66 97C80
 COND~1~3:
-        :: %%0 SWAP ONE_DO_ARRY INDEX@ OBJ_372EF B%ABS ROT %%+ SWAP * 7CE64
+        :: %%0 SWAP ONE_DO_ARRY INDEX@ PULL%%EL B%ABS ROT %%+ SWAP * 7CE64
           NextInArray SWAP ;                     * 7CE96
 
 * refs (8): 9242A 92885 979DC 97D8A 97EFD 97FFC ...
 OBJ_7CEA5:
         :: # FFF OVER#< case doerr501            * 7CEA5
           DUP #8* !MAKEHXS 2NULLLAM{} BIND DUP OBJ_37A4F #ZERO#ONE * 7CEC3
-          3NULLLAM{} BIND 5GETLAM OBJ_7D28D OBJ_357F0 BEGIN 1GETLAM DUP * 7CEEB
+          3NULLLAM{} BIND 5GETLAM OBJ_7D28D CkATTNQUIT BEGIN 1GETLAM DUP * 7CEEB
           OBJ_376C1 5GETLAM OBJ_37013 2DUP#= ?SKIP * 7CF13
           :: SWAPCOLUMNS 3GETLAM OBJ_3798C ITE %%CHS * 7CF2C
             :: C%%CHS C%%CONJ ;                  * 7CF4A
@@ -580,11 +580,11 @@ OBJ_7CEA5:
           DROP 5GETLAM FALSE OBJ_7D3CB 3GETLAM OBJ_37941 2GETLAM OBJ_377DD * 7CF68
           2PUTLAM 3PUTLAM 1GETLAM 6GETLAM #< WHILE * 7CF90
           :: 1GETLAM #1+ 1PUTLAM ONESWAP 1GETLAM ONE_DO OVER 1GETLAM 2DUP * 7CFAE
-            #1-+ 4UNROLL INDEX@ #1- OBJ_7C855 SWAP3PICK OBJ_372EF ROT L%- * 7CFE0
-            SWAPINDEX@ 5GETLAM TRUE OBJ_7D3CB ROTSWAP L%/ ROT OBJ_37361 * 7D00D
+            #1-+ 4UNROLL INDEX@ #1- OBJ_7C855 SWAP3PICK PULL%%EL ROT L%- * 7CFE0
+            SWAPINDEX@ 5GETLAM TRUE OBJ_7D3CB ROTSWAP L%/ ROT PUT%%EL * 7D00D
             6GETLAM ROT#+SWAP NextInArray 6GETLAM #1+ 1GETLAM DO OVER * 7D035
-            1GETLAM 2DUP #1-+ 4UNROLL DUP#1- OBJ_7C855 SWAP3PICK OBJ_372EF * 7D05D
-            ROT L%- ROT OBJ_37361 6GETLAM ROT#+SWAP NextInArray SWAPDROP ; * 7D085
+            1GETLAM 2DUP #1-+ 4UNROLL DUP#1- OBJ_7C855 SWAP3PICK PULL%%EL * 7D05D
+            ROT L%- ROT PUT%%EL 6GETLAM ROT#+SWAP NextInArray SWAPDROP ; * 7D085
           REPEAT 3GETLAM 2GETLAM ABND ;          * 7D0B2
 
 * refs (7): 92439 928EE 98039 C9E0F C9EF0 CA057 ...
@@ -597,13 +597,13 @@ OBJ_7D0CB:
 OBJ_7D11B:
         :: 3UNROLL ONEONE 2SWAP 2GETLAM #1+_ONE_DO SWAPINDEX@ 1GETLAM TRUE * 7D11B
           OBJ_7D3CB SWAPROT 6PICK #1+_ONE_DO 5PICK INDEX@ JINDEX@ #1- * 7D148
-          OBJ_7C861 SWAP 5PICK OBJ_372EF ROT L%- 4PICK L%/ 5PICK OBJ_37361 * 7D170
+          OBJ_7C861 SWAP 5PICK PULL%%EL ROT L%- 4PICK L%/ 5PICK PUT%%EL * 7D170
           4ROLL #1+ 4UNROLL NextInArray ROTDROP 4ROLL 2GETLAM #+ 4UNROLL * 7D1A2
           LOOP OBJ_37B03 2GETLAM DUP#1= caseDROP DUP#1- * 7D1CF
           OVER #* 4UNROLL DUP#1- 6PICK #* 4UNROLL ONE_DO 5PICK ZERO_DO 2OVER * 7D1ED
-          7PICK #+ JINDEX@ OBJ_7C861 SWAP 4PICK OBJ_372EF ROT L%- 4PICK * 7D224
-          OBJ_37361 ROT #1-UNROT NextInArray 4ROLL 2GETLAM OBJ_36FC4 4UNROLL * 7D256
-          LOOP OBJ_37B03 ;                       * 7D27E
+          7PICK #+ JINDEX@ OBJ_7C861 SWAP 4PICK PULL%%EL ROT L%- 4PICK * 7D224
+          PUT%%EL ROT #1-UNROT NextInArray 4ROLL 2GETLAM #-#1- 4UNROLL LOOP * 7D256
+          OBJ_37B03 ;                            * 7D283
 
 * refs (2): 7CEFA 9871C
 OBJ_7D28D:
@@ -821,7 +821,7 @@ L_7D486:
 OBJ_7D4C5:
         CON(5)  (*)+5                            * 7D4C5  primitive code object
         GOSBVL  POP#                             * 7D4CA
-        GOSUB   SUB_7D6B8                        * 7D4D1
+        GOSUB   SAVPTR~jump_7D6B8                * 7D4D1
         C=DAT1  A                                * 7D4D5
         D0=C                                     * 7D4D8
         D1=D1+  5                                * 7D4DB
@@ -918,7 +918,7 @@ OBJ_7D5CF:
         CON(5)  (*)+5                            * 7D5CF  primitive code object
         ST=0    1                                * 7D5D4
         GOSBVL  POP#                             * 7D5D7
-        GOSUB   SUB_7D6B8                        * 7D5DE
+        GOSUB   SAVPTR~jump_7D6B8                * 7D5DE
         C=DAT1  A                                * 7D5E2
         D0=C                                     * 7D5E5
         D1=D1+  5                                * 7D5E8
@@ -1005,7 +1005,7 @@ SUB_7D6B0:
         D=D+1   A                                * 7D6B6
 
 * refs (3): 7D4D1 7D5DE 7D82F
-SUB_7D6B8:
+SAVPTR~jump_7D6B8:
         GOVLNG  SAVPTR                           * 7D6B8
 
 * refs (2): 7D677 7D74A
@@ -1153,7 +1153,7 @@ OBJ_7D7F9:
         GOYES   L_7D82F                          * 7D829
         GOTO    L_7D886                          * 7D82B
 L_7D82F:
-        GOSUB   SUB_7D6B8                        * 7D82F
+        GOSUB   SAVPTR~jump_7D6B8                * 7D82F
         C=DAT1  A                                * 7D833
         D1=C                                     * 7D836
         D1=D1+  15                               * 7D839

@@ -66,42 +66,42 @@ ROMP_0A8_007:
 ROMP_0A8_008:
         {                                        * C5507
           :: PTR DirLabel: $ "MAKE" ;            * C550C
-          :: MenuMaker ROMPTR 0A9 006 OBJ_40184 ; } * C552D
+          :: MenuMaker ROMPTR 0A9 006 InitMenuNoExit ; } * C552D
 
 * ROMPTR 0A8 009
 * refs (1): C5332
 ROMP_0A8_009:
         {                                        * C5551
           :: PTR DirLabel: $ "NORM" ;            * C5556
-          :: MenuMaker ROMPTR 0A9 007 OBJ_40184 ; } * C5577
+          :: MenuMaker ROMPTR 0A9 007 InitMenuNoExit ; } * C5577
 
 * ROMPTR 0A8 00A
 * refs (1): C5332
 ROMP_0A8_00A:
         {                                        * C559B
           :: PTR DirLabel: $ "FACTR" ;           * C55A0
-          :: MenuMaker ROMPTR 0A9 008 OBJ_40184 ; } * C55C3
+          :: MenuMaker ROMPTR 0A9 008 InitMenuNoExit ; } * C55C3
 
 * ROMPTR 0A8 00B
 * refs (1): C5332
 ROMP_0A8_00B:
         {                                        * C55E7
           :: PTR DirLabel: $ "COL" ;             * C55EC
-          :: MenuMaker ROMPTR 0A9 009 OBJ_40184 ; } * C560B
+          :: MenuMaker ROMPTR 0A9 009 InitMenuNoExit ; } * C560B
 
 * ROMPTR 0A8 00C
 * refs (1): C5332
 ROMP_0A8_00C:
         {                                        * C562F
           :: PTR DirLabel: $ "ROW" ;             * C5634
-          :: MenuMaker ROMPTR 0A9 00A OBJ_40184 ; } * C5653
+          :: MenuMaker ROMPTR 0A9 00A InitMenuNoExit ; } * C5653
 
 * ROMPTR 0A8 00D
 * refs (1): C5332
 ROMP_0A8_00D:
         {                                        * C5677
           :: PTR DirLabel: $ "MATRX" ;           * C567C
-          :: MenuMaker ROMPTR 0A9 005 OBJ_40184 ; } * C569F
+          :: MenuMaker ROMPTR 0A9 005 InitMenuNoExit ; } * C569F
 
 * ROMPTR 0A8 00E
 * refs (1): C5332
@@ -136,21 +136,21 @@ ROMP_0A8_011:
 ROMP_0A8_012:
         {                                        * C57CB
           :: PTR DirLabel: $ "LOGIC" ;           * C57D0
-          :: MenuMaker ROMPTR 0A9 010 OBJ_40184 ; } * C57F3
+          :: MenuMaker ROMPTR 0A9 010 InitMenuNoExit ; } * C57F3
 
 * ROMPTR 0A8 013
 * refs (1): C5332
 ROMP_0A8_013:
         {                                        * C5817
           :: PTR DirLabel: $ "BIT" ;             * C581C
-          :: MenuMaker ROMPTR 0A9 011 OBJ_40184 ; } * C583B
+          :: MenuMaker ROMPTR 0A9 011 InitMenuNoExit ; } * C583B
 
 * ROMPTR 0A8 014
 * refs (1): C5332
 ROMP_0A8_014:
         {                                        * C585F
           :: PTR DirLabel: $ "BYTE" ;            * C5864
-          :: MenuMaker ROMPTR 0A9 012 OBJ_40184 ; } * C5885
+          :: MenuMaker ROMPTR 0A9 012 InitMenuNoExit ; } * C5885
 
 * ROMPTR 0A8 015
 * refs (1): C5332
@@ -167,7 +167,7 @@ ROMP_0A8_016:
         {                                        * C5902
           :: PTR DirLabel: $ "IF" ;              * C5907
           {                                      * C5924
-            :: MenuMaker ROMPTR 0A9 018 OBJ_40184 ; * C5929
+            :: MenuMaker ROMPTR 0A9 018 InitMenuNoExit ; * C5929
             :: 3NextInCmdLine xIFEND xTHEN xIF ; * C5948
             :: 4NextInCmdLine xIFEND xELSE xTHEN xIF ; } * C5966
         }                                        * C598E
@@ -178,7 +178,7 @@ ROMP_0A8_017:
         {                                        * C5993
           :: PTR DirLabel: $ "CASE" ;            * C5998
           {                                      * C59B9
-            :: MenuMaker ROMPTR 0A9 019 OBJ_40184 ; * C59BE
+            :: MenuMaker ROMPTR 0A9 019 InitMenuNoExit ; * C59BE
             :: 4NextInCmdLine xIFEND xIFEND xTHENCASE xCASE ; * C59DD
             :: Echo2Macros xIFEND xTHENCASE ; }  * C5A00
         }                                        * C5A1E
@@ -189,7 +189,7 @@ ROMP_0A8_018:
         {                                        * C5A23
           :: PTR DirLabel: $ "START" ;           * C5A28
           {                                      * C5A4B
-            :: MenuMaker ROMPTR 0A9 01A OBJ_40184 ; * C5A50
+            :: MenuMaker ROMPTR 0A9 01A InitMenuNoExit ; * C5A50
             :: Echo2Macros xNEXT xSTART ;        * C5A6F
             :: Echo2Macros xSTEP xSTART ; }      * C5A88
         }                                        * C5AA6
@@ -200,7 +200,7 @@ ROMP_0A8_019:
         {                                        * C5AAB
           :: PTR DirLabel: $ "FOR" ;             * C5AB0
           {                                      * C5ACF
-            :: MenuMaker ROMPTR 0A9 01B OBJ_40184 ; * C5AD4
+            :: MenuMaker ROMPTR 0A9 01B InitMenuNoExit ; * C5AD4
             :: Echo2Macros xNEXT xSTARTVAR ;     * C5AF3
             :: Echo2Macros xSTEP xSTARTVAR ; }   * C5B0C
         }                                        * C5B2A
@@ -211,7 +211,7 @@ ROMP_0A8_01A:
         {                                        * C5B2F
           :: PTR DirLabel: $ "DO" ;              * C5B34
           {                                      * C5B51
-            :: MenuMaker ROMPTR 0A9 01D OBJ_40184 ; * C5B56
+            :: MenuMaker ROMPTR 0A9 01D InitMenuNoExit ; * C5B56
             :: 3NextInCmdLine xENDDO xUNTIL xDO ; } * C5B75
         }                                        * C5B98
 
@@ -221,7 +221,7 @@ ROMP_0A8_01B:
         {                                        * C5B9D
           :: PTR DirLabel: $ "WHILE" ;           * C5BA2
           {                                      * C5BC5
-            :: MenuMaker ROMPTR 0A9 01F OBJ_40184 ; * C5BCA
+            :: MenuMaker ROMPTR 0A9 01F InitMenuNoExit ; * C5BCA
             :: 3NextInCmdLine xWHILEEND xREPEAT xWHILE ; } * C5BE9
         }                                        * C5C0C
 
@@ -230,28 +230,28 @@ ROMP_0A8_01B:
 ROMP_0A8_01C:
         {                                        * C5C11
           :: PTR DirLabel: $ "BRCH" ;            * C5C16
-          :: MenuMaker ROMPTR 0A9 017 OBJ_40184 ; } * C5C37
+          :: MenuMaker ROMPTR 0A9 017 InitMenuNoExit ; } * C5C37
 
 * ROMPTR 0A8 01D
 * refs (1): C5332
 ROMP_0A8_01D:
         {                                        * C5C5B
           :: PTR DirLabel: $ "ELEM" ;            * C5C60
-          :: MenuMaker ROMPTR 0A9 023 OBJ_40184 ; } * C5C81
+          :: MenuMaker ROMPTR 0A9 023 InitMenuNoExit ; } * C5C81
 
 * ROMPTR 0A8 01E
 * refs (1): C5332
 ROMP_0A8_01E:
         {                                        * C5CA5
           :: PTR DirLabel: $ "PROC" ;            * C5CAA
-          :: MenuMaker ROMPTR 0A9 024 OBJ_40184 ; } * C5CCB
+          :: MenuMaker ROMPTR 0A9 024 InitMenuNoExit ; } * C5CCB
 
 * ROMPTR 0A8 01F
 * refs (1): C5332
 ROMP_0A8_01F:
         {                                        * C5CEF
           :: PTR DirLabel: $ "LIST" ;            * C5CF4
-          :: MenuMaker ROMPTR 0A9 022 OBJ_40184 ; } * C5D15
+          :: MenuMaker ROMPTR 0A9 022 InitMenuNoExit ; } * C5D15
 
 * ROMPTR 0A8 020
 * refs (1): C5332
@@ -279,7 +279,7 @@ ROMP_0A8_024:
         {                                        * C5DBB
           :: PTR DirLabel: $ "IFERR" ;           * C5DC0
           {                                      * C5DE3
-            :: MenuMaker ROMPTR 0A9 03C OBJ_40184 ; * C5DE8
+            :: MenuMaker ROMPTR 0A9 03C InitMenuNoExit ; * C5DE8
             :: 3NextInCmdLine xIFEND xERRTHEN xIFERR ; * C5E07
             :: 4NextInCmdLine xIFEND xELSE xERRTHEN xIFERR ; } * C5E25
         }                                        * C5E4D
@@ -289,56 +289,56 @@ ROMP_0A8_024:
 ROMP_0A8_025:
         {                                        * C5E52
           :: PTR DirLabel: $ "ERROR" ;           * C5E57
-          :: MenuMaker ROMPTR 0A9 03D OBJ_40184 ; } * C5E7A
+          :: MenuMaker ROMPTR 0A9 03D InitMenuNoExit ; } * C5E7A
 
 * ROMPTR 0A8 026
 * refs (1): C5332
 ROMP_0A8_026:
         {                                        * C5E9E
           :: PTR DirLabel: $ "FMT" ;             * C5EA3
-          :: MenuMaker ROMPTR 0A9 040 OBJ_40184 ; } * C5EC2
+          :: MenuMaker ROMPTR 0A9 040 InitMenuNoExit ; } * C5EC2
 
 * ROMPTR 0A8 027
 * refs (1): C5332
 ROMP_0A8_027:
         {                                        * C5EE6
           :: PTR DirLabel: $ "ANGLE" ;           * C5EEB
-          :: MenuMaker ROMPTR 0A9 041 OBJ_40184 ; } * C5F0E
+          :: MenuMaker ROMPTR 0A9 041 InitMenuNoExit ; } * C5F0E
 
 * ROMPTR 0A8 028
 * refs (1): C5332
 ROMP_0A8_028:
         {                                        * C5F32
           :: PTR DirLabel: $ "FLAG" ;            * C5F37
-          :: MenuMaker ROMPTR 0A9 042 OBJ_40184 ; } * C5F58
+          :: MenuMaker ROMPTR 0A9 042 InitMenuNoExit ; } * C5F58
 
 * ROMPTR 0A8 029
 * refs (1): C5332
 ROMP_0A8_029:
         {                                        * C5F7C
           :: PTR DirLabel: $ "KEYS" ;            * C5F81
-          :: MenuMaker ROMPTR 0A9 043 OBJ_40184 ; } * C5FA2
+          :: MenuMaker ROMPTR 0A9 043 InitMenuNoExit ; } * C5FA2
 
 * ROMPTR 0A8 02A
 * refs (1): C5332
 ROMP_0A8_02A:
         {                                        * C5FC6
           :: PTR DirLabel: $ "MENU" ;            * C5FCB
-          :: MenuMaker ROMPTR 0A9 044 OBJ_40184 ; } * C5FEC
+          :: MenuMaker ROMPTR 0A9 044 InitMenuNoExit ; } * C5FEC
 
 * ROMPTR 0A8 02B
 * refs (1): C5332
 ROMP_0A8_02B:
         {                                        * C6010
           :: PTR DirLabel: $ "MISC" ;            * C6015
-          :: MenuMaker ROMPTR 0A9 045 OBJ_40184 ; } * C6036
+          :: MenuMaker ROMPTR 0A9 045 InitMenuNoExit ; } * C6036
 
 * ROMPTR 0A8 02C
 * refs (1): C5332
 ROMP_0A8_02C:
         {                                        * C605A
           :: PTR DirLabel: $ "MODES" ;           * C605F
-          :: MenuMaker ROMPTR 0A9 03F OBJ_40184 ; } * C6082
+          :: MenuMaker ROMPTR 0A9 03F InitMenuNoExit ; } * C6082
 
 * ROMPTR 0A8 02D
 * refs (1): C5332
@@ -464,21 +464,21 @@ ROMP_0A8_03E:
 ROMP_0A8_03F:
         {                                        * C64B7
           :: PTR DirLabel: $ "DIR" ;             * C64BC
-          :: MenuMaker ROMPTR 0A9 047 OBJ_40184 ; } * C64DB
+          :: MenuMaker ROMPTR 0A9 047 InitMenuNoExit ; } * C64DB
 
 * ROMPTR 0A8 040
 * refs (1): C5332
 ROMP_0A8_040:
         {                                        * C64FF
           :: PTR DirLabel: $ "ARITH" ;           * C6504
-          :: MenuMaker ROMPTR 0A9 048 OBJ_40184 ; } * C6527
+          :: MenuMaker ROMPTR 0A9 048 InitMenuNoExit ; } * C6527
 
 * ROMPTR 0A8 041
 * refs (1): C5332
 ROMP_0A8_041:
         {                                        * C654B
           :: PTR DirLabel: $ "MEM" ;             * C6550
-          :: MenuMaker ROMPTR 0A9 046 OBJ_40184 ; } * C656F
+          :: MenuMaker ROMPTR 0A9 046 InitMenuNoExit ; } * C656F
 
 * ROMPTR 0A8 042
 * refs (1): C5332
@@ -490,21 +490,21 @@ ROMP_0A8_042:
 ROMP_0A8_043:
         {                                        * C65B4
           :: PTR DirLabel: $ "SOLVE" ;           * C65B9
-          :: MenuMaker ROMPTR 0A9 04A OBJ_40184 ; } * C65DC
+          :: MenuMaker ROMPTR 0A9 04A InitMenuNoExit ; } * C65DC
 
 * ROMPTR 0A8 044
 * refs (1): C5332
 ROMP_0A8_044:
         {                                        * C6600
           :: PTR DirLabel: $ "SOLVR" ;           * C6605
-          :: MenuMaker ROMPTR 0A9 01E OBJ_40184 ; } * C6628
+          :: MenuMaker ROMPTR 0A9 01E InitMenuNoExit ; } * C6628
 
 * ROMPTR 0A8 045
 * refs (1): C5332
 ROMP_0A8_045:
         {                                        * C664C
           :: PTR DirLabel: $ "SOLVR" ;           * C6651
-          :: MenuMaker ROMPTR 0A9 050 OBJ_40184 ; } * C6674
+          :: MenuMaker ROMPTR 0A9 050 InitMenuNoExit ; } * C6674
 
 * ROMPTR 0A8 046
 * refs (1): C5332
@@ -532,14 +532,14 @@ ROMP_0A8_048:
 ROMP_0A8_049:
         {                                        * C675C
           :: PTR DirLabel: $ "PTYPE" ;           * C6761
-          :: MenuMaker ROMPTR 0A9 052 OBJ_40184 ; } * C6784
+          :: MenuMaker ROMPTR 0A9 052 InitMenuNoExit ; } * C6784
 
 * ROMPTR 0A8 04A
 * refs (1): C5332
 ROMP_0A8_04A:
         {                                        * C67A8
           :: PTR DirLabel: $ "PPAR" ;            * C67AD
-          :: MenuMaker ROMPTR 0A9 053 OBJ_40184 ; } * C67CE
+          :: MenuMaker ROMPTR 0A9 053 InitMenuNoExit ; } * C67CE
 
 * ROMPTR 0A8 04B
 * refs (1): C5332
@@ -552,28 +552,28 @@ ROMP_0A8_04B:
 ROMP_0A8_04C:
         {                                        * C681A
           :: PTR DirLabel: $ "3D" ;              * C681F
-          :: MenuMaker ROMPTR 0A9 054 OBJ_40184 ; } * C683C
+          :: MenuMaker ROMPTR 0A9 054 InitMenuNoExit ; } * C683C
 
 * ROMPTR 0A8 04D
 * refs (1): C5332
 ROMP_0A8_04D:
         {                                        * C6860
           :: PTR DirLabel: $ "STAT" ;            * C6865
-          :: MenuMaker ROMPTR 0A9 057 OBJ_40184 ; } * C6886
+          :: MenuMaker ROMPTR 0A9 057 InitMenuNoExit ; } * C6886
 
 * ROMPTR 0A8 04E
 * refs (1): C5332
 ROMP_0A8_04E:
         {                                        * C68AA
           :: PTR DirLabel: $ "FLAG" ;            * C68AF
-          :: MenuMaker ROMPTR 0A9 05C OBJ_40184 ; } * C68D0
+          :: MenuMaker ROMPTR 0A9 05C InitMenuNoExit ; } * C68D0
 
 * ROMPTR 0A8 04F
 * refs (1): C5332
 ROMP_0A8_04F:
         {                                        * C68F4
           :: PTR DirLabel: $ "PLOT" ;            * C68F9
-          :: MenuMaker ROMPTR 0A9 051 OBJ_40184 ; } * C691A
+          :: MenuMaker ROMPTR 0A9 051 InitMenuNoExit ; } * C691A
 
 * ROMPTR 0A8 050
 * refs (1): C5332
@@ -589,7 +589,7 @@ ROMP_0A8_050:
 ROMP_0A8_051:
         {                                        * C6997
           :: PTR DirLabel: $ "PLOT" ;            * C699C
-          :: MenuMaker ROMPTR 0A9 051 PrgmEntry? NOTcaseDROP OBJ_40184 * C69BD
+          :: MenuMaker ROMPTR 0A9 051 PrgmEntry? NOTcaseDROP InitMenuNoExit * C69BD
           ;                                      * C69E1
         }                                        * C69E6
 
@@ -608,21 +608,21 @@ ROMP_0A8_053:
 ROMP_0A8_054:
         {                                        * C6A1D
           :: PTR DirLabel: $ "PTYPE" ;           * C6A22
-          :: MenuMaker ROMPTR 0A9 055 OBJ_40184 ; } * C6A45
+          :: MenuMaker ROMPTR 0A9 055 InitMenuNoExit ; } * C6A45
 
 * ROMPTR 0A8 055
 * refs (1): C5332
 ROMP_0A8_055:
         {                                        * C6A69
           :: PTR DirLabel: $ "VPAR" ;            * C6A6E
-          :: MenuMaker ROMPTR 0A9 056 OBJ_40184 ; } * C6A8F
+          :: MenuMaker ROMPTR 0A9 056 InitMenuNoExit ; } * C6A8F
 
 * ROMPTR 0A8 056
 * refs (1): C5332
 ROMP_0A8_056:
         {                                        * C6AB3
           :: PTR DirLabel: $ "3D" ;              * C6AB8
-          :: MenuMaker ROMPTR 0A9 054 PrgmEntry? NOTcaseDROP OBJ_40184 * C6AD5
+          :: MenuMaker ROMPTR 0A9 054 PrgmEntry? NOTcaseDROP InitMenuNoExit * C6AD5
           ;                                      * C6AF9
         }                                        * C6AFE
 
@@ -642,28 +642,28 @@ ROMP_0A8_058:
 ROMP_0A8_059:
         {                                        * C6B55
           :: PTR DirLabel: $ "PTYPE" ;           * C6B5A
-          :: MenuMaker ROMPTR 0A9 058 OBJ_40184 ; } * C6B7D
+          :: MenuMaker ROMPTR 0A9 058 InitMenuNoExit ; } * C6B7D
 
 * ROMPTR 0A8 05A
 * refs (1): C5332
 ROMP_0A8_05A:
         {                                        * C6BA1
           :: PTR DirLabel: $ "DATA" ;            * C6BA6
-          :: MenuMaker ROMPTR 0A9 05B OBJ_40184 ; } * C6BC7
+          :: MenuMaker ROMPTR 0A9 05B InitMenuNoExit ; } * C6BC7
 
 * ROMPTR 0A8 05B
 * refs (1): C5332
 ROMP_0A8_05B:
         {                                        * C6BEB
           :: PTR DirLabel: $ "ΣPAR" ;            * C6BF0
-          :: MenuMaker ROMPTR 0A9 059 OBJ_40184 ; } * C6C11
+          :: MenuMaker ROMPTR 0A9 059 InitMenuNoExit ; } * C6C11
 
 * ROMPTR 0A8 05C
 * refs (1): C5332
 ROMP_0A8_05C:
         {                                        * C6C35
           :: PTR DirLabel: $ "STAT" ;            * C6C3A
-          :: MenuMaker ROMPTR 0A9 057 PrgmEntry? NOTcaseDROP OBJ_40184 * C6C5B
+          :: MenuMaker ROMPTR 0A9 057 PrgmEntry? NOTcaseDROP InitMenuNoExit * C6C5B
           ;                                      * C6C7F
         }                                        * C6C84
 
@@ -672,7 +672,7 @@ ROMP_0A8_05C:
 ROMP_0A8_05D:
         {                                        * C6C89
           :: PTR DirLabel: $ "MODL" ;            * C6C8E
-          :: MenuMaker ROMPTR 0A9 05A OBJ_40184 ; } * C6CAF
+          :: MenuMaker ROMPTR 0A9 05A InitMenuNoExit ; } * C6CAF
 
 * ROMPTR 0A8 05E
 * refs (1): C5332
@@ -687,7 +687,7 @@ ROMP_0A8_05E:
 ROMP_0A8_05F:
         {                                        * C6D32
           :: PTR DirLabel: $ "ΣPAR" ;            * C6D37
-          :: MenuMaker ROMPTR 0A9 059 PrgmEntry? NOTcaseDROP OBJ_40184 * C6D58
+          :: MenuMaker ROMPTR 0A9 059 PrgmEntry? NOTcaseDROP InitMenuNoExit * C6D58
           ;                                      * C6D7C
         }                                        * C6D81
 
@@ -714,63 +714,63 @@ ROMP_0A8_062:
 ROMP_0A8_063:
         {                                        * C6E25
           :: PTR DirLabel: $ "ALRM" ;            * C6E2A
-          :: MenuMaker ROMPTR 0A9 05F OBJ_40184 ; } * C6E4B
+          :: MenuMaker ROMPTR 0A9 05F InitMenuNoExit ; } * C6E4B
 
 * ROMPTR 0A8 064
 * refs (1): C5332
 ROMP_0A8_064:
         {                                        * C6E6F
           :: PTR DirLabel: $ "TIME" ;            * C6E74
-          :: MenuMaker ROMPTR 0A9 05E OBJ_40184 ; } * C6E95
+          :: MenuMaker ROMPTR 0A9 05E InitMenuNoExit ; } * C6E95
 
 * ROMPTR 0A8 065
 * refs (1): C5332
 ROMP_0A8_065:
         {                                        * C6EB9
           :: PTR DirLabel: $ "DATA" ;            * C6EBE
-          :: MenuMaker ROMPTR 0A9 061 OBJ_40184 ; } * C6EDF
+          :: MenuMaker ROMPTR 0A9 061 InitMenuNoExit ; } * C6EDF
 
 * ROMPTR 0A8 066
 * refs (1): C5332
 ROMP_0A8_066:
         {                                        * C6F03
           :: PTR DirLabel: $ "ΣPAR" ;            * C6F08
-          :: MenuMaker ROMPTR 0A9 062 OBJ_40184 ; } * C6F29
+          :: MenuMaker ROMPTR 0A9 062 InitMenuNoExit ; } * C6F29
 
 * ROMPTR 0A8 067
 * refs (1): C5332
 ROMP_0A8_067:
         {                                        * C6F4D
           :: PTR DirLabel: $ "1VAR" ;            * C6F52
-          :: MenuMaker ROMPTR 0A9 064 OBJ_40184 ; } * C6F73
+          :: MenuMaker ROMPTR 0A9 064 InitMenuNoExit ; } * C6F73
 
 * ROMPTR 0A8 068
 * refs (1): C5332
 ROMP_0A8_068:
         {                                        * C6F97
           :: PTR DirLabel: $ "PLOT" ;            * C6F9C
-          :: MenuMaker ROMPTR 0A9 065 OBJ_40184 ; } * C6FBD
+          :: MenuMaker ROMPTR 0A9 065 InitMenuNoExit ; } * C6FBD
 
 * ROMPTR 0A8 069
 * refs (1): C5332
 ROMP_0A8_069:
         {                                        * C6FE1
           :: PTR DirLabel: $ "FIT" ;             * C6FE6
-          :: MenuMaker ROMPTR 0A9 066 OBJ_40184 ; } * C7005
+          :: MenuMaker ROMPTR 0A9 066 InitMenuNoExit ; } * C7005
 
 * ROMPTR 0A8 06A
 * refs (1): C5332
 ROMP_0A8_06A:
         {                                        * C7029
           :: PTR DirLabel: $ "SUMS" ;            * C702E
-          :: MenuMaker ROMPTR 0A9 067 OBJ_40184 ; } * C704F
+          :: MenuMaker ROMPTR 0A9 067 InitMenuNoExit ; } * C704F
 
 * ROMPTR 0A8 06B
 * refs (1): C5332
 ROMP_0A8_06B:
         {                                        * C7073
           :: PTR DirLabel: $ "STAT" ;            * C7078
-          :: MenuMaker ROMPTR 0A9 060 OBJ_40184 ; } * C7099
+          :: MenuMaker ROMPTR 0A9 060 InitMenuNoExit ; } * C7099
 
 * ROMPTR 0A8 06C
 * refs (1): C5332
@@ -807,14 +807,14 @@ ROMP_0A8_070:
 ROMP_0A8_071:
         {                                        * C7185
           :: PTR DirLabel: $ "MODL" ;            * C718A
-          :: MenuMaker ROMPTR 0A9 063 OBJ_40184 ; } * C71AB
+          :: MenuMaker ROMPTR 0A9 063 InitMenuNoExit ; } * C71AB
 
 * ROMPTR 0A8 072
 * refs (1): C5332
 ROMP_0A8_072:
         {                                        * C71CF
           :: PTR DirLabel: $ "ΣPAR" ;            * C71D4
-          :: MenuMaker ROMPTR 0A9 062 PrgmEntry? NOTcaseDROP OBJ_40184 * C71F5
+          :: MenuMaker ROMPTR 0A9 062 PrgmEntry? NOTcaseDROP InitMenuNoExit * C71F5
           ;                                      * C7219
         }                                        * C721E
 
@@ -823,35 +823,35 @@ ROMP_0A8_072:
 ROMP_0A8_073:
         {                                        * C7223
           :: PTR DirLabel: $ "SRVR" ;            * C7228
-          :: MenuMaker ROMPTR 0A9 069 OBJ_40184 ; } * C7249
+          :: MenuMaker ROMPTR 0A9 069 InitMenuNoExit ; } * C7249
 
 * ROMPTR 0A8 074
 * refs (1): C5332
 ROMP_0A8_074:
         {                                        * C726D
           :: PTR DirLabel: $ "IOPAR" ;           * C7272
-          :: MenuMaker ROMPTR 0A9 06A OBJ_40184 ; } * C7295
+          :: MenuMaker ROMPTR 0A9 06A InitMenuNoExit ; } * C7295
 
 * ROMPTR 0A8 075
 * refs (1): C5332
 ROMP_0A8_075:
         {                                        * C72B9
           :: PTR DirLabel: $ "PRINT" ;           * C72BE
-          :: MenuMaker ROMPTR 0A9 06B OBJ_40184 ; } * C72E1
+          :: MenuMaker ROMPTR 0A9 06B InitMenuNoExit ; } * C72E1
 
 * ROMPTR 0A8 076
 * refs (1): C5332
 ROMP_0A8_076:
         {                                        * C7305
           :: PTR DirLabel: $ "SERIAL" ;          * C730A
-          :: MenuMaker ROMPTR 0A9 06D OBJ_40184 ; } * C732F
+          :: MenuMaker ROMPTR 0A9 06D InitMenuNoExit ; } * C732F
 
 * ROMPTR 0A8 077
 * refs (1): C5332
 ROMP_0A8_077:
         {                                        * C7353
           :: PTR DirLabel: $ "I/O" ;             * C7358
-          :: MenuMaker ROMPTR 0A9 068 OBJ_40184 ; } * C7377
+          :: MenuMaker ROMPTR 0A9 068 InitMenuNoExit ; } * C7377
 
 * ROMPTR 0A8 078
 * refs (1): C5332
@@ -890,7 +890,7 @@ ROMP_0A8_07C:
 ROMP_0A8_07D:
         {                                        * C74A7
           :: PTR DirLabel: $ "PRTPAR" ;          * C74AC
-          :: MenuMaker ROMPTR 0A9 06C OBJ_40184 ; } * C74D1
+          :: MenuMaker ROMPTR 0A9 06C InitMenuNoExit ; } * C74D1
 
 * ROMPTR 0A8 07E
 * refs (1): C5332
@@ -908,14 +908,14 @@ ROMP_0A8_07F:
 ROMP_0A8_080:
         {                                        * C7544
           :: PTR DirLabel: $ "PORTS" ;           * C7549
-          :: MenuMaker ROMPTR 0A9 06F OBJ_40184 ; } * C756C
+          :: MenuMaker ROMPTR 0A9 06F InitMenuNoExit ; } * C756C
 
 * ROMPTR 0A8 081
 * refs (1): C5332
 ROMP_0A8_081:
         {                                        * C7590
           :: PTR DirLabel: $ "EQLIB" ;           * C7595
-          :: MenuMaker ROMPTR 0A9 071 OBJ_40184 ; } * C75B8
+          :: MenuMaker ROMPTR 0A9 071 InitMenuNoExit ; } * C75B8
 
 LIB0A8.hash:
         CON(5)  DOHSTR                           * C75DC  hash table of library 0A8

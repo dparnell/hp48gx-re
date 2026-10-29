@@ -5,7 +5,7 @@
 
 use crate::prelude::*;
 
-// SystemLevel?: firmware/lower/40002-outer-loop.s:244
+// SystemLevel?: firmware/lower/40002-outer-loop.s:245
 pub(crate) fn SystemLevel_(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -58,7 +58,7 @@ pub(crate) fn SystemLevel_(r: &mut Run) {
 }
 
 // ob ->
-// KeyOb!: firmware/lower/40002-outer-loop.s:362
+// KeyOb!: firmware/lower/40002-outer-loop.s:363
 pub(crate) fn KeyOb_(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -76,7 +76,7 @@ pub(crate) fn KeyOb_(r: &mut Run) {
 }
 
 // -> id/romptr
-// KeyOb@: firmware/lower/40002-outer-loop.s:370
+// KeyOb@: firmware/lower/40002-outer-loop.s:371
 pub(crate) fn KeyOb__40A87(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -94,7 +94,7 @@ pub(crate) fn KeyOb__40A87(r: &mut Run) {
 }
 
 // ->
-// KeyOb0: firmware/lower/40002-outer-loop.s:377
+// KeyOb0: firmware/lower/40002-outer-loop.s:378
 pub(crate) fn KeyOb0(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -128,7 +128,7 @@ pub(crate) fn code_40AAD(r: &mut Run) {
     }
 }
 
-// GetLastEdit: firmware/lower/40002-outer-loop.s:421
+// GetLastEdit: firmware/lower/40002-outer-loop.s:422
 pub(crate) fn GetLastEdit(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -214,7 +214,7 @@ pub(crate) fn GetLastEdit(r: &mut Run) {
 }
 
 // $ ->
-// CMDSTO: firmware/lower/40002-outer-loop.s:477
+// CMDSTO: firmware/lower/40002-outer-loop.s:478
 pub(crate) fn CMDSTO(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -242,7 +242,7 @@ pub(crate) fn CMDSTO(r: &mut Run) {
     }
 }
 
-// OBJ_40CC3: firmware/lower/40002-outer-loop.s:495
+// OBJ_40CC3: firmware/lower/40002-outer-loop.s:496
 pub(crate) fn OBJ_40CC3(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -270,7 +270,7 @@ pub(crate) fn OBJ_40CC3(r: &mut Run) {
 }
 
 // ->
-// SLOW: firmware/lower/40002-outer-loop.s:587
+// SLOW: firmware/lower/40002-outer-loop.s:588
 pub(crate) fn SLOW(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -299,7 +299,7 @@ pub(crate) fn SLOW(r: &mut Run) {
 }
 
 // ->
-// VERYSLOW: firmware/lower/40002-outer-loop.s:600
+// VERYSLOW: firmware/lower/40002-outer-loop.s:601
 pub(crate) fn VERYSLOW(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -317,7 +317,7 @@ pub(crate) fn VERYSLOW(r: &mut Run) {
 }
 
 // ->
-// VERYVERYSLOW: firmware/lower/40002-outer-loop.s:607
+// VERYVERYSLOW: firmware/lower/40002-outer-loop.s:608
 pub(crate) fn VERYVERYSLOW(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -334,7 +334,7 @@ pub(crate) fn VERYVERYSLOW(r: &mut Run) {
     }
 }
 
-// StartMenu~3: firmware/lower/40002-outer-loop.s:838
+// StartMenu~3: firmware/lower/40002-outer-loop.s:839
 pub(crate) fn StartMenu_3(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -351,7 +351,7 @@ pub(crate) fn StartMenu_3(r: &mut Run) {
     }
 }
 
-// InitTrack:~1: firmware/lower/40002-outer-loop.s:845
+// InitTrack:~1: firmware/lower/40002-outer-loop.s:846
 pub(crate) fn InitTrack__1(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -368,7 +368,7 @@ pub(crate) fn InitTrack__1(r: &mut Run) {
     }
 }
 
-// SysMenuCheck~2: firmware/lower/40002-outer-loop.s:851
+// SysMenuCheck~2: firmware/lower/40002-outer-loop.s:852
 pub(crate) fn SysMenuCheck_2(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -385,7 +385,7 @@ pub(crate) fn SysMenuCheck_2(r: &mut Run) {
     }
 }
 
-// StartMenu~4: firmware/lower/40002-outer-loop.s:857
+// StartMenu~4: firmware/lower/40002-outer-loop.s:858
 pub(crate) fn StartMenu_4(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -403,7 +403,7 @@ pub(crate) fn StartMenu_4(r: &mut Run) {
 }
 
 // ->
-// SetRebuild: firmware/lower/40002-outer-loop.s:864
+// SetRebuild: firmware/lower/40002-outer-loop.s:865
 pub(crate) fn SetRebuild(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -420,7 +420,7 @@ pub(crate) fn SetRebuild(r: &mut Run) {
     }
 }
 
-// SysMenuCheck~3: firmware/lower/40002-outer-loop.s:870
+// SysMenuCheck~3: firmware/lower/40002-outer-loop.s:871
 pub(crate) fn SysMenuCheck_3(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -437,7 +437,7 @@ pub(crate) fn SysMenuCheck_3(r: &mut Run) {
     }
 }
 
-// OBJ_41815: firmware/lower/40002-outer-loop.s:876
+// OBJ_41815: firmware/lower/40002-outer-loop.s:877
 pub(crate) fn OBJ_41815(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -454,7 +454,7 @@ pub(crate) fn OBJ_41815(r: &mut Run) {
     }
 }
 
-// OBJ_41826: firmware/lower/40002-outer-loop.s:882
+// OBJ_41826: firmware/lower/40002-outer-loop.s:883
 pub(crate) fn OBJ_41826(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -471,7 +471,7 @@ pub(crate) fn OBJ_41826(r: &mut Run) {
     }
 }
 
-// OBJ_41837: firmware/lower/40002-outer-loop.s:888
+// OBJ_41837: firmware/lower/40002-outer-loop.s:889
 pub(crate) fn OBJ_41837(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -489,7 +489,7 @@ pub(crate) fn OBJ_41837(r: &mut Run) {
 }
 
 // #n ->
-// MenuRow!: firmware/lower/40002-outer-loop.s:895
+// MenuRow!: firmware/lower/40002-outer-loop.s:896
 pub(crate) fn MenuRow_(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -507,7 +507,7 @@ pub(crate) fn MenuRow_(r: &mut Run) {
 }
 
 // -> #n
-// MenuRow@: firmware/lower/40002-outer-loop.s:902
+// MenuRow@: firmware/lower/40002-outer-loop.s:903
 pub(crate) fn MenuRow__41860(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -525,7 +525,7 @@ pub(crate) fn MenuRow__41860(r: &mut Run) {
 }
 
 // #n ->
-// LastMenuRow!: firmware/lower/40002-outer-loop.s:909
+// LastMenuRow!: firmware/lower/40002-outer-loop.s:910
 pub(crate) fn LastMenuRow_(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -543,7 +543,7 @@ pub(crate) fn LastMenuRow_(r: &mut Run) {
 }
 
 // -> #n
-// LastMenuRow@: firmware/lower/40002-outer-loop.s:916
+// LastMenuRow@: firmware/lower/40002-outer-loop.s:917
 pub(crate) fn LastMenuRow__41886(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -560,7 +560,7 @@ pub(crate) fn LastMenuRow__41886(r: &mut Run) {
     }
 }
 
-// StartMenu~5: firmware/lower/40002-outer-loop.s:922
+// StartMenu~5: firmware/lower/40002-outer-loop.s:923
 pub(crate) fn StartMenu_5(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -578,7 +578,7 @@ pub(crate) fn StartMenu_5(r: &mut Run) {
 }
 
 // -> menu
-// MenuDef@: firmware/lower/40002-outer-loop.s:929
+// MenuDef@: firmware/lower/40002-outer-loop.s:930
 pub(crate) fn MenuDef_(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -595,7 +595,7 @@ pub(crate) fn MenuDef_(r: &mut Run) {
     }
 }
 
-// StartMenu~6: firmware/lower/40002-outer-loop.s:935
+// StartMenu~6: firmware/lower/40002-outer-loop.s:936
 pub(crate) fn StartMenu_6(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -612,7 +612,7 @@ pub(crate) fn StartMenu_6(r: &mut Run) {
     }
 }
 
-// SetThisRow~1: firmware/lower/40002-outer-loop.s:941
+// SetThisRow~1: firmware/lower/40002-outer-loop.s:942
 pub(crate) fn SetThisRow_1(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -630,7 +630,7 @@ pub(crate) fn SetThisRow_1(r: &mut Run) {
 }
 
 // ob ->
-// MenuRowAct!: firmware/lower/40002-outer-loop.s:948
+// MenuRowAct!: firmware/lower/40002-outer-loop.s:949
 pub(crate) fn MenuRowAct_(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -647,7 +647,7 @@ pub(crate) fn MenuRowAct_(r: &mut Run) {
     }
 }
 
-// OBJ_418E4: firmware/lower/40002-outer-loop.s:954
+// OBJ_418E4: firmware/lower/40002-outer-loop.s:955
 pub(crate) fn OBJ_418E4(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -665,7 +665,7 @@ pub(crate) fn OBJ_418E4(r: &mut Run) {
 }
 
 // ob ->
-// LabelDef!: firmware/lower/40002-outer-loop.s:961
+// LabelDef!: firmware/lower/40002-outer-loop.s:962
 pub(crate) fn LabelDef_(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -683,7 +683,7 @@ pub(crate) fn LabelDef_(r: &mut Run) {
 }
 
 // #col ob ->
-// DoLabel: firmware/lower/40002-outer-loop.s:968
+// DoLabel: firmware/lower/40002-outer-loop.s:969
 pub(crate) fn DoLabel(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -701,7 +701,7 @@ pub(crate) fn DoLabel(r: &mut Run) {
 }
 
 // og -> ob
-// MenuKeyNS!: firmware/lower/40002-outer-loop.s:975
+// MenuKeyNS!: firmware/lower/40002-outer-loop.s:976
 pub(crate) fn MenuKeyNS_(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -719,7 +719,7 @@ pub(crate) fn MenuKeyNS_(r: &mut Run) {
 }
 
 // -> ob
-// MenuKeyNS@: firmware/lower/40002-outer-loop.s:982
+// MenuKeyNS@: firmware/lower/40002-outer-loop.s:983
 pub(crate) fn MenuKeyNS__41929(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -737,7 +737,7 @@ pub(crate) fn MenuKeyNS__41929(r: &mut Run) {
 }
 
 // #n ->
-// DoMenuKeyNS: firmware/lower/40002-outer-loop.s:989
+// DoMenuKeyNS: firmware/lower/40002-outer-loop.s:990
 pub(crate) fn DoMenuKeyNS(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -755,7 +755,7 @@ pub(crate) fn DoMenuKeyNS(r: &mut Run) {
 }
 
 // ob -> ob
-// MenuKeyLS!: firmware/lower/40002-outer-loop.s:996
+// MenuKeyLS!: firmware/lower/40002-outer-loop.s:997
 pub(crate) fn MenuKeyLS_(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -772,7 +772,7 @@ pub(crate) fn MenuKeyLS_(r: &mut Run) {
     }
 }
 
-// OBJ_41954: firmware/lower/40002-outer-loop.s:1002
+// OBJ_41954: firmware/lower/40002-outer-loop.s:1003
 pub(crate) fn OBJ_41954(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -790,7 +790,7 @@ pub(crate) fn OBJ_41954(r: &mut Run) {
 }
 
 // ob -> ob
-// MenuKeyRS!: firmware/lower/40002-outer-loop.s:1009
+// MenuKeyRS!: firmware/lower/40002-outer-loop.s:1010
 pub(crate) fn MenuKeyRS_(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -807,7 +807,7 @@ pub(crate) fn MenuKeyRS_(r: &mut Run) {
     }
 }
 
-// OBJ_41974: firmware/lower/40002-outer-loop.s:1015
+// OBJ_41974: firmware/lower/40002-outer-loop.s:1016
 pub(crate) fn OBJ_41974(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -825,7 +825,7 @@ pub(crate) fn OBJ_41974(r: &mut Run) {
 }
 
 // ob ->
-// ReviewKey!: firmware/lower/40002-outer-loop.s:1022
+// ReviewKey!: firmware/lower/40002-outer-loop.s:1023
 pub(crate) fn ReviewKey_(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -842,7 +842,7 @@ pub(crate) fn ReviewKey_(r: &mut Run) {
     }
 }
 
-// LocalReview: firmware/lower/40002-outer-loop.s:1028
+// LocalReview: firmware/lower/40002-outer-loop.s:1029
 pub(crate) fn LocalReview(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -859,7 +859,7 @@ pub(crate) fn LocalReview(r: &mut Run) {
     }
 }
 
-// OBJ_419A4: firmware/lower/40002-outer-loop.s:1034
+// OBJ_419A4: firmware/lower/40002-outer-loop.s:1035
 pub(crate) fn OBJ_419A4(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -876,7 +876,7 @@ pub(crate) fn OBJ_419A4(r: &mut Run) {
     }
 }
 
-// SysMenuCheck~1~1: firmware/lower/40002-outer-loop.s:1040
+// SysMenuCheck~1~1: firmware/lower/40002-outer-loop.s:1041
 pub(crate) fn SysMenuCheck_1_1(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -894,7 +894,7 @@ pub(crate) fn SysMenuCheck_1_1(r: &mut Run) {
 }
 
 // ob ->
-// MenuExitAct!: firmware/lower/40002-outer-loop.s:1047
+// MenuExitAct!: firmware/lower/40002-outer-loop.s:1048
 pub(crate) fn MenuExitAct_(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -911,7 +911,7 @@ pub(crate) fn MenuExitAct_(r: &mut Run) {
     }
 }
 
-// StartMenu~2~1: firmware/lower/40002-outer-loop.s:1053
+// StartMenu~2~1: firmware/lower/40002-outer-loop.s:1054
 pub(crate) fn StartMenu_2_1(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -929,7 +929,7 @@ pub(crate) fn StartMenu_2_1(r: &mut Run) {
 }
 
 // menu ->
-// LastMenuDef!: firmware/lower/40002-outer-loop.s:1060
+// LastMenuDef!: firmware/lower/40002-outer-loop.s:1061
 pub(crate) fn LastMenuDef_(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -947,7 +947,7 @@ pub(crate) fn LastMenuDef_(r: &mut Run) {
 }
 
 // -> menu
-// LastMenuDef@: firmware/lower/40002-outer-loop.s:1067
+// LastMenuDef@: firmware/lower/40002-outer-loop.s:1068
 pub(crate) fn LastMenuDef__419F9(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -964,7 +964,7 @@ pub(crate) fn LastMenuDef__419F9(r: &mut Run) {
     }
 }
 
-// OBJ_41A04: firmware/lower/40002-outer-loop.s:1073
+// OBJ_41A04: firmware/lower/40002-outer-loop.s:1074
 pub(crate) fn OBJ_41A04(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -981,7 +981,7 @@ pub(crate) fn OBJ_41A04(r: &mut Run) {
     }
 }
 
-// OBJ_41A14: firmware/lower/40002-outer-loop.s:1079
+// OBJ_41A14: firmware/lower/40002-outer-loop.s:1080
 pub(crate) fn OBJ_41A14(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -1011,7 +1011,7 @@ pub(crate) fn OBJ_41A14(r: &mut Run) {
 }
 
 // {} ->
-// UserKeys!: firmware/lower/40002-outer-loop.s:1218
+// UserKeys!: firmware/lower/40002-outer-loop.s:1219
 pub(crate) fn UserKeys_(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -1029,7 +1029,7 @@ pub(crate) fn UserKeys_(r: &mut Run) {
 }
 
 // -> {}
-// GetUserKeys: firmware/lower/40002-outer-loop.s:1226
+// GetUserKeys: firmware/lower/40002-outer-loop.s:1227
 pub(crate) fn GetUserKeys(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -1047,7 +1047,7 @@ pub(crate) fn GetUserKeys(r: &mut Run) {
 }
 
 // ->
-// PgUserKeys: firmware/lower/40002-outer-loop.s:1233
+// PgUserKeys: firmware/lower/40002-outer-loop.s:1234
 pub(crate) fn PgUserKeys(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {

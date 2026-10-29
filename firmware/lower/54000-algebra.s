@@ -30,7 +30,7 @@ getwordsize:
 * refs (1): 53CF5
 WORDSIZE:
         CON(5)  (*)+5                            * 54039  primitive code object
-        GOSUB   SUB_53F69                        * 5403E
+        GOSUB   SAVPTR~jump_53F69                * 5403E
         GOSUB   getwordsize                      * 54042
         R0=A                                     * 54046
 L_54049:
@@ -40,7 +40,7 @@ L_54049:
 * refs (4): 2565F 256C6 3ED34 5407F
 BASE:
         CON(5)  (*)+5                            * 54050  primitive code object
-        GOSUB   SUB_53F69                        * 54055
+        GOSUB   SAVPTR~jump_53F69                * 54055
         GOSUB   SUB_541FA                        * 54059
         GOTO    L_54049                          * 5405D
         RPL
@@ -63,7 +63,7 @@ BASECHAR:
 hxs>$:
         CON(5)  (*)+5                            * 540BB  primitive code object
         ASSEMBLE
-        GOSUB   SUB_53F69                        * 540C0
+        GOSUB   SAVPTR~jump_53F69                * 540C0
         GOSBVL  SUB_53F99                        * 540C4
         P=      0                                * 540CB
         GOSUB   SUB_541FA                        * 540CD
@@ -232,7 +232,7 @@ GPPushA:
         P=      0                                * 54266
         ST=0    10                               * 54268
 L_5426B:
-        GOSUB   SUB_53F70                        * 5426B
+        GOSUB   GETPTR~jump_53F70                * 5426B
         D=D-1   A                                * 5426F
         GONC    L_54297                          * 54271
         D0=(5)  OSAVE                            * 54274
@@ -480,7 +480,7 @@ L_54510:
         LC(5)   %0_2A2B4                         * 54510
 L_54517:
         A=C     A                                * 54517
-        GOSUB   SUB_53F70                        * 54519
+        GOSUB   GETPTR~jump_53F70                * 54519
         PC=(A)                                   * 5451D
 L_54521:
         LC(5)   %1                               * 54521
@@ -843,7 +843,7 @@ OBJ_54E5C:
 OBJ_54E7F:
         CON(5)  (*)+5                            * 54E7F  primitive code object
         ASSEMBLE
-        GOSBVL  SUB_5F6F2                        * 54E84  inline data follows
+        GOSBVL  RuleMatch                        * 54E84  inline data follows
 
 * rewrite rules, read by the interpreter called just before (SUB_5F6F2)
         NIBHEX  C0000                            * 54E8B  pattern: op11
@@ -1900,6 +1900,7 @@ OBJ_56BC3:
         :: psh OBJ_56BEB top& OBJ_56C72 Cr x* ;  * 56BC3
 
 * refs (26): 56BA5 56BCD 7DD03 7DD21 85EBC 85F0C ...
+* Probably: derivatives: wrap the inner argument as d/d'dv(arg) for the chain rule, then ABND the 'dv environment
 OBJ_56BEB:
         :: OBJ_56D01 ABND ;                      * 56BEB
 

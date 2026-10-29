@@ -297,6 +297,7 @@ OBJ_276F7:
           DROP                                   * 27792
 
 * refs (22): 2753F 2762A 276E3 27701 2782D 2784B ...
+* Probably: parser failure exit: restore the saved token and parser state (lams 11..8), FALSE TRUE
 OBJ_27797:
           :: OBJ_283F1 failed ; ;                * 27797
 
@@ -2192,7 +2193,7 @@ POP1%:
         SETDEC                                   * 29FEF
 
 * refs (1): 2A22E
-SUB_29FF1:
+SAVPTR~jump_29FF1:
         GOVLNG  SAVPTR                           * 29FF1
 
 * refs (2): 2AEA9 34C99
