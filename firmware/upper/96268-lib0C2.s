@@ -32,10 +32,10 @@ ROMP_0C2_040:
           :: #1=case                             * 965C9
             :: 3PICK OBJ_36C2A 6PICK OBJ_36C2A 8PICK OBJ_36C2A ; * 965D3
             3PICK OBJ_36C2A 5PICK OBJ_36C2A 7PICK OBJ_36C2A ; * 965FB
-          8ROLL DROP 7ROLL OBJ_36BD5 7ROLL OBJ_36BD5 7ROLL SWAP BINT9 PICK * 9661E
-          PUT%%EL SWAP 7PICK PUT%%EL %%0 7PICK 3GETLAM #+ PUT%%EL 7UNROLL * 96650
-          BINT9 PICK 3UNROLL 6PICK 1GETLAM 11GETLAM EVAL 6PICK 3UNROLL 4ROLL * 96682
-          2GETLAM 10GETLAM EVAL #2- ;            * 966B4
+          8ROLL DROP 7ROLL ~%%0>=;?SEMI;%%CHS 7ROLL ~%%0>=;?SEMI;%%CHS 7ROLL * 9661E
+          SWAP BINT9 PICK PUT%%EL SWAP 7PICK PUT%%EL %%0 7PICK 3GETLAM #+ * 96641
+          PUT%%EL 7UNROLL BINT9 PICK 3UNROLL 6PICK 1GETLAM 11GETLAM EVAL * 96678
+          6PICK 3UNROLL 4ROLL 2GETLAM 10GETLAM EVAL #2- ; * 966A5
 
 * ROMPTR 0C2 041
 * refs (1): 90007
@@ -47,8 +47,8 @@ ROMP_0C2_041:
           #+ PULL%%EL %%ABS DUP 6PICK %%3E-13 %%* %%<= casedrop * 96777
           :: RDROP ROTDROPROTDROP %%0 ROT 3GETLAM #+ PUT%%EL 3UNROLL TRUE ; * 967A4
           5ROLL DUPUNROT %%+ %%/ SWAP3PICK #1+ PULL%%EL %%ABS ROT %%* * 967DB
-          4ROLLOVER OBJ_37DA0 4ROLL #1+ 6PICK OVER#= UNTIL DROPSWAPDROP SWAP * 9680D
-          4UNROLL FALSE ;                        * 9683A
+          4ROLLOVER ~2DUP;%%<;NOT?SWAPDROP 4ROLL #1+ 6PICK OVER#= UNTIL * 9680D
+          DROPSWAPDROP SWAP 4UNROLL FALSE ;      * 96830
 
 * ROMPTR 0C2 042
 * refs (1): 90007
@@ -60,7 +60,8 @@ ROMP_0C2_042:
           3GETLAM #+ PULL%%EL %%ABS DUP 6PICK %%3E-13 %%* %%<= casedrop * 968E9
           :: RDROP ROTDROPROTDROP %%0 ROT 3GETLAM #+ PUT%%EL 3UNROLL TRUE ; * 9691B
           5ROLL DUPUNROT %%+ %%/ SWAP3PICK PULL%%EL %%ABS ROT %%* 4ROLLOVER * 96952
-          OBJ_37DA0 4ROLL 5PICK OVER#= UNTIL DROPSWAPDROP SWAP 4UNROLL FALSE ; * 96984
+          ~2DUP;%%<;NOT?SWAPDROP 4ROLL 5PICK OVER#= UNTIL DROPSWAPDROP SWAP * 96984
+          4UNROLL FALSE ;                        * 969A7
 
 * ROMPTR 0C2 043
 * refs (1): 90007
@@ -71,7 +72,8 @@ ROMP_0C2_043:
             3GETLAM #1-+ PULL%%EL SWAP 5GETLAM PULL%%EL ; * 96A39
           :: 5GETLAM PULL%%EL %%ABS OVER 6GETLAM PULL%%EL SWAP 6GETLAM * 96A5C
             3GETLAM #+ PULL%%EL SWAP 6GETLAM #1+ PULL%%EL ; * 96A89
-          SWAPDROP SWAP %%ABS ROT %%ABS ROT %%ABS 2DUP OBJ_37DA0 3UNROLL * 96AB1
+          SWAPDROP SWAP %%ABS ROT %%ABS ROT %%ABS 2DUP * 96AB1
+          ~2DUP;%%<;NOT?SWAPDROP 3UNROLL         * 96AD9
           :: 3PICK %%0= case2drop SWAPDROP       * 96AE3
             %%MAX 2DUP %%/ 1+(rr) OVER 4PICK %%- 3PICK %%/ 5ROLL 4ROLL %%/ * 96AFC
             DUP %%* ROTDUP %%* OVER %%+ %%SQRT SWAPROT DUP %%+* %%SQRT %%+ * 96B38
@@ -213,13 +215,13 @@ COND~1:
           2GETLAM 1GETABND                       * 97A34
           { NULLLAM NULLLAM NULLLAM NULLLAM NULLLAM NULLLAM NULLLAM } BIND * 97A3E
           2GETLAM BINT1 {}N OVER OBJ_37A4F 2GETLAM UNCOERCE%% L%/ MAKEARRY * 97A70
-          BINT1 OBJ_7D11B ROTDROP COND~1~3 3PUTLAM 6GETLAM EVAL 2GETLAM * 97A9D
+          BINT1 OBJ_7D11B ROTDROP COND~5 3PUTLAM 6GETLAM EVAL 2GETLAM * 97A9D
           7GETLAM EVAL 4PUTLAM BEGIN 5GETLAM #1-DUP 5PUTLAM #0= case * 97AC5
           ROMPTR 0C2 04E                         * 97AF2
           DUP OBJ_37A0E OVER OBJ_37A4F 4GETLAM 4ROLL 2GETLAM #1+_ONE_DO * 97AFD
           INDEX@ 3PICK OVER#= ITE 4PICK 5PICK    * 97B25
           SWAP PUT%%EL NextInArray 4UNROLL3DROP BINT1 OBJ_7D11B ROTDROP * 97B43
-          COND~1~3 3GETLAM OVER 3PUTLAM %%<= case ROMPTR 0C2 04E * 97B66
+          COND~5 3GETLAM OVER 3PUTLAM %%<= case ROMPTR 0C2 04E * 97B66
           6GETLAM EVAL 2GETLAM 7GETLAM EVAL 4GETLAM 2DUP#= case2drop * 97B8F
           ROMPTR 0C2 04E                         * 97BB7
           OVER 4PUTLAM ROTSWAP PULL%%EL OBJ_37D69 %%>% SWAPROT PULL%%EL * 97BC2
@@ -230,7 +232,7 @@ COND~1:
 ROMP_0C2_04E:
           :: RDROP 2GETLAM #1- UNCOERCE%% OVER OBJ_37A4F OVER L%* 2GETLAM * 97C03
             #1+_ONE_DO ROT 3PICK3PICK L%/ INDEX@ PUT%%EL ROT 1+(rr) ROT * 97C35
-            B%NEG NextInArray 2DROP BINT1 OBJ_7D11B ROTROT2DROP COND~1~3 * 97C62
+            B%NEG NextInArray 2DROP BINT1 OBJ_7D11B ROTROT2DROP COND~5 * 97C62
             %% 6.66666666666667E-1 %%* 2GETLAM UNCOERCE%% %%/ 3GETLAM ABND * 97C85
             2DUP %%> ITE DROPSWAPDROP ROTROT2DROP * 97CBD
             %%* %%>% ;                           * 97CD6
@@ -238,7 +240,7 @@ ROMP_0C2_04E:
 
 * ROMPTR 0C2 04F
 * refs (1): 90007
-COND~1~1:
+COND~2:
         :: BINT1 %%0 ROT #1+_ONE_DO ROT INDEX@ PULL%%EL %%ABS ROT 2DUP %%> * 97CEA
           ITE                                    * 97D26
           :: DROP ROTDROP INDEX@ SWAP ;          * 97D2B
@@ -249,7 +251,7 @@ COND~1~1:
 * refs (1): 90007
 LU~1:
         :: sqmat(ar)? SWAP CKREF OBJ_7CD7E ROT OBJ_7CEA5 2DROP OBJ_7CDE2 DUP * 97D6C
-          TOTEMPOB DUP LU~1~1 OVER OBJ_379F0 2SWAP BINT1 2GETLAM #1+_ONE_DO * 97D9E
+          TOTEMPOB DUP LU~2 OVER OBJ_379F0 2SWAP BINT1 2GETLAM #1+_ONE_DO * 97D9E
           2GETLAM #1+_ONE_DO JINDEX@ INDEX@ 2DUP#< ITE * 97DCB
           :: 2DROP ROT 4PICK 3PICK PUTEL 3UNROLL ; * 97DE9
           :: #= ITE 5PICK 4PICK                  * 97E11
@@ -263,7 +265,7 @@ LU~1:
 MATDET~1:
         :: sqmat(ar)? DUP#1= case                * 97EA2
           :: PULLEL SWAPDROP ;                   * 97EB6
-          DUP #2= case MATDET~1~1                * 97ECA
+          DUP #2= case MATDET~2                  * 97ECA
           SWAP ROMPTR 0C2 059 SWAP OBJ_7CD79 ROT OBJ_7CEA5 ABND ROTDROP * 97EDE
           ROMPTR 0C2 052 ToNorm(nb) ;            * 97F0C
 
@@ -326,8 +328,8 @@ ROMP_0C2_057:
 
 * ROMPTR 0C2 058
 * refs (1): 90007
-COND~1~2:
-        :: 2GETLAM #1+_ONE_DO INDEX@ PULL%%EL COND~1~2~1 INDEX@ PUT%%EL * 983C6
+COND~3:
+        :: 2GETLAM #1+_ONE_DO INDEX@ PULL%%EL COND~4 INDEX@ PUT%%EL * 983C6
           NextInArray                            * 983EE
           :: 2GETLAM DUP #1= caseDROP #1+        * 983F3
             BINT2 DO INDEX@ BINT1 INDEX@ #1- OBJ_7CAA4 SWAP INDEX@ PULL%%EL * 98411
@@ -501,7 +503,7 @@ RREF~1:
 
 * ROMPTR 0C2 05C
 * refs (1): 90007
-RREF~1~1:
+RREF~2:
         :: OVER PULL%%EL DUPUNROT B%ABS 7PICK %%> 5PICK 8PICK %%<= AND ?SKIP * 98966
           :: %%0 4PICK PUT%%EL ;                 * 989A2
           4PICK 7PICK %%<= 2GETLAM JINDEX@ #= OR case SWAPDROP * 989BB
@@ -511,7 +513,7 @@ RREF~1~1:
 
 * ROMPTR 0C2 05D
 * refs (1): 90007
-RREF~1~2:
+RREF~3:
         :: 4GETLAM 3GETLAM #> ?SEMI              * 98A6A
           OVER PULL%%EL SWAP OVER =0?(nb) case SWAPDROP * 98A83
           %%1 4PICK PUT%%EL 2GETLAM INDEX@ #=case SWAPDROP * 98AA6
@@ -521,7 +523,7 @@ RREF~1~2:
 
 * ROMPTR 0C2 05E
 * refs (1): 90007
-RREF~1~3:
+RREF~4:
         CODE                                     * 98B28  98 nibbles
           GOSBVL  POP2#                          * 98B32
           R1=C                                   * 98B39
@@ -605,15 +607,15 @@ LIB0C2.link:
         REL(5)  ROMP_0C2_012                     * 98C5C  012 
         REL(5)  ROMP_0C2_013                     * 98C61  013 
         REL(5)  ROMP_0C2_014                     * 98C66  014 
-        REL(5)  EGV~1~1                          * 98C6B  015 
+        REL(5)  EGV~2                            * 98C6B  015 
         REL(5)  ROMP_0C2_016                     * 98C70  016 
         REL(5)  ROMP_0C2_017                     * 98C75  017 
-        REL(5)  EGV~1~1~1                        * 98C7A  018 
-        REL(5)  EGV~1~2                          * 98C7F  019 
+        REL(5)  EGV~3                            * 98C7A  018 
+        REL(5)  EGV~4                            * 98C7F  019 
         REL(5)  ROMP_0C2_01A                     * 98C84  01A 
         REL(5)  ROMP_0C2_01B                     * 98C89  01B 
         REL(5)  ROMP_0C2_01C                     * 98C8E  01C 
-        REL(5)  EGV~1~3                          * 98C93  01D 
+        REL(5)  EGV~5                            * 98C93  01D 
         REL(5)  ROMP_0C2_01E                     * 98C98  01E 
         REL(5)  ROMP_0C2_01F                     * 98C9D  01F 
         REL(5)  ROMP_0C2_020                     * 98CA2  020 
@@ -663,7 +665,7 @@ LIB0C2.link:
         REL(5)  TRACE~1                          * 98D7E  04C 
         REL(5)  COND~1                           * 98D83  04D 
         REL(5)  ROMP_0C2_04E                     * 98D88  04E 
-        REL(5)  COND~1~1                         * 98D8D  04F 
+        REL(5)  COND~2                           * 98D8D  04F 
         REL(5)  LU~1                             * 98D92  050 
         REL(5)  MATDET~1                         * 98D97  051 
         REL(5)  ROMP_0C2_052                     * 98D9C  052 
@@ -672,13 +674,13 @@ LIB0C2.link:
         REL(5)  MATINV~1                         * 98DAB  055 
         REL(5)  ROMP_0C2_056                     * 98DB0  056 
         REL(5)  ROMP_0C2_057                     * 98DB5  057 
-        REL(5)  COND~1~2                         * 98DBA  058 
+        REL(5)  COND~3                           * 98DBA  058 
         REL(5)  ROMP_0C2_059                     * 98DBF  059 
         REL(5)  ROMP_0C2_05A                     * 98DC4  05A 
         REL(5)  RREF~1                           * 98DC9  05B 
-        REL(5)  RREF~1~1                         * 98DCE  05C 
-        REL(5)  RREF~1~2                         * 98DD3  05D 
-        REL(5)  RREF~1~3                         * 98DD8  05E 
+        REL(5)  RREF~2                           * 98DCE  05C 
+        REL(5)  RREF~3                           * 98DD3  05D 
+        REL(5)  RREF~4                           * 98DD8  05E 
         ENDLENGTH                                * 98DDD
         NIBHEX  C0210E06494E4020202A36496E616E63 * 98DDD  ..à`ηä...¢cηæ.æ6
         NIBHEX  656E0                            * 98DFD  Væ

@@ -483,12 +483,12 @@ ROMP_0E4_033:
 
 * ROMPTR 0E4 034
 * refs (1): 9DA1F
-MINIT~1~1:
+MINIT~2:
         :: # E402 ERROROUT ;                     * 9F365
 
 * ROMPTR 0E4 035
 * refs (1): 9DA1F
-MINIT~1~2:
+MINIT~3:
         :: # E403 ERROROUT ;                     * 9F37E
 
 * ROMPTR 0E4 036
@@ -857,8 +857,8 @@ LIB0E4.link:
         REL(5)  ROMP_0E4_031                     * A0740  031 
         REL(5)  ROMP_0E4_032                     * A0745  032 
         REL(5)  ROMP_0E4_033                     * A074A  033 
-        REL(5)  MINIT~1~1                        * A074F  034 
-        REL(5)  MINIT~1~2                        * A0754  035 
+        REL(5)  MINIT~2                          * A074F  034 
+        REL(5)  MINIT~3                          * A0754  035 
         REL(5)  ROMP_0E4_036                     * A0759  036 
         REL(5)  ROMP_0E4_037                     * A075E  037 
         REL(5)  ROMP_0E4_038                     * A0763  038 

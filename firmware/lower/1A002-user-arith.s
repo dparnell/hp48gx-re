@@ -5,7 +5,7 @@
         RPL
 
 * refs (11): B2733 B31D5 B3A23 BBC99 BC1AA BC7B5 ...
-OBJ_1A002:
+~DUPTYPEBINT?;case;JstGetTHEMESG:
         :: DUPTYPEBINT? case JstGetTHEMESG       * 1A002
         ;                                        * 1A016
 
@@ -18,8 +18,9 @@ OBJ_1A03E:
         :: SetDA1Bad SetDA2aBad SetDA2bBad SetDA3Bad ; * 1A03E
 
 * refs (1): 19EBC
-DoInputForm~2~1~2:
-        :: 2DUP Key>U/SKeyOb OBJ_4080F SWAPDROP case2drop 'DoBadKeyT * 1A05C
+DoInputForm~5:
+        :: 2DUP Key>U/SKeyOb ~';MenuMaker;CkSecoType SWAPDROP case2drop * 1A05C
+          'DoBadKeyT                             * 1A07A
           5GETLAM DUP ROMPTR 0B0 088 casedrop OBJ_19F0F * 1A07F
           ROMPTR 0B0 08B NOTcase2drop 'DoBadKeyT * 1A09E
           ROMPTR 0B0 052 ;                       * 1A0B3

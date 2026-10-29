@@ -5,7 +5,7 @@
         RPL
 
 * refs (1): 42000
-WaitForKey~1~1:
+~TakeOver;TRUE;1PUTLAM:
         :: TakeOver TRUE 1PUTLAM ;               * 42023
 
 * -> ob
@@ -50,19 +50,19 @@ UARTxcp:
 * -> #kc flag
 * refs (3): 17FC0 2D9CD 420AA
 GETKEY:
-        :: ATTN? case GETKEY~4                   * 42159
+        :: ATTN? case GETKEY~13                  * 42159
           GETTOUCH case OBJ_421D6                * 4216D
-          GETKEY~6 OBJ_13E22 GETKEY~2 BEGIN GETKEY~5 IT * 4217C
-          :: 2RDROP GETKEY~4 ;                   * 4219A
-          GETKEY~3 ?SKIP GETKEY~2                * 421AE
-          GETKEY~1 GETTOUCH UNTIL OBJ_421D6 ;    * 421BD
+          GETKEY~6 OBJ_13E22 GETKEY~1 BEGIN GETKEY~5 IT * 4217C
+          :: 2RDROP GETKEY~13 ;                  * 4219A
+          GETKEY~3 ?SKIP GETKEY~1                * 421AE
+          GETKEY~10 GETTOUCH UNTIL OBJ_421D6 ;   * 421BD
 
 * refs (3): 42109 42177 421CC
 OBJ_421D6:
         :: OBJ_4231A OBJ_42396 ClrDouseAlm TRUE ; * 421D6
 
 * refs (2): 42168 421A4
-GETKEY~4:
+GETKEY~13:
         :: OBJ_4231A FALSE ;                     * 421F4
 
 * refs (1): 42190
@@ -70,7 +70,7 @@ GETKEY~5:
         :: ATTN? caseTRUE KEYINBUFFER?           * 42208
           caseFALSE UART?                        * 4221C
           caseTRUE TIMEOUT?                      * 42226
-          caseTRUE GETKEY~5~1                    * 42230
+          caseTRUE GETKEY~7                      * 42230
           caseFALSE ALARM?                       * 4223A
         ;                                        * 42244
 
@@ -191,7 +191,7 @@ SUB_42359:
         RTN                                      * 4237D
 
 * refs (1): 423F8
-GETKEY~6~2:
+GETKEY~9:
         CON(5)  (*)+5                            * 4237F  primitive code object
         GOSBVL  SAVPTR                           * 42384
         ST=0    15                               * 4238B
@@ -228,8 +228,8 @@ L_423D6:
 
 * refs (1): 4217C
 GETKEY~6:
-        :: NoEditLine? ?SKIP GETKEY~6~1          * 423E4
-          GETKEY~6~2 ;                           * 423F8
+        :: NoEditLine? ?SKIP GETKEY~8            * 423E4
+          GETKEY~9 ;                             * 423F8
 
 * -> flag
 * refs (23): 19B2B 19CBD 395A1 39B8A 3A1CF 42217 ...
@@ -270,7 +270,7 @@ CtlAlarm@:
         GOVLNG  SysPtr@                          * 424AD
 
 * refs (1): 38953
-SysErrorTrap~1~1:
+SysErrorTrap~2:
         CON(5)  (*)+5                            * 424B4  primitive code object
         LC(5)   CtlAlarm                         * 424B9
         GOVLNG  L_08D35                          * 424C0
@@ -527,7 +527,7 @@ OBJ_42B61:
           CHR_Newline InsertEcho CURSOR_OFF0 OBJ_13F69 SETFIRSTC_0 OBJ_11422 ; * 42B7F
 
 * refs (1): 443D0
-EditString~1:
+~ChkNoChr0!(st);Echo$NoChr00:
         :: ChkNoChr0!(st) Echo$NoChr00 ;         * 42BA2
 
 * $ ->
@@ -613,7 +613,7 @@ ObEdit:
         ;                                        * 42DFA
 
 * refs (2): 3AE85 43F3A
-OBJ_42DFF:
+~Roll&Do:;EditLevel1:
         :: PTR Roll&Do: EditLevel1 ;             * 42DFF
 
 * refs (2): 3AE49 43EF4
@@ -718,11 +718,11 @@ true;dup;1Lput:
 * refs (1): 4316A
 InputLAttn:
         :: TakeOver DAsBad? ?SEMI                * 43200
-          InputLAttn~2 NOT 3GETLAM NOT ANDcase InputLAttn~1 * 43214
+          InputLAttn~1 NOT 3GETLAM NOT ANDcase ~InitEdLine;NULL$;EditString * 43214
           FalseTrue 1PUTLAM ;                    * 43232
 
 * refs (1): 4322D
-InputLAttn~1:
+~InitEdLine;NULL$;EditString:
         :: InitEdLine NULL$ EditString ;         * 43241
 
 * # -> {# #'} ->
@@ -781,17 +781,18 @@ input(st,li):
 
 * refs (1): 43426
 input(st,li)~string:
-        :: BINT1 OBJ_43644 ;                     * 434A3
+        :: BINT1 ~4ROLL;PUTLIST;SWAP ;           * 434A3
 
 * refs (1): 43430
 input(st,li)~real:
-        :: OBJ_43608 COERCE BINT2 OBJ_43644 ;    * 434B7
+        :: OBJ_43608 COERCE BINT2 ~4ROLL;PUTLIST;SWAP ; * 434B7
 
 * refs (1): 4343A
 input(st,li)~list:
         :: INNERCOMP BINT2 #<>case SETSIZEERR    * 434D5
           DUPTYPEREAL? 3PICK TYPEREAL? ANDNOTcase SETSIZEERR * 434EE
-          4UNROLL OBJ_43608 COERCE 4ROLL COERCE TWO{}N BINT2 OBJ_43644 ; * 43507
+          4UNROLL OBJ_43608 COERCE 4ROLL COERCE TWO{}N BINT2 * 43507
+          ~4ROLL;PUTLIST;SWAP ;                  * 4352A
 
 * refs (2): 43444 4344E
 input(st,li)~1:
@@ -802,7 +803,7 @@ ALG:
 
 ΠALG:
           LAM ALG EQUALOR casedrop               * 43555
-          :: BINT2 BINT4 OBJ_43644 ;             * 4356C
+          :: BINT2 BINT4 ~4ROLL;PUTLIST;SWAP ;   * 4356C
           DUP'                                   * 43585
 
 à:
@@ -810,7 +811,7 @@ ALG:
 
 Πà:
           LAM α EQUALOR casedrop                 * 4359D
-          :: BINT1 BINT5 OBJ_43644 ;             * 435B0
+          :: BINT1 BINT5 ~4ROLL;PUTLIST;SWAP ;   * 435B0
           DUP'                                   * 435C9
 
 V:
@@ -818,15 +819,15 @@ V:
 
 ΠV:
           LAM V EQUALOR NcaseSIZEERR BINT1       * 435E1
-          BINT6 OBJ_43644 ;                      * 435F9
+          BINT6 ~4ROLL;PUTLIST;SWAP ;            * 435F9
 
 * refs (2): 434BC 4350C
 OBJ_43608:
         :: DUP4UNROLL %0_2A2B4 %< ITE BINT2 BINT1 * 43608
-          BINT3 OBJ_43644 ROT %ABS ;             * 4362B
+          BINT3 ~4ROLL;PUTLIST;SWAP ROT %ABS ;   * 4362B
 
 * refs (7): 434AD 434CB 4352A 4357B 435BF 435FE ...
-OBJ_43644:
+~4ROLL;PUTLIST;SWAP:
         :: 4ROLL PUTLIST SWAP ;                  * 43644
 
 * refs (7): 3B36E 3B37D 3DDD9 3E5E4 8EB84 D51AD ...
@@ -860,7 +861,7 @@ OBJ_437A2:
 * refs (1): 437B1
 OBJ_437C5:
         :: TOADISP ClrAbbrevStk 3GETLAM 2GETLAM #1-+ BINT4 ZERO_DO * 437C5
-          ISTOP-INDEX OVER OVER#- #1+DUP #3+ OBJ_4416A pick(s)? OBJ_39DBF * 437ED
+          ISTOP-INDEX OVER OVER#- #1+DUP #3+ ~4GETLAM;#+ pick(s)? OBJ_39DBF * 437ED
           ISTOP-INDEX 2GETLAM #= IT OBJ_441BF    * 43815
           LOOP DROP SetDA2Valid ;                * 4382E
 
@@ -903,14 +904,14 @@ OBJ_43982:
 
 * refs (1): 4389C
 OBJ_439F5:
-        :: TakeOver 3GETLAM OBJ_4417E #1- #=case DoBadKey * 439F5
+        :: TakeOver 3GETLAM ~DEPTH;4GETLAM;#- #1- #=case DoBadKey * 439F5
           TOADISP REPEATER BINT11 OBJ_43A36 SetDA123NoCh ; * 43A18
 
 * refs (1): 43A27
 OBJ_43A36:
-        :: 3GETLAM OBJ_4417E #3- #= ?SEMI        * 43A36
+        :: 3GETLAM ~DEPTH;4GETLAM;#- #3- #= ?SEMI * 43A36
           OBJ_441D3 3GETLAM #1+ 3PUTLAM 2GETLAM BINT1 #=ITE * 43A54
-          :: BINT3 ScreenDnN BINT1 3GETLAM DUP #4+ OBJ_4416A pick(s)? * 43A77
+          :: BINT3 ScreenDnN BINT1 3GETLAM DUP #4+ ~4GETLAM;#+ pick(s)? * 43A77
             OBJ_39DBF ;                          * 43AA4
           :: 2GETLAM #1- 2PUTLAM ; OBJ_441BF ;   * 43AAE
 
@@ -923,13 +924,13 @@ OBJ_43AD1:
 OBJ_43B0D:
         :: 3GETLAM #1= ?SEMI                     * 43B0D
           OBJ_441D3 3GETLAM #1- 3PUTLAM 2GETLAM BINT4 #=ITE * 43B21
-          :: BINT3 ScreenUpN BINT4 3GETLAM DUP #4+ OBJ_4416A pick(s)? * 43B44
+          :: BINT3 ScreenUpN BINT4 3GETLAM DUP #4+ ~4GETLAM;#+ pick(s)? * 43B44
             OBJ_39DBF ;                          * 43B71
           :: 2GETLAM #1+ 2PUTLAM ; OBJ_441BF ;   * 43B7B
 
 * refs (1): 43932
 OBJ_43B9E:
-        :: TakeOver OBJ_4417E 3GETLAM 2DUP#= case2drop DoBadKey * 43B9E
+        :: TakeOver ~DEPTH;4GETLAM;#- 3GETLAM 2DUP#= case2drop DoBadKey * 43B9E
           2DUPSWAP BINT4 #MAX #4- #>ITE          * 43BC1
 
 drop;3Lput:
@@ -945,7 +946,7 @@ OBJ_43C16:
 
 * refs (1): 439A5
 OBJ_43C89:
-        :: TakeOver OBJ_4417E 3PUTLAM OBJ_44110 SetDA13NoCh ; * 43C89
+        :: TakeOver ~DEPTH;4GETLAM;#- 3PUTLAM OBJ_44110 SetDA13NoCh ; * 43C89
 
 * refs (1): 439B4
 OBJ_43CAC:
@@ -953,12 +954,12 @@ OBJ_43CAC:
 
 * refs (1): 438D8
 OBJ_43CD4:
-        :: TakeOver OBJ_44259 ;                  * 43CD4
+        :: TakeOver ~TRUE;1PUTLAM ;              * 43CD4
 
 * refs (1): 438E7
 OBJ_43CE8:
         :: TakeOver DAsBad? ?SEMI                * 43CE8
-          OBJ_44259 ;                            * 43CFC
+          ~TRUE;1PUTLAM ;                        * 43CFC
 
 * refs (1): 43720
 MenuSTACK:
@@ -1019,7 +1020,7 @@ _LEVEL_:
 
 * refs (1): 43D1F
 \ECHO:
-        :: TakeOver 3GETLAM OBJ_4416A PICK DUP OBJ_408C3 CkChr00 NOT * 43E40
+        :: TakeOver 3GETLAM ~4GETLAM;#+ PICK DUP OBJ_408C3 CkChr00 NOT * 43E40
           case2drop                              * 43E6D
           :: #_102 JstGetTHEMESG DoWarning SetDA23NoCh ; * 43E72
           SWAP AdjEdModes DROP NoEditLine? ITE   * 43E90
@@ -1036,7 +1037,7 @@ _LEVEL_:
 
 * refs (2): 438BA 43950
 OBJ_43F26:
-        :: ComLine?:(bip;q) 3GETLAM UNCOERCE OBJ_42DFF OBJ_440CF ; * 43F26
+        :: ComLine?:(bip;q) 3GETLAM UNCOERCE ~Roll&Do:;EditLevel1 OBJ_440CF ; * 43F26
 
 * refs (1): 439C3
 OBJ_43F49:
@@ -1044,23 +1045,23 @@ OBJ_43F49:
 
 * refs (1): 43D68
 \PICK:
-        :: OBJ_4409D PICK OBJ_440BB ;            * 43F6C
+        :: OBJ_4409D PICK ~AtUserStack;SetDA13NoCh ; * 43F6C
 
 * refs (1): 43D7C
 \ROLL:
-        :: OBJ_4409D ROLL OBJ_440BB ;            * 43F85
+        :: OBJ_4409D ROLL ~AtUserStack;SetDA13NoCh ; * 43F85
 
 * refs (1): 43D90
 \ROLLD:
-        :: OBJ_4409D UNROLL OBJ_440BB ;          * 43F9E
+        :: OBJ_4409D UNROLL ~AtUserStack;SetDA13NoCh ; * 43F9E
 
 * refs (1): 43E1D
 \LEVEL:
-        :: TakeOver 3GETLAM UNCOERCE OBJ_440BB ; * 43FB7
+        :: TakeOver 3GETLAM UNCOERCE ~AtUserStack;SetDA13NoCh ; * 43FB7
 
 * refs (1): 43DB8
 \DUPN:
-        :: OBJ_4409D NDUP OBJ_440BB ;            * 43FD5
+        :: OBJ_4409D NDUP ~AtUserStack;SetDA13NoCh ; * 43FD5
 
 * refs (1): 43DD9
 \DRPN:

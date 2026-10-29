@@ -5,24 +5,24 @@
         RPL
 
 * refs (3): 33571 33684 3371A
-NUMSOLVE~5:
+NUMSOLVE~8:
         :: BINT2 BINT5 GOTO L_34051 ;            * 34006
 
 * refs (5): 333F5 33495 334D6 335DA 3382D
-NUMSOLVE~6:
+NUMSOLVE~9:
         :: BINT2 BINT4 GOTO L_34051 ;            * 34024
 
 * refs (1): 33B1B
-NUMSOLVE~7:
+NUMSOLVE~10:
         :: BINT1 BINT5                           * 34042
 L_34051:
           CHECKKEY NOTcase2DROP 7GETLAM          * 34051
           case 3DROP                             * 34060
           DROPOVER OBJ_34771 OVER OBJ_34771 2DUP %< ITE ROTSWAP 4ROLLROT * 3406A
-          NUMSOLVE~7~1 DISPROW1 NUMSOLVE~7~1 DISPROW2 ; * 34097
+          NUMSOLVE~11 DISPROW1 NUMSOLVE~11 DISPROW2 ; * 34097
 
 * refs (2): 34097 340A1
-NUMSOLVE~7~1:
+NUMSOLVE~11:
         :: DUP a%>$ SWAP %0<                     * 340B0
 * The Very Big List names this address +("+",st), but it is a pointer inside an object; the name is not used
           ?SKIP                                  * 340C9
@@ -43,37 +43,37 @@ NUMSOLVE~7~1:
           ROTDROP !insert$ ;                     * 3413F
 
 * refs (4): 33175 331AC 331CA 333AF
-NUMSOLVE~8:
+NUMSOLVE~12:
         :: NoAttn?Semi BINT2 BINT3 BINT4 GOTO L_34298 ; * 3414E
 
 * refs (2): 33422 33468
-NUMSOLVE~9:
+NUMSOLVE~13:
         :: NoAttn?Semi BINT2 BINT5 BINT4 GOTO L_34298 ; * 34176
 
 * refs (1): 33553
-NUMSOLVE~10:
+NUMSOLVE~14:
         :: NoAttn?Semi BINT2 BINT3 BINT4 GOTO L_34298 ; * 3419E
 
 * refs (1): 33666
-NUMSOLVE~11:
+NUMSOLVE~15:
         :: NoAttn?Semi BINT4 BINT3 BINT2 GOTO L_34298 ; * 341C6
 
 * refs (1): 337CE
-NUMSOLVE~12:
+NUMSOLVE~16:
         :: NoAttn?Semi BINT4 BINT2 BINT5 GOTO L_34298 ; * 341EE
 
 * refs (1): 33A80
-NUMSOLVE~13:
-        :: NoAttn?Semi BINT2 BINT4 BINT3 GOTO NUMSOLVE~13~1 ; * 34216
+NUMSOLVE~17:
+        :: NoAttn?Semi BINT2 BINT4 BINT3 GOTO NUMSOLVE~19 ; * 34216
 
 * refs (1): 33B6B
-NUMSOLVE~14:
+NUMSOLVE~18:
         :: NoAttn?Semi BINT1 BINT5 BINT4         * 3423E
-NUMSOLVE~13~1:
+NUMSOLVE~19:
           3UNROLL                                * 34257
 
 * refs (1): 33C38
-NUMSOLVE~15:
+NUMSOLVE~20:
           :: OVER OBJ_347DA %ABS OVER OBJ_347DA %ABS %<= ?SEMI * 3425C
             SWAP ;                               * 34289
           ROT                                    * 34293
@@ -90,7 +90,7 @@ ATTN#:
           # A03 FLUSHKEYS ATTNFLGCLR TRUE ;      * 34301
 
 * refs (47): 33166 33170 33198 331BB 331E3 33224 ...
-NUMSOLVE~16:
+NUMSOLVE~21:
         CON(5)  (*)+5                            * 3431F  primitive code object
         ASSEMBLE
         GOSUB   SUB_34847                        * 34324
@@ -131,13 +131,13 @@ OBJ_3437C:
         GOTO    L_343A4                          * 34385
 
 * refs (2): 334AE 33521
-NUMSOLVE~17:
+NUMSOLVE~22:
         CON(5)  (*)+5                            * 34389  primitive code object
         C=0     A                                * 3438E
         GOTO    L_343A0                          * 34390
 
 * refs (6): 331CF 33486 33558 3366B 33A85 33B70
-NUMSOLVE~18:
+NUMSOLVE~23:
         CON(5)  (*)+5                            * 34394  primitive code object
         LC(5)   #00003                           * 34399
 L_343A0:
@@ -161,7 +161,7 @@ L_343CD:
         GOTO    L_34A4F                          * 343CD
 
 * refs (5): 33409 3350D 3368E 33837 33B25
-NUMSOLVE~19:
+NUMSOLVE~24:
         CON(5)  (*)+5                            * 343D1  primitive code object
         GOSUB   SUB_34847                        * 343D6
         GOSUB   SUB_3448A                        * 343DA
@@ -289,7 +289,7 @@ L_3453A:
         GOTO    L_34A4F                          * 34542
 
 * refs (4): 3344F 33639 337E7 33A58
-NUMSOLVE~20:
+NUMSOLVE~25:
         CON(5)  (*)+5                            * 34546  primitive code object
         GOSUB   SUB_34847                        * 3454B
         GOSBVL  SAVPTR                           * 3454F
@@ -371,7 +371,7 @@ L_34620:
         GOVLNG  PushFLoop                        * 34620
 
 * refs (1): 33846
-NUMSOLVE~21:
+NUMSOLVE~26:
         CON(5)  (*)+5                            * 34627  primitive code object
         GOSUB   SUB_348DC                        * 3462C
         GOSBVL  SAVPTR                           * 34630
@@ -446,19 +446,19 @@ SUB_346D1:
         RTN                                      * 346E6
 
 * refs (10): 33157 331C0 3337D 33418 3345E 33549 ...
-NUMSOLVE~22:
+NUMSOLVE~27:
         CON(5)  (*)+5                            * 346E8  primitive code object
         LC(5)   #00003                           * 346ED
         GOTO    L_34714                          * 346F4
 
 * refs (2): 3314D 33378
-NUMSOLVE~23:
+NUMSOLVE~28:
         CON(5)  (*)+5                            * 346F8  primitive code object
         LC(5)   #00004                           * 346FD
         GOTO    L_34714                          * 34704
 
 * refs (1): 33152
-NUMSOLVE~24:
+NUMSOLVE~29:
         CON(5)  (*)+5                            * 34708  primitive code object
         LC(5)   #00005                           * 3470D
 L_34714:
@@ -485,7 +485,7 @@ L_34744:
         PC=(A)                                   * 3474A
 
 * refs (1): 33D78
-NUMSOLVE~2~3:
+NUMSOLVE~30:
         CON(5)  (*)+5                            * 3474E  primitive code object
         LC(5)   #00003                           * 34753
         GOSUB   SUB_348BC                        * 3475A
@@ -514,7 +514,7 @@ OBJ_3478E:
         GOTO    L_347BA                          * 3479A
 
 * refs (2): 33D0A 33D96
-NUMSOLVE~2~4:
+NUMSOLVE~31:
         CON(5)  (*)+5                            * 3479E  primitive code object
         LC(5)   #00003                           * 347A3
         GOTO    L_347BA                          * 347AA
@@ -557,7 +557,7 @@ OBJ_347F7:
         GOTO    L_34833                          * 34803
 
 * refs (7): 3320B 33279 332D3 33328 336B6 33A94 ...
-NUMSOLVE~25:
+NUMSOLVE~32:
         CON(5)  (*)+5                            * 34807  primitive code object
         LC(5)   #00003                           * 3480C
         GOTO    L_34833                          * 34813
@@ -570,7 +570,7 @@ OBJ_34817:
         GOTO    L_34833                          * 34823
 
 * refs (1): 33B84
-NUMSOLVE~26:
+NUMSOLVE~33:
         CON(5)  (*)+5                            * 34827  primitive code object
         LC(5)   #00005                           * 3482C
 L_34833:
@@ -675,7 +675,7 @@ L_34906:
         RTN                                      * 34919
 
 * refs (13): 3330F 33341 333DC 33481 334B8 3353A ...
-NUMSOLVE~27:
+NUMSOLVE~34:
         CON(5)  (*)+5                            * 3491B  primitive code object
         LC(5)   TEMPENV                          * 34920
         CD0EX                                    * 34927
@@ -696,7 +696,7 @@ L_3494B:
         RPL
 
 * refs (2): 3317A 33382
-NUMSOLVE~28:
+NUMSOLVE~35:
         :: 2GETLAM                               * 34957
           CODE                                   * 34961  86 nibbles
             A=DAT1  A                            * 3496B
@@ -729,7 +729,7 @@ NUMSOLVE~28:
         ;                                        * 349C1
 
 * refs (2): 33355 33369
-NUMSOLVE~29:
+NUMSOLVE~36:
         CON(5)  (*)+5                            * 349C6  primitive code object
         ASSEMBLE
         A=DAT1  A                                * 349CB
@@ -755,7 +755,7 @@ L_34A01:
         GOVLNG  L_5436A                          * 34A01
 
 * refs (1): 338A0
-NUMSOLVE~30:
+NUMSOLVE~37:
         CON(5)  (*)+5                            * 34A08  primitive code object
         C=DAT1  A                                * 34A0D
         CD1EX                                    * 34A10
@@ -763,7 +763,7 @@ NUMSOLVE~30:
         GOTO    L_34A25                          * 34A16
 
 * refs (7): 33210 332A1 332E2 335AD 336C5 33A9E ...
-NUMSOLVE~31:
+NUMSOLVE~38:
         CON(5)  (*)+5                            * 34A1A  primitive code object
         C=DAT1  A                                * 34A1F
         CD1EX                                    * 34A22
@@ -786,7 +786,7 @@ L_34A4F:
         GOVLNG  OverWrT/FLp                      * 34A4F
 
 * refs (1): 33927
-NUMSOLVE~32:
+NUMSOLVE~39:
         CON(5)  (*)+5                            * 34A56  primitive code object
         GOSUB   SUB_34CC4                        * 34A5B
         ?D#0    M                                * 34A5F
@@ -844,7 +844,7 @@ L_34AF5:
         GOTO    L_34AE1                          * 34B29
 
 * refs (1): 3374C
-NUMSOLVE~33:
+NUMSOLVE~40:
         CON(5)  (*)+5                            * 34B2D  primitive code object
         GOSUB   SUB_34CC4                        * 34B32
         GOSUB   SUB_34C62                        * 34B36
@@ -864,7 +864,7 @@ NUMSOLVE~33:
         GOTO    L_34C3E                          * 34B73
 
 * refs (1): 33882
-NUMSOLVE~34:
+NUMSOLVE~41:
         CON(5)  (*)+5                            * 34B77  primitive code object
         GOSUB   SUB_34C96                        * 34B7C
         GOSUB   DIVF~jump                        * 34B80
@@ -872,7 +872,7 @@ NUMSOLVE~34:
         GOSBVL  RADD1                            * 34B87
         GOSUB   STAB0~jump                       * 34B8E
         GOSUB   SUB_34CA7                        * 34B92
-        GOSUB   Pop%ACSrSep~jump_34C99           * 34B96
+        GOSUB   Pop%ACSrSep~jump_2               * 34B96
         GOSUB   STAB2~jump                       * 34B9A
         GOSUB   SUB_34C62                        * 34B9E
         GOSUB   SUB_34C6C                        * 34BA2
@@ -882,7 +882,7 @@ NUMSOLVE~34:
         GOTO    L_34C3E                          * 34BB1
 
 * refs (1): 33607
-NUMSOLVE~35:
+NUMSOLVE~42:
         CON(5)  (*)+5                            * 34BB5  primitive code object
         GOSUB   SUB_34C96                        * 34BBA
         GOSUB   DIVF~jump                        * 34BBE
@@ -908,7 +908,7 @@ NUMSOLVE~35:
 L_34BFD:
         GOSUB   STAB0~jump                       * 34BFD
         GOSUB   SUB_34CA7                        * 34C01
-        GOSUB   Pop%ACSrSep~jump_34C99           * 34C05
+        GOSUB   Pop%ACSrSep~jump_2               * 34C05
         GOSUB   STAB2~jump                       * 34C09
         GOSUB   SUB_34C62                        * 34C0D
         GOSUB   SUB_34C6C                        * 34C11
@@ -917,7 +917,7 @@ L_34BFD:
         GOTO    L_34C3E                          * 34C1D
 
 * refs (1): 334E5
-NUMSOLVE~36:
+NUMSOLVE~43:
         CON(5)  (*)+5                            * 34C21  primitive code object
         GOSUB   SUB_34C96                        * 34C26
         GOSUB   STAB0~jump                       * 34C2A
@@ -933,7 +933,7 @@ L_34C3E:
 * refs (4): 174DC 17577 339E0 352D2
 OBJ_34C49:
         CON(5)  (*)+5                            * 34C49  primitive code object
-        GOSUB   POP1%%~jump_34CB6                * 34C4E
+        GOSUB   POP1%%~jump_2                    * 34C4E
         GOTO    L_34C3E                          * 34C52
 
 * refs (3): 34429 344E4 34578
@@ -982,7 +982,7 @@ SUB_34C96:
         HST=0   3                                * 34C96
 
 * refs (2): 34B96 34C05
-Pop%ACSrSep~jump_34C99:
+Pop%ACSrSep~jump_2:
         GOVLNG  Pop%ACSrSep                      * 34C99
 
 * refs (6): 344F1 3450B 3457E 34665 3469E 34BED
@@ -1000,7 +1000,7 @@ SUB_34CB2:
         GOSUB   SUB_34CA7                        * 34CB2
 
 * refs (1): 34C4E
-POP1%%~jump_34CB6:
+POP1%%~jump_2:
         GOVLNG  POP1%%                           * 34CB6
 
 * refs (4): 34A77 34AF9 34B3E 34B55
@@ -1026,7 +1026,7 @@ SUB_34CCE:
         RPL
 
 * refs (2): 33657 33A71
-NUMSOLVE~37:
+NUMSOLVE~44:
         :: OBJ_344C7 NOTcaseDROP                 * 34CE2
           CODE                                   * 34CF1  43 nibbles
             GOSUB   SUB_34C96                    * 34CFB
@@ -1304,17 +1304,17 @@ OBJ_35264:
 
 * refs (1): 3527D
 ->StdStr(r):
-        :: TempStd ERRSET a%>$ ERRTRAP OBJ_352AF RclOldMode ; * 35287
+        :: TempStd ERRSET a%>$ ERRTRAP ~RclOldMode;ERRJMP RclOldMode ; * 35287
 
 * refs (2): 352A0 35309
-OBJ_352AF:
+~RclOldMode;ERRJMP:
         :: RclOldMode ERRJMP ;                   * 352AF
 
 * refs (1): 5F9D2
 ->StdStr(c):
         :: DUP OBJ_1DE19 OBJ_34C49 OBJ_35236 casedrop ->str(c) * 352C3
           OBJ_35236 case ->str(c)                * 352E6
-          TempStd ERRSET ->str(c) ERRTRAP OBJ_352AF RclOldMode ; * 352F5
+          TempStd ERRSET ->str(c) ERRTRAP ~RclOldMode;ERRJMP RclOldMode ; * 352F5
 
 * refs (1): 34F16
 OBJ_35318:
@@ -1382,7 +1382,7 @@ L_353F1:
 L_3540A:
           DUPSAFE@ ?GOTO L_35423 COLA apndvarlst * 3540A
 L_35423:
-          DUP FINDVAR~1~1 ?GOTO L_3545A TYPERRP? NOTcase apndvarlst * 35423
+          DUP FINDVAR~2 ?GOTO L_3545A TYPERRP? NOTcase apndvarlst * 35423
           ROTSWAP apndvarlst COLA SWAP           * 35446
 L_3545A:
           4ROLLROT OVER matchob? ?GOTO L_35487 >TCOMP 3UNROLL COLA FINDVAR~1 * 3545A
@@ -1400,7 +1400,7 @@ OBJ_354AF:
         :: INHARDROM? NOT SWAP DUPTYPECOL? SWAP TYPESYMB? OR AND ; * 354AF
 
 * refs (1): 35428
-FINDVAR~1~1:
+FINDVAR~2:
         :: DUPTYPEIDNT? SWAP OBJ_354AF OR ;      * 354E1
         NIBHEX  A803000                          * 354FF  ≥0.
 
@@ -1414,8 +1414,8 @@ LIB005:
 
 * refs (2): 355BD 35607
 SUB_3551D:
-        GOSUB   POP#~jump_35AD2                  * 3551D
-        GOSUB   SAVPTR~jump_35AD9                * 35521
+        GOSUB   POP#~jump_2                      * 3551D
+        GOSUB   SAVPTR~jump_16                   * 35521
         C=DAT1  A                                * 35525
         D1=C                                     * 35528
         D1=D1+  15                               * 3552B
@@ -1436,8 +1436,8 @@ L_3553F:
 
 * refs (2): 355CD 35619
 SUB_35551:
-        GOSUB   POP#~jump_35AD2                  * 35551
-        GOSUB   SAVPTR~jump_35AD9                * 35555
+        GOSUB   POP#~jump_2                      * 35551
+        GOSUB   SAVPTR~jump_16                   * 35555
         C=DAT1  A                                * 35559
         D1=C                                     * 3555C
         D1=D1+  15                               * 3555F
@@ -1518,7 +1518,7 @@ L_35612:
         GOVLNG  L_37915                          * 35612
 L_35619:
         GOSUB   SUB_35551                        * 35619
-        GOSUB   SPLTAC~jump_35AE7                * 3561D
+        GOSUB   SPLTAC~jump_2                    * 3561D
         GOVLNG  L_51BA2                          * 35621
 
 * [%] % # -> [%]' [C%] C% # -> [C%]'
@@ -1578,7 +1578,7 @@ L_35697:
 
 * refs (2): 35674 356F8
 SUB_356B3:
-        GOSUB   POP#~jump_35AD2                  * 356B3
+        GOSUB   POP#~jump_2                      * 356B3
         R0=A                                     * 356B7
         C=DAT1  A                                * 356BA
         D1=D1+  5                                * 356BD
@@ -1589,7 +1589,7 @@ SUB_356B3:
         AR0EX                                    * 356CC
         RTN                                      * 356CF
 L_356D1:
-        GOSUB   POP#~jump_35AD2                  * 356D1
+        GOSUB   POP#~jump_2                      * 356D1
         R0=A                                     * 356D5
         GOSBVL  POP1%%                           * 356D8
         GOSUB   PACK~jump                        * 356DF
@@ -1639,7 +1639,7 @@ L_3574C:
         D0=D0+  5                                * 3574F
         PC=(A)                                   * 35752
 L_35756:
-        GOSUB   POP#~jump_35AD2                  * 35756
+        GOSUB   POP#~jump_2                      * 35756
         R0=A                                     * 3575A
         GOSBVL  POPC%%                           * 3575D
         GOSBVL  STCD2                            * 35764
@@ -1674,7 +1674,7 @@ MDIMS:
         A=DAT1  A                                * 357AD
         D1=D1+  5                                * 357B0
         D=D+1   A                                * 357B3
-        GOSUB   SAVPTR~jump_35AD9                * 357B5
+        GOSUB   SAVPTR~jump_16                   * 357B5
         D1=A                                     * 357B9
         D1=D1+  15                               * 357BC
         C=DAT1  A                                * 357BF
@@ -1721,12 +1721,12 @@ SUB_3580D:
 * refs (1): 36566
 OBJ_3582F:
         CON(5)  (*)+5                            * 3582F  primitive code object
-        GOSUB   POP#~jump_35AD2                  * 35834
+        GOSUB   POP#~jump_2                      * 35834
         R4=A                                     * 35838
-        GOSUB   POP#~jump_35AD2                  * 3583B
+        GOSUB   POP#~jump_2                      * 3583B
         R0=A                                     * 3583F
-        GOSUB   POP#~jump_35AD2                  * 35842
-        GOSUB   SAVPTR~jump_35AD9                * 35846
+        GOSUB   POP#~jump_2                      * 35842
+        GOSUB   SAVPTR~jump_16                   * 35846
         C=DAT1  A                                * 3584A
         D0=C                                     * 3584D
         D1=D1+  5                                * 35850
@@ -1914,7 +1914,7 @@ L_35A13:
 SUB_35A22:
         GOSUB   SUB_35A70                        * 35A22
         RTNC                                     * 35A26
-        GOSUB   SPLTAC~jump_35AE7                * 35A29
+        GOSUB   SPLTAC~jump_2                    * 35A29
 L_35A2D:
         GOSBVL  MULTF                            * 35A2D
         GOSBVL  RCCD0                            * 35A34
@@ -1925,7 +1925,7 @@ L_35A2D:
 SUB_35A49:
         GOSUB   SUB_35A70                        * 35A49
         RTNC                                     * 35A4D
-        GOSUB   SPLTAC~jump_35AE7                * 35A50
+        GOSUB   SPLTAC~jump_2                    * 35A50
 L_35A54:
         GOSBVL  MULTF                            * 35A54
         GOSBVL  RCCD2                            * 35A5B
@@ -1980,11 +1980,11 @@ SUB_35ABD:
         RTN                                      * 35AD0
 
 * refs (8): 3551D 35551 356B3 356D1 35756 35834 ...
-POP#~jump_35AD2:
+POP#~jump_2:
         GOVLNG  POP#                             * 35AD2
 
 * refs (4): 35521 35555 357B5 35846
-SAVPTR~jump_35AD9:
+SAVPTR~jump_16:
         GOVLNG  SAVPTR                           * 35AD9
 
 * refs (3): 356DF 3576B 35779
@@ -1992,7 +1992,7 @@ PACK~jump:
         GOVLNG  PACK                             * 35AE0
 
 * refs (3): 3561D 35A29 35A50
-SPLTAC~jump_35AE7:
+SPLTAC~jump_2:
         GOVLNG  SPLTAC                           * 35AE7
 
 * refs (7): 36138 361E7 366B0 3687C 36B19 36B6F ...
@@ -2098,7 +2098,7 @@ OBJ_35BF5:
         RPL
 
 * refs (4): 35CC7 36363 36AAE 37E32
-OBJ_35C18:
+~SWAP;FreeRefs:
         :: SWAP FreeRefs ;                       * 35C18
 
 * seco [F%] -> [F%]'
@@ -2120,7 +2120,7 @@ MATCON:
 
 * refs (2): 1D253 1D27B
 @con(ar,nb):
-        :: OBJ_35C18                             * 35CC2
+        :: ~SWAP;FreeRefs                        * 35CC2
 
 * refs (1): 35CB8
 @con!(nb,ar):
@@ -2148,7 +2148,7 @@ MATIDN:
 @idn!(ar):
         CON(5)  (*)+5                            * 35D71  primitive code object
         ASSEMBLE
-        GOSUBL  SAVPTR~jump_376AC                * 35D76
+        GOSUBL  SAVPTR~jump_17                   * 35D76
         C=DAT1  A                                * 35D7C
         D1=C                                     * 35D7F
         D1=D1+  5                                * 35D82

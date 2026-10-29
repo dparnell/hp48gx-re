@@ -246,16 +246,16 @@ OBJ_57676:
 
 * meta ob -> meta ob flag
 ObInMeta?:
-          OBJ_576CB                              * 5768A
-          DUP #3+PICK 3PICK EQUALcase OBJ_576B7  * 5768F
+          ~DROPRDROP;FALSE                       * 5768A
+          DUP #3+PICK 3PICK EQUALcase ~DROPRDROP;TRUE * 5768F
           #1- AGAIN ;                            * 576A8
 
 * refs (2): 576A3 584DA
-OBJ_576B7:
+~DROPRDROP;TRUE:
         :: DROPRDROP TRUE ;                      * 576B7
 
 * refs (2): 5768A 584FD
-OBJ_576CB:
+~DROPRDROP;FALSE:
         :: DROPRDROP FALSE ;                     * 576CB
 
 * refs (2): 86F10 86F5B
@@ -263,28 +263,28 @@ OBJ_576DF:
         ::                                       * 576DF
 
 {PI,I,*}:
-          { xPI xi x* } INNERCOMP OBJ_57888 SWAP#1+ meta* ; * 576E4
+          { xPI xi x* } INNERCOMP ~TRUE;Π'ni;EVAL SWAP#1+ meta* ; * 576E4
 
 * refs (6): 86D5D 86E3E 86E7A 86F38 86F7E 86FC4
 OBJ_57716:
         ::                                       * 57716
 
 {2,Pi,*,I,*}:
-          { %2 xPI x* xi x* } INNERCOMP OBJ_57888 SWAP#1+ meta* ; * 5771B
+          { %2 xPI x* xi x* } INNERCOMP ~TRUE;Π'ni;EVAL SWAP#1+ meta* ; * 5771B
 
 * refs (1): 86ECA
 OBJ_57757:
         :: RAD? case                             * 57757
-          :: %2 ' xPI 'x* OBJ_57888 'x* BINT5 ;  * 57766
+          :: %2 ' xPI 'x* ~TRUE;Π'ni;EVAL 'x* BINT5 ; * 57766
           DEG? ITE %360 %400                     * 57793
-          OBJ_57888 ' x* BINT3 ;                 * 577A7
+          ~TRUE;Π'ni;EVAL ' x* BINT3 ;           * 577A7
 
 * refs (2): 86EA2 86EED
 OBJ_577C0:
         :: RAD? case                             * 577C0
-          :: ' xPI OBJ_57888 'x* BINT3 ;         * 577CF
+          :: ' xPI ~TRUE;Π'ni;EVAL 'x* BINT3 ;   * 577CF
           DEG? ITE %180 %200                     * 577F2
-          OBJ_57888 'x* BINT3 ;                  * 57806
+          ~TRUE;Π'ni;EVAL 'x* BINT3 ;            * 57806
 
 * refs (2): 86EA7 86F15
 OBJ_5781A:
@@ -292,22 +292,22 @@ OBJ_5781A:
 
 * refs (4): 57598 86DE9 86EC5 86F33
 OBJ_57856:
-        :: OBJ_578A1 BINT1 pshtop& meta* ;       * 57856
+        :: ~TRUE;Π'ns;EVAL BINT1 pshtop& meta* ; * 57856
 
 * refs (5): 86D62 86ECF 86EF2 86F3D 86F60
-OBJ_57874:
+~top&;meta+:
         :: top& meta+ ;                          * 57874
 
 * refs (6): 57702 57743 5777F 577A7 577DE 57806
-OBJ_57888:
+~TRUE;Π'ni;EVAL:
         :: TRUE Π'ni EVAL ;                      * 57888
 
 * refs (1): 5785B
-OBJ_578A1:
+~TRUE;Π'ns;EVAL:
         :: TRUE Π'ns EVAL ;                      * 578A1
 
 * refs (1): 5790B
-SYMISOL~1~3:
+SYMISOL~4:
         { Π'ni Π'ns }                            * 578BA
 
 * refs (2): 57892 578BF
@@ -320,8 +320,8 @@ SYMISOL~1~3:
 
 * refs (1): 572C0
 SYMISOL~1:
-        :: ' SYMISOL~1~1 TOTEMPOB ' SYMISOL~1~2 TOTEMPOB SYMISOL~1~3 BIND ; * 578E8
-SYMISOL~1~1:
+        :: ' SYMISOL~2 TOTEMPOB ' SYMISOL~3 TOTEMPOB SYMISOL~4 BIND ; * 578E8
+SYMISOL~2:
         CON(5)  DOCODE                           * 5791A  address
         NIBHEX  910008F65                        * 5791F  ..∡o
         NIBHEX  975                              * 57928  y
@@ -331,7 +331,7 @@ n0:
         CON(5)  DOIDNT                           * 5792B  entry 0
         CON(2)  #02                              * 57930
         NIBASC  "n00"                            * 57932
-SYMISOL~1~2:
+SYMISOL~3:
         CON(5)  DOCODE                           * 57938  address
         NIBHEX  910008F65                        * 5793D  ..∡o
         NIBHEX  975                              * 57946  y
@@ -419,7 +419,7 @@ expan1:
         :: ?expan^ AEQ1stcase xSQ                * 57AA2
 
 expansq:
-          :: OBJ_57CDF #1-SWAP COLA OBJ_57C3A    * 57AB6
+          :: ~addt2:;%2;x^ #1-SWAP COLA OBJ_57C3A * 57AB6
           ;                                      * 57ACF
           MetaD-> Meta<-D MetaE^ MetaL* ?expanneginv Meta->() ?expanapp * 57AD4
           +B21;PullB[1];<1> ;                    * 57AF7
@@ -431,7 +431,7 @@ expansq:
 
 * refs (1): 57B0B
 ?expanapp~1:
-        :: 4PICK ?expanapp~1~1 NOTcaseDROP COLA_EVAL * 57B15
+        :: 4PICK ?expanapp~2 NOTcaseDROP COLA_EVAL * 57B15
         ;                                        * 57B2E
 
 * refs (2): 57AF7 57B5D
@@ -477,11 +477,12 @@ OBJ_57C3A:
 
 * refs (2): 57C4E 57C58
 expansum^:
-        :: pshzer pullpsh1& pshzerpsharg dup OBJ_57CDF %2 psh1& unrot meta* * 57C71
-          psh dup unrot top& meta* psh over& overev& top& OBJ_57CDF meta+ ; * 57CA3
+        :: pshzer pullpsh1& pshzerpsharg dup ~addt2:;%2;x^ %2 psh1& unrot * 57C71
+          meta* psh dup unrot top& meta* psh over& overev& top& * 57C9E
+          ~addt2:;%2;x^ meta+ ;                  * 57CD0
 
 * refs (3): 57ABB 57C8A 57CD0
-OBJ_57CDF:
+~addt2:;%2;x^:
         :: PTR addt2: %2 x^ ;                    * 57CDF
 
 * % -> flag %' T % -> % F
@@ -709,8 +710,8 @@ OBJ_5848A:
 * refs (8): 56142 56179 56255 562B4 582DC 583E5 ...
 MEQU?:
         :: DUP #2+PICK OVER#= NOTcaseFALSE DUP   * 584B2
-          BEGIN DUP#0=case OBJ_576B7             * 584D0
-          2DUP#+ #3+PICK OVER #3+PICK EQUAL NOTcase OBJ_576CB * 584DF
+          BEGIN DUP#0=case ~DROPRDROP;TRUE       * 584D0
+          2DUP#+ #3+PICK OVER #3+PICK EQUAL NOTcase ~DROPRDROP;FALSE * 584DF
           #1- AGAIN ;                            * 58502
 
 * meta1 meta2 -> meta1 meta2 flag
@@ -867,11 +868,11 @@ colfac~2:
 OBJ_58854:
         :: SWAPDROP#1- M1st+case OBJ_588B8       * 58854
           M1st-case OBJ_588E5                    * 58868
-          M1stNEGcase OBJ_588A4                  * 58872
+          M1stNEGcase ~SWAPDROP#1-;AGAIN         * 58872
           PTR psh1&rev: x* pshzerpsharg %-1 SWAP#1+ pshtop& AGAIN ; * 5887C
 
 * refs (2): 58877 58935
-OBJ_588A4:
+~SWAPDROP#1-;AGAIN:
         :: SWAPDROP#1- AGAIN ;                   * 588A4
 
 * refs (1): 58863
@@ -887,7 +888,7 @@ OBJ_588E5:
 OBJ_58912:
         :: SWAPDROP#1- M1st*case OBJ_58962       * 58912
           M1st/case OBJ_58999                    * 58926
-          M1stINVcase OBJ_588A4                  * 58930
+          M1stINVcase ~SWAPDROP#1-;AGAIN         * 58930
           M1st^case OBJ_589CB                    * 5893A
           PTR psh1&rev: x^ %-1 SWAP#1+ AGAIN ;   * 58944
 
@@ -921,7 +922,7 @@ colunfac:
         :: BEGIN DUP#0=case drop;q_58A0C         * 58A20
           M-1potcase colunfac~1                  * 58A34
           M1st+case colunfac~2                   * 58A3E
-          M1st*case colunfac~3                   * 58A48
+          M1st*case colunfac~4                   * 58A48
           pullpsh1& AGAIN ;                      * 58A52
 
 * [expr1 INV expr2 INV *] -> [expr1 expr2 /]
@@ -975,25 +976,25 @@ colunfac~1:
 
 * refs (1): 58A43
 colunfac~2:
-        :: pullpsh1& M1st+case colunfac~2~1      * 58B58
+        :: pullpsh1& M1st+case colunfac~3        * 58B58
           AGAIN ;                                * 58B6C
 
 * refs (2): 58B67 58B8F
-colunfac~2~1:
-        :: plDRPpZparg OBJ_5CD02 pshtop& M1st+case colunfac~2~1 * 58B76
+colunfac~3:
+        :: plDRPpZparg ~addt:;x+ pshtop& M1st+case colunfac~3 * 58B76
           AGAIN ;                                * 58B94
 
 * refs (1): 58A4D
-colunfac~3:
+colunfac~4:
         ::                                       * 58B9E
           :: MetaMulInv COLA SKIP                * 58BA3
           ;                                      * 58BB7
-          AGAIN pullpsh1& M1st*case colunfac~3~1 * 58BBC
+          AGAIN pullpsh1& M1st*case colunfac~5   * 58BBC
           AGAIN ;                                * 58BD0
 
 * refs (2): 58BCB 58BF3
-colunfac~3~1:
-        :: plDRPpZparg addt* pshtop& M1st*case colunfac~3~1 * 58BDA
+colunfac~5:
+        :: plDRPpZparg addt* pshtop& M1st*case colunfac~5 * 58BDA
           AGAIN ;                                * 58BF8
 
 * meta -> meta #0 meta &+&+..&+ -> meta #n
@@ -1096,11 +1097,11 @@ OBJ_58DA7:
           :: OVER nonopcase FALSE                * 58DEB
             OBJ_26F7A ;                          * 58DFF
           casedrop OBJ_59020                     * 58E09
-          DROP pullpsh1& COLA OBJ_58E2C          * 58E13
+          DROP pullpsh1& COLA ~#0=UNTIL;DROP;1GETABND * 58E13
         ;                                        * 58E27
 
 * refs (8): 58E22 58EE5 58F08 58F4E 58FBC 58FE9 ...
-OBJ_58E2C:
+~#0=UNTIL;DROP;1GETABND:
         :: #0=UNTIL DROP 1GETABND ;              * 58E2C
 
 * refs (1): 58DDC
@@ -1114,18 +1115,18 @@ OBJ_58E95:
           :: DROP ABND COLA OBJ_58EEF            * 58E95
           ;                                      * 58EAE
           OBJ_58E95 DROP larg SWAPDROP#1- ROTROT2DROP OBJ_56E05 SWAPDROP * 58EB3
-          EXPLODE top& COLA OBJ_58E2C            * 58ED6
+          EXPLODE top& COLA ~#0=UNTIL;DROP;1GETABND * 58ED6
         ;                                        * 58EEA
 
 * refs (2): 58E6D 58EA9
 OBJ_58EEF:
-        :: pullpsh1& pullpsh1& pullpsh1& COLA OBJ_58E2C * 58EEF
+        :: pullpsh1& pullpsh1& pullpsh1& COLA ~#0=UNTIL;DROP;1GETABND * 58EEF
         ;                                        * 58F0D
 
 * refs (1): 58DE6
 OBJ_58F12:
         :: #1-SWAP lam'dvar OVER EQUALPOSCOMP #0<> case * 58F12
-          :: psh1& FALSE 1PUTLAM COLA OBJ_58E2C  * 58F35
+          :: psh1& FALSE 1PUTLAM COLA ~#0=UNTIL;DROP;1GETABND * 58F35
           ;                                      * 58F53
           DUP ROMPTR@NOT case OBJ_58FA8          * 58F58
           idntlamcase                            * 58F6C
@@ -1136,15 +1137,15 @@ OBJ_58F12:
 
 * refs (2): 58F67 58F8F
 OBJ_58FA8:
-        :: DROP psh1& COLA OBJ_58E2C             * 58FA8
+        :: DROP psh1& COLA ~#0=UNTIL;DROP;1GETABND * 58FA8
         ;                                        * 58FC1
 
 * refs (2): 58F7B 58F9E
 OBJ_58FC6:
         :: OBJ_58DA7 case                        * 58FC6
-          :: NDROP psh1& COLA OBJ_58E2C          * 58FD5
+          :: NDROP psh1& COLA ~#0=UNTIL;DROP;1GETABND * 58FD5
           ;                                      * 58FEE
-          get1 DROP ROTUntop& psh FALSE 1PUTLAM COLA OBJ_58E2C * 58FF3
+          get1 DROP ROTUntop& psh FALSE 1PUTLAM COLA ~#0=UNTIL;DROP;1GETABND * 58FF3
         ;                                        * 5901B
 
 * refs (2): 58E0E 58E59
@@ -1154,7 +1155,7 @@ OBJ_59020:
           ;                                      * 5904D
           DROP BINT1 splitup 2DUPSWAP #- #2= UNTIL DROP psh lam'dvar * 59052
           INNERtop& {}N dvarlsBIND rotswap pullpsh1& rotswap OBJ_58DA7 ABND * 59084
-          1GETLAM AND 1PUTLAM ROTUntop& psh COLA OBJ_58E2C * 590AC
+          1GETLAM AND 1PUTLAM ROTUntop& psh COLA ~#0=UNTIL;DROP;1GETABND * 590AC
         ;                                        * 590CF
 
 * refs (1): 59048
@@ -1239,12 +1240,12 @@ OBJ_59373:
         :: OBJ_59503 OBJ_593AF ;                 * 59373
 
 * refs (2): 593A0 59560
-OBJ_59387:
+~lam'dvar;?PURGE_HERE:
         :: lam'dvar ?PURGE_HERE ;                * 59387
 
 * refs (1): 5955B
 OBJ_5939B:
-        :: OBJ_59387 ERRJMP ;                    * 5939B
+        :: ~lam'dvar;?PURGE_HERE ERRJMP ;        * 5939B
 
 * refs (1): 5937D
 OBJ_593AF:
@@ -1278,7 +1279,7 @@ OBJ_59503:
 Π'prog:
             LAM 'prog }                          * 59522
           BIND 1GETLAM lam'dvar CREATE ERRSET 'REVAL ERRTRAP OBJ_5939B * 59538
-          OBJ_59387 ABND ;                       * 59560
+          ~lam'dvar;?PURGE_HERE ABND ;           * 59560
 
 * refs (2): 4BD19 5950D
 OBJ_5956F:

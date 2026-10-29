@@ -269,8 +269,9 @@ ROMP_0B4_1D9:
 * ROMPTR 0B4 1DA
 * refs (1): A2437
 ROMP_0B4_1DA:
-        :: LAM 'P OBJ_1A002 PATHDIR ROMPTR 0B0 075 8GETLAM ROMPTR 0B3 046 * B2723
-          3PICK ROMPTR 0B0 071 #- BINT12 #- 14GETLAM ITE BINT8 BINT0 * B2758
+        :: LAM 'P ~DUPTYPEBINT?;case;JstGetTHEMESG PATHDIR * B2723
+          ROMPTR 0B0 075 8GETLAM ROMPTR 0B3 046 3PICK ROMPTR 0B0 071 #- * B273D
+          BINT12 #- 14GETLAM ITE BINT8 BINT0     * B276D
           #- ROMPTR 0B0 070 ITE SPACE$ $ " { "   * B278B
           SWAP&$ &$ ;                            * B27B5
 
@@ -414,7 +415,8 @@ ROMP_0B4_1E4:
           :: DUPDUP 11GETLAM #+ #1- 12GETLAM #MIN 2DUP ' LAM 'E STOLAM ' * B3120
             LAM 'B STOLAM LAM 'O ' ROMPTR 0B5 15A 4ROLL 4ROLL ROMPTR 0B4 1DB * B3162
             {}N 19PUTLAM ;                       * B31A2
-          LAM 'B #- #1+ 19GETLAM SWAP OBJ_1A01B OBJ_1A002 ; * B31B1
+          LAM 'B #- #1+ 19GETLAM SWAP OBJ_1A01B  * B31B1
+          ~DUPTYPEBINT?;case;JstGetTHEMESG ;     * B31D5
 
 * ROMPTR 0B4 1E5
 * refs (1): A2437
@@ -547,7 +549,7 @@ ROMP_0B4_1F2:
         ::                                       * B39D1
           { BINT37 ROMPTR 0B4 1E1 BINT13         * B39D6
             :: BINT1 ROMPTR 0B0 0C5 TYPELIST? ITE # B990 # B991 * B39F0  ~gFldVal
-              OBJ_1A002 ;                        * B3A23
+              ~DUPTYPEBINT?;case;JstGetTHEMESG ; * B3A23
           }                                      * B3A2D
           EQLookup case                          * B3A32
           :: EVAL TRUE ;                         * B3A3C
@@ -1026,7 +1028,7 @@ LIB0B4.link:
         REL(5)  ROMP_0B4_162                     * B4835  162 
         REL(5)  ROMP_0B4_163                     * B483A  163 
         REL(5)  ROMP_0B4_164                     * B483F  164 
-        REL(5)  ROMP_0B4_165                     * B4844  165 
+        REL(5)  ~BINT42;TestSysFlag              * B4844  165 
         REL(5)  ROMP_0B4_166                     * B4849  166 
         REL(5)  ROMP_0B4_168                     * B484E  167 
         REL(5)  ROMP_0B4_168                     * B4853  168 

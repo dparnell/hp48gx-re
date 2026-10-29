@@ -5,7 +5,7 @@
         RPL
 
 * refs (6): 48A21 4BB70 4BE72 4C53A 4C930 4CCE4
-OBJ_4C082:
+~ATTNFLG@;#0=?SEMI;ExitAtLOOP:
         :: ATTNFLG@ #0=?SEMI ExitAtLOOP ;        * 4C082
 
 * refs (15): 4695A 48CD8 49261 49E84 4BB2A 4BCB0 ...
@@ -42,8 +42,9 @@ OBJ_4C0D4:
 
 * refs (11): 48B2A 4B701 4C553 8A656 8A665 8B2C0 ...
 OBJ_4C0E4:
-        :: INDEPVAR ?PURGE_HERE GETPTYPE OBJ_7316C NOT?SEMI * 4C0E4
-          OBJ_4D96B ?PURGE_HERE ;                * 4C102
+        :: INDEPVAR ?PURGE_HERE GETPTYPE ~BINT11;PTYPE>PINFO;NOTcaseFALSE * 4C0E4
+          NOT?SEMI                               * 4C0FD
+          ~RclDepnd;1get(li)? ?PURGE_HERE ;      * 4C102
 
 * refs (1): 4BC5B
 OBJ_4C111:
@@ -86,8 +87,9 @@ OBJ_4C265:
 
 * refs (3): 48FEF 4DAB7 B639E
 OBJ_4C2CE:
-        :: GDISPCENTER TURNMENUOFF GETPTYPE OBJ_73185 BINT29 TestSysFlag NOT * 4C2CE
-          AND IT drax                            * 4C2F6
+        :: GDISPCENTER TURNMENUOFF GETPTYPE ~BINT4;PTYPE>PINFO;NOTcaseFALSE * 4C2CE
+          BINT29                                 * 4C2E7
+          TestSysFlag NOT AND IT drax            * 4C2EC
           draw OBJ_4DA3F ;                       * 4C305
 
 * refs (11): 488FA 48B2F 4BB0C 4BC88 4C4BD 57285 ...
@@ -135,8 +137,8 @@ OBJ_4C4B8:
             2PUTLAM BEGIN OBJ_4C166 NEXTSTEP LASTPT? UNTIL PlotOneMore? * 4C4FE
             NOT?SEMI                             * 4C521
             OBJ_4C166 ;                          * 4C526
-          ERRTRAP PLOTERR OBJ_4C082 LOOP ATTNFLGCLR 18GETLAM RESETDEPTH * 4C530
-          OBJ_4C0E4 ;                            * 4C553
+          ERRTRAP PLOTERR ~ATTNFLG@;#0=?SEMI;ExitAtLOOP LOOP ATTNFLGCLR * 4C530
+          18GETLAM RESETDEPTH OBJ_4C0E4 ;        * 4C549
 
 * refs (1): 4C4C2
 OBJ_4C55D:
@@ -155,7 +157,7 @@ RclYminYmax:
 
 * refs (2): 4BBC0 4EDCA
 OBJ_4C616:
-        :: rceq! INDEX@ #0=ITE OBJ_4B62F OBJ_4B733 ; * 4C616
+        :: rceq! INDEX@ #0=ITE ~1stArgb(ex);SYMBN ~1stArgRpn(ex);SYMBN ; * 4C616
 
 * refs (1): 4C49F
 drax_4C639:
@@ -183,12 +185,12 @@ OBJ_4C701:
           TWO{}N ;                               * 4C738
 
 * refs (2): 4536C 4542F
-drax~1~3:
+drax~4:
         :: 2DUP DUP 6ROLL #1- #=?SKIP #1+ PIXON3 DUP#0= ?SKIP #1- * 4C742
           PIXON3 ;                               * 4C779
 
 * refs (2): 4556A 45628
-drax~1~4:
+drax~5:
         :: 2DUP SWAPDUP 6PICK #1- #=?SKIP #1+ SWAP PIXON3 SWAP DUP#0= ?SKIP * 4C783
           #1-                                    * 4C7BF
           SWAP PIXON3 ;                          * 4C7C4
@@ -223,7 +225,7 @@ doerr607:
 OBJ_4C8D1:
         :: RclXYCol&äDAT DUP MDIMSDROP 5UNROLL #1+_ONE_DO OVER PULLREALEL * 4C8D1
           GETYPOS SWAP4PICK PULLREALEL GETXPOS ROT PIXON3 ROT 4PICK#+ ROT * 4C8F9
-          4PICK#+ ROT OBJ_4C082 LOOP 4DROP ;     * 4C926
+          4PICK#+ ROT ~ATTNFLG@;#0=?SEMI;ExitAtLOOP LOOP 4DROP ; * 4C926
 
 * refs (3): 20122 4D9BB B7ED7
 bins(3r):
@@ -247,7 +249,7 @@ bins(3r)~1:
           :: DUP UNCOERCE 5PICK %< case OBJ_2D2E7 * 4CA1E
             4UNROLLROT COERCE 3UNROLL ;          * 4CA41
           :: ROTDROP BINT1 3UNROLL BINT1 3UNROLL ; * 4CA55
-          #1+_ONE_DO OVER PULLREALEL 5PICK 7PICK bins(3r)~1~1 6UNROLL * 4CA78
+          #1+_ONE_DO OVER PULLREALEL 5PICK 7PICK bins(3r)~3 6UNROLL * 4CA78
           SWAP3PICK #+SWAP LOOP MDIMS IT DROP    * 4CA9B
           5UNROLL 4DROP ;                        * 4CAB9
         BSS     10                               * 4CAC8
@@ -275,7 +277,8 @@ OBJ_4CC6C:
           :: 8PICK %* COERCE BINT9 PICK #+ ; SWAP OBJ_4CC6C DUP 5UNROLL * 4CC6C
           #-DUP #>1 IT                           * 4CCA8
           :: #1- 4ROLL #1+ 4UNROLL ;             * 4CCB7
-          OBJ_4CCF8 SWAP3PICK #+SWAP OBJ_4C082 LOOP 5DROP ; * 4CCD5
+          OBJ_4CCF8 SWAP3PICK #+SWAP ~ATTNFLG@;#0=?SEMI;ExitAtLOOP LOOP * 4CCD5
+          5DROP ;                                * 4CCEE
 
 * refs (1): 4CCD5
 OBJ_4CCF8:
@@ -352,8 +355,8 @@ OBJ_4CF8E:
           :: BINT1 ?CaseKeyDef SCROLLRIGHT BINT3 ?CaseKeyDef JUMPRIGHT * 4D056
             DROPDEADTRUE ;                       * 4D079
           BINT45 #=casedrop                      * 4D083
-          :: BINT1 ?CaseKeyDef OBJ_4DA8F BINT3 ?CaseKeyDef TurnOffKey * 4D08D
-            DROPDEADTRUE ;                       * 4D0B0
+          :: BINT1 ?CaseKeyDef ~EXITFCNsto;TOADISP BINT3 ?CaseKeyDef * 4D08D
+            TurnOffKey DROPDEADTRUE ;            * 4D0AB
           SWAPDROP BINT35 #=casedrop FALSE       * 4D0BA
           BINT40 #=case FALSE                    * 4D0CE
           'DoBadKeyT ;                           * 4D0DD
@@ -361,7 +364,7 @@ OBJ_4CF8E:
 * refs (1): 4CFF7
 OBJ_4D0E7:
         :: TakeOver OBJ_6DE82 case               * 4D0E7
-          :: ATTNFLGCLR OBJ_4DA8F ;              * 4D0FB
+          :: ATTNFLGCLR ~EXITFCNsto;TOADISP ;    * 4D0FB
           EXITFCNsto OBJ_4D1AA ;                 * 4D10F
 
 * ob -> DoBadKey T
@@ -398,29 +401,29 @@ OBJ_4D1AA:
 OBJ_4D1DC:
         :: GBUFFGROBDIM #1- 14PUTLAM #1- 13PUTLAM WINDOWCORNER # 41 #+ * 4D1DC
           TOTEMPOB 8PUTLAM BINT32 #+ TOTEMPOB 7PUTLAM 16GETLAM 20PUTLAM * 4D20E
-          4GETLAM 21PUTLAM BINT1 BINT27 PUTLAM BINT0 16PUTLAM OBJ_73684 * 4D236
+          4GETLAM 21PUTLAM BINT1 BINT27 PUTLAM BINT0 16PUTLAM ~BINT0;3PUTLAM * 4D236
           %0_2A2B4 TOTEMPOB 1PUTLAM BINT0 TOTEMPOB 4PUTLAM GETPTYPE DUP * 4D25E
-          OBJ_731B7 IT OBJ_4638C                 * 4D286
+          OBJ_731B7 IT ~BINT23;PUTLAM            * 4D286
           OBJ_732C2 22PUTLAM CROSS_HAIRS 1GETLAM BINT28 ONE_DO ISTOP-INDEX * 4D295
           #1+ GETLAM LOOP ABND ABND OBJ_46BA7 GETPTYPE OBJ_731F8 ' * 4D2B8
           :: DUP                                 * 4D2E5
 
 * refs (1): 330FD
-NUMSOLVE~38:
+NUMSOLVE~45:
             :: BINT3 #> ; case2drop 'DoBadKeyT   * 4D2EF
             SWAP DUP#<7 case2drpfls BINT11       * 4D30D
             #=casedrop                           * 4D321
             :: BINT3 ?CaseKeyDef                 * 4D326
-              :: TakeOver TraceMode? caseDoBadKey OBJ_735EE * 4D335
+              :: TakeOver TraceMode? caseDoBadKey ~3GETLAM;#3= * 4D335
                 caseDoBadKey WINDOWTOP?          * 4D34E
                 IT JUMPTOP                       * 4D358
                 BINT7 TOPROW OBJ_47021 ;         * 4D362
               BINT2 ?CaseKeyDef DoBadKey DROP'   * 4D376
               :: TakeOver TraceMode? case        * 4D38A
                 :: BINT3 OBJ_735CB ;             * 4D39E
-                OBJ_5102B OBJ_4BF5D OBJ_735EE case * 4D3B2
+                ~16GETLAM;#1= OBJ_4BF5D ~3GETLAM;#3= case * 4D3B2
                 :: OBJ_46E28 BINT11 OBJ_48238 ;  * 4D3C6
-                OBJ_7361B case                   * 4D3DF
+                ~3GETLAM;#0= case                * 4D3DF
                 :: OBJ_46E28 BINT11 OBJ_4DCEC ;  * 4D3E9
                 OBJ_46E28 BINT11                 * 4D402
                 :: WINDOWTOP? IT WINDOWUP        * 4D40C
@@ -429,45 +432,45 @@ NUMSOLVE~38:
               TRUE ;                             * 4D43E
             BINT16 #=casedrop                    * 4D448
             :: BINT3 ?CaseKeyDef                 * 4D452
-              :: TakeOver TraceMode? caseDoBadKey OBJ_735EE * 4D461
+              :: TakeOver TraceMode? caseDoBadKey ~3GETLAM;#3= * 4D461
                 caseDoBadKey WINDOWLEFT?         * 4D47A
                 IT JUMPLEFT                      * 4D484
                 LEFTCOL OBJ_4728B ;              * 4D48E
               BINT2 ?CaseKeyDef                  * 4D49D
               :: EXITFCNsto OBJ_4CE83 ; DROP'    * 4D4A7
               :: TakeOver TraceMode? case OBJ_736AC * 4D4C0
-                OBJ_5102B OBJ_0C811 OBJ_735EE case * 4D4D9
+                ~16GETLAM;#1= OBJ_0C811 ~3GETLAM;#3= case * 4D4D9
                 :: OBJ_46E28 BINT16 OBJ_4881E ;  * 4D4ED
-                OBJ_7361B case                   * 4D506
+                ~3GETLAM;#0= case                * 4D506
                 :: OBJ_46E28 BINT16 OBJ_4DDAF ;  * 4D510
                 OBJ_46E28 BINT16 OBJ_470E9 ;     * 4D529
               TRUE ;                             * 4D53D
             BINT18 #=casedrop                    * 4D547
             :: BINT3 ?CaseKeyDef                 * 4D551
-              :: TakeOver TraceMode? caseDoBadKey OBJ_735EE * 4D560
+              :: TakeOver TraceMode? caseDoBadKey ~3GETLAM;#3= * 4D560
                 caseDoBadKey WINDOWRIGHT?        * 4D579
                 IT JUMPRIGHT                     * 4D583
                 RIGHTCOL OBJ_4728B ;             * 4D58D
               BINT2 ?CaseKeyDef DoBadKey DROP'   * 4D59C
               :: TakeOver TraceMode? case OBJ_736F7 * 4D5B0
-                OBJ_5102B OBJ_0C811 OBJ_735EE case * 4D5C9
+                ~16GETLAM;#1= OBJ_0C811 ~3GETLAM;#3= case * 4D5C9
                 :: OBJ_46E28 BINT18 OBJ_4842C ;  * 4D5DD
-                OBJ_7361B case                   * 4D5F6
+                ~3GETLAM;#0= case                * 4D5F6
                 :: OBJ_46E28 BINT18 OBJ_4DDE6 ;  * 4D600
                 OBJ_46E28 BINT18 OBJ_470B7 ;     * 4D619
               TRUE ;                             * 4D62D
             BINT17 #=casedrop                    * 4D637
             :: BINT3 ?CaseKeyDef                 * 4D641
-              :: TakeOver TraceMode? caseDoBadKey OBJ_735EE * 4D650
+              :: TakeOver TraceMode? caseDoBadKey ~3GETLAM;#3= * 4D650
                 caseDoBadKey WINDOWBOT?          * 4D669
                 IT JUMPBOT                       * 4D673
                 BINT7 BOTROW OBJ_47021 ;         * 4D67D
               BINT2 ?CaseKeyDef OBJ_48873 DROP'  * 4D691
               :: TakeOver TraceMode? case        * 4D6A5
                 :: BINT4 OBJ_735CB ;             * 4D6B9
-                OBJ_5102B OBJ_4BF5D OBJ_735EE case * 4D6CD
+                ~16GETLAM;#1= OBJ_4BF5D ~3GETLAM;#3= case * 4D6CD
                 :: OBJ_46E28 BINT17 OBJ_481D9 ;  * 4D6E1
-                OBJ_7361B case                   * 4D6FA
+                ~3GETLAM;#0= case                * 4D6FA
                 :: OBJ_46E28 BINT17 OBJ_4DD73 ;  * 4D704
                 OBJ_46E28 BINT17                 * 4D71D
                 :: WINDOWBOT? IT WINDOWDOWN      * 4D727
@@ -483,8 +486,8 @@ NUMSOLVE~38:
             :: BINT2 ?CaseKeyDef OBJ_4576C BINT1 ?CaseKeyDef OBJ_4EBD1 * 4D7FE
               DROPDEADTRUE ;                     * 4D821
             BINT45 #=casedrop                    * 4D82B
-            :: BINT1 ?CaseKeyDef OBJ_4DA8F BINT3 ?CaseKeyDef TurnOffKey * 4D835
-              DROPDEADTRUE ;                     * 4D858
+            :: BINT1 ?CaseKeyDef ~EXITFCNsto;TOADISP BINT3 ?CaseKeyDef * 4D835
+              TurnOffKey DROPDEADTRUE ;          * 4D853
             BINT35 #=casedrop DROPFALSE          * 4D862
             BINT40 #=casedrop DROPFALSE          * 4D871
             SWAP BINT1 #<> case DROPDEADTRUE     * 4D880
@@ -497,11 +500,11 @@ NUMSOLVE~38:
           OBJ_5108F ;                            * 4D961
 
 * refs (8): 471B6 47679 4817F 4BD05 4C102 4E8B1 ...
-OBJ_4D96B:
+~RclDepnd;1get(li)?:
         :: RclDepnd 1get(li)? ;                  * 4D96B
 
 * refs (2): 49E16 4BAD0
-OBJ_4D97F:
+~1stArgb(ex);::N:
         :: 1stArgb(ex) ::N ;                     * 4D97F
 
 * refs (1): 8CE65
@@ -516,7 +519,7 @@ OBJ_4D9CF:
 
 * refs (22): 0C9F4 46C70 46CA7 47D84 482BA 482CE ...
 CROSS_HAIRS:
-        :: OBJ_517B2 CROSSGROB OBJ_4DEAE DUP4PUTLAM OBJ_4DB18 ; * 4DA0D
+        :: ~8GETLAM;7GETLAM CROSSGROB OBJ_4DEAE DUP4PUTLAM OBJ_4DB18 ; * 4DA0D
         BSS     15                               * 4DA30
 
 * refs (3): 1E2C4 4C30A AA43D
@@ -530,10 +533,10 @@ OBJ_4DA58:
 
 * refs (22): 0C9E5 46C57 46CBB 4703A 470CB 470FD ...
 CROSS_OFF:
-        :: BINT4 OBJ_517B2 OBJ_4E092 ;           * 4DA76
+        :: BINT4 ~8GETLAM;7GETLAM OBJ_4E092 ;    * 4DA76
 
 * refs (4): 4D09C 4D105 4D844 734B8
-OBJ_4DA8F:
+~EXITFCNsto;TOADISP:
         :: EXITFCNsto TOADISP ;                  * 4DA8F
 
 * refs (7): 47C18 481CF 49696 49B19 49B41 4E76C ...
@@ -560,7 +563,7 @@ SUB_4DAFD:
 
 * refs (3): 4DA26 4DD64 4ECD0
 OBJ_4DB18:
-        :: TOTEMPOB 4ROLL OBJ_50F2E OBJ_4DF67 GBUFF 2SWAP GROB! ; * 4DB18
+        :: TOTEMPOB 4ROLL ~BINT32;TestSysFlag OBJ_4DF67 GBUFF 2SWAP GROB! ; * 4DB18
 
 * refs (1): 47026
 OBJ_4DB45:
@@ -569,12 +572,12 @@ OBJ_4DB45:
 * refs (2): 47053 4DE54
 OBJ_4DB63:
         :: OBJ_4DC76 IT OBJ_4DBB3                * 4DB63
-          OBJ_517B2 PIXON3 CROSS_HAIRS ;         * 4DB77
+          ~8GETLAM;7GETLAM PIXON3 CROSS_HAIRS ;  * 4DB77
 
 * refs (2): 4704E 4DE9A
 OBJ_4DB8B:
         :: OBJ_4DC76 IT OBJ_4DBD1                * 4DB8B
-          OBJ_517B2 PIXOFF3 CROSS_HAIRS ;        * 4DB9F
+          ~8GETLAM;7GETLAM PIXOFF3 CROSS_HAIRS ; * 4DB9F
 
 * refs (1): 4DB72
 OBJ_4DBB3:
@@ -618,38 +621,38 @@ OBJ_4DCC6:
 * refs (1): 4D3F8
 OBJ_4DCEC:
         :: OBJ_4DCC6 WINDOWTOP? IT WINDOWUP      * 4DCEC
-          OBJ_517B2 OBJ_4E0BA 7GETLAM !#1-IF>0   * 4DD05
+          ~8GETLAM;7GETLAM OBJ_4E0BA 7GETLAM !#1-IF>0 * 4DD05
 
 * refs (3): 4DDA5 4DDDC 4DE18
 OBJ_4DD19:
-          :: OBJ_517B2 CROSSGROB OBJ_4DEB3 4GETLAM GBUFF BINT11 ROLL BINT11 * 4DD19
-            ROLL GROB! GBUFF 5UNROLL SUBGROB DUP4PUTLAM OBJ_4DB18 ; * 4DD46
+          :: ~8GETLAM;7GETLAM CROSSGROB OBJ_4DEB3 4GETLAM GBUFF BINT11 ROLL * 4DD19
+            BINT11 ROLL GROB! GBUFF 5UNROLL SUBGROB DUP4PUTLAM OBJ_4DB18 ; * 4DD41
         ;                                        * 4DD6E
 
 * refs (1): 4D713
 OBJ_4DD73:
         :: OBJ_4DCC6 WINDOWBOT? IT WINDOWDOWN    * 4DD73
-          OBJ_517B2 OBJ_4E0BA 7GETLAM 13GETLAM !#1+IF<dim-1 OBJ_4DD19 ; * 4DD8C
+          ~8GETLAM;7GETLAM OBJ_4E0BA 7GETLAM 13GETLAM !#1+IF<dim-1 OBJ_4DD19 ; * 4DD8C
 
 * refs (2): 0C8ED 4D51F
 OBJ_4DDAF:
         :: OBJ_4DCC6 WINDOWLEFT? IT WINDOWLEFT   * 4DDAF
-          OBJ_517B2 OBJ_4E0BA 8GETLAM !#1-IF>0 OBJ_4DD19 ; * 4DDC8
+          ~8GETLAM;7GETLAM OBJ_4E0BA 8GETLAM !#1-IF>0 OBJ_4DD19 ; * 4DDC8
 
 * refs (2): 0C8E8 4D60F
 OBJ_4DDE6:
         :: OBJ_4DCC6 WINDOWRIGHT? IT WINDOWRIGHT * 4DDE6
-          OBJ_517B2 OBJ_4E0BA 8GETLAM 14GETLAM !#1+IF<dim-1 OBJ_4DD19 ; * 4DDFF
+          ~8GETLAM;7GETLAM OBJ_4E0BA 8GETLAM 14GETLAM !#1+IF<dim-1 OBJ_4DD19 ; * 4DDFF
 
 * refs (1): 3E8B6
 {GRAPH\DOT+}~1:
-        :: CHECKMENU OBJ_7362F ITE OBJ_73684     * 4DE22
+        :: CHECKMENU ~3GETLAM;#2= ITE ~BINT0;3PUTLAM * 4DE22
           :: OBJ_4EE6F BINT2 3PUTLAM CROSS_OFF OBJ_4DB63 ; * 4DE3B
           DispMenu ;                             * 4DE5E
 
 * refs (1): 3E8EB
 {GRAPH\DOT-}~1:
-        :: CHECKMENU OBJ_73643 ITE OBJ_73684     * 4DE68
+        :: CHECKMENU ~3GETLAM;#1=_2 ITE ~BINT0;3PUTLAM * 4DE68
           :: OBJ_4EE6F BINT1 3PUTLAM CROSS_OFF OBJ_4DB8B ; * 4DE81
           DispMenu ;                             * 4DEA4
 
@@ -888,7 +891,7 @@ SUB_4E235:
         RPL
 
 * refs (1): 4888C
-OBJ_4E248:
+~BINT1;GetEqN:
         :: BINT1 GetEqN ;                        * 4E248
         BSS     10                               * 4E25C
 
@@ -897,8 +900,8 @@ OBJ_4E248:
 CHECKMENU:
         :: TakeOver MENUOFF? case                * 4E266
           :: RDROP TURNMENUON DispMenu ;         * 4E27A
-          CHECKMENU~1 NOT?SEMI                   * 4E293
-          RDROP CHECKMENU~2 ;                    * 4E29D
+          ~16GETLAM;BINT0;#<> NOT?SEMI           * 4E293
+          RDROP ~DispMenu;BINT0;16PUTLAM ;       * 4E29D
 
 * ->
 * refs (3): 3E7FF 46ACA 4D8DF
@@ -971,9 +974,9 @@ PREMARKON:
 
 * refs (3): 457B2 4980F 4E438
 NEWMARK:
-        :: OBJ_517B2 2DUP TOTEMPOB 12PUTLAM TOTEMPOB 1PUTLAM OBJ_4E0BA * 4E4B0
-          4GETLAM DUP 11PUTLAM GROBDIM 4PICK#+SWAP 3PICK#+ HARDBUFF 5UNROLL * 4E4D8
-          SUBGROB 4PUTLAM CROSSMARKOFF CROSSMARKON ; * 4E500
+        :: ~8GETLAM;7GETLAM 2DUP TOTEMPOB 12PUTLAM TOTEMPOB 1PUTLAM * 4E4B0
+          OBJ_4E0BA 4GETLAM DUP 11PUTLAM GROBDIM 4PICK#+SWAP 3PICK#+ * 4E4D3
+          HARDBUFF 5UNROLL SUBGROB 4PUTLAM CROSSMARKOFF CROSSMARKON ; * 4E4F6
 
 * refs (2): 4E64F 4ECC1
 OBJ_4E519:
@@ -982,7 +985,8 @@ OBJ_4E519:
 
 * refs (1): 3E85C
 \BOX:
-        :: CHECKMENU OBJ_4579E CROSSMARKOFF OBJ_517B2 DRAWBOX# CROSSMARKON ; * 4E55A
+        :: CHECKMENU OBJ_4579E CROSSMARKOFF ~8GETLAM;7GETLAM DRAWBOX# * 4E55A
+          CROSSMARKON ;                          * 4E578
 
 * #x1 #y1 #x2 #y2 ->
 * refs (3): 4E573 4F67E 4F697
@@ -994,25 +998,25 @@ DRAWBOX#:
 * refs (1): 3E881
 \CIRCLE:
         :: CHECKMENU OBJ_4579E CROSSMARKOFF FALSE 3UNROLL UNCOERCE2 * 4E5E6
-          OBJ_517B2 UNCOERCE2 2DUP 6ROLL 6ROLL OBJ_4FE6C CROSSMARKON ; * 4E609
+          ~8GETLAM;7GETLAM UNCOERCE2 2DUP 6ROLL 6ROLL OBJ_4FE6C CROSSMARKON ; * 4E609
 
 * refs (1): 3E834
 \LINE:
-        :: CHECKMENU OBJ_4579E CROSSMARKOFF OBJ_517B2 DRAWLINE#3 OBJ_4E519 * 4E631
-          CROSS_HAIRS \MARK ;                    * 4E654
+        :: CHECKMENU OBJ_4579E CROSSMARKOFF ~8GETLAM;7GETLAM DRAWLINE#3 * 4E631
+          OBJ_4E519 CROSS_HAIRS \MARK ;          * 4E64F
 
 * refs (1): 3E848
 \TLINE:
-        :: CHECKMENU OBJ_4579E CROSSMARKOFF OBJ_517B2 TOGGLELINE#3 * 4E663
+        :: CHECKMENU OBJ_4579E CROSSMARKOFF ~8GETLAM;7GETLAM TOGGLELINE#3 * 4E663
           CROSSMARKON ;                          * 4E681
 
 * refs (2): 46CAC 4702B
 OBJ_4E68B:
-        :: OBJ_5102B NOT?SEMI                    * 4E68B
+        :: ~16GETLAM;#1= NOT?SEMI                * 4E68B
           OBJ_47209 OBJ_47236 ;                  * 4E69A
 
 * refs (1): 4E2A2
-CHECKMENU~2:
+~DispMenu;BINT0;16PUTLAM:
         :: DispMenu BINT0 16PUTLAM ;             * 4E6A9
         NIBHEX  00000                            * 4E6C2  ..
 
@@ -1044,7 +1048,7 @@ Z-BOX:
 
 * refs (1): 0C9C2
 OBJ_4E799:
-          :: GBUFFGROBDIM px->c(2rr,2s) C%>% OBJ_517B2 GBUFFGROBDIM * 4E799
+          :: GBUFFGROBDIM px->c(2rr,2s) C%>% ~8GETLAM;7GETLAM GBUFFGROBDIM * 4E799
             px->c(2rr,2s) C%>% ORDERXY% DUP 4PICK %= IT * 4E7B7
             :: DROPSWAPDROP GETPMIN&MAX SWAP2C%>% SWAPDROP ROTDROP 3UNROLL ; * 4E7DA
             OVER5PICK %= IT                      * 4E802
@@ -1065,16 +1069,16 @@ label:
 * refs (1): 4E870
 label!:
           :: OBJ_4681A ?SKIP                     * 4E893
-            :: INDEPVAR ID>$ OBJ_4D96B ID>$ ;    * 4E8A2
+            :: INDEPVAR ID>$ ~RclDepnd;1get(li)? ID>$ ; * 4E8A2
             $>grob SWAP $>grob GBUFFGROBDIM label~1 GETPMIN&MAX SWAP2C%>% * 4E8C0
-            ROT 4ROLL 3UNROLL label~2 ;          * 4E8E3
+            ROT 4ROLL 3UNROLL label~3 ;          * 4E8E3
         ;                                        * 4E8FC
 
 * refs (1): 4E8D4
 label~1:
         :: RclAx*s 1get(li)? 3PICK3PICK OBJ_4F20F 4UNROLLROT * 4E901
           r=>rr;rot;*(2rr);+(2rr);r=>r SWAP4ROLL Chkr=>s(s,r) DUPTYPEBINT? * 4E91F
-          ITE label~1~1 4ROLLDROP                * 4E933
+          ITE label~2 4ROLLDROP                  * 4E933
           SWAP3PICK Chkr=>s(s,r) DUPTYPEBINT? NOTcase * 4E942
 
 drop(3-4);swap:
@@ -1088,7 +1092,7 @@ Chkr=>s(s,r):
           2DROP ;                                * 4E9B5
 
 * refs (1): 4E938
-label~1~1:
+label~2:
         :: 3PICK #2- 5PICK GROBDIMw 2DUPSWAP #> ITE * 4E9BF
           :: SWAP#- 5ROLL SWAP BINT0 MINUSONE DUP SUBGROB 4UNROLL BINT0 ; #- * 4E9E7
           OVER BINT7 #- 6ROLL PutOnPict(2s,go) ; * 4EA23
@@ -1099,32 +1103,32 @@ PutOnPict(2s,go):
           GBUFF 4UNROLL CKGROBFITS 4ROLL 3UNROLL GROB! ; * 4EA5F
 
 * refs (1): 4E8F2
-label~2:
-        :: label~2~1 6PICK DUPTYPEBINT? ITE      * 4EA82
+label~3:
+        :: label~4 6PICK DUPTYPEBINT? ITE        * 4EA82
           :: OVER GROBDIMw #- #1- BINT3 ROT PutOnPict(2s,go) ; 2DROP * 4EA9B
           BINT3 5PICK DUPTYPEBINT? ITE           * 4EACD
-          :: #3+ 5ROLL label~2~1 PutOnPict(2s,go) ; * 4EAE1
+          :: #3+ 5ROLL label~4 PutOnPict(2s,go) ; * 4EAE1
           :: 2DROP ROTDROP ;                     * 4EAFF
-          GBUFFGROBDIM #2- 4ROLL label~2~1 DUPGROBDIM SWAPDROP ROTSWAP #- * 4EB13
+          GBUFFGROBDIM #2- 4ROLL label~4 DUPGROBDIM SWAPDROP ROTSWAP #- * 4EB13
           5ROLL DUPTYPEBINT? ITE                 * 4EB3B
           :: #3+ ROT PutOnPict(2s,go) ; 3DROP    * 4EB4A
-          SWAP label~2~1 DUPGROBDIM 5ROLL DUPTYPEBINT? ITE * 4EB68
+          SWAP label~4 DUPGROBDIM 5ROLL DUPTYPEBINT? ITE * 4EB68
           :: SWAP#- #1- 4ROLL #2- ROT#- ROT PutOnPict(2s,go) ; 5DROP * 4EB86
         ;                                        * 4EBB8
 
 * refs (4): 4EA87 4EAF0 4EB22 4EB6D
-label~2~1:
-        :: OBJ_159D2 $>grob ;                    * 4EBBD
+label~4:
+        :: ~setStdWid;COLA;stkdecomp$w $>grob ;  * 4EBBD
 
 * refs (2): 45762 4D81C
 OBJ_4EBD1:
-        :: TakeOver OBJ_4579E GBUFF 3UNROLL CROSSMARKOFF OBJ_517B2 ORDERXY# * 4EBD1
-          SWAP#1+SWAP #1+ GROB!ZERODRP CROSSMARKON ; * 4EBF9
+        :: TakeOver OBJ_4579E GBUFF 3UNROLL CROSSMARKOFF ~8GETLAM;7GETLAM * 4EBD1
+          ORDERXY# SWAP#1+SWAP #1+ GROB!ZERODRP CROSSMARKON ; * 4EBF4
 
 * refs (1): 73AF8
 OBJ_4EC12:
         :: TraceMode? NOTcase RECORDX&YC%        * 4EC12
-          OBJ_456E5 BINT5 NTHELCOMP case EVAL    * 4EC26
+          ~BINT23;GETLAM BINT5 NTHELCOMP case EVAL * 4EC26
           RECORDX&YC% ;                          * 4EC3F
 
 * refs (1): 68E95
@@ -1133,7 +1137,7 @@ OBJ_4EC49:
           TRUE' 'EL STO OBJ_699B9 ;              * 4EC7B
 
 * refs (1): 3B3FA
-OBJ_4EC94:
+~0LASTOWDOB!;CK2NOLASTWD:
         :: 0LASTOWDOB! CK2NOLASTWD ;             * 4EC94
         NIBHEX  00000                            * 4ECA8  ..
 
@@ -1153,8 +1157,8 @@ Warning201:
 
 Warning202:
           :: # 202 OBJ_6BC2D ;                   * 4ED20
-          CK1NOLASTWD CROSSMARKOFF GBUFF SWAP OBJ_517B2 CKGROBFITS 4ROLL * 4ED39
-          3UNROLL GROB! CROSSMARKON ;            * 4ED5C
+          CK1NOLASTWD CROSSMARKOFF GBUFF SWAP ~8GETLAM;7GETLAM CKGROBFITS * 4ED39
+          4ROLL 3UNROLL GROB! CROSSMARKON ;      * 4ED57
 
 * refs (1): 4BB2F
 OBJ_4ED70:
@@ -1183,7 +1187,7 @@ OBJ_4EE6F:
 
 * refs (1): 73B75
 OBJ_4EEA1:
-        :: OBJ_456E5 BINT1 NTHCOMPDROP EVAL ;    * 4EEA1
+        :: ~BINT23;GETLAM BINT1 NTHCOMPDROP EVAL ; * 4EEA1
 
 * refs (16): 0C9B3 47ACE 47AF1 47BD7 47C2C 47FFE ...
 * -> : save PPAR in ZPAR (with its zoom factors, or 4 4 0) so a zoom can be undone
@@ -1198,7 +1202,7 @@ OBJ_4EF0A:
         :: OBJ_4C64D NOT?INVPPAR ;               * 4EF0A
 
 * refs (1): 4CA91
-bins(3r)~1~1:
+bins(3r)~3:
         :: 3PICK 2GETLAM %= case                 * 4EF1E
           :: 3DROP 1GETLAM ;                     * 4EF37
           3UNROLL %- SWAP %/ %1+ %IP COERCE ;    * 4EF4B
@@ -1227,5 +1231,5 @@ xPVIEW~list:
 * refs (2): 4F01D 4F040
 WINDOW#:
         :: CHECKPICT GBUFF InGrob(2s,go)?#:BAV! GBUFFGROBDIM 4PICK BINT131 * 4F052
-          WINDOW#~1 SWAP3PICK BINT64 WINDOW#~1 ORcase SETSIZEERR * 4F075
+          ~#+;#< SWAP3PICK BINT64 ~#+;#< ORcase SETSIZEERR * 4F075
           TOGDISP SWAP WINDOWXY TURNMENUOFF ;    * 4F093

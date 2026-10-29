@@ -6,8 +6,8 @@
 use crate::prelude::*;
 
 // ROMPTR 0C1 021
-// UMSIN~1~1~2: firmware/upper/CA95B-lib0C1.s:43
-pub(crate) fn UMSIN_1_1_2(r: &mut Run) {
+// UMSIN~4: firmware/upper/CA95B-lib0C1.s:43
+pub(crate) fn UMSIN_4(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -405,7 +405,7 @@ pub(crate) fn SUB_CB05C(r: &mut Run) {
                 op!(r, at, 0xCB097..0xCB09A, 5, r.cpu.d_add(0, 16)); // D0=D0+ 16
                 op!(r, at, 0xCB09A..0xCB09D, 5, r.cpu.d_add(0, 16)); // D0=D0+ 16
                 op!(r, at, 0xCB09D..0xCB0A0, 5, r.cpu.d_add(0, 11)); // D0=D0+ 11
-                branch!(r, at, 0xCB0A4, 6, r.cpu.call(0xCB3FD)); // GOSUB PUTAB0~jump_CB3FD
+                branch!(r, at, 0xCB0A4, 6, r.cpu.call(0xCB3FD)); // GOSUB PUTAB0~jump_4
             }
             // #CB0A4:
             0xCB0A4..=0xCB0AC => {
@@ -473,7 +473,7 @@ pub(crate) fn SUB_CB05C(r: &mut Run) {
                 op!(r, at, 0xCB11B..0xCB11D, 4, r.cpu.pop_c()); // C=RSTK
                 op!(r, at, 0xCB11D..0xCB120, 5, r.cpu.d_from_r(0, R::C, false)); // D0=C
                 op!(r, at, 0xCB120..0xCB123, 5, r.cpu.not(R::A, Field::S)); // A=-A-1 S
-                branch!(r, at, 0xCB127, 6, r.cpu.call(0xCB3FD)); // GOSUB PUTAB0~jump_CB3FD
+                branch!(r, at, 0xCB127, 6, r.cpu.call(0xCB3FD)); // GOSUB PUTAB0~jump_4
             }
             // #CB127:
             0xCB127..=0xCB127 => {
@@ -481,7 +481,7 @@ pub(crate) fn SUB_CB05C(r: &mut Run) {
             }
             // #CB12E:
             0xCB12E..=0xCB12E => {
-                branch!(r, at, 0xCB132, 6, r.cpu.call(0xCB3FD)); // GOSUB PUTAB0~jump_CB3FD
+                branch!(r, at, 0xCB132, 6, r.cpu.call(0xCB3FD)); // GOSUB PUTAB0~jump_4
             }
             // #CB132:
             0xCB132..=0xCB134 => {
@@ -516,7 +516,7 @@ pub(crate) fn SUB_CB05C(r: &mut Run) {
                 op!(r, at, 0xCB161..0xCB163, 4, r.cpu.add(R::C, R::D, Field::A)); // C=C+D A
                 op!(r, at, 0xCB163..0xCB166, 5, r.cpu.d_from_r(1, R::C, false)); // D1=C
                 op!(r, at, 0xCB166..0xCB168, 4, r.cpu.dec = true); // SETDEC
-                branch!(r, at, 0xCB16C, 6, r.cpu.call(0xCB40A)); // GOSUB GETAB1~jump_CB40A
+                branch!(r, at, 0xCB16C, 6, r.cpu.call(0xCB40A)); // GOSUB GETAB1~jump_3
             }
             // #CB16C:
             0xCB16C..=0xCB16C => {
@@ -533,7 +533,7 @@ pub(crate) fn SUB_CB05C(r: &mut Run) {
             }
             // #CB17E:
             0xCB17E..=0xCB17E => {
-                branch!(r, at, 0xCB182, 6, r.cpu.call(0xCB40A)); // GOSUB GETAB1~jump_CB40A
+                branch!(r, at, 0xCB182, 6, r.cpu.call(0xCB40A)); // GOSUB GETAB1~jump_3
             }
             // #CB182:
             0xCB182..=0xCB182 => {
@@ -570,7 +570,7 @@ pub(crate) fn SUB_CB05C(r: &mut Run) {
             }
             // #CB1AB:
             0xCB1AB..=0xCB1AB => {
-                branch!(r, at, 0xCB1AF, 6, r.cpu.call(0xCB40A)); // GOSUB GETAB1~jump_CB40A
+                branch!(r, at, 0xCB1AF, 6, r.cpu.call(0xCB40A)); // GOSUB GETAB1~jump_3
             }
             // #CB1AF:
             0xCB1AF..=0xCB1AF => {
@@ -604,7 +604,7 @@ pub(crate) fn SUB_CB05C(r: &mut Run) {
             }
             // #CB1DB:
             0xCB1DB..=0xCB1DB => {
-                branch!(r, at, 0xCB1DF, 6, r.cpu.call(0xCB3F0)); // GOSUB PutAB%1~jump_CB3F0
+                branch!(r, at, 0xCB1DF, 6, r.cpu.call(0xCB3F0)); // GOSUB PutAB%1~jump_3
             }
             // #CB1DF:
             0xCB1DF..=0xCB1DF => {
@@ -625,7 +625,7 @@ pub(crate) fn SUB_CB05C(r: &mut Run) {
             }
             // #CB1F5:
             0xCB1F5..=0xCB1F5 => {
-                branch!(r, at, 0xCB1F9, 6, r.cpu.call(0xCB3F0)); // GOSUB PutAB%1~jump_CB3F0
+                branch!(r, at, 0xCB1F9, 6, r.cpu.call(0xCB3F0)); // GOSUB PutAB%1~jump_3
             }
             // #CB1F9:
             0xCB1F9..=0xCB1F9 => {
@@ -1077,8 +1077,8 @@ pub(crate) fn SUB_CB3E5(r: &mut Run) {
     }
 }
 
-// PutAB%1~jump_CB3F0: firmware/upper/CADC4-lib0C4.s:539
-pub(crate) fn PutAB_1_jump_CB3F0(r: &mut Run) {
+// PutAB%1~jump_3: firmware/upper/CADC4-lib0C4.s:539
+pub(crate) fn PutAB_1_jump_3(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -1111,8 +1111,8 @@ pub(crate) fn SUB_CB3F7(r: &mut Run) {
     }
 }
 
-// PUTAB0~jump_CB3FD: firmware/upper/CADC4-lib0C4.s:548
-pub(crate) fn PUTAB0_jump_CB3FD(r: &mut Run) {
+// PUTAB0~jump_4: firmware/upper/CADC4-lib0C4.s:548
+pub(crate) fn PUTAB0_jump_4(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -1145,8 +1145,8 @@ pub(crate) fn SUB_CB404(r: &mut Run) {
     }
 }
 
-// GETAB1~jump_CB40A: firmware/upper/CADC4-lib0C4.s:557
-pub(crate) fn GETAB1_jump_CB40A(r: &mut Run) {
+// GETAB1~jump_3: firmware/upper/CADC4-lib0C4.s:557
+pub(crate) fn GETAB1_jump_3(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -1933,7 +1933,7 @@ pub(crate) fn _UTTYPEEXT0_(r: &mut Run) {
 }
 
 pub const ROUTINES: &[(u32, u32, Block, &str)] = &[
-    (0xCABB6, 0xCABFE, UMSIN_1_1_2, "UMSIN_1_1_2"),
+    (0xCABB6, 0xCABFE, UMSIN_4, "UMSIN_4"),
     (0xCAE87, 0xCAEC4, ROMP_0C4_003, "ROMP_0C4_003"),
     (0xCAEC5, 0xCAEDF, SUB_CAEC5, "SUB_CAEC5"),
     (0xCAEEA, 0xCB048, ROMP_0C4_004, "ROMP_0C4_004"),
@@ -1949,11 +1949,11 @@ pub const ROUTINES: &[(u32, u32, Block, &str)] = &[
     (0xCB3D7, 0xCB3D9, SUB_CB3D7, "SUB_CB3D7"),
     (0xCB3DA, 0xCB3E4, SUB_CB3DA, "SUB_CB3DA"),
     (0xCB3E5, 0xCB3EF, SUB_CB3E5, "SUB_CB3E5"),
-    (0xCB3F0, 0xCB3F6, PutAB_1_jump_CB3F0, "PutAB_1_jump_CB3F0"),
+    (0xCB3F0, 0xCB3F6, PutAB_1_jump_3, "PutAB_1_jump_3"),
     (0xCB3F7, 0xCB3FC, SUB_CB3F7, "SUB_CB3F7"),
-    (0xCB3FD, 0xCB403, PUTAB0_jump_CB3FD, "PUTAB0_jump_CB3FD"),
+    (0xCB3FD, 0xCB403, PUTAB0_jump_4, "PUTAB0_jump_4"),
     (0xCB404, 0xCB409, SUB_CB404, "SUB_CB404"),
-    (0xCB40A, 0xCB410, GETAB1_jump_CB40A, "GETAB1_jump_CB40A"),
+    (0xCB40A, 0xCB410, GETAB1_jump_3, "GETAB1_jump_3"),
     (0xCB411, 0xCB417, SUB_CB411, "SUB_CB411"),
     (0xCB418, 0xCB42D, SUB_CB418, "SUB_CB418"),
     (0xCB42E, 0xCB438, SUB_CB42E, "SUB_CB42E"),

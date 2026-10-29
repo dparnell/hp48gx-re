@@ -296,7 +296,7 @@ SUB_38327:
         RTN                                      * 38335
 
 * refs (5): 37EA2 37EB3 37EBA 37EC1 37ED4
-POP#~jump_38337:
+POP#~jump_3:
         GOVLNG  POP#                             * 38337
 
 * refs (3): 38208 382E5 38302
@@ -348,7 +348,7 @@ puretemp?~1:
         ENDLENGTH                                * 384D0
 
 * refs (1): CAC68
-UMSIN~1~1~1:
+UMSIN~3:
         CON(5)  DOARRY                           * 384D0  array 10
         LENGTH                                   * 384D5  length, to #38589
         CON(5)  DOREAL                           * 384DA  element type
@@ -465,7 +465,7 @@ FlashWarning:
 
 * refs (1): 38782
 SysErrorTrap~1:
-        :: SysErrorTrap~1~1 case OBJ_3881D       * 3894E
+        :: SysErrorTrap~2 case OBJ_3881D         * 3894E
           CtlAlarm@ OBJ_3881D ERRSET ExecAlarm(r) ERRTRAP SysErrorTrap ; * 38962
 
 * Disp Keys NonAppKeys? DoStdKeys? menu #row suspendOK? ExitCond AppErr ->
@@ -1506,7 +1506,7 @@ DispDir?Tim2:
 PathStatus:
         :: ITE BINT53 # 7D                       * 39971
           $ " }" CONTEXT@ BEGIN DUP RAM-WORDNAME DUP NULLID EQUALNOT DUP ITE * 3998A
-          PathStatus~1 PathStatus~2              * 399C5
+          ~SWAP;ID>$ PathStatus~1                * 399C5
           4ROLL !append$ SPACE$ !insert$ 3UNROLL 3PICK LEN$ BINT63 #< AND * 399CF
           WHILE                                  * 39A01
           :: MYRAMROMPAIR DROP ; REPEAT DROPSWAP RIGHT$3x6 OVER ITE * 39A06
@@ -1514,11 +1514,11 @@ PathStatus:
           $>grob ROT ;                           * 39A3D
 
 * refs (1): 399C5
-PathStatus~1:
+~SWAP;ID>$:
         :: SWAP ID>$ ;                           * 39A4C
 
 * refs (1): 399CA
-PathStatus~2:
+PathStatus~1:
         :: SWAPDROP ' xHOME PTR>ROMPTR ->str(xn) ; * 39A60
 
 * refs (2): 39930 39AE7
@@ -1527,7 +1527,7 @@ OBJ_39A83:
           TOD TOD>t$ !append$ $>grob HARDBUFF BINT63 BINT7 GROB! ; * 39AAB
 
 * refs (2): 048C7 048EA
-GETKEY~1~1~4:
+OBJ_39AD8:
         :: DA1IsStat? NOT?SEMI                   * 39AD8
           OBJ_39A83 ;                            * 39AE7
 
@@ -1635,7 +1635,7 @@ OBJ_39F04:
         ::                                       * 39F04
 
 * refs (1): 17CC4
-VLM~4~2:
+VLM~6:
           $ "1: " !insert$ ;                     * 39F09
 
 * refs (1): 39D38
@@ -1695,7 +1695,7 @@ ClrAbbrevStk:
         RPL
 
 * refs (2): 3A04E 3A053
-OBJ_39FE3:
+~BINT5:
         :: BINT5 ;                               * 39FE3
 
 * refs (6): 39A33 3A12F AE62A B21DC BBEDD D6E46

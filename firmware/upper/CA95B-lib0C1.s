@@ -40,7 +40,7 @@ ROMP_0C1_020:
 
 * ROMPTR 0C1 021
 * refs (1): C78DB
-UMSIN~1~1~2:
+UMSIN~4:
           CODE                                   * CABAC  73 nibbles
             GOSBVL  SAVPTR                       * CABB6
             GOSBVL  SUB_2AEF6                    * CABBD
@@ -70,8 +70,8 @@ L_CABF5:
 
 * ROMPTR 0C1 022
 * refs (1): C78DB
-UMSIN~1~1:
-        :: UMSIN~1~1~1 OBJ_0FBFB case2DROP DROP  * CAC63
+UMSIN~2:
+        :: UMSIN~3 OBJ_0FBFB case2DROP DROP      * CAC63
           OBJ_3835E EQUALNOTcase CONSTUNITERR    * CAC7C
           ROMPTR 0C1 021 %%* ;                   * CAC8B
 
@@ -109,11 +109,11 @@ LIB0C1.link:
         REL(5)  ROMP_0C1_004                     * CAD22  004 
         REL(5)  RKFERR~1                         * CAD27  005 
         REL(5)  ROMP_0C1_006                     * CAD2C  006 
-        REL(5)  RKFERR~1~1                       * CAD31  007 
+        REL(5)  RKFERR~2                         * CAD31  007 
         REL(5)  ROMP_0C1_008                     * CAD36  008 
         REL(5)  ROMP_0C1_009                     * CAD3B  009 
         REL(5)  RKFSTEP~1                        * CAD40  00A 
-        REL(5)  RKFSTEP~1~1                      * CAD45  00B 
+        REL(5)  RKFSTEP~2                        * CAD45  00B 
         REL(5)  ROMP_0C1_00C                     * CAD4A  00C 
         REL(5)  ROMP_0C1_00D                     * CAD4F  00D 
         REL(5)  ROMP_0C1_00E                     * CAD54  00E 
@@ -123,11 +123,11 @@ LIB0C1.link:
         REL(5)  ROMP_0C1_012                     * CAD68  012 
         REL(5)  RSBERR~1                         * CAD6D  013 
         REL(5)  ROMP_0C1_014                     * CAD72  014 
-        REL(5)  RSBERR~1~1                       * CAD77  015 
+        REL(5)  RSBERR~2                         * CAD77  015 
         REL(5)  ROMP_0C1_016                     * CAD7C  016 
         REL(5)  ROMP_0C1_017                     * CAD81  017 
         REL(5)  RRKSTEP~1                        * CAD86  018 
-        REL(5)  RRKSTEP~1~1                      * CAD8B  019 
+        REL(5)  RRKSTEP~2                        * CAD8B  019 
         REL(5)  ROMP_0C1_01A                     * CAD90  01A 
         REL(5)  ROMP_0C1_01B                     * CAD95  01B 
         REL(5)  ROMP_0C1_01C                     * CAD9A  01C 
@@ -135,7 +135,7 @@ LIB0C1.link:
         REL(5)  ROMP_0C1_01E                     * CADA4  01E 
         REL(5)  ROMP_0C1_01F                     * CADA9  01F 
         REL(5)  ROMP_0C1_020                     * CADAE  020 
-        REL(5)  UMSIN~1~1~2                      * CADB3  021 
-        REL(5)  UMSIN~1~1                        * CADB8  022 
+        REL(5)  UMSIN~4                          * CADB3  021 
+        REL(5)  UMSIN~2                          * CADB8  022 
         ENDLENGTH                                * CADBD
         NIBHEX  A0D0000                          * CADBD  ...

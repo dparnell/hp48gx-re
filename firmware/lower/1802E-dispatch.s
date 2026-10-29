@@ -1984,7 +1984,7 @@ DoInputForm:
             BINT13 PICK #3* OVER #+ DUP BINT16 #+ ROT BINT16 #+ ROT BINT14 * 19A4D
             #+ ROMPTR 0B0 0DB ROMPTR 0B0 0A3 ROMPTR 0B0 009 8PUTLAM MINUSONE * 19A8E  ~nNullBind
             5PUTLAM ROMPTR 0B0 020 ROMPTR 0B0 06B ROMPTR 0B0 00B ' * 19ABE
-            DoInputForm~1 ' DoInputForm~2 TrueFalse 8GETLAM ONEFALSE ' * 19AE9
+            DoInputForm~1 ' DoInputForm~3 TrueFalse 8GETLAM ONEFALSE ' * 19AE9
             11GETLAM ' ROMPTR 0B0 000 POLSetUI OBJ_1A03E KEYINBUFFER? NOT * 19B0C
             DAsBad? AND IT BlankDA12             * 19B35
             POLKeyUI ABND ABND ;                 * 19B49
@@ -1998,28 +1998,28 @@ DoInputForm~1:
           ?SKIP DispEditLine                     * 19BAE
           :: EditLExists? caseTRUE DA2bOK?       * 19BB8
           ;                                      * 19BCC
-          ?SKIP DoInputForm~1~1                  * 19BD1
+          ?SKIP DoInputForm~2                    * 19BD1
           ROMPTR 0B0 06E EditLExists? AND IT     * 19BDB
           :: ROMPTR 0B0 0A8 SetDA3Bad ;          * 19BF5
           DA3OK? ?SKIP                           * 19C0F
           :: ?DispMenu ROMPTR 0B0 06E ?SEMI      * 19C19
             EditLExists? ?SEMI                   * 19C33
             DA2bTemp? ?SEMI                      * 19C3D
-            DoInputForm~1~1 ;                    * 19C47
+            DoInputForm~2 ;                      * 19C47
           :: DA2aOK? DA2aLess1OK? ClrNewEditL OR ; NOT IT ROMPTR 0B0 002 * 19C51
           ROMPTR 0B0 0A0 IT ROMPTR 0B0 003       * 19C84
           ClrDAsOK EditLExists? ?SEMI            * 19C9F
           SetPrgmEntry ;                         * 19CAE
 
 * refs (2): 19BD6 19C47
-DoInputForm~1~1:
+DoInputForm~2:
         :: KEYINBUFFER? case SetDA2bBad          * 19CB8
           TOADISP TRUE 5GETLAM ROMPTR 0B0 017 SetDA2bValid ; * 19CCC
 
 * refs (1): 19AF3
-DoInputForm~2:
+DoInputForm~3:
         :: 5GETLAM BINT8 IFECallFieldMH ?SEMI    * 19CF0
-          BINT1 #=casedrop DoInputForm~2~1       * 19D09
+          BINT1 #=casedrop DoInputForm~4         * 19D09
           BINT2 #=casedrop ROMPTR 0B0 047        * 19D18
           BINT3 #=casedrop ROMPTR 0B0 048        * 19D2D
           BINT4 #=casedrop ROMPTR 0B0 049        * 19D42
@@ -2028,23 +2028,23 @@ DoInputForm~2:
         ;                                        * 19D81
 
 * refs (1): 19D13
-DoInputForm~2~1:
+DoInputForm~4:
         ::                                       * 19D86
           { BINT11 ROMPTR 0B0 05E BINT17 ROMPTR 0B0 05F BINT25 * 19D8B
             ROMPTR 0B0 05A BINT45                * 19DB5  DoKeyOK
             ROMPTR 0B0 059 }                     * 19DC5  DoKeyCancel
           #=Lookup caseTRUE EditExstCase         * 19DD5
-          DoInputForm~2~1~1                      * 19DE4
+          DoInputForm~39                         * 19DE4
           { BINT11 ROMPTR 0B0 064 BINT17 ROMPTR 0B0 065 BINT18 * 19DE9
             ROMPTR 0B0 066 BINT16 ROMPTR 0B0 068 BINT26 ROMPTR 0B0 06A * 19E13
             BINT28 ROMPTR 0B0 05B BINT29 DoBadKey } * 19E3E
           #=Lookup caseTRUE BINT1                * 19E5D
           OVER BINT7                             * 19E6C
 * The Very Big List names this address [liste], but it is a pointer inside an object; the name is not used
-          #<case OBJ_19F93                       * 19E76
+          #<case ~Key>StdKeyOb;TRUE              * 19E76
           { BINT12 BINT30 BINT35 BINT40 } 3PICK #=POSCOMP #0<> case * 19E80
-          OBJ_19F93                              * 19EB2
-          COLA DoInputForm~2~1~2                 * 19EB7
+          ~Key>StdKeyOb;TRUE                     * 19EB2
+          COLA DoInputForm~5                     * 19EB7
         ;                                        * 19EC1
         FILLTO  #19EEC                           * 19EC6  38 zero nibbles: the next entry stays at #19EEC
 
@@ -2061,16 +2061,16 @@ OBJ_19F0F:
           Key>U/SKeyOb 6PUTLAM ' ROMPTR 0B0 04C TRUE ; * 19F56
 
 * refs (1): 19DE4
-DoInputForm~2~1~1:
+DoInputForm~39:
         :: BINT1 COLA OBJ_19F0F                  * 19F7A
         ;                                        * 19F8E
 
 * refs (9): 19E7B 19EB2 D6F52 D6F84 D70A6 D70D8 ...
-OBJ_19F93:
+~Key>StdKeyOb;TRUE:
         :: Key>StdKeyOb TRUE ;                   * 19F93
 
 * refs (14): D529C D5318 D5336 D534F D5403 D544F ...
-OBJ_19FA7:
+~13GETLAM;EVAL:
         :: 13GETLAM EVAL ;                       * 19FA7
 
 * refs (42): 19CFF 19F1E D5545 D55B0 D55E3 D5681 ...

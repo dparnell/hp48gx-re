@@ -143,7 +143,7 @@ STATCLST:
         :: ' ID_SIGMADAT ?PURGE_HERE ;           * 2C22F
 
 * refs (1): 2C45A
-xSIGMA-~1~1:
+xSIGMA-~2:
         :: ' ID_SIGMADAT dup;Vector*­Rcl(nm)? SWAPDROP NOT?SEMI * 2C248
           ?PURGE_HERE ;                          * 2C266
 
@@ -192,7 +192,7 @@ L_2C3E7:
 xSIGMA-~1:
         :: rclä DUP MDIMSDROP ROTOVER lastv(ra,s) SWAP4ROLL 4ROLLOVER * 2C423
           #1=case                                * 2C44B
-          :: 3DROP xSIGMA-~1~1 STATCLST ;        * 2C450
+          :: 3DROP xSIGMA-~2 STATCLST ;          * 2C450
           SWAP#1- SWAP TWO{}N @rdm(ar,ls) DROP ; * 2C469
 
 * refs (1): 2C43C
@@ -207,7 +207,7 @@ nulv(s):
           :: DUPONE {}N %0_2A2B4 MAKEARRY ; SWAP * 2C4B4
           CODE                                   * 2C4D7  79 nibbles
             GOSBVL  POP#                         * 2C4E1
-            GOSUBL  SAVPTR~jump_2CE75            * 2C4E8
+            GOSUBL  SAVPTR~jump_12               * 2C4E8
             A=A+A   A                            * 2C4EE
             A=A+A   A                            * 2C4F0
             A=A+A   A                            * 2C4F2
@@ -441,7 +441,7 @@ maxcols(s,ra):
         A=DAT1  A                                * 2CC97
         D1=D1+  5                                * 2CC9A
         D=D+1   A                                * 2CC9D
-        GOSUB   SAVPTR~jump_2CE75                * 2CC9F
+        GOSUB   SAVPTR~jump_12                   * 2CC9F
         D0=A                                     * 2CCA3
         D0=D0+  15                               * 2CCA6
         D0=D0+  5                                * 2CCA9
@@ -576,7 +576,7 @@ L_2CDDB:
         A=C     A                                * 2CDDD
         P=      0                                * 2CDDF
         SETHEX                                   * 2CDE1
-        GOSUB   GETPTR~jump_2CE6E                * 2CDE3
+        GOSUB   GETPTR~jump_6                    * 2CDE3
         C=A     A                                * 2CDE7
         GOTO    L_2D313                          * 2CDE9
 L_2CDED:
@@ -624,11 +624,11 @@ SUB_2CE52:
         GOVLNG  DIVF                             * 2CE67
 
 * refs (3): 2CDE3 2CF14 2CF25
-GETPTR~jump_2CE6E:
+GETPTR~jump_6:
         GOVLNG  GETPTR                           * 2CE6E
 
 * refs (3): 2C4E8 2CC9F 2CF38
-SAVPTR~jump_2CE75:
+SAVPTR~jump_12:
         GOVLNG  SAVPTR                           * 2CE75
 
 * refs (5): 2C8B4 2C91D 2C9E0 2CA49 CB55B
@@ -690,14 +690,14 @@ OBJ_2CF08:
         CON(5)  (*)+5                            * 2CF08  primitive code object
         GOSUB   SUB_2CF8B                        * 2CF0D
         GOC     L_2CF25                          * 2CF11
-        GOSUB   GETPTR~jump_2CE6E                * 2CF14
+        GOSUB   GETPTR~jump_6                    * 2CF14
         D1=D1-  15                               * 2CF18
         D=D-1   A                                * 2CF1B
         D=D-1   A                                * 2CF1D
         D=D-1   A                                * 2CF1F
         GOTO    L_2D2BD                          * 2CF21
 L_2CF25:
-        GOSUB   GETPTR~jump_2CE6E                * 2CF25
+        GOSUB   GETPTR~jump_6                    * 2CF25
         GOTO    L_2D2EC                          * 2CF29
 
 * refs (4): 2CCC2 2CD35 2CDB1 2CE0D
@@ -708,7 +708,7 @@ SUB_2CF2D:
 SUB_2CF31:
         GOSUB   SUB_2CEF2                        * 2CF31
         R4=C                                     * 2CF35
-        GOSUB   SAVPTR~jump_2CE75                * 2CF38
+        GOSUB   SAVPTR~jump_12                   * 2CF38
         D0=A                                     * 2CF3C
         D0=D0+  5                                * 2CF3F
         AD0EX                                    * 2CF42

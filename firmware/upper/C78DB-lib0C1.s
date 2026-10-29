@@ -26,7 +26,7 @@ ROMP_0C1_001:
           :: 5GETLAM %%CHS 5PUTLAM %%CHS FALSE 12PUTLAM ; * C79D3
           SWAP BEGIN 5GETLAM                     * C79FB
           :: 4dropn;IU! caseDROP ROT             * C7A0A
-            12GETLAM ITE OBJ_37DA0 %%MAX         * C7A1E
+            12GETLAM ITE ~2DUP;%%<;NOT?SWAPDROP %%MAX * C7A1E
             SWAP ;                               * C7A32
           8GETLAM 12GETLAM ITE OBJ_7CE00 OBJ_7CE32 * C7A3C
           11GETLAM EVAL LAM 'T OBJ_36DDF DUP LAM 'W OBJ_36E5C 10GETLAM * C7A55
@@ -76,7 +76,7 @@ ROMP_0C1_004:
           :: 10GETLAM %%CHS 10PUTLAM %%CHS FALSE 17PUTLAM ; * C7EDB
           SWAP BEGIN 10GETLAM                    * C7F03
           :: 4dropn;IU! caseDROP ROT             * C7F12
-            17GETLAM ITE OBJ_37DA0 %%MAX         * C7F26
+            17GETLAM ITE ~2DUP;%%<;NOT?SWAPDROP %%MAX * C7F26
             SWAP ;                               * C7F3A
           13GETLAM 17GETLAM ITE OBJ_7CE00 OBJ_7CE32 * C7F44
           SWAP 16GETLAM EVAL SWAP LAM 'T OBJ_36DDF DUP LAM 'W OBJ_36E5C * C7F5D
@@ -103,7 +103,7 @@ ROMP_0C1_006:
 
 * ROMPTR 0C1 007
 * refs (1): C78DB
-RKFERR~1~1:
+RKFERR~2:
         :: %0_2A2B4 %0_2A2B4 ROT %0_2A2B4 %0_2A2B4 %0_2A2B4 %0_2A2B4 * C80F7
           %0_2A2B4 8NULLLAM{} BIND LAM 'T OBJ_36DCB 8PUTLAM LAM 'W OBJ_36E43 * C811F
           DUP 7PUTLAM ROMPTR 0C1 00C EVAL ABND ; * C8153
@@ -191,7 +191,7 @@ RKFSTEP~1:
 
 * ROMPTR 0C1 00B
 * refs (1): C78DB
-RKFSTEP~1~1:
+RKFSTEP~2:
         :: OVER %0> NOTcase SETSIZEERR           * C8F83
           %0_2A2B4 SWAPROT 3NULLLAM{} BIND LAM 'W OBJ_36E43 ROMPTR 0C1 00C * C8F9C
           3PUTLAM 2GETLAM ROMPTR 0C1 00D 1GETABND SWAP ; * C8FCB
@@ -216,7 +216,7 @@ ROMP_0C1_00D:
             :: DROP %% 2E-1 ;                    * C9162
             %%* 6PUTLAM ;                        * C918B
           REPEAT ABND 2GETLAM OVER %%0= ITE SWAPDROP * C919A
-          :: %% 9E-1 ROT %% 2E-1 %%^ %%/ OBJ_37DA0 ; * C91BD
+          :: %% 9E-1 ROT %% 2E-1 %%^ %%/ ~2DUP;%%<;NOT?SWAPDROP ; * C91BD
           3PICK %%* 2PUTLAM LAM 'W OBJ_36D5D LAM 'T OBJ_36D26 2GETLAM ; * C920F
 
 * ROMPTR 0C1 00E
@@ -290,7 +290,7 @@ ROMP_0C1_014:
 
 * ROMPTR 0C1 015
 * refs (1): C78DB
-RSBERR~1~1:
+RSBERR~2:
         :: %0_2A2B4 %0_2A2B4 ROT %0_2A2B4 %0_2A2B4 %0_2A2B4 %0_2A2B4 * C9702
           %0_2A2B4 8NULLLAM{} BIND LAM 'T OBJ_36DCB 8PUTLAM LAM 'W OBJ_36E43 * C972A
           DUP 7PUTLAM TYPERARRY? ITE             * C975E
@@ -368,7 +368,7 @@ RRKSTEP~1:
 
 * ROMPTR 0C1 019
 * refs (1): C78DB
-RRKSTEP~1~1:
+RRKSTEP~2:
         :: 3PICK %0> NOTcase SETSIZEERR          * CA2EC
           %0_2A2B4 %0_2A2B4 %0_2A2B4 %0_2A2B4 %0_2A2B4 6ROLL 8ROLL * CA305
           8NULLLAM{} BIND LAM 'W OBJ_36E43 ROMPTR 0C1 01A 5PUTLAM 4PUTLAM * CA328
@@ -421,5 +421,5 @@ ROMP_0C1_01B:
 ROMP_0C1_01C:
         :: ABND 1GETLAM %>%% %%/ 3PICK 7GETLAM %%* %%ABS %% 2E-2 %%* 1+(rr) * CA828
           %% 3.8E0 SWAP%%/ %% 1.2E0 %%+ OVER %%0= ITE SWAPDROP * CA879
-          :: %% 9E-1 ROT %% 2.5E-1 %%^ %%/ OBJ_37DA0 ; * CA8CB
+          :: %% 9E-1 ROT %% 2.5E-1 %%^ %%/ ~2DUP;%%<;NOT?SWAPDROP ; * CA8CB
           3PICK %%* 2PUTLAM LAM 'W OBJ_36D5D LAM 'T OBJ_36D26 2GETLAM %2 ; * CA91D

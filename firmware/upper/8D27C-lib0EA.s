@@ -101,7 +101,8 @@ ROMP_0EA_00B:
             :: TOADISP 8GETLAM ROMPTR 0EA 020 CHR "-" >T$ 9GETLAM * 8D639
               ROMPTR 0EA 021 &$ PTR CHR_: >T$ APPEND_SPACE 22Lget 8GETLAM * 8D664
               9GETLAM ROMPTR 0EA 01E DUPTYPECSTR? ?SKIP * 8D68D
-              :: OBJ_159D2 OVERLEN$ BINT22 SWAP#- 2DUPSWAP LEN$ #<ITE * 8D6A7
+              :: ~setStdWid;COLA;stkdecomp$w OVERLEN$ BINT22 SWAP#- 2DUPSWAP * 8D6A7
+                LEN$ #<ITE                       * 8D6C5
                 :: 1_#1-SUB$ CHR_... >T$ ; DROP ; * 8D6CF
               &$ BigDisp1(st) ;                  * 8D6F2
             SetDA2bValid ;                       * 8D701
@@ -446,12 +447,12 @@ ROMP_0EA_03B:
 
 * ROMPTR 0EA 03C
 * refs (1): 8D288
-ROMP_0EA_03C:
+~'R;STO:
         :: 'R STO ;                              * 8E6E0
 
 * ROMPTR 0EA 03D
 * refs (1): 8D288
-GetElt~1:
+~RowElt#;PULLEL;SWAPDROP:
         :: RowElt# PULLEL SWAPDROP ;             * 8E6F4
 
 * ROMPTR 0EA 03E
@@ -594,19 +595,19 @@ ROMP_0EA_051:
 
 * ROMPTR 0EA 052
 * refs (1): 8D288
-DoNewMatrix~1~1:
+DoNewMatrix~2:
           ::                                     * 8ED70
 
 * ROMPTR 0EA 053
 * refs (1): 8D288
-InitOldMat~1~1:
+InitOldMat~2:
             :: OBJ_44B9B #0= NOT?SEMI            * 8ED75
               BINT5 OBJ_44BAB ;                  * 8ED89
             NULL{} OBJ_6D909 Push3Zeros          * 8ED98
 
 * ROMPTR 0EA 054
 * refs (1): 8D288
-InitOldMat~1~2:
+InitOldMat~3:
             :: RCLSYSF BINT0 ONEONE ROMPTR 0EA 018 3PICK#+ BINT5 ONEONE * 8EDA7
               BINT12 BINT6 ROMPTR 0EA 015 #12+ BINT14 FALSE BINT0 ; * 8EDD5
           ;                                      * 8EE03
@@ -917,8 +918,8 @@ LIB0EA.link:
         REL(5)  ROMP_0EA_039                     * 8FE99  039 
         REL(5)  ROMP_0EA_03A                     * 8FE9E  03A 
         REL(5)  ROMP_0EA_03B                     * 8FEA3  03B 
-        REL(5)  ROMP_0EA_03C                     * 8FEA8  03C 
-        REL(5)  GetElt~1                         * 8FEAD  03D 
+        REL(5)  ~'R;STO                          * 8FEA8  03C 
+        REL(5)  ~RowElt#;PULLEL;SWAPDROP         * 8FEAD  03D 
         REL(5)  ROMP_0EA_03E                     * 8FEB2  03E 
         REL(5)  ROMP_0EA_03F                     * 8FEB7  03F 
         REL(5)  ROMP_0EA_040                     * 8FEBC  040 
@@ -939,9 +940,9 @@ LIB0EA.link:
         REL(5)  ROMP_0EA_04F                     * 8FF07  04F 
         REL(5)  ROMP_0EA_050                     * 8FF0C  050 
         REL(5)  ROMP_0EA_051                     * 8FF11  051 
-        REL(5)  DoNewMatrix~1~1                  * 8FF16  052 
-        REL(5)  InitOldMat~1~1                   * 8FF1B  053 
-        REL(5)  InitOldMat~1~2                   * 8FF20  054 
+        REL(5)  DoNewMatrix~2                    * 8FF16  052 
+        REL(5)  InitOldMat~2                     * 8FF1B  053 
+        REL(5)  InitOldMat~3                     * 8FF20  054 
         REL(5)  ROMP_0EA_055                     * 8FF25  055 
         REL(5)  ROMP_0EA_056                     * 8FF2A  056 
         REL(5)  CopyRowsUp~1                     * 8FF2F  057 

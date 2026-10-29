@@ -47,6 +47,11 @@ COMMENT_COL = 48
 # pictures packed hex strings.
 EQLIB = (0xE384B, 0x100000)
 
+# Secondaries of up to TINY_WORDS named words are named after their content
+# (`~sstDISP;RDUP;GsstFIN`), if that is at most TINY_NAME characters.
+TINY_WORDS = 3
+TINY_NAME = 40
+
 # RPL bodies are written several objects to a line, up to this width.
 RPL_WIDTH = 76
 MAX_XREFS = 6
@@ -250,7 +255,14 @@ class Generator:
             base = base + "_%05X" % a if base else "L_%05X" % a
         name = base
         if self.used.get(name, a) != a:
-            name = "%s_%05X" % (base, a)
+            if "~" in base:
+                # derived names that come out the same are numbered
+                k = 2
+                while self.used.get("%s_%d" % (base, k), a) != a:
+                    k += 1
+                name = "%s_%d" % (base, k)
+            else:
+                name = "%s_%05X" % (base, a)
         self.used[name] = a
         self.label[a] = name
         return name
@@ -263,9 +275,11 @@ class Generator:
     def derive_names(self):
         """Names for objects and routines with no known name, from where they
         are used: `GETAB1~jump` for a veneer (one jump to GETAB1),
+        `~sstDISP;RDUP;GsstFIN` for a small secondary of named words,
         `xSUB~grob,list,list` for the case of a dispatch table
-        (the command and the argument types), and `ROMPOLL~1` for the first
-        helper (by address) only ROMPOLL uses. Repeated, so helpers of named
+        (the command and the argument types), and `ROMPOLL~1` for a helper
+        only ROMPOLL uses (helpers of helpers are numbered in the same
+        family). Repeated, so helpers of named
         helpers get names too. These are our names, not HP's or the entry
         lists' (no known name contains ~)."""
         self.derived = {}
@@ -320,6 +334,23 @@ class Generator:
         veneers = {a: i.target for a, i in self.insns.items()
                    if self.s["labels"].get(a) == "sub" and i.target is not None
                    and i.text.split()[0] in ("GOVLNG", "GOLONG", "GOTO")}
+        # Small secondaries `:: A B C ;` of named words are named after their
+        # content, as HP's own names often are (dup;RclInVars(gn)?).
+        tiny = {}
+        for start, _, lines in self.blocks:
+            if self.unit_kind.get(start) != "obj" or not 3 <= len(lines) <= 2 + TINY_WORDS:
+                continue
+            if lines[0].parts != ["::"] or lines[-1].parts != [";"]:
+                continue
+            mid = lines[1:-1]
+            if all(ln.value and ln.value[0] == "ptr" and ln.indent == 1 for ln in mid):
+                tiny[start] = [ln.value[1] for ln in mid]
+        def family(parent):
+            """Helpers of a helper are numbered in its root's family:
+            GETKEY~7, not GETKEY~2~4."""
+            m = re.fullmatch(r"(.+?)(~\d+)+", parent)
+            return m.group(1) if m else parent
+
         count = defaultdict(int)
         changed = True
         while changed:
@@ -347,11 +378,36 @@ class Generator:
                 cs = {t for x, t in cases.get(a, ()) if x == u}
                 if len(cs) == 1 and len(refs) == 1:
                     name = "%s~%s" % (parent, next(iter(cs)).replace(" ", ","))
+                elif a in tiny:
+                    continue        # named after its content below, once its words have names
                 else:
-                    count[parent] += 1
-                    name = "%s~%d" % (parent, count[parent])
+                    root = family(parent)
+                    count[root] += 1
+                    name = "%s~%d" % (root, count[root])
                 self.derived[a] = name
                 changed = True
+            for a, words in sorted(tiny.items()):
+                if a in self.derived or not wanted(a):
+                    continue
+                names = [self.symbol_name(t) or self.derived.get(t) for t in words]
+                if all(n and not n.startswith("~") for n in names):
+                    name = "~" + ";".join(names)
+                    if len(name) <= TINY_NAME:
+                        self.derived[a] = name
+                        changed = True
+        # A small secondary whose words never all get names falls back to
+        # its single caller's name, as other helpers do.
+        for a in sorted(uses):
+            if a in tiny and a not in self.derived and wanted(a):
+                own = unit_of(a)
+                us = {u for u, f in uses[a] if u is not None and u != own and self.unit_kind.get(u) not in self.IGNORED_KINDS}
+                if len(us) == 1:
+                    u = next(iter(us))
+                    parent = self.symbol_name(u) or self.derived.get(u)
+                    if parent and self.unit_kind.get(u) in self.CALLER_KINDS:
+                        root = family(parent)
+                        count[root] += 1
+                        self.derived[a] = "%s~%d" % (root, count[root])
 
     def label_for(self, a):
         if a in self.label:

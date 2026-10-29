@@ -72,7 +72,7 @@ ROMP_0E7_005:
 
 * ROMPTR 0E7 006
 * refs (1): CCAAB
-TVMROOT~1~1:
+TVMROOT~2:
         :: # 202 ERROROUT ;                      * CD0FB
 
 * ROMPTR 0E7 007
@@ -163,12 +163,12 @@ ROMP_0E7_010:
 
 * ROMPTR 0E7 012
 * refs (1): CCAAB
-~UTVUNS1Arg~1:
+~SWAPcompSWAP:
         :: SWAPcompSWAP ;                        * CD7A1
 
 * ROMPTR 0E7 013
 * refs (1): CCAAB
-~UTVUNS1Arg~2:
+~DROPTRUE:
         :: DROPTRUE ;                            * CD7B0
 
 * ROMPTR 0E7 014
@@ -428,7 +428,7 @@ ROMP_0E7_03D:
 
 * ROMPTR 0E7 03E
 * refs (1): CCAAB
-MINEHUNT~1~1:
+MINEHUNT~2:
         :: ROMPTR 0E7 037 ROMPTR 0E7 036 BINT0 3UNROLL DUPDUP BINT8 #<> IT * CE4B4
           #1+                                    * CE4ED
           #1+ SWAPDUP #1<> IT #1-                * CE4F2
@@ -480,7 +480,7 @@ ROMP_0E7_043:
 
 * ROMPTR 0E7 044
 * refs (1): CCAAB
-MINEHUNT~1~2:
+MINEHUNT~3:
         :: BINT1 #=casedrop                      * CE88D
           :: BINT11 ?CaseRomptr@ ROMPTR 0E7 046 BINT32 ?CaseRomptr@ * CE89C
             ROMPTR 0E7 046 BINT16 ?CaseRomptr@ ROMPTR 0E7 047 BINT36 * CE8C0
@@ -500,32 +500,32 @@ MINEHUNT~1~2:
 
 * ROMPTR 0E7 045
 * refs (1): CCAAB
-MINEHUNT~1~2~1:
+MINEHUNT~4:
         :: TakeOver ClrDAsOK ROMPTR 0E7 04E ;    * CEA21
 
 * ROMPTR 0E7 046
 * refs (1): CCAAB
-MINEHUNT~1~2~2:
+MINEHUNT~5:
         :: TakeOver ROMPTR 0E7 040 ROMPTR 0E7 036 #1- DUP#0= ITE * CEA40
           :: DROP DoBadKey ; ROMPTR 0E7 030      * CEA6F
           ROMPTR 0E7 041 ;                       * CEA8E
 
 * ROMPTR 0E7 047
 * refs (1): CCAAB
-MINEHUNT~1~2~3:
+MINEHUNT~6:
         :: TakeOver ROMPTR 0E7 040 ROMPTR 0E7 037 #1- DUP#0= ITE * CEA9E
           :: DROP DoBadKey ; ROMPTR 0E7 02F      * CEACD
           ROMPTR 0E7 041 ;                       * CEAEC
 
 * ROMPTR 0E7 048
 * refs (1): CCAAB
-MINEHUNT~1~2~4:
+MINEHUNT~7:
         :: TakeOver ROMPTR 0E7 040 ROMPTR 0E7 036 #1+DUP BINT9 #=ITE * CEAFC
           :: DROP DoBadKey ; ROMPTR 0E7 030 ROMPTR 0E7 041 ; * CEB2B
 
 * ROMPTR 0E7 049
 * refs (1): CCAAB
-MINEHUNT~1~2~5:
+MINEHUNT~8:
         :: TakeOver ROMPTR 0E7 037 DUP #1= casedrop DoBadKey * CEB5A
           ROMPTR 0E7 036 DUP #1= case2drop DoBadKey * CEB83
           ROMPTR 0E7 040 #1- ROMPTR 0E7 030 #1- ROMPTR 0E7 02F * CEBA2
@@ -533,7 +533,7 @@ MINEHUNT~1~2~5:
 
 * ROMPTR 0E7 04A
 * refs (1): CCAAB
-MINEHUNT~1~2~6:
+MINEHUNT~9:
         :: TakeOver ROMPTR 0E7 037 DUP BINT16 #= casedrop DoBadKey * CEBDD
           ROMPTR 0E7 036 DUP #1= case2drop DoBadKey * CEC0B
           ROMPTR 0E7 040 #1- ROMPTR 0E7 030 #1+ ROMPTR 0E7 02F * CEC2A
@@ -541,7 +541,7 @@ MINEHUNT~1~2~6:
 
 * ROMPTR 0E7 04B
 * refs (1): CCAAB
-MINEHUNT~1~2~7:
+MINEHUNT~10:
         :: TakeOver ROMPTR 0E7 037 DUP #1= casedrop DoBadKey * CEC65
           ROMPTR 0E7 036 DUP BINT8 #= case2drop DoBadKey * CEC8E
           ROMPTR 0E7 040 #1+ ROMPTR 0E7 030 #1- ROMPTR 0E7 02F * CECB2
@@ -549,7 +549,7 @@ MINEHUNT~1~2~7:
 
 * ROMPTR 0E7 04C
 * refs (1): CCAAB
-MINEHUNT~1~2~8:
+MINEHUNT~11:
         :: TakeOver ROMPTR 0E7 037 DUP BINT16 #= casedrop DoBadKey * CECED
           ROMPTR 0E7 036 DUP BINT8 #= case2drop DoBadKey * CED1B
           ROMPTR 0E7 040 #1+ ROMPTR 0E7 030 #1+ ROMPTR 0E7 02F * CED3F
@@ -557,7 +557,7 @@ MINEHUNT~1~2~8:
 
 * ROMPTR 0E7 04D
 * refs (1): CCAAB
-MINEHUNT~1~2~9:
+MINEHUNT~12:
         :: TakeOver ROMPTR 0E7 040 ROMPTR 0E7 037 #1+ DUP BINT17 #=ITE * CED7A
           :: DROP DoBadKey ; ROMPTR 0E7 02F ROMPTR 0E7 041 ; * CEDAE
 
@@ -608,7 +608,7 @@ ROMP_0E7_052:
 
 * ROMPTR 0E7 053
 * refs (1): CCAAB
-MINEHUNT~1~3:
+MINEHUNT~13:
         GROB    "images/CEEEA.png"               * CEEEA  6 x 6
 
 * ROMPTR 0E7 054
@@ -623,7 +623,7 @@ ROMP_0E7_055:
 
 * ROMPTR 0E7 056
 * refs (1): CCAAB
-MINEHUNT~1~2~10:
+MINEHUNT~14:
         :: HARDBUFF ROMPTR 0E7 037 ROMPTR 0E7 036 ROMPTR 0E7 034 * CEF4A
           ROMPTR 0E7 035 BINT5 {}N # E7 SWAP TWO{}N DUP OSIZE * CEF75
           CODE                                   * CEFA8  71 nibbles
@@ -647,7 +647,7 @@ MINEHUNT~1~2~10:
 
 * ROMPTR 0E7 057
 * refs (1): CCAAB
-MINEHUNT~1~4:
+MINEHUNT~15:
         :: ' ID MHpar SAFE@ DUP casedrop         * CF029
           :: TOTEMPOB DUP ROMPTR 0E7 058 NOTcasedrop FALSE * CF053  ~UTTYPEEXT0?
             CODE                                 * CF077  64 nibbles
@@ -735,7 +735,7 @@ LIB0E7.link:
         REL(5)  ROMP_0E7_003                     * CF1CE  003 
         REL(5)  ROMP_0E7_004                     * CF1D3  004 
         REL(5)  ROMP_0E7_005                     * CF1D8  005 
-        REL(5)  TVMROOT~1~1                      * CF1DD  006 
+        REL(5)  TVMROOT~2                        * CF1DD  006 
         REL(5)  ROMP_0E7_007                     * CF1E2  007 
         REL(5)  DARCY~1                          * CF1E7  008 
         REL(5)  DARCY~2                          * CF1EC  009 
@@ -747,8 +747,8 @@ LIB0E7.link:
         REL(5)  TINC~1                           * CF20A  00F 
         REL(5)  ROMP_0E7_010                     * CF20F  010 
         REL(5)  ~UTVUNS1Arg                      * CF214  011 ~UTVUNS1Arg
-        REL(5)  ~UTVUNS1Arg~1                    * CF219  012 
-        REL(5)  ~UTVUNS1Arg~2                    * CF21E  013 
+        REL(5)  ~SWAPcompSWAP                    * CF219  012 
+        REL(5)  ~DROPTRUE                        * CF21E  013 
         REL(5)  ROMP_0E7_014                     * CF223  014 
         REL(5)  ZFACTOR~2                        * CF228  015 
         REL(5)  ZFACTOR~3                        * CF22D  016 
@@ -791,32 +791,32 @@ LIB0E7.link:
         REL(5)  ROMP_0E7_03B                     * CF2E6  03B 
         REL(5)  ROMP_0E7_03C                     * CF2EB  03C 
         REL(5)  ROMP_0E7_03D                     * CF2F0  03D 
-        REL(5)  MINEHUNT~1~1                     * CF2F5  03E 
+        REL(5)  MINEHUNT~2                       * CF2F5  03E 
         REL(5)  ROMP_0E7_03F                     * CF2FA  03F 
         REL(5)  ROMP_0E7_040                     * CF2FF  040 
         REL(5)  ROMP_0E7_041                     * CF304  041 
         REL(5)  ROMP_0E7_042                     * CF309  042 
         REL(5)  ROMP_0E7_043                     * CF30E  043 
-        REL(5)  MINEHUNT~1~2                     * CF313  044 
-        REL(5)  MINEHUNT~1~2~1                   * CF318  045 
-        REL(5)  MINEHUNT~1~2~2                   * CF31D  046 
-        REL(5)  MINEHUNT~1~2~3                   * CF322  047 
-        REL(5)  MINEHUNT~1~2~4                   * CF327  048 
-        REL(5)  MINEHUNT~1~2~5                   * CF32C  049 
-        REL(5)  MINEHUNT~1~2~6                   * CF331  04A 
-        REL(5)  MINEHUNT~1~2~7                   * CF336  04B 
-        REL(5)  MINEHUNT~1~2~8                   * CF33B  04C 
-        REL(5)  MINEHUNT~1~2~9                   * CF340  04D 
+        REL(5)  MINEHUNT~3                       * CF313  044 
+        REL(5)  MINEHUNT~4                       * CF318  045 
+        REL(5)  MINEHUNT~5                       * CF31D  046 
+        REL(5)  MINEHUNT~6                       * CF322  047 
+        REL(5)  MINEHUNT~7                       * CF327  048 
+        REL(5)  MINEHUNT~8                       * CF32C  049 
+        REL(5)  MINEHUNT~9                       * CF331  04A 
+        REL(5)  MINEHUNT~10                      * CF336  04B 
+        REL(5)  MINEHUNT~11                      * CF33B  04C 
+        REL(5)  MINEHUNT~12                      * CF340  04D 
         REL(5)  ROMP_0E7_04E                     * CF345  04E 
         REL(5)  ROMP_0E7_04F                     * CF34A  04F 
         REL(5)  ROMP_0E7_050                     * CF34F  050 
         REL(5)  ROMP_0E7_051                     * CF354  051 
         REL(5)  ROMP_0E7_052                     * CF359  052 
-        REL(5)  MINEHUNT~1~3                     * CF35E  053 
+        REL(5)  MINEHUNT~13                      * CF35E  053 
         REL(5)  ROMP_0E7_054                     * CF363  054 
         REL(5)  ROMP_0E7_055                     * CF368  055 
-        REL(5)  MINEHUNT~1~2~10                  * CF36D  056 
-        REL(5)  MINEHUNT~1~4                     * CF372  057 
+        REL(5)  MINEHUNT~14                      * CF36D  056 
+        REL(5)  MINEHUNT~15                      * CF372  057 
         REL(5)  ~UTTYPEEXT0?                     * CF377  058 ~UTTYPEEXT0?
         ENDLENGTH                                * CF37C
         NIBHEX  0000                             * CF37C  ..

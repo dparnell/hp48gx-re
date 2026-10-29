@@ -202,8 +202,8 @@ ROMP_0C2_00E:
             OVER 1GETLAM #2* #+ PULL%%EL 17PUTLAM ; * 911A3
           ROT                                    * 911C6
           15GETLAM 16GETLAM %%SQR 17GETLAM DUP %%+* %%SQRT 15GETLAM * 911CB
-          OBJ_36BEE 15GETLAM OVER %%- DUP 15PUTLAM OVER %%* 3UNROLL 6PICK * 911F3
-          6PICK #< ITE                           * 91225
+          ~%%0<;?SEMI;%%CHS 15GETLAM OVER %%- DUP 15PUTLAM OVER %%* 3UNROLL * 911F3
+          6PICK 6PICK #< ITE                     * 91220
           :: 4PICK PUT%%EL %%0 4PICK 1GETLAM #+ PUT%%EL %%0 4PICK 1GETLAM * 91234
             #2* #+ PUT%%EL ;                     * 9126B
           :: 7PICK 7PICK #= caseDROP SWAP        * 9127F
@@ -235,8 +235,8 @@ ROMP_0C2_010:
           :: ROTOVER PULL%%EL 15PUTLAM OVER 1GETLAM #+ PULL%%EL 16PUTLAM ; * 9157C
           ROT                                    * 915AE
           15GETLAM OBJ_37D37 16GETLAM OBJ_37D37 %%+ %%SQRT 15GETLAM * 915B3
-          OBJ_37D69 OBJ_36BEE 15GETLAM OVER L%- DUP 15PUTLAM OVER L%* * 915D6
-          3UNROLL 6PICK 6PICK #< ITE             * 91603
+          OBJ_37D69 ~%%0<;?SEMI;%%CHS 15GETLAM OVER L%- DUP 15PUTLAM OVER * 915D6
+          L%* 3UNROLL 6PICK 6PICK #< ITE         * 915FE
           :: 4PICK PUT%%EL %%0 4PICK 1GETLAM #+ PUT%%EL ; * 9161C
           :: 7PICK 7PICK #= caseDROP SWAP        * 91649
             4PICK PULL%%EL 15GETLAM L%CONJ 4ROLL L%/ %%1 L%+ L%* 4PICK * 91667
@@ -323,7 +323,7 @@ ROMP_0C2_014:
 
 * ROMPTR 0C2 015
 * refs (1): 90007
-EGV~1~1:
+EGV~2:
         :: 1GETLAM #1= ?SEMI                     * 92099
           1GETLAM BINT1 {}N %%0 MAKEARRY 4PUTLAM #TWO#TWO TWO{}N %%0 * 920AD
           MAKEARRY 5PUTLAM #TWO#ONE {}N %%0 MAKEARRY 6PUTLAM 1GETLAM BINT1 * 920DA
@@ -369,7 +369,7 @@ ROMP_0C2_017:
 
 * ROMPTR 0C2 018
 * refs (1): 90007
-EGV~1~1~1:
+EGV~3:
         :: SWAP#1-SWAP 1GETLAM #-#1- DUP 4ROLLOVER PULL%%EL SWAP3PICK #1+ * 925AB
           PULL%%EL SWAP 4PICK 1GETLAM #+ PULL%%EL SWAP 4UNROLL 2DUP %%* * 925D8
           %%ABS %%SQRT 4ROLLOVER %%>C%% 6UNROLL 3PICK %%ABS 3PICK %%ABS %%>= * 9260A
@@ -402,7 +402,7 @@ EGV~1~1~1:
 
 * ROMPTR 0C2 019
 * refs (1): 90007
-EGV~1~2:
+EGV~4:
         :: ROTOVER #1+_ONE_DO ((0,0)) %%0 ROT INDEX@ 6PICK ZERO_DO DUPUNROT * 92A10
           PULL%%EL DUP OBJ_37D37 5PICK OVER %%>= ?SKIP * 92A42
           :: 2SWAP 6ROLL 6ROLL ;                 * 92A65
@@ -450,7 +450,7 @@ ROMP_0C2_01C:
               :: DUP C%%0= ?SEMI                 * 92E62
                 C%%>%% 2DUP%%R 3PICK %%ABS %%+ %%/2 %%SQRT DUPDUP %%+ * 92E76
                 ROTSWAP %%/ ROT %%0>= case %%>C%% * 92EA3
-                DUP %%ABS 3UNROLL OBJ_36BD5 %%>C%% ; * 92EC1
+                DUP %%ABS 3UNROLL ~%%0>=;?SEMI;%%CHS %%>C%% ; * 92EC1
               OVER C%%>%% 3PICK C%%>%% ROT %%*UNROT %%+* %%0>= ?SKIP C%%CHS * 92EDF
               C%%C+C ROTSWAP C%%C/C ROTSWAP C%%C-C SWAP ; * 92F11
           ;                                      * 92F34

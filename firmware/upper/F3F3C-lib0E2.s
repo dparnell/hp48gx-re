@@ -307,7 +307,7 @@ ROMP_0E2_029:
 
 * ROMPTR 0E2 02A
 * refs (1): E3857
-ROMP_0E2_02A:
+~NULL{}:
         :: NULL{} ;                              * F4AA9
 
 * ROMPTR 0E2 02B

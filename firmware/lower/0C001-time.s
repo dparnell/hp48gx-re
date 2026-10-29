@@ -184,12 +184,12 @@ OBJ_0C204:
         BSS     22                               * 0C236
 
 * refs (2): 0FE9E 0FF7F
-U>NCQ~1~7:
+U>NCQ~5:
         CON(5)  (*)+5                            * 0C24C  primitive code object
         ASSEMBLE
         D1=D1+  5                                * 0C251
         D=D+1   A                                * 0C254
-        GOSUB   SAVPTR~jump_0C2BB                * 0C256
+        GOSUB   SAVPTR~jump_3                    * 0C256
         GOSUB   SUB_0C2C2                        * 0C25A
         D0=D0+  12                               * 0C25E
         D1=D1-  5                                * 0C261
@@ -229,7 +229,7 @@ SUB_0C2B2:
         GOVLNG  GETPTR                           * 0C2B4
 
 * refs (4): 0C256 0C2D2 0C315 0C3A8
-SAVPTR~jump_0C2BB:
+SAVPTR~jump_3:
         GOVLNG  SAVPTR                           * 0C2BB
 
 * refs (2): 0C25A 0C2D6
@@ -241,7 +241,7 @@ SUB_0C2C2:
 * refs (2): 0F09D 0FF70
 OBJ_0C2CD:
         CON(5)  (*)+5                            * 0C2CD  primitive code object
-        GOSUB   SAVPTR~jump_0C2BB                * 0C2D2
+        GOSUB   SAVPTR~jump_3                    * 0C2D2
         GOSUB   SUB_0C2C2                        * 0C2D6
         D0=D0+  10                               * 0C2DA
         A=DAT0  B                                * 0C2DD
@@ -268,7 +268,7 @@ L_0C308:
 * refs (2): 0F084 0F0B6
 dup;stdunit(st)?:
         CON(5)  (*)+5                            * 0C310  primitive code object
-        GOSUB   SAVPTR~jump_0C2BB                * 0C315
+        GOSUB   SAVPTR~jump_3                    * 0C315
         D0=(5)  L_7567F                          * 0C319
         A=DAT1  A                                * 0C320
         D1=A                                     * 0C323
@@ -317,9 +317,9 @@ L_0C39B:
         GOTO    L_0C4D6                          * 0C39F
 
 * refs (1): 0FEF8
-U>NCQ~1~8:
+U>NCQ~6:
         CON(5)  (*)+5                            * 0C3A3  primitive code object
-        GOSUB   SAVPTR~jump_0C2BB                * 0C3A8
+        GOSUB   SAVPTR~jump_3                    * 0C3A8
         D0=(5)  L_7567F                          * 0C3AC
         A=DAT1  A                                * 0C3B3
         D1=A                                     * 0C3B6
@@ -546,7 +546,7 @@ OBJ_0C663:
           ;                                      * 0C67C
           OBJ_46955 NOTcase OBJ_46C1B            * 0C681
           DUPTYPEREAL? NOTcasedrop OBJ_46C1B     * 0C690
-          DUP OBJ_468F1 15GETLAM %POL>%REC OBJ_46C43 ; * 0C69F
+          DUP ~BINT25;PUTLAM 15GETLAM %POL>%REC OBJ_46C43 ; * 0C69F
 
 * refs (1): 8CB7D
 OBJ_0C6BD:
@@ -554,7 +554,7 @@ OBJ_0C6BD:
           BINT4 EQcasedrop OBJ_7399A             * 0C6D1
           15GETLAM DUP 21GETLAM 4ROLL DUP#0=ITE 2DROP OBJ_0C663 OBJ_46955 * 0C6E0
           ITE                                    * 0C708
-          :: DUP OBJ_468F1 ; OBJ_46C7A           * 0C70D
+          :: DUP ~BINT25;PUTLAM ; OBJ_46C7A      * 0C70D
           DUPTYPECMP? NOTcasedrop OBJ_46C7A      * 0C726
           C%>% OBJ_46C43 ;                       * 0C735
 
@@ -591,10 +591,10 @@ OBJ_0C811:
         :: NOT?SEMI                              * 0C811
           OBJ_0C7F3 SWAP ;                       * 0C81B
 
-        :: TakeOver OBJ_470E9 OBJ_5102B IT       * 0C82A
+        :: TakeOver OBJ_470E9 ~16GETLAM;#1= IT   * 0C82A
           :: OBJ_47209 OBJ_47236 ;               * 0C843
           BINT16 REPKEY? NOT?SEMI                * 0C857
-          OBJ_5102B NOTcase                      * 0C866
+          ~16GETLAM;#1= NOTcase                  * 0C866
           :: BEGIN BINT16 REPKEY? WHILE          * 0C870
             :: OBJ_470E9 ; REPEAT ;              * 0C889
           BEGIN BINT16 REPKEY? WHILE             * 0C8A2
@@ -607,12 +607,12 @@ OBJ_0C811:
 
 * refs (1): 0C988
 OBJ_0C8F7:
-        :: CHECKMENU OBJ_73684 OBJ_48305 ' OBJ_47D93 InitMenu DispMenu ; * 0C8F7
+        :: CHECKMENU ~BINT0;3PUTLAM OBJ_48305 ' OBJ_47D93 InitMenu DispMenu ; * 0C8F7
 
 * refs (1): 47DFA
 OBJ_0C924:
         :: CHECKMENU CURRENTMARK? IT OBJ_48288   * 0C924
-          BINT3 3PUTLAM OBJ_517B2 12PUTLAM 2PUTLAM * 0C93D
+          BINT3 3PUTLAM ~8GETLAM;7GETLAM 12PUTLAM 2PUTLAM * 0C93D
           { OBJ_456C2 OBJ_456C2 OBJ_456C2 OBJ_456C2 * 0C956
 
 {CANCEL}:
@@ -628,15 +628,15 @@ _ZOOM_:
               $ "ZOOM"                           * 0C997
               :: CHECKMENU PPAR>ZPAR 2GETLAM 12GETLAM OBJ_4E799 ; } * 0C9A9
           }                                      * 0C9D1
-          InitMenu DispMenu.1 OBJ_4EE6F CROSS_OFF OBJ_517B2 PIXON3 * 0C9D6
+          InitMenu DispMenu.1 OBJ_4EE6F CROSS_OFF ~8GETLAM;7GETLAM PIXON3 * 0C9D6
           CROSS_HAIRS ;                          * 0C9F4
 
 * refs (5): 48B57 48B89 49876 4A000 4A01E
-OBJ_0C9FE:
+~DispCoord1;BINT2;16PUTLAM:
         :: DispCoord1 BINT2 16PUTLAM ;           * 0C9FE
 
 * refs (1): 4E293
-CHECKMENU~1:
+~16GETLAM;BINT0;#<>:
         :: 16GETLAM BINT0 #<> ;                  * 0CA17
         BSS     10                               * 0CA30
         ASSEMBLE
@@ -914,7 +914,7 @@ L_0CD81:
 
 a/pm!:
         CON(5)  (*)+5                            * 0CDD0  primitive code object
-        GOSUB   SAVPTR~jump_0CF15                * 0CDD5
+        GOSUB   SAVPTR~jump_4                    * 0CDD5
         ST=0    15                               * 0CDD9
         GOSBVL  GetTimChk                        * 0CDDC
         GOSBVL  SUB_0DB6C                        * 0CDE3
@@ -985,7 +985,7 @@ L_0CEA7:
         GOVLNG  GETPTRLOOP                       * 0CEB2
 
         CON(5)  (*)+5                            * 0CEB9  primitive code object
-        GOSUB   SAVPTR~jump_0CF15                * 0CEBE
+        GOSUB   SAVPTR~jump_4                    * 0CEBE
         D1=(5)  #8084C                           * 0CEC2
         A=0     A                                * 0CEC9
         C=DAT1  1                                * 0CECB
@@ -994,9 +994,9 @@ L_0CEA7:
         GONC    L_0CEE4                          * 0CED6
 
 * refs (1): 048E5
-GETKEY~1~1~2:
+OBJ_0CED9:
         CON(5)  (*)+5                            * 0CED9  primitive code object
-        GOSUB   SAVPTR~jump_0CF15                * 0CEDE
+        GOSUB   SAVPTR~jump_4                    * 0CEDE
         A=0     A                                * 0CEE2
 L_0CEE4:
         A=A-1   A                                * 0CEE4
@@ -1005,7 +1005,7 @@ L_0CEE4:
 * refs (2): 048CC 0DCE5
 OBJ_0CEEA:
         CON(5)  (*)+5                            * 0CEEA  primitive code object
-        GOSUB   SAVPTR~jump_0CF15                * 0CEEF
+        GOSUB   SAVPTR~jump_4                    * 0CEEF
         A=0     A                                * 0CEF3
 L_0CEF5:
         D1=(5)  ClkOnNib                         * 0CEF5
@@ -1019,7 +1019,7 @@ GETPTR~jump:
         GOVLNG  GETPTR                           * 0CF0E
 
 * refs (7): 0CDD5 0CEBE 0CEDE 0CEEF 0CF60 0CF79 ...
-SAVPTR~jump_0CF15:
+SAVPTR~jump_4:
         GOVLNG  SAVPTR                           * 0CF15
 
 * refs (4): 0CF69 0CFED 0D099 0D1A5
@@ -1047,7 +1047,7 @@ Day>Date~jump:
 * refs (1): 0D2FA
 Ticks>wd$:
         CON(5)  (*)+5                            * 0CF5B  primitive code object
-        GOSUB   SAVPTR~jump_0CF15                * 0CF60
+        GOSUB   SAVPTR~jump_4                    * 0CF60
         C=0     A                                * 0CF64
         LC(1)   #3                               * 0CF66
         GOSUB   MAKE$~jump                       * 0CF69
@@ -1055,7 +1055,7 @@ Ticks>wd$:
         A=DAT1  A                                * 0CF71
         D=D+1   A                                * 0CF74
         D1=D1+  5                                * 0CF76
-        GOSUB   SAVPTR~jump_0CF15                * 0CF79
+        GOSUB   SAVPTR~jump_4                    * 0CF79
         AD1EX                                    * 0CF7D
         D1=D1+  10                               * 0CF80
         C=0     W                                * 0CF83
@@ -1265,7 +1265,7 @@ WSLOGN:
         GOSBVL  POP#                             * 0D18F
         A=A-1   A                                * 0D196
         R4=A                                     * 0D198
-        GOSUB   SAVPTR~jump_0CF15                * 0D19B
+        GOSUB   SAVPTR~jump_4                    * 0D19B
         C=0     A                                * 0D19F
         LC(2)   #14                              * 0D1A1
         GOSUB   MAKE$~jump                       * 0D1A5
@@ -2326,26 +2326,25 @@ L_0DC31:
 * refs (1): 42122
 ALARMxcp~1:
         :: ALARMS@ TOTEMPOB DUP NextAlarm(li)? NOTcase DROPFALSE * 0DC3B
-          DUP ALARMxcp~1~3 case                  * 0DC5E
-          :: ALARMxcp~1~1 TRUE ;                 * 0DC6D
-          ALARMxcp~1~2 FALSE ;                   * 0DC81
+          DUP ALARMxcp~4 case                    * 0DC5E
+          :: ALARMxcp~2 TRUE ;                   * 0DC6D
+          ALARMxcp~3 FALSE ;                     * 0DC81
 
 * refs (1): 0DC72
-ALARMxcp~1~1:
+ALARMxcp~2:
         :: OBJ_0E802 OBJ_0E7F7 OBJ_0E820 OBJ_0DFD9 ITE OBJ_0DE61 DROP * 0DC90
           NewAlarm(li) OBJ_0E26D UNCOERCE OBJ_0172B OBJ_0E164 OBJ_47445 ; * 0DCB8
 
 * refs (1): 0DC81
-ALARMxcp~1~2:
-        :: ALARMxcp~1~2~1 OBJ_0CEEA Save16 Clr16 SWAP DUP INCOMPDROP SWAP * 0DCDB
-          DispTstr(b) DISPROW1*! OBJ_0E802 OBJ_0E820 ALARMxcp~1~2~3 IT * 0DD08
+ALARMxcp~3:
+        :: ALARMxcp~5 OBJ_0CEEA Save16 Clr16 SWAP DUP INCOMPDROP SWAP * 0DCDB
+          DispTstr(b) DISPROW1*! OBJ_0E802 OBJ_0E820 ALARMxcp~7 IT * 0DD08
           :: OBJ_0E7F7 OBJ_0E836 ;               * 0DD26
           SWAP Restore16 OBJ_0DF84 ITE           * 0DD3A
           :: DROP OBJ_0E26D REMOVEN{} ;          * 0DD4E
           :: OBJ_0DFD9 ITE OBJ_0DE61 DROP        * 0DD67
           ;                                      * 0DD80
-          NewAlarm(li) ALARMxcp~1~2~2 OBJ_0172B OBJ_0E164 OBJ_47445 * 0DD85
-          FLUSHKEYS ;                            * 0DD9E
+          NewAlarm(li) ALARMxcp~6 OBJ_0172B OBJ_0E164 OBJ_47445 FLUSHKEYS ; * 0DD85
 
 * ->
 * refs (1): 1986D
@@ -2370,7 +2369,7 @@ OBJ_0DE61:
 
 * refs (2): 0DE93 0E70B
 InsAlarm(2li):
-        :: 2DUP InsAlarm(2li)~1 DUP 4UNROLL INSERTN{} ; * 0DEAC
+        :: 2DUP ~BINT1;NTHCOMPDROP;FindAlarm(li,b) DUP 4UNROLL INSERTN{} ; * 0DEAC
 
 * refs (7): 0CB2F 0DCB8 0DD85 0DE43 0E710 0E783 ...
 NewAlarm(li):
@@ -2406,7 +2405,7 @@ L_0DF5C:
         RPL
 
 * refs (1): 0DC63
-ALARMxcp~1~3:
+ALARMxcp~4:
         :: BINT2 NTHCOMPDROP TYPECSTR? NOT ;     * 0DF66
 
 * refs (2): 0DD44 0DE02

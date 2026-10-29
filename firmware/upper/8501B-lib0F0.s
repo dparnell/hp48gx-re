@@ -45,11 +45,11 @@ sto(_,to)~1:
 
 * ROMPTR 0F0 07F
 * refs (1): 82007
-sto(_,to)~1~1:
+sto(_,to)~2:
         :: idntlamcase                           * 852D8
           :: SWAP CK&DISPATCH0                   * 852E2
-            #8F_64D2E sto(_,to)~1~1~1            * 852F1  library
-            backup sto(_,to)~1~1~1               * 852FB  backup
+            #8F_64D2E ~SWAPDROP;dup;BkpName(bk);TRUE * 852F1  library
+            backup ~SWAPDROP;dup;BkpName(bk);TRUE * 852FB  backup
             BINT0                                * 85305  any
             :: RSWAP RDUP 'R RDROP RSWAP #0=case * 8530A
               :: OVERSWAP DoBkpName(_);true ROTSWAP ; * 8532D
@@ -57,7 +57,7 @@ sto(_,to)~1~1:
           ;                                      * 85350
           dup;r?:dq/sk                           * 85355
           :: SWAP CK&DISPATCH0                   * 8535A
-            #8F_64D2E sto(_,to)~1~1~1            * 85369  library
+            #8F_64D2E ~SWAPDROP;dup;BkpName(bk);TRUE * 85369  library
             BINT0 swap;false                     * 85373  any
           ;                                      * 8537D
           swap;false ;                           * 85382
@@ -108,8 +108,8 @@ ROMP_0F0_083:
 * ROMPTR 0F0 084
 * refs (1): 82007
 restore(nm,s)~1:
-        :: ?ACCPTR> DUP BAK>OB TYPERRP? NcaseTYPEERR restore(nm,s)~1~1 * 85528
-          restore(nm,s)~1~2 ERRSET               * 8554B
+        :: ?ACCPTR> DUP BAK>OB TYPERRP? NcaseTYPEERR restore(nm,s)~2 * 85528
+          restore(nm,s)~3 ERRSET                 * 8554B
           :: NULLID CREATE ; ERRTRAP DOAPWL OBJ_09699 DOAPWL ; * 85555
 
 * ROMPTR 0F0 085
@@ -117,12 +117,11 @@ restore(nm,s)~1:
 XEQIOBACKUP~1:
         :: DUPTYPECSTR? ?SKIP ID>$               * 85582
           InitIOEnv KERMOPEN CHR_F CHOOSE_INIT ' ID HOMEDIR ERRSET * 85596
-          HomeInBkp(nm) ERRTRAP OBJ_2E772 3UNROLL XEQIOBACKUP~1~2 ERRSET * 855C9
-          XEQIOBACKUP~1~1 ERRTRAP                * 855E7
-          :: OBJ_09699 XEQIOBACKUP~1~3 InitEnab OBJ_42309 caseERRJMP * 855F1
-            OBJ_2E763                            * 8560F
+          HomeInBkp(nm) ERRTRAP OBJ_2E772 3UNROLL XEQIOBACKUP~3 ERRSET * 855C9
+          XEQIOBACKUP~2 ERRTRAP                  * 855E7
+          :: OBJ_09699 XEQIOBACKUP~4 InitEnab OBJ_42309 caseERRJMP OBJ_2E763 * 855F1
           ;                                      * 85614
-          ABND OBJ_09699 XEQIOBACKUP~1~3 InitEnab AllowPrlcdCl NOTcase * 85619
+          ABND OBJ_09699 XEQIOBACKUP~4 InitEnab AllowPrlcdCl NOTcase * 85619
           OBJ_2EFC8                              * 85637
         ;                                        * 8563C
 
@@ -131,15 +130,15 @@ XEQIOBACKUP~1:
 free(li,r)~1:
         :: COERCEDUP #1<> case SETPORTNOTAV      * 85641
           DUP PORTSTATUS 2DROP AND ANDNOTcase SETPORTNOTAV * 8565A
-          SWAPINCOMP DUP#0=case free(li,r)~1~1   * 85678
+          SWAPINCOMP DUP#0=case free(li,r)~2     * 85678
           pshzer BEGIN #1-SWAP                   * 85687
           :: CK&DISPATCH1                        * 85696
             BINT6 NOP                            * 856A0  name
             BINT7 NOP                            * 856AA  local
             BINT1 COERCE                         * 856B4  real
           ;                                      * 856BE
-          psh1& #0=UNTIL psh BEGIN free(li,r)~1~2 over& #0=UNTIL drop;dq * 856C3
-          free(li,r)~1~1 ;                       * 856EB
+          psh1& #0=UNTIL psh BEGIN free(li,r)~8 over& #0=UNTIL drop;dq * 856C3
+          free(li,r)~2 ;                         * 856EB
 
 * ROMPTR 0F0 087
 * refs (1): 82007
@@ -147,7 +146,7 @@ libs~1:
         :: ROMPART NOTcase BINT0                 * 856F5
           BINT0 SWAPDUP TYPELIST? ITE INNERCOMP BINT1 * 85709
           BEGIN #1-SWAP                          * 85727
-          :: DUP libs~1~1 NOTcaseDROP DUP        * 85731
+          :: DUP libs~3 NOTcaseDROP DUP          * 85731
             OBJ_72B22 MINUSONE #= case2DROP OVER * 8574A
             ROMPARTNAME ITE ID>$ NULL$           * 85763
             ROT UNCOERCE ROT BINT3 psh over& ;   * 85777
@@ -316,7 +315,7 @@ ROMP_0F0_097:
 D/D*~1:
         :: OBJ_57022                             * 85EA8
           :: psh OBJ_56BEB top&Cr x* ; psh MetaConcase * 85EB2
-          :: derprod1 OBJ_56BFF ;                * 85EDA
+          :: derprod1 ~ABND;SYMBN ;              * 85EDA
           dup metaROTDUP rot derprod1 unrot psh OBJ_56BEB 2top& addt* Cr x+ ; * 85EEE
 
 * ROMPTR 0F0 099
@@ -324,7 +323,7 @@ D/D*~1:
 D/D+~1:
         :: OBJ_57022                             * 85F2A
           :: NDROP OBJ_56BEB SYMBN ; OBJ_56D01 psh MetaConcase * 85F34
-          :: NDROP OBJ_56BFF ;                   * 85F5C
+          :: NDROP ~ABND;SYMBN ;                 * 85F5C
           OBJ_56D01 ABND top&Cr x+ ;             * 85F70
 
 * ROMPTR 0F0 09A
@@ -332,7 +331,7 @@ D/D+~1:
 D/D-~1:
         :: OBJ_57022                             * 85F89
           :: NDROP OBJ_56BEB Cr xNEG ; OBJ_56D01 psh MetaConcase * 85F93
-          :: NDROP OBJ_56BFF ;                   * 85FC0
+          :: NDROP ~ABND;SYMBN ;                 * 85FC0
           OBJ_56D01 ABND top&Cr x- ;             * 85FD4
 
 * ROMPTR 0F0 09B
@@ -340,7 +339,7 @@ D/D-~1:
 D/D/~1:
         :: OBJ_57022                             * 85FED
           :: derquot ABND Cr xNEG ; psh MetaConcase * 85FF7
-          :: derprod1 drpmeta/ OBJ_56BFF ;       * 8601F
+          :: derprod1 drpmeta/ ~ABND;SYMBN ;     * 8601F
           dup metaROTDUP rot derprod1 drpmeta/ unrot derquot ABND top&Cr x- ; * 86038
 
 * ROMPTR 0F0 09D
@@ -487,8 +486,8 @@ D/DTANH~1:
 * refs (1): 82007
 D/D^~1:
         :: OBJ_57022                             * 866FF
-          :: D/D^Y OBJ_56BFF ; psh MetaConcase   * 86709
-          :: D/D^X OBJ_56BFF ;                   * 86727
+          :: D/D^Y ~ABND;SYMBN ; psh MetaConcase * 86709
+          :: D/D^X ~ABND;SYMBN ;                 * 86727
           dup metaROTDUP rot D/D^X unrot D/D^Y ABND top&Cr x+ ; * 8673B
 
 * ROMPTR 0F0 0B6
@@ -628,7 +627,7 @@ ROMP_0F0_0CB:
 ROMP_0F0_0CC:
         :: pshm1 pshzerpsharg rot DROP OBJ_57676 case OBJ_5747D * 86D12
           psh1&rev rot PTR addt: xLN PRSOL? ?SKIP * 86D3A
-          :: OBJ_57716 OBJ_57874 ;               * 86D58
+          :: OBJ_57716 ~top&;meta+ ;             * 86D58
           pshtop& PTR addt2: xLN x/ OBJ_5760D ;  * 86D6C
 
 * ROMPTR 0F0 0CD
@@ -657,12 +656,12 @@ ROMP_0F0_0CF:
 * ROMPTR 0F0 0D0
 * refs (1): 82007
 ROMP_0F0_0D0:
-        :: OBJ_57630 xACOS OBJ_57856 OBJ_57757 OBJ_57874 OBJ_5760D ; * 86EB6
+        :: OBJ_57630 xACOS OBJ_57856 OBJ_57757 ~top&;meta+ OBJ_5760D ; * 86EB6
 
 * ROMPTR 0F0 0D1
 * refs (1): 82007
 ROMP_0F0_0D1:
-        :: OBJ_57630 xATAN OBJ_577C0 OBJ_57874 OBJ_5760D ; * 86EDE
+        :: OBJ_57630 xATAN OBJ_577C0 ~top&;meta+ OBJ_5760D ; * 86EDE
 
 * ROMPTR 0F0 0D2
 * refs (1): 82007
@@ -672,12 +671,12 @@ ROMP_0F0_0D2:
 * ROMPTR 0F0 0D3
 * refs (1): 82007
 ROMP_0F0_0D3:
-        :: OBJ_57630 xACOSH OBJ_57856 OBJ_57716 OBJ_57874 OBJ_5760D ; * 86F24
+        :: OBJ_57630 xACOSH OBJ_57856 OBJ_57716 ~top&;meta+ OBJ_5760D ; * 86F24
 
 * ROMPTR 0F0 0D4
 * refs (1): 82007
 ROMP_0F0_0D4:
-        :: OBJ_57630 xATANH OBJ_576DF OBJ_57874 OBJ_5760D ; * 86F4C
+        :: OBJ_57630 xATANH OBJ_576DF ~top&;meta+ OBJ_5760D ; * 86F4C
 
 * ROMPTR 0F0 0D5
 * refs (1): 82007

@@ -277,7 +277,7 @@ ROMP_0F1_006:
             :: ERROR@ #0= ?SEMI                  * 8A642
               OBJ_4C0E4 ERRJMP ;                 * 8A656
             OBJ_4C0E4 18GETLAM RESETDEPTH ABND ABND ABND ; * 8A665
-          ERRTRAP OBJ_472B8                      * 8A688
+          ERRTRAP ~'R;EVAL;ERRJMP                * 8A688
 
 * ROMPTR 0F1 007
 * refs (1): 8999A
@@ -392,7 +392,7 @@ ROMP_0F1_00E:
               :: ERROR@ #0= ?SEMI                * 8B2AC
                 OBJ_4C0E4 ERRJMP ;               * 8B2C0
               OBJ_4C0E4 18GETLAM RESETDEPTH ABND ABND ; * 8B2CF
-            ERRTRAP OBJ_472B8                    * 8B2ED
+            ERRTRAP ~'R;EVAL;ERRJMP              * 8B2ED
 
 * ROMPTR 0F1 00F
 * refs (1): 8999A
@@ -419,7 +419,7 @@ ROMP_0F1_011:
             meta* LAM 'xp SINNER top& LAM 'xe SWAP#1+ meta- LAM 'yp SINNER * 8B4CF
             top& LAM 'ye SWAP#1+ meta- meta/ LAM 'xe SWAP#1+ meta+ Cr x+ ; * 8B514
           ERRSET                                 * 8B55B
-          :: DOSTOE TRUE ROMPTR 0F1 00D ; ERRTRAP OBJ_472B8 * 8B560
+          :: DOSTOE TRUE ROMPTR 0F1 00D ; ERRTRAP ~'R;EVAL;ERRJMP * 8B560
 
 * ROMPTR 0F1 012
 * refs (1): 8999A
@@ -455,7 +455,7 @@ ROMP_0F1_014:
             ?SKIP                                * 8B92C
             :: #3+ BINT3 DO INDEX@ GETLAM LOOP LAM '#ny #1- ; * 8B931
             UNCOERCE CK0NOLASTWD ABND ;          * 8B96D
-          ERRTRAP OBJ_472B8                      * 8B981
+          ERRTRAP ~'R;EVAL;ERRJMP                * 8B981
 
 * ROMPTR 0F1 015
 * refs (1): 8999A
@@ -540,13 +540,13 @@ ROMP_0F1_01D:
                 :: ERROR@ #0= ?SEMI              * 8C0A0
                   OBJ_4C0E4 ERRJMP ;             * 8C0B4
                 OBJ_4C0E4 18GETLAM RESETDEPTH ;  * 8C0C3
-              ERRTRAP OBJ_472B8                  * 8C0D7
+              ERRTRAP ~'R;EVAL;ERRJMP            * 8C0D7
 
 * ROMPTR 0F1 01E
 * refs (1): 8999A
 ROMP_0F1_01E:
               :: LAM 'dependvar ?PURGE_HERE ; ABND ABND ABND ; * 8C0E1
-            ERRTRAP OBJ_472B8                    * 8C11F
+            ERRTRAP ~'R;EVAL;ERRJMP              * 8C11F
 
 * ROMPTR 0F1 01F
 * refs (1): 8999A

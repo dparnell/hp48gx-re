@@ -60,12 +60,12 @@ ROMP_0B5_0DF:
 
 * ROMPTR 0B5 0E0
 * refs (1): B4B39
-ROMP_0B5_0E0:
+~ChkReakäPAR;3DROP:
         :: ChkReakäPAR 3DROP ;                   * B7DF1
 
 * ROMPTR 0B5 0E1
 * refs (1): B4B39
-ROMP_0B5_0E1:
+~STATCOL:
         :: STATCOL ;                             * B7E05
 
 * ROMPTR 0B5 0E2
@@ -102,7 +102,7 @@ ROMP_0B5_0E7:
 
 * ROMPTR 0B5 0E8
 * refs (1): B4B39
-ROMP_0B5_0E8:
+~4ROLLDROP;SWAP;bins(3r):
         :: 4ROLLDROP SWAP bins(3r) ;             * B7EC8
 
 * ROMPTR 0B5 0E9
@@ -112,42 +112,42 @@ ROMP_0B5_0E9:
 
 * ROMPTR 0B5 0EA
 * refs (1): B4B39
-ROMP_0B5_0EA:
+~STATPREDX:
         :: STATPREDX ;                           * B7EFA
 
 * ROMPTR 0B5 0EB
 * refs (1): B4B39
-ROMP_0B5_0EB:
+~STATPREDY:
         :: STATPREDY ;                           * B7F09
 
 * ROMPTR 0B5 0EC
 * refs (1): B4B39
-ROMP_0B5_0EC:
+~STATX:
         :: STATX ;                               * B7F18
 
 * ROMPTR 0B5 0ED
 * refs (1): B4B39
-ROMP_0B5_0ED:
+~STATY:
         :: STATY ;                               * B7F27
 
 * ROMPTR 0B5 0EE
 * refs (1): B4B39
-ROMP_0B5_0EE:
+~STATXX:
         :: STATXX ;                              * B7F36
 
 * ROMPTR 0B5 0EF
 * refs (1): B4B39
-ROMP_0B5_0EF:
+~STATYY:
         :: STATYY ;                              * B7F45
 
 * ROMPTR 0B5 0F0
 * refs (1): B4B39
-ROMP_0B5_0F0:
+~STATXY:
         :: STATXY ;                              * B7F54
 
 * ROMPTR 0B5 0F1
 * refs (1): B4B39
-ROMP_0B5_0F1:
+~STATN:
         :: STATN ;                               * B7F63
 
 * ROMPTR 0B5 0F2
@@ -260,7 +260,7 @@ ROMP_0B5_103:
 
 * ROMPTR 0B5 104
 * refs (1): B4B39
-ROMP_0B5_104:
+~BINT38;TestSysFlag;NOT:
         :: BINT38 TestSysFlag NOT ;              * B82E9
 
 * ROMPTR 0B5 105
@@ -335,7 +335,7 @@ ROMP_0B5_10D:
 
 * ROMPTR 0B5 10E
 * refs (1): B4B39
-ROMP_0B5_10E:
+~BINT36;TestSysFlag:
         :: BINT36 TestSysFlag ;                  * B8625
 
 * ROMPTR 0B5 10F
@@ -462,7 +462,7 @@ ROMP_0B5_117:
 
 * ROMPTR 0B5 118
 * refs (1): B4B39
-ROMP_0B5_118:
+~NULL$TEMP;DORECN:
         :: NULL$TEMP DORECN ;                    * B8ABC
 
 * ROMPTR 0B5 119
@@ -495,7 +495,7 @@ ROMP_0B5_11C:
 
 * ROMPTR 0B5 11D
 * refs (1): B4B39
-ROMP_0B5_11D:
+~Reset&BreakPRTPAR;DROP:
         :: Reset&BreakPRTPAR DROP ;              * B8BBE
 
 * ROMPTR 0B5 11E
@@ -665,7 +665,7 @@ ROMP_0B5_13B:
 
 * ROMPTR 0B5 13C
 * refs (1): B4B39
-ROMP_0B5_13C:
+~BINT56;TestSysFlag;NOT:
         :: BINT56 TestSysFlag NOT ;              * B9068
 
 * ROMPTR 0B5 13D
@@ -676,7 +676,7 @@ ROMP_0B5_13D:
 
 * ROMPTR 0B5 13E
 * refs (1): B4B39
-ROMP_0B5_13E:
+~BINT40;TestSysFlag:
         :: BINT40 TestSysFlag ;                  * B90A4
 
 * ROMPTR 0B5 13F
@@ -687,7 +687,7 @@ ROMP_0B5_13F:
 
 * ROMPTR 0B5 140
 * refs (1): B4B39
-ROMP_0B5_140:
+~BINT51;TestSysFlag:
         :: BINT51 TestSysFlag ;                  * B90DB
 
 * ROMPTR 0B5 141
@@ -775,7 +775,7 @@ ROMP_0B5_150:
 
 * ROMPTR 0B5 151
 * refs (1): B4B39
-ROMP_0B5_151:
+~BINT16;ClrSysFlag:
         :: BINT16 ClrSysFlag ;                   * B939B
 
 * ROMPTR 0B5 152
@@ -983,7 +983,7 @@ ROMP_0B5_169:
 
 * ROMPTR 0B5 16A
 * refs (1): B4B39
-ROMP_0B5_16A:
+~GARBAGE;MEM;#2/:
         :: GARBAGE MEM #2/ ;                     * B9DD1
 
 LIB0B5.hash:
@@ -1018,7 +1018,7 @@ LIB0B5.link:
         REL(5)  ROMP_0B5_002                     * B9E62  002 
         REL(5)  ROMP_0B5_003                     * B9E67  003 
         REL(5)  ROMP_0B5_004                     * B9E6C  004 
-        REL(5)  ROMP_0B5_005                     * B9E71  005 
+        REL(5)  ~SAFE@                           * B9E71  005 
         REL(5)  ROMP_0B5_006                     * B9E76  006 
         REL(5)  ROMP_0B5_007                     * B9E7B  007 
         REL(5)  ROMP_0B5_008                     * B9E80  008 
@@ -1027,7 +1027,7 @@ LIB0B5.link:
         REL(5)  ROMP_0B5_00B                     * B9E8F  00B 
         REL(5)  ROMP_0B5_00C                     * B9E94  00C 
         REL(5)  ROMP_0B5_00D                     * B9E99  00D 
-        REL(5)  ROMP_0B5_00E                     * B9E9E  00E 
+        REL(5)  ~MAT*                            * B9E9E  00E 
         REL(5)  ROMP_0B5_00F                     * B9EA3  00F 
         REL(5)  ROMP_0B5_010                     * B9EA8  010 
         REL(5)  ROMP_0B5_011                     * B9EAD  011 
@@ -1059,21 +1059,21 @@ LIB0B5.link:
         REL(5)  ROMP_0B5_02B                     * B9F2F  02B 
         REL(5)  ROMP_0B5_02C                     * B9F34  02C 
         REL(5)  ROMP_0B5_02D                     * B9F39  02D 
-        REL(5)  ROMP_0B5_02F                     * B9F3E  02E 
-        REL(5)  ROMP_0B5_02F                     * B9F43  02F 
+        REL(5)  ~BINT1;{}N;PUTINDEPLIST          * B9F3E  02E 
+        REL(5)  ~BINT1;{}N;PUTINDEPLIST          * B9F43  02F 
         REL(5)  ROMP_0B5_030                     * B9F48  030 
         REL(5)  ROMP_0B5_031                     * B9F4D  031 
         REL(5)  ROMP_0B5_032                     * B9F52  032 
         REL(5)  ROMP_0B5_035                     * B9F57  033 
         REL(5)  ROMP_0B5_035                     * B9F5C  034 
         REL(5)  ROMP_0B5_035                     * B9F61  035 
-        REL(5)  ROMP_0B5_036                     * B9F66  036 
-        REL(5)  ROMP_0B5_039                     * B9F6B  037 
-        REL(5)  ROMP_0B5_039                     * B9F70  038 
-        REL(5)  ROMP_0B5_039                     * B9F75  039 
+        REL(5)  ~GETXMIN;GETXMAX                 * B9F66  036 
+        REL(5)  ~BINT1;{}N;depnd(li)             * B9F6B  037 
+        REL(5)  ~BINT1;{}N;depnd(li)             * B9F70  038 
+        REL(5)  ~BINT1;{}N;depnd(li)             * B9F75  039 
         REL(5)  ROMP_0B5_03A                     * B9F7A  03A 
         REL(5)  ROMP_0B5_03B                     * B9F7F  03B 
-        REL(5)  ROMP_0B5_03C                     * B9F84  03C 
+        REL(5)  ~GETYMIN;GETYMAX                 * B9F84  03C 
         REL(5)  ROMP_0B5_03E                     * B9F89  03D 
         REL(5)  ROMP_0B5_03E                     * B9F8E  03E 
         REL(5)  ROMP_0B5_03F                     * B9F93  03F 
@@ -1109,9 +1109,9 @@ LIB0B5.link:
         REL(5)  ROMP_0B5_05D                     * BA029  05D 
         REL(5)  ROMP_0B5_05E                     * BA02E  05E 
         REL(5)  ROMP_0B5_05F                     * BA033  05F 
-        REL(5)  ROMP_0B5_060                     * BA038  060 
+        REL(5)  ~BINT31;TestSysFlag;NOT          * BA038  060 
         REL(5)  ROMP_0B5_061                     * BA03D  061 
-        REL(5)  ROMP_0B5_062                     * BA042  062 
+        REL(5)  ~BINT28;TestSysFlag              * BA042  062 
         REL(5)  ROMP_0B5_063                     * BA047  063 
         REL(5)  ROMP_0B5_064                     * BA04C  064 
         REL(5)  ROMP_0B5_065                     * BA051  065 
@@ -1125,7 +1125,7 @@ LIB0B5.link:
         REL(5)  ROMP_0B5_06D                     * BA079  06D 
         REL(5)  ROMP_0B5_06E                     * BA07E  06E 
         REL(5)  ROMP_0B5_06F                     * BA083  06F 
-        REL(5)  ROMP_0B5_070                     * BA088  070 
+        REL(5)  ~BINT29;TestSysFlag;NOT          * BA088  070 
         REL(5)  ROMP_0B5_071                     * BA08D  071 
         REL(5)  ROMP_0B5_072                     * BA092  072 
         REL(5)  ROMP_0B5_073                     * BA097  073 
@@ -1133,7 +1133,7 @@ LIB0B5.link:
         REL(5)  ROMP_0B5_075                     * BA0A1  075 
         REL(5)  ROMP_0B5_076                     * BA0A6  076 
         REL(5)  ROMP_0B5_077                     * BA0AB  077 
-        REL(5)  ROMP_0B5_078                     * BA0B0  078 
+        REL(5)  ~DOERASE                         * BA0B0  078 
         REL(5)  ROMP_0B5_079                     * BA0B5  079 
         REL(5)  ROMP_0B5_07A                     * BA0BA  07A 
         REL(5)  ROMP_0B5_07B                     * BA0BF  07B 
@@ -1161,8 +1161,8 @@ LIB0B5.link:
         REL(5)  ROMP_0B5_091                     * BA12D  091 
         REL(5)  ROMP_0B5_092                     * BA132  092 
         REL(5)  ROMP_0B5_093                     * BA137  093 
-        REL(5)  ROMP_0B5_094                     * BA13C  094 
-        REL(5)  ROMP_0B5_095                     * BA141  095 
+        REL(5)  ~BINT3;TestSysFlag;NOT           * BA13C  094 
+        REL(5)  ~BINT1;TestSysFlag               * BA141  095 
         REL(5)  ROMP_0B5_096                     * BA146  096 
         REL(5)  ROMP_0B5_097                     * BA14B  097 
         REL(5)  ROMP_0B5_098                     * BA150  098 
@@ -1226,8 +1226,8 @@ LIB0B5.link:
         REL(5)  ROMP_0B5_0D2                     * BA272  0D2 
         REL(5)  ROMP_0B5_0D3                     * BA277  0D3 
         REL(5)  ROMP_0B5_0D4                     * BA27C  0D4 
-        REL(5)  ROMP_0B5_0D5                     * BA281  0D5 
-        REL(5)  ROMP_0B5_0D6                     * BA286  0D6 
+        REL(5)  ~ALARMS@;LENCOMP                 * BA281  0D5 
+        REL(5)  ~RCLALM;NOTcase;NOALARMERR       * BA286  0D6 
         REL(5)  ROMP_0B5_0D7                     * BA28B  0D7 
         REL(5)  ROMP_0B5_0D8                     * BA290  0D8 
         REL(5)  ROMP_0B5_0D9                     * BA295  0D9 
@@ -1237,24 +1237,24 @@ LIB0B5.link:
         REL(5)  ROMP_0B5_0DD                     * BA2A9  0DD 
         REL(5)  ROMP_0B5_0DE                     * BA2AE  0DE 
         REL(5)  ROMP_0B5_0DF                     * BA2B3  0DF 
-        REL(5)  ROMP_0B5_0E0                     * BA2B8  0E0 
-        REL(5)  ROMP_0B5_0E1                     * BA2BD  0E1 
+        REL(5)  ~ChkReakäPAR;3DROP               * BA2B8  0E0 
+        REL(5)  ~STATCOL                         * BA2BD  0E1 
         REL(5)  ROMP_0B5_0E2                     * BA2C2  0E2 
         REL(5)  ROMP_0B5_0E3                     * BA2C7  0E3 
         REL(5)  ROMP_0B5_0E4                     * BA2CC  0E4 
         REL(5)  ROMP_0B5_0E5                     * BA2D1  0E5 
         REL(5)  ROMP_0B5_0E6                     * BA2D6  0E6 
         REL(5)  ROMP_0B5_0E7                     * BA2DB  0E7 
-        REL(5)  ROMP_0B5_0E8                     * BA2E0  0E8 
+        REL(5)  ~4ROLLDROP;SWAP;bins(3r)         * BA2E0  0E8 
         REL(5)  ROMP_0B5_0E9                     * BA2E5  0E9 
-        REL(5)  ROMP_0B5_0EA                     * BA2EA  0EA 
-        REL(5)  ROMP_0B5_0EB                     * BA2EF  0EB 
-        REL(5)  ROMP_0B5_0EC                     * BA2F4  0EC 
-        REL(5)  ROMP_0B5_0ED                     * BA2F9  0ED 
-        REL(5)  ROMP_0B5_0EE                     * BA2FE  0EE 
-        REL(5)  ROMP_0B5_0EF                     * BA303  0EF 
-        REL(5)  ROMP_0B5_0F0                     * BA308  0F0 
-        REL(5)  ROMP_0B5_0F1                     * BA30D  0F1 
+        REL(5)  ~STATPREDX                       * BA2EA  0EA 
+        REL(5)  ~STATPREDY                       * BA2EF  0EB 
+        REL(5)  ~STATX                           * BA2F4  0EC 
+        REL(5)  ~STATY                           * BA2F9  0ED 
+        REL(5)  ~STATXX                          * BA2FE  0EE 
+        REL(5)  ~STATYY                          * BA303  0EF 
+        REL(5)  ~STATXY                          * BA308  0F0 
+        REL(5)  ~STATN                           * BA30D  0F1 
         REL(5)  ROMP_0B5_0F2                     * BA312  0F2 
         REL(5)  ROMP_0B5_0F3                     * BA317  0F3 
         REL(5)  ROMP_0B5_0F4                     * BA31C  0F4 
@@ -1273,7 +1273,7 @@ LIB0B5.link:
         REL(5)  ROMP_0B5_101                     * BA35D  101 
         REL(5)  ROMP_0B5_102                     * BA362  102 
         REL(5)  ROMP_0B5_103                     * BA367  103 
-        REL(5)  ROMP_0B5_104                     * BA36C  104 
+        REL(5)  ~BINT38;TestSysFlag;NOT          * BA36C  104 
         REL(5)  ROMP_0B5_105                     * BA371  105 
         REL(5)  ROMP_0B5_106                     * BA376  106 
         REL(5)  ROMP_0B5_107                     * BA37B  107 
@@ -1283,7 +1283,7 @@ LIB0B5.link:
         REL(5)  ROMP_0B5_10B                     * BA38F  10B 
         REL(5)  ROMP_0B5_10C                     * BA394  10C 
         REL(5)  ROMP_0B5_10D                     * BA399  10D 
-        REL(5)  ROMP_0B5_10E                     * BA39E  10E 
+        REL(5)  ~BINT36;TestSysFlag              * BA39E  10E 
         REL(5)  ROMP_0B5_10F                     * BA3A3  10F 
         REL(5)  ROMP_0B5_110                     * BA3A8  110 
         REL(5)  ROMP_0B5_111                     * BA3AD  111 
@@ -1293,12 +1293,12 @@ LIB0B5.link:
         REL(5)  ROMP_0B5_115                     * BA3C1  115 
         REL(5)  ROMP_0B5_116                     * BA3C6  116 
         REL(5)  ROMP_0B5_117                     * BA3CB  117 
-        REL(5)  ROMP_0B5_118                     * BA3D0  118 
+        REL(5)  ~NULL$TEMP;DORECN                * BA3D0  118 
         REL(5)  ROMP_0B5_119                     * BA3D5  119 
         REL(5)  ROMP_0B5_11A                     * BA3DA  11A 
         REL(5)  ROMP_0B5_11B                     * BA3DF  11B 
         REL(5)  ROMP_0B5_11C                     * BA3E4  11C 
-        REL(5)  ROMP_0B5_11D                     * BA3E9  11D 
+        REL(5)  ~Reset&BreakPRTPAR;DROP          * BA3E9  11D 
         REL(5)  ROMP_0B5_11E                     * BA3EE  11E 
         REL(5)  ROMP_0B5_11F                     * BA3F3  11F 
         REL(5)  ROMP_0B5_120                     * BA3F8  120 
@@ -1329,11 +1329,11 @@ LIB0B5.link:
         REL(5)  ROMP_0B5_139                     * BA475  139 
         REL(5)  ROMP_0B5_13A                     * BA47A  13A 
         REL(5)  ROMP_0B5_13B                     * BA47F  13B 
-        REL(5)  ROMP_0B5_13C                     * BA484  13C 
+        REL(5)  ~BINT56;TestSysFlag;NOT          * BA484  13C 
         REL(5)  ROMP_0B5_13D                     * BA489  13D 
-        REL(5)  ROMP_0B5_13E                     * BA48E  13E 
+        REL(5)  ~BINT40;TestSysFlag              * BA48E  13E 
         REL(5)  ROMP_0B5_13F                     * BA493  13F 
-        REL(5)  ROMP_0B5_140                     * BA498  140 
+        REL(5)  ~BINT51;TestSysFlag              * BA498  140 
         REL(5)  ROMP_0B5_141                     * BA49D  141 
         REL(5)  ROMP_0B5_142                     * BA4A2  142 
         REL(5)  ROMP_0B5_143                     * BA4A7  143 
@@ -1350,7 +1350,7 @@ LIB0B5.link:
         REL(5)  ROMP_0B5_14E                     * BA4DE  14E 
         REL(5)  ROMP_0B5_14F                     * BA4E3  14F 
         REL(5)  ROMP_0B5_150                     * BA4E8  150 
-        REL(5)  ROMP_0B5_151                     * BA4ED  151 
+        REL(5)  ~BINT16;ClrSysFlag               * BA4ED  151 
         REL(5)  ROMP_0B5_152                     * BA4F2  152 
         REL(5)  ROMP_0B5_153                     * BA4F7  153 
         REL(5)  ROMP_0B5_154                     * BA4FC  154 
@@ -1375,6 +1375,6 @@ LIB0B5.link:
         REL(5)  ROMP_0B5_167                     * BA55B  167 
         REL(5)  ROMP_0B5_168                     * BA560  168 
         REL(5)  ROMP_0B5_169                     * BA565  169 
-        REL(5)  ROMP_0B5_16A                     * BA56A  16A 
+        REL(5)  ~GARBAGE;MEM;#2/                 * BA56A  16A 
         ENDLENGTH                                * BA56F
         NIBHEX  5444000                          * BA56F  ED.

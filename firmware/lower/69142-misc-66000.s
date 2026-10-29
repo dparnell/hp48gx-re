@@ -61,7 +61,7 @@ OBJ_693BE:
 
 * refs (1): 6939B
 OBJ_693CD:
-            :: OBJ_69824 OBJ_28602 PutGNTData OBJ_69941 ; ; * 693CD
+            :: OBJ_69824 ~BINT0;1PUTLAM PutGNTData OBJ_69941 ; ; * 693CD
           LEN$ ROTSWAP #-SWAP NULL$ OBJ_6933C ;  * 693F0
 
 * refs (2): 68B57 68B84
@@ -73,7 +73,7 @@ OBJ_69431:
           :: RDROP OBJ_67DDF #0=case             * 69431
             :: OBJ_69495 OBJ_6E1A9 OBJ_674BB EqwBoxCount EqwBoxParent@ * 69445
               EqwBoxParent@ OBJ_2846E #05060410h BINT0 BINT5 OBJ_67532 * 69463
-              OBJ_28602 ;                        * 69481
+              ~BINT0;1PUTLAM ;                   * 69481
             OBJ_69098 OBJ_69431                  * 6948B
 
 * refs (7): 68882 68963 68D91 690CA 6944A 69883 ...
@@ -101,7 +101,8 @@ OBJ_69553:
 
 * refs (3): 68931 6E3AC 6E3B1
 OBJ_69594:
-            :: OBJ_672E6 OBJ_67E34 #1- OBJ_67F0B ; LOOP OBJ_67F45 OBJ_28602 ; * 69594
+            :: OBJ_672E6 OBJ_67E34 #1- OBJ_67F0B ; LOOP OBJ_67F45 * 69594
+            ~BINT0;1PUTLAM ;                     * 695BC
         ;                                        * 695C6
 
 * refs (3): 6BF83 6C0FF 6C163
@@ -299,7 +300,7 @@ OBJ_6996E:
 
 * refs (2): 69089 69580
 OBJ_69996:
-          :: OBJ_6994B OBJ_67F45 OBJ_28602 ; ;   * 69996
+          :: OBJ_6994B OBJ_67F45 ~BINT0;1PUTLAM ; ; * 69996
 
 * refs (1): 68BA2
 OBJ_699B4:
@@ -330,7 +331,7 @@ OBJ_69B17:
         ;                                        * 69B2B
 
 * refs (2): 5D04F 5D054
-OBJ_69B30:
+~DUP#1+PICK;#+;#1+:
         :: DUP#1+PICK #+ #1+ ;                   * 69B30
 
 * refs (4): 69DDE 69ED4 6A16D 6C43D
@@ -372,7 +373,7 @@ OBJ_69CCA:
         :: OBJ_6B0E8 SYMBN 1PUTLAM OBJ_677DE OBJ_67416 1GETABND ZEROSWAP * 69CCA
 
 * refs (1): 6A014
-EqwRuleKey0~1~6:
+EqwRuleKey0~12:
           :: CLEARVDISP REDISPHBUFF NULL$ TRUE OBJ_6C550 ERRSET OBJ_677EA * 69CF2
             #2+PICK OBJ_67426 OBJ_6C4A1 ERRSET ROMPTR 0EA 005 ERRTRAP * 69D1A
             :: OBJ_6AE6F OBJ_6AE6F OBJ_6AE6F 3DROP OBJ_677DE OBJ_677EA * 69D3E
@@ -391,12 +392,12 @@ EqwRuleKey0~1:
             :: 'NOP ROMPTR 0EA 03C 'ManOp DoBadKey ; ; * 69E60
           3GETLAM #0<> case OBJ_69CCA            * 69E89
           'ManOp 'NOP EQ case                    * 69E9D
-          :: OBJ_6B0E8 NDROP OBJ_6AEA6 'LB EqwRuleKey0~1~2 COLA OBJ_69B49 * 69EB1
+          :: OBJ_6B0E8 NDROP OBJ_6AEA6 'LB EqwRuleKey0~8 COLA OBJ_69B49 * 69EB1
           ;                                      * 69ED9
 
 * refs (1): 69E15
 OBJ_69EDE:
-          :: 'LB OBJ_6AC67 OBJ_6AC80 OBJ_6AEF1 IT EqwRuleKey0~1~1~4 * 69EDE
+          :: 'LB OBJ_6AC67 OBJ_6AC80 OBJ_6AEF1 IT EqwRuleKey0~13 * 69EDE
             EqwBoxParent@ #1= ?SEMI              * 69F01
             rot DUP#0=case unrot                 * 69F10
             DUP#2+ BINT1 splitdown DROP #1- 1PUTLAM top& top& 1GETLAM * 69F1F
@@ -405,32 +406,32 @@ OBJ_69EDE:
           7PUTLAM DUP                            * 69F88
 
 * refs (2): 69EFC 6A3A2
-EqwRuleKey0~1~1~4:
+EqwRuleKey0~13:
           :: BEGIN EqwBoxParent@ OBJ_67B12 OBJ_6EE65 NOT_UNTIL ; DUP#1= ITE * 69F92
           DROP SWAPDROP                          * 69FBF
           OBJ_673E6 EqwBoxCount OBJ_67406 OBJ_673A2 OBJ_673F6 OBJ_681E8 * 69FC9
-          2GETLAM EqwRuleKey0~1~3 BINT11 {}N OVER#2+UNROL 7GETLAM * 69FE7
-          EqwRuleKey0~1~4 OVER#2+UNROL SYMBN EqwRuleKey0~1~6 OBJ_0C4E3 * 6A005
-          3PUTLAM DROP OBJ_67364 {}N SWAPDROP OBJ_673D6 OBJ_6773D DUPUNROT * 6A01E
-          #2+UNROLL NDROP 1PUTLAM OBJ_0C4E3 SYMBN 5PUTLAM 3DROP INCOMPDROP * 6A046
-          OBJ_67648 OBJ_0C4E3 SWAP#- 8PUTLAM BINT1 OBJ_679B3 11PUTLAM * 6A06E
-          OBJ_681E8 BINT43 EqwBoxCount OBJ_6869D SUBHXS 12PUTLAM OBJ_681B1 * 6A091
-          OBJ_6749B OBJ_67458 OBJ_674AB OBJ_6746B DUP OBJ_6748B OBJ_6747B * 6A0B4
-          4PUTLAM BINT27 PUTLAM 22PUTLAM NDROP DUP 7PUTLAM 5GETLAM INNERCOMP * 6A0D7
-          OBJ_6B0E8 EqwRuleKey0~1~5 1GETLAM 4GETLAM EqwRuleKey0~1~1 BINT27 * 6A104
+          2GETLAM EqwRuleKey0~9 BINT11 {}N OVER#2+UNROL 7GETLAM * 69FE7
+          EqwRuleKey0~10 OVER#2+UNROL SYMBN EqwRuleKey0~12 OBJ_0C4E3 3PUTLAM * 6A005
+          DROP OBJ_67364 {}N SWAPDROP OBJ_673D6 OBJ_6773D DUPUNROT #2+UNROLL * 6A023
+          NDROP 1PUTLAM OBJ_0C4E3 SYMBN 5PUTLAM 3DROP INCOMPDROP OBJ_67648 * 6A04B
+          OBJ_0C4E3 SWAP#- 8PUTLAM BINT1 OBJ_679B3 11PUTLAM OBJ_681E8 BINT43 * 6A073
+          EqwBoxCount OBJ_6869D SUBHXS 12PUTLAM OBJ_681B1 OBJ_6749B * 6A09B
+          OBJ_67458 OBJ_674AB OBJ_6746B DUP OBJ_6748B OBJ_6747B 4PUTLAM * 6A0B9
+          BINT27 PUTLAM 22PUTLAM NDROP DUP 7PUTLAM 5GETLAM INNERCOMP * 6A0DC
+          OBJ_6B0E8 EqwRuleKey0~11 1GETLAM 4GETLAM EqwRuleKey0~2 BINT27 * 6A104
           GETLAM 3GETLAM 22Lget #- #+ OBJ_6B39F ABND DUP 18PUTLAM OBJ_6681A * 6A122
           CLEARVDISP OBJ_666D3 OBJ_6AEA6 'LB COLA OBJ_69B49 * 6A154
         ;                                        * 6A172
 
 * refs (1): 6A118
-EqwRuleKey0~1~1:
+EqwRuleKey0~2:
         :: DUP 4PUTLAM OBJ_68550 15PUTLAM OBJ_678D6 9PUTLAM OBJ_67987 * 6A177
           5PUTLAM OBJ_6799C 6PUTLAM DUP OBJ_68F7B ROT #MIN SWAPDUP 10PUTLAM * 6A19F
           #1+DUP 2PUTLAM SWAPDUP 1PUTLAM 11GETLAM OVER#+ #2- 11PUTLAM 2DUP * 6A1CC
-          #- 4PICK LENCOMP DUP 14PUTLAM EqwRuleKey0~1~1~1 2GETLAM 13GETLAM * 6A1F9
-          #+ DUP 2PUTLAM 1GETLAM DUP#2- DUP#0=ITE * 6A221
-          :: ROTROT2DROP EqwRuleKey0~1~1~3 3GETLAM ; EqwRuleKey0~1~1~2 * 6A23F
-          OBJ_6A267 OVER                         * 6A25D
+          #- 4PICK LENCOMP DUP 14PUTLAM EqwRuleKey0~3 2GETLAM 13GETLAM #+ * 6A1F9
+          DUP 2PUTLAM 1GETLAM DUP#2- DUP#0=ITE   * 6A226
+          :: ROTROT2DROP EqwRuleKey0~5 3GETLAM ; EqwRuleKey0~4 OBJ_6A267 * 6A23F
+          OVER                                   * 6A262
 
 * refs (3): 6953A 6A25D 6EA46
 OBJ_6A267:
@@ -447,7 +448,7 @@ OBJ_6A28A:
           4PICK#+                                * 6A35C
           3PICK OVER#= IT                        * 6A361
           :: ROTDROP OVERSWAP ;                  * 6A370
-          OBJ_67C3C LOOP SWAPDROP DUP 14GETLAM #1=?SKIP EqwRuleKey0~1~1~4 * 6A384
+          OBJ_67C3C LOOP SWAPDROP DUP 14GETLAM #1=?SKIP EqwRuleKey0~13 * 6A384
           15GETLAM OVER OBJ_685B2 '              * 6A3A7
           :: 4GETLAM BINT1 ; '                   * 6A3BB
           :: 10GETLAM BINT2 ; 13GETLAM OBJ_66BAD IT SWAP * 6A3D4
@@ -460,7 +461,7 @@ OBJ_6A40B:
           2DROP ;                                * 6A442
 
 * refs (1): 6A212
-EqwRuleKey0~1~1~1:
+EqwRuleKey0~3:
         :: 12GETLAM OBJ_681E8 DUP BINT1 7ROLL #1- OBJ_6869D SUBHXS ROT &HXS * 6A44C
           SWAP 5ROLL #1- OBJ_6869D #1+ MINUSONE SUBHXS &HXS OBJ_681B1 2DUP * 6A483
           SWAP#- 13PUTLAM 2DUP#= ITE 2DROP       * 6A4B5
@@ -469,21 +470,20 @@ EqwRuleKey0~1~1~1:
             #- OBJ_67519 2GETLAM #-SWAP ZERO_DO DUP#1+ ROLLDROP OBJ_6C302 * 6A505
             LOOP DROP ;                          * 6A52D
           EqwBoxCount 13GETLAM #+ OBJ_6746B EqwBoxCount 1GETLAM #1-- SWAP * 6A53C
-          INNERCOMP DUP#2+ ROLL OVER#+ #1+ OBJ_68183 EqwRuleKey0~1~1~1~1 * 6A564
-          NDROP ;                                * 6A587
+          INNERCOMP DUP#2+ ROLL OVER#+ #1+ OBJ_68183 EqwRuleKey0~7 NDROP ; * 6A564
 
 * refs (1): 6A258
-EqwRuleKey0~1~1~2:
+EqwRuleKey0~4:
         :: ZEROZERO ROT 5ROLL 5ROLL              * 6A591
 
 * refs (3): 6A424 6A433 6EDDE
 OBJ_6A5AA:
           :: 2DUP#= case2DROP DO                 * 6A5AA
-            INDEX@ 13GETLAM EqwRuleKey0~1~1~2~1 LOOP ; * 6A5BE
+            INDEX@ 13GETLAM EqwRuleKey0~6 LOOP ; * 6A5BE
           3DROP                                  * 6A5D7
 
 * refs (1): 6A249
-EqwRuleKey0~1~1~3:
+EqwRuleKey0~5:
           :: 1GETLAM 11GETLAM DUP 6GETLAM OBJ_6A61D OBJ_67BD5 DUP 5GETLAM * 6A5DC
             OBJ_6A61D OBJ_67BE2 DUP 9GETLAM      * 6A609
 
@@ -495,7 +495,7 @@ OBJ_6A61D:
           7GETLAM 3GETLAM OVER#+ ;               * 6A64F
 
 * refs (1): 6A5C8
-EqwRuleKey0~1~1~2~1:
+EqwRuleKey0~6:
         CON(5)  (*)+5                            * 6A663  primitive code object
         ASSEMBLE
         GOSBVL  POP#                             * 6A668
@@ -596,7 +596,7 @@ OBJ_6A75D:
         GOTO    L_6A70D                          * 6A765
 
 * refs (1): 6A582
-EqwRuleKey0~1~1~1~1:
+EqwRuleKey0~7:
         CON(5)  (*)+5                            * 6A769  primitive code object
         GOSBVL  POP#                             * 6A76E
         R0=A                                     * 6A775
@@ -714,7 +714,7 @@ OBJ_6AAB9:
 * refs (1): 6AB72
 OBJ_6AAF5:
           :: OBJ_25F4E OBJ_6AF4B SYMBN OBJ_6C2C1 ; EXITFCNsto * 6AAF5
-          :: toklparen SWAP&$ tokrparen &$ OBJ_6A929 OBJ_285EE * 6AB18
+          :: toklparen SWAP&$ tokrparen &$ OBJ_6A929 ~BINT1;1PUTLAM * 6AB18
 
 * refs (1): 6ABC7
 OBJ_6AB3B:
@@ -947,9 +947,9 @@ L_6B3F5:
         CON(2)  #12                              * 6B40C  entry 3
         CON(5)  OBJ_6F9B4                        * 6B40E
         CON(2)  #23                              * 6B413  entry 4
-        CON(5)  ROMP_0A1_022                     * 6B415
+        CON(5)  ~Modifier;RShiftOnly;SetDA123NoCh * 6B415
         CON(2)  #28                              * 6B41A  entry 5
-        CON(5)  ROMP_0A2_022                     * 6B41C
+        CON(5)  ~Modifier;SetKeysNS;SetDA123NoCh * 6B41C
         CON(2)  #2D                              * 6B421  entry 6
         CON(5)  TurnOffKey                       * 6B423
 
@@ -959,9 +959,9 @@ L_6B428:
         CON(2)  #10                              * 6B42A  entry 0
         CON(5)  OBJ_6A8C4                        * 6B42C
         CON(2)  #23                              * 6B431  entry 1
-        CON(5)  ROMP_0A2_022                     * 6B433
+        CON(5)  ~Modifier;SetKeysNS;SetDA123NoCh * 6B433
         CON(2)  #28                              * 6B438  entry 2
-        CON(5)  ROMP_0A1_027                     * 6B43A
+        CON(5)  ~Modifier;LShiftOnly;SetDA123NoCh * 6B43A
 
 * Key dispatch: keycode byte and object to run
 L_6B43F:
@@ -981,13 +981,13 @@ L_6B43F:
         CON(2)  #1A                              * 6B46B  entry 6
         CON(5)  OBJ_6AC3A                        * 6B46D
         CON(2)  #23                              * 6B472  entry 7
-        CON(5)  ROMP_0A1_022                     * 6B474
+        CON(5)  ~Modifier;RShiftOnly;SetDA123NoCh * 6B474
         CON(2)  #28                              * 6B479  entry 8
-        CON(5)  ROMP_0A1_027                     * 6B47B
+        CON(5)  ~Modifier;LShiftOnly;SetDA123NoCh * 6B47B
         CON(2)  #2C                              * 6B480  entry 9
         CON(5)  OBJ_461CD                        * 6B482
         CON(2)  #2D                              * 6B487  entry 10
-        CON(5)  OBJ_4B86E                        * 6B489
+        CON(5)  ~EXITFCNsto;ERRJMP               * 6B489
         RPL
 
 * refs (2): 3D8AD D755C
@@ -1001,17 +1001,17 @@ OBJ_6B48E:
 * refs (2): 42DD7 42DE1
 ObEdit~1:
         :: CK1NOLASTWD POLSaveUI ERRSET          * 6B506
-          :: TRUE ObEdit~1~3 ERRSET              * 6B51A
-            :: ObEdit~1~4 OBJ_6C302 OBJ_6BBFE DROP OBJ_4CE83 ObEdit~1~2 * 6B52E
-              BINT30 GETLAM IT OBJ_6B5E2         * 6B551
+          :: TRUE ObEdit~4 ERRSET                * 6B51A
+            :: ObEdit~5 OBJ_6C302 OBJ_6BBFE DROP OBJ_4CE83 ObEdit~3 BINT30 * 6B52E
+              GETLAM IT OBJ_6B5E2                * 6B556
             ;                                    * 6B565
             ERRTRAP                              * 6B56A
             :: RDROP OBJ_6C8CD ERROR@ #0= caseFALSE GOTO * 6B56F
-              ObEdit~1~5 ;                       * 6B592
+              ObEdit~6 ;                         * 6B592
 
 * refs (1): 6B4E3
 OBJ_6B59C:
-            :: ObEdit~1~1 OBJ_6AFF0 SWAP OBJ_6C8CD ExitFcn EVAL TRUE ; ; * 6B59C
+            :: ObEdit~2 OBJ_6AFF0 SWAP OBJ_6C8CD ExitFcn EVAL TRUE ; ; * 6B59C
           ERRTRAP POLResUI&Err POLRestoreUI ;    * 6B5CE
 
 * refs (6): 6ABE5 6B4CF 6B560 6B790 6B8AD 6B9E8
@@ -1081,8 +1081,8 @@ OBJ_6B934:
 * refs (5): 6B899 6BFA6 6BFF1 6C3CF 6E5FF
 OBJ_6B939:
             :: OBJ_6C361 HARDBUFF 14GETLAM 15GETLAM BINT28 GETLAM 3PICK#+ * 6B939
-              OBJ_49158 3PICK#+ GROB!ZERODRP ZEROZERO BINT28 PUTLAM * 6B961
-              OBJ_496F0 ;                        * 6B97F
+              ~BINT27;GETLAM 3PICK#+ GROB!ZERODRP ZEROZERO BINT28 PUTLAM * 6B961
+              ~BINT27;PUTLAM ;                   * 6B97F
             OBJ_6B79A OBJ_6CB25 OBJ_6CB39 ;      * 6B989
         ;                                        * 6B99D
 
@@ -1101,12 +1101,12 @@ OBJ_6B9BB:
 OBJ_6B9F2:
         { ROMP_0A2_00F OBJ_6C32A ROMP_0A1_00D    * 6B9F2
           :: TakeOver OBJ_6B934 OBJ_6C361 OBJ_6A947 OBJ_6C954 ; DoCAlarmKey * 6BA06
-          DoCAlarmKey NOP NOP ROMP_0A1_02C ABORT ROMP_0A2_030 * 6BA2E
+          DoCAlarmKey NOP NOP ROMP_0A1_02C ABORT ~DoDelims;$_{};?ClrAlgSetPr * 6BA2E
           :: OBJ_6B934 OBJ_6CC10 ITE             * 6BA4C
             :: OBJ_6CC32 # 207 ;                 * 6BA60
             :: OBJ_6CC21 # 208 ;                 * 6BA79
             JstGetTHEMESG FlashMsg ;             * 6BA92
-          ROMP_0A3_02B                           * 6BAA1
+          ~DoDelims;$_2DQ;?ClrAlg                * 6BAA1
           :: OBJ_6B934 10GETLAM OBJ_6A95B        * 6BAA6
 
 * refs (1): 6A988
@@ -1117,8 +1117,9 @@ OBJ_6BABA:
           OBJ_6BF6F ROMP_0A1_011 OBJ_6BF6F ROMP_0A3_010 OBJ_6BFEC * 6BB18
           ROMP_0A3_011 OBJ_6BFEC ROMP_0A2_019 OBJ_6C186 ROMP_0A1_01C * 6BB31
           OBJ_6E5D2 ROMP_0A3_00D OBJ_6C262 ROMP_0A2_01B * 6BB4A
-          :: NULL$ 10PUTLAM OBJ_6AE42 ; ROMP_0A1_018 * 6BB5E
-          :: OBJ_6BBCC ; EVAL_3B427              * 6BB7C
+          :: NULL$ 10PUTLAM OBJ_6AE42 ; ~NoEdit?case;xDUP;EnterComLine * 6BB5E
+          :: OBJ_6BBCC ;                         * 6BB7C
+          EVAL_3B427                             * 6BB8B
           :: EXITFCNsto xEVAL OBJ_6BBCC ; ROMP_0A2_00E * 6BB90
           :: EXITFCNsto x>NUM OBJ_6BBCC ; }      * 6BBAE
 
@@ -1155,7 +1156,7 @@ OBJ_6BC73:
         :: BINT51 SysITE CHR_, CHR_. ;           * 6BC73
 
 * refs (2): 68CE7 6BD03
-OBJ_6BC91:
+~';xFORMUNIT:
         :: ' xFORMUNIT ;                         * 6BC91
 
 * refs (2): 6B32C 6BD44
@@ -1170,9 +1171,9 @@ OBJ_6BCAC:
 OBJ_6BCB3:
         { ROMP_0A3_007 OBJ_6CC43 ROMP_0A5_02E OBJ_6BC55 ROMP_0A2_02E * 6BCB3
           OBJ_6BC55 ROMP_0A4_02E OBJ_6BC73 ROMP_0A1_02E OBJ_6BC73 * 6BCD1
-          ROMP_0A5_021 toklparen ROMP_0A2_021 toklparen ROMP_0A3_026 * 6BCEA
-          OBJ_6BC91 ROMP_0A1_01A CHR_E ROMP_0A1_019 CHR_- ROMP_0A4_02F * 6BD03
-          OBJ_6BC55 ROMP_0A1_02F OBJ_6BC55 K__ë_ BINT0 } * 6BD21
+          ROMP_0A5_021 toklparen ~DoDelims;$_LRParens;SetDA1NoCh toklparen * 6BCEA
+          ROMP_0A3_026 ~';xFORMUNIT ROMP_0A1_01A CHR_E ROMP_0A1_019 CHR_- * 6BCFE
+          ROMP_0A4_02F OBJ_6BC55 ROMP_0A1_02F OBJ_6BC55 K__ë_ BINT0 } * 6BD1C
 
 * refs (1): 6BE61
 OBJ_6BD3F:
@@ -1195,7 +1196,7 @@ OBJ_6BDF3:
           :: OBJ_6BCB3 EQLookup IT EVAL          * 6BDF3
             OBJ_72FED OVER OBJ_4AC02 OR ITE      * 6BE0C
             :: OBJ_6C555 TRUE ; FALSE            * 6BE25
-            BINT32 PUTLAM OBJ_40841 case OBJ_6BD76 * 6BE3E
+            BINT32 PUTLAM ~';MenuKey;CkSecoType case OBJ_6BD76 * 6BE3E
             ' EQUAL OBJ_6BD3F Lookup IT EVAL     * 6BE57
             DUPTYPECHAR? ITE                     * 6BE75
             :: ?TogU/LCase CHR>$ ;               * 6BE7F
@@ -1206,13 +1207,13 @@ OBJ_6BDF3:
             DUPTYPECSTR? case OBJ_6BF8D          * 6BEF2
             OBJ_6B9F2 EQLookup case EVAL         * 6BF01
             ' OBJ_3F247 CkSecoType case EVAL     * 6BF15
-            OBJ_4080F case                       * 6BF2E
+            ~';MenuMaker;CkSecoType case         * 6BF2E
 
 * refs (1): 6BD85
 OBJ_6BF38:
             :: EVAL DispMenu ;                   * 6BF38
-            OBJ_40869 case EVAL                  * 6BF4C
-            OBJ_5186B ;                          * 6BF5B
+            ~';Modifier;CkSecoType case EVAL     * 6BF4C
+            ~DROP;DoBadKey ;                     * 6BF5B
           DoBadKey ;                             * 6BF65
 
 * refs (2): 6BB18 6BB22

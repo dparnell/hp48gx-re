@@ -737,7 +737,7 @@ ROMP_0B4_164:
 
 * ROMPTR 0B4 165
 * refs (1): A2437
-ROMP_0B4_165:
+~BINT42;TestSysFlag:
         :: BINT42 TestSysFlag ;                  * AE37A
 
 * ROMPTR 0B4 166

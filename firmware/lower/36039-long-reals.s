@@ -106,7 +106,7 @@ MATFLOAT/~1:
 * refs (1): 3641C
 1@/(ar,nb)~1:
           :: 3UNROLL 1@*(nb,ar)~2 ITE FreeRefs   * 3633B
-            :: DUP r->c(ar) OBJ_35C18 REPLACE ;  * 36354
+            :: DUP r->c(ar) ~SWAP;FreeRefs REPLACE ; * 36354
             SWAP F%>L% 3UNROLL DOARRYPRG1 SWAPDROP ; * 36372
         ;                                        * 36390
 
@@ -191,14 +191,14 @@ MATRSD:
 
 * refs (1): 3666F
 MATRSD~1:
-        :: OBJ_35AEE rot;NewobIfNotFree MATRSD~1~1 MATRSD~1~1 MATRSD~1~1 ; * 366AB
+        :: OBJ_35AEE rot;NewobIfNotFree MATRSD~2 MATRSD~2 MATRSD~2 ; * 366AB
 
 * refs (5): 366B5 4F99E 4F9F8 CBBFF CBC78
 rot;NewobIfNotFree:
         :: ROT CKREF ;                           * 366CE
 
 * refs (3): 366BA 366BF 366C4
-MATRSD~1~1:
+MATRSD~2:
         :: ROTDUP TYPERARRY? case r->c(ar)       * 366E2
           CKREF ;                                * 366FB
 
@@ -226,12 +226,12 @@ OBJ_367C8:
           :: 5PICK                               * 367C8
 
 * refs (3): 367FF 36A62 36A7B
-MATDET~1~1~1:
+MATDET~3:
             :: 3PICK PULLLONGEL SWAP3PICK PULLLONGEL SWAPDROP 2SWAP ; 6PICK * 367D2
-            MATDET~1~1~1 2DROP                   * 367FF
+            MATDET~3 2DROP                       * 367FF
 
 * refs (1): 36A85
-MATDET~1~1~2:
+MATDET~4:
             :: 4ROLL L%* 3UNROLL L%* L%- ; ;     * 36809
           BINT1 PUTEL BINT3 BINT1 OBJ_367C8 BINT2 PUTEL BINT1 BINT2 * 36831
           OBJ_367C8 BINT3 PUTEL ROTROT2DROP ;    * 3685E
@@ -281,9 +281,9 @@ MATDET:
         ROMPTR 0C2 051                           * 36A48
 
 * refs (1): 97ED9
-MATDET~1~1:
-        :: BINT1 SWAP3PICK MATDET~1~1~1 2DROP BINT3 BINT4 5PICK MATDET~1~1~1 * 36A53
-          2DROP MATDET~1~1~2 ToNorm(nb) SWAPDROP ; * 36A80
+MATDET~2:
+        :: BINT1 SWAP3PICK MATDET~3 2DROP BINT3 BINT4 5PICK MATDET~3 2DROP * 36A53
+          MATDET~4 ToNorm(nb) SWAPDROP ;         * 36A85
 
 * [F%] -> [F%]'
 * refs (1): 1B29B
@@ -292,7 +292,7 @@ MATINV:
 
 * refs (1): 20337
 @inv(ar):
-        :: sqmat(ar)? OBJ_35C18 ROMPTR 0C2 056 ; * 36AA4
+        :: sqmat(ar)? ~SWAP;FreeRefs ROMPTR 0C2 056 ; * 36AA4
 
 * [F%] [F%]' -> [F%]''
 * refs (1): 1AF6E
@@ -329,12 +329,12 @@ OBJ_36B14:
         :: FreeRefs DUP r->c(ar) SWAP REPLACE ROMPTR 0C2 054 ; * 36BA7
 
 * refs (3): 92ED0 9662D 96637
-OBJ_36BD5:
+~%%0>=;?SEMI;%%CHS:
         :: %%0>= ?SEMI                           * 36BD5
           %%CHS ;                                * 36BE4
 
 * refs (2): 911F3 915DB
-OBJ_36BEE:
+~%%0<;?SEMI;%%CHS:
         :: %%0< ?SEMI                            * 36BEE
           %%CHS ;                                * 36BFD
 
@@ -463,10 +463,10 @@ OBJ_36F56:
 
 * refs (5): CC059 CC0D3 CC202 CC295 CC569
 OBJ_36F74:
-        :: OBJ_35AEE NOP r->c(ar) OBJ_36F97 NOP ; * 36F74
+        :: OBJ_35AEE NOP r->c(ar) ~SWAP;r->c(ar);SWAP NOP ; * 36F74
 
 * refs (1): 36F88
-OBJ_36F97:
+~SWAP;r->c(ar);SWAP:
         :: SWAP r->c(ar) SWAP ;                  * 36F97
 
 * refs (12): 904F8 905A2 90778 90BBB 9100E 92CF0 ...
@@ -497,7 +497,7 @@ OBJ_36FDB:
         A=DAT1  A                                * 36FE0
         D1=D1+  5                                * 36FE3
         D=D+1   A                                * 36FE6
-        GOSUB   SAVPTR~jump_376AC                * 36FE8
+        GOSUB   SAVPTR~jump_17                   * 36FE8
         C=DAT1  A                                * 36FEC
         D0=C                                     * 36FEF
         D0=D0+  5                                * 36FF2
@@ -554,7 +554,7 @@ OBJ_3706E:
         A=DAT1  A                                * 37073
         D1=D1+  5                                * 37076
         D=D+1   A                                * 37079
-        GOSUB   SAVPTR~jump_376AC                * 3707B
+        GOSUB   SAVPTR~jump_17                   * 3707B
         D0=A                                     * 3707F
         C=DAT1  A                                * 37082
         D1=C                                     * 37085
@@ -595,7 +595,7 @@ L%ARRY*%%:
         D1=C                                     * 370DF
         D1=D1+  5                                * 370E2
         D=D+1   A                                * 370E5
-        GOSUB   SAVPTR~jump_376AC                * 370E7
+        GOSUB   SAVPTR~jump_17                   * 370E7
         C=DAT1  A                                * 370EB
         D1=C                                     * 370EE
         D1=D1+  15                               * 370F1
@@ -625,7 +625,7 @@ L_3711D:
         D1=D1-  5                                * 37131
         A=DAT1  A                                * 37134
         GOSBVL  RCCD0                            * 37137
-        GOSUB   MULTF~jump_372D2                 * 3713E
+        GOSUB   MULTF~jump_2                     * 3713E
         DAT1=A  A                                * 37142
         D1=D1+  5                                * 37145
         P=      14                               * 37148
@@ -657,7 +657,7 @@ L_37151:
         D1=D1+  10                               * 37188
         D=D+1   A                                * 3718B
         D=D+1   A                                * 3718D
-        GOSUB   SAVPTR~jump_376AC                * 3718F
+        GOSUB   SAVPTR~jump_17                   * 3718F
         D1=D1-  5                                * 37193
         C=DAT1  A                                * 37196
         D0=C                                     * 37199
@@ -685,7 +685,7 @@ L_371C1:
         GOYES   L_3720D                          * 371D8
         SETDEC                                   * 371DA
         GOSBVL  RCCD0                            * 371DC
-        GOSUB   MULTF~jump_372D2                 * 371E3
+        GOSUB   MULTF~jump_2                     * 371E3
         C=DAT1  W                                * 371E7
         D=C     W                                * 371EB
         D=0     S                                * 371EE
@@ -723,7 +723,7 @@ L_37232:
         CON(5)  (*)+5                            * 37247  primitive code object
         GOSBVL  SUB_2A0B1                        * 3724C
         HST=0   3                                * 37253
-        GOSUB   MULTF~jump_372D2                 * 37256
+        GOSUB   MULTF~jump_2                     * 37256
         GOSBVL  STAB0                            * 3725A
         P=      0                                * 37261
         SETHEX                                   * 37263
@@ -739,7 +739,7 @@ L_37232:
         GOSBVL  SUB_2A0B1                        * 37283
         HST=0   3                                * 3728A
 L_3728D:
-        GOSUB   MULTF~jump_372D2                 * 3728D
+        GOSUB   MULTF~jump_2                     * 3728D
         GOSBVL  STAB0                            * 37291
         P=      0                                * 37298
         SETHEX                                   * 3729A
@@ -760,7 +760,7 @@ B%ABS1~1:
         GOTO    L_3728D                          * 372CE
 
 * refs (4): 3713E 371E3 37256 3728D
-MULTF~jump_372D2:
+MULTF~jump_2:
         GOVLNG  MULTF                            * 372D2
 L_372D9:
         GOSBVL  MOVEDOWN                         * 372D9
@@ -775,7 +775,7 @@ PULL%%EL:
         CON(5)  (*)+5                            * 372EF  primitive code object
         GOSBVL  POP#                             * 372F4
         A=A-1   A                                * 372FB
-        GOSUB   SAVPTR~jump_376AC                * 372FD
+        GOSUB   SAVPTR~jump_17                   * 372FD
         C=DAT1  A                                * 37301
         D1=C                                     * 37304
         D1=D1+  10                               * 37307
@@ -816,7 +816,7 @@ PUT%%EL:
         A=A-1   A                                * 3736D
         D1=D1+  5                                * 3736F
         D=D+1   A                                * 37372
-        GOSUB   SAVPTR~jump_376AC                * 37374
+        GOSUB   SAVPTR~jump_17                   * 37374
         D1=D1-  5                                * 37378
         C=DAT1  A                                * 3737B
         D0=C                                     * 3737E
@@ -883,7 +883,7 @@ SUB_37412:
 * refs (7): 7CECD 87062 88389 93189 93C2D 986FE ...
 !MAKEHXS:
         CON(5)  (*)+5                            * 3742D  primitive code object
-        GOSUB   SAVPTR~jump_376AC                * 37432
+        GOSUB   SAVPTR~jump_17                   * 37432
         C=DAT1  A                                * 37436
         D1=C                                     * 37439
         D1=D1+  5                                * 3743C
@@ -900,7 +900,7 @@ SUB_37412:
 * refs (4): 9396F 97E89 CBC09 CBC87
 SWAPROWS:
         CON(5)  (*)+5                            * 3745E  primitive code object
-        GOSUB   SAVPTR~jump_376AC                * 37463
+        GOSUB   SAVPTR~jump_17                   * 37463
         GOSUB   POP2#~jump                       * 37467
         RSTK=C                                   * 3746B
         C=A     A                                * 3746D
@@ -969,7 +969,7 @@ L_37501:
 * refs (8): 7CF31 7D0F8 93247 9335F 933F5 93454 ...
 SWAPCOLUMNS:
         CON(5)  (*)+5                            * 37508  primitive code object
-        GOSUB   SAVPTR~jump_376AC                * 3750D
+        GOSUB   SAVPTR~jump_17                   * 3750D
         GOSUB   POP2#~jump                       * 37511
         RSTK=C                                   * 37515
         C=A     A                                * 37517
@@ -1033,7 +1033,7 @@ L_37594:
 * refs (5): 9324C 93364 93DF8 977F9 983A3
 OBJ_375A7:
         CON(5)  (*)+5                            * 375A7  primitive code object
-        GOSUB   SAVPTR~jump_376AC                * 375AC
+        GOSUB   SAVPTR~jump_17                   * 375AC
         GOSUB   POP2#~jump                       * 375B0
         B=C     A                                * 375B4
         C=DAT1  A                                * 375B6
@@ -1151,7 +1151,7 @@ SUB_3769E:
         RTN                                      * 376AA
 
 * refs (13): 35D76 36FE8 3707B 370E7 3718F 372FD ...
-SAVPTR~jump_376AC:
+SAVPTR~jump_17:
         GOVLNG  SAVPTR                           * 376AC
 
 * refs (5): 374AB 374CB 37555 37577 37721
@@ -1167,7 +1167,7 @@ OBJ_376C1:
         CON(5)  (*)+5                            * 376C1  primitive code object
         GOSBVL  POP#                             * 376C6
         R1=A                                     * 376CD
-        GOSUB   SAVPTR~jump_376AC                * 376D0
+        GOSUB   SAVPTR~jump_17                   * 376D0
         C=DAT1  A                                * 376D4
         D0=C                                     * 376D7
         D0=D0+  5                                * 376DA
@@ -1295,7 +1295,7 @@ L_3783D:
 L_37850:
         A=R4                                     * 37850
         R0=A                                     * 37853
-        GOSUB   SAVPTR~jump_376AC                * 37856
+        GOSUB   SAVPTR~jump_17                   * 37856
         GOTO    L_377D6                          * 3785A
 L_3785E:
         GOSBVL  SUB_2A24B                        * 3785E
@@ -1403,7 +1403,7 @@ OBJ_37A0E:
           ((0,0)) ;                              * 37A27
 
 * refs (1): 97DA8
-LU~1~1:
+LU~2:
         :: TYPERARRY? case %1                    * 37A31
           C%1 ;                                  * 37A45
 
@@ -1413,7 +1413,7 @@ OBJ_37A4F:
           C%%1 ;                                 * 37A68
 
 * refs (1): 983DF
-COND~1~2~1:
+COND~4:
         :: DUPTYPEEREL? case OBJ_37AC2           * 37A72
           DUP C%%0= case %%1                     * 37A86
           C%%>%% 2DUP%%R ROTOVER %%/ 3UNROLL %%/ %%>C%% ; * 37A9A
@@ -1539,7 +1539,7 @@ L%CONJ:
           C%%CONJ ;                              * 37D96
 
 * refs (12): 7CE28 935BC 94C48 95018 95F25 96812 ...
-OBJ_37DA0:
+~2DUP;%%<;NOT?SWAPDROP:
         :: 2DUP %%< NOT?SWAPDROP ;               * 37DA0
 
 * -> {}
@@ -1567,7 +1567,7 @@ MATREDIM:
 
 * refs (3): 1D143 2C3D3 2C478
 @rdm(ar,ls):
-        :: OBJ_35C18 SWAP OBJ_37E4B @rdm(ar,ls)~1 ; * 37E2D
+        :: ~SWAP;FreeRefs SWAP OBJ_37E4B @rdm(ar,ls)~1 ; * 37E2D
 
 * refs (2): 37E1E 37E3C
 OBJ_37E4B:
@@ -1595,25 +1595,25 @@ L_37E94:
 L_37E9B:
         GOVLNG  DOMEMERR                         * 37E9B
 L_37EA2:
-        GOSUB   POP#~jump_38337                  * 37EA2
+        GOSUB   POP#~jump_3                      * 37EA2
         ST=0    6                                * 37EA6
         A=A-1   A                                * 37EA9
         ?A=0    A                                * 37EAB
         GOYES   L_37EBA                          * 37EAE
         ST=1    6                                * 37EB0
-        GOSUB   POP#~jump_38337                  * 37EB3
+        GOSUB   POP#~jump_3                      * 37EB3
         R4=A                                     * 37EB7
 L_37EBA:
-        GOSUB   POP#~jump_38337                  * 37EBA
+        GOSUB   POP#~jump_3                      * 37EBA
         R3=A                                     * 37EBE
-        GOSUB   POP#~jump_38337                  * 37EC1
+        GOSUB   POP#~jump_3                      * 37EC1
         P=      4                                * 37EC5
         A=A-1   P                                * 37EC7
         P=      0                                * 37ECA
         GONC    L_37E9B                          * 37ECC
         ASL     A                                * 37ECF
         R2=A                                     * 37ED1
-        GOSUB   POP#~jump_38337                  * 37ED4
+        GOSUB   POP#~jump_3                      * 37ED4
         ASL     A                                * 37ED8
         R1=A                                     * 37EDA
         GOSBVL  SAVPTR                           * 37EDD

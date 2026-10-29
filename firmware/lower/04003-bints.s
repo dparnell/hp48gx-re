@@ -218,7 +218,7 @@ BINT43:
 * refs (6): 1A328 2DB49 3A9D8 3AC25 3E0FB 42136
 TurnOff:
         :: OBJ_4231A ALARM? ?SEMI                * 041A7
-          DEEPSLEEP InitEnab TurnOff~1 ?FlashAlert ; * 041BB
+          DEEPSLEEP InitEnab ~IT;ShowInvRomp ?FlashAlert ; * 041BB
 
 * refs (1): 17FE8
 off!:
@@ -229,7 +229,7 @@ off!:
 DEEPSLEEP:
         CON(5)  (*)+5                            * 041ED  primitive code object
         ASSEMBLE
-        GOSUB   SAVPTR~jump_04691                * 041F2
+        GOSUB   SAVPTR~jump_2                    * 041F2
         ST=0    15                               * 041F6
         GOSBVL  SUB_00672                        * 041F9
         GOSUBL  SUB_049B8                        * 04200
@@ -507,7 +507,7 @@ L_04508:
 * refs (1): 386DD
 AlertStatus:
         CON(5)  (*)+5                            * 04544  primitive code object
-        GOSUB   SAVPTR~jump_04691                * 04549
+        GOSUB   SAVPTR~jump_2                    * 04549
         ST=0    15                               * 0454D
         GOSBVL  SUB_00672                        * 04550
         GOSBVL  AllowIntr                        * 04557
@@ -523,7 +523,7 @@ Alert$:
         CON(5)  (*)+5                            * 04575  primitive code object
         GOSBVL  POP#                             * 0457A
         R1=A                                     * 04581
-        GOSUB   SAVPTR~jump_04691                * 04584
+        GOSUB   SAVPTR~jump_2                    * 04584
         C=0     A                                * 04588
         LC(2)   #16                              * 0458A
         GOSBVL  MAKE$                            * 0458E
@@ -618,7 +618,7 @@ SUB_04684:
         RTN                                      * 0468F
 
 * refs (4): 041F2 04549 04584 04763
-SAVPTR~jump_04691:
+SAVPTR~jump_2:
         GOVLNG  SAVPTR                           * 04691
 L_04698:
         P=      0                                * 04698
@@ -685,7 +685,7 @@ L_0474A:
         C=DAT1  B                                * 0475A
         D1=A                                     * 0475D
         R0=C                                     * 04760
-        GOSUB   SAVPTR~jump_04691                * 04763
+        GOSUB   SAVPTR~jump_2                    * 04763
         GOSUBL  PUSH#                            * 04767
         GOVLNG  PushTLoop                        * 0476D
 L_04774:
@@ -784,20 +784,20 @@ POPKEY:
         RPL
 
 * refs (1): 421BD
-GETKEY~1:
-        :: OBJ_01E5E GETKEY~1~1 LiteSlp ;        * 04890
+GETKEY~10:
+        :: OBJ_01E5E OBJ_048A9 LiteSlp ;         * 04890
 
 * refs (1): 0489A
-GETKEY~1~1:
-        :: GETKEY~1~1~3 case                     * 048A9
-          :: GETKEY~1~1~1 case GETKEY~1~1~4      * 048B8
+OBJ_048A9:
+        :: OBJ_0E7CE case                        * 048A9
+          :: ~DispTimeReq?;DA1IsStat?;AND case OBJ_39AD8 * 048B8
             OBJ_0CEEA ;                          * 048CC
-          GETKEY~1~1~1 case                      * 048D6
-          :: GETKEY~1~1~2 GETKEY~1~1~4 ;         * 048E0
+          ~DispTimeReq?;DA1IsStat?;AND case      * 048D6
+          :: OBJ_0CED9 OBJ_39AD8 ;               * 048E0
         ;                                        * 048F4
 
 * refs (2): 048BD 048D6
-GETKEY~1~1~1:
+~DispTimeReq?;DA1IsStat?;AND:
         :: DispTimeReq? DA1IsStat? AND ;         * 048F9
 
 * ->

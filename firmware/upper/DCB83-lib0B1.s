@@ -16,9 +16,11 @@ LIB0B1:
 ~DoMsgBox:
         :: POLSaveUI ERRSET                      * DCB9A
           :: MINUSONE MINUSONE MINUSONE MINUSONE ROMPTR 0B3 057 FALSE BINT6 * DCBA9
-            ROMPTR 0B0 0DB 5ROLL DUPTYPEGROB? ?SKIP OBJ_1A002 * DCBD7  ~nNullBind
-            5UNROLL 5PICK 5PICK 5PICK ROMPTR 0B1 00B DUP 7PUTLAM BINT28 SWAP * DCBF6
-            BINT9 #* #7+ #2/ #- 6PUTLAM ROMPTR 0B1 00C ' ROMPTR 0B1 001 ' * DCC29
+            ROMPTR 0B0 0DB 5ROLL DUPTYPEGROB? ?SKIP * DCBD7  ~nNullBind
+            ~DUPTYPEBINT?;case;JstGetTHEMESG     * DCBF1
+            5UNROLL                              * DCBF6
+            5PICK 5PICK 5PICK ROMPTR 0B1 00B DUP 7PUTLAM BINT28 SWAP BINT9 * DCBFB
+            #* #7+ #2/ #- 6PUTLAM ROMPTR 0B1 00C ' ROMPTR 0B1 001 ' * DCC2E
             ROMPTR 0B1 003 TrueTrue 5ROLL ONEFALSE ' 2GETLAM 'ERRJMP * DCC67
             POLSetUI ClrDA1IsStat ClrDA2bEdit ROMPTR 0B1 008 ClrDA3OK * DCC90
             POLKeyUI ROMPTR 0B1 00D ClrDAsOK 3GETLAM ROMPTR 0B3 058 ABND ; * DCCAF
@@ -51,7 +53,7 @@ LIB0B1:
 
 * ROMPTR 0B1 004
 * refs (1): DCB83
-~DoMsgBox~2~1:
+~DoMsgBox~3:
         ::                                       * DCDDC
           { BINT25                               * DCDE1
             :: TakeOver ROMPTR 0B1 009 ; BINT45  * DCDEB  DoMKeyOK
@@ -65,7 +67,7 @@ LIB0B1:
 
 * ROMPTR 0B1 005
 * refs (1): DCB83
-~DoMsgBox~2~2:
+~DoMsgBox~4:
         :: DUP#<7 casedrpfls BINT12              * DCE6A
           #=casedrpfls BINT35                    * DCE7E
           #=casedrpfls DROP                      * DCE88
@@ -73,7 +75,7 @@ LIB0B1:
 
 * ROMPTR 0B1 006
 * refs (1): DCB83
-~DoMsgBox~2~3:
+~DoMsgBox~5:
         :: BINT45 #=casedrpfls DUP#<7            * DCE9C
           casedrpfls BINT40                      * DCEB0
           #=casedrpfls DROP                      * DCEBA
@@ -81,7 +83,7 @@ LIB0B1:
 
 * ROMPTR 0B1 007
 * refs (1): DCB83
-~DoMsgBox~2~4:
+~DoMsgBox~6:
         ::                                       * DCECE
           { BINT25                               * DCED3
             :: TakeOver ROMPTR 0B1 009 ; BINT45  * DCEDD  DoMKeyOK
@@ -92,7 +94,7 @@ LIB0B1:
 
 * ROMPTR 0B1 008
 * refs (1): DCB83
-~DoMsgBox~3:
+~DoMsgBox~7:
         ::                                       * DCF3E
           { ROMPTR 0B3 05C ROMPTR 0B3 05D ROMPTR 0B3 05E * DCF43  ~BBGetDefltHeight
             ROMPTR 0B3 05F }                     * DCF69  ~$>grobOrGROB
@@ -128,7 +130,7 @@ ROMP_0B1_00A:
 
 * ROMPTR 0B1 00B
 * refs (1): DCB83
-~DoMsgBox~4:
+~DoMsgBox~8:
         :: 3PICK TYPEGROB? case2drop             * DD231
           :: GROBDIM DROP BINT9 #/ SWAP #0<> IT #1+ * DD245
           ;                                      * DD272
@@ -139,13 +141,13 @@ ROMP_0B1_00A:
 
 * ROMPTR 0B1 00C
 * refs (1): DCB83
-~DoMsgBox~5:
+~DoMsgBox~9:
         :: HARDBUFF BINT16 6GETLAM # 76 OVER 7GETLAM BINT9 #* #+ #7+ SUBGROB * DD2F0
           5PUTLAM HARDBUFF2 TOTEMPOB 4PUTLAM ;   * DD331
 
 * ROMPTR 0B1 00D
 * refs (1): DCB83
-~DoMsgBox~6:
+~DoMsgBox~10:
         :: 5GETLAM HARDBUFF BINT16 6GETLAM GROB! 4GETLAM HARDBUFF2 ZEROZERO * DD34A
           GROB! ;                                * DD377
 
@@ -197,7 +199,7 @@ ROMP_0B1_012:
 
 * ROMPTR 0B1 013
 * refs (1): DCB83
-ROMP_0B1_013:
+~MenuDef@;4GETLAM;EQUAL:
         :: MenuDef@ 4GETLAM EQUAL ;              * DD625
 
 * ROMPTR 0B1 014
@@ -249,7 +251,8 @@ ROMP_0B1_01A:
 * ROMPTR 0B1 01B
 * refs (1): DCB83
 ROMP_0B1_01B:
-        :: TakeOver EditExstCase ROMP_0A1_018 DEPTH #0<> TRUE 2PUTLAM ; * DD7F4
+        :: TakeOver EditExstCase ~NoEdit?case;xDUP;EnterComLine DEPTH * DD7F4
+          #0<> TRUE 2PUTLAM ;                    * DD80D
 
 * ROMPTR 0B1 01C
 * refs (1): DCB83
@@ -309,7 +312,7 @@ INFORM~1:
 
 * ROMPTR 0B1 01D
 * refs (1): DCB83
-INFORM~1~1:
+INFORM~2:
         :: INNERCOMP DUP 1LAMBIND ZERO_DO ISTOP@ ROLL CKREAL COERCE * DDD34
           { BINT0 BINT1 BINT2 BINT3 BINT4 BINT5 BINT6 BINT8 BINT9 BINT10 * DDD61
             BINT13 }                             * DDD98
@@ -399,22 +402,22 @@ LIB0B1.link:
         REL(5)  ~DoMsgBox~1                      * DE3B5  001 
         REL(5)  ~MsgBoxMenu                      * DE3BA  002 ~MsgBoxMenu
         REL(5)  ~DoMsgBox~2                      * DE3BF  003 
-        REL(5)  ~DoMsgBox~2~1                    * DE3C4  004 
-        REL(5)  ~DoMsgBox~2~2                    * DE3C9  005 
-        REL(5)  ~DoMsgBox~2~3                    * DE3CE  006 
-        REL(5)  ~DoMsgBox~2~4                    * DE3D3  007 
-        REL(5)  ~DoMsgBox~3                      * DE3D8  008 
+        REL(5)  ~DoMsgBox~3                      * DE3C4  004 
+        REL(5)  ~DoMsgBox~4                      * DE3C9  005 
+        REL(5)  ~DoMsgBox~5                      * DE3CE  006 
+        REL(5)  ~DoMsgBox~6                      * DE3D3  007 
+        REL(5)  ~DoMsgBox~7                      * DE3D8  008 
         REL(5)  DoMKeyOK                         * DE3DD  009 DoMKeyOK
         REL(5)  ROMP_0B1_00A                     * DE3E2  00A 
-        REL(5)  ~DoMsgBox~4                      * DE3E7  00B 
-        REL(5)  ~DoMsgBox~5                      * DE3EC  00C 
-        REL(5)  ~DoMsgBox~6                      * DE3F1  00D 
+        REL(5)  ~DoMsgBox~8                      * DE3E7  00B 
+        REL(5)  ~DoMsgBox~9                      * DE3EC  00C 
+        REL(5)  ~DoMsgBox~10                     * DE3F1  00D 
         REL(5)  Ck&DoMsgBox                      * DE3F6  00E Ck&DoMsgBox
         REL(5)  ROMP_0B1_00F                     * DE3FB  00F 
         REL(5)  ROMP_0B1_010                     * DE400  010 
         REL(5)  ROMP_0B1_011                     * DE405  011 
         REL(5)  ROMP_0B1_012                     * DE40A  012 
-        REL(5)  ROMP_0B1_013                     * DE40F  013 
+        REL(5)  ~MenuDef@;4GETLAM;EQUAL          * DE40F  013 
         REL(5)  ROMP_0B1_014                     * DE414  014 
         REL(5)  ROMP_0B1_015                     * DE419  015 
         REL(5)  ROMP_0B1_016                     * DE41E  016 
@@ -424,7 +427,7 @@ LIB0B1.link:
         REL(5)  ROMP_0B1_01A                     * DE432  01A 
         REL(5)  ROMP_0B1_01B                     * DE437  01B 
         REL(5)  INFORM~1                         * DE43C  01C 
-        REL(5)  INFORM~1~1                       * DE441  01D 
+        REL(5)  INFORM~2                         * DE441  01D 
         REL(5)  ROMP_0B1_01E                     * DE446  01E 
         REL(5)  ROMP_0B1_020                     * DE44B  01F 
         REL(5)  ROMP_0B1_020                     * DE450  020 

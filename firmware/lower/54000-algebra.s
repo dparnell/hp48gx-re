@@ -30,7 +30,7 @@ getwordsize:
 * refs (1): 53CF5
 WORDSIZE:
         CON(5)  (*)+5                            * 54039  primitive code object
-        GOSUB   SAVPTR~jump_53F69                * 5403E
+        GOSUB   SAVPTR~jump_19                   * 5403E
         GOSUB   getwordsize                      * 54042
         R0=A                                     * 54046
 L_54049:
@@ -40,7 +40,7 @@ L_54049:
 * refs (4): 2565F 256C6 3ED34 5407F
 BASE:
         CON(5)  (*)+5                            * 54050  primitive code object
-        GOSUB   SAVPTR~jump_53F69                * 54055
+        GOSUB   SAVPTR~jump_19                   * 54055
         GOSUB   SUB_541FA                        * 54059
         GOTO    L_54049                          * 5405D
         RPL
@@ -63,7 +63,7 @@ BASECHAR:
 hxs>$:
         CON(5)  (*)+5                            * 540BB  primitive code object
         ASSEMBLE
-        GOSUB   SAVPTR~jump_53F69                * 540C0
+        GOSUB   SAVPTR~jump_19                   * 540C0
         GOSBVL  SUB_53F99                        * 540C4
         P=      0                                * 540CB
         GOSUB   SUB_541FA                        * 540CD
@@ -232,7 +232,7 @@ GPPushA:
         P=      0                                * 54266
         ST=0    10                               * 54268
 L_5426B:
-        GOSUB   GETPTR~jump_53F70                * 5426B
+        GOSUB   GETPTR~jump_8                    * 5426B
         D=D-1   A                                * 5426F
         GONC    L_54297                          * 54271
         D0=(5)  OSAVE                            * 54274
@@ -480,7 +480,7 @@ L_54510:
         LC(5)   %0_2A2B4                         * 54510
 L_54517:
         A=C     A                                * 54517
-        GOSUB   GETPTR~jump_53F70                * 54519
+        GOSUB   GETPTR~jump_8                    * 54519
         PC=(A)                                   * 5451D
 L_54521:
         LC(5)   %1                               * 54521
@@ -567,7 +567,7 @@ NumIFTE:
 
 * refs (1): 2300E
 xALG->~1:
-        :: xALG->~1~1 'R COMPEVAL OBJ_546B1 ;    * 54693
+        :: ~DOBIND;CK0NOLASTWD 'R COMPEVAL OBJ_546B1 ; * 54693
 
 * refs (2): 546A7 56B73
 OBJ_546B1:
@@ -645,7 +645,7 @@ SYMDERSTEP:
 * meta -> %0
 Repl0ABND:
           :: NDROP ABND %0_2A2B4 ;               * 5499F
-          #1-SWAP 1ABNDSWAP SYMDERSTEP~2 ;       * 549B8
+          #1-SWAP 1ABNDSWAP SYMDERSTEP~3 ;       * 549B8
 
 * refs (3): 1F645 63A2E 85E30
 {'dvar}:
@@ -707,7 +707,7 @@ L_54A62:
 
 * refs (1): 54995
 SYMDERSTEP~1:
-        :: GETLAM CARCOMP DUP TYPELAM? case SYMDERSTEP~1~1 * 54A6F
+        :: GETLAM CARCOMP DUP TYPELAM? case SYMDERSTEP~2 * 54A6F
           OVERSWAP EQUALcase                     * 54A92
 
 * ob -> %1
@@ -720,7 +720,7 @@ DROP%1ABND:
         ;                                        * 54ADD
 
 * refs (1): 54A8D
-SYMDERSTEP~1~1:
+SYMDERSTEP~2:
         :: ABND EQUAL %1 %0_2A2B4 RPITE ;        * 54AE2
 
 * refs (1): 54ACE
@@ -734,7 +734,7 @@ DROP%0ABND:
         :: DROP%0 ABND ;                         * 54B1E
 
 * refs (1): 549C2
-SYMDERSTEP~2:
+SYMDERSTEP~3:
         :: OBJ_26F18 case EVAL                   * 54B32
           DUP PTR>ROMPTR ROMPTRDECOMP NcaseTYPEERR SWAP * 54B46
           infarg? ITE                            * 54B5F
@@ -1253,12 +1253,12 @@ nscknum2:
 * refs (14): 1A8E7 1A8F1 1A8FB 1A905 1A90F 1A919 ...
 x=~1:
         ::                                       * 55927
-          :: PTR cknum2: COLA x=~1~1             * 5592C
+          :: PTR cknum2: COLA x=~2               * 5592C
           ;                                      * 55940
           NOP x- ;                               * 55945
 
 * refs (1): 5593B
-x=~1~1:
+x=~2:
         :: RDROP 2SINNER AEQ1stcase x=           * 55954
           SETTYPEERR psh AEQ1stcase x=           * 5596D
           SETTYPEERR pshtop& Cr x= ;             * 55981
@@ -1598,16 +1598,16 @@ Meta-:
 * meta1 meta2 -> %0 #1
 2Repl0:
           :: NDROP Repl0 ;                       * 56183
-          COLA OBJ_561A6                         * 56197
+          COLA ~top&;meta-                       * 56197
         ;                                        * 561A1
 
 * refs (3): 5619C 56386 5657F
-OBJ_561A6:
+~top&;meta-:
         :: top& meta- ;                          * 561A6
 
 * refs (3): 55FFD 563D1 565C5
 Meta*:
-        :: psh M-1stcasechs Meta*~1              * 561BA
+        :: psh M-1stcasechs ~pshtop&;meta*;metaneg * 561BA
           AEQopscase xi                          * 561CE
 
 * meta1 meta2 -> %-1 #1
@@ -1615,16 +1615,16 @@ Meta*:
           :: NDROP Repl-1 ; pshtop& meta* ;      * 561D8
 
 * refs (1): 561C9
-Meta*~1:
+~pshtop&;meta*;metaneg:
         :: pshtop& meta* metaneg ;               * 561FB
 
 * refs (3): 56048 56421 56601
 Meta/:
-        :: psh M-1stcasechs Meta/~1              * 56214
+        :: psh M-1stcasechs ~pshtop&;meta/;metaneg * 56214
           pshtop& meta/ ;                        * 56228
 
 * refs (1): 56223
-Meta/~1:
+~pshtop&;meta/;metaneg:
         :: pshtop& meta/ metaneg ;               * 56237
 
 * refs (2): 56093 56624
@@ -1666,7 +1666,7 @@ Con+Meta:
 Con-Meta:
         :: 3GETLAM num0=case                     * 56359
           :: DROP metaneg ;                      * 56368
-          pshm1 COLA OBJ_561A6                   * 5637C
+          pshm1 COLA ~top&;meta-                 * 5637C
         ;                                        * 5638B
 
 * refs (1): 55FE4
@@ -1722,7 +1722,7 @@ Meta+Con:
 * refs (1): 55F80
 Meta-Con:
         :: 3GETLAM num0=case DROP                * 56566
-          ONECOLA OBJ_561A6 ;                    * 5657A
+          ONECOLA ~top&;meta- ;                  * 5657A
 
 * refs (1): 55FCB
 Meta*Con:
@@ -1906,7 +1906,7 @@ OBJ_56BEB:
         :: OBJ_56D01 ABND ;                      * 56BEB
 
 * refs (6): 85EE4 85F66 85FCA 8602E 86713 86731
-OBJ_56BFF:
+~ABND;SYMBN:
         :: ABND SYMBN ;                          * 56BFF
 
 * refs (1): 56BAF

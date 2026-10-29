@@ -1325,10 +1325,10 @@ xGETI:
 * refs (4): 1D8FE 1D908 1D912 1D91C
 geti(nm,lr):
         :: OBJ_1DFDF over;RclInVars(nm) SWAP CK&DISPATCH0 * 1D926
-          BINT69 geti(nm,lr)~1                   * 1D93F  array list
-          BINT65 geti(nm,lr)~1                   * 1D949  array real
-          BINT85 geti(nm,lr)~2                   * 1D953  list list
-          BINT81 geti(nm,lr)~2                   * 1D95D  list real
+          BINT69 ~geti(cp,lr);ROTDROP            * 1D93F  array list
+          BINT65 ~geti(cp,lr);ROTDROP            * 1D949  array real
+          BINT85 ~'EvalNoCK:_sup;geti!(cp,lr);ROTDROP * 1D953  list list
+          BINT81 ~'EvalNoCK:_sup;geti!(cp,lr);ROTDROP * 1D95D  list real
         ;                                        * 1D967
 
 * refs (2): 1D8D6 1D8E0
@@ -1340,7 +1340,7 @@ geti(cp,lr):
           :: OBJ_1DC6E SWAP OBJ_1DA02 SWAP PULLEL 1GETABND SWAP ; ; * 1D976
 
 * refs (2): 1D944 1D94E
-geti(nm,lr)~1:
+~geti(cp,lr);ROTDROP:
         :: geti(cp,lr) ROTDROP ;                 * 1D9A8
 
 * refs (3): 1D8EA 1D8F4 1D9F3
@@ -1348,7 +1348,7 @@ geti!(cp,lr):
         :: OBJ_1DFDF OBJ_1DB5B OBJ_1DAED DUPROT NTHCOMPDROP 1GETABND SWAP ; * 1D9BC
 
 * refs (2): 1D958 1D962
-geti(nm,lr)~2:
+~'EvalNoCK:_sup;geti!(cp,lr);ROTDROP:
         :: 'EvalNoCK:_sup geti!(cp,lr) ROTDROP ; * 1D9E9
 
 * refs (3): 1D6CA 1D6ED 1D985

@@ -2545,7 +2545,7 @@ pub(crate) fn GETLAMPAIR(r: &mut Run) {
             }
             // #61833:
             0x61833..=0x61833 => {
-                branch!(r, at, 0x61839, 8, r.cpu.call(0x624AC)); // GOSUBL GETPTR~jump_624AC
+                branch!(r, at, 0x61839, 8, r.cpu.call(0x624AC)); // GOSUBL GETPTR~jump_9
             }
             // #61839:
             0x61839..=0x61842 => {
@@ -3590,7 +3590,7 @@ pub(crate) fn EXPAND(r: &mut Run) {
     loop {
         match at {
             0x61C21..=0x61C21 => {
-                branch!(r, at, 0x61C27, 8, r.cpu.call(0x6249E)); // GOSUBL POP#~jump_6249E
+                branch!(r, at, 0x61C27, 8, r.cpu.call(0x6249E)); // GOSUBL POP#~jump_4
             }
             // #61C27:
             0x61C27..=0x61C27 => {
@@ -3631,7 +3631,7 @@ pub(crate) fn EXPAND(r: &mut Run) {
             0x61C62..=0x61C66 => {
                 op!(r, at, 0x61C62..0x61C64, 4, r.cpu.pop_c()); // C=RSTK
                 op!(r, at, 0x61C64..0x61C66, 4, r.cpu.pop_c()); // C=RSTK
-                branch!(r, at, 0x61C6C, 8, r.cpu.call(0x624AC)); // GOSUBL GETPTR~jump_624AC
+                branch!(r, at, 0x61C6C, 8, r.cpu.call(0x624AC)); // GOSUBL GETPTR~jump_9
             }
             // #61C6C:
             0x61C6C..=0x61C6C => {
@@ -3644,7 +3644,7 @@ pub(crate) fn EXPAND(r: &mut Run) {
             }
             // #61C79:
             0x61C79..=0x61C79 => {
-                branch!(r, at, 0x61C7F, 8, r.cpu.call(0x624AC)); // GOSUBL GETPTR~jump_624AC
+                branch!(r, at, 0x61C7F, 8, r.cpu.call(0x624AC)); // GOSUBL GETPTR~jump_9
             }
             // #61C7F:
             0x61C7F..=0x61C95 => {
@@ -3714,7 +3714,7 @@ pub(crate) fn CACHE(r: &mut Run) {
                 op!(r, at, 0x61CF1..0x61CF7, 8, r.cpu.scratch(ScratchOp::ToScratch, R::A, 2, Field::A)); // R2=A.F A
                 op!(r, at, 0x61CF7..0x61CFA, 5, r.cpu.d_add(1, 5)); // D1=D1+ 5
                 op!(r, at, 0x61CFA..0x61CFC, 4, r.cpu.inc(R::D, Field::A)); // D=D+1 A
-                branch!(r, at, 0x61D02, 8, r.cpu.call(0x6249E)); // GOSUBL POP#~jump_6249E
+                branch!(r, at, 0x61D02, 8, r.cpu.call(0x6249E)); // GOSUBL POP#~jump_4
             }
             // #61D02:
             0x61D02..=0x61D02 => {
@@ -3732,7 +3732,7 @@ pub(crate) fn CACHE(r: &mut Run) {
                 op!(r, at, 0x61D15..0x61D18, 5, r.cpu.scratch(ScratchOp::FromScratch, R::C, 0, Field::W)); // C=R0
                 op!(r, at, 0x61D18..0x61D1A, 4, r.cpu.sub(R::A, R::A, R::C, Field::A)); // A=A-C A
                 io!(r, at, 0x61D1A..0x61D1D, 19, r.cpu.store(1, R::A, Field::A, r.hw)); // DAT1=A A
-                branch!(r, at, 0x61D23, 8, r.cpu.call(0x624AC)); // GOSUBL GETPTR~jump_624AC
+                branch!(r, at, 0x61D23, 8, r.cpu.call(0x624AC)); // GOSUBL GETPTR~jump_9
             }
             // #61D23:
             0x61D23..=0x61D36 => {
@@ -3826,7 +3826,7 @@ pub(crate) fn SUB_61D86(r: &mut Run) {
             }
             // #61DAB:
             0x61DAB..=0x61DAB => {
-                branch!(r, at, 0x61DB1, 8, r.cpu.call(0x624AC)); // GOSUBL GETPTR~jump_624AC
+                branch!(r, at, 0x61DB1, 8, r.cpu.call(0x624AC)); // GOSUBL GETPTR~jump_9
             }
             // #61DB1:
             0x61DB1..=0x61DB1 => {
@@ -4105,7 +4105,7 @@ pub(crate) fn DUPROM_WORD_(r: &mut Run) {
     loop {
         match at {
             0x61FAE..=0x61FAE => {
-                branch!(r, at, 0x61FB2, 6, r.cpu.call(0x624B3)); // GOSUB SAVPTR~jump_624B3
+                branch!(r, at, 0x61FB2, 6, r.cpu.call(0x624B3)); // GOSUB SAVPTR~jump_20
             }
             // #61FB2:
             0x61FB2..=0x61FB2 => {
@@ -4128,7 +4128,7 @@ pub(crate) fn ROM_WORD_(r: &mut Run) {
             0x61FBB..=0x61FC0 => {
                 op!(r, at, 0x61FBB..0x61FBE, 5, r.cpu.d_add(1, 5)); // D1=D1+ 5
                 op!(r, at, 0x61FBE..0x61FC0, 4, r.cpu.inc(R::D, Field::A)); // D=D+1 A
-                branch!(r, at, 0x61FC4, 6, r.cpu.call(0x624B3)); // GOSUB SAVPTR~jump_624B3
+                branch!(r, at, 0x61FC4, 6, r.cpu.call(0x624B3)); // GOSUB SAVPTR~jump_20
             }
             // #61FC4:
             0x61FC4..=0x61FC4 => {
@@ -4549,7 +4549,7 @@ pub(crate) fn OVER__(r: &mut Run) {
     loop {
         match at {
             0x620F0..=0x620F0 => {
-                branch!(r, at, 0x620F6, 8, r.cpu.call(0x62829)); // GOSUBL POP2#~jump_62829
+                branch!(r, at, 0x620F6, 8, r.cpu.call(0x62829)); // GOSUBL POP2#~jump_2
             }
             // #620F6:
             0x620F6..=0x620FB => {
@@ -4952,7 +4952,7 @@ pub(crate) fn _3_(r: &mut Run) {
     loop {
         match at {
             0x6228E..=0x6228E => {
-                branch!(r, at, 0x62292, 6, r.cpu.call(0x6249E)); // GOSUB POP#~jump_6249E
+                branch!(r, at, 0x62292, 6, r.cpu.call(0x6249E)); // GOSUB POP#~jump_4
             }
             // #62292:
             0x62292..=0x62292 => {
@@ -4979,7 +4979,7 @@ pub(crate) fn _2__6229F(r: &mut Run) {
     loop {
         match at {
             0x6229F..=0x6229F => {
-                branch!(r, at, 0x622A3, 6, r.cpu.call(0x6249E)); // GOSUB POP#~jump_6249E
+                branch!(r, at, 0x622A3, 6, r.cpu.call(0x6249E)); // GOSUB POP#~jump_4
             }
             // #622A3:
             0x622A3..=0x622A3 => {
@@ -5000,7 +5000,7 @@ pub(crate) fn _1__622AC(r: &mut Run) {
     loop {
         match at {
             0x622AC..=0x622AC => {
-                branch!(r, at, 0x622B0, 6, r.cpu.call(0x6249E)); // GOSUB POP#~jump_6249E
+                branch!(r, at, 0x622B0, 6, r.cpu.call(0x6249E)); // GOSUB POP#~jump_4
             }
             // L_622B0:
             0x622B0..=0x622B2 => {
@@ -5022,7 +5022,7 @@ pub(crate) fn _1__(r: &mut Run) {
     loop {
         match at {
             0x622BB..=0x622BB => {
-                branch!(r, at, 0x622BF, 6, r.cpu.call(0x6249E)); // GOSUB POP#~jump_6249E
+                branch!(r, at, 0x622BF, 6, r.cpu.call(0x6249E)); // GOSUB POP#~jump_4
             }
             // #622BF:
             0x622BF..=0x622C1 => {
@@ -5154,7 +5154,7 @@ pub(crate) fn __append_(r: &mut Run) {
             }
             // L_623EF:
             0x623EF..=0x623EF => {
-                branch!(r, at, 0x623F3, 6, r.cpu.call(0x624AC)); // GOSUB GETPTR~jump_624AC
+                branch!(r, at, 0x623F3, 6, r.cpu.call(0x624AC)); // GOSUB GETPTR~jump_9
             }
             // #623F3:
             0x623F3..=0x623F3 => {
@@ -5218,7 +5218,7 @@ pub(crate) fn __append_(r: &mut Run) {
             }
             // L_62467:
             0x62467..=0x62467 => {
-                branch!(r, at, 0x6246B, 6, r.cpu.call(0x624AC)); // GOSUB GETPTR~jump_624AC
+                branch!(r, at, 0x6246B, 6, r.cpu.call(0x624AC)); // GOSUB GETPTR~jump_9
             }
             // #6246B:
             0x6246B..=0x62470 => {
@@ -5260,8 +5260,8 @@ pub(crate) fn _RSAVEWORD(r: &mut Run) {
     }
 }
 
-// POP#~jump_6249E: firmware/lower/6001C-rpl-utils.s:2835
-pub(crate) fn POP__jump_6249E(r: &mut Run) {
+// POP#~jump_4: firmware/lower/6001C-rpl-utils.s:2835
+pub(crate) fn POP__jump_4(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -5292,8 +5292,8 @@ pub(crate) fn GARBAGECOL_jump(r: &mut Run) {
     }
 }
 
-// GETPTR~jump_624AC: firmware/lower/6001C-rpl-utils.s:2843
-pub(crate) fn GETPTR_jump_624AC(r: &mut Run) {
+// GETPTR~jump_9: firmware/lower/6001C-rpl-utils.s:2843
+pub(crate) fn GETPTR_jump_9(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -5308,8 +5308,8 @@ pub(crate) fn GETPTR_jump_624AC(r: &mut Run) {
     }
 }
 
-// SAVPTR~jump_624B3: firmware/lower/6001C-rpl-utils.s:2847
-pub(crate) fn SAVPTR_jump_624B3(r: &mut Run) {
+// SAVPTR~jump_20: firmware/lower/6001C-rpl-utils.s:2847
+pub(crate) fn SAVPTR_jump_20(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -5977,7 +5977,7 @@ pub(crate) fn DUP_2_(r: &mut Run) {
             }
             // L_62704:
             0x62704..=0x62704 => {
-                branch!(r, at, 0x62708, 6, r.cpu.call(0x624B3)); // GOSUB SAVPTR~jump_624B3
+                branch!(r, at, 0x62708, 6, r.cpu.call(0x624B3)); // GOSUB SAVPTR~jump_20
             }
             // #62708:
             0x62708..=0x62708 => {
@@ -6118,7 +6118,7 @@ pub(crate) fn SWAP__(r: &mut Run) {
     loop {
         match at {
             0x62799..=0x62799 => {
-                branch!(r, at, 0x6279F, 8, r.cpu.call(0x62829)); // GOSUBL POP2#~jump_62829
+                branch!(r, at, 0x6279F, 8, r.cpu.call(0x62829)); // GOSUBL POP2#~jump_2
             }
             // #6279F:
             0x6279F..=0x627A3 => {
@@ -6162,7 +6162,7 @@ pub(crate) fn DUPLEN_(r: &mut Run) {
         match at {
             0x627C0..=0x627C3 => {
                 io!(r, at, 0x627C0..0x627C3, 19, r.cpu.load(1, R::A, Field::A, r.hw)); // A=DAT1 A
-                branch!(r, at, 0x627C7, 6, r.cpu.call(0x624B3)); // GOSUB SAVPTR~jump_624B3
+                branch!(r, at, 0x627C7, 6, r.cpu.call(0x624B3)); // GOSUB SAVPTR~jump_20
             }
             // #627C7:
             0x627C7..=0x627C7 => {
@@ -6187,7 +6187,7 @@ pub(crate) fn __DUP(r: &mut Run) {
     loop {
         match at {
             0x627DA..=0x627DA => {
-                branch!(r, at, 0x627E0, 8, r.cpu.call(0x62829)); // GOSUBL POP2#~jump_62829
+                branch!(r, at, 0x627E0, 8, r.cpu.call(0x62829)); // GOSUBL POP2#~jump_2
             }
             // #627E0:
             0x627E0..=0x627E0 => {
@@ -6196,7 +6196,7 @@ pub(crate) fn __DUP(r: &mut Run) {
             }
             // L_627E2:
             0x627E2..=0x627E2 => {
-                branch!(r, at, 0x627E8, 8, r.cpu.call(0x624B3)); // GOSUBL SAVPTR~jump_624B3
+                branch!(r, at, 0x627E8, 8, r.cpu.call(0x624B3)); // GOSUBL SAVPTR~jump_20
             }
             // #627E8:
             0x627E8..=0x627E8 => {
@@ -6236,7 +6236,7 @@ pub(crate) fn __DUP_627FD(r: &mut Run) {
     loop {
         match at {
             0x627FD..=0x627FD => {
-                branch!(r, at, 0x62803, 8, r.cpu.call(0x62829)); // GOSUBL POP2#~jump_62829
+                branch!(r, at, 0x62803, 8, r.cpu.call(0x62829)); // GOSUBL POP2#~jump_2
             }
             // #62803:
             0x62803..=0x62805 => {
@@ -6258,7 +6258,7 @@ pub(crate) fn _1_DUP(r: &mut Run) {
     loop {
         match at {
             0x6280E..=0x6280E => {
-                branch!(r, at, 0x62814, 8, r.cpu.call(0x6249E)); // GOSUBL POP#~jump_6249E
+                branch!(r, at, 0x62814, 8, r.cpu.call(0x6249E)); // GOSUBL POP#~jump_4
             }
             // #62814:
             0x62814..=0x62816 => {
@@ -6280,7 +6280,7 @@ pub(crate) fn _1_DUP_6281F(r: &mut Run) {
     loop {
         match at {
             0x6281F..=0x6281F => {
-                branch!(r, at, 0x62823, 6, r.cpu.call(0x6249E)); // GOSUB POP#~jump_6249E
+                branch!(r, at, 0x62823, 6, r.cpu.call(0x6249E)); // GOSUB POP#~jump_4
             }
             // #62823:
             0x62823..=0x62825 => {
@@ -6295,8 +6295,8 @@ pub(crate) fn _1_DUP_6281F(r: &mut Run) {
     }
 }
 
-// POP2#~jump_62829: firmware/lower/6001C-rpl-utils.s:3221
-pub(crate) fn POP2__jump_62829(r: &mut Run) {
+// POP2#~jump_2: firmware/lower/6001C-rpl-utils.s:3221
+pub(crate) fn POP2__jump_2(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -6409,11 +6409,11 @@ pub(crate) fn r2DUP__(r: &mut Run) {
     loop {
         match at {
             0x628A0..=0x628A0 => {
-                branch!(r, at, 0x628A6, 8, r.cpu.call(0x624B3)); // GOSUBL SAVPTR~jump_624B3
+                branch!(r, at, 0x628A6, 8, r.cpu.call(0x624B3)); // GOSUBL SAVPTR~jump_20
             }
             // #628A6:
             0x628A6..=0x628A6 => {
-                branch!(r, at, 0x628AC, 8, r.cpu.call(0x62829)); // GOSUBL POP2#~jump_62829
+                branch!(r, at, 0x628AC, 8, r.cpu.call(0x62829)); // GOSUBL POP2#~jump_2
             }
             // #628AC:
             0x628AC..=0x628AC => {
@@ -6438,11 +6438,11 @@ pub(crate) fn r2DUP___628BA(r: &mut Run) {
     loop {
         match at {
             0x628BA..=0x628BA => {
-                branch!(r, at, 0x628C0, 8, r.cpu.call(0x624B3)); // GOSUBL SAVPTR~jump_624B3
+                branch!(r, at, 0x628C0, 8, r.cpu.call(0x624B3)); // GOSUBL SAVPTR~jump_20
             }
             // #628C0:
             0x628C0..=0x628C0 => {
-                branch!(r, at, 0x628C6, 8, r.cpu.call(0x62829)); // GOSUBL POP2#~jump_62829
+                branch!(r, at, 0x628C6, 8, r.cpu.call(0x62829)); // GOSUBL POP2#~jump_2
             }
             // #628C6:
             0x628C6..=0x628C6 => {
@@ -6467,11 +6467,11 @@ pub(crate) fn r2DUP___628D6(r: &mut Run) {
     loop {
         match at {
             0x628D6..=0x628D6 => {
-                branch!(r, at, 0x628DC, 8, r.cpu.call(0x624B3)); // GOSUBL SAVPTR~jump_624B3
+                branch!(r, at, 0x628DC, 8, r.cpu.call(0x624B3)); // GOSUBL SAVPTR~jump_20
             }
             // #628DC:
             0x628DC..=0x628DC => {
-                branch!(r, at, 0x628E2, 8, r.cpu.call(0x62829)); // GOSUBL POP2#~jump_62829
+                branch!(r, at, 0x628E2, 8, r.cpu.call(0x62829)); // GOSUBL POP2#~jump_2
             }
             // #628E2:
             0x628E2..=0x628E2 => {
@@ -6496,11 +6496,11 @@ pub(crate) fn DUP_1__628F0(r: &mut Run) {
     loop {
         match at {
             0x628F0..=0x628F0 => {
-                branch!(r, at, 0x628F6, 8, r.cpu.call(0x624B3)); // GOSUBL SAVPTR~jump_624B3
+                branch!(r, at, 0x628F6, 8, r.cpu.call(0x624B3)); // GOSUBL SAVPTR~jump_20
             }
             // #628F6:
             0x628F6..=0x628F6 => {
-                branch!(r, at, 0x628FC, 8, r.cpu.call(0x6249E)); // GOSUBL POP#~jump_6249E
+                branch!(r, at, 0x628FC, 8, r.cpu.call(0x6249E)); // GOSUBL POP#~jump_4
             }
             // #628FC:
             0x628FC..=0x628FC => {
@@ -6529,7 +6529,7 @@ pub(crate) fn SWAP_1_(r: &mut Run) {
                 io!(r, at, 0x62909..0x6290C, 19, r.cpu.load(1, R::A, Field::A, r.hw)); // A=DAT1 A
                 op!(r, at, 0x6290C..0x6290F, 5, r.cpu.d_add(1, 5)); // D1=D1+ 5
                 op!(r, at, 0x6290F..0x62911, 4, r.cpu.inc(R::D, Field::A)); // D=D+1 A
-                branch!(r, at, 0x62917, 8, r.cpu.call(0x624B3)); // GOSUBL SAVPTR~jump_624B3
+                branch!(r, at, 0x62917, 8, r.cpu.call(0x624B3)); // GOSUBL SAVPTR~jump_20
             }
             // #62917:
             0x62917..=0x6292B => {
@@ -6557,11 +6557,11 @@ pub(crate) fn DUP_1__62934(r: &mut Run) {
     loop {
         match at {
             0x62934..=0x62934 => {
-                branch!(r, at, 0x6293A, 8, r.cpu.call(0x624B3)); // GOSUBL SAVPTR~jump_624B3
+                branch!(r, at, 0x6293A, 8, r.cpu.call(0x624B3)); // GOSUBL SAVPTR~jump_20
             }
             // #6293A:
             0x6293A..=0x6293A => {
-                branch!(r, at, 0x62940, 8, r.cpu.call(0x6249E)); // GOSUBL POP#~jump_6249E
+                branch!(r, at, 0x62940, 8, r.cpu.call(0x6249E)); // GOSUBL POP#~jump_4
             }
             // #62940:
             0x62940..=0x62942 => {
@@ -6693,7 +6693,7 @@ pub(crate) fn _1___637D1(r: &mut Run) {
     loop {
         match at {
             0x637D1..=0x637D1 => {
-                branch!(r, at, 0x637D7, 8, r.cpu.call(0x62829)); // GOSUBL POP2#~jump_62829
+                branch!(r, at, 0x637D7, 8, r.cpu.call(0x62829)); // GOSUBL POP2#~jump_2
             }
             // #637D7:
             0x637D7..=0x637D9 => {
@@ -6715,7 +6715,7 @@ pub(crate) fn _1___6380D(r: &mut Run) {
     loop {
         match at {
             0x6380D..=0x6380D => {
-                branch!(r, at, 0x63813, 8, r.cpu.call(0x62829)); // GOSUBL POP2#~jump_62829
+                branch!(r, at, 0x63813, 8, r.cpu.call(0x62829)); // GOSUBL POP2#~jump_2
             }
             // #63813:
             0x63813..=0x63815 => {
@@ -8983,7 +8983,7 @@ pub(crate) fn SUB_67136(r: &mut Run) {
     loop {
         match at {
             0x67136..=0x67136 => {
-                branch!(r, at, 0x6713A, 6, r.cpu.call(0x67156)); // GOSUB SAVPTR~jump_67156
+                branch!(r, at, 0x6713A, 6, r.cpu.call(0x67156)); // GOSUB SAVPTR~jump_21
             }
             // #6713A:
             0x6713A..=0x6714C => {
@@ -9008,8 +9008,8 @@ pub(crate) fn SUB_67136(r: &mut Run) {
     }
 }
 
-// SAVPTR~jump_67156: firmware/lower/660FC-misc-66000.s:664
-pub(crate) fn SAVPTR_jump_67156(r: &mut Run) {
+// SAVPTR~jump_21: firmware/lower/660FC-misc-66000.s:664
+pub(crate) fn SAVPTR_jump_21(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -9967,8 +9967,8 @@ pub(crate) fn OBJ_67648(r: &mut Run) {
     }
 }
 
-// EqwRuleKey0~1~3: firmware/lower/660FC-misc-66000.s:1113
-pub(crate) fn EqwRuleKey0_1_3(r: &mut Run) {
+// EqwRuleKey0~9: firmware/lower/660FC-misc-66000.s:1113
+pub(crate) fn EqwRuleKey0_9(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -10598,8 +10598,8 @@ pub(crate) fn OBJ_679EA(r: &mut Run) {
     }
 }
 
-// EqwRuleKey0~1~4: firmware/lower/660FC-misc-66000.s:1454
-pub(crate) fn EqwRuleKey0_1_4(r: &mut Run) {
+// EqwRuleKey0~10: firmware/lower/660FC-misc-66000.s:1454
+pub(crate) fn EqwRuleKey0_10(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -12957,7 +12957,7 @@ pub(crate) fn SUB_68670(r: &mut Run) {
     }
 }
 
-// OBJ_6964D: firmware/lower/69142-misc-66000.s:121
+// OBJ_6964D: firmware/lower/69142-misc-66000.s:122
 pub(crate) fn OBJ_6964D(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -12974,7 +12974,7 @@ pub(crate) fn OBJ_6964D(r: &mut Run) {
     }
 }
 
-// OBJ_69659: firmware/lower/69142-misc-66000.s:128
+// OBJ_69659: firmware/lower/69142-misc-66000.s:129
 pub(crate) fn OBJ_69659(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -13154,8 +13154,8 @@ pub(crate) fn OBJ_69659(r: &mut Run) {
     }
 }
 
-// EqwRuleKey0~1~1~2~1: firmware/lower/69142-misc-66000.s:498
-pub(crate) fn EqwRuleKey0_1_1_2_1(r: &mut Run) {
+// EqwRuleKey0~6: firmware/lower/69142-misc-66000.s:498
+pub(crate) fn EqwRuleKey0_6(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -13383,8 +13383,8 @@ pub(crate) fn OBJ_6A75D(r: &mut Run) {
     }
 }
 
-// EqwRuleKey0~1~1~1~1: firmware/lower/69142-misc-66000.s:599
-pub(crate) fn EqwRuleKey0_1_1_1_1(r: &mut Run) {
+// EqwRuleKey0~7: firmware/lower/69142-misc-66000.s:599
+pub(crate) fn EqwRuleKey0_7(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -14680,10 +14680,10 @@ pub const ROUTINES: &[(u32, u32, Block, &str)] = &[
     (0x62399, 0x6239F, __insert_, "__insert_"),
     (0x623A5, 0x62473, __append_, "__append_"),
     (0x62479, 0x6249D, _RSAVEWORD, "_RSAVEWORD"),
-    (0x6249E, 0x624A4, POP__jump_6249E, "POP__jump_6249E"),
+    (0x6249E, 0x624A4, POP__jump_4, "POP__jump_4"),
     (0x624A5, 0x624AB, GARBAGECOL_jump, "GARBAGECOL_jump"),
-    (0x624AC, 0x624B2, GETPTR_jump_624AC, "GETPTR_jump_624AC"),
-    (0x624B3, 0x624B9, SAVPTR_jump_624B3, "SAVPTR_jump_624B3"),
+    (0x624AC, 0x624B2, GETPTR_jump_9, "GETPTR_jump_9"),
+    (0x624B3, 0x624B9, SAVPTR_jump_20, "SAVPTR_jump_20"),
     (0x624BF, 0x624C5, _MIN, "_MIN"),
     (0x624CB, 0x624FA, _MAX, "_MAX"),
     (0x62500, 0x6250A, ___2_, "___2_"),
@@ -14726,7 +14726,7 @@ pub const ROUTINES: &[(u32, u32, Block, &str)] = &[
     (0x627FD, 0x62808, __DUP_627FD, "__DUP_627FD"),
     (0x6280E, 0x62819, _1_DUP, "_1_DUP"),
     (0x6281F, 0x62828, _1_DUP_6281F, "_1_DUP_6281F"),
-    (0x62829, 0x6282F, POP2__jump_62829, "POP2__jump_62829"),
+    (0x62829, 0x6282F, POP2__jump_2, "POP2__jump_2"),
     (0x62835, 0x6284A, SWAPDROPDUP, "SWAPDROPDUP"),
     (0x62850, 0x62863, SWAPDROPSWAP, "SWAPDROPSWAP"),
     (0x62869, 0x6287F, r4ROLLDROP, "r4ROLLDROP"),
@@ -14784,7 +14784,7 @@ pub const ROUTINES: &[(u32, u32, Block, &str)] = &[
     (0x670F3, 0x67128, OBJ_670EE, "OBJ_670EE"),
     (0x67129, 0x67135, SUB_67129, "SUB_67129"),
     (0x67136, 0x67155, SUB_67136, "SUB_67136"),
-    (0x67156, 0x6715C, SAVPTR_jump_67156, "SAVPTR_jump_67156"),
+    (0x67156, 0x6715C, SAVPTR_jump_21, "SAVPTR_jump_21"),
     (0x67162, 0x67192, OBJ_6715D, "OBJ_6715D"),
     (0x67198, 0x671AF, OBJ_67193, "OBJ_67193"),
     (0x671B5, 0x671BE, OBJ_671B0, "OBJ_671B0"),
@@ -14820,7 +14820,7 @@ pub const ROUTINES: &[(u32, u32, Block, &str)] = &[
     (0x6755F, 0x675BD, OBJ_6755A, "OBJ_6755A"),
     (0x675BE, 0x675E3, SUB_675BE, "SUB_675BE"),
     (0x6764D, 0x67664, OBJ_67648, "OBJ_67648"),
-    (0x6766A, 0x67681, EqwRuleKey0_1_3, "EqwRuleKey0_1_3"),
+    (0x6766A, 0x67681, EqwRuleKey0_9, "EqwRuleKey0_9"),
     (0x67687, 0x676C4, OBJ_67682, "OBJ_67682"),
     (0x676C5, 0x676CE, SUB_676C5, "SUB_676C5"),
     (0x6776A, 0x67799, OBJ_67765, "OBJ_67765"),
@@ -14838,7 +14838,7 @@ pub const ROUTINES: &[(u32, u32, Block, &str)] = &[
     (0x679CA, 0x679D1, OBJ_679C5, "OBJ_679C5"),
     (0x679DC, 0x679E9, OBJ_679D7, "OBJ_679D7"),
     (0x679EF, 0x67A1D, OBJ_679EA, "OBJ_679EA"),
-    (0x67A23, 0x67A3A, EqwRuleKey0_1_4, "EqwRuleKey0_1_4"),
+    (0x67A23, 0x67A3A, EqwRuleKey0_10, "EqwRuleKey0_10"),
     (0x67A3B, 0x67A3C, SUB_67A3B, "SUB_67A3B"),
     (0x67A3D, 0x67A49, SUB_67A3D, "SUB_67A3D"),
     (0x67A4A, 0x67A50, EqwPOP__Box, "EqwPOP__Box"),
@@ -14919,12 +14919,12 @@ pub const ROUTINES: &[(u32, u32, Block, &str)] = &[
     (0x68670, 0x68679, SUB_68670, "SUB_68670"),
     (0x69652, 0x69658, OBJ_6964D, "OBJ_6964D"),
     (0x6965E, 0x6979C, OBJ_69659, "OBJ_69659"),
-    (0x6A668, 0x6A6BF, EqwRuleKey0_1_1_2_1, "EqwRuleKey0_1_1_2_1"),
+    (0x6A668, 0x6A6BF, EqwRuleKey0_6, "EqwRuleKey0_6"),
     (0x6A6C0, 0x6A6D3, SUB_6A6C0, "SUB_6A6C0"),
     (0x6A6D4, 0x6A704, SUB_6A6D4, "SUB_6A6D4"),
     (0x6A70A, 0x6A75C, OBJ_6A705, "OBJ_6A705"),
     (0x6A762, 0x6A768, OBJ_6A75D, "OBJ_6A75D"),
-    (0x6A76E, 0x6A7BF, EqwRuleKey0_1_1_1_1, "EqwRuleKey0_1_1_1_1"),
+    (0x6A76E, 0x6A7BF, EqwRuleKey0_7, "EqwRuleKey0_7"),
     (0x6B386, 0x6B39E, OBJ_6B381, "OBJ_6B381"),
     (0x6B3A4, 0x6B3F4, OBJ_6B39F, "OBJ_6B39F"),
     (0x6CC15, 0x6CC20, OBJ_6CC10, "OBJ_6CC10"),

@@ -312,7 +312,7 @@ OBJ_277C9:
 
 * refs (5): 27922 27A30 27AB2 27C65 27EB8
 OBJ_277EC:
-          :: GetGNTData DROP GetNextToken PutGNTData ; OBJ_28602 COLA * 277EC
+          :: GetGNTData DROP GetNextToken PutGNTData ; ~BINT0;1PUTLAM COLA * 277EC
           OBJ_273AA                              * 27814
         ;                                        * 27819
 
@@ -368,12 +368,12 @@ OBJ_27A03:
           ;                                      * 27A3F
           psh OVERDUP TYPEIDNT? SWAP TYPELAM? OR NOTcase OBJ_27797 * 27A44
           #1-SWAP symcomp BINT0 ' xFCNAPPLY #0590410h BINT0 BINT3 BINT6 * 27A6C
-          BINT7 psh over& psh OBJ_28602 OBJ_277EC COLA OBJ_273AA * 27A99
+          BINT7 psh over& psh ~BINT0;1PUTLAM OBJ_277EC COLA OBJ_273AA * 27A99
         ;                                        * 27AC1
 
 * refs (3): 2744F 27468 27684
 OBJ_27AC6:
-        :: 1GETLAM OBJ_285EE #0= NOTcase         * 27AC6
+        :: 1GETLAM ~BINT1;1PUTLAM #0= NOTcase    * 27AC6
           :: 4DROP OBJ_27797 ;                   * 27ADF
           PutGNTData pullrev1& COLA OBJ_273AA    * 27AF3
         ;                                        * 27B07
@@ -401,7 +401,8 @@ OBJ_27BD9:
           :: 6GETLAM ITE                         * 27C15
             :: ZEROSWAP BINT2 ; BINT1            * 27C24
           ;                                      * 27C3D
-          4GETLAM 7GETLAM 3GETLAM BINT3 top& DUP#1+ top& OBJ_277EC OBJ_28602 ; * 27C42
+          4GETLAM 7GETLAM 3GETLAM BINT3 top& DUP#1+ top& OBJ_277EC * 27C42
+          ~BINT0;1PUTLAM ;                       * 27C6A
 
 * refs (2): 27B5C 27CC4
 OBJ_27C74:
@@ -415,7 +416,7 @@ OBJ_27C74:
 * refs (1): 273BE
 OBJ_27CCE:
         :: 1GETLAM #0= NOTcase OBJ_27797         * 27CCE
-          OBJ_285EE OBJ_27FC1 COLA OBJ_273AA     * 27CE7
+          ~BINT1;1PUTLAM OBJ_27FC1 COLA OBJ_273AA * 27CE7
         ;                                        * 27CFB
 
 * refs (2): 273AF 27EC7
@@ -545,8 +546,8 @@ OBJ_27FC1:
 OBJ_27FEE:
         :: M1stNEGcase OBJ_2813D                 * 27FEE
           AEQ1stcase xNEGNEG                     * 27FFD
-          SWAPDROP#1- AEQ1stcase ROMP_002_105    * 28007
-          OBJ_2818D AEQ1stcase ROMP_002_106      * 28016
+          SWAPDROP#1- AEQ1stcase ~CK2&Dispatch   * 28007
+          OBJ_2818D AEQ1stcase ~CK2&Dispatch_2   * 28016
           OBJ_281F6 AEQ1stcase xFORMUNIT         * 28025
           OBJ_2806B AEQ1stcase xPREDIV           * 28034
           OBJ_2804D ;                            * 28043
@@ -571,25 +572,25 @@ OBJ_2806B:
 * refs (1): 27FF8
 OBJ_2813D:
         :: CK&DISPATCH0                          * 2813D
-          REALOBOB OBJ_28174                     * 28147  real any any
-          CMPOBOB OBJ_28174                      * 28151  complex any any
-          EXTOBOB OBJ_28174                      * 2815B  unit any any
+          REALOBOB ~#1-UNROT;EvalNoCK;SWAP       * 28147  real any any
+          CMPOBOB ~#1-UNROT;EvalNoCK;SWAP        * 28151  complex any any
+          EXTOBOB ~#1-UNROT;EvalNoCK;SWAP        * 2815B  unit any any
           BINT0 NOP                              * 28165  any
         ;                                        * 2816F
 
 * refs (3): 2814C 28156 28160
-OBJ_28174:
+~#1-UNROT;EvalNoCK;SWAP:
         :: #1-UNROT EvalNoCK SWAP ;              * 28174
 
 * refs (2): 28016 5F594
 OBJ_2818D:
         :: SWAPDROP#1- CK&DISPATCH0              * 2818D
-          REALREALOB OBJ_281B5                   * 2819C  real real any
+          REALREALOB ~#1-UNROT;%>C%;SWAP         * 2819C  real real any
           BINT0 Addi*+[_]                        * 281A6  any
         ;                                        * 281B0
 
 * refs (1): 281A1
-OBJ_281B5:
+~#1-UNROT;%>C%;SWAP:
         :: #1-UNROT %>C% SWAP ;                  * 281B5
 
 * refs (2): 281AB 28282
@@ -729,13 +730,13 @@ OBJ_2842D:
 
 * refs (3): 699F0 6F1B7 6F8C4
 OBJ_2845A:
-            :: ' ROMP_002_106 ;                  * 2845A
+            :: ' ~CK2&Dispatch_2 ;               * 2845A
 
 * refs (5): 69468 699D7 6F144 6F1F8 6F8B5
 OBJ_2846E:
-            :: ' ROMP_002_105 ; ;                * 2846E
+            :: ' ~CK2&Dispatch ; ;               * 2846E
           5UNROLL PutGNTData #05060410h BINT0 BINT5 BINT4 BINT5 top& * 28487
-          OBJ_28602 COLA OBJ_273AA               * 284AF
+          ~BINT0;1PUTLAM COLA OBJ_273AA          * 284AF
         ;                                        * 284BE
 
 * refs (8): 27594 27747 277E7 27891 27968 27B8E ...
@@ -806,11 +807,11 @@ OBJ_285C6:
         :: ' x= #00700h BINT0 BINT1 BINT4 ;      * 285C6
 
 * refs (7): 27AD0 27CE7 688CD 68936 68AC6 68E54 ...
-OBJ_285EE:
+~BINT1;1PUTLAM:
         :: BINT1 1PUTLAM ;                       * 285EE
 
 * refs (10): 2780A 27AAD 27C6A 284AF 68887 68F6C ...
-OBJ_28602:
+~BINT0;1PUTLAM:
         :: BINT0 1PUTLAM ;                       * 28602
 
 * refs (5): 27585 27738 27882 27959 27CA6
@@ -828,16 +829,16 @@ ChkEvalNext?:
 * refs (3): 28666 2899F 28B28
 ChkEval?:
         :: NOTNUM? CLRNUM ERRSET ITE             * 28670
-          :: EvalNoCK ERRTRAP ChkEval?~1 CLRNUM TRUE ; * 28689
-          :: EvalNoCK ERRTRAP ChkEval?~2 SETNUM TRUE ; * 286AC
+          :: EvalNoCK ERRTRAP ~CLRNUM;RDROP;FALSE CLRNUM TRUE ; * 28689
+          :: EvalNoCK ERRTRAP ~SETNUM;RDROP;FALSE SETNUM TRUE ; * 286AC
         ;                                        * 286CF
 
 * refs (1): 28698
-ChkEval?~1:
+~CLRNUM;RDROP;FALSE:
         :: CLRNUM RDROP FALSE ;                  * 286D4
 
 * refs (1): 286BB
-ChkEval?~2:
+~SETNUM;RDROP;FALSE:
         :: SETNUM RDROP FALSE ;                  * 286ED
 
 * refs (3): 24474 28747 3EFA5
@@ -1410,7 +1411,7 @@ L_2963F:
 
 * refs (1): 28CB3
 OBJ_2965B:
-        :: ROTDROP BINT2 3UNROLL DUP #3+PICK ' ROMP_002_106 EQ 4PUTLAM ; * 2965B
+        :: ROTDROP BINT2 3UNROLL DUP #3+PICK ' ~CK2&Dispatch_2 EQ 4PUTLAM ; * 2965B
 
 * refs (1): 28CAE
 OBJ_29692:
@@ -2195,7 +2196,7 @@ POP1%:
         SETDEC                                   * 29FEF
 
 * refs (1): 2A22E
-SAVPTR~jump_29FF1:
+SAVPTR~jump_11:
         GOVLNG  SAVPTR                           * 29FF1
 
 * refs (2): 2AEA9 34C99

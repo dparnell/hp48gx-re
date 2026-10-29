@@ -10,7 +10,7 @@ OBJ_24028:
 
 * refs (1): 2342F
 OBJ_24046:
-        :: 'Rapndit xIFERR OBJ_2530E COLA OBJ_24069 * 24046
+        :: 'Rapndit xIFERR ~BINT0;5UNROLL COLA OBJ_24069 * 24046
         ;                                        * 24064
 
 * refs (2): 2405F 24096
@@ -22,7 +22,7 @@ OBJ_24069:
 * refs (1): 24082
 OBJ_240A0:
         :: OBJ_2525A 4psh DROP drop2;6rolld;1+(s5) 'Rapndit xERRTHEN * 240A0
-          OBJ_2530E COLA OBJ_240D7               * 240C3
+          ~BINT0;5UNROLL COLA OBJ_240D7          * 240C3
         ;                                        * 240D2
 
 * refs (2): 240CD 24113
@@ -33,7 +33,7 @@ OBJ_240D7:
 
 * refs (1): 240FF
 OBJ_2411D:
-        :: OBJ_252CD 'Rapndit xELSE OBJ_2530E COLA OBJ_24145 * 2411D
+        :: OBJ_252CD 'Rapndit xELSE ~BINT0;5UNROLL COLA OBJ_24145 * 2411D
         ;                                        * 24140
 
 * refs (2): 2413B 24172
@@ -48,7 +48,7 @@ OBJ_2417C:
 
 * refs (2): 23022 234F8
 OBJ_2419A:
-        :: OBJ_2530E OBJ_23E52 !*triand COLA OBJ_241BD * 2419A
+        :: ~BINT0;5UNROLL OBJ_23E52 !*triand COLA OBJ_241BD * 2419A
         ;                                        * 241B8
 
 * refs (2): 241B3 241F9
@@ -74,20 +74,20 @@ OBJ_24280:
 
 * refs (2): 2429E 242FD
 OBJ_242D0:
-        :: nultrior OBJ_24307 tok>> tok8trior OBJ_24307 OBJ_23A2E !*triand * 242D0
-          COLA OBJ_242D0                         * 242F8
+        :: nultrior ~'Rapndit;x>>ABND;TrueTrue tok>> tok8trior * 242D0
+          ~'Rapndit;x>>ABND;TrueTrue OBJ_23A2E !*triand COLA OBJ_242D0 * 242E9
         ;                                        * 24302
 
 * refs (2): 242DA 242E9
-OBJ_24307:
+~'Rapndit;x>>ABND;TrueTrue:
         :: 'Rapndit x>>ABND TrueTrue ;           * 24307
 
 * refs (1): 2348B
-OBJ_24320:
+~'Rapndit;xHALT;TrueTrue:
         :: 'Rapndit xHALT TrueTrue ;             * 24320
 
 * refs (1): 2385B
-OBJ_24339:
+~'Rapndit;xPROMPT;TrueTrue:
         :: 'Rapndit xPROMPT TrueTrue ;           * 24339
 
 * refs (3): 2452D 24C5D 24E1F
@@ -101,9 +101,9 @@ OBJ_24384:
         :: ?ATTNQUIT nultrior FALSE OBJ_25D03 !*trior OBJ_24447 tok' * 24384
           tok8cktrior OBJ_2472B toklparen tok8trior OBJ_2478A tok[ tok8trior * 243AC
           OBJ_24816 tok{ tok8trior List toksharp tok8cktrior OBJ_24C9E * 243CF
-          tokquote tok8cktrior OBJ_24FD2 _:__253B8 tok8cktrior OBJ_244A1 * 243F2
-          _DIR tok8trior OBJ_24D20 tokCTSTR tok8trior OBJ_24FE6 tokCTGROB * 24410
-          tok8trior OBJ_25B3D FALSE ;            * 24433
+          tokquote tok8cktrior ~getmatchtok;DaDGNTc _:__253B8 tok8cktrior * 243F2
+          OBJ_244A1 _DIR tok8trior OBJ_24D20 tokCTSTR tok8trior OBJ_24FE6 * 2440B
+          tokCTGROB tok8trior OBJ_25B3D FALSE ;  * 2442E
 
 * refs (1): 243A2
 OBJ_24447:
@@ -123,7 +123,7 @@ OBJ_244A1:
 * refs (1): 244C9
 OBJ_244F6:
         :: tok<< tok8trior                       * 244F6
-          :: OBJ_2530E 'Rapndit x<< COLA OBJ_23DFD * 24505
+          :: ~BINT0;5UNROLL 'Rapndit x<< COLA OBJ_23DFD * 24505
           ;                                      * 24523
           COLA OBJ_24352                         * 24528
         ;                                        * 24532
@@ -143,8 +143,8 @@ OBJ_24541:
 
 * refs (1): 245F0
 OBJ_245A5:
-          :: UNROLL DROP GetNextToken 5ROLL ; EVAL !*triand OBJ_252B4 * 245A5
-          TrueTrue ;                             * 245D2
+          :: UNROLL DROP GetNextToken 5ROLL ; EVAL !*triand * 245A5
+          ~4psh;P::N;drop2;6rolld;1+(s5) TrueTrue ; * 245CD
 
 * refs (1): 23A51
 OBJ_245DC:
@@ -206,7 +206,7 @@ OBJ_24771:
 
 * refs (2): 243C0 24997
 OBJ_2478A:
-        :: OBJ_2530E OBJ_25D03 !*triand          * 2478A
+        :: ~BINT0;5UNROLL OBJ_25D03 !*triand     * 2478A
           :: tokanglesign tok8trior FALSE TRUE ; 6rolld;1+(s5) OBJ_25D03 * 2479E
           !*triand                               * 247C6
           :: nultrior TrueTrue tokrparen OBJ_0BC15 ; !*triand 4psh DROPSWAP * 247CB
@@ -216,7 +216,7 @@ OBJ_2478A:
 * refs (1): 243CF
 OBJ_24816:
         :: nultrior failed tok[ tok8trior OBJ_249C9 tok] tok8trior failed * 24816
-          OBJ_2530E OBJ_2489D !*triand 4psh UNCOERCE ONE{}N XEQ>ARRAY * 24843
+          ~BINT0;5UNROLL OBJ_2489D !*triand 4psh UNCOERCE ONE{}N XEQ>ARRAY * 24843
           drop2;6rolld;1+(s5) TrueTrue ;         * 24866
 
         :: nultrior TrueTrue tok] tok8trior TrueTrue FALSE ; * 24875
@@ -254,7 +254,7 @@ OBJ_24992:
 * refs (1): 2482F
 OBJ_249C9:
         :: tok] tok8trior failed tok[ tok8trior failed nultrior failed * 249C9
-          OBJ_2530E OBJ_24956 !*triand COLA OBJ_24A14 * 249F6
+          ~BINT0;5UNROLL OBJ_24956 !*triand COLA OBJ_24A14 * 249F6
         ;                                        * 24A0F
 
 * refs (1): 24A0A
@@ -285,7 +285,7 @@ OBJ_24A97:
 * refs (2): 24A4E 24BF4
 OBJ_24AC9:
         :: tok] tok8trior TrueTrue nultrior TrueTrue tok[ tok8trior * 24AC9
-          OBJ_24B70 OBJ_2530E OBJ_24956 !*triand 5PICK * 24AF1
+          OBJ_24B70 ~BINT0;5UNROLL OBJ_24956 !*triand 5PICK * 24AF1
 
 Πj_24B0A:
           LAM j #/ DUPUNROT                      * 24B0A
@@ -300,7 +300,7 @@ OBJ_24AC9:
 * refs (1): 24AF1
 OBJ_24B70:
         :: nultrior failed tok] tok8trior failed tok[ tok8trior failed * 24B70
-          OBJ_2530E OBJ_24956 !*triand 4psh DUP  * 24B9D
+          ~BINT0;5UNROLL OBJ_24956 !*triand 4psh DUP * 24B9D
 
 Πj_24BB6:
           LAM j #=case                           * 24BB6
@@ -316,7 +316,8 @@ OBJ_24B70:
 
 * refs (1): 243DE
 List:
-        :: OBJ_2530E OBJ_24C30 !*triand List~1 TrueTrue ; * 24C0D
+        :: ~BINT0;5UNROLL OBJ_24C30 !*triand ~4psh;P{}N;drop2;6rolld;1+(s5) * 24C0D
+          TrueTrue ;                             * 24C26
 
 * refs (3): 24C17 24C67 24C94
 OBJ_24C30:
@@ -325,7 +326,7 @@ OBJ_24C30:
 
 * refs (1): 24C58
 OBJ_24C71:
-        :: OBJ_2530E 'Rapndit x<< OBJ_23DFD !*triand COLA OBJ_24C30 * 24C71
+        :: ~BINT0;5UNROLL 'Rapndit x<< OBJ_23DFD !*triand COLA OBJ_24C30 * 24C71
         ;                                        * 24C99
 
 * refs (1): 243ED
@@ -337,8 +338,9 @@ OBJ_24C9E:
 
 * refs (1): 2441A
 OBJ_24D20:
-        :: OBJ_2530E NULLHXS BINT3 EXPAND 6rolld;1+(s5) OBJ_24D75 !*triand * 24D20
-          4psh #1-SWAP pshm1 top& P{}N {}>DIR drop2;6rolld;1+(s5) TrueTrue ; * 24D48
+        :: ~BINT0;5UNROLL NULLHXS BINT3 EXPAND 6rolld;1+(s5) OBJ_24D75 * 24D20
+          !*triand 4psh #1-SWAP pshm1 top& P{}N {}>DIR drop2;6rolld;1+(s5) * 24D43
+          TrueTrue ;                             * 24D6B
 
 * refs (2): 24D3E 24DFC
 OBJ_24D75:
@@ -355,7 +357,7 @@ OBJ_24E06:
 
 * refs (1): 24E15
 OBJ_24E29:
-        :: OBJ_2530E 'Rapndit x<< OBJ_23DFD ;    * 24E29
+        :: ~BINT0;5UNROLL 'Rapndit x<< OBJ_23DFD ; * 24E29
 
 * refs (1): 24D93
 OBJ_24E47:
@@ -451,7 +453,7 @@ L_24F5C:
         RPL
 
 * refs (1): 243FC
-OBJ_24FD2:
+~getmatchtok;DaDGNTc:
         :: getmatchtok DaDGNTc ;                 * 24FD2
 
 * refs (1): 24429
@@ -594,20 +596,20 @@ swapB;drop;2true:
 
 * refs (2): 239F7 240A5
 OBJ_2525A:
-        :: 4psh DUP#1= ITE OBJ_25282 OBJ_252A0   * 2525A
+        :: 4psh DUP#1= ITE OBJ_25282 ~P::N;BINT1 * 2525A
           SWAPUnDROP ;                           * 25278
 
 * refs (1): 2526E
 OBJ_25282:
-        :: OVER OBJ_2699F case OBJ_252A0         * 25282
+        :: OVER OBJ_2699F case ~P::N;BINT1       * 25282
         ;                                        * 2529B
 
 * refs (2): 25273 25296
-OBJ_252A0:
+~P::N;BINT1:
         :: P::N BINT1 ;                          * 252A0
 
 * refs (2): 23E43 245CD
-OBJ_252B4:
+~4psh;P::N;drop2;6rolld;1+(s5):
         :: 4psh P::N drop2;6rolld;1+(s5) ;       * 252B4
 
 * refs (7): 23B00 23B7D 23C95 23CF4 2402D 24122 ...
@@ -616,12 +618,12 @@ OBJ_252CD:
           drop2;6rolld;1+(s5) ;                  * 252EB
 
 * refs (1): 24C21
-List~1:
+~4psh;P{}N;drop2;6rolld;1+(s5):
         :: 4psh P{}N drop2;6rolld;1+(s5) ;       * 252F5
 
 * refs (21): 239E8 23AF1 23B6E 23C36 23CA4 23DDF ...
 * Probably: compiler: open an empty meta under the four objects on top (BINT0 5UNROLL), for 4psh to collect a clause into
-OBJ_2530E:
+~BINT0;5UNROLL:
         :: BINT0 5UNROLL ;                       * 2530E
 
 * meta1 ob1..ob4 -> ob1&..ob4 meta1
@@ -708,11 +710,11 @@ getmatchtok:
 
 * refs (1): 25466
 getmatchtok~1:
-        :: FALSE OBJ_2622F getmatchtok~1~1 DROP ROTDROP OVERDUP LEN$ ROTSWAP * 2549D
-          #1+DUP 4UNROLL SUB$ ;                  * 254CA
+        :: FALSE OBJ_2622F ~ROT;COLA;getmatchtok DROP ROTDROP OVERDUP LEN$ * 2549D
+          ROTSWAP #1+DUP 4UNROLL SUB$ ;          * 254C5
 
 * refs (1): 254AC
-getmatchtok~1~1:
+~ROT;COLA;getmatchtok:
         :: ROT COLA getmatchtok                  * 254DE
         ;                                        * 254F2
 
@@ -1364,7 +1366,7 @@ OBJ_26301:
         ASSEMBLE
 
 * refs (1): 26363
-GetNextToken~1~1:
+GetNextToken~2:
         ST=1    2                                * 26342
         A=DAT1  A                                * 26345
         D1=D1+  5                                * 26348
@@ -1378,7 +1380,7 @@ GetNextToken~1~1:
 * refs (1): 26171
 GetNextToken~1:
         CON(5)  (*)+5                            * 2635E  primitive code object
-        GOSUB   GetNextToken~1~1                 * 26363
+        GOSUB   GetNextToken~2                   * 26363
         ST=1    3                                * 26367
         A=DAT1  A                                * 2636A
         D1=D1+  5                                * 2636D
@@ -1913,11 +1915,11 @@ LIB700.config:
 * refs (1): 62AED
 MACRODCMP~1:
         :: NOTROMPcase OBJ_26912                 * 268D6
-          COLA MACRODCMP~1~1                     * 268E5
+          COLA MACRODCMP~2                       * 268E5
         ;                                        * 268EF
 
 * refs (1): 268EA
-MACRODCMP~1~1:
+MACRODCMP~2:
         :: RPTRACC NOTcase BINT2                 * 268F4
           OBJ_26912 ;                            * 26908
 
@@ -2340,7 +2342,7 @@ OBJ_26F34:
         GOTO    L_26F88                          * 26F3E
 
 * refs (1): 57B1F
-?expanapp~1~1:
+?expanapp~2:
         CON(5)  (*)+5                            * 26F42  primitive code object
         P=      15                               * 26F47
         LC(1)   #7                               * 26F49
@@ -2354,7 +2356,7 @@ OBJ_26F50:
         GOTO    L_26F88                          * 26F5A
 
 * refs (1): 5B1D6
-intg1~1~1:
+intg1~2:
         CON(5)  (*)+5                            * 26F5E  primitive code object
         P=      15                               * 26F63
         LC(1)   #9                               * 26F65

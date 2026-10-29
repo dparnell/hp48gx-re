@@ -2745,7 +2745,7 @@ L_01F41:
         CON(2)  #00                              * 01F51  entry 7
 
 * refs (1): 423F3
-GETKEY~6~1:
+GETKEY~8:
         CON(5)  (*)+5                            * 01F53  primitive code object
         CD0EX                                    * 01F58
         RSTK=C                                   * 01F5B

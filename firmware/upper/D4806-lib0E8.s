@@ -52,46 +52,46 @@ LIB0E8.link:
         REL(5)  ROMP_0E8_014                     * D48D8  014 
         REL(5)  ADD~1                            * D48DD  015 
         REL(5)  SORT~1                           * D48E2  016 
-        REL(5)  SORT~1~1                         * D48E7  017 
-        REL(5)  SORT~1~1~1                       * D48EC  018 
-        REL(5)  SORT~1~2                         * D48F1  019 
-        REL(5)  SORT~1~2~1                       * D48F6  01A 
+        REL(5)  SORT~2                           * D48E7  017 
+        REL(5)  SORT~3                           * D48EC  018 
+        REL(5)  SORT~4                           * D48F1  019 
+        REL(5)  SORT~5                           * D48F6  01A 
         REL(5)  ROMP_0E8_01B                     * D48FB  01B 
         REL(5)  ROMP_0E8_01C                     * D4900  01C 
-        REL(5)  ROMP_0E8_01D                     * D4905  01D 
+        REL(5)  ~INNERCOMP;'REVAL;{}N            * D4905  01D 
         REL(5)  ~INTEMPOB?                       * D490A  01E ~INTEMPOB?
         REL(5)  xSUB~1                           * D490F  01F 
         REL(5)  xREPL~1                          * D4914  020 
-        REL(5)  xREPL~1~1                        * D4919  021 
-        REL(5)  xREPL~1~2                        * D491E  022 
+        REL(5)  xREPL~2                          * D4919  021 
+        REL(5)  xREPL~3                          * D491E  022 
         REL(5)  ROMP_0E8_023                     * D4923  023 
-        REL(5)  xSUB~1~1                         * D4928  024 
-        REL(5)  xSUB~1~2                         * D492D  025 
-        REL(5)  xSUB~1~3                         * D4932  026 
+        REL(5)  xSUB~2                           * D4928  024 
+        REL(5)  xSUB~3                           * D492D  025 
+        REL(5)  xSUB~4                           * D4932  026 
         REL(5)  ROMP_0E8_027                     * D4937  027 
-        REL(5)  xSUB~1~4                         * D493C  028 
+        REL(5)  xSUB~5                           * D493C  028 
         REL(5)  ROMP_0E8_029                     * D4941  029 
         REL(5)  ROMP_0E8_02A                     * D4946  02A 
         REL(5)  ROMP_0E8_02B                     * D494B  02B 
         REL(5)  ROMP_0E8_02C                     * D4950  02C 
         REL(5)  TEACH~1                          * D4955  02D 
-        REL(5)  TEACH~1~1                        * D495A  02E 
-        REL(5)  TEACH~1~2                        * D495F  02F 
-        REL(5)  TEACH~1~3                        * D4964  030 
-        REL(5)  TEACH~1~4                        * D4969  031 
-        REL(5)  TEACH~1~5                        * D496E  032 
-        REL(5)  TEACH~1~6                        * D4973  033 
-        REL(5)  TEACH~1~7                        * D4978  034 
-        REL(5)  TEACH~1~8                        * D497D  035 
-        REL(5)  TEACH~1~9                        * D4982  036 
-        REL(5)  TEACH~1~10                       * D4987  037 
-        REL(5)  TEACH~1~11                       * D498C  038 
-        REL(5)  TEACH~1~12                       * D4991  039 
-        REL(5)  TEACH~1~13                       * D4996  03A 
-        REL(5)  TEACH~1~14                       * D499B  03B 
-        REL(5)  TEACH~1~15                       * D49A0  03C 
-        REL(5)  TEACH~1~16                       * D49A5  03D 
-        REL(5)  TEACH~1~17                       * D49AA  03E 
+        REL(5)  TEACH~2                          * D495A  02E 
+        REL(5)  TEACH~3                          * D495F  02F 
+        REL(5)  TEACH~4                          * D4964  030 
+        REL(5)  TEACH~5                          * D4969  031 
+        REL(5)  TEACH~6                          * D496E  032 
+        REL(5)  TEACH~7                          * D4973  033 
+        REL(5)  TEACH~8                          * D4978  034 
+        REL(5)  TEACH~9                          * D497D  035 
+        REL(5)  TEACH~10                         * D4982  036 
+        REL(5)  TEACH~11                         * D4987  037 
+        REL(5)  TEACH~12                         * D498C  038 
+        REL(5)  TEACH~13                         * D4991  039 
+        REL(5)  TEACH~14                         * D4996  03A 
+        REL(5)  TEACH~15                         * D499B  03B 
+        REL(5)  TEACH~16                         * D49A0  03C 
+        REL(5)  TEACH~17                         * D49A5  03D 
+        REL(5)  TEACH~18                         * D49AA  03E 
         REL(5)  ATICK~1                          * D49AF  03F 
         REL(5)  XSEND~1                          * D49B4  040 
         REL(5)  XRECV~1                          * D49B9  041 

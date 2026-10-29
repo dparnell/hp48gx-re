@@ -93,7 +93,7 @@ OBJ_101CB:
 * refs (1): 101EE
 OBJ_10202:
         :: REQcase um*                           * 10202
-          OBJ_10310 REQcasedrop {}               * 10211
+          ~drop;1-(s);dup;roll(s);FALSE REQcasedrop {} * 10211
           TRUE tok1 OVER EQUALcase OBJ_102D9     * 10220
           DUPTYPECSTR? ITE                       * 10239
           :: NULL$ SWAPROT #1+ ;                 * 10243
@@ -102,19 +102,19 @@ OBJ_10202:
           :: %1 ROT#1+ ROT FALSE ;               * 10284
           DUP%0= ITE                             * 102A2
           :: DROPSWAPDROP SWAPDROP #3- ; SWAP    * 102AC
-          DUPROLL OBJ_10310 ;                    * 102CA
+          DUPROLL ~drop;1-(s);dup;roll(s);FALSE ; * 102CA
 
 * refs (1): 10234
 OBJ_102D9:
         :: drop;1-(s);dup;roll(s) dREALNcase FALSE * 102D9
-          drop;1-(s);dup;roll(s) OBJ_10310 ;     * 102ED
+          drop;1-(s);dup;roll(s) ~drop;1-(s);dup;roll(s);FALSE ; * 102ED
 
 * refs (3): 102DE 102ED 10315
 drop;1-(s);dup;roll(s):
         :: DROP#1- DUPROLL ;                     * 102FC
 
 * refs (3): 10211 102CF 102F2
-OBJ_10310:
+~drop;1-(s);dup;roll(s);FALSE:
         :: drop;1-(s);dup;roll(s) FALSE ;        * 10310
 
 * refs (2): 1019E 101AD
@@ -263,7 +263,7 @@ unrot1:
         :: OVER #3+PICK 3PICK#+ BINT3 #+UNROLL ; * 10AF9
 
 * refs (1): 0F0CA
-st=>uo?~2:
+st=>uo?~3:
         CON(5)  (*)+5                            * 10B1C  primitive code object
         ASSEMBLE
         C=DAT1  A                                * 10B21
@@ -332,24 +332,24 @@ OBJ_10BC3:
           3UNROLL #1- ;                          * 10C13
 
 * refs (1): 0FEAD
-U>NCQ~1~2:
-        :: 4ROLLROT %%*UNROT U>NCQ~1~2~1 ;       * 10C22
+U>NCQ~7:
+        :: 4ROLLROT %%*UNROT OBJ_0F73D ;         * 10C22
 
 * refs (1): 0FEBC
-U>NCQ~1~3:
+U>NCQ~3:
         :: 4ROLLROT %%/ 3UNROLL OBJ_0F756 ;      * 10C3B
 
 * refs (1): 0FEDA
-U>NCQ~1~4:
+U>NCQ~4:
         :: %>%% ROTOVER %%^ 3UNROLL SWAPCKREF ONE_DO_ARRY INDEX@ PULLLONGEL * 10C59
           3PICK %%* INDEX@ PUTEL NextInArray SWAPDROP ; * 10C86
 
 * refs (2): 0FECB 0FF57
-U>NCQ~1~5:
+~3UNROLL;%%*SWAP;TOTEMPOB:
         :: 3UNROLL %%*SWAP TOTEMPOB ;            * 10CA9
 
 * refs (1): 0FEE9
-U>NCQ~1~6:
+~ROT;%>%%;3UNROLL:
         :: ROT %>%% 3UNROLL ;                    * 10CC2
         ASSEMBLE
 
@@ -1171,7 +1171,7 @@ MAKEGROB:
         CON(5)  (*)+5                            * 1158F  primitive code object
         GOSUB   POP#~jump                        * 11594
         R0=A                                     * 11598
-        GOSUB   SAVPTR~jump_11CC5                * 1159B
+        GOSUB   SAVPTR~jump_7                    * 1159B
         GOSUB   POP#~jump                        * 1159F
         R1=A                                     * 115A3
         GOSUB   makegrob                         * 115A6
@@ -1269,7 +1269,7 @@ GROB!:
         A=DAT1  A                                * 11696
         D1=D1+  5                                * 11699
         D=D+1   A                                * 1169C
-        GOSUB   SAVPTR~jump_11CC5                * 1169E
+        GOSUB   SAVPTR~jump_7                    * 1169E
         D0=A                                     * 116A2
         C=RSTK                                   * 116A5
         D1=C                                     * 116A7
@@ -1517,7 +1517,7 @@ SUB_118F3:
         B=B-C   A                                * 11915
         RTNCC                                    * 11917
 L_11919:
-        GOSUBL  GETPTR~jump_120E7                * 11919
+        GOSUBL  GETPTR~jump_3                    * 11919
         LC(5)   NULLPAINT                        * 1191F
         DAT1=C  A                                * 11926
         GOLONG  L_12002                          * 11929
@@ -1763,7 +1763,7 @@ SUB_11BAA:
         R2=A                                     * 11BBC
         GOSUB   POP#~jump                        * 11BBF
         R4=A                                     * 11BC3
-        GOSUB   SAVPTR~jump_11CC5                * 11BC6
+        GOSUB   SAVPTR~jump_7                    * 11BC6
         C=R0                                     * 11BCA
         B=C     A                                * 11BCD
         A=R2                                     * 11BCF
@@ -1879,7 +1879,7 @@ POP#~jump:
         GOVLNG  POP#                             * 11CBE
 
 * refs (10): 1159B 1169E 11BC6 11CD3 11D08 11F88 ...
-SAVPTR~jump_11CC5:
+SAVPTR~jump_7:
         GOVLNG  SAVPTR                           * 11CC5
 
 * refs (4): 11CDB 11CF8 11D83 12421
@@ -1889,7 +1889,7 @@ SUB_11CCC:
 * refs (1): 13B5B
 3->grob(s):
         CON(5)  (*)+5                            * 11CCE  primitive code object
-        GOSUB   SAVPTR~jump_11CC5                * 11CD3
+        GOSUB   SAVPTR~jump_7                    * 11CD3
         A=0     A                                * 11CD7
         A=A+1   A                                * 11CD9
         GOSUB   SUB_11CCC                        * 11CDB
@@ -1914,13 +1914,13 @@ $>GROB:
         CON(5)  (*)+5                            * 11D00  primitive code object
         XM=0                                     * 11D05
 L_11D08:
-        GOSUB   SAVPTR~jump_11CC5                * 11D08
+        GOSUB   SAVPTR~jump_7                    * 11D08
         A=DAT1  A                                * 11D0C
         GOSUB   SUB_120CC                        * 11D0F
         ?A#0    A                                * 11D13
         GOYES   L_11D2A                          * 11D16
 L_11D18:
-        GOSUB   GETPTR~jump_120E7                * 11D18
+        GOSUB   GETPTR~jump_3                    * 11D18
         LC(5)   NULLPAINT                        * 11D1C
         DAT1=C  A                                * 11D23
         GOTO    L_12002                          * 11D26
@@ -2167,7 +2167,7 @@ L_11F6D:
 $>grob:
         CON(5)  (*)+5                            * 11F80  primitive code object
         ST=1    3                                * 11F85
-        GOSUB   SAVPTR~jump_11CC5                * 11F88
+        GOSUB   SAVPTR~jump_7                    * 11F88
         A=DAT1  A                                * 11F8C
         GOSUB   SUB_120CC                        * 11F8F
         ?A#0    A                                * 11F93
@@ -2206,6 +2206,6 @@ L_11FF1:
         C=0     A                                * 11FF3
         LC(2)   #14                              * 11FF5
         A=A-C   A                                * 11FF9
-        GOSUB   GETPTR~jump_120E7                * 11FFB
+        GOSUB   GETPTR~jump_3                    * 11FFB
 L_11FFF:
         DAT1=A  A                                * 11FFF

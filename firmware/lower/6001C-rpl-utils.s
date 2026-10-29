@@ -172,7 +172,7 @@ OBJ_603C9:
         :: BEGIN Π'sur Π'cts #=case              * 603C9
 
 * refs (1): 6068F
-match'(ex,li)~1~2:
+match'(ex,li)~4:
           :: NDROP RDROP ;                       * 603E2
           Π'sun OVER #<case                      * 603F6
 
@@ -205,7 +205,7 @@ OBJ_604E6:
         ;                                        * 60595
 
 * refs (1): 60A90
-match'(ex,li)~2~1:
+match'(ex,li)~5:
         :: Π'prd EXPLODE OBJ_600A3 IMPLODE symcomp ' Π'prp STO DUPTEMPENV * 6059A
           DUP#2+PICK OVER#+ #2+ ' NULLLAM CACHE Π'prp COMPEVAL CK1NOLASTWD ' * 605CC
           Π'prp STO ' NULLLAM DUMP ABND ABND DROP Π'prp DUPTYPEREAL? ITE * 605FE
@@ -215,8 +215,8 @@ match'(ex,li)~2~1:
 * refs (1): 60B71
 match'(ex,li)~1:
         :: Π'sur Π'cts #1+ ' Π'sur STOLAM #1+ ' Π'cts STOLAM BEGIN Π'sur * 60644
-          Π'cts #=case match'(ex,li)~1~2         * 60685
-          DUPTWO Π'sur DUPTEMPENV OBJ_5FDB7 case match'(ex,li)~1~1 * 60694
+          Π'cts #=case match'(ex,li)~4           * 60685
+          DUPTWO Π'sur DUPTEMPENV OBJ_5FDB7 case match'(ex,li)~2 * 60694
           3DROP ABND COLA OBJ_606CB              * 606B2
         ;                                        * 606C6
 
@@ -225,7 +225,7 @@ OBJ_606CB:
         :: OBJ_6045F Π'sur AGAIN ;               * 606CB
 
 * refs (1): 606AD
-match'(ex,li)~1~1:
+match'(ex,li)~2:
         :: ROTROT2DROP Π'sur #- ' Π'mlg STOLAM OBJ_60E3C Π'ckd EVAL NOTcase * 606E4
 
 * refs (1): 60757
@@ -278,12 +278,12 @@ OBJ_60806:
           LAM 'rhs }                             * 60883
 
 * refs (1): 60A9F
-match'(ex,li)~2~2:
+match'(ex,li)~6:
         :: ?SKIP TrueTrue                        * 60897
-          OBJ_60806 INCOMPDROP OBJ_60806 BIND match'(ex,li)~2~2~1 ; * 608A6
+          OBJ_60806 INCOMPDROP OBJ_60806 BIND match'(ex,li)~7 ; * 608A6
 
 * refs (1): 608BA
-match'(ex,li)~2~2~1:
+match'(ex,li)~7:
         ::                                       * 608C4
 
 * refs (1): 60D02
@@ -294,17 +294,17 @@ OBJ_608C9:
           STO BINT0 ' Π'mlg STO ;                * 6095F
 
 * refs (1): 60AA4
-match'(ex,li)~2~3:
+match'(ex,li)~8:
         :: dup pshzer BEGIN #1-SWAP OBJ_5FF73 ITE psh1& DROP * 6097D
           #0=UNTIL DROP ;                        * 609AA
 
 * refs (2): 60AE0 60B08
-match'(ex,li)~2~4:
-        :: BEGIN pullrev OBJ_5FF73 ITE match'(ex,li)~2~4~1 DROP * 609B9
+match'(ex,li)~9:
+        :: BEGIN pullrev OBJ_5FF73 ITE match'(ex,li)~10 DROP * 609B9
           #0=UNTIL DROP ;                        * 609DC
 
 * refs (1): 609D2
-match'(ex,li)~2~4~1:
+match'(ex,li)~10:
         :: DUP FIRST@LAM NOTcase SETNONEXTERR    * 609EB
           {}_600F3 EQ caseDROP OVER#0=           * 60A04
           caseDROP OVER                          * 60A18
@@ -313,20 +313,20 @@ match'(ex,li)~2~4~1:
         ;                                        * 60A4F
 
 * refs (1): 60B5D
-match'(ex,li)~2:
+match'(ex,li)~3:
         :: DUP BINT4 BINT3 RPITE get1 EXPLODE    * 60A54
           psh DROPDUP IT                         * 60A77
-          :: ' match'(ex,li)~2~1 3UNROLL ;       * 60A86
-          match'(ex,li)~2~2 match'(ex,li)~2~3 PTR addt: NULLLAM NULL{} OVER * 60A9F
-          NDUPN psh get1 DROP DOBIND Π'rhs EXPLODE match'(ex,li)~2~4 Π'ckd * 60ABD
+          :: ' match'(ex,li)~5 3UNROLL ;         * 60A86
+          match'(ex,li)~6 match'(ex,li)~8 PTR addt: NULLLAM NULL{} OVER * 60A9F
+          NDUPN psh get1 DROP DOBIND Π'rhs EXPLODE match'(ex,li)~9 Π'ckd * 60ABD
           TRUE EQ ?SKIP                          * 60AEA
-          :: Π'prd EXPLODE match'(ex,li)~2~4 ;   * 60AF9
+          :: Π'prd EXPLODE match'(ex,li)~9 ;     * 60AF9
         ;                                        * 60B12
 
 * refs (2): 1FABF 1FAD3
 match'(ex,li):
         :: INNERCOMP DUP #2= OVER #3= OR ?SKIP SETSIZEERR * 60B17
-          DUP dvarlsBIND nmetasyms 1GETABND #3= match'(ex,li)~2 'R ITE * 60B44
+          DUP dvarlsBIND nmetasyms 1GETABND #3= match'(ex,li)~3 'R ITE * 60B44
           OBJ_603C9 match'(ex,li)~1              * 60B6C
           ABND Π'reg ITE %1 %0_2A2B4             * 60B76
           ABND pshm1 IMPLODE SWAPDROPSWAP ;      * 60B8F
@@ -1476,7 +1476,7 @@ L_6180B:
         D1=C                                     * 61823
         GOSBVL  SAVPTR                           * 61826
         GOSUBL  GARBAGECOL~jump                  * 6182D
-        GOSUBL  GETPTR~jump_624AC                * 61833
+        GOSUBL  GETPTR~jump_9                    * 61833
         LC(5)   #00002                           * 61839
         D=D-C   A                                * 61840
         GONC    L_6184B                          * 61842
@@ -1940,7 +1940,7 @@ L_61C05:
 * refs (8): 0EDF0 15E9C 17F54 24CDA 24D34 298C3 ...
 EXPAND:
         CON(5)  (*)+5                            * 61C1C  primitive code object
-        GOSUBL  POP#~jump_6249E                  * 61C21
+        GOSUBL  POP#~jump_4                      * 61C21
         GOSBVL  SAVPTR                           * 61C27
         B=A     A                                * 61C2E
         C=DAT1  A                                * 61C30
@@ -1964,12 +1964,12 @@ L_61C4F:
         GOYES   L_61C70                          * 61C60
         C=RSTK                                   * 61C62
         C=RSTK                                   * 61C64
-        GOSUBL  GETPTR~jump_624AC                * 61C66
+        GOSUBL  GETPTR~jump_9                    * 61C66
         GOTO    L_61DBD                          * 61C6C
 L_61C70:
         ST=1    10                               * 61C70
         GOSUBL  GARBAGECOL~jump                  * 61C73
-        GOSUBL  GETPTR~jump_624AC                * 61C79
+        GOSUBL  GETPTR~jump_9                    * 61C79
         C=RSTK                                   * 61C7F
         A=C     A                                * 61C81
         C=RSTK                                   * 61C83
@@ -2017,7 +2017,7 @@ CACHE:
         R2=A.F  A                                * 61CF1
         D1=D1+  5                                * 61CF7
         D=D+1   A                                * 61CFA
-        GOSUBL  POP#~jump_6249E                  * 61CFC
+        GOSUBL  POP#~jump_4                      * 61CFC
         GOSBVL  SAVPTR                           * 61D02
         C=A     A                                * 61D09
         ST=1    1                                * 61D0B
@@ -2026,7 +2026,7 @@ CACHE:
         C=R0                                     * 61D15
         A=A-C   A                                * 61D18
         DAT1=A  A                                * 61D1A
-        GOSUBL  GETPTR~jump_624AC                * 61D1D
+        GOSUBL  GETPTR~jump_9                    * 61D1D
         C=R1                                     * 61D23
         A=C     A                                * 61D26
         A=A+A   A                                * 61D28
@@ -2081,7 +2081,7 @@ L_61D8C:
         GOYES   L_61DF3                          * 61DA4
         ?ST=0   10                               * 61DA6
         GOYES   L_61DC4                          * 61DA9
-        GOSUBL  GETPTR~jump_624AC                * 61DAB
+        GOSUBL  GETPTR~jump_9                    * 61DAB
         ?ST=1   1                                * 61DB1
         GOYES   L_61DBD                          * 61DB4
         GOVLNG  L_10F2D                          * 61DB6
@@ -2250,7 +2250,7 @@ OBJ_61F8F:
 * refs (9): 16AB3 1CDD9 24DC0 269C2 26A87 270C0 ...
 DUPROM-WORD?:
         CON(5)  (*)+5                            * 61FA9  primitive code object
-        GOSUB   SAVPTR~jump_624B3                * 61FAE
+        GOSUB   SAVPTR~jump_20                   * 61FAE
         GOTO    L_61FC7                          * 61FB2
 
 * ob -> flag
@@ -2259,7 +2259,7 @@ ROM-WORD?:
         CON(5)  (*)+5                            * 61FB6  primitive code object
         D1=D1+  5                                * 61FBB
         D=D+1   A                                * 61FBE
-        GOSUB   SAVPTR~jump_624B3                * 61FC0
+        GOSUB   SAVPTR~jump_20                   * 61FC0
         D1=D1-  5                                * 61FC4
 L_61FC7:
         GOSUB   Rom-Word?                        * 61FC7
@@ -2431,7 +2431,7 @@ PushFLoop:
 * refs (20): 04D6E 27648 36629 36714 37B8F 584C1 ...
 OVER#=:
         CON(5)  (*)+5                            * 620EB  primitive code object
-        GOSUBL  POP2#~jump_62829                 * 620F0
+        GOSUBL  POP2#~jump_2                     * 620F0
         D=D-1   A                                * 620F6
         D1=D1-  5                                * 620F8
         ?C=A    A                                * 620FB
@@ -2659,7 +2659,7 @@ SUB_62278:
 * refs (25): 16EC1 17176 17491 28F1A 33120 368B8 ...
 #3=:
         CON(5)  (*)+5                            * 62289  primitive code object
-        GOSUB   POP#~jump_6249E                  * 6228E
+        GOSUB   POP#~jump_4                      * 6228E
         A=A-1   A                                * 62292
 L_62294:
         A=A-1   A                                * 62294
@@ -2669,14 +2669,14 @@ L_62294:
 * refs (31): 1523C 368C2 3F92B 3F96C 3F9A8 467B6 ...
 #2=:
         CON(5)  (*)+5                            * 6229A  primitive code object
-        GOSUB   POP#~jump_6249E                  * 6229F
+        GOSUB   POP#~jump_4                      * 6229F
         GOTO    L_62294                          * 622A3
 
 * # -> flag
 * refs (86): 093A7 0C668 152C3 1DD65 20C17 29458 ...
 #1=:
         CON(5)  (*)+5                            * 622A7  primitive code object
-        GOSUB   POP#~jump_6249E                  * 622AC
+        GOSUB   POP#~jump_4                      * 622AC
 L_622B0:
         A=A-1   A                                * 622B0
         GOTO    L_6226F                          * 622B2
@@ -2685,7 +2685,7 @@ L_622B0:
 * refs (20): 0C762 108D3 17BB3 1DB79 28B87 39CB6 ...
 #1<>:
         CON(5)  (*)+5                            * 622B6  primitive code object
-        GOSUB   POP#~jump_6249E                  * 622BB
+        GOSUB   POP#~jump_4                      * 622BB
         A=A-1   A                                * 622BF
         GOTO    L_622DD                          * 622C1
 
@@ -2770,7 +2770,7 @@ L_623CC:
         C=RSTK                                   * 623EA
         GONC    L_623CC                          * 623EC
 L_623EF:
-        GOSUB   GETPTR~jump_624AC                * 623EF
+        GOSUB   GETPTR~jump_9                    * 623EF
         GOLONG  L_61DBD                          * 623F3
 L_623F9:
         GOTO    L_62467                          * 623F9
@@ -2811,7 +2811,7 @@ L_6243F:
         C=R0                                     * 6245D
         GOSBVL  MOVEDOWN                         * 62460
 L_62467:
-        GOSUB   GETPTR~jump_624AC                * 62467
+        GOSUB   GETPTR~jump_9                    * 62467
         D1=D1+  5                                * 6246B
         D=D+1   A                                * 6246E
         GOTO    L_62544                          * 62470
@@ -2832,7 +2832,7 @@ L_62467:
         GOTO    L_62544                          * 6249A
 
 * refs (10): 61C21 61CFC 6228E 6229F 622AC 622BB ...
-POP#~jump_6249E:
+POP#~jump_4:
         GOVLNG  POP#                             * 6249E
 
 * refs (5): 6182D 61C73 61DD4 61EC2 623E3
@@ -2840,11 +2840,11 @@ GARBAGECOL~jump:
         GOVLNG  GARBAGECOL                       * 624A5
 
 * refs (7): 61833 61C66 61C79 61D1D 61DAB 623EF ...
-GETPTR~jump_624AC:
+GETPTR~jump_9:
         GOVLNG  GETPTR                           * 624AC
 
 * refs (11): 61FAE 61FC0 62704 627C3 627E2 628A0 ...
-SAVPTR~jump_624B3:
+SAVPTR~jump_20:
         GOVLNG  SAVPTR                           * 624B3
 
 * # #' -> #''
@@ -3088,7 +3088,7 @@ DUP#2+:
         A=A+1   A                                * 62700
         A=A+1   A                                * 62702
 L_62704:
-        GOSUB   SAVPTR~jump_624B3                * 62704
+        GOSUB   SAVPTR~jump_20                   * 62704
         GOTO    L_627CE                          * 62708
 
 * 1 2 3 -> 2 1
@@ -3154,7 +3154,7 @@ L_6277F:
 * refs (31): 277DD 27EAE 29561 430FC 4E9EC 4EB8B ...
 SWAP#-:
         CON(5)  (*)+5                            * 62794  primitive code object
-        GOSUBL  POP2#~jump_62829                 * 62799
+        GOSUBL  POP2#~jump_2                     * 62799
         CAEX    A                                * 6279F
         A=A-C   A                                * 627A1
         GOTO    L_62704                          * 627A3
@@ -3173,7 +3173,7 @@ DROPDUP:
 DUPLEN$:
         CON(5)  (*)+5                            * 627BB  primitive code object
         A=DAT1  A                                * 627C0
-        GOSUB   SAVPTR~jump_624B3                * 627C3
+        GOSUB   SAVPTR~jump_20                   * 627C3
         GOSBVL  SUB_120CC                        * 627C7
 L_627CE:
         GOVLNG  PUSH#ALOOP                       * 627CE
@@ -3182,10 +3182,10 @@ L_627CE:
 * refs (7): 8E988 905C5 93E6B 940E7 94367 958A6 ...
 #+DUP:
         CON(5)  (*)+5                            * 627D5  primitive code object
-        GOSUBL  POP2#~jump_62829                 * 627DA
+        GOSUBL  POP2#~jump_2                     * 627DA
         A=A+C   A                                * 627E0
 L_627E2:
-        GOSUBL  SAVPTR~jump_624B3                * 627E2
+        GOSUBL  SAVPTR~jump_20                   * 627E2
         R0=A                                     * 627E8
 
 * <REF>GETPTR , Push R0 & A as #, Loop
@@ -3197,7 +3197,7 @@ Push2#aLoop:
 * refs (6): 152BE 4CCA8 6D33E 6EE1F D0057 D1DDC
 #-DUP:
         CON(5)  (*)+5                            * 627F8  primitive code object
-        GOSUBL  POP2#~jump_62829                 * 627FD
+        GOSUBL  POP2#~jump_2                     * 627FD
         A=A-C   A                                * 62803
         GOTO    L_627E2                          * 62805
 
@@ -3205,7 +3205,7 @@ Push2#aLoop:
 * refs (26): 05313 109DC 10A27 17117 254CA 437FC ...
 #1+DUP:
         CON(5)  (*)+5                            * 62809  primitive code object
-        GOSUBL  POP#~jump_6249E                  * 6280E
+        GOSUBL  POP#~jump_4                      * 6280E
         A=A+1   A                                * 62814
         GOTO    L_627E2                          * 62816
 
@@ -3213,12 +3213,12 @@ Push2#aLoop:
 * refs (15): 296AB 2D7B7 4AB80 4AC7A 4C9CE 5F99B ...
 #1-DUP:
         CON(5)  (*)+5                            * 6281A  primitive code object
-        GOSUB   POP#~jump_6249E                  * 6281F
+        GOSUB   POP#~jump_4                      * 6281F
         A=A-1   A                                * 62823
         GOTO    L_627E2                          * 62825
 
 * refs (9): 620F0 62799 627DA 627FD 628A6 628C0 ...
-POP2#~jump_62829:
+POP2#~jump_2:
         GOVLNG  POP2#                            * 62829
 
 * 1 2 -> 2 2
@@ -3273,8 +3273,8 @@ L_62869:
 * refs (12): 18C63 3A0AD 4111B 46CF2 46D4C 4DC8A ...
 2DUP#<:
         CON(5)  (*)+5                            * 6289B  primitive code object
-        GOSUBL  SAVPTR~jump_624B3                * 628A0
-        GOSUBL  POP2#~jump_62829                 * 628A6
+        GOSUBL  SAVPTR~jump_20                   * 628A0
+        GOSUBL  POP2#~jump_2                     * 628A6
         ?C>A    A                                * 628AC
         GOYES   L_628CB                          * 628AF
         GOTO    L_628CB                          * 628B1
@@ -3283,8 +3283,8 @@ L_62869:
 * refs (23): 3A152 43BB2 6A28F 6A4BF 6A5AF 7CF22 ...
 2DUP#=:
         CON(5)  (*)+5                            * 628B5  primitive code object
-        GOSUBL  SAVPTR~jump_624B3                * 628BA
-        GOSUBL  POP2#~jump_62829                 * 628C0
+        GOSUBL  SAVPTR~jump_20                   * 628BA
+        GOSUBL  POP2#~jump_2                     * 628C0
         ?C=A    A                                * 628C6
         GOYES   L_628CB                          * 628C9
 L_628CB:
@@ -3294,8 +3294,8 @@ L_628CB:
 * refs (24): 10333 10487 25AE8 33E5C 3A148 3B61D ...
 2DUP#>:
         CON(5)  (*)+5                            * 628D1  primitive code object
-        GOSUBL  SAVPTR~jump_624B3                * 628D6
-        GOSUBL  POP2#~jump_62829                 * 628DC
+        GOSUBL  SAVPTR~jump_20                   * 628D6
+        GOSUBL  POP2#~jump_2                     * 628DC
         ?C<A    A                                * 628E2
         GOYES   L_628CB                          * 628E5
         GOTO    L_628CB                          * 628E7
@@ -3304,8 +3304,8 @@ L_628CB:
 * refs (40): 0F99A 272AA 27C5B 35083 36575 3A50F ...
 DUP#1+:
         CON(5)  (*)+5                            * 628EB  primitive code object
-        GOSUBL  SAVPTR~jump_624B3                * 628F0
-        GOSUBL  POP#~jump_6249E                  * 628F6
+        GOSUBL  SAVPTR~jump_20                   * 628F0
+        GOSUBL  POP#~jump_4                      * 628F6
         A=A+1   A                                * 628FC
 L_628FE:
         GOLONG  L_6266D                          * 628FE
@@ -3317,7 +3317,7 @@ SWAP#1+:
         A=DAT1  A                                * 62909
         D1=D1+  5                                * 6290C
         D=D+1   A                                * 6290F
-        GOSUBL  SAVPTR~jump_624B3                * 62911
+        GOSUBL  SAVPTR~jump_20                   * 62911
         C=DAT1  A                                * 62917
         DAT1=A  A                                * 6291A
         CD1EX                                    * 6291D
@@ -3331,8 +3331,8 @@ SWAP#1+:
 * refs (28): 1F484 1F605 41143 5961E 65D37 6602F ...
 DUP#1-:
         CON(5)  (*)+5                            * 6292F  primitive code object
-        GOSUBL  SAVPTR~jump_624B3                * 62934
-        GOSUBL  POP#~jump_6249E                  * 6293A
+        GOSUBL  SAVPTR~jump_20                   * 62934
+        GOSUBL  POP#~jump_4                      * 6293A
         A=A-1   A                                * 62940
         GOTO    L_628FE                          * 62942
 

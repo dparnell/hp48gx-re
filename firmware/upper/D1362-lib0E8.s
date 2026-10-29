@@ -251,26 +251,26 @@ SORT~1:
 
 * ROMPTR 0E8 017
 * refs (1): D136E
-SORT~1~1:
+SORT~2:
         :: DUPTYPELAM? case ROMPTR 0E8 018       * D1F9F
           1GETLAM ZERO_DO DUPTYPEIDNT? NOTcase SETTYPEERR * D1FB9
           ID>$ 1GETLAM ROLL LOOP ;               * D1FD2
 
 * ROMPTR 0E8 018
 * refs (1): D136E
-SORT~1~1~1:
+SORT~3:
         :: FALSE 3PUTLAM 1GETLAM ZERO_DO DUPTYPELAM? NOTcase SETTYPEERR * D1FEB
           LAM>ID ID>$ 1GETLAM ROLL LOOP ;        * D2013
 
 * ROMPTR 0E8 019
 * refs (1): D136E
-SORT~1~2:
+SORT~4:
         :: 3GETLAM NOTcase ROMPTR 0E8 01A        * D2031
           1GETLAM ZERO_DO $>ID 1GETLAM ROLL LOOP ; * D204B
 
 * ROMPTR 0E8 01A
 * refs (1): D136E
-SORT~1~2~1:
+SORT~5:
         :: 1GETLAM ZERO_DO $>ID ID>LAM 1GETLAM ROLL LOOP ; * D206E
 
 * ROMPTR 0E8 01B
@@ -291,7 +291,7 @@ ROMP_0E8_01C:
 
 * ROMPTR 0E8 01D
 * refs (1): D136E
-ROMP_0E8_01D:
+~INNERCOMP;'REVAL;{}N:
         :: INNERCOMP 'REVAL {}N ;                * D21BC
 
 * ROMPTR 0E8 01E
@@ -351,12 +351,12 @@ xREPL~1:
 
 * ROMPTR 0E8 021
 * refs (1): D136E
-xREPL~1~1:
+xREPL~2:
         :: 3UNROLL COERCE OVER ROMPTR 0E8 02B ROMPTR 0E8 023 ; * D2377
 
 * ROMPTR 0E8 022
 * refs (1): D136E
-xREPL~1~2:
+xREPL~3:
         :: ROT OBJ_1DF30 4GETLAM 3GETLAM 1GETABND INNERCOMP BINT2 #<>case * D23A6
           SETSIZEERR                             * D23D3
           COERCE2 ROMPTR 0E8 023 ;               * D23D8
@@ -378,12 +378,12 @@ ROMP_0E8_023:
 
 * ROMPTR 0E8 024
 * refs (1): D136E
-xSUB~1~1:
+xSUB~2:
         :: SWAP                                  * D2558
 
 * ROMPTR 0E8 025
 * refs (1): D136E
-xSUB~1~2:
+xSUB~3:
           :: 3UNROLL OBJ_1DF30 4GETLAM 3GETLAM 1GETABND INNERCOMP BINT2 * D2562
             #<>case SETSIZEERR                   * D258A
             COERCE2 ROT COERCE 4PICK ROMPTR 0E8 02B ROMPTR 0E8 027 ; * D2594
@@ -391,7 +391,7 @@ xSUB~1~2:
 
 * ROMPTR 0E8 026
 * refs (1): D136E
-xSUB~1~3:
+xSUB~4:
         :: ROT OBJ_1DF30 4GETLAM 3GETLAM 1GETABND OBJ_1DF30 4GETLAM 3GETLAM * D25C8
           1GETABND INNERCOMP BINT2 #<>case SETSIZEERR * D25F5
           COERCE2 ROT INNERCOMP BINT2 #<>case SETSIZEERR * D260E
@@ -417,7 +417,7 @@ ROMP_0E8_027:
 
 * ROMPTR 0E8 028
 * refs (1): D136E
-xSUB~1~4:
+xSUB~5:
         :: COERCE2 3PICK ROMPTR 0E8 02B ROT 4PICK ROMPTR 0E8 02B * D27DD
           ROMPTR 0E8 027 ;                       * D280C
 
@@ -519,14 +519,14 @@ TEACH~1:
 
 * ROMPTR 0E8 02E
 * refs (1): D136E
-TEACH~1~1:
+TEACH~2:
         :: x<< xSWAP ROMPTR 0AB 06E xDUP xSIZE %1 x+ xROT % 1E2 x/ x* xRPN-> * D2F04  SORT
           LAM p x<< xDUP LAM p xFLOOR xGET xSWAP LAM p xCEIL xGET x+ %2 x/ * D2F5B
           x>>ABND x>> ;                          * D2FA8
 
 * ROMPTR 0E8 02F
 * refs (1): D136E
-TEACH~1~2:
+TEACH~3:
         :: x<< xRAD                              * D2FB7
           { xPICT ID PPAR ID VPAR } xPURGE ROMPTR 0AB 00B * D2FC6  YSLICE
           SYMBOL ID X %3 x^ ID Y x* ID X ID Y %3 x^ x* x- ; xSTEQ % -5E-1 * D3003
@@ -534,7 +534,7 @@ TEACH~1~2:
 
 * ROMPTR 0E8 030
 * refs (1): D136E
-TEACH~1~3:
+TEACH~4:
         :: x<<                                   * D309D
           { xPICT ID PPAR ID VPAR } xPURGE ROMPTR 0AB 008 * D30A7  WIREFRAME
           SYMBOL ID X %3 x^ ID Y x* ID X ID Y %3 x^ x* x- ; xSTEQ % 1.2E1 * D30E4
@@ -545,7 +545,7 @@ TEACH~1~3:
 
 * ROMPTR 0E8 031
 * refs (1): D136E
-TEACH~1~4:
+TEACH~5:
         :: x<< xRAD                              * D31DD
           { xPICT ID PPAR ID VPAR } xPURGE ROMPTR 0AB 009 * D31EC  PARSURFACE
           {                                      * D3229
@@ -562,14 +562,14 @@ TEACH~1~4:
 
 * ROMPTR 0E8 032
 * refs (1): D136E
-TEACH~1~5:
+TEACH~6:
         :: x<< xRAD                              * D3380
           { xPICT ID PPAR ID VPAR } xPURGE ROMPTR 0AB 00A * D338F  GRIDMAP
           SYMBOL ID X ID Y xi x* x+ xSIN ; xSTEQ xDRAW xGRAPH x>> ; * D33CC
 
 * ROMPTR 0E8 033
 * refs (1): D136E
-TEACH~1~6:
+TEACH~7:
         :: x<< xRAD                              * D3415
           { xPICT ID PPAR ID VPAR } xPURGE ROMPTR 0AB 00D * D3424  PCONTOUR
           SYMBOL ID X %2 x^ %1 x- ID Y %2 x^ %1 x- x/ ; xSTEQ % 1.6E1 * D3461
@@ -580,7 +580,7 @@ TEACH~1~6:
 
 * ROMPTR 0E8 034
 * refs (1): D136E
-TEACH~1~7:
+TEACH~8:
         :: x<< xRAD                              * D351D
           { xPICT ID PPAR ID VPAR } xPURGE ROMPTR 0AB 00C * D352C  SLOPEFIELD
           SYMBOL ID X %2 x^ %1 x- ID Y %2 x^ %1 x- x/ ; xSTEQ % 1.6E1 * D3569
@@ -591,7 +591,7 @@ TEACH~1~7:
 
 * ROMPTR 0E8 035
 * refs (1): D136E
-TEACH~1~8:
+TEACH~9:
         :: x<< xSILENT'                          * D3625
           :: x<< ID Y xOBJ> xDROP ID T %5 x* xCOS % 1.2E1 x* xROT % 4.9E1 x* * D3634
             x- %2 x>ARRY x>> ;                   * D36A2
@@ -614,7 +614,7 @@ TEACH~1~8:
 
 * ROMPTR 0E8 036
 * refs (1): D136E
-TEACH~1~9:
+TEACH~10:
         :: x<< xRAD                              * D3818
           { xPICT ID PPAR } xPURGE ROMPTR 0F1 037 * D3827  TRUTH
           SYMBOL ID X %2 x^ ID Y %3 x^ x+ %4 xMOD %2 x< ; xSTEQ xDRAX xDRAW * D3855
@@ -622,14 +622,14 @@ TEACH~1~9:
 
 * ROMPTR 0E8 037
 * refs (1): D136E
-TEACH~1~10:
+TEACH~11:
         :: x<< xRAD                              * D38BC
           { xPICT ID PPAR } xPURGE ROMPTR 0F1 035 ID θ xINDEP * D38CB  POLAR
           SYMBOL %2 %4 ID θ x* xCOS x* ; xSTEQ xDRAX xDRAW xGRAPH x>> ; * D3907
 
 * ROMPTR 0E8 038
 * refs (1): D136E
-TEACH~1~11:
+TEACH~12:
         :: x<<                                   * D3951
           { xPICT ID PPAR } xPURGE xRAD ROMPTR 0F1 036 * D395B  PARAMETRIC
           { ID T %0_2A2B4 % 6.5E0 } xINDEP       * D398E
@@ -638,7 +638,7 @@ TEACH~1~11:
 
 * ROMPTR 0E8 039
 * refs (1): D136E
-TEACH~1~12:
+TEACH~13:
         :: x<<                                   * D3A3B
           { xPICT ID PPAR } xPURGE ROMPTR 0F1 034 % 1E-2 xRES * D3A45  CONIC
           { ID X %-2 %2 } xINDEP                 * D3A8D
@@ -647,14 +647,14 @@ TEACH~1~12:
 
 * ROMPTR 0E8 03A
 * refs (1): D136E
-TEACH~1~13:
+TEACH~14:
         :: x<< xRAD                              * D3B30
           { xPICT ID PPAR } xPURGE               * D3B3F
           SYMBOL ID X %2 ID X x* xSIN x+ ; xSTEQ xDRAX xDRAW xGRAPH x>> ; * D3B62
 
 * ROMPTR 0E8 03B
 * refs (1): D136E
-TEACH~1~14:
+TEACH~15:
         :: x<< xOBJ> xIF xOVER xTHEN             * D3BB0
           :: xRPN-> LAM n LAM f x<< %1 LAM n xSTARTVAR LAM i xIF xDUP xTYPE * D3BCE
             %9 xSAME xTHEN ID →RPN xIFEND LAM n xROLLD xNEXT xIF xDUP xTYPE * D3C1A
@@ -666,7 +666,7 @@ TEACH~1~14:
 
 * ROMPTR 0E8 03C
 * refs (1): D136E
-TEACH~1~15:
+TEACH~16:
         :: x<< xRPN-> LAM a LAM p x<< %1 xCF LAM a xDUP xSIZE xDUP xSIZE xIF * D3D1A
           %1 x== xTHEN                           * D3D6C
           :: %1 xSF %1 x+ xSWAP xOBJ> xOBJ> xDROP %1 x+ xROLL ; xELSE * D3D7B
@@ -683,14 +683,14 @@ TEACH~1~15:
 
 * ROMPTR 0E8 03D
 * refs (1): D136E
-TEACH~1~16:
+TEACH~17:
         :: x<< xIF ID n %1 x<=? xTHEN ID n xELSE * D3F7D
           :: %0_2A2B4 %1 %2 ID n xSTART xDUP xROT x+ xNEXT xDROP ; xIFEND * D3FB2
           x>> ;                                  * D3FF7
 
 * ROMPTR 0E8 03E
 * refs (1): D136E
-TEACH~1~17:
+TEACH~18:
         :: x<< xRCLSIGMA xDUP xSIZE xOBJ> xDROP xRPN-> LAM s LAM n LAM m x<< * D4001
           x' ID ΣDAT xENDTIC xTRN %1 LAM m xSTARTVAR LAM j xSIGMA- xOBJ> * D4049
           xDROP LAM n x>LIST % 5E1 ID %TILE LAM j xROLLD xNEXT LAM m x>ARRY * D408D

@@ -277,11 +277,12 @@ SUB_2E447:
             RTN                                  * 2E453
           ENDCODE                                * 2E455
           NOTcase                                * 2E455
-          :: OBJ_2E4A5 FALSE ;                   * 2E45A
+          :: ~ATTNERR;#=casedrop;ABORT FALSE     * 2E45A
+          ;                                      * 2E469
           FLUSHRSBUF #>CHR ROT BINT4 OVERLEN$ OBJ_2E291 #- SUB$ 3UNROLL TRUE ; * 2E46E
 
 * refs (3): 2E45F 2EE5B 30E5D
-OBJ_2E4A5:
+~ATTNERR;#=casedrop;ABORT:
         :: ATTNERR #=casedrop ABORT              * 2E4A5
         ;                                        * 2E4B9
 
@@ -691,7 +692,8 @@ OBJ_2EE31:
 * refs (2): 2EE8D 2EEBA
 OBJ_2EE47:
         :: OpenIO_324C8 case %1                  * 2EE47
-          OBJ_2E4A5 OBJ_2EE31 %0_2A2B4 ;         * 2EE5B
+          ~ATTNERR;#=casedrop;ABORT OBJ_2EE31    * 2EE5B
+          %0_2A2B4 ;                             * 2EE65
 
 * $ ->
 * refs (1): 21E84
@@ -715,7 +717,7 @@ DOSERVER~6:
         :: LAMEXCHP ERRSET                       * 2EF1E
 
 * refs (1): 855E7
-XEQIOBACKUP~1~1:
+XEQIOBACKUP~2:
           :: SendSetup NOTcaseFALSE OBJ_2F0DB    * 2EF2D
             NOTcaseFALSE SENDEOT                 * 2EF41
             case                                 * 2EF4B

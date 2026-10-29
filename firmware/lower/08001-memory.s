@@ -39,7 +39,7 @@ L_08066:
         RPL
 
 * refs (1): 8573B
-libs~1~1:
+libs~3:
         :: OBJ_7028A ROMPART>ADDR ;              * 0806D
 
 * #libnum -> #addr T -> F
@@ -1426,7 +1426,7 @@ PurgeBkp12(nm,s)~1:
           BEGIN DUP NEXTLIBBAK WHILE             * 08FD5
           :: ROTDROP 3UNROLL dup2;idem(nm,bk)? case SETOBINUSE * 08FE9
             DROPSWAP ;                           * 09007
-          REPEAT sto12(bk,nm,s)~2 #5+ SWAP       * 09011
+          REPEAT sto12(bk,nm,s)~3 #5+ SWAP       * 09011
           :: DNOTBAKcase                         * 09025
             :: DNOTLIBcase                       * 0902F
               :: SWAP 1GETLAM OSIZE              * 09039
@@ -1443,7 +1443,7 @@ dup;=7(s)?:BAT!:
 
 * refs (1): 090B1
 sto12(bk,nm,s)~1:
-        CON(5)  sto12(bk,nm,s)~1~1               * 090BE  code object: the address of its machine code
+        CON(5)  sto12(bk,nm,s)~2                 * 090BE  code object: the address of its machine code
         ASSEMBLE
 L_090C3:
         C=R3.F  A                                * 090C3
@@ -1616,10 +1616,10 @@ PurgeBkp12(nm,s):
 
 * refs (1): 09465
 PurgeBkp0(nm)~1:
-          :: PurgeBkp12(nm,s)~4 SWAP PurgeBkp12(nm,s)~3 ROT OR case * 0941F
+          :: PurgeBkp12(nm,s)~4 SWAP PurgeBkp12(nm,s)~2 ROT OR case * 0941F
             SETOBINUSE                           * 09442
           ;                                      * 09447
-          PurgeBkp12(nm,s)~2 ;                   * 0944C
+          PurgeBkp12(nm,s)~5 ;                   * 0944C
 
 * refs (1): 85A9D
 PurgeBkp0(nm):
@@ -1842,7 +1842,7 @@ L_09723:
         PC=(A)                                   * 0972C
 
 * refs (1): 85546
-restore(nm,s)~1~1:
+restore(nm,s)~2:
         CON(5)  (*)+5                            * 09730  primitive code object
         A=0     A                                * 09735
         LC(5)   UserKeys                         * 09737

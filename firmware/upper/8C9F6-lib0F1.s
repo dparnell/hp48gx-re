@@ -126,8 +126,8 @@ PTYPE>PINFO~1:
 * ROMPTR 0F1 03C
 * refs (1): 8999A
 ChkPut('PPAR',li,s)~1:
-        :: SWAPINCOMP DUP #1=case ChkPut('PPAR',li,s)~1~1 * 8D017
-          DUPTWO #=case ChkPut('PPAR',li,s)~1~2  * 8D030
+        :: SWAPINCOMP DUP #1=case ChkPut('PPAR',li,s)~2 * 8D017
+          DUPTWO #=case ChkPut('PPAR',li,s)~3    * 8D030
           #3= NcaseTYPEERR DUPTYPEREAL?          * 8D03F
           3PICK TYPEREAL? DUP ?SKIP              * 8D04E
           :: DROP 5PICK BINT7 #= NcaseTYPEERR 3PICK * 8D062
@@ -162,7 +162,7 @@ ROMP_0F1_03F:
 * ROMPTR 0F1 040
 * refs (1): 8999A
 ROMP_0F1_040:
-        :: OBJ_735EE IT OBJ_48305                * 8D205
+        :: ~3GETLAM;#3= IT OBJ_48305             * 8D205
           CROSSMARKOFF INDEPVAR ?PURGE_HERE ABND ABND ; * 8D219
 
 * ROMPTR 0F1 041

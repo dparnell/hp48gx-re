@@ -310,7 +310,7 @@ USER$>TAG:
         CON(3)  #002                             * 2262D  library
         CON(3)  #180                             * 22630  command
 xDTAG:
-        :: xDTAG~1 ;                             * 22633
+        :: ~CK1;STRIPTAGS ;                      * 22633
 
 LIB002.hash:
         ACPTR L_7633B Reset                      * 22642
@@ -580,8 +580,8 @@ LIB002.link:
         REL(5)  APPLY                            * 22B65  102 APPLY
         REL(5)  xAPPLY                           * 22B6A  103 
         REL(5)  xFCNAPPLY                        * 22B6F  104 
-        REL(5)  ROMP_002_105                     * 22B74  105 
-        REL(5)  ROMP_002_106                     * 22B79  106 
+        REL(5)  ~CK2&Dispatch                    * 22B74  105 
+        REL(5)  ~CK2&Dispatch_2                  * 22B79  106 
         REL(5)  x->Q                             * 22B7E  107 →Q
         REL(5)  x->QPI                           * 22B83  108 →Qπ
         REL(5)  xMATCHUP                         * 22B88  109 ↑MATCH
@@ -857,7 +857,7 @@ xWHILE:
 
 * slots of 700 005 (derivative, inverse, ...: used by the symbolic code)
         CON(5)  OBJ_23F79                        * 2304C  slot 0
-        CON(5)  OBJ_148F2                        * 23051  slot 1
+        CON(5)  ~sstDISP;RDUP;GsstFIN            * 23051  slot 1
 
 * 1/0 ->
 * ROMPTR 700 006 REPEAT
@@ -896,7 +896,7 @@ xDO:
 
 * slots of 700 007 (derivative, inverse, ...: used by the symbolic code)
         CON(5)  OBJ_23D0D                        * 230DC  slot 0
-        CON(5)  OBJ_148F2                        * 230E1  slot 1
+        CON(5)  ~sstDISP;RDUP;GsstFIN            * 230E1  slot 1
 
 * ->
 * ROMPTR 700 008 UNTIL
@@ -1132,8 +1132,8 @@ xHALT:
         ;                                        * 23486
 
 * slots of 700 00E (derivative, inverse, ...: used by the symbolic code)
-        CON(5)  OBJ_24320                        * 2348B  slot 0
-        CON(5)  OBJ_14BE5                        * 23490  slot 1
+        CON(5)  ~'Rapndit;xHALT;TrueTrue         * 2348B  slot 0
+        CON(5)  ~sstDISP;CK0NOLASTWD;GsstFIN     * 23490  slot 1
 
 * -> nextob
 * ROMPTR 700 00F
@@ -1434,9 +1434,9 @@ Chk1&2Disp!(st)Fr:
           COLA halt                              * 2384C
         ;                                        * 23856
 
-        CON(5)  OBJ_24339                        * 2385B  address (the code jumps or points through it)
+        CON(5)  ~'Rapndit;xPROMPT;TrueTrue       * 2385B  address (the code jumps or points through it)
 
-        CON(5)  OBJ_14BFE                        * 23860  address (the code jumps or points through it)
+        CON(5)  ~sstDISP;Chk1&2Disp!(st)Fr;GsstFIN * 23860  address (the code jumps or points through it)
 
 * refs (1): 23842
 1&2Disp!(st)Fr:
@@ -1499,11 +1499,11 @@ drop(1-5,7);true:
 
 * refs (1): 238E0
 palparse~2:
-        :: OBJ_2530E palparse~2~1 !*triand OBJ_2525A TrueTrue ; * 239E3
+        :: ~BINT0;5UNROLL palparse~3 !*triand OBJ_2525A TrueTrue ; * 239E3
 
 * refs (2): 239ED 23A24
-palparse~2~1:
-        :: nultrior TrueTrue OBJ_23A2E !*triand COLA palparse~2~1 * 23A06
+palparse~3:
+        :: nultrior TrueTrue OBJ_23A2E !*triand COLA palparse~3 * 23A06
         ;                                        * 23A29
 
 * refs (16): 23A15 23B46 23BB9 23C0E 23C77 23CD6 ...
@@ -1528,8 +1528,8 @@ OBJ_23AB0:
 
 * refs (1): 2379C
 OBJ_23AE2:
-        :: 'Rapndit xCASE OBJ_2530E OBJ_23B19 !*triand OBJ_252CD 'Rapndit * 23AE2
-          xIFEND TrueTrue ;                      * 23B0A
+        :: 'Rapndit xCASE ~BINT0;5UNROLL OBJ_23B19 !*triand OBJ_252CD * 23AE2
+          'Rapndit xIFEND TrueTrue ;             * 23B05
 
 * refs (3): 23AF6 23B55 23B91
 OBJ_23B19:
@@ -1539,7 +1539,7 @@ OBJ_23B19:
 
 * refs (1): 23B41
 OBJ_23B5F:
-        :: 'Rapndit xTHENCASE OBJ_2530E OBJ_23B9B !*triand OBJ_252CD * 23B5F
+        :: 'Rapndit xTHENCASE ~BINT0;5UNROLL OBJ_23B9B !*triand OBJ_252CD * 23B5F
           'Rapndit xIFEND COLA OBJ_23B19         * 23B82
         ;                                        * 23B96
 
@@ -1562,7 +1562,7 @@ OBJ_23BF0:
 
 * refs (1): 23C09
 OBJ_23C27:
-        :: 'Rapndit xTHEN OBJ_2530E COLA OBJ_23C4A * 23C27
+        :: 'Rapndit xTHEN ~BINT0;5UNROLL COLA OBJ_23C4A * 23C27
         ;                                        * 23C45
 
 * refs (2): 23C40 23C86
@@ -1573,7 +1573,7 @@ OBJ_23C4A:
 
 * refs (1): 23C72
 OBJ_23C90:
-        :: OBJ_252CD 'Rapndit xELSE OBJ_2530E COLA OBJ_23CB8 * 23C90
+        :: OBJ_252CD 'Rapndit xELSE ~BINT0;5UNROLL COLA OBJ_23CB8 * 23C90
         ;                                        * 23CB3
 
 * refs (2): 23CAE 23CE5
@@ -1604,17 +1604,17 @@ OBJ_23D62:
 
 * refs (2): 23D76 23DAD
 OBJ_23D80:
-        :: nultrior OBJ_23DB7 _END__253D6 tok8trior OBJ_23DB7 OBJ_23A2E * 23D80
-          !*triand COLA OBJ_23D80                * 23DA3
+        :: nultrior ~'Rapndit;xENDDO;TrueTrue _END__253D6 tok8trior * 23D80
+          ~'Rapndit;xENDDO;TrueTrue OBJ_23A2E !*triand COLA OBJ_23D80 * 23D99
         ;                                        * 23DB2
 
 * refs (2): 23D8A 23D99
-OBJ_23DB7:
+~'Rapndit;xENDDO;TrueTrue:
         :: 'Rapndit xENDDO TrueTrue ;            * 23DB7
 
 * refs (1): 2362D
 OBJ_23DD0:
-        :: 'Rapndit xSILENT' OBJ_2530E 'Rapndit x<< COLA OBJ_23DFD * 23DD0
+        :: 'Rapndit xSILENT' ~BINT0;5UNROLL 'Rapndit x<< COLA OBJ_23DFD * 23DD0
         ;                                        * 23DF8
 
 * refs (5): 23DF3 23E2A 2451E 24C85 24E3D
@@ -1625,7 +1625,7 @@ OBJ_23DFD:
 
 * refs (2): 23E07 23E16
 OBJ_23E34:
-        :: 'Rapndit x>> OBJ_252B4 TrueTrue ;     * 23E34
+        :: 'Rapndit x>> ~4psh;P::N;drop2;6rolld;1+(s5) TrueTrue ; * 23E34
 
 * refs (3): 23EA2 241A4 241EA
 OBJ_23E52:
@@ -1649,16 +1649,17 @@ ONE{}N:
 
 * refs (3): 23E93 23ED4 23F3D
 OBJ_23F01:
-        :: nultrior failed _NEXT_ tok8trior OBJ_23F47 _STEP_ tok8trior * 23F01
-          OBJ_23F60 OBJ_23A2E !*triand COLA OBJ_23F01 * 23F29
+        :: nultrior failed _NEXT_ tok8trior ~'Rapndit;xNEXT;TrueTrue _STEP_ * 23F01
+          tok8trior ~'Rapndit;xSTEP;TrueTrue OBJ_23A2E !*triand COLA * 23F24
+          OBJ_23F01                              * 23F3D
         ;                                        * 23F42
 
 * refs (1): 23F1A
-OBJ_23F47:
+~'Rapndit;xNEXT;TrueTrue:
         :: 'Rapndit xNEXT TrueTrue ;             * 23F47
 
 * refs (1): 23F29
-OBJ_23F60:
+~'Rapndit;xSTEP;TrueTrue:
         :: 'Rapndit xSTEP TrueTrue ;             * 23F60
 
 * refs (1): 2304C
@@ -1674,7 +1675,7 @@ OBJ_23F97:
 
 * refs (1): 23FB0
 OBJ_23FCE:
-        :: 'Rapndit xREPEAT OBJ_2530E COLA OBJ_23FF1 * 23FCE
+        :: 'Rapndit xREPEAT ~BINT0;5UNROLL COLA OBJ_23FF1 * 23FCE
         ;                                        * 23FEC
 
 * refs (2): 23FE7 2401E

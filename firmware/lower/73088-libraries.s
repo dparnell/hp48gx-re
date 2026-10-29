@@ -48,26 +48,26 @@ L_73111:
 
 * refs (1): 7310A
 OBJ_73117:
-        :: ' ROMP_002_105 ;                      * 73117
+        :: ' ~CK2&Dispatch ;                     * 73117
 
 * refs (1): 4B675
-draw~2:
+~BINT1;PTYPE>PINFO:
         :: BINT1 PTYPE>PINFO ;                   * 7312B
 
 * refs (1): 4B84B
-GetRes~1:
+~BINT9;PTYPE>PINFO:
         :: BINT9 PTYPE>PINFO ;                   * 7313F
 
 * refs (2): 4B68E 4B9B3
-OBJ_73153:
+~BINT2;PTYPE>PINFO;DROP:
         :: BINT2 PTYPE>PINFO DROP ;              * 73153
 
 * refs (1): 4C0F8
-OBJ_7316C:
+~BINT11;PTYPE>PINFO;NOTcaseFALSE:
         :: BINT11 PTYPE>PINFO NOTcaseFALSE ;     * 7316C
 
 * refs (1): 4C2E2
-OBJ_73185:
+~BINT4;PTYPE>PINFO;NOTcaseFALSE:
         :: BINT4 PTYPE>PINFO NOTcaseFALSE ;      * 73185
 
         :: BINT6 PTYPE>PINFO NOTcaseFALSE ;      * 7319E
@@ -79,7 +79,7 @@ OBJ_731B7:
         ;                                        * 731DA
 
 * refs (1): 7000C
-OBJ_731DF:
+~BINT12;PTYPE>PINFO;NOTcaseFALSE:
         :: BINT12 PTYPE>PINFO NOTcaseFALSE ;     * 731DF
 
 * refs (1): 4D2DB
@@ -178,7 +178,7 @@ OBJ_73495:
 
 (AN(L:
               $ "(AN(L"                          * 7349A
-              :: CHECKMENU OBJ_4DA8F ; }         * 734AE
+              :: CHECKMENU ~EXITFCNsto;TOADISP ; } * 734AE
           }                                      * 734C7
         ;                                        * 734CC
 
@@ -210,10 +210,10 @@ OBJ_73594:
 
 * refs (5): 46E05 46E1E 47272 4D3A8 4D6C3
 OBJ_735CB:
-        :: OBJ_456E5 BINT2 NTHCOMPDROP EVAL OBJ_73742 ; * 735CB
+        :: ~BINT23;GETLAM BINT2 NTHCOMPDROP EVAL OBJ_73742 ; * 735CB
 
 * refs (9): 4D349 4D3BC 4D475 4D4E3 4D574 4D5D3 ...
-OBJ_735EE:
+~3GETLAM;#3=:
         :: 3GETLAM #3= ;                         * 735EE
 
 * refs (20): 47071 4720E 4723B 47290 4887D 4D33F ...
@@ -222,15 +222,15 @@ TraceMode?:
         :: 3GETLAM BINT4 #= ;                    * 73602
 
 * refs (4): 4D3DF 4D506 4D5F6 4D6FA
-OBJ_7361B:
+~3GETLAM;#0=:
         :: 3GETLAM #0= ;                         * 7361B
 
 * refs (2): 3E8AC 4DE2C
-OBJ_7362F:
+~3GETLAM;#2=:
         :: 3GETLAM #2= ;                         * 7362F
 
 * refs (2): 47044 4DE72
-OBJ_73643:
+~3GETLAM;#1=_2:
         :: 3GETLAM #1= ;                         * 73643
 
 * refs (2): 46CB1 47030
@@ -238,11 +238,11 @@ OBJ_73657:
         :: 3GETLAM DUP #1= SWAP #2= OR NOT ;     * 73657
 
 * refs (4): 0C901 4D259 4DE36 4DE7C
-OBJ_73684:
+~BINT0;3PUTLAM:
         :: BINT0 3PUTLAM ;                       * 73684
 
 * refs (1): 737C4
-OBJ_73698:
+~BINT4;3PUTLAM:
         :: BINT4 3PUTLAM ;                       * 73698
 
 * refs (1): 4D4D4
@@ -271,31 +271,31 @@ OBJ_7376A:
 OBJ_73792:
         :: CHECKMENU TraceMode? case OBJ_4EE60   * 73792
           BINT27 GETLAM OBJ_737D3 NOTcase DoBadKey * 737AB
-          OBJ_73698 DispMenu.1 ;                 * 737C4
+          ~BINT4;3PUTLAM DispMenu.1 ;            * 737C4
 
 * refs (3): 737B5 73986 739D1
 OBJ_737D3:
-        :: OBJ_456E5 BINT3 NTHCOMPDROP EVAL ;    * 737D3
+        :: ~BINT23;GETLAM BINT3 NTHCOMPDROP EVAL ; * 737D3
 
 * refs (3): 8C83F 8CA3E 8CB82
 OBJ_737F1:
         :: DUP OBJ_73846 NOTcasedrop FALSE       * 737F1
-          SWAP OBJ_496F0 BINT24 PUTLAM OBJ_456E5 BINT4 NTHCOMPDROP BINT26 * 7380A
-          PUTLAM OBJ_47268 TRUE ;                * 73832
+          SWAP ~BINT27;PUTLAM BINT24 PUTLAM ~BINT23;GETLAM BINT4 NTHCOMPDROP * 7380A
+          BINT26 PUTLAM OBJ_47268 TRUE ;         * 7382D
 
 * refs (1): 737FB
 OBJ_73846:
         :: OBJ_4BF71 case                        * 73846
           :: BINT1 GetEqN NOTcasedrop FALSE      * 73855
-            SWAP #1= ITE OBJ_4B62F OBJ_4B733     * 7386E
+            SWAP #1= ITE ~1stArgb(ex);SYMBN ~1stArgRpn(ex);SYMBN * 7386E
             TRUE ;                               * 73887
           GetEqN NOTcaseFALSE OBJ_49B7D          * 73891
           TRUE ;                                 * 738A0
 
-        :: TakeOver OBJ_470B7 OBJ_5102B IT       * 738AA
+        :: TakeOver OBJ_470B7 ~16GETLAM;#1= IT   * 738AA
           :: OBJ_47209 OBJ_47236 ;               * 738C3
           BINT18 REPKEY? NOT?SEMI                * 738D7
-          OBJ_5102B NOTcase                      * 738E6
+          ~16GETLAM;#1= NOTcase                  * 738E6
           :: BEGIN BINT18 REPKEY? WHILE          * 738F0
             :: OBJ_470B7 ; REPEAT ;              * 73909
           BEGIN BINT18 REPKEY? WHILE             * 73922
@@ -305,13 +305,13 @@ OBJ_73846:
 
 * refs (3): 0C631 0C6CC 73BFE
 OBJ_7395E:
-        :: TakeOver OBJ_49158 OBJ_46905 OVER #>ITE #1+ DROPONE OBJ_737D3 * 7395E
-          NOTcase DoBadKey                       * 7398B
+        :: TakeOver ~BINT27;GETLAM OBJ_46905 OVER #>ITE #1+ DROPONE * 7395E
+          OBJ_737D3 NOTcase DoBadKey             * 73986
         ;                                        * 73995
 
 * refs (3): 0C640 0C6DB 73C0D
 OBJ_7399A:
-        :: TakeOver OBJ_49158 BINT1 OVER #<ITE #1- * 7399A
+        :: TakeOver ~BINT27;GETLAM BINT1 OVER #<ITE #1- * 7399A
           :: DROP OBJ_46905 ; OBJ_737D3 NOTcase DoBadKey * 739BD
         ;                                        * 739E0
 
@@ -371,22 +371,23 @@ OBJ_73C12:
               ;                                  * 73C7B
             ;                                    * 73C80
             OBJ_4782B ROT BINT0 #=casedrop       * 73C85
-            :: OBJ_73CF8 OBJ_73D6B CROSS_HAIRS ; * 73C99
+            :: OBJ_73CF8 ~TOTEMPOB;CROSS_OFF;7PUTLAM CROSS_HAIRS ; * 73C99
             #1=case                              * 73CB2
-            :: OBJ_73CF8 OBJ_73D6B 8GETLAM DUP RIGHTCOL #< IT #1+ * 73CB7
+            :: OBJ_73CF8 ~TOTEMPOB;CROSS_OFF;7PUTLAM 8GETLAM DUP RIGHTCOL #< * 73CB7
+              IT #1+                             * 73CDA
               TOTEMPOB 8PUTLAM CROSS_HAIRS ;     * 73CE4
 
 * refs (2): 73C9E 73CBC
 OBJ_73CF8:
             :: OBJ_46955 NOTcase OBJ_46C1B       * 73CF8
               DUPTYPEREAL? NOTcasedrop OBJ_46C1B * 73D0C
-              DUP OBJ_468F1 OBJ_46D24 ;          * 73D1B
-            OBJ_73D6B 8GETLAM DUP LEFTCOL #> IT #1- * 73D2F
+              DUP ~BINT25;PUTLAM OBJ_46D24 ;     * 73D1B
+            ~TOTEMPOB;CROSS_OFF;7PUTLAM 8GETLAM DUP LEFTCOL #> IT #1- * 73D2F
             TOTEMPOB 8PUTLAM CROSS_HAIRS ;       * 73D52
         ;                                        * 73D66
 
 * refs (3): 73CA3 73CC1 73D2F
-OBJ_73D6B:
+~TOTEMPOB;CROSS_OFF;7PUTLAM:
         :: TOTEMPOB CROSS_OFF 7PUTLAM ;          * 73D6B
 
 * refs (1): 8CB8C

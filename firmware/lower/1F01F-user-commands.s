@@ -321,7 +321,7 @@ xAPPLY:
 
 * refs (2): 1F5B2 1F5CF
 apply(_,s):
-        :: uncrunch OBJ_1F960 DUP#1- dvarlsBIND pullrev symcomp SWAPDROP * 1F5F6  slot 3
+        :: uncrunch ~BINT3;RROLL DUP#1- dvarlsBIND pullrev symcomp SWAPDROP * 1F5F6  slot 3
           ChkExpr1Name CARCOMP GOTO L_1F6EF ;    * 1F61E
         CON(2)  #A2                              * 1F637  end of the slots: property byte (meaning not yet known)
         ASSEMBLE
@@ -405,7 +405,7 @@ StoLT(_,ex):
           SETTYPEERR ;                           * 1F956
 
 * refs (1): 1F600
-OBJ_1F960:
+~BINT3;RROLL:
         :: BINT3 RROLL ;                         * 1F960
 
         CON(5)  NOP                              * 1F974  address (the code jumps or points through it)
@@ -422,7 +422,7 @@ OBJ_1F960:
         CON(1)  0                                * 1F98F  command header: flags (meaning not yet known)
         CON(3)  #002                             * 1F990  library
         CON(3)  #105                             * 1F993  command
-ROMP_002_105:
+~CK2&Dispatch:
         :: CK2&Dispatch                          * 1F996
         ;                                        * 1F9A0
 
@@ -434,7 +434,7 @@ ROMP_002_105:
         CON(1)  0                                * 1F9A7  command header: flags (meaning not yet known)
         CON(3)  #002                             * 1F9A8  library
         CON(3)  #106                             * 1F9AB  command
-ROMP_002_106:
+~CK2&Dispatch_2:
         :: CK2&Dispatch                          * 1F9AE
         ;                                        * 1F9B8
         ASSEMBLE
@@ -1114,7 +1114,7 @@ xSINV:
 
 * refs (1): 202DD
 sinv(gn):
-        :: dup;RclInVars(nm) dARRYcase sinv(gn)~1 * 202F1
+        :: dup;RclInVars(nm) dARRYcase ~SWAPDROP;@inv(ar);DROP * 202F1
           'REvalSto xINV ;                       * 20305
 
 * refs (1): 202E7
@@ -1122,7 +1122,7 @@ sinv(ln):
         :: dup;RclInVars(nm) 'REvalSto xINV ;    * 20314
 
 * refs (1): 20300
-sinv(gn)~1:
+~SWAPDROP;@inv(ar);DROP:
         :: SWAPDROP @inv(ar) DROP ;              * 2032D
 
 * name ->
@@ -1139,7 +1139,7 @@ xSNEG:
 
 * refs (1): 2035C
 sneg(gn):
-        :: dup;RclInVars(nm) dARRYcase sneg(gn)~1 * 20370
+        :: dup;RclInVars(nm) dARRYcase ~SWAPDROP;@neg(ar);DROP * 20370
           'REvalSto xNEG ;                       * 20384
 
 * refs (1): 20366
@@ -1147,7 +1147,7 @@ sneg(ln):
         :: dup;RclInVars(nm) 'REvalSto xNEG ;    * 20393
 
 * refs (1): 2037F
-sneg(gn)~1:
+~SWAPDROP;@neg(ar);DROP:
         :: SWAPDROP @neg(ar) DROP ;              * 203AC
 
 * name ->
@@ -1164,7 +1164,7 @@ xSCONJ:
 
 * refs (1): 203DB
 sconj(gn):
-        :: dup;RclInVars(nm) dARRYcase sconj(gn)~1 * 203EF
+        :: dup;RclInVars(nm) dARRYcase ~SWAPDROP;@conj!(ar);DROP * 203EF
           'REvalSto xCONJ ;                      * 20403
 
 * refs (1): 203E5
@@ -1172,7 +1172,7 @@ sconj(ln):
         :: dup;RclInVars(nm) 'REvalSto xCONJ ;   * 20412
 
 * refs (1): 203FE
-sconj(gn)~1:
+~SWAPDROP;@conj!(ar);DROP:
         :: SWAPDROP @conj!(ar) DROP ;            * 2042B
 
 * ob name -> name ob ->
@@ -1195,7 +1195,7 @@ sto+(_,nm):
 
 * refs (1): 204D2
 sto+(nm,_)~1:
-          # 644 OBJ_20518                        * 20496  name array array
+          # 644 ~ROTDROP;1@+(2ar);DROP           * 20496  name array array
           BINT0                                  * 204A5  any
           :: 'REvalSto x+ ;                      * 204AA
         ;                                        * 204BE
@@ -1203,7 +1203,7 @@ sto+(nm,_)~1:
 * refs (2): 2046E 20478
 sto+(nm,_):
         :: over;RclInVars(nm) CK&DISPATCH1       * 204C3
-          sto+(nm,_)~1 OBJ_20518                 * 204D2  name array array
+          sto+(nm,_)~1 ~ROTDROP;1@+(2ar);DROP    * 204D2  name array array
           BINT0                                  * 204DC  any
           :: SWAP 'REvalSto x+ ;                 * 204E1
         ;                                        * 204FA
@@ -1214,7 +1214,7 @@ sto+(nm,_):
         :: 'R EvalNoCK sto(nm,_) ;               * 204FF
 
 * refs (2): 204A0 204D7
-OBJ_20518:
+~ROTDROP;1@+(2ar);DROP:
         :: ROTDROP 1@+(2ar) DROP ;               * 20518
 
 * ob name -> name ob ->
@@ -1277,20 +1277,20 @@ sto/(nm,_):
 
 * refs (2): 2061B 20625
 sto/(gn,nb):
-        :: over;RclInVars(nm) dARRYcase sto/(gn,nb)~1 * 206A7
+        :: over;RclInVars(nm) dARRYcase ~ROTDROPSWAP;1@/(ar,nb);DROP * 206A7
           SWAP 'REvalSto x/ ;                    * 206BB
 
 * refs (1): 206B6
-sto/(gn,nb)~1:
+~ROTDROPSWAP;1@/(ar,nb);DROP:
         :: ROTDROPSWAP 1@/(ar,nb) DROP ;         * 206CF
 
 * refs (1): 2062F
 xSTO/~array,name:
-        :: dup;RclInVars(nm) ROTSWAP dARRYcase xSTO/~array,name~1 * 206E8
+        :: dup;RclInVars(nm) ROTSWAP dARRYcase ~ROTDROP;1@/(2ar);DROP * 206E8
           'REvalSto x/ ;                         * 20701
 
 * refs (1): 206FC
-xSTO/~array,name~1:
+~ROTDROP;1@/(2ar);DROP:
         :: ROTDROP 1@/(2ar) DROP ;               * 20710
 
 * refs (1): 2064D
@@ -1327,34 +1327,34 @@ sto*(nm,_):
 
 * refs (2): 20762 2076C
 sto*(nb,gn):
-        :: dup;RclInVars(nm) ROTSWAP dARRYcase OBJ_20852 * 20802
+        :: dup;RclInVars(nm) ROTSWAP dARRYcase ~ROTDROP;1@*(nb,ar);DROP * 20802
           'REvalSto x* ;                         * 2081B
 
 * refs (2): 20776 20780
 sto*(gn,nb):
-        :: over;RclInVars(nm) dARRYcase OBJ_20852 * 2082A
+        :: over;RclInVars(nm) dARRYcase ~ROTDROP;1@*(nb,ar);DROP * 2082A
           SWAP 'REvalSto x* ;                    * 2083E
 
 * refs (2): 20816 20839
-OBJ_20852:
+~ROTDROP;1@*(nb,ar);DROP:
         :: ROTDROP 1@*(nb,ar) DROP ;             * 20852
 
 * refs (1): 2078A
 sto*(ar,nm):
-        :: dup;RclInVars(nm) ROTSWAP dARRYcase sto*(ar,nm)~1 * 2086B
+        :: dup;RclInVars(nm) ROTSWAP dARRYcase ~ROTDROP;1@*(2ar);DROP * 2086B
           'REvalSto x* ;                         * 20884
 
 * refs (1): 2087F
-sto*(ar,nm)~1:
+~ROTDROP;1@*(2ar);DROP:
         :: ROTDROP 1@*(2ar) DROP ;               * 20893
 
 * refs (1): 207A8
 sto*(nm,ar):
-        :: over;RclInVars(nm) dARRYcase sto*(nm,ar)~1 * 208AC
+        :: over;RclInVars(nm) dARRYcase ~ROTDROPSWAP;2@*(2ar);DROP * 208AC
           SWAP 'REvalSto x* ;                    * 208C0
 
 * refs (1): 208BB
-sto*(nm,ar)~1:
+~ROTDROPSWAP;2@*(2ar);DROP:
         :: ROTDROPSWAP 2@*(2ar) DROP ;           * 208D4
 
 * name -> x
@@ -1766,7 +1766,8 @@ xPVARS:
           BINT1                                  * 21206  real
 
 pvars(r):
-          :: COERCE DUP xPVARS~1 SETPORTNOTAV pvars(s) ; * 2120B
+          :: COERCE DUP ~BINT33;#>;COLAcase SETPORTNOTAV * 2120B
+            pvars(s) ;                           * 21224
         ;                                        * 2122E
 
 * name ->
@@ -1919,7 +1920,7 @@ ChkNøLib(r):
         BSS     7                                * 214F4
 
 * refs (1): 22638
-xDTAG~1:
+~CK1;STRIPTAGS:
         :: CK1 STRIPTAGS ;                       * 214FB
 
 * refs (2): 20CDC 8FCEB
@@ -1955,7 +1956,7 @@ SlibNum(lb):
           BAKNAME DROP ;                         * 215FC
 
 * refs (3): 852F6 85300 8536E
-sto(_,to)~1~1~1:
+~SWAPDROP;dup;BkpName(bk);TRUE:
         :: SWAPDROP dup;BkpName(bk) TRUE ;       * 2160B
 
 * refs (1): 85337
@@ -2156,7 +2157,7 @@ free(li,r):
         ;                                        * 21B89
 
 * refs (1): 856D7
-free(li,r)~1~2:
+free(li,r)~8:
         :: #1-SWAP DUP RclBkp0(nm)? NOTcase SETNONEXTERR * 21B8E
           SWAP dvarlsBIND pshm1 DUP#0= case ABND * 21BAC
           pshzer BEGIN #1-SWAP 1GETLAM OVER EQUAL ITE * 21BCA

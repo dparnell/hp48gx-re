@@ -496,7 +496,7 @@ ROT#1+:
 #1--:
         CON(5)  (*)+5                            * 637CC  primitive code object
         ASSEMBLE
-        GOSUBL  POP2#~jump_62829                 * 637D1
+        GOSUBL  POP2#~jump_2                     * 637D1
         A=A-C   A                                * 637D7
         GOVLNG  L_36FBB                          * 637D9
         RPL
@@ -516,7 +516,7 @@ DROP#1-:
 #1-+:
         CON(5)  (*)+5                            * 63808  primitive code object
         ASSEMBLE
-        GOSUBL  POP2#~jump_62829                 * 6380D
+        GOSUBL  POP2#~jump_2                     * 6380D
         A=A+C   A                                * 63813
         GOVLNG  L_36FCF                          * 63815
         RPL

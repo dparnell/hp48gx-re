@@ -2464,7 +2464,7 @@ utpn(3r)~1:
 SUB_77EBC:
         GOSUB   SUB_78591                        * 77EBC
         GOSUB   SUB_7804A                        * 77EC0
-        GOSUBL  STAB0~jump_78751                 * 77EC4
+        GOSUBL  STAB0~jump_3                     * 77EC4
         A=R4                                     * 77ECA
         C=0     W                                * 77ECD
         D1=C                                     * 77ED0
@@ -2491,12 +2491,12 @@ L_77F16:
         GOSUBL  EXAB2~jump                       * 77F1C
         GOSUB   SUB_786C3                        * 77F22
         GOSUB   SUB_786E9                        * 77F26
-        GOSUB   RCCD2~jump_7870C                 * 77F2A
-        GOSUB   STAB2~jump_786FD                 * 77F2E
+        GOSUB   RCCD2~jump_3                     * 77F2A
+        GOSUB   STAB2~jump_3                     * 77F2E
         RSTK=C                                   * 77F32
         C=D     W                                * 77F34
         R4=C                                     * 77F37
-        GOSUBL  RCCD0~jump_787ED                 * 77F3A
+        GOSUBL  RCCD0~jump_3                     * 77F3A
         GOSUBL  L_78760                          * 77F40
         B=0     S                                * 77F46
         C=R4                                     * 77F49
@@ -2520,7 +2520,7 @@ L_77F73:
 * refs (3): 77FB5 77FC5 77FE0
 SUB_77F77:
         GOSUB   L_7856F                          * 77F77
-        GOSUB   RCCD2~jump_7870C                 * 77F7B
+        GOSUB   RCCD2~jump_3                     * 77F7B
         GOSUB   L_7858A                          * 77F7F
 L_77F83:
         ?ST=0   0                                * 77F83
@@ -2543,14 +2543,14 @@ L_77FB5:
         GOSUB   SUB_77F77                        * 77FB5
         GOSUB   SUB_7861D                        * 77FB9
         P=      2                                * 77FBD
-        GOSUBL  TST15~jump_789D7                 * 77FBF
+        GOSUBL  TST15~jump_2                     * 77FBF
         GOC     SUB_77F77                        * 77FC5
         GOSUB   SUB_78617                        * 77FC8
         GOSUB   SUB_78676                        * 77FCC
-        GOSUB   XYEX~jump_78438                  * 77FD0
+        GOSUB   XYEX~jump_2                      * 77FD0
         GOSUB   SUB_7867C                        * 77FD4
         P=      2                                * 77FD8
-        GOSUBL  TST15~jump_789D7                 * 77FDA
+        GOSUBL  TST15~jump_2                     * 77FDA
         GOC     SUB_77F77                        * 77FE0
         CD1EX                                    * 77FE3
         C=C+1   A                                * 77FE6

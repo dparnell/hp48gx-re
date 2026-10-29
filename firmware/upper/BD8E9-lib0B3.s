@@ -11,12 +11,12 @@ sysCHOOSE:
 
 * ROMPTR 0B3 061
 * refs (1): BA576
-~BBReDrawBackgr~2~1:
+~BBReDrawBackgr~3:
         GROB    "images/BDC57.png"               * BDC57  98 x 42
 
 * ROMPTR 0B3 062
 * refs (1): BA576
-~BBReDrawBackgr~2~2:
+~BBReDrawBackgr~4:
         GROB    "images/BE0AF.png"               * BE0AF  98 x 51
 
 * ROMPTR 0B3 063
@@ -33,7 +33,7 @@ CHOOSE~1:
 
 * ROMPTR 0B3 065
 * refs (2): BA576 BA576
-CHOOSE~1~1:
+CHOOSE~2:
         :: DUPTYPELIST? IT                       * BE6AE
           :: DUPNULLCOMP? ?SEMI                  * BE6BD
             ROMPTR 0B0 098 ;                     * BE6CC
@@ -76,19 +76,19 @@ LIB0B3.link:
         LENGTH                                   * BE7AC  length, to #BE9B4
         REL(5)  ~Choose                          * BE7B1  000 ~Choose
         REL(5)  ~Choose~1                        * BE7B6  001 
-        REL(5)  ~Choose~1~1                      * BE7BB  002 
-        REL(5)  ~Choose~1~2                      * BE7C0  003 
+        REL(5)  ~Choose~2                        * BE7BB  002 
+        REL(5)  ~Choose~3                        * BE7C0  003 
         REL(5)  ROMP_0B3_004                     * BE7C5  004 
         REL(5)  ~ChooseMenu0                     * BE7CA  005 ~ChooseMenu0
         REL(5)  ~ChooseMenu1                     * BE7CF  006 ~ChooseMenu1
         REL(5)  ~ChooseMenu2                     * BE7D4  007 ~ChooseMenu2
-        REL(5)  ~Choose~2                        * BE7D9  008 
-        REL(5)  ~Choose~2~1                      * BE7DE  009 
-        REL(5)  ~Choose~2~2                      * BE7E3  00A 
-        REL(5)  ~Choose~2~3                      * BE7E8  00B 
-        REL(5)  ~Choose~2~4                      * BE7ED  00C 
-        REL(5)  ~Choose~2~5                      * BE7F2  00D 
-        REL(5)  ~Choose~2~6                      * BE7F7  00E 
+        REL(5)  ~Choose~4                        * BE7D9  008 
+        REL(5)  ~Choose~5                        * BE7DE  009 
+        REL(5)  ~Choose~6                        * BE7E3  00A 
+        REL(5)  ~Choose~7                        * BE7E8  00B 
+        REL(5)  ~Choose~8                        * BE7ED  00C 
+        REL(5)  ~Choose~9                        * BE7F2  00D 
+        REL(5)  ~Choose~10                       * BE7F7  00E 
         REL(5)  ROMP_0B3_00F                     * BE7FC  00F 
         REL(5)  ROMP_0B3_010                     * BE801  010 
         REL(5)  ROMP_0B3_011                     * BE806  011 
@@ -100,20 +100,20 @@ LIB0B3.link:
         REL(5)  ~BBMoveTo~2                      * BE824  017 
         REL(5)  ~BBMoveTo~3                      * BE829  018 
         REL(5)  ~BBRecalOff&Disp                 * BE82E  019 ~BBRecalOff&Disp
-        REL(5)  ~Choose~2~1~1                    * BE833  01A 
-        REL(5)  ~Choose~2~1~1~1                  * BE838  01B 
-        REL(5)  ~Choose~2~1~2                    * BE83D  01C 
-        REL(5)  ~Choose~2~1~2~1                  * BE842  01D 
-        REL(5)  ~Choose~2~2~1                    * BE847  01E 
-        REL(5)  ~Choose~2~2~2                    * BE84C  01F 
-        REL(5)  ~Choose~2~3~1                    * BE851  020 
-        REL(5)  ~Choose~2~3~2                    * BE856  021 
+        REL(5)  ~Choose~11                       * BE833  01A 
+        REL(5)  ~Choose~12                       * BE838  01B 
+        REL(5)  ~Choose~13                       * BE83D  01C 
+        REL(5)  ~Choose~14                       * BE842  01D 
+        REL(5)  ~Choose~15                       * BE847  01E 
+        REL(5)  ~Choose~16                       * BE84C  01F 
+        REL(5)  ~Choose~17                       * BE851  020 
+        REL(5)  ~Choose~18                       * BE856  021 
         REL(5)  ~BBRunEntryProc                  * BE85B  022 ~BBRunEntryProc
         REL(5)  ~BBReReadPageSize                * BE860  023 ~BBReReadPageSize
         REL(5)  ~BBReReadHeight                  * BE865  024 ~BBReReadHeight
         REL(5)  ~BBReReadCoords                  * BE86A  025 ~BBReReadCoords
         REL(5)  ~BBReReadWidth                   * BE86F  026 ~BBReReadWidth
-        REL(5)  ~Choose~3                        * BE874  027 
+        REL(5)  ~Choose~19                       * BE874  027 
         REL(5)  ~BBRunENTERAction                * BE879  028 ~BBRunENTERAction
         REL(5)  ~BBRunCanclAction                * BE87E  029 ~BBRunCanclAction
         REL(5)  DoCKeyCheck                      * BE883  02A DoCKeyCheck
@@ -124,15 +124,15 @@ LIB0B3.link:
         REL(5)  ~BBReDrawBackgr                  * BE89C  02F ~BBReDrawBackgr
         REL(5)  LEDispPrompt                     * BE8A1  030 LEDispPrompt
         REL(5)  LEDispPrompt~1                   * BE8A6  031 
-        REL(5)  LEDispPrompt~1~1                 * BE8AB  032 
-        REL(5)  LEDispPrompt~1~2                 * BE8B0  033 
+        REL(5)  LEDispPrompt~2                   * BE8AB  032 
+        REL(5)  LEDispPrompt~3                   * BE8B0  033 
         REL(5)  ROMP_0B3_034                     * BE8B5  034 
         REL(5)  LEDispList                       * BE8BA  035 LEDispList
         REL(5)  LEDispItem                       * BE8BF  036 LEDispItem
         REL(5)  ~BBGetNGrob                      * BE8C4  037 ~BBGetNGrob
         REL(5)  ~BBGetNStr                       * BE8C9  038 ~BBGetNStr
-        REL(5)  ~Choose~4                        * BE8CE  039 
-        REL(5)  ~Choose~5                        * BE8D3  03A 
+        REL(5)  ~Choose~20                       * BE8CE  039 
+        REL(5)  ~Choose~21                       * BE8D3  03A 
         REL(5)  ~BBRereadChkEnbl                 * BE8D8  03B ~BBRereadChkEnbl
         REL(5)  ~BBRereadFullScr                 * BE8DD  03C ~BBRereadFullScr
         REL(5)  ~BReReadMenus                    * BE8E2  03D ~BReReadMenus
@@ -146,20 +146,20 @@ LIB0B3.link:
         REL(5)  ROMP_0B3_045                     * BE90A  045 
         REL(5)  ROMP_0B3_046                     * BE90F  046 
         REL(5)  ~BBReReadWidth~1                 * BE914  047 
-        REL(5)  ROMP_0B3_048                     * BE919  048 
-        REL(5)  LEDispPrompt~2                   * BE91E  049 
-        REL(5)  ~Choose~6                        * BE923  04A 
+        REL(5)  ~12GETLAM;11GETLAM;#>            * BE919  048 
+        REL(5)  LEDispPrompt~4                   * BE91E  049 
+        REL(5)  ~Choose~22                       * BE923  04A 
         REL(5)  ~BBIsChecked?                    * BE928  04B ~BBIsChecked?
-        REL(5)  LEDispPrompt~3                   * BE92D  04C 
+        REL(5)  LEDispPrompt~5                   * BE92D  04C 
         REL(5)  ROMP_0B3_04E                     * BE932  04D 
         REL(5)  ROMP_0B3_04E                     * BE937  04E 
         REL(5)  ROMP_0B3_04F                     * BE93C  04F 
-        REL(5)  ROMP_0B3_050                     * BE941  050 
+        REL(5)  ~18GETLAM;6GETLAM;#>             * BE941  050 
         REL(5)  ROMP_0B3_051                     * BE946  051 
         REL(5)  ~BBUpArrow                       * BE94B  052 ~BBUpArrow
         REL(5)  ~BBDownArrow                     * BE950  053 ~BBDownArrow
         REL(5)  ~BBSpace                         * BE955  054 ~BBSpace
-        REL(5)  ROMP_0B3_055                     * BE95A  055 
+        REL(5)  ~22Lget;EVAL                     * BE95A  055 
         REL(5)  ROMP_0B3_056                     * BE95F  056 
         REL(5)  ROMP_0B3_057                     * BE964  057 
         REL(5)  ROMP_0B3_058                     * BE969  058 
@@ -171,11 +171,11 @@ LIB0B3.link:
         REL(5)  ROMP_0B3_05E                     * BE987  05E 
         REL(5)  ~$>grobOrGROB                    * BE98C  05F ~$>grobOrGROB
         REL(5)  sysCHOOSE                        * BE991  060 sysCHOOSE
-        REL(5)  ~BBReDrawBackgr~2~1              * BE996  061 
-        REL(5)  ~BBReDrawBackgr~2~2              * BE99B  062 
+        REL(5)  ~BBReDrawBackgr~3                * BE996  061 
+        REL(5)  ~BBReDrawBackgr~4                * BE99B  062 
         REL(5)  CHOOSE~1                         * BE9A0  063 
-        REL(5)  CHOOSE~1~1                       * BE9A5  064 
-        REL(5)  CHOOSE~1~1                       * BE9AA  065 
+        REL(5)  CHOOSE~2                         * BE9A5  064 
+        REL(5)  CHOOSE~2                         * BE9AA  065 
         REL(5)  ~ChooseSimple                    * BE9AF  066 ~ChooseSimple
         ENDLENGTH                                * BE9B4
         FILLTO  #C0000                           * BE9B4  5708 zero nibbles: the next entry stays at #C0000

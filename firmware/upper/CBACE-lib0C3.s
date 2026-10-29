@@ -105,14 +105,14 @@ ROW+~1:
 
 * ROMPTR 0C3 00B
 * refs (1): CBACE
-ROW+~1~1:
+ROW+~2:
         :: 3PICK #<>case doerr501                * CC097
           2OVER #1+ #> case SETSIZEERR           * CC0AB
           ROT#+SWAP TWO{}N 2SWAP OBJ_36F74 2SWAP 4ROLLSWAP MATREDIM ROT * CC0C4
 
 * ROMPTR 0C3 00C
 * refs (1): CBACE
-COL+~1~1~1:
+COL+~3:
           :: RESOROMP ROMPTR 0C3 01A 4UNROLL RESOROMP ROMPTR 0C3 01B 4UNROLL * CC0EC
             DUP MDIMS DROP BINT1 {}N 3PICK OBJ_379F0 MAKEARRY SWAP * CC11B
             #1+_ONE_DO ISTOP@ INDEX@#- FALSE 7PICK EVAL 4PICK 4ROLL 7PICK * CC148
@@ -131,7 +131,7 @@ COL+~1:
 
 * ROMPTR 0C3 00E
 * refs (1): CBACE
-COL+~1~1:
+COL+~2:
         :: SWAP4PICK #<>case doerr501            * CC254
           4PICK 3PICK #1+ #> case SETSIZEERR     * CC268
           #+SWAP TWO{}N 2SWAP OBJ_36F74 2SWAP 4ROLL CKREF @trn!(ar) SWAP * CC286
@@ -480,10 +480,10 @@ LIB0C3.link:
         REL(5)  ROMP_0C3_008                     * CCA3B  008 
         REL(5)  COL-~1                           * CCA40  009 
         REL(5)  ROW+~1                           * CCA45  00A 
-        REL(5)  ROW+~1~1                         * CCA4A  00B 
-        REL(5)  COL+~1~1~1                       * CCA4F  00C 
+        REL(5)  ROW+~2                           * CCA4A  00B 
+        REL(5)  COL+~3                           * CCA4F  00C 
         REL(5)  COL+~1                           * CCA54  00D 
-        REL(5)  COL+~1~1                         * CCA59  00E 
+        REL(5)  COL+~2                           * CCA59  00E 
         REL(5)  ROMP_0C3_00F                     * CCA5E  00F 
         REL(5)  ROMP_0C3_010                     * CCA63  010 
         REL(5)  ROMP_0C3_011                     * CCA68  011 

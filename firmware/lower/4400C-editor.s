@@ -22,25 +22,25 @@ OBJ_4409D:
         :: TakeOver 3GETLAM UNCOERCE CKNNOLASTWD ; * 4409D
 
 * refs (5): 43F7B 43F94 43FAD 43FCB 43FE4
-OBJ_440BB:
+~AtUserStack;SetDA13NoCh:
         :: AtUserStack SetDA13NoCh ;             * 440BB
 
 * refs (8): 43EF9 43F1C 43F3F 43F62 43FFD 4404D ...
 OBJ_440CF:
-        :: AtUserStack DEPTH BINT0 #=casedrop OBJ_44259 * 440CF
+        :: AtUserStack DEPTH BINT0 #=casedrop ~TRUE;1PUTLAM * 440CF
           DUP 3GETLAM #<ITE 3PUTLAM DROP OBJ_44110 ; * 440ED
 
 * refs (4): 43C07 43C75 43C9D 44106
 OBJ_44110:
-        :: OBJ_4417E 3GETLAM #- BINT3 #MIN #1+ BINT5 3GETLAM BINT4 #MIN #- * 44110
-          2GETLAM ROT #MIN #MAX 2PUTLAM ;        * 4414C
+        :: ~DEPTH;4GETLAM;#- 3GETLAM #- BINT3 #MIN #1+ BINT5 3GETLAM BINT4 * 44110
+          #MIN #- 2GETLAM ROT #MIN #MAX 2PUTLAM ; * 44142
 
 * refs (4): 43806 43A9A 43B67 43E4F
-OBJ_4416A:
+~4GETLAM;#+:
         :: 4GETLAM #+ ;                          * 4416A
 
 * refs (5): 43A04 43A40 43BA8 43C93 44115
-OBJ_4417E:
+~DEPTH;4GETLAM;#-:
         :: DEPTH 4GETLAM #- ;                    * 4417E
 
 * refs (4): 39C43 4380B 43A9F 43B6C
@@ -75,7 +75,7 @@ _:__44243:
           $ ":" $>BIGGROB ;                      * 44243
 
 * refs (3): 43CDE 43CFC 440E8
-OBJ_44259:
+~TRUE;1PUTLAM:
         :: TRUE 1PUTLAM ;                        * 44259
 
 * refs (3): 40B79 4261F 426CE
@@ -170,7 +170,7 @@ InitEdModes~1:
 * $ ->
 * refs (10): 40B60 42F71 43250 8F0F5 D5F6A D62B4 ...
 EditString:
-        :: EditString~1 OBJ_4434F ;              * 443CB
+        :: ~ChkNoChr0!(st);Echo$NoChr00 OBJ_4434F ; * 443CB
 
 * refs (6): 3E68E 3E6A2 3F288 4278C 44473 4448C
 NextChrInComLine:
@@ -478,7 +478,7 @@ SUB_44772:
         RTN                                      * 44788
 
 * refs (1): 43214
-InputLAttn~2:
+InputLAttn~1:
         CON(5)  (*)+5                            * 4478A  primitive code object
         CD0EX                                    * 4478F
         RSTK=C                                   * 44792
@@ -824,41 +824,41 @@ OBJ_4502E:
 * refs (1): 4C643
 drax~1:
         :: 2DUP 5PICK DUPTYPELIST? IT CARCOMP    * 451E1
-          C%>% DUP 8UNROLL OVER 9rolld drax~1~5 DUP %0>= OVER 6PICK #1- * 451FF
+          C%>% DUP 8UNROLL OVER 9rolld drax~6 DUP %0>= OVER 6PICK #1- * 451FF
           UNCOERCE %<= AND IT                    * 45236
           :: SWAP 4UNROLLDUP COERCE BINT0 OVER5PICK #1- OVER DRAWLINE#3 * 4524A
-            6PICK drax~1~2 DROP DUPTYPEREAL? ITE * 45277
+            6PICK drax~3 DROP DUPTYPEREAL? ITE   * 45277
             :: DUP%0= case2drop 4ROLLSWAP        * 45290
               6ROLL 4UNROLL DUP %>%% 10GETLAM %%* BINT10 PICK GETXMIN %- ROT * 452A4
               %MOD GETXMIN %+ %>%% 10GETLAM %%* 6GETLAM %%+ GETXMAX %>%% * 452DB
-              10GETLAM %%* 6GETLAM %%+ SWAP BEGIN 2DUP %%>= drax~1~1 WHILE * 4530D
-              :: 8PICK OVER %%>% # 2A01 OBJ_2B551 COERCE 6PICK drax~1~3 * 4533F
-                3PICK %%+ ;                      * 45371
+              10GETLAM %%* 6GETLAM %%+ SWAP BEGIN 2DUP %%>= drax~2 WHILE * 4530D
+              :: 8PICK OVER %%>% # 2A01 OBJ_2B551 COERCE 6PICK drax~4 3PICK * 4533F
+                %%+ ;                            * 45376
               REPEAT 4DROP ;                     * 45380
             :: DUP#0= case2drop 4ROLLSWAP        * 4538F
               4PICK 2DUP #> case                 * 453A3
               :: 3DROP 4ROLLSWAP ;               * 453B7
               7PICK DUP %0< DUPUNROT IT %CHS     * 453CB
               COERCE 4PICK #/ DROP 4PICK SWAP ROT ITE #- SWAPDROP * 453E9
-              DO 5PICK INDEX@ 4PICK drax~1~3 DUP +LOOP 2DROP 4ROLLSWAP ; * 4541B
+              DO 5PICK INDEX@ 4PICK drax~4 DUP +LOOP 2DROP 4ROLLSWAP ; * 4541B
           ;                                      * 4544D
           SWAPDUP %0>= OVER5PICK #1- UNCOERCE %<= AND NOTcase 7DROP * 45452
-          SWAP 4UNROLL COERCEDUP ZEROOVER 6PICK #1- DRAWLINE#3 5ROLL * 4547F
-          drax~1~2 SWAPDROP DUPTYPEREAL? case    * 454A7
+          SWAP 4UNROLL COERCEDUP ZEROOVER 6PICK #1- DRAWLINE#3 5ROLL drax~3 * 4547F
+          SWAPDROP DUPTYPEREAL? case             * 454AC
           :: DUP%0= case 7DROP                   * 454BB
             DUP %>%% 9GETLAM %%* 7PICK GETYMIN %- ROT %MOD GETYMIN %+ %>%% * 454CF
-            9GETLAM %%* 5GETLAM SWAP %%- BEGIN DUP %%0>= drax~1~1 WHILE * 4550B
-            :: 4PICK 4PICK 3PICK %%>% # 2A01 OBJ_2B551 COERCE drax~1~4 DROP * 4553D
+            9GETLAM %%* 5GETLAM SWAP %%- BEGIN DUP %%0>= drax~2 WHILE * 4550B
+            :: 4PICK 4PICK 3PICK %%>% # 2A01 OBJ_2B551 COERCE drax~5 DROP * 4553D
               OVER %%- ;                         * 45574
             REPEAT BINT8 NDROP ;                 * 45583
           DUP#0=case 7DROP                       * 45597
           DUP 5PICK #> case 7DROP                * 455A1
           5UNROLL SWAP 4ROLL DUP %0< DUPUNROT IT %CHS * 455BA
           COERCE 6PICK #/ DROP 6PICK SWAP ROT ITE #- SWAPDROP * 455E2
-          4ROLL SWAP DO OVERINDEX@ drax~1~4 3PICK +LOOP 5DROP ; * 45614
+          4ROLL SWAP DO OVERINDEX@ drax~5 3PICK +LOOP 5DROP ; * 45614
 
 * refs (2): 45335 45533
-drax~1~1:
+drax~2:
         :: NoAttn?Semi ATTNFLGCLR FLUSHKEYS DROPFALSE ; * 45641
         BSS     23                               * 4565F
 
@@ -878,12 +878,12 @@ OBJ_456C2:
           :: CHECKMENU DoBadKey ; }              * 456CC
 
 * refs (6): 45BC0 4EC26 4EEA6 735D0 737D8 7381E
-OBJ_456E5:
+~BINT23;GETLAM:
         :: BINT23 GETLAM ;                       * 456E5
 
 * refs (1): 3E7AB
 {GRAPH\SUä}~1:
-        :: CHECKMENU OBJ_4579E CROSSMARKOFF OBJ_517B2 ORDERXY# #1+ * 456F9
+        :: CHECKMENU OBJ_4579E CROSSMARKOFF ~8GETLAM;7GETLAM ORDERXY# #1+ * 456F9
           SWAP#1+SWAP GBUFF 5UNROLL SUBGROB CK0NOLASTWD Π'SAVEDDEPTH #1+ ' * 4571C
           Π'SAVEDDEPTH STO CROSSMARKON ;         * 45744
 
@@ -923,7 +923,7 @@ OBJ_457BC:
 OBJ_4588E:
           :: OBJ_46955 ?SKIP OBJ_46C7A           * 4588E
             DUPTYPECMP? NOTcasedrop OBJ_46C7A    * 458A2
-            DUP OBJ_468F1 C%>% OBJ_46C43 ;       * 458B1
+            DUP ~BINT25;PUTLAM C%>% OBJ_46C43 ;  * 458B1
         ;                                        * 458CA
 
 * refs (1): 57162
@@ -967,7 +967,7 @@ OBJ_459E3:
 
 * refs (3): 44FF7 4500B 45CB3
 OBJ_459E8:
-          :: ERRSET ROMPTR 0F1 03F ERRTRAP COLA OBJ_472B8 * 459E8
+          :: ERRSET ROMPTR 0F1 03F ERRTRAP COLA ~'R;EVAL;ERRJMP * 459E8
           ;                                      * 45A0C
           OBJ_45990 ;                            * 45A11
 
@@ -1021,7 +1021,8 @@ OBJ_45B8D:
 
 * refs (6): C01AC C02A0 C0394 C0488 C057C C0670
 OBJ_45BB6:
-        :: DROP OBJ_456E5 BINT4 NTHCOMPDROP BINT26 PUTLAM OBJ_47268 TRUE ; * 45BB6
+        :: DROP ~BINT23;GETLAM BINT4 NTHCOMPDROP BINT26 PUTLAM OBJ_47268 * 45BB6
+          TRUE ;                                 * 45BDE
 
 * refs (3): 45816 4592C 46258
 OBJ_45BE8:
@@ -1073,7 +1074,7 @@ OBJ_45CAE:
         :: OBJ_459E8 OBJ_45C8A ;                 * 45CAE
 
 * refs (1): 462D0
-OBJ_45CC2:
+~BINT3;#<:
         :: BINT3 #< ;                            * 45CC2
         FILLTO  #45D1F                           * 45CD6  73 zero nibbles: the next entry stays at #45D1F
 

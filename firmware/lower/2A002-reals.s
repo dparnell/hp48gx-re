@@ -130,7 +130,7 @@ L_2A15E:
         RTN                                      * 2A17F
 
 * refs (2): 2A1E9 2A223
-GETPTR~jump_2A181:
+GETPTR~jump_5:
         GOVLNG  GETPTR                           * 2A181
 
 * ( A -> %push ) Push A as %, <REF>GETPTR
@@ -168,7 +168,7 @@ L_2A1DC:
         D0=D0+  5                                * 2A1DF
         C=R0                                     * 2A1E2
         DAT0=C  W                                * 2A1E5
-        GOSUB   GETPTR~jump_2A181                * 2A1E9
+        GOSUB   GETPTR~jump_5                    * 2A1E9
         D=D-1   A                                * 2A1ED
 L_2A1EF:
         D1=D1-  5                                * 2A1EF
@@ -192,11 +192,11 @@ L_2A20C:
         P=      0                                * 2A218
         LC(5)   %0_2A2B4                         * 2A21A
         A=A+C   A                                * 2A221
-        GOSUB   GETPTR~jump_2A181                * 2A223
+        GOSUB   GETPTR~jump_5                    * 2A223
         D=D-1   A                                * 2A227
         GONC    L_2A1EF                          * 2A229
         D=D+1   A                                * 2A22C
-        GOSUB   SAVPTR~jump_29FF1                * 2A22E
+        GOSUB   SAVPTR~jump_11                   * 2A22E
         GONC    L_2A1B9                          * 2A232
 L_2A235:
         GOSUB   SUB_2A24B                        * 2A235

@@ -32,7 +32,7 @@ MenuMTH~1:
 
 * ROMPTR 0A9 004
 * refs (1): C31C5
-MenuMTH~1~1~1:
+MenuMTH~3:
         CON(5)  DOARRY                           * C3207  array 9
         LENGTH                                   * C320C  length, to #C3256
         CON(5)  DOROMP                           * C3211  element type
@@ -182,7 +182,7 @@ ROMP_0A9_00A:
 
 * ROMPTR 0A9 00B
 * refs (1): C31C5
-MenuMTH~1~1~2:
+MenuMTH~4:
         CON(5)  DOARRY                           * C3496  array 6
         LENGTH                                   * C349B  length, to #C34D3
         CON(5)  DOROMP                           * C34A0  element type
@@ -198,7 +198,7 @@ MenuMTH~1~1~2:
 
 * ROMPTR 0A9 00C
 * refs (1): C31C5
-MenuMTH~1~1~3:
+MenuMTH~5:
         CON(5)  DOARRY                           * C34D3  array 8
         LENGTH                                   * C34D8  length, to #C351C
         CON(5)  DOROMP                           * C34DD  element type
@@ -216,7 +216,7 @@ MenuMTH~1~1~3:
 
 * ROMPTR 0A9 00D
 * refs (1): C31C5
-MenuMTH~1~1~4:
+MenuMTH~6:
         CON(5)  DOARRY                           * C351C  array 11
         LENGTH                                   * C3521  length, to #C3577
         CON(5)  DOROMP                           * C3526  element type
@@ -237,7 +237,7 @@ MenuMTH~1~1~4:
 
 * ROMPTR 0A9 00E
 * refs (1): C31C5
-MenuMTH~1~1~5:
+MenuMTH~7:
         CON(5)  DOARRY                           * C3577  array 18
         LENGTH                                   * C357C  length, to #C35FC
         CON(5)  DOROMP                           * C3581  element type
@@ -335,7 +335,7 @@ ROMP_0A9_012:
 
 * ROMPTR 0A9 013
 * refs (1): C31C5
-MenuMTH~1~1~6:
+MenuMTH~8:
         CON(5)  DOARRY                           * C3714  array 2
         LENGTH                                   * C3719  length, to #C3739
         CON(5)  DOROMP                           * C371E  element type
@@ -347,7 +347,7 @@ MenuMTH~1~1~6:
 
 * ROMPTR 0A9 014
 * refs (1): C31C5
-MenuMTH~1~1~7:
+MenuMTH~9:
         CON(5)  DOARRY                           * C3739  array 9
         LENGTH                                   * C373E  length, to #C3788
         CON(5)  DOROMP                           * C3743  element type
@@ -366,7 +366,7 @@ MenuMTH~1~1~7:
 
 * ROMPTR 0A9 015
 * refs (1): C31C5
-MenuMTH~1~1~8:
+MenuMTH~10:
         ROMPTR 0A7 003                           * C3788
 
 * ROMPTR 0A9 016
@@ -458,7 +458,7 @@ ROMP_0A9_01B:
 
 * ROMPTR 0A9 01C
 * refs (1): C31C5
-ROMP_0A9_01C:
+~EditMenu:
         :: EditMenu ;                            * C38DB
 
 * ROMPTR 0A9 01D
@@ -500,7 +500,7 @@ ROMP_0A9_01F:
 
 * ROMPTR 0A9 020
 * refs (1): C31C5
-MenuPr~1~1~1:
+MenuPr~3:
         CON(5)  DOARRY                           * C396F  array 19
         LENGTH                                   * C3974  length, to #C39FA
         CON(5)  DOROMP                           * C3979  element type
@@ -529,7 +529,7 @@ MenuPr~1~1~1:
 
 * ROMPTR 0A9 021
 * refs (1): C31C5
-MenuPr~1~1~2:
+MenuPr~4:
         CON(5)  DOARRY                           * C39FA  array 14
         LENGTH                                   * C39FF  length, to #C3A67
         CON(5)  DOROMP                           * C3A04  element type
@@ -613,7 +613,7 @@ ROMP_0A9_024:
 
 * ROMPTR 0A9 025
 * refs (1): C31C5
-MenuPr~1~1~3:
+MenuPr~5:
         CON(5)  DOARRY                           * C3B66  array 10
         LENGTH                                   * C3B6B  length, to #C3BBB
         CON(5)  DOROMP                           * C3B70  element type
@@ -633,7 +633,7 @@ MenuPr~1~1~3:
 
 * ROMPTR 0A9 026
 * refs (1): C31C5
-MenuPr~1~1~4:
+MenuPr~6:
         CON(5)  DOARRY                           * C3BBB  array 12
         LENGTH                                   * C3BC0  length, to #C3C1C
         CON(5)  DOROMP                           * C3BC5  element type
@@ -655,7 +655,7 @@ MenuPr~1~1~4:
 
 * ROMPTR 0A9 027
 * refs (1): C31C5
-MenuPr~1~1~5:
+MenuPr~7:
         CON(5)  DOARRY                           * C3C1C  array 7
         LENGTH                                   * C3C21  length, to #C3C5F
         CON(5)  DOROMP                           * C3C26  element type
@@ -672,7 +672,7 @@ MenuPr~1~1~5:
 
 * ROMPTR 0A9 028
 * refs (1): C31C5
-MenuPr~1~1~6:
+MenuPr~8:
         CON(5)  DOARRY                           * C3C5F  array 7
         LENGTH                                   * C3C64  length, to #C3CA2
         CON(5)  DOROMP                           * C3C69  element type
@@ -689,7 +689,7 @@ MenuPr~1~1~6:
 
 * ROMPTR 0A9 029
 * refs (1): C31C5
-MenuPr~1~1~7:
+MenuPr~9:
         CON(5)  DOARRY                           * C3CA2  array 7
         LENGTH                                   * C3CA7  length, to #C3CE5
         CON(5)  DOROMP                           * C3CAC  element type
@@ -1706,44 +1706,44 @@ LIB0A9.link:
         REL(5)  ROMP_0A9_001                     * C4BD6  001 
         REL(5)  ROMP_0A9_002                     * C4BDB  002 
         REL(5)  MenuMTH~1                        * C4BE0  003 
-        REL(5)  MenuMTH~1~1~1                    * C4BE5  004 
+        REL(5)  MenuMTH~3                        * C4BE5  004 
         REL(5)  ROMP_0A9_005                     * C4BEA  005 
         REL(5)  ROMP_0A9_006                     * C4BEF  006 
         REL(5)  ROMP_0A9_007                     * C4BF4  007 
         REL(5)  ROMP_0A9_008                     * C4BF9  008 
         REL(5)  ROMP_0A9_009                     * C4BFE  009 
         REL(5)  ROMP_0A9_00A                     * C4C03  00A 
-        REL(5)  MenuMTH~1~1~2                    * C4C08  00B 
-        REL(5)  MenuMTH~1~1~3                    * C4C0D  00C 
-        REL(5)  MenuMTH~1~1~4                    * C4C12  00D 
-        REL(5)  MenuMTH~1~1~5                    * C4C17  00E 
+        REL(5)  MenuMTH~4                        * C4C08  00B 
+        REL(5)  MenuMTH~5                        * C4C0D  00C 
+        REL(5)  MenuMTH~6                        * C4C12  00D 
+        REL(5)  MenuMTH~7                        * C4C17  00E 
         REL(5)  ROMP_0A9_00F                     * C4C1C  00F 
         REL(5)  ROMP_0A9_010                     * C4C21  010 
         REL(5)  ROMP_0A9_011                     * C4C26  011 
         REL(5)  ROMP_0A9_012                     * C4C2B  012 
-        REL(5)  MenuMTH~1~1~6                    * C4C30  013 
-        REL(5)  MenuMTH~1~1~7                    * C4C35  014 
-        REL(5)  MenuMTH~1~1~8                    * C4C3A  015 
+        REL(5)  MenuMTH~8                        * C4C30  013 
+        REL(5)  MenuMTH~9                        * C4C35  014 
+        REL(5)  MenuMTH~10                       * C4C3A  015 
         REL(5)  MenuPr~1                         * C4C3F  016 
         REL(5)  ROMP_0A9_017                     * C4C44  017 
         REL(5)  ROMP_0A9_018                     * C4C49  018 
         REL(5)  ROMP_0A9_019                     * C4C4E  019 
         REL(5)  ROMP_0A9_01A                     * C4C53  01A 
         REL(5)  ROMP_0A9_01B                     * C4C58  01B 
-        REL(5)  ROMP_0A9_01C                     * C4C5D  01C 
+        REL(5)  ~EditMenu                        * C4C5D  01C 
         REL(5)  ROMP_0A9_01D                     * C4C62  01D 
         REL(5)  ROMP_0A9_01E                     * C4C67  01E 
         REL(5)  ROMP_0A9_01F                     * C4C6C  01F 
-        REL(5)  MenuPr~1~1~1                     * C4C71  020 
-        REL(5)  MenuPr~1~1~2                     * C4C76  021 
+        REL(5)  MenuPr~3                         * C4C71  020 
+        REL(5)  MenuPr~4                         * C4C76  021 
         REL(5)  ROMP_0A9_022                     * C4C7B  022 
         REL(5)  ROMP_0A9_023                     * C4C80  023 
         REL(5)  ROMP_0A9_024                     * C4C85  024 
-        REL(5)  MenuPr~1~1~3                     * C4C8A  025 
-        REL(5)  MenuPr~1~1~4                     * C4C8F  026 
-        REL(5)  MenuPr~1~1~5                     * C4C94  027 
-        REL(5)  MenuPr~1~1~6                     * C4C99  028 
-        REL(5)  MenuPr~1~1~7                     * C4C9E  029 
+        REL(5)  MenuPr~5                         * C4C8A  025 
+        REL(5)  MenuPr~6                         * C4C8F  026 
+        REL(5)  MenuPr~7                         * C4C94  027 
+        REL(5)  MenuPr~8                         * C4C99  028 
+        REL(5)  MenuPr~9                         * C4C9E  029 
         REL(5)  ROMP_0A9_02A                     * C4CA3  02A 
         REL(5)  ROMP_0A9_02B                     * C4CA8  02B 
         REL(5)  ROMP_0A9_02C                     * C4CAD  02C 

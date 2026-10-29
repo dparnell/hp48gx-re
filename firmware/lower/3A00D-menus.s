@@ -13,10 +13,10 @@ DispEditLine:
 * refs (4): 3A026 40B6F D85F3 D8700
 OBJ_3A030:
         :: NoEditLine? ?SEMI                     * 3A030
-          EDITLINE$ BINT1 OBJ_3A0E4 OBJ_39FE3 OBJ_39FE3 EDITPARTS BINT4 #MIN * 3A03F
-          #- DO dup2;spos(st,RC) DUP#0=IT        * 3A067
+          EDITLINE$ BINT1 OBJ_3A0E4 ~BINT5 ~BINT5 EDITPARTS BINT4 #MIN #- DO * 3A03F
+          dup2;spos(st,RC) DUP#0=IT              * 3A071
           :: DROP OVERLEN$ #1+ ; 3PICK ROT FIRSTC@ #+ 3PICKOVER 2DUP#< ITE * 3A07B
-          OBJ_3A125 OBJ_3A139                    * 3A0B7
+          ~4DROP;_chr(31)_ OBJ_3A139             * 3A0B7
           INDEX@ BigDisp(st,s) #1+ LOOP 2DROP OBJ_42831 ; * 3A0C1
 
 * refs (1): 3A049
@@ -25,7 +25,7 @@ OBJ_3A0E4:
           OVER CHR_Newline ROT POS$ #1+ LOOP ;   * 3A102
 
 * refs (1): 3A0B7
-OBJ_3A125:
+~4DROP;_chr(31)_:
         :: 4DROP _chr(31)_ ;                     * 3A125
 
 * refs (1): 3A0BC
@@ -607,7 +607,7 @@ K_191:
 
 * ROMPTR 0A6 01D
 * refs (1): 3AA8F
-ROMP_0A6_01D:
+~TakeOver;InvCursor;SetDA12NoCh:
         :: TakeOver InvCursor SetDA12NoCh ;      * 3AB71
 
 * ROMPTR 0A6 01E
@@ -682,7 +682,7 @@ K_____3AC14:
 
 * ROMPTR 0A6 02C
 * refs (1): 3AA8F
-ROMP_0A6_02C:
+~Modifier;TurnOff;SetDA123NoCh:
         :: Modifier TurnOff SetDA123NoCh ;       * 3AC1B
 
 * ROMPTR 0A6 02D
@@ -761,7 +761,7 @@ LIB0A6.link:
         REL(5)  K_156                            * 3AD44  01A 
         REL(5)  K_161                            * 3AD49  01B 
         REL(5)  K_191                            * 3AD4E  01C 
-        REL(5)  ROMP_0A6_01D                     * 3AD53  01D 
+        REL(5)  ~TakeOver;InvCursor;SetDA12NoCh  * 3AD53  01D 
         REL(5)  ROMP_0A6_01E                     * 3AD58  01E 
         REL(5)  ROMP_0A6_01F                     * 3AD5D  01F 
         REL(5)  ROMP_0A6_020                     * 3AD62  020 
@@ -776,7 +776,7 @@ LIB0A6.link:
         REL(5)  K__>_                            * 3AD8F  029 
         REL(5)  K_138                            * 3AD94  02A 
         REL(5)  K_____3AC14                      * 3AD99  02B 
-        REL(5)  ROMP_0A6_02C                     * 3AD9E  02C 
+        REL(5)  ~Modifier;TurnOff;SetDA123NoCh   * 3AD9E  02C 
         REL(5)  K_141                            * 3ADA3  02D 
         REL(5)  ROMP_0A6_02E                     * 3ADA8  02E 
         REL(5)  K_128                            * 3ADAD  02F 
@@ -812,7 +812,7 @@ OBJ_3AE0C:
 * refs (1): 43F5D
 OBJ_3AE71:
         :: CK1NOLASTWD CK&DISPATCH1              * 3AE71
-          BINT1 OBJ_42DFF                        * 3AE80  real
+          BINT1 ~Roll&Do:;EditLevel1             * 3AE80  real
           BINT6 Visit(nm)                        * 3AE8A  name
           BINT7 Visit(nm)                        * 3AE94  local
         ;                                        * 3AE9E
@@ -998,7 +998,7 @@ K__/_:
 
 * ROMPTR 0A4 022
 * refs (1): 3AEAA
-ROMP_0A4_022:
+~Modifier;àLShiftOnly;SetDA123NoCh:
         :: Modifier àLShiftOnly SetDA123NoCh ;   * 3AFE6
 
 * ROMPTR 0A4 023
@@ -1023,7 +1023,7 @@ K__*_:
 
 * ROMPTR 0A4 027
 * refs (1): 3AEAA
-ROMP_0A4_027:
+~Modifier;àRShiftOnly;SetDA123NoCh:
         :: Modifier àRShiftOnly SetDA123NoCh ;   * 3B01B
 
 * ROMPTR 0A4 028
@@ -1043,7 +1043,7 @@ K__3_:
 
 * ROMPTR 0A4 02B
 * refs (1): 3AEAA
-K__~__3B049:
+K__~__2:
         CHR "-"                                  * 3B049
 
 * ROMPTR 0A4 02C
@@ -1132,16 +1132,16 @@ LIB0A4.link:
         REL(5)  K__8_                            * 3B184  01F 
         REL(5)  K__9_                            * 3B189  020 
         REL(5)  K__/_                            * 3B18E  021 
-        REL(5)  ROMP_0A4_022                     * 3B193  022 
+        REL(5)  ~Modifier;àLShiftOnly;SetDA123NoCh * 3B193  022 
         REL(5)  K__4_                            * 3B198  023 
         REL(5)  K__5_                            * 3B19D  024 
         REL(5)  ROMP_0A4_025                     * 3B1A2  025 
         REL(5)  K__*_                            * 3B1A7  026 
-        REL(5)  ROMP_0A4_027                     * 3B1AC  027 
+        REL(5)  ~Modifier;àRShiftOnly;SetDA123NoCh * 3B1AC  027 
         REL(5)  K__1_                            * 3B1B1  028 
         REL(5)  K__2_                            * 3B1B6  029 
         REL(5)  K__3_                            * 3B1BB  02A 
-        REL(5)  K__~__3B049                      * 3B1C0  02B 
+        REL(5)  K__~__2                          * 3B1C0  02B 
         REL(5)  ROMP_0A4_02C                     * 3B1C5  02C 
         REL(5)  K__0_                            * 3B1CA  02D 
         REL(5)  ROMP_0A4_02E                     * 3B1CF  02E 
@@ -1229,7 +1229,7 @@ ROMP_0A1_00A:
 
 * ROMPTR 0A1 00B
 * refs (1): 3B23B
-ROMP_0A1_00B:
+~MenuMaker;BINT6;SetSomeRow:
         :: MenuMaker BINT6 SetSomeRow ;          * 3B3B9
 
 * ROMPTR 0A1 00C
@@ -1240,7 +1240,7 @@ ROMP_0A1_00C:
 * ROMPTR 0A1 00D
 * refs (3): 3B23B 403F5 6BA01
 ROMP_0A1_00D:
-        :: PTR Do1st/2nd+: xSTO OBJ_4EC94 CK&DISPATCH0 * 3B3EB
+        :: PTR Do1st/2nd+: xSTO ~0LASTOWDOB!;CK2NOLASTWD CK&DISPATCH0 * 3B3EB
           BINT6 XEQStoKey                        * 3B404  name
           BINT7 XEQStoKey                        * 3B40E  local
 * The Very Big List names this address XLIB 2 46, but it is a pointer inside an object; the name is not used
@@ -1280,7 +1280,8 @@ ROMP_0A1_010:
 * refs (2): 3B23B 6BB1D
 ROMP_0A1_011:
         :: NoEdit?case xSWAP                     * 3B4E6
-          EndComLine?:(bip;q) SetDA123NoCh CURSOR_END? case OBJ_3E14E * 3B4F5
+          EndComLine?:(bip;q) SetDA123NoCh CURSOR_END? case * 3B4F5
+          ~Cursor&Disp;ToNextRowIfEnd            * 3B509
           REPEATER # 12                          * 3B50E
           :: Cursor&Disp ->OnTheRow ; ;          * 3B51D
 
@@ -1316,7 +1317,7 @@ ROMP_0A1_017:
 
 * ROMPTR 0A1 018
 * refs (3): 3B23B 6BB77 DD803
-ROMP_0A1_018:
+~NoEdit?case;xDUP;EnterComLine:
         :: NoEdit?case xDUP                      * 3B578
           EnterComLine ;                         * 3B587
 
@@ -1357,7 +1358,7 @@ ROMP_0A1_01C:
 
 * ROMPTR 0A1 01D
 * refs (1): 3B23B
-ROMP_0A1_01D:
+~Modifier;1A/LockA:
         :: Modifier 1A/LockA ;                   * 3B721
 
 * ROMPTR 0A1 01E
@@ -1382,7 +1383,7 @@ ROMP_0A1_021:
 
 * ROMPTR 0A1 022
 * refs (3): 3B23B 6B415 6B474
-ROMP_0A1_022:
+~Modifier;RShiftOnly;SetDA123NoCh:
         :: Modifier RShiftOnly SetDA123NoCh ;    * 3B755
 
 * ROMPTR 0A1 023
@@ -1407,7 +1408,7 @@ ROMP_0A1_026:
 
 * ROMPTR 0A1 027
 * refs (3): 3B23B 6B43A 6B47B
-ROMP_0A1_027:
+~Modifier;LShiftOnly;SetDA123NoCh:
         :: Modifier LShiftOnly SetDA123NoCh ;    * 3B78E
 
 * ROMPTR 0A1 028
@@ -1494,7 +1495,7 @@ LIB0A1.link:
         REL(5)  MenuCST                          * 3B8C1  008 
         REL(5)  ROMP_0A1_009                     * 3B8C6  009 
         REL(5)  ROMP_0A1_00A                     * 3B8CB  00A 
-        REL(5)  ROMP_0A1_00B                     * 3B8D0  00B 
+        REL(5)  ~MenuMaker;BINT6;SetSomeRow      * 3B8D0  00B 
         REL(5)  ROMP_0A1_00C                     * 3B8D5  00C 
         REL(5)  ROMP_0A1_00D                     * 3B8DA  00D 
         REL(5)  EVAL_3B427                       * 3B8DF  00E 
@@ -1507,22 +1508,22 @@ LIB0A1.link:
         REL(5)  ROMP_0A1_015                     * 3B902  015 
         REL(5)  ROMP_0A1_016                     * 3B907  016 
         REL(5)  ROMP_0A1_017                     * 3B90C  017 
-        REL(5)  ROMP_0A1_018                     * 3B911  018 
+        REL(5)  ~NoEdit?case;xDUP;EnterComLine   * 3B911  018 
         REL(5)  ROMP_0A1_019                     * 3B916  019 
         REL(5)  ROMP_0A1_01A                     * 3B91B  01A 
         REL(5)  ROMP_0A1_01B                     * 3B920  01B 
         REL(5)  ROMP_0A1_01C                     * 3B925  01C 
-        REL(5)  ROMP_0A1_01D                     * 3B92A  01D 
+        REL(5)  ~Modifier;1A/LockA               * 3B92A  01D 
         REL(5)  K__7__3B735                      * 3B92F  01E 
         REL(5)  K__8__3B73C                      * 3B934  01F 
         REL(5)  K__9__3B743                      * 3B939  020 
         REL(5)  ROMP_0A1_021                     * 3B93E  021 
-        REL(5)  ROMP_0A1_022                     * 3B943  022 
+        REL(5)  ~Modifier;RShiftOnly;SetDA123NoCh * 3B943  022 
         REL(5)  K__4__3B76E                      * 3B948  023 
         REL(5)  K__5__3B775                      * 3B94D  024 
         REL(5)  K__6_                            * 3B952  025 
         REL(5)  ROMP_0A1_026                     * 3B957  026 
-        REL(5)  ROMP_0A1_027                     * 3B95C  027 
+        REL(5)  ~Modifier;LShiftOnly;SetDA123NoCh * 3B95C  027 
         REL(5)  K__1__3B7A7                      * 3B961  028 
         REL(5)  K__2__3B7AE                      * 3B966  029 
         REL(5)  K__3__3B7B5                      * 3B96B  02A 
@@ -1689,7 +1690,7 @@ K__?_:
 
 * ROMPTR 0A5 01D
 * refs (1): 3B995
-ROMP_0A5_01D:
+~Modifier;MinusMo;SetDA123NoCh:
         :: Modifier MinusMo_539A0 SetDA123NoCh ; * 3BA77
 
 * ROMPTR 0A5 01E
@@ -1714,7 +1715,7 @@ ROMP_0A5_021:
 
 * ROMPTR 0A5 022
 * refs (1): 3B995
-ROMP_0A5_022:
+~Modifier;àShiftOnly;SetDA123NoCh:
         :: Modifier àShiftOnly SetDA123NoCh ;    * 3BAD7
 
 * ROMPTR 0A5 023
@@ -1759,7 +1760,7 @@ K_137:
 
 * ROMPTR 0A5 02B
 * refs (1): 3B995
-ROMP_0A5_02B:
+~DoDelims;$_<<>>;?ClrAlgSetPr:
         :: DoDelims $_<<>> ?ClrAlgSetPr ;        * 3BB37
 
 * ROMPTR 0A5 02C
@@ -1843,12 +1844,12 @@ LIB0A5.link:
         REL(5)  K__z_                            * 3BC6F  01A 
         REL(5)  K__!__3BA69                      * 3BC74  01B 
         REL(5)  K__?_                            * 3BC79  01C 
-        REL(5)  ROMP_0A5_01D                     * 3BC7E  01D 
+        REL(5)  ~Modifier;MinusMo;SetDA123NoCh   * 3BC7E  01D 
         REL(5)  ROMP_0A5_01E                     * 3BC83  01E 
         REL(5)  ROMP_0A5_01F                     * 3BC88  01F 
         REL(5)  ROMP_0A5_020                     * 3BC8D  020 
         REL(5)  ROMP_0A5_021                     * 3BC92  021 
-        REL(5)  ROMP_0A5_022                     * 3BC97  022 
+        REL(5)  ~Modifier;àShiftOnly;SetDA123NoCh * 3BC97  022 
         REL(5)  K__$_                            * 3BC9C  023 
         REL(5)  K_163                            * 3BCA1  024 
         REL(5)  K_164                            * 3BCA6  025 
@@ -1857,7 +1858,7 @@ LIB0A5.link:
         REL(5)  _==_                             * 3BCB5  028 
         REL(5)  K__<_                            * 3BCBA  029 
         REL(5)  K_137                            * 3BCBF  02A 
-        REL(5)  ROMP_0A5_02B                     * 3BCC4  02B 
+        REL(5)  ~DoDelims;$_<<>>;?ClrAlgSetPr    * 3BCC4  02B 
         REL(5)  ROMP_0A5_02C                     * 3BCC9  02C 
         REL(5)  K__=_                            * 3BCCE  02D 
         REL(5)  ROMP_0A5_02E                     * 3BCD3  02E 
@@ -1913,7 +1914,7 @@ ROMP_0A7_001:
 
 * ROMPTR 0A7 002
 * refs (1): 3BE7E
-MenuMTH~1~1:
+MenuMTH~2:
         :: OBJ_3F036 OBJ_3EFE6 NoExitAction      * 3BF0D
 
 {MEnuMTH}:
@@ -1975,12 +1976,12 @@ _CONST_:
 
 * ROMPTR 0A7 003
 * refs (1): 3BE7E
-MenuMTH~1~1~8~1:
+MenuMTH~11:
         { xCONSTANTe %e xi C%i xPI %PI xMINR %MINREAL xMAXR %MAXREAL } * 3C0A8
 
 * ROMPTR 0A7 004
 * refs (1): 3BE7E
-MenuPr~1~1:
+MenuPr~2:
         :: OBJ_3F036 OBJ_3EFE6 NoExitAction      * 3C0E4
           {                                      * 3C0F8
 

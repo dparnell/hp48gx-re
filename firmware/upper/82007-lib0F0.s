@@ -37,16 +37,16 @@ LIB0F0.link:
         CON(5)  DOHSTR                           * 82082  link table of library 0F0
         LENGTH                                   * 82087  length, to #824BF
         REL(5)  nINTGSIN~1                       * 8208C  000 
-        REL(5)  nINTGTAN~1~1                     * 82091  001 
+        REL(5)  nINTGTAN~2                       * 82091  001 
         REL(5)  nINTGCOS~1                       * 82096  002 
-        REL(5)  nINTGSIN~1~1                     * 8209B  003 
+        REL(5)  nINTGSIN~2                       * 8209B  003 
         REL(5)  nINTGTAN~1                       * 820A0  004 
         REL(5)  nINTGASIN~1                      * 820A5  005 
         REL(5)  nINTGACOS~1                      * 820AA  006 
         REL(5)  nINTGATAN~1                      * 820AF  007 
         REL(5)  nINTGSINH~1                      * 820B4  008 
-        REL(5)  nINTGTANH~1~1                    * 820B9  009 
-        REL(5)  nINTGCOSH~1~1                    * 820BE  00A 
+        REL(5)  nINTGTANH~2                      * 820B9  009 
+        REL(5)  nINTGCOSH~2                      * 820BE  00A 
         REL(5)  nINTGCOSH~1                      * 820C3  00B 
         REL(5)  ROMP_0F0_00C                     * 820C8  00C 
         REL(5)  nINTGTANH~1                      * 820CD  00D 
@@ -67,9 +67,9 @@ LIB0F0.link:
         REL(5)  ROMP_0F0_01C                     * 82118  01C 
         REL(5)  ROMP_0F0_01D                     * 8211D  01D 
         REL(5)  ROMP_0F0_01E                     * 82122  01E 
-        REL(5)  ROMP_0F0_01F                     * 82127  01F 
+        REL(5)  ~drppargtop&;COLA;meta+          * 82127  01F 
         REL(5)  ROMP_0F0_020                     * 8212C  020 
-        REL(5)  ROMP_0F0_021                     * 82131  021 
+        REL(5)  ~drppargtop&;COLA;meta*          * 82131  021 
         REL(5)  ROMP_0F0_022                     * 82136  022 
         REL(5)  ROMP_0F0_023                     * 8213B  023 
         REL(5)  ROMP_0F0_024                     * 82140  024 
@@ -89,20 +89,20 @@ LIB0F0.link:
         REL(5)  ROMP_0F0_032                     * 82186  032 
         REL(5)  ROMP_0F0_033                     * 8218B  033 
         REL(5)  ROMP_0F0_034                     * 82190  034 
-        REL(5)  ROMP_0F0_036                     * 82195  035 
-        REL(5)  ROMP_0F0_036                     * 8219A  036 
-        REL(5)  ROMP_0F0_037                     * 8219F  037 
+        REL(5)  ~SWAPDROP#1-;metaneglft          * 82195  035 
+        REL(5)  ~SWAPDROP#1-;metaneglft          * 8219A  036 
+        REL(5)  ~SWAPDROP#1-;COLA;metainvlft     * 8219F  037 
         REL(5)  ROMP_0F0_039                     * 821A4  038 
         REL(5)  ROMP_0F0_039                     * 821A9  039 
-        REL(5)  ROMP_0F0_03A                     * 821AE  03A 
-        REL(5)  ROMP_0F0_03B                     * 821B3  03B 
+        REL(5)  ~[f(X,Y)]=>[INV(X)/Y]!;addt:;xINV * 821AE  03A 
+        REL(5)  ~[f(X,Y)]=>[INV(X)*Y]!;addt:;xINV * 821B3  03B 
         REL(5)  ROMP_0F0_03D                     * 821B8  03C 
         REL(5)  ROMP_0F0_03D                     * 821BD  03D 
-        REL(5)  ROMP_0F0_03E                     * 821C2  03E 
-        REL(5)  ROMP_0F0_040                     * 821C7  03F 
-        REL(5)  ROMP_0F0_040                     * 821CC  040 
-        REL(5)  ROMP_0F0_041                     * 821D1  041 
-        REL(5)  ROMP_0F0_042                     * 821D6  042 
+        REL(5)  ~metainvlft;addtNEG              * 821C2  03E 
+        REL(5)  ~metaneglft;addtNEG              * 821C7  03F 
+        REL(5)  ~metaneglft;addtNEG              * 821CC  040 
+        REL(5)  ~[f(X,Y)]=>[-X-Y]!;addtNEG       * 821D1  041 
+        REL(5)  ~[f(X,Y)]=>[-X+Y]!;addtNEG       * 821D6  042 
         REL(5)  ROMP_0F0_043                     * 821DB  043 
         REL(5)  ROMP_0F0_044                     * 821E0  044 
         REL(5)  ROMP_0F0_045                     * 821E5  045 
@@ -113,7 +113,7 @@ LIB0F0.link:
         REL(5)  ROMP_0F0_04A                     * 821FE  04A 
         REL(5)  ROMP_0F0_04B                     * 82203  04B 
         REL(5)  ROMP_0F0_04C                     * 82208  04C 
-        REL(5)  ROMP_0F0_04D                     * 8220D  04D 
+        REL(5)  ~SWAPDROP#1-;metainv;addt*_2     * 8220D  04D 
         REL(5)  ROMP_0F0_04E                     * 82212  04E 
         REL(5)  ROMP_0F0_04F                     * 82217  04F 
         REL(5)  ROMP_0F0_050                     * 8221C  050 
@@ -163,7 +163,7 @@ LIB0F0.link:
         REL(5)  nWHEREINTG~1                     * 822F8  07C 
         REL(5)  nWHERESUM~1                      * 822FD  07D 
         REL(5)  sto(_,to)~1                      * 82302  07E 
-        REL(5)  sto(_,to)~1~1                    * 82307  07F 
+        REL(5)  sto(_,to)~2                      * 82307  07F 
         REL(5)  sto(bk,r)~1                      * 8230C  080 
         REL(5)  ROMP_0F0_081                     * 82311  081 
         REL(5)  ROMP_0F0_082                     * 82316  082 
@@ -269,7 +269,7 @@ nINTGSIN~1:
 
 * ROMPTR 0F0 001
 * refs (1): 82007
-nINTGTAN~1~1:
+nINTGTAN~2:
               :: OBJ_5B3D9 Π&1                   * 8255A
                 SYMBOL Π&1 xSIN xINV xNEG ; ;    * 82569
               NULL{} }                           * 8258C
@@ -299,7 +299,7 @@ nINTGCOS~1:
 
 * ROMPTR 0F0 003
 * refs (1): 82007
-nINTGSIN~1~1:
+nINTGSIN~2:
               :: OBJ_5B3D9 Π&1                   * 826EB
                 SYMBOL Π&1 xTAN xLN ; ;          * 826FA
               NULL{} }                           * 82718
@@ -391,7 +391,7 @@ nINTGSINH~1:
 
 * ROMPTR 0F0 009
 * refs (1): 82007
-nINTGTANH~1~1:
+nINTGTANH~2:
               :: OBJ_5B375 Π&1                   * 82B9C
                 SYMBOL Π&1 xSINH xINV xNEG ; ;   * 82BAB
               NULL{} }                           * 82BCE
@@ -405,7 +405,7 @@ nINTGTANH~1~1:
 
 * ROMPTR 0F0 00A
 * refs (1): 82007
-nINTGCOSH~1~1:
+nINTGCOSH~2:
               :: OBJ_5B375 Π&1                   * 82C73
                 SYMBOL Π&1 xTANH xLN ; ;         * 82C82
               NULL{} }                           * 82CA0
@@ -635,9 +635,10 @@ ROMP_0F0_019:
         :: #1- DUP#1= dvarlsBIND tailpsh larg SWAPDROP#1- DUP#1+PICK ' * 837DE
           lam'dvar EQ 1GETABND ANDcase           * 8380B
           :: #1- get1 DROP over& psh NDROP TRUE ; * 8381F
-          DUP#1+PICK DUP OBJ_5AD4E ID>LAM BINT1 DOBIND pshzer >dvars #1- * 8384C
-          IMPLODE SWAPcompSWAP SYMDERSTEP EXPLODE 1GETABND DUP OBJ_5AD4E * 83879
-          ID>LAM SWAP BINT1 DOBIND pshzer >dvars ABND top& pshtop& FALSE ; * 8389C
+          DUP#1+PICK DUP ~REQcase;lam'dvar;SKIP ID>LAM * 8384C
+          BINT1 DOBIND pshzer >dvars #1- IMPLODE SWAPcompSWAP SYMDERSTEP * 83860
+          EXPLODE 1GETABND DUP ~REQcase;lam'dvar;SKIP ID>LAM * 83888
+          SWAP BINT1 DOBIND pshzer >dvars ABND top& pshtop& FALSE ; * 838A1
 
 * ROMPTR 0F0 01A
 * refs (1): 82007
@@ -678,7 +679,7 @@ ROMP_0F0_01E:
 
 * ROMPTR 0F0 01F
 * refs (1): 82007
-ROMP_0F0_01F:
+~drppargtop&;COLA;meta+:
         :: drppargtop& COLA meta+                * 83B1D
         ;                                        * 83B31
 
@@ -690,7 +691,7 @@ ROMP_0F0_020:
 
 * ROMPTR 0F0 021
 * refs (1): 82007
-ROMP_0F0_021:
+~drppargtop&;COLA;meta*:
         :: drppargtop& COLA meta*                * 83B5E
         ;                                        * 83B72
 
@@ -792,12 +793,12 @@ ROMP_0F0_034:
 
 * ROMPTR 0F0 036
 * refs (2): 82007 82007
-ROMP_0F0_036:
+~SWAPDROP#1-;metaneglft:
         :: SWAPDROP#1- metaneglft ;              * 83D43
 
 * ROMPTR 0F0 037
 * refs (1): 82007
-ROMP_0F0_037:
+~SWAPDROP#1-;COLA;metainvlft:
         :: SWAPDROP#1- COLA metainvlft           * 83D57
         ;                                        * 83D6B
 
@@ -809,12 +810,12 @@ ROMP_0F0_039:
 
 * ROMPTR 0F0 03A
 * refs (1): 82007
-ROMP_0F0_03A:
+~[f(X,Y)]=>[INV(X)/Y]!;addt:;xINV:
         :: [f(X,Y)]=>[INV(X)/Y]! PTR addt: xINV ; * 83D98
 
 * ROMPTR 0F0 03B
 * refs (1): 82007
-ROMP_0F0_03B:
+~[f(X,Y)]=>[INV(X)*Y]!;addt:;xINV:
         :: [f(X,Y)]=>[INV(X)*Y]! PTR addt: xINV ; * 83DB1
 
 * ROMPTR 0F0 03D
@@ -824,22 +825,22 @@ ROMP_0F0_03D:
 
 * ROMPTR 0F0 03E
 * refs (1): 82007
-ROMP_0F0_03E:
+~metainvlft;addtNEG:
         :: metainvlft addtNEG ;                  * 83DF2
 
 * ROMPTR 0F0 040
 * refs (2): 82007 82007
-ROMP_0F0_040:
+~metaneglft;addtNEG:
         :: metaneglft addtNEG ;                  * 83E06
 
 * ROMPTR 0F0 041
 * refs (1): 82007
-ROMP_0F0_041:
+~[f(X,Y)]=>[-X-Y]!;addtNEG:
         :: [f(X,Y)]=>[-X-Y]! addtNEG ;           * 83E1A
 
 * ROMPTR 0F0 042
 * refs (1): 82007
-ROMP_0F0_042:
+~[f(X,Y)]=>[-X+Y]!;addtNEG:
         :: [f(X,Y)]=>[-X+Y]! addtNEG ;           * 83E2E
 
 * ROMPTR 0F0 043
@@ -900,7 +901,7 @@ ROMP_0F0_04C:
 
 * ROMPTR 0F0 04D
 * refs (1): 82007
-ROMP_0F0_04D:
+~SWAPDROP#1-;metainv;addt*_2:
         :: SWAPDROP#1- metainv addt* ;           * 83FBD
 
 * ROMPTR 0F0 04E
@@ -1177,9 +1178,9 @@ ROMP_0F0_075:
 * ROMPTR 0F0 077
 * refs (1): 82007
 nWHEREFCNAPP~1:
-        :: 3PICK CARCOMP NOTROMPcase nWHEREFCNAPP~1~1 * 84E95
+        :: 3PICK CARCOMP NOTROMPcase nWHEREFCNAPP~2 * 84E95
           DUPROMPTR@ ?SKIP SETROMPERR            * 84EAE
-          SWAP OBJ_26F6C NOTcasedrop nWHEREFCNAPP~1~1 * 84EBD
+          SWAP OBJ_26F6C NOTcasedrop nWHEREFCNAPP~2 * 84EBD
           SWAP infarg? SWAPDROP ITE              * 84ED1
           :: 4ROLL DROPSWAP #1- ;                * 84EE5
           :: ROTDROP ROTDROPSWAP #2- ;           * 84EFE

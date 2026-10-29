@@ -557,7 +557,7 @@ OBJ_7CDE2:
 * refs (4): C7A4B C7F53 C933F CAA8F
 OBJ_7CE00:
         :: SWAP %>%%- 2DUP %%> case SWAPDROP     * 7CE00
-          %%/2 OBJ_37DA0 ;                       * 7CE23
+          %%/2 ~2DUP;%%<;NOT?SWAPDROP ;          * 7CE23
 
 * refs (4): C7A50 C7F58 C9344 CAA94
 OBJ_7CE32:
@@ -565,7 +565,7 @@ OBJ_7CE32:
           %%/2 %%MAX ;                           * 7CE55
 
 * refs (3): 97AAC 97B66 97C80
-COND~1~3:
+COND~5:
         :: %%0 SWAP ONE_DO_ARRY INDEX@ PULL%%EL B%ABS ROT %%+ SWAP * 7CE64
           NextInArray SWAP ;                     * 7CE96
 
@@ -822,7 +822,7 @@ L_7D486:
 OBJ_7D4C5:
         CON(5)  (*)+5                            * 7D4C5  primitive code object
         GOSBVL  POP#                             * 7D4CA
-        GOSUB   SAVPTR~jump_7D6B8                * 7D4D1
+        GOSUB   SAVPTR~jump_22                   * 7D4D1
         C=DAT1  A                                * 7D4D5
         D0=C                                     * 7D4D8
         D1=D1+  5                                * 7D4DB
@@ -919,7 +919,7 @@ OBJ_7D5CF:
         CON(5)  (*)+5                            * 7D5CF  primitive code object
         ST=0    1                                * 7D5D4
         GOSBVL  POP#                             * 7D5D7
-        GOSUB   SAVPTR~jump_7D6B8                * 7D5DE
+        GOSUB   SAVPTR~jump_22                   * 7D5DE
         C=DAT1  A                                * 7D5E2
         D0=C                                     * 7D5E5
         D1=D1+  5                                * 7D5E8
@@ -1006,7 +1006,7 @@ SUB_7D6B0:
         D=D+1   A                                * 7D6B6
 
 * refs (3): 7D4D1 7D5DE 7D82F
-SAVPTR~jump_7D6B8:
+SAVPTR~jump_22:
         GOVLNG  SAVPTR                           * 7D6B8
 
 * refs (2): 7D677 7D74A
@@ -1083,7 +1083,7 @@ SUB_7D755:
         RTN                                      * 7D75F
 
 * refs (1): 0F74C
-U>NCQ~1~2~1~1:
+OBJ_7D761:
         CON(5)  (*)+5                            * 7D761  primitive code object
         ST=0    0                                * 7D766
         GOTO    L_7D775                          * 7D769
@@ -1154,7 +1154,7 @@ OBJ_7D7F9:
         GOYES   L_7D82F                          * 7D829
         GOTO    L_7D886                          * 7D82B
 L_7D82F:
-        GOSUB   SAVPTR~jump_7D6B8                * 7D82F
+        GOSUB   SAVPTR~jump_22                   * 7D82F
         C=DAT1  A                                * 7D833
         D1=C                                     * 7D836
         D1=D1+  15                               * 7D839

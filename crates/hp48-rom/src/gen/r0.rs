@@ -5061,8 +5061,8 @@ pub(crate) fn SUB_01EFD(r: &mut Run) {
     }
 }
 
-// GETKEY~6~1: firmware/lower/00000-hardware.s:2748
-pub(crate) fn GETKEY_6_1(r: &mut Run) {
+// GETKEY~8: firmware/lower/00000-hardware.s:2748
+pub(crate) fn GETKEY_8(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -10757,7 +10757,7 @@ pub(crate) fn DEEPSLEEP(r: &mut Run) {
     loop {
         match at {
             0x041F2..=0x041F2 => {
-                branch!(r, at, 0x041F6, 6, r.cpu.call(0x04691)); // GOSUB SAVPTR~jump_04691
+                branch!(r, at, 0x041F6, 6, r.cpu.call(0x04691)); // GOSUB SAVPTR~jump_2
             }
             // #041F6:
             0x041F6..=0x041F9 => {
@@ -11425,7 +11425,7 @@ pub(crate) fn AlertStatus(r: &mut Run) {
     loop {
         match at {
             0x04549..=0x04549 => {
-                branch!(r, at, 0x0454D, 6, r.cpu.call(0x04691)); // GOSUB SAVPTR~jump_04691
+                branch!(r, at, 0x0454D, 6, r.cpu.call(0x04691)); // GOSUB SAVPTR~jump_2
             }
             // #0454D:
             0x0454D..=0x04550 => {
@@ -11464,7 +11464,7 @@ pub(crate) fn Alert_(r: &mut Run) {
             // #04581:
             0x04581..=0x04584 => {
                 op!(r, at, 0x04581..0x04584, 5, r.cpu.scratch(ScratchOp::ToScratch, R::A, 1, Field::W)); // R1=A
-                branch!(r, at, 0x04588, 6, r.cpu.call(0x04691)); // GOSUB SAVPTR~jump_04691
+                branch!(r, at, 0x04588, 6, r.cpu.call(0x04691)); // GOSUB SAVPTR~jump_2
             }
             // #04588:
             0x04588..=0x0458E => {
@@ -11681,8 +11681,8 @@ pub(crate) fn SUB_04684(r: &mut Run) {
     }
 }
 
-// SAVPTR~jump_04691: firmware/lower/04003-bints.s:621
-pub(crate) fn SAVPTR_jump_04691(r: &mut Run) {
+// SAVPTR~jump_2: firmware/lower/04003-bints.s:621
+pub(crate) fn SAVPTR_jump_2(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -11798,7 +11798,7 @@ pub(crate) fn GETTOUCH(r: &mut Run) {
                 io!(r, at, 0x0475A..0x0475D, 16, r.cpu.load(1, R::C, Field::B, r.hw)); // C=DAT1 B
                 op!(r, at, 0x0475D..0x04760, 5, r.cpu.d_from_r(1, R::A, false)); // D1=A
                 op!(r, at, 0x04760..0x04763, 5, r.cpu.scratch(ScratchOp::ToScratch, R::C, 0, Field::W)); // R0=C
-                branch!(r, at, 0x04767, 6, r.cpu.call(0x04691)); // GOSUB SAVPTR~jump_04691
+                branch!(r, at, 0x04767, 6, r.cpu.call(0x04691)); // GOSUB SAVPTR~jump_2
             }
             // #04767:
             0x04767..=0x04767 => {
@@ -25316,8 +25316,8 @@ pub(crate) fn InitEnab(r: &mut Run) {
     }
 }
 
-// restore(nm,s)~1~1: firmware/lower/08001-memory.s:1845
-pub(crate) fn restore_nm_s__1_1(r: &mut Run) {
+// restore(nm,s)~2: firmware/lower/08001-memory.s:1845
+pub(crate) fn restore_nm_s__2(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -29727,8 +29727,8 @@ pub(crate) fn OBJ_0B40C(r: &mut Run) {
     }
 }
 
-// free(li,r)~1~1~2~1: firmware/lower/0A006-misc-0A000.s:1875
-pub(crate) fn free_li_r__1_1_2_1(r: &mut Run) {
+// free(li,r)~5: firmware/lower/0A006-misc-0A000.s:1875
+pub(crate) fn free_li_r__5(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -29786,8 +29786,8 @@ pub(crate) fn free_li_r__1_1_2_1(r: &mut Run) {
     }
 }
 
-// free(li,r)~1~1~2~2: firmware/lower/0A006-misc-0A000.s:1906
-pub(crate) fn free_li_r__1_1_2_2(r: &mut Run) {
+// free(li,r)~6: firmware/lower/0A006-misc-0A000.s:1906
+pub(crate) fn free_li_r__6(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -29901,8 +29901,8 @@ pub(crate) fn free_li_r__1_1_2_2(r: &mut Run) {
     }
 }
 
-// free(li,r)~1~1~2~3: firmware/lower/0A006-misc-0A000.s:1980
-pub(crate) fn free_li_r__1_1_2_3(r: &mut Run) {
+// free(li,r)~7: firmware/lower/0A006-misc-0A000.s:1980
+pub(crate) fn free_li_r__7(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -30493,7 +30493,7 @@ pub(crate) fn tok8trior(r: &mut Run) {
                 op!(r, at, 0x0BDD6..0x0BDD8, 4, r.cpu.p = 0); // P= 0
                 op!(r, at, 0x0BDD8..0x0BDDA, 4, r.cpu.pop_c()); // C=RSTK
                 op!(r, at, 0x0BDDA..0x0BDDD, 5, r.cpu.d_from_r(1, R::C, false)); // D1=C
-                op!(r, at, 0x0BDDD..0x0BDE4, 9, r.cpu.load_const(R::C, 5, 0xBDF6)); // LC(5) OBJ_0BDF6
+                op!(r, at, 0x0BDDD..0x0BDE4, 9, r.cpu.load_const(R::C, 5, 0xBDF6)); // LC(5) ~DROP;GetNextToken;COLACOLA
                 branch!(r, at, 0x0BDE9, 7, r.cpu.st_test(0, false, Some(0x0BDF0))); // ?ST=0 0 / GOYES L_0BDF0
             }
             // #0BDE9:
@@ -31120,15 +31120,15 @@ pub(crate) fn SUB_0C1C5(r: &mut Run) {
     }
 }
 
-// U>NCQ~1~7: firmware/lower/0C001-time.s:187
-pub(crate) fn U_NCQ_1_7(r: &mut Run) {
+// U>NCQ~5: firmware/lower/0C001-time.s:187
+pub(crate) fn U_NCQ_5(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
             0x0C251..=0x0C256 => {
                 op!(r, at, 0x0C251..0x0C254, 5, r.cpu.d_add(1, 5)); // D1=D1+ 5
                 op!(r, at, 0x0C254..0x0C256, 4, r.cpu.inc(R::D, Field::A)); // D=D+1 A
-                branch!(r, at, 0x0C25A, 6, r.cpu.call(0x0C2BB)); // GOSUB SAVPTR~jump_0C2BB
+                branch!(r, at, 0x0C25A, 6, r.cpu.call(0x0C2BB)); // GOSUB SAVPTR~jump_3
             }
             // #0C25A:
             0x0C25A..=0x0C25A => {
@@ -31209,8 +31209,8 @@ pub(crate) fn SUB_0C2B2(r: &mut Run) {
     }
 }
 
-// SAVPTR~jump_0C2BB: firmware/lower/0C001-time.s:232
-pub(crate) fn SAVPTR_jump_0C2BB(r: &mut Run) {
+// SAVPTR~jump_3: firmware/lower/0C001-time.s:232
+pub(crate) fn SAVPTR_jump_3(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -31249,7 +31249,7 @@ pub(crate) fn OBJ_0C2CD(r: &mut Run) {
     loop {
         match at {
             0x0C2D2..=0x0C2D2 => {
-                branch!(r, at, 0x0C2D6, 6, r.cpu.call(0x0C2BB)); // GOSUB SAVPTR~jump_0C2BB
+                branch!(r, at, 0x0C2D6, 6, r.cpu.call(0x0C2BB)); // GOSUB SAVPTR~jump_3
             }
             // #0C2D6:
             0x0C2D6..=0x0C2D6 => {
@@ -31305,7 +31305,7 @@ pub(crate) fn dup_stdunit_st__(r: &mut Run) {
     loop {
         match at {
             0x0C315..=0x0C315 => {
-                branch!(r, at, 0x0C319, 6, r.cpu.call(0x0C2BB)); // GOSUB SAVPTR~jump_0C2BB
+                branch!(r, at, 0x0C319, 6, r.cpu.call(0x0C2BB)); // GOSUB SAVPTR~jump_3
             }
             // #0C319:
             0x0C319..=0x0C349 => {
@@ -31383,13 +31383,13 @@ pub(crate) fn dup_stdunit_st__(r: &mut Run) {
     }
 }
 
-// U>NCQ~1~8: firmware/lower/0C001-time.s:320
-pub(crate) fn U_NCQ_1_8(r: &mut Run) {
+// U>NCQ~6: firmware/lower/0C001-time.s:320
+pub(crate) fn U_NCQ_6(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
             0x0C3A8..=0x0C3A8 => {
-                branch!(r, at, 0x0C3AC, 6, r.cpu.call(0x0C2BB)); // GOSUB SAVPTR~jump_0C2BB
+                branch!(r, at, 0x0C3AC, 6, r.cpu.call(0x0C2BB)); // GOSUB SAVPTR~jump_3
             }
             // #0C3AC:
             0x0C3AC..=0x0C3DC => {
@@ -32264,7 +32264,7 @@ pub(crate) fn a_pm_(r: &mut Run) {
     loop {
         match at {
             0x0CDD5..=0x0CDD5 => {
-                branch!(r, at, 0x0CDD9, 6, r.cpu.call(0x0CF15)); // GOSUB SAVPTR~jump_0CF15
+                branch!(r, at, 0x0CDD9, 6, r.cpu.call(0x0CF15)); // GOSUB SAVPTR~jump_4
             }
             // #0CDD9:
             0x0CDD9..=0x0CDDC => {
@@ -32418,7 +32418,7 @@ pub(crate) fn code_0CEBE(r: &mut Run) {
     loop {
         match at {
             0x0CEBE..=0x0CEBE => {
-                branch!(r, at, 0x0CEC2, 6, r.cpu.call(0x0CF15)); // GOSUB SAVPTR~jump_0CF15
+                branch!(r, at, 0x0CEC2, 6, r.cpu.call(0x0CF15)); // GOSUB SAVPTR~jump_4
             }
             // #0CEC2:
             0x0CEC2..=0x0CECF => {
@@ -32439,13 +32439,13 @@ pub(crate) fn code_0CEBE(r: &mut Run) {
     }
 }
 
-// GETKEY~1~1~2: firmware/lower/0C001-time.s:997
-pub(crate) fn GETKEY_1_1_2(r: &mut Run) {
+// OBJ_0CED9: firmware/lower/0C001-time.s:997
+pub(crate) fn OBJ_0CED9(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
             0x0CEDE..=0x0CEDE => {
-                branch!(r, at, 0x0CEE2, 6, r.cpu.call(0x0CF15)); // GOSUB SAVPTR~jump_0CF15
+                branch!(r, at, 0x0CEE2, 6, r.cpu.call(0x0CF15)); // GOSUB SAVPTR~jump_4
             }
             // #0CEE2:
             0x0CEE2..=0x0CEE2 => {
@@ -32471,7 +32471,7 @@ pub(crate) fn OBJ_0CEEA(r: &mut Run) {
     loop {
         match at {
             0x0CEEF..=0x0CEEF => {
-                branch!(r, at, 0x0CEF3, 6, r.cpu.call(0x0CF15)); // GOSUB SAVPTR~jump_0CF15
+                branch!(r, at, 0x0CEF3, 6, r.cpu.call(0x0CF15)); // GOSUB SAVPTR~jump_4
             }
             // #0CEF3:
             0x0CEF3..=0x0CEF3 => {
@@ -32513,8 +32513,8 @@ pub(crate) fn GETPTR_jump(r: &mut Run) {
     }
 }
 
-// SAVPTR~jump_0CF15: firmware/lower/0C001-time.s:1022
-pub(crate) fn SAVPTR_jump_0CF15(r: &mut Run) {
+// SAVPTR~jump_4: firmware/lower/0C001-time.s:1022
+pub(crate) fn SAVPTR_jump_4(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -32584,7 +32584,7 @@ pub(crate) fn Ticks_wd_(r: &mut Run) {
     loop {
         match at {
             0x0CF60..=0x0CF60 => {
-                branch!(r, at, 0x0CF64, 6, r.cpu.call(0x0CF15)); // GOSUB SAVPTR~jump_0CF15
+                branch!(r, at, 0x0CF64, 6, r.cpu.call(0x0CF15)); // GOSUB SAVPTR~jump_4
             }
             // #0CF64:
             0x0CF64..=0x0CF69 => {
@@ -32601,7 +32601,7 @@ pub(crate) fn Ticks_wd_(r: &mut Run) {
                 io!(r, at, 0x0CF71..0x0CF74, 19, r.cpu.load(1, R::A, Field::A, r.hw)); // A=DAT1 A
                 op!(r, at, 0x0CF74..0x0CF76, 4, r.cpu.inc(R::D, Field::A)); // D=D+1 A
                 op!(r, at, 0x0CF76..0x0CF79, 5, r.cpu.d_add(1, 5)); // D1=D1+ 5
-                branch!(r, at, 0x0CF7D, 6, r.cpu.call(0x0CF15)); // GOSUB SAVPTR~jump_0CF15
+                branch!(r, at, 0x0CF7D, 6, r.cpu.call(0x0CF15)); // GOSUB SAVPTR~jump_4
             }
             // #0CF7D:
             0x0CF7D..=0x0CF8A => {
@@ -33094,7 +33094,7 @@ pub(crate) fn WSLOGN(r: &mut Run) {
             0x0D196..=0x0D19B => {
                 op!(r, at, 0x0D196..0x0D198, 4, r.cpu.dec(R::A, Field::A)); // A=A-1 A
                 op!(r, at, 0x0D198..0x0D19B, 5, r.cpu.scratch(ScratchOp::ToScratch, R::A, 4, Field::W)); // R4=A
-                branch!(r, at, 0x0D19F, 6, r.cpu.call(0x0CF15)); // GOSUB SAVPTR~jump_0CF15
+                branch!(r, at, 0x0D19F, 6, r.cpu.call(0x0CF15)); // GOSUB SAVPTR~jump_4
             }
             // #0D19F:
             0x0D19F..=0x0D1A5 => {
@@ -35344,7 +35344,7 @@ pub(crate) fn code_0DC2D(r: &mut Run) {
     }
 }
 
-// NewAlarm(li)~1: firmware/lower/0C001-time.s:2394
+// NewAlarm(li)~1: firmware/lower/0C001-time.s:2393
 pub(crate) fn NewAlarm_li__1(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -35377,7 +35377,7 @@ pub(crate) fn OBJ_0E1B9(r: &mut Run) {
     loop {
         match at {
             0x0E1BE..=0x0E1BE => {
-                branch!(r, at, 0x0E1C2, 6, r.cpu.call(0x0E39F)); // GOSUB SAVPTR~jump_0E39F
+                branch!(r, at, 0x0E1C2, 6, r.cpu.call(0x0E39F)); // GOSUB SAVPTR~jump_5
             }
             // #0E1C2:
             0x0E1C2..=0x0E1C5 => {
@@ -35494,7 +35494,7 @@ pub(crate) fn IndexPastDue_li_(r: &mut Run) {
             // L_0E289:
             0x0E289..=0x0E28B => {
                 op!(r, at, 0x0E289..0x0E28B, 4, r.cpu.push_c()); // RSTK=C
-                branch!(r, at, 0x0E28F, 6, r.cpu.call(0x0E39F)); // GOSUB SAVPTR~jump_0E39F
+                branch!(r, at, 0x0E28F, 6, r.cpu.call(0x0E39F)); // GOSUB SAVPTR~jump_5
             }
             // #0E28F:
             0x0E28F..=0x0E29A => {
@@ -35601,7 +35601,7 @@ pub(crate) fn OBJ_0E302(r: &mut Run) {
     loop {
         match at {
             0x0E307..=0x0E307 => {
-                branch!(r, at, 0x0E30B, 6, r.cpu.call(0x0E39F)); // GOSUB SAVPTR~jump_0E39F
+                branch!(r, at, 0x0E30B, 6, r.cpu.call(0x0E39F)); // GOSUB SAVPTR~jump_5
             }
             // #0E30B:
             0x0E30B..=0x0E314 => {
@@ -35722,8 +35722,8 @@ pub(crate) fn AllowIntr_jump(r: &mut Run) {
     }
 }
 
-// SAVPTR~jump_0E39F: firmware/lower/0E006-units.s:243
-pub(crate) fn SAVPTR_jump_0E39F(r: &mut Run) {
+// SAVPTR~jump_5: firmware/lower/0E006-units.s:243
+pub(crate) fn SAVPTR_jump_5(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -35747,7 +35747,7 @@ pub(crate) fn pastdue_li__(r: &mut Run) {
                 io!(r, at, 0x0E3AB..0x0E3AE, 19, r.cpu.load(1, R::A, Field::A, r.hw)); // A=DAT1 A
                 op!(r, at, 0x0E3AE..0x0E3B1, 5, r.cpu.d_add(1, 5)); // D1=D1+ 5
                 op!(r, at, 0x0E3B1..0x0E3B3, 4, r.cpu.inc(R::D, Field::A)); // D=D+1 A
-                branch!(r, at, 0x0E3B7, 6, r.cpu.call(0x0E39F)); // GOSUB SAVPTR~jump_0E39F
+                branch!(r, at, 0x0E3B7, 6, r.cpu.call(0x0E39F)); // GOSUB SAVPTR~jump_5
             }
             // #0E3B7:
             0x0E3B7..=0x0E3CC => {
@@ -35775,8 +35775,8 @@ pub(crate) fn pastdue_li__(r: &mut Run) {
     }
 }
 
-// ALARMxcp~1~2~1: firmware/lower/0E006-units.s:277
-pub(crate) fn ALARMxcp_1_2_1(r: &mut Run) {
+// ALARMxcp~5: firmware/lower/0E006-units.s:277
+pub(crate) fn ALARMxcp_5(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -35799,8 +35799,8 @@ pub(crate) fn ALARMxcp_1_2_1(r: &mut Run) {
     }
 }
 
-// ALARMxcp~1~2~2: firmware/lower/0E006-units.s:288
-pub(crate) fn ALARMxcp_1_2_2(r: &mut Run) {
+// ALARMxcp~6: firmware/lower/0E006-units.s:288
+pub(crate) fn ALARMxcp_6(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -35830,7 +35830,7 @@ pub(crate) fn chkdate_r_(r: &mut Run) {
     loop {
         match at {
             0x0E635..=0x0E635 => {
-                branch!(r, at, 0x0E639, 6, r.cpu.call(0x0E39F)); // GOSUB SAVPTR~jump_0E39F
+                branch!(r, at, 0x0E639, 6, r.cpu.call(0x0E39F)); // GOSUB SAVPTR~jump_5
             }
             // #0E639:
             0x0E639..=0x0E646 => {
@@ -35876,7 +35876,7 @@ pub(crate) fn VerifyTOD(r: &mut Run) {
     loop {
         match at {
             0x0E66F..=0x0E66F => {
-                branch!(r, at, 0x0E673, 6, r.cpu.call(0x0E39F)); // GOSUB SAVPTR~jump_0E39F
+                branch!(r, at, 0x0E673, 6, r.cpu.call(0x0E39F)); // GOSUB SAVPTR~jump_5
             }
             // #0E673:
             0x0E673..=0x0E682 => {
@@ -35909,7 +35909,7 @@ pub(crate) fn Ornd_abs_r___1(r: &mut Run) {
     loop {
         match at {
             0x0E698..=0x0E698 => {
-                branch!(r, at, 0x0E69C, 6, r.cpu.call(0x0E39F)); // GOSUB SAVPTR~jump_0E39F
+                branch!(r, at, 0x0E69C, 6, r.cpu.call(0x0E39F)); // GOSUB SAVPTR~jump_5
             }
             // #0E69C:
             0x0E69C..=0x0E6A9 => {
@@ -35992,8 +35992,8 @@ pub(crate) fn OBJ_0E7BB(r: &mut Run) {
     }
 }
 
-// GETKEY~1~1~3: firmware/lower/0E006-units.s:456
-pub(crate) fn GETKEY_1_1_3(r: &mut Run) {
+// OBJ_0E7CE: firmware/lower/0E006-units.s:456
+pub(crate) fn OBJ_0E7CE(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -36188,8 +36188,8 @@ pub(crate) fn SUB_0E859(r: &mut Run) {
     }
 }
 
-// GETPTR~jump_0E87B: firmware/lower/0E006-units.s:536
-pub(crate) fn GETPTR_jump_0E87B(r: &mut Run) {
+// GETPTR~jump_2: firmware/lower/0E006-units.s:536
+pub(crate) fn GETPTR_jump_2(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -36204,8 +36204,8 @@ pub(crate) fn GETPTR_jump_0E87B(r: &mut Run) {
     }
 }
 
-// SAVPTR~jump_0E882: firmware/lower/0E006-units.s:540
-pub(crate) fn SAVPTR_jump_0E882(r: &mut Run) {
+// SAVPTR~jump_6: firmware/lower/0E006-units.s:540
+pub(crate) fn SAVPTR_jump_6(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -36426,7 +36426,7 @@ pub(crate) fn OldestPastDue_li__(r: &mut Run) {
                 io!(r, at, 0x0E92A..0x0E92D, 19, r.cpu.load(1, R::A, Field::A, r.hw)); // A=DAT1 A
                 op!(r, at, 0x0E92D..0x0E92F, 4, r.cpu.inc(R::D, Field::A)); // D=D+1 A
                 op!(r, at, 0x0E92F..0x0E932, 5, r.cpu.d_add(1, 5)); // D1=D1+ 5
-                branch!(r, at, 0x0E936, 6, r.cpu.call(0x0E882)); // GOSUB SAVPTR~jump_0E882
+                branch!(r, at, 0x0E936, 6, r.cpu.call(0x0E882)); // GOSUB SAVPTR~jump_6
             }
             // #0E936:
             0x0E936..=0x0E953 => {
@@ -36507,7 +36507,7 @@ pub(crate) fn NextAlarm_li__(r: &mut Run) {
                 io!(r, at, 0x0E9B7..0x0E9BA, 19, r.cpu.load(1, R::A, Field::A, r.hw)); // A=DAT1 A
                 op!(r, at, 0x0E9BA..0x0E9BC, 4, r.cpu.inc(R::D, Field::A)); // D=D+1 A
                 op!(r, at, 0x0E9BC..0x0E9BF, 5, r.cpu.d_add(1, 5)); // D1=D1+ 5
-                branch!(r, at, 0x0E9C3, 6, r.cpu.call(0x0E882)); // GOSUB SAVPTR~jump_0E882
+                branch!(r, at, 0x0E9C3, 6, r.cpu.call(0x0E882)); // GOSUB SAVPTR~jump_6
             }
             // #0E9C3:
             0x0E9C3..=0x0E9E0 => {
@@ -36561,7 +36561,7 @@ pub(crate) fn NextAlarm_li__(r: &mut Run) {
             }
             // #0EA37:
             0x0EA37..=0x0EA37 => {
-                branch!(r, at, 0x0EA3B, 6, r.cpu.call(0x0E87B)); // GOSUB GETPTR~jump_0E87B
+                branch!(r, at, 0x0EA3B, 6, r.cpu.call(0x0E87B)); // GOSUB GETPTR~jump_2
             }
             // #0EA3B:
             0x0EA3B..=0x0EA43 => {
@@ -36707,7 +36707,7 @@ pub(crate) fn FindAlarm_li_b_(r: &mut Run) {
             }
             // #0EC13:
             0x0EC13..=0x0EC13 => {
-                branch!(r, at, 0x0EC17, 6, r.cpu.call(0x0E87B)); // GOSUB GETPTR~jump_0E87B
+                branch!(r, at, 0x0EC17, 6, r.cpu.call(0x0E87B)); // GOSUB GETPTR~jump_2
             }
             // #0EC17:
             0x0EC17..=0x0EC22 => {
@@ -36715,7 +36715,7 @@ pub(crate) fn FindAlarm_li_b_(r: &mut Run) {
                 op!(r, at, 0x0EC1A..0x0EC1D, 5, r.cpu.scratch(ScratchOp::ToScratch, R::C, 1, Field::W)); // R1=C
                 op!(r, at, 0x0EC1D..0x0EC20, 5, r.cpu.d_add(1, 5)); // D1=D1+ 5
                 op!(r, at, 0x0EC20..0x0EC22, 4, r.cpu.inc(R::D, Field::A)); // D=D+1 A
-                branch!(r, at, 0x0EC26, 6, r.cpu.call(0x0E882)); // GOSUB SAVPTR~jump_0E882
+                branch!(r, at, 0x0EC26, 6, r.cpu.call(0x0E882)); // GOSUB SAVPTR~jump_6
             }
             // #0EC26:
             0x0EC26..=0x0EC32 => {
@@ -36833,14 +36833,14 @@ pub(crate) fn SUB_0EC76(r: &mut Run) {
     }
 }
 
-// ALARMxcp~1~2~3: firmware/lower/0E006-units.s:843
-pub(crate) fn ALARMxcp_1_2_3(r: &mut Run) {
+// ALARMxcp~7: firmware/lower/0E006-units.s:843
+pub(crate) fn ALARMxcp_7(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
             0x0ECA2..=0x0ECA5 => {
                 op!(r, at, 0x0ECA2..0x0ECA5, 5, r.cpu.st_set(15, false)); // ST=0 15
-                branch!(r, at, 0x0ECA9, 6, r.cpu.call(0x0E882)); // GOSUB SAVPTR~jump_0E882
+                branch!(r, at, 0x0ECA9, 6, r.cpu.call(0x0E882)); // GOSUB SAVPTR~jump_6
             }
             // #0ECA9:
             0x0ECA9..=0x0ECA9 => {
@@ -37067,7 +37067,7 @@ pub(crate) fn SUB_0EDFA(r: &mut Run) {
             }
             // L_0EE10:
             0x0EE10..=0x0EE10 => {
-                branch!(r, at, 0x0EE14, 6, r.cpu.call(0x0E882)); // GOSUB SAVPTR~jump_0E882
+                branch!(r, at, 0x0EE14, 6, r.cpu.call(0x0E882)); // GOSUB SAVPTR~jump_6
             }
             // #0EE14:
             0x0EE14..=0x0EE14 => {
@@ -37075,7 +37075,7 @@ pub(crate) fn SUB_0EDFA(r: &mut Run) {
             }
             // #0EE1B:
             0x0EE1B..=0x0EE1B => {
-                branch!(r, at, 0x0EE1F, 6, r.cpu.call(0x0E87B)); // GOSUB GETPTR~jump_0E87B
+                branch!(r, at, 0x0EE1F, 6, r.cpu.call(0x0E87B)); // GOSUB GETPTR~jump_2
             }
             // #0EE1F:
             0x0EE1F..=0x0EE22 => {
@@ -37150,7 +37150,7 @@ pub(crate) fn L_0EEB0(r: &mut Run) {
     loop {
         match at {
             0x0EEB0..=0x0EEB0 => {
-                branch!(r, at, 0x0EEB4, 6, r.cpu.call(0x0E87B)); // GOSUB GETPTR~jump_0E87B
+                branch!(r, at, 0x0EEB4, 6, r.cpu.call(0x0E87B)); // GOSUB GETPTR~jump_2
             }
             // #0EEB4:
             0x0EEB4..=0x0EEC7 => {
@@ -37217,7 +37217,7 @@ pub(crate) fn code_0EEE9(r: &mut Run) {
             0x0EF21..=0x0EF25 => {
                 op!(r, at, 0x0EF21..0x0EF23, 4, r.cpu.p = 0); // P= 0
                 op!(r, at, 0x0EF23..0x0EF25, 4, r.cpu.dec = false); // SETHEX
-                branch!(r, at, 0x0EF29, 6, r.cpu.call(0x0E87B)); // GOSUB GETPTR~jump_0E87B
+                branch!(r, at, 0x0EF29, 6, r.cpu.call(0x0E87B)); // GOSUB GETPTR~jump_2
             }
             // #0EF29:
             0x0EF29..=0x0EF3C => {
@@ -37247,7 +37247,7 @@ pub(crate) fn code_0EF7C(r: &mut Run) {
             }
             // #0EF83:
             0x0EF83..=0x0EF83 => {
-                branch!(r, at, 0x0EF87, 6, r.cpu.call(0x0E87B)); // GOSUB GETPTR~jump_0E87B
+                branch!(r, at, 0x0EF87, 6, r.cpu.call(0x0E87B)); // GOSUB GETPTR~jump_2
             }
             // #0EF87:
             0x0EF87..=0x0EF87 => {
@@ -37272,7 +37272,7 @@ pub(crate) fn code_0EF7C(r: &mut Run) {
             // L_0EFA5:
             0x0EFA5..=0x0EFA7 => {
                 op!(r, at, 0x0EFA5..0x0EFA7, 4, r.cpu.p = 0); // P= 0
-                branch!(r, at, 0x0EFAB, 6, r.cpu.call(0x0E87B)); // GOSUB GETPTR~jump_0E87B
+                branch!(r, at, 0x0EFAB, 6, r.cpu.call(0x0E87B)); // GOSUB GETPTR~jump_2
             }
             // #0EFAB:
             0x0EFAB..=0x0EFCA => {
@@ -37467,7 +37467,7 @@ pub const ROUTINES: &[(u32, u32, Block, &str)] = &[
     (0x01EEC, 0x01EF5, OUT_CC_in, "OUT_CC_in"),
     (0x01EF6, 0x01EFC, SUB_01EF6, "SUB_01EF6"),
     (0x01EFD, 0x01F42, SUB_01EFD, "SUB_01EFD"),
-    (0x01F58, 0x01F6C, GETKEY_6_1, "GETKEY_6_1"),
+    (0x01F58, 0x01F6C, GETKEY_8, "GETKEY_8"),
     (0x01F72, 0x01FA6, CLCD10, "CLCD10"),
     (0x01FAC, 0x01FBC, CLEARLCD, "CLEARLCD"),
     (0x01FBD, 0x01FC3, Warmstart, "Warmstart"),
@@ -37622,7 +37622,7 @@ pub const ROUTINES: &[(u32, u32, Block, &str)] = &[
     (0x04676, 0x04679, SUB_04676, "SUB_04676"),
     (0x0467A, 0x04683, SUB_0467A, "SUB_0467A"),
     (0x04684, 0x04690, SUB_04684, "SUB_04684"),
-    (0x04691, 0x04705, SAVPTR_jump_04691, "SAVPTR_jump_04691"),
+    (0x04691, 0x04705, SAVPTR_jump_2, "SAVPTR_jump_2"),
     (0x0470D, 0x04713, CHECKKEY, "CHECKKEY"),
     (0x04719, 0x0477D, GETTOUCH, "GETTOUCH"),
     (0x0477E, 0x047C6, SUB_0477E, "SUB_0477E"),
@@ -37924,7 +37924,7 @@ pub const ROUTINES: &[(u32, u32, Block, &str)] = &[
     (0x0966F, 0x09698, SUB_0966F, "SUB_0966F"),
     (0x0969E, 0x09709, OBJ_09699, "OBJ_09699"),
     (0x0970F, 0x0972F, InitEnab, "InitEnab"),
-    (0x09735, 0x09751, restore_nm_s__1_1, "restore_nm_s__1_1"),
+    (0x09735, 0x09751, restore_nm_s__2, "restore_nm_s__2"),
     (0x098DB, 0x099BF, SUB_098DB, "SUB_098DB"),
     (0x099C0, 0x09B25, SUB_099C0, "SUB_099C0"),
     (0x09B26, 0x09B6C, SUB_09B26, "SUB_09B26"),
@@ -37984,9 +37984,9 @@ pub const ROUTINES: &[(u32, u32, Block, &str)] = &[
     (0x0B347, 0x0B350, SUB_0B347, "SUB_0B347"),
     (0x0B356, 0x0B40B, L_0B356, "L_0B356"),
     (0x0B411, 0x0B5D3, OBJ_0B40C, "OBJ_0B40C"),
-    (0x0B723, 0x0B798, free_li_r__1_1_2_1, "free_li_r__1_1_2_1"),
-    (0x0B79E, 0x0B8C3, free_li_r__1_1_2_2, "free_li_r__1_1_2_2"),
-    (0x0B8C9, 0x0B996, free_li_r__1_1_2_3, "free_li_r__1_1_2_3"),
+    (0x0B723, 0x0B798, free_li_r__5, "free_li_r__5"),
+    (0x0B79E, 0x0B8C3, free_li_r__6, "free_li_r__6"),
+    (0x0B8C9, 0x0B996, free_li_r__7, "free_li_r__7"),
     (0x0B9B0, 0x0B9FF, OBJ_0B9AB, "OBJ_0B9AB"),
     (0x0BA00, 0x0BA3F, SUB_0BA00, "SUB_0BA00"),
     (0x0BA45, 0x0BB02, OBJ_0BA40, "OBJ_0BA40"),
@@ -38006,13 +38006,13 @@ pub const ROUTINES: &[(u32, u32, Block, &str)] = &[
     (0x0C1A7, 0x0C1B5, SUB_0C1A7, "SUB_0C1A7"),
     (0x0C1B6, 0x0C1C4, SUB_0C1B6, "SUB_0C1B6"),
     (0x0C1C5, 0x0C203, SUB_0C1C5, "SUB_0C1C5"),
-    (0x0C251, 0x0C2B1, U_NCQ_1_7, "U_NCQ_1_7"),
+    (0x0C251, 0x0C2B1, U_NCQ_5, "U_NCQ_5"),
     (0x0C2B2, 0x0C2BA, SUB_0C2B2, "SUB_0C2B2"),
-    (0x0C2BB, 0x0C2C1, SAVPTR_jump_0C2BB, "SAVPTR_jump_0C2BB"),
+    (0x0C2BB, 0x0C2C1, SAVPTR_jump_3, "SAVPTR_jump_3"),
     (0x0C2C2, 0x0C2CC, SUB_0C2C2, "SUB_0C2C2"),
     (0x0C2D2, 0x0C30F, OBJ_0C2CD, "OBJ_0C2CD"),
     (0x0C315, 0x0C3A2, dup_stdunit_st__, "dup_stdunit_st__"),
-    (0x0C3A8, 0x0C4E2, U_NCQ_1_8, "U_NCQ_1_8"),
+    (0x0C3A8, 0x0C4E2, U_NCQ_6, "U_NCQ_6"),
     (0x0C50B, 0x0C621, SUB_0C50B, "SUB_0C50B"),
     (0x0CA3A, 0x0CA4F, L_0CA3A, "L_0CA3A"),
     (0x0CA60, 0x0CA80, ATTNchk, "ATTNchk"),
@@ -38033,10 +38033,10 @@ pub const ROUTINES: &[(u32, u32, Block, &str)] = &[
     (0x0CDD5, 0x0CE0E, a_pm_, "a_pm_"),
     (0x0CE14, 0x0CEB8, clkadj__r_, "clkadj__r_"),
     (0x0CEBE, 0x0CED8, code_0CEBE, "code_0CEBE"),
-    (0x0CEDE, 0x0CEE9, GETKEY_1_1_2, "GETKEY_1_1_2"),
+    (0x0CEDE, 0x0CEE9, OBJ_0CED9, "OBJ_0CED9"),
     (0x0CEEF, 0x0CF0D, OBJ_0CEEA, "OBJ_0CEEA"),
     (0x0CF0E, 0x0CF14, GETPTR_jump, "GETPTR_jump"),
-    (0x0CF15, 0x0CF1B, SAVPTR_jump_0CF15, "SAVPTR_jump_0CF15"),
+    (0x0CF15, 0x0CF1B, SAVPTR_jump_4, "SAVPTR_jump_4"),
     (0x0CF1C, 0x0CF22, MAKE__jump, "MAKE__jump"),
     (0x0CF23, 0x0CF29, CLKUTL1_jump, "CLKUTL1_jump"),
     (0x0CF2A, 0x0CF30, Day_Date_jump, "Day_Date_jump"),
@@ -38128,16 +38128,16 @@ pub const ROUTINES: &[(u32, u32, Block, &str)] = &[
     (0x0E307, 0x0E376, OBJ_0E302, "OBJ_0E302"),
     (0x0E377, 0x0E390, SUB_0E377, "SUB_0E377"),
     (0x0E391, 0x0E397, AllowIntr_jump, "AllowIntr_jump"),
-    (0x0E39F, 0x0E3A5, SAVPTR_jump_0E39F, "SAVPTR_jump_0E39F"),
+    (0x0E39F, 0x0E3A5, SAVPTR_jump_5, "SAVPTR_jump_5"),
     (0x0E3AB, 0x0E3DE, pastdue_li__, "pastdue_li__"),
-    (0x0E420, 0x0E43B, ALARMxcp_1_2_1, "ALARMxcp_1_2_1"),
-    (0x0E441, 0x0E460, ALARMxcp_1_2_2, "ALARMxcp_1_2_2"),
+    (0x0E420, 0x0E43B, ALARMxcp_5, "ALARMxcp_5"),
+    (0x0E441, 0x0E460, ALARMxcp_6, "ALARMxcp_6"),
     (0x0E635, 0x0E669, chkdate_r_, "chkdate_r_"),
     (0x0E66F, 0x0E692, VerifyTOD, "VerifyTOD"),
     (0x0E698, 0x0E6D3, Ornd_abs_r___1, "Ornd_abs_r___1"),
     (0x0E7B5, 0x0E7BA, code_0E7B5, "code_0E7B5"),
     (0x0E7C0, 0x0E7CD, OBJ_0E7BB, "OBJ_0E7BB"),
-    (0x0E7D3, 0x0E7F6, GETKEY_1_1_3, "GETKEY_1_1_3"),
+    (0x0E7D3, 0x0E7F6, OBJ_0E7CE, "OBJ_0E7CE"),
     (0x0E7FC, 0x0E801, OBJ_0E7F7, "OBJ_0E7F7"),
     (0x0E807, 0x0E80C, OBJ_0E802, "OBJ_0E802"),
     (0x0E812, 0x0E81F, OBJ_0E80D, "OBJ_0E80D"),
@@ -38145,8 +38145,8 @@ pub const ROUTINES: &[(u32, u32, Block, &str)] = &[
     (0x0E830, 0x0E835, OBJ_0E82B, "OBJ_0E82B"),
     (0x0E83B, 0x0E858, OBJ_0E836, "OBJ_0E836"),
     (0x0E859, 0x0E87A, SUB_0E859, "SUB_0E859"),
-    (0x0E87B, 0x0E881, GETPTR_jump_0E87B, "GETPTR_jump_0E87B"),
-    (0x0E882, 0x0E888, SAVPTR_jump_0E882, "SAVPTR_jump_0E882"),
+    (0x0E87B, 0x0E881, GETPTR_jump_2, "GETPTR_jump_2"),
+    (0x0E882, 0x0E888, SAVPTR_jump_6, "SAVPTR_jump_6"),
     (0x0E889, 0x0E894, SUB_0E889, "SUB_0E889"),
     (0x0E895, 0x0E89B, SAFESKIPOB_jump, "SAFESKIPOB_jump"),
     (0x0E89C, 0x0E8F2, SUB_0E89C, "SUB_0E89C"),
@@ -38160,7 +38160,7 @@ pub const ROUTINES: &[(u32, u32, Block, &str)] = &[
     (0x0EB95, 0x0EBA2, code_0EB95, "code_0EB95"),
     (0x0EC0C, 0x0EC75, FindAlarm_li_b_, "FindAlarm_li_b_"),
     (0x0EC76, 0x0EC9C, SUB_0EC76, "SUB_0EC76"),
-    (0x0ECA2, 0x0ED44, ALARMxcp_1_2_3, "ALARMxcp_1_2_3"),
+    (0x0ECA2, 0x0ED44, ALARMxcp_7, "ALARMxcp_7"),
     (0x0ED45, 0x0ED77, SUB_0ED45, "SUB_0ED45"),
     (0x0ED7D, 0x0ED94, ClrDouseAlm, "ClrDouseAlm"),
     (0x0ED9A, 0x0EDA4, OBJ_0ED95, "OBJ_0ED95"),

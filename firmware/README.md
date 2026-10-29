@@ -85,7 +85,10 @@ code, the generator works one out from where it is used. These names are ours,
 not HP's, and always contain `~`, which no published name does:
 
 - `xSUB~grob,list,list`: the case of a command's argument dispatch for those argument types (deepest stack level first).
-- `ROMPOLL~1`: a helper that only `ROMPOLL` uses (numbered in address order); `GETKEY~2~4` is a helper of a helper.
+- `~sstDISP;RDUP;GsstFIN`: a small secondary of named words (up to three), named after what it holds, the way HP named many of its own (`dup;RclInVars(gn)?`).
+- `ROMPOLL~1`: a helper that only `ROMPOLL` uses. Helpers of helpers are numbered in the same family, so `GETKEY~7` may be a helper of `GETKEY~2`.
+- `GETAB1~jump`: a routine that is one jump to `GETAB1` (a veneer).
+- Names that come out the same are numbered: `SAVPTR~jump_2`.
 
 Everything else has a generated name that just gives its address: `OBJ_` for
 an RPL object, `SUB_` for a subroutine, `L_` for a branch target, and

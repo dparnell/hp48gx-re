@@ -315,9 +315,9 @@ LIB0A7.link:
         LENGTH                                   * 3D5DD  length, to #3D6AA
         REL(5)  ROMP_0A7_000                     * 3D5E2  000 
         REL(5)  ROMP_0A7_001                     * 3D5E7  001 
-        REL(5)  MenuMTH~1~1                      * 3D5EC  002 
-        REL(5)  MenuMTH~1~1~8~1                  * 3D5F1  003 
-        REL(5)  MenuPr~1~1                       * 3D5F6  004 
+        REL(5)  MenuMTH~2                        * 3D5EC  002 
+        REL(5)  MenuMTH~11                       * 3D5F1  003 
+        REL(5)  MenuPr~2                         * 3D5F6  004 
         REL(5)  ROMP_0A7_005                     * 3D5FB  005 
         REL(5)  ROMP_0A7_006                     * 3D600  006 
         REL(5)  ROMP_0A7_007                     * 3D605  007 
@@ -451,7 +451,7 @@ ROMP_0A2_00F:
 
 * ROMPTR 0A2 010
 * refs (1): 3D6B1
-ROMP_0A2_010:
+~NoEdit?case;ViewLevel1;DoBadKey:
         :: NoEdit?case ViewLevel1                * 3D838
           DoBadKey ;                             * 3D847
 
@@ -548,12 +548,12 @@ ROMP_0A2_020:
 
 * ROMPTR 0A2 021
 * refs (2): 3D6B1 6BCF4
-ROMP_0A2_021:
+~DoDelims;$_LRParens;SetDA1NoCh:
         :: DoDelims $_LRParens SetDA1NoCh ;      * 3D9EA
 
 * ROMPTR 0A2 022
 * refs (3): 3D6B1 6B41C 6B433
-ROMP_0A2_022:
+~Modifier;SetKeysNS;SetDA123NoCh:
         :: Modifier SetKeysNS SetDA123NoCh ;     * 3DA03
 
 * ROMPTR 0A2 023
@@ -573,12 +573,12 @@ ROMP_0A2_025:
 
 * ROMPTR 0A2 026
 * refs (1): 3D6B1
-ROMP_0A2_026:
+~DoDelims;$_[];?ClrAlg:
         :: DoDelims $_[] ?ClrAlg ;               * 3DA79
 
 * ROMPTR 0A2 027
 * refs (1): 3D6B1
-ROMP_0A2_027:
+~Modifier;LShiftOnly;SetDA123NoCh_2:
         :: Modifier LShiftOnly SetDA123NoCh ;    * 3DA92
 
 * ROMPTR 0A2 028
@@ -598,7 +598,7 @@ ROMP_0A2_02A:
 
 * ROMPTR 0A2 02B
 * refs (1): 3D6B1
-ROMP_0A2_02B:
+~Echo2Macros;x>>;x<<:
         :: Echo2Macros x>> x<< ;                 * 3DB08
 
 * ROMPTR 0A2 02C
@@ -623,7 +623,7 @@ ROMP_0A2_02F:
 
 * ROMPTR 0A2 030
 * refs (2): 3D6B1 6BA47
-ROMP_0A2_030:
+~DoDelims;$_{};?ClrAlgSetPr:
         :: DoDelims $_{} ?ClrAlgSetPr ;          * 3DB6A
 
 LIB0A2.hash:
@@ -669,7 +669,7 @@ LIB0A2.link:
         REL(5)  ROMP_0A2_00D                     * 3DC32  00D 
         REL(5)  ROMP_0A2_00E                     * 3DC37  00E 
         REL(5)  ROMP_0A2_00F                     * 3DC3C  00F 
-        REL(5)  ROMP_0A2_010                     * 3DC41  010 
+        REL(5)  ~NoEdit?case;ViewLevel1;DoBadKey * 3DC41  010 
         REL(5)  ROMP_0A2_011                     * 3DC46  011 
         REL(5)  ASIN                             * 3DC4B  012 
         REL(5)  ROMP_0A2_013                     * 3DC50  013 
@@ -686,22 +686,22 @@ LIB0A2.link:
         REL(5)  ROMP_0A2_01E                     * 3DC87  01E 
         REL(5)  ROMP_0A2_01F                     * 3DC8C  01F 
         REL(5)  ROMP_0A2_020                     * 3DC91  020 
-        REL(5)  ROMP_0A2_021                     * 3DC96  021 
-        REL(5)  ROMP_0A2_022                     * 3DC9B  022 
+        REL(5)  ~DoDelims;$_LRParens;SetDA1NoCh  * 3DC96  021 
+        REL(5)  ~Modifier;SetKeysNS;SetDA123NoCh * 3DC9B  022 
         REL(5)  ROMP_0A2_023                     * 3DCA0  023 
         REL(5)  ROMP_0A2_024                     * 3DCA5  024 
         REL(5)  ROMP_0A2_025                     * 3DCAA  025 
-        REL(5)  ROMP_0A2_026                     * 3DCAF  026 
-        REL(5)  ROMP_0A2_027                     * 3DCB4  027 
+        REL(5)  ~DoDelims;$_[];?ClrAlg           * 3DCAF  026 
+        REL(5)  ~Modifier;LShiftOnly;SetDA123NoCh_2 * 3DCB4  027 
         REL(5)  ROMP_0A2_028                     * 3DCB9  028 
         REL(5)  ROMP_0A2_029                     * 3DCBE  029 
         REL(5)  ROMP_0A2_02A                     * 3DCC3  02A 
-        REL(5)  ROMP_0A2_02B                     * 3DCC8  02B 
+        REL(5)  ~Echo2Macros;x>>;x<<             * 3DCC8  02B 
         REL(5)  ROMP_0A2_02C                     * 3DCCD  02C 
         REL(5)  ROMP_0A2_02D                     * 3DCD2  02D 
         REL(5)  ROMP_0A2_02E                     * 3DCD7  02E 
         REL(5)  ROMP_0A2_02F                     * 3DCDC  02F 
-        REL(5)  ROMP_0A2_030                     * 3DCE1  030 
+        REL(5)  ~DoDelims;$_{};?ClrAlgSetPr      * 3DCE1  030 
         ENDLENGTH                                * 3DCE6
         NIBHEX  4E50000                          * 3DCE6  ä..
 
@@ -845,7 +845,7 @@ ROMP_0A3_017:
 
 * ROMPTR 0A3 018
 * refs (1): 3DCED
-ROMP_0A3_018:
+~Do1st/2nd+:;xDUP;DoNewMatrix:
         :: PTR Do1st/2nd+: xDUP DoNewMatrix ;    * 3DF54
 
 * ROMPTR 0A3 019

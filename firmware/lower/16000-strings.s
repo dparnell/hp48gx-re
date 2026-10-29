@@ -106,7 +106,7 @@ NULL$TEMP:
         :: NULL$ TOTEMPOB ;                      * 1613F
 
 * refs (1): 15C70
-OBJ_16153:
+~PALPTRDCMP;NOTcase;_type(_)_:
         :: PALPTRDCMP NOTcase _type(_)_          * 16153
         ;                                        * 16167
 
@@ -1434,32 +1434,32 @@ VLM~3:
 VLM~4:
         :: #134_64EA0 JstGetTHEMESG DISPROW3 Y/N-Menu BEGIN HOMEDIR * 17C6A
           NoEditLine? ?SKIP                      * 17C8D
-          :: #13D_64EF0 JstGetTHEMESG VLM~4~1 InitEd&Modes ; * 17C97
+          :: #13D_64EF0 JstGetTHEMESG VLM~5 InitEd&Modes ; * 17C97
 L_17CB5:
           DEPTH #0=?SKIP                         * 17CB5
-          :: VLM~4~2 OVER OBJ_15CCF VLM~4~1      * 17CBF
+          :: VLM~6 OVER OBJ_15CCF VLM~5          * 17CBF
             :: DROP CK0NOLASTWD 3RDROP GOTO L_17CB5 ; ; * 17CD8
           NoMemComLine? ?SKIP                    * 17D00
-          :: #138_64EC8 JstGetTHEMESG VLM~4~1 DelMemComLine ; * 17D0A
+          :: #138_64EC8 JstGetTHEMESG VLM~5 DelMemComLine ; * 17D0A
           NoLastStack? ?SKIP                     * 17D28
-          :: #137_64EBE JstGetTHEMESG VLM~4~1    * 17D32
+          :: #137_64EBE JstGetTHEMESG VLM~5      * 17D32
 
 DelLastStack:
             :: ABND BINT0 ' SAVELAM CACHE ERRSET ; ; * 17D46
           NoLastArg? ?SKIP                       * 17D73
-          :: #13B_64EE6 JstGetTHEMESG VLM~4~1 DelLastArg ; * 17D7D
+          :: #13B_64EE6 JstGetTHEMESG VLM~5 DelLastArg ; * 17D7D
           GBUFF GROBDIM DROP #0=?SKIP            * 17D9B
           ::                                     * 17DAF
 
 _PICT_:
-            $ "PICT" VLM~4~1 KILLADISP ;         * 17DB4
+            $ "PICT" VLM~5 KILLADISP ;           * 17DB4
           GetUserKeys NULL{} EQUAL ?SKIP         * 17DD5
-          :: #139_64ED2 JstGetTHEMESG VLM~4~1 ClrUserKeys ; * 17DE9
+          :: #139_64ED2 JstGetTHEMESG VLM~5 ClrUserKeys ; * 17DE9
           alarm<>{}? IT                          * 17E07
-          :: #13A_64EDC JstGetTHEMESG VLM~4~1 DelAlarrm(0) ; * 17E11
+          :: #13A_64EDC JstGetTHEMESG VLM~5 DelAlarrm(0) ; * 17E11
           DEPTH #0=?SKIP                         * 17E2F
-          :: #136_64EB4 JstGetTHEMESG VLM~4~1 DelStack ; CONTEXT@ * 17E39
-          LastNonNull IT OBJ_1804C               * 17E5C
+          :: #136_64EB4 JstGetTHEMESG VLM~5 DelStack ; CONTEXT@ LastNonNull * 17E39
+          IT OBJ_1804C                           * 17E61
           AdrPort0 NEXTLIBBAK IT                 * 17E6B
           :: BEGIN NEXTLIBBAK DUP ITE 4ROLL SWAP * 17E7A
             REFERENCED? ITE DROP                 * 17E9D
@@ -1499,7 +1499,7 @@ OBJ_17F40:
         ;                                        * 17F7F
 
 * refs (9): 17CA6 17CD3 17D19 17D41 17D8C 17DC6 ...
-VLM~4~1:
+VLM~5:
         :: DISPROW5 'R OBJ_17FB1 casedrop 2RDROP * 17F84
           NOTcaseDROP EVAL                       * 17FA2
         ;                                        * 17FAC

@@ -27,7 +27,7 @@ CONLIB~1:
 
 * ROMPTR 0E1 001
 * refs (1): A07F5
-CONLIB~1~1:
+CONLIB~2:
         {                                        * A08CE
           {                                      * A08D3
             :: TakeOver $ "SI" BINT60 TestUserFlag NOT Box/StdLabel ; * A08D8
@@ -73,13 +73,13 @@ CONLIB~1~1:
 
 * ROMPTR 0E1 002
 * refs (1): A07F5
-CONLIB~1~2:
+CONLIB~3:
         { ROMPTR 0E0 052                         * A0C1C  BRViewItem
           ROMPTR 0E0 013 }                       * A0C2C  BRdone
 
 * ROMPTR 0E1 003
 * refs (1): A07F5
-CONLIB~1~3:
+CONLIB~4:
         :: DUP#0= case2drop # 27                 * A0C3C
           DUPUNROT NTHCOMPDROP $ ": " &$ SWAP LAM CLFlag ITE * A0C55
           :: ROMPTR 0E1 009 DUPTYPEEXT? ITE      * A0C8F
@@ -90,7 +90,7 @@ CONLIB~1~3:
 
 * ROMPTR 0E1 004
 * refs (1): A07F5
-CONLIB~1~1~1:
+CONLIB~5:
         :: ROMPTR 0E0 017 DUP ROMPTR 0E1 009 ROMPTR 0E1 005 ROT NTHCOMPDROP * A0CFE  ~BRRclCurRow
           >TAG ;                                 * A0D33
 
@@ -200,7 +200,7 @@ ROMP_0E1_009:
 
 * ROMPTR 0E1 00A
 * refs (1): A07F5
-CONST~1~1:
+CONST~2:
         :: # E129 ERROROUT ;                     * A1EA1
 
 * ROMPTR 0E1 00B
@@ -282,16 +282,16 @@ LIB0E1.link:
         CON(5)  DOHSTR                           * A23E6  link table of library 0E1
         LENGTH                                   * A23EB  length, to #A242C
         REL(5)  CONLIB~1                         * A23F0  000 
-        REL(5)  CONLIB~1~1                       * A23F5  001 
-        REL(5)  CONLIB~1~2                       * A23FA  002 
-        REL(5)  CONLIB~1~3                       * A23FF  003 
-        REL(5)  CONLIB~1~1~1                     * A2404  004 
+        REL(5)  CONLIB~2                         * A23F5  001 
+        REL(5)  CONLIB~3                         * A23FA  002 
+        REL(5)  CONLIB~4                         * A23FF  003 
+        REL(5)  CONLIB~5                         * A2404  004 
         REL(5)  ROMP_0E1_005                     * A2409  005 
         REL(5)  ROMP_0E1_006                     * A240E  006 
         REL(5)  ROMP_0E1_007                     * A2413  007 
         REL(5)  CONST~1                          * A2418  008 
         REL(5)  ROMP_0E1_009                     * A241D  009 
-        REL(5)  CONST~1~1                        * A2422  00A 
+        REL(5)  CONST~2                          * A2422  00A 
         REL(5)  ROMP_0E1_00B                     * A2427  00B 
         ENDLENGTH                                * A242C
         BSS     4                                * A242C

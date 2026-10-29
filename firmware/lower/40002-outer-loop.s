@@ -8,7 +8,7 @@
 StartMenu~2:
         :: OVER' ROMPTR 0A9 000 EQUAL IT         * 40002
           :: 2DROP LastMenuDef@ LastMenuRow@ ;   * 40021
-          StartMenu~2~1 ;                        * 4003A
+          StartMenu~7 ;                          * 4003A
 
 * refs (1): 401CA
 StdMenuKeyNS~any:
@@ -180,11 +180,11 @@ DoKeyOb~romptr:
 * refs (1): 40468
 DoKeyOb~1:
         :: DUP OBJ_2699F case PutInComLine!!(_)  * 4053F
-          AlgEntry? case DoKeyOb~1~1             * 40558
+          AlgEntry? case DoKeyOb~2               * 40558
           OBJ_4058F ;                            * 40567
 
 * refs (1): 40562
-DoKeyOb~1~1:
+DoKeyOb~2:
         :: ?OKINALG case OBJ_40639               * 40571
           OBJ_4058F ;                            * 40585
 
@@ -281,7 +281,7 @@ MenuMaker:
         :: TakeOver 'R ;                         * 407FB
 
 * refs (8): 1A06B 4A25D 6BF2E D6F93 D70E7 D71C9 ...
-OBJ_4080F:
+~';MenuMaker;CkSecoType:
         :: ' MenuMaker CkSecoType ;              * 4080F
 
 * ->
@@ -290,7 +290,7 @@ MenuKey:
         :: TakeOver 'R GETPROC ;                 * 40828
 
 * refs (1): 6BE48
-OBJ_40841:
+~';MenuKey;CkSecoType:
         :: ' MenuKey CkSecoType ;                * 40841
 
 * ->
@@ -299,7 +299,7 @@ Modifier:
         :: TakeOver ;                            * 4085A
 
 * refs (1): 6BF4C
-OBJ_40869:
+~';Modifier;CkSecoType:
         :: ' Modifier CkSecoType ;               * 40869
 
 * refs (4): 4081E 40850 40878 6BF1F
@@ -415,7 +415,7 @@ EnterComLine:
 * ->
 * refs (48): 15039 1505C 15882 2230C 2232A 22348 ...
 AtUserStack:
-        :: AtUserStack~1 InitEnab ;              * 40BC9
+        :: ~CK0NOLASTWD;0LASTOWDOB! InitEnab ;   * 40BC9
 
 * refs (1): D9A95
 GetLastEdit:
@@ -761,9 +761,9 @@ $_::
 
 * refs (1): 4144F
 >Review$~program:
-        :: DUPROM-WORD? case >Review$~program~1  * 414DA
+        :: DUPROM-WORD? case ~SWAPDROP;->StkStr22! * 414DA
           SystemLevel? NOTcasedrop OBJ_41552     * 414EE
-          ' ROM-WORD? Find1stTrue case >Review$~program~1 * 414FD
+          ' ROM-WORD? Find1stTrue case ~SWAPDROP;->StkStr22! * 414FD
           OBJ_41552 ;                            * 41516
 
 * refs (1): 41459
@@ -781,7 +781,7 @@ OBJ_41552:
         ;                                        * 4159D
 
 * refs (2): 414E9 41511
->Review$~program~1:
+~SWAPDROP;->StkStr22!:
         :: SWAPDROP ->StkStr22! ;                * 415A2
         BSS     19                               * 415B6
 
@@ -832,7 +832,7 @@ OBJ_41764:
 * refs (1): 38688
 SysMenuCheck~1:
         :: CONTEXT@ OBJ_41A14 EQcase DROP        * 41787
-          OBJ_41A04 SysMenuCheck~1~1 ;           * 417A0
+          OBJ_41A04 SysMenuCheck~4 ;             * 417A0
 
 * refs (1): 4102B
 StartMenu~3:
@@ -1037,7 +1037,7 @@ OBJ_419A4:
         GOTO    L_41A24                          * 419B0
 
 * refs (1): 417A5
-SysMenuCheck~1~1:
+SysMenuCheck~4:
         CON(5)  (*)+5                            * 419B4  primitive code object
         LC(5)   TrackAct                         * 419B9
         GOTO    L_41A32                          * 419C0
@@ -1050,7 +1050,7 @@ MenuExitAct!:
         GOTO    L_41A24                          * 419D0
 
 * refs (1): 4003A
-StartMenu~2~1:
+StartMenu~7:
         CON(5)  (*)+5                            * 419D4  primitive code object
         LC(5)   MenuExitAct                      * 419D9
         GOTO    L_41A32                          * 419E0
@@ -1247,4 +1247,4 @@ WaitForKey:
 * refs (1): 41F97
 WaitForKey~1:
         :: 2DUP ModifierKey? case2drpfls '       * 41FE7
-          WaitForKey~1~1 ROT >TCOMP SWAP >TCOMP TRUE ; * 42000
+          ~TakeOver;TRUE;1PUTLAM ROT >TCOMP SWAP >TCOMP TRUE ; * 42000

@@ -649,7 +649,7 @@ SUB_67129:
 
 * refs (3): 670F3 67162 67198
 SUB_67136:
-        GOSUB   SAVPTR~jump_67156                * 67136
+        GOSUB   SAVPTR~jump_21                   * 67136
         A=DAT1  A                                * 6713A
         D1=A                                     * 6713D
         D1=D1+  10                               * 67140
@@ -661,7 +661,7 @@ SUB_67136:
         RTN                                      * 67154
 
 * refs (1): 67136
-SAVPTR~jump_67156:
+SAVPTR~jump_21:
         GOVLNG  SAVPTR                           * 67156
 
 * refs (1): 44CE1
@@ -1110,7 +1110,7 @@ OBJ_67648:
         GOTO    L_6778D                          * 67661
 
 * refs (1): 69FEC
-EqwRuleKey0~1~3:
+EqwRuleKey0~9:
         CON(5)  (*)+5                            * 67665  primitive code object
         GOSBVL  SAVPTR                           * 6766A
         D0=(5)  PDCHXS                           * 67671
@@ -1451,7 +1451,7 @@ L_67A18:
         PC=(A)                                   * 67A1A
 
 * refs (1): 6A005
-EqwRuleKey0~1~4:
+EqwRuleKey0~10:
         CON(5)  (*)+5                            * 67A1E  primitive code object
         GOSUB   EqwPOP#>Box                      * 67A23
         D0=D0+  1                                * 67A27
@@ -2654,12 +2654,13 @@ OBJ_687FB:
 
 * refs (2): 68747 68B20
 OBJ_68873:
-        :: OBJ_69147 OBJ_27797 OBJ_69495 OBJ_28602 BEGIN OBJ_67DDF #0= WHILE * 68873
+        :: OBJ_69147 OBJ_27797 OBJ_69495 ~BINT0;1PUTLAM BEGIN OBJ_67DDF #0= * 68873
+          WHILE                                  * 6889B
           :: GetGNTData DROP tokrparen DUP OBJ_6934B PutGNTData * 688A0
 
 * refs (3): 68715 68B0C 69057
 OBJ_688C3:
-            :: OBJ_690C0 OBJ_285EE ; ;           * 688C3
+            :: OBJ_690C0 ~BINT1;1PUTLAM ; ;      * 688C3
           REPEAT OBJ_67DDF #1=case               * 688DC
 
 * refs (3): 6874C 6894A 68968
@@ -2667,7 +2668,7 @@ OBJ_688EB:
           :: GetGNTData TrueTrue ;               * 688EB
           OBJ_67F45 OBJ_69941 OBJ_672E6 #1= OBJ_67DDF BINT4 #= AND NOTcase * 688FF
           OBJ_686CF                              * 6892C
-          OBJ_69594 OBJ_285EE OBJ_67DEC OBJ_69188 EQcasedrop OBJ_688EB * 68931
+          OBJ_69594 ~BINT1;1PUTLAM OBJ_67DEC OBJ_69188 EQcasedrop OBJ_688EB * 68931
           OBJ_676D4 OBJ_67416 OBJ_679A1 OBJ_67448 OBJ_69495 OBJ_688EB ; * 6894F
 
 * refs (2): 6C4BF 8D3F5
@@ -2694,7 +2695,7 @@ OBJ_68972:
 
 * refs (4): 68A1C 68A8A 68A9E 68AE4
 OBJ_68AC1:
-            :: OBJ_285EE OBJ_676CF OBJ_6DE96 ;   * 68AC1
+            :: ~BINT1;1PUTLAM OBJ_676CF OBJ_6DE96 ; * 68AC1
             DUPROMPTR@ casedrop OBJ_68AC1        * 68ADA
             BINT4 ERROROUT ;                     * 68AE9
 
@@ -2747,7 +2748,7 @@ OBJ_68C7E:
 
 * refs (1): 689F4
 OBJ_68CE2:
-        :: OBJ_6BC91 #72109h BINT2               * 68CE2
+        :: ~';xFORMUNIT #72109h BINT2            * 68CE2
 
 * refs (2): 68869 68AB2
 OBJ_68CF6:
@@ -2775,7 +2776,7 @@ OBJ_68D9B:
 * refs (3): 687B5 687DD 68846
 OBJ_68E45:
         :: OBJ_69147                             * 68E45
-          :: OBJ_285EE OBJ_69824 8GETLAM OBJ_6D62A PutGNTData DROPDUP * 68E4F
+          :: ~BINT1;1PUTLAM OBJ_69824 8GETLAM OBJ_6D62A PutGNTData DROPDUP * 68E4F
             OBJ_676D4 OBJ_6DEAA ;                * 68E72
           6DROP OBJ_691E7 ;                      * 68E81
 
@@ -2792,7 +2793,7 @@ OBJ_68EEF:
             :: BINT0 ' xFCNAPPLY THREE{}N ;      * 68F17
             :: 6GETLAM NOT?SEMI                  * 68F35
               ZEROSWAP TWO{}N ;                  * 68F44
-            4GETLAM 7GETLAM 3GETLAM OBJ_67532 OBJ_69020 OBJ_28602 ; * 68F53
+            4GETLAM 7GETLAM 3GETLAM OBJ_67532 OBJ_69020 ~BINT0;1PUTLAM ; * 68F53
         ;                                        * 68F76
 
 * refs (5): 68FDA 694FE 6A1B3 6EC58 6F392
@@ -2829,7 +2830,7 @@ OBJ_690C0:
                 INNERCOMP                        * 690F7
 
 * refs (1): 6A109
-EqwRuleKey0~1~5:
+EqwRuleKey0~11:
                 :: ZERO_DO OBJ_68BE3 OBJ_676D4 LOOP ; ; * 690FC
             ;                                    * 6911F
             OBJ_67E0C OBJ_67448 OBJ_674BB ;      * 69124

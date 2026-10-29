@@ -6,7 +6,7 @@
 
 * refs (2): 48DB5 48DD3
 OBJ_49017:
-        :: 'NOP ZEROZERO ZEROZERO rceq! OBJ_47858 IT GETRHS * 49017
+        :: 'NOP ZEROZERO ZEROZERO rceq! ~DUP;ALGeq? IT GETRHS * 49017
           GETINDEP DUPTYPELIST? ITE              * 4903F
           :: INCOMPDROP %MAXorder SWAP ;         * 4904E
           :: GETPTYPE 'IDPOLAR jEQcase           * 49067
@@ -22,7 +22,7 @@ OBJ_49017:
           % 4E1 %/ SWAPDUP KeepUnit DROP SWAP EVAL SWAP 8NULLLAM{} BIND ; * 49111
 
 * refs (3): 6B961 73968 739A4
-OBJ_49158:
+~BINT27;GETLAM:
         :: BINT27 GETLAM ;                       * 49158
         NIBHEX  00000                            * 4916C  ..
 
@@ -71,44 +71,44 @@ OBJ_49293:
 
 * refs (1): 20A82
 xRULES~1:
-        :: CK0NOLASTWD RECLAIMDISP xRULES~1~7 xRULES~1~6 xRULES~1~5 * 492AC
-          xRULES~1~4 xRULES~1~3 xRULES~1~2 xRULES~1~1 BINT8 ONE_DO INDEX@ * 492CA
-          DISPN LOOP SetDAsTemp ;                * 492ED
+        :: CK0NOLASTWD RECLAIMDISP xRULES~8 xRULES~7 xRULES~6 xRULES~5 * 492AC
+          xRULES~4 xRULES~3 xRULES~2 BINT8 ONE_DO INDEX@ DISPN LOOP * 492CF
+          SetDAsTemp ;                           * 492F7
 
 * refs (1): 492D9
-xRULES~1~1:
+xRULES~2:
         $ "            M G"                      * 49301
 
 * refs (1): 492D4
-xRULES~1~2:
+xRULES~3:
         $ "      P   DIANA"                      * 49329
 
 * refs (1): 492CF
-xRULES~1~3:
+xRULES~4:
         $ "    CHARLIE X B     D"                * 49351
 
 * refs (1): 492CA
-xRULES~1~4:
+xRULES~5:
         $ " BILL U   N  TED    A"                * 49385
 
 * refs (1): 492C5
-xRULES~1~5:
+xRULES~6:
         $ " O  A L   N    ALCUIN"                * 493B9
 
 * refs (1): 492C0
-xRULES~1~6:
+xRULES~7:
         $ " B  I    JIM   V"                     * 493ED
 
 * refs (1): 492BB
-xRULES~1~7:
+xRULES~8:
         $ "  RON     S    E"                     * 49417
 
 * refs (1): 48887
-OBJ_49441:
+~BINT24;GETLAM;TRUE:
         :: BINT24 GETLAM TRUE ;                  * 49441
 
 * refs (1): 47989
-1FrDisp(st)~1:
+~TOADISP;BlankDA1:
         :: TOADISP BlankDA1 ;                    * 4945A
         BSS     10                               * 4946E
 
@@ -175,7 +175,7 @@ OBJ_496A0:
           DROPTRUE ;                             * 496E6
 
 * refs (3): 6B97F 6CBCF 7380F
-OBJ_496F0:
+~BINT27;PUTLAM:
         :: BINT27 PUTLAM ;                       * 496F0
         NIBHEX  00000                            * 49704  ..
 
@@ -185,14 +185,14 @@ PromptIdUtil:
         :: ->StkStr22! SWAP ID>$ $ ": " !append$SWAP !append$ ; * 49709
 
 * refs (1): 474F1
-PlotScr*en~6:
+PlotScr*en~10:
         :: CHECKMENU OBJ_49B4B CkEQUtil PointDerivUt CRUNCHNoBlame * 4973A
 
 _Slope__49758:
           $ "Slope" >TAG DUP OBJ_49D3A Π'SAVEDDEPTH #1+ ' Π'SAVEDDEPTH STO ; * 49758
 
 * refs (1): 48D0F
-PlotScr*en~3~1:
+PlotScr*en~11:
         :: OBJ_49B4B OBJ_48B39 FALSE             * 49799
 
 _Root_:
@@ -200,18 +200,18 @@ _Root_:
         NIBHEX  00000                            * 497E2  ..
 
 * refs (1): 47512
-PlotScr*en~7:
+PlotScr*en~12:
         :: CHECKMENU OBJ_49B4B CkEQUtil CURRENTMARK? NOTcase * 497E7
           :: 3DROP NEWMARK ;                     * 49805
           DROP OBJ_4782B 4UNROLL 3UNROLL DUPUNROT SYMSHOW SWAP ' INTEG * 49819
           CRUNCHNoBlame                          * 49846
 
 _Area_:
-          $ "Area" >TAG DUP BINT39 !DcompWidth 1stkdecomp$w OBJ_0C9FE * 4984B
-          Π'SAVEDDEPTH #1+ ' Π'SAVEDDEPTH STO ;  * 4987B
+          $ "Area" >TAG DUP BINT39 !DcompWidth 1stkdecomp$w * 4984B
+          ~DispCoord1;BINT2;16PUTLAM Π'SAVEDDEPTH #1+ ' Π'SAVEDDEPTH STO ; * 49876
 
 * refs (1): 48D4B
-PlotScr*en~4~1:
+PlotScr*en~13:
         :: OBJ_49B4B DORCLE EqList? ITE          * 49899
           :: ROT ' xEVAL BINT2 GetEqN NcaseSIZEERR OBJ_49B7D * 498B2
             OVER ' x- BINT5 ::N 3UNROLL ;        * 498DA
@@ -223,14 +223,14 @@ _I-sect_:
           $ "I-sect" OBJ_49E75 Π'SAVEDDEPTH #1+ ' Π'SAVEDDEPTH STO ; * 4992F
 
 * refs (1): 48D78
-PlotScr*en~5~1:
+PlotScr*en~14:
         :: OBJ_49B4B CkEQUtil PointDerivUt OBJ_48CBA OBJ_48B39 TRUE * 49968
 
 _Extrm_:
           $ "Extrm" OBJ_49E75 Π'SAVEDDEPTH #1+ ' Π'SAVEDDEPTH STO ; * 4998B
 
 * refs (1): 47577
-PlotScr*en~8:
+PlotScr*en~15:
         :: CHECKMENU OBJ_49B4B 2DROP CRUNCHNoBlame * 499C2
 
 _F(x)_:
@@ -274,12 +274,12 @@ ZPAR_49A88:
           ID ZPAR STOAPPLDATA ;                  * 49A88
 
 * refs (2): 48AA3 48AFD
-PlotScr*en~2~2~1~1~1:
+PlotScr*en~16:
         :: DUP OBJ_66BAD IT DROPZERO             * 49AA1
         ;                                        * 49ABA
 
 * refs (1): 47594
-PlotScr*en~9:
+PlotScr*en~17:
         :: CHECKMENU OBJ_49B4B CkEQUtil          * 49ABF
 
 * refs (3): 47660 4974E 49977
@@ -294,18 +294,18 @@ NextInEQ~1:
 
 * refs (10): 47638 47656 49744 4979E 497F1 4989E ...
 OBJ_49B4B:
-        :: rceq! OBJ_47858 NOTcase OBJ_48CBA     * 49B4B
+        :: rceq! ~DUP;ALGeq? NOTcase OBJ_48CBA   * 49B4B
           DUP ChkEQ(eq) case OBJ_49C95           * 49B64
           2DROP                                  * 49B78
 
 * refs (5): 498D5 7389B 8AB45 B6BB7 B6BDA
 OBJ_49B7D:
-          :: OBJ_47858 NOT?SEMI                  * 49B7D
+          :: ~DUP;ALGeq? NOT?SEMI                * 49B7D
             1stArgRpn(ex) SYMBN ;                * 49B8C
           OBJ_48CBA ;                            * 49B9B
 
 FcnUtilEnd:
-        :: INDEPVAR FcnUtilEnd~1 OVER OBJ_1552C OVER SWAP XEQSTOID ; * 49BA5
+        :: INDEPVAR ~RECORDX&YC%;C>Re% OVER OBJ_1552C OVER SWAP XEQSTOID ; * 49BA5
 
 RootUtil:
         :: SYMBNUMSOLVE NOTcase                  * 49BD2
@@ -367,7 +367,7 @@ dup;BreakEquation?:
 
 * refs (1): 49B69
 ChkEQ(eq):
-        :: DUP OBJ_4D97F SWAP GETRHS OVER ChkEQ(eq)~1 NOTcaseFALSE * 49E0C
+        :: DUP ~1stArgb(ex);::N SWAP GETRHS OVER ChkEQ(eq)~1 NOTcaseFALSE * 49E0C
           ChkEQ(eq)~2                            * 49E34
         ;                                        * 49E39
 
@@ -402,8 +402,8 @@ PointMoveCur:
 * refs (1): 49D76
 NextInEQ~2:
           :: SWAP DUPNULL$? ITE DROP             * 49FE2
-            :: OBJ_0C9FE SORTASLOW ;             * 49FFB
-            BINT39 !DcompWidth 1stkdecomp$w OBJ_0C9FE ; * 4A00F
+            :: ~DispCoord1;BINT2;16PUTLAM SORTASLOW ; * 49FFB
+            BINT39 !DcompWidth 1stkdecomp$w ~DispCoord1;BINT2;16PUTLAM ; * 4A00F
         ;                                        * 4A028
 
 * refs (4): 49F4C 49F60 49F8D 49FA1
@@ -416,7 +416,7 @@ DISPCOORD2:
         :: DispCoord1 WaitForKey 2DROP DispMenu InitEdModes ; * 4A055
 
 * refs (1): 49BAF
-FcnUtilEnd~1:
+~RECORDX&YC%;C>Re%:
         :: RECORDX&YC% C>Re% ;                   * 4A078
 
 * refs (8): 155E5 15887 4902B 49902 49B50 49E89 ...
@@ -483,7 +483,7 @@ OBJ_4A244:
 
 * refs (3): 4A221 4A235 4A249
 OBJ_4A258:
-        :: OBJ_4080F 'R SWAP case EVAL           * 4A258
+        :: ~';MenuMaker;CkSecoType 'R SWAP case EVAL * 4A258
           EVAL OBJ_4A285 ;                       * 4A276
 
 * refs (4): 3C407 4A27B 4A2DF 4A2F8
@@ -541,13 +541,13 @@ _mark__4A45C:
             OVER %ABSCOERCE #1+ NTHELCOMP ?SKIP $ "spc " * 4A475
             swap;->EditStr;+(2st) ;              * 4A4A0
           &$ DISPROW6 $ "cksum: " ROT DECOMP&$ $ "  translate: " !!append$ * 4A4AA
-          OBJ_4613E DISPROW7 2DROP SetDA2OKTemp ; * 4A4FF
+          ~SWAP;DECOMP&$ DISPROW7 2DROP SetDA2OKTemp ; * 4A4FF
 
 * refs (1): 3D3DE
 OBJ_4A518:
         :: ChkPRTPAR #4- NDROP $ "Delay: " 5ROLL DECOMP&$ DISPROW3 * 4A518
           $ "Remap: " 4ROLL DECOMP&$ DISPROW4 $ "Line length: " ROT DECOMP&$ * 4A553
-          DISPROW5 $ "End-of-line: " OBJ_4613E DISPROW6 NULL$ DISPROW7 * 4A5A8
+          DISPROW5 $ "End-of-line: " ~SWAP;DECOMP&$ DISPROW6 NULL$ DISPROW7 * 4A5A8
           SetDA2OKTemp ;                         * 4A5E5
 
 * refs (1): 413C3
@@ -560,8 +560,8 @@ OBJ_4A5EF:
 OBJ_4A678:
         :: ROMPTR 0B5 08C $ "Xeye:  " 6ROLL DECOMP&$ DISPROW3 $ "Yeye:  " * 4A678
           5ROLL DECOMP&$ DISPROW4 $ "Zeye:  " 4ROLL DECOMP&$ DISPROW5 * 4A6C7
-          $ "Xstep: " ROT DECOMP&$ DISPROW6 $ "Ystep: " OBJ_4613E DISPROW7 * 4A6FD
-          BINT10 NDROP SetDA2OKTemp ;            * 4A746
+          $ "Xstep: " ROT DECOMP&$ DISPROW6 $ "Ystep: " ~SWAP;DECOMP&$ * 4A6FD
+          DISPROW7 BINT10 NDROP SetDA2OKTemp ;   * 4A741
 
 * refs (2): 3C5A5 3C62F
 OBJ_4A75A:
@@ -860,23 +860,23 @@ ChkPut('PPAR',li,s):
         :: ROMPTR 0F1 03C ;                      * 4B37D
 
 * refs (1): 8D02B
-ChkPut('PPAR',li,s)~1~1:
+ChkPut('PPAR',li,s)~2:
         :: DROP DUPTYPEIDNT? NcaseTYPEERR OVER   * 4B392
           PPAR(s);dup;li? ITE                    * 4B3AB
           :: ICMPDRPRTDRP THREE{}N ; DROP        * 4B3B5
           BINT8 ROT#- PutBackPPAR(_,s) ;         * 4B3CE
 
 * refs (1): 8D03A
-ChkPut('PPAR',li,s)~1~2:
+ChkPut('PPAR',li,s)~3:
         :: DROP DUPTYPEREAL? 3PICK TYPEREAL? AND NcaseTYPEERR 3PICK * 4B3E2
-          PPAR(s);dup;li? ?CARCOMP 3UNROLL ChkPut('PPAR',li,s)~1~2~1 ; * 4B40A
+          PPAR(s);dup;li? ?CARCOMP 3UNROLL ChkPut('PPAR',li,s)~4 ; * 4B40A
 
 * refs (7): 45060 45092 4654F 4B3AB 4B40A B60C6 ...
 PPAR(s);dup;li?:
         :: CHECKPVARS SWAP NTHCOMPDROP DUPTYPELIST? ; * 4B423
 
 * refs (1): 4B419
-ChkPut('PPAR',li,s)~1~2~1:
+ChkPut('PPAR',li,s)~4:
         :: THREE{}N BINT8 ROT#- PutBackPPAR(_,s) ; * 4B441
 
 * refs (1): 4C58F
@@ -924,23 +924,23 @@ HSCALE:
 * ->
 * refs (5): 1E269 20151 4DAB2 8B812 B6358
 DOERASE:
-        :: GBUFF ZEROZERO OBJ_472D1 SWAP GROB!ZERODRP ; * 4B60C
+        :: GBUFF ZEROZERO ~3PICK;GROBDIM SWAP GROB!ZERODRP ; * 4B60C
 
 * refs (2): 4C62A 7387D
-OBJ_4B62F:
+~1stArgb(ex);SYMBN:
         :: 1stArgb(ex) SYMBN ;                   * 4B62F
 
 * refs (1): 041C5
-TurnOff~1:
+~IT;ShowInvRomp:
         :: IT ShowInvRomp                        * 4B643
         ;                                        * 4B652
         NIBHEX  00000                            * 4B657  ..
 
 * refs (3): 1E19A 20156 4C305
 draw:
-        :: GDISPCENTER TURNMENUOFF GETPTYPE DUP draw~2 IT * 4B65C
+        :: GDISPCENTER TURNMENUOFF GETPTYPE DUP ~BINT1;PTYPE>PINFO IT * 4B65C
           :: EVAL NOT?SEMI                       * 4B67F
-            OBJ_73153 RDROP EVAL ;               * 4B68E
+            ~BINT2;PTYPE>PINFO;DROP RDROP EVAL ; * 4B68E
           DROP PLOTPREP DROP draw~1 ABND ABND ;  * 4B6A2
 
 * refs (9): 8C894 8C964 8CA93 8CBD7 8CCBB 8CD9F ...
@@ -958,12 +958,12 @@ RESETDEPTH:
         :: DEPTH #1-SWAP OBJ_6C339 NDROP CK0NOLASTWD ; * 4B710
 
 * refs (2): 4C62F 73882
-OBJ_4B733:
+~1stArgRpn(ex);SYMBN:
         :: 1stArgRpn(ex) SYMBN ;                 * 4B733
 
 * refs (2): 4BBC5 4EDCF
 OBJ_4B747:
-        :: OBJ_50D02 OBJ_47858 IT GETRHS         * 4B747
+        :: OBJ_50D02 ~DUP;ALGeq? IT GETRHS       * 4B747
         ;                                        * 4B760
 
 * refs (3): 488BE 4B6A7 8A4EB
@@ -982,11 +982,11 @@ GetRes:
             :: %0_2A2B4 GetRes ;                 * 4B800
             UNCOERCE%% %%1 10GETLAM %%/ %%* %%>% ; * 4B814
           DUP %0<> ?SEMIDROP                     * 4B837
-          11GETLAM GetRes~1 case EVAL            * 4B846
+          11GETLAM ~BINT9;PTYPE>PINFO case EVAL  * 4B846
           %%1 10GETLAM %%/>% ;                   * 4B85A
 
 * refs (1): 6B489
-OBJ_4B86E:
+~EXITFCNsto;ERRJMP:
         :: EXITFCNsto ERRJMP ;                   * 4B86E
 
 * refs (1): 6D195
@@ -1007,7 +1007,7 @@ H/WKey>KeyOb~1:
         :: EVAL BINT7 GETDF EQLookup DROP ;      * 4B927
 
 * refs (1): 54698
-xALG->~1~1:
+~DOBIND;CK0NOLASTWD:
         :: DOBIND CK0NOLASTWD ;                  * 4B94A
 
 * refs (1): 6CB93
@@ -1021,7 +1021,7 @@ OBJ_4B97E:
 
 * refs (1): 4B6B1
 draw~1:
-        :: GetRes 4PUTLAM 11GETLAM OBJ_73153 EVAL ; * 4B99F
+        :: GetRes 4PUTLAM 11GETLAM ~BINT2;PTYPE>PINFO;DROP EVAL ; * 4B99F
 
 * refs (5): 21092 4BC3D 4BD41 4C33C 4C5EE
 rcl(nm)?;drop:
@@ -1055,7 +1055,7 @@ OBJ_4BAAD:
 
 * refs (2): 4692D 4BF94
 OBJ_4BABC:
-          :: rceq! OBJ_47858 NOTcaseDROP OBJ_4D97F * 4BABC
+          :: rceq! ~DUP;ALGeq? NOTcaseDROP ~1stArgb(ex);::N * 4BABC
             DUPLENCOMP #1= NOTcase2drop BINT2    * 4BAD5
             INCOMPDROP TYPEIDNT? ?SEMI           * 4BAE9
             DROP BINT2 ;                         * 4BAF8
@@ -1064,8 +1064,8 @@ OBJ_4BABC:
             OBJ_4BC06 OBJ_4C12A                  * 4BB43
             BINT28 TestSysFlag IT ExitAtLOOP     * 4BB4D
           ;                                      * 4BB61
-          ERRTRAP OBJ_4B4EB OBJ_4C082 LOOP ATTNFLGCLR 18GETLAM RESETDEPTH * 4BB66
-          INDEPVAR ?PURGE_HERE ;                 * 4BB89
+          ERRTRAP OBJ_4B4EB ~ATTNFLG@;#0=?SEMI;ExitAtLOOP LOOP ATTNFLGCLR * 4BB66
+          18GETLAM RESETDEPTH INDEPVAR ?PURGE_HERE ; * 4BB7F
 
 * refs (1): 4EDA2
 OBJ_4BB98:
@@ -1089,9 +1089,9 @@ OBJ_4BC83:
               BINT31 TestSysFlag ITE             * 4BCC9
               :: ' OBJ_4C7D3 ;                   * 4BCD8
               :: ' OBJ_4C846 ;                   * 4BCEC
-              3PUTLAM OBJ_4D96B INDEPVAR DUP 15PUTLAM OBJ_5956F 15GETLAM STO * 4BD00
-              OBJ_591E9 17GETLAM 15GETLAM XEQSTOID 15GETLAM rcl(nm)?;drop * 4BD28
-              15PUTLAM ITE                       * 4BD46
+              3PUTLAM ~RclDepnd;1get(li)? INDEPVAR DUP 15PUTLAM OBJ_5956F * 4BD00
+              15GETLAM STO OBJ_591E9 17GETLAM 15GETLAM XEQSTOID 15GETLAM * 4BD1E
+              rcl(nm)?;drop 15PUTLAM ITE         * 4BD41
               :: BINT2 OBJ_4A96E DROP DUP OBJ_513D7 SWAP OBJ_513FF ' * 4BD50
                 15GETLAM ' GETXPOS ' 1PUTLAM 4ROLL OBJ_4BEEF SWAPDROP * 4BD7D
                 ONESWAP 4ROLLDROP BINT1 4UNROLL BINT9 ROLL OBJ_4BEEF * 4BDA5
@@ -1100,8 +1100,8 @@ OBJ_4BC83:
                 OBJ_4BEEF SWAPDROP ONESWAP 4ROLLDROP BINT1 4UNROLL BINT8 ; * 4BE27
               ::N 2PUTLAM OBJ_4C12A ;            * 4BE4F
           ;                                      * 4BE63
-          ERRTRAP OBJ_4B4EB OBJ_4C082 LOOP ATTNFLGCLR 18GETLAM RESETDEPTH * 4BE68
-          INDEPVAR ?PURGE_HERE ;                 * 4BE8B
+          ERRTRAP OBJ_4B4EB ~ATTNFLG@;#0=?SEMI;ExitAtLOOP LOOP ATTNFLGCLR * 4BE68
+          18GETLAM RESETDEPTH INDEPVAR ?PURGE_HERE ; * 4BE81
         NIBHEX  00000                            * 4BE9A  ..
 
 * refs (1): 8CB64

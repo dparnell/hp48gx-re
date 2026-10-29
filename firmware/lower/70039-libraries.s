@@ -4,14 +4,14 @@
 * Follows on from the previous file (at #70039 in the original ROM).
 
 * refs (1): 855DD
-XEQIOBACKUP~1~2:
+XEQIOBACKUP~3:
         CON(5)  (*)+5                            * 70039  primitive code object
         C=0     S                                * 7003E
         C=-C-1  S                                * 70041
         GOTO    L_70050                          * 70044
 
 * refs (2): 855FB 85623
-XEQIOBACKUP~1~3:
+XEQIOBACKUP~4:
         CON(5)  (*)+5                            * 70048  primitive code object
         C=0     S                                * 7004D
 L_70050:
@@ -1387,7 +1387,7 @@ L_71317:
         D0=A                                     * 71317
         GOSBVL  SUB_0841E                        * 7131A
         GONC    L_71310                          * 71321
-PurgeBkp12(nm,s)~2~1~1:
+L_71324:
         C=0     A                                * 71324
         R0=C.F  A                                * 71326
         C=DAT1  A                                * 7132C
@@ -1584,13 +1584,13 @@ L_71583:
         AD0EX                                    * 71583
         GOSBVL  GETPTR                           * 71586
         DAT1=A  A                                * 7158D
-        LC(5)   OBJ_7159D                        * 71590
+        LC(5)   ~TOTEMPOB;TRUE                   * 71590
         A=C     A                                * 71597
         PC=(A)                                   * 71599
         RPL
 
 * refs (1): 71590
-OBJ_7159D:
+~TOTEMPOB;TRUE:
         :: TOTEMPOB TRUE ;                       * 7159D
 
 * refs (7): 09307 27061 2707F 71650 721AB 8552D ...
@@ -1804,7 +1804,7 @@ L_71843:
         GOSBVL  GETPTR                           * 7186A
         D1=(5)  #80104                           * 71871
         GOTO    L_71811                          * 71878
-sto12(bk,nm,s)~1~1:
+sto12(bk,nm,s)~2:
         GOSBVL  POP2#                            * 7187C
         R4=C.F  A                                * 71883
         R3=A.F  A                                * 71889
@@ -1880,7 +1880,7 @@ L_71917:
         C=R0.F  A                                * 7197E
         D1=C                                     * 71984
         RTNCC                                    * 71987
-PurgeBkp12(nm,s)~3~1:
+PurgeBkp12(nm,s)~3:
         GOSBVL  SAVPTR                           * 71989
         C=0     A                                * 71990
         R1=C.F  A                                * 71992
@@ -2581,7 +2581,7 @@ SUB_72245:
         DAT1=C  12                               * 7227D
         SETHEX                                   * 72281
         RTN                                      * 72283
-purge(bk,s)~1~1:
+purge(bk,s)~2:
         C=0     A                                * 72285
         R3=C.F  A                                * 72287
         A=DAT1  A                                * 7228D
@@ -2622,7 +2622,7 @@ L_722E9:
         RPL
 
 * refs (1): 09016
-sto12(bk,nm,s)~2:
+sto12(bk,nm,s)~3:
         :: SWAPDROP 2DUP #>case SETCORPORT       * 72300
           2DUP SWAP#- 4ROLL 2DUP #>case SETCORPORT * 72319
           SWAP#- ROTDROP ROTDUP OSIZE ;          * 72337
@@ -2772,16 +2772,16 @@ L_72529:
         ST=1    10                               * 7252E
         D0=D0-  6                                * 72531
         C=RSTK                                   * 72534
-        GOSUB   CSLW5~jump_7265D                 * 72536
+        GOSUB   CSLW5~jump_2                     * 72536
         CD0EX                                    * 7253A
-        GOSUB   CSLW5~jump_7265D                 * 7253D
+        GOSUB   CSLW5~jump_2                     * 7253D
         C=R1.F  A                                * 72541
         R1=C                                     * 72547
         GOSBVL  GARBAGECOL                       * 7254A  inline data follows
         C=R1                                     * 72551
-        GOSUB   CSRW5~jump_72664                 * 72554
+        GOSUB   CSRW5~jump_2                     * 72554
         A=C     A                                * 72558
-        GOSUB   CSRW5~jump_72664                 * 7255A
+        GOSUB   CSRW5~jump_2                     * 7255A
         RSTK=C                                   * 7255E
         GONC    L_724FA                          * 72560
 L_72563:
@@ -2856,11 +2856,11 @@ L_7263A:
         GOTO    L_72407                          * 72659
 
 * refs (4): 72536 7253D 72849 72850
-CSLW5~jump_7265D:
+CSLW5~jump_2:
         GOVLNG  CSLW5                            * 7265D
 
 * refs (4): 72554 7255A 72867 7286D
-CSRW5~jump_72664:
+CSRW5~jump_2:
         GOVLNG  CSRW5                            * 72664
 
 * refs (1): 726C8
@@ -3006,16 +3006,16 @@ L_7283C:
         ST=1    10                               * 72841
         D0=D0-  6                                * 72844
         C=RSTK                                   * 72847
-        GOSUB   CSLW5~jump_7265D                 * 72849
+        GOSUB   CSLW5~jump_2                     * 72849
         CD0EX                                    * 7284D
-        GOSUB   CSLW5~jump_7265D                 * 72850
+        GOSUB   CSLW5~jump_2                     * 72850
         C=R1.F  A                                * 72854
         R1=C                                     * 7285A
         GOSBVL  GARBAGECOL                       * 7285D  inline data follows
         C=R1                                     * 72864
-        GOSUB   CSRW5~jump_72664                 * 72867
+        GOSUB   CSRW5~jump_2                     * 72867
         A=C     A                                * 7286B
-        GOSUB   CSRW5~jump_72664                 * 7286D
+        GOSUB   CSRW5~jump_2                     * 7286D
         RSTK=C                                   * 72871
         GONC    L_7281D                          * 72873
 L_72876:
@@ -3163,7 +3163,7 @@ L_72A61:
         ;                                        * 72A6E
 
 * refs (1): 2121A
-xPVARS~1:
+~BINT33;#>;COLAcase:
         :: BINT33 #> COLAcase ;                  * 72A73
 
 * refs (2): 097C0 72AF0
@@ -3174,7 +3174,7 @@ OBJ_72A8C:
           REPEAT DROP ;                          * 72AC8
 
 * refs (1): 8554B
-restore(nm,s)~1~2:
+restore(nm,s)~3:
         :: HOMEDIR SYSSTOPSIGN CONTEXT@ COLA OBJ_72A8C * 72AD7
         ;                                        * 72AF5
 
@@ -3234,13 +3234,13 @@ SUB_72BA1:
         RPL
 
 * refs (1): 72BC3
-StartMenu~1~romptr~1~1:
+~RPTRACC;?SEMI;SETROMPERR:
         :: RPTRACC ?SEMI                         * 72BA5
           SETROMPERR ;                           * 72BB4
 
 * refs (1): 3A604
 StartMenu~1~romptr~1:
-        :: StartMenu~1~romptr~1~1 OBJ_72BD2 ;    * 72BBE
+        :: ~RPTRACC;?SEMI;SETROMPERR OBJ_72BD2 ; * 72BBE
 
 * refs (2): 72BC8 8D24B
 OBJ_72BD2:

@@ -5,7 +5,7 @@
 
 * ROMPTR 0C2 01D
 * refs (1): 90007
-EGV~1~3:
+EGV~5:
         :: 1GETLAM #1= ?SEMI                     * 93079
           1GETLAM BINT1 {}N ((0,0)) MAKEARRY 4PUTLAM RESOROMP ROMPTR 0C2 016 * 9308D
           10PUTLAM RESOROMP ROMPTR 0C2 017 12PUTLAM 1GETLAM DUPDUP #* BEGIN * 930BB
@@ -63,7 +63,7 @@ ROMP_0C2_021:
           :: 8PICK 3PICK PULL%%EL B%ABS1 6ROLL %%+ SWAP 3PICK PULL%%EL * 9353A
             B%ABS1 6ROLL %%+ SWAPDROP 2SWAP ;    * 9356C
           1GETLAM ROT#+SWAP #1+ NextInArray 2DROP 2DUP %%+ * 9358A
-          :: 3PICK 3PICK OBJ_37DA0 %%0= case 3DROP * 935AD
+          :: 3PICK 3PICK ~2DUP;%%<;NOT?SWAPDROP %%0= case 3DROP * 935AD
             OVER 4PICK                           * 935D0
             CODE                                 * 935DA  74 nibbles
               GOSBVL  SUB_2A0B1                  * 935E4
@@ -386,7 +386,7 @@ ROMP_0C2_02F:
           OVER %%> case2drop                     * 94BF3
           :: ROTDROP %%1 %%0 4ROLL 6PICK OVER %%< caseDROP 6UNROLL * 94C02
             5ROLL DROPSWAP ;                     * 94C34
-          4PICKOVER OBJ_37DA0 %%1E-14 %%* 8PICK %%> case * 94C43
+          4PICKOVER ~2DUP;%%<;NOT?SWAPDROP %%1E-14 %%* 8PICK %%> case * 94C43
           :: 4PICK %%SQR %%SQRT 4ROLLOVER %%/ 7ROLL %%* 6UNROLL 4ROLL L%CONJ * 94C66
             B%NEG OVER L%/ 3UNROLL L%/ L%CONJ ;  * 94C9D
           7PICK %%/ 4ROLL 7PICK %%/ 2DUP %%+ 3PICKOVER %%* 1+(rr) 3PICK3PICK * 94CC0
@@ -412,7 +412,7 @@ ROMP_0C2_030:
           OVER %%> case2drop                     * 94FC3
           :: ROTDROP %%1 %%0 4ROLL 5PICK OVER %%< caseDROP 5UNROLL * 94FD2
             4ROLL DROPSWAP ;                     * 95004
-          4PICKOVER OBJ_37DA0 %%1E-14 %%* 7PICK %%> case * 95013
+          4PICKOVER ~2DUP;%%<;NOT?SWAPDROP %%1E-14 %%* 7PICK %%> case * 95013
           :: 6ROLL DROP 4ROLL %%SQR %%SQRT DUP 6UNROLL DUPUNROT L%/ 4ROLLROT * 95036
             L%/ ;                                * 9506D
           6PICK %%/ DUP %%* 4ROLL 6PICK %%/ DUP %%* %%1 3PICK %%- SWAP %%- * 95077
@@ -607,7 +607,8 @@ ROMP_0C2_03F:
           RESOROMP ROMPTR 0C2 044 18PUTLAM RESOROMP ROMPTR 0C2 045 19PUTLAM * 95E79
           BINT1 PULL%%EL %%ABS DUP 3GETLAM ONE_DO 4dropn;IU! ?SKIP * 95EA3
           :: ROT INDEX@ 3GETLAM #+ PULL%%EL %%ABS SWAPINDEX@ #1+ PULL%%EL * 95ECB
-            %%ABS ROT 4ROLL DUPUNROT %%+ %%/ %%* ROTOVER OBJ_37DA0 SWAP ; * 95EFD
+            %%ABS ROT 4ROLL DUPUNROT %%+ %%/ %%* ROTOVER * 95EFD
+            ~2DUP;%%<;NOT?SWAPDROP SWAP ;        * 95F25
           NextInArray DROP %%3E-13 %%* 3GETLAM UNCOERCE %>%%SQRT %%/ 4PUTLAM * 95F34
           BINT0 5PUTLAM # FFFFF 6PUTLAM TRUE 7PUTLAM %%0 8PUTLAM 3GETLAM * 95F61
           BEGIN DUPUNROT PULL%%EL %%ABS 3PICK #1- * 95F93

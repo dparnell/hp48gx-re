@@ -104,7 +104,7 @@ setbeep:
         C=A     A                                * 141BE
         RSTK=C                                   * 141C0
         GOSBVL  POP#                             * 141C2
-        GOSUB   SAVPTR~jump_141DE                * 141C9
+        GOSUB   SAVPTR~jump_10                   * 141C9
         C=RSTK                                   * 141CD
         D=C     A                                * 141CF
         C=A     A                                * 141D1
@@ -112,14 +112,14 @@ setbeep:
         GOTO    L_14203                          * 141DA
 
 * refs (3): 141C9 141EA 1420F
-SAVPTR~jump_141DE:
+SAVPTR~jump_10:
         GOVLNG  SAVPTR                           * 141DE
 
 * ->
 * refs (9): 17BCC 1801A 2F022 38796 3890D 3892B ...
 ERRBEEP:
         CON(5)  (*)+5                            * 141E5  primitive code object
-        GOSUB   SAVPTR~jump_141DE                * 141EA
+        GOSUB   SAVPTR~jump_10                   * 141EA
         C=0     A                                * 141EE
         LC(3)   #578                             * 141F0
         D=C     A                                * 141F5
@@ -132,7 +132,7 @@ L_14203:
 * refs (6): 142B0 142E7 1EC80 D1E96 D1EFA D1F27
 $>$?:
         CON(5)  (*)+5                            * 1420A  primitive code object
-        GOSUB   SAVPTR~jump_141DE                * 1420F
+        GOSUB   SAVPTR~jump_10                   * 1420F
         C=DAT1  A                                * 14213
         D0=C                                     * 14216
         D0=D0+  5                                * 14219
@@ -381,7 +381,7 @@ OBJ_1470D:
 OBJ_14762:
         :: DUP OBJ_271C5 case EVAL               * 14762
           DROP REQcase xKILL                     * 1477B
-          OBJ_1482A DUPTYPECOL? NOTcase OBJ_14DFA * 1478A
+          ~sstDISP;kill DUPTYPECOL? NOTcase OBJ_14DFA * 1478A
           INHARDROM? case OBJ_14DFA              * 1479E
           ZEROSWAP COLA OBJ_14DAA                * 147AD
         ;                                        * 147BC
@@ -399,7 +399,7 @@ OBJ_147C1:
         CON(5)  NOP                              * 14825  entry 0
 
 * refs (1): 1478A
-OBJ_1482A:
+~sstDISP;kill:
         :: sstDISP kill ;                        * 1482A
 
 * refs (1): 23434
@@ -419,7 +419,7 @@ OBJ_148C0:
         :: RSWAP 'R RSWAP DUPUNROT OBJ_15156 SPACE$ !insert$ !append$ ; * 148C0
 
 * refs (2): 23051 230E1
-OBJ_148F2:
+~sstDISP;RDUP;GsstFIN:
         :: sstDISP RDUP GsstFIN ;                * 148F2
 
 * refs (1): 236DC
@@ -479,11 +479,11 @@ OBJ_14BB3:
         :: 'R'R OVER DECOMP$ addtics OBJ_14D8C BINT3 ::NEVAL GsstFIN ; * 14BB3
 
 * refs (1): 23490
-OBJ_14BE5:
+~sstDISP;CK0NOLASTWD;GsstFIN:
         :: sstDISP CK0NOLASTWD GsstFIN ;         * 14BE5
 
 * refs (1): 23860
-OBJ_14BFE:
+~sstDISP;Chk1&2Disp!(st)Fr;GsstFIN:
         :: sstDISP Chk1&2Disp!(st)Fr GsstFIN ;   * 14BFE
 
 * ob ->
@@ -818,8 +818,8 @@ GsstFIN:
 * refs (2): 1528C 3FB5F
 SolvMenuInit:
         :: ' SolvMenuInit~1 MenuKeyNS! ' SolvMenuInit~3 MenuKeyLS! ' * 151A6
-          SolvMenuInit~2 MenuKeyRS! ' PutStoLabel(s,_) LabelDef! ' EQReview * 151CE
-          ReviewKey! SolvMenuInit~4 ;            * 151F1
+          ~dIDNTNcase;StdRightShift;DoNameKeyRS MenuKeyRS! * 151CE
+          ' PutStoLabel(s,_) LabelDef! ' EQReview ReviewKey! SolvMenuInit~4 ; * 151D8
 
 * refs (3): 15352 3BE68 3C329
 OBJ_15200:
@@ -900,10 +900,10 @@ PutStoLabel(s,_):
 * refs (1): 151B0
 SolvMenuInit~1:
         :: DUPTYPEIDNT? ImmedEntry? ANDNOTcase StdMenuKeyNS * 154CD
-          ' SolvMenuInit~1~1 DoNameKeyLRS ;      * 154E6
+          ' SolvMenuInit~2 DoNameKeyLRS ;        * 154E6
 
 * refs (1): 154EB
-SolvMenuInit~1~1:
+SolvMenuInit~2:
         :: CK2NOLASTWD STRIPTAGSl2 OVER FINDVAR OVERSWAP matchob? ITE * 154FA
           SETCIRCERR DROP                        * 15522
 
@@ -921,7 +921,7 @@ KeepUnit:
           SetDA3NoCh ;                           * 15590
 
 * refs (1): 151CE
-SolvMenuInit~2:
+~dIDNTNcase;StdRightShift;DoNameKeyRS:
         :: dIDNTNcase StdRightShift              * 1559A
           DoNameKeyRS ;                          * 155A9
 
@@ -1100,7 +1100,7 @@ OBJ_159B4:
           :: OBJ_53922 OBJ_539D8 ; ERRJMP ;      * 159B4
 
 * refs (2): 4EBC2 8D6AC
-OBJ_159D2:
+~setStdWid;COLA;stkdecomp$w:
         :: setStdWid COLA stkdecomp$w            * 159D2
         ;                                        * 159E6
 
@@ -1292,7 +1292,7 @@ SUB_15C5F:
         GOSBVL  SAVPTR                           * 15C5F
         GOSBVL  Rom-Word?                        * 15C66
         GONC    L_15C84                          * 15C6D
-        LC(5)   OBJ_16153                        * 15C70
+        LC(5)   ~PALPTRDCMP;NOTcase;_type(_)_    * 15C70
 L_15C77:
         A=C     A                                * 15C77
 L_15C79:

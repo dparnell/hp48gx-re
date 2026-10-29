@@ -169,10 +169,10 @@ blank(2b):
 
 * refs (2): 1E474 1E502
 g?or(go,li,go,?):
-        :: 4ROLL CKREF 4UNROLL 4UNROLL OBJ_4F6DD ; * 4F6BA
+        :: 4ROLL CKREF 4UNROLL 4UNROLL ~SWAP;2HXSLIST?;GROB+# ; * 4F6BA
 
 * refs (2): 4F6D3 4F76E
-OBJ_4F6DD:
+~SWAP;2HXSLIST?;GROB+#:
         :: SWAP 2HXSLIST? GROB+# ;               * 4F6DD
 
 * refs (2): 1E492 1E520
@@ -181,13 +181,13 @@ g?or(go,c,go,?):
 
 * refs (2): 4F70F 4F77D
 OBJ_4F719:
-        :: SWAP OBJ_472D1 OBJ_4F1A1 case GROB+#  * 4F719
+        :: SWAP ~3PICK;GROBDIM OBJ_4F1A1 case GROB+# * 4F719
           SETSIZEERR ;                           * 4F737
 
 * refs (4): 1E4B0 1E4CE 1E53E 1E55C
 g?or(PICT,c,go,?):
         :: 4UNROLLROT CKPICT CHECKPICT GBUFF UNROTOVER TYPELIST? case * 4F741
-          :: OBJ_4F6DD DROP ;                    * 4F769
+          :: ~SWAP;2HXSLIST?;GROB+# DROP ;       * 4F769
           OBJ_4F719 DROP ;                       * 4F77D
 
 * flag grob1 grob2 #x #y -> grob'
@@ -200,7 +200,7 @@ GROB+#:
 * g1 g2 #n #m -> g1 g2' #n #m
 * refs (5): 4EA69 4ED52 4F79B 4F9DA 50451
 CKGROBFITS:
-        :: OBJ_472D1 2DUP 6PICK #+SWAP 5PICK #+ 8PICK GROBDIM DUP 5ROLL * 4F7E6
+        :: ~3PICK;GROBDIM 2DUP 6PICK #+SWAP 5PICK #+ 8PICK GROBDIM DUP 5ROLL * 4F7E6
           #<ITE                                  * 4F81D
           :: 7PICK #- 4ROLLDROP TRUE ;           * 4F822
           :: DROPROT FALSE ; 3PICK 5ROLL #<ITE   * 4F840
@@ -244,7 +244,7 @@ repl(go,c,go):
 
 * refs (2): 4FA02 4FA6B
 repl!(go,c,go):
-        :: SWAP OBJ_472D1 OBJ_4F1A1 NOTcaseDROP ChkRepl(2go,2s) * 4FA0C
+        :: SWAP ~3PICK;GROBDIM OBJ_4F1A1 NOTcaseDROP ChkRepl(2go,2s) * 4FA0C
         ;                                        * 4FA2A
 
 * refs (2): D231D D232C
@@ -279,7 +279,7 @@ sub(go,4s):
 
 * refs (2): 1C893 4FC1E
 sub(go,2c):
-        :: OBJ_472D1 2DUP5ROLL 3UNROLL sub(go,2c)~1 5UNROLL 5UNROLL * 4FBC4
+        :: ~3PICK;GROBDIM 2DUP5ROLL 3UNROLL sub(go,2c)~1 5UNROLL 5UNROLL * 4FBC4
           sub(go,2c)~1 sub(go,4s) ;              * 4FBE7
 
 * refs (2): D2285 D2294
@@ -320,7 +320,7 @@ OBJ_4FDCC:
         ;                                        * 4FE03
 
 * refs (1): 45218
-drax~1~5:
+drax~6:
         :: OBJ_4FE30                             * 4FE08
 
 * refs (3): 4FD04 4FD0E 4FD18
@@ -384,15 +384,16 @@ OBJ_4FE6C:
           8GETLAM 7GETLAM OBJ_5032A DUP %3 %< IT OBJ_501DB * 50091
           4PUTLAM 2DROP OBJ_5036B BEGIN OBJ_5028A 8GETLAM 3GETLAM ITE %1- * 500B9
           %1+                                    * 500E6
-          7GETLAM OBJ_5032A OBJ_517B2 2GETLAM ITE %1- %1+ * 500EB
+          7GETLAM OBJ_5032A ~8GETLAM;7GETLAM 2GETLAM ITE %1- %1+ * 500EB
           OBJ_5032A 6PICK 3PICK OBJ_5032A 4GETLAM dist(2r) 4ROLL 4GETLAM * 5010E
           dist(2r) 2DUP %> ITE 4UNROLL3DROP      * 50136
 
 drop(1,5-6):
           :: DROP 4ROLLDROP 4ROLLDROP ;          * 5014F
           4ROLL 4GETLAM dist(2r) %> ?SKIP 2SWAP  * 50168
-          2DROP TOTEMPSWAP TOTEMPSWAP 7PUTLAM 8PUTLAM OBJ_5036B OBJ_517B2 * 50186
-          1GETLAM EVAL AND ATTNFLG@ ATTNFLGCLR #0<> OR UNTIL ABND ; * 501A9
+          2DROP TOTEMPSWAP TOTEMPSWAP 7PUTLAM 8PUTLAM OBJ_5036B * 50186
+          ~8GETLAM;7GETLAM 1GETLAM EVAL AND ATTNFLG@ ATTNFLGCLR #0<> OR * 501A4
+          UNTIL ABND ;                           * 501CC
 
 * refs (1): 500B4
 OBJ_501DB:
@@ -423,7 +424,7 @@ OBJ_502BC:
           3PUTLAM ;                              * 5030C
 
 * refs (2): 4F075 4F084
-WINDOW#~1:
+~#+;#<:
         :: #+ #< ;                               * 50316
 
 * refs (4): 5009B 500F0 5010E 5011D
@@ -458,7 +459,7 @@ DO>LCD:
 * ->
 * refs (4): 1A862 47D65 5043D 6B25A
 DOCLLCD:
-        :: ABUFF ZEROZERO OBJ_472D1 SWAP GROB!ZERODRP ; * 5046A
+        :: ABUFF ZEROZERO ~3PICK;GROBDIM SWAP GROB!ZERODRP ; * 5046A
 
 * refs (2): 1E5C1 50532
 ->grob(_,r):
@@ -1096,7 +1097,7 @@ SUB_50E94:
         RPL
 
 * refs (1): 3E8E1
-{GRAPH\DOT-}~2:
+~3GETLAM;#1=:
         :: 3GETLAM #1= ;                         * 50EBB
 
 * refs (1): 3E76B
@@ -1105,12 +1106,13 @@ SUB_50E94:
 
 * refs (2): 4D8D0 50ED9
 OBJ_50EE3:
-        :: TakeOver CROSSMARKOFF BINT32 OBJ_50F2E ITE ClrSysFlag SetSysFlag * 50EE3
-          OBJ_5102B MENUOFF? OR ?SKIP DispMenu   * 50F0B
+        :: TakeOver CROSSMARKOFF BINT32 ~BINT32;TestSysFlag ITE ClrSysFlag * 50EE3
+          SetSysFlag                             * 50F06
+          ~16GETLAM;#1= MENUOFF? OR ?SKIP DispMenu * 50F0B
           CROSSMARKON ;                          * 50F24
 
 * refs (4): 3E761 484E0 4DB27 50EF7
-OBJ_50F2E:
+~BINT32;TestSysFlag:
         :: BINT32 TestSysFlag ;                  * 50F2E
 
 * refs (1): 49E2A
@@ -1144,7 +1146,7 @@ ChkEQ(eq)~2:
 
 * refs (19): 0C839 0C866 46C2F 46C8E 46E37 46E64 ...
 * Probably: PICTURE: TRUE when the menu area shows the x/y readout (lam 16 = 1)
-OBJ_5102B:
+~16GETLAM;#1=:
         :: 16GETLAM #1= ;                        * 5102B
 
 * refs (12): 451D7 4AF81 4AFBD 4B01C 4B044 4B080 ...
@@ -1436,7 +1438,7 @@ DUPGROBDIM:
 
 * refs (29): 0C947 0C9EA 4570D 481F2 48251 48328 ...
 * Probably: PICTURE cursor position: -> #x #y (lams 8 and 7)
-OBJ_517B2:
+~8GETLAM;7GETLAM:
         :: 8GETLAM 7GETLAM ;                     * 517B2
 
 * refs (4): 100DD 107ED 10806 10879
@@ -1474,7 +1476,7 @@ SWAP#1-SWAP:
         :: SWAP#1- SWAP ;                        * 51857
 
 * refs (1): 6BF5B
-OBJ_5186B:
+~DROP;DoBadKey:
         :: DROP DoBadKey ;                       * 5186B
 
 * -> #height #width

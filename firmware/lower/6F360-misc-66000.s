@@ -58,7 +58,7 @@ OBJ_6F595:
         :: TakeOver OBJ_461CD                    * 6F595
 
 * refs (1): 69ECA
-EqwRuleKey0~1~2:
+EqwRuleKey0~8:
           :: 'EL NOTcase                         * 6F5A4
 
 * refs (1): 6ACDF
@@ -348,5 +348,5 @@ OBJ_6FFC1:
 
 * refs (2): 4B7AB 4D1B4
 OBJ_6FFFD:
-        :: OBJ_4A874 11GETLAM OBJ_731DF NOT?SEMI * 6FFFD
+        :: OBJ_4A874 11GETLAM ~BINT12;PTYPE>PINFO;NOTcaseFALSE NOT?SEMI * 6FFFD
           10GETLAM OBJ_6FFC1 DROP 16GETLAM %+ 16PUTLAM ; * 70016

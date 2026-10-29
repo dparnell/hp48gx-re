@@ -86,7 +86,7 @@ LIB0E2.link:
         REL(5)  ROMP_0E2_027                     * E39B8  027 
         REL(5)  ROMP_0E2_028                     * E39BD  028 
         REL(5)  ROMP_0E2_029                     * E39C2  029 
-        REL(5)  ROMP_0E2_02A                     * E39C7  02A 
+        REL(5)  ~NULL{}                          * E39C7  02A 
         REL(5)  ROMP_0E2_02B                     * E39CC  02B 
         REL(5)  ROMP_0E2_02C                     * E39D1  02C 
         REL(5)  ROMP_0E2_02D                     * E39D6  02D 

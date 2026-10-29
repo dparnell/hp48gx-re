@@ -44,7 +44,7 @@ ROMP_0B5_004:
 
 * ROMPTR 0B5 005
 * refs (1): B4B39
-ROMP_0B5_005:
+~SAFE@:
         :: SAFE@ ;                               * B4C87
 
 * ROMPTR 0B5 006
@@ -96,7 +96,7 @@ ROMP_0B5_00D:
 
 * ROMPTR 0B5 00E
 * refs (1): B4B39
-ROMP_0B5_00E:
+~MAT*:
         :: MAT* ;                                * B4E20
 
 * ROMPTR 0B5 00F
@@ -281,7 +281,7 @@ ROMP_0B5_02D:
 
 * ROMPTR 0B5 02F
 * refs (2): B4B39 B4B39
-ROMP_0B5_02F:
+~BINT1;{}N;PUTINDEPLIST:
         :: BINT1 {}N PUTINDEPLIST ;              * B53F4
 
 * ROMPTR 0B5 030
@@ -311,12 +311,12 @@ ROMP_0B5_035:
 
 * ROMPTR 0B5 036
 * refs (1): B4B39
-ROMP_0B5_036:
+~GETXMIN;GETXMAX:
         :: GETXMIN GETXMAX ;                     * B54A3
 
 * ROMPTR 0B5 039
 * refs (3): B4B39 B4B39 B4B39
-ROMP_0B5_039:
+~BINT1;{}N;depnd(li):
         :: BINT1 {}N depnd(li) ;                 * B54B7
 
 * ROMPTR 0B5 03A
@@ -331,12 +331,12 @@ ROMP_0B5_03A:
 * refs (1): B4B39
 ROMP_0B5_03B:
         :: DUPTYPEBINT? case2drop                * B5511
-          :: OBJ_4D96B depnd(gn) ;               * B5520
+          :: ~RclDepnd;1get(li)? depnd(gn) ;     * B5520
           TWO{}N depnd(li) ;                     * B5534
 
 * ROMPTR 0B5 03C
 * refs (1): B4B39
-ROMP_0B5_03C:
+~GETYMIN;GETYMAX:
         :: GETYMIN GETYMAX ;                     * B5543
 
 * ROMPTR 0B5 03E
@@ -517,7 +517,7 @@ ROMP_0B5_05F:
 
 * ROMPTR 0B5 060
 * refs (1): B4B39
-ROMP_0B5_060:
+~BINT31;TestSysFlag;NOT:
         :: BINT31 TestSysFlag NOT ;              * B5C3E
 
 * ROMPTR 0B5 061
@@ -528,7 +528,7 @@ ROMP_0B5_061:
 
 * ROMPTR 0B5 062
 * refs (1): B4B39
-ROMP_0B5_062:
+~BINT28;TestSysFlag:
         :: BINT28 TestSysFlag ;                  * B5C7A
 
 * ROMPTR 0B5 063
@@ -631,7 +631,7 @@ ROMP_0B5_06F:
 
 * ROMPTR 0B5 070
 * refs (1): B4B39
-ROMP_0B5_070:
+~BINT29;TestSysFlag;NOT:
         :: BINT29 TestSysFlag NOT ;              * B611B
 
 * ROMPTR 0B5 071
@@ -643,13 +643,13 @@ ROMP_0B5_071:
 * ROMPTR 0B5 072
 * refs (1): B4B39
 ROMP_0B5_072:
-        :: OBJ_4681A NOTcase OBJ_0FDD1           * B6157
-          ROMPTR 0B5 073 NOTcasedrop OBJ_0FDD1   * B616B
-          SWAP ROMPTR 0B5 073 NOTcasedrop OBJ_0FDD1 * B6180
-          SWAP 2DUP %MIN %0< case2drop OBJ_0FDD1 * B619A
+        :: OBJ_4681A NOTcase ~%0;%1              * B6157
+          ROMPTR 0B5 073 NOTcasedrop ~%0;%1      * B616B
+          SWAP ROMPTR 0B5 073 NOTcasedrop ~%0;%1 * B6180
+          SWAP 2DUP %MIN %0< case2drop ~%0;%1    * B619A
           2DUP %MAX RclDepnd ROMPTR 0B5 064 DUPTYPEREAL? ITE * B61B8
           :: DROP BINT1 ; ARSIZE                 * B61DC
-          UNCOERCE %> case2drop OBJ_0FDD1        * B61F5
+          UNCOERCE %> case2drop ~%0;%1           * B61F5
         ;                                        * B6209
 
 * ROMPTR 0B5 073
@@ -688,7 +688,7 @@ ROMP_0B5_077:
 
 * ROMPTR 0B5 078
 * refs (1): B4B39
-ROMP_0B5_078:
+~DOERASE:
         :: DOERASE ;                             * B6353
 
 * ROMPTR 0B5 079
@@ -706,8 +706,9 @@ ROMP_0B5_07A:
           :: INNERCOMP DUP #3= NOTcase doerr607  * B63D5
           ;                                      * B63F3
           BINT1                                  * B63F8
-          INDEPVAR GETINDEP ROMPTR 0B5 032 3UNROLL OVER XEQSTOID OBJ_4D96B * B63FD
-          RclDepnd ROMPTR 0B5 064 OVER XEQSTOID 4ROLL #1= ITE * B6426
+          INDEPVAR GETINDEP ROMPTR 0B5 032 3UNROLL OVER XEQSTOID * B63FD
+          ~RclDepnd;1get(li)? RclDepnd ROMPTR 0B5 064 OVER XEQSTOID 4ROLL * B6421
+          #1= ITE                                * B6445
           :: 4ROLL THREE{}N ;                    * B644F
           :: 6ROLL 6ROLL 6ROLL BINT5 {}N ;       * B6463
           ROMPTR 0B5 072 DUP MINUSONE EQUAL IT   * B6486
@@ -852,12 +853,12 @@ ROMP_0B5_093:
 
 * ROMPTR 0B5 094
 * refs (1): B4B39
-ROMP_0B5_094:
+~BINT3;TestSysFlag;NOT:
         :: BINT3 TestSysFlag NOT ;               * B69CB
 
 * ROMPTR 0B5 095
 * refs (1): B4B39
-ROMP_0B5_095:
+~BINT1;TestSysFlag:
         :: BINT1 TestSysFlag ;                   * B69E4
 
 * ROMPTR 0B5 096
@@ -1306,12 +1307,12 @@ ROMP_0B5_0D4:
 
 * ROMPTR 0B5 0D5
 * refs (1): B4B39
-ROMP_0B5_0D5:
+~ALARMS@;LENCOMP:
         :: ALARMS@ LENCOMP ;                     * B7ABC
 
 * ROMPTR 0B5 0D6
 * refs (1): B4B39
-ROMP_0B5_0D6:
+~RCLALM;NOTcase;NOALARMERR:
         :: RCLALM NOTcase NOALARMERR             * B7AD0
         ;                                        * B7AE4
 

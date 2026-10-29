@@ -21,7 +21,7 @@ ROMP_0A3_020:
 
 * ROMPTR 0A3 021
 * refs (1): 3DCED
-ROMP_0A3_021:
+~DoDelim;CHR_#;?ClrAlg:
         :: DoDelim CHR_# ?ClrAlg ;               * 3E026
 
 * ROMPTR 0A3 022
@@ -71,12 +71,12 @@ ROMP_0A3_02A:
 
 * ROMPTR 0A3 02B
 * refs (2): 3DCED 6BAA1
-ROMP_0A3_02B:
+~DoDelims;$_2DQ;?ClrAlg:
         :: DoDelims $_2DQ ?ClrAlg ;              * 3E0D8
 
 * ROMPTR 0A3 02C
 * refs (1): 3DCED
-ROMP_0A3_02C:
+~Modifier;TurnOff;SetDA123NoCh_2:
         :: Modifier TurnOff SetDA123NoCh ;       * 3E0F1
 
 * ROMPTR 0A3 02D
@@ -96,11 +96,11 @@ K_128_3E12E:
 
 * ROMPTR 0A3 030
 * refs (1): 3DCED
-ROMP_0A3_030:
+~DoDelims;$_::;?ClrAlgSetPr:
         :: DoDelims PTR $_:: ?ClrAlgSetPr ;      * 3E135
 
 * refs (1): 3B509
-OBJ_3E14E:
+~Cursor&Disp;ToNextRowIfEnd:
         :: Cursor&Disp ToNextRowIfEnd ;          * 3E14E
         NIBHEX  00000                            * 3E162  ..
 
@@ -155,7 +155,7 @@ LIB0A3.link:
         REL(5)  ROMP_0A3_015                     * 3E23E  015 
         REL(5)  ROMP_0A3_016                     * 3E243  016 
         REL(5)  ROMP_0A3_017                     * 3E248  017 
-        REL(5)  ROMP_0A3_018                     * 3E24D  018 
+        REL(5)  ~Do1st/2nd+:;xDUP;DoNewMatrix    * 3E24D  018 
         REL(5)  ROMP_0A3_019                     * 3E252  019 
         REL(5)  ROMP_0A3_01A                     * 3E257  01A 
         REL(5)  ROMP_0A3_01B                     * 3E25C  01B 
@@ -164,7 +164,7 @@ LIB0A3.link:
         REL(5)  ROMP_0A3_01E                     * 3E26B  01E 
         REL(5)  ROMP_0A3_01F                     * 3E270  01F 
         REL(5)  ROMP_0A3_020                     * 3E275  020 
-        REL(5)  ROMP_0A3_021                     * 3E27A  021 
+        REL(5)  ~DoDelim;CHR_#;?ClrAlg           * 3E27A  021 
         REL(5)  ROMP_0A3_022                     * 3E27F  022 
         REL(5)  ROMP_0A3_023                     * 3E284  023 
         REL(5)  ROMP_0A3_024                     * 3E289  024 
@@ -174,12 +174,12 @@ LIB0A3.link:
         REL(5)  ROMP_0A3_028                     * 3E29D  028 
         REL(5)  ROMP_0A3_029                     * 3E2A2  029 
         REL(5)  ROMP_0A3_02A                     * 3E2A7  02A 
-        REL(5)  ROMP_0A3_02B                     * 3E2AC  02B 
-        REL(5)  ROMP_0A3_02C                     * 3E2B1  02C 
+        REL(5)  ~DoDelims;$_2DQ;?ClrAlg          * 3E2AC  02B 
+        REL(5)  ~Modifier;TurnOff;SetDA123NoCh_2 * 3E2B1  02C 
         REL(5)  ROMP_0A3_02D                     * 3E2B6  02D 
         REL(5)  ROMP_0A3_02E                     * 3E2BB  02E 
         REL(5)  K_128_3E12E                      * 3E2C0  02F 
-        REL(5)  ROMP_0A3_030                     * 3E2C5  030 
+        REL(5)  ~DoDelims;$_::;?ClrAlgSetPr      * 3E2C5  030 
         ENDLENGTH                                * 3E2CA
         BSS     19                               * 3E2CA
 
@@ -324,7 +324,7 @@ ChkForMenu(_):
           :: PTR Box/StdLbl:                     * 3E747
 
 _+/-_:
-            $ "+/-" OBJ_50F2E ;                  * 3E751
+            $ "+/-" ~BINT32;TestSysFlag ;        * 3E751
           {GRAPH\+/-}~1 }                        * 3E76B
 
 * refs (1): 46AD9
@@ -390,7 +390,7 @@ _CIRCLE_:
           :: PTR Box/StdLbl:                     * 3E890
 
 _DOT+_:
-            $ "DOT+" OBJ_7362F ;                 * 3E89A
+            $ "DOT+" ~3GETLAM;#2= ;              * 3E89A
           {GRAPH\DOT+}~1 }                       * 3E8B6
 
 * refs (1): 46A54
@@ -399,7 +399,7 @@ _DOT+_:
           :: PTR Box/StdLbl:                     * 3E8C5
 
 _DOT-_:
-            $ "DOT-" {GRAPH\DOT-}~2 ;            * 3E8CF
+            $ "DOT-" ~3GETLAM;#1= ;              * 3E8CF
           {GRAPH\DOT-}~1 }                       * 3E8EB
         FILLTO  #3EC71                           * 3E8F5  892 zero nibbles: the next entry stays at #3EC71
 
@@ -1000,15 +1000,15 @@ OBJ_3FC0F:
           1USR? NOTcase2DROP 2DUP                * 3FC28
           ModifierKey? case OBJ_3FC7D            * 3FC37
           OVER BINT30 #= OVER BINT2 #= ANDcase OBJ_3FC7D * 3FC46
-          2DROP OBJ_3FC9B ;                      * 3FC6E
+          2DROP ~QuitUserMo;SetDA1Bad ;          * 3FC6E
 
 * refs (2): 3FC41 3FC69
 OBJ_3FC7D:
         :: ?Key>UKeyOb NOT?SEMI                  * 3FC7D
-          DROP OBJ_3FC9B ;                       * 3FC8C
+          DROP ~QuitUserMo;SetDA1Bad ;           * 3FC8C
 
 * refs (2): 3FC73 3FC91
-OBJ_3FC9B:
+~QuitUserMo;SetDA1Bad:
         :: QuitUserMo SetDA1Bad ;                * 3FC9B
 
 * ob ->

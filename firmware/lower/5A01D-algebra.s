@@ -18,7 +18,7 @@ uncrunch:
         ;                                        * 5A090
 
 * refs (2): 84EA9 84ECC
-nWHEREFCNAPP~1~1:
+nWHEREFCNAPP~2:
         :: DROP' xFCNAPPLY pshm1 pullpsh1& pullpsh1& COLA OBJ_548D2 * 5A095
         ;                                        * 5A0BD
 
@@ -54,7 +54,7 @@ OBJ_5A1F8:
 
 * refs (1): 1F271
 OBJ_5A211:
-        { OBJ_5A333 =4(s)? OBJ_5A504 }           * 5A211
+        { OBJ_5A333 =4(s)? ~DROP';INTEG }        * 5A211
 
 * refs (1): 1F344
 OBJ_5A22A:
@@ -70,7 +70,7 @@ OBJ_5A257:
 
 * refs (1): 1F538
 OBJ_5A26B:
-        { OBJ_5A419 drop;false }                 * 5A26B
+        { ~larg;symbn;SWAP#1+ drop;false }       * 5A26B
 
 * refs (1): 1F5F1
 OBJ_5A27F:
@@ -78,7 +78,7 @@ OBJ_5A27F:
 
 * refs (1): 1FB2C
 OBJ_5A298:
-        { OBJ_5A45A drop;false }                 * 5A298
+        { ~larg;symbn;SWAP#1+_2 drop;false }     * 5A298
 
 * refs (1): 1B238
 OBJ_5A2AC:
@@ -115,7 +115,7 @@ OBJ_5A3EC:
         :: pshzerpsharg larg symbn SWAP#1+ psh symbn SWAP#1+ ; * 5A3EC
 
 * refs (1): 5A270
-OBJ_5A419:
+~larg;symbn;SWAP#1+:
         :: larg symbn SWAP#1+ ;                  * 5A419
 
 * refs (1): 5A284
@@ -123,7 +123,7 @@ OBJ_5A432:
         :: PTR addt: xAPPLY pargop SWAPcompSWAP pshtop& SWAPDROP#1- ; * 5A432
 
 * refs (1): 5A29D
-OBJ_5A45A:
+~larg;symbn;SWAP#1+_2:
         :: larg symbn SWAP#1+ ;                  * 5A45A
 
 * refs (1): 5A21B
@@ -152,7 +152,7 @@ OBJ_5A4E6:
         :: DROP ROTSWAP ' DERIV ;                * 5A4E6
 
 * refs (1): 5A220
-OBJ_5A504:
+~DROP';INTEG:
         :: DROP' INTEG ;                         * 5A504
 
 * refs (1): 5A24D
@@ -405,7 +405,7 @@ OBJ_5A9F5:
 * refs (2): 1FA2F 5AA90
 OBJ_5AA13:
         :: C%>% RclAccuracy DUPROT BINT2 3UNROLL OBJ_5A62E psh DROPSWAP * 5AA13
-          OBJ_5A62E pshtop& PTR addt: ROMP_002_105 IMPLODE ; * 5AA40
+          OBJ_5A62E pshtop& PTR addt: ~CK2&Dispatch IMPLODE ; * 5AA40
 
 * refs (1): 1FA39
 OBJ_5AA5E:
@@ -477,7 +477,7 @@ dvars?:
           DUP#1+PICK ' lam'dvar EQ UNTIL TRUE ;  * 5AD2B
 
 * refs (2): 83856 83897
-OBJ_5AD4E:
+~REQcase;lam'dvar;SKIP:
         :: REQcase lam'dvar                      * 5AD4E
           SKIP ;                                 * 5AD5D
 
@@ -505,20 +505,20 @@ linear:
 linear~1:
         :: BINT1 splitdown OVER #2+PICK REQcasedrop xNEG * 5ADEE
           DROP REQcasedrop x+                    * 5AE11
-          linear~1~2 REQcasedrop x-              * 5AE20
-          linear~1~2 REQcasedrop x*              * 5AE2F
+          linear~3 REQcasedrop x-                * 5AE20
+          linear~3 REQcasedrop x*                * 5AE2F
           OBJ_5AF01 REQcasedrop x/               * 5AE3E
-          linear~1~3 REQcasedrop x^              * 5AE4D
-          linear~1~4 REQcasedrop ä               * 5AE5C
-          linear~1~1 2DROP false;1Lput ;         * 5AE6B
+          linear~4 REQcasedrop x^                * 5AE4D
+          linear~5 REQcasedrop ä                 * 5AE5C
+          linear~2 2DROP false;1Lput ;           * 5AE6B
 
 * refs (1): 5AE6B
-linear~1~1:
+linear~2:
         :: BINT4 #= ?SEMI                        * 5AE7F
           FALSE 1PUTLAM ;                        * 5AE93
 
 * refs (2): 5AE20 5AE2F
-linear~1~2:
+linear~3:
         :: #2= ?SEMI                             * 5AEA2
 
 * refs (1): 5AF10
@@ -533,7 +533,7 @@ OBJ_5AF01:
           1PUTLAM top& pshtop& #1-SWAP ;         * 5AF29
 
 * refs (1): 5AE4D
-linear~1~3:
+linear~4:
         :: BINT2 #=casedrop                      * 5AF42
 
 * refs (3): 5AE75 5AF7E 5AFA1
@@ -542,7 +542,7 @@ false;1Lput:
           OBJ_5AF01 ;                            * 5AF65
 
 * refs (1): 5AE5C
-linear~1~4:
+linear~5:
         :: BINT2 #=casedrop false;1Lput          * 5AF6F
           #1+PICK num0=case DROP                 * 5AF83
           num1=case DROP                         * 5AF92
@@ -601,7 +601,7 @@ intg1~1:
             :: OVER #4+PICK NOTROMPcase DROP     * 5B1AE
               SWAPDROP ;                         * 5B1C7
           ;                                      * 5B1D1
-          intg1~1~1 NOTcase 2DROPFALSE           * 5B1D6
+          intg1~2 NOTcase 2DROPFALSE             * 5B1D6
           EVAL ;                                 * 5B1E5
 
 * Unreferenced NOP between objects: padding
@@ -746,29 +746,29 @@ OBJ_5B6F4:
 * refs (1): 5B67C
 forcemul:
         :: pshzer BEGIN                          * 5B717
-          :: M1st/case OBJ_5B758                 * 5B726
+          :: M1st/case ~SWAPDROP#1-;metainv;addt* * 5B726
             M1stINVcase forcemul~1               * 5B735
           ;                                      * 5B73F
           pullpsh1& #0=UNTIL DROP ;              * 5B744
 
 * refs (2): 5B730 5B79E
-OBJ_5B758:
+~SWAPDROP#1-;metainv;addt*:
         :: SWAPDROP#1- metainv addt* ;           * 5B758
 
 * refs (2): 5B73A 5B7AD
 forcemul~1:
         :: 3PICK REQcasedrop xNEG                * 5B771
           ROTSWAP REQcasedrop x/                 * 5B785
-          :: SWAPDROP#1- OBJ_5B758 addtINV COLA forcemul~1 * 5B794
+          :: SWAPDROP#1- ~SWAPDROP#1-;metainv;addt* addtINV COLA forcemul~1 * 5B794
           ;                                      * 5B7B2
           'x* EQ NOT?SEMI                        * 5B7B7
           larg dvars? NOTcase top&               * 5B7C6
-          DROP SWAPDROP#1- SWAPDROP#1- larg dvars? NOTcase forcemul~1~1 * 5B7DA
-          DROP psh dvars? NOTcase forcemul~1~1   * 5B7FD
+          DROP SWAPDROP#1- SWAPDROP#1- larg dvars? NOTcase forcemul~2 * 5B7DA
+          DROP psh dvars? NOTcase forcemul~2     * 5B7FD
           DROP pshtop& PTR addt2: x* xINV top& ; * 5B816
 
 * refs (2): 5B7F8 5B811
-forcemul~1~1:
+forcemul~2:
         :: metainv addt* over& unrot over& metainv ; * 5B839
 
 * meta1 meta2 meta3 -> meta2&meta3&meta1
@@ -1199,9 +1199,9 @@ Meta->():
 
 * rewrite rules, read by the interpreter called just before (SUB_5F6F2)
         NIBHEX  61000                            * 5C143  pattern: op5 op0
-        CON(5)  OBJ_5CC58                        * 5C148  run if it matches
+        CON(5)  ~SWAPDROP#1-;COLA;[f(X,Y)]=>[-X-Y]! * 5C148  run if it matches
         NIBHEX  62000                            * 5C14D  pattern: op5 op1
-        CON(5)  OBJ_5CC71                        * 5C152  run if it matches
+        CON(5)  ~SWAPDROP#1-;COLA;[f(X,Y)]=>[-X+Y]! * 5C152  run if it matches
         NIBHEX  63000                            * 5C157  pattern: op5 op2
         RPL
         ROMPTR 0F0 035                           * 5C15C  run if it matches
@@ -1222,9 +1222,9 @@ Meta->():
         NIBHEX  79000                            * 5C1CB  pattern: op6 op8
         ROMPTR 0F0 039                           * 5C1D0  run if it matches
         NIBHEX  73000                            * 5C1DB  pattern: op6 op2
-        CON(5)  OBJ_5CCBC                        * 5C1E0  run if it matches
+        CON(5)  ~SWAPDROP#1-;COLA;[f(X,Y)]=>[INV(X)/Y]! * 5C1E0  run if it matches
         NIBHEX  74000                            * 5C1E5  pattern: op6 op3
-        CON(5)  OBJ_5CCD5                        * 5C1EA  run if it matches
+        CON(5)  ~SWAPDROP#1-;COLA;[f(X,Y)]=>[INV(X)*Y]! * 5C1EA  run if it matches
         NIBHEX  77000                            * 5C1EF  pattern: op6 op6
         CON(5)  2pull2DROP                       * 5C1F4  run if it matches
         NIBHEX  76000                            * 5C1F9  pattern: op6 op5
@@ -1731,12 +1731,12 @@ drppargtop&:
         ;                                        * 5CC53
 
 * refs (3): 5C148 5D126 5D1F3
-OBJ_5CC58:
+~SWAPDROP#1-;COLA;[f(X,Y)]=>[-X-Y]!:
         :: SWAPDROP#1- COLA [f(X,Y)]=>[-X-Y]!    * 5CC58
         ;                                        * 5CC6C
 
 * refs (3): 5C152 5D149 5D216
-OBJ_5CC71:
+~SWAPDROP#1-;COLA;[f(X,Y)]=>[-X+Y]!:
         :: SWAPDROP#1- COLA [f(X,Y)]=>[-X+Y]!    * 5CC71
         ;                                        * 5CC85
 
@@ -1751,12 +1751,12 @@ OBJ_5CC71:
         ;                                        * 5CCB7
 
 * refs (3): 5C1E0 5D39D 5D46A
-OBJ_5CCBC:
+~SWAPDROP#1-;COLA;[f(X,Y)]=>[INV(X)/Y]!:
         :: SWAPDROP#1- COLA [f(X,Y)]=>[INV(X)/Y]! * 5CCBC
         ;                                        * 5CCD0
 
 * refs (3): 5C1EA 5D3C0 5D48D
-OBJ_5CCD5:
+~SWAPDROP#1-;COLA;[f(X,Y)]=>[INV(X)*Y]!:
         :: SWAPDROP#1- COLA [f(X,Y)]=>[INV(X)*Y]! * 5CCD5
         ;                                        * 5CCE9
 
@@ -1766,7 +1766,7 @@ larg&:
         :: larg over& ;                          * 5CCEE
 
 * refs (6): 58B80 5D0F9 5D1A8 5D243 5D298 5D2B1
-OBJ_5CD02:
+~addt:;x+:
         :: PTR addt: x+ ;                        * 5CD02
 
 * meta -> meta&*
