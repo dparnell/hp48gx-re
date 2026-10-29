@@ -1381,7 +1381,7 @@ OBJ_5ED82:
         ASSEMBLE
 
 * refs (1): 5EE01
-(2.280296843E2:8,-3.0002280220~1~1:
+numb1stcase~1:
         C=DAT1  A                                * 5EDBE
         CD1EX                                    * 5EDC1
         A=DAT1  A                                * 5EDC4
@@ -1389,13 +1389,21 @@ OBJ_5ED82:
         LC(5)   DOREAL                           * 5EDCA
         ?C=A    A                                * 5EDD1
         RTNYES                                   * 5EDD4
-        NIBHEX  34                               * 5EDD6  C
+        LC(5)   DOCMP                            * 5EDD6
+        ?C=A    A                                * 5EDDD
+        RTNYES                                   * 5EDE0
+        LC(5)   DOARRY                           * 5EDE2
+        ?C=A    A                                * 5EDE9
+        RTNYES                                   * 5EDEC
+        LC(5)   DOLNKARRY                        * 5EDEE
+        ?C=A    A                                * 5EDF5
+        RTNYES                                   * 5EDF8
+        RTNCC                                    * 5EDFA
 
-(2.280296843E2:8,-3.0002280220:
-        CON(5)  DOCMP                            * 5EDD8  DOCMP
-        NIBHEX  8A200348E9208A20034A0A208A200031 * 5EDDD  ¨.0∫■.¨.0¤..¨...
-        NIBHEX  0EE5                             * 5EDFD  à^
-        GOSUB   (2.280296843E2:8,-3.0002280220~1~1 * 5EE01
+* %/C%/[]/[L] -> :: <ob1> ; ob -> :: ob2 <rest> ;
+numb1stcase:
+        CON(5)  (*)+5                            * 5EDFC  primitive code object
+        GOSUB   numb1stcase~1                    * 5EE01
         GOC     L_5EE0C                          * 5EE05
         GOTO    doskip                           * 5EE08
 L_5EE0C:
@@ -1478,11 +1486,13 @@ REALNEGcase:
         A=DAT1  A                                * 5EEE6
         CD1EX                                    * 5EEE9
         RSTK=C                                   * 5EEEC
-        NIBHEX  34                               * 5EEEE  C
-
--7.14717317057E-372:
-        CON(5)  DOREAL                           * 5EEF0  DOREAL
-        NIBHEX  8A6FD0713717417E                 * 5EEF5  ¨ö..sq.ç
+        LC(5)   DOREAL                           * 5EEEE
+        ?C#A    A                                * 5EEF5
+        GOYES   L_5EED7                          * 5EEF8
+        C=RSTK                                   * 5EEFA
+        CD1EX                                    * 5EEFC
+        D1=D1+  5                                * 5EEFF
+        D1=D1+  15                               * 5EF02
         C=DAT1  S                                * 5EF05
         D1=C                                     * 5EF09
         ?C=0    S                                * 5EF0C

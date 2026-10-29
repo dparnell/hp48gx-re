@@ -1,0 +1,23 @@
+# Machine code no executed or followed path reaches, seeded as code for
+# tools/analyze.py. Each was read and checked with tools/hpdis.py.
+# ADDR<TAB>HOW IT IS ENTERED
+0BA2B	unexecuted handler
+0C615	unexecuted handler
+5EDD6	type tests (LC(5) prolog / ?C=A / RTNYES), split by misplaced VBL names
+5EEEE	type tests (LC(5) prolog / ?C=A / RTNYES), split by misplaced VBL names
+7073F	bank-select stubs, reached through computed jumps
+785DC	P=8; GOTO entry
+78635	P=8; GOTO entry
+78694	P=8; GOTO entry
+78A04	unexecuted handler
+80804	self-test
+811E3	self-test
+814B2	self-test
+815E3	self-test
+81990	self-test code copied to RAM #409A3 by #811A9, entered at +3
+81CAD	memory recovery, entered from lower ROM through SUB_026CA
+81CE2	memory recovery, entered from lower ROM through SUB_026CA
+81CFC	memory recovery, entered from lower ROM through SUB_026CA
+81E00	self-test
+81E74	self-test
+87BCF	library 0C0, unexecuted

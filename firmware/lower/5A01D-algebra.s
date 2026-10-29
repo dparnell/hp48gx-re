@@ -447,7 +447,9 @@ OBJ_5ABC8:
             ROT #2+ ;                            * 5AC31
           DUP#0= OVER #3+PICK #0= OR ?SKIP meta+ * 5AC40
           top& ABND pshzer colunfac IMPLODE ;    * 5AC63
-        NIBHEX  E8E60                            * 5AC81  ←n
+
+* Unreferenced NOP between objects: padding
+        CON(5)  NOP                              * 5AC81  entry 0
 
 * meta -> meta'
 * refs (3): 5AB37 5AC09 5B898
@@ -478,7 +480,9 @@ dvars?:
 OBJ_5AD4E:
         :: REQcase lam'dvar                      * 5AD4E
           SKIP ;                                 * 5AD5D
-        NIBHEX  E8E60                            * 5AD67  ←n
+
+* Unreferenced NOP between objects: padding
+        CON(5)  NOP                              * 5AD67  entry 0
 
 * meta #level -> meta' flag
 * refs (5): 5AEDE 5B398 5B451 5B569 C0D91
@@ -599,7 +603,9 @@ intg1~1:
           ;                                      * 5B1D1
           intg1~1~1 NOTcase 2DROPFALSE           * 5B1D6
           EVAL ;                                 * 5B1E5
-        NIBHEX  E8E60                            * 5B1EF  ←n
+
+* Unreferenced NOP between objects: padding
+        CON(5)  NOP                              * 5B1EF  entry 0
 
 * refs (2): 5B055 5B17C
 OBJ_5B1F4:
@@ -618,10 +624,10 @@ OBJ_5B28A:
 * refs (1): 5B29E
 OBJ_5B2D0:
         :: DROP rot larg OBJ_5B0D2 4roll top& rot pullrev psh1&rev ; * 5B2D0
+        NIBHEX  E8E60                            * 5B307  ←n
 
-        CON(5)  NOP                              * 5B307  address (the code jumps or points through it)
-
-        CON(5)  NOP                              * 5B30C  address (the code jumps or points through it)
+* Unreferenced NOP between objects: padding
+        CON(5)  NOP                              * 5B30C  entry 0
 
         CON(5)  DOCOL                            * 5B311  address (the code jumps or points through it)
 
@@ -656,14 +662,18 @@ OBJ_5B389:
           :: dvars? ITE linear! FALSE            * 5B389
           ;                                      * 5B3A2
           pshm1 #1+NDROP 'R SWAP NOTcsdrpfls ?ROMPTR@ SINNER OBJ_5B4FB ; * 5B3A7
-        NIBHEX  E8E60                            * 5B3D4  ←n
+
+* Unreferenced NOP between objects: padding
+        CON(5)  NOP                              * 5B3D4  entry 0
 
 * refs (9): 824F6 8255F 825C8 8268C 826F0 82772 ...
 OBJ_5B3D9:
         :: 'R BINT1 OBJ_600A3 OBJ_5B389 pshm1 #1+NDROP 'R SWAP NOTcsdrpfls * 5B3D9
           ?ROMPTR@ SINNER RAD? ?SKIP OBJ_5B4A6   * 5B40B
           OBJ_5B4FB ;                            * 5B424
-        NIBHEX  E8E60                            * 5B42E  ←n
+
+* Unreferenced NOP between objects: padding
+        CON(5)  NOP                              * 5B42E  entry 0
 
 * refs (3): 82953 829F3 82A93
 OBJ_5B433:
@@ -687,7 +697,9 @@ OBJ_5B4A6:
 OBJ_5B4FB:
         ::                                       * 5B4FB
           { lam'dvar Π&1 xDER x/ } INNERtop& CKSYMBN ' Π'rhs STOLAM TRUE ; * 5B500
-        NIBHEX  E8E60                            * 5B541  ←n
+
+* Unreferenced NOP between objects: padding
+        CON(5)  NOP                              * 5B541  entry 0
 
 * refs (1): 5BA96
 OBJ_5B546:

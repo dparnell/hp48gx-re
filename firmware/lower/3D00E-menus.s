@@ -552,7 +552,7 @@ ROMP_0A2_021:
         :: DoDelims $_LRParens SetDA1NoCh ;      * 3D9EA
 
 * ROMPTR 0A2 022
-* refs (1): 3D6B1
+* refs (3): 3D6B1 6B41C 6B433
 ROMP_0A2_022:
         :: Modifier SetKeysNS SetDA123NoCh ;     * 3DA03
 

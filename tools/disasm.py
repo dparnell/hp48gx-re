@@ -31,7 +31,7 @@ import analyze  # noqa: F401  (needed to unpickle analyze.Item etc.)
 import sasm
 from rom import Rom
 from rpl import Decoder as RplDecoder, DecodeError, PROLOGS, FIXED_BODY, LENGTH_PREFIXED, COMPOSITE
-from symbols import Symbols
+from symbols import Symbols, fake_number
 
 ROOT = Path(__file__).resolve().parent.parent
 OUT = ROOT / "out"
@@ -217,6 +217,8 @@ class Generator:
             note = "The Very Big List names this address %s, but it is a pointer inside an object; the name is not used" % s.name
             if note not in self.notes[a]:
                 self.notes[a].append(note)
+            return None
+        if s and fake_number(self.rom, s):
             return None
         if s and s.name and "RAM" not in s.flags and (a >= 0x140 or s.usage == "ASM") and a < LOWER_END:
             n = s.name
@@ -1010,15 +1012,23 @@ class Generator:
         out = []
         prev = None
         for a, w, f, k in t["words"]:
-            if f in ("a", "c"):
+            note = "" if k == prev else "end of table" if f == "end" else "entries" if f == "count" else "entry %d" % k
+            prev = k
+            if f in ("a", "c") and self.rom.addr(a):
                 parts = op("CON(5)", Ref(self.rom.addr(a), a, "addr"))
-            elif f == "n":
-                parts = op("CON(%d)" % w, "#%0*X" % (w, self.rom.read(a, w)))
+            elif f in ("n", "count") or f in ("a", "c"):
+                parts = op("CON(%d)" % w, "#%0*X" % (w, self.rom.read(a, w)) if w > 1 else "%X" % self.rom.read(a, w))
+            elif f == "t":
+                parts = op("NIBASC", sasm.escape([self.rom.byte(a + 2 * i) for i in range(w // 2)]))
+            elif f == "s":
+                out.append(Line(a, 2, op("CON(2)", "%d" % ((w - 2) // 2)), comment=note))
+                if w > 2:
+                    out.append(Line(a + 2, w - 2, op("NIBASC", sasm.escape([self.rom.byte(a + 2 + 2 * i)
+                                                                            for i in range((w - 2) // 2)]))))
+                continue
             else:
                 parts = op("CON(%d)" % w, "0")
-            note = "" if k == prev else "end of table" if f == "end" else "entry %d" % k
             out.append(Line(a, w, parts, comment=note))
-            prev = k
         return out
 
     def rule_lines(self, it):

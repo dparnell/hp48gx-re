@@ -139,8 +139,12 @@ L_6F8D8:
             OBJ_67B17 OBJ_6B39F OBJ_6FACC ;      * 6F8E7
         ;                                        * 6F8FB
 
+* refs (1): 6B407
+OBJ_6F900:
         :: OBJ_6F595 TRUE GOTO L_6F92D ;         * 6F900
 
+* refs (1): 6B3F9
+OBJ_6F91E:
         :: OBJ_6F595 FALSE                       * 6F91E
 L_6F92D:
           3UNROLL #1<> 3PICK OBJ_6F621 NOTcasedrop OBJ_6F608 * 6F92D
@@ -148,8 +152,12 @@ L_6F92D:
           #1<> 4PICK OBJ_6F621 DUP IT ROTDROP    * 6F964
           NOT_UNTIL SWAPDROP OBJ_6F87E ;         * 6F982
 
+* refs (1): 6B400
+OBJ_6F996:
         :: OBJ_6F595 2DROP OBJ_67D0F OBJ_6FACC ; * 6F996
 
+* refs (1): 6B40E
+OBJ_6F9B4:
         :: OBJ_6F595 2DROP OBJ_67D1B OBJ_6FACC ; * 6F9B4
 
 * refs (2): 6F644 6FAC2

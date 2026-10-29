@@ -13442,7 +13442,7 @@ pub(crate) fn EqwRuleKey0_1_1_1_1(r: &mut Run) {
     }
 }
 
-// OBJ_6B381: firmware/lower/69142-misc-66000.s:893
+// OBJ_6B381: firmware/lower/69142-misc-66000.s:897
 pub(crate) fn OBJ_6B381(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -13464,7 +13464,7 @@ pub(crate) fn OBJ_6B381(r: &mut Run) {
     }
 }
 
-// OBJ_6B39F: firmware/lower/69142-misc-66000.s:902
+// OBJ_6B39F: firmware/lower/69142-misc-66000.s:906
 pub(crate) fn OBJ_6B39F(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -14263,7 +14263,7 @@ pub(crate) fn OBJ_6F0B8(r: &mut Run) {
     }
 }
 
-// OBJ_6FD85: firmware/lower/6F360-misc-66000.s:200
+// OBJ_6FD85: firmware/lower/6F360-misc-66000.s:208
 pub(crate) fn OBJ_6FD85(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -14302,7 +14302,7 @@ pub(crate) fn OBJ_6FD85(r: &mut Run) {
     }
 }
 
-// OBJ_6FDB6: firmware/lower/6F360-misc-66000.s:219
+// OBJ_6FDB6: firmware/lower/6F360-misc-66000.s:227
 pub(crate) fn OBJ_6FDB6(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -14319,7 +14319,7 @@ pub(crate) fn OBJ_6FDB6(r: &mut Run) {
     }
 }
 
-// OBJ_6FDC6: firmware/lower/6F360-misc-66000.s:225
+// OBJ_6FDC6: firmware/lower/6F360-misc-66000.s:233
 pub(crate) fn OBJ_6FDC6(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -14336,7 +14336,7 @@ pub(crate) fn OBJ_6FDC6(r: &mut Run) {
     }
 }
 
-// OBJ_6FDD6: firmware/lower/6F360-misc-66000.s:231
+// OBJ_6FDD6: firmware/lower/6F360-misc-66000.s:239
 pub(crate) fn OBJ_6FDD6(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -14353,7 +14353,7 @@ pub(crate) fn OBJ_6FDD6(r: &mut Run) {
     }
 }
 
-// OBJ_6FDE2: firmware/lower/6F360-misc-66000.s:237
+// OBJ_6FDE2: firmware/lower/6F360-misc-66000.s:245
 pub(crate) fn OBJ_6FDE2(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -14438,7 +14438,7 @@ pub(crate) fn OBJ_6FDE2(r: &mut Run) {
     }
 }
 
-// L_6FF81: firmware/lower/6F360-misc-66000.s:311
+// L_6FF81: firmware/lower/6F360-misc-66000.s:319
 pub(crate) fn L_6FF81(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {

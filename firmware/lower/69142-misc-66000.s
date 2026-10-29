@@ -640,10 +640,14 @@ OBJ_6A7C0:
           :: OBJ_6FDD6 L_6B3F5 ;                 * 6A883
           BINT2 #=case                           * 6A897
           :: OBJ_6FDD6 L_6B428 ;                 * 6A8A1
-          OBJ_6FDD6 OBJ_6B43F ;                  * 6A8B5
+          OBJ_6FDD6 L_6B43F ;                    * 6A8B5
 
+* refs (1): 6B42C
+OBJ_6A8C4:
         :: TakeOver WINDOWCORNER OBJ_4CE83 TURNMENUON WINDOWXY ; * 6A8C4
 
+* refs (1): 6B466
+OBJ_6A8E7:
         :: EXITFCNsto OBJ_6A8FB ;                * 6A8E7
 
 * refs (1): 6A8F1
@@ -654,7 +658,7 @@ OBJ_6A8FB:
 OBJ_6A929:
           :: DUPLEN$ #1+ NULL$ ; ;               * 6A929
 
-* refs (1): 6BA1A
+* refs (2): 6B45F 6BA1A
 OBJ_6A947:
         :: TakeOver HARDBUFF TOTEMPOB            * 6A947
 
@@ -729,7 +733,7 @@ OBJ_6AB5E:
             OBJ_6C302 OBJ_6BF8D GetGNTData ;     * 6AC21
         ;                                        * 6AC35
 
-* refs (1): 6AA0B
+* refs (2): 6AA0B 6B46D
 OBJ_6AC3A:
         :: TakeOver 'EL case                     * 6AC3A
           :: OBJ_6B0CF OBJ_6ACF3 OBJ_25C23 ;     * 6AC4E
@@ -930,18 +934,60 @@ L_6B3E8:
         C=RSTK                                   * 6B3EA
         B=C     A                                * 6B3EC
         GOVLNG  L_67901                          * 6B3EE
-L_6B3F5:
-        NIBHEX  70B0E19F601699F611009F6214B9F632 * 6B3F5  ...ù.aτo..ù&AΔo#
-        NIBHEX  557B38230AD3D2EC9A3              * 6B415  U·√2.=-Î©
-L_6B428:
-        NIBHEX  30014C8A63230AD382E87B3          * 6B428  ..Ä¨62.=(←·
 
-* refs (1): 6A8BA
-OBJ_6B43F:
-        CON(5)  L_30B0B                          * 6B43F  code object: the address of its machine code
-        NIBHEX  74B401194B411FA4B421DC4B4E0749A6 * 6B444  GK.γ´.ñJK.Í´äpηj
-        NIBHEX  917E8A6A1A3CA632557B382E87B3C2DC * 6B464  .ç¨¦¡Ãj#U·√âx;,Í
-        NIBHEX  164D2E68B4                       * 6B484  aÔâ▶K
+* Key dispatch: keycode byte and object to run (read by OBJ_6FDD6/OBJ_6FDE2)
+L_6B3F5:
+        CON(2)  #07                              * 6B3F5  entries
+        CON(2)  #0B                              * 6B3F7  entry 0
+        CON(5)  OBJ_6F91E                        * 6B3F9
+        CON(2)  #10                              * 6B3FE  entry 1
+        CON(5)  OBJ_6F996                        * 6B400
+        CON(2)  #11                              * 6B405  entry 2
+        CON(5)  OBJ_6F900                        * 6B407
+        CON(2)  #12                              * 6B40C  entry 3
+        CON(5)  OBJ_6F9B4                        * 6B40E
+        CON(2)  #23                              * 6B413  entry 4
+        CON(5)  ROMP_0A1_022                     * 6B415
+        CON(2)  #28                              * 6B41A  entry 5
+        CON(5)  ROMP_0A2_022                     * 6B41C
+        CON(2)  #2D                              * 6B421  entry 6
+        CON(5)  TurnOffKey                       * 6B423
+
+* Key dispatch: keycode byte and object to run
+L_6B428:
+        CON(2)  #03                              * 6B428  entries
+        CON(2)  #10                              * 6B42A  entry 0
+        CON(5)  OBJ_6A8C4                        * 6B42C
+        CON(2)  #23                              * 6B431  entry 1
+        CON(5)  ROMP_0A2_022                     * 6B433
+        CON(2)  #28                              * 6B438  entry 2
+        CON(5)  ROMP_0A1_027                     * 6B43A
+
+* Key dispatch: keycode byte and object to run
+L_6B43F:
+        CON(2)  #0B                              * 6B43F  entries
+        CON(2)  #0B                              * 6B441  entry 0
+        CON(5)  OBJ_4B473                        * 6B443
+        CON(2)  #10                              * 6B448  entry 1
+        CON(5)  OBJ_4B491                        * 6B44A
+        CON(2)  #11                              * 6B44F  entry 2
+        CON(5)  OBJ_4B4AF                        * 6B451
+        CON(2)  #12                              * 6B456  entry 3
+        CON(5)  OBJ_4B4CD                        * 6B458
+        CON(2)  #0E                              * 6B45D  entry 4
+        CON(5)  OBJ_6A947                        * 6B45F
+        CON(2)  #19                              * 6B464  entry 5
+        CON(5)  OBJ_6A8E7                        * 6B466
+        CON(2)  #1A                              * 6B46B  entry 6
+        CON(5)  OBJ_6AC3A                        * 6B46D
+        CON(2)  #23                              * 6B472  entry 7
+        CON(5)  ROMP_0A1_022                     * 6B474
+        CON(2)  #28                              * 6B479  entry 8
+        CON(5)  ROMP_0A1_027                     * 6B47B
+        CON(2)  #2C                              * 6B480  entry 9
+        CON(5)  OBJ_461CD                        * 6B482
+        CON(2)  #2D                              * 6B487  entry 10
+        CON(5)  OBJ_4B86E                        * 6B489
         RPL
 
 * refs (2): 3D8AD D755C

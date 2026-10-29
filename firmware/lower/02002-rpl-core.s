@@ -54,7 +54,7 @@ L_020A0:
         GOSBVL  SUB_09BED                        * 020AA
         GOTO    Coldstart                        * 020B1
 L_020B5:
-        LC(5)   L_81CA3+10                       * 020B5  in the self-test area (#80000-#82006): ROM, not RAM
+        LC(5)   L_81CAD                          * 020B5  in the self-test area (#80000-#82006): ROM, not RAM
         GOSUB   SUB_026CA                        * 020BC
 L_020C0:
         GOSUB   SUB_027A2                        * 020C0
@@ -107,12 +107,12 @@ L_020F2:
         GOSBVL  L_01C7F                          * 02181
         ?ST=0   0                                * 02188
         GOYES   L_02198                          * 0218B
-        LC(5)   L_81CC3+31                       * 0218D  in the self-test area
+        LC(5)   L_81CE2                          * 0218D  in the self-test area
         GOSUB   SUB_026CA                        * 02194
 L_02198:
         ?ST=0   5                                * 02198
         GOYES   L_021A8                          * 0219B
-        LC(5)   L_81CE3+25                       * 0219D  in the self-test area
+        LC(5)   L_81CFC                          * 0219D  in the self-test area
         GOSUB   SUB_026CA                        * 021A4
 L_021A8:
         P=      0                                * 021A8
@@ -279,7 +279,7 @@ L_0239C:
         DAT1=C  A                                * 023E6
         GOTO    L_02402                          * 023E9
 L_023ED:
-        LC(5)   L_81CA3+25                       * 023ED  in the self-test area
+        LC(5)   L_81CBC                          * 023ED  in the self-test area
         GOSUB   SUB_026CA                        * 023F4
         ST=1    7                                * 023F8
         GOVLNG  L_0A0A2                          * 023FB
@@ -514,7 +514,7 @@ SUB_026FD:
 
 * refs (3): 01A67 02026 80CA3
 SUB_02708:
-        GOSBVL  L_0C1A7                          * 02708
+        GOSBVL  SUB_0C1A7                        * 02708
         D0=(4)  #0036                            * 0270F
         D1=C                                     * 02715
         D1=(4)  #0048                            * 02718
@@ -540,7 +540,7 @@ SUB_02708:
         C=0     W                                * 02764
 L_02767:
         A=C     W                                * 02767
-        GOSBVL  L_0C1A7                          * 0276A
+        GOSBVL  SUB_0C1A7                        * 0276A
         D0=(4)  #0011                            * 02771
         DAT0=A  13                               * 02777
         D0=D0-  1                                * 0277B
@@ -615,7 +615,7 @@ PRLG:
         CON(5)  L_0308E                          * 0290C
 
 * BINT prologue 5  number (hex)
-* refs (21): 03639 03824 0387E 038DA 0657C 0803D ...
+* refs (22): 03639 03824 0387E 038DA 0657C 0803D ...
 DOBINT:
         D=D-1   A                                * 02911
         HST=0   0                                * 02913
@@ -630,7 +630,7 @@ DOBINT:
         CON(5)  L_0307F                          * 0292E
 
 * Real number prologue 3  exponent 12 mantissa 1  sign
-* refs (35): 038E6 05D6F 05D93 10174 10D0E 15B4C ...
+* refs (38): 038E6 05D6F 05D93 10174 10D0E 15B4C ...
 DOREAL:
         D=D-1   A                                * 02933
         HST=0   0                                * 02935
@@ -645,7 +645,7 @@ DOREAL:
         CON(5)  L_0308B                          * 02950
 
 * Long real prologue 5  exponent 15 mantissa 1  sign
-* refs (28): 038F2 05E11 05E3E 2A29B 3564B 35B76 ...
+* refs (29): 038F2 05E11 05E3E 1917D 2A29B 3564B ...
 DOEREL:
         D=D-1   A                                * 02955
         HST=0   0                                * 02957
@@ -660,7 +660,7 @@ DOEREL:
         CON(5)  L_0307C                          * 02972
 
 * Complex number prologue 3  real exponent 12 real mantissa 1  real sign 3  complex exponent 12 complex mantissa 1  complex sign
-* refs (11): 038FE 05C4A 15BA6 19247 192F7 3565B ...
+* refs (14): 038FE 05C4A 15BA6 1912D 19247 192F7 ...
 DOCMP:
         D=D-1   A                                * 02977
         HST=0   0                                * 02979
@@ -677,7 +677,7 @@ L_0298F:
         CON(5)  L_03085                          * 02998
 
 * Long complex prologue 5  real exponent 15 real mantissa 1  real sign 5  complex exponent 15 complex mantissa 1  complex sign
-* refs (5): 0390A 05CA7 52BEA 7D52B 7D81F
+* refs (6): 0390A 05CA7 19182 52BEA 7D52B 7D81F
 DOECMP:
         D=D-1   A                                * 0299D
         HST=0   0                                * 0299F
@@ -692,7 +692,7 @@ DOECMP:
         CON(5)  L_030B7                          * 029BA
 
 * Character prologue 2  character
-* refs (7): 03916 05125 05A9C 10168 44455 6202A ...
+* refs (8): 03916 05125 05A9C 10168 1918C 44455 ...
 DOCHAR:
         D=D-1   A                                * 029BF
         HST=0   0                                * 029C1
@@ -708,7 +708,7 @@ DOCHAR:
         CON(5)  L_0309A                          * 029E3
 
 * Array prologue 5  size 5  prologue of objects 5  # of dimensions 5n dimensions .. objects (content only)
-* refs (6): 034DB 03800 10CF4 15B6A 2D265 6219D
+* refs (8): 034DB 03800 10CF4 15B6A 19137 2D265 ...
 DOARRY:
         D=D-1   A                                * 029E8
         HST=0   0                                * 029EA
@@ -723,6 +723,7 @@ DOARRY:
         CON(5)  L_0309A                          * 02A05
 
 * Linked array prologue
+* refs (2): 19187 5EDEE
 DOLNKARRY:
         D=D-1   A                                * 02A0A
         HST=0   0                                * 02A0C
@@ -737,7 +738,7 @@ DOLNKARRY:
         CON(5)  L_0309A                          * 02A27
 
 * String prologue 5  length .. characters
-* refs (6): 05BCB 1015C 15B97 16322 6215E 9C836
+* refs (7): 05BCB 1015C 15B97 16322 19132 6215E ...
 DOCSTR:
         D=D-1   A                                * 02A2C
         HST=0   0                                * 02A2E
@@ -769,7 +770,7 @@ L_02A66:
         CON(5)  L_03077                          * 02A6F
 
 * List prologue see <REF>DOCOL
-* refs (11): 03613 08053 0E914 156AA 15B79 27249 ...
+* refs (12): 03613 08053 0E914 156AA 15B79 1913C ...
 DOLIST:
         D=D-1   A                                * 02A74
         HST=0   0                                * 02A76
@@ -784,7 +785,7 @@ DOLIST:
         CON(5)  L_030BD                          * 02A91
 
 * Directory prologue
-* refs (16): 023BE 02F82 077FD 079E8 0A15E 0A1DF ...
+* refs (17): 023BE 02F82 077FD 079E8 0A15E 0A1DF ...
 DORRP:
         D=D-1   A                                * 02A96
         HST=0   0                                * 02A98
@@ -799,7 +800,7 @@ DORRP:
         CON(5)  L_03077                          * 02AB3
 
 * Symbolic prologue .. objects 5  SEMI
-* refs (11): 156C2 15BB5 18E58 18E91 19098 1F060 ...
+* refs (13): 156C2 15BB5 18E58 18E91 19098 19150 ...
 DOSYMB:
         D=D-1   A                                * 02AB8
         HST=0   0                                * 02ABA
@@ -814,7 +815,7 @@ DOSYMB:
         CON(5)  L_03077                          * 02AD5
 
 * Unit object prologue .. object (usually a real) .. unit 5  SEMI
-* refs (5): 0F148 15BE2 19169 29C12 62054
+* refs (6): 0F148 15BE2 19169 29C12 62054 71F72
 DOEXT:
         D=D-1   A                                * 02ADA
         HST=0   0                                * 02ADC
@@ -859,7 +860,7 @@ DOGROB:
         CON(5)  L_0309A                          * 02B3B
 
 * Library prologue
-* refs (9): 08E64 09ECC 0A0E5 0AF13 15C0F 27239 ...
+* refs (10): 08E64 09ECC 0A0E5 0AF13 15C0F 19196 ...
 DOLIB:
         D=D-1   A                                * 02B40
         HST=0   0                                * 02B42
@@ -904,7 +905,7 @@ DOEXT0:
         CON(5)  L_71532                          * 02BA0
         CON(5)  L_7155A                          * 02BA5
 
-* refs (26): 07A8E 08231 09D7A 09E2B 706F3 70F61 ...
+* refs (27): 07A8E 08231 09D7A 09E2B 191A5 706F3 ...
 DOEXT1:
         D=D-1   A                                * 02BAA
         HST=0   0                                * 02BAC
@@ -918,6 +919,7 @@ DOEXT1:
         CON(5)  L_02D04                          * 02BC2
         CON(5)  L_0309A                          * 02BC7
 
+* refs (1): 191AA
 DOEXT2:
         D=D-1   A                                * 02BCC
         HST=0   0                                * 02BCE
@@ -931,6 +933,7 @@ DOEXT2:
         CON(5)  L_02D04                          * 02BE4
         CON(5)  L_0309A                          * 02BE9
 
+* refs (1): 191AF
 DOEXT3:
         D=D-1   A                                * 02BEE
         HST=0   0                                * 02BF0
@@ -944,6 +947,7 @@ DOEXT3:
         CON(5)  L_02D04                          * 02C06
         CON(5)  L_0309A                          * 02C0B
 
+* refs (1): 191B4
 DOEXT4:
         D=D-1   A                                * 02C10
         HST=0   0                                * 02C12
@@ -1085,7 +1089,7 @@ L_02D59:
         CON(5)  L_03077                          * 02D98
 
 * Secondary prologue .. objects 5  SEMI
-* refs (18): 0704B 0707F 0EE83 156B6 15B88 18EC7 ...
+* refs (21): 0704B 0707F 0EE83 156B6 15B88 18EC7 ...
 DOCOL:
         D=D-1   A                                * 02D9D
         HST=0   0                                * 02D9F
@@ -1105,7 +1109,7 @@ DOCOL:
         CON(5)  L_0309A                          * 02DC7
 
 * Code prologue 5  length .. machine code
-* refs (1): 0EE92
+* refs (3): 0EE92 19191 2D544
 DOCODE:
         D=D-1   A                                * 02DCC
         HST=0   0                                * 02DCE
@@ -1154,7 +1158,7 @@ L_02E20:
         CON(5)  L_030A8                          * 02E43
 
 * Global name (ID) prologue 2  # of characters .. characters
-* refs (17): 05B54 05EF1 07998 07BCB 07D54 15B5B ...
+* refs (19): 05B54 05EF1 07998 07BCB 07D54 15B5B ...
 DOIDNT:
         D=D-1   A                                * 02E48
         HST=0   0                                * 02E4A
@@ -1169,7 +1173,7 @@ DOIDNT:
         CON(5)  L_030A8                          * 02E68
 
 * Local name (LAM) prologue see <REF>DOIDNT
-* refs (17): 15BC4 190B0 1F0AE 2356B 2357D 24664 ...
+* refs (19): 15BC4 190B0 19146 1F0AE 2356B 2357D ...
 DOLAM:
         D=D-1   A                                * 02E6D
         HST=0   0                                * 02E6F
@@ -1184,7 +1188,7 @@ DOLAM:
         CON(5)  L_03094                          * 02E8D
 
 * XLIB prologue 3  library ID 3  command #
-* refs (15): 03922 07B86 15C3C 26FA0 27269 2937C ...
+* refs (16): 03922 07B86 15C3C 1916E 26FA0 27269 ...
 DOROMP:
         D=D-1   A                                * 02E92
         HST=0   0                                * 02E94
@@ -1437,7 +1441,7 @@ L_03115:
         GOTO    L_0302E                          * 03127
 
 * ->
-* refs (35): 03665 0383B 0509C 05416 054D5 055C8 ...
+* refs (37): 03665 0383B 0509C 05416 054D5 055C8 ...
 SEMI:
         CON(5)  (*)+5                            * 0312B  primitive code object
 SEMILOOP~1:

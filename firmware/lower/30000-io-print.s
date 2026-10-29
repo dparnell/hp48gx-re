@@ -70,17 +70,66 @@ L_3008B:
         LC(2)   #5C                              * 300AB
         P=      7                                * 300AF
         GOTO    L_3007E                          * 300B1
+
+* TRANSIO: the ASCII pair for each character 128-159 (read at #30043)
 L_300B5:
-        NIBHEX  C39287D2E26567F2E2357435C7E30796 * 300B5  <)x-.Vv/.SGS|>pi
-        NIBHEX  E246C3D3E3D3D3F27416D2E3C3D2C767 * 300D5  .d<=>==/Ga-><-|v
-        NIBHEX  C7E574767446745674E6748674C67427 * 300F5  |^GgGdGeGnGhGlGr
-        NIBHEX  743774477477744405947475B5D5F6F6 * 30115  GsGtGwGDPIGW[]oo
-        NIBHEX  00                               * 30135  .
+        NIBASC  "<)"                             * 300B5  entry 0
+        NIBASC  "x-"                             * 300B9  entry 1
+        NIBASC  ".V"                             * 300BD  entry 2
+        NIBASC  "v/"                             * 300C1  entry 3
+        NIBASC  ".S"                             * 300C5  entry 4
+        NIBASC  "GS"                             * 300C9  entry 5
+        NIBASC  "|>"                             * 300CD  entry 6
+        NIBASC  "pi"                             * 300D1  entry 7
+        NIBASC  ".d"                             * 300D5  entry 8
+        NIBASC  "<="                             * 300D9  entry 9
+        NIBASC  ">="                             * 300DD  entry 10
+        NIBASC  "=/"                             * 300E1  entry 11
+        NIBASC  "Ga"                             * 300E5  entry 12
+        NIBASC  "->"                             * 300E9  entry 13
+        NIBASC  "<-"                             * 300ED  entry 14
+        NIBASC  "|v"                             * 300F1  entry 15
+        NIBASC  "|^"                             * 300F5  entry 16
+        NIBASC  "Gg"                             * 300F9  entry 17
+        NIBASC  "Gd"                             * 300FD  entry 18
+        NIBASC  "Ge"                             * 30101  entry 19
+        NIBASC  "Gn"                             * 30105  entry 20
+        NIBASC  "Gh"                             * 30109  entry 21
+        NIBASC  "Gl"                             * 3010D  entry 22
+        NIBASC  "Gr"                             * 30111  entry 23
+        NIBASC  "Gs"                             * 30115  entry 24
+        NIBASC  "Gt"                             * 30119  entry 25
+        NIBASC  "Gw"                             * 3011D  entry 26
+        NIBASC  "GD"                             * 30121  entry 27
+        NIBASC  "PI"                             * 30125  entry 28
+        NIBASC  "GW"                             * 30129  entry 29
+        NIBASC  "[]"                             * 3012D  entry 30
+        NIBASC  "oo"                             * 30131  entry 31
+
+* TRANSIO: end of the pairs for 128-159
+        CON(2)  #00                              * 30135  entry 0
+
+* TRANSIO: character and ASCII pair for characters from 160 up (read at #30060)
 L_30137:
-        NIBHEX  BA                               * 30137  «
+        CON(2)  #AB                              * 30137  entry 0
 L_30139:
-        NIBHEX  C3C30BE5F65B74D6BBE3E37DE287FD74 * 30139  <<°^oµGm»>>×.xßG
-        NIBHEX  267FA3D28DF4F20000               * 30159  b÷:-ØO/..
+        NIBASC  "<<"                             * 30139
+        CON(2)  #B0                              * 3013D  entry 1
+        NIBASC  "^o"                             * 3013F
+        CON(2)  #B5                              * 30143  entry 2
+        NIBASC  "Gm"                             * 30145
+        CON(2)  #BB                              * 30149  entry 3
+        NIBASC  ">>"                             * 3014B
+        CON(2)  #D7                              * 3014F  entry 4
+        NIBASC  ".x"                             * 30151
+        CON(2)  #DF                              * 30155  entry 5
+        NIBASC  "Gb"                             * 30157
+        CON(2)  #F7                              * 3015B  entry 6
+        NIBASC  ":-"                             * 3015D
+        CON(2)  #D8                              * 30161  entry 7
+        NIBASC  "O/"                             * 30163
+        CON(2)  0                                * 30167  end of table
+        NIBHEX  00                               * 30169  .
         RPL
 
 * $ -> $' $''
@@ -841,9 +890,8 @@ SUB_30AF3:
 * refs (5): 30A38 30A6A 30A80 30A8E 30A9C
 SUB_30B06:
         A=DAT1  B                                * 30B06
-        NIBHEX  96                               * 30B09  i
-L_30B0B:
-        RTNC                                     * 30B0B
+        ?A#B    B                                * 30B09
+        RTNYES                                   * 30B0C
 
 * refs (3): 30A75 30AD1 30AE6
 SUB_30B0E:
@@ -1453,10 +1501,10 @@ L_31228:
 
 * refs (1): 32127
 SUB_31239:
-        D1=(5)  L_00C04                          * 31239
+        D1=(5)  L_00C02+2                        * 31239
         A=A+A   XS                               * 31240
         GOC     L_3124D                          * 31243
-        D1=(5)  L_00C03                          * 31246
+        D1=(5)  L_00C02+1                        * 31246
 L_3124D:
         CD1EX                                    * 3124D
         RTNSC                                    * 31250
@@ -1577,7 +1625,7 @@ L_31383:
         CBIT=1  3                                * 3139E
         C=C&A   B                                * 313A3
         DAT0=C  1                                * 313A7
-        GOSBVL  L_0C1A7                          * 313AB
+        GOSBVL  SUB_0C1A7                        * 313AB
         D0=(4)  #0927                            * 313B2
         DAT0=A  1                                * 313B8
         RTN                                      * 313BC
@@ -1589,7 +1637,7 @@ SUB_313C2:
         C=DAT0  B                                * 313C9
         ?CBIT=0 2                                * 313CC
         GOYES   L_313FC                          * 313D1
-        GOSBVL  L_0C1A7                          * 313D3
+        GOSBVL  SUB_0C1A7                        * 313D3
         D0=(4)  #0927                            * 313DA
         A=DAT0  1                                * 313E0
         GOSUB   WaitTbz0                         * 313E4
@@ -1823,7 +1871,7 @@ L_31684:
 
 * refs (2): 3166F 3233A
 SUB_31692:
-        GOSBVL  L_0C1A7                          * 31692
+        GOSBVL  SUB_0C1A7                        * 31692
         D0=(4)  #084B                            * 31699
         C=DAT0  B                                * 3169F
         ST=C                                     * 316A2
@@ -2940,7 +2988,7 @@ SUB_32A30:
 
 * refs (8): 32636 3283A 3286E 3287B 32932 329EE ...
 SUB_32A3F:
-        GOVLNG  L_0C1A7                          * 32A3F
+        GOVLNG  SUB_0C1A7                        * 32A3F
 
 * refs (3): 3261B 32A7D 32F3C
 SUB_32A46:

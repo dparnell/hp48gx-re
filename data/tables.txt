@@ -2,11 +2,47 @@
 # tools/analyze.py and tools/disasm.py. Each address field is written as a
 # label, so the table stays right when code moves.
 # ADDR<TAB>FIELDS<TAB>COUNT<TAB>DESCRIPTION
-# FIELDS: one character per field: `a` is the 5-nibble address of an object or
-# data, `c` the address of machine code, a digit 1-9 a number of that many
-# nibbles.
-# COUNT: the number of entries, or 0 for "until an entry whose first field is
-# zero" (that zero word belongs to the table).
+# FIELDS: one per entry field: `a` is the 5-nibble address of an object or
+# data, `c` the address of machine code, a digit 1-9 or `(n)` a number of
+# that many nibbles, `tN` N ASCII characters, `s` a counted string (a length
+# byte, then the characters).
+# COUNT: the number of entries, 0 for "until an entry whose first field is
+# zero" (that zero word belongs to the table), or `#N` for "the count is in
+# the table's first N nibbles".
 15B4C	aaa	0	Decompiler handlers by object type (walked by SUB_15C5F): prolog, handler when ST3 is set, handler when it is clear
 80232	c	28	Self-test commands by key code - 1 (dispatched by PC=(A) at #8007D)
 70606	c	31	Bank switcher methods after BANKMTHDS: stubs of D0=(5) #7F0xx, GOTO #708C2
+00ED5	1(13)c	0	ON-key combinations (read at #00E7A): kind (1 jump, 2 and 3 other actions), 13-nibble key bitmap, handler
+00487	3	8	Time-out ticks by baud code 0-7 (read at #00437)
+00AEB	33	49	Key matrix by keycode 1-49: OUT mask and IN mask (read at #00CD3); key 45 (ON) is 0
+01F43	2	8	Annunciator bit for each bit of the annunciator byte (read at #01F13)
+0A69F	cc	0	Object types: SKIPOB's size handler and the handler to use for that type (read at #0A67E, from the address before)
+0CF31	t3	7	Weekday names
+0D4EF	23	12	Months: days in the month and days before it, both BCD (read by SUB_0D4DA)
+19128	a	14	Argument dispatch: the prolog for each type digit 1-E (A, name or algebraic, is 0 and checked in code); read at #19017
+1916E	a	15	Argument dispatch: the prolog for each extended type 0F-EF; read at #19017
+300B5	t2	32	TRANSIO: the ASCII pair for each character 128-159 (read at #30043)
+30135	2	1	TRANSIO: end of the pairs for 128-159
+30137	2t2	0	TRANSIO: character and ASCII pair for characters from 160 up (read at #30060)
+3F384	222222	7	Accents: for A E I O U Y N, what to add to the letter for each accented form, 0 for none (read by OBJ_3F2D3)
+3F3D8	2	3	Accents: the same for D, P and C
+6B3F5	2a	#2	Key dispatch: keycode byte and object to run (read by OBJ_6FDD6/OBJ_6FDE2)
+6B428	2a	#2	Key dispatch: keycode byte and object to run
+6B43F	2a	#2	Key dispatch: keycode byte and object to run
+71F68	a	7	?OKINALG: prologs of the objects an algebraic may hold, ending in 0 (read at #71F30, which steps over every other one)
+760D3	2	1	SI prefixes: the index of the last one (read by OBJ_0C2CD)
+760D5	t1(2)	22	SI prefixes: the character and its power of ten (two-digit ten's complement BCD)
+79163	(16)	9	ln(1+10^-k) for k = 0..7, then ln 10: BCD mantissas (read by L_79A0A)
+7994E	(16)	9	atan(10^-k) for k = 1..7, then pi/180 and pi/4: BCD mantissas (read by L_79A0A)
+81823	s	27	Self-test messages: counted strings (used as L_81823+n)
+14825	a	1	Unreferenced NOP between objects: padding
+28291	a	1	Unreferenced NOP between objects: padding
+3F93F	a	1	Unreferenced NOP between objects: padding
+3FF0C	aa	1	Unreferenced NOPs between objects: padding
+5AC81	a	1	Unreferenced NOP between objects: padding
+5AD67	a	1	Unreferenced NOP between objects: padding
+5B1EF	a	1	Unreferenced NOP between objects: padding
+5B30C	a	1	Unreferenced NOP between objects: padding
+5B3D4	a	1	Unreferenced NOP between objects: padding
+5B42E	a	1	Unreferenced NOP between objects: padding
+5B541	a	1	Unreferenced NOP between objects: padding

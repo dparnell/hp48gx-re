@@ -313,8 +313,6 @@ SUB_3833E:
 OBJ_3835E:
         CON(5)  DOARRY                           * 3835E  array 10
         LENGTH                                   * 38363  length, to #38417
-
-0.00000010:
         CON(5)  DOREAL                           * 38368  element type
         CON(5)  1                                * 3836D  dimensions
         CON(5)  10                               * 38372
@@ -334,8 +332,6 @@ OBJ_3835E:
 puretemp?~1:
         CON(5)  DOARRY                           * 38417  array 10
         LENGTH                                   * 3841C  length, to #384D0
-
-0.00000010_38421:
         CON(5)  DOREAL                           * 38421  element type
         CON(5)  1                                * 38426  dimensions
         CON(5)  10                               * 3842B
@@ -355,8 +351,6 @@ puretemp?~1:
 UMSIN~1~1~1:
         CON(5)  DOARRY                           * 384D0  array 10
         LENGTH                                   * 384D5  length, to #38589
-
-0.00000010_384DA:
         CON(5)  DOREAL                           * 384DA  element type
         CON(5)  1                                * 384DF  dimensions
         CON(5)  10                               * 384E4

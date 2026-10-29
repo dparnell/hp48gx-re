@@ -883,12 +883,20 @@ ChkPut('PPAR',li,s)~1~2~1:
 sort(2r):
         :: %MAXorder SWAP ;                      * 4B45F
 
+* refs (1): 6B443
+OBJ_4B473:
         :: TakeOver REPEATERCH BINT11 OBJ_0C758 ; * 4B473
 
+* refs (1): 6B44A
+OBJ_4B491:
         :: TakeOver REPEATERCH BINT16 OBJ_6F810 ; * 4B491
 
+* refs (1): 6B451
+OBJ_4B4AF:
         :: TakeOver REPEATERCH BINT17 OBJ_6F85B ; * 4B4AF
 
+* refs (1): 6B458
+OBJ_4B4CD:
         :: TakeOver REPEATERCH BINT18 OBJ_4618C ; * 4B4CD
 
 * refs (3): 48A1C 4BB6B 4BE6D
@@ -977,6 +985,8 @@ GetRes:
           11GETLAM GetRes~1 case EVAL            * 4B846
           %%1 10GETLAM %%/>% ;                   * 4B85A
 
+* refs (1): 6B489
+OBJ_4B86E:
         :: EXITFCNsto ERRJMP ;                   * 4B86E
 
 * refs (1): 6D195

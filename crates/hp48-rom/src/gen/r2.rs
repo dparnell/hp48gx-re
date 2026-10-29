@@ -13715,30 +13715,7 @@ pub(crate) fn OBJ_2D307(r: &mut Run) {
     }
 }
 
-// Unlabelled code at #2D54E.
-pub(crate) fn code_2D54E(r: &mut Run) {
-    let mut at = r.cpu.pc;
-    loop {
-        match at {
-            0x2D54E..=0x2D561 => {
-                io!(r, at, 0x2D54E..0x2D551, 19, r.cpu.load(1, R::A, Field::A, r.hw)); // A=DAT1 A
-                op!(r, at, 0x2D551..0x2D554, 5, r.cpu.d_ex_r(1, R::A, false)); // AD1EX
-                op!(r, at, 0x2D554..0x2D557, 5, r.cpu.d_add(1, 10)); // D1=D1+ 10
-                op!(r, at, 0x2D557..0x2D55A, 5, r.cpu.d_add(1, 14)); // D1=D1+ 14
-                op!(r, at, 0x2D55A..0x2D55E, 6, r.cpu.load_const(R::C, 2, 0x31)); // LC(2) #31
-                io!(r, at, 0x2D55E..0x2D561, 16, r.cpu.store(1, R::C, Field::B, r.hw)); // DAT1=C B
-                op!(r, at, 0x2D561..0x2D564, 5, r.cpu.d_ex_r(1, R::A, false)); // AD1EX
-                at = 0x2D564;
-            }
-            _ => {
-                r.cpu.pc = at;
-                return;
-            }
-        }
-    }
-}
-
-// Loop: firmware/lower/2C000-misc-2C000.s:1202
+// Loop: firmware/lower/2C000-misc-2C000.s:1213
 pub(crate) fn Loop(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -13756,7 +13733,7 @@ pub(crate) fn Loop(r: &mut Run) {
     }
 }
 
-// SetServMode: firmware/lower/2C000-misc-2C000.s:1307
+// SetServMode: firmware/lower/2C000-misc-2C000.s:1327
 pub(crate) fn SetServMode(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -13773,7 +13750,7 @@ pub(crate) fn SetServMode(r: &mut Run) {
     }
 }
 
-// ClrServMode: firmware/lower/2C000-misc-2C000.s:1314
+// ClrServMode: firmware/lower/2C000-misc-2C000.s:1334
 pub(crate) fn ClrServMode(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -15351,7 +15328,6 @@ pub const ROUTINES: &[(u32, u32, Block, &str)] = &[
     (0x2D2EC, 0x2D2F6, OBJ_2D2E7, "OBJ_2D2E7"),
     (0x2D2FC, 0x2D306, OBJ_2D2F7, "OBJ_2D2F7"),
     (0x2D30C, 0x2D31B, OBJ_2D307, "OBJ_2D307"),
-    (0x2D54E, 0x2D563, code_2D54E, "code_2D54E"),
     (0x2D564, 0x2D56D, Loop, "Loop"),
     (0x2D9A6, 0x2D9B1, SetServMode, "SetServMode"),
     (0x2D9B7, 0x2D9C2, ClrServMode, "ClrServMode"),

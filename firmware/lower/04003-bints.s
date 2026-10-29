@@ -453,7 +453,9 @@ L_044C4:
         RSTK=C                                   * 044C7
         GOSBVL  CSRW5                            * 044C9
         PC=C                                     * 044D0
-L_044D4:
+
+* refs (3): 8081A 819F6 81A45
+SUB_044D4:
         B=B-C   A                                * 044D4
 
 * refs (1): 044AA
@@ -848,7 +850,7 @@ Attn?:
         RTN                                      * 04997
 
 * Carry if true
-* refs (2): 0281F 0493A
+* refs (3): 0281F 0493A 814B2
 KeyInBuff?:
         GOSBVL  SUB_0C198                        * 04999
         D1=(4)  #0669                            * 049A0

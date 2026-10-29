@@ -2,15 +2,61 @@
 * Addresses in the right-hand comments are those of the original ROM.
 * Follows on from the previous file (at #760C9 in the original ROM).
         ENDLENGTH                                * 760C9
+L_760C9:
+        A=A+1   A                                * 760C9
+        A=A+B   XS                               * 760CB
+        BSR     A                                * 760CE
+        RTNSXM                                   * 760D0
+        NIBHEX  0                                * 760D2
 
-* refs (1): 0C2C2
-OBJ_760C9:
-        CON(5)  DOHSTR                           * 760C9  DOHSTR
-        LENGTH                                   * 760CE  length, to #7612D
-        NIBHEX  51D679B6305B49D4603689E619749086 * 760D3  .mρk.µηM.cσnγG.h
-        NIBHEX  20469944104521078805516658548116 * 760F3  .dτD.T.p∂P.fΣE.a
-        NIBHEX  28B4308420A512A79795429767       * 76113  ∇K.H.Z!zyY$yv
-        ENDLENGTH                                * 7612D
+* SI prefixes: the index of the last one (read by OBJ_0C2CD)
+        CON(2)  #15                              * 760D3  entry 0
+
+* SI prefixes: the character and its power of ten (two-digit ten's complement BCD)
+        NIBASC  "m"                              * 760D5  entry 0
+        CON(2)  #97                              * 760D7
+        NIBASC  "k"                              * 760D9  entry 1
+        CON(2)  #03                              * 760DB
+        NIBASC  "µ"                              * 760DD  entry 2
+        CON(2)  #94                              * 760DF
+        NIBASC  "M"                              * 760E1  entry 3
+        CON(2)  #06                              * 760E3
+        NIBASC  "c"                              * 760E5  entry 4
+        CON(2)  #98                              * 760E7
+        NIBASC  "n"                              * 760E9  entry 5
+        CON(2)  #91                              * 760EB
+        NIBASC  "G"                              * 760ED  entry 6
+        CON(2)  #09                              * 760EF
+        NIBASC  "h"                              * 760F1  entry 7
+        CON(2)  #02                              * 760F3
+        NIBASC  "d"                              * 760F5  entry 8
+        CON(2)  #99                              * 760F7
+        NIBASC  "D"                              * 760F9  entry 9
+        CON(2)  #01                              * 760FB
+        NIBASC  "T"                              * 760FD  entry 10
+        CON(2)  #12                              * 760FF
+        NIBASC  "p"                              * 76101  entry 11
+        CON(2)  #88                              * 76103
+        NIBASC  "P"                              * 76105  entry 12
+        CON(2)  #15                              * 76107
+        NIBASC  "f"                              * 76109  entry 13
+        CON(2)  #85                              * 7610B
+        NIBASC  "E"                              * 7610D  entry 14
+        CON(2)  #18                              * 7610F
+        NIBASC  "a"                              * 76111  entry 15
+        CON(2)  #82                              * 76113
+        NIBASC  "K"                              * 76115  entry 16
+        CON(2)  #03                              * 76117
+        NIBASC  "H"                              * 76119  entry 17
+        CON(2)  #02                              * 7611B
+        NIBASC  "Z"                              * 7611D  entry 18
+        CON(2)  #21                              * 7611F
+        NIBASC  "z"                              * 76121  entry 19
+        CON(2)  #79                              * 76123
+        NIBASC  "Y"                              * 76125  entry 20
+        CON(2)  #24                              * 76127
+        NIBASC  "y"                              * 76129  entry 21
+        CON(2)  #76                              * 7612B
 
 L_7612D:
         CON(5)  DOHSTR                           * 7612D  hash table of library 700

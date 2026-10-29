@@ -477,32 +477,84 @@ L_0A597:
         C=RSTK                                   * 0A59B
         D1=C                                     * 0A59D
         RTNSC                                    * 0A5A0
+L_0A5A2:
         B=B+1   A                                * 0A5A2
         GOC     L_0A597                          * 0A5A4
         GONC    L_0A547                          * 0A5A7
+L_0A5AA:
         D0=D0+  16                               * 0A5AA
         GOC     L_0A597                          * 0A5AD
+L_0A5B0:
         D0=D0+  16                               * 0A5B0
         GONC    L_0A581                          * 0A5B3
         GOC     L_0A597                          * 0A5B6
+L_0A5B9:
         D0=D0+  16                               * 0A5B9
         GOC     L_0A597                          * 0A5BC
         D0=D0+  5                                * 0A5BF
         GOC     L_0A597                          * 0A5C2
+L_0A5C5:
         D0=D0+  16                               * 0A5C5
         GOC     L_0A597                          * 0A5C8
+L_0A5CB:
         D0=D0+  5                                * 0A5CB
         GONC    L_0A581                          * 0A5CE
         GOC     L_0A597                          * 0A5D1
+L_0A5D4:
         D0=D0+  6                                * 0A5D4
         GONC    L_0A581                          * 0A5D7
         GOC     L_0A597                          * 0A5DA
-        NIBHEX  146818FA440B818F24132C21345986C9 * 0A5DD  A▶ā¯D°.øB1Â.CθhΠ
-        NIBHEX  FD214EC6132C21341614686D6F6F7F16 * 0A5FD  ß.äl1Â.CaA▶Ööö÷a
-        NIBHEX  248F1468AA4A132C248E134D214E8AA5 * 0A61D  BøA▶ª¤1ÂBè1Ô.ä¨Z
-        NIBHEX  1C6132C241D13416148C1614606FEE   * 0A63D  Á.#,..CaAÈaA.öî
+L_0A5DD:
+        C=DAT0  A                                * 0A5DD
+        C=C-CON A,5                              * 0A5E0
+        GOC     L_0A597                          * 0A5E6
+        C=C+CON A,5                              * 0A5E9
+        AD0EX                                    * 0A5EF
+        C=C+A   A                                * 0A5F2
+        D0=C                                     * 0A5F4
+        GONC    L_0A581                          * 0A5F7
+        GOTO    L_0A597                          * 0A5FA
+L_0A5FE:
+        C=0     A                                * 0A5FE
+        C=DAT0  B                                * 0A600
+        C=C+C   A                                * 0A603
+        AD0EX                                    * 0A605
+        C=C+A   A                                * 0A608
+        D0=C                                     * 0A60A
+L_0A60D:
+        D0=D0+  2                                * 0A60D
+        GOC     L_0A597                          * 0A610
+        GOTO    L_0A581                          * 0A613
+L_0A617:
+        GOTO    L_0A597                          * 0A617
+L_0A61B:
+        D0=D0+  3                                * 0A61B
+        GOC     L_0A617                          * 0A61E
+        C=DAT0  A                                * 0A621
+        ?C=0    A                                * 0A624
+        GOYES   L_0A5CB                          * 0A627
+        AD0EX                                    * 0A629
+        C=C+A   A                                * 0A62C
+        GOC     L_0A617                          * 0A62E
+        D0=C                                     * 0A631
+        C=0     A                                * 0A634
+        C=DAT0  B                                * 0A636
+        ?C=0    A                                * 0A639
+        GOYES   L_0A651                          * 0A63C
+        C=C+C   A                                * 0A63E
+        AD0EX                                    * 0A640
+        C=C+A   A                                * 0A643
+        GOC     L_0A617                          * 0A645
+        D0=C                                     * 0A648
+        D0=D0+  2                                * 0A64B
+        GOC     L_0A617                          * 0A64E
+L_0A651:
+        D0=D0+  2                                * 0A651
+        GOC     L_0A65B                          * 0A654
+        GOTO    L_0A547                          * 0A657
 L_0A65B:
         GOTO    L_0A597                          * 0A65B
+L_0A65F:
         C=0     A                                * 0A65F
         C=DAT0  B                                * 0A661
         C=C+C   A                                * 0A664
@@ -527,10 +579,33 @@ L_0A685:
 L_0A698:
         AD1EX                                    * 0A698
         PC=(A)                                   * 0A69B
-        NIBHEX  770302A5A0C7030AA5A0F70300B5A058 * 0A69F  w0 Z.|0.Z..0.[.Σ
-        NIBHEX  0309B5A0B80305C5A0E8030BC5A04903 * 0A6BF  0↑[.≠0P\.←0°\.η0
-        NIBHEX  04D5A0A9030DD5A08A030EF5A07B030D * 0A6DF  @].ω0Ð].¨0à_.·0Ð
-        NIBHEX  06A0DB030B16A051130F56A000000    * 0A6FF  `.½0°a..1ðe...
+
+* Object types: SKIPOB's size handler and the handler to use for that type (read at #0A67E, from the address before)
+        CON(5)  L_03077                          * 0A69F  entry 0
+        CON(5)  L_0A5A2                          * 0A6A4
+        CON(5)  L_0307C                          * 0A6A9  entry 1
+        CON(5)  L_0A5AA                          * 0A6AE
+        CON(5)  L_0307F                          * 0A6B3  entry 2
+        CON(5)  L_0A5B0                          * 0A6B8
+        CON(5)  L_03085                          * 0A6BD  entry 3
+        CON(5)  L_0A5B9                          * 0A6C2
+        CON(5)  L_0308B                          * 0A6C7  entry 4
+        CON(5)  L_0A5C5                          * 0A6CC
+        CON(5)  L_0308E                          * 0A6D1  entry 5
+        CON(5)  L_0A5CB                          * 0A6D6
+        CON(5)  L_03094                          * 0A6DB  entry 6
+        CON(5)  L_0A5D4                          * 0A6E0
+        CON(5)  L_0309A                          * 0A6E5  entry 7
+        CON(5)  L_0A5DD                          * 0A6EA
+        CON(5)  L_030A8                          * 0A6EF  entry 8
+        CON(5)  L_0A5FE                          * 0A6F4
+        CON(5)  L_030B7                          * 0A6F9  entry 9
+        CON(5)  L_0A60D                          * 0A6FE
+        CON(5)  L_030BD                          * 0A703  entry 10
+        CON(5)  L_0A61B                          * 0A708
+        CON(5)  L_03115                          * 0A70D  entry 11
+        CON(5)  L_0A65F                          * 0A712
+        CON(5)  0                                * 0A717  end of table
 
 * refs (2): 0A331 0A421
 SUB_0A71C:
@@ -2014,7 +2089,15 @@ SUB_0BA00:
         ASL     A                                * 0BA25
         C=C+A   A                                * 0BA27
         RTN                                      * 0BA29
-        NIBHEX  D21563DAF2E2E2E2132CA            * 0BA2B  -Q6./...1Â
+        C=0     A                                * 0BA2B
+        C=DAT0  X                                * 0BA2D
+        A=C     A                                * 0BA31
+        CSL     A                                * 0BA33
+        C=C-A   A                                * 0BA35
+        C=C-A   A                                * 0BA37
+        C=C-A   A                                * 0BA39
+        AD0EX                                    * 0BA3B
+        A=A+C   A                                * 0BA3E
 
 * refs (2): 0BB17 640D2
 OBJ_0BA40:
@@ -2421,7 +2504,7 @@ L_0BF68:
         P=      0                                * 0BF72
         RTNCC                                    * 0BF74
 
-* refs (1): 0C12D
+* refs (2): 0C12D 0C615
 SUB_0BF76:
         P=      0                                * 0BF76
         LC(5)   #FE000                           * 0BF78

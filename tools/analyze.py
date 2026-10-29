@@ -15,6 +15,7 @@ Usage: python analyze.py            writes out/analysis.pickle and a summary
 """
 import bisect
 import pickle
+import re
 import sys
 from collections import defaultdict
 from dataclasses import dataclass, field
@@ -23,7 +24,7 @@ from pathlib import Path
 from rom import Rom
 from rpl import Decoder as RplDecoder, DecodeError, PROLOGS, SEMI
 from saturn import Decoder as CodeDecoder
-from symbols import Symbols
+from symbols import Symbols, fake_number
 
 OUT = Path(__file__).resolve().parent.parent / "out"
 DATA = Path(__file__).resolve().parent.parent / "data"
@@ -45,7 +46,9 @@ def read_tables(rom=None):
     """data/tables.txt as dicts: start, size, desc, and words: (address,
     width, field, entry) for every field of every entry, where field is
     "a" (address of an object or data), "c" (address of machine code), "n"
-    (a number) or "end" (the zero terminator)."""
+    (a number), "t" (ASCII text), "s" (a counted string: length byte, then
+    the bytes), "count" (the table's own entry count) or "end" (the zero
+    terminator)."""
     rom = rom or Rom()
     out = []
     path = DATA / "tables.txt"
@@ -54,18 +57,37 @@ def read_tables(rom=None):
     for line in path.read_text(encoding="utf-8").splitlines():
         if line.startswith("#") or not line.strip():
             continue
-        a, fields, count, desc = (line.split("\t") + ["", "", ""])[:4]
-        fields = [(f, 5) if f in "ac" else ("n", int(f)) for f in fields]
+        a, spec, count, desc = (line.split("\t") + ["", "", ""])[:4]
+        fields = []
+        for f in re.findall(r"\(\d+\)|t\d+|[acs]|\d", spec):
+            if f in ("a", "c"):
+                fields.append((f, 5))
+            elif f == "s":
+                fields.append(("s", None))
+            elif f.startswith("t"):
+                fields.append(("t", 2 * int(f[1:])))
+            else:
+                fields.append(("n", int(f.strip("()"))))
         a = p = int(a, 16)
-        count = int(count)
         words = []
+        if count.startswith("#"):
+            # the count is the table's first field, of that many nibbles
+            w = int(count[1:])
+            count = rom.read(p, w)
+            words.append((p, w, "count", -1))
+            p += w
+        else:
+            count = int(count)
         k = 0
         while count == 0 or k < count:
-            if count == 0 and rom.read(p, fields[0][1]) == 0:
-                words.append((p, fields[0][1], "end", k))
-                p += fields[0][1]
+            first = fields[0][1] or 2
+            if count == 0 and rom.read(p, first) == 0:
+                words.append((p, first, "end", k))
+                p += first
                 break
             for f, w in fields:
+                if f == "s":
+                    w = 2 + 2 * rom.read(p, 2)
                 words.append((p, w, f, k))
                 p += w
             k += 1
@@ -455,6 +477,8 @@ class Analyzer:
                 continue
             if a < 0x1000 and not s.flags and s.name and s.name.endswith(("err", "msg")):
                 continue    # a message number (posunferr = #301), not an address
+            if fake_number(self.rom, s):
+                continue
             if self.rd.is_object(a) or self.rd.is_pco(a):
                 self.q("ptr", a)
             elif "ML" in s.flags or s.usage == "ASM":
@@ -545,8 +569,15 @@ class Analyzer:
         for t in read_tables():
             self.mark(Item(t["start"], t["size"], "table", t))
             for w, _, fld, _ in t["words"]:
-                if fld in "ac":
+                if fld in ("a", "c") and self.rom.addr(w):
                     self.q("ptr" if fld == "a" else "code", self.rom.addr(w), w, "table")
+        # Code no executed or followed path reaches: entered through
+        # computed addresses, copied to RAM first, or from untaken handlers.
+        path = DATA / "code-entries.txt"
+        if path.exists():
+            for line in path.read_text(encoding="utf-8").splitlines():
+                if line.strip() and not line.startswith("#"):
+                    self.q("code", int(line.split("\t")[0], 16))
 
     def analyze(self):
         self.declared_tables()

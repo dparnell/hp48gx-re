@@ -433,7 +433,7 @@ Key>StdKeyOb~1:
         NIBHEX  0                                * 3A9CD
         RPL
 
-* refs (2): 4D0AB 4D853
+* refs (3): 4D0AB 4D853 6B423
 TurnOffKey:
         :: Modifier TurnOff SetDA123NoCh ;       * 3A9CE
 
@@ -1398,7 +1398,7 @@ ROMP_0A1_021:
         ROMPTR 002 048                           * 3B74A  /
 
 * ROMPTR 0A1 022
-* refs (1): 3B23B
+* refs (3): 3B23B 6B415 6B474
 ROMP_0A1_022:
         :: Modifier RShiftOnly SetDA123NoCh ;    * 3B755
 
@@ -1423,7 +1423,7 @@ ROMP_0A1_026:
         ROMPTR 002 047                           * 3B783  *
 
 * ROMPTR 0A1 027
-* refs (1): 3B23B
+* refs (3): 3B23B 6B43A 6B47B
 ROMP_0A1_027:
         :: Modifier LShiftOnly SetDA123NoCh ;    * 3B78E
 

@@ -7301,7 +7301,7 @@ pub(crate) fn SUB_5A999(r: &mut Run) {
     }
 }
 
-// MetaMulInv: firmware/lower/5A01D-algebra.s:1014
+// MetaMulInv: firmware/lower/5A01D-algebra.s:1026
 pub(crate) fn MetaMulInv(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -7318,7 +7318,7 @@ pub(crate) fn MetaMulInv(r: &mut Run) {
 }
 
 // commute terms
-// Meta<-->: firmware/lower/5A01D-algebra.s:1030
+// Meta<-->: firmware/lower/5A01D-algebra.s:1042
 pub(crate) fn Meta____(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -7335,7 +7335,7 @@ pub(crate) fn Meta____(r: &mut Run) {
 }
 
 // associate left term
-// Meta<-A: firmware/lower/5A01D-algebra.s:1048
+// Meta<-A: firmware/lower/5A01D-algebra.s:1060
 pub(crate) fn Meta__A(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -7352,7 +7352,7 @@ pub(crate) fn Meta__A(r: &mut Run) {
 }
 
 // associate right term
-// MetaA->: firmware/lower/5A01D-algebra.s:1077
+// MetaA->: firmware/lower/5A01D-algebra.s:1089
 pub(crate) fn MetaA__(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -7369,7 +7369,7 @@ pub(crate) fn MetaA__(r: &mut Run) {
 }
 
 // delete right term
-// MetaD->: firmware/lower/5A01D-algebra.s:1106
+// MetaD->: firmware/lower/5A01D-algebra.s:1118
 pub(crate) fn MetaD__(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -7386,7 +7386,7 @@ pub(crate) fn MetaD__(r: &mut Run) {
 }
 
 // delete left term
-// Meta<-D: firmware/lower/5A01D-algebra.s:1145
+// Meta<-D: firmware/lower/5A01D-algebra.s:1157
 pub(crate) fn Meta__D(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -7403,7 +7403,7 @@ pub(crate) fn Meta__D(r: &mut Run) {
 }
 
 // delete left term
-// Meta<-D!: firmware/lower/5A01D-algebra.s:1167
+// Meta<-D!: firmware/lower/5A01D-algebra.s:1179
 pub(crate) fn Meta__D_(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -7420,7 +7420,7 @@ pub(crate) fn Meta__D_(r: &mut Run) {
 }
 
 // remove prefix
-// Meta->(): firmware/lower/5A01D-algebra.s:1184
+// Meta->(): firmware/lower/5A01D-algebra.s:1196
 pub(crate) fn Meta_____5C13C(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -7437,7 +7437,7 @@ pub(crate) fn Meta_____5C13C(r: &mut Run) {
 }
 
 // double invert & remove prefix
-// Meta1/(): firmware/lower/5A01D-algebra.s:1224
+// Meta1/(): firmware/lower/5A01D-algebra.s:1236
 pub(crate) fn Meta1___(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -7454,7 +7454,7 @@ pub(crate) fn Meta1___(r: &mut Run) {
 }
 
 // double negate & remove prefix
-// Meta-(): firmware/lower/5A01D-algebra.s:1245
+// Meta-(): firmware/lower/5A01D-algebra.s:1257
 pub(crate) fn Meta___(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -7471,7 +7471,7 @@ pub(crate) fn Meta___(r: &mut Run) {
 }
 
 // EXP(a*b) -> EXP(a)^b
-// MetaE^: firmware/lower/5A01D-algebra.s:1268
+// MetaE^: firmware/lower/5A01D-algebra.s:1280
 pub(crate) fn MetaE_(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -7488,7 +7488,7 @@ pub(crate) fn MetaE_(r: &mut Run) {
 }
 
 // EXP(a)^b -> EXP(a*b)
-// MetaE(): firmware/lower/5A01D-algebra.s:1287
+// MetaE(): firmware/lower/5A01D-algebra.s:1299
 pub(crate) fn MetaE__(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -7505,7 +7505,7 @@ pub(crate) fn MetaE__(r: &mut Run) {
 }
 
 // LN(a^b) -> b*LN(a)
-// MetaL*: firmware/lower/5A01D-algebra.s:1302
+// MetaL*: firmware/lower/5A01D-algebra.s:1314
 pub(crate) fn MetaL_(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -7522,7 +7522,7 @@ pub(crate) fn MetaL_(r: &mut Run) {
 }
 
 // b*LN(a) -> LN(a^b)
-// MetaL(): firmware/lower/5A01D-algebra.s:1317
+// MetaL(): firmware/lower/5A01D-algebra.s:1329
 pub(crate) fn MetaL__(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -7539,7 +7539,7 @@ pub(crate) fn MetaL__(r: &mut Run) {
 }
 
 // merge common factor on left
-// Meta<-M: firmware/lower/5A01D-algebra.s:1336
+// Meta<-M: firmware/lower/5A01D-algebra.s:1348
 pub(crate) fn Meta__M(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -7556,7 +7556,7 @@ pub(crate) fn Meta__M(r: &mut Run) {
 }
 
 // merge common factor on right
-// MetaM->: firmware/lower/5A01D-algebra.s:1379
+// MetaM->: firmware/lower/5A01D-algebra.s:1391
 pub(crate) fn MetaM__(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -7573,7 +7573,7 @@ pub(crate) fn MetaM__(r: &mut Run) {
 }
 
 // add fractions
-// MetaAF: firmware/lower/5A01D-algebra.s:1402
+// MetaAF: firmware/lower/5A01D-algebra.s:1414
 pub(crate) fn MetaAF(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -7590,7 +7590,7 @@ pub(crate) fn MetaAF(r: &mut Run) {
 }
 
 // include left term
-// Meta(<-: firmware/lower/5A01D-algebra.s:1421
+// Meta(<-: firmware/lower/5A01D-algebra.s:1433
 pub(crate) fn Meta____5C58E(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -7607,7 +7607,7 @@ pub(crate) fn Meta____5C58E(r: &mut Run) {
 }
 
 // include right term
-// Meta->): firmware/lower/5A01D-algebra.s:1440
+// Meta->): firmware/lower/5A01D-algebra.s:1452
 pub(crate) fn Meta____5C5DB(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -7624,7 +7624,7 @@ pub(crate) fn Meta____5C5DB(r: &mut Run) {
 }
 
 // parenthesise nearest term
-// Meta(()): firmware/lower/5A01D-algebra.s:1459
+// Meta(()): firmware/lower/5A01D-algebra.s:1471
 pub(crate) fn Meta_____5C628(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -7641,7 +7641,7 @@ pub(crate) fn Meta_____5C628(r: &mut Run) {
 }
 
 // change EXP to trig. fns.
-// Meta->TRG: firmware/lower/5A01D-algebra.s:1478
+// Meta->TRG: firmware/lower/5A01D-algebra.s:1490
 pub(crate) fn Meta__TRG(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -7658,7 +7658,7 @@ pub(crate) fn Meta__TRG(r: &mut Run) {
 }
 
 // move nearest left term to right
-// MetaT->: firmware/lower/5A01D-algebra.s:1491
+// MetaT->: firmware/lower/5A01D-algebra.s:1503
 pub(crate) fn MetaT__(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -7676,7 +7676,7 @@ pub(crate) fn MetaT__(r: &mut Run) {
 }
 
 // move nearest right term to left
-// Meta<-T: firmware/lower/5A01D-algebra.s:1513
+// Meta<-T: firmware/lower/5A01D-algebra.s:1525
 pub(crate) fn Meta__T(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -7694,7 +7694,7 @@ pub(crate) fn Meta__T(r: &mut Run) {
 }
 
 // remove 1st RE,IM; CONJ
-// Meta->()C%: firmware/lower/5A01D-algebra.s:1535
+// Meta->()C%: firmware/lower/5A01D-algebra.s:1547
 pub(crate) fn Meta____C_(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -7712,7 +7712,7 @@ pub(crate) fn Meta____C_(r: &mut Run) {
 }
 
 // define function
-// Meta->DEF: firmware/lower/5A01D-algebra.s:1579
+// Meta->DEF: firmware/lower/5A01D-algebra.s:1591
 pub(crate) fn Meta__DEF(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -7730,7 +7730,7 @@ pub(crate) fn Meta__DEF(r: &mut Run) {
 }
 
 // expand trig fns. of a sum
-// MetaTRG*: firmware/lower/5A01D-algebra.s:1616
+// MetaTRG*: firmware/lower/5A01D-algebra.s:1628
 pub(crate) fn MetaTRG_(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -8879,8 +8879,8 @@ pub(crate) fn N_1unroll(r: &mut Run) {
     }
 }
 
-// (2.280296843E2:8,-3.0002280220~1~1: firmware/lower/5D01D-algebra.s:1384
-pub(crate) fn _2_280296843E2_8__3_0002280220_1_1(r: &mut Run) {
+// numb1stcase~1: firmware/lower/5D01D-algebra.s:1384
+pub(crate) fn numb1stcase_1(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -8892,6 +8892,25 @@ pub(crate) fn _2_280296843E2_8__3_0002280220_1_1(r: &mut Run) {
                 op!(r, at, 0x5EDCA..0x5EDD1, 9, r.cpu.load_const(R::C, 5, 0x2933)); // LC(5) DOREAL
                 branch!(r, at, 0x5EDD6, 7, r.cpu.test(Test::Regs(Cmp::Eq, R::C, R::A), Field::A, None)); // ?C=A A / RTNYES
             }
+            // #5EDD6:
+            0x5EDD6..=0x5EDDD => {
+                op!(r, at, 0x5EDD6..0x5EDDD, 9, r.cpu.load_const(R::C, 5, 0x2977)); // LC(5) DOCMP
+                branch!(r, at, 0x5EDE2, 7, r.cpu.test(Test::Regs(Cmp::Eq, R::C, R::A), Field::A, None)); // ?C=A A / RTNYES
+            }
+            // #5EDE2:
+            0x5EDE2..=0x5EDE9 => {
+                op!(r, at, 0x5EDE2..0x5EDE9, 9, r.cpu.load_const(R::C, 5, 0x29E8)); // LC(5) DOARRY
+                branch!(r, at, 0x5EDEE, 7, r.cpu.test(Test::Regs(Cmp::Eq, R::C, R::A), Field::A, None)); // ?C=A A / RTNYES
+            }
+            // #5EDEE:
+            0x5EDEE..=0x5EDF5 => {
+                op!(r, at, 0x5EDEE..0x5EDF5, 9, r.cpu.load_const(R::C, 5, 0x2A0A)); // LC(5) DOLNKARRY
+                branch!(r, at, 0x5EDFA, 7, r.cpu.test(Test::Regs(Cmp::Eq, R::C, R::A), Field::A, None)); // ?C=A A / RTNYES
+            }
+            // #5EDFA:
+            0x5EDFA..=0x5EDFA => {
+                jump!(r, at, 9, r.cpu.rtn(RtnKind::ClearCarry)); // RTNCC
+            }
             _ => {
                 r.cpu.pc = at;
                 return;
@@ -8900,13 +8919,14 @@ pub(crate) fn _2_280296843E2_8__3_0002280220_1_1(r: &mut Run) {
     }
 }
 
-// Unlabelled code at #5EE01.
-pub(crate) fn code_5EE01(r: &mut Run) {
+// %/C%/[]/[L] -> :: <ob1> ; ob -> :: ob2 <rest> ;
+// numb1stcase: firmware/lower/5D01D-algebra.s:1404
+pub(crate) fn numb1stcase(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
             0x5EE01..=0x5EE01 => {
-                branch!(r, at, 0x5EE05, 6, r.cpu.call(0x5EDBE)); // GOSUB (2.280296843E2:8,-3.0002280220~1~1
+                branch!(r, at, 0x5EE05, 6, r.cpu.call(0x5EDBE)); // GOSUB numb1stcase~1
             }
             // #5EE05:
             0x5EE05..=0x5EE05 => {
@@ -8929,7 +8949,7 @@ pub(crate) fn code_5EE01(r: &mut Run) {
 }
 
 // Meta&NEG -> Meta COLA Meta -> Meta SKIP Meta&(%<0) -> Meta&ABS(%) COLA
-// M-1stcasechs: firmware/lower/5D01D-algebra.s:1406
+// M-1stcasechs: firmware/lower/5D01D-algebra.s:1414
 pub(crate) fn M_1stcasechs(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -9037,33 +9057,26 @@ pub(crate) fn M_1stcasechs(r: &mut Run) {
 }
 
 // %<0 -> :: % <ob1> ; ob -> :: ob <ob2> <rest> ;
-// REALNEGcase: firmware/lower/5D01D-algebra.s:1474
+// REALNEGcase: firmware/lower/5D01D-algebra.s:1482
 pub(crate) fn REALNEGcase(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
-            0x5EEE0..=0x5EEEC => {
+            0x5EEE0..=0x5EEF5 => {
                 io!(r, at, 0x5EEE0..0x5EEE3, 19, r.cpu.load(1, R::C, Field::A, r.hw)); // C=DAT1 A
                 op!(r, at, 0x5EEE3..0x5EEE6, 5, r.cpu.d_ex_r(1, R::C, false)); // CD1EX
                 io!(r, at, 0x5EEE6..0x5EEE9, 19, r.cpu.load(1, R::A, Field::A, r.hw)); // A=DAT1 A
                 op!(r, at, 0x5EEE9..0x5EEEC, 5, r.cpu.d_ex_r(1, R::C, false)); // CD1EX
                 op!(r, at, 0x5EEEC..0x5EEEE, 4, r.cpu.push_c()); // RSTK=C
-                at = 0x5EEEE;
+                op!(r, at, 0x5EEEE..0x5EEF5, 9, r.cpu.load_const(R::C, 5, 0x2933)); // LC(5) DOREAL
+                branch!(r, at, 0x5EEFA, 7, r.cpu.test(Test::Regs(Cmp::Ne, R::C, R::A), Field::A, Some(0x5EED7))); // ?C#A A / GOYES L_5EED7
             }
-            _ => {
-                r.cpu.pc = at;
-                return;
-            }
-        }
-    }
-}
-
-// Unlabelled code at #5EF05.
-pub(crate) fn code_5EF05(r: &mut Run) {
-    let mut at = r.cpu.pc;
-    loop {
-        match at {
-            0x5EF05..=0x5EF0C => {
+            // #5EEFA:
+            0x5EEFA..=0x5EF0C => {
+                op!(r, at, 0x5EEFA..0x5EEFC, 4, r.cpu.pop_c()); // C=RSTK
+                op!(r, at, 0x5EEFC..0x5EEFF, 5, r.cpu.d_ex_r(1, R::C, false)); // CD1EX
+                op!(r, at, 0x5EEFF..0x5EF02, 5, r.cpu.d_add(1, 5)); // D1=D1+ 5
+                op!(r, at, 0x5EF02..0x5EF05, 5, r.cpu.d_add(1, 15)); // D1=D1+ 15
                 io!(r, at, 0x5EF05..0x5EF09, 15, r.cpu.load(1, R::C, Field::S, r.hw)); // C=DAT1 S
                 op!(r, at, 0x5EF09..0x5EF0C, 5, r.cpu.d_from_r(1, R::C, false)); // D1=C
                 branch!(r, at, 0x5EF11, 7, r.cpu.test(Test::Zero(R::C), Field::S, Some(0x5EED7))); // ?C=0 S / GOYES L_5EED7
@@ -9081,7 +9094,7 @@ pub(crate) fn code_5EF05(r: &mut Run) {
 }
 
 // Meta&+ ? case
-// M1st+case: firmware/lower/5D01D-algebra.s:1501
+// M1st+case: firmware/lower/5D01D-algebra.s:1511
 pub(crate) fn M1st_case(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -9100,7 +9113,7 @@ pub(crate) fn M1st_case(r: &mut Run) {
 }
 
 // Meta&- ? case
-// M1st-case: firmware/lower/5D01D-algebra.s:1510
+// M1st-case: firmware/lower/5D01D-algebra.s:1520
 pub(crate) fn M1st_case_5EF46(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -9119,7 +9132,7 @@ pub(crate) fn M1st_case_5EF46(r: &mut Run) {
 }
 
 // Meta&* ? case
-// M1st*case: firmware/lower/5D01D-algebra.s:1518
+// M1st*case: firmware/lower/5D01D-algebra.s:1528
 pub(crate) fn M1st_case_5EF59(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -9138,7 +9151,7 @@ pub(crate) fn M1st_case_5EF59(r: &mut Run) {
 }
 
 // Meta&/ ? case
-// M1st/case: firmware/lower/5D01D-algebra.s:1526
+// M1st/case: firmware/lower/5D01D-algebra.s:1536
 pub(crate) fn M1st_case_5EF6C(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -9157,7 +9170,7 @@ pub(crate) fn M1st_case_5EF6C(r: &mut Run) {
 }
 
 // Meta&NEG ? case
-// M1stNEGcase: firmware/lower/5D01D-algebra.s:1534
+// M1stNEGcase: firmware/lower/5D01D-algebra.s:1544
 pub(crate) fn M1stNEGcase(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -9176,7 +9189,7 @@ pub(crate) fn M1stNEGcase(r: &mut Run) {
 }
 
 // Meta&INV ? case
-// M1stINVcase: firmware/lower/5D01D-algebra.s:1542
+// M1stINVcase: firmware/lower/5D01D-algebra.s:1552
 pub(crate) fn M1stINVcase(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -9195,7 +9208,7 @@ pub(crate) fn M1stINVcase(r: &mut Run) {
 }
 
 // Meta&^ ? case
-// M1st^case: firmware/lower/5D01D-algebra.s:1550
+// M1st^case: firmware/lower/5D01D-algebra.s:1560
 pub(crate) fn M1st_case_5EFA5(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -9214,7 +9227,7 @@ pub(crate) fn M1st_case_5EFA5(r: &mut Run) {
 }
 
 // Meta&SQ ? case
-// M1stSQcase: firmware/lower/5D01D-algebra.s:1558
+// M1stSQcase: firmware/lower/5D01D-algebra.s:1568
 pub(crate) fn M1stSQcase(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -9233,7 +9246,7 @@ pub(crate) fn M1stSQcase(r: &mut Run) {
 }
 
 // Meta&FNCAPPLY ? case
-// M1stFNCcase: firmware/lower/5D01D-algebra.s:1566
+// M1stFNCcase: firmware/lower/5D01D-algebra.s:1576
 pub(crate) fn M1stFNCcase(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -9252,7 +9265,7 @@ pub(crate) fn M1stFNCcase(r: &mut Run) {
 }
 
 // meta&ob1 ob2 -> ob1=ob2 ? case
-// MEQ1stcase: firmware/lower/5D01D-algebra.s:1574
+// MEQ1stcase: firmware/lower/5D01D-algebra.s:1584
 pub(crate) fn MEQ1stcase(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -9286,7 +9299,7 @@ pub(crate) fn MEQ1stcase(r: &mut Run) {
 }
 
 // meta1&ob1 meta2&ob2 ob3 ->
-// MEQopscase: firmware/lower/5D01D-algebra.s:1591
+// MEQopscase: firmware/lower/5D01D-algebra.s:1601
 pub(crate) fn MEQopscase(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -9334,7 +9347,7 @@ pub(crate) fn MEQopscase(r: &mut Run) {
 }
 
 // meta&ob -> ob is id lam ? case
-// Mid1stcase: firmware/lower/5D01D-algebra.s:1631
+// Mid1stcase: firmware/lower/5D01D-algebra.s:1641
 pub(crate) fn Mid1stcase(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -9363,7 +9376,7 @@ pub(crate) fn Mid1stcase(r: &mut Run) {
 }
 
 // Exit to rpl SKIP
-// doskip: firmware/lower/5D01D-algebra.s:1649
+// doskip: firmware/lower/5D01D-algebra.s:1659
 pub(crate) fn doskip(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -9382,7 +9395,7 @@ pub(crate) fn doskip(r: &mut Run) {
 }
 
 // Exit to rpl COLA
-// docola: firmware/lower/5D01D-algebra.s:1656
+// docola: firmware/lower/5D01D-algebra.s:1666
 pub(crate) fn docola(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -9400,7 +9413,7 @@ pub(crate) fn docola(r: &mut Run) {
     }
 }
 
-// IMPLODE~1~4: firmware/lower/5D01D-algebra.s:1816
+// IMPLODE~1~4: firmware/lower/5D01D-algebra.s:1826
 pub(crate) fn IMPLODE_1_4(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -9436,7 +9449,7 @@ pub(crate) fn IMPLODE_1_4(r: &mut Run) {
 }
 
 // Rewrite rules with the default operator table: the inline pattern/action pairs after the call are matched against the meta (see SUB_5F6F9)
-// RuleMatch: firmware/lower/5D01D-algebra.s:1877
+// RuleMatch: firmware/lower/5D01D-algebra.s:1887
 pub(crate) fn RuleMatch(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -9453,7 +9466,7 @@ pub(crate) fn RuleMatch(r: &mut Run) {
     }
 }
 
-// SUB_5F6F9: firmware/lower/5D01D-algebra.s:1881
+// SUB_5F6F9: firmware/lower/5D01D-algebra.s:1891
 pub(crate) fn SUB_5F6F9(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -9590,7 +9603,7 @@ pub(crate) fn SUB_5F6F9(r: &mut Run) {
     }
 }
 
-// L_5F821: firmware/lower/5D01D-algebra.s:1986
+// L_5F821: firmware/lower/5D01D-algebra.s:1996
 pub(crate) fn L_5F821(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -9715,7 +9728,7 @@ pub(crate) fn L_5F821(r: &mut Run) {
     }
 }
 
-// SUB_5F8F0: firmware/lower/5D01D-algebra.s:2061
+// SUB_5F8F0: firmware/lower/5D01D-algebra.s:2071
 pub(crate) fn SUB_5F8F0(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -9737,7 +9750,7 @@ pub(crate) fn SUB_5F8F0(r: &mut Run) {
 }
 
 // meta #n #m -> meta #level
-// splitup: firmware/lower/5D01D-algebra.s:2084
+// splitup: firmware/lower/5D01D-algebra.s:2094
 pub(crate) fn splitup(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -9761,7 +9774,7 @@ pub(crate) fn splitup(r: &mut Run) {
     }
 }
 
-// SUB_5F93A: firmware/lower/5D01D-algebra.s:2091
+// SUB_5F93A: firmware/lower/5D01D-algebra.s:2101
 pub(crate) fn SUB_5F93A(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -9797,7 +9810,7 @@ pub(crate) fn SUB_5F93A(r: &mut Run) {
 }
 
 // meta #n #m -> meta #lowlevel #args+1
-// splitdown: firmware/lower/5D01D-algebra.s:2109
+// splitdown: firmware/lower/5D01D-algebra.s:2119
 pub(crate) fn splitdown(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -9831,7 +9844,7 @@ pub(crate) fn splitdown(r: &mut Run) {
 }
 
 // # ob ob' -> #+1 ob ob'
-// ROT#1+UNROT: firmware/lower/5D01D-algebra.s:2187
+// ROT#1+UNROT: firmware/lower/5D01D-algebra.s:2197
 pub(crate) fn ROT_1_UNROT(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -9891,7 +9904,7 @@ pub(crate) fn ROT_1_UNROT(r: &mut Run) {
     }
 }
 
-// SUB_5FBDC: firmware/lower/5D01D-algebra.s:2221
+// SUB_5FBDC: firmware/lower/5D01D-algebra.s:2231
 pub(crate) fn SUB_5FBDC(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -9912,7 +9925,7 @@ pub(crate) fn SUB_5FBDC(r: &mut Run) {
 }
 
 // #0 M -> COLA ob M -> SKIP
-// pick1#0=case: firmware/lower/5D01D-algebra.s:2230
+// pick1#0=case: firmware/lower/5D01D-algebra.s:2240
 pub(crate) fn pick1_0_case(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -9954,7 +9967,7 @@ pub(crate) fn pick1_0_case(r: &mut Run) {
     }
 }
 
-// SUB_5FCA3: firmware/lower/5D01D-algebra.s:2275
+// SUB_5FCA3: firmware/lower/5D01D-algebra.s:2285
 pub(crate) fn SUB_5FCA3(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -10014,7 +10027,7 @@ pub(crate) fn SUB_5FCA3(r: &mut Run) {
     }
 }
 
-// SUB_5FCFC: firmware/lower/5D01D-algebra.s:2307
+// SUB_5FCFC: firmware/lower/5D01D-algebra.s:2317
 pub(crate) fn SUB_5FCFC(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -10121,7 +10134,7 @@ pub(crate) fn SUB_5FCFC(r: &mut Run) {
     }
 }
 
-// OBJ_5FF73: firmware/lower/5D01D-algebra.s:2424
+// OBJ_5FF73: firmware/lower/5D01D-algebra.s:2434
 pub(crate) fn OBJ_5FF73(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -10416,11 +10429,10 @@ pub const ROUTINES: &[(u32, u32, Block, &str)] = &[
     (0x5ED45, 0x5ED59, r5roll, "r5roll"),
     (0x5ED5F, 0x5ED6B, r5unroll, "r5unroll"),
     (0x5ED71, 0x5ED81, N_1unroll, "N_1unroll"),
-    (0x5EDBE, 0x5EDD5, _2_280296843E2_8__3_0002280220_1_1, "_2_280296843E2_8__3_0002280220_1_1"),
-    (0x5EE01, 0x5EE0F, code_5EE01, "code_5EE01"),
+    (0x5EDBE, 0x5EDFB, numb1stcase_1, "numb1stcase_1"),
+    (0x5EE01, 0x5EE0F, numb1stcase, "numb1stcase"),
     (0x5EE15, 0x5EEDA, M_1stcasechs, "M_1stcasechs"),
-    (0x5EEE0, 0x5EEED, REALNEGcase, "REALNEGcase"),
-    (0x5EF05, 0x5EF14, code_5EF05, "code_5EF05"),
+    (0x5EEE0, 0x5EF14, REALNEGcase, "REALNEGcase"),
     (0x5EF33, 0x5EF40, M1st_case, "M1st_case"),
     (0x5EF46, 0x5EF53, M1st_case_5EF46, "M1st_case_5EF46"),
     (0x5EF59, 0x5EF66, M1st_case_5EF59, "M1st_case_5EF59"),

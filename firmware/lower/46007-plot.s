@@ -52,7 +52,7 @@ L_46196:
           #1= TRUE OBJ_6F621 NOTcase OBJ_6F608   * 46196
           OBJ_6F883 OBJ_678D6 OBJ_679D7 GOTO L_46196 ; * 461AF
 
-* refs (1): 6F59F
+* refs (2): 6B482 6F59F
 OBJ_461CD:
         :: TakeOver                              * 461CD
 

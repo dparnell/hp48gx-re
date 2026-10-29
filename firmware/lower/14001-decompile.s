@@ -394,7 +394,9 @@ OBJ_147C1:
           TYPECOL? NOTcase OBJ_14762             * 147F8
           INHARDROM? case OBJ_14762              * 14807
           debug(rpl)! GsstFIN ;                  * 14816
-        NIBHEX  E8E60                            * 14825  ←n
+
+* Unreferenced NOP between objects: padding
+        CON(5)  NOP                              * 14825  entry 0
 
 * refs (1): 1478A
 OBJ_1482A:
@@ -1247,8 +1249,6 @@ L_15B48:
         CON(5)  DOCSTR                           * 15B97  entry 5
         CON(5)  ->str1(st)                       * 15B9C
         CON(5)  ->str2(st)                       * 15BA1
-
-(-0.22381746617E46>,-1.0266516:
         CON(5)  DOCMP                            * 15BA6  entry 6
         CON(5)  ->str(c)                         * 15BAB
         CON(5)  ->str(c)                         * 15BB0

@@ -82,3 +82,19 @@ class Symbols:
         if text in self.by_name:
             return self.by_name[text]
         return int(text.lstrip("#"), 16)
+
+
+def fake_number(rom, s):
+    """A VBL-only name for a real or complex number whose digits are not BCD
+    (sign 0 or 9, mantissa digits 0-9): the VBL took data, such as a table of
+    prologs, for a number, so the name is not used."""
+    if not s.vbl_only or s.vtype not in ("Real", "Complex"):
+        return False
+    a = s.addr
+    parts = 1 if s.vtype == "Real" else 2
+    for k in range(parts):
+        body = a + 5 + 16 * k
+        mant = [rom.nib(body + 3 + i) for i in range(12)]
+        if rom.nib(body + 15) not in (0, 9) or any(d > 9 for d in mant):
+            return True
+    return False

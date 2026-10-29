@@ -1342,7 +1342,7 @@ L_06E06:
         GOVLNG  GETPTRLOOP                       * 06E87
 
 * ->
-* refs (136): 0F7A1 0F837 146F9 14D82 14DE6 14E22 ...
+* refs (141): 0F7A1 0F837 146F9 14825 14D82 14DE6 ...
 NOP:
         CON(5)  (*)+5                            * 06E8E  primitive code object
         GOTO    L_071BE                          * 06E93

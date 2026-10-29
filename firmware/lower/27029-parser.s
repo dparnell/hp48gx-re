@@ -612,10 +612,10 @@ OBJ_2821E:
 OBJ_2823C:
         :: pshzerpsharg parg& psh dup PTR addt2: xCOS x* psh PTR addt2: xSIN * 2823C
           x* top& top& Addi*+[_] ;               * 28273
+        NIBHEX  E8E60                            * 2828C  ←n
 
-        CON(5)  NOP                              * 2828C  address (the code jumps or points through it)
-
-        CON(5)  NOP                              * 28291  address (the code jumps or points through it)
+* Unreferenced NOP between objects: padding
+        CON(5)  NOP                              * 28291  entry 0
 
 * ob1..obn-i..obn #i #n+1 -> ob1..ob..obn-i #n-i obn-i+1..obn #i
 * refs (3): 27918 27FC6 28432

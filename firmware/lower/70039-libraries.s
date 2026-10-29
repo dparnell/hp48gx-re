@@ -1,6 +1,6 @@
 * HP 48GX ROM revision R, #70039-#73087: Library table, access pointers, bank switching
 * Addresses in the right-hand comments are those of the original ROM.
-* Most referenced: ?ROMPTR@ CallC ?ACCPTR> RPTRACC rNTHELCOMP -0.26480225202E-23 {{}}_7303D RomLibTable Code_72EDD Code_72A11 BANKMTHDS (-0.26650264802E-740,-4.16487E
+* Most referenced: ?ROMPTR@ CallC ?ACCPTR> RPTRACC rNTHELCOMP {{}}_7303D RomLibTable Code_72EDD Code_72A11 BANKMTHDS
 * Follows on from the previous file (at #70039 in the original ROM).
 
 * refs (1): 855DD
@@ -394,7 +394,7 @@ LIB00D.message:
         ACPTR MsgTab(13) Reset                   * 705F2
 
 BANKMTHDS:
-        NIBHEX  F3707                            * 70601  ?.
+        CON(5)  BANKMTHDS~1                      * 70601  code object: the address of its machine code
 
 * Bank switcher methods after BANKMTHDS: stubs of D0=(5) #7F0xx, GOTO #708C2
         CON(5)  L_7074A                          * 70606  entry 0
@@ -476,7 +476,9 @@ L_70726:
 L_70738:
         GOVLNG  GPMEMERR                         * 70738
 * Bank-select stubs, reached through computed jumps: D0=(5) #7F040+2n, then GOTO
-        NIBHEX  1B040F76B71                      * 7073F  ±@ðg{
+BANKMTHDS~1:
+        D0=(5)  #7F040                           * 7073F
+        GOTO    L_708C2                          * 70746
 L_7074A:
         D0=(5)  #7F042                           * 7074A
         GOTO    L_708C2                          * 70751
@@ -2311,7 +2313,7 @@ L_71F00:
         GOSUB   SUB_71E57                        * 71F13
         RSTK=C                                   * 71F17
         A=DAT1  A                                * 71F19
-        D1=(5)  -0.26480225202E-23               * 71F1C
+        D1=(5)  L_71F68                          * 71F1C
 L_71F23:
         C=DAT1  A                                * 71F23
         ?C=A    A                                * 71F26
@@ -2336,13 +2338,15 @@ L_71F48:
         LC(5)   DROPFALSE                        * 71F5D
         GOTO    L_71F3D                          * 71F64
 
-* refs (1): 71F1C
--0.26480225202E-23:
-        CON(5)  DOREAL                           * 71F68  DOREAL
-
-(-0.26650264802E-740,-4.16487E:
-        NIBHEX  77920ADA2084E20D                 * 71F6D  w)...H.Ð
-        NIBHEX  6E208BA2000000                   * 71F7D  æ.¸*...
+* ?OKINALG: prologs of the objects an algebraic may hold, ending in 0 (read at #71F30, which steps over every other one)
+L_71F68:
+        CON(5)  DOREAL                           * 71F68  entry 0
+        CON(5)  DOCMP                            * 71F6D  entry 1
+        CON(5)  DOEXT                            * 71F72  entry 2
+        CON(5)  DOIDNT                           * 71F77  entry 3
+        CON(5)  DOLAM                            * 71F7C  entry 4
+        CON(5)  DOSYMB                           * 71F81  entry 5
+        CON(5)  #00000                           * 71F86  entry 6
 L_71F8B:
         GOSUB   SUB_71E57                        * 71F8B
         D1=D1-  6                                * 71F8F

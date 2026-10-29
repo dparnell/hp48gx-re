@@ -693,10 +693,56 @@ L_3F36C:
 L_3F37E:
         C=0     A                                * 3F37E
         GOTO    L_3F369                          * 3F380
+
+* Accents: for A E I O U Y N, what to add to the letter for each accented form, 0 for none (read by OBJ_3F2D3)
 L_3F384:
-        NIBHEX  F7081828384838485800681838485800 * 3F384  .∡ā∇√∫√∫Σ.▶ā√∫Σ.
-        NIBHEX  68003848586878984858680078000048 * 3F3A4  ▶.√∫Σ▶π≤∫Σ▶.π..∫
-        NIBHEX  00006800000000380000C8E848       * 3F3C4  ..▶....√..α←∫
+        CON(2)  #7F                              * 3F384  entry 0
+        CON(2)  #80                              * 3F386
+        CON(2)  #81                              * 3F388
+        CON(2)  #82                              * 3F38A
+        CON(2)  #83                              * 3F38C
+        CON(2)  #84                              * 3F38E
+        CON(2)  #83                              * 3F390  entry 1
+        CON(2)  #84                              * 3F392
+        CON(2)  #85                              * 3F394
+        CON(2)  #00                              * 3F396
+        CON(2)  #86                              * 3F398
+        CON(2)  #81                              * 3F39A
+        CON(2)  #83                              * 3F39C  entry 2
+        CON(2)  #84                              * 3F39E
+        CON(2)  #85                              * 3F3A0
+        CON(2)  #00                              * 3F3A2
+        CON(2)  #86                              * 3F3A4
+        CON(2)  #00                              * 3F3A6
+        CON(2)  #83                              * 3F3A8  entry 3
+        CON(2)  #84                              * 3F3AA
+        CON(2)  #85                              * 3F3AC
+        CON(2)  #86                              * 3F3AE
+        CON(2)  #87                              * 3F3B0
+        CON(2)  #89                              * 3F3B2
+        CON(2)  #84                              * 3F3B4  entry 4
+        CON(2)  #85                              * 3F3B6
+        CON(2)  #86                              * 3F3B8
+        CON(2)  #00                              * 3F3BA
+        CON(2)  #87                              * 3F3BC
+        CON(2)  #00                              * 3F3BE
+        CON(2)  #00                              * 3F3C0  entry 5
+        CON(2)  #84                              * 3F3C2
+        CON(2)  #00                              * 3F3C4
+        CON(2)  #00                              * 3F3C6
+        CON(2)  #86                              * 3F3C8
+        CON(2)  #00                              * 3F3CA
+        CON(2)  #00                              * 3F3CC  entry 6
+        CON(2)  #00                              * 3F3CE
+        CON(2)  #00                              * 3F3D0
+        CON(2)  #83                              * 3F3D2
+        CON(2)  #00                              * 3F3D4
+        CON(2)  #00                              * 3F3D6
+
+* Accents: the same for D, P and C
+        CON(2)  #8C                              * 3F3D8  entry 0
+        CON(2)  #8E                              * 3F3DA  entry 1
+        CON(2)  #84                              * 3F3DC  entry 2
         RPL
 
 * refs (1): 3D43E
@@ -857,7 +903,9 @@ OBJ_3F8FE:
         :: BINT64 #/ DUP #0=?SEMI DUP#1= casedrop BINT2 * 3F8FE
           DUP #2= casedrop BINT1                 * 3F926
         ;                                        * 3F93A
-        NIBHEX  E8E60                            * 3F93F  ←n
+
+* Unreferenced NOP between objects: padding
+        CON(5)  NOP                              * 3F93F  entry 0
 
 * refs (3): 3F840 3F868 3F88B
 over;=1(s);?:3+(s):
@@ -1038,11 +1086,10 @@ ModifierKey?:
 OBJ_3FEEE:
         :: SetKeysNS OBJ_3FFCA KeyOb0 OBJ_424C7 ; * 3FEEE
 
-        CON(5)  NOP                              * 3FF0C  address (the code jumps or points through it)
-
-        CON(5)  NOP                              * 3FF11  address (the code jumps or points through it)
-
-        CON(5)  NOP                              * 3FF16  address (the code jumps or points through it)
+* Unreferenced NOPs between objects: padding
+        CON(5)  NOP                              * 3FF0C  entry 0
+        CON(5)  NOP                              * 3FF11
+        NIBHEX  E8E60                            * 3FF16  ←n
 
 * # #' -> :: ' ob1 T ; -> :: <ob2> <rest> ;
 * refs (84): 43156 43165 43897 438A6 438B5 438C4 ...
@@ -1095,4 +1142,5 @@ OBJ_3FFCA:
         CON(5)  (*)+5                            * 3FFCA  primitive code object
         LC(3)   #106                             * 3FFCF
         GOVLNG  L_539F1                          * 3FFD4
+L_3FFDB:
         FILLTO  #40002                           * 3FFDB  39 zero nibbles: the next entry stays at #40002

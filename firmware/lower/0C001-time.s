@@ -93,7 +93,7 @@ L_0C0F5:
         LC(5)   #00100                           * 0C107
         A=C     A                                * 0C10E
         GOTO    L_0C131                          * 0C110
-        NIBHEX  3400100                          * 0C114  C..
+        LC(5)   #00100                           * 0C114
 
 * refs (1): 0C1F8
 SUB_0C11B:
@@ -141,7 +141,9 @@ SUB_0C198:
         C=DAT1  A                                * 0C19F
         D1=C                                     * 0C1A2
         RTN                                      * 0C1A5
-L_0C1A7:
+
+* refs (11): 016E2 019BA 01CEC 01D53 02708 0276A ...
+SUB_0C1A7:
         D0=(5)  =IR_16Hz_Clock                   * 0C1A7
         C=DAT0  A                                * 0C1AE
         D0=C                                     * 0C1B1
@@ -232,7 +234,7 @@ SAVPTR~jump_0C2BB:
 
 * refs (2): 0C25A 0C2D6
 SUB_0C2C2:
-        D0=(5)  OBJ_760C9                        * 0C2C2
+        D0=(5)  L_760C9                          * 0C2C2
         SETHEX                                   * 0C2C9
         RTN                                      * 0C2CB
 
@@ -528,7 +530,8 @@ L_0C60B:
         A=DAT0  A                                * 0C60B
         D0=D0+  5                                * 0C60E
         PC=(A)                                   * 0C611
-        NIBHEX  8EB59F8D5E010                    * 0C615  è[ùØå.
+        GOSUBL  SUB_0BF76                        * 0C615
+        GOVLNG  AllowIntr                        * 0C61B
         RPL
 
 * refs (1): 8CA39
@@ -1030,8 +1033,15 @@ CLKUTL1~jump:
 * refs (3): 0CC2E 0CD23 0D252
 Day>Date~jump:
         GOVLNG  Day>Date                         * 0CF2A
-        NIBHEX  D4F4E445555475544445845564259435 * 0CF31  MONTUEWEDTHUFRIS
-        NIBHEX  14453555E4                       * 0CF51  ATSUN
+
+* Weekday names
+        NIBASC  "MON"                            * 0CF31  entry 0
+        NIBASC  "TUE"                            * 0CF37  entry 1
+        NIBASC  "WED"                            * 0CF3D  entry 2
+        NIBASC  "THU"                            * 0CF43  entry 3
+        NIBASC  "FRI"                            * 0CF49  entry 4
+        NIBASC  "SAT"                            * 0CF4F  entry 5
+        NIBASC  "SUN"                            * 0CF55  entry 6
 
 * hxs -> $weekday
 * refs (1): 0D2FA
@@ -1538,8 +1548,32 @@ L_0D4E5:
 L_0D4EA:
         GONC    L_0D4E5                          * 0D4EA
         RTNCC                                    * 0D4ED
-        NIBHEX  13000821301395003090130210315113 * 0D4EF  1.∡..1Y...1 ...1
-        NIBHEX  1811321203342133720340313433     * 0D50F  ā.#!0C.3'0..C3
+
+* Months: days in the month and days before it, both BCD (read by SUB_0D4DA)
+        CON(2)  #31                              * 0D4EF  entry 0
+        CON(3)  #000                             * 0D4F1
+        CON(2)  #28                              * 0D4F4  entry 1
+        CON(3)  #031                             * 0D4F6
+        CON(2)  #31                              * 0D4F9  entry 2
+        CON(3)  #059                             * 0D4FB
+        CON(2)  #30                              * 0D4FE  entry 3
+        CON(3)  #090                             * 0D500
+        CON(2)  #31                              * 0D503  entry 4
+        CON(3)  #120                             * 0D505
+        CON(2)  #30                              * 0D508  entry 5
+        CON(3)  #151                             * 0D50A
+        CON(2)  #31                              * 0D50D  entry 6
+        CON(3)  #181                             * 0D50F
+        CON(2)  #31                              * 0D512  entry 7
+        CON(3)  #212                             * 0D514
+        CON(2)  #30                              * 0D517  entry 8
+        CON(3)  #243                             * 0D519
+        CON(2)  #31                              * 0D51C  entry 9
+        CON(3)  #273                             * 0D51E
+        CON(2)  #30                              * 0D521  entry 10
+        CON(3)  #304                             * 0D523
+        CON(2)  #31                              * 0D526  entry 11
+        CON(3)  #334                             * 0D528
 
 * refs (1): 0D665
 SUB_0D52B:

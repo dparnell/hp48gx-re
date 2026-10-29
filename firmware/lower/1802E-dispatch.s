@@ -1232,7 +1232,7 @@ L_19017:
         LC(5)   L_1911C+2                        * 1902B
         GOTO    L_1903D                          * 19032
 L_19036:
-        LC(5)   OBJ_1916E                        * 19036
+        LC(5)   #1916E                           * 19036
 L_1903D:
         A=A+C   A                                * 1903D
         AD1EX                                    * 1903F
@@ -1316,51 +1316,45 @@ L_1911C:
         C=RSTK                                   * 19122
         GOTO    L_19017                          * 19124
 
--0.29680222402E-23:
-        CON(5)  DOREAL                           * 19128  address
+* Argument dispatch: the prolog for each type digit 1-E (A, name or algebraic, is 0 and checked in code); read at #19017
+        CON(5)  DOREAL                           * 19128  entry 0
+        CON(5)  DOCMP                            * 1912D  entry 1
+        CON(5)  DOCSTR                           * 19132  entry 2
+        CON(5)  DOARRY                           * 19137  entry 3
+        CON(5)  DOLIST                           * 1913C  entry 4
+        CON(5)  DOIDNT                           * 19141  entry 5
+        CON(5)  DOLAM                            * 19146  entry 6
+        CON(5)  DOCOL                            * 1914B  entry 7
+        CON(5)  DOSYMB                           * 19150  entry 8
+        CON(5)  #00000                           * 19155  entry 9
+        CON(5)  DOHSTR                           * 1915A  entry 10
+        CON(5)  DOGROB                           * 1915F  entry 11
+        CON(5)  DOTAG                            * 19164  entry 12
+        CON(5)  DOEXT                            * 19169  entry 13
 
-(-0.22740296802E-776,-8.025950:
-        CON(5)  DOCMP                            * 1912D  DOCMP
-        CON(5)  DOCSTR                           * 19132  address
-        CON(5)  DOARRY                           * 19137  address
-        NIBHEX  47A2084E20D6E20D9D20             * 1913C  t*∡ä.m.ÐÙ.
-        NIBHEX  8B                               * 19150  ¸
-        NIBHEX  A2000000                         * 19152  *...
-
-        CON(5)  DOHSTR                           * 1915A  address (the code jumps or points through it)
-
-        CON(5)  DOGROB                           * 1915F  address (the code jumps or points through it)
-
-        CON(5)  DOTAG                            * 19164  address (the code jumps or points through it)
-
-        CON(5)  DOEXT                            * 19169  address (the code jumps or points through it)
-        RPL
-
-* refs (1): 19036
-OBJ_1916E:
-        ROMPTR 911 602                           * 1916E
-        NIBHEX  9A20                             * 19179  ©.
-
-        CON(5)  DOEREL                           * 1917D  DOEREL
-        NIBHEX  D9920A0A20                       * 19182  Ω)...
-        CON(5)  DOCHAR                           * 1918C  address
+* Argument dispatch: the prolog for each extended type 0F-EF; read at #19017
+        CON(5)  DOROMP                           * 1916E  entry 0
+        CON(5)  DOBINT                           * 19173  entry 1
+        CON(5)  DORRP                            * 19178  entry 2
+        CON(5)  DOEREL                           * 1917D  entry 3
+        CON(5)  DOECMP                           * 19182  entry 4
+        CON(5)  DOLNKARRY                        * 19187  entry 5
+        CON(5)  DOCHAR                           * 1918C  entry 6
 
 Code_19191:
-        NIBHEX  CCD200                           * 19191  Ì-.
-        NIBHEX  4B20                             * 19197  ´.
-
-        CON(5)  DOBAK                            * 1919B  address (the code jumps or points through it)
-
-        CON(5)  DOEXT0                           * 191A0  address (the code jumps or points through it)
-
-        ACPTR DOEXT2 DOEXT3                      * 191A5
-        NIBHEX  01C20                            * 191B4  .,
+        CON(5)  DOCODE                           * 19191  entry 7
+        CON(5)  DOLIB                            * 19196  entry 8
+        CON(5)  DOBAK                            * 1919B  entry 9
+        CON(5)  DOEXT0                           * 191A0  entry 10
+        CON(5)  DOEXT1                           * 191A5  entry 11
+        CON(5)  DOEXT2                           * 191AA  entry 12
+        CON(5)  DOEXT3                           * 191AF  entry 13
+        CON(5)  DOEXT4                           * 191B4  entry 14
 
 * # #' -> #*#'
 * refs (2): 1D068 37E64
 #*OVF:
         CON(5)  (*)+5                            * 191B9  primitive code object
-        ASSEMBLE
         GOSBVL  POP#                             * 191BE
         R0=A                                     * 191C5
         GOSBVL  POP#                             * 191C8
