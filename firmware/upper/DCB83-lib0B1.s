@@ -56,7 +56,7 @@ LIB0B1:
           { BINT25                               * DCDE1
             :: TakeOver ROMPTR 0B1 009 ; BINT45  * DCDEB  DoMKeyOK
             :: TakeOver ROMPTR 0B1 009 ; }       * DCE0A  DoMKeyOK
-          OBJ_19FE4 caseTRUE DUP#<7              * DCE29
+          #=Lookup caseTRUE DUP#<7               * DCE29
           casedrpfls BINT12                      * DCE38
           #=casedrpfls BINT35                    * DCE42
           #=casedrpfls BINT40                    * DCE4C
@@ -86,7 +86,7 @@ LIB0B1:
           { BINT25                               * DCED3
             :: TakeOver ROMPTR 0B1 009 ; BINT45  * DCEDD  DoMKeyOK
             :: TakeOver ROMPTR 0B1 009 ; }       * DCEFC  DoMKeyOK
-          OBJ_19FE4 caseTRUE BINT30              * DCF1B
+          #=Lookup caseTRUE BINT30               * DCF1B
           #=casedrpfls DROP                      * DCF2A
           'DoBadKeyT ;                           * DCF34
 
@@ -360,9 +360,9 @@ ROMP_0B1_021:
 * refs (1): DCB83
 ROMP_0B1_022:
         :: MINUSONE MINUSONE BINT8 ROMPTR 0B0 0DB 9GETLAM INNERCOMP DUP * DE224  ~nNullBind
-          3PUTLAM ZERO_DO ISTOP-INDEX INDEX@ OBJ_6819D #+ ROLL INCOMPDROP * DE252
-          LOOP 8GETLAM INNERCOMP DUP 2PUTLAM ZERO_DO ISTOP-INDEX INDEX@ * DE27A
-          BINT13 #* #+ ROLL INCOMPDROP 5GETLAM DUP MINUSONE EQUAL ?SKIP * DE2A2
+          3PUTLAM ZERO_DO ISTOP-INDEX INDEX@ #3* #+ ROLL INCOMPDROP LOOP * DE252
+          8GETLAM INNERCOMP DUP 2PUTLAM ZERO_DO ISTOP-INDEX INDEX@ BINT13 #* * DE27F
+          #+ ROLL INCOMPDROP 5GETLAM DUP MINUSONE EQUAL ?SKIP * DE2AC
           :: INDEX@ #1+ NTHCOMPDROP ;            * DE2D4
           4GETLAM DUP MINUSONE EQUAL ?SKIP       * DE2ED
           :: INDEX@ #1+ NTHCOMPDROP ;            * DE306

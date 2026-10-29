@@ -1,6 +1,6 @@
 * HP 48GX ROM revision R, #6C186-#6F35F: not yet identified
 * Addresses in the right-hand comments are those of the original ROM.
-* Most referenced: Push3Zeros 'LB 'TE 'LE 'EL 'ManOp 'FOK 'unbound 'NG 'source 'ploc 'KO
+* Most referenced: Push3Zeros EqwFontWidth EqwFontHeight 2DUPHALF DUP#2- 'LB 'TE 'LE 'EL 'ManOp 'FOK 'unbound
 * Follows on from the previous file (at #6C186 in the original ROM).
         RPL
 
@@ -32,7 +32,9 @@ OBJ_6C262:
 * refs (1): 6AD70
 OBJ_6C276:
           :: OBJ_677EA DEPTH #1- #< ?SEMI        * 6C276
-            RDROP # 201 OBJ_6BC2D ;              * 6C294
+            RDROP # 201                          * 6C294
+* The Very Big List names this address <00201h4A9 RPL ArF15h : CNTR, but it is a pointer inside an object; the name is not used
+            OBJ_6BC2D ;                          * 6C2A3
           OBJ_677EA #1+PICK OBJ_6E026 IT         * 6C2AD
 
 * refs (5): 69DA7 6AB09 6BEA7 6C208 6C21C
@@ -76,7 +78,7 @@ ObEdit~1~2:
           :: OBJ_6731D OBJ_0C4E3 ZERO_DO #1+ DUPPICK OBJ_6B2AA xPREDIV IT * 6C3D9
             :: dup;drop(s) ' x/ OVER UNROLL ;    * 6C406
             LOOP DROP OBJ_461D7 OBJ_67D1B OBJ_69B49 ClrDAsOK DispMenu * 6C429
-            OBJ_2840F ;                          * 6C44C
+            PutGNTData ;                         * 6C44C
         ;                                        * 6C456
 
 * refs (2): 50519 50528
@@ -210,23 +212,22 @@ OBJ_6C7E5:
 * refs (1): 67625
 OBJ_6C7F6:
           { }                                    * 6C7F6
-
-{}_6C800:
+* The Very Big List names this address {}, but it is a pointer inside an object; the name is not used
           LOOP                                   * 6C800
           { }                                    * 6C805
-
-{}_6C80F:
+* The Very Big List names this address {}, but it is a pointer inside an object; the name is not used
           DEPTH OBJ_68183 OBJ_67648 BINT1 OBJ_285C6 DROP OBJ_67532 NULLHXS * 6C80F
           BINT30 OBJ_6869D EXPAND OBJ_681B1 #TWO#TWO Push3Zeros Push3Zeros * 6C837
           NULLPAINT                              * 6C85A
 
 * refs (4): 660B6 6D2AD 6D706 6DD3C
 OBJ_6C85F:
-          :: OBJ_6E0A1 OBJ_6E057 ;               * 6C85F
+          :: EqwFontWidth EqwFontHeight ;        * 6C85F
 
 * refs (16): 44E08 65A92 65B28 65FD0 660BB 66421 ...
-OBJ_6C873:
-          :: 2DUP 2/(s);swap;2/(s) SWAP ; BINT0 BINT22 BINT1 OBJ_682DE * 6C873
+* #w #h -> #w #h #w/2 #h/2
+2DUPHALF:
+          :: 2DUP 2/(s);swap;2/(s) SWAP ; BINT0 BINT22 BINT1 EqwNewBox * 6C873
           OBJ_6D909 BINT1 OBJ_6DAE9 BINT0 OBJ_67426 OBJ_69BBA ; * 6C8A0
 
 * refs (1): 6B4DE
@@ -258,7 +259,8 @@ OBJ_6C954:
             :: 2DUP WINDOWXY ;                   * 6C9D6
             3PICKOVER #< IT                      * 6C9EA
             :: TOPROW 4PICK WINDOWXY ;           * 6C9F9
-            OBJ_6E057 OBJ_6E0A1 5ROLL #+ SWAP4ROLL #+ BOTROW 2DUP#> ITE * 6CA12
+            EqwFontHeight EqwFontWidth 5ROLL #+ SWAP4ROLL #+ BOTROW 2DUP#> * 6CA12
+            ITE                                  * 6CA3A
             :: #- TOPROW #1-+ LEFTCOL WINDOWXY ; 2DROP * 6CA3F
             BINT130 ROT#+ 2DUP#> NOTcase2DROP #- * 6CA67
             LEFTCOL #1-+ TOPROW SWAP WINDOWXY ;  * 6CA80
@@ -337,12 +339,13 @@ OBJ_6CCBD:
 
 * refs (8): 1AC70 1ADCC 1AED9 1FB18 68E13 6CDEE ...
 OBJ_6CCCC:
-          :: SKIP OBJ_6DFFD DROP ZEROZERO OBJ_67416 OBJ_67356 DUP#1- BINT2 * 6CCCC
-            ZEROZERO 22Lget OBJ_6CF3D OBJ_6DA4E OBJ_67356 OBJ_6CFB5 BINT19 * 6CCF9
-            PICK #+ OBJ_6D573 ZEROZERO OBJ_6733B ZEROOVER #1+ OBJ_6D163 * 6CD1C
-            OBJ_6D4CE OBJ_67364 DUP#1+ ;         * 6CD44
-          OBJ_6799C OBJ_6D523 3PICKSWAP OBJ_67BFC OVER OBJ_67A98 OBJ_6E0A1 * 6CD58
-          #- OBJ_67BAE OVERDUP OBJ_67AD5 OBJ_6E0A1 #2/ #- OBJ_67C09 #1- * 6CD7B
+          :: SKIP OBJ_6DFFD DROP ZEROZERO OBJ_67416 EqwBoxCount#3+ DUP#1- * 6CCCC
+            BINT2 ZEROZERO 22Lget OBJ_6CF3D OBJ_6DA4E EqwBoxCount#3+ * 6CCF4
+            OBJ_6CFB5 BINT19 PICK #+ OBJ_6D573 ZEROZERO EqwBoxCount#1+ * 6CD12
+            ZEROOVER #1+ OBJ_6D163 OBJ_6D4CE OBJ_67364 DUP#1+ ; * 6CD35
+          OBJ_6799C OBJ_6D523 3PICKSWAP OBJ_67BFC OVER OBJ_67A98 * 6CD58
+          EqwFontWidth #- OBJ_67BAE OVERDUP OBJ_67AD5 EqwFontWidth #2/ #- * 6CD76
+          OBJ_67C09 #1-                          * 6CD9E
 
 * refs (1): 6D113
 OBJ_6CDA8:
@@ -365,21 +368,22 @@ OBJ_6CE8E:
 
 * refs (1): 1FB76
 OBJ_6CEC5:
-        :: SKIP OBJ_6E23F OBJ_67348 DUP#1+ OBJ_6CFB5 3DROP OBJ_6D7DD * 6CEC5
-          OBJ_6E057 OBJ_6DA26 OBJ_6C873          * 6CEED
+        :: SKIP OBJ_6E23F EqwBoxCount#2+ DUP#1+ OBJ_6CFB5 3DROP OBJ_6D7DD * 6CEC5
+          EqwFontHeight OBJ_6DA26 2DUPHALF       * 6CEED
 
 * refs (1): 6DC15
 OBJ_6CEFC:
           :: OBJ_6D990                           * 6CEFC
 L_6CF06:
             BINT15 ROLL OBJ_68283 ;              * 6CF06
-          OBJ_67356 OBJ_67348 OBJ_67416 ONEONE BINT3 OBJ_6D7DD OBJ_66FF1 * 6CF1A
+          EqwBoxCount#3+ EqwBoxCount#2+ OBJ_67416 ONEONE BINT3 OBJ_6D7DD * 6CF1A
+          OBJ_66FF1                              * 6CF38
 
 * refs (4): 44E03 6CD03 6D023 6D9EA
 OBJ_6CF3D:
           :: DUPGROBDIM SWAP ; OBJ_6DA4E OBJ_682D2 EqwBoxCount BINT0 * 6CF3D
           OBJ_6F199 OBJ_6DAE9 Push3Zeros OBJ_67364 OBJ_67416 OBJ_6D163 * 6CF65
-          OBJ_682DE OBJ_6D5EB ;                  * 6CF83
+          EqwNewBox OBJ_6D5EB ;                  * 6CF83
 
 * refs (1): 6D10E
 OBJ_6CF92:
@@ -387,18 +391,18 @@ OBJ_6CF92:
 
 * refs (2): 65A60 6D66B
 OBJ_6CFA1:
-          :: OBJ_6733B DUP#2+ SWAP               * 6CFA1
+          :: EqwBoxCount#1+ DUP#2+ SWAP          * 6CFA1
 
 * refs (5): 65F12 663FE 6CD12 6CEDE 6D3FC
 OBJ_6CFB5:
             :: OBJ_67416 OBJ_6DDD3 ; ;           * 6CFB5
-          3DROP 22Lget GROBDIM OBJ_6E0A1 #12+ #+ SWAP #2+ OBJ_6C873 * 6CFCE
-          OBJ_6D8DC Push3Zeros OBJ_67348 OBJ_67416 OBJ_6D9C2 * 6CFFB
+          3DROP 22Lget GROBDIM EqwFontWidth #12+ #+ SWAP #2+ 2DUPHALF * 6CFCE
+          OBJ_6D8DC Push3Zeros EqwBoxCount#2+ OBJ_67416 OBJ_6D9C2 * 6CFFB
 
 * refs (3): 6D5C8 6D63E 6DED2
 OBJ_6D014:
-          :: BINT0 22Lget OBJ_6CF3D OBJ_6DA4E ; ZEROZERO OBJ_6733B DUP #3+ * 6D014
-          OBJ_6F199                              * 6D046
+          :: BINT0 22Lget OBJ_6CF3D OBJ_6DA4E ; ZEROZERO EqwBoxCount#1+ DUP * 6D014
+          #3+ OBJ_6F199                          * 6D041
 
 * refs (2): 6D44C 6D6C5
 OBJ_6D04B:
@@ -425,12 +429,12 @@ OBJ_6D0FF:
 
 * refs (8): 65C18 65C3B 65C54 65D41 65DF5 6D16D ...
 OBJ_6D136:
-            :: BINT0 OBJ_6DD2D ; DROPONE OBJ_682DE ZEROZERO ZEROZERO * 6D136
+            :: BINT0 OBJ_6DD2D ; DROPONE EqwNewBox ZEROZERO ZEROZERO * 6D136
             EqwBoxCount                          * 6D15E
 
 * refs (6): 66520 6CD3F 6CF7E 6D0C3 6D71A 6D85F
 OBJ_6D163:
-            :: BINT3 OBJ_6D136 ; OBJ_682DE EqwBoxCount ; * 6D163
+            :: BINT3 OBJ_6D136 ; EqwNewBox EqwBoxCount ; * 6D163
         ;                                        * 6D186
 
 * refs (1): 1B0C8
@@ -445,31 +449,31 @@ OBJ_6D1C7:
             OBJ_6D37F ;                          * 6D1E5
           OBJ_6CCCC DROP DUP#1- OBJ_44E3F OBJ_44DFE EqwBoxCount DUPTWO * 6D1EF
           OBJ_67C85 DUP MINUSONE OBJ_67C3C DUP DUP#2+ OBJ_67BEF DUP DUP#1+ * 6D212
-          OBJ_67BFC OBJ_6DFDE OBJ_67416 OBJ_67AAA OBJ_6E057 #2- #+ 3PICKSWAP * 6D23F
-          OBJ_67BBB OBJ_67AE2 OBJ_6E057 #2- #+ OBJ_67C16 OBJ_6E00B DUP #3+ * 6D267
-          BINT0 3pick;1+(s) BINT0 BINT2 BINT0 OBJ_6C85F #2- 2DUPSWAP * 6D294
-          MAKEGROB 3UNROLL OVER #2/ OBJ_67416 OBJ_67AE2 Push3Zeros OBJ_682D2 * 6D2BC
-          OBJ_6DFDE ZEROOVER #2+ 3PICK #1+ BINT4 OBJ_6DAE9 DUP DUP#1+ * 6D2E4
-          OBJ_67AAF OBJ_67BBB DUP DUP#1+ OBJ_44D9A OBJ_6E00B DUPDUP * 6D311
-          OBJ_67A9D OBJ_6E0A1 #-DUP 3PICKSWAP OBJ_67BAE #2/ OBJ_67C09 * 6D334
-          OBJ_6DFDE EqwBoxCount OBJ_6CC10 ?SEMI  * 6D357
+          OBJ_67BFC OBJ_6DFDE OBJ_67416 OBJ_67AAA EqwFontHeight #2- #+ * 6D23F
+          3PICKSWAP OBJ_67BBB OBJ_67AE2 EqwFontHeight #2- #+ OBJ_67C16 * 6D262
+          OBJ_6E00B DUP #3+ BINT0 3pick;1+(s) BINT0 BINT2 BINT0 OBJ_6C85F * 6D285
+          #2- 2DUPSWAP MAKEGROB 3UNROLL OVER #2/ OBJ_67416 OBJ_67AE2 * 6D2B2
+          Push3Zeros OBJ_682D2 OBJ_6DFDE ZEROOVER #2+ 3PICK #1+ BINT4 * 6D2DA
+          OBJ_6DAE9 DUP DUP#1+ OBJ_67AAF OBJ_67BBB DUP DUP#1+ OBJ_44D9A * 6D302
+          OBJ_6E00B DUPDUP OBJ_67A9D EqwFontWidth #-DUP 3PICKSWAP OBJ_67BAE * 6D32A
+          #2/ OBJ_67C09 OBJ_6DFDE EqwBoxCount OBJ_6CC10 ?SEMI * 6D34D
           DUP BINT3 OBJ_67C3C ;                  * 6D36B
 
 * refs (2): 6AAD7 6D1E5
 OBJ_6D37F:
-        :: OBJ_67416 DUP OBJ_67356 DUP#1+ OBJ_67348 * 6D37F
+        :: OBJ_67416 DUP EqwBoxCount#3+ DUP#1+ EqwBoxCount#2+ * 6D37F
 
 * refs (11): 65B91 65F9E 66043 660B1 66449 664C6 ...
 OBJ_6D39D:
           :: MINUSONE ZEROZERO NULLPAINT ; ZEROZERO BINT10 PICK DUP * 6D39D
-          OBJ_67AD5 SWAP OBJ_67AE2 SWAP #6+ SWAP OBJ_6D909 OBJ_682DE * 6D3CA
-          OBJ_67356 DUP#1- OBJ_6CFB5 BINT11 ROLLDROP OBJ_6E0A1 #2* #+ ROT * 6D3F2
-          #2+ OVER #2/ 4ROLL OBJ_6D909 Push3Zeros EqwBoxCount DUP#1+ BINT1 * 6D41F
-          OBJ_6D04B                              * 6D44C
+          OBJ_67AD5 SWAP OBJ_67AE2 SWAP #6+ SWAP OBJ_6D909 EqwNewBox * 6D3CA
+          EqwBoxCount#3+ DUP#1- OBJ_6CFB5 BINT11 ROLLDROP EqwFontWidth #2* * 6D3F2
+          #+ ROT #2+ OVER #2/ 4ROLL OBJ_6D909 Push3Zeros EqwBoxCount DUP#1+ * 6D415
+          BINT1 OBJ_6D04B                        * 6D447
 
 * refs (5): 65BFF 660CA 6D073 6D715 6D931
 OBJ_6D451:
-          :: ZEROZERO EqwBoxCount ; BINT0 OBJ_6733B OBJ_6D990 OBJ_67416 * 6D451
+          :: ZEROZERO EqwBoxCount ; BINT0 EqwBoxCount#1+ OBJ_6D990 OBJ_67416 * 6D451
           OBJ_67AAF #2+ DUP                      * 6D479
 
 * refs (1): 6E13B
@@ -497,12 +501,13 @@ OBJ_6D55F:
 
 * refs (1): 6CD26
 OBJ_6D573:
-          :: OBJ_6E0A1 #+ DUP4UNROLL #2/ SWAP OBJ_6D909 ; * 6D573
+          :: EqwFontWidth #+ DUP4UNROLL #2/ SWAP OBJ_6D909 ; * 6D573
 
 * refs (1): 6D76F
 OBJ_6D59B:
-          :: BINT15 ROLL OBJ_68283 Push3Zeros OBJ_67348 OBJ_67416 OBJ_6D9C2 ; * 6D59B
-          OBJ_6D014 OBJ_682DE EqwBoxCount BINT0 OBJ_67416 BINT1 OBJ_6DAE9 * 6D5C8
+          :: BINT15 ROLL OBJ_68283 Push3Zeros EqwBoxCount#2+ OBJ_67416 * 6D59B
+            OBJ_6D9C2 ;                          * 6D5BE
+          OBJ_6D014 EqwNewBox EqwBoxCount BINT0 OBJ_67416 BINT1 OBJ_6DAE9 * 6D5C8
 
 * refs (8): 65C86 660ED 6652A 6CF88 6D0CD 6D869 ...
 OBJ_6D5EB:
@@ -527,55 +532,56 @@ OBJ_6D661:
 * refs (3): 6D56E 6D747 6D8A0
 OBJ_6D666:
           :: OBJ_6CFA1 BINT13 ROLL #1- BINT13 UNROLL ; DUP #2* 4UNROLL * 6D666
-          ROT#1+UNROT ROT#1+UNROT SWAP#1+ OBJ_6D8DC Push3Zeros OBJ_67356 * 6D69D
-          OBJ_67416 BINT1 OBJ_6D04B OBJ_682DE OBJ_67348 BINT0 OBJ_67416 * 6D6BB
-          OBJ_6D087 OBJ_682D2 OBJ_67348 DUPDUP #3- DUP#1+ OBJ_67416 * 6D6DE
-          OBJ_6D39D OBJ_6C85F OBJ_6DCA6 OBJ_682DE OBJ_6D451 OBJ_6D163 * 6D701
-          OBJ_682D2 ;                            * 6D71F
+          ROT#1+UNROT ROT#1+UNROT SWAP#1+ OBJ_6D8DC Push3Zeros * 6D69D
+          EqwBoxCount#3+ OBJ_67416 BINT1 OBJ_6D04B EqwNewBox EqwBoxCount#2+ * 6D6B6
+          BINT0 OBJ_67416 OBJ_6D087 OBJ_682D2 EqwBoxCount#2+ DUPDUP #3- * 6D6D4
+          DUP#1+ OBJ_67416 OBJ_6D39D OBJ_6C85F OBJ_6DCA6 EqwNewBox OBJ_6D451 * 6D6F7
+          OBJ_6D163 OBJ_682D2 ;                  * 6D71A
 
 * refs (1): 1B3AB
 OBJ_6D729:
         :: SKIP OBJ_6DFFD                        * 6D729
-          :: SKIP OBJ_6DFFD OBJ_6D666 SWAPDROP #6+ SWAP #2+ OBJ_6C873 #1+ * 6D738
+          :: SKIP OBJ_6DFFD OBJ_6D666 SWAPDROP #6+ SWAP #2+ 2DUPHALF #1+ * 6D738
             OBJ_6D909 OBJ_6D59B BINT6            * 6D76A
 
 * refs (9): 4B904 6648A 664D0 6CE7A 6D055 6D064 ...
 OBJ_6D779:
-            :: OBJ_6E057 #2+ ; DUP OBJ_44CD2 BINT4 ROT BINT2 OBJ_6E057 #2/ * 6D779
-            #2+ Push3Zeros OBJ_682DE OBJ_67356 DUP#1- OBJ_6D9AE ZEROOVER #1- * 6D7B0
-            OBJ_6D39D                            * 6D7D8
+            :: EqwFontHeight #2+ ; DUP OBJ_44CD2 BINT4 ROT BINT2 * 6D779
+            EqwFontHeight #2/ #2+ Push3Zeros EqwNewBox EqwBoxCount#3+ DUP#1- * 6D7A6
+            DUP#2- ZEROOVER #1- OBJ_6D39D        * 6D7C9
 
 * refs (6): 664CB 66502 66629 6CEE8 6CF33 6D81E
 OBJ_6D7DD:
-            :: OBJ_6E0A1 #2+ ; OBJ_6D779 OBJ_6C873 #1+ OBJ_6D990 Push3Zeros * 6D7DD
-            OBJ_67356 OBJ_6D9AE BINT0 #THREE#FOUR OBJ_6D7DD DUP OBJ_66FF1 * 6D80A
-            SWAP BINT2 OBJ_6E0A1 #2/ #1+ BINT1 Push3Zeros OBJ_6D9F9 ZEROOVER * 6D82D
-            #1- OBJ_6D163 OBJ_6D4CE OBJ_6D5EB ;  * 6D85A
+            :: EqwFontWidth #2+ ; OBJ_6D779 2DUPHALF #1+ OBJ_6D990 * 6D7DD
+            Push3Zeros EqwBoxCount#3+ DUP#2- BINT0 #THREE#FOUR OBJ_6D7DD DUP * 6D805
+            OBJ_66FF1 SWAP BINT2 EqwFontWidth #2/ #1+ BINT1 Push3Zeros * 6D828
+            OBJ_6D9F9 ZEROOVER #1- OBJ_6D163 OBJ_6D4CE OBJ_6D5EB ; * 6D850
           OBJ_6CC10 ?SEMI                        * 6D873
           EqwBoxCount BINT2 OBJ_67C3C ;          * 6D87D
 
 * refs (1): 1EFBF
 OBJ_6D891:
-        :: SKIP OBJ_4B8BE OBJ_6D666 3DROP BINT9 ROLL #2+ 9rolld OBJ_6E0A1 * 6D891
-          OBJ_6819D #12+ OBJ_6E057 OBJ_6DA26 OBJ_6C873 * 6D8C3
+        :: SKIP OBJ_4B8BE OBJ_6D666 3DROP BINT9 ROLL #2+ 9rolld EqwFontWidth * 6D891
+          #3* #12+ EqwFontHeight OBJ_6DA26 2DUPHALF * 6D8C3
 
 * refs (4): 65A97 6642B 6CFFB 6D6AC
 OBJ_6D8DC:
-          :: OBJ_6D909 GOTO L_6CF06 ; OBJ_67356 DUP #6+ OBJ_67416 * 6D8DC
+          :: OBJ_6D909 GOTO L_6CF06 ; EqwBoxCount#3+ DUP #6+ OBJ_67416 * 6D8DC
 
 * refs (9): 65F67 6C8A0 6D3E8 6D433 6D591 6D76A ...
 OBJ_6D909:
           :: ZEROZERO BINT1 ; OBJ_6D779 BINT6 OBJ_6DC51 OBJ_682D2 OBJ_6D451 * 6D909
-          #8+ BINT0 OBJ_67416 OBJ_6D087 OBJ_682DE EqwBoxCount #4+ OBJ_6D9AE * 6D936
-          BINT0 3PICK #5- DUP#1- OBJ_6D39D OBJ_6E0A1 OBJ_6DA26 OBJ_6E057 * 6D95E
-          OBJ_6DA26 OBJ_6C873                    * 6D986
+          #8+ BINT0 OBJ_67416 OBJ_6D087 EqwNewBox EqwBoxCount #4+ DUP#2- * 6D936
+          BINT0 3PICK #5- DUP#1- OBJ_6D39D EqwFontWidth OBJ_6DA26 * 6D95E
+          EqwFontHeight OBJ_6DA26 2DUPHALF       * 6D981
 
 * refs (8): 65B2D 65FD5 660C0 66462 664DF 6CF01 ...
 OBJ_6D990:
-          :: ZEROZERO BINT2 ; Push3Zeros OBJ_67356 * 6D990
+          :: ZEROZERO BINT2 ; Push3Zeros EqwBoxCount#3+ * 6D990
 
 * refs (14): 65F85 65FE4 66034 66066 6A235 6D7C9 ...
-OBJ_6D9AE:
+* #n -> #n #n-2
+DUP#2-:
           :: DUP #2- ;                           * 6D9AE
 
 * refs (3): 65AAB 6D00F 6D5BE
@@ -588,7 +594,8 @@ OBJ_6D9D6:
 
 * refs (6): 65C40 65FF8 66075 6D850 6DAB2 6DD05
 OBJ_6D9F9:
-          :: ZEROZERO OBJ_67348 ; DUP#2+ OBJ_6DCE7 #ZERO#ONE BINT3 OBJ_6E0A1 * 6D9F9
+          :: ZEROZERO EqwBoxCount#2+ ; DUP#2+ OBJ_6DCE7 #ZERO#ONE BINT3 * 6D9F9
+          EqwFontWidth                           * 6DA21
 
 * refs (4): 6CEF2 6D8D2 6D97C 6D986
 OBJ_6DA26:
@@ -596,11 +603,11 @@ OBJ_6DA26:
 
 * refs (10): 65ACE 66020 6CD08 6CE2A 6CF51 6D028 ...
 OBJ_6DA4E:
-          :: OBJ_6C873 Push3Zeros ; OBJ_6D4CE OBJ_67356 DUP#1- OBJ_6D9AE * 6DA4E
-          ZEROOVER #2- OBJ_6D39D OBJ_6E0A1 #2* OBJ_6E057 OBJ_6DCA6 * 6DA76
-          Push3Zeros OBJ_67356 OBJ_6D9AE ZEROZERO OBJ_6D9D6 OBJ_6D9F9 BINT0 * 6DA99
-          OBJ_6DCE7 BINT2 OBJ_6D136 OBJ_6D4CE OBJ_67371 #5- DUP#1+ OBJ_67416 * 6DABC
-          BINT4                                  * 6DAE4
+          :: 2DUPHALF Push3Zeros ; OBJ_6D4CE EqwBoxCount#3+ DUP#1- DUP#2- * 6DA4E
+          ZEROOVER #2- OBJ_6D39D EqwFontWidth #2* EqwFontHeight OBJ_6DCA6 * 6DA76
+          Push3Zeros EqwBoxCount#3+ DUP#2- ZEROZERO OBJ_6D9D6 OBJ_6D9F9 * 6DA99
+          BINT0 OBJ_6DCE7 BINT2 OBJ_6D136 OBJ_6D4CE OBJ_67371 #5- DUP#1+ * 6DAB7
+          OBJ_67416 BINT4                        * 6DADF
 
 * refs (12): 660D4 660E8 66287 665F7 6C8AA 6CF6A ...
 OBJ_6DAE9:
@@ -609,28 +616,27 @@ OBJ_6DAE9:
 * refs (2): 1F381 1F407
 OBJ_6DB0C:
         :: SKIP OBJ_6E3E3 OBJ_6E00B OBJ_6CCCC OVER OBJ_67416 OBJ_67A9D #2+ * 6DB0C
-          OBJ_6E0D2 OBJ_6819D #+ OBJ_6DB6B 3PICK OBJ_67416 OBJ_44D9A * 6DB39
-          OBJ_6CE8E OBJ_679A1 DUP                * 6DB5C
+          OBJ_6E0D2 #3* #+ OBJ_6DB6B 3PICK OBJ_67416 OBJ_44D9A OBJ_6CE8E * 6DB39
+          OBJ_679A1 DUP                          * 6DB61
 
 * refs (2): 6DB48 6DBFC
 OBJ_6DB6B:
           :: OBJ_67416 OBJ_67AAF OBJ_6E0C0 #+ #2- ; OBJ_44D7C 2DUP GROBDIM * 6DB6B
           SWAP OVER 8PICK OBJ_67AE2 5PICK 3UNROLL OBJ_67C23 OBJ_6CE8E * 6DB9D
-          OBJ_68245 BINT8 SWAP OBJ_68593 OBJ_67348 DUP#1- DUP#1- OBJ_6DDD3 * 6DBC5
-          3DROP OBJ_6E0D2 OBJ_6819D OBJ_6DB6B OVER #2/ OBJ_67416 OBJ_67AE2 * 6DBED
-          OBJ_6CEFC Push3Zeros OBJ_67348 OBJ_6D9AE BINT0 BINT5 BINT0 * 6DC15
-          OBJ_67416 OBJ_67AAF #2- OBJ_6E0D2 OBJ_6819D * 6DC38
+          OBJ_68245 BINT8 SWAP OBJ_68593 EqwBoxCount#2+ DUP#1- DUP#1- * 6DBC5
+          OBJ_6DDD3 3DROP OBJ_6E0D2 #3* OBJ_6DB6B OVER #2/ OBJ_67416 * 6DBE8
+          OBJ_67AE2 OBJ_6CEFC Push3Zeros EqwBoxCount#2+ DUP#2- BINT0 BINT5 * 6DC10
+          BINT0 OBJ_67416 OBJ_67AAF #2- OBJ_6E0D2 #3* * 6DC33
 
 * refs (5): 65B64 65BD7 66494 66507 6D927
 OBJ_6DC51:
-          :: 2DUP MAKEGROB SWAPROT OBJ_6DA4E ; OBJ_682DE EqwBoxCount #4+ * 6DC51
-          OBJ_6D9AE OBJ_6D9AE BINT0 OBJ_6DCE7 OBJ_6D39D OBJ_6E0D2 OBJ_6819D * 6DC7E
-          OBJ_6E0C0                              * 6DCA1
+          :: 2DUP MAKEGROB SWAPROT OBJ_6DA4E ; EqwNewBox EqwBoxCount #4+ * 6DC51
+          DUP#2- DUP#2- BINT0 OBJ_6DCE7 OBJ_6D39D OBJ_6E0D2 #3* OBJ_6E0C0 * 6DC7E
 
 * refs (4): 65BAA 66057 6D70B 6DA94
 OBJ_6DCA6:
-          :: OBJ_6C873 OBJ_6D909 ; OBJ_682DE Push3Zeros OBJ_67348 OBJ_6D9AE * 6DCA6
-          BINT4 OBJ_6DD19 ZEROZERO OBJ_6733B DUP#2+ * 6DCCE
+          :: 2DUPHALF OBJ_6D909 ; EqwNewBox Push3Zeros EqwBoxCount#2+ DUP#2- * 6DCA6
+          BINT4 OBJ_6DD19 ZEROZERO EqwBoxCount#1+ DUP#2+ * 6DCCE
 
 * refs (10): 65C6D 66002 6607F 6DA12 6DABC 6DC8D ...
 OBJ_6DCE7:
@@ -877,7 +883,8 @@ L_6E04D:
         GOC     L_6E06D                          * 6E054
 
 * refs (18): 65B19 65B55 65BA5 65BCD 65EC2 65FA3 ...
-OBJ_6E057:
+* -> #h: EquationWriter character height for the size level in AppCount: 10, 8 or 6
+EqwFontHeight:
         CON(5)  (*)+5                            * 6E057  primitive code object
         GOSUB   SUB_6E08F                        * 6E05C
         A=A-1   B                                * 6E060
@@ -905,7 +912,8 @@ SUB_6E08F:
         RTN                                      * 6E09F
 
 * refs (21): 65A7E 65B05 65B5F 65B96 65ECC 65F21 ...
-OBJ_6E0A1:
+* -> #w: EquationWriter character width for the size level in AppCount: 6, 6 or 4
+EqwFontWidth:
         CON(5)  (*)+5                            * 6E0A1  primitive code object
         GOSUB   SUB_6E08F                        * 6E0A6
         A=A-1   B                                * 6E0AA
@@ -974,9 +982,9 @@ OBJ_6E1A9:
 
 * refs (3): 6625A 663BD 6E40B
 OBJ_6E1C7:
-            :: OBJ_67416 OBJ_6798C ; DUPDUP OBJ_6E474 ZEROOVER OBJ_678DB * 6E1C7
+            :: OBJ_67416 OBJ_6798C ; DUPDUP OBJ_6E474 ZEROOVER EqwBoxParent@ * 6E1C7
             OBJ_67DDF #1+ OBJ_6DAE9 EqwBoxCount 2DUP OBJ_67BE2 OBJ_67443 * 6E1EF
-            SWAP OBJ_678DB SWAP OBJ_67BFC OBJ_6E4F6 ; * 6E212
+            SWAP EqwBoxParent@ SWAP OBJ_67BFC OBJ_6E4F6 ; * 6E212
           BINT8 OBJ_6E113 ;                      * 6E230
 
 * refs (1): 6CECF
@@ -1032,8 +1040,9 @@ OBJ_6E474:
 
 * refs (5): 6E1B3 6E2A3 6E45B 6E497 6E4A1
 OBJ_6E4AB:
-          :: SWAP OBJ_67348 OVER OBJ_678DB 4ROLL OBJ_6DAE9 EqwBoxCount ; * 6E4AB
-          OBJ_6D523 OBJ_67416 OBJ_678DB SWAP OBJ_67BFC OBJ_67448 * 6E4D8
+          :: SWAP EqwBoxCount#2+ OVER EqwBoxParent@ 4ROLL OBJ_6DAE9 * 6E4AB
+            EqwBoxCount ;                        * 6E4CE
+          OBJ_6D523 OBJ_67416 EqwBoxParent@ SWAP OBJ_67BFC OBJ_67448 * 6E4D8
 
 * refs (7): 65DA0 6624B 69165 6DEF0 6E226 6E2C6 ...
 OBJ_6E4F6:
@@ -1063,7 +1072,7 @@ OBJ_6E5E6:
             :: 10GETLAM OBJ_6B359 10PUTLAM ; OBJ_6B939 OBJ_6CB25 OBJ_6CB3E * 6E5E6
             ?SEMI                                * 6E60E
             OBJ_6CB39 ;                          * 6E613
-          OBJ_283F1 DROPDUP BINT2 #<case         * 6E61D
+          GetGNTData DROPDUP BINT2 #<case        * 6E61D
           :: 3DROP DoBadKey ;                    * 6E631
 
 * refs (4): 69214 6ABA9 6E73F 6E7DA
@@ -1094,7 +1103,7 @@ OBJ_6E7CB:
             DROP DUP' xNOT EQ SWAP OBJ_6E2E9 OR NOT?SEMI * 6E7FD
             SWAP APPEND_SPACE SWAP #1+ ;         * 6E825
           OBJ_6821C DUPNULLCOMP? casedrop        * 6E83E
-          :: RDROP NULL$ OBJ_2840F OBJ_6AE42 ;   * 6E84D
+          :: RDROP NULL$ PutGNTData OBJ_6AE42 ;  * 6E84D
           OBJ_6C127 CARCOMP INCOMPDROP 8PUTLAM BINT34 PUTLAM EqwBoxCount * 6E86B
           OVER#- DUP#0=ITE DROP                  * 6E88E
           :: ZERO_DO OBJ_674D6 ROLLDROP OBJ_6C302 LOOP ; OBJ_6746B OBJ_67426 * 6E89D
@@ -1104,7 +1113,7 @@ OBJ_6E7CB:
             22Lget OBJ_0C204 ?SEMI               * 6E915
             8GETLAM LEN$ 2DUP#> NOTcaseDROP #-   * 6E924
           ;                                      * 6E93D
-          NULL$ OBJ_2840F OBJ_67416 7PUTLAM OBJ_67448 OVER 12PUTLAM * 6E942
+          NULL$ PutGNTData OBJ_67416 7PUTLAM OBJ_67448 OVER 12PUTLAM * 6E942
           OBJ_67DDF OBJ_67DEC DUPTYPELIST? OBJ_6BFBA * 6E965
           :: DUPLENCOMP DUP#0= case2DROP #1-     * 6E979
             NTHCOMPDROP #0=?SKIP #1+ ;           * 6E992
@@ -1120,31 +1129,30 @@ OBJ_6E9B0:
             OBJ_0C4E3 OBJ_6A267 BINT0 BEGIN #1+ OBJ_67B12 3PICK #= UNTIL * 6EA41
             SWAPDROP OBJ_69188 OBJ_6E2E9 ITE BINT2 BINT1 * 6EA6E
             OBJ_67C3C ;                          * 6EA8C
-          15GETLAM 12GETLAM DUPLENCOMP #2- 3PICK OBJ_6819D #- NTHCOMPDROP * 6EA96
-          13GETLAM #=?SKIP #1+ DUP#0=IT #1+ ZERO_DO OBJ_672E6 INDEX@#- * 6EABE
-          OBJ_6F0FE LOOP EqwBoxCount #1+_ONE_DO INDEX@ OBJ_6798C OBJ_6ECF8 * 6EAE6
-          IT                                     * 6EB09
+          15GETLAM 12GETLAM DUPLENCOMP #2- 3PICK #3* #- NTHCOMPDROP 13GETLAM * 6EA96
+          #=?SKIP #1+ DUP#0=IT #1+ ZERO_DO OBJ_672E6 INDEX@#- OBJ_6F0FE LOOP * 6EAC3
+          EqwBoxCount #1+_ONE_DO INDEX@ OBJ_6798C OBJ_6ECF8 IT * 6EAF0
           :: INDEX@ BINT0 OBJ_67BE2 ;            * 6EB0E
           LOOP ;                                 * 6EB27
 
 * refs (1): 6E9AB
 OBJ_6EB31:
         :: OBJ_67E0C 3UNROLL FALSE 4PICK 4PICK DUP OBJ_6EDFC #1+_ONE_DO * 6EB31
-          DUPINDEX@ OBJ_6819D #1- NTHCOMPDROP 3PICK #= 4ROLL OR 3UNROLL LOOP * 6EB5E
-          2DROP ?SKIP                            * 6EB90
-          :: OBJ_674BB ROT OBJ_678DB 3UNROLL ;   * 6EB9A
+          DUPINDEX@ #3* #1- NTHCOMPDROP 3PICK #= 4ROLL OR 3UNROLL LOOP 2DROP * 6EB5E
+          ?SKIP                                  * 6EB95
+          :: OBJ_674BB ROT EqwBoxParent@ 3UNROLL ; * 6EB9A
           OBJ_6EDF2 DUPLENCOMP #0=?SKIP          * 6EBB8
           :: DUPLENCOMP #1+_ONE_DO DUPINDEX@ NTHCOMPDROP DUP OBJ_6EF6E * 6EBC7
             OBJ_6AEF1 ITE OBJ_6EF64              * 6EBEA
             :: DROP OBJ_67416 OBJ_67DDF ;        * 6EBF9
             OBJ_67C3C LOOP ;                     * 6EC12
           2DROP OBJ_67416 7GETLAM                * 6EC21
-          :: 2DUPSWAP OBJ_678DB #=case SWAPDROP  * 6EC30
+          :: 2DUPSWAP EqwBoxParent@ #=case SWAPDROP * 6EC30
             BEGIN OBJ_678D6 DUP OBJ_68F7B 5PICK #> SWAP 5PICK #< OR OVER * 6EC49
             OBJ_67B17 OBJ_6EE65 IT               * 6EC80
             :: caseTRUE DROPDUP                  * 6EC8F
               FALSE ;                            * 6EC9E
-            OVER OBJ_678DB #0<> AND WHILE        * 6ECA8
+            OVER EqwBoxParent@ #0<> AND WHILE    * 6ECA8
             :: SWAPDROP ; REPEAT ROTROT2DROP DUP#0<> ?SEMI * 6ECC1
             DROP 7GETLAM ;                       * 6ECE4
           DUP                                    * 6ECF3
@@ -1186,7 +1194,7 @@ OBJ_6EEC4:
             4ROLLROT >TCOMP 3UNROLL IT #1+       * 6EEE2
             LOOP ;                               * 6EEFB
           DUP 14PUTLAM ROT OVER#> NOTcaseDROP 3PICK * 6EF05
-          OBJ_6EDFC SWAP#- OBJ_6819D #1- 3PICKSWAP NTHCOMPDROP * 6EF23
+          OBJ_6EDFC SWAP#- #3* #1- 3PICKSWAP NTHCOMPDROP * 6EF23
 
 * refs (1): 69179
 OBJ_6EF41:
@@ -1202,7 +1210,7 @@ OBJ_6EF6E:
             DUP CARCOMP DUPTYPEROMP? case SWAPDROP * 6EF7D
             DROP DUPLENCOMP NTHCOMPDROP ;        * 6EF96
           DUPUNROT OBJ_6B713 case2drop 2SKIP     * 6EFAA
-          4PICK DUPLENCOMP 14GETLAM DUP OBJ_6819D SWAP#1- 14PUTLAM #1-- 2DUP * 6EFBE
+          4PICK DUPLENCOMP 14GETLAM DUP #3* SWAP#1- 14PUTLAM #1-- 2DUP * 6EFBE
           NTHCOMPDROP 3UNROLL #1+ 2DUP NTHCOMPDROP 5UNROLL #1+ NTHCOMPDROP * 6EFEB
           DUP OBJ_26E61 DROP ROTROT2DROP ROT OBJ_67532 OBJ_67E0C OBJ_679B3 * 6F013
           SWAP                                   * 6F03B
@@ -1237,7 +1245,7 @@ OBJ_6F0B8:
 
 * refs (1): 6EAE6
 OBJ_6F0FE:
-        :: OBJ_67E34 12GETLAM 3PICK OBJ_6819D #2- NTHCOMPDROP OVER#= 7PUTLAM * 6F0FE
+        :: OBJ_67E34 12GETLAM 3PICK #3* #2- NTHCOMPDROP OVER#= 7PUTLAM * 6F0FE
           DUP#0=csedrp OBJ_6F41E OVER OBJ_67E54 OBJ_6EF6E OBJ_2846E * 6F12B
           EQcasedrop                             * 6F149
           :: DROP 7GETLAM case OBJ_6F41E         * 6F14E

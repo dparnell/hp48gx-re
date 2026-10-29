@@ -641,6 +641,7 @@ OBJ_5B32F:
           FALSE RDROP ;                          * 5B33E
 
 * refs (20): 5B9C4 5BA87 5BBD6 8264B 82727 82912 ...
+* Probably: meta {varls {pattern ...}...} -> meta' TRUE | FALSE: try an integration pattern table
 OBJ_5B34D:
         ::                                       * 5B34D
           :: OBJ_60BCB FALSE RDROP ; TRUE ;      * 5B352
@@ -772,7 +773,7 @@ OBJ_5B875:
 OBJ_5B906:
         :: OBJ_5B32F OBJ_5B69F ' OBJ_5BA41 SWAP NOTcase EVAL * 5B906
           DROP OBJ_5B6F4 NOTcaseFALSE            * 5B92E
-          { OBJ_60E73                            * 5B93D
+          { IntgPatVars                          * 5B93D
             {                                    * 5B947
 
 '&1^-1':
@@ -799,7 +800,7 @@ OBJ_5B9F6:
 * refs (1): 5B91A
 OBJ_5BA41:
         ::                                       * 5BA41
-          { OBJ_60E73                            * 5BA46
+          { IntgPatVars                          * 5BA46
             {                                    * 5BA50
 
 '&1^&2'_5BA55:
@@ -823,7 +824,7 @@ OBJ_5BB31:
 * refs (1): 1B941
 OBJ_5BB6D:
         :: OBJ_5B32F                             * 5BB6D
-          { OBJ_60E73                            * 5BB77
+          { IntgPatVars                          * 5BB77
             {                                    * 5BB81
 
 'EXP(&1)':

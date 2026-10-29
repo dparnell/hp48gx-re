@@ -1,6 +1,6 @@
 * HP 48GX ROM revision R, #0C001-#0E005: Clock and alarms
 * Addresses in the right-hand comments are those of the original ROM.
-* Most referenced: CSRW5 CSLW5 HXDCW NewAlarm(li) DAY# rGETATELN WSLOGN DATE CKTIME ASLW5 Ticks>TOD Ticks>Date
+* Most referenced: CkATTNcode CSRW5 CSLW5 HXDCW NewAlarm(li) DAY# rGETATELN WSLOGN DATE CKTIME ASLW5 Ticks>TOD
 * Follows on from the previous file (at #0C001 in the original ROM).
         LC(1)   #B                               * 0C001
         ?C<=A   P                                * 0C004
@@ -428,6 +428,7 @@ L_0C4D6:
         RPL
 
 * refs (16): 69512 69DB6 69E06 69E42 6A019 6A055 ...
+* Probably: EquationWriter: -> #n, slots in use (VIEWLEVEL - EqPtr)
 OBJ_0C4E3:
         :: OBJ_673E6 OBJ_673D6 #- ;              * 0C4E3
         NIBHEX  00000                            * 0C4FC  ..
@@ -622,7 +623,7 @@ _CANCL_:
 
 _ZOOM_:
               $ "ZOOM"                           * 0C997
-              :: CHECKMENU OBJ_4EEBF 2GETLAM 12GETLAM OBJ_4E799 ; } * 0C9A9
+              :: CHECKMENU PPAR>ZPAR 2GETLAM 12GETLAM OBJ_4E799 ; } * 0C9A9
           }                                      * 0C9D1
           InitMenu DispMenu.1 OBJ_4EE6F CROSS_OFF OBJ_517B2 PIXON3 * 0C9D6
           CROSS_HAIRS ;                          * 0C9F4
@@ -659,7 +660,8 @@ ATTNchk:
         RTNYES                                   * 0CA7F
 
 * refs (20): 87140 871C1 8739C 87714 878B4 87903 ...
-SUB_0CA81:
+* From machine code, with the RPL pointers saved: carry set and back if ATTNFLG is 0; else GETPTR and ?ATTNQUIT (abort)
+CkATTNcode:
         SETHEX                                   * 0CA81
         CD0EX                                    * 0CA83
         D=C     A                                * 0CA86

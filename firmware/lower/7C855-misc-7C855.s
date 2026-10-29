@@ -44,7 +44,7 @@ L_7C8A9:
         RSTK=C                                   * 7C8B2
         C=C+A   A                                * 7C8B4
         RSTK=C                                   * 7C8B6
-        GOSUB   SUB_7CC6A                        * 7C8B8
+        GOSUB   GetAbs%%AB1~jump                 * 7C8B8
         GOSUB   SUB_7CC56                        * 7C8BC
         SETHEX                                   * 7C8C0
         D1=D1+  5                                * 7C8C2
@@ -69,7 +69,7 @@ L_7C8E8:
 L_7C8F1:
         GOTO    L_7C95A                          * 7C8F1
 L_7C8F5:
-        GOSUB   SUB_7CC6A                        * 7C8F5
+        GOSUB   GetAbs%%AB1~jump                 * 7C8F5
         C=RSTK                                   * 7C8F9
         RSTK=C                                   * 7C8FB
         D0=C                                     * 7C8FD
@@ -84,7 +84,7 @@ L_7C8F5:
         GOSUB   SUB_7CC56                        * 7C918
         D1=D1-  5                                * 7C91C
         D1=D1-  16                               * 7C91F
-        GOSUB   SUB_7CC6A                        * 7C922
+        GOSUB   GetAbs%%AB1~jump                 * 7C922
         C=RSTK                                   * 7C926
         RSTK=C                                   * 7C928
         D0=C                                     * 7C92A
@@ -120,12 +120,12 @@ L_7C96D:
         GOSBVL  RCCD2                            * 7C974
         GOVLNG  L_51BA2                          * 7C97B
 L_7C982:
-        GOSUB   SUB_7CC6A                        * 7C982
+        GOSUB   GetAbs%%AB1~jump                 * 7C982
         C=RSTK                                   * 7C986
         RSTK=C                                   * 7C988
         D0=C                                     * 7C98A
         GOSUB   SUB_7CC56                        * 7C98D
-        GOSUB   SUB_7CC6A                        * 7C991
+        GOSUB   GetAbs%%AB1~jump                 * 7C991
         C=RSTK                                   * 7C995
         RSTK=C                                   * 7C997
         D0=C                                     * 7C999
@@ -145,7 +145,7 @@ L_7C9BA:
         GOSUB   SUB_7C962                        * 7C9BA
         GONC    L_7C982                          * 7C9BE
 L_7C9C1:
-        GOSUB   SUB_7CC6A                        * 7C9C1
+        GOSUB   GetAbs%%AB1~jump                 * 7C9C1
         C=RSTK                                   * 7C9C5
         RSTK=C                                   * 7C9C7
         D0=C                                     * 7C9C9
@@ -272,7 +272,7 @@ L_7CAD8:
         GOYES   L_7CB2A                          * 7CAF5
         GOTO    L_7CC4F                          * 7CAF7
 L_7CAFB:
-        GOSUB   SUB_7CC6A                        * 7CAFB
+        GOSUB   GetAbs%%AB1~jump                 * 7CAFB
         C=RSTK                                   * 7CAFF
         RSTK=C                                   * 7CB01
         D0=C                                     * 7CB03
@@ -302,7 +302,7 @@ L_7CB31:
 L_7CB3A:
         GOTO    L_7CBB5                          * 7CB3A
 L_7CB3E:
-        GOSUB   SUB_7CC6A                        * 7CB3E
+        GOSUB   GetAbs%%AB1~jump                 * 7CB3E
         C=RSTK                                   * 7CB42
         RSTK=C                                   * 7CB44
         D0=C                                     * 7CB46
@@ -316,7 +316,7 @@ L_7CB3E:
         GOSUB   SUB_7CC56                        * 7CB5E
         D1=D1-  5                                * 7CB62
         D1=D1-  16                               * 7CB65
-        GOSUB   SUB_7CC6A                        * 7CB68
+        GOSUB   GetAbs%%AB1~jump                 * 7CB68
         C=RSTK                                   * 7CB6C
         RSTK=C                                   * 7CB6E
         D0=C                                     * 7CB70
@@ -350,12 +350,12 @@ L_7CBB5:
         GOSUB   SUB_7C962                        * 7CBB5
         GOTO    L_7CB3E                          * 7CBB9
 L_7CBBD:
-        GOSUB   SUB_7CC6A                        * 7CBBD
+        GOSUB   GetAbs%%AB1~jump                 * 7CBBD
         C=RSTK                                   * 7CBC1
         RSTK=C                                   * 7CBC3
         D0=C                                     * 7CBC5
         GOSUB   SUB_7CC56                        * 7CBC8
-        GOSUB   SUB_7CC6A                        * 7CBCC
+        GOSUB   GetAbs%%AB1~jump                 * 7CBCC
         C=RSTK                                   * 7CBD0
         RSTK=C                                   * 7CBD2
         D0=C                                     * 7CBD4
@@ -381,7 +381,7 @@ L_7CC01:
         GOSUB   SUB_7C962                        * 7CC01
         GONC    L_7CBBD                          * 7CC05
 L_7CC08:
-        GOSUB   SUB_7CC6A                        * 7CC08
+        GOSUB   GetAbs%%AB1~jump                 * 7CC08
         C=RSTK                                   * 7CC0C
         RSTK=C                                   * 7CC0E
         D0=C                                     * 7CC10
@@ -427,8 +427,8 @@ SUB_7CC64:
         D1=D1+  16                               * 7CC67
 
 * refs (15): 7C8B8 7C8F5 7C922 7C982 7C991 7C9C1 ...
-SUB_7CC6A:
-        GOVLNG  L_35AA8                          * 7CC6A
+GetAbs%%AB1~jump:
+        GOVLNG  GetAbs%%AB1                      * 7CC6A
 
 * refs (4): 7C872 7CA65 7CABA 7CC96
 SUB_7CC71:
@@ -471,7 +471,7 @@ L_7CCBB:
         GOYES   L_7CCFE                          * 7CCD1
         GOTO    L_7CD71                          * 7CCD3
 L_7CCD7:
-        GOSUB   SUB_7CC6A                        * 7CCD7
+        GOSUB   GetAbs%%AB1~jump                 * 7CCD7
         C=RSTK                                   * 7CCDB
         RSTK=C                                   * 7CCDD
         D0=C                                     * 7CCDF
@@ -489,7 +489,7 @@ L_7CCFE:
         GOSUB   SUB_7C8CF                        * 7CCFE
         GONC    L_7CCD7                          * 7CD02
 L_7CD05:
-        GOSUB   SUB_7CC6A                        * 7CD05
+        GOSUB   GetAbs%%AB1~jump                 * 7CD05
         C=RSTK                                   * 7CD09
         RSTK=C                                   * 7CD0B
         D0=C                                     * 7CD0D
@@ -503,7 +503,7 @@ L_7CD05:
         GOSUB   SUB_7CC56                        * 7CD25
         D1=D1-  5                                * 7CD29
         D1=D1-  16                               * 7CD2C
-        GOSUB   SUB_7CC6A                        * 7CD2F
+        GOSUB   GetAbs%%AB1~jump                 * 7CD2F
         C=RSTK                                   * 7CD33
         RSTK=C                                   * 7CD35
         D0=C                                     * 7CD37
@@ -532,6 +532,7 @@ L_7CD71:
         RPL
 
 * refs (15): 903DC 979D2 97EF3 97FF2 C8819 C8951 ...
+* Probably: [array] -> [%%array]: convert a real or complex array to an extended one of the same dimensions
 OBJ_7CD79:
         ::                                       * 7CD79
 
@@ -556,12 +557,12 @@ OBJ_7CDE2:
 * refs (4): C7A4B C7F53 C933F CAA8F
 OBJ_7CE00:
         :: SWAP %>%%- 2DUP %%> case SWAPDROP     * 7CE00
-          OBJ_37B30 OBJ_37DA0 ;                  * 7CE23
+          %%/2 OBJ_37DA0 ;                       * 7CE23
 
 * refs (4): C7A50 C7F58 C9344 CAA94
 OBJ_7CE32:
         :: SWAP %>%%- 2DUP %%< case SWAPDROP     * 7CE32
-          OBJ_37B30 %%MAX ;                      * 7CE55
+          %%/2 %%MAX ;                           * 7CE55
 
 * refs (3): 97AAC 97B66 97C80
 COND~1~3:
@@ -574,7 +575,7 @@ OBJ_7CEA5:
           DUP #8* !MAKEHXS 2NULLLAM{} BIND DUP OBJ_37A4F #ZERO#ONE * 7CEC3
           3NULLLAM{} BIND 5GETLAM OBJ_7D28D CkATTNQUIT BEGIN 1GETLAM DUP * 7CEEB
           OBJ_376C1 5GETLAM OBJ_37013 2DUP#= ?SKIP * 7CF13
-          :: SWAPCOLUMNS 3GETLAM OBJ_3798C ITE %%CHS * 7CF2C
+          :: SWAPCOLUMNS 3GETLAM DUPTYPEEREL? ITE %%CHS * 7CF2C
             :: C%%CHS C%%CONJ ;                  * 7CF4A
             3PUTLAM ;                            * 7CF5E
           DROP 5GETLAM FALSE OBJ_7D3CB 3GETLAM OBJ_37941 2GETLAM OBJ_377DD * 7CF68
@@ -599,11 +600,11 @@ OBJ_7D11B:
           OBJ_7D3CB SWAPROT 6PICK #1+_ONE_DO 5PICK INDEX@ JINDEX@ #1- * 7D148
           OBJ_7C861 SWAP 5PICK PULL%%EL ROT L%- 4PICK L%/ 5PICK PUT%%EL * 7D170
           4ROLL #1+ 4UNROLL NextInArray ROTDROP 4ROLL 2GETLAM #+ 4UNROLL * 7D1A2
-          LOOP OBJ_37B03 2GETLAM DUP#1= caseDROP DUP#1- * 7D1CF
+          LOOP ROTDROPROTDROP 2GETLAM DUP#1= caseDROP DUP#1- * 7D1CF
           OVER #* 4UNROLL DUP#1- 6PICK #* 4UNROLL ONE_DO 5PICK ZERO_DO 2OVER * 7D1ED
           7PICK #+ JINDEX@ OBJ_7C861 SWAP 4PICK PULL%%EL ROT L%- 4PICK * 7D224
           PUT%%EL ROT #1-UNROT NextInArray 4ROLL 2GETLAM #-#1- 4UNROLL LOOP * 7D256
-          OBJ_37B03 ;                            * 7D283
+          ROTDROPROTDROP ;                       * 7D283
 
 * refs (2): 7CEFA 9871C
 OBJ_7D28D:

@@ -2133,8 +2133,7 @@ DODELAY:
 * refs (7): 317FF 31EEC 3204D 32193 32288 32391 ...
 GetChkPRTPAR:
         :: ChkPRTPAR #4- NDROP DUPTYPECSTR?      * 3205C
-
-dropn(s-4):
+* The Very Big List names this address dropn(s-4), but it is a pointer inside an object; the name is not used
           3PICK TYPEREAL? AND 4PICK TYPECSTR? AND 5PICK TYPEREAL? AND GOTO * 32075
           ChkPRTPAR~1 NOP                        * 320A7
 
@@ -2183,8 +2182,7 @@ SUB_3214B:
 PRINT:
         :: BINT34 TestSysFlag NOTcase PrintRC(st) * 32161
           KVIS BINT38 TestSysFlag                * 3217A
-
-PopBufA:
+* The Very Big List names this address PopBufA, but it is a pointer inside an object; the name is not used
           case PrintRC(st)                       * 32189
           GetChkPRTPAR 4UNROLL 2DROP BEGIN ?ATTNQUIT DUP NEWLINE$ XEQPOS$ * 32193
           COERCE DUP#0=ITE OBJ_321E3 PRINT~1 DUPNULL$? UNTIL 2DROP ; * 321BB

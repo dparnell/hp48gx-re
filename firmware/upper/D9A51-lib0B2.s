@@ -126,7 +126,7 @@ ROMP_0B2_00B:
         ::                                       * DA1A7
           { BINT17 ROMPTR 0B2 00E BINT11 ROMPTR 0B2 011 BINT16 * DA1AC
             ROMPTR 0B2 017 BINT18 ROMPTR 0B2 014 } * DA1D6
-          OBJ_19FE4 caseTRUE DUP#<7              * DA1F6
+          #=Lookup caseTRUE DUP#<7               * DA1F6
           casedrop FALSE                         * DA205
           { BINT25 BINT45 BINT12 BINT35 BINT40 } SWAP #=POSCOMP #0<> * DA20F
           caseFALSE 'DoBadKeyT                   * DA241
@@ -145,7 +145,7 @@ ROMP_0B2_00D:
         ::                                       * DA29B
           { BINT17 ROMPTR 0B2 010 BINT11 ROMPTR 0B2 013 BINT16 * DA2A0
             ROMPTR 0B2 019 BINT18 ROMPTR 0B2 016 } * DA2CA
-          OBJ_19FE4 caseTRUE DUP#<7              * DA2EA
+          #=Lookup caseTRUE DUP#<7               * DA2EA
           casedrop FALSE                         * DA2F9
           { BINT45 BINT35 BINT40 } SWAP #=POSCOMP #0<> caseFALSE 'DoBadKeyT * DA303
         ;                                        * DA335

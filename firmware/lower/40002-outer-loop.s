@@ -23,8 +23,7 @@ StdMenuKeyLS~any:
 * refs (1): 40260
 StdRightShift~any:
         :: DUPTYPEBINT?                          * 40099
-
-RightShift3:
+* The Very Big List names this address RightShift3, but it is a pointer inside an object; the name is not used
           NOTcase DropBadKey                     * 400A3
           UNCOERCE %CHS OBJ_4015C xCF ;          * 400AD
 
@@ -799,7 +798,7 @@ GetMenu%:
 * refs (1): 3BE36
 NumCurMenu:
         :: ROMPTR># SWAP SYMSYMB #=case UNCOERCE * 4161A
-          OBJ_56B87 ;                            * 41638
+          DROP%0b ;                              * 41638
 
 * refs (1): 3BE40
 GetMenu%~1~program:

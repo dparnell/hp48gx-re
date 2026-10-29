@@ -1888,7 +1888,8 @@ OBJ_56A9C:
           CK1NOLASTWD DUPTEMPENV OBJ_546B1 x+ xNEXT ; * 56B69
 
 * refs (14): 1AAD1 1AAF3 1AB15 1AB37 1AB59 2EB00 ...
-OBJ_56B87:
+* ob -> %0 (a second DROP%0; the derivative slot of constants)
+DROP%0b:
         :: DROP %0_2A2B4 ;                       * 56B87
 
 * refs (3): 86411 865C4 866B4

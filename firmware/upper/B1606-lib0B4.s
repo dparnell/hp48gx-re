@@ -214,7 +214,7 @@ ROMP_0B4_1D4:
 * ROMPTR 0B4 1D5
 * refs (1): A2437
 ROMP_0B4_1D5:
-        :: LAM 'F OBJ_19FE4 ?SEMI                * B23A2
+        :: LAM 'F #=Lookup ?SEMI                 * B23A2
           TestSysFlag ;                          * B23BC
 
 * ROMPTR 0B4 1D6

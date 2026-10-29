@@ -88,7 +88,7 @@ pixon(c):
 * refs (4): 4F17E 4F3F9 4F47B 4F4AD
 C%>#:
         :: C%>% GETPMIN&MAX RclMaxStdPict OBJ_4F2CD 5ROLL SWAPROT getypos * 4F408
-          5UNROLL 5UNROLL SWAP getxpos OBJ_506C2 3UNROLL OBJ_506C2 ; * 4F430
+          5UNROLL 5UNROLL SWAP getxpos SgnMag># 3UNROLL SgnMag># ; * 4F430
 
 * refs (1): 1E333
 pixon(li):
@@ -151,9 +151,9 @@ line(2c,?):
 * refs (2): 4F5BB 4F692
 2c=>pxs:
         :: SWAP2C%>% GETPMIN&MAX RclMaxStdPict OBJ_4F2CD 2DUP 7ROLL SWAPROT * 4F5D9
-          getypos OBJ_506C2 5UNROLL 7ROLL SWAPROT getypos OBJ_506C2 3UNROLL * 4F601
-          2DUP 8ROLL SWAPROT getxpos OBJ_506C2 4UNROLL 6ROLL SWAPROT getxpos * 4F629
-          OBJ_506C2 4UNROLL ;                    * 4F656
+          getypos SgnMag># 5UNROLL 7ROLL SWAPROT getypos SgnMag># 3UNROLL * 4F601
+          2DUP 8ROLL SWAPROT getxpos SgnMag># 4UNROLL 6ROLL SWAPROT getxpos * 4F629
+          SgnMag># 4UNROLL ;                     * 4F656
 
 * refs (1): 1E3FB
 box(2li):
@@ -518,7 +518,7 @@ NULLPAINT:
 
 * refs (9): 48927 4BD87 4BE13 4C1AC 4C42C 4C908 ...
 GETXPOS:
-        :: 6GETLAM 10GETLAM getxpos OBJ_506C2 ;  * 505C6
+        :: 6GETLAM 10GETLAM getxpos SgnMag># ;   * 505C6
 
 * refs (9): 46CD9 4CB7C 4F43F 4F638 4F651 505D5 ...
 getxpos:
@@ -578,7 +578,7 @@ SUB_5064F:
 
 * refs (9): 48A67 4C1B6 4C364 4C436 4C819 4C891 ...
 GETYPOS:
-        :: 5GETLAM 9GETLAM getypos OBJ_506C2 ;   * 5068D
+        :: 5GETLAM 9GETLAM getypos SgnMag># ;    * 5068D
 
 * refs (9): 46D33 4CBF9 4F42B 4F601 4F61A 5069C ...
 getypos:
@@ -590,7 +590,8 @@ getypos:
         GOTO    L_505F4                          * 506BE
 
 * refs (15): 4F444 4F44E 4F606 4F61F 4F63D 4F656 ...
-OBJ_506C2:
+* #sign #mag -> #n: 20-bit two's complement (#sign 0 = negative; magnitude capped at #7FFFF)
+SgnMag>#:
         CON(5)  (*)+5                            * 506C2  primitive code object
         GOSBVL  POP2#                            * 506C7
         CAEX    A                                * 506CE
@@ -786,7 +787,7 @@ UNROT2DROP%0:
 swap(1,3);4roll:
           :: SWAPROT 4ROLL ;                     * 50A63
           BINT4 ZERO_DO BINT1 OVER %0< IT DROPZERO * 50A77
-          SWAP %ABS COERCE OBJ_506C2 4ROLL LOOP 5ROLL NOT?SEMI * 50A9A
+          SWAP %ABS COERCE SgnMag># 4ROLL LOOP 5ROLL NOT?SEMI * 50A9A
           2SWAP ;                                * 50AC2
 
 * #x1 #y1 #x2 #y2 ->
@@ -1104,7 +1105,7 @@ SUB_50E94:
 
 * refs (2): 4D8D0 50ED9
 OBJ_50EE3:
-        :: TakeOver OBJ_4E6C7 BINT32 OBJ_50F2E ITE ClrSysFlag SetSysFlag * 50EE3
+        :: TakeOver CROSSMARKOFF BINT32 OBJ_50F2E ITE ClrSysFlag SetSysFlag * 50EE3
           OBJ_5102B MENUOFF? OR ?SKIP DispMenu   * 50F0B
           CROSSMARKON ;                          * 50F24
 
@@ -1142,6 +1143,7 @@ ChkEQ(eq)~2:
         :: OVER INCOMPDROP OVER FINDVAR NTHOF #0= ; * 51003
 
 * refs (19): 0C839 0C866 46C2F 46C8E 46E37 46E64 ...
+* Probably: PICTURE: TRUE when the menu area shows the x/y readout (lam 16 = 1)
 OBJ_5102B:
         :: 16GETLAM #1= ;                        * 5102B
 

@@ -251,7 +251,9 @@ L_33E46:
           ENDCODE                                * 33E52
 NUMSOLVE~2~2:
           DEPTH 3GETLAM 2DUP#> ITE #- BINT2      * 33E52
-          NDROP CK0NOLASTWD 2GETLAM              * 33E70
+          NDROP CK0NOLASTWD                      * 33E70
+* The Very Big List names this address [code], but it is a pointer inside an object; the name is not used
+          2GETLAM                                * 33E7A
 
 Code_33E7F:
           CODE                                   * 33E7F  36 nibbles

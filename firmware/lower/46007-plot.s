@@ -35,7 +35,7 @@ OBJ_46120:
 
 * refs (3): 4A4FF 4A5D1 4A73C
 OBJ_4613E:
-        :: SWAP OBJ_45EB0 ;                      * 4613E
+        :: SWAP DECOMP&$ ;                       * 4613E
 
 * refs (3): 20F94 4B20B 4F386
 OBJ_46152:
@@ -363,7 +363,7 @@ OBJ_4703F:
             OBJ_4DB63 ;                          * 47053
         ;                                        * 4705D
 
-        :: ' OBJ_47236 OBJ_73602 ITE             * 47062
+        :: ' OBJ_47236 TraceMode? ITE            * 47062
           :: '                                   * 4707B
             :: OBJ_47209 OBJ_47236 ; ;           * 47085
           :: ' OBJ_47209 ;                       * 4709E
@@ -395,13 +395,14 @@ OBJ_471B1:
           $ ": " &$ ;                            * 471F1
 
 * refs (18): 0C7FD 0C848 0C8C5 4708A 470A8 47161 ...
+* Probably: PICTURE: redraw the X field of the coordinate readout
 OBJ_47209:
-        :: OBJ_73602 NOTcase OBJ_73DE8           * 47209
+        :: TraceMode? NOTcase OBJ_73DE8          * 47209
           BINT26 GETLAM CARCOMP EVAL ;           * 4721D
 
 * refs (10): 0C807 0C84D 4706C 4708F 47166 471A7 ...
 OBJ_47236:
-        :: OBJ_73602 NOTcase OBJ_73A8F           * 47236
+        :: TraceMode? NOTcase OBJ_73A8F          * 47236
           BINT26 GETLAM BINT2 NTHCOMPDROP EVAL ; * 4724A
 
 * refs (2): 45BD9 73837
@@ -411,7 +412,7 @@ OBJ_47268:
 
 * refs (2): 4D493 4D592
 OBJ_4728B:
-        :: OBJ_73602 case DoBadKey               * 4728B
+        :: TraceMode? case DoBadKey              * 4728B
           CROSS_OFF TOTEMPOB 8PUTLAM OBJ_46CA2 ; * 4729F
 
 * refs (7): 45A07 8A68D 8B2F2 8B584 8B986 8C0DC ...
@@ -562,7 +563,7 @@ OBJ_47736:
           SWAP OBJ_46955 NOTcase ERRJMP          * 47763
           BINT28 PUTLAM OBJ_47736 SWAPDROP 15GETLAM SWAP OBJ_46955 NOTcase * 47777
           ERRJMP                                 * 4779F
-          OBJ_47736 ROT %>C% SWAP BINT28 GETLAM %>C% OBJ_4E6C7 line(2c) * 477A4
+          OBJ_47736 ROT %>C% SWAP BINT28 GETLAM %>C% CROSSMARKOFF line(2c) * 477A4
           CROSSMARKON ;                          * 477D1
 
 * refs (1): 47535
@@ -675,11 +676,11 @@ FastCat?:
 
 * refs (1): 47E19
 OBJ_47AC4:
-        :: CHECKMENU OBJ_4EEBF TRUE OBJ_47B00 ;  * 47AC4
+        :: CHECKMENU PPAR>ZPAR TRUE OBJ_47B00 ;  * 47AC4
 
 * refs (1): 47E3A
 OBJ_47AE2:
-        :: CHECKMENU FALSE OBJ_4EEBF OBJ_47B00 ; * 47AE2
+        :: CHECKMENU FALSE PPAR>ZPAR OBJ_47B00 ; * 47AE2
 
 * refs (2): 47AD8 47AF6
 OBJ_47B00:
@@ -701,7 +702,7 @@ OBJ_47B6E:
 
 * refs (1): 47E5B
 OBJ_47BCD:
-        :: CHECKMENU OBJ_4EEBF GETSCALE DROPDUP PUTSCALE OBJ_47BF5 ; * 47BCD
+        :: CHECKMENU PPAR>ZPAR GETSCALE DROPDUP PUTSCALE OBJ_47BF5 ; * 47BCD
 
 * refs (8): 47B2D 47BEB 47C63 4801C 48071 48111 ...
 OBJ_47BF5:
@@ -709,7 +710,7 @@ OBJ_47BF5:
           :: RECORDX&YC% centr(c) ;              * 47C04
           OBJ_4DAA3 ;                            * 47C18
 
-        :: CHECKMENU OBJ_4EEBF BINT131 MakeRange(s) BINT64 MakeRange(s) * 47C22
+        :: CHECKMENU PPAR>ZPAR BINT131 MakeRange(s) BINT64 MakeRange(s) * 47C22
           ROTSWAP %>C% 3UNROLL %>C% pmin(c) pmax(c) OBJ_47BF5 ; * 47C45
 
 * refs (3): 47B05 480F8 48120
@@ -732,8 +733,7 @@ OBJ_47C90:
 OBJ_47D0D:
         {                                        * 47D0D
           ::                                     * 47D12
-
-{PICT\}:
+* The Very Big List names this address {PICT\}, but it is a pointer inside an object; the name is not used
             PTR DirLabel:                        * 47D17
 
 PICT:
@@ -753,8 +753,7 @@ OBJ_47D93:
 
 {MenuGRAPH\ZOOM}:
               ::                                 * 47DA7
-
-{ZOOM\ZFACT}:
+* The Very Big List names this address {ZOOM\ZFACT}, but it is a pointer inside an object; the name is not used
                 PTR DirLabel:                    * 47DAC
 
 ZFACT:
@@ -762,8 +761,7 @@ ZFACT:
               OBJ_47D5B }                        * 47DCA
             {                                    * 47DD4
               ::                                 * 47DD9
-
-{ZOOM\BOXZ}:
+* The Very Big List names this address {ZOOM\BOXZ}, but it is a pointer inside an object; the name is not used
                 PTR DirLabel:                    * 47DDE
 
 BOXZ:
@@ -814,7 +812,7 @@ ZAUTO:
 
 * refs (1): 47F6D
 OBJ_47FF4:
-        :: CHECKMENU OBJ_4EEBF %1                * 47FF4
+        :: CHECKMENU PPAR>ZPAR %1                * 47FF4
 
 * refs (1): 4803F
 OBJ_48008:
@@ -822,27 +820,27 @@ OBJ_48008:
 
 * refs (1): 47F90
 OBJ_4802B:
-        :: CHECKMENU OBJ_4EEBF %10 OBJ_48008 ;   * 4802B
+        :: CHECKMENU PPAR>ZPAR %10 OBJ_48008 ;   * 4802B
 
 * refs (1): 47FB3
 OBJ_48049:
-        :: CHECKMENU OBJ_4EEBF %%PI %%2 %%/>% %1 PUTSCALE OBJ_47BF5 ; * 48049
+        :: CHECKMENU PPAR>ZPAR %%PI %%2 %%/>% %1 PUTSCALE OBJ_47BF5 ; * 48049
 
 * refs (1): 47E9F
 OBJ_4807B:
-        :: CHECKMENU OBJ_4EEBF TRUE OBJ_480F3 ;  * 4807B
+        :: CHECKMENU PPAR>ZPAR TRUE OBJ_480F3 ;  * 4807B
 
 * refs (1): 47EC2
 OBJ_48099:
-        :: CHECKMENU OBJ_4EEBF FALSE OBJ_480F3 ; * 48099
+        :: CHECKMENU PPAR>ZPAR FALSE OBJ_480F3 ; * 48099
 
 * refs (1): 47EE3
 OBJ_480B7:
-        :: CHECKMENU OBJ_4EEBF TRUE OBJ_4811B ;  * 480B7
+        :: CHECKMENU PPAR>ZPAR TRUE OBJ_4811B ;  * 480B7
 
 * refs (1): 47F06
 OBJ_480D5:
-        :: CHECKMENU OBJ_4EEBF FALSE OBJ_4811B ; * 480D5
+        :: CHECKMENU PPAR>ZPAR FALSE OBJ_4811B ; * 480D5
 
 * refs (2): 4808F 480AD
 OBJ_480F3:
@@ -854,11 +852,11 @@ OBJ_4811B:
 
 * refs (1): 47F4A
 OBJ_48143:
-        :: CHECKMENU OBJ_4EEBF AUTOSCALE OBJ_47BF5 ; * 48143
+        :: CHECKMENU PPAR>ZPAR AUTOSCALE OBJ_47BF5 ; * 48143
 
 * refs (1): 47E7E
 OBJ_48161:
-        :: CHECKMENU OBJ_4EEBF ERRSET            * 48161
+        :: CHECKMENU PPAR>ZPAR ERRSET            * 48161
           :: INDEPVAR OBJ_4D96B GETPTYPE ; ERRTRAP * 48175
           :: ERRORCLR DropSysObs ID_X ID_Y 'IDFUNCTION ; MAKEPVARS DROP * 48193
           PUTPTYPE depnd(gn) PUTINDEP OBJ_4DAA3 ; * 481C0
@@ -989,7 +987,7 @@ OBJ_4881E:
 
 * refs (2): 47610 4D69B
 OBJ_48873:
-        :: TakeOver OBJ_73602 ITE OBJ_49441 OBJ_4E248 * 48873
+        :: TakeOver TraceMode? ITE OBJ_49441 OBJ_4E248 * 48873
           NOTcase DoBadKey                       * 48891
           ->StkStr22! OBJ_469FF ;                * 4889B
         NIBHEX  00000                            * 488AA  ..
@@ -1039,8 +1037,7 @@ OBJ_48B39:
           ATTN# OVER #= case                     * 48B61
           :: SWAPDROP 2RDROP GETTHEMESG OBJ_0C9FE ; * 48B75
           OBJ_33D8C OVER                         * 48B93
-
-äline:
+* The Very Big List names this address äline, but it is a pointer inside an object; the name is not used
           #= ITE DROPNULL$ GETTHEMESG            * 48B9D
           SWAP ;                                 * 48BB1
 
@@ -1088,8 +1085,7 @@ AUTOSCALE~1:
 * refs (2): 8CB30 8CC6E
 OBJ_48DCE:
         :: OBJ_49017 ' OBJ_48F4A 8PUTLAM OBJ_491E4 DUP TYPEBINT? * 48DCE
-
-ScaleY=ScaleX:
+* The Very Big List names this address ScaleY=ScaleX, but it is a pointer inside an object; the name is not used
           case2DROP OBJ_49478                    * 48DF6
           xrng(2r) ;                             * 48E00
 
@@ -1119,10 +1115,10 @@ OBJ_48E8C:
 * refs (1): 8CFE5
 OBJ_48ECD:
         :: OBJ_48E2D %0_2A2B4 PUTRES %0_2A2B4 STATN xrng(2r) DROP * 48ECD
-          MinMaxCol(ra,s) 2DUP %= ITE OBJ_56B87  * 48EF5
+          MinMaxCol(ra,s) 2DUP %= ITE DROP%0b    * 48EF5
           :: DUP %0< casedrop %0_2A2B4           * 48F0E
             SWAPDUP %0> NOT?SEMI                 * 48F27
-            OBJ_56B87 ;                          * 48F36
+            DROP%0b ;                            * 48F36
           OBJ_49293 ;                            * 48F40
 
 * refs (1): 48DDD

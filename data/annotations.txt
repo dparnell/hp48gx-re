@@ -52,5 +52,59 @@
 6DD6E	Push3Zeros	-> #0 #0 #0, collecting garbage if memory is short
 67416		Probably: EquationWriter: -> #box, the current box (kept in FONTHEIGHT)
 67448		Probably: EquationWriter: #box -> , set the current box (kept in FONTHEIGHT)
-682DE		Probably: EquationWriter: allocate a box record and fill it from 15 bints
-69C64		Probably: EquationWriter RULES menu key: run the next runstream object as the rule
+# Second round.
+36DB7	CRUNCH>%	ob -> %: evaluate to a number (honouring ATTN), strip units; anything else is Bad Argument Type
+37247	%+%%*	% %%2 %%1 -> %: %+%%2*%%1, rounded to a real
+3798C	DUPTYPEEREL?	ob -> ob flag: TRUE for an extended real
+37B03	ROTDROPROTDROP	a b c d -> c d
+37B30	%%/2	%% -> %%/2
+37C98	B%ABS1	% -> |%|, C% -> |C%|, %% -> |%%|, C%% -> |re|+|im| (a cheap magnitude for pivoting)
+347AE		Probably: NUMSOLVE: push element 4 of the solver's guess vector (x values)
+347F7		Probably: NUMSOLVE: push element 2 of the solver's function values
+34817		Probably: NUMSOLVE: push element 4 of the solver's function values
+6E057	EqwFontHeight	-> #h: EquationWriter character height for the size level in AppCount: 10, 8 or 6
+6E0A1	EqwFontWidth	-> #w: EquationWriter character width for the size level in AppCount: 6, 6 or 4
+73602	TraceMode?	-> flag: PICTURE: TRUE when the cursor mode (lam 3) is 4, TRACE
+891F0	D0Back2%%	D0 -= 42: back two extended reals
+35AA8	GetAbs%%AB1	D1 -> %% body: A.A = exponent, B.W = mantissa with the sign cleared; D1 unchanged
+7CD79		Probably: [array] -> [%%array]: convert a real or complex array to an extended one of the same dimensions
+87B01		Probably: counterpart of Get2ABR0: store A/B, then R0/R1, as two %% at R4+#1F4
+0CA81	CkATTNcode	From machine code, with the RPL pointers saved: carry set and back if ATTNFLG is 0; else GETPTR and ?ATTNQUIT (abort)
+19FE4	#=Lookup	# {#1 ob1 #2 ob2 ...} -> ob TRUE | # FALSE
+204FF	'REvalSto	name args -> : evaluate the next runstream object on the arguments and store the result in name (STO+, SINV, ...)
+283F1	GetGNTData	-> hxs-mask $ #next $token: the parser's tokenizer state, from lams 11..8
+2840F	PutGNTData	hxs-mask $ #next $token -> : store the tokenizer state in lams 8..11
+2A060	POP1%%	Pop an extended real (saving the RPL pointers): A.W = sign, mantissa, exponent; B.W = mantissa without sign; decimal mode
+0C4E3		Probably: EquationWriter: -> #n, slots in use (VIEWLEVEL - EqPtr)
+23A2E		Probably: parser: parse one object inside a program or structure body
+26BED		Probably: ob -> ob' x #n TRUE | ob FALSE: the argument count of a program or ROMPTR that starts with CKn&Dispatch or -> locals
+56B87	DROP%0b	ob -> %0 (a second DROP%0; the derivative slot of constants)
+60E73	IntgPatVars	The pattern variables &1..&4 of an integration table, unbound: { NULL{} NULL{} NULL{} NULL{} '&1 '&2 '&3 '&4 }
+6C873	2DUPHALF	#w #h -> #w #h #w/2 #h/2
+6D9AE	DUP#2-	#n -> #n #n-2
+69C64	EqwRuleKey0	EquationWriter RULES key: take the next runstream object as the rule ('ManOp), 'ploc = 0, and apply it
+69CAC	EqwRuleKey3	As EqwRuleKey0, with 'ploc = 3 (the move rules)
+5B34D		Probably: meta {varls {pattern ...}...} -> meta' TRUE | FALSE: try an integration pattern table
+6AE6F		Probably: bring the object stored under the EquationWriter's stack marker up to level 1
+45EB0	DECOMP&$	$ ob -> $': append ob, decompiled for editing
+4E6C7	CROSSMARKOFF	-> : take the crosshair and the mark off PICT (the inverse of CROSSMARKON)
+4EEBF	PPAR>ZPAR	-> : save PPAR in ZPAR (with its zoom factors, or 4 4 0) so a zoom can be undone
+506C2	SgnMag>#	#sign #mag -> #n: 20-bit two's complement (#sign 0 = negative; magnitude capped at #7FFFF)
+3EF14		Probably: install the soft-key handlers of a UNITS menu
+47209		Probably: PICTURE: redraw the X field of the coordinate readout
+4DCC6		Probably: write 4 to TIMER1, shortening the wait before the next key repeat
+5102B		Probably: PICTURE: TRUE when the menu area shows the x/y readout (lam 16 = 1)
+6733B	EqwBoxCount#1+	-> #n+1: boxes in use + 1, the index the next new box gets
+67348	EqwBoxCount#2+	-> #n+2
+67356	EqwBoxCount#3+	-> #n+3
+678DB	EqwBoxParent@	#box -> #parent: the box's parent link (field #1B), 0 at the root
+682DE	EqwNewBox	#27 #24 #21 #1E #1B #18 #b16 #b14 obj #11 #0E #0B #08 #05 #02 #type -> obj: take a free box record and fill it (fields by offset; see EqwPOP#>Box)
+67A4A		EquationWriter box record, 42 nibbles, offsets from D0: +00 type; +01 size level (low); +02/+05 position y/x (low); +08 vertical reference (medium-low); +0B horizontal centre (medium); +0E height, +11 width (medium-high); +14/+16 size and placement handler indexes; +18 unknown; +1B parent (high); +1E/+21 next/previous sibling and +24/+27 first/last child (medium)
+6819D	#3*	#n -> #3n
+6798C		Probably: EquationWriter: #box -> next-sibling link (field #1E)
+679A1		Probably: EquationWriter: #box -> previous-sibling link (field #21)
+679B3		Probably: EquationWriter: #box -> first-child link (field #24)
+679C5		Probably: EquationWriter: #box -> last-child link (field #27)
+67AE2		Probably: EquationWriter: #box -> vertical reference (field #08)
+67BE2		Probably: EquationWriter: #box #box' -> , set the next-sibling link (field #1E)
+67BFC		Probably: EquationWriter: #box #child -> , set the last-child link (field #27)

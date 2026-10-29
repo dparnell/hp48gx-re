@@ -3208,7 +3208,7 @@ SUB_79EA8:
 
 * refs (1): 2AF2C
 %%H>HMS~1:
-        GOSBVL  SUB_2A060                        * 79EC4
+        GOSBVL  POP1%%                           * 79EC4
         GOSUB   SUB_79EE1                        * 79ECB
         GOSBVL  PACKSB                           * 79ECF
         GOSBVL  SPLITA                           * 79ED6

@@ -165,7 +165,7 @@ OBJ_495D3:
 * refs (1): 47FD6
 OBJ_4965A:
         :: CHECKMENU OBJ_496A0 NOTcase DoBadKey  * 4965A
-          4UNROLL3DROP OBJ_4EEBF DUPNULL{}? casedrop DoBadKey * 49673
+          4UNROLL3DROP PPAR>ZPAR DUPNULL{}? casedrop DoBadKey * 49673
           'IDPAR STOAPPLDATA OBJ_4DAA3 ;         * 4968C
 
 * refs (5): 47B3C 49664 4EEC4 B6295 B6326
@@ -520,7 +520,7 @@ _binary__4A395:
 
 _ASCII__4A3AB:
           $ "ASCII" !append$ DISPROW4 GetIOPAR OBJ_49A4C JstGetTHEMESG 7ROLL * 4A3AB
-          OBJ_45EB0 DISPROW5 OBJ_49A56 JstGetTHEMESG 6ROLL * 4A3DD
+          DECOMP&$ DISPROW5 OBJ_49A56 JstGetTHEMESG 6ROLL * 4A3DD
           :: DUPTYPEREAL? NOTcasedrop            * 4A3F6
 
 _invalid__4A405:
@@ -540,27 +540,27 @@ _mark__4A45C:
               $ "mark " }                        * 4A45C
             OVER %ABSCOERCE #1+ NTHELCOMP ?SKIP $ "spc " * 4A475
             swap;->EditStr;+(2st) ;              * 4A4A0
-          &$ DISPROW6 $ "cksum: " ROT OBJ_45EB0 $ "  translate: " !!append$ * 4A4AA
+          &$ DISPROW6 $ "cksum: " ROT DECOMP&$ $ "  translate: " !!append$ * 4A4AA
           OBJ_4613E DISPROW7 2DROP SetDA2OKTemp ; * 4A4FF
 
 * refs (1): 3D3DE
 OBJ_4A518:
-        :: ChkPRTPAR #4- NDROP $ "Delay: " 5ROLL OBJ_45EB0 DISPROW3 * 4A518
-          $ "Remap: " 4ROLL OBJ_45EB0 DISPROW4 $ "Line length: " ROT * 4A553
-          OBJ_45EB0 DISPROW5 $ "End-of-line: " OBJ_4613E DISPROW6 NULL$ * 4A5A3
-          DISPROW7 SetDA2OKTemp ;                * 4A5E0
+        :: ChkPRTPAR #4- NDROP $ "Delay: " 5ROLL DECOMP&$ DISPROW3 * 4A518
+          $ "Remap: " 4ROLL DECOMP&$ DISPROW4 $ "Line length: " ROT DECOMP&$ * 4A553
+          DISPROW5 $ "End-of-line: " OBJ_4613E DISPROW6 NULL$ DISPROW7 * 4A5A8
+          SetDA2OKTemp ;                         * 4A5E5
 
 * refs (1): 413C3
 OBJ_4A5EF:
-        :: $ "Eq: " EQUATION IT OBJ_45EB0        * 4A5EF
-          DISPROW3 $ "Ptype: " Chk&BreakPPAR DROP 6UNROLL 5DROP OBJ_45EB0 * 4A615
+        :: $ "Eq: " EQUATION IT DECOMP&$         * 4A5EF
+          DISPROW3 $ "Ptype: " Chk&BreakPPAR DROP 6UNROLL 5DROP DECOMP&$ * 4A615
           DISPROW4 NULL$ DISPROW5 NULL$ DISPROW6 NULL$ DISPROW7 SetDA2OKTemp ; * 4A64B
 
 * refs (1): 4602A
 OBJ_4A678:
-        :: ROMPTR 0B5 08C $ "Xeye:  " 6ROLL OBJ_45EB0 DISPROW3 $ "Yeye:  " * 4A678
-          5ROLL OBJ_45EB0 DISPROW4 $ "Zeye:  " 4ROLL OBJ_45EB0 DISPROW5 * 4A6C7
-          $ "Xstep: " ROT OBJ_45EB0 DISPROW6 $ "Ystep: " OBJ_4613E DISPROW7 * 4A6FD
+        :: ROMPTR 0B5 08C $ "Xeye:  " 6ROLL DECOMP&$ DISPROW3 $ "Yeye:  " * 4A678
+          5ROLL DECOMP&$ DISPROW4 $ "Zeye:  " 4ROLL DECOMP&$ DISPROW5 * 4A6C7
+          $ "Xstep: " ROT DECOMP&$ DISPROW6 $ "Ystep: " OBJ_4613E DISPROW7 * 4A6FD
           BINT10 NDROP SetDA2OKTemp ;            * 4A746
 
 * refs (2): 3C5A5 3C62F

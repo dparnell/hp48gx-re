@@ -1507,6 +1507,7 @@ palparse~2~1:
         ;                                        * 23A29
 
 * refs (16): 23A15 23B46 23BB9 23C0E 23C77 23CD6 ...
+* Probably: parser: parse one object inside a program or structure body
 OBJ_23A2E:
         :: tok' tok8cktrior OBJ_23A6F OBJ_24384 !*trior TrueTrue OBJ_245DC * 23A2E
           !*trior TrueTrue COLA OBJ_2469F        * 23A56

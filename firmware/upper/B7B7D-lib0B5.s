@@ -314,7 +314,7 @@ ROMP_0B5_10C:
           :: DUPTYPEREAL? NOTcasedrop BINT3      * B84D6
             OBJ_2ED74 NOTcasedrop BINT3          * B84EA
             COERCE ;                             * B84F9
-          NTHCOMPDROP OBJ_37B03 4ROLL            * B8503
+          NTHCOMPDROP ROTDROPROTDROP 4ROLL       * B8503
           :: DUPTYPEREAL? NOTcasedrop %9600      * B8512
             %IP># s=okBaud? NOTcasedrop %9600    * B8526
             UNCOERCE ;                           * B853A
@@ -328,7 +328,7 @@ ROMP_0B5_10C:
 * refs (1): B4B39
 ROMP_0B5_10D:
         :: ROMPTR 0B0 09A 4ROLL ROMPTR 0B0 09A 4UNROLL ROMPTR 0B5 11E DROP * B8595
-          7UNROLL OBJ_37B03 6ROLL DUPTYPEBINT? ITE * B85CA
+          7UNROLL ROTDROPROTDROP 6ROLL DUPTYPEBINT? ITE * B85CA
           :: DROP 5ROLL ;                        * B85E3
           :: 6ROLL DROP ROMPTR 0B0 099 ;         * B85F7
           6ROLL 6->list;StoInIPAR ;              * B8616

@@ -646,7 +646,7 @@ xPI:
         :: CK0 pi ;                              * 1AABD
 
 * slots of 002 03F (derivative, inverse, ...: used by the symbolic code)
-        CON(5)  OBJ_56B87                        * 1AAD1  slot 0
+        CON(5)  DROP%0b                          * 1AAD1  slot 0
         CON(2)  #80                              * 1AAD6  end of the slots: property byte (meaning not yet known)
 
 * -> MAXR
@@ -659,7 +659,7 @@ xMAXR:
         :: CK0 maxr ;                            * 1AADF
 
 * slots of 002 040 (derivative, inverse, ...: used by the symbolic code)
-        CON(5)  OBJ_56B87                        * 1AAF3  slot 0
+        CON(5)  DROP%0b                          * 1AAF3  slot 0
         CON(2)  #80                              * 1AAF8  end of the slots: property byte (meaning not yet known)
 
 * -> MINR
@@ -672,7 +672,7 @@ xMINR:
         :: CK0 xMINR~1 ;                         * 1AB01
 
 * slots of 002 041 (derivative, inverse, ...: used by the symbolic code)
-        CON(5)  OBJ_56B87                        * 1AB15  slot 0
+        CON(5)  DROP%0b                          * 1AB15  slot 0
         CON(2)  #80                              * 1AB1A  end of the slots: property byte (meaning not yet known)
 
 * -> e
@@ -685,7 +685,7 @@ xCONSTANTe:
         :: CK0 e ;                               * 1AB23
 
 * slots of 002 042 (derivative, inverse, ...: used by the symbolic code)
-        CON(5)  OBJ_56B87                        * 1AB37  slot 0
+        CON(5)  DROP%0b                          * 1AB37  slot 0
         CON(2)  #80                              * 1AB3C  end of the slots: property byte (meaning not yet known)
 
 * -> i
@@ -698,7 +698,7 @@ xi:
         :: CK0 i ;                               * 1AB45
 
 * slots of 002 043 (derivative, inverse, ...: used by the symbolic code)
-        CON(5)  OBJ_56B87                        * 1AB59  slot 0
+        CON(5)  DROP%0b                          * 1AB59  slot 0
         CON(2)  #C8                              * 1AB5E  end of the slots: property byte (meaning not yet known)
 
 * x y -> x+y

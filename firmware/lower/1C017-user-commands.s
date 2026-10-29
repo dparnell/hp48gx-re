@@ -319,8 +319,7 @@ fs?c(r):
 * refs (1): 1C53E
 fs?c(r)?:
           :: r=>s;r>0?                           * 1C4BF
-
-UserFs?c(r)?:
+* The Very Big List names this address UserFs?c(r)?, but it is a pointer inside an object; the name is not used
             ITE                                  * 1C4C9
 
 * # -> flag

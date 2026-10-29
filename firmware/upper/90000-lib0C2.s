@@ -162,13 +162,13 @@ ROMP_0C2_00C:
         :: 3PICK DUP#1- 1GETLAM #1+ #* BEGIN CkATTNQUIT ROTOVER PULL%%EL DUP * 90C10
           =0?(nb) case                           * 90C47
           :: RDROP DROPSWAPDROP ROTDROP ;        * 90C51
-          SWAP3PICK 1GETLAM #- PULL%%EL OBJ_37C98 SWAP 4PICK #1+ PULL%%EL * 90C6A
-          OBJ_37C98 ROT %%+ DUP %%0> ?SKIP       * 90C97
+          SWAP3PICK 1GETLAM #- PULL%%EL B%ABS1 SWAP 4PICK #1+ PULL%%EL * 90C6A
+          B%ABS1 ROT %%+ DUP %%0> ?SKIP          * 90C97
           :: DROP 5PICK #1- 1GETLAM #1+ #* #1+ 5PICK 7PICK #1-- 1GETLAM OVER * 90CB5
             #* 3PICK#+ 3UNROLL %%0 5ROLL ROT 4PICK#+ 4ROLL DO %%0 4PICK * 90CF6
             INDEX@ DO SWAPINDEX@ PULL%%EL B%ABS ROT %%+ 1GETLAM +LOOP ROT * 90D2D
             %%MAX SWAP NextInArray ROTDROPSWAP ; * 90D5F
-          %%1E-13 %%* ROT OBJ_37C98 %%>= case    * 90D78
+          %%1E-13 %%* ROT B%ABS1 %%>= case       * 90D78
           :: RDROP %%0 3PICK PUT%%EL SWAPDROP ROTDROP ; * 90D96
           ROT #1-ROT 1GETLAM #-#1- OVER5PICK #= UNTIL 2DROP ; * 90DBE
 
@@ -192,7 +192,7 @@ ROMP_0C2_00D:
           5ROLL 1GETLAM #-#1- ROTOVER 1GETLAM #- PULL%%EL %%ABS 5ROLL %%ABS * 910A4
           %%+ 5ROLL %%ABS %%+ 15GETLAM %%ABS %%* SWAP3PICK PULL%%EL %%ABS * 910D6
           16GETLAM %%ABS 17GETLAM %%ABS %%+ %%* SWAP 5UNROLL SWAP %%1E-13 * 91108
-          %%* %%<= UNTIL DROP OBJ_37B03 ROTDROP ; * 9113A
+          %%* %%<= UNTIL DROP ROTDROPROTDROP ROTDROP ; * 9113A
 
 * ROMPTR 0C2 00E
 * refs (1): 90007
@@ -299,14 +299,14 @@ ROMP_0C2_014:
           caseDROP                               * 91D1A
           :: caseFALSE 6ROLL                     * 91D1F
             6ROLL 2DROP 4PICKOVER %%- 2OVER %%+ 2DUP%%R OVER %%ABS OVER %%/ * 91D2E
-            1+(rr) OBJ_37B30 %%SQRT 4ROLL OBJ_37B30 ROT 3PICK %%* %%/ %%CHS * 91D65
-            ROT OBJ_37AC2 %%* 6PICK 3PICK %%* 6PICK 3PICK %%+* 6ROLL 4PICK * 91D97
-            %%* 7ROLL 4PICK %%-* 2SWAP 6PICK 3PICK %%* 6PICK 3PICK %%+* * 91DCE
-            6ROLL 4PICK %%* 7ROLL 4PICK %%-* 2SWAP 6PICK 3PICK %%* 5PICK * 91E05
-            3PICK %%+* 5ROLL 4PICK %%* 7ROLL 4PICK %%-* 2SWAP 6PICK 3PICK * 91E3C
-            %%* 6PICK 3PICK %%+* 6ROLL 4PICK %%* 7ROLL 4PICK %%-* 6ROLL %%+ * 91E73
-            DUP OBJ_37B30 ROT 6ROLL 3PICK 5ROLL %%ABS %%1E-13 %%* 3PICK * 91EAF
-            %%ABS OVER %%> ?SKIP                 * 91EE1
+            1+(rr) %%/2 %%SQRT 4ROLL %%/2 ROT 3PICK %%* %%/ %%CHS ROT * 91D65
+            OBJ_37AC2 %%* 6PICK 3PICK %%* 6PICK 3PICK %%+* 6ROLL 4PICK %%* * 91D9C
+            7ROLL 4PICK %%-* 2SWAP 6PICK 3PICK %%* 6PICK 3PICK %%+* 6ROLL * 91DD3
+            4PICK %%* 7ROLL 4PICK %%-* 2SWAP 6PICK 3PICK %%* 5PICK 3PICK * 91E0A
+            %%+* 5ROLL 4PICK %%* 7ROLL 4PICK %%-* 2SWAP 6PICK 3PICK %%* * 91E41
+            6PICK 3PICK %%+* 6ROLL 4PICK %%* 7ROLL 4PICK %%-* 6ROLL %%+ DUP * 91E78
+            %%/2 ROT 6ROLL 3PICK 5ROLL %%ABS %%1E-13 %%* 3PICK %%ABS OVER * 91EB4
+            %%> ?SKIP                            * 91EEB
             :: ROTDROP %%0 3UNROLL ;             * 91EF5
             4PICK %%ABS %%< ?SKIP                * 91F0E
             :: ROTDROP %%0 3UNROLL ;             * 91F22
@@ -337,14 +337,14 @@ EGV~1~1:
 * ROMPTR 0C2 016
 * refs (1): 90007
 ROMP_0C2_016:
-        :: DUP 4ROLLOVER PULL%%EL DUP OBJ_37C98 %%1E-14 %%* %%1E-514 %%MAX * 921F0
+        :: DUP 4ROLLOVER PULL%%EL DUP B%ABS1 %%1E-14 %%* %%1E-514 %%MAX * 921F0
           13PUTLAM 3UNROLL 4GETLAM 6PICK DUP ONE_DO ROTOVER PULL%%EL B%NEG * 92222
           4ROLLSWAP INDEX@ PUT%%EL ROT 1GETLAM #+ NextInArray DROP %%1 7PICK * 9224F
           PUT%%EL 6PICK #1- BEGIN CkATTNQUIT 4ROLL 1GETLAM #-#1- 4ROLL 3PICK * 92281
           :: #1= caseTRUE OBJ_6DCE7              * 922B3
             PULL%%EL =0?(nb) ;                   * 922C7
           ITE                                    * 922D6
-          :: OVER PULL%%EL 6PICK L%- DUP OBJ_37C98 13GETLAM %%< IT * 922DB
+          :: OVER PULL%%EL 6PICK L%- DUP B%ABS1 13GETLAM %%< IT * 922DB
             :: DROP 13GETLAM ;                   * 9230D
             5ROLL 5PICK PULL%%EL ROT L%/ 5PICK PUT%%EL BINT1 ; * 92321
           :: ROT #1-ROT 1GETLAM #-#1- ROTOVER PULL%%EL 6PICK %%- 5GETLAM * 9234E
@@ -354,10 +354,10 @@ ROMP_0C2_016:
             6PICK #1+ PULL%%EL ROTSWAP BINT2 PUT%%EL ROT BINT2 OBJ_7CEA5 * 92402
             2DROP SWAPONE OBJ_7D0CB ABND BINT1 PULL%%EL ROTSWAP 6PICK * 9242F
             PUT%%EL SWAP BINT2 PULL%%EL SWAPDROP 5PICK #1+ PUT%%EL BINT2 ; * 92457
-          12GETLAM EVAL 4ROLL #1- DUP#0= UNTIL DROP OBJ_37B03 5PICK BINT1 * 92489
-          1GETLAM ZERO_DO SWAPROT 3PICK BINT1 8PICK OBJ_7C861 ROTSWAP 4PICK * 924BB
-          8PICK #1-+ PUT%%EL ROT 1GETLAM #+ NextInArray 3DROP ROT #1-ROT * 924E8
-          1GETLAM #-#1- ;                        * 9251A
+          12GETLAM EVAL 4ROLL #1- DUP#0= UNTIL DROP ROTDROPROTDROP 5PICK * 92489
+          BINT1 1GETLAM ZERO_DO SWAPROT 3PICK BINT1 8PICK OBJ_7C861 ROTSWAP * 924B6
+          4PICK 8PICK #1-+ PUT%%EL ROT 1GETLAM #+ NextInArray 3DROP ROT * 924E3
+          #1-ROT 1GETLAM #-#1- ;                 * 92515
 
 * ROMPTR 0C2 017
 * refs (1): 90007
@@ -395,10 +395,10 @@ EGV~1~1~1:
                 OBJ_7D0CB BINT2 PULL%%EL SWAPONE PULL%%EL SWAPDROP ; * 928EE
               ABND ROTSWAP 6PICK PUT%%EL SWAP 5PICK #1+ PUT%%EL BINT2 ; * 92911
             12GETLAM EVAL 4ROLL #1- DUP#0= UNTIL DROP ; * 92943
-          OBJ_37B03 5PICK BINT1 1GETLAM ZERO_DO SWAPROT 3PICK BINT1 8PICK * 9296B
-          #1+ OBJ_7C861 ROTOVER 5PICK BINT9 PICK #1-+ PUT%%EL SWAP L%CONJ * 92998
-          4PICK 8PICK #+ PUT%%EL ROT 1GETLAM #+ NextInArray 3DROP ROT #1-ROT * 929CA
-          1GETLAM #-#1- ;                        * 92A01
+          ROTDROPROTDROP 5PICK BINT1 1GETLAM ZERO_DO SWAPROT 3PICK BINT1 * 9296B
+          8PICK #1+ OBJ_7C861 ROTOVER 5PICK BINT9 PICK #1-+ PUT%%EL SWAP * 92993
+          L%CONJ 4PICK 8PICK #+ PUT%%EL ROT 1GETLAM #+ NextInArray 3DROP ROT * 929C5
+          #1-ROT 1GETLAM #-#1- ;                 * 929FC
 
 * ROMPTR 0C2 019
 * refs (1): 90007
@@ -440,15 +440,15 @@ ROMP_0C2_01B:
 * refs (1): 90007
 ROMP_0C2_01C:
         :: 3PICK #1- 1GETLAM #1+ #* DUPUNROT 4GETLAM BINT5 #= ITE * 92D36
-          :: PULL%%EL OBJ_37C98 SWAP3PICK 1GETLAM #-#1- DUP#0= ITE DROPSWAP * 92D6D
-            :: PULL%%EL OBJ_37C98 ROT %%+ ;      * 92D9A
+          :: PULL%%EL B%ABS1 SWAP3PICK 1GETLAM #-#1- DUP#0= ITE DROPSWAP * 92D6D
+            :: PULL%%EL B%ABS1 ROT %%+ ;         * 92D9A
             SWAP BINT0 4PUTLAM ;                 * 92DB8
           :: #1+ PULL%%EL SWAP3PICK PULL%%EL SWAP 4PICK 1GETLAM #1-- * 92DCC
             PULL%%EL ROT C%%C*C DUP C%%0= ITE DROP * 92DF9
             :: SWAP 4PICK 1GETLAM #- PULL%%EL 4PICK C%%C-C %%.5 C%%C*R * 92E1C
               DUPDUP C%%C*C 4PICK C%%C+C         * 92E4E
               :: DUP C%%0= ?SEMI                 * 92E62
-                C%%>%% 2DUP%%R 3PICK %%ABS %%+ OBJ_37B30 %%SQRT DUPDUP %%+ * 92E76
+                C%%>%% 2DUP%%R 3PICK %%ABS %%+ %%/2 %%SQRT DUPDUP %%+ * 92E76
                 ROTSWAP %%/ ROT %%0>= case %%>C%% * 92EA3
                 DUP %%ABS 3UNROLL OBJ_36BD5 %%>C%% ; * 92EC1
               OVER C%%>%% 3PICK C%%>%% ROT %%*UNROT %%+* %%0>= ?SKIP C%%CHS * 92EDF
@@ -456,9 +456,9 @@ ROMP_0C2_01C:
           ;                                      * 92F34
           5PICK 4ROLL BEGIN CkATTNQUIT SWAP#1-SWAP ROTOVER 1GETLAM #- * 92F39
           PULL%%EL SWAP3PICK #1+ PULL%%EL SWAP 4PICK PULL%%EL 4PICK 8PICK * 92F61
-          L%- OVER OBJ_37C98 OVER OBJ_37C98 %%+ DUPUNROT L%/ 15PUTLAM L%/ * 92F8E
-          16PUTLAM 5ROLL 7PICK OVER#=case        * 92FC0
+          L%- OVER B%ABS1 OVER B%ABS1 %%+ DUPUNROT L%/ 15PUTLAM L%/ 16PUTLAM * 92F8E
+          5ROLL 7PICK OVER#=case                 * 92FC5
           :: RDROP DROP 5UNROLL 4DROP OVER ;     * 92FD4
-          5ROLL 1GETLAM #-#1- 5ROLL OBJ_37C98 5ROLL OBJ_37C98 %%+ 15GETLAM * 92FF7
-          OBJ_37C98 %%* %%1E-13 %%* 4ROLL 3PICK PULL%%EL 16GETLAM L%* B%ABS * 93024
-          SWAP 5UNROLL %%>= UNTIL DROP ROTDROP ; * 93056
+          5ROLL 1GETLAM #-#1- 5ROLL B%ABS1 5ROLL B%ABS1 %%+ 15GETLAM B%ABS1 * 92FF7
+          %%* %%1E-13 %%* 4ROLL 3PICK PULL%%EL 16GETLAM L%* B%ABS SWAP * 93029
+          5UNROLL %%>= UNTIL DROP ROTDROP ;      * 9305B

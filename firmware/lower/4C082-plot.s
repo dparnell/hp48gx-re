@@ -1,6 +1,6 @@
 * HP 48GX ROM revision R, #4C082-#4F0AB: Plotting
 * Addresses in the right-hand comments are those of the original ROM.
-* Most referenced: CHECKMENU CROSS_OFF CROSS_HAIRS EXITFCNsto NEWINDEP CROSSMARKON TURNMENUOFF DROPDEADTRUE GDISPCENTER CURRENTMARK? PutOnPict(2s,go) ExitFcn
+* Most referenced: CHECKMENU CROSS_OFF CROSS_HAIRS PPAR>ZPAR EXITFCNsto NEWINDEP CROSSMARKOFF CROSSMARKON TURNMENUOFF DROPDEADTRUE GDISPCENTER CURRENTMARK?
 * Follows on from the previous file (at #4C082 in the original ROM).
         RPL
 
@@ -141,7 +141,7 @@ OBJ_4C4B8:
 * refs (1): 4C4C2
 OBJ_4C55D:
         :: RclDepnd DUPTYPELIST? ITE             * 4C55D
-          :: INCOMPDROP SWAP DUPTYPEARRY? IT OBJ_56B87 * 4C571
+          :: INCOMPDROP SWAP DUPTYPEARRY? IT DROP%0b * 4C571
             sort(2r) ;                           * 4C58F
 
 RclYminYmax:
@@ -411,12 +411,12 @@ NUMSOLVE~38:
             SWAP DUP#<7 case2drpfls BINT11       * 4D30D
             #=casedrop                           * 4D321
             :: BINT3 ?CaseKeyDef                 * 4D326
-              :: TakeOver OBJ_73602 caseDoBadKey OBJ_735EE * 4D335
+              :: TakeOver TraceMode? caseDoBadKey OBJ_735EE * 4D335
                 caseDoBadKey WINDOWTOP?          * 4D34E
                 IT JUMPTOP                       * 4D358
                 BINT7 TOPROW OBJ_47021 ;         * 4D362
               BINT2 ?CaseKeyDef DoBadKey DROP'   * 4D376
-              :: TakeOver OBJ_73602 case         * 4D38A
+              :: TakeOver TraceMode? case        * 4D38A
                 :: BINT3 OBJ_735CB ;             * 4D39E
                 OBJ_5102B OBJ_4BF5D OBJ_735EE case * 4D3B2
                 :: OBJ_46E28 BINT11 OBJ_48238 ;  * 4D3C6
@@ -429,13 +429,13 @@ NUMSOLVE~38:
               TRUE ;                             * 4D43E
             BINT16 #=casedrop                    * 4D448
             :: BINT3 ?CaseKeyDef                 * 4D452
-              :: TakeOver OBJ_73602 caseDoBadKey OBJ_735EE * 4D461
+              :: TakeOver TraceMode? caseDoBadKey OBJ_735EE * 4D461
                 caseDoBadKey WINDOWLEFT?         * 4D47A
                 IT JUMPLEFT                      * 4D484
                 LEFTCOL OBJ_4728B ;              * 4D48E
               BINT2 ?CaseKeyDef                  * 4D49D
               :: EXITFCNsto OBJ_4CE83 ; DROP'    * 4D4A7
-              :: TakeOver OBJ_73602 case OBJ_736AC * 4D4C0
+              :: TakeOver TraceMode? case OBJ_736AC * 4D4C0
                 OBJ_5102B OBJ_0C811 OBJ_735EE case * 4D4D9
                 :: OBJ_46E28 BINT16 OBJ_4881E ;  * 4D4ED
                 OBJ_7361B case                   * 4D506
@@ -444,12 +444,12 @@ NUMSOLVE~38:
               TRUE ;                             * 4D53D
             BINT18 #=casedrop                    * 4D547
             :: BINT3 ?CaseKeyDef                 * 4D551
-              :: TakeOver OBJ_73602 caseDoBadKey OBJ_735EE * 4D560
+              :: TakeOver TraceMode? caseDoBadKey OBJ_735EE * 4D560
                 caseDoBadKey WINDOWRIGHT?        * 4D579
                 IT JUMPRIGHT                     * 4D583
                 RIGHTCOL OBJ_4728B ;             * 4D58D
               BINT2 ?CaseKeyDef DoBadKey DROP'   * 4D59C
-              :: TakeOver OBJ_73602 case OBJ_736F7 * 4D5B0
+              :: TakeOver TraceMode? case OBJ_736F7 * 4D5B0
                 OBJ_5102B OBJ_0C811 OBJ_735EE case * 4D5C9
                 :: OBJ_46E28 BINT18 OBJ_4842C ;  * 4D5DD
                 OBJ_7361B case                   * 4D5F6
@@ -458,12 +458,12 @@ NUMSOLVE~38:
               TRUE ;                             * 4D62D
             BINT17 #=casedrop                    * 4D637
             :: BINT3 ?CaseKeyDef                 * 4D641
-              :: TakeOver OBJ_73602 caseDoBadKey OBJ_735EE * 4D650
+              :: TakeOver TraceMode? caseDoBadKey OBJ_735EE * 4D650
                 caseDoBadKey WINDOWBOT?          * 4D669
                 IT JUMPBOT                       * 4D673
                 BINT7 BOTROW OBJ_47021 ;         * 4D67D
               BINT2 ?CaseKeyDef OBJ_48873 DROP'  * 4D691
-              :: TakeOver OBJ_73602 case         * 4D6A5
+              :: TakeOver TraceMode? case        * 4D6A5
                 :: BINT4 OBJ_735CB ;             * 4D6B9
                 OBJ_5102B OBJ_4BF5D OBJ_735EE case * 4D6CD
                 :: OBJ_46E28 BINT17 OBJ_481D9 ;  * 4D6E1
@@ -601,6 +601,7 @@ OBJ_4DC76:
           2DUP#< ?SWAP #- #<3 SWAP 8GETLAM 2DUP#< ?SWAP #- #<3 AND ; * 4DC8A
 
 * refs (14): 46DFB 46E14 46EAF 46F54 46FFE 481DE ...
+* Probably: write 4 to TIMER1, shortening the wait before the next key repeat
 OBJ_4DCC6:
         CON(5)  (*)+5                            * 4DCC6  primitive code object
         ASSEMBLE
@@ -972,7 +973,7 @@ PREMARKON:
 NEWMARK:
         :: OBJ_517B2 2DUP TOTEMPOB 12PUTLAM TOTEMPOB 1PUTLAM OBJ_4E0BA * 4E4B0
           4GETLAM DUP 11PUTLAM GROBDIM 4PICK#+SWAP 3PICK#+ HARDBUFF 5UNROLL * 4E4D8
-          SUBGROB 4PUTLAM OBJ_4E6C7 CROSSMARKON ; * 4E500
+          SUBGROB 4PUTLAM CROSSMARKOFF CROSSMARKON ; * 4E500
 
 * refs (2): 4E64F 4ECC1
 OBJ_4E519:
@@ -981,7 +982,7 @@ OBJ_4E519:
 
 * refs (1): 3E85C
 \BOX:
-        :: CHECKMENU OBJ_4579E OBJ_4E6C7 OBJ_517B2 DRAWBOX# CROSSMARKON ; * 4E55A
+        :: CHECKMENU OBJ_4579E CROSSMARKOFF OBJ_517B2 DRAWBOX# CROSSMARKON ; * 4E55A
 
 * #x1 #y1 #x2 #y2 ->
 * refs (3): 4E573 4F67E 4F697
@@ -992,17 +993,18 @@ DRAWBOX#:
 
 * refs (1): 3E881
 \CIRCLE:
-        :: CHECKMENU OBJ_4579E OBJ_4E6C7 FALSE 3UNROLL UNCOERCE2 OBJ_517B2 * 4E5E6
-          UNCOERCE2 2DUP 6ROLL 6ROLL OBJ_4FE6C CROSSMARKON ; * 4E60E
+        :: CHECKMENU OBJ_4579E CROSSMARKOFF FALSE 3UNROLL UNCOERCE2 * 4E5E6
+          OBJ_517B2 UNCOERCE2 2DUP 6ROLL 6ROLL OBJ_4FE6C CROSSMARKON ; * 4E609
 
 * refs (1): 3E834
 \LINE:
-        :: CHECKMENU OBJ_4579E OBJ_4E6C7 OBJ_517B2 DRAWLINE#3 OBJ_4E519 * 4E631
+        :: CHECKMENU OBJ_4579E CROSSMARKOFF OBJ_517B2 DRAWLINE#3 OBJ_4E519 * 4E631
           CROSS_HAIRS \MARK ;                    * 4E654
 
 * refs (1): 3E848
 \TLINE:
-        :: CHECKMENU OBJ_4579E OBJ_4E6C7 OBJ_517B2 TOGGLELINE#3 CROSSMARKON ; * 4E663
+        :: CHECKMENU OBJ_4579E CROSSMARKOFF OBJ_517B2 TOGGLELINE#3 * 4E663
+          CROSSMARKON ;                          * 4E681
 
 * refs (2): 46CAC 4702B
 OBJ_4E68B:
@@ -1015,7 +1017,8 @@ CHECKMENU~2:
         NIBHEX  00000                            * 4E6C2  ..
 
 * refs (15): 4568B 45708 45776 477C7 4E50A 4E569 ...
-OBJ_4E6C7:
+* -> : take the crosshair and the mark off PICT (the inverse of CROSSMARKON)
+CROSSMARKOFF:
         :: CROSS_OFF CURRENTMARK? IT PREMARKON   * 4E6C7
         ;                                        * 4E6E0
 
@@ -1034,7 +1037,7 @@ sub(go,<0>,<0>,<83>,<8>):
 
 * refs (1): 47F27
 OBJ_4E753:
-        :: CHECKMENU OBJ_4EEBF RECORDX&YC% centr(c) OBJ_4DAA3 ; * 4E753
+        :: CHECKMENU PPAR>ZPAR RECORDX&YC% centr(c) OBJ_4DAA3 ; * 4E753
 
 Z-BOX:
         :: CHECKMENU LookForEQ/äDAT OBJ_4579E EQCURSOR? case2drop DoBadKey * 4E776
@@ -1052,7 +1055,7 @@ OBJ_4E799:
 
 * refs (1): 3E7DE
 {GRAPH\LABEL}~1:
-        :: CHECKMENU OBJ_4E6C7 label! CROSSMARKON ; * 4E861
+        :: CHECKMENU CROSSMARKOFF label! CROSSMARKON ; * 4E861
         BSS     10                               * 4E87F
 
 * refs (1): 1E2DF
@@ -1115,12 +1118,12 @@ label~2~1:
 
 * refs (2): 45762 4D81C
 OBJ_4EBD1:
-        :: TakeOver OBJ_4579E GBUFF 3UNROLL OBJ_4E6C7 OBJ_517B2 ORDERXY# * 4EBD1
+        :: TakeOver OBJ_4579E GBUFF 3UNROLL CROSSMARKOFF OBJ_517B2 ORDERXY# * 4EBD1
           SWAP#1+SWAP #1+ GROB!ZERODRP CROSSMARKON ; * 4EBF9
 
 * refs (1): 73AF8
 OBJ_4EC12:
-        :: OBJ_73602 NOTcase RECORDX&YC%         * 4EC12
+        :: TraceMode? NOTcase RECORDX&YC%        * 4EC12
           OBJ_456E5 BINT5 NTHELCOMP case EVAL    * 4EC26
           RECORDX&YC% ;                          * 4EC3F
 
@@ -1150,7 +1153,7 @@ Warning201:
 
 Warning202:
           :: # 202 OBJ_6BC2D ;                   * 4ED20
-          CK1NOLASTWD OBJ_4E6C7 GBUFF SWAP OBJ_517B2 CKGROBFITS 4ROLL * 4ED39
+          CK1NOLASTWD CROSSMARKOFF GBUFF SWAP OBJ_517B2 CKGROBFITS 4ROLL * 4ED39
           3UNROLL GROB! CROSSMARKON ;            * 4ED5C
 
 * refs (1): 4BB2F
@@ -1183,7 +1186,8 @@ OBJ_4EEA1:
         :: OBJ_456E5 BINT1 NTHCOMPDROP EVAL ;    * 4EEA1
 
 * refs (16): 0C9B3 47ACE 47AF1 47BD7 47C2C 47FFE ...
-OBJ_4EEBF:
+* -> : save PPAR in ZPAR (with its zoom factors, or 4 4 0) so a zoom can be undone
+PPAR>ZPAR:
         :: OBJ_496A0 ITE DROP                    * 4EEBF
           :: %4 %4 %0_2A2B4 ;                    * 4EED3
           'IDPAR OBJ_4735A ?SKIP MAKEPVARS       * 4EEEC

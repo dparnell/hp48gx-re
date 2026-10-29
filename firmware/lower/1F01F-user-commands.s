@@ -1,6 +1,6 @@
 * HP 48GX ROM revision R, #1F01F-#22004: User commands
 * Addresses in the right-hand comments are those of the original ROM.
-* Most referenced: xFCNAPPLY xWHERE XEQRCL xPURGE xSTEQ xDUP xDROP ChkExpr1Name xLINFIT xSWAP ä dup;r?:dq/sk
+* Most referenced: xFCNAPPLY xWHERE 'REvalSto XEQRCL xPURGE xSTEQ xDUP xDROP ChkExpr1Name xLINFIT xSWAP ä
 * Follows on from the previous file (at #1F01F in the original ROM).
         NIBHEX  0FDD7                            * 1F01F  ðÝ
         RPL
@@ -1115,11 +1115,11 @@ xSINV:
 * refs (1): 202DD
 sinv(gn):
         :: dup;RclInVars(nm) dARRYcase sinv(gn)~1 * 202F1
-          OBJ_204FF xINV ;                       * 20305
+          'REvalSto xINV ;                       * 20305
 
 * refs (1): 202E7
 sinv(ln):
-        :: dup;RclInVars(nm) OBJ_204FF xINV ;    * 20314
+        :: dup;RclInVars(nm) 'REvalSto xINV ;    * 20314
 
 * refs (1): 20300
 sinv(gn)~1:
@@ -1140,11 +1140,11 @@ xSNEG:
 * refs (1): 2035C
 sneg(gn):
         :: dup;RclInVars(nm) dARRYcase sneg(gn)~1 * 20370
-          OBJ_204FF xNEG ;                       * 20384
+          'REvalSto xNEG ;                       * 20384
 
 * refs (1): 20366
 sneg(ln):
-        :: dup;RclInVars(nm) OBJ_204FF xNEG ;    * 20393
+        :: dup;RclInVars(nm) 'REvalSto xNEG ;    * 20393
 
 * refs (1): 2037F
 sneg(gn)~1:
@@ -1165,11 +1165,11 @@ xSCONJ:
 * refs (1): 203DB
 sconj(gn):
         :: dup;RclInVars(nm) dARRYcase sconj(gn)~1 * 203EF
-          OBJ_204FF xCONJ ;                      * 20403
+          'REvalSto xCONJ ;                      * 20403
 
 * refs (1): 203E5
 sconj(ln):
-        :: dup;RclInVars(nm) OBJ_204FF xCONJ ;   * 20412
+        :: dup;RclInVars(nm) 'REvalSto xCONJ ;   * 20412
 
 * refs (1): 203FE
 sconj(gn)~1:
@@ -1197,7 +1197,7 @@ sto+(_,nm):
 sto+(nm,_)~1:
           # 644 OBJ_20518                        * 20496  name array array
           BINT0                                  * 204A5  any
-          :: OBJ_204FF x+ ;                      * 204AA
+          :: 'REvalSto x+ ;                      * 204AA
         ;                                        * 204BE
 
 * refs (2): 2046E 20478
@@ -1205,11 +1205,12 @@ sto+(nm,_):
         :: over;RclInVars(nm) CK&DISPATCH1       * 204C3
           sto+(nm,_)~1 OBJ_20518                 * 204D2  name array array
           BINT0                                  * 204DC  any
-          :: SWAP OBJ_204FF x+ ;                 * 204E1
+          :: SWAP 'REvalSto x+ ;                 * 204E1
         ;                                        * 204FA
 
 * refs (20): 20305 2031E 20384 2039D 20403 2041C ...
-OBJ_204FF:
+* name args -> : evaluate the next runstream object on the arguments and store the result in name (STO+, SINV, ...)
+'REvalSto:
         :: 'R EvalNoCK sto(nm,_) ;               * 204FF
 
 * refs (2): 204A0 204D7
@@ -1234,11 +1235,11 @@ xSTO-:
 
 * refs (2): 20551 2055B
 sto-(_,nm):
-        :: dup;RclInVars(nm) ROTSWAP OBJ_204FF x- ; * 20583
+        :: dup;RclInVars(nm) ROTSWAP 'REvalSto x- ; * 20583
 
 * refs (2): 2056F 20579
 sto-(nm,_):
-        :: over;RclInVars(nm) SWAP OBJ_204FF x- ; * 205A1
+        :: over;RclInVars(nm) SWAP 'REvalSto x- ; * 205A1
 
 * refs (1): 20547
 sto-(ar,gn):
@@ -1268,16 +1269,16 @@ xSTO/:
 
 * refs (2): 20639 20643
 sto/(_,nm):
-        :: dup;RclInVars(nm) ROTSWAP OBJ_204FF x/ ; * 2066B
+        :: dup;RclInVars(nm) ROTSWAP 'REvalSto x/ ; * 2066B
 
 * refs (2): 20657 20661
 sto/(nm,_):
-        :: over;RclInVars(nm) SWAP OBJ_204FF x/ ; * 20689
+        :: over;RclInVars(nm) SWAP 'REvalSto x/ ; * 20689
 
 * refs (2): 2061B 20625
 sto/(gn,nb):
         :: over;RclInVars(nm) dARRYcase sto/(gn,nb)~1 * 206A7
-          SWAP OBJ_204FF x/ ;                    * 206BB
+          SWAP 'REvalSto x/ ;                    * 206BB
 
 * refs (1): 206B6
 sto/(gn,nb)~1:
@@ -1286,7 +1287,7 @@ sto/(gn,nb)~1:
 * refs (1): 2062F
 xSTO/~array,name:
         :: dup;RclInVars(nm) ROTSWAP dARRYcase xSTO/~array,name~1 * 206E8
-          OBJ_204FF x/ ;                         * 20701
+          'REvalSto x/ ;                         * 20701
 
 * refs (1): 206FC
 xSTO/~array,name~1:
@@ -1318,21 +1319,21 @@ xSTO*:
 
 * refs (2): 20794 2079E
 sto*(_,nm):
-        :: dup;RclInVars(nm) ROTSWAP OBJ_204FF x* ; * 207C6
+        :: dup;RclInVars(nm) ROTSWAP 'REvalSto x* ; * 207C6
 
 * refs (2): 207B2 207BC
 sto*(nm,_):
-        :: over;RclInVars(nm) SWAP OBJ_204FF x* ; * 207E4
+        :: over;RclInVars(nm) SWAP 'REvalSto x* ; * 207E4
 
 * refs (2): 20762 2076C
 sto*(nb,gn):
         :: dup;RclInVars(nm) ROTSWAP dARRYcase OBJ_20852 * 20802
-          OBJ_204FF x* ;                         * 2081B
+          'REvalSto x* ;                         * 2081B
 
 * refs (2): 20776 20780
 sto*(gn,nb):
         :: over;RclInVars(nm) dARRYcase OBJ_20852 * 2082A
-          SWAP OBJ_204FF x* ;                    * 2083E
+          SWAP 'REvalSto x* ;                    * 2083E
 
 * refs (2): 20816 20839
 OBJ_20852:
@@ -1341,7 +1342,7 @@ OBJ_20852:
 * refs (1): 2078A
 sto*(ar,nm):
         :: dup;RclInVars(nm) ROTSWAP dARRYcase sto*(ar,nm)~1 * 2086B
-          OBJ_204FF x* ;                         * 20884
+          'REvalSto x* ;                         * 20884
 
 * refs (1): 2087F
 sto*(ar,nm)~1:
@@ -1350,7 +1351,7 @@ sto*(ar,nm)~1:
 * refs (1): 207A8
 sto*(nm,ar):
         :: over;RclInVars(nm) dARRYcase sto*(nm,ar)~1 * 208AC
-          SWAP OBJ_204FF x* ;                    * 208C0
+          SWAP 'REvalSto x* ;                    * 208C0
 
 * refs (1): 208BB
 sto*(nm,ar)~1:

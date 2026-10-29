@@ -58,7 +58,7 @@ OBJ_6F595:
         :: TakeOver OBJ_461CD                    * 6F595
 
 * refs (1): 69ECA
-OBJ_6F5A4:
+EqwRuleKey0~1~2:
           :: 'EL NOTcase                         * 6F5A4
 
 * refs (1): 6ACDF
@@ -78,7 +78,7 @@ OBJ_6F608:
 
 * refs (6): 461A0 6F6F3 6F824 6F86F 6F93C 6F96E
 OBJ_6F621:
-        :: 3PICK OBJ_678DB OBJ_679D7 4UNROLL ROTOVER 4PICK OBJ_6F9D2 * 6F621
+        :: 3PICK EqwBoxParent@ OBJ_679D7 4UNROLL ROTOVER 4PICK OBJ_6F9D2 * 6F621
           NOTcase2drop 2DROPFALSE                * 6F649
           SWAPDROP BEGIN OBJ_679EA OVER OBJ_67B17 #0<> AND NOT_WHILE * 6F653
           :: OBJ_679EA ITE                       * 6F67B

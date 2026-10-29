@@ -197,7 +197,7 @@ pub(crate) fn UMTAN_1(r: &mut Run) {
     loop {
         match at {
             0x10E13..=0x10E13 => {
-                branch!(r, at, 0x10E1A, 9, r.cpu.call(0x2A060)); // GOSBVL SUB_2A060
+                branch!(r, at, 0x10E1A, 9, r.cpu.call(0x2A060)); // GOSBVL POP1%%
             }
             // #10E1A:
             0x10E1A..=0x10E20 => {
@@ -14590,7 +14590,7 @@ pub(crate) fn wait(r: &mut Run) {
 }
 
 // -> hxs
-// RCLSYSF: firmware/lower/1C017-user-commands.s:425
+// RCLSYSF: firmware/lower/1C017-user-commands.s:424
 pub(crate) fn RCLSYSF(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -14612,7 +14612,7 @@ pub(crate) fn RCLSYSF(r: &mut Run) {
 }
 
 // -> hxs
-// RCLUSERF: firmware/lower/1C017-user-commands.s:434
+// RCLUSERF: firmware/lower/1C017-user-commands.s:433
 pub(crate) fn RCLUSERF(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -14646,7 +14646,7 @@ pub(crate) fn RCLUSERF(r: &mut Run) {
 }
 
 // hxs ->
-// STOUSERF: firmware/lower/1C017-user-commands.s:479
+// STOUSERF: firmware/lower/1C017-user-commands.s:478
 pub(crate) fn STOUSERF(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -14677,7 +14677,7 @@ pub(crate) fn STOUSERF(r: &mut Run) {
 }
 
 // hxs ->
-// STOSYSF: firmware/lower/1C017-user-commands.s:500
+// STOSYSF: firmware/lower/1C017-user-commands.s:499
 pub(crate) fn STOSYSF(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {

@@ -2410,7 +2410,7 @@ L_77E84:
 
 * refs (1): 2C10D
 utpn(3r)~1:
-        GOSBVL  SUB_2A060                        * 77EA8
+        GOSBVL  POP1%%                           * 77EA8
         D0=(5)  IRAMBUFF                         * 77EAF
         GOLONG  PUTAB0~jump                      * 77EB6
 

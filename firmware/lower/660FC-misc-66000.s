@@ -1,6 +1,6 @@
 * HP 48GX ROM revision R, #660FC-#69141: not yet identified
 * Addresses in the right-hand comments are those of the original ROM.
-* Most referenced: EqwBoxCount EqwPOP#>Box drop;false;true_680B4 SmallCursor MediumCursor BigCursor Code_67005
+* Most referenced: EqwBoxCount EqwPOP#>Box EqwNewBox EqwBoxCount#2+ EqwBoxParent@ EqwBoxCount#3+ #3* EqwBoxCount#1+ drop;false;true_680B4 SmallCursor MediumCursor BigCursor
 * Follows on from the previous file (at #660FC in the original ROM).
         RPL
 
@@ -20,21 +20,21 @@ OBJ_661A6:
         :: SKIP OBJ_66331 OBJ_6FD85              * 661A6
           :: OBJ_6DFDE OBJ_67416 OBJ_6F42D OBJ_44DFE ; OBJ_6FDB6 OBJ_66255 * 661BA
           OBJ_6FDC6 OBJ_662B9 BINT8 OBJ_6E433 OBJ_6E00B OBJ_67E0C OBJ_65D14 * 661E2
-          OBJ_679AE DUP OBJ_6733B OBJ_67BE2 BINT0 3PICK BINT9 BINT7 * 66205
+          OBJ_679AE DUP EqwBoxCount#1+ OBJ_67BE2 BINT0 3PICK BINT9 BINT7 * 66205
           OBJ_6DD2D OBJ_682D2 EqwBoxCount OBJ_67BFC EqwBoxCount OBJ_67448 * 6622D
           OBJ_6E4F6 ;                            * 6624B
 
 * refs (1): 661DD
 OBJ_66255:
-        :: OBJ_6E1C7 DUP tok= OBJ_6CB70 OBJ_68245 DUPZERO OVER OBJ_678DB * 66255
-          BINT5 OBJ_6DAE9 EqwBoxCount OVER OBJ_678DB OVER OBJ_67BFC DUPUNROT * 66282
-          OBJ_67BE2 OBJ_67448 ;                  * 662AA
+        :: OBJ_6E1C7 DUP tok= OBJ_6CB70 OBJ_68245 DUPZERO OVER EqwBoxParent@ * 66255
+          BINT5 OBJ_6DAE9 EqwBoxCount OVER EqwBoxParent@ OVER OBJ_67BFC * 66282
+          DUPUNROT OBJ_67BE2 OBJ_67448 ;         * 662A5
 
 * refs (1): 661E7
 OBJ_662B9:
         :: OBJ_67E0C OBJ_679B3 OBJ_679B3 DUPZERO OBJ_67C3C Push3Zeros 4PICK * 662B9
-          #1+ OBJ_678D6 BINT7 BINT6 OBJ_6DD2D OBJ_682DE EqwBoxCount SWAPDUP * 662E1
-          OBJ_678DB 3PICK OBJ_67BEF #1+ OVER OBJ_67BD5 OBJ_67448 ; * 66309
+          #1+ OBJ_678D6 BINT7 BINT6 OBJ_6DD2D EqwNewBox EqwBoxCount SWAPDUP * 662E1
+          EqwBoxParent@ 3PICK OBJ_67BEF #1+ OVER OBJ_67BD5 OBJ_67448 ; * 66309
 
 * refs (1): 661B0
 OBJ_66331:
@@ -44,19 +44,21 @@ OBJ_66331:
           :: OBJ_67E64 OBJ_679B3 DUP#1+ DUPUNROT OBJ_67BEF DUP#1+ SWAP * 6637C
             OBJ_67BD5 ;                          * 663A4
           SWAPDROP #5= NOT?SEMI                  * 663AE
-          OBJ_6E1C7 OBJ_6D523 OBJ_678D6 OVER OBJ_67BFC OBJ_6E057 OBJ_65EC7 ; * 663BD
+          OBJ_6E1C7 OBJ_6D523 OBJ_678D6 OVER OBJ_67BFC EqwFontHeight * 663BD
+          OBJ_65EC7 ;                            * 663DB
 
 * refs (1): 1B233
 OBJ_663E5:
-        :: SKIP OBJ_6656B OBJ_67356 OBJ_6733B OBJ_6CFB5 SWAPDROP OBJ_6E0D2 * 663E5
-          #+ #6+ SWAP #2+ OBJ_6C873 #1+ OBJ_6D8DC EqwBoxCount #5+ DUPZERO * 6640D
-          OBJ_67348 OBJ_67416 OBJ_6D39D OBJ_6E0D2 OBJ_6E0C0 OBJ_6C873 #3+ * 6643F
-          OBJ_6D990 OBJ_682DE EqwBoxCount OBJ_67348 OBJ_67416 BINT1 BINT4 * 66462
-          BINT0 OBJ_6D779 BINT4 OBJ_6DC51 4ROLL #1+ 4UNROLL OBJ_682D2 * 66485
-          OBJ_67348 DUP EqwBoxCount BINT0 OBJ_67416 OBJ_6D39D OBJ_6D7DD * 664AD
-          OBJ_6D779 OBJ_6C873 #1+ OBJ_6D990 Push3Zeros BINT0 OBJ_6733B BINT0 * 664D0
-          #THREE#FOUR BINT2 OBJ_6D7DD OBJ_6DC51 OBJ_6DFDE ZEROZERO ZEROZERO * 664F8
-          OBJ_67364 OBJ_6D163 OBJ_6D4CE OBJ_6D5EB ; * 6651B
+        :: SKIP OBJ_6656B EqwBoxCount#3+ EqwBoxCount#1+ OBJ_6CFB5 SWAPDROP * 663E5
+          OBJ_6E0D2 #+ #6+ SWAP #2+ 2DUPHALF #1+ OBJ_6D8DC EqwBoxCount #5+ * 66408
+          DUPZERO EqwBoxCount#2+ OBJ_67416 OBJ_6D39D OBJ_6E0D2 OBJ_6E0C0 * 6643A
+          2DUPHALF #3+ OBJ_6D990 EqwNewBox EqwBoxCount EqwBoxCount#2+ * 66458
+          OBJ_67416 BINT1 BINT4 BINT0 OBJ_6D779 BINT4 OBJ_6DC51 4ROLL #1+ * 66476
+          4UNROLL OBJ_682D2 EqwBoxCount#2+ DUP EqwBoxCount BINT0 OBJ_67416 * 664A3
+          OBJ_6D39D OBJ_6D7DD OBJ_6D779 2DUPHALF #1+ OBJ_6D990 Push3Zeros * 664C6
+          BINT0 EqwBoxCount#1+ BINT0 #THREE#FOUR BINT2 OBJ_6D7DD OBJ_6DC51 * 664E9
+          OBJ_6DFDE ZEROZERO ZEROZERO OBJ_67364 OBJ_6D163 OBJ_6D4CE * 6650C
+          OBJ_6D5EB ;                            * 6652A
 
 * refs (1): 68439
 OBJ_66534:
@@ -177,7 +179,7 @@ L_6678A:
 
 * refs (8): 68E2C 68EE5 692F1 69A27 6A14F 6D546 ...
 OBJ_6681A:
-        :: BEGIN OBJ_678DB DUP#0= case drop;q_58A0C * 6681A
+        :: BEGIN EqwBoxParent@ DUP#0= case drop;q_58A0C * 6681A
           :: OBJ_679AE BEGIN OBJ_6689C           * 66838
 L_6684C:
             OBJ_6FEE1                            * 6684C
@@ -439,7 +441,7 @@ OBJ_66C2C:
 
 * refs (1): 6842F
 OBJ_66C4A:
-        :: OBJ_679AE OBJ_67ABC SWAP #2/ SWAPROT OBJ_678DB OBJ_679B3 * 66C4A
+        :: OBJ_679AE OBJ_67ABC SWAP #2/ SWAPROT EqwBoxParent@ OBJ_679B3 * 66C4A
           OBJ_67AE2 #+ #2- ;                     * 66C72
 
 * refs (1): 68434
@@ -837,7 +839,8 @@ OBJ_6731D:
         :: OBJ_67519 OBJ_6773D OBJ_673D6 #+ ;    * 6731D
 
 * refs (14): 65C22 65DD7 65DE1 65F0D 6620F 663F9 ...
-OBJ_6733B:
+* -> #n+1: boxes in use + 1, the index the next new box gets
+EqwBoxCount#1+:
         CON(5)  (*)+5                            * 6733B  primitive code object
         ASSEMBLE
         C=0     A                                * 67340
@@ -845,14 +848,16 @@ OBJ_6733B:
         GOTO    L_67388                          * 67344
 
 * refs (21): 65AA1 65AE2 65B78 65BB9 65BF0 66093 ...
-OBJ_67348:
+* -> #n+2
+EqwBoxCount#2+:
         CON(5)  (*)+5                            * 67348  primitive code object
         C=0     A                                * 6734D
         LC(1)   #2                               * 6734F
         GOTO    L_67388                          * 67352
 
 * refs (18): 65AEC 65FDF 6602A 66061 660A7 663F4 ...
-OBJ_67356:
+* -> #n+3
+EqwBoxCount#3+:
         CON(5)  (*)+5                            * 67356  primitive code object
         C=0     A                                * 6735B
         LC(1)   #3                               * 6735D
@@ -1105,7 +1110,7 @@ OBJ_67648:
         GOTO    L_6778D                          * 67661
 
 * refs (1): 69FEC
-OBJ_67665:
+EqwRuleKey0~1~3:
         CON(5)  (*)+5                            * 67665  primitive code object
         GOSBVL  SAVPTR                           * 6766A
         D0=(5)  PDCHXS                           * 67671
@@ -1303,7 +1308,8 @@ OBJ_678D6:
         CON(5)  DupAndThen                       * 678D6  code object: the address of its machine code
 
 * refs (20): 6627D 66296 66309 66824 66C68 6945E ...
-OBJ_678DB:
+* #box -> #parent: the box's parent link (field #1B), 0 at the root
+EqwBoxParent@:
         CON(5)  (*)+5                            * 678DB  primitive code object
         LC(2)   #1B                              * 678E0
 L_678E4:
@@ -1372,6 +1378,7 @@ OBJ_67987:
         CON(5)  DupAndThen                       * 67987  code object: the address of its machine code
 
 * refs (17): 65CD6 65CDB 65D1E 65D55 65EB3 65EB8 ...
+* Probably: EquationWriter: #box -> next-sibling link (field #1E)
 OBJ_6798C:
         CON(5)  (*)+5                            * 6798C  primitive code object
         ASSEMBLE
@@ -1384,6 +1391,7 @@ OBJ_6799C:
         CON(5)  DupAndThen                       * 6799C  code object: the address of its machine code
 
 * refs (15): 4B8FF 665A2 6661F 66642 66CC2 66CC7 ...
+* Probably: EquationWriter: #box -> previous-sibling link (field #21)
 OBJ_679A1:
         CON(5)  (*)+5                            * 679A1  primitive code object
         LC(2)   #21                              * 679A6
@@ -1394,6 +1402,7 @@ OBJ_679AE:
         CON(5)  DupAndThen                       * 679AE  code object: the address of its machine code
 
 * refs (23): 44D18 65D19 65DC8 66106 66129 6613D ...
+* Probably: EquationWriter: #box -> first-child link (field #24)
 OBJ_679B3:
         CON(5)  (*)+5                            * 679B3  primitive code object
         LC(2)   #24                              * 679B8
@@ -1404,6 +1413,7 @@ OBJ_679C0:
         CON(5)  DupAndThen                       * 679C0  code object: the address of its machine code
 
 * refs (14): 44D72 65CCC 65DB9 66552 665DE 66CA4 ...
+* Probably: EquationWriter: #box -> last-child link (field #27)
 OBJ_679C5:
         CON(5)  (*)+5                            * 679C5  primitive code object
         LC(2)   #27                              * 679CA
@@ -1441,7 +1451,7 @@ L_67A18:
         PC=(A)                                   * 67A1A
 
 * refs (1): 6A005
-OBJ_67A1E:
+EqwRuleKey0~1~4:
         CON(5)  (*)+5                            * 67A1E  primitive code object
         GOSUB   EqwPOP#>Box                      * 67A23
         D0=D0+  1                                * 67A27
@@ -1463,6 +1473,7 @@ SUB_67A3D:
 
 * refs (22): 668A1 66A0F 66B64 66BC9 678E7 679DC ...
 * POP# -> D0 at box n's fields (table at ITEM1STATE, 42 nibbles a box); the RPL IP saved in R2
+* EquationWriter box record, 42 nibbles, offsets from D0: +00 type; +01 size level (low); +02/+05 position y/x (low); +08 vertical reference (medium-low); +0B horizontal centre (medium); +0E height, +11 width (medium-high); +14/+16 size and placement handler indexes; +18 unknown; +1B parent (high); +1E/+21 next/previous sibling and +24/+27 first/last child (medium)
 EqwPOP#>Box:
         GOSBVL  POP#                             * 67A4A
 
@@ -1530,6 +1541,7 @@ OBJ_67AD5:
         GOTO    L_678E4                          * 67ADE
 
 * refs (19): 44C73 44D9F 6614C 66557 66679 66692 ...
+* Probably: EquationWriter: #box -> vertical reference (field #08)
 OBJ_67AE2:
         CON(5)  (*)+5                            * 67AE2  primitive code object
         LC(2)   #08                              * 67AE7
@@ -1629,6 +1641,7 @@ OBJ_67BD5:
         GOTO    L_67B70                          * 67BDE
 
 * refs (15): 65DE6 65E95 66214 662AA 66606 6A60E ...
+* Probably: EquationWriter: #box #box' -> , set the next-sibling link (field #1E)
 OBJ_67BE2:
         CON(5)  (*)+5                            * 67BE2  primitive code object
         LC(2)   #1E                              * 67BE7
@@ -1641,6 +1654,7 @@ OBJ_67BEF:
         GOTO    L_67B70                          * 67BF8
 
 * refs (17): 6623C 662A0 66368 663D1 665C0 66610 ...
+* Probably: EquationWriter: #box #child -> , set the last-child link (field #27)
 OBJ_67BFC:
         CON(5)  (*)+5                            * 67BFC  primitive code object
         LC(2)   #27                              * 67C01
@@ -2171,7 +2185,8 @@ L_68195:
         GOLONG  L_67907                          * 68197
 
 * refs (17): 19A57 65B9B 6604D 6C082 6D8C3 6DB3E ...
-OBJ_6819D:
+* #n -> #3n
+#3*:
         CON(5)  (*)+5                            * 6819D  primitive code object
         GOSBVL  POP#                             * 681A2
         C=A     A                                * 681A9
@@ -2271,8 +2286,8 @@ OBJ_682D2:
         GOTO    L_682E6                          * 682DA
 
 * refs (22): 65AD3 65B32 65B69 65BAF 65BDC 65D46 ...
-* Probably: EquationWriter: allocate a box record and fill it from 15 bints
-OBJ_682DE:
+* #27 #24 #21 #1E #1B #18 #b16 #b14 obj #11 #0E #0B #08 #05 #02 #type -> obj: take a free box record and fill it (fields by offset; see EqwPOP#>Box)
+EqwNewBox:
         CON(5)  (*)+5                            * 682DE  primitive code object
         ST=0    4                                * 682E3
 L_682E6:
@@ -2603,7 +2618,7 @@ OBJ_686C0:
 
 * refs (1): 6892C
 OBJ_686CF:
-          :: BEGIN ?ATTNQUIT OBJ_68701 AGAIN ; DROP 5UNROLL OBJ_2840F ; * 686CF
+          :: BEGIN ?ATTNQUIT OBJ_68701 AGAIN ; DROP 5UNROLL PutGNTData ; * 686CF
 
 * refs (1): 686DE
 OBJ_68701:
@@ -2617,7 +2632,7 @@ OBJ_68724:
           OBJ_68B3E casedrop                     * 6876F
           :: 2RDROP 5ROLL 6ROLL ;                * 68779
           ?SEMI                                  * 68792
-          DROPZERO OBJ_283F1 OBJ_25D03 case      * 68797
+          DROPZERO GetGNTData OBJ_25D03 case     * 68797
           :: case OBJ_68E45                      * 687AB
             COLA OBJ_687FB                       * 687BA
           ;                                      * 687C4
@@ -2640,7 +2655,7 @@ OBJ_687FB:
 * refs (2): 68747 68B20
 OBJ_68873:
         :: OBJ_69147 OBJ_27797 OBJ_69495 OBJ_28602 BEGIN OBJ_67DDF #0= WHILE * 68873
-          :: OBJ_283F1 DROP tokrparen DUP OBJ_6934B OBJ_2840F * 688A0
+          :: GetGNTData DROP tokrparen DUP OBJ_6934B PutGNTData * 688A0
 
 * refs (3): 68715 68B0C 69057
 OBJ_688C3:
@@ -2649,7 +2664,7 @@ OBJ_688C3:
 
 * refs (3): 6874C 6894A 68968
 OBJ_688EB:
-          :: OBJ_283F1 TrueTrue ;                * 688EB
+          :: GetGNTData TrueTrue ;               * 688EB
           OBJ_67F45 OBJ_69941 OBJ_672E6 #1= OBJ_67DDF BINT4 #= AND NOTcase * 688FF
           OBJ_686CF                              * 6892C
           OBJ_69594 OBJ_285EE OBJ_67DEC OBJ_69188 EQcasedrop OBJ_688EB * 68931
@@ -2760,7 +2775,7 @@ OBJ_68D9B:
 * refs (3): 687B5 687DD 68846
 OBJ_68E45:
         :: OBJ_69147                             * 68E45
-          :: OBJ_285EE OBJ_69824 8GETLAM OBJ_6D62A OBJ_2840F DROPDUP * 68E4F
+          :: OBJ_285EE OBJ_69824 8GETLAM OBJ_6D62A PutGNTData DROPDUP * 68E4F
             OBJ_676D4 OBJ_6DEAA ;                * 68E72
           6DROP OBJ_691E7 ;                      * 68E81
 
@@ -2793,7 +2808,7 @@ OBJ_69002:
 
 * refs (7): 6876A 68F67 6917E 6942C 69919 699E6 ...
 OBJ_69020:
-          :: OBJ_283F1 DROP GetNextToken OBJ_69824 OBJ_2840F ; * 69020
+          :: GetGNTData DROP GetNextToken OBJ_69824 PutGNTData ; * 69020
 
 * refs (1): 69061
 OBJ_69043:
@@ -2814,7 +2829,7 @@ OBJ_690C0:
                 INNERCOMP                        * 690F7
 
 * refs (1): 6A109
-OBJ_690FC:
+EqwRuleKey0~1~5:
                 :: ZERO_DO OBJ_68BE3 OBJ_676D4 LOOP ; ; * 690FC
             ;                                    * 6911F
             OBJ_67E0C OBJ_67448 OBJ_674BB ;      * 69124

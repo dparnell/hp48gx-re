@@ -1,6 +1,6 @@
 * HP 48GX ROM revision R, #69142-#6C185: not yet identified
 * Addresses in the right-hand comments are those of the original ROM.
-* Most referenced: SUB RULES REPL NOT_69250 EXPR EDIT
+* Most referenced: EqwRuleKey0 EqwRuleKey3 SUB RULES REPL NOT_69250 EXPR EDIT
 * Follows on from the previous file (at #69142 in the original ROM).
         RPL
 
@@ -26,22 +26,22 @@ OBJ_6918D:
 
 * refs (2): 68E86 68E9F
 OBJ_691E7:
-          :: OBJ_283F1 3PICK LEN$ 3PICK #> NOTcase * 691E7
-            :: 4UNROLL OBJ_6E645 DROP #1+ tok* OBJ_2840F tok* OBJ_6BF8D * 6920A
+          :: GetGNTData 3PICK LEN$ 3PICK #> NOTcase * 691E7
+            :: 4UNROLL OBJ_6E645 DROP #1+ tok* PutGNTData tok* OBJ_6BF8D * 6920A
               OBJ_686C0 OBJ_6C041 DROPDUP OBJ_6BF8D DUP * 69237
 
 NOT_69250:
               $ "NOT" EQUAL IT                   * 69250
               :: SPACE$ OBJ_6BF8D ;              * 6926A
-              OBJ_283F1 2DROP DUPLEN$ #1+ 4ROLL OBJ_2840F ; * 6927E
+              GetGNTData 2DROP DUPLEN$ #1+ 4ROLL PutGNTData ; * 6927E
             LEN$ #- DUP4UNROLL tok* DUP OBJ_6934B 2DROP ROT#1+ tok* * 692A1
-            OBJ_2840F ;                          * 692CE
+            PutGNTData ;                         * 692CE
           OBJ_6918D ID>$ OBJ_6D62A OBJ_6D0D7 OVER OBJ_6681A OBJ_67448 * 692D8
           #0590410h 4PUTLAM BINT0 7PUTLAM BINT3 3PUTLAM OBJ_68EEF ; * 692FB
 
 * refs (1): 68710
 OBJ_69323:
-        :: OBJ_283F1 5ROLL SWAP nultrior         * 69323
+        :: GetGNTData 5ROLL SWAP nultrior        * 69323
 
 * refs (1): 69404
 OBJ_6933C:
@@ -61,7 +61,7 @@ OBJ_693BE:
 
 * refs (1): 6939B
 OBJ_693CD:
-            :: OBJ_69824 OBJ_28602 OBJ_2840F OBJ_69941 ; ; * 693CD
+            :: OBJ_69824 OBJ_28602 PutGNTData OBJ_69941 ; ; * 693CD
           LEN$ ROTSWAP #-SWAP NULL$ OBJ_6933C ;  * 693F0
 
 * refs (2): 68B57 68B84
@@ -71,8 +71,9 @@ OBJ_6940E:
 * refs (1): 69490
 OBJ_69431:
           :: RDROP OBJ_67DDF #0=case             * 69431
-            :: OBJ_69495 OBJ_6E1A9 OBJ_674BB EqwBoxCount OBJ_678DB OBJ_678DB * 69445
-              OBJ_2846E #05060410h BINT0 BINT5 OBJ_67532 OBJ_28602 ; * 69468
+            :: OBJ_69495 OBJ_6E1A9 OBJ_674BB EqwBoxCount EqwBoxParent@ * 69445
+              EqwBoxParent@ OBJ_2846E #05060410h BINT0 BINT5 OBJ_67532 * 69463
+              OBJ_28602 ;                        * 69481
             OBJ_69098 OBJ_69431                  * 6948B
 
 * refs (7): 68882 68963 68D91 690CA 6944A 69883 ...
@@ -80,7 +81,7 @@ OBJ_69495:
             :: OBJ_6E9B0 ITE                     * 69495
               :: OBJ_67B17 OBJ_66BAD NOTcase OBJ_67416 * 694A4
                 OBJ_67E0C OBJ_679C5 OBJ_679EA IT * 694BD
-                :: OBJ_67B12 #0=case OBJ_678DB   * 694D1
+                :: OBJ_67B12 #0=case EqwBoxParent@ * 694D1
                   RDROP ;                        * 694E5
                 OBJ_694F9 ;                      * 694EF
 
@@ -240,7 +241,7 @@ L_69787:
 
 * refs (1): 6870B
 OBJ_6979D:
-        :: TRUE 18PUTLAM 8GETLAM nultrior OBJ_68724 DROP OBJ_283F1 * 6979D
+        :: TRUE 18PUTLAM 8GETLAM nultrior OBJ_68724 DROP GetGNTData * 6979D
           ngsizecase                             * 697C5
 
 * refs (3): 6880A 697E3 69810
@@ -255,7 +256,7 @@ OBJ_697CA:
 OBJ_69824:
           :: nultrior NOP OBJ_250EF NOP 3PICK LEN$ 3PICKSWAP #> NOT?SEMI * 69824
             LEN$ #- NULL$ ;                      * 69856
-          OBJ_2840F                              * 6986A
+          PutGNTData                             * 6986A
 
 * refs (1): 68BF7
 OBJ_6986F:
@@ -352,25 +353,26 @@ OBJ_69C3C:
           :: EXITFCNsto NOP ; FALSE 19PUTLAM COLA_EVAL ; * 69C3C
 
 * refs (24): 596CE 59718 59766 597B0 59836 59880 ...
-* Probably: EquationWriter RULES menu key: run the next runstream object as the rule
-OBJ_69C64:
+* EquationWriter RULES key: take the next runstream object as the rule ('ManOp), 'ploc = 0, and apply it
+EqwRuleKey0:
         :: TakeOver BINT0                        * 69C64
 
 * refs (1): 69CC0
-OBJ_69C73:
+EqwRuleKey3~1:
           ROMPTR 0EA 03C 'ploc SetDA3NoCh 'R ROMPTR 0EA 03C 'ManOp * 69C73
-          EXITFCNsto OBJ_69DE8 ;                 * 69C9D
+          EXITFCNsto EqwRuleKey0~1 ;             * 69C9D
 
 * refs (19): 59999 599B2 599E8 59A01 59A37 59A50 ...
-OBJ_69CAC:
-        :: TakeOver BINT3 GOTO OBJ_69C73 ;       * 69CAC
+* As EqwRuleKey0, with 'ploc = 3 (the move rules)
+EqwRuleKey3:
+        :: TakeOver BINT3 GOTO EqwRuleKey3~1 ;   * 69CAC
 
 * refs (3): 69E98 6ADF2 6B1F6
 OBJ_69CCA:
         :: OBJ_6B0E8 SYMBN 1PUTLAM OBJ_677DE OBJ_67416 1GETABND ZEROSWAP * 69CCA
 
 * refs (1): 6A014
-OBJ_69CF2:
+EqwRuleKey0~1~6:
           :: CLEARVDISP REDISPHBUFF NULL$ TRUE OBJ_6C550 ERRSET OBJ_677EA * 69CF2
             #2+PICK OBJ_67426 OBJ_6C4A1 ERRSET ROMPTR 0EA 005 ERRTRAP * 69D1A
             :: OBJ_6AE6F OBJ_6AE6F OBJ_6AE6F 3DROP OBJ_677DE OBJ_677EA * 69D3E
@@ -381,7 +383,7 @@ OBJ_69CF2:
           DUP 18PUTLAM OBJ_6AEA6 SWAPCOLA OBJ_69B49 ; * 69DCA
 
 * refs (1): 69CA2
-OBJ_69DE8:
+EqwRuleKey0~1:
         :: OBJ_6AF46 DUP 4PUTLAM DUP#2+PICK 5PUTLAM OBJ_0C4E3 #3+ NDUP * 69DE8
           OBJ_69EDE DUP 2PUTLAM DUP 4GETLAM #- 6PUTLAM DUP#2+PICK 7PUTLAM * 69E15
           OBJ_0C4E3 #3+ NDROP                    * 69E42
@@ -389,13 +391,13 @@ OBJ_69DE8:
             :: 'NOP ROMPTR 0EA 03C 'ManOp DoBadKey ; ; * 69E60
           3GETLAM #0<> case OBJ_69CCA            * 69E89
           'ManOp 'NOP EQ case                    * 69E9D
-          :: OBJ_6B0E8 NDROP OBJ_6AEA6 'LB OBJ_6F5A4 COLA OBJ_69B49 * 69EB1
+          :: OBJ_6B0E8 NDROP OBJ_6AEA6 'LB EqwRuleKey0~1~2 COLA OBJ_69B49 * 69EB1
           ;                                      * 69ED9
 
 * refs (1): 69E15
 OBJ_69EDE:
-          :: 'LB OBJ_6AC67 OBJ_6AC80 OBJ_6AEF1 IT OBJ_69F92 * 69EDE
-            OBJ_678DB #1= ?SEMI                  * 69F01
+          :: 'LB OBJ_6AC67 OBJ_6AC80 OBJ_6AEF1 IT EqwRuleKey0~1~1~4 * 69EDE
+            EqwBoxParent@ #1= ?SEMI              * 69F01
             rot DUP#0=case unrot                 * 69F10
             DUP#2+ BINT1 splitdown DROP #1- 1PUTLAM top& top& 1GETLAM * 69F1F
             tailpsh pZpargSWAPUn ;               * 69F4C
@@ -403,31 +405,32 @@ OBJ_69EDE:
           7PUTLAM DUP                            * 69F88
 
 * refs (2): 69EFC 6A3A2
-OBJ_69F92:
-          :: BEGIN OBJ_678DB OBJ_67B12 OBJ_6EE65 NOT_UNTIL ; DUP#1= ITE DROP * 69F92
-          SWAPDROP                               * 69FC4
+EqwRuleKey0~1~1~4:
+          :: BEGIN EqwBoxParent@ OBJ_67B12 OBJ_6EE65 NOT_UNTIL ; DUP#1= ITE * 69F92
+          DROP SWAPDROP                          * 69FBF
           OBJ_673E6 EqwBoxCount OBJ_67406 OBJ_673A2 OBJ_673F6 OBJ_681E8 * 69FC9
-          2GETLAM OBJ_67665 BINT11 {}N OVER#2+UNROL 7GETLAM OBJ_67A1E * 69FE7
-          OVER#2+UNROL SYMBN OBJ_69CF2 OBJ_0C4E3 3PUTLAM DROP OBJ_67364 {}N * 6A00A
-          SWAPDROP OBJ_673D6 OBJ_6773D DUPUNROT #2+UNROLL NDROP 1PUTLAM * 6A032
-          OBJ_0C4E3 SYMBN 5PUTLAM 3DROP INCOMPDROP OBJ_67648 OBJ_0C4E3 * 6A055
-          SWAP#- 8PUTLAM BINT1 OBJ_679B3 11PUTLAM OBJ_681E8 BINT43 * 6A078
-          EqwBoxCount OBJ_6869D SUBHXS 12PUTLAM OBJ_681B1 OBJ_6749B * 6A09B
-          OBJ_67458 OBJ_674AB OBJ_6746B DUP OBJ_6748B OBJ_6747B 4PUTLAM * 6A0B9
-          BINT27 PUTLAM 22PUTLAM NDROP DUP 7PUTLAM 5GETLAM INNERCOMP * 6A0DC
-          OBJ_6B0E8 OBJ_690FC 1GETLAM 4GETLAM OBJ_6A177 BINT27 GETLAM * 6A104
-          3GETLAM 22Lget #- #+ OBJ_6B39F ABND DUP 18PUTLAM OBJ_6681A * 6A127
+          2GETLAM EqwRuleKey0~1~3 BINT11 {}N OVER#2+UNROL 7GETLAM * 69FE7
+          EqwRuleKey0~1~4 OVER#2+UNROL SYMBN EqwRuleKey0~1~6 OBJ_0C4E3 * 6A005
+          3PUTLAM DROP OBJ_67364 {}N SWAPDROP OBJ_673D6 OBJ_6773D DUPUNROT * 6A01E
+          #2+UNROLL NDROP 1PUTLAM OBJ_0C4E3 SYMBN 5PUTLAM 3DROP INCOMPDROP * 6A046
+          OBJ_67648 OBJ_0C4E3 SWAP#- 8PUTLAM BINT1 OBJ_679B3 11PUTLAM * 6A06E
+          OBJ_681E8 BINT43 EqwBoxCount OBJ_6869D SUBHXS 12PUTLAM OBJ_681B1 * 6A091
+          OBJ_6749B OBJ_67458 OBJ_674AB OBJ_6746B DUP OBJ_6748B OBJ_6747B * 6A0B4
+          4PUTLAM BINT27 PUTLAM 22PUTLAM NDROP DUP 7PUTLAM 5GETLAM INNERCOMP * 6A0D7
+          OBJ_6B0E8 EqwRuleKey0~1~5 1GETLAM 4GETLAM EqwRuleKey0~1~1 BINT27 * 6A104
+          GETLAM 3GETLAM 22Lget #- #+ OBJ_6B39F ABND DUP 18PUTLAM OBJ_6681A * 6A122
           CLEARVDISP OBJ_666D3 OBJ_6AEA6 'LB COLA OBJ_69B49 * 6A154
         ;                                        * 6A172
 
 * refs (1): 6A118
-OBJ_6A177:
+EqwRuleKey0~1~1:
         :: DUP 4PUTLAM OBJ_68550 15PUTLAM OBJ_678D6 9PUTLAM OBJ_67987 * 6A177
           5PUTLAM OBJ_6799C 6PUTLAM DUP OBJ_68F7B ROT #MIN SWAPDUP 10PUTLAM * 6A19F
           #1+DUP 2PUTLAM SWAPDUP 1PUTLAM 11GETLAM OVER#+ #2- 11PUTLAM 2DUP * 6A1CC
-          #- 4PICK LENCOMP DUP 14PUTLAM OBJ_6A44C 2GETLAM 13GETLAM #+ DUP * 6A1F9
-          2PUTLAM 1GETLAM OBJ_6D9AE DUP#0=ITE    * 6A22B
-          :: ROTROT2DROP OBJ_6A5DC 3GETLAM ; OBJ_6A591 OBJ_6A267 OVER * 6A23F
+          #- 4PICK LENCOMP DUP 14PUTLAM EqwRuleKey0~1~1~1 2GETLAM 13GETLAM * 6A1F9
+          #+ DUP 2PUTLAM 1GETLAM DUP#2- DUP#0=ITE * 6A221
+          :: ROTROT2DROP EqwRuleKey0~1~1~3 3GETLAM ; EqwRuleKey0~1~1~2 * 6A23F
+          OBJ_6A267 OVER                         * 6A25D
 
 * refs (3): 6953A 6A25D 6EA46
 OBJ_6A267:
@@ -439,25 +442,25 @@ OBJ_6A28A:
             DO INDEX@ OBJ_67B12 DUP OBJ_6EE65 IT #1+ * 6A2A8
             DUP 4PICK #>ITE                      * 6A2CB
             :: 8GETLAM #+ OBJ_67C3C ; 2DROP LOOP ; * 6A2DA
-          OBJ_6733B 2GETLAM OBJ_6A28A DROP 2GETLAM 1GETLAM DO INDEX@ * 6A302
+          EqwBoxCount#1+ 2GETLAM OBJ_6A28A DROP 2GETLAM 1GETLAM DO INDEX@ * 6A302
           OBJ_67B12 DUP#0= OVER OBJ_66BAD NOT OR OVER OBJ_6EE65 OR ?SKIP * 6A32A
           4PICK#+                                * 6A35C
           3PICK OVER#= IT                        * 6A361
           :: ROTDROP OVERSWAP ;                  * 6A370
-          OBJ_67C3C LOOP SWAPDROP DUP 14GETLAM #1=?SKIP OBJ_69F92 15GETLAM * 6A384
-          OVER OBJ_685B2 '                       * 6A3AC
+          OBJ_67C3C LOOP SWAPDROP DUP 14GETLAM #1=?SKIP EqwRuleKey0~1~1~4 * 6A384
+          15GETLAM OVER OBJ_685B2 '              * 6A3A7
           :: 4GETLAM BINT1 ; '                   * 6A3BB
           :: 10GETLAM BINT2 ; 13GETLAM OBJ_66BAD IT SWAP * 6A3D4
           ROTSWAP OBJ_6A40B SWAP                 * 6A3FC
 
 * refs (1): 6A401
 OBJ_6A40B:
-          :: EVAL 3UNROLL 1GETLAM BINT1 OBJ_6A5AA OBJ_6733B 2GETLAM * 6A40B
+          :: EVAL 3UNROLL 1GETLAM BINT1 OBJ_6A5AA EqwBoxCount#1+ 2GETLAM * 6A40B
             OBJ_6A5AA DROPSWAPDROP ;             * 6A433
           2DROP ;                                * 6A442
 
 * refs (1): 6A212
-OBJ_6A44C:
+EqwRuleKey0~1~1~1:
         :: 12GETLAM OBJ_681E8 DUP BINT1 7ROLL #1- OBJ_6869D SUBHXS ROT &HXS * 6A44C
           SWAP 5ROLL #1- OBJ_6869D #1+ MINUSONE SUBHXS &HXS OBJ_681B1 2DUP * 6A483
           SWAP#- 13PUTLAM 2DUP#= ITE 2DROP       * 6A4B5
@@ -466,20 +469,21 @@ OBJ_6A44C:
             #- OBJ_67519 2GETLAM #-SWAP ZERO_DO DUP#1+ ROLLDROP OBJ_6C302 * 6A505
             LOOP DROP ;                          * 6A52D
           EqwBoxCount 13GETLAM #+ OBJ_6746B EqwBoxCount 1GETLAM #1-- SWAP * 6A53C
-          INNERCOMP DUP#2+ ROLL OVER#+ #1+ OBJ_68183 OBJ_6A769 NDROP ; * 6A564
+          INNERCOMP DUP#2+ ROLL OVER#+ #1+ OBJ_68183 EqwRuleKey0~1~1~1~1 * 6A564
+          NDROP ;                                * 6A587
 
 * refs (1): 6A258
-OBJ_6A591:
+EqwRuleKey0~1~1~2:
         :: ZEROZERO ROT 5ROLL 5ROLL              * 6A591
 
 * refs (3): 6A424 6A433 6EDDE
 OBJ_6A5AA:
           :: 2DUP#= case2DROP DO                 * 6A5AA
-            INDEX@ 13GETLAM OBJ_6A663 LOOP ;     * 6A5BE
+            INDEX@ 13GETLAM EqwRuleKey0~1~1~2~1 LOOP ; * 6A5BE
           3DROP                                  * 6A5D7
 
 * refs (1): 6A249
-OBJ_6A5DC:
+EqwRuleKey0~1~1~3:
           :: 1GETLAM 11GETLAM DUP 6GETLAM OBJ_6A61D OBJ_67BD5 DUP 5GETLAM * 6A5DC
             OBJ_6A61D OBJ_67BE2 DUP 9GETLAM      * 6A609
 
@@ -491,7 +495,7 @@ OBJ_6A61D:
           7GETLAM 3GETLAM OVER#+ ;               * 6A64F
 
 * refs (1): 6A5C8
-OBJ_6A663:
+EqwRuleKey0~1~1~2~1:
         CON(5)  (*)+5                            * 6A663  primitive code object
         ASSEMBLE
         GOSBVL  POP#                             * 6A668
@@ -592,7 +596,7 @@ OBJ_6A75D:
         GOTO    L_6A70D                          * 6A765
 
 * refs (1): 6A582
-OBJ_6A769:
+EqwRuleKey0~1~1~1~1:
         CON(5)  (*)+5                            * 6A769  primitive code object
         GOSBVL  POP#                             * 6A76E
         R0=A                                     * 6A775
@@ -722,7 +726,7 @@ OBJ_6AB5E:
             FALSE BINT30 PUTLAM ERRSET           * 6ABCC
             :: OBJ_6B5E2 ; ERRTRAP               * 6ABE0
             :: OBJ_6AE6F OBJ_6C302 ERRJMP ; TRUE BINT30 PUTLAM OBJ_6AE6F * 6ABF4
-            OBJ_6C302 OBJ_6BF8D OBJ_283F1 ;      * 6AC21
+            OBJ_6C302 OBJ_6BF8D GetGNTData ;     * 6AC21
         ;                                        * 6AC35
 
 * refs (1): 6AA0B
@@ -745,7 +749,7 @@ OBJ_6AC80:
 
 * refs (2): 6AC58 6F5D6
 OBJ_6ACF3:
-          :: 'LB OBJ_678DB OBJ_67B12 OBJ_6EE65 IT OBJ_678DB * 6ACF3
+          :: 'LB EqwBoxParent@ OBJ_67B12 OBJ_6EE65 IT EqwBoxParent@ * 6ACF3
             OBJ_67AEF                            * 6AD16
 
 * refs (1): 44DDB
@@ -776,6 +780,7 @@ OBJ_6AE42:
           ERRSET                                 * 6AE6A
 
 * refs (14): 69D43 69D48 69D4D 69D7F 69D89 69D98 ...
+* Probably: bring the object stored under the EquationWriter's stack marker up to level 1
 OBJ_6AE6F:
           :: OBJ_677EA #1+ROLL ; BINT23 PUTLAM OBJ_6C302 OBJ_6B74F ; * 6AE6F
 
@@ -969,7 +974,7 @@ OBJ_6B5E2:
 
 * refs (1): 6C023
 OBJ_6B5F6:
-          :: OBJ_283F1 DROP GetNextToken nultrior * 6B5F6
+          :: GetGNTData DROP GetNextToken nultrior * 6B5F6
             :: 2DROP SWAPDROP DUPLEN$ #1+ FALSE ; OBJ_250EF * 6B60F
             :: 4ROLLDROP TRUE ; 4ROLLDROP 3PICK LEN$ 3PICKSWAP #> * 6B637
             NOTcaseTRUE LEN$                     * 6B664
@@ -1002,8 +1007,8 @@ OBJ_6B79A:
           OBJ_679D7 #0=ITE                       * 6B7C7
           :: ROT OBJ_67C6C OBJ_6F42D EQcasedrop SWAP * 6B7D1
             GROBDIMw ROT#+ ;                     * 6B7EF
-          :: 3PICK OBJ_67AE2 #+ OBJ_6E057 #2/ #- SWAPROT OBJ_67A9D #+ ; 2DUP * 6B7FE
-          14PUTLAM 15PUTLAM 12PUTLAM 13PUTLAM ;  * 6B83A
+          :: 3PICK OBJ_67AE2 #+ EqwFontHeight #2/ #- SWAPROT OBJ_67A9D #+ ; * 6B7FE
+          2DUP 14PUTLAM 15PUTLAM 12PUTLAM 13PUTLAM ; * 6B835
 
 * refs (1): 6B682
 OBJ_6B853:
@@ -1020,8 +1025,8 @@ OBJ_6B894:
 OBJ_6B8B7:
         :: OBJ_6821C DUP CARCOMP OBJ_6C04B EQUAL IT CDRCOMP * 6B8B7
           OBJ_681D8 8GETLAM NEWLINE$&$ #SyntaxErr JstGetTHEMESG &$ DoBadKey * 6B8DF
-          FlashMsg OBJ_283F1 LEN$ #- DUPUNROT #1- ONESWAP SUB$SWAP NULL$ * 6B902
-          OBJ_2840F                              * 6B92F
+          FlashMsg GetGNTData LEN$ #- DUPUNROT #1- ONESWAP SUB$SWAP NULL$ * 6B902
+          PutGNTData                             * 6B92F
 
 * refs (6): 6BA10 6BA51 6BAAB 6BC46 6C267 6C35C
 OBJ_6B934:
@@ -1077,7 +1082,9 @@ OBJ_6BBCC:
 
 * refs (1): 6C1A4
 OBJ_6BBD6:
-          # 206 OBJ_6BFFB NOTcasedrop            * 6BBD6
+          # 206                                  * 6BBD6  518
+* The Very Big List names this address <00206h4A9 RPL ArF15h : CNTR, but it is a pointer inside an object; the name is not used
+          OBJ_6BFFB NOTcasedrop                  * 6BBE0
           :: OBJ_69C3C OBJ_6B8B7 ;               * 6BBEA
 
 * refs (3): 6B53D 6C195 8D3FA
@@ -1205,7 +1212,7 @@ OBJ_6C041:
 * refs (1): 6B8CB
 OBJ_6C04B:
                 :: OBJ_672E6 #1+_ONE_DO INDEX@ OBJ_67E34 OVER OBJ_67E64 ROT * 6C04B
-                  OBJ_67E45 LOOP OBJ_672E6 OBJ_6819D {}N OBJ_6E9B0 OBJ_0C4E3 * 6C073
+                  OBJ_67E45 LOOP OBJ_672E6 #3* {}N OBJ_6E9B0 OBJ_0C4E3 * 6C073
                   OBJ_673A2 1GETLAM OBJ_673BB EqwBoxCount BINT34 GETLAM * 6C096
                   8GETLAM BINT10 {}N ;           * 6C0B4
                 >HCOMP BINT1 BINT10 SUBCOMP OBJ_681D8 ; * 6C0C8

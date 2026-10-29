@@ -395,12 +395,13 @@ OBJ_36D99:
         :: CRUNCH 0LASTOWDOB! ?ATTNQUIT CK1NOLASTWD ; * 36D99
 
 * refs (15): 36DD5 C7C94 C8187 C82A6 C8360 C843E ...
-OBJ_36DB7:
+* ob -> %: evaluate to a number (honouring ATTN), strip units; anything else is Bad Argument Type
+CRUNCH>%:
         :: OBJ_36D99 OBJ_36DF8 ;                 * 36DB7
 
 * refs (6): C7BDE C8139 C9092 C93E7 C9744 CA62C
 OBJ_36DCB:
-        :: OBJ_36E93 OBJ_36DB7 ;                 * 36DCB
+        :: OBJ_36E93 CRUNCH>% ;                  * 36DCB
 
 * refs (5): 36D30 C7A6A C7F7C C935E CAAB8
 OBJ_36DDF:
@@ -457,7 +458,7 @@ OBJ_36F24:
 
 * refs (4): C90C0 CA655 CA6F2 CA7A9
 OBJ_36F56:
-        :: OBJ_3798C case %%ABS                  * 36F56
+        :: DUPTYPEEREL? case %%ABS               * 36F56
           OBJ_7D7A9 ;                            * 36F6A
 
 * refs (5): CC059 CC0D3 CC202 CC295 CC569
@@ -717,7 +718,8 @@ L_37232:
         GOVLNG  PUSH%LOOP                        * 37240
 
 * refs (17): C8243 C8286 C82D9 C8340 C8393 C841E ...
-OBJ_37247:
+* % %%2 %%1 -> %: %+%%2*%%1, rounded to a real
+%+%%*:
         CON(5)  (*)+5                            * 37247  primitive code object
         GOSBVL  SUB_2A0B1                        * 3724C
         HST=0   3                                * 37253
@@ -742,9 +744,9 @@ L_3728D:
         P=      0                                * 37298
         SETHEX                                   * 3729A
         GOSBVL  GETPTR                           * 3729C
-        GOSBVL  SUB_2A060                        * 372A3
+        GOSBVL  POP1%%                           * 372A3
         GOSBVL  RCCD0                            * 372AA
-L_372B1:
+B%ABS1~1:
         GOSBVL  RADDF                            * 372B1
         GOTO    L_37915                          * 372B8
 
@@ -1271,7 +1273,7 @@ OBJ_377DD:
         ?C#A    A                                * 377FF
         GOYES   L_37812                          * 37802
         ST=0    0                                * 37804
-        GOSBVL  SUB_2A060                        * 37807
+        GOSBVL  POP1%%                           * 37807
         GOTO    L_37823                          * 3780E
 L_37812:
         ST=1    0                                * 37812
@@ -1332,7 +1334,7 @@ L_378AD:
         ?C#A    A                                * 378C3
         GOYES   L_378D6                          * 378C6
         ST=0    0                                * 378C8
-        GOSBVL  SUB_2A060                        * 378CB
+        GOSBVL  POP1%%                           * 378CB
         GOTO    L_378E7                          * 378D2
 L_378D6:
         ST=1    0                                * 378D6
@@ -1376,12 +1378,13 @@ L_37934:
 
 * refs (1): 7CF81
 OBJ_37941:
-        :: OBJ_3798C case %%*                    * 37941
+        :: DUPTYPEEREL? case %%*                 * 37941
           SWAP2C%%>%% 2DUP %%ANGLEDEG 3UNROLL %%SQR %%SQRT 4ROLL %%*UNROT * 37955
           %%+ %%>C%% ;                           * 3797D
 
 * refs (14): 36F5B 37946 37A77 37AE5 37D3C 37D6E ...
-OBJ_3798C:
+* ob -> ob flag: TRUE for an extended real
+DUPTYPEEREL?:
         :: DUP TYPE TYPEEREL #= ;                * 3798C
 
 * refs (8): 3635E 363C7 366F6 36B23 36BB6 36F83 ...
@@ -1411,7 +1414,7 @@ OBJ_37A4F:
 
 * refs (1): 983DF
 COND~1~2~1:
-        :: OBJ_3798C case OBJ_37AC2              * 37A72
+        :: DUPTYPEEREL? case OBJ_37AC2           * 37A72
           DUP C%%0= case %%1                     * 37A86
           C%%>%% 2DUP%%R ROTOVER %%/ 3UNROLL %%/ %%>C%% ; * 37A9A
 
@@ -1422,11 +1425,12 @@ OBJ_37AC2:
 
 * refs (5): 905F2 93E98 943D5 958CE 95AB3
 dup;cc?:
-        :: OBJ_3798C case TRUE                   * 37AE0
+        :: DUPTYPEEREL? case TRUE                * 37AE0
           C%%>%% %%0= ;                          * 37AF4
 
 * refs (17): 7D1D4 7D283 9114E 924AC 9296B 967AE ...
-OBJ_37B03:
+* a b c d -> c d
+ROTDROPROTDROP:
         :: ROTDROP ROTDROP ;                     * 37B03
 
 * -> {}
@@ -1435,7 +1439,8 @@ OBJ_37B03:
         { NULLLAM NULLLAM NULLLAM }              * 37B17
 
 * refs (14): 7CE23 7CE55 91D6A 91D79 91EB4 92E8F ...
-OBJ_37B30:
+* %% -> %%/2
+%%/2:
         :: %%.5 %%* ;                            * 37B30
 
 * ob -> ob'
@@ -1491,13 +1496,14 @@ B%ABS:
         :: SWITCHFLOATS %ABS C%ABS %%ABS C%%ABS ; * 37C75
 
 * refs (14): 90C7E 90C97 90D87 92209 922F9 92D77 ...
-OBJ_37C98:
+* % -> |%|, C% -> |C%|, %% -> |%%|, C%% -> |re|+|im| (a cheap magnitude for pivoting)
+B%ABS1:
         :: SWITCHFLOATS %ABS C%ABS %%ABS         * 37C98
           CODE                                   * 37CB1  19 nibbles
             GOSBVL  POPC%%                       * 37CBB
             A=0     S                            * 37CC2
             C=0     S                            * 37CC5
-            GOLONG  L_372B1                      * 37CC8
+            GOLONG  B%ABS1~1                     * 37CC8
           ENDCODE                                * 37CCE
         ;                                        * 37CCE
 
@@ -1517,19 +1523,19 @@ F%>L%:
 
 * refs (13): 90615 915B8 915C2 92A4C 93ED4 94064 ...
 OBJ_37D37:
-        :: OBJ_3798C case                        * 37D37
+        :: DUPTYPEEREL? case                     * 37D37
           :: DUP %%* ;                           * 37D46
           C%%>%% %%SQR ;                         * 37D5A
 
 * refs (9): 905D9 915D6 93E7F 9402D 94091 943BC ...
 OBJ_37D69:
-        :: OBJ_3798C ?SEMI                       * 37D69
+        :: DUPTYPEEREL? ?SEMI                    * 37D69
           C%%>%% DROP ;                          * 37D78
 
 * refs (25): 9066A 906CE 907D7 91676 916E9 916FD ...
 * L% -> L%': conjugate an extended complex number; an extended real is left alone
 L%CONJ:
-        :: OBJ_3798C ?SEMI                       * 37D87
+        :: DUPTYPEEREL? ?SEMI                    * 37D87
           C%%CONJ ;                              * 37D96
 
 * refs (12): 7CE28 935BC 94C48 95018 95F25 96812 ...

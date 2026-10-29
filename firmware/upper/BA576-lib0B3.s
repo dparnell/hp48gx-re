@@ -115,7 +115,7 @@ ROMP_0B3_004:
             ROMPTR 0B3 02A BINT25                * BAA80  DoCKeyCheck
             ROMPTR 0B3 02E BINT45                * BAA90  DoCKeyOK
             ROMPTR 0B3 02D }                     * BAAA0  DoCKeyCancel
-          OBJ_19FE4 caseTRUE BINT30              * BAAB0
+          #=Lookup caseTRUE BINT30               * BAAB0
           #=casedrpfls DUP#<7                    * BAABF
           casedrpfls BINT12                      * BAAC9
           #=casedrpfls BINT35                    * BAAD3
@@ -127,7 +127,7 @@ ROMP_0B3_004:
 * refs (1): BA576
 ~Choose~2~2:
         ::                                       * BAB01
-          { BINT11 ROMPTR 0B3 01E BINT17 ROMPTR 0B3 01F } OBJ_19FE4 caseTRUE * BAB06
+          { BINT11 ROMPTR 0B3 01E BINT17 ROMPTR 0B3 01F } #=Lookup caseTRUE * BAB06
           DUP#<7                                 * BAB3A
           casedrpfls BINT12                      * BAB3F
           #=casedrpfls BINT35                    * BAB49
@@ -139,7 +139,7 @@ ROMP_0B3_004:
 * refs (1): BA576
 ~Choose~2~3:
         ::                                       * BAB77
-          { BINT11 ROMPTR 0B3 020 BINT17 ROMPTR 0B3 021 } OBJ_19FE4 caseTRUE * BAB7C
+          { BINT11 ROMPTR 0B3 020 BINT17 ROMPTR 0B3 021 } #=Lookup caseTRUE * BAB7C
           BINT45                                 * BABB0
           #=casedrpfls DUP#<7                    * BABB5
           casedrpfls BINT35                      * BABBF
@@ -153,7 +153,7 @@ ROMP_0B3_004:
         ::                                       * BABED
           { BINT25 ROMPTR 0B3 02E BINT45         * BABF2  DoCKeyOK
             ROMPTR 0B3 02D }                     * BAC0C  DoCKeyCancel
-          OBJ_19FE4 caseTRUE BINT30              * BAC1C
+          #=Lookup caseTRUE BINT30               * BAC1C
           #=casedrpfls BINT35                    * BAC2B
           #=casedrpfls BINT40                    * BAC35
           #=casedrpfls BINT4                     * BAC3F

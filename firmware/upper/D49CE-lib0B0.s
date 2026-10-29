@@ -701,10 +701,10 @@ ROMP_0B0_046:
 * refs (1): D49CE
 DoInputForm~2~2:
         ::                                       * D6ECD
-          { BINT26 ROMPTR 0B0 056 BINT7 DoBadKey } OBJ_19FE4 caseTRUE * D6ED2  DoKeyEdit
+          { BINT26 ROMPTR 0B0 056 BINT7 DoBadKey } #=Lookup caseTRUE * D6ED2  DoKeyEdit
           EditExstCase                           * D6F00
           ROMPTR 0B0 04D                         * D6F05
-          { BINT17 DoBadKey BINT25 ROMPTR 0B0 054 } OBJ_19FE4 caseTRUE BINT2 * D6F10
+          { BINT17 DoBadKey BINT25 ROMPTR 0B0 054 } #=Lookup caseTRUE BINT2 * D6F10
           OVER BINT7 #<case OBJ_19F93            * D6F43
           { BINT12 BINT35 BINT40 } 3PICK #=POSCOMP #0<> case OBJ_19F93 * D6F57
           2DUP Key>U/SKeyOb OBJ_4080F SWAPDROP case2drop 'DoBadKeyT * D6F89
@@ -716,12 +716,12 @@ DoInputForm~2~2:
 * refs (1): D49CE
 DoInputForm~2~3:
         ::                                       * D6FEB
-          { BINT7 DoBadKey } OBJ_19FE4 caseTRUE EditExstCase * D6FF0
+          { BINT7 DoBadKey } #=Lookup caseTRUE EditExstCase * D6FF0
           ROMPTR 0B0 04E                         * D7013
           { BINT11 ROMPTR 0B0 060 BINT17 ROMPTR 0B0 061 BINT16 * D701E
             ROMPTR 0B0 062 BINT18 ROMPTR 0B0 063 BINT25 ROMPTR 0B0 055 * D7048
             BINT26 ROMPTR 0B0 057 }              * D7073
-          OBJ_19FE4 caseTRUE BINT3               * D7088
+          #=Lookup caseTRUE BINT3                * D7088
           OVER BINT7 #<case OBJ_19F93            * D7097
           { BINT45 BINT35 BINT40 } 3PICK #=POSCOMP #0<> case OBJ_19F93 * D70AB
           2DUP Key>U/SKeyOb OBJ_4080F SWAPDROP case2drop 'DoBadKeyT * D70DD
@@ -735,7 +735,7 @@ DoInputForm~2~4:
         ::                                       * D713F
           { BINT25 ROMPTR 0B0 05A BINT45         * D7144  DoKeyOK
             ROMPTR 0B0 059 }                     * D715E  DoKeyCancel
-          OBJ_19FE4 caseTRUE EditExstCase        * D716E
+          #=Lookup caseTRUE EditExstCase         * D716E
           ROMPTR 0B0 04F BINT4                   * D717D
           { BINT30 BINT35 BINT40 } 3PICK #=POSCOMP #0<> case OBJ_19F93 * D718D
           2DUP Key>U/SKeyOb OBJ_4080F SWAPDROP case2drop 'DoBadKeyT * D71BF

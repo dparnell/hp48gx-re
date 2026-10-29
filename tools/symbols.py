@@ -15,6 +15,7 @@ class Sym:
     stack: str = ""     # EDB stack diagram
     usage: str = ""     # VBL usage (RPL, ASM, IOR, SYS)
     vtype: str = ""     # VBL object type (Program, ASM-SRPL, String, ...)
+    vbl_only: bool = False  # named by the VBL alone
 
 
 class Symbols:
@@ -59,7 +60,7 @@ class Symbols:
                 continue
             s = self.by_addr.get(addr)
             if s is None:
-                s = self.by_addr[addr] = Sym(addr, name)
+                s = self.by_addr[addr] = Sym(addr, name, vbl_only=bool(name))
                 if name:
                     self.by_name.setdefault(name, addr)
             elif name and name != s.name:

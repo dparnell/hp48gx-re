@@ -544,7 +544,7 @@ Sys@:
 
 * refs (7): 2D51C 2D88E 2D9FA 2DB53 2DE19 2E70E ...
 KERMOPEN:
-        :: GetIOPAR 4DROP BINT33 TestSysFlag IT OBJ_56B87 * 2EAE2
+        :: GetIOPAR 4DROP BINT33 TestSysFlag IT DROP%0b * 2EAE2
           FalseFalse 2SWAP KERMOPEN~2 KERMOPEN~1 * 2EB05
           :: TOADISP REDISPHBUFF ; OpenUartClr ; * 2EB19
 

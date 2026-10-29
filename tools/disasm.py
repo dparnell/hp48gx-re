@@ -200,6 +200,14 @@ class Generator:
         if a in self.messages:
             return None
         s = self.sym.by_addr.get(a)
+        if s and s.vbl_only and a in getattr(self, "ptr_slots", ()):
+            # A VBL name on a pointer inside another object: in places the
+            # VBL's conversion to revision R is one object off
+            # (PwrExpFIT? at #2CB52 is the code at #2CC06).
+            note = "The Very Big List names this address %s, but it is a pointer inside an object; the name is not used" % s.name
+            if note not in self.notes[a]:
+                self.notes[a].append(note)
+            return None
         if s and s.name and "RAM" not in s.flags and (a >= 0x140 or s.usage == "ASM") and a < LOWER_END:
             n = s.name
             if not re.fullmatch(r"<\w+h>|\[.*\]|.*\s.*", n):
@@ -1061,6 +1069,7 @@ class Generator:
         if p < sasm.ROM_SIZE:
             self.blocks.append((p, sasm.ROM_SIZE, self.data_lines(p, sasm.ROM_SIZE)))
         self.lines = [ln for _, _, b in self.blocks for ln in b]
+        self.ptr_slots = {ln.pc for ln in self.lines if ln.value and ln.value[0] == "ptr" and ln.indent > 0}
         self.line_start = {ln.pc for ln in self.lines if ln.size}
         self.starts = sorted(self.line_start)
 

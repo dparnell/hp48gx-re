@@ -60,8 +60,8 @@ ROMP_0C2_021:
           NextInArray SWAP BEGIN TRUE 2GETLAM #1- 1GETLAM #1+ #* #1+ DUP * 934BD
           3GETLAM #1+ 2GETLAM DO %%0 %%0 2OVER ISTOP@ 2GETLAM DO INDEX@ * 934F4
           JINDEX@ #= ?SKIP                       * 9352B
-          :: 8PICK 3PICK PULL%%EL OBJ_37C98 6ROLL %%+ SWAP 3PICK PULL%%EL * 9353A
-            OBJ_37C98 6ROLL %%+ SWAPDROP 2SWAP ; * 9356C
+          :: 8PICK 3PICK PULL%%EL B%ABS1 6ROLL %%+ SWAP 3PICK PULL%%EL * 9353A
+            B%ABS1 6ROLL %%+ SWAPDROP 2SWAP ;    * 9356C
           1GETLAM ROT#+SWAP #1+ NextInArray 2DROP 2DUP %%+ * 9358A
           :: 3PICK 3PICK OBJ_37DA0 %%0= case 3DROP * 935AD
             OVER 4PICK                           * 935D0
@@ -391,11 +391,11 @@ ROMP_0C2_02F:
             B%NEG OVER L%/ 3UNROLL L%/ L%CONJ ;  * 94C9D
           7PICK %%/ 4ROLL 7PICK %%/ 2DUP %%+ 3PICKOVER %%* 1+(rr) 3PICK3PICK * 94CC0
           %%* %%MAX 5UNROLL 3PICK3PICK %%- %%* DUP %%+ 1+(rr) %%0>= ITE * 94CF7
-          :: DUP %%* SWAPDUP %%* OVER %%+ 1+(rr) OBJ_37B30 DUPDUP %%* 3PICK * 94D2E
-            %%- %%ABS %%SQRT %%+ %%/ SWAP 7PICK L%/ %%1 3PICK %%- L%/ 5ROLL * 94D6A
+          :: DUP %%* SWAPDUP %%* OVER %%+ 1+(rr) %%/2 DUPDUP %%* 3PICK %%- * 94D2E
+            %%ABS %%SQRT %%+ %%/ SWAP 7PICK L%/ %%1 3PICK %%- L%/ 5ROLL * 94D6F
             7PICK %%CHS L%/ 3PICK L%/ ROT ;      * 94DAB
-          :: SWAPDUP %%* SWAPDUP %%* OVER %%+ %%1 %%- OBJ_37B30 DUPDUP %%* * 94DCE
-            OVER %%0> ITE                        * 94E0A
+          :: SWAPDUP %%* SWAPDUP %%* OVER %%+ %%1 %%- %%/2 DUPDUP %%* OVER * 94DCE
+            %%0> ITE                             * 94E0F
             :: 3PICK %%+ %%SQRT %%+ %%/ %%CHS ;  * 94E19
             :: ROT %%+ %%SQRT %%- ;              * 94E41
             SWAP 7PICK %%CHS L%/ OVER L%/ 5ROLL 7PICK %%CHS L%/ 3PICK 1+(rr) * 94E5F
@@ -416,7 +416,7 @@ ROMP_0C2_030:
           :: 6ROLL DROP 4ROLL %%SQR %%SQRT DUP 6UNROLL DUPUNROT L%/ 4ROLLROT * 95036
             L%/ ;                                * 9506D
           6PICK %%/ DUP %%* 4ROLL 6PICK %%/ DUP %%* %%1 3PICK %%- SWAP %%- * 95077
-          OBJ_37B30 DUPDUP %%* OVER %%0> ITE     * 950BD
+          %%/2 DUPDUP %%* OVER %%0> ITE          * 950BD
           :: 3PICK %%+ %%SQRT %%+ %%/ ;          * 950DB
           :: ROT %%+ %%SQRT SWAP %%- ;           * 950FE
           SWAP 5PICK %%CHS L%/ OVER L%/ 4ROLL 5PICK %%CHS L%/ 3PICK 1+(rr) * 95121

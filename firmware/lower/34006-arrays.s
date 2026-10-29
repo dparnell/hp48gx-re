@@ -24,12 +24,13 @@ L_34051:
 * refs (2): 34097 340A1
 NUMSOLVE~7~1:
         :: DUP a%>$ SWAP %0<                     * 340B0
-
-+(_+_,st):
+* The Very Big List names this address +("+",st), but it is a pointer inside an object; the name is not used
           ?SKIP                                  * 340C9
           :: tok+ !insert$ ;                     * 340CE
           OVER OBJ_3437C ITE                     * 340E2
-          :: OVER OBJ_347DA %0>                  * 340F1
+          :: OVER OBJ_347DA                      * 340F1
+* The Very Big List names this address "+  ", but it is a pointer inside an object; the name is not used
+            %0>                                  * 34100
 
 +:
             $ "+  "                              * 34105
@@ -519,6 +520,7 @@ NUMSOLVE~2~4:
         GOTO    L_347BA                          * 347AA
 
 * refs (14): 331B1 334DB 335F3 3373D 3376F 33788 ...
+* Probably: NUMSOLVE: push element 4 of the solver's guess vector (x values)
 OBJ_347AE:
         CON(5)  (*)+5                            * 347AE  primitive code object
         LC(5)   #00004                           * 347B3
@@ -548,6 +550,7 @@ OBJ_347E7:
         GOTO    L_34833                          * 347F3
 
 * refs (14): 33206 3325B 33297 332B0 3331E 334C2 ...
+* Probably: NUMSOLVE: push element 2 of the solver's function values
 OBJ_347F7:
         CON(5)  (*)+5                            * 347F7  primitive code object
         LC(5)   #00002                           * 347FC
@@ -560,6 +563,7 @@ NUMSOLVE~25:
         GOTO    L_34833                          * 34813
 
 * refs (16): 33260 33274 3329C 332BA 332D8 334BD ...
+* Probably: NUMSOLVE: push element 4 of the solver's function values
 OBJ_34817:
         CON(5)  (*)+5                            * 34817  primitive code object
         LC(5)   #00004                           * 3481C
@@ -929,7 +933,7 @@ L_34C3E:
 * refs (4): 174DC 17577 339E0 352D2
 OBJ_34C49:
         CON(5)  (*)+5                            * 34C49  primitive code object
-        GOSUB   SUB_34CB6                        * 34C4E
+        GOSUB   POP1%%~jump_34CB6                * 34C4E
         GOTO    L_34C3E                          * 34C52
 
 * refs (3): 34429 344E4 34578
@@ -996,8 +1000,8 @@ SUB_34CB2:
         GOSUB   SUB_34CA7                        * 34CB2
 
 * refs (1): 34C4E
-SUB_34CB6:
-        GOVLNG  SUB_2A060                        * 34CB6
+POP1%%~jump_34CB6:
+        GOVLNG  POP1%%                           * 34CB6
 
 * refs (4): 34A77 34AF9 34B3E 34B55
 SUB_34CBD:
@@ -1587,7 +1591,7 @@ SUB_356B3:
 L_356D1:
         GOSUB   POP#~jump_35AD2                  * 356D1
         R0=A                                     * 356D5
-        GOSBVL  SUB_2A060                        * 356D8
+        GOSBVL  POP1%%                           * 356D8
         GOSUB   PACK~jump                        * 356DF
         SETHEX                                   * 356E3
         GOSBVL  GETPTR                           * 356E5
@@ -1953,7 +1957,10 @@ L_35A95:
         ?D=0    M                                * 35AA0
         RTNYES                                   * 35AA3
         GONC    L_35A54                          * 35AA5
-L_35AA8:
+
+* refs (1): 7CC6A
+* D1 -> %% body: A.A = exponent, B.W = mantissa with the sign cleared; D1 unchanged
+GetAbs%%AB1:
         D1=D1+  5                                * 35AA8
         A=DAT1  W                                * 35AAB
         B=A     W                                * 35AAF
@@ -2083,7 +2090,7 @@ L_35BC9:
 OBJ_35BF5:
         CON(5)  (*)+5                            * 35BF5  primitive code object
         ASSEMBLE
-        GOSBVL  SUB_2A060                        * 35BFA
+        GOSBVL  POP1%%                           * 35BFA
         HST=0   3                                * 35C01
         GOSBVL  SUB_79F38                        * 35C04
         GOTO    L_35612                          * 35C0B

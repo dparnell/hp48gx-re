@@ -429,7 +429,7 @@ sr:
 UMTAN~1:
         CON(5)  (*)+5                            * 10E0E  primitive code object
         ASSEMBLE
-        GOSBVL  SUB_2A060                        * 10E13
+        GOSBVL  POP1%%                           * 10E13
         ST=0    9                                * 10E1A
         ST=0    4                                * 10E1D
         GOSBVL  SUB_2B6F2                        * 10E20

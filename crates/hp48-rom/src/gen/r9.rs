@@ -982,7 +982,7 @@ pub(crate) fn SUB_993B0(r: &mut Run) {
             }
             // #994F2:
             0x994F2..=0x994F2 => {
-                branch!(r, at, 0x994F9, 9, r.cpu.call(0x0CA81)); // GOSBVL SUB_0CA81
+                branch!(r, at, 0x994F9, 9, r.cpu.call(0x0CA81)); // GOSBVL CkATTNcode
             }
             // #994F9:
             0x994F9..=0x994FB => {
@@ -1696,7 +1696,7 @@ pub(crate) fn SUB_9973F(r: &mut Run) {
             }
             // L_9987A:
             0x9987A..=0x9987A => {
-                branch!(r, at, 0x99881, 9, r.cpu.call(0x0CA81)); // GOSBVL SUB_0CA81
+                branch!(r, at, 0x99881, 9, r.cpu.call(0x0CA81)); // GOSBVL CkATTNcode
             }
             // #99881:
             0x99881..=0x99883 => {

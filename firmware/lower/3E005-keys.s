@@ -504,6 +504,7 @@ OBJ_3EEEC:
           OBJ_408C3 APPEND_SPACE AddInComLine(st) ; * 3EF00
 
 * refs (16): 3C93B 3CAA2 3CB85 3CD00 3CD69 3CE02 ...
+* Probably: install the soft-key handlers of a UNITS menu
 OBJ_3EF14:
         :: '                                     * 3EF14
           :: OBJ_3F06D OBJ_3EF87 StdMenuKeyNS ; MenuKeyNS! ' * 3EF1E

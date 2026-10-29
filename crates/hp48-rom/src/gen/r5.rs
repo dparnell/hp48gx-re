@@ -183,8 +183,9 @@ pub(crate) fn getypos(r: &mut Run) {
     }
 }
 
-// OBJ_506C2: firmware/lower/4F0AC-plot.s:593
-pub(crate) fn OBJ_506C2(r: &mut Run) {
+// #sign #mag -> #n: 20-bit two's complement (#sign 0 = negative; magnitude capped at #7FFFF)
+// SgnMag>#: firmware/lower/4F0AC-plot.s:594
+pub(crate) fn SgnMag__(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -231,7 +232,7 @@ pub(crate) fn OBJ_506C2(r: &mut Run) {
     }
 }
 
-// RclRowMenu: firmware/lower/4F0AC-plot.s:614
+// RclRowMenu: firmware/lower/4F0AC-plot.s:615
 pub(crate) fn RclRowMenu(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -261,7 +262,7 @@ pub(crate) fn RclRowMenu(r: &mut Run) {
     }
 }
 
-// OutOfPICT(4s)?: firmware/lower/4F0AC-plot.s:640
+// OutOfPICT(4s)?: firmware/lower/4F0AC-plot.s:641
 pub(crate) fn OutOfPICT_4s__(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -464,7 +465,7 @@ pub(crate) fn OutOfPICT_4s__(r: &mut Run) {
     }
 }
 
-// SUB_508BF: firmware/lower/4F0AC-plot.s:754
+// SUB_508BF: firmware/lower/4F0AC-plot.s:755
 pub(crate) fn SUB_508BF(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -497,7 +498,7 @@ pub(crate) fn SUB_508BF(r: &mut Run) {
 }
 
 // #x1 #y1 #x2 #y2 ->
-// LINEOFF3: firmware/lower/4F0AC-plot.s:793
+// LINEOFF3: firmware/lower/4F0AC-plot.s:794
 pub(crate) fn LINEOFF3(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -516,7 +517,7 @@ pub(crate) fn LINEOFF3(r: &mut Run) {
 }
 
 // #x1 #y1 #x2 #y2 ->
-// TOGLINE3: firmware/lower/4F0AC-plot.s:802
+// TOGLINE3: firmware/lower/4F0AC-plot.s:803
 pub(crate) fn TOGLINE3(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -535,7 +536,7 @@ pub(crate) fn TOGLINE3(r: &mut Run) {
 }
 
 // #x1 #y1 #x2 #y2 ->
-// LINEON3: firmware/lower/4F0AC-plot.s:810
+// LINEON3: firmware/lower/4F0AC-plot.s:811
 pub(crate) fn LINEON3(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -554,7 +555,7 @@ pub(crate) fn LINEON3(r: &mut Run) {
 }
 
 // #x1 #y1 #x2 #y2 ->
-// TOGLINE: firmware/lower/4F0AC-plot.s:817
+// TOGLINE: firmware/lower/4F0AC-plot.s:818
 pub(crate) fn TOGLINE(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -573,7 +574,7 @@ pub(crate) fn TOGLINE(r: &mut Run) {
 }
 
 // #x1 #y1 #x2 #y2 ->
-// LINEOFF: firmware/lower/4F0AC-plot.s:824
+// LINEOFF: firmware/lower/4F0AC-plot.s:825
 pub(crate) fn LINEOFF(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -592,7 +593,7 @@ pub(crate) fn LINEOFF(r: &mut Run) {
 }
 
 // #x1 #y1 #x2 #y2 ->
-// LINEON: firmware/lower/4F0AC-plot.s:832
+// LINEON: firmware/lower/4F0AC-plot.s:833
 pub(crate) fn LINEON(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -886,7 +887,7 @@ pub(crate) fn LINEON(r: &mut Run) {
     }
 }
 
-// SUB_50CD7: firmware/lower/4F0AC-plot.s:996
+// SUB_50CD7: firmware/lower/4F0AC-plot.s:997
 pub(crate) fn SUB_50CD7(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -918,7 +919,7 @@ pub(crate) fn SUB_50CD7(r: &mut Run) {
     }
 }
 
-// !#1+IF<dim-1: firmware/lower/4F0AC-plot.s:1057
+// !#1+IF<dim-1: firmware/lower/4F0AC-plot.s:1058
 pub(crate) fn __1_IF_dim_1(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -960,7 +961,7 @@ pub(crate) fn __1_IF_dim_1(r: &mut Run) {
     }
 }
 
-// SUB_50E94: firmware/lower/4F0AC-plot.s:1078
+// SUB_50E94: firmware/lower/4F0AC-plot.s:1079
 pub(crate) fn SUB_50E94(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -981,7 +982,7 @@ pub(crate) fn SUB_50E94(r: &mut Run) {
     }
 }
 
-// !#1-IF>0: firmware/lower/4F0AC-plot.s:1087
+// !#1-IF>0: firmware/lower/4F0AC-plot.s:1088
 pub(crate) fn __1_IF_0(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -1007,7 +1008,7 @@ pub(crate) fn __1_IF_0(r: &mut Run) {
     }
 }
 
-// OBJ_515CD: firmware/lower/4F0AC-plot.s:1355
+// OBJ_515CD: firmware/lower/4F0AC-plot.s:1357
 pub(crate) fn OBJ_515CD(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -1038,7 +1039,7 @@ pub(crate) fn OBJ_515CD(r: &mut Run) {
 }
 
 // C%% -> C%
-// C%%>C%: firmware/lower/4F0AC-plot.s:1540
+// C%%>C%: firmware/lower/4F0AC-plot.s:1542
 pub(crate) fn C___C_(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -1059,7 +1060,7 @@ pub(crate) fn C___C_(r: &mut Run) {
 }
 
 // %%re %%im -> C%
-// %%>C%: firmware/lower/4F0AC-plot.s:1548
+// %%>C%: firmware/lower/4F0AC-plot.s:1550
 pub(crate) fn ___C_(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -1094,7 +1095,7 @@ pub(crate) fn ___C_(r: &mut Run) {
 }
 
 // %re -> C%
-// Re>C%: firmware/lower/4F0AC-plot.s:1564
+// Re>C%: firmware/lower/4F0AC-plot.s:1566
 pub(crate) fn Re_C_(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -1116,7 +1117,7 @@ pub(crate) fn Re_C_(r: &mut Run) {
 }
 
 // C% -> C%'
-// C%*i: firmware/lower/4F0AC-plot.s:1572
+// C%*i: firmware/lower/4F0AC-plot.s:1574
 pub(crate) fn C__i(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -1139,7 +1140,7 @@ pub(crate) fn C__i(r: &mut Run) {
 }
 
 // C% -> C%'
-// C/i: firmware/lower/4F0AC-plot.s:1581
+// C/i: firmware/lower/4F0AC-plot.s:1583
 pub(crate) fn C_i(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -1161,7 +1162,7 @@ pub(crate) fn C_i(r: &mut Run) {
 }
 
 // C%% -> flag
-// C%%0=: firmware/lower/4F0AC-plot.s:1612
+// C%%0=: firmware/lower/4F0AC-plot.s:1614
 pub(crate) fn C__0_(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -1183,7 +1184,7 @@ pub(crate) fn C__0_(r: &mut Run) {
 }
 
 // C% -> flag
-// C%0=: firmware/lower/4F0AC-plot.s:1624
+// C%0=: firmware/lower/4F0AC-plot.s:1626
 pub(crate) fn C_0_(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -1219,7 +1220,7 @@ pub(crate) fn C_0_(r: &mut Run) {
 }
 
 // C% -> -C%
-// C%CHS: firmware/lower/4F0AC-plot.s:1643
+// C%CHS: firmware/lower/4F0AC-plot.s:1645
 pub(crate) fn C_CHS(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -1256,7 +1257,7 @@ pub(crate) fn C_CHS(r: &mut Run) {
 }
 
 // C%% -> -C%%
-// C%%CHS: firmware/lower/4F0AC-plot.s:1657
+// C%%CHS: firmware/lower/4F0AC-plot.s:1659
 pub(crate) fn C__CHS(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -1293,7 +1294,7 @@ pub(crate) fn C__CHS(r: &mut Run) {
 }
 
 // C% -> C%'
-// C%CONJ: firmware/lower/4F0AC-plot.s:1671
+// C%CONJ: firmware/lower/4F0AC-plot.s:1673
 pub(crate) fn C_CONJ(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -1314,7 +1315,7 @@ pub(crate) fn C_CONJ(r: &mut Run) {
 }
 
 // C%% -> C%%'
-// C%%CONJ: firmware/lower/4F0AC-plot.s:1678
+// C%%CONJ: firmware/lower/4F0AC-plot.s:1680
 pub(crate) fn C__CONJ(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -7300,7 +7301,7 @@ pub(crate) fn SUB_5A999(r: &mut Run) {
     }
 }
 
-// MetaMulInv: firmware/lower/5A01D-algebra.s:1013
+// MetaMulInv: firmware/lower/5A01D-algebra.s:1014
 pub(crate) fn MetaMulInv(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -7317,7 +7318,7 @@ pub(crate) fn MetaMulInv(r: &mut Run) {
 }
 
 // commute terms
-// Meta<-->: firmware/lower/5A01D-algebra.s:1029
+// Meta<-->: firmware/lower/5A01D-algebra.s:1030
 pub(crate) fn Meta____(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -7334,7 +7335,7 @@ pub(crate) fn Meta____(r: &mut Run) {
 }
 
 // associate left term
-// Meta<-A: firmware/lower/5A01D-algebra.s:1047
+// Meta<-A: firmware/lower/5A01D-algebra.s:1048
 pub(crate) fn Meta__A(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -7351,7 +7352,7 @@ pub(crate) fn Meta__A(r: &mut Run) {
 }
 
 // associate right term
-// MetaA->: firmware/lower/5A01D-algebra.s:1076
+// MetaA->: firmware/lower/5A01D-algebra.s:1077
 pub(crate) fn MetaA__(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -7368,7 +7369,7 @@ pub(crate) fn MetaA__(r: &mut Run) {
 }
 
 // delete right term
-// MetaD->: firmware/lower/5A01D-algebra.s:1105
+// MetaD->: firmware/lower/5A01D-algebra.s:1106
 pub(crate) fn MetaD__(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -7385,7 +7386,7 @@ pub(crate) fn MetaD__(r: &mut Run) {
 }
 
 // delete left term
-// Meta<-D: firmware/lower/5A01D-algebra.s:1144
+// Meta<-D: firmware/lower/5A01D-algebra.s:1145
 pub(crate) fn Meta__D(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -7402,7 +7403,7 @@ pub(crate) fn Meta__D(r: &mut Run) {
 }
 
 // delete left term
-// Meta<-D!: firmware/lower/5A01D-algebra.s:1166
+// Meta<-D!: firmware/lower/5A01D-algebra.s:1167
 pub(crate) fn Meta__D_(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -7419,7 +7420,7 @@ pub(crate) fn Meta__D_(r: &mut Run) {
 }
 
 // remove prefix
-// Meta->(): firmware/lower/5A01D-algebra.s:1183
+// Meta->(): firmware/lower/5A01D-algebra.s:1184
 pub(crate) fn Meta_____5C13C(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -7436,7 +7437,7 @@ pub(crate) fn Meta_____5C13C(r: &mut Run) {
 }
 
 // double invert & remove prefix
-// Meta1/(): firmware/lower/5A01D-algebra.s:1223
+// Meta1/(): firmware/lower/5A01D-algebra.s:1224
 pub(crate) fn Meta1___(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -7453,7 +7454,7 @@ pub(crate) fn Meta1___(r: &mut Run) {
 }
 
 // double negate & remove prefix
-// Meta-(): firmware/lower/5A01D-algebra.s:1244
+// Meta-(): firmware/lower/5A01D-algebra.s:1245
 pub(crate) fn Meta___(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -7470,7 +7471,7 @@ pub(crate) fn Meta___(r: &mut Run) {
 }
 
 // EXP(a*b) -> EXP(a)^b
-// MetaE^: firmware/lower/5A01D-algebra.s:1267
+// MetaE^: firmware/lower/5A01D-algebra.s:1268
 pub(crate) fn MetaE_(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -7487,7 +7488,7 @@ pub(crate) fn MetaE_(r: &mut Run) {
 }
 
 // EXP(a)^b -> EXP(a*b)
-// MetaE(): firmware/lower/5A01D-algebra.s:1286
+// MetaE(): firmware/lower/5A01D-algebra.s:1287
 pub(crate) fn MetaE__(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -7504,7 +7505,7 @@ pub(crate) fn MetaE__(r: &mut Run) {
 }
 
 // LN(a^b) -> b*LN(a)
-// MetaL*: firmware/lower/5A01D-algebra.s:1301
+// MetaL*: firmware/lower/5A01D-algebra.s:1302
 pub(crate) fn MetaL_(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -7521,7 +7522,7 @@ pub(crate) fn MetaL_(r: &mut Run) {
 }
 
 // b*LN(a) -> LN(a^b)
-// MetaL(): firmware/lower/5A01D-algebra.s:1316
+// MetaL(): firmware/lower/5A01D-algebra.s:1317
 pub(crate) fn MetaL__(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -7538,7 +7539,7 @@ pub(crate) fn MetaL__(r: &mut Run) {
 }
 
 // merge common factor on left
-// Meta<-M: firmware/lower/5A01D-algebra.s:1335
+// Meta<-M: firmware/lower/5A01D-algebra.s:1336
 pub(crate) fn Meta__M(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -7555,7 +7556,7 @@ pub(crate) fn Meta__M(r: &mut Run) {
 }
 
 // merge common factor on right
-// MetaM->: firmware/lower/5A01D-algebra.s:1378
+// MetaM->: firmware/lower/5A01D-algebra.s:1379
 pub(crate) fn MetaM__(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -7572,7 +7573,7 @@ pub(crate) fn MetaM__(r: &mut Run) {
 }
 
 // add fractions
-// MetaAF: firmware/lower/5A01D-algebra.s:1401
+// MetaAF: firmware/lower/5A01D-algebra.s:1402
 pub(crate) fn MetaAF(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -7589,7 +7590,7 @@ pub(crate) fn MetaAF(r: &mut Run) {
 }
 
 // include left term
-// Meta(<-: firmware/lower/5A01D-algebra.s:1420
+// Meta(<-: firmware/lower/5A01D-algebra.s:1421
 pub(crate) fn Meta____5C58E(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -7606,7 +7607,7 @@ pub(crate) fn Meta____5C58E(r: &mut Run) {
 }
 
 // include right term
-// Meta->): firmware/lower/5A01D-algebra.s:1439
+// Meta->): firmware/lower/5A01D-algebra.s:1440
 pub(crate) fn Meta____5C5DB(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -7623,7 +7624,7 @@ pub(crate) fn Meta____5C5DB(r: &mut Run) {
 }
 
 // parenthesise nearest term
-// Meta(()): firmware/lower/5A01D-algebra.s:1458
+// Meta(()): firmware/lower/5A01D-algebra.s:1459
 pub(crate) fn Meta_____5C628(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -7640,7 +7641,7 @@ pub(crate) fn Meta_____5C628(r: &mut Run) {
 }
 
 // change EXP to trig. fns.
-// Meta->TRG: firmware/lower/5A01D-algebra.s:1477
+// Meta->TRG: firmware/lower/5A01D-algebra.s:1478
 pub(crate) fn Meta__TRG(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -7657,7 +7658,7 @@ pub(crate) fn Meta__TRG(r: &mut Run) {
 }
 
 // move nearest left term to right
-// MetaT->: firmware/lower/5A01D-algebra.s:1490
+// MetaT->: firmware/lower/5A01D-algebra.s:1491
 pub(crate) fn MetaT__(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -7675,7 +7676,7 @@ pub(crate) fn MetaT__(r: &mut Run) {
 }
 
 // move nearest right term to left
-// Meta<-T: firmware/lower/5A01D-algebra.s:1512
+// Meta<-T: firmware/lower/5A01D-algebra.s:1513
 pub(crate) fn Meta__T(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -7693,7 +7694,7 @@ pub(crate) fn Meta__T(r: &mut Run) {
 }
 
 // remove 1st RE,IM; CONJ
-// Meta->()C%: firmware/lower/5A01D-algebra.s:1534
+// Meta->()C%: firmware/lower/5A01D-algebra.s:1535
 pub(crate) fn Meta____C_(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -7711,7 +7712,7 @@ pub(crate) fn Meta____C_(r: &mut Run) {
 }
 
 // define function
-// Meta->DEF: firmware/lower/5A01D-algebra.s:1578
+// Meta->DEF: firmware/lower/5A01D-algebra.s:1579
 pub(crate) fn Meta__DEF(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -7729,7 +7730,7 @@ pub(crate) fn Meta__DEF(r: &mut Run) {
 }
 
 // expand trig fns. of a sum
-// MetaTRG*: firmware/lower/5A01D-algebra.s:1615
+// MetaTRG*: firmware/lower/5A01D-algebra.s:1616
 pub(crate) fn MetaTRG_(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -10181,7 +10182,7 @@ pub const ROUTINES: &[(u32, u32, Block, &str)] = &[
     (0x505E9, 0x5064E, getxpos, "getxpos"),
     (0x5064F, 0x5068C, SUB_5064F, "SUB_5064F"),
     (0x506B0, 0x506C1, getypos, "getypos"),
-    (0x506C7, 0x50700, OBJ_506C2, "OBJ_506C2"),
+    (0x506C7, 0x50700, SgnMag__, "SgnMag__"),
     (0x50706, 0x5072A, RclRowMenu, "RclRowMenu"),
     (0x5078A, 0x508BE, OutOfPICT_4s__, "OutOfPICT_4s__"),
     (0x508BF, 0x508E1, SUB_508BF, "SUB_508BF"),

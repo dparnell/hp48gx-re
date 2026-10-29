@@ -1239,6 +1239,7 @@ ROMP_0A1_009:
 ROMP_0A1_00A:
         :: NoEdit?case OBJ_4365D                 * 3B364
           EDITPARTS #1=case OBJ_4365D            * 3B373
+* The Very Big List names this address <0000Bh>, but it is a pointer inside an object; the name is not used
           TopERow? caseDoBadKey REPEATER         * 3B382
           # B                                    * 3B391  11
           :: Cursor&Disp UCursor ; SetDA123NoCh ; * 3B39B
@@ -1259,6 +1260,7 @@ ROMP_0A1_00D:
         :: PTR Do1st/2nd+: xSTO OBJ_4EC94 CK&DISPATCH0 * 3B3EB
           BINT6 XEQStoKey                        * 3B404  name
           BINT7 XEQStoKey                        * 3B40E  local
+* The Very Big List names this address XLIB 2 46, but it is a pointer inside an object; the name is not used
           BINT0 xSTO                             * 3B418  any
         ;                                        * 3B422
 
@@ -1272,7 +1274,9 @@ EVAL_3B427:
 ROMP_0A1_00F:
         :: NoEdit?case xGRAPH                    * 3B432
           BegComLine?:(bip;q) SetDA123NoCh OnTheFirstCol? case * 3B441
-          :: Cursor&Disp PrevLineIfStart ;       * 3B455
+          :: Cursor&Disp                         * 3B455
+* The Very Big List names this address <00010h>, but it is a pointer inside an object; the name is not used
+            PrevLineIfStart ;                    * 3B45F
           REPEATER # 10                          * 3B469
 
 * refs (1): 3F279
@@ -1284,6 +1288,7 @@ OBJ_3B478:
 ROMP_0A1_010:
         :: NoEdit?case ViewLevel1                * 3B491
           EDITPARTS #1=case OBJ_3D8C6            * 3B4A0
+* The Very Big List names this address <00011h>, but it is a pointer inside an object; the name is not used
           LastERow? caseDoBadKey REPEATER        * 3B4AF
           # 11                                   * 3B4BE  17
           :: Cursor&Disp DCursor ; SetDA123NoCh ; * 3B4C8
@@ -1893,7 +1898,7 @@ GetMenu%~1:
         :: MenuDef@ CK&DISPATCH0                 * 3BE22
           BINT15 NumCurMenu                      * 3BE31  romptr
           BINT8 GetMenu%~1~program               * 3BE3B  program
-          BINT0 OBJ_56B87                        * 3BE45  any
+          BINT0 DROP%0b                          * 3BE45  any
         ;                                        * 3BE4F
 
 * ->
@@ -2092,8 +2097,7 @@ ROMP_0A7_007:
           :: ROMPTR 0E6 00A SetDA2NoCh ; MenuRowAct! ' ROMPTR 0E6 002 * 3C366
           MenuKeyLS! ROMPTR 0E6 00A              * 3C395
           { N I%YR                               * 3C3A5
-
-{SOLVE\TVM\}:
+* The Very Big List names this address {SOLVE\TVM\}, but it is a pointer inside an object; the name is not used
             PV PMT FV ROMPTR 0A8 046 ROMPTR 0A8 047 ROMPTR 0A8 048 } * 3C3B4
         ;                                        * 3C3E9
         BSS     15                               * 3C3EE

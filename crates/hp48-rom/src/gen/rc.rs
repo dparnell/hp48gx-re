@@ -497,7 +497,7 @@ pub(crate) fn SUB_CB05C(r: &mut Run) {
             0xCB13A..=0xCB13F => {
                 op!(r, at, 0xCB13A..0xCB13C, 4, r.cpu.inc(R::C, Field::A)); // C=C+1 A
                 io!(r, at, 0xCB13C..0xCB13F, 19, r.cpu.store(0, R::C, Field::A, r.hw)); // DAT0=C A
-                branch!(r, at, 0xCB146, 9, r.cpu.call(0x0CA81)); // GOSBVL SUB_0CA81
+                branch!(r, at, 0xCB146, 9, r.cpu.call(0x0CA81)); // GOSBVL CkATTNcode
             }
             // #CB146:
             0xCB146..=0xCB157 => {
@@ -1265,7 +1265,7 @@ pub(crate) fn code_CB946(r: &mut Run) {
             }
             // #CB95E:
             0xCB95E..=0xCB95E => {
-                branch!(r, at, 0xCB965, 9, r.cpu.call(0x2A060)); // GOSBVL SUB_2A060
+                branch!(r, at, 0xCB965, 9, r.cpu.call(0x2A060)); // GOSBVL POP1%%
             }
             // #CB965:
             0xCB965..=0xCB965 => {

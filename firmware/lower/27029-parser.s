@@ -1,6 +1,6 @@
 * HP 48GX ROM revision R, #27029-#2A001: Parser and compiler
 * Addresses in the right-hand comments are those of the original ROM.
-* Most referenced: PACK tok=casedrop POP1% NOTROMPcase drop;dq true;1Lput #1-UNROT COLAskipcola 3SKIP NoDecSep drop2;true;1Lput POP1%SPLITA
+* Most referenced: PACK tok=casedrop GetGNTData PutGNTData POP1% NOTROMPcase drop;dq true;1Lput #1-UNROT COLAskipcola 3SKIP NoDecSep
 * Follows on from the previous file (at #27029 in the original ROM).
         A=C     A                                * 27029
         PC=(A)                                   * 2702B
@@ -214,7 +214,7 @@ OBJ_273AA:
           NoDecSep tok=casedrop OBJ_276D4        * 2740E
           tok; tok=casedrop OBJ_276D4            * 2741D
           tok= tok=casedrop OBJ_2781E            * 2742C
-          DROP OBJ_283F1 OBJ_25D03 !*trior OBJ_27AC6 ngsizecase failed * 2743B
+          DROP GetGNTData OBJ_25D03 !*trior OBJ_27AC6 ngsizecase failed * 2743B
           OBJ_24609 !*trior OBJ_27AC6 SWAP COMPILEID ROT ORNOT casedrop * 2745E
           failed                                 * 27486
           OBJ_274D1 ?OKINALG NOTcasedrop failed  * 2748B
@@ -259,7 +259,7 @@ OBJ_275AD:
 * refs (2): 2755D 275D5
 OBJ_2763E:
         :: DROPONE OVER#= ITE CKSYMBN PSYMBN     * 2763E
-          SWAP#1+ OBJ_283F1 TrueTrue ;           * 2765C
+          SWAP#1+ GetGNTData TrueTrue ;          * 2765C
 
 * refs (1): 274A9
 OBJ_27670:
@@ -268,11 +268,11 @@ OBJ_27670:
 
 * refs (1): 273B9
 OBJ_2768E:
-        :: OBJ_283F1 5ROLL tok8trior             * 2768E
+        :: GetGNTData 5ROLL tok8trior            * 2768E
 
 * refs (1): 276CA
 OBJ_276A2:
-          :: OBJ_2840F COLA OBJ_273AA            * 276A2
+          :: PutGNTData COLA OBJ_273AA           * 276A2
           ;                                      * 276B6
           tok; OBJ_0BC15 !*triand OBJ_276A2 ;    * 276BB
 
@@ -299,7 +299,7 @@ OBJ_276F7:
 * refs (22): 2753F 2762A 276E3 27701 2782D 2784B ...
 * Probably: parser failure exit: restore the saved token and parser state (lams 11..8), FALSE TRUE
 OBJ_27797:
-          :: OBJ_283F1 failed ; ;                * 27797
+          :: GetGNTData failed ; ;               * 27797
 
 * refs (4): 27779 278C3 279A9 279F4
 OBJ_277B0:
@@ -312,7 +312,7 @@ OBJ_277C9:
 
 * refs (5): 27922 27A30 27AB2 27C65 27EB8
 OBJ_277EC:
-          :: OBJ_283F1 DROP GetNextToken OBJ_2840F ; OBJ_28602 COLA * 277EC
+          :: GetGNTData DROP GetNextToken PutGNTData ; OBJ_28602 COLA * 277EC
           OBJ_273AA                              * 27814
         ;                                        * 27819
 
@@ -375,7 +375,7 @@ OBJ_27A03:
 OBJ_27AC6:
         :: 1GETLAM OBJ_285EE #0= NOTcase         * 27AC6
           :: 4DROP OBJ_27797 ;                   * 27ADF
-          OBJ_2840F pullrev1& COLA OBJ_273AA     * 27AF3
+          PutGNTData pullrev1& COLA OBJ_273AA    * 27AF3
         ;                                        * 27B07
 
 * refs (1): 274C7
@@ -509,7 +509,7 @@ OBJ_27E68:
 
 * refs (1): 273B4
 OBJ_27ED1:
-        :: OBJ_283F1 ~;eval;q                    * 27ED1
+        :: GetGNTData ~;eval;q                   * 27ED1
 
 * refs (2): 246C7 24E51
 OBJ_27EE0:
@@ -529,7 +529,7 @@ OBJ_27F35:
 
 drop;false;true:
           :: DROP failed ;                       * 27F58
-          symcomp 6rolld;1+(s5) DROP GetNextToken OBJ_2840F pullrev1& * 27F6C
+          symcomp 6rolld;1+(s5) DROP GetNextToken PutGNTData pullrev1& * 27F6C
           OBJ_284C3 ROT#1+UNROT COLA OBJ_273AA   * 27F8A
         ;                                        * 27F9E
 
@@ -713,16 +713,18 @@ COLAskipcola:
         :: RSKIP RSKIP RSKIP ;                   * 283D8
 
 * refs (19): 27440 27661 27693 2779C 277F1 27ED6 ...
-OBJ_283F1:
+* -> hxs-mask $ #next $token: the parser's tokenizer state, from lams 11..8
+GetGNTData:
         :: 11GETLAM 10GETLAM 9GETLAM 8GETLAM ;   * 283F1
 
 * refs (18): 276A7 27800 27AF3 27F80 2848C 686F7 ...
-OBJ_2840F:
+* hxs-mask $ #next $token -> : store the tokenizer state in lams 8..11
+PutGNTData:
         :: 8PUTLAM 9PUTLAM 10PUTLAM 11PUTLAM ;   * 2840F
 
 * refs (1): 27710
 OBJ_2842D:
-        :: metatail NDROP OBJ_283F1 DROP GetNextToken * 2842D
+        :: metatail NDROP GetGNTData DROP GetNextToken * 2842D
           :: tokanglesign tok8trior              * 2844B
 
 * refs (3): 699F0 6F1B7 6F8C4
@@ -732,7 +734,7 @@ OBJ_2845A:
 * refs (5): 69468 699D7 6F144 6F1F8 6F8B5
 OBJ_2846E:
             :: ' ROMP_002_105 ; ;                * 2846E
-          5UNROLL OBJ_2840F #05060410h BINT0 BINT5 BINT4 BINT5 top& * 28487
+          5UNROLL PutGNTData #05060410h BINT0 BINT5 BINT4 BINT5 top& * 28487
           OBJ_28602 COLA OBJ_273AA               * 284AF
         ;                                        * 284BE
 

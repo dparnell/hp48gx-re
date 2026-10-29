@@ -391,7 +391,8 @@ OBJ_60E3C:
           ?ROMPTR@ DUPROT STOLAM ;               * 60E5F
 
 * refs (20): 5B942 5BA4B 5BB7C 824CE 82664 82740 ...
-OBJ_60E73:
+* The pattern variables &1..&4 of an integration table, unbound: { NULL{} NULL{} NULL{} NULL{} '&1 '&2 '&3 '&4 }
+IntgPatVars:
         { NULL{} NULL{} NULL{} NULL{}            * 60E73
 
 * refs (162): 5B50A 5B951 5B979 5B9A1 5B9D3 5B9E2 ...

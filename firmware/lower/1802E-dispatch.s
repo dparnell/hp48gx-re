@@ -1987,9 +1987,9 @@ DoInputForm:
 Π'IF:
               LAM 'IF }                          * 19A09
             BIND FALSE MINUSONE BINT7 NDUPN DROP BINT11 PICK BINT13 #* * 19A1B
-            BINT13 PICK OBJ_6819D OVER #+ DUP BINT16 #+ ROT BINT16 #+ ROT * 19A4D
-            BINT14 #+ ROMPTR 0B0 0DB ROMPTR 0B0 0A3 ROMPTR 0B0 009 8PUTLAM * 19A89  ~nNullBind
-            MINUSONE 5PUTLAM ROMPTR 0B0 020 ROMPTR 0B0 06B ROMPTR 0B0 00B ' * 19AB9
+            BINT13 PICK #3* OVER #+ DUP BINT16 #+ ROT BINT16 #+ ROT BINT14 * 19A4D
+            #+ ROMPTR 0B0 0DB ROMPTR 0B0 0A3 ROMPTR 0B0 009 8PUTLAM MINUSONE * 19A8E  ~nNullBind
+            5PUTLAM ROMPTR 0B0 020 ROMPTR 0B0 06B ROMPTR 0B0 00B ' * 19ABE
             DoInputForm~1 ' DoInputForm~2 TrueFalse 8GETLAM ONEFALSE ' * 19AE9
             11GETLAM ' ROMPTR 0B0 000 POLSetUI OBJ_1A03E KEYINBUFFER? NOT * 19B0C
             DAsBad? AND IT BlankDA12             * 19B35
@@ -2039,13 +2039,15 @@ DoInputForm~2~1:
           { BINT11 ROMPTR 0B0 05E BINT17 ROMPTR 0B0 05F BINT25 * 19D8B
             ROMPTR 0B0 05A BINT45                * 19DB5  DoKeyOK
             ROMPTR 0B0 059 }                     * 19DC5  DoKeyCancel
-          OBJ_19FE4 caseTRUE EditExstCase        * 19DD5
+          #=Lookup caseTRUE EditExstCase         * 19DD5
           DoInputForm~2~1~1                      * 19DE4
           { BINT11 ROMPTR 0B0 064 BINT17 ROMPTR 0B0 065 BINT18 * 19DE9
             ROMPTR 0B0 066 BINT16 ROMPTR 0B0 068 BINT26 ROMPTR 0B0 06A * 19E13
             BINT28 ROMPTR 0B0 05B BINT29 DoBadKey } * 19E3E
-          OBJ_19FE4 caseTRUE BINT1               * 19E5D
-          OVER BINT7 #<case OBJ_19F93            * 19E6C
+          #=Lookup caseTRUE BINT1                * 19E5D
+          OVER BINT7                             * 19E6C
+* The Very Big List names this address [liste], but it is a pointer inside an object; the name is not used
+          #<case OBJ_19F93                       * 19E76
           { BINT12 BINT30 BINT35 BINT40 } 3PICK #=POSCOMP #0<> case * 19E80
           OBJ_19F93                              * 19EB2
           COLA DoInputForm~2~1~2                 * 19EB7
@@ -2083,5 +2085,6 @@ IFECallFieldMH:
         :: SWAP DUP 4PUTLAM ROMPTR 0B0 0B9 EVAL ; * 19FBB
 
 * refs (16): 19DD5 19E5D B23B2 BAAB0 BAB30 BABA6 ...
-OBJ_19FE4:
+* # {#1 ob1 #2 ob2 ...} -> ob TRUE | # FALSE
+#=Lookup:
         :: ' #= SWAP Lookup ;                    * 19FE4

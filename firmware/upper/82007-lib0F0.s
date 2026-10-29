@@ -258,7 +258,7 @@ LIB0F0.link:
 * refs (1): 82007
 nINTGSIN~1:
         :: DROP                                  * 824BF
-          { OBJ_60E73                            * 824C9
+          { IntgPatVars                          * 824C9
             {                                    * 824D3
               SYMBOL Π&1 xSIN ; NULL{}           * 824D8
               :: OBJ_5B3D9 Π&1                   * 824F1
@@ -288,7 +288,7 @@ nINTGTAN~1~1:
 * refs (1): 82007
 nINTGCOS~1:
         :: DROP                                  * 82655
-          { OBJ_60E73                            * 8265F
+          { IntgPatVars                          * 8265F
             {                                    * 82669
               SYMBOL Π&1 xCOS ; NULL{}           * 8266E
               :: OBJ_5B3D9 Π&1                   * 82687
@@ -310,7 +310,7 @@ nINTGSIN~1~1:
 * refs (1): 82007
 nINTGTAN~1:
         :: DROP                                  * 82731
-          { OBJ_60E73                            * 8273B
+          { IntgPatVars                          * 8273B
             {                                    * 82745
               SYMBOL Π&1 xTAN %2 x^ ; NULL{}     * 8274A
               :: OBJ_5B3D9 Π&1                   * 8276D
@@ -341,7 +341,7 @@ nINTGTAN~1:
 * refs (1): 82007
 nINTGASIN~1:
         :: OBJ_5B32F                             * 8291C
-          { OBJ_60E73                            * 82926
+          { IntgPatVars                          * 82926
             {                                    * 82930
               SYMBOL Π&1 xASIN ; NULL{}          * 82935
               :: OBJ_5B433 Π&1                   * 8294E
@@ -354,7 +354,7 @@ nINTGASIN~1:
 * refs (1): 82007
 nINTGACOS~1:
         :: OBJ_5B32F                             * 829BC
-          { OBJ_60E73                            * 829C6
+          { IntgPatVars                          * 829C6
             {                                    * 829D0
               SYMBOL Π&1 xACOS ; NULL{}          * 829D5
               :: OBJ_5B433 Π&1                   * 829EE
@@ -367,7 +367,7 @@ nINTGACOS~1:
 * refs (1): 82007
 nINTGATAN~1:
         :: OBJ_5B32F                             * 82A5C
-          { OBJ_60E73                            * 82A66
+          { IntgPatVars                          * 82A66
             {                                    * 82A70
               SYMBOL Π&1 xATAN ; NULL{}          * 82A75
               :: OBJ_5B433 Π&1                   * 82A8E
@@ -380,7 +380,7 @@ nINTGATAN~1:
 * refs (1): 82007
 nINTGSINH~1:
         :: DROP                                  * 82B06
-          { OBJ_60E73                            * 82B10
+          { IntgPatVars                          * 82B10
             {                                    * 82B1A
               SYMBOL Π&1 xSINH ; NULL{}          * 82B1F
               :: OBJ_5B375 Π&1                   * 82B38
@@ -416,7 +416,7 @@ nINTGCOSH~1~1:
 * refs (1): 82007
 nINTGCOSH~1:
         :: DROP                                  * 82CB9
-          { OBJ_60E73                            * 82CC3
+          { IntgPatVars                          * 82CC3
             {                                    * 82CCD
               SYMBOL Π&1 xCOSH ; NULL{}          * 82CD2
               :: OBJ_5B375 Π&1                   * 82CEB
@@ -443,7 +443,7 @@ ROMP_0F0_00C:
 * refs (1): 82007
 nINTGTANH~1:
         :: DROP                                  * 82E0F
-          { OBJ_60E73                            * 82E19
+          { IntgPatVars                          * 82E19
             {                                    * 82E23
               SYMBOL Π&1 xTANH ; NULL{}          * 82E28
               :: OBJ_5B375 Π&1                   * 82E41
@@ -469,7 +469,7 @@ nINTGTANH~1:
 * refs (1): 82007
 nINTGEXPM~1:
         :: OBJ_5B32F                             * 82F91
-          { OBJ_60E73                            * 82F9B
+          { IntgPatVars                          * 82F9B
             {                                    * 82FA5
               SYMBOL Π&1 xEXPM ; NULL{}          * 82FAA
               :: OBJ_5B375 Π&1                   * 82FC3
@@ -482,7 +482,7 @@ nINTGEXPM~1:
 * refs (1): 82007
 nINTGALOG~1:
         :: OBJ_5B32F                             * 8300E
-          { OBJ_60E73                            * 83018
+          { IntgPatVars                          * 83018
             {                                    * 83022
               SYMBOL Π&1 xALOG ; NULL{}          * 83027
               :: OBJ_5B375 Π&1                   * 83040
@@ -495,7 +495,7 @@ nINTGALOG~1:
 * refs (1): 82007
 nINTGLN~1:
         :: OBJ_5B32F                             * 8309B
-          { OBJ_60E73                            * 830A5
+          { IntgPatVars                          * 830A5
             {                                    * 830AF
               SYMBOL Π&1 xLN ; NULL{}            * 830B4
               :: OBJ_5B375 Π&1                   * 830CD
@@ -508,7 +508,7 @@ nINTGLN~1:
 * refs (1): 82007
 nINTGLOG~1:
         :: OBJ_5B32F                             * 83122
-          { OBJ_60E73                            * 8312C
+          { IntgPatVars                          * 8312C
             {                                    * 83136
               SYMBOL Π&1 xLOG ; NULL{}           * 8313B
               :: OBJ_5B375 Π&1                   * 83154
@@ -521,7 +521,7 @@ nINTGLOG~1:
 * refs (1): 82007
 nINTGINV~1:
         :: OBJ_5B32F                             * 831C3
-          { OBJ_60E73                            * 831CD
+          { IntgPatVars                          * 831CD
             {                                    * 831D7
               SYMBOL Π&1 xINV ; NULL{}           * 831DC
               :: OBJ_5B375 Π&1                   * 831F5
@@ -560,7 +560,7 @@ ROMP_0F0_013:
 * refs (1): 82007
 nINTGSQ~1:
         :: DROP                                  * 833FE
-          { OBJ_60E73                            * 83408
+          { IntgPatVars                          * 83408
             {                                    * 83412
               SYMBOL Π&1 xSQ ; NULL{}            * 83417
               :: OBJ_5B375 Π&1                   * 83430
@@ -573,7 +573,7 @@ nINTGSQ~1:
 * refs (1): 82007
 nINTGSQRT~1:
         :: DROP                                  * 83480
-          { OBJ_60E73                            * 8348A
+          { IntgPatVars                          * 8348A
             {                                    * 83494
               SYMBOL %1 Π&1 %2 x^ x- xSQRT xINV ; NULL{} * 83499
               :: OBJ_5B375 Π&1                   * 834CB
@@ -620,7 +620,7 @@ ROMP_0F0_017:
 * refs (1): 82007
 nINTGSIGN~1:
         :: OBJ_5B32F                             * 8376B
-          { OBJ_60E73                            * 83775
+          { IntgPatVars                          * 83775
             {                                    * 8377F
               SYMBOL Π&1 xSIGN ; NULL{}          * 83784
               :: OBJ_5B375 Π&1                   * 8379D

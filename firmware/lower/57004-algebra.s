@@ -1318,7 +1318,7 @@ drop;Lpop:
 
 _COLCT_:
           $ "COLCT"                              * 596B5
-          :: OBJ_69C64                           * 596C9
+          :: EqwRuleKey0                         * 596C9
 
 * restricted collection
 MetaRCOLCT:
@@ -1331,7 +1331,7 @@ MetaRCOLCT:
 
 _DNEG_:
           $ "DNEG"                               * 59701
-          :: OBJ_69C64                           * 59713
+          :: EqwRuleKey0                         * 59713
 
 * double negate
 MetaDNEG:
@@ -1344,7 +1344,7 @@ MetaDNEG:
 
 _DINV_:
           $ "DINV"                               * 5974F
-          :: OBJ_69C64                           * 59761
+          :: EqwRuleKey0                         * 59761
 
 * double invert
 MetaDINV:
@@ -1357,7 +1357,7 @@ MetaDINV:
 
 _*1_:
           $ "*1"                                 * 5979D
-          :: OBJ_69C64                           * 597AB
+          :: EqwRuleKey0                         * 597AB
 
 * mult by one
 Meta*1:
@@ -1373,7 +1373,7 @@ Meta*1:
 
 _^1_:
           $ "^1"                                 * 59823
-          :: OBJ_69C64                           * 59831
+          :: EqwRuleKey0                         * 59831
 
 * pow by one
 Meta^1:
@@ -1386,7 +1386,7 @@ Meta^1:
 
 _/1_:
           $ "/1"                                 * 5986D
-          :: OBJ_69C64                           * 5987B
+          :: EqwRuleKey0                         * 5987B
 
 * div by one
 Meta1/:
@@ -1402,7 +1402,7 @@ Meta1/:
 
 _+1-1_:
           $ "+1-1"                               * 598F3
-          :: OBJ_69C64                           * 59905
+          :: EqwRuleKey0                         * 59905
 
 * add 1 subtract 1
 Meta+1-1:
@@ -1419,7 +1419,7 @@ Meta+1-1:
 
 _<-->_:
           $ "←→"                                 * 59955
-          :: OBJ_69C64 Meta<--> ; }              * 59963
+          :: EqwRuleKey0 Meta<--> ; }            * 59963
 
 * refs (3): 86A6A 86AB0 86AF1
 {RULES\<-A}:
@@ -1428,8 +1428,8 @@ _<-->_:
 _<-A_:
           $ "←A"                                 * 59981
           {                                      * 5998F
-            :: OBJ_69CAC Meta<-A ; DoBadKey      * 59994
-            :: OBJ_69CAC Meta<-Aall ; }          * 599AD
+            :: EqwRuleKey3 Meta<-A ; DoBadKey    * 59994
+            :: EqwRuleKey3 Meta<-Aall ; }        * 599AD
         }                                        * 599C6
 
 * refs (3): 86A6F 86AB5 86AF6
@@ -1439,8 +1439,8 @@ _<-A_:
 _A->_:
           $ "A→"                                 * 599D0
           {                                      * 599DE
-            :: OBJ_69CAC MetaA-> ; DoBadKey      * 599E3
-            :: OBJ_69CAC MetaA->all ; }          * 599FC
+            :: EqwRuleKey3 MetaA-> ; DoBadKey    * 599E3
+            :: EqwRuleKey3 MetaA->all ; }        * 599FC
         }                                        * 59A15
 
 * refs (3): 86A42 86A88 86B50
@@ -1450,8 +1450,8 @@ _A->_:
 _<-T_:
           $ "←T"                                 * 59A1F
           {                                      * 59A2D
-            :: OBJ_69CAC Meta<-T ; DoBadKey      * 59A32
-            :: OBJ_69CAC Meta<-Tall ; }          * 59A4B
+            :: EqwRuleKey3 Meta<-T ; DoBadKey    * 59A32
+            :: EqwRuleKey3 Meta<-Tall ; }        * 59A4B
         }                                        * 59A64
 
 * refs (3): 86A47 86A8D 86B55
@@ -1461,8 +1461,8 @@ _<-T_:
 _T->_:
           $ "T→"                                 * 59A6E
           {                                      * 59A7C
-            :: OBJ_69CAC MetaT-> ; DoBadKey      * 59A81
-            :: OBJ_69CAC MetaT->all ; }          * 59A9A
+            :: EqwRuleKey3 MetaT-> ; DoBadKey    * 59A81
+            :: EqwRuleKey3 MetaT->all ; }        * 59A9A
         }                                        * 59AB3
 
 * refs (2): 86A60 86AA6
@@ -1472,8 +1472,8 @@ _T->_:
 _(<-_:
           $ "(←"                                 * 59ABD
           {                                      * 59ACB
-            :: OBJ_69CAC Meta(<- ; DoBadKey      * 59AD0
-            :: OBJ_69CAC Meta(<-all ; }          * 59AE9
+            :: EqwRuleKey3 Meta(<- ; DoBadKey    * 59AD0
+            :: EqwRuleKey3 Meta(<-all ; }        * 59AE9
         }                                        * 59B02
 
 * refs (2): 86A65 86AAB
@@ -1483,8 +1483,8 @@ _(<-_:
 _->)_:
           $ "→)"                                 * 59B0C
           {                                      * 59B1A
-            :: OBJ_69CAC Meta->) ; DoBadKey      * 59B1F
-            :: OBJ_69CAC Meta->)all ; }          * 59B38
+            :: EqwRuleKey3 Meta->) ; DoBadKey    * 59B1F
+            :: EqwRuleKey3 Meta->)all ; }        * 59B38
         }                                        * 59B51
 
 * refs (2): 86A74 86ABF
@@ -1493,7 +1493,7 @@ _->)_:
 
 _(())_:
           $ "(())"                               * 59B5B
-          :: OBJ_69CAC Meta(()) ; }              * 59B6D
+          :: EqwRuleKey3 Meta(()) ; }            * 59B6D
 
 * refs (1): 86A56
 {RULES\AF}:
@@ -1501,7 +1501,7 @@ _(())_:
 
 _AF_:
           $ "AF"                                 * 59B8B
-          :: OBJ_69C64 MetaAF ; }                * 59B99
+          :: EqwRuleKey0 MetaAF ; }              * 59B99
 
 * refs (2): 86A4C 86A92
 {RULES\<-M}:
@@ -1510,8 +1510,8 @@ _AF_:
 _<-M_:
           $ "←M"                                 * 59BB7
           {                                      * 59BC5
-            :: OBJ_69C64 Meta<-M ; DoBadKey      * 59BCA
-            :: OBJ_69CAC Meta<-Mall ; }          * 59BE3
+            :: EqwRuleKey0 Meta<-M ; DoBadKey    * 59BCA
+            :: EqwRuleKey3 Meta<-Mall ; }        * 59BE3
         }                                        * 59BFC
 
 * refs (2): 86A51 86A97
@@ -1521,8 +1521,8 @@ _<-M_:
 _M->_:
           $ "M→"                                 * 59C06
           {                                      * 59C14
-            :: OBJ_69C64 MetaM-> ; DoBadKey      * 59C19
-            :: OBJ_69CAC MetaM->all ; }          * 59C32
+            :: EqwRuleKey0 MetaM-> ; DoBadKey    * 59C19
+            :: EqwRuleKey3 MetaM->all ; }        * 59C32
         }                                        * 59C4B
 
 * refs (3): 86A79 86AC4 86B23
@@ -1531,7 +1531,7 @@ _M->_:
 
 _-()_:
           $ "-()"                                * 59C55
-          :: OBJ_69C64 Meta-() ; }               * 59C65
+          :: EqwRuleKey0 Meta-() ; }             * 59C65
 
 * refs (3): 86AC9 86ADD 86B05
 {RULES\1/()}:
@@ -1539,7 +1539,7 @@ _-()_:
 
 _1/()_:
           $ "1/()"                               * 59C83
-          :: OBJ_69C64 Meta1/() ; }              * 59C95
+          :: EqwRuleKey0 Meta1/() ; }            * 59C95
 
 * refs (1): 86AE2
 {RULES\E()}:
@@ -1547,7 +1547,7 @@ _1/()_:
 
 _E()_:
           $ "E()"                                * 59CB3
-          :: OBJ_69C64 MetaE() ; }               * 59CC3
+          :: EqwRuleKey0 MetaE() ; }             * 59CC3
 
 * refs (1): 86ACE
 {RULES\L()}:
@@ -1555,7 +1555,7 @@ _E()_:
 
 _L()_:
           $ "L()"                                * 59CE1
-          :: OBJ_69C64 MetaL() ; }               * 59CF1
+          :: EqwRuleKey0 MetaL() ; }             * 59CF1
 
 * refs (1): 86B28
 {RULES\L*}:
@@ -1563,7 +1563,7 @@ _L()_:
 
 _L*_:
           $ "L*"                                 * 59D0F
-          :: OBJ_69C64 MetaL* ; }                * 59D1D
+          :: EqwRuleKey0 MetaL* ; }              * 59D1D
 
 * refs (1): 86B0A
 {RULES\E^}:
@@ -1571,7 +1571,7 @@ _L*_:
 
 _E^_:
           $ "E^"                                 * 59D3B
-          :: OBJ_69C64 MetaE^ ; }                * 59D49
+          :: EqwRuleKey0 MetaE^ ; }              * 59D49
 
 * refs (1): 86B41
 {RULES\->()}:
@@ -1580,8 +1580,8 @@ _E^_:
 _->()_:
           $ "→()"                                * 59D67
           {                                      * 59D77
-            :: OBJ_69C64 Meta->() ; DoBadKey     * 59D7C
-            :: OBJ_69CAC Meta->()all ; }         * 59D95
+            :: EqwRuleKey0 Meta->() ; DoBadKey   * 59D7C
+            :: EqwRuleKey3 Meta->()all ; }       * 59D95
         }                                        * 59DAE
 
 * refs (2): 86A9C 86AE7
@@ -1591,8 +1591,8 @@ _->()_:
 _<-D_:
           $ "←D"                                 * 59DB8
           {                                      * 59DC6
-            :: OBJ_69C64 Meta<-D ; DoBadKey      * 59DCB
-            :: OBJ_69CAC <-D[_]! ; }             * 59DE4
+            :: EqwRuleKey0 Meta<-D ; DoBadKey    * 59DCB
+            :: EqwRuleKey3 <-D[_]! ; }           * 59DE4
         }                                        * 59DFD
 
 * refs (4): 86AA1 86AEC 86B14 86B32
@@ -1602,8 +1602,8 @@ _<-D_:
 _D->_:
           $ "D→"                                 * 59E07
           {                                      * 59E15
-            :: OBJ_69C64 MetaD-> ; DoBadKey      * 59E1A
-            :: OBJ_69CAC MetaD->all ; }          * 59E33
+            :: EqwRuleKey0 MetaD-> ; DoBadKey    * 59E1A
+            :: EqwRuleKey3 MetaD->all ; }        * 59E33
         }                                        * 59E4C
 
 * refs (1): 86B0F
@@ -1612,7 +1612,7 @@ _D->_:
 
 _->TRG_:
           $ "→TRG"                               * 59E56
-          :: OBJ_69C64 Meta->TRG ; }             * 59E68
+          :: EqwRuleKey0 Meta->TRG ; }           * 59E68
 
 * refs (1): 86B64
 {RULES\->()}_59E81:
@@ -1621,8 +1621,8 @@ _->TRG_:
 _->()__59E86:
           $ "→()"                                * 59E86
           {                                      * 59E96
-            :: OBJ_69C64 Meta->()C% ; DoBadKey   * 59E9B
-            :: OBJ_69CAC Meta->()C%all ; }       * 59EB4
+            :: EqwRuleKey0 Meta->()C% ; DoBadKey * 59E9B
+            :: EqwRuleKey3 Meta->()C%all ; }     * 59EB4
         }                                        * 59ECD
 
 * refs (2): 86B73 86B87
@@ -1631,7 +1631,7 @@ _->()__59E86:
 
 _->DEF:
           $ "→DEF"                               * 59ED7
-          :: OBJ_69C64 Meta->DEF ; }             * 59EE9
+          :: EqwRuleKey0 Meta->DEF ; }           * 59EE9
 
 * refs (1): 86B78
 {RULES\TRG*}:
@@ -1639,7 +1639,7 @@ _->DEF:
 
 _TRG*_:
           $ "TRG*"                               * 59F07
-          :: OBJ_69C64 MetaTRG* ; }              * 59F19
+          :: EqwRuleKey0 MetaTRG* ; }            * 59F19
 
 * refs (7): 596D8 59722 59770 597BA 59840 5988A ...
 OBJ_59F32:

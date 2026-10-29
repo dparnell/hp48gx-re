@@ -6209,7 +6209,7 @@ pub(crate) fn utpn_3r__1(r: &mut Run) {
     loop {
         match at {
             0x77EA8..=0x77EA8 => {
-                branch!(r, at, 0x77EAF, 9, r.cpu.call(0x2A060)); // GOSBVL SUB_2A060
+                branch!(r, at, 0x77EAF, 9, r.cpu.call(0x2A060)); // GOSBVL POP1%%
             }
             // #77EAF:
             0x77EAF..=0x77EB6 => {
@@ -14804,7 +14804,7 @@ pub(crate) fn __H_HMS_1(r: &mut Run) {
     loop {
         match at {
             0x79EC4..=0x79EC4 => {
-                branch!(r, at, 0x79ECB, 9, r.cpu.call(0x2A060)); // GOSBVL SUB_2A060
+                branch!(r, at, 0x79ECB, 9, r.cpu.call(0x2A060)); // GOSBVL POP1%%
             }
             // #79ECB:
             0x79ECB..=0x79ECB => {
@@ -16150,7 +16150,7 @@ pub(crate) fn OBJ_7C861(r: &mut Run) {
                 op!(r, at, 0x7C8B2..0x7C8B4, 4, r.cpu.push_c()); // RSTK=C
                 op!(r, at, 0x7C8B4..0x7C8B6, 4, r.cpu.add(R::C, R::A, Field::A)); // C=C+A A
                 op!(r, at, 0x7C8B6..0x7C8B8, 4, r.cpu.push_c()); // RSTK=C
-                branch!(r, at, 0x7C8BC, 6, r.cpu.call(0x7CC6A)); // GOSUB SUB_7CC6A
+                branch!(r, at, 0x7C8BC, 6, r.cpu.call(0x7CC6A)); // GOSUB GetAbs%%AB1~jump
             }
             // #7C8BC:
             0x7C8BC..=0x7C8BC => {
@@ -16212,7 +16212,7 @@ pub(crate) fn SUB_7C8CF(r: &mut Run) {
             }
             // L_7C8F5:
             0x7C8F5..=0x7C8F5 => {
-                branch!(r, at, 0x7C8F9, 6, r.cpu.call(0x7CC6A)); // GOSUB SUB_7CC6A
+                branch!(r, at, 0x7C8F9, 6, r.cpu.call(0x7CC6A)); // GOSUB GetAbs%%AB1~jump
             }
             // #7C8F9:
             0x7C8F9..=0x7C900 => {
@@ -16239,7 +16239,7 @@ pub(crate) fn SUB_7C8CF(r: &mut Run) {
             0x7C91C..=0x7C922 => {
                 op!(r, at, 0x7C91C..0x7C91F, 5, r.cpu.d_sub(1, 5)); // D1=D1- 5
                 op!(r, at, 0x7C91F..0x7C922, 5, r.cpu.d_sub(1, 16)); // D1=D1- 16
-                branch!(r, at, 0x7C926, 6, r.cpu.call(0x7CC6A)); // GOSUB SUB_7CC6A
+                branch!(r, at, 0x7C926, 6, r.cpu.call(0x7CC6A)); // GOSUB GetAbs%%AB1~jump
             }
             // #7C926:
             0x7C926..=0x7C933 => {
@@ -16315,7 +16315,7 @@ pub(crate) fn SUB_7C962(r: &mut Run) {
             }
             // L_7C982:
             0x7C982..=0x7C982 => {
-                branch!(r, at, 0x7C986, 6, r.cpu.call(0x7CC6A)); // GOSUB SUB_7CC6A
+                branch!(r, at, 0x7C986, 6, r.cpu.call(0x7CC6A)); // GOSUB GetAbs%%AB1~jump
             }
             // #7C986:
             0x7C986..=0x7C98D => {
@@ -16326,7 +16326,7 @@ pub(crate) fn SUB_7C962(r: &mut Run) {
             }
             // #7C991:
             0x7C991..=0x7C991 => {
-                branch!(r, at, 0x7C995, 6, r.cpu.call(0x7CC6A)); // GOSUB SUB_7CC6A
+                branch!(r, at, 0x7C995, 6, r.cpu.call(0x7CC6A)); // GOSUB GetAbs%%AB1~jump
             }
             // #7C995:
             0x7C995..=0x7C9A2 => {
@@ -16360,7 +16360,7 @@ pub(crate) fn SUB_7C962(r: &mut Run) {
             }
             // L_7C9C1:
             0x7C9C1..=0x7C9C1 => {
-                branch!(r, at, 0x7C9C5, 6, r.cpu.call(0x7CC6A)); // GOSUB SUB_7CC6A
+                branch!(r, at, 0x7C9C5, 6, r.cpu.call(0x7CC6A)); // GOSUB GetAbs%%AB1~jump
             }
             // #7C9C5:
             0x7C9C5..=0x7C9CC => {
@@ -16622,7 +16622,7 @@ pub(crate) fn OBJ_7CAA4(r: &mut Run) {
             }
             // L_7CAFB:
             0x7CAFB..=0x7CAFB => {
-                branch!(r, at, 0x7CAFF, 6, r.cpu.call(0x7CC6A)); // GOSUB SUB_7CC6A
+                branch!(r, at, 0x7CAFF, 6, r.cpu.call(0x7CC6A)); // GOSUB GetAbs%%AB1~jump
             }
             // #7CAFF:
             0x7CAFF..=0x7CB06 => {
@@ -16672,7 +16672,7 @@ pub(crate) fn OBJ_7CAA4(r: &mut Run) {
             }
             // L_7CB3E:
             0x7CB3E..=0x7CB3E => {
-                branch!(r, at, 0x7CB42, 6, r.cpu.call(0x7CC6A)); // GOSUB SUB_7CC6A
+                branch!(r, at, 0x7CB42, 6, r.cpu.call(0x7CC6A)); // GOSUB GetAbs%%AB1~jump
             }
             // #7CB42:
             0x7CB42..=0x7CB49 => {
@@ -16698,7 +16698,7 @@ pub(crate) fn OBJ_7CAA4(r: &mut Run) {
             0x7CB62..=0x7CB68 => {
                 op!(r, at, 0x7CB62..0x7CB65, 5, r.cpu.d_sub(1, 5)); // D1=D1- 5
                 op!(r, at, 0x7CB65..0x7CB68, 5, r.cpu.d_sub(1, 16)); // D1=D1- 16
-                branch!(r, at, 0x7CB6C, 6, r.cpu.call(0x7CC6A)); // GOSUB SUB_7CC6A
+                branch!(r, at, 0x7CB6C, 6, r.cpu.call(0x7CC6A)); // GOSUB GetAbs%%AB1~jump
             }
             // #7CB6C:
             0x7CB6C..=0x7CB79 => {
@@ -16752,7 +16752,7 @@ pub(crate) fn OBJ_7CAA4(r: &mut Run) {
             }
             // L_7CBBD:
             0x7CBBD..=0x7CBBD => {
-                branch!(r, at, 0x7CBC1, 6, r.cpu.call(0x7CC6A)); // GOSUB SUB_7CC6A
+                branch!(r, at, 0x7CBC1, 6, r.cpu.call(0x7CC6A)); // GOSUB GetAbs%%AB1~jump
             }
             // #7CBC1:
             0x7CBC1..=0x7CBC8 => {
@@ -16763,7 +16763,7 @@ pub(crate) fn OBJ_7CAA4(r: &mut Run) {
             }
             // #7CBCC:
             0x7CBCC..=0x7CBCC => {
-                branch!(r, at, 0x7CBD0, 6, r.cpu.call(0x7CC6A)); // GOSUB SUB_7CC6A
+                branch!(r, at, 0x7CBD0, 6, r.cpu.call(0x7CC6A)); // GOSUB GetAbs%%AB1~jump
             }
             // #7CBD0:
             0x7CBD0..=0x7CBDD => {
@@ -16803,7 +16803,7 @@ pub(crate) fn OBJ_7CAA4(r: &mut Run) {
             }
             // L_7CC08:
             0x7CC08..=0x7CC08 => {
-                branch!(r, at, 0x7CC0C, 6, r.cpu.call(0x7CC6A)); // GOSUB SUB_7CC6A
+                branch!(r, at, 0x7CC0C, 6, r.cpu.call(0x7CC6A)); // GOSUB GetAbs%%AB1~jump
             }
             // #7CC0C:
             0x7CC0C..=0x7CC13 => {
@@ -16911,13 +16911,13 @@ pub(crate) fn SUB_7CC64(r: &mut Run) {
     }
 }
 
-// SUB_7CC6A: firmware/lower/7C855-misc-7C855.s:430
-pub(crate) fn SUB_7CC6A(r: &mut Run) {
+// GetAbs%%AB1~jump: firmware/lower/7C855-misc-7C855.s:430
+pub(crate) fn GetAbs__AB1_jump(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
             0x7CC6A..=0x7CC6A => {
-                jump!(r, at, 9, r.cpu.pc = 0x35AA8); // GOVLNG L_35AA8
+                jump!(r, at, 9, r.cpu.pc = 0x35AA8); // GOVLNG GetAbs%%AB1
             }
             _ => {
                 r.cpu.pc = at;
@@ -17016,7 +17016,7 @@ pub(crate) fn OBJ_7CC7F(r: &mut Run) {
             }
             // L_7CCD7:
             0x7CCD7..=0x7CCD7 => {
-                branch!(r, at, 0x7CCDB, 6, r.cpu.call(0x7CC6A)); // GOSUB SUB_7CC6A
+                branch!(r, at, 0x7CCDB, 6, r.cpu.call(0x7CC6A)); // GOSUB GetAbs%%AB1~jump
             }
             // #7CCDB:
             0x7CCDB..=0x7CCE2 => {
@@ -17048,7 +17048,7 @@ pub(crate) fn OBJ_7CC7F(r: &mut Run) {
             }
             // L_7CD05:
             0x7CD05..=0x7CD05 => {
-                branch!(r, at, 0x7CD09, 6, r.cpu.call(0x7CC6A)); // GOSUB SUB_7CC6A
+                branch!(r, at, 0x7CD09, 6, r.cpu.call(0x7CC6A)); // GOSUB GetAbs%%AB1~jump
             }
             // #7CD09:
             0x7CD09..=0x7CD10 => {
@@ -17074,7 +17074,7 @@ pub(crate) fn OBJ_7CC7F(r: &mut Run) {
             0x7CD29..=0x7CD2F => {
                 op!(r, at, 0x7CD29..0x7CD2C, 5, r.cpu.d_sub(1, 5)); // D1=D1- 5
                 op!(r, at, 0x7CD2C..0x7CD2F, 5, r.cpu.d_sub(1, 16)); // D1=D1- 16
-                branch!(r, at, 0x7CD33, 6, r.cpu.call(0x7CC6A)); // GOSUB SUB_7CC6A
+                branch!(r, at, 0x7CD33, 6, r.cpu.call(0x7CC6A)); // GOSUB GetAbs%%AB1~jump
             }
             // #7CD33:
             0x7CD33..=0x7CD40 => {
@@ -17127,7 +17127,7 @@ pub(crate) fn OBJ_7CC7F(r: &mut Run) {
     }
 }
 
-// OBJ_7D28D: firmware/lower/7C855-misc-7C855.s:609
+// OBJ_7D28D: firmware/lower/7C855-misc-7C855.s:610
 pub(crate) fn OBJ_7D28D(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -17312,7 +17312,7 @@ pub(crate) fn OBJ_7D28D(r: &mut Run) {
     }
 }
 
-// OBJ_7D3CB: firmware/lower/7C855-misc-7C855.s:730
+// OBJ_7D3CB: firmware/lower/7C855-misc-7C855.s:731
 pub(crate) fn OBJ_7D3CB(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -17461,7 +17461,7 @@ pub(crate) fn OBJ_7D3CB(r: &mut Run) {
     }
 }
 
-// OBJ_7D4C5: firmware/lower/7C855-misc-7C855.s:821
+// OBJ_7D4C5: firmware/lower/7C855-misc-7C855.s:822
 pub(crate) fn OBJ_7D4C5(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -17633,7 +17633,7 @@ pub(crate) fn OBJ_7D4C5(r: &mut Run) {
     }
 }
 
-// OBJ_7D5CF: firmware/lower/7C855-misc-7C855.s:917
+// OBJ_7D5CF: firmware/lower/7C855-misc-7C855.s:918
 pub(crate) fn OBJ_7D5CF(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -17781,7 +17781,7 @@ pub(crate) fn OBJ_7D5CF(r: &mut Run) {
     }
 }
 
-// SUB_7D6B0: firmware/lower/7C855-misc-7C855.s:1002
+// SUB_7D6B0: firmware/lower/7C855-misc-7C855.s:1003
 pub(crate) fn SUB_7D6B0(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -17800,7 +17800,7 @@ pub(crate) fn SUB_7D6B0(r: &mut Run) {
     }
 }
 
-// SAVPTR~jump_7D6B8: firmware/lower/7C855-misc-7C855.s:1008
+// SAVPTR~jump_7D6B8: firmware/lower/7C855-misc-7C855.s:1009
 pub(crate) fn SAVPTR_jump_7D6B8(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -17816,7 +17816,7 @@ pub(crate) fn SAVPTR_jump_7D6B8(r: &mut Run) {
     }
 }
 
-// SUB_7D6BF: firmware/lower/7C855-misc-7C855.s:1012
+// SUB_7D6BF: firmware/lower/7C855-misc-7C855.s:1013
 pub(crate) fn SUB_7D6BF(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -17840,7 +17840,7 @@ pub(crate) fn SUB_7D6BF(r: &mut Run) {
     }
 }
 
-// OBJ_7D6D2: firmware/lower/7C855-misc-7C855.s:1020
+// OBJ_7D6D2: firmware/lower/7C855-misc-7C855.s:1021
 pub(crate) fn OBJ_7D6D2(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -17857,7 +17857,7 @@ pub(crate) fn OBJ_7D6D2(r: &mut Run) {
     }
 }
 
-// OBJ_7D6DE: firmware/lower/7C855-misc-7C855.s:1026
+// OBJ_7D6DE: firmware/lower/7C855-misc-7C855.s:1027
 pub(crate) fn OBJ_7D6DE(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -17904,7 +17904,7 @@ pub(crate) fn OBJ_7D6DE(r: &mut Run) {
     }
 }
 
-// SUB_7D70A: firmware/lower/7C855-misc-7C855.s:1045
+// SUB_7D70A: firmware/lower/7C855-misc-7C855.s:1046
 pub(crate) fn SUB_7D70A(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -17929,7 +17929,7 @@ pub(crate) fn SUB_7D70A(r: &mut Run) {
     }
 }
 
-// SUB_7D71D: firmware/lower/7C855-misc-7C855.s:1054
+// SUB_7D71D: firmware/lower/7C855-misc-7C855.s:1055
 pub(crate) fn SUB_7D71D(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -17952,7 +17952,7 @@ pub(crate) fn SUB_7D71D(r: &mut Run) {
     }
 }
 
-// SUB_7D733: firmware/lower/7C855-misc-7C855.s:1065
+// SUB_7D733: firmware/lower/7C855-misc-7C855.s:1066
 pub(crate) fn SUB_7D733(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -17991,7 +17991,7 @@ pub(crate) fn SUB_7D733(r: &mut Run) {
     }
 }
 
-// SUB_7D755: firmware/lower/7C855-misc-7C855.s:1077
+// SUB_7D755: firmware/lower/7C855-misc-7C855.s:1078
 pub(crate) fn SUB_7D755(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -18011,7 +18011,7 @@ pub(crate) fn SUB_7D755(r: &mut Run) {
     }
 }
 
-// U>NCQ~1~2~1~1: firmware/lower/7C855-misc-7C855.s:1085
+// U>NCQ~1~2~1~1: firmware/lower/7C855-misc-7C855.s:1086
 pub(crate) fn U_NCQ_1_2_1_1(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -18028,7 +18028,7 @@ pub(crate) fn U_NCQ_1_2_1_1(r: &mut Run) {
     }
 }
 
-// OBJ_7D76D: firmware/lower/7C855-misc-7C855.s:1091
+// OBJ_7D76D: firmware/lower/7C855-misc-7C855.s:1092
 pub(crate) fn OBJ_7D76D(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -18086,7 +18086,7 @@ pub(crate) fn OBJ_7D76D(r: &mut Run) {
     }
 }
 
-// OBJ_7D7A9: firmware/lower/7C855-misc-7C855.s:1115
+// OBJ_7D7A9: firmware/lower/7C855-misc-7C855.s:1116
 pub(crate) fn OBJ_7D7A9(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -18153,7 +18153,7 @@ pub(crate) fn OBJ_7D7A9(r: &mut Run) {
     }
 }
 
-// OBJ_7D7F9: firmware/lower/7C855-misc-7C855.s:1139
+// OBJ_7D7F9: firmware/lower/7C855-misc-7C855.s:1140
 pub(crate) fn OBJ_7D7F9(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -18256,7 +18256,7 @@ pub(crate) fn OBJ_7D7F9(r: &mut Run) {
     }
 }
 
-// SUB_7D89B: firmware/lower/7C855-misc-7C855.s:1194
+// SUB_7D89B: firmware/lower/7C855-misc-7C855.s:1195
 pub(crate) fn SUB_7D89B(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -18367,7 +18367,7 @@ pub(crate) fn SUB_7D89B(r: &mut Run) {
     }
 }
 
-// SUB_7D9B8: firmware/lower/7C855-misc-7C855.s:1288
+// SUB_7D9B8: firmware/lower/7C855-misc-7C855.s:1289
 pub(crate) fn SUB_7D9B8(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -18429,7 +18429,7 @@ pub(crate) fn SUB_7D9B8(r: &mut Run) {
     }
 }
 
-// SUB_7DA1D: firmware/lower/7C855-misc-7C855.s:1321
+// SUB_7DA1D: firmware/lower/7C855-misc-7C855.s:1322
 pub(crate) fn SUB_7DA1D(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -18453,7 +18453,7 @@ pub(crate) fn SUB_7DA1D(r: &mut Run) {
     }
 }
 
-// SUB_7DA2B: firmware/lower/7C855-misc-7C855.s:1327
+// SUB_7DA2B: firmware/lower/7C855-misc-7C855.s:1328
 pub(crate) fn SUB_7DA2B(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -18523,7 +18523,7 @@ pub(crate) fn SUB_7DA2B(r: &mut Run) {
     }
 }
 
-// SUB_7DA74: firmware/lower/7C855-misc-7C855.s:1357
+// SUB_7DA74: firmware/lower/7C855-misc-7C855.s:1358
 pub(crate) fn SUB_7DA74(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -18554,7 +18554,7 @@ pub(crate) fn SUB_7DA74(r: &mut Run) {
     }
 }
 
-// SUB_7DA8D: firmware/lower/7C855-misc-7C855.s:1370
+// SUB_7DA8D: firmware/lower/7C855-misc-7C855.s:1371
 pub(crate) fn SUB_7DA8D(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -18595,7 +18595,7 @@ pub(crate) fn SUB_7DA8D(r: &mut Run) {
     }
 }
 
-// SUB_7DABE: firmware/lower/7C855-misc-7C855.s:1389
+// SUB_7DABE: firmware/lower/7C855-misc-7C855.s:1390
 pub(crate) fn SUB_7DABE(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -18627,7 +18627,7 @@ pub(crate) fn SUB_7DABE(r: &mut Run) {
     }
 }
 
-// SUB_7DADF: firmware/lower/7C855-misc-7C855.s:1398
+// SUB_7DADF: firmware/lower/7C855-misc-7C855.s:1399
 pub(crate) fn SUB_7DADF(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -18644,7 +18644,7 @@ pub(crate) fn SUB_7DADF(r: &mut Run) {
     }
 }
 
-// SUB_7DAE2: firmware/lower/7C855-misc-7C855.s:1402
+// SUB_7DAE2: firmware/lower/7C855-misc-7C855.s:1403
 pub(crate) fn SUB_7DAE2(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -18747,7 +18747,7 @@ pub(crate) fn SUB_7DAE2(r: &mut Run) {
     }
 }
 
-// SUB_7DB73: firmware/lower/7C855-misc-7C855.s:1447
+// SUB_7DB73: firmware/lower/7C855-misc-7C855.s:1448
 pub(crate) fn SUB_7DB73(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -18785,7 +18785,7 @@ pub(crate) fn SUB_7DB73(r: &mut Run) {
     }
 }
 
-// L_7DF9D: firmware/lower/7C855-misc-7C855.s:1784
+// L_7DF9D: firmware/lower/7C855-misc-7C855.s:1785
 pub(crate) fn L_7DF9D(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -18807,7 +18807,7 @@ pub(crate) fn L_7DF9D(r: &mut Run) {
     }
 }
 
-// SUB_7DFB6: firmware/lower/7C855-misc-7C855.s:1794
+// SUB_7DFB6: firmware/lower/7C855-misc-7C855.s:1795
 pub(crate) fn SUB_7DFB6(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -18847,7 +18847,7 @@ pub(crate) fn SUB_7DFB6(r: &mut Run) {
     }
 }
 
-// SUB_7DFF6: firmware/lower/7C855-misc-7C855.s:1815
+// SUB_7DFF6: firmware/lower/7C855-misc-7C855.s:1816
 pub(crate) fn SUB_7DFF6(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -18863,7 +18863,7 @@ pub(crate) fn SUB_7DFF6(r: &mut Run) {
     }
 }
 
-// EndFreeROM: firmware/lower/7C855-misc-7C855.s:1819
+// EndFreeROM: firmware/lower/7C855-misc-7C855.s:1820
 pub(crate) fn EndFreeROM(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -19204,7 +19204,7 @@ pub const ROUTINES: &[(u32, u32, Block, &str)] = &[
     (0x7CC56, 0x7CC5C, SUB_7CC56, "SUB_7CC56"),
     (0x7CC5D, 0x7CC63, SUB_7CC5D, "SUB_7CC5D"),
     (0x7CC64, 0x7CC69, SUB_7CC64, "SUB_7CC64"),
-    (0x7CC6A, 0x7CC70, SUB_7CC6A, "SUB_7CC6A"),
+    (0x7CC6A, 0x7CC70, GetAbs__AB1_jump, "GetAbs__AB1_jump"),
     (0x7CC71, 0x7CC77, SUB_7CC71, "SUB_7CC71"),
     (0x7CC78, 0x7CC7E, SUB_7CC78, "SUB_7CC78"),
     (0x7CC84, 0x7CD78, OBJ_7CC7F, "OBJ_7CC7F"),

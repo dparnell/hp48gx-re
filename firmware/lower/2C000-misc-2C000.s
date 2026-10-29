@@ -384,16 +384,14 @@ STATLR:
           %%/ SWAPROT 3PICK %%-* OBJ_2CC06 IT %%EXP * 2CA7B
           %%>% SWAP %%>% 2SWAP 2DROP ChkReakäPAR ROTROT2DROP 4PICKSWAP 6PICK * 2CA9E
           3UNROLL                                * 2CACB
-
-predy(r):
+* The Very Big List names this address predy(r), but it is a pointer inside an object; the name is not used
           StoäPAR(5_) ;                          * 2CAD0
 
 * % -> %'
 * refs (3): 1FF89 1FFA9 B7F0E
 STATPREDY:
         ::                                       * 2CADA
-
-predx(r):
+* The Very Big List names this address predx(r), but it is a pointer inside an object; the name is not used
           ChkReakäPAR DROP ROTDROP ROTDROP ROT %>%% OBJ_2CC4C IT OBJ_2CBC5 * 2CADF
           SWAP %>%% %%*SWAP %>%% OBJ_2CC06 IT OBJ_2CBC5 * 2CB0C
           %%+ OBJ_2CC06 IT %%EXP                 * 2CB2F
@@ -403,8 +401,7 @@ predx(r):
 * refs (2): 1FFC9 B7EFF
 STATPREDX:
         ::                                       * 2CB4D
-
-PwrExpFIT?:
+* The Very Big List names this address PwrExpFIT?, but it is a pointer inside an object; the name is not used
           ChkReakäPAR DROP ROTDROP ROTDROP ROT %>%% OBJ_2CC06 IT OBJ_2CBC5 * 2CB52
           ROT %>%% OBJ_2CC06 IT OBJ_2CBC5        * 2CB7F
           %%- SWAP %>%% %%/ OBJ_2CC4C IT %%EXP   * 2CB98
@@ -423,16 +420,14 @@ OBJ_2CBE8:
 * refs (14): 2C84B 2C85F 2C8AF 2C909 2C918 2CA2B ...
 OBJ_2CC06:
         ::                                       * 2CC06
-
-PwrLogFIT?:
+* The Very Big List names this address PwrLogFIT?, but it is a pointer inside an object; the name is not used
           ChkReakäPAR 5UNROLL 4DROP DUP ' xPWRFIT EQUAL SWAP ' xEXPFIT EQUAL * 2CC0B
           OR ;                                   * 2CC42
 
 * refs (12): 2C878 2C88C 2C8AA 2C8FA 2C913 2CA1C ...
 OBJ_2CC4C:
         ::                                       * 2CC4C
-
-nrows(ar):
+* The Very Big List names this address nrows(ar), but it is a pointer inside an object; the name is not used
           ChkReakäPAR 5UNROLL 4DROP DUP ' xPWRFIT EQUAL SWAP ' xLOGFIT EQUAL * 2CC51
           OR ;                                   * 2CC88
 

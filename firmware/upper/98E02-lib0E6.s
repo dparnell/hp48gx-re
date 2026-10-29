@@ -220,7 +220,7 @@ L_9947F:
           GOSBVL  RCAB2                          * 994DD
           GOSBVL  RADDF                          * 994E4
           GOSBVL  SUB_78670                      * 994EB
-          GOSBVL  SUB_0CA81                      * 994F2
+          GOSBVL  CkATTNcode                     * 994F2
           SETDEC                                 * 994F9
           GOSBVL  RCAB0                          * 994FB
           GOSBVL  RSUB1                          * 99502
@@ -490,7 +490,7 @@ L_9986F:
           RTNC                                   * 99873
           GOSUB   SUB_99A66                      * 99876
 L_9987A:
-          GOSBVL  SUB_0CA81                      * 9987A
+          GOSBVL  CkATTNcode                     * 9987A
           SETDEC                                 * 99881
           GOSBVL  SUB_7866A                      * 99883
           GOSUB   RADD1~jump_99D1D               * 9988A

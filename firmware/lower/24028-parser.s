@@ -1097,8 +1097,7 @@ OBJ_25B3D:
           3PICK LEN$ #<case                      * 25B97
           :: DROP failed ;                       * 25BA6
           BINT20                                 * 25BBA
-
-3dropn;false;true:
+* The Very Big List names this address 3dropn;false;true, but it is a pointer inside an object; the name is not used
           OBJ_25C37 Extobcode NOTcase            * 25BBF
           :: DROP failed ;                       * 25BCE
           6rolld;1+(s5) OBJ_25D3A OBJ_25AB6 TrueTrue ; * 25BE2
@@ -2043,6 +2042,7 @@ L_26B5E:
         RPL
 
 * refs (15): 0C218 1F889 2749F 40643 5E9E6 68828 ...
+* Probably: ob -> ob' x #n TRUE | ob FALSE: the argument count of a program or ROMPTR that starts with CKn&Dispatch or -> locals
 OBJ_26BED:
         :: CK&DISPATCH0                          * 26BED
           BINT15 OBJ_26C1A                       * 26BF7  romptr

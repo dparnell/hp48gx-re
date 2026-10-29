@@ -1,6 +1,6 @@
 * HP 48GX ROM revision R, #4400C-#46006: Command line editor
 * Addresses in the right-hand comments are those of the original ROM.
-* Most referenced: EDITPARTS InitEd&Modes NoEditLine? CURSOR_END? EditString InitEdLine RowElt# InitEdModes GetElt EDITLINE$ AddInComLine(st) NextChrInComLine
+* Most referenced: EDITPARTS InitEd&Modes DECOMP&$ NoEditLine? CURSOR_END? EditString InitEdLine RowElt# InitEdModes GetElt EDITLINE$ AddInComLine(st)
 * Follows on from the previous file (at #4400C in the original ROM).
         RPL
 
@@ -741,7 +741,7 @@ OBJ_44DD6:
 
 * refs (8): 65D91 65ED6 661CE 69A22 6D203 6E145 ...
 OBJ_44DFE:
-          :: OBJ_6CF3D OBJ_6C873 6PICK 3UNROLL OBJ_67C23 4PICK 3UNROLL * 44DFE
+          :: OBJ_6CF3D 2DUPHALF 6PICK 3UNROLL OBJ_67C23 4PICK 3UNROLL * 44DFE
             OBJ_6CE8E OBJ_68245 ;                * 44E26
           SWAP ;                                 * 44E35
 
@@ -869,8 +869,8 @@ Blank$:
 
 * refs (2): 46B01 4D8B2
 OBJ_45681:
-        :: TakeOver OBJ_4E6C7 GBUFF TOTEMPOB CK0NOLASTWD Π'SAVEDDEPTH #1+ ' * 45681
-          Π'SAVEDDEPTH STO CROSSMARKON ;         * 456AE
+        :: TakeOver CROSSMARKOFF GBUFF TOTEMPOB CK0NOLASTWD Π'SAVEDDEPTH #1+ * 45681
+          ' Π'SAVEDDEPTH STO CROSSMARKON ;       * 456A9
 
 * refs (6): 0C95B 0C960 0C965 0C96A 46B40 47FE0
 OBJ_456C2:
@@ -883,9 +883,9 @@ OBJ_456E5:
 
 * refs (1): 3E7AB
 {GRAPH\SUä}~1:
-        :: CHECKMENU OBJ_4579E OBJ_4E6C7 OBJ_517B2 ORDERXY# #1+ SWAP#1+SWAP * 456F9
-          GBUFF 5UNROLL SUBGROB CK0NOLASTWD Π'SAVEDDEPTH #1+ ' Π'SAVEDDEPTH * 45721
-          STO CROSSMARKON ;                      * 45749
+        :: CHECKMENU OBJ_4579E CROSSMARKOFF OBJ_517B2 ORDERXY# #1+ * 456F9
+          SWAP#1+SWAP GBUFF 5UNROLL SUBGROB CK0NOLASTWD Π'SAVEDDEPTH #1+ ' * 4571C
+          Π'SAVEDDEPTH STO CROSSMARKON ;         * 45744
 
 * refs (1): 3E7CA
 {GRAPH\DEL}~1:
@@ -893,8 +893,8 @@ OBJ_456E5:
 
 * refs (2): 46AA4 4D80D
 OBJ_4576C:
-        :: TakeOver OBJ_4E6C7 GBUFF ZEROZERO GBUFFGROBDIM SWAP GROB!ZERODRP * 4576C
-          CROSSMARKON ;                          * 45794
+        :: TakeOver CROSSMARKOFF GBUFF ZEROZERO GBUFFGROBDIM SWAP * 4576C
+          GROB!ZERODRP CROSSMARKON ;             * 4578F
 
 * refs (9): 45703 477E5 4E3ED 4E564 4E5F0 4E63B ...
 OBJ_4579E:
@@ -1108,7 +1108,8 @@ OBJ_45E6F:
           14SPACES$ BINT1 ROT SUB$ SWAP !!append$ ; * 45E8D
 
 * refs (15): 45F3B 45F62 45FF3 46148 4A3DD 4A4D1 ...
-OBJ_45EB0:
+* $ ob -> $': append ob, decompiled for editing
+DECOMP&$:
         :: EDITDECOMP$ &$ ;                      * 45EB0
 
 * refs (2): B6349 C6A04
@@ -1119,13 +1120,13 @@ OBJ_45EC4:
 
 * refs (1): 3C491
 OBJ_45F14:
-        :: Chk&BreakPPAR $ "Indep: " 6ROLL OBJ_45EB0 DISPROW3 $ "Depnd: " * 45F14
-          SWAP OBJ_45EB0 DISPROW4 2DROP 3UNROLL DUPTYPECMP? NOT?INVPPAR C%>% * 45F5D
+        :: Chk&BreakPPAR $ "Indep: " 6ROLL DECOMP&$ DISPROW3 $ "Depnd: " * 45F14
+          SWAP DECOMP&$ DISPROW4 2DROP 3UNROLL DUPTYPECMP? NOT?INVPPAR C%>% * 45F5D
           ROT DUPTYPECMP? NOT?INVPPAR C%>% 4ROLLROT * 45F85
 
 _Xrng:_:
           $ "Xrng:" OBJ_4A834 DISPROW5           * 45F9E
 
 _Yrng:_:
-          $ "Yrng:" OBJ_4A834 DISPROW6 $ "Res: " SWAP OBJ_45EB0 DISPROW7 * 45FBC
+          $ "Yrng:" OBJ_4A834 DISPROW6 $ "Res: " SWAP DECOMP&$ DISPROW7 * 45FBC
           SetDA2OKTemp ;                         * 45FFD

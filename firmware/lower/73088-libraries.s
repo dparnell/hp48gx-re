@@ -1,6 +1,6 @@
 * HP 48GX ROM revision R, #73088-#740E0: Library table, access pointers, bank switching
 * Addresses in the right-hand comments are those of the original ROM.
-* Most referenced: ZOOM Y: X: TRACE MsgTab(0) FCN EDIT_73456 (X,Y) (AN(L 'EnvOK
+* Most referenced: TraceMode? ZOOM Y: X: TRACE MsgTab(0) FCN EDIT_73456 (X,Y) (AN(L 'EnvOK
 * Follows on from the previous file (at #73088 in the original ROM).
 
 * refs (1): 7305B
@@ -151,7 +151,7 @@ OBJ_73388:
                 PTR Box/StdLbl:                  * 733A6
 
 TRACE:
-                $ "TRACE" OBJ_73602 ;            * 733AB
+                $ "TRACE" TraceMode? ;           * 733AB
               OBJ_73792 }                        * 733C9
             {                                    * 733D3
               :: TakeOver OBJ_4EE42 NOTcase NULL$ * 733D8
@@ -217,7 +217,8 @@ OBJ_735EE:
         :: 3GETLAM #3= ;                         * 735EE
 
 * refs (20): 47071 4720E 4723B 47290 4887D 4D33F ...
-OBJ_73602:
+* -> flag: PICTURE: TRUE when the cursor mode (lam 3) is 4, TRACE
+TraceMode?:
         :: 3GETLAM BINT4 #= ;                    * 73602
 
 * refs (4): 4D3DF 4D506 4D5F6 4D6FA
@@ -268,7 +269,7 @@ OBJ_7376A:
 
 * refs (1): 733C9
 OBJ_73792:
-        :: CHECKMENU OBJ_73602 case OBJ_4EE60    * 73792
+        :: CHECKMENU TraceMode? case OBJ_4EE60   * 73792
           BINT27 GETLAM OBJ_737D3 NOTcase DoBadKey * 737AB
           OBJ_73698 DispMenu.1 ;                 * 737C4
 
@@ -316,7 +317,7 @@ OBJ_7399A:
 
 * refs (2): 73A3A 73A94
 OBJ_739E5:
-        :: OBJ_73602 ITE                         * 739E5
+        :: TraceMode? ITE                        * 739E5
           :: BINT25 GETLAM ;                     * 739F4
           :: 5GETLAM 7GETLAM UNCOERCE%% %%- 9GETLAM %%/>% ; * 73A08
         ;                                        * 73A30
@@ -344,7 +345,7 @@ OBJ_73B20:
 
 * refs (1): 47281
 OBJ_73B61:
-          :: CLEARMENU OBJ_73602 case OBJ_4EEA1  * 73B61
+          :: CLEARMENU TraceMode? case OBJ_4EEA1 * 73B61
             BINT1 16PUTLAM                       * 73B7A
 
 Y::
@@ -390,13 +391,13 @@ OBJ_73D6B:
 
 * refs (1): 8CB8C
 OBJ_73D84:
-        :: OBJ_73602 ITE 15GETLAM OBJ_73DFC      * 73D84
+        :: TraceMode? ITE 15GETLAM OBJ_73DFC     * 73D84
           BINT38 SWAP BINT9 OBJ_4686A HARDBUFF2 BINT8 BINT2 BINT47 BINT7 * 73D9D
           GROB!ZERODRP HARDBUFF2 BINT8 BINT2 GROB! ; * 73DCA
 
 * refs (3): 47218 8C849 8CA48
 OBJ_73DE8:
-        :: OBJ_73602 ITE 15GETLAM                * 73DE8
+        :: TraceMode? ITE 15GETLAM               * 73DE8
 
 * refs (3): 47821 48CC4 73D98
 OBJ_73DFC:

@@ -509,7 +509,7 @@ ROMP_0B0_0AE:
 * ROMPTR 0B0 0AF
 * refs (1): D49CE
 ROMP_0B0_0AF:
-        :: OBJ_6819D 3GETLAM SWAP#- ;            * D8FEA
+        :: #3* 3GETLAM SWAP#- ;                  * D8FEA
 
 * ROMPTR 0B0 0B0
 * refs (1): D49CE

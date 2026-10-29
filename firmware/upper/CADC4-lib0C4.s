@@ -278,7 +278,7 @@ L_CB0E1:
 L_CB13A:
           C=C+1   A                              * CB13A
           DAT0=C  A                              * CB13C
-          GOSBVL  SUB_0CA81                      * CB13F
+          GOSBVL  CkATTNcode                     * CB13F
           D0=D0-  16                             * CB146
           D0=D0-  9                              * CB149
           C=DAT0  A                              * CB14C
@@ -615,7 +615,7 @@ ROMP_0C4_009:
         :: DUP ARSIZE RESOROMP ROMPTR 0C4 00B RESOROMP ROMPTR 0C4 00A 3PICK * CB579
           3NULLLAM{} BIND #1+ DUP BINT1 {}N 3PICK TYPERARRY? ITE %%0 ((0,0)) * CB5AD
           MAKEARRY %%1 3PICK PUT%%EL 3UNROLL ONE_DO INDEX@ PULLLONGEL * CB5E4
-          :: OBJ_3798C case 2GETLAM              * CB60C
+          :: DUPTYPEEREL? case 2GETLAM           * CB60C
             INDEX@ 1GETLAM #=case 2GETLAM        * CB620
             SWAP INDEX@ #1+ PULLLONGEL C%%CONJ ROT DUPUNROT EQUAL ITE * CB634
             3GETLAM 2GETLAM                      * CB661
@@ -666,7 +666,7 @@ PEVAL~1:
             CD1EX                                * CB956
             ?C#A    A                            * CB959
             GOYES   L_CB973                      * CB95C
-            GOSBVL  SUB_2A060                    * CB95E
+            GOSBVL  POP1%%                       * CB95E
             GOSUB   SUB_CB9CE                    * CB965
             GOC     L_CB996                      * CB969
             GOVLNG  L_2A235                      * CB96C
