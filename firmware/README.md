@@ -65,6 +65,21 @@ The format is described at the top of `tools/sasm.py`. In short:
 - **Comments** start with `*`.
 - **Data directives** are `CON(n)`, `REL(n)`, `NIBHEX`, `NIBASC` and `BSS`.
 
+## Names
+
+Labels come, in order of preference, from our notes (`data/annotations.txt`),
+the published entry-point lists (`data/entries48g.txt`, `data/vbl48gx-r.txt`)
+and the libraries' own command names. Where none of those names a piece of
+code, the generator works one out from where it is used. These names are ours,
+not HP's, and always contain `~`, which no published name does:
+
+- `xSUB~grob,list,list`: the case of a command's argument dispatch for those argument types (deepest stack level first).
+- `ROMPOLL~1`: a helper that only `ROMPOLL` uses (numbered in address order); `GETKEY~2~4` is a helper of a helper.
+
+Everything else has a generated name that just gives its address: `OBJ_` for
+an RPL object, `SUB_` for a subroutine, `L_` for a branch target, and
+`ROMP_lib_cmd` for an unnamed library command.
+
 Objects and tables are written with labels, never as fixed addresses, so code
 can grow or shrink:
 

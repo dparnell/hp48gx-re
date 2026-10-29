@@ -461,12 +461,12 @@ PI/180:
 * %hms -> %
 * refs (1): 1BF4D
 %HMS>:
-        :: hm->(r);r=>rr OBJ_35BCD ;             * 2A68C
+        :: hm->(r);r=>rr %HMS>~1 ;               * 2A68C
 
 * %hms1 %hms2 -> %hms
 * refs (2): 1BF6D 2A6D2
 %HMS+:
-        :: hm->(r);r=>rr SWAP hm->(r);r=>rr %%+ OBJ_35BE1 %%>% ; * 2A6A0
+        :: hm->(r);r=>rr SWAP hm->(r);r=>rr %%+ %HMS+~1 %%>% ; * 2A6A0
 
 * %hms1 %hms2 -> %hms
 * refs (1): 1BF8D
@@ -1421,7 +1421,7 @@ L_2AF21:
 * refs (2): 2A67D 35BEB
 %%H>HMS:
         CON(5)  (*)+5                            * 2AF27  primitive code object
-        GOSBVL  SUB_79EC4                        * 2AF2C
+        GOSBVL  %%H>HMS~1                        * 2AF2C
         GOTO    L_2AECC                          * 2AF33
         NIBHEX  000                              * 2AF37  .
 
@@ -1571,20 +1571,20 @@ L_2B0A6:
 
 %%1E10000:
             %% 1E10000 %%>% ;                    * 2B0F2
-          DUP %IP OVER %= case OBJ_2B171         * 2B116
+          DUP %IP OVER %= case %FACT~1           * 2B116
           DUP                                    * 2B134
 
 %-2.6E2:
-          % -2.6E2 %< case OBJ_2B19E             * 2B139
+          % -2.6E2 %< case %FACT~2               * 2B139
           %>%% fact(rr) %%>% ;                   * 2B15D
 
 * refs (1): 2B12F
-OBJ_2B171:
+%FACT~1:
         :: DUP %0>= case %NFACT                  * 2B171
           OBJ_5203A DROP %-MAXREAL ;             * 2B18A
 
 * refs (1): 2B158
-OBJ_2B19E:
+%FACT~2:
         :: %IP %2 %MOD %0= ITE                   * 2B19E
 
 %%1E-10000:
@@ -1600,13 +1600,13 @@ fact(rr):
 
 * 7
 %%7:
-          %% 7E0 OVER %%- %%FLOOR DUP %%0<= casedrop OBJ_2B2C3 * 2B1FF
-          2DUP %%+ OBJ_2B2C3 SWAP %%>% COERCE ROT 1+(rr) DUP ROT BEGIN #1- * 2B23C
+          %% 7E0 OVER %%- %%FLOOR DUP %%0<= casedrop fact(rr)~1 * 2B1FF
+          2DUP %%+ fact(rr)~1 SWAP %%>% COERCE ROT 1+(rr) DUP ROT BEGIN #1- * 2B23C
           DUP#0<> WHILE                          * 2B278
           :: ROT 1+(rr) ROT OVER %%* ROT ; REPEAT ROT 2DROP %%/ ; * 2B282
 
 * refs (2): 2B237 2B246
-OBJ_2B2C3:
+fact(rr)~1:
         :: 1+(rr) DUP 2DUP %%*                   * 2B2C3
 
 * 12
@@ -1792,7 +1792,7 @@ SUB_2B674:
 
 * refs (1): 2ABE5
 aMODF:
-        GOVLNG  L_78A6A                          * 2B67D
+        GOVLNG  aMODF~1                          * 2B67D
         NIBHEX  00                               * 2B684  .
 
 * refs (1): 2AE42

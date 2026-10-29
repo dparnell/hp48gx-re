@@ -91,7 +91,7 @@ OBJ_462C6:
         FILLTO  #46378                           * 46348  48 zero nibbles: the next entry stays at #46378
 
 * refs (1): 40BCE
-OBJ_46378:
+AtUserStack~1:
         :: CK0NOLASTWD 0LASTOWDOB! ;             * 46378
 
 * refs (1): 4D290
@@ -139,7 +139,7 @@ CopyColsRght:
         ROMPTR 0EA 05E                           * 4677E
 
 * refs (2): 4527C 454A7
-OBJ_46789:
+drax~1~2:
         :: DUPTYPELIST? NOTcasedrop              * 46789
           :: BINT10 BINT10 ;                     * 46798
           CDRCOMP INNERCOMP #2= case2drop        * 467AC
@@ -478,55 +478,55 @@ PlotScr*en:
             {                                    * 47494
 
 _ROOT_:
-              $ "ROOT" OBJ_48CFB }               * 47499
+              $ "ROOT" PlotScr*en~3 }            * 47499
 
 {FCN\ISECT}:
             {                                    * 474B5
 
 _ISECT_:
-              $ "ISECT" OBJ_48D37 }              * 474BA
+              $ "ISECT" PlotScr*en~4 }           * 474BA
 
 {FCN\SLOPE}:
             {                                    * 474D8
 
 _SLOPE_:
-              $ "SLOPE" OBJ_4973A }              * 474DD
+              $ "SLOPE" PlotScr*en~6 }           * 474DD
 
 {FCN\AREA}:
             {                                    * 474FB
 
 _AREA__47500:
-              $ "AREA" OBJ_497E7 }               * 47500
+              $ "AREA" PlotScr*en~7 }            * 47500
 
 {FCN\SHADE}:
             {                                    * 4751C
 
 _SHADE_:
-              $ "SHADE" OBJ_477DB }              * 47521
+              $ "SHADE" PlotScr*en~2 }           * 47521
 
 {FCN\EXTR}:
             {                                    * 4753F
 
 _EXTR_:
-              $ "EXTR" OBJ_48D64 }               * 47544
+              $ "EXTR" PlotScr*en~5 }            * 47544
 
 {FCN\F(X)}:
             {                                    * 47560
 
 _F(X)_:
-              $ "F(X)" OBJ_499C2 }               * 47565
+              $ "F(X)" PlotScr*en~8 }            * 47565
 
 {FCN\F'}:
             {                                    * 47581
 
 _F'_:
-              $ "F'" OBJ_49ABF }                 * 47586
+              $ "F'" PlotScr*en~9 }              * 47586
 
 {FCN\TANL}:
             {                                    * 4759E
 
 _TANL_:
-              $ "TANL" OBJ_4762E }               * 475A3
+              $ "TANL" PlotScr*en~1 }            * 475A3
 
 {FCN\NXEQ}:
             {                                    * 475BF
@@ -545,7 +545,7 @@ _VIEW__475F4:
         ;                                        * 47629
 
 * refs (1): 475B5
-OBJ_4762E:
+PlotScr*en~1:
         :: CHECKMENU OBJ_49B4B 2DROP CRUNCHNoBlame DUPTYPEREAL? NOTcasedrop * 4762E
           ERRJMP                                 * 47651
           OBJ_49B4B CkEQUtil PointDerivUt ZEROZERO ROT OBJ_49E3E ROTROT2DROP * 47656
@@ -566,12 +566,12 @@ OBJ_47736:
           CROSSMARKON ;                          * 477D1
 
 * refs (1): 47535
-OBJ_477DB:
-        :: CHECKMENU OBJ_4579E 2DROP OBJ_4781C ' OBJ_488AF BINT3 ::N ' * 477DB
-          ExitFcn STO ;                          * 4780D
+PlotScr*en~2:
+        :: CHECKMENU OBJ_4579E 2DROP PlotScr*en~2~1 ' PlotScr*en~2~2 BINT3 * 477DB
+          ::N ' ExitFcn STO ;                    * 47803
 
 * refs (1): 477EF
-OBJ_4781C:
+PlotScr*en~2~1:
         :: OBJ_73DFC 1GETLAM                     * 4781C
 
 * refs (4): 4768D 4981E 73C85 73E06
@@ -608,7 +608,7 @@ OBJ_4788F:
         # 61B                                    * 47925  1563
 
 * refs (1): 2210A
-OBJ_4792F:
+IOSetup~1:
         # 61C                                    * 4792F  1564
 
         # 61D                                    * 47939  1565
@@ -624,7 +624,7 @@ OBJ_4794D:
         # 621                                    * 47961  1569
 
 * refs (1): 20281
-OBJ_4796B:
+xBESTFIT~1:
         # 605                                    * 4796B  1541
 
 * refs (1): 15282
@@ -633,7 +633,7 @@ OBJ_4796B:
 
 * refs (4): 15586 15617 15680 9EF0A
 APPprompt1!:
-          :: OBJ_4945A DISPROW1 DispStsBound ;   * 47984
+          :: 1FrDisp(st)~1 DISPROW1 DispStsBound ; * 47984
           SetDA1Valid ;                          * 4799D
 
 * refs (1): 99252
@@ -665,7 +665,7 @@ indep(2r):
         ;                                        * 47A88
 
 * refs (1): 1E24E
-OBJ_47A8D:
+xDEPND~real:
         :: CK2NOLASTWD BINT2 {}N COLA xDEPND     * 47A8D
         ;                                        * 47AAB
 
@@ -995,7 +995,7 @@ OBJ_48873:
         NIBHEX  00000                            * 488AA  ..
 
 * refs (1): 477F9
-OBJ_488AF:
+PlotScr*en~2~2:
         :: GDISPCENTER TURNMENUOFF PLOTPREP 2DROP 3UNROLL DUP TOTEMPOB * 488AF
           15PUTLAM 17PUTLAM 16PUTLAM %0_2A2B4 GetRes 4PUTLAM OBJ_4B9D6 * 488D7
           OBJ_4C314 ERRSET                       * 488FA
@@ -1007,25 +1007,26 @@ OBJ_488AF:
             :: BINT2 GetEqN NOTcase ERRJMP       * 48981
               DUP ALGeq? IT GETRHS               * 4899A
             ;                                    * 489AE
-            ' OBJ_5135F BINT1 ' OBJ_48A4E 4ROLL ' OBJ_5135F BINT2 ' * 489B3
-            OBJ_48A4E BINT11 ::N 2PUTLAM 19GETLAM TYPEEXT? ITE OBJ_4BC06 * 489E5
-            OBJ_4C12A                            * 48A0D
+            ' OBJ_5135F BINT1 ' PlotScr*en~2~2~1 4ROLL ' OBJ_5135F BINT2 ' * 489B3
+            PlotScr*en~2~2~1 BINT11 ::N 2PUTLAM 19GETLAM TYPEEXT? ITE * 489E5
+            OBJ_4BC06 OBJ_4C12A                  * 48A08
           ;                                      * 48A12
           ERRTRAP OBJ_4B4EB OBJ_4C082 ATTNFLGCLR 18GETLAM RESETDEPTH * 48A17
           INDEPVAR ?PURGE_HERE GDISPCENTER OBJ_4D1DC ; * 48A35
 
 * refs (2): 489C7 489E5
-OBJ_48A4E:
+PlotScr*en~2~2~1:
         :: SWAP DUPTYPEREAL? NOTcasedrop OBJ_4C22E * 48A4E
           GETYPOS 1GETLAM SWAP2DUP PIXON3 3PICK #2= NOTcase OBJ_4C440 * 48A67
-          ROTDROP OBJ_48A9E ;                    * 48A8F
+          ROTDROP PlotScr*en~2~2~1~1 ;           * 48A8F
 
 * refs (1): 48A94
-OBJ_48A9E:
-        :: OBJ_49AA1 20GETLAM BINT1 PULLREALEL SWAPDROP %-1=case * 48A9E
+PlotScr*en~2~2~1~1:
+        :: PlotScr*en~2~2~1~1~1 20GETLAM BINT1 PULLREALEL SWAPDROP %-1=case * 48A9E
           :: DROP BINT2 3UNROLL OBJ_4C440 ;      * 48AC1
-          COERCE 21GETLAM BINT1 PULLREALEL SWAPDROP COERCE OBJ_49AA1 4PICK * 48ADF
-          4PICK DRAWLINE#3 BINT2 3UNROLL OBJ_4C440 ; * 48B07
+          COERCE 21GETLAM BINT1 PULLREALEL SWAPDROP COERCE * 48ADF
+          PlotScr*en~2~2~1~1~1 4PICK 4PICK DRAWLINE#3 BINT2 3UNROLL * 48AFD
+          OBJ_4C440 ;                            * 48B1B
 
 * refs (7): 48D05 48D1E 48D2D 48D41 48D5A 48D6E ...
 OBJ_48B25:
@@ -1061,24 +1062,26 @@ OBJ_48CBA:
         NIBHEX  00000                            * 48CF6  ..
 
 * refs (1): 474AB
-OBJ_48CFB:
-        :: CHECKMENU OBJ_48B25 ERRSET OBJ_49799 ERRTRAP * 48CFB
+PlotScr*en~3:
+        :: CHECKMENU OBJ_48B25 ERRSET PlotScr*en~3~1 ERRTRAP * 48CFB
 
 * refs (2): 48D55 48D82
 OBJ_48D19:
           :: OBJ_48B25 ERRJMP ; OBJ_48B25 ;      * 48D19
 
 * refs (1): 474CE
-OBJ_48D37:
-        :: CHECKMENU OBJ_48B25 ERRSET OBJ_49899 ERRTRAP OBJ_48D19 OBJ_48B25 ; * 48D37
+PlotScr*en~4:
+        :: CHECKMENU OBJ_48B25 ERRSET PlotScr*en~4~1 ERRTRAP OBJ_48D19 * 48D37
+          OBJ_48B25 ;                            * 48D5A
 
 * refs (1): 47556
-OBJ_48D64:
-        :: CHECKMENU OBJ_48B25 ERRSET OBJ_49968 ERRTRAP OBJ_48D19 OBJ_48B25 ; * 48D64
+PlotScr*en~5:
+        :: CHECKMENU OBJ_48B25 ERRSET PlotScr*en~5~1 ERRTRAP OBJ_48D19 * 48D64
+          OBJ_48B25 ;                            * 48D87
         NIBHEX  0                                * 48D91
 
 * refs (1): 491DA
-OBJ_48D92:
+AUTOSCALE~1:
         :: GETPTYPE BINT17 PTYPE>PINFO case EVAL * 48D92
           :: OBJ_49017 OBJ_491E4 2DROP ; ;       * 48DB0
 
@@ -1103,7 +1106,7 @@ OBJ_48E2D:
           :: rclä ChkReakäPAR 3DROP COERCE2 ;    * 48E2D
 
 * refs (1): 200E2
-OBJ_48E4B:
+xSCLSIGMA~1:
           :: ROT OBJ_2CF08 DUP 4ROLL MinMaxCol(ra,s) OBJ_49478 xrng(2r) SWAP * 48E4B
             MinMaxCol(ra,s) OBJ_49293 ;          * 48E78
         ;                                        * 48E87

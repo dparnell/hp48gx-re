@@ -537,8 +537,8 @@ ifte(ex,2_):
 cknumdsptch1:
             :: NOTNUM? case PTR ckseval1:        * 545A0
               EVAL CK1NOLASTWD ->num(ex) CK1NOLASTWD CK&DISPATCH1 * 545B4
-              BINT6 OBJ_54D9E                    * 545CD  name
-              BINT7 OBJ_54D9E                    * 545D7  local
+              BINT6 ifte(ex,2_)~1                * 545CD  name
+              BINT7 ifte(ex,2_)~1                * 545D7  local
               BINT0 skipcola                     * 545E1  any
             ;                                    * 545EB
             MetaIFTE NumIFTE ;                   * 545F0
@@ -566,8 +566,8 @@ NumIFTE:
         ;                                        * 5468E
 
 * refs (1): 2300E
-OBJ_54693:
-        :: OBJ_4B94A 'R COMPEVAL OBJ_546B1 ;     * 54693
+xALG->~1:
+        :: xALG->~1~1 'R COMPEVAL OBJ_546B1 ;    * 54693
 
 * refs (2): 546A7 56B73
 OBJ_546B1:
@@ -639,13 +639,13 @@ SYMDER:
 * QN sym -> symf
 * refs (6): 1F109 54963 54B14 56DFB 83883 8681C
 SYMDERSTEP:
-        :: SWAP dvarlsBIND SINNER DUP#1= case OBJ_54A6F * 54977
+        :: SWAP dvarlsBIND SINNER DUP#1= case SYMDERSTEP~1 * 54977
           MetaConcase                            * 5499A
 
 * meta -> %0
 Repl0ABND:
           :: NDROP ABND %0_2A2B4 ;               * 5499F
-          #1-SWAP 1ABNDSWAP OBJ_54B32 ;          * 549B8
+          #1-SWAP 1ABNDSWAP SYMDERSTEP~2 ;       * 549B8
 
 * refs (3): 1F645 63A2E 85E30
 {'dvar}:
@@ -706,8 +706,8 @@ L_54A62:
         RPL
 
 * refs (1): 54995
-OBJ_54A6F:
-        :: GETLAM CARCOMP DUP TYPELAM? case OBJ_54AE2 * 54A6F
+SYMDERSTEP~1:
+        :: GETLAM CARCOMP DUP TYPELAM? case SYMDERSTEP~1~1 * 54A6F
           OVERSWAP EQUALcase                     * 54A92
 
 * ob -> %1
@@ -715,16 +715,16 @@ DROP%1ABND:
           :: DROP %1 ABND ;                      * 54A9C
           ROMPTR@NOT case DROP%0ABND             * 54AB5
           CK&DISPATCH0                           * 54AC4
-          BINT10 OBJ_54B05                       * 54AC9  name|local|algebraic
+          BINT10 SYMDERSTEP~1~name|local|algebraic * 54AC9  name|local|algebraic
           BINT0 DROP%0ABND                       * 54AD3  any
         ;                                        * 54ADD
 
 * refs (1): 54A8D
-OBJ_54AE2:
+SYMDERSTEP~1~1:
         :: ABND EQUAL %1 %0_2A2B4 RPITE ;        * 54AE2
 
 * refs (1): 54ACE
-OBJ_54B05:
+SYMDERSTEP~1~name|local|algebraic:
         :: 1ABNDSWAP COLA SYMDERSTEP             * 54B05
         ;                                        * 54B19
 
@@ -734,7 +734,7 @@ DROP%0ABND:
         :: DROP%0 ABND ;                         * 54B1E
 
 * refs (1): 549C2
-OBJ_54B32:
+SYMDERSTEP~2:
         :: OBJ_26F18 case EVAL                   * 54B32
           DUP PTR>ROMPTR ROMPTRDECOMP NcaseTYPEERR SWAP * 54B46
           infarg? ITE                            * 54B5F
@@ -784,7 +784,7 @@ drop(2);BAT!:
         :: SWAPDROP SETTYPEERR ;                 * 54CC7
 
 * refs (1): 1AB0B
-OBJ_54CDB:
+xMINR~1:
         :: OBJ_5EA72 %MINREAL BINT0              * 54CDB
 
 * ob1..obn #n -> symb
@@ -809,7 +809,7 @@ e:
         :: OBJ_5EA72 %e BINT0 Cr xCONSTANTe ;    * 54D7B
 
 * refs (2): 545D2 545DC
-OBJ_54D9E:
+ifte(ex,2_)~1:
         :: XEQRCL COLA skipcola                  * 54D9E
           NOP ;                                  * 54DB2
 
@@ -1053,7 +1053,7 @@ MetaSIN:
         :: M-1stcasechs                          * 5533C
 
 * refs (1): 553AF
-OBJ_55346:
+MetaTAN~1:
           :: 1GETLAMSWP1+ metaneg ;              * 55346
           OBJ_54E5C Repl0 Repl1 PTR ?addinver: xASIN ; * 5535A
 
@@ -1064,7 +1064,7 @@ MetaCOS:
 
 * refs (1): 54FEF
 MetaTAN:
-        :: M-1stcasechs OBJ_55346                * 553A5
+        :: M-1stcasechs MetaTAN~1                * 553A5
           OBJ_54E5C Repl0 1GETLAMSWP1+ PTR ?addinver: xATAN ; * 553B4
 
 * refs (1): 54EF5
@@ -1160,20 +1160,20 @@ cknum2::
             LAM 'oth }                           * 5566B
           BIND EVAL CK1NOLASTWD ->num(ex) CK1NOLASTWD 1GETABND EVAL * 5567F
           CK2NOLASTWD ->num(ex) CK2NOLASTWD CK&DISPATCH1 * 556A2
-          BINT6 OBJ_556ED                        * 556B6  name
-          BINT7 OBJ_556ED                        * 556C0  local
-          BINT96 OBJ_5570B                       * 556CA  name ?
-          BINT112 OBJ_5570B                      * 556D4  local ?
+          BINT6 cknum2:~1                        * 556B6  name
+          BINT7 cknum2:~1                        * 556C0  local
+          BINT96 cknum2:~2                       * 556CA  name any
+          BINT112 cknum2:~2                      * 556D4  local any
           BINT0 COLAthexFCN                      * 556DE  any
         ;                                        * 556E8
 
 * refs (2): 556BB 556C5
-OBJ_556ED:
+cknum2:~1:
         :: XEQRCL COLA COLAthexFCN               * 556ED
           NOP ;                                  * 55701
 
 * refs (2): 556CF 556D9
-OBJ_5570B:
+cknum2:~2:
         :: SWAP XEQRCL COLA                      * 5570B
           :: SWAPCOLA COLAthexFCN ;              * 5571F
           NOP ;                                  * 55733
@@ -1218,11 +1218,11 @@ cksseval2::
 Π'xfcn_55817:
             LAM 'xfcn }                          * 55817
           BIND 2SINNER AEQ1stcase x=             * 5582D
-          OBJ_55878 DUP #3+PICK REQcasedrop x=   * 55841
-          OBJ_55878 DROP 2GETEVAL ABND CKSYMBN ; * 5585A
+          cksseval2:~1 DUP #3+PICK REQcasedrop x= * 55841
+          cksseval2:~1 DROP 2GETEVAL ABND CKSYMBN ; * 5585A
 
 * refs (2): 55841 5585A
-OBJ_55878:
+cksseval2:~1:
         :: psh ?spliteq rot ?spliteq rot psh 2GETEVAL unrot 2GETEVAL ABND * 55878
           top&Cr x= ;                            * 558AF
 
@@ -1251,14 +1251,14 @@ nscknum2:
         ;                                        * 55922
 
 * refs (14): 1A8E7 1A8F1 1A8FB 1A905 1A90F 1A919 ...
-OBJ_55927:
+x=~1:
         ::                                       * 55927
-          :: PTR cknum2: COLA OBJ_55954          * 5592C
+          :: PTR cknum2: COLA x=~1~1             * 5592C
           ;                                      * 55940
           NOP x- ;                               * 55945
 
 * refs (1): 5593B
-OBJ_55954:
+x=~1~1:
         :: RDROP 2SINNER AEQ1stcase x=           * 55954
           SETTYPEERR psh AEQ1stcase x=           * 5596D
           SETTYPEERR pshtop& Cr x= ;             * 55981
@@ -1607,7 +1607,7 @@ OBJ_561A6:
 
 * refs (3): 55FFD 563D1 565C5
 Meta*:
-        :: psh M-1stcasechs OBJ_561FB            * 561BA
+        :: psh M-1stcasechs Meta*~1              * 561BA
           AEQopscase xi                          * 561CE
 
 * meta1 meta2 -> %-1 #1
@@ -1615,28 +1615,28 @@ Meta*:
           :: NDROP Repl-1 ; pshtop& meta* ;      * 561D8
 
 * refs (1): 561C9
-OBJ_561FB:
+Meta*~1:
         :: pshtop& meta* metaneg ;               * 561FB
 
 * refs (3): 56048 56421 56601
 Meta/:
-        :: psh M-1stcasechs OBJ_56237            * 56214
+        :: psh M-1stcasechs Meta/~1              * 56214
           pshtop& meta/ ;                        * 56228
 
 * refs (1): 56223
-OBJ_56237:
+Meta/~1:
         :: pshtop& meta/ metaneg ;               * 56237
 
 * refs (2): 56093 56624
 Metamod:
         :: MEQU? case                            * 56250
           :: NDROP Repl0 ;                       * 5625F
-          psh #1-SWAP 1GETLAM EQcasedrop OBJ_562A5 * 56273
+          psh #1-SWAP 1GETLAM EQcasedrop Metamod~1 * 56273
           SWAP#1+ psh COLA xssgeneral            * 5628C
         ;                                        * 562A0
 
 * refs (1): 56287
-OBJ_562A5:
+Metamod~1:
         :: pshzerpsharg unrot MEQU? case         * 562A5
 
 * meta1 meta2 meta3 -> meta1&meta2&LAM1
@@ -1748,22 +1748,22 @@ MetamodCon:
 * refs (1): 1F29D
 NUMINTEG:
         :: CK&DISPATCH0                          * 5662E
-          BINT17 OBJ_566A6                       * 56638  real real
-          2EXT OBJ_56683                         * 56642  unit unit
-          BINT26 OBJ_56912                       * 5664C  real name|local|algebraic
-          EXTSYM OBJ_56912                       * 56656  unit name|local|algebraic
-          SYMREAL OBJ_56912                      * 56660  name|local|algebraic real
-          SYMEXT OBJ_56912                       * 5666A  name|local|algebraic unit
-          SYMSYM OBJ_56912                       * 56674  name|local|algebraic name|local|algebraic
+          BINT17 NUMINTEG~real,real              * 56638  real real
+          2EXT NUMINTEG~unit,unit                * 56642  unit unit
+          BINT26 NUMINTEG~1                      * 5664C  real name|local|algebraic
+          EXTSYM NUMINTEG~1                      * 56656  unit name|local|algebraic
+          SYMREAL NUMINTEG~1                     * 56660  name|local|algebraic real
+          SYMEXT NUMINTEG~1                      * 5666A  name|local|algebraic unit
+          SYMSYM NUMINTEG~1                      * 56674  name|local|algebraic name|local|algebraic
         ;                                        * 5667E
 
 * refs (1): 56647
-OBJ_56683:
+NUMINTEG~unit,unit:
         :: OVER UMCONV TRUE COLA OBJ_566BF       * 56683
         ;                                        * 566A1
 
 * refs (1): 5663D
-OBJ_566A6:
+NUMINTEG~real,real:
         :: FALSE COLA OBJ_566BF                  * 566A6
         ;                                        * 566BA
 
@@ -1772,11 +1772,11 @@ OBJ_566BF:
         :: DUPDUP OBJ_56FD1 BIND 2SWAP           * 566BF
 
 * refs (1): 56B0F
-OBJ_566D8:
+%%SUM~1:
           :: CARCOMP DUP ID>LAM BINT1 DOBIND ; BINT0 SWAP EXPLODE * 566D8
 
 * refs (1): 56B1E
-OBJ_5670A:
+%%SUM~2:
           ::                                     * 5670A
 
 * meta1 meta2 -> meta1&meta2'
@@ -1788,7 +1788,7 @@ OBJ_5670A:
           ' '                                    * 56764
 
 * refs (1): 56B32
-OBJ_5676E:
+%%SUM~3:
           :: BINT10 GETLAMPAIR DROPSWAPDROP SWAPDROP ; ' STOLAM 4ROLL ' * 5676E
           COMPEVAL ' OBJ_568AE Π'dv ITE          * 567A0
           :: 7ROLL CARCOMP 7UNROLL 8ROLL UMU> OVER 10UNROLL SWAPDROP DUP ' * 567B9
@@ -1819,7 +1819,7 @@ OBJ_568D1:
           CARCOMP ;                              * 56908
 
 * refs (5): 56651 5665B 56665 5666F 56679
-OBJ_56912:
+NUMINTEG~1:
         :: SYMCRUNCH1 SYMCRUNCH2 DEPTH BINT3 #> IT 2SWAP * 56912
           COLA xINTEGRAL                         * 5693A
         ;                                        * 56944
@@ -1854,20 +1854,20 @@ OBJ_569D4:
 * refs (1): 1F2EC
 SYM%SUM:
         :: OBJ_5694E                             * 56A06
-          :: sncknum2 OBJ_56A33 OBJ_56A9C ; ABND ; * 56A10
+          :: sncknum2 SYM%SUM~1 OBJ_56A9C ; ABND ; * 56A10
 
 * refs (1): 56A1A
-OBJ_56A33:
+SYM%SUM~1:
         :: 3GETLAM ONECOLA OBJ_569D4 ;           * 56A33
 
 * sym % sym ob -> symf
 * refs (1): 1F2FB
 %SYMSUM:
         :: OBJ_5694E                             * 56A4C
-          :: nscknum2 OBJ_56A79 OBJ_56A9C ; ABND ; * 56A56
+          :: nscknum2 %SYMSUM~1 OBJ_56A9C ; ABND ; * 56A56
 
 * refs (1): 56A60
-OBJ_56A79:
+%SYMSUM~1:
         :: 3GETLAM BINT1 psh COLA OBJ_569D4      * 56A79
         ;                                        * 56A97
 
@@ -1883,9 +1883,9 @@ OBJ_56A9C:
 * 1...4 -> %0
 4DROP%0:
           :: 4DROP %0_2A2B4 ;                    * 56AFB
-          OBJ_566D8 ZEROSWAP EXPLODE OBJ_5670A 3UNROLL ' Π'fcn OBJ_5676E * 56B0F
-          ABND ' Π'stop BINT3 DOBIND %0_2A2B4 BEGIN ?ATTNQUIT 3GETLAM * 56B37
-          COMPEVAL CK1NOLASTWD DUPTEMPENV OBJ_546B1 x+ xNEXT ; * 56B64
+          %%SUM~1 ZEROSWAP EXPLODE %%SUM~2 3UNROLL ' Π'fcn %%SUM~3 ABND ' * 56B0F
+          Π'stop BINT3 DOBIND %0_2A2B4 BEGIN ?ATTNQUIT 3GETLAM COMPEVAL * 56B41
+          CK1NOLASTWD DUPTEMPENV OBJ_546B1 x+ xNEXT ; * 56B69
 
 * refs (14): 1AAD1 1AAF3 1AB15 1AB37 1AB59 2EB00 ...
 OBJ_56B87:

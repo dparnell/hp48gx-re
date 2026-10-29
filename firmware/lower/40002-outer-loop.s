@@ -5,23 +5,23 @@
         RPL
 
 * refs (1): 41012
-OBJ_40002:
+StartMenu~2:
         :: OVER' ROMPTR 0A9 000 EQUAL IT         * 40002
           :: 2DROP LastMenuDef@ LastMenuRow@ ;   * 40021
-          OBJ_419D4 ;                            * 4003A
+          StartMenu~2~1 ;                        * 4003A
 
 * refs (1): 401CA
-OBJ_40044:
+StdMenuKeyNS~any:
         :: DUPTYPEBINT? NOTcase DoKeyOb          * 40044
           TogSysFlag SetDA2bNoCh ChkDelLastArg ; * 40058
 
 * refs (1): 40215
-OBJ_4006C:
+StdMenuKeyLS~any:
         :: DUPTYPEBINT? NOTcase DropBadKey       * 4006C
           UNCOERCE %CHS OBJ_4015C xSF ;          * 40080
 
 * refs (1): 40260
-OBJ_40099:
+StdRightShift~any:
         :: DUPTYPEBINT?                          * 40099
 
 RightShift3:
@@ -29,18 +29,18 @@ RightShift3:
           UNCOERCE %CHS OBJ_4015C xCF ;          * 400AD
 
 * refs (1): 401C0
-OBJ_400C6:
+StdMenuKeyNS~tagged:
         :: OBJ_4013E NOTcasedrop DoKeyOb         * 400C6
           PrgmEntry? case DoKeyOb                * 400DA
           OBJ_4015C xEVAL ;                      * 400E9
 
 * refs (1): 4020B
-OBJ_400F8:
+StdMenuKeyLS~tagged:
         :: OBJ_4013E NOTcasedrop DoBadKey        * 400F8
           OBJ_4015C xSTO ;                       * 4010C
 
 * refs (1): 40256
-OBJ_4011B:
+StdRightShift~tagged:
         :: OBJ_4013E NOTcasedrop DoBadKey        * 4011B
           OBJ_4015C xRCL ;                       * 4012F
 
@@ -61,46 +61,46 @@ OBJ_40184:
 * refs (10): 154E1 3EF2D 41058 4A226 9E4E1 9E539 ...
 StdMenuKeyNS:
         :: CK&DISPATCH0                          * 4019D
-          BINT5 OBJ_40292                        * 401A7  list
-          BINT14 OBJ_402EC                       * 401B1  unit
-          BINT13 OBJ_400C6                       * 401BB  tagged
-          BINT0 OBJ_40044                        * 401C5  any
+          BINT5 StdMenuKeyNS~list                * 401A7  list
+          BINT14 StdMenuKeyNS~unit               * 401B1  unit
+          BINT13 StdMenuKeyNS~tagged             * 401BB  tagged
+          BINT0 StdMenuKeyNS~any                 * 401C5  any
         ;                                        * 401CF
 
 * {ob-NS ob-LS ob-RS} -> ?
 * refs (5): 155C7 3EF50 41067 4A23A 98FDC
 StdMenuKeyLS:
         :: CK&DISPATCH0                          * 401D4
-          BINT5 OBJ_402A6                        * 401DE  list
-          BINT6 OBJ_403DC                        * 401E8  name
-          BINT7 OBJ_403DC                        * 401F2  local
-          BINT14 OBJ_4030F                       * 401FC  unit
-          BINT13 OBJ_400F8                       * 40206  tagged
-          BINT0 OBJ_4006C                        * 40210  any
+          BINT5 StdMenuKeyLS~list                * 401DE  list
+          BINT6 StdMenuKeyLS~1                   * 401E8  name
+          BINT7 StdMenuKeyLS~1                   * 401F2  local
+          BINT14 StdMenuKeyLS~unit               * 401FC  unit
+          BINT13 StdMenuKeyLS~tagged             * 40206  tagged
+          BINT0 StdMenuKeyLS~any                 * 40210  any
         ;                                        * 4021A
 
 * refs (4): 155A4 3EF73 41076 4A24E
 StdRightShift:
         :: CK&DISPATCH0                          * 4021F
-          BINT5 OBJ_402BA                        * 40229  list
+          BINT5 StdRightShift~list               * 40229  list
           BINT6 DoNameKeyRS                      * 40233  name
           BINT7 DoNameKeyRS                      * 4023D  local
-          BINT14 OBJ_40323                       * 40247  unit
-          BINT13 OBJ_4011B                       * 40251  tagged
-          BINT0 OBJ_40099                        * 4025B  any
+          BINT14 StdRightShift~unit              * 40247  unit
+          BINT13 StdRightShift~tagged            * 40251  tagged
+          BINT0 StdRightShift~any                * 4025B  any
         ;                                        * 40265
         FILLTO  #40292                           * 4026A  40 zero nibbles: the next entry stays at #40292
 
 * refs (1): 401AC
-OBJ_40292:
+StdMenuKeyNS~list:
         :: BINT1 OBJ_402CE ;                     * 40292
 
 * refs (1): 401E3
-OBJ_402A6:
+StdMenuKeyLS~list:
         :: BINT2 OBJ_402CE ;                     * 402A6
 
 * refs (1): 4022E
-OBJ_402BA:
+StdRightShift~list:
         :: BINT3 OBJ_402CE ;                     * 402BA
 
 * refs (3): 4029C 402B0 402C4
@@ -109,16 +109,16 @@ OBJ_402CE:
         ;                                        * 402E7
 
 * refs (1): 401B6
-OBJ_402EC:
+StdMenuKeyNS~unit:
         :: ImmedEntry? NOTcase DoKeyOb           * 402EC
           OBJ_4015C x* ;                         * 40300
 
 * refs (1): 40201
-OBJ_4030F:
+StdMenuKeyLS~unit:
         :: OBJ_4015C xCONVERT ;                  * 4030F
 
 * refs (1): 4024C
-OBJ_40323:
+StdRightShift~unit:
         :: OBJ_4015C x/ ;                        * 40323
 
 * refs (4): 155A9 40238 40242 9E7C9
@@ -133,7 +133,7 @@ DoNameKeyLRS:
         FILLTO  #403DC                           * 40387  85 zero nibbles: the next entry stays at #403DC
 
 * refs (2): 401ED 401F7
-OBJ_403DC:
+StdMenuKeyLS~1:
         :: PrgmEntry? NOTcase                    * 403DC
           :: OBJ_4040E ROMP_0A1_00D ;            * 403EB
           OBJ_4040E xSTO ;                       * 403FF
@@ -146,45 +146,45 @@ OBJ_4040E:
 * ob ->
 * refs (18): 385CF 38B27 3AE67 3B5B9 3D551 3EDDE ...
 DoKeyOb:
-        :: DUP OBJ_729F8 case OBJ_4053F          * 40454
+        :: DUP OBJ_729F8 case DoKeyOb~1          * 40454
           CK&DISPATCH0                           * 4046D
           BINT111 EchoChrKey                     * 40472  char
-          BINT3 OBJ_404BD                        * 4047C  string
-          BINT14 OBJ_404D1                       * 40486  unit
-          BINT8 OBJ_404F9                        * 40490  program
-          BINT15 OBJ_40521                       * 4049A  romptr
-          BINT9 OBJ_405AD                        * 404A4  algebraic
+          BINT3 DoKeyOb~string                   * 4047C  string
+          BINT14 DoKeyOb~unit                    * 40486  unit
+          BINT8 DoKeyOb~program                  * 40490  program
+          BINT15 DoKeyOb~romptr                  * 4049A  romptr
+          BINT9 DoKeyOb~algebraic                * 404A4  algebraic
           BINT0 OBJ_405E4                        * 404AE  any
         ;                                        * 404B8
 
 * refs (1): 40481
-OBJ_404BD:
+DoKeyOb~string:
         :: Echo$Key SetDA1NoCh ;                 * 404BD
 
 * refs (1): 4048B
-OBJ_404D1:
+DoKeyOb~unit:
         :: ImmedEntry? case OBJ_408F0            * 404D1
           ->StrUnit(uo) OBJ_42CE2 SetDA1NoCh ;   * 404E5
 
 * refs (1): 40495
-OBJ_404F9:
+DoKeyOb~program:
         :: SystemLevel? case EVAL                * 404F9
           PrgmEntry? caseDrpBadKy OBJ_408F0      * 4050D
         ;                                        * 4051C
 
 * refs (1): 4049F
-OBJ_40521:
+DoKeyOb~romptr:
         :: ROMPTR@ ?SKIP SETROMPERR              * 40521
           DoKeyOb ;                              * 40535
 
 * refs (1): 40468
-OBJ_4053F:
+DoKeyOb~1:
         :: DUP OBJ_2699F case PutInComLine!!(_)  * 4053F
-          AlgEntry? case OBJ_40571               * 40558
+          AlgEntry? case DoKeyOb~1~1             * 40558
           OBJ_4058F ;                            * 40567
 
 * refs (1): 40562
-OBJ_40571:
+DoKeyOb~1~1:
         :: ?OKINALG case OBJ_40639               * 40571
           OBJ_4058F ;                            * 40585
 
@@ -194,7 +194,7 @@ OBJ_4058F:
           OBJ_408F0 ;                            * 405A3
 
 * refs (1): 404A9
-OBJ_405AD:
+DoKeyOb~algebraic:
         :: AlgEntry? NOTcase OBJ_405E4           * 405AD
           OBJ_408C3 BINT2 OVERLEN$ #1-SUB$ OBJ_42CE2 SetDA1NoCh ; * 405C1
 
@@ -405,8 +405,8 @@ ParseFail:
 * refs (2): 40B33 D69C4
 DispBadToken:
         :: SWAPROT EditString SetCursPos(s) TOADISP OBJ_3A030 LEN$ OBJ_4426D * 40B56
-          #MIN ROWNUM SWAP CURSOR_OFF OVER #-SWAP OBJ_139E7 DROP SetDA2bTemp * 40B7E
-          SetDA2bEdit ;                          * 40BAB
+          #MIN ROWNUM SWAP CURSOR_OFF OVER #-SWAP DispBadToken~1 DROP * 40B7E
+          SetDA2bTemp SetDA2bEdit ;              * 40BA6
 
 * refs (1): 3B587
 EnterComLine:
@@ -415,7 +415,7 @@ EnterComLine:
 * ->
 * refs (48): 15039 1505C 15882 2230C 2232A 22348 ...
 AtUserStack:
-        :: OBJ_46378 InitEnab ;                  * 40BC9
+        :: AtUserStack~1 InitEnab ;              * 40BC9
 
 * refs (1): D9A95
 GetLastEdit:
@@ -529,7 +529,7 @@ InvUserMo:
 
 * refs (1): 3D96A
 SetUserMo:
-        :: BINT62 SetSysFlag OBJ_3FFB9 ;         * 40D61
+        :: BINT62 SetSysFlag SetUserMo~1 ;       * 40D61
 
 * refs (1): 3FCA0
 QuitUserMo:
@@ -638,16 +638,16 @@ DoMenuPos(li,s):
 * menu #n ->
 * refs (9): 387EB 38A96 38BB8 40FC2 40FDB 4138C ...
 StartMenu:
-        :: OBJ_41826 OBJ_40002 MenuRow! DUP OBJ_41894 OBJ_417E2 OBJ_417AF * 41008
-          NoClock ' SetDA12NoCh MenuRowAct! ' >MENU LabelDef! ' StdMenuKeyNS * 41030
-          MenuKeyNS! ' StdMenuKeyLS MenuKeyLS! ' StdRightShift MenuKeyRS! ' * 4105D
-          review ReviewKey! 'NOP OBJ_419A4 ' SaveLastMenu MenuExitAct! BINT0 * 41085
-          OBJ_41A04 OBJ_3A5CD OBJ_418B4 SetThisRow ; * 410AD
+        :: OBJ_41826 StartMenu~2 MenuRow! DUP StartMenu~5 StartMenu~4 * 41008
+          StartMenu~3 NoClock ' SetDA12NoCh MenuRowAct! ' >MENU LabelDef! ' * 4102B
+          StdMenuKeyNS MenuKeyNS! ' StdMenuKeyLS MenuKeyLS! ' StdRightShift * 41058
+          MenuKeyRS! ' review ReviewKey! 'NOP OBJ_419A4 ' SaveLastMenu * 4107B
+          MenuExitAct! BINT0 OBJ_41A04 StartMenu~1 StartMenu~6 SetThisRow ; * 410A3
 
 * ->
 * refs (7): 17C26 38697 3A9FB 3B225 410BC D8DC3 ...
 SetThisRow:
-        :: OBJ_41826 OBJ_418C4 INNERCOMP OBJ_410E9 LoadTouchTbl ; * 410C6
+        :: OBJ_41826 SetThisRow~1 INNERCOMP OBJ_410E9 LoadTouchTbl ; * 410C6
 
 * refs (4): 3F438 3F660 3F6F6 410DA
 OBJ_410E9:
@@ -719,7 +719,7 @@ OBJ_41355:
 
 * refs (4): 17BD1 38606 3880E 3886D
 DoMenuMTH:
-        :: NoExitAction ' OBJ_3B2F2 BINT1 StartMenu SaveLastMenu ; * 41373
+        :: NoExitAction ' DoMenuMTH~1 BINT1 StartMenu SaveLastMenu ; * 41373
 
 * ->
 * refs (3): 3BCF6 4109E 41391
@@ -742,8 +742,8 @@ review:
           BINT3 SWAPDROP                         * 4142C  string
           BINT6 OBJ_41495                        * 41436  name
           BINT7 OBJ_41495                        * 41440  local
-          BINT8 OBJ_414DA                        * 4144A  program
-          BINT5 OBJ_41520                        * 41454  list
+          BINT8 >Review$~program                 * 4144A  program
+          BINT5 >Review$~list                    * 41454  list
           BINT14                                 * 4145E  unit
           :: SWAPDROP ->StkStr22! ;              * 41463
           BINT0                                  * 41477  any
@@ -760,14 +760,14 @@ $_::
           $ ": " &$ SWAP&$ ;                     * 414BD
 
 * refs (1): 4144F
-OBJ_414DA:
-        :: DUPROM-WORD? case OBJ_415A2           * 414DA
+>Review$~program:
+        :: DUPROM-WORD? case >Review$~program~1  * 414DA
           SystemLevel? NOTcasedrop OBJ_41552     * 414EE
-          ' ROM-WORD? Find1stTrue case OBJ_415A2 * 414FD
+          ' ROM-WORD? Find1stTrue case >Review$~program~1 * 414FD
           OBJ_41552 ;                            * 41516
 
 * refs (1): 41459
-OBJ_41520:
+>Review$~list:
         :: OBJ_3EFC8 casedrop OBJ_41552          * 41520
           CARCOMP DUPTYPELIST? casedrop OBJ_41552 * 41534
           >Review$ ;                             * 41548
@@ -781,14 +781,14 @@ OBJ_41552:
         ;                                        * 4159D
 
 * refs (2): 414E9 41511
-OBJ_415A2:
+>Review$~program~1:
         :: SWAPDROP ->StkStr22! ;                * 415A2
         BSS     19                               * 415B6
 
 * -> %
 * refs (1): 211EB
 GetMenu%:
-        :: OBJ_3BE22 MenuRow@ # 6 #/ #+ UNCOERCE * 415C9
+        :: GetMenu%~1 MenuRow@ # 6 #/ #+ UNCOERCE * 415C9
 
 * 100
 * refs (21): 4167E B6D26 B6D44 B6E55 B6F18 B6F31 ...
@@ -801,7 +801,7 @@ NumCurMenu:
           OBJ_56B87 ;                            * 41638
 
 * refs (1): 3BE40
-OBJ_41642:
+GetMenu%~1~program:
         :: DUPTWO NTHELCOMP NOTcasedrop %0_2A2B4 * 41642
           PTR EQ: OBJ_3F4C4 NOTcasedrop %0_2A2B4 * 4165B
           CARCOMP ;                              * 4166F
@@ -822,7 +822,7 @@ InitMenu%:
 * ->
 * refs (4): 15205 3BE9A 3BEE0 3C338
 InitTrack::
-        :: 'R OBJ_419A4 CONTEXT@ OBJ_41A04 OBJ_417C0 ; * 41741
+        :: 'R OBJ_419A4 CONTEXT@ OBJ_41A04 InitTrack:~1 ; * 41741
 
 * refs (2): 1857C 185B8
 OBJ_41764:
@@ -830,31 +830,31 @@ OBJ_41764:
           BINT0 OBJ_41A04 ;                      * 41778
 
 * refs (1): 38688
-OBJ_41787:
+SysMenuCheck~1:
         :: CONTEXT@ OBJ_41A14 EQcase DROP        * 41787
-          OBJ_41A04 OBJ_419B4 ;                  * 417A0
+          OBJ_41A04 SysMenuCheck~1~1 ;           * 417A0
 
 * refs (1): 4102B
-OBJ_417AF:
+StartMenu~3:
         CON(5)  (*)+5                            * 417AF  primitive code object
         ASSEMBLE
         LC(3)   #402                             * 417B4
         GOVLNG  L_539F1                          * 417B9
 
 * refs (1): 4175A
-OBJ_417C0:
+InitTrack:~1:
         CON(5)  (*)+5                            * 417C0  primitive code object
         LC(3)   #402                             * 417C5
         GOVLNG  SetISysFlag                      * 417CA
 
 * refs (1): 3867E
-OBJ_417D1:
+SysMenuCheck~2:
         CON(5)  (*)+5                            * 417D1  primitive code object
         LC(3)   #402                             * 417D6
         GOVLNG  L_539E6                          * 417DB
 
 * refs (1): 41026
-OBJ_417E2:
+StartMenu~4:
         CON(5)  (*)+5                            * 417E2  primitive code object
         LC(3)   #804                             * 417E7
         GOVLNG  L_539F1                          * 417EC
@@ -867,7 +867,7 @@ SetRebuild:
         GOVLNG  SetISysFlag                      * 417FD
 
 * refs (1): 3868D
-OBJ_41804:
+SysMenuCheck~3:
         CON(5)  (*)+5                            * 41804  primitive code object
         LC(3)   #804                             * 41809
         GOVLNG  L_539E6                          * 4180E
@@ -919,7 +919,7 @@ LastMenuRow@:
         GOVLNG  L_114B3                          * 4188D
 
 * refs (1): 41021
-OBJ_41894:
+StartMenu~5:
         CON(5)  (*)+5                            * 41894  primitive code object
         LC(5)   MenuDef                          * 41899
         GOTO    L_41A24                          * 418A0
@@ -932,13 +932,13 @@ MenuDef@:
         GOTO    L_41A2B                          * 418B0
 
 * refs (1): 410B7
-OBJ_418B4:
+StartMenu~6:
         CON(5)  (*)+5                            * 418B4  primitive code object
         LC(5)   MenuData                         * 418B9
         GOTO    L_41A24                          * 418C0
 
 * refs (1): 410D0
-OBJ_418C4:
+SetThisRow~1:
         CON(5)  (*)+5                            * 418C4  primitive code object
         LC(5)   MenuData                         * 418C9
         GOTO    L_41A32                          * 418D0
@@ -1037,7 +1037,7 @@ OBJ_419A4:
         GOTO    L_41A24                          * 419B0
 
 * refs (1): 417A5
-OBJ_419B4:
+SysMenuCheck~1~1:
         CON(5)  (*)+5                            * 419B4  primitive code object
         LC(5)   TrackAct                         * 419B9
         GOTO    L_41A32                          * 419C0
@@ -1050,7 +1050,7 @@ MenuExitAct!:
         GOTO    L_41A24                          * 419D0
 
 * refs (1): 4003A
-OBJ_419D4:
+StartMenu~2~1:
         CON(5)  (*)+5                            * 419D4  primitive code object
         LC(5)   MenuExitAct                      * 419D9
         GOTO    L_41A32                          * 419E0
@@ -1240,11 +1240,11 @@ PgUserKeys:
 * refs (3): 1A760 4A05F D102E
 WaitForKey:
         :: POLSaveUI ERRSET                      * 41F65
-          :: FALSE 1NULLLAM{} BIND ' ClrDAsOK ' OBJ_41FE7 TrueTrue FALSE * 41F74
+          :: FALSE 1NULLLAM{} BIND ' ClrDAsOK ' WaitForKey~1 TrueTrue FALSE * 41F74
             BINT0 FALSE ' 1GETLAM 'ERRJMP POLSetUI POLKeyUI ABND ; * 41FA6
           ERRTRAP POLResUI&Err POLRestoreUI ;    * 41FD3
 
 * refs (1): 41F97
-OBJ_41FE7:
+WaitForKey~1:
         :: 2DUP ModifierKey? case2drpfls '       * 41FE7
-          OBJ_42023 ROT >TCOMP SWAP >TCOMP TRUE ; * 42000
+          WaitForKey~1~1 ROT >TCOMP SWAP >TCOMP TRUE ; * 42000

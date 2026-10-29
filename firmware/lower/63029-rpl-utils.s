@@ -3478,7 +3478,7 @@ L_659D7:
 * symb ->
 * refs (1): 9CB7A
 Symb>HBuff:
-        :: POLSaveUI ERRSET OBJ_6C514 ERRTRAP POLResUI&Err POLRestoreUI ; * 659DE
+        :: POLSaveUI ERRSET Symb>HBuff~1 ERRTRAP POLResUI&Err POLRestoreUI ; * 659DE
 
 * refs (1): 68425
 OBJ_65A06:

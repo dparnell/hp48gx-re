@@ -126,7 +126,7 @@ pub(crate) fn code_D1F7C(r: &mut Run) {
 }
 
 // ROMPTR 0E8 01E
-// ~INTEMPOB?: firmware/upper/D1362-lib0E8.s:805
+// ~INTEMPOB?: firmware/upper/D1362-lib0E8.s:299
 pub(crate) fn _INTEMPOB_(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -166,7 +166,7 @@ pub(crate) fn _INTEMPOB_(r: &mut Run) {
 }
 
 // ROMPTR 0E8 029
-// ROMP_0E8_029: firmware/upper/D1362-lib0E8.s:1143
+// ROMP_0E8_029: firmware/upper/D1362-lib0E8.s:426
 pub(crate) fn ROMP_0E8_029(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -578,7 +578,7 @@ pub(crate) fn code_D4287(r: &mut Run) {
     }
 }
 
-// SUB_D4457: firmware/upper/D1362-lib0E8.s:2422
+// SUB_D4457: firmware/upper/D1362-lib0E8.s:897
 pub(crate) fn SUB_D4457(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -608,7 +608,7 @@ pub(crate) fn SUB_D4457(r: &mut Run) {
     }
 }
 
-// SUB_D4468: firmware/upper/D1362-lib0E8.s:2431
+// SUB_D4468: firmware/upper/D1362-lib0E8.s:906
 pub(crate) fn SUB_D4468(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -625,7 +625,7 @@ pub(crate) fn SUB_D4468(r: &mut Run) {
     }
 }
 
-// SUB_D446F: firmware/upper/D1362-lib0E8.s:2435
+// SUB_D446F: firmware/upper/D1362-lib0E8.s:910
 pub(crate) fn SUB_D446F(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -675,7 +675,7 @@ pub(crate) fn SUB_D446F(r: &mut Run) {
     }
 }
 
-// SUB_D44B9: firmware/upper/D1362-lib0E8.s:2459
+// SUB_D44B9: firmware/upper/D1362-lib0E8.s:934
 pub(crate) fn SUB_D44B9(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -710,7 +710,7 @@ pub(crate) fn SUB_D44B9(r: &mut Run) {
     }
 }
 
-// SUB_D44DF: firmware/upper/D1362-lib0E8.s:2475
+// SUB_D44DF: firmware/upper/D1362-lib0E8.s:950
 pub(crate) fn SUB_D44DF(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -727,7 +727,7 @@ pub(crate) fn SUB_D44DF(r: &mut Run) {
     }
 }
 
-// SUB_D44EA: firmware/upper/D1362-lib0E8.s:2480
+// SUB_D44EA: firmware/upper/D1362-lib0E8.s:955
 pub(crate) fn SUB_D44EA(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -754,7 +754,7 @@ pub(crate) fn SUB_D44EA(r: &mut Run) {
     }
 }
 
-// SUB_D44FB: firmware/upper/D1362-lib0E8.s:2488
+// SUB_D44FB: firmware/upper/D1362-lib0E8.s:963
 pub(crate) fn SUB_D44FB(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -819,7 +819,7 @@ pub(crate) fn SUB_D44FB(r: &mut Run) {
     }
 }
 
-// SUB_D454E: firmware/upper/D1362-lib0E8.s:2518
+// SUB_D454E: firmware/upper/D1362-lib0E8.s:993
 pub(crate) fn SUB_D454E(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {

@@ -25,23 +25,21 @@ MAT+:
         :: ' L%+ DUP                             * 36115
 
 * refs (1): 362A0
-OBJ_36129:
-          :: 2SWAP idsize(2ar)? OBJ_35AEE OBJ_3615B OBJ_36197 OBJ_361A6 * 36129
-            OBJ_3615B ;                          * 3614C
-        ;                                        * 36156
+MAT-~1:
+          :: 2SWAP idsize(2ar)? OBJ_35AEE MAT+~1 MAT+~2 MAT+~3 MAT+~1 ; ; * 36129
 
 * refs (2): 3613D 3614C
-OBJ_3615B:
+MAT+~1:
         :: 2DUPEQ casedrop                       * 3615B
           :: ROTDROP CKREF DUP DOARRYPRG2 ;      * 3616A
-          INTEMNOTREF? case OBJ_361A6            * 36188
+          INTEMNOTREF? case MAT+~3               * 36188
 
 * refs (1): 36142
-OBJ_36197:
+MAT+~2:
           :: SWAPROT 4UNROLL                     * 36197
 
 * refs (2): 36147 36192
-OBJ_361A6:
+MAT+~3:
             :: ROTDROP CKREF DOARRYPRG2 ; ;      * 361A6
         ;                                        * 361C4
 
@@ -51,7 +49,7 @@ OBJ_361A6:
 
 * refs (2): 362B9 362D2
 OBJ_361D8:
-          :: 3UNROLL idsize(2ar)? OBJ_35AEE OBJ_361FB OBJ_36241 OBJ_3620A * 361D8
+          :: 3UNROLL idsize(2ar)? OBJ_35AEE OBJ_361FB 1@+(2ar)~1 OBJ_3620A * 361D8
 
 * refs (1): 361EC
 OBJ_361FB:
@@ -65,7 +63,7 @@ OBJ_3620A:
         ;                                        * 3623C
 
 * refs (1): 361F1
-OBJ_36241:
+1@+(2ar)~1:
         :: TOTEMPOBADJ ROTSWAP REPLACE ' SWAP 4ROLL 2Ob>Seco 3UNROLL * 36241
           DOARRYPRG2 ;                           * 3626E
 
@@ -75,8 +73,8 @@ MAT-:
         :: ' L%- '                               * 36278
 
 * refs (1): 362CD
-OBJ_3628C:
-          :: SWAP L%- ; OBJ_36129 ;              * 3628C
+2@-(2ar)~1:
+          :: SWAP L%- ; MAT-~1 ;                 * 3628C
 
 * refs (1): 205D3
 1@-(2ar):
@@ -84,7 +82,7 @@ OBJ_3628C:
 
 * refs (1): 205F6
 2@-(2ar):
-        :: SWAP' OBJ_3628C OBJ_361D8 ;           * 362C3
+        :: SWAP' 2@-(2ar)~1 OBJ_361D8 ;          * 362C3
 
 * [F%] F% -> [F%]'
 * refs (4): 1AE43 1AE4D 1AE57 1AE61
@@ -92,22 +90,22 @@ MATFLOAT*:
         :: '                                     * 362DC
 
 * refs (1): 36336
-OBJ_362E6:
+1@*(nb,ar)~1:
           :: 4PICK L%* ;                         * 362E6
 
 * refs (1): 363FE
-OBJ_362FA:
+MATFLOAT/~1:
           :: UNROTDUP TYPEARRAY? ?SKIPSWAP OBJ_36395 3UNROLL DOARRYPRG1 * 362FA
             SWAPDROP ;                           * 3631D
         ;                                        * 36327
 
 * refs (1): 2085C
 1@*(nb,ar):
-        :: ' OBJ_362E6                           * 3632C
+        :: ' 1@*(nb,ar)~1                        * 3632C
 
 * refs (1): 3641C
-OBJ_3633B:
-          :: 3UNROLL OBJ_3639A ITE FreeRefs      * 3633B
+1@/(ar,nb)~1:
+          :: 3UNROLL 1@*(nb,ar)~2 ITE FreeRefs   * 3633B
             :: DUP r->c(ar) OBJ_35C18 REPLACE ;  * 36354
             SWAP F%>L% 3UNROLL DOARRYPRG1 SWAPDROP ; * 36372
         ;                                        * 36390
@@ -117,7 +115,7 @@ OBJ_36395:
         ::                                       * 36395
 
 * refs (1): 36345
-OBJ_3639A:
+1@*(nb,ar)~2:
           :: OVER TYPEREAL? OVER TYPECARRY? OR ; ITE CKREF r->c(ar) * 3639A
           SWAP F%>L% ;                           * 363CC
 
@@ -127,12 +125,12 @@ MATFLOAT/:
         :: dup;=0?:UR! '                         * 363DB
 
 * refs (1): 36417
-OBJ_363EA:
-          :: 4PICK L%/ ; OBJ_362FA ;             * 363EA
+1@/(ar,nb)~2:
+          :: 4PICK L%/ ; MATFLOAT/~1 ;           * 363EA
 
 * refs (1): 206D9
 1@/(ar,nb):
-        :: dup;=0?:UR! SWAP' OBJ_363EA OBJ_3633B ; * 36408
+        :: dup;=0?:UR! SWAP' 1@/(ar,nb)~2 1@/(ar,nb)~1 ; * 36408
 
 * refs (2): 363E0 3640D
 dup;=0?:UR!:
@@ -181,19 +179,19 @@ MATRSD:
             4PICK #= OBJ_37DE1 ;                 * 36610
           :: OVER#= OBJ_37DE1 5PICK MDIMS NOT OBJ_37DE1 3PICK #= OBJ_37DE1 * 36624
             BINT1 ;                              * 36656
-          6ROLL 6PICK 6PICK OBJ_366AB ROTROT2DROP OBJ_36525 * 36660
+          6ROLL 6PICK 6PICK MATRSD~1 ROTROT2DROP OBJ_36525 * 36660
           :: DUPUNROT PULLLONGEL 4ROLL L%- ROT ; ROTROT2DROP ; * 3667E
 
 * refs (1): 3666F
-OBJ_366AB:
-        :: OBJ_35AEE rot;NewobIfNotFree OBJ_366E2 OBJ_366E2 OBJ_366E2 ; * 366AB
+MATRSD~1:
+        :: OBJ_35AEE rot;NewobIfNotFree MATRSD~1~1 MATRSD~1~1 MATRSD~1~1 ; * 366AB
 
 * refs (5): 366B5 4F99E 4F9F8 CBBFF CBC78
 rot;NewobIfNotFree:
         :: ROT CKREF ;                           * 366CE
 
 * refs (3): 366BA 366BF 366C4
-OBJ_366E2:
+MATRSD~1~1:
         :: ROTDUP TYPERARRY? case r->c(ar)       * 366E2
           CKREF ;                                * 366FB
 
@@ -211,7 +209,7 @@ ToNorm(nb):
 * [F%] [F%]' -> [F%]''
 * refs (1): 1C02D
 MATCROSS:
-        :: OBJ_3689A OBJ_3689A 0ChkType(2ar)     * 36791
+        :: MATCROSS~1 MATCROSS~1 0ChkType(2ar)   * 36791
 
 {<3>}:
           { BINT3 } SWAP MAKEARRY BINT2 BINT3    * 367A5
@@ -221,12 +219,12 @@ OBJ_367C8:
           :: 5PICK                               * 367C8
 
 * refs (3): 367FF 36A62 36A7B
-OBJ_367D2:
+MATDET~1~1~1:
             :: 3PICK PULLLONGEL SWAP3PICK PULLLONGEL SWAPDROP 2SWAP ; 6PICK * 367D2
-            OBJ_367D2 2DROP                      * 367FF
+            MATDET~1~1~1 2DROP                   * 367FF
 
 * refs (1): 36A85
-OBJ_36809:
+MATDET~1~1~2:
             :: 4ROLL L%* 3UNROLL L%* L%- ; ;     * 36809
           BINT1 PUTEL BINT3 BINT1 OBJ_367C8 BINT2 PUTEL BINT1 BINT2 * 36831
           OBJ_367C8 BINT3 PUTEL ROTROT2DROP ;    * 3685E
@@ -236,7 +234,7 @@ OBJ_36809:
         :: OBJ_35AEE %0_2A2B4 C%0 C%0 C%0 ;      * 36877
 
 * refs (2): 36796 3679B
-OBJ_3689A:
+MATCROSS~1:
         :: SWAPDUP MDIMS NOT OBJ_37DE1 DUP #3= caseDROP #2= * 3689A
           NOTcase doerr501                       * 368C7
           DOARRY> DROP%0                         * 368D1
@@ -275,9 +273,9 @@ MATDET:
         ROMPTR 0C2 051                           * 36A48
 
 * refs (1): 97ED9
-OBJ_36A53:
-        :: BINT1 SWAP3PICK OBJ_367D2 2DROP BINT3 BINT4 5PICK OBJ_367D2 2DROP * 36A53
-          OBJ_36809 ToNorm(nb) SWAPDROP ;        * 36A85
+MATDET~1~1:
+        :: BINT1 SWAP3PICK MATDET~1~1~1 2DROP BINT3 BINT4 5PICK MATDET~1~1~1 * 36A53
+          2DROP MATDET~1~1~2 ToNorm(nb) SWAPDROP ; * 36A80
 
 * [F%] -> [F%]'
 * refs (1): 1B29B
@@ -310,15 +308,15 @@ OBJ_36B14:
 
 * refs (1): 2073D
 2@/(2ar):
-        :: OBJ_36AD3 CKREF SWAP OBJ_35AEE OBJ_36B8D OBJ_36BA7 OBJ_36B8D * 36B5B
-          OBJ_36B8D ;                            * 36B83
+        :: OBJ_36AD3 CKREF SWAP OBJ_35AEE 2@/(2ar)~1 2@/(2ar)~2 2@/(2ar)~1 * 36B5B
+          2@/(2ar)~1 ;                           * 36B83
 
 * refs (3): 36B74 36B7E 36B83
-OBJ_36B8D:
+2@/(2ar)~1:
         :: FreeRefs ROMPTR 0C2 054 ;             * 36B8D
 
 * refs (1): 36B79
-OBJ_36BA7:
+2@/(2ar)~2:
         :: FreeRefs DUP r->c(ar) SWAP REPLACE ROMPTR 0C2 054 ; * 36BA7
 
 * refs (3): 92ED0 9662D 96637
@@ -1385,7 +1383,7 @@ OBJ_37A0E:
           ((0,0)) ;                              * 37A27
 
 * refs (1): 97DA8
-OBJ_37A31:
+LU~1~1:
         :: TYPERARRY? case %1                    * 37A31
           C%1 ;                                  * 37A45
 
@@ -1395,7 +1393,7 @@ OBJ_37A4F:
           C%%1 ;                                 * 37A68
 
 * refs (1): 983DF
-OBJ_37A72:
+COND~1~2~1:
         :: OBJ_3798C case OBJ_37AC2              * 37A72
           DUP C%%0= case %%1                     * 37A86
           C%%>%% 2DUP%%R ROTOVER %%/ 3UNROLL %%/ %%>C%% ; * 37A9A
@@ -1539,11 +1537,11 @@ L_37DEB:
 * [F%] {#n #m} -> [F%]'
 * refs (19): 1D11B 1D170 8D8BE 8E277 8E2FB 8E4D1 ...
 MATREDIM:
-        :: SWAPCKREF SWAP OBJ_37E4B OBJ_37E73 ;  * 37E0F
+        :: SWAPCKREF SWAP OBJ_37E4B MATREDIM~1 ; * 37E0F
 
 * refs (3): 1D143 2C3D3 2C478
 @rdm(ar,ls):
-        :: OBJ_35C18 SWAP OBJ_37E4B OBJ_37E7F ;  * 37E2D
+        :: OBJ_35C18 SWAP OBJ_37E4B @rdm(ar,ls)~1 ; * 37E2D
 
 * refs (2): 37E1E 37E3C
 OBJ_37E4B:
@@ -1551,14 +1549,14 @@ OBJ_37E4B:
           SWAPINCOMP ;                           * 37E69
 
 * refs (1): 37E23
-OBJ_37E73:
+MATREDIM~1:
         CON(5)  (*)+5                            * 37E73  primitive code object
         ASSEMBLE
         ST=0    7                                * 37E78
         GOTO    L_37EA2                          * 37E7B
 
 * refs (1): 37E41
-OBJ_37E7F:
+@rdm(ar,ls)~1:
         CON(5)  (*)+5                            * 37E7F  primitive code object
         ST=1    7                                * 37E84
         GOTO    L_37EA2                          * 37E87

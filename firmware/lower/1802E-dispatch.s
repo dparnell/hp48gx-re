@@ -607,14 +607,14 @@ HomeAttach!(<2>):
 CK0NOLASTWD:
         CON(5)  (*)+5                            * 18A15  primitive code object
         ASSEMBLE
-        GOTO    L_18A27                          * 18A1A
+        GOTO    CK0NOLASTWD~1                    * 18A1A
 
 * ->
 * refs (139): 197FC 19817 19832 1984D 19868 19883 ...
 CK0:
         CON(5)  (*)+5                            * 18A1E  primitive code object
         GOSUB   SUB_18C77                        * 18A23
-L_18A27:
+CK0NOLASTWD~1:
         CD1EX                                    * 18A27
         D1=(5)  EDITLINE                         * 18A2A
         A=DAT1  A                                * 18A31
@@ -1027,7 +1027,7 @@ L_18DF3:
 
 * refs (6): 157C4 157F6 20DE2 545BE 5568E 556A7
 ->num(ex):
-        :: DNOTSYMB?SEMI BEGIN OBJ_4241B OBJ_18E7E WHILE COMPEVAL REPEAT ; * 18E18
+        :: DNOTSYMB?SEMI BEGIN OBJ_4241B ->num(ex)~1 WHILE COMPEVAL REPEAT ; * 18E18
 
 * symb -> :: symb <ob1> <rest> ; ob -> :: ob ;
 * refs (1): 18E1D
@@ -1053,7 +1053,7 @@ L_18E74:
         PC=(A)                                   * 18E7A
 
 * refs (1): 18E2C
-OBJ_18E7E:
+->num(ex)~1:
         CON(5)  (*)+5                            * 18E7E  primitive code object
         A=DAT1  A                                * 18E83
         ?A=0    A                                * 18E86
@@ -1125,7 +1125,7 @@ CK5&Dispatch:
 * comp -> ?
 * refs (22): 18F79 19F05 1EA62 1EB83 1F861 1F94C ...
 EvalNoCK:
-        CON(5)  L_72E19                          * 18F23  code object: the address of its machine code
+        CON(5)  EvalNoCK~1                       * 18F23  code object: the address of its machine code
         BSS     23                               * 18F28
 L_18F3F:
         ?ST=0   5                                * 18F3F
@@ -1990,42 +1990,42 @@ DoInputForm:
             BINT13 PICK OBJ_6819D OVER #+ DUP BINT16 #+ ROT BINT16 #+ ROT * 19A4D
             BINT14 #+ ROMPTR 0B0 0DB ROMPTR 0B0 0A3 ROMPTR 0B0 009 8PUTLAM * 19A89  ~nNullBind
             MINUSONE 5PUTLAM ROMPTR 0B0 020 ROMPTR 0B0 06B ROMPTR 0B0 00B ' * 19AB9
-            OBJ_19B7B ' OBJ_19CF0 TrueFalse 8GETLAM ONEFALSE ' 11GETLAM ' * 19AE9
-            ROMPTR 0B0 000 POLSetUI OBJ_1A03E KEYINBUFFER? NOT DAsBad? AND * 19B16
-            IT BlankDA12                         * 19B3F
+            DoInputForm~1 ' DoInputForm~2 TrueFalse 8GETLAM ONEFALSE ' * 19AE9
+            11GETLAM ' ROMPTR 0B0 000 POLSetUI OBJ_1A03E KEYINBUFFER? NOT * 19B0C
+            DAsBad? AND IT BlankDA12             * 19B35
             POLKeyUI ABND ABND ;                 * 19B49
           ERRTRAP POLResUI&Err POLRestoreUI InitEd&Modes ClrDAsOK ; * 19B5D
 
 * refs (1): 19AE9
-OBJ_19B7B:
+DoInputForm~1:
         :: DA1OK? ?SKIP ROMPTR 0B0 001           * 19B7B
           :: NoEditLine? caseTRUE DA2bOK?        * 19B95
           ;                                      * 19BA9
           ?SKIP DispEditLine                     * 19BAE
           :: EditLExists? caseTRUE DA2bOK?       * 19BB8
           ;                                      * 19BCC
-          ?SKIP OBJ_19CB8                        * 19BD1
+          ?SKIP DoInputForm~1~1                  * 19BD1
           ROMPTR 0B0 06E EditLExists? AND IT     * 19BDB
           :: ROMPTR 0B0 0A8 SetDA3Bad ;          * 19BF5
           DA3OK? ?SKIP                           * 19C0F
           :: ?DispMenu ROMPTR 0B0 06E ?SEMI      * 19C19
             EditLExists? ?SEMI                   * 19C33
             DA2bTemp? ?SEMI                      * 19C3D
-            OBJ_19CB8 ;                          * 19C47
+            DoInputForm~1~1 ;                    * 19C47
           :: DA2aOK? DA2aLess1OK? ClrNewEditL OR ; NOT IT ROMPTR 0B0 002 * 19C51
           ROMPTR 0B0 0A0 IT ROMPTR 0B0 003       * 19C84
           ClrDAsOK EditLExists? ?SEMI            * 19C9F
           SetPrgmEntry ;                         * 19CAE
 
 * refs (2): 19BD6 19C47
-OBJ_19CB8:
+DoInputForm~1~1:
         :: KEYINBUFFER? case SetDA2bBad          * 19CB8
           TOADISP TRUE 5GETLAM ROMPTR 0B0 017 SetDA2bValid ; * 19CCC
 
 * refs (1): 19AF3
-OBJ_19CF0:
+DoInputForm~2:
         :: 5GETLAM BINT8 OBJ_19FBB ?SEMI         * 19CF0
-          BINT1 #=casedrop OBJ_19D86             * 19D09
+          BINT1 #=casedrop DoInputForm~2~1       * 19D09
           BINT2 #=casedrop ROMPTR 0B0 047        * 19D18
           BINT3 #=casedrop ROMPTR 0B0 048        * 19D2D
           BINT4 #=casedrop ROMPTR 0B0 049        * 19D42
@@ -2034,13 +2034,13 @@ OBJ_19CF0:
         ;                                        * 19D81
 
 * refs (1): 19D13
-OBJ_19D86:
+DoInputForm~2~1:
         ::                                       * 19D86
           { BINT11 ROMPTR 0B0 05E BINT17 ROMPTR 0B0 05F BINT25 * 19D8B
             ROMPTR 0B0 05A BINT45                * 19DB5  DoKeyOK
             ROMPTR 0B0 059 }                     * 19DC5  DoKeyCancel
           OBJ_19FE4 caseTRUE EditExstCase        * 19DD5
-          OBJ_19F7A                              * 19DE4
+          DoInputForm~2~1~1                      * 19DE4
           { BINT11 ROMPTR 0B0 064 BINT17 ROMPTR 0B0 065 BINT18 * 19DE9
             ROMPTR 0B0 066 BINT16 ROMPTR 0B0 068 BINT26 ROMPTR 0B0 06A * 19E13
             BINT28 ROMPTR 0B0 05B BINT29 DoBadKey } * 19E3E
@@ -2048,12 +2048,12 @@ OBJ_19D86:
           OVER BINT7 #<case OBJ_19F93            * 19E6C
           { BINT12 BINT30 BINT35 BINT40 } 3PICK #=POSCOMP #0<> case * 19E80
           OBJ_19F93                              * 19EB2
-          COLA OBJ_1A05C                         * 19EB7
+          COLA DoInputForm~2~1~2                 * 19EB7
         ;                                        * 19EC1
         FILLTO  #19EEC                           * 19EC6  38 zero nibbles: the next entry stays at #19EEC
 
 * refs (1): 1B1A8
-OBJ_19EEC:
+rpnXROOT~any:
         :: SWAP ' xXROOT COLA EvalNoCK           * 19EEC
         ;                                        * 19F0A
 
@@ -2065,7 +2065,7 @@ OBJ_19F0F:
           Key>U/SKeyOb 6PUTLAM ' ROMPTR 0B0 04C TRUE ; * 19F56
 
 * refs (1): 19DE4
-OBJ_19F7A:
+DoInputForm~2~1~1:
         :: BINT1 COLA OBJ_19F0F                  * 19F7A
         ;                                        * 19F8E
 

@@ -5,7 +5,7 @@
         RPL
 
 * refs (1): 42000
-OBJ_42023:
+WaitForKey~1~1:
         :: TakeOver TRUE 1PUTLAM ;               * 42023
 
 * -> ob
@@ -18,7 +18,7 @@ GetKeyOb:
 * ->
 * refs (1): 42041
 ?BlinkCursor:
-        :: EditLExists? DA2bEdit? AND ITE OBJ_538EA NOBLINK * 42078
+        :: EditLExists? DA2bEdit? AND ITE ?BlinkCursor~1 NOBLINK * 42078
         ;                                        * 4209B
 
 * -> #kc T -> F F -> {Alrmlist} T F
@@ -37,7 +37,7 @@ ATTNxcp:
 
 * refs (2): 2DB1C 420CD
 ALARMxcp:
-        :: OBJ_42396 FLUSHKEYS OBJ_0DC3B FALSE ; * 42113
+        :: OBJ_42396 FLUSHKEYS ALARMxcp~1 FALSE ; * 42113
 
 * refs (1): 420DC
 SLEEPxcp:
@@ -50,33 +50,33 @@ UARTxcp:
 * -> #kc flag
 * refs (3): 17FC0 2D9CD 420AA
 GETKEY:
-        :: ATTN? case OBJ_421F4                  * 42159
+        :: ATTN? case GETKEY~4                   * 42159
           GETTOUCH case OBJ_421D6                * 4216D
-          OBJ_423E4 OBJ_13E22 OBJ_13CB0 BEGIN OBJ_42208 IT * 4217C
-          :: 2RDROP OBJ_421F4 ;                  * 4219A
-          OBJ_13E53 ?SKIP OBJ_13CB0              * 421AE
-          OBJ_04890 GETTOUCH UNTIL OBJ_421D6 ;   * 421BD
+          GETKEY~6 OBJ_13E22 GETKEY~2 BEGIN GETKEY~5 IT * 4217C
+          :: 2RDROP GETKEY~4 ;                   * 4219A
+          GETKEY~3 ?SKIP GETKEY~2                * 421AE
+          GETKEY~1 GETTOUCH UNTIL OBJ_421D6 ;    * 421BD
 
 * refs (3): 42109 42177 421CC
 OBJ_421D6:
         :: OBJ_4231A OBJ_42396 ClrDouseAlm TRUE ; * 421D6
 
 * refs (2): 42168 421A4
-OBJ_421F4:
+GETKEY~4:
         :: OBJ_4231A FALSE ;                     * 421F4
 
 * refs (1): 42190
-OBJ_42208:
+GETKEY~5:
         :: ATTN? caseTRUE KEYINBUFFER?           * 42208
           caseFALSE UART?                        * 4221C
           caseTRUE TIMEOUT?                      * 42226
-          caseTRUE OBJ_53AC8                     * 42230
+          caseTRUE GETKEY~5~1                    * 42230
           caseFALSE ALARM?                       * 4223A
         ;                                        * 42244
 
 * refs (3): 17FED 420E1 42221
 UART?:
-        :: OBJ_422EB OBJ_42309 AND ;             * 42249
+        :: UART?~1 OBJ_42309 AND ;               * 42249
 
 * -> flag
 * refs (8): 17FCF 2DAEF 420B4 4215E 4220D 42461 ...
@@ -126,7 +126,7 @@ SUB_422B4:
         RTNCC                                    * 422C4
 
 * refs (1): 386E2
-OBJ_422C6:
+?FlashAlert~1:
         CON(5)  (*)+5                            * 422C6  primitive code object
         CD0EX                                    * 422CB
         GOSUB   SUB_422D9                        * 422CE
@@ -142,7 +142,7 @@ SUB_422D9:
         RTNCC                                    * 422E9
 
 * refs (1): 4224E
-OBJ_422EB:
+UART?~1:
         CON(5)  (*)+5                            * 422EB  primitive code object
         AD1EX                                    * 422F0
         D1=(5)  uart_buf_end                     * 422F3
@@ -191,7 +191,7 @@ SUB_42359:
         RTN                                      * 4237D
 
 * refs (1): 423F8
-OBJ_4237F:
+GETKEY~6~2:
         CON(5)  (*)+5                            * 4237F  primitive code object
         GOSBVL  SAVPTR                           * 42384
         ST=0    15                               * 4238B
@@ -227,9 +227,9 @@ L_423D6:
         RPL
 
 * refs (1): 4217C
-OBJ_423E4:
-        :: NoEditLine? ?SKIP OBJ_01F53           * 423E4
-          OBJ_4237F ;                            * 423F8
+GETKEY~6:
+        :: NoEditLine? ?SKIP GETKEY~6~1          * 423E4
+          GETKEY~6~2 ;                           * 423F8
 
 * -> flag
 * refs (23): 19B2B 19CBD 395A1 39B8A 3A1CF 42217 ...
@@ -270,7 +270,7 @@ CtlAlarm@:
         GOVLNG  SysPtr@                          * 424AD
 
 * refs (1): 38953
-OBJ_424B4:
+SysErrorTrap~1~1:
         CON(5)  (*)+5                            * 424B4  primitive code object
         LC(5)   CtlAlarm                         * 424B9
         GOVLNG  L_08D35                          * 424C0
@@ -290,15 +290,15 @@ DCursor:
 
 * refs (3): 3DED6 43291 4331D
 ToTheLastRow:
-        :: OBJ_13FB0 SizeOfComLine OBJ_4482D OBJ_42804 SETCURSOR EDITPARTS * 42525
-          BINT3 2DUP#> NOTcase2DROP #-           * 42548
+        :: ToTheLastRow~1 SizeOfComLine OBJ_4482D OBJ_42804 SETCURSOR * 42525
+          EDITPARTS BINT3 2DUP#> NOTcase2DROP #- * 42543
           OBJ_113E2 OBJ_426C4 ;                  * 4255C
 
 * refs (8): 3B482 3B654 3E4A2 3E67F 40724 40E15 ...
 LCursor:
         :: OnTheFirstCol? ?SEMI                  * 4256B
-          OBJ_13F11 CURSOR_OFF BINT2 OVER#> FIRSTC@ #0<> AND casedrop * 4257A
-          OBJ_11452                              * 425A2
+          LCursor~2 CURSOR_OFF BINT2 OVER#> FIRSTC@ #0<> AND casedrop * 4257A
+          LCursor~1                              * 425A2
           #1- OBJ_13E9E ;                        * 425A7
 
 * refs (1): 3DEA9
@@ -324,12 +324,13 @@ OBJ_42615:
 * refs (6): 3B3A5 3EE83 3EEB5 3EEBA 3EEE2 428B3
 UCursor:
         :: TopERow? ?SEMI                        * 42660
-          OBJ_42886 OBJ_42741 #1- OBJ_13F7F OBJ_4482D OBJ_42804 SETCURSOR * 4266F
+          OBJ_42886 OBJ_42741 #1- UCursor~1 OBJ_4482D OBJ_42804 SETCURSOR * 4266F
           OBJ_426C4 ;                            * 42692
 
 * refs (1): 3DDED
 ToTheFirstRow:
-        :: OBJ_428E5 OBJ_13F9B BINT0 OBJ_4482D OBJ_428F9 OBJ_426C4 ; * 4269C
+        :: ToTheFirstRow~2 ToTheFirstRow~1 BINT0 OBJ_4482D OBJ_428F9 * 4269C
+          OBJ_426C4 ;                            * 426BA
 
 * refs (4): 4251B 42561 42692 426BA
 OBJ_426C4:
@@ -400,7 +401,7 @@ ToNextRowIfEnd:
         :: OBJ_4285E CURSOR+ OBJ_13F69 SETFIRSTC_0 CURSOR_OFF0 ; * 428C2
 
 * refs (1): 426A1
-OBJ_428E5:
+ToTheFirstRow~2:
         :: BINT1 OBJ_113E2 ;                     * 428E5
 
 * refs (2): 42516 426B5
@@ -526,7 +527,7 @@ OBJ_42B61:
           CHR_Newline InsertEcho CURSOR_OFF0 OBJ_13F69 SETFIRSTC_0 OBJ_11422 ; * 42B7F
 
 * refs (1): 443D0
-OBJ_42BA2:
+EditString~1:
         :: ChkNoChr0!(st) Echo$NoChr00 ;         * 42BA2
 
 * $ ->
@@ -538,11 +539,11 @@ Echo$NoChr00:
 * $/chr ->
 * refs (2): 404C2 4062A
 Echo$Key:
-        :: OBJ_42BFC dup;BeforeRC(st)? case2drop OBJ_42CE2 * 42BD4
+        :: Echo$Key~1 dup;BeforeRC(st)? case2drop OBJ_42CE2 * 42BD4
           SetDA3NoCh OBJ_42C92 ;                 * 42BED
 
 * refs (1): 42BD9
-OBJ_42BFC:
+Echo$Key~1:
         :: CkChr00 ?SEMIDROP                     * 42BFC
           #_102 JstGetTHEMESG DoWarning RDROP ;  * 42C0B
 
@@ -605,8 +606,8 @@ CharEdit:
 * refs (2): 42D50 42E7C
 ObEdit:
         :: CK&DISPATCH0                          * 42DC8
-          BINT9 OBJ_6B506                        * 42DD2  algebraic
-          BINT14 OBJ_6B506                       * 42DDC  unit
+          BINT9 ObEdit~1                         * 42DD2  algebraic
+          BINT14 ObEdit~1                        * 42DDC  unit
           BINT4 DoOldMatrix                      * 42DE6  array
           BINT0 CharEdit                         * 42DF0  any
         ;                                        * 42DFA
@@ -681,12 +682,13 @@ InputLine:
             :: #1= ITE LockAlpha UnLockAlpha     * 42FF8
             ;                                    * 43011
             DROP                                 * 43016
-            FALSE 4NULLLAM{} BIND ' OBJ_43098 ' OBJ_43124 TrueFalse 6ROLL * 4301B
-            6ROLL FALSE ' 1GETLAM 'ERRJMP POLSetUI ClrDAsOK POLKeyUI ABND ; * 43048
+            FALSE 4NULLLAM{} BIND ' InputLine~1 ' InputLine~2 TrueFalse * 4301B
+            6ROLL 6ROLL FALSE ' 1GETLAM 'ERRJMP POLSetUI ClrDAsOK POLKeyUI * 43043
+            ABND ;                               * 43070
           ERRTRAP POLResUI&Err POLRestoreUI InitEd&Modes ClrDAsOK ; * 4307A
 
 * refs (1): 4302F
-OBJ_43098:
+InputLine~1:
         :: DA1OK?NOTIT ?DispStatus DA2aOK?NOTIT DispILPrompt DA2bOK?NOTIT * 43098
           DispEditLine DA3OK?NOTIT ?DispMenu ClrDAsOK ; * 430B6
 
@@ -698,7 +700,7 @@ DispILPrompt:
           SetDA2aValid ;                         * 4311A
 
 * refs (1): 43039
-OBJ_43124:
+InputLine~2:
         :: DUP BINT1 #<> SWAP BINT4 #<> AND casedrpfls BINT25 * 43124
           ?CaseKeyDef InputLEnter BINT45 ?CaseKeyDef InputLAttn DROPFALSE ; * 43156
 
@@ -716,11 +718,11 @@ true;dup;1Lput:
 * refs (1): 4316A
 InputLAttn:
         :: TakeOver DAsBad? ?SEMI                * 43200
-          OBJ_4478A NOT 3GETLAM NOT ANDcase OBJ_43241 * 43214
+          InputLAttn~2 NOT 3GETLAM NOT ANDcase InputLAttn~1 * 43214
           FalseTrue 1PUTLAM ;                    * 43232
 
 * refs (1): 4322D
-OBJ_43241:
+InputLAttn~1:
         :: InitEdLine NULL$ EditString ;         * 43241
 
 * # -> {# #'} ->
@@ -766,11 +768,11 @@ input(st,li):
           { NULL$ BINT0 BINT1 BINT1 BINT2 BINT0 } * 433DB
           SWAP toLEN_DO DUPINDEX@ NTHCOMPDROP    * 43403
           :: CK&DISPATCH0                        * 43417
-            BINT3 OBJ_434A3                      * 43421  string
-            BINT1 OBJ_434B7                      * 4342B  real
-            BINT5 OBJ_434D5                      * 43435  list
-            BINT6 OBJ_43534                      * 4343F  name
-            BINT7 OBJ_43534                      * 43449  local
+            BINT3 input(st,li)~string            * 43421  string
+            BINT1 input(st,li)~real              * 4342B  real
+            BINT5 input(st,li)~list              * 43435  list
+            BINT6 input(st,li)~1                 * 4343F  name
+            BINT7 input(st,li)~1                 * 43449  local
           ;                                      * 43453
           LOOP DROP INCOMPDROP FALSE ZEROFALSE 4ROLL DUP1LAMBIND InputLine * 43458
           NOTcase ABORT                          * 43480
@@ -778,21 +780,21 @@ input(st,li):
         ;                                        * 4349E
 
 * refs (1): 43426
-OBJ_434A3:
+input(st,li)~string:
         :: BINT1 OBJ_43644 ;                     * 434A3
 
 * refs (1): 43430
-OBJ_434B7:
+input(st,li)~real:
         :: OBJ_43608 COERCE BINT2 OBJ_43644 ;    * 434B7
 
 * refs (1): 4343A
-OBJ_434D5:
+input(st,li)~list:
         :: INNERCOMP BINT2 #<>case SETSIZEERR    * 434D5
           DUPTYPEREAL? 3PICK TYPEREAL? ANDNOTcase SETSIZEERR * 434EE
           4UNROLL OBJ_43608 COERCE 4ROLL COERCE TWO{}N BINT2 OBJ_43644 ; * 43507
 
 * refs (2): 43444 4344E
-OBJ_43534:
+input(st,li)~1:
         :: DUP'                                  * 43534
 
 ALG:
@@ -1030,7 +1032,7 @@ _LEVEL_:
 
 * refs (1): 43D4F
 \Ú>VIEW:
-        :: TakeOver 3GETLAM PICK OBJ_3AE2B OBJ_440CF ; * 43F03
+        :: TakeOver 3GETLAM PICK \Ú>VIEW~1 OBJ_440CF ; * 43F03
 
 * refs (2): 438BA 43950
 OBJ_43F26:

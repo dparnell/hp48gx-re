@@ -91,7 +91,7 @@ IOSetup:
         :: OBJ_479D4 ?SEMI                       * 220F6
 
 IOSetup!:
-          :: OBJ_4792F JstGetTHEMESG DISPROW1 OBJ_49A38 JstGetTHEMESG BINT33 * 22105
+          :: IOSetup~1 JstGetTHEMESG DISPROW1 OBJ_49A38 JstGetTHEMESG BINT33 * 22105
             SysITE                               * 22128
 
 _IR_:
@@ -130,8 +130,8 @@ _space_:
 
 _invalid_:
               $ "invalid" ;                      * 22290
-            !append$ DISPROW5 OBJ_49A60 JstGetTHEMESG swap;->EditStr;+(2st) * 222AD
-            DISPROW6 OBJ_49A6A JstGetTHEMESG swap;->EditStr;+(2st) DISPROW7 ; * 222C6
+            !append$ DISPROW5 IOSetup~2 JstGetTHEMESG swap;->EditStr;+(2st) * 222AD
+            DISPROW6 IOSetup~3 JstGetTHEMESG swap;->EditStr;+(2st) DISPROW7 ; * 222C6
           SetDA3NoCh ;                           * 222E4
 
 * refs (10): 221CC 2227C 222C1 222D5 4A4A0 4A781 ...
@@ -214,7 +214,7 @@ L_22473:
         NIBHEX  B21                              * 224BE  +
 
 INPUT:
-        CON(5)  L_02803                          * 224C1  code object: the address of its machine code
+        CON(5)  INPUT~1                          * 224C1  code object: the address of its machine code
         NIBHEX  0A71                             * 224C6  ..
 
 * $prompt $ -> $' $prompt {specs} -> $'
@@ -310,7 +310,7 @@ USER$>TAG:
         CON(3)  #002                             * 2262D  library
         CON(3)  #180                             * 22630  command
 xDTAG:
-        :: OBJ_214FB ;                           * 22633
+        :: xDTAG~1 ;                             * 22633
 
 LIB002.hash:
         ACPTR L_7633B Reset                      * 22642
@@ -838,7 +838,7 @@ xIFEND:
         CON(3)  #700                             * 22FE5  library
         CON(3)  #004                             * 22FE8  command
 xALG->:
-        :: CK0ATTNABORT OBJ_23502 DEPTH OVER #2* #>case OBJ_54693 * 22FEB
+        :: CK0ATTNABORT OBJ_23502 DEPTH OVER #2* #>case xALG->~1 * 22FEB
           NDROP SETSTACKERR ;                    * 23013
 
 * slots of 700 004 (derivative, inverse, ...: used by the symbolic code)
@@ -1084,18 +1084,18 @@ L_23356:
         RPL
 xSTEP:
         :: CK1&Dispatch                          * 23380
-          BINT1 OBJ_233C1                        * 2338A  real
-          BINT10 OBJ_233A8                       * 23394  name|local|algebraic
+          BINT1 xSTEP~real                       * 2338A  real
+          BINT10 xSTEP~name|local|algebraic      * 23394  name|local|algebraic
         ;                                        * 2339E
         NIBHEX  27B41                            * 233A3  rK
 
 * refs (1): 23399
-OBJ_233A8:
+xSTEP~name|local|algebraic:
         :: SYMCRUNCH1 COLA xSTEP                 * 233A8
         ;                                        * 233BC
 
 * refs (1): 2338F
-OBJ_233C1:
+xSTEP~real:
         CON(5)  (*)+5                            * 233C1  primitive code object
         ASSEMBLE
         GOSBVL  POP1%                            * 233C6
@@ -1458,8 +1458,8 @@ palparse:
 * refs (1): 25902
 OBJ_238B8:
           :: {}_23989 SWAP ERRSET                * 238B8
-            :: OBJ_25D3A SWAPONE GetNextToken OBJ_239E3 ; ERRTRAP OBJ_23993 * 238CC
-            DROP case drop(1-5,7);true           * 238F4
+            :: OBJ_25D3A SWAPONE GetNextToken palparse~2 ; ERRTRAP * 238CC
+            palparse~1 DROP case drop(1-5,7);true * 238EF
 
 {st,ofs,tok}:
             {                                    * 23903
@@ -1489,7 +1489,7 @@ OBJ_238B8:
         { }                                      * 23989
 
 * refs (1): 238EF
-OBJ_23993:
+palparse~1:
         :: ERROR@ OBJ_26289 #=?SKIP              * 23993
           :: BEGIN {}_23989 EQ UNTIL ; ERRJMP ;  * 239A7
 
@@ -1498,12 +1498,12 @@ drop(1-5,7);true:
         :: 5DROP SWAPDROPTRUE ;                  * 239CF
 
 * refs (1): 238E0
-OBJ_239E3:
-        :: OBJ_2530E OBJ_23A06 !*triand OBJ_2525A TrueTrue ; * 239E3
+palparse~2:
+        :: OBJ_2530E palparse~2~1 !*triand OBJ_2525A TrueTrue ; * 239E3
 
 * refs (2): 239ED 23A24
-OBJ_23A06:
-        :: nultrior TrueTrue OBJ_23A2E !*triand COLA OBJ_23A06 * 23A06
+palparse~2~1:
+        :: nultrior TrueTrue OBJ_23A2E !*triand COLA palparse~2~1 * 23A06
         ;                                        * 23A29
 
 * refs (16): 23A15 23B46 23BB9 23C0E 23C77 23CD6 ...

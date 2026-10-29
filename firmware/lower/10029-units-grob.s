@@ -28,11 +28,11 @@ Unbr>U:
 
 * refs (5): 0F33F 0F7D3 0F7E2 0F9C7 10BB4
 units(uo)=>(_,s):
-        :: DUPTYPEEXT? case OBJ_100B5            * 1008D
+        :: DUPTYPEEXT? case units(uo)=>(_,s)~1   * 1008D
           DROP tok1 BINT1 ;                      * 100A1
 
 * refs (1): 1009C
-OBJ_100B5:
+units(uo)=>(_,s)~1:
         :: INNERCOMP SWAPDROP dup;drop(s) #2- ;  * 100B5
 
 * refs (5): 0F344 0F819 0F869 0F8E6 0FA44
@@ -263,7 +263,7 @@ unrot1:
         :: OVER #3+PICK 3PICK#+ BINT3 #+UNROLL ; * 10AF9
 
 * refs (1): 0F0CA
-OBJ_10B1C:
+st=>uo?~2:
         CON(5)  (*)+5                            * 10B1C  primitive code object
         ASSEMBLE
         C=DAT1  A                                * 10B21
@@ -317,7 +317,7 @@ umEND:
         { }                                      * 10B86
 
 * refs (1): 0F638
-OBJ_10B90:
+UMSIN~1:
         :: U>NCQ ROMPTR 0C1 022 %%* ;            * 10B90
 
 * refs (2): 0F855 0F8B4
@@ -332,24 +332,24 @@ OBJ_10BC3:
           3UNROLL #1- ;                          * 10C13
 
 * refs (1): 0FEAD
-OBJ_10C22:
-        :: 4ROLLROT %%*UNROT OBJ_0F73D ;         * 10C22
+U>NCQ~1~2:
+        :: 4ROLLROT %%*UNROT U>NCQ~1~2~1 ;       * 10C22
 
 * refs (1): 0FEBC
-OBJ_10C3B:
+U>NCQ~1~3:
         :: 4ROLLROT %%/ 3UNROLL OBJ_0F756 ;      * 10C3B
 
 * refs (1): 0FEDA
-OBJ_10C59:
+U>NCQ~1~4:
         :: %>%% ROTOVER %%^ 3UNROLL SWAPCKREF ONE_DO_ARRY INDEX@ PULLLONGEL * 10C59
           3PICK %%* INDEX@ PUTEL NextInArray SWAPDROP ; * 10C86
 
 * refs (2): 0FECB 0FF57
-OBJ_10CA9:
+U>NCQ~1~5:
         :: 3UNROLL %%*SWAP TOTEMPOB ;            * 10CA9
 
 * refs (1): 0FEE9
-OBJ_10CC2:
+U>NCQ~1~6:
         :: ROT %>%% 3UNROLL ;                    * 10CC2
         ASSEMBLE
 
@@ -403,7 +403,7 @@ L_10D59:
         RPL
 
 * refs (1): 0F94A
-OBJ_10D78:
+UMSI~1:
         { 1_kg 1_m 1_A 1_s 1_K 1_cd 1_mol        * 10D78
 
 '1_r':
@@ -426,7 +426,7 @@ sr:
           $ "°R" umEND ;                         * 10DF6
 
 * refs (1): 0F67E
-OBJ_10E0E:
+UMTAN~1:
         CON(5)  (*)+5                            * 10E0E  primitive code object
         ASSEMBLE
         GOSBVL  SUB_2A060                        * 10E13
@@ -1041,7 +1041,7 @@ SETFIRSTC_0:
         GOTO    L_114F8                          * 1144E
 
 * refs (1): 425A2
-OBJ_11452:
+LCursor~1:
         CON(5)  (*)+5                            * 11452  primitive code object
         LC(5)   FIRSTCHAR                        * 11457
         GOTO    L_114EC                          * 1145E

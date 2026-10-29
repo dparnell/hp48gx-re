@@ -27,7 +27,7 @@ OBJ_49158:
         NIBHEX  00000                            * 4916C  ..
 
 * refs (1): 15415
-OBJ_49171:
+EQReview~1:
         # 60E                                    * 49171  1550
 
         # 60F                                    * 4917B  1551
@@ -35,7 +35,7 @@ OBJ_49171:
         # 610                                    * 49185  1552
 
 * refs (1): 15608
-OBJ_4918F:
+SolvEQ(nm)~1:
         # 611                                    * 4918F  1553
 
         # 612                                    * 49199  1554
@@ -53,7 +53,7 @@ OBJ_4918F:
 * ->
 * refs (4): 1E1B5 20147 48152 B6399
 AUTOSCALE:
-        :: OBJ_48D92 ;                           * 491D5
+        :: AUTOSCALE~1 ;                         * 491D5
 
 * refs (2): 48DBA 48DE7
 OBJ_491E4:
@@ -70,37 +70,37 @@ OBJ_49293:
         ;                                        * 492A7
 
 * refs (1): 20A82
-OBJ_492AC:
-        :: CK0NOLASTWD RECLAIMDISP OBJ_49417 OBJ_493ED OBJ_493B9 OBJ_49385 * 492AC
-          OBJ_49351 OBJ_49329 OBJ_49301 BINT8 ONE_DO INDEX@ DISPN LOOP * 492CF
-          SetDAsTemp ;                           * 492F7
+xRULES~1:
+        :: CK0NOLASTWD RECLAIMDISP xRULES~1~7 xRULES~1~6 xRULES~1~5 * 492AC
+          xRULES~1~4 xRULES~1~3 xRULES~1~2 xRULES~1~1 BINT8 ONE_DO INDEX@ * 492CA
+          DISPN LOOP SetDAsTemp ;                * 492ED
 
 * refs (1): 492D9
-OBJ_49301:
+xRULES~1~1:
         $ "            M G"                      * 49301
 
 * refs (1): 492D4
-OBJ_49329:
+xRULES~1~2:
         $ "      P   DIANA"                      * 49329
 
 * refs (1): 492CF
-OBJ_49351:
+xRULES~1~3:
         $ "    CHARLIE X B     D"                * 49351
 
 * refs (1): 492CA
-OBJ_49385:
+xRULES~1~4:
         $ " BILL U   N  TED    A"                * 49385
 
 * refs (1): 492C5
-OBJ_493B9:
+xRULES~1~5:
         $ " O  A L   N    ALCUIN"                * 493B9
 
 * refs (1): 492C0
-OBJ_493ED:
+xRULES~1~6:
         $ " B  I    JIM   V"                     * 493ED
 
 * refs (1): 492BB
-OBJ_49417:
+xRULES~1~7:
         $ "  RON     S    E"                     * 49417
 
 * refs (1): 48887
@@ -108,7 +108,7 @@ OBJ_49441:
         :: BINT24 GETLAM TRUE ;                  * 49441
 
 * refs (1): 47989
-OBJ_4945A:
+1FrDisp(st)~1:
         :: TOADISP BlankDA1 ;                    * 4945A
         BSS     10                               * 4946E
 
@@ -185,14 +185,14 @@ PromptIdUtil:
         :: ->StkStr22! SWAP ID>$ $ ": " !append$SWAP !append$ ; * 49709
 
 * refs (1): 474F1
-OBJ_4973A:
+PlotScr*en~6:
         :: CHECKMENU OBJ_49B4B CkEQUtil PointDerivUt CRUNCHNoBlame * 4973A
 
 _Slope__49758:
           $ "Slope" >TAG DUP OBJ_49D3A Π'SAVEDDEPTH #1+ ' Π'SAVEDDEPTH STO ; * 49758
 
 * refs (1): 48D0F
-OBJ_49799:
+PlotScr*en~3~1:
         :: OBJ_49B4B OBJ_48B39 FALSE             * 49799
 
 _Root_:
@@ -200,7 +200,7 @@ _Root_:
         NIBHEX  00000                            * 497E2  ..
 
 * refs (1): 47512
-OBJ_497E7:
+PlotScr*en~7:
         :: CHECKMENU OBJ_49B4B CkEQUtil CURRENTMARK? NOTcase * 497E7
           :: 3DROP NEWMARK ;                     * 49805
           DROP OBJ_4782B 4UNROLL 3UNROLL DUPUNROT SYMSHOW SWAP ' INTEG * 49819
@@ -211,7 +211,7 @@ _Area_:
           Π'SAVEDDEPTH #1+ ' Π'SAVEDDEPTH STO ;  * 4987B
 
 * refs (1): 48D4B
-OBJ_49899:
+PlotScr*en~4~1:
         :: OBJ_49B4B DORCLE EqList? ITE          * 49899
           :: ROT ' xEVAL BINT2 GetEqN NcaseSIZEERR OBJ_49B7D * 498B2
             OVER ' x- BINT5 ::N 3UNROLL ;        * 498DA
@@ -223,14 +223,14 @@ _I-sect_:
           $ "I-sect" OBJ_49E75 Π'SAVEDDEPTH #1+ ' Π'SAVEDDEPTH STO ; * 4992F
 
 * refs (1): 48D78
-OBJ_49968:
+PlotScr*en~5~1:
         :: OBJ_49B4B CkEQUtil PointDerivUt OBJ_48CBA OBJ_48B39 TRUE * 49968
 
 _Extrm_:
           $ "Extrm" OBJ_49E75 Π'SAVEDDEPTH #1+ ' Π'SAVEDDEPTH STO ; * 4998B
 
 * refs (1): 47577
-OBJ_499C2:
+PlotScr*en~8:
         :: CHECKMENU OBJ_49B4B 2DROP CRUNCHNoBlame * 499C2
 
 _F(x)_:
@@ -259,11 +259,11 @@ OBJ_49A56:
         # 62B                                    * 49A56  1579
 
 * refs (1): 222B7
-OBJ_49A60:
+IOSetup~2:
         # 62C                                    * 49A60  1580
 
 * refs (1): 222CB
-OBJ_49A6A:
+IOSetup~3:
         # 62D                                    * 49A6A  1581
 
 * refs (2): 4EF00 B633A
@@ -274,12 +274,12 @@ ZPAR_49A88:
           ID ZPAR STOAPPLDATA ;                  * 49A88
 
 * refs (2): 48AA3 48AFD
-OBJ_49AA1:
+PlotScr*en~2~2~1~1~1:
         :: DUP OBJ_66BAD IT DROPZERO             * 49AA1
         ;                                        * 49ABA
 
 * refs (1): 47594
-OBJ_49ABF:
+PlotScr*en~9:
         :: CHECKMENU OBJ_49B4B CkEQUtil          * 49ABF
 
 * refs (3): 47660 4974E 49977
@@ -287,7 +287,7 @@ PointDerivUt:
           :: DROP SymDer(ex,nm) ;                * 49AD3
 
 * refs (1): 49CCC
-OBJ_49AE7:
+NextInEQ~1:
           :: DORCLE DUP EqList? ; case           * 49AE7
           :: SWAP>HCOMP 'EQ STOAPPLDATA OBJ_4DAA3 ; * 49B05
           DROP 'EQ SAFE@ DROP TWO{}N DOSTOE OBJ_4DAA3 ; * 49B23
@@ -305,7 +305,7 @@ OBJ_49B7D:
           OBJ_48CBA ;                            * 49B9B
 
 FcnUtilEnd:
-        :: INDEPVAR OBJ_4A078 OVER OBJ_1552C OVER SWAP XEQSTOID ; * 49BA5
+        :: INDEPVAR FcnUtilEnd~1 OVER OBJ_1552C OVER SWAP XEQSTOID ; * 49BA5
 
 RootUtil:
         :: SYMBNUMSOLVE NOTcase                  * 49BD2
@@ -322,7 +322,7 @@ CkEQUtil:
 
 * refs (1): 49B73
 OBJ_49C95:
-          :: OBJ_4A12C OBJ_6BC2D 3DROP RDROP ;   * 49C95
+          :: CkEQUtil~1 OBJ_6BC2D 3DROP RDROP ;  * 49C95
         ;                                        * 49CB3
 
 * refs (1): 475E0
@@ -331,7 +331,7 @@ NextInEQ:
 
 * refs (1): 15348
 NextInEQ!:
-          :: TakeOver AtUserStack OBJ_49AE7 ITE  * 49CBD
+          :: TakeOver AtUserStack NextInEQ~1 ITE * 49CBD
 
 * {} -> {}'
 ROLL{}:
@@ -348,7 +348,7 @@ OBJ_49D3A:
             :: NULL$ SWAP OBJ_49B4B SWAPDROPSWAP OBJ_49E3E U>nbr dREALNcase * 49D3F
               2DROP                              * 49D67
               PointMoveCur ;                     * 49D6C
-            OBJ_49FE2 ;                          * 49D76
+            NextInEQ~2 ;                         * 49D76
         ;                                        * 49D80
 
 * refs (1): 49907
@@ -367,7 +367,8 @@ dup;BreakEquation?:
 
 * refs (1): 49B69
 ChkEQ(eq):
-        :: DUP OBJ_4D97F SWAP GETRHS OVER OBJ_50F42 NOTcaseFALSE OBJ_51003 * 49E0C
+        :: DUP OBJ_4D97F SWAP GETRHS OVER ChkEQ(eq)~1 NOTcaseFALSE * 49E0C
+          ChkEQ(eq)~2                            * 49E34
         ;                                        * 49E39
 
 * refs (3): 4766F 49D58 49EA2
@@ -399,7 +400,7 @@ PointMoveCur:
           DUPUNROT                               * 49FDD
 
 * refs (1): 49D76
-OBJ_49FE2:
+NextInEQ~2:
           :: SWAP DUPNULL$? ITE DROP             * 49FE2
             :: OBJ_0C9FE SORTASLOW ;             * 49FFB
             BINT39 !DcompWidth 1stkdecomp$w OBJ_0C9FE ; * 4A00F
@@ -415,7 +416,7 @@ DISPCOORD2:
         :: DispCoord1 WaitForKey 2DROP DispMenu InitEdModes ; * 4A055
 
 * refs (1): 49BAF
-OBJ_4A078:
+FcnUtilEnd~1:
         :: RECORDX&YC% C>Re% ;                   * 4A078
 
 * refs (8): 155E5 15887 4902B 49902 49B50 49E89 ...
@@ -437,11 +438,11 @@ ___4A0D7:
           OBJ_15389 TRUE ;                       * 4A113
 
 * refs (1): 20295
-OBJ_4A122:
+xBESTFIT~2:
         # 606                                    * 4A122  1542
 
 * refs (1): 49C9A
-OBJ_4A12C:
+CkEQUtil~1:
         # 607                                    * 4A12C  1543
 
         # 608                                    * 4A136  1544
@@ -461,7 +462,7 @@ bestfit:
         ::                                       * 4A172
 
 * refs (1): 2C7AB
-OBJ_4A177:
+ChkReakäPAR~2:
           { xLINFIT xLOGFIT xEXPFIT xPWRFIT } ' xLINFIT %0_2A2B4 BINT5 * 4A177
           ONE_DO 3PICK INDEX@ NTHCOMPDROP DUP StoModel STATCORR %ABS ROTSWAP * 4A1A9
           2DUP %>= ITE DROPSWAPDROP              * 4A1D6
@@ -604,10 +605,10 @@ OBJ_4A96E:
 * -> {}
 * refs (18): 4A892 4B369 4B428 4FC6E 50F92 8AAB9 ...
 CHECKPVARS:
-        :: Chk&BreakPPAR ROMPTR 0F1 03D OBJ_4ABC1 DUPTYPELIST? IT * 4A9AF
+        :: Chk&BreakPPAR ROMPTR 0F1 03D CHECKPVARS~1 DUPTYPELIST? IT * 4A9AF
           :: INNERCOMP BINT3 EQUALcasedrop OBJ_4C6E3 * 4A9D3
             BINT2 EQUALcasedrop OBJ_4EF0A        * 4A9EC
-            OBJ_4B527 ;                          * 4A9FB
+            CHECKPVARS~2 ;                       * 4A9FB
           TYPECMP? OBJ_514C3 DUPTYPEREAL? SWAP TYPEHSTR? OR OBJ_514C3 * 4AA05
           ChkIndep TYPECMP? OBJ_514C3 TYPECMP? OBJ_514C3 'IDPAR OBJ_4735A * 4AA28
           DROP ;                                 * 4AA4B
@@ -649,7 +650,7 @@ MakeRange(s):
         :: #1-DUP #2/ UNCOERCE %10 %/ %CHS SWAP UNCOERCE %10 %/ OVER %+ ; * 4AB7B
 
 * refs (1): 4A9C4
-OBJ_4ABC1:
+CHECKPVARS~1:
         :: ?OKINALG casedrop                     * 4ABC1
           :: 'IDFUNCTION PUTPTYPE ;              * 4ABD0
           OBJ_2708E caseDROP DROP                * 4ABE4
@@ -858,23 +859,23 @@ ChkPut('PPAR',li,s):
         :: ROMPTR 0F1 03C ;                      * 4B37D
 
 * refs (1): 8D02B
-OBJ_4B392:
+ChkPut('PPAR',li,s)~1~1:
         :: DROP DUPTYPEIDNT? NcaseTYPEERR OVER   * 4B392
           PPAR(s);dup;li? ITE                    * 4B3AB
           :: ICMPDRPRTDRP THREE{}N ; DROP        * 4B3B5
           BINT8 ROT#- PutBackPPAR(_,s) ;         * 4B3CE
 
 * refs (1): 8D03A
-OBJ_4B3E2:
+ChkPut('PPAR',li,s)~1~2:
         :: DROP DUPTYPEREAL? 3PICK TYPEREAL? AND NcaseTYPEERR 3PICK * 4B3E2
-          PPAR(s);dup;li? ?CARCOMP 3UNROLL OBJ_4B441 ; * 4B40A
+          PPAR(s);dup;li? ?CARCOMP 3UNROLL ChkPut('PPAR',li,s)~1~2~1 ; * 4B40A
 
 * refs (7): 45060 45092 4654F 4B3AB 4B40A B60C6 ...
 PPAR(s);dup;li?:
         :: CHECKPVARS SWAP NTHCOMPDROP DUPTYPELIST? ; * 4B423
 
 * refs (1): 4B419
-OBJ_4B441:
+ChkPut('PPAR',li,s)~1~2~1:
         :: THREE{}N BINT8 ROT#- PutBackPPAR(_,s) ; * 4B441
 
 * refs (1): 4C58F
@@ -895,7 +896,7 @@ OBJ_4B4EB:
           18GETLAM ABND ABND RESETDEPTH INDEPVAR ?PURGE_HERE ERRJMP ; * 4B4FF
 
 * refs (1): 4A9FB
-OBJ_4B527:
+CHECKPVARS~2:
         :: BINT4 EQUAL OBJ_514C3 OBJ_4C6E3 OBJ_4EF0A ; * 4B527
         BSS     9                                * 4B54A
 
@@ -921,17 +922,17 @@ OBJ_4B62F:
         :: 1stArgb(ex) SYMBN ;                   * 4B62F
 
 * refs (1): 041C5
-OBJ_4B643:
+TurnOff~1:
         :: IT ShowInvRomp                        * 4B643
         ;                                        * 4B652
         NIBHEX  00000                            * 4B657  ..
 
 * refs (3): 1E19A 20156 4C305
 draw:
-        :: GDISPCENTER TURNMENUOFF GETPTYPE DUP OBJ_7312B IT * 4B65C
+        :: GDISPCENTER TURNMENUOFF GETPTYPE DUP draw~2 IT * 4B65C
           :: EVAL NOT?SEMI                       * 4B67F
             OBJ_73153 RDROP EVAL ;               * 4B68E
-          DROP PLOTPREP DROP OBJ_4B99F ABND ABND ; * 4B6A2
+          DROP PLOTPREP DROP draw~1 ABND ABND ;  * 4B6A2
 
 * refs (9): 8C894 8C964 8CA93 8CBD7 8CCBB 8CD9F ...
 OBJ_4B6C5:
@@ -972,7 +973,7 @@ GetRes:
             :: %0_2A2B4 GetRes ;                 * 4B800
             UNCOERCE%% %%1 10GETLAM %%/ %%* %%>% ; * 4B814
           DUP %0<> ?SEMIDROP                     * 4B837
-          11GETLAM OBJ_7313F case EVAL           * 4B846
+          11GETLAM GetRes~1 case EVAL            * 4B846
           %%1 10GETLAM %%/>% ;                   * 4B85A
 
         :: EXITFCNsto ERRJMP ;                   * 4B86E
@@ -991,11 +992,11 @@ OBJ_4B8BE:
           BINT5 OBJ_6E113 ;                      * 4B918
 
 * refs (1): 3FE3A
-OBJ_4B927:
+H/WKey>KeyOb~1:
         :: EVAL BINT7 GETDF EQLookup DROP ;      * 4B927
 
 * refs (1): 54698
-OBJ_4B94A:
+xALG->~1~1:
         :: DOBIND CK0NOLASTWD ;                  * 4B94A
 
 * refs (1): 6CB93
@@ -1008,7 +1009,7 @@ OBJ_4B97E:
         NIBHEX  0                                * 4B99E
 
 * refs (1): 4B6B1
-OBJ_4B99F:
+draw~1:
         :: GetRes 4PUTLAM 11GETLAM OBJ_73153 EVAL ; * 4B99F
 
 * refs (5): 21092 4BC3D 4BD41 4C33C 4C5EE
@@ -1126,11 +1127,11 @@ OBJ_4BF71:
 * refs (3): 4BC56 4C13E 4C50D
 NEXTSTEP:
         :: 15GETLAM DUP 4GETLAM %+ 2DUP %= IT    * 4BFAE
-          :: DUP OBJ_4C003 DUP 4PUTLAM %+ ;      * 4BFD6
+          :: DUP NEXTSTEP~1 DUP 4PUTLAM %+ ;     * 4BFD6
           NEWINDEP ;                             * 4BFF9
 
 * refs (1): 4BFE0
-OBJ_4C003:
+NEXTSTEP~1:
         :: DUP%0= casedrop                       * 4C003
           :: %10                                 * 4C012
 

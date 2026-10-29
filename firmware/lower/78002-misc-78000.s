@@ -117,7 +117,7 @@ SUB_78163:
         GOTO    SUB_7826A                        * 78163
 
 * refs (1): 2C14E
-SUB_78167:
+utpn(2r)~1:
         GOSUB   SUB_78411                        * 78167
         GOSUB   SUB_78797                        * 7816B
         GOSUB   SUB_77EBC                        * 7816F
@@ -218,7 +218,7 @@ L_78271:
         GOTO    L_78350                          * 78279
 
 * refs (1): 2C179
-SUB_7827D:
+utpf(3r)~1:
         GOSUB   SUB_785BE                        * 7827D
         GOSUBL  SUB_78987                        * 78281
         GOSUB   SUB_78670                        * 78287
@@ -1189,7 +1189,7 @@ L_78A58:
         GOTO    L_78A58                          * 78A62
 L_78A66:
         GOTO    SUB_78AE4                        * 78A66
-L_78A6A:
+aMODF~1:
         HST=0   3                                * 78A6A
         P=      14                               * 78A6D
         ?D=0    P                                * 78A6F
@@ -3207,7 +3207,7 @@ SUB_79EA8:
         RTN                                      * 79EC2
 
 * refs (1): 2AF2C
-SUB_79EC4:
+%%H>HMS~1:
         GOSBVL  SUB_2A060                        * 79EC4
         GOSUB   SUB_79EE1                        * 79ECB
         GOSBVL  PACKSB                           * 79ECF

@@ -38,7 +38,7 @@ ROMP_0E0_002:
 
 * ROMPTR 0E0 004
 * refs (1): CF38C
-ROMP_0E0_004:
+~BRbrowse~2~2:
         :: ' LAM 'BR6 STO ;                      * CF42F
 
 * ROMPTR 0E0 005
@@ -53,7 +53,7 @@ ROMP_0E0_006:
 
 * ROMPTR 0E0 007
 * refs (1): CF38C
-ROMP_0E0_007:
+~BRbrowse~2~3:
         :: ' LAM 'BR16 STO ;                     * CF49C
 
 * ROMPTR 0E0 008
@@ -83,7 +83,7 @@ ROMP_0E0_00C:
 
 * ROMPTR 0E0 00D
 * refs (1): CF38C
-ROMP_0E0_00D:
+~BRbrowse~2~4:
         :: ' LAM 'BR26 STO ;                     * CF57A
 
 * ROMPTR 0E0 00E
@@ -106,7 +106,7 @@ ROMP_0E0_00F:
 
 * ROMPTR 0E0 011
 * refs (1): CF38C
-ROMP_0E0_011:
+~BRbrowse~1:
         :: DA3OK? ?SKIP                          * CF67C
           :: DispMenu SetDA3Valid ;              * CF68B
         ;                                        * CF69F
@@ -123,7 +123,7 @@ BRdone:
 
 * ROMPTR 0E0 014
 * refs (1): CF38C
-ROMP_0E0_014:
+~BRbrowse~2:
         :: 8PICK LENCOMP BINT0 BINT9 NDUPN DROP  * CF6E3
           {                                      * CF706
 
@@ -149,7 +149,7 @@ ROMP_0E0_016:
 
 * ROMPTR 0E0 019
 * refs (1): CF38C
-ROMP_0E0_019:
+BRGetItem~1:
             LAM 'BR22                            * CF749
 
 * ROMPTR 0E0 01A
@@ -174,12 +174,12 @@ ROMP_0E0_01D:
 
 * ROMPTR 0E0 01E
 * refs (1): CF38C
-ROMP_0E0_01E:
+BRinverse~1:
             LAM 'BR12                            * CF79A
 
 * ROMPTR 0E0 01F
 * refs (1): CF38C
-ROMP_0E0_01F:
+BRinverse~2:
             LAM 'BR14                            * CF7AB
 
 * ROMPTR 0E0 020
@@ -215,7 +215,7 @@ ROMP_0E0_024:
 
 * ROMPTR 0E0 025
 * refs (1): CF38C
-ROMP_0E0_025:
+~BRbrowse~3:
         :: BINT1 #=casedrop ROMPTR 0E0 026       * CF8FD
           BINT2 #=casedrop ROMPTR 0E0 027        * CF917
           BINT3 #=casedrop ROMPTR 0E0 028        * CF92C
@@ -225,7 +225,7 @@ ROMP_0E0_025:
 
 * ROMPTR 0E0 026
 * refs (1): CF38C
-ROMP_0E0_026:
+~BRbrowse~3~1:
         :: BINT11 ?CaseRomptr@ ROMPTR 0E0 030 BINT12 ?CaseRomptr@ * CF980
           ROMPTR 0E0 02D BINT17 ?CaseRomptr@ ROMPTR 0E0 031 BINT25 * CF9A4
           ?CaseRomptr@ ROMPTR 0E0 038 BINT45 ?CaseRomptr@ ROMPTR 0E0 039 * CF9C9
@@ -237,7 +237,7 @@ ROMP_0E0_026:
 
 * ROMPTR 0E0 027
 * refs (1): CF38C
-ROMP_0E0_027:
+~BRbrowse~3~2:
         :: BINT11 ?CaseRomptr@ ROMPTR 0E0 034 BINT12 ?CaseRomptr@ * CFA35
           ROMPTR 0E0 02E BINT17 ?CaseRomptr@ ROMPTR 0E0 035 BINT25 * CFA59
           ?CaseRomptr@ ROMPTR 0E0 052 BINT35 #=casedrpfls BINT40 * CFA7E  BRViewItem
@@ -246,7 +246,7 @@ ROMP_0E0_027:
 
 * ROMPTR 0E0 028
 * refs (1): CF38C
-ROMP_0E0_028:
+~BRbrowse~3~3:
         :: BINT11 ?CaseRomptr@ ROMPTR 0E0 036 BINT12 ?CaseRomptr@ * CFAB7
           ROMPTR 0E0 02F BINT17 ?CaseRomptr@ ROMPTR 0E0 037 BINT25 * CFADB
           ?CaseRomptr@ ROMPTR 0E0 052 BINT35 #=casedrpfls BINT40 * CFB00  BRViewItem
@@ -256,7 +256,7 @@ ROMP_0E0_028:
 
 * ROMPTR 0E0 029
 * refs (1): CF38C
-ROMP_0E0_029:
+~BRbrowse~3~4:
         :: BINT25 ?CaseRomptr@ ROMPTR 0E0 038 BINT45 ?CaseRomptr@ * CFB43
           ROMPTR 0E0 039 BINT30 #=casedrpfls BINT35 * CFB67
           #=casedrpfls BINT40                    * CFB81
@@ -265,7 +265,7 @@ ROMP_0E0_029:
 
 * ROMPTR 0E0 02A
 * refs (1): CF38C
-ROMP_0E0_02A:
+~BRbrowse~3~5:
         :: BINT45 ?CaseRomptr@ ROMPTR 0E0 039 BINT25 ?CaseRomptr@ * CFBA5
           ROMPTR 0E0 038 BINT35 #=casedrpfls BINT40 * CFBC9
           #=casedrpfls BINT5                     * CFBE3
@@ -273,7 +273,7 @@ ROMP_0E0_02A:
 
 * ROMPTR 0E0 02B
 * refs (1): CF38C
-ROMP_0E0_02B:
+~BRbrowse~3~6:
         :: BINT45 #=casedrpfls BINT25            * CFBFD
           ?CaseRomptr@ ROMPTR 0E0 038 BINT35 #=casedrpfls BINT40 * CFC11
           #=casedrpfls BINT6                     * CFC30
@@ -289,7 +289,7 @@ ROMP_0E0_02C:
 
 * ROMPTR 0E0 02D
 * refs (1): CF38C
-ROMP_0E0_02D:
+~BRbrowse~3~1~1:
         :: TakeOver ROMPTR 0E0 01B BINT7 #< case DoBadKey * CFCA1
           BINT6 SetSomeRow DispMenu ROMPTR 0E0 049 * CFCCA  BRinverse
           ROMPTR 0E0 045                         * CFCE4  BRDispItems
@@ -297,7 +297,7 @@ ROMP_0E0_02D:
 
 * ROMPTR 0E0 02E
 * refs (1): CF38C
-ROMP_0E0_02E:
+~BRbrowse~3~2~1:
         :: TakeOver ROMPTR 0E0 01B BINT7 #< case DoBadKey * CFCFF
           DoPrevRow DispMenu ROMPTR 0E0 049      * CFD28  BRinverse
           ROMPTR 0E0 045                         * CFD3D  BRDispItems
@@ -305,7 +305,7 @@ ROMP_0E0_02E:
 
 * ROMPTR 0E0 02F
 * refs (1): CF38C
-ROMP_0E0_02F:
+~BRbrowse~3~3~1:
         :: TakeOver ROMPTR 0E0 01B BINT7 #< case DoBadKey * CFD58
           DoFirstRow DispMenu ROMPTR 0E0 049     * CFD81  BRinverse
           ROMPTR 0E0 045                         * CFD96  BRDispItems
@@ -313,17 +313,17 @@ ROMP_0E0_02F:
 
 * ROMPTR 0E0 030
 * refs (1): CF38C
-ROMP_0E0_030:
+~BRbrowse~3~1~2:
         :: TakeOver REPEATER BINT11 ROMPTR 0E0 032 ; * CFDB1
 
 * ROMPTR 0E0 031
 * refs (1): CF38C
-ROMP_0E0_031:
+~BRbrowse~3~1~3:
         :: TakeOver REPEATER BINT17 ROMPTR 0E0 033 ; * CFDD5
 
 * ROMPTR 0E0 032
 * refs (1): CF38C
-ROMP_0E0_032:
+~BRbrowse~3~1~2~1:
         :: ROMPTR 0E0 017 #1-DUP #0=case         * CFDF9  ~BRRclCurRow
           :: DROP ROMPTR 0E0 037 ;               * CFE13
           ROMPTR 0E0 049 DUP ROMPTR 0E0 002 DUP ROMPTR 0E0 016 #< IT * CFE2D  BRinverse
@@ -333,7 +333,7 @@ ROMP_0E0_032:
 
 * ROMPTR 0E0 033
 * refs (1): CF38C
-ROMP_0E0_033:
+~BRbrowse~3~1~3~1:
         :: ROMPTR 0E0 017 DUP ROMPTR 0E0 01D #= casedrop ROMPTR 0E0 036 * CFED8  ~BRRclCurRow
           #1+ ROMPTR 0E0 049 DUP ROMPTR 0E0 002 DUP ROMPTR 0E0 01C #> IT * CFF0D  BRinverse
           :: DUP ROMPTR 0E0 001 ROMPTR 0E0 016 #1+ ROMPTR 0E0 000 * CFF47
@@ -342,7 +342,7 @@ ROMP_0E0_033:
 
 * ROMPTR 0E0 034
 * refs (1): CF38C
-ROMP_0E0_034:
+~BRbrowse~3~2~2:
         :: TakeOver ROMPTR 0E0 042 ROMPTR 0E0 017 #1=case ROMPTR 0E0 037 * CFFBD  ~BRRclCurRow
           ROMPTR 0E0 049 ROMPTR 0E0 016 DUP      * CFFED  BRinverse
           ROMPTR 0E0 017 #<> ITE ROMPTR 0E0 002  * D0008  ~BRRclCurRow
@@ -354,7 +354,7 @@ ROMP_0E0_034:
 
 * ROMPTR 0E0 035
 * refs (1): CF38C
-ROMP_0E0_035:
+~BRbrowse~3~2~3:
         :: TakeOver ROMPTR 0E0 042 ROMPTR 0E0 017 ROMPTR 0E0 01D #=casedrop * D00DC  ~BRRclCurRow
           ROMPTR 0E0 036                         * D010C
           ROMPTR 0E0 049 ROMPTR 0E0 01C DUPUNROT #<> ITE ROMPTR 0E0 002 * D0117  BRinverse
@@ -474,7 +474,7 @@ ROMP_0E0_043:
 
 * ROMPTR 0E0 044
 * refs (1): CF38C
-ROMP_0E0_044:
+~BRbrowse~2~1:
         :: ROMPTR 0B0 0A5 ZEROZERO ROT XYGROBDISP ; * D0830
 
 * ROMPTR 0E0 045
@@ -548,7 +548,7 @@ BRinverse:
 
 * ROMPTR 0E0 04A
 * refs (1): CF38C
-ROMP_0E0_04A:
+~BRbrowse~3~1~2~1~1:
         :: BINT1 ROMPTR 0E0 050 HARDBUFF ROMPTR 0E0 024 BINT2 #- BINT0 * D0B3A
           ROMPTR 0E0 051 3PICK 6UNROLL SUBGROB SWAP ZEROSWAP ROMPTR 0E0 04B * D0B6E
           XYGROBDISP XYGROBDISP ;                * D0B9D
@@ -562,7 +562,7 @@ ROMP_0E0_04B:
 
 * ROMPTR 0E0 04C
 * refs (1): CF38C
-ROMP_0E0_04C:
+~BRbrowse~3~1~3~1~1:
         :: BINT0 ROMPTR 0E0 050 HARDBUFF ROMPTR 0E0 024 #1- BINT1 * D0CCA
           ROMPTR 0E0 051 DUP BINT7 #- 6UNROLL SUBGROB SWAP#1- ZEROSWAP * D0CF9
           ROMPTR 0E0 04B XYGROBDISP XYGROBDISP ; * D0D27
@@ -670,56 +670,56 @@ LIB0E0.link:
         REL(5)  ROMP_0E0_001                     * D11B0  001 
         REL(5)  ROMP_0E0_002                     * D11B5  002 
         REL(5)  ~BRStoC1                         * D11BA  003 ~BRStoC1
-        REL(5)  ROMP_0E0_004                     * D11BF  004 
+        REL(5)  ~BRbrowse~2~2                    * D11BF  004 
         REL(5)  ROMP_0E0_005                     * D11C4  005 
         REL(5)  ROMP_0E0_006                     * D11C9  006 
-        REL(5)  ROMP_0E0_007                     * D11CE  007 
+        REL(5)  ~BRbrowse~2~3                    * D11CE  007 
         REL(5)  ROMP_0E0_008                     * D11D3  008 
         REL(5)  ROMP_0E0_009                     * D11D8  009 
         REL(5)  ROMP_0E0_00A                     * D11DD  00A 
         REL(5)  ROMP_0E0_00B                     * D11E2  00B 
         REL(5)  ROMP_0E0_00C                     * D11E7  00C 
-        REL(5)  ROMP_0E0_00D                     * D11EC  00D 
+        REL(5)  ~BRbrowse~2~4                    * D11EC  00D 
         REL(5)  ROMP_0E0_00E                     * D11F1  00E 
         REL(5)  ROMP_0E0_00F                     * D11F6  00F 
         REL(5)  ~BRbrowse                        * D11FB  010 ~BRbrowse
-        REL(5)  ROMP_0E0_011                     * D1200  011 
+        REL(5)  ~BRbrowse~1                      * D1200  011 
         REL(5)  ~BRoutput                        * D1205  012 ~BRoutput
         REL(5)  BRdone                           * D120A  013 BRdone
-        REL(5)  ROMP_0E0_014                     * D120F  014 
+        REL(5)  ~BRbrowse~2                      * D120F  014 
         REL(5)  ROMP_0E0_015                     * D1214  015 
         REL(5)  ROMP_0E0_016                     * D1219  016 
         REL(5)  ~BRRclCurRow                     * D121E  017 ~BRRclCurRow
         REL(5)  ~BRRclC1                         * D1223  018 ~BRRclC1
-        REL(5)  ROMP_0E0_019                     * D1228  019 
+        REL(5)  BRGetItem~1                      * D1228  019 
         REL(5)  ROMP_0E0_01A                     * D122D  01A 
         REL(5)  ROMP_0E0_01B                     * D1232  01B 
         REL(5)  ROMP_0E0_01C                     * D1237  01C 
         REL(5)  ROMP_0E0_01D                     * D123C  01D 
-        REL(5)  ROMP_0E0_01E                     * D1241  01E 
-        REL(5)  ROMP_0E0_01F                     * D1246  01F 
+        REL(5)  BRinverse~1                      * D1241  01E 
+        REL(5)  BRinverse~2                      * D1246  01F 
         REL(5)  ROMP_0E0_020                     * D124B  020 
         REL(5)  ROMP_0E0_021                     * D1250  021 
         REL(5)  ROMP_0E0_022                     * D1255  022 
         REL(5)  ROMP_0E0_023                     * D125A  023 
         REL(5)  ROMP_0E0_024                     * D125F  024 
-        REL(5)  ROMP_0E0_025                     * D1264  025 
-        REL(5)  ROMP_0E0_026                     * D1269  026 
-        REL(5)  ROMP_0E0_027                     * D126E  027 
-        REL(5)  ROMP_0E0_028                     * D1273  028 
-        REL(5)  ROMP_0E0_029                     * D1278  029 
-        REL(5)  ROMP_0E0_02A                     * D127D  02A 
-        REL(5)  ROMP_0E0_02B                     * D1282  02B 
+        REL(5)  ~BRbrowse~3                      * D1264  025 
+        REL(5)  ~BRbrowse~3~1                    * D1269  026 
+        REL(5)  ~BRbrowse~3~2                    * D126E  027 
+        REL(5)  ~BRbrowse~3~3                    * D1273  028 
+        REL(5)  ~BRbrowse~3~4                    * D1278  029 
+        REL(5)  ~BRbrowse~3~5                    * D127D  02A 
+        REL(5)  ~BRbrowse~3~6                    * D1282  02B 
         REL(5)  ROMP_0E0_02C                     * D1287  02C 
-        REL(5)  ROMP_0E0_02D                     * D128C  02D 
-        REL(5)  ROMP_0E0_02E                     * D1291  02E 
-        REL(5)  ROMP_0E0_02F                     * D1296  02F 
-        REL(5)  ROMP_0E0_030                     * D129B  030 
-        REL(5)  ROMP_0E0_031                     * D12A0  031 
-        REL(5)  ROMP_0E0_032                     * D12A5  032 
-        REL(5)  ROMP_0E0_033                     * D12AA  033 
-        REL(5)  ROMP_0E0_034                     * D12AF  034 
-        REL(5)  ROMP_0E0_035                     * D12B4  035 
+        REL(5)  ~BRbrowse~3~1~1                  * D128C  02D 
+        REL(5)  ~BRbrowse~3~2~1                  * D1291  02E 
+        REL(5)  ~BRbrowse~3~3~1                  * D1296  02F 
+        REL(5)  ~BRbrowse~3~1~2                  * D129B  030 
+        REL(5)  ~BRbrowse~3~1~3                  * D12A0  031 
+        REL(5)  ~BRbrowse~3~1~2~1                * D12A5  032 
+        REL(5)  ~BRbrowse~3~1~3~1                * D12AA  033 
+        REL(5)  ~BRbrowse~3~2~2                  * D12AF  034 
+        REL(5)  ~BRbrowse~3~2~3                  * D12B4  035 
         REL(5)  ROMP_0E0_036                     * D12B9  036 
         REL(5)  ROMP_0E0_037                     * D12BE  037 
         REL(5)  ROMP_0E0_038                     * D12C3  038 
@@ -734,15 +734,15 @@ LIB0E0.link:
         REL(5)  ROMP_0E0_041                     * D12F0  041 
         REL(5)  ROMP_0E0_042                     * D12F5  042 
         REL(5)  ROMP_0E0_043                     * D12FA  043 
-        REL(5)  ROMP_0E0_044                     * D12FF  044 
+        REL(5)  ~BRbrowse~2~1                    * D12FF  044 
         REL(5)  BRDispItems                      * D1304  045 BRDispItems
         REL(5)  ROMP_0E0_046                     * D1309  046 
         REL(5)  ROMP_0E0_047                     * D130E  047 
         REL(5)  ROMP_0E0_048                     * D1313  048 
         REL(5)  BRinverse                        * D1318  049 BRinverse
-        REL(5)  ROMP_0E0_04A                     * D131D  04A 
+        REL(5)  ~BRbrowse~3~1~2~1~1              * D131D  04A 
         REL(5)  ROMP_0E0_04B                     * D1322  04B 
-        REL(5)  ROMP_0E0_04C                     * D1327  04C 
+        REL(5)  ~BRbrowse~3~1~3~1~1              * D1327  04C 
         REL(5)  ROMP_0E0_04D                     * D132C  04D 
         REL(5)  ROMP_0E0_04E                     * D1331  04E 
         REL(5)  ROMP_0E0_04F                     * D1336  04F 

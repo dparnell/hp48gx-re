@@ -564,7 +564,7 @@ OBJ_7CE32:
           OBJ_37B30 %%MAX ;                      * 7CE55
 
 * refs (3): 97AAC 97B66 97C80
-OBJ_7CE64:
+COND~1~3:
         :: %%0 SWAP ONE_DO_ARRY INDEX@ OBJ_372EF B%ABS ROT %%+ SWAP * 7CE64
           NextInArray SWAP ;                     * 7CE96
 
@@ -1082,7 +1082,7 @@ SUB_7D755:
         RTN                                      * 7D75F
 
 * refs (1): 0F74C
-OBJ_7D761:
+U>NCQ~1~2~1~1:
         CON(5)  (*)+5                            * 7D761  primitive code object
         ST=0    0                                * 7D766
         GOTO    L_7D775                          * 7D769
@@ -1778,7 +1778,7 @@ COPYVAR:
         ROMPTR 0B5 164                           * 7DF87
 
 * refs (1): 5FAC2
-OBJ_7DF92:
+EXPR>~1~romptr:
         ROMPTR 0F1 041                           * 7DF92
         ASSEMBLE
 L_7DF9D:

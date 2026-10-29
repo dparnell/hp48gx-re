@@ -570,9 +570,9 @@ OBJ_2806B:
 * refs (1): 27FF8
 OBJ_2813D:
         :: CK&DISPATCH0                          * 2813D
-          REALOBOB OBJ_28174                     * 28147  real ? ?
-          CMPOBOB OBJ_28174                      * 28151  complex ? ?
-          EXTOBOB OBJ_28174                      * 2815B  unit ? ?
+          REALOBOB OBJ_28174                     * 28147  real any any
+          CMPOBOB OBJ_28174                      * 28151  complex any any
+          EXTOBOB OBJ_28174                      * 2815B  unit any any
           BINT0 NOP                              * 28165  any
         ;                                        * 2816F
 
@@ -583,7 +583,7 @@ OBJ_28174:
 * refs (2): 28016 5F594
 OBJ_2818D:
         :: SWAPDROP#1- CK&DISPATCH0              * 2818D
-          REALREALOB OBJ_281B5                   * 2819C  real real ?
+          REALREALOB OBJ_281B5                   * 2819C  real real any
           BINT0 Addi*+[_]                        * 281A6  any
         ;                                        * 281B0
 
@@ -599,7 +599,7 @@ Addi*+[_]:
 * refs (2): 28025 5F599
 OBJ_281F6:
         :: SWAPDROP#1- CK&DISPATCH0              * 281F6
-          REALREALOB OBJ_2821E                   * 28205  real real ?
+          REALREALOB OBJ_2821E                   * 28205  real real any
           BINT0 OBJ_2823C                        * 2820F  any
         ;                                        * 28219
 
@@ -825,16 +825,16 @@ ChkEvalNext?:
 * refs (3): 28666 2899F 28B28
 ChkEval?:
         :: NOTNUM? CLRNUM ERRSET ITE             * 28670
-          :: EvalNoCK ERRTRAP OBJ_286D4 CLRNUM TRUE ; * 28689
-          :: EvalNoCK ERRTRAP OBJ_286ED SETNUM TRUE ; * 286AC
+          :: EvalNoCK ERRTRAP ChkEval?~1 CLRNUM TRUE ; * 28689
+          :: EvalNoCK ERRTRAP ChkEval?~2 SETNUM TRUE ; * 286AC
         ;                                        * 286CF
 
 * refs (1): 28698
-OBJ_286D4:
+ChkEval?~1:
         :: CLRNUM RDROP FALSE ;                  * 286D4
 
 * refs (1): 286BB
-OBJ_286ED:
+ChkEval?~2:
         :: SETNUM RDROP FALSE ;                  * 286ED
 
 * refs (3): 24474 28747 3EFA5
@@ -926,7 +926,7 @@ _INV_:
         $ "INV"                                  * 28A28
 
 * refs (1): 1FB0E
-OBJ_28A38:
+xFORMUNIT~name|local|algebraic:
         :: BINT2 nmetasyms ' OBJ_28A65 parameval COLA x* * 28A38
         ;                                        * 28A60
 

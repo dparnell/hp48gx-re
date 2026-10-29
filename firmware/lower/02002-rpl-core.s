@@ -138,7 +138,7 @@ ROMPOLL:
 
 * refs (1): 02205
 RunConfig(s):
-        :: DUP ZERO_DO pullrev GETCONFIG IT OBJ_71646 * 0220F
+        :: DUP ZERO_DO pullrev GETCONFIG IT RunConfig(s)~1 * 0220F
           LOOP DROP ;                            * 02232
         ASSEMBLE
 
@@ -579,7 +579,7 @@ L_027D3:
         DAT1=C  8                                * 027F8
         D1=(2)  #2F                              * 027FC
         LC(1)   #5                               * 02800
-L_02803:
+INPUT~1:
         DAT1=C  1                                * 02803
         GOSBVL  liteslp                          * 02807
         GOSBVL  OnKeyStable?                     * 0280E
@@ -1254,11 +1254,11 @@ L_02F39:
 
 * refs (2): 02E56 02EEE
 Eval(nm):
-        :: DUP@ ' OBJ_02F6F COLA RPIT            * 02F4C
+        :: DUP@ ' Eval(nm)~1 COLA RPIT           * 02F4C
         ;                                        * 02F6A
 
 * refs (1): 02F5B
-OBJ_02F6F:
+Eval(nm)~1:
         CON(5)  (*)+5                            * 02F6F  primitive code object
         ASSEMBLE
         C=DAT1  A                                * 02F74
@@ -1340,7 +1340,7 @@ L_03034:
         AD1EX                                    * 03049
         PC=(A)                                   * 0304C
 L_03050:
-        LC(5)   L_03130                          * 03050
+        LC(5)   SEMILOOP~1                       * 03050
         ?C#A    A                                * 03057
         GOYES   L_03061                          * 0305A
         B=B-1   A                                * 0305C
@@ -1440,7 +1440,7 @@ L_03115:
 * refs (35): 03665 0383B 0509C 05416 054D5 055C8 ...
 SEMI:
         CON(5)  (*)+5                            * 0312B  primitive code object
-L_03130:
+SEMILOOP~1:
         C=B     A                                * 03130
         CD0EX                                    * 03132
         D0=D0-  5                                * 03135
@@ -2054,7 +2054,7 @@ L_0370A:
 * refs (14): 1706D 8A906 8D0AD 8D152 9A3D9 9A479 ...
 GETATELN:
         CON(5)  (*)+5                            * 0371D  primitive code object
-        GOSUB   SUB_037F2                        * 03722
+        GOSUB   GETATELN~1                       * 03722
         R2=A                                     * 03726
         A=DAT1  A                                * 03729
         R1=A                                     * 0372C
@@ -2121,7 +2121,7 @@ L_03773:
         GOTO    L_03585                          * 037EE
 
 * refs (1): 03722
-SUB_037F2:
+GETATELN~1:
         C=DAT1  A                                * 037F2
 
 * refs (1): 0C512
@@ -2352,13 +2352,13 @@ L_039E9:
 * refs (1): 0866E
 ECUSER:
         ?ST=1   5                                * 039EF
-        GOYES   L_03A09                          * 039F2
+        GOYES   ECUSER~1                         * 039F2
         R2=A                                     * 039F4
         GOSUBL  SUB_0852C                        * 039F7
         A=R2                                     * 039FD
         C=R0                                     * 03A00
         GOLONG  MOVEDSU                          * 03A03
-L_03A09:
+ECUSER~1:
         R2=A                                     * 03A09
         AD0EX                                    * 03A0C
         R1=A                                     * 03A0F
@@ -2917,7 +2917,7 @@ Push2#Loop:
 * refs (3): 03F0A 32368 3A8A6
 IntDiv:
         ?C=0    A                                * 03F24
-        GOYES   L_03F59                          * 03F27
+        GOYES   IntDiv~1                         * 03F27
         B=C     A                                * 03F29
         C=0     A                                * 03F2B
         D=0     A                                * 03F2D
@@ -2942,7 +2942,7 @@ L_03F4A:
         GOYES   L_03F3F                          * 03F53
         P=      0                                * 03F55
         RTN                                      * 03F57
-L_03F59:
+IntDiv~1:
         A=0     A                                * 03F59
         RTN                                      * 03F5B
 

@@ -17,7 +17,7 @@ OBJ_5D01D:
 forceadd:
         :: M1st+case OBJ_5D167                   * 5D0C2
           M1st-case OBJ_5D0EA                    * 5D0D1
-          M1stNEGcase OBJ_5D10D                  * 5D0DB
+          M1stNEGcase forceadd~1                 * 5D0DB
         ;                                        * 5D0E5
 
 * refs (2): 5D0D6 5D130
@@ -26,7 +26,7 @@ OBJ_5D0EA:
         ;                                        * 5D108
 
 * refs (1): 5D0E0
-OBJ_5D10D:
+forceadd~1:
         :: 3PICK REQcasedrop x+                  * 5D10D
           :: OBJ_5CC58 COLA OBJ_5D0EA            * 5D121
           ;                                      * 5D135
@@ -366,13 +366,13 @@ dup;ex?:
         :: DUPTYPESYMB? ;                        * 5DEAA
 
 * refs (1): 1F762
-OBJ_5DEB9:
-        :: OBJ_5DEEB ARGNUMERR INVFUNCERR ;      * 5DEB9
+xFCNAPPLY~program~1:
+        :: xFCNAPPLY~program~1~1 ARGNUMERR INVFUNCERR ; * 5DEB9
 
         :: OBJ_5DEF7 ARGNUMERR INVFUNCERR ;      * 5DED2
 
 * refs (1): 5DEBE
-OBJ_5DEEB:
+xFCNAPPLY~program~1~1:
         CON(5)  (*)+5                            * 5DEEB  primitive code object
         ASSEMBLE
         ST=1    2                                * 5DEF0
@@ -520,30 +520,30 @@ CKSYMBN:
 * ob1..obn #n -> sym
 * refs (3): 0F133 27657 282C3
 PSYMBN:
-        :: ERRSET SYMBN ERRTRAP OBJ_5E0C1 ;      * 5E0A3
+        :: ERRSET SYMBN ERRTRAP PSYMBN~1 ;       * 5E0A3
 
 * refs (1): 5E0B7
-OBJ_5E0C1:
+PSYMBN~1:
         :: NULLSYMB COLA prepend(_,s,cp)         * 5E0C1
         ;                                        * 5E0D5
 
 * ob1..obn #n -> {}
 * refs (7): 216C9 23EF7 24212 24AB0 24D5C 252FF ...
 P{}N:
-        :: ERRSET {}N ERRTRAP OBJ_5E0F8 ;        * 5E0DA
+        :: ERRSET {}N ERRTRAP P{}N~1 ;           * 5E0DA
 
 * refs (1): 5E0EE
-OBJ_5E0F8:
+P{}N~1:
         :: NULL{} COLA prepend(_,s,cp)           * 5E0F8
         ;                                        * 5E10C
 
 * ob1..obn #n -> seco
 * refs (3): 252A5 252BE 252E6
 P::N:
-        :: ERRSET ::N ERRTRAP OBJ_5E12F ;        * 5E111
+        :: ERRSET ::N ERRTRAP P::N~1 ;           * 5E111
 
 * refs (1): 5E125
-OBJ_5E12F:
+P::N~1:
         :: PTR NULL:: COLA prepend(_,s,cp)       * 5E12F
         ;                                        * 5E143
 
@@ -554,12 +554,12 @@ prepend(_,s,cp):
 
 * refs (1): 5E170
 prepend(cp,_):
-        :: FREEINTEMP? NOTcase OBJ_5E1B1         * 5E17F
+        :: FREEINTEMP? NOTcase prepend(cp,_)~1   * 5E17F
           >TOPTEMP SWAP >TOPTEMP SWAP OBJ_5E1E3 ; * 5E193
 
 * refs (1): 5E18E
-OBJ_5E1B1:
-        :: INHARDROM? case OBJ_5E29C             * 5E1B1
+prepend(cp,_)~1:
+        :: INHARDROM? case prepend(cp,_)~1~1     * 5E1B1
           TOTEMPOB SWAP >TOPTEMP SWAP OBJ_5E1E3 ; * 5E1C5
 
 * refs (2): 5E1A7 5E1D9
@@ -609,7 +609,7 @@ OBJ_5E1E3:
         GOVLNG  GETPTRLOOP                       * 5E295
 
 * refs (1): 5E1C0
-OBJ_5E29C:
+prepend(cp,_)~1~1:
         CON(5)  (*)+5                            * 5E29C  primitive code object
         A=DAT1  A                                * 5E2A1
         R0=A.F  A                                * 5E2A4
@@ -837,7 +837,7 @@ pshzer:
 * meta -> M_last&op M_rest
 * refs (25): 5A441 5B6F9 5BC08 5BC26 5CA1E 5CA37 ...
 pargop:
-        :: #1-SWAP OBJ_5E889 ROT #1+SWAP DUP#0=case psh * 5E68E
+        :: #1-SWAP pargop~1 ROT #1+SWAP DUP#0=case psh * 5E68E
           BINT1 #=casedrop                       * 5E6B1
 
 * meta&ob -> ob #1 meta
@@ -982,7 +982,7 @@ rotswap:
         ;                                        * 5E884
 
 * refs (1): 5E698
-OBJ_5E889:
+pargop~1:
         :: nonopcase BINT0                       * 5E889
           REQcase xFCNAPPLY                      * 5E898
 
@@ -998,10 +998,10 @@ OBJ_5E889:
 * seco -> seco #args
 * refs (3): 54B87 5E8D4 60071
 argum:
-        :: TRUE OBJ_5E8F2 ;                      * 5E8DE
+        :: TRUE argum~1 ;                        * 5E8DE
 
 * refs (1): 5E8E8
-OBJ_5E8F2:
+argum~1:
         CON(5)  (*)+5                            * 5E8F2  primitive code object
         ASSEMBLE
         D1=D1+  5                                * 5E8F7
@@ -1089,11 +1089,11 @@ OBJ_5E9E1:
 CKINFARGS:
         :: 'RSAVEWORD                            * 5EA09
           :: DEPTH OVER #1+ #<case SETSTACKERR   * 5EA13
-            OBJ_5EA40 ;                          * 5EA31
+            CKINFARGS~1 ;                        * 5EA31
         ;                                        * 5EA3B
 
 * refs (1): 5EA31
-OBJ_5EA40:
+CKINFARGS~1:
         :: dup P{}N OVER #2+ UNROLL NDROP CK1NOLASTWD INNERCOMP ; * 5EA40
 
 * refs (5): 54CE0 54D17 54D3A 54D5D 54D80
@@ -1381,7 +1381,7 @@ OBJ_5ED82:
         ASSEMBLE
 
 * refs (1): 5EE01
-SUB_5EDBE:
+(2.280296843E2:8,-3.0002280220~1~1:
         C=DAT1  A                                * 5EDBE
         CD1EX                                    * 5EDC1
         A=DAT1  A                                * 5EDC4
@@ -1395,7 +1395,7 @@ SUB_5EDBE:
         CON(5)  DOCMP                            * 5EDD8  DOCMP
         NIBHEX  8A200348E9208A20034A0A208A200031 * 5EDDD  ¨.0∫■.¨.0¤..¨...
         NIBHEX  0EE5                             * 5EDFD  à^
-        GOSUB   SUB_5EDBE                        * 5EE01
+        GOSUB   (2.280296843E2:8,-3.0002280220~1~1 * 5EE01
         GOC     L_5EE0C                          * 5EE05
         GOTO    doskip                           * 5EE08
 L_5EE0C:
@@ -1764,17 +1764,17 @@ EXPLODE:
 * refs (19): 2809D 280B1 28124 56755 57A20 57A34 ...
 IMPLODE:
         :: BINT1 OVER#=case DROPSYM              * 5F2EE
-          pshzer OBJ_5F31B DROP CKSYMBN ;        * 5F302
+          pshzer IMPLODE~1 DROP CKSYMBN ;        * 5F302
 
 * refs (1): 5F307
-OBJ_5F31B:
-        :: BEGIN pullrev OBJ_5F537 OBJ_5F571 nonopcase OBJ_5F370 * 5F31B
-          DUP M1stFNCcase OBJ_5F3D4              * 5F33E
-          OBJ_26F7A case OBJ_5F4F6               * 5F34D
+IMPLODE~1:
+        :: BEGIN pullrev IMPLODE~1~4 IMPLODE~1~5 nonopcase IMPLODE~1~1 * 5F31B
+          DUP M1stFNCcase IMPLODE~1~2            * 5F33E
+          OBJ_26F7A case IMPLODE~1~3             * 5F34D
           DROP psh1&rev #0=UNTIL ;               * 5F35C
 
 * refs (1): 5F339
-OBJ_5F370:
+IMPLODE~1~1:
         :: psh1&rev #0=UNTIL ;                   * 5F370
 
 * ob1 ob2 -> ob
@@ -1790,7 +1790,7 @@ DROPSYM:
         ;                                        * 5F3CF
 
 * refs (1): 5F348
-OBJ_5F3D4:
+IMPLODE~1~2:
         :: 2DROP psh ROT symcomp DUP4UNROLL CARCOMP NOTROMPcase * 5F3D4
 
 * refs (1): 5F43D
@@ -1798,22 +1798,22 @@ OBJ_5F3FC:
           :: DROP PTR addt: xFCNAPPLY psh #0=UNTIL ; * 5F3FC
           DUPROMPTR@ ?SKIP SETROMPERR            * 5F41F
           DROP OBJ_26F7A NOTcase OBJ_5F3FC       * 5F42E
-          CARCOMP 4PICK CARCOMP OBJ_5E9E1 NOTcase OBJ_5F4A6 * 5F442
+          CARCOMP 4PICK CARCOMP OBJ_5E9E1 NOTcase IMPLODE~1~2~1 * 5F442
           4ROLLSWAP 4UNROLL psh1&rev #1-ROT EVAL #1+DUP #2+PICK 3UNROLL * 5F460
           PTR addt: xFCNAPPLY psh SWAPDROP#1- #0=UNTIL ; * 5F488
 
 * refs (1): 5F45B
-OBJ_5F4A6:
+IMPLODE~1~2~1:
         :: SWAPROT psh1&rev #1-ROT psh1&rev #1-SWAP EVAL psh #1-SWAP * 5F4A6
           psh1&rev pullrev1& ' xFCNAPPLY psh1&rev #0=UNTIL ; * 5F4D3
 
 * refs (1): 5F357
-OBJ_5F4F6:
+IMPLODE~1~3:
         :: ROT #1+SWAP psh1&rev psh #1-SWAP CARCOMP EVAL psh #1-SWAP * 5F4F6
           psh1&rev #0=UNTIL ;                    * 5F528
 
 * refs (1): 5F32A
-OBJ_5F537:
+IMPLODE~1~4:
         CON(5)  (*)+5                            * 5F537  primitive code object
         ASSEMBLE
         A=DAT1  A                                * 5F53C
@@ -1834,7 +1834,7 @@ L_5F564:
         RPL
 
 * refs (1): 5F32F
-OBJ_5F571:
+IMPLODE~1~5:
         :: psh1&rev psh OVER ' ROMP_002_105 EQITE OBJ_2818D OBJ_281F6 psh * 5F571
           #0=UNTIL ;                             * 5F5A3
 
@@ -2141,7 +2141,7 @@ tailpsh:
           tokUNKNOWN ;                           * 5FA22
 
 * refs (1): 1CFDF
-OBJ_5FA2C:
+EXPR>~1:
         :: #1-SWAP                               * 5FA2C
           :: REQcasedrop xFCNAPPLY               * 5FA36
 
@@ -2155,7 +2155,7 @@ revpulldrop:
           ;                                      * 5FA7C
           pshm1 BEGIN DUP#0<>WHILE               * 5FA81
           :: larg IMPLODE psh1& ; REPEAT DROP #1-SWAP CK&DISPATCH0 * 5FA90
-          BINT15 OBJ_7DF92                       * 5FABD  romptr
+          BINT15 EXPR>~1~romptr                  * 5FABD  romptr
           BINT8 OBJ_5FAE0                        * 5FAC7  program
           BINT0 TRUE                             * 5FAD1  any
         ;                                        * 5FADB

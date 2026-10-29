@@ -119,15 +119,15 @@ BAR:
 
 * ROMPTR 0F1 03B
 * refs (1): 8999A
-ROMP_0F1_03B:
+PTYPE>PINFO~1:
         :: SWAP OBJ_2708E NOTcasedrop DROPFALSE  * 8CFEF
           SWAP NTHELCOMP ;                       * 8D008
 
 * ROMPTR 0F1 03C
 * refs (1): 8999A
-ROMP_0F1_03C:
-        :: SWAPINCOMP DUP #1=case OBJ_4B392      * 8D017
-          DUPTWO #=case OBJ_4B3E2                * 8D030
+ChkPut('PPAR',li,s)~1:
+        :: SWAPINCOMP DUP #1=case ChkPut('PPAR',li,s)~1~1 * 8D017
+          DUPTWO #=case ChkPut('PPAR',li,s)~1~2  * 8D030
           #3= NcaseTYPEERR DUPTYPEREAL?          * 8D03F
           3PICK TYPEREAL? DUP ?SKIP              * 8D04E
           :: DROP 5PICK BINT7 #= NcaseTYPEERR 3PICK * 8D062
@@ -139,7 +139,7 @@ ROMP_0F1_03C:
 
 * ROMPTR 0F1 03D
 * refs (1): 8999A
-ROMP_0F1_03D:
+CHECKPVARS~3:
         :: DUPTYPELIST? IT                       * 8D0F3
           :: INNERCOMP #3= OBJ_514C3 TYPEREAL? OBJ_514C3 DUPTYPEREAL? * 8D102
             caseDROP DUPTYPEARRY?                * 8D125
@@ -167,7 +167,7 @@ ROMP_0F1_040:
 
 * ROMPTR 0F1 041
 * refs (1): 8999A
-ROMP_0F1_041:
+EXPR>~1~romptr~1:
         :: DUP RPTRACC NOTcaseFALSE OBJ_72BD2    * 8D237
           TYPECOL #=case OBJ_5FAE0               * 8D250
           PALPTRDCMP NOTcaseFALSE $>ID           * 8D25F

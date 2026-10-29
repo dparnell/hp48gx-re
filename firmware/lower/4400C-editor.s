@@ -90,10 +90,10 @@ InitEd&Modes:
 * ->
 * refs (9): 40AE8 42F6C 43246 4427C D5F60 D62AF ...
 InitEdLine:
-        :: OBJ_442A4 OBJ_4434F OBJ_53A66 ;       * 4428B
+        :: InitEdLine~1 OBJ_4434F InitEdLine~2 ; * 4428B
 
 * refs (1): 44290
-OBJ_442A4:
+InitEdLine~1:
         CON(5)  (*)+5                            * 442A4  primitive code object
         ASSEMBLE
         GOSBVL  SAVPTR                           * 442A9
@@ -161,16 +161,16 @@ OBJ_4434F:
 * ->
 * refs (8): 1A765 4090E 40B1F 40DB1 431C9 4369E ...
 InitEdModes:
-        :: OBJ_443A8 OBJ_40CC3 ;                 * 44394
+        :: InitEdModes~1 OBJ_40CC3 ;             * 44394
 
 * refs (1): 44399
-OBJ_443A8:
+InitEdModes~1:
         :: ClrAlgEntry ClrPrgmEntry MajusMo UnLockAlpha INSERT_MODE ; * 443A8
 
 * $ ->
 * refs (10): 40B60 42F71 43250 8F0F5 D5F6A D62B4 ...
 EditString:
-        :: OBJ_42BA2 OBJ_4434F ;                 * 443CB
+        :: EditString~1 OBJ_4434F ;              * 443CB
 
 * refs (6): 3E68E 3E6A2 3F288 4278C 44473 4448C
 NextChrInComLine:
@@ -478,7 +478,7 @@ SUB_44772:
         RTN                                      * 44788
 
 * refs (1): 43214
-OBJ_4478A:
+InputLAttn~2:
         CON(5)  (*)+5                            * 4478A  primitive code object
         CD0EX                                    * 4478F
         RSTK=C                                   * 44792
@@ -822,17 +822,17 @@ OBJ_4502E:
           BINT3 PutBackPPAR(_,s) ;               * 451D2
 
 * refs (1): 4C643
-OBJ_451E1:
+drax~1:
         :: 2DUP 5PICK DUPTYPELIST? IT CARCOMP    * 451E1
-          C%>% DUP 8UNROLL OVER 9rolld OBJ_4FE08 DUP %0>= OVER 6PICK #1- * 451FF
+          C%>% DUP 8UNROLL OVER 9rolld drax~1~5 DUP %0>= OVER 6PICK #1- * 451FF
           UNCOERCE %<= AND IT                    * 45236
           :: SWAP 4UNROLLDUP COERCE BINT0 OVER5PICK #1- OVER DRAWLINE#3 * 4524A
-            6PICK OBJ_46789 DROP DUPTYPEREAL? ITE * 45277
+            6PICK drax~1~2 DROP DUPTYPEREAL? ITE * 45277
             :: DUP%0= case2drop 4ROLLSWAP        * 45290
               6ROLL 4UNROLL DUP %>%% 10GETLAM %%* BINT10 PICK GETXMIN %- ROT * 452A4
               %MOD GETXMIN %+ %>%% 10GETLAM %%* 6GETLAM %%+ GETXMAX %>%% * 452DB
-              10GETLAM %%* 6GETLAM %%+ SWAP BEGIN 2DUP %%>= OBJ_45641 WHILE * 4530D
-              :: 8PICK OVER %%>% # 2A01 OBJ_2B551 COERCE 6PICK OBJ_4C742 * 4533F
+              10GETLAM %%* 6GETLAM %%+ SWAP BEGIN 2DUP %%>= drax~1~1 WHILE * 4530D
+              :: 8PICK OVER %%>% # 2A01 OBJ_2B551 COERCE 6PICK drax~1~3 * 4533F
                 3PICK %%+ ;                      * 45371
               REPEAT 4DROP ;                     * 45380
             :: DUP#0= case2drop 4ROLLSWAP        * 4538F
@@ -840,25 +840,25 @@ OBJ_451E1:
               :: 3DROP 4ROLLSWAP ;               * 453B7
               7PICK DUP %0< DUPUNROT IT %CHS     * 453CB
               COERCE 4PICK #/ DROP 4PICK SWAP ROT ITE #- SWAPDROP * 453E9
-              DO 5PICK INDEX@ 4PICK OBJ_4C742 DUP +LOOP 2DROP 4ROLLSWAP ; * 4541B
+              DO 5PICK INDEX@ 4PICK drax~1~3 DUP +LOOP 2DROP 4ROLLSWAP ; * 4541B
           ;                                      * 4544D
           SWAPDUP %0>= OVER5PICK #1- UNCOERCE %<= AND NOTcase 7DROP * 45452
           SWAP 4UNROLL COERCEDUP ZEROOVER 6PICK #1- DRAWLINE#3 5ROLL * 4547F
-          OBJ_46789 SWAPDROP DUPTYPEREAL? case   * 454A7
+          drax~1~2 SWAPDROP DUPTYPEREAL? case    * 454A7
           :: DUP%0= case 7DROP                   * 454BB
             DUP %>%% 9GETLAM %%* 7PICK GETYMIN %- ROT %MOD GETYMIN %+ %>%% * 454CF
-            9GETLAM %%* 5GETLAM SWAP %%- BEGIN DUP %%0>= OBJ_45641 WHILE * 4550B
-            :: 4PICK 4PICK 3PICK %%>% # 2A01 OBJ_2B551 COERCE OBJ_4C783 DROP * 4553D
+            9GETLAM %%* 5GETLAM SWAP %%- BEGIN DUP %%0>= drax~1~1 WHILE * 4550B
+            :: 4PICK 4PICK 3PICK %%>% # 2A01 OBJ_2B551 COERCE drax~1~4 DROP * 4553D
               OVER %%- ;                         * 45574
             REPEAT BINT8 NDROP ;                 * 45583
           DUP#0=case 7DROP                       * 45597
           DUP 5PICK #> case 7DROP                * 455A1
           5UNROLL SWAP 4ROLL DUP %0< DUPUNROT IT %CHS * 455BA
           COERCE 6PICK #/ DROP 6PICK SWAP ROT ITE #- SWAPDROP * 455E2
-          4ROLL SWAP DO OVERINDEX@ OBJ_4C783 3PICK +LOOP 5DROP ; * 45614
+          4ROLL SWAP DO OVERINDEX@ drax~1~4 3PICK +LOOP 5DROP ; * 45614
 
 * refs (2): 45335 45533
-OBJ_45641:
+drax~1~1:
         :: NoAttn?Semi ATTNFLGCLR FLUSHKEYS DROPFALSE ; * 45641
         BSS     23                               * 4565F
 
@@ -882,13 +882,13 @@ OBJ_456E5:
         :: BINT23 GETLAM ;                       * 456E5
 
 * refs (1): 3E7AB
-OBJ_456F9:
+{GRAPH\SUä}~1:
         :: CHECKMENU OBJ_4579E OBJ_4E6C7 OBJ_517B2 ORDERXY# #1+ SWAP#1+SWAP * 456F9
           GBUFF 5UNROLL SUBGROB CK0NOLASTWD Π'SAVEDDEPTH #1+ ' Π'SAVEDDEPTH * 45721
           STO CROSSMARKON ;                      * 45749
 
 * refs (1): 3E7CA
-OBJ_45758:
+{GRAPH\DEL}~1:
         :: CHECKMENU OBJ_4EBD1 ;                 * 45758
 
 * refs (2): 46AA4 4D80D

@@ -182,7 +182,7 @@ OBJ_0C204:
         BSS     22                               * 0C236
 
 * refs (2): 0FE9E 0FF7F
-OBJ_0C24C:
+U>NCQ~1~7:
         CON(5)  (*)+5                            * 0C24C  primitive code object
         ASSEMBLE
         D1=D1+  5                                * 0C251
@@ -315,7 +315,7 @@ L_0C39B:
         GOTO    L_0C4D6                          * 0C39F
 
 * refs (1): 0FEF8
-OBJ_0C3A3:
+U>NCQ~1~8:
         CON(5)  (*)+5                            * 0C3A3  primitive code object
         GOSUB   SUB_0C2BB                        * 0C3A8
         D0=(5)  L_7567F                          * 0C3AC
@@ -435,11 +435,11 @@ OBJ_0C4E3:
 * #i [] -> ob T -> F
 * refs (1): 04DA0
 GETEL:
-        CON(5)  L_71685                          * 0C501  code object: the address of its machine code
+        CON(5)  GETEL~1                          * 0C501  code object: the address of its machine code
 
 * refs (4): 9A372 9A650 9A891 9AC15
 rGETATELN:
-        CON(5)  L_71705                          * 0C506  code object: the address of its machine code
+        CON(5)  rGETATELN~1                      * 0C506  code object: the address of its machine code
         ASSEMBLE
 
 * refs (2): 0C5BC 0C5E3
@@ -632,7 +632,7 @@ OBJ_0C9FE:
         :: DispCoord1 BINT2 16PUTLAM ;           * 0C9FE
 
 * refs (1): 4E293
-OBJ_0CA17:
+CHECKMENU~1:
         :: 16GETLAM BINT0 #<> ;                  * 0CA17
         BSS     10                               * 0CA30
         ASSEMBLE
@@ -736,7 +736,7 @@ TRM?:
 * refs (3): 0E3F3 0E756 B7ADF
 NOALARMERR:
         CON(5)  (*)+5                            * 0CBAE  primitive code object
-        GOTO    L_0CBDE                          * 0CBB3
+        GOTO    NOALARMERR~1                     * 0CBB3
 L_0CBB7:
         GOSUB   SUB_0CBEF                        * 0CBB7
         LC(3)   #D01                             * 0CBBB
@@ -751,7 +751,7 @@ L_0CBD1:
         GOSUB   SUB_0CBEF                        * 0CBD1
         LC(3)   #D03                             * 0CBD5
         GOTO    L_0CBE3                          * 0CBDA
-L_0CBDE:
+NOALARMERR~1:
         LC(3)   #D04                             * 0CBDE
 L_0CBE3:
         A=0     A                                * 0CBE3
@@ -989,7 +989,7 @@ L_0CEA7:
         GONC    L_0CEE4                          * 0CED6
 
 * refs (1): 048E5
-OBJ_0CED9:
+GETKEY~1~1~2:
         CON(5)  (*)+5                            * 0CED9  primitive code object
         GOSUB   SUB_0CF15                        * 0CEDE
         A=0     A                                * 0CEE2
@@ -1240,7 +1240,7 @@ Ticks>Date:
 * refs (2): 0E1FB B7BF7
 Ticks>Rpt:
         CON(5)  (*)+5                            * 0D169  primitive code object
-        GOSBVL  SUB_0D8EB                        * 0D16E
+        GOSBVL  Ticks>Rpt~1                      * 0D16E
         A=R0                                     * 0D175
         GOSBVL  HXDCW                            * 0D178
         GOSBVL  FLOAT                            * 0D17F
@@ -1680,7 +1680,7 @@ CslW3:
         RTN                                      * 0D627
 
 * refs (1): 0DB3A
-SUB_0D629:
+YMD>Ticks~1:
         SETDEC                                   * 0D629
         GOSUB   DAY#                             * 0D62B
 
@@ -1754,9 +1754,9 @@ L_0D6BA:
 * refs (2): 0D17F 0D731
 FLOAT:
         ?A#0    W                                * 0D6D8
-        GOYES   L_0D6DF                          * 0D6DB
+        GOYES   FLOAT~1                          * 0D6DB
         RTN                                      * 0D6DD
-L_0D6DF:
+FLOAT~1:
         ASL     W                                * 0D6DF
         ASL     W                                * 0D6E2
         A=A+1   A                                * 0D6E5
@@ -1943,7 +1943,7 @@ SUB_0D8B7:
         GOTO    L_0D7EF                          * 0D8CB
 
 * refs (1): 0EF87
-SUB_0D8CF:
+>ALRMLS~1:
         A=DAT1  A                                * 0D8CF
         D1=D1+  5                                * 0D8D2
         D=D+1   A                                * 0D8D5
@@ -1955,7 +1955,7 @@ SUB_0D8CF:
         GOTO    L_0D922                          * 0D8E7
 
 * refs (1): 0D16E
-SUB_0D8EB:
+Ticks>Rpt~1:
         A=DAT1  A                                * 0D8EB
         D1=D1+  5                                * 0D8EE
         D=D+1   A                                * 0D8F1
@@ -2182,7 +2182,7 @@ L_0DB30:
 
 * refs (2): 0CD81 0EE70
 YMD>Ticks:
-        GOSBVL  SUB_0D629                        * 0DB3A
+        GOSBVL  YMD>Ticks~1                      * 0DB3A
         C=0     W                                * 0DB41
         P=      5                                * 0DB44
         LC(3)   #2A3                             * 0DB46
@@ -2288,27 +2288,28 @@ L_0DC31:
         RPL
 
 * refs (1): 42122
-OBJ_0DC3B:
+ALARMxcp~1:
         :: ALARMS@ TOTEMPOB DUP NextAlarm(li)? NOTcase DROPFALSE * 0DC3B
-          DUP OBJ_0DF66 case                     * 0DC5E
-          :: OBJ_0DC90 TRUE ;                    * 0DC6D
-          OBJ_0DCDB FALSE ;                      * 0DC81
+          DUP ALARMxcp~1~3 case                  * 0DC5E
+          :: ALARMxcp~1~1 TRUE ;                 * 0DC6D
+          ALARMxcp~1~2 FALSE ;                   * 0DC81
 
 * refs (1): 0DC72
-OBJ_0DC90:
+ALARMxcp~1~1:
         :: OBJ_0E802 OBJ_0E7F7 OBJ_0E820 OBJ_0DFD9 ITE OBJ_0DE61 DROP * 0DC90
           NewAlarm(li) OBJ_0E26D UNCOERCE OBJ_0172B OBJ_0E164 OBJ_47445 ; * 0DCB8
 
 * refs (1): 0DC81
-OBJ_0DCDB:
-        :: OBJ_0E41B OBJ_0CEEA Save16 Clr16 SWAP DUP INCOMPDROP SWAP * 0DCDB
-          DispTstr(b) DISPROW1*! OBJ_0E802 OBJ_0E820 OBJ_0EC9D IT * 0DD08
+ALARMxcp~1~2:
+        :: ALARMxcp~1~2~1 OBJ_0CEEA Save16 Clr16 SWAP DUP INCOMPDROP SWAP * 0DCDB
+          DispTstr(b) DISPROW1*! OBJ_0E802 OBJ_0E820 ALARMxcp~1~2~3 IT * 0DD08
           :: OBJ_0E7F7 OBJ_0E836 ;               * 0DD26
           SWAP Restore16 OBJ_0DF84 ITE           * 0DD3A
           :: DROP OBJ_0E26D REMOVEN{} ;          * 0DD4E
           :: OBJ_0DFD9 ITE OBJ_0DE61 DROP        * 0DD67
           ;                                      * 0DD80
-          NewAlarm(li) OBJ_0E43C OBJ_0172B OBJ_0E164 OBJ_47445 FLUSHKEYS ; * 0DD85
+          NewAlarm(li) ALARMxcp~1~2~2 OBJ_0172B OBJ_0E164 OBJ_47445 * 0DD85
+          FLUSHKEYS ;                            * 0DD9E
 
 * ->
 * refs (1): 1986D
@@ -2333,11 +2334,11 @@ OBJ_0DE61:
 
 * refs (2): 0DE93 0E70B
 InsAlarm(2li):
-        :: 2DUP OBJ_0EABE DUP 4UNROLL INSERTN{} ; * 0DEAC
+        :: 2DUP InsAlarm(2li)~1 DUP 4UNROLL INSERTN{} ; * 0DEAC
 
 * refs (7): 0CB2F 0DCB8 0DD85 0DE43 0E710 0E783 ...
 NewAlarm(li):
-        :: OBJ_0DF45 StoAlarms(_) RclAlarms? DROP OBJ_0E219 DROP ; * 0DECF
+        :: NewAlarm(li)~1 StoAlarms(_) RclAlarms? DROP OBJ_0E219 DROP ; * 0DECF
 
 * refs (1): 0DED9
 StoAlarms(_):
@@ -2354,7 +2355,7 @@ Alarms_0DF28:
           ID Alarms RclHiddenVar ;               * 0DF28
 
 * refs (1): 0DED4
-OBJ_0DF45:
+NewAlarm(li)~1:
         CON(5)  (*)+5                            * 0DF45  primitive code object
         ASSEMBLE
         CD0EX                                    * 0DF4A
@@ -2369,7 +2370,7 @@ L_0DF5C:
         RPL
 
 * refs (1): 0DC63
-OBJ_0DF66:
+ALARMxcp~1~3:
         :: BINT2 NTHCOMPDROP TYPECSTR? NOT ;     * 0DF66
 
 * refs (2): 0DD44 0DE02

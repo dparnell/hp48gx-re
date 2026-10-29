@@ -221,10 +221,97 @@ class Generator:
         self.label[a] = name
         return name
 
+    # Units whose references count as uses by a caller (not library
+    # structures that only list or describe a command).
+    CALLER_KINDS = {"obj", "code", "pco", "codeptr"}
+    IGNORED_KINDS = {"libhdr", "liblink", "libhash", "libtab", "cmdhdr"}
+
+    def derive_names(self):
+        """Names for objects and routines with no known name, from where they
+        are used: `xSUB~grob,list,list` for the case of a dispatch table
+        (the command and the argument types), and `ROMPOLL~1` for the first
+        helper (by address) only ROMPOLL uses. Repeated, so helpers of named
+        helpers get names too. These are our names, not HP's or the entry
+        lists' (no known name contains ~)."""
+        self.derived = {}
+        starts = sorted(self.unit_kind)
+        romp_addr = {(lib, cmd): a for a, (lib, cmd, _) in self.libcmd.items()}
+
+        def unit_of(x):
+            i = bisect.bisect_right(starts, x) - 1
+            if i < 0:
+                return None
+            u = starts[i]
+            # a primitive code object's code belongs to the object
+            if self.unit_kind[u] == "code" and i > 0 and self.unit_kind[starts[i - 1]] in ("pco", "codeptr"):
+                u = starts[i - 1]
+            return u
+
+        dispatch = {a for a in self.sym.by_addr if self.symbol_name(a) in self.DISPATCH}
+        uses = defaultdict(set)      # target -> {(unit, from)}
+        for target, refs in self.xrefs.items():
+            if isinstance(target, int):
+                for f, _ in refs:
+                    if isinstance(f, int):
+                        uses[target].add((unit_of(f), f))
+        cases = defaultdict(set)     # target -> {(unit, types)}
+        for start, _, lines in self.blocks:
+            table = None
+            for ln in lines:
+                if ln.value and ln.value[0] == "romp" and ln.value[1] in romp_addr:
+                    uses[romp_addr[ln.value[1]]].add((unit_of(ln.pc), ln.pc))
+                if ln.mode != "RPL":
+                    continue
+                is_dispatch = bool(ln.value and ln.value[0] == "ptr" and ln.value[1] in dispatch)
+                if table is not None and ln.indent < table[0]:
+                    table = None
+                if table is not None and ln.indent == table[0]:
+                    if table[1] is None:
+                        code = self.type_code(ln)
+                        table[1] = "any" if code is None else self.describe_types(code)
+                    else:
+                        if ln.value and ln.value[0] == "ptr":
+                            cases[ln.value[1]].add((unit_of(ln.pc), table[1]))
+                        table[1] = None
+                elif is_dispatch:
+                    table = [ln.indent, None]
+
+        def wanted(a):
+            return a in self.starts_set and not self.symbol_name(a) and a not in self.messages
+
+        self.starts_set = {ln.pc for ln in self.lines if ln.size}
+        count = defaultdict(int)
+        changed = True
+        while changed:
+            changed = False
+            for a in sorted(uses):
+                if a in self.derived or not wanted(a):
+                    continue
+                own = unit_of(a)
+                refs = {(u, f) for u, f in uses[a]
+                        if u is not None and u != own and self.unit_kind.get(u) not in self.IGNORED_KINDS}
+                us = {u for u, _ in refs}
+                if len(us) != 1:
+                    continue
+                u = next(iter(us))
+                if self.unit_kind.get(u) not in self.CALLER_KINDS:
+                    continue
+                parent = self.symbol_name(u) or self.derived.get(u)
+                if parent is None:
+                    continue
+                cs = {t for x, t in cases.get(a, ()) if x == u}
+                if len(cs) == 1 and len(refs) == 1:
+                    name = "%s~%s" % (parent, next(iter(cs)).replace(" ", ","))
+                else:
+                    count[parent] += 1
+                    name = "%s~%d" % (parent, count[parent])
+                self.derived[a] = name
+                changed = True
+
     def label_for(self, a):
         if a in self.label:
             return self.label[a]
-        nm = self.symbol_name(a) or self.hints.get(a)
+        nm = self.symbol_name(a) or self.derived.get(a) or self.hints.get(a)
         if nm is None:
             kind = self.s["labels"].get(a)
             nm = {"sub": "SUB_", "obj": "OBJ_"}.get(kind, "L_") + "%05X" % a
@@ -392,6 +479,7 @@ class Generator:
         body = list(self.n[a + 5:a + o.size])
         text = None
         comment = ""
+        romp = None
         if k == "DOBINT":
             given, why = self.operands.get(a, (None, ""))
             if given == "addr" or (given is None and o.value in PROLOG_ADDRS):
@@ -429,6 +517,7 @@ class Generator:
             lib, cmd = o.value
             text = op("ROMPTR", "%03X" % lib, "%03X" % cmd)
             comment = self.s["romptr_names"].get(o.value) or ""
+            romp = o.value
         elif k == "DOACPTR":
             text = op("ACPTR", Ref(o.value[0], a, "rom"), Ref(o.value[1], a, "rom"))
         elif k == "DOGROB":
@@ -447,6 +536,8 @@ class Generator:
             ln = Line(a, o.size, text, comment=comment, mode="RPL", indent=depth)
             if k == "DOBINT":
                 ln.value = ("bint", o.value)
+            elif romp is not None:
+                ln.value = ("romp", romp)
             return [ln]
         return self.raw_object(o, depth)
 
@@ -923,6 +1014,7 @@ class Generator:
     def render(self):
         """Lines for the whole ROM, grouped into top-level units."""
         self.blocks = []      # (start, end, lines)
+        self.unit_kind = {}   # start -> unit kind
         self.ends = defaultdict(int)   # address -> number of ENDLENGTHs there
         p = 0
         prev_kind = None
@@ -945,6 +1037,7 @@ class Generator:
             if start > p:
                 fill = self.fill_line(p, start)
                 self.blocks.append((p, start, [fill] if fill else self.data_lines(p, start)))
+            self.unit_kind[start] = kind
             lines = self.render_unit(start, end, kind, x)
             if lines is None or sum(ln.size for ln in lines) != end - start or lines[0].pc != start:
                 self.fallbacks["unit " + kind] += 1
@@ -1069,10 +1162,11 @@ class Generator:
 
     # Argument type codes of the dispatch words (CK&DISPATCH1), from the
     # ROM's tables at #19123 and #1916E: one digit per stack level from
-    # level 1 up; F with the digit before it makes a two-digit code.
+    # level 1 up (0 for any object); F with the digit before it makes a
+    # two-digit code.
     DISPATCH = {"CK&DISPATCH0", "CK&DISPATCH1", "CK1&Dispatch", "CK2&Dispatch", "CK3&Dispatch",
                 "CK4&Dispatch", "CK5&Dispatch"}
-    TYPES = {0x1: "real", 0x2: "complex", 0x3: "string", 0x4: "array", 0x5: "list", 0x6: "name",
+    TYPES = {0x0: "any", 0x1: "real", 0x2: "complex", 0x3: "string", 0x4: "array", 0x5: "list", 0x6: "name",
              0x7: "local", 0x8: "program", 0x9: "algebraic", 0xA: "name|local|algebraic",
              0xB: "binary", 0xC: "grob", 0xD: "tagged", 0xE: "unit"}
     EXT_TYPES = {0x0: "romptr", 0x1: "bint", 0x2: "directory", 0x3: "%%", 0x4: "C%%", 0x5: "linked-array",
@@ -1087,6 +1181,8 @@ class Generator:
         if ln.value is None:
             return None
         kind, v = ln.value
+        if kind == "romp":
+            return None
         if kind == "ptr":
             if v >= len(self.n) - 10 or self.word(v) != sasm.PROLOG["DOBINT"]:
                 return None
@@ -1097,6 +1193,8 @@ class Generator:
         """`real real`: the argument types a dispatch code accepts, deepest
         stack level first."""
         out = []
+        # the ROM checks from level 1 up until the rest of the code is 0;
+        # a 0 digit accepts any object at its level
         while code:
             d = code & 0xF
             if d == 0xF:
@@ -1317,12 +1415,13 @@ class Generator:
                 p.unlink()
         SRC.mkdir(parents=True, exist_ok=True)
         self.render()
+        self.derive_names()
         self.name_labels()
         self.resolve_all()
         self.verify()
         files = self.write()
-        print("wrote %d files, %d lines, %d labels, %d equates" % (
-            len(files) + 2, len(self.lines), len(self.label), len(self.eq)))
+        print("wrote %d files, %d lines, %d labels (%d derived from where they are used), %d equates" % (
+            len(files) + 2, len(self.lines), len(self.label), len(self.derived), len(self.eq)))
         if self.fallbacks:
             print("written as NIBHEX:", ", ".join("%s %d" % kv for kv in sorted(self.fallbacks.items())))
         if check:

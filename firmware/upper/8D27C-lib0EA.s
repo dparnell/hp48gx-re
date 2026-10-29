@@ -56,7 +56,7 @@ ROMP_0EA_005:
 
 * ROMPTR 0EA 006
 * refs (1): 8D288
-ROMP_0EA_006:
+DoNewMatrix~1:
         :: POLSaveUI ERRSET                      * 8D409
           :: ROMPTR 0EA 052 ROMPTR 0EA 003 ; ERRTRAP POLResUI&Err * 8D418
           POLRestoreUI ClrDAsOK ;                * 8D442
@@ -139,7 +139,7 @@ L_8D75B:
 
 * ROMPTR 0EA 00D
 * refs (1): 8D288
-ROMP_0EA_00D:
+BindMatVars~1:
         :: BINT21 ' NULLLAM CACHE BINT0 1PUTLAM ; * 8D785
 
 * ROMPTR 0EA 00E
@@ -151,14 +151,14 @@ ROMP_0EA_00E:
 
 * ROMPTR 0EA 00F
 * refs (1): 8D288
-ROMP_0EA_00F:
+DoOldMatrix~1:
         :: POLSaveUI ERRSET                      * 8D83A
           :: InitOldMat ROMPTR 0EA 003 ; ERRTRAP POLResUI&Err POLRestoreUI * 8D849
           ClrDAsOK ;                             * 8D872
 
 * ROMPTR 0EA 010
 * refs (1): 8D288
-ROMP_0EA_010:
+InitOldMat~1:
         :: ROMPTR 0EA 053 DUP DIMLIMITS INNER#1= ITE * 8D87C
           :: BINT1 2DUPSWAP 5ROLL 3UNROLL TWO{}N MATREDIM 3UNROLL BINT1 ; * 8D8A0
           :: SWAP BINT0 ;                        * 8D8D2
@@ -294,7 +294,7 @@ ROMP_0EA_026:
 
 * ROMPTR 0EA 027
 * refs (1): 8D288
-ROMP_0EA_027:
+Blank$~1:
         :: NULL$SWAP DUP#0=csDROP ZERO_DO CHR_Space >H$ LOOP ; * 8DF9D
 
 * ROMPTR 0EA 028
@@ -391,7 +391,7 @@ ROMP_0EA_033:
 
 * ROMPTR 0EA 034
 * refs (1): 8D288
-ROMP_0EA_034:
+GetMat/Vec~1:
         :: 20GETLAM #1= 19GETLAM #1= ANDITE      * 8E48B
           :: ERRSET                              * 8E4A9
             :: 22Lget DUP DIMLIMITS OBJ_6F261 ONE{}N MATREDIM ; ERRTRAP * 8E4B3
@@ -421,7 +421,7 @@ ROMP_0EA_037:
 
 * ROMPTR 0EA 038
 * refs (1): 8D288
-ROMP_0EA_038:
+RowElt#~1:
         :: SWAP#1- 21GETLAM #* #+ ;              * 8E5F8
 
 * ROMPTR 0EA 039
@@ -451,7 +451,7 @@ ROMP_0EA_03C:
 
 * ROMPTR 0EA 03D
 * refs (1): 8D288
-ROMP_0EA_03D:
+GetElt~1:
         :: RowElt# PULLEL SWAPDROP ;             * 8E6F4
 
 * ROMPTR 0EA 03E
@@ -594,19 +594,19 @@ ROMP_0EA_051:
 
 * ROMPTR 0EA 052
 * refs (1): 8D288
-ROMP_0EA_052:
+DoNewMatrix~1~1:
           ::                                     * 8ED70
 
 * ROMPTR 0EA 053
 * refs (1): 8D288
-ROMP_0EA_053:
+InitOldMat~1~1:
             :: OBJ_44B9B #0= NOT?SEMI            * 8ED75
               BINT5 OBJ_44BAB ;                  * 8ED89
             NULL{} OBJ_6D909 OBJ_6DD6E           * 8ED98
 
 * ROMPTR 0EA 054
 * refs (1): 8D288
-ROMP_0EA_054:
+InitOldMat~1~2:
             :: RCLSYSF BINT0 ONEONE ROMPTR 0EA 018 3PICK#+ BINT5 ONEONE * 8EDA7
               BINT12 BINT6 ROMPTR 0EA 015 #12+ BINT14 FALSE BINT0 ; * 8EDD5
           ;                                      * 8EE03
@@ -626,7 +626,7 @@ ROMP_0EA_056:
 
 * ROMPTR 0EA 057
 * refs (1): 8D288
-ROMP_0EA_057:
+CopyRowsUp~1:
           :: 20GETLAM #1+ 8GETLAM #1+ DO INDEX@ SWAP 21GETLAM #1+_ONE_DO * 8EEA6
             2DUPSWAP INDEX@ GetElt 3PICK #1- INDEX@ RowElt# ROT BANGARRY * 8EED8
             ?ATTNQUIT LOOP SWAPDROP LOOP ;       * 8EF05
@@ -642,7 +642,7 @@ ROMP_0EA_058:
 
 * ROMPTR 0EA 059
 * refs (1): 8D288
-ROMP_0EA_059:
+CopyColsLeft~1:
         :: 21GETLAM #1+ 9GETLAM #1+ DO INDEX@ SWAP 20GETLAM #1+_ONE_DO * 8EFEA
           2DUPSWAP INDEX@ SWAP GetElt 3PICK #1- INDEX@ SWAP RowElt# ROT * 8F01C
           BANGARRY ?ATTNQUIT LOOP SWAPDROP LOOP ; * 8F04E
@@ -657,7 +657,7 @@ ROMP_0EA_05A:
 
 * ROMPTR 0EA 05B
 * refs (1): 8D288
-ROMP_0EA_05B:
+CopyRowsDown~1:
         :: 20GETLAM #1+ 8GETLAM #- ONE_DO 20GETLAM INDEX@ #-SWAP 21GETLAM * 8F0FF
           #1+_ONE_DO 2DUPSWAP INDEX@ GetElt 3pick;1+(s) INDEX@ RowElt# ROT * 8F131
           BANGARRY ?ATTNQUIT LOOP SWAPDROP LOOP 8GETLAM SWAP 21GETLAM * 8F159
@@ -679,7 +679,7 @@ ROMP_0EA_05D:
 
 * ROMPTR 0EA 05E
 * refs (1): 8D288
-ROMP_0EA_05E:
+CopyColsRght~1:
         :: 21GETLAM #1+ 9GETLAM #- ONE_DO 21GETLAM INDEX@ #-SWAP 20GETLAM * 8F264
           #1+_ONE_DO 2DUPSWAP INDEX@ SWAP GetElt 3pick;1+(s) INDEX@ SWAP * 8F296
           RowElt# ROT BANGARRY ?ATTNQUIT LOOP SWAPDROP LOOP 9GETLAM SWAP * 8F2BE
@@ -825,7 +825,7 @@ ROMP_0EA_06F:
 
 * ROMPTR 0EA 070
 * refs (1): 8D288
-ROMP_0EA_070:
+PINIT~1:
         :: BINT33 ONE_DO ?ATTNQUIT %0_2A2B4 ID 'tmp INDEX@ #>$ >TAG DUPUNROT * 8FCA5
           ERRSET                                 * 8FCE1
           :: sto(_,to) purge(to) ; ERRTRAP DropSysObs LOOP ; * 8FCE6
@@ -863,17 +863,17 @@ LIB0EA.link:
         REL(5)  ROMP_0EA_003                     * 8FD8B  003 
         REL(5)  ROMP_0EA_004                     * 8FD90  004 
         REL(5)  ROMP_0EA_005                     * 8FD95  005 
-        REL(5)  ROMP_0EA_006                     * 8FD9A  006 
+        REL(5)  DoNewMatrix~1                    * 8FD9A  006 
         REL(5)  ROMP_0EA_007                     * 8FD9F  007 
         REL(5)  ROMP_0EA_008                     * 8FDA4  008 
         REL(5)  ROMP_0EA_009                     * 8FDA9  009 
         REL(5)  ROMP_0EA_00A                     * 8FDAE  00A 
         REL(5)  ROMP_0EA_00B                     * 8FDB3  00B 
         REL(5)  ROMP_0EA_00C                     * 8FDB8  00C 
-        REL(5)  ROMP_0EA_00D                     * 8FDBD  00D 
+        REL(5)  BindMatVars~1                    * 8FDBD  00D 
         REL(5)  ROMP_0EA_00E                     * 8FDC2  00E 
-        REL(5)  ROMP_0EA_00F                     * 8FDC7  00F 
-        REL(5)  ROMP_0EA_010                     * 8FDCC  010 
+        REL(5)  DoOldMatrix~1                    * 8FDC7  00F 
+        REL(5)  InitOldMat~1                     * 8FDCC  010 
         REL(5)  ROMP_0EA_012                     * 8FDD1  011 
         REL(5)  ROMP_0EA_012                     * 8FDD6  012 
         REL(5)  ROMP_0EA_013                     * 8FDDB  013 
@@ -896,7 +896,7 @@ LIB0EA.link:
         REL(5)  ROMP_0EA_024                     * 8FE30  024 
         REL(5)  ROMP_0EA_025                     * 8FE35  025 
         REL(5)  ROMP_0EA_026                     * 8FE3A  026 
-        REL(5)  ROMP_0EA_027                     * 8FE3F  027 
+        REL(5)  Blank$~1                         * 8FE3F  027 
         REL(5)  ROMP_0EA_028                     * 8FE44  028 
         REL(5)  ROMP_0EA_029                     * 8FE49  029 
         REL(5)  ROMP_0EA_02A                     * 8FE4E  02A 
@@ -909,16 +909,16 @@ LIB0EA.link:
         REL(5)  ROMP_0EA_031                     * 8FE71  031 
         REL(5)  ROMP_0EA_032                     * 8FE76  032 
         REL(5)  ROMP_0EA_033                     * 8FE7B  033 
-        REL(5)  ROMP_0EA_034                     * 8FE80  034 
+        REL(5)  GetMat/Vec~1                     * 8FE80  034 
         REL(5)  ROMP_0EA_035                     * 8FE85  035 
         REL(5)  ROMP_0EA_036                     * 8FE8A  036 
         REL(5)  ROMP_0EA_037                     * 8FE8F  037 
-        REL(5)  ROMP_0EA_038                     * 8FE94  038 
+        REL(5)  RowElt#~1                        * 8FE94  038 
         REL(5)  ROMP_0EA_039                     * 8FE99  039 
         REL(5)  ROMP_0EA_03A                     * 8FE9E  03A 
         REL(5)  ROMP_0EA_03B                     * 8FEA3  03B 
         REL(5)  ROMP_0EA_03C                     * 8FEA8  03C 
-        REL(5)  ROMP_0EA_03D                     * 8FEAD  03D 
+        REL(5)  GetElt~1                         * 8FEAD  03D 
         REL(5)  ROMP_0EA_03E                     * 8FEB2  03E 
         REL(5)  ROMP_0EA_03F                     * 8FEB7  03F 
         REL(5)  ROMP_0EA_040                     * 8FEBC  040 
@@ -939,19 +939,19 @@ LIB0EA.link:
         REL(5)  ROMP_0EA_04F                     * 8FF07  04F 
         REL(5)  ROMP_0EA_050                     * 8FF0C  050 
         REL(5)  ROMP_0EA_051                     * 8FF11  051 
-        REL(5)  ROMP_0EA_052                     * 8FF16  052 
-        REL(5)  ROMP_0EA_053                     * 8FF1B  053 
-        REL(5)  ROMP_0EA_054                     * 8FF20  054 
+        REL(5)  DoNewMatrix~1~1                  * 8FF16  052 
+        REL(5)  InitOldMat~1~1                   * 8FF1B  053 
+        REL(5)  InitOldMat~1~2                   * 8FF20  054 
         REL(5)  ROMP_0EA_055                     * 8FF25  055 
         REL(5)  ROMP_0EA_056                     * 8FF2A  056 
-        REL(5)  ROMP_0EA_057                     * 8FF2F  057 
+        REL(5)  CopyRowsUp~1                     * 8FF2F  057 
         REL(5)  ROMP_0EA_058                     * 8FF34  058 
-        REL(5)  ROMP_0EA_059                     * 8FF39  059 
+        REL(5)  CopyColsLeft~1                   * 8FF39  059 
         REL(5)  ROMP_0EA_05A                     * 8FF3E  05A 
-        REL(5)  ROMP_0EA_05B                     * 8FF43  05B 
+        REL(5)  CopyRowsDown~1                   * 8FF43  05B 
         REL(5)  ROMP_0EA_05C                     * 8FF48  05C 
         REL(5)  ROMP_0EA_05D                     * 8FF4D  05D 
-        REL(5)  ROMP_0EA_05E                     * 8FF52  05E 
+        REL(5)  CopyColsRght~1                   * 8FF52  05E 
         REL(5)  ROMP_0EA_05F                     * 8FF57  05F 
         REL(5)  ROMP_0EA_060                     * 8FF5C  060 
         REL(5)  ROMP_0EA_061                     * 8FF61  061 
@@ -969,7 +969,7 @@ LIB0EA.link:
         REL(5)  ROMP_0EA_06D                     * 8FF9D  06D 
         REL(5)  ROMP_0EA_06E                     * 8FFA2  06E 
         REL(5)  ROMP_0EA_06F                     * 8FFA7  06F 
-        REL(5)  ROMP_0EA_070                     * 8FFAC  070 
+        REL(5)  PINIT~1                          * 8FFAC  070 
         ENDLENGTH                                * 8FFB1
         BSS     4                                * 8FFB1
         ENDLENGTH                                * 8FFB5

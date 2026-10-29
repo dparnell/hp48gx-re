@@ -172,7 +172,7 @@ OBJ_603C9:
         :: BEGIN Π'sur Π'cts #=case              * 603C9
 
 * refs (1): 6068F
-OBJ_603E2:
+match'(ex,li)~1~2:
           :: NDROP RDROP ;                       * 603E2
           Π'sun OVER #<case                      * 603F6
 
@@ -205,7 +205,7 @@ OBJ_604E6:
         ;                                        * 60595
 
 * refs (1): 60A90
-OBJ_6059A:
+match'(ex,li)~2~1:
         :: Π'prd EXPLODE OBJ_600A3 IMPLODE symcomp ' Π'prp STO DUPTEMPENV * 6059A
           DUP#2+PICK OVER#+ #2+ ' NULLLAM CACHE Π'prp COMPEVAL CK1NOLASTWD ' * 605CC
           Π'prp STO ' NULLLAM DUMP ABND ABND DROP Π'prp DUPTYPEREAL? ITE * 605FE
@@ -213,10 +213,10 @@ OBJ_6059A:
         ;                                        * 6063F
 
 * refs (1): 60B71
-OBJ_60644:
+match'(ex,li)~1:
         :: Π'sur Π'cts #1+ ' Π'sur STOLAM #1+ ' Π'cts STOLAM BEGIN Π'sur * 60644
-          Π'cts #=case OBJ_603E2                 * 60685
-          DUPTWO Π'sur DUPTEMPENV OBJ_5FDB7 case OBJ_606E4 * 60694
+          Π'cts #=case match'(ex,li)~1~2         * 60685
+          DUPTWO Π'sur DUPTEMPENV OBJ_5FDB7 case match'(ex,li)~1~1 * 60694
           3DROP ABND COLA OBJ_606CB              * 606B2
         ;                                        * 606C6
 
@@ -225,7 +225,7 @@ OBJ_606CB:
         :: OBJ_6045F Π'sur AGAIN ;               * 606CB
 
 * refs (1): 606AD
-OBJ_606E4:
+match'(ex,li)~1~1:
         :: ROTROT2DROP Π'sur #- ' Π'mlg STOLAM OBJ_60E3C Π'ckd EVAL NOTcase * 606E4
 
 * refs (1): 60757
@@ -278,12 +278,12 @@ OBJ_60806:
           LAM 'rhs }                             * 60883
 
 * refs (1): 60A9F
-OBJ_60897:
+match'(ex,li)~2~2:
         :: ?SKIP TrueTrue                        * 60897
-          OBJ_60806 INCOMPDROP OBJ_60806 BIND OBJ_608C4 ; * 608A6
+          OBJ_60806 INCOMPDROP OBJ_60806 BIND match'(ex,li)~2~2~1 ; * 608A6
 
 * refs (1): 608BA
-OBJ_608C4:
+match'(ex,li)~2~2~1:
         ::                                       * 608C4
 
 * refs (1): 60D02
@@ -294,17 +294,17 @@ OBJ_608C9:
           STO BINT0 ' Π'mlg STO ;                * 6095F
 
 * refs (1): 60AA4
-OBJ_6097D:
+match'(ex,li)~2~3:
         :: dup pshzer BEGIN #1-SWAP OBJ_5FF73 ITE psh1& DROP * 6097D
           #0=UNTIL DROP ;                        * 609AA
 
 * refs (2): 60AE0 60B08
-OBJ_609B9:
-        :: BEGIN pullrev OBJ_5FF73 ITE OBJ_609EB DROP * 609B9
+match'(ex,li)~2~4:
+        :: BEGIN pullrev OBJ_5FF73 ITE match'(ex,li)~2~4~1 DROP * 609B9
           #0=UNTIL DROP ;                        * 609DC
 
 * refs (1): 609D2
-OBJ_609EB:
+match'(ex,li)~2~4~1:
         :: DUP FIRST@LAM NOTcase SETNONEXTERR    * 609EB
           {}_600F3 EQ caseDROP OVER#0=           * 60A04
           caseDROP OVER                          * 60A18
@@ -313,20 +313,21 @@ OBJ_609EB:
         ;                                        * 60A4F
 
 * refs (1): 60B5D
-OBJ_60A54:
+match'(ex,li)~2:
         :: DUP BINT4 BINT3 RPITE get1 EXPLODE    * 60A54
           psh DROPDUP IT                         * 60A77
-          :: ' OBJ_6059A 3UNROLL ;               * 60A86
-          OBJ_60897 OBJ_6097D PTR addt: NULLLAM NULL{} OVER NDUPN psh get1 * 60A9F
-          DROP DOBIND Π'rhs EXPLODE OBJ_609B9 Π'ckd TRUE EQ ?SKIP * 60ACC
-          :: Π'prd EXPLODE OBJ_609B9 ;           * 60AF9
+          :: ' match'(ex,li)~2~1 3UNROLL ;       * 60A86
+          match'(ex,li)~2~2 match'(ex,li)~2~3 PTR addt: NULLLAM NULL{} OVER * 60A9F
+          NDUPN psh get1 DROP DOBIND Π'rhs EXPLODE match'(ex,li)~2~4 Π'ckd * 60ABD
+          TRUE EQ ?SKIP                          * 60AEA
+          :: Π'prd EXPLODE match'(ex,li)~2~4 ;   * 60AF9
         ;                                        * 60B12
 
 * refs (2): 1FABF 1FAD3
 match'(ex,li):
         :: INNERCOMP DUP #2= OVER #3= OR ?SKIP SETSIZEERR * 60B17
-          DUP dvarlsBIND nmetasyms 1GETABND #3= OBJ_60A54 'R ITE OBJ_603C9 * 60B44
-          OBJ_60644                              * 60B71
+          DUP dvarlsBIND nmetasyms 1GETABND #3= match'(ex,li)~2 'R ITE * 60B44
+          OBJ_603C9 match'(ex,li)~1              * 60B6C
           ABND Π'reg ITE %1 %0_2A2B4             * 60B76
           ABND pshm1 IMPLODE SWAPDROPSWAP ;      * 60B8F
 
@@ -477,7 +478,7 @@ SWAPROT:
 * refs (98): 0C227 1DA7A 200D8 21579 218C1 28D80 ...
 3DROP:
         CON(5)  (*)+5                            * 60F4B  primitive code object
-        GOTO    L_60F88                          * 60F50
+        GOTO    3DROP~1                          * 60F50
 
 * 1..7 ->
 * refs (8): 3EFAA 4547A 454CA 4559C 455B5 91A3B ...
@@ -515,7 +516,7 @@ L_60F60:
 4DropLoop:
         D1=D1+  5                                * 60F83
         D=D+1   A                                * 60F86
-L_60F88:
+3DROP~1:
         D1=D1+  15                               * 60F88
 L_60F8B:
         D=D+1   A                                * 60F8B
@@ -1743,7 +1744,7 @@ NOT?SEMI:
 * ->
 * refs (3): 6195C 61A24 61A35
 SEMILOOP:
-        GOVLNG  L_03130                          * 61A47
+        GOVLNG  SEMILOOP~1                       * 61A47
 L_61A4E:
         A=DAT0  A                                * 61A4E
         D0=D0+  5                                * 61A51
@@ -2876,12 +2877,12 @@ L_624F0:
 * refs (2): 4CF19 4CF28
 #-#2/:
         CON(5)  (*)+5                            * 624FB  primitive code object
-        GOSUB   SUB_6250B                        * 62500
+        GOSUB   #-#2/~1                          * 62500
 L_62504:
         GOVLNG  PUSH#ALOOP                       * 62504
 
 * refs (1): 62500
-SUB_6250B:
+#-#2/~1:
         GOSBVL  POP#                             * 6250B
         R0=A.F  A                                * 62512
         GOSBVL  POP#                             * 62518
@@ -3053,30 +3054,30 @@ L_6266D:
         CON(5)  (*)+5                            * 626AE  primitive code object
         GOSBVL  SKIPOB                           * 626B3
         GOSBVL  SKIPOB                           * 626BA
-L_626C1:
+3skipcola~1:
         GOSBVL  SKIPOB                           * 626C1
-L_626C8:
+2skipcola~1:
         GOSBVL  SKIPOB                           * 626C8
-L_626CF:
+skipcola~1:
         GOSBVL  SKIPOB                           * 626CF
         GOLONG  L_6199F                          * 626D6
 
 * Does 3SKIP, then COLA.
 3skipcola:
         CON(5)  (*)+5                            * 626DC  primitive code object
-        GOTO    L_626C1                          * 626E1
+        GOTO    3skipcola~1                      * 626E1
 
 * Does 2SKIP, then COLA.
 * refs (2): 27D28 69A4F
 2skipcola:
         CON(5)  (*)+5                            * 626E5  primitive code object
-        GOTO    L_626C8                          * 626EA
+        GOTO    2skipcola~1                      * 626EA
 
 * Does SKIP, then COLA.
 * refs (5): 283CE 545E6 54DAD 54E9A 5DFD0
 skipcola:
         CON(5)  (*)+5                            * 626EE  primitive code object
-        GOTO    L_626CF                          * 626F3
+        GOTO    skipcola~1                       * 626F3
 
 * # -> # #+2
 * refs (21): 0E4E8 0E4F2 219AE 2D960 5AD0D 5D5BF ...
@@ -3442,7 +3443,7 @@ MACRODCMP:
         :: DUP OBJ_2699F NOTcase                 * 62ABB
           :: PALPTRDCMP NOTcaseFALSE failed      * 62ACF
           ;                                      * 62AE3
-          DUP OBJ_268D6 SWAP PALPTRDCMP ROTSWAP TRUE ; * 62AE8
+          DUP MACRODCMP~1 SWAP PALPTRDCMP ROTSWAP TRUE ; * 62AE8
 
 * ob1 ob2 -> F
 * refs (13): 27E8B 2FE1B 3FBD8 4498F 46842 4F1B5 ...

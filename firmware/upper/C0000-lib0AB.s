@@ -211,7 +211,7 @@ DIFFEQ:
         CON(3)  #0AB                             * C07DE  library
         CON(3)  #00F                             * C07E1  command
 VERSION:
-        :: CK0 # VersionStrings OBJ_7295C TOTEMPOB EVAL ; * C07E4  the version object, read by VERSION
+        :: CK0 # VersionStrings VERSION~1 TOTEMPOB EVAL ; * C07E4  the version object, read by VERSION
 
 * refs (1): C0007
 LIB0AB.config:
@@ -325,7 +325,7 @@ ROMP_0AB_01A:
 
 * ROMPTR 0AB 01B
 * refs (1): C0007
-ROMP_0AB_01B:
+ANIMATE~1:
           ::                                     * C0B09
             { NULLLAM NULLLAM NULLLAM NULLLAM NULLLAM NULLLAM } BIND ERRSET * C0B0E
             :: 6GETLAM ZERO_DO 5GETLAM ZERO_DO GBUFF 5GETLAM INDEX@ #- #1+ * C0B40
@@ -367,7 +367,7 @@ LININ:
 
 * ROMPTR 0AB 01D
 * refs (1): C0007
-ROMP_0AB_01D:
+LININ~1:
         :: symcomp ChkExpr1Name CARCOMP DUP      * C0D2D
           { lam'dvar lam'dvar } BIND ZEROSWAP EXPLODE >dvars dvars? ABND * C0D46
           NOTcase                                * C0D78
@@ -386,7 +386,7 @@ LIBEVAL:
 
 * ROMPTR 0AB 01F
 * refs (1): C0007
-ROMP_0AB_01F:
+LIBEVAL~1:
         :: DUP LENHXS BINT6 #<case ROMPTR 0E7 007 * C0DD0
           DUP BINT4 BINT6 SUBHXS HXS># SWAP BINT1 BINT3 SUBHXS HXS># * C0DF4
           #>ROMPTR COLA_EVAL ;                   * C0E26
@@ -856,18 +856,18 @@ RCIJ:
 
 * ROMPTR 0AB 04F
 * refs (1): C0007
-ROMP_0AB_04F:
+DIAG→~1:
         :: OBJ_1DFDF COERCE{}2 ROMPTR 0C3 018 ;  * C1616
 
 * ROMPTR 0AB 050
 * refs (1): C0007
-ROMP_0AB_050:
+DIAG→~2:
         :: COERCE DUP#0<> ?SKIP SETSIZEERR       * C1635
           DUP TWO{}N ROMPTR 0C3 018 ;            * C164E
 
 * ROMPTR 0AB 051
 * refs (1): C0007
-ROMP_0AB_051:
+RANM~1:
         :: %0_2A2B4 %0_2A2B4 OBJ_1DF30 1GETLAM ABND CK1NOLASTWD COERCE{}2 * C1668
           %0_2A2B4 MAKEARRY ROMPTR 0C3 000 ;     * C1690
 
@@ -1050,8 +1050,8 @@ TAIL:
         CON(3)  #062                             * C19DB  command
 SEQ:
         :: CK5&Dispatch                          * C19DE
-          # 6000 ROMPTR 0E8 000                  * C19E8  name ? ? ?
-          # 7000 ROMPTR 0E8 000                  * C19FD  local ? ? ?
+          # 6000 ROMPTR 0E8 000                  * C19E8  name any any any
+          # 7000 ROMPTR 0E8 000                  * C19FD  local any any any
         ;                                        * C1A12
 
 * ROMPTR 0AB 063
@@ -1113,7 +1113,7 @@ ENDSUB:
         CON(3)  #067                             * C1BBB  command
 STREAM:
         :: CK2&Dispatch                          * C1BBE
-          # 50                                   * C1BC8  list ?
+          # 50                                   * C1BC8  list any
           :: 1LAMBIND DUP CARCOMP SWAP CDRCOMP DUP LENCOMP DUPUNROT #0=case * C1BD2
             doerr501                             * C1C04
             >R ZERO_DO ?ATTNQUIT RSWAP 'R RSWAP 1GETLAM EVAL LOOP RDROP ABND ; * C1C09
@@ -1131,7 +1131,7 @@ STREAM:
 
 * ROMPTR 0AB 069
 * refs (1): C0007
-ROMP_0AB_069:
+ΠLIST~1:
             :: DUP CARCOMP SWAP CDRCOMP DUP LENCOMP DUPUNROT #0=case * C1C65
               doerr501                           * C1C92
             ;                                    * C1C97
@@ -1177,7 +1177,7 @@ DOLIST_C1D41:
 ADD:
         :: CK2&Dispatch                          * C1DE1
           BINT85 ROMPTR 0E8 015                  * C1DEB  list list
-          OBJ_64C34 ROMPTR 0E8 015               * C1DFB  list ?
+          OBJ_64C34 ROMPTR 0E8 015               * C1DFB  list any
           BINT5 ROMPTR 0E8 015                   * C1E0B  list
           BINT13                                 * C1E1B  tagged
           :: STRIPTAGS 'EvalNoCK:_sup ROMPTR 0AB 06C ; * C1E20  ADD
@@ -2114,11 +2114,11 @@ LIB0AB.link:
         REL(5)  ANIMATE                          * C2FAC  018 ANIMATE
         REL(5)  ROMP_0AB_019                     * C2FB1  019 
         REL(5)  ROMP_0AB_01A                     * C2FB6  01A 
-        REL(5)  ROMP_0AB_01B                     * C2FBB  01B 
+        REL(5)  ANIMATE~1                        * C2FBB  01B 
         REL(5)  LININ                            * C2FC0  01C LININ
-        REL(5)  ROMP_0AB_01D                     * C2FC5  01D 
+        REL(5)  LININ~1                          * C2FC5  01D 
         REL(5)  LIBEVAL                          * C2FCA  01E LIBEVAL
-        REL(5)  ROMP_0AB_01F                     * C2FCF  01F 
+        REL(5)  LIBEVAL~1                        * C2FCF  01F 
         REL(5)  CONLIB                           * C2FD4  020 CONLIB
         REL(5)  CONST                            * C2FD9  021 CONST
         REL(5)  EQNLIB                           * C2FDE  022 EQNLIB
@@ -2166,9 +2166,9 @@ LIB0AB.link:
         REL(5)  CSWP                             * C30B0  04C CSWP
         REL(5)  RCI                              * C30B5  04D RCI
         REL(5)  RCIJ                             * C30BA  04E RCIJ
-        REL(5)  ROMP_0AB_04F                     * C30BF  04F 
-        REL(5)  ROMP_0AB_050                     * C30C4  050 
-        REL(5)  ROMP_0AB_051                     * C30C9  051 
+        REL(5)  DIAG→~1                          * C30BF  04F 
+        REL(5)  DIAG→~2                          * C30C4  050 
+        REL(5)  RANM~1                           * C30C9  051 
         REL(5)  PROOT                            * C30CE  052 PROOT
         REL(5)  PCOEF                            * C30D3  053 PCOEF
         REL(5)  PEVAL                            * C30D8  054 PEVAL
@@ -2192,7 +2192,7 @@ LIB0AB.link:
         REL(5)  ENDSUB                           * C3132  066 ENDSUB
         REL(5)  STREAM                           * C3137  067 STREAM
         REL(5)  ΣLIST                            * C313C  068 ΣLIST
-        REL(5)  ROMP_0AB_069                     * C3141  069 
+        REL(5)  ΠLIST~1                          * C3141  069 
         REL(5)  ΠLIST                            * C3146  06A ΠLIST
         REL(5)  DOLIST_C1D41                     * C314B  06B DOLIST
         REL(5)  ADD                              * C3150  06C ADD

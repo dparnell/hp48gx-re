@@ -69,7 +69,7 @@ OBJ_57216:
 * refs (3): 20AA2 B6BAD B6BB2
 SYMISOL:
         ::                                       * 57293
-          :: 2DUP %0_2A2B4 3UNROLL BINT1 SWAPROT SINNER get1 OBJ_578E8 * 57298
+          :: 2DUP %0_2A2B4 3UNROLL BINT1 SWAPROT SINNER get1 SYMISOL~1 * 57298
             OBJ_57324 ABND NOTcase SETISOLERR    * 572C5
           ;                                      * 572D9
           DUP#2+PICK OBJ_57676 case SETISOLERR   * 572DE
@@ -305,7 +305,7 @@ OBJ_578A1:
         :: TRUE Π'ns EVAL ;                      * 578A1
 
 * refs (1): 5790B
-OBJ_578BA:
+SYMISOL~1~3:
         { Π'ni Π'ns }                            * 578BA
 
 * refs (2): 57892 578BF
@@ -317,11 +317,11 @@ OBJ_578BA:
         LAM 'ns                                  * 578DB
 
 * refs (1): 572C0
-OBJ_578E8:
-        :: ' OBJ_5791A TOTEMPOB ' OBJ_57938 TOTEMPOB OBJ_578BA BIND ; * 578E8
+SYMISOL~1:
+        :: ' SYMISOL~1~1 TOTEMPOB ' SYMISOL~1~2 TOTEMPOB SYMISOL~1~3 BIND ; * 578E8
 
 * refs (1): 578F2
-OBJ_5791A:
+SYMISOL~1~1:
         CODE                                     * 5791A  20 nibbles
           GOSBVL  SUB_57956                      * 57924  inline data follows
 
@@ -330,7 +330,7 @@ n0:
         ENDCODE                                  * 57938
 
 * refs (1): 57901
-OBJ_57938:
+SYMISOL~1~2:
         CODE                                     * 57938  20 nibbles
           GOSBVL  SUB_57956                      * 57942  inline data follows
 
@@ -425,12 +425,12 @@ expansq:
 
 * refs (1): 57AF2
 ?expanapp:
-        :: M1stFNCcase OBJ_57B15                 * 57B01
+        :: M1stFNCcase ?expanapp~1               * 57B01
         ;                                        * 57B10
 
 * refs (1): 57B0B
-OBJ_57B15:
-        :: 4PICK OBJ_26F42 NOTcaseDROP COLA_EVAL * 57B15
+?expanapp~1:
+        :: 4PICK ?expanapp~1~1 NOTcaseDROP COLA_EVAL * 57B15
         ;                                        * 57B2E
 
 * refs (2): 57AF7 57B5D
@@ -451,11 +451,11 @@ OBJ_57B15:
 
 * refs (1): 57AA7
 ?expan^:
-        :: M1st^case OBJ_57B77                   * 57B63
+        :: M1st^case ?expan^~1                   * 57B63
         ;                                        * 57B72
 
 * refs (1): 57B6D
-OBJ_57B77:
+?expan^~1:
         :: 3PICK TYPE TYPEREAL #<> ?SEMI         * 57B77
           3PICK num0=case                        * 57B95
           :: DROPRDROP NDROP %1 BINT1 ;          * 57B9F
@@ -559,12 +559,12 @@ colrev:
           ATTNFLG@ #0<> case                     * 57E1C
           :: DUP#0_DO pullrev1& LOOP COLA drop;q_58A0C * 57E2B
           ;                                      * 57E49
-          M1st+case OBJ_580C7                    * 57E4E
-          M1st*case OBJ_57E71                    * 57E58
+          M1st+case colrev~2                     * 57E4E
+          M1st*case colrev~1                     * 57E58
           pullrev1& AGAIN ;                      * 57E62
 
 * refs (1): 57E5D
-OBJ_57E71:
+colrev~1:
         :: SWAPDROP#1- psh larg BINT0 rot parg& unrot count* #1+ * 57E71
           { Π'*s } BIND psh count* Π'*s #+ ' Π'*s STO BINT0 unrot COLA * 57EA3
           OBJ_57F00                              * 57EE9
@@ -617,7 +617,7 @@ OBJ_580A4:
         :: Π'+s #1- ' Π'+s STO ;                 * 580A4
 
 * refs (1): 57E53
-OBJ_580C7:
+colrev~2:
         :: SWAPDROP#1- psh larg BINT0 rot parg& unrot count+ #1+ * 580C7
 
 {'+s}:
@@ -845,20 +845,20 @@ L_5879C:
 * refs (1): 57DB3
 colfac:
         :: BEGIN DUP#0=case drop;q_58A0C         * 587AA
-          M1st-case OBJ_587FF                    * 587BE
-          M1st/case OBJ_58827                    * 587C8
+          M1st-case colfac~1                     * 587BE
+          M1st/case colfac~2                     * 587C8
           M1stNEGcase OBJ_58854                  * 587D2
           M1stINVcase OBJ_58912                  * 587DC
-          M1stSQcase OBJ_589E9                   * 587E6
+          M1stSQcase colfac~3                    * 587E6
           pullrev1& AGAIN ;                      * 587F0
 
 * refs (1): 587C3
-OBJ_587FF:
+colfac~1:
         :: SWAPDROP#1- PTR psh1&rev: x+ addtNEG COLA OBJ_58854 * 587FF
         ;                                        * 58822
 
 * refs (1): 587CD
-OBJ_58827:
+colfac~2:
         :: SWAPDROP#1- PTR psh1&rev: x* PTR addt: xINV COLA OBJ_58912 * 58827
         ;                                        * 5884F
 
@@ -907,7 +907,7 @@ OBJ_589CB:
         ;                                        * 589E4
 
 * refs (1): 587EB
-OBJ_589E9:
+colfac~3:
         :: SWAPDROP#1- PTR psh1&rev2: x^ %2 AGAIN ; * 589E9
 
 * refs (10): 57A8E 57E17 57E44 587B9 58A2F 66833 ...
@@ -918,9 +918,9 @@ drop;q_58A0C:
 * refs (2): 57DEF 5AC72
 colunfac:
         :: BEGIN DUP#0=case drop;q_58A0C         * 58A20
-          M-1potcase OBJ_58B26                   * 58A34
-          M1st+case OBJ_58B58                    * 58A3E
-          M1st*case OBJ_58B9E                    * 58A48
+          M-1potcase colunfac~1                  * 58A34
+          M1st+case colunfac~2                   * 58A3E
+          M1st*case colunfac~3                   * 58A48
           pullpsh1& AGAIN ;                      * 58A52
 
 * [expr1 INV expr2 INV *] -> [expr1 expr2 /]
@@ -969,30 +969,30 @@ L_58B17:
         RPL
 
 * refs (1): 58A39
-OBJ_58B26:
+colunfac~1:
         :: BINT3 #- SWAPDROP ROTROT2DROP ' x/ psh1& AGAIN ; * 58B26
 
 * refs (1): 58A43
-OBJ_58B58:
-        :: pullpsh1& M1st+case OBJ_58B76         * 58B58
+colunfac~2:
+        :: pullpsh1& M1st+case colunfac~2~1      * 58B58
           AGAIN ;                                * 58B6C
 
 * refs (2): 58B67 58B8F
-OBJ_58B76:
-        :: plDRPpZparg OBJ_5CD02 pshtop& M1st+case OBJ_58B76 * 58B76
+colunfac~2~1:
+        :: plDRPpZparg OBJ_5CD02 pshtop& M1st+case colunfac~2~1 * 58B76
           AGAIN ;                                * 58B94
 
 * refs (1): 58A4D
-OBJ_58B9E:
+colunfac~3:
         ::                                       * 58B9E
           :: MetaMulInv COLA SKIP                * 58BA3
           ;                                      * 58BB7
-          AGAIN pullpsh1& M1st*case OBJ_58BDA    * 58BBC
+          AGAIN pullpsh1& M1st*case colunfac~3~1 * 58BBC
           AGAIN ;                                * 58BD0
 
 * refs (2): 58BCB 58BF3
-OBJ_58BDA:
-        :: plDRPpZparg addt* pshtop& M1st*case OBJ_58BDA * 58BDA
+colunfac~3~1:
+        :: plDRPpZparg addt* pshtop& M1st*case colunfac~3~1 * 58BDA
           AGAIN ;                                * 58BF8
 
 * meta -> meta #0 meta &+&+..&+ -> meta #n
@@ -1172,10 +1172,10 @@ SHOWLS:
 * refs (1): 59158
 Π'nmls:
             LAM 'nmls }                          * 59115
-          BIND ' OBJ_59149 parameval ABND ;      * 5912B
+          BIND ' SHOWLS~1 parameval ABND ;       * 5912B
 
 * refs (1): 59135
-OBJ_59149:
+SHOWLS~1:
         :: dup;#nm? caseFALSE Π'nmls             * 59149
           OVER EQUALPOSCOMP #0<> caseFALSE ROMPTR@NOT * 5915D
           caseFALSE ?ATTNQUIT                    * 59176

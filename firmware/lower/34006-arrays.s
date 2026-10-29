@@ -5,24 +5,24 @@
         RPL
 
 * refs (3): 33571 33684 3371A
-OBJ_34006:
+NUMSOLVE~5:
         :: BINT2 BINT5 GOTO L_34051 ;            * 34006
 
 * refs (5): 333F5 33495 334D6 335DA 3382D
-OBJ_34024:
+NUMSOLVE~6:
         :: BINT2 BINT4 GOTO L_34051 ;            * 34024
 
 * refs (1): 33B1B
-OBJ_34042:
+NUMSOLVE~7:
         :: BINT1 BINT5                           * 34042
 L_34051:
           CHECKKEY NOTcase2DROP 7GETLAM          * 34051
           case 3DROP                             * 34060
           DROPOVER OBJ_34771 OVER OBJ_34771 2DUP %< ITE ROTSWAP 4ROLLROT * 3406A
-          OBJ_340B0 DISPROW1 OBJ_340B0 DISPROW2 ; * 34097
+          NUMSOLVE~7~1 DISPROW1 NUMSOLVE~7~1 DISPROW2 ; * 34097
 
 * refs (2): 34097 340A1
-OBJ_340B0:
+NUMSOLVE~7~1:
         :: DUP a%>$ SWAP %0<                     * 340B0
 
 +(_+_,st):
@@ -42,37 +42,37 @@ OBJ_340B0:
           ROTDROP !insert$ ;                     * 3413F
 
 * refs (4): 33175 331AC 331CA 333AF
-OBJ_3414E:
+NUMSOLVE~8:
         :: NoAttn?Semi BINT2 BINT3 BINT4 GOTO L_34298 ; * 3414E
 
 * refs (2): 33422 33468
-OBJ_34176:
+NUMSOLVE~9:
         :: NoAttn?Semi BINT2 BINT5 BINT4 GOTO L_34298 ; * 34176
 
 * refs (1): 33553
-OBJ_3419E:
+NUMSOLVE~10:
         :: NoAttn?Semi BINT2 BINT3 BINT4 GOTO L_34298 ; * 3419E
 
 * refs (1): 33666
-OBJ_341C6:
+NUMSOLVE~11:
         :: NoAttn?Semi BINT4 BINT3 BINT2 GOTO L_34298 ; * 341C6
 
 * refs (1): 337CE
-OBJ_341EE:
+NUMSOLVE~12:
         :: NoAttn?Semi BINT4 BINT2 BINT5 GOTO L_34298 ; * 341EE
 
 * refs (1): 33A80
-OBJ_34216:
-        :: NoAttn?Semi BINT2 BINT4 BINT3 GOTO L_34257 ; * 34216
+NUMSOLVE~13:
+        :: NoAttn?Semi BINT2 BINT4 BINT3 GOTO NUMSOLVE~13~1 ; * 34216
 
 * refs (1): 33B6B
-OBJ_3423E:
+NUMSOLVE~14:
         :: NoAttn?Semi BINT1 BINT5 BINT4         * 3423E
-L_34257:
+NUMSOLVE~13~1:
           3UNROLL                                * 34257
 
 * refs (1): 33C38
-OBJ_3425C:
+NUMSOLVE~15:
           :: OVER OBJ_347DA %ABS OVER OBJ_347DA %ABS %<= ?SEMI * 3425C
             SWAP ;                               * 34289
           ROT                                    * 34293
@@ -89,7 +89,7 @@ ATTN#:
           # A03 FLUSHKEYS ATTNFLGCLR TRUE ;      * 34301
 
 * refs (47): 33166 33170 33198 331BB 331E3 33224 ...
-OBJ_3431F:
+NUMSOLVE~16:
         CON(5)  (*)+5                            * 3431F  primitive code object
         ASSEMBLE
         GOSUB   SUB_34847                        * 34324
@@ -130,13 +130,13 @@ OBJ_3437C:
         GOTO    L_343A4                          * 34385
 
 * refs (2): 334AE 33521
-OBJ_34389:
+NUMSOLVE~17:
         CON(5)  (*)+5                            * 34389  primitive code object
         C=0     A                                * 3438E
         GOTO    L_343A0                          * 34390
 
 * refs (6): 331CF 33486 33558 3366B 33A85 33B70
-OBJ_34394:
+NUMSOLVE~18:
         CON(5)  (*)+5                            * 34394  primitive code object
         LC(5)   #00003                           * 34399
 L_343A0:
@@ -160,7 +160,7 @@ L_343CD:
         GOTO    L_34A4F                          * 343CD
 
 * refs (5): 33409 3350D 3368E 33837 33B25
-OBJ_343D1:
+NUMSOLVE~19:
         CON(5)  (*)+5                            * 343D1  primitive code object
         GOSUB   SUB_34847                        * 343D6
         GOSUB   SUB_3448A                        * 343DA
@@ -288,7 +288,7 @@ L_3453A:
         GOTO    L_34A4F                          * 34542
 
 * refs (4): 3344F 33639 337E7 33A58
-OBJ_34546:
+NUMSOLVE~20:
         CON(5)  (*)+5                            * 34546  primitive code object
         GOSUB   SUB_34847                        * 3454B
         GOSBVL  SAVPTR                           * 3454F
@@ -370,7 +370,7 @@ L_34620:
         GOVLNG  PushFLoop                        * 34620
 
 * refs (1): 33846
-OBJ_34627:
+NUMSOLVE~21:
         CON(5)  (*)+5                            * 34627  primitive code object
         GOSUB   SUB_348DC                        * 3462C
         GOSBVL  SAVPTR                           * 34630
@@ -445,19 +445,19 @@ SUB_346D1:
         RTN                                      * 346E6
 
 * refs (10): 33157 331C0 3337D 33418 3345E 33549 ...
-OBJ_346E8:
+NUMSOLVE~22:
         CON(5)  (*)+5                            * 346E8  primitive code object
         LC(5)   #00003                           * 346ED
         GOTO    L_34714                          * 346F4
 
 * refs (2): 3314D 33378
-OBJ_346F8:
+NUMSOLVE~23:
         CON(5)  (*)+5                            * 346F8  primitive code object
         LC(5)   #00004                           * 346FD
         GOTO    L_34714                          * 34704
 
 * refs (1): 33152
-OBJ_34708:
+NUMSOLVE~24:
         CON(5)  (*)+5                            * 34708  primitive code object
         LC(5)   #00005                           * 3470D
 L_34714:
@@ -484,7 +484,7 @@ L_34744:
         PC=(A)                                   * 3474A
 
 * refs (1): 33D78
-OBJ_3474E:
+NUMSOLVE~2~3:
         CON(5)  (*)+5                            * 3474E  primitive code object
         LC(5)   #00003                           * 34753
         GOSUB   SUB_348BC                        * 3475A
@@ -513,7 +513,7 @@ OBJ_3478E:
         GOTO    L_347BA                          * 3479A
 
 * refs (2): 33D0A 33D96
-OBJ_3479E:
+NUMSOLVE~2~4:
         CON(5)  (*)+5                            * 3479E  primitive code object
         LC(5)   #00003                           * 347A3
         GOTO    L_347BA                          * 347AA
@@ -554,7 +554,7 @@ OBJ_347F7:
         GOTO    L_34833                          * 34803
 
 * refs (7): 3320B 33279 332D3 33328 336B6 33A94 ...
-OBJ_34807:
+NUMSOLVE~25:
         CON(5)  (*)+5                            * 34807  primitive code object
         LC(5)   #00003                           * 3480C
         GOTO    L_34833                          * 34813
@@ -566,7 +566,7 @@ OBJ_34817:
         GOTO    L_34833                          * 34823
 
 * refs (1): 33B84
-OBJ_34827:
+NUMSOLVE~26:
         CON(5)  (*)+5                            * 34827  primitive code object
         LC(5)   #00005                           * 3482C
 L_34833:
@@ -671,7 +671,7 @@ L_34906:
         RTN                                      * 34919
 
 * refs (13): 3330F 33341 333DC 33481 334B8 3353A ...
-OBJ_3491B:
+NUMSOLVE~27:
         CON(5)  (*)+5                            * 3491B  primitive code object
         LC(5)   TEMPENV                          * 34920
         CD0EX                                    * 34927
@@ -692,7 +692,7 @@ L_3494B:
         RPL
 
 * refs (2): 3317A 33382
-OBJ_34957:
+NUMSOLVE~28:
         :: 2GETLAM                               * 34957
           CODE                                   * 34961  86 nibbles
             A=DAT1  A                            * 3496B
@@ -725,7 +725,7 @@ OBJ_34957:
         ;                                        * 349C1
 
 * refs (2): 33355 33369
-OBJ_349C6:
+NUMSOLVE~29:
         CON(5)  (*)+5                            * 349C6  primitive code object
         ASSEMBLE
         A=DAT1  A                                * 349CB
@@ -751,7 +751,7 @@ L_34A01:
         GOVLNG  L_5436A                          * 34A01
 
 * refs (1): 338A0
-OBJ_34A08:
+NUMSOLVE~30:
         CON(5)  (*)+5                            * 34A08  primitive code object
         C=DAT1  A                                * 34A0D
         CD1EX                                    * 34A10
@@ -759,7 +759,7 @@ OBJ_34A08:
         GOTO    L_34A25                          * 34A16
 
 * refs (7): 33210 332A1 332E2 335AD 336C5 33A9E ...
-OBJ_34A1A:
+NUMSOLVE~31:
         CON(5)  (*)+5                            * 34A1A  primitive code object
         C=DAT1  A                                * 34A1F
         CD1EX                                    * 34A22
@@ -782,7 +782,7 @@ L_34A4F:
         GOVLNG  OverWrT/FLp                      * 34A4F
 
 * refs (1): 33927
-OBJ_34A56:
+NUMSOLVE~32:
         CON(5)  (*)+5                            * 34A56  primitive code object
         GOSUB   SUB_34CC4                        * 34A5B
         ?D#0    M                                * 34A5F
@@ -840,7 +840,7 @@ L_34AF5:
         GOTO    L_34AE1                          * 34B29
 
 * refs (1): 3374C
-OBJ_34B2D:
+NUMSOLVE~33:
         CON(5)  (*)+5                            * 34B2D  primitive code object
         GOSUB   SUB_34CC4                        * 34B32
         GOSUB   SUB_34C62                        * 34B36
@@ -860,7 +860,7 @@ OBJ_34B2D:
         GOTO    L_34C3E                          * 34B73
 
 * refs (1): 33882
-OBJ_34B77:
+NUMSOLVE~34:
         CON(5)  (*)+5                            * 34B77  primitive code object
         GOSUB   SUB_34C96                        * 34B7C
         GOSUB   SUB_34C73                        * 34B80
@@ -878,7 +878,7 @@ OBJ_34B77:
         GOTO    L_34C3E                          * 34BB1
 
 * refs (1): 33607
-OBJ_34BB5:
+NUMSOLVE~35:
         CON(5)  (*)+5                            * 34BB5  primitive code object
         GOSUB   SUB_34C96                        * 34BBA
         GOSUB   SUB_34C73                        * 34BBE
@@ -913,7 +913,7 @@ L_34BFD:
         GOTO    L_34C3E                          * 34C1D
 
 * refs (1): 334E5
-OBJ_34C21:
+NUMSOLVE~36:
         CON(5)  (*)+5                            * 34C21  primitive code object
         GOSUB   SUB_34C96                        * 34C26
         GOSUB   SUB_34C7A                        * 34C2A
@@ -1022,7 +1022,7 @@ SUB_34CCE:
         RPL
 
 * refs (2): 33657 33A71
-OBJ_34CE2:
+NUMSOLVE~37:
         :: OBJ_344C7 NOTcaseDROP                 * 34CE2
           CODE                                   * 34CF1  43 nibbles
             GOSUB   SUB_34C96                    * 34CFB
@@ -1367,21 +1367,21 @@ L_35399:
 * sym -> {}
 * refs (5): 1525A 1550E 51017 B4BA3 B4CA5
 FINDVAR:
-        :: NULL{} DUPROT OBJ_353C9 SWAPDROP ;    * 353AB
+        :: NULL{} DUPROT FINDVAR~1 SWAPDROP ;    * 353AB
 
 * refs (3): 353BA 353FB 35482
-OBJ_353C9:
+FINDVAR~1:
         :: DUPTYPEIDNT? ?GOTO L_3540A DUP OBJ_354AF NOTcaseDROP >R * 353C9
 L_353F1:
           ticR NOT?SEMI                          * 353F1
-          OBJ_353C9 GOTO L_353F1                 * 353FB
+          FINDVAR~1 GOTO L_353F1                 * 353FB
 L_3540A:
           DUPSAFE@ ?GOTO L_35423 COLA apndvarlst * 3540A
 L_35423:
-          DUP OBJ_354E1 ?GOTO L_3545A TYPERRP? NOTcase apndvarlst * 35423
+          DUP FINDVAR~1~1 ?GOTO L_3545A TYPERRP? NOTcase apndvarlst * 35423
           ROTSWAP apndvarlst COLA SWAP           * 35446
 L_3545A:
-          4ROLLROT OVER matchob? ?GOTO L_35487 >TCOMP 3UNROLL COLA OBJ_353C9 * 3545A
+          4ROLLROT OVER matchob? ?GOTO L_35487 >TCOMP 3UNROLL COLA FINDVAR~1 * 3545A
 L_35487:
           SWAPDROPSWAP ;                         * 35487
 
@@ -1396,7 +1396,7 @@ OBJ_354AF:
         :: INHARDROM? NOT SWAP DUPTYPECOL? SWAP TYPESYMB? OR AND ; * 354AF
 
 * refs (1): 35428
-OBJ_354E1:
+FINDVAR~1~1:
         :: DUPTYPEIDNT? SWAP OBJ_354AF OR ;      * 354E1
         NIBHEX  A803000                          * 354FF  ≥0.
 
@@ -2071,11 +2071,11 @@ L_35BC9:
         RPL
 
 * refs (1): 2A696
-OBJ_35BCD:
+%HMS>~1:
         :: OBJ_35BF5 %%>% ;                      * 35BCD
 
 * refs (1): 2A6B9
-OBJ_35BE1:
+%HMS+~1:
         :: OBJ_35BF5 %%H>HMS ;                   * 35BE1
 
 * refs (2): 35BD2 35BE6
@@ -2200,7 +2200,7 @@ MATRND:
         :: ' OBJ_2B551                           * 35E2C
 
 * refs (1): 35EB8
-OBJ_35E3B:
+MATTRNC~1:
           :: 3UNROLL OBJ_2B590 SWAPCKREF DUP ARSIZE OVER TYPERARRY? ?SKIP * 35E3B
             #2*                                  * 35E68
             #1+_ONE_DO INDEX@ PULLREALEL 3PICK 5PICK EVAL INDEX@ PUTREALEL * 35E6D
@@ -2210,21 +2210,21 @@ OBJ_35E3B:
 * [F%] % -> [F%]'
 * refs (1): 1BE08
 MATTRNC:
-        :: ' OBJ_2B55D OBJ_35E3B ;               * 35EA9
+        :: ' OBJ_2B55D MATTRNC~1 ;               * 35EA9
 
 * refs (2): 1BD78 4FE1C
 trunc(c,r):
         :: ' OBJ_2B551                           * 35EC2
 
 * refs (1): 35F26
-OBJ_35ED1:
+conj(ar)~1:
           :: 3UNROLL OBJ_2B590 SWAP C%>% 3PICK 5PICK EVAL SWAPROT 4ROLL EVAL * 35ED1
             SWAP%>C% ;                           * 35F08
         ;                                        * 35F12
 
 * refs (1): 1BDF4
 conj(ar):
-        :: ' OBJ_2B55D OBJ_35ED1 ;               * 35F17
+        :: ' OBJ_2B55D conj(ar)~1 ;              * 35F17
 
 * [F%] -> [F%]'
 * refs (1): 1AA91

@@ -325,7 +325,7 @@ ChkForMenu(_):
 
 _+/-_:
             $ "+/-" OBJ_50F2E ;                  * 3E751
-          OBJ_50ECF }                            * 3E76B
+          {GRAPH\+/-}~1 }                        * 3E76B
 
 * refs (1): 46AD9
 {GRAPH\REPL}:
@@ -339,18 +339,18 @@ _REPL_:
         {                                        * 3E796
 
 _SUä_:
-          $ "SUB" OBJ_456F9 }                    * 3E79B
+          $ "SUB" {GRAPH\SUä}~1 }                * 3E79B
 
 * refs (1): 46A7C
 {GRAPH\DEL}:
         {                                        * 3E7B5
 
 _DEL_:
-          $ "DEL" OBJ_45758 }                    * 3E7BA
+          $ "DEL" {GRAPH\DEL}~1 }                * 3E7BA
 
 * refs (1): 46A77
 {GRAPH\LABEL}:
-        { xLABEL OBJ_4E861 }                     * 3E7D4
+        { xLABEL {GRAPH\LABEL}~1 }               * 3E7D4
 
 {GRAPH\MENUU}:
         {                                        * 3E7E8
@@ -391,7 +391,7 @@ _CIRCLE_:
 
 _DOT+_:
             $ "DOT+" OBJ_7362F ;                 * 3E89A
-          OBJ_4DE22 }                            * 3E8B6
+          {GRAPH\DOT+}~1 }                       * 3E8B6
 
 * refs (1): 46A54
 {GRAPH\DOT-}:
@@ -399,8 +399,8 @@ _DOT+_:
           :: PTR Box/StdLbl:                     * 3E8C5
 
 _DOT-_:
-            $ "DOT-" OBJ_50EBB ;                 * 3E8CF
-          OBJ_4DE68 }                            * 3E8EB
+            $ "DOT-" {GRAPH\DOT-}~2 ;            * 3E8CF
+          {GRAPH\DOT-}~1 }                       * 3E8EB
         FILLTO  #3EC71                           * 3E8F5  892 zero nibbles: the next entry stays at #3EC71
 
 * ->
@@ -727,7 +727,7 @@ NumEntryLin(s):
 
 * refs (1): 3F50F
 NumEntryLin(b):
-        CON(5)  L_7175E                          * 3F519  code object: the address of its machine code
+        CON(5)  NumEntryLin(b)~1                 * 3F519  code object: the address of its machine code
         ASSEMBLE
 L_3F51E:
         D0=D0+  5                                * 3F51E
@@ -904,13 +904,13 @@ Key>U/SKeyOb:
 * refs (2): 3FA61 3FC82
 ?Key>UKeyOb:
         :: UserKeys? NOT case2drpfls 2DUP        * 3FA7A
-          GetUserKeys OBJ_3FBC9 case OBJ_3FAC5   * 3FA93
+          GetUserKeys ?Key>UKeyOb~2 case ?Key>UKeyOb~1 * 3FA93
           NonUsrKeyOK? case2drpfls ModifierKey?  * 3FAA7
           caseFALSE 'DoBadKeyT                   * 3FAB6
         ;                                        * 3FAC0
 
 * refs (1): 3FAA2
-OBJ_3FAC5:
+?Key>UKeyOb~1:
         :: DUP'                                  * 3FAC5
 
 * ID SKEY
@@ -925,7 +925,7 @@ LAM_SKEY:
 * #kc #pl -> ob
 * refs (5): 19F98 3FA48 3FA70 3FB0B CFC4F
 Key>StdKeyOb:
-        :: OBJ_3A94E ROMPTR@ ?SEMI               * 3FB1A
+        :: Key>StdKeyOb~1 ROMPTR@ ?SEMI          * 3FB1A
           'DoBadKey ;                            * 3FB2E
         FILLTO  #3FB5A                           * 3FB38  34 zero nibbles: the next entry stays at #3FB5A
 
@@ -939,7 +939,7 @@ OBJ_3FB78:
           BINT8 INDEX@#- DISPN LOOP SetDA12Temp SetDA3NoCh ; * 3FBA6
 
 * refs (1): 3FA98
-OBJ_3FBC9:
+?Key>UKeyOb~2:
         :: DUPNULL{}? casedrop 2DROPFALSE        * 3FBC9
           ROT NTHCOMPDROP DUPNULL{}? case2drpfls SWAP * 3FBDD
           NTHCOMPDROP DUPNULL{}? casedrpfls TRUE * 3FBF6
@@ -1015,7 +1015,7 @@ DoBadKey:
 
 * refs (1): 42055
 H/WKey>KeyOb:
-        :: H/W>KeyCode BINT7 GETPROC OBJ_4B927 ; * 3FE26
+        :: H/W>KeyCode BINT7 GETPROC H/WKey>KeyOb~1 ; * 3FE26
 
 * # -> #'
 * refs (2): 1A88C 3FE2B
@@ -1084,7 +1084,7 @@ ClrNUsrKeyOK:
         GOVLNG  L_539E6                          * 3FFB2
 
 * refs (1): 40D70
-OBJ_3FFB9:
+SetUserMo~1:
         CON(5)  (*)+5                            * 3FFB9  primitive code object
         LC(3)   #106                             * 3FFBE
         GOVLNG  SetISysFlag                      * 3FFC3

@@ -487,12 +487,12 @@ ROMP_0E4_033:
 
 * ROMPTR 0E4 034
 * refs (1): 9DA1F
-ROMP_0E4_034:
+MINIT~1~1:
         :: # E402 ERROROUT ;                     * 9F365
 
 * ROMPTR 0E4 035
 * refs (1): 9DA1F
-ROMP_0E4_035:
+MINIT~1~2:
         :: # E403 ERROROUT ;                     * 9F37E
 
 * ROMPTR 0E4 036
@@ -624,7 +624,7 @@ ROMP_0E4_041:
 
 * ROMPTR 0E4 042
 * refs (1): 9DA1F
-ROMP_0E4_042:
+MINIT~1:
         :: NULL{} DORCLE DUP EqList? NOTcase2drop ROMPTR 0E4 034 * 9FBB2
           LENCOMP DUP #1= IT ROMPTR 0E4 034      * 9FBDB
           #1+_ONE_DO DORCLE INDEX@ NTHCOMPDROP   * 9FBFA
@@ -663,7 +663,7 @@ ROMP_0E4_042:
 
 * ROMPTR 0E4 043
 * refs (1): 9DA1F
-ROMP_0E4_043:
+MITM~1:
         :: ROMPTR 0E4 013 DROP OVER LENCOMP #1+_ONE_DO 2DUPSWAP INDEX@ * 9FEC0
           NTHCOMPDROP EQUALPOSCOMP #0= IT        * 9FEEE
           :: OVER INDEX@ NTHCOMPDROP NULL$ EQUAL ?SEMI * 9FF02
@@ -694,23 +694,23 @@ ROMP_0E4_043:
 
 * ROMPTR 0E4 044
 * refs (1): 9DA1F
-ROMP_0E4_044:
+MUSER~1:
         :: ROMPTR 0E4 04F ROMPTR 0E4 01E BINT1 ROMPTR 0E4 049 ; * A019A
 
 * ROMPTR 0E4 045
 * refs (1): 9DA1F
-ROMP_0E4_045:
+MCALC~1:
         :: ROMPTR 0E4 04F ROMPTR 0E4 01E BINT0 ROMPTR 0E4 049 ; * A01CA
 
 * ROMPTR 0E4 046
 * refs (1): 9DA1F
-ROMP_0E4_046:
+MUSER~2:
         :: ROMPTR 0E4 04F DUPNULL{}? case ROMPTR 0E7 007 * A01FA
           BINT1 ROMPTR 0E4 048 ;                 * A021F
 
 * ROMPTR 0E4 047
 * refs (1): 9DA1F
-ROMP_0E4_047:
+MCALC~2:
         :: ROMPTR 0E4 04F DUPNULL{}? case ROMPTR 0E7 007 * A0234
           BINT0 ROMPTR 0E4 048 ;                 * A0259
 
@@ -729,13 +729,13 @@ ROMP_0E4_049:
 
 * ROMPTR 0E4 04A
 * refs (1): 9DA1F
-ROMP_0E4_04A:
+MUSER~3:
         :: ROMPTR 0E4 04F $ "ALL" EQUALNOTcase ROMPTR 0E7 007 * A02FB
           BINT1 ROMPTR 0E4 04C ;                 * A032B
 
 * ROMPTR 0E4 04B
 * refs (1): 9DA1F
-ROMP_0E4_04B:
+MCALC~3:
         :: ROMPTR 0E4 04F $ "ALL" EQUALNOTcase ROMPTR 0E7 007 * A0340
           BINT0 ROMPTR 0E4 04C ;                 * A0370
 
@@ -747,13 +747,13 @@ ROMP_0E4_04C:
 
 * ROMPTR 0E4 04D
 * refs (1): 9DA1F
-ROMP_0E4_04D:
+MROOT~1:
         :: ROMPTR 0E4 04F DUP ROMPTR 0E4 00E #0=case ROMPTR 0E7 007 * A03C3
           FALSE' ROMPTR 0E4 024 COLA_EVAL ;      * A03F3
 
 * ROMPTR 0E4 04E
 * refs (1): 9DA1F
-ROMP_0E4_04E:
+MROOT~2:
         :: ROMPTR 0E4 04F DUP $ "ALL" EQUALNOTcase ROMPTR 0E7 007 * A040D
           FALSE' ROMPTR 0E4 022 COLA_EVAL ;      * A0442
 
@@ -861,8 +861,8 @@ LIB0E4.link:
         REL(5)  ROMP_0E4_031                     * A0740  031 
         REL(5)  ROMP_0E4_032                     * A0745  032 
         REL(5)  ROMP_0E4_033                     * A074A  033 
-        REL(5)  ROMP_0E4_034                     * A074F  034 
-        REL(5)  ROMP_0E4_035                     * A0754  035 
+        REL(5)  MINIT~1~1                        * A074F  034 
+        REL(5)  MINIT~1~2                        * A0754  035 
         REL(5)  ROMP_0E4_036                     * A0759  036 
         REL(5)  ROMP_0E4_037                     * A075E  037 
         REL(5)  ROMP_0E4_038                     * A0763  038 
@@ -875,19 +875,19 @@ LIB0E4.link:
         REL(5)  ROMP_0E4_03F                     * A0786  03F 
         REL(5)  ROMP_0E4_040                     * A078B  040 
         REL(5)  ROMP_0E4_041                     * A0790  041 
-        REL(5)  ROMP_0E4_042                     * A0795  042 
-        REL(5)  ROMP_0E4_043                     * A079A  043 
-        REL(5)  ROMP_0E4_044                     * A079F  044 
-        REL(5)  ROMP_0E4_045                     * A07A4  045 
-        REL(5)  ROMP_0E4_046                     * A07A9  046 
-        REL(5)  ROMP_0E4_047                     * A07AE  047 
+        REL(5)  MINIT~1                          * A0795  042 
+        REL(5)  MITM~1                           * A079A  043 
+        REL(5)  MUSER~1                          * A079F  044 
+        REL(5)  MCALC~1                          * A07A4  045 
+        REL(5)  MUSER~2                          * A07A9  046 
+        REL(5)  MCALC~2                          * A07AE  047 
         REL(5)  ROMP_0E4_048                     * A07B3  048 
         REL(5)  ROMP_0E4_049                     * A07B8  049 
-        REL(5)  ROMP_0E4_04A                     * A07BD  04A 
-        REL(5)  ROMP_0E4_04B                     * A07C2  04B 
+        REL(5)  MUSER~3                          * A07BD  04A 
+        REL(5)  MCALC~3                          * A07C2  04B 
         REL(5)  ROMP_0E4_04C                     * A07C7  04C 
-        REL(5)  ROMP_0E4_04D                     * A07CC  04D 
-        REL(5)  ROMP_0E4_04E                     * A07D1  04E 
+        REL(5)  MROOT~1                          * A07CC  04D 
+        REL(5)  MROOT~2                          * A07D1  04E 
         REL(5)  ROMP_0E4_04F                     * A07D6  04F 
         REL(5)  ROMP_0E4_051                     * A07DB  050 
         REL(5)  ROMP_0E4_051                     * A07E0  051 

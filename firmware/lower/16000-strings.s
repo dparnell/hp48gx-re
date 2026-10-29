@@ -190,9 +190,9 @@ L_1630C:
 * refs (12): 05BA7 07072 0742B 0751B 115E9 16304 ...
 St10Gb:
         ?ST=0   10                               * 1633D
-        GOYES   L_16349                          * 16340
+        GOYES   St10Gb~1                         * 16340
         GOVLNG  GPMEMERR                         * 16342
-L_16349:
+St10Gb~1:
         ST=1    10                               * 16349
         GOVLNG  GARBAGECOL                       * 1634C
 
@@ -721,7 +721,7 @@ SUB_16837:
 * refs (1): 39ED7
 s:str(st,s):
         CON(5)  (*)+5                            * 1685C  primitive code object
-        GOSUBL  SUB_15AFD                        * 16861
+        GOSUBL  s:str(st,s)~1                    * 16861
         GONC    L_1686F                          * 16867  always taken
 
 * refs (1): 159A5
@@ -864,13 +864,13 @@ L_16A22:
 OBJ_16AA9:
             :: 4PICK DUPROM-WORD? SWAP TYPECOL? NOTAND case OBJ_16FDE * 16AA9
               CK&DISPATCH0                       * 16AD1
-              # 4000 OBJ_1700B                   * 16AD6  array ? ? ?
-              # 5000 OBJ_16BA3                   * 16AE5  list ? ? ?
-              # 8000 OBJ_16E2B                   * 16AF4  program ? ? ?
-              # 9000 OBJ_16DB3                   * 16B03  algebraic ? ? ?
-              # E000 OBJ_16DB3                   * 16B12  unit ? ? ?
-              # D000 OBJ_16D16                   * 16B21  tagged ? ? ?
-              # 2F000 OBJ_16C01                  * 16B30  directory ? ? ?
+              # 4000 OBJ_1700B                   * 16AD6  array any any any
+              # 5000 OBJ_16BA3                   * 16AE5  list any any any
+              # 8000 OBJ_16E2B                   * 16AF4  program any any any
+              # 9000 OBJ_16DB3                   * 16B03  algebraic any any any
+              # E000 OBJ_16DB3                   * 16B12  unit any any any
+              # D000 OBJ_16D16                   * 16B21  tagged any any any
+              # 2F000 OBJ_16C01                  * 16B30  directory any any any
               BINT0 OBJ_16FDE                    * 16B3F  any
             ;                                    * 16B49
           ;                                      * 16B4E
@@ -1083,7 +1083,7 @@ OBJ_1743C:
 
 * refs (6): 15BAB 15BB0 1785B 352E1 352F0 352FF
 ->str(c):
-        :: OBJ_17527 TRUE OBJ_17545 DROP ;       * 1746E
+        :: ->str(c)~1 TRUE ->str(c)~2 DROP ;     * 1746E
 
 * refs (1): 16A68
 OBJ_1748C:
@@ -1105,11 +1105,11 @@ OBJ_17518:
         :: INNERCOMP #0=ITE                      * 17518
 
 * refs (1): 17473
-OBJ_17527:
+->str(c)~1:
           :: BINT0 toklparen ; NULL$TEMP FALSE   * 17527
 
 * refs (1): 1747D
-OBJ_17545:
+->str(c)~2:
           :: FALSE 5UNROLL tokrparen DPRADIX? tok, tok; RPITE 6ROLL * 17545
             OBJ_1DE19                            * 17572
             OBJ_34C49                            * 17577
@@ -1401,19 +1401,19 @@ L_17B7A:
 
 * refs (3): 17C0D 17C48 3859D
 VLM:
-        :: RDROP OBJ_17C55 ClrBusyAnn RECLAIMDISP ClrDA1IsStat OBJ_01E5E * 17B86
-          ERROR@ OBJ_38854 #1<> OBJ_18338 AND ?GOTO L_17BFE ERRBEEP * 17BA9
-          DoMenuMTH ERRORCLR #135_64EAA JstGetTHEMESG DISPROW1 ERRSET * 17BD1
-          OBJ_17C6A ERRTRAP OBJ_17C3F            * 17BEF
+        :: RDROP VLM~3 ClrBusyAnn RECLAIMDISP ClrDA1IsStat OBJ_01E5E ERROR@ * 17B86
+          OBJ_38854 #1<> OBJ_18338 AND ?GOTO L_17BFE ERRBEEP DoMenuMTH * 17BAE
+          ERRORCLR #135_64EAA JstGetTHEMESG DISPROW1 ERRSET VLM~4 ERRTRAP * 17BD6
+          VLM~2                                  * 17BF9
 L_17BFE:
-          OBJ_17F40 OBJ_17C17 ERRTRAP VLM ;      * 17BFE
+          OBJ_17F40 VLM~1 ERRTRAP VLM ;          * 17BFE
 
 * refs (1): 17C03
-OBJ_17C17:
+VLM~1:
         :: HOMEDIR ERRSET SetThisRow ClrDAsOK GOTO L_385B1 ; * 17C17
 
 * refs (1): 17BF9
-OBJ_17C3F:
+VLM~2:
         CON(5)  (*)+5                            * 17C3F  primitive code object
         ASSEMBLE
         GOSUB   SUB_18362                        * 17C44
@@ -1422,7 +1422,7 @@ OBJ_17C3F:
         PC=(A)                                   * 17C51
 
 * refs (1): 17B90
-OBJ_17C55:
+VLM~3:
         CON(5)  (*)+5                            * 17C55  primitive code object
         A=0     A                                * 17C5A
         D1=(5)  leeway                           * 17C5C
@@ -1431,34 +1431,34 @@ OBJ_17C55:
         RPL
 
 * refs (1): 17BEF
-OBJ_17C6A:
+VLM~4:
         :: #134_64EA0 JstGetTHEMESG DISPROW3 Y/N-Menu BEGIN HOMEDIR * 17C6A
           NoEditLine? ?SKIP                      * 17C8D
-          :: #13D_64EF0 JstGetTHEMESG OBJ_17F84 InitEd&Modes ; * 17C97
+          :: #13D_64EF0 JstGetTHEMESG VLM~4~1 InitEd&Modes ; * 17C97
 L_17CB5:
           DEPTH #0=?SKIP                         * 17CB5
-          :: OBJ_39F09 OVER OBJ_15CCF OBJ_17F84  * 17CBF
+          :: VLM~4~2 OVER OBJ_15CCF VLM~4~1      * 17CBF
             :: DROP CK0NOLASTWD 3RDROP GOTO L_17CB5 ; ; * 17CD8
           NoMemComLine? ?SKIP                    * 17D00
-          :: #138_64EC8 JstGetTHEMESG OBJ_17F84 DelMemComLine ; * 17D0A
+          :: #138_64EC8 JstGetTHEMESG VLM~4~1 DelMemComLine ; * 17D0A
           NoLastStack? ?SKIP                     * 17D28
-          :: #137_64EBE JstGetTHEMESG OBJ_17F84  * 17D32
+          :: #137_64EBE JstGetTHEMESG VLM~4~1    * 17D32
 
 DelLastStack:
             :: ABND BINT0 ' SAVELAM CACHE ERRSET ; ; * 17D46
           NoLastArg? ?SKIP                       * 17D73
-          :: #13B_64EE6 JstGetTHEMESG OBJ_17F84 DelLastArg ; * 17D7D
+          :: #13B_64EE6 JstGetTHEMESG VLM~4~1 DelLastArg ; * 17D7D
           GBUFF GROBDIM DROP #0=?SKIP            * 17D9B
           ::                                     * 17DAF
 
 _PICT_:
-            $ "PICT" OBJ_17F84 KILLADISP ;       * 17DB4
+            $ "PICT" VLM~4~1 KILLADISP ;         * 17DB4
           GetUserKeys NULL{} EQUAL ?SKIP         * 17DD5
-          :: #139_64ED2 JstGetTHEMESG OBJ_17F84 ClrUserKeys ; * 17DE9
+          :: #139_64ED2 JstGetTHEMESG VLM~4~1 ClrUserKeys ; * 17DE9
           alarm<>{}? IT                          * 17E07
-          :: #13A_64EDC JstGetTHEMESG OBJ_17F84 DelAlarrm(0) ; * 17E11
+          :: #13A_64EDC JstGetTHEMESG VLM~4~1 DelAlarrm(0) ; * 17E11
           DEPTH #0=?SKIP                         * 17E2F
-          :: #136_64EB4 JstGetTHEMESG OBJ_17F84 DelStack ; CONTEXT@ * 17E39
+          :: #136_64EB4 JstGetTHEMESG VLM~4~1 DelStack ; CONTEXT@ * 17E39
           LastNonNull IT OBJ_1804C               * 17E5C
           AdrPort0 NEXTLIBBAK IT                 * 17E6B
           :: BEGIN NEXTLIBBAK DUP ITE 4ROLL SWAP * 17E7A
@@ -1499,7 +1499,7 @@ OBJ_17F40:
         ;                                        * 17F7F
 
 * refs (9): 17CA6 17CD3 17D19 17D41 17D8C 17DC6 ...
-OBJ_17F84:
+VLM~4~1:
         :: DISPROW5 'R OBJ_17FB1 casedrop 2RDROP * 17F84
           NOTcaseDROP EVAL                       * 17FA2
         ;                                        * 17FAC

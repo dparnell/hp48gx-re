@@ -218,7 +218,7 @@ BINT43:
 * refs (6): 1A328 2DB49 3A9D8 3AC25 3E0FB 42136
 TurnOff:
         :: OBJ_4231A ALARM? ?SEMI                * 041A7
-          DEEPSLEEP InitEnab OBJ_4B643 ?FlashAlert ; * 041BB
+          DEEPSLEEP InitEnab TurnOff~1 ?FlashAlert ; * 041BB
 
 * refs (1): 17FE8
 off!:
@@ -273,7 +273,7 @@ ShowInvRomp:
 * Puts calc into "deep sleep" Low power mode, display off Wakeup on ON key or interrupt
 * refs (3): 0283D 04210 042AE
 DeepSleep:
-        GOSUB   SUB_042B8                        * 04292  inline data follows
+        GOSUB   DeepSleep~1                      * 04292  inline data follows
         GOSUB   SUB_042E0                        * 04296
         GOSUB   SUB_0432B                        * 0429A
         GOSUB   SUB_04337                        * 0429E
@@ -284,7 +284,7 @@ DeepSleep:
         GOVLNG  L_42333                          * 042B1
 
 * refs (1): 04292
-SUB_042B8:
+DeepSleep~1:
         C=RSTK                                   * 042B8
         A=C     A                                * 042BA
         D1=(5)  TIMER1CTRL                       * 042BC
@@ -782,20 +782,20 @@ POPKEY:
         RPL
 
 * refs (1): 421BD
-OBJ_04890:
-        :: OBJ_01E5E OBJ_048A9 LiteSlp ;         * 04890
+GETKEY~1:
+        :: OBJ_01E5E GETKEY~1~1 LiteSlp ;        * 04890
 
 * refs (1): 0489A
-OBJ_048A9:
-        :: OBJ_0E7CE case                        * 048A9
-          :: OBJ_048F9 case OBJ_39AD8            * 048B8
+GETKEY~1~1:
+        :: GETKEY~1~1~3 case                     * 048A9
+          :: GETKEY~1~1~1 case GETKEY~1~1~4      * 048B8
             OBJ_0CEEA ;                          * 048CC
-          OBJ_048F9 case                         * 048D6
-          :: OBJ_0CED9 OBJ_39AD8 ;               * 048E0
+          GETKEY~1~1~1 case                      * 048D6
+          :: GETKEY~1~1~2 GETKEY~1~1~4 ;         * 048E0
         ;                                        * 048F4
 
 * refs (2): 048BD 048D6
-OBJ_048F9:
+GETKEY~1~1~1:
         :: DispTimeReq? DA1IsStat? AND ;         * 048F9
 
 * ->
@@ -1640,7 +1640,7 @@ L_05149:
 * comp -> comp-ob_head comp_null -> comp_null
 * refs (11): 184C8 20C7B 4506A 467AC 6B8DA 6C131 ...
 CDRCOMP:
-        :: BINT2 OBJ_05176 SUBCOMP ;             * 05153
+        :: BINT2 CDRCOMP~1 SUBCOMP ;             * 05153
 
 * $ -> $'
 * refs (6): 0F0B1 0FF89 6B33B 9F7BA 9F8F2 C19CD
@@ -1648,7 +1648,7 @@ CDR$:
         :: BINT2                                 * 0516C
 
 * refs (1): 0515D
-OBJ_05176:
+CDRCOMP~1:
           # FFFFF SUB$ ;                         * 05176
 
 * hxs hxs' -> hxs''
@@ -1656,13 +1656,13 @@ OBJ_05176:
 &HXS:
         CON(5)  (*)+5                            * 0518A  primitive code object
         ASSEMBLE
-        GOTO    L_05198                          * 0518F
+        GOTO    &HXS~1                           * 0518F
 
 * $ $' -> $+$'
 * refs (97): 0D32E 0F326 14B22 15CFC 18196 181AA ...
 &$:
         CON(5)  (*)+5                            * 05193  primitive code object
-L_05198:
+&HXS~1:
         ST=0    10                               * 05198
         GOSUBL  SAVPTR                           * 0519B
         A=DAT1  A                                * 051A1
@@ -1973,13 +1973,13 @@ L_05560:
 * hxs -> flag
 NULLHXS?:
         CON(5)  (*)+5                            * 05566  primitive code object
-        GOTO    L_05574                          * 0556B
+        GOTO    NULLHXS?~1                       * 0556B
 
 * ob -> flag
 * refs (11): 16C0B 16E94 176FD 17757 177DE 21688 ...
 NULL$?:
         CON(5)  (*)+5                            * 0556F  primitive code object
-L_05574:
+NULLHXS?~1:
         C=DAT1  A                                * 05574
         CD1EX                                    * 05577
         D1=D1+  5                                * 0557A
@@ -2555,7 +2555,7 @@ $>ID:
 * Creates character string in tempob area Does SETHEX, C=C+C.A and then <REF>MAKE$N
 * refs (15): 0458E 05C04 0CF1C 16092 16837 2E1B9 ...
 MAKE$:
-        GOSUB   SUB_05EBE                        * 05B79
+        GOSUB   MAKE$~1                          * 05B79
 
 * Creates character string in tempob area If not enough mem even after GC then memerr C.A = nibbles -> A=nibbles+5, B=nibbles+16 C=D1=addr of stack D0 = addr of body of $ R0 = addr of $  Not used: R1-R4
 * refs (5): 051D1 05290 059E5 2FF45 44699
@@ -2828,7 +2828,7 @@ L_05E65:
         GOTO    L_05CE8                          * 05EBA
 
 * refs (1): 05B79
-SUB_05EBE:
+MAKE$~1:
         SETHEX                                   * 05EBE
         C=C+C   A                                * 05EC0
         RTNNC                                    * 05EC2

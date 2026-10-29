@@ -197,14 +197,14 @@ $<$?:
 * refs (1): 1EDBE
 $>=$?:
         :: $<$?                                  * 142BA
-L_142C4:
+$<=$?~1:
           %1 %= case %0_2A2B4                    * 142C4
           %1 ;                                   * 142D8
 
 * $ $' -> flag
 * refs (1): 1ED1F
 $<=$?:
-        :: $>$? GOTO L_142C4 ;                   * 142E2
+        :: $>$? GOTO $<=$?~1 ;                   * 142E2
 
 * % ->
 * refs (1): 1A5B3
@@ -815,9 +815,9 @@ GsstFIN:
 * ->
 * refs (2): 1528C 3FB5F
 SolvMenuInit:
-        :: ' OBJ_154CD MenuKeyNS! ' OBJ_155B3 MenuKeyLS! ' OBJ_1559A * 151A6
-          MenuKeyRS! ' PutStoLabel(s,_) LabelDef! ' EQReview ReviewKey! * 151D3
-          OBJ_3BCE2 ;                            * 151F6
+        :: ' SolvMenuInit~1 MenuKeyNS! ' SolvMenuInit~3 MenuKeyLS! ' * 151A6
+          SolvMenuInit~2 MenuKeyRS! ' PutStoLabel(s,_) LabelDef! ' EQReview * 151CE
+          ReviewKey! SolvMenuInit~4 ;            * 151F1
 
 * refs (3): 15352 3BE68 3C329
 OBJ_15200:
@@ -880,7 +880,7 @@ DispVarsUtil:
 
 * refs (5): 46946 8C59A 8C871 8CA70 8CBB4
 Message60E:
-              :: OBJ_49171 JstGetTHEMESG ;       * 15410
+              :: EQReview~1 JstGetTHEMESG ;      * 15410
 
 DoSt:(nm,st):
               :: SWAP ID>$ BINT1 BINT8 SUB$ $ ": " !append$SWAP !append$ ; * 15424
@@ -896,12 +896,12 @@ PutStoLabel(s,_):
           MakeInvLabel Grob>Menu ;               * 154BE
 
 * refs (1): 151B0
-OBJ_154CD:
+SolvMenuInit~1:
         :: DUPTYPEIDNT? ImmedEntry? ANDNOTcase StdMenuKeyNS * 154CD
-          ' OBJ_154FA DoNameKeyLRS ;             * 154E6
+          ' SolvMenuInit~1~1 DoNameKeyLRS ;      * 154E6
 
 * refs (1): 154EB
-OBJ_154FA:
+SolvMenuInit~1~1:
         :: CK2NOLASTWD STRIPTAGSl2 OVER FINDVAR OVERSWAP matchob? ITE * 154FA
           SETCIRCERR DROP                        * 15522
 
@@ -919,12 +919,12 @@ KeepUnit:
           SetDA3NoCh ;                           * 15590
 
 * refs (1): 151CE
-OBJ_1559A:
+SolvMenuInit~2:
         :: dIDNTNcase StdRightShift              * 1559A
           DoNameKeyRS ;                          * 155A9
 
 * refs (1): 151BF
-OBJ_155B3:
+SolvMenuInit~3:
         :: DUPTYPEIDNT? ImmedEntry? ANDNOTcase StdMenuKeyLS * 155B3
           ' SolvEQ(nm) DoNameKeyLRS ;            * 155CC
 
@@ -933,7 +933,7 @@ SolvEQ(nm):
         :: rceq! OVERDUP                         * 155E0
 
 {'nohalt}:
-          { nohalt } BIND ID>$ OBJ_4918F JstGetTHEMESG SWAP&$ APPprompt1! * 155EF
+          { nohalt } BIND ID>$ SolvEQ(nm)~1 JstGetTHEMESG SWAP&$ APPprompt1! * 155EF
           SWAPDUP SAFE@ ?SKIP %0_2A2B4           * 1561C
           SYMBNUMSOLVE ?SKIP                     * 15630
 
@@ -1007,16 +1007,16 @@ NULLID:
 * ob -> %
 * refs (11): 15850 1A5F3 1DF76 22F7C 33D23 36D9E ...
 CRUNCH:
-        :: NOTNUM? SETNUM ITE OBJ_157B0 OBJ_157E2 * 1578D
+        :: NOTNUM? SETNUM ITE CRUNCH~1 CRUNCH~2  * 1578D
         ;                                        * 157AB
 
 * refs (1): 157A1
-OBJ_157B0:
+CRUNCH~1:
         :: ERRSET                                * 157B0
           :: EVAL ->num(ex) ; ERRTRAP cf(-3);error CLRNUM ; * 157BA
 
 * refs (1): 157A6
-OBJ_157E2:
+CRUNCH~2:
         :: ERRSET                                * 157E2
           :: EVAL ->num(ex) ; ERRTRAP sf(-3);error SETNUM ; * 157EC
 
@@ -1193,7 +1193,7 @@ SUB_15AD5:
         RTN                                      * 15AFB
 
 * refs (1): 16861
-SUB_15AFD:
+s:str(st,s)~1:
         AD0EX                                    * 15AFD
         D0=(5)  DcompWidth                       * 15B00
         LC(2)   #13                              * 15B07
@@ -1368,7 +1368,7 @@ _chr(215)_:
 
 * refs (2): 15E74 15FB0
 longhxs:
-        :: NULL$TEMP OVER LENHXS #2* EXPAND OBJ_15FCF ; * 15E83
+        :: NULL$TEMP OVER LENHXS #2* EXPAND longhxs~1 ; * 15E83
 
 * refs (2): 15F33 15FC5
 OBJ_15EAB:
@@ -1399,7 +1399,7 @@ ONEPOS$:
           longhxs $ "C# " OBJ_15EAB ;            * 15FB0
 
 * refs (1): 15EA1
-OBJ_15FCF:
+longhxs~1:
         CON(5)  (*)+5                            * 15FCF  primitive code object
         ASSEMBLE
         D=D+1   A                                * 15FD4

@@ -2409,7 +2409,7 @@ L_77E84:
         RTN                                      * 77EA6
 
 * refs (1): 2C10D
-SUB_77EA8:
+utpn(3r)~1:
         GOSBVL  SUB_2A060                        * 77EA8
         D0=(5)  IRAMBUFF                         * 77EAF
         GOLONG  SUB_786BC                        * 77EB6

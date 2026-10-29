@@ -34,7 +34,7 @@ LIB0B3:
 
 * ROMPTR 0B3 001
 * refs (1): BA576
-ROMP_0B3_001:
+~Choose~1:
         :: DA1OK? ?SKIP ROMPTR 0B3 002           * BA712
           ROMPTR 0B3 056 DA2aOK? NOT AND IT ROMPTR 0B3 003 * BA72C
           DA3OK? ?SKIP ?DispMenu                 * BA756
@@ -43,14 +43,14 @@ ROMP_0B3_001:
 
 * ROMPTR 0B3 002
 * refs (1): BA576
-ROMP_0B3_002:
+~Choose~1~1:
         :: KEYINBUFFER? case SetDA1Bad           * BA784
           ROMPTR 0B3 02F SetDA1Valid SetDA2bBad ROMPTR 0B3 056 IT SetDA2aBad * BA798  ~BBReDrawBackgr
         ;                                        * BA7C2
 
 * ROMPTR 0B3 003
 * refs (1): BA576
-ROMP_0B3_003:
+~Choose~1~2:
         :: KEYINBUFFER? case SetDA2aBad          * BA7C7
           ROMPTR 0B3 030 SetDA2aValid ;          * BA7DB  LEDispPrompt
 
@@ -98,7 +98,7 @@ ROMP_0B3_004:
 
 * ROMPTR 0B3 008
 * refs (1): BA576
-ROMP_0B3_008:
+~Choose~2:
         :: BINT1 #=casedrop ROMPTR 0B3 009       * BA9C9
           BINT2 #=casedrop ROMPTR 0B3 00A        * BA9E3
           BINT3 #=casedrop ROMPTR 0B3 00B        * BA9F8
@@ -109,7 +109,7 @@ ROMP_0B3_008:
 
 * ROMPTR 0B3 009
 * refs (1): BA576
-ROMP_0B3_009:
+~Choose~2~1:
         ::                                       * BAA51
           { BINT11 ROMPTR 0B3 01A BINT17 ROMPTR 0B3 01C BINT26 * BAA56
             ROMPTR 0B3 02A BINT25                * BAA80  DoCKeyCheck
@@ -125,7 +125,7 @@ ROMP_0B3_009:
 
 * ROMPTR 0B3 00A
 * refs (1): BA576
-ROMP_0B3_00A:
+~Choose~2~2:
         ::                                       * BAB01
           { BINT11 ROMPTR 0B3 01E BINT17 ROMPTR 0B3 01F } OBJ_19FE4 caseTRUE * BAB06
           DUP#<7                                 * BAB3A
@@ -137,7 +137,7 @@ ROMP_0B3_00A:
 
 * ROMPTR 0B3 00B
 * refs (1): BA576
-ROMP_0B3_00B:
+~Choose~2~3:
         ::                                       * BAB77
           { BINT11 ROMPTR 0B3 020 BINT17 ROMPTR 0B3 021 } OBJ_19FE4 caseTRUE * BAB7C
           BINT45                                 * BABB0
@@ -149,7 +149,7 @@ ROMP_0B3_00B:
 
 * ROMPTR 0B3 00C
 * refs (1): BA576
-ROMP_0B3_00C:
+~Choose~2~4:
         ::                                       * BABED
           { BINT25 ROMPTR 0B3 02E BINT45         * BABF2  DoCKeyOK
             ROMPTR 0B3 02D }                     * BAC0C  DoCKeyCancel
@@ -161,7 +161,7 @@ ROMP_0B3_00C:
 
 * ROMPTR 0B3 00D
 * refs (1): BA576
-ROMP_0B3_00D:
+~Choose~2~5:
         :: BINT30 #=casedrpfls BINT35            * BAC59
           #=casedrpfls BINT40                    * BAC6D
           #=casedrpfls BINT5                     * BAC77
@@ -169,7 +169,7 @@ ROMP_0B3_00D:
 
 * ROMPTR 0B3 00E
 * refs (1): BA576
-ROMP_0B3_00E:
+~Choose~2~6:
         :: BINT35 #=casedrpfls BINT40            * BAC91
           #=casedrpfls BINT45                    * BACA5
           #=casedrpfls BINT6                     * BACAF
@@ -238,7 +238,7 @@ ROMP_0B3_014:
 
 * ROMPTR 0B3 016
 * refs (1): BA576
-ROMP_0B3_016:
+~BBMoveTo~1:
         :: DA2bBad? ?SEMI                        * BB06B
           10GETLAM 9GETLAM 2DUP 7GETLAM #+ OVER 8GETLAM #+ OVER 11GETLAM #1- * BB07A
           7GETLAM #* #+ HARDBUFF 5UNROLL 6GETLAM ROMPTR 0B3 04E SUBGROB * BB0B1
@@ -247,7 +247,7 @@ ROMP_0B3_016:
 
 * ROMPTR 0B3 017
 * refs (1): BA576
-ROMP_0B3_017:
+~BBMoveTo~2:
         :: DA2bBad? ?SEMI                        * BB11D
           10GETLAM 9GETLAM 2DUP OVER 8GETLAM #+ OVER 11GETLAM #1- 7GETLAM #* * BB12C
           #+ HARDBUFF 5UNROLL 6GETLAM ROMPTR 0B3 04E SUBGROB 3UNROLL 7GETLAM * BB163
@@ -256,7 +256,7 @@ ROMP_0B3_017:
 
 * ROMPTR 0B3 018
 * refs (1): BA576
-ROMP_0B3_018:
+~BBMoveTo~3:
         :: 2DUP #= case2drop SetDA2bNoCh         * BB1CF
           SWAP ROMPTR 0B3 04E ROMPTR 0B3 04D SetDA2bNoCh ; * BB1E8
 
@@ -271,13 +271,13 @@ ROMP_0B3_018:
 
 * ROMPTR 0B3 01A
 * refs (1): BA576
-ROMP_0B3_01A:
+~Choose~2~1~1:
         :: TakeOver ROMPTR 0B3 05B case DoBadKey * BB291  ~BBEmpty?
           ROMPTR 0B3 05A REPEATERCH BINT11 ROMPTR 0B3 01B SetDA123NoCh ; * BB2B0  ~BBPgUp
 
 * ROMPTR 0B3 01B
 * refs (1): BA576
-ROMP_0B3_01B:
+~Choose~2~1~1~1:
         :: 18GETLAM #1- DUP#0= IT                * BB2DA
           :: DROP 12GETLAM ;                     * BB2F3
           ROMPTR 0B3 015 DA2bOK? ?SKIP ROMPTR 0B3 004 * BB307  ~BBMoveTo
@@ -285,13 +285,13 @@ ROMP_0B3_01B:
 
 * ROMPTR 0B3 01C
 * refs (1): BA576
-ROMP_0B3_01C:
+~Choose~2~1~2:
         :: TakeOver ROMPTR 0B3 05B case DoBadKey * BB331  ~BBEmpty?
           ROMPTR 0B3 059 REPEATERCH BINT17 ROMPTR 0B3 01D SetDA123NoCh ; * BB350  ~BBPgDown
 
 * ROMPTR 0B3 01D
 * refs (1): BA576
-ROMP_0B3_01D:
+~Choose~2~1~2~1:
         :: 18GETLAM #1+ DUP 12GETLAM #> IT       * BB37A
           :: DROP BINT1 ;                        * BB39D
           ROMPTR 0B3 015 DA2bOK? ?SKIP ROMPTR 0B3 004 * BB3B1  ~BBMoveTo
@@ -299,7 +299,7 @@ ROMP_0B3_01D:
 
 * ROMPTR 0B3 01E
 * refs (1): BA576
-ROMP_0B3_01E:
+~Choose~2~2~1:
         :: TakeOver ROMPTR 0B3 05B case DoBadKey * BB3DB  ~BBEmpty?
           ROMPTR 0B3 05A 18GETLAM DUP#1= casedrop DoBadKey * BB3FA  ~BBPgUp
           11GETLAM 2DUP #>ITE #-                 * BB419
@@ -307,20 +307,20 @@ ROMP_0B3_01E:
 
 * ROMPTR 0B3 01F
 * refs (1): BA576
-ROMP_0B3_01F:
+~Choose~2~2~2:
         :: TakeOver ROMPTR 0B3 05B case DoBadKey * BB451  ~BBEmpty?
           ROMPTR 0B3 059 12GETLAM 18GETLAM 2DUP #= case2drop DoBadKey * BB470  ~BBPgDown
           11GETLAM #+ #MIN ROMPTR 0B3 015 ;      * BB499  ~BBMoveTo
 
 * ROMPTR 0B3 020
 * refs (1): BA576
-ROMP_0B3_020:
+~Choose~2~3~1:
         :: TakeOver ROMPTR 0B3 05B case DoBadKey * BB4B8  ~BBEmpty?
           BINT1 ROMPTR 0B3 015 ;                 * BB4D7  ~BBMoveTo
 
 * ROMPTR 0B3 021
 * refs (1): BA576
-ROMP_0B3_021:
+~Choose~2~3~2:
         :: TakeOver ROMPTR 0B3 05B case DoBadKey * BB4EC  ~BBEmpty?
           12GETLAM ROMPTR 0B3 015 ;              * BB50B  ~BBMoveTo
 
@@ -365,7 +365,7 @@ ROMP_0B3_021:
 
 * ROMPTR 0B3 027
 * refs (1): BA576
-ROMP_0B3_027:
+~Choose~3:
         :: BINT64 ROMPTR 0B3 055 case 6PUTLAM    * BB711
           18GETLAM 11GETLAM #MIN 6PUTLAM ;       * BB730
 
@@ -446,20 +446,20 @@ LEDispPrompt:
 
 * ROMPTR 0B3 031
 * refs (1): BA576
-ROMP_0B3_031:
+LEDispPrompt~1:
         :: BINT67 ROMPTR 0B3 055 ?SEMI           * BBBD7
           14GETLAM ITE ROMPTR 0B3 032 ROMPTR 0B3 033 * BBBF1
         ;                                        * BBC11
 
 * ROMPTR 0B3 032
 * refs (1): BA576
-ROMP_0B3_032:
+LEDispPrompt~1~1:
         :: BINT68 ROMPTR 0B3 055 ?SEMI           * BBC16
           ROMPTR 0B3 034 ROMPTR 0B0 0A5 ;        * BBC30
 
 * ROMPTR 0B3 033
 * refs (1): BA576
-ROMP_0B3_033:
+LEDispPrompt~1~2:
         :: BINT69 ROMPTR 0B3 055 ?SEMI           * BBC4B
           ROMPTR 0B3 034 $>grob ;                * BBC65
 
@@ -508,7 +508,7 @@ LEDispItem:
 
 * ROMPTR 0B3 039
 * refs (1): BA576
-ROMP_0B3_039:
+~Choose~4:
         :: BINT84 ROMPTR 0B3 055 ?SEMI           * BBF21
           HARDBUFF 14GETLAM ITE                  * BBF3B
           :: ZEROZERO BINT131 BINT56 ;           * BBF4A
@@ -519,7 +519,7 @@ ROMP_0B3_039:
 
 * ROMPTR 0B3 03A
 * refs (1): BA576
-ROMP_0B3_03A:
+~Choose~5:
         :: BINT87 ROMPTR 0B3 055 ?SEMI           * BBFF2
           5GETLAM HARDBUFF 14GETLAM ITE ZEROZERO * BC00C
           :: 10GETLAM #3- 9GETLAM ROMPTR 0B3 045 #3- ; * BC025
@@ -576,7 +576,7 @@ ROMP_0B3_040:
 
 * ROMPTR 0B3 041
 * refs (1): BA576
-ROMP_0B3_041:
+~BBReDrawBackgr~1:
         :: 8GETLAM ROMPTR 0B3 046 BINT91 #<> caseFALSE 11GETLAM * BC2A5
           7GETLAM #* BINT9 #/ SWAP #0<> casedrop FALSE * BC2CE
           DUP BINT1 #> BINT5 ROMPTR 0B3 056 ?SKIP #1+ * BC2F6
@@ -584,7 +584,7 @@ ROMP_0B3_041:
 
 * ROMPTR 0B3 042
 * refs (1): BA576
-ROMP_0B3_042:
+~BBReDrawBackgr~2:
         ::                                       * BC333
           { ROMPTR 0B3 05C                       * BC338  ~BBGetDefltHeight
             ROMPTR 0B3 060 ROMPTR 0B3 05D ROMPTR 0B3 061 ROMPTR 0B3 05E * BC348  sysCHOOSE
@@ -618,7 +618,7 @@ ROMP_0B3_046:
 
 * ROMPTR 0B3 047
 * refs (1): BA576
-ROMP_0B3_047:
+~BBReReadWidth~1:
         :: ROMPTR 0B3 048 NOT?SEMI               * BC48E
           BINT6 #- ;                             * BC4A3
 
@@ -629,13 +629,13 @@ ROMP_0B3_048:
 
 * ROMPTR 0B3 049
 * refs (1): BA576
-ROMP_0B3_049:
+LEDispPrompt~2:
         :: BINT8 8GETLAM ROMPTR 0B3 046 MAKEGROB HARDBUFF ROMPTR 0B3 043 * BC4CB
           GROB! ;                                * BC4FA
 
 * ROMPTR 0B3 04A
 * refs (1): BA576
-ROMP_0B3_04A:
+~Choose~6:
         :: 16GETLAM NOT?SEMI                     * BC504
           18GETLAM DUPTYPEBINT? casedrop         * BC513
           :: NULL{} 15PUTLAM ;                   * BC522
@@ -648,7 +648,7 @@ ROMP_0B3_04A:
 
 * ROMPTR 0B3 04C
 * refs (1): BA576
-ROMP_0B3_04C:
+LEDispPrompt~3:
         :: 10GETLAM 9GETLAM #2- OVER 8GETLAM ROMPTR 0B3 046 #1-+ OVER LINEON ; * BC572
 
 * ROMPTR 0B3 04E

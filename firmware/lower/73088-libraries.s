@@ -51,11 +51,11 @@ OBJ_73117:
         :: ' ROMP_002_105 ;                      * 73117
 
 * refs (1): 4B675
-OBJ_7312B:
+draw~2:
         :: BINT1 PTYPE>PINFO ;                   * 7312B
 
 * refs (1): 4B84B
-OBJ_7313F:
+GetRes~1:
         :: BINT9 PTYPE>PINFO ;                   * 7313F
 
 * refs (2): 4B68E 4B9B3

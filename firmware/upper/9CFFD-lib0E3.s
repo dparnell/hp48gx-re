@@ -194,7 +194,7 @@ ROMP_0E3_06B:
 
 * ROMPTR 0E3 06C
 * refs (1): 99FF5
-ROMP_0E3_06C:
+SOLVEQN~1:
         :: 3UNROLL COERCESWAP COERCE ROMPTR 0E2 015 SWAP NTHELCOMP NOTcase * 9D536
           ROMPTR 0E7 007                         * 9D564
           EVAL INCOMPDROP 4PICK NTHELCOMP NOTcase ROMPTR 0E7 007 * 9D56F
@@ -262,7 +262,7 @@ LIB0E3.link:
         REL(5)  ROMP_0E3_009                     * 9D816  009 
         REL(5)  ROMP_0E3_00A                     * 9D81B  00A 
         REL(5)  ROMP_0E3_00B                     * 9D820  00B 
-        REL(5)  ROMP_0E3_00C                     * 9D825  00C 
+        REL(5)  EQNLIB~1                         * 9D825  00C 
         REL(5)  ROMP_0E3_00D                     * 9D82A  00D 
         REL(5)  ROMP_0E3_00E                     * 9D82F  00E 
         REL(5)  ROMP_0E3_00F                     * 9D834  00F 
@@ -358,7 +358,7 @@ LIB0E3.link:
         REL(5)  ROMP_0E3_069                     * 9D9F6  069 
         REL(5)  ROMP_0E3_06A                     * 9D9FB  06A 
         REL(5)  ROMP_0E3_06B                     * 9DA00  06B 
-        REL(5)  ROMP_0E3_06C                     * 9DA05  06C 
+        REL(5)  SOLVEQN~1                        * 9DA05  06C 
         REL(5)  ROMP_0E3_06D                     * 9DA0A  06D 
         ENDLENGTH                                * 9DA0F
         NIBHEX  0000                             * 9DA0F  ..

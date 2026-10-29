@@ -77,7 +77,7 @@ ROMP_0E3_00B:
 
 * ROMPTR 0E3 00C
 * refs (1): 99FF5
-ROMP_0E3_00C:
+EQNLIB~1:
         :: RECLAIMDISP POLSaveUI ERRSET          * 9A1B6
           :: FALSE ZEROZERO BINT0 ONEONE ONEONE ONEONE ZEROZERO * 9A1CA
             {                                    * 9A1F2

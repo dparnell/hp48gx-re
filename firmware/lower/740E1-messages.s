@@ -356,7 +356,7 @@ U.F:
 U.r:
         NIBASC  "r"                              * 75767
         CON(1)  0                                * 75769  pointer follows
-        CON(5)  OBJ_384D0                        * 7576A
+        CON(5)  UMSIN~1~1~1                      * 7576A
         CON(1)  15                               * 7576F  15 digits
         CON(2)  #01                              * 75770  exponent 1
         NIBHEX  328031597759275                  * 75772
@@ -372,7 +372,7 @@ U.a:
 U.°:
         NIBASC  "°"                              * 7578E
         CON(1)  0                                * 75790  pointer follows
-        CON(5)  OBJ_384D0                        * 75791
+        CON(5)  UMSIN~1~1~1                      * 75791
         CON(1)  0                                * 75796  pointer follows
         CON(5)  %%1                              * 75797
         CON(2)  U.R-(*)                          * 7579C  next name of this length
@@ -472,7 +472,7 @@ U.Ω:
 U.K:
         NIBASC  "K"                              * 7584D
         CON(1)  0                                * 7584F  pointer follows
-        CON(5)  OBJ_38417                        * 75850
+        CON(5)  puretemp?~1                      * 75850
         CON(1)  0                                * 75855  pointer follows
         CON(5)  %%1                              * 75856
         CON(2)  0                                * 7585B  last of this length
@@ -670,21 +670,21 @@ U.pt:
 U.°C:
         NIBASC  "°C"                             * 75A2E
         CON(1)  0                                * 75A32  pointer follows
-        CON(5)  OBJ_38417                        * 75A33
+        CON(5)  puretemp?~1                      * 75A33
         CON(1)  0                                * 75A38  pointer follows
         CON(5)  cfC                              * 75A39
         CON(2)  U.°R-(*)                         * 75A3E  next name of this length
 U.°F:
         NIBASC  "°F"                             * 75A40
         CON(1)  0                                * 75A44  pointer follows
-        CON(5)  OBJ_38417                        * 75A45
+        CON(5)  puretemp?~1                      * 75A45
         CON(1)  0                                * 75A4A  pointer follows
         CON(5)  cfF                              * 75A4B
         CON(2)  U.lm-(*)                         * 75A50  next name of this length
 U.°R:
         NIBASC  "°R"                             * 75A52
         CON(1)  0                                * 75A56  pointer follows
-        CON(5)  OBJ_38417                        * 75A57
+        CON(5)  puretemp?~1                      * 75A57
         CON(1)  15                               * 75A5C  15 digits
         CON(2)  #99                              * 75A5D  exponent -1
         NIBHEX  655555555555555                  * 75A5F
@@ -1064,7 +1064,7 @@ U.torr:
 U.grad:
         NIBASC  "grad"                           * 75ECE
         CON(1)  0                                * 75ED6  pointer follows
-        CON(5)  OBJ_384D0                        * 75ED7
+        CON(5)  UMSIN~1~1~1                      * 75ED7
         CON(1)  1                                * 75EDC  1 digits
         CON(2)  #99                              * 75EDD  exponent -1
         NIBHEX  9                                * 75EDF
@@ -1128,7 +1128,7 @@ U.slug:
 U.arcs:
         NIBASC  "arcs"                           * 75FB9
         CON(1)  0                                * 75FC1  pointer follows
-        CON(5)  OBJ_384D0                        * 75FC2
+        CON(5)  UMSIN~1~1~1                      * 75FC2
         CON(1)  15                               * 75FC7  15 digits
         CON(2)  #96                              * 75FC8  exponent -4
         NIBHEX  877777777777772                  * 75FCA
@@ -1200,7 +1200,7 @@ U.grain:
 U.arcmin:
         NIBASC  "arcmin"                         * 760A5
         CON(1)  0                                * 760B1  pointer follows
-        CON(5)  OBJ_384D0                        * 760B2
+        CON(5)  UMSIN~1~1~1                      * 760B2
         CON(1)  15                               * 760B7  15 digits
         CON(2)  #98                              * 760B8  exponent -2
         NIBHEX  766666666666661                  * 760BA

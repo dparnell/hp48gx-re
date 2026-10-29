@@ -18,7 +18,7 @@ uncrunch:
         ;                                        * 5A090
 
 * refs (2): 84EA9 84ECC
-OBJ_5A095:
+nWHEREFCNAPP~1~1:
         :: DROP' xFCNAPPLY pshm1 pullpsh1& pullpsh1& COLA OBJ_548D2 * 5A095
         ;                                        * 5A0BD
 
@@ -495,26 +495,26 @@ linear?:
 * refs (2): 5AD71 5AD85
 linear:
         :: TRUE dvarlsBIND BEGIN DUP #2= NOT 1GETLAM AND WHILE * 5AD9E
-          :: OBJ_5ADEE ; REPEAT 1GETABND ;       * 5ADD0
+          :: linear~1 ; REPEAT 1GETABND ;        * 5ADD0
 
 * refs (1): 5ADD5
-OBJ_5ADEE:
+linear~1:
         :: BINT1 splitdown OVER #2+PICK REQcasedrop xNEG * 5ADEE
           DROP REQcasedrop x+                    * 5AE11
-          OBJ_5AEA2 REQcasedrop x-               * 5AE20
-          OBJ_5AEA2 REQcasedrop x*               * 5AE2F
+          linear~1~2 REQcasedrop x-              * 5AE20
+          linear~1~2 REQcasedrop x*              * 5AE2F
           OBJ_5AF01 REQcasedrop x/               * 5AE3E
-          OBJ_5AF42 REQcasedrop x^               * 5AE4D
-          OBJ_5AF6F REQcasedrop ä                * 5AE5C
-          OBJ_5AE7F 2DROP false;1Lput ;          * 5AE6B
+          linear~1~3 REQcasedrop x^              * 5AE4D
+          linear~1~4 REQcasedrop ä               * 5AE5C
+          linear~1~1 2DROP false;1Lput ;         * 5AE6B
 
 * refs (1): 5AE6B
-OBJ_5AE7F:
+linear~1~1:
         :: BINT4 #= ?SEMI                        * 5AE7F
           FALSE 1PUTLAM ;                        * 5AE93
 
 * refs (2): 5AE20 5AE2F
-OBJ_5AEA2:
+linear~1~2:
         :: #2= ?SEMI                             * 5AEA2
 
 * refs (1): 5AF10
@@ -529,7 +529,7 @@ OBJ_5AF01:
           1PUTLAM top& pshtop& #1-SWAP ;         * 5AF29
 
 * refs (1): 5AE4D
-OBJ_5AF42:
+linear~1~3:
         :: BINT2 #=casedrop                      * 5AF42
 
 * refs (3): 5AE75 5AF7E 5AFA1
@@ -538,7 +538,7 @@ false;1Lput:
           OBJ_5AF01 ;                            * 5AF65
 
 * refs (1): 5AE5C
-OBJ_5AF6F:
+linear~1~4:
         :: BINT2 #=casedrop false;1Lput          * 5AF6F
           #1+PICK num0=case DROP                 * 5AF83
           num1=case DROP                         * 5AF92
@@ -551,7 +551,7 @@ intg1:
           linear? case intglinear                * 5AFBF
           DUPDUP DUP OBJ_56FD1 BIND BEGIN linear? NOT_WHILE * 5AFCE
           :: DUP 1PUTLAM ; REPEAT 1GETLAM 2GETLAM OVER#- #2+ 2PUTLAM #1- * 5AFF1
-          tailpsh larg 2GETLAM BEGIN DUP 2PUTLAM OBJ_5B195 ITE * 5B028
+          tailpsh larg 2GETLAM BEGIN DUP 2PUTLAM intg1~1 ITE * 5B028
           :: OBJ_5B1F4 intg1ok ;                 * 5B050
           :: 2GETLAM linear? NOTcaseFALSE top&   * 5B064
             pshtop& intg1fail ;                  * 5B07D
@@ -591,13 +591,13 @@ intgaddlin:
           intg1ok DROP ;                         * 5B186
 
 * refs (1): 5B046
-OBJ_5B195:
+intg1~1:
         :: DUP#1+PICK                            * 5B195
           :: REQcase xFCNAPPLY                   * 5B19F
             :: OVER #4+PICK NOTROMPcase DROP     * 5B1AE
               SWAPDROP ;                         * 5B1C7
           ;                                      * 5B1D1
-          OBJ_26F5E NOTcase 2DROPFALSE           * 5B1D6
+          intg1~1~1 NOTcase 2DROPFALSE           * 5B1D6
           EVAL ;                                 * 5B1E5
         NIBHEX  E8E60                            * 5B1EF  ←n
 
@@ -733,7 +733,7 @@ OBJ_5B6F4:
 forcemul:
         :: pshzer BEGIN                          * 5B717
           :: M1st/case OBJ_5B758                 * 5B726
-            M1stINVcase OBJ_5B771                * 5B735
+            M1stINVcase forcemul~1               * 5B735
           ;                                      * 5B73F
           pullpsh1& #0=UNTIL DROP ;              * 5B744
 
@@ -742,19 +742,19 @@ OBJ_5B758:
         :: SWAPDROP#1- metainv addt* ;           * 5B758
 
 * refs (2): 5B73A 5B7AD
-OBJ_5B771:
+forcemul~1:
         :: 3PICK REQcasedrop xNEG                * 5B771
           ROTSWAP REQcasedrop x/                 * 5B785
-          :: SWAPDROP#1- OBJ_5B758 addtINV COLA OBJ_5B771 * 5B794
+          :: SWAPDROP#1- OBJ_5B758 addtINV COLA forcemul~1 * 5B794
           ;                                      * 5B7B2
           'x* EQ NOT?SEMI                        * 5B7B7
           larg dvars? NOTcase top&               * 5B7C6
-          DROP SWAPDROP#1- SWAPDROP#1- larg dvars? NOTcase OBJ_5B839 * 5B7DA
-          DROP psh dvars? NOTcase OBJ_5B839      * 5B7FD
+          DROP SWAPDROP#1- SWAPDROP#1- larg dvars? NOTcase forcemul~1~1 * 5B7DA
+          DROP psh dvars? NOTcase forcemul~1~1   * 5B7FD
           DROP pshtop& PTR addt2: x* xINV top& ; * 5B816
 
 * refs (2): 5B7F8 5B811
-OBJ_5B839:
+forcemul~1~1:
         :: metainv addt* over& unrot over& metainv ; * 5B839
 
 * meta1 meta2 meta3 -> meta2&meta3&meta1

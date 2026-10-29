@@ -53,8 +53,8 @@ DispMenu:
 * ->
 * refs (6): 0C9DB 1A75B 3A1ED 4EE97 6CCB2 737C9
 DispMenu.1:
-        :: TURNMENUON OBJ_12847 # 6E # 58 # 42 BINT44 BINT22 BINT0 BINT7 * 3A1FC
-          ONE_DO INDEX@ GETDF DoLabel LOOP OBJ_72ED8 ; * 3A23D
+        :: TURNMENUON DispMenu.1~1 # 6E # 58 # 42 BINT44 BINT22 BINT0 BINT7 * 3A1FC
+          ONE_DO INDEX@ GETDF DoLabel LOOP DispMenu.1~2 ; * 3A23D
 
 * #col grob -> #col $ -> #col id -> #col :: ->
 * refs (2): 154AA 41049
@@ -183,16 +183,16 @@ BlankDA2a:
           BLANKIT ;                              * 3A5C3
 
 * refs (1): 410B2
-OBJ_3A5CD:
+StartMenu~1:
         :: CK&DISPATCH0                          * 3A5CD
           BINT5 NOP                              * 3A5D7  list
           BINT8 EVAL                             * 3A5E1  program
-          BINT15 OBJ_3A5FA                       * 3A5EB  romptr
+          BINT15 StartMenu~1~romptr              * 3A5EB  romptr
         ;                                        * 3A5F5
 
 * refs (1): 3A5F0
-OBJ_3A5FA:
-        :: DUP OBJ_72BBE # DOARRY #<>case EVAL   * 3A5FA  address
+StartMenu~1~romptr:
+        :: DUP StartMenu~1~romptr~1 # DOARRY #<>case EVAL * 3A5FA  address
           DROP '                                 * 3A61D
           :: MenuDef@ OBJ_3A640 ; ;              * 3A627
 
@@ -395,7 +395,7 @@ L_3A945:
         GOVLNG  DOBINT                           * 3A947
 
 * refs (1): 3FB1F
-OBJ_3A94E:
+Key>StdKeyOb~1:
         CON(5)  (*)+5                            * 3A94E  primitive code object
         GOSBVL  POP#                             * 3A953
         LC(5)   #000A0                           * 3A95A
@@ -817,7 +817,7 @@ OBJ_3AE0C:
         :: MenuMaker ROMPTR 0A9 04A DoMenuKey ;  * 3AE0C
 
 * refs (1): 43F17
-OBJ_3AE2B:
+\Ú>VIEW~1:
         :: '                                     * 3AE2B
           :: CK1NOLASTWD CK&DISPATCH1            * 3AE35
             BINT1 BestEditLevel(r)               * 3AE44  real
@@ -1216,7 +1216,7 @@ MenuMTH:
         :: MenuMaker                             * 3B2E8
 
 * refs (1): 41382
-OBJ_3B2F2:
+DoMenuMTH~1:
           ROMPTR 0A9 003 DoMenuKey ;             * 3B2F2
 
 * ROMPTR 0A1 007
@@ -1878,7 +1878,7 @@ LIB0A5.link:
         ENDLENGTH                                * 3BCE2
 
 * refs (1): 151F6
-OBJ_3BCE2:
+SolvMenuInit~4:
         :: '                                     * 3BCE2
           :: SetDA1Bad SaveLastMenu ; MenuExitAct! ; * 3BCEC
         FILLTO  #3BDFA                           * 3BD0A  240 zero nibbles: the next entry stays at #3BDFA
@@ -1889,10 +1889,10 @@ EditMenu:
         { <SkipKey >SkipKey <DelKey >DelKey TogInsertKey IStackKey } * 3BDFA
 
 * refs (1): 415CE
-OBJ_3BE22:
+GetMenu%~1:
         :: MenuDef@ CK&DISPATCH0                 * 3BE22
           BINT15 NumCurMenu                      * 3BE31  romptr
-          BINT8 OBJ_41642                        * 3BE3B  program
+          BINT8 GetMenu%~1~program               * 3BE3B  program
           BINT0 OBJ_56B87                        * 3BE45  any
         ;                                        * 3BE4F
 
@@ -1925,7 +1925,7 @@ ROMP_0A7_001:
 
 * ROMPTR 0A7 002
 * refs (1): 3BE7E
-ROMP_0A7_002:
+MenuMTH~1~1:
         :: OBJ_3F036 OBJ_3EFE6 NoExitAction      * 3BF0D
 
 {MEnuMTH}:
@@ -1987,12 +1987,12 @@ _CONST_:
 
 * ROMPTR 0A7 003
 * refs (1): 3BE7E
-ROMP_0A7_003:
+MenuMTH~1~1~8~1:
         { xCONSTANTe %e xi C%i xPI %PI xMINR %MINREAL xMAXR %MAXREAL } * 3C0A8
 
 * ROMPTR 0A7 004
 * refs (1): 3BE7E
-ROMP_0A7_004:
+MenuPr~1~1:
         :: OBJ_3F036 OBJ_3EFE6 NoExitAction      * 3C0E4
           {                                      * 3C0F8
 

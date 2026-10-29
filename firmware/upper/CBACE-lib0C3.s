@@ -26,7 +26,7 @@ ROMP_0C3_001:
 
 * ROMPTR 0C3 002
 * refs (1): CBACE
-ROMP_0C3_002:
+RSWP~1:
         :: COERCE2 OVER#0= OVER#0= ORcase SETSIZEERR * CBB95
           3PICK MDIMS IT DROP                    * CBBB3
           ROMPTR 0C3 003 ;                       * CBBC7
@@ -41,7 +41,7 @@ ROMP_0C3_003:
 
 * ROMPTR 0C3 004
 * refs (1): CBACE
-ROMP_0C3_004:
+CSWP~1:
         :: COERCE2 OVER#0= OVER#0= ORcase SETSIZEERR * CBC18
           3PICK MDIMS NOTcase ROMPTR 0C3 003     * CBC36
           SWAPDROP 2DUP#> caseSIZEERR 3PICK      * CBC50
@@ -51,7 +51,7 @@ ROMP_0C3_004:
 
 * ROMPTR 0C3 005
 * refs (1): CBACE
-ROMP_0C3_005:
+RCI~1:
         :: COERCE DUP#0= case SETSIZEERR         * CBC9B
           3PICK MDIMS ?SKIP BINT1                * CBCB4
           3UNROLL OVER#< caseSIZEERR ROT         * CBCC8
@@ -61,7 +61,7 @@ ROMP_0C3_005:
 
 * ROMPTR 0C3 006
 * refs (1): CBACE
-ROMP_0C3_006:
+RCIJ~1:
         :: COERCE2 OVER#0= OVER#0= ORcase SETSIZEERR * CBD40
           4PICK MDIMS ?SKIP BINT1                * CBD5E
           4UNROLL 3PICK OVER #> caseSIZEERR OVER#< * CBD72
@@ -73,7 +73,7 @@ ROMP_0C3_006:
 
 * ROMPTR 0C3 007
 * refs (1): CBACE
-ROMP_0C3_007:
+ROW-~1:
         :: COERCE OVER MDIMS NOTcase ROMPTR 0C3 008 * CBE3F
           DUP BINT1 {}N 5PICK OBJ_379F0 MAKEARRY 5ROLL SWAP 5PICK FALSE * CBE63
           ROMPTR 0C3 01B 4ROLL #1- 4ROLL TWO{}N ROT CKREF 4ROLL * CBE95
@@ -88,7 +88,7 @@ ROMP_0C3_008:
 
 * ROMPTR 0C3 009
 * refs (1): CBACE
-ROMP_0C3_009:
+COL-~1:
         :: COERCE OVER MDIMS NOTcase ROMPTR 0C3 008 * CBF56
           OVER BINT1 {}N 5PICK OBJ_379F0 MAKEARRY 5ROLL CKREF @trn!(ar) SWAP * CBF7A
           5PICK FALSE ROMPTR 0C3 01B ROT #1- 4ROLL TWO{}N ROT 4ROLL * CBFAC
@@ -96,7 +96,7 @@ ROMP_0C3_009:
 
 * ROMPTR 0C3 00A
 * refs (1): CBACE
-ROMP_0C3_00A:
+ROW+~1:
         :: COERCE 3PICK MDIMS NOTcase doerr501   * CC003
           4PICK MDIMS case ROMPTR 0C3 00B        * CC021
           OVER #<>case doerr501                  * CC03B
@@ -105,14 +105,14 @@ ROMP_0C3_00A:
 
 * ROMPTR 0C3 00B
 * refs (1): CBACE
-ROMP_0C3_00B:
+ROW+~1~1:
         :: 3PICK #<>case doerr501                * CC097
           2OVER #1+ #> case SETSIZEERR           * CC0AB
           ROT#+SWAP TWO{}N 2SWAP OBJ_36F74 2SWAP 4ROLLSWAP MATREDIM ROT * CC0C4
 
 * ROMPTR 0C3 00C
 * refs (1): CBACE
-ROMP_0C3_00C:
+COL+~1~1~1:
           :: RESOROMP ROMPTR 0C3 01A 4UNROLL RESOROMP ROMPTR 0C3 01B 4UNROLL * CC0EC
             DUP MDIMS DROP BINT1 {}N 3PICK OBJ_379F0 MAKEARRY SWAP * CC11B
             #1+_ONE_DO ISTOP@ INDEX@#- FALSE 7PICK EVAL 4PICK 4ROLL 7PICK * CC148
@@ -122,7 +122,7 @@ ROMP_0C3_00C:
 
 * ROMPTR 0C3 00D
 * refs (1): CBACE
-ROMP_0C3_00D:
+COL+~1:
         :: COERCE 3PICK MDIMS NOTcase doerr501   * CC1AC
           4PICK MDIMS case ROMPTR 0C3 00E        * CC1CA
           3PICK #<>case doerr501                 * CC1E4
@@ -131,7 +131,7 @@ ROMP_0C3_00D:
 
 * ROMPTR 0C3 00E
 * refs (1): CBACE
-ROMP_0C3_00E:
+COL+~1~1:
         :: SWAP4PICK #<>case doerr501            * CC254
           4PICK 3PICK #1+ #> case SETSIZEERR     * CC268
           #+SWAP TWO{}N 2SWAP OBJ_36F74 2SWAP 4ROLL CKREF @trn!(ar) SWAP * CC286
@@ -172,7 +172,7 @@ ROMP_0C3_013:
 
 * ROMPTR 0C3 014
 * refs (1): CBACE
-ROMP_0C3_014:
+→COL~1:
         :: DUP MDIMS NOTcase ROMPTR 0C3 013      * CC485
           2DROP CKREF @trn!(ar) ROMPTR 0C3 012 ; * CC4A4
 
@@ -191,7 +191,7 @@ ROMP_0C3_015:
 
 * ROMPTR 0C3 016
 * refs (1): CBACE
-ROMP_0C3_016:
+COL→~1:
         :: DUP#0= case SETSIZEERR                * CC5A5
           OVER TYPEARRAY? NOTcase                * CC5B9
           :: UNCOERCE XEQ>VECTOR ;               * CC5C8
@@ -199,7 +199,7 @@ ROMP_0C3_016:
 
 * ROMPTR 0C3 017
 * refs (1): CBACE
-ROMP_0C3_017:
+→DIAG~1:
         :: DUP MDIMS NOTcase doerr501            * CC5F1
           DUP#1+ 3UNROLL #MIN DUP BINT1 {}N 4PICK OBJ_379F0 MAKEARRY BINT1 * CC60A
           5ROLL 4ROLL #1+_ONE_DO OVER PULLEL 4ROLLSWAP INDEX@ PUTEL ROT * CC63C
@@ -471,28 +471,28 @@ LIB0C3.link:
         LENGTH                                   * CCA0E  length, to #CCA9F
         REL(5)  ROMP_0C3_000                     * CCA13  000 
         REL(5)  ROMP_0C3_001                     * CCA18  001 
-        REL(5)  ROMP_0C3_002                     * CCA1D  002 
+        REL(5)  RSWP~1                           * CCA1D  002 
         REL(5)  ROMP_0C3_003                     * CCA22  003 
-        REL(5)  ROMP_0C3_004                     * CCA27  004 
-        REL(5)  ROMP_0C3_005                     * CCA2C  005 
-        REL(5)  ROMP_0C3_006                     * CCA31  006 
-        REL(5)  ROMP_0C3_007                     * CCA36  007 
+        REL(5)  CSWP~1                           * CCA27  004 
+        REL(5)  RCI~1                            * CCA2C  005 
+        REL(5)  RCIJ~1                           * CCA31  006 
+        REL(5)  ROW-~1                           * CCA36  007 
         REL(5)  ROMP_0C3_008                     * CCA3B  008 
-        REL(5)  ROMP_0C3_009                     * CCA40  009 
-        REL(5)  ROMP_0C3_00A                     * CCA45  00A 
-        REL(5)  ROMP_0C3_00B                     * CCA4A  00B 
-        REL(5)  ROMP_0C3_00C                     * CCA4F  00C 
-        REL(5)  ROMP_0C3_00D                     * CCA54  00D 
-        REL(5)  ROMP_0C3_00E                     * CCA59  00E 
+        REL(5)  COL-~1                           * CCA40  009 
+        REL(5)  ROW+~1                           * CCA45  00A 
+        REL(5)  ROW+~1~1                         * CCA4A  00B 
+        REL(5)  COL+~1~1~1                       * CCA4F  00C 
+        REL(5)  COL+~1                           * CCA54  00D 
+        REL(5)  COL+~1~1                         * CCA59  00E 
         REL(5)  ROMP_0C3_00F                     * CCA5E  00F 
         REL(5)  ROMP_0C3_010                     * CCA63  010 
         REL(5)  ROMP_0C3_011                     * CCA68  011 
         REL(5)  ROMP_0C3_012                     * CCA6D  012 
         REL(5)  ROMP_0C3_013                     * CCA72  013 
-        REL(5)  ROMP_0C3_014                     * CCA77  014 
+        REL(5)  →COL~1                           * CCA77  014 
         REL(5)  ROMP_0C3_015                     * CCA7C  015 
-        REL(5)  ROMP_0C3_016                     * CCA81  016 
-        REL(5)  ROMP_0C3_017                     * CCA86  017 
+        REL(5)  COL→~1                           * CCA81  016 
+        REL(5)  →DIAG~1                          * CCA86  017 
         REL(5)  ROMP_0C3_018                     * CCA8B  018 
         REL(5)  ROMP_0C3_019                     * CCA90  019 
         REL(5)  ROMP_0C3_01A                     * CCA95  01A 

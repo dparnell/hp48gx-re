@@ -6,7 +6,7 @@
 
 * ROMPTR 0B0 063
 * refs (1): D49CE
-ROMP_0B0_063:
+DoInputForm~2~3~6:
         :: TakeOver 5GETLAM DUP BEGIN ROMPTR 0B0 025 2DUP #< WHILE * D79FD
           :: SWAPDROP DUP ; REPEAT DROP ROMPTR 0B0 095 ; * D7A30
 
@@ -24,27 +24,27 @@ ROMP_0B0_065:
 
 * ROMPTR 0B0 066
 * refs (1): D49CE
-ROMP_0B0_066:
+DoInputForm~2~1~5:
         :: TakeOver REPEATERCH BINT18 ROMPTR 0B0 067 ; * D7ADA
 
 * ROMPTR 0B0 067
 * refs (1): D49CE
-ROMP_0B0_067:
+DoInputForm~2~1~5~1:
         :: 5GETLAM ROMPTR 0B0 025 ROMPTR 0B0 095 ; * D7AFE
 
 * ROMPTR 0B0 068
 * refs (1): D49CE
-ROMP_0B0_068:
+DoInputForm~2~1~6:
         :: TakeOver REPEATERCH BINT16 ROMPTR 0B0 069 ; * D7B23
 
 * ROMPTR 0B0 069
 * refs (1): D49CE
-ROMP_0B0_069:
+DoInputForm~2~1~6~1:
         :: 5GETLAM ROMPTR 0B0 026 ROMPTR 0B0 095 ; * D7B47
 
 * ROMPTR 0B0 06A
 * refs (1): D49CE
-ROMP_0B0_06A:
+DoInputForm~2~1~7:
         :: TakeOver 5GETLAM DUP ROMPTR 0B0 08D casedrop ROMPTR 0B0 058 * D7B6C
           ROMPTR 0B0 08B NOTcase DoBadKey        * D7B9B
           REPEATERCH BINT26 ROMPTR 0B0 03D ;     * D7BB0
@@ -57,7 +57,7 @@ ROMP_0B0_06B:
 
 * ROMPTR 0B0 06C
 * refs (1): D49CE
-ROMP_0B0_06C:
+DoKeyOK~2~6:
         :: 5GETLAM DUP ROMPTR 0B0 024 2DUP #=case 2DROP * D7C18
           DUP ROMPTR 0B0 06B SWAP ROMPTR 0B0 014 ROMPTR 0B0 015 ; * D7C41
 
@@ -71,7 +71,7 @@ ROMP_0B0_06D:
 
 * ROMPTR 0B0 06E
 * refs (1): D49CE
-ROMP_0B0_06E:
+DoInputForm~1~5:
         :: MenuDef@ 8GETLAM EQUAL ;              * D7CE0
 
 * ROMPTR 0B0 06F
@@ -198,12 +198,12 @@ ROMP_0B0_07E:
 
 * ROMPTR 0B0 07F
 * refs (1): D49CE
-ROMP_0B0_07F:
+IFEDispField~1~2:
         GROB    "images/D82AA.png"               * D82AA  6 x 9
 
 * ROMPTR 0B0 080
 * refs (1): D49CE
-ROMP_0B0_080:
+DoCKeyCheck~1:
         GROB    "images/D82D0.png"               * D82D0  6 x 9
 
 * ROMPTR 0B0 081
@@ -213,7 +213,7 @@ ROMP_0B0_081:
 
 * ROMPTR 0B0 082
 * refs (1): D49CE
-ROMP_0B0_082:
+IFEDispField~1~3:
         GROB    "images/D831C.png"               * D831C  6 x 9
 
 * ROMPTR 0B0 083
@@ -223,7 +223,7 @@ ROMP_0B0_083:
 
 * ROMPTR 0B0 084
 * refs (1): D49CE
-ROMP_0B0_084:
+DoCKeyCheck~2:
         GROB    "images/D8368.png"               * D8368  6 x 9
 
 * ROMPTR 0B0 085
@@ -350,7 +350,7 @@ ROMP_0B0_096:
 
 * ROMPTR 0B0 097
 * refs (1): D49CE
-ROMP_0B0_097:
+DoInputForm~1~3~1~2:
         :: 10GETLAM DUP MINUSONE EQUAL NOT?SEMI  * D8925
           DROP ROMPTR 0B0 00E NOT?SEMI           * D8943
           DUP 10PUTLAM ;                         * D8958
@@ -416,7 +416,7 @@ ROMP_0B0_09F:
 
 * ROMPTR 0B0 0A0
 * refs (1): D49CE
-ROMP_0B0_0A0:
+DoInputForm~1~6:
         :: 9GETLAM CARCOMP NOT ;                 * D8BEC
 
 * ROMPTR 0B0 0A1
@@ -434,7 +434,7 @@ ROMP_0B0_0A2:
 
 * ROMPTR 0B0 0A3
 * refs (1): D49CE
-ROMP_0B0_0A3:
+DoInputForm~5:
         :: TRUE 14GETLAM #1+_ONE_DO DUP LOOP 14GETLAM #1+ {}N 9PUTLAM ; * D8CB9
 
 * ROMPTR 0B0 0A4
@@ -759,21 +759,21 @@ LIB0B0.link:
         CON(5)  DOHSTR                           * D95F4  link table of library 0B0
         LENGTH                                   * D95F9  length, to #D9A4A
         REL(5)  ROMP_0B0_000                     * D95FE  000 
-        REL(5)  ROMP_0B0_001                     * D9603  001 
-        REL(5)  ROMP_0B0_002                     * D9608  002 
-        REL(5)  ROMP_0B0_003                     * D960D  003 
-        REL(5)  ROMP_0B0_004                     * D9612  004 
+        REL(5)  DoInputForm~1~2                  * D9603  001 
+        REL(5)  DoInputForm~1~3                  * D9608  002 
+        REL(5)  DoInputForm~1~4                  * D960D  003 
+        REL(5)  DoInputForm~3~2                  * D9612  004 
         REL(5)  ~IFMenuRow1                      * D9617  005 ~IFMenuRow1
         REL(5)  ~IFMenuRow2                      * D961C  006 ~IFMenuRow2
         REL(5)  ROMP_0B0_007                     * D9621  007 
         REL(5)  ROMP_0B0_008                     * D9626  008 
-        REL(5)  ROMP_0B0_009                     * D962B  009 
-        REL(5)  ROMP_0B0_00A                     * D9630  00A 
-        REL(5)  ROMP_0B0_00B                     * D9635  00B 
-        REL(5)  ROMP_0B0_00C                     * D963A  00C 
-        REL(5)  ROMP_0B0_00D                     * D963F  00D 
-        REL(5)  ROMP_0B0_00E                     * D9644  00E 
-        REL(5)  ROMP_0B0_00F                     * D9649  00F 
+        REL(5)  DoInputForm~3                    * D962B  009 
+        REL(5)  DoInputForm~3~1                  * D9630  00A 
+        REL(5)  DoInputForm~4                    * D9635  00B 
+        REL(5)  DoInputForm~1~3~1                * D963A  00C 
+        REL(5)  DoInputForm~1~3~1~1              * D963F  00D 
+        REL(5)  DoInputForm~1~3~1~2~1            * D9644  00E 
+        REL(5)  DoInputForm~1~2~1                * D9649  00F 
         REL(5)  ROMP_0B0_010                     * D964E  010 
         REL(5)  ROMP_0B0_011                     * D9653  011 
         REL(5)  ROMP_0B0_012                     * D9658  012 
@@ -799,10 +799,10 @@ LIB0B0.link:
         REL(5)  ROMP_0B0_026                     * D96BC  026 
         REL(5)  ROMP_0B0_027                     * D96C1  027 
         REL(5)  ROMP_0B0_028                     * D96C6  028 
-        REL(5)  ROMP_0B0_029                     * D96CB  029 
-        REL(5)  ROMP_0B0_02A                     * D96D0  02A 
+        REL(5)  DoInputForm~2~3~4~1              * D96CB  029 
+        REL(5)  DoInputForm~2~3~3~1              * D96D0  02A 
         REL(5)  ROMP_0B0_02B                     * D96D5  02B 
-        REL(5)  ROMP_0B0_02C                     * D96DA  02C 
+        REL(5)  DoKeyEdit~1                      * D96DA  02C 
         REL(5)  ROMP_0B0_02D                     * D96DF  02D 
         REL(5)  ROMP_0B0_02E                     * D96E4  02E 
         REL(5)  ROMP_0B0_02F                     * D96E9  02F 
@@ -812,38 +812,38 @@ LIB0B0.link:
         REL(5)  ROMP_0B0_033                     * D96FD  033 
         REL(5)  ROMP_0B0_034                     * D9702  034 
         REL(5)  ROMP_0B0_035                     * D9707  035 
-        REL(5)  ROMP_0B0_036                     * D970C  036 
-        REL(5)  ROMP_0B0_037                     * D9711  037 
+        REL(5)  DoKeyCancel~1                    * D970C  036 
+        REL(5)  DoKeyOK~1                        * D9711  037 
         REL(5)  ROMP_0B0_038                     * D9716  038 
-        REL(5)  ROMP_0B0_039                     * D971B  039 
-        REL(5)  ROMP_0B0_03A                     * D9720  03A 
-        REL(5)  ROMP_0B0_03B                     * D9725  03B 
-        REL(5)  ROMP_0B0_03C                     * D972A  03C 
-        REL(5)  ROMP_0B0_03D                     * D972F  03D 
+        REL(5)  DoKeyOK~2                        * D971B  039 
+        REL(5)  DoKeyOK~2~1                      * D9720  03A 
+        REL(5)  DoKeyOK~2~2                      * D9725  03B 
+        REL(5)  DoKeyOK~2~3                      * D972A  03C 
+        REL(5)  DoInputForm~2~1~7~1              * D972F  03D 
         REL(5)  ROMP_0B0_03E                     * D9734  03E 
-        REL(5)  ROMP_0B0_03F                     * D9739  03F 
-        REL(5)  ROMP_0B0_040                     * D973E  040 
+        REL(5)  DoKeyOK~2~4                      * D9739  03F 
+        REL(5)  DoKeyOK~2~5                      * D973E  040 
         REL(5)  ROMP_0B0_041                     * D9743  041 
         REL(5)  ROMP_0B0_042                     * D9748  042 
         REL(5)  ROMP_0B0_043                     * D974D  043 
-        REL(5)  ROMP_0B0_044                     * D9752  044 
-        REL(5)  ROMP_0B0_045                     * D9757  045 
+        REL(5)  IFEDispField~1                   * D9752  044 
+        REL(5)  IFEDispField~1~1                 * D9757  045 
         REL(5)  ROMP_0B0_046                     * D975C  046 
-        REL(5)  ROMP_0B0_047                     * D9761  047 
-        REL(5)  ROMP_0B0_048                     * D9766  048 
-        REL(5)  ROMP_0B0_049                     * D976B  049 
-        REL(5)  ROMP_0B0_04A                     * D9770  04A 
-        REL(5)  ROMP_0B0_04B                     * D9775  04B 
+        REL(5)  DoInputForm~2~2                  * D9761  047 
+        REL(5)  DoInputForm~2~3                  * D9766  048 
+        REL(5)  DoInputForm~2~4                  * D976B  049 
+        REL(5)  DoInputForm~2~5                  * D9770  04A 
+        REL(5)  DoInputForm~2~6                  * D9775  04B 
         REL(5)  ROMP_0B0_04C                     * D977A  04C 
-        REL(5)  ROMP_0B0_04D                     * D977F  04D 
-        REL(5)  ROMP_0B0_04E                     * D9784  04E 
-        REL(5)  ROMP_0B0_04F                     * D9789  04F 
-        REL(5)  ROMP_0B0_050                     * D978E  050 
-        REL(5)  ROMP_0B0_051                     * D9793  051 
+        REL(5)  DoInputForm~2~2~1                * D977F  04D 
+        REL(5)  DoInputForm~2~3~1                * D9784  04E 
+        REL(5)  DoInputForm~2~4~1                * D9789  04F 
+        REL(5)  DoInputForm~2~5~1                * D978E  050 
+        REL(5)  DoInputForm~2~6~1                * D9793  051 
         REL(5)  ROMP_0B0_052                     * D9798  052 
         REL(5)  ROMP_0B0_053                     * D979D  053 
-        REL(5)  ROMP_0B0_054                     * D97A2  054 
-        REL(5)  ROMP_0B0_055                     * D97A7  055 
+        REL(5)  DoInputForm~2~2~2                * D97A2  054 
+        REL(5)  DoInputForm~2~3~2                * D97A7  055 
         REL(5)  DoKeyEdit                        * D97AC  056 DoKeyEdit
         REL(5)  ROMP_0B0_057                     * D97B1  057 
         REL(5)  ROMP_0B0_058                     * D97B6  058 
@@ -852,23 +852,23 @@ LIB0B0.link:
         REL(5)  ROMP_0B0_05B                     * D97C5  05B 
         REL(5)  ROMP_0B0_05C                     * D97CA  05C 
         REL(5)  ROMP_0B0_05D                     * D97CF  05D 
-        REL(5)  ROMP_0B0_05E                     * D97D4  05E 
-        REL(5)  ROMP_0B0_05F                     * D97D9  05F 
-        REL(5)  ROMP_0B0_060                     * D97DE  060 
-        REL(5)  ROMP_0B0_061                     * D97E3  061 
-        REL(5)  ROMP_0B0_062                     * D97E8  062 
-        REL(5)  ROMP_0B0_063                     * D97ED  063 
+        REL(5)  DoInputForm~2~1~3                * D97D4  05E 
+        REL(5)  DoInputForm~2~1~4                * D97D9  05F 
+        REL(5)  DoInputForm~2~3~3                * D97DE  060 
+        REL(5)  DoInputForm~2~3~4                * D97E3  061 
+        REL(5)  DoInputForm~2~3~5                * D97E8  062 
+        REL(5)  DoInputForm~2~3~6                * D97ED  063 
         REL(5)  ROMP_0B0_064                     * D97F2  064 
         REL(5)  ROMP_0B0_065                     * D97F7  065 
-        REL(5)  ROMP_0B0_066                     * D97FC  066 
-        REL(5)  ROMP_0B0_067                     * D9801  067 
-        REL(5)  ROMP_0B0_068                     * D9806  068 
-        REL(5)  ROMP_0B0_069                     * D980B  069 
-        REL(5)  ROMP_0B0_06A                     * D9810  06A 
+        REL(5)  DoInputForm~2~1~5                * D97FC  066 
+        REL(5)  DoInputForm~2~1~5~1              * D9801  067 
+        REL(5)  DoInputForm~2~1~6                * D9806  068 
+        REL(5)  DoInputForm~2~1~6~1              * D980B  069 
+        REL(5)  DoInputForm~2~1~7                * D9810  06A 
         REL(5)  ROMP_0B0_06B                     * D9815  06B 
-        REL(5)  ROMP_0B0_06C                     * D981A  06C 
+        REL(5)  DoKeyOK~2~6                      * D981A  06C 
         REL(5)  ROMP_0B0_06D                     * D981F  06D 
-        REL(5)  ROMP_0B0_06E                     * D9824  06E 
+        REL(5)  DoInputForm~1~5                  * D9824  06E 
         REL(5)  ROMP_0B0_06F                     * D9829  06F 
         REL(5)  ROMP_0B0_070                     * D982E  070 
         REL(5)  ROMP_0B0_071                     * D9833  071 
@@ -885,12 +885,12 @@ LIB0B0.link:
         REL(5)  ROMP_0B0_07C                     * D986A  07C 
         REL(5)  ROMP_0B0_07D                     * D986F  07D 
         REL(5)  ROMP_0B0_07E                     * D9874  07E 
-        REL(5)  ROMP_0B0_07F                     * D9879  07F 
-        REL(5)  ROMP_0B0_080                     * D987E  080 
+        REL(5)  IFEDispField~1~2                 * D9879  07F 
+        REL(5)  DoCKeyCheck~1                    * D987E  080 
         REL(5)  ROMP_0B0_081                     * D9883  081 
-        REL(5)  ROMP_0B0_082                     * D9888  082 
+        REL(5)  IFEDispField~1~3                 * D9888  082 
         REL(5)  ROMP_0B0_083                     * D988D  083 
-        REL(5)  ROMP_0B0_084                     * D9892  084 
+        REL(5)  DoCKeyCheck~2                    * D9892  084 
         REL(5)  ~grobAlertIcon                   * D9897  085 ~grobAlertIcon
         REL(5)  ~grobCheckKey                    * D989C  086 ~grobCheckKey
         REL(5)  ROMP_0B0_087                     * D98A1  087 
@@ -909,7 +909,7 @@ LIB0B0.link:
         REL(5)  ROMP_0B0_094                     * D98E2  094 
         REL(5)  ROMP_0B0_095                     * D98E7  095 
         REL(5)  ROMP_0B0_096                     * D98EC  096 
-        REL(5)  ROMP_0B0_097                     * D98F1  097 
+        REL(5)  DoInputForm~1~3~1~2              * D98F1  097 
         REL(5)  ROMP_0B0_098                     * D98F6  098 
         REL(5)  ROMP_0B0_099                     * D98FB  099 
         REL(5)  ROMP_0B0_09A                     * D9900  09A 
@@ -918,10 +918,10 @@ LIB0B0.link:
         REL(5)  ROMP_0B0_09D                     * D990F  09D 
         REL(5)  ROMP_0B0_09E                     * D9914  09E 
         REL(5)  ROMP_0B0_09F                     * D9919  09F 
-        REL(5)  ROMP_0B0_0A0                     * D991E  0A0 
+        REL(5)  DoInputForm~1~6                  * D991E  0A0 
         REL(5)  ROMP_0B0_0A1                     * D9923  0A1 
         REL(5)  ROMP_0B0_0A2                     * D9928  0A2 
-        REL(5)  ROMP_0B0_0A3                     * D992D  0A3 
+        REL(5)  DoInputForm~5                    * D992D  0A3 
         REL(5)  ROMP_0B0_0A4                     * D9932  0A4 
         REL(5)  ROMP_0B0_0A5                     * D9937  0A5 
         REL(5)  ROMP_0B0_0A6                     * D993C  0A6 

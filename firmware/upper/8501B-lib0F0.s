@@ -5,19 +5,19 @@
 
 * ROMPTR 0F0 07A
 * refs (1): 82007
-ROMP_0F0_07A:
+nWHEREWHERE~1:
         :: ' xWHERE psh1& OBJ_5A0C2 psh DUP {}N ' OBJ_5A0FE BINT3 ::N * 8501B
           SWAPDROP COLA_EVAL ;                   * 85057
 
 * ROMPTR 0F0 07B
 * refs (1): 82007
-ROMP_0F0_07B:
+SPLITWHERE~1:
         :: SWAPINCOMP BINT0 rot DUP#0_DO pullpsh1& unrot psh #1-SWAP symcomp * 85066
           psh1& unrot psh LOOP DROP top& #1+DUP #1+ Cr xWHERE ; * 85098
 
 * ROMPTR 0F0 07C
 * refs (1): 82007
-ROMP_0F0_07C:
+nWHEREINTG~1:
         :: #2- 3UNROLL BINT2 unrot BINT2 SWAP#1+ OBJ_5A0C2 SWAPDROP#1- psh * 850CF
           #1+DUP dup PTR addt: xWHERE rot pullrev psh1& metaROTDUP over& psh * 85101
           PTR addt: xWHERE psh& SWAPDROP#1- rot #1-SWAP psh1&rev psh * 85133
@@ -27,7 +27,7 @@ ROMP_0F0_07C:
 
 * ROMPTR 0F0 07D
 * refs (1): 82007
-ROMP_0F0_07D:
+nWHERESUM~1:
         :: pullrev SWAP#1+ #2- 3UNROLL BINT2 unrot BINT2 SWAP#1+ OBJ_5A0C2 * 851AB
           SWAPDROP#1- psh #1+DUP dup PTR addt: xWHERE rot pullrev psh1& * 851DD
           metaROTDUP over& psh PTR addt: xWHERE psh& SWAPDROP#1- rot #1-SWAP * 8520A
@@ -38,18 +38,18 @@ ROMP_0F0_07D:
 
 * ROMPTR 0F0 07E
 * refs (1): 82007
-ROMP_0F0_07E:
+sto(_,to)~1:
         :: ROMPTR 0F0 07F case                   * 852A0
           :: 'R sto(bk,nm,s) ;                   * 852B5
           RDROPCOLA OBJ_2157E ;                  * 852C9
 
 * ROMPTR 0F0 07F
 * refs (1): 82007
-ROMP_0F0_07F:
+sto(_,to)~1~1:
         :: idntlamcase                           * 852D8
           :: SWAP CK&DISPATCH0                   * 852E2
-            #8F_64D2E OBJ_2160B                  * 852F1  library
-            backup OBJ_2160B                     * 852FB  backup
+            #8F_64D2E sto(_,to)~1~1~1            * 852F1  library
+            backup sto(_,to)~1~1~1               * 852FB  backup
             BINT0                                * 85305  any
             :: RSWAP RDUP 'R RDROP RSWAP #0=case * 8530A
               :: OVERSWAP DoBkpName(_);true ROTSWAP ; * 8532D
@@ -57,14 +57,14 @@ ROMP_0F0_07F:
           ;                                      * 85350
           dup;r?:dq/sk                           * 85355
           :: SWAP CK&DISPATCH0                   * 8535A
-            #8F_64D2E OBJ_2160B                  * 85369  library
+            #8F_64D2E sto(_,to)~1~1~1            * 85369  library
             BINT0 swap;false                     * 85373  any
           ;                                      * 8537D
           swap;false ;                           * 85382
 
 * ROMPTR 0F0 080
 * refs (1): 82007
-ROMP_0F0_080:
+sto(bk,r)~1:
         :: COERCEDUP BINT33 #>case SETPORTNOTAV  * 8538C
           OVER                                   * 853A5
           :: DNOTBAKcase LIB>#                   * 853AA
@@ -107,45 +107,47 @@ ROMP_0F0_083:
 
 * ROMPTR 0F0 084
 * refs (1): 82007
-ROMP_0F0_084:
-        :: ?ACCPTR> DUP BAK>OB TYPERRP? NcaseTYPEERR OBJ_09730 * 85528
-          OBJ_72AD7 ERRSET                       * 8554B
+restore(nm,s)~1:
+        :: ?ACCPTR> DUP BAK>OB TYPERRP? NcaseTYPEERR restore(nm,s)~1~1 * 85528
+          restore(nm,s)~1~2 ERRSET               * 8554B
           :: NULLID CREATE ; ERRTRAP DOAPWL OBJ_09699 DOAPWL ; * 85555
 
 * ROMPTR 0F0 085
 * refs (1): 82007
-ROMP_0F0_085:
+XEQIOBACKUP~1:
         :: DUPTYPECSTR? ?SKIP ID>$               * 85582
           InitIOEnv KERMOPEN CHR_F CHOOSE_INIT ' ID HOMEDIR ERRSET * 85596
-          HomeInBkp(nm) ERRTRAP OBJ_2E772 3UNROLL OBJ_70039 ERRSET OBJ_2EF2D * 855C9
-          ERRTRAP                                * 855EC
-          :: OBJ_09699 OBJ_70048 InitEnab OBJ_42309 caseERRJMP OBJ_2E763 * 855F1
+          HomeInBkp(nm) ERRTRAP OBJ_2E772 3UNROLL XEQIOBACKUP~1~2 ERRSET * 855C9
+          XEQIOBACKUP~1~1 ERRTRAP                * 855E7
+          :: OBJ_09699 XEQIOBACKUP~1~3 InitEnab OBJ_42309 caseERRJMP * 855F1
+            OBJ_2E763                            * 8560F
           ;                                      * 85614
-          ABND OBJ_09699 OBJ_70048 InitEnab AllowPrlcdCl NOTcase OBJ_2EFC8 * 85619
+          ABND OBJ_09699 XEQIOBACKUP~1~3 InitEnab AllowPrlcdCl NOTcase * 85619
+          OBJ_2EFC8                              * 85637
         ;                                        * 8563C
 
 * ROMPTR 0F0 086
 * refs (1): 82007
-ROMP_0F0_086:
+free(li,r)~1:
         :: COERCEDUP #1<> case SETPORTNOTAV      * 85641
           DUP PORTSTATUS 2DROP AND ANDNOTcase SETPORTNOTAV * 8565A
-          SWAPINCOMP DUP#0=case OBJ_0B5D4        * 85678
+          SWAPINCOMP DUP#0=case free(li,r)~1~1   * 85678
           pshzer BEGIN #1-SWAP                   * 85687
           :: CK&DISPATCH1                        * 85696
             BINT6 NOP                            * 856A0  name
             BINT7 NOP                            * 856AA  local
             BINT1 COERCE                         * 856B4  real
           ;                                      * 856BE
-          psh1& #0=UNTIL psh BEGIN OBJ_21B8E over& #0=UNTIL drop;dq * 856C3
-          OBJ_0B5D4 ;                            * 856EB
+          psh1& #0=UNTIL psh BEGIN free(li,r)~1~2 over& #0=UNTIL drop;dq * 856C3
+          free(li,r)~1~1 ;                       * 856EB
 
 * ROMPTR 0F0 087
 * refs (1): 82007
-ROMP_0F0_087:
+libs~1:
         :: ROMPART NOTcase BINT0                 * 856F5
           BINT0 SWAPDUP TYPELIST? ITE INNERCOMP BINT1 * 85709
           BEGIN #1-SWAP                          * 85727
-          :: DUP OBJ_0806D NOTcaseDROP DUP       * 85731
+          :: DUP libs~1~1 NOTcaseDROP DUP        * 85731
             OBJ_72B22 MINUSONE #= case2DROP OVER * 8574A
             ROMPARTNAME ITE ID>$ NULL$           * 85763
             ROT UNCOERCE ROT BINT3 psh over& ;   * 85777
@@ -218,7 +220,7 @@ ROMP_0F0_08F:
 
 * ROMPTR 0F0 090
 * refs (1): 82007
-ROMP_0F0_090:
+libs~2:
         :: pshzer BEGIN #1-SWAP OBJ_72B22 DUP MINUSONE #= ITE * 85B93
           :: DROP SWAPDROP#1- SWAPDROP#1- ;      * 85BC0
           :: UNCOERCE psh1& pullpsh1& pullpsh1& ; * 85BD9
@@ -295,7 +297,7 @@ ROMP_0F0_095:
 
 * ROMPTR 0F0 096
 * refs (1): 82007
-ROMP_0F0_096:
+nCOLCTQUOTE~1:
         :: CK1NOLASTWD BINT1 nmetasyms symcomp BINT1 Cr xQUOTE ; * 85DFE
 
 * ROMPTR 0F0 097
@@ -311,7 +313,7 @@ ROMP_0F0_097:
 
 * ROMPTR 0F0 098
 * refs (1): 82007
-ROMP_0F0_098:
+D/D*~1:
         :: OBJ_57022                             * 85EA8
           :: psh OBJ_56BEB top&Cr x* ; psh MetaConcase * 85EB2
           :: derprod1 OBJ_56BFF ;                * 85EDA
@@ -319,7 +321,7 @@ ROMP_0F0_098:
 
 * ROMPTR 0F0 099
 * refs (1): 82007
-ROMP_0F0_099:
+D/D+~1:
         :: OBJ_57022                             * 85F2A
           :: NDROP OBJ_56BEB SYMBN ; OBJ_56D01 psh MetaConcase * 85F34
           :: NDROP OBJ_56BFF ;                   * 85F5C
@@ -327,7 +329,7 @@ ROMP_0F0_099:
 
 * ROMPTR 0F0 09A
 * refs (1): 82007
-ROMP_0F0_09A:
+D/D-~1:
         :: OBJ_57022                             * 85F89
           :: NDROP OBJ_56BEB Cr xNEG ; OBJ_56D01 psh MetaConcase * 85F93
           :: NDROP OBJ_56BFF ;                   * 85FC0
@@ -335,7 +337,7 @@ ROMP_0F0_09A:
 
 * ROMPTR 0F0 09B
 * refs (1): 82007
-ROMP_0F0_09B:
+D/D/~1:
         :: OBJ_57022                             * 85FED
           :: derquot ABND Cr xNEG ; psh MetaConcase * 85FF7
           :: derprod1 drpmeta/ OBJ_56BFF ;       * 8601F
@@ -343,12 +345,12 @@ ROMP_0F0_09B:
 
 * ROMPTR 0F0 09D
 * refs (2): 82007 82007
-ROMP_0F0_09D:
+D/D=~1:
         :: OBJ_56CD1 pshzerpsharg OBJ_56D01 psh OBJ_56BEB top&Cr x= ; * 8606F
 
 * ROMPTR 0F0 09E
 * refs (1): 82007
-ROMP_0F0_09E:
+D/DABS~1:
         :: 3PICK OVER CARCOMP EQUALcase easyabs  * 8609C
           OBJ_57045 OBJ_56BEB dup metaROTDUP unrot PTR addt2: xCONJ x* top& * 860BA
           unrot dup ROTUntop&                    * 860E7
@@ -357,133 +359,133 @@ ROMP_0F0_09E:
 
 * ROMPTR 0F0 09F
 * refs (1): 82007
-ROMP_0F0_09F:
+D/DACOS~1:
         :: OBJ_57045 psh %1 pshm1                * 8614B
           { %2 x^ x- xSQRT xINV xNEG } INNERtop& top& OBJ_56BC3 ; * 86164
 
 * ROMPTR 0F0 0A0
 * refs (1): 82007
-ROMP_0F0_0A0:
+D/DACOSH~1:
         :: OBJ_57045 OBJ_56BEB psh               * 861A0
           { %1 x- xSQRT } INNERtop& dup ROTDROP ' x+ 3UNROLL PTR addt2: x* * 861B4
           x/ top& top& SYMBN ;                   * 861F5
 
 * ROMPTR 0F0 0A1
 * refs (1): 82007
-ROMP_0F0_0A1:
+D/DALOG~1:
         :: OBJ_57045 OBJ_56BEB %10 ' xLN BINT2 unrot addt* pshtop& top& * 8620E
           PTR addt2: xALOG x* SYMBN ;            * 86245
 
 * ROMPTR 0F0 0A2
 * refs (1): 82007
-ROMP_0F0_0A2:
+D/DARG~1:
         :: OBJ_57045 OBJ_56BEB pshtop& PTR addt: x/ dup top& * 8625E
           { xCONJ x- %2 xi x* x/ } INNERtop& OBJ_56C72 SYMBN ; * 86286
 
 * ROMPTR 0F0 0A3
 * refs (1): 82007
-ROMP_0F0_0A3:
+D/DASIN~1:
         :: OBJ_57045 %1 pshm1                    * 862C2
           { %2 x^ x- xSQRT xINV } INNERtop& top& OBJ_56BC3 ; * 862D6
 
 * ROMPTR 0F0 0A4
 * refs (1): 82007
-ROMP_0F0_0A4:
+D/DASINH~1:
         :: OBJ_57045 OBJ_56BEB psh %1 pshm1 2top& * 8630D
           { %2 x^ x+ xSQRT x/ } INNERtop& SYMBN ; * 86330
 
 * ROMPTR 0F0 0A5
 * refs (1): 82007
-ROMP_0F0_0A5:
+D/DATAN~1:
         :: OBJ_57045 %1 pshm1                    * 86362
           { %2 x^ x+ xINV } INNERtop& top& OBJ_56BC3 ; * 86376
 
 * ROMPTR 0F0 0A6
 * refs (1): 82007
-ROMP_0F0_0A6:
+D/DATANH~1:
         :: OBJ_57045 OBJ_56BEB psh %1 pshm1 2top& * 863A8
           { %2 x^ x- x/ } INNERtop& SYMBN ;      * 863CB
 
 * ROMPTR 0F0 0A7
 * refs (1): 82007
-ROMP_0F0_0A7:
+D/DCOS~1:
         :: OBJ_57045 PTR addt2: xSIN xNEG OBJ_56B9B ; * 863F8
 
 * ROMPTR 0F0 0A8
 * refs (1): 82007
-ROMP_0F0_0A8:
+D/DCOSH~1:
         :: OBJ_57045 OBJ_56BEB psh PTR addt: xSINH pshtop& Cr x* ; * 8641B
 
 * ROMPTR 0F0 0A9
 * refs (1): 82007
-ROMP_0F0_0A9:
+D/DEXP~1:
         :: OBJ_57045 OBJ_56BEB pshtop& PTR addt2: xEXP x* SYMBN ; * 8644D
 
 * ROMPTR 0F0 0AA
 * refs (1): 82007
-ROMP_0F0_0AA:
+D/DINV~1:
         :: OBJ_57045 OBJ_56BEB metaneg pshtop& %2 SWAP#1+ PTR addt2: x^ x/ * 8647A
           SYMBN ;                                * 864AC
 
 * ROMPTR 0F0 0AB
 * refs (1): 82007
-ROMP_0F0_0AB:
+D/DLN~1:
         :: OBJ_57045 OBJ_56BEB pshtop& Cr x/ ;   * 864B6
 
 * ROMPTR 0F0 0AC
 * refs (1): 82007
-ROMP_0F0_0AC:
+D/DLNP1~1:
         :: OBJ_57045 OBJ_56BEB pshtop&           * 864D9
           { %1 x+ x/ } INNERtop& SYMBN ;         * 864ED
 
 * ROMPTR 0F0 0AD
 * refs (1): 82007
-ROMP_0F0_0AD:
+D/DLOG~1:
         :: OBJ_57045 OBJ_56BEB pshtop&           * 86515
           { %10 xLN x* x/ } INNERtop& SYMBN ;    * 86529
 
 * ROMPTR 0F0 0AE
 * refs (1): 82007
-ROMP_0F0_0AE:
+D/DIFTE~1:
         :: OBJ_56CD1 #1-SWAP 1GETSWAP 'xDER BINT3 SYMBN pshm1 #1-SWAP * 86556
           1ABNDSWAP 'xDER BINT3 SYMBN SWAP#1+ psh top&Cr xIFTE ; * 86583
 
 * ROMPTR 0F0 0AF
 * refs (1): 82007
-ROMP_0F0_0AF:
+D/DSIN~1:
         :: OBJ_57045 PTR addt: xCOS OBJ_56B9B ;  * 865B0
 
 * ROMPTR 0F0 0B0
 * refs (1): 82007
-ROMP_0F0_0B0:
+D/DSINH~1:
         :: OBJ_57045 PTR addt: xCOSH psh OBJ_56BEB top&Cr x* ; * 865CE
 
 * ROMPTR 0F0 0B1
 * refs (1): 82007
-ROMP_0F0_0B1:
+D/DSQ~1:
         :: OBJ_57045 %2 pshm1 top& addt* psh OBJ_56BEB top&Cr x* ; * 865FB
 
 * ROMPTR 0F0 0B2
 * refs (1): 82007
-ROMP_0F0_0B2:
+D/DSQRT~1:
         :: OBJ_57045 OBJ_56BEB psh %2 pshm1 2top& * 86632
           { xSQRT x* x/ } INNERtop& SYMBN ;      * 86655
 
 * ROMPTR 0F0 0B3
 * refs (1): 82007
-ROMP_0F0_0B3:
+D/DTAN~1:
         :: OBJ_57045 %1pshm1 top&                * 8667D
           { xTAN %2 x^ x+ } INNERtop& OBJ_56B9B ; * 86691
 
 * ROMPTR 0F0 0B4
 * refs (1): 82007
-ROMP_0F0_0B4:
+D/DTANH~1:
         :: OBJ_57045 OBJ_56BEB pshtop&           * 866BE
           { xCOSH %2 x^ x/ } INNERtop& SYMBN ;   * 866D2
 
 * ROMPTR 0F0 0B5
 * refs (1): 82007
-ROMP_0F0_0B5:
+D/D^~1:
         :: OBJ_57022                             * 866FF
           :: D/D^Y OBJ_56BFF ; psh MetaConcase   * 86709
           :: D/D^X OBJ_56BFF ;                   * 86727
@@ -491,30 +493,30 @@ ROMP_0F0_0B5:
 
 * ROMPTR 0F0 0B6
 * refs (1): 82007
-ROMP_0F0_0B6:
+D/D^X~1:
         :: psh dup OBJ_56D01 metaROTDUP roll2top& addt* over& pshtop& * 8676D
           { %1 x- x^ x* } INNERtop& ;            * 8679A
 
 * ROMPTR 0F0 0B7
 * refs (1): 82007
-ROMP_0F0_0B7:
+D/D^Y~1:
         :: dup metaROTDUP OBJ_56D01 rot PTR addt: xLN pshtop& addt* over& * 867C2
           pshtop& PTR addt2: x^ x* ;             * 867F4
 
 * ROMPTR 0F0 0B8
 * refs (1): 82007
-ROMP_0F0_0B8:
+D/DDER~1:
         :: OBJ_56CD1 DROP SYMDERSTEP SINNER OBJ_56BEB SYMBN ; * 8680D
 
 * ROMPTR 0F0 0B9
 * refs (1): 82007
-ROMP_0F0_0B9:
+D/DWHERE~1:
         :: dvarlsBIND OBJ_5A0C2 DROP SYMBWHERE CK1NOLASTWD BINT1 nmetasyms * 86835
           symcomp 1ABNDSWAP BINT2 Cr xDER ;      * 8685D
 
 * ROMPTR 0F0 0BA
 * refs (1): 82007
-ROMP_0F0_0BA:
+D/DINTEGRAL~1:
         :: dvarlsBIND dup #2- 3UNROLL BINT2 psh pshzerpsharg NDROP dup * 8687B
           PTR addt2: BINT3 xWHERE 1GETLAM SWAP#1+ psh& top& PTR addt2: xDER * 868AD
           x* psh dup #2- 3UNROLL BINT2 psh larg NDROP dup PTR addt2: BINT3 * 868DA
@@ -525,70 +527,70 @@ ROMP_0F0_0BA:
 
 * ROMPTR 0F0 0BB
 * refs (1): 82007
-ROMP_0F0_0BB:
+D/DSUM~1:
         :: OVER #2+PICK OVER 2SINNER DROPSWAPDROP EQUALcase * 869B1
           :: DROPNDROP %0_2A2B4 ;                * 869D4
           ROT BINT2 Cr xDER SWAP Cr ä ;          * 869E8
 
 * ROMPTR 0F0 0BC
 * refs (1): 82007
-ROMP_0F0_0BC:
+D/DAPPLY~1:
         :: SWAP get1 4UNROLL SWAPROT #1-UNROT COLA OBJ_56D1F * 86A10
         ;                                        * 86A38
 
 * ROMPTR 0F0 0BD
 * refs (1): 82007
-ROMP_0F0_0BD:
+MANMENU+-~1:
         { {RULES\<-T} {RULES\T->} {RULES\<-M} {RULES\M->} {RULES\AF} * 86A3D
           {RULES\<-->} {RULES\(<-} {RULES\->)} {RULES\<-A} {RULES\A->} * 86A5B
           {RULES\(())} {RULES\-()} }             * 86A74
 
 * ROMPTR 0F0 0BE
 * refs (1): 82007
-ROMP_0F0_0BE:
+MANMENU*/~1:
         { {RULES\<-T} {RULES\T->} {RULES\<-M} {RULES\M->} {RULES\<-D} * 86A83
           {RULES\D->} {RULES\(<-} {RULES\->)} {RULES\<-A} {RULES\A->} * 86AA1
           {RULES\<-->} {RULES\(())} {RULES\-()} {RULES\1/()} {RULES\L()} } * 86ABA
 
 * ROMPTR 0F0 0BF
 * refs (1): 82007
-ROMP_0F0_0BF:
+MANMENU^~1:
         { {RULES\1/()} {RULES\E()} {RULES\<-D} {RULES\D->} {RULES\<-A} * 86AD8
           {RULES\A->} }                          * 86AF6
 
 * ROMPTR 0F0 0C0
 * refs (1): 82007
-ROMP_0F0_0C0:
+MANMENUEXP~1:
         { {RULES\1/()} {RULES\E^} {RULES\->TRG} {RULES\D->} } * 86B00
 
 * ROMPTR 0F0 0C1
 * refs (1): 82007
-ROMP_0F0_0C1:
+MANMENULN~1:
         { {RULES\-()} {RULES\L*} NullMenuKey {RULES\D->} } * 86B1E
 
 * ROMPTR 0F0 0C2
 * refs (1): 82007
-ROMP_0F0_0C2:
+MANMENUCSIV~1:
         { {RULES\->()} }                         * 86B3C
 
 * ROMPTR 0F0 0C3
 * refs (1): 82007
-ROMP_0F0_0C3:
+MANMENUEQ~1:
         { {RULES\<-T} {RULES\T->} }              * 86B4B
 
 * ROMPTR 0F0 0C4
 * refs (1): 82007
-ROMP_0F0_0C4:
+MANMENUCX~1:
         { {RULES\->()}_59E81 }                   * 86B5F
 
 * ROMPTR 0F0 0C5
 * refs (1): 82007
-ROMP_0F0_0C5:
+MANMENUTRG~1:
         { {RULES\->DEF} {RULES\TRG*} }           * 86B6E
 
 * ROMPTR 0F0 0C6
 * refs (1): 82007
-ROMP_0F0_0C6:
+MANMENUATG~1:
         { {RULES\->DEF} }                        * 86B82
 
 * ROMPTR 0F0 0C7

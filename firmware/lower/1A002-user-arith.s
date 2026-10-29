@@ -18,7 +18,7 @@ OBJ_1A03E:
         :: SetDA1Bad SetDA2aBad SetDA2bBad SetDA3Bad ; * 1A03E
 
 * refs (1): 19EBC
-OBJ_1A05C:
+DoInputForm~2~1~2:
         :: 2DUP Key>U/SKeyOb OBJ_4080F SWAPDROP case2drop 'DoBadKeyT * 1A05C
           5GETLAM DUP ROMPTR 0B0 088 casedrop OBJ_19F0F * 1A07F
           ROMPTR 0B0 08B NOTcase2drop 'DoBadKeyT * 1A09E
@@ -230,7 +230,7 @@ xEVAL:
         CON(3)  #02F                             * 1A3FB  command
 xIFTE:
         :: CK3&Dispatch                          * 1A3FE
-          REALOBOB %IFTE                         * 1A408  real ? ?
+          REALOBOB %IFTE                         * 1A408  real any any
           SYMREALREAL ifte(ex,2_)                * 1A412  name|local|algebraic real real
           SYMREALCMP ifte(ex,2_)                 * 1A41C  name|local|algebraic real complex
           SYMCMPREAL ifte(ex,2_)                 * 1A426  name|local|algebraic complex real
@@ -266,8 +266,8 @@ xIFTE:
         CON(3)  #030                             * 1A4CA  command
 xIFT:
         :: CK2&Dispatch                          * 1A4CD
-          BINT16 ift(r,_)                        * 1A4D7  real ?
-          SYMOB ift(ex,_)                        * 1A4E1  name|local|algebraic ?
+          BINT16 ift(r,_)                        * 1A4D7  real any
+          SYMOB ift(ex,_)                        * 1A4E1  name|local|algebraic any
         ;                                        * 1A4EB
 
 * refs (1): 1A4DC
@@ -544,20 +544,20 @@ xCONT:
         CON(3)  #03B                             * 1A8D5  command
 x=:
         :: CK2&Dispatch                          * 1A8D8
-          BINT17 OBJ_55927                       * 1A8E2  real real
-          BINT18 OBJ_55927                       * 1A8EC  real complex
-          BINT33 OBJ_55927                       * 1A8F6  complex real
-          BINT34 OBJ_55927                       * 1A900  complex complex
-          BINT26 OBJ_55927                       * 1A90A  real name|local|algebraic
-          BINT42 OBJ_55927                       * 1A914  complex name|local|algebraic
-          SYMREAL OBJ_55927                      * 1A91E  name|local|algebraic real
-          OBJ_64D7E OBJ_55927                    * 1A928  name|local|algebraic complex
-          SYMSYM OBJ_55927                       * 1A932  name|local|algebraic name|local|algebraic
-          2EXT OBJ_55927                         * 1A93C  unit unit
-          BINT30 OBJ_55927                       * 1A946  real unit
-          EXTREAL OBJ_55927                      * 1A950  unit real
-          SYMEXT OBJ_55927                       * 1A95A  name|local|algebraic unit
-          EXTSYM OBJ_55927                       * 1A964  unit name|local|algebraic
+          BINT17 x=~1                            * 1A8E2  real real
+          BINT18 x=~1                            * 1A8EC  real complex
+          BINT33 x=~1                            * 1A8F6  complex real
+          BINT34 x=~1                            * 1A900  complex complex
+          BINT26 x=~1                            * 1A90A  real name|local|algebraic
+          BINT42 x=~1                            * 1A914  complex name|local|algebraic
+          SYMREAL x=~1                           * 1A91E  name|local|algebraic real
+          OBJ_64D7E x=~1                         * 1A928  name|local|algebraic complex
+          SYMSYM x=~1                            * 1A932  name|local|algebraic name|local|algebraic
+          2EXT x=~1                              * 1A93C  unit unit
+          BINT30 x=~1                            * 1A946  real unit
+          EXTREAL x=~1                           * 1A950  unit real
+          SYMEXT x=~1                            * 1A95A  name|local|algebraic unit
+          EXTSYM x=~1                            * 1A964  unit name|local|algebraic
         ;                                        * 1A96E
 
 * slots of 002 03B (derivative, inverse, ...: used by the symbolic code)
@@ -669,7 +669,7 @@ xMAXR:
         CON(3)  #002                             * 1AAFB  library
         CON(3)  #041                             * 1AAFE  command
 xMINR:
-        :: CK0 OBJ_54CDB ;                       * 1AB01
+        :: CK0 xMINR~1 ;                         * 1AB01
 
 * slots of 002 041 (derivative, inverse, ...: used by the symbolic code)
         CON(5)  OBJ_56B87                        * 1AB15  slot 0
@@ -730,9 +730,9 @@ x+:
           2GROB +(2go)                           * 1AC25  grob grob
           BINT85 &COMP                           * 1AC2F  list list
           BINT51 &$                              * 1AC39  string string
-          OBJ_64C34 >TCOMP                       * 1AC43  list ?
+          OBJ_64C34 >TCOMP                       * 1AC43  list any
           BINT5 SWAP>HCOMP                       * 1AC4D  list
-          BINT48 +(st,_)                         * 1AC57  string ?
+          BINT48 +(st,_)                         * 1AC57  string any
           BINT3 +(_,st)                          * 1AC61  string
         ;                                        * 1AC6B
 
@@ -958,9 +958,9 @@ OBJ_1B0E6:
         CON(3)  #04A                             * 1B182  command
 rpnXROOT:
         :: CK2&Dispatch                          * 1B185
-          BINT5 OBJ_21DBE                        * 1B18F  list
-          OBJ_64C34 OBJ_21DBE                    * 1B199  list ?
-          BINT0 OBJ_19EEC                        * 1B1A3  any
+          BINT5 rpnXROOT~1                       * 1B18F  list
+          OBJ_64C34 rpnXROOT~1                   * 1B199  list any
+          BINT0 rpnXROOT~any                     * 1B1A3  any
         ;                                        * 1B1AD
 
 * slots of 002 04A (derivative, inverse, ...: used by the symbolic code)
@@ -977,10 +977,10 @@ rpnXROOT:
         CON(3)  #04B                             * 1B1C7  command
 xXROOT:
         :: CK2&Dispatch                          * 1B1CA
-          BINT17 OBJ_1B251                       * 1B1D4  real real
-          BINT30 OBJ_1B23D                       * 1B1DE  real unit
-          EXTREAL OBJ_1B23D                      * 1B1E8  unit real
-          2EXT OBJ_1B23D                         * 1B1F2  unit unit
+          BINT17 xXROOT~real,real                * 1B1D4  real real
+          BINT30 xXROOT~1                        * 1B1DE  real unit
+          EXTREAL xXROOT~1                       * 1B1E8  unit real
+          2EXT xXROOT~1                          * 1B1F2  unit unit
           BINT26 %SYMXROOT                       * 1B1FC  real name|local|algebraic
           SYMREAL SYM%XROOT                      * 1B206  name|local|algebraic real
           SYMSYM SYMXROOT                        * 1B210  name|local|algebraic name|local|algebraic
@@ -993,11 +993,11 @@ xXROOT:
         CON(5)  OBJ_5A2AC                        * 1B238  slot 1
 
 * refs (3): 1B1E3 1B1ED 1B1F7
-OBJ_1B23D:
+xXROOT~1:
         :: SWAP UMXROOT ;                        * 1B23D  slot 2
 
 * refs (1): 1B1D9
-OBJ_1B251:
+xXROOT~real,real:
         :: SWAP %NROOT ;                         * 1B251  slot 3
         CON(5)  NOP                              * 1B265  slot 4
         CON(5)  NOP                              * 1B26A  slot 5

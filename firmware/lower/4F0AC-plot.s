@@ -11,7 +11,7 @@ DOPX>C:
 
 * refs (6): 4F0B6 4F0C0 4FD45 4FD4F 4FD63 508F1
 s=>ñr:
-        :: DUP OBJ_4F4D0 #<case UNCOERCE         * 4F0DE
+        :: DUP s=>ñr~1 #<case UNCOERCE           * 4F0DE
           BINT0 SWAP#- UNCOERCE %CHS ;           * 4F0F7
 
 * refs (6): 49F33 49F74 4AC57 4E7A3 4E7B7 4F0D4
@@ -37,7 +37,7 @@ SWAPTRUE:
         :: SWAP TRUE ;                           * 4F1D8
 
 * refs (2): 4FBD8 4FBE7
-OBJ_4F1EC:
+sub(go,2c)~1:
         :: OBJ_4F20F COERCE 4UNROLLROT r=>rr;rot;*(2rr);+(2rr);r=>r * 4F1EC
           COERCESWAP ;                           * 4F205
 
@@ -115,7 +115,7 @@ pix?(2s):
           ::                                     * 4F4CB
 
 * refs (1): 4F0E8
-OBJ_4F4D0:
+s=>ñr~1:
             # 80000 2DUP#< 4PICK ROT #< AND NOTcase 2DROP%0 * 4F4D0
             GBUFF InGrob(2s,go)? NOTcase 2DROP%0 * 4F4FD
             PIXON?3 COERCEFLAG ;                 * 4F511
@@ -194,7 +194,7 @@ g?or(PICT,c,go,?):
 * refs (2): 4F6EC 4F732
 GROB+#:
         :: 4PICK InGrob(2s,go)?#:BAV! CKGROBFITS 2DUP 5PICK GROBDIM * 4F78C
-          4PICK#+SWAP 3PICK#+ 8PICK 5UNROLL SUBGROB 4ROLL OBJ_4F91C 4PICK * 4F7AF
+          4PICK#+SWAP 3PICK#+ 8PICK 5UNROLL SUBGROB 4ROLL GROB+#~1 4PICK * 4F7AF
           2SWAP GROB! ;                          * 4F7D7
 
 * g1 g2 #n #m -> g1 g2' #n #m
@@ -217,7 +217,7 @@ drop(3);rot;false:
           !OR$ &HXS OBJ_515CD ;                  * 4F908
 
 * refs (1): 4F7CD
-OBJ_4F91C:
+GROB+#~1:
         :: OBJ_4F949 7ROLL ITE !OR$ !XOR$        * 4F91C
           &HXS OBJ_515CD ;                       * 4F93A
 
@@ -254,7 +254,7 @@ repl(PICT,c,go):
           repl!(go,c,go) DROP ;                  * 4FA6B
 
 * refs (1): 1C92B
-OBJ_4FA7A:
+xREPL~list,real,list:
         :: SWAP COERCE DUP#0=case SETSIZEERR     * 4FA7A
           3PICK LENCOMP OVER#< casedrop &COMP    * 4FA93
           3PICK BINT1 3PICK #1- SUBCOMP 4ROLLROT 4PICK LENCOMP #+OVER * 4FAAC
@@ -279,8 +279,8 @@ sub(go,4s):
 
 * refs (2): 1C893 4FC1E
 sub(go,2c):
-        :: OBJ_472D1 2DUP5ROLL 3UNROLL OBJ_4F1EC 5UNROLL 5UNROLL OBJ_4F1EC * 4FBC4
-          sub(go,4s) ;                           * 4FBEC
+        :: OBJ_472D1 2DUP5ROLL 3UNROLL sub(go,2c)~1 5UNROLL 5UNROLL * 4FBC4
+          sub(go,2c)~1 sub(go,4s) ;              * 4FBE7
 
 * refs (2): D2285 D2294
 sub(PICT,2c):
@@ -300,8 +300,8 @@ arc(c,3r):
         :: CHECKPICT OBJ_4FDCC CHECKPVARS DROP 4UNROLL OVER %SGN 4UNROLL * 4FC5F
           %POL>%REC %>C% OVER C%C+C RclMaxStdPict 2DUP 5ROLL C%>% OBJ_4FE30 * 4FC8C
           4UNROLL ROT C%>% OBJ_4FE30 2DUP C%C-C C%ABS 4ROLL %* 4ROLL * 4FCB9
-          %POL>%REC %CHS %>C% OVER C%C+C OBJ_4FE12 2SWAP OBJ_4FE12 ROT * 4FCEB
-          OBJ_4FE12 2SWAP OBJ_4FE6C ;            * 4FD18
+          %POL>%REC %CHS %>C% OVER C%C+C arc(c,3r)~1 2SWAP arc(c,3r)~1 ROT * 4FCEB
+          arc(c,3r)~1 2SWAP OBJ_4FE6C ;          * 4FD18
 
 * refs (1): 1E5F5
 arc(li,b,2r):
@@ -320,11 +320,11 @@ OBJ_4FDCC:
         ;                                        * 4FE03
 
 * refs (1): 45218
-OBJ_4FE08:
+drax~1~5:
         :: OBJ_4FE30                             * 4FE08
 
 * refs (3): 4FD04 4FD0E 4FD18
-OBJ_4FE12:
+arc(c,3r)~1:
           :: %0_2A2B4 trunc(c,r) C%>% ; ;        * 4FE12
 
 * refs (3): 4FCB4 4FCC8 4FE0D
@@ -423,7 +423,7 @@ OBJ_502BC:
           3PUTLAM ;                              * 5030C
 
 * refs (2): 4F075 4F084
-OBJ_50316:
+WINDOW#~1:
         :: #+ #< ;                               * 50316
 
 * refs (4): 5009B 500F0 5010E 5011D
@@ -472,8 +472,8 @@ DOCLLCD:
 
 * refs (1): 5049C
 0->grob(_):
-        :: DUPTYPESYMB? case OBJ_6C45B           * 5050A
-          DUPTYPEEXT? case OBJ_6C45B             * 5051E
+        :: DUPTYPESYMB? case 0->grob(_)~1        * 5050A
+          DUPTYPEEXT? case 0->grob(_)~1          * 5051E
           %3 ->grob(_,r) ;                       * 5052D
 
 * -> grob
@@ -1042,15 +1042,15 @@ StatPlotMo:
 LookForEQ/äDAT:
         :: StatPlotMo DUP ITE STATRCL EQUATION   * 50E04
           case2DROP RDROP                        * 50E22
-          ITE OBJ_50E4F OBJ_50E45                * 50E2C
+          ITE LookForEQ/äDAT~2 LookForEQ/äDAT~1  * 50E2C
           OBJ_6BC2D ;                            * 50E3B
 
 * refs (1): 50E36
-OBJ_50E45:
+LookForEQ/äDAT~1:
         # 104                                    * 50E45  260
 
 * refs (1): 50E31
-OBJ_50E4F:
+LookForEQ/äDAT~2:
         # 602                                    * 50E4F  1538
 
 * refs (6): 470DA 4821A 4846D 4D74A 4DDA0 4DE13
@@ -1095,11 +1095,11 @@ SUB_50E94:
         RPL
 
 * refs (1): 3E8E1
-OBJ_50EBB:
+{GRAPH\DOT-}~2:
         :: 3GETLAM #1= ;                         * 50EBB
 
 * refs (1): 3E76B
-OBJ_50ECF:
+{GRAPH\+/-}~1:
         :: CHECKMENU OBJ_50EE3 ;                 * 50ECF
 
 * refs (2): 4D8D0 50ED9
@@ -1113,7 +1113,7 @@ OBJ_50F2E:
         :: BINT32 TestSysFlag ;                  * 50F2E
 
 * refs (1): 49E2A
-OBJ_50F42:
+ChkEQ(eq)~1:
         :: BINT3 SWAP INNERDUP ONE_EQ NOTcase    * 50F42
 
 * ob meta -> F
@@ -1138,7 +1138,7 @@ Y:
           EQUAL ;                                * 50FF9
 
 * refs (1): 49E34
-OBJ_51003:
+ChkEQ(eq)~2:
         :: OVER INCOMPDROP OVER FINDVAR NTHOF #0= ; * 51003
 
 * refs (19): 0C839 0C866 46C2F 46C8E 46E37 46E64 ...
@@ -1790,7 +1790,7 @@ axy=>(x/a,y/a):
 * % C% -> C%'
 * refs (2): 1AF1E 51F09
 C%R/C:
-        :: C%0=case OBJ_51F9A                    * 51E19
+        :: C%0=case C%R/C~1                      * 51E19
           C%>% 2DUP 2%>%%SQR 4UNROLL UNROTOVER _*(2r);r=>rr 3UNROLL * 51E28
           _*(2r);r=>rr %%CHS axy=>(x/a,y/a) %%>C% ; * 51E4B
 
@@ -1805,7 +1805,7 @@ OBJ_51E9B:
         :: %%CHS                                 * 51E9B
 
 * refs (1): 51F45
-OBJ_51EA5:
+C%%R/C~1:
           :: 2DUP %%SQR 4UNROLL ; ROT ;          * 51EA5
 
 * C% C%' -> C%''
@@ -1827,7 +1827,7 @@ C%%C/C:
 * %% C%% -> C%%'
 * refs (1): 37C66
 C%%R/C:
-        :: C%%>%% OBJ_51EA5 3PICK %%*UNROT %%* 3PICK %%/ SWAPROT %%/ %%CHS * 51F3B
+        :: C%%>%% C%%R/C~1 3PICK %%*UNROT %%* 3PICK %%/ SWAPROT %%/ %%CHS * 51F3B
           %%>C%% ;                               * 51F72
 
 * C%% %% -> C%%'
@@ -1836,7 +1836,7 @@ C%%C/R:
         :: SWAP C%%>%% axy=>(x/a,y/a) %%>C%% ;   * 51F7C
 
 * refs (1): 51E23
-OBJ_51F9A:
+C%R/C~1:
         :: OBJ_52017 %MAXIMIZE Re>C% ;           * 51F9A
 
 * refs (2): 51E6E 51ED2
@@ -1848,5 +1848,5 @@ OBJ_51FDB:
         :: OBJ_5203A DROP %-MAXREAL Re>C% ;      * 51FDB
 
 * refs (1): 526DD
-OBJ_51FF9:
+C%ATAN~1:
         :: OBJ_5203A C%>% %MAXIMIZE %>C% ;       * 51FF9

@@ -21,19 +21,19 @@ ROMP_0B0_000:
 
 * ROMPTR 0B0 001
 * refs (1): D49CE
-ROMP_0B0_001:
+DoInputForm~1~2:
         :: KEYINBUFFER? case SetDA1Bad           * D4A4F
           TOADISP ROMPTR 0B0 00F SetDA1Valid ;   * D4A63
 
 * ROMPTR 0B0 002
 * refs (1): D49CE
-ROMP_0B0_002:
+DoInputForm~1~3:
         :: KEYINBUFFER? case SetDA2aBad          * D4A7D
           TOADISP ROMPTR 0B0 00C SetDA2aValid ;  * D4A91
 
 * ROMPTR 0B0 003
 * refs (1): D49CE
-ROMP_0B0_003:
+DoInputForm~1~4:
         :: KEYINBUFFER? ?SEMI                    * D4AAB
           EDITPARTS BINT1 #> ?SEMI               * D4ABA
           9GETLAM 14GETLAM #1+_ONE_DO            * D4ACE
@@ -46,7 +46,7 @@ ROMP_0B0_003:
 
 * ROMPTR 0B0 004
 * refs (1): D49CE
-ROMP_0B0_004:
+DoInputForm~3~2:
         :: NoExitAction                          * D4B3D
           {                                      * D4B47
             {                                    * D4B4C
@@ -157,7 +157,7 @@ ROMP_0B0_008:
 
 * ROMPTR 0B0 009
 * refs (1): D49CE
-ROMP_0B0_009:
+DoInputForm~3:
         :: BINT15 OBJ_19FA7 ?SEMI                * D5292
           ROMPTR 0B0 00A NOTcase                 * D52A6
           :: ' ROMPTR 0B0 004 ;                  * D52B6
@@ -166,18 +166,18 @@ ROMP_0B0_009:
 
 * ROMPTR 0B0 00A
 * refs (1): D49CE
-ROMP_0B0_00A:
+DoInputForm~3~1:
         :: BINT16 OBJ_19FA7 ?SEMI                * D530E
           FALSE ;                                * D5322
 
 * ROMPTR 0B0 00B
 * refs (1): D49CE
-ROMP_0B0_00B:
+DoInputForm~4:
         :: BINT17 OBJ_19FA7 DROP ;               * D532C
 
 * ROMPTR 0B0 00C
 * refs (1): D49CE
-ROMP_0B0_00C:
+DoInputForm~1~3~1:
         :: BINT4 OBJ_19FA7 ?SEMI                 * D5345
           EDITPARTS BINT1 #> case ROMPTR 0B0 00D * D5359
           ROMPTR 0B0 097 HARDBUFF BINT0 BINT7 GROB! 14GETLAM #1+_ONE_DO * D5378
@@ -186,19 +186,19 @@ ROMP_0B0_00C:
 
 * ROMPTR 0B0 00D
 * refs (1): D49CE
-ROMP_0B0_00D:
+DoInputForm~1~3~1~1:
         :: FALSE 5GETLAM ROMPTR 0B0 017 ;        * D53DA
 
 * ROMPTR 0B0 00E
 * refs (1): D49CE
-ROMP_0B0_00E:
+DoInputForm~1~3~1~2~1:
         :: BINT5 OBJ_19FA7 ?SEMI                 * D53F9
           BINT39 BINT131 MAKEGROB 15GETLAM #1+_ONE_DO INDEX@ ROMPTR 0B0 012 * D540D
           LOOP TRUE ;                            * D5436
 
 * ROMPTR 0B0 00F
 * refs (1): D49CE
-ROMP_0B0_00F:
+DoInputForm~1~2~1:
         :: BINT1 OBJ_19FA7 ?SEMI                 * D5445
           ROMPTR 0B0 010 HARDBUFF ZEROZERO GROB! ; * D5459
 
@@ -395,14 +395,14 @@ ROMP_0B0_028:
 
 * ROMPTR 0B0 029
 * refs (1): D49CE
-ROMP_0B0_029:
+DoInputForm~2~3~4~1:
         :: BINT50 OBJ_19FBB ?SEMI                * D5DA5
           14GETLAM BEGIN DUP ROMPTR 0B0 023 NOT WHILE * D5DB9
           :: ROMPTR 0B0 073 DROP ; REPEAT ;      * D5DDD
 
 * ROMPTR 0B0 02A
 * refs (1): D49CE
-ROMP_0B0_02A:
+DoInputForm~2~3~3~1:
         :: BINT51 OBJ_19FBB ?SEMI                * D5E01
           BINT1 BEGIN DUP ROMPTR 0B0 023 NOT WHILE * D5E15
           :: ROMPTR 0B0 072 DROP ; REPEAT ;      * D5E39
@@ -417,7 +417,7 @@ ROMP_0B0_02B:
 
 * ROMPTR 0B0 02C
 * refs (1): D49CE
-ROMP_0B0_02C:
+DoKeyEdit~1:
         :: BINT23 OBJ_19FBB ?SEMI                * D5EBF
           4GETLAM DUP ROMPTR 0B0 046 ITE         * D5ED3
           :: SWAPDROP AdjEdModes EDITDECOMP$ BINT1 ; * D5EED
@@ -560,13 +560,13 @@ ROMP_0B0_035:
 
 * ROMPTR 0B0 036
 * refs (1): D49CE
-ROMP_0B0_036:
+DoKeyCancel~1:
         :: BINT28 OBJ_19FA7 ?SEMI                * D6734
           TRUE ;                                 * D6748
 
 * ROMPTR 0B0 037
 * refs (1): D49CE
-ROMP_0B0_037:
+DoKeyOK~1:
         :: BINT29 OBJ_19FA7 ?SEMI                * D6752
           TRUE ;                                 * D6766
 
@@ -587,7 +587,7 @@ ROMP_0B0_038:
 
 * ROMPTR 0B0 039
 * refs (1): D49CE
-ROMP_0B0_039:
+DoKeyOK~2:
         :: 5GETLAM BINT44 OBJ_19FBB ?SEMI        * D68A5
           EDITPARTS #>1 NOT ROMPTR 0B0 03F Parse.1 NOTcase ROMPTR 0B0 03A * D68BE
           PTR NULL:: EQUALcasedrop ROMPTR 0B0 03B * D68ED
@@ -600,14 +600,14 @@ ROMP_0B0_039:
 
 * ROMPTR 0B0 03A
 * refs (1): D49CE
-ROMP_0B0_03A:
+DoKeyOK~2~1:
         :: DispBadToken SetPrgmEntry DROP #SyntaxErr ClrDA2bEdit * D69BF
           :: SetDA1NoCh SetDA2aNoCh SetDA3NoCh ; ROMPTR 0B0 091 SetDA2bTemp * D69DD  DoAlert
           SetDA2bEdit ;                          * D6A06
 
 * ROMPTR 0B0 03B
 * refs (1): D49CE
-ROMP_0B0_03B:
+DoKeyOK~2~2:
         :: 5GETLAM DUP ROMPTR 0B0 01F ROMPTR 0B0 0A7 SWAP NOTcasedrop * D6A10
           SetDA1NoCh                             * D6A3F
           ROMPTR 0B0 013                         * D6A44  IFEDispField
@@ -615,7 +615,7 @@ ROMP_0B0_03B:
 
 * ROMPTR 0B0 03C
 * refs (1): D49CE
-ROMP_0B0_03C:
+DoKeyOK~2~3:
         :: DUPTYPECOL? NOT?SEMI                  * D6A68
           DUP CARCOMP ' x' EQUAL case            * D6A77
           :: BINT2 NTHCOMPDROP ;                 * D6A95
@@ -623,7 +623,7 @@ ROMP_0B0_03C:
 
 * ROMPTR 0B0 03D
 * refs (1): D49CE
-ROMP_0B0_03D:
+DoInputForm~2~1~7~1:
         :: 5GETLAM BINT38 OBJ_19FBB ?SEMI        * D6AB3
           SetDA123NoCh 4GETLAM DUP ROMPTR 0B0 02B OVER NULL{} EQUAL case * D6ACC
           3DROP                                  * D6AFA
@@ -643,12 +643,12 @@ ROMP_0B0_03E:
 
 * ROMPTR 0B0 03F
 * refs (1): D49CE
-ROMP_0B0_03F:
+DoKeyOK~2~4:
         :: 5GETLAM BINT24 OBJ_19FBB DROP ;       * D6C39
 
 * ROMPTR 0B0 040
 * refs (1): D49CE
-ROMP_0B0_040:
+DoKeyOK~2~5:
         :: 5GETLAM BINT25 OBJ_19FBB DROP ;       * D6C57
 
 * ROMPTR 0B0 041
@@ -671,7 +671,7 @@ ROMP_0B0_043:
 
 * ROMPTR 0B0 044
 * refs (1): D49CE
-ROMP_0B0_044:
+IFEDispField~1:
         :: BINT9 OBJ_19FBB ?SEMI                 * D6D02
           4GETLAM DUP ROMPTR 0B0 08D case        * D6D16
           :: DUP ROMPTR 0B0 0A1 ROMPTR 0B0 0C5 ITE ROMPTR 0B0 07F * D6D30  ~gFldVal
@@ -684,7 +684,7 @@ ROMP_0B0_044:
 
 * ROMPTR 0B0 045
 * refs (1): D49CE
-ROMP_0B0_045:
+IFEDispField~1~1:
         :: KEYINBUFFER? case                     * D6E0D
           :: DUP ROMPTR 0B0 0A2 ROMPTR 0B0 079 ITE NULL$ _chr(31)_ * D6E1C
           ;                                      * D6E4B
@@ -699,7 +699,7 @@ ROMP_0B0_046:
 
 * ROMPTR 0B0 047
 * refs (1): D49CE
-ROMP_0B0_047:
+DoInputForm~2~2:
         ::                                       * D6ECD
           { BINT26 ROMPTR 0B0 056 BINT7 DoBadKey } OBJ_19FE4 caseTRUE * D6ED2  DoKeyEdit
           EditExstCase                           * D6F00
@@ -714,7 +714,7 @@ ROMP_0B0_047:
 
 * ROMPTR 0B0 048
 * refs (1): D49CE
-ROMP_0B0_048:
+DoInputForm~2~3:
         ::                                       * D6FEB
           { BINT7 DoBadKey } OBJ_19FE4 caseTRUE EditExstCase * D6FF0
           ROMPTR 0B0 04E                         * D7013
@@ -731,7 +731,7 @@ ROMP_0B0_048:
 
 * ROMPTR 0B0 049
 * refs (1): D49CE
-ROMP_0B0_049:
+DoInputForm~2~4:
         ::                                       * D713F
           { BINT25 ROMPTR 0B0 05A BINT45         * D7144  DoKeyOK
             ROMPTR 0B0 059 }                     * D715E  DoKeyCancel
@@ -745,7 +745,7 @@ ROMP_0B0_049:
 
 * ROMPTR 0B0 04A
 * refs (1): D49CE
-ROMP_0B0_04A:
+DoInputForm~2~5:
         :: EditExstCase ROMPTR 0B0 050 BINT5     * D7221
           { BINT30 BINT35 BINT40 } 3PICK #=POSCOMP #0<> case OBJ_19F93 * D723B
           2DUP Key>U/SKeyOb OBJ_4080F SWAPDROP case2drop 'DoBadKeyT * D726D
@@ -755,7 +755,7 @@ ROMP_0B0_04A:
 
 * ROMPTR 0B0 04B
 * refs (1): D49CE
-ROMP_0B0_04B:
+DoInputForm~2~6:
         :: EditExstCase ROMPTR 0B0 051 BINT6     * D72CF
           { BINT45 BINT35 BINT40 } 3PICK #=POSCOMP #0<> case OBJ_19F93 * D72E9
           2DUP Key>U/SKeyOb OBJ_4080F SWAPDROP case2drop 'DoBadKeyT * D731B
@@ -774,31 +774,31 @@ ROMP_0B0_04C:
 
 * ROMPTR 0B0 04D
 * refs (1): D49CE
-ROMP_0B0_04D:
+DoInputForm~2~2~1:
         :: BINT2 COLA OBJ_19F0F                  * D7412
         ;                                        * D7426
 
 * ROMPTR 0B0 04E
 * refs (1): D49CE
-ROMP_0B0_04E:
+DoInputForm~2~3~1:
         :: BINT3 COLA OBJ_19F0F                  * D742B
         ;                                        * D743F
 
 * ROMPTR 0B0 04F
 * refs (1): D49CE
-ROMP_0B0_04F:
+DoInputForm~2~4~1:
         :: BINT4 COLA OBJ_19F0F                  * D7444
         ;                                        * D7458
 
 * ROMPTR 0B0 050
 * refs (1): D49CE
-ROMP_0B0_050:
+DoInputForm~2~5~1:
         :: BINT5 COLA OBJ_19F0F                  * D745D
         ;                                        * D7471
 
 * ROMPTR 0B0 051
 * refs (1): D49CE
-ROMP_0B0_051:
+DoInputForm~2~6~1:
         :: BINT6 COLA OBJ_19F0F                  * D7476
         ;                                        * D748A
 
@@ -817,7 +817,7 @@ ROMP_0B0_053:
 
 * ROMPTR 0B0 054
 * refs (1): D49CE
-ROMP_0B0_054:
+DoInputForm~2~2~2:
         :: ComLine?:(bip;q) 5GETLAM ROMPTR 0B0 088 NOTcase DoBadKey * D7524
           NULL{} InitMenu DEPTH 1LAMBIND OBJ_6B48E DEPTH 1GETABND * D7548
           ROMPTR 0B0 0A7 #> NOT?SEMI             * D756B
@@ -826,7 +826,7 @@ ROMP_0B0_054:
 
 * ROMPTR 0B0 055
 * refs (1): D49CE
-ROMP_0B0_055:
+DoInputForm~2~3~2:
         :: ComLine?:(bip;q) 5GETLAM ROMPTR 0B0 088 NOTcase DoBadKey * D75AF
           DEPTH 1LAMBIND DoNewMatrix DEPTH 1GETABND #> NOT?SEMI * D75D3
           5GETLAM ROMPTR 0B0 096 NOTcase EVAL    * D75F6
@@ -892,30 +892,30 @@ ROMP_0B0_05D:
 
 * ROMPTR 0B0 05E
 * refs (1): D49CE
-ROMP_0B0_05E:
+DoInputForm~2~1~3:
         :: TakeOver NoEditLine? case ROMPTR 0B0 064 * D78D8
           EDITPARTS #1=case DoBadKey             * D78F7
           ROMP_0A1_00A ;                         * D7906
 
 * ROMPTR 0B0 05F
 * refs (1): D49CE
-ROMP_0B0_05F:
+DoInputForm~2~1~4:
         :: TakeOver NoEditLine? case ROMPTR 0B0 065 * D7910
           EDITPARTS #1=case DoBadKey             * D792F
           ROMP_0A1_010 ;                         * D793E
 
 * ROMPTR 0B0 060
 * refs (1): D49CE
-ROMP_0B0_060:
+DoInputForm~2~3~3:
         :: TakeOver 5GETLAM ROMPTR 0B0 02A ROMPTR 0B0 095 ; * D7948
 
 * ROMPTR 0B0 061
 * refs (1): D49CE
-ROMP_0B0_061:
+DoInputForm~2~3~4:
         :: TakeOver 5GETLAM ROMPTR 0B0 029 ROMPTR 0B0 095 ; * D7972
 
 * ROMPTR 0B0 062
 * refs (1): D49CE
-ROMP_0B0_062:
+DoInputForm~2~3~5:
         :: TakeOver 5GETLAM DUP BEGIN ROMPTR 0B0 026 2DUP #> WHILE * D799C
           :: SWAPDROP DUP ; REPEAT DROP ROMPTR 0B0 095 ; * D79CF

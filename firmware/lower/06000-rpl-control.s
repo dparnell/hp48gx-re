@@ -1395,7 +1395,7 @@ L_06F03:
         D0=C                                     * 06F05
         GOTO    L_06EC9                          * 06F08
 L_06F0C:
-        LC(5)   L_03130                          * 06F0C
+        LC(5)   SEMILOOP~1                       * 06F0C
         ?C=A    A                                * 06F13
         GOYES   L_06F1E                          * 06F16
         A=DAT0  A                                * 06F18
@@ -1809,7 +1809,7 @@ L_072B8:
 
 * # ->
 JSTOPSTO:
-        GOSUB   SUB_079F2                        * 072C2
+        GOSUB   JSTOPSTO~1                       * 072C2
         CLRST                                    * 072C6
         A=A+1   A                                * 072C8
         NIBHEX  73F                              * 072CA  7
@@ -2165,7 +2165,7 @@ SETMESG:
 
 * refs (1): 0764B
 SET:
-        GOVLNG  L_70E0C                          * 07661
+        GOVLNG  SET~1                            * 07661
 L_07668:
         C=DAT0  A                                * 07668
         ?C#A    X                                * 0766B
@@ -2443,7 +2443,7 @@ L_078FF:
         NIBHEX  AF02                             * 07903  ú 
         ST=1    0                                * 07907
         GOTO    L_0794B                          * 0790A
-L_0790E:
+COMPILEID~1:
         GOSUBL  SAVPTR                           * 0790E
         C=DAT1  A                                * 07914
         P=      4                                * 07917
@@ -2525,7 +2525,7 @@ OBJ_079D7:
 
 * refs (1): 072C2
 * a branch also enters #079F2, where the nibbles decode as B=B+C M
-SUB_079F2:
+JSTOPSTO~1:
         GOYES   L_07A4C                          * 079F2
 * the rest of B=B+C M at #079F2
 * a branch also enters #079F4, where the nibbles decode as A=DAT1 A
@@ -2754,7 +2754,7 @@ SUB_07BF9:
 * id -> id T -> ROMPTR T -> F
 * refs (9): 0F1B9 0FFF7 24564 24E5B 27472 27F3F ...
 COMPILEID:
-        CON(5)  L_0790E                          * 07C18  code object: the address of its machine code
+        CON(5)  COMPILEID~1                      * 07C18  code object: the address of its machine code
 L_07C1D:
         GOSUB   SUB_0788E                        * 07C1D
         GOC     L_07C37                          * 07C21

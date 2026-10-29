@@ -36,31 +36,31 @@ L_8207D:
 LIB0F0.link:
         CON(5)  DOHSTR                           * 82082  link table of library 0F0
         LENGTH                                   * 82087  length, to #824BF
-        REL(5)  ROMP_0F0_000                     * 8208C  000 
-        REL(5)  ROMP_0F0_001                     * 82091  001 
-        REL(5)  ROMP_0F0_002                     * 82096  002 
-        REL(5)  ROMP_0F0_003                     * 8209B  003 
-        REL(5)  ROMP_0F0_004                     * 820A0  004 
-        REL(5)  ROMP_0F0_005                     * 820A5  005 
-        REL(5)  ROMP_0F0_006                     * 820AA  006 
-        REL(5)  ROMP_0F0_007                     * 820AF  007 
-        REL(5)  ROMP_0F0_008                     * 820B4  008 
-        REL(5)  ROMP_0F0_009                     * 820B9  009 
-        REL(5)  ROMP_0F0_00A                     * 820BE  00A 
-        REL(5)  ROMP_0F0_00B                     * 820C3  00B 
+        REL(5)  nINTGSIN~1                       * 8208C  000 
+        REL(5)  nINTGTAN~1~1                     * 82091  001 
+        REL(5)  nINTGCOS~1                       * 82096  002 
+        REL(5)  nINTGSIN~1~1                     * 8209B  003 
+        REL(5)  nINTGTAN~1                       * 820A0  004 
+        REL(5)  nINTGASIN~1                      * 820A5  005 
+        REL(5)  nINTGACOS~1                      * 820AA  006 
+        REL(5)  nINTGATAN~1                      * 820AF  007 
+        REL(5)  nINTGSINH~1                      * 820B4  008 
+        REL(5)  nINTGTANH~1~1                    * 820B9  009 
+        REL(5)  nINTGCOSH~1~1                    * 820BE  00A 
+        REL(5)  nINTGCOSH~1                      * 820C3  00B 
         REL(5)  ROMP_0F0_00C                     * 820C8  00C 
-        REL(5)  ROMP_0F0_00D                     * 820CD  00D 
-        REL(5)  ROMP_0F0_00E                     * 820D2  00E 
-        REL(5)  ROMP_0F0_00F                     * 820D7  00F 
-        REL(5)  ROMP_0F0_010                     * 820DC  010 
-        REL(5)  ROMP_0F0_011                     * 820E1  011 
-        REL(5)  ROMP_0F0_012                     * 820E6  012 
+        REL(5)  nINTGTANH~1                      * 820CD  00D 
+        REL(5)  nINTGEXPM~1                      * 820D2  00E 
+        REL(5)  nINTGALOG~1                      * 820D7  00F 
+        REL(5)  nINTGLN~1                        * 820DC  010 
+        REL(5)  nINTGLOG~1                       * 820E1  011 
+        REL(5)  nINTGINV~1                       * 820E6  012 
         REL(5)  ROMP_0F0_013                     * 820EB  013 
-        REL(5)  ROMP_0F0_014                     * 820F0  014 
-        REL(5)  ROMP_0F0_015                     * 820F5  015 
+        REL(5)  nINTGSQ~1                        * 820F0  014 
+        REL(5)  nINTGSQRT~1                      * 820F5  015 
         REL(5)  ROMP_0F0_016                     * 820FA  016 
         REL(5)  ROMP_0F0_017                     * 820FF  017 
-        REL(5)  ROMP_0F0_018                     * 82104  018 
+        REL(5)  nINTGSIGN~1                      * 82104  018 
         REL(5)  ROMP_0F0_019                     * 82109  019 
         REL(5)  ROMP_0F0_01A                     * 8210E  01A 
         REL(5)  ROMP_0F0_01B                     * 82113  01B 
@@ -154,24 +154,24 @@ LIB0F0.link:
         REL(5)  ROMP_0F0_073                     * 822CB  073 
         REL(5)  ROMP_0F0_074                     * 822D0  074 
         REL(5)  ROMP_0F0_075                     * 822D5  075 
-        REL(5)  ROMP_0F0_076                     * 822DA  076 
-        REL(5)  ROMP_0F0_077                     * 822DF  077 
-        REL(5)  ROMP_0F0_078                     * 822E4  078 
-        REL(5)  ROMP_0F0_079                     * 822E9  079 
-        REL(5)  ROMP_0F0_07A                     * 822EE  07A 
-        REL(5)  ROMP_0F0_07B                     * 822F3  07B 
-        REL(5)  ROMP_0F0_07C                     * 822F8  07C 
-        REL(5)  ROMP_0F0_07D                     * 822FD  07D 
-        REL(5)  ROMP_0F0_07E                     * 82302  07E 
-        REL(5)  ROMP_0F0_07F                     * 82307  07F 
-        REL(5)  ROMP_0F0_080                     * 8230C  080 
+        REL(5)  {RULES\COLCT}~1                  * 822DA  076 
+        REL(5)  nWHEREFCNAPP~1                   * 822DF  077 
+        REL(5)  nWHEREDER~1                      * 822E4  078 
+        REL(5)  nWHEREIFTE~1                     * 822E9  079 
+        REL(5)  nWHEREWHERE~1                    * 822EE  07A 
+        REL(5)  SPLITWHERE~1                     * 822F3  07B 
+        REL(5)  nWHEREINTG~1                     * 822F8  07C 
+        REL(5)  nWHERESUM~1                      * 822FD  07D 
+        REL(5)  sto(_,to)~1                      * 82302  07E 
+        REL(5)  sto(_,to)~1~1                    * 82307  07F 
+        REL(5)  sto(bk,r)~1                      * 8230C  080 
         REL(5)  ROMP_0F0_081                     * 82311  081 
         REL(5)  ROMP_0F0_082                     * 82316  082 
         REL(5)  ROMP_0F0_083                     * 8231B  083 
-        REL(5)  ROMP_0F0_084                     * 82320  084 
-        REL(5)  ROMP_0F0_085                     * 82325  085 
-        REL(5)  ROMP_0F0_086                     * 8232A  086 
-        REL(5)  ROMP_0F0_087                     * 8232F  087 
+        REL(5)  restore(nm,s)~1                  * 82320  084 
+        REL(5)  XEQIOBACKUP~1                    * 82325  085 
+        REL(5)  free(li,r)~1                     * 8232A  086 
+        REL(5)  libs~1                           * 8232F  087 
         REL(5)  ROMP_0F0_088                     * 82334  088 
         REL(5)  ROMP_0F0_089                     * 82339  089 
         REL(5)  ROMP_0F0_08A                     * 8233E  08A 
@@ -180,61 +180,61 @@ LIB0F0.link:
         REL(5)  ROMP_0F0_08D                     * 8234D  08D 
         REL(5)  ROMP_0F0_08E                     * 82352  08E 
         REL(5)  ROMP_0F0_08F                     * 82357  08F 
-        REL(5)  ROMP_0F0_090                     * 8235C  090 
+        REL(5)  libs~2                           * 8235C  090 
         REL(5)  ROMP_0F0_091                     * 82361  091 
         REL(5)  ROMP_0F0_092                     * 82366  092 
         REL(5)  ROMP_0F0_093                     * 8236B  093 
         REL(5)  ROMP_0F0_094                     * 82370  094 
         REL(5)  ROMP_0F0_095                     * 82375  095 
-        REL(5)  ROMP_0F0_096                     * 8237A  096 
+        REL(5)  nCOLCTQUOTE~1                    * 8237A  096 
         REL(5)  ROMP_0F0_097                     * 8237F  097 
-        REL(5)  ROMP_0F0_098                     * 82384  098 
-        REL(5)  ROMP_0F0_099                     * 82389  099 
-        REL(5)  ROMP_0F0_09A                     * 8238E  09A 
-        REL(5)  ROMP_0F0_09B                     * 82393  09B 
-        REL(5)  ROMP_0F0_09D                     * 82398  09C 
-        REL(5)  ROMP_0F0_09D                     * 8239D  09D 
-        REL(5)  ROMP_0F0_09E                     * 823A2  09E 
-        REL(5)  ROMP_0F0_09F                     * 823A7  09F 
-        REL(5)  ROMP_0F0_0A0                     * 823AC  0A0 
-        REL(5)  ROMP_0F0_0A1                     * 823B1  0A1 
-        REL(5)  ROMP_0F0_0A2                     * 823B6  0A2 
-        REL(5)  ROMP_0F0_0A3                     * 823BB  0A3 
-        REL(5)  ROMP_0F0_0A4                     * 823C0  0A4 
-        REL(5)  ROMP_0F0_0A5                     * 823C5  0A5 
-        REL(5)  ROMP_0F0_0A6                     * 823CA  0A6 
-        REL(5)  ROMP_0F0_0A7                     * 823CF  0A7 
-        REL(5)  ROMP_0F0_0A8                     * 823D4  0A8 
-        REL(5)  ROMP_0F0_0A9                     * 823D9  0A9 
-        REL(5)  ROMP_0F0_0AA                     * 823DE  0AA 
-        REL(5)  ROMP_0F0_0AB                     * 823E3  0AB 
-        REL(5)  ROMP_0F0_0AC                     * 823E8  0AC 
-        REL(5)  ROMP_0F0_0AD                     * 823ED  0AD 
-        REL(5)  ROMP_0F0_0AE                     * 823F2  0AE 
-        REL(5)  ROMP_0F0_0AF                     * 823F7  0AF 
-        REL(5)  ROMP_0F0_0B0                     * 823FC  0B0 
-        REL(5)  ROMP_0F0_0B1                     * 82401  0B1 
-        REL(5)  ROMP_0F0_0B2                     * 82406  0B2 
-        REL(5)  ROMP_0F0_0B3                     * 8240B  0B3 
-        REL(5)  ROMP_0F0_0B4                     * 82410  0B4 
-        REL(5)  ROMP_0F0_0B5                     * 82415  0B5 
-        REL(5)  ROMP_0F0_0B6                     * 8241A  0B6 
-        REL(5)  ROMP_0F0_0B7                     * 8241F  0B7 
-        REL(5)  ROMP_0F0_0B8                     * 82424  0B8 
-        REL(5)  ROMP_0F0_0B9                     * 82429  0B9 
-        REL(5)  ROMP_0F0_0BA                     * 8242E  0BA 
-        REL(5)  ROMP_0F0_0BB                     * 82433  0BB 
-        REL(5)  ROMP_0F0_0BC                     * 82438  0BC 
-        REL(5)  ROMP_0F0_0BD                     * 8243D  0BD 
-        REL(5)  ROMP_0F0_0BE                     * 82442  0BE 
-        REL(5)  ROMP_0F0_0BF                     * 82447  0BF 
-        REL(5)  ROMP_0F0_0C0                     * 8244C  0C0 
-        REL(5)  ROMP_0F0_0C1                     * 82451  0C1 
-        REL(5)  ROMP_0F0_0C2                     * 82456  0C2 
-        REL(5)  ROMP_0F0_0C3                     * 8245B  0C3 
-        REL(5)  ROMP_0F0_0C4                     * 82460  0C4 
-        REL(5)  ROMP_0F0_0C5                     * 82465  0C5 
-        REL(5)  ROMP_0F0_0C6                     * 8246A  0C6 
+        REL(5)  D/D*~1                           * 82384  098 
+        REL(5)  D/D+~1                           * 82389  099 
+        REL(5)  D/D-~1                           * 8238E  09A 
+        REL(5)  D/D/~1                           * 82393  09B 
+        REL(5)  D/D=~1                           * 82398  09C 
+        REL(5)  D/D=~1                           * 8239D  09D 
+        REL(5)  D/DABS~1                         * 823A2  09E 
+        REL(5)  D/DACOS~1                        * 823A7  09F 
+        REL(5)  D/DACOSH~1                       * 823AC  0A0 
+        REL(5)  D/DALOG~1                        * 823B1  0A1 
+        REL(5)  D/DARG~1                         * 823B6  0A2 
+        REL(5)  D/DASIN~1                        * 823BB  0A3 
+        REL(5)  D/DASINH~1                       * 823C0  0A4 
+        REL(5)  D/DATAN~1                        * 823C5  0A5 
+        REL(5)  D/DATANH~1                       * 823CA  0A6 
+        REL(5)  D/DCOS~1                         * 823CF  0A7 
+        REL(5)  D/DCOSH~1                        * 823D4  0A8 
+        REL(5)  D/DEXP~1                         * 823D9  0A9 
+        REL(5)  D/DINV~1                         * 823DE  0AA 
+        REL(5)  D/DLN~1                          * 823E3  0AB 
+        REL(5)  D/DLNP1~1                        * 823E8  0AC 
+        REL(5)  D/DLOG~1                         * 823ED  0AD 
+        REL(5)  D/DIFTE~1                        * 823F2  0AE 
+        REL(5)  D/DSIN~1                         * 823F7  0AF 
+        REL(5)  D/DSINH~1                        * 823FC  0B0 
+        REL(5)  D/DSQ~1                          * 82401  0B1 
+        REL(5)  D/DSQRT~1                        * 82406  0B2 
+        REL(5)  D/DTAN~1                         * 8240B  0B3 
+        REL(5)  D/DTANH~1                        * 82410  0B4 
+        REL(5)  D/D^~1                           * 82415  0B5 
+        REL(5)  D/D^X~1                          * 8241A  0B6 
+        REL(5)  D/D^Y~1                          * 8241F  0B7 
+        REL(5)  D/DDER~1                         * 82424  0B8 
+        REL(5)  D/DWHERE~1                       * 82429  0B9 
+        REL(5)  D/DINTEGRAL~1                    * 8242E  0BA 
+        REL(5)  D/DSUM~1                         * 82433  0BB 
+        REL(5)  D/DAPPLY~1                       * 82438  0BC 
+        REL(5)  MANMENU+-~1                      * 8243D  0BD 
+        REL(5)  MANMENU*/~1                      * 82442  0BE 
+        REL(5)  MANMENU^~1                       * 82447  0BF 
+        REL(5)  MANMENUEXP~1                     * 8244C  0C0 
+        REL(5)  MANMENULN~1                      * 82451  0C1 
+        REL(5)  MANMENUCSIV~1                    * 82456  0C2 
+        REL(5)  MANMENUEQ~1                      * 8245B  0C3 
+        REL(5)  MANMENUCX~1                      * 82460  0C4 
+        REL(5)  MANMENUTRG~1                     * 82465  0C5 
+        REL(5)  MANMENUATG~1                     * 8246A  0C6 
         REL(5)  ROMP_0F0_0C7                     * 8246F  0C7 
         REL(5)  ROMP_0F0_0C9                     * 82474  0C8 
         REL(5)  ROMP_0F0_0C9                     * 82479  0C9 
@@ -256,7 +256,7 @@ LIB0F0.link:
 
 * ROMPTR 0F0 000
 * refs (1): 82007
-ROMP_0F0_000:
+nINTGSIN~1:
         :: DROP                                  * 824BF
           { OBJ_60E73                            * 824C9
             {                                    * 824D3
@@ -269,7 +269,7 @@ ROMP_0F0_000:
 
 * ROMPTR 0F0 001
 * refs (1): 82007
-ROMP_0F0_001:
+nINTGTAN~1~1:
               :: OBJ_5B3D9 Π&1                   * 8255A
                 SYMBOL Π&1 xSIN xINV xNEG ; ;    * 82569
               NULL{} }                           * 8258C
@@ -286,7 +286,7 @@ ROMP_0F0_001:
 
 * ROMPTR 0F0 002
 * refs (1): 82007
-ROMP_0F0_002:
+nINTGCOS~1:
         :: DROP                                  * 82655
           { OBJ_60E73                            * 8265F
             {                                    * 82669
@@ -299,7 +299,7 @@ ROMP_0F0_002:
 
 * ROMPTR 0F0 003
 * refs (1): 82007
-ROMP_0F0_003:
+nINTGSIN~1~1:
               :: OBJ_5B3D9 Π&1                   * 826EB
                 SYMBOL Π&1 xTAN xLN ; ;          * 826FA
               NULL{} }                           * 82718
@@ -308,7 +308,7 @@ ROMP_0F0_003:
 
 * ROMPTR 0F0 004
 * refs (1): 82007
-ROMP_0F0_004:
+nINTGTAN~1:
         :: DROP                                  * 82731
           { OBJ_60E73                            * 8273B
             {                                    * 82745
@@ -339,7 +339,7 @@ ROMP_0F0_004:
 
 * ROMPTR 0F0 005
 * refs (1): 82007
-ROMP_0F0_005:
+nINTGASIN~1:
         :: OBJ_5B32F                             * 8291C
           { OBJ_60E73                            * 82926
             {                                    * 82930
@@ -352,7 +352,7 @@ ROMP_0F0_005:
 
 * ROMPTR 0F0 006
 * refs (1): 82007
-ROMP_0F0_006:
+nINTGACOS~1:
         :: OBJ_5B32F                             * 829BC
           { OBJ_60E73                            * 829C6
             {                                    * 829D0
@@ -365,7 +365,7 @@ ROMP_0F0_006:
 
 * ROMPTR 0F0 007
 * refs (1): 82007
-ROMP_0F0_007:
+nINTGATAN~1:
         :: OBJ_5B32F                             * 82A5C
           { OBJ_60E73                            * 82A66
             {                                    * 82A70
@@ -378,7 +378,7 @@ ROMP_0F0_007:
 
 * ROMPTR 0F0 008
 * refs (1): 82007
-ROMP_0F0_008:
+nINTGSINH~1:
         :: DROP                                  * 82B06
           { OBJ_60E73                            * 82B10
             {                                    * 82B1A
@@ -391,7 +391,7 @@ ROMP_0F0_008:
 
 * ROMPTR 0F0 009
 * refs (1): 82007
-ROMP_0F0_009:
+nINTGTANH~1~1:
               :: OBJ_5B375 Π&1                   * 82B9C
                 SYMBOL Π&1 xSINH xINV xNEG ; ;   * 82BAB
               NULL{} }                           * 82BCE
@@ -405,7 +405,7 @@ ROMP_0F0_009:
 
 * ROMPTR 0F0 00A
 * refs (1): 82007
-ROMP_0F0_00A:
+nINTGCOSH~1~1:
               :: OBJ_5B375 Π&1                   * 82C73
                 SYMBOL Π&1 xTANH xLN ; ;         * 82C82
               NULL{} }                           * 82CA0
@@ -414,7 +414,7 @@ ROMP_0F0_00A:
 
 * ROMPTR 0F0 00B
 * refs (1): 82007
-ROMP_0F0_00B:
+nINTGCOSH~1:
         :: DROP                                  * 82CB9
           { OBJ_60E73                            * 82CC3
             {                                    * 82CCD
@@ -441,7 +441,7 @@ ROMP_0F0_00C:
 
 * ROMPTR 0F0 00D
 * refs (1): 82007
-ROMP_0F0_00D:
+nINTGTANH~1:
         :: DROP                                  * 82E0F
           { OBJ_60E73                            * 82E19
             {                                    * 82E23
@@ -467,7 +467,7 @@ ROMP_0F0_00D:
 
 * ROMPTR 0F0 00E
 * refs (1): 82007
-ROMP_0F0_00E:
+nINTGEXPM~1:
         :: OBJ_5B32F                             * 82F91
           { OBJ_60E73                            * 82F9B
             {                                    * 82FA5
@@ -480,7 +480,7 @@ ROMP_0F0_00E:
 
 * ROMPTR 0F0 00F
 * refs (1): 82007
-ROMP_0F0_00F:
+nINTGALOG~1:
         :: OBJ_5B32F                             * 8300E
           { OBJ_60E73                            * 83018
             {                                    * 83022
@@ -493,7 +493,7 @@ ROMP_0F0_00F:
 
 * ROMPTR 0F0 010
 * refs (1): 82007
-ROMP_0F0_010:
+nINTGLN~1:
         :: OBJ_5B32F                             * 8309B
           { OBJ_60E73                            * 830A5
             {                                    * 830AF
@@ -506,7 +506,7 @@ ROMP_0F0_010:
 
 * ROMPTR 0F0 011
 * refs (1): 82007
-ROMP_0F0_011:
+nINTGLOG~1:
         :: OBJ_5B32F                             * 83122
           { OBJ_60E73                            * 8312C
             {                                    * 83136
@@ -519,7 +519,7 @@ ROMP_0F0_011:
 
 * ROMPTR 0F0 012
 * refs (1): 82007
-ROMP_0F0_012:
+nINTGINV~1:
         :: OBJ_5B32F                             * 831C3
           { OBJ_60E73                            * 831CD
             {                                    * 831D7
@@ -558,7 +558,7 @@ ROMP_0F0_013:
 
 * ROMPTR 0F0 014
 * refs (1): 82007
-ROMP_0F0_014:
+nINTGSQ~1:
         :: DROP                                  * 833FE
           { OBJ_60E73                            * 83408
             {                                    * 83412
@@ -571,7 +571,7 @@ ROMP_0F0_014:
 
 * ROMPTR 0F0 015
 * refs (1): 82007
-ROMP_0F0_015:
+nINTGSQRT~1:
         :: DROP                                  * 83480
           { OBJ_60E73                            * 8348A
             {                                    * 83494
@@ -618,7 +618,7 @@ ROMP_0F0_017:
 
 * ROMPTR 0F0 018
 * refs (1): 82007
-ROMP_0F0_018:
+nINTGSIGN~1:
         :: OBJ_5B32F                             * 8376B
           { OBJ_60E73                            * 83775
             {                                    * 8377F
@@ -1167,7 +1167,7 @@ ROMP_0F0_075:
 
 * ROMPTR 0F0 076
 * refs (1): 82007
-ROMP_0F0_076:
+{RULES\COLCT}~1:
         :: OBJ_6AFF0 DUPTYPESYMB? NOTcase EXPLODE * 84E0E
           OBJ_6A95B DEPTH OBJ_677EA ' NULLLAM CACHE SYMCOLCT OBJ_6B28C * 84E27
           NOTcase INVDEFERR                      * 84E4F
@@ -1176,10 +1176,10 @@ ROMP_0F0_076:
 
 * ROMPTR 0F0 077
 * refs (1): 82007
-ROMP_0F0_077:
-        :: 3PICK CARCOMP NOTROMPcase OBJ_5A095   * 84E95
+nWHEREFCNAPP~1:
+        :: 3PICK CARCOMP NOTROMPcase nWHEREFCNAPP~1~1 * 84E95
           DUPROMPTR@ ?SKIP SETROMPERR            * 84EAE
-          SWAP OBJ_26F6C NOTcasedrop OBJ_5A095   * 84EBD
+          SWAP OBJ_26F6C NOTcasedrop nWHEREFCNAPP~1~1 * 84EBD
           SWAP infarg? SWAPDROP ITE              * 84ED1
           :: 4ROLL DROPSWAP #1- ;                * 84EE5
           :: ROTDROP ROTDROPSWAP #2- ;           * 84EFE
@@ -1187,12 +1187,12 @@ ROMP_0F0_077:
 
 * ROMPTR 0F0 078
 * refs (1): 82007
-ROMP_0F0_078:
+nWHEREDER~1:
         :: PTR addt: xDER psh #1+DUP top& PTR addt: xWHERE ::N COLA_EVAL ; * 84F26
 
 * ROMPTR 0F0 079
 * refs (1): 82007
-ROMP_0F0_079:
+nWHEREIFTE~1:
         :: psh dup unrot psh #1-SWAP symcomp psh1& psh DUP#1+ Cr xWHERE * 84F5D
           pshm1 metaROTDUP rot #1-SWAP symcomp psh1& psh DUP#1+ Cr xWHERE * 84F99
           BINT1 unrot symbn BINT1 psh #1+DUP top& PTR addt: xWHERE pshtop& * 84FCB

@@ -947,19 +947,19 @@ OBJ_6B48E:
           ERRTRAP POLResUI&Err POLRestoreUI ;    * 6B4F2
 
 * refs (2): 42DD7 42DE1
-OBJ_6B506:
+ObEdit~1:
         :: CK1NOLASTWD POLSaveUI ERRSET          * 6B506
-          :: TRUE OBJ_6C483 ERRSET               * 6B51A
-            :: OBJ_6C4BA OBJ_6C302 OBJ_6BBFE DROP OBJ_4CE83 OBJ_6C3D9 BINT30 * 6B52E
-              GETLAM IT OBJ_6B5E2                * 6B556
+          :: TRUE ObEdit~1~3 ERRSET              * 6B51A
+            :: ObEdit~1~4 OBJ_6C302 OBJ_6BBFE DROP OBJ_4CE83 ObEdit~1~2 * 6B52E
+              BINT30 GETLAM IT OBJ_6B5E2         * 6B551
             ;                                    * 6B565
             ERRTRAP                              * 6B56A
             :: RDROP OBJ_6C8CD ERROR@ #0= caseFALSE GOTO * 6B56F
-              L_6C927 ;                          * 6B592
+              ObEdit~1~5 ;                       * 6B592
 
 * refs (1): 6B4E3
 OBJ_6B59C:
-            :: OBJ_6C1C2 OBJ_6AFF0 SWAP OBJ_6C8CD ExitFcn EVAL TRUE ; ; * 6B59C
+            :: ObEdit~1~1 OBJ_6AFF0 SWAP OBJ_6C8CD ExitFcn EVAL TRUE ; ; * 6B59C
           ERRTRAP POLResUI&Err POLRestoreUI ;    * 6B5CE
 
 * refs (6): 6ABE5 6B4CF 6B560 6B790 6B8AD 6B9E8

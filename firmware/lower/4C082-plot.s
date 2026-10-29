@@ -159,7 +159,7 @@ OBJ_4C616:
 
 * refs (1): 4C49F
 drax_4C639:
-        :: RclMaxStdPict OBJ_451E1 ;             * 4C639
+        :: RclMaxStdPict drax~1 ;                * 4C639
 
 * refs (5): 45083 451AA 465D6 4EF0F D410E
 OBJ_4C64D:
@@ -183,12 +183,12 @@ OBJ_4C701:
           TWO{}N ;                               * 4C738
 
 * refs (2): 4536C 4542F
-OBJ_4C742:
+drax~1~3:
         :: 2DUP DUP 6ROLL #1- #=?SKIP #1+ PIXON3 DUP#0= ?SKIP #1- * 4C742
           PIXON3 ;                               * 4C779
 
 * refs (2): 4556A 45628
-OBJ_4C783:
+drax~1~4:
         :: 2DUP SWAPDUP 6PICK #1- #=?SKIP #1+ SWAP PIXON3 SWAP DUP#0= ?SKIP * 4C783
           #1-                                    * 4C7BF
           SWAP PIXON3 ;                          * 4C7C4
@@ -239,21 +239,21 @@ bins(3r):
 Π'N:
             LAM 'N }                             * 4C9A5
           BIND %0_2A2B4 SWAP #2+ NDUPN #1-DUP #3+ ROLL OVER #4+ ROLL * 4C9B5
-          OBJ_4CA00 ABND OBJ_4CAD2 ;             * 4C9EC
+          bins(3r)~1 ABND bins(3r)~2 ;           * 4C9EC
 
 * refs (1): 4C9EC
-OBJ_4CA00:
+bins(3r)~1:
         :: STATGETXCOL rclä DUP MDIMS ITE        * 4CA00
           :: DUP UNCOERCE 5PICK %< case OBJ_2D2E7 * 4CA1E
             4UNROLLROT COERCE 3UNROLL ;          * 4CA41
           :: ROTDROP BINT1 3UNROLL BINT1 3UNROLL ; * 4CA55
-          #1+_ONE_DO OVER PULLREALEL 5PICK 7PICK OBJ_4EF1E 6UNROLL SWAP3PICK * 4CA78
-          #+SWAP LOOP MDIMS IT DROP              * 4CAA0
+          #1+_ONE_DO OVER PULLREALEL 5PICK 7PICK bins(3r)~1~1 6UNROLL * 4CA78
+          SWAP3PICK #+SWAP LOOP MDIMS IT DROP    * 4CA9B
           5UNROLL 4DROP ;                        * 4CAB9
         BSS     10                               * 4CAC8
 
 * refs (1): 4C9F6
-OBJ_4CAD2:
+bins(3r)~2:
         :: ZERO_DO ISTOP-INDEX DUP #2+PICK ROT2DUP #<ITE * 4CAD2
           :: 2DROP BINT0 ; #- #+ #1+DUP #1+ROLL %1+ SWAP UNROLL LOOP * 4CAF5
           DUPUNROT #1+UNROLL #1- UNCOERCE %1 TWO{}N XEQ>ARRAY 3UNROLL %2 * 4CB31
@@ -406,7 +406,7 @@ OBJ_4D1DC:
           :: DUP                                 * 4D2E5
 
 * refs (1): 330FD
-OBJ_4D2EF:
+NUMSOLVE~38:
             :: BINT3 #> ; case2drop 'DoBadKeyT   * 4D2EF
             SWAP DUP#<7 case2drpfls BINT11       * 4D30D
             #=casedrop                           * 4D321
@@ -641,13 +641,13 @@ OBJ_4DDE6:
           OBJ_517B2 OBJ_4E0BA 8GETLAM 14GETLAM !#1+IF<dim-1 OBJ_4DD19 ; * 4DDFF
 
 * refs (1): 3E8B6
-OBJ_4DE22:
+{GRAPH\DOT+}~1:
         :: CHECKMENU OBJ_7362F ITE OBJ_73684     * 4DE22
           :: OBJ_4EE6F BINT2 3PUTLAM CROSS_OFF OBJ_4DB63 ; * 4DE3B
           DispMenu ;                             * 4DE5E
 
 * refs (1): 3E8EB
-OBJ_4DE68:
+{GRAPH\DOT-}~1:
         :: CHECKMENU OBJ_73643 ITE OBJ_73684     * 4DE68
           :: OBJ_4EE6F BINT1 3PUTLAM CROSS_OFF OBJ_4DB8B ; * 4DE81
           DispMenu ;                             * 4DEA4
@@ -896,8 +896,8 @@ OBJ_4E248:
 CHECKMENU:
         :: TakeOver MENUOFF? case                * 4E266
           :: RDROP TURNMENUON DispMenu ;         * 4E27A
-          OBJ_0CA17 NOT?SEMI                     * 4E293
-          RDROP OBJ_4E6A9 ;                      * 4E29D
+          CHECKMENU~1 NOT?SEMI                   * 4E293
+          RDROP CHECKMENU~2 ;                    * 4E29D
 
 * ->
 * refs (3): 3E7FF 46ACA 4D8DF
@@ -1010,7 +1010,7 @@ OBJ_4E68B:
           OBJ_47209 OBJ_47236 ;                  * 4E69A
 
 * refs (1): 4E2A2
-OBJ_4E6A9:
+CHECKMENU~2:
         :: DispMenu BINT0 16PUTLAM ;             * 4E6A9
         NIBHEX  00000                            * 4E6C2  ..
 
@@ -1051,7 +1051,7 @@ OBJ_4E799:
         ;                                        * 4E85C
 
 * refs (1): 3E7DE
-OBJ_4E861:
+{GRAPH\LABEL}~1:
         :: CHECKMENU OBJ_4E6C7 label! CROSSMARKON ; * 4E861
         BSS     10                               * 4E87F
 
@@ -1063,15 +1063,15 @@ label:
 label!:
           :: OBJ_4681A ?SKIP                     * 4E893
             :: INDEPVAR ID>$ OBJ_4D96B ID>$ ;    * 4E8A2
-            $>grob SWAP $>grob GBUFFGROBDIM OBJ_4E901 GETPMIN&MAX SWAP2C%>% * 4E8C0
-            ROT 4ROLL 3UNROLL OBJ_4EA82 ;        * 4E8E3
+            $>grob SWAP $>grob GBUFFGROBDIM label~1 GETPMIN&MAX SWAP2C%>% * 4E8C0
+            ROT 4ROLL 3UNROLL label~2 ;          * 4E8E3
         ;                                        * 4E8FC
 
 * refs (1): 4E8D4
-OBJ_4E901:
+label~1:
         :: RclAx*s 1get(li)? 3PICK3PICK OBJ_4F20F 4UNROLLROT * 4E901
           r=>rr;rot;*(2rr);+(2rr);r=>r SWAP4ROLL Chkr=>s(s,r) DUPTYPEBINT? * 4E91F
-          ITE OBJ_4E9BF 4ROLLDROP                * 4E933
+          ITE label~1~1 4ROLLDROP                * 4E933
           SWAP3PICK Chkr=>s(s,r) DUPTYPEBINT? NOTcase * 4E942
 
 drop(3-4);swap:
@@ -1085,7 +1085,7 @@ Chkr=>s(s,r):
           2DROP ;                                * 4E9B5
 
 * refs (1): 4E938
-OBJ_4E9BF:
+label~1~1:
         :: 3PICK #2- 5PICK GROBDIMw 2DUPSWAP #> ITE * 4E9BF
           :: SWAP#- 5ROLL SWAP BINT0 MINUSONE DUP SUBGROB 4UNROLL BINT0 ; #- * 4E9E7
           OVER BINT7 #- 6ROLL PutOnPict(2s,go) ; * 4EA23
@@ -1096,21 +1096,21 @@ PutOnPict(2s,go):
           GBUFF 4UNROLL CKGROBFITS 4ROLL 3UNROLL GROB! ; * 4EA5F
 
 * refs (1): 4E8F2
-OBJ_4EA82:
-        :: OBJ_4EBBD 6PICK DUPTYPEBINT? ITE      * 4EA82
+label~2:
+        :: label~2~1 6PICK DUPTYPEBINT? ITE      * 4EA82
           :: OVER GROBDIMw #- #1- BINT3 ROT PutOnPict(2s,go) ; 2DROP * 4EA9B
           BINT3 5PICK DUPTYPEBINT? ITE           * 4EACD
-          :: #3+ 5ROLL OBJ_4EBBD PutOnPict(2s,go) ; * 4EAE1
+          :: #3+ 5ROLL label~2~1 PutOnPict(2s,go) ; * 4EAE1
           :: 2DROP ROTDROP ;                     * 4EAFF
-          GBUFFGROBDIM #2- 4ROLL OBJ_4EBBD DUPGROBDIM SWAPDROP ROTSWAP #- * 4EB13
+          GBUFFGROBDIM #2- 4ROLL label~2~1 DUPGROBDIM SWAPDROP ROTSWAP #- * 4EB13
           5ROLL DUPTYPEBINT? ITE                 * 4EB3B
           :: #3+ ROT PutOnPict(2s,go) ; 3DROP    * 4EB4A
-          SWAP OBJ_4EBBD DUPGROBDIM 5ROLL DUPTYPEBINT? ITE * 4EB68
+          SWAP label~2~1 DUPGROBDIM 5ROLL DUPTYPEBINT? ITE * 4EB68
           :: SWAP#- #1- 4ROLL #2- ROT#- ROT PutOnPict(2s,go) ; 5DROP * 4EB86
         ;                                        * 4EBB8
 
 * refs (4): 4EA87 4EAF0 4EB22 4EB6D
-OBJ_4EBBD:
+label~2~1:
         :: OBJ_159D2 $>grob ;                    * 4EBBD
 
 * refs (2): 45762 4D81C
@@ -1194,7 +1194,7 @@ OBJ_4EF0A:
         :: OBJ_4C64D OBJ_514C3 ;                 * 4EF0A
 
 * refs (1): 4CA91
-OBJ_4EF1E:
+bins(3r)~1~1:
         :: 3PICK 2GETLAM %= case                 * 4EF1E
           :: 3DROP 1GETLAM ;                     * 4EF37
           3UNROLL %- SWAP %/ %1+ %IP COERCE ;    * 4EF4B
@@ -1214,7 +1214,7 @@ pview(c):
         ;                                        * 4F022
 
 * refs (1): 1E309
-OBJ_4F027:
+xPVIEW~list:
         :: NULL{} EQUALcasedrop DOGRAPHIC        * 4F027
           2HXSLIST? WINDOW# ;                    * 4F03B
         BSS     8                                * 4F04A
@@ -1223,5 +1223,5 @@ OBJ_4F027:
 * refs (2): 4F01D 4F040
 WINDOW#:
         :: CHECKPICT GBUFF InGrob(2s,go)?#:BAV! GBUFFGROBDIM 4PICK BINT131 * 4F052
-          OBJ_50316 SWAP3PICK BINT64 OBJ_50316 ORcase SETSIZEERR * 4F075
+          WINDOW#~1 SWAP3PICK BINT64 WINDOW#~1 ORcase SETSIZEERR * 4F075
           TOGDISP SWAP WINDOWXY TURNMENUOFF ;    * 4F093

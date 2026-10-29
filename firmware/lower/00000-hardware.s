@@ -2490,7 +2490,7 @@ L_01F41:
         NIBHEX  0140201080000200                 * 01F43  ...... .
 
 * refs (1): 423F3
-OBJ_01F53:
+GETKEY~6~1:
         CON(5)  (*)+5                            * 01F53  primitive code object
         CD0EX                                    * 01F58
         RSTK=C                                   * 01F5B

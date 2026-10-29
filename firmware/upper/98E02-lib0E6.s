@@ -35,7 +35,7 @@ ROMP_0E6_000:
 
 * ROMPTR 0E6 001
 * refs (1): 98E02
-ROMP_0E6_001:
+TVM~1:
         :: ' ROMPTR 0A9 050 InitMenu ;           * 98FB3
 
 * ROMPTR 0E6 002
@@ -97,7 +97,7 @@ ROMP_0E6_00A:
 
 * ROMPTR 0E6 00B
 * refs (1): 98E02
-ROMP_0E6_00B:
+TVMROOT~1:
         :: INNERCOMP #1<> case ROMPTR 0E7 006    * 9925C
           DUPTYPEIDNT? NOTcase ROMPTR 0E7 006    * 9927B
           ROMPTR 0E6 00C ;                       * 99290
@@ -1008,7 +1008,7 @@ LIB0E6.link:
         CON(5)  DOHSTR                           * 99F7B  link table of library 0E6
         LENGTH                                   * 99F80  length, to #99FE9
         REL(5)  ROMP_0E6_000                     * 99F85  000 
-        REL(5)  ROMP_0E6_001                     * 99F8A  001 
+        REL(5)  TVM~1                            * 99F8A  001 
         REL(5)  ROMP_0E6_002                     * 99F8F  002 
         REL(5)  ROMP_0E6_003                     * 99F94  003 
         REL(5)  ROMP_0E6_004                     * 99F99  004 
@@ -1018,7 +1018,7 @@ LIB0E6.link:
         REL(5)  ROMP_0E6_008                     * 99FAD  008 
         REL(5)  ROMP_0E6_009                     * 99FB2  009 
         REL(5)  ROMP_0E6_00A                     * 99FB7  00A 
-        REL(5)  ROMP_0E6_00B                     * 99FBC  00B 
+        REL(5)  TVMROOT~1                        * 99FBC  00B 
         REL(5)  ROMP_0E6_00C                     * 99FC1  00C 
         REL(5)  ROMP_0E6_00D                     * 99FC6  00D 
         REL(5)  ROMP_0E6_00E                     * 99FCB  00E 

@@ -191,13 +191,13 @@ LIB0F1.link:
         REL(5)  SCATTER                          * 89CE9  038 SCATTER
         REL(5)  HISTOGRAM                        * 89CEE  039 HISTOGRAM
         REL(5)  BAR                              * 89CF3  03A BAR
-        REL(5)  ROMP_0F1_03B                     * 89CF8  03B 
-        REL(5)  ROMP_0F1_03C                     * 89CFD  03C 
-        REL(5)  ROMP_0F1_03D                     * 89D02  03D 
+        REL(5)  PTYPE>PINFO~1                    * 89CF8  03B 
+        REL(5)  ChkPut('PPAR',li,s)~1            * 89CFD  03C 
+        REL(5)  CHECKPVARS~3                     * 89D02  03D 
         REL(5)  ROMP_0F1_03E                     * 89D07  03E 
         REL(5)  ROMP_0F1_03F                     * 89D0C  03F 
         REL(5)  ROMP_0F1_040                     * 89D11  040 
-        REL(5)  ROMP_0F1_041                     * 89D16  041 
+        REL(5)  EXPR>~1~romptr~1                 * 89D16  041 
         ENDLENGTH                                * 89D1B
         RPL
 

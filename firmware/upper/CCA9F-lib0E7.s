@@ -18,7 +18,7 @@ LIB0E7:
 
 * ROMPTR 0E7 000
 * refs (1): CCAAB
-ROMP_0E7_000:
+ZFACTOR~1:
         :: SWAP %1 UMCONV SWAP %1 UMCONV ROMPTR 0E7 001 ; * CCAC2
 
 * ROMPTR 0E7 001
@@ -72,7 +72,7 @@ ROMP_0E7_005:
 
 * ROMPTR 0E7 006
 * refs (1): CCAAB
-ROMP_0E7_006:
+TVMROOT~1~1:
         :: # 202 ERROROUT ;                      * CD0FB
 
 * ROMPTR 0E7 007
@@ -82,17 +82,17 @@ ROMP_0E7_007:
 
 * ROMPTR 0E7 008
 * refs (1): CCAAB
-ROMP_0E7_008:
+DARCY~1:
         :: ROMPTR 0E7 003 %4 %* ;                * CD12D
 
 * ROMPTR 0E7 009
 * refs (1): CCAAB
-ROMP_0E7_009:
+DARCY~2:
         :: ROMPTR 0E7 004 %4 %* ;                * CD14C
 
 * ROMPTR 0E7 00A
 * refs (1): CCAAB
-ROMP_0E7_00A:
+F0λ~1:
         :: SWAP                                  * CD16B
           UNIT %1 tok_m umEND ; UMCONV CARCOMP SWAP * CD175
           UNIT %1 $ "K" umEND ; UMCONV CARCOMP ROMPTR 0E7 00B ; * CD19D
@@ -125,21 +125,21 @@ ROMP_0E7_00C:
 
 * ROMPTR 0E7 00D
 * refs (1): CCAAB
-ROMP_0E7_00D:
+SIDENS~1:
         ::                                       * CD58D
           UNIT %1 $ "K" umEND ; UMCONV CARCOMP ROMPTR 0E7 00C * CD592
           UNIT %1 tok1 CHR_c tok_m umP %3 um^ um/ umEND ; SWAP Unbr>U ; * CD5C7
 
 * ROMPTR 0E7 00E
 * refs (1): CCAAB
-ROMP_0E7_00E:
+TDELTA~1:
         :: SWAP DUPROT U>NCQ 4ROLL U>NCQ ROT 6UNROLL ROT puretemp? NOTcase * CD60D
           ROMPTR 0E7 010                         * CD644
           TempConv %%- %%>% Unbr>U ;             * CD64F
 
 * ROMPTR 0E7 00F
 * refs (1): CCAAB
-ROMP_0E7_00F:
+TINC~1:
         :: SWAP DUPROT U>NCQ 4ROLL U>NCQ ROT 6UNROLL ROT puretemp? NOTcase * CD668
           ROMPTR 0E7 010                         * CD69F
           2DROP DUP cfC EQUAL SWAP %%1 EQUALOR ITE * CD6AA
@@ -163,12 +163,12 @@ ROMP_0E7_010:
 
 * ROMPTR 0E7 012
 * refs (1): CCAAB
-ROMP_0E7_012:
+~UTVUNS1Arg~1:
         :: SWAPcompSWAP ;                        * CD7A1
 
 * ROMPTR 0E7 013
 * refs (1): CCAAB
-ROMP_0E7_013:
+~UTVUNS1Arg~2:
         :: DROPTRUE ;                            * CD7B0
 
 * ROMPTR 0E7 014
@@ -189,97 +189,97 @@ ROMP_0E7_014:
 
 * ROMPTR 0E7 015
 * refs (1): CCAAB
-ROMP_0E7_015:
+ZFACTOR~2:
         :: nscknum2 ROMPTR 0E7 02A ROMPTR 0AB 076 ; * CD864  ZFACTOR
 
 * ROMPTR 0E7 016
 * refs (1): CCAAB
-ROMP_0E7_016:
+ZFACTOR~3:
         :: sncknum2 ROMPTR 0E7 02B ROMPTR 0AB 076 ; * CD889  ZFACTOR
 
 * ROMPTR 0E7 017
 * refs (1): CCAAB
-ROMP_0E7_017:
+ZFACTOR~4:
         :: sscknum2 ROMPTR 0E7 02C ROMPTR 0AB 076 ; * CD8AE  ZFACTOR
 
 * ROMPTR 0E7 018
 * refs (1): CCAAB
-ROMP_0E7_018:
+FANNING~1:
         :: nscknum2 ROMPTR 0E7 02A ROMPTR 0AB 077 ; * CD8D3  FANNING
 
 * ROMPTR 0E7 019
 * refs (1): CCAAB
-ROMP_0E7_019:
+FANNING~2:
         :: sncknum2 ROMPTR 0E7 02B ROMPTR 0AB 077 ; * CD8F8  FANNING
 
 * ROMPTR 0E7 01A
 * refs (1): CCAAB
-ROMP_0E7_01A:
+FANNING~3:
         :: sscknum2 ROMPTR 0E7 02C ROMPTR 0AB 077 ; * CD91D  FANNING
 
 * ROMPTR 0E7 01B
 * refs (1): CCAAB
-ROMP_0E7_01B:
+DARCY~3:
         :: nscknum2 ROMPTR 0E7 02A ROMPTR 0AB 078 ; * CD942  DARCY
 
 * ROMPTR 0E7 01C
 * refs (1): CCAAB
-ROMP_0E7_01C:
+DARCY~4:
         :: sncknum2 ROMPTR 0E7 02B ROMPTR 0AB 078 ; * CD967  DARCY
 
 * ROMPTR 0E7 01D
 * refs (1): CCAAB
-ROMP_0E7_01D:
+DARCY~5:
         :: sscknum2 ROMPTR 0E7 02C ROMPTR 0AB 078 ; * CD98C  DARCY
 
 * ROMPTR 0E7 01E
 * refs (1): CCAAB
-ROMP_0E7_01E:
+F0λ~2:
         :: nscknum2 ROMPTR 0E7 02A ROMPTR 0AB 079 ; * CD9B1  F0λ
 
 * ROMPTR 0E7 01F
 * refs (1): CCAAB
-ROMP_0E7_01F:
+F0λ~3:
         :: sncknum2 ROMPTR 0E7 02B ROMPTR 0AB 079 ; * CD9D6  F0λ
 
 * ROMPTR 0E7 020
 * refs (1): CCAAB
-ROMP_0E7_020:
+F0λ~4:
         :: sscknum2 ROMPTR 0E7 02C ROMPTR 0AB 079 ; * CD9FB  F0λ
 
 * ROMPTR 0E7 021
 * refs (1): CCAAB
-ROMP_0E7_021:
+TDELTA~2:
         :: nscknum2 ROMPTR 0E7 02A ROMPTR 0AB 07B ; * CDA20  TDELTA
 
 * ROMPTR 0E7 022
 * refs (1): CCAAB
-ROMP_0E7_022:
+TDELTA~3:
         :: sncknum2 ROMPTR 0E7 02B ROMPTR 0AB 07B ; * CDA45  TDELTA
 
 * ROMPTR 0E7 023
 * refs (1): CCAAB
-ROMP_0E7_023:
+TDELTA~4:
         :: sscknum2 ROMPTR 0E7 02C ROMPTR 0AB 07B ; * CDA6A  TDELTA
 
 * ROMPTR 0E7 024
 * refs (1): CCAAB
-ROMP_0E7_024:
+TINC~2:
         :: nscknum2 ROMPTR 0E7 02A ROMPTR 0AB 07C ; * CDA8F  TINC
 
 * ROMPTR 0E7 025
 * refs (1): CCAAB
-ROMP_0E7_025:
+TINC~3:
         :: sncknum2 ROMPTR 0E7 02B ROMPTR 0AB 07C ; * CDAB4  TINC
 
 * ROMPTR 0E7 026
 * refs (1): CCAAB
-ROMP_0E7_026:
+TINC~4:
         :: sscknum2 ROMPTR 0E7 02C ROMPTR 0AB 07C ; * CDAD9  TINC
 
 * ROMPTR 0E7 027
 * refs (1): CCAAB
-ROMP_0E7_027:
+SIDENS~2:
         :: cknumdsptch1 ROMPTR 0E7 028 ROMPTR 0AB 07A ; * CDAFE  SIDENS
 
 * ROMPTR 0E7 029
@@ -334,7 +334,7 @@ ROMP_0E7_032:
 
 * ROMPTR 0E7 033
 * refs (1): CCAAB
-ROMP_0E7_033:
+MINEHUNT~1:
         :: UnLockAlpha RECLAIMDISP POLSaveUI ERRSET * CDC8E
           :: ClrDA1IsStat BINT0                  * CDCA7
             $ "00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000" * CDCB6
@@ -447,7 +447,7 @@ ROMP_0E7_03D:
 
 * ROMPTR 0E7 03E
 * refs (1): CCAAB
-ROMP_0E7_03E:
+MINEHUNT~1~1:
         :: ROMPTR 0E7 037 ROMPTR 0E7 036 BINT0 3UNROLL DUPDUP BINT8 #<> IT * CE4B4
           #1+                                    * CE4ED
           #1+ SWAPDUP #1<> IT #1-                * CE4F2
@@ -499,7 +499,7 @@ ROMP_0E7_043:
 
 * ROMPTR 0E7 044
 * refs (1): CCAAB
-ROMP_0E7_044:
+MINEHUNT~1~2:
         :: BINT1 #=casedrop                      * CE88D
           :: BINT11 ?CaseRomptr@ ROMPTR 0E7 046 BINT32 ?CaseRomptr@ * CE89C
             ROMPTR 0E7 046 BINT16 ?CaseRomptr@ ROMPTR 0E7 047 BINT36 * CE8C0
@@ -519,32 +519,32 @@ ROMP_0E7_044:
 
 * ROMPTR 0E7 045
 * refs (1): CCAAB
-ROMP_0E7_045:
+MINEHUNT~1~2~1:
         :: TakeOver ClrDAsOK ROMPTR 0E7 04E ;    * CEA21
 
 * ROMPTR 0E7 046
 * refs (1): CCAAB
-ROMP_0E7_046:
+MINEHUNT~1~2~2:
         :: TakeOver ROMPTR 0E7 040 ROMPTR 0E7 036 #1- DUP#0= ITE * CEA40
           :: DROP DoBadKey ; ROMPTR 0E7 030      * CEA6F
           ROMPTR 0E7 041 ;                       * CEA8E
 
 * ROMPTR 0E7 047
 * refs (1): CCAAB
-ROMP_0E7_047:
+MINEHUNT~1~2~3:
         :: TakeOver ROMPTR 0E7 040 ROMPTR 0E7 037 #1- DUP#0= ITE * CEA9E
           :: DROP DoBadKey ; ROMPTR 0E7 02F      * CEACD
           ROMPTR 0E7 041 ;                       * CEAEC
 
 * ROMPTR 0E7 048
 * refs (1): CCAAB
-ROMP_0E7_048:
+MINEHUNT~1~2~4:
         :: TakeOver ROMPTR 0E7 040 ROMPTR 0E7 036 #1+DUP BINT9 #=ITE * CEAFC
           :: DROP DoBadKey ; ROMPTR 0E7 030 ROMPTR 0E7 041 ; * CEB2B
 
 * ROMPTR 0E7 049
 * refs (1): CCAAB
-ROMP_0E7_049:
+MINEHUNT~1~2~5:
         :: TakeOver ROMPTR 0E7 037 DUP #1= casedrop DoBadKey * CEB5A
           ROMPTR 0E7 036 DUP #1= case2drop DoBadKey * CEB83
           ROMPTR 0E7 040 #1- ROMPTR 0E7 030 #1- ROMPTR 0E7 02F * CEBA2
@@ -552,7 +552,7 @@ ROMP_0E7_049:
 
 * ROMPTR 0E7 04A
 * refs (1): CCAAB
-ROMP_0E7_04A:
+MINEHUNT~1~2~6:
         :: TakeOver ROMPTR 0E7 037 DUP BINT16 #= casedrop DoBadKey * CEBDD
           ROMPTR 0E7 036 DUP #1= case2drop DoBadKey * CEC0B
           ROMPTR 0E7 040 #1- ROMPTR 0E7 030 #1+ ROMPTR 0E7 02F * CEC2A
@@ -560,7 +560,7 @@ ROMP_0E7_04A:
 
 * ROMPTR 0E7 04B
 * refs (1): CCAAB
-ROMP_0E7_04B:
+MINEHUNT~1~2~7:
         :: TakeOver ROMPTR 0E7 037 DUP #1= casedrop DoBadKey * CEC65
           ROMPTR 0E7 036 DUP BINT8 #= case2drop DoBadKey * CEC8E
           ROMPTR 0E7 040 #1+ ROMPTR 0E7 030 #1- ROMPTR 0E7 02F * CECB2
@@ -568,7 +568,7 @@ ROMP_0E7_04B:
 
 * ROMPTR 0E7 04C
 * refs (1): CCAAB
-ROMP_0E7_04C:
+MINEHUNT~1~2~8:
         :: TakeOver ROMPTR 0E7 037 DUP BINT16 #= casedrop DoBadKey * CECED
           ROMPTR 0E7 036 DUP BINT8 #= case2drop DoBadKey * CED1B
           ROMPTR 0E7 040 #1+ ROMPTR 0E7 030 #1+ ROMPTR 0E7 02F * CED3F
@@ -576,7 +576,7 @@ ROMP_0E7_04C:
 
 * ROMPTR 0E7 04D
 * refs (1): CCAAB
-ROMP_0E7_04D:
+MINEHUNT~1~2~9:
         :: TakeOver ROMPTR 0E7 040 ROMPTR 0E7 037 #1+ DUP BINT17 #=ITE * CED7A
           :: DROP DoBadKey ; ROMPTR 0E7 02F ROMPTR 0E7 041 ; * CEDAE
 
@@ -627,7 +627,7 @@ ROMP_0E7_052:
 
 * ROMPTR 0E7 053
 * refs (1): CCAAB
-ROMP_0E7_053:
+MINEHUNT~1~3:
         GROB    "images/CEEEA.png"               * CEEEA  6 x 6
 
 * ROMPTR 0E7 054
@@ -642,7 +642,7 @@ ROMP_0E7_055:
 
 * ROMPTR 0E7 056
 * refs (1): CCAAB
-ROMP_0E7_056:
+MINEHUNT~1~2~10:
         :: HARDBUFF ROMPTR 0E7 037 ROMPTR 0E7 036 ROMPTR 0E7 034 * CEF4A
           ROMPTR 0E7 035 BINT5 {}N # E7 SWAP TWO{}N DUP OSIZE * CEF75
           CODE                                   * CEFA8  71 nibbles
@@ -666,7 +666,7 @@ ROMP_0E7_056:
 
 * ROMPTR 0E7 057
 * refs (1): CCAAB
-ROMP_0E7_057:
+MINEHUNT~1~4:
         :: ' ID MHpar SAFE@ DUP casedrop         * CF029
           :: TOTEMPOB DUP ROMPTR 0E7 058 NOTcasedrop FALSE * CF053  ~UTTYPEEXT0?
             CODE                                 * CF077  64 nibbles
@@ -748,46 +748,46 @@ L_CF1B0:
 LIB0E7.link:
         CON(5)  DOHSTR                           * CF1B5  link table of library 0E7
         LENGTH                                   * CF1BA  length, to #CF37C
-        REL(5)  ROMP_0E7_000                     * CF1BF  000 
+        REL(5)  ZFACTOR~1                        * CF1BF  000 
         REL(5)  ROMP_0E7_001                     * CF1C4  001 
         REL(5)  ROMP_0E7_002                     * CF1C9  002 
         REL(5)  ROMP_0E7_003                     * CF1CE  003 
         REL(5)  ROMP_0E7_004                     * CF1D3  004 
         REL(5)  ROMP_0E7_005                     * CF1D8  005 
-        REL(5)  ROMP_0E7_006                     * CF1DD  006 
+        REL(5)  TVMROOT~1~1                      * CF1DD  006 
         REL(5)  ROMP_0E7_007                     * CF1E2  007 
-        REL(5)  ROMP_0E7_008                     * CF1E7  008 
-        REL(5)  ROMP_0E7_009                     * CF1EC  009 
-        REL(5)  ROMP_0E7_00A                     * CF1F1  00A 
+        REL(5)  DARCY~1                          * CF1E7  008 
+        REL(5)  DARCY~2                          * CF1EC  009 
+        REL(5)  F0λ~1                            * CF1F1  00A 
         REL(5)  ROMP_0E7_00B                     * CF1F6  00B 
         REL(5)  ROMP_0E7_00C                     * CF1FB  00C 
-        REL(5)  ROMP_0E7_00D                     * CF200  00D 
-        REL(5)  ROMP_0E7_00E                     * CF205  00E 
-        REL(5)  ROMP_0E7_00F                     * CF20A  00F 
+        REL(5)  SIDENS~1                         * CF200  00D 
+        REL(5)  TDELTA~1                         * CF205  00E 
+        REL(5)  TINC~1                           * CF20A  00F 
         REL(5)  ROMP_0E7_010                     * CF20F  010 
         REL(5)  ~UTVUNS1Arg                      * CF214  011 ~UTVUNS1Arg
-        REL(5)  ROMP_0E7_012                     * CF219  012 
-        REL(5)  ROMP_0E7_013                     * CF21E  013 
+        REL(5)  ~UTVUNS1Arg~1                    * CF219  012 
+        REL(5)  ~UTVUNS1Arg~2                    * CF21E  013 
         REL(5)  ROMP_0E7_014                     * CF223  014 
-        REL(5)  ROMP_0E7_015                     * CF228  015 
-        REL(5)  ROMP_0E7_016                     * CF22D  016 
-        REL(5)  ROMP_0E7_017                     * CF232  017 
-        REL(5)  ROMP_0E7_018                     * CF237  018 
-        REL(5)  ROMP_0E7_019                     * CF23C  019 
-        REL(5)  ROMP_0E7_01A                     * CF241  01A 
-        REL(5)  ROMP_0E7_01B                     * CF246  01B 
-        REL(5)  ROMP_0E7_01C                     * CF24B  01C 
-        REL(5)  ROMP_0E7_01D                     * CF250  01D 
-        REL(5)  ROMP_0E7_01E                     * CF255  01E 
-        REL(5)  ROMP_0E7_01F                     * CF25A  01F 
-        REL(5)  ROMP_0E7_020                     * CF25F  020 
-        REL(5)  ROMP_0E7_021                     * CF264  021 
-        REL(5)  ROMP_0E7_022                     * CF269  022 
-        REL(5)  ROMP_0E7_023                     * CF26E  023 
-        REL(5)  ROMP_0E7_024                     * CF273  024 
-        REL(5)  ROMP_0E7_025                     * CF278  025 
-        REL(5)  ROMP_0E7_026                     * CF27D  026 
-        REL(5)  ROMP_0E7_027                     * CF282  027 
+        REL(5)  ZFACTOR~2                        * CF228  015 
+        REL(5)  ZFACTOR~3                        * CF22D  016 
+        REL(5)  ZFACTOR~4                        * CF232  017 
+        REL(5)  FANNING~1                        * CF237  018 
+        REL(5)  FANNING~2                        * CF23C  019 
+        REL(5)  FANNING~3                        * CF241  01A 
+        REL(5)  DARCY~3                          * CF246  01B 
+        REL(5)  DARCY~4                          * CF24B  01C 
+        REL(5)  DARCY~5                          * CF250  01D 
+        REL(5)  F0λ~2                            * CF255  01E 
+        REL(5)  F0λ~3                            * CF25A  01F 
+        REL(5)  F0λ~4                            * CF25F  020 
+        REL(5)  TDELTA~2                         * CF264  021 
+        REL(5)  TDELTA~3                         * CF269  022 
+        REL(5)  TDELTA~4                         * CF26E  023 
+        REL(5)  TINC~2                           * CF273  024 
+        REL(5)  TINC~3                           * CF278  025 
+        REL(5)  TINC~4                           * CF27D  026 
+        REL(5)  SIDENS~2                         * CF282  027 
         REL(5)  ROMP_0E7_029                     * CF287  028 
         REL(5)  ROMP_0E7_029                     * CF28C  029 
         REL(5)  ROMP_0E7_02A                     * CF291  02A 
@@ -799,7 +799,7 @@ LIB0E7.link:
         REL(5)  ROMP_0E7_030                     * CF2AF  030 
         REL(5)  ROMP_0E7_031                     * CF2B4  031 
         REL(5)  ROMP_0E7_032                     * CF2B9  032 
-        REL(5)  ROMP_0E7_033                     * CF2BE  033 
+        REL(5)  MINEHUNT~1                       * CF2BE  033 
         REL(5)  ROMP_0E7_034                     * CF2C3  034 
         REL(5)  ROMP_0E7_035                     * CF2C8  035 
         REL(5)  ROMP_0E7_036                     * CF2CD  036 
@@ -810,32 +810,32 @@ LIB0E7.link:
         REL(5)  ROMP_0E7_03B                     * CF2E6  03B 
         REL(5)  ROMP_0E7_03C                     * CF2EB  03C 
         REL(5)  ROMP_0E7_03D                     * CF2F0  03D 
-        REL(5)  ROMP_0E7_03E                     * CF2F5  03E 
+        REL(5)  MINEHUNT~1~1                     * CF2F5  03E 
         REL(5)  ROMP_0E7_03F                     * CF2FA  03F 
         REL(5)  ROMP_0E7_040                     * CF2FF  040 
         REL(5)  ROMP_0E7_041                     * CF304  041 
         REL(5)  ROMP_0E7_042                     * CF309  042 
         REL(5)  ROMP_0E7_043                     * CF30E  043 
-        REL(5)  ROMP_0E7_044                     * CF313  044 
-        REL(5)  ROMP_0E7_045                     * CF318  045 
-        REL(5)  ROMP_0E7_046                     * CF31D  046 
-        REL(5)  ROMP_0E7_047                     * CF322  047 
-        REL(5)  ROMP_0E7_048                     * CF327  048 
-        REL(5)  ROMP_0E7_049                     * CF32C  049 
-        REL(5)  ROMP_0E7_04A                     * CF331  04A 
-        REL(5)  ROMP_0E7_04B                     * CF336  04B 
-        REL(5)  ROMP_0E7_04C                     * CF33B  04C 
-        REL(5)  ROMP_0E7_04D                     * CF340  04D 
+        REL(5)  MINEHUNT~1~2                     * CF313  044 
+        REL(5)  MINEHUNT~1~2~1                   * CF318  045 
+        REL(5)  MINEHUNT~1~2~2                   * CF31D  046 
+        REL(5)  MINEHUNT~1~2~3                   * CF322  047 
+        REL(5)  MINEHUNT~1~2~4                   * CF327  048 
+        REL(5)  MINEHUNT~1~2~5                   * CF32C  049 
+        REL(5)  MINEHUNT~1~2~6                   * CF331  04A 
+        REL(5)  MINEHUNT~1~2~7                   * CF336  04B 
+        REL(5)  MINEHUNT~1~2~8                   * CF33B  04C 
+        REL(5)  MINEHUNT~1~2~9                   * CF340  04D 
         REL(5)  ROMP_0E7_04E                     * CF345  04E 
         REL(5)  ROMP_0E7_04F                     * CF34A  04F 
         REL(5)  ROMP_0E7_050                     * CF34F  050 
         REL(5)  ROMP_0E7_051                     * CF354  051 
         REL(5)  ROMP_0E7_052                     * CF359  052 
-        REL(5)  ROMP_0E7_053                     * CF35E  053 
+        REL(5)  MINEHUNT~1~3                     * CF35E  053 
         REL(5)  ROMP_0E7_054                     * CF363  054 
         REL(5)  ROMP_0E7_055                     * CF368  055 
-        REL(5)  ROMP_0E7_056                     * CF36D  056 
-        REL(5)  ROMP_0E7_057                     * CF372  057 
+        REL(5)  MINEHUNT~1~2~10                  * CF36D  056 
+        REL(5)  MINEHUNT~1~4                     * CF372  057 
         REL(5)  ~UTTYPEEXT0?                     * CF377  058 ~UTTYPEEXT0?
         ENDLENGTH                                * CF37C
         NIBHEX  0000                             * CF37C  ..

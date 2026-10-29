@@ -200,13 +200,13 @@ ROMP_0C2_04B:
 
 * ROMPTR 0C2 04C
 * refs (1): 90007
-ROMP_0C2_04C:
+TRACE~1:
         :: sqmat(ar)? %%0 BINT1 ROT #1+_ONE_DO ROTOVER PULLLONGEL 4ROLL L%+ * 9791D
           ROT ISTOP@ #+ NextInArray DROPSWAPDROP ToNorm(nb) ; * 9794F
 
 * ROMPTR 0C2 04D
 * refs (1): 90007
-ROMP_0C2_04D:
+COND~1:
         :: sqmat(ar)? OVER OBJ_36912 3UNROLL 3PICK %%0= case SETIVLERR * 97972
           DUP#1= case                            * 9799F
           :: 3DROP %1 ;                          * 979A9
@@ -216,13 +216,13 @@ ROMP_0C2_04D:
           2GETLAM 1GETABND                       * 97A34
           { NULLLAM NULLLAM NULLLAM NULLLAM NULLLAM NULLLAM NULLLAM } BIND * 97A3E
           2GETLAM BINT1 {}N OVER OBJ_37A4F 2GETLAM UNCOERCE%% L%/ MAKEARRY * 97A70
-          BINT1 OBJ_7D11B ROTDROP OBJ_7CE64 3PUTLAM 6GETLAM EVAL 2GETLAM * 97A9D
+          BINT1 OBJ_7D11B ROTDROP COND~1~3 3PUTLAM 6GETLAM EVAL 2GETLAM * 97A9D
           7GETLAM EVAL 4PUTLAM BEGIN 5GETLAM #1-DUP 5PUTLAM #0= case * 97AC5
           ROMPTR 0C2 04E                         * 97AF2
           DUP OBJ_37A0E OVER OBJ_37A4F 4GETLAM 4ROLL 2GETLAM #1+_ONE_DO * 97AFD
           INDEX@ 3PICK OVER#= ITE 4PICK 5PICK    * 97B25
           SWAP OBJ_37361 NextInArray 4UNROLL3DROP BINT1 OBJ_7D11B ROTDROP * 97B43
-          OBJ_7CE64 3GETLAM OVER 3PUTLAM %%<= case ROMPTR 0C2 04E * 97B66
+          COND~1~3 3GETLAM OVER 3PUTLAM %%<= case ROMPTR 0C2 04E * 97B66
           6GETLAM EVAL 2GETLAM 7GETLAM EVAL 4GETLAM 2DUP#= case2drop * 97B8F
           ROMPTR 0C2 04E                         * 97BB7
           OVER 4PUTLAM ROTSWAP OBJ_372EF OBJ_37D69 %%>% SWAPROT OBJ_372EF * 97BC2
@@ -233,7 +233,7 @@ ROMP_0C2_04D:
 ROMP_0C2_04E:
           :: RDROP 2GETLAM #1- UNCOERCE%% OVER OBJ_37A4F OVER L%* 2GETLAM * 97C03
             #1+_ONE_DO ROT 3PICK3PICK L%/ INDEX@ OBJ_37361 ROT 1+(rr) ROT * 97C35
-            B%NEG NextInArray 2DROP BINT1 OBJ_7D11B ROTROT2DROP OBJ_7CE64 * 97C62
+            B%NEG NextInArray 2DROP BINT1 OBJ_7D11B ROTROT2DROP COND~1~3 * 97C62
             %% 6.66666666666667E-1 %%* 2GETLAM UNCOERCE%% %%/ 3GETLAM ABND * 97C85
             2DUP %%> ITE DROPSWAPDROP ROTROT2DROP * 97CBD
             %%* %%>% ;                           * 97CD6
@@ -241,7 +241,7 @@ ROMP_0C2_04E:
 
 * ROMPTR 0C2 04F
 * refs (1): 90007
-ROMP_0C2_04F:
+COND~1~1:
         :: BINT1 %%0 ROT #1+_ONE_DO ROT INDEX@ OBJ_372EF %%ABS ROT 2DUP %%> * 97CEA
           ITE                                    * 97D26
           :: DROP ROTDROP INDEX@ SWAP ;          * 97D2B
@@ -250,10 +250,10 @@ ROMP_0C2_04F:
 
 * ROMPTR 0C2 050
 * refs (1): 90007
-ROMP_0C2_050:
+LU~1:
         :: sqmat(ar)? SWAP CKREF OBJ_7CD7E ROT OBJ_7CEA5 2DROP OBJ_7CDE2 DUP * 97D6C
-          TOTEMPOB DUP OBJ_37A31 OVER OBJ_379F0 2SWAP BINT1 2GETLAM * 97D9E
-          #1+_ONE_DO 2GETLAM #1+_ONE_DO JINDEX@ INDEX@ 2DUP#< ITE * 97DC6
+          TOTEMPOB DUP LU~1~1 OVER OBJ_379F0 2SWAP BINT1 2GETLAM #1+_ONE_DO * 97D9E
+          2GETLAM #1+_ONE_DO JINDEX@ INDEX@ 2DUP#< ITE * 97DCB
           :: 2DROP ROT 4PICK 3PICK PUTEL 3UNROLL ; * 97DE9
           :: #= ITE 5PICK 4PICK                  * 97E11
             ROTSWAP 3PICK PUTEL SWAP ;           * 97E2A
@@ -263,10 +263,10 @@ ROMP_0C2_050:
 
 * ROMPTR 0C2 051
 * refs (1): 90007
-ROMP_0C2_051:
+MATDET~1:
         :: sqmat(ar)? DUP#1= case                * 97EA2
           :: PULLEL SWAPDROP ;                   * 97EB6
-          DUP #2= case OBJ_36A53                 * 97ECA
+          DUP #2= case MATDET~1~1                * 97ECA
           SWAP ROMPTR 0C2 059 SWAP OBJ_7CD79 ROT OBJ_7CEA5 ABND ROTDROP * 97EDE
           ROMPTR 0C2 052 ToNorm(nb) ;            * 97F0C
 
@@ -292,7 +292,7 @@ ROMP_0C2_054:
 
 * ROMPTR 0C2 055
 * refs (1): 90007
-ROMP_0C2_055:
+MATINV~1:
         :: sqmat(ar)? SWAP CKREF ROMPTR 0C2 056 ; * 9804D
 
 * ROMPTR 0C2 056
@@ -329,8 +329,8 @@ ROMP_0C2_057:
 
 * ROMPTR 0C2 058
 * refs (1): 90007
-ROMP_0C2_058:
-        :: 2GETLAM #1+_ONE_DO INDEX@ OBJ_372EF OBJ_37A72 INDEX@ OBJ_37361 * 983C6
+COND~1~2:
+        :: 2GETLAM #1+_ONE_DO INDEX@ OBJ_372EF COND~1~2~1 INDEX@ OBJ_37361 * 983C6
           NextInArray                            * 983EE
           :: 2GETLAM DUP #1= caseDROP #1+        * 983F3
             BINT2 DO INDEX@ BINT1 INDEX@ #1- OBJ_7CAA4 SWAP INDEX@ OBJ_372EF * 98411
@@ -478,7 +478,7 @@ L_98690:
 
 * ROMPTR 0C2 05B
 * refs (1): 90007
-ROMP_0C2_05B:
+RREF~1:
         :: BINT1 OVER MDIMS NOTcase doerr501     * 986AC
           RESOROMP ROMPTR 0C2 05C RESOROMP ROMPTR 0C2 05E 2NULLLAM{} BIND * 986CA
           DUP #8* !MAKEHXS 4NULLLAM{} BIND CKREF OBJ_7CD7E 1GETLAM OBJ_7D28D * 986F4
@@ -504,7 +504,7 @@ ROMP_0C2_05B:
 
 * ROMPTR 0C2 05C
 * refs (1): 90007
-ROMP_0C2_05C:
+RREF~1~1:
         :: OVER OBJ_372EF DUPUNROT B%ABS 7PICK %%> 5PICK 8PICK %%<= AND * 98966
           ?SKIP                                  * 9899D
           :: %%0 4PICK OBJ_37361 ;               * 989A2
@@ -515,7 +515,7 @@ ROMP_0C2_05C:
 
 * ROMPTR 0C2 05D
 * refs (1): 90007
-ROMP_0C2_05D:
+RREF~1~2:
         :: 4GETLAM 3GETLAM #> ?SEMI              * 98A6A
           OVER OBJ_372EF SWAP OVER =0?(nb) case SWAPDROP * 98A83
           %%1 4PICK OBJ_37361 2GETLAM INDEX@ #=case SWAPDROP * 98AA6
@@ -525,7 +525,7 @@ ROMP_0C2_05D:
 
 * ROMPTR 0C2 05E
 * refs (1): 90007
-ROMP_0C2_05E:
+RREF~1~3:
         CODE                                     * 98B28  98 nibbles
           GOSBVL  POP2#                          * 98B32
           R1=C                                   * 98B39
@@ -588,12 +588,12 @@ L_98BF3:
 LIB0C2.link:
         CON(5)  DOHSTR                           * 98BF8  link table of library 0C2
         LENGTH                                   * 98BFD  length, to #98DDD
-        REL(5)  ROMP_0C2_000                     * 98C02  000 
+        REL(5)  SRAD~1                           * 98C02  000 
         REL(5)  ROMP_0C2_001                     * 98C07  001 
-        REL(5)  ROMP_0C2_002                     * 98C0C  002 
+        REL(5)  EGVL~1                           * 98C0C  002 
         REL(5)  ROMP_0C2_003                     * 98C11  003 
-        REL(5)  ROMP_0C2_004                     * 98C16  004 
-        REL(5)  ROMP_0C2_005                     * 98C1B  005 
+        REL(5)  EGV~1                            * 98C16  004 
+        REL(5)  SCHUR~1                          * 98C1B  005 
         REL(5)  ROMP_0C2_006                     * 98C20  006 
         REL(5)  ROMP_0C2_007                     * 98C25  007 
         REL(5)  ROMP_0C2_008                     * 98C2A  008 
@@ -609,22 +609,22 @@ LIB0C2.link:
         REL(5)  ROMP_0C2_012                     * 98C5C  012 
         REL(5)  ROMP_0C2_013                     * 98C61  013 
         REL(5)  ROMP_0C2_014                     * 98C66  014 
-        REL(5)  ROMP_0C2_015                     * 98C6B  015 
+        REL(5)  EGV~1~1                          * 98C6B  015 
         REL(5)  ROMP_0C2_016                     * 98C70  016 
         REL(5)  ROMP_0C2_017                     * 98C75  017 
-        REL(5)  ROMP_0C2_018                     * 98C7A  018 
-        REL(5)  ROMP_0C2_019                     * 98C7F  019 
+        REL(5)  EGV~1~1~1                        * 98C7A  018 
+        REL(5)  EGV~1~2                          * 98C7F  019 
         REL(5)  ROMP_0C2_01A                     * 98C84  01A 
         REL(5)  ROMP_0C2_01B                     * 98C89  01B 
         REL(5)  ROMP_0C2_01C                     * 98C8E  01C 
-        REL(5)  ROMP_0C2_01D                     * 98C93  01D 
+        REL(5)  EGV~1~3                          * 98C93  01D 
         REL(5)  ROMP_0C2_01E                     * 98C98  01E 
         REL(5)  ROMP_0C2_01F                     * 98C9D  01F 
         REL(5)  ROMP_0C2_020                     * 98CA2  020 
         REL(5)  ROMP_0C2_021                     * 98CA7  021 
         REL(5)  ROMP_0C2_022                     * 98CAC  022 
-        REL(5)  ROMP_0C2_023                     * 98CB1  023 
-        REL(5)  ROMP_0C2_024                     * 98CB6  024 
+        REL(5)  QR~1                             * 98CB1  023 
+        REL(5)  LQ~1                             * 98CB6  024 
         REL(5)  ROMP_0C2_025                     * 98CBB  025 
         REL(5)  ROMP_0C2_026                     * 98CC0  026 
         REL(5)  ROMP_0C2_027                     * 98CC5  027 
@@ -640,11 +640,11 @@ LIB0C2.link:
         REL(5)  ROMP_0C2_031                     * 98CF7  031 
         REL(5)  ROMP_0C2_032                     * 98CFC  032 
         REL(5)  ROMP_0C2_033                     * 98D01  033 
-        REL(5)  ROMP_0C2_034                     * 98D06  034 
+        REL(5)  SNRM~1                           * 98D06  034 
         REL(5)  ROMP_0C2_035                     * 98D0B  035 
-        REL(5)  ROMP_0C2_036                     * 98D10  036 
-        REL(5)  ROMP_0C2_037                     * 98D15  037 
-        REL(5)  ROMP_0C2_038                     * 98D1A  038 
+        REL(5)  RANK~1                           * 98D10  036 
+        REL(5)  SVL~1                            * 98D15  037 
+        REL(5)  SVD~1                            * 98D1A  038 
         REL(5)  ROMP_0C2_039                     * 98D1F  039 
         REL(5)  ROMP_0C2_03A                     * 98D24  03A 
         REL(5)  ROMP_0C2_03B                     * 98D29  03B 
@@ -664,25 +664,25 @@ LIB0C2.link:
         REL(5)  ROMP_0C2_049                     * 98D6F  049 
         REL(5)  ROMP_0C2_04A                     * 98D74  04A 
         REL(5)  ROMP_0C2_04B                     * 98D79  04B 
-        REL(5)  ROMP_0C2_04C                     * 98D7E  04C 
-        REL(5)  ROMP_0C2_04D                     * 98D83  04D 
+        REL(5)  TRACE~1                          * 98D7E  04C 
+        REL(5)  COND~1                           * 98D83  04D 
         REL(5)  ROMP_0C2_04E                     * 98D88  04E 
-        REL(5)  ROMP_0C2_04F                     * 98D8D  04F 
-        REL(5)  ROMP_0C2_050                     * 98D92  050 
-        REL(5)  ROMP_0C2_051                     * 98D97  051 
+        REL(5)  COND~1~1                         * 98D8D  04F 
+        REL(5)  LU~1                             * 98D92  050 
+        REL(5)  MATDET~1                         * 98D97  051 
         REL(5)  ROMP_0C2_052                     * 98D9C  052 
         REL(5)  ROMP_0C2_053                     * 98DA1  053 
         REL(5)  ROMP_0C2_054                     * 98DA6  054 
-        REL(5)  ROMP_0C2_055                     * 98DAB  055 
+        REL(5)  MATINV~1                         * 98DAB  055 
         REL(5)  ROMP_0C2_056                     * 98DB0  056 
         REL(5)  ROMP_0C2_057                     * 98DB5  057 
-        REL(5)  ROMP_0C2_058                     * 98DBA  058 
+        REL(5)  COND~1~2                         * 98DBA  058 
         REL(5)  ROMP_0C2_059                     * 98DBF  059 
         REL(5)  ROMP_0C2_05A                     * 98DC4  05A 
-        REL(5)  ROMP_0C2_05B                     * 98DC9  05B 
-        REL(5)  ROMP_0C2_05C                     * 98DCE  05C 
-        REL(5)  ROMP_0C2_05D                     * 98DD3  05D 
-        REL(5)  ROMP_0C2_05E                     * 98DD8  05E 
+        REL(5)  RREF~1                           * 98DC9  05B 
+        REL(5)  RREF~1~1                         * 98DCE  05C 
+        REL(5)  RREF~1~2                         * 98DD3  05D 
+        REL(5)  RREF~1~3                         * 98DD8  05E 
         ENDLENGTH                                * 98DDD
         NIBHEX  C0210E06494E4020202A36496E616E63 * 98DDD  ..à`ηä...¢cηæ.æ6
         NIBHEX  656E0                            * 98DFD  Væ

@@ -4,14 +4,14 @@
 * Follows on from the previous file (at #70039 in the original ROM).
 
 * refs (1): 855DD
-OBJ_70039:
+XEQIOBACKUP~1~2:
         CON(5)  (*)+5                            * 70039  primitive code object
         C=0     S                                * 7003E
         C=-C-1  S                                * 70041
         GOTO    L_70050                          * 70044
 
 * refs (2): 855FB 85623
-OBJ_70048:
+XEQIOBACKUP~1~3:
         CON(5)  (*)+5                            * 70048  primitive code object
         C=0     S                                * 7004D
 L_70050:
@@ -176,7 +176,7 @@ L_70250:
         RPL
 
 * refs (1): 0AAC1
-OBJ_70280:
+PORTSTATUS~2:
         # 40000                                  * 70280  262144
 
 * refs (4): 08072 0AACB 0AB27 0BBAC
@@ -970,7 +970,7 @@ L_70DE9:
         C=R0.F  A                                * 70E00
         A=A-C   A                                * 70E06
         GOTO    L_70BB7                          * 70E08
-L_70E0C:
+SET~1:
         AD1EX                                    * 70E0C
         C=DAT1  A                                * 70E0F
         D1=(5)  DOROMP                           * 70E12
@@ -1385,7 +1385,7 @@ L_71317:
         D0=A                                     * 71317
         GOSBVL  SUB_0841E                        * 7131A
         GONC    L_71310                          * 71321
-L_71324:
+PurgeBkp12(nm,s)~2~1~1:
         C=0     A                                * 71324
         R0=C.F  A                                * 71326
         C=DAT1  A                                * 7132C
@@ -1645,7 +1645,7 @@ L_7162C:
         RPL
 
 * refs (1): 0222D
-OBJ_71646:
+RunConfig(s)~1:
         :: ERRSET ?ACCPTR> ERRTRAP               * 71646
           :: DROP COLASKIP ; EVAL ;              * 7165A
         ASSEMBLE
@@ -1654,7 +1654,7 @@ L_71678:
         A=DAT0  A                                * 7167B
         D0=A                                     * 7167E
         GOTO    L_716B0                          * 71681
-L_71685:
+GETEL~1:
         C=0     A                                * 71685
         R0=C.F  A                                * 71687
         C=DAT1  A                                * 7168D
@@ -1692,7 +1692,7 @@ L_716D3:
         GOSUB   SUB_71603                        * 716FA
 L_716FE:
         GOVLNG  L_0C50F                          * 716FE
-L_71705:
+rGETATELN~1:
         A=DAT1  A                                * 71705
         GOSBVL  SAVPTR                           * 71708
         GOSBVL  SUB_07ED8                        * 7170F
@@ -1715,7 +1715,7 @@ L_71750:
         LC(5)   IRAMBUFF                         * 71750
         DAT1=C  A                                * 71757
         GOTO    L_716B8                          * 7175A
-L_7175E:
+NumEntryLin(b)~1:
         A=DAT1  A                                * 7175E
         D1=D1+  5                                * 71761
         D=D+1   A                                * 71764
@@ -1742,7 +1742,7 @@ L_717A8:
         D0=A                                     * 717A8
         B=A     A                                * 717AB
         GOVLNG  L_3F51E                          * 717AD
-L_717B4:
+dup2;idem(nm,bk)?~1:
         C=DAT1  A                                * 717B4
         CD1EX                                    * 717B7
         RSTK=C                                   * 717BA
@@ -1801,7 +1801,7 @@ L_71843:
         GOSBVL  GETPTR                           * 7186A
         D1=(5)  #80104                           * 71871
         GOTO    L_71811                          * 71878
-L_7187C:
+sto12(bk,nm,s)~1~1:
         GOSBVL  POP2#                            * 7187C
         R4=C.F  A                                * 71883
         R3=A.F  A                                * 71889
@@ -1877,7 +1877,7 @@ L_71917:
         C=R0.F  A                                * 7197E
         D1=C                                     * 71984
         RTNCC                                    * 71987
-L_71989:
+PurgeBkp12(nm,s)~3~1:
         GOSBVL  SAVPTR                           * 71989
         C=0     A                                * 71990
         R1=C.F  A                                * 71992
@@ -1928,7 +1928,7 @@ L_71A35:
         GOVLNG  GETPTRFALSE                      * 71A35
 
 * refs (1): 09424
-OBJ_71A3C:
+PurgeBkp12(nm,s)~4:
         CON(5)  (*)+5                            * 71A3C  primitive code object
         C=DAT1  A                                * 71A41
         CD1EX                                    * 71A44
@@ -1956,7 +1956,7 @@ L_71A69:
         LC(5)   FALSE                            * 71A82
         A=C     A                                * 71A89
         PC=(A)                                   * 71A8B
-L_71A8F:
+BAK>OB~1:
         C=DAT1  A                                * 71A8F
         CD1EX                                    * 71A92
         RSTK=C                                   * 71A95
@@ -2001,7 +2001,7 @@ L_71AD9:
         A=DAT0  A                                * 71B21
         D0=D0+  5                                * 71B24
         PC=(A)                                   * 71B27
-L_71B2B:
+BAKNAME~1:
         C=DAT1  A                                * 71B2B
         CD1EX                                    * 71B2E
         RSTK=C                                   * 71B31
@@ -2305,7 +2305,7 @@ L_71F00:
         GOVLNG  L_26B09                          * 71F07
 
 * refs (1): 26AD7
-OBJ_71F0E:
+?OKINALG~romptr~1:
         CON(5)  (*)+5                            * 71F0E  primitive code object
         GOSUB   SUB_71E57                        * 71F13
         RSTK=C                                   * 71F17
@@ -2576,7 +2576,7 @@ SUB_72245:
         DAT1=C  12                               * 7227D
         SETHEX                                   * 72281
         RTN                                      * 72283
-L_72285:
+purge(bk,s)~1~1:
         C=0     A                                * 72285
         R3=C.F  A                                * 72287
         A=DAT1  A                                * 7228D
@@ -2617,7 +2617,7 @@ L_722E9:
         RPL
 
 * refs (1): 09016
-OBJ_72300:
+sto12(bk,nm,s)~2:
         :: SWAPDROP 2DUP #>case SETCORPORT       * 72300
           2DUP SWAP#- 4ROLL 2DUP #>case SETCORPORT * 72319
           SWAP#- ROTDROP ROTDUP OSIZE ;          * 72337
@@ -3079,7 +3079,7 @@ L_72939:
         GOTO    L_72712                          * 72958
 
 * refs (1): C07F8
-OBJ_7295C:
+VERSION~1:
         CON(5)  (*)+5                            * 7295C  primitive code object
         GOSBVL  SAVPTR                           * 72961
         A=DAT1  A                                * 72968
@@ -3158,7 +3158,7 @@ L_72A61:
         ;                                        * 72A6E
 
 * refs (1): 2121A
-OBJ_72A73:
+xPVARS~1:
         :: BINT33 #> COLAcase ;                  * 72A73
 
 * refs (2): 097C0 72AF0
@@ -3169,7 +3169,7 @@ OBJ_72A8C:
           REPEAT DROP ;                          * 72AC8
 
 * refs (1): 8554B
-OBJ_72AD7:
+restore(nm,s)~1~2:
         :: HOMEDIR SYSSTOPSIGN CONTEXT@ COLA OBJ_72A8C * 72AD7
         ;                                        * 72AF5
 
@@ -3228,13 +3228,13 @@ SUB_72BA1:
         RPL
 
 * refs (1): 72BC3
-OBJ_72BA5:
+StartMenu~1~romptr~1~1:
         :: RPTRACC ?SEMI                         * 72BA5
           SETROMPERR ;                           * 72BB4
 
 * refs (1): 3A604
-OBJ_72BBE:
-        :: OBJ_72BA5 OBJ_72BD2 ;                 * 72BBE
+StartMenu~1~romptr~1:
+        :: StartMenu~1~romptr~1~1 OBJ_72BD2 ;    * 72BBE
 
 * refs (2): 72BC8 8D24B
 OBJ_72BD2:
@@ -3431,7 +3431,7 @@ L_72E0F:
         A=DAT0  A                                * 72E0F
         D0=D0+  5                                * 72E12
         PC=(A)                                   * 72E15
-L_72E19:
+EvalNoCK~1:
         C=DAT1  A                                * 72E19
         RSTK=C                                   * 72E1C
         CD1EX                                    * 72E1E
@@ -3477,7 +3477,7 @@ OBJ_72EA5:
           ROMPTR 0E8 00D ;                       * 72EC8
 
 * refs (1): 3A256
-OBJ_72ED8:
+DispMenu.1~2:
         ::                                       * 72ED8
 
 Code_72EDD:

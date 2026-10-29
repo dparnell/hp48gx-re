@@ -6,8 +6,8 @@
 use crate::prelude::*;
 
 // ROMPTR 0C1 021
-// ROMP_0C1_021: firmware/upper/CA95B-lib0C1.s:125
-pub(crate) fn ROMP_0C1_021(r: &mut Run) {
+// UMSIN~1~1~2: firmware/upper/CA95B-lib0C1.s:43
+pub(crate) fn UMSIN_1_1_2(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -54,7 +54,7 @@ pub(crate) fn ROMP_0C1_021(r: &mut Run) {
 }
 
 // ROMPTR 0C4 003
-// ROMP_0C4_003: firmware/upper/CADC4-lib0C4.s:50
+// ROMP_0C4_003: firmware/upper/CADC4-lib0C4.s:31
 pub(crate) fn ROMP_0C4_003(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -107,7 +107,7 @@ pub(crate) fn ROMP_0C4_003(r: &mut Run) {
     }
 }
 
-// SUB_CAEC5: firmware/upper/CADC4-lib0C4.s:76
+// SUB_CAEC5: firmware/upper/CADC4-lib0C4.s:57
 pub(crate) fn SUB_CAEC5(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -141,7 +141,7 @@ pub(crate) fn SUB_CAEC5(r: &mut Run) {
 }
 
 // ROMPTR 0C4 004
-// ROMP_0C4_004: firmware/upper/CADC4-lib0C4.s:92
+// ROMP_0C4_004: firmware/upper/CADC4-lib0C4.s:73
 pub(crate) fn ROMP_0C4_004(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -336,7 +336,7 @@ pub(crate) fn ROMP_0C4_004(r: &mut Run) {
     }
 }
 
-// SUB_CB049: firmware/upper/CADC4-lib0C4.s:214
+// SUB_CB049: firmware/upper/CADC4-lib0C4.s:195
 pub(crate) fn SUB_CB049(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -365,7 +365,7 @@ pub(crate) fn SUB_CB049(r: &mut Run) {
     }
 }
 
-// SUB_CB05C: firmware/upper/CADC4-lib0C4.s:226
+// SUB_CB05C: firmware/upper/CADC4-lib0C4.s:207
 pub(crate) fn SUB_CB05C(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -805,7 +805,7 @@ pub(crate) fn SUB_CB05C(r: &mut Run) {
     }
 }
 
-// SUB_CB31C: firmware/upper/CADC4-lib0C4.s:450
+// SUB_CB31C: firmware/upper/CADC4-lib0C4.s:431
 pub(crate) fn SUB_CB31C(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -833,7 +833,7 @@ pub(crate) fn SUB_CB31C(r: &mut Run) {
     }
 }
 
-// SUB_CB346: firmware/upper/CADC4-lib0C4.s:466
+// SUB_CB346: firmware/upper/CADC4-lib0C4.s:447
 pub(crate) fn SUB_CB346(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -871,7 +871,7 @@ pub(crate) fn SUB_CB346(r: &mut Run) {
     }
 }
 
-// SUB_CB363: firmware/upper/CADC4-lib0C4.s:482
+// SUB_CB363: firmware/upper/CADC4-lib0C4.s:463
 pub(crate) fn SUB_CB363(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -899,7 +899,7 @@ pub(crate) fn SUB_CB363(r: &mut Run) {
     }
 }
 
-// SUB_CB372: firmware/upper/CADC4-lib0C4.s:492
+// SUB_CB372: firmware/upper/CADC4-lib0C4.s:473
 pub(crate) fn SUB_CB372(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -930,7 +930,7 @@ pub(crate) fn SUB_CB372(r: &mut Run) {
     }
 }
 
-// SUB_CB385: firmware/upper/CADC4-lib0C4.s:504
+// SUB_CB385: firmware/upper/CADC4-lib0C4.s:485
 pub(crate) fn SUB_CB385(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -986,7 +986,7 @@ pub(crate) fn SUB_CB385(r: &mut Run) {
     }
 }
 
-// SUB_CB3C9: firmware/upper/CADC4-lib0C4.s:529
+// SUB_CB3C9: firmware/upper/CADC4-lib0C4.s:510
 pub(crate) fn SUB_CB3C9(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -1005,7 +1005,7 @@ pub(crate) fn SUB_CB3C9(r: &mut Run) {
     }
 }
 
-// SUB_CB3D4: firmware/upper/CADC4-lib0C4.s:536
+// SUB_CB3D4: firmware/upper/CADC4-lib0C4.s:517
 pub(crate) fn SUB_CB3D4(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -1022,7 +1022,7 @@ pub(crate) fn SUB_CB3D4(r: &mut Run) {
     }
 }
 
-// SUB_CB3D7: firmware/upper/CADC4-lib0C4.s:540
+// SUB_CB3D7: firmware/upper/CADC4-lib0C4.s:521
 pub(crate) fn SUB_CB3D7(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -1039,7 +1039,7 @@ pub(crate) fn SUB_CB3D7(r: &mut Run) {
     }
 }
 
-// SUB_CB3DA: firmware/upper/CADC4-lib0C4.s:544
+// SUB_CB3DA: firmware/upper/CADC4-lib0C4.s:525
 pub(crate) fn SUB_CB3DA(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -1058,7 +1058,7 @@ pub(crate) fn SUB_CB3DA(r: &mut Run) {
     }
 }
 
-// SUB_CB3E5: firmware/upper/CADC4-lib0C4.s:551
+// SUB_CB3E5: firmware/upper/CADC4-lib0C4.s:532
 pub(crate) fn SUB_CB3E5(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -1077,7 +1077,7 @@ pub(crate) fn SUB_CB3E5(r: &mut Run) {
     }
 }
 
-// SUB_CB3F0: firmware/upper/CADC4-lib0C4.s:558
+// SUB_CB3F0: firmware/upper/CADC4-lib0C4.s:539
 pub(crate) fn SUB_CB3F0(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -1093,7 +1093,7 @@ pub(crate) fn SUB_CB3F0(r: &mut Run) {
     }
 }
 
-// SUB_CB3F7: firmware/upper/CADC4-lib0C4.s:562
+// SUB_CB3F7: firmware/upper/CADC4-lib0C4.s:543
 pub(crate) fn SUB_CB3F7(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -1111,7 +1111,7 @@ pub(crate) fn SUB_CB3F7(r: &mut Run) {
     }
 }
 
-// SUB_CB3FD: firmware/upper/CADC4-lib0C4.s:567
+// SUB_CB3FD: firmware/upper/CADC4-lib0C4.s:548
 pub(crate) fn SUB_CB3FD(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -1127,7 +1127,7 @@ pub(crate) fn SUB_CB3FD(r: &mut Run) {
     }
 }
 
-// SUB_CB404: firmware/upper/CADC4-lib0C4.s:571
+// SUB_CB404: firmware/upper/CADC4-lib0C4.s:552
 pub(crate) fn SUB_CB404(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -1145,7 +1145,7 @@ pub(crate) fn SUB_CB404(r: &mut Run) {
     }
 }
 
-// SUB_CB40A: firmware/upper/CADC4-lib0C4.s:576
+// SUB_CB40A: firmware/upper/CADC4-lib0C4.s:557
 pub(crate) fn SUB_CB40A(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -1161,7 +1161,7 @@ pub(crate) fn SUB_CB40A(r: &mut Run) {
     }
 }
 
-// SUB_CB411: firmware/upper/CADC4-lib0C4.s:580
+// SUB_CB411: firmware/upper/CADC4-lib0C4.s:561
 pub(crate) fn SUB_CB411(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -1177,7 +1177,7 @@ pub(crate) fn SUB_CB411(r: &mut Run) {
     }
 }
 
-// SUB_CB418: firmware/upper/CADC4-lib0C4.s:584
+// SUB_CB418: firmware/upper/CADC4-lib0C4.s:565
 pub(crate) fn SUB_CB418(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -1202,7 +1202,7 @@ pub(crate) fn SUB_CB418(r: &mut Run) {
     }
 }
 
-// SUB_CB42E: firmware/upper/CADC4-lib0C4.s:594
+// SUB_CB42E: firmware/upper/CADC4-lib0C4.s:575
 pub(crate) fn SUB_CB42E(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -1222,7 +1222,7 @@ pub(crate) fn SUB_CB42E(r: &mut Run) {
     }
 }
 
-// SUB_CB439: firmware/upper/CADC4-lib0C4.s:599
+// SUB_CB439: firmware/upper/CADC4-lib0C4.s:580
 pub(crate) fn SUB_CB439(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -1348,7 +1348,7 @@ pub(crate) fn code_CB946(r: &mut Run) {
     }
 }
 
-// SUB_CB9CE: firmware/upper/CADC4-lib0C4.s:923
+// SUB_CB9CE: firmware/upper/CADC4-lib0C4.s:698
 pub(crate) fn SUB_CB9CE(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -1386,7 +1386,7 @@ pub(crate) fn SUB_CB9CE(r: &mut Run) {
 }
 
 // ROMPTR 0C3 019
-// ROMP_0C3_019: firmware/upper/CBACE-lib0C3.s:709
+// ROMP_0C3_019: firmware/upper/CBACE-lib0C3.s:218
 pub(crate) fn ROMP_0C3_019(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -1506,7 +1506,7 @@ pub(crate) fn ROMP_0C3_019(r: &mut Run) {
 }
 
 // ROMPTR 0C3 01A
-// ROMP_0C3_01A: firmware/upper/CBACE-lib0C3.s:780
+// ROMP_0C3_01A: firmware/upper/CBACE-lib0C3.s:289
 pub(crate) fn ROMP_0C3_01A(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -1613,7 +1613,7 @@ pub(crate) fn ROMP_0C3_01A(r: &mut Run) {
 }
 
 // ROMPTR 0C3 01B
-// ROMP_0C3_01B: firmware/upper/CBACE-lib0C3.s:848
+// ROMP_0C3_01B: firmware/upper/CBACE-lib0C3.s:357
 pub(crate) fn ROMP_0C3_01B(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -1768,7 +1768,7 @@ pub(crate) fn ROMP_0C3_01B(r: &mut Run) {
 }
 
 // ROMPTR 0E7 051
-// ROMP_0E7_051: firmware/upper/CCA9F-lib0E7.s:1652
+// ROMP_0E7_051: firmware/upper/CCA9F-lib0E7.s:601
 pub(crate) fn ROMP_0E7_051(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -1891,7 +1891,7 @@ pub(crate) fn code_CF081(r: &mut Run) {
 }
 
 // ROMPTR 0E7 058
-// ~UTTYPEEXT0?: firmware/upper/CCA9F-lib0E7.s:1782
+// ~UTTYPEEXT0?: firmware/upper/CCA9F-lib0E7.s:698
 pub(crate) fn _UTTYPEEXT0_(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -1933,7 +1933,7 @@ pub(crate) fn _UTTYPEEXT0_(r: &mut Run) {
 }
 
 pub const ROUTINES: &[(u32, u32, Block, &str)] = &[
-    (0xCABB6, 0xCABFE, ROMP_0C1_021, "ROMP_0C1_021"),
+    (0xCABB6, 0xCABFE, UMSIN_1_1_2, "UMSIN_1_1_2"),
     (0xCAE87, 0xCAEC4, ROMP_0C4_003, "ROMP_0C4_003"),
     (0xCAEC5, 0xCAEDF, SUB_CAEC5, "SUB_CAEC5"),
     (0xCAEEA, 0xCB048, ROMP_0C4_004, "ROMP_0C4_004"),

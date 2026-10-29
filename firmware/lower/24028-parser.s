@@ -316,7 +316,7 @@ OBJ_24B70:
 
 * refs (1): 243DE
 List:
-        :: OBJ_2530E OBJ_24C30 !*triand OBJ_252F5 TrueTrue ; * 24C0D
+        :: OBJ_2530E OBJ_24C30 !*triand List~1 TrueTrue ; * 24C0D
 
 * refs (3): 24C17 24C67 24C94
 OBJ_24C30:
@@ -616,7 +616,7 @@ OBJ_252CD:
           drop2;6rolld;1+(s5) ;                  * 252EB
 
 * refs (1): 24C21
-OBJ_252F5:
+List~1:
         :: 4psh P{}N drop2;6rolld;1+(s5) ;       * 252F5
 
 * refs (21): 239E8 23AF1 23B6E 23C36 23CA4 23DDF ...
@@ -702,16 +702,16 @@ tok->:
 * hxs-mask $ #loc $_tok -> hxs-mask $ #next $match
 * refs (3): 244A6 24FD7 254ED
 getmatchtok:
-        :: 2DUP5ROLL 3UNROLL OBJ_2551F OBJ_2549D 4ROLLDROP 4ROLLDROP BINT3 * 25452
-          NDUP #1- SUB$ ROTDROP SWAP#1+ SWAP ;   * 2547A
+        :: 2DUP5ROLL 3UNROLL getmatchtok~2 getmatchtok~1 4ROLLDROP 4ROLLDROP * 25452
+          BINT3 NDUP #1- SUB$ ROTDROP SWAP#1+ SWAP ; * 25475
 
 * refs (1): 25466
-OBJ_2549D:
-        :: FALSE OBJ_2622F OBJ_254DE DROP ROTDROP OVERDUP LEN$ ROTSWAP * 2549D
+getmatchtok~1:
+        :: FALSE OBJ_2622F getmatchtok~1~1 DROP ROTDROP OVERDUP LEN$ ROTSWAP * 2549D
           #1+DUP 4UNROLL SUB$ ;                  * 254CA
 
 * refs (1): 254AC
-OBJ_254DE:
+getmatchtok~1~1:
         :: ROT COLA getmatchtok                  * 254DE
         ;                                        * 254F2
 
@@ -721,7 +721,7 @@ OBJ_254F7:
           :: 3UNROLL GetNextToken 4ROLLDROP ; ;  * 25501
 
 * refs (1): 25461
-OBJ_2551F:
+getmatchtok~2:
         CON(5)  (*)+5                            * 2551F  primitive code object
         ASSEMBLE
         D1=D1+  5                                * 25524
@@ -1248,7 +1248,7 @@ OBJ_26058:
 * hxs-mask $ #start -> hxs-mask $ #next $token
 * refs (23): 0BC2E 0BE00 238DB 245B4 24690 250A9 ...
 GetNextToken:
-        :: DUP4UNROLL DPRADIX? OBJ_2635E OBJ_261AD GetNextToken NOTcase * 26162
+        :: DUP4UNROLL DPRADIX? GetNextToken~1 OBJ_261AD GetNextToken NOTcase * 26162
           NULL$                                  * 26185
           ROT2DUP SWAP#1+ 5UNROLL 5UNROLL 3UNROLL SUB$ ; * 2618A
 
@@ -1328,7 +1328,7 @@ OBJ_26301:
         ASSEMBLE
 
 * refs (1): 26363
-SUB_26342:
+GetNextToken~1~1:
         ST=1    2                                * 26342
         A=DAT1  A                                * 26345
         D1=D1+  5                                * 26348
@@ -1340,9 +1340,9 @@ SUB_26342:
         RTNCC                                    * 2635C
 
 * refs (1): 26171
-OBJ_2635E:
+GetNextToken~1:
         CON(5)  (*)+5                            * 2635E  primitive code object
-        GOSUB   SUB_26342                        * 26363
+        GOSUB   GetNextToken~1~1                 * 26363
         ST=1    3                                * 26367
         A=DAT1  A                                * 2636A
         D1=D1+  5                                * 2636D
@@ -1866,7 +1866,7 @@ L_26867:
         RPL
 
 * refs (1): 2DC2F
-OBJ_26886:
+DOSERVER~1:
         :: DROP PATHDIR DO>STR APPEND_SPACE 'EvalNoCK:_sup xMEM DECOMP$ &$ * 26886
           NEWLINE$&$ ;                           * 268B3
 
@@ -1875,13 +1875,13 @@ LIB700.config:
         :: # 700 TOSRRP ;                        * 268BD
 
 * refs (1): 62AED
-OBJ_268D6:
+MACRODCMP~1:
         :: NOTROMPcase OBJ_26912                 * 268D6
-          COLA OBJ_268F4                         * 268E5
+          COLA MACRODCMP~1~1                     * 268E5
         ;                                        * 268EF
 
 * refs (1): 268EA
-OBJ_268F4:
+MACRODCMP~1~1:
         :: RPTRACC NOTcase BINT2                 * 268F4
           OBJ_26912 ;                            * 26908
 
@@ -1975,7 +1975,7 @@ L_26A20:
 ?OKINALG:
         :: CK&DISPATCH0                          * 26A2D
           BINT8 OBJ_26A82                        * 26A37  program
-          BINT15 OBJ_26AB9                       * 26A41  romptr
+          BINT15 ?OKINALG~romptr                 * 26A41  romptr
           BINT1 TRUE                             * 26A4B  real
           BINT2 TRUE                             * 26A55  complex
           BINT14 TRUE                            * 26A5F  unit
@@ -1991,9 +1991,9 @@ OBJ_26A82:
           TRUE ;                                 * 26AAF
 
 * refs (1): 26A46
-OBJ_26AB9:
+?OKINALG~romptr:
         :: DUP OBJ_269E7 caseFALSE OBJ_71DFF     * 26AB9
-          FALSE OBJ_71F0E ;                      * 26AD2
+          FALSE ?OKINALG~romptr~1 ;              * 26AD2
 
 * refs (1): 71F51
 OBJ_26AE1:
@@ -2303,7 +2303,7 @@ OBJ_26F34:
         GOTO    L_26F88                          * 26F3E
 
 * refs (1): 57B1F
-OBJ_26F42:
+?expanapp~1~1:
         CON(5)  (*)+5                            * 26F42  primitive code object
         P=      15                               * 26F47
         LC(1)   #7                               * 26F49
@@ -2317,7 +2317,7 @@ OBJ_26F50:
         GOTO    L_26F88                          * 26F5A
 
 * refs (1): 5B1D6
-OBJ_26F5E:
+intg1~1~1:
         CON(5)  (*)+5                            * 26F5E  primitive code object
         P=      15                               * 26F63
         LC(1)   #9                               * 26F65

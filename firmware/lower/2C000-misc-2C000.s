@@ -76,7 +76,7 @@ utpn(3r):
             %0_2A2B4 ;                           * 2C0E0
           ROT %>%%- SWAP %>%%SQRT %%/            * 2C0EA
           CODE                                   * 2C103  28 nibbles
-            GOSBVL  SUB_77EA8                    * 2C10D
+            GOSBVL  utpn(3r)~1                   * 2C10D
             GOSBVL  SUB_77EBC                    * 2C114
 L_2C11B:
             GOSBVL  PACK                         * 2C11B
@@ -89,7 +89,7 @@ utpn(2r):
         :: SWAP %0_2A2B4                         * 2C12E
           CODE                                   * 2C13D  18 nibbles
             GOSBVL  SUB_77E62                    * 2C147
-            GOSBVL  SUB_78167                    * 2C14E
+            GOSBVL  utpn(2r)~1                   * 2C14E
             GOTO    L_2C11B                      * 2C155
           ENDCODE                                * 2C159
         ;                                        * 2C159
@@ -99,7 +99,7 @@ utpf(3r):
         :: 3UNROLL                               * 2C15E
           CODE                                   * 2C168  18 nibbles
             GOSBVL  SUB_77E62                    * 2C172
-            GOSBVL  SUB_7827D                    * 2C179
+            GOSBVL  utpf(3r)~1                   * 2C179
             GOTO    L_2C11B                      * 2C180
           ENDCODE                                * 2C184
         ;                                        * 2C184
@@ -143,7 +143,7 @@ STATCLST:
         :: ' ID_SIGMADAT ?PURGE_HERE ;           * 2C22F
 
 * refs (1): 2C45A
-OBJ_2C248:
+xSIGMA-~1~1:
         :: ' ID_SIGMADAT dup;Vector*­Rcl(nm)? SWAPDROP NOT?SEMI * 2C248
           ?PURGE_HERE ;                          * 2C266
 
@@ -161,7 +161,7 @@ Exist@äDAT?:
 * refs (3): 1FD50 2C2CA 4B779
 rclä!:
         :: Exist@äDAT? ?SEMI                     * 2C2AC
-          OBJ_2D2C7 ;                            * 2C2BB
+          rclä!~1 ;                              * 2C2BB
 
 * refs (8): 200CE 2C428 2C5F8 2C7EC 2C9F9 48E32 ...
 rclä:
@@ -189,10 +189,10 @@ L_2C3E7:
           PUTREALEL NextInArray 3DROP ;          * 2C40F
 
 * refs (1): 1FD95
-OBJ_2C423:
+xSIGMA-~1:
         :: rclä DUP MDIMSDROP ROTOVER lastv(ra,s) SWAP4ROLL 4ROLLOVER * 2C423
           #1=case                                * 2C44B
-          :: 3DROP OBJ_2C248 STATCLST ;          * 2C450
+          :: 3DROP xSIGMA-~1~1 STATCLST ;        * 2C450
           SWAP#1- SWAP TWO{}N @rdm(ar,ls) DROP ; * 2C469
 
 * refs (1): 2C43C
@@ -312,14 +312,14 @@ ResetäPAR:
             { %1 %2 %0_2A2B4 %0_2A2B4 xLINFIT } DUP' äPAR XEQSTOID ; * 2C747
           DUPTYPELIST? NOTcase OBJ_2D2E7         * 2C77E
           INNERCOMP BINT5 EQ NOTcase OBJ_2D2E7   * 2C78D
-          DUP OBJ_4A177 matchob? NOTcase OBJ_2D2E7 * 2C7A6
+          DUP ChkReakäPAR~2 matchob? NOTcase OBJ_2D2E7 * 2C7A6
           CK&DISPATCH0                           * 2C7BF
-          OBJ_2C7DD NOP                          * 2C7C4  real real real real program
+          ChkReakäPAR~1 NOP                      * 2C7C4  real real real real program
           BINT0 OBJ_2D2E7                        * 2C7CE  any
         ;                                        * 2C7D8
 
 * refs (1): 2C7C4
-OBJ_2C7DD:
+ChkReakäPAR~1:
         # 11118                                  * 2C7DD  69912
 
 * refs (6): 2C814 2C841 2C9C7 2CA12 4C8D6 CB529
@@ -1067,7 +1067,7 @@ L_2D2BD:
         PC=(A)                                   * 2D2C3
 
 * refs (1): 2C2BB
-OBJ_2D2C7:
+rclä!~1:
         CON(5)  (*)+5                            * 2D2C7  primitive code object
         LC(5)   #00602                           * 2D2CC
         GOTO    L_2D313                          * 2D2D3
@@ -1215,7 +1215,7 @@ Loop:
 
 * refs (2): 2E754 2EF46
 SENDEOT:
-        :: NULL$ GetKermPkt# CHR_B BUILDKPACKET BINT2 OBJ_2D5EB casedrptru * 2D58C
+        :: NULL$ GetKermPkt# CHR_B BUILDKPACKET BINT2 SENDEOT~1 casedrptru * 2D58C
           case                                   * 2D5B4
           TrueFalse                              * 2D5B9
           DUP # C02 #=case DROPTRUE              * 2D5BE
@@ -1226,11 +1226,11 @@ SEND_PACKET:
         :: MAXRETRY                              * 2D5E1
 
 * refs (1): 2D5AA
-OBJ_2D5EB:
+SENDEOT~1:
           :: DUP                                 * 2D5EB
             { LAMPACKET LAMRETRY LAMMaxR } BIND  * 2D5F5
 L_2D613:
-            OBJ_30833 NOTcase Lpop;2false        * 2D613
+            SEND_PACKET~1 NOTcase Lpop;2false    * 2D613
             DUP CHR_Y EQUALcase                  * 2D622
             :: OVER GetKermPkt# #=case           * 2D631
 
@@ -1272,7 +1272,7 @@ OBJ_2D76C:
         :: 3PICK EQUAL SWAP4PICK #= AND ;        * 2D76C
 
 * refs (5): 2DB7B 2DB8A 2DBA8 2DBB7 2DBC6
-OBJ_2D78F:
+DOSERVER~2:
         :: ZEROSWAP OBJ_2D76C COLA ?GOTO         * 2D78F
         ;                                        * 2D7A8
 
@@ -1292,7 +1292,7 @@ DORECN:
             NOTcasedrop ERROROUT                 * 2D898
 
 * refs (1): 2E97B
-OBJ_2D8A2:
+DOPKT~1:
             :: BINT0 CHR_S OBJ_2D76C NOTcase TRPACKETFAIL * 2D8A2
               2DROP OBJ_2F709 case AllowPrlcdCl  * 2D8C0
               ABND case TRPACKETFAIL             * 2D8D4
@@ -1302,7 +1302,7 @@ OBJ_2D8A2:
           ERRTRAP OBJ_2E763 ABND ;               * 2D91A
 
 * refs (1): 2DDBA
-OBJ_2D92E:
+DOSERVER~3:
         :: DEPTH #0=ITE MessageC15               * 2D92E
           :: NULL$TEMP DEPTH ONE_DO ?ATTNQUIT ISTOP-INDEX DUP#2+ PICK # 4B * 2D942
             DoSt:(s,_,s) !!append$ CRLF$ !!append$ LOOP ; * 2D974
@@ -1323,9 +1323,9 @@ ClrServMode:
         RPL
 
 * refs (2): 2D9EB 2DAEA
-OBJ_2D9C3:
+DOSERVER~4:
         :: NoIgnoreAlm GETKEY NOT?SEMI           * 2D9C3
-          DROP FLUSHKEYS DoBadKey COLA OBJ_2D9C3 * 2D9D7
+          DROP FLUSHKEYS DoBadKey COLA DOSERVER~4 * 2D9D7
         ;                                        * 2D9F0
 
 * refs (2): 21FDB AFE1B
@@ -1337,7 +1337,7 @@ L_2DA45:
             ClrDA1IsStat                         * 2DA45
 
 * refs (4): 2DDE7 2E06D 2E090 2EB14
-OBJ_2DA4A:
+KERMOPEN~1:
             :: BINT39 TestSysFlag COLA ?SKIP     * 2DA4A
             ;                                    * 2DA63
             :: CLEARVDISP CLEARMENU ; # C0C JstGetTHEMESG KDispStatus2 * 2DA68
@@ -1348,7 +1348,7 @@ L_2DA9A:
 * refs (4): 2D535 2DB71 2F392 2F835
 OBJ_2DAB3:
             :: ' LAMPKNO STO ; BEGIN OBJ_2E2B4 NOT_WHILE * 2DAB3
-            :: DROP SENDNAK OBJ_2D9C3 ATTN? case * 2DADB
+            :: DROP SENDNAK DOSERVER~4 ATTN? case * 2DADB
               :: ATTNFLGCLR 2RDROP ;             * 2DAF9
               ALARM? case                        * 2DB0D
               :: ALARMxcp DROP NOT?SEMI          * 2DB17
@@ -1358,9 +1358,9 @@ OBJ_2DAB3:
             ;                                    * 2DB62
             REPEAT                               * 2DB67
 L_2DB6C:
-            BINT0 OBJ_2DAB3 CHR_S OBJ_2D78F L_2DEED CHR_I OBJ_2D78F L_2DE41 * 2DB6C
-            ROT DECODE 3UNROLL CHR_R OBJ_2D78F L_2DFB4 CHR_C OBJ_2D78F * 2DB94
-            L_2DD4C CHR_G OBJ_2D78F L_2DE98 DUP CHR_E EQUALcase * 2DBBC
+            BINT0 OBJ_2DAB3 CHR_S DOSERVER~2 L_2DEED CHR_I DOSERVER~2 * 2DB6C
+            L_2DE41 ROT DECODE 3UNROLL CHR_R DOSERVER~2 L_2DFB4 CHR_C * 2DB8F
+            DOSERVER~2 L_2DD4C CHR_G DOSERVER~2 L_2DE98 DUP CHR_E EQUALcase * 2DBB7
             :: 2DROP OBJ_30E6C GOTO L_2DFA5 ;    * 2DBDF
             3DROP                                * 2DBFD
 L_2DC02:
@@ -1368,7 +1368,7 @@ L_2DC02:
 L_2DC07:
             OBJ_2EFA0 DUP OBJ_2F01D %2 dowait SENDERROR GOTO L_2DA45 * 2DC07
 L_2DC2F:
-            OBJ_26886 ERRSET                     * 2DC2F
+            DOSERVER~1 ERRSET                    * 2DC2F
 
 StringVarsBytes(st):
             :: DOVARS DUPLENCOMP DUP#0=ITE 2DROP * 2DC39
@@ -1389,14 +1389,14 @@ L_2DD4C:
             TWODROPNULL$ BINT0                   * 2DD4C
             { LAMERRMSG NULLLAM } BIND # C11 JstGetTHEMESG KDispRow2 * 2DD56
             KINVISLF &$ FLUSHKEYS xIFERR xSTR> xERRTHEN OBJ_2DCE8 xIFEND * 2DD83
-            CK0NOLASTWD 0LASTOWDOB! ERRSET OBJ_2D92E ERRTRAP * 2DDAB
+            CK0NOLASTWD 0LASTOWDOB! ERRSET DOSERVER~3 ERRTRAP * 2DDAB
 
 * refs (2): 2DCD9 2E768
 DropSysErr$:
-            :: DropSysObs ERROR@ OBJ_2EFA0 APNDCRLF ; ABND OBJ_2DA4A * 2DDC4
+            :: DropSysObs ERROR@ OBJ_2EFA0 APNDCRLF ; ABND KERMOPEN~1 * 2DDC4
             :: TOADISP REDISPHBUFF ClrDAsOK ;    * 2DDEC
 L_2DE05:
-            NULL$SWAP CHR_X OBJ_2EF1E ClrServMode KERMOPEN SetServMode * 2DE05
+            NULL$SWAP CHR_X DOSERVER~6 ClrServMode KERMOPEN SetServMode * 2DE05
 L_2DE23:
             ?GOTO L_2DA45 ?GOTO L_2DB6C GOTO L_2DC07 * 2DE23
 L_2DE41:
@@ -1439,10 +1439,10 @@ L_2DFB4:
 OBJ_2DFE6:
             :: OBJ_672DC GOTO L_2DC07 ;          * 2DFE6
             DRPExitAtLOOP NOTcasedrop            * 2DFFF
-            :: OBJ_2E7D6 GOTO L_2DC07 ;          * 2E009
-            CHR_F OBJ_2EF1E GOTO L_2DE23 ;       * 2E022
+            :: DOSERVER~5 GOTO L_2DC07 ;         * 2E009
+            CHR_F DOSERVER~6 GOTO L_2DE23 ;      * 2E022
           ERRTRAP                                * 2E03B
           :: ERROR@ DUP #0=?SEMI FLUSHKEYS ClrServMode GETTHEMESG SENDERROR * 2E040
-            AllowPrlcdCl OBJ_2DA4A ClrDAsOK ERRJMP ; * 2E068
-          FLUSHKEYS ClrServMode AllowPrlcdCl OBJ_2DA4A ClrDAsOK ABND * 2E081
+            AllowPrlcdCl KERMOPEN~1 ClrDAsOK ERRJMP ; * 2E068
+          FLUSHKEYS ClrServMode AllowPrlcdCl KERMOPEN~1 ClrDAsOK ABND * 2E081
           DropSysObs ;                           * 2E09F

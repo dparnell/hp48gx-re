@@ -179,10 +179,10 @@ XEQINTEG:
         CON(3)  #0FE                             * 1F2C6  command
 ä:
         :: CK4&Dispatch                          * 1F2C9
-          # A110 %%SUM                           * 1F2D3  name|local|algebraic real real ?
-          # AA10 SYM%SUM                         * 1F2E2  name|local|algebraic name|local|algebraic real ?
-          # A1A0 %SYMSUM                         * 1F2F1  name|local|algebraic real name|local|algebraic ?
-          # AAA0 SYMSUM                          * 1F300  name|local|algebraic name|local|algebraic name|local|algebraic ?
+          # A110 %%SUM                           * 1F2D3  name|local|algebraic real real any
+          # AA10 SYM%SUM                         * 1F2E2  name|local|algebraic name|local|algebraic real any
+          # A1A0 %SYMSUM                         * 1F2F1  name|local|algebraic real name|local|algebraic any
+          # AAA0 SYMSUM                          * 1F300  name|local|algebraic name|local|algebraic name|local|algebraic any
         ;                                        * 1F30F
         NIBHEX  4FE56                            * 1F314  ô^
 
@@ -336,10 +336,10 @@ xFCNAPPLY:
         :: {'dvar} BIND 0LASTOWDOB! CARCOMP CK1NOLASTWD DEPTH 1GETLAM * 1F640
           #>?SKIP SETSTACKERR DUP ROMPTR@NOT case OBJ_1F6E0 * 1F668
           CK&DISPATCH0                           * 1F686
-          ROMPANY OBJ_1F86B                      * 1F68B  romptr ?
-          BINT8 OBJ_1F758                        * 1F695  program
+          ROMPANY xFCNAPPLY~romptr,any           * 1F68B  romptr any
+          BINT8 xFCNAPPLY~program                * 1F695  program
           BINT5 OBJ_1F776                        * 1F69F  list
-          BINT4 OBJ_1F7C1                        * 1F6A9  array
+          BINT4 xFCNAPPLY~array                  * 1F6A9  array
           BINT0 INVFUNCERR                       * 1F6B3  any
         ;                                        * 1F6BD
 
@@ -360,8 +360,8 @@ L_1F6EF:
         ;                                        * 1F753
 
 * refs (1): 1F69A
-OBJ_1F758:
-        :: SWAPDROP OBJ_5DEB9 ABND COLA_EVAL ;   * 1F758
+xFCNAPPLY~program:
+        :: SWAPDROP xFCNAPPLY~program~1 ABND COLA_EVAL ; * 1F758
 
 * refs (2): 1F6A4 1F7D5
 OBJ_1F776:
@@ -372,7 +372,7 @@ OBJ_1F776:
         ;                                        * 1F7BC
 
 * refs (1): 1F6AE
-OBJ_1F7C1:
+xFCNAPPLY~array:
         :: 1GETLAM BINT2 #<>case OBJ_1F776       * 1F7C1
           NOTNUM? NOTcase OBJ_1F81B              * 1F7DA
           4PICK TYPEREAL? 4PICK TYPEREAL? ANDcase OBJ_1F81B * 1F7E9
@@ -385,7 +385,7 @@ OBJ_1F81B:
           1PUTLAM {}N 1ABNDSWAP CK2NOLASTWD ' xGET EvalNoCK ; * 1F843
 
 * refs (1): 1F690
-OBJ_1F86B:
+xFCNAPPLY~romptr,any:
         ::                                       * 1F86B
 
 * refs (1): 85E8A
@@ -521,9 +521,9 @@ L_1FAE7:
 * refs (3): 189EA 2802F 6BC9B
 xFORMUNIT:
         :: CK2&Dispatch                          * 1FAEB
-          BINT1 OBJ_1FB31                        * 1FAF5  real
-          BINT14 OBJ_1FB31                       * 1FAFF  unit
-          BINT10 OBJ_28A38                       * 1FB09  name|local|algebraic
+          BINT1 xFORMUNIT~1                      * 1FAF5  real
+          BINT14 xFORMUNIT~1                     * 1FAFF  unit
+          BINT10 xFORMUNIT~name|local|algebraic  * 1FB09  name|local|algebraic
         ;                                        * 1FB13
 
 * slots of 002 10B (derivative, inverse, ...: used by the symbolic code)
@@ -535,7 +535,7 @@ xFORMUNIT:
         CON(5)  OBJ_5A298                        * 1FB2C  slot 2
 
 * refs (2): 1FAFA 1FB04
-OBJ_1FB31:
+xFORMUNIT~1:
         :: BINT2 nmetasyms ' x* EvalNoCK ;       * 1FB31  slot 3
         CON(2)  #00                              * 1FB54  end of the slots: property byte (meaning not yet known)
         ASSEMBLE
@@ -731,7 +731,7 @@ xSIGMA+:
         CON(3)  #002                             * 1FD85  library
         CON(3)  #11F                             * 1FD88  command
 xSIGMA-:
-        :: CK0 OBJ_2C423 ;                       * 1FD8B
+        :: CK0 xSIGMA-~1 ;                       * 1FD8B
 
 * -> nrows
 * ROMPTR 002 120 NΣ
@@ -998,7 +998,7 @@ xSIGMACOL:
         CON(3)  #002                             * 200BE  library
         CON(3)  #139                             * 200C1  command
 xSCLSIGMA:
-        :: CK0 rclä ChkReakäPAR 3DROP COERCE2 OBJ_48E4B ; * 200C4
+        :: CK0 rclä ChkReakäPAR 3DROP COERCE2 xSCLSIGMA~1 ; * 200C4
 
 * -> symb
 * ROMPTR 002 13A ΣLINE
@@ -1096,7 +1096,7 @@ StoModel:
         CON(3)  #143                             * 2025B  command
 xBESTFIT:
         :: CK0 ERRSET bestfit ERRTRAP            * 2025E
-          :: ERROR@ OBJ_4796B OVER #= SWAP OBJ_4A122 #= OR NOTcase ERRJMP * 20277
+          :: ERROR@ xBESTFIT~1 OVER #= SWAP xBESTFIT~2 #= OR NOTcase ERRJMP * 20277
             ERRORCLR DropSysObs xLINFIT ;        * 202AE
         ;                                        * 202C2
 
@@ -1114,7 +1114,7 @@ xSINV:
 
 * refs (1): 202DD
 sinv(gn):
-        :: dup;RclInVars(nm) dARRYcase OBJ_2032D * 202F1
+        :: dup;RclInVars(nm) dARRYcase sinv(gn)~1 * 202F1
           OBJ_204FF xINV ;                       * 20305
 
 * refs (1): 202E7
@@ -1122,7 +1122,7 @@ sinv(ln):
         :: dup;RclInVars(nm) OBJ_204FF xINV ;    * 20314
 
 * refs (1): 20300
-OBJ_2032D:
+sinv(gn)~1:
         :: SWAPDROP @inv(ar) DROP ;              * 2032D
 
 * name ->
@@ -1139,7 +1139,7 @@ xSNEG:
 
 * refs (1): 2035C
 sneg(gn):
-        :: dup;RclInVars(nm) dARRYcase OBJ_203AC * 20370
+        :: dup;RclInVars(nm) dARRYcase sneg(gn)~1 * 20370
           OBJ_204FF xNEG ;                       * 20384
 
 * refs (1): 20366
@@ -1147,7 +1147,7 @@ sneg(ln):
         :: dup;RclInVars(nm) OBJ_204FF xNEG ;    * 20393
 
 * refs (1): 2037F
-OBJ_203AC:
+sneg(gn)~1:
         :: SWAPDROP @neg(ar) DROP ;              * 203AC
 
 * name ->
@@ -1164,7 +1164,7 @@ xSCONJ:
 
 * refs (1): 203DB
 sconj(gn):
-        :: dup;RclInVars(nm) dARRYcase OBJ_2042B * 203EF
+        :: dup;RclInVars(nm) dARRYcase sconj(gn)~1 * 203EF
           OBJ_204FF xCONJ ;                      * 20403
 
 * refs (1): 203E5
@@ -1172,7 +1172,7 @@ sconj(ln):
         :: dup;RclInVars(nm) OBJ_204FF xCONJ ;   * 20412
 
 * refs (1): 203FE
-OBJ_2042B:
+sconj(gn)~1:
         :: SWAPDROP @conj!(ar) DROP ;            * 2042B
 
 * ob name -> name ob ->
@@ -1185,8 +1185,8 @@ xSTO+:
         :: CK2&Dispatch                          * 2044B
           BINT6 sto+(_,nm)                       * 20455  name
           BINT7 sto+(_,nm)                       * 2045F  local
-          BINT96 sto+(nm,_)                      * 20469  name ?
-          BINT112 sto+(nm,_)                     * 20473  local ?
+          BINT96 sto+(nm,_)                      * 20469  name any
+          BINT112 sto+(nm,_)                     * 20473  local any
         ;                                        * 2047D
 
 * refs (2): 2045A 20464
@@ -1194,7 +1194,7 @@ sto+(_,nm):
         :: dup;RclInVars(nm) ROTSWAP CK&DISPATCH1 * 20482
 
 * refs (1): 204D2
-OBJ_20496:
+sto+(nm,_)~1:
           # 644 OBJ_20518                        * 20496  name array array
           BINT0                                  * 204A5  any
           :: OBJ_204FF x+ ;                      * 204AA
@@ -1203,7 +1203,7 @@ OBJ_20496:
 * refs (2): 2046E 20478
 sto+(nm,_):
         :: over;RclInVars(nm) CK&DISPATCH1       * 204C3
-          OBJ_20496 OBJ_20518                    * 204D2  name array array
+          sto+(nm,_)~1 OBJ_20518                 * 204D2  name array array
           BINT0                                  * 204DC  any
           :: SWAP OBJ_204FF x+ ;                 * 204E1
         ;                                        * 204FA
@@ -1228,8 +1228,8 @@ xSTO-:
           BINT6 sto-(_,nm)                       * 2054C  name
           BINT7 sto-(_,nm)                       * 20556  local
           BINT100 sto-(gn,ar)                    * 20560  name array
-          BINT96 sto-(nm,_)                      * 2056A  name ?
-          BINT112 sto-(nm,_)                     * 20574  local ?
+          BINT96 sto-(nm,_)                      * 2056A  name any
+          BINT112 sto-(nm,_)                     * 20574  local any
         ;                                        * 2057E
 
 * refs (2): 20551 2055B
@@ -1258,12 +1258,12 @@ xSTO/:
         :: CK2&Dispatch                          * 2060C
           BINT97 sto/(gn,nb)                     * 20616  name real
           BINT98 sto/(gn,nb)                     * 20620  name complex
-          BINT70 OBJ_206E8                       * 2062A  array name
+          BINT70 xSTO/~array,name                * 2062A  array name
           BINT6 sto/(_,nm)                       * 20634  name
           BINT7 sto/(_,nm)                       * 2063E  local
           BINT100 sto/(gn,ar)                    * 20648  name array
-          BINT96 sto/(nm,_)                      * 20652  name ?
-          BINT112 sto/(nm,_)                     * 2065C  local ?
+          BINT96 sto/(nm,_)                      * 20652  name any
+          BINT112 sto/(nm,_)                     * 2065C  local any
         ;                                        * 20666
 
 * refs (2): 20639 20643
@@ -1276,20 +1276,20 @@ sto/(nm,_):
 
 * refs (2): 2061B 20625
 sto/(gn,nb):
-        :: over;RclInVars(nm) dARRYcase OBJ_206CF * 206A7
+        :: over;RclInVars(nm) dARRYcase sto/(gn,nb)~1 * 206A7
           SWAP OBJ_204FF x/ ;                    * 206BB
 
 * refs (1): 206B6
-OBJ_206CF:
+sto/(gn,nb)~1:
         :: ROTDROPSWAP 1@/(ar,nb) DROP ;         * 206CF
 
 * refs (1): 2062F
-OBJ_206E8:
-        :: dup;RclInVars(nm) ROTSWAP dARRYcase OBJ_20710 * 206E8
+xSTO/~array,name:
+        :: dup;RclInVars(nm) ROTSWAP dARRYcase xSTO/~array,name~1 * 206E8
           OBJ_204FF x/ ;                         * 20701
 
 * refs (1): 206FC
-OBJ_20710:
+xSTO/~array,name~1:
         :: ROTDROP 1@/(2ar) DROP ;               * 20710
 
 * refs (1): 2064D
@@ -1312,8 +1312,8 @@ xSTO*:
           BINT6 sto*(_,nm)                       * 2078F  name
           BINT7 sto*(_,nm)                       * 20799  local
           BINT100 sto*(nm,ar)                    * 207A3  name array
-          BINT96 sto*(nm,_)                      * 207AD  name ?
-          BINT112 sto*(nm,_)                     * 207B7  local ?
+          BINT96 sto*(nm,_)                      * 207AD  name any
+          BINT112 sto*(nm,_)                     * 207B7  local any
         ;                                        * 207C1
 
 * refs (2): 20794 2079E
@@ -1340,20 +1340,20 @@ OBJ_20852:
 
 * refs (1): 2078A
 sto*(ar,nm):
-        :: dup;RclInVars(nm) ROTSWAP dARRYcase OBJ_20893 * 2086B
+        :: dup;RclInVars(nm) ROTSWAP dARRYcase sto*(ar,nm)~1 * 2086B
           OBJ_204FF x* ;                         * 20884
 
 * refs (1): 2087F
-OBJ_20893:
+sto*(ar,nm)~1:
         :: ROTDROP 1@*(2ar) DROP ;               * 20893
 
 * refs (1): 207A8
 sto*(nm,ar):
-        :: over;RclInVars(nm) dARRYcase OBJ_208D4 * 208AC
+        :: over;RclInVars(nm) dARRYcase sto*(nm,ar)~1 * 208AC
           SWAP OBJ_204FF x* ;                    * 208C0
 
 * refs (1): 208BB
-OBJ_208D4:
+sto*(nm,ar)~1:
         :: ROTDROPSWAP 2@*(2ar) DROP ;           * 208D4
 
 * name -> x
@@ -1438,7 +1438,7 @@ xEXPAN:
         CON(3)  #002                             * 20A77  library
         CON(3)  #14F                             * 20A7A  command
 xRULES:
-        :: OBJ_492AC ;                           * 20A7D
+        :: xRULES~1 ;                            * 20A7D
 
 * symb var -> symb'
 * ROMPTR 002 150 ISOL
@@ -1631,7 +1631,7 @@ purge(li):
         :: DUPNULLCOMP? caseDROP                 * 20F35
 
 * refs (1): 1EF2D
-OBJ_20F44:
+prvar(li)~1:
           :: 'R 1LAMBIND toLEN_DO DUPINDEX@ NTHCOMPDROP 1GETLAM EvalNoCK * 20F44
             LOOP DROP ABND ;                     * 20F6C
           xPURGE ;                               * 20F80
@@ -1668,7 +1668,7 @@ XEQORDER:
 
 order!(li):
           :: INNERCOMP ZERO_DO ?ATTNQUIT DUP@ ?SKIP SETNONEXTERR * 21006
-            DUPTYPERRP? SWAP REFERENCED? ROTAND ITE OBJ_21074 * 21029
+            DUPTYPERRP? SWAP REFERENCED? ROTAND ITE XEQORDER~1 * 21029
 
 PurgeSto(nm,_):
             :: OVER PURGE SWAP CREATE ;          * 21047
@@ -1676,7 +1676,7 @@ PurgeSto(nm,_):
         ;                                        * 2106F
 
 * refs (1): 21042
-OBJ_21074:
+XEQORDER~1:
         :: DUP TOTEMPOB 3PICK CREATE SWAP rcl(nm)?;drop * 21074
           CODE                                   * 21097  74 nibbles
             GOSBVL  PopASavptr                   * 210A1
@@ -1765,7 +1765,7 @@ xPVARS:
           BINT1                                  * 21206  real
 
 pvars(r):
-          :: COERCE DUP OBJ_72A73 SETPORTNOTAV pvars(s) ; * 2120B
+          :: COERCE DUP xPVARS~1 SETPORTNOTAV pvars(s) ; * 2120B
         ;                                        * 2122E
 
 * name ->
@@ -1787,11 +1787,11 @@ xPGDIR:
         CON(3)  #160                             * 21257  command
 xARCHIVE:
         :: CK1&Dispatch                          * 2125A
-          BINT13 OBJ_21273                       * 21264  tagged
+          BINT13 xARCHIVE~tagged                 * 21264  tagged
         ;                                        * 2126E
 
 * refs (1): 21269
-OBJ_21273:
+xARCHIVE~tagged:
         :: TAG>                                  * 21273
 
 _IO_:
@@ -1807,7 +1807,7 @@ archive(nm,st):
         ::                                       * 212C7
 
 * refs (1): 21355
-OBJ_212CC:
+xRESTORE~1:
           ::                                     * 212CC
 
 ChkName2:
@@ -1831,7 +1831,7 @@ xRESTORE:
           BINT13                                 * 21346  tagged
 
 restore(to):
-          :: TAG> OBJ_212CC restore(nm,s) ;      * 2134B
+          :: TAG> xRESTORE~1 restore(nm,s) ;     * 2134B
           # 9F restore(bk)                       * 21364  backup
         ;                                        * 21373
 
@@ -1918,7 +1918,7 @@ ChkNøLib(r):
         BSS     7                                * 214F4
 
 * refs (1): 22638
-OBJ_214FB:
+xDTAG~1:
         :: CK1 STRIPTAGS ;                       * 214FB
 
 * refs (2): 20CDC 8FCEB
@@ -1954,7 +1954,7 @@ SlibNum(lb):
           BAKNAME DROP ;                         * 215FC
 
 * refs (3): 852F6 85300 8536E
-OBJ_2160B:
+sto(_,to)~1~1~1:
         :: SWAPDROP dup;BkpName(bk) TRUE ;       * 2160B
 
 * refs (1): 85337
@@ -2111,13 +2111,13 @@ archive(nm,s):
           OVER HomeInBkp(nm) 3UNROLL ERRSET sto12(bk,nm,s) ERRTRAP * 21A71
 
 * refs (1): 21AE4
-OBJ_21A8F:
+archive0(s)~1:
           :: OBJ_09699 InitEnab ERRJMP ; OBJ_09699 InitEnab ; * 21A8F
 
 * refs (1): 21A58
 archive0(s):
         :: DUP RclBkp0(nm)? case SETOBINUSE      * 21AB7
-          HomeInBkp(nm) ERRSET sto0!(bk) ERRTRAP OBJ_21A8F OBJ_09699 * 21AD0
+          HomeInBkp(nm) ERRSET sto0!(bk) ERRTRAP archive0(s)~1 OBJ_09699 * 21AD0
           InitEnab ;                             * 21AEE
 
 * refs (1): 2135A
@@ -2155,7 +2155,7 @@ free(li,r):
         ;                                        * 21B89
 
 * refs (1): 856D7
-OBJ_21B8E:
+free(li,r)~1~2:
         :: #1-SWAP DUP RclBkp0(nm)? NOTcase SETNONEXTERR * 21B8E
           SWAP dvarlsBIND pshm1 DUP#0= case ABND * 21BAC
           pshzer BEGIN #1-SWAP 1GETLAM OVER EQUAL ITE * 21BCA
@@ -2244,7 +2244,7 @@ GetLibs(di):
         FILLTO  #21DBE                           * 21D9C  34 zero nibbles: the next entry stays at #21DBE
 
 * refs (2): 1B194 1B19E
-OBJ_21DBE:
+rpnXROOT~1:
         :: ' rpnXROOT BINT2 TRUE ROMPTR 0E8 00F ; * 21DBE
 
         # 80000                                  * 21DE7  524288

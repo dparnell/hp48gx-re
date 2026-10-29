@@ -106,7 +106,7 @@ C%C^R:
 * C% C%' -> C%''
 * refs (3): 1B05A 52356 5236A
 C%C^C:
-        :: OVER C%0= case OBJ_52491              * 52374
+        :: OVER C%0= case C%C^C~1                * 52374
           C%>%% DUP %%0<> case                   * 5238D
           :: ROT C%>%% OBJ_52215 %%ANGLERAD ãcplx(4rr) exp(,i)(2rr) ; * 523A1
           DROPSWAP C%>%% DUP %%0<> ITE           * 523C9
@@ -117,7 +117,7 @@ C%C^C:
           %%* %%>C% ;                            * 52482
 
 * refs (1): 52388
-OBJ_52491:
+C%C^C~1:
         :: SWAPDROP C%>% OVER %0> case2drop      * 52491
 
 * (0,0)
@@ -183,7 +183,7 @@ C%i:
 
 * (0,-1)
 C%-i:
-          C% 0E0 -1E0 EQUAL ORcase OBJ_51FF9     * 526AE
+          C% 0E0 -1E0 EQUAL ORcase C%ATAN~1      * 526AE
           C%>%% %%1 2DUP OVER %%- 3UNROLL %%+ %%* OVER %%ABS DUP %%4 %%*SWAP * 526E2
           %%1 %%- DUP %%* 5PICK DUP %%* DUPUNROT %%+ 4ROLLROT %%- 5ROLL * 52723
           DUPDUP %%+ ROTSWAP %%ANGLERAD %%2 %%/ SWAP %%0<> ?SKIP * 5275F
@@ -447,16 +447,16 @@ CALCINTEG:
             D1=D1+  16                           * 52D66
             C=DAT1  W                            * 52D69
             SETDEC                               * 52D6D
-            GOSUBL  SUB_5357D                    * 52D6F
-            GOSUBL  SUB_5368F                    * 52D75
-            GOSUBL  SUB_535A0                    * 52D7B
+            GOSUBL  CALCINTEG~1                  * 52D6F
+            GOSUBL  CALCINTEG~20                 * 52D75
+            GOSUBL  CALCINTEG~6                  * 52D7B
             GOTO    L_52F13                      * 52D81
           ENDCODE                                * 52D85
-          OBJ_535D8                              * 52D85
+          CALCINTEG~14                           * 52D85
           CODE                                   * 52D8A  39 nibbles
             GOSBVL  POP1%                        * 52D94
             SETHEX                               * 52D9B
-            GOSUBL  SUB_53647                    * 52D9D
+            GOSUBL  CALCINTEG~16                 * 52D9D
             DAT1=A  W                            * 52DA3
             D1=D1+  16                           * 52DA7
             A=0     S                            * 52DAA
@@ -486,53 +486,53 @@ CALCINTEG:
             D0=D0+  5                            * 52E04
             PC=(A)                               * 52E07
           ENDCODE                                * 52E0B
-          INDEX@ OBJ_536AC ONE_DO INDEX@ UNCOERCE ISTOP@ UNCOERCE * 52E0B
+          INDEX@ CALCINTEG~22 ONE_DO INDEX@ UNCOERCE ISTOP@ UNCOERCE * 52E0B
           CODE                                   * 52E2E  230 nibbles
             GOSBVL  POP2%                        * 52E38
             R4=A                                 * 52E3F
             R1=C                                 * 52E42
             A=-A-1  S                            * 52E45
-            GOSUB   SUB_5357D                    * 52E48
+            GOSUB   CALCINTEG~1                  * 52E48
             C=B     W                            * 52E4C
             D=C     W                            * 52E4F
             C=A     W                            * 52E52
-            GOSUB   SUB_53592                    * 52E55
-            GOSUB   SUB_535BC                    * 52E59
+            GOSUB   CALCINTEG~4                  * 52E55
+            GOSUB   CALCINTEG~10                 * 52E59
             C=R1                                 * 52E5D
             A=C     W                            * 52E60
-            GOSUB   SUB_5357D                    * 52E63
+            GOSUB   CALCINTEG~1                  * 52E63
             C=R4                                 * 52E67
-            GOSUB   SUB_535AE                    * 52E6A
-            GOSUB   SUB_53584                    * 52E6E
-            GOSUB   SUB_535D1                    * 52E72
-            GOSUB   SUB_53592                    * 52E76
-            GOSUB   SUB_535BC                    * 52E7A
+            GOSUB   CALCINTEG~8                  * 52E6A
+            GOSUB   CALCINTEG~2                  * 52E6E
+            GOSUB   CALCINTEG~13                 * 52E72
+            GOSUB   CALCINTEG~4                  * 52E76
+            GOSUB   CALCINTEG~10                 * 52E7A
             C=R1                                 * 52E7E
             A=C     W                            * 52E81
-            GOSUB   SUB_5358B                    * 52E84
+            GOSUB   CALCINTEG~3                  * 52E84
             C=R1                                 * 52E88
-            GOSUB   SUB_535AE                    * 52E8B
-            GOSUB   SUB_53592                    * 52E8F
-            GOSUB   SUB_535D1                    * 52E93
-            GOSUB   SUB_53599                    * 52E97
-            GOSUB   SUB_535BC                    * 52E9B
+            GOSUB   CALCINTEG~8                  * 52E8B
+            GOSUB   CALCINTEG~4                  * 52E8F
+            GOSUB   CALCINTEG~13                 * 52E93
+            GOSUB   CALCINTEG~5                  * 52E97
+            GOSUB   CALCINTEG~10                 * 52E9B
             GOSUB   SUB_5360F                    * 52E9F
             D1=D1+  10                           * 52EA3
             A=DAT1  W                            * 52EA6
             D1=D1+  16                           * 52EAA
             C=DAT1  W                            * 52EAD
             A=-A-1  S                            * 52EB1
-            GOSUB   SUB_5357D                    * 52EB4
-            GOSUBL  SUB_53682                    * 52EB8
-            GOSUB   SUB_535A0                    * 52EBE
-            GOSUB   SUB_535D1                    * 52EC2
-            GOSUB   SUB_53592                    * 52EC6
+            GOSUB   CALCINTEG~1                  * 52EB4
+            GOSUBL  CALCINTEG~19                 * 52EB8
+            GOSUB   CALCINTEG~6                  * 52EBE
+            GOSUB   CALCINTEG~13                 * 52EC2
+            GOSUB   CALCINTEG~4                  * 52EC6
             C=DAT1  W                            * 52ECA
-            GOSUB   SUB_535BC                    * 52ECE
+            GOSUB   CALCINTEG~10                 * 52ECE
             A=-A-1  S                            * 52ED2
-            GOSUB   SUB_535AE                    * 52ED5
-            GOSUB   SUB_53584                    * 52ED9
-            GOSUB   SUB_535A7                    * 52EDD
+            GOSUB   CALCINTEG~8                  * 52ED5
+            GOSUB   CALCINTEG~2                  * 52ED9
+            GOSUB   CALCINTEG~7                  * 52EDD
             D1=D1-  16                           * 52EE1
             C=DAT1  W                            * 52EE4
             D=C     W                            * 52EE8
@@ -545,15 +545,15 @@ CALCINTEG:
             D1=C                                 * 52EFD
             DAT1=A  W                            * 52F00
             C=D     W                            * 52F04
-            GOSUB   SUB_535C3                    * 52F07
-            GOSUB   SUB_535AE                    * 52F0B
-            GOSUB   SUB_53584                    * 52F0F
+            GOSUB   CALCINTEG~11                 * 52F07
+            GOSUB   CALCINTEG~8                  * 52F0B
+            GOSUB   CALCINTEG~2                  * 52F0F
 L_52F13:
-            GOSUB   SUB_535A7                    * 52F13
+            GOSUB   CALCINTEG~7                  * 52F13
 L_52F17:
             GOVLNG  PUSH%LOOP                    * 52F17
           ENDCODE                                * 52F1E
-          OBJ_535D8                              * 52F1E
+          CALCINTEG~14                           * 52F1E
           CODE                                   * 52F23  42 nibbles
             GOSBVL  POP1%                        * 52F2D
             SETHEX                               * 52F34
@@ -567,7 +567,7 @@ L_52F17:
             DAT1=C  W                            * 52F4F
             GOTO    L_52F17                      * 52F53
           ENDCODE                                * 52F57
-          OBJ_535D8 INDEX@ UNCOERCE ISTOP@ UNCOERCE * 52F57
+          CALCINTEG~14 INDEX@ UNCOERCE ISTOP@ UNCOERCE * 52F57
           CODE                                   * 52F70  211 nibbles
             GOSBVL  POP1%                        * 52F7A
             R2=A                                 * 52F81
@@ -578,23 +578,23 @@ L_52F17:
             R3=A                                 * 52F94
             C=R2                                 * 52F97
             A=C     W                            * 52F9A
-            GOSUB   SUB_5358B                    * 52F9D
-            GOSUB   SUB_535B5                    * 52FA1
+            GOSUB   CALCINTEG~3                  * 52F9D
+            GOSUB   CALCINTEG~9                  * 52FA1
             C=R4                                 * 52FA5
             A=C     W                            * 52FA8
-            GOSUB   SUB_5358B                    * 52FAB
+            GOSUB   CALCINTEG~3                  * 52FAB
             A=-A-1  S                            * 52FAF
-            GOSUB   SUB_535CA                    * 52FB2
-            GOSUB   SUB_53584                    * 52FB6
-            GOSUB   SUB_535CA                    * 52FBA
-            GOSUB   SUB_535A0                    * 52FBE
+            GOSUB   CALCINTEG~12                 * 52FB2
+            GOSUB   CALCINTEG~2                  * 52FB6
+            GOSUB   CALCINTEG~12                 * 52FBA
+            GOSUB   CALCINTEG~6                  * 52FBE
             D=0     W                            * 52FC2
             C=0     W                            * 52FC5
             P=      13                           * 52FC8
             LC(2)   #15                          * 52FCA
             DCEX    W                            * 52FCE
-            GOSUB   SUB_53592                    * 52FD1
-            GOSUB   SUB_535B5                    * 52FD5
+            GOSUB   CALCINTEG~4                  * 52FD1
+            GOSUB   CALCINTEG~9                  * 52FD5
             GOSUB   SUB_5360F                    * 52FD9
             B=C     A                            * 52FDD
             P=      0                            * 52FDF
@@ -607,53 +607,53 @@ L_52F17:
             A=R3                                 * 52FF5
             A=0     S                            * 52FF8
             C=0     S                            * 52FFB
-            GOSUB   SUB_5357D                    * 52FFE
-            GOSUB   SUB_535CA                    * 53002
-            GOSUB   SUB_53592                    * 53006
+            GOSUB   CALCINTEG~1                  * 52FFE
+            GOSUB   CALCINTEG~12                 * 53002
+            GOSUB   CALCINTEG~4                  * 53006
             D1=D1+  16                           * 5300A
             C=DAT1  W                            * 5300D
-            GOSUB   SUB_535AE                    * 53011
-            GOSUB   SUB_53584                    * 53015
-            GOSUB   SUB_535A7                    * 53019
+            GOSUB   CALCINTEG~8                  * 53011
+            GOSUB   CALCINTEG~2                  * 53015
+            GOSUB   CALCINTEG~7                  * 53019
             DAT1=A  W                            * 5301D
             D1=D1-  16                           * 53021
             C=DAT1  W                            * 53024
             A=R3                                 * 53028
-            GOSUB   SUB_5357D                    * 5302B
-            GOSUB   SUB_535CA                    * 5302F
-            GOSUB   SUB_53592                    * 53033
+            GOSUB   CALCINTEG~1                  * 5302B
+            GOSUB   CALCINTEG~12                 * 5302F
+            GOSUB   CALCINTEG~4                  * 53033
             D1=D1+  16                           * 53037
             D1=D1+  16                           * 5303A
-            GOSUB   SUB_53659                    * 5303D
-            GOSUB   SUB_53584                    * 53041
-            GOSUB   SUB_5366E                    * 53045
+            GOSUB   CALCINTEG~17                 * 5303D
+            GOSUB   CALCINTEG~2                  * 53041
+            GOSUB   CALCINTEG~18                 * 53045
             GOTO    L_53470                      * 53049
           ENDCODE                                * 5304D
-          BINT2 +LOOP INDEX@ OBJ_536AC UNCOERCE  * 5304D
+          BINT2 +LOOP INDEX@ CALCINTEG~22 UNCOERCE * 5304D
           CODE                                   * 53066  354 nibbles
             GOSBVL  POP1%                        * 53070
             R4=A                                 * 53077
             C=A     W                            * 5307A
-            GOSUB   SUB_5358B                    * 5307D
-            GOSUB   SUB_535BC                    * 53081
-            GOSUB   SUB_53647                    * 53085
+            GOSUB   CALCINTEG~3                  * 5307D
+            GOSUB   CALCINTEG~10                 * 53081
+            GOSUB   CALCINTEG~16                 * 53085
             A=DAT1  W                            * 53089
             D1=D1+  16                           * 5308D
             D1=D1+  16                           * 53090
             C=DAT1  W                            * 53093
-            GOSUB   SUB_5357D                    * 53097
-            GOSUB   SUB_535D1                    * 5309B
-            GOSUB   SUB_535A0                    * 5309F
+            GOSUB   CALCINTEG~1                  * 53097
+            GOSUB   CALCINTEG~13                 * 5309B
+            GOSUB   CALCINTEG~6                  * 5309F
             A=-A-1  S                            * 530A3
             C=DAT1  W                            * 530A6
-            GOSUB   SUB_535AE                    * 530AA
-            GOSUB   SUB_53584                    * 530AE
+            GOSUB   CALCINTEG~8                  * 530AA
+            GOSUB   CALCINTEG~2                  * 530AE
             D1=D1-  16                           * 530B2
             D1=D1-  16                           * 530B5
             C=DAT1  W                            * 530B8
             C=-C-1  S                            * 530BC
-            GOSUB   SUB_535AE                    * 530BF
-            GOSUB   SUB_53584                    * 530C3
+            GOSUB   CALCINTEG~8                  * 530BF
+            GOSUB   CALCINTEG~2                  * 530C3
             CD1EX                                * 530C7
             RSTK=C                               * 530CA
             D=C     A                            * 530CC
@@ -663,64 +663,64 @@ L_52F17:
             C=C+D   A                            * 530D9
             SETDEC                               * 530DB
             D1=C                                 * 530DD
-            GOSUB   SUB_53659                    * 530E0
-            GOSUB   SUB_535B5                    * 530E4
+            GOSUB   CALCINTEG~17                 * 530E0
+            GOSUB   CALCINTEG~9                  * 530E4
             A=R4                                 * 530E8
             GOSBVL  SPLITA                       * 530EB
-            GOSUB   SUB_53599                    * 530F2
-            GOSUB   SUB_535CA                    * 530F6
-            GOSUB   SUB_53584                    * 530FA
-            GOSUB   SUB_5368F                    * 530FE
-            GOSUB   SUB_535A0                    * 53102
+            GOSUB   CALCINTEG~5                  * 530F2
+            GOSUB   CALCINTEG~12                 * 530F6
+            GOSUB   CALCINTEG~2                  * 530FA
+            GOSUB   CALCINTEG~20                 * 530FE
+            GOSUB   CALCINTEG~6                  * 53102
             C=RSTK                               * 53106
             D0=C                                 * 53108
             C=DAT0  W                            * 5310B
-            GOSUB   SUB_535AE                    * 5310F
-            GOSUB   SUB_53584                    * 53113
-            GOSUB   SUB_535B5                    * 53117
-            GOSUB   SUB_535C3                    * 5311B
-            GOSUB   SUB_53682                    * 5311F
-            GOSUB   SUB_53592                    * 53123
-            GOSUB   SUB_5369C                    * 53127
-            GOSUB   SUB_53584                    * 5312B
-            GOSUB   SUB_535CA                    * 5312F
-            GOSUB   SUB_53599                    * 53133
-            GOSUB   SUB_535CA                    * 53137
-            GOSUB   SUB_53584                    * 5313B
-            GOSUB   SUB_5366E                    * 5313F
+            GOSUB   CALCINTEG~8                  * 5310F
+            GOSUB   CALCINTEG~2                  * 53113
+            GOSUB   CALCINTEG~9                  * 53117
+            GOSUB   CALCINTEG~11                 * 5311B
+            GOSUB   CALCINTEG~19                 * 5311F
+            GOSUB   CALCINTEG~4                  * 53123
+            GOSUB   CALCINTEG~21                 * 53127
+            GOSUB   CALCINTEG~2                  * 5312B
+            GOSUB   CALCINTEG~12                 * 5312F
+            GOSUB   CALCINTEG~5                  * 53133
+            GOSUB   CALCINTEG~12                 * 53137
+            GOSUB   CALCINTEG~2                  * 5313B
+            GOSUB   CALCINTEG~18                 * 5313F
             D1=D1-  16                           * 53143
             A=DAT1  W                            * 53146
             C=R4                                 * 5314A
             GOSBVL  SPLTAC                       * 5314D
-            GOSUB   SUB_535A0                    * 53154
-            GOSUB   SUB_53647                    * 53158
+            GOSUB   CALCINTEG~6                  * 53154
+            GOSUB   CALCINTEG~16                 * 53158
             D1=D1+  16                           * 5315C
             C=DAT1  W                            * 5315F
-            GOSUB   SUB_535AE                    * 53163
+            GOSUB   CALCINTEG~8                  * 53163
             GOSBVL  STCD0                        * 53167
             C=-C-1  S                            * 5316E
-            GOSUB   SUB_53584                    * 53171
+            GOSUB   CALCINTEG~2                  * 53171
             GOSBVL  EXAB0                        * 53175
-            GOSUB   SUB_535D1                    * 5317C
-            GOSUB   SUB_535A0                    * 53180
+            GOSUB   CALCINTEG~13                 * 5317C
+            GOSUB   CALCINTEG~6                  * 53180
             A=-A-1  S                            * 53184
-            GOSUB   SUB_535CA                    * 53187
-            GOSUB   SUB_53584                    * 5318B
-            GOSUB   SUB_5368F                    * 5318F
-            GOSUB   SUB_535A0                    * 53193
+            GOSUB   CALCINTEG~12                 * 53187
+            GOSUB   CALCINTEG~2                  * 5318B
+            GOSUB   CALCINTEG~20                 * 5318F
+            GOSUB   CALCINTEG~6                  * 53193
             C=DAT1  W                            * 53197
-            GOSUB   SUB_535AE                    * 5319B
-            GOSUB   SUB_53584                    * 5319F
+            GOSUB   CALCINTEG~8                  * 5319B
+            GOSUB   CALCINTEG~2                  * 5319F
             GOSBVL  EXAB2                        * 531A3
-            GOSUB   SUB_53682                    * 531AA
-            GOSUB   SUB_53592                    * 531AE
-            GOSUB   SUB_5369C                    * 531B2
-            GOSUB   SUB_53584                    * 531B6
-            GOSUB   SUB_535D1                    * 531BA
-            GOSUB   SUB_53599                    * 531BE
-            GOSUB   SUB_535D1                    * 531C2
-            GOSUB   SUB_53584                    * 531C6
-            GOSUB   SUB_535A7                    * 531CA
+            GOSUB   CALCINTEG~19                 * 531AA
+            GOSUB   CALCINTEG~4                  * 531AE
+            GOSUB   CALCINTEG~21                 * 531B2
+            GOSUB   CALCINTEG~2                  * 531B6
+            GOSUB   CALCINTEG~13                 * 531BA
+            GOSUB   CALCINTEG~5                  * 531BE
+            GOSUB   CALCINTEG~13                 * 531C2
+            GOSUB   CALCINTEG~2                  * 531C6
+            GOSUB   CALCINTEG~7                  * 531CA
             GOTO    L_5346C                      * 531CE
           ENDCODE                                * 531D2
           INDEX@ DUP                             * 531D2
@@ -732,29 +732,29 @@ L_52F17:
             A=A+1   S                            * 531F6
             A=A+1   S                            * 531F9
             R4=A                                 * 531FC
-            GOSUB   SUB_5362D                    * 531FF
-            GOSUB   SUB_53659                    * 53203
+            GOSUB   CALCINTEG~15                 * 531FF
+            GOSUB   CALCINTEG~17                 * 53203
             GOSBVL  STCD0                        * 53207
             GOSBVL  RCAB0                        * 5320E
-            GOSUB   SUB_535A7                    * 53215
+            GOSUB   CALCINTEG~7                  * 53215
             R3=A                                 * 53219
             GOSBVL  SPLITA                       * 5321C
             A=-A-1  S                            * 53223
-            GOSUB   SUB_535CA                    * 53226
-            GOSUB   SUB_53584                    * 5322A
-            GOSUB   SUB_535A7                    * 5322E
+            GOSUB   CALCINTEG~12                 * 53226
+            GOSUB   CALCINTEG~2                  * 5322A
+            GOSUB   CALCINTEG~7                  * 5322E
             D1=D1-  16                           * 53232
             DAT1=A  W                            * 53235
             D1=D1-  16                           * 53239
             CD1EX                                * 5323C
             RSTK=C                               * 5323F
-            GOSUB   SUB_53647                    * 53241
+            GOSUB   CALCINTEG~16                 * 53241
             C=DAT1  W                            * 53245
             A=R3                                 * 53249
             DAT1=A  W                            * 5324C
             C=-C-1  S                            * 53250
-            GOSUB   SUB_5357D                    * 53253
-            GOSUB   SUB_535A7                    * 53257
+            GOSUB   CALCINTEG~1                  * 53253
+            GOSUB   CALCINTEG~7                  * 53257
             C=RSTK                               * 5325B
             D1=C                                 * 5325D
             DAT1=A  W                            * 53260
@@ -792,18 +792,18 @@ L_53271:
             A=DAT1  W                            * 532C0
             C=R1                                 * 532C4
             C=-C-1  S                            * 532C7
-            GOSUB   SUB_5357D                    * 532CA
-            GOSUB   SUB_535BC                    * 532CE
+            GOSUB   CALCINTEG~1                  * 532CA
+            GOSUB   CALCINTEG~10                 * 532CE
 L_532D2:
-            GOSUB   SUB_5362D                    * 532D2
+            GOSUB   CALCINTEG~15                 * 532D2
             A=DAT1  W                            * 532D6
             GOSBVL  SPLITA                       * 532DA
-            GOSBVL  SUB_53682                    * 532E1
-            GOSUB   SUB_53592                    * 532E8
-            GOSUB   SUB_5368F                    * 532EC
+            GOSBVL  CALCINTEG~19                 * 532E1
+            GOSUB   CALCINTEG~4                  * 532E8
+            GOSUB   CALCINTEG~20                 * 532EC
             D=D+1   P                            * 532F0
-            GOSUB   SUB_53584                    * 532F3
-            GOSUB   SUB_535A7                    * 532F7
+            GOSUB   CALCINTEG~2                  * 532F3
+            GOSUB   CALCINTEG~7                  * 532F7
             DAT1=A  W                            * 532FB
             D1=D1-  16                           * 532FF
             A=DAT1  W                            * 53302
@@ -812,12 +812,12 @@ L_532D2:
             D0=C                                 * 5330A
             C=DAT0  W                            * 5330D
             C=-C-1  S                            * 53311
-            GOSUB   SUB_5357D                    * 53314
+            GOSUB   CALCINTEG~1                  * 53314
             D1=D1-  16                           * 53318
             C=DAT1  W                            * 5331B
-            GOSUB   SUB_535AE                    * 5331F
-            GOSUB   SUB_53584                    * 53323
-            GOSUB   SUB_535B5                    * 53327
+            GOSUB   CALCINTEG~8                  * 5331F
+            GOSUB   CALCINTEG~2                  * 53323
+            GOSUB   CALCINTEG~9                  * 53327
             GOSUB   SUB_5360F                    * 5332B
             D1=D1+  10                           * 5332F
             D1=D1+  16                           * 53332
@@ -826,8 +826,8 @@ L_532D2:
             D1=D1+  16                           * 5333C
             D1=D1+  16                           * 5333F
             C=DAT1  W                            * 53342
-            GOSUB   SUB_5358B                    * 53346
-            GOSUB   SUB_535CA                    * 5334A
+            GOSUB   CALCINTEG~3                  * 53346
+            GOSUB   CALCINTEG~12                 * 5334A
             C=0     S                            * 5334E
             P=      6                            * 53351
             GOSBVL  TST15                        * 53353
@@ -836,14 +836,14 @@ L_532D2:
             A=0     S                            * 53360
             A=A+1   S                            * 53363
             R4=A                                 * 53366
-            GOSUB   SUB_5362D                    * 53369
+            GOSUB   CALCINTEG~15                 * 53369
             C=DAT1  W                            * 5336D
-            GOSUB   SUB_535AE                    * 53371
-            GOSUB   SUB_535C3                    * 53375
-            GOSUB   SUB_53592                    * 53379
-            GOSUB   SUB_535CA                    * 5337D
-            GOSUB   SUB_535A0                    * 53381
-            GOSUB   SUB_5368F                    * 53385
+            GOSUB   CALCINTEG~8                  * 53371
+            GOSUB   CALCINTEG~11                 * 53375
+            GOSUB   CALCINTEG~4                  * 53379
+            GOSUB   CALCINTEG~12                 * 5337D
+            GOSUB   CALCINTEG~6                  * 53381
+            GOSUB   CALCINTEG~20                 * 53385
             P=      6                            * 53389
             GOSBVL  TST15                        * 5338B
             GOC     L_5339E                      * 53392
@@ -851,16 +851,16 @@ L_532D2:
             A=A+1   S                            * 53398
             R4=A                                 * 5339B
 L_5339E:
-            GOSUB   SUB_5362D                    * 5339E
+            GOSUB   CALCINTEG~15                 * 5339E
             C=DAT1  W                            * 533A2
             D1=D1-  16                           * 533A6
-            GOSUB   SUB_535AE                    * 533A9
+            GOSUB   CALCINTEG~8                  * 533A9
             GOSBVL  RCAB0                        * 533AD
-            GOSUB   SUB_535A0                    * 533B4
+            GOSUB   CALCINTEG~6                  * 533B4
             C=DAT1  W                            * 533B8
-            GOSUB   SUB_535AE                    * 533BC
-            GOSUB   SUB_53584                    * 533C0
-            GOSUB   SUB_535A7                    * 533C4
+            GOSUB   CALCINTEG~8                  * 533BC
+            GOSUB   CALCINTEG~2                  * 533C0
+            GOSUB   CALCINTEG~7                  * 533C4
             C=DAT1  W                            * 533C8
             DAT1=A  W                            * 533CC
             A=C     W                            * 533D0
@@ -919,7 +919,7 @@ L_53470:
           1GETLAM ?SKIP                          * 53487
           CODE                                   * 53491  38 nibbles
             AD1EX                                * 5349B
-            GOSUB   SUB_53647                    * 5349E
+            GOSUB   CALCINTEG~16                 * 5349E
             D1=D1+  16                           * 534A2
             C=DAT1  W                            * 534A5
             SETDEC                               * 534A9
@@ -940,19 +940,19 @@ L_53470:
             C=DAT1  W                            * 534DD
             SETDEC                               * 534E1
             A=-A-1  S                            * 534E3
-            GOSUB   SUB_5357D                    * 534E6
-            GOSUB   SUB_535B5                    * 534EA
+            GOSUB   CALCINTEG~1                  * 534E6
+            GOSUB   CALCINTEG~9                  * 534EA
             D1=D1+  16                           * 534EE
             C=DAT1  W                            * 534F1
             A=0     S                            * 534F5
-            GOSUB   SUB_535AE                    * 534F8
-            GOSUB   SUB_53592                    * 534FC
+            GOSUB   CALCINTEG~8                  * 534F8
+            GOSUB   CALCINTEG~4                  * 534FC
             D1=D1+  16                           * 53500
             D1=D1+  16                           * 53503
             C=DAT1  W                            * 53506
-            GOSUB   SUB_535AE                    * 5350A
-            GOSUB   SUB_53592                    * 5350E
-            GOSUB   SUB_535BC                    * 53512
+            GOSUB   CALCINTEG~8                  * 5350A
+            GOSUB   CALCINTEG~4                  * 5350E
+            GOSUB   CALCINTEG~10                 * 53512
             D1=D1-  16                           * 53516
             A=DAT1  W                            * 53519
             CD1EX                                * 5351D
@@ -964,13 +964,13 @@ L_53470:
             SETDEC                               * 5352F
             D1=C                                 * 53531
             C=DAT1  W                            * 53534
-            GOSUB   SUB_5357D                    * 53538
-            GOSUB   SUB_535CA                    * 5353C
-            GOSUB   SUB_53592                    * 53540
+            GOSUB   CALCINTEG~1                  * 53538
+            GOSUB   CALCINTEG~12                 * 5353C
+            GOSUB   CALCINTEG~4                  * 53540
             GOSBVL  PACK                         * 53544
             GOSBVL  PUSH%                        * 5354B
             GOSUB   SUB_5356F                    * 53552
-            GOSUB   SUB_535C3                    * 53556
+            GOSUB   CALCINTEG~11                 * 53556
             GOSBVL  PACK                         * 5355A
             GOTO    L_52F17                      * 53561
           ENDCODE                                * 53565
@@ -987,60 +987,60 @@ SUB_53576:
         GOVLNG  GETPTR                           * 53576
 
 * refs (12): 52D6F 52E48 52E63 52EB4 52FFE 5302B ...
-SUB_5357D:
+CALCINTEG~1:
         GOSBVL  SPLTAC                           * 5357D
 
 * refs (21): 52E6E 52ED9 52F0F 52FB6 53015 53041 ...
-SUB_53584:
+CALCINTEG~2:
         GOVLNG  RADDF                            * 53584
 
 * refs (5): 52E84 52F9D 52FAB 5307D 53346
-SUB_5358B:
+CALCINTEG~3:
         GOSBVL  SPLTAC                           * 5358B
 
 * refs (14): 52E55 52E76 52E8F 52EC6 52FD1 53006 ...
-SUB_53592:
+CALCINTEG~4:
         GOVLNG  MULTF                            * 53592
 
 * refs (4): 52E97 530F2 53133 531BE
-SUB_53599:
+CALCINTEG~5:
         GOSBVL  XYEX                             * 53599
 
 * refs (10): 52D7B 52EBE 52FBE 5309F 53102 53154 ...
-SUB_535A0:
+CALCINTEG~6:
         GOVLNG  DIVF                             * 535A0
 
 * refs (9): 52EDD 52F13 53019 531CA 53215 5322E ...
-SUB_535A7:
+CALCINTEG~7:
         GOVLNG  SUB_29F76                        * 535A7
 
 * refs (16): 52E6A 52E8B 52ED5 52F0B 53011 530AA ...
-SUB_535AE:
+CALCINTEG~8:
         GOVLNG  SUB_2BCAC                        * 535AE
 
 * refs (6): 52FA1 52FD5 530E4 53117 53327 534EA
-SUB_535B5:
+CALCINTEG~9:
         GOVLNG  STAB0                            * 535B5
 
 * refs (7): 52E59 52E7A 52E9B 52ECE 53081 532CE ...
-SUB_535BC:
+CALCINTEG~10:
         GOVLNG  STAB2                            * 535BC
 
 * refs (4): 52F07 5311B 53375 53556
-SUB_535C3:
+CALCINTEG~11:
         GOVLNG  RCAB2                            * 535C3
 
 * refs (12): 52FB2 52FBA 53002 5302F 530F6 5312F ...
-SUB_535CA:
+CALCINTEG~12:
         GOVLNG  RCCD0                            * 535CA
 
 * refs (7): 52E72 52E93 52EC2 5309B 5317C 531BA ...
-SUB_535D1:
+CALCINTEG~13:
         GOVLNG  RCCD2                            * 535D1
         RPL
 
 * refs (3): 52D85 52F1E 52F57
-OBJ_535D8:
+CALCINTEG~14:
         :: OBJ_4241B 4GETLAM CRUNCH CK1NoBlame DUP TYPEREAL? ?SKIP * 535D8
           SETNONERAL                             * 53600
           OBJ_4241B ;                            * 53605
@@ -1059,7 +1059,7 @@ SUB_5360F:
         RTN                                      * 5362B
 
 * refs (4): 531FF 532D2 53369 5339E
-SUB_5362D:
+CALCINTEG~15:
         GOSUB   SUB_5360F                        * 5362D
         B=C     A                                * 53631
         P=      0                                * 53633
@@ -1071,7 +1071,7 @@ SUB_5362D:
         RTN                                      * 53645
 
 * refs (5): 52D9D 53085 53158 53241 5349E
-SUB_53647:
+CALCINTEG~16:
         GOSUB   SUB_5360F                        * 53647
         D1=D1+  10                               * 5364B
         D1=D1+  16                               * 5364E
@@ -1080,7 +1080,7 @@ SUB_53647:
         RTN                                      * 53657
 
 * refs (3): 5303D 530E0 53203
-SUB_53659:
+CALCINTEG~17:
         D1=D1+  5                                * 53659
         C=DAT1  W                                * 5365C
         D=C     W                                * 53660
@@ -1090,7 +1090,7 @@ SUB_53659:
         RTN                                      * 5366C
 
 * refs (2): 53045 5313F
-SUB_5366E:
+CALCINTEG~18:
         DAT1=A  A                                * 5366E
         D1=D1+  5                                * 53671
         P=      14                               * 53674
@@ -1100,7 +1100,7 @@ SUB_5366E:
         RTN                                      * 53680
 
 * refs (4): 52EB8 5311F 531AA 532E1
-SUB_53682:
+CALCINTEG~19:
         C=0     W                                * 53682
         P=      14                               * 53685
         LC(1)   #4                               * 53687
@@ -1108,7 +1108,7 @@ SUB_53682:
         RTN                                      * 5368D
 
 * refs (5): 52D75 530FE 5318F 532EC 53385
-SUB_5368F:
+CALCINTEG~20:
         C=0     W                                * 5368F
         P=      14                               * 53692
         LC(1)   #2                               * 53694
@@ -1116,7 +1116,7 @@ SUB_5368F:
         RTN                                      * 5369A
 
 * refs (2): 53127 531B2
-SUB_5369C:
+CALCINTEG~21:
         C=0     W                                * 5369C
         C=-C-1  S                                * 5369F
         D=0     W                                * 536A2
@@ -1125,7 +1125,7 @@ SUB_5369C:
         RTN                                      * 536AA
 
 * refs (2): 52E10 5305C
-OBJ_536AC:
+CALCINTEG~22:
         CON(5)  (*)+5                            * 536AC  primitive code object
         GOSBVL  POP#                             * 536B1
         A=A-1   A                                * 536B8
@@ -1329,7 +1329,7 @@ UNDO_OFF:
         GOTO    L_539F1                          * 538E6
 
 * refs (1): 42091
-OBJ_538EA:
+?BlinkCursor~1:
         CON(5)  (*)+5                            * 538EA  primitive code object
         LC(3)   #205                             * 538EF
         GOTO    SetISysFlag                      * 538F4
@@ -1499,19 +1499,19 @@ BeginComLine:
         GOTO    SetISysFlag                      * 53A62
 
 * refs (1): 4429A
-OBJ_53A66:
+InitEdLine~2:
         CON(5)  (*)+5                            * 53A66  primitive code object
         LC(3)   #10A                             * 53A6B
         GOTO    L_539F1                          * 53A70
 
 * refs (1): 38FBE
-OBJ_53A74:
+DA2aLess1OK?~1:
         CON(5)  (*)+5                            * 53A74  primitive code object
         LC(3)   #40B                             * 53A79
         GOTO    L_539E6                          * 53A7E
 
 * refs (1): 39095
-OBJ_53A82:
+?SetEditRoll~1:
         CON(5)  (*)+5                            * 53A82  primitive code object
         LC(3)   #40B                             * 53A87
         GOTO    SetISysFlag                      * 53A8C
@@ -1540,7 +1540,7 @@ NoClock:
         GOTO    L_539F1                          * 53AC4
 
 * refs (1): 42235
-OBJ_53AC8:
+GETKEY~5~1:
         CON(5)  (*)+5                            * 53AC8  primitive code object
         LC(3)   #801                             * 53ACD
         GOTO    L_539E6                          * 53AD2

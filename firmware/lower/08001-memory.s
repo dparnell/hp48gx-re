@@ -39,7 +39,7 @@ L_08066:
         RPL
 
 * refs (1): 8573B
-OBJ_0806D:
+libs~1~1:
         :: OBJ_7028A ROMPART>ADDR ;              * 0806D
 
 * #libnum -> #addr T -> F
@@ -135,7 +135,7 @@ GETCONFIG:
         CON(5)  (*)+5                            * 08157  primitive code object
         ST=1    11                               * 0815C
         GOTO    L_08144                          * 0815F
-L_08163:
+AdrPort0~1:
         GOSBVL  SAVPTR                           * 08163
         D1=(5)  ROMPARTS                         * 0816A
         A=DAT1  A                                * 08171
@@ -178,12 +178,12 @@ L_081C3:
 * bak -> id T
 * refs (6): 15D5B 15D9C 215FC 219F9 853B9 85C4C
 BAKNAME:
-        CON(5)  L_71B2B                          * 081D9  code object: the address of its machine code
+        CON(5)  BAKNAME~1                        * 081D9  code object: the address of its machine code
 
 * lib -> #libnum T
 * refs (4): 15D42 215ED 219E5 853B4
 LIB>#:
-        CON(5)  L_09D68                          * 081DE  code object: the address of its machine code
+        CON(5)  LIB>#~1                          * 081DE  code object: the address of its machine code
 
 * ob -> id T -> F
 * refs (1): 62B3D
@@ -964,7 +964,7 @@ L_089D4:
         GOTO    L_0888A                          * 089D4
 
 * refs (1): 08C5E
-OBJ_089D8:
+purge(_)~1:
         CON(5)  (*)+5                            * 089D8  primitive code object
         A=DAT1  A                                * 089DD
         D1=D1+  5                                * 089E0
@@ -1170,7 +1170,7 @@ PURGE:
 
 * refs (6): 08C36 097E3 1810A 1811E 210EB 72ABE
 purge(_):
-        :: OBJ_079D7 REFERENCED? COLA OBJ_089D8  * 08C4A
+        :: OBJ_079D7 REFERENCED? COLA purge(_)~1 * 08C4A
         ;                                        * 08C63
 
 * refs (1): 07D95
@@ -1314,7 +1314,7 @@ RclKnownLibs:
 
 * refs (2): 08FF8 093E8
 dup2;idem(nm,bk)?:
-        CON(5)  L_717B4                          * 08E56  code object: the address of its machine code
+        CON(5)  dup2;idem(nm,bk)?~1              * 08E56  code object: the address of its machine code
         ASSEMBLE
 L_08E5B:
         D1=A                                     * 08E5B
@@ -1420,13 +1420,13 @@ sto12(bk,nm,s):
         :: ROT ?>ROMPTR 3UNROLL OVER dvarlsBIND DUP4UNROLL * 08F85
 
 * refs (1): 09410
-OBJ_08FA8:
+PurgeBkp12(nm,s)~1:
           :: PORTSTATUS 5UNROLL 5UNROLL NOTAND ANDNOTcase SETPORTNOTAV * 08FA8
             ROTOVER ;                            * 08FCB
           BEGIN DUP NEXTLIBBAK WHILE             * 08FD5
           :: ROTDROP 3UNROLL dup2;idem(nm,bk)? case SETOBINUSE * 08FE9
             DROPSWAP ;                           * 09007
-          REPEAT OBJ_72300 #5+ SWAP              * 09011
+          REPEAT sto12(bk,nm,s)~2 #5+ SWAP       * 09011
           :: DNOTBAKcase                         * 09025
             :: DNOTLIBcase                       * 0902F
               :: SWAP 1GETLAM OSIZE              * 09039
@@ -1438,12 +1438,12 @@ dup;=7(s)?:BAT!:
               SWAP ;                             * 0907A
             SWAP ;                               * 09084
           ROTOVER #<case SETNOROOM               * 0908E
-          ROTSWAP 4ROLL 1GETABND 5UNROLL OBJ_090BE ; * 0909D
+          ROTSWAP 4ROLL 1GETABND 5UNROLL sto12(bk,nm,s)~1 ; * 0909D
         NIBHEX  000                              * 090BB  .
 
 * refs (1): 090B1
-OBJ_090BE:
-        CON(5)  L_7187C                          * 090BE  code object: the address of its machine code
+sto12(bk,nm,s)~1:
+        CON(5)  sto12(bk,nm,s)~1~1               * 090BE  code object: the address of its machine code
         ASSEMBLE
 L_090C3:
         C=R3.F  A                                * 090C3
@@ -1592,7 +1592,7 @@ RclBkp0(nm)?:
 
 * refs (4): 092F8 09334 17E6B 21936
 AdrPort0:
-        CON(5)  L_08163                          * 09316  code object: the address of its machine code
+        CON(5)  AdrPort0~1                       * 09316  code object: the address of its machine code
 
 * refs (3): 858E2 859F8 85B1C
 X@:
@@ -1612,18 +1612,19 @@ RclBkp(nm,adr)?:
 
 * refs (1): 85AA7
 PurgeBkp12(nm,s):
-        :: OBJ_08FA8 RclBkp(nm,adr)? NOTcase2DROP * 0940B
+        :: PurgeBkp12(nm,s)~1 RclBkp(nm,adr)? NOTcase2DROP * 0940B
 
 * refs (1): 09465
-OBJ_0941F:
-          :: OBJ_71A3C SWAP OBJ_0BB2B ROT OR case SETOBINUSE * 0941F
+PurgeBkp0(nm)~1:
+          :: PurgeBkp12(nm,s)~4 SWAP PurgeBkp12(nm,s)~3 ROT OR case * 0941F
+            SETOBINUSE                           * 09442
           ;                                      * 09447
-          OBJ_0B227 ;                            * 0944C
+          PurgeBkp12(nm,s)~2 ;                   * 0944C
 
 * refs (1): 85A9D
 PurgeBkp0(nm):
         :: RclBkp0(nm)? NOT?SEMI                 * 09456
-          OBJ_0941F purge(bk,s) ;                * 09465
+          PurgeBkp0(nm)~1 purge(bk,s) ;          * 09465
         ASSEMBLE
 
 * refs (2): 09493 71AC0
@@ -1644,7 +1645,7 @@ SUB_09477:
 * bak -> ob
 * refs (3): 093B1 85519 85537
 BAK>OB:
-        CON(5)  L_71A8F                          * 0948E  code object: the address of its machine code
+        CON(5)  BAK>OB~1                         * 0948E  code object: the address of its machine code
 L_09493:
         GOSUB   SUB_09474                        * 09493
         DAT1=A  A                                * 09497
@@ -1831,7 +1832,7 @@ L_09723:
         PC=(A)                                   * 0972C
 
 * refs (1): 85546
-OBJ_09730:
+restore(nm,s)~1~1:
         CON(5)  (*)+5                            * 09730  primitive code object
         A=0     A                                * 09735
         LC(5)   UserKeys                         * 09737
@@ -2249,7 +2250,7 @@ SUB_09D50:
         C=C+1   A                                * 09D62
 L_09D64:
         GOTO    L_09CFA                          * 09D64
-L_09D68:
+LIB>#~1:
         GOSUBL  SAVPTR                           * 09D68
         C=DAT1  A                                * 09D6E
         D1=C                                     * 09D71
@@ -2289,7 +2290,7 @@ SUB_09DD6:
         FILLTO  #09E1A                           * 09DDA  64 zero nibbles: the next entry stays at #09E1A
 
 * refs (1): 0AB87
-OBJ_09E1A:
+NEXTLIBBAK~1:
         CON(5)  (*)+5                            * 09E1A  primitive code object
         C=DAT1  A                                * 09E1F
         CD1EX                                    * 09E22
@@ -2306,7 +2307,7 @@ L_09E47:
         PC=(A)                                   * 09E49
 
 * refs (1): 0AB96
-OBJ_09E4D:
+NEXTLIBBAK~2:
         CON(5)  (*)+5                            * 09E4D  primitive code object
         GOSBVL  SAVPTR                           * 09E52
         D1=D1+  5                                * 09E59
@@ -2400,7 +2401,7 @@ L_09F64:
         GOLONG  L_0AB11                          * 09F64
 
 * refs (1): 0AAD5
-OBJ_09F6A:
+PORTSTATUS~1:
         CON(5)  (*)+5                            * 09F6A  primitive code object
         GOSBVL  POP#                             * 09F6F
         GOSBVL  SAVPTR                           * 09F76

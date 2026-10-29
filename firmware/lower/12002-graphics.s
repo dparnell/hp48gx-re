@@ -735,7 +735,7 @@ repl(go,2s,go):
         :: 4UNROLL 3PICK 5UNROLL GROB! ;         * 12829
 
 * refs (1): 3A206
-OBJ_12847:
+DispMenu.1~1:
         CON(5)  (*)+5                            * 12847  primitive code object
         ASSEMBLE
         CD0EX                                    * 1284C
@@ -2066,11 +2066,11 @@ L_138C0:
 * refs (2): 138B5 50C05
 pixon2:
         ?ST=0   0                                * 138CA
-        GOYES   L_138DA                          * 138CD
+        GOYES   pixon2~1                         * 138CD
         B=-B-1  P                                * 138CF
         A=A&B   P                                * 138D2
         GOTO    L_138DE                          * 138D6
-L_138DA:
+pixon2~1:
         A=A!B   P                                * 138DA
 L_138DE:
         DAT0=A  1                                * 138DE
@@ -2170,7 +2170,7 @@ L_139E1:
         PC=(A)                                   * 139E3
 
 * refs (1): 40B9C
-OBJ_139E7:
+DispBadToken~1:
         CON(5)  (*)+5                            * 139E7  primitive code object
         GOSBVL  POP#                             * 139EC
         R0=A                                     * 139F3
@@ -2376,18 +2376,18 @@ SUB_13C5A:
         RPL
 
 * refs (2): 42186 421B8
-OBJ_13CB0:
-        :: OBJ_13E63 case                        * 13CB0
-          :: OBJ_13CE2 OBJ_13E2E ;               * 13CBF
-          OBJ_13CFB OBJ_13E22 ;                  * 13CD3
+GETKEY~2:
+        :: GETKEY~2~4 case                       * 13CB0
+          :: GETKEY~2~1 GETKEY~2~3 ;             * 13CBF
+          GETKEY~2~2 OBJ_13E22 ;                 * 13CD3
 
 * refs (1): 13CC4
-OBJ_13CE2:
+GETKEY~2~1:
         :: OBJ_13D14 NOT?SEMI                    * 13CE2
           cursorblink+ ;                         * 13CF1
 
 * refs (1): 13CD3
-OBJ_13CFB:
+GETKEY~2~2:
         :: OBJ_13D14 NOT?SEMI                    * 13CFB
           cursorblink- ;                         * 13D0A
 
@@ -2468,7 +2468,7 @@ OBJ_13E22:
         GOTO    L_13E36                          * 13E2A
 
 * refs (1): 13CC9
-OBJ_13E2E:
+GETKEY~2~3:
         CON(5)  (*)+5                            * 13E2E  primitive code object
         ST=0    0                                * 13E33
 L_13E36:
@@ -2483,13 +2483,13 @@ L_13E4B:
         GOTO    L_13FD1                          * 13E4F
 
 * refs (1): 421AE
-OBJ_13E53:
+GETKEY~3:
         CON(5)  (*)+5                            * 13E53  primitive code object
         LC(5)   T1COUNT                          * 13E58
         GOTO    L_13E6F                          * 13E5F
 
 * refs (1): 13CB5
-OBJ_13E63:
+GETKEY~2~4:
         CON(5)  (*)+5                            * 13E63  primitive code object
         LC(5)   CURSORSTATE                      * 13E68
 L_13E6F:
@@ -2558,7 +2558,7 @@ CURSOR+:
         GOTO    L_13F75                          * 13F0D
 
 * refs (1): 4257A
-OBJ_13F11:
+LCursor~2:
         CON(5)  (*)+5                            * 13F11  primitive code object
         LC(5)   CURSOR                           * 13F16
         CD0EX                                    * 13F1D
@@ -2599,7 +2599,7 @@ L_13F75:
         GOTO    L_13FC9                          * 13F7B
 
 * refs (1): 4267E
-OBJ_13F7F:
+UCursor~1:
         CON(5)  (*)+5                            * 13F7F  primitive code object
         LC(5)   CURSORPART                       * 13F84
         CD0EX                                    * 13F8B
@@ -2610,7 +2610,7 @@ OBJ_13F7F:
         GONC    L_13FCE                          * 13F98
 
 * refs (1): 426A6
-OBJ_13F9B:
+ToTheFirstRow~1:
         CON(5)  (*)+5                            * 13F9B  primitive code object
         LC(5)   CURSORPART                       * 13FA0
         CD0EX                                    * 13FA7
@@ -2618,7 +2618,7 @@ OBJ_13F9B:
         GOTO    L_13FC9                          * 13FAC
 
 * refs (1): 4252A
-OBJ_13FB0:
+ToTheLastRow~1:
         CON(5)  (*)+5                            * 13FB0  primitive code object
         LC(5)   CR_COUNT                         * 13FB5
         CD0EX                                    * 13FBC

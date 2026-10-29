@@ -14,7 +14,7 @@ OBJ_6C190:
             RDROP OBJ_6BBD6 OBJ_6BC2D OBJ_6CB25 OBJ_6C555 OBJ_6B894 ; * 6C19F
 
 * refs (1): 6B5A1
-OBJ_6C1C2:
+ObEdit~1~1:
           :: OBJ_67381 OBJ_6773D OBJ_673D6 #+ #1+NDROP OBJ_673E6 OBJ_673D6 * 6C1C2
             #- ;                                 * 6C1EA
           OBJ_6AFF0 OBJ_6CC10 OBJ_6CC32 SWAP OBJ_6C2C1 OBJ_6B200 * 6C1F4
@@ -72,7 +72,7 @@ OBJ_6C3AC:
           OBJ_6B939 OBJ_6B79A                    * 6C3CF
 
 * refs (1): 6B54C
-OBJ_6C3D9:
+ObEdit~1~2:
           :: OBJ_6731D OBJ_0C4E3 ZERO_DO #1+ DUPPICK OBJ_6B2AA xPREDIV IT * 6C3D9
             :: dup;drop(s) ' x/ OVER UNROLL ;    * 6C406
             LOOP DROP OBJ_461D7 OBJ_67D1B OBJ_69B49 ClrDAsOK DispMenu * 6C429
@@ -80,16 +80,16 @@ OBJ_6C3D9:
         ;                                        * 6C456
 
 * refs (2): 50519 50528
-OBJ_6C45B:
+0->grob(_)~1:
         :: POLSaveUI ERRSET                      * 6C45B
           :: ERRSET                              * 6C46A
 
 * refs (1): 6C51E
-OBJ_6C474:
+Symb>HBuff~1~2:
             :: SetDA3NoCh FALSE                  * 6C474
 
 * refs (1): 6B524
-OBJ_6C483:
+ObEdit~1~3:
               :: TOADISP CLEARVDISP OBJ_6CC21 NULL$SWAP OBJ_6C550 * 6C483
 
 * refs (3): 69D24 6AD75 6B165
@@ -97,18 +97,18 @@ OBJ_6C4A1:
                 :: OBJ_677EA #1+PICK ; ;         * 6C4A1
 
 * refs (1): 6B533
-OBJ_6C4BA:
+ObEdit~1~4:
               :: OBJ_68972 OBJ_666D3 OBJ_6AE6F DROP ; ; * 6C4BA
-            ERRTRAP OBJ_6C528 HARDBUFF TOTEMPOB OBJ_6A95B OBJ_6C8CD ; * 6C4DD
+            ERRTRAP 0->grob(_)~1~1 HARDBUFF TOTEMPOB OBJ_6A95B OBJ_6C8CD ; * 6C4DD
           ERRTRAP POLResUI&Err POLRestoreUI ;    * 6C500
 
 * refs (1): 659ED
-OBJ_6C514:
-        :: ERRSET OBJ_6C474 ERRTRAP              * 6C514
+Symb>HBuff~1:
+        :: ERRSET Symb>HBuff~1~2 ERRTRAP         * 6C514
 
 * refs (1): 6C4E2
-OBJ_6C528:
-          :: OBJ_6CC32 OBJ_6C8CD ERRJMP ; OBJ_6CC32 OBJ_6C8D7 ; * 6C528
+0->grob(_)~1~1:
+          :: OBJ_6CC32 OBJ_6C8CD ERRJMP ; OBJ_6CC32 Symb>HBuff~1~1 ; * 6C528
 
 * refs (4): 69D0B 6AE65 6B4B6 6C49C
 OBJ_6C550:
@@ -238,12 +238,12 @@ OBJ_6C8CD:
           :: OBJ_6CC32                           * 6C8CD
 
 * refs (1): 6C546
-OBJ_6C8D7:
+Symb>HBuff~1~1:
             :: OBJ_677DE ClrDAsOK BINT23 GETLAM IT SetAppMode * 6C8D7
               InitEd&Modes OBJ_6C555 NULLHXS OBJ_681B1 ; * 6C8FA
             RECLAIMDISP ;                        * 6C913
           ERROR@ #0=?SEMI                        * 6C91D
-L_6C927:
+ObEdit~1~5:
           OBJ_18295 ' 'source DRPExitAtLOOP ?SKIP ERRSET * 6C927
           CK0NOLASTWD ERRJMP ;                   * 6C945
 

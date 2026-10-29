@@ -315,9 +315,9 @@ LIB0A7.link:
         LENGTH                                   * 3D5DD  length, to #3D6AA
         REL(5)  ROMP_0A7_000                     * 3D5E2  000 
         REL(5)  ROMP_0A7_001                     * 3D5E7  001 
-        REL(5)  ROMP_0A7_002                     * 3D5EC  002 
-        REL(5)  ROMP_0A7_003                     * 3D5F1  003 
-        REL(5)  ROMP_0A7_004                     * 3D5F6  004 
+        REL(5)  MenuMTH~1~1                      * 3D5EC  002 
+        REL(5)  MenuMTH~1~1~8~1                  * 3D5F1  003 
+        REL(5)  MenuPr~1~1                       * 3D5F6  004 
         REL(5)  ROMP_0A7_005                     * 3D5FB  005 
         REL(5)  ROMP_0A7_006                     * 3D600  006 
         REL(5)  ROMP_0A7_007                     * 3D605  007 

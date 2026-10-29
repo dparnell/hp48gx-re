@@ -619,7 +619,7 @@ xREPL:
           # C5C repl(go,li,go)                   * 1C8F4  grob list grob
           # C2C repl(go,c,go)                    * 1C903  grob complex grob
           # 313 repl(st,s,st)                    * 1C912  string real string
-          # 515 OBJ_4FA7A                        * 1C921  list real list
+          # 515 xREPL~list,real,list             * 1C921  list real list
           BINT0 ROMPTR 0E8 020                   * 1C930  any
         ;                                        * 1C940
         BSS     14                               * 1C945
@@ -705,7 +705,7 @@ size(PICT):
         CON(3)  #0A1                             * 1CAB1  command
 xPOS:
         :: CK2&Dispatch                          * 1CAB4
-          OBJ_64C34 pos(cp,_)                    * 1CABE  list ?
+          OBJ_64C34 pos(cp,_)                    * 1CABE  list any
           BINT51 XEQPOS$                         * 1CAC8  string string
         ;                                        * 1CAD2
 
@@ -780,7 +780,7 @@ XEQTYPE:
             BINT5 %5                             * 1CBC2  list
             BINT6 %6                             * 1CBCC  name
             BINT7 %7                             * 1CBD6  local
-            BINT8 OBJ_1CDD4                      * 1CBE0  program
+            BINT8 xTYPE~program                  * 1CBE0  program
             BINT9 %9                             * 1CBEA  algebraic
             BINT11 %10                           * 1CBF4  binary
             BINT12                               * 1CBFE  grob
@@ -881,7 +881,7 @@ dup;type(ar):
         ;                                        * 1CDCF
 
 * refs (1): 1CBE5
-OBJ_1CDD4:
+xTYPE~program:
         :: DUPROM-WORD? NOTcase %8               * 1CDD4
           ?OKINALG case                          * 1CDE8
 
@@ -905,7 +905,7 @@ xVTYPE:
         :: CK1&Dispatch                          * 1CE28
           BINT6 vtype(nm)                        * 1CE32  name
           BINT7 vtype(nm)                        * 1CE3C  local
-          BINT13 OBJ_1CE82                       * 1CE46  tagged
+          BINT13 xVTYPE~tagged                   * 1CE46  tagged
         ;                                        * 1CE50
 
 * refs (2): 1CE37 1CE41
@@ -913,18 +913,18 @@ vtype(nm):
         :: SAFE@                                 * 1CE55
 
 * refs (1): 1CED2
-OBJ_1CE5F:
+xVTYPE~tagged~1:
           :: NOTcase %-1                         * 1CE5F
             XEQTYPE SWAPDROP ;                   * 1CE6E
         ;                                        * 1CE7D
 
 * refs (1): 1CE4B
-OBJ_1CE82:
+xVTYPE~tagged:
         :: ERRSET                                * 1CE82
           :: rcl(to) TRUE ; ERRTRAP              * 1CE8C
           :: ERROR@ # 204 #<>case ERRJMP         * 1CEA5
             ERRORCLR FALSE ;                     * 1CEC3
-          OBJ_1CE5F ;                            * 1CED2
+          xVTYPE~tagged~1 ;                      * 1CED2
 
 * 'l=r' -> l r
 * ROMPTR 002 0A8 EQ→
@@ -971,7 +971,7 @@ xOBJ>:
 * sym -> arg1..argn %n ob
 * refs (1): 1CFBC
 EXPR>:
-        :: symcomp EXPLODE OBJ_5FA2C NOTcase MISLIBERR * 1CFD0
+        :: symcomp EXPLODE EXPR>~1 NOTcase MISLIBERR * 1CFD0
           SWAP UNCOERCE SWAP ;                   * 1CFEE
 
 * x1..xn n -> [] x11...xnm {n m} -> [[]]
@@ -1146,12 +1146,12 @@ trn(ln):
         CON(3)  #0B0                             * 1D404  command
 xPUT:
         :: CK3&Dispatch                          * 1D407
-          LISTREALOB put(li,lr,_)                * 1D411  list real ?
-          LISTLISTOB put(li,lr,_)                * 1D41B  list list ?
-          IDLISTOB put(gn,lr,_)                  * 1D425  name list ?
-          # 750 put(ln,lr,_)                     * 1D42F  local list ?
-          IDREALOB put(gn,lr,_)                  * 1D43E  name real ?
-          # 710 put(ln,lr,_)                     * 1D448  local real ?
+          LISTREALOB put(li,lr,_)                * 1D411  list real any
+          LISTLISTOB put(li,lr,_)                * 1D41B  list list any
+          IDLISTOB put(gn,lr,_)                  * 1D425  name list any
+          # 750 put(ln,lr,_)                     * 1D42F  local list any
+          IDREALOB put(gn,lr,_)                  * 1D43E  name real any
+          # 710 put(ln,lr,_)                     * 1D448  local real any
           ARRYLISTREAL put(ar,lr,nb)             * 1D457  array list real
           ARRYLISTCMP put(ar,lr,nb)              * 1D461  array list complex
           ARRYREALREAL put(ar,lr,nb)             * 1D46B  array real real
@@ -1161,12 +1161,12 @@ xPUT:
 * refs (2): 1D42A 1D443
 put(gn,lr,_):
         :: OBJ_1E00C 3pick;RclInVars(nm) 3UNROLL CK&DISPATCH0 * 1D484
-          ARRYLISTREAL OBJ_1D501                 * 1D49D  array list real
-          ARRYLISTCMP OBJ_1D501                  * 1D4A7  array list complex
-          ARRYREALREAL OBJ_1D501                 * 1D4B1  array real real
-          ARRYREALCMP OBJ_1D501                  * 1D4BB  array real complex
-          LISTLISTOB PutSto(nm,li,lr,_)          * 1D4C5  list list ?
-          LISTREALOB PutSto(nm,li,lr,_)          * 1D4CF  list real ?
+          ARRYLISTREAL put(gn,lr,_)~1            * 1D49D  array list real
+          ARRYLISTCMP put(gn,lr,_)~1             * 1D4A7  array list complex
+          ARRYREALREAL put(gn,lr,_)~1            * 1D4B1  array real real
+          ARRYREALCMP put(gn,lr,_)~1             * 1D4BB  array real complex
+          LISTLISTOB PutSto(nm,li,lr,_)          * 1D4C5  list list any
+          LISTREALOB PutSto(nm,li,lr,_)          * 1D4CF  list real any
         ;                                        * 1D4D9
 
 * refs (5): 1D45C 1D466 1D470 1D47A 1D5C9
@@ -1174,7 +1174,7 @@ put(ar,lr,nb):
         :: OBJ_1E00C OBJ_1DCC3 OBJ_1DC55 ABND BANGARRY ; * 1D4DE
 
 * refs (4): 1D4A2 1D4AC 1D4B6 1D4C0
-OBJ_1D501:
+put(gn,lr,_)~1:
         :: 4ROLLDROP OBJ_1DCC3 OBJ_1DC55 ABND @put(nb,s,ar) ; * 1D501
 
 * refs (3): 1D416 1D420 1D556
@@ -1192,8 +1192,8 @@ put(ln,lr,_):
           ARRYLISTCMP PutSto(nm,ar,ln,nb)        * 1D588  array list complex
           ARRYREALREAL PutSto(nm,ar,ln,nb)       * 1D592  array real real
           ARRYREALCMP PutSto(nm,ar,ln,nb)        * 1D59C  array real complex
-          LISTLISTOB PutSto(nm,li,lr,_)          * 1D5A6  list list ?
-          LISTREALOB PutSto(nm,li,lr,_)          * 1D5B0  list real ?
+          LISTLISTOB PutSto(nm,li,lr,_)          * 1D5A6  list list any
+          LISTREALOB PutSto(nm,li,lr,_)          * 1D5B0  list real any
         ;                                        * 1D5BA
 
 * refs (4): 1D583 1D58D 1D597 1D5A1
@@ -1208,12 +1208,12 @@ PutSto(nm,ar,ln,nb):
         CON(3)  #0B1                             * 1D5DC  command
 xPUTI:
         :: CK3&Dispatch                          * 1D5DF
-          LISTREALOB puti(li,lr,_)               * 1D5E9  list real ?
-          LISTLISTOB puti(li,lr,_)               * 1D5F3  list list ?
-          IDLISTOB puti(gn,lr,_)                 * 1D5FD  name list ?
-          IDREALOB puti(gn,lr,_)                 * 1D607  name real ?
-          # 750 puti(ln,lr,_)                    * 1D611  local list ?
-          # 710 puti(ln,lr,_)                    * 1D620  local real ?
+          LISTREALOB puti(li,lr,_)               * 1D5E9  list real any
+          LISTLISTOB puti(li,lr,_)               * 1D5F3  list list any
+          IDLISTOB puti(gn,lr,_)                 * 1D5FD  name list any
+          IDREALOB puti(gn,lr,_)                 * 1D607  name real any
+          # 750 puti(ln,lr,_)                    * 1D611  local list any
+          # 710 puti(ln,lr,_)                    * 1D620  local real any
           ARRYLISTREAL puti(ar,lr,nb)            * 1D62F  array list real
           ARRYLISTCMP puti(ar,lr,nb)             * 1D639  array list complex
           ARRYREALREAL puti(ar,lr,nb)            * 1D643  array real real
@@ -1227,8 +1227,8 @@ puti(gn,lr,_):
           ARRYLISTCMP @puti(ar,lr,nb)            * 1D67F  array list complex
           ARRYREALREAL @puti(ar,lr,nb)           * 1D689  array real real
           ARRYREALCMP @puti(ar,lr,nb)            * 1D693  array real complex
-          LISTLISTOB PutiSto(nm,li,lr,_)         * 1D69D  list list ?
-          LISTREALOB PutiSto(nm,li,lr,_)         * 1D6A7  list real ?
+          LISTLISTOB PutiSto(nm,li,lr,_)         * 1D69D  list list any
+          LISTREALOB PutiSto(nm,li,lr,_)         * 1D6A7  list real any
         ;                                        * 1D6B1
 
 * refs (5): 1D634 1D63E 1D648 1D652 1D7AB
@@ -1254,8 +1254,8 @@ puti(ln,lr,_):
           ARRYLISTCMP PutiLSto(ln,ar,lr,nb)      * 1D76A  array list complex
           ARRYREALREAL PutiLSto(ln,ar,lr,nb)     * 1D774  array real real
           ARRYREALCMP PutiLSto(ln,ar,lr,nb)      * 1D77E  array real complex
-          LISTLISTOB PutiSto(nm,li,lr,_)         * 1D788  list list ?
-          LISTREALOB PutiSto(nm,li,lr,_)         * 1D792  list real ?
+          LISTLISTOB PutiSto(nm,li,lr,_)         * 1D788  list list any
+          LISTREALOB PutiSto(nm,li,lr,_)         * 1D792  list real any
         ;                                        * 1D79C
 
 * refs (4): 1D765 1D76F 1D779 1D783
@@ -1326,10 +1326,10 @@ xGETI:
 * refs (4): 1D8FE 1D908 1D912 1D91C
 geti(nm,lr):
         :: OBJ_1DFDF over;RclInVars(nm) SWAP CK&DISPATCH0 * 1D926
-          BINT69 OBJ_1D9A8                       * 1D93F  array list
-          BINT65 OBJ_1D9A8                       * 1D949  array real
-          BINT85 OBJ_1D9E9                       * 1D953  list list
-          BINT81 OBJ_1D9E9                       * 1D95D  list real
+          BINT69 geti(nm,lr)~1                   * 1D93F  array list
+          BINT65 geti(nm,lr)~1                   * 1D949  array real
+          BINT85 geti(nm,lr)~2                   * 1D953  list list
+          BINT81 geti(nm,lr)~2                   * 1D95D  list real
         ;                                        * 1D967
 
 * refs (2): 1D8D6 1D8E0
@@ -1341,7 +1341,7 @@ geti(cp,lr):
           :: OBJ_1DC6E SWAP OBJ_1DA02 SWAP PULLEL 1GETABND SWAP ; ; * 1D976
 
 * refs (2): 1D944 1D94E
-OBJ_1D9A8:
+geti(nm,lr)~1:
         :: geti(cp,lr) ROTDROP ;                 * 1D9A8
 
 * refs (3): 1D8EA 1D8F4 1D9F3
@@ -1349,7 +1349,7 @@ geti!(cp,lr):
         :: OBJ_1DFDF OBJ_1DB5B OBJ_1DAED DUPROT NTHCOMPDROP 1GETABND SWAP ; * 1D9BC
 
 * refs (2): 1D958 1D962
-OBJ_1D9E9:
+geti(nm,lr)~2:
         :: 'EvalNoCK:_sup geti!(cp,lr) ROTDROP ; * 1D9E9
 
 * refs (3): 1D6CA 1D6ED 1D985
@@ -1479,11 +1479,11 @@ OBJ_1DE28:
         CON(3)  #0B5                             * 1DE63  command
 x>V2:
         :: CK2&Dispatch                          * 1DE66
-          BINT17 OBJ_1DE7F                       * 1DE70  real real
+          BINT17 x>V2~real,real                  * 1DE70  real real
         ;                                        * 1DE7A
 
 * refs (1): 1DE75
-OBJ_1DE7F:
+x>V2~real,real:
         :: BINT16 TestSysFlag IT %POL>%REC       * 1DE7F
           BINT19 TestSysFlag case %>C%           * 1DE98
           %2 XEQ>VECTOR ;                        * 1DEAC
@@ -1687,7 +1687,7 @@ xDEPND:
         :: CK1&Dispatch                          * 1E22B
           BINT6 depnd(gn)                        * 1E235  name
           BINT5 depnd(li)                        * 1E23F  list
-          BINT1 OBJ_47A8D                        * 1E249  real
+          BINT1 xDEPND~real                      * 1E249  real
         ;                                        * 1E253
 
 * ->
@@ -1748,7 +1748,7 @@ xLABEL:
 xPVIEW:
         :: CK1&Dispatch                          * 1E2F0
           BINT2 pview(c)                         * 1E2FA  complex
-          BINT5 OBJ_4F027                        * 1E304  list
+          BINT5 xPVIEW~list                      * 1E304  list
         ;                                        * 1E30E
 
 * (x,y) -> {#n #m} ->
@@ -2178,7 +2178,7 @@ x==:
           2EXT UM=?                              * 1E9E0  unit unit
           SYMEXT SYMFLOAT==                      * 1E9EA  name|local|algebraic unit
           EXTSYM FLOATSYM==                      * 1E9F4  unit name|local|algebraic
-          TAGGEDANY ==1tag                       * 1E9FE  tagged ?
+          TAGGEDANY ==1tag                       * 1E9FE  tagged any
           BINT13 ==1tag                          * 1EA08  tagged
           BINT0 OBJ_1EA30                        * 1EA12  any
         ;                                        * 1EA1C
@@ -2219,16 +2219,16 @@ x#?:
           SYMREAL SYMFLOAT<>                     * 1EABB  name|local|algebraic real
           OBJ_64D7E SYMFLOAT<>                   * 1EAC5  name|local|algebraic complex
           SYMSYM SYM<>                           * 1EACF  name|local|algebraic name|local|algebraic
-          BINT18 OBJ_1EB8D                       * 1EAD9  real complex
-          BINT33 OBJ_1EB97                       * 1EAE3  complex real
+          BINT18 x#?~real,complex                * 1EAD9  real complex
+          BINT33 x#?~complex,real                * 1EAE3  complex real
           2HXS HXS#HXS                           * 1EAED  binary binary
           BINT30 UM#?                            * 1EAF7  real unit
           EXTREAL UM#?                           * 1EB01  unit real
           2EXT UM#?                              * 1EB0B  unit unit
           SYMEXT SYMFLOAT<>                      * 1EB15  name|local|algebraic unit
           EXTSYM FLOATSYM<>                      * 1EB1F  unit name|local|algebraic
-          TAGGEDANY OBJ_1EB65                    * 1EB29  tagged ?
-          BINT13 OBJ_1EB65                       * 1EB33  tagged
+          TAGGEDANY x#?~1                        * 1EB29  tagged any
+          BINT13 x#?~1                           * 1EB33  tagged
           BINT0 OBJ_1EB51                        * 1EB3D  any
         ;                                        * 1EB47
 
@@ -2240,16 +2240,16 @@ OBJ_1EB51:
         :: EQUALNOT COERCEFLAG ;                 * 1EB51  slot 1
 
 * refs (2): 1EB2E 1EB38
-OBJ_1EB65:
+x#?~1:
         :: STRIPTAGS STRIPTAGSl2 ' x#? COLA EvalNoCK * 1EB65  slot 2
         ;                                        * 1EB88
 
 * refs (1): 1EADE
-OBJ_1EB8D:
+x#?~real,complex:
         :: SWAP                                  * 1EB8D  slot 3
 
 * refs (1): 1EAE8
-OBJ_1EB97:
+x#?~complex,real:
           :: %0_2A2B4 %>C% OBJ_1EB51 ; ;         * 1EB97
         CON(2)  #00                              * 1EBB5  end of the slots: property byte (meaning not yet known)
 
@@ -2425,12 +2425,12 @@ xPRVAR:
           BINT13                                 * 1EEE7  tagged
 
 prvar(to):
-          :: DUP rcl(to) SWAP SetEcma94 OBJ_31D7E OBJ_31D7E docr ; * 1EEEC
+          :: DUP rcl(to) SWAP SetEcma94 xPRVAR~1 xPRVAR~1 docr ; * 1EEEC
         ;                                        * 1EF19
 
 * refs (1): 1EEE2
 prvar(li):
-        :: DUPNULLCOMP? caseDROP OBJ_20F44       * 1EF1E
+        :: DUPNULLCOMP? caseDROP prvar(li)~1     * 1EF1E
           xPRVAR ;                               * 1EF32
 
 * x_delay ->

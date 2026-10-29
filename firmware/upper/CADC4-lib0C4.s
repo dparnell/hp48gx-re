@@ -12,7 +12,7 @@ LIB0C4:
 
 * ROMPTR 0C4 000
 * refs (1): CADC4
-ROMP_0C4_000:
+FFT~1:
         :: ROMPTR 0C4 001 FALSE ROMPTR 0C4 004 ROMPTR 0C2 032 ; * CADDB
 
 * ROMPTR 0C4 001
@@ -23,7 +23,7 @@ ROMP_0C4_001:
 
 * ROMPTR 0C4 002
 * refs (1): CADC4
-ROMP_0C4_002:
+IFFT~1:
         :: ROMPTR 0C4 001 TRUE ROMPTR 0C4 004 ROMPTR 0C2 032 ; * CAE4D
 
 * ROMPTR 0C4 003
@@ -587,24 +587,24 @@ SUB_CB439:
 
 * ROMPTR 0C4 005
 * refs (1): CADC4
-ROMP_0C4_005:
+NDIST~1:
         :: OVER %0> NOTcase SETSIZEERR           * CB450
           ROT %>%%- DUP %%* SWAP %>%% SWAP OVER %%/ %% -5E-1 %%* %%EXP SWAP * CB469
           %% 6.28318530717959E0 %%* %%SQRT %%/ %%>% ; * CB4BF
 
 * ROMPTR 0C4 006
 * refs (1): CADC4
-ROMP_0C4_006:
+PSDEV~1:
         :: BINT0 OBJ_2C5EE OBJ_2CD27 ;           * CB4F2
 
 * ROMPTR 0C4 007
 * refs (1): CADC4
-ROMP_0C4_007:
+PVAR~1:
         :: BINT0 OBJ_2C5EE OBJ_2CD1B ;           * CB50B
 
 * ROMPTR 0C4 008
 * refs (1): CADC4
-ROMP_0C4_008:
+PCOV~1:
         :: RclXYCol&äDAT DUP4UNROLL 3PICKOVER OBJ_2CC4C OBJ_2CDA5 3PICK3PICK * CB524
           OBJ_2CC06 OBJ_2CDA5 OBJ_2CC4C OBJ_2CC06 OBJ_2CE7C SWAP OBJ_2CC92 * CB547
           %>%% %%/>% ;                           * CB56A
@@ -655,7 +655,7 @@ ROMP_0C4_00D:
 
 * ROMPTR 0C4 00E
 * refs (1): CADC4
-ROMP_0C4_00E:
+PEVAL~1:
         :: F%>L% SWAP %%0 OVERARSIZE #1+_ONE_DO 3PICK L%* SWAP INDEX@ * CB8FB
           PULLLONGEL ROT L%+                     * CB92D
           CODE                                   * CB93C  180 nibbles
@@ -740,20 +740,20 @@ L_CBA6D:
 LIB0C4.link:
         CON(5)  DOHSTR                           * CBA72  link table of library 0C4
         LENGTH                                   * CBA77  length, to #CBAC7
-        REL(5)  ROMP_0C4_000                     * CBA7C  000 
+        REL(5)  FFT~1                            * CBA7C  000 
         REL(5)  ROMP_0C4_001                     * CBA81  001 
-        REL(5)  ROMP_0C4_002                     * CBA86  002 
+        REL(5)  IFFT~1                           * CBA86  002 
         REL(5)  ROMP_0C4_003                     * CBA8B  003 
         REL(5)  ROMP_0C4_004                     * CBA90  004 
-        REL(5)  ROMP_0C4_005                     * CBA95  005 
-        REL(5)  ROMP_0C4_006                     * CBA9A  006 
-        REL(5)  ROMP_0C4_007                     * CBA9F  007 
-        REL(5)  ROMP_0C4_008                     * CBAA4  008 
+        REL(5)  NDIST~1                          * CBA95  005 
+        REL(5)  PSDEV~1                          * CBA9A  006 
+        REL(5)  PVAR~1                           * CBA9F  007 
+        REL(5)  PCOV~1                           * CBAA4  008 
         REL(5)  ROMP_0C4_009                     * CBAA9  009 
         REL(5)  ROMP_0C4_00A                     * CBAAE  00A 
         REL(5)  ROMP_0C4_00B                     * CBAB3  00B 
         REL(5)  ROMP_0C4_00C                     * CBAB8  00C 
         REL(5)  ROMP_0C4_00D                     * CBABD  00D 
-        REL(5)  ROMP_0C4_00E                     * CBAC2  00E 
+        REL(5)  PEVAL~1                          * CBAC2  00E 
         ENDLENGTH                                * CBAC7
         NIBHEX  8DF0000                          * CBAC7  Ø..

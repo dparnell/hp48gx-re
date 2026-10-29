@@ -381,11 +381,11 @@ OBJ_2E5BF:
         ;                                        * 2E5F6
 
 * refs (2): 2E736 2E740
-OBJ_2E5FB:
+SENDLIST~1:
         :: DUP nm=>st 'LAMLNAMESTO OBJ_2E5BF ;   * 2E5FB
 
 * refs (1): 2E74A
-OBJ_2E619:
+SENDLIST~list:
         :: INNERCOMP #2<> caseSIZEERR nm=>st!    * 2E619
           'LAMLNAMESTO dup;#nm? case SETTYPEERR  * 2E632
           OBJ_2E5BF ;                            * 2E646
@@ -412,9 +412,9 @@ SENDLIST:
         :: InitIOEnv BINT0 NULL$ CHR_F ERRSET    * 2E6EB
           :: KERMOPEN CHOOSE_INIT SendSetup NOTcaseFALSE OBJ_2E678 * 2E709
             :: CK&DISPATCH1                      * 2E727
-              BINT6 OBJ_2E5FB                    * 2E731  name
-              BINT7 OBJ_2E5FB                    * 2E73B  local
-              BINT5 OBJ_2E619                    * 2E745  list
+              BINT6 SENDLIST~1                   * 2E731  name
+              BINT7 SENDLIST~1                   * 2E73B  local
+              BINT5 SENDLIST~list                * 2E745  list
             ;                                    * 2E74F
             SENDEOT ;                            * 2E754
           ERRTRAP                                * 2E75E
@@ -438,7 +438,7 @@ OBJ_2E7C2:
         :: TYPELAM? # 3                          * 2E7C2
 
 * refs (1): 2E00E
-OBJ_2E7D6:
+DOSERVER~5:
           # 204 RPITE ERROROUT ;                 * 2E7D6
 
 * $/id/lam ->
@@ -478,21 +478,21 @@ kget(nm,st):
         :: SWAP nm=>st!                          * 2E8A2
 
 _R_:
-          $ "R" ROT GOTO L_2E8DB ;               * 2E8B1
+          $ "R" ROT GOTO kget(nm,st)~1 ;         * 2E8B1
 
 * $ $' ->
 * refs (3): 220EC 2E893 B89A9
 DOPKT:
         :: BINT0                                 * 2E8D1
-L_2E8DB:
+kget(nm,st)~1:
           OBJ_2D37C BINT0                        * 2E8DB
           { LAMKP LAMPKNO } BIND ERRSET          * 2E8E5
           :: ZEROFALSE                           * 2E903
             { LAMLNAME LAMKMODE LAMKRM } BIND EXCHINITPK SWAP ENCODE1PKT * 2E90D
             BINT0 ROT CAR$ BUILDKPACKET SEND_PACKET case * 2E93A
-            :: ABND AllowPrlcdCl OBJ_2F678 ;     * 2E958
+            :: ABND AllowPrlcdCl DOPKT~2 ;       * 2E958
             NOTcase ERROROUT                     * 2E971
-            OBJ_2D8A2 ;                          * 2E97B
+            DOPKT~1 ;                            * 2E97B
           ERRTRAP OBJ_2E763 ABND ;               * 2E985
 
 * refs (4): 2EAB0 B8BF7 B8C06 B8C1F
@@ -545,7 +545,7 @@ Sys@:
 * refs (7): 2D51C 2D88E 2D9FA 2DB53 2DE19 2E70E ...
 KERMOPEN:
         :: GetIOPAR 4DROP BINT33 TestSysFlag IT OBJ_56B87 * 2EAE2
-          FalseFalse 2SWAP OBJ_2EB8F OBJ_2DA4A   * 2EB05
+          FalseFalse 2SWAP KERMOPEN~2 KERMOPEN~1 * 2EB05
           :: TOADISP REDISPHBUFF ; OpenUartClr ; * 2EB19
 
 * refs (2): 21EBF D4223
@@ -569,7 +569,7 @@ OpenIO:
         :: GetIOPAR 2DROP IOCheckReal %0<> 4UNROLL IOCheckReal %0<> 4UNROLL * 2EB62
 
 * refs (1): 2EB0F
-OBJ_2EB8F:
+KERMOPEN~2:
           :: IOCheckReal DUP %ABS %5 %< NOTcase SetIOPARerr * 2EB8F
             DUP %0> IT                           * 2EBB7
 
@@ -677,7 +677,7 @@ DOSTIME:
 * ->
 * refs (1): 220CC
 DOSBRK:
-        :: OpenIO OBJ_31791 OpenIO_324C8 ;       * 2EE18
+        :: OpenIO DOSBRK~1 OpenIO_324C8 ;        * 2EE18
 
 * refs (1): 2EE60
 OBJ_2EE31:
@@ -711,11 +711,11 @@ SendSetup:
           'LamKPSto TRUE ;                       * 2EF0F
 
 * refs (2): 2DE0F 2E027
-OBJ_2EF1E:
+DOSERVER~6:
         :: LAMEXCHP ERRSET                       * 2EF1E
 
 * refs (1): 855E7
-OBJ_2EF2D:
+XEQIOBACKUP~1~1:
           :: SendSetup NOTcaseFALSE OBJ_2F0DB    * 2EF2D
             NOTcaseFALSE SENDEOT                 * 2EF41
             case                                 * 2EF4B
@@ -865,7 +865,7 @@ OBJ_2F4F2:
           OBJ_30607 LAMLNAME BINT0 EQUAL ITE     * 2F65F
 
 * refs (1): 2E967
-OBJ_2F678:
+DOPKT~2:
           :: KINVISLF !append$ ;                 * 2F678
 
 * refs (1): 2F623
@@ -1078,22 +1078,22 @@ SENDNULLACK:
 * $ -> $'
 * refs (3): 2E0D6 2FC81 2FCC7
 KVISLF:
-        :: ChkTransio OBJ_2FEF1 ;                * 2FEC9
+        :: ChkTransio KVISLF~1 ;                 * 2FEC9
 
 * $ -> $'
 * refs (1): 3217A
 KVIS:
-        :: ChkTransio OBJ_2FEFD ;                * 2FEDD
+        :: ChkTransio KVIS~1 ;                   * 2FEDD
 
 * refs (1): 2FED3
-OBJ_2FEF1:
+KVISLF~1:
         CON(5)  (*)+5                            * 2FEF1  primitive code object
         ASSEMBLE
         ST=1    4                                * 2FEF6
         GOTO    L_2FF05                          * 2FEF9
 
 * refs (1): 2FEE7
-OBJ_2FEFD:
+KVIS~1:
         CON(5)  (*)+5                            * 2FEFD  primitive code object
         ST=0    4                                * 2FF02
 L_2FF05:

@@ -162,7 +162,7 @@ pub(crate) fn code_B8694(r: &mut Run) {
     }
 }
 
-// SUB_B86EE: firmware/upper/B7B7D-lib0B5.s:747
+// SUB_B86EE: firmware/upper/B7B7D-lib0B5.s:382
 pub(crate) fn SUB_B86EE(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -212,7 +212,7 @@ pub(crate) fn SUB_B86EE(r: &mut Run) {
 }
 
 // ROMPTR 0B5 139
-// ROMP_0B5_139: firmware/upper/B7B7D-lib0B5.s:1290
+// ROMP_0B5_139: firmware/upper/B7B7D-lib0B5.s:642
 pub(crate) fn ROMP_0B5_139(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {

@@ -317,7 +317,7 @@ HeadIOString(s):
             C=C+1   A                            * 3040B
             A=A-1   A                            * 3040D
             GOC     L_30416                      * 3040F
-            GOTO    L_30538                      * 30412
+            GOTO    HeadIOString~1               * 30412
 L_30416:
             DAT0=C  8                            * 30416
             D0=D0+  8                            * 3041A
@@ -376,7 +376,7 @@ L_304A6:
             GOYES   L_30547                      * 304DC
             LC(4)   #3A4F                        * 304DE
             ?C#A    A                            * 304E4
-            GOYES   L_30538                      * 304E7
+            GOYES   HeadIOString~1               * 304E7
 L_304E9:
             GOVLNG  GPOverWrTLp                  * 304E9
 L_304F0:
@@ -388,21 +388,21 @@ L_304F0:
             GOYES   L_30516                      * 30506
             LC(2)   #2C                          * 30508
             ?D#C    B                            * 3050C
-            GOYES   L_30538                      * 3050F
+            GOYES   HeadIOString~1               * 3050F
             ABIT=1  2                            * 30511
 L_30516:
             DAT0=A  B                            * 30516
             D1=D1+  2                            * 30519
             B=B-CON A,2                          * 3051C
 L_30522:
-            GOC     L_30538                      * 30522
+            GOC     HeadIOString~1               * 30522
             A=DAT1  B                            * 30525
             LC(2)   #29                          * 30528
             ?C#A    B                            * 3052C
-            GOYES   L_30538                      * 3052F
+            GOYES   HeadIOString~1               * 3052F
             D1=D1+  2                            * 30531
             GOTO    L_304A6                      * 30534
-L_30538:
+HeadIOString~1:
             GOVLNG  GPOverWrFLp                  * 30538
 L_3053F:
             GOTO    L_30587                      * 3053F
@@ -418,7 +418,7 @@ L_30547:
             A=0     A                            * 30559
             LC(2)   #30                          * 3055B
             D=D-C   B                            * 3055F
-            GOC     L_30538                      * 30562
+            GOC     HeadIOString~1               * 30562
             D=D-1   B                            * 30565
             GOC     L_30543                      * 30568
             A=A+1   A                            * 3056B
@@ -432,7 +432,7 @@ L_30547:
 L_30580:
             GOC     L_30543                      * 30580
 L_30583:
-            GOTO    L_30538                      * 30583
+            GOTO    HeadIOString~1               * 30583
 L_30587:
             D0=(5)  #80847                       * 30587
             A=DAT0  B                            * 3058E
@@ -616,10 +616,10 @@ SUB$1#:
         RPL
 
 * refs (2): 2D613 30865
-OBJ_30833:
+SEND_PACKET~1:
         :: LAMPACKET OBJ_30E44 OBJ_2E2B4 caseTRUE LAMMaxR * 30833
           OBJ_2D7AD NOTcaseFALSE DROP            * 30851
-          COLA OBJ_30833                         * 30860
+          COLA SEND_PACKET~1                     * 30860
         ;                                        * 3086A
         ASSEMBLE
 
@@ -1651,7 +1651,7 @@ L_31486:
             C=C-1   S                            * 31486
             R0=C                                 * 31489
             GONC    L_31498                      * 3148C
-            GOSUBL  SUB_3213E                    * 3148F
+            GOSUBL  PUTSERIAL~1                  * 3148F
             GOC     L_314AF                      * 31495
 L_31498:
             C=R2                                 * 31498
@@ -1747,7 +1747,7 @@ L_315B1:
         CD1EX                                    * 315B3
         DAT1=A  B                                * 315B6
         D1=C                                     * 315B9
-L_315BC:
+CLOSEUART~1:
         A=DAT0  A                                * 315BC
         D0=D0+  5                                * 315BF
         PC=(A)                                   * 315C2
@@ -1765,7 +1765,7 @@ L_315DE:
             D0=(5)  KERMERRM                     * 315DE
             DAT0=C  A                            * 315E5
             D0=A                                 * 315E8
-            GOTO    L_315BC                      * 315EB
+            GOTO    CLOSEUART~1                  * 315EB
           ENDCODE                                * 315EF
           FLUSHRSBUF ;                           * 315EF
         ASSEMBLE
@@ -1906,7 +1906,7 @@ L_31788:
         RTNCC                                    * 3178F
 
 * refs (1): 2EE22
-OBJ_31791:
+DOSBRK~1:
         CON(5)  (*)+5                            * 31791  primitive code object
         GOSUB   SUB_30FB3                        * 31796
         GOSUB   WaitTbz0                         * 3179A
@@ -1982,7 +1982,7 @@ OBJ_3194E:
         :: BINT0                                 * 3194E
 
 * refs (1): 31A89
-OBJ_31958:
+prst~1:
           :: OVER dup;#nm? NOTcase               * 31958
 
 * refs (1): 31999
@@ -2000,7 +2000,7 @@ prst:
         :: OBJ_3180E DEPTH ZERO_DO ISTOP-INDEX PICK ISTOP-INDEX #:>$ DUPLEN$ * 31A25
           SWAP PRINTxNLF OVER TYPEGROB? ITE      * 31A52
           :: DROP ->str1(go) PRINT ;             * 31A6B
-          :: OBJ_31958 DROP ;                    * 31A84
+          :: prst~1 DROP ;                       * 31A84
           LOOP docr ;                            * 31A98
 
 * refs (2): 31B6F 31B92
@@ -2064,7 +2064,7 @@ prvar(nm):
           SetEcma94 SWAP ID>$ PRINT              * 31D6A
 
 * refs (2): 1EF05 1EF0A
-OBJ_31D7E:
+xPRVAR~1:
           :: DUPTYPEGROB? ITE PrintGrob OBJ_3194E * 31D7E
             DROP ;                               * 31D97
           docr ;                                 * 31DA1
@@ -2085,7 +2085,7 @@ DOPRLCD:
             GOSUBL  ChkGrHook                    * 31F0C
             ST=1    10                           * 31F12
             GOSBVL  DisableIntr                  * 31F15
-            GOSBVL  SUB_32A63                    * 31F1C
+            GOSBVL  DOPRLCD~1                    * 31F1C
             GOSBVL  AllowIntr                    * 31F23
             GOC     L_31F34                      * 31F2A
             GOVLNG  GETPTRLOOP                   * 31F2D
@@ -2121,7 +2121,7 @@ ChkPRTPAR:
 
 PRTPAR_31FB8:
           ID PRTPAR Sys@ NOTcase Reset&BreakPRTPAR * 31FB8
-          DUPTYPELIST? OBJ_320C6 INNERDUP BINT3 #> OBJ_320C6 ; * 31FDA
+          DUPTYPELIST? ChkPRTPAR~1 INNERDUP BINT3 #> ChkPRTPAR~1 ; * 31FDA
 
 * % ->
 * refs (2): 1EF52 B8293
@@ -2136,7 +2136,7 @@ GetChkPRTPAR:
 
 dropn(s-4):
           3PICK TYPEREAL? AND 4PICK TYPECSTR? AND 5PICK TYPEREAL? AND GOTO * 32075
-          OBJ_320C6 NOP                          * 320A7
+          ChkPRTPAR~1 NOP                        * 320A7
 
 * 80
 * refs (4): 31F69 B0395 B82C6 B834F
@@ -2144,11 +2144,11 @@ dropn(s-4):
           % 8E1                                  * 320B1
 
 * refs (5): 31FDF 31FF3 320A7 320F3 32111
-OBJ_320C6:
+ChkPRTPAR~1:
           :: ?SEMI                               * 320C6
             # C13 ERROROUT ;                     * 320D0
-          4UNROLL COERCEDUP #0<> OBJ_320C6 ROT %10* COERCEDUP BINT70 #< * 320E4
-          OBJ_320C6 OBJ_3234D ;                  * 32111
+          4UNROLL COERCEDUP #0<> ChkPRTPAR~1 ROT %10* COERCEDUP BINT70 #< * 320E4
+          ChkPRTPAR~1 GetChkPRTPAR~1 ;           * 32111
         ASSEMBLE
 
 * refs (1): 3135D
@@ -2163,7 +2163,7 @@ SUB_32120:
         RTN                                      * 3213C
 
 * refs (1): 3148F
-SUB_3213E:
+PUTSERIAL~1:
         ST=0    15                               * 3213E
         GOSUB   ChkLowBat                        * 32141
         GOLONG  SUB_329E2                        * 32145
@@ -2187,14 +2187,14 @@ PRINT:
 PopBufA:
           case PrintRC(st)                       * 32189
           GetChkPRTPAR 4UNROLL 2DROP BEGIN ?ATTNQUIT DUP NEWLINE$ XEQPOS$ * 32193
-          COERCE DUP#0=ITE OBJ_321E3 OBJ_3221F DUPNULL$? UNTIL 2DROP ; * 321BB
+          COERCE DUP#0=ITE OBJ_321E3 PRINT~1 DUPNULL$? UNTIL 2DROP ; * 321BB
 
 * refs (2): 321C5 32233
 OBJ_321E3:
         :: DROPDUP BINT1 4PICK SUB$ PrintRC(st) OVER #1+ DUP#0=IT #1- LAST$ ; * 321E3
 
 * refs (1): 321CA
-OBJ_3221F:
+PRINT~1:
         :: DUP 4PICK #>case OBJ_321E3            * 3221F
           2DUP 1_#1-SUB$ PrintRC(st) #1+LAST$ ;  * 32238
 
@@ -2214,12 +2214,12 @@ dup;+(2st):
               _chr(4)_ ;                         * 322BA
             !append$ PRINTxNLF ?SEMI             * 322C4
             BINT34 TestSysFlag NOT?SEMI          * 322D3
-            OBJ_32305 BINT37 TestSysFlag NOT?SEMI * 322E2
-            OBJ_32305 ;                          * 322F6
+            PrintRC(st)~1 BINT37 TestSysFlag NOT?SEMI * 322E2
+            PrintRC(st)~1 ;                      * 322F6
         ;                                        * 32300
 
 * refs (2): 322E2 322F6
-OBJ_32305:
+PrintRC(st)~1:
         CON(5)  (*)+5                            * 32305  primitive code object
         ASSEMBLE
         GOSUB   SUB_32524                        * 3230A
@@ -2246,7 +2246,7 @@ _chr(4)_:
         $ "\04"                                  * 32341
 
 * refs (1): 32116
-OBJ_3234D:
+GetChkPRTPAR~1:
         CON(5)  (*)+5                            * 3234D  primitive code object
         ASSEMBLE
         GOSBVL  POP#                             * 32352
@@ -2278,7 +2278,7 @@ IRprint(st):
             D1=A                                 * 323C2
             GOSUB   SUB_3246B                    * 323C5
             GOSBVL  GetStrLen                    * 323C9
-            GOSUB   SUB_32515                    * 323D0
+            GOSUB   PRINTxNLF~1                  * 323D0
             GOC     L_323DF                      * 323D4
 L_323D7:
             GOSUB   FixEIRU                      * 323D7
@@ -2400,7 +2400,7 @@ L_324E9:
         C=R1                                     * 32512
 
 * refs (1): 323D0
-SUB_32515:
+PRINTxNLF~1:
         C=C-1   A                                * 32515
         GONC    L_324E9                          * 32517
         RTNCC                                    * 3251A
@@ -2445,7 +2445,7 @@ SetEcma94:
         LC(2)   #F9                              * 32577
         GOSUB   SUB_32634                        * 3257B
         GOC     L_3258A                          * 3257F
-L_32582:
+PrintGrob~1:
         GOSUB   SUB_329E2                        * 32582
         GOTO    L_323D7                          * 32586
 L_3258A:
@@ -2482,7 +2482,7 @@ L_325D9:
         RTNCC                                    * 325DB
 
 * refs (2): 32BC1 32C67
-SUB_325DD:
+PrintGrob~2:
         GOSUB   SUB_32868                        * 325DD
         GONC    SUB_32602                        * 325E1
         ?C=0    A                                * 325E4
@@ -2958,7 +2958,7 @@ SUB_32A4D:
         ST=0    10                               * 32A60
 
 * refs (1): 31F1C
-SUB_32A63:
+DOPRLCD~1:
         GOSUB   SUB_32F3C                        * 32A63
         D1=(4)  #0692                            * 32A67
         A=0     A                                * 32A6D
@@ -3075,7 +3075,7 @@ PrintGrob:
             ?A#0    A                            * 32BB9
             GOYES   L_32BCB                      * 32BBC
             ST=0    15                           * 32BBE
-            GOSUB   SUB_325DD                    * 32BC1
+            GOSUB   PrintGrob~2                  * 32BC1
             GOC     L_32C13                      * 32BC5
             GONC    L_32BE7                      * 32BC8
 L_32BCB:
@@ -3090,7 +3090,7 @@ L_32BDA:
             ?A#0    A                            * 32BE2
             GOYES   L_32BEB                      * 32BE5
 L_32BE7:
-            GOTO    L_32582                      * 32BE7
+            GOTO    PrintGrob~1                  * 32BE7
 L_32BEB:
             C=0     W                            * 32BEB
             LC(2)   #A6                          * 32BEE
@@ -3139,7 +3139,7 @@ L_32C4E:
             C=RSTK                               * 32C61
             GOTO    L_32C4E                      * 32C63
 L_32C67:
-            GOSUB   SUB_325DD                    * 32C67
+            GOSUB   PrintGrob~2                  * 32C67
             GOC     L_32C13                      * 32C6B
             GOSUB   SUB_329E2                    * 32C6E
             C=R3                                 * 32C72

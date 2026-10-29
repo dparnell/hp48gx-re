@@ -454,7 +454,7 @@ L_0A554:
         GOC     L_0A597                          * 0A569
         GOTO    L_0A67B                          * 0A56C
 L_0A570:
-        LC(5)   L_03130                          * 0A570
+        LC(5)   SEMILOOP~1                       * 0A570
         ?C#A    A                                * 0A577
         GOYES   L_0A581                          * 0A57A
         B=B-1   A                                * 0A57C
@@ -866,7 +866,8 @@ L_0AA95:
 * #port -> present? writeable? merged? #size #addr
 * refs (8): 08FAD 0929E 09348 0B5FC 21875 21945 ...
 PORTSTATUS:
-        :: FalseFalse FALSE OBJ_70280 TOTEMPOB OBJ_7028A 6ROLL OBJ_09F6A ; * 0AAB2
+        :: FalseFalse FALSE PORTSTATUS~2 TOTEMPOB OBJ_7028A 6ROLL * 0AAB2
+          PORTSTATUS~1 ;                         * 0AAD5
         ASSEMBLE
 L_0AADF:
         A=0     A                                * 0AADF
@@ -898,10 +899,10 @@ L_0AB11:
 * #port -> #addr
 * refs (1): 218E6
 PORTEND:
-        :: OBJ_7028A SWAP OBJ_0AB3B ;            * 0AB22
+        :: OBJ_7028A SWAP PORTEND~1 ;            * 0AB22
 
 * refs (1): 0AB31
-OBJ_0AB3B:
+PORTEND~1:
         CON(5)  (*)+5                            * 0AB3B  primitive code object
         ASSEMBLE
         GOSBVL  POP#                             * 0AB40
@@ -927,7 +928,7 @@ L_0AB57:
 * #addr -> backup/library #nextaddr
 * refs (5): 08FDF 093D9 17E70 17E84 21981
 NEXTLIBBAK:
-        :: OBJ_09E1A TOTEMPOB TRUE OBJ_09E4D ;   * 0AB82
+        :: NEXTLIBBAK~1 TOTEMPOB TRUE NEXTLIBBAK~2 ; * 0AB82
         ASSEMBLE
 
 * refs (2): 02173 7DFDD
@@ -1425,8 +1426,8 @@ purge(bk,s):
         ::                                       * 0B14D
 
 * refs (1): 0B22C
-OBJ_0B152:
-          :: BEGIN DUP OBJ_0B351 NOT UNTIL ; Purge!(lb,s) ; * 0B152
+PurgeBkp12(nm,s)~2~2:
+          :: BEGIN DUP purge(bk,s)~1 NOT UNTIL ; Purge!(lb,s) ; * 0B152
 
 * refs (1): 0B175
 Purge!(lb,s):
@@ -1470,12 +1471,12 @@ Purge!(lb,s):
         RPL
 
 * refs (1): 0944C
-OBJ_0B227:
-        :: OBJ_0B152 OBJ_0B23B ;                 * 0B227
+PurgeBkp12(nm,s)~2:
+        :: PurgeBkp12(nm,s)~2~2 PurgeBkp12(nm,s)~2~1 ; * 0B227
 
 * refs (1): 0B231
-OBJ_0B23B:
-        CON(5)  L_71324                          * 0B23B  code object: the address of its machine code
+PurgeBkp12(nm,s)~2~1:
+        CON(5)  PurgeBkp12(nm,s)~2~1~1           * 0B23B  code object: the address of its machine code
         ASSEMBLE
 L_0B240:
         GOSUB   SUB_0B2D5                        * 0B240
@@ -1591,8 +1592,8 @@ L_0B34A:
         GOVLNG  L_714F1                          * 0B34A
 
 * refs (1): 0B161
-OBJ_0B351:
-        CON(5)  L_72285                          * 0B351  code object: the address of its machine code
+purge(bk,s)~1:
+        CON(5)  purge(bk,s)~1~1                  * 0B351  code object: the address of its machine code
 L_0B356:
         C=R3.F  A                                * 0B356
         D1=C                                     * 0B35C
@@ -1775,28 +1776,28 @@ L_0B5D2:
         RPL
 
 * refs (2): 85682 856EB
-OBJ_0B5D4:
-        :: ZEROOVER #0=?SKIP OBJ_0B656 OVER #3+ ROLL DUP PORTSTATUS DROP * 0B5D4
-          4UNROLL3DROP ROT2DUP BINT10 #+ #<case SETNOROOM * 0B606
+free(li,r)~1~1:
+        :: ZEROOVER #0=?SKIP free(li,r)~1~1~1 OVER #3+ ROLL DUP PORTSTATUS * 0B5D4
+          DROP 4UNROLL3DROP ROT2DUP BINT10 #+ #<case SETNOROOM * 0B601
           #- GARBAGE MEM SWAP OBJ_0B09E #+ #<case SETMEMERR * 0B624
-          OBJ_0B6C4 ;                            * 0B64C
+          free(li,r)~1~1~2 ;                     * 0B64C
 
 * refs (1): 0B5E3
-OBJ_0B656:
+free(li,r)~1~1~1:
         :: SWAP DUP BINT0 DO get1 DUP OSIZE 4ROLL #+ ROT LOOP SWAP pshm1 * 0B656
           BEGIN pullrev psh1& DUP#0= UNTIL DROP #1-SWAP ; * 0B69C
 
 * refs (1): 0B64C
-OBJ_0B6C4:
-        :: OBJ_0B71E OVER#2+UNROL                * 0B6C4
+free(li,r)~1~1~2:
+        :: free(li,r)~1~1~2~1 OVER#2+UNROL       * 0B6C4
 
 * refs (1): 0B6F6
 OBJ_0B6D3:
           { } OVER#2+UNROL DROP GARBAGE BEGIN DUP OBJ_0B6D3 EQ NOT_WHILE * 0B6D3
-          OBJ_0B799 REPEAT DROP OBJ_0B8C4 ;      * 0B705
+          free(li,r)~1~1~2~2 REPEAT DROP free(li,r)~1~1~2~3 ; * 0B705
 
 * refs (1): 0B6C9
-OBJ_0B71E:
+free(li,r)~1~1~2~1:
         CON(5)  (*)+5                            * 0B71E  primitive code object
         ASSEMBLE
         GOSBVL  SAVPTR                           * 0B723
@@ -1827,7 +1828,7 @@ OBJ_0B71E:
         GOVLNG  GETPTRLOOP                       * 0B792
 
 * refs (1): 0B705
-OBJ_0B799:
+free(li,r)~1~1~2~2:
         CON(5)  (*)+5                            * 0B799  primitive code object
         GOSBVL  SAVPTR                           * 0B79E
         D0=(5)  ROMPARTS                         * 0B7A5
@@ -1901,7 +1902,7 @@ OBJ_0B799:
         PC=(A)                                   * 0B8C0
 
 * refs (1): 0B714
-OBJ_0B8C4:
+free(li,r)~1~1~2~3:
         CON(5)  (*)+5                            * 0B8C4  primitive code object
         GOSBVL  POP#                             * 0B8C9
         ST=1    5                                * 0B8D0
@@ -2076,8 +2077,8 @@ LIB000.config:
         ;                                        * 0BB26
 
 * refs (1): 0942E
-OBJ_0BB2B:
-        CON(5)  L_71989                          * 0BB2B  code object: the address of its machine code
+PurgeBkp12(nm,s)~3:
+        CON(5)  PurgeBkp12(nm,s)~3~1             * 0BB2B  code object: the address of its machine code
         ASSEMBLE
 L_0BB30:
         D0=D0+  8                                * 0BB30

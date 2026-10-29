@@ -274,7 +274,7 @@ RCLALM:
         :: ALARMS@ SWAP NTHELCOMP ;              * 0E402
 
 * refs (1): 0DCE0
-OBJ_0E41B:
+ALARMxcp~1~2~1:
         CON(5)  (*)+5                            * 0E41B  primitive code object
         ASSEMBLE
         AD1EX                                    * 0E420
@@ -285,7 +285,7 @@ OBJ_0E41B:
         GOTO    L_0DF5C                          * 0E438
 
 * refs (1): 0DD8A
-OBJ_0E43C:
+ALARMxcp~1~2~2:
         CON(5)  (*)+5                            * 0E43C  primitive code object
         AD1EX                                    * 0E441
         D1=(5)  SAVECLK                          * 0E444
@@ -391,7 +391,7 @@ VerifyTOD:
         GOVLNG  ErrTime                          * 0E68C
 
 * refs (1): 0E6E3
-OBJ_0E693:
+Ornd(abs(r))~1:
         CON(5)  (*)+5                            * 0E693  primitive code object
         GOSUB   SUB_0E39F                        * 0E698
         C=DAT1  A                                * 0E69C
@@ -415,7 +415,7 @@ L_0E6CC:
 
 * refs (1): 0E5F9
 Ornd(abs(r)):
-        :: %ABS %INT OBJ_0E693 ;                 * 0E6D4
+        :: %ABS %INT Ornd(abs(r))~1 ;            * 0E6D4
 
 * %date %time acti %rep -> %
 * refs (2): 0E543 0E626
@@ -453,7 +453,7 @@ L_0E7C2:
         GOTO    L_0E7E1                          * 0E7CA
 
 * refs (1): 048AE
-OBJ_0E7CE:
+GETKEY~1~1~3:
         CON(5)  (*)+5                            * 0E7CE  primitive code object
 
 * refs (1): 0E7CE
@@ -740,7 +740,7 @@ L_0EABA:
         RPL
 
 * refs (1): 0DEB6
-OBJ_0EABE:
+InsAlarm(2li)~1:
         :: BINT1 NTHCOMPDROP FindAlarm(li,b) ;   * 0EABE
 
 * %date -> %
@@ -840,7 +840,7 @@ SUB_0EC76:
         RTNCC                                    * 0EC9B
 
 * refs (1): 0DD1C
-OBJ_0EC9D:
+ALARMxcp~1~2~3:
         CON(5)  (*)+5                            * 0EC9D  primitive code object
         ST=0    15                               * 0ECA2
         GOSUB   SUB_0E882                        * 0ECA5
@@ -922,7 +922,7 @@ OBJ_0ED95:
         RPL
 
 * refs (1): 0EED5
-OBJ_0EDA5:
+r=>b10~1:
         :: BINT10 MAKEHXS ;                      * 0EDA5
 
 * refs (3): 0EB86 0EE55 0EE88
@@ -930,7 +930,7 @@ OBJ_0EDB9:
         :: BINT13 MAKEHXS ;                      * 0EDB9
 
 * refs (1): 0EF68
-OBJ_0EDCD:
+>ALRMLS~2:
         :: BINT24 MAKEHXS ;                      * 0EDCD
 
 * #nibs -> hxs
@@ -1010,7 +1010,7 @@ L_0EEB0:
 
 * refs (1): 0EF4A
 r=>b10:
-        :: OBJ_0EDA5 SWAP                        * 0EED0
+        :: r=>b10~1 SWAP                         * 0EED0
           CODE                                   * 0EEDF  87 nibbles
             GOSBVL  POP1%                        * 0EEE9
             GOSBVL  SPLITA                       * 0EEF0
@@ -1044,11 +1044,11 @@ L_0EF21:
 * $ %date %time %rpt -> {}
 * refs (1): 0E6FC
 >ALRMLS:
-        :: r=>b10 ROT Date>hxs13 ROT TOD>Ticks Date+Time OBJ_0EDCD 3UNROLL * 0EF45
+        :: r=>b10 ROT Date>hxs13 ROT TOD>Ticks Date+Time >ALRMLS~2 3UNROLL * 0EF45
           CODE                                   * 0EF72  99 nibbles
             GOSBVL  SUB_0D90A                    * 0EF7C
             GOSUB   SUB_0E87B                    * 0EF83
-            GOSBVL  SUB_0D8CF                    * 0EF87
+            GOSBVL  >ALRMLS~1                    * 0EF87
             GOSBVL  SUB_012F9                    * 0EF8E
             A=R0                                 * 0EF95
             ST=0    8                            * 0EF98
@@ -1120,17 +1120,17 @@ LIB00B:
 * refs (2): 289EA 28AD3
 st=>uo?:
         :: %1 SWAP dup;stdunit(st)? case makeuo!(r,st) * 0F075
-          DUP CAR$ OBJ_0C2CD NOTcase OBJ_0F106   * 0F093
-          OVER CDR$ dup;stdunit(st)? NOTcasedrop OBJ_0F106 * 0F0AC
-          ROTDROPSWAP OBJ_10B1C SWAP umP BINT4 OBJ_0F124 TRUE ; * 0F0C5
+          DUP CAR$ OBJ_0C2CD NOTcase st=>uo?~1   * 0F093
+          OVER CDR$ dup;stdunit(st)? NOTcasedrop st=>uo?~1 * 0F0AC
+          ROTDROPSWAP st=>uo?~2 SWAP umP BINT4 OBJ_0F124 TRUE ; * 0F0C5
 
 * refs (2): 0F08E 0F11A
 makeuo!(r,st):
         :: BINT2 OBJ_0F124 TRUE ;                * 0F0ED
 
 * refs (2): 0F0A7 0F0C0
-OBJ_0F106:
-        :: DROP OBJ_0F164 case2drpfls makeuo!(r,st) * 0F106
+st=>uo?~1:
+        :: DROP st=>uo?~1~1 case2drpfls makeuo!(r,st) * 0F106
         ;                                        * 0F11F
 
 * refs (2): 0F0DE 0F0F7
@@ -1149,7 +1149,7 @@ OBJ_0F124:
         ;                                        * 0F15F
 
 * refs (1): 0F110
-OBJ_0F164:
+st=>uo?~1~1:
         :: ngsizecase TRUE                       * 0F164
           OBJ_25F4E SWAPONE OVER delimcase drop(1-2,4);true * 0F173
           DROP OBJ_25A93 DROP OBJ_25A93 nultrior * 0F18C
@@ -1202,7 +1202,7 @@ UMCONV:
 * [] []' -> [] []' flag
 * refs (4): 0F3A3 0F6ED CD63A CD695
 puretemp?:
-        :: DUP OBJ_38417 EQ NOTcaseFALSE 2DUPEQ  * 0F3E4
+        :: DUP puretemp?~1 EQ NOTcaseFALSE 2DUPEQ * 0F3E4
         ;                                        * 0F402
 
 * refs (9): 9362E 94032 95D56 95EC1 9616E 9632B ...
@@ -1213,24 +1213,24 @@ puretemp?:
 * refs (2): 0F3AD CD64F
 TempConv:
         :: 2DROP 2DUPEQ case2DROP OVER           * 0F41B
-          cfC jEQcase OBJ_0F47F                  * 0F434
-          OVER cfF jEQcase OBJ_0F4C5             * 0F443
-          3UNROLL %%* OVER %%/ OBJ_0F510 %%- SWAPDROP ; * 0F457
+          cfC jEQcase TempConv~1                 * 0F434
+          OVER cfF jEQcase TempConv~2            * 0F443
+          3UNROLL %%* OVER %%/ TempConv~3 %%- SWAPDROP ; * 0F457
 
 * refs (1): 0F43E
-OBJ_0F47F:
+TempConv~1:
         :: SWAPDROP cfF EQcase                   * 0F47F
           :: %%/ %%3.2E1 %%+ ;                   * 0F493
           SWAP %%KZERO %%+ SWAP%%/ ;             * 0F4AC
 
 * refs (1): 0F452
-OBJ_0F4C5:
+TempConv~2:
         :: cfC EQcasedrop                        * 0F4C5
           :: SWAP %%3.2E1 %%- %%* ;              * 0F4D4
           %%/ SWAP %%RZERO %%+ %%* ;             * 0F4F2
 
 * refs (1): 0F46B
-OBJ_0F510:
+TempConv~3:
         :: OVER cfC jEQcase %%KZERO              * 0F510
           OVER cfF jEQcase %%RZERO               * 0F529
           %%0 ;                                  * 0F53D
@@ -1290,7 +1290,7 @@ UMSIN:
 
 * refs (2): 0F665 0F679
 OBJ_0F633:
-          :: OBJ_10B90 'REVAL %%>% ; %%SINDEG ;  * 0F633
+          :: UMSIN~1 'REVAL %%>% ; %%SINDEG ;    * 0F633
 
 * refs (2): 9028A 934A9
 OBJ_0F656:
@@ -1304,7 +1304,7 @@ UMCOS:
 * u -> u'
 * refs (1): 1B58B
 UMTAN:
-        :: OBJ_0F633 OBJ_10E0E ;                 * 0F674
+        :: OBJ_0F633 UMTAN~1 ;                   * 0F674
 
 * 2pi
 %%2PI:
@@ -1326,8 +1326,8 @@ OBJ_0F6C0:
           %%/ %%*SWAP ;                          * 0F72E
 
 * refs (1): 10C31
-OBJ_0F73D:
-        :: SWAPCKREF SWAP OBJ_7D761 ;            * 0F73D
+U>NCQ~1~2~1:
+        :: SWAPCKREF SWAP U>NCQ~1~2~1~1 ;        * 0F73D
 
 * refs (2): 10C4F CAC04
 OBJ_0F756:
@@ -1365,7 +1365,7 @@ UMINV:
         :: OBJ_0FDAE FALSE                       * 0F873
 
 * refs (1): 0F909
-OBJ_0F882:
+UMXROOT~1:
           :: 2NULLLAM{} BIND dup;uo=>r 2GETLAM 1GETLAM ITE %NROOT %^ * 0F882
             SWAP OBJ_10BAF OBJ_10194 OBJ_108F1 psh OBJ_108F1 2GETLAM %0< * 0F8AF
             ?SKIP psh                            * 0F8D7
@@ -1375,7 +1375,7 @@ OBJ_0F882:
 * u u' -> u''
 * refs (1): 1B247
 UMXROOT:
-        :: OBJ_0FDAE TRUE OBJ_0F882 ;            * 0F8FA
+        :: OBJ_0FDAE TRUE UMXROOT~1 ;            * 0F8FA
 
 * u -> u'
 * refs (1): 1B45D
@@ -1392,7 +1392,7 @@ UMSQRT:
 * u -> u'
 * refs (2): 19780 197E1
 UMSI:
-        :: OBJ_10D78 >R DUP U>NCQ %1 BINT1 3UNROLL FALSE 4NULLLAM{} BIND * 0F945
+        :: UMSI~1 >R DUP U>NCQ %1 BINT1 3UNROLL FALSE 4NULLLAM{} BIND * 0F945
           2DROP00                                * 0F97C
 L_0F981:
           ticR NOT?GOTO L_0FA2B 3GETLAM 4GETLAM DUP#1+ 4PUTLAM PULLEL * 0F981
@@ -1501,7 +1501,7 @@ OBJ_0FBFB:
 * refs (3): 1C180 1C18A 1C194
 UM%CH:
         :: OBJ_0F6C0 OVER %%-                    * 0FC3C
-L_0FC50:
+UM%T~1:
           SWAP%%/ %%1E2 %%* %%>% SWAPDROP ;      * 0FC50
 
 * refs (2): 0F701 0F70B
@@ -1519,7 +1519,7 @@ OBJ_0FCA5:
 * u u' -> %
 * refs (3): 1C10E 1C118 1C122
 UM%T:
-        :: OBJ_0F6C0 GOTO L_0FC50 ;              * 0FCCD
+        :: OBJ_0F6C0 GOTO UM%T~1 ;               * 0FCCD
 
 * u -> %
 * refs (1): 1B357
@@ -1591,33 +1591,33 @@ L_0FE6C:
           >R                                     * 0FE6C
 L_0FE71:
           ticR NOT?SEMI                          * 0FE71
-          OBJ_0FE8F GOTO L_0FE71 ;               * 0FE7B
+          U>NCQ~1 GOTO L_0FE71 ;                 * 0FE7B
 
 * refs (1): 0FE7B
-OBJ_0FE8F:
-        :: DUPTYPECHAR? case OBJ_0C24C           * 0FE8F
+U>NCQ~1:
+        :: DUPTYPECHAR? case U>NCQ~1~7           * 0FE8F
           REQcasedrop um*                        * 0FEA3
-          OBJ_10C22 REQcasedrop um/              * 0FEAD
-          OBJ_10C3B REQcasedrop umP              * 0FEBC
-          OBJ_10CA9 REQcasedrop um^              * 0FECB
-          OBJ_10C59 REQcasedrop umEND            * 0FEDA
-          OBJ_10CC2 DUPTYPECSTR? NOT?SEMI        * 0FEE9
-          OBJ_0C3A3 case SWAP                    * 0FEF8
-          DUP$>ID OBJ_0FFF2 NOT?GOTO L_0FF66 DUPTYPEREAL? case * 0FF07
+          U>NCQ~1~2 REQcasedrop um/              * 0FEAD
+          U>NCQ~1~3 REQcasedrop umP              * 0FEBC
+          U>NCQ~1~5 REQcasedrop um^              * 0FECB
+          U>NCQ~1~4 REQcasedrop umEND            * 0FEDA
+          U>NCQ~1~6 DUPTYPECSTR? NOT?SEMI        * 0FEE9
+          U>NCQ~1~8 case SWAP                    * 0FEF8
+          DUP$>ID U>NCQ~1~1 NOT?GOTO L_0FF66 DUPTYPEREAL? case * 0FF07
           :: SWAPDROP %>%% OBJ_3835E ;           * 0FF25
           DUPTYPEEXT? case                       * 0FF3E
-          :: SWAPDROP U>NCQ OBJ_10CA9 ;          * 0FF48
+          :: SWAPDROP U>NCQ U>NCQ~1~5 ;          * 0FF48
           DROP                                   * 0FF61
 L_0FF66:
           DUP CAR$ OBJ_0C2CD NOTcase INVUNITERR  * 0FF66
-          OBJ_0C24C SWAP CDR$ $>ID OBJ_0FFF2 NOTcase INVUNITERR * 0FF7F
+          U>NCQ~1~7 SWAP CDR$ $>ID U>NCQ~1~1 NOTcase INVUNITERR * 0FF7F
           DUPTYPEREAL? case                      * 0FFA2
           :: %>%% %%* OBJ_3835E ;                * 0FFAC
           DUPTYPEEXT? NOTcase INVUNITERR         * 0FFC5
           U>NCQ 4UNROLL %%* %%*SWAP TOTEMPOB ;   * 0FFD4
 
 * refs (2): 0FF0C 0FF93
-OBJ_0FFF2:
+U>NCQ~1~1:
         :: COMPILEID NOTcsdrpfls DUPTYPEIDNT? case SAFE@ * 0FFF2
           DUPTYPEROMP? case ROMPTR@              * 10010
           DROPFALSE ;                            * 1001F
