@@ -496,7 +496,7 @@ OBJ_66E61:
 * refs (2): 6E0F3 6F44B
 OBJ_66E7F:
         GROB    "images/66E7F.png"               * 66E7F  4 x 6
-        BSS     6                                * 66E9F
+        BSS     6                                * 66E9F  zeros
 
 * -> grob
 * refs (1): 6C986
@@ -832,7 +832,7 @@ OBJ_672E6:
         C=RSTK                                   * 67306
         D0=C                                     * 67308
         GOTO    L_6739E                          * 6730B
-        BSS     14                               * 6730F
+        BSS     14                               * 6730F  zeros
         RPL
 
 * refs (2): 6AC8F 6C3DE

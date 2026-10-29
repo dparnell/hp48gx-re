@@ -71,7 +71,7 @@ L_12080:
         C=C+A   A                                * 120BE
         CD1EX                                    * 120C0
         GOTO    L_11FD0                          * 120C3
-        NIBHEX  00000                            * 120C7  ..
+        BSS     5                                * 120C7  zeros
 
 * refs (8): 11D0F 11D36 11F8F 1201F 120B0 1219A ...
 SUB_120CC:
@@ -129,7 +129,7 @@ L_1212F:
         AD1EX                                    * 1214D
         GOSBVL  L_0C169                          * 12150
         RTNCC                                    * 12157
-        NIBHEX  00000                            * 12159  ..
+        BSS     5                                * 12159  zeros
 
 * grob #x #y $ #w -> grob'
 * refs (1): 3A4C4
@@ -1133,7 +1133,7 @@ L_12D16:
 SUB_12D68:
         ?ST=1   10                               * 12D68
         GOYES   L_12D7E                          * 12D6B
-        GOSBVL  GARBAGECOL                       * 12D6D  inline data follows
+        GOSBVL  GARBAGECOL                       * 12D6D
         ST=1    10                               * 12D74
         GOVLNG  GETPTR                           * 12D77
 L_12D7E:
@@ -1313,7 +1313,7 @@ SUB_12FC0:
         R0=C.F  A                                * 12FC0
         GOSUB   SAVPTR~jump_8                    * 12FC6
         GOSUB   SUB_13075                        * 12FCA
-        GOSBVL  GARBAGECOL                       * 12FCE  inline data follows
+        GOSBVL  GARBAGECOL                       * 12FCE
         GOSUB   GETPTR~jump_4                    * 12FD5
         A=DAT1  A                                * 12FD9
         R1=A.F  A                                * 12FDC
@@ -2346,7 +2346,7 @@ OBJ_13BF1:
         A=DAT1  B                                * 13C45
         GOSBVL  SUB_13C5A                        * 13C48
         GOTO    L_13BEA                          * 13C4F
-        NIBHEX  00000                            * 13C53  ..
+        BSS     5                                * 13C53  zeros
 
 * refs (1): 13C5A
 SUB_13C58:

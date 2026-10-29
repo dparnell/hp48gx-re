@@ -97,6 +97,8 @@ LIB0E8.link:
         REL(5)  XRECV~1                          * D49B9  041 
         REL(5)  ROMP_0E8_042                     * D49BE  042 
         ENDLENGTH                                * D49C3
-        BSS     4                                * D49C3
+        BSS     4                                * D49C3  zeros
         ENDLENGTH                                * D49C7
-        NIBHEX  3805000                          * D49C7  √P.
+
+        LENGTH                                   * D49C7  library object without its prolog (its place is the end of the link table before): length, to #D9A4A
+        CON(2)  0                                * D49CC  no title

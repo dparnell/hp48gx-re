@@ -756,4 +756,7 @@ LIB0C4.link:
         REL(5)  ROMP_0C4_00D                     * CBABD  00D 
         REL(5)  PEVAL~1                          * CBAC2  00E 
         ENDLENGTH                                * CBAC7
-        NIBHEX  8DF0000                          * CBAC7  Ø..
+        ENDLENGTH                                * CBAC7
+
+        LENGTH                                   * CBAC7  library object without its prolog (its place is the end of the link table before): length, to #CCA9F
+        CON(2)  0                                * CBACC  no title

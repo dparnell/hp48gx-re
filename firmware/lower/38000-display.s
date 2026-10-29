@@ -45,7 +45,7 @@ L_38050:
         GOTO    L_37E8B                          * 38065
 L_38069:
         RSTK=C                                   * 38069
-        GOSBVL  GARBAGECOL                       * 3806B  inline data follows
+        GOSBVL  GARBAGECOL                       * 3806B
         C=RSTK                                   * 38072
         ST=1    1                                * 38074
         GONC    L_38050                          * 38077
@@ -365,7 +365,8 @@ UMSIN~3:
         %BODY   0E0                              * 38569
         %BODY   0E0                              * 38579
         ENDLENGTH                                * 38589
-        NIBHEX  00000                            * 38589  ..
+        ENDLENGTH                                * 38589
+        BSS     5                                * 38589  zeros
 
 * refs (1): 0214E
 StartupProc:

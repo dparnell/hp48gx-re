@@ -30,7 +30,7 @@ L_00022:
         ?ST=1   15                               * 00022
         GOYES   L_0001A                          * 00025
         RTNSC                                    * 00027
-        BSS     15                               * 00029
+        BSS     15                               * 00029  zeros
 L_00038:
         P=      8                                * 00038
         GOTO    L_001BC                          * 0003A
@@ -288,7 +288,7 @@ L_00378:
         D0=(2)  #2E                              * 003B4
         DAT0=C  B                                * 003B8
         RTNCC                                    * 003BB
-        NIBHEX  000                              * 003BD  .
+        BSS     3                                * 003BD  zeros
 
 * refs (1): 001C3
 SUB_003C0:
@@ -460,7 +460,7 @@ L_005D5:
         DAT1=A  1                                * 005E1
 L_005E5:
         GOTO    L_00418                          * 005E5
-        NIBHEX  000                              * 005E9  .
+        BSS     3                                * 005E9  zeros
 
 * refs (1): 0021F
 SUB_005EC:
@@ -780,7 +780,7 @@ L_0093F:
         P=C     0                                * 00970
         CPEX    15                               * 00974
         GONC    L_0093F                          * 00978
-        NIBHEX  0                                * 0097B
+        BSS     1                                * 0097B  zeros
 L_0097C:
         LC(3)   #1FF                             * 0097C
         OUT=C                                    * 00981
@@ -1095,7 +1095,7 @@ L_00C02:
         CON(2)  #30                              * 00C6D  entry 46
         CON(2)  #31                              * 00C6F  entry 47
         CON(2)  0                                * 00C71  end of table
-        NIBHEX  0                                * 00C73
+        BSS     1                                * 00C73  zeros
 
 * Carry if true
 * refs (6): 00227 0441D 30F42 328D9 D448A D4518
@@ -1531,14 +1531,14 @@ L_01152:
         A=A-1   A                                * 01152
         GONC    L_01152                          * 01154
         RTNCC                                    * 01157
-        NIBHEX  0                                * 01159
+        BSS     1                                * 01159  zeros
 
 * A=IN see also <REF>CINRTN For hardware reasons (bug) A=IN must be at even addr
 * refs (1): 00E63
 AINRTN:
         A=IN                                     * 0115A
         RTN                                      * 0115D
-        NIBHEX  0                                * 0115F
+        BSS     1                                * 0115F  zeros
 
 * C=IN see also <REF>AINRTN For hardware reasons (bug) C=IN must be at even addr
 * refs (5): 0027D 00D2E 01EEF 0479F 32A0F
@@ -1593,7 +1593,7 @@ SUB_011CA:
         A=A&C   XS                               * 011F1
         DAT1=A  XS                               * 011F5
         RTNCC                                    * 011F9
-        NIBHEX  0                                * 011FB
+        BSS     1                                * 011FB  zeros
 
 * refs (7): 012EE 012FC 0133A 0148C 01A3E 0275A ...
 SUB_011FC:
@@ -2219,7 +2219,7 @@ L_01914:
         LC(1)   #9                               * 0191D
         A=A+C   A                                * 01920
         RTNCC                                    * 01922
-        NIBHEX  00000                            * 01924  ..
+        BSS     5                                * 01924  zeros
 
 * refs (2): 011A5 02045
 SUB_01929:
@@ -2538,7 +2538,7 @@ L_01CD9:
         DAT1=C  B                                * 01CDD
         DAT0=C  B                                * 01CE0
         GOVLNG  disprange                        * 01CE3
-        NIBHEX  00                               * 01CEA  .
+        BSS     2                                * 01CEA  zeros
 
 * refs (1): 0198E
 SUB_01CEC:

@@ -55,4 +55,7 @@ LIB0B2.link:
         REL(5)  ROMP_0B2_02E                     * DCB72  02E 
         REL(5)  ROMP_0B2_02F                     * DCB77  02F 
         ENDLENGTH                                * DCB7C
-        NIBHEX  3E81000                          * DCB7C  ã..
+        ENDLENGTH                                * DCB7C
+
+        LENGTH                                   * DCB7C  library object without its prolog (its place is the end of the link table before): length, to #DE45F
+        CON(2)  0                                * DCB81  no title

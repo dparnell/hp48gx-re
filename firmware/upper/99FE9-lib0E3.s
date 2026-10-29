@@ -2,6 +2,7 @@
 * Addresses in the right-hand comments are those of the original ROM.
 * Follows on from the previous file (at #99FE9 in the original ROM).
         ENDLENGTH                                * 99FE9
+        ENDLENGTH                                * 99FE9
 
         CON(5)  DOLIB                            * 99FE9  library object
         LENGTH                                   * 99FEE  length, to #9DA13

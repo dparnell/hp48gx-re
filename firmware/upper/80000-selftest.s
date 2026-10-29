@@ -1332,7 +1332,7 @@ L_8103E:
         GONC    L_8100E                          * 81042
         D0=C                                     * 81045
         RTNSC                                    * 81048
-        BSS     7                                * 8104A
+        BSS     7                                * 8104A  zeros
 
 * refs (3): 80CF9 80F17 8100A
 SUB_81051:
@@ -2084,7 +2084,7 @@ L_81941:
         CON(2)  17                               * 81969  entry 26
         NIBASC  "Copyright HP 1989"              * 8196B
 L_8198D:
-        NIBHEX  000                              * 8198D  .
+        BSS     3                                * 8198D  zeros
         GOSUB   SUB_81B6B                        * 81990
         LC(5)   #C0000                           * 81994
         B=C     A                                * 8199B
@@ -2522,4 +2522,6 @@ L_81E6D:
         GOSBVL  ClrScrMn                         * 81EC1
         GOVLNG  L_80A67                          * 81EC8
         FILLTO  #82000                           * 81ECF  305 zero nibbles: the next entry stays at #82000
-        NIBHEX  DDF4000                          * 82000  ÝO.
+
+        LENGTH                                   * 82000  library object without its prolog (its place is the end of the link table before): length, to #86FDD
+        CON(2)  0                                * 82005  no title

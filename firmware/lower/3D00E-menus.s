@@ -354,12 +354,13 @@ LIB0A7.link:
         REL(5)  ROMP_0A7_026                     * 3D6A0  026 
         REL(5)  ROMP_0A7_027                     * 3D6A5  027 
         ENDLENGTH                                * 3D6AA
+        ENDLENGTH                                * 3D6AA
         ASSEMBLE
         D=D+C   A                                * 3D6AA
 * a branch also enters #3D6AD, where the nibbles decode as RTNSXM
 L_3D6AC:
         GOTO    L_3D6AC+1                        * 3D6AC
-        NIBHEX  0                                * 3D6B0
+        BSS     1                                * 3D6B0  zeros
 
 LIB0A2:
         CON(3)  #0A2                             * 3D6B1  library number
@@ -703,7 +704,9 @@ LIB0A2.link:
         REL(5)  ROMP_0A2_02F                     * 3DCDC  02F 
         REL(5)  ~DoDelims;$_{};?ClrAlgSetPr      * 3DCE1  030 
         ENDLENGTH                                * 3DCE6
-        NIBHEX  4E50000                          * 3DCE6  ä..
+
+        LENGTH                                   * 3DCE6  library object without its prolog (its place is the end of the link table before): length, to #3E2CA
+        CON(2)  0                                * 3DCEB  no title
 
 LIB0A3:
         CON(3)  #0A3                             * 3DCED  library number

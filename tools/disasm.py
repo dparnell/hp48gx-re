@@ -479,9 +479,31 @@ class Generator:
                 out.append(self.fill_line(p, q, force=True))
                 p = q
                 continue
-            if q - p >= 16 or (q == hi and q - p >= 6) or (q < hi and q in self.ends and q > p):
-                out.append(Line(p, q - p, op("BSS", str(q - p)), indent=indent, mode=mode))
+            if q - p >= 16 or (q == hi and q > p) or (q < hi and q in self.ends and q > p):
+                out.append(Line(p, q - p, op("BSS", str(q - p)), comment="zeros" if q - p < 16 else "",
+                                indent=indent, mode=mode))
                 p = q
+                continue
+            # the length of a code object whose body the analysis took apart
+            if self.rom.addr(p - 5) == 0x02DCC and (p == lo or out and out[-1].pc == p - 5) and p + 5 <= hi:
+                ln = self.length(p, indent)
+                ln.comment = "code object's " + ln.comment
+                out.append(ln)
+                p += 5
+                continue
+            # a lone ROMPTR body (library and command) naming a known command
+            if hi - p == 6 and (self.rom.read(p, 3), self.rom.read(p + 3, 3)) in self.romp_addr:
+                lib, cmd = self.rom.read(p, 3), self.rom.read(p + 3, 3)
+                out.append(Line(p, 6, op("ROMPBODY", "%03X" % lib, "%03X" % cmd), comment=self.romptr_name(lib, cmd),
+                                indent=indent, mode=mode))
+                p += 6
+                continue
+            # a lone word holding the address of an object or of code
+            v = self.rom.addr(p)
+            if hi - p == 5 and 0x100 <= v < LOWER_END and (v in self.items or v in self.insns)                     and not any(p < e < p + 5 for e in self.ends):
+                out.append(Line(p, 5, op("CON(5)", Ref(v, p, "addr")), comment="address",
+                                indent=indent, mode=mode))
+                p += 5
                 continue
             q = min(hi, p + 32)
             for t in range(p + 1, q):
@@ -664,6 +686,12 @@ class Generator:
             arr = self.linked_array_lines(o, depth)
             if arr:
                 return arr
+        if text is None and k in ("DOREAL", "DOEREL", "DOCMP", "DOECMP"):
+            lines = self.raw_object(o, depth)
+            for ln in lines[1:]:
+                ln.comment = "not a canonical number (a zero mantissa with exponent FFF), so written as nibbles"
+                break
+            return lines
         if text is not None:
             ln = Line(a, o.size, text, comment=comment, mode="RPL", indent=depth)
             if k == "DOBINT":
@@ -672,6 +700,28 @@ class Generator:
                 ln.value = ("romp", romp)
             return [ln]
         return self.raw_object(o, depth)
+
+    def unit_dims(self, q):
+        """A units-table dimensions field at q as UDIMS operands, or None."""
+        k = self.n[q]
+        digits = [d - 16 if d > 7 else d for d in self.n[q + 1:q + 1 + k]]
+        if k > len(sasm.UNIT_BASES) or not digits or digits[-1] == 0:
+            return None
+        return " ".join(b if d == 1 else "%s^%d" % (b, d) for b, d in zip(sasm.UNIT_BASES, digits) if d)
+
+    def unit_factor(self, q):
+        """A units-table factor field at q as a UFACT operand, or None."""
+        k = self.n[q]
+        b = self.rom.byte(q + 1)
+        if b >> 4 > 9 or b & 15 > 9:
+            return None
+        e = int("%02X" % b)
+        e = e - 100 if e >= 50 else e
+        digits = list(reversed(self.n[q + 3:q + 3 + k]))
+        if any(d > 9 for d in digits):
+            return None
+        m = "".join(map(str, digits))
+        return "%s%sE%d" % (m[0], "." + m[1:] if len(m) > 1 else "", e)
 
     def units_table_lines(self, o, depth):
         """The units table (a hex string): for each name length 1-8 the
@@ -714,17 +764,22 @@ class Generator:
             q = p + 2 * n
             for second in (False, True):
                 k = self.n[q]
-                out.append(Line(q, 1, op("CON(1)", "%d" % k),
-                                comment=("pointer follows" if k == 0 else "%d digits" % k), indent=depth))
-                q += 1
                 if k == 0:
-                    out.append(Line(q, 5, op("CON(5)", Ref(r.addr(q), q, "rom")), indent=depth))
-                    q += 5
+                    out.append(Line(q, 1, op("CON(1)", "0"), comment="pointer follows", indent=depth))
+                    out.append(Line(q + 1, 5, op("CON(5)", Ref(r.addr(q + 1), q + 1, "rom")),
+                                    comment="factor" if second else "dimensions", indent=depth))
+                    q += 6
                     continue
+                text = self.unit_factor(q) if second else self.unit_dims(q)
+                size = 1 + k + (2 if second else 0)
+                if text:
+                    out.append(Line(q, size, op("UFACT" if second else "UDIMS", text), indent=depth))
+                    q += size
+                    continue
+                out.append(Line(q, 1, op("CON(1)", "%d" % k), comment="%d digits" % k, indent=depth))
+                q += 1
                 if second:
-                    e = int("%02X" % r.byte(q)) if r.byte(q) < 0xA0 and r.byte(q) & 15 < 10 else None
-                    note = "exponent" if e is None else "exponent %d" % (e - 100 if e >= 50 else e)
-                    out.append(Line(q, 2, op("CON(2)", "#%02X" % r.byte(q)), comment=note, indent=depth))
+                    out.append(Line(q, 2, op("CON(2)", "#%02X" % r.byte(q)), comment="exponent", indent=depth))
                     q += 2
                 out.append(Line(q, k, op("NIBHEX", hexs(self.n[q:q + k])), indent=depth))
                 q += k
@@ -1008,6 +1063,36 @@ class Generator:
                      comment="%d x %d; the padding (gray) is not zero" % (w, h), mode="RPL", indent=depth)]
 
     # ================================================================ structures
+    def library_bodies(self):
+        """A library is a library object: DOLIB, length, title, then the
+        header. Many have no prolog (its place is taken by the end of the
+        link table before, or it starts an upper-ROM window): just the
+        length and the title before the header. Units for those."""
+        out = []
+        for lib in self.s["libs"]:
+            if lib.obj_start is not None or not lib.hdr:
+                continue
+            for tl in range(0, 40):
+                p = lib.hdr - 7 - (2 * tl + 2 if tl else 0)
+                if self.rom.byte(p + 5) != tl or (tl and self.rom.byte(lib.hdr - 2) != tl):
+                    continue
+                end = p + self.rom.addr(p)
+                if lib.hdr < end <= 0x100000 and all(self.owner(p + i) in (None, "data", "fill") for i in range(7)):
+                    out.append((p, p + 7 + (2 * tl + 2 if tl else 0), "libbody", tl))
+                break
+        return out
+
+    def library_body_lines(self, p, tl):
+        ln = self.length(p)
+        why = "at the window's start" if p in WINDOWS else "its place is the end of the link table before"
+        ln.comment = "library object without its prolog (%s): %s" % (why, ln.comment)
+        out = [ln, Line(p + 5, 2, op("CON(2)", "%d" % tl), comment="title length" if tl else "no title")]
+        if tl:
+            nb = [self.rom.byte(p + 7 + 2 * i) for i in range(tl)]
+            out.append(Line(p + 7, 2 * tl, op("NIBASC", sasm.escape(nb)), comment="title"))
+            out.append(Line(p + 7 + 2 * tl, 2, op("CON(2)", "%d" % tl), comment="title length again"))
+        return out
+
     def lib_header_lines(self, it):
         a = it.start
         lib = it.info["lib"]
@@ -1089,6 +1174,9 @@ class Generator:
             out.append(Line(p + 8, 5, op("CON(5)", Ref(acc, p, "rom")) if acc else op("CON(5)", "0"),
                             comment="access handler" if acc else "directly visible"))
             p += 13
+        if p + 3 <= it.start + it.size and r.read(p, 3) == 0xFFF:
+            out.append(Line(p, 3, op("CON(3)", "#FFF"), comment="end of the table"))
+            p += 3
         out += self.data_lines(p, it.start + it.size)
         return out
 
@@ -1123,12 +1211,14 @@ class Generator:
         """A rule stream after a call to the algebra's rule interpreter
         (analyze.rule_streams)."""
         out = []
+        ops = self.rule_operators(it.start)
         for kind, p, size in it.info["parts"]:
             if kind == "pattern":
                 w = self.rom.read(p, 5)
-                tests = " ".join("arg" if d == "0" else "op%d" % (int(d, 16) - 1)
-                                 for d in ("%05X" % w)[::-1].rstrip("0") or "0") if w else "always"
-                out.append(Line(p, 5, op("NIBHEX", hexs(self.n[p:p + 5])), comment="pattern: " + tests))
+                tests = [d for d in ("%05X" % w)[::-1].rstrip("0")] if w else []
+                text = " ".join("arg" if d == "0" else "op%d" % (int(d, 16) - 1) for d in tests) or "always"
+                names = " ".join("arg" if d == "0" else ops.get(int(d, 16) - 1, "?") for d in tests)
+                out.append(Line(p, 5, op("PATTERN", text), comment=names if ops and tests else ""))
             elif kind == "ptr":
                 out.append(Line(p, 5, op("CON(5)", Ref(self.rom.addr(p), p, "addr")), comment="run if it matches"))
             elif kind == "romptr":
@@ -1136,8 +1226,31 @@ class Generator:
                 lines[0].comment = "run if it matches"
                 out += lines
             else:
-                out.append(Line(p, 1, op("NIBHEX", "F"), comment="end of the rules"))
-        out[0].pre.append("* rewrite rules, read by the interpreter called just before (SUB_5F6F2)")
+                out.append(Line(p, 1, op("CON(1)", "#F"), comment="end of the rules"))
+        out[0].pre.append("* rewrite rules, read by the interpreter called just before (RuleMatch, #5F6F2)")
+        return out
+
+    def rule_operators(self, start):
+        """The operator table of the rule stream at start, by entry: the
+        default one for RuleMatch (#5F6F2), else the LC(5) before the call
+        to #5F6F9. Names where entries are known words; {} if unknown."""
+        call = start - 7
+        ins = self.insns.get(call)
+        if ins is None:
+            return {}
+        if ins.target == 0x5F6F2:
+            table = 0x5F7E0
+        else:
+            prev = self.insns.get(call - 7)
+            if prev is None or not prev.text.startswith("LC(5)") or prev.const is None:
+                return {}
+            table = prev.const
+        out = {}
+        for k in range(14):
+            nm = self.symbol_name(self.rom.addr(table + 5 * k))
+            if nm is None:
+                break
+            out[k] = nm
         return out
 
     def trailer_lines(self, it):
@@ -1245,6 +1358,7 @@ class Generator:
         for lib in self.s["libs"]:
             if lib.obj_start is not None:
                 special.append((lib.obj_start, lib.hdr, "libobj", lib))
+        special += self.library_bodies()
         for a, (lib, cmd, _) in self.libcmd.items():
             h = a - 7
             if (self.rom.read(h + 1, 3) == lib and self.rom.read(h + 4, 3) == cmd
@@ -1322,6 +1436,8 @@ class Generator:
             return self.remap_lines()
         if kind == "minitail":
             return self.mini_tail_lines()
+        if kind == "libbody":
+            return self.library_body_lines(start, x)
         if kind == "libobj":
             return self.library_object_lines(x)
         if kind == "code":

@@ -754,4 +754,4 @@ LIB0E0.link:
         REL(5)  ROMP_0E0_055                     * D1354  055 
         REL(5)  ROMP_0E0_056                     * D1359  056 
         ENDLENGTH                                * D135E
-        NIBHEX  0000                             * D135E  ..
+        BSS     4                                * D135E  zeros

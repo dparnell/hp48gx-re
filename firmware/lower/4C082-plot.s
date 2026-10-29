@@ -256,7 +256,7 @@ bins(3r)~1:
           #1+_ONE_DO OVER PULLREALEL 5PICK 7PICK bins(3r)~3 6UNROLL * 4CA78
           SWAP3PICK #+SWAP LOOP MDIMS IT DROP    * 4CA9B
           5UNROLL 4DROP ;                        * 4CAB9
-        BSS     10                               * 4CAC8
+        BSS     10                               * 4CAC8  zeros
 
 * refs (1): 4C9F6
 bins(3r)~2:
@@ -304,7 +304,7 @@ OBJ_4CDD9:
 OBJ_4CE0B:
         :: SWAP DUPTYPEREAL? NOTcasedrop ClrLastPt * 4CE0B
           SWAPDROP GETYPOS 1GETLAM SWAP PIXON3 ; * 4CE24
-        BSS     10                               * 4CE42
+        BSS     10                               * 4CE42  zeros
 
 * refs (16): 46C0C 48FEA 4B873 4D10F 4D4AC 4DA94 ...
 EXITFCNsto:
@@ -519,12 +519,12 @@ OBJ_4D993:
 * refs (1): 8CF53
 OBJ_4D9CF:
         :: rclä STATGETXCOL COERCE BINT1 3PICK OBJ_2CF08 2DROP OBJ_4CB68 ; * 4D9CF
-        BSS     12                               * 4DA01
+        BSS     12                               * 4DA01  zeros
 
 * refs (22): 0C9F4 46C70 46CA7 47D84 482BA 482CE ...
 CROSS_HAIRS:
         :: ~8GETLAM;7GETLAM CROSSGROB OBJ_4DEAE DUP4PUTLAM OBJ_4DB18 ; * 4DA0D
-        BSS     15                               * 4DA30
+        BSS     15                               * 4DA30  zeros
 
 * refs (3): 1E2C4 4C30A AA43D
 OBJ_4DA3F:
@@ -562,7 +562,7 @@ SUB_4DAFD:
         RTNNC                                    * 4DB0B
         P=      2                                * 4DB0E
         GOVLNG  L_01FC6                          * 4DB10
-        NIBHEX  0                                * 4DB17
+        BSS     1                                * 4DB17  zeros
         RPL
 
 * refs (3): 4DA26 4DD64 4ECD0
@@ -900,7 +900,7 @@ SUB_4E235:
 * refs (1): 4888C
 ~BINT1;GetEqN:
         :: BINT1 GetEqN ;                        * 4E248
-        BSS     10                               * 4E25C
+        BSS     10                               * 4E25C  zeros
 
 * ->
 * refs (61): 0C8FC 0C929 0C9AE 456D1 456FE 4575D ...
@@ -1025,7 +1025,7 @@ OBJ_4E68B:
 * refs (1): 4E2A2
 ~DispMenu;BINT0;16PUTLAM:
         :: DispMenu BINT0 16PUTLAM ;             * 4E6A9
-        NIBHEX  00000                            * 4E6C2  ..
+        BSS     5                                * 4E6C2  zeros
 
 * refs (15): 4568B 45708 45776 477C7 4E50A 4E569 ...
 * -> : take the crosshair and the mark off PICT (the inverse of CROSSMARKON)
@@ -1067,7 +1067,7 @@ OBJ_4E799:
 * refs (1): 3E7DE
 {GRAPH\LABEL}~1:
         :: CHECKMENU CROSSMARKOFF label! CROSSMARKON ; * 4E861
-        BSS     10                               * 4E87F
+        BSS     10                               * 4E87F  zeros
 
 * refs (1): 1E2DF
 label:
@@ -1146,7 +1146,7 @@ OBJ_4EC49:
 * refs (1): 3B3FA
 ~0LASTOWDOB!;CK2NOLASTWD:
         :: 0LASTOWDOB! CK2NOLASTWD ;             * 4EC94
-        NIBHEX  00000                            * 4ECA8  ..
+        BSS     5                                * 4ECA8  zeros
 
 * refs (12): 456B8 4574E 45794 477D1 4E50F 4E578 ...
 CROSSMARKON:
@@ -1232,7 +1232,7 @@ pview(c):
 xPVIEW~list:
         :: NULL{} EQUALcasedrop DOGRAPHIC        * 4F027
           2HXSLIST? WINDOW# ;                    * 4F03B
-        BSS     8                                * 4F04A
+        BSS     8                                * 4F04A  zeros
 
 * #x #y  ->
 * refs (2): 4F01D 4F040

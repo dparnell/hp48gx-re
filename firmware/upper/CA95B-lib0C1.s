@@ -138,4 +138,7 @@ LIB0C1.link:
         REL(5)  UMSIN~4                          * CADB3  021 
         REL(5)  UMSIN~2                          * CADB8  022 
         ENDLENGTH                                * CADBD
-        NIBHEX  A0D0000                          * CADBD  ...
+        ENDLENGTH                                * CADBD
+
+        LENGTH                                   * CADBD  library object without its prolog (its place is the end of the link table before): length, to #CBAC7
+        CON(2)  0                                * CADC2  no title

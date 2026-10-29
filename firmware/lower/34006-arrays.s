@@ -1402,7 +1402,10 @@ OBJ_354AF:
 * refs (1): 35428
 FINDVAR~2:
         :: DUPTYPEIDNT? SWAP OBJ_354AF OR ;      * 354E1
-        NIBHEX  A803000                          * 354FF  ≥0.
+        ENDLENGTH                                * 354FF
+
+        LENGTH                                   * 354FF  library object without its prolog (its place is the end of the link table before): length, to #38589
+        CON(2)  0                                * 35504  no title
 
 LIB005:
         CON(3)  #005                             * 35506  library number
@@ -2100,7 +2103,7 @@ OBJ_35BF5:
         HST=0   3                                * 35C01
         GOSBVL  SUB_79F38                        * 35C04
         GOTO    L_35612                          * 35C0B
-        BSS     9                                * 35C0F
+        BSS     9                                * 35C0F  zeros
         RPL
 
 * refs (4): 35CC7 36363 36AAE 37E32

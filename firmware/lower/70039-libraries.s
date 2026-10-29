@@ -360,7 +360,7 @@ RomLibTable:
         CON(3)  #700                             * 7055B  library
         CON(5)  LIB700                           * 7055E  header
         CON(5)  0                                * 70563  directly visible
-        NIBHEX  FFF                              * 70568  ÿ
+        CON(3)  #FFF                             * 70568  end of the table
         RPL
 
 LIB000.message:
@@ -440,6 +440,7 @@ L_706A1:
 * refs (2): 706A9 71B1A
 SUB_706B7:
         ST=0    10                               * 706B7
+L_706BA:
         LC(5)   #0000F                           * 706BA
         B=C     A                                * 706C1
         LC(2)   #1A                              * 706C3
@@ -471,8 +472,9 @@ SUB_706B7:
 L_70726:
         ?ST=1   10                               * 70726
         GOYES   L_70738                          * 70729
-        GOSBVL  GARBAGECOL                       * 7072B  inline data follows
-        NIBHEX  85A548                           * 70732  XZ∫
+        GOSBVL  GARBAGECOL                       * 7072B
+        ST=1    10                               * 70732
+        GONC    L_706BA                          * 70735
 L_70738:
         GOVLNG  GPMEMERR                         * 70738
 * Bank-select stubs, reached through computed jumps: D0=(5) #7F040+2n, then GOTO
@@ -698,7 +700,7 @@ L_70A20:
         GOSUB   CSLW5~jump                       * 70A34
         C=R1.F  A                                * 70A38
         R1=C                                     * 70A3E
-        GOSBVL  GARBAGECOL                       * 70A41  inline data follows
+        GOSBVL  GARBAGECOL                       * 70A41
         C=R1                                     * 70A48
         GOSUB   CSRW5~jump                       * 70A4B
         A=C     A                                * 70A4F
@@ -905,7 +907,7 @@ L_70CF4:
         GOSUB   CSLW5~jump                       * 70D08
         C=R1.F  A                                * 70D0C
         R1=C                                     * 70D12
-        GOSBVL  GARBAGECOL                       * 70D15  inline data follows
+        GOSBVL  GARBAGECOL                       * 70D15
         C=R1                                     * 70D1C
         GOSUB   CSRW5~jump                       * 70D1F
         A=C     A                                * 70D23
@@ -1291,7 +1293,7 @@ L_7120B:
         P=      0                                * 7120B
         D0=D0-  5                                * 7120D
         RTNCC                                    * 71210
-        NIBHEX  000                              * 71212  .
+        BSS     3                                * 71212  zeros
 
 * refs (5): 70A2D 70A34 70D01 70D08 71281
 CSLW5~jump:
@@ -2777,7 +2779,7 @@ L_72529:
         GOSUB   CSLW5~jump_2                     * 7253D
         C=R1.F  A                                * 72541
         R1=C                                     * 72547
-        GOSBVL  GARBAGECOL                       * 7254A  inline data follows
+        GOSBVL  GARBAGECOL                       * 7254A
         C=R1                                     * 72551
         GOSUB   CSRW5~jump_2                     * 72554
         A=C     A                                * 72558
@@ -3011,7 +3013,7 @@ L_7283C:
         GOSUB   CSLW5~jump_2                     * 72850
         C=R1.F  A                                * 72854
         R1=C                                     * 7285A
-        GOSBVL  GARBAGECOL                       * 7285D  inline data follows
+        GOSBVL  GARBAGECOL                       * 7285D
         C=R1                                     * 72864
         GOSUB   CSRW5~jump_2                     * 72867
         A=C     A                                * 7286B

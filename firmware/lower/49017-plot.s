@@ -24,7 +24,7 @@ OBJ_49017:
 * refs (3): 6B961 73968 739A4
 ~BINT27;GETLAM:
         :: BINT27 GETLAM ;                       * 49158
-        NIBHEX  00000                            * 4916C  ..
+        BSS     5                                * 4916C  zeros
 
 * refs (1): 15415
 EQReview~1:
@@ -110,7 +110,7 @@ xRULES~8:
 * refs (1): 47989
 ~TOADISP;BlankDA1:
         :: TOADISP BlankDA1 ;                    * 4945A
-        BSS     10                               * 4946E
+        BSS     10                               * 4946E  zeros
 
 * refs (4): 48DFB 48E69 48EAF 49298
 OBJ_49478:
@@ -177,7 +177,7 @@ OBJ_496A0:
 * refs (3): 6B97F 6CBCF 7380F
 ~BINT27;PUTLAM:
         :: BINT27 PUTLAM ;                       * 496F0
-        NIBHEX  00000                            * 49704  ..
+        BSS     5                                * 49704  zeros
 
 * id ob -> $
 * refs (3): 15581 9E59F 9F21D
@@ -197,7 +197,7 @@ PlotScr*en~11:
 
 _Root_:
           $ "Root" OBJ_49E75 Π'SAVEDDEPTH #1+ ' Π'SAVEDDEPTH STO ; * 497AD
-        NIBHEX  00000                            * 497E2  ..
+        BSS     5                                * 497E2  zeros
 
 * refs (1): 47512
 PlotScr*en~12:
@@ -576,7 +576,7 @@ _Mo:
 * refs (7): 45FB2 45FD0 46071 46099 460C1 460E9 ...
 OBJ_4A834:
         :: SWAP OBJ_46120 &$ SPACE$ !!append$ SWAP OBJ_46120 !!append$ ; * 4A834
-        BSS     14                               * 4A866
+        BSS     14                               * 4A866  zeros
 
 * refs (3): 4B783 4C495 70002
 OBJ_4A874:
@@ -612,7 +612,7 @@ CHECKPVARS:
           TYPECMP? NOT?INVPPAR DUPTYPEREAL? SWAP TYPEHSTR? OR NOT?INVPPAR * 4AA05
           ChkIndep TYPECMP? NOT?INVPPAR TYPECMP? NOT?INVPPAR 'IDPAR * 4AA28
           RclPlotVar? DROP ;                     * 4AA46
-        NIBHEX  0000                             * 4AA55  ..
+        BSS     4                                * 4AA55  zeros
 
 * refs (1): 4AA28
 ChkIndep:
@@ -660,7 +660,7 @@ CHECKPVARS~1:
 * refs (1): 6BE16
 OBJ_4AC02:
         :: DUPTYPESYMB? OVER TYPECMP? OR SWAP TYPEEXT? OR ; * 4AC02
-        NIBHEX  00000                            * 4AC2F  ..
+        BSS     5                                * 4AC2F  zeros
 
 * refs (3): 4AE5F 4B567 4B5C1
 RclCenter:
@@ -751,7 +751,7 @@ ax*s(c):
 * refs (1): 1E0D7
 ax*s(li):
         :: OBJ_4502E ;                           * 4B04E
-        NIBHEX  00000                            * 4B05D  ..
+        BSS     5                                * 4B05D  zeros
 
 * -> name
 * refs (24): 0C7CB 45ED3 48184 48D97 48F4F 4906C ...
@@ -907,7 +907,7 @@ OBJ_4B4EB:
 * refs (1): 4A9FB
 CHECKPVARS~2:
         :: BINT4 EQUAL NOT?INVPPAR OBJ_4C6E3 OBJ_4EF0A ; * 4B527
-        BSS     9                                * 4B54A
+        BSS     9                                * 4B54A  zeros
 
 * refs (3): 1E15F 47B14 4812F
 VSCALE:
@@ -934,7 +934,7 @@ DOERASE:
 ~IT;ShowInvRomp:
         :: IT ShowInvRomp                        * 4B643
         ;                                        * 4B652
-        NIBHEX  00000                            * 4B657  ..
+        BSS     5                                * 4B657  zeros
 
 * refs (3): 1E19A 20156 4C305
 draw:
@@ -1017,7 +1017,7 @@ OBJ_4B95E:
 * refs (1): 6D492
 OBJ_4B97E:
         GROB    "images/4B97E.png"               * 4B97E  6 x 6
-        NIBHEX  0                                * 4B99E
+        BSS     1                                * 4B99E  zeros
 
 * refs (1): 4B6B1
 draw~1:
@@ -1071,7 +1071,7 @@ OBJ_4BABC:
 OBJ_4BB98:
         :: ISTOP@ OBJ_4A96E ZERO_DO ' ' OBJ_4BF71 ITE OBJ_4C616 OBJ_4B747 * 4BB98
           OBJ_4BEEF BINT6 ::N LOOP ISTOP@ #3+ ::N 2PUTLAM ; * 4BBCA
-        BSS     15                               * 4BBF7
+        BSS     15                               * 4BBF7  zeros
 
 * refs (2): 48A08 4BB43
 OBJ_4BC06:
@@ -1102,7 +1102,7 @@ OBJ_4BC83:
           ;                                      * 4BE63
           ERRTRAP OBJ_4B4EB ~ATTNFLG@;#0=?SEMI;ExitAtLOOP LOOP ATTNFLGCLR * 4BE68
           18GETLAM RESETDEPTH INDEPVAR ?PURGE_HERE ; * 4BE81
-        NIBHEX  00000                            * 4BE9A  ..
+        BSS     5                                * 4BE9A  zeros
 
 * refs (1): 8CB64
 OBJ_4BE9F:
@@ -1133,7 +1133,7 @@ OBJ_4BF71:
           TYPELIST? caseFALSE BINT1              * 4BF85
           OBJ_4BABC #1=case FALSE                * 4BF94
           TRUE ;                                 * 4BFA3
-        NIBHEX  0                                * 4BFAD
+        BSS     1                                * 4BFAD  zeros
 
 * refs (3): 4BC56 4C13E 4C50D
 NEXTSTEP:

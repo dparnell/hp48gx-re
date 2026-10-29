@@ -1377,4 +1377,7 @@ LIB0B5.link:
         REL(5)  ROMP_0B5_169                     * BA565  169 
         REL(5)  ~GARBAGE;MEM;#2/                 * BA56A  16A 
         ENDLENGTH                                * BA56F
-        NIBHEX  5444000                          * BA56F  ED.
+        ENDLENGTH                                * BA56F
+
+        LENGTH                                   * BA56F  library object without its prolog (its place is the end of the link table before): length, to #BE9B4
+        CON(2)  0                                * BA574  no title

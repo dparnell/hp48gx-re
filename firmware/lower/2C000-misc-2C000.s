@@ -58,7 +58,10 @@ PutAB%1:
         A=0     S                                * 2C079
         ABEX    W                                * 2C07C
         RTN                                      * 2C07F
-        NIBHEX  AB21000                          * 2C081  º..
+        ENDLENGTH                                * 2C081
+
+        LENGTH                                   * 2C081  library object without its prolog (its place is the end of the link table before): length, to #2D33B
+        CON(2)  0                                * 2C086  no title
 
 LIB006:
         CON(3)  #006                             * 2C088  library number
@@ -121,7 +124,7 @@ utpt(2r):
 * refs (20): 2B25F 2B28C 2B2C8 528A4 912B6 91D65 ...
 1+(rr):
         :: %%1 %%+ ;                             * 2C1D3
-        BSS     12                               * 2C1E7
+        BSS     12                               * 2C1E7  zeros
 
 * ob ->
 * refs (1): 1FD1A
@@ -1096,7 +1099,10 @@ L_2D313:
         A=C     A                                * 2D313
         GOVLNG  Errjmp                           * 2D315
         BSS     31                               * 2D31C
-        NIBHEX  E1C5000                          * 2D33B  .\.
+        ENDLENGTH                                * 2D33B
+
+        LENGTH                                   * 2D33B  library object without its prolog (its place is the end of the link table before): length, to #32F59
+        CON(2)  0                                * 2D340  no title
 
 LIB00C:
         CON(3)  #00C                             * 2D342  library number
@@ -1189,46 +1195,26 @@ OBJ_2D4B3:
 
 * refs (1): 2E92B
 EXCHINITPK:
-        CON(5)  DOCOL                            * 2D517  address (the code jumps or points through it)
-
-        CON(5)  KERMOPEN                         * 2D51C  address (the code jumps or points through it)
-
-        CON(5)  CHR_I                            * 2D521  address (the code jumps or points through it)
-
-        CON(5)  CHOOSE_INIT                      * 2D526  address (the code jumps or points through it)
-
-        CON(5)  OBJ_2D4B3                        * 2D52B  address (the code jumps or points through it)
-
-        CON(5)  BINT0                            * 2D530  address (the code jumps or points through it)
-
-        CON(5)  OBJ_2DAB3                        * 2D535  address (the code jumps or points through it)
-
-        CON(5)  case                             * 2D53A  address (the code jumps or points through it)
-
-        CON(5)  DOCOL                            * 2D53F  address (the code jumps or points through it)
-
-        CON(5)  DOCODE                           * 2D544  address (the code jumps or points through it)
-        NIBHEX  5200014313317917D311314D133      * 2D549  %..41.ρq=..Ô1
-        ASSEMBLE
+        :: KERMOPEN CHR_I CHOOSE_INIT OBJ_2D4B3 BINT0 OBJ_2DAB3 case * 2D517
+          ::                                     * 2D53F
+            CODE                                 * 2D544  32 nibbles
+              A=DAT1  A                          * 2D54E
+              AD1EX                              * 2D551
+              D1=D1+  10                         * 2D554
+              D1=D1+  14                         * 2D557
+              LC(2)   #31                        * 2D55A
+              DAT1=C  B                          * 2D55E
+              AD1EX                              * 2D561
 
 * refs (2): 307DC 70061
 Loop:
-        A=DAT0  A                                * 2D564
-        D0=D0+  5                                * 2D567
-        PC=(A)                                   * 2D56A
-
-        CON(5)  'LamKPSto                        * 2D56E  address (the code jumps or points through it)
-
-        CON(5)  SEMI                             * 2D573  address (the code jumps or points through it)
-
-        CON(5)  case                             * 2D578  address (the code jumps or points through it)
-
-        CON(5)  3DROP                            * 2D57D  address (the code jumps or points through it)
-
-        CON(5)  ERROROUT                         * 2D582  address (the code jumps or points through it)
-
-        CON(5)  SEMI                             * 2D587  address (the code jumps or points through it)
-        RPL
+              A=DAT0  A                          * 2D564
+              D0=D0+  5                          * 2D567
+              PC=(A)                             * 2D56A
+            ENDCODE                              * 2D56E
+            'LamKPSto ;                          * 2D56E
+          case 3DROP                             * 2D578
+          ERROROUT ;                             * 2D582
 
 * refs (2): 2E754 2EF46
 SENDEOT:

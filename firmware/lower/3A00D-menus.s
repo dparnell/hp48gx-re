@@ -414,7 +414,7 @@ Key>StdKeyOb~1:
         LC(5)   DROPFALSE                        * 3A9BD
         A=C     A                                * 3A9C4
         GOVLNG  PUSHA                            * 3A9C6
-        NIBHEX  0                                * 3A9CD
+        BSS     1                                * 3A9CD  zeros
         RPL
 
 * refs (3): 4D0AB 4D853 6B423
@@ -783,7 +783,7 @@ LIB0A6.link:
         REL(5)  K_128                            * 3ADAD  02F 
         REL(5)  K__:_                            * 3ADB2  030 
         ENDLENGTH                                * 3ADB7
-        NIBHEX  0000                             * 3ADB7  ..
+        BSS     4                                * 3ADB7  zeros
 
 * refs (1): 3D8DA
 OBJ_3ADBB:
@@ -817,7 +817,9 @@ OBJ_3AE71:
           BINT6 Visit(nm)                        * 3AE8A  name
           BINT7 Visit(nm)                        * 3AE94  local
         ;                                        * 3AE9E
-        NIBHEX  B330000                          * 3AEA3  ;..
+
+        LENGTH                                   * 3AEA3  library object without its prolog (its place is the end of the link table before): length, to #3B1DE
+        CON(2)  0                                * 3AEA8  no title
 
 LIB0A4:
         CON(3)  #0A4                             * 3AEAA  library number
@@ -1149,13 +1151,16 @@ LIB0A4.link:
         REL(5)  ROMP_0A4_02F                     * 3B1D4  02F 
         REL(5)  K__+_                            * 3B1D9  030 
         ENDLENGTH                                * 3B1DE
+        ENDLENGTH                                * 3B1DE
         FILLTO  #3B211                           * 3B1DE  51 zero nibbles: the next entry stays at #3B211
 
 * ->
 * refs (2): 6A860 CFD81
 DoFirstRow:
         :: MenuMaker BINT1 MenuRow! SetThisRow OBJ_418E4 ; * 3B211
-        NIBHEX  A570000                          * 3B234  Z..
+
+        LENGTH                                   * 3B234  library object without its prolog (its place is the end of the link table before): length, to #3B98E
+        CON(2)  0                                * 3B239  no title
 
 LIB0A1:
         CON(3)  #0A1                             * 3B23B  library number
@@ -1535,7 +1540,10 @@ LIB0A1.link:
         REL(5)  ROMP_0A1_02F                     * 3B984  02F 
         REL(5)  ROMP_0A1_030                     * 3B989  030 
         ENDLENGTH                                * 3B98E
-        NIBHEX  4530000                          * 3B98E  T..
+        ENDLENGTH                                * 3B98E
+
+        LENGTH                                   * 3B98E  library object without its prolog (its place is the end of the link table before): length, to #3BCE2
+        CON(2)  0                                * 3B993  no title
 
 LIB0A5:
         CON(3)  #0A5                             * 3B995  library number
@@ -1866,6 +1874,7 @@ LIB0A5.link:
         REL(5)  K_135                            * 3BCD8  02F 
         REL(5)  ROMP_0A5_030                     * 3BCDD  030 
         ENDLENGTH                                * 3BCE2
+        ENDLENGTH                                * 3BCE2
 
 * refs (1): 151F6
 SolvMenuInit~4:
@@ -1891,7 +1900,9 @@ GetMenu%~1:
 DoSolvrMenu:
         :: PrgmEntry? caseDoBadKey '             * 3BE54
           OBJ_15200 InitMenu ;                   * 3BE68
-        NIBHEX  3381000                          * 3BE77  3..
+
+        LENGTH                                   * 3BE77  library object without its prolog (its place is the end of the link table before): length, to #3D6AA
+        CON(2)  0                                * 3BE7C  no title
 
 LIB0A7:
         CON(3)  #0A7                             * 3BE7E  library number
@@ -2085,7 +2096,7 @@ ROMP_0A7_007:
 * The Very Big List names this address {SOLVE\TVM\}, but it is a pointer inside an object; the name is not used
             PV PMT FV ROMPTR 0A8 046 ROMPTR 0A8 047 ROMPTR 0A8 048 } * 3C3B4
         ;                                        * 3C3E9
-        BSS     15                               * 3C3EE
+        BSS     15                               * 3C3EE  zeros
 
 * ROMPTR 0A7 008
 * refs (1): 3BE7E

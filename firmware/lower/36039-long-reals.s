@@ -493,7 +493,7 @@ L_36FBD:
 L_36FCF:
         A=A-1   A                                * 36FCF
         GOTO    L_36FBD                          * 36FD1
-        BSS     6                                * 36FD5
+        BSS     6                                * 36FD5  zeros
 
 * refs (9): 7D0E9 90280 933E6 93445 936A7 93960 ...
 OBJ_36FDB:

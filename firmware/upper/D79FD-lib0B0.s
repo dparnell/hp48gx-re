@@ -969,4 +969,7 @@ LIB0B0.link:
         REL(5)  ROMP_0B0_0DA                     * D9A40  0DA 
         REL(5)  ~nNullBind                       * D9A45  0DB ~nNullBind
         ENDLENGTH                                * D9A4A
-        NIBHEX  2313000                          * D9A4A  21.
+        ENDLENGTH                                * D9A4A
+
+        LENGTH                                   * D9A4A  library object without its prolog (its place is the end of the link table before): length, to #DCB7C
+        CON(2)  0                                * D9A4F  no title

@@ -3,7 +3,9 @@
 * Most referenced: →ROW →DIAG →COL ΣLIST ΠLIST ΔLIST rpm lbmol gmol dB ZVOL ZFACTOR
 
         ORG     #C0000
-        NIBHEX  EB13000                          * C0000  ¾1.
+
+        LENGTH                                   * C0000  library object without its prolog (at the window's start): length, to #C31BE
+        CON(2)  0                                * C0005  no title
 
 LIB0AB:
         CON(3)  #0AB                             * C0007  library number
@@ -1418,25 +1420,25 @@ TINC:
           BINT30 ROMPTR 0E7 010                  * C244E  real unit
           EXTREAL ROMPTR 0E7 010                 * C245E  unit real
         ;                                        * C246E
-        NIBHEX  BA0D70                           * C2473  «Ð.
+        ROMPBODY 0AB 07D                         * C2473  gmol
 
 * ROMPTR 0AB 07D
 * refs (1): C0007
 gmol:
         UNIT %1 $ "mol" umEND ;                  * C2479
-        NIBHEX  BA0E70                           * C249D  «à.
+        ROMPBODY 0AB 07E                         * C249D  lbmol
 
 * ROMPTR 0AB 07E
 * refs (1): C0007
 lbmol:
         UNIT % 4.5359237E2 $ "gmol" umEND ;      * C24A3
-        NIBHEX  BA0F70                           * C24D9  «ð.
+        ROMPBODY 0AB 07F                         * C24D9  rpm
 
 * ROMPTR 0AB 07F
 * refs (1): C0007
 rpm:
         UNIT %1 tok1 $ "min" um/ umEND ;         * C24DF
-        NIBHEX  BA0080                           * C250D  «..
+        ROMPBODY 0AB 080                         * C250D  dB
 
 * ROMPTR 0AB 080
 * refs (1): C0007

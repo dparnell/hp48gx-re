@@ -15339,7 +15339,7 @@ pub(crate) fn SUB_898F6(r: &mut Run) {
 }
 
 // ROMPTR 0F1 024
-// ROMP_0F1_024: firmware/upper/8998E-lib0F1.s:592
+// ROMP_0F1_024: firmware/upper/8998E-lib0F1.s:593
 pub(crate) fn ROMP_0F1_024(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -15412,7 +15412,7 @@ pub(crate) fn ROMP_0F1_024(r: &mut Run) {
 }
 
 // ROMPTR 0F1 025
-// ROMP_0F1_025: firmware/upper/8998E-lib0F1.s:638
+// ROMP_0F1_025: firmware/upper/8998E-lib0F1.s:639
 pub(crate) fn ROMP_0F1_025(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {

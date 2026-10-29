@@ -513,7 +513,7 @@ GROBDIM:
 NULLPAINT:
         CON(5)  DOGROB                           * 505B2  DOGROB
         LENGTH                                   * 505B7  length, to #505C6
-        BSS     10                               * 505BC
+        BSS     10                               * 505BC  zeros
         ENDLENGTH                                * 505C6
         RPL
 
@@ -1093,7 +1093,7 @@ SUB_50E94:
         GONC    L_50E7C                          * 50EB0
         A=0     A                                * 50EB3
         GOTO    L_50E7C                          * 50EB5
-        NIBHEX  00                               * 50EB9  .
+        BSS     2                                * 50EB9  zeros
         RPL
 
 * refs (1): 3E8E1
@@ -1156,7 +1156,7 @@ PutBackPPAR(_,s):
 * refs (2): 4AB62 51062
 StoInPPAR(7_):
         :: BINT7 {}N 'IDPAR STOAPPLDATA ;        * 5106C
-        NIBHEX  00000                            * 5108A  ..
+        BSS     5                                * 5108A  zeros
 
 * refs (2): 4CEDD 4D961
 OBJ_5108F:
@@ -1314,7 +1314,7 @@ GETRHS:
 NOT?INVPPAR:
         :: ?SKIP SETINVPPAR                      * 514C3
         ;                                        * 514D2
-        NIBHEX  00000                            * 514D7  ..
+        BSS     5                                * 514D7  zeros
 
 * -> 6.28318530718 -> 360. -> 400.
 * refs (5): 49085 4A937 4FDDB A89D3 B5444
@@ -1430,7 +1430,7 @@ REPEATERCH:
           ::                                     * 5176C
             :: OBJ_4DCC6 EVAL ; ;                * 51771
           REPEAT 3DROP ;                         * 5178A
-        NIBHEX  00000                            * 51799  ..
+        BSS     5                                * 51799  zeros
 
 * grob -> grob #height #width
 * refs (11): 4DC3F 4E6F9 4EB27 4EB72 4F38B 4F8D6 ...
@@ -1503,7 +1503,7 @@ ORDERXY%:
 OBJ_51901:
         :: 16PUTLAM 2SWAP RclMaxStdPict OBJ_4F2CD 5PUTLAM 9PUTLAM 6PUTLAM * 51901
           10PUTLAM OBJ_4B9D6 ;                   * 51929
-        NIBHEX  000                              * 51938  .
+        BSS     3                                * 51938  zeros
 
 * (Q%%1,%%0Q)
 * refs (3): 37A68 92646 92AAB

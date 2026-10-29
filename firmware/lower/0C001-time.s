@@ -1,6 +1,6 @@
 * HP 48GX ROM revision R, #0C001-#0E005: Clock and alarms
 * Addresses in the right-hand comments are those of the original ROM.
-* Most referenced: CkATTNcode CSRW5 D1=IRAM D0=IRAM CSLW5 HXDCW NewAlarm(li) DAY# rGETATELN WSLOGN DATE CKTIME
+* Most referenced: CkATTNcode CSRW5 D1=IRAM D0=IRAM CSLW5 HXDCW NewAlarm(li) DAY# rGETATELN WSLOGN ErrTime DATE
 * Follows on from the previous file (at #0C001 in the original ROM).
         LC(1)   #B                               * 0C001
         ?C<=A   P                                * 0C004
@@ -435,7 +435,7 @@ L_0C4D6:
 * Probably: EquationWriter: -> #n, slots in use (VIEWLEVEL - EqPtr)
 OBJ_0C4E3:
         :: OBJ_673E6 OBJ_673D6 #- ;              * 0C4E3
-        NIBHEX  00000                            * 0C4FC  ..
+        BSS     5                                * 0C4FC  zeros
 
 * #i [] -> ob T -> F
 * refs (1): 04DA0
@@ -640,7 +640,7 @@ _ZOOM_:
 * refs (1): 4E293
 ~16GETLAM;BINT0;#<>:
         :: 16GETLAM BINT0 #<> ;                  * 0CA17
-        BSS     10                               * 0CA30
+        BSS     10                               * 0CA30  zeros
         ASSEMBLE
 L_0CA3A:
         D0=D0+  2                                * 0CA3A
@@ -681,7 +681,11 @@ CkATTNcode:
         LC(5)   ?ATTNQUIT                        * 0CAA5
         A=C     A                                * 0CAAC
         PC=(A)                                   * 0CAAE
-        NIBHEX  0000000E952000                   * 0CAB2  ...àY..
+        BSS     7                                * 0CAB2  zeros
+        ENDLENGTH                                * 0CAB9
+
+        LENGTH                                   * 0CAB9  library object without its prolog (its place is the end of the link table before): length, to #0F057
+        CON(2)  0                                * 0CABE  no title
 
 LIB00D:
         CON(3)  #00D                             * 0CAC0  library number
@@ -749,7 +753,7 @@ L_0CBB7:
         LC(3)   #D01                             * 0CBBB
         GOTO    L_0CBE3                          * 0CBC0
 
-* refs (3): 0D28D 0D953 0E68C
+* refs (4): 0D28D 0D953 0E68C 0EEA9
 ErrTime:
         GOSUB   SUB_0CBEF                        * 0CBC4
         LC(3)   #D02                             * 0CBC8
@@ -2027,7 +2031,7 @@ POPDATE%:
         RTNNC                                    * 0D93E
         GOVLNG  L_0CBB7                          * 0D941
 
-* refs (1): 0CDAE
+* refs (2): 0CDAE 0EE9C
 POPTIME%:
         GOSUB   mpop1%                           * 0D948
         GOSUB   CKTIME                           * 0D94C
@@ -2071,7 +2075,7 @@ SUB_0D9B4:
 * refs (3): 0D96E 0D985 0D9A2
 DCHXW~jump:
         GOVLNG  DCHXW                            * 0D9BF
-        NIBHEX  0                                * 0D9C6
+        BSS     1                                * 0D9C6  zeros
 
 * refs (4): 0D076 0D27F 0D94C 0E682
 CKTIME:
@@ -2199,7 +2203,7 @@ L_0DAFE:
         GOSBVL  SPLITA                           * 0DAFE
         A=B     M                                * 0DB05
         RTNCC                                    * 0DB08
-        NIBHEX  0                                * 0DB0A
+        BSS     1                                * 0DB0A  zeros
 
 * refs (2): 0CD73 0E659
 SUB_0DB0B:

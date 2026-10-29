@@ -9099,7 +9099,7 @@ pub(crate) fn OBJ_35318(r: &mut Run) {
     }
 }
 
-// SUB_3551D: firmware/lower/34006-arrays.s:1416
+// SUB_3551D: firmware/lower/34006-arrays.s:1419
 pub(crate) fn SUB_3551D(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -9144,7 +9144,7 @@ pub(crate) fn SUB_3551D(r: &mut Run) {
     }
 }
 
-// SUB_35551: firmware/lower/34006-arrays.s:1438
+// SUB_35551: firmware/lower/34006-arrays.s:1441
 pub(crate) fn SUB_35551(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -9193,7 +9193,7 @@ pub(crate) fn SUB_35551(r: &mut Run) {
 }
 
 // [F%] #n -> [F%] F%
-// PULLEL: firmware/lower/34006-arrays.s:1464
+// PULLEL: firmware/lower/34006-arrays.s:1467
 pub(crate) fn PULLEL(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -9222,7 +9222,7 @@ pub(crate) fn PULLEL(r: &mut Run) {
 }
 
 // [%] # -> [%] %
-// PULLREALEL: firmware/lower/34006-arrays.s:1480
+// PULLREALEL: firmware/lower/34006-arrays.s:1483
 pub(crate) fn PULLREALEL(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -9243,7 +9243,7 @@ pub(crate) fn PULLREALEL(r: &mut Run) {
 }
 
 // [C%] # -> [C%] C%
-// PULLCMPEL: firmware/lower/34006-arrays.s:1488
+// PULLCMPEL: firmware/lower/34006-arrays.s:1491
 pub(crate) fn PULLCMPEL(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -9264,7 +9264,7 @@ pub(crate) fn PULLCMPEL(r: &mut Run) {
 }
 
 // [F%] #n -> [F%] L%
-// PULLLONGEL: firmware/lower/34006-arrays.s:1496
+// PULLLONGEL: firmware/lower/34006-arrays.s:1499
 pub(crate) fn PULLLONGEL(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -9293,7 +9293,7 @@ pub(crate) fn PULLLONGEL(r: &mut Run) {
 }
 
 // [%] #n -> [%] %%
-// PULLEREALEL: firmware/lower/34006-arrays.s:1512
+// PULLEREALEL: firmware/lower/34006-arrays.s:1515
 pub(crate) fn PULLEREALEL(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -9330,7 +9330,7 @@ pub(crate) fn PULLEREALEL(r: &mut Run) {
 }
 
 // [%] % # -> [%]' [C%] C% # -> [C%]'
-// PUTEL: firmware/lower/34006-arrays.s:1526
+// PUTEL: firmware/lower/34006-arrays.s:1529
 pub(crate) fn PUTEL(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -9376,7 +9376,7 @@ pub(crate) fn PUTEL(r: &mut Run) {
 }
 
 // [%] % # -> [%]'
-// PUTREALEL: firmware/lower/34006-arrays.s:1551
+// PUTREALEL: firmware/lower/34006-arrays.s:1554
 pub(crate) fn PUTREALEL(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -9426,7 +9426,7 @@ pub(crate) fn PUTREALEL(r: &mut Run) {
     }
 }
 
-// SUB_356B3: firmware/lower/34006-arrays.s:1580
+// SUB_356B3: firmware/lower/34006-arrays.s:1583
 pub(crate) fn SUB_356B3(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -9478,7 +9478,7 @@ pub(crate) fn SUB_356B3(r: &mut Run) {
 }
 
 // [C%] C% # -> [C%]'
-// PUTCMPEL: firmware/lower/34006-arrays.s:1603
+// PUTCMPEL: firmware/lower/34006-arrays.s:1606
 pub(crate) fn PUTCMPEL(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -9608,7 +9608,7 @@ pub(crate) fn PUTCMPEL(r: &mut Run) {
 }
 
 // [1D] -> #m F [2D] -> #m #n T
-// MDIMS: firmware/lower/34006-arrays.s:1672
+// MDIMS: firmware/lower/34006-arrays.s:1675
 pub(crate) fn MDIMS(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -9658,7 +9658,7 @@ pub(crate) fn MDIMS(r: &mut Run) {
 }
 
 // -> : abort if ATTN was pressed (?ATTNQUIT), else go on
-// CkATTNQUIT: firmware/lower/34006-arrays.s:1698
+// CkATTNQUIT: firmware/lower/34006-arrays.s:1701
 pub(crate) fn CkATTNQUIT(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -9678,7 +9678,7 @@ pub(crate) fn CkATTNQUIT(r: &mut Run) {
     }
 }
 
-// NextInArray: firmware/lower/34006-arrays.s:1704
+// NextInArray: firmware/lower/34006-arrays.s:1707
 pub(crate) fn NextInArray(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -9698,7 +9698,7 @@ pub(crate) fn NextInArray(r: &mut Run) {
     }
 }
 
-// SUB_3580D: firmware/lower/34006-arrays.s:1710
+// SUB_3580D: firmware/lower/34006-arrays.s:1713
 pub(crate) fn SUB_3580D(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -9724,7 +9724,7 @@ pub(crate) fn SUB_3580D(r: &mut Run) {
     }
 }
 
-// OBJ_3582F: firmware/lower/34006-arrays.s:1722
+// OBJ_3582F: firmware/lower/34006-arrays.s:1725
 pub(crate) fn OBJ_3582F(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -10025,7 +10025,7 @@ pub(crate) fn OBJ_3582F(r: &mut Run) {
     }
 }
 
-// SUB_35A22: firmware/lower/34006-arrays.s:1914
+// SUB_35A22: firmware/lower/34006-arrays.s:1917
 pub(crate) fn SUB_35A22(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -10065,7 +10065,7 @@ pub(crate) fn SUB_35A22(r: &mut Run) {
     }
 }
 
-// SUB_35A49: firmware/lower/34006-arrays.s:1925
+// SUB_35A49: firmware/lower/34006-arrays.s:1928
 pub(crate) fn SUB_35A49(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -10105,7 +10105,7 @@ pub(crate) fn SUB_35A49(r: &mut Run) {
     }
 }
 
-// SUB_35A70: firmware/lower/34006-arrays.s:1936
+// SUB_35A70: firmware/lower/34006-arrays.s:1939
 pub(crate) fn SUB_35A70(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -10132,7 +10132,7 @@ pub(crate) fn SUB_35A70(r: &mut Run) {
 }
 
 // R0/R1 += A/B * (the %% at D0); nothing when either is 0; decimal mode
-// MACCF0: firmware/lower/34006-arrays.s:1947
+// MACCF0: firmware/lower/34006-arrays.s:1950
 pub(crate) fn MACCF0(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -10162,7 +10162,7 @@ pub(crate) fn MACCF0(r: &mut Run) {
 }
 
 // R2/R3 += A/B * (the %% at D0); nothing when either is 0; decimal mode
-// MACCF2: firmware/lower/34006-arrays.s:1958
+// MACCF2: firmware/lower/34006-arrays.s:1961
 pub(crate) fn MACCF2(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -10192,7 +10192,7 @@ pub(crate) fn MACCF2(r: &mut Run) {
 }
 
 // D1 -> %% body: A.A = exponent, B.W = mantissa with the sign cleared; D1 unchanged
-// GetAbs%%AB1: firmware/lower/34006-arrays.s:1969
+// GetAbs%%AB1: firmware/lower/34006-arrays.s:1972
 pub(crate) fn GetAbs__AB1(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -10214,7 +10214,7 @@ pub(crate) fn GetAbs__AB1(r: &mut Run) {
     }
 }
 
-// SUB_35ABD: firmware/lower/34006-arrays.s:1979
+// SUB_35ABD: firmware/lower/34006-arrays.s:1982
 pub(crate) fn SUB_35ABD(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -10236,7 +10236,7 @@ pub(crate) fn SUB_35ABD(r: &mut Run) {
     }
 }
 
-// POP#~jump_2: firmware/lower/34006-arrays.s:1989
+// POP#~jump_2: firmware/lower/34006-arrays.s:1992
 pub(crate) fn POP__jump_2(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -10252,7 +10252,7 @@ pub(crate) fn POP__jump_2(r: &mut Run) {
     }
 }
 
-// SAVPTR~jump_16: firmware/lower/34006-arrays.s:1993
+// SAVPTR~jump_16: firmware/lower/34006-arrays.s:1996
 pub(crate) fn SAVPTR_jump_16(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -10268,7 +10268,7 @@ pub(crate) fn SAVPTR_jump_16(r: &mut Run) {
     }
 }
 
-// PACK~jump: firmware/lower/34006-arrays.s:1997
+// PACK~jump: firmware/lower/34006-arrays.s:2000
 pub(crate) fn PACK_jump(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -10284,7 +10284,7 @@ pub(crate) fn PACK_jump(r: &mut Run) {
     }
 }
 
-// SPLTAC~jump_2: firmware/lower/34006-arrays.s:2001
+// SPLTAC~jump_2: firmware/lower/34006-arrays.s:2004
 pub(crate) fn SPLTAC_jump_2(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -10300,7 +10300,7 @@ pub(crate) fn SPLTAC_jump_2(r: &mut Run) {
     }
 }
 
-// OBJ_35AEE: firmware/lower/34006-arrays.s:2005
+// OBJ_35AEE: firmware/lower/34006-arrays.s:2008
 pub(crate) fn OBJ_35AEE(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -10358,7 +10358,7 @@ pub(crate) fn OBJ_35AEE(r: &mut Run) {
 }
 
 // B% -> ?
-// SWITCHFLOATS: firmware/lower/34006-arrays.s:2039
+// SWITCHFLOATS: firmware/lower/34006-arrays.s:2042
 pub(crate) fn SWITCHFLOATS(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -10397,7 +10397,7 @@ pub(crate) fn SWITCHFLOATS(r: &mut Run) {
 }
 
 // L% L% -> ?
-// SWITCH2FLOATS: firmware/lower/34006-arrays.s:2061
+// SWITCH2FLOATS: firmware/lower/34006-arrays.s:2064
 pub(crate) fn SWITCH2FLOATS(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -10444,7 +10444,7 @@ pub(crate) fn SWITCH2FLOATS(r: &mut Run) {
     }
 }
 
-// OBJ_35BF5: firmware/lower/34006-arrays.s:2096
+// OBJ_35BF5: firmware/lower/34006-arrays.s:2099
 pub(crate) fn OBJ_35BF5(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -10469,7 +10469,7 @@ pub(crate) fn OBJ_35BF5(r: &mut Run) {
     }
 }
 
-// @idn!(ar): firmware/lower/34006-arrays.s:2154
+// @idn!(ar): firmware/lower/34006-arrays.s:2157
 pub(crate) fn _idn__ar_(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -13139,7 +13139,7 @@ pub(crate) fn SUB_3833E(r: &mut Run) {
 }
 
 // ob ->
-// AppDisplay!: firmware/lower/38000-display.s:550
+// AppDisplay!: firmware/lower/38000-display.s:551
 pub(crate) fn AppDisplay_(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -13157,7 +13157,7 @@ pub(crate) fn AppDisplay_(r: &mut Run) {
 }
 
 // ->
-// AppDisplay@: firmware/lower/38000-display.s:558
+// AppDisplay@: firmware/lower/38000-display.s:559
 pub(crate) fn AppDisplay__38C1D(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -13174,7 +13174,7 @@ pub(crate) fn AppDisplay__38C1D(r: &mut Run) {
     }
 }
 
-// NoAppDisplay!: firmware/lower/38000-display.s:564
+// NoAppDisplay!: firmware/lower/38000-display.s:565
 pub(crate) fn NoAppDisplay_(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -13192,7 +13192,7 @@ pub(crate) fn NoAppDisplay_(r: &mut Run) {
 }
 
 // ob ->
-// AppKeys!: firmware/lower/38000-display.s:571
+// AppKeys!: firmware/lower/38000-display.s:572
 pub(crate) fn AppKeys_(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -13209,7 +13209,7 @@ pub(crate) fn AppKeys_(r: &mut Run) {
     }
 }
 
-// AppKeys@: firmware/lower/38000-display.s:577
+// AppKeys@: firmware/lower/38000-display.s:578
 pub(crate) fn AppKeys__38C4D(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -13227,7 +13227,7 @@ pub(crate) fn AppKeys__38C4D(r: &mut Run) {
 }
 
 // ???
-// AppKeys0: firmware/lower/38000-display.s:584
+// AppKeys0: firmware/lower/38000-display.s:585
 pub(crate) fn AppKeys0(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -13245,7 +13245,7 @@ pub(crate) fn AppKeys0(r: &mut Run) {
 }
 
 // ob ->
-// AppExitCond!: firmware/lower/38000-display.s:591
+// AppExitCond!: firmware/lower/38000-display.s:592
 pub(crate) fn AppExitCond_(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -13263,7 +13263,7 @@ pub(crate) fn AppExitCond_(r: &mut Run) {
 }
 
 // -> ob
-// AppExitCond@: firmware/lower/38000-display.s:598
+// AppExitCond@: firmware/lower/38000-display.s:599
 pub(crate) fn AppExitCond__38C7D(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -13280,7 +13280,7 @@ pub(crate) fn AppExitCond__38C7D(r: &mut Run) {
     }
 }
 
-// NoAppExitCnd!: firmware/lower/38000-display.s:604
+// NoAppExitCnd!: firmware/lower/38000-display.s:605
 pub(crate) fn NoAppExitCnd_(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -13298,7 +13298,7 @@ pub(crate) fn NoAppExitCnd_(r: &mut Run) {
 }
 
 // ob ->
-// AppError!: firmware/lower/38000-display.s:611
+// AppError!: firmware/lower/38000-display.s:612
 pub(crate) fn AppError_(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -13320,7 +13320,7 @@ pub(crate) fn AppError_(r: &mut Run) {
 }
 
 // -> ob
-// AppError@: firmware/lower/38000-display.s:619
+// AppError@: firmware/lower/38000-display.s:620
 pub(crate) fn AppError__38CB0(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -13342,7 +13342,7 @@ pub(crate) fn AppError__38CB0(r: &mut Run) {
 }
 
 // ->
-// NoAppError!: firmware/lower/38000-display.s:627
+// NoAppError!: firmware/lower/38000-display.s:628
 pub(crate) fn NoAppError_(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -13364,7 +13364,7 @@ pub(crate) fn NoAppError_(r: &mut Run) {
 }
 
 // -> flag
-// AppError?: firmware/lower/38000-display.s:635
+// AppError?: firmware/lower/38000-display.s:636
 pub(crate) fn AppError__38CD6(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -13382,7 +13382,7 @@ pub(crate) fn AppError__38CD6(r: &mut Run) {
 }
 
 // ->
-// SetAppError: firmware/lower/38000-display.s:642
+// SetAppError: firmware/lower/38000-display.s:643
 pub(crate) fn SetAppError(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -13400,7 +13400,7 @@ pub(crate) fn SetAppError(r: &mut Run) {
 }
 
 // ->
-// ClrAppError: firmware/lower/38000-display.s:649
+// ClrAppError: firmware/lower/38000-display.s:650
 pub(crate) fn ClrAppError(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -13418,7 +13418,7 @@ pub(crate) fn ClrAppError(r: &mut Run) {
 }
 
 // -> flag
-// AppMode?: firmware/lower/38000-display.s:656
+// AppMode?: firmware/lower/38000-display.s:657
 pub(crate) fn AppMode_(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -13436,7 +13436,7 @@ pub(crate) fn AppMode_(r: &mut Run) {
 }
 
 // ->
-// SetAppMode: firmware/lower/38000-display.s:663
+// SetAppMode: firmware/lower/38000-display.s:664
 pub(crate) fn SetAppMode(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -13454,7 +13454,7 @@ pub(crate) fn SetAppMode(r: &mut Run) {
 }
 
 // ->
-// ClrAppMode: firmware/lower/38000-display.s:670
+// ClrAppMode: firmware/lower/38000-display.s:671
 pub(crate) fn ClrAppMode(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -13472,7 +13472,7 @@ pub(crate) fn ClrAppMode(r: &mut Run) {
 }
 
 // -> flag
-// NAppKeyOK?: firmware/lower/38000-display.s:677
+// NAppKeyOK?: firmware/lower/38000-display.s:678
 pub(crate) fn NAppKeyOK_(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -13490,7 +13490,7 @@ pub(crate) fn NAppKeyOK_(r: &mut Run) {
 }
 
 // ->
-// SetNAppKeyOK: firmware/lower/38000-display.s:684
+// SetNAppKeyOK: firmware/lower/38000-display.s:685
 pub(crate) fn SetNAppKeyOK(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -13508,7 +13508,7 @@ pub(crate) fn SetNAppKeyOK(r: &mut Run) {
 }
 
 // ->
-// ClrNAppKeyOK: firmware/lower/38000-display.s:691
+// ClrNAppKeyOK: firmware/lower/38000-display.s:692
 pub(crate) fn ClrNAppKeyOK(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -13526,7 +13526,7 @@ pub(crate) fn ClrNAppKeyOK(r: &mut Run) {
 }
 
 // -> flag
-// DoStdKeys?: firmware/lower/38000-display.s:698
+// DoStdKeys?: firmware/lower/38000-display.s:699
 pub(crate) fn DoStdKeys_(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -13544,7 +13544,7 @@ pub(crate) fn DoStdKeys_(r: &mut Run) {
 }
 
 // ->
-// SetDoStdKeys: firmware/lower/38000-display.s:705
+// SetDoStdKeys: firmware/lower/38000-display.s:706
 pub(crate) fn SetDoStdKeys(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -13562,7 +13562,7 @@ pub(crate) fn SetDoStdKeys(r: &mut Run) {
 }
 
 // ->
-// ClrDoStdKeys: firmware/lower/38000-display.s:712
+// ClrDoStdKeys: firmware/lower/38000-display.s:713
 pub(crate) fn ClrDoStdKeys(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -13580,7 +13580,7 @@ pub(crate) fn ClrDoStdKeys(r: &mut Run) {
 }
 
 // ->
-// AppSuspOK?: firmware/lower/38000-display.s:719
+// AppSuspOK?: firmware/lower/38000-display.s:720
 pub(crate) fn AppSuspOK_(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -13602,7 +13602,7 @@ pub(crate) fn AppSuspOK_(r: &mut Run) {
 }
 
 // ->
-// SetAppSuspOK: firmware/lower/38000-display.s:727
+// SetAppSuspOK: firmware/lower/38000-display.s:728
 pub(crate) fn SetAppSuspOK(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -13624,7 +13624,7 @@ pub(crate) fn SetAppSuspOK(r: &mut Run) {
 }
 
 // ->
-// ClrAppSuspOK: firmware/lower/38000-display.s:735
+// ClrAppSuspOK: firmware/lower/38000-display.s:736
 pub(crate) fn ClrAppSuspOK(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -13646,7 +13646,7 @@ pub(crate) fn ClrAppSuspOK(r: &mut Run) {
 }
 
 // -> flag
-// DA1ValidF?: firmware/lower/38000-display.s:988
+// DA1ValidF?: firmware/lower/38000-display.s:989
 pub(crate) fn DA1ValidF_(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -13664,7 +13664,7 @@ pub(crate) fn DA1ValidF_(r: &mut Run) {
 }
 
 // ->
-// SetDA1ValidF: firmware/lower/38000-display.s:996
+// SetDA1ValidF: firmware/lower/38000-display.s:997
 pub(crate) fn SetDA1ValidF(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -13682,7 +13682,7 @@ pub(crate) fn SetDA1ValidF(r: &mut Run) {
 }
 
 // ->
-// ClrDA1ValidF: firmware/lower/38000-display.s:1003
+// ClrDA1ValidF: firmware/lower/38000-display.s:1004
 pub(crate) fn ClrDA1ValidF(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -13700,7 +13700,7 @@ pub(crate) fn ClrDA1ValidF(r: &mut Run) {
 }
 
 // -> flag
-// DA2aValidF?: firmware/lower/38000-display.s:1010
+// DA2aValidF?: firmware/lower/38000-display.s:1011
 pub(crate) fn DA2aValidF_(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -13718,7 +13718,7 @@ pub(crate) fn DA2aValidF_(r: &mut Run) {
 }
 
 // ->
-// SetDA2aValidF: firmware/lower/38000-display.s:1017
+// SetDA2aValidF: firmware/lower/38000-display.s:1018
 pub(crate) fn SetDA2aValidF(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -13736,7 +13736,7 @@ pub(crate) fn SetDA2aValidF(r: &mut Run) {
 }
 
 // ->
-// ClrDA2aValidF: firmware/lower/38000-display.s:1024
+// ClrDA2aValidF: firmware/lower/38000-display.s:1025
 pub(crate) fn ClrDA2aValidF(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -13754,7 +13754,7 @@ pub(crate) fn ClrDA2aValidF(r: &mut Run) {
 }
 
 // -> flag
-// DA2bValidF?: firmware/lower/38000-display.s:1031
+// DA2bValidF?: firmware/lower/38000-display.s:1032
 pub(crate) fn DA2bValidF_(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -13772,7 +13772,7 @@ pub(crate) fn DA2bValidF_(r: &mut Run) {
 }
 
 // ->
-// SetDA2bValidF: firmware/lower/38000-display.s:1038
+// SetDA2bValidF: firmware/lower/38000-display.s:1039
 pub(crate) fn SetDA2bValidF(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -13790,7 +13790,7 @@ pub(crate) fn SetDA2bValidF(r: &mut Run) {
 }
 
 // ->
-// ClrDA2bValidF: firmware/lower/38000-display.s:1045
+// ClrDA2bValidF: firmware/lower/38000-display.s:1046
 pub(crate) fn ClrDA2bValidF(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -13808,7 +13808,7 @@ pub(crate) fn ClrDA2bValidF(r: &mut Run) {
 }
 
 // -> flag
-// DA3ValidF?: firmware/lower/38000-display.s:1052
+// DA3ValidF?: firmware/lower/38000-display.s:1053
 pub(crate) fn DA3ValidF_(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -13826,7 +13826,7 @@ pub(crate) fn DA3ValidF_(r: &mut Run) {
 }
 
 // ->
-// SetDA3ValidF: firmware/lower/38000-display.s:1059
+// SetDA3ValidF: firmware/lower/38000-display.s:1060
 pub(crate) fn SetDA3ValidF(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -13844,7 +13844,7 @@ pub(crate) fn SetDA3ValidF(r: &mut Run) {
 }
 
 // ->
-// ClrDA3ValidF: firmware/lower/38000-display.s:1066
+// ClrDA3ValidF: firmware/lower/38000-display.s:1067
 pub(crate) fn ClrDA3ValidF(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -13862,7 +13862,7 @@ pub(crate) fn ClrDA3ValidF(r: &mut Run) {
 }
 
 // ->
-// DA1TempF: firmware/lower/38000-display.s:1073
+// DA1TempF: firmware/lower/38000-display.s:1074
 pub(crate) fn DA1TempF(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -13880,7 +13880,7 @@ pub(crate) fn DA1TempF(r: &mut Run) {
 }
 
 // ->
-// SetDA1TempF: firmware/lower/38000-display.s:1080
+// SetDA1TempF: firmware/lower/38000-display.s:1081
 pub(crate) fn SetDA1TempF(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -13898,7 +13898,7 @@ pub(crate) fn SetDA1TempF(r: &mut Run) {
 }
 
 // ->
-// ClrDA1TempF: firmware/lower/38000-display.s:1087
+// ClrDA1TempF: firmware/lower/38000-display.s:1088
 pub(crate) fn ClrDA1TempF(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -13916,7 +13916,7 @@ pub(crate) fn ClrDA1TempF(r: &mut Run) {
 }
 
 // -> flag
-// DA2aTempF?: firmware/lower/38000-display.s:1094
+// DA2aTempF?: firmware/lower/38000-display.s:1095
 pub(crate) fn DA2aTempF_(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -13934,7 +13934,7 @@ pub(crate) fn DA2aTempF_(r: &mut Run) {
 }
 
 // ->
-// SetDA2aTempF: firmware/lower/38000-display.s:1101
+// SetDA2aTempF: firmware/lower/38000-display.s:1102
 pub(crate) fn SetDA2aTempF(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -13952,7 +13952,7 @@ pub(crate) fn SetDA2aTempF(r: &mut Run) {
 }
 
 // ->
-// ClrDA2aTempF: firmware/lower/38000-display.s:1108
+// ClrDA2aTempF: firmware/lower/38000-display.s:1109
 pub(crate) fn ClrDA2aTempF(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -13969,7 +13969,7 @@ pub(crate) fn ClrDA2aTempF(r: &mut Run) {
     }
 }
 
-// DA2bTemp?: firmware/lower/38000-display.s:1114
+// DA2bTemp?: firmware/lower/38000-display.s:1115
 pub(crate) fn DA2bTemp_(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -13987,7 +13987,7 @@ pub(crate) fn DA2bTemp_(r: &mut Run) {
 }
 
 // ->
-// SetDA2bTempF: firmware/lower/38000-display.s:1121
+// SetDA2bTempF: firmware/lower/38000-display.s:1122
 pub(crate) fn SetDA2bTempF(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -14005,7 +14005,7 @@ pub(crate) fn SetDA2bTempF(r: &mut Run) {
 }
 
 // ->
-// ClrDA2bTemp: firmware/lower/38000-display.s:1128
+// ClrDA2bTemp: firmware/lower/38000-display.s:1129
 pub(crate) fn ClrDA2bTemp(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -14023,7 +14023,7 @@ pub(crate) fn ClrDA2bTemp(r: &mut Run) {
 }
 
 // -> flag
-// DA3TempF?: firmware/lower/38000-display.s:1135
+// DA3TempF?: firmware/lower/38000-display.s:1136
 pub(crate) fn DA3TempF_(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -14041,7 +14041,7 @@ pub(crate) fn DA3TempF_(r: &mut Run) {
 }
 
 // ->
-// SetDA3TempF: firmware/lower/38000-display.s:1142
+// SetDA3TempF: firmware/lower/38000-display.s:1143
 pub(crate) fn SetDA3TempF(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -14059,7 +14059,7 @@ pub(crate) fn SetDA3TempF(r: &mut Run) {
 }
 
 // ->
-// ClrDA3TempF: firmware/lower/38000-display.s:1149
+// ClrDA3TempF: firmware/lower/38000-display.s:1150
 pub(crate) fn ClrDA3TempF(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -14077,7 +14077,7 @@ pub(crate) fn ClrDA3TempF(r: &mut Run) {
 }
 
 // -> flag
-// DA1NoCh?: firmware/lower/38000-display.s:1156
+// DA1NoCh?: firmware/lower/38000-display.s:1157
 pub(crate) fn DA1NoCh_(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -14095,7 +14095,7 @@ pub(crate) fn DA1NoCh_(r: &mut Run) {
 }
 
 // ->
-// SetDA1NoCh: firmware/lower/38000-display.s:1163
+// SetDA1NoCh: firmware/lower/38000-display.s:1164
 pub(crate) fn SetDA1NoCh(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -14113,7 +14113,7 @@ pub(crate) fn SetDA1NoCh(r: &mut Run) {
 }
 
 // ->
-// ClrDA1NoCh: firmware/lower/38000-display.s:1170
+// ClrDA1NoCh: firmware/lower/38000-display.s:1171
 pub(crate) fn ClrDA1NoCh(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -14131,7 +14131,7 @@ pub(crate) fn ClrDA1NoCh(r: &mut Run) {
 }
 
 // -> flag
-// DA2aNoCh?: firmware/lower/38000-display.s:1177
+// DA2aNoCh?: firmware/lower/38000-display.s:1178
 pub(crate) fn DA2aNoCh_(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -14149,7 +14149,7 @@ pub(crate) fn DA2aNoCh_(r: &mut Run) {
 }
 
 // ->
-// SetDA2aNoCh: firmware/lower/38000-display.s:1184
+// SetDA2aNoCh: firmware/lower/38000-display.s:1185
 pub(crate) fn SetDA2aNoCh(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -14167,7 +14167,7 @@ pub(crate) fn SetDA2aNoCh(r: &mut Run) {
 }
 
 // ->
-// ClrDA2NoCh: firmware/lower/38000-display.s:1191
+// ClrDA2NoCh: firmware/lower/38000-display.s:1192
 pub(crate) fn ClrDA2NoCh(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -14185,7 +14185,7 @@ pub(crate) fn ClrDA2NoCh(r: &mut Run) {
 }
 
 // -> flag
-// DA2bNoCh?: firmware/lower/38000-display.s:1198
+// DA2bNoCh?: firmware/lower/38000-display.s:1199
 pub(crate) fn DA2bNoCh_(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -14203,7 +14203,7 @@ pub(crate) fn DA2bNoCh_(r: &mut Run) {
 }
 
 // ->
-// SetDA2bNoCh: firmware/lower/38000-display.s:1205
+// SetDA2bNoCh: firmware/lower/38000-display.s:1206
 pub(crate) fn SetDA2bNoCh(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -14221,7 +14221,7 @@ pub(crate) fn SetDA2bNoCh(r: &mut Run) {
 }
 
 // ->
-// ClrDA2bNoCh: firmware/lower/38000-display.s:1212
+// ClrDA2bNoCh: firmware/lower/38000-display.s:1213
 pub(crate) fn ClrDA2bNoCh(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -14239,7 +14239,7 @@ pub(crate) fn ClrDA2bNoCh(r: &mut Run) {
 }
 
 // -> flag
-// DA3NoCh?: firmware/lower/38000-display.s:1219
+// DA3NoCh?: firmware/lower/38000-display.s:1220
 pub(crate) fn DA3NoCh_(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -14257,7 +14257,7 @@ pub(crate) fn DA3NoCh_(r: &mut Run) {
 }
 
 // ->
-// SetDA3NoCh: firmware/lower/38000-display.s:1226
+// SetDA3NoCh: firmware/lower/38000-display.s:1227
 pub(crate) fn SetDA3NoCh(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -14275,7 +14275,7 @@ pub(crate) fn SetDA3NoCh(r: &mut Run) {
 }
 
 // ->
-// ClrDA3NoCh: firmware/lower/38000-display.s:1233
+// ClrDA3NoCh: firmware/lower/38000-display.s:1234
 pub(crate) fn ClrDA3NoCh(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -14293,7 +14293,7 @@ pub(crate) fn ClrDA3NoCh(r: &mut Run) {
 }
 
 // -> flag
-// DA1Bad?: firmware/lower/38000-display.s:1240
+// DA1Bad?: firmware/lower/38000-display.s:1241
 pub(crate) fn DA1Bad_(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -14311,7 +14311,7 @@ pub(crate) fn DA1Bad_(r: &mut Run) {
 }
 
 // ->
-// SetDA1Bad: firmware/lower/38000-display.s:1247
+// SetDA1Bad: firmware/lower/38000-display.s:1248
 pub(crate) fn SetDA1Bad(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -14329,7 +14329,7 @@ pub(crate) fn SetDA1Bad(r: &mut Run) {
 }
 
 // ->
-// ClrDA1Bad: firmware/lower/38000-display.s:1254
+// ClrDA1Bad: firmware/lower/38000-display.s:1255
 pub(crate) fn ClrDA1Bad(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -14347,7 +14347,7 @@ pub(crate) fn ClrDA1Bad(r: &mut Run) {
 }
 
 // -> flag
-// DA2aBad?: firmware/lower/38000-display.s:1261
+// DA2aBad?: firmware/lower/38000-display.s:1262
 pub(crate) fn DA2aBad_(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -14365,7 +14365,7 @@ pub(crate) fn DA2aBad_(r: &mut Run) {
 }
 
 // ->
-// SetDA2aBad: firmware/lower/38000-display.s:1268
+// SetDA2aBad: firmware/lower/38000-display.s:1269
 pub(crate) fn SetDA2aBad(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -14383,7 +14383,7 @@ pub(crate) fn SetDA2aBad(r: &mut Run) {
 }
 
 // ->
-// ClrDA2aBad: firmware/lower/38000-display.s:1275
+// ClrDA2aBad: firmware/lower/38000-display.s:1276
 pub(crate) fn ClrDA2aBad(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -14401,7 +14401,7 @@ pub(crate) fn ClrDA2aBad(r: &mut Run) {
 }
 
 // -> flag
-// DA2bBad?: firmware/lower/38000-display.s:1282
+// DA2bBad?: firmware/lower/38000-display.s:1283
 pub(crate) fn DA2bBad_(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -14419,7 +14419,7 @@ pub(crate) fn DA2bBad_(r: &mut Run) {
 }
 
 // ->
-// SetDA2bBad: firmware/lower/38000-display.s:1289
+// SetDA2bBad: firmware/lower/38000-display.s:1290
 pub(crate) fn SetDA2bBad(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -14437,7 +14437,7 @@ pub(crate) fn SetDA2bBad(r: &mut Run) {
 }
 
 // ->
-// ClrDA2bBad: firmware/lower/38000-display.s:1296
+// ClrDA2bBad: firmware/lower/38000-display.s:1297
 pub(crate) fn ClrDA2bBad(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -14455,7 +14455,7 @@ pub(crate) fn ClrDA2bBad(r: &mut Run) {
 }
 
 // -> flag
-// DA3Bad?: firmware/lower/38000-display.s:1303
+// DA3Bad?: firmware/lower/38000-display.s:1304
 pub(crate) fn DA3Bad_(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -14473,7 +14473,7 @@ pub(crate) fn DA3Bad_(r: &mut Run) {
 }
 
 // ->
-// SetDA3Bad: firmware/lower/38000-display.s:1310
+// SetDA3Bad: firmware/lower/38000-display.s:1311
 pub(crate) fn SetDA3Bad(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -14491,7 +14491,7 @@ pub(crate) fn SetDA3Bad(r: &mut Run) {
 }
 
 // ->
-// ClrDA3Bad: firmware/lower/38000-display.s:1317
+// ClrDA3Bad: firmware/lower/38000-display.s:1318
 pub(crate) fn ClrDA3Bad(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -14509,7 +14509,7 @@ pub(crate) fn ClrDA3Bad(r: &mut Run) {
 }
 
 // -> flag
-// DA1IsStat?: firmware/lower/38000-display.s:1324
+// DA1IsStat?: firmware/lower/38000-display.s:1325
 pub(crate) fn DA1IsStat_(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -14527,7 +14527,7 @@ pub(crate) fn DA1IsStat_(r: &mut Run) {
 }
 
 // ->
-// SetDA1IsStat: firmware/lower/38000-display.s:1331
+// SetDA1IsStat: firmware/lower/38000-display.s:1332
 pub(crate) fn SetDA1IsStat(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -14545,7 +14545,7 @@ pub(crate) fn SetDA1IsStat(r: &mut Run) {
 }
 
 // ->
-// ClrDA1IsStat: firmware/lower/38000-display.s:1338
+// ClrDA1IsStat: firmware/lower/38000-display.s:1339
 pub(crate) fn ClrDA1IsStat(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -14563,7 +14563,7 @@ pub(crate) fn ClrDA1IsStat(r: &mut Run) {
 }
 
 // -> flag
-// DA2bEdit?: firmware/lower/38000-display.s:1345
+// DA2bEdit?: firmware/lower/38000-display.s:1346
 pub(crate) fn DA2bEdit_(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -14581,7 +14581,7 @@ pub(crate) fn DA2bEdit_(r: &mut Run) {
 }
 
 // ->
-// SetDA2bEdit: firmware/lower/38000-display.s:1352
+// SetDA2bEdit: firmware/lower/38000-display.s:1353
 pub(crate) fn SetDA2bEdit(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -14599,7 +14599,7 @@ pub(crate) fn SetDA2bEdit(r: &mut Run) {
 }
 
 // ->
-// ClrDA2bEdit: firmware/lower/38000-display.s:1359
+// ClrDA2bEdit: firmware/lower/38000-display.s:1360
 pub(crate) fn ClrDA2bEdit(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -14617,7 +14617,7 @@ pub(crate) fn ClrDA2bEdit(r: &mut Run) {
 }
 
 // -> flag
-// NoRollDA2?: firmware/lower/38000-display.s:1366
+// NoRollDA2?: firmware/lower/38000-display.s:1367
 pub(crate) fn NoRollDA2_(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -14639,7 +14639,7 @@ pub(crate) fn NoRollDA2_(r: &mut Run) {
 }
 
 // ->
-// SetNoRollDA2: firmware/lower/38000-display.s:1374
+// SetNoRollDA2: firmware/lower/38000-display.s:1375
 pub(crate) fn SetNoRollDA2(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -14661,7 +14661,7 @@ pub(crate) fn SetNoRollDA2(r: &mut Run) {
 }
 
 // ->
-// ClrNoRollDA2: firmware/lower/38000-display.s:1382
+// ClrNoRollDA2: firmware/lower/38000-display.s:1383
 pub(crate) fn ClrNoRollDA2(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -14731,7 +14731,7 @@ pub(crate) fn code_39766(r: &mut Run) {
     }
 }
 
-// LINESOFSTACK: firmware/lower/38000-display.s:1654
+// LINESOFSTACK: firmware/lower/38000-display.s:1655
 pub(crate) fn LINESOFSTACK(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -14762,7 +14762,7 @@ pub(crate) fn LINESOFSTACK(r: &mut Run) {
     }
 }
 
-// SUB_39F93: firmware/lower/38000-display.s:1666
+// SUB_39F93: firmware/lower/38000-display.s:1667
 pub(crate) fn SUB_39F93(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -14794,7 +14794,7 @@ pub(crate) fn SUB_39F93(r: &mut Run) {
     }
 }
 
-// AbbrevStack?: firmware/lower/38000-display.s:1679
+// AbbrevStack?: firmware/lower/38000-display.s:1680
 pub(crate) fn AbbrevStack_(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -14811,7 +14811,7 @@ pub(crate) fn AbbrevStack_(r: &mut Run) {
     }
 }
 
-// SetAbbrevStk: firmware/lower/38000-display.s:1685
+// SetAbbrevStk: firmware/lower/38000-display.s:1686
 pub(crate) fn SetAbbrevStk(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -14828,7 +14828,7 @@ pub(crate) fn SetAbbrevStk(r: &mut Run) {
     }
 }
 
-// ClrAbbrevStk: firmware/lower/38000-display.s:1691
+// ClrAbbrevStk: firmware/lower/38000-display.s:1692
 pub(crate) fn ClrAbbrevStk(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -15416,7 +15416,7 @@ pub(crate) fn code_3F0E8(r: &mut Run) {
     }
 }
 
-// SUB_3F13E: firmware/lower/3E005-keys.s:593
+// SUB_3F13E: firmware/lower/3E005-keys.s:594
 pub(crate) fn SUB_3F13E(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -15475,7 +15475,7 @@ pub(crate) fn SUB_3F13E(r: &mut Run) {
     }
 }
 
-// OBJ_3F2D3: firmware/lower/3E005-keys.s:641
+// OBJ_3F2D3: firmware/lower/3E005-keys.s:642
 pub(crate) fn OBJ_3F2D3(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -15578,7 +15578,7 @@ pub(crate) fn OBJ_3F2D3(r: &mut Run) {
     }
 }
 
-// L_3F51E: firmware/lower/3E005-keys.s:779
+// L_3F51E: firmware/lower/3E005-keys.s:780
 pub(crate) fn L_3F51E(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -15648,7 +15648,7 @@ pub(crate) fn L_3F51E(r: &mut Run) {
     }
 }
 
-// SUB_3F585: firmware/lower/3E005-keys.s:817
+// SUB_3F585: firmware/lower/3E005-keys.s:818
 pub(crate) fn SUB_3F585(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -15666,7 +15666,7 @@ pub(crate) fn SUB_3F585(r: &mut Run) {
 }
 
 // -> flag
-// NonUsrKeyOK?: firmware/lower/3E005-keys.s:1108
+// NonUsrKeyOK?: firmware/lower/3E005-keys.s:1109
 pub(crate) fn NonUsrKeyOK_(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -15684,7 +15684,7 @@ pub(crate) fn NonUsrKeyOK_(r: &mut Run) {
 }
 
 // ->
-// SetNUsrKeyOK: firmware/lower/3E005-keys.s:1116
+// SetNUsrKeyOK: firmware/lower/3E005-keys.s:1117
 pub(crate) fn SetNUsrKeyOK(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -15702,7 +15702,7 @@ pub(crate) fn SetNUsrKeyOK(r: &mut Run) {
 }
 
 // ->
-// ClrNUsrKeyOK: firmware/lower/3E005-keys.s:1123
+// ClrNUsrKeyOK: firmware/lower/3E005-keys.s:1124
 pub(crate) fn ClrNUsrKeyOK(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -15719,7 +15719,7 @@ pub(crate) fn ClrNUsrKeyOK(r: &mut Run) {
     }
 }
 
-// 1USR?: firmware/lower/3E005-keys.s:1129
+// 1USR?: firmware/lower/3E005-keys.s:1130
 pub(crate) fn r1USR_(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -15736,7 +15736,7 @@ pub(crate) fn r1USR_(r: &mut Run) {
     }
 }
 
-// SetUserMo~1: firmware/lower/3E005-keys.s:1135
+// SetUserMo~1: firmware/lower/3E005-keys.s:1136
 pub(crate) fn SetUserMo_1(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -15753,7 +15753,7 @@ pub(crate) fn SetUserMo_1(r: &mut Run) {
     }
 }
 
-// OBJ_3FFCA: firmware/lower/3E005-keys.s:1141
+// OBJ_3FFCA: firmware/lower/3E005-keys.s:1142
 pub(crate) fn OBJ_3FFCA(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {

@@ -294,6 +294,8 @@ LIB0E1.link:
         REL(5)  CONST~2                          * A2422  00A 
         REL(5)  ROMP_0E1_00B                     * A2427  00B 
         ENDLENGTH                                * A242C
-        BSS     4                                * A242C
+        BSS     4                                * A242C  zeros
         ENDLENGTH                                * A2430
-        NIBHEX  2072100                          * A2430  .'.
+
+        LENGTH                                   * A2430  library object without its prolog (its place is the end of the link table before): length, to #B4B32
+        CON(2)  0                                * A2435  no title

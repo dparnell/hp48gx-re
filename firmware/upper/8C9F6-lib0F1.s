@@ -172,4 +172,4 @@ EXPR>~1~romptr~1:
           TYPECOL #=case OBJ_5FAE0               * 8D250
           PALPTRDCMP NOTcaseFALSE $>ID           * 8D25F
           COMPILEID ;                            * 8D26E
-        NIBHEX  0000                             * 8D278  ..
+        BSS     4                                * 8D278  zeros

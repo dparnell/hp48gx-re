@@ -209,4 +209,4 @@ LIB0B9.link:
         LENGTH                                   * E383D  length, to #E3847
         REL(5)  ROMP_0B9_000                     * E3842  000 
         ENDLENGTH                                * E3847
-        NIBHEX  0000                             * E3847  ..
+        BSS     4                                * E3847  zeros

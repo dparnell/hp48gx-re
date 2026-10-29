@@ -41,6 +41,12 @@ RPL_GOTOS = {0x619CB, 0x619E0, 0x619F3}     # GOTO ?GOTO NOT?GOTO: an address fo
 # stream, not by code (see Analyzer.rule_streams).
 RULE_INTERPRETERS = {0x5F6F2, 0x5F6F9}
 
+# Callees that start with C=RSTK only to save their return address, and
+# return to it: no inline data follows a call to them.
+RETURNS_NORMALLY = {
+    0x0613E,    # GARBAGECOL: keeps it in GARBSCRATCH1
+}
+
 
 def read_tables(rom=None):
     """data/tables.txt as dicts: start, size, desc, and words: (address,
@@ -279,7 +285,8 @@ class Analyzer:
         """Callees that pop their return address to read inline data."""
         if t is None or t >= LOWER_END:
             return False
-        return t in RULE_INTERPRETERS or (self.rom.n[t] == 0 and self.rom.n[t + 1] == 7)  # C=RSTK
+        return t in RULE_INTERPRETERS or (self.rom.n[t] == 0 and self.rom.n[t + 1] == 7  # C=RSTK
+                                          and t not in RETURNS_NORMALLY)
 
     def const_ref(self, src, v):
         if v >= LOWER_END:
@@ -356,8 +363,20 @@ class Analyzer:
             # Objects found earlier may be embedded in this one: absorb them.
             inner = {self.owner[a + i] for i in range(o.size) if (a + i) in self.owner}
             items = [self.items[s] for s in inner]
+            # Code found earlier may be the body of one of this object's code
+            # objects (TOD>Ticks: its CODE runs into code other routines use).
+            bodies = []
+            todo = [o]
+            while todo:
+                x = todo.pop()
+                if x.kind == "DOCODE":
+                    bodies.append((x.addr + 10, x.addr + x.size))
+                todo += x.children
+
+            def in_body(it):
+                return it.kind == "code" and any(b0 <= it.start and it.start + it.size <= b1 for b0, b1 in bodies)
             if all((it.kind in ("obj", "pco", "codebody", "addrslot", "rplptr")
-                    or (it.kind == "code" and it.start in self.shallow))
+                    or (it.kind == "code" and it.start in self.shallow) or in_body(it))
                    and it.start + it.size <= a + o.size for it in items):
                 for it in items:
                     if it.kind == "codebody":

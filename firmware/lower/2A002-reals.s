@@ -242,7 +242,7 @@ L_2A28A:
         D0=D0+  5                                * 2A2A5
         C=R1                                     * 2A2A8
         GOTO    L_2A1DC                          * 2A2AB
-        NIBHEX  00000                            * 2A2AF  ..
+        BSS     5                                * 2A2AF  zeros
         RPL
 
 * refs (360): 0EAE1 0EBC6 0FDD6 10A0E 1427B 142D3 ...
@@ -1425,7 +1425,7 @@ L_2AF21:
         CON(5)  (*)+5                            * 2AF27  primitive code object
         GOSBVL  %%H>HMS~1                        * 2AF2C
         GOTO    L_2AECC                          * 2AF33
-        NIBHEX  000                              * 2AF37  .
+        BSS     3                                * 2AF37  zeros
 
 * refs (3): 2A691 2A6A5 2A6AF
 hm->(r);r=>rr:
@@ -1790,42 +1790,42 @@ L_2B666:
 * refs (1): 2AF56
 SUB_2B674:
         GOVLNG  SUB_78A3A                        * 2B674
-        NIBHEX  00                               * 2B67B  .
+        BSS     2                                * 2B67B  zeros
 
 * refs (1): 2ABE5
 aMODF:
         GOVLNG  aMODF~1                          * 2B67D
-        NIBHEX  00                               * 2B684  .
+        BSS     2                                * 2B684  zeros
 
 * refs (1): 2AE42
 SUB_2B686:
         GOVLNG  L_78D53                          * 2B686
-        NIBHEX  00                               * 2B68D  .
+        BSS     2                                * 2B68D  zeros
 
 * refs (2): 2AB9D 2ABB0
 SUB_2B68F:
         GOVLNG  L_78DBC                          * 2B68F
-        NIBHEX  00                               * 2B696  .
+        BSS     2                                * 2B696  zeros
 
 * refs (4): 2AB64 2AB77 872C6 885E5
 SUB_2B698:
         GOVLNG  L_78E05                          * 2B698
-        NIBHEX  00                               * 2B69F  .
+        BSS     2                                * 2B69F  zeros
 
 * refs (2): 2AB8A 935F5
 SUB_2B6A1:
         GOVLNG  L_791F3                          * 2B6A1
-        NIBHEX  00                               * 2B6A8  .
+        BSS     2                                * 2B6A8  zeros
 
 * refs (4): 2AB25 2AB38 872D5 885F8
 SUB_2B6AA:
         GOVLNG  L_78FCB                          * 2B6AA
-        NIBHEX  00                               * 2B6B1  .
+        BSS     2                                * 2B6B1  zeros
 
 * refs (1): 2AB4B
 SUB_2B6B3:
         GOVLNG  L_78FD5                          * 2B6B3
-        NIBHEX  00                               * 2B6BA  .
+        BSS     2                                * 2B6BA  zeros
 
 * refs (2): 2AAC0 9030A
 SUB_2B6BC:
@@ -1835,87 +1835,87 @@ SUB_2B6BC:
 * refs (1): 2AAD5
 SUB_2B6CE:
         GOVLNG  L_7943E                          * 2B6CE
-        NIBHEX  00                               * 2B6D5  .
+        BSS     2                                * 2B6D5  zeros
 
 * refs (2): 2AD45 2AD8B
 SUB_2B6D7:
         GOVLNG  L_79529                          * 2B6D7
-        NIBHEX  00                               * 2B6DE  .
+        BSS     2                                * 2B6DE  zeros
 
 * refs (2): 2ABFC 2AC36
 SUB_2B6E0:
         GOVLNG  L_7965D                          * 2B6E0
-        NIBHEX  00                               * 2B6E7  .
+        BSS     2                                * 2B6E7  zeros
 
 * refs (3): 2AC4D 2AC87 CB385
 SUB_2B6E9:
         GOVLNG  L_79664                          * 2B6E9
-        NIBHEX  00                               * 2B6F0  .
+        BSS     2                                * 2B6F0  zeros
 
 * refs (3): 10E20 2AC9E 2ACB7
 SUB_2B6F2:
         GOVLNG  L_7966E                          * 2B6F2
-        NIBHEX  00                               * 2B6F9  .
+        BSS     2                                * 2B6F9  zeros
 
 * refs (1): 2AD2E
 SUB_2B6FB:
         GOVLNG  L_79AF5                          * 2B6FB
-        NIBHEX  00                               * 2B702  .
+        BSS     2                                * 2B702  zeros
 
 * refs (2): 2ACCE 2ACE7
 SUB_2B704:
         GOVLNG  L_79AFF                          * 2B704
-        NIBHEX  00                               * 2B70B  .
+        BSS     2                                * 2B70B  zeros
 
 * refs (2): 2ACFE 2AD17
 SUB_2B70D:
         GOVLNG  L_79B06                          * 2B70D
-        NIBHEX  00                               * 2B714  .
+        BSS     2                                * 2B714  zeros
 
 * refs (1): 2AE58
 SUB_2B716:
         GOVLNG  L_78AEB                          * 2B716
-        NIBHEX  00                               * 2B71D  .
+        BSS     2                                * 2B71D  zeros
 
 * refs (1): 2AE7E
 SUB_2B71F:
         GOVLNG  L_78BD4                          * 2B71F
-        NIBHEX  00                               * 2B726  .
+        BSS     2                                * 2B726  zeros
 
 * refs (1): 2AE6B
 SUB_2B728:
         GOVLNG  L_78BDB                          * 2B728
-        NIBHEX  00                               * 2B72F  .
+        BSS     2                                * 2B72F  zeros
 
 * refs (4): 2AD9E 2ADB7 2ADD0 2ADE3
 SUB_2B731:
         GOVLNG  L_79DA9                          * 2B731
-        NIBHEX  00                               * 2B738  .
+        BSS     2                                * 2B738  zeros
 
 * refs (1): 2ADF6
 SUB_2B73A:
         GOVLNG  L_79DE2                          * 2B73A
-        NIBHEX  00                               * 2B741  .
+        BSS     2                                * 2B741  zeros
 
 * refs (1): 2AE09
 SUB_2B743:
         GOVLNG  L_79DF1                          * 2B743
-        NIBHEX  00                               * 2B74A  .
+        BSS     2                                * 2B74A  zeros
 
 * refs (1): 2AE1C
 SUB_2B74C:
         GOVLNG  L_79E2D                          * 2B74C
-        NIBHEX  00                               * 2B753  .
+        BSS     2                                * 2B753  zeros
 
 * refs (1): 2AE2F
 SUB_2B755:
         GOVLNG  L_79E6A                          * 2B755
-        NIBHEX  00                               * 2B75C  .
+        BSS     2                                * 2B75C  zeros
 
 * refs (1): 2AF7C
 SUB_2B75E:
         GOVLNG  L_79F90                          * 2B75E
-        NIBHEX  00                               * 2B765  .
+        BSS     2                                * 2B765  zeros
 
 * refs (3): 2AF8F 2AFA2 93611
 SUB_2B767:
@@ -1925,7 +1925,7 @@ SUB_2B767:
 * refs (1): 2AF43
 SUB_2B779:
         GOVLNG  SUB_79F51                        * 2B779
-        BSS     9                                * 2B780
+        BSS     9                                * 2B780  zeros
 
 * refs (8): 2AEBE 787D3 794AE 79832 7992C 79C18 ...
 1/X15:

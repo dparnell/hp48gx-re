@@ -68,6 +68,9 @@ The format is described at the top of `tools/sasm.py`. In short:
   - **Menus** (libraries 0A9 and 0AA) are arrays of ROMPTRs, one per soft key, each written `ROMPBODY lib cmd` with the command's name or the key's label as its comment.
   - **Array elements** are numbers without prologs: `%BODY 0E0`, `C%BODY`, `%%BODY`, `C%%BODY`, or `CON(5) #1F` for binary integers.
   - **Grobs whose row padding is not zero** (HP filled some rows with ones) are `GROBW "png" w`: the PNG holds whole rows, with set padding bits in gray.
+  - **The units table** writes each unit's dimensions as `UDIMS kg m s^-2` and its factor to SI as `UFACT 4.4482216152605E0` (lbf).
+  - **The algebra's rewrite rules** write each pattern as `PATTERN op2 op6 arg op6`, commented with the operators' names (`x* xINV arg xINV`).
+  - **Library objects without a prolog** are `LENGTH` blocks with their title, and code objects whose code is shared with other routines are proper `CODE` blocks.
   - **The parser's character-class tables** are hex strings written 16 characters to a line, each line commented with its characters.
   - **Message tables** are linked arrays of strings: `REL(5)` offsets to `$BODY` strings labelled by message number (`msg~BE02`).
   - **The Equation Library** (library 0E2):

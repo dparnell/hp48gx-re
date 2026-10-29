@@ -124,7 +124,7 @@ StdRightShift~unit:
 * refs (4): 155A9 40238 40242 9E7C9
 DoNameKeyRS:
         :: OBJ_4040E xRCL ;                      * 40337
-        NIBHEX  00000                            * 4034B  ..
+        BSS     5                                * 4034B  zeros
 
 * refs (3): 154F0 155D6 9E55D
 DoNameKeyLRS:
@@ -233,7 +233,7 @@ OBJ_4072E:
           PrevChrInComLine CHR_Space EQUAL ?SEMI * 40747
           NextChrInComLine=space? case ->OnTheRow * 4075B
           CHR_Space Char>Edit ;                  * 4076A
-        BSS     15                               * 40779
+        BSS     15                               * 40779  zeros
 
 * ->
 * refs (407): 0C82F 144B1 3AB76 3B5FF 3B7CC 3B7F6 ...
@@ -817,7 +817,7 @@ InitMenu%:
           :: ERROR@ BINT4 #=case SETSIZEERR      * 41714
             ERRJMP ;                             * 4172D
         ;                                        * 41737
-        NIBHEX  00000                            * 4173C  ..
+        BSS     5                                * 4173C  zeros
 
 * ->
 * refs (4): 15205 3BE9A 3BEE0 3C338

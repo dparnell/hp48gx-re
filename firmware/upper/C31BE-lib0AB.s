@@ -2,4 +2,7 @@
 * Addresses in the right-hand comments are those of the original ROM.
 * Follows on from the previous file (at #C31BE in the original ROM).
         ENDLENGTH                                * C31BE
-        NIBHEX  16C1000                          * C31BE  a..
+        ENDLENGTH                                * C31BE
+
+        LENGTH                                   * C31BE  library object without its prolog (its place is the end of the link table before): length, to #C4E1F
+        CON(2)  0                                * C31C3  no title

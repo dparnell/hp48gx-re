@@ -3262,7 +3262,7 @@ pub(crate) fn code_9A5FA(r: &mut Run) {
 }
 
 // ROMPTR 0E3 04B
-// ROMP_0E3_04B: firmware/upper/99FE9-lib0E3.s:692
+// ROMP_0E3_04B: firmware/upper/99FE9-lib0E3.s:693
 pub(crate) fn ROMP_0E3_04B(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {

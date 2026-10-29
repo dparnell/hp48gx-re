@@ -902,7 +902,7 @@ OBJ_43982:
           ?CaseKeyDef OBJ_43F49 BINT35 #=casedrpfls BINT40 * 439BE
           #=casedrpfls DROP                      * 439D7
           'DoBadKeyT ;                           * 439E1
-        BSS     10                               * 439EB
+        BSS     10                               * 439EB  zeros
 
 * refs (1): 4389C
 OBJ_439F5:

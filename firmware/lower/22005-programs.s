@@ -705,11 +705,12 @@ LIB002.link:
         REL(5)  x->TAG                           * 22DD6  17F →TAG
         REL(5)  xDTAG                            * 22DDB  180 DTAG
         ENDLENGTH                                * 22DE0
+        ENDLENGTH                                * 22DE0
         ASSEMBLE
         A=B-A   A                                * 22DE0
         CSR     A                                * 22DE2
         RTNSXM                                   * 22DE4
-        NIBHEX  0                                * 22DE6
+        BSS     1                                * 22DE6  zeros
 
 LIB700:
         CON(3)  #700                             * 22DE7  library number
@@ -982,7 +983,7 @@ for(ex,r):
 xNEXT:
         :: CK0 COLA next_2326A                   * 2324C
         ;                                        * 23260
-        NIBHEX  27B41                            * 23265  rK
+        CON(5)  OBJ_14B72                        * 23265  address
 
 * refs (1): 2325B
 next_2326A:
@@ -1087,7 +1088,7 @@ xSTEP:
           BINT1 xSTEP~real                       * 2338A  real
           BINT10 xSTEP~name|local|algebraic      * 23394  name|local|algebraic
         ;                                        * 2339E
-        NIBHEX  27B41                            * 233A3  rK
+        CON(5)  OBJ_14B72                        * 233A3  address
 
 * refs (1): 23399
 xSTEP~name|local|algebraic:
@@ -1184,7 +1185,7 @@ L_2351D:
         C=RSTK                                   * 23529
         D0=C                                     * 2352B
         GOSBVL  SAVPTR                           * 2352E
-        GOSBVL  GARBAGECOL                       * 23535  inline data follows
+        GOSBVL  GARBAGECOL                       * 23535
         GOSBVL  GETPTR                           * 2353C
         D=D-1   A                                * 23543
         GONC    L_23551                          * 23545

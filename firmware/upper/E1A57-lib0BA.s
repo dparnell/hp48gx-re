@@ -120,4 +120,4 @@ LIB0BA.link:
         LENGTH                                   * E227D  length, to #E2287
         REL(5)  ROMP_0BA_000                     * E2282  000 
         ENDLENGTH                                * E2287
-        NIBHEX  0000                             * E2287  ..
+        BSS     4                                * E2287  zeros

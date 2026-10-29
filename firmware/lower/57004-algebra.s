@@ -64,7 +64,7 @@ OBJ_57216:
           :: ROMPTR 0F1 001 ROMPTR 0F1 00B ROMPTR 0F1 003 BIND ; * 57216
           ROMPTR 0F1 004 DUP ' PlotEval ROMPTR 0F1 005 ' NOP %1 * 57246
           ROMPTR 0F1 006 OBJ_4C314 ;             * 5727A
-        NIBHEX  0000                             * 5728F  ..
+        BSS     4                                * 5728F  zeros
 
 * sym id -> symb
 * refs (3): 20AA2 B6BAD B6BB2
@@ -324,25 +324,30 @@ SYMISOL~1:
         :: ' SYMISOL~2 TOTEMPOB ' SYMISOL~3 TOTEMPOB SYMISOL~4 BIND ; * 578E8
 SYMISOL~2:
         CON(5)  DOCODE                           * 5791A  address
-        NIBHEX  910008F65                        * 5791F  ..∡o
-        NIBHEX  975                              * 57928  y
+        LENGTH                                   * 5791F  code object's length, to #57938
+        ASSEMBLE
+        GOSBVL  SUB_57956                        * 57924  inline data follows
 
 * ISOL's fresh-name template: ID "n0" and a spare byte for a second digit (SUB_57956 counts it up: n1, n2, ...)
 n0:
         CON(5)  DOIDNT                           * 5792B  entry 0
         CON(2)  #02                              * 57930
         NIBASC  "n00"                            * 57932
+        ENDLENGTH                                * 57938
 SYMISOL~3:
         CON(5)  DOCODE                           * 57938  address
-        NIBHEX  910008F65                        * 5793D  ..∡o
-        NIBHEX  975                              * 57946  y
+        LENGTH                                   * 5793D  code object's length, to #57956
+        GOSBVL  SUB_57956                        * 57942  inline data follows
 
 * ISOL's fresh-name template: ID "s0" and a spare byte for a second digit
 s0:
         CON(5)  DOIDNT                           * 57949  entry 0
         CON(2)  #02                              * 5794E
         NIBASC  "s00"                            * 57950
-        ASSEMBLE
+        ENDLENGTH                                * 57956
+
+* refs (2): 57924 57942
+SUB_57956:
         C=RSTK                                   * 57956
         CD1EX                                    * 57958
         RSTK=C                                   * 5795B
@@ -445,10 +450,10 @@ expansq:
         ASSEMBLE
         GOSBVL  RuleMatch                        * 57B51  inline data follows
 
-* rewrite rules, read by the interpreter called just before (SUB_5F6F2)
-        NIBHEX  67000                            * 57B58  pattern: op5 op6
+* rewrite rules, read by the interpreter called just before (RuleMatch, #5F6F2)
+        PATTERN op5 op6                          * 57B58  xNEG xINV
         CON(5)  +B21;PullB[1];<1>                * 57B5D  run if it matches
-        NIBHEX  F                                * 57B62  end of the rules
+        CON(1)  #F                               * 57B62  end of the rules
         RPL
 
 * refs (1): 57AA7

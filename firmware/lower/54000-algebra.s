@@ -845,12 +845,12 @@ OBJ_54E7F:
         ASSEMBLE
         GOSBVL  RuleMatch                        * 54E84  inline data follows
 
-* rewrite rules, read by the interpreter called just before (SUB_5F6F2)
-        NIBHEX  C0000                            * 54E8B  pattern: op11
+* rewrite rules, read by the interpreter called just before (RuleMatch, #5F6F2)
+        PATTERN op11                             * 54E8B  xPI
         CON(5)  COLA                             * 54E90  run if it matches
-        NIBHEX  4DC00                            * 54E95  pattern: op3 op12 op11
+        PATTERN op3 op12 op11                    * 54E95  x/ %2 xPI
         CON(5)  skipcola                         * 54E9A  run if it matches
-        NIBHEX  F                                * 54E9F  end of the rules
+        CON(1)  #F                               * 54E9F  end of the rules
         RPL
 
 * refs (1): 1C7F7

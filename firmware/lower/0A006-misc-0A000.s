@@ -997,7 +997,7 @@ L_0AB57:
         C=DAT0  A                                * 0AB6B
         D=C     A                                * 0AB6E
         GOTO    L_0AADF                          * 0AB70
-        BSS     14                               * 0AB74
+        BSS     14                               * 0AB74  zeros
         RPL
 
 * #addr -> backup/library #nextaddr
@@ -2108,7 +2108,7 @@ OBJ_0BA40:
         LC(5)   #00014                           * 0BA55
         A=A-C   A                                * 0BA5C
         GONC    L_0BA8B                          * 0BA5E
-        GOSBVL  GARBAGECOL                       * 0BA61  inline data follows
+        GOSBVL  GARBAGECOL                       * 0BA61
         GOSBVL  ROOM                             * 0BA68
         A=C     A                                * 0BA6F
         LC(5)   #00014                           * 0BA71
@@ -2229,7 +2229,7 @@ Code:
             PC=(A)                               * 0BBDF
           ENDCODE                                * 0BBE3
         ;                                        * 0BBE3
-        NIBHEX  00000                            * 0BBE8  ..
+        BSS     5                                * 0BBE8  zeros
 
 * -> T T
 * refs (113): 09877 0BC33 0BC5B 11179 1877E 234B0 ...
@@ -2381,7 +2381,10 @@ L_0BDF0:
 * refs (1): 0BDDD
 ~DROP;GetNextToken;COLACOLA:
         :: DROP GetNextToken COLACOLA ;          * 0BDF6
-        NIBHEX  AAC0000                          * 0BE0F  ª..
+        ENDLENGTH                                * 0BE0F
+
+        LENGTH                                   * 0BE0F  library object without its prolog (its place is the end of the link table before): length, to #0CAB9
+        CON(2)  0                                * 0BE14  no title
 
 LIB019:
         CON(3)  #019                             * 0BE16  library number

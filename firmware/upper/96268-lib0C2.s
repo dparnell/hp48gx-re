@@ -681,5 +681,9 @@ LIB0C2.link:
         REL(5)  RREF~3                           * 98DD3  05D 
         REL(5)  RREF~4                           * 98DD8  05E 
         ENDLENGTH                                * 98DDD
-        NIBHEX  C0210E06494E4020202A36496E616E63 * 98DDD  ..à`ηä...¢cηæ.æ6
-        NIBHEX  656E0                            * 98DFD  Væ
+        ENDLENGTH                                * 98DDD
+
+        LENGTH                                   * 98DDD  library object without its prolog (its place is the end of the link table before): length, to #99FE9
+        CON(2)  14                               * 98DE2  title length
+        NIBASC  "FIN   :Finance"                 * 98DE4  title
+        CON(2)  14                               * 98E00  title length again

@@ -951,7 +951,7 @@ L_0EDFD:
         GOVLNG  DOMEMERR                         * 0EE09
 L_0EE10:
         GOSUB   SAVPTR~jump_6                    * 0EE10
-        GOSBVL  GARBAGECOL                       * 0EE14  inline data follows
+        GOSBVL  GARBAGECOL                       * 0EE14
         GOSUB   GETPTR~jump_2                    * 0EE1B
         ST=1    10                               * 0EE1F
         GOTO    L_0EDFD                          * 0EE22
@@ -987,26 +987,23 @@ Date>hxs13:
 * %time -> hxs
 * refs (2): 0EB54 0EF5E
 TOD>Ticks:
-        CON(5)  DOCOL                            * 0EE83  address (the code jumps or points through it)
-
-        CON(5)  ~BINT13;MAKEHXS                  * 0EE88  address (the code jumps or points through it)
-
-        CON(5)  SWAP                             * 0EE8D  address (the code jumps or points through it)
-
-        CON(5)  DOCODE                           * 0EE92  address (the code jumps or points through it)
-        NIBHEX  430008F849D01085908D4CBC0        * 0EE97  4.∡↓η..X.ØÄË
-        ASSEMBLE
+        :: ~BINT13;MAKEHXS SWAP                  * 0EE83
+          CODE                                   * 0EE92  47 nibbles
+            GOSBVL  POPTIME%                     * 0EE9C
+            R0=C                                 * 0EEA3
+            GONC    L_0EEB0                      * 0EEA6
+            GOVLNG  ErrTime                      * 0EEA9
 L_0EEB0:
-        GOSUB   GETPTR~jump_2                    * 0EEB0
-        A=DAT1  A                                * 0EEB4
-        AD1EX                                    * 0EEB7
-        D1=D1+  10                               * 0EEBA
-        C=R0                                     * 0EEBD
-        DAT1=C  13                               * 0EEC0
-        D1=A                                     * 0EEC4
-        GOTO    L_0E84F                          * 0EEC7
-        NIBHEX  B2130                            * 0EECB  +1
-        RPL
+            GOSUB   GETPTR~jump_2                * 0EEB0
+            A=DAT1  A                            * 0EEB4
+            AD1EX                                * 0EEB7
+            D1=D1+  10                           * 0EEBA
+            C=R0                                 * 0EEBD
+            DAT1=C  13                           * 0EEC0
+            D1=A                                 * 0EEC4
+            GOTO    L_0E84F                      * 0EEC7
+          ENDCODE                                * 0EECB
+        ;                                        * 0EECB
 
 * refs (1): 0EF4A
 r=>b10:
@@ -1099,6 +1096,7 @@ L_0EFD2:
 * 4954521600
 %TICKSweek:
         % 4.9545216E9                            * 0F042
+        ENDLENGTH                                * 0F057
         ASSEMBLE
         ?C<=A   A                                * 0F057
 * a branch also enters #0F05B, where the nibbles decode as RTNSXM
@@ -1106,9 +1104,9 @@ L_0F05A:
         GOYES   L_0F05A+1                        * 0F05A
 * the rest of RTNSXM at #0F05B
 * a branch also enters #0F05C, where the nibbles decode as RTNSXM
-        NIBHEX  0                                * 0F05C
+        BSS     1                                * 0F05C  zeros
 * the rest of RTNSXM at #0F05C
-        NIBHEX  0                                * 0F05D
+        BSS     1                                * 0F05D  zeros
 
 LIB00B:
         CON(3)  #00B                             * 0F05E  library number
@@ -1198,7 +1196,7 @@ UMCONV:
           2DROP puretemp? ITE TempConv           * 0F39E
           :: OBJ_0FCA5 %%/ %%* ;                 * 0F3B2
           %%>% Unbr>U ;                          * 0F3CB
-        BSS     10                               * 0F3DA
+        BSS     10                               * 0F3DA  zeros
 
 * [] []' -> [] []' flag
 * refs (4): 0F3A3 0F6ED CD63A CD695
@@ -1333,7 +1331,7 @@ OBJ_0F73D:
 * refs (2): 10C4F CAC04
 OBJ_0F756:
         :: SWAPCKREF SWAP OBJ_7D76D ;            * 0F756
-        NIBHEX  00000                            * 0F76F  ..
+        BSS     5                                * 0F76F  zeros
 
 * u u' -> u''
 * refs (3): 1AD9A 1ADA4 1ADAE
@@ -1404,7 +1402,7 @@ L_0FA1C:
           DROP GOTO L_0F981                      * 0FA1C
 L_0FA2B:
           ABND %1 unrot1 OBJ_10194 OBJ_1086F ->unit(_,s) UMCONV ; * 0FA2B
-        NIBHEX  00000                            * 0FA53  ..
+        BSS     5                                * 0FA53  zeros
 
 * refs (1): 10D7D
 1_kg:
@@ -1470,7 +1468,7 @@ _mol_:
 
 _?_:
           $ "?" umEND ;                          * 0FB54
-        NIBHEX  00000                            * 0FB6A  ..
+        BSS     5                                * 0FB6A  zeros
 
 * u u' -> u?
 * refs (3): 1BCA8 1BCB2 1BCBC
@@ -1486,7 +1484,7 @@ UMMIN:
 * refs (2): 1C097 1C0BF
 UM%:
         :: SWAP dup;uo=>r ROT _*(2r);r=>rr %%1E2 %%/>% Unbr>U ; * 0FBAB
-        BSS     10                               * 0FBD8
+        BSS     10                               * 0FBD8  zeros
 
 * refs (1): 0FDBD
 OBJ_0FBE2:
@@ -1515,7 +1513,7 @@ OBJ_0FC6E:
 OBJ_0FCA5:
         :: OBJ_0FBFB case2DROP ROMPTR 0C1 020    * 0FCA5
         ;                                        * 0FCBF
-        BSS     9                                * 0FCC4
+        BSS     9                                * 0FCC4  zeros
 
 * u u' -> %
 * refs (3): 1C10E 1C118 1C122

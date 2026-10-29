@@ -29,6 +29,13 @@ Source format
     IDBODY name       an identifier body without prolog: length (2), then bytes
     %BODY r, %%BODY r, C%BODY re im, C%%BODY re im
                       a number without its prolog (an array element)
+    UDIMS kg m s^-2   a unit's dimensions in the units table: the digit
+                      count, then a signed digit per base unit (UNIT_BASES)
+    UFACT 3.048E-1    a unit's conversion factor: digit count, exponent
+                      byte, mantissa digits (lowest first)
+    PATTERN op2 arg op6   a rewrite rule's pattern word (tests from the low
+                      nibble up: opK, entry K of the operator table; arg,
+                      step into an argument); PATTERN always is 00000
     BSS n             n zero nibbles
     FILLTO expr       zero nibbles up to address expr: free space that
                       absorbs code growing or shrinking before it. If the
@@ -87,7 +94,7 @@ RPL_WORDS = set(OPENERS) | {";", "}", "#", "%", "%%", "C%", "C%%", "CHR", "$", "
                             "ID", "LAM", "TAG", "ROMPTR", "ACPTR", "GROB", "CODE",
                             "ENDCODE", "PTR", "EQ$", "PCGROB", "PCGROBS", "GROBW"}
 DIRECTIVES = {"ORG", "INCLUDE", "ASSEMBLE", "RPL", "NIBHEX", "NIBASC", "ROMPBODY", "IDBODY", "%BODY", "%%BODY",
-              "C%BODY", "C%%BODY", "BSS", "EQU",
+              "C%BODY", "C%%BODY", "UDIMS", "UFACT", "PATTERN", "BSS", "EQU",
               "GLYPHS", "$BODY", "LENGTH", "ENDLENGTH", "FILLTO", "PIN", "CRC"}
 KEYWORDS = RPL_WORDS | DIRECTIVES
 
@@ -435,6 +442,10 @@ def pc_pack(rows, split=None):
     return out
 
 
+# Base units of a unit's dimensions, in the order of the units table's digits.
+UNIT_BASES = ["kg", "m", "A", "s", "K", "cd", "mol", "r", "sr"]
+
+
 # Equation Library strings (expanded by ROMPTR 0E3 04B at #9C79C): bytes up
 # to #10 stand for these texts.
 EQ_TOKENS = {0x01: "CONST(", 0x02: "UBASE(", 0x03: "IFTE(", 0x04: "COS(", 0x05: "SIN(", 0x06: "rad",
@@ -644,6 +655,33 @@ class Assembler:
         if op in ("C%BODY", "C%%BODY"):
             sz = (3, 12) if op == "C%BODY" else (5, 15)
             return encode_real(arg(0), *sz) + encode_real(arg(1), *sz)
+        if op == "UDIMS":
+            # a unit's dimensions: the digit count, then one signed digit
+            # per base unit (UNIT_BASES) up to the last that is not 0
+            dims = [0] * len(UNIT_BASES)
+            for a in args:
+                name, _, power = a.partition("^")
+                dims[UNIT_BASES.index(name)] = int(power or "1")
+            k = max(i for i, d in enumerate(dims) if d) + 1
+            return [k] + [d & 0xF for d in dims[:k]]
+        if op == "UFACT":
+            # a unit's conversion factor: digit count, exponent byte (BCD,
+            # ten's complement), then the mantissa's digits, lowest first
+            m = re.fullmatch(r"(\d)(?:\.(\d+))?E(-?\d+)", arg())
+            if not m:
+                raise AsmError("UFACT %s: expected d.dddEe" % arg())
+            mant = m.group(1) + (m.group(2) or "")
+            e = int(m.group(3)) % 100
+            return [len(mant)] + bytes_nibs([int("%02d" % e, 16)]) + [int(c) for c in reversed(mant)]
+        if op == "PATTERN":
+            # a rewrite rule's pattern word: tests from the low nibble up,
+            # opK for entry K of the operator table, arg to step into an argument
+            if args == ["always"]:
+                return [0] * 5
+            nibs = [0 if t == "arg" else int(t[2:]) + 1 for t in args]
+            if len(nibs) > 5 or any(not 0 <= x <= 14 for x in nibs):
+                raise AsmError("PATTERN %s: at most 5 tests, op0-op13" % " ".join(args))
+            return nibs + [0] * (5 - len(nibs))
         if op == "IDBODY":
             # an identifier without its prolog (an element of a name array)
             a = " ".join(args)
@@ -872,7 +910,7 @@ class Assembler:
             state["mode"] = "RPL"
             return
         raw = op in ("NIBHEX", "NIBASC", "$BODY", "ROMPBODY", "IDBODY", "%BODY", "%%BODY", "C%BODY",
-                     "C%%BODY", "BSS", "GLYPHS") or re.fullmatch(r"(CON|REL)\(\d+\)", op)
+                     "C%%BODY", "UDIMS", "UFACT", "PATTERN", "BSS", "GLYPHS") or re.fullmatch(r"(CON|REL)\(\d+\)", op)
         if state["mode"] == "RPL" and op not in DIRECTIVES and not raw:
             objs = rpl_objects(toks)
             for k, obj in enumerate(objs):

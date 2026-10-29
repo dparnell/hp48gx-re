@@ -102,7 +102,7 @@ K_128_3E12E:
 * refs (1): 3B509
 ~Cursor&Disp;ToNextRowIfEnd:
         :: Cursor&Disp ToNextRowIfEnd ;          * 3E14E
-        NIBHEX  00000                            * 3E162  ..
+        BSS     5                                * 3E162  zeros
 
 LIB0A3.hash:
         CON(5)  DOHSTR                           * 3E167  hash table of library 0A3
@@ -180,6 +180,7 @@ LIB0A3.link:
         REL(5)  ROMP_0A3_02E                     * 3E2BB  02E 
         REL(5)  K_128_3E12E                      * 3E2C0  02F 
         REL(5)  ~DoDelims;$_::;?ClrAlgSetPr      * 3E2C5  030 
+        ENDLENGTH                                * 3E2CA
         ENDLENGTH                                * 3E2CA
         BSS     19                               * 3E2CA
 
@@ -823,7 +824,7 @@ SUB_3F585:
 OBJ_3F589:
         :: 2RDROP CheckMenuRow DUP #5+ ROT #MIN SWAP#1- BINT0 4UNROLL BINT1 * 3F589
           3UNROLL DO OVER INDEX@ #>ROMPTR psh1&rev LOOP 2DROP LoadTouchTbl ; * 3F5C0
-        NIBHEX  00000                            * 3F5F2  ..
+        BSS     5                                * 3F5F2  zeros
 
 * refs (1): 3D457
 OBJ_3F5F7:
@@ -1089,7 +1090,7 @@ OBJ_3FEEE:
 * Unreferenced NOPs between objects: padding
         CON(5)  NOP                              * 3FF0C  entry 0
         CON(5)  NOP                              * 3FF11
-        NIBHEX  E8E60                            * 3FF16  ←n
+        CON(5)  NOP                              * 3FF16  address
 
 * # #' -> :: ' ob1 T ; -> :: <ob2> <rest> ;
 * refs (84): 43156 43165 43897 438A6 438B5 438C4 ...

@@ -178,4 +178,5 @@ LIB0B3.link:
         REL(5)  CHOOSE~2                         * BE9AA  065 
         REL(5)  ~ChooseSimple                    * BE9AF  066 ~ChooseSimple
         ENDLENGTH                                * BE9B4
+        ENDLENGTH                                * BE9B4
         FILLTO  #C0000                           * BE9B4  5708 zero nibbles: the next entry stays at #C0000

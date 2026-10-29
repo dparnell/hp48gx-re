@@ -2,7 +2,7 @@
 * Addresses in the right-hand comments are those of the original ROM.
 * Most referenced: xFCNAPPLY xWHERE 'REvalSto XEQRCL xPURGE xSTEQ xDUP xDROP ChkExpr1Name xLINFIT xSWAP ä
 * Follows on from the previous file (at #1F01F in the original ROM).
-        NIBHEX  0FDD7                            * 1F01F  ðÝ
+        CON(5)  D/DDER                           * 1F01F  address
         RPL
 
         ROMPTR 0F0 092                           * 1F024
@@ -12,7 +12,7 @@
         CON(5)  nWHEREDER                        * 1F03A  address (the code jumps or points through it)
 
         CON(5)  OBJ_5A1F8                        * 1F03F  address (the code jumps or points through it)
-        NIBHEX  000                              * 1F044  .
+        BSS     3                                * 1F044  zeros
 
 * ob ob' -> %0
 * refs (6): 1EFA1 1EFAB 1EFB5 1F122 4F4F8 4F50C
@@ -149,11 +149,11 @@ xINTEGRAL:
         :: CK4&Dispatch                          * 1F223
           BINT9 XEQINTEG                         * 1F22D  algebraic
         ;                                        * 1F237
-        NIBHEX  15A56                            * 1F23C  QZ
+        CON(5)  OBJ_65A51                        * 1F23C  address
 
 #053626060410h:
         HXS 014060626350                         * 1F241
-        NIBHEX  60ED7                            * 1F257  .Þ
+        CON(5)  D/DINTEGRAL                      * 1F257  address
 
         ROMPTR 0F0 093                           * 1F25C
 
@@ -162,7 +162,7 @@ xINTEGRAL:
         CON(5)  nWHEREINTG                       * 1F26C  address (the code jumps or points through it)
 
         CON(5)  OBJ_5A211                        * 1F271  address (the code jumps or points through it)
-        NIBHEX  0000                             * 1F276  ..
+        BSS     4                                * 1F276  zeros
 
 * ob ob ob QN -> symf
 * refs (2): 1F210 1F232
@@ -184,18 +184,18 @@ XEQINTEG:
           # A1A0 %SYMSUM                         * 1F2F1  name|local|algebraic real name|local|algebraic any
           # AAA0 SYMSUM                          * 1F300  name|local|algebraic name|local|algebraic name|local|algebraic any
         ;                                        * 1F30F
-        NIBHEX  4FE56                            * 1F314  ô^
+        CON(5)  OBJ_65EF4                        * 1F314  address
 
 #052606073410h:
         HXS 014370606250                         * 1F319
-        NIBHEX  11ED7                            * 1F32F  .Þ
+        CON(5)  D/DSUM                           * 1F32F  address
 
         ROMPTR 0F0 094                           * 1F334
 
         CON(5)  nWHERESUM                        * 1F33F  address (the code jumps or points through it)
 
         CON(5)  OBJ_5A22A                        * 1F344  address (the code jumps or points through it)
-        NIBHEX  0000                             * 1F349  ..
+        BSS     4                                * 1F349  zeros
 
 * ROMPTR 002 0FF |
 * refs (4): 189EA 5A531 B6AFC B6B24
@@ -415,7 +415,7 @@ StoLT(_,ex):
 * refs (1): 56B2D
 Π'fcn:
         LAM 'fcn                                 * 1F97E
-        NIBHEX  00                               * 1F98D  .
+        BSS     2                                * 1F98D  zeros
 
 * ROMPTR 002 105
 * refs (7): 189EA 28011 28478 5AA4F 5F53F 5F58A ...
@@ -1699,7 +1699,7 @@ XEQORDER~1:
             A=DAT0  A                            * 210D9
             D0=D0+  5                            * 210DC
             PC=(A)                               * 210DF
-            BSS     8                            * 210E3
+            BSS     8                            * 210E3  zeros
           ENDCODE                                * 210EB
           purge(_) ;                             * 210EB
 
@@ -1917,7 +1917,7 @@ ChkNøLib(r):
           DUP FSTMACROROM# #< ?SEMI              * 214C2
           DUP FSTMACROROM# #> ?SEMI              * 214D6
           SETSIZEERR ;                           * 214EA
-        BSS     7                                * 214F4
+        BSS     7                                * 214F4  zeros
 
 * refs (1): 22638
 ~CK1;STRIPTAGS:

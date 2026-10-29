@@ -141,7 +141,7 @@ AdrPort0~1:
         A=DAT1  A                                * 08171
         R0=A                                     * 08174
         GOVLNG  L_706A1                          * 08177
-        NIBHEX  0                                * 0817E
+        BSS     1                                * 0817E  zeros
 L_0817F:
         GOSUB   SUB_07BF9                        * 0817F
         D1=D1+  5                                * 08183
@@ -173,7 +173,7 @@ L_081C3:
         GOSUB   SKIPVARNAME                      * 081C9
         GONC    L_0818F                          * 081CD
         RTNSXM                                   * 081D0
-        BSS     7                                * 081D2
+        BSS     7                                * 081D2  zeros
 
 * bak -> id T
 * refs (6): 15D5B 15D9C 215FC 219F9 853B9 85C4C
@@ -275,7 +275,7 @@ L_082D5:
         C=RSTK                                   * 082D5
         GOSUB   SUB_07B6A                        * 082D7
         GOTO    L_07EBE                          * 082DB
-        NIBHEX  0000                             * 082DF  ..
+        BSS     4                                * 082DF  zeros
 
 * ob -> id
 * refs (10): 09863 16CB6 184A5 186AC 21138 399A7 ...
@@ -506,7 +506,7 @@ L_084DF:
         RTNYES                                   * 084E5
         D0=A                                     * 084E7
         RTNCC                                    * 084EA
-        BSS     9                                * 084EC
+        BSS     9                                * 084EC  zeros
 
 * refs (3): 07CEF 07EFD 08148
 SUB_084F5:
@@ -729,7 +729,7 @@ L_08718:
         GOYES   L_0874D                          * 0871B
         C=D     A                                * 0871D
         R1=C.F  A                                * 0871F
-        GOSUBL  GARBAGECOL                       * 08725  inline data follows
+        GOSUBL  GARBAGECOL                       * 08725
         ST=1    10                               * 0872B
         D1=(5)  DSKTOP                           * 0872E
         C=DAT1  A                                * 08735
@@ -1045,7 +1045,7 @@ L_08AA8:
         A=A-C   A                                * 08AB0
         AR0EX                                    * 08AB2
         GOSUBL  MOVEDSU                          * 08AB5
-        GOSUBL  GARBAGECOL                       * 08ABB  inline data follows
+        GOSUBL  GARBAGECOL                       * 08ABB
         C=R0                                     * 08AC1
         GOSUBL  CREATETEMP                       * 08AC4
         GOC     L_08AF2                          * 08ACA
@@ -1440,7 +1440,7 @@ dup;=7(s)?:BAT!:
             SWAP ;                               * 09084
           ROTOVER #<case SETNOROOM               * 0908E
           ROTSWAP 4ROLL 1GETABND 5UNROLL sto12(bk,nm,s)~1 ; * 0909D
-        NIBHEX  000                              * 090BB  .
+        BSS     3                                * 090BB  zeros
 
 * refs (1): 090B1
 sto12(bk,nm,s)~1:
@@ -1454,7 +1454,7 @@ L_090C3:
         ?C=0    A                                * 090DC
         GOYES   L_090E9                          * 090DF
         GOVLNG  L_7DFE4                          * 090E1
-        NIBHEX  0                                * 090E8
+        BSS     1                                * 090E8  zeros
 L_090E9:
         DAT1=C  A                                * 090E9
 L_090EC:
@@ -1667,6 +1667,7 @@ HomeInBkp(nm):
         D1=A                                     * 094BB
         GOSBVL  SAVPTR                           * 094BE
         ST=0    1                                * 094C5
+L_094C8:
         GOSBVL  ROOM                             * 094C8
         A=C     A                                * 094CF
         LC(5)   #00036                           * 094D1
@@ -1679,8 +1680,9 @@ HomeInBkp(nm):
 L_094E6:
         ?ST=1   1                                * 094E6
         GOYES   L_094F9                          * 094E9
-        GOSBVL  GARBAGECOL                       * 094EB  inline data follows
-        NIBHEX  85162DF                          * 094F2  XaÒ
+        GOSBVL  GARBAGECOL                       * 094EB
+        ST=1    1                                * 094F2
+        GOTO    L_094C8                          * 094F5
 L_094F9:
         GOSBVL  GETPTR                           * 094F9
         GOVLNG  DOMEMERR                         * 09500
@@ -1865,7 +1867,7 @@ true;swap:
           DUP OBJ_72A8C SWAP ?SKIP               * 097BB
           :: DOADJ1 SWAPDROP ;                   * 097CF
           purge(_) ;                             * 097E3
-        NIBHEX  000                              * 097ED  .
+        BSS     3                                * 097ED  zeros
 
 * refs (3): 093CA 20C58 85862
 rcl(di,li)?:
@@ -2075,7 +2077,7 @@ L_09B5A:
         A=C     A                                * 09B61
         LC(5)   #FF000                           * 09B63
         GOC     L_09B4D                          * 09B6A
-        BSS     6                                * 09B6D
+        BSS     6                                * 09B6D  zeros
 
 * refs (5): 04457 098E1 09B0D 09BFB 0B593
 COMPCONFCRC:

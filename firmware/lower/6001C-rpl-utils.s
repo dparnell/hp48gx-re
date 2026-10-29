@@ -115,7 +115,7 @@ OBJ_602BD:
         D=D-C   A                                * 602FC
         GONC    L_60328                          * 602FE
         GOSBVL  SAVPTR                           * 60301
-        GOSBVL  GARBAGECOL                       * 60308  inline data follows
+        GOSBVL  GARBAGECOL                       * 60308
         GOSBVL  GETPTR                           * 6030F
         C=R1.F  A                                * 60316
         D=D-C   A                                * 6031C

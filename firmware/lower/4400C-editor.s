@@ -750,7 +750,7 @@ OBJ_44DFE:
 OBJ_44E3F:
         CON(5)  DOGROB                           * 44E3F  DOGROB
         LENGTH                                   * 44E44  length, to #44E53
-        BSS     10                               * 44E49
+        BSS     10                               * 44E49  zeros
         ENDLENGTH                                * 44E53
         FILLTO  #44F42                           * 44E53  239 zero nibbles: the next entry stays at #44F42
 
@@ -773,7 +773,7 @@ OBJ_44F9B:
 * refs (1): 458DF
 OBJ_44FAB:
           :: ROMPTR 0F1 003 BIND ROMPTR 0F1 01C ROMPTR 0F1 01D ; ; * 44FAB
-        BSS     7                                * 44FE0
+        BSS     7                                * 44FE0  zeros
 
 * [] -> []'
 * refs (2): 42DEB B4D9B
@@ -787,7 +787,7 @@ OBJ_44FF2:
 * refs (1): C0326
 OBJ_45006:
         :: OBJ_459E8 OBJ_45A25 ;                 * 45006
-        BSS     9                                * 4501A
+        BSS     9                                * 4501A  zeros
 
 * refs (1): 8D84E
 InitOldMat:
@@ -1045,7 +1045,7 @@ L_45C0F:
         A=DAT0  A                                * 45C17
         D0=D0+  5                                * 45C1A
         PC=(A)                                   * 45C1D
-        BSS     14                               * 45C21
+        BSS     14                               * 45C21  zeros
         RPL
 
 * refs (8): 8E374 8E6F9 8EEF6 8F044 8F14F 8F18B ...

@@ -310,7 +310,7 @@ _R__46DB6:
 _P_:
             $ "P" }                              * 46DC7
           EQLookup DROP SWAP&$ $>ID ;            * 46DD8
-        NIBHEX  00000                            * 46DF1  ..
+        BSS     5                                * 46DF1  zeros
 
 * refs (2): 736B6 736E3
 OBJ_46DF6:
@@ -994,7 +994,7 @@ OBJ_48873:
         :: TakeOver TraceMode? ITE ~BINT24;GETLAM;TRUE ~BINT1;GetEqN * 48873
           NOTcase DoBadKey                       * 48891
           ->StkStr22! OBJ_469FF ;                * 4889B
-        NIBHEX  00000                            * 488AA  ..
+        BSS     5                                * 488AA  zeros
 
 * refs (1): 477F9
 PlotScr*en~4:
@@ -1059,7 +1059,7 @@ OBJ_48CBA:
         :: INDEPVAR OBJ_73DFC TOTEMPOB 15GETLAM OVER NEWINDEP 19GETLAM * 48CBA
           DUPTYPEEXT? NOTcaseDROP UM>U           * 48CE2
         ;                                        * 48CF1
-        NIBHEX  00000                            * 48CF6  ..
+        BSS     5                                * 48CF6  zeros
 
 * refs (1): 474AB
 PlotScr*en~7:
@@ -1078,7 +1078,7 @@ PlotScr*en~8:
 PlotScr*en~9:
         :: CHECKMENU OBJ_48B25 ERRSET PlotScr*en~14 ERRTRAP OBJ_48D19 * 48D64
           OBJ_48B25 ;                            * 48D87
-        NIBHEX  0                                * 48D91
+        BSS     1                                * 48D91  zeros
 
 * refs (1): 491DA
 AUTOSCALE~1:

@@ -410,4 +410,4 @@ LIB0BE.link:
         LENGTH                                   * E04F1  length, to #E04FB
         REL(5)  ROMP_0BE_000                     * E04F6  000 
         ENDLENGTH                                * E04FB
-        NIBHEX  0000                             * E04FB  ..
+        BSS     4                                * E04FB  zeros

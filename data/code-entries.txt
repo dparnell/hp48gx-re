@@ -23,3 +23,5 @@
 87BCF	library 0C0, unexecuted
 81CBC	memory recovery: shows "Recovering Memory", entered from lower ROM at #023ED through SUB_026CA
 81EB1	self-test, unreferenced (a variant of the end of #81E74)
+57924	SYMISOL~2: the code object's body (GOSBVL SUB_57956, then its inline name template)
+57942	SYMISOL~3: the code object's body (GOSBVL SUB_57956, then its inline name template)

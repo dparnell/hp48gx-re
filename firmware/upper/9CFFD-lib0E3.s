@@ -361,4 +361,4 @@ LIB0E3.link:
         REL(5)  SOLVEQN~1                        * 9DA05  06C 
         REL(5)  ROMP_0E3_06D                     * 9DA0A  06D 
         ENDLENGTH                                * 9DA0F
-        NIBHEX  0000                             * 9DA0F  ..
+        BSS     4                                * 9DA0F  zeros

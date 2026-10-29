@@ -972,6 +972,6 @@ LIB0EA.link:
         REL(5)  ROMP_0EA_06F                     * 8FFA7  06F 
         REL(5)  PINIT~1                          * 8FFAC  070 
         ENDLENGTH                                * 8FFB1
-        BSS     4                                * 8FFB1
+        BSS     4                                * 8FFB1  zeros
         ENDLENGTH                                * 8FFB5
         FILLTO  #90000                           * 8FFB5  75 zero nibbles: the next entry stays at #90000

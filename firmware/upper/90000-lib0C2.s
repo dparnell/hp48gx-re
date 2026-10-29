@@ -2,7 +2,9 @@
 * Addresses in the right-hand comments are those of the original ROM.
 
         ORG     #90000
-        NIBHEX  DDD8000                          * 90000  Ý→.
+
+        LENGTH                                   * 90000  library object without its prolog (at the window's start): length, to #98DDD
+        CON(2)  0                                * 90005  no title
 
 LIB0C2:
         CON(3)  #0C2                             * 90007  library number

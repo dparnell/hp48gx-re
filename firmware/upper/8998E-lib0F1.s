@@ -3,6 +3,7 @@
 * Most referenced: FUNCTION CONIC
 * Follows on from the previous file (at #8998E in the original ROM).
         ENDLENGTH                                * 8998E
+        ENDLENGTH                                * 8998E
 
         CON(5)  DOLIB                            * 8998E  library object
         LENGTH                                   * 89993  length, to #8D27C
@@ -300,7 +301,7 @@ ROMP_0F1_008:
           LAM 'csindex LAM 'fscsbar ?SKIP        * 8A78B
           :: LAM 'oldpt DUP                      * 8A7BE
             CON(5)  DOCMP                        * 8A7DB  DOCMP
-            NIBHEX  FFF0000000000000FFF0000000000000 * 8A7E0  ÿ.......ÿ.......
+            NIBHEX  FFF0000000000000FFF0000000000000 * 8A7E0  not a canonical number (a zero mantissa with exponent FFF), so written as nibbles
             EQUAL caseDROP 3PICK                 * 8A800
             line(2c) ;                           * 8A80F
           2DUP LAM 'csbar 3UNROLL PUTEL 2DROP ;  * 8A819
@@ -310,7 +311,7 @@ ROMP_0F1_008:
 ROMP_0F1_009:
         :: LAM 'csbar                            * 8A845
           CON(5)  DOCMP                          * 8A85D  DOCMP
-          NIBHEX  FFF0000000000000FFF0000000000000 * 8A862  ÿ.......ÿ.......
+          NIBHEX  FFF0000000000000FFF0000000000000 * 8A862  not a canonical number (a zero mantissa with exponent FFF), so written as nibbles
           LAM 'csindex #1+ LAM 'cssz 2DUP #> ITE #- DROP * 8A882
           DUP ' LAM 'csindex STOLAM DUP LAM 'csbar GETATELN DROP ' * 8A8C8
           LAM 'oldpt STOLAM PUTEL DROP ;         * 8A915

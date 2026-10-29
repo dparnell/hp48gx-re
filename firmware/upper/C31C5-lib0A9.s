@@ -1821,4 +1821,7 @@ LIB0A9.link:
         REL(5)  ROMP_0A9_074                     * C4E15  074 
         REL(5)  ROMP_0A9_075                     * C4E1A  075 
         ENDLENGTH                                * C4E1F
-        NIBHEX  C050000                          * C4E1F  ...
+        ENDLENGTH                                * C4E1F
+
+        LENGTH                                   * C4E1F  library object without its prolog (its place is the end of the link table before): length, to #C532B
+        CON(2)  0                                * C4E24  no title

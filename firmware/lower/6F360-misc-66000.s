@@ -203,7 +203,7 @@ OBJ_6FBD1:
             #1- 'TE #+ ROMPTR 0EA 03C 'TE ;      * 6FD05
           'TE 'LE WINDOWXY 4PICK 4UNROLL 3PICK 5UNROLL HARDBUFF 5UNROLL * 6FD29
           SUBGROB 3PICK3PICK THREE{}N ROMPTR 0EA 03C 'NG ROT XYGROBDISP ; * 6FD56
-        NIBHEX  0                                * 6FD84
+        BSS     1                                * 6FD84  zeros
 
 * refs (3): 65C9F 661B5 6E3F2
 OBJ_6FD85:

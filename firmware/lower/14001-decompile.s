@@ -471,6 +471,7 @@ OBJ_14B13:
         :: OBJ_14843 SPACE$ &$ 'R DUPUNROT DUPTYPELIST? ITE ->StkStr22! ID>$ * 14B13
           !append$ OBJ_14D8C 2Ob>Seco EVAL ERRSET OBJ_14FC3 RDUP GsstFIN ; * 14B45
 
+OBJ_14B72:
         :: DUP sstDISP                           * 14B72
           :: EVAL ERRSET GOTO L_146C7 ; 2RDROP GOTO L_14933 ; * 14B81
 
@@ -1065,7 +1066,7 @@ OBJ_158FF:
 * ob #msg -> :msg:ob: tag ob with message text #msg
 msg>TAG:
           :: JstGetTHEMESG >TAG ; ;              * 15909
-        BSS     11                               * 15922
+        BSS     11                               * 15922  zeros
 
 * ->
 * refs (10): 158B4 158D7 158FA 1594B 1DF7B 49623 ...

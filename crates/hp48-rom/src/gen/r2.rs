@@ -234,7 +234,7 @@ pub(crate) fn code_22DE0(r: &mut Run) {
     }
 }
 
-// next_2326A: firmware/lower/22005-programs.s:988
+// next_2326A: firmware/lower/22005-programs.s:989
 pub(crate) fn next_2326A(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -258,7 +258,7 @@ pub(crate) fn next_2326A(r: &mut Run) {
     }
 }
 
-// STEP: firmware/lower/22005-programs.s:997
+// STEP: firmware/lower/22005-programs.s:998
 pub(crate) fn STEP(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -301,7 +301,7 @@ pub(crate) fn STEP(r: &mut Run) {
     }
 }
 
-// step(r): firmware/lower/22005-programs.s:1018
+// step(r): firmware/lower/22005-programs.s:1019
 pub(crate) fn step_r_(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -330,7 +330,7 @@ pub(crate) fn step_r_(r: &mut Run) {
     }
 }
 
-// IFERR: firmware/lower/22005-programs.s:1030
+// IFERR: firmware/lower/22005-programs.s:1031
 pub(crate) fn IFERR(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -422,7 +422,7 @@ pub(crate) fn IFERR(r: &mut Run) {
     }
 }
 
-// xSTEP~real: firmware/lower/22005-programs.s:1098
+// xSTEP~real: firmware/lower/22005-programs.s:1099
 pub(crate) fn xSTEP_real(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -446,7 +446,7 @@ pub(crate) fn xSTEP_real(r: &mut Run) {
     }
 }
 
-// OBJ_23502: firmware/lower/22005-programs.s:1166
+// OBJ_23502: firmware/lower/22005-programs.s:1167
 pub(crate) fn OBJ_23502(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -5090,7 +5090,7 @@ pub(crate) fn OBJ_29D5F(r: &mut Run) {
 }
 
 // Error 301h
-// POSFLOWERR: firmware/lower/27029-parser.s:1967
+// POSFLOWERR: firmware/lower/27029-parser.s:1969
 pub(crate) fn POSFLOWERR(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -5108,7 +5108,7 @@ pub(crate) fn POSFLOWERR(r: &mut Run) {
 }
 
 // Error 302h
-// NEGFLOWERR: firmware/lower/27029-parser.s:1976
+// NEGFLOWERR: firmware/lower/27029-parser.s:1978
 pub(crate) fn NEGFLOWERR(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -5126,7 +5126,7 @@ pub(crate) fn NEGFLOWERR(r: &mut Run) {
 }
 
 // Error 303h
-// OVERFLOWERR: firmware/lower/27029-parser.s:1985
+// OVERFLOWERR: firmware/lower/27029-parser.s:1987
 pub(crate) fn OVERFLOWERR(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -5144,7 +5144,7 @@ pub(crate) fn OVERFLOWERR(r: &mut Run) {
 }
 
 // Error 304h
-// SETIVLERR: firmware/lower/27029-parser.s:1992
+// SETIVLERR: firmware/lower/27029-parser.s:1994
 pub(crate) fn SETIVLERR(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -5162,7 +5162,7 @@ pub(crate) fn SETIVLERR(r: &mut Run) {
 }
 
 // Error 305h
-// INFRESERR: firmware/lower/27029-parser.s:2002
+// INFRESERR: firmware/lower/27029-parser.s:2004
 pub(crate) fn INFRESERR(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -5185,7 +5185,7 @@ pub(crate) fn INFRESERR(r: &mut Run) {
 }
 
 // ( x -> A ) Converts %% to %.If SB is clear uses roundup, if set uses lowest nibble in % field to determine rounding direction. Obeys and sets flow flags/indicators
-// PACKSB: firmware/lower/27029-parser.s:2014
+// PACKSB: firmware/lower/27029-parser.s:2016
 pub(crate) fn PACKSB(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -5227,7 +5227,7 @@ pub(crate) fn PACKSB(r: &mut Run) {
 }
 
 // ( x -> A ) <REF>PACKSB without rounding
-// PACK: firmware/lower/27029-parser.s:2033
+// PACK: firmware/lower/27029-parser.s:2035
 pub(crate) fn PACK(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -5441,7 +5441,7 @@ pub(crate) fn overlap_29EF1(r: &mut Run) {
     }
 }
 
-// SUB_29F76: firmware/lower/27029-parser.s:2144
+// SUB_29F76: firmware/lower/27029-parser.s:2146
 pub(crate) fn SUB_29F76(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -5516,7 +5516,7 @@ pub(crate) fn SUB_29F76(r: &mut Run) {
 }
 
 // ( %pop -> x ) Pop %, convert to %%, <REF>SAVPTR
-// POP1%SPLITA: firmware/lower/27029-parser.s:2184
+// POP1%SPLITA: firmware/lower/27029-parser.s:2186
 pub(crate) fn POP1_SPLITA(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -5537,7 +5537,7 @@ pub(crate) fn POP1_SPLITA(r: &mut Run) {
 }
 
 // ( %pop -> A ) Pop %, <REF>SAVPTR
-// POP1%: firmware/lower/27029-parser.s:2190
+// POP1%: firmware/lower/27029-parser.s:2192
 pub(crate) fn POP1_(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -5561,7 +5561,7 @@ pub(crate) fn POP1_(r: &mut Run) {
     }
 }
 
-// SAVPTR~jump_11: firmware/lower/27029-parser.s:2201
+// SAVPTR~jump_11: firmware/lower/27029-parser.s:2203
 pub(crate) fn SAVPTR_jump_11(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -5577,7 +5577,7 @@ pub(crate) fn SAVPTR_jump_11(r: &mut Run) {
     }
 }
 
-// Pop%ACSrSep: firmware/lower/27029-parser.s:2205
+// Pop%ACSrSep: firmware/lower/27029-parser.s:2207
 pub(crate) fn Pop_ACSrSep(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -12254,7 +12254,7 @@ pub(crate) fn code_2C4E1(r: &mut Run) {
     }
 }
 
-// OBJ_2CC92: firmware/lower/2C000-misc-2C000.s:437
+// OBJ_2CC92: firmware/lower/2C000-misc-2C000.s:440
 pub(crate) fn OBJ_2CC92(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -12285,7 +12285,7 @@ pub(crate) fn OBJ_2CC92(r: &mut Run) {
     }
 }
 
-// ColumnMAX: firmware/lower/2C000-misc-2C000.s:455
+// ColumnMAX: firmware/lower/2C000-misc-2C000.s:458
 pub(crate) fn ColumnMAX(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -12316,7 +12316,7 @@ pub(crate) fn ColumnMAX(r: &mut Run) {
     }
 }
 
-// ColumnMIN: firmware/lower/2C000-misc-2C000.s:466
+// ColumnMIN: firmware/lower/2C000-misc-2C000.s:469
 pub(crate) fn ColumnMIN(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -12333,7 +12333,7 @@ pub(crate) fn ColumnMIN(r: &mut Run) {
     }
 }
 
-// ColumnTOT: firmware/lower/2C000-misc-2C000.s:472
+// ColumnTOT: firmware/lower/2C000-misc-2C000.s:475
 pub(crate) fn ColumnTOT(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -12351,7 +12351,7 @@ pub(crate) fn ColumnTOT(r: &mut Run) {
     }
 }
 
-// ColumnMEAN: firmware/lower/2C000-misc-2C000.s:479
+// ColumnMEAN: firmware/lower/2C000-misc-2C000.s:482
 pub(crate) fn ColumnMEAN(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -12369,7 +12369,7 @@ pub(crate) fn ColumnMEAN(r: &mut Run) {
     }
 }
 
-// ColumnVAR: firmware/lower/2C000-misc-2C000.s:486
+// ColumnVAR: firmware/lower/2C000-misc-2C000.s:489
 pub(crate) fn ColumnVAR(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -12386,7 +12386,7 @@ pub(crate) fn ColumnVAR(r: &mut Run) {
     }
 }
 
-// ColumnTDEV: firmware/lower/2C000-misc-2C000.s:492
+// ColumnTDEV: firmware/lower/2C000-misc-2C000.s:495
 pub(crate) fn ColumnTDEV(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -12409,7 +12409,7 @@ pub(crate) fn ColumnTDEV(r: &mut Run) {
     }
 }
 
-// OBJ_2CD1B: firmware/lower/2C000-misc-2C000.s:501
+// OBJ_2CD1B: firmware/lower/2C000-misc-2C000.s:504
 pub(crate) fn OBJ_2CD1B(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -12426,7 +12426,7 @@ pub(crate) fn OBJ_2CD1B(r: &mut Run) {
     }
 }
 
-// OBJ_2CD27: firmware/lower/2C000-misc-2C000.s:507
+// OBJ_2CD27: firmware/lower/2C000-misc-2C000.s:510
 pub(crate) fn OBJ_2CD27(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -12526,7 +12526,7 @@ pub(crate) fn OBJ_2CD27(r: &mut Run) {
     }
 }
 
-// OBJ_2CDA5: firmware/lower/2C000-misc-2C000.s:556
+// OBJ_2CDA5: firmware/lower/2C000-misc-2C000.s:559
 pub(crate) fn OBJ_2CDA5(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -12598,7 +12598,7 @@ pub(crate) fn OBJ_2CDA5(r: &mut Run) {
     }
 }
 
-// OBJ_2CDFA: firmware/lower/2C000-misc-2C000.s:591
+// OBJ_2CDFA: firmware/lower/2C000-misc-2C000.s:594
 pub(crate) fn OBJ_2CDFA(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -12665,7 +12665,7 @@ pub(crate) fn OBJ_2CDFA(r: &mut Run) {
     }
 }
 
-// SUB_2CE52: firmware/lower/2C000-misc-2C000.s:622
+// SUB_2CE52: firmware/lower/2C000-misc-2C000.s:625
 pub(crate) fn SUB_2CE52(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -12693,7 +12693,7 @@ pub(crate) fn SUB_2CE52(r: &mut Run) {
     }
 }
 
-// GETPTR~jump_6: firmware/lower/2C000-misc-2C000.s:629
+// GETPTR~jump_6: firmware/lower/2C000-misc-2C000.s:632
 pub(crate) fn GETPTR_jump_6(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -12709,7 +12709,7 @@ pub(crate) fn GETPTR_jump_6(r: &mut Run) {
     }
 }
 
-// SAVPTR~jump_12: firmware/lower/2C000-misc-2C000.s:633
+// SAVPTR~jump_12: firmware/lower/2C000-misc-2C000.s:636
 pub(crate) fn SAVPTR_jump_12(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -12725,7 +12725,7 @@ pub(crate) fn SAVPTR_jump_12(r: &mut Run) {
     }
 }
 
-// OBJ_2CE7C: firmware/lower/2C000-misc-2C000.s:637
+// OBJ_2CE7C: firmware/lower/2C000-misc-2C000.s:640
 pub(crate) fn OBJ_2CE7C(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -12811,7 +12811,7 @@ pub(crate) fn OBJ_2CE7C(r: &mut Run) {
     }
 }
 
-// SUB_2CEE8: firmware/lower/2C000-misc-2C000.s:672
+// SUB_2CEE8: firmware/lower/2C000-misc-2C000.s:675
 pub(crate) fn SUB_2CEE8(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -12830,7 +12830,7 @@ pub(crate) fn SUB_2CEE8(r: &mut Run) {
     }
 }
 
-// SUB_2CEF2: firmware/lower/2C000-misc-2C000.s:679
+// SUB_2CEF2: firmware/lower/2C000-misc-2C000.s:682
 pub(crate) fn SUB_2CEF2(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -12849,7 +12849,7 @@ pub(crate) fn SUB_2CEF2(r: &mut Run) {
     }
 }
 
-// SUB_2CEFC: firmware/lower/2C000-misc-2C000.s:686
+// SUB_2CEFC: firmware/lower/2C000-misc-2C000.s:689
 pub(crate) fn SUB_2CEFC(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -12866,7 +12866,7 @@ pub(crate) fn SUB_2CEFC(r: &mut Run) {
     }
 }
 
-// OBJ_2CF08: firmware/lower/2C000-misc-2C000.s:691
+// OBJ_2CF08: firmware/lower/2C000-misc-2C000.s:694
 pub(crate) fn OBJ_2CF08(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -12906,7 +12906,7 @@ pub(crate) fn OBJ_2CF08(r: &mut Run) {
     }
 }
 
-// SUB_2CF2D: firmware/lower/2C000-misc-2C000.s:706
+// SUB_2CF2D: firmware/lower/2C000-misc-2C000.s:709
 pub(crate) fn SUB_2CF2D(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -12922,7 +12922,7 @@ pub(crate) fn SUB_2CF2D(r: &mut Run) {
     }
 }
 
-// SUB_2CF31: firmware/lower/2C000-misc-2C000.s:710
+// SUB_2CF31: firmware/lower/2C000-misc-2C000.s:713
 pub(crate) fn SUB_2CF31(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -12987,7 +12987,7 @@ pub(crate) fn SUB_2CF31(r: &mut Run) {
     }
 }
 
-// SUB_2CF8B: firmware/lower/2C000-misc-2C000.s:747
+// SUB_2CF8B: firmware/lower/2C000-misc-2C000.s:750
 pub(crate) fn SUB_2CF8B(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -13037,7 +13037,7 @@ pub(crate) fn SUB_2CF8B(r: &mut Run) {
     }
 }
 
-// SUB_2CFC0: firmware/lower/2C000-misc-2C000.s:769
+// SUB_2CFC0: firmware/lower/2C000-misc-2C000.s:772
 pub(crate) fn SUB_2CFC0(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -13109,7 +13109,7 @@ pub(crate) fn SUB_2CFC0(r: &mut Run) {
     }
 }
 
-// SUB_2D019: firmware/lower/2C000-misc-2C000.s:806
+// SUB_2D019: firmware/lower/2C000-misc-2C000.s:809
 pub(crate) fn SUB_2D019(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -13191,7 +13191,7 @@ pub(crate) fn SUB_2D019(r: &mut Run) {
     }
 }
 
-// SUB_2D080: firmware/lower/2C000-misc-2C000.s:847
+// SUB_2D080: firmware/lower/2C000-misc-2C000.s:850
 pub(crate) fn SUB_2D080(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -13208,7 +13208,7 @@ pub(crate) fn SUB_2D080(r: &mut Run) {
     }
 }
 
-// SPLITA~jump: firmware/lower/2C000-misc-2C000.s:851
+// SPLITA~jump: firmware/lower/2C000-misc-2C000.s:854
 pub(crate) fn SPLITA_jump(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -13224,7 +13224,7 @@ pub(crate) fn SPLITA_jump(r: &mut Run) {
     }
 }
 
-// SUB_2D08B: firmware/lower/2C000-misc-2C000.s:855
+// SUB_2D08B: firmware/lower/2C000-misc-2C000.s:858
 pub(crate) fn SUB_2D08B(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -13267,7 +13267,7 @@ pub(crate) fn SUB_2D08B(r: &mut Run) {
     }
 }
 
-// SUB_2D0B0: firmware/lower/2C000-misc-2C000.s:875
+// SUB_2D0B0: firmware/lower/2C000-misc-2C000.s:878
 pub(crate) fn SUB_2D0B0(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -13361,7 +13361,7 @@ pub(crate) fn SUB_2D0B0(r: &mut Run) {
     }
 }
 
-// SUB_2D131: firmware/lower/2C000-misc-2C000.s:922
+// SUB_2D131: firmware/lower/2C000-misc-2C000.s:925
 pub(crate) fn SUB_2D131(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -13535,7 +13535,7 @@ pub(crate) fn SUB_2D131(r: &mut Run) {
     }
 }
 
-// ChkäData(_): firmware/lower/2C000-misc-2C000.s:1017
+// ChkäData(_): firmware/lower/2C000-misc-2C000.s:1020
 pub(crate) fn Chk_Data___(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -13557,7 +13557,7 @@ pub(crate) fn Chk_Data___(r: &mut Run) {
     }
 }
 
-// OBJ_2D252: firmware/lower/2C000-misc-2C000.s:1024
+// OBJ_2D252: firmware/lower/2C000-misc-2C000.s:1027
 pub(crate) fn OBJ_2D252(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -13626,7 +13626,7 @@ pub(crate) fn OBJ_2D252(r: &mut Run) {
     }
 }
 
-// rclä!~1: firmware/lower/2C000-misc-2C000.s:1067
+// rclä!~1: firmware/lower/2C000-misc-2C000.s:1070
 pub(crate) fn rcl___1(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -13643,7 +13643,7 @@ pub(crate) fn rcl___1(r: &mut Run) {
     }
 }
 
-// OBJ_2D2D7: firmware/lower/2C000-misc-2C000.s:1073
+// OBJ_2D2D7: firmware/lower/2C000-misc-2C000.s:1076
 pub(crate) fn OBJ_2D2D7(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -13660,7 +13660,7 @@ pub(crate) fn OBJ_2D2D7(r: &mut Run) {
     }
 }
 
-// OBJ_2D2E7: firmware/lower/2C000-misc-2C000.s:1079
+// OBJ_2D2E7: firmware/lower/2C000-misc-2C000.s:1082
 pub(crate) fn OBJ_2D2E7(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -13677,7 +13677,7 @@ pub(crate) fn OBJ_2D2E7(r: &mut Run) {
     }
 }
 
-// OBJ_2D2F7: firmware/lower/2C000-misc-2C000.s:1086
+// OBJ_2D2F7: firmware/lower/2C000-misc-2C000.s:1089
 pub(crate) fn OBJ_2D2F7(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -13694,7 +13694,7 @@ pub(crate) fn OBJ_2D2F7(r: &mut Run) {
     }
 }
 
-// OBJ_2D307: firmware/lower/2C000-misc-2C000.s:1092
+// OBJ_2D307: firmware/lower/2C000-misc-2C000.s:1095
 pub(crate) fn OBJ_2D307(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -13716,7 +13716,30 @@ pub(crate) fn OBJ_2D307(r: &mut Run) {
     }
 }
 
-// Loop: firmware/lower/2C000-misc-2C000.s:1215
+// Unlabelled code at #2D54E.
+pub(crate) fn code_2D54E(r: &mut Run) {
+    let mut at = r.cpu.pc;
+    loop {
+        match at {
+            0x2D54E..=0x2D561 => {
+                io!(r, at, 0x2D54E..0x2D551, 19, r.cpu.load(1, R::A, Field::A, r.hw)); // A=DAT1 A
+                op!(r, at, 0x2D551..0x2D554, 5, r.cpu.d_ex_r(1, R::A, false)); // AD1EX
+                op!(r, at, 0x2D554..0x2D557, 5, r.cpu.d_add(1, 10)); // D1=D1+ 10
+                op!(r, at, 0x2D557..0x2D55A, 5, r.cpu.d_add(1, 14)); // D1=D1+ 14
+                op!(r, at, 0x2D55A..0x2D55E, 6, r.cpu.load_const(R::C, 2, 0x31)); // LC(2) #31
+                io!(r, at, 0x2D55E..0x2D561, 16, r.cpu.store(1, R::C, Field::B, r.hw)); // DAT1=C B
+                op!(r, at, 0x2D561..0x2D564, 5, r.cpu.d_ex_r(1, R::A, false)); // AD1EX
+                at = 0x2D564;
+            }
+            _ => {
+                r.cpu.pc = at;
+                return;
+            }
+        }
+    }
+}
+
+// Loop: firmware/lower/2C000-misc-2C000.s:1210
 pub(crate) fn Loop(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -13734,7 +13757,7 @@ pub(crate) fn Loop(r: &mut Run) {
     }
 }
 
-// SetServMode: firmware/lower/2C000-misc-2C000.s:1329
+// SetServMode: firmware/lower/2C000-misc-2C000.s:1315
 pub(crate) fn SetServMode(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -13751,7 +13774,7 @@ pub(crate) fn SetServMode(r: &mut Run) {
     }
 }
 
-// ClrServMode: firmware/lower/2C000-misc-2C000.s:1336
+// ClrServMode: firmware/lower/2C000-misc-2C000.s:1322
 pub(crate) fn ClrServMode(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -15329,6 +15352,7 @@ pub const ROUTINES: &[(u32, u32, Block, &str)] = &[
     (0x2D2EC, 0x2D2F6, OBJ_2D2E7, "OBJ_2D2E7"),
     (0x2D2FC, 0x2D306, OBJ_2D2F7, "OBJ_2D2F7"),
     (0x2D30C, 0x2D31B, OBJ_2D307, "OBJ_2D307"),
+    (0x2D54E, 0x2D563, code_2D54E, "code_2D54E"),
     (0x2D564, 0x2D56D, Loop, "Loop"),
     (0x2D9A6, 0x2D9B1, SetServMode, "SetServMode"),
     (0x2D9B7, 0x2D9C2, ClrServMode, "ClrServMode"),

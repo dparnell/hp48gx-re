@@ -7,7 +7,7 @@ L_760C9:
         A=A+B   XS                               * 760CB
         BSR     A                                * 760CE
         RTNSXM                                   * 760D0
-        NIBHEX  0                                * 760D2
+        BSS     1                                * 760D2  zeros
 
 * SI prefixes: the index of the last one (read by OBJ_0C2CD)
         CON(2)  #15                              * 760D3  entry 0

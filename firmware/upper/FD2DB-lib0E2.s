@@ -87,7 +87,7 @@ ROMP_0E2_069:
         { BINT0 BINT1                            * FF4CB
           PCGROB  "images/FF4DA-packed.png"      * FF4DA  120 x 53, packed
         }                                        * FF950
-        BSS     4                                * FF955
+        BSS     4                                * FF955  zeros
         ENDLENGTH                                * FF959
         FILLTO  #FFFFC                           * FF959  1699 zero nibbles: the next entry stays at #FFFFC
 

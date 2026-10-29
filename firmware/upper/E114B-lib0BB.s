@@ -116,4 +116,4 @@ LIB0BB.link:
         LENGTH                                   * E1A49  length, to #E1A53
         REL(5)  ROMP_0BB_000                     * E1A4E  000 
         ENDLENGTH                                * E1A53
-        NIBHEX  0000                             * E1A53  ..
+        BSS     4                                * E1A53  zeros

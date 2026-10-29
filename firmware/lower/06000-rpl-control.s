@@ -524,7 +524,7 @@ L_06593:
 L_0659B:
         ?ST=1   10                               * 0659B
         GOYES   GPMEMERR                         * 0659E
-        GOSUB   GARBAGECOL                       * 065A0  inline data follows
+        GOSUB   GARBAGECOL                       * 065A0
         ST=1    10                               * 065A4
         GONC    L_0653A                          * 065A7
 
@@ -610,6 +610,7 @@ POP#:
 TOTEMPOB:
         CON(5)  (*)+5                            * 06657  primitive code object
         ST=0    10                               * 0665C
+L_0665F:
         GOSUB   SAVPTR                           * 0665F
         C=DAT1  A                                * 06663
         B=C     A                                * 06666
@@ -637,8 +638,9 @@ L_066A2:
         GOTO    GPMEMERR                         * 066A7
 L_066AB:
         ST=1    10                               * 066AB
-        GOSUB   GARBAGECOL                       * 066AE  inline data follows
-        NIBHEX  7C1158A                          * 066B2  Ç.Σ
+        GOSUB   GARBAGECOL                       * 066AE
+        GOSUB   GETPTR                           * 066B2
+        GONC    L_0665F                          * 066B6
 
 * Copy upwards C.A nibbles from D0 to D1 D0 D1 will point to start of area Used: A.W C.A P Use this to move downwards
 * refs (42): 0320E 0668A 069F3 06A86 06B2D 06C92 ...
@@ -759,7 +761,7 @@ SAVPTR:
         RTNCC                                    * 067D0
 
 * <REF>SAVPTR in reverse \ Clears Carry.
-* refs (198): 021AA 02D80 0342C 03553 03672 0370A ...
+* refs (200): 021AA 02D80 0342C 03553 03672 0370A ...
 GETPTR:
         D0=(5)  AVMEM                            * 067D2
         C=DAT0  A                                * 067D9
@@ -1800,7 +1802,7 @@ L_072B8:
         GOYES   L_072B8+1                        * 072B8
 * the rest of RTNSXM at #072B9
 * a branch also enters #072BA, where the nibbles decode as C=RSTK
-        NIBHEX  0                                * 072BA
+        BSS     1                                * 072BA  zeros
 * the rest of C=RSTK at #072BA
         NIBHEX  7                                * 072BB
         C=0     A                                * 072BC
@@ -2258,7 +2260,7 @@ L_0772D:
         GOSUBL  MOVEDSD                          * 07735
         GONC    L_0775E                          * 0773B
         R2=A                                     * 0773E
-        GOSUBL  GARBAGECOL                       * 07741  inline data follows
+        GOSUBL  GARBAGECOL                       * 07741
         A=R2                                     * 07747
         C=0     A                                * 0774A
         LC(1)   #D                               * 0774C
@@ -2840,7 +2842,7 @@ L_07CEC:
         A=DAT0  A                                * 07D0F
         A=A+C   A                                * 07D12
         GOTO    L_08060                          * 07D14
-        NIBHEX  000                              * 07D18  .
+        BSS     3                                * 07D18  zeros
 
 * ob lam ->
 * refs (89): 26275 262D4 54783 56791 567F5 568FE ...

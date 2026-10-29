@@ -614,7 +614,7 @@ OBJ_2821E:
 OBJ_2823C:
         :: pshzerpsharg parg& psh dup PTR addt2: xCOS x* psh PTR addt2: xSIN * 2823C
           x* top& top& Addi*+[_] ;               * 28273
-        NIBHEX  E8E60                            * 2828C  ←n
+        CON(5)  NOP                              * 2828C  address
 
 * Unreferenced NOP between objects: padding
         CON(5)  NOP                              * 28291  entry 0
@@ -1644,7 +1644,7 @@ L_299A2:
         GOSBVL  GETPTR                           * 299C6
         GOVLNG  DOMEMERR                         * 299CD
 L_299D4:
-        GOSBVL  GARBAGECOL                       * 299D4  inline data follows
+        GOSBVL  GARBAGECOL                       * 299D4
         D1=(5)  DSKTOP                           * 299DB
         C=DAT1  A                                * 299E2
         D1=C                                     * 299E5
@@ -1790,7 +1790,7 @@ L_29B76:
         GOVLNG  DOMEMERR                         * 29B8D
 L_29B94:
         GOSBVL  SAVPTR                           * 29B94
-        GOSBVL  GARBAGECOL                       * 29B9B  inline data follows
+        GOSBVL  GARBAGECOL                       * 29B9B
         GOSBVL  GETPTR                           * 29BA2
         A=B     A                                * 29BA9
         AD0EX                                    * 29BAB
@@ -1893,7 +1893,7 @@ OBJ_29CC7:
         D=D-1   A                                * 29CCC
         GONC    L_29CF4                          * 29CCE
         GOSBVL  SAVPTR                           * 29CD1
-        GOSBVL  GARBAGECOL                       * 29CD8  inline data follows
+        GOSBVL  GARBAGECOL                       * 29CD8
         GOSBVL  GETPTR                           * 29CDF
         D=D-1   A                                * 29CE6
         GONC    L_29CF4                          * 29CE8
@@ -1954,7 +1954,9 @@ OBJ_29D5F:
         A=A+1   A                                * 29D9F
         R0=A.F  A                                * 29DA1
         GOVLNG  PUSH#LOOP                        * 29DA7
-        NIBHEX  3D22000                          * 29DAE  Ó".
+
+        LENGTH                                   * 29DAE  library object without its prolog (its place is the end of the link table before): length, to #2C081
+        CON(2)  0                                * 29DB3  no title
 
 LIB003:
         CON(3)  #003                             * 29DB5  library number

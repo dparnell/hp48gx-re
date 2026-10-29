@@ -1768,7 +1768,7 @@ pub(crate) fn ROMP_0C3_01B(r: &mut Run) {
 }
 
 // ROMPTR 0E7 051
-// ROMP_0E7_051: firmware/upper/CCA9F-lib0E7.s:582
+// ROMP_0E7_051: firmware/upper/CCA9F-lib0E7.s:583
 pub(crate) fn ROMP_0E7_051(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -1891,7 +1891,7 @@ pub(crate) fn code_CF081(r: &mut Run) {
 }
 
 // ROMPTR 0E7 058
-// ~UTTYPEEXT0?: firmware/upper/CCA9F-lib0E7.s:679
+// ~UTTYPEEXT0?: firmware/upper/CCA9F-lib0E7.s:680
 pub(crate) fn _UTTYPEEXT0_(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {

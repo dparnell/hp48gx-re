@@ -596,7 +596,7 @@ xSUB:
           # C22 sub(go,2c)                       * 1C889  grob complex complex
           BINT0 ROMPTR 0E8 01F                   * 1C898  any
         ;                                        * 1C8A8
-        BSS     14                               * 1C8AD
+        BSS     14                               * 1C8AD  zeros
 
 * $ % %' -> $'
 * refs (1): 1C86B
@@ -621,7 +621,7 @@ xREPL:
           # 515 xREPL~list,real,list             * 1C921  list real list
           BINT0 ROMPTR 0E8 020                   * 1C930  any
         ;                                        * 1C940
-        BSS     14                               * 1C945
+        BSS     14                               * 1C945  zeros
 
 * {} -> ob1...obn n
 * ROMPTR 002 09E LIST→
@@ -1975,7 +1975,7 @@ xYRNG:
         CON(3)  #0DC                             * 1E65E  command
 xFUNCTION:
         ROMPTR 0F1 033                           * 1E661  FUNCTION
-        BSS     14                               * 1E66C
+        BSS     14                               * 1E66C  zeros
 
 * ->
 * ROMPTR 002 0DD CONIC
@@ -1985,7 +1985,7 @@ xFUNCTION:
         CON(3)  #0DD                             * 1E67E  command
 xCONIC:
         ROMPTR 0F1 034                           * 1E681  CONIC
-        BSS     14                               * 1E68C
+        BSS     14                               * 1E68C  zeros
 
 * ROMPTR 002 0DE
 * refs (9): 189EA 46DB1 512CE A54FA A5642 A60ED ...
@@ -1994,7 +1994,7 @@ xCONIC:
         CON(3)  #0DE                             * 1E69E  command
 POLAR:
         ROMPTR 0F1 035                           * 1E6A1  POLAR
-        BSS     14                               * 1E6AC
+        BSS     14                               * 1E6AC  zeros
 
 * ->
 * ROMPTR 002 0DF PARAMETRIC
@@ -2004,7 +2004,7 @@ POLAR:
         CON(3)  #0DF                             * 1E6BE  command
 xPARAMETRIC:
         ROMPTR 0F1 036                           * 1E6C1  PARAMETRIC
-        BSS     14                               * 1E6CC
+        BSS     14                               * 1E6CC  zeros
 
 * ->
 * ROMPTR 002 0E0 TRUTH
@@ -2014,7 +2014,7 @@ xPARAMETRIC:
         CON(3)  #0E0                             * 1E6DE  command
 xTRUTH:
         ROMPTR 0F1 037                           * 1E6E1  TRUTH
-        BSS     14                               * 1E6EC
+        BSS     14                               * 1E6EC  zeros
 
 * ROMPTR 002 0E1 SCATTER
 * refs (8): 189EA 5130A A5570 A56B8 A6163 A62AB ...
@@ -2023,7 +2023,7 @@ xTRUTH:
         CON(3)  #0E1                             * 1E6FE  command
 xSCATTER:
         ROMPTR 0F1 038                           * 1E701  SCATTER
-        BSS     14                               * 1E70C
+        BSS     14                               * 1E70C  zeros
 
 * ->
 * ROMPTR 002 0E2 HISTOGRAM
@@ -2033,7 +2033,7 @@ xSCATTER:
         CON(3)  #0E2                             * 1E71E  command
 xHISTOGRAM:
         ROMPTR 0F1 039                           * 1E721  HISTOGRAM
-        BSS     14                               * 1E72C
+        BSS     14                               * 1E72C  zeros
 
 * ->
 * ROMPTR 002 0E3 BAR
@@ -2043,7 +2043,7 @@ xHISTOGRAM:
         CON(3)  #0E3                             * 1E73E  command
 xBAR:
         ROMPTR 0F1 03A                           * 1E741  BAR
-        BSS     14                               * 1E74C
+        BSS     14                               * 1E74C  zeros
 
 * ob1 ob2 -> 1/0
 * ROMPTR 002 0E4 SAME
@@ -2484,7 +2484,7 @@ xDER:
           SYMBCMP XEQSYMDERCON                   * 1EFF0  algebraic complex
           SYMBUNIT XEQSYMDERCON                  * 1EFFA  algebraic unit
         ;                                        * 1F004
-        NIBHEX  198D6                            * 1F009  γØ
+        CON(5)  OBJ_6D891                        * 1F009  address
 
 #0524310h:
         HXS 0134250                              * 1F00E

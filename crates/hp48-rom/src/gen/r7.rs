@@ -456,8 +456,12 @@ pub(crate) fn SUB_706B7(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
-            0x706B7..=0x706E1 => {
+            0x706B7..=0x706B7 => {
                 op!(r, at, 0x706B7..0x706BA, 5, r.cpu.st_set(10, false)); // ST=0 10
+                at = 0x706BA;
+            }
+            // L_706BA:
+            0x706BA..=0x706E1 => {
                 op!(r, at, 0x706BA..0x706C1, 9, r.cpu.load_const(R::C, 5, 0xF)); // LC(5) #0000F
                 op!(r, at, 0x706C1..0x706C3, 4, r.cpu.copy(R::B, R::C, Field::A)); // B=C A
                 op!(r, at, 0x706C3..0x706C7, 6, r.cpu.load_const(R::C, 2, 0x1A)); // LC(2) #1A
@@ -504,19 +508,12 @@ pub(crate) fn SUB_706B7(r: &mut Run) {
             0x7072B..=0x7072B => {
                 branch!(r, at, 0x70732, 9, r.cpu.call(0x0613E)); // GOSBVL GARBAGECOL
             }
-            _ => {
-                r.cpu.pc = at;
-                return;
+            // #70732:
+            0x70732..=0x70735 => {
+                op!(r, at, 0x70732..0x70735, 5, r.cpu.st_set(10, true)); // ST=1 10
+                branch!(r, at, 0x70738, 5, r.cpu.jump_if(Cond::NoCarry, 0x706BA)); // GONC L_706BA
             }
-        }
-    }
-}
-
-// L_70738: firmware/lower/70039-libraries.s:476
-pub(crate) fn L_70738(r: &mut Run) {
-    let mut at = r.cpu.pc;
-    loop {
-        match at {
+            // L_70738:
             0x70738..=0x70738 => {
                 jump!(r, at, 9, r.cpu.pc = 0x065AA); // GOVLNG GPMEMERR
             }
@@ -529,7 +526,7 @@ pub(crate) fn L_70738(r: &mut Run) {
 }
 
 // Bank-select stubs, reached through computed jumps: D0=(5) #7F040+2n, then GOTO
-// BANKMTHDS~1: firmware/lower/70039-libraries.s:479
+// BANKMTHDS~1: firmware/lower/70039-libraries.s:481
 pub(crate) fn BANKMTHDS_1(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -701,7 +698,7 @@ pub(crate) fn BANKMTHDS_1(r: &mut Run) {
     }
 }
 
-// SUB_7089F: firmware/lower/70039-libraries.s:577
+// SUB_7089F: firmware/lower/70039-libraries.s:579
 pub(crate) fn SUB_7089F(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -1454,7 +1451,7 @@ pub(crate) fn SUB_7089F(r: &mut Run) {
     }
 }
 
-// SET~1: firmware/lower/70039-libraries.s:975
+// SET~1: firmware/lower/70039-libraries.s:977
 pub(crate) fn SET_1(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -1885,7 +1882,7 @@ pub(crate) fn SET_1(r: &mut Run) {
     }
 }
 
-// SUB_7116E: firmware/lower/70039-libraries.s:1241
+// SUB_7116E: firmware/lower/70039-libraries.s:1243
 pub(crate) fn SUB_7116E(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -1974,7 +1971,7 @@ pub(crate) fn SUB_7116E(r: &mut Run) {
     }
 }
 
-// CSLW5~jump: firmware/lower/70039-libraries.s:1297
+// CSLW5~jump: firmware/lower/70039-libraries.s:1299
 pub(crate) fn CSLW5_jump(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -1990,7 +1987,7 @@ pub(crate) fn CSLW5_jump(r: &mut Run) {
     }
 }
 
-// CSRW5~jump: firmware/lower/70039-libraries.s:1301
+// CSRW5~jump: firmware/lower/70039-libraries.s:1303
 pub(crate) fn CSRW5_jump(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -2014,7 +2011,7 @@ pub(crate) fn CSRW5_jump(r: &mut Run) {
     }
 }
 
-// SUB_7122B: firmware/lower/70039-libraries.s:1308
+// SUB_7122B: firmware/lower/70039-libraries.s:1310
 pub(crate) fn SUB_7122B(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -2074,7 +2071,7 @@ pub(crate) fn SUB_7122B(r: &mut Run) {
     }
 }
 
-// SUB_7127A: firmware/lower/70039-libraries.s:1340
+// SUB_7127A: firmware/lower/70039-libraries.s:1342
 pub(crate) fn SUB_7127A(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -2390,7 +2387,7 @@ pub(crate) fn SUB_7127A(r: &mut Run) {
     }
 }
 
-// SUB_714EA: firmware/lower/70039-libraries.s:1532
+// SUB_714EA: firmware/lower/70039-libraries.s:1534
 pub(crate) fn SUB_714EA(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -2497,7 +2494,7 @@ pub(crate) fn SUB_714EA(r: &mut Run) {
     }
 }
 
-// ?ACCPTR>: firmware/lower/70039-libraries.s:1597
+// ?ACCPTR>: firmware/lower/70039-libraries.s:1599
 pub(crate) fn _ACCPTR_(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -2545,7 +2542,7 @@ pub(crate) fn _ACCPTR_(r: &mut Run) {
 }
 
 // Call the routine at C.A (RSTK=C, RTN): it returns to CallC's caller
-// CallC: firmware/lower/70039-libraries.s:1626
+// CallC: firmware/lower/70039-libraries.s:1628
 pub(crate) fn CallC(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -2597,7 +2594,7 @@ pub(crate) fn CallC(r: &mut Run) {
     }
 }
 
-// L_71678: firmware/lower/70039-libraries.s:1655
+// L_71678: firmware/lower/70039-libraries.s:1657
 pub(crate) fn L_71678(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -2616,7 +2613,7 @@ pub(crate) fn L_71678(r: &mut Run) {
     }
 }
 
-// GETEL~1: firmware/lower/70039-libraries.s:1660
+// GETEL~1: firmware/lower/70039-libraries.s:1662
 pub(crate) fn GETEL_1(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -2691,7 +2688,7 @@ pub(crate) fn GETEL_1(r: &mut Run) {
     }
 }
 
-// rGETATELN~1: firmware/lower/70039-libraries.s:1698
+// rGETATELN~1: firmware/lower/70039-libraries.s:1700
 pub(crate) fn rGETATELN_1(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -2749,7 +2746,7 @@ pub(crate) fn rGETATELN_1(r: &mut Run) {
     }
 }
 
-// NumEntryLin(b)~1: firmware/lower/70039-libraries.s:1721
+// NumEntryLin(b)~1: firmware/lower/70039-libraries.s:1723
 pub(crate) fn NumEntryLin_b__1(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -2806,7 +2803,7 @@ pub(crate) fn NumEntryLin_b__1(r: &mut Run) {
     }
 }
 
-// dup2;idem(nm,bk)?~1: firmware/lower/70039-libraries.s:1748
+// dup2;idem(nm,bk)?~1: firmware/lower/70039-libraries.s:1750
 pub(crate) fn dup2_idem_nm_bk___1(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -2911,7 +2908,7 @@ pub(crate) fn dup2_idem_nm_bk___1(r: &mut Run) {
     }
 }
 
-// sto12(bk,nm,s)~2: firmware/lower/70039-libraries.s:1807
+// sto12(bk,nm,s)~2: firmware/lower/70039-libraries.s:1809
 pub(crate) fn sto12_bk_nm_s__2(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -2965,7 +2962,7 @@ pub(crate) fn sto12_bk_nm_s__2(r: &mut Run) {
     }
 }
 
-// SUB_718E5: firmware/lower/70039-libraries.s:1835
+// SUB_718E5: firmware/lower/70039-libraries.s:1837
 pub(crate) fn SUB_718E5(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -3051,7 +3048,7 @@ pub(crate) fn SUB_718E5(r: &mut Run) {
     }
 }
 
-// PurgeBkp12(nm,s)~3: firmware/lower/70039-libraries.s:1883
+// PurgeBkp12(nm,s)~3: firmware/lower/70039-libraries.s:1885
 pub(crate) fn PurgeBkp12_nm_s__3(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -3139,7 +3136,7 @@ pub(crate) fn PurgeBkp12_nm_s__3(r: &mut Run) {
     }
 }
 
-// PurgeBkp12(nm,s)~4: firmware/lower/70039-libraries.s:1934
+// PurgeBkp12(nm,s)~4: firmware/lower/70039-libraries.s:1936
 pub(crate) fn PurgeBkp12_nm_s__4(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -3185,7 +3182,7 @@ pub(crate) fn PurgeBkp12_nm_s__4(r: &mut Run) {
     }
 }
 
-// BAK>OB~1: firmware/lower/70039-libraries.s:1962
+// BAK>OB~1: firmware/lower/70039-libraries.s:1964
 pub(crate) fn BAK_OB_1(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -3270,7 +3267,7 @@ pub(crate) fn BAK_OB_1(r: &mut Run) {
     }
 }
 
-// BAKNAME~1: firmware/lower/70039-libraries.s:2007
+// BAKNAME~1: firmware/lower/70039-libraries.s:2009
 pub(crate) fn BAKNAME_1(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -3352,7 +3349,7 @@ pub(crate) fn BAKNAME_1(r: &mut Run) {
     }
 }
 
-// OBJ_71BB6: firmware/lower/70039-libraries.s:2055
+// OBJ_71BB6: firmware/lower/70039-libraries.s:2057
 pub(crate) fn OBJ_71BB6(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -3442,7 +3439,7 @@ pub(crate) fn code_71BCB(r: &mut Run) {
 }
 
 // romptr #i -> ob T -> F
-// rNTHELCOMP: firmware/lower/70039-libraries.s:2100
+// rNTHELCOMP: firmware/lower/70039-libraries.s:2102
 pub(crate) fn rNTHELCOMP(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -3630,7 +3627,7 @@ pub(crate) fn rNTHELCOMP(r: &mut Run) {
     }
 }
 
-// SUB_71D8A: firmware/lower/70039-libraries.s:2200
+// SUB_71D8A: firmware/lower/70039-libraries.s:2202
 pub(crate) fn SUB_71D8A(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -3655,7 +3652,7 @@ pub(crate) fn SUB_71D8A(r: &mut Run) {
     }
 }
 
-// RPTRACC: firmware/lower/70039-libraries.s:2212
+// RPTRACC: firmware/lower/70039-libraries.s:2214
 pub(crate) fn RPTRACC(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -3705,7 +3702,7 @@ pub(crate) fn RPTRACC(r: &mut Run) {
     }
 }
 
-// L_71E1D: firmware/lower/70039-libraries.s:2239
+// L_71E1D: firmware/lower/70039-libraries.s:2241
 pub(crate) fn L_71E1D(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -3741,7 +3738,7 @@ pub(crate) fn L_71E1D(r: &mut Run) {
     }
 }
 
-// SUB_71E57: firmware/lower/70039-libraries.s:2260
+// SUB_71E57: firmware/lower/70039-libraries.s:2262
 pub(crate) fn SUB_71E57(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -3827,7 +3824,7 @@ pub(crate) fn SUB_71E57(r: &mut Run) {
     }
 }
 
-// ?OKINALG~romptr~1: firmware/lower/70039-libraries.s:2311
+// ?OKINALG~romptr~1: firmware/lower/70039-libraries.s:2313
 pub(crate) fn _OKINALG_romptr_1(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -3888,7 +3885,7 @@ pub(crate) fn _OKINALG_romptr_1(r: &mut Run) {
     }
 }
 
-// L_71F8B: firmware/lower/70039-libraries.s:2350
+// L_71F8B: firmware/lower/70039-libraries.s:2352
 pub(crate) fn L_71F8B(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -4000,7 +3997,7 @@ pub(crate) fn L_71F8B(r: &mut Run) {
     }
 }
 
-// SUB_72048: firmware/lower/70039-libraries.s:2406
+// SUB_72048: firmware/lower/70039-libraries.s:2408
 pub(crate) fn SUB_72048(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -4017,7 +4014,7 @@ pub(crate) fn SUB_72048(r: &mut Run) {
     }
 }
 
-// SUB_7204C: firmware/lower/70039-libraries.s:2411
+// SUB_7204C: firmware/lower/70039-libraries.s:2413
 pub(crate) fn SUB_7204C(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -4059,7 +4056,7 @@ pub(crate) fn SUB_7204C(r: &mut Run) {
     }
 }
 
-// SUB_72080: firmware/lower/70039-libraries.s:2429
+// SUB_72080: firmware/lower/70039-libraries.s:2431
 pub(crate) fn SUB_72080(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -4109,7 +4106,7 @@ pub(crate) fn SUB_72080(r: &mut Run) {
     }
 }
 
-// OBJ_720D4: firmware/lower/70039-libraries.s:2455
+// OBJ_720D4: firmware/lower/70039-libraries.s:2457
 pub(crate) fn OBJ_720D4(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -4147,7 +4144,7 @@ pub(crate) fn OBJ_720D4(r: &mut Run) {
     }
 }
 
-// SUB_72107: firmware/lower/70039-libraries.s:2472
+// SUB_72107: firmware/lower/70039-libraries.s:2474
 pub(crate) fn SUB_72107(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -4233,7 +4230,7 @@ pub(crate) fn SUB_72107(r: &mut Run) {
     }
 }
 
-// L_721C4: firmware/lower/70039-libraries.s:2526
+// L_721C4: firmware/lower/70039-libraries.s:2528
 pub(crate) fn L_721C4(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -4288,7 +4285,7 @@ pub(crate) fn L_721C4(r: &mut Run) {
     }
 }
 
-// OBJ_7221F: firmware/lower/70039-libraries.s:2555
+// OBJ_7221F: firmware/lower/70039-libraries.s:2557
 pub(crate) fn OBJ_7221F(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -4323,7 +4320,7 @@ pub(crate) fn OBJ_7221F(r: &mut Run) {
     }
 }
 
-// SUB_72245: firmware/lower/70039-libraries.s:2568
+// SUB_72245: firmware/lower/70039-libraries.s:2570
 pub(crate) fn SUB_72245(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -4371,7 +4368,7 @@ pub(crate) fn SUB_72245(r: &mut Run) {
     }
 }
 
-// purge(bk,s)~2: firmware/lower/70039-libraries.s:2584
+// purge(bk,s)~2: firmware/lower/70039-libraries.s:2586
 pub(crate) fn purge_bk_s__2(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -4449,7 +4446,7 @@ pub(crate) fn purge_bk_s__2(r: &mut Run) {
     }
 }
 
-// SUB_72350: firmware/lower/70039-libraries.s:2632
+// SUB_72350: firmware/lower/70039-libraries.s:2634
 pub(crate) fn SUB_72350(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -4894,7 +4891,7 @@ pub(crate) fn SUB_72350(r: &mut Run) {
     }
 }
 
-// CSLW5~jump_2: firmware/lower/70039-libraries.s:2859
+// CSLW5~jump_2: firmware/lower/70039-libraries.s:2861
 pub(crate) fn CSLW5_jump_2(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -4910,7 +4907,7 @@ pub(crate) fn CSLW5_jump_2(r: &mut Run) {
     }
 }
 
-// CSRW5~jump_2: firmware/lower/70039-libraries.s:2863
+// CSRW5~jump_2: firmware/lower/70039-libraries.s:2865
 pub(crate) fn CSRW5_jump_2(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -4926,7 +4923,7 @@ pub(crate) fn CSRW5_jump_2(r: &mut Run) {
     }
 }
 
-// SUB_7266B: firmware/lower/70039-libraries.s:2867
+// SUB_7266B: firmware/lower/70039-libraries.s:2869
 pub(crate) fn SUB_7266B(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -5371,7 +5368,7 @@ pub(crate) fn SUB_7266B(r: &mut Run) {
     }
 }
 
-// VERSION~1: firmware/lower/70039-libraries.s:3087
+// VERSION~1: firmware/lower/70039-libraries.s:3089
 pub(crate) fn VERSION_1(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -5490,7 +5487,7 @@ pub(crate) fn VERSION_1(r: &mut Run) {
     }
 }
 
-// Code_72A11: firmware/lower/70039-libraries.s:3134
+// Code_72A11: firmware/lower/70039-libraries.s:3136
 pub(crate) fn Code_72A11(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -5541,7 +5538,7 @@ pub(crate) fn Code_72A11(r: &mut Run) {
     }
 }
 
-// OBJ_72B22: firmware/lower/70039-libraries.s:3189
+// OBJ_72B22: firmware/lower/70039-libraries.s:3191
 pub(crate) fn OBJ_72B22(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -5612,7 +5609,7 @@ pub(crate) fn OBJ_72B22(r: &mut Run) {
     }
 }
 
-// SUB_72BA1: firmware/lower/70039-libraries.s:3232
+// SUB_72BA1: firmware/lower/70039-libraries.s:3234
 pub(crate) fn SUB_72BA1(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -5628,7 +5625,7 @@ pub(crate) fn SUB_72BA1(r: &mut Run) {
     }
 }
 
-// OBJ_72BD2: firmware/lower/70039-libraries.s:3246
+// OBJ_72BD2: firmware/lower/70039-libraries.s:3248
 pub(crate) fn OBJ_72BD2(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -5808,7 +5805,7 @@ pub(crate) fn code_72C53(r: &mut Run) {
     }
 }
 
-// SUB_72CF2: firmware/lower/70039-libraries.s:3338
+// SUB_72CF2: firmware/lower/70039-libraries.s:3340
 pub(crate) fn SUB_72CF2(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -5833,7 +5830,7 @@ pub(crate) fn SUB_72CF2(r: &mut Run) {
     }
 }
 
-// SUB_72D01: firmware/lower/70039-libraries.s:3346
+// SUB_72D01: firmware/lower/70039-libraries.s:3348
 pub(crate) fn SUB_72D01(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -5870,7 +5867,7 @@ pub(crate) fn SUB_72D01(r: &mut Run) {
     }
 }
 
-// SUB_72D1F: firmware/lower/70039-libraries.s:3361
+// SUB_72D1F: firmware/lower/70039-libraries.s:3363
 pub(crate) fn SUB_72D1F(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -5956,7 +5953,7 @@ pub(crate) fn SUB_72D1F(r: &mut Run) {
     }
 }
 
-// OBJ_72DC5: firmware/lower/70039-libraries.s:3415
+// OBJ_72DC5: firmware/lower/70039-libraries.s:3417
 pub(crate) fn OBJ_72DC5(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -5998,7 +5995,7 @@ pub(crate) fn OBJ_72DC5(r: &mut Run) {
     }
 }
 
-// EvalNoCK~1: firmware/lower/70039-libraries.s:3440
+// EvalNoCK~1: firmware/lower/70039-libraries.s:3442
 pub(crate) fn EvalNoCK_1(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -6055,7 +6052,7 @@ pub(crate) fn EvalNoCK_1(r: &mut Run) {
     }
 }
 
-// Code_72EDD: firmware/lower/70039-libraries.s:3489
+// Code_72EDD: firmware/lower/70039-libraries.s:3491
 pub(crate) fn Code_72EDD(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -18951,8 +18948,7 @@ pub const ROUTINES: &[(u32, u32, Block, &str)] = &[
     (0x7028F, 0x702A1, OBJ_7028A, "OBJ_7028A"),
     (0x702A2, 0x702C3, SUB_702A2, "SUB_702A2"),
     (0x706A1, 0x706B6, L_706A1, "L_706A1"),
-    (0x706B7, 0x70731, SUB_706B7, "SUB_706B7"),
-    (0x70738, 0x7073E, L_70738, "L_70738"),
+    (0x706B7, 0x7073E, SUB_706B7, "SUB_706B7"),
     (0x7073F, 0x7089E, BANKMTHDS_1, "BANKMTHDS_1"),
     (0x7089F, 0x70E0B, SUB_7089F, "SUB_7089F"),
     (0x70E0C, 0x7116D, SET_1, "SET_1"),

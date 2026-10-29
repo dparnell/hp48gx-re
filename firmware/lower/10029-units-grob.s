@@ -434,7 +434,7 @@ UMTAN~1:
         ST=0    4                                * 10E1D
         GOSBVL  SUB_2B6F2                        * 10E20
         GOVLNG  L_2AECC                          * 10E27
-        BSS     8                                * 10E2E
+        BSS     8                                * 10E2E  zeros
         RPL
 
 * -> {}
@@ -481,7 +481,9 @@ CONSTUNITERR:
 L_10F06:
         A=C     A                                * 10F06
         GOVLNG  Errjmp                           * 10F08
-        NIBHEX  4DA7000                          * 10F0F  Ôz.
+
+        LENGTH                                   * 10F0F  library object without its prolog (its place is the end of the link table before): length, to #189E3
+        CON(2)  0                                * 10F14  no title
 
 LIB001:
         CON(3)  #001                             * 10F16  library number
@@ -2093,7 +2095,7 @@ L_11EBF:
         GOSUB   SUB_11EF9                        * 11EE5
 L_11EE9:
         RTNSC                                    * 11EE9
-        BSS     7                                * 11EEB
+        BSS     7                                * 11EEB  zeros
 
 * refs (4): 11DDD 11E43 11E4C 11EBB
 SUB_11EF2:
@@ -2160,7 +2162,7 @@ L_11F6D:
         LC(5)   Font8-496                        * 11F6F  glyph of code c = #7B257 + 16*c
         C=C+A   A                                * 11F76
         RTN                                      * 11F78
-        BSS     6                                * 11F7A
+        BSS     6                                * 11F7A  zeros
 
 * $ -> grob
 * refs (34): 1281A 3963C 39A3D 39ABA 4712A 47143 ...

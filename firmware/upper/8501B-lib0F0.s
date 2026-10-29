@@ -688,4 +688,7 @@ ROMP_0F0_0D5:
 * refs (1): 82007
 ROMP_0F0_0D6:
         :: OBJ_57630 xLNP1 OBJ_57716 top& meta+ IsolContinue ; * 86FB5
-        NIBHEX  1B92000                          * 86FDD  ±).
+        ENDLENGTH                                * 86FDD
+
+        LENGTH                                   * 86FDD  library object without its prolog (its place is the end of the link table before): length, to #8998E
+        CON(2)  0                                * 86FE2  no title

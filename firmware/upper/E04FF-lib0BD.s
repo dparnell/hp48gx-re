@@ -92,4 +92,4 @@ LIB0BD.link:
         LENGTH                                   * E0AF1  length, to #E0AFB
         REL(5)  ROMP_0BD_000                     * E0AF6  000 
         ENDLENGTH                                * E0AFB
-        NIBHEX  0000                             * E0AFB  ..
+        BSS     4                                * E0AFB  zeros

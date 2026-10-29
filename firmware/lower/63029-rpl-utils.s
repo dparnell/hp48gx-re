@@ -1778,7 +1778,7 @@ SUB_64ADC:
           D1=C                                   * 64B08
           RTN                                    * 64B0B
         ENDCODE                                  * 64B0D
-        NIBHEX  B2130                            * 64B0D  +1
+        CON(5)  SEMI                             * 64B0D  address
 
 * 44d 2Ch
 * refs (6): 3A229 4D8D5 A4061 A5390 AC2DD D68AF
@@ -3421,7 +3421,7 @@ L_6593E:
         B=B-1   B                                * 65945
         GONC    L_6591A                          * 65948
         RTNCC                                    * 6594B
-        NIBHEX  0                                * 6594D
+        BSS     1                                * 6594D  zeros
 
 * hxs hxs ->
 putnibs:
@@ -3574,6 +3574,7 @@ OBJ_65EC7:
           :: EqwFontWidth MAKEGROB OBJ_44DFE ; EqwBoxNext@ OBJ_6F42D * 65EC7
           EqwBoxObj! ;                           * 65EEA
 
+OBJ_65EF4:
         :: SKIP OBJ_661A6 EqwBoxCount #9+ EqwBoxCount#1+ OBJ_6CFB5 3DROP * 65EF4
           BINT16 EqwFontWidth #2* #+ BINT18 OBJ_6E0C0 #2* #+ BINT9 * 65F1C
           EqwFontWidth #2/ #+ BINT9 OBJ_6E0C0 #+ OBJ_6D909 BINT15 ROLL * 65F49

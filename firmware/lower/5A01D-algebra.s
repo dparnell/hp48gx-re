@@ -624,7 +624,7 @@ OBJ_5B28A:
 * refs (1): 5B29E
 OBJ_5B2D0:
         :: DROP rot larg OBJ_5B0D2 4roll top& rot pullrev psh1&rev ; * 5B2D0
-        NIBHEX  E8E60                            * 5B307  ←n
+        CON(5)  NOP                              * 5B307  address
 
 * Unreferenced NOP between objects: padding
         CON(5)  NOP                              * 5B30C  entry 0
@@ -849,7 +849,7 @@ OBJ_5BB6D:
               NULL{} }                           * 5BBC7
           }                                      * 5BBD1
           OBJ_5B34D ;                            * 5BBD6
-        NIBHEX  E8E60                            * 5BBE0  ←n
+        CON(5)  NOP                              * 5BBE0  address
 
 * meta&NEG -> meta meta -> meta&NEG
 * refs (19): 55350 5620A 56246 56372 563BD 565B6 ...
@@ -1029,14 +1029,14 @@ MetaMulInv:
         ASSEMBLE
         GOSBVL  RuleMatch                        * 5BE5B  inline data follows
 
-* rewrite rules, read by the interpreter called just before (SUB_5F6F2)
-        NIBHEX  37070                            * 5BE62  pattern: op2 op6 arg op6
+* rewrite rules, read by the interpreter called just before (RuleMatch, #5F6F2)
+        PATTERN op2 op6 arg op6                  * 5BE62  x* xINV arg xINV
         CON(5)  colinv1                          * 5BE67  run if it matches
-        NIBHEX  37000                            * 5BE6C  pattern: op2 op6
+        PATTERN op2 op6                          * 5BE6C  x* xINV
         CON(5)  colinv2                          * 5BE71  run if it matches
-        NIBHEX  30700                            * 5BE76  pattern: op2 arg op6
+        PATTERN op2 arg op6                      * 5BE76  x* arg xINV
         CON(5)  colinv3                          * 5BE7B  run if it matches
-        NIBHEX  F                                * 5BE80  end of the rules
+        CON(1)  #F                               * 5BE80  end of the rules
 
 * commute terms
 * refs (1): 5996D
@@ -1044,17 +1044,17 @@ Meta<-->:
         CON(5)  (*)+5                            * 5BE81  primitive code object
         GOSBVL  RuleMatch                        * 5BE86  inline data follows
 
-* rewrite rules, read by the interpreter called just before (SUB_5F6F2)
-        NIBHEX  10000                            * 5BE8D  pattern: op0
+* rewrite rules, read by the interpreter called just before (RuleMatch, #5F6F2)
+        PATTERN op0                              * 5BE8D  x+
         RPL
         ROMPTR 0F0 01F                           * 5BE92  run if it matches
-        NIBHEX  20000                            * 5BE9D  pattern: op1
+        PATTERN op1                              * 5BE9D  x-
         ROMPTR 0F0 020                           * 5BEA2  run if it matches
-        NIBHEX  30000                            * 5BEAD  pattern: op2
+        PATTERN op2                              * 5BEAD  x*
         ROMPTR 0F0 021                           * 5BEB2  run if it matches
-        NIBHEX  40000                            * 5BEBD  pattern: op3
+        PATTERN op3                              * 5BEBD  x/
         ROMPTR 0F0 022                           * 5BEC2  run if it matches
-        NIBHEX  F                                * 5BECD  end of the rules
+        CON(1)  #F                               * 5BECD  end of the rules
 
 * associate left term
 * refs (3): 5999E 5CE1F 5CE33
@@ -1063,27 +1063,27 @@ Meta<-A:
         ASSEMBLE
         GOSBVL  RuleMatch                        * 5BED3  inline data follows
 
-* rewrite rules, read by the interpreter called just before (SUB_5F6F2)
-        NIBHEX  11000                            * 5BEDA  pattern: op0 op0
+* rewrite rules, read by the interpreter called just before (RuleMatch, #5F6F2)
+        PATTERN op0 op0                          * 5BEDA  x+ x+
         CON(5)  OBJ_5C9FB                        * 5BEDF  run if it matches
-        NIBHEX  12000                            * 5BEE4  pattern: op0 op1
+        PATTERN op0 op1                          * 5BEE4  x+ x-
         CON(5)  OBJ_5C9FB                        * 5BEE9  run if it matches
-        NIBHEX  21000                            * 5BEEE  pattern: op1 op0
+        PATTERN op1 op0                          * 5BEEE  x- x+
         RPL
         ROMPTR 0F0 023                           * 5BEF3  run if it matches
-        NIBHEX  22000                            * 5BEFE  pattern: op1 op1
+        PATTERN op1 op1                          * 5BEFE  x- x-
         ROMPTR 0F0 024                           * 5BF03  run if it matches
-        NIBHEX  33000                            * 5BF0E  pattern: op2 op2
+        PATTERN op2 op2                          * 5BF0E  x* x*
         CON(5)  OBJ_5C9FB                        * 5BF13  run if it matches
-        NIBHEX  34000                            * 5BF18  pattern: op2 op3
+        PATTERN op2 op3                          * 5BF18  x* x/
         CON(5)  OBJ_5C9FB                        * 5BF1D  run if it matches
-        NIBHEX  43000                            * 5BF22  pattern: op3 op2
+        PATTERN op3 op2                          * 5BF22  x/ x*
         ROMPTR 0F0 025                           * 5BF27  run if it matches
-        NIBHEX  44000                            * 5BF32  pattern: op3 op3
+        PATTERN op3 op3                          * 5BF32  x/ x/
         ROMPTR 0F0 026                           * 5BF37  run if it matches
-        NIBHEX  53000                            * 5BF42  pattern: op4 op2
+        PATTERN op4 op2                          * 5BF42  x^ x*
         ROMPTR 0F0 027                           * 5BF47  run if it matches
-        NIBHEX  F                                * 5BF52  end of the rules
+        CON(1)  #F                               * 5BF52  end of the rules
 
 * associate right term
 * refs (3): 599ED 5CE56 5CE6A
@@ -1092,27 +1092,27 @@ MetaA->:
         ASSEMBLE
         GOSBVL  RuleMatch                        * 5BF58  inline data follows
 
-* rewrite rules, read by the interpreter called just before (SUB_5F6F2)
-        NIBHEX  10100                            * 5BF5F  pattern: op0 arg op0
+* rewrite rules, read by the interpreter called just before (RuleMatch, #5F6F2)
+        PATTERN op0 arg op0                      * 5BF5F  x+ arg x+
         CON(5)  OBJ_5CA32                        * 5BF64  run if it matches
-        NIBHEX  20100                            * 5BF69  pattern: op1 arg op0
+        PATTERN op1 arg op0                      * 5BF69  x- arg x+
         CON(5)  OBJ_5CA32                        * 5BF6E  run if it matches
-        NIBHEX  10200                            * 5BF73  pattern: op0 arg op1
+        PATTERN op0 arg op1                      * 5BF73  x+ arg x-
         RPL
         ROMPTR 0F0 028                           * 5BF78  run if it matches
-        NIBHEX  20200                            * 5BF83  pattern: op1 arg op1
+        PATTERN op1 arg op1                      * 5BF83  x- arg x-
         ROMPTR 0F0 029                           * 5BF88  run if it matches
-        NIBHEX  30300                            * 5BF93  pattern: op2 arg op2
+        PATTERN op2 arg op2                      * 5BF93  x* arg x*
         CON(5)  OBJ_5CA32                        * 5BF98  run if it matches
-        NIBHEX  40300                            * 5BF9D  pattern: op3 arg op2
+        PATTERN op3 arg op2                      * 5BF9D  x/ arg x*
         CON(5)  OBJ_5CA32                        * 5BFA2  run if it matches
-        NIBHEX  30400                            * 5BFA7  pattern: op2 arg op3
+        PATTERN op2 arg op3                      * 5BFA7  x* arg x/
         ROMPTR 0F0 02A                           * 5BFAC  run if it matches
-        NIBHEX  40400                            * 5BFB7  pattern: op3 arg op3
+        PATTERN op3 arg op3                      * 5BFB7  x/ arg x/
         ROMPTR 0F0 02B                           * 5BFBC  run if it matches
-        NIBHEX  50500                            * 5BFC7  pattern: op4 arg op4
+        PATTERN op4 arg op4                      * 5BFC7  x^ arg x^
         ROMPTR 0F0 02C                           * 5BFCC  run if it matches
-        NIBHEX  F                                * 5BFD7  end of the rules
+        CON(1)  #F                               * 5BFD7  end of the rules
 
 * delete right term
 * refs (5): 57AD4 59E24 5B672 5CEFB 5CF0A
@@ -1121,37 +1121,37 @@ MetaD->:
         ASSEMBLE
         GOSBVL  RuleMatch                        * 5BFDD  inline data follows
 
-* rewrite rules, read by the interpreter called just before (SUB_5F6F2)
-        NIBHEX  31000                            * 5BFE4  pattern: op2 op0
+* rewrite rules, read by the interpreter called just before (RuleMatch, #5F6F2)
+        PATTERN op2 op0                          * 5BFE4  x* x+
         CON(5)  OBJ_5CA50                        * 5BFE9  run if it matches
-        NIBHEX  32000                            * 5BFEE  pattern: op2 op1
+        PATTERN op2 op1                          * 5BFEE  x* x-
         CON(5)  OBJ_5CA50                        * 5BFF3  run if it matches
-        NIBHEX  41000                            * 5BFF8  pattern: op3 op0
+        PATTERN op3 op0                          * 5BFF8  x/ x+
         RPL
         ROMPTR 0F0 02D                           * 5BFFD  run if it matches
-        NIBHEX  42000                            * 5C008  pattern: op3 op1
+        PATTERN op3 op1                          * 5C008  x/ x-
         ROMPTR 0F0 02E                           * 5C00D  run if it matches
-        NIBHEX  51000                            * 5C018  pattern: op4 op0
+        PATTERN op4 op0                          * 5C018  x^ x+
         ROMPTR 0F0 02F                           * 5C01D  run if it matches
-        NIBHEX  52000                            * 5C028  pattern: op4 op1
+        PATTERN op4 op1                          * 5C028  x^ x-
         ROMPTR 0F0 030                           * 5C02D  run if it matches
-        NIBHEX  81000                            * 5C038  pattern: op7 op0
+        PATTERN op7 op0                          * 5C038  xEXP x+
         ROMPTR 0F0 031                           * 5C03D  run if it matches
-        NIBHEX  91000                            * 5C048  pattern: op8 op0
+        PATTERN op8 op0                          * 5C048  xALOG x+
         ROMPTR 0F0 031                           * 5C04D  run if it matches
-        NIBHEX  82000                            * 5C058  pattern: op7 op1
+        PATTERN op7 op1                          * 5C058  xEXP x-
         ROMPTR 0F0 032                           * 5C05D  run if it matches
-        NIBHEX  92000                            * 5C068  pattern: op8 op1
+        PATTERN op8 op1                          * 5C068  xALOG x-
         ROMPTR 0F0 032                           * 5C06D  run if it matches
-        NIBHEX  A3000                            * 5C078  pattern: op9 op2
+        PATTERN op9 op2                          * 5C078  xLN x*
         ROMPTR 0F0 033                           * 5C07D  run if it matches
-        NIBHEX  B3000                            * 5C088  pattern: op10 op2
+        PATTERN op10 op2                         * 5C088  xLOG x*
         ROMPTR 0F0 033                           * 5C08D  run if it matches
-        NIBHEX  A4000                            * 5C098  pattern: op9 op3
+        PATTERN op9 op3                          * 5C098  xLN x/
         ROMPTR 0F0 034                           * 5C09D  run if it matches
-        NIBHEX  B4000                            * 5C0A8  pattern: op10 op3
+        PATTERN op10 op3                         * 5C0A8  xLOG x/
         ROMPTR 0F0 034                           * 5C0AD  run if it matches
-        NIBHEX  F                                * 5C0B8  end of the rules
+        CON(1)  #F                               * 5C0B8  end of the rules
 
 * delete left term
 * refs (4): 57AD9 59DD5 5CDED 5CDFC
@@ -1160,20 +1160,20 @@ Meta<-D:
         ASSEMBLE
         GOSBVL  RuleMatch                        * 5C0BE  inline data follows
 
-* rewrite rules, read by the interpreter called just before (SUB_5F6F2)
-        NIBHEX  30100                            * 5C0C5  pattern: op2 arg op0
+* rewrite rules, read by the interpreter called just before (RuleMatch, #5F6F2)
+        PATTERN op2 arg op0                      * 5C0C5  x* arg x+
         CON(5)  OBJ_5CAA5                        * 5C0CA  run if it matches
-        NIBHEX  30200                            * 5C0CF  pattern: op2 arg op1
+        PATTERN op2 arg op1                      * 5C0CF  x* arg x-
         CON(5)  OBJ_5CAA5                        * 5C0D4  run if it matches
-        NIBHEX  40100                            * 5C0D9  pattern: op3 arg op0
+        PATTERN op3 arg op0                      * 5C0D9  x/ arg x+
         CON(5)  OBJ_5CAA5                        * 5C0DE  run if it matches
-        NIBHEX  40200                            * 5C0E3  pattern: op3 arg op1
+        PATTERN op3 arg op1                      * 5C0E3  x/ arg x-
         CON(5)  OBJ_5CAA5                        * 5C0E8  run if it matches
-        NIBHEX  50300                            * 5C0ED  pattern: op4 arg op2
+        PATTERN op4 arg op2                      * 5C0ED  x^ arg x*
         CON(5)  OBJ_5CAA5                        * 5C0F2  run if it matches
-        NIBHEX  50400                            * 5C0F7  pattern: op4 arg op3
+        PATTERN op4 arg op3                      * 5C0F7  x^ arg x/
         CON(5)  OBJ_5CAA5                        * 5C0FC  run if it matches
-        NIBHEX  F                                * 5C101  end of the rules
+        CON(1)  #F                               * 5C101  end of the rules
 
 * delete left term
 * refs (1): 5B663
@@ -1181,16 +1181,16 @@ Meta<-D!:
         CON(5)  (*)+5                            * 5C102  primitive code object
         GOSBVL  RuleMatch                        * 5C107  inline data follows
 
-* rewrite rules, read by the interpreter called just before (SUB_5F6F2)
-        NIBHEX  30100                            * 5C10E  pattern: op2 arg op0
+* rewrite rules, read by the interpreter called just before (RuleMatch, #5F6F2)
+        PATTERN op2 arg op0                      * 5C10E  x* arg x+
         CON(5)  OBJ_5CAA5                        * 5C113  run if it matches
-        NIBHEX  30200                            * 5C118  pattern: op2 arg op1
+        PATTERN op2 arg op1                      * 5C118  x* arg x-
         CON(5)  OBJ_5CAA5                        * 5C11D  run if it matches
-        NIBHEX  40100                            * 5C122  pattern: op3 arg op0
+        PATTERN op3 arg op0                      * 5C122  x/ arg x+
         CON(5)  OBJ_5CAA5                        * 5C127  run if it matches
-        NIBHEX  40200                            * 5C12C  pattern: op3 arg op1
+        PATTERN op3 arg op1                      * 5C12C  x/ arg x-
         CON(5)  OBJ_5CAA5                        * 5C131  run if it matches
-        NIBHEX  F                                * 5C136  end of the rules
+        CON(1)  #F                               * 5C136  end of the rules
 
 * remove prefix
 * refs (6): 57AED 59D86 5BD1B 5BD34 5CF9B 5CFAA
@@ -1198,39 +1198,39 @@ Meta->():
         CON(5)  (*)+5                            * 5C137  primitive code object
         GOSBVL  RuleMatch                        * 5C13C  inline data follows
 
-* rewrite rules, read by the interpreter called just before (SUB_5F6F2)
-        NIBHEX  61000                            * 5C143  pattern: op5 op0
+* rewrite rules, read by the interpreter called just before (RuleMatch, #5F6F2)
+        PATTERN op5 op0                          * 5C143  xNEG x+
         CON(5)  ~SWAPDROP#1-;COLA;[f(X,Y)]=>[-X-Y]! * 5C148  run if it matches
-        NIBHEX  62000                            * 5C14D  pattern: op5 op1
+        PATTERN op5 op1                          * 5C14D  xNEG x-
         CON(5)  ~SWAPDROP#1-;COLA;[f(X,Y)]=>[-X+Y]! * 5C152  run if it matches
-        NIBHEX  63000                            * 5C157  pattern: op5 op2
+        PATTERN op5 op2                          * 5C157  xNEG x*
         RPL
         ROMPTR 0F0 035                           * 5C15C  run if it matches
-        NIBHEX  64000                            * 5C167  pattern: op5 op3
+        PATTERN op5 op3                          * 5C167  xNEG x/
         ROMPTR 0F0 036                           * 5C16C  run if it matches
-        NIBHEX  6A000                            * 5C177  pattern: op5 op9
+        PATTERN op5 op9                          * 5C177  xNEG xLN
         ROMPTR 0F0 037                           * 5C17C  run if it matches
-        NIBHEX  6B000                            * 5C187  pattern: op5 op10
+        PATTERN op5 op10                         * 5C187  xNEG xLOG
         ROMPTR 0F0 037                           * 5C18C  run if it matches
-        NIBHEX  66000                            * 5C197  pattern: op5 op5
+        PATTERN op5 op5                          * 5C197  xNEG xNEG
         CON(5)  2pull2DROP                       * 5C19C  run if it matches
-        NIBHEX  67000                            * 5C1A1  pattern: op5 op6
+        PATTERN op5 op6                          * 5C1A1  xNEG xINV
         CON(5)  ROTSWAP                          * 5C1A6  run if it matches
-        NIBHEX  75000                            * 5C1AB  pattern: op6 op4
+        PATTERN op6 op4                          * 5C1AB  xINV x^
         ROMPTR 0F0 038                           * 5C1B0  run if it matches
-        NIBHEX  78000                            * 5C1BB  pattern: op6 op7
+        PATTERN op6 op7                          * 5C1BB  xINV xEXP
         ROMPTR 0F0 039                           * 5C1C0  run if it matches
-        NIBHEX  79000                            * 5C1CB  pattern: op6 op8
+        PATTERN op6 op8                          * 5C1CB  xINV xALOG
         ROMPTR 0F0 039                           * 5C1D0  run if it matches
-        NIBHEX  73000                            * 5C1DB  pattern: op6 op2
+        PATTERN op6 op2                          * 5C1DB  xINV x*
         CON(5)  ~SWAPDROP#1-;COLA;[f(X,Y)]=>[INV(X)/Y]! * 5C1E0  run if it matches
-        NIBHEX  74000                            * 5C1E5  pattern: op6 op3
+        PATTERN op6 op3                          * 5C1E5  xINV x/
         CON(5)  ~SWAPDROP#1-;COLA;[f(X,Y)]=>[INV(X)*Y]! * 5C1EA  run if it matches
-        NIBHEX  77000                            * 5C1EF  pattern: op6 op6
+        PATTERN op6 op6                          * 5C1EF  xINV xINV
         CON(5)  2pull2DROP                       * 5C1F4  run if it matches
-        NIBHEX  76000                            * 5C1F9  pattern: op6 op5
+        PATTERN op6 op5                          * 5C1F9  xINV xNEG
         CON(5)  ROTSWAP                          * 5C1FE  run if it matches
-        NIBHEX  F                                * 5C203  end of the rules
+        CON(1)  #F                               * 5C203  end of the rules
 
 * double invert & remove prefix
 * refs (1): 59C9F
@@ -1239,19 +1239,19 @@ Meta1/():
         ASSEMBLE
         GOSBVL  RuleMatch                        * 5C209  inline data follows
 
-* rewrite rules, read by the interpreter called just before (SUB_5F6F2)
-        NIBHEX  30000                            * 5C210  pattern: op2
+* rewrite rules, read by the interpreter called just before (RuleMatch, #5F6F2)
+        PATTERN op2                              * 5C210  x*
         RPL
         ROMPTR 0F0 03A                           * 5C215  run if it matches
-        NIBHEX  40000                            * 5C220  pattern: op3
+        PATTERN op3                              * 5C220  x/
         ROMPTR 0F0 03B                           * 5C225  run if it matches
-        NIBHEX  50000                            * 5C230  pattern: op4
+        PATTERN op4                              * 5C230  x^
         ROMPTR 0F0 03C                           * 5C235  run if it matches
-        NIBHEX  80000                            * 5C240  pattern: op7
+        PATTERN op7                              * 5C240  xEXP
         ROMPTR 0F0 03D                           * 5C245  run if it matches
-        NIBHEX  90000                            * 5C250  pattern: op8
+        PATTERN op8                              * 5C250  xALOG
         ROMPTR 0F0 03D                           * 5C255  run if it matches
-        NIBHEX  F                                * 5C260  end of the rules
+        CON(1)  #F                               * 5C260  end of the rules
 
 * double negate & remove prefix
 * refs (1): 59C6F
@@ -1260,21 +1260,21 @@ Meta-():
         ASSEMBLE
         GOSBVL  RuleMatch                        * 5C266  inline data follows
 
-* rewrite rules, read by the interpreter called just before (SUB_5F6F2)
-        NIBHEX  A0000                            * 5C26D  pattern: op9
+* rewrite rules, read by the interpreter called just before (RuleMatch, #5F6F2)
+        PATTERN op9                              * 5C26D  xLN
         RPL
         ROMPTR 0F0 03E                           * 5C272  run if it matches
-        NIBHEX  B0000                            * 5C27D  pattern: op10
+        PATTERN op10                             * 5C27D  xLOG
         ROMPTR 0F0 03E                           * 5C282  run if it matches
-        NIBHEX  10000                            * 5C28D  pattern: op0
+        PATTERN op0                              * 5C28D  x+
         ROMPTR 0F0 041                           * 5C292  run if it matches
-        NIBHEX  20000                            * 5C29D  pattern: op1
+        PATTERN op1                              * 5C29D  x-
         ROMPTR 0F0 042                           * 5C2A2  run if it matches
-        NIBHEX  30000                            * 5C2AD  pattern: op2
+        PATTERN op2                              * 5C2AD  x*
         ROMPTR 0F0 03F                           * 5C2B2  run if it matches
-        NIBHEX  40000                            * 5C2BD  pattern: op3
+        PATTERN op3                              * 5C2BD  x/
         ROMPTR 0F0 040                           * 5C2C2  run if it matches
-        NIBHEX  F                                * 5C2CD  end of the rules
+        CON(1)  #F                               * 5C2CD  end of the rules
 
 * EXP(a*b) -> EXP(a)^b
 * refs (2): 57ADE 59D53
@@ -1283,17 +1283,17 @@ MetaE^:
         ASSEMBLE
         GOSBVL  RuleMatch                        * 5C2D3  inline data follows
 
-* rewrite rules, read by the interpreter called just before (SUB_5F6F2)
-        NIBHEX  83000                            * 5C2DA  pattern: op7 op2
+* rewrite rules, read by the interpreter called just before (RuleMatch, #5F6F2)
+        PATTERN op7 op2                          * 5C2DA  xEXP x*
         RPL
         ROMPTR 0F0 043                           * 5C2DF  run if it matches
-        NIBHEX  93000                            * 5C2EA  pattern: op8 op2
+        PATTERN op8 op2                          * 5C2EA  xALOG x*
         ROMPTR 0F0 043                           * 5C2EF  run if it matches
-        NIBHEX  84000                            * 5C2FA  pattern: op7 op3
+        PATTERN op7 op3                          * 5C2FA  xEXP x/
         ROMPTR 0F0 044                           * 5C2FF  run if it matches
-        NIBHEX  94000                            * 5C30A  pattern: op8 op3
+        PATTERN op8 op3                          * 5C30A  xALOG x/
         ROMPTR 0F0 044                           * 5C30F  run if it matches
-        NIBHEX  F                                * 5C31A  end of the rules
+        CON(1)  #F                               * 5C31A  end of the rules
 
 * EXP(a)^b -> EXP(a*b)
 * refs (1): 59CCD
@@ -1302,13 +1302,13 @@ MetaE():
         ASSEMBLE
         GOSBVL  RuleMatch                        * 5C320  inline data follows
 
-* rewrite rules, read by the interpreter called just before (SUB_5F6F2)
-        NIBHEX  50800                            * 5C327  pattern: op4 arg op7
+* rewrite rules, read by the interpreter called just before (RuleMatch, #5F6F2)
+        PATTERN op4 arg op7                      * 5C327  x^ arg xEXP
         RPL
         ROMPTR 0F0 045                           * 5C32C  run if it matches
-        NIBHEX  50900                            * 5C337  pattern: op4 arg op8
+        PATTERN op4 arg op8                      * 5C337  x^ arg xALOG
         ROMPTR 0F0 045                           * 5C33C  run if it matches
-        NIBHEX  F                                * 5C347  end of the rules
+        CON(1)  #F                               * 5C347  end of the rules
 
 * LN(a^b) -> b*LN(a)
 * refs (2): 57AE3 59D27
@@ -1317,13 +1317,13 @@ MetaL*:
         ASSEMBLE
         GOSBVL  RuleMatch                        * 5C34D  inline data follows
 
-* rewrite rules, read by the interpreter called just before (SUB_5F6F2)
-        NIBHEX  A5000                            * 5C354  pattern: op9 op4
+* rewrite rules, read by the interpreter called just before (RuleMatch, #5F6F2)
+        PATTERN op9 op4                          * 5C354  xLN x^
         RPL
         ROMPTR 0F0 046                           * 5C359  run if it matches
-        NIBHEX  B5000                            * 5C364  pattern: op10 op4
+        PATTERN op10 op4                         * 5C364  xLOG x^
         ROMPTR 0F0 046                           * 5C369  run if it matches
-        NIBHEX  F                                * 5C374  end of the rules
+        CON(1)  #F                               * 5C374  end of the rules
 
 * b*LN(a) -> LN(a^b)
 * refs (1): 59CFB
@@ -1332,17 +1332,17 @@ MetaL():
         ASSEMBLE
         GOSBVL  RuleMatch                        * 5C37A  inline data follows
 
-* rewrite rules, read by the interpreter called just before (SUB_5F6F2)
-        NIBHEX  30A00                            * 5C381  pattern: op2 arg op9
+* rewrite rules, read by the interpreter called just before (RuleMatch, #5F6F2)
+        PATTERN op2 arg op9                      * 5C381  x* arg xLN
         RPL
         ROMPTR 0F0 047                           * 5C386  run if it matches
-        NIBHEX  30B00                            * 5C391  pattern: op2 arg op10
+        PATTERN op2 arg op10                     * 5C391  x* arg xLOG
         ROMPTR 0F0 047                           * 5C396  run if it matches
-        NIBHEX  40A00                            * 5C3A1  pattern: op3 arg op9
+        PATTERN op3 arg op9                      * 5C3A1  x/ arg xLN
         ROMPTR 0F0 048                           * 5C3A6  run if it matches
-        NIBHEX  40B00                            * 5C3B1  pattern: op3 arg op10
+        PATTERN op3 arg op10                     * 5C3B1  x/ arg xLOG
         ROMPTR 0F0 048                           * 5C3B6  run if it matches
-        NIBHEX  F                                * 5C3C1  end of the rules
+        CON(1)  #F                               * 5C3C1  end of the rules
 
 * merge common factor on left
 * refs (2): 59BD4 5CFFF
@@ -1351,41 +1351,41 @@ Meta<-M:
         ASSEMBLE
         GOSBVL  RuleMatch                        * 5C3C7  inline data follows
 
-* rewrite rules, read by the interpreter called just before (SUB_5F6F2)
-        NIBHEX  35005                            * 5C3CE  pattern: op2 op4 arg arg op4
+* rewrite rules, read by the interpreter called just before (RuleMatch, #5F6F2)
+        PATTERN op2 op4 arg arg op4              * 5C3CE  x* x^ arg arg x^
         RPL
         ROMPTR 0F0 04E                           * 5C3D3  run if it matches
-        NIBHEX  45005                            * 5C3DE  pattern: op3 op4 arg arg op4
+        PATTERN op3 op4 arg arg op4              * 5C3DE  x/ x^ arg arg x^
         ROMPTR 0F0 04F                           * 5C3E3  run if it matches
-        NIBHEX  38080                            * 5C3EE  pattern: op2 op7 arg op7
+        PATTERN op2 op7 arg op7                  * 5C3EE  x* xEXP arg xEXP
         ROMPTR 0F0 050                           * 5C3F3  run if it matches
-        NIBHEX  39090                            * 5C3FE  pattern: op2 op8 arg op8
+        PATTERN op2 op8 arg op8                  * 5C3FE  x* xALOG arg xALOG
         ROMPTR 0F0 050                           * 5C403  run if it matches
-        NIBHEX  48080                            * 5C40E  pattern: op3 op7 arg op7
+        PATTERN op3 op7 arg op7                  * 5C40E  x/ xEXP arg xEXP
         ROMPTR 0F0 051                           * 5C413  run if it matches
-        NIBHEX  49090                            * 5C41E  pattern: op3 op8 arg op8
+        PATTERN op3 op8 arg op8                  * 5C41E  x/ xALOG arg xALOG
         ROMPTR 0F0 051                           * 5C423  run if it matches
-        NIBHEX  1A0A0                            * 5C42E  pattern: op0 op9 arg op9
+        PATTERN op0 op9 arg op9                  * 5C42E  x+ xLN arg xLN
         ROMPTR 0F0 052                           * 5C433  run if it matches
-        NIBHEX  1B0B0                            * 5C43E  pattern: op0 op10 arg op10
+        PATTERN op0 op10 arg op10                * 5C43E  x+ xLOG arg xLOG
         ROMPTR 0F0 052                           * 5C443  run if it matches
-        NIBHEX  2A0A0                            * 5C44E  pattern: op1 op9 arg op9
+        PATTERN op1 op9 arg op9                  * 5C44E  x- xLN arg xLN
         ROMPTR 0F0 053                           * 5C453  run if it matches
-        NIBHEX  2B0B0                            * 5C45E  pattern: op1 op10 arg op10
+        PATTERN op1 op10 arg op10                * 5C45E  x- xLOG arg xLOG
         ROMPTR 0F0 053                           * 5C463  run if it matches
-        NIBHEX  13000                            * 5C46E  pattern: op0 op2
+        PATTERN op0 op2                          * 5C46E  x+ x*
         ROMPTR 0F0 049                           * 5C473  run if it matches
-        NIBHEX  23000                            * 5C47E  pattern: op1 op2
+        PATTERN op1 op2                          * 5C47E  x- x*
         ROMPTR 0F0 04A                           * 5C483  run if it matches
-        NIBHEX  14000                            * 5C48E  pattern: op0 op3
+        PATTERN op0 op3                          * 5C48E  x+ x/
         ROMPTR 0F0 049                           * 5C493  run if it matches
-        NIBHEX  24000                            * 5C49E  pattern: op1 op3
+        PATTERN op1 op3                          * 5C49E  x- x/
         ROMPTR 0F0 04A                           * 5C4A3  run if it matches
-        NIBHEX  10000                            * 5C4AE  pattern: op0
+        PATTERN op0                              * 5C4AE  x+
         ROMPTR 0F0 049                           * 5C4B3  run if it matches
-        NIBHEX  20000                            * 5C4BE  pattern: op1
+        PATTERN op1                              * 5C4BE  x-
         ROMPTR 0F0 04A                           * 5C4C3  run if it matches
-        NIBHEX  F                                * 5C4CE  end of the rules
+        CON(1)  #F                               * 5C4CE  end of the rules
 
 * merge common factor on right
 * refs (2): 59C23 5D013
@@ -1394,21 +1394,21 @@ MetaM->:
         ASSEMBLE
         GOSBVL  RuleMatch                        * 5C4D4  inline data follows
 
-* rewrite rules, read by the interpreter called just before (SUB_5F6F2)
-        NIBHEX  13003                            * 5C4DB  pattern: op0 op2 arg arg op2
+* rewrite rules, read by the interpreter called just before (RuleMatch, #5F6F2)
+        PATTERN op0 op2 arg arg op2              * 5C4DB  x+ x* arg arg x*
         RPL
         ROMPTR 0F0 054                           * 5C4E0  run if it matches
-        NIBHEX  23003                            * 5C4EB  pattern: op1 op2 arg arg op2
+        PATTERN op1 op2 arg arg op2              * 5C4EB  x- x* arg arg x*
         ROMPTR 0F0 054                           * 5C4F0  run if it matches
-        NIBHEX  14004                            * 5C4FB  pattern: op0 op3 arg arg op3
+        PATTERN op0 op3 arg arg op3              * 5C4FB  x+ x/ arg arg x/
         ROMPTR 0F0 054                           * 5C500  run if it matches
-        NIBHEX  24004                            * 5C50B  pattern: op1 op3 arg arg op3
+        PATTERN op1 op3 arg arg op3              * 5C50B  x- x/ arg arg x/
         ROMPTR 0F0 054                           * 5C510  run if it matches
-        NIBHEX  35005                            * 5C51B  pattern: op2 op4 arg arg op4
+        PATTERN op2 op4 arg arg op4              * 5C51B  x* x^ arg arg x^
         ROMPTR 0F0 054                           * 5C520  run if it matches
-        NIBHEX  45005                            * 5C52B  pattern: op3 op4 arg arg op4
+        PATTERN op3 op4 arg arg op4              * 5C52B  x/ x^ arg arg x^
         ROMPTR 0F0 054                           * 5C530  run if it matches
-        NIBHEX  F                                * 5C53B  end of the rules
+        CON(1)  #F                               * 5C53B  end of the rules
 
 * add fractions
 * refs (1): 59BA3
@@ -1417,17 +1417,17 @@ MetaAF:
         ASSEMBLE
         GOSBVL  RuleMatch                        * 5C541  inline data follows
 
-* rewrite rules, read by the interpreter called just before (SUB_5F6F2)
-        NIBHEX  14000                            * 5C548  pattern: op0 op3
+* rewrite rules, read by the interpreter called just before (RuleMatch, #5F6F2)
+        PATTERN op0 op3                          * 5C548  x+ x/
         RPL
         ROMPTR 0F0 01C                           * 5C54D  run if it matches
-        NIBHEX  24000                            * 5C558  pattern: op1 op3
+        PATTERN op1 op3                          * 5C558  x- x/
         ROMPTR 0F0 01C                           * 5C55D  run if it matches
-        NIBHEX  10400                            * 5C568  pattern: op0 arg op3
+        PATTERN op0 arg op3                      * 5C568  x+ arg x/
         ROMPTR 0F0 01E                           * 5C56D  run if it matches
-        NIBHEX  20400                            * 5C578  pattern: op1 arg op3
+        PATTERN op1 arg op3                      * 5C578  x- arg x/
         ROMPTR 0F0 01E                           * 5C57D  run if it matches
-        NIBHEX  F                                * 5C588  end of the rules
+        CON(1)  #F                               * 5C588  end of the rules
 
 * include left term
 * refs (3): 59ADA 5CEC4 5CED8
@@ -1436,17 +1436,17 @@ Meta(<-:
         ASSEMBLE
         GOSBVL  RuleMatch                        * 5C58E  inline data follows
 
-* rewrite rules, read by the interpreter called just before (SUB_5F6F2)
-        NIBHEX  10000                            * 5C595  pattern: op0
+* rewrite rules, read by the interpreter called just before (RuleMatch, #5F6F2)
+        PATTERN op0                              * 5C595  x+
         RPL
         ROMPTR 0F0 059                           * 5C59A  run if it matches
-        NIBHEX  20000                            * 5C5A5  pattern: op1
+        PATTERN op1                              * 5C5A5  x-
         ROMPTR 0F0 059                           * 5C5AA  run if it matches
-        NIBHEX  30000                            * 5C5B5  pattern: op2
+        PATTERN op2                              * 5C5B5  x*
         ROMPTR 0F0 05A                           * 5C5BA  run if it matches
-        NIBHEX  40000                            * 5C5C5  pattern: op3
+        PATTERN op3                              * 5C5C5  x/
         ROMPTR 0F0 05A                           * 5C5CA  run if it matches
-        NIBHEX  F                                * 5C5D5  end of the rules
+        CON(1)  #F                               * 5C5D5  end of the rules
 
 * include right term
 * refs (3): 59B29 5CE8D 5CEA1
@@ -1455,17 +1455,17 @@ Meta->):
         ASSEMBLE
         GOSBVL  RuleMatch                        * 5C5DB  inline data follows
 
-* rewrite rules, read by the interpreter called just before (SUB_5F6F2)
-        NIBHEX  10000                            * 5C5E2  pattern: op0
+* rewrite rules, read by the interpreter called just before (RuleMatch, #5F6F2)
+        PATTERN op0                              * 5C5E2  x+
         RPL
         ROMPTR 0F0 05B                           * 5C5E7  run if it matches
-        NIBHEX  20000                            * 5C5F2  pattern: op1
+        PATTERN op1                              * 5C5F2  x-
         ROMPTR 0F0 05B                           * 5C5F7  run if it matches
-        NIBHEX  30000                            * 5C602  pattern: op2
+        PATTERN op2                              * 5C602  x*
         ROMPTR 0F0 05C                           * 5C607  run if it matches
-        NIBHEX  40000                            * 5C612  pattern: op3
+        PATTERN op3                              * 5C612  x/
         ROMPTR 0F0 05C                           * 5C617  run if it matches
-        NIBHEX  F                                * 5C622  end of the rules
+        CON(1)  #F                               * 5C622  end of the rules
 
 * parenthesise nearest term
 * refs (1): 59B77
@@ -1474,17 +1474,17 @@ Meta(()):
         ASSEMBLE
         GOSBVL  RuleMatch                        * 5C628  inline data follows
 
-* rewrite rules, read by the interpreter called just before (SUB_5F6F2)
-        NIBHEX  10000                            * 5C62F  pattern: op0
+* rewrite rules, read by the interpreter called just before (RuleMatch, #5F6F2)
+        PATTERN op0                              * 5C62F  x+
         RPL
         ROMPTR 0F0 05D                           * 5C634  run if it matches
-        NIBHEX  20000                            * 5C63F  pattern: op1
+        PATTERN op1                              * 5C63F  x-
         ROMPTR 0F0 05D                           * 5C644  run if it matches
-        NIBHEX  30000                            * 5C64F  pattern: op2
+        PATTERN op2                              * 5C64F  x*
         ROMPTR 0F0 05E                           * 5C654  run if it matches
-        NIBHEX  40000                            * 5C65F  pattern: op3
+        PATTERN op3                              * 5C65F  x/
         ROMPTR 0F0 05E                           * 5C664  run if it matches
-        NIBHEX  F                                * 5C66F  end of the rules
+        CON(1)  #F                               * 5C66F  end of the rules
 
 * change EXP to trig. fns.
 * refs (1): 59E72
@@ -1493,11 +1493,11 @@ Meta->TRG:
         ASSEMBLE
         GOSBVL  RuleMatch                        * 5C675  inline data follows
 
-* rewrite rules, read by the interpreter called just before (SUB_5F6F2)
-        NIBHEX  80000                            * 5C67C  pattern: op7
+* rewrite rules, read by the interpreter called just before (RuleMatch, #5F6F2)
+        PATTERN op7                              * 5C67C  xEXP
         RPL
         ROMPTR 0F0 063                           * 5C681  run if it matches
-        NIBHEX  F                                * 5C68C  end of the rules
+        CON(1)  #F                               * 5C68C  end of the rules
 
 * move nearest left term to right
 * refs (3): 59A8B 5CF2D 5CF41
@@ -1507,19 +1507,19 @@ MetaT->:
         LC(5)   L_5BDA2                          * 5C692
         GOSBVL  SUB_5F6F9                        * 5C699  inline data follows
 
-* rewrite rules, read by the interpreter called just before (SUB_5F6F2)
-        NIBHEX  10000                            * 5C6A0  pattern: op0
+* rewrite rules, read by the interpreter called just before (RuleMatch, #5F6F2)
+        PATTERN op0                              * 5C6A0  x+
         CON(5)  OBJ_5D794                        * 5C6A5  run if it matches
-        NIBHEX  20000                            * 5C6AA  pattern: op1
+        PATTERN op1                              * 5C6AA  x-
         CON(5)  OBJ_5D794                        * 5C6AF  run if it matches
-        NIBHEX  30000                            * 5C6B4  pattern: op2
+        PATTERN op2                              * 5C6B4  x*
         CON(5)  OBJ_5D7EF                        * 5C6B9  run if it matches
-        NIBHEX  40000                            * 5C6BE  pattern: op3
+        PATTERN op3                              * 5C6BE  x/
         CON(5)  OBJ_5D7EF                        * 5C6C3  run if it matches
-        NIBHEX  50000                            * 5C6C8  pattern: op4
+        PATTERN op4                              * 5C6C8  x=
         RPL
         ROMPTR 0F0 01A                           * 5C6CD  run if it matches
-        NIBHEX  F                                * 5C6D8  end of the rules
+        CON(1)  #F                               * 5C6D8  end of the rules
 
 * move nearest right term to left
 * refs (3): 59A3C 5CF64 5CF78
@@ -1529,19 +1529,19 @@ Meta<-T:
         LC(5)   L_5BDA2                          * 5C6DE
         GOSBVL  SUB_5F6F9                        * 5C6E5  inline data follows
 
-* rewrite rules, read by the interpreter called just before (SUB_5F6F2)
-        NIBHEX  10000                            * 5C6EC  pattern: op0
+* rewrite rules, read by the interpreter called just before (RuleMatch, #5F6F2)
+        PATTERN op0                              * 5C6EC  x+
         RPL
         ROMPTR 0F0 057                           * 5C6F1  run if it matches
-        NIBHEX  20000                            * 5C6FC  pattern: op1
+        PATTERN op1                              * 5C6FC  x-
         ROMPTR 0F0 057                           * 5C701  run if it matches
-        NIBHEX  30000                            * 5C70C  pattern: op2
+        PATTERN op2                              * 5C70C  x*
         ROMPTR 0F0 058                           * 5C711  run if it matches
-        NIBHEX  40000                            * 5C71C  pattern: op3
+        PATTERN op3                              * 5C71C  x/
         ROMPTR 0F0 058                           * 5C721  run if it matches
-        NIBHEX  50000                            * 5C72C  pattern: op4
+        PATTERN op4                              * 5C72C  x=
         ROMPTR 0F0 01B                           * 5C731  run if it matches
-        NIBHEX  F                                * 5C73C  end of the rules
+        CON(1)  #F                               * 5C73C  end of the rules
 
 * remove 1st RE,IM; CONJ
 * refs (3): 59EA5 5CFCD 5CFDC
@@ -1551,41 +1551,41 @@ Meta->()C%:
         LC(5)   L_5BDF7                          * 5C742
         GOSBVL  SUB_5F6F9                        * 5C749  inline data follows
 
-* rewrite rules, read by the interpreter called just before (SUB_5F6F2)
-        NIBHEX  14000                            * 5C750  pattern: op0 op3
+* rewrite rules, read by the interpreter called just before (RuleMatch, #5F6F2)
+        PATTERN op0 op3                          * 5C750  xCONJ x+
         RPL
         ROMPTR 0F0 05F                           * 5C755  run if it matches
-        NIBHEX  15000                            * 5C760  pattern: op0 op4
+        PATTERN op0 op4                          * 5C760  xCONJ x-
         ROMPTR 0F0 05F                           * 5C765  run if it matches
-        NIBHEX  16000                            * 5C770  pattern: op0 op5
+        PATTERN op0 op5                          * 5C770  xCONJ x*
         ROMPTR 0F0 05F                           * 5C775  run if it matches
-        NIBHEX  17000                            * 5C780  pattern: op0 op6
+        PATTERN op0 op6                          * 5C780  xCONJ x/
         ROMPTR 0F0 05F                           * 5C785  run if it matches
-        NIBHEX  18000                            * 5C790  pattern: op0 op7
+        PATTERN op0 op7                          * 5C790  xCONJ xNEG
         ROMPTR 0F0 05F                           * 5C795  run if it matches
-        NIBHEX  19000                            * 5C7A0  pattern: op0 op8
+        PATTERN op0 op8                          * 5C7A0  xCONJ xINV
         ROMPTR 0F0 05F                           * 5C7A5  run if it matches
-        NIBHEX  1A000                            * 5C7B0  pattern: op0 op9
+        PATTERN op0 op9                          * 5C7B0  xCONJ xEXP
         ROMPTR 0F0 05F                           * 5C7B5  run if it matches
-        NIBHEX  1B000                            * 5C7C0  pattern: op0 op10
+        PATTERN op0 op10                         * 5C7C0  xCONJ xSQ
         ROMPTR 0F0 05F                           * 5C7C5  run if it matches
-        NIBHEX  24000                            * 5C7D0  pattern: op1 op3
+        PATTERN op1 op3                          * 5C7D0  xRE x+
         ROMPTR 0F0 060                           * 5C7D5  run if it matches
-        NIBHEX  25000                            * 5C7E0  pattern: op1 op4
+        PATTERN op1 op4                          * 5C7E0  xRE x-
         ROMPTR 0F0 060                           * 5C7E5  run if it matches
-        NIBHEX  28000                            * 5C7F0  pattern: op1 op7
+        PATTERN op1 op7                          * 5C7F0  xRE xNEG
         ROMPTR 0F0 060                           * 5C7F5  run if it matches
-        NIBHEX  34000                            * 5C800  pattern: op2 op3
+        PATTERN op2 op3                          * 5C800  xIM x+
         ROMPTR 0F0 061                           * 5C805  run if it matches
-        NIBHEX  35000                            * 5C810  pattern: op2 op4
+        PATTERN op2 op4                          * 5C810  xIM x-
         ROMPTR 0F0 061                           * 5C815  run if it matches
-        NIBHEX  38000                            * 5C820  pattern: op2 op7
+        PATTERN op2 op7                          * 5C820  xIM xNEG
         ROMPTR 0F0 061                           * 5C825  run if it matches
-        NIBHEX  26000                            * 5C830  pattern: op1 op5
+        PATTERN op1 op5                          * 5C830  xRE x*
         CON(5)  OBJ_5DCEB                        * 5C835  run if it matches
-        NIBHEX  36000                            * 5C83A  pattern: op2 op5
+        PATTERN op2 op5                          * 5C83A  xIM x*
         CON(5)  OBJ_5DD19                        * 5C83F  run if it matches
-        NIBHEX  F                                * 5C844  end of the rules
+        CON(1)  #F                               * 5C844  end of the rules
 
 * define function
 * refs (1): 59EF3
@@ -1595,34 +1595,34 @@ Meta->DEF:
         LC(5)   L_5BDBB                          * 5C84A
         GOSBVL  SUB_5F6F9                        * 5C851  inline data follows
 
-* rewrite rules, read by the interpreter called just before (SUB_5F6F2)
-        NIBHEX  10000                            * 5C858  pattern: op0
+* rewrite rules, read by the interpreter called just before (RuleMatch, #5F6F2)
+        PATTERN op0                              * 5C858  xSIN
         RPL
         ROMPTR 0F0 064                           * 5C85D  run if it matches
-        NIBHEX  20000                            * 5C868  pattern: op1
+        PATTERN op1                              * 5C868  xCOS
         ROMPTR 0F0 065                           * 5C86D  run if it matches
-        NIBHEX  30000                            * 5C878  pattern: op2
+        PATTERN op2                              * 5C878  xTAN
         ROMPTR 0F0 066                           * 5C87D  run if it matches
-        NIBHEX  40000                            * 5C888  pattern: op3
+        PATTERN op3                              * 5C888  xSINH
         ROMPTR 0F0 06A                           * 5C88D  run if it matches
-        NIBHEX  50000                            * 5C898  pattern: op4
+        PATTERN op4                              * 5C898  xCOSH
         ROMPTR 0F0 06B                           * 5C89D  run if it matches
-        NIBHEX  60000                            * 5C8A8  pattern: op5
+        PATTERN op5                              * 5C8A8  xTANH
         ROMPTR 0F0 06C                           * 5C8AD  run if it matches
-        NIBHEX  70000                            * 5C8B8  pattern: op6
+        PATTERN op6                              * 5C8B8  xASIN
         ROMPTR 0F0 067                           * 5C8BD  run if it matches
-        NIBHEX  80000                            * 5C8C8  pattern: op7
+        PATTERN op7                              * 5C8C8  xACOS
         ROMPTR 0F0 068                           * 5C8CD  run if it matches
-        NIBHEX  90000                            * 5C8D8  pattern: op8
+        PATTERN op8                              * 5C8D8  xATAN
         ROMPTR 0F0 069                           * 5C8DD  run if it matches
-        NIBHEX  A0000                            * 5C8E8  pattern: op9
+        PATTERN op9                              * 5C8E8  xASINH
         ROMPTR 0F0 06D                           * 5C8ED  run if it matches
-        NIBHEX  B0000                            * 5C8F8  pattern: op10
+        PATTERN op10                             * 5C8F8  xACOSH
         ROMPTR 0F0 06E                           * 5C8FD  run if it matches
-        NIBHEX  C0000                            * 5C908  pattern: op11
+        PATTERN op11                             * 5C908  xATANH
         ROMPTR 0F0 06F                           * 5C90D  run if it matches
-        NIBHEX  F                                * 5C918  end of the rules
-        NIBHEX  0000                             * 5C919  ..
+        CON(1)  #F                               * 5C918  end of the rules
+        BSS     4                                * 5C919  zeros
 
 * expand trig fns. of a sum
 * refs (1): 59F23
@@ -1632,33 +1632,33 @@ MetaTRG*:
         LC(5)   L_5BE2E                          * 5C922
         GOSBVL  SUB_5F6F9                        * 5C929  inline data follows
 
-* rewrite rules, read by the interpreter called just before (SUB_5F6F2)
-        NIBHEX  31000                            * 5C930  pattern: op2 op0
+* rewrite rules, read by the interpreter called just before (RuleMatch, #5F6F2)
+        PATTERN op2 op0                          * 5C930  xSIN x+
         RPL
         ROMPTR 0F0 070                           * 5C935  run if it matches
-        NIBHEX  32000                            * 5C940  pattern: op2 op1
+        PATTERN op2 op1                          * 5C940  xSIN x-
         ROMPTR 0F0 070                           * 5C945  run if it matches
-        NIBHEX  41000                            * 5C950  pattern: op3 op0
+        PATTERN op3 op0                          * 5C950  xCOS x+
         ROMPTR 0F0 071                           * 5C955  run if it matches
-        NIBHEX  42000                            * 5C960  pattern: op3 op1
+        PATTERN op3 op1                          * 5C960  xCOS x-
         ROMPTR 0F0 071                           * 5C965  run if it matches
-        NIBHEX  61000                            * 5C970  pattern: op5 op0
+        PATTERN op5 op0                          * 5C970  xSINH x+
         ROMPTR 0F0 073                           * 5C975  run if it matches
-        NIBHEX  62000                            * 5C980  pattern: op5 op1
+        PATTERN op5 op1                          * 5C980  xSINH x-
         ROMPTR 0F0 073                           * 5C985  run if it matches
-        NIBHEX  71000                            * 5C990  pattern: op6 op0
+        PATTERN op6 op0                          * 5C990  xCOSH x+
         ROMPTR 0F0 074                           * 5C995  run if it matches
-        NIBHEX  72000                            * 5C9A0  pattern: op6 op1
+        PATTERN op6 op1                          * 5C9A0  xCOSH x-
         ROMPTR 0F0 074                           * 5C9A5  run if it matches
-        NIBHEX  81000                            * 5C9B0  pattern: op7 op0
+        PATTERN op7 op0                          * 5C9B0  xTANH x+
         ROMPTR 0F0 075                           * 5C9B5  run if it matches
-        NIBHEX  82000                            * 5C9C0  pattern: op7 op1
+        PATTERN op7 op1                          * 5C9C0  xTANH x-
         ROMPTR 0F0 075                           * 5C9C5  run if it matches
-        NIBHEX  51000                            * 5C9D0  pattern: op4 op0
+        PATTERN op4 op0                          * 5C9D0  xTAN x+
         ROMPTR 0F0 072                           * 5C9D5  run if it matches
-        NIBHEX  52000                            * 5C9E0  pattern: op4 op1
+        PATTERN op4 op1                          * 5C9E0  xTAN x-
         ROMPTR 0F0 072                           * 5C9E5  run if it matches
-        NIBHEX  F                                * 5C9F0  end of the rules
+        CON(1)  #F                               * 5C9F0  end of the rules
 
 * refs (6): 5CA05 83BAE 83BC7 83BE0 83BF9 83C17
 OBJ_5C9F1:

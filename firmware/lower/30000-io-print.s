@@ -129,7 +129,7 @@ L_30139:
         CON(2)  #D8                              * 30161  entry 7
         NIBASC  "O/"                             * 30163
         CON(2)  0                                * 30167  end of table
-        NIBHEX  00                               * 30169  .
+        BSS     2                                * 30169  zeros
         RPL
 
 * $ -> $' $''
@@ -596,7 +596,7 @@ L_306AD:
             C=C-A   A                            * 3071D
             DAT0=C  A                            * 3071F
             GOVLNG  GPPushTLoop                  * 30722
-            NIBHEX  00                           * 30729  .
+            BSS     2                            * 30729  zeros
           ENDCODE                                * 3072B
           NOT?SEMI                               * 3072B
           ?ROMPTR> ;                             * 30730
@@ -802,7 +802,7 @@ L_309D1:
             DAT0=A  B                            * 309DA
 L_309DD:
             GOVLNG  GPPushTLoop                  * 309DD
-            NIBHEX  000                          * 309E4  .
+            BSS     3                            * 309E4  zeros
           ENDCODE                                * 309E7
         ;                                        * 309E7
 
@@ -1280,7 +1280,7 @@ L_30FA3:
 * refs (2): 31623 31796
 SAVPTR~jump_14:
         GOVLNG  SAVPTR                           * 30FB3
-        BSS     8                                * 30FBA
+        BSS     8                                * 30FBA  zeros
 
 * refs (1): 324FB
 SUB_30FC2:
@@ -1309,7 +1309,7 @@ SUB_30FE1:
         DAT1=C  1                                * 30FFF
         CBIT=0  0                                * 31003
         GOTO    L_3140D                          * 31008
-        NIBHEX  00                               * 3100C  .
+        BSS     2                                * 3100C  zeros
 
 * refs (10): 30F13 30F34 30F69 30F78 30FAD 311F4 ...
 SUB_3100E:
@@ -1606,7 +1606,7 @@ UARTBUFLEN:
         GOSUBL  SUB_32120                        * 3135D
 L_31363:
         GOVLNG  PushAC<>®                        * 31363
-        NIBHEX  00                               * 3136A  .
+        BSS     2                                * 3136A  zeros
 
 * refs (5): 17FF7 2E46E 30E49 315EF 4214A
 FLUSHRSBUF:
@@ -1630,7 +1630,7 @@ L_31383:
         D0=(4)  #0927                            * 313B2
         DAT0=A  1                                * 313B8
         RTN                                      * 313BC
-        NIBHEX  0000                             * 313BE  ..
+        BSS     4                                * 313BE  zeros
 
 * refs (4): 3147B 314BA 317DE 32B25
 SUB_313C2:
@@ -2224,7 +2224,7 @@ SUB_3214B:
         RTNNC                                    * 32157
         A=0     A                                * 3215A
         GOTO    L_32336                          * 3215C
-        NIBHEX  0                                * 32160
+        BSS     1                                * 32160  zeros
         RPL
 
 * refs (12): 31840 318D6 318F4 3198A 319D5 31A7A ...
@@ -2285,7 +2285,7 @@ L_32336:
         B=0     A                                * 32336
         D=0     A                                * 32338
         GOLONG  SUB_31692                        * 3233A
-        NIBHEX  0                                * 32340
+        BSS     1                                * 32340  zeros
         RPL
 
 * refs (1): 322BA
@@ -3472,7 +3472,10 @@ SUB_32F3C:
         C=C+1   A                                * 32F53
         D=C     A                                * 32F55
         RTN                                      * 32F57
-        NIBHEX  6A52000                          * 32F59  ¦%.
+        ENDLENGTH                                * 32F59
+
+        LENGTH                                   * 32F59  library object without its prolog (its place is the end of the link table before): length, to #354FF
+        CON(2)  0                                * 32F5E  no title
 
 LIB00A:
         CON(3)  #00A                             * 32F60  library number

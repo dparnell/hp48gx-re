@@ -1075,4 +1075,7 @@ LIB0A8.link:
         REL(5)  ROMP_0A8_080                     * C78CA  080 
         REL(5)  ROMP_0A8_081                     * C78CF  081 
         ENDLENGTH                                * C78D4
-        NIBHEX  9E43000                          * C78D4  é4.
+        ENDLENGTH                                * C78D4
+
+        LENGTH                                   * C78D4  library object without its prolog (its place is the end of the link table before): length, to #CADBD
+        CON(2)  0                                * C78D9  no title

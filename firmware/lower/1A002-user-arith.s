@@ -246,14 +246,14 @@ xIFTE:
 
 #0526260410h:
         HXS 0140626250                           * 1A471
-        NIBHEX  28DD7                            * 1A485  ∇Ý
+        CON(5)  D/DIFTE                          * 1A485  address
 
         ROMPTR 0F0 095                           * 1A48A
 
         CON(5)  nWHEREIFTE                       * 1A495  address (the code jumps or points through it)
 
         CON(5)  OBJ_5A257                        * 1A49A  address (the code jumps or points through it)
-        NIBHEX  0000                             * 1A49F  ..
+        BSS     4                                * 1A49F  zeros
 
 * % ob1 ob2 -> ?
 * refs (1): 1A40D
@@ -440,7 +440,7 @@ L_1A6F7:
         GOSBVL  SUB_14ED6                        * 1A6FE
         ST=1    10                               * 1A705
         GOTO    L_1A639                          * 1A708
-        BSS     12                               * 1A70C
+        BSS     12                               * 1A70C  zeros
 
 * sec -> 0 -> rc.p
 * ROMPTR 002 037 WAIT

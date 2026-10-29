@@ -2,6 +2,7 @@
 * Addresses in the right-hand comments are those of the original ROM.
 * Follows on from the previous file (at #DE45F in the original ROM).
         ENDLENGTH                                * DE45F
+        ENDLENGTH                                * DE45F
 
         CON(5)  DOLIB                            * DE45F  library object
         LENGTH                                   * DE464  length, to #DF08C
@@ -139,4 +140,4 @@ LIB0BF.link:
         LENGTH                                   * DF07E  length, to #DF088
         REL(5)  ROMP_0BF_000                     * DF083  000 
         ENDLENGTH                                * DF088
-        NIBHEX  0000                             * DF088  ..
+        BSS     4                                * DF088  zeros

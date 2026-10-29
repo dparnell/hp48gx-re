@@ -510,7 +510,7 @@ L_026ED:
 * refs (1): 026D8
 SUB_026FD:
         GOVLNG  L_01C7F                          * 026FD
-        NIBHEX  0000                             * 02704  ..
+        BSS     4                                * 02704  zeros
 
 * refs (3): 01A67 02026 80CA3
 SUB_02708:
@@ -596,7 +596,9 @@ L_0282B:
         GOSBVL  DeepSleep                        * 0283D
         GOTO    L_027D3                          * 02844
         FILLTO  #028DE                           * 02848  150 zero nibbles: the next entry stays at #028DE
-        NIBHEX  1359000                          * 028DE  1θ.
+
+        LENGTH                                   * 028DE  library object without its prolog (its place is the end of the link table before): length, to #0BE0F
+        CON(2)  0                                * 028E3  no title
 
 LIB000:
         CON(3)  #000                             * 028E5  library number
@@ -702,7 +704,7 @@ DOCHAR:
         A=DAT0  A                                * 029CD
         D0=D0+  5                                * 029D0
         PC=(A)                                   * 029D3
-        BSS     7                                * 029D7
+        BSS     7                                * 029D7  zeros
 
         CON(5)  L_02D04                          * 029DE
         CON(5)  L_0309A                          * 029E3
@@ -1074,7 +1076,7 @@ L_02D59:
         GOSUBL  SAVPTR                           * 02D5B
         D0=(5)  OSAVE                            * 02D61
         DAT0=A  A                                * 02D68
-        GOSUBL  GARBAGECOL                       * 02D6B  inline data follows
+        GOSUBL  GARBAGECOL                       * 02D6B
         D0=(5)  OSAVE                            * 02D71
         A=DAT0  A                                * 02D78
         C=0     A                                * 02D7B
@@ -1089,7 +1091,7 @@ L_02D59:
         CON(5)  L_03077                          * 02D98
 
 * Secondary prologue .. objects 5  SEMI
-* refs (21): 0704B 0707F 0EE83 156B6 15B88 18EC7 ...
+* refs (18): 0704B 0707F 156B6 15B88 18EC7 1914B ...
 DOCOL:
         D=D-1   A                                * 02D9D
         HST=0   0                                * 02D9F
@@ -1109,7 +1111,7 @@ DOCOL:
         CON(5)  L_0309A                          * 02DC7
 
 * Code prologue 5  length .. machine code
-* refs (3): 0EE92 19191 2D544
+* refs (1): 19191
 DOCODE:
         D=D-1   A                                * 02DCC
         HST=0   0                                * 02DCE
@@ -1441,7 +1443,7 @@ L_03115:
         GOTO    L_0302E                          * 03127
 
 * ->
-* refs (37): 03665 0383B 0509C 05416 054D5 055C8 ...
+* refs (35): 03665 0383B 0509C 05416 054D5 055C8 ...
 SEMI:
         CON(5)  (*)+5                            * 0312B  primitive code object
 SEMILOOP~1:
@@ -1767,7 +1769,7 @@ SUB_03416:
 SafeGargb:
         R0=C                                     * 0341D
         GOSUBL  SAVPTR                           * 03420
-        GOSUBL  GARBAGECOL                       * 03426  inline data follows
+        GOSUBL  GARBAGECOL                       * 03426
         GOSUBL  GETPTR                           * 0342C
         C=R0                                     * 03432
         D=D-C   A                                * 03435
@@ -2339,7 +2341,7 @@ L_039C1:
         GONC    L_039DF                          * 039C9
         ?ST=1   10                               * 039CC
         GOYES   RrErrIM                          * 039CF
-        GOSUBL  GARBAGECOL                       * 039D1  inline data follows
+        GOSUBL  GARBAGECOL                       * 039D1
         ST=1    10                               * 039D7
         C=RSTK                                   * 039DA
         GONC    L_039C1                          * 039DC
@@ -2386,7 +2388,7 @@ L_03A31:
         ?ST=1   10                               * 03A40
         GOYES   L_03A55                          * 03A43
         RSTK=C                                   * 03A45
-        GOSUBL  GARBAGECOL                       * 03A47  inline data follows
+        GOSUBL  GARBAGECOL                       * 03A47
         ST=1    10                               * 03A4D
         C=RSTK                                   * 03A50
         GONC    L_03A31                          * 03A52
@@ -2427,7 +2429,7 @@ L_03A8B:
 L_03A9B:
         R2=A                                     * 03A9B
         GOSUBL  SAVPTR                           * 03A9E
-        GOSUBL  GARBAGECOL                       * 03AA4  inline data follows
+        GOSUBL  GARBAGECOL                       * 03AA4
         GOSUBL  GETPTR                           * 03AAA
         A=R2                                     * 03AB0
         D=D-1   A                                * 03AB3

@@ -239,7 +239,7 @@ ROMP_0E4_019:
 ROMP_0E4_01A:
         :: BlankDA12 ROMPTR 0E4 015 DISPSTATUS2 BINT7 ONE_DO INDEX@ DUP * 9E42F
           GETPROC >Review$ INDEX@ #1+ DISPN LOOP SetDA12Temp SetDA3NoCh ; * 9E45D
-        NIBHEX  BA0F60                           * 9E48A  «ð.
+        ROMPBODY 0AB 06F                         * 9E48A
 
 * ROMPTR 0E4 01B
 * refs (1): 9DA1F
@@ -286,7 +286,7 @@ ROMP_0E4_020:
         :: OVER ROMPTR 0E4 013 DROP matchob? casedrop * 9E6E3
           :: CK1NOLASTWD SETCIRCERR ERRJMP ;     * 9E707
           DROP ;                                 * 9E720
-        NIBHEX  BA0F60                           * 9E72A  «ð.
+        ROMPBODY 0AB 06F                         * 9E72A
 
 * ROMPTR 0E4 021
 * refs (1): 9DA1F
@@ -309,7 +309,7 @@ ROMP_0E4_022:
           casedrop                               * 9E86E
           :: 4DROP ROMPTR 0E4 033 ;              * 9E873
           BINT1 ZEROFALSE BINT1 BINT9 ROLL ROMPTR 0E4 025 ; * 9E88D
-        NIBHEX  BA0470                           * 9E8B6  «@.
+        ROMPBODY 0AB 074                         * 9E8B6  MROOT
 
 * ROMPTR 0E4 023
 * refs (1): 9DA1F
@@ -888,4 +888,4 @@ LIB0E4.link:
         REL(5)  ROMP_0E4_051                     * A07DB  050 
         REL(5)  ROMP_0E4_051                     * A07E0  051 
         ENDLENGTH                                * A07E5
-        NIBHEX  0000                             * A07E5  ..
+        BSS     4                                * A07E5  zeros

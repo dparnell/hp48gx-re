@@ -1067,7 +1067,7 @@ L_2FDEE:
 L_2FE52:
           SWAP#1+SWAP DUP DPRADIX? ITE CHR_. CHR_, * 2FE52
           >T$ 3PICK #>$ &$ GOTO L_2FDEE ;        * 2FE70
-        BSS     14                               * 2FE93
+        BSS     14                               * 2FE93  zeros
 
 * refs (4): 2DE5A 2F736 2F911 2FEBF
 SENDACK:

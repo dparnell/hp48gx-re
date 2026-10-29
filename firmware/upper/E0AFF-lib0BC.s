@@ -112,4 +112,4 @@ LIB0BC.link:
         LENGTH                                   * E113D  length, to #E1147
         REL(5)  ROMP_0BC_000                     * E1142  000 
         ENDLENGTH                                * E1147
-        NIBHEX  0000                             * E1147  ..
+        BSS     4                                * E1147  zeros

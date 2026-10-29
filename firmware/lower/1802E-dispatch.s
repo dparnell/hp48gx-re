@@ -194,7 +194,7 @@ SUB_18362:
         D1=A                                     * 1837F
 L_18382:
         GOSBVL  SAVPTR                           * 18382
-        GOSBVL  GARBAGECOL                       * 18389  inline data follows
+        GOSBVL  GARBAGECOL                       * 18389
         GOVLNG  GETPTR                           * 18390
         RPL
 
@@ -438,7 +438,7 @@ L_18812:
 * refs (1): 1880C
 SUB_1882C:
         GOSBVL  SAVPTR                           * 1882C
-        GOSBVL  GARBAGECOL                       * 18833  inline data follows
+        GOSBVL  GARBAGECOL                       * 18833
         GOSBVL  GETPTR                           * 1883A
         ?D#0    A                                * 18841
         RTNYES                                   * 18844
@@ -588,7 +588,10 @@ SUB_189C6:
         RTNYES                                   * 189DC
         A=A-B   W                                * 189DE
         RTN                                      * 189E1
-        NIBHEX  DF3A000                          * 189E3  ý£.
+        ENDLENGTH                                * 189E3
+
+        LENGTH                                   * 189E3  library object without its prolog (its place is the end of the link table before): length, to #22DE0
+        CON(2)  0                                * 189E8  no title
 
 LIB002:
         CON(3)  #002                             * 189EA  library number

@@ -333,7 +333,7 @@ OBJ_6CC43:
         :: TakeOver WINDOWCORNER ABUFF ZEROZERO BINT131 # 38 SUBGROB * 6CC43
           3NULLLAM{} BIND REDISPHBUFF ROMPTR 0B2 002 3GETLAM 2GETLAM 1GETLAM * 6CC70
           ABND ZEROZERO ROT XYGROBDISP WINDOWXY DispMenu.1 ; * 6CC99
-        NIBHEX  0                                * 6CCBC
+        BSS     1                                * 6CCBC  zeros
 
 * refs (1): 1BB25
 OBJ_6CCBD:
@@ -691,7 +691,7 @@ SUB_6DDAB:
         GOYES   L_6DDCC                          * 6DDAE
         D=D+C   A                                * 6DDB0
         GOSBVL  SAVPTR                           * 6DDB2
-        GOSBVL  GARBAGECOL                       * 6DDB9  inline data follows
+        GOSBVL  GARBAGECOL                       * 6DDB9
         GOSBVL  GETPTR                           * 6DDC0
         ST=1    10                               * 6DDC7
         RTNSC                                    * 6DDCA

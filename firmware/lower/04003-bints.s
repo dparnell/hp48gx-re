@@ -316,7 +316,7 @@ SUB_042E0:
         C=0     A                                * 0430F
         DAT1=C  1                                * 04311
         GOVLNG  L_01D44                          * 04315
-        NIBHEX  0                                * 0431C
+        BSS     1                                * 0431C  zeros
 
 * refs (1): 043EE
 SUB_0431D:
@@ -647,7 +647,7 @@ L_046FC:
         A=DAT0  A                                * 046FC
         D0=D0+  5                                * 046FF
         PC=(A)                                   * 04702
-        NIBHEX  00                               * 04706  .
+        BSS     2                                * 04706  zeros
 
 * -> #kc T -> F
 * refs (2): 34051 42407
@@ -1104,7 +1104,7 @@ SUB_04BEC:
         RTNYES                                   * 04BF9
         C=P     15                               * 04BFB
         R2=C                                     * 04BFF
-        GOSUBL  GARBAGECOL                       * 04C02  inline data follows
+        GOSUBL  GARBAGECOL                       * 04C02
         C=R2                                     * 04C08
         P=C     15                               * 04C0B
         D=C     A                                * 04C0F
@@ -1178,7 +1178,7 @@ L_04CC1:
         A=0     W                                * 04CD0
         A=-A-1  W                                * 04CD3
         GOLONG  L_0675F                          * 04CD6
-        BSS     10                               * 04CDC
+        BSS     10                               * 04CDC  zeros
 
 * -> #
 * refs (40): 143F2 1441F 14663 14677 14686 17BA9 ...
@@ -1967,8 +1967,9 @@ L_05528:
 DOGARBAGE:
         ?ST=1   10                               * 0554C
         GOYES   L_05560                          * 0554F
-        GOSUBL  GARBAGECOL                       * 05551  inline data follows
-        NIBHEX  85A8C6721                        * 05557  X≥l'
+        GOSUBL  GARBAGECOL                       * 05551
+        ST=1    10                               * 05557
+        GOLONG  GETPTR                           * 0555A
 L_05560:
         GOLONG  GPMEMERR                         * 05560
 
@@ -2701,7 +2702,7 @@ L_05D13:
         C=DAT1  A                                * 05D1A
         D1=C                                     * 05D1D
         RTNCC                                    * 05D20
-        NIBHEX  000                              * 05D22  .
+        BSS     3                                * 05D22  zeros
 L_05D25:
         GOSUB   SafGarbD-1                       * 05D25
         GONC    L_05D36                          * 05D29  always taken
@@ -2853,12 +2854,12 @@ TAG>:
         DAT1=C  A                                * 05F01
         AD1EX                                    * 05F04
         GOTO    L_05CEB                          * 05F07
-        NIBHEX  0000                             * 05F0B  ..
+        BSS     4                                * 05F0B  zeros
 
 * refs (5): 05D25 05DB5 613A8 641EB 64259
 SafGarbD-1:
         GOSUBL  SAVPTR                           * 05F0F
-        GOSUBL  GARBAGECOL                       * 05F15  inline data follows
+        GOSUBL  GARBAGECOL                       * 05F15
         GOSUBL  GETPTR                           * 05F1B
         D=D-1   A                                * 05F21
         RTNNC                                    * 05F23
@@ -2882,7 +2883,7 @@ GARBAGE:
 * refs (1): 05F42
 SafGarb®:
         GOSUBL  SAVPTR                           * 05F47
-        GOSUB   GARBAGECOL                       * 05F4D  inline data follows
+        GOSUB   GARBAGECOL                       * 05F4D
         GOSUBL  GETPTR                           * 05F51
         A=DAT0  A                                * 05F57
         D0=D0+  5                                * 05F5A

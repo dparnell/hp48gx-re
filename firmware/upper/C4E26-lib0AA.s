@@ -301,4 +301,7 @@ LIB0AA.link:
         REL(5)  ROMP_0AA_00A                     * C5321  00A 
         REL(5)  ROMP_0AA_00B                     * C5326  00B 
         ENDLENGTH                                * C532B
-        NIBHEX  9A52000                          * C532B  ©%.
+        ENDLENGTH                                * C532B
+
+        LENGTH                                   * C532B  library object without its prolog (its place is the end of the link table before): length, to #C78D4
+        CON(2)  0                                * C5330  no title

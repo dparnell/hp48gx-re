@@ -1815,7 +1815,7 @@ L_7DFE4:
 * refs (1): 7DFE6
 SUB_7DFF6:
         PC=C                                     * 7DFF6
-        NIBHEX  00000                            * 7DFFA  ..
+        BSS     5                                * 7DFFA  zeros
 
 EndFreeROM:
         RTNSXM                                   * 7DFFF

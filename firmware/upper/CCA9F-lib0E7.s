@@ -3,6 +3,7 @@
 * Most referenced: ~UTVUNS1Arg ~UTTYPEEXT0?
 * Follows on from the previous file (at #CCA9F in the original ROM).
         ENDLENGTH                                * CCA9F
+        ENDLENGTH                                * CCA9F
 
         CON(5)  DOLIB                            * CCA9F  library object
         LENGTH                                   * CCAA4  length, to #CF380
@@ -819,4 +820,4 @@ LIB0E7.link:
         REL(5)  MINEHUNT~15                      * CF372  057 
         REL(5)  ~UTTYPEEXT0?                     * CF377  058 ~UTTYPEEXT0?
         ENDLENGTH                                * CF37C
-        NIBHEX  0000                             * CF37C  ..
+        BSS     4                                * CF37C  zeros
