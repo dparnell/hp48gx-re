@@ -214,61 +214,61 @@ ROMP_0E2_016:
           {                                      * EBB1F
             {                                    * EBB24
               { BINT3 BINT4                      * EBB29
-                { $ "Pcr=π\0C*E*A\0DK*L/r)\0C\0A" $ "Pcr=π\0C*E*I\0DK*L)\0C" * EBB38
-                  $ "σcr=Pcr/A" $ "r=√(I/A)" }   * EBB97
-                { CHR_D CHR_D CHR_D $ "r=√(\02I/A\0F" } } * EBBD2
-              { $ "\08\07\06\05\04\03\02\01" # B # 8 * EBC0C
+                { EQ$ "Pcr=π^2*E*A/(K*L/r)^2\0A" EQ$ "Pcr=π^2*E*I/(K*L)^2" * EBB38
+                  EQ$ "σcr=Pcr/A" EQ$ "r=√(I/A)" } * EBB97
+                { CHR_D CHR_D CHR_D EQ$ "r=√(UBASE(I/A))" } } * EBBD2
+              { $ "\08\07\06\05\04\03\02\01" # B # 8 * EBC0C  variables L K r E I A Pcr σcr
                 $ "\02\01\18\03\04\11\05\03" }   * EBC3F
               ROMPTR 0E2 02D }                   * EBC5E
             {                                    * EBC6E
               { BINT3 BINT2                      * EBC73
                 {                                * EBC82
-                  $ "σmax=P/A\101+ε*c/r\0C*\0A(1/\04K*L\0D\08r\09√(P/\0A(E*A\0F\0F)" * EBC87
-                  $ "r=√(I/A)" }                 * EBCE5
+                  EQ$ "σmax=P/A*(1+ε*c/r^2*\0A(1/COS(K*L/(2*r)*√(P/\0A(E*A)))))" * EBC87
+                  EQ$ "r=√(I/A)" }               * EBCE5
                 {                                * EBD04
-                  $ "σmax=P/A\101+ε*c/r\0C\101/\04\01\06\09K*L\0D\08r\09√(\02P\0DE*A\0F\0F\0F" * EBD09
-                  $ "r=√(\02I/A\0F" }            * EBD67
+                  EQ$ "σmax=P/A*(1+ε*c/r^2*(1/COS(CONST(rad)*K*L/(2*r)*√(UBASE(P/(E*A))))))" * EBD09
+                  EQ$ "r=√(UBASE(I/A))" }        * EBD67
               }                                  * EBD88
-              { $ "\08\07\06\05\04\03\0C\0B\0A\09" # 13 # A * EBD8D
+              { $ "\08\07\06\05\04\03\0C\0B\0A\09" # 13 # A * EBD8D  variables L K r E I A ε c P σmax
                 $ "\02\01\18\03\04\11\18\18\05\03" } * EBDC4
               ROMPTR 0E2 02E }                   * EBDE7
             {                                    * EBDF7
               { BINT1                            * EBDFC
-                $ "y=P\10L-a\09x\0D6*L*E*I)\0A\10x\0C+(L-a)\0C-L\0C)-\0AM*x\0DE*I\09(c-x\0C/\0A(6*L)-L/3-c\0C\0D\08L\0F-\0Aw*x\0D24*E*I\09(L^3+\0Ax\0C\10x-\08L\0F" * EBE06
-                $ "y=\03x≤a;P\10L-a\09x\0D6*L*E*I\09(x\0C+(L-a)\0C-L\0C);P*a\10L-x)\0D6*L*E*I\09((L-x)\0C+a\0C-L\0C\0F+\03x≤c;-M*x\0DE*I\09(c-x\0C\0D6*L)-L/3-c\0C\0D\08L\0F;-M*x\0DE*I\09((c\0C+x\0C)\0D\08x)-x\0C\0D6*L)-L/3-c\0C\0D\08L\0F)-w*x\0D24*E*I\09(L^3+x\0C\10x-\08L\0F" } * EBECA
+                EQ$ "y=P*(L-a)*x/(6*L*E*I)\0A*(x^2+(L-a)^2-L^2)-\0AM*x/(E*I)*(c-x^2/\0A(6*L)-L/3-c^2/(2*L))-\0Aw*x/(24*E*I)*(L^3+\0Ax^2*(x-2*L))" * EBE06
+                EQ$ "y=IFTE(x≤a;P*(L-a)*x/(6*L*E*I)*(x^2+(L-a)^2-L^2);P*a*(L-x)/(6*L*E*I)*((L-x)^2+a^2-L^2))+IFTE(x≤c;-M*x/(E*I)*(c-x^2/(6*L)-L/3-c^2/(2*L));-M*x/(E*I)*((c^2+x^2)/(2*x)-x^2/(6*L)-L/3-c^2/(2*L)))-w*x/(24*E*I)*(L^3+x^2*(x-2*L))" } * EBECA
               ROMPTR 0E2 025 ROMPTR 0E2 02C }    * EC031
             {                                    * EC04C
               { BINT1                            * EC051
-                $ "θ=P\10L-a)\0D6*L*E*I\09\0A(3*x\0C+(L-a)\0C-L\0C)-\0AM\0DE*I\09(c-x\0C\0D\08L)-\0AL/3-c\0C\0D\08L\0F-w/\0A(24*E*I\09(L^3+x\0C*\0A(4*x-6*L\0F" * EC05B
-                $ "θ=\01\06\09(\03x≤a;P\10L-a)\0D6*L*E*I\09(3*x\0C+(L-a)\0C-L\0C);-P*a\0D6*L*E*I\09(3\10L-x)\0C+a\0C-L\0C\0F+\03x≤c;-M\0DE*I\09(c-x\0C\0D\08L)-L/3-c\0C\0D\08L\0F;-M\0DE*I\09(x-x\0C\0D\08L)-L/3-c\0C\0D\08L\0F)-w\0D24*E*I\09(L^3+x\0C\104*x-6*L\0F)" } * EC11F
+                EQ$ "θ=P*(L-a)/(6*L*E*I)*\0A(3*x^2+(L-a)^2-L^2)-\0AM/(E*I)*(c-x^2/(2*L)-\0AL/3-c^2/(2*L))-w/\0A(24*E*I)*(L^3+x^2*\0A(4*x-6*L))" * EC05B
+                EQ$ "θ=CONST(rad)*(IFTE(x≤a;P*(L-a)/(6*L*E*I)*(3*x^2+(L-a)^2-L^2);-P*a/(6*L*E*I)*(3*(L-x)^2+a^2-L^2))+IFTE(x≤c;-M/(E*I)*(c-x^2/(2*L)-L/3-c^2/(2*L));-M/(E*I)*(x-x^2/(2*L)-L/3-c^2/(2*L)))-w/(24*E*I)*(L^3+x^2*(4*x-6*L)))" } * EC11F
               ROMPTR 0E2 026 ROMPTR 0E2 02C }    * EC26E
             {                                    * EC289
-              { BINT1 $ "Mx=P\10L-a\09x/L+M*x/L+\0Aw*x/\08(L-x)" * EC28E
-                $ "Mx=\03x≤a;P\10L-a\09x/L;P*a\10L-x)/L)+\03x≤c;M*x/L;-M\10L-x)/L)+w*x/\08(L-x)" } * EC2DE
+              { BINT1 EQ$ "Mx=P*(L-a)*x/L+M*x/L+\0Aw*x/2*(L-x)" * EC28E
+                EQ$ "Mx=IFTE(x≤a;P*(L-a)*x/L;P*a*(L-x)/L)+IFTE(x≤c;M*x/L;-M*(L-x)/L)+w*x/2*(L-x)" } * EC2DE
               ROMPTR 0E2 027 ROMPTR 0E2 02C }    * EC369
             {                                    * EC384
-              { BINT1 $ "V=P\10L-a)/L+M/L+w/\08\0A(L-\08x)" * EC389
-                $ "V=\03x≤a;P\10L-a)/L;-P*a/L)+M/L+w/\08(L-\08x)" } * EC3CF
-              { $ "\08\11\0A\10\0Fî\0E\14" # 39 # 7 * EC428
+              { BINT1 EQ$ "V=P*(L-a)/L+M/L+w/2*\0A(L-2*x)" * EC389
+                EQ$ "V=IFTE(x≤a;P*(L-a)/L;-P*a/L)+M/L+w/2*(L-2*x)" } * EC3CF
+              { $ "\08\11\0A\10\0Fî\0E\14" # 39 # 7 * EC428  variables L a P M w - x V
                 $ "\02\02\05\06\07\02\05" }      * EC45B
               ROMPTR 0E2 02C }                   * EC478
             {                                    * EC488
               { BINT1                            * EC48D
-                $ "y=P*x\0C\0D6*E*I\09\0A(x-3*a)+M*x\0C\0D\08E*I)-\0Aw*x\0C\0D24*E*I\09(6*\0AL\0C-4*L*x+x\0C)" * EC497
-                $ "y=\03x≤a;P*x\0C\0D6*E*I\09(x-3*a);P*a\0C\0D6*E*I\09(a-3*x\0F+\03x≤c;M*x\0C\0D\08E*I);M*c\0D\08E*I\09(\08x-c\0F-w*x\0C\0D24*E*I\09(6*L\0C-4*L*x+x\0C)" } * EC51D
+                EQ$ "y=P*x^2/(6*E*I)*\0A(x-3*a)+M*x^2/(2*E*I)-\0Aw*x^2/(24*E*I)*(6*\0AL^2-4*L*x+x^2)" * EC497
+                EQ$ "y=IFTE(x≤a;P*x^2/(6*E*I)*(x-3*a);P*a^2/(6*E*I)*(a-3*x))+IFTE(x≤c;M*x^2/(2*E*I);M*c/(2*E*I)*(2*x-c))-w*x^2/(24*E*I)*(6*L^2-4*L*x+x^2)" } * EC51D
               ROMPTR 0E2 025 ROMPTR 0E2 02B }    * EC5FC
             {                                    * EC617
               { BINT1                            * EC61C
-                $ "θ=P*x\0D\08E*I\09(x-\08a)\0A+M*x\0DE*I)-w*x\0D6*E*\0AI\09(3*L\0C-3*L*x+x\0C)" * EC626
-                $ "θ=\01\06\09(\03x≤a;P*x\0D\08E*I\09(x-\08a);-P*a\0C\0D\08E*I\0F+\03x≤c;M*x\0DE*I);M*c\0DE*I\0F-w*x\0D6*E*I\09(3*L\0C-3*L*x+x\0C\0F" } * EC69C
+                EQ$ "θ=P*x/(2*E*I)*(x-2*a)\0A+M*x/(E*I)-w*x/(6*E*\0AI)*(3*L^2-3*L*x+x^2)" * EC626
+                EQ$ "θ=CONST(rad)*(IFTE(x≤a;P*x/(2*E*I)*(x-2*a);-P*a^2/(2*E*I))+IFTE(x≤c;M*x/(E*I);M*c/(E*I))-w*x/(6*E*I)*(3*L^2-3*L*x+x^2))" } * EC69C
               ROMPTR 0E2 026 ROMPTR 0E2 02B }    * EC759
             {                                    * EC774
-              { BINT1 $ "Mx=P\10x-a)+M-w/\08\0A(L\0C-\08L*x+x\0C)" * EC779
-                $ "Mx=\03x≤a;P\10x-a);0)+\03x≤c;M;0)-w/\08(L\0C-\08L*x+x\0C)" } * EC7C5
+              { BINT1 EQ$ "Mx=P*(x-a)+M-w/2*\0A(L^2-2*L*x+x^2)" * EC779
+                EQ$ "Mx=IFTE(x≤a;P*(x-a);0)+IFTE(x≤c;M;0)-w/2*(L^2-2*L*x+x^2)" } * EC7C5
               ROMPTR 0E2 027 ROMPTR 0E2 02B }    * EC82A
             {                                    * EC845
-              { BINT1 $ "V=P+w\10L-x)" $ "V=\03x≤a;P;0)+w\10L-x)" } * EC84A
-              { $ "\08\11\0A\0F\0E\14" # 40 # 6 $ "\02\02\05\07\02\05" } * EC8A5
+              { BINT1 EQ$ "V=P+w*(L-x)" EQ$ "V=IFTE(x≤a;P;0)+w*(L-x)" } * EC84A
+              { $ "\08\11\0A\0F\0E\14" # 40 # 6 $ "\02\02\05\07\02\05" } * EC8A5  variables L a P w x V
               ROMPTR 0E2 02B }                   * EC8EF
           }                                      * EC8FF
         }                                        * EC904
@@ -279,106 +279,107 @@ ROMP_0E2_017:
         { ROMPTR 0E2 005 # 17                    * EC909
           {                                      * EC923
             {                                    * EC928
-              { BINT1 $ "F=1\0D4*π*ε0*εr\09\0A(q1*q2/r\0C)" * EC92D
-                $ "F=1\0D4*π*\01ε0\09εr\09(q1*q2/r\0C)" } * EC973
-              { $ "\18\17\06\16\15" # 18 # 5 $ "\0A\0A\18\01\0B" } * EC9B4
+              { BINT1 EQ$ "F=1/(4*π*ε0*εr)*\0A(q1*q2/r^2)" * EC92D
+                EQ$ "F=1/(4*π*CONST(ε0)*εr)*(q1*q2/r^2)" } * EC973
+              { $ "\18\17\06\16\15" # 18 # 5 $ "\0A\0A\18\01\0B" } * EC9B4  variables q1 q2 r εr F
               ROMPTR 0E2 02A }                   * EC9FA
             {                                    * ECA0A
               { BINT2 BINT4                      * ECA0F
-                { $ "V=I*R" $ "P=V*I" $ "P=I\0C*R" $ "P=V\0C/R" } } * ECA1E
-              { $ "\14\04\19\0A" # 1D # 4 $ "\0C\0D\0E\0F" } ROMPTR 0E2 02A } * ECA81
+                { EQ$ "V=I*R" EQ$ "P=V*I" EQ$ "P=I^2*R" EQ$ "P=V^2/R" } } * ECA1E
+              { $ "\14\04\19\0A" # 1D # 4 $ "\0C\0D\0E\0F" } ROMPTR 0E2 02A } * ECA81  variables V I R P
             {                                    * ECAD3
-              { BINT0 $ "V1=V\10R1\0DR1+R2\0F" } * ECAD8
-              { $ "\1C\1B\14\1A" # 21 # 4 $ "\0E\0E\0C\0C" } ROMPTR 0E2 02F } * ECB0D
+              { BINT0 EQ$ "V1=V*(R1/(R1+R2))" }  * ECAD8
+              { $ "\1C\1B\14\1A" # 21 # 4 $ "\0E\0E\0C\0C" } ROMPTR 0E2 02F } * ECB0D  variables R1 R2 V V1
             {                                    * ECB5F
-              { BINT0 $ "I1=I\10R2\0DR1+R2\0F" } * ECB64
-              { $ "\1C\1B\04\1D" # 25 # 4 $ "\0E\0E\0D\0D" } ROMPTR 0E2 030 } * ECB99
+              { BINT0 EQ$ "I1=I*(R2/(R1+R2))" }  * ECB64
+              { $ "\1C\1B\04\1D" # 25 # 4 $ "\0E\0E\0D\0D" } ROMPTR 0E2 030 } * ECB99  variables R1 R2 I I1
             {                                    * ECBEB
-              { BINT0 $ "R=ρ*L/A" }              * ECBF0
-              { $ "\1E\08\03\19" # 29 # 4 $ "\10\18\11\0E" } ROMPTR 0E2 02A } * ECC17
+              { BINT0 EQ$ "R=ρ*L/A" }            * ECBF0
+              { $ "\1E\08\03\19" # 29 # 4 $ "\10\18\11\0E" } ROMPTR 0E2 02A } * ECC17  variables ρ L A R
             {                                    * ECC69
               { BINT2 BINT2                      * ECC6E
-                { $ "Rs=R1+R2" $ "1/Rp=1/R1+1/R2" } } * ECC7D
-              { $ "\1C\1B \1F" # 2D # 4 $ "\0E\0E\0E\0E" } ROMPTR 0E2 031 } * ECCCC
+                { EQ$ "Rs=R1+R2" EQ$ "1/Rp=1/R1+1/R2" } } * ECC7D
+              { $ "\1C\1B \1F" # 2D # 4 $ "\0E\0E\0E\0E" } ROMPTR 0E2 031 } * ECCCC  variables R1 R2 Rs Rp
             {                                    * ECD1E
               { BINT2 BINT2                      * ECD23
-                { $ "1/Cs=1/C1+1/C2" $ "Cp=C1+C2" } } * ECD32
-              { $ "$#\"!" # 31 # 4 $ "\12\12\12\12" } ROMPTR 0E2 032 } * ECD81
+                { EQ$ "1/Cs=1/C1+1/C2" EQ$ "Cp=C1+C2" } } * ECD32
+              { $ "$#\"!" # 31 # 4 $ "\12\12\12\12" } ROMPTR 0E2 032 } * ECD81  variables C1 C2 Cs Cp
             {                                    * ECDD3
               { BINT2 BINT2                      * ECDD8
-                { $ "Ls=L1+L2" $ "1/Lp=1/L1+1/L2" } } * ECDE7
-              { $ "('&%" # 35 # 4 $ "\13\13\13\13" } ROMPTR 0E2 033 } * ECE36
+                { EQ$ "Ls=L1+L2" EQ$ "1/Lp=1/L1+1/L2" } } * ECDE7
+              { $ "('&%" # 35 # 4 $ "\13\13\13\13" } ROMPTR 0E2 033 } * ECE36  variables L1 L2 Ls Lp
             {                                    * ECE88
-              { BINT0 $ "E=C*V\0C/2" }           * ECE8D
-              { $ "\05)\14" # 39 # 3 $ "\14\12\0C" } ROMPTR 0E2 02A } * ECEB6
+              { BINT0 EQ$ "E=C*V^2/2" }          * ECE8D
+              { $ "\05)\14" # 39 # 3 $ "\14\12\0C" } ROMPTR 0E2 02A } * ECEB6  variables E C V
             {                                    * ECF04
-              { BINT0 $ "E=L*I\0C/2" }           * ECF09
-              { $ "\05\08\04" # 3C # 3 $ "\14\13\0D" } ROMPTR 0E2 02A } * ECF32
+              { BINT0 EQ$ "E=L*I^2/2" }          * ECF09
+              { $ "\05\08\04" # 3C # 3 $ "\14\13\0D" } ROMPTR 0E2 02A } * ECF32  variables E L I
             {                                    * ECF80
               { BINT3 BINT5                      * ECF85
-                { $ "TAN(Øs)\0EXL-XC)/R" $ "TAN(Øp)\0E1/XC-1/XL)/\0A(1/R)" * ECF94
-                  $ "XC=1\0Dω*C)" $ "XL=ω*L" $ "ω=\08π*f" } * ECFFF
-                { CHR_D CHR_D $ "XC=\01\06)\0Dω*C)" $ "XL=ω*L/\01\06)" * ED04C
-                  $ "ω=\01\07π\09f" }            * ED099
+                { EQ$ "TAN(Øs)=(XL-XC)/R" EQ$ "TAN(Øp)=(1/XC-1/XL)/\0A(1/R)" * ECF94
+                  EQ$ "XC=1/(ω*C)" EQ$ "XL=ω*L" EQ$ "ω=2*π*f" } * ECFFF
+                { CHR_D CHR_D EQ$ "XC=CONST(rad)/(ω*C)" * ED04C
+                  EQ$ "XL=ω*L/CONST(rad)" EQ$ "ω=CONST(twoπ)*f" } * ED07B
               }                                  * ED0B6
-              { $ "/.)\08-,\19+*" # 3F # 9 $ "\15\16\12\13\0E\0E\0E44" } * ED0BB
+              { $ "/.)\08-,\19+*" # 3F # 9 $ "\15\16\12\13\0E\0E\0E44" } * ED0BB  variables ω f C L XC XL R Øs Øp
               ROMPTR 0E2 034 }                   * ED111
             {                                    * ED121
               { BINT2 BINT3                      * ED126
-                { $ "I=C\10ΔV/Δt)" $ "ΔV=Vf-Vi" $ "Δt=tf-ti" } } * ED135
-              { $ ")54\04îî3210" # 48 # 8 $ "\12\0C.\0D\0C\0C.." } * ED196
+                { EQ$ "I=C*(ΔV/Δt)" EQ$ "ΔV=Vf-Vi" EQ$ "Δt=tf-ti" } } * ED135
+              { $ ")54\04îî3210" # 48 # 8 $ "\12\0C.\0D\0C\0C.." } * ED196  variables C ΔV Δt I - - Vi Vf ti tf
               ROMPTR 0E2 02A }                   * ED1EC
             {                                    * ED1FC
-              { BINT0 $ "q=C*V" }                * ED201
-              { $ ")\146" # 50 # 3 $ "\12\0C\0A" } ROMPTR 0E2 02A } * ED224
+              { BINT0 EQ$ "q=C*V" }              * ED201
+              { $ ")\146" # 50 # 3 $ "\12\0C\0A" } ROMPTR 0E2 02A } * ED224  variables C V q
             {                                    * ED272
               { BINT2 BINT3                      * ED277
-                { $ "V=-L\10ΔI/Δt)" $ "ΔI=If-Ii" $ "Δt=tf-ti" } } * ED286
-              { $ "\0894\14îî8710" # 53 # 8 $ "\13\0D.\0C\0D\0D.." } * ED2E9
+                { EQ$ "V=-L*(ΔI/Δt)" EQ$ "ΔI=If-Ii" EQ$ "Δt=tf-ti" } } * ED286
+              { $ "\0894\14îî8710" # 53 # 8 $ "\13\0D.\0C\0D\0D.." } * ED2E9  variables L ΔI Δt V - - Ii If ti tf
               ROMPTR 0E2 02A }                   * ED33F
             {                                    * ED34F
-              { BINT1 $ "V=Vf-(Vf-Vi\09\0Ae^((-t)\0DR*C\0F" * ED354
-                $ "V=Vf-(Vf-Vi\09EXP(\02(-t)\0DR*C\0F)" } * ED39A
-              { $ "32)\19:\14" # 5B # 6 $ "\0C\0C\12\0E.\0C" } * ED3DF
+              { BINT1 EQ$ "V=Vf-(Vf-Vi)*\0Ae^((-t)/(R*C))" * ED354
+                EQ$ "V=Vf-(Vf-Vi)*EXP(UBASE((-t)/(R*C)))" } * ED39A
+              { $ "32)\19:\14" # 5B # 6 $ "\0C\0C\12\0E.\0C" } * ED3DF  variables Vi Vf C R t V
               ROMPTR 0E2 035 }                   * ED429
             {                                    * ED439
-              { BINT1 $ "I=1/R\10Vf-(Vf-Vi\09e^\0A(-t*R/L\0F" * ED43E
-                $ "I=1/R\10Vf-(Vf-Vi\09EXP(\02-t*R/L\0F)" } * ED488
-              { $ "32\08\19:\04" # 61 # 6 $ "\0C\0C\13\0E.\0D" } * ED4D1
+              { BINT1 EQ$ "I=1/R*(Vf-(Vf-Vi)*e^\0A(-t*R/L))" * ED43E
+                EQ$ "I=1/R*(Vf-(Vf-Vi)*EXP(UBASE(-t*R/L)))" } * ED488
+              { $ "32\08\19:\04" # 61 # 6 $ "\0C\0C\13\0E.\0D" } * ED4D1  variables Vi Vf L R t I
               ROMPTR 0E2 036 }                   * ED51B
             {                                    * ED52B
               { BINT3 BINT4                      * ED530
-                { $ "ω0=1/√(L*C)" $ "Qs=1/R*√(L/C)" $ "Qp=R*√(C/L)" * ED53F
-                  $ "ω0=\08π*f0" }               * ED5A8
-                { $ "ω0=\01\06)/√(\02L*C\0F" $ "Qs=1/R*√(\02L/C\0F" * ED5C7
-                  $ "Qp=R*√(\02C/L\0F" $ "ω0=\01\07π\09f0" } * ED618
+                { EQ$ "ω0=1/√(L*C)" EQ$ "Qs=1/R*√(L/C)" EQ$ "Qp=R*√(C/L)" * ED53F
+                  EQ$ "ω0=2*π*f0" }              * ED5A8
+                { EQ$ "ω0=CONST(rad)/√(UBASE(L*C))" * ED5C7
+                  EQ$ "Qs=1/R*√(UBASE(L/C))" EQ$ "Qp=R*√(UBASE(C/L))" * ED5F2
+                  EQ$ "ω0=CONST(twoπ)*f0" }      * ED63A
               }                                  * ED65B
-              { $ "\08)\19>=<;" # 67 # 7 $ "\13\12\0E\15\01\01\16" } * ED660
+              { $ "\08)\19>=<;" # 67 # 7 $ "\13\12\0E\15\01\01\16" } * ED660  variables L C R ω0 Qs Qp f0
               ROMPTR 0E2 02A }                   * ED6AE
             {                                    * ED6BE
-              { BINT1 $ "C\0Eε0*εr*A)/d" $ "C\0E\01ε0\09εr*A)/d" } * ED6C3
-              { $ "\16\03?)" # 6E # 4 $ "\01\11\18\12" } ROMPTR 0E2 037 } * ED718
+              { BINT1 EQ$ "C=(ε0*εr*A)/d" EQ$ "C=(CONST(ε0)*εr*A)/d" } * ED6C3
+              { $ "\16\03?)" # 6E # 4 $ "\01\11\18\12" } ROMPTR 0E2 037 } * ED718  variables εr A d C
             {                                    * ED76A
-              { BINT1 $ "C=\08π*ε0*εr*L/\0ALN(ro/ri)" * ED76F
-                $ "C=\08π*\01ε0\09εr*L/LN(\02ro/ri\0F" } * ED7B1
-              { $ "\16A@\08)" # 72 # 5 $ "\01\18\18\18\12" } ROMPTR 0E2 038 } * ED7F0
+              { BINT1 EQ$ "C=2*π*ε0*εr*L/\0ALN(ro/ri)" * ED76F
+                EQ$ "C=2*π*CONST(ε0)*εr*L/LN(UBASE(ro/ri))" } * ED7B1
+              { $ "\16A@\08)" # 72 # 5 $ "\01\18\18\18\12" } ROMPTR 0E2 038 } * ED7F0  variables εr ri ro L C
             {                                    * ED846
-              { BINT1 $ "L=µ0*µr*n\0C*A*h" $ "L=\01µ0\09µr*n\0C*A*h" } * ED84B
-              { $ "DC\03B\08" # 77 # 5 $ "\01\19\11\18\13" } ROMPTR 0E2 039 } * ED8A8
+              { BINT1 EQ$ "L=µ0*µr*n^2*A*h" EQ$ "L=CONST(µ0)*µr*n^2*A*h" } * ED84B
+              { $ "DC\03B\08" # 77 # 5 $ "\01\19\11\18\13" } ROMPTR 0E2 039 } * ED8A8  variables µr n A h L
             {                                    * ED8FE
-              { BINT1 $ "L\0Eµ0*µr*N\0C*h)\0D\08π)\0A*LN(ro/ri)" * ED903
-                $ "L\0E\01µ0\09µr*N\0C*h)\0D\08π\09LN(\02ro/ri\0F" } * ED94F
-              { $ "DEBA@\08" # 7C # 6 $ "\01\01\18\18\18\13" } * ED996
+              { BINT1 EQ$ "L=(µ0*µr*N^2*h)/(2*π)\0A*LN(ro/ri)" * ED903
+                EQ$ "L=(CONST(µ0)*µr*N^2*h)/(2*π)*LN(UBASE(ro/ri))" } * ED94F
+              { $ "DEBA@\08" # 7C # 6 $ "\01\01\18\18\18\13" } * ED996  variables µr N h ri ro L
               ROMPTR 0E2 03A }                   * ED9E0
             {                                    * ED9F0
               { BINT3 BINT2                      * ED9F5
-                { $ "V=Vmax*\05ω*t+Ø)" $ "ω=\08π*f" } * EDA04
-                { CHR_D $ "ω=\01\07π\09f" } }    * EDA4A
-              { $ "/.:GF\14" # 82 # 6 $ "\15\16\174\0C\0C" } ROMPTR 0E2 02A } * EDA76
+                { EQ$ "V=Vmax*SIN(ω*t+Ø)" EQ$ "ω=2*π*f" } * EDA04
+                { CHR_D EQ$ "ω=CONST(twoπ)*f" } } * EDA4A
+              { $ "/.:GF\14" # 82 # 6 $ "\15\16\174\0C\0C" } ROMPTR 0E2 02A } * EDA76  variables ω f t Ø Vmax V
             {                                    * EDAD0
               { BINT3 BINT2                      * EDAD5
-                { $ "I=Imax*\05ω*t+Ø)" $ "ω=\08π*f" } * EDAE4
-                { CHR_D $ "ω=\01\07π\09f" } }    * EDB2A
-              { $ "/.:GH\04" # 88 # 6 $ "\15\16\174\0D\0D" } ROMPTR 0E2 02A } * EDB56
+                { EQ$ "I=Imax*SIN(ω*t+Ø)" EQ$ "ω=2*π*f" } * EDAE4
+                { CHR_D EQ$ "ω=CONST(twoπ)*f" } } * EDB2A
+              { $ "/.:GH\04" # 88 # 6 $ "\15\16\174\0D\0D" } ROMPTR 0E2 02A } * EDB56  variables ω f t Ø Imax I
           }                                      * EDBB0
         }                                        * EDBB5

@@ -43,6 +43,10 @@ SPLIT = 0x3000            # split regions into files of about this many nibbles
 HARDWARE = 0x7E000        # D0=/D1= from here up are I/O windows (bank switcher at #7F000)
 FILL_TO = 32              # zero fill at least this long between entries becomes FILLTO
 COMMENT_COL = 48
+# The Equation Library (library 0E2): its equations are packed strings, its
+# pictures packed hex strings.
+EQLIB = (0xE384B, 0x100000)
+
 # RPL bodies are written several objects to a line, up to this width.
 RPL_WIDTH = 76
 MAX_XREFS = 6
@@ -128,7 +132,7 @@ def hexs(nibs):
 
 def op(mnemonic, *operands):
     """Format `MNEMONIC operand`, operands being text or Refs."""
-    parts = ["%-8s" % mnemonic if operands else mnemonic]
+    parts = ["%-7s " % mnemonic if operands else mnemonic]
     for i, o in enumerate(operands):
         if i:
             parts.append(" ")
@@ -172,6 +176,12 @@ class Generator:
             self.operands[int(a, 16)] = (v, note)
         for a, (lib, cmd, nm) in self.libcmd.items():
             self.hints[a] = "ROMP_%03X_%03X" % (lib, cmd)
+        self.romp_addr = {(lib, cmd): a for a, (lib, cmd, _) in self.libcmd.items()}
+        self.eq_strings = set()     # Equation Library strings (packed equations)
+        self.eq_vars = {}           # its variable-name strings -> a comment naming them
+        self.eq_names = self.id_array(self.romp_addr.get((0xE2, 0x29)))
+        # Hex strings outside the Equation Library unpacked by ~PCunpack (MINEHUNT)
+        self.pc_strings = {0xCDE97, 0xCDFA0}
         self.ref_targets = {a for a in self.xrefs if isinstance(a, int)} | set(self.s["data_refs"])
         # Words the emulator saw used as addresses (also inside objects such
         # as the hex string at #75675); data is written around them.
@@ -486,6 +496,20 @@ class Generator:
             ln.value = ("ptr", o.value)
             return [ln]
         if k in COMPOSITE:
+            if k == "DOLIST" and EQLIB[0] <= a < EQLIB[1] and len(o.children) == 4                     and o.children[0].kind == "DOCSTR" and o.children[3].kind == "DOCSTR"                     and self.small_bint(o.children[1]) is not None and self.small_bint(o.children[2]) is not None:
+                # a set's variables { $names # first # count $units }: the
+                # names are indexes into the name array (ROMPTR 0E2 029)
+                nb = [self.n[x] | self.n[x + 1] << 4 for x in range(o.children[0].addr + 10, o.children[0].addr + o.children[0].size, 2)]
+                names = [self.eq_names[b - 1] if 0 < b <= len(self.eq_names) and b != 0xEE else "-" for b in nb]
+                self.eq_vars[o.children[0].addr] = "variables " + " ".join(names)
+            if k == "DOLIST" and EQLIB[0] <= a < EQLIB[1] and o.children and self.small_bint(o.children[0]) in (0, 1, 2, 3):
+                # an equation entry { BINT1..3 ... }: its strings are packed
+                todo = list(o.children)
+                while todo:
+                    c = todo.pop()
+                    if c.kind == "DOCSTR":
+                        self.eq_strings.add(c.addr)
+                    todo += c.children
             out = [Line(a, 5, OPENER[k], mode="RPL", indent=depth)]
             for c in o.children:
                 out += self.obj_lines(c, depth + 1)
@@ -499,6 +523,10 @@ class Generator:
         text = None
         comment = ""
         romp = None
+        if k == "DOHSTR" and (EQLIB[0] <= a < EQLIB[1] or a in self.pc_strings):
+            pic = self.pc_picture_lines(o, depth)
+            if pic:
+                return pic
         if k == "DOBINT":
             given, why = self.operands.get(a, (None, ""))
             if given == "addr" or (given is None and o.value in PROLOG_ADDRS):
@@ -523,6 +551,11 @@ class Generator:
         elif k == "DOCSTR" and len(body) % 2 == 1:
             nb = [body[i] | body[i + 1] << 4 for i in range(5, len(body), 2)]
             text = op("$", sasm.escape(nb))
+            if a in self.eq_strings:
+                e = sasm.eq_expand(nb)
+                if sasm.eq_compress(e) == nb:
+                    text = op("EQ$", sasm.escape(e))
+            comment = self.eq_vars.get(a, "")
         elif k == "DOHSTR" and a == UNITS_TABLE:
             return self.units_table_lines(o, depth)
         elif k == "DOHSTR" and len(body) <= 69 and not any(a + 10 <= t < a + o.size for t in self.slots):
@@ -549,6 +582,10 @@ class Generator:
             return out
         elif k == "DOARRY":
             arr = self.array_lines(o, depth)
+            if arr:
+                return arr
+        elif k == "DOLNKARRY":
+            arr = self.linked_array_lines(o, depth)
             if arr:
                 return arr
         if text is not None:
@@ -660,6 +697,10 @@ class Generator:
         p = a + 20 + 5 * nd
         if PROLOGS[ep] == "DOCSTR":
             return self.string_array_lines(o, depth, dims, p)
+        if PROLOGS[ep] == "DOROMP":
+            return self.romptr_array_lines(o, depth, dims, p)
+        if PROLOGS[ep] == "DOIDNT":
+            return self.id_array_lines(o, depth, dims, p)
         esize = {"DOREAL": 16, "DOCMP": 32, "DOBINT": 5, "DOEREL": 21, "DOECMP": 42}.get(PROLOGS[ep])
         if esize is None or p + count * esize != a + o.size:
             return None
@@ -688,6 +729,163 @@ class Generator:
                Line(a + 15, 5, op("CON(5)", str(len(dims))), comment="dimensions", indent=depth)]
         for i, d in enumerate(dims):
             out.append(Line(a + 20 + 5 * i, 5, op("CON(5)", str(d)), indent=depth))
+        return out
+
+    def id_array(self, a):
+        """The names in an array of identifiers at a, or []."""
+        if a is None or self.rom.addr(a) != sasm.PROLOG["DOARRY"] or self.rom.addr(a + 10) != sasm.PROLOG["DOIDNT"]:
+            return []
+        out, p = [], a + 25
+        for _ in range(self.rom.addr(a + 20)):
+            n = self.rom.byte(p)
+            out.append(self.name_text([self.rom.byte(p + 2 + 2 * k) for k in range(n)]))
+            p += 2 + 2 * n
+        return out
+
+    def small_bint(self, o):
+        """The value of a binary integer object or a pointer to one."""
+        if o.kind == "PTR":
+            v = o.value
+            if v < len(self.n) - 10 and self.word(v) == sasm.PROLOG["DOBINT"]:
+                return self.word(v + 5)
+            return None
+        return o.value if o.kind == "DOBINT" else None
+
+    def romptr_name(self, lib, cmd):
+        """What a ROMPTR names, for a comment: the command's name, or the
+        label of a menu key (the first string in the object)."""
+        a = self.romp_addr.get((lib, cmd))
+        if a is None:
+            return ""
+        nm = self.libcmd[a][2] or self.symbol_name(a)
+        if nm:
+            return nm
+        try:
+            o = self.rd.decode(a)
+        except DecodeError:
+            return ""
+        todo = [(o, 0)]
+        while todo:
+            x, d = todo.pop(0)
+            if x.kind == "DOCSTR":
+                body = list(self.n[x.addr + 10:x.addr + x.size])
+                return "key " + sasm.escape([body[i] | body[i + 1] << 4 for i in range(0, len(body) - 1, 2)])
+            if d < 3:
+                todo += [(c, d + 1) for c in x.children]
+        return ""
+
+    def romptr_array_lines(self, o, depth, dims, p):
+        """An array of ROMPTRs (a menu: one element per soft key), each a
+        library and command number without prolog."""
+        count = 1
+        for d in dims:
+            count *= d
+        if p + 6 * count != o.addr + o.size:
+            return None
+        out = self.array_head(o, depth, dims)
+        for _ in range(count):
+            lib, cmd = self.rom.read(p, 3), self.rom.read(p + 3, 3)
+            out.append(Line(p, 6, op("ROMPBODY", "%03X" % lib, "%03X" % cmd), comment=self.romptr_name(lib, cmd),
+                            indent=depth))
+            p += 6
+        return out
+
+    def id_array_lines(self, o, depth, dims, p):
+        """An array of identifiers (the Equation Library's variable names):
+        each a length byte and the characters, without prolog."""
+        count = 1
+        for d in dims:
+            count *= d
+        out = self.array_head(o, depth, dims)
+        for i in range(count):
+            n = self.rom.byte(p)
+            nb = [self.rom.byte(p + 2 + 2 * k) for k in range(n)]
+            out.append(Line(p, 2 + 2 * n, op("IDBODY", self.name_text(nb)), comment="%d" % (i + 1), indent=depth))
+            p += 2 + 2 * n
+        return out if p == o.addr + o.size else None
+
+    def pc_picture_lines(self, o, depth):
+        """A hex string holding a picture packed for ~PCunpack, as a PNG.
+        PCGROB when HP's packer's rule (sasm.pc_split) gives the same
+        commands, else PCGROBS with the commands."""
+        a, end = o.addr, o.addr + o.size
+        if o.size < 30:
+            return None
+        h, w = self.rom.byte(a + 10), self.rom.byte(a + 12)
+        if not h or not w:
+            return None
+        p, stream, split = a + 14, [], []
+        while p < end:
+            c = self.rom.byte(p)
+            p += 2
+            k = (c & 0x7F) + 1
+            if c & 0x80:
+                stream += [self.n[p]] * k
+                split.append("R%d" % k)
+                p += 1
+            else:
+                stream += list(self.n[p:p + k])
+                split.append("L%d" % k)
+                p += k
+        stride = (w + 7) // 8 * 2
+        if p != end or len(stream) not in (h * stride, h * stride - 1):
+            return None
+        full = stream + [0] * (h * stride - len(stream))
+        rows = sasm.grob_png_rows(h, w, sasm.pc_stream(full))
+        if rows is None:
+            return None
+        fname = "images/%05X-packed.png" % a
+        (SRC / "images").mkdir(parents=True, exist_ok=True)
+        sasm.png_write(SRC / fname, rows)
+        default = ["%s%d" % t for t in sasm.pc_split(sasm.pc_stream(sasm.grob_nibs(rows, w)))]
+        if default == split:
+            text = op("PCGROB", '"%s"' % fname)
+        else:
+            text = op("PCGROBS", '"%s"' % fname, ",".join(split))
+        return [Line(a, o.size, text, comment="%d x %d, packed" % (w, h), mode="RPL", indent=depth)]
+
+    def linked_array_lines(self, o, depth):
+        """A linked array of strings (a library's message table): offsets,
+        each from its own address to an element (0 for none), then the
+        elements as length and characters without prolog."""
+        a, r = o.addr, self.rom
+        ep, nd = r.addr(a + 10), r.addr(a + 15)
+        if ep not in PROLOGS or PROLOGS[ep] != "DOCSTR" or nd != 1:
+            return None
+        n = r.addr(a + 20)
+        offs = a + 25
+        index = {}                  # element address -> number
+        for i in range(n):
+            f = offs + 5 * i
+            v = r.addr(f)
+            if v:
+                index[(f + v) & 0xFFFFF] = i + 1
+        lib = next((l.num for l in self.s["libs"] if l.message == a), None)
+        names = {}
+        for t, i in index.items():
+            names[t] = ("msg~%02X%02X" % (lib, i)) if lib is not None and lib < 0x100 and i < 0x100 else "msg~%d" % i
+            self.hints.setdefault(t, names[t])
+        out = [Line(a, 5, op("CON(5)", Ref(0x02A0A, a, "rom")), comment="linked array %d" % n, indent=depth),
+               self.length(a + 5, depth),
+               Line(a + 10, 5, op("CON(5)", Ref(ep, a, "rom")), comment="element type", indent=depth),
+               Line(a + 15, 5, op("CON(5)", "1"), comment="dimensions", indent=depth),
+               Line(a + 20, 5, op("CON(5)", str(n)), indent=depth)]
+        for i in range(n):
+            f = offs + 5 * i
+            v = r.addr(f)
+            if v:
+                out.append(Line(f, 5, op("REL(5)", Ref((f + v) & 0xFFFFF, f, "addr")), indent=depth))
+            else:
+                out.append(Line(f, 5, op("CON(5)", "0"), comment="no element %d" % (i + 1), indent=depth))
+        p = offs + 5 * n
+        end = a + o.size
+        while p < end:
+            ln = r.addr(p)
+            if ln < 5 or ln % 2 == 0 or p + ln > end or p not in index:
+                return None
+            nb = [r.byte(p + 5 + 2 * k) for k in range((ln - 5) // 2)]
+            out.append(Line(p, ln, op("$BODY", sasm.escape(nb)), comment="%d" % index[p], indent=depth))
+            p += ln
         return out
 
     def string_array_lines(self, o, depth, dims, p):

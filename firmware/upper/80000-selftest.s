@@ -2027,16 +2027,16 @@ L_81D93:
         CON(5)  L_F310E+81                       * 81D99  address (the code jumps or points through it)
         NIBHEX  1                                * 81D9E
 
-        CON(5)  L_FDD45+26                       * 81D9F  address (the code jumps or points through it)
+        CON(5)  L_FDD3B+36                       * 81D9F  address (the code jumps or points through it)
         NIBHEX  1                                * 81DA4
 
-        CON(5)  L_FB1B8+7                        * 81DA5  address (the code jumps or points through it)
+        CON(5)  L_FB0EE+209                      * 81DA5  address (the code jumps or points through it)
         NIBHEX  1                                * 81DAA
 
-        CON(5)  L_F7DBB+4                        * 81DAB  address (the code jumps or points through it)
+        CON(5)  L_F7C51+366                      * 81DAB  address (the code jumps or points through it)
         NIBHEX  1                                * 81DB0
 
-        CON(5)  L_F91AC+19                       * 81DB1  address (the code jumps or points through it)
+        CON(5)  L_F91A2+29                       * 81DB1  address (the code jumps or points through it)
         NIBHEX  1                                * 81DB6
 
         CON(5)  L_FFFFC+3                        * 81DB7  address (the code jumps or points through it)

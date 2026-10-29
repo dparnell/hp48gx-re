@@ -64,6 +64,14 @@ The format is described at the top of `tools/sasm.py`. In short:
 - **RPL** uses RPLCOMP-like syntax: `::` … `;`, `{ }`, `# 3F`, `% 1.5`, `$ "text"`, `ROMPTR 0AB 00F`, and `CODE` … `ENDCODE` for machine code inside RPL. Any other word is a pointer to that label. A line holds several objects. A nested `::` starts a line; a line ends after words that act on the objects that follow them (`IT`, `ITE`, `?SKIP`, the `…case` words) and those objects. Argument-type dispatch tables (`CK2&Dispatch`) put one case per line, with its argument types as the comment (`real real`; the codes are those of the ROM's tables at #19123).
 - **Comments** start with `*`.
 - **Data directives** are `CON(n)`, `REL(n)`, `NIBHEX`, `NIBASC` and `BSS`.
+- **Data in readable form:**
+  - **Menus** (libraries 0A9 and 0AA) are arrays of ROMPTRs, one per soft key, each written `ROMPBODY lib cmd` with the command's name or the key's label as its comment.
+  - **Message tables** are linked arrays of strings: `REL(5)` offsets to `$BODY` strings labelled by message number (`msg~BE02`).
+  - **The Equation Library** (library 0E2):
+    - its equations are `EQ$ "..."` strings, written expanded; the assembler packs them with the library's tokens (`=(` is one byte);
+    - its variable names are `IDBODY` entries;
+    - each set's variables are named in a comment;
+    - its pictures (and MINEHUNT's) are PNG files in `images/`, written `PCGROB "images/F8567-packed.png"`. The assembler packs them as the ROM's unpacker (#9D2A9) reads them, by the rule HP's packer followed. Where it chose otherwise, `PCGROBS` gives the packing.
 
 ## Names
 

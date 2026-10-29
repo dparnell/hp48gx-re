@@ -17,167 +17,368 @@ LIB0BE:
 * ROMPTR 0BE 000
 * refs (1): DF098
 ROMP_0BE_000:
-        CON(5)  DOLNKARRY                        * DF0AF  DOLNKARRY
+        CON(5)  DOLNKARRY                        * DF0AF  linked array 119
         LENGTH                                   * DF0B4  length, to #E0488
-        NIBHEX  C2A20100007700035200B52005620096 * DF0B9  ,*...w.0%.[.P&.i
-        NIBHEX  200772009820079200DB2005E2007130 * DF0D9  .p'.≤.p).½.P....
-        NIBHEX  035300F8300BC30030400B3400D54005 * DF0F9  05.↓.°<...°C.].P
-        NIBHEX  94007B4007F400F250096500B95005A5 * DF119  I.·.pO./.↑V.Δ.PZ
-        NIBHEX  00DA5005B5009D500BE5003160013600 * DF139  ...P[.Ù.°^....c.
-        NIBHEX  B3600976003B600FB6007F600B270034 * DF159  ;.↑g.³.ðk.÷.°r.C
-        NIBHEX  70094700F4700757003670017700D770 * DF179  .↑t.O.pu.c..w.}.
-        NIBHEX  0B8700997003D700D080014800968005 * DF199  °x.τ.0}....∫.i.P
-        NIBHEX  A8007D800F090094900F7900BB9007C9 * DF1B9  ≥.×.ð↑.I.ðρ.».pΠ
-        NIBHEX  007F900D2A0036A00F6A00B7A005BA00 * DF1D9  .÷.Ð¢.c.ð¦.{.P«.
-        NIBHEX  9EA0091B0072B0033B00F3B00D4B00D5 * DF1F9  é.↑±.'.0³.?.Ð´.]
-        NIBHEX  B00B6B0077B0038B0019B00FCB00D0C0 * DF219  .°¶.w.0¸.γ.ð¼...
-        NIBHEX  0B4C0098C007CC0050D00B0D0011D007 * DF239  °Ä.≤.pÌ...°Ð...p
-        NIBHEX  1D00D4D0038D009BD005DD0031E0032E * DF259  Ñ.M.0Ø.¹.PÝ...0â
-        NIBHEX  0033E0034E0015E0098E001CE009FE00 * DF279  .3.0ä.Q.↑è.Á.↑ï.
-        NIBHEX  13F00D5F0057F0078F0099F005CF00DF * DF299  1.Ðõ.u.pø.τ.Pü.ý
-        NIBHEX  F001301096010D701058010D8010D901 * DF2B9  ....i.Ð..Σ.Ð..Ω.
-        NIBHEX  07A0101B010BB010FC010DD010FE0105 * DF2D9  p..±.°..Ï.Ð..ï.P
-        NIBHEX  F010301107111092110D3110B4110951 * DF2F9  ....p..).Ð..K.↑.
-        NIBHEX  10D000005C6F647F000045970756A390 * DF319  ....ÅöF÷..Type:.
-        NIBHEX  00008A33100084D265965677A3710001 * DF339  ..¨3..H-View:...
-        NIBHEX  45747F6373616C6563100065D2659656 * DF359  TG÷67.ÆV6..V-Vie
-        NIBHEX  77A3B20003486F6F6375602479707560 * DF379  w:+.0∫öö6W.Bρ.W.
-        NIBHEX  2F6660207C6F647D20003486F6F63756 * DF399  òf..ÇöF×..Choose
-        NIBHEX  0216E676C65602D65616375727567300 * DF3B9   angle measure7.
-        NIBHEX  054E6475627026657E6364796F6E6823 * DF3D9  PäFW&.bVç6Fρöæ▶2
-        NIBHEX  7920247F60207C6F6471400054E64756 * DF3F9  ρ.B÷..ÇöF...Ente
-        NIBHEX  2702D696E696D657D60286F62796A7F6 * DF419  r minimum horizo
-        NIBHEX  E64716C6026716C657561400054E6475 * DF439  ntal valueA.PäFW
-        NIBHEX  62702D6168796D657D60286F62796A7F * DF459  &.Ò.▶ρÖV×.∇ö&ρ¦÷
-        NIBHEX  6E64716C6026716C6575614000145747 * DF479  æF.Æ.b.ÆVW...Aut
-        NIBHEX  F6373616C6560267562747963616C602 * DF499  oscale vertical 
-        NIBHEX  07C6F647022716E67656F3D300054E64 * DF4B9  plot range?=.PäF
-        NIBHEX  7562702D696E696D657D602675627479 * DF4D9  W&.ÒλæλÖV×.bW&Gρ
-        NIBHEX  63616C6026716C65756D300054E64756 * DF4F9  6.Æ.b.ÆVWÖ..Ente
-        NIBHEX  2702D6168796D657D602675627479636 * DF519  r maximum vertic
-        NIBHEX  16C6026716C657567200005C6F647028 * DF539  al value'..ÅöF.∇
-        NIBHEX  287824792C2029782479292D300054E6 * DF559  ∇πBρÂ.δπBρδÒ..En
-        NIBHEX  4756270236F6D607C65687D26716C657 * DF579  ter complex-valu
-        NIBHEX  5646026657E6368237927200005C6F64 * DF599  ed func(s)'..ÅöF
-        NIBHEX  7029772824792D3668247C2979254000 * DF5B9  .δw∇BρÒc▶BÇδρR..
-        NIBHEX  54E6475627026657E6364796F6E602F6 * DF5D9  Enter function o
-        NIBHEX  660294E44454050216E6460235F4C4E4 * DF5F9  f INDEP and SOLN
-        NIBHEX  D300054E647562702465627966716479 * DF619  =.PäFW&.BV&ρf.Fρ
-        NIBHEX  667560277E227E247E20235F4C4E4F30 * DF639  fW.rç"çBç.2õÄäô.
-        NIBHEX  0054E647562702465627966716479667 * DF659  .Enter derivativ
-        NIBHEX  560277E227E247E20294E44454057300 * DF679  e w.r.t. INDEP7.
-        NIBHEX  05537560235479666660246966666025 * DF699  P5W.2Eρff.Bλff.R
-        NIBHEX  6170237F6C6675627F3F000058441647 * DF6B9  ..2÷ÆfW&÷ó..ΣDat
-        NIBHEX  A3D000034F6C6A3D0000759646A39200 * DF6D9  :..0ôÆ¦Ó..Wid:).
-        NIBHEX  054E647562702461647160247F60207C * DF6F9  PäFW&.B.F..B÷..Ç
-        NIBHEX  6F647710001427271697370296E6D200 * DF719  öFw..Arrays in-.
-        NIBHEX  054E64756270236F6C657D6E60247F60 * DF739  PäFW&.2öÆV×æ.B÷.
-        NIBHEX  207C6F6473200054E647562702261627 * DF759  .ÇöF7..Enter bar
-        NIBHEX  027796464786F000034F6C637A334000 * DF779   width..0ôÆ6§3..
-        NIBHEX  54E64756270236F6C60247F602573756 * DF799  Enter col to use
-        NIBHEX  0266F6270286F62796A7F6E64716C6F3 * DF7B9   for horizontal?
-        NIBHEX  00054E64756270236F6C60247F602573 * DF7D9  .PäFW&.2öÆ.B÷.R7
-        NIBHEX  7560266F6270267562747963616C6110 * DF7F9  W.bö&.bW&Gρ6.Æ..
-        NIBHEX  003547560737A3D300054E6475627029 * DF819  .Steps:=.PäFW&.δ
-        NIBHEX  6E646560702671627023716D607C6560 * DF839  æFV..b.&.2.Ö.ÇV.
-        NIBHEX  236F657E6479300054E6475627024656 * DF859  2öVçFρ..Enter de
-        NIBHEX  0702671627023716D607C6560236F657 * DF879  p var sample cou
-        NIBHEX  E647D100005C6F64702F4074796F6E63 * DF899  nt...ÅöF.ò.Gρöæ6
-        NIBHEX  7B0000C4F6A3B00008496A3D00001487 * DF8B9  ·..Lo:..∡η¦Ó..Ax
-        NIBHEX  5637110003596D657C6473100034F6E6 * DF8D9  es..0θÖVÇF7..Con
-        NIBHEX  E65636471100005968756C6373100084 * DF8F9  nect...θ▶WÆ67..H
-        NIBHEX  D2459636B6A33100065D2459636B6A3F * DF919  -Tick:..`ÕBθ6¶¦ó
-        NIBHEX  300054E647562702D696E696D657D602 * DF939  ..Enter minimum 
-        NIBHEX  96E646560702671627026716C65756F3 * DF959  indep var value?
-        NIBHEX  00054E647562702D6168796D657D6029 * DF979  .PäFW&.Ò.▶ρÖV×.δ
-        NIBHEX  6E646560702671627026716C65756930 * DF999  æFV..b.&.b.ÆVWλ.
-        NIBHEX  0044271677021687563702265666F627 * DF9B9  .Draw axes befor
-        NIBHEX  560207C6F6474796E676F3D200034F6E * DF9D9  e plotting?-.0ôæ
-        NIBHEX  6E65636470207C6F6470207F696E6473 * DF9F9  æV6F..ÇöF..÷λæF7
-        NIBHEX  7F31400005C6F647026657E6364796F6 * DFA19  ÷...Plot functio
-        NIBHEX  E637023796D657C64716E656F65737C6 * DFA39  ns simultaneousl
-        NIBHEX  97F37300054E64756270296E64656070 * DFA59  y?7.PäFW&.δæFV..
-        NIBHEX  26716270296E6362756D656E647D3000 * DFA79  b.&.δæ6&WÖVæF×..
-        NIBHEX  94E646560702374756070257E6964737 * DFA99  Indep step units
-        NIBHEX  021627560207968756C637F3F300054E * DFAB9   are pixels??.Pä
-        NIBHEX  64756270286F62796A7F6E64716C6024 * DFAD9  FW&.∇ö&ρ¦÷æF.Æ.B
-        NIBHEX  79636B6023707163696E676B300054E6 * DFAF9  ρ6¶.2..6λæv¶..En
-        NIBHEX  4756270267562747963616C602479636 * DFB19  ter vertical tic
-        NIBHEX  B6023707163696E67614000459636B60 * DFB39  k spacingA.@θ6¶.
-        NIBHEX  23707163696E6760257E696473702162 * DFB59  2..6λæv.RçλF7..&
-        NIBHEX  7560207968756C637F311000445607E6 * DFB79  W..ρ▶WÆ6÷...Depn
-        NIBHEX  46A35300054E64756270246560756E64 * DFB99  d:5.PäFW&.BV.WæF
-        NIBHEX  656E6470267162702E616D656B300054 * DFBB9  VæF.b.&.â.ÖV¶..E
-        NIBHEX  E647562702D696E696D657D602465607 * DFBD9  nter minimum dep
-        NIBHEX  02671627026716C65756B300054E6475 * DFBF9   var value;.PäFW
-        NIBHEX  62702D6168796D657D60246560702671 * DFC19  &.Ò.▶ρÖV×.BV..b.
-        NIBHEX  627026716C657561100084D2651627A3 * DFC39  &.b.ÆVW...H-Var:
-        NIBHEX  1100065D2651627A3F300054E6475627 * DFC59  ..`Õb.&§ó..Enter
-        NIBHEX  02D616870296E6465607026716270296 * DFC79   max indep var i
-        NIBHEX  E6362756D656E647930003486F6F6375 * DFC99  ncrement9.0∫öö6W
-        NIBHEX  60286F62796A7F6E64716C6026716279 * DFCB9  .∇ö&ρ¦÷æF.Æ.b.&ρ
-        NIBHEX  61626C656530003486F6F63756026756 * DFCD9  .&ÆVV..Choose ve
-        NIBHEX  2747963616C602671627961626C65631 * DFCF9  rtical variable.
-        NIBHEX  000030294E444540511000130235F4C4 * DFD19  ...δäDT....1 SOL
-        NIBHEX  E4110000235F4C4E4823100085D2C456 * DFD39  N...2õÄä∫2..X-Le
-        NIBHEX  6647A35100085D22596768647A331000 * DFD59  ft:..∡Õ"θv▶F§3..
-        NIBHEX  95D2E4561627A31100095D2641627A31 * DFD79  Y-Near:..↑Õb.&§.
-        NIBHEX  1000A5D2C4F677A331000A5D28496768 * DFD99  ..Z-Low:...Õ∇ηv▶
-        NIBHEX  6A33400054E647562702D696E696D657 * DFDB9  ¦3..Enter minimu
-        NIBHEX  D602850267965677D267F6C657D65602 * DFDD9  m X view-volume 
-        NIBHEX  6716C63400054E647562702D6168796D * DFDF9  valC.PäFW&.Ò.▶ρÖ
-        NIBHEX  657D602850267965677D267F6C657D65 * DFE19  V×.∇.bρVv×b÷ÆV×V
-        NIBHEX  6026716C63400054E647562702D696E6 * DFE39  .b.Æ6..Enter min
-        NIBHEX  96D657D602950267965677D267F6C657 * DFE59  imum Y view-volu
-        NIBHEX  D656026716C63400054E647562702D61 * DFE79  me valC.PäFW&.Ò.
-        NIBHEX  68796D657D602950267965677D267F6C * DFE99  ▶ρÖV×.δ.bρVv×b÷Æ
-        NIBHEX  657D656026716C63400054E647562702 * DFEB9  V×V.b.Æ6..Enter 
-        NIBHEX  D696E696D657D602A50267965677D267 * DFED9  minimum Z view-v
-        NIBHEX  F6C657D656026716C63400054E647562 * DFEF9  olume valC.PäFW&
-        NIBHEX  702D6168796D657D602A50267965677D * DFF19  .Ò.▶ρÖV×.¢.bρVv×
-        NIBHEX  267F6C657D656026716C6B00008554A3 * DFF39  b÷ÆV×V.b.Æ¶..XE:
-        NIBHEX  B00009554A3B0000A554A3B300054E64 * DFF59  ..↑U¤³..ZE:;.PäF
-        NIBHEX  7562702850256975607F696E6470236F * DFF79  W&.∇.RλW.÷λæF.2ö
-        NIBHEX  6F6274696E6164756B300054E6475627 * DFF99  ö&Gλæ.FW¶..Enter
-        NIBHEX  02950256975607F696E6470236F6F627 * DFFB9   Y eyepoint coor
-        NIBHEX  4696E6164756B300054E647562702A50 * DFFD9  dinate;.PäFW&.¢.
-        NIBHEX  256975607F696E6470236F6F6274696E * DFFF9  RλW.÷λæF.2öö&Gλæ
-        NIBHEX  616475612000351667560214E696D616 * E0019  .FW...Save Anima
-        NIBHEX  4796F6E634000351667560216E696D61 * E0039  tionC.0.fW..æλÖ.
-        NIBHEX  64796F6E602461647160216664756270 * E0059  Fρöæ.B.F...fFW&.
-        NIBHEX  207C6F647F3510008585D2C4566647A3 * E0079  .ÇöF÷S..XX-Left:
-        NIBHEX  510008585D225768647A3510009595D2 * E0099  ..∡ΣÕ"u▶F§S..YY-
-        NIBHEX  E4561627A3310009595D2641627A3D30 * E00B9  Near:..↑θÕb.&§Ó.
-        NIBHEX  0054E647562702D696E696D657D60285 * E00D9  .Enter minimum X
-        NIBHEX  85022716E67656026716C65756D30005 * E00F9  X range value=.P
-        NIBHEX  4E647562702D6168796D657D60285850 * E0119  äFW&.Ò.▶ρÖV×.∇Σ.
-        NIBHEX  22716E67656026716C65756D300054E6 * E0139  ".ævV.b.ÆVWÖ..En
-        NIBHEX  47562702D696E696D657D60295950227 * E0159  ter minimum YY r
-        NIBHEX  16E67656026716C65756D300054E6475 * E0179  ange value=.PäFW
-        NIBHEX  62702D6168796D657D6029595022716E * E0199  &.Ò.▶ρÖV×.δθ.".æ
-        NIBHEX  67656026716C657561300085850216E6 * E01B9  vV.b.ÆVW...XX an
-        NIBHEX  460295950205C6F64702F4074796F6E6 * E01D9  d YY Plot Option
-        NIBHEX  37D1000A5F6F6D60264163647F627377 * E01F9  s...õöÖ.b.6F÷&7w
-        NIBHEX  100084D264163647F627A37100065D26 * E0219  ..H-Factor:..`Õb
-        NIBHEX  4163647F627A31300025563656E64756 * E0239  .6F÷&§...Recente
-        NIBHEX  27021647023427F637378616962737D3 * E0259  r at Crosshairs=
-        NIBHEX  00054E64756270286F62796A7F6E6471 * E0279  .PäFW&.∇ö&ρ¦÷æF.
-        NIBHEX  6C602A7F6F6D60266163647F62793000 * E0299  Æ.¢÷öÖ.b.6F÷&ρ..
-        NIBHEX  54E64756270267562747963616C602A7 * E02B9  Enter vertical z
-        NIBHEX  F6F6D60266163647F627D30002556365 * E02D9  oom factor=. U6V
-        NIBHEX  6E64756270207C6F647021647023627F * E02F9  æFW&..ÇöF..F.2&÷
-        NIBHEX  637378616962737F3910002556375647 * E0319  67π.λ&7÷ε..Reset
-        NIBHEX  0207C6F647D00004466C647D00001457 * E0339   plot..@dÆF×..Au
-        NIBHEX  47F6510006457E6364796F6E6F000005 * E0359  to..`Tç6Fρöæö..P
-        NIBHEX  F6C61627F000034F6E69636F00004527 * E0379  olar..0ôæλ6ö..Tr
-        NIBHEX  5747869100005162716D656472796363 * E0399  uth....&.ÖVF'ρ66
-        NIBHEX  1000449666660254177100084963747F * E03B9  ..Diff Eq..∡η6G÷
-        NIBHEX  6762716D6B0000241627310003536164 * E03D9  v&.Ö¶..Bar..05.F
-        NIBHEX  74756279100035C6F60756669656C646 * E03F9  GW&ρ..Slopefield
-        NIBHEX  7100075962756662716D656910000537 * E0419  ..pθ&Wf&.ÖVλ..Ps
-        NIBHEX  D234F6E647F657273100095D235C6963 * E0439  -Contour..↑Õ2Åλ6
-        NIBHEX  6563100074279646D61607910000527D * E0459  V6..Gridmap...%×
-        NIBHEX  235572766163656                  * E0479  2U'g.6V
+        CON(5)  DOCSTR                           * DF0B9  element type
+        CON(5)  1                                * DF0BE  dimensions
+        CON(5)  119                              * DF0C3
+        REL(5)  msg~BE01                         * DF0C8
+        REL(5)  msg~BE02                         * DF0CD
+        REL(5)  msg~BE03                         * DF0D2
+        REL(5)  msg~BE04                         * DF0D7
+        REL(5)  msg~BE05                         * DF0DC
+        REL(5)  msg~BE06                         * DF0E1
+        REL(5)  msg~BE07                         * DF0E6
+        REL(5)  msg~BE08                         * DF0EB
+        REL(5)  msg~BE09                         * DF0F0
+        REL(5)  msg~BE0A                         * DF0F5
+        REL(5)  msg~BE0B                         * DF0FA
+        REL(5)  msg~BE0C                         * DF0FF
+        REL(5)  msg~BE0D                         * DF104
+        REL(5)  msg~BE0E                         * DF109
+        REL(5)  msg~BE0F                         * DF10E
+        REL(5)  msg~BE10                         * DF113
+        REL(5)  msg~BE11                         * DF118
+        REL(5)  msg~BE12                         * DF11D
+        REL(5)  msg~BE13                         * DF122
+        REL(5)  msg~BE14                         * DF127
+        REL(5)  msg~BE15                         * DF12C
+        REL(5)  msg~BE16                         * DF131
+        REL(5)  msg~BE17                         * DF136
+        REL(5)  msg~BE18                         * DF13B
+        REL(5)  msg~BE19                         * DF140
+        REL(5)  msg~BE1A                         * DF145
+        REL(5)  msg~BE1B                         * DF14A
+        REL(5)  msg~BE1C                         * DF14F
+        REL(5)  msg~BE1D                         * DF154
+        REL(5)  msg~BE1E                         * DF159
+        REL(5)  msg~BE1F                         * DF15E
+        REL(5)  msg~BE20                         * DF163
+        REL(5)  msg~BE21                         * DF168
+        REL(5)  msg~BE22                         * DF16D
+        REL(5)  msg~BE23                         * DF172
+        REL(5)  msg~BE24                         * DF177
+        REL(5)  msg~BE25                         * DF17C
+        REL(5)  msg~BE26                         * DF181
+        REL(5)  msg~BE27                         * DF186
+        REL(5)  msg~BE28                         * DF18B
+        REL(5)  msg~BE29                         * DF190
+        REL(5)  msg~BE2A                         * DF195
+        REL(5)  msg~BE2B                         * DF19A
+        REL(5)  msg~BE2C                         * DF19F
+        REL(5)  msg~BE2D                         * DF1A4
+        REL(5)  msg~BE2E                         * DF1A9
+        REL(5)  msg~BE2F                         * DF1AE
+        REL(5)  msg~BE30                         * DF1B3
+        REL(5)  msg~BE31                         * DF1B8
+        REL(5)  msg~BE32                         * DF1BD
+        REL(5)  msg~BE33                         * DF1C2
+        REL(5)  msg~BE34                         * DF1C7
+        REL(5)  msg~BE35                         * DF1CC
+        REL(5)  msg~BE36                         * DF1D1
+        REL(5)  msg~BE37                         * DF1D6
+        REL(5)  msg~BE38                         * DF1DB
+        REL(5)  msg~BE39                         * DF1E0
+        REL(5)  msg~BE3A                         * DF1E5
+        REL(5)  msg~BE3B                         * DF1EA
+        REL(5)  msg~BE3C                         * DF1EF
+        REL(5)  msg~BE3D                         * DF1F4
+        REL(5)  msg~BE3E                         * DF1F9
+        REL(5)  msg~BE3F                         * DF1FE
+        REL(5)  msg~BE40                         * DF203
+        REL(5)  msg~BE41                         * DF208
+        REL(5)  msg~BE42                         * DF20D
+        REL(5)  msg~BE43                         * DF212
+        REL(5)  msg~BE44                         * DF217
+        REL(5)  msg~BE45                         * DF21C
+        REL(5)  msg~BE46                         * DF221
+        REL(5)  msg~BE47                         * DF226
+        REL(5)  msg~BE48                         * DF22B
+        REL(5)  msg~BE49                         * DF230
+        REL(5)  msg~BE4A                         * DF235
+        REL(5)  msg~BE4B                         * DF23A
+        REL(5)  msg~BE4C                         * DF23F
+        REL(5)  msg~BE4D                         * DF244
+        REL(5)  msg~BE4E                         * DF249
+        REL(5)  msg~BE4F                         * DF24E
+        REL(5)  msg~BE50                         * DF253
+        REL(5)  msg~BE51                         * DF258
+        REL(5)  msg~BE52                         * DF25D
+        REL(5)  msg~BE53                         * DF262
+        REL(5)  msg~BE54                         * DF267
+        REL(5)  msg~BE55                         * DF26C
+        REL(5)  msg~BE56                         * DF271
+        REL(5)  msg~BE57                         * DF276
+        REL(5)  msg~BE58                         * DF27B
+        REL(5)  msg~BE59                         * DF280
+        REL(5)  msg~BE5A                         * DF285
+        REL(5)  msg~BE5B                         * DF28A
+        REL(5)  msg~BE5C                         * DF28F
+        REL(5)  msg~BE5D                         * DF294
+        REL(5)  msg~BE5E                         * DF299
+        REL(5)  msg~BE5F                         * DF29E
+        REL(5)  msg~BE60                         * DF2A3
+        REL(5)  msg~BE61                         * DF2A8
+        REL(5)  msg~BE62                         * DF2AD
+        REL(5)  msg~BE63                         * DF2B2
+        REL(5)  msg~BE64                         * DF2B7
+        REL(5)  msg~BE65                         * DF2BC
+        REL(5)  msg~BE66                         * DF2C1
+        REL(5)  msg~BE67                         * DF2C6
+        REL(5)  msg~BE68                         * DF2CB
+        REL(5)  msg~BE69                         * DF2D0
+        REL(5)  msg~BE6A                         * DF2D5
+        REL(5)  msg~BE6B                         * DF2DA
+        REL(5)  msg~BE6C                         * DF2DF
+        REL(5)  msg~BE6D                         * DF2E4
+        REL(5)  msg~BE6E                         * DF2E9
+        REL(5)  msg~BE6F                         * DF2EE
+        REL(5)  msg~BE70                         * DF2F3
+        REL(5)  msg~BE71                         * DF2F8
+        REL(5)  msg~BE72                         * DF2FD
+        REL(5)  msg~BE73                         * DF302
+        REL(5)  msg~BE74                         * DF307
+        REL(5)  msg~BE75                         * DF30C
+        REL(5)  msg~BE76                         * DF311
+        REL(5)  msg~BE77                         * DF316
+msg~BE01:
+        $BODY   "Plot"                           * DF31B  1
+msg~BE02:
+        $BODY   "Type:"                          * DF328  2
+msg~BE03:
+        $BODY   "∡:"                             * DF337  3
+msg~BE04:
+        $BODY   "H-View:"                        * DF340  4
+msg~BE05:
+        $BODY   "Autoscale"                      * DF353  5
+msg~BE06:
+        $BODY   "V-View:"                        * DF36A  6
+msg~BE07:
+        $BODY   "Choose type of plot"            * DF37D  7
+msg~BE08:
+        $BODY   "Choose angle measure"           * DF3A8  8
+msg~BE09:
+        $BODY   "Enter function(s) to plot"      * DF3D5  9
+msg~BE0A:
+        $BODY   "Enter minimum horizontal value" * DF40C  10
+msg~BE0B:
+        $BODY   "Enter maximum horizontal value" * DF44D  11
+msg~BE0C:
+        $BODY   "Autoscale vertical plot range?" * DF48E  12
+msg~BE0D:
+        $BODY   "Enter minimum vertical value"   * DF4CF  13
+msg~BE0E:
+        $BODY   "Enter maximum vertical value"   * DF50C  14
+msg~BE0F:
+        $BODY   "Plot (x(t), y(t))"              * DF549  15
+msg~BE10:
+        $BODY   "Enter complex-valued func(s)"   * DF570  16
+msg~BE11:
+        $BODY   "Plot y'(t)=f(t,y)"              * DF5AD  17
+msg~BE12:
+        $BODY   "Enter function of INDEP and SOLN" * DF5D4  18
+msg~BE13:
+        $BODY   "Enter derivative w.r.t. SOLN"   * DF619  19
+msg~BE14:
+        $BODY   "Enter derivative w.r.t. INDEP"  * DF656  20
+msg~BE15:
+        $BODY   "Use Stiff diff eq solver?"      * DF695  21
+msg~BE16:
+        $BODY   "ΣDat:"                          * DF6CC  22
+msg~BE17:
+        $BODY   "Col:"                           * DF6DB  23
+msg~BE18:
+        $BODY   "Wid:"                           * DF6E8  24
+msg~BE19:
+        $BODY   "Enter data to plot"             * DF6F5  25
+msg~BE1A:
+        $BODY   "Arrays in"                      * DF71E  26
+msg~BE1B:
+        $BODY   "Enter column to plot"           * DF735  27
+msg~BE1C:
+        $BODY   "Enter bar width"                * DF762  28
+msg~BE1D:
+        $BODY   "Cols:"                          * DF785  29
+msg~BE1E:
+        $BODY   "Enter col to use for horizontal" * DF794  30
+msg~BE1F:
+        $BODY   "Enter col to use for vertical"  * DF7D7  31
+msg~BE20:
+        $BODY   "Steps:"                         * DF816  32
+msg~BE21:
+        $BODY   "Enter indep var sample count"   * DF827  33
+msg~BE22:
+        $BODY   "Enter dep var sample count"     * DF864  34
+msg~BE23:
+        $BODY   "Plot Options"                   * DF89D  35
+msg~BE24:
+        $BODY   "Lo:"                            * DF8BA  36
+msg~BE25:
+        $BODY   "Hi:"                            * DF8C5  37
+msg~BE26:
+        $BODY   "Axes"                           * DF8D0  38
+msg~BE27:
+        $BODY   "Simult"                         * DF8DD  39
+msg~BE28:
+        $BODY   "Connect"                        * DF8EE  40
+msg~BE29:
+        $BODY   "Pixels"                         * DF901  41
+msg~BE2A:
+        $BODY   "H-Tick:"                        * DF912  42
+msg~BE2B:
+        $BODY   "V-Tick:"                        * DF925  43
+msg~BE2C:
+        $BODY   "Enter minimum indep var value"  * DF938  44
+msg~BE2D:
+        $BODY   "Enter maximum indep var value"  * DF977  45
+msg~BE2E:
+        $BODY   "Draw axes before plotting?"     * DF9B6  46
+msg~BE2F:
+        $BODY   "Connect plot points?"           * DF9EF  47
+msg~BE30:
+        $BODY   "Plot functions simultaneously?" * DFA1C  48
+msg~BE31:
+        $BODY   "Enter indep var increment"      * DFA5D  49
+msg~BE32:
+        $BODY   "Indep step units are pixels?"   * DFA94  50
+msg~BE33:
+        $BODY   "Enter horizontal tick spacing"  * DFAD1  51
+msg~BE34:
+        $BODY   "Enter vertical tick spacing"    * DFB10  52
+msg~BE35:
+        $BODY   "Tick spacing units are pixels?" * DFB4B  53
+msg~BE36:
+        $BODY   "Depnd:"                         * DFB8C  54
+msg~BE37:
+        $BODY   "Enter dependent var name"       * DFB9D  55
+msg~BE38:
+        $BODY   "Enter minimum dep var value"    * DFBD2  56
+msg~BE39:
+        $BODY   "Enter maximum dep var value"    * DFC0D  57
+msg~BE3A:
+        $BODY   "H-Var:"                         * DFC48  58
+msg~BE3B:
+        $BODY   "V-Var:"                         * DFC59  59
+msg~BE3C:
+        $BODY   "Enter max indep var increment"  * DFC6A  60
+msg~BE3D:
+        $BODY   "Choose horizontal variable"     * DFCA9  61
+msg~BE3E:
+        $BODY   "Choose vertical variable"       * DFCE2  62
+msg~BE3F:
+        $BODY   "0 INDEP"                        * DFD17  63
+msg~BE40:
+        $BODY   "1 SOLN"                         * DFD2A  64
+msg~BE41:
+        $BODY   " SOLN("                         * DFD3B  65
+msg~BE42:
+        $BODY   "X-Left:"                        * DFD4C  66
+msg~BE43:
+        $BODY   "X-Right:"                       * DFD5F  67
+msg~BE44:
+        $BODY   "Y-Near:"                        * DFD74  68
+msg~BE45:
+        $BODY   "Y-Far:"                         * DFD87  69
+msg~BE46:
+        $BODY   "Z-Low:"                         * DFD98  70
+msg~BE47:
+        $BODY   "Z-High:"                        * DFDA9  71
+msg~BE48:
+        $BODY   "Enter minimum X view-volume val" * DFDBC  72
+msg~BE49:
+        $BODY   "Enter maximum X view-volume val" * DFDFF  73
+msg~BE4A:
+        $BODY   "Enter minimum Y view-volume val" * DFE42  74
+msg~BE4B:
+        $BODY   "Enter maximum Y view-volume val" * DFE85  75
+msg~BE4C:
+        $BODY   "Enter minimum Z view-volume val" * DFEC8  76
+msg~BE4D:
+        $BODY   "Enter maximum Z view-volume val" * DFF0B  77
+msg~BE4E:
+        $BODY   "XE:"                            * DFF4E  78
+msg~BE4F:
+        $BODY   "YE:"                            * DFF59  79
+msg~BE50:
+        $BODY   "ZE:"                            * DFF64  80
+msg~BE51:
+        $BODY   "Enter X eyepoint coordinate"    * DFF6F  81
+msg~BE52:
+        $BODY   "Enter Y eyepoint coordinate"    * DFFAA  82
+msg~BE53:
+        $BODY   "Enter Z eyepoint coordinate"    * DFFE5  83
+msg~BE54:
+        $BODY   "Save Animation"                 * E0020  84
+msg~BE55:
+        $BODY   "Save animation data after plot?" * E0041  85
+msg~BE56:
+        $BODY   "XX-Left:"                       * E0084  86
+msg~BE57:
+        $BODY   "XX-Rght:"                       * E0099  87
+msg~BE58:
+        $BODY   "YY-Near:"                       * E00AE  88
+msg~BE59:
+        $BODY   "YY-Far:"                        * E00C3  89
+msg~BE5A:
+        $BODY   "Enter minimum XX range value"   * E00D6  90
+msg~BE5B:
+        $BODY   "Enter maximum XX range value"   * E0113  91
+msg~BE5C:
+        $BODY   "Enter minimum YY range value"   * E0150  92
+msg~BE5D:
+        $BODY   "Enter maximum YY range value"   * E018D  93
+msg~BE5E:
+        $BODY   "XX and YY Plot Options"         * E01CA  94
+msg~BE5F:
+        $BODY   "Zoom Factors"                   * E01FB  95
+msg~BE60:
+        $BODY   "H-Factor:"                      * E0218  96
+msg~BE61:
+        $BODY   "V-Factor:"                      * E022F  97
+msg~BE62:
+        $BODY   "Recenter at Crosshairs"         * E0246  98
+msg~BE63:
+        $BODY   "Enter horizontal zoom factor"   * E0277  99
+msg~BE64:
+        $BODY   "Enter vertical zoom factor"     * E02B4  100
+msg~BE65:
+        $BODY   "Recenter plot at crosshairs?"   * E02ED  101
+msg~BE66:
+        $BODY   "Reset plot"                     * E032A  102
+msg~BE67:
+        $BODY   "Dflt"                           * E0343  103
+msg~BE68:
+        $BODY   "Auto"                           * E0350  104
+msg~BE69:
+        $BODY   "Function"                       * E035D  105
+msg~BE6A:
+        $BODY   "Polar"                          * E0372  106
+msg~BE6B:
+        $BODY   "Conic"                          * E0381  107
+msg~BE6C:
+        $BODY   "Truth"                          * E0390  108
+msg~BE6D:
+        $BODY   "Parametric"                     * E039F  109
+msg~BE6E:
+        $BODY   "Diff Eq"                        * E03B8  110
+msg~BE6F:
+        $BODY   "Histogram"                      * E03CB  111
+msg~BE70:
+        $BODY   "Bar"                            * E03E2  112
+msg~BE71:
+        $BODY   "Scatter"                        * E03ED  113
+msg~BE72:
+        $BODY   "Slopefield"                     * E0400  114
+msg~BE73:
+        $BODY   "Wireframe"                      * E0419  115
+msg~BE74:
+        $BODY   "Ps-Contour"                     * E0430  116
+msg~BE75:
+        $BODY   "Y-Slice"                        * E0449  117
+msg~BE76:
+        $BODY   "Gridmap"                        * E045C  118
+msg~BE77:
+        $BODY   "Pr-Surface"                     * E046F  119
         ENDLENGTH                                * E0488
 
 LIB0BE.hash:

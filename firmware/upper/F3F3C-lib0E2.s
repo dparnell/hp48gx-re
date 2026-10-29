@@ -10,26 +10,27 @@ ROMP_0E2_024:
           {                                      * F3F56
             {                                    * F3F5B
               { BINT3 BINT4                      * F3F60
-                { $ "y=ym*\05k*x-ω*t)" $ "v=λ*f" $ "k\0E\08π)/λ" * F3F6F
-                  $ "ω=\08π*f" }                 * F3FC6
-                { CHR_D CHR_D $ "k=\01\07π)/λ" $ "ω=\01\07π\09f" } } * F3FE1
-              { $ "ë/.m\7F\0E:\0Dc" # 4 # 9 $ "\18\15\160\18\18\17\18M" } * F402C
+                { EQ$ "y=ym*SIN(k*x-ω*t)" EQ$ "v=λ*f" EQ$ "k=(2*π)/λ" * F3F6F
+                  EQ$ "ω=2*π*f" }                * F3FC6
+                { CHR_D CHR_D EQ$ "k=CONST(twoπ)/λ" EQ$ "ω=CONST(twoπ)*f" } } * F3FE1
+              { $ "ë/.m\7F\0E:\0Dc" # 4 # 9 $ "\18\15\160\18\18\17\18M" } * F402C  variables ym ω f k λ x t y v
               ROMPTR 0E2 02A }                   * F4082
             {                                    * F4092
               { BINT3 BINT4                      * F4097
-                { $ "s=sm*\04k*x-ω*t)" $ "v=λ*f" $ "k\0E\08π)/λ" * F40A6
-                  $ "ω=\08π*f" }                 * F40FD
-                { CHR_D CHR_D $ "k=\01\07π)/λ" $ "ω=\01\07π\09f" } } * F4118
-              { $ "í/.m\7F\0E:ìc" # D # 9 $ "\18\15\160\02\18\17\18\09" } * F4163
+                { EQ$ "s=sm*COS(k*x-ω*t)" EQ$ "v=λ*f" EQ$ "k=(2*π)/λ" * F40A6
+                  EQ$ "ω=2*π*f" }                * F40FD
+                { CHR_D CHR_D EQ$ "k=CONST(twoπ)/λ" EQ$ "ω=CONST(twoπ)*f" } } * F4118
+              { $ "í/.m\7F\0E:ìc" # D # 9 $ "\18\15\160\02\18\17\18\09" } * F4163  variables sm ω f k λ x t s v
               ROMPTR 0E2 02A }                   * F41B9
             {                                    * F41C9
               { BINT3 BINT4                      * F41CE
-                { $ "v=√(B/ρ)" $ "I=1/\08ρ*v*ω\0C*sm\0C" $ "ß=10*LOG(I/I0)" * F41DD
-                  $ "ω=\08π*f" }                 * F424A
-                { $ "v=√(\02B/ρ\0F" $ "I=1/\08ρ*v*ω\0C*sm\0C/\01\06)\0C" * F4265
-                  $ "ß=10*LOG(\02I/\01I0\0F)" $ "ω=\01\07π\09f" } * F42B8
+                { EQ$ "v=√(B/ρ)" EQ$ "I=1/2*ρ*v*ω^2*sm^2" * F41DD
+                  EQ$ "ß=10*LOG(I/I0)" EQ$ "ω=2*π*f" } * F4224
+                { EQ$ "v=√(UBASE(B/ρ))"          * F4265
+                  EQ$ "I=1/2*ρ*v*ω^2*sm^2/CONST(rad)^2" * F4286
+                  EQ$ "ß=10*LOG(UBASE(I/CONST(I0)))" EQ$ "ω=CONST(twoπ)*f" } * F42B8
               }                                  * F4301
-              { $ "í/.↑\1Eîc\04©" # 16 # 8 $ "\18\15\16\033\0912" } * F4306
+              { $ "í/.↑\1Eîc\04©" # 16 # 8 $ "\18\15\16\033\0912" } * F4306  variables sm ω f B ρ - v I ß
               ROMPTR 0E2 02A }                   * F435A
           }                                      * F436A
         }                                        * F436F
@@ -37,76 +38,271 @@ ROMP_0E2_024:
 * ROMPTR 0E2 025
 * refs (1): E3857
 ROMP_0E2_025:
-        { $ "\08\05\04îîî\11\0A\0B\10\0Fî\0E\0D" # 1D # A * F4374
+        { $ "\08\05\04îîî\11\0A\0B\10\0Fî\0E\0D" # 1D # A * F4374  variables L E I - - - a P c M w - x y
           $ "\02\03\04\02\05\02\06\07\02\18" }   * F43B3
 
 * ROMPTR 0E2 026
 * refs (1): E3857
 ROMP_0E2_026:
-        { $ "\08\05\04îîî\11\0A\0B\10\0Fî\0E\12" # 27 # A * F43D6
+        { $ "\08\05\04îîî\11\0A\0B\10\0Fî\0E\12" # 27 # A * F43D6  variables L E I - - - a P c M w - x θ
           $ "\02\03\04\02\05\02\06\07\02)" }     * F4415
 
 * ROMPTR 0E2 027
 * refs (1): E3857
 ROMP_0E2_027:
-        { $ "\08\11\0A\0B\10\0F\0E\13" # 31 # 8 $ "\02\02\05\02\06\07\02\06" } * F4438
+        { $ "\08\11\0A\0B\10\0F\0E\13" # 31 # 8 $ "\02\02\05\02\06\07\02\06" } * F4438  variables L a P c M w x Mx
 
 * ROMPTR 0E2 028
 * refs (1): E3857
 ROMP_0E2_028:
-        { $ "\06B\14\03îîd¯®?§" # 5 # 9 $ "\18\18#\11\08$$\18$" } * F448A
+        { $ "\06B\14\03îîd¯®?§" # 5 # 9 $ "\18\18#\11\08$$\18$" } * F448A  variables r h V A - - m Ixx Izz d Id
 
 * ROMPTR 0E2 029
 * refs (1): E3857
 ROMP_0E2_029:
-        CON(5)  DOARRY                           * F44E4  DOARRY
+        CON(5)  DOARRY                           * F44E4  array 238
         LENGTH                                   * F44E9  length, to #F4AA9
-        NIBHEX  84E2010000EE00030893627300536271 * F44EE  H....î.0∡9&7.5&.
-        NIBHEX  01410941054102710B410C44089D6168 * F450E  ..↑.P. .°.ÀD∡Ù.▶
-        NIBHEX  710051036103910971087107710D4101 * F452E  ...0.0.↑.∡.p.Ð..
-        NIBHEX  6105920D487106510642039272017232 * F454E  .P)Ð∫.`.`$0)'.'#
-        NIBHEX  01713102520651320252320251320941 * F456E  ... %`.# %# .#↑.
-        NIBHEX  31079202507202537203407203437203 * F458E  .p) .' 5'0.'04'0
-        NIBHEX  42320341320C40720C43720C42320C41 * F45AE  $#0.#À.'À4'À$#À.
-        NIBHEX  31034208D07208D372085C4208534106 * F45CE  .0$∡.'∡='∡Å$∡5.`
-        NIBHEX  610A920476620479620656620659620B * F45EE  ..)@g&@ρ&`e&`θ&°
-        NIBHEX  94720B965101720946620949620B9941 * F460E  I'°i..'↑d&↑η&°τ.
-        NIBHEX  04720660320150720153720A90310462 * F462E  @'`.#..'.5'...@&
-        NIBHEX  027F6202796108610E6205B2710E4406 * F464E   ÷& ρ.∡.à&P+.àD`
-        NIBHEX  5D61687108D4094D6168720050310152 * F466E  Õ.▶.∡M↑Ô.▶'....%
-        NIBHEX  04423204413201423201413206723206 * F468E  @$#@.#.$#..#`'#`
-        NIBHEX  71320972320971320B99720052320051 * F46AE  .#↑'#↑.#°τ'.%#..
-        NIBHEX  320B90510752086C4202556105B2058B * F46CE  #°..p%∡Æ$ U.P+P¸
-        NIBHEX  410444067166776400516677620B4662 * F46EE  .@D`.fwF..fw&°d&
-        NIBHEX  0B496206766206796106710D620E4662 * F470E  °η&`g&`ρ.`.Ð&àd&
-        NIBHEX  0E496201647109920A96620A99610C82 * F472E  àη&.F.↑).i&.τ.À(
-        NIBHEX  0162710B630672366306713663067139 * F474E  .&.°6`'c6`.c6`.ε
-        NIBHEX  620D62320D61320344620D4751045204 * F476E  &Ð&#Ð.#0D&Ðt.@%@
-        NIBHEX  56620459620056620059620144720450 * F478E  e&@θ&.e&.θ&.D'@.
-        NIBHEX  32079032045362005361069406727D63 * F47AE  #p.#@5&.5.`I`'×6
-        NIBHEX  720B9451029204586105520B63320B62 * F47CE  '°I. )@Σ.P%°6#°&
-        NIBHEX  320B61320C4332086332086134069D61 * F47EE  #°.#À4#∡6#∡.C`Ù.
-        NIBHEX  68740562613232069232069132056261 * F480E  ▶GP&.##`)#`.#P&.
-        NIBHEX  02420277730642616209416209426206 * F482E   $ w7`$.&↑.&↑$&`
-        NIBHEX  70320870320970320679720678720590 * F484E  .#∡.#↑.#`ρ'`π'P.
-        NIBHEX  320592320591320E62320E6132059362 * F486E  #P)#P.#à&#à.#P9&
-        NIBHEX  05924105720272320271310A41074208 * F488E  P).P' '# ....p$∡
-        NIBHEX  7D6209446102610FD202767202737209 * F48AE  ×&↑D. .ð- g' 7'↑
-        NIBHEX  4972094873094A7A7309487872024654 * F48CE  η'↑∫7↑¤§7↑∫π' dE
-        NIBHEX  054D61687306526962034A62014A6208 * F48EE  PÔ.▶7`%λ&0¤&.¤&∡
-        NIBHEX  7462087A620B9C420B97520541320651 * F490E  G&∡§&°É$°y%P.#`.
-        NIBHEX  620A43720E41420E4442076D65065443 * F492E  &.4'à.$àD$pÖV`E4
-        NIBHEX  71647307646373094443520C45620755 * F494E  .F7pF67↑D4%ÀT&pU
-        NIBHEX  63065443530652435306574352065471 * F496E  6`E45`%45`u4%`E.
-        NIBHEX  01930654703205BE63034F6873047F68 * F498E  .9`E.#Pë60ô▶7@÷▶
-        NIBHEX  73065245430652434606534543716474 * F49AE  7`%T4`%4d`5T4.FG
-        NIBHEX  0943454F4309434F4209424209434209 * F49CE  ↑4Tô4↑4ô$↑$$↑4$↑
-        NIBHEX  45420C82520C86430943435309454352 * F49EE  T$À(%Àh4↑445↑T4%
-        NIBHEX  09435508746D61687207403209444108 * F4A0E  ↑4U∡GÖ.▶'p.#↑D.∡
-        NIBHEX  95099871397133089971330898713309 * F4A2E  Y↑≤.ε.3∡τ.3∡≤.3↑
-        NIBHEX  98797208997208987408916677620593 * F4A4E  ≤ρ'∡τ'∡≤G∡.fw&P9
-        NIBHEX  74099D61687305907232089233059071 * F4A6E  G↑Ù.▶7P.'#∡)3P..
-        NIBHEX  32089132097D610372037D610A7      * F4A8E  #∡.#↑×.0'0×..
+        CON(5)  DOIDNT                           * F44EE  element type
+        CON(5)  1                                * F44F3  dimensions
+        CON(5)  238                              * F44F8
+        IDBODY  σcr                              * F44FD  1
+        IDBODY  Pcr                              * F4505  2
+        IDBODY  A                                * F450D  3
+        IDBODY  I                                * F4511  4
+        IDBODY  E                                * F4515  5
+        IDBODY  r                                * F4519  6
+        IDBODY  K                                * F451D  7
+        IDBODY  L                                * F4521  8
+        IDBODY  σmax                             * F4525  9
+        IDBODY  P                                * F452F  10
+        IDBODY  c                                * F4533  11
+        IDBODY  ε                                * F4537  12
+        IDBODY  y                                * F453B  13
+        IDBODY  x                                * F453F  14
+        IDBODY  w                                * F4543  15
+        IDBODY  M                                * F4547  16
+        IDBODY  a                                * F454B  17
+        IDBODY  θ                                * F454F  18
+        IDBODY  Mx                               * F4553  19
+        IDBODY  V                                * F4559  20
+        IDBODY  F                                * F455D  21
+        IDBODY  εr                               * F4561  22
+        IDBODY  q2                               * F4567  23
+        IDBODY  q1                               * F456D  24
+        IDBODY  R                                * F4573  25
+        IDBODY  V1                               * F4577  26
+        IDBODY  R2                               * F457D  27
+        IDBODY  R1                               * F4583  28
+        IDBODY  I1                               * F4589  29
+        IDBODY  ρ                                * F458F  30
+        IDBODY  Rp                               * F4593  31
+        IDBODY  Rs                               * F4599  32
+        IDBODY  Cp                               * F459F  33
+        IDBODY  Cs                               * F45A5  34
+        IDBODY  C2                               * F45AB  35
+        IDBODY  C1                               * F45B1  36
+        IDBODY  Lp                               * F45B7  37
+        IDBODY  Ls                               * F45BD  38
+        IDBODY  L2                               * F45C3  39
+        IDBODY  L1                               * F45C9  40
+        IDBODY  C                                * F45CF  41
+        IDBODY  Øp                               * F45D3  42
+        IDBODY  Øs                               * F45D9  43
+        IDBODY  XL                               * F45DF  44
+        IDBODY  XC                               * F45E5  45
+        IDBODY  f                                * F45EB  46
+        IDBODY  ω                                * F45EF  47
+        IDBODY  tf                               * F45F3  48
+        IDBODY  ti                               * F45F9  49
+        IDBODY  Vf                               * F45FF  50
+        IDBODY  Vi                               * F4605  51
+        IDBODY  Δt                               * F460B  52
+        IDBODY  ΔV                               * F4611  53
+        IDBODY  q                                * F4617  54
+        IDBODY  If                               * F461B  55
+        IDBODY  Ii                               * F4621  56
+        IDBODY  ΔI                               * F4627  57
+        IDBODY  t                                * F462D  58
+        IDBODY  f0                               * F4631  59
+        IDBODY  Qp                               * F4637  60
+        IDBODY  Qs                               * F463D  61
+        IDBODY  ω0                               * F4643  62
+        IDBODY  d                                * F4649  63
+        IDBODY  ro                               * F464D  64
+        IDBODY  ri                               * F4653  65
+        IDBODY  h                                * F4659  66
+        IDBODY  n                                * F465D  67
+        IDBODY  µr                               * F4661  68
+        IDBODY  N                                * F4667  69
+        IDBODY  Vmax                             * F466B  70
+        IDBODY  Ø                                * F4675  71
+        IDBODY  Imax                             * F4679  72
+        IDBODY  P0                               * F4683  73
+        IDBODY  Q                                * F4689  74
+        IDBODY  D2                               * F468D  75
+        IDBODY  D1                               * F4693  76
+        IDBODY  A2                               * F4699  77
+        IDBODY  A1                               * F469F  78
+        IDBODY  v2                               * F46A5  79
+        IDBODY  v1                               * F46AB  80
+        IDBODY  y2                               * F46B1  81
+        IDBODY  y1                               * F46B7  82
+        IDBODY  Δy                               * F46BD  83
+        IDBODY  P2                               * F46C3  84
+        IDBODY  P1                               * F46C9  85
+        IDBODY  ΔP                               * F46CF  86
+        IDBODY  W                                * F46D5  87
+        IDBODY  hL                               * F46D9  88
+        IDBODY  Re                               * F46DF  89
+        IDBODY  µ                                * F46E5  90
+        IDBODY  ΣK                               * F46E9  91
+        IDBODY  D                                * F46EF  92
+        IDBODY  vavg                             * F46F3  93
+        IDBODY  Pavg                             * F46FD  94
+        IDBODY  Kf                               * F4707  95
+        IDBODY  Ki                               * F470D  96
+        IDBODY  vf                               * F4713  97
+        IDBODY  vi                               * F4719  98
+        IDBODY  v                                * F471F  99
+        IDBODY  m                                * F4723  100
+        IDBODY  Nf                               * F4727  101
+        IDBODY  Ni                               * F472D  102
+        IDBODY  at                               * F4733  103
+        IDBODY  τ                                * F4739  104
+        IDBODY  ωf                               * F473D  105
+        IDBODY  ωi                               * F4743  106
+        IDBODY  α                                * F4749  107
+        IDBODY  ar                               * F474D  108
+        IDBODY  k                                * F4753  109
+        IDBODY  v2f                              * F4757  110
+        IDBODY  v1f                              * F475F  111
+        IDBODY  v1i                              * F4767  112
+        IDBODY  m2                               * F476F  113
+        IDBODY  m1                               * F4775  114
+        IDBODY  Cd                               * F477B  115
+        IDBODY  MW                               * F4781  116
+        IDBODY  T                                * F4787  117
+        IDBODY  Tf                               * F478B  118
+        IDBODY  Ti                               * F4791  119
+        IDBODY  Pf                               * F4797  120
+        IDBODY  Pi                               * F479D  121
+        IDBODY  At                               * F47A3  122
+        IDBODY  T0                               * F47A9  123
+        IDBODY  ρ0                               * F47AF  124
+        IDBODY  Tc                               * F47B5  125
+        IDBODY  Pc                               * F47BB  126
+        IDBODY  λ                                * F47C1  127
+        IDBODY  vrms                             * F47C5  128
+        IDBODY  ΔT                               * F47CF  129
+        IDBODY  δ                                * F47D5  130
+        IDBODY  Th                               * F47D9  131
+        IDBODY  U                                * F47DF  132
+        IDBODY  k3                               * F47E3  133
+        IDBODY  k2                               * F47E9  134
+        IDBODY  k1                               * F47EF  135
+        IDBODY  L3                               * F47F5  136
+        IDBODY  h3                               * F47FB  137
+        IDBODY  h1                               * F4801  138
+        IDBODY  λmax                             * F4807  139
+        IDBODY  eb12                             * F4811  140
+        IDBODY  λ2                               * F481B  141
+        IDBODY  λ1                               * F4821  142
+        IDBODY  eb                               * F4827  143
+        IDBODY  B                                * F482D  144
+        IDBODY  rw                               * F4831  145
+        IDBODY  Fba                              * F4837  146
+        IDBODY  Ia                               * F483F  147
+        IDBODY  Ib                               * F4845  148
+        IDBODY  v0                               * F484B  149
+        IDBODY  x0                               * F4851  150
+        IDBODY  y0                               * F4857  151
+        IDBODY  vy                               * F485D  152
+        IDBODY  vx                               * F4863  153
+        IDBODY  θ0                               * F4869  154
+        IDBODY  θ2                               * F486F  155
+        IDBODY  θ1                               * F4875  156
+        IDBODY  n2                               * F487B  157
+        IDBODY  n1                               * F4881  158
+        IDBODY  θc                               * F4887  159
+        IDBODY  θB                               * F488D  160
+        IDBODY  u                                * F4893  161
+        IDBODY  r2                               * F4897  162
+        IDBODY  r1                               * F489D  163
+        IDBODY  J                                * F48A3  164
+        IDBODY  G                                * F48A7  165
+        IDBODY  xm                               * F48AB  166
+        IDBODY  Id                               * F48B1  167
+        IDBODY  b                                * F48B7  168
+        IDBODY  ß                                * F48BB  169
+        IDBODY  rv                               * F48BF  170
+        IDBODY  rs                               * F48C5  171
+        IDBODY  Iy                               * F48CB  172
+        IDBODY  Ix                               * F48D1  173
+        IDBODY  Izz                              * F48D7  174
+        IDBODY  Ixx                              * F48DF  175
+        IDBODY  BV                               * F48E7  176
+        IDBODY  Emax                             * F48ED  177
+        IDBODY  Vbi                              * F48F7  178
+        IDBODY  Cj                               * F48FF  179
+        IDBODY  Aj                               * F4905  180
+        IDBODY  xd                               * F490B  181
+        IDBODY  xj                               * F4911  182
+        IDBODY  ΔL                               * F4917  183
+        IDBODY  ΔW                               * F491D  184
+        IDBODY  E1                               * F4923  185
+        IDBODY  Va                               * F4929  186
+        IDBODY  Js                               * F492F  187
+        IDBODY  NA                               * F4935  188
+        IDBODY  ND                               * F493B  189
+        IDBODY  gm                               * F4941  190
+        IDBODY  VDsat                            * F4947  191
+        IDBODY  gds                              * F4953  192
+        IDBODY  IDS                              * F495B  193
+        IDBODY  Le                               * F4963  194
+        IDBODY  We                               * F4969  195
+        IDBODY  VDS                              * F496F  196
+        IDBODY  VBS                              * F4977  197
+        IDBODY  VGS                              * F497F  198
+        IDBODY  Vt                               * F4987  199
+        IDBODY  γ                                * F498D  200
+        IDBODY  Vt0                              * F4991  201
+        IDBODY  µn                               * F4999  202
+        IDBODY  Cox                              * F499F  203
+        IDBODY  tox                              * F49A7  204
+        IDBODY  VBE                              * F49AF  205
+        IDBODY  VBC                              * F49B7  206
+        IDBODY  VCEsat                           * F49BF  207
+        IDBODY  ICEO                             * F49CD  208
+        IDBODY  ICO                              * F49D7  209
+        IDBODY  IB                               * F49DF  210
+        IDBODY  IC                               * F49E5  211
+        IDBODY  IE                               * F49EB  212
+        IDBODY  αR                               * F49F1  213
+        IDBODY  αF                               * F49F7  214
+        IDBODY  ICS                              * F49FD  215
+        IDBODY  IES                              * F4A05  216
+        IDBODY  IS                               * F4A0D  217
+        IDBODY  xdmax                            * F4A13  218
+        IDBODY  G0                               * F4A1F  219
+        IDBODY  ID                               * F4A25  220
+        IDBODY  σ                                * F4A2B  221
+        IDBODY  τx1y1                            * F4A2F  222
+        IDBODY  σy1                              * F4A3B  223
+        IDBODY  σx1                              * F4A43  224
+        IDBODY  τxy                              * F4A4B  225
+        IDBODY  σy                               * F4A53  226
+        IDBODY  σx                               * F4A59  227
+        IDBODY  σavg                             * F4A5F  228
+        IDBODY  θs                               * F4A69  229
+        IDBODY  τmax                             * F4A6F  230
+        IDBODY  θp2                              * F4A79  231
+        IDBODY  σ2                               * F4A81  232
+        IDBODY  θp1                              * F4A87  233
+        IDBODY  σ1                               * F4A8F  234
+        IDBODY  ym                               * F4A95  235
+        IDBODY  s                                * F4A9B  236
+        IDBODY  sm                               * F4A9F  237
+        IDBODY  z                                * F4AA5  238
         ENDLENGTH                                * F4AA9
 
 * ROMPTR 0E2 02A
@@ -117,404 +313,64 @@ ROMP_0E2_02A:
 * ROMPTR 0E2 02B
 * refs (1): E3857
 ROMP_0E2_02B:
-        { BINT32 BINT3                           * F4AB8
-          CON(5)  DOHSTR                         * F4AC7  DOHSTR
-          LENGTH                                 * F4ACC  length, to #F4DCA
-          NIBHEX  1384B8060E001001A801622020098000 * F4AD1  1H≠`à...≥.&..↑..
-          NIBHEX  01C0040220200540000200080E20100F * F4AF1  ..@ ..P.. .∡à..ð
-          NIBHEX  2FF3F3CFEFF230000590000220080220 * F4B11  ò??üþ/..P.. .∡ .
-          NIBHEX  0009400003C004022000012A80602000 * F4B31  .↑..0.@ ...¢....
-          NIBHEX  019580B0F00002000014680A0C030200 * F4B51  .Y.... ..A▶.À0 .
-          NIBHEX  0012680A02840A000019680F01000700 * F4B71  .!▶. H...γ▶ð..p.
-          NIBHEX  0014000085806020000F2D8F05001982 * F4B91  .A..X....ðÒøP.γ(
-          NIBHEX  20488220088288148220488220088288 * F4BB1  .∫(.∡(∂A(.∫(.∡(∂
-          NIBHEX  12C7715CC7711CC7A919822048822008 * F4BD1  !|.Å|.Á|ωγ(.∫(.∡
-          NIBHEX  82A8F4FFFFB88FA050F2FFFFBFD68FA0 * F4BF1  (≥Oÿÿ≠ø../ÿÿûmø.
-          NIBHEX  00F9FFFFBF868FA000F4FFFFBFD68F80 * F4C11  .∞ÿÿûhø..Oÿÿûmø.
-          NIBHEX  00F2FFFFB88F80001900004A80601400 * F4C31  ./ÿÿ≠ø..γ..¤..A.
-          NIBHEX  004A8031120000800082080000194806 * F4C51  .¤..!....(∡..γ∫`
-          NIBHEX  6801840D000014200209068F0A000012 * F4C71  ▶.HÐ..A. ↑`ø...!
-          NIBHEX  40010AF8840A0000F983F00F00820800 * F4C91  ...↓H...∞8.ð.(∡.
-          NIBHEX  001440010A0080080000122002090080 * F4CB1  .A.....∡..!. ↑..
-          NIBHEX  080000194800089801014F8010125800 * F4CD1  ∡..γ∫.∡≤..ô..!Σ.
-          NIBHEX  02880909900F00024780905400080028 * F4CF1   ∂↑↑.ð. t..E.∡.∇
-          NIBHEX  78090F2FF08F83F78090590008002878 * F4D11  π↑ðò.ø8...θ.∡.∇π
-          NIBHEX  0909400F000247801012580002880101 * F4D31  ↑↑.ð. t..!Σ. ∂..
-          NIBHEX  9F80601400008680A080009200008680 * F4D51  ù..A..h....)..h.
-          NIBHEX  A090005900008680D0A000F4FFFF8F80 * F4D71  ...θ..h....Oÿÿø.
-          NIBHEX  58F80005200008680A0A000910000868 * F4D91  Σ↓.P..∡▶...↑..∡▶
-          NIBHEX  0409000148080800F00008280      * F4DB1  @↑..∫∡∡...∡∇
-        ENDLENGTH                                * F4DCA
-        }                                        * F4DCA
+        { BINT32 BINT3 PCGROB "images/F4AC7-packed.png" } * F4AB8  72 x 49, packed
 
 * ROMPTR 0E2 02C
 * refs (1): E3857
 ROMP_0E2_02C:
-        { BINT32 BINT3                           * F4DCF
-          CON(5)  DOHSTR                         * F4DDE  DOHSTR
-          LENGTH                                 * F4DE3  length, to #F50C8
-          NIBHEX  1384B8070E0010008980702202004848 * F4DE8  1H≠pà...σ.." .∫∫
-          NIBHEX  0E4E0040220200280000100080E20100 * F4E08  àä.." .∇........
-          NIBHEX  F8FF1F1EFFFF23000028000011008022 * F4E28  ↓ÿñáÿÿ2..∇....."
-          NIBHEX  00004800001E004022480008A80002B8 * F4E48  ..∫..á.."∫.∡≥. ≠
-          NIBHEX  050F00002C8040C0302C80402840AC80 * F4E68  Pð..Â....Â..∇.Ê.
-          NIBHEX  40100079800085806020000F8D8F280D * F4E88  ...ρ..X....ðØø∇Ð
-          NIBHEX  48822048822008828808822048822008 * F4EA8  ∫(.∫(.∡(∂∡(.∫(.∡
-          NIBHEX  82881CC7715CC7711CC7A90882204882 * F4EC8  (∂Á|.Å|.Á|ω∡(.∫(
-          NIBHEX  200882A8F8FFFFB88FA050F8FFFFBFD6 * F4EE8  .∡(≥↓ÿÿ≠ø..↓ÿÿûm
-          NIBHEX  8FA000F8FFFFBF868FA000F8FFFFBFD6 * F4F08  ø..↓ÿÿûhø..↓ÿÿûm
-          NIBHEX  8F8000F8FFFFB88F28050800004680A0 * F4F28  ø..↓ÿÿ≠ø∇P∡..d..
-          NIBHEX  C0011C0000468071E0033E0000800082 * F4F48  ..Á..d...0ã....(
-          NIBHEX  08E0037F480C3401840DE00308108104 * F4F68  ∡.0÷∫ÀC.HÐ.0∡..@
-          NIBHEX  068F0AC00108A00005F8840A0000F841 * F4F88  `ø...∡..P↓H...↓.
-          NIBHEX  F807008208480C08A00005008008480C * F4FA8  ↓p.(∡∫À∡..P..∡∫À
-          NIBHEX  08108104008008480008480004A80008 * F4FC8  ∡..@..∡∫.∡∫.@≥.∡
-          NIBHEX  09000858000288090480078002478090 * F4FE8  ↑.∡Σ. ∂↑@.p. t..
-          NIBHEX  280004002878090F87F04FC3F7809028 * F5008  ∇.@.∇π↑ðx.ô<...∇
-          NIBHEX  00040028780904800780024880008580 * F5028  .@.∇π↑@.p. ∫..X.
-          NIBHEX  00298000809050800008680A08000480 * F5048  .δ.......∡▶.∡.@.
-          NIBHEX  0008680A090002800008680D0A000F8F * F5068  .∡▶.↑. ..∡▶Ð..ðø
-          NIBHEX  FFF8F8058F80002800008680A0A00048 * F5088  ÿ↓↓Pø..∇..h....∫
-          NIBHEX  00008680219000080000800F00008280 * F50A8  ..h....∡...ð..(.
-        ENDLENGTH                                * F50C8
-        }                                        * F50C8
+        { BINT32 BINT3 PCGROB "images/F4DDE-packed.png" } * F4DCF  72 x 49, packed
 
 * ROMPTR 0E2 02D
 * refs (1): E3857
 ROMP_0E2_02D:
-        { BINT8 BINT2                            * F50CD
-          CON(5)  DOHSTR                         * F50DC  DOHSTR
-          LENGTH                                 * F50E1  length, to #F559E
-          NIBHEX  4386400F004480001E80401100448000 * F50E6  4h.ð.D..á....D..
-          NIBHEX  1E800191EB5001005400002880404F18 * F5106  á...¾...E..∇..ôā
-          NIBHEX  E4806038000025807080041084480001 * F5126  N..√..R...@.H∫..
-          NIBHEX  48010A8480608004108B80007480B12A * F5146  ∫..H...@.¸..G..¢
-          NIBHEX  00810BA80200AA00002017001C580315 * F5166  ..°≥ .ª...q.ÁΣ0Q
-          NIBHEX  00100540000800A0008580F0A80200AA * F5186  ..P..∡...X..≥ .ª
-          NIBHEX  00007016980A1F873CEFE9C73568A731 * F51A6  ...a≤.ñxÃþ■|S▶z.
-          NIBHEX  CFE0000E480E03800007016001C14800 * F51C6  ü..à∫à0..p....∫.
-          NIBHEX  0E48041380000F00A001C380000E4804 * F51E6  à∫@1..ð...<..à∫@
-          NIBHEX  13800007017001C540000E4806038000 * F5206  1..p...\..à∫`0..
-          NIBHEX  07480201C148000E4806038000074802 * F5226  p∫ ..∫.à∫`0..p∫ 
-          NIBHEX  01C148000E480603800007480201C148 * F5246  ..∫.à∫`0..p∫ ..∫
-          NIBHEX  000E480603800007480201C148000E48 * F5266  .à∫`0..p∫ ..∫.à∫
-          NIBHEX  0603800007480101C58000E480603800 * F5286  `0..p∫..\..N..√.
-          NIBHEX  007480101C58000E4806038000074801 * F52A6  .G..ÁΣ.à∫`0..p∫.
-          NIBHEX  01C58000E480603800007480801C0400 * F52C6  .\..N..√..G..Á@.
-          NIBHEX  00E480603800007480801C040000E480 * F52E6  .N..√..G..Á@..N.
-          NIBHEX  603800007480801C040000E480603800 * F5306  .√..G..Á@..N..√.
-          NIBHEX  007480801C040000E480603800007480 * F5326  .G..Á@..N..√..G.
-          NIBHEX  801C040000E480603800007480801C04 * F5346  .Á@..N..√..G..Á@
-          NIBHEX  0000E480603800007480801C7C0000E4 * F5366  ..N..√..G..ÁÇ..N
-          NIBHEX  80603800007480101C58000E48060380 * F5386  ..√..G..ÁΣ.à∫`0.
-          NIBHEX  0007480101C58000E480603800007480 * F53A6  .p∫..\..N..√..G.
-          NIBHEX  101C58000E480603800007480201C148 * F53C6  .ÁΣ.à∫`0..p∫ ..∫
-          NIBHEX  000E480603800007480201C148000E48 * F53E6  .à∫`0..p∫ ..∫.à∫
-          NIBHEX  0603800007480201C148000E48060380 * F5406  `0..p∫ ..∫.à∫`0.
-          NIBHEX  0007480201C148000E48060380000748 * F5426  .p∫ ..∫.à∫`0..p∫
-          NIBHEX  0801C540000E480603800007480801C3 * F5446  ∡.\..à∫`0..p∫∡.<
-          NIBHEX  80000E480603800007480201C148062F * F5466  ..à∫`0..p∫ ..∫`ò
-          NIBHEX  873CE28E79C53CE397FFE0000A802003 * F5486  xÃ.èρ\Ã>yÿ.....0
-          NIBHEX  80000748018558031500100440000880 * F54A6  ..p∫.XΣ0Q..@..∡.
-          NIBHEX  0002A58070A8020082480604010055B8 * F54C6  . Z..≥ .(∫`@..U≠
-          NIBHEX  090FE0000FC01F8018A380305401F807 * F54E6  ↑ð..ð.ñ.ā:..E.↓p
-          NIBHEX  0540000A819018A380305401EB0E2938 * F5506  P.....ā:..E.¾àδ√
-          NIBHEX  40020780040320C1010000E508403904 * F5526  . p.@0.....^∡.ε@
-          NIBHEX  807202A01C01480C2338C00004800102 * F5546  .' .Á.∫À2√..@.. 
-          NIBHEX  60C0010000E520403904807202A05C68 * F5566  .....^..ε@.' .Å▶
-          NIBHEX  04193A40820480040720C101       * F5586  @γ£.(@.@p...
-        ENDLENGTH                                * F559E
-        }                                        * F559E
+        { BINT8 BINT2 PCGROB "images/F50DC-packed.png" } * F50CD  104 x 52, packed
 
 * ROMPTR 0E2 02E
 * refs (1): E3857
 ROMP_0E2_02E:
-        { BINT48 BINT5                           * F55A3
-          CON(5)  DOHSTR                         * F55B2  DOHSTR
-          LENGTH                                 * F55B7  length, to #F5745
-          NIBHEX  130222C00300004004000040440000C0 * F55BC  1 ".0...@...D...
-          NIBHEX  43000040448020404480A04050010000 * F55DC  4...D...D.......
-          NIBHEX  E680004680B4F07FFE00504210005042 * F55FC  n..d.K.÷ï..$...$
-          NIBHEX  3800504254000040103848521004504A * F561C  √..$E....√∫%.@.¤
-          NIBHEX  103C7FFE1104504A1038485258000448 * F563C  .Ã÷ï.@.¤.√∫%Σ.@∫
-          NIBHEX  02010448024104204001042040010420 * F565C   .@∫ .@...@...@.
-          NIBHEX  40010400400104004001042040010427 * F567C  ..@...@...@...@r
-          NIBHEX  C0010420000104480D41040001E12521 * F569C  ..@...@∫Ð.@...R.
-          NIBHEX  001144A10811FFE1101144A101E12521 * F56BC  ..D.∡.ÿ...D...R.
-          NIBHEX  000104054001040380010471000F07DF * F56DC  ..@P..@0..@..ðpý
-          NIBHEX  E480F070000800800004014802020248 * F56FC  N....∡...@.∫   ∫
-          NIBHEX  020104480D1F07F000050550000A02A0 * F571C   .@∫Ðñp..PP... .
-          NIBHEX  000505500                      * F573C  .PP.
-        ENDLENGTH                                * F5745
-        }                                        * F5745
+        { BINT48 BINT5 PCGROB "images/F55B2-packed.png" } * F55A3  32 x 49, packed
 
 * ROMPTR 0E2 02F
 * refs (1): E3857
 ROMP_0E2_02F:
-        { BINT32 BINT8                           * F574A
-          CON(5)  DOHSTR                         * F5759  DOHSTR
-          LENGTH                                 * F575E  length, to #F5931
-          NIBHEX  62043805040000498050A0000A980201 * F5763  &@√P@..η.....≤ .
-          NIBHEX  0028158041FE3F0882E0FFFF7F104002 * F5783  .∇Q..ïó∡(.ÿÿ÷.. 
-          NIBHEX  84480A0108388002284809011C540001 * F57A3  H∫..∡√. ∇∫↑.ÁE..
-          NIBHEX  15803012A1B80301081B80A510810007 * F57C3  Q..!.≠0.∡±.Z...p
-          NIBHEX  81C00800008100088220040000810008 * F57E3  ..∡....∡(.@....∡
-          NIBHEX  82000200008100078180040000810002 * F5803  (. ....p..@.... 
-          NIBHEX  80400800008000048024800015803088 * F5823  ..∡....@.B..Q..∂
-          NIBHEX  3E480002E804040044580501E0248384 * F5843  ã∫. ←@@.DΣP..B8H
-          NIBHEX  58060220344628458090220242442858 * F5863  Σ` .Cd∇T.." $D∇Σ
-          NIBHEX  0901E0281422868070A8280421680801 * F5883  ↑..∇A"h..≥∇@.▶∡.
-          NIBHEX  2420041168028240700E1980004E8000 * F58A3  B.@.▶ (..àγ..ä..
-          NIBHEX  8190301001B80302081B80304081B803 * F58C3  .....≠0 ∡±....≠0
-          NIBHEX  08081B80304081B80302081B80301081 * F58E3  ∡∡±....≠0 ∡±....
-          NIBHEX  B804010854A804012A38A803011C1B80 * F5903  ≠@.∡E≥@.¢√≥0.Á±.
-          NIBHEX  40108FEB8F107F                 * F5923  ..ø¾ø.÷
-        ENDLENGTH                                * F5931
-        }                                        * F5931
+        { BINT32 BINT8 PCGROB "images/F5759-packed.png" } * F574A  64 x 38, packed
 
 * ROMPTR 0E2 030
 * refs (1): E3857
 ROMP_0E2_030:
-        { BINT32 BINT9                           * F5936
-          CON(5)  DOHSTR                         * F5945  DOHSTR
-          LENGTH                                 * F594A  length, to #F5B6E
-          NIBHEX  5284280001090002D8030FFC778F107F * F594F  %H∇..↑. →0ðÏwø.÷
-          NIBHEX  680302001480004780301001480004A8 * F596F  ▶0 .A..t....∫.@≥
-          NIBHEX  0001480004A80001480004A800014800 * F598F  ..∫.@≥..∫.@≥..∫.
-          NIBHEX  0448000758050800002480C020E01004 * F59AF  @∫.pΣP∡..B.....@
-          NIBHEX  00001480702040180248011800002040 * F59CF  ..A....ā ∫.ā....
-          NIBHEX  100400001480C0204010080000248060 * F59EF  .@..A.....∡..B..
-          NIBHEX  20401014800044806070401024800086 * F5A0F  ...A..D.....B..h
-          NIBHEX  8040E0384780001780B080780800E271 * F5A2F  ...√t..q...π∡...
-          NIBHEX  580B040880C00218A580B02088088020 * F5A4F  Σ°@∡.. āZ...∂∡..
-          NIBHEX  82480C0210780840E061480B02082808 * F5A6F  (∫À .π∡...∫° ∡∇∡
-          NIBHEX  20A01580C02044808102009480C02028 * F5A8F  ..Q...D.. .I...∇
-          NIBHEX  81C0820FA48070204000019807020800 * F5AAF  ..(ðJ......≤p ∡.
-          NIBHEX  00298010214800049801824800086804 * F5ACF  .δ...∫.@≤.(∫.∡▶@
-          NIBHEX  0800A478000168010787800026801024 * F5AEF  ∡.Jπ..▶.px..b..B
-          NIBHEX  780001780002480008A80001480004A8 * F5B0F  π..π. ∫.∡≥..∫.@≥
-          NIBHEX  0001480004A80001480004A800014800 * F5B2F  ..∫.@≥..∫.@≥..∫.
-          NIBHEX  04A8000148000468010C078F107F380 * F5B4F  @≥..∫.@▶.Àpø.÷√
-        ENDLENGTH                                * F5B6E
-        }                                        * F5B6E
+        { BINT32 BINT9 PCGROB "images/F5945-packed.png" } * F5936  72 x 37, packed
 
 * ROMPTR 0E2 031
 * refs (1): E3857
 ROMP_0E2_031:
-        { BINT8 BINT5                            * F5B73
-          CON(5)  DOHSTR                         * F5B82  DOHSTR
-          LENGTH                                 * F5B87  length, to #F5EED
-          NIBHEX  D28748020F01990309101990301101A9 * F5B8C  -x∫ ð.τ0↑.γ....ω
-          NIBHEX  020F01A9020501A90209019903091036 * F5BAC   ð.ω P.ω ↑.τ0↑.c
-          NIBHEX  D0188A905014400179028220002390F0 * F5BCC  .ā¨..A..ρ (..2..
-          NIBHEX  E0074110FC0100C078F101F580288600 * F5BEC  .p..Ï...π.._.∇h.
-          NIBHEX  08000168050800001680905000050001 * F5C0C  ∡..▶P∡..a....P..
-          NIBHEX  68050800001680902000020001680508 * F5C2C  ▶P∡..a.... ..▶P∡
-          NIBHEX  00001F800016805081E0217805010000 * F5C4C  ..ñ..a.....πP...
-          NIBHEX  89806042203086805020000448000438 * F5C6C  σ..$..h....@∫.@√
-          NIBHEX  02820102040000FF0700002480B08000 * F5C8C   (. @..ÿp..B....
-          NIBHEX  011E020268061200004000C0FF01020A * F5CAC  .á  ▶`!.....ÿ. .
-          NIBHEX  020468050100008480B0800004120208 * F5CCC   @▶P...H....@! ∡
-          NIBHEX  E80D010040000822071F800025800014 * F5CEC  ←Ð....∡"pñ..R..A
-          NIBHEX  80002F8000458000248000458011F008 * F5D0C  ..ò..T..B..T...∡
-          NIBHEX  0C70108C0030044808180781C1100802 * F5D2C  À..È..@∫∡āp...∡ 
-          NIBHEX  80204400400248081408822910780080 * F5D4C  ..D.. ∫∡A∡(δ.π..
-          NIBHEX  20240F4001480732088204F008087010 * F5D6C  .Bð..∫p#∡(@.∡∡..
-          NIBHEX  1C013010800001078188503804280004 * F5D8C  Á......p.∂.√@∇.@
-          NIBHEX  0110104480818280409048024400040F * F5DAC  ...D..(...∫ D.@ð
-          NIBHEX  200024808144802D10380E8230040140 * F5DCC  ..B..D.Ò.√à(.@..
-          NIBHEX  001480402883E7800044805010000248 * F5DEC  .A..∇8~..D.... ∫
-          NIBHEX  0004B80008980004480008E800016805 * F5E0C  .@≠.∡≤.@∫.∡←..▶P
-          NIBHEX  0800001F80002580001480002F800045 * F5E2C  ∡..ñ..R..A..ò..T
-          NIBHEX  80002480004F80008580004480008F80 * F5E4C  ..B..ô..X..D..ø.
-          NIBHEX  004580002480004F8000258000148000 * F5E6C  .T..B..ô..R..A..
-          NIBHEX  2F8000168050800001F8000168050800 * F5E8C  ò..a.....↓..▶P∡.
-          NIBHEX  001F8000168050800001F80001680508 * F5EAC  .ñ..a.....↓..▶P∡
-          NIBHEX  0000148010E078F500100C078F101F38 * F5ECC  ..A...π_..Àpø.ñ√
-          NIBHEX  0                              * F5EEC
-        ENDLENGTH                                * F5EED
-        }                                        * F5EED
+        { BINT8 BINT5 PCGROB "images/F5B82-packed.png" } * F5B73  120 x 45, packed
 
 * ROMPTR 0E2 032
 * refs (1): E3857
 ROMP_0E2_032:
-        { BINT8 BINT3                            * F5EF2
-          CON(5)  DOHSTR                         * F5F01  DOHSTR
-          LENGTH                                 * F5F06  length, to #F628B
-          NIBHEX  138748020E01990309101A9020101A90 * F5F0B  1x∫ à.τ0↑.¡...¡.
-          NIBHEX  20101A9020101990301101990308E033 * F5F2B  ..¡...γ....τ0∡.3
-          NIBHEX  F0188B901048B901028B90102879040F * F5F4B  .ā¸..∫Δ. ¸..∇ρ@ð
-          NIBHEX  0FFE48F38010C078F101F78040280088 * F5F6B  ðï∫?...π.....∇.∂
-          NIBHEX  80004480001880402800888000448000 * F5F8B  ..D..ā..∇.∂..D..
-          NIBHEX  18804048008880004480001880408800 * F5FAB  ā..∫.∂..D..ā..∂.
-          NIBHEX  8880604038041C800088806040440617 * F5FCB  ∂...√@Á..∂...D`q
-          NIBHEX  8050100008480A040004004041780502 * F5FEB  ....∡∫.@.@...πP 
-          NIBHEX  00008480A08000400404148081FF0700 * F600B  ..H.....@@A..ÿp.
-          NIBHEX  008000C0FF0140040417805020000848 * F602B  ....ÿ..@@q....∡∫
-          NIBHEX  0A08000404404178050100008480A040 * F604B  .∡.@@..πP...H...
-          NIBHEX  0040380E1C80008880004480001C8000 * F606B  ..√àÁ..∂..D..Á..
-          NIBHEX  8880004480001C800088800044800015 * F608B  ∂..D..Á..∂..D..Q
-          NIBHEX  8011E00C071800080030044800014802 * F60AB  ...Àpā.∡..@∫..∫ 
-          NIBHEX  11100208AF80F4004004480C010E0388 * F60CB  .. ∡ú.O..@∫À.à0∂
-          NIBHEX  1072084803240F000FC0700FF1145410 * F60EB  .'∡∫0Bð.ð..ð.AE.
-          NIBHEX  02060E003401001780D5104081032010 * F610B   `à.C..q.]...0..
-          NIBHEX  9004401001F001007C10301104200A88 * F612B  .@......Ç...@..∂
-          NIBHEX  0840F400480200921008CE03C0F98000 * F614B  ∡.O.∫ .).∡ì0.∞..
-          NIBHEX  80130044040011110578000848040100 * F616B  .1.D@...Pπ.∡∫@..
-          NIBHEX  044805010E07C780008880004480001C * F618B  @∫P.àp|..∂..D..Á
-          NIBHEX  80008880004480001C80008880004480 * F61AB  ..∂..D..Á..∂..D.
-          NIBHEX  001C80008880004480001C8000888000 * F61CB  .Á..∂..D..Á..∂..
-          NIBHEX  4480001C80008880004480001C800088 * F61EB  D..Á..∂..D..Á..∂
-          NIBHEX  80004480001C80008880004480001C80 * F620B  ..D..Á..∂..D..Á.
-          NIBHEX  008880004480001C8000888000448000 * F622B  .∂..D..Á..∂..D..
-          NIBHEX  1C80008880004480001C800088800044 * F624B  Á..∂..D..Á..∂..D
-          NIBHEX  8000148010F078F380108078F101F380 * F626B  ..A...π?...π..?.
-        ENDLENGTH                                * F628B
-        }                                        * F628B
+        { BINT8 BINT3 PCGROB "images/F5F01-packed.png" } * F5EF2  120 x 49, packed
 
 * ROMPTR 0E2 033
 * refs (1): E3857
 ROMP_0E2_033:
-        { BINT8 BINT4                            * F6290
-          CON(5)  DOHSTR                         * F629F  DOHSTR
-          LENGTH                                 * F62A4  length, to #F65F9
-          NIBHEX  D28738020808A902080CA9020808A902 * F62A9  -x√ ∡∡ω ∡Àω ∡∡ω 
-          NIBHEX  0808A9020808A9020808A905080CF013 * F62C9  ∡∡ω ∡∡ω ∡∡ωP∡À.1
-          NIBHEX  F0182B90185790F0FE3F55FE1F0000F8 * F62E9  .ā².āu..ïóUïñ..↓
-          NIBHEX  58F103F7806020550216800084800028 * F6309  Σ.0....U a..H..∇
-          NIBHEX  8060202202168000848000288060C0DD * F6329  ..." a..H..∇...Ý
-          NIBHEX  011680008480002E8000168060800808 * F6349  .a..H..â..a...∡∡
-          NIBHEX  278000258000158070880080C2780004 * F6369  r..R..Q..∂..,π.@
-          NIBHEX  5800014808010800808248030FE0F580 * F6389  Σ..∫∡.∡..(∫0ð._.
-          NIBHEX  E01000F83F8008082780004580001480 * F63A9  ...↓ó.∡∡r..T..A.
-          NIBHEX  80108008082780002580001580708800 * F63C9  ...∡∡r..R..Q..∂.
-          NIBHEX  8082E80101C58070E0F81C38E8000258 * F63E9  .(←..\...↓Á√←. Σ
-          NIBHEX  00015800044800028800025800015800 * F6409  ..Σ.@∫. ∂. Σ..Σ.
-          NIBHEX  044800024808181C3A000800D0010074 * F6429  @∫. ∫∡āÁ£.∡....G
-          NIBHEX  081C0248063822440008002002008808 * F6449  ∡Á ∫`√"D.∡.. .∂∡
-          NIBHEX  22020F0008203A00081ED00100740820 * F6469  " ð.∡.£.∡á...G∡.
-          NIBHEX  82480B0818020008221580E540818020 * F6489  (∫°∡ā .∡"Q.^....
-          NIBHEX  70008043A000822D0010074080402080 * F64A9  ...4..(Ò..p.....
-          NIBHEX  008024400081E200200880802BE0700F * F64C9  ..B......∡..²..ð
-          NIBHEX  83E3A00F802D0010074F83EA80002480 * F64E9  8>.ð.Ò..pô8®..B.
-          NIBHEX  1021580004E80002580001580004D801 * F6509  ..Σ.@←. Σ..Σ.@→.
-          NIBHEX  01C58000E4801038D800016800084800 * F6529  .\..N..√→..▶.∡∫.
-          NIBHEX  02E80001680008480002E80001680008 * F6549   ←..▶.∡∫. ←..▶.∡
-          NIBHEX  480002E80001680008480002E8000168 * F6569  ∫. ←..▶.∡∫. ←..▶
-          NIBHEX  0008480002E80001680008480002E800 * F6589  .∡∫. ←..▶.∡∫. ←.
-          NIBHEX  01680008480002E80001680008480002 * F65A9  .▶.∡∫. ←..▶.∡∫. 
-          NIBHEX  E8000168000848000268010FE58F701F * F65C9  ←..▶.∡∫. ▶.ð^ø.ñ
-          NIBHEX  0000F058F103F380               * F65E9  ...Σ.0?.
-        ENDLENGTH                                * F65F9
-        }                                        * F65F9
+        { BINT8 BINT4 PCGROB "images/F629F-packed.png" } * F6290  120 x 45, packed
 
 * ROMPTR 0E2 034
 * refs (1): E3857
 ROMP_0E2_034:
-        { BINT16 BINT10                          * F65FE
-          CON(5)  DOHSTR                         * F660D  DOHSTR
-          LENGTH                                 * F6612  length, to #F6916
-          NIBHEX  4286700040000439050A0000A3902010 * F6617  $h....@εP...:...
-          NIBHEX  0281190B0FF0F82E01F80B8FA00F0000 * F6637   .γ°ð.↓â.↓°ø.ð..
-          NIBHEX  44001780118000800080000280017801 * F6657  D.q........ ..π.
-          NIBHEX  18000800080000100017808080008000 * F6677  ā.∡.∡....q......
-          NIBHEX  87800017808080008000878000178021 * F6697  x..q......x..q..
-          NIBHEX  800080008000018001C680F74000E000 * F66B7  .........l......
-          NIBHEX  8100028000200080002000100088E071 * F66D7  .. ..........∂..
-          NIBHEX  800020007000100010008590028003A8 * F66F7  ..........X. .0≥
-          NIBHEX  0EC0102001D00089503280044802A020 * F6717  à......σ.#.@∫ ..
-          NIBHEX  400220008130400003A80290E3208001 * F6737  . ......0≥ .>...
-          NIBHEX  D0008CE0300100200E7C110080118000 * F6757  ..È.....àÇ......
-          NIBHEX  10000103A80204021081D84FF5801110 * F6777  ...0≥ @ ..→ô_...
-          NIBHEX  440020C04008220478031103A0000402 * F6797  D....∡"@π0.0..@ 
-          NIBHEX  1081D043E58073700200004011380118 * F67B7  ...4^.7. ....√.ā
-          NIBHEX  49000100003A00800008001D80880002 * F67D7  η....£...∡.Ñ.∂. 
-          NIBHEX  0000444808210400220008FF0700003A * F67F7  ..D∫∡.@.".∡ÿp..£
-          NIBHEX  80FF0302001D00080002480002480721 * F6817  .ÿ0 .Ñ.∡. ∫. ∫p.
-          NIBHEX  01000100080081010002008000020001 * F6837  ....∡.... ... ..
-          NIBHEX  0008004480101C680B04000E00080044 * F6857  .∡.D..Á▶°@.à.∡.D
-          NIBHEX  80001780118000800080040880017801 * F6877  ..q.......@∡..π.
-          NIBHEX  18000800080080490017801180008000 * F6897  ā.∡.∡..η.q......
-          NIBHEX  80000280017801180008000800002800 * F68B7  .. ..π.ā.∡.∡..∇.
-          NIBHEX  178041800080008FFFFEFFF1F80B8F70 * F68D7  q......øÿïÿ.↓°ø.
-          NIBHEX  0F00002879010287901048790188390 * F68F7  ð..∇ρ. x..∫ρ.∂ε
-        ENDLENGTH                                * F6916
-        }                                        * F6916
+        { BINT16 BINT10 PCGROB "images/F660D-packed.png" } * F65FE  104 x 36, packed
 
 * ROMPTR 0E2 035
 * refs (1): E3857
 ROMP_0E2_035:
-        { BINT8 BINT8                            * F691B
-          CON(5)  DOHSTR                         * F692A  DOHSTR
-          LENGTH                                 * F692F  length, to #F6B90
-          NIBHEX  6206B805010000119050288002190284 * F6934  &`≠P......∇. γ H
-          NIBHEX  20004D8090C00F8220F858F980C01001 * F6954  ..Ô...ð(.↓Σ∞....
-          NIBHEX  110080001A80D0A0000A00800038980D * F6974  ....¡........√≤Ð
-          NIBHEX  04000040080005419040800012904080 * F6994  @...∡.P.....!...
-          NIBHEX  0012904080001C80A0E0010080001680 * F69B4  .!....Á.......a.
-          NIBHEX  01881000200200800016800188280020 * F69D4  .∂... ...a..∂∇..
-          NIBHEX  02008000168001880800E00100800014 * F69F4   ...a..∂∡......A
-          NIBHEX  8080FC501C00A480008980D045008002 * F6A14  ..Ï.Á.J..σ..T.. 
-          NIBHEX  001008980D0420080020020089804042 * F6A34  ..∡≤Ð@.∡.. .σ..$
-          NIBHEX  00858070708000444800049807088F80 * F6A54  .X.....D∫.@≤p∡ø.
-          NIBHEX  F44480004A80608000044480004A8060 * F6A74  OD..¤....@D..¤..
-          NIBHEX  8E00328480004A806089004284800049 * F6A94  è.#H..¤..σ.$H..η
-          NIBHEX  80388200815800049806070800015800 * F6AB4  .√(..Σ.@≤`p∡..Σ.
-          NIBHEX  04B8000848050110104B800084801812 * F6AD4  @≠.∡∫P...´..H.ā!
-          NIBHEX  80004B8000848050910104B80B080001 * F6AF4  ..´..H....@≠°∡..
-          NIBHEX  00AE107B80908000100A01D809080001 * F6B14  .ê.·.......→↑∡..
-          NIBHEX  00401D80908000108403D80408000129 * F6B34  ..Ñ.....H0→@∡..δ
-          NIBHEX  04080001290408000129050800054190 * F6B54  @∡..δ@∡..δP∡.P..
-          NIBHEX  5080003819040800018801080D8F   * F6B74  ...√γ@∡..∂.∡Ðø
-        ENDLENGTH                                * F6B90
-        }                                        * F6B90
+        { BINT8 BINT8 PCGROB "images/F692A-packed.png" } * F691B  96 x 38, packed
 
 * ROMPTR 0E2 036
 * refs (1): E3857
 ROMP_0E2_036:
-        { BINT16 BINT8                           * F6B95
-          CON(5)  DOHSTR                         * F6BA4  DOHSTR
-          LENGTH                                 * F6BA9  length, to #F6DAE
-          NIBHEX  6285C8018439018A29028120001B80C0 * F6BAE  &Xα.Hε.¨δ ...±..
-          NIBHEX  F0832008FE3F2A802847000400202A80 * F6BCE  .8.∡ïó¢.∇t.@..¢.
-          NIBHEX  A028800200202A80A010000100202290 * F6BEE  .∇. ..¢.......".
-          NIBHEX  202022902020229020202C8080780000 * F6C0E  .."..."...Â..π..
-          NIBHEX  202680F044080088000020A8580E0441 * F6C2E  .b..D∡.∂...≥Σà@.
-          NIBHEX  400880000207680E0440400780000382 * F6C4E  .∡.. p▶à@..p..0(
-          NIBHEX  48090FC280E002848000468080428040 * F6C6E  ∫↑ð,.. H..d..$..
-          NIBHEX  048480004680E0410040088000074680 * F6C8E  @H..d.....∡..pd.
-          NIBHEX  4041004680304887580004A803047425 * F6CAE  ...d..∫xΣ.@≥0@GR
-          NIBHEX  80004A80304042580004A80304742580 * F6CCE  ..¤...$Σ.@≥0@GR.
-          NIBHEX  004A80304882580004A8030474258000 * F6CEE  .¤..∫(Σ.@≥0@GR..
-          NIBHEX  4980B07C0470110104B8090740011000 * F6D0E  η..Ç@...@≠↑p....
-          NIBHEX  4B80908800910104B809074000A0104C * F6D2E  ´..∂...@≠↑p....Ä
-          NIBHEX  80804000AE107C80604000401D807038 * F6D4E  ....ê.Ç.....Ñ..√
-          NIBHEX  008403D8000249000249000249000249 * F6D6E  .H0→. η. η. η. η
-          NIBHEX  0002490002490002A8010F078F303F00 * F6D8E  . η. η. ≥.ðpø.ó.
-        ENDLENGTH                                * F6DAE
-        }                                        * F6DAE
+        { BINT16 BINT8 PCGROB "images/F6BA4-packed.png" } * F6B95  88 x 38, packed
 
 * ROMPTR 0E2 037
 * refs (1): E3857
 ROMP_0E2_037:
-        { BINT24 BINT6                           * F6DB3
-          CON(5)  DOHSTR                         * F6DC2  DOHSTR
-          LENGTH                                 * F6DC7  length, to #F6FB3
-          NIBHEX  C284F80007B80607000088A806070000 * F6DCC  ,H↓.p≠`p..∂≥`p..
-          NIBHEX  88A8060200F8F8A80602000488A80602 * F6DEC  ∂≥` .↓↓≥` .@∂≥` 
-          NIBHEX  001588A80602000E88A804020004580B * F6E0C  .Q∂≥` .à∂≥@ .@Σ°
-          NIBHEX  8F1007480001A80004480001A80404FE * F6E2C  ø.p∫..≥.@∫..≥@@ï
-          NIBHEX  F8D8F301008B8050803808B805080540 * F6E4C  ↓→?..¸...√∡≠P∡P.
-          NIBHEX  8B8050801008B8050800008B80508000 * F6E6C  ¸....∡≠P∡..¸....
-          NIBHEX  08B8050800008B8050804008B80F5804 * F6E8C  ∡≠P∡..¸....∡≠ðΣ@
-          NIBHEX  0080000C07500008078080000200C000 * F6EAC  ...Àp..∡p... ...
-          NIBHEX  08044080000E00500008044080000200 * F6ECC  ∡@...à...∡@... .
-          NIBHEX  400008044080000C0050000807808B80 * F6EEC  ..∡@...À...∡p.¸.
-          NIBHEX  50800008B8050800008B8050800008B8 * F6F0C  ...∡≠P∡..¸....∡≠
-          NIBHEX  050801008B8050805408B8050803808B * F6F2C  P∡..¸...E∡≠P∡0.¸
-          NIBHEX  8050801008B805080FEF8D8F480001A8 * F6F4C  ....∡≠P∡ðþØø∫..≥
-          NIBHEX  0004480001A80004380B8F1007A80002 * F6F6C  .@∫..≥.@√°ø.p≥. 
-          NIBHEX  09000209000209000209000209000709 * F6F8C  ↑. ↑. ↑. ↑. ↑.p↑
-          NIBHEX  0007580                        * F6FAC  .pΣ
-        ENDLENGTH                                * F6FB3
-        }                                        * F6FB3
+        { BINT24 BINT6 PCGROB "images/F6DC2-packed.png" } * F6DB3  72 x 44, packed

@@ -373,32 +373,13 @@ ROMP_0E7_038:
 * ROMPTR 0E7 039
 * refs (1): CCAAB
 ROMP_0E7_039:
-              CON(5)  DOHSTR                     * CDE97  DOHSTR
-              LENGTH                             * CDE9C  length, to #CDF81
-              NIBHEX  F30111D8013800FC000201FC59011440 * CDEA1  ?..→.√.Ï. .Ïθ.A.
-              NIBHEX  06C005400440044580117C0010001000 * CDEC1  `.P.@.@T..Ç.....
-              NIBHEX  10007C5801144004C005400640044580 * CDEE1  ..ÇΣ.A.@.P.`.@T.
-              NIBHEX  117C0004003C0004007C580114400440 * CDF01  .Ç.@.Ã.@.ÇΣ.A.@.
-              NIBHEX  07C00440044580114400440044004400 * CDF21  p.@.@T..D.D.D.D.
-              NIBHEX  385801144004C005400640044580417C * CDF41  √Σ.A.@.P.`.@T..Ç
-              NIBHEX  0010001000100010001E80707C00FE00 * CDF61  .........á..Ç.ï.
-        ENDLENGTH                                * CDF81
+              PCGROB "images/CDE97-packed.png"   * CDE97  16 x 63, packed
               ROMPTR 0E3 063 XYGROBDISP # 78 BINT1 * CDF81  ~PCunpack
 
 * ROMPTR 0E7 03A
 * refs (1): CCAAB
 ROMP_0E7_03A:
-              CON(5)  DOHSTR                     * CDFA0  DOHSTR
-              LENGTH                             * CDFA5  length, to #CE093
-              NIBHEX  F30131DC00E000F8010402F801390F71 * CDFAA  ?..Í...↓.@ ↓.εð.
-              NIBHEX  001B0015001100110010000F00140004 * CDFCA  .±.Q.......ð.A.@
-              NIBHEX  0004000F001000010013001500190011 * CDFEA  .@.ð.....1.Q.γ..
-              NIBHEX  0010000F0011000F0001000F00100001 * CE00A  ...ð...ð...ð....
-              NIBHEX  0011001F001100110010000100110018 * CE02A  ...ñ...........ā
-              NIBHEX  010011001E680C210013001500190011 * CE04A  ....á▶À..1.Q.γ..
-              NIBHEX  0010000F00140004000400040004E807 * CE06A  ...ð.A.@.@.@.@←p
-              NIBHEX  0F001F803                  * CE08A  ð.ñ.
-        ENDLENGTH                                * CE093
+              PCGROB "images/CDFA0-packed.png"   * CDFA0  16 x 63, packed
               ROMPTR 0E3 063 XYGROBDISP TURNMENUOFF BINT10 ONE_DO BINT9 * CE093  ~PCunpack
               INDEX@ BINT1 #- BINT7 #* BINT7 #+ # 78 OVER LINEON LOOP BINT18 * CE0B7
               ONE_DO INDEX@ #1- BINT7 #* BINT9 #+ BINT7 OVER BINT63 LINEON * CE0F8

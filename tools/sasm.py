@@ -25,6 +25,8 @@ Source format
     NIBHEX hex        nibbles in memory order
     NIBASC "text"     bytes, low nibble first (escape: \\xx hex, \\" and \\\\)
     $BODY "text"      a string body without prolog: length (5), then bytes
+    ROMPBODY lib cmd  a ROMPTR body without prolog: library and command (3+3)
+    IDBODY name       an identifier body without prolog: length (2), then bytes
     BSS n             n zero nibbles
     FILLTO expr       zero nibbles up to address expr: free space that
                       absorbs code growing or shrinking before it. If the
@@ -47,7 +49,11 @@ Source format
   `C% re im`, `C%% re im`, `CHR "c"` or `CHR #xx`, `$ "text"`, `HXS hex`,
   `ID name`, `LAM name`, `TAG "text"`, `ROMPTR lib cmd`, `ACPTR expr expr`,
   `GROB "png"`, `CODE` ... `ENDCODE` (Saturn lines in between). Any other
-  token is a pointer to that symbol; `PTR expr` says so explicitly. A line
+  token is a pointer to that symbol; `PTR expr` says so explicitly.
+  `EQ$ "text"` is an Equation Library string, written expanded and packed
+  with its tokens (EQ_TOKENS). `PCGROB "png"` is a hex string holding a
+  picture packed for ~PCunpack by HP's packer's rule (pc_split);
+  `PCGROBS "png" L4,R11,...` gives the packing commands instead. A line
   may hold several objects (`:: DUP # 3F ROMPTR 0C2 000 ;`); `CODE` ends its
   line.
 """
@@ -74,14 +80,15 @@ SEMI = 0x0312B
 OPENERS = {"::": "DOCOL", "{": "DOLIST", "SYMBOL": "DOSYMB", "UNIT": "DOEXT"}
 RPL_WORDS = set(OPENERS) | {";", "}", "#", "%", "%%", "C%", "C%%", "CHR", "$", "HXS",
                             "ID", "LAM", "TAG", "ROMPTR", "ACPTR", "GROB", "CODE",
-                            "ENDCODE", "PTR"}
-DIRECTIVES = {"ORG", "INCLUDE", "ASSEMBLE", "RPL", "NIBHEX", "NIBASC", "BSS", "EQU",
+                            "ENDCODE", "PTR", "EQ$", "PCGROB", "PCGROBS"}
+DIRECTIVES = {"ORG", "INCLUDE", "ASSEMBLE", "RPL", "NIBHEX", "NIBASC", "ROMPBODY", "IDBODY", "BSS", "EQU",
               "GLYPHS", "$BODY", "LENGTH", "ENDLENGTH", "FILLTO", "PIN", "CRC"}
 KEYWORDS = RPL_WORDS | DIRECTIVES
 
 # Operands each RPL word takes, so that a line can hold several objects
 # (`:: DUP # 3F ROMPTR 0C2 000 ;`). Pointers and the rest take none.
 RPL_OPERANDS = {"#": 1, "%": 1, "%%": 1, "C%": 2, "C%%": 2, "CHR": 1, "$": 1, "HXS": 1, "ID": 1,
+                "EQ$": 1, "PCGROB": 1, "PCGROBS": 2,
                 "LAM": 1, "TAG": 1, "ROMPTR": 2, "ACPTR": 2, "GROB": 1, "PTR": 1}
 
 
@@ -351,6 +358,108 @@ def grob_nibs(rows, w):
     return out
 
 
+# Pictures packed for ~PCunpack (#9D2A9; the Equation Library and MINEHUNT).
+# The hex string's body is the height and width bytes, then commands, each a
+# control byte c: below #80 the next c+1 nibbles are copied, otherwise the
+# next nibble is repeated c-#7F times. The nibbles are the grob's rows as
+# bytes with the high nibble first.
+
+def pc_stream(nibs):
+    """The packed nibble order of grob nibbles (each pair swapped)."""
+    out = []
+    for i in range(0, len(nibs), 2):
+        out += [nibs[i + 1], nibs[i]]
+    return out
+
+
+def _run(s, i):
+    j = i
+    while j < len(s) and s[j] == s[i] and j - i < 128:
+        j += 1
+    return j - i
+
+
+def pc_split(s):
+    """The commands HP's packer chose, as ('L'|'R', n): a run of 3 or more
+    (or of 2 before a run of 3) is repeated at the start or after a repeat; a
+    literal ends at a run of 5 or more, or at a run of 3 or more before
+    another of 3 or more (or the end)."""
+    out = []
+    i, n = 0, len(s)
+    while i < n:
+        r = _run(s, i)
+        nx = _run(s, i + r) if i + r < n else 99
+        if r >= 3 or (r >= 2 and nx >= 3):
+            out.append(("R", r))
+            i += r
+            continue
+        k = 1
+        while i + k < n and k < 128:
+            r = _run(s, i + k)
+            nx = _run(s, i + k + r) if i + k + r < n else 99
+            if r >= 5 or (r >= 3 and nx >= 3):
+                break
+            k += 1
+        out.append(("L", k))
+        i += k
+    return out
+
+
+def pc_pack(rows, split=None):
+    """The hex string body (after its length) for a picture: height and
+    width bytes, then the commands. `split` gives the commands' kinds and
+    lengths (`L4,R11,...`); by default HP's packer's rule."""
+    h, w = len(rows), len(rows[0])
+    s = pc_stream(grob_nibs(rows, w))
+    tokens = pc_split(s) if split is None else [(t[0], int(t[1:])) for t in split.split(",")]
+    if sum(n for _, n in tokens) > len(s):
+        raise AsmError("the split covers %d nibbles, the picture %d" % (sum(n for _, n in tokens), len(s)))
+    out = bytes_nibs([h, w])
+    i = 0
+    for kind, n in tokens:
+        if not 1 <= n <= 128:
+            raise AsmError("a packed command covers 1 to 128 nibbles, not %d" % n)
+        if kind == "R":
+            if any(x != s[i] for x in s[i:i + n]):
+                raise AsmError("repeat of %d at nibble %d: the nibbles differ" % (n, i))
+            out += bytes_nibs([0x7F + n]) + [s[i]]
+        else:
+            out += bytes_nibs([n - 1]) + s[i:i + n]
+        i += n
+    return out
+
+
+# Equation Library strings (expanded by ROMPTR 0E3 04B at #9C79C): bytes up
+# to #10 stand for these texts.
+EQ_TOKENS = {0x01: "CONST(", 0x02: "UBASE(", 0x03: "IFTE(", 0x04: "COS(", 0x05: "SIN(", 0x06: "rad",
+             0x07: "two", 0x08: "2*", 0x09: ")*", 0x0B: "2-", 0x0C: "^2", 0x0D: "/(", 0x0E: "=(",
+             0x0F: "))", 0x10: "*("}
+
+
+def eq_expand(b):
+    out = []
+    for x in b:
+        out += [ord(c) for c in EQ_TOKENS[x]] if x in EQ_TOKENS else [x]
+    return out
+
+
+def eq_compress(b):
+    """Bytes of an expanded equation, packed again, longest text first."""
+    toks = sorted(((list(map(ord, t)), k) for k, t in EQ_TOKENS.items()), key=lambda t: -len(t[0]))
+    out = []
+    i = 0
+    while i < len(b):
+        for t, k in toks:
+            if b[i:i + len(t)] == t:
+                out.append(k)
+                i += len(t)
+                break
+        else:
+            out.append(b[i])
+            i += 1
+    return out
+
+
 # Font sheets: 16 glyphs per row, each 8 pixels wide, separated by gray lines.
 def glyph_sheet(glyph_rows, rows):
     count = len(glyph_rows)
@@ -523,6 +632,14 @@ class Assembler:
             return digits(len(body) + 5, 5) + body
         if op == "BSS":
             return [0] * self.value(arg(), pc)
+        if op == "IDBODY":
+            # an identifier without its prolog (an element of a name array)
+            a = " ".join(args)
+            name = unescape(unquote(a)) if a.startswith('"') else [char_byte(c) for c in a]
+            return digits(len(name), 2) + bytes_nibs(name)
+        if op == "ROMPBODY":
+            # a ROMPTR without its prolog (an element of a menu array)
+            return digits(int(arg(0), 16), 3) + digits(int(arg(1), 16), 3)
         if op == "GLYPHS":
             rows, first, count = (self.value(a, pc) for a in args[1:4])
             widths = [int(c, 16) for c in args[4]] if len(args) > 4 else None
@@ -612,6 +729,13 @@ class Assembler:
             return p(pro) + digits(len(name), 2) + bytes_nibs(name)
         if op == "ROMPTR":
             return p("DOROMP") + digits(int(args[0], 16), 3) + digits(int(args[1], 16), 3)
+        if op in ("PCGROB", "PCGROBS"):
+            rows = png_read(self.root / unquote(args[0]))
+            body = pc_pack(rows, args[1] if op == "PCGROBS" else None)
+            return p("DOHSTR") + digits(len(body) + 5, 5) + body
+        if op == "EQ$":
+            body = bytes_nibs(eq_compress(unescape(unquote(args[0]))))
+            return p("DOCSTR") + digits(len(body) + 5, 5) + body
         if op == "ACPTR":
             return p("DOACPTR") + digits(self.value(args[0], pc), 5) + digits(self.value(args[1], pc), 5)
         if op == "GROB":
@@ -725,7 +849,7 @@ class Assembler:
             self.put(start + 5, digits(self.pc - start - 5, 5), overwrite=True)
             state["mode"] = "RPL"
             return
-        raw = op in ("NIBHEX", "NIBASC", "$BODY", "BSS", "GLYPHS") or re.fullmatch(r"(CON|REL)\(\d+\)", op)
+        raw = op in ("NIBHEX", "NIBASC", "$BODY", "ROMPBODY", "IDBODY", "BSS", "GLYPHS") or re.fullmatch(r"(CON|REL)\(\d+\)", op)
         if state["mode"] == "RPL" and op not in DIRECTIVES and not raw:
             objs = rpl_objects(toks)
             for k, obj in enumerate(objs):

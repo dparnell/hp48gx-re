@@ -33,165 +33,335 @@ MenuMTH~1:
 * ROMPTR 0A9 004
 * refs (1): C31C5
 MenuMTH~1~1~1:
-        CON(5)  DOARRY                           * C3207  DOARRY
+        CON(5)  DOARRY                           * C3207  array 9
         LENGTH                                   * C320C  length, to #C3256
-        NIBHEX  29E201000090000200D30200970200A7 * C3211  δ...... .= .y .z
-        NIBHEX  02004B02005B02006B08A05008A06008 * C3231   .´ .µ .¶∡..∡..∡
-        NIBHEX  A0700                            * C3251  ..
+        CON(5)  DOROMP                           * C3211  element type
+        CON(5)  1                                * C3216  dimensions
+        CON(5)  9                                * C321B
+        ROMPBODY 002 03D                         * C3220  ABS
+        ROMPBODY 002 079                         * C3226  DOT
+        ROMPBODY 002 07A                         * C322C  CROSS
+        ROMPBODY 002 0B4                         * C3232  V→
+        ROMPBODY 002 0B5                         * C3238  →V2
+        ROMPBODY 002 0B6                         * C323E  →V3
+        ROMPBODY 0A8 005                         * C3244  key "RECT"
+        ROMPBODY 0A8 006                         * C324A  key "CYLIN"
+        ROMPBODY 0A8 007                         * C3250  key "SPHERE"
         ENDLENGTH                                * C3256
 
 * ROMPTR 0A9 005
 * refs (1): C31C5
 ROMP_0A9_005:
-        CON(5)  DOARRY                           * C3256  DOARRY
+        CON(5)  DOARRY                           * C3256  array 11
         LENGTH                                   * C325B  length, to #C32B1
-        NIBHEX  29E2010000B00008A08008A09008A0A0 * C3260  δ......∡..∡..∡..
-        NIBHEX  08A0B008A0C00BA0630200B70BA0730B * C3280  ∡..∡..°.6 .{°.7°
-        NIBHEX  A0830BA0540BA0640                * C32A0  .8°.E°.F
+        CON(5)  DOROMP                           * C3260  element type
+        CON(5)  1                                * C3265  dimensions
+        CON(5)  11                               * C326A
+        ROMPBODY 0A8 008                         * C326F  key "MAKE"
+        ROMPBODY 0A8 009                         * C3275  key "NORM"
+        ROMPBODY 0A8 00A                         * C327B  key "FACTR"
+        ROMPBODY 0A8 00B                         * C3281  key "COL"
+        ROMPBODY 0A8 00C                         * C3287  key "ROW"
+        ROMPBODY 0AB 036                         * C328D  LSQ
+        ROMPBODY 002 07B                         * C3293  RSD
+        ROMPBODY 0AB 037                         * C3299  EGV
+        ROMPBODY 0AB 038                         * C329F  EGVL
+        ROMPBODY 0AB 045                         * C32A5  →DIAG
+        ROMPBODY 0AB 046                         * C32AB  DIAG→
         ENDLENGTH                                * C32B1
 
 * ROMPTR 0A9 006
 * refs (1): C31C5
 ROMP_0A9_006:
-        CON(5)  DOARRY                           * C32B1  DOARRY
+        CON(5)  DOARRY                           * C32B1  array 18
         LENGTH                                   * C32B6  length, to #C3336
-        NIBHEX  29E201000021000200DA0200EA0200FA * C32BB  δ...... .. .® .¯
-        NIBHEX  0200CA0BA00402000A02002B02003B02 * C32DB   .¬°.@ .. .² .³ 
-        NIBHEX  000B02001B0200C90200D908A00008A0 * C32FB  .° .± .Π .Ω∡..∡.
-        NIBHEX  0008A00008A00008A00008A0D00      * C331B  .∡..∡..∡..∡..
+        CON(5)  DOROMP                           * C32BB  element type
+        CON(5)  1                                * C32C0  dimensions
+        CON(5)  18                               * C32C5
+        ROMPBODY 002 0AD                         * C32CA  CON
+        ROMPBODY 002 0AE                         * C32D0  IDN
+        ROMPBODY 002 0AF                         * C32D6  TRN
+        ROMPBODY 002 0AC                         * C32DC  RDM
+        ROMPBODY 0AB 040                         * C32E2  RANM
+        ROMPBODY 002 0A0                         * C32E8  SIZE
+        ROMPBODY 002 0B2                         * C32EE  GET
+        ROMPBODY 002 0B3                         * C32F4  GETI
+        ROMPBODY 002 0B0                         * C32FA  PUT
+        ROMPBODY 002 0B1                         * C3300  PUTI
+        ROMPBODY 002 09C                         * C3306  SUB
+        ROMPBODY 002 09D                         * C330C  REPL
+        ROMPBODY 0A8 000                         * C3312
+        ROMPBODY 0A8 000                         * C3318
+        ROMPBODY 0A8 000                         * C331E
+        ROMPBODY 0A8 000                         * C3324
+        ROMPBODY 0A8 000                         * C332A
+        ROMPBODY 0A8 00D                         * C3330  key "MATRX"
         ENDLENGTH                                * C3336
 
 * ROMPTR 0A9 007
 * refs (1): C31C5
 ROMP_0A9_007:
-        CON(5)  DOARRY                           * C3336  DOARRY
+        CON(5)  DOARRY                           * C3336  array 12
         LENGTH                                   * C333B  length, to #C3397
-        NIBHEX  29E2010000C0000200D30BA043020067 * C3340  δ...... .=°.4 .v
-        NIBHEX  0200770BA0330BA0130BA0530200870B * C3360   .w°.3°.1°.5 .x°
-        NIBHEX  A02308A00008A00008A0D00          * C3380  .2∡..∡..∡..
+        CON(5)  DOROMP                           * C3340  element type
+        CON(5)  1                                * C3345  dimensions
+        CON(5)  12                               * C334A
+        ROMPBODY 002 03D                         * C334F  ABS
+        ROMPBODY 0AB 034                         * C3355  SNRM
+        ROMPBODY 002 076                         * C335B  RNRM
+        ROMPBODY 002 077                         * C3361  CNRM
+        ROMPBODY 0AB 033                         * C3367  SRAD
+        ROMPBODY 0AB 031                         * C336D  COND
+        ROMPBODY 0AB 035                         * C3373  RANK
+        ROMPBODY 002 078                         * C3379  DET
+        ROMPBODY 0AB 032                         * C337F  TRACE
+        ROMPBODY 0A8 000                         * C3385
+        ROMPBODY 0A8 000                         * C338B
+        ROMPBODY 0A8 00D                         * C3391  key "MATRX"
         ENDLENGTH                                * C3397
 
 * ROMPTR 0A9 008
 * refs (1): C31C5
 ROMP_0A9_008:
-        CON(5)  DOARRY                           * C3397  DOARRY
+        CON(5)  DOARRY                           * C3397  array 12
         LENGTH                                   * C339C  length, to #C33F8
-        NIBHEX  29E2010000C0000BA0F30BA0B30BA0D3 * C33A1  δ......°.?°.;°.=
-        NIBHEX  0BA0C30BA0E30BA0930BA0A308A00008 * C33C1  °.<°.>°.9°.:∡..∡
-        NIBHEX  A00008A00008A00008A0D00          * C33E1  ..∡..∡..∡..
+        CON(5)  DOROMP                           * C33A1  element type
+        CON(5)  1                                * C33A6  dimensions
+        CON(5)  12                               * C33AB
+        ROMPBODY 0AB 03F                         * C33B0  RREF
+        ROMPBODY 0AB 03B                         * C33B6  LU
+        ROMPBODY 0AB 03D                         * C33BC  LQ
+        ROMPBODY 0AB 03C                         * C33C2  QR
+        ROMPBODY 0AB 03E                         * C33C8  SCHUR
+        ROMPBODY 0AB 039                         * C33CE  SVD
+        ROMPBODY 0AB 03A                         * C33D4  SVL
+        ROMPBODY 0A8 000                         * C33DA
+        ROMPBODY 0A8 000                         * C33E0
+        ROMPBODY 0A8 000                         * C33E6
+        ROMPBODY 0A8 000                         * C33EC
+        ROMPBODY 0A8 00D                         * C33F2  key "MATRX"
         ENDLENGTH                                * C33F8
 
 * ROMPTR 0A9 009
 * refs (1): C31C5
 ROMP_0A9_009:
-        CON(5)  DOARRY                           * C33F8  DOARRY
+        CON(5)  DOARRY                           * C33F8  array 6
         LENGTH                                   * C33FD  length, to #C3435
-        NIBHEX  29E201000060000BA0340BA0440BA0A4 * C3402  δ......°.C°.D°.J
-        NIBHEX  0BA0940BA0C408A0D00              * C3422  °.I°.L∡..
+        CON(5)  DOROMP                           * C3402  element type
+        CON(5)  1                                * C3407  dimensions
+        CON(5)  6                                * C340C
+        ROMPBODY 0AB 043                         * C3411  →COL
+        ROMPBODY 0AB 044                         * C3417  COL→
+        ROMPBODY 0AB 04A                         * C341D  COL+
+        ROMPBODY 0AB 049                         * C3423  COL-
+        ROMPBODY 0AB 04C                         * C3429  CSWP
+        ROMPBODY 0A8 00D                         * C342F  key "MATRX"
         ENDLENGTH                                * C3435
 
 * ROMPTR 0A9 00A
 * refs (1): C31C5
 ROMP_0A9_00A:
-        CON(5)  DOARRY                           * C3435  DOARRY
+        CON(5)  DOARRY                           * C3435  array 12
         LENGTH                                   * C343A  length, to #C3496
-        NIBHEX  29E2010000C0000BA0140BA0240BA084 * C343F  δ......°.A°.B°.H
-        NIBHEX  0BA0740BA0D40BA0E40BA0B408A00008 * C345F  °.G°.M°.N°.K∡..∡
-        NIBHEX  A00008A00008A00008A0D00          * C347F  ..∡..∡..∡..
+        CON(5)  DOROMP                           * C343F  element type
+        CON(5)  1                                * C3444  dimensions
+        CON(5)  12                               * C3449
+        ROMPBODY 0AB 041                         * C344E  →ROW
+        ROMPBODY 0AB 042                         * C3454  ROW→
+        ROMPBODY 0AB 048                         * C345A  ROW+
+        ROMPBODY 0AB 047                         * C3460  ROW-
+        ROMPBODY 0AB 04D                         * C3466  RCI
+        ROMPBODY 0AB 04E                         * C346C  RCIJ
+        ROMPBODY 0AB 04B                         * C3472  RSWP
+        ROMPBODY 0A8 000                         * C3478
+        ROMPBODY 0A8 000                         * C347E
+        ROMPBODY 0A8 000                         * C3484
+        ROMPBODY 0A8 000                         * C348A
+        ROMPBODY 0A8 00D                         * C3490  key "MATRX"
         ENDLENGTH                                * C3496
 
 * ROMPTR 0A9 00B
 * refs (1): C31C5
 MenuMTH~1~1~2:
-        CON(5)  DOARRY                           * C3496  DOARRY
+        CON(5)  DOARRY                           * C3496  array 6
         LENGTH                                   * C349B  length, to #C34D3
-        NIBHEX  29E201000060000BA0460BA0860BA0A6 * C34A0  δ......°.d°.h°.j
-        NIBHEX  0BA0E60BA0D60BA0C60              * C34C0  °.n°.m°.l
+        CON(5)  DOROMP                           * C34A0  element type
+        CON(5)  1                                * C34A5  dimensions
+        CON(5)  6                                * C34AA
+        ROMPBODY 0AB 064                         * C34AF  ΔLIST
+        ROMPBODY 0AB 068                         * C34B5  ΣLIST
+        ROMPBODY 0AB 06A                         * C34BB  ΠLIST
+        ROMPBODY 0AB 06E                         * C34C1  SORT
+        ROMPBODY 0AB 06D                         * C34C7  REVLIST
+        ROMPBODY 0AB 06C                         * C34CD  ADD
         ENDLENGTH                                * C34D3
 
 * ROMPTR 0A9 00C
 * refs (1): C31C5
 MenuMTH~1~1~3:
-        CON(5)  DOARRY                           * C34D3  DOARRY
+        CON(5)  DOARRY                           * C34D3  array 8
         LENGTH                                   * C34D8  length, to #C351C
-        NIBHEX  29E201000080000200450200A5020055 * C34DD  δ...... .T .Z .U
-        NIBHEX  0200B50200650200C50200260200160  * C34FD   .[ .V .\ .b .a
+        CON(5)  DOROMP                           * C34DD  element type
+        CON(5)  1                                * C34E2  dimensions
+        CON(5)  8                                * C34E7
+        ROMPBODY 002 054                         * C34EC  SINH
+        ROMPBODY 002 05A                         * C34F2  ASINH
+        ROMPBODY 002 055                         * C34F8  COSH
+        ROMPBODY 002 05B                         * C34FE  ACOSH
+        ROMPBODY 002 056                         * C3504  TANH
+        ROMPBODY 002 05C                         * C350A  ATANH
+        ROMPBODY 002 062                         * C3510  EXPM
+        ROMPBODY 002 061                         * C3516  LNP1
         ENDLENGTH                                * C351C
 
 * ROMPTR 0A9 00D
 * refs (1): C31C5
 MenuMTH~1~1~4:
-        CON(5)  DOARRY                           * C351C  DOARRY
+        CON(5)  DOARRY                           * C351C  array 11
         LENGTH                                   * C3521  length, to #C3577
-        NIBHEX  29E2010000B000020018020028020036 * C3526  δ...... .ā .∇ .c
-        NIBHEX  0200F702000808A00002004312006312 * C3546   .. .∡∡.. .4!.6!
-        NIBHEX  00531200731BA0720                * C3566  .5!.7±.'
+        CON(5)  DOROMP                           * C3526  element type
+        CON(5)  1                                * C352B  dimensions
+        CON(5)  11                               * C3530
+        ROMPBODY 002 081                         * C3535  COMB
+        ROMPBODY 002 082                         * C353B  PERM
+        ROMPBODY 002 063                         * C3541  !
+        ROMPBODY 002 07F                         * C3547  RAND
+        ROMPBODY 002 080                         * C354D  RDZ
+        ROMPBODY 0A8 000                         * C3553
+        ROMPBODY 002 134                         * C3559  UTPC
+        ROMPBODY 002 136                         * C355F  UTPF
+        ROMPBODY 002 135                         * C3565  UTPN
+        ROMPBODY 002 137                         * C356B  UTPT
+        ROMPBODY 0AB 027                         * C3571  NDIST
         ENDLENGTH                                * C3577
 
 * ROMPTR 0A9 00E
 * refs (1): C31C5
 MenuMTH~1~1~5:
-        CON(5)  DOARRY                           * C3577  DOARRY
+        CON(5)  DOARRY                           * C3577  array 18
         LENGTH                                   * C357C  length, to #C35FC
-        NIBHEX  29E201000021000200C70200E70200D7 * C3581  δ...... .| .~ .}
-        NIBHEX  0200B60200A60200E60200D30200E402 * C35A1   .k .j .n .= .N 
-        NIBHEX  00F60200960200560200660200C60200 * C35C1  .o .i .e .f .l .
-        NIBHEX  D60200760200860200070200170      * C35E1  m .g .h .p .q
+        CON(5)  DOROMP                           * C3581  element type
+        CON(5)  1                                * C3586  dimensions
+        CON(5)  18                               * C358B
+        ROMPBODY 002 07C                         * C3590  %
+        ROMPBODY 002 07E                         * C3596  %CH
+        ROMPBODY 002 07D                         * C359C  %T
+        ROMPBODY 002 06B                         * C35A2  MIN
+        ROMPBODY 002 06A                         * C35A8  MAX
+        ROMPBODY 002 06E                         * C35AE  MOD
+        ROMPBODY 002 03D                         * C35B4  ABS
+        ROMPBODY 002 04E                         * C35BA  SIGN
+        ROMPBODY 002 06F                         * C35C0  MANT
+        ROMPBODY 002 069                         * C35C6  XPON
+        ROMPBODY 002 065                         * C35CC  IP
+        ROMPBODY 002 066                         * C35D2  FP
+        ROMPBODY 002 06C                         * C35D8  RND
+        ROMPBODY 002 06D                         * C35DE  TRNC
+        ROMPBODY 002 067                         * C35E4  FLOOR
+        ROMPBODY 002 068                         * C35EA  CEIL
+        ROMPBODY 002 070                         * C35F0  D→R
+        ROMPBODY 002 071                         * C35F6  R→D
         ENDLENGTH                                * C35FC
 
 * ROMPTR 0A9 00F
 * refs (1): C31C5
 ROMP_0A9_00F:
-        CON(5)  DOARRY                           * C35FC  DOARRY
+        CON(5)  DOARRY                           * C35FC  array 12
         LENGTH                                   * C3601  length, to #C365D
-        NIBHEX  29E2010000C00008A0E008A0F008A001 * C3606  δ......∡..∡..∡..
-        NIBHEX  08A0110200900200A008A02108A03108 * C3626  ∡.. .. ..∡..∡..∡
-        NIBHEX  A04108A0000200490200590          * C3646  ..∡.. .η .θ
+        CON(5)  DOROMP                           * C3606  element type
+        CON(5)  1                                * C360B  dimensions
+        CON(5)  12                               * C3610
+        ROMPBODY 0A8 00E                         * C3615  key "HEX"
+        ROMPBODY 0A8 00F                         * C361B  key "DEC"
+        ROMPBODY 0A8 010                         * C3621  key "OCT"
+        ROMPBODY 0A8 011                         * C3627  key "BIN"
+        ROMPBODY 002 009                         * C362D  R→B
+        ROMPBODY 002 00A                         * C3633  B→R
+        ROMPBODY 0A8 012                         * C3639  key "LOGIC"
+        ROMPBODY 0A8 013                         * C363F  key "BIT"
+        ROMPBODY 0A8 014                         * C3645  key "BYTE"
+        ROMPBODY 0A8 000                         * C364B
+        ROMPBODY 002 094                         * C3651  STWS
+        ROMPBODY 002 095                         * C3657  RCWS
         ENDLENGTH                                * C365D
 
 * ROMPTR 0A9 010
 * refs (1): C31C5
 ROMP_0A9_010:
-        CON(5)  DOARRY                           * C365D  DOARRY
+        CON(5)  DOARRY                           * C365D  array 6
         LENGTH                                   * C3662  length, to #C369A
-        NIBHEX  29E2010000600002005E02006E02008E * C3667  δ...... .å .æ .è
-        NIBHEX  02007E08A00008A0510              * C3687   .ç∡..∡..
+        CON(5)  DOROMP                           * C3667  element type
+        CON(5)  1                                * C366C  dimensions
+        CON(5)  6                                * C3671
+        ROMPBODY 002 0E5                         * C3676  AND
+        ROMPBODY 002 0E6                         * C367C  OR
+        ROMPBODY 002 0E8                         * C3682  XOR
+        ROMPBODY 002 0E7                         * C3688  NOT
+        ROMPBODY 0A8 000                         * C368E
+        ROMPBODY 0A8 015                         * C3694  key "BASE"
         ENDLENGTH                                * C369A
 
 * ROMPTR 0A9 011
 * refs (1): C31C5
 ROMP_0A9_011:
-        CON(5)  DOARRY                           * C369A  DOARRY
+        CON(5)  DOARRY                           * C369A  array 6
         LENGTH                                   * C369F  length, to #C36D7
-        NIBHEX  29E20100006000020010020050020000 * C36A4  δ...... .. .. ..
-        NIBHEX  02007002003008A0510              * C36C4   .. ..∡..
+        CON(5)  DOROMP                           * C36A4  element type
+        CON(5)  1                                * C36A9  dimensions
+        CON(5)  6                                * C36AE
+        ROMPBODY 002 001                         * C36B3  RL
+        ROMPBODY 002 005                         * C36B9  SL
+        ROMPBODY 002 000                         * C36BF  ASR
+        ROMPBODY 002 007                         * C36C5  SR
+        ROMPBODY 002 003                         * C36CB  RR
+        ROMPBODY 0A8 015                         * C36D1  key "BASE"
         ENDLENGTH                                * C36D7
 
 * ROMPTR 0A9 012
 * refs (1): C31C5
 ROMP_0A9_012:
-        CON(5)  DOARRY                           * C36D7  DOARRY
+        CON(5)  DOARRY                           * C36D7  array 6
         LENGTH                                   * C36DC  length, to #C3714
-        NIBHEX  29E2010000600002002002006008A000 * C36E1  δ...... .. ..∡..
-        NIBHEX  02008002004008A0510              * C3701   .. ..∡..
+        CON(5)  DOROMP                           * C36E1  element type
+        CON(5)  1                                * C36E6  dimensions
+        CON(5)  6                                * C36EB
+        ROMPBODY 002 002                         * C36F0  RLB
+        ROMPBODY 002 006                         * C36F6  SLB
+        ROMPBODY 0A8 000                         * C36FC
+        ROMPBODY 002 008                         * C3702  SRB
+        ROMPBODY 002 004                         * C3708  RRB
+        ROMPBODY 0A8 015                         * C370E  key "BASE"
         ENDLENGTH                                * C3714
 
 * ROMPTR 0A9 013
 * refs (1): C31C5
 MenuMTH~1~1~6:
-        CON(5)  DOARRY                           * C3714  DOARRY
+        CON(5)  DOARRY                           * C3714  array 2
         LENGTH                                   * C3719  length, to #C3739
-        NIBHEX  29E201000020000BA0520BA0620      * C371E  δ......°.%°.&
+        CON(5)  DOROMP                           * C371E  element type
+        CON(5)  1                                * C3723  dimensions
+        CON(5)  2                                * C3728
+        ROMPBODY 0AB 025                         * C372D  FFT
+        ROMPBODY 0AB 026                         * C3733  IFFT
         ENDLENGTH                                * C3739
 
 * ROMPTR 0A9 014
 * refs (1): C31C5
 MenuMTH~1~1~7:
-        CON(5)  DOARRY                           * C3739  DOARRY
+        CON(5)  DOARRY                           * C3739  array 9
         LENGTH                                   * C373E  length, to #C3788
-        NIBHEX  29E201000090000200A90200B90200F9 * C3743  δ...... .ω .Δ .∞
-        NIBHEX  0200990200D30200D40200E40200C302 * C3763   .τ .= .M .N .< 
-        NIBHEX  00E30                            * C3783  .>
+        CON(5)  DOROMP                           * C3743  element type
+        CON(5)  1                                * C3748  dimensions
+        CON(5)  9                                * C374D
+        ROMPBODY 002 09A                         * C3752  RE
+        ROMPBODY 002 09B                         * C3758  IM
+        ROMPBODY 002 09F                         * C375E  C→R
+        ROMPBODY 002 099                         * C3764  R→C
+        ROMPBODY 002 03D                         * C376A  ABS
+        ROMPBODY 002 04D                         * C3770  ARG
+        ROMPBODY 002 04E                         * C3776  SIGN
+        ROMPBODY 002 03C                         * C377C  NEG
+        ROMPBODY 002 03E                         * C3782  CONJ
         ENDLENGTH                                * C3788
 
 * ROMPTR 0A9 015
@@ -207,46 +377,83 @@ MenuPr~1:
 * ROMPTR 0A9 017
 * refs (1): C31C5
 ROMP_0A9_017:
-        CON(5)  DOARRY                           * C379E  DOARRY
+        CON(5)  DOARRY                           * C379E  array 8
         LENGTH                                   * C37A3  length, to #C37E7
-        NIBHEX  29E2010000800008A06108A07108A081 * C37A8  δ......∡..∡..∡..
-        NIBHEX  08A09108A0A108A0B10200030200F20  * C37C8  ∡..∡..∡.. .0 ./
+        CON(5)  DOROMP                           * C37A8  element type
+        CON(5)  1                                * C37AD  dimensions
+        CON(5)  8                                * C37B2
+        ROMPBODY 0A8 016                         * C37B7  key "IF"
+        ROMPBODY 0A8 017                         * C37BD  key "CASE"
+        ROMPBODY 0A8 018                         * C37C3  key "START"
+        ROMPBODY 0A8 019                         * C37C9  key "FOR"
+        ROMPBODY 0A8 01A                         * C37CF  key "DO"
+        ROMPBODY 0A8 01B                         * C37D5  key "WHILE"
+        ROMPBODY 002 030                         * C37DB  IFT
+        ROMPBODY 002 02F                         * C37E1  IFTE
         ENDLENGTH                                * C37E7
 
 * ROMPTR 0A9 018
 * refs (1): C31C5
 ROMP_0A9_018:
-        CON(5)  DOARRY                           * C37E7  DOARRY
+        CON(5)  DOARRY                           * C37E7  array 6
         LENGTH                                   * C37EC  length, to #C3824
-        NIBHEX  29E20100006000000700000710000720 * C37F1  δ.......p..p..p.
-        NIBHEX  00073008A00008A0C10              * C3811  .p.∡..∡..
+        CON(5)  DOROMP                           * C37F1  element type
+        CON(5)  1                                * C37F6  dimensions
+        CON(5)  6                                * C37FB
+        ROMPBODY 700 000                         * C3800  IF
+        ROMPBODY 700 001                         * C3806  THEN
+        ROMPBODY 700 002                         * C380C  ELSE
+        ROMPBODY 700 003                         * C3812  END
+        ROMPBODY 0A8 000                         * C3818
+        ROMPBODY 0A8 01C                         * C381E  key "BRCH"
         ENDLENGTH                                * C3824
 
 * ROMPTR 0A9 019
 * refs (1): C31C5
 ROMP_0A9_019:
-        CON(5)  DOARRY                           * C3824  DOARRY
+        CON(5)  DOARRY                           * C3824  array 6
         LENGTH                                   * C3829  length, to #C3861
-        NIBHEX  29E201000060000007910007A1000730 * C382E  δ.......p..p..p.
-        NIBHEX  08A00008A00008A0C10              * C384E  ∡..∡..∡..
+        CON(5)  DOROMP                           * C382E  element type
+        CON(5)  1                                * C3833  dimensions
+        CON(5)  6                                * C3838
+        ROMPBODY 700 019                         * C383D  CASE
+        ROMPBODY 700 01A                         * C3843  xTHENCASE
+        ROMPBODY 700 003                         * C3849  END
+        ROMPBODY 0A8 000                         * C384F
+        ROMPBODY 0A8 000                         * C3855
+        ROMPBODY 0A8 01C                         * C385B  key "BRCH"
         ENDLENGTH                                * C3861
 
 * ROMPTR 0A9 01A
 * refs (1): C31C5
 ROMP_0A9_01A:
-        CON(5)  DOARRY                           * C3861  DOARRY
+        CON(5)  DOARRY                           * C3861  array 6
         LENGTH                                   * C3866  length, to #C389E
-        NIBHEX  29E201000060000007900007B00007C0 * C386B  δ.......p..p..p.
-        NIBHEX  08A00008A00008A0C10              * C388B  ∡..∡..∡..
+        CON(5)  DOROMP                           * C386B  element type
+        CON(5)  1                                * C3870  dimensions
+        CON(5)  6                                * C3875
+        ROMPBODY 700 009                         * C387A  START
+        ROMPBODY 700 00B                         * C3880  NEXT
+        ROMPBODY 700 00C                         * C3886  STEP
+        ROMPBODY 0A8 000                         * C388C
+        ROMPBODY 0A8 000                         * C3892
+        ROMPBODY 0A8 01C                         * C3898  key "BRCH"
         ENDLENGTH                                * C389E
 
 * ROMPTR 0A9 01B
 * refs (1): C31C5
 ROMP_0A9_01B:
-        CON(5)  DOARRY                           * C389E  DOARRY
+        CON(5)  DOARRY                           * C389E  array 6
         LENGTH                                   * C38A3  length, to #C38DB
-        NIBHEX  29E201000060000007A00007B00007C0 * C38A8  δ.......p..p..p.
-        NIBHEX  08A00008A00008A0C10              * C38C8  ∡..∡..∡..
+        CON(5)  DOROMP                           * C38A8  element type
+        CON(5)  1                                * C38AD  dimensions
+        CON(5)  6                                * C38B2
+        ROMPBODY 700 00A                         * C38B7  FOR
+        ROMPBODY 700 00B                         * C38BD  NEXT
+        ROMPBODY 700 00C                         * C38C3  STEP
+        ROMPBODY 0A8 000                         * C38C9
+        ROMPBODY 0A8 000                         * C38CF
+        ROMPBODY 0A8 01C                         * C38D5  key "BRCH"
         ENDLENGTH                                * C38DB
 
 * ROMPTR 0A9 01C
@@ -257,10 +464,17 @@ ROMP_0A9_01C:
 * ROMPTR 0A9 01D
 * refs (1): C31C5
 ROMP_0A9_01D:
-        CON(5)  DOARRY                           * C38EA  DOARRY
+        CON(5)  DOARRY                           * C38EA  array 6
         LENGTH                                   * C38EF  length, to #C3927
-        NIBHEX  29E20100006000000770000780000771 * C38F4  δ.......p..p..p.
-        NIBHEX  08A00008A00008A0C10              * C3914  ∡..∡..∡..
+        CON(5)  DOROMP                           * C38F4  element type
+        CON(5)  1                                * C38F9  dimensions
+        CON(5)  6                                * C38FE
+        ROMPBODY 700 007                         * C3903  DO
+        ROMPBODY 700 008                         * C3909  UNTIL
+        ROMPBODY 700 017                         * C390F  xENDDO
+        ROMPBODY 0A8 000                         * C3915
+        ROMPBODY 0A8 000                         * C391B
+        ROMPBODY 0A8 01C                         * C3921  key "BRCH"
         ENDLENGTH                                * C3927
 
 * ROMPTR 0A9 01E
@@ -271,109 +485,223 @@ ROMP_0A9_01E:
 * ROMPTR 0A9 01F
 * refs (1): C31C5
 ROMP_0A9_01F:
-        CON(5)  DOARRY                           * C3932  DOARRY
+        CON(5)  DOARRY                           * C3932  array 6
         LENGTH                                   * C3937  length, to #C396F
-        NIBHEX  29E20100006000000750000760000761 * C393C  δ.......p..p..p.
-        NIBHEX  08A00008A00008A0C10              * C395C  ∡..∡..∡..
+        CON(5)  DOROMP                           * C393C  element type
+        CON(5)  1                                * C3941  dimensions
+        CON(5)  6                                * C3946
+        ROMPBODY 700 005                         * C394B  WHILE
+        ROMPBODY 700 006                         * C3951  REPEAT
+        ROMPBODY 700 016                         * C3957  xWHILEEND
+        ROMPBODY 0A8 000                         * C395D
+        ROMPBODY 0A8 000                         * C3963
+        ROMPBODY 0A8 01C                         * C3969  key "BRCH"
         ENDLENGTH                                * C396F
 
 * ROMPTR 0A9 020
 * refs (1): C31C5
 MenuPr~1~1~1:
-        CON(5)  DOARRY                           * C396F  DOARRY
+        CON(5)  DOARRY                           * C396F  array 19
         LENGTH                                   * C3974  length, to #C39FA
-        NIBHEX  29E2010000310002009E0200AE0200BE * C3979  δ...... .é .ê .ë
-        NIBHEX  0200CE0200DE0200EE02005E02006E02 * C3999   .ì .í .î .å .æ 
-        NIBHEX  008E02007E02004E02006A0200380200 * C39B9  .è .ç .ä .¦ .√ .
-        NIBHEX  480200580200680200E80200F80BA0C1 * C39D9  ∫ .Σ .▶ .← .↓°..
-        NIBHEX  0                                * C39F9
+        CON(5)  DOROMP                           * C3979  element type
+        CON(5)  1                                * C397E  dimensions
+        CON(5)  19                               * C3983
+        ROMPBODY 002 0E9                         * C3988  ==
+        ROMPBODY 002 0EA                         * C398E  ≠
+        ROMPBODY 002 0EB                         * C3994  <
+        ROMPBODY 002 0EC                         * C399A  >
+        ROMPBODY 002 0ED                         * C39A0  ≤
+        ROMPBODY 002 0EE                         * C39A6  ≥
+        ROMPBODY 002 0E5                         * C39AC  AND
+        ROMPBODY 002 0E6                         * C39B2  OR
+        ROMPBODY 002 0E8                         * C39B8  XOR
+        ROMPBODY 002 0E7                         * C39BE  NOT
+        ROMPBODY 002 0E4                         * C39C4  SAME
+        ROMPBODY 002 0A6                         * C39CA  TYPE
+        ROMPBODY 002 083                         * C39D0  SF
+        ROMPBODY 002 084                         * C39D6  CF
+        ROMPBODY 002 085                         * C39DC  FS?
+        ROMPBODY 002 086                         * C39E2  FC?
+        ROMPBODY 002 08E                         * C39E8  FS?C
+        ROMPBODY 002 08F                         * C39EE  FC?C
+        ROMPBODY 0AB 01C                         * C39F4  LININ
         ENDLENGTH                                * C39FA
 
 * ROMPTR 0A9 021
 * refs (1): C31C5
 MenuPr~1~1~2:
-        CON(5)  DOARRY                           * C39FA  DOARRY
+        CON(5)  DOARRY                           * C39FA  array 14
         LENGTH                                   * C39FF  length, to #C3A67
-        NIBHEX  29E2010000E00002009A0200AA020089 * C3A04  δ...... .© .ª .σ
-        NIBHEX  02002A0200F71200D00200F902009902 * C3A24   .¢ ..!.. .∞ .τ 
-        NIBHEX  004A02005A02000812008A02006A0200 * C3A44  .¤ .¥ .∡!.¨ .¦ .
-        NIBHEX  7A0                              * C3A64  §
+        CON(5)  DOROMP                           * C3A04  element type
+        CON(5)  1                                * C3A09  dimensions
+        CON(5)  14                               * C3A0E
+        ROMPBODY 002 0A9                         * C3A13  OBJ→
+        ROMPBODY 002 0AA                         * C3A19  →ARRY
+        ROMPBODY 002 098                         * C3A1F  →LIST
+        ROMPBODY 002 0A2                         * C3A25  →STR
+        ROMPBODY 002 17F                         * C3A2B  →TAG
+        ROMPBODY 002 00D                         * C3A31  →UNIT
+        ROMPBODY 002 09F                         * C3A37  C→R
+        ROMPBODY 002 099                         * C3A3D  R→C
+        ROMPBODY 002 0A4                         * C3A43  NUM
+        ROMPBODY 002 0A5                         * C3A49  CHR
+        ROMPBODY 002 180                         * C3A4F  DTAG
+        ROMPBODY 002 0A8                         * C3A55  EQ→
+        ROMPBODY 002 0A6                         * C3A5B  TYPE
+        ROMPBODY 002 0A7                         * C3A61  VTYPE
         ENDLENGTH                                * C3A67
 
 * ROMPTR 0A9 022
 * refs (1): C31C5
 ROMP_0A9_022:
-        CON(5)  DOARRY                           * C3A67  DOARRY
+        CON(5)  DOARRY                           * C3A67  array 6
         LENGTH                                   * C3A6C  length, to #C3AA4
-        NIBHEX  29E2010000600008A0D108A0E102009A * C3A71  δ......∡..∡.. .©
-        NIBHEX  0200890200C90200D90              * C3A91   .σ .Π .Ω
+        CON(5)  DOROMP                           * C3A71  element type
+        CON(5)  1                                * C3A76  dimensions
+        CON(5)  6                                * C3A7B
+        ROMPBODY 0A8 01D                         * C3A80  key "ELEM"
+        ROMPBODY 0A8 01E                         * C3A86  key "PROC"
+        ROMPBODY 002 0A9                         * C3A8C  OBJ→
+        ROMPBODY 002 098                         * C3A92  →LIST
+        ROMPBODY 002 09C                         * C3A98  SUB
+        ROMPBODY 002 09D                         * C3A9E  REPL
         ENDLENGTH                                * C3AA4
 
 * ROMPTR 0A9 023
 * refs (1): C31C5
 ROMP_0A9_023:
-        CON(5)  DOARRY                           * C3AA4  DOARRY
+        CON(5)  DOARRY                           * C3AA4  array 12
         LENGTH                                   * C3AA9  length, to #C3B05
-        NIBHEX  29E2010000C00002002B02003B02000B * C3AAE  δ...... .² .³ .°
-        NIBHEX  02001B02000A02001A0BA0060BA01608 * C3ACE   .± .. .¡°.`°.a∡
-        NIBHEX  A00008A00008A00008A0F10          * C3AEE  ..∡..∡..∡..
+        CON(5)  DOROMP                           * C3AAE  element type
+        CON(5)  1                                * C3AB3  dimensions
+        CON(5)  12                               * C3AB8
+        ROMPBODY 002 0B2                         * C3ABD  GET
+        ROMPBODY 002 0B3                         * C3AC3  GETI
+        ROMPBODY 002 0B0                         * C3AC9  PUT
+        ROMPBODY 002 0B1                         * C3ACF  PUTI
+        ROMPBODY 002 0A0                         * C3AD5  SIZE
+        ROMPBODY 002 0A1                         * C3ADB  POS
+        ROMPBODY 0AB 060                         * C3AE1  HEAD
+        ROMPBODY 0AB 061                         * C3AE7  TAIL
+        ROMPBODY 0A8 000                         * C3AED
+        ROMPBODY 0A8 000                         * C3AF3
+        ROMPBODY 0A8 000                         * C3AF9
+        ROMPBODY 0A8 01F                         * C3AFF  key "LIST"
         ENDLENGTH                                * C3B05
 
 * ROMPTR 0A9 024
 * refs (1): C31C5
 ROMP_0A9_024:
-        CON(5)  DOARRY                           * C3B05  DOARRY
+        CON(5)  DOARRY                           * C3B05  array 12
         LENGTH                                   * C3B0A  length, to #C3B66
-        NIBHEX  29E2010000C0000BA0B60BA0360BA056 * C3B0F  δ......°.k°.c°.e
-        NIBHEX  0BA0660BA0760BA0D60BA0E60BA02608 * C3B2F  °.f°.g°.m°.n°.b∡
-        NIBHEX  A00008A00008A00008A0F10          * C3B4F  ..∡..∡..∡..
+        CON(5)  DOROMP                           * C3B0F  element type
+        CON(5)  1                                * C3B14  dimensions
+        CON(5)  12                               * C3B19
+        ROMPBODY 0AB 06B                         * C3B1E  DOLIST
+        ROMPBODY 0AB 063                         * C3B24  DOSUBS
+        ROMPBODY 0AB 065                         * C3B2A  NSUB
+        ROMPBODY 0AB 066                         * C3B30  ENDSUB
+        ROMPBODY 0AB 067                         * C3B36  STREAM
+        ROMPBODY 0AB 06D                         * C3B3C  REVLIST
+        ROMPBODY 0AB 06E                         * C3B42  SORT
+        ROMPBODY 0AB 062                         * C3B48  SEQ
+        ROMPBODY 0A8 000                         * C3B4E
+        ROMPBODY 0A8 000                         * C3B54
+        ROMPBODY 0A8 000                         * C3B5A
+        ROMPBODY 0A8 01F                         * C3B60  key "LIST"
         ENDLENGTH                                * C3B66
 
 * ROMPTR 0A9 025
 * refs (1): C31C5
 MenuPr~1~1~3:
-        CON(5)  DOARRY                           * C3B66  DOARRY
+        CON(5)  DOARRY                           * C3B66  array 10
         LENGTH                                   * C3B6B  length, to #C3BBB
-        NIBHEX  29E2010000A00002007D02001D02003D * C3B70  δ...... .× .Ñ .Ó
-        NIBHEX  02004D0200C90200D908A0F602005D02 * C3B90   .Ô .Π .Ω∡.o .Õ 
-        NIBHEX  000A0BA0810                      * C3BB0  ..°..
+        CON(5)  DOROMP                           * C3B70  element type
+        CON(5)  1                                * C3B75  dimensions
+        CON(5)  10                               * C3B7A
+        ROMPBODY 002 0D7                         * C3B7F  →GROB
+        ROMPBODY 002 0D1                         * C3B85  BLANK
+        ROMPBODY 002 0D3                         * C3B8B  GOR
+        ROMPBODY 002 0D4                         * C3B91  GXOR
+        ROMPBODY 002 09C                         * C3B97  SUB
+        ROMPBODY 002 09D                         * C3B9D  REPL
+        ROMPBODY 0A8 06F                         * C3BA3
+        ROMPBODY 002 0D5                         * C3BA9  LCD→
+        ROMPBODY 002 0A0                         * C3BAF  SIZE
+        ROMPBODY 0AB 018                         * C3BB5  ANIMATE
         ENDLENGTH                                * C3BBB
 
 * ROMPTR 0A9 026
 * refs (1): C31C5
 MenuPr~1~1~4:
-        CON(5)  DOARRY                           * C3BBB  DOARRY
+        CON(5)  DOARRY                           * C3BBB  array 12
         LENGTH                                   * C3BC0  length, to #C3C1C
-        NIBHEX  29E2010000C00002002D02003C0200EC * C3BC5  δ...... .Ò .Ã .Î
-        NIBHEX  0200FC02000D02008D0200BC0200CC02 * C3BE5   .Ï .Ð .Ø .Ë .Ì 
-        NIBHEX  00DC0200AC02006C02007C0          * C3C05  .Í .Ê .Æ .Ç
+        CON(5)  DOROMP                           * C3BC5  element type
+        CON(5)  1                                * C3BCA  dimensions
+        CON(5)  12                               * C3BCF
+        ROMPBODY 002 0D2                         * C3BD4  PICT
+        ROMPBODY 002 0C3                         * C3BDA  PDIM
+        ROMPBODY 002 0CE                         * C3BE0  LINE
+        ROMPBODY 002 0CF                         * C3BE6  TLINE
+        ROMPBODY 002 0D0                         * C3BEC  BOX
+        ROMPBODY 002 0D8                         * C3BF2  ARC
+        ROMPBODY 002 0CB                         * C3BF8  PIXON
+        ROMPBODY 002 0CC                         * C3BFE  PIXOFF
+        ROMPBODY 002 0CD                         * C3C04  PIX?
+        ROMPBODY 002 0CA                         * C3C0A  PVIEW
+        ROMPBODY 002 0C6                         * C3C10  PX→C
+        ROMPBODY 002 0C7                         * C3C16  C→PX
         ENDLENGTH                                * C3C1C
 
 * ROMPTR 0A9 027
 * refs (1): C31C5
 MenuPr~1~1~5:
-        CON(5)  DOARRY                           * C3C1C  DOARRY
+        CON(5)  DOARRY                           * C3C1C  array 7
         LENGTH                                   * C3C21  length, to #C3C5F
-        NIBHEX  29E201000070000BA0A50BA0B50BA0C5 * C3C26  δ......°.Z°.[°.\
-        NIBHEX  0200A71200930200730007C10        * C3C46   .z!.9 .7.p.
+        CON(5)  DOROMP                           * C3C26  element type
+        CON(5)  1                                * C3C2B  dimensions
+        CON(5)  7                                * C3C30
+        ROMPBODY 0AB 05A                         * C3C35  INFORM
+        ROMPBODY 0AB 05B                         * C3C3B  NOVAL
+        ROMPBODY 0AB 05C                         * C3C41  CHOOSE
+        ROMPBODY 002 17A                         * C3C47  INPUT
+        ROMPBODY 002 039                         * C3C4D  KEY
+        ROMPBODY 002 037                         * C3C53  WAIT
+        ROMPBODY 700 01C                         * C3C59  PROMPT
         ENDLENGTH                                * C3C5F
 
 * ROMPTR 0A9 028
 * refs (1): C31C5
 MenuPr~1~1~6:
-        CON(5)  DOARRY                           * C3C5F  DOARRY
+        CON(5)  DOARRY                           * C3C5F  array 7
         LENGTH                                   * C3C64  length, to #C3CA2
-        NIBHEX  29E201000070000200AC02009D08A007 * C3C69  δ...... .Ê .Ù∡.p
-        NIBHEX  0200230200330BA0D50200430        * C3C89   .2 .3°.] .4
+        CON(5)  DOROMP                           * C3C69  element type
+        CON(5)  1                                * C3C6E  dimensions
+        CON(5)  7                                * C3C73
+        ROMPBODY 002 0CA                         * C3C78  PVIEW
+        ROMPBODY 002 0D9                         * C3C7E  TEXT
+        ROMPBODY 0A8 070                         * C3C84
+        ROMPBODY 002 032                         * C3C8A  DISP
+        ROMPBODY 002 033                         * C3C90  FREEZE
+        ROMPBODY 0AB 05D                         * C3C96  MSGBOX
+        ROMPBODY 002 034                         * C3C9C  BEEP
         ENDLENGTH                                * C3CA2
 
 * ROMPTR 0A9 029
 * refs (1): C31C5
 MenuPr~1~1~7:
-        CON(5)  DOARRY                           * C3CA2  DOARRY
+        CON(5)  DOARRY                           * C3CA2  array 7
         LENGTH                                   * C3CA7  length, to #C3CE5
-        NIBHEX  29E2010000700008A00208A01208A022 * C3CAC  δ......∡. ∡.!∡."
-        NIBHEX  08A0320007E00200820200920        * C3CCC  ∡.#.p. .( .)
+        CON(5)  DOROMP                           * C3CAC  element type
+        CON(5)  1                                * C3CB1  dimensions
+        CON(5)  7                                * C3CB6
+        ROMPBODY 0A8 020                         * C3CBB  key "DBUG"
+        ROMPBODY 0A8 021                         * C3CC1  key "SST"
+        ROMPBODY 0A8 022                         * C3CC7  key "SST↓"
+        ROMPBODY 0A8 023                         * C3CCD  key "NEXT"
+        ROMPBODY 700 00E                         * C3CD3  HALT
+        ROMPBODY 002 028                         * C3CD9  KILL
+        ROMPBODY 002 029                         * C3CDF  OFF
         ENDLENGTH                                * C3CE5
 
 * ROMPTR 0A9 02A
@@ -464,144 +792,287 @@ ROMP_0A9_03A:
 * ROMPTR 0A9 03B
 * refs (1): C31C5
 ROMP_0A9_03B:
-        CON(5)  DOARRY                           * C3DA0  DOARRY
+        CON(5)  DOARRY                           * C3DA0  array 5
         LENGTH                                   * C3DA5  length, to #C3DD7
-        NIBHEX  29E201000050000200B00200E00200C0 * C3DAA  δ...... .. .. ..
-        NIBHEX  0200F00200D00                    * C3DCA   .. ..
+        CON(5)  DOROMP                           * C3DAA  element type
+        CON(5)  1                                * C3DAF  dimensions
+        CON(5)  5                                * C3DB4
+        ROMPBODY 002 00B                         * C3DB9  CONVERT
+        ROMPBODY 002 00E                         * C3DBF  UBASE
+        ROMPBODY 002 00C                         * C3DC5  UVAL
+        ROMPBODY 002 00F                         * C3DCB  UFACT
+        ROMPBODY 002 00D                         * C3DD1  →UNIT
         ENDLENGTH                                * C3DD7
 
 * ROMPTR 0A9 03C
 * refs (1): C31C5
 ROMP_0A9_03C:
-        CON(5)  DOARRY                           * C3DD7  DOARRY
+        CON(5)  DOARRY                           * C3DD7  array 6
         LENGTH                                   * C3DDC  length, to #C3E14
-        NIBHEX  29E201000060000007D0000781000720 * C3DE1  δ.......p..p..p.
-        NIBHEX  00073008A00008A0520              * C3E01  .p.∡..∡.%
+        CON(5)  DOROMP                           * C3DE1  element type
+        CON(5)  1                                * C3DE6  dimensions
+        CON(5)  6                                * C3DEB
+        ROMPBODY 700 00D                         * C3DF0  IFERR
+        ROMPBODY 700 018                         * C3DF6  xERRTHEN
+        ROMPBODY 700 002                         * C3DFC  ELSE
+        ROMPBODY 700 003                         * C3E02  END
+        ROMPBODY 0A8 000                         * C3E08
+        ROMPBODY 0A8 025                         * C3E0E  key "ERROR"
         ENDLENGTH                                * C3E14
 
 * ROMPTR 0A9 03D
 * refs (1): C31C5
 ROMP_0A9_03D:
-        CON(5)  DOARRY                           * C3E14  DOARRY
+        CON(5)  DOARRY                           * C3E14  array 6
         LENGTH                                   * C3E19  length, to #C3E51
-        NIBHEX  29E201000060000200A20200C20200D2 * C3E1E  δ...... .* ., .-
-        NIBHEX  0200B202006308A0420              * C3E3E   .+ .6∡.$
+        CON(5)  DOROMP                           * C3E1E  element type
+        CON(5)  1                                * C3E23  dimensions
+        CON(5)  6                                * C3E28
+        ROMPBODY 002 02A                         * C3E2D  DOERR
+        ROMPBODY 002 02C                         * C3E33  ERRN
+        ROMPBODY 002 02D                         * C3E39  ERRM
+        ROMPBODY 002 02B                         * C3E3F  ERR0
+        ROMPBODY 002 036                         * C3E45  LASTARG
+        ROMPBODY 0A8 024                         * C3E4B  key "IFERR"
         ENDLENGTH                                * C3E51
 
 * ROMPTR 0A9 03E
 * refs (1): C31C5
 ROMP_0A9_03E:
-        CON(5)  DOARRY                           * C3E51  DOARRY
+        CON(5)  DOARRY                           * C3E51  array 10
         LENGTH                                   * C3E56  length, to #C3EA6
-        NIBHEX  29E2010000A0000200C90200D902001A * C3E5B  δ...... .Π .Ω .¡
-        NIBHEX  02000A02004A02005A02009A02002A0B * C3E7B   .. .¤ .¥ .© .¢°
-        NIBHEX  A0060BA0160                      * C3E9B  .`°.a
+        CON(5)  DOROMP                           * C3E5B  element type
+        CON(5)  1                                * C3E60  dimensions
+        CON(5)  10                               * C3E65
+        ROMPBODY 002 09C                         * C3E6A  SUB
+        ROMPBODY 002 09D                         * C3E70  REPL
+        ROMPBODY 002 0A1                         * C3E76  POS
+        ROMPBODY 002 0A0                         * C3E7C  SIZE
+        ROMPBODY 002 0A4                         * C3E82  NUM
+        ROMPBODY 002 0A5                         * C3E88  CHR
+        ROMPBODY 002 0A9                         * C3E8E  OBJ→
+        ROMPBODY 002 0A2                         * C3E94  →STR
+        ROMPBODY 0AB 060                         * C3E9A  HEAD
+        ROMPBODY 0AB 061                         * C3EA0  TAIL
         ENDLENGTH                                * C3EA6
 
 * ROMPTR 0A9 03F
 * refs (1): C31C5
 ROMP_0A9_03F:
-        CON(5)  DOARRY                           * C3EA6  DOARRY
+        CON(5)  DOARRY                           * C3EA6  array 6
         LENGTH                                   * C3EAB  length, to #C3EE3
-        NIBHEX  29E2010000600008A06208A07208A082 * C3EB0  δ......∡.&∡.'∡.(
-        NIBHEX  08A09208A0A208A0B20              * C3ED0  ∡.)∡.*∡.+
+        CON(5)  DOROMP                           * C3EB0  element type
+        CON(5)  1                                * C3EB5  dimensions
+        CON(5)  6                                * C3EBA
+        ROMPBODY 0A8 026                         * C3EBF  key "FMT"
+        ROMPBODY 0A8 027                         * C3EC5  key "ANGLE"
+        ROMPBODY 0A8 028                         * C3ECB  key "FLAG"
+        ROMPBODY 0A8 029                         * C3ED1  key "KEYS"
+        ROMPBODY 0A8 02A                         * C3ED7  key "MENU"
+        ROMPBODY 0A8 02B                         * C3EDD  key "MISC"
         ENDLENGTH                                * C3EE3
 
 * ROMPTR 0A9 040
 * refs (1): C31C5
 ROMP_0A9_040:
-        CON(5)  DOARRY                           * C3EE3  DOARRY
+        CON(5)  DOARRY                           * C3EE3  array 12
         LENGTH                                   * C3EE8  length, to #C3F44
-        NIBHEX  29E2010000C00008A0D208A0E208A0F2 * C3EED  δ......∡.-∡..∡./
-        NIBHEX  08A00308A01308A02308A00008A00008 * C3F0D  ∡.0∡.1∡.2∡..∡..∡
-        NIBHEX  A00008A00008A00008A0C20          * C3F2D  ..∡..∡..∡.,
+        CON(5)  DOROMP                           * C3EED  element type
+        CON(5)  1                                * C3EF2  dimensions
+        CON(5)  12                               * C3EF7
+        ROMPBODY 0A8 02D                         * C3EFC  key "STD"
+        ROMPBODY 0A8 02E                         * C3F02  key "FIX"
+        ROMPBODY 0A8 02F                         * C3F08  key "SCI"
+        ROMPBODY 0A8 030                         * C3F0E  key "ENG"
+        ROMPBODY 0A8 031                         * C3F14  key "FM,"
+        ROMPBODY 0A8 032                         * C3F1A  key "ML"
+        ROMPBODY 0A8 000                         * C3F20
+        ROMPBODY 0A8 000                         * C3F26
+        ROMPBODY 0A8 000                         * C3F2C
+        ROMPBODY 0A8 000                         * C3F32
+        ROMPBODY 0A8 000                         * C3F38
+        ROMPBODY 0A8 02C                         * C3F3E  key "MODES"
         ENDLENGTH                                * C3F44
 
 * ROMPTR 0A9 041
 * refs (1): C31C5
 ROMP_0A9_041:
-        CON(5)  DOARRY                           * C3F44  DOARRY
+        CON(5)  DOARRY                           * C3F44  array 12
         LENGTH                                   * C3F49  length, to #C3FA5
-        NIBHEX  29E2010000C00008A03308A04308A053 * C3F4E  δ......∡.3∡.4∡.5
-        NIBHEX  08A05008A06008A07008A00008A00008 * C3F6E  ∡..∡..∡..∡..∡..∡
-        NIBHEX  A00008A00008A00008A0C20          * C3F8E  ..∡..∡..∡.,
+        CON(5)  DOROMP                           * C3F4E  element type
+        CON(5)  1                                * C3F53  dimensions
+        CON(5)  12                               * C3F58
+        ROMPBODY 0A8 033                         * C3F5D  key "DEG"
+        ROMPBODY 0A8 034                         * C3F63
+        ROMPBODY 0A8 035                         * C3F69
+        ROMPBODY 0A8 005                         * C3F6F  key "RECT"
+        ROMPBODY 0A8 006                         * C3F75  key "CYLIN"
+        ROMPBODY 0A8 007                         * C3F7B  key "SPHERE"
+        ROMPBODY 0A8 000                         * C3F81
+        ROMPBODY 0A8 000                         * C3F87
+        ROMPBODY 0A8 000                         * C3F8D
+        ROMPBODY 0A8 000                         * C3F93
+        ROMPBODY 0A8 000                         * C3F99
+        ROMPBODY 0A8 02C                         * C3F9F  key "MODES"
         ENDLENGTH                                * C3FA5
 
 * ROMPTR 0A9 042
 * refs (1): C31C5
 ROMP_0A9_042:
-        CON(5)  DOARRY                           * C3FA5  DOARRY
+        CON(5)  DOARRY                           * C3FA5  array 12
         LENGTH                                   * C3FAA  length, to #C4006
-        NIBHEX  29E2010000C000020038020048020058 * C3FAF  δ...... .√ .∫ .Σ
-        NIBHEX  0200680200E80200F802007902006908 * C3FCF   .▶ .← .↓ .ρ .λ∡
-        NIBHEX  A06308A00008A00008A0C20          * C3FEF  .6∡..∡..∡.,
+        CON(5)  DOROMP                           * C3FAF  element type
+        CON(5)  1                                * C3FB4  dimensions
+        CON(5)  12                               * C3FB9
+        ROMPBODY 002 083                         * C3FBE  SF
+        ROMPBODY 002 084                         * C3FC4  CF
+        ROMPBODY 002 085                         * C3FCA  FS?
+        ROMPBODY 002 086                         * C3FD0  FC?
+        ROMPBODY 002 08E                         * C3FD6  FS?C
+        ROMPBODY 002 08F                         * C3FDC  FC?C
+        ROMPBODY 002 097                         * C3FE2  STOF
+        ROMPBODY 002 096                         * C3FE8  RCLF
+        ROMPBODY 0A8 036                         * C3FEE  key "RESET"
+        ROMPBODY 0A8 000                         * C3FF4
+        ROMPBODY 0A8 000                         * C3FFA
+        ROMPBODY 0A8 02C                         * C4000  key "MODES"
         ENDLENGTH                                * C4006
 
 * ROMPTR 0A9 043
 * refs (1): C31C5
 ROMP_0A9_043:
-        CON(5)  DOARRY                           * C4006  DOARRY
+        CON(5)  DOARRY                           * C4006  array 6
         LENGTH                                   * C400B  length, to #C4043
-        NIBHEX  29E201000060000200B71200C71200E7 * C4010  δ...... .{!.|!.~
-        NIBHEX  1200D718A00008A0C20              * C4030  !.}ā..∡.,
+        CON(5)  DOROMP                           * C4010  element type
+        CON(5)  1                                * C4015  dimensions
+        CON(5)  6                                * C401A
+        ROMPBODY 002 17B                         * C401F  ASN
+        ROMPBODY 002 17C                         * C4025  STOKEYS
+        ROMPBODY 002 17E                         * C402B  RCLKEYS
+        ROMPBODY 002 17D                         * C4031  DELKEYS
+        ROMPBODY 0A8 000                         * C4037
+        ROMPBODY 0A8 02C                         * C403D  key "MODES"
         ENDLENGTH                                * C4043
 
 * ROMPTR 0A9 044
 * refs (1): C31C5
 ROMP_0A9_044:
-        CON(5)  DOARRY                           * C4043  DOARRY
+        CON(5)  DOARRY                           * C4043  array 6
         LENGTH                                   * C4048  length, to #C4080
-        NIBHEX  29E201000060000200C518A0730200B5 * C404D  δ...... .\ā.7 .[
-        NIBHEX  1200D518A00008A0C20              * C406D  !.]ā..∡.,
+        CON(5)  DOROMP                           * C404D  element type
+        CON(5)  1                                * C4052  dimensions
+        CON(5)  6                                * C4057
+        ROMPBODY 002 15C                         * C405C  MENU
+        ROMPBODY 0A8 037                         * C4062
+        ROMPBODY 002 15B                         * C4068  TMENU
+        ROMPBODY 002 15D                         * C406E  RCLMENU
+        ROMPBODY 0A8 000                         * C4074
+        ROMPBODY 0A8 02C                         * C407A  key "MODES"
         ENDLENGTH                                * C4080
 
 * ROMPTR 0A9 045
 * refs (1): C31C5
 ROMP_0A9_045:
-        CON(5)  DOARRY                           * C4080  DOARRY
+        CON(5)  DOARRY                           * C4080  array 12
         LENGTH                                   * C4085  length, to #C40E1
-        NIBHEX  29E2010000C00008A08308A09308A0A3 * C408A  δ......∡.8∡.9∡.:
-        NIBHEX  08A0B308A0C308A0D308A0E308A00008 * C40AA  ∡.;∡.<∡.=∡.>∡..∡
-        NIBHEX  A00008A00008A00008A0C20          * C40CA  ..∡..∡..∡.,
+        CON(5)  DOROMP                           * C408A  element type
+        CON(5)  1                                * C408F  dimensions
+        CON(5)  12                               * C4094
+        ROMPBODY 0A8 038                         * C4099  key "BEEP"
+        ROMPBODY 0A8 039                         * C409F  key "CLK"
+        ROMPBODY 0A8 03A                         * C40A5  key "SYM"
+        ROMPBODY 0A8 03B                         * C40AB  key "STK"
+        ROMPBODY 0A8 03C                         * C40B1  key "ARG"
+        ROMPBODY 0A8 03D                         * C40B7  key "CMD"
+        ROMPBODY 0A8 03E                         * C40BD  key "INFO?"
+        ROMPBODY 0A8 000                         * C40C3
+        ROMPBODY 0A8 000                         * C40C9
+        ROMPBODY 0A8 000                         * C40CF
+        ROMPBODY 0A8 000                         * C40D5
+        ROMPBODY 0A8 02C                         * C40DB  key "MODES"
         ENDLENGTH                                * C40E1
 
 * ROMPTR 0A9 046
 * refs (1): C31C5
 ROMP_0A9_046:
-        CON(5)  DOARRY                           * C40E1  DOARRY
+        CON(5)  DOARRY                           * C40E1  array 8
         LENGTH                                   * C40E6  length, to #C412A
-        NIBHEX  29E20100008000020085120062020072 * C40EB  δ...... .X!.& .'
-        NIBHEX  08A00008A0F308A0040200061200161  * C410B  ∡..∡.?∡.@ .`!.a
+        CON(5)  DOROMP                           * C40EB  element type
+        CON(5)  1                                * C40F0  dimensions
+        CON(5)  8                                * C40F5
+        ROMPBODY 002 158                         * C40FA  MEM
+        ROMPBODY 002 026                         * C4100  BYTES
+        ROMPBODY 002 027                         * C4106  NEWOB
+        ROMPBODY 0A8 000                         * C410C
+        ROMPBODY 0A8 03F                         * C4112  key "DIR"
+        ROMPBODY 0A8 040                         * C4118  key "ARITH"
+        ROMPBODY 002 160                         * C411E  ARCHIVE
+        ROMPBODY 002 161                         * C4124  RESTORE
         ENDLENGTH                                * C412A
 
 * ROMPTR 0A9 047
 * refs (1): C31C5
 ROMP_0A9_047:
-        CON(5)  DOARRY                           * C412A  DOARRY
+        CON(5)  DOARRY                           * C412A  array 12
         LENGTH                                   * C412F  length, to #C418B
-        NIBHEX  29E2010000C0000200120200020200F5 * C4134  δ...... .! .  ._
-        NIBHEX  12004202005202009518A00008A00008 * C4154  !.$ .% .Yā..∡..∡
-        NIBHEX  A00008A00008A00008A0140          * C4174  ..∡..∡..∡.A
+        CON(5)  DOROMP                           * C4134  element type
+        CON(5)  1                                * C4139  dimensions
+        CON(5)  12                               * C413E
+        ROMPBODY 002 021                         * C4143  PATH
+        ROMPBODY 002 020                         * C4149  CRDIR
+        ROMPBODY 002 15F                         * C414F  PGDIR
+        ROMPBODY 002 024                         * C4155  VARS
+        ROMPBODY 002 025                         * C415B  TVARS
+        ROMPBODY 002 159                         * C4161  ORDER
+        ROMPBODY 0A8 000                         * C4167
+        ROMPBODY 0A8 000                         * C416D
+        ROMPBODY 0A8 000                         * C4173
+        ROMPBODY 0A8 000                         * C4179
+        ROMPBODY 0A8 000                         * C417F
+        ROMPBODY 0A8 041                         * C4185  key "MEM"
         ENDLENGTH                                * C418B
 
 * ROMPTR 0A9 048
 * refs (1): C31C5
 ROMP_0A9_048:
-        CON(5)  DOARRY                           * C418B  DOARRY
+        CON(5)  DOARRY                           * C418B  array 12
         LENGTH                                   * C4190  length, to #C41EC
-        NIBHEX  29E2010000C0000200741200841200A4 * C4195  δ...... .G!.H!.J
-        NIBHEX  1200941200B41200C412004412005412 * C41B5  !.I!.K!.L!.D!.E!
-        NIBHEX  006418A00008A00008A0140          * C41D5  .Fā..∡..∡.A
+        CON(5)  DOROMP                           * C4195  element type
+        CON(5)  1                                * C419A  dimensions
+        CON(5)  12                               * C419F
+        ROMPBODY 002 147                         * C41A4  STO+
+        ROMPBODY 002 148                         * C41AA  STO-
+        ROMPBODY 002 14A                         * C41B0  STO*
+        ROMPBODY 002 149                         * C41B6  STO/
+        ROMPBODY 002 14B                         * C41BC  INCR
+        ROMPBODY 002 14C                         * C41C2  DECR
+        ROMPBODY 002 144                         * C41C8  SINV
+        ROMPBODY 002 145                         * C41CE  SNEG
+        ROMPBODY 002 146                         * C41D4  SCONJ
+        ROMPBODY 0A8 000                         * C41DA
+        ROMPBODY 0A8 000                         * C41E0
+        ROMPBODY 0A8 041                         * C41E6  key "MEM"
         ENDLENGTH                                * C41EC
 
 * ROMPTR 0A9 049
 * refs (1): C31C5
 ROMP_0A9_049:
-        CON(5)  DOARRY                           * C41EC  DOARRY
+        CON(5)  DOARRY                           * C41EC  array 11
         LENGTH                                   * C41F1  length, to #C4247
-        NIBHEX  29E2010000B000020031120021120081 * C41F6  δ...... ..!..!..
-        NIBHEX  1200911200711200411200D01200E012 * C4216  !..!..!..!..!..!
-        NIBHEX  006112001118A0240                * C4236  ..!..ā.B
+        CON(5)  DOROMP                           * C41F6  element type
+        CON(5)  1                                * C41FB  dimensions
+        CON(5)  11                               * C4200
+        ROMPBODY 002 113                         * C4205  OVER
+        ROMPBODY 002 112                         * C420B  ROT
+        ROMPBODY 002 118                         * C4211  ROLL
+        ROMPBODY 002 119                         * C4217  ROLLD
+        ROMPBODY 002 117                         * C421D  PICK
+        ROMPBODY 002 114                         * C4223  DEPTH
+        ROMPBODY 002 10D                         * C4229  DUP
+        ROMPBODY 002 10E                         * C422F  DUP2
+        ROMPBODY 002 116                         * C4235  DUPN
+        ROMPBODY 002 111                         * C423B  DROP2
+        ROMPBODY 0A8 042                         * C4241  key "DRPN"
         ENDLENGTH                                * C4247
 
 * ROMPTR 0A9 04A
@@ -612,47 +1083,87 @@ ROMP_0A9_04A:
 * ROMPTR 0A9 04B
 * refs (1): C31C5
 ROMP_0A9_04B:
-        CON(5)  DOARRY                           * C4252  DOARRY
+        CON(5)  DOARRY                           * C4252  array 6
         LENGTH                                   * C4257  length, to #C428F
-        NIBHEX  29E2010000600008A0440200BF08A010 * C425C  δ......∡.D .û∡..
-        NIBHEX  08A00008A00008A0340              * C427C  ∡..∡..∡.C
+        CON(5)  DOROMP                           * C425C  element type
+        CON(5)  1                                * C4261  dimensions
+        CON(5)  6                                * C4266
+        ROMPBODY 0A8 044                         * C426B  key "SOLVR"
+        ROMPBODY 002 0FB                         * C4271  ROOT
+        ROMPBODY 0A8 001                         * C4277
+        ROMPBODY 0A8 000                         * C427D
+        ROMPBODY 0A8 000                         * C4283
+        ROMPBODY 0A8 043                         * C4289  key "SOLVE"
         ENDLENGTH                                * C428F
 
 * ROMPTR 0A9 04C
 * refs (1): C31C5
 ROMP_0A9_04C:
-        CON(5)  DOARRY                           * C428F  DOARRY
+        CON(5)  DOARRY                           * C428F  array 12
         LENGTH                                   * C4294  length, to #C42F0
-        NIBHEX  29E2010000C0000BA0B20BA0E20BA0C2 * C4299  δ......°.+°..°.,
-        NIBHEX  0BA0F20BA0D20BA00308A00008A00008 * C42B9  °./°.-°.0∡..∡..∡
-        NIBHEX  A00008A00008A00008A0340          * C42D9  ..∡..∡..∡.C
+        CON(5)  DOROMP                           * C4299  element type
+        CON(5)  1                                * C429E  dimensions
+        CON(5)  12                               * C42A3
+        ROMPBODY 0AB 02B                         * C42A8  RKF
+        ROMPBODY 0AB 02E                         * C42AE  RRK
+        ROMPBODY 0AB 02C                         * C42B4  RKFSTEP
+        ROMPBODY 0AB 02F                         * C42BA  RRKSTEP
+        ROMPBODY 0AB 02D                         * C42C0  RKFERR
+        ROMPBODY 0AB 030                         * C42C6  RSBERR
+        ROMPBODY 0A8 000                         * C42CC
+        ROMPBODY 0A8 000                         * C42D2
+        ROMPBODY 0A8 000                         * C42D8
+        ROMPBODY 0A8 000                         * C42DE
+        ROMPBODY 0A8 000                         * C42E4
+        ROMPBODY 0A8 043                         * C42EA  key "SOLVE"
         ENDLENGTH                                * C42F0
 
 * ROMPTR 0A9 04D
 * refs (1): C31C5
 ROMP_0A9_04D:
-        CON(5)  DOARRY                           * C42F0  DOARRY
+        CON(5)  DOARRY                           * C42F0  array 6
         LENGTH                                   * C42F5  length, to #C432D
-        NIBHEX  29E201000060000BA0250BA0350BA045 * C42FA  δ......°.R°.S°.T
-        NIBHEX  08A00008A00008A0340              * C431A  ∡..∡..∡.C
+        CON(5)  DOROMP                           * C42FA  element type
+        CON(5)  1                                * C42FF  dimensions
+        CON(5)  6                                * C4304
+        ROMPBODY 0AB 052                         * C4309  PROOT
+        ROMPBODY 0AB 053                         * C430F  PCOEF
+        ROMPBODY 0AB 054                         * C4315  PEVAL
+        ROMPBODY 0A8 000                         * C431B
+        ROMPBODY 0A8 000                         * C4321
+        ROMPBODY 0A8 043                         * C4327  key "SOLVE"
         ENDLENGTH                                * C432D
 
 * ROMPTR 0A9 04E
 * refs (1): C31C5
 ROMP_0A9_04E:
-        CON(5)  DOARRY                           * C432D  DOARRY
+        CON(5)  DOARRY                           * C432D  array 6
         LENGTH                                   * C4332  length, to #C436A
-        NIBHEX  29E201000060000200840BA0630200B7 * C4337  δ...... .H°.6 .{
-        NIBHEX  08A00008A00008A0340              * C4357  ∡..∡..∡.C
+        CON(5)  DOROMP                           * C4337  element type
+        CON(5)  1                                * C433C  dimensions
+        CON(5)  6                                * C4341
+        ROMPBODY 002 048                         * C4346  /
+        ROMPBODY 0AB 036                         * C434C  LSQ
+        ROMPBODY 002 07B                         * C4352  RSD
+        ROMPBODY 0A8 000                         * C4358
+        ROMPBODY 0A8 000                         * C435E
+        ROMPBODY 0A8 043                         * C4364  key "SOLVE"
         ENDLENGTH                                * C436A
 
 * ROMPTR 0A9 04F
 * refs (1): C31C5
 ROMP_0A9_04F:
-        CON(5)  DOARRY                           * C436A  DOARRY
+        CON(5)  DOARRY                           * C436A  array 6
         LENGTH                                   * C436F  length, to #C43A7
-        NIBHEX  29E2010000600008A0540BA0850BA095 * C4374  δ......∡.E°.X°.Y
-        NIBHEX  08A08408A00008A0340              * C4394  ∡.H∡..∡.C
+        CON(5)  DOROMP                           * C4374  element type
+        CON(5)  1                                * C4379  dimensions
+        CON(5)  6                                * C437E
+        ROMPBODY 0A8 045                         * C4383  key "SOLVR"
+        ROMPBODY 0AB 058                         * C4389  TVMROOT
+        ROMPBODY 0AB 059                         * C438F  AMORT
+        ROMPBODY 0A8 048                         * C4395  key "BEG"
+        ROMPBODY 0A8 000                         * C439B
+        ROMPBODY 0A8 043                         * C43A1  key "SOLVE"
         ENDLENGTH                                * C43A7
 
 * ROMPTR 0A9 050
@@ -678,10 +1189,17 @@ ROMP_0A9_053:
 * ROMPTR 0A9 054
 * refs (1): C31C5
 ROMP_0A9_054:
-        CON(5)  DOARRY                           * C43D3  DOARRY
+        CON(5)  DOARRY                           * C43D3  array 6
         LENGTH                                   * C43D8  length, to #C4410
-        NIBHEX  29E2010000600008A04508A05508A010 * C43DD  δ......∡.T∡.U∡..
-        NIBHEX  08A00008A00008A0050              * C43FD  ∡..∡..∡.P
+        CON(5)  DOROMP                           * C43DD  element type
+        CON(5)  1                                * C43E2  dimensions
+        CON(5)  6                                * C43E7
+        ROMPBODY 0A8 054                         * C43EC  key "PTYPE"
+        ROMPBODY 0A8 055                         * C43F2  key "VPAR"
+        ROMPBODY 0A8 001                         * C43F8
+        ROMPBODY 0A8 000                         * C43FE
+        ROMPBODY 0A8 000                         * C4404
+        ROMPBODY 0A8 050                         * C440A  key "PLOT"
         ENDLENGTH                                * C4410
 
 * ROMPTR 0A9 055
@@ -697,10 +1215,17 @@ ROMP_0A9_056:
 * ROMPTR 0A9 057
 * refs (1): C31C5
 ROMP_0A9_057:
-        CON(5)  DOARRY                           * C4426  DOARRY
+        CON(5)  DOARRY                           * C4426  array 6
         LENGTH                                   * C442B  length, to #C4463
-        NIBHEX  29E2010000600008A09508A0A508A0B5 * C4430  δ......∡.Y∡.Z∡.[
-        NIBHEX  08A00008A00008A0050              * C4450  ∡..∡..∡.P
+        CON(5)  DOROMP                           * C4430  element type
+        CON(5)  1                                * C4435  dimensions
+        CON(5)  6                                * C443A
+        ROMPBODY 0A8 059                         * C443F  key "PTYPE"
+        ROMPBODY 0A8 05A                         * C4445  key "DATA"
+        ROMPBODY 0A8 05B                         * C444B  key "ΣPAR"
+        ROMPBODY 0A8 000                         * C4451
+        ROMPBODY 0A8 000                         * C4457
+        ROMPBODY 0A8 050                         * C445D  key "PLOT"
         ENDLENGTH                                * C4463
 
 * ROMPTR 0A9 058
@@ -721,68 +1246,134 @@ ROMP_0A9_05A:
 * ROMPTR 0A9 05B
 * refs (1): C31C5
 ROMP_0A9_05B:
-        CON(5)  DOARRY                           * C4484  DOARRY
+        CON(5)  DOARRY                           * C4484  array 6
         LENGTH                                   * C4489  length, to #C44C1
-        NIBHEX  29E201000060000200E11200F11200C1 * C448E  δ...... ..!..!..
-        NIBHEX  18A03008A00008A0D40              * C44AE  ā..∡..∡.M
+        CON(5)  DOROMP                           * C448E  element type
+        CON(5)  1                                * C4493  dimensions
+        CON(5)  6                                * C4498
+        ROMPBODY 002 11E                         * C449D  Σ+
+        ROMPBODY 002 11F                         * C44A3  Σ-
+        ROMPBODY 002 11C                         * C44A9  CLΣ
+        ROMPBODY 0A8 003                         * C44AF
+        ROMPBODY 0A8 000                         * C44B5
+        ROMPBODY 0A8 04D                         * C44BB  key "STAT"
         ENDLENGTH                                * C44C1
 
 * ROMPTR 0A9 05C
 * refs (1): C31C5
 ROMP_0A9_05C:
-        CON(5)  DOARRY                           * C44C1  DOARRY
+        CON(5)  DOARRY                           * C44C1  array 6
         LENGTH                                   * C44C6  length, to #C44FE
-        NIBHEX  29E2010000600008A00608A01608A026 * C44CB  δ......∡.`∡.a∡.b
-        NIBHEX  08A00008A00008A0F40              * C44EB  ∡..∡..∡.O
+        CON(5)  DOROMP                           * C44CB  element type
+        CON(5)  1                                * C44D0  dimensions
+        CON(5)  6                                * C44D5
+        ROMPBODY 0A8 060                         * C44DA  key "AXES"
+        ROMPBODY 0A8 061                         * C44E0  key "CNCT"
+        ROMPBODY 0A8 062                         * C44E6  key "SIMU"
+        ROMPBODY 0A8 000                         * C44EC
+        ROMPBODY 0A8 000                         * C44F2
+        ROMPBODY 0A8 04F                         * C44F8  key "PLOT"
         ENDLENGTH                                * C44FE
 
 * ROMPTR 0A9 05D
 * refs (1): C31C5
 ROMP_0A9_05D:
-        CON(5)  DOARRY                           * C44FE  DOARRY
+        CON(5)  DOARRY                           * C44FE  array 13
         LENGTH                                   * C4503  length, to #C4565
-        NIBHEX  29E2010000D0000200D41200E4120005 * C4508  δ...... .M!.N!.P
-        NIBHEX  1200151200251200351200901200A012 * C4528  !.Q!.R!.S!..!..!
-        NIBHEX  00701200801200FF0200201200101    * C4548  ..!..!.ÿ ..!..
+        CON(5)  DOROMP                           * C4508  element type
+        CON(5)  1                                * C450D  dimensions
+        CON(5)  13                               * C4512
+        ROMPBODY 002 14D                         * C4517  COLCT
+        ROMPBODY 002 14E                         * C451D  EXPAN
+        ROMPBODY 002 150                         * C4523  ISOL
+        ROMPBODY 002 151                         * C4529  QUAD
+        ROMPBODY 002 152                         * C452F  SHOW
+        ROMPBODY 002 153                         * C4535  TAYLR
+        ROMPBODY 002 109                         * C453B  ↑MATCH
+        ROMPBODY 002 10A                         * C4541  ↓MATCH
+        ROMPBODY 002 107                         * C4547  →Q
+        ROMPBODY 002 108                         * C454D  →Qπ
+        ROMPBODY 002 0FF                         * C4553  |
+        ROMPBODY 002 102                         * C4559  APPLY
+        ROMPBODY 002 101                         * C455F  QUOTE
         ENDLENGTH                                * C4565
 
 * ROMPTR 0A9 05E
 * refs (1): C31C5
 ROMP_0A9_05E:
-        CON(5)  DOARRY                           * C4565  DOARRY
+        CON(5)  DOARRY                           * C4565  array 14
         LENGTH                                   * C456A  length, to #C45D2
-        NIBHEX  29E2010000E000020011020061020001 * C456F  δ...... .. .. ..
-        NIBHEX  02007102002108A0360200F10200E102 * C458F   .. ..∡.c .. .. 
-        NIBHEX  00270200370200470200570200D10200 * C45AF  .r .s .t .u .. .
-        NIBHEX  810                              * C45CF  .
+        CON(5)  DOROMP                           * C456F  element type
+        CON(5)  1                                * C4574  dimensions
+        CON(5)  14                               * C4579
+        ROMPBODY 002 011                         * C457E  DATE
+        ROMPBODY 002 016                         * C4584  →DATE
+        ROMPBODY 002 010                         * C458A  TIME
+        ROMPBODY 002 017                         * C4590  →TIME
+        ROMPBODY 002 012                         * C4596  TICKS
+        ROMPBODY 0A8 063                         * C459C  key "ALRM"
+        ROMPBODY 002 01F                         * C45A2  DATE+
+        ROMPBODY 002 01E                         * C45A8  DDAYS
+        ROMPBODY 002 072                         * C45AE  →HMS
+        ROMPBODY 002 073                         * C45B4  HMS→
+        ROMPBODY 002 074                         * C45BA  HMS+
+        ROMPBODY 002 075                         * C45C0  HMS-
+        ROMPBODY 002 01D                         * C45C6  TSTR
+        ROMPBODY 002 018                         * C45CC  CLKADJ
         ENDLENGTH                                * C45D2
 
 * ROMPTR 0A9 05F
 * refs (1): C31C5
 ROMP_0A9_05F:
-        CON(5)  DOARRY                           * C45D2  DOARRY
+        CON(5)  DOARRY                           * C45D2  array 12
         LENGTH                                   * C45D7  length, to #C4633
-        NIBHEX  29E2010000C000020051020041020091 * C45DC  δ...... .. .. ..
-        NIBHEX  0200A10200C10200B108A00008A00008 * C45FC   .. .. ..∡..∡..∡
-        NIBHEX  A00008A00008A00008A0460          * C461C  ..∡..∡..∡.d
+        CON(5)  DOROMP                           * C45DC  element type
+        CON(5)  1                                * C45E1  dimensions
+        CON(5)  12                               * C45E6
+        ROMPBODY 002 015                         * C45EB  ACK
+        ROMPBODY 002 014                         * C45F1  ACKALL
+        ROMPBODY 002 019                         * C45F7  STOALARM
+        ROMPBODY 002 01A                         * C45FD  RCLALARM
+        ROMPBODY 002 01C                         * C4603  DELALARM
+        ROMPBODY 002 01B                         * C4609  FINDALARM
+        ROMPBODY 0A8 000                         * C460F
+        ROMPBODY 0A8 000                         * C4615
+        ROMPBODY 0A8 000                         * C461B
+        ROMPBODY 0A8 000                         * C4621
+        ROMPBODY 0A8 000                         * C4627
+        ROMPBODY 0A8 064                         * C462D  key "TIME"
         ENDLENGTH                                * C4633
 
 * ROMPTR 0A9 060
 * refs (1): C31C5
 ROMP_0A9_060:
-        CON(5)  DOARRY                           * C4633  DOARRY
+        CON(5)  DOARRY                           * C4633  array 6
         LENGTH                                   * C4638  length, to #C4670
-        NIBHEX  29E2010000600008A05608A06608A076 * C463D  δ......∡.e∡.f∡.g
-        NIBHEX  08A08608A09608A0A60              * C465D  ∡.h∡.i∡.j
+        CON(5)  DOROMP                           * C463D  element type
+        CON(5)  1                                * C4642  dimensions
+        CON(5)  6                                * C4647
+        ROMPBODY 0A8 065                         * C464C  key "DATA"
+        ROMPBODY 0A8 066                         * C4652  key "ΣPAR"
+        ROMPBODY 0A8 067                         * C4658  key "1VAR"
+        ROMPBODY 0A8 068                         * C465E  key "PLOT"
+        ROMPBODY 0A8 069                         * C4664  key "FIT"
+        ROMPBODY 0A8 06A                         * C466A  key "SUMS"
         ENDLENGTH                                * C4670
 
 * ROMPTR 0A9 061
 * refs (1): C31C5
 ROMP_0A9_061:
-        CON(5)  DOARRY                           * C4670  DOARRY
+        CON(5)  DOARRY                           * C4670  array 6
         LENGTH                                   * C4675  length, to #C46AD
-        NIBHEX  29E201000060000200E11200F11200C1 * C467A  δ...... ..!..!..
-        NIBHEX  18A03008A00008A0B60              * C469A  ā..∡..∡.k
+        CON(5)  DOROMP                           * C467A  element type
+        CON(5)  1                                * C467F  dimensions
+        CON(5)  6                                * C4684
+        ROMPBODY 002 11E                         * C4689  Σ+
+        ROMPBODY 002 11F                         * C468F  Σ-
+        ROMPBODY 002 11C                         * C4695  CLΣ
+        ROMPBODY 0A8 003                         * C469B
+        ROMPBODY 0A8 000                         * C46A1
+        ROMPBODY 0A8 06B                         * C46A7  key "STAT"
         ENDLENGTH                                * C46AD
 
 * ROMPTR 0A9 062
@@ -798,59 +1389,121 @@ ROMP_0A9_063:
 * ROMPTR 0A9 064
 * refs (1): C31C5
 ROMP_0A9_064:
-        CON(5)  DOARRY                           * C46C3  DOARRY
+        CON(5)  DOARRY                           * C46C3  array 12
         LENGTH                                   * C46C8  length, to #C4724
-        NIBHEX  29E2010000C0000200C21200921200B2 * C46CD  δ...... .,!.)!.+
-        NIBHEX  1200821200A21200B31200D21BA0820B * C46ED  !.(!.*!.;!.-±.(°
-        NIBHEX  A09208A00008A00008A0B60          * C470D  .)∡..∡..∡.k
+        CON(5)  DOROMP                           * C46CD  element type
+        CON(5)  1                                * C46D2  dimensions
+        CON(5)  12                               * C46D7
+        ROMPBODY 002 12C                         * C46DC  TOT
+        ROMPBODY 002 129                         * C46E2  MEAN
+        ROMPBODY 002 12B                         * C46E8  SDEV
+        ROMPBODY 002 128                         * C46EE  MAXΣ
+        ROMPBODY 002 12A                         * C46F4  MINΣ
+        ROMPBODY 002 13B                         * C46FA  BINS
+        ROMPBODY 002 12D                         * C4700  VAR
+        ROMPBODY 0AB 028                         * C4706  PSDEV
+        ROMPBODY 0AB 029                         * C470C  PVAR
+        ROMPBODY 0A8 000                         * C4712
+        ROMPBODY 0A8 000                         * C4718
+        ROMPBODY 0A8 06B                         * C471E  key "STAT"
         ENDLENGTH                                * C4724
 
 * ROMPTR 0A9 065
 * refs (1): C31C5
 ROMP_0A9_065:
-        CON(5)  DOARRY                           * C4724  DOARRY
+        CON(5)  DOARRY                           * C4724  array 6
         LENGTH                                   * C4729  length, to #C4761
-        NIBHEX  29E2010000600008A0C608A0D608A0E6 * C472E  δ......∡.l∡.m∡.n
-        NIBHEX  08A00008A00008A0B60              * C474E  ∡..∡..∡.k
+        CON(5)  DOROMP                           * C472E  element type
+        CON(5)  1                                * C4733  dimensions
+        CON(5)  6                                * C4738
+        ROMPBODY 0A8 06C                         * C473D
+        ROMPBODY 0A8 06D                         * C4743
+        ROMPBODY 0A8 06E                         * C4749
+        ROMPBODY 0A8 000                         * C474F
+        ROMPBODY 0A8 000                         * C4755
+        ROMPBODY 0A8 06B                         * C475B  key "STAT"
         ENDLENGTH                                * C4761
 
 * ROMPTR 0A9 066
 * refs (1): C31C5
 ROMP_0A9_066:
-        CON(5)  DOARRY                           * C4761  DOARRY
+        CON(5)  DOARRY                           * C4761  array 12
         LENGTH                                   * C4766  length, to #C47C2
-        NIBHEX  29E2010000C0000200A31200E2120013 * C476B  δ...... .:!..!.1
-        NIBHEX  1200031200121200221BA0A208A00008 * C478B  !.0!.!!."±.*∡..∡
-        NIBHEX  A00008A00008A00008A0B60          * C47AB  ..∡..∡..∡.k
+        CON(5)  DOROMP                           * C476B  element type
+        CON(5)  1                                * C4770  dimensions
+        CON(5)  12                               * C4775
+        ROMPBODY 002 13A                         * C477A  ΣLINE
+        ROMPBODY 002 12E                         * C4780  LR
+        ROMPBODY 002 131                         * C4786  PREDX
+        ROMPBODY 002 130                         * C478C  PREDY
+        ROMPBODY 002 121                         * C4792  CORR
+        ROMPBODY 002 122                         * C4798  COV
+        ROMPBODY 0AB 02A                         * C479E  PCOV
+        ROMPBODY 0A8 000                         * C47A4
+        ROMPBODY 0A8 000                         * C47AA
+        ROMPBODY 0A8 000                         * C47B0
+        ROMPBODY 0A8 000                         * C47B6
+        ROMPBODY 0A8 06B                         * C47BC  key "STAT"
         ENDLENGTH                                * C47C2
 
 * ROMPTR 0A9 067
 * refs (1): C31C5
 ROMP_0A9_067:
-        CON(5)  DOARRY                           * C47C2  DOARRY
+        CON(5)  DOARRY                           * C47C2  array 12
         LENGTH                                   * C47C7  length, to #C4823
-        NIBHEX  29E2010000C000020032120042120052 * C47CC  δ...... .#!.$!.%
-        NIBHEX  12006212007212000218A00008A00008 * C47EC  !.&!.'!. ā..∡..∡
-        NIBHEX  A00008A00008A00008A0B60          * C480C  ..∡..∡..∡.k
+        CON(5)  DOROMP                           * C47CC  element type
+        CON(5)  1                                * C47D1  dimensions
+        CON(5)  12                               * C47D6
+        ROMPBODY 002 123                         * C47DB  ΣX
+        ROMPBODY 002 124                         * C47E1  ΣY
+        ROMPBODY 002 125                         * C47E7  ΣX^2
+        ROMPBODY 002 126                         * C47ED  ΣY^2
+        ROMPBODY 002 127                         * C47F3  ΣX*Y
+        ROMPBODY 002 120                         * C47F9  NΣ
+        ROMPBODY 0A8 000                         * C47FF
+        ROMPBODY 0A8 000                         * C4805
+        ROMPBODY 0A8 000                         * C480B
+        ROMPBODY 0A8 000                         * C4811
+        ROMPBODY 0A8 000                         * C4817
+        ROMPBODY 0A8 06B                         * C481D  key "STAT"
         ENDLENGTH                                * C4823
 
 * ROMPTR 0A9 068
 * refs (1): C31C5
 ROMP_0A9_068:
-        CON(5)  DOARRY                           * C4823  DOARRY
+        CON(5)  DOARRY                           * C4823  array 12
         LENGTH                                   * C4828  length, to #C4884
-        NIBHEX  29E2010000C00008A03708A04708A057 * C482D  δ......∡.s∡.t∡.u
-        NIBHEX  02000F0200B61200E618A06702005712 * C484D   .ð .k!.nā.v .u!
-        NIBHEX  00D61200A61BA0E50BA0F50          * C486D  .m!.j±.^°._
+        CON(5)  DOROMP                           * C482D  element type
+        CON(5)  1                                * C4832  dimensions
+        CON(5)  12                               * C4837
+        ROMPBODY 0A8 073                         * C483C  key "SRVR"
+        ROMPBODY 0A8 074                         * C4842  key "IOPAR"
+        ROMPBODY 0A8 075                         * C4848  key "PRINT"
+        ROMPBODY 002 0F0                         * C484E  PR1
+        ROMPBODY 002 16B                         * C4854  SEND
+        ROMPBODY 002 16E                         * C485A  RECV
+        ROMPBODY 0A8 076                         * C4860  key "SERIAL"
+        ROMPBODY 002 175                         * C4866  KERRM
+        ROMPBODY 002 16D                         * C486C  RECN
+        ROMPBODY 002 16A                         * C4872  CLOSEIO
+        ROMPBODY 0AB 05E                         * C4878  XSEND
+        ROMPBODY 0AB 05F                         * C487E  XRECV
         ENDLENGTH                                * C4884
 
 * ROMPTR 0A9 069
 * refs (1): C31C5
 ROMP_0A9_069:
-        CON(5)  DOARRY                           * C4884  DOARRY
+        CON(5)  DOARRY                           * C4884  array 6
         LENGTH                                   * C4889  length, to #C48C1
-        NIBHEX  29E201000060000200071200971200C6 * C488E  δ...... .p!.y!.l
-        NIBHEX  1200F618A00008A0770              * C48AE  !.oā..∡.w
+        CON(5)  DOROMP                           * C488E  element type
+        CON(5)  1                                * C4893  dimensions
+        CON(5)  6                                * C4898
+        ROMPBODY 002 170                         * C489D  SERVER
+        ROMPBODY 002 179                         * C48A3  PKT
+        ROMPBODY 002 16C                         * C48A9  KGET
+        ROMPBODY 002 16F                         * C48AF  FINISH
+        ROMPBODY 0A8 000                         * C48B5
+        ROMPBODY 0A8 077                         * C48BB  key "I/O"
         ENDLENGTH                                * C48C1
 
 * ROMPTR 0A9 06A
@@ -861,11 +1514,23 @@ ROMP_0A9_06A:
 * ROMPTR 0A9 06B
 * refs (1): C31C5
 ROMP_0A9_06B:
-        CON(5)  DOARRY                           * C48CC  DOARRY
+        CON(5)  DOARRY                           * C48CC  array 12
         LENGTH                                   * C48D1  length, to #C492D
-        NIBHEX  29E2010000C00002004F02002F02001F * C48D6  δ...... .ô .ò .ñ
-        NIBHEX  02006F02003F08A0D702000F08A00008 * C48F6   .ö .ó∡.} .ð∡..∡
-        NIBHEX  A00008A00008A00008A0770          * C4916  ..∡..∡..∡.w
+        CON(5)  DOROMP                           * C48D6  element type
+        CON(5)  1                                * C48DB  dimensions
+        CON(5)  12                               * C48E0
+        ROMPBODY 002 0F4                         * C48E5  PRVAR
+        ROMPBODY 002 0F2                         * C48EB  PRST
+        ROMPBODY 002 0F1                         * C48F1  PRSTC
+        ROMPBODY 002 0F6                         * C48F7  PRLCD
+        ROMPBODY 002 0F3                         * C48FD  CR
+        ROMPBODY 0A8 07D                         * C4903  key "PRTPAR"
+        ROMPBODY 002 0F0                         * C4909  PR1
+        ROMPBODY 0A8 000                         * C490F
+        ROMPBODY 0A8 000                         * C4915
+        ROMPBODY 0A8 000                         * C491B
+        ROMPBODY 0A8 000                         * C4921
+        ROMPBODY 0A8 077                         * C4927  key "I/O"
         ENDLENGTH                                * C492D
 
 * ROMPTR 0A9 06C
@@ -876,20 +1541,41 @@ ROMP_0A9_06C:
 * ROMPTR 0A9 06D
 * refs (1): C31C5
 ROMP_0A9_06D:
-        CON(5)  DOARRY                           * C4938  DOARRY
+        CON(5)  DOARRY                           * C4938  array 12
         LENGTH                                   * C493D  length, to #C4999
-        NIBHEX  29E2010000C000020076120086120077 * C4942  δ...... .g!.h!.w
-        NIBHEX  12008712006712009618A00008A00008 * C4962  !.x!.v!.iā..∡..∡
-        NIBHEX  A00008A00008A00008A0870          * C4982  ..∡..∡..∡.x
+        CON(5)  DOROMP                           * C4942  element type
+        CON(5)  1                                * C4947  dimensions
+        CON(5)  12                               * C494C
+        ROMPBODY 002 167                         * C4951  XMIT
+        ROMPBODY 002 168                         * C4957  SRECV
+        ROMPBODY 002 177                         * C495D  STIME
+        ROMPBODY 002 178                         * C4963  SBRK
+        ROMPBODY 002 176                         * C4969  BUFLEN
+        ROMPBODY 002 169                         * C496F  OPENIO
+        ROMPBODY 0A8 000                         * C4975
+        ROMPBODY 0A8 000                         * C497B
+        ROMPBODY 0A8 000                         * C4981
+        ROMPBODY 0A8 000                         * C4987
+        ROMPBODY 0A8 000                         * C498D
+        ROMPBODY 0A8 078                         * C4993  key "I/O"
         ENDLENGTH                                * C4999
 
 * ROMPTR 0A9 06E
 * refs (1): C31C5
 ROMP_0A9_06E:
-        CON(5)  DOARRY                           * C4999  DOARRY
+        CON(5)  DOARRY                           * C4999  array 8
         LENGTH                                   * C499E  length, to #C49E2
-        NIBHEX  29E2010000800008A0080200E5120046 * C49A3  δ......∡.∡ .^!.d
-        NIBHEX  1BA0610BA0710200661200561BA0180  * C49C3  ±..°.. .f!.e±.ā
+        CON(5)  DOROMP                           * C49A3  element type
+        CON(5)  1                                * C49A8  dimensions
+        CON(5)  8                                * C49AD
+        ROMPBODY 0A8 080                         * C49B2  key "PORTS"
+        ROMPBODY 002 15E                         * C49B8  PVARS
+        ROMPBODY 002 164                         * C49BE  LIBS
+        ROMPBODY 0AB 016                         * C49C4  MERGE1
+        ROMPBODY 0AB 017                         * C49CA  FREE1
+        ROMPBODY 002 166                         * C49D0  DETACH
+        ROMPBODY 002 165                         * C49D6  ATTACH
+        ROMPBODY 0AB 081                         * C49DC  PINIT
         ENDLENGTH                                * C49E2
 
 * ROMPTR 0A9 06F
@@ -910,40 +1596,83 @@ ROMP_0A9_071:
 * ROMPTR 0A9 072
 * refs (1): C31C5
 ROMP_0A9_072:
-        CON(5)  DOARRY                           * C4A03  DOARRY
+        CON(5)  DOARRY                           * C4A03  array 6
         LENGTH                                   * C4A08  length, to #C4A40
-        NIBHEX  29E201000060000BA0220BA0320BA0F6 * C4A0D  δ......°."°.#°.o
-        NIBHEX  08A00008A00008A0180              * C4A2D  ∡..∡..∡.ā
+        CON(5)  DOROMP                           * C4A0D  element type
+        CON(5)  1                                * C4A12  dimensions
+        CON(5)  6                                * C4A17
+        ROMPBODY 0AB 022                         * C4A1C  EQNLIB
+        ROMPBODY 0AB 023                         * C4A22  SOLVEQN
+        ROMPBODY 0AB 06F                         * C4A28
+        ROMPBODY 0A8 000                         * C4A2E
+        ROMPBODY 0A8 000                         * C4A34
+        ROMPBODY 0A8 081                         * C4A3A  key "EQLIB"
         ENDLENGTH                                * C4A40
 
 * ROMPTR 0A9 073
 * refs (1): C31C5
 ROMP_0A9_073:
-        CON(5)  DOARRY                           * C4A40  DOARRY
+        CON(5)  DOARRY                           * C4A40  array 6
         LENGTH                                   * C4A45  length, to #C4A7D
-        NIBHEX  29E201000060000BA0020BA01208A000 * C4A4A  δ......°. °.!∡..
-        NIBHEX  08A00008A00008A0180              * C4A6A  ∡..∡..∡.ā
+        CON(5)  DOROMP                           * C4A4A  element type
+        CON(5)  1                                * C4A4F  dimensions
+        CON(5)  6                                * C4A54
+        ROMPBODY 0AB 020                         * C4A59  CONLIB
+        ROMPBODY 0AB 021                         * C4A5F  CONST
+        ROMPBODY 0A8 000                         * C4A65
+        ROMPBODY 0A8 000                         * C4A6B
+        ROMPBODY 0A8 000                         * C4A71
+        ROMPBODY 0A8 081                         * C4A77  key "EQLIB"
         ENDLENGTH                                * C4A7D
 
 * ROMPTR 0A9 074
 * refs (1): C31C5
 ROMP_0A9_074:
-        CON(5)  DOARRY                           * C4A7D  DOARRY
+        CON(5)  DOARRY                           * C4A7D  array 12
         LENGTH                                   * C4A82  length, to #C4ADE
-        NIBHEX  29E2010000C0000BA0F60BA0070BA017 * C4A87  δ......°.o°.p°.q
-        NIBHEX  0BA0270BA0370BA04708A00008A00008 * C4AA7  °.r°.s°.t∡..∡..∡
-        NIBHEX  A00008A00008A00008A0180          * C4AC7  ..∡..∡..∡.ā
+        CON(5)  DOROMP                           * C4A87  element type
+        CON(5)  1                                * C4A8C  dimensions
+        CON(5)  12                               * C4A91
+        ROMPBODY 0AB 06F                         * C4A96
+        ROMPBODY 0AB 070                         * C4A9C  MINIT
+        ROMPBODY 0AB 071                         * C4AA2  MITM
+        ROMPBODY 0AB 072                         * C4AA8  MUSER
+        ROMPBODY 0AB 073                         * C4AAE  MCALC
+        ROMPBODY 0AB 074                         * C4AB4  MROOT
+        ROMPBODY 0A8 000                         * C4ABA
+        ROMPBODY 0A8 000                         * C4AC0
+        ROMPBODY 0A8 000                         * C4AC6
+        ROMPBODY 0A8 000                         * C4ACC
+        ROMPBODY 0A8 000                         * C4AD2
+        ROMPBODY 0A8 081                         * C4AD8  key "EQLIB"
         ENDLENGTH                                * C4ADE
 
 * ROMPTR 0A9 075
 * refs (1): C31C5
 ROMP_0A9_075:
-        CON(5)  DOARRY                           * C4ADE  DOARRY
+        CON(5)  DOARRY                           * C4ADE  array 18
         LENGTH                                   * C4AE3  length, to #C4B63
-        NIBHEX  29E201000021000BA0570BA0670BA077 * C4AE8  δ......°.u°.v°.w
-        NIBHEX  0BA0870BA0970BA0A70BA0B70BA0C70B * C4B08  °.x°.y°.z°.{°.|°
-        NIBHEX  A0D70BA0E70BA0F70BA00808A00008A0 * C4B28  .}°.~°..°.∡∡..∡.
-        NIBHEX  0008A00008A00008A00008A0180      * C4B48  .∡..∡..∡..∡.ā
+        CON(5)  DOROMP                           * C4AE8  element type
+        CON(5)  1                                * C4AED  dimensions
+        CON(5)  18                               * C4AF2
+        ROMPBODY 0AB 075                         * C4AF7  MINEHUNT
+        ROMPBODY 0AB 076                         * C4AFD  ZFACTOR
+        ROMPBODY 0AB 077                         * C4B03  FANNING
+        ROMPBODY 0AB 078                         * C4B09  DARCY
+        ROMPBODY 0AB 079                         * C4B0F  F0λ
+        ROMPBODY 0AB 07A                         * C4B15  SIDENS
+        ROMPBODY 0AB 07B                         * C4B1B  TDELTA
+        ROMPBODY 0AB 07C                         * C4B21  TINC
+        ROMPBODY 0AB 07D                         * C4B27  gmol
+        ROMPBODY 0AB 07E                         * C4B2D  lbmol
+        ROMPBODY 0AB 07F                         * C4B33  rpm
+        ROMPBODY 0AB 080                         * C4B39  dB
+        ROMPBODY 0A8 000                         * C4B3F
+        ROMPBODY 0A8 000                         * C4B45
+        ROMPBODY 0A8 000                         * C4B4B
+        ROMPBODY 0A8 000                         * C4B51
+        ROMPBODY 0A8 000                         * C4B57
+        ROMPBODY 0A8 081                         * C4B5D  key "EQLIB"
         ENDLENGTH                                * C4B63
 
 LIB0A9.hash:
