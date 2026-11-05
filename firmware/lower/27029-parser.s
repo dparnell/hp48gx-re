@@ -10,14 +10,14 @@ SUB_2702F:
         P=      4                                * 2702F
         A=0     P                                * 27031
         C=C-1   S                                * 27034
-        GOC     L_27048                          * 27037
-L_2703A:
+        GOC     SUB_2702F.L2                     * 27037
+SUB_2702F.loop1:
         C=0     P                                * 2703A
         C=C+C   A                                * 2703D
         A=A+C   P                                * 2703F
         C=C-1   S                                * 27042
-        GONC    L_2703A                          * 27045
-L_27048:
+        GONC    SUB_2702F.loop1                  * 27045
+SUB_2702F.L2:
         C=A     P                                * 27048
         P=C     4                                * 2704B
         CPEX    15                               * 2704F
@@ -55,45 +55,45 @@ OBJ_270F2:
 
 * refs (2): 270CA 270F7
 OBJ_2710B:
-        CON(5)  L_71FA7                          * 2710B  code object: the address of its machine code
+        CON(5)  ?OKINALG~romptr~1.L8             * 2710B  code object: the address of its machine code
         ASSEMBLE
-L_27110:
+OBJ_2710B.L1:
         A=DAT1  X                                * 27110
         CD1EX                                    * 27114
         RSTK=C                                   * 27117
         LC(3)   #700                             * 27119
         ST=0    6                                * 2711E
         ?C>A    X                                * 27121
-        GOYES   L_27129                          * 27124
+        GOYES   OBJ_2710B.L2                     * 27124
         ST=1    6                                * 27126
-L_27129:
+OBJ_2710B.L2:
         C=RSTK                                   * 27129
         CD1EX                                    * 2712B
         D1=D1-  1                                * 2712E
         A=DAT1  1                                * 27131
         D1=C                                     * 27135
         ?ABIT=1 2                                * 27138
-        GOYES   L_2714C                          * 2713D
-L_2713F:
+        GOYES   OBJ_2710B.L4                     * 2713D
+OBJ_2710B.L3:
         LC(5)   FALSE                            * 2713F
         A=C     A                                * 27146
         PC=(A)                                   * 27148
-L_2714C:
+OBJ_2710B.L4:
         C=0     S                                * 2714C
         ?ST=0   6                                * 2714F
-        GOYES   L_27168                          * 27152
+        GOYES   OBJ_2710B.L6                     * 27152
         ?ABIT=0 3                                * 27154
-        GOYES   L_2715E                          * 27159
+        GOYES   OBJ_2710B.L5                     * 27159
         C=C+1   S                                * 2715B
-L_2715E:
+OBJ_2710B.L5:
         ?ABIT=1 1                                * 2715E
-        GOYES   L_27168                          * 27163
+        GOYES   OBJ_2710B.L6                     * 27163
         C=C+1   S                                * 27165
-L_27168:
+OBJ_2710B.L6:
         GOSBVL  SAVPTR                           * 27168
         A=R0.F  A                                * 2716F
         D0=A                                     * 27175
-        GOTO    L_26FE1                          * 27178
+        GOTO    GETPTRFALSE.L2                   * 27178
         FILLTO  #271C5                           * 2717C  73 zero nibbles: the next entry stays at #271C5
         RPL
 
@@ -105,63 +105,63 @@ OBJ_271C5:
 
 * refs (2): 271E3 271F2
 OBJ_27206:
-        CON(5)  L_71FB5                          * 27206  code object: the address of its machine code
+        CON(5)  ?OKINALG~romptr~1.L9             * 27206  code object: the address of its machine code
         ASSEMBLE
-L_2720B:
+OBJ_27206.L1:
         A=DAT1  1                                * 2720B
         D1=C                                     * 2720F
         ?ABIT=1 3                                * 27212
-        GOYES   L_2721D                          * 27217
-        GOTO    L_2713F                          * 27219
-L_2721D:
+        GOYES   OBJ_27206.L2                     * 27217
+        GOTO    OBJ_2710B.L3                     * 27219
+OBJ_27206.L2:
         C=0     S                                * 2721D
-        GOTO    L_2715E                          * 27220
+        GOTO    OBJ_2710B.L5                     * 27220
 
 * bak -> :: bak <ob2> <rest> ; ob -> :: ob <ob1> ;
 * refs (4): 0902A 215E3 853AF 8550F
 DNOTBAKcase:
         CON(5)  (*)+5                            * 27224  primitive code object
         LC(5)   DOBAK                            * 27229
-        GOTO    L_27270                          * 27230
+        GOTO    NOTROMPcase.L1                   * 27230
 
 * lib -> :: lib <ob2> <rest> ; ob -> :: ob <ob1> ;
 * refs (1): 09034
 DNOTLIBcase:
         CON(5)  (*)+5                            * 27234  primitive code object
         LC(5)   DOLIB                            * 27239
-        GOTO    L_27270                          * 27240
+        GOTO    NOTROMPcase.L1                   * 27240
 
 * {} -> :: {} <ob2> <rest> ; ob -> :: ob <ob1> ;
 NOTLISTcase:
         CON(5)  (*)+5                            * 27244  primitive code object
         LC(5)   DOLIST                           * 27249
-        GOTO    L_27270                          * 27250
+        GOTO    NOTROMPcase.L1                   * 27250
 
 * seco -> :: seco <ob2> <rest> ; ob -> :: ob <ob1> ;
 NOTSECOcase:
         CON(5)  (*)+5                            * 27254  primitive code object
         LC(5)   DOCOL                            * 27259
-        GOTO    L_27270                          * 27260
+        GOTO    NOTROMPcase.L1                   * 27260
 
 * romp -> :: romp <ob2> <rest> ; ob -> :: ob <ob1> ;
 * refs (15): 0F1C3 268DB 2691C 269A4 27066 291F8 ...
 NOTROMPcase:
         CON(5)  (*)+5                            * 27264  primitive code object
         LC(5)   DOROMP                           * 27269
-L_27270:
+NOTROMPcase.L1:
         RSTK=C                                   * 27270
         C=DAT1  A                                * 27272
         CD1EX                                    * 27275
         A=DAT1  A                                * 27278
         D1=C                                     * 2727B
-L_2727E:
+NOTROMPcase.L2:
         C=RSTK                                   * 2727E
         A=A-C   A                                * 27280
         LC(5)   COLA                             * 27282
         ?A#0    A                                * 27289
-        GOYES   L_27295                          * 2728C
+        GOYES   NOTROMPcase.L3                   * 2728C
         LC(5)   SKIP                             * 2728E
-L_27295:
+NOTROMPcase.L3:
         A=C     A                                * 27295
         PC=(A)                                   * 27297
         RPL
@@ -433,21 +433,21 @@ OBJ_27D32:
             GOSBVL  POP#                         * 27D3C
             LC(5)   #00000                       * 27D43
             ?C=A    A                            * 27D4A
-            GOYES   L_27D74                      * 27D4D
+            GOYES   OBJ_27D32.L1                 * 27D4D
             LC(1)   #2                           * 27D4F
             ?C=A    A                            * 27D52
-            GOYES   L_27D74                      * 27D55
+            GOYES   OBJ_27D32.L1                 * 27D55
             D0=D0+  5                            * 27D57
             LC(1)   #3                           * 27D5A
             ?C=A    A                            * 27D5D
-            GOYES   L_27D74                      * 27D60
+            GOYES   OBJ_27D32.L1                 * 27D60
             D0=D0+  5                            * 27D62
             D1=D1-  5                            * 27D65
             D=D-1   A                            * 27D68
             A=DAT0  A                            * 27D6A
             D0=D0+  5                            * 27D6D
             PC=(A)                               * 27D70
-L_27D74:
+OBJ_27D32.L1:
             LC(5)   COLA                         * 27D74
             A=C     A                            * 27D7B
             PC=(A)                               * 27D7D
@@ -461,32 +461,32 @@ OBJ_27D9A:
             GOSBVL  POP#                         * 27DA4
             LC(5)   #00004                       * 27DAB
             ?C=A    A                            * 27DB2
-            GOYES   L_27DEF                      * 27DB5
+            GOYES   OBJ_27D9A.L1                 * 27DB5
             D0=D0+  15                           * 27DB7
             D0=D0+  5                            * 27DBA
             LC(1)   #5                           * 27DBD
             ?C=A    A                            * 27DC0
-            GOYES   L_27DEF                      * 27DC3
+            GOYES   OBJ_27D9A.L1                 * 27DC3
             D0=D0+  15                           * 27DC5
             D0=D0+  5                            * 27DC8
             LC(1)   #6                           * 27DCB
             ?C=A    A                            * 27DCE
-            GOYES   L_27DEF                      * 27DD1
+            GOYES   OBJ_27D9A.L1                 * 27DD1
             D0=D0+  15                           * 27DD3
             D0=D0+  5                            * 27DD6
             LC(1)   #7                           * 27DD9
             ?C=A    A                            * 27DDC
-            GOYES   L_27DEF                      * 27DDF
+            GOYES   OBJ_27D9A.L1                 * 27DDF
             D0=D0+  15                           * 27DE1
             D0=D0+  5                            * 27DE4
             LC(1)   #1                           * 27DE7
             ?C#A    A                            * 27DEA
-            GOYES   L_27DFC                      * 27DED
-L_27DEF:
+            GOYES   OBJ_27D9A.L2                 * 27DED
+OBJ_27D9A.L1:
             LC(5)   COLA                         * 27DEF
             A=C     A                            * 27DF6
             PC=(A)                               * 27DF8
-L_27DFC:
+OBJ_27D9A.L2:
             D0=D0+  5                            * 27DFC
             D1=D1-  5                            * 27DFF
             D=D-1   A                            * 27E02
@@ -649,7 +649,7 @@ OBJ_28318:
         D1=C                                     * 28322
         D1=D1+  5                                * 28325
         D1=D1+  15                               * 28328
-L_2832B:
+OBJ_28318.L1:
         C=DAT1  A                                * 2832B
         CD1EX                                    * 2832E
         D1=D1+  5                                * 28331
@@ -662,13 +662,13 @@ L_2832B:
         C=DAT1  A                                * 28346
         C=C-CON A,7                              * 28349
         ?C<A    A                                * 2834F
-        GOYES   L_28362                          * 28352
+        GOYES   OBJ_28318.L2                     * 28352
         A=0     S                                * 28354
         ?C>A    A                                * 28357
-        GOYES   L_28376                          * 2835A
+        GOYES   OBJ_28318.L3                     * 2835A
         A=A+1   S                                * 2835C
-        GONC    L_28376                          * 2835F
-L_28362:
+        GONC    OBJ_28318.L3                     * 2835F
+OBJ_28318.L2:
         C=RSTK                                   * 28362
         D1=C                                     * 28364
         D1=D1+  5                                * 28367
@@ -676,7 +676,7 @@ L_28362:
         A=DAT0  A                                * 2836C
         D0=D0+  5                                * 2836F
         PC=(A)                                   * 28372
-L_28376:
+OBJ_28318.L3:
         D1=D1+  5                                * 28376
         CD1EX                                    * 28379
         C=C+A   A                                * 2837C
@@ -698,9 +698,9 @@ L_28376:
         LC(5)   TRUE                             * 283A8
         A=C     A                                * 283AF
         ?A=0    S                                * 283B1
-        GOYES   L_283BD                          * 283B4
+        GOYES   OBJ_28318.L4                     * 283B4
         LC(5)   FALSE                            * 283B6
-L_283BD:
+OBJ_28318.L4:
         DAT1=C  A                                * 283BD
         PC=(A)                                   * 283C0
         RPL
@@ -753,34 +753,34 @@ OBJ_284E6:
         LC(5)   BINT0                            * 284EB
         A=DAT1  A                                * 284F2
         ?C=A    A                                * 284F5
-        GOYES   L_2854B                          * 284F8
+        GOYES   OBJ_284E6.L4                     * 284F8
         D1=D1+  10                               * 284FA
         A=DAT1  A                                * 284FD
         ?C=A    A                                * 28500
-        GOYES   L_28548                          * 28503
+        GOYES   OBJ_284E6.L3                     * 28503
         D1=D1+  15                               * 28505
         C=DAT1  A                                * 28508
         LA(5)   xFCNAPPLY                        * 2850B
         ?C=A    A                                * 28515
-        GOYES   L_28532                          * 28518
+        GOYES   OBJ_284E6.L1                     * 28518
         CD1EX                                    * 2851A
         D1=D1+  5                                * 2851D
         A=DAT1  A                                * 28520
         D1=C                                     * 28523
         LC(5)   CKINFARGS                        * 28526
         ?C#A    A                                * 2852D
-        GOYES   L_28545                          * 28530
-L_28532:
+        GOYES   OBJ_284E6.L2                     * 28530
+OBJ_284E6.L1:
         D1=D1-  15                               * 28532
         D1=D1-  10                               * 28535
         LC(5)   FALSE                            * 28538
         A=C     A                                * 2853F
         PC=(A)                                   * 28541
-L_28545:
+OBJ_284E6.L2:
         D1=D1-  15                               * 28545
-L_28548:
+OBJ_284E6.L3:
         D1=D1-  10                               * 28548
-L_2854B:
+OBJ_284E6.L4:
         LC(5)   TRUE                             * 2854B
         A=C     A                                * 28552
         PC=(A)                                   * 28554
@@ -958,7 +958,7 @@ nm=>uo?:
 
 * refs (4): 280E3 28AB5 28B14 28B23
 doerrB01:
-          :: # B01 ERRORSTO ERRJMP ; ;           * 28AE2
+          :: # B01 ERRORSTO ERRJMP ; ;           * 28AE2  "Invalid Unit"
 
 * refs (1): 28A88
 OBJ_28B05:
@@ -1006,38 +1006,38 @@ OBJ_28D08:
         GOSBVL  POP#                             * 28D0D
         LC(5)   #00000                           * 28D14
         ?C=A    A                                * 28D1B
-        GOYES   L_28D5C                          * 28D1E
+        GOYES   OBJ_28D08.L1                     * 28D1E
         LC(1)   #2                               * 28D20
         ?C=A    A                                * 28D23
-        GOYES   L_28D5C                          * 28D26
+        GOYES   OBJ_28D08.L1                     * 28D26
         LC(1)   #3                               * 28D28
         ?C=A    A                                * 28D2B
-        GOYES   L_28D5C                          * 28D2E
+        GOYES   OBJ_28D08.L1                     * 28D2E
         D0=D0+  5                                * 28D30
         LC(1)   #4                               * 28D33
         ?C=A    A                                * 28D36
-        GOYES   L_28D5C                          * 28D39
+        GOYES   OBJ_28D08.L1                     * 28D39
         D0=D0+  5                                * 28D3B
         LC(1)   #5                               * 28D3E
         ?C=A    A                                * 28D41
-        GOYES   L_28D5C                          * 28D44
+        GOYES   OBJ_28D08.L1                     * 28D44
         D0=D0+  5                                * 28D46
         LC(1)   #7                               * 28D49
         ?C=A    A                                * 28D4C
-        GOYES   L_28D5C                          * 28D4F
+        GOYES   OBJ_28D08.L1                     * 28D4F
         D0=D0+  5                                * 28D51
         LC(1)   #6                               * 28D54
         ?C#A    A                                * 28D57
-        GOYES   L_28D69                          * 28D5A
-L_28D5C:
+        GOYES   OBJ_28D08.L2                     * 28D5A
+OBJ_28D08.L1:
         LC(5)   COLA                             * 28D5C
         A=C     A                                * 28D63
         PC=(A)                                   * 28D65
-L_28D69:
+OBJ_28D08.L2:
         D0=D0+  5                                * 28D69
         D1=D1-  5                                * 28D6C
         D=D-1   A                                * 28D6F
-L_28D71:
+OBJ_28D08.L3:
         A=DAT0  A                                * 28D71
         D0=D0+  5                                * 28D74
         PC=(A)                                   * 28D77
@@ -1148,7 +1148,7 @@ OBJ_29140:
         CON(5)  (*)+5                            * 29140  primitive code object
         ASSEMBLE
         ST=1    0                                * 29145
-L_29148:
+OBJ_29140.L1:
         GOSBVL  SAVPTR                           * 29148
         D1=(5)  TEMPENV                          * 2914F
         A=DAT1  A                                * 29156
@@ -1161,12 +1161,12 @@ L_29148:
         D1=D1+  5                                * 29171
         A=DAT1  A                                * 29174
         ?ST=1   0                                * 29177
-        GOYES   L_29181                          * 2917A
+        GOYES   OBJ_29140.L2                     * 2917A
         A=A-1   A                                * 2917C
-        GONC    L_29183                          * 2917E
-L_29181:
+        GONC    OBJ_29140.L3                     * 2917E
+OBJ_29140.L2:
         A=A+1   A                                * 29181
-L_29183:
+OBJ_29140.L3:
         R0=A.F  A                                * 29183
         GOSBVL  PUSH#                            * 29189
         C=DAT1  A                                * 29190
@@ -1176,13 +1176,13 @@ L_29183:
         AD1EX                                    * 2919E
         DAT1=C  A                                * 291A1
         D1=A                                     * 291A4
-        GOTO    L_28D71                          * 291A7
+        GOTO    OBJ_28D08.L3                     * 291A7
 
 * refs (3): 291E9 291EE 29403
 OBJ_291AB:
         CON(5)  (*)+5                            * 291AB  primitive code object
         ST=0    0                                * 291B0
-        GOTO    L_29148                          * 291B3
+        GOTO    OBJ_29140.L1                     * 291B3
         RPL
 
 * refs (1): 28C09
@@ -1237,45 +1237,45 @@ OBJ_292F7:
         D1=C                                     * 29310
         A=A-1   A                                * 29313
         ?A=0    A                                * 29315
-        GOYES   L_2932C                          * 29318
-L_2931A:
+        GOYES   OBJ_292F7.L3                     * 29318
+OBJ_292F7.loop1:
         LC(5)   TRUE                             * 2931A
-L_29321:
+OBJ_292F7.loop2:
         A=C     A                                * 29321
         C=RSTK                                   * 29323
         D1=C                                     * 29325
         PC=(A)                                   * 29328
-L_2932C:
+OBJ_292F7.L3:
         GOSUB   SUB_29393                        * 2932C
         ?A=0    A                                * 29330
-        GOYES   L_2931A                          * 29333
+        GOYES   OBJ_292F7.loop1                  * 29333
         D1=D1-  5                                * 29335
         A=DAT1  A                                * 29338
         D1=C                                     * 2933B
         LC(5)   DOBINT                           * 2933E
         ?C#A    A                                * 29345
-        GOYES   L_2931A                          * 29348
+        GOYES   OBJ_292F7.loop1                  * 29348
         GOSUB   SUB_29393                        * 2934A
         D1=C                                     * 2934E
         A=A-1   A                                * 29351
         ?A#0    A                                * 29353
-        GOYES   L_2931A                          * 29356
+        GOYES   OBJ_292F7.loop1                  * 29356
         D1=D1+  5                                * 29358
         C=DAT1  A                                * 2935B
         CD1EX                                    * 2935E
         A=DAT1  A                                * 29361
         LC(5)   DOIDNT                           * 29364
         ?C=A    A                                * 2936B
-        GOYES   L_29388                          * 2936E
+        GOYES   OBJ_292F7.L4                     * 2936E
         LC(5)   DOLAM                            * 29370
         ?C=A    A                                * 29377
-        GOYES   L_29388                          * 2937A
+        GOYES   OBJ_292F7.L4                     * 2937A
         LC(5)   DOROMP                           * 2937C
         ?C#A    A                                * 29383
-        GOYES   L_2931A                          * 29386
-L_29388:
+        GOYES   OBJ_292F7.loop1                  * 29386
+OBJ_292F7.L4:
         LC(5)   FALSE                            * 29388
-        GOTO    L_29321                          * 2938F
+        GOTO    OBJ_292F7.loop2                  * 2938F
 
 * refs (4): 2932C 2934A 29586 2958F
 SUB_29393:
@@ -1351,58 +1351,58 @@ OBJ_2957A:
         CPEX    15                               * 295B0
         A=C     S                                * 295B4
         D=0     S                                * 295B7
-L_295BA:
+OBJ_2957A.loop1:
         C=DAT1  S                                * 295BA
         P=C     15                               * 295BE
         ?P=     0                                * 295C2
-        GOYES   L_29618                          * 295C5
+        GOYES   OBJ_2957A.L5                     * 295C5
         ?P=     2                                * 295C7
-        GOYES   L_29618                          * 295CA
+        GOYES   OBJ_2957A.L5                     * 295CA
         ?P=     3                                * 295CC
-        GOYES   L_29618                          * 295CF
+        GOYES   OBJ_2957A.L5                     * 295CF
         C=C-A   S                                * 295D1
-        GOC     L_295DD                          * 295D4
+        GOC     OBJ_2957A.loop2                  * 295D4
         B=C     S                                * 295D7
         B=B+1   S                                * 295DA
-L_295DD:
+OBJ_2957A.loop2:
         D1=D1-  1                                * 295DD
         D=D-1   A                                * 295E0
-        GOC     L_295F0                          * 295E2
+        GOC     OBJ_2957A.L3                     * 295E2
         ?B=0    S                                * 295E5
-        GOYES   L_295BA                          * 295E8
+        GOYES   OBJ_2957A.loop1                  * 295E8
         B=B-1   S                                * 295EA
-        GONC    L_295BA                          * 295ED
-L_295F0:
+        GONC    OBJ_2957A.loop1                  * 295ED
+OBJ_2957A.L3:
         A=0     A                                * 295F0
         ?B=0    A                                * 295F2
-        GOYES   L_2963F                          * 295F5
+        GOYES   OBJ_2957A.L7                     * 295F5
         ?D=0    S                                * 295F7
-        GOYES   L_29629                          * 295FA
+        GOYES   OBJ_2957A.L6                     * 295FA
         C=D     S                                * 295FC
         C=0     A                                * 295FF
         CPEX    15                               * 29601
         CPEX    0                                * 29605
-L_29609:
+OBJ_2957A.loop4:
         A=A+1   A                                * 29609
         B=B-C   A                                * 2960B
-        GOC     L_29629                          * 2960D
+        GOC     OBJ_2957A.L6                     * 2960D
         ?B=0    A                                * 29610
-        GOYES   L_2963F                          * 29613
-        GONC    L_29609                          * 29615
-L_29618:
+        GOYES   OBJ_2957A.L7                     * 29613
+        GONC    OBJ_2957A.loop4                  * 29615
+OBJ_2957A.L5:
         B=B-1   A                                * 29618
-        GOC     L_29629                          * 2961A
+        GOC     OBJ_2957A.L6                     * 2961A
         ?B=0    S                                * 2961D
-        GOYES   L_295DD                          * 29620
+        GOYES   OBJ_2957A.loop2                  * 29620
         D=D+1   S                                * 29622
-        GOTO    L_295DD                          * 29625
-L_29629:
+        GOTO    OBJ_2957A.loop2                  * 29625
+OBJ_2957A.L6:
         P=      0                                * 29629
         GOSBVL  GETPTR                           * 2962B
         LC(5)   COLA                             * 29632
         A=C     A                                * 29639
         PC=(A)                                   * 2963B
-L_2963F:
+OBJ_2957A.L7:
         P=      0                                * 2963F
         R0=A.F  A                                * 29641
         GOSBVL  PUSH#                            * 29647
@@ -1441,16 +1441,16 @@ OBJ_29738:
         R0=C.F  A                                * 29753
         R1=A.F  A                                * 29759
         GOSUB   SUB_2980F                        * 2975F
-        GONC    L_2977F                          * 29763
-L_29766:
+        GONC    OBJ_29738.L2                     * 29763
+OBJ_29738.L1:
         A=R0.F  A                                * 29766
         ?A#0    A                                * 2976C
-        GOYES   L_297AC                          * 2976F
+        GOYES   OBJ_29738.L3                     * 2976F
         A=R1.F  A                                * 29771
         ?A=0    A                                * 29777
-        GOYES   L_297B6                          * 2977A
-        GONC    L_297AC                          * 2977C
-L_2977F:
+        GOYES   OBJ_29738.loop4                  * 2977A
+        GONC    OBJ_29738.L3                     * 2977C
+OBJ_29738.L2:
         GOSUB   SUB_297EA                        * 2977F
         RSTK=C                                   * 29783
         D1=D1+  10                               * 29785
@@ -1461,33 +1461,33 @@ L_2977F:
         D1=C                                     * 29794
         C=R0.F  A                                * 29797
         ?C=0    A                                * 2979D
-        GOYES   L_297C3                          * 297A0
+        GOYES   OBJ_29738.L5                     * 297A0
         ?C>=A   A                                * 297A2
-        GOYES   L_297C3                          * 297A5
+        GOYES   OBJ_29738.L5                     * 297A5
         C=RSTK                                   * 297A7
         D1=C                                     * 297A9
-L_297AC:
+OBJ_29738.L3:
         A=DAT0  A                                * 297AC
         D0=D0+  5                                * 297AF
         PC=(A)                                   * 297B2
-L_297B6:
+OBJ_29738.loop4:
         LC(5)   SKIP                             * 297B6
         A=C     A                                * 297BD
         PC=(A)                                   * 297BF
-L_297C3:
+OBJ_29738.L5:
         C=R1.F  A                                * 297C3
         ?C=0    A                                * 297C9
-        GOYES   L_297E1                          * 297CC
+        GOYES   OBJ_29738.L6                     * 297CC
         ?A=0    A                                * 297CE
-        GOYES   L_297E1                          * 297D1
+        GOYES   OBJ_29738.L6                     * 297D1
         ?C>=A   A                                * 297D3
-        GOYES   L_297E1                          * 297D6
+        GOYES   OBJ_29738.L6                     * 297D6
         C=R2.F  A                                * 297D8
         DAT1=C  A                                * 297DE
-L_297E1:
+OBJ_29738.L6:
         C=RSTK                                   * 297E1
         D1=C                                     * 297E3
-        GOTO    L_297B6                          * 297E6
+        GOTO    OBJ_29738.loop4                  * 297E6
 
 * refs (2): 2977F 29855
 SUB_297EA:
@@ -1525,9 +1525,9 @@ OBJ_29829:
         R1=C.F  A                                * 2983E
         R0=A.F  A                                * 29844
         GOSUB   SUB_2980F                        * 2984A
-        GONC    L_29855                          * 2984E
-        GOTO    L_29766                          * 29851
-L_29855:
+        GONC    OBJ_29829.L1                     * 2984E
+        GOTO    OBJ_29738.L1                     * 29851
+OBJ_29829.L1:
         GOSUB   SUB_297EA                        * 29855
         RSTK=C                                   * 29859
         C=DAT1  A                                * 2985B
@@ -1537,26 +1537,26 @@ L_29855:
         D1=C                                     * 29867
         C=R0.F  A                                * 2986A
         ?C=0    A                                * 29870
-        GOYES   L_29883                          * 29873
+        GOYES   OBJ_29829.L2                     * 29873
         ?C>A    A                                * 29875
-        GOYES   L_29883                          * 29878
+        GOYES   OBJ_29829.L2                     * 29878
         C=RSTK                                   * 2987A
         D1=C                                     * 2987C
-        GOTO    L_297AC                          * 2987F
-L_29883:
+        GOTO    OBJ_29738.L3                     * 2987F
+OBJ_29829.L2:
         C=R1.F  A                                * 29883
         ?C=0    A                                * 29889
-        GOYES   L_298A1                          * 2988C
+        GOYES   OBJ_29829.L3                     * 2988C
         ?A=0    A                                * 2988E
-        GOYES   L_298A1                          * 29891
+        GOYES   OBJ_29829.L3                     * 29891
         ?C>=A   A                                * 29893
-        GOYES   L_298A1                          * 29896
+        GOYES   OBJ_29829.L3                     * 29896
         C=R2.F  A                                * 29898
         DAT1=C  A                                * 2989E
-L_298A1:
+OBJ_29829.L3:
         C=RSTK                                   * 298A1
         D1=C                                     * 298A3
-        GOTO    L_297B6                          * 298A6
+        GOTO    OBJ_29738.loop4                  * 298A6
         RPL
 
 * refs (1): 34FED
@@ -1589,16 +1589,16 @@ OBJ_298D7:
         B=B-1   A                                * 2991D
         LC(5)   CMOS                             * 2991F
         D=C     A                                * 29926
-L_29928:
+OBJ_298D7.loop1:
         D1=D1+  5                                * 29928
         D0=D0-  5                                * 2992B
         C=DAT1  A                                * 2992E
         ?D<=C   A                                * 29931
-        GOYES   L_29973                          * 29934
-L_29936:
+        GOYES   OBJ_298D7.L3                     * 29934
+OBJ_298D7.loop2:
         DAT0=C  A                                * 29936
         B=B-1   A                                * 29939
-        GONC    L_29928                          * 2993B
+        GONC    OBJ_298D7.loop1                  * 2993B
         D0=D0-  10                               * 2993E
         CD0EX                                    * 29941
         DAT1=C  A                                * 29944
@@ -1612,14 +1612,14 @@ L_29936:
         A=DAT0  A                                * 29969
         D0=D0+  5                                * 2996C
         PC=(A)                                   * 2996F
-L_29973:
+OBJ_298D7.L3:
         A=R0.F  A                                * 29973
         A=A-C   A                                * 29979
-        GONC    L_29985                          * 2997B
+        GONC    OBJ_298D7.L4                     * 2997B
         C=A     A                                * 2997E
         A=A+A   A                                * 29980
-        GOC     L_29936                          * 29982
-L_29985:
+        GOC     OBJ_298D7.loop2                  * 29982
+OBJ_298D7.L4:
         GOSBVL  GETPTR                           * 29985
         GOVLNG  DOMEMERR                         * 2998C
 
@@ -1628,7 +1628,7 @@ OBJ_29993:
         CON(5)  (*)+5                            * 29993  primitive code object
         GOSBVL  SAVPTR                           * 29998
         ST=0    4                                * 2999F
-L_299A2:
+OBJ_29993.loop1:
         D1=D1+  5                                * 299A2
         C=DAT1  A                                * 299A5
         CD1EX                                    * 299A8
@@ -1638,19 +1638,19 @@ L_299A2:
         B=A     A                                * 299B3
         GOSBVL  ROOM                             * 299B5
         ?B<C    A                                * 299BC
-        GOYES   L_299EF                          * 299BF
+        GOYES   OBJ_29993.L3                     * 299BF
         ?ST=0   4                                * 299C1
-        GOYES   L_299D4                          * 299C4
+        GOYES   OBJ_29993.L2                     * 299C4
         GOSBVL  GETPTR                           * 299C6
         GOVLNG  DOMEMERR                         * 299CD
-L_299D4:
+OBJ_29993.L2:
         GOSBVL  GARBAGECOL                       * 299D4
         D1=(5)  DSKTOP                           * 299DB
         C=DAT1  A                                * 299E2
         D1=C                                     * 299E5
         ST=1    4                                * 299E8
-        GOTO    L_299A2                          * 299EB
-L_299EF:
+        GOTO    OBJ_29993.loop1                  * 299EB
+OBJ_29993.L3:
         C=D     A                                * 299EF
         D0=C                                     * 299F1
         D0=D0-  5                                * 299F4
@@ -1659,20 +1659,20 @@ L_299EF:
         D1=D1+  9                                * 299FD
         B=B-CON A,10                             * 29A00
         D=0     A                                * 29A06
-L_29A08:
+OBJ_29993.loop4:
         C=DAT1  S                                * 29A08
         D1=D1-  4                                * 29A0C
         C=DAT1  A                                * 29A0F
         C=C+C   S                                * 29A12
-        GONC    L_29A1A                          * 29A15
+        GONC    OBJ_29993.L5                     * 29A15
         C=A-C   A                                * 29A18
-L_29A1A:
+OBJ_29993.L5:
         DAT0=C  A                                * 29A1A
         D0=D0-  5                                * 29A1D
         D1=D1+  9                                * 29A20
         D=D+1   A                                * 29A23
         B=B-CON A,5                              * 29A25
-        GONC    L_29A08                          * 29A2B
+        GONC    OBJ_29993.loop4                  * 29A2B
         D0=D0+  5                                * 29A2E
         D1=(5)  DSKTOP                           * 29A31
         CD0EX                                    * 29A38
@@ -1711,15 +1711,15 @@ nextsym'R:
         CD0EX                                    * 29A94
         RSTK=C                                   * 29A97
         D0=D0-  10                               * 29A99
-L_29A9C:
+nextsym'R.loop1:
         C=DAT0  A                                * 29A9C
         CD0EX                                    * 29A9F
         A=DAT0  A                                * 29AA2
         D0=C                                     * 29AA5
-L_29AA8:
+nextsym'R.L2:
         LC(5)   SEMI                             * 29AA8
         ?C#A    A                                * 29AAF
-        GOYES   L_29ACE                          * 29AB2
+        GOYES   nextsym'R.L3                     * 29AB2
         D0=D0+  5                                * 29AB4
         A=DAT0  A                                * 29AB7
         D0=D0-  5                                * 29ABA
@@ -1727,11 +1727,11 @@ L_29AA8:
         D0=D0-  5                                * 29AC0
         B=B-CON A,5                              * 29AC3
         D=D+1   A                                * 29AC9
-        GONC    L_29A9C                          * 29ACB
-L_29ACE:
+        GONC    nextsym'R.loop1                  * 29ACB
+nextsym'R.L3:
         LC(5)   DOSYMB                           * 29ACE
         ?C#A    A                                * 29AD5
-        GOYES   L_29B1E                          * 29AD8
+        GOYES   nextsym'R.L4                     * 29AD8
         GOSUB   SUB_29B73                        * 29ADA
         A=DAT0  10                               * 29ADE
         A=A+CON A,5                              * 29AE2
@@ -1747,8 +1747,8 @@ L_29ACE:
         AD0EX                                    * 29B11
         DAT0=A  A                                * 29B14
         D0=D0+  5                                * 29B17
-        GOTO    L_29A9C                          * 29B1A
-L_29B1E:
+        GOTO    nextsym'R.loop1                  * 29B1A
+nextsym'R.L4:
         GOSUB   SUB_29B73                        * 29B1E
         C=DAT0  A                                * 29B22
         R0=C.F  A                                * 29B25
@@ -1761,10 +1761,10 @@ L_29B1E:
         DAT0=C  A                                * 29B4A
         C=C-CON A,5                              * 29B4D
         ?C#A    A                                * 29B53
-        GOYES   L_29B5E                          * 29B56
+        GOYES   nextsym'R.L5                     * 29B56
         D0=A                                     * 29B58
         A=DAT0  A                                * 29B5B
-L_29B5E:
+nextsym'R.L5:
         D1=D1-  5                                * 29B5E
         DAT1=A  A                                * 29B61
         C=RSTK                                   * 29B64
@@ -1776,7 +1776,7 @@ L_29B5E:
 * refs (2): 29ADA 29B1E
 SUB_29B73:
         ST=0    7                                * 29B73
-L_29B76:
+SUB_29B73.loop1:
         D=D-1   A                                * 29B76
         RTNNC                                    * 29B78
         C=RSTK                                   * 29B7B
@@ -1786,9 +1786,9 @@ L_29B76:
         CAEX    A                                * 29B84
         RSTK=C                                   * 29B86
         ?ST=0   7                                * 29B88
-        GOYES   L_29B94                          * 29B8B
+        GOYES   SUB_29B73.L2                     * 29B8B
         GOVLNG  DOMEMERR                         * 29B8D
-L_29B94:
+SUB_29B73.L2:
         GOSBVL  SAVPTR                           * 29B94
         GOSBVL  GARBAGECOL                       * 29B9B
         GOSBVL  GETPTR                           * 29BA2
@@ -1801,7 +1801,7 @@ L_29B94:
         CAEX    A                                * 29BB7
         RSTK=C                                   * 29BB9
         ST=1    7                                * 29BBB
-        GOTO    L_29B76                          * 29BBE
+        GOTO    SUB_29B73.loop1                  * 29BBE
 
 * refs (1): 28C04
 subpdcdptch:
@@ -1809,14 +1809,14 @@ subpdcdptch:
         A=DAT1  A                                * 29BC7
         LC(5)   xFCNAPPLY                        * 29BCA
         ?C=A    A                                * 29BD1
-        GOYES   L_29C53                          * 29BD4
+        GOYES   subpdcdptch.loop2                * 29BD4
         D0=D0+  5                                * 29BD6
         AD1EX                                    * 29BD9
         C=DAT1  A                                * 29BDC
         D1=(5)  DOREAL                           * 29BDF
         AD1EX                                    * 29BE6
         ?C#A    A                                * 29BE9
-        GOYES   L_29C0D                          * 29BEC
+        GOYES   subpdcdptch.L1                   * 29BEC
         A=DAT1  A                                * 29BEE
         AD1EX                                    * 29BF1
         D1=D1+  5                                * 29BF4
@@ -1824,40 +1824,40 @@ subpdcdptch:
         C=DAT1  S                                * 29BFA
         D1=A                                     * 29BFE
         ?C#0    S                                * 29C01
-        GOYES   L_29C53                          * 29C04
+        GOYES   subpdcdptch.loop2                * 29C04
         D0=D0+  10                               * 29C06
-        GOTO    L_29C53                          * 29C09
-L_29C0D:
+        GOTO    subpdcdptch.loop2                * 29C09
+subpdcdptch.L1:
         D0=D0+  5                                * 29C0D
         A=C     A                                * 29C10
         LC(5)   DOEXT                            * 29C12
         ?C=A    A                                * 29C19
-        GOYES   L_29C53                          * 29C1C
+        GOYES   subpdcdptch.loop2                * 29C1C
         D0=D0+  5                                * 29C1E
         LC(5)   DOCOL                            * 29C21
         ?C#A    A                                * 29C28
-        GOYES   L_29C53                          * 29C2B
+        GOYES   subpdcdptch.loop2                * 29C2B
         D0=D0+  5                                * 29C2D
         A=DAT1  A                                * 29C30
         LC(5)   CMOS                             * 29C33
         ?C<=A   A                                * 29C3A
-        GOYES   L_29C53                          * 29C3D
+        GOYES   subpdcdptch.loop2                * 29C3D
         AD1EX                                    * 29C3F
         D1=D1-  7                                * 29C42
         C=DAT1  4                                * 29C45
         D1=A                                     * 29C49
         ?CBIT=0 3                                * 29C4C
-        GOYES   L_29C60                          * 29C51
-L_29C53:
+        GOYES   subpdcdptch.L3                   * 29C51
+subpdcdptch.loop2:
         LC(5)   COLA                             * 29C53
         A=C     A                                * 29C5A
         PC=(A)                                   * 29C5C
-L_29C60:
+subpdcdptch.L3:
         CSR     A                                * 29C60
         A=C     X                                * 29C62
         LC(3)   #002                             * 29C65
         ?C#A    X                                * 29C6A
-        GOYES   L_29C53                          * 29C6D
+        GOYES   subpdcdptch.loop2                * 29C6D
         D0=D0+  5                                * 29C6F
         A=DAT0  A                                * 29C72
         D0=D0+  5                                * 29C75
@@ -1891,15 +1891,15 @@ OBJ_29C7C:
 OBJ_29CC7:
         CON(5)  (*)+5                            * 29CC7  primitive code object
         D=D-1   A                                * 29CCC
-        GONC    L_29CF4                          * 29CCE
+        GONC    OBJ_29CC7.L1                     * 29CCE
         GOSBVL  SAVPTR                           * 29CD1
         GOSBVL  GARBAGECOL                       * 29CD8
         GOSBVL  GETPTR                           * 29CDF
         D=D-1   A                                * 29CE6
-        GONC    L_29CF4                          * 29CE8
+        GONC    OBJ_29CC7.L1                     * 29CE8
         D=D+1   A                                * 29CEB
         GOVLNG  DOMEMERR                         * 29CED
-L_29CF4:
+OBJ_29CC7.L1:
         D1=D1-  5                                * 29CF4
         GOSBVL  SAVPTR                           * 29CF7
         D1=D1+  10                               * 29CFE
@@ -1971,8 +1971,8 @@ POSFLOWERR:
 
 * refs (1): 29DCC
 DoErrPU:
-        LC(5)   posunferr                        * 29DD1
-        GOTO    L_29E18                          * 29DD8
+        LC(5)   posunferr                        * 29DD1  "Positive Underflow"
+        GOTO    DoErrIR.L1                       * 29DD8
 
 * Error 302h
 NEGFLOWERR:
@@ -1980,14 +1980,14 @@ NEGFLOWERR:
 
 * refs (1): 29DDC
 DoErrNU:
-        LC(5)   negunferr                        * 29DE1
-        GOTO    L_29E18                          * 29DE8
+        LC(5)   negunferr                        * 29DE1  "Negative Underflow"
+        GOTO    DoErrIR.L1                       * 29DE8
 
 * Error 303h
 OVERFLOWERR:
         CON(5)  (*)+5                            * 29DEC  primitive code object
-        LC(5)   ofloerr                          * 29DF1
-        GOTO    L_29E18                          * 29DF8
+        LC(5)   ofloerr                          * 29DF1  "Overflow"
+        GOTO    DoErrIR.L1                       * 29DF8
 
 * Error 304h
 * refs (3): 3643A 524E8 9799A
@@ -1997,7 +1997,7 @@ SETIVLERR:
 * refs (1): 29DFC
 DoErrUR:
         LC(5)   #00304                           * 29E01
-        GOTO    L_29E18                          * 29E08
+        GOTO    DoErrIR.L1                       * 29E08
 
 * Error 305h
 * refs (1): 5204E
@@ -2006,8 +2006,8 @@ INFRESERR:
 
 * refs (1): 29E0C
 DoErrIR:
-        LC(5)   infreserr                        * 29E11
-L_29E18:
+        LC(5)   infreserr                        * 29E11  "Infinite Result"
+DoErrIR.L1:
         A=C     A                                * 29E18
         GOVLNG  Errjmp                           * 29E1A
 
@@ -2016,91 +2016,91 @@ L_29E18:
 PACKSB:
         P=      0                                * 29E21
         ?B#0    M                                * 29E23
-        GOYES   L_29E2D                          * 29E26
+        GOYES   PACKSB.L1                        * 29E26
         A=0     W                                * 29E28
         RTN                                      * 29E2B
-L_29E2D:
+PACKSB.L1:
         B=B+B   X                                * 29E2D
-        GONC    L_29E74                          * 29E30
+        GONC    PACK.L4                          * 29E30
         C=0     M                                * 29E33
         C=C+1   M                                * 29E36
         ?B#0    X                                * 29E39
-        GOYES   L_29E65                          * 29E3C
+        GOYES   PACK.L3                          * 29E3C
         ?SB=0                                    * 29E3E
-        GOYES   L_29E61                          * 29E41
-        GONC    L_29E65                          * 29E43
+        GOYES   PACK.L2                          * 29E41
+        GONC    PACK.L3                          * 29E43
 
 * ( x -> A ) <REF>PACKSB without rounding 
 * refs (22): 23313 2AEDB 2C11B 2CD97 35AE0 5060D ...
 PACK:
         P=      0                                * 29E46
         ?B#0    M                                * 29E48
-        GOYES   L_29E52                          * 29E4B
+        GOYES   PACK.L1                          * 29E4B
         A=0     W                                * 29E4D
         RTN                                      * 29E50
-L_29E52:
+PACK.L1:
         B=B+B   X                                * 29E52
-        GONC    L_29E74                          * 29E55
+        GONC    PACK.L4                          * 29E55
         C=0     M                                * 29E58
         C=C+1   M                                * 29E5B
-        GONC    L_29E65                          * 29E5E
-L_29E61:
+        GONC    PACK.L3                          * 29E5E
+PACK.L2:
         C=C&B   M                                * 29E61
-L_29E65:
+PACK.L3:
         B=B+C   M                                * 29E65
-        GONC    L_29E74                          * 29E68
+        GONC    PACK.L4                          * 29E68
         P=      14                               * 29E6B
         B=B+1   P                                * 29E6D
         P=      0                                * 29E70
         A=A+1   A                                * 29E72
-L_29E74:
+PACK.L4:
         C=A     A                                * 29E74
         C=C+C   A                                * 29E76
-        GOC     L_29E8C                          * 29E78
+        GOC     PACK.L6                          * 29E78
         LC(5)   #00499                           * 29E7B
         ?C<A    A                                * 29E82
-        GOYES   L_29EEC                          * 29E85
-L_29E87:
+        GOYES   PACK.L11                         * 29E85
+PACK.loop5:
         A=B     M                                * 29E87
         RTN                                      * 29E8A
-L_29E8C:
+PACK.L6:
         LC(5)   #99501                           * 29E8C
         ?C<=A   A                                * 29E93
-        GOYES   L_29E87                          * 29E96
+        GOYES   PACK.loop5                       * 29E96
         D0=(5)  #80847                           * 29E98
         A=DAT0  B                                * 29E9F
         ?ABIT=0 3                                * 29EA2
-        GOYES   L_29EBE                          * 29EA7
-        LC(5)   posunferr                        * 29EA9
+        GOYES   PACK.loop8                       * 29EA7
+        LC(5)   posunferr                        * 29EA9  "Positive Underflow"
         ?A=0    S                                * 29EB0
-        GOYES   L_29EB7                          * 29EB3
+        GOYES   PACK.loop7                       * 29EB3
         C=C+1   A                                * 29EB5
-L_29EB7:
+PACK.loop7:
         GOVLNG  GPErrjmpC                        * 29EB7
-L_29EBE:
+PACK.loop8:
         ?A#0    S                                * 29EBE
-        GOYES   L_29ED5                          * 29EC1
+        GOYES   PACK.L9                          * 29EC1
         D0=(5)  #80848                           * 29EC3
         A=DAT0  B                                * 29ECA
         ABIT=1  3                                * 29ECD
-        GONC    L_29EE4                          * 29ED2
-L_29ED5:
+        GONC    PACK.L10                         * 29ED2
+PACK.L9:
         D0=(5)  #80848                           * 29ED5
         A=DAT0  B                                * 29EDC
         ABIT=1  2                                * 29EDF
-L_29EE4:
+PACK.L10:
         DAT0=A  B                                * 29EE4
         A=0     W                                * 29EE7
         RTN                                      * 29EEA
 * a branch also enters #29EF1, where the nibbles decode as CLRST
-L_29EEC:
+PACK.L11:
         D0=(5)  #80848                           * 29EEC
         A=DAT0  B                                * 29EF3
         ?ABIT=0 0                                * 29EF6
-        GOYES   L_29F07                          * 29EFB
-        LC(5)   ofloerr                          * 29EFD
-        GONC    L_29EB7                          * 29F04
-L_29F07:
+        GOYES   PACK.loop12                      * 29EFB
+        LC(5)   ofloerr                          * 29EFD  "Overflow"
+        GONC    PACK.loop7                       * 29F04
+PACK.loop12:
         D0=(5)  #80849                           * 29F07
         A=DAT0  B                                * 29F0E
         ABIT=1  0                                * 29F11
@@ -2112,69 +2112,69 @@ L_29F07:
         RTN                                      * 29F27
         P=      0                                * 29F29
         ?B#0    M                                * 29F2B
-        GOYES   L_29F35                          * 29F2E
+        GOYES   PACK.L13                         * 29F2E
         A=0     W                                * 29F30
         RTN                                      * 29F33
-L_29F35:
+PACK.L13:
         B=B+B   X                                * 29F35
-        GONC    L_29F4A                          * 29F38
+        GONC    PACK.L14                         * 29F38
         B=B+1   M                                * 29F3B
-        GONC    L_29F4A                          * 29F3E
+        GONC    PACK.L14                         * 29F3E
         P=      14                               * 29F41
         B=B+1   P                                * 29F43
         P=      0                                * 29F46
         A=A+1   A                                * 29F48
-L_29F4A:
+PACK.L14:
         C=A     A                                * 29F4A
         C=C+C   A                                * 29F4C
-        GOC     L_29F62                          * 29F4E
+        GOC     PACK.L16                         * 29F4E
         LC(5)   #00499                           * 29F51
         ?C<A    A                                * 29F58
-        GOYES   L_29F72                          * 29F5B
-L_29F5D:
+        GOYES   PACK.L17                         * 29F5B
+PACK.loop15:
         A=B     M                                * 29F5D
         RTN                                      * 29F60
-L_29F62:
+PACK.L16:
         LC(5)   #99501                           * 29F62
         ?C<=A   A                                * 29F69
-        GOYES   L_29F5D                          * 29F6C
-        GOTO    L_29EBE                          * 29F6E
-L_29F72:
-        GOTO    L_29F07                          * 29F72
+        GOYES   PACK.loop15                      * 29F6C
+        GOTO    PACK.loop8                       * 29F6E
+PACK.L17:
+        GOTO    PACK.loop12                      * 29F72
 
 * refs (6): 3443F 34C3E 37239 535A7 789F1 7D6CB
 SUB_29F76:
         P=      0                                * 29F76
         ?B#0    M                                * 29F78
-        GOYES   L_29F82                          * 29F7B
+        GOYES   SUB_29F76.L1                     * 29F7B
         A=0     W                                * 29F7D
         RTN                                      * 29F80
-L_29F82:
+SUB_29F76.L1:
         B=B+B   X                                * 29F82
-        GONC    L_29F97                          * 29F85
+        GONC    SUB_29F76.L2                     * 29F85
         B=B+1   M                                * 29F88
-        GONC    L_29F97                          * 29F8B
+        GONC    SUB_29F76.L2                     * 29F8B
         P=      14                               * 29F8E
         B=B+1   P                                * 29F90
         P=      0                                * 29F93
         A=A+1   A                                * 29F95
-L_29F97:
+SUB_29F76.L2:
         C=A     A                                * 29F97
         C=C+C   A                                * 29F99
-        GOC     L_29FAF                          * 29F9B
+        GOC     SUB_29F76.L4                     * 29F9B
         LC(5)   #00499                           * 29F9E
         ?C<A    A                                * 29FA5
-        GOYES   L_29FC0                          * 29FA8
-L_29FAA:
+        GOYES   SUB_29F76.L5                     * 29FA8
+SUB_29F76.loop3:
         A=B     M                                * 29FAA
         RTN                                      * 29FAD
-L_29FAF:
+SUB_29F76.L4:
         LC(5)   #99501                           * 29FAF
         ?C<=A   A                                * 29FB6
-        GOYES   L_29FAA                          * 29FB9
+        GOYES   SUB_29F76.loop3                  * 29FB9
         A=0     W                                * 29FBB
         RTN                                      * 29FBE
-L_29FC0:
+SUB_29F76.L5:
         LC(3)   #499                             * 29FC0
         A=C     X                                * 29FC5
         A=0     M                                * 29FC8

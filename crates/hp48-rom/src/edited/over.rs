@@ -24,9 +24,9 @@ pub(super) fn OVER(r: &mut Run) {
 
     // One more stack level: D counts the free room in 5-nibble words.
     op!(r, at, 0x032C7..0x032C9, 4, r.cpu.dec(R::D, Field::A)); // D=D-1 A
-    // No room left: L_032BB collects garbage, then goes on at L_032CC.
+    // No room left: the code at #032BB collects garbage, then goes on at #032CC.
     r.cpu.pc = 0x032CC;
-    r.cpu.jump_if(Cond::Carry, 0x032BB); // GOC L_032BB
+    r.cpu.jump_if(Cond::Carry, 0x032BB); // GOC #032BB
     if !r.go(5) || r.cpu.pc != 0x032CC {
         return;
     }

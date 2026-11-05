@@ -110,8 +110,8 @@ LIB0BA.hash:
         CON(5)  0                                * E225F  names of length 14
         CON(5)  0                                * E2264  names of length 15
         CON(5)  0                                * E2269  names of length 16
-        REL(5)  L_E2273                          * E226E  end of the names
-L_E2273:
+        REL(5)  LIB0BA.hash.L1                   * E226E  end of the names
+LIB0BA.hash.L1:
         CON(5)  0                                * E2273  command 000 has no name
         ENDLENGTH                                * E2278
 

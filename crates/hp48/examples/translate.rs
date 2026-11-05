@@ -10,7 +10,7 @@
 //! data/executed.txt (recorded by execmap over the tour).
 //!
 //! The code is cut into routines the way the firmware source (firmware/)
-//! labels it: a routine starts at a label that isn't local (`L_...`) and
+//! labels it: a routine starts at a label that isn't local (`NAME.L1`) and
 //! runs on while the code is contiguous. Each becomes a Rust function named
 //! after its label, with the comments above the label. Its basic blocks
 //! are the arms of a `match` on the address to run next, inside a loop, so
@@ -275,6 +275,14 @@ const KEYWORDS: &[&str] = &["as", "break", "const", "continue", "crate", "else",
         "impl", "in", "let", "loop", "match", "mod", "move", "mut", "pub", "ref", "return", "self", "Self", "static", "struct",
         "super", "trait", "true", "type", "unsafe", "use", "where", "while", "async", "await", "dyn"];
 
+/// Whether a label is a branch target inside a routine (`SKIPOB.L2`,
+/// `SKIPOB.loop3`, or `L_12345` before any routine).
+fn is_local(name: &str) -> bool {
+    let Some((_, tail)) = name.rsplit_once('.') else { return name.starts_with("L_") };
+    let number = tail.strip_prefix("loop").or_else(|| tail.strip_prefix('L'));
+    number.is_some_and(|n| !n.is_empty() && n.bytes().all(|b| b.is_ascii_digit()))
+}
+
 /// A label as a Rust identifier, unique among `taken`.
 fn ident(name: &str, a: u32, taken: &mut BTreeSet<String>) -> String {
     let mut s: String = name.chars().map(|c| if c.is_ascii_alphanumeric() { c } else { '_' }).collect();
@@ -450,7 +458,7 @@ fn main() {
     // Routines: contiguous code, cut at labels that aren't local. An
     // instruction that starts inside another (code that overlaps code) is a
     // routine of its own.
-    let routine_label = |a: u32| src.labels.get(&a).and_then(|ls| ls.iter().find(|l| !l.name.starts_with("L_"))).cloned();
+    let routine_label = |a: u32| src.labels.get(&a).and_then(|ls| ls.iter().find(|l| !is_local(&l.name))).cloned();
     let mut routines: Vec<Routine> = Vec::new();
     // The routine the contiguous code goes on in, and where it goes on.
     let (mut current, mut expected) = (0, None);

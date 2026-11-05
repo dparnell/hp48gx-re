@@ -2,51 +2,51 @@
 * Addresses in the right-hand comments are those of the original ROM.
 * Most referenced: ' COLA EVAL SAVPTR ?SKIP ABND LOOP INDEX@ BEGIN GETPTR POP# RDROP
 * Follows on from the previous file (at #06000 in the original ROM).
-        GONC    L_05FED                          * 06000
+        GONC    SUB_05F91.loop6                  * 06000
         D1=(5)  TEMPENV                          * 06003
         C=DAT1  A                                * 0600A
         D1=C                                     * 0600D
-        GOC     L_06042                          * 06010
-L_06013:
+        GOC     SUB_05F91.L12                    * 06010
+SUB_05F91.loop8:
         D0=A                                     * 06013
         D0=D0-  15                               * 06016
         D1=D1+  10                               * 06019
-L_0601C:
+SUB_05F91.loop9:
         C=DAT1  A                                * 0601C
         ?B>C    A                                * 0601F
-        GOYES   L_06029                          * 06022
+        GOYES   SUB_05F91.L10                    * 06022
         ?D>C    A                                * 06024
         RTNYES                                   * 06027
-L_06029:
+SUB_05F91.L10:
         D1=D1+  5                                * 06029
         C=DAT1  A                                * 0602C
         ?B>C    A                                * 0602F
-        GOYES   L_06039                          * 06032
+        GOYES   SUB_05F91.L11                    * 06032
         ?D>C    A                                * 06034
         RTNYES                                   * 06037
-L_06039:
+SUB_05F91.L11:
         D1=D1+  5                                * 06039
         D0=D0-  10                               * 0603C
-        GONC    L_0601C                          * 0603F
-L_06042:
+        GONC    SUB_05F91.loop9                  * 0603F
+SUB_05F91.L12:
         A=DAT1  A                                * 06042
         ?A#0    A                                * 06045
-        GOYES   L_06013                          * 06048
+        GOYES   SUB_05F91.loop8                  * 06048
         D1=(5)  TOUCHTAB                         * 0604A
         C=DAT1  A                                * 06051
         D1=C                                     * 06054
         D1=D1-  2                                * 06057
-L_0605A:
+SUB_05F91.loop13:
         D1=D1+  5                                * 0605A
         C=DAT1  A                                * 0605D
         ?C=0    A                                * 06060
-        GOYES   L_06071                          * 06063
+        GOYES   SUB_05F91.L14                    * 06063
         ?B>C    A                                * 06065
-        GOYES   L_0605A                          * 06068
+        GOYES   SUB_05F91.loop13                 * 06068
         ?D<=C   A                                * 0606A
-        GOYES   L_0605A                          * 0606D
+        GOYES   SUB_05F91.loop13                 * 0606D
         RTNSC                                    * 0606F
-L_06071:
+SUB_05F91.L14:
         ST=0    0                                * 06071
         RTNCC                                    * 06074
 
@@ -56,30 +56,30 @@ SUB_06076:
         C=RSTK                                   * 06078
         DCEX    A                                * 0607A
         ?B<=C   A                                * 0607C
-        GOYES   L_06086                          * 0607F
+        GOYES   SUB_06076.L1                     * 0607F
         ?C>=A   A                                * 06081
-        GOYES   L_0608C                          * 06084
-L_06086:
+        GOYES   SUB_06076.L2                     * 06084
+SUB_06076.L1:
         C=D     A                                * 06086
         RSTK=C                                   * 06088
         RTN                                      * 0608A
-L_0608C:
+SUB_06076.L2:
         D0=C                                     * 0608C
-L_0608F:
+SUB_06076.loop3:
         GOSBVL  SKIPOB                           * 0608F
-L_06096:
+SUB_06076.loop4:
         LC(5)   SEMI                             * 06096
         A=DAT0  A                                * 0609D
         ?C#A    A                                * 060A0
-        GOYES   L_060AB                          * 060A3
+        GOYES   SUB_06076.L5                     * 060A3
         D0=D0+  5                                * 060A5
-        GONC    L_06096                          * 060A8
-L_060AB:
+        GONC    SUB_06076.loop4                  * 060A8
+SUB_06076.L5:
         P=      4                                * 060AB
         LC(1)   #2                               * 060AD
         A=A+C   P                                * 060B0
         P=      0                                * 060B3
-        GONC    L_0608F                          * 060B5
+        GONC    SUB_06076.loop3                  * 060B5
         P=      4                                * 060B8
         LC(1)   #F                               * 060BA
         A=C     P                                * 060BD
@@ -98,25 +98,25 @@ SUB_060D5:
         D0=(5)  TEMPTOP                          * 060DA
         A=DAT0  A                                * 060E1
         ?C>=A   A                                * 060E4
-        GOYES   L_06132                          * 060E7
+        GOYES   SUB_060D5.L4                     * 060E7
         D0=C                                     * 060E9
         C=RSTK                                   * 060EC
         D=C     A                                * 060EE
-L_060F0:
+SUB_060D5.loop1:
         GOSBVL  SKIPOB                           * 060F0
         LC(5)   SEMI                             * 060F7
-L_060FE:
+SUB_060D5.loop2:
         A=DAT0  A                                * 060FE
         ?C#A    A                                * 06101
-        GOYES   L_0610C                          * 06104
+        GOYES   SUB_060D5.L3                     * 06104
         D0=D0+  5                                * 06106
-        GONC    L_060FE                          * 06109
-L_0610C:
+        GONC    SUB_060D5.loop2                  * 06109
+SUB_060D5.L3:
         P=      4                                * 0610C
         LC(1)   #2                               * 0610E
         A=A+C   P                                * 06111
         P=      0                                * 06114
-        GONC    L_060F0                          * 06116
+        GONC    SUB_060D5.loop1                  * 06116
         P=      4                                * 06119
         D0=D0+  5                                * 0611B
         A=DAT0  P                                * 0611E
@@ -127,7 +127,7 @@ L_0610C:
         DAT1=C  A                                * 0612B
         C=D     A                                * 0612E
         RSTK=C                                   * 06130
-L_06132:
+SUB_060D5.L4:
         D0=(5)  TEMPOB                           * 06132
         A=DAT0  A                                * 06139
         RTN                                      * 0613C
@@ -140,9 +140,9 @@ GARBAGECOL:
         DAT0=C  A                                * 06147
         ST=0    0                                * 0614A
         ?ST=0   1                                * 0614D
-        GOYES   L_06155                          * 06150
+        GOYES   GARBAGECOL.L1                    * 06150
         ST=1    0                                * 06152
-L_06155:
+GARBAGECOL.L1:
         D1=(5)  TEMPTOP                          * 06155
         C=DAT1  A                                * 0615C
         D1=C                                     * 0615F
@@ -150,10 +150,10 @@ L_06155:
         LC(1)   #E                               * 06164
         P=      0                                * 06167
         D1=D1-  5                                * 06169
-L_0616C:
+GARBAGECOL.loop2:
         C=DAT1  A                                * 0616C
         ?C=0    A                                * 0616F
-        GOYES   L_06193                          * 06172
+        GOYES   GARBAGECOL.L3                    * 06172
         B=C     A                                * 06174
         P=C     15                               * 06176
         CPEX    4                                * 0617A
@@ -163,8 +163,8 @@ L_0616C:
         CD1EX                                    * 06188
         C=C-B   A                                * 0618B
         D1=C                                     * 0618D
-        GONC    L_0616C                          * 06190
-L_06193:
+        GONC    GARBAGECOL.loop2                 * 06190
+GARBAGECOL.L3:
         P=      0                                * 06193
         D0=(5)  TEMPTOP                          * 06195
         A=DAT0  A                                * 0619C
@@ -176,48 +176,48 @@ L_06193:
         D1=(5)  DSKTOP                           * 061B1
         C=DAT1  A                                * 061B8
         D1=C                                     * 061BB
-        GONC    L_061C8                          * 061BE
-L_061C1:
+        GONC    GARBAGECOL.L5                    * 061BE
+GARBAGECOL.loop4:
         GOSUB   SUB_06076                        * 061C1
         D1=D1+  5                                * 061C5
-L_061C8:
+GARBAGECOL.L5:
         C=DAT1  A                                * 061C8
         ?C#0    A                                * 061CB
-        GOYES   L_061C1                          * 061CE
+        GOYES   GARBAGECOL.loop4                 * 061CE
         D1=(5)  RSKTOP                           * 061D0
         C=DAT1  A                                * 061D7
         D1=C                                     * 061DA
-        GONC    L_061E4                          * 061DD
-L_061E0:
+        GONC    GARBAGECOL.L7                    * 061DD
+GARBAGECOL.loop6:
         GOSUB   SUB_06076                        * 061E0
-L_061E4:
+GARBAGECOL.L7:
         D1=D1-  5                                * 061E4
         C=DAT1  A                                * 061E7
         CPEX    0                                * 061EA
         ?C=0    A                                * 061EE
-        GOYES   L_061FA                          * 061F1
+        GOYES   GARBAGECOL.L8                    * 061F1
         CPEX    0                                * 061F3
-        GONC    L_061E0                          * 061F7
-L_061FA:
+        GONC    GARBAGECOL.loop6                 * 061F7
+GARBAGECOL.L8:
         P=      0                                * 061FA
         D1=(5)  INTRPPTR                         * 061FC
         LC(2)   #24                              * 06203
         CSRC                                     * 06207
         D=C     S                                * 0620A
         CSRC                                     * 0620D
-L_06210:
+GARBAGECOL.loop9:
         C=DAT1  A                                * 06210
         GOSUB   SUB_06076                        * 06213
         D1=D1+  5                                * 06217
         D=D-1   S                                * 0621A
-        GONC    L_06210                          * 0621D
+        GONC    GARBAGECOL.loop9                 * 0621D
         C=C-1   S                                * 06220
-        GONC    L_06210                          * 06223
+        GONC    GARBAGECOL.loop9                 * 06223
         D1=(5)  TEMPENV                          * 06226
         C=DAT1  A                                * 0622D
         D1=C                                     * 06230
-        GOC     L_06268                          * 06233
-L_06236:
+        GOC     GARBAGECOL.L12                   * 06233
+GARBAGECOL.loop10:
         D0=(5)  GARBSCRATCH2                     * 06236
         DAT0=C  A                                * 0623D
         C=DAT1  A                                * 06240
@@ -229,29 +229,29 @@ L_06236:
         D0=(5)  GARBSCRATCH2                     * 06254
         C=DAT0  A                                * 0625B
         P=      9                                * 0625E
-L_06260:
+GARBAGECOL.loop11:
         C+P+1                                    * 06260
         P=      0                                * 06263
-        GONC    L_06236                          * 06265
-L_06268:
+        GONC    GARBAGECOL.loop10                * 06265
+GARBAGECOL.L12:
         C=DAT1  A                                * 06268
         D1=D1+  10                               * 0626B
         P=      14                               * 0626E
         C=-C    A                                * 06270
-        GOC     L_06260                          * 06272
+        GOC     GARBAGECOL.loop11                * 06272
         P=      0                                * 06275
         D1=(5)  TOUCHTAB                         * 06277
         C=DAT1  A                                * 0627E
         D1=C                                     * 06281
         D1=D1+  3                                * 06284
-        GONC    L_06291                          * 06287
-L_0628A:
+        GONC    GARBAGECOL.L14                   * 06287
+GARBAGECOL.loop13:
         GOSUB   SUB_06076                        * 0628A
         D1=D1+  5                                * 0628E
-L_06291:
+GARBAGECOL.L14:
         C=DAT1  A                                * 06291
         ?C#0    A                                * 06294
-        GOYES   L_0628A                          * 06297
+        GOYES   GARBAGECOL.loop13                * 06297
         A=B     A                                * 06299
         D0=A                                     * 0629B
         B=0     A                                * 0629E
@@ -259,10 +259,10 @@ L_06291:
         LC(1)   #E                               * 062A2
         D=C     P                                * 062A5
         D0=D0-  5                                * 062A8
-L_062AB:
+GARBAGECOL.loop15:
         C=DAT0  6                                * 062AB
         ?C=0    A                                * 062AF
-        GOYES   L_062FD                          * 062B2
+        GOYES   GARBAGECOL.L17                   * 062B2
         AD0EX                                    * 062B4
         D1=A                                     * 062B7
         P=      4                                * 062BA
@@ -275,7 +275,7 @@ L_062AB:
         D0=A                                     * 062D1
         P=      5                                * 062D4
         ?C=0    P                                * 062D6
-        GOYES   L_062F8                          * 062D9
+        GOYES   GARBAGECOL.L16                   * 062D9
         C=B     A                                * 062DB
         CPEX    4                                * 062DD
         CPEX    5                                * 062E1
@@ -284,11 +284,11 @@ L_062AB:
         C=D     P                                * 062EB
         C=C+1   P                                * 062EE
         DAT1=C  6                                * 062F1
-        GONC    L_062AB                          * 062F5
-L_062F8:
+        GONC    GARBAGECOL.loop15                * 062F5
+GARBAGECOL.L16:
         B=B+C   A                                * 062F8
-        GONC    L_062AB                          * 062FA
-L_062FD:
+        GONC    GARBAGECOL.loop15                * 062FA
+GARBAGECOL.L17:
         C=0     W                                * 062FD
         A=0     W                                * 06300
         D0=(5)  TEMPOB                           * 06303
@@ -297,48 +297,48 @@ L_062FD:
         D1=(5)  DSKTOP                           * 0630F
         C=DAT1  A                                * 06316
         D1=C                                     * 06319
-        GOC     L_06326                          * 0631C
-L_0631F:
+        GOC     GARBAGECOL.L19                   * 0631C
+GARBAGECOL.loop18:
         GOSUB   SUB_060D5                        * 0631F
         D1=D1+  5                                * 06323
-L_06326:
+GARBAGECOL.L19:
         C=DAT1  A                                * 06326
         ?C#0    A                                * 06329
-        GOYES   L_0631F                          * 0632C
+        GOYES   GARBAGECOL.loop18                * 0632C
         D1=(5)  RSKTOP                           * 0632E
         C=DAT1  A                                * 06335
         D1=C                                     * 06338
-        GONC    L_06342                          * 0633B
-L_0633E:
+        GONC    GARBAGECOL.L21                   * 0633B
+GARBAGECOL.loop20:
         GOSUB   SUB_060D5                        * 0633E
-L_06342:
+GARBAGECOL.L21:
         D1=D1-  5                                * 06342
         C=DAT1  A                                * 06345
         CPEX    0                                * 06348
         ?C=0    A                                * 0634C
-        GOYES   L_06358                          * 0634F
+        GOYES   GARBAGECOL.L22                   * 0634F
         CPEX    0                                * 06351
-        GONC    L_0633E                          * 06355
-L_06358:
+        GONC    GARBAGECOL.loop20                * 06355
+GARBAGECOL.L22:
         P=      0                                * 06358
         D1=(5)  INTRPPTR                         * 0635A
         LC(2)   #24                              * 06361
         CSRC                                     * 06365
         D=C     S                                * 06368
         CSRC                                     * 0636B
-L_0636E:
+GARBAGECOL.loop23:
         C=DAT1  A                                * 0636E
         GOSUB   SUB_060D5                        * 06371
         D1=D1+  5                                * 06375
         D=D-1   S                                * 06378
-        GONC    L_0636E                          * 0637B
+        GONC    GARBAGECOL.loop23                * 0637B
         C=C-1   S                                * 0637E
-        GONC    L_0636E                          * 06381
+        GONC    GARBAGECOL.loop23                * 06381
         D1=(5)  TEMPENV                          * 06384
         C=DAT1  A                                * 0638B
         D1=C                                     * 0638E
-        GOC     L_063C4                          * 06391
-L_06394:
+        GOC     GARBAGECOL.L26                   * 06391
+GARBAGECOL.loop24:
         D0=(5)  GARBSCRATCH2                     * 06394
         DAT0=C  A                                * 0639B
         C=DAT1  A                                * 0639E
@@ -350,57 +350,57 @@ L_06394:
         D0=(5)  GARBSCRATCH2                     * 063B2
         C=DAT0  A                                * 063B9
         P=      9                                * 063BC
-L_063BE:
+GARBAGECOL.loop25:
         C+P+1                                    * 063BE
-        GONC    L_06394                          * 063C1
-L_063C4:
+        GONC    GARBAGECOL.loop24                * 063C1
+GARBAGECOL.L26:
         C=DAT1  A                                * 063C4
         D1=D1+  10                               * 063C7
         P=      14                               * 063CA
         C=-C    A                                * 063CC
-        GOC     L_063BE                          * 063CE
+        GOC     GARBAGECOL.loop25                * 063CE
         P=      0                                * 063D1
         D1=(5)  TOUCHTAB                         * 063D3
         C=DAT1  A                                * 063DA
         D1=C                                     * 063DD
         D1=D1+  3                                * 063E0
-        GONC    L_063ED                          * 063E3
-L_063E6:
+        GONC    GARBAGECOL.L28                   * 063E3
+GARBAGECOL.loop27:
         GOSUB   SUB_060D5                        * 063E6
         D1=D1+  5                                * 063EA
-L_063ED:
+GARBAGECOL.L28:
         C=DAT1  A                                * 063ED
         ?C#0    A                                * 063F0
-        GOYES   L_063E6                          * 063F3
+        GOYES   GARBAGECOL.loop27                * 063F3
         D0=(5)  TEMPOB                           * 063F5
         C=DAT0  A                                * 063FC
         C=C+CON A,5                              * 063FF
         D0=C                                     * 06405
         D1=C                                     * 06408
-L_0640B:
+GARBAGECOL.loop29:
         C=DAT0  A                                * 0640B
         CPEX    0                                * 0640E
         ?C=0    A                                * 06412
-        GOYES   L_0646B                          * 06415
+        GOYES   GARBAGECOL.L32                   * 06415
         CPEX    0                                * 06417
         CD0EX                                    * 0641B
         B=C     A                                * 0641E
         D0=C                                     * 06420
         D0=D0+  1                                * 06423
-L_06426:
+GARBAGECOL.loop30:
         GOSBVL  SKIPOB                           * 06426
         D0=D0+  4                                * 0642D
         A=DAT0  1                                * 06430
         LC(1)   #2                               * 06434
         C=C+A   P                                * 06437
         C=A     P                                * 0643A
-        GOC     L_06446                          * 0643D
+        GOC     GARBAGECOL.L31                   * 0643D
         D0=D0-  4                                * 06440
-        GONC    L_06426                          * 06443
-L_06446:
+        GONC    GARBAGECOL.loop30                * 06443
+GARBAGECOL.L31:
         D0=D0+  1                                * 06446
         ?CBIT=0 0                                * 06449
-        GOYES   L_0640B                          * 0644E
+        GOYES   GARBAGECOL.loop29                * 0644E
         CD0EX                                    * 06450
         D0=C                                     * 06453
         C=C-B   A                                * 06456
@@ -409,8 +409,8 @@ L_06446:
         A=B     A                                * 0645E
         D0=A                                     * 06460
         GOSUB   MOVEDOWN                         * 06463
-        GOTO    L_0640B                          * 06467
-L_0646B:
+        GOTO    GARBAGECOL.loop29                * 06467
+GARBAGECOL.L32:
         P=      0                                * 0646B
         DAT0=C  1                                * 0646D
         LC(5)   TEMPTOP                          * 06471
@@ -433,9 +433,9 @@ L_0646B:
         RSTK=C                                   * 064AC
         ST=0    1                                * 064AE
         ?ST=0   0                                * 064B1
-        GOYES   L_064B9                          * 064B4
+        GOYES   GARBAGECOL.L33                   * 064B4
         ST=1    1                                * 064B6
-L_064B9:
+GARBAGECOL.L33:
         GOTO    ADJMEM                           * 064B9
         RPL
 
@@ -450,14 +450,14 @@ DOADJ1:
         CON(5)  (*)+5                            * 064D6  primitive code object
         ASSEMBLE
         ST=0    1                                * 064DB
-        GOTO    L_064EA                          * 064DE
+        GOTO    DOADJ.L1                         * 064DE
 
 * ob1 ob2 -> ob1 ob'
 * refs (1): 064CC
 DOADJ:
         CON(5)  (*)+5                            * 064E2  primitive code object
         ST=1    1                                * 064E7
-L_064EA:
+DOADJ.L1:
         A=DAT1  A                                * 064EA
         D1=D1+  5                                * 064ED
         GOSUB   SAVPTR                           * 064F0
@@ -465,10 +465,10 @@ L_064EA:
         D0=A                                     * 064F6
         D0=D0+  5                                * 064F9
         ?ST=0   1                                * 064FC
-        GOYES   L_0650A                          * 064FF
+        GOYES   DOADJ.L2                         * 064FF
         D0=D0-  5                                * 06501
         GOSUBL  SKIPOB                           * 06504
-L_0650A:
+DOADJ.L2:
         C=DAT1  A                                * 0650A
         C=C-B   A                                * 0650D
         AD0EX                                    * 0650F
@@ -492,11 +492,11 @@ PUSH2#:
 * refs (45): 03171 0357F 036F7 03DD0 04767 04CFE ...
 PUSH#:
         ST=0    10                               * 06537
-L_0653A:
+PUSH#.loop1:
         LC(5)   #0002C                           * 0653A
         A=R0                                     * 06541
         ?C>A    A                                * 06544
-        GOYES   L_065B4                          * 06547
+        GOYES   GPMEMERR.L1                      * 06547
         LC(5)   #00010                           * 06549
         B=C     A                                * 06550
         LC(1)   #5                               * 06552
@@ -507,7 +507,7 @@ L_0653A:
         A=DAT1  A                                * 06568
         C=C-A   A                                * 0656B
         C=C-D   A                                * 0656D
-        GOC     L_0659B                          * 0656F
+        GOC     PUSH#.L3                         * 0656F
         GOSUB   SUB_06B00                        * 06572
         AD0EX                                    * 06576
         D0=A                                     * 06579
@@ -517,23 +517,23 @@ L_0653A:
         C=R0                                     * 06589
         DAT0=C  A                                * 0658C
         GOSUB   GETPTR                           * 0658F
-L_06593:
+PUSH#.L2:
         D1=D1-  5                                * 06593
         DAT1=A  A                                * 06596
         RTN                                      * 06599
-L_0659B:
+PUSH#.L3:
         ?ST=1   10                               * 0659B
         GOYES   GPMEMERR                         * 0659E
         GOSUB   GARBAGECOL                       * 065A0
         ST=1    10                               * 065A4
-        GONC    L_0653A                          * 065A7
+        GONC    PUSH#.loop1                      * 065A7
 
 * <REF>GETPTR <REF>DOMEMERR
 * refs (10): 05560 0659B 066A7 12D7E 16342 70738 ...
 GPMEMERR:
         GOSUB   GETPTR                           * 065AA
         GOLONG  DOMEMERR                         * 065AE
-L_065B4:
+GPMEMERR.L1:
         A=A+A   A                                * 065B4
         C=A     A                                * 065B6
         A=A+A   A                                * 065B8
@@ -543,29 +543,29 @@ L_065B4:
         A=A+C   A                                * 065C5
         GOSUB   GETPTR                           * 065C7
         D=D-1   A                                * 065CB
-        GONC    L_06593                          * 065CD
+        GONC    PUSH#.L2                         * 065CD
         D=D+1   A                                * 065D0
         GOSUB   SAVPTR                           * 065D2
-        GONC    L_0659B                          * 065D6
+        GONC    PUSH#.L3                         * 065D6
 
 * ob -> ob flag
 * refs (1): 0977F
 PTRREFD?:
         B=C-B   A                                * 065D9
-        GONC    L_065E1+1                        * 065DB
+        GONC    PTRREFD?.L1+1                    * 065DB
         ST=0    1                                * 065DE
 * a branch also enters #065E2, where the nibbles decode as A=A-B P
-L_065E1:
-        GOTO    L_065ED                          * 065E1
+PTRREFD?.L1:
+        GOTO    REFERENCED?.L1                   * 065E1
 
 * ob -> ob flag
 * refs (9): 06BC7 08C54 08C86 17E9D 180A6 1DBCE ...
 REFERENCED?:
         CON(5)  (*)+5                            * 065E5  primitive code object
         ST=1    1                                * 065EA
-L_065ED:
+REFERENCED?.L1:
         A=DAT1  A                                * 065ED
-L_065F0:
+REFERENCED?.L2:
         D1=D1+  5                                * 065F0
         GOSUB   SAVPTR                           * 065F3
         B=A     A                                * 065F7
@@ -574,22 +574,22 @@ L_065F0:
         D0=D0+  5                                * 065FF
         CD0EX                                    * 06602
         ?C=A    A                                * 06605
-        GOYES   L_0661B                          * 06608
+        GOYES   REFERENCED?.L3                   * 06608
         ?ST=0   1                                * 0660A
-        GOYES   L_0661B                          * 0660D
+        GOYES   REFERENCED?.L3                   * 0660D
         D0=C                                     * 0660F
         GOSUBL  SUB_03012                        * 06612
         CD0EX                                    * 06618
-L_0661B:
+REFERENCED?.L3:
         D=C     A                                * 0661B
         GOSUB   SUB_05F91                        * 0661D
         GOSUB   GETPTR                           * 06621
         D1=D1-  5                                * 06625
         LC(5)   FALSE                            * 06628
         ?ST=0   0                                * 0662F
-        GOYES   L_0663B                          * 06632
+        GOYES   REFERENCED?.L4                   * 06632
         LC(5)   TRUE                             * 06634
-L_0663B:
+REFERENCED?.L4:
         A=C     A                                * 0663B
         PC=(A)                                   * 0663D
 
@@ -610,7 +610,7 @@ POP#:
 TOTEMPOB:
         CON(5)  (*)+5                            * 06657  primitive code object
         ST=0    10                               * 0665C
-L_0665F:
+TOTEMPOB.loop1:
         GOSUB   SAVPTR                           * 0665F
         C=DAT1  A                                * 06663
         B=C     A                                * 06666
@@ -622,7 +622,7 @@ L_0665F:
         GOSUB   CREATETEMP                       * 06678
         D0=C                                     * 0667C
         C=RSTK                                   * 0667F
-        GOC     L_066A2                          * 06681
+        GOC     TOTEMPOB.L2                      * 06681
         D0=D0-  6                                * 06684
         CD0EX                                    * 06687
         GOSUB   MOVEUP                           * 0668A
@@ -632,38 +632,38 @@ L_0665F:
         A=DAT0  A                                * 06698
         D0=D0+  5                                * 0669B
         PC=(A)                                   * 0669E
-L_066A2:
+TOTEMPOB.L2:
         ?ST=0   10                               * 066A2
-        GOYES   L_066AB                          * 066A5
+        GOYES   TOTEMPOB.L3                      * 066A5
         GOTO    GPMEMERR                         * 066A7
-L_066AB:
+TOTEMPOB.L3:
         ST=1    10                               * 066AB
         GOSUB   GARBAGECOL                       * 066AE
         GOSUB   GETPTR                           * 066B2
-        GONC    L_0665F                          * 066B6
+        GONC    TOTEMPOB.loop1                   * 066B6
 
 * Copy upwards C.A nibbles from D0 to D1 D0 D1 will point to start of area Used: A.W C.A P Use this to move downwards
 * refs (42): 0320E 0668A 069F3 06A86 06B2D 06C92 ...
 MOVEUP:
         C=C-1   A                                * 066B9
-        GOC     L_06708                          * 066BB
+        GOC     MOVEUP.L3                        * 066BB
         P=C     0                                * 066BE
         CSR     A                                * 066C2
         C=C-1   A                                * 066C4
-        GOC     L_066EB                          * 066C6
-L_066C9:
+        GOC     MOVEUP.L2                        * 066C6
+MOVEUP.loop1:
         D0=D0-  16                               * 066C9
         D1=D1-  16                               * 066CC
         A=DAT0  W                                * 066CF
         DAT1=A  W                                * 066D3
         C=C-1   B                                * 066D7
-        GONC    L_066C9                          * 066DA
+        GONC    MOVEUP.loop1                     * 066DA
         C=C-1   XS                               * 066DD
-        GONC    L_066C9                          * 066E0
+        GONC    MOVEUP.loop1                     * 066E0
         C=C+1   X                                * 066E3
         C=C-1   A                                * 066E6
-        GONC    L_066C9                          * 066E8
-L_066EB:
+        GONC    MOVEUP.loop1                     * 066E8
+MOVEUP.L2:
         C=0     A                                * 066EB
         C+P+1                                    * 066ED
         AD0EX                                    * 066F0
@@ -674,7 +674,7 @@ L_066EB:
         D1=A                                     * 066FD
         A=DAT0  WP                               * 06700
         DAT1=A  WP                               * 06704
-L_06708:
+MOVEUP.L3:
         P=      0                                * 06708
         RTNCC                                    * 0670A
 
@@ -682,24 +682,24 @@ L_06708:
 * refs (66): 03547 037CD 05219 0540D 05807 05C18 ...
 MOVEDOWN:
         C=C-1   A                                * 0670C
-        GOC     L_06758                          * 0670E
+        GOC     MOVEDOWN.L3                      * 0670E
         P=C     0                                * 06711
         CSR     A                                * 06715
         C=C-1   A                                * 06717
-        GOC     L_0673E                          * 06719
-L_0671C:
+        GOC     MOVEDOWN.L2                      * 06719
+MOVEDOWN.loop1:
         A=DAT0  W                                * 0671C
         DAT1=A  W                                * 06720
         D0=D0+  16                               * 06724
         D1=D1+  16                               * 06727
         C=C-1   B                                * 0672A
-        GONC    L_0671C                          * 0672D
+        GONC    MOVEDOWN.loop1                   * 0672D
         C=C-1   XS                               * 06730
-        GONC    L_0671C                          * 06733
+        GONC    MOVEDOWN.loop1                   * 06733
         C=C+1   X                                * 06736
         C=C-1   A                                * 06739
-        GONC    L_0671C                          * 0673B
-L_0673E:
+        GONC    MOVEDOWN.loop1                   * 0673B
+MOVEDOWN.L2:
         A=DAT0  WP                               * 0673E
         DAT1=A  WP                               * 06742
         CD0EX                                    * 06746
@@ -708,7 +708,7 @@ L_0673E:
         CD1EX                                    * 0674F
         C+P+1                                    * 06752
         D1=C                                     * 06755
-L_06758:
+MOVEDOWN.L3:
         P=      0                                * 06758
         RTNCC                                    * 0675A
 
@@ -716,29 +716,29 @@ L_06758:
 * refs (10): 01F91 02426 11639 12CA7 12E50 134D9 ...
 WIPEOUT:
         A=0     W                                * 0675C
-L_0675F:
+WIPEOUT.L1:
         C=C-1   A                                * 0675F
-        GOC     L_06797                          * 06761
+        GOC     WIPEOUT.L4                       * 06761
         P=C     0                                * 06764
         CSR     A                                * 06768
         C=C-1   A                                * 0676A
-        GOC     L_0678A                          * 0676C
-L_0676F:
+        GOC     WIPEOUT.L3                       * 0676C
+WIPEOUT.loop2:
         DAT1=A  W                                * 0676F
         D1=D1+  16                               * 06773
         C=C-1   B                                * 06776
-        GONC    L_0676F                          * 06779
+        GONC    WIPEOUT.loop2                    * 06779
         C=C-1   XS                               * 0677C
-        GONC    L_0676F                          * 0677F
+        GONC    WIPEOUT.loop2                    * 0677F
         C=C+1   X                                * 06782
         C=C-1   A                                * 06785
-        GONC    L_0676F                          * 06787
-L_0678A:
+        GONC    WIPEOUT.loop2                    * 06787
+WIPEOUT.L3:
         DAT1=A  WP                               * 0678A
         CD1EX                                    * 0678E
         C+P+1                                    * 06791
         D1=C                                     * 06794
-L_06797:
+WIPEOUT.L4:
         P=      0                                * 06797
         RTNCC                                    * 06799
 
@@ -790,22 +790,22 @@ ROOM:
 * refs (6): 068B0 068CF 068F8 06902 06934 06957
 SUB_0681E:
         ?C<A    A                                * 0681E
-        GOYES   L_0682F                          * 06821
+        GOYES   SUB_0681E.L1                     * 06821
         ?B<=C   A                                * 06823
-        GOYES   L_0682F                          * 06826
+        GOYES   SUB_0681E.L1                     * 06826
         C=C+D   A                                * 06828
         DAT1=C  A                                * 0682A
         RTNSC                                    * 0682D
-L_0682F:
+SUB_0681E.L1:
         ?ST=0   2                                * 0682F
         RTNYES                                   * 06832
         AR1EX                                    * 06834
         ABEX    A                                * 06837
         AR0EX                                    * 06839
         ?C<A    A                                * 0683C
-        GOYES   L_06859                          * 0683F
+        GOYES   SUB_0681E.L2                     * 0683F
         ?B<=C   A                                * 06841
-        GOYES   L_06859                          * 06844
+        GOYES   SUB_0681E.L2                     * 06844
         DCEX    A                                * 06846
         CD0EX                                    * 06848
         DCEX    A                                * 0684B
@@ -814,7 +814,7 @@ L_0682F:
         C=D     A                                * 06852
         CD0EX                                    * 06854
         D=C     A                                * 06857
-L_06859:
+SUB_0681E.L2:
         AR0EX                                    * 06859
         ABEX    A                                * 0685C
         AR1EX                                    * 0685E
@@ -825,14 +825,14 @@ SUB_06863:
         D=C     A                                * 06863
         C=ST                                     * 06865
         ST=0    2                                * 06867
-        GOTO    L_06875                          * 0686A
+        GOTO    SUB_0686E.L1                     * 0686A
 
 * refs (5): 06C06 06CFD 088FF 08B14 64AAA
 SUB_0686E:
         D=C     A                                * 0686E
         C=ST                                     * 06870
         ST=1    2                                * 06872
-L_06875:
+SUB_0686E.L1:
         D1=(5)  PADJSAVE1                        * 06875
         DAT1=C  1                                * 0687C
         C=RSTK                                   * 06880
@@ -844,37 +844,37 @@ L_06875:
         D1=(5)  DSKTOP                           * 06894
         C=DAT1  A                                * 0689B
         D1=C                                     * 0689E
-        GOTO    L_068A8                          * 068A1
-L_068A5:
+        GOTO    SUB_0686E.L3                     * 068A1
+SUB_0686E.loop2:
         D1=D1+  5                                * 068A5
-L_068A8:
+SUB_0686E.L3:
         C=DAT1  A                                * 068A8
         ?C=0    A                                * 068AB
-        GOYES   L_068B7                          * 068AE
+        GOYES   SUB_0686E.L4                     * 068AE
         GOSUB   SUB_0681E                        * 068B0
-        GOC     L_068A5                          * 068B4
-L_068B7:
+        GOC     SUB_0686E.loop2                  * 068B4
+SUB_0686E.L4:
         D1=(5)  RSKTOP                           * 068B7
         C=DAT1  A                                * 068BE
         D1=C                                     * 068C1
-L_068C4:
+SUB_0686E.loop5:
         D1=D1-  5                                * 068C4
         C=DAT1  A                                * 068C7
         ?C=0    A                                * 068CA
-        GOYES   L_068D6                          * 068CD
+        GOYES   SUB_0686E.L6                     * 068CD
         GOSUB   SUB_0681E                        * 068CF
-        GOC     L_068C4                          * 068D3
-L_068D6:
+        GOC     SUB_0686E.loop5                  * 068D3
+SUB_0686E.L6:
         D1=(5)  TEMPENV                          * 068D6
         C=DAT1  A                                * 068DD
         D1=C                                     * 068E0
-        GOTO    L_06919                          * 068E3
-L_068E7:
+        GOTO    SUB_0686E.L9                     * 068E3
+SUB_0686E.loop7:
         CD0EX                                    * 068E7
         D0=D0-  10                               * 068EA
         CD0EX                                    * 068ED
         D1=D1+  10                               * 068F0
-L_068F3:
+SUB_0686E.loop8:
         RSTK=C                                   * 068F3
         C=DAT1  A                                * 068F5
         GOSUB   SUB_0681E                        * 068F8
@@ -887,35 +887,35 @@ L_068F3:
         D0=D0-  10                               * 0690E
         CD0EX                                    * 06911
         ?C#0    A                                * 06914
-        GOYES   L_068F3                          * 06917
-L_06919:
+        GOYES   SUB_0686E.loop8                  * 06917
+SUB_0686E.L9:
         C=DAT1  A                                * 06919
         ?C#0    A                                * 0691C
-        GOYES   L_068E7                          * 0691F
+        GOYES   SUB_0686E.loop7                  * 0691F
         D1=(5)  TOUCHTAB                         * 06921
         C=DAT1  A                                * 06928
         D1=C                                     * 0692B
         D1=D1+  3                                * 0692E
-        GONC    L_0693B                          * 06931
-L_06934:
+        GONC    SUB_0686E.L11                    * 06931
+SUB_0686E.loop10:
         GOSUB   SUB_0681E                        * 06934
         D1=D1+  5                                * 06938
-L_0693B:
+SUB_0686E.L11:
         C=DAT1  A                                * 0693B
         ?C#0    A                                * 0693E
-        GOYES   L_06934                          * 06941
+        GOYES   SUB_0686E.loop10                 * 06941
         D1=(5)  VDISP                            * 06943
         P=      14                               * 0694A
         LC(2)   #35                              * 0694C
         P=C     14                               * 06950
-L_06954:
+SUB_0686E.loop12:
         C=DAT1  A                                * 06954
         GOSUB   SUB_0681E                        * 06957
         D1=D1+  5                                * 0695B
         P=P-1                                    * 0695E
-        GONC    L_06954                          * 06960
+        GONC    SUB_0686E.loop12                 * 06960
         C=C-1   S                                * 06963
-        GONC    L_06954                          * 06966
+        GONC    SUB_0686E.loop12                 * 06966
         P=      0                                * 06969
         C=ST                                     * 0696B
         D1=(5)  PADJSAVE1                        * 0696D
@@ -1103,14 +1103,14 @@ SUB_06B00:
 FREEINTEMP?:
         CON(5)  (*)+5                            * 06B3E  primitive code object
         LC(5)   TRUE                             * 06B43
-        GOTO    L_06B5A                          * 06B4A
+        GOTO    INTEMNOTREF?.L1                  * 06B4A
 
 * ob -> ob flag
 * refs (5): 36188 37B49 62317 6232B 9FD0F
 INTEMNOTREF?:
         CON(5)  (*)+5                            * 06B4E  primitive code object
         LC(5)   NOTREF?                          * 06B53
-L_06B5A:
+INTEMNOTREF?.L1:
         R2=C.F  A                                * 06B5A
         GOSUBL  SAVPTR                           * 06B60
         A=DAT1  A                                * 06B66
@@ -1118,26 +1118,26 @@ L_06B5A:
         D0=(5)  TEMPOB                           * 06B6B
         C=DAT0  A                                * 06B72
         ?B>=C   A                                * 06B75
-        GOYES   L_06B8B                          * 06B78
-L_06B7A:
+        GOYES   INTEMNOTREF?.L3                  * 06B78
+INTEMNOTREF?.loop2:
         GOSUBL  GETPTR                           * 06B7A
         LC(5)   FALSE                            * 06B80
-        GOTO    L_0663B                          * 06B87
-L_06B8B:
+        GOTO    REFERENCED?.L4                   * 06B87
+INTEMNOTREF?.L3:
         D0=(5)  TEMPTOP                          * 06B8B
         C=DAT0  A                                * 06B92
         ?B>=C   A                                * 06B95
-        GOYES   L_06B7A                          * 06B98
+        GOYES   INTEMNOTREF?.loop2               * 06B98
         B=B-1   A                                * 06B9A
-L_06B9C:
+INTEMNOTREF?.loop4:
         D0=C                                     * 06B9C
         D0=D0-  5                                * 06B9F
         A=DAT0  A                                * 06BA2
         ?A=0    A                                * 06BA5
-        GOYES   L_06B7A                          * 06BA8
+        GOYES   INTEMNOTREF?.loop2               * 06BA8
         C=C-A   A                                * 06BAA
         ?B#C    A                                * 06BAC
-        GOYES   L_06B9C                          * 06BAF
+        GOYES   INTEMNOTREF?.loop4               * 06BAF
         GOSBVL  GETPTR                           * 06BB1
         A=R2.F  A                                * 06BB8
         PC=(A)                                   * 06BBE
@@ -1186,11 +1186,11 @@ SUB_06BD6:
         A=A-B   A                                * 06C4D
         R4=A.F  A                                * 06C4F
         C=R2.F  A                                * 06C55
-L_06C5B:
+SUB_06BD6.loop1:
         ?D<C    A                                * 06C5B
-        GOYES   L_06C62                          * 06C5E
+        GOYES   SUB_06BD6.L2                     * 06C5E
         D=C     A                                * 06C60
-L_06C62:
+SUB_06BD6.L2:
         C=R0.F  A                                * 06C62
         D0=C                                     * 06C68
         C=C-D   A                                * 06C6B
@@ -1215,7 +1215,7 @@ L_06C62:
         C=C-D   A                                * 06CBA
         R2=C.F  A                                * 06CBC
         ?C#0    A                                * 06CC2
-        GOYES   L_06C5B                          * 06CC5
+        GOYES   SUB_06BD6.loop1                  * 06CC5
         C=R1.F  A                                * 06CC7
         D1=C                                     * 06CCD
         C=B     A                                * 06CD0
@@ -1260,11 +1260,11 @@ SUB_06CD7:
         A=A-C   A                                * 06D54
         R4=A.F  A                                * 06D56
         C=R2.F  A                                * 06D5C
-L_06D62:
+SUB_06CD7.loop1:
         ?D<C    A                                * 06D62
-        GOYES   L_06D69                          * 06D65
+        GOYES   SUB_06CD7.L2                     * 06D65
         D=C     A                                * 06D67
-L_06D69:
+SUB_06CD7.L2:
         C=R0.F  A                                * 06D69
         D0=C                                     * 06D6F
         C=C+D   A                                * 06D72
@@ -1289,7 +1289,7 @@ L_06D69:
         C=C-D   A                                * 06DC1
         R2=C.F  A                                * 06DC3
         ?C#0    A                                * 06DC9
-        GOYES   L_06D62                          * 06DCC
+        GOYES   SUB_06CD7.loop1                  * 06DCC
         C=B     A                                * 06DCE
         D0=C                                     * 06DD0
         C=R1.F  A                                * 06DD3
@@ -1305,10 +1305,10 @@ L_06D69:
         A=C     A                                * 06DEF
         C=0     P                                * 06DF1
         ?C#0    A                                * 06DF4
-        GOYES   L_06E06                          * 06DF7
+        GOYES   >TOPTEMP.L1                      * 06DF7
         GOSUBL  GETPTR                           * 06DF9
         GOVLNG  DOMEMERR                         * 06DFF
-L_06E06:
+>TOPTEMP.L1:
         B=A     A                                * 06E06
         D0=(5)  INITEN                           * 06E08
         C=DAT1  S                                * 06E0F
@@ -1347,7 +1347,7 @@ L_06E06:
 * refs (141): 0F7A1 0F837 146F9 14825 14D82 14DE6 ...
 NOP:
         CON(5)  (*)+5                            * 06E8E  primitive code object
-        GOTO    L_071BE                          * 06E93
+        GOTO    AGAIN.L3                         * 06E93
 
 * -> nob (nextob)
 * refs (970): 02F56 04D96 04DA5 04DAF 04DC3 05602 ...
@@ -1360,26 +1360,26 @@ NOP:
         D0=(5)  PRLG                             * 06EA7
         CD0EX                                    * 06EAE
         ?C#A    A                                * 06EB1
-        GOYES   L_06EC3                          * 06EB4
+        GOYES   '.L1                             * 06EB4
         GOSUBL  SKIPOB                           * 06EB6
         C=RSTK                                   * 06EBC
         A=C     A                                * 06EBE
-        GONC    L_06EC9                          * 06EC0
-L_06EC3:
+        GONC    '.L2                             * 06EC0
+'.L1:
         A=DAT0  A                                * 06EC3
         D0=D0+  5                                * 06EC6
-L_06EC9:
+'.L2:
         D=D-1   A                                * 06EC9
-        GOC     L_06EDE                          * 06ECB
-L_06ECE:
+        GOC     '.L4                             * 06ECB
+'.L3:
         D1=D1-  5                                * 06ECE
         DAT1=A  A                                * 06ED1
         A=DAT0  A                                * 06ED4
         D0=D0+  5                                * 06ED7
         PC=(A)                                   * 06EDA
-L_06EDE:
-        LC(5)   L_06ECE                          * 06EDE
-        GOLONG  L_02D59                          * 06EE5
+'.L4:
+        LC(5)   '.L3                             * 06EDE
+        GOLONG  DOEXT4.L12                       * 06EE5
 
 * -> ob
 * refs (123): 14730 148CA 14A64 14B27 14C49 14C80 ...
@@ -1390,19 +1390,19 @@ L_06EDE:
         RSTK=C                                   * 06EF5
         GOSUB   SUB_06F30                        * 06EF7
         ?C#A    A                                * 06EFB
-        GOYES   L_06F0C                          * 06EFE
+        GOYES   'R.L2                            * 06EFE
         AD0EX                                    * 06F00
-L_06F03:
+'R.loop1:
         C=RSTK                                   * 06F03
         D0=C                                     * 06F05
-        GOTO    L_06EC9                          * 06F08
-L_06F0C:
+        GOTO    '.L2                             * 06F08
+'R.L2:
         LC(5)   SEMILOOP~1                       * 06F0C
         ?C=A    A                                * 06F13
-        GOYES   L_06F1E                          * 06F16
+        GOYES   'R.L3                            * 06F16
         A=DAT0  A                                * 06F18
-        GONC    L_06F03                          * 06F1B
-L_06F1E:
+        GONC    'R.loop1                         * 06F1B
+'R.L3:
         C=RSTK                                   * 06F1E
         D0=C                                     * 06F20
         LC(5)   NULL::                           * 06F23
@@ -1438,12 +1438,12 @@ SUB_06F30:
         RSTK=C                                   * 06F70
         GOSUB   SUB_06F30                        * 06F72
         ?C#A    A                                * 06F76
-        GOYES   L_06F82                          * 06F79
+        GOYES   'REVAL.L1                        * 06F79
         AD0EX                                    * 06F7B
-        GOTO    L_06F85                          * 06F7E
-L_06F82:
+        GOTO    'REVAL.L2                        * 06F7E
+'REVAL.L1:
         A=DAT0  A                                * 06F82
-L_06F85:
+'REVAL.L2:
         C=RSTK                                   * 06F85
         D0=C                                     * 06F87
         PC=(A)                                   * 06F8A
@@ -1465,13 +1465,13 @@ EVAL:
         D1=D1+  5                                * 06FA7
         LC(5)   #00005                           * 06FAA
         A=A+C   A                                * 06FB1
-        GOTO    L_0717B                          * 06FB3
+        GOTO    IDUP.L2                          * 06FB3
 
 * ->
 * refs (185): 145B5 145FA 1465E 146D6 14744 14974 ...
 RDROP:
         CON(5)  (*)+5                            * 06FB7  primitive code object
-L_06FBC:
+RDROP.L1:
         LC(5)   #00005                           * 06FBC
         B=B-C   A                                * 06FC3
         D=D+1   A                                * 06FC5
@@ -1483,20 +1483,20 @@ L_06FBC:
 * refs (438): 02F60 03003 08C3B 08C59 093FC 0BCAE ...
 COLA:
         CON(5)  (*)+5                            * 06FD1  primitive code object
-L_06FD6:
+COLA.L1:
         A=DAT0  A                                * 06FD6
         AD0EX                                    * 06FD9
         C=DAT0  A                                * 06FDC
         D0=(5)  PRLG                             * 06FDF
         AD0EX                                    * 06FE6
         ?C#A    A                                * 06FE9
-        GOYES   L_06FF7                          * 06FEC
+        GOYES   COLA.L2                          * 06FEC
         AD0EX                                    * 06FEE
         D0=A                                     * 06FF1
-        GONC    L_06FFA                          * 06FF4
-L_06FF7:
+        GONC    COLA.L3                          * 06FF4
+COLA.L2:
         A=DAT0  A                                * 06FF7
-L_06FFA:
+COLA.L3:
         ABEX    A                                * 06FFA
         AD0EX                                    * 06FFC
         D0=D0-  5                                * 06FFF
@@ -1511,7 +1511,7 @@ L_06FFA:
 R@:
         CON(5)  (*)+5                            * 07012  primitive code object
         GOSUB   SUB_07035                        * 07017
-        GOTO    L_06EC9                          * 0701B
+        GOTO    '.L2                             * 0701B
 
 * -> ::
 * refs (2): 3EDFC 3EE29
@@ -1520,7 +1520,7 @@ R>:
         GOSUB   SUB_07035                        * 07024
         LC(5)   #00005                           * 07028
         B=B-C   A                                * 0702F
-        GOTO    L_06ECE                          * 07031
+        GOTO    '.L3                             * 07031
 
 * refs (2): 07017 07024
 SUB_07035:
@@ -1539,13 +1539,13 @@ SUB_07035:
         C=C-B   A                                * 07061
         R3=C                                     * 07063
         ST=0    10                               * 07066
-L_07069:
+SUB_07035.loop1:
         GOSUBL  CREATETEMP                       * 07069
-        GONC    L_0707F                          * 0706F
+        GONC    SUB_07035.L2                     * 0706F
         GOSBVL  St10Gb                           * 07072
         C=R3                                     * 07079
-        GONC    L_07069                          * 0707C
-L_0707F:
+        GONC    SUB_07035.loop1                  * 0707C
+SUB_07035.L2:
         LC(5)   DOCOL                            * 0707F
         DAT0=C  A                                * 07086
         AD0EX                                    * 07089
@@ -1580,9 +1580,9 @@ RPITE:
         D=D+C   A                                * 070E5
         LC(5)   TRUE                             * 070E7
         ?C=A    A                                * 070EE
-        GOYES   L_070F5                          * 070F1
+        GOYES   RPITE.L1                         * 070F1
         C=RSTK                                   * 070F3
-L_070F5:
+RPITE.L1:
         C=RSTK                                   * 070F5
 
 * refs (1): 07273
@@ -1603,7 +1603,7 @@ RPIT:
         D=D+1   A                                * 07112
         LC(5)   TRUE                             * 07114
         ?C=A    A                                * 0711B
-        GOYES   L_070F5                          * 0711E
+        GOYES   RPITE.L1                         * 0711E
         A=DAT0  A                                * 07120
         D0=D0+  5                                * 07123
         PC=(A)                                   * 07126
@@ -1617,7 +1617,7 @@ RPIT:
         D=D+1   A                                * 07135
         LC(5)   TRUE                             * 07137
         ?C=A    A                                * 0713E
-        GOYES   L_07152                          * 07141
+        GOYES   SKIP.L1                          * 07141
         A=DAT0  A                                * 07143
         D0=D0+  5                                * 07146
         PC=(A)                                   * 07149
@@ -1626,26 +1626,26 @@ RPIT:
 * refs (71): 0BC8D 0BD94 1DD8D 1DDA1 1DE3C 20BEF ...
 SKIP:
         CON(5)  (*)+5                            * 0714D  primitive code object
-L_07152:
+SKIP.L1:
         GOSUBL  SKIPOB                           * 07152
-        GOTO    L_071BE                          * 07158
+        GOTO    AGAIN.L3                         * 07158
 
 * Skips 2 objs in the runstream.
 * refs (1): 6EFB9
 2SKIP:
         CON(5)  (*)+5                            * 0715C  primitive code object
         GOSUBL  SKIPOB                           * 07161
-        GOTO    L_07152                          * 07167
+        GOTO    SKIP.L1                          * 07167
 
 * ->
 IDUP:
         CON(5)  (*)+5                            * 0716B  primitive code object
-L_07170:
+IDUP.L1:
         AD0EX                                    * 07170
         D0=A                                     * 07173
         D=D-1   A                                * 07176
-        GOC     L_07195                          * 07178
-L_0717B:
+        GOC     IDUP.L3                          * 07178
+IDUP.L2:
         C=B     A                                * 0717B
         CD0EX                                    * 0717D
         DAT0=A  A                                * 07180
@@ -1655,31 +1655,31 @@ L_0717B:
         A=DAT0  A                                * 0718B
         D0=D0+  5                                * 0718E
         PC=(A)                                   * 07191
-L_07195:
-        LC(5)   L_0717B                          * 07195
-        GOLONG  L_02D59                          * 0719C
+IDUP.L3:
+        LC(5)   IDUP.L2                          * 07195
+        GOLONG  DOEXT4.L12                       * 0719C
 
 * ->
 * refs (261): 08E24 08FD5 0980E 09854 0B157 0B69C ...
 BEGIN:
         CON(5)  (*)+5                            * 071A2  primitive code object
-        GOTO    L_07170                          * 071A7
+        GOTO    IDUP.L1                          * 071A7
 
 * ->
 * refs (40): 34F39 385DE 576AD 57A98 57E67 58077 ...
 AGAIN:
         CON(5)  (*)+5                            * 071AB  primitive code object
-L_071B0:
+AGAIN.L1:
         C=B     A                                * 071B0
 * a branch also enters #071B4, where the nibbles decode as GOTO #07636
-L_071B2:
+AGAIN.L2:
         CD0EX                                    * 071B2
 * the rest of GOTO #07636 at #071B4
 * a branch also enters #071B5, where the nibbles decode as D0=D0- 5
         NIBHEX  184                              * 071B5  ā
         A=DAT0  A                                * 071B8
         D0=A                                     * 071BB
-L_071BE:
+AGAIN.L3:
         A=DAT0  A                                * 071BE
         D0=D0+  5                                * 071C1
         PC=(A)                                   * 071C4
@@ -1693,14 +1693,14 @@ UNTIL:
         D=D+1   A                                * 071D3
         LC(5)   FALSE                            * 071D5
         ?C=A    A                                * 071DC
-        GOYES   L_071B0                          * 071DF
-        GOTO    L_06FBC                          * 071E1
+        GOYES   AGAIN.L1                         * 071DF
+        GOTO    RDROP.L1                         * 071E1
 
 * ->
 * refs (106): 08E4C 09011 0B70A 0C898 0C8D4 10365 ...
 REPEAT:
         CON(5)  (*)+5                            * 071E5  primitive code object
-        GOTO    L_071B0                          * 071EA
+        GOTO    AGAIN.L1                         * 071EA
 
 * flag ->
 * refs (92): 08E2E 08FE4 0C884 0C8B1 10338 1048C ...
@@ -1711,21 +1711,21 @@ WHILE:
         D=D+1   A                                * 071F9
         LC(5)   FALSE                            * 071FB
         ?C=A    A                                * 07202
-        GOYES   L_07211                          * 07205
+        GOYES   WHILE.L1                         * 07205
         A=DAT0  A                                * 07207
         D0=D0+  5                                * 0720A
         PC=(A)                                   * 0720D
-L_07211:
+WHILE.L1:
         GOSUBL  SKIPOB                           * 07211
         GOSUBL  SKIPOB                           * 07217
-        GOTO    L_06FBC                          * 0721D
+        GOTO    RDROP.L1                         * 0721D
 
 * -> #
 * refs (273): 10C7C 10C90 153E8 1545F 1D0B5 2C405 ...
 INDEX@:
         CON(5)  (*)+5                            * 07221  primitive code object
         GOSUB   SUB_072D7                        * 07226
-L_0722A:
+INDEX@.L1:
         C=DAT0  A                                * 0722A
         D0=A                                     * 0722D
         R0=C                                     * 07230
@@ -1740,25 +1740,25 @@ L_0722A:
 ISTOP@:
         CON(5)  (*)+5                            * 07249  primitive code object
         GOSUB   SUB_072D7                        * 0724E
-L_07252:
+ISTOP@.L1:
         D0=D0+  5                                * 07252
-        GONC    L_0722A                          * 07255  always taken
+        GONC    INDEX@.L1                        * 07255  always taken
 
 * -> #
 * refs (15): 36557 41C6B 7D166 7D22E 8DAF6 9352B ...
 JINDEX@:
         CON(5)  (*)+5                            * 07258  primitive code object
         GOSUB   SUB_072EC                        * 0725D
-        GONC    L_0722A                          * 07261
+        GONC    INDEX@.L1                        * 07261
 
 * -> #
 JSTOP@:
         ?C=A    B                                * 07264
-        GOYES   L_0726D+1                        * 07267
+        GOYES   JSTOP@.L1+1                      * 07267
         GOSUB   SUB_072EC                        * 07269
 * a branch also enters #0726E, where the nibbles decode as GOC #072CD
-L_0726D:
-        GONC    L_07252                          * 0726D
+JSTOP@.L1:
+        GONC    ISTOP@.L1                        * 0726D
 
 * # ->
 * refs (1): CB810
@@ -1769,9 +1769,9 @@ INDEXSTO:
 * the rest of GONC #07298 at #07270
         NIBHEX  72                               * 07271  '
         GOSUB   SUB_070F7                        * 07273
-        GOTO    L_071B2+2                        * 07277
+        GOTO    AGAIN.L2+2                       * 07277
         NIBHEX  1007550                          * 0727B  .pU
-L_07282:
+INDEXSTO.L1:
         C=R0                                     * 07282
         DAT0=C  A                                * 07285
         D0=A                                     * 07288
@@ -1786,9 +1786,9 @@ ISTOPSTO:
         GOSUBL  POP#                             * 0729A
         R0=A                                     * 072A0
         GOSUB   SUB_072D7                        * 072A3
-L_072A7:
+ISTOPSTO.L1:
         D0=D0+  5                                * 072A7
-        GONC    L_07282                          * 072AA
+        GONC    INDEXSTO.L1                      * 072AA
 
 * # ->
 JINDEXSTO:
@@ -1798,8 +1798,8 @@ JINDEXSTO:
         C=C-B   A                                * 072B3
         ?HST=0  15                               * 072B5
 * a branch also enters #072B9, where the nibbles decode as RTNSXM
-L_072B8:
-        GOYES   L_072B8+1                        * 072B8
+JINDEXSTO.L1:
+        GOYES   JINDEXSTO.L1+1                   * 072B8
 * the rest of RTNSXM at #072B9
 * a branch also enters #072BA, where the nibbles decode as C=RSTK
         BSS     1                                * 072BA  zeros
@@ -1817,7 +1817,7 @@ JSTOPSTO:
         NIBHEX  73F                              * 072CA  7
         R0=A                                     * 072CD
         GOSUB   SUB_072EC                        * 072D0
-        GONC    L_072A7                          * 072D4
+        GONC    ISTOPSTO.L1                      * 072D4
 
 * refs (6): 07226 0724E 072A3 07326 07339 073B3
 SUB_072D7:
@@ -1841,13 +1841,13 @@ SUB_072EC:
 * refs (4): 07397 07489 074C5 07558
 SUB_07304:
         D0=(5)  DSKTOP                           * 07304
-L_0730B:
+SUB_07304.loop1:
         A=DAT0  A                                * 0730B
         A=A+C   A                                * 0730E
         DAT0=A  A                                * 07310
         D0=D0+  5                                * 07313
         P=P-1                                    * 07316
-        GONC    L_0730B                          * 07318
+        GONC    SUB_07304.loop1                  * 07318
         GOLONG  ADJMEM                           * 0731B
 
 * ->
@@ -1856,28 +1856,28 @@ STOPLOOP:
         GOSUB   SUB_072D7                        * 07326
         D0=D0+  5                                * 0732A
         R0=A                                     * 0732D
-        GOTO    L_07360                          * 07330
+        GOTO    LOOP.L3                          * 07330
 
 * ->
 * refs (284): 02232 0B68D 12BA8 152E6 15478 178AB ...
 LOOP:
         CON(5)  (*)+5                            * 07334  primitive code object
-L_07339:
+LOOP.L1:
         GOSUB   SUB_072D7                        * 07339
         C=DAT0  A                                * 0733D
         R0=A                                     * 07340
         C=C+1   A                                * 07343
-L_07345:
+LOOP.L2:
         D0=D0+  5                                * 07345
         A=DAT0  A                                * 07348
         ?C>=A   A                                * 0734B
-        GOYES   L_07360                          * 0734E
+        GOYES   LOOP.L3                          * 0734E
         D0=D0-  5                                * 07350
         DAT0=C  A                                * 07353
         A=R0                                     * 07356
         D0=A                                     * 07359
-        GOTO    L_071B0                          * 0735C
-L_07360:
+        GOTO    AGAIN.L1                         * 0735C
+LOOP.L3:
         D0=D0-  15                               * 07360
         C=DAT0  A                                * 07363
         C=C-1   A                                * 07366
@@ -1896,7 +1896,7 @@ L_07360:
         P=      3                                * 07395
         GOSUB   SUB_07304                        * 07397
         GOSUBL  GETPTR                           * 0739B
-        GOTO    L_06FBC                          * 073A1
+        GOTO    RDROP.L1                         * 073A1
 
 * # ->
 * refs (9): 36598 369C1 369D5 39C52 45439 45632 ...
@@ -1908,14 +1908,14 @@ L_07360:
         C=DAT0  A                                * 073B7
         AR0EX                                    * 073BA
         C=C+A   A                                * 073BD
-        GOTO    L_07345                          * 073BF
+        GOTO    LOOP.L2                          * 073BF
 
 * #stop ->
 * refs (145): 02219 12B9E 1871A 1F3BD 1F48E 21010 ...
 ZERO_DO:
         CON(5)  (*)+5                            * 073C3  primitive code object
         A=0     A                                * 073C8
-        GOTO    L_07402                          * 073CA
+        GOTO    DO.L1                            * 073CA
 
 * #stop ->
 * refs (61): 152D7 153E3 2D951 3A0FD 3A23D 3A681 ...
@@ -1923,7 +1923,7 @@ ONE_DO:
         CON(5)  (*)+5                            * 073CE  primitive code object
         A=0     A                                * 073D3
         A=A+1   A                                * 073D5
-        GOTO    L_07402                          * 073D7
+        GOTO    DO.L1                            * 073D7
 
 * #stop ->
 * refs (82): 20E46 2C3EC 2C643 2DC57 35E6D 36548 ...
@@ -1935,29 +1935,29 @@ ONE_DO:
         A=0     A                                * 073EC
         A=A+1   A                                * 073EE
         R2=A                                     * 073F0
-        GOTO    L_0740E                          * 073F3
+        GOTO    DO.L2                            * 073F3
 
 * #stop #start ->
 * refs (85): 0B66A 17874 36994 3A06C 3A4E7 3F5C5 ...
 DO:
         CON(5)  (*)+5                            * 073F7  primitive code object
         GOSUBL  POP#                             * 073FC
-L_07402:
+DO.L1:
         R2=A                                     * 07402
         GOSUBL  POP#                             * 07405
         R3=A                                     * 0740B
-L_0740E:
+DO.L2:
         GOSUBL  SAVPTR                           * 0740E
         ST=0    10                               * 07414
-L_07417:
+DO.loop3:
         GOSUBL  ROOM                             * 07417
         D=C     A                                * 0741D
         LC(5)   #0000F                           * 0741F
         ?D>=C   A                                * 07426
-        GOYES   L_07435                          * 07429
+        GOYES   DO.L4                            * 07429
         GOSBVL  St10Gb                           * 0742B
-        GONC    L_07417                          * 07432
-L_07435:
+        GONC    DO.loop3                         * 07432
+DO.L4:
         D0=(5)  DOLPENV                          * 07435
         A=DAT0  A                                * 0743C
         D0=(5)  DSKTOP                           * 0743F
@@ -1984,7 +1984,7 @@ L_07435:
         P=      3                                * 07487
         GOSUB   SUB_07304                        * 07489
         GOSUBL  GETPTR                           * 0748D
-        GOTO    L_07170                          * 07493
+        GOTO    IDUP.L1                          * 07493
 
 * ->
 * refs (305): 0E4D4 0F8EB 0FA2B 14465 14CE4 14E63 ...
@@ -2028,14 +2028,14 @@ DOBIND:
         A=A+B   A                                * 07505
         R1=A                                     * 07507
         ST=0    10                               * 0750A
-L_0750D:
+DOBIND.loop1:
         GOSUBL  ROOM                             * 0750D
         A=R1                                     * 07513
         ?C>=A   A                                * 07516
-        GOYES   L_07525                          * 07519
+        GOYES   DOBIND.L2                        * 07519
         GOSBVL  St10Gb                           * 0751B
-        GONC    L_0750D                          * 07522
-L_07525:
+        GONC    DOBIND.loop1                     * 07522
+DOBIND.L2:
         B=A     A                                * 07525
         D0=(5)  TEMPENV                          * 07527
         C=DAT0  A                                * 0752E
@@ -2066,20 +2066,20 @@ L_07525:
         C=R0                                     * 07581
         C=C+C   A                                * 07584
         D=D+C   A                                * 07586
-        GOTO    L_071BE                          * 07588
+        GOTO    AGAIN.L3                         * 07588
 
 * refs (2): 07567 07571
 SUB_0758C:
         C=R0                                     * 0758C
         B=C     A                                * 0758F
-L_07591:
+SUB_0758C.loop1:
         B=B-1   A                                * 07591
         RTNC                                     * 07593
         C=DAT0  A                                * 07596
         D0=D0+  5                                * 07599
         D1=D1+  10                               * 0759C
         DAT1=C  A                                * 0759F
-        GONC    L_07591                          * 075A2  always taken
+        GONC    SUB_0758C.loop1                  * 075A2  always taken
 
 * #n -> ob
 * refs (52): 456EF 46964 47222 4724F 477BD 47D42 ...
@@ -2139,7 +2139,7 @@ PUTLAM:
         D=D+1   A                                * 07630
         D=D+1   A                                * 07632
 * a branch also enters #07636, where the nibbles decode as ?B<=C A
-        GOTO    L_071BE                          * 07634
+        GOTO    AGAIN.L3                         * 07634
 
 * #libnum hxs ->
 * the rest of ?B<=C A at #07636
@@ -2168,31 +2168,31 @@ SETMESG:
 * refs (1): 0764B
 SET:
         GOVLNG  SET~1                            * 07661
-L_07668:
+SET.loop1:
         C=DAT0  A                                * 07668
         ?C#A    X                                * 0766B
-        GOYES   L_07690                          * 0766E
+        GOYES   SET.L3                           * 0766E
         C=R3                                     * 07670
         ?ST=1   11                               * 07673
-        GOYES   L_07684                          * 07676
+        GOYES   SET.L2                           * 07676
         D0=D0+  3                                * 07678
         DAT0=C  A                                * 0767B
         D0=D0+  10                               * 0767E
-        GONC    L_07698                          * 07681
-L_07684:
+        GONC    SET.L4                           * 07681
+SET.L2:
         D0=D0+  8                                * 07684
         DAT0=C  A                                * 07687
         D0=D0+  5                                * 0768A
-        GONC    L_07698                          * 0768D
-L_07690:
+        GONC    SET.L4                           * 0768D
+SET.L3:
         ?C>A    X                                * 07690
-        GOYES   L_0769E                          * 07693
+        GOYES   SET.L5                           * 07693
         D0=D0+  13                               * 07695
-L_07698:
+SET.L4:
         B=B-1   X                                * 07698
 * a branch also enters #0769C, where the nibbles decode as A=A-1 A
-        GONC    L_07668                          * 0769B
-L_0769E:
+        GONC    SET.loop1                        * 0769B
+SET.L5:
         GOSUBL  GETPTR                           * 0769E
         A=DAT0  A                                * 076A4
         D0=D0+  5                                * 076A7
@@ -2204,28 +2204,28 @@ OFFSRRP:
         CON(5)  (*)+5                            * 076AE  primitive code object
         GOSUB   SUB_077B2                        * 076B3
         D=0     A                                * 076B7
-        GONC    L_076DC                          * 076B9
-L_076BC:
+        GONC    OFFSRRP.L4                       * 076B9
+OFFSRRP.loop1:
         C=DAT0  A                                * 076BC
         ?C#A    X                                * 076BF
-        GOYES   L_076D4                          * 076C2
+        GOYES   OFFSRRP.L3                       * 076C2
         ?D#0    A                                * 076C4
-        GOYES   L_076D2                          * 076C7
+        GOYES   OFFSRRP.L2                       * 076C7
         CD0EX                                    * 076C9
         R0=C                                     * 076CC
         CD0EX                                    * 076CF
-L_076D2:
+OFFSRRP.L2:
         D=D+1   A                                * 076D2
-L_076D4:
+OFFSRRP.L3:
         ?C>A    X                                * 076D4
-        GOYES   L_076E2                          * 076D7
+        GOYES   OFFSRRP.L5                       * 076D7
         D0=D0+  13                               * 076D9
-L_076DC:
+OFFSRRP.L4:
         B=B-1   X                                * 076DC
-        GONC    L_076BC                          * 076DF
-L_076E2:
+        GONC    OFFSRRP.loop1                    * 076DF
+OFFSRRP.L5:
         ?D=0    A                                * 076E2
-        GOYES   L_0769E                          * 076E5
+        GOYES   SET.L5                           * 076E5
         D1=D1+  5                                * 076E7
         C=DAT1  A                                * 076EA
         C=C-D   A                                * 076ED
@@ -2237,37 +2237,37 @@ L_076E2:
         C=C-D   A                                * 076FA
         A=R0                                     * 076FC
         GOSUBL  MOVEDSU                          * 076FF
-        GOTO    L_0769E                          * 07705
+        GOTO    SET.L5                           * 07705
 
 * # ->
 * refs (5): 18A0B 21CA1 268CC C081B E387D
 TOSRRP:
         CON(5)  (*)+5                            * 07709  primitive code object
         GOSUB   SUB_077B2                        * 0770E
-        GOVLNG  L_71014                          * 07712
-L_07719:
+        GOVLNG  SET~1.L19                        * 07712
+TOSRRP.loop1:
         B=B-1   X                                * 07719
-        GOC     L_0772D                          * 0771C
+        GOC     TOSRRP.L2                        * 0771C
         C=DAT1  A                                * 0771F
         ?C>=A   X                                * 07722
-        GOYES   L_0772D                          * 07725
+        GOYES   TOSRRP.L2                        * 07725
         D1=D1+  13                               * 07727
-        GONC    L_07719                          * 0772A
-L_0772D:
+        GONC    TOSRRP.loop1                     * 0772A
+TOSRRP.L2:
         AD1EX                                    * 0772D
         C=0     A                                * 07730
         LC(1)   #D                               * 07732
         GOSUBL  MOVEDSD                          * 07735
-        GONC    L_0775E                          * 0773B
+        GONC    TOSRRP.L3                        * 0773B
         R2=A                                     * 0773E
         GOSUBL  GARBAGECOL                       * 07741
         A=R2                                     * 07747
         C=0     A                                * 0774A
         LC(1)   #D                               * 0774C
         GOSUBL  MOVEDSD                          * 0774F
-        GONC    L_0775E                          * 07755
-        GOLONG  L_08755                          * 07758
-L_0775E:
+        GONC    TOSRRP.L3                        * 07755
+        GOLONG  CREATE.loop7                     * 07758
+TOSRRP.L3:
         A=R3                                     * 0775E
         D0=A                                     * 07761
         A=B     A                                * 07764
@@ -2281,25 +2281,25 @@ L_0775E:
         C=DAT1  A                                * 07781
         C=C+1   A                                * 07784
         DAT1=C  A                                * 07786
-        GOTO    L_0769E                          * 07789
+        GOTO    SET.L5                           * 07789
 
 * # -> flag
 * refs (1): 21C92
 ONSRRP?:
         CON(5)  (*)+5                            * 0778D  primitive code object
         GOSUB   SUB_077B2                        * 07792
-        GONC    L_077A4                          * 07796
-L_07799:
+        GONC    ONSRRP?.L2                       * 07796
+ONSRRP?.loop1:
         C=DAT0  A                                * 07799
         ?C=A    X                                * 0779C
-        GOYES   L_077AE                          * 0779F
+        GOYES   ONSRRP?.L3                       * 0779F
         D0=D0+  13                               * 077A1
-L_077A4:
+ONSRRP?.L2:
         B=B-1   X                                * 077A4
-        GONC    L_07799                          * 077A7
-        GOTO    L_07C6F                          * 077AA
-L_077AE:
-        GOTO    L_07C24                          * 077AE
+        GONC    ONSRRP?.loop1                    * 077A7
+        GOTO    COMPILEID.L6                     * 077AA
+ONSRRP?.L3:
+        GOTO    COMPILEID.L2                     * 077AE
 
 * refs (4): 076B3 0770E 07792 70E57
 SUB_077B2:
@@ -2355,21 +2355,21 @@ SUB_07831:
         P=C     0                                * 07848
         CSR     X                                * 0784C
         B=C     B                                * 0784F
-L_07852:
+SUB_07831.loop1:
         B=B-1   B                                * 07852
-        GOC     L_0786F                          * 07855
+        GOC     SUB_07831.L3                     * 07855
         A=DAT0  W                                * 07858
         C=DAT1  W                                * 0785C
         D0=D0+  16                               * 07860
         D1=D1+  16                               * 07863
         ?C=A    W                                * 07866
-        GOYES   L_07852                          * 07869
-L_0786B:
+        GOYES   SUB_07831.loop1                  * 07869
+SUB_07831.L2:
         P=      0                                * 0786B
         RTNSC                                    * 0786D
-L_0786F:
+SUB_07831.L3:
         P=P-1                                    * 0786F
-        GOC     L_0788A                          * 07871
+        GOC     SUB_0787C.L1                     * 07871
         A=DAT0  WP                               * 07874
         C=DAT1  WP                               * 07878
 
@@ -2377,11 +2377,11 @@ L_0786F:
 * a branch also enters #0787D, where the nibbles decode as D0=D0+ 13
 SUB_0787C:
         ?C#A    WP                               * 0787C
-        GOYES   L_0786B                          * 0787F
+        GOYES   SUB_07831.L2                     * 0787F
         CD0EX                                    * 07881
         C+P+1                                    * 07884
         D0=C                                     * 07887
-L_0788A:
+SUB_0787C.L1:
         P=      0                                * 0788A
         RTNCC                                    * 0788C
 
@@ -2391,7 +2391,7 @@ SUB_0788E:
         GOSUBL  SUB_08503                        * 07891
         A=DAT0  A                                * 07897
         A=-A    A                                * 0789A
-L_0789C:
+SUB_0788E.L1:
         ?A=0    A                                * 0789C
         RTNYES                                   * 0789F
         CD0EX                                    * 078A1
@@ -2412,7 +2412,7 @@ D01<>WP:
 GrclR01A:
         D0=D0-  5                                * 078C3
         A=DAT0  A                                * 078C6
-        GONC    L_0789C                          * 078C9
+        GONC    SUB_0788E.L1                     * 078C9
 
 * refs (2): 079CC 07C68
 SUB_078CC:
@@ -2431,7 +2431,7 @@ FIRST@LAM:
         CON(5)  (*)+5                            * 078E9  primitive code object
         A=0     A                                * 078EE
         A=A+1   A                                * 078F0
-        GONC    L_078FF+2                        * 078F2
+        GONC    NTH@LAM.L1+2                     * 078F2
 
 * lam #n -> ob T -> F
 NTH@LAM:
@@ -2439,12 +2439,12 @@ NTH@LAM:
         GOSUB   SUB_0787C                        * 078F8
         C=DAT0  A                                * 078FC
 * a branch also enters #07901, where the nibbles decode as R2=A.F A
-L_078FF:
-        GOTO    L_07A7E+2                        * 078FF
+NTH@LAM.L1:
+        GOTO    SUB_07A56.L2+2                   * 078FF
 * the rest of R2=A.F A at #07901
         NIBHEX  AF02                             * 07903  ú 
         ST=1    0                                * 07907
-        GOTO    L_0794B                          * 0790A
+        GOTO    undo.L1                          * 0790A
 COMPILEID~1:
         GOSUBL  SAVPTR                           * 0790E
         C=DAT1  A                                * 07914
@@ -2455,7 +2455,7 @@ COMPILEID~1:
         D0=(5)  CONTEXT                          * 07921
         C=DAT0  A                                * 07928
         R1=C                                     * 0792B
-        GOTO    L_07C1D                          * 0792E
+        GOTO    COMPILEID.loop1                  * 0792E
         BSS     17                               * 07932
 
 * -> -> F
@@ -2463,7 +2463,7 @@ COMPILEID~1:
 undo:
         CON(5)  (*)+5                            * 07943  primitive code object
         ST=0    0                                * 07948
-L_0794B:
+undo.L1:
         GOSUBL  SAVPTR                           * 0794B
         C=DAT1  A                                * 07951
         D1=C                                     * 07954
@@ -2472,12 +2472,12 @@ L_0794B:
         CD1EX                                    * 0795D
         R0=C                                     * 07960
         ?ST=0   0                                * 07963
-        GOYES   L_079A4                          * 07966
+        GOYES   DRPExitAtLOOP.L1                 * 07966
         A=R2.F  A                                * 07968
         B=A     A                                * 0796E
         GOSUB   SUB_07DF3                        * 07970
-        GONC    L_079AB                          * 07974
-        GOTO    L_079D3                          * 07977
+        GONC    DRPExitAtLOOP.L2                 * 07974
+        GOTO    DRPExitAtLOOP.L7                 * 07977
 
 * ob -> -> F ->
 * refs (22): 02FDB 08C2C 14410 14498 14542 1507A ...
@@ -2492,28 +2492,28 @@ DRPExitAtLOOP:
         R0=C                                     * 07995
         LC(5)   DOIDNT                           * 07998
         ?C=A    A                                * 0799F
-        GOYES   L_079B2                          * 079A2
-L_079A4:
+        GOYES   DRPExitAtLOOP.L4                 * 079A2
+DRPExitAtLOOP.L1:
         GOSUB   LrclR0A                          * 079A4
-        GOC     L_079D3                          * 079A8
-L_079AB:
+        GOC     DRPExitAtLOOP.L7                 * 079A8
+DRPExitAtLOOP.L2:
         A=DAT0  A                                * 079AB
-L_079AE:
-        GOTO    L_08060                          * 079AE
-L_079B2:
+DRPExitAtLOOP.loop3:
+        GOTO    ROMPART.L5                       * 079AE
+DRPExitAtLOOP.L4:
         D0=(5)  CONTEXT                          * 079B2
         A=DAT0  A                                * 079B9
         R1=A                                     * 079BC
-L_079BF:
+DRPExitAtLOOP.loop5:
         GOSUB   SUB_0788E                        * 079BF
-        GOC     L_079CC                          * 079C3
+        GOC     DRPExitAtLOOP.L6                 * 079C3
         AD0EX                                    * 079C6
-        GONC    L_079AE                          * 079C9
-L_079CC:
+        GONC    DRPExitAtLOOP.loop3              * 079C9
+DRPExitAtLOOP.L6:
         GOSUB   SUB_078CC                        * 079CC
-        GONC    L_079BF                          * 079D0
-L_079D3:
-        GOTO    L_07EBE                          * 079D3
+        GONC    DRPExitAtLOOP.loop5              * 079D0
+DRPExitAtLOOP.L7:
+        GOTO    ROMPTR@.L2                       * 079D3
 
 * refs (2): 08C4F 08C81
 OBJ_079D7:
@@ -2528,7 +2528,7 @@ OBJ_079D7:
 * refs (1): 072C2
 * a branch also enters #079F2, where the nibbles decode as B=B+C M
 JSTOPSTO~1:
-        GOYES   L_07A4C                          * 079F2
+        GOYES   JSTOPSTO~1.L3                    * 079F2
 * the rest of B=B+C M at #079F2
 * a branch also enters #079F4, where the nibbles decode as A=DAT1 A
         NIBHEX  1                                * 079F4
@@ -2543,23 +2543,23 @@ JSTOPSTO~1:
         D0=(5)  CONTEXT                          * 07A12
         A=DAT0  A                                * 07A19
         ?A<B    A                                * 07A1C
-        GOYES   L_07A2C                          * 07A1F
+        GOYES   JSTOPSTO~1.L1                    * 07A1F
         ?C<=A   A                                * 07A21
-        GOYES   L_07A2C                          * 07A24
+        GOYES   JSTOPSTO~1.L1                    * 07A24
         A=DAT1  A                                * 07A26
         DAT0=A  A                                * 07A29
-L_07A2C:
+JSTOPSTO~1.L1:
         D0=(5)  STOPSIGN                         * 07A2C
         A=DAT0  A                                * 07A33
         ?A<B    A                                * 07A36
-        GOYES   L_07A46                          * 07A39
+        GOYES   JSTOPSTO~1.L2                    * 07A39
         ?C<=A   A                                * 07A3B
-        GOYES   L_07A46                          * 07A3E
+        GOYES   JSTOPSTO~1.L2                    * 07A3E
         A=DAT1  A                                * 07A40
         DAT0=A  A                                * 07A43
-L_07A46:
+JSTOPSTO~1.L2:
         GOSUBL  GETPTR                           * 07A46
-L_07A4C:
+JSTOPSTO~1.L3:
         A=DAT0  A                                * 07A4C
 
 * refs (1): 0763B
@@ -2577,15 +2577,15 @@ SUB_07A56:
         RTNYES                                   * 07A64
         LC(2)   #10                              * 07A66
         ?C<=A   B                                * 07A6A
-        GOYES   L_07A72                          * 07A6D
+        GOYES   SUB_07A56.L1                     * 07A6D
         C=A     B                                * 07A6F
-L_07A72:
+SUB_07A56.L1:
         RSTK=C                                   * 07A72
         D1=D1+  2                                * 07A74
         C=DAT1  W                                * 07A77
         D=C     W                                * 07A7B
 * a branch also enters #07A80, where the nibbles decode as BSL A
-L_07A7E:
+SUB_07A56.L2:
         D1=D1+  16                               * 07A7E
 * the rest of BSL A at #07A80
 * a branch also enters #07A81, where the nibbles decode as C=DAT1 W
@@ -2597,14 +2597,14 @@ L_07A7E:
         A=DAT0  A                                * 07A8B
         LC(5)   DOEXT1                           * 07A8E
         ?C#A    A                                * 07A95
-        GOYES   L_07AC8                          * 07A98
+        GOYES   SUB_07AB7.L3                     * 07A98
         D0=D0+  5                                * 07A9A
         A=DAT0  A                                * 07A9D
         D0=D0+  5                                * 07AA0
         C=DAT0  A                                * 07AA3
         ?C=0    A                                * 07AA6
-        GOYES   L_07AC5                          * 07AA9
-        GONC    L_07ABB                          * 07AAB
+        GOYES   SUB_07AB7.L2                     * 07AA9
+        GONC    SUB_07AB7.L1                     * 07AAB
 
 * refs (1): 07AC1
 SUB_07AAE:
@@ -2615,13 +2615,13 @@ SUB_07AAE:
 * refs (4): 07B71 07F2A 07F73 08254
 SUB_07AB7:
         PC=C                                     * 07AB7
-L_07ABB:
+SUB_07AB7.L1:
         ST=1    1                                * 07ABB
         CD0EX                                    * 07ABE
         GOSUB   SUB_07AAE                        * 07AC1
-L_07AC5:
+SUB_07AB7.L2:
         D0=A                                     * 07AC5
-L_07AC8:
+SUB_07AB7.L3:
         P=      0                                * 07AC8
         C=RSTK                                   * 07ACA
         CD1EX                                    * 07ACC
@@ -2638,13 +2638,13 @@ L_07AC8:
         D0=C                                     * 07AE6
         A=DAT0  A                                * 07AE9
         ?A=0    A                                * 07AEC
-        GOYES   L_07B51                          * 07AEF
+        GOYES   SUB_07AB7.L9                     * 07AEF
         A=A+C   A                                * 07AF1
-L_07AF3:
+SUB_07AB7.loop4:
         D0=D0+  5                                * 07AF3
         C=DAT0  A                                * 07AF6
         ?C=0    A                                * 07AF9
-        GOYES   L_07AF3                          * 07AFC
+        GOYES   SUB_07AB7.loop4                  * 07AFC
         AD0EX                                    * 07AFE
         A=A+C   A                                * 07B01
         ST=0    10                               * 07B03
@@ -2652,37 +2652,37 @@ L_07AF3:
         C=C-1   A                                * 07B09
         C=C+C   P                                * 07B0B
         P=C     0                                * 07B0E
-        GONC    L_07B21                          * 07B12
+        GONC    SUB_07AB7.L5                     * 07B12
         ST=1    10                               * 07B15
         BCEX    W                                * 07B18
         DCEX    W                                * 07B1B
         BCEX    W                                * 07B1E
-L_07B21:
+SUB_07AB7.L5:
         P=P+1                                    * 07B21
         D0=D0+  2                                * 07B23
-L_07B26:
+SUB_07AB7.loop6:
         ?ST=0   10                               * 07B26
-        GOYES   L_07B37                          * 07B29
+        GOYES   SUB_07AB7.L7                     * 07B29
         C=DAT0  W                                * 07B2B
         D0=D0+  16                               * 07B2F
         ?B#C    W                                * 07B32
-        GOYES   L_07B40                          * 07B35
-L_07B37:
+        GOYES   SUB_07AB7.L8                     * 07B35
+SUB_07AB7.L7:
         C=DAT0  WP                               * 07B37
         ?D=C    WP                               * 07B3B
-        GOYES   L_07B59                          * 07B3E
-L_07B40:
+        GOYES   SUB_07AB7.L10                    * 07B3E
+SUB_07AB7.L8:
         D0=D0+  5                                * 07B40
         CD0EX                                    * 07B43
         C+P+1                                    * 07B46
         D0=C                                     * 07B49
         ?C<A    A                                * 07B4C
-        GOYES   L_07B26                          * 07B4F
-L_07B51:
+        GOYES   SUB_07AB7.loop6                  * 07B4F
+SUB_07AB7.L9:
         C=RSTK                                   * 07B51
         GOSUB   SUB_07B6A                        * 07B53
         RTNSC                                    * 07B57
-L_07B59:
+SUB_07AB7.L10:
         CD0EX                                    * 07B59
         C+P+1                                    * 07B5C
         D0=C                                     * 07B5F
@@ -2694,9 +2694,9 @@ L_07B59:
 SUB_07B6A:
         P=      1                                * 07B6A
         ?ST=0   1                                * 07B6C
-        GOYES   L_07B75                          * 07B6F
+        GOYES   SUB_07B6A.L1                     * 07B6F
         GOSUB   SUB_07AB7                        * 07B71
-L_07B75:
+SUB_07B6A.L1:
         P=      0                                * 07B75
         RTNCC                                    * 07B77
 
@@ -2757,49 +2757,49 @@ SUB_07BF9:
 * refs (9): 0F1B9 0FFF7 24564 24E5B 27472 27F3F ...
 COMPILEID:
         CON(5)  COMPILEID~1                      * 07C18  code object: the address of its machine code
-L_07C1D:
+COMPILEID.loop1:
         GOSUB   SUB_0788E                        * 07C1D
-        GOC     L_07C37                          * 07C21
-L_07C24:
+        GOC     COMPILEID.L4                     * 07C21
+COMPILEID.L2:
         GOSUBL  GETPTR                           * 07C24
-L_07C2A:
+COMPILEID.L3:
         LC(5)   TRUE                             * 07C2A
         A=C     A                                * 07C31
         PC=(A)                                   * 07C33
-L_07C37:
+COMPILEID.L4:
         D0=(5)  USEROB                           * 07C37
         C=DAT0  A                                * 07C3E
         A=R1                                     * 07C41
         ?C=A    A                                * 07C44
-        GOYES   L_07C82                          * 07C47
+        GOYES   COMPILEID.L7                     * 07C47
         D0=A                                     * 07C49
         D0=D0+  5                                * 07C4C
         A=DAT0  A                                * 07C4F
         R2=A                                     * 07C52
         ST=0    11                               * 07C55
         GOSUBL  SUB_084B2                        * 07C58
-        GOC     L_07C68                          * 07C5E
+        GOC     COMPILEID.loop5                  * 07C5E
         GOSUB   SUB_07A56                        * 07C61
-        GONC    L_07CC3                          * 07C65
-L_07C68:
+        GONC    COMPILEID.L9                     * 07C65
+COMPILEID.loop5:
         GOSUB   SUB_078CC                        * 07C68
-        GONC    L_07C1D                          * 07C6C
-L_07C6F:
+        GONC    COMPILEID.loop1                  * 07C6C
+COMPILEID.L6:
         GOSUBL  GETPTR                           * 07C6F
         LC(5)   FALSE                            * 07C75
         A=C     A                                * 07C7C
         PC=(A)                                   * 07C7E
-L_07C82:
+COMPILEID.L7:
         GOSUBL  SUB_08503                        * 07C82
         CD0EX                                    * 07C88
         R4=C                                     * 07C8B
-L_07C8E:
+COMPILEID.loop8:
         A=R4                                     * 07C8E
         LC(5)   #0000D                           * 07C91
         A=A-C   A                                * 07C98
         C=R1                                     * 07C9A
         ?C>A    A                                * 07C9D
-        GOYES   L_07C68                          * 07CA0
+        GOYES   COMPILEID.loop5                  * 07CA0
         R4=A                                     * 07CA2
         D0=A                                     * 07CA5
         A=DAT0  A                                * 07CA8
@@ -2807,25 +2807,25 @@ L_07C8E:
         D0=D0+  3                                * 07CAE
         A=DAT0  A                                * 07CB1
         ?A=0    A                                * 07CB4
-        GOYES   L_07C8E                          * 07CB7
+        GOYES   COMPILEID.loop8                  * 07CB7
         D0=A                                     * 07CB9
         GOSUB   SUB_07A56                        * 07CBC
-        GOC     L_07C8E                          * 07CC0
-L_07CC3:
+        GOC     COMPILEID.loop8                  * 07CC0
+COMPILEID.L9:
         A=R2                                     * 07CC3
         LC(3)   #0A0                             * 07CC6
         ?C>A    X                                * 07CCB
-        GOYES   L_07CEC                          * 07CCE
+        GOYES   COMPILEID.L11                    * 07CCE
         LC(3)   #700                             * 07CD0
         ?C>A    X                                * 07CD5
-        GOYES   L_07CE4                          * 07CD8
+        GOYES   COMPILEID.L10                    * 07CD8
         LC(3)   #700                             * 07CDA
         ?C>=A   X                                * 07CDF
-        GOYES   L_07CEC                          * 07CE2
-L_07CE4:
+        GOYES   COMPILEID.L11                    * 07CE2
+COMPILEID.L10:
         GOSUB   SUB_07B79                        * 07CE4
-        GOTO    L_08060                          * 07CE8
-L_07CEC:
+        GOTO    ROMPART.L5                       * 07CE8
+COMPILEID.L11:
         ST=0    11                               * 07CEC
         GOSUBL  SUB_084F5                        * 07CEF
         A=R3                                     * 07CF5
@@ -2841,7 +2841,7 @@ L_07CEC:
         D0=C                                     * 07D0C
         A=DAT0  A                                * 07D0F
         A=A+C   A                                * 07D12
-        GOTO    L_08060                          * 07D14
+        GOTO    ROMPART.L5                       * 07D14
         BSS     3                                * 07D18  zeros
 
 * ob lam ->
@@ -2849,14 +2849,14 @@ L_07CEC:
 STOLAM:
         CON(5)  (*)+5                            * 07D1B  primitive code object
         ST=1    0                                * 07D20
-        GOTO    L_07D2F                          * 07D23
+        GOTO    STO.L1                           * 07D23
 
 * ob id/lam ->
 * refs (141): 15667 1D7B5 20999 20A04 20D09 24B39 ...
 STO:
         CON(5)  (*)+5                            * 07D27  primitive code object
         ST=0    0                                * 07D2C
-L_07D2F:
+STO.L1:
         GOSUBL  SAVPTR                           * 07D2F
         A=DAT1  A                                * 07D35
         D1=D1+  5                                * 07D38
@@ -2868,13 +2868,13 @@ L_07D2F:
         CD1EX                                    * 07D49
         R0=C                                     * 07D4C
         ?ST=1   0                                * 07D4F
-        GOYES   L_07D60                          * 07D52
+        GOYES   STO.L2                           * 07D52
         LC(5)   DOIDNT                           * 07D54
         ?C=A    A                                * 07D5B
-        GOYES   L_07D8F                          * 07D5E
-L_07D60:
+        GOYES   STO.L4                           * 07D5E
+STO.L2:
         GOSUB   LrclR0A                          * 07D60
-        GOC     L_07D83                          * 07D64
+        GOC     STO.L3                           * 07D64
         C=RSTK                                   * 07D67
         DAT0=C  A                                * 07D69
         GOSUBL  GETPTR                           * 07D6C
@@ -2884,10 +2884,10 @@ L_07D60:
         A=DAT0  A                                * 07D79
         D0=D0+  5                                * 07D7C
         PC=(A)                                   * 07D7F
-L_07D83:
+STO.L3:
         GOSUBL  GETPTR                           * 07D83
         GOLONG  DoErrULN                         * 07D89
-L_07D8F:
+STO.L4:
         GOSUBL  GETPTR                           * 07D8F
         LC(5)   OBJ_08C68                        * 07D95
         A=C     A                                * 07D9C
@@ -2898,7 +2898,7 @@ LrclR0A:
         D0=(5)  TEMPENV                          * 07DA2
         A=DAT0  A                                * 07DA9
         D0=A                                     * 07DAC
-L_07DAF:
+LrclR0A.loop1:
         A=DAT0  A                                * 07DAF
         ?A=0    A                                * 07DB2
         RTNYES                                   * 07DB5
@@ -2907,7 +2907,7 @@ L_07DAF:
         C=C+A   A                                * 07DBD
         D=C     A                                * 07DBF
         D0=D0+  10                               * 07DC1
-L_07DC4:
+LrclR0A.loop2:
         A=DAT0  A                                * 07DC4
         D0=D0+  10                               * 07DC7
         AD0EX                                    * 07DCA
@@ -2918,11 +2918,11 @@ L_07DC4:
         GOSUB   SUB_07831                        * 07DD9
         C=R1                                     * 07DDD
         D0=C                                     * 07DE0
-        GONC    L_07DEE                          * 07DE3
+        GONC    LrclR0A.L3                       * 07DE3
         ?D>C    A                                * 07DE6
-        GOYES   L_07DC4                          * 07DE9
-        GONC    L_07DAF                          * 07DEB
-L_07DEE:
+        GOYES   LrclR0A.loop2                    * 07DE9
+        GONC    LrclR0A.loop1                    * 07DEB
+LrclR0A.L3:
         D0=D0-  5                                * 07DEE
         RTNCC                                    * 07DF1
 
@@ -2932,23 +2932,23 @@ SUB_07DF3:
         A=DAT0  A                                * 07DFA
         D0=A                                     * 07DFD
         B=B-1   A                                * 07E00
-L_07E02:
+SUB_07DF3.loop1:
         A=DAT0  A                                * 07E02
         ?A=0    A                                * 07E05
         RTNYES                                   * 07E08
         B=B-1   A                                * 07E0A
-        GOC     L_07E1A                          * 07E0C
+        GOC     SUB_07DF3.L2                     * 07E0C
         CD0EX                                    * 07E0F
         C=C+A   A                                * 07E12
         D0=C                                     * 07E14
-        GONC    L_07E02                          * 07E17
-L_07E1A:
+        GONC    SUB_07DF3.loop1                  * 07E17
+SUB_07DF3.L2:
         CD0EX                                    * 07E1A
         D0=C                                     * 07E1D
         C=C+A   A                                * 07E20
         D=C     A                                * 07E22
         D0=D0+  10                               * 07E24
-L_07E27:
+SUB_07DF3.loop3:
         A=DAT0  A                                * 07E27
         D0=D0+  10                               * 07E2A
         AD0EX                                    * 07E2D
@@ -2959,9 +2959,9 @@ L_07E27:
         GOSUB   SUB_07831                        * 07E3C
         C=R1                                     * 07E40
         D0=C                                     * 07E43
-        GONC    L_07DEE                          * 07E46
+        GONC    LrclR0A.L3                       * 07E46
         ?D>C    A                                * 07E49
-        GOYES   L_07E27                          * 07E4C
+        GOYES   SUB_07DF3.loop3                  * 07E4C
         RTNSC                                    * 07E4E
 
 * #lib #cmd -> ROMPTR
@@ -2971,7 +2971,7 @@ L_07E27:
         GOSUBL  POP#                             * 07E55
         R3=A                                     * 07E5B
         GOSUB   SUB_07BF9                        * 07E5E
-L_07E62:
+#>ROMPTR.L1:
         R2=A                                     * 07E62
         GOSUB   SUB_07B79                        * 07E65
         DAT1=A  A                                * 07E69
@@ -2991,7 +2991,7 @@ PTR>ROMPTR:
         R3=A                                     * 07E8D
         D0=D0-  3                                * 07E90
         A=DAT0  A                                * 07E93
-        GONC    L_07E62                          * 07E96  always taken
+        GONC    #>ROMPTR.L1                      * 07E96  always taken
 
 * ROMPTR -> ob T -> F
 * refs (17): 02FF4 0F1DC 1001A 3834F 3A6D6 3FB24 ...
@@ -3000,13 +3000,13 @@ ROMPTR@:
         A=DAT1  A                                * 07E9E
         GOSUBL  SAVPTR                           * 07EA1
         GOSUB   ROMPTR>ADDR                      * 07EA7
-        GOC     L_07EBE                          * 07EAB
+        GOC     ROMPTR@.L2                       * 07EAB
         ?ST=0   1                                * 07EAE
-        GOYES   L_07EBA                          * 07EB1
-        GOVLNG  L_70F85                          * 07EB3
-L_07EBA:
-        GOTO    L_08060                          * 07EBA
-L_07EBE:
+        GOYES   ROMPTR@.L1                       * 07EB1
+        GOVLNG  SET~1.L14                        * 07EB3
+ROMPTR@.L1:
+        GOTO    ROMPART.L5                       * 07EBA
+ROMPTR@.L2:
         GOSUBL  GETPTR                           * 07EBE
         LC(5)   FALSE                            * 07EC4
         DAT1=C  A                                * 07ECB
@@ -3035,7 +3035,7 @@ PushXlib:
         RTNC                                     * 07F01
         LC(5)   IRAMBUFF                         * 07F04
         ?C#A    A                                * 07F0B
-        GOYES   L_07F31                          * 07F0E
+        GOYES   PushXlib.L1                      * 07F0E
         ST=1    1                                * 07F10
         D0=D0+  5                                * 07F13
         A=DAT0  A                                * 07F16
@@ -3047,7 +3047,7 @@ PushXlib:
         AD1EX                                    * 07F27
         GOSUB   SUB_07AB7                        * 07F2A
         D0=A                                     * 07F2E
-L_07F31:
+PushXlib.L1:
         B=B+1   A                                * 07F31
         A=B     A                                * 07F33
         A=A+A   A                                * 07F35
@@ -3056,22 +3056,22 @@ L_07F31:
         D0=D0+  5                                * 07F3B
         C=DAT0  A                                * 07F3E
         ?C<=A   A                                * 07F41
-        GOYES   L_07F69                          * 07F44
+        GOYES   PushXlib.L3                      * 07F44
         CD0EX                                    * 07F46
         A=A+C   A                                * 07F49
         D0=A                                     * 07F4B
         A=DAT0  A                                * 07F4E
         ?A=0    A                                * 07F51
-        GOYES   L_07F69                          * 07F54
+        GOYES   PushXlib.L3                      * 07F54
         CD0EX                                    * 07F56
         A=A+C   A                                * 07F59
         ?ST=0   1                                * 07F5B
-        GOYES   L_07F67                          * 07F5E
+        GOYES   PushXlib.L2                      * 07F5E
         GOSUB   SUB_07F6E                        * 07F60
         DAT0=A  A                                * 07F64
-L_07F67:
+PushXlib.L2:
         RTNCC                                    * 07F67
-L_07F69:
+PushXlib.L3:
         ?ST=0   1                                * 07F69
         RTNYES                                   * 07F6C
 
@@ -3094,16 +3094,16 @@ ROMPART:
         D0=(5)  USEROB                           * 07F94
         C=DAT0  A                                * 07F9B
         ?C=A    A                                * 07F9E
-        GOYES   L_07FE3                          * 07FA1
+        GOYES   ROMPART.L2                       * 07FA1
         D0=A                                     * 07FA3
         D0=D0+  5                                * 07FA6
         A=0     A                                * 07FA9
         A=DAT0  X                                * 07FAB
         LC(3)   #7FF                             * 07FAF
         ?C#A    X                                * 07FB4
-        GOYES   L_07FBD                          * 07FB7
-        GOTO    L_07EBE                          * 07FB9
-L_07FBD:
+        GOYES   ROMPART.L1                       * 07FB7
+        GOTO    ROMPTR@.L2                       * 07FB9
+ROMPART.L1:
         R0=A                                     * 07FBD
         GOSUBL  PUSH#                            * 07FC0
         LC(5)   TRUE                             * 07FC6
@@ -3114,7 +3114,7 @@ L_07FBD:
         A=DAT0  A                                * 07FD9
         D0=D0+  5                                * 07FDC
         PC=(A)                                   * 07FDF
-L_07FE3:
+ROMPART.L2:
         D0=C                                     * 07FE3
         D0=D0+  5                                * 07FE6
         C=0     A                                * 07FE9

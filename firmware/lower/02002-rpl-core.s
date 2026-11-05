@@ -3,23 +3,23 @@
 * Most referenced: SWAP DUP DROP BINT1 OVER TRUE ROT FALSE BINT0 #1+ #1- #+
 * Follows on from the previous file (at #02002 in the original ROM).
         ?P#     8                                * 02002
-        GOYES   L_02026                          * 02005
-L_02007:
+        GOYES   norecCSseq.L6                    * 02005
+norecCSseq.L4:
         D0=(5)  DA1BadMASK                       * 02007
         C=DAT0  1                                * 0200E
         ?CBIT=1 0                                * 02012
-        GOYES   L_02020                          * 02017
+        GOYES   norecCSseq.L5                    * 02017
         ?CBIT=0 1                                * 02019
-        GOYES   L_02026                          * 0201E
-L_02020:
+        GOYES   norecCSseq.L6                    * 0201E
+norecCSseq.L5:
         P=      12                               * 02020
-        GOTO    L_01FC6                          * 02022
-L_02026:
+        GOTO    Warmstart.L1                     * 02022
+norecCSseq.L6:
         GOSUB   SUB_02708                        * 02026
         ?P#     9                                * 0202A
-        GOYES   L_02033                          * 0202D
+        GOYES   norecCSseq.L7                    * 0202D
         GOTO    Coldstart                        * 0202F
-L_02033:
+norecCSseq.L7:
         D0=(5)  ALARMS                           * 02033
         C=0     A                                * 0203A
         DAT0=C  A                                * 0203C
@@ -29,7 +29,7 @@ L_02033:
         GOSBVL  SUB_01BEB                        * 0204C
         GOSBVL  FlushAttn                        * 02053
         ST=1    5                                * 0205A
-L_0205D:
+norecCSseq.loop8:
         D0=(5)  #0010F                           * 0205D
         C=DAT0  1                                * 02064
         D0=(5)  PortStat                         * 02068
@@ -37,43 +37,43 @@ L_0205D:
         P=      0                                * 02073
         GOSBVL  SUB_098DB                        * 02075
         ?ST=0   3                                * 0207C
-        GOYES   L_0208E                          * 0207F
+        GOYES   norecCSseq.L9                    * 0207F
         GOSBVL  SUB_09BED                        * 02081
         P=      14                               * 02088
-        GOTO    L_01FC6                          * 0208A
-L_0208E:
+        GOTO    Warmstart.L1                     * 0208A
+norecCSseq.L9:
         ?ST=0   4                                * 0208E
-        GOYES   L_020A0                          * 02091
+        GOYES   norecCSseq.L10                   * 02091
         GOSBVL  SUB_09BED                        * 02093
-        GOLONG  L_00038                          * 0209A
-L_020A0:
+        GOLONG  Interrupt.L4                     * 0209A
+norecCSseq.L10:
         ?ST=0   0                                * 020A0
-        GOYES   L_020DF                          * 020A3
+        GOYES   norecCSseq.L14                   * 020A3
         ?ST=1   5                                * 020A5
-        GOYES   L_020B5                          * 020A8
+        GOYES   norecCSseq.L11                   * 020A8
         GOSBVL  SUB_09BED                        * 020AA
         GOTO    Coldstart                        * 020B1
-L_020B5:
-        LC(5)   L_81CAD                          * 020B5  in the self-test area (#80000-#82006): ROM, not RAM
+norecCSseq.L11:
+        LC(5)   SUB_81BA2.L4                     * 020B5  in the self-test area (#80000-#82006): ROM, not RAM
         GOSUB   SUB_026CA                        * 020BC
-L_020C0:
+norecCSseq.loop12:
         GOSUB   SUB_027A2                        * 020C0
-        GOC     L_020D5                          * 020C4
+        GOC     norecCSseq.L13                   * 020C4
         GOSUBL  Flush                            * 020C7
         GOSUB   SUB_02388                        * 020CD
-        GOTO    L_020C0                          * 020D1
-L_020D5:
+        GOTO    norecCSseq.loop12                * 020D1
+norecCSseq.L13:
         ST=0    5                                * 020D5
         MP=0                                     * 020D8
-        GOTO    L_0205D                          * 020DB
-L_020DF:
+        GOTO    norecCSseq.loop8                 * 020DB
+norecCSseq.L14:
         ?ST=1   2                                * 020DF
-        GOYES   L_020EE                          * 020E2
+        GOYES   norecCSseq.L15                   * 020E2
         GOSBVL  SUB_0A464                        * 020E4
-        GONC    L_020F2                          * 020EB
-L_020EE:
+        GONC    norecCSseq.L16                   * 020EB
+norecCSseq.L15:
         GOSUB   SUB_02313                        * 020EE
-L_020F2:
+norecCSseq.L16:
         GOSUB   SUB_02593                        * 020F2
         GOSUB   SUB_0266F                        * 020F6
         D1=(5)  OSAVE                            * 020FA
@@ -104,17 +104,17 @@ L_020F2:
         INTON                                    * 0216F
         GOSBVL  SUB_0ABA0                        * 02173
         GOSBVL  SUB_0AC6A                        * 0217A
-        GOSBVL  L_01C7F                          * 02181
+        GOSBVL  D0->Sft1.L1                      * 02181
         ?ST=0   0                                * 02188
-        GOYES   L_02198                          * 0218B
-        LC(5)   L_81CE2                          * 0218D  in the self-test area
+        GOYES   norecCSseq.L17                   * 0218B
+        LC(5)   SUB_81BA2.L6                     * 0218D  in the self-test area
         GOSUB   SUB_026CA                        * 02194
-L_02198:
+norecCSseq.L17:
         ?ST=0   5                                * 02198
-        GOYES   L_021A8                          * 0219B
-        LC(5)   L_81CFC                          * 0219D  in the self-test area
+        GOYES   norecCSseq.L18                   * 0219B
+        LC(5)   SUB_81BA2.L7                     * 0219D  in the self-test area
         GOSUB   SUB_026CA                        * 021A4
-L_021A8:
+norecCSseq.L18:
         P=      0                                * 021A8
         GOSBVL  GETPTR                           * 021AA
         D0=(5)  OBJ_021C5                        * 021B1
@@ -127,7 +127,7 @@ L_021A8:
 OBJ_021C5:
         CODE                                     * 021C5  14 nibbles
           GOSBVL  SAVPTR                         * 021CF
-          GOVLNG  L_04698                        * 021D6
+          GOVLNG  SAVPTR~jump_2.L1               * 021D6
         ENDCODE                                  * 021DD
 
 * ->
@@ -230,34 +230,34 @@ SUB_02313:
         D1=(5)  ROMPARTS                         * 0233F
         DAT1=C  A                                * 02346
         ?ST=0   7                                * 02349
-        GOYES   L_0239C                          * 0234C
-        LC(5)   L_81D24                          * 0234E  memory-recovery code in the self-test area
+        GOYES   SUB_02388.L2                     * 0234C
+        LC(5)   SUB_81BA2.L9                     * 0234E  memory-recovery code in the self-test area
         GOSUB   SUB_026CA                        * 02355
-L_02359:
+SUB_02313.loop1:
         GOSUB   SUB_027A2                        * 02359
-        GOC     L_02380                          * 0235D
+        GOC     SUB_02313.L2                     * 0235D
         GOSBVL  POPKEY                           * 02360
-        GOC     L_02359                          * 02367
+        GOC     SUB_02313.loop1                  * 02367
         B=C     A                                * 0236A
         C=0     A                                * 0236C
         LC(2)   #01                              * 0236E
         ?B=C    B                                * 02372
-        GOYES   L_023ED                          * 02375
+        GOYES   SUB_02388.L3                     * 02375
         LC(2)   #06                              * 02377
         ?B=C    B                                * 0237B
-        GOYES   L_02395                          * 0237E
-L_02380:
+        GOYES   SUB_02388.L1                     * 0237E
+SUB_02313.L2:
         GOSUB   SUB_02388                        * 02380
-        GOTO    L_02359                          * 02384
+        GOTO    SUB_02313.loop1                  * 02384
 
 * refs (2): 020CD 02380
 SUB_02388:
         P=      0                                * 02388
         LC(2)   #F4                              * 0238A
         GOVLNG  RCKBp                            * 0238E
-L_02395:
+SUB_02388.L1:
         GOSBVL  ClrScrMn                         * 02395
-L_0239C:
+SUB_02388.L2:
         ST=0    7                                * 0239C
         D1=(5)  ROMPARTS                         * 0239F
         C=DAT1  A                                * 023A6
@@ -277,13 +277,13 @@ L_0239C:
         DAT1=C  A                                * 023DC
         D1=(5)  USEROB                           * 023DF
         DAT1=C  A                                * 023E6
-        GOTO    L_02402                          * 023E9
-L_023ED:
-        LC(5)   L_81CBC                          * 023ED  in the self-test area
+        GOTO    SUB_02388.L4                     * 023E9
+SUB_02388.L3:
+        LC(5)   SUB_81BA2.L5                     * 023ED  in the self-test area
         GOSUB   SUB_026CA                        * 023F4
         ST=1    7                                * 023F8
-        GOVLNG  L_0A0A2                          * 023FB
-L_02402:
+        GOVLNG  SUB_0A01C.L4                     * 023FB
+SUB_02388.L4:
         GOSUB   SUB_0249F                        * 02402
         GOSBVL  SUB_02593                        * 02406
         LC(5)   INTRPPTR                         * 0240D
@@ -300,9 +300,9 @@ L_02402:
         D1=(5)  ERROR                            * 02444
         LC(5)   #00005                           * 0244B
         ?ST=0   7                                * 02452
-        GOYES   L_02459                          * 02455
+        GOYES   SUB_02388.L5                     * 02455
         C=0     A                                * 02457
-L_02459:
+SUB_02388.L5:
         DAT1=C  A                                * 02459
         RTN                                      * 0245C
 
@@ -469,39 +469,39 @@ SUB_0266F:
         C=DAT1  A                                * 02697
         D=C     A                                * 0269A
         D1=(5)  INTRPPTR                         * 0269C
-L_026A3:
+SUB_0266F.loop1:
         C=DAT1  A                                * 026A3
         ?B>C    A                                * 026A6
-        GOYES   L_026BA                          * 026A9
+        GOYES   SUB_0266F.L3                     * 026A9
         ?C<A    A                                * 026AB
-        GOYES   L_026B5                          * 026AE
+        GOYES   SUB_0266F.L2                     * 026AE
         ?D>C    A                                * 026B0
-        GOYES   L_026BA                          * 026B3
-L_026B5:
+        GOYES   SUB_0266F.L3                     * 026B3
+SUB_0266F.L2:
         C=0     A                                * 026B5
         DAT1=C  A                                * 026B7
-L_026BA:
+SUB_0266F.L3:
         D1=D1+  5                                * 026BA
         C=RSTK                                   * 026BD
         C=C-1   A                                * 026BF
         RSTK=C                                   * 026C1
-        GONC    L_026A3                          * 026C3
+        GONC    SUB_0266F.loop1                  * 026C3
         C=RSTK                                   * 026C6
         RTN                                      * 026C8
 
 * refs (5): 020BC 02194 021A4 02355 023F4
 SUB_026CA:
-        GOVLNG  L_700FE                          * 026CA
-L_026D1:
+        GOVLNG  SUB_700F7.L1                     * 026CA
+SUB_026CA.L1:
         UNCNFG                                   * 026D1
         GOSUB   SUB_022D9                        * 026D4
         GOSUB   SUB_026FD                        * 026D8
         C=RSTK                                   * 026DC
         A=C     A                                * 026DE
-        LC(5)   L_026ED                          * 026E0
+        LC(5)   SUB_026CA.L2                     * 026E0
         RSTK=C                                   * 026E7
         PC=A                                     * 026E9
-L_026ED:
+SUB_026CA.L2:
         P=      0                                * 026ED
         LC(5)   #C0000                           * 026EF
         UNCNFG                                   * 026F6
@@ -509,7 +509,7 @@ L_026ED:
 
 * refs (1): 026D8
 SUB_026FD:
-        GOVLNG  L_01C7F                          * 026FD
+        GOVLNG  D0->Sft1.L1                      * 026FD
         BSS     4                                * 02704  zeros
 
 * refs (3): 01A67 02026 80CA3
@@ -536,9 +536,9 @@ SUB_02708:
         DAT0=C  1                                * 02754
         RSTK=C                                   * 02758
         GOSBVL  SUB_011FC                        * 0275A
-        GONC    L_02767                          * 02761
+        GONC    SUB_02708.L1                     * 02761
         C=0     W                                * 02764
-L_02767:
+SUB_02708.L1:
         A=C     W                                * 02767
         GOSBVL  D0=IRAM                          * 0276A
         D0=(4)  #0011                            * 02771
@@ -568,7 +568,7 @@ SUB_027A2:
         D1=(5)  DISABLE_KBD                      * 027C6
         C=0     A                                * 027CD
         DAT1=C  1                                * 027CF
-L_027D3:
+SUB_027A2.L1:
         GOSBVL  GetTimChk                        * 027D3
         B=C     W                                * 027DA
         A=B     W                                * 027DD
@@ -586,15 +586,15 @@ INPUT~1:
         RTNC                                     * 02815
         GOSBVL  SrvcKbdAB                        * 02818
         GOSBVL  KeyInBuff?                       * 0281F
-        GONC    L_0282B                          * 02826
+        GONC    INPUT~1.L1                       * 02826
         RTNCC                                    * 02829
-L_0282B:
+INPUT~1.L1:
         D1=(5)  TIMER2CTRL                       * 0282B
         C=DAT1  1                                * 02832
         ?CBIT=0 3                                * 02836
-        GOYES   L_027D3                          * 0283B
+        GOYES   SUB_027A2.L1                     * 0283B
         GOSBVL  DeepSleep                        * 0283D
-        GOTO    L_027D3                          * 02844
+        GOTO    SUB_027A2.L1                     * 02844
         FILLTO  #028DE                           * 02848  150 zero nibbles: the next entry stays at #028DE
 
         LENGTH                                   * 028DE  library object without its prolog (its place is the end of the link table before): length, to #0BE0F
@@ -613,92 +613,92 @@ PRLG:
         A=A-C   B                                * 02900
         PC=(A)                                   * 02903
 
-        CON(5)  L_02C28                          * 02907
-        CON(5)  L_0308E                          * 0290C
+        CON(5)  DOEXT4.L1                        * 02907
+        CON(5)  SKIPOB.loop13                    * 0290C
 
 * BINT prologue 5  number (hex)
 * refs (22): 03639 03824 0387E 038DA 0657C 0803D ...
 DOBINT:
         D=D-1   A                                * 02911
         HST=0   0                                * 02913
-        GOC     L_0298F                          * 02916
+        GOC     DOCMP.L1                         * 02916
         D1=D1-  5                                * 02919
         DAT1=A  A                                * 0291C
         A=DAT0  A                                * 0291F
         D0=D0+  5                                * 02922
         PC=(A)                                   * 02925
 
-        CON(5)  L_02C49                          * 02929
-        CON(5)  L_0307F                          * 0292E
+        CON(5)  DOEXT4.L2                        * 02929
+        CON(5)  SKIPOB.L10                       * 0292E
 
 * Real number prologue 3  exponent 12 mantissa 1  sign
 * refs (38): 038E6 05D6F 05D93 10174 10D0E 15B4C ...
 DOREAL:
         D=D-1   A                                * 02933
         HST=0   0                                * 02935
-        GOC     L_0298F                          * 02938
+        GOC     DOCMP.L1                         * 02938
         D1=D1-  5                                * 0293B
         DAT1=A  A                                * 0293E
         A=DAT0  A                                * 02941
         D0=D0+  5                                * 02944
         PC=(A)                                   * 02947
 
-        CON(5)  L_02C6D                          * 0294B
-        CON(5)  L_0308B                          * 02950
+        CON(5)  DOEXT4.L3                        * 0294B
+        CON(5)  SKIPOB.L12                       * 02950
 
 * Long real prologue 5  exponent 15 mantissa 1  sign
 * refs (29): 038F2 05E11 05E3E 1917D 2A29B 3564B ...
 DOEREL:
         D=D-1   A                                * 02955
         HST=0   0                                * 02957
-        GOC     L_0298F                          * 0295A
+        GOC     DOCMP.L1                         * 0295A
         D1=D1-  5                                * 0295D
         DAT1=A  A                                * 02960
         A=DAT0  A                                * 02963
         D0=D0+  5                                * 02966
         PC=(A)                                   * 02969
 
-        CON(5)  L_02C95                          * 0296D
-        CON(5)  L_0307C                          * 02972
+        CON(5)  DOEXT4.L5                        * 0296D
+        CON(5)  SKIPOB.L9                        * 02972
 
 * Complex number prologue 3  real exponent 12 real mantissa 1  real sign 3  complex exponent 12 complex mantissa 1  complex sign
 * refs (14): 038FE 05C4A 15BA6 1912D 19247 192F7 ...
 DOCMP:
         D=D-1   A                                * 02977
         HST=0   0                                * 02979
-        GOC     L_0298F                          * 0297C
+        GOC     DOCMP.L1                         * 0297C
         D1=D1-  5                                * 0297F
         DAT1=A  A                                * 02982
         A=DAT0  A                                * 02985
         D0=D0+  5                                * 02988
         PC=(A)                                   * 0298B
-L_0298F:
-        GOTO    L_02D52                          * 0298F
+DOCMP.L1:
+        GOTO    DOEXT4.L11                       * 0298F
 
-        CON(5)  L_02CBC                          * 02993
-        CON(5)  L_03085                          * 02998
+        CON(5)  DOEXT4.L6                        * 02993
+        CON(5)  SKIPOB.L11                       * 02998
 
 * Long complex prologue 5  real exponent 15 real mantissa 1  real sign 5  complex exponent 15 complex mantissa 1  complex sign
 * refs (6): 0390A 05CA7 19182 52BEA 7D52B 7D81F
 DOECMP:
         D=D-1   A                                * 0299D
         HST=0   0                                * 0299F
-        GOC     L_0298F                          * 029A2
+        GOC     DOCMP.L1                         * 029A2
         D1=D1-  5                                * 029A5
         DAT1=A  A                                * 029A8
         A=DAT0  A                                * 029AB
         D0=D0+  5                                * 029AE
         PC=(A)                                   * 029B1
 
-        CON(5)  L_02CE3                          * 029B5
-        CON(5)  L_030B7                          * 029BA
+        CON(5)  DOEXT4.L7                        * 029B5
+        CON(5)  SKIPOB.L17                       * 029BA
 
 * Character prologue 2  character
 * refs (8): 03916 05125 05A9C 10168 1918C 44455 ...
 DOCHAR:
         D=D-1   A                                * 029BF
         HST=0   0                                * 029C1
-        GOC     L_0298F                          * 029C4
+        GOC     DOCMP.L1                         * 029C4
         D1=D1-  5                                * 029C7
         DAT1=A  A                                * 029CA
         A=DAT0  A                                * 029CD
@@ -706,300 +706,300 @@ DOCHAR:
         PC=(A)                                   * 029D3
         BSS     7                                * 029D7  zeros
 
-        CON(5)  L_02D04                          * 029DE
-        CON(5)  L_0309A                          * 029E3
+        CON(5)  DOEXT4.L8                        * 029DE
+        CON(5)  SKIPOB.L15                       * 029E3
 
 * Array prologue 5  size 5  prologue of objects 5  # of dimensions 5n dimensions .. objects (content only)
 * refs (8): 034DB 03800 10CF4 15B6A 19137 2D265 ...
 DOARRY:
         D=D-1   A                                * 029E8
         HST=0   0                                * 029EA
-        GOC     L_02A66                          * 029ED
+        GOC     DOHSTR.L1                        * 029ED
         D1=D1-  5                                * 029F0
         DAT1=A  A                                * 029F3
         A=DAT0  A                                * 029F6
         D0=D0+  5                                * 029F9
         PC=(A)                                   * 029FC
 
-        CON(5)  L_02D04                          * 02A00
-        CON(5)  L_0309A                          * 02A05
+        CON(5)  DOEXT4.L8                        * 02A00
+        CON(5)  SKIPOB.L15                       * 02A05
 
 * Linked array prologue
 * refs (2): 19187 5EDEE
 DOLNKARRY:
         D=D-1   A                                * 02A0A
         HST=0   0                                * 02A0C
-        GOC     L_02A66                          * 02A0F
+        GOC     DOHSTR.L1                        * 02A0F
         D1=D1-  5                                * 02A12
         DAT1=A  A                                * 02A15
         A=DAT0  A                                * 02A18
         D0=D0+  5                                * 02A1B
         PC=(A)                                   * 02A1E
 
-        CON(5)  L_02D04                          * 02A22
-        CON(5)  L_0309A                          * 02A27
+        CON(5)  DOEXT4.L8                        * 02A22
+        CON(5)  SKIPOB.L15                       * 02A27
 
 * String prologue 5  length .. characters
 * refs (7): 05BCB 1015C 15B97 16322 19132 6215E ...
 DOCSTR:
         D=D-1   A                                * 02A2C
         HST=0   0                                * 02A2E
-        GOC     L_02A66                          * 02A31
+        GOC     DOHSTR.L1                        * 02A31
         D1=D1-  5                                * 02A34
         DAT1=A  A                                * 02A37
         A=DAT0  A                                * 02A3A
         D0=D0+  5                                * 02A3D
         PC=(A)                                   * 02A40
 
-        CON(5)  L_02D04                          * 02A44
-        CON(5)  L_0309A                          * 02A49
+        CON(5)  DOEXT4.L8                        * 02A44
+        CON(5)  SKIPOB.L15                       * 02A49
 
 * HXS prologue 5  length .. hex digits, reverse order
 * refs (7): 059EF 0E8FE 15BD3 1915A 37421 52CD9 ...
 DOHSTR:
         D=D-1   A                                * 02A4E
         HST=0   0                                * 02A50
-        GOC     L_02A66                          * 02A53
+        GOC     DOHSTR.L1                        * 02A53
         D1=D1-  5                                * 02A56
         DAT1=A  A                                * 02A59
         A=DAT0  A                                * 02A5C
         D0=D0+  5                                * 02A5F
         PC=(A)                                   * 02A62
-L_02A66:
-        GOTO    L_02D52                          * 02A66
+DOHSTR.L1:
+        GOTO    DOEXT4.L11                       * 02A66
 
-        CON(5)  L_02D2A                          * 02A6A
-        CON(5)  L_03077                          * 02A6F
+        CON(5)  DOEXT4.L9                        * 02A6A
+        CON(5)  SKIPOB.L8                        * 02A6F
 
 * List prologue see <REF>DOCOL
 * refs (12): 03613 08053 0E914 156AA 15B79 1913C ...
 DOLIST:
         D=D-1   A                                * 02A74
         HST=0   0                                * 02A76
-        GOC     L_02A66                          * 02A79
+        GOC     DOHSTR.L1                        * 02A79
         D1=D1-  5                                * 02A7C
         DAT1=A  A                                * 02A7F
         A=DAT0  A                                * 02A82
         D0=D0+  5                                * 02A85
         PC=(A)                                   * 02A88
 
-        CON(5)  L_02D2A                          * 02A8C
-        CON(5)  L_030BD                          * 02A91
+        CON(5)  DOEXT4.L9                        * 02A8C
+        CON(5)  SKIPOB.L18                       * 02A91
 
 * Directory prologue
 * refs (18): 023BE 02F82 077FD 079E8 09667 0A15E ...
 DORRP:
         D=D-1   A                                * 02A96
         HST=0   0                                * 02A98
-        GOC     L_02A66                          * 02A9B
+        GOC     DOHSTR.L1                        * 02A9B
         D1=D1-  5                                * 02A9E
         DAT1=A  A                                * 02AA1
         A=DAT0  A                                * 02AA4
         D0=D0+  5                                * 02AA7
         PC=(A)                                   * 02AAA
 
-        CON(5)  L_02D2A                          * 02AAE
-        CON(5)  L_03077                          * 02AB3
+        CON(5)  DOEXT4.L9                        * 02AAE
+        CON(5)  SKIPOB.L8                        * 02AB3
 
 * Symbolic prologue .. objects 5  SEMI
 * refs (13): 156C2 15BB5 18E58 18E91 19098 19150 ...
 DOSYMB:
         D=D-1   A                                * 02AB8
         HST=0   0                                * 02ABA
-        GOC     L_02A66                          * 02ABD
+        GOC     DOHSTR.L1                        * 02ABD
         D1=D1-  5                                * 02AC0
         DAT1=A  A                                * 02AC3
         A=DAT0  A                                * 02AC6
         D0=D0+  5                                * 02AC9
         PC=(A)                                   * 02ACC
 
-        CON(5)  L_02D2A                          * 02AD0
-        CON(5)  L_03077                          * 02AD5
+        CON(5)  DOEXT4.L9                        * 02AD0
+        CON(5)  SKIPOB.L8                        * 02AD5
 
 * Unit object prologue .. object (usually a real) .. unit 5  SEMI
 * refs (6): 0F148 15BE2 19169 29C12 62054 71F72
 DOEXT:
         D=D-1   A                                * 02ADA
         HST=0   0                                * 02ADC
-        GOC     L_02A66                          * 02ADF
+        GOC     DOHSTR.L1                        * 02ADF
         D1=D1-  5                                * 02AE2
         DAT1=A  A                                * 02AE5
         A=DAT0  A                                * 02AE8
         D0=D0+  5                                * 02AEB
         PC=(A)                                   * 02AEE
 
-        CON(5)  L_02D2A                          * 02AF2
-        CON(5)  L_03115                          * 02AF7
+        CON(5)  DOEXT4.L9                        * 02AF2
+        CON(5)  SKIPOB.L22                       * 02AF7
 
 * Tagged object prologue 2  # of chars in tag .. tag .. object
 * refs (6): 05EA4 15BF1 17AC3 190C0 19164 62230
 DOTAG:
         D=D-1   A                                * 02AFC
         HST=0   0                                * 02AFE
-        GOC     L_02B7A                          * 02B01
+        GOC     DOBAK.L1                         * 02B01
         D1=D1-  5                                * 02B04
         DAT1=A  A                                * 02B07
         A=DAT0  A                                * 02B0A
         D0=D0+  5                                * 02B0D
         PC=(A)                                   * 02B10
 
-        CON(5)  L_02D04                          * 02B14
-        CON(5)  L_0309A                          * 02B19
+        CON(5)  DOEXT4.L8                        * 02B14
+        CON(5)  SKIPOB.L15                       * 02B19
 
 * GROB prologue 5  size 5  height 5  width .. pixels Rows must be byte-aligned
 * refs (7): 0251F 115F4 13C75 15C2D 1915F 515DF ...
 DOGROB:
         D=D-1   A                                * 02B1E
         HST=0   0                                * 02B20
-        GOC     L_02B7A                          * 02B23
+        GOC     DOBAK.L1                         * 02B23
         D1=D1-  5                                * 02B26
         DAT1=A  A                                * 02B29
         A=DAT0  A                                * 02B2C
         D0=D0+  5                                * 02B2F
         PC=(A)                                   * 02B32
 
-        CON(5)  L_02D04                          * 02B36
-        CON(5)  L_0309A                          * 02B3B
+        CON(5)  DOEXT4.L8                        * 02B36
+        CON(5)  SKIPOB.L15                       * 02B3B
 
 * Library prologue
 * refs (10): 08E64 09ECC 0A0E5 0AF13 15C0F 19196 ...
 DOLIB:
         D=D-1   A                                * 02B40
         HST=0   0                                * 02B42
-        GOC     L_02B7A                          * 02B45
+        GOC     DOBAK.L1                         * 02B45
         D1=D1-  5                                * 02B48
         DAT1=A  A                                * 02B4B
         A=DAT0  A                                * 02B4E
         D0=D0+  5                                * 02B51
         PC=(A)                                   * 02B54
 
-        CON(5)  L_02D04                          * 02B58
-        CON(5)  L_0309A                          * 02B5D
+        CON(5)  DOEXT4.L8                        * 02B58
+        CON(5)  SKIPOB.L15                       * 02B5D
 
 * Backup prologue 5  size 2  # of chars in name .. name .. object 5  DOBINT 5  CRC
 * refs (11): 09130 09659 09ED8 0A0EE 0AF07 15C1E ...
 DOBAK:
         D=D-1   A                                * 02B62
         HST=0   0                                * 02B64
-        GOC     L_02B7A                          * 02B67
+        GOC     DOBAK.L1                         * 02B67
         D1=D1-  5                                * 02B6A
         DAT1=A  A                                * 02B6D
         A=DAT0  A                                * 02B70
         D0=D0+  5                                * 02B73
         PC=(A)                                   * 02B76
-L_02B7A:
-        GOTO    L_02D52                          * 02B7A
+DOBAK.L1:
+        GOTO    DOEXT4.L11                       * 02B7A
 
-        CON(5)  L_02D04                          * 02B7E
-        CON(5)  L_0309A                          * 02B83
+        CON(5)  DOEXT4.L8                        * 02B7E
+        CON(5)  SKIPOB.L15                       * 02B83
 
 * refs (4): 191A0 9E16B CEFCC CF109
 DOEXT0:
         D=D-1   A                                * 02B88
         HST=0   0                                * 02B8A
-        GOC     L_02B7A                          * 02B8D
+        GOC     DOBAK.L1                         * 02B8D
         D1=D1-  5                                * 02B90
         DAT1=A  A                                * 02B93
         A=DAT0  A                                * 02B96
         D0=D0+  5                                * 02B99
         PC=(A)                                   * 02B9C
 
-        CON(5)  L_71532                          * 02BA0
-        CON(5)  L_7155A                          * 02BA5
+        CON(5)  SUB_714EA.L3                     * 02BA0
+        CON(5)  SUB_714EA.L5                     * 02BA5
 
 * refs (27): 07A8E 08231 09D7A 09E2B 191A5 706F3 ...
 DOEXT1:
         D=D-1   A                                * 02BAA
         HST=0   0                                * 02BAC
-        GOC     L_02B7A                          * 02BAF
+        GOC     DOBAK.L1                         * 02BAF
         D1=D1-  5                                * 02BB2
         DAT1=A  A                                * 02BB5
         A=DAT0  A                                * 02BB8
         D0=D0+  5                                * 02BBB
         PC=(A)                                   * 02BBE
 
-        CON(5)  L_02D04                          * 02BC2
-        CON(5)  L_0309A                          * 02BC7
+        CON(5)  DOEXT4.L8                        * 02BC2
+        CON(5)  SKIPOB.L15                       * 02BC7
 
 * refs (1): 191AA
 DOEXT2:
         D=D-1   A                                * 02BCC
         HST=0   0                                * 02BCE
-        GOC     L_02B7A                          * 02BD1
+        GOC     DOBAK.L1                         * 02BD1
         D1=D1-  5                                * 02BD4
         DAT1=A  A                                * 02BD7
         A=DAT0  A                                * 02BDA
         D0=D0+  5                                * 02BDD
         PC=(A)                                   * 02BE0
 
-        CON(5)  L_02D04                          * 02BE4
-        CON(5)  L_0309A                          * 02BE9
+        CON(5)  DOEXT4.L8                        * 02BE4
+        CON(5)  SKIPOB.L15                       * 02BE9
 
 * refs (1): 191AF
 DOEXT3:
         D=D-1   A                                * 02BEE
         HST=0   0                                * 02BF0
-        GOC     L_02B7A                          * 02BF3
+        GOC     DOBAK.L1                         * 02BF3
         D1=D1-  5                                * 02BF6
         DAT1=A  A                                * 02BF9
         A=DAT0  A                                * 02BFC
         D0=D0+  5                                * 02BFF
         PC=(A)                                   * 02C02
 
-        CON(5)  L_02D04                          * 02C06
-        CON(5)  L_0309A                          * 02C0B
+        CON(5)  DOEXT4.L8                        * 02C06
+        CON(5)  SKIPOB.L15                       * 02C0B
 
 * refs (1): 191B4
 DOEXT4:
         D=D-1   A                                * 02C10
         HST=0   0                                * 02C12
-        GOC     L_02C91                          * 02C15
+        GOC     DOEXT4.loop4                     * 02C15
         D1=D1-  5                                * 02C18
         DAT1=A  A                                * 02C1B
         A=DAT0  A                                * 02C1E
         D0=D0+  5                                * 02C21
         PC=(A)                                   * 02C24
-L_02C28:
+DOEXT4.L1:
         D0=D0-  5                                * 02C28
         AD0EX                                    * 02C2B
         D0=A                                     * 02C2E
         D0=D0+  10                               * 02C31
         D=D-1   A                                * 02C34
-        GOC     L_02C91                          * 02C36
+        GOC     DOEXT4.loop4                     * 02C36
         D1=D1-  5                                * 02C39
         DAT1=A  A                                * 02C3C
         A=DAT0  A                                * 02C3F
         D0=D0+  5                                * 02C42
         PC=(A)                                   * 02C45
-L_02C49:
+DOEXT4.L2:
         D0=D0-  5                                * 02C49
         AD0EX                                    * 02C4C
         D0=A                                     * 02C4F
         D0=D0+  5                                * 02C52
         D0=D0+  16                               * 02C55
         D=D-1   A                                * 02C58
-        GOC     L_02C91                          * 02C5A
+        GOC     DOEXT4.loop4                     * 02C5A
         D1=D1-  5                                * 02C5D
         DAT1=A  A                                * 02C60
         A=DAT0  A                                * 02C63
         D0=D0+  5                                * 02C66
         PC=(A)                                   * 02C69
-L_02C6D:
+DOEXT4.L3:
         D0=D0-  5                                * 02C6D
         AD0EX                                    * 02C70
         D0=A                                     * 02C73
         D0=D0+  10                               * 02C76
         D0=D0+  16                               * 02C79
         D=D-1   A                                * 02C7C
-        GOC     L_02C91                          * 02C7E
+        GOC     DOEXT4.loop4                     * 02C7E
         D1=D1-  5                                * 02C81
         DAT1=A  A                                * 02C84
         A=DAT0  A                                * 02C87
         D0=D0+  5                                * 02C8A
         PC=(A)                                   * 02C8D
-L_02C91:
-        GOTO    L_02D52                          * 02C91
-L_02C95:
+DOEXT4.loop4:
+        GOTO    DOEXT4.L11                       * 02C91
+DOEXT4.L5:
         D0=D0-  5                                * 02C95
         AD0EX                                    * 02C98
         D0=A                                     * 02C9B
@@ -1007,13 +1007,13 @@ L_02C95:
         D0=D0+  16                               * 02CA1
         D0=D0+  16                               * 02CA4
         D=D-1   A                                * 02CA7
-        GOC     L_02C91                          * 02CA9
+        GOC     DOEXT4.loop4                     * 02CA9
         D1=D1-  5                                * 02CAC
         DAT1=A  A                                * 02CAF
         A=DAT0  A                                * 02CB2
         D0=D0+  5                                * 02CB5
         PC=(A)                                   * 02CB8
-L_02CBC:
+DOEXT4.L6:
         D0=D0-  5                                * 02CBC
         AD0EX                                    * 02CBF
         D0=A                                     * 02CC2
@@ -1021,25 +1021,25 @@ L_02CBC:
         D0=D0+  16                               * 02CC8
         D0=D0+  16                               * 02CCB
         D=D-1   A                                * 02CCE
-        GOC     L_02C91                          * 02CD0
+        GOC     DOEXT4.loop4                     * 02CD0
         D1=D1-  5                                * 02CD3
         DAT1=A  A                                * 02CD6
         A=DAT0  A                                * 02CD9
         D0=D0+  5                                * 02CDC
         PC=(A)                                   * 02CDF
-L_02CE3:
+DOEXT4.L7:
         D0=D0-  5                                * 02CE3
         AD0EX                                    * 02CE6
         D0=A                                     * 02CE9
         D0=D0+  7                                * 02CEC
         D=D-1   A                                * 02CEF
-        GOC     L_02C91                          * 02CF1
+        GOC     DOEXT4.loop4                     * 02CF1
         D1=D1-  5                                * 02CF4
         DAT1=A  A                                * 02CF7
         A=DAT0  A                                * 02CFA
         D0=D0+  5                                * 02CFD
         PC=(A)                                   * 02D00
-L_02D04:
+DOEXT4.L8:
         C=DAT0  A                                * 02D04
         D0=D0-  5                                * 02D07
         AD0EX                                    * 02D0A
@@ -1047,13 +1047,13 @@ L_02D04:
         D0=C                                     * 02D0F
         D0=D0+  5                                * 02D12
         D=D-1   A                                * 02D15
-        GOC     L_02D52                          * 02D17
+        GOC     DOEXT4.L11                       * 02D17
         D1=D1-  5                                * 02D1A
         DAT1=A  A                                * 02D1D
         A=DAT0  A                                * 02D20
         D0=D0+  5                                * 02D23
         PC=(A)                                   * 02D26
-L_02D2A:
+DOEXT4.L9:
         D0=D0-  5                                * 02D2A
         CD0EX                                    * 02D2D
         D0=C                                     * 02D30
@@ -1062,16 +1062,16 @@ L_02D2A:
         C=RSTK                                   * 02D39
         A=C     A                                * 02D3B
         D=D-1   A                                * 02D3D
-        GOC     L_02D52                          * 02D3F
-L_02D42:
+        GOC     DOEXT4.L11                       * 02D3F
+DOEXT4.L10:
         D1=D1-  5                                * 02D42
         DAT1=A  A                                * 02D45
         A=DAT0  A                                * 02D48
         D0=D0+  5                                * 02D4B
         PC=(A)                                   * 02D4E
-L_02D52:
-        LC(5)   L_02D42                          * 02D52
-L_02D59:
+DOEXT4.L11:
+        LC(5)   DOEXT4.L10                       * 02D52
+DOEXT4.L12:
         RSTK=C                                   * 02D59
         GOSUBL  SAVPTR                           * 02D5B
         D0=(5)  OSAVE                            * 02D61
@@ -1087,15 +1087,15 @@ L_02D59:
         D=0     A                                * 02D8B
         GOLONG  DOMEMERR                         * 02D8D
 
-        CON(5)  L_02DE0                          * 02D93
-        CON(5)  L_03077                          * 02D98
+        CON(5)  DOCODE.L1                        * 02D93
+        CON(5)  SKIPOB.L8                        * 02D98
 
 * Secondary prologue .. objects 5  SEMI
 * refs (18): 0704B 0707F 156B6 15B88 18EC7 1914B ...
 DOCOL:
         D=D-1   A                                * 02D9D
         HST=0   0                                * 02D9F
-        GOC     L_02E15                          * 02DA2
+        GOC     DOCODE.L3                        * 02DA2
         C=B     A                                * 02DA5
         CD0EX                                    * 02DA7
         DAT0=C  A                                * 02DAA
@@ -1107,8 +1107,8 @@ DOCOL:
         D0=D0+  5                                * 02DBB
         PC=(A)                                   * 02DBE
 
-        CON(5)  L_02E20                          * 02DC2
-        CON(5)  L_0309A                          * 02DC7
+        CON(5)  DOCODE.L4                        * 02DC2
+        CON(5)  SKIPOB.L15                       * 02DC7
 
 * Code prologue 5  length .. machine code
 * refs (1): 19191
@@ -1116,11 +1116,11 @@ DOCODE:
         D=D-1   A                                * 02DCC
         HST=0   0                                * 02DCE
         D=D+1   A                                * 02DD1
-        LC(5)   portnotaverr                     * 02DD3
+        LC(5)   portnotaverr                     * 02DD3  "Port Not Available"
         C=C+A   A                                * 02DDA
         RSTK=C                                   * 02DDC
         RTN                                      * 02DDE
-L_02DE0:
+DOCODE.L1:
         D0=D0-  5                                * 02DE0
         CD0EX                                    * 02DE3
         D0=C                                     * 02DE6
@@ -1129,8 +1129,8 @@ L_02DE0:
         C=RSTK                                   * 02DEF
         A=C     A                                * 02DF1
         D=D-1   A                                * 02DF3
-        GOC     L_02E15                          * 02DF5
-L_02DF8:
+        GOC     DOCODE.L3                        * 02DF5
+DOCODE.L2:
         C=B     A                                * 02DF8
         CD0EX                                    * 02DFA
         DAT0=C  A                                * 02DFD
@@ -1141,75 +1141,75 @@ L_02DF8:
         A=DAT0  A                                * 02E0B
         D0=D0+  5                                * 02E0E
         PC=(A)                                   * 02E11
-L_02E15:
-        LC(5)   L_02DF8                          * 02E15
-        GOTO    L_02D59                          * 02E1C
-L_02E20:
+DOCODE.L3:
+        LC(5)   DOCODE.L2                        * 02E15
+        GOTO    DOEXT4.L12                       * 02E1C
+DOCODE.L4:
         C=DAT0  A                                * 02E20
         D0=D0-  5                                * 02E23
         AD0EX                                    * 02E26
         C=C+A   A                                * 02E29
         D0=C                                     * 02E2B
         D0=D0+  5                                * 02E2E
-        LC(5)   portnotaverr                     * 02E31
+        LC(5)   portnotaverr                     * 02E31  "Port Not Available"
         C=C+A   A                                * 02E38
         RSTK=C                                   * 02E3A
         RTN                                      * 02E3C
 
-        CON(5)  L_02ECE                          * 02E3E
-        CON(5)  L_030A8                          * 02E43
+        CON(5)  DOROMP.L4                        * 02E3E
+        CON(5)  SKIPOB.L16                       * 02E43
 
 * Global name (ID) prologue 2  # of characters .. characters
 * refs (21): 05B54 05EF1 07998 07BCB 07D54 15B5B ...
 DOIDNT:
         D=D-1   A                                * 02E48
         HST=0   0                                * 02E4A
-        GOC     L_02EAD                          * 02E4D
+        GOC     DOROMP.loop1                     * 02E4D
         D1=D1-  5                                * 02E50
         DAT1=A  A                                * 02E53
         LC(5)   Eval(nm)                         * 02E56
         A=C     A                                * 02E5D
         PC=(A)                                   * 02E5F
 
-        CON(5)  L_02EFB                          * 02E63
-        CON(5)  L_030A8                          * 02E68
+        CON(5)  DOROMP.L6                        * 02E63
+        CON(5)  SKIPOB.L16                       * 02E68
 
 * Local name (LAM) prologue see <REF>DOIDNT
 * refs (19): 15BC4 190B0 19146 1F0AE 2356B 2357D ...
 DOLAM:
         D=D-1   A                                * 02E6D
         HST=0   0                                * 02E6F
-        GOC     L_02EB8                          * 02E72
+        GOC     DOROMP.loop2                     * 02E72
         D1=D1-  5                                * 02E75
         DAT1=A  A                                * 02E78
         LC(5)   DoLam                            * 02E7B
         A=C     A                                * 02E82
         PC=(A)                                   * 02E84
 
-        CON(5)  L_02F28                          * 02E88
-        CON(5)  L_03094                          * 02E8D
+        CON(5)  DOROMP.L8                        * 02E88
+        CON(5)  SKIPOB.L14                       * 02E8D
 
 * XLIB prologue 3  library ID 3  command #
 * refs (16): 03922 07B86 15C3C 1916E 26FA0 27269 ...
 DOROMP:
         D=D-1   A                                * 02E92
         HST=0   0                                * 02E94
-        GOC     L_02EC3                          * 02E97
+        GOC     DOROMP.loop3                     * 02E97
         D1=D1-  5                                * 02E9A
         DAT1=A  A                                * 02E9D
         LC(5)   ROMSEC                           * 02EA0
         A=C     A                                * 02EA7
         PC=(A)                                   * 02EA9
-L_02EAD:
-        LC(5)   L_02EE8                          * 02EAD
-        GOTO    L_02D59                          * 02EB4
-L_02EB8:
-        LC(5)   L_02F15                          * 02EB8
-        GOTO    L_02D59                          * 02EBF
-L_02EC3:
-        LC(5)   L_02F39                          * 02EC3
-        GOTO    L_02D59                          * 02ECA
-L_02ECE:
+DOROMP.loop1:
+        LC(5)   DOROMP.L5                        * 02EAD
+        GOTO    DOEXT4.L12                       * 02EB4
+DOROMP.loop2:
+        LC(5)   DOROMP.L7                        * 02EB8
+        GOTO    DOEXT4.L12                       * 02EBF
+DOROMP.loop3:
+        LC(5)   DOROMP.L9                        * 02EC3
+        GOTO    DOEXT4.L12                       * 02ECA
+DOROMP.L4:
         C=0     A                                * 02ECE
         C=DAT0  B                                * 02ED0
         D0=D0-  5                                * 02ED3
@@ -1219,14 +1219,14 @@ L_02ECE:
         D0=C                                     * 02EDD
         D0=D0+  7                                * 02EE0
         D=D-1   A                                * 02EE3
-        GOC     L_02EAD                          * 02EE5
-L_02EE8:
+        GOC     DOROMP.loop1                     * 02EE5
+DOROMP.L5:
         D1=D1-  5                                * 02EE8
         DAT1=A  A                                * 02EEB
         LC(5)   Eval(nm)                         * 02EEE
         A=C     A                                * 02EF5
         PC=(A)                                   * 02EF7
-L_02EFB:
+DOROMP.L6:
         C=0     A                                * 02EFB
         C=DAT0  B                                * 02EFD
         D0=D0-  5                                * 02F00
@@ -1236,21 +1236,21 @@ L_02EFB:
         D0=C                                     * 02F0A
         D0=D0+  7                                * 02F0D
         D=D-1   A                                * 02F10
-        GOC     L_02EB8                          * 02F12
-L_02F15:
+        GOC     DOROMP.loop2                     * 02F12
+DOROMP.L7:
         D1=D1-  5                                * 02F15
         DAT1=A  A                                * 02F18
         LC(5)   DoLam                            * 02F1B
         A=C     A                                * 02F22
         PC=(A)                                   * 02F24
-L_02F28:
+DOROMP.L8:
         D0=D0-  5                                * 02F28
         AD0EX                                    * 02F2B
         D0=A                                     * 02F2E
         D0=D0+  11                               * 02F31
         D=D-1   A                                * 02F34
-        GOC     L_02EC3                          * 02F36
-L_02F39:
+        GOC     DOROMP.loop3                     * 02F36
+DOROMP.L9:
         D1=D1-  5                                * 02F39
         DAT1=A  A                                * 02F3C
         LC(5)   ROMSEC                           * 02F3F
@@ -1274,24 +1274,24 @@ Eval(nm)~1:
         D1=C                                     * 02F7F
         LC(5)   DORRP                            * 02F82
         ?C=A    A                                * 02F89
-        GOYES   L_02FBF                          * 02F8C
+        GOYES   Eval(nm)~1.L2                    * 02F8C
         LC(5)   ATTNFLG                          * 02F8E
         CD0EX                                    * 02F95
         A=DAT0  A                                * 02F98
         D0=C                                     * 02F9B
         C=RSTK                                   * 02F9E
         ?A#0    A                                * 02FA0
-        GOYES   L_02FB2                          * 02FA3
+        GOYES   Eval(nm)~1.L1                    * 02FA3
         A=C     A                                * 02FA5
         D1=D1+  10                               * 02FA7
         D=D+1   A                                * 02FAA
         D=D+1   A                                * 02FAC
         PC=(A)                                   * 02FAE
-L_02FB2:
+Eval(nm)~1.L1:
         LC(5)   ?ATTNQUIT                        * 02FB2
         A=C     A                                * 02FB9
         PC=(A)                                   * 02FBB
-L_02FBF:
+Eval(nm)~1.L2:
         C=RSTK                                   * 02FBF
         D1=D1+  5                                * 02FC1
         DAT1=C  A                                * 02FC4
@@ -1318,13 +1318,13 @@ ROMSEC:
 * refs (5): 03786 0395F 06612 07055 0C56D
 SUB_03012:
         ST=1    1                                * 03012
-        GOTO    L_0301C                          * 03015
+        GOTO    SKIPOB.L1                        * 03015
 
 * Skip object in D0, clears ST1, clears carry, P=0 --> D0  = addr past object Uses: A.A C.A P ST1 RSTK2
 * refs (86): 02D35 02DEB 03455 03BF4 03C0A 04EC1 ...
 SKIPOB:
         ST=0    1                                * 03019
-L_0301C:
+SKIPOB.L1:
         CD1EX                                    * 0301C
         RSTK=C                                   * 0301F
         C=B     A                                * 03021
@@ -1332,73 +1332,73 @@ L_0301C:
         P=      0                                * 03025
         B=0     A                                * 03027
         ?ST=1   1                                * 03029
-        GOYES   L_03034                          * 0302C
-L_0302E:
+        GOYES   SKIPOB.L3                        * 0302C
+SKIPOB.loop2:
         A=DAT0  A                                * 0302E
         D0=D0+  5                                * 03031
-L_03034:
+SKIPOB.L3:
         D1=A                                     * 03034
         A=DAT1  A                                * 03037
         LC(5)   PRLG                             * 0303A
         ?C#A    A                                * 03041
-        GOYES   L_03050                          * 03044
+        GOYES   SKIPOB.L4                        * 03044
         D1=D1-  5                                * 03046
         AD1EX                                    * 03049
         PC=(A)                                   * 0304C
-L_03050:
+SKIPOB.L4:
         LC(5)   SEMILOOP~1                       * 03050
         ?C#A    A                                * 03057
-        GOYES   L_03061                          * 0305A
+        GOYES   SKIPOB.loop5                     * 0305A
         B=B-1   A                                * 0305C
-        GOC     L_03071                          * 0305E
-L_03061:
+        GOC     SKIPOB.L7                        * 0305E
+SKIPOB.loop5:
         ?B#0    A                                * 03061
-        GOYES   L_0302E                          * 03064
-L_03066:
+        GOYES   SKIPOB.loop2                     * 03064
+SKIPOB.loop6:
         C=RSTK                                   * 03066
         B=C     A                                * 03068
         C=RSTK                                   * 0306A
         D1=C                                     * 0306C
         RTNCC                                    * 0306F
-L_03071:
+SKIPOB.L7:
         D0=D0-  5                                * 03071
-        GONC    L_03066                          * 03074
-L_03077:
+        GONC    SKIPOB.loop6                     * 03074
+SKIPOB.L8:
         B=B+1   A                                * 03077
-        GONC    L_0302E                          * 03079
-L_0307C:
+        GONC    SKIPOB.loop2                     * 03079
+SKIPOB.L9:
         D0=D0+  16                               * 0307C
-L_0307F:
+SKIPOB.L10:
         D0=D0+  16                               * 0307F
-        GONC    L_03061                          * 03082
-L_03085:
+        GONC    SKIPOB.loop5                     * 03082
+SKIPOB.L11:
         D0=D0+  16                               * 03085
         D0=D0+  5                                * 03088
-L_0308B:
+SKIPOB.L12:
         D0=D0+  16                               * 0308B
-L_0308E:
+SKIPOB.loop13:
         D0=D0+  5                                * 0308E
-        GONC    L_03061                          * 03091
-L_03094:
+        GONC    SKIPOB.loop5                     * 03091
+SKIPOB.L14:
         D0=D0+  6                                * 03094
-        GONC    L_03061                          * 03097
-L_0309A:
+        GONC    SKIPOB.loop5                     * 03097
+SKIPOB.L15:
         C=DAT0  A                                * 0309A
         AD0EX                                    * 0309D
         C=C+A   A                                * 030A0
         D0=C                                     * 030A2
-        GONC    L_03061                          * 030A5
-L_030A8:
+        GONC    SKIPOB.loop5                     * 030A5
+SKIPOB.L16:
         C=0     A                                * 030A8
         C=DAT0  B                                * 030AA
         C=C+C   A                                * 030AD
         AD0EX                                    * 030AF
         C=C+A   A                                * 030B2
         D0=C                                     * 030B4
-L_030B7:
+SKIPOB.L17:
         D0=D0+  2                                * 030B7
-        GONC    L_03061                          * 030BA
-L_030BD:
+        GONC    SKIPOB.loop5                     * 030BA
+SKIPOB.L18:
         D0=D0-  5                                * 030BD
         AD0EX                                    * 030C0
         D0=A                                     * 030C3
@@ -1406,33 +1406,33 @@ L_030BD:
         D1=(5)  USEROB                           * 030C9
         C=DAT1  A                                * 030D0
         ?C#A    A                                * 030D3
-        GOYES   L_030E4                          * 030D6
+        GOYES   SKIPOB.L20                       * 030D6
         C=DAT0  A                                * 030D8
-L_030DB:
+SKIPOB.loop19:
         D0=D0+  13                               * 030DB
         C=C-1   X                                * 030DE
-        GONC    L_030DB                          * 030E1
-L_030E4:
+        GONC    SKIPOB.loop19                    * 030E1
+SKIPOB.L20:
         D0=D0+  3                                * 030E4
         C=DAT0  A                                * 030E7
         ?C=0    A                                * 030EA
-        GOYES   L_0308E                          * 030ED
+        GOYES   SKIPOB.loop13                    * 030ED
         AD0EX                                    * 030EF
         C=C+A   A                                * 030F2
         D0=C                                     * 030F4
         C=0     A                                * 030F7
         C=DAT0  B                                * 030F9
         ?C=0    A                                * 030FC
-        GOYES   L_0310E                          * 030FF
+        GOYES   SKIPOB.L21                       * 030FF
         C=C+C   A                                * 03101
         AD0EX                                    * 03103
         C=C+A   A                                * 03106
         D0=C                                     * 03108
         D0=D0+  2                                * 0310B
-L_0310E:
+SKIPOB.L21:
         D0=D0+  2                                * 0310E
-        GOTO    L_0302E                          * 03111
-L_03115:
+        GOTO    SKIPOB.loop2                     * 03111
+SKIPOB.L22:
         C=0     A                                * 03115
         C=DAT0  B                                * 03117
         C=C+C   A                                * 0311A
@@ -1440,7 +1440,7 @@ L_03115:
         C=C+A   A                                * 0311F
         D0=C                                     * 03121
         D0=D0+  2                                * 03124
-        GOTO    L_0302E                          * 03127
+        GOTO    SKIPOB.loop2                     * 03127
 
 * ->
 * refs (35): 03665 0383B 0509C 05416 054D5 055C8 ...
@@ -1474,26 +1474,26 @@ DEPTH:
         A=DAT0  A                                * 03177
         D0=D0+  5                                * 0317A
         PC=(A)                                   * 0317D
-L_03181:
+DEPTH.L1:
         GOSUB   SUB_03416                        * 03181
-        GONC    L_03192                          * 03185  always taken
+        GONC    DUP.L1                           * 03185  always taken
 
 * ob -> ob ob
 * refs (1523): 02214 05224 064C2 08FDA 09757 0976B ...
 DUP:
         CON(5)  (*)+5                            * 03188  primitive code object
         D=D-1   A                                * 0318D
-        GOC     L_03181                          * 0318F
-L_03192:
+        GOC     DEPTH.L1                         * 0318F
+DUP.L1:
         A=DAT1  A                                * 03192
         D1=D1-  5                                * 03195
         DAT1=A  A                                * 03198
         A=DAT0  A                                * 0319B
         D0=D0+  5                                * 0319E
         PC=(A)                                   * 031A1
-L_031A5:
+DUP.L2:
         GOSUB   SafeGargb                        * 031A5
-        GONC    L_031BD                          * 031A9  always taken
+        GONC    2DUP.L1                          * 031A9  always taken
 
 * 1 2 -> 1 2 1 2
 * refs (256): 0DEB1 0E0B5 0E0DD 0E10A 0FB74 0FB92 ...
@@ -1501,17 +1501,17 @@ L_031A5:
         CON(5)  (*)+5                            * 031AC  primitive code object
         LC(5)   #00002                           * 031B1
         D=D-C   A                                * 031B8
-        GOC     L_031A5                          * 031BA
-L_031BD:
+        GOC     DUP.L2                           * 031BA
+2DUP.L1:
         C=DAT1  10                               * 031BD
         D1=D1-  10                               * 031C1
         DAT1=C  10                               * 031C4
         A=DAT0  A                                * 031C8
         D0=D0+  5                                * 031CB
         PC=(A)                                   * 031CE
-L_031D2:
+2DUP.L2:
         GOSUB   SafeGargb                        * 031D2
-        GONC    L_031F7                          * 031D6  always taken
+        GONC    NDUP.L1                          * 031D6  always taken
 
 * 1..n #n -> 1..n 1..n
 * refs (15): 1FC89 2508B 2547A 2C85A 2C887 2CA3A ...
@@ -1525,8 +1525,8 @@ NDUP:
         D1=D1+  5                                * 031ED
         D=D+1   A                                * 031F0
         D=D-C   A                                * 031F2
-        GOC     L_031D2                          * 031F4
-L_031F7:
+        GOC     2DUP.L2                          * 031F4
+NDUP.L1:
         A=C     A                                * 031F7
         A=A+A   A                                * 031F9
         A=A+A   A                                * 031FB
@@ -1614,17 +1614,17 @@ ROT:
         A=DAT0  A                                * 032B1
         D0=D0+  5                                * 032B4
         PC=(A)                                   * 032B7
-L_032BB:
+ROT.L1:
         GOSUB   SUB_03416                        * 032BB
-        GONC    L_032CC                          * 032BF  always taken
+        GONC    OVER.L1                          * 032BF  always taken
 
 * 1 2 -> 1 2 1
 * refs (827): 052CB 052FF 08F99 09370 0939D 093C5 ...
 OVER:
         CON(5)  (*)+5                            * 032C2  primitive code object
         D=D-1   A                                * 032C7
-        GOC     L_032BB                          * 032C9
-L_032CC:
+        GOC     ROT.L1                           * 032C9
+OVER.L1:
         D1=D1+  5                                * 032CC
         C=DAT1  A                                * 032CF
         D1=D1-  10                               * 032D2
@@ -1641,10 +1641,10 @@ PICK:
         CD1EX                                    * 032EA
         D1=D1+  5                                * 032ED
         A=DAT1  A                                * 032F0
-L_032F3:
+PICK.L1:
         RSTK=C                                   * 032F3
         ?A=0    A                                * 032F5
-        GOYES   L_0331C                          * 032F8
+        GOYES   PICK.L2                          * 032F8
         C=A     A                                * 032FA
         A=A+A   A                                * 032FC
         A=A+A   A                                * 032FE
@@ -1658,7 +1658,7 @@ L_032F3:
         A=DAT0  A                                * 03312
         D0=D0+  5                                * 03315
         PC=(A)                                   * 03318
-L_0331C:
+PICK.L2:
         C=RSTK                                   * 0331C
         D1=C                                     * 0331E
         GOTO    DropLoop                         * 03321
@@ -1668,11 +1668,11 @@ L_0331C:
 ROLL:
         CON(5)  (*)+5                            * 03325  primitive code object
         GOSUBL  POP#                             * 0332A
-L_03330:
+ROLL.L1:
         A=A-1   A                                * 03330
-        GOC     L_03394                          * 03332
+        GOC     ROLL.L4                          * 03332
         ?A=0    A                                * 03335
-        GOYES   L_03394                          * 03338
+        GOYES   ROLL.L4                          * 03338
         C=A     A                                * 0333A
         A=A+A   A                                * 0333C
         A=A+A   A                                * 0333E
@@ -1686,16 +1686,16 @@ L_03330:
         C=C-1   A                                * 03351
         CPEX    0                                * 03353
         CSR     A                                * 03357
-L_03359:
+ROLL.loop2:
         C=C-1   A                                * 03359
-        GOC     L_03372                          * 0335B
+        GOC     ROLL.L3                          * 0335B
         D1=D1-  16                               * 0335E
         A=DAT1  W                                * 03361
         D1=D1+  5                                * 03365
         DAT1=A  W                                * 03368
         D1=D1-  5                                * 0336C
-        GONC    L_03359                          * 0336F
-L_03372:
+        GONC    ROLL.loop2                       * 0336F
+ROLL.L3:
         AD1EX                                    * 03372
         C=0     A                                * 03375
         C+P+1                                    * 03377
@@ -1708,7 +1708,7 @@ L_03372:
         D1=D1-  5                                * 0338C
         C=RSTK                                   * 0338F
         DAT1=C  A                                * 03391
-L_03394:
+ROLL.L4:
         A=DAT0  A                                * 03394
         D0=D0+  5                                * 03397
         PC=(A)                                   * 0339A
@@ -1718,11 +1718,11 @@ L_03394:
 UNROLL:
         CON(5)  (*)+5                            * 0339E  primitive code object
         GOSUBL  POP#                             * 033A3
-L_033A9:
+UNROLL.L1:
         A=A-1   A                                * 033A9
-        GOC     L_03394                          * 033AB
+        GOC     ROLL.L4                          * 033AB
         ?A=0    A                                * 033AE
-        GOYES   L_03394                          * 033B1
+        GOYES   ROLL.L4                          * 033B1
         CD1EX                                    * 033B3
         D1=C                                     * 033B6
         RSTK=C                                   * 033B9
@@ -1736,16 +1736,16 @@ L_033A9:
         C=C-1   A                                * 033CB
         CPEX    0                                * 033CD
         CSR     A                                * 033D1
-L_033D3:
+UNROLL.loop2:
         C=C-1   A                                * 033D3
-        GOC     L_033EC                          * 033D5
+        GOC     UNROLL.L3                        * 033D5
         A=DAT1  W                                * 033D8
         D1=D1-  5                                * 033DC
         DAT1=A  W                                * 033DF
         D1=D1+  5                                * 033E3
         D1=D1+  16                               * 033E6
-        GONC    L_033D3                          * 033E9
-L_033EC:
+        GONC    UNROLL.loop2                     * 033E9
+UNROLL.L3:
         A=DAT1  WP                               * 033EC
         D1=D1-  5                                * 033F0
         DAT1=A  WP                               * 033F3
@@ -1801,26 +1801,26 @@ MAKEARRY:
         A=C     A                                * 0347D
         AR3EX                                    * 0347F
         GOSUBL  SUB_0384F                        * 03482
-        GONC    L_03491                          * 03488
-L_0348B:
+        GONC    MAKEARRY.L2                      * 03488
+MAKEARRY.loop1:
         GOLONG  RrErrIM                          * 0348B
-L_03491:
+MAKEARRY.L2:
         R4=A                                     * 03491
         C=R2                                     * 03494
         GOSUBL  MUL#                             * 03497
-        GOC     L_0348B                          * 0349D
+        GOC     MAKEARRY.loop1                   * 0349D
         A=R3                                     * 034A0
         B=B+A   A                                * 034A3
-        GOC     L_0348B                          * 034A5
+        GOC     MAKEARRY.loop1                   * 034A5
         A=A+A   A                                * 034A8
-        GOC     L_0348B                          * 034AA
+        GOC     MAKEARRY.loop1                   * 034AA
         A=A+A   A                                * 034AD
-        GOC     L_0348B                          * 034AF
+        GOC     MAKEARRY.loop1                   * 034AF
         A=A+B   A                                * 034B2
-        GOC     L_0348B                          * 034B4
+        GOC     MAKEARRY.loop1                   * 034B4
         LC(5)   #00014                           * 034B7
         C=C+A   A                                * 034BE
-        GOC     L_0348B                          * 034C0
+        GOC     MAKEARRY.loop1                   * 034C0
         GOSUBL  GETTEMP                          * 034C3
         AD0EX                                    * 034C9
         D1=A                                     * 034CC
@@ -1850,31 +1850,31 @@ L_03491:
         D=C     A                                * 0351B
         A=DAT0  A                                * 0351D
         D0=A                                     * 03520
-L_03523:
+MAKEARRY.loop3:
         D1=D1+  5                                * 03523
         D=D-1   A                                * 03526
-        GOC     L_03535                          * 03528
+        GOC     MAKEARRY.L4                      * 03528
         GOSUB   SUB_03878                        * 0352B
         DAT1=C  A                                * 0352F
-        GONC    L_03523                          * 03532
-L_03535:
+        GONC    MAKEARRY.loop3                   * 03532
+MAKEARRY.L4:
         C=R4                                     * 03535
         D=C     A                                * 03538
-L_0353A:
+MAKEARRY.loop5:
         D=D-1   A                                * 0353A
-        GOC     L_03550                          * 0353C
+        GOC     MAKEARRY.L6                      * 0353C
         A=B     A                                * 0353F
         D0=A                                     * 03541
         C=R2                                     * 03544
         GOSUBL  MOVEDOWN                         * 03547
-        GONC    L_0353A                          * 0354D
-L_03550:
+        GONC    MAKEARRY.loop5                   * 0354D
+MAKEARRY.L6:
         A=R0                                     * 03550
-L_03553:
+MAKEARRY.L7:
         GOSUBL  GETPTR                           * 03553
         D1=D1+  5                                * 03559
         D=D+1   A                                * 0355C
-        GOTO    L_03678                          * 0355E
+        GOTO    GPOverWrALp.L1                   * 0355E
 
 * [] -> #
 * refs (11): 1DA25 35E54 36958 37BD5 6314B 882F6 ...
@@ -1896,7 +1896,7 @@ PUSH#ALOOP:
 * refs (26): 0456E 05546 0590B 0E29A 0EC6F 13F62 ...
 PUSH#LOOP:
         GOSUBL  PUSH#                            * 0357F
-L_03585:
+PUSH#LOOP.L1:
         A=DAT0  A                                * 03585
         D0=D0+  5                                * 03588
         PC=(A)                                   * 0358B
@@ -1909,7 +1909,7 @@ prefix(ar):
         D1=D1+  10                               * 0359A
         A=DAT1  A                                * 0359D
         D1=C                                     * 035A0
-        GOLONG  L_03C75                          * 035A3
+        GOLONG  TYPE.L1                          * 035A3
 
 * [] -> {#n #m}
 * refs (17): 16991 1CA53 1D0C9 1DA39 35FAD 3605C ...
@@ -1925,18 +1925,18 @@ DIMLIMITS:
         B=C     A                                * 035C9
         LC(1)   #A                               * 035CB
         P=      4                                * 035CE
-L_035D0:
+DIMLIMITS.loop1:
         D=D-1   A                                * 035D0
-        GOC     L_035E9                          * 035D2
+        GOC     DIMLIMITS.L3                     * 035D2
         D1=D1+  5                                * 035D5
         A=DAT1  A                                * 035D8
         ?A<=B   A                                * 035DB
-        GOYES   L_035E3                          * 035DE
+        GOYES   DIMLIMITS.L2                     * 035DE
         C+P+1                                    * 035E0
-L_035E3:
+DIMLIMITS.L2:
         C+P+1                                    * 035E3
-        GONC    L_035D0                          * 035E6
-L_035E9:
+        GONC    DIMLIMITS.loop1                  * 035E6
+DIMLIMITS.L3:
         P=      0                                * 035E9
         GOSUB   GETTEMP                          * 035EB
         AD0EX                                    * 035EF
@@ -1955,21 +1955,21 @@ L_035E9:
         D0=D0+  5                                * 0361D
         LC(5)   #0000F                           * 03620
         B=C     A                                * 03627
-L_03629:
+DIMLIMITS.loop4:
         D=D-1   A                                * 03629
-        GOC     L_03665                          * 0362B
+        GOC     DIMLIMITS.L7                     * 0362B
         D1=D1+  5                                * 0362E
         A=DAT1  A                                * 03631
         ?A<=B   A                                * 03634
-        GOYES   L_0364F                          * 03637
+        GOYES   DIMLIMITS.L6                     * 03637
         LC(5)   DOBINT                           * 03639
         DAT0=C  A                                * 03640
         D0=D0+  5                                * 03643
-L_03646:
+DIMLIMITS.loop5:
         DAT0=A  A                                * 03646
         D0=D0+  5                                * 03649
-        GONC    L_03629                          * 0364C
-L_0364F:
+        GONC    DIMLIMITS.loop4                  * 0364C
+DIMLIMITS.L6:
         A=A+A   A                                * 0364F
         C=A     A                                * 03651
         A=A+A   A                                * 03653
@@ -1977,8 +1977,8 @@ L_0364F:
         A=A+C   A                                * 03657
         LC(5)   BINT0                            * 03659
         A=A+C   A                                * 03660
-        GONC    L_03646                          * 03662
-L_03665:
+        GONC    DIMLIMITS.loop5                  * 03662
+DIMLIMITS.L7:
         LC(5)   SEMI                             * 03665
         DAT0=C  A                                * 0366C
 
@@ -1991,7 +1991,7 @@ GPOverWrR0Lp:
 * refs (9): 0513D 0580F 05C21 2E285 2FF85 37457 ...
 GPOverWrALp:
         GOSUBL  GETPTR                           * 03672
-L_03678:
+GPOverWrALp.L1:
         DAT1=A  A                                * 03678
         A=DAT0  A                                * 0367B
         D0=D0+  5                                * 0367E
@@ -2019,27 +2019,27 @@ ARRYEL?:
         D1=D1+  15                               * 036B4
         C=DAT1  A                                * 036B7
         ?D#C    A                                * 036BA
-        GOYES   L_0370A                          * 036BD
+        GOYES   Push#TLoop.L1                    * 036BD
         D=D-1   A                                * 036BF
-        GOC     L_0370A                          * 036C1
+        GOC     Push#TLoop.L1                    * 036C1
         B=0     A                                * 036C4
         D1=D1+  5                                * 036C6
-L_036C9:
+ARRYEL?.loop1:
         GOSUB   SUB_03878                        * 036C9
         A=DAT1  A                                * 036CD
         ?C>A    A                                * 036D0
-        GOYES   L_0370A                          * 036D3
+        GOYES   Push#TLoop.L1                    * 036D3
         C=C-1   A                                * 036D5
-        GOC     L_0370A                          * 036D7
+        GOC     Push#TLoop.L1                    * 036D7
         B=B+C   A                                * 036DA
         D=D-1   A                                * 036DC
-        GOC     L_036F0                          * 036DE
+        GOC     ARRYEL?.L2                       * 036DE
         D1=D1+  5                                * 036E1
         C=DAT1  A                                * 036E4
         A=B     A                                * 036E7
         GOSUB   MUL#                             * 036E9
-        GONC    L_036C9                          * 036ED
-L_036F0:
+        GONC    ARRYEL?.loop1                    * 036ED
+ARRYEL?.L2:
         B=B+1   A                                * 036F0
         A=B     A                                * 036F2
         R0=A                                     * 036F4
@@ -2050,7 +2050,7 @@ Push#TLoop:
         LC(5)   TRUE                             * 036FD
         A=C     A                                * 03704
         PC=(A)                                   * 03706
-L_0370A:
+Push#TLoop.L1:
         GOSUBL  GETPTR                           * 0370A
         LC(5)   FALSE                            * 03710
         A=C     A                                * 03717
@@ -2075,18 +2075,18 @@ GETATELN:
         C=R1                                     * 0374A
         GOSUB   SUB_038A0                        * 0374D
         ?ST=0   3                                * 03751
-        GOYES   L_03773                          * 03754
+        GOYES   GETATELN.L2                      * 03754
         A=DAT0  A                                * 03756
         ?A#0    A                                * 03759
-        GOYES   L_0376B                          * 0375C
+        GOYES   GETATELN.L1                      * 0375C
         LC(5)   FALSE                            * 0375E
         A=C     A                                * 03765
-        GOTO    L_03553                          * 03767
-L_0376B:
+        GOTO    MAKEARRY.L7                      * 03767
+GETATELN.L1:
         CD0EX                                    * 0376B
         C=C+A   A                                * 0376E
         D0=C                                     * 03770
-L_03773:
+GETATELN.L2:
         C=R1                                     * 03773
         AD0EX                                    * 03776
         C=A-C   A                                * 03779
@@ -2124,7 +2124,7 @@ L_03773:
         D1=D1+  5                                * 037E5
         DAT1=A  A                                * 037E8
         D1=D1-  5                                * 037EB
-        GOTO    L_03585                          * 037EE
+        GOTO    PUSH#LOOP.L1                     * 037EE
 
 * refs (1): 03722
 GETATELN~1:
@@ -2138,9 +2138,9 @@ SUB_037F5:
         ST=0    3                                * 037FD
         LC(5)   DOARRY                           * 03800
         ?C=A    A                                * 03807
-        GOYES   L_0380F                          * 0380A
+        GOYES   SUB_037F5.L1                     * 0380A
         ST=1    3                                * 0380C
-L_0380F:
+SUB_037F5.L1:
         D1=D1+  10                               * 0380F
         A=DAT1  A                                * 03812
         C=RSTK                                   * 03815
@@ -2152,42 +2152,42 @@ SUB_0381C:
         D0=A                                     * 0381C
         D0=D0+  5                                * 0381F
         D=0     A                                * 03822
-L_03824:
+SUB_0381C.loop1:
         LC(5)   DOBINT                           * 03824
-L_0382B:
+SUB_0381C.loop2:
         A=DAT0  A                                * 0382B
         ?C#A    A                                * 0382E
-        GOYES   L_0383B                          * 03831
+        GOYES   SUB_0381C.L3                     * 03831
         D0=D0+  10                               * 03833
         D=D+1   A                                * 03836
-        GONC    L_0382B                          * 03838
-L_0383B:
+        GONC    SUB_0381C.loop2                  * 03838
+SUB_0381C.L3:
         LC(5)   SEMI                             * 0383B
         ?C=A    A                                * 03842
         RTNYES                                   * 03845
         D0=D0+  5                                * 03847
         D=D+1   A                                * 0384A
-        GONC    L_03824                          * 0384C
+        GONC    SUB_0381C.loop1                  * 0384C
 
 * refs (1): 03482
 SUB_0384F:
         D0=A                                     * 0384F
         A=0     A                                * 03852
         D=D-1   A                                * 03854
-        GOC     L_03876                          * 03856
+        GOC     SUB_0384F.L3                     * 03856
         GOSUB   SUB_03878                        * 03859
         B=C     A                                * 0385D
-L_0385F:
+SUB_0384F.loop1:
         D=D-1   A                                * 0385F
-        GOC     L_03874                          * 03861
+        GOC     SUB_0384F.L2                     * 03861
         GOSUB   SUB_03878                        * 03864
         A=B     A                                * 03868
         GOSUB   MUL#                             * 0386A
         RTNC                                     * 0386E
-        GONC    L_0385F                          * 03871
-L_03874:
+        GONC    SUB_0384F.loop1                  * 03871
+SUB_0384F.L2:
         A=B     A                                * 03874
-L_03876:
+SUB_0384F.L3:
         RTNCC                                    * 03876
 
 * refs (4): 0352B 036C9 03859 03864
@@ -2196,13 +2196,13 @@ SUB_03878:
         A=DAT0  A                                * 0387B
         LC(5)   DOBINT                           * 0387E
         ?C=A    A                                * 03885
-        GOYES   L_03898                          * 03888
+        GOYES   SUB_03878.L1                     * 03888
         AD0EX                                    * 0388A
         D0=D0+  5                                * 0388D
         C=DAT0  A                                * 03890
         D0=A                                     * 03893
         RTN                                      * 03896
-L_03898:
+SUB_03878.L1:
         D0=D0+  5                                * 03898
         C=DAT0  A                                * 0389B
         RTN                                      * 0389E
@@ -2213,19 +2213,19 @@ SUB_038A0:
         D0=D0+  15                               * 038A3
         C=DAT0  A                                * 038A6
         D=C     A                                * 038A9
-L_038AB:
+SUB_038A0.loop1:
         D=D-1   A                                * 038AB
-        GOC     L_038B6                          * 038AD
+        GOC     SUB_038A0.L2                     * 038AD
         D0=D0+  5                                * 038B0
-        GONC    L_038AB                          * 038B3
-L_038B6:
+        GONC    SUB_038A0.loop1                  * 038B3
+SUB_038A0.L2:
         A=A-1   A                                * 038B6
         RTNC                                     * 038B8
         D0=D0+  5                                * 038BB
         B=A     A                                * 038BE
         ?ST=0   3                                * 038C0
-        GOYES   L_038D5                          * 038C3
-L_038C5:
+        GOYES   SUB_038A0.L4                     * 038C3
+SUB_038A0.loop3:
         B=B+B   A                                * 038C5
         B=B+B   A                                * 038C7
         B=B+A   A                                * 038C9
@@ -2233,61 +2233,61 @@ L_038C5:
         A=A+B   A                                * 038CE
         D0=A                                     * 038D0
         RTNSC                                    * 038D3
-L_038D5:
+SUB_038A0.L4:
         C=R2                                     * 038D5
         D=C     A                                * 038D8
         LC(5)   DOBINT                           * 038DA
         ?D=C    A                                * 038E1
-        GOYES   L_038C5                          * 038E4
+        GOYES   SUB_038A0.loop3                  * 038E4
         LC(5)   DOREAL                           * 038E6
         ?D=C    A                                * 038ED
-        GOYES   L_0394A                          * 038F0
+        GOYES   SUB_038A0.L9                     * 038F0
         LC(5)   DOEREL                           * 038F2
         ?D=C    A                                * 038F9
-        GOYES   L_0393B                          * 038FC
+        GOYES   SUB_038A0.L7                     * 038FC
         LC(5)   DOCMP                            * 038FE
         ?D=C    A                                * 03905
-        GOYES   L_03948                          * 03908
+        GOYES   SUB_038A0.L8                     * 03908
         LC(5)   DOECMP                           * 0390A
         ?D=C    A                                * 03911
-        GOYES   L_03937                          * 03914
+        GOYES   SUB_038A0.L6                     * 03914
         LC(5)   DOCHAR                           * 03916
         ?D=C    A                                * 0391D
-        GOYES   L_03932                          * 03920
+        GOYES   SUB_038A0.L5                     * 03920
         LC(5)   DOROMP                           * 03922
         ?D#C    A                                * 03929
-        GOYES   L_03956                          * 0392C
+        GOYES   SUB_038A0.loop11                 * 0392C
         B=B+B   A                                * 0392E
         B=B+A   A                                * 03930
-L_03932:
+SUB_038A0.L5:
         B=B+B   A                                * 03932
-        GONC    L_0394C                          * 03934
-L_03937:
+        GONC    SUB_038A0.L10                    * 03934
+SUB_038A0.L6:
         B=B+B   A                                * 03937
         A=B     A                                * 03939
-L_0393B:
+SUB_038A0.L7:
         B=B+B   A                                * 0393B
         B=B+B   A                                * 0393D
         B=B+A   A                                * 0393F
         ASL     A                                * 03941
         B=B+A   A                                * 03943
-        GONC    L_0394C                          * 03945
-L_03948:
+        GONC    SUB_038A0.L10                    * 03945
+SUB_038A0.L8:
         B=B+B   A                                * 03948
-L_0394A:
+SUB_038A0.L9:
         BSL     A                                * 0394A
-L_0394C:
+SUB_038A0.L10:
         AD0EX                                    * 0394C
         A=A+B   A                                * 0394F
         D0=A                                     * 03951
         RTNSC                                    * 03954
-L_03956:
+SUB_038A0.loop11:
         B=B-1   A                                * 03956
         RTNC                                     * 03958
         C=D     A                                * 0395B
         A=C     A                                * 0395D
         GOSUBL  SUB_03012                        * 0395F
-        GONC    L_03956                          * 03965
+        GONC    SUB_038A0.loop11                 * 03965
 
 * refs (2): 03578 0C522
 LenArD1:
@@ -2299,60 +2299,60 @@ LenArD1:
         RTNC                                     * 03974
         D1=D1+  5                                * 03977
         A=DAT1  A                                * 0397A
-L_0397D:
+LenArD1.loop1:
         D=D-1   A                                * 0397D
         RTNC                                     * 0397F
         D1=D1+  5                                * 03982
         C=DAT1  A                                * 03985
         GOSUB   MUL#                             * 03988
         A=B     A                                * 0398C
-        GONC    L_0397D                          * 0398E
+        GONC    LenArD1.loop1                    * 0398E
 
 * B.A = A.A*C.A
 * refs (4): 03497 036E9 0386A 03988
 MUL#:
         B=0     A                                * 03991
         ?A#0    A                                * 03993
-        GOYES   L_0399A                          * 03996
+        GOYES   MUL#.loop1                       * 03996
         RTN                                      * 03998
-L_0399A:
+MUL#.loop1:
         ?CBIT=0 0                                * 0399A
-        GOYES   L_039AB                          * 0399F
+        GOYES   MUL#.L2                          * 0399F
         B=B+A   A                                * 039A1
         RTNC                                     * 039A3
         CBIT=0  0                                * 039A6
-L_039AB:
+MUL#.L2:
         ?C#0    A                                * 039AB
-        GOYES   L_039B2                          * 039AE
+        GOYES   MUL#.L3                          * 039AE
         RTN                                      * 039B0
-L_039B2:
+MUL#.L3:
         CSRB.F  A                                * 039B2
         A=A+A   A                                * 039B7
-        GONC    L_0399A                          * 039B9
+        GONC    MUL#.loop1                       * 039B9
         RTN                                      * 039BC
 
 * <REF>CREATETEMP with <REF>GARBAGECOL if necessary <REF>GPMEMERR if not enough memory
 * refs (20): 034C3 035EB 03794 0511F 05A90 05B30 ...
 GETTEMP:
         ST=0    10                               * 039BE
-L_039C1:
+GETTEMP.loop1:
         RSTK=C                                   * 039C1
         GOSUBL  CREATETEMP                       * 039C3
-        GONC    L_039DF                          * 039C9
+        GONC    GETTEMP.L2                       * 039C9
         ?ST=1   10                               * 039CC
         GOYES   RrErrIM                          * 039CF
         GOSUBL  GARBAGECOL                       * 039D1
         ST=1    10                               * 039D7
         C=RSTK                                   * 039DA
-        GONC    L_039C1                          * 039DC
-L_039DF:
+        GONC    GETTEMP.loop1                    * 039DC
+GETTEMP.L2:
         C=RSTK                                   * 039DF
         RTNCC                                    * 039E1
 
 * refs (2): 0348B 039CC
 RrErrIM:
         GOSUBL  GETPTR                           * 039E3
-L_039E9:
+RrErrIM.L1:
         GOLONG  DOMEMERR                         * 039E9
 
 * refs (1): 0866E
@@ -2379,24 +2379,24 @@ ECUSER~1:
 * refs (1): 03A12
 SUB_03A2E:
         ST=0    10                               * 03A2E
-L_03A31:
+SUB_03A2E.loop1:
         D=C     A                                * 03A31
         GOSUBL  ROOM                             * 03A33
         DCEX    A                                * 03A39
         ?D>=C   A                                * 03A3B
         RTNYES                                   * 03A3E
         ?ST=1   10                               * 03A40
-        GOYES   L_03A55                          * 03A43
+        GOYES   SUB_03A2E.L2                     * 03A43
         RSTK=C                                   * 03A45
         GOSUBL  GARBAGECOL                       * 03A47
         ST=1    10                               * 03A4D
         C=RSTK                                   * 03A50
-        GONC    L_03A31                          * 03A52
-L_03A55:
+        GONC    SUB_03A2E.loop1                  * 03A52
+SUB_03A2E.L2:
         GOSUBL  GETPTR                           * 03A55
         D1=D1+  5                                * 03A5B
         D=D+1   A                                * 03A5E
-        GOTO    L_039E9                          * 03A60
+        GOTO    RrErrIM.L1                       * 03A60
 
 * refs (2): 08534 0864D
 SUB_03A64:
@@ -2419,21 +2419,21 @@ TRUE:
 * refs (3): 03A81 3A9C6 B9839
 PUSHA:
         D=D-1   A                                * 03A86
-        GOC     L_03A9B                          * 03A88
-L_03A8B:
+        GOC     PUSHA.L2                         * 03A88
+PUSHA.loop1:
         D1=D1-  5                                * 03A8B
         DAT1=A  A                                * 03A8E
         A=DAT0  A                                * 03A91
         D0=D0+  5                                * 03A94
         PC=(A)                                   * 03A97
-L_03A9B:
+PUSHA.L2:
         R2=A                                     * 03A9B
         GOSUBL  SAVPTR                           * 03A9E
         GOSUBL  GARBAGECOL                       * 03AA4
         GOSUBL  GETPTR                           * 03AAA
         A=R2                                     * 03AB0
         D=D-1   A                                * 03AB3
-        GONC    L_03A8B                          * 03AB5
+        GONC    PUSHA.loop1                      * 03AB5
         D=0     A                                * 03AB8
         GOLONG  DOMEMERR                         * 03ABA
 
@@ -2442,7 +2442,7 @@ L_03A9B:
 FALSE:
         CON(5)  (*)+5                            * 03AC0  primitive code object
         D=D-1   A                                * 03AC5
-        GOC     L_03A9B                          * 03AC7
+        GOC     PUSHA.L2                         * 03AC7
         D1=D1-  5                                * 03ACA
         DAT1=A  A                                * 03ACD
         A=DAT0  A                                * 03AD0
@@ -2458,8 +2458,8 @@ XOR:
         D=D+1   A                                * 03AE5
         C=DAT1  A                                * 03AE7
         ?C=A    A                                * 03AEA
-        GOYES   L_03B06                          * 03AED
-        GONC    L_03B1A                          * 03AEF
+        GOYES   NOT.L2                           * 03AED
+        GONC    NOT.L3                           * 03AEF
 
 * flag -> flag'
 * refs (150): 06BCC 092AD 0988B 0B166 0BCD9 0DF7A ...
@@ -2467,16 +2467,16 @@ NOT:
         CON(5)  (*)+5                            * 03AF2  primitive code object
         A=DAT1  A                                * 03AF7
         LC(5)   FALSE                            * 03AFA
-L_03B01:
+NOT.L1:
         ?C=A    A                                * 03B01
-        GOYES   L_03B1A                          * 03B04
-L_03B06:
+        GOYES   NOT.L3                           * 03B04
+NOT.L2:
         LC(5)   FALSE                            * 03B06
         DAT1=C  A                                * 03B0D
         A=DAT0  A                                * 03B10
         D0=D0+  5                                * 03B13
         PC=(A)                                   * 03B16
-L_03B1A:
+NOT.L3:
         LC(5)   TRUE                             * 03B1A
         DAT1=C  A                                * 03B21
         A=DAT0  A                                * 03B24
@@ -2492,8 +2492,8 @@ EQ:
         D=D+1   A                                * 03B39
         C=DAT1  A                                * 03B3B
         ?C=A    A                                * 03B3E
-        GOYES   L_03B1A                          * 03B41
-        GONC    L_03B06                          * 03B43
+        GOYES   NOT.L3                           * 03B41
+        GONC    NOT.L2                           * 03B43
 
 * flag1 flag2 -> flag
 * refs (99): 04908 16D5E 176BC 17BBD 19B3A 19BEB ...
@@ -2506,10 +2506,10 @@ AND:
         A=DAT1  A                                * 03B56
         LC(5)   FALSE                            * 03B59
         ?C=A    A                                * 03B60
-        GOYES   L_03B68                          * 03B63
-L_03B65:
+        GOYES   AND.L2                           * 03B63
+AND.L1:
         A=R0                                     * 03B65
-L_03B68:
+AND.L2:
         DAT1=A  A                                * 03B68
         A=DAT0  A                                * 03B6B
         D0=D0+  5                                * 03B6E
@@ -2526,8 +2526,8 @@ OR:
         A=DAT1  A                                * 03B85
         LC(5)   TRUE                             * 03B88
         ?C=A    A                                * 03B8F
-        GOYES   L_03B68                          * 03B92
-        GONC    L_03B65                          * 03B94
+        GOYES   AND.L2                           * 03B92
+        GONC    AND.L1                           * 03B94
 
 * ob1 ob2 -> flag
 * refs (179): 0986D 0BC51 0C7D5 0FC05 0FC32 103BF ...
@@ -2547,11 +2547,11 @@ EQUAL:
         BCEX    A                                * 03BBB
         R1=C                                     * 03BBD
         ?A=B    A                                * 03BC0
-        GOYES   L_03BEC                          * 03BC3
-L_03BC5:
+        GOYES   EQUAL.L3                         * 03BC3
+EQUAL.loop1:
         P=      0                                * 03BC5
         LC(5)   FALSE                            * 03BC7
-L_03BCE:
+EQUAL.loop2:
         A=R2                                     * 03BCE
         D1=A                                     * 03BD1
         A=R1                                     * 03BD4
@@ -2562,7 +2562,7 @@ L_03BCE:
         A=DAT0  A                                * 03BE2
         D0=D0+  5                                * 03BE5
         PC=(A)                                   * 03BE8
-L_03BEC:
+EQUAL.L3:
         AD0EX                                    * 03BEC
         D0=A                                     * 03BEF
         B=A     A                                * 03BF2
@@ -2579,31 +2579,31 @@ L_03BEC:
         AD0EX                                    * 03C16
         C=A-C   A                                * 03C19
         ?B#C    A                                * 03C1B
-        GOYES   L_03BC5                          * 03C1E
+        GOYES   EQUAL.loop1                      * 03C1E
         BSR     A                                * 03C20
         P=C     0                                * 03C22
-L_03C26:
+EQUAL.loop4:
         B=B-1   A                                * 03C26
-        GOC     L_03C41                          * 03C28
+        GOC     EQUAL.L5                         * 03C28
         A=DAT0  W                                * 03C2B
         C=DAT1  W                                * 03C2F
         D0=D0+  16                               * 03C33
         D1=D1+  16                               * 03C36
         ?C#A    W                                * 03C39
-        GOYES   L_03BC5                          * 03C3C
-        GONC    L_03C26                          * 03C3E
-L_03C41:
+        GOYES   EQUAL.loop1                      * 03C3C
+        GONC    EQUAL.loop4                      * 03C3E
+EQUAL.L5:
         P=P-1                                    * 03C41
-        GOC     L_03C57                          * 03C43
+        GOC     EQUAL.L6                         * 03C43
         A=DAT0  WP                               * 03C46
         C=DAT1  WP                               * 03C4A
         ?C=A    WP                               * 03C4E
-        GOYES   L_03C57                          * 03C51
-        GOTO    L_03BC5                          * 03C53
-L_03C57:
+        GOYES   EQUAL.L6                         * 03C51
+        GOTO    EQUAL.loop1                      * 03C53
+EQUAL.L6:
         P=      0                                * 03C57
         LC(5)   TRUE                             * 03C59
-        GOTO    L_03BCE                          * 03C60
+        GOTO    EQUAL.loop2                      * 03C60
 
 * ob -> #prolog
 * refs (10): 05229 052DF 05304 173B0 1948E 35CD6 ...
@@ -2613,18 +2613,18 @@ TYPE:
         CD1EX                                    * 03C6C
         A=DAT1  A                                * 03C6F
         D1=C                                     * 03C72
-L_03C75:
+TYPE.L1:
         CD0EX                                    * 03C75
         RSTK=C                                   * 03C78
-        D0=(5)  L_03F85+1                        * 03C7A  table, read 10 nibbles further on
-L_03C81:
+        D0=(5)  POP2#.L1+1                       * 03C7A  table, read 10 nibbles further on
+TYPE.loop2:
         D0=D0+  10                               * 03C81
         C=DAT0  A                                * 03C84
         ?C=A    A                                * 03C87
-        GOYES   L_03C91                          * 03C8A
+        GOYES   TYPE.L3                          * 03C8A
         ?C#0    A                                * 03C8C
-        GOYES   L_03C81                          * 03C8F
-L_03C91:
+        GOYES   TYPE.loop2                       * 03C8F
+TYPE.L3:
         D0=D0-  5                                * 03C91
         C=RSTK                                   * 03C94
         CD0EX                                    * 03C96
@@ -2643,10 +2643,10 @@ L_03C91:
         A=DAT1  A                                * 03CB4
         D1=C                                     * 03CB7
         ?A=0    A                                * 03CBA
-        GOYES   L_03CC3                          * 03CBD
-        GOTO    L_03B06                          * 03CBF
-L_03CC3:
-        GOTO    L_03B1A                          * 03CC3
+        GOYES   #0=.L1                           * 03CBD
+        GOTO    NOT.L2                           * 03CBF
+#0=.L1:
+        GOTO    NOT.L3                           * 03CC3
 
 * # -> flag
 * refs (75): 14332 1434B 14364 1876F 19EA8 1F3A9 ...
@@ -2658,8 +2658,8 @@ L_03CC3:
         A=DAT1  A                                * 03CD5
         D1=C                                     * 03CD8
         ?A#0    A                                * 03CDB
-        GOYES   L_03CC3                          * 03CDE
-        GOTO    L_03B06                          * 03CE0
+        GOYES   #0=.L1                           * 03CDE
+        GOTO    NOT.L2                           * 03CE0
 
 * # #' -> flag
 * refs (101): 0B085 0E55C 178CE 214CC 21541 279BD ...
@@ -2680,8 +2680,8 @@ L_03CC3:
         D1=C                                     * 03D0B
         C=RSTK                                   * 03D0E
         ?C>A    A                                * 03D10
-        GOYES   L_03CC3                          * 03D13
-        GOTO    L_03B06                          * 03D15
+        GOYES   #0=.L1                           * 03D13
+        GOTO    NOT.L2                           * 03D15
 
 * # #' -> flag
 * refs (172): 143FC 1466D 14690 19FEE 1A774 1A783 ...
@@ -2702,8 +2702,8 @@ L_03CC3:
         D1=C                                     * 03D40
         C=RSTK                                   * 03D43
         ?C=A    A                                * 03D45
-        GOYES   L_03DB8                          * 03D48
-        GOTO    L_03B06                          * 03D4A
+        GOYES   #>.L1                            * 03D48
+        GOTO    NOT.L2                           * 03D4A
 
 * # #' -> flag
 * refs (40): 0CA26 21D17 27B7A 28625 2C3BA 2EACE ...
@@ -2724,8 +2724,8 @@ L_03CC3:
         D1=C                                     * 03D75
         C=RSTK                                   * 03D78
         ?C#A    A                                * 03D7A
-        GOYES   L_03DB8                          * 03D7D
-        GOTO    L_03B06                          * 03D7F
+        GOYES   #>.L1                            * 03D7D
+        GOTO    NOT.L2                           * 03D7F
 
 * # #' -> flag
 * refs (141): 0E575 0E74C 0EBBC 1038D 1277F 15F65 ...
@@ -2746,10 +2746,10 @@ L_03CC3:
         D1=C                                     * 03DAA
         C=RSTK                                   * 03DAD
         ?C<A    A                                * 03DAF
-        GOYES   L_03DB8                          * 03DB2
-        GOTO    L_03B06                          * 03DB4
-L_03DB8:
-        GOTO    L_03B1A                          * 03DB8
+        GOYES   #>.L1                            * 03DB2
+        GOTO    NOT.L2                           * 03DB4
+#>.L1:
+        GOTO    NOT.L3                           * 03DB8
 
 * # #' -> #+#'
 * refs (305): 05247 09066 09070 0B615 0B63D 0B683 ...
@@ -2763,7 +2763,7 @@ L_03DB8:
 Push#Loop:
         GOSUBL  SAVPTR                           * 03DC7
         R0=A                                     * 03DCD
-L_03DD0:
+Push#Loop.L1:
         GOSUBL  PUSH#                            * 03DD0
         A=DAT0  A                                * 03DD6
         D0=D0+  5                                * 03DD9
@@ -2882,19 +2882,19 @@ L_03DD0:
         C=RSTK                                   * 03ED3
         B=0     A                                * 03ED5
         BCEX    A                                * 03ED7
-L_03ED9:
+#*.loop1:
         B=B-1   P                                * 03ED9
-        GOC     L_03EE5                          * 03EDC
+        GOC     #*.L2                            * 03EDC
         C=C+A   A                                * 03EDF
-        GOTO    L_03ED9                          * 03EE1
-L_03EE5:
+        GOTO    #*.loop1                         * 03EE1
+#*.L2:
         ASL     A                                * 03EE5
         P=P+1                                    * 03EE7
         ?P#     5                                * 03EE9
-        GOYES   L_03ED9                          * 03EEC
+        GOYES   #*.loop1                         * 03EEC
         R0=C                                     * 03EEE
         P=      0                                * 03EF1
-        GOTO    L_03DD0                          * 03EF3
+        GOTO    Push#Loop.L1                     * 03EF3
 
 * # #' -> #r #q
 * refs (56): 152B4 1DAA7 1F39F 24B13 24CCB 2D6CC ...
@@ -2929,23 +2929,23 @@ IntDiv:
         D=0     A                                * 03F2D
         D=D+1   A                                * 03F2F
         P=      4                                * 03F31
-L_03F33:
+IntDiv.loop1:
         ?B#0    P                                * 03F33
-        GOYES   L_03F3F                          * 03F36
+        GOYES   IntDiv.loop2                     * 03F36
         BSL     A                                * 03F38
         DSL     A                                * 03F3A
-        GONC    L_03F33                          * 03F3C
-L_03F3F:
+        GONC    IntDiv.loop1                     * 03F3C
+IntDiv.loop2:
         A=A-B   A                                * 03F3F
-        GOC     L_03F4A                          * 03F41
+        GOC     IntDiv.L3                        * 03F41
         C=C+D   A                                * 03F44
-        GOTO    L_03F3F                          * 03F46
-L_03F4A:
+        GOTO    IntDiv.loop2                     * 03F46
+IntDiv.L3:
         A=A+B   A                                * 03F4A
         BSR     A                                * 03F4C
         DSR     A                                * 03F4E
         ?D#0    A                                * 03F50
-        GOYES   L_03F3F                          * 03F53
+        GOYES   IntDiv.loop2                     * 03F53
         P=      0                                * 03F55
         RTN                                      * 03F57
 IntDiv~1:
@@ -2969,7 +2969,7 @@ POP2#:
         A=DAT1  A                                * 03F7C
         D1=C                                     * 03F7F
         D1=D1+  5                                * 03F82
-L_03F85:
+POP2#.L1:
         D=D+1   A                                * 03F85
         C=RSTK                                   * 03F87
         RTN                                      * 03F89

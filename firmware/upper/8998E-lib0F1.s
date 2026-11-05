@@ -35,7 +35,7 @@ LIB0F1.hash:
         CON(5)  0                                * 899FC  names of length 14
         CON(5)  0                                * 89A01  names of length 15
         CON(5)  0                                * 89A06  names of length 16
-        REL(5)  L_89AA0                          * 89A0B  end of the names
+        REL(5)  H0F1.PARAMETRIC.L1               * 89A0B  end of the names
 H0F1.BAR:
         CON(2)  3                                * 89A10
         NIBASC  "BAR"                            * 89A12
@@ -68,7 +68,7 @@ H0F1.PARAMETRIC:
         CON(2)  10                               * 89A87
         NIBASC  "PARAMETRIC"                     * 89A89
         CON(3)  #036                             * 89A9D  command
-L_89AA0:
+H0F1.PARAMETRIC.L1:
         CON(5)  0                                * 89AA0  command 000 has no name
         CON(5)  0                                * 89AA5  command 001 has no name
         CON(5)  0                                * 89AAA  command 002 has no name
@@ -605,14 +605,14 @@ ROMP_0F1_024:
           CD1EX                                  * 8C43C
           R0=C.F  A                              * 8C43F
           GOSBVL  LrclR0A                        * 8C445
-          GONC    L_8C46C                        * 8C44C
+          GONC    ROMP_0F1_024.L1                * 8C44C
           GOSBVL  GETPTR                         * 8C44F
           D1=D1+  10                             * 8C456
           D=D+CON A,2                            * 8C459
           LC(5)   FALSE                          * 8C45F
           A=C     A                              * 8C466
           PC=(A)                                 * 8C468
-L_8C46C:
+ROMP_0F1_024.L1:
           A=R3.F  A                              * 8C46C
           A=A+A   A                              * 8C472
           C=A     A                              * 8C474
@@ -657,10 +657,10 @@ ROMP_0F1_025:
           CD1EX                                  * 8C4F2
           R0=C.F  A                              * 8C4F5
           GOSBVL  LrclR0A                        * 8C4FB
-          GONC    L_8C513                        * 8C502
+          GONC    ROMP_0F1_025.L1                * 8C502
           GOSBVL  GETPTR                         * 8C505
           GOVLNG  DoErrULN                       * 8C50C
-L_8C513:
+ROMP_0F1_025.L1:
           A=R3.F  A                              * 8C513
           A=A+A   A                              * 8C519
           C=A     A                              * 8C51B
@@ -751,7 +751,7 @@ FUNCTION:
               15GETLAM SWAP %>C% ;               * 8C876
           }                                      * 8C88A
           TRUE ~';PlotEval                       * 8C88F
-          :: BINT31 TestSysFlag ITE              * 8C899
+          :: BINT31 TestSysFlag ITE              * 8C899  flag -31: Connect points / Plot points only
             :: ' OBJ_4CE0B ;                     * 8C8AD
             :: ' PlotFcnPt ;                     * 8C8C1
           ;                                      * 8C8D5
@@ -767,7 +767,7 @@ CONIC:
         :: CK0 'IDCONIC PUTPTYPE ;               * 8C928
 
         { FALSE OBJ_4BC83 NOP TRUE NULL{} FALSE ~';PlotEval * 8C941
-          :: BINT31 TestSysFlag ITE              * 8C969
+          :: BINT31 TestSysFlag ITE              * 8C969  flag -31: Connect points / Plot points only
             :: ' OBJ_4CE0B ;                     * 8C97D
             :: ' PlotFcnPt ;                     * 8C991
           ;                                      * 8C9A5

@@ -184,14 +184,14 @@ ROMP_0E4_011:
             A=DAT1  A                            * 9E2B0
             LC(5)   #000E4                       * 9E2B3
             ?C#A    A                            * 9E2BA
-            GOYES   L_9E2D9                      * 9E2BD
+            GOYES   ~MESRclEqn.L1                * 9E2BD
             D1=D1-  10                           * 9E2BF
             LC(5)   DOLIST                       * 9E2C2
             DAT1=C  A                            * 9E2C9
             D1=D1+  5                            * 9E2CC
             LC(5)   DOBINT                       * 9E2CF
             DAT1=C  A                            * 9E2D6
-L_9E2D9:
+~MESRclEqn.L1:
             C=RSTK                               * 9E2D9
             D1=C                                 * 9E2DB
             GOVLNG  PushF/TLoop                  * 9E2DE
@@ -334,7 +334,7 @@ ROMP_0E4_024:
 * refs (1): 9DA1F
 ROMP_0E4_025:
         :: RDROP DUP IT                          * 9EA1D
-          :: BlankDA12 # E408 JstGetTHEMESG DISPROW1 ; * 9EA31
+          :: BlankDA12 # E408 JstGetTHEMESG DISPROW1 ; * 9EA31  "Searching"
           ERRSET                                 * 9EA54
           ::                                     * 9EA59
             {                                    * 9EA5E
@@ -399,7 +399,7 @@ ROMP_0E4_02E:
             BEGIN ROMPTR 0E4 02A BINT0 #> WHILE  * 9EC5C
             :: BINT0 ROMPTR 0E4 00A ROMPTR 0E4 014 SWAPDROP #1+_ONE_DO * 9EC7B
               ROMPTR 0E4 02E IT                  * 9ECA5
-              :: # E408 JstGetTHEMESG DISPROW1 ; * 9ECB5
+              :: # E408 JstGetTHEMESG DISPROW1 ; * 9ECB5  "Searching"
               INDEX@ ROMPTR 0E4 037 ROMPTR 0E4 027 ROMPTR 0E4 036 IT * 9ECD3
               :: ROMPTR 0E4 02F NOTcase          * 9ECFE
                 :: BINT0 ISTOPSTO BINT0 ROMPTR 0E4 00A BINT1 ROMPTR 0E4 007 * 9ED13
@@ -418,7 +418,7 @@ ROMP_0E4_02E:
               LOOP ;                             * 9EE9E
             REPEAT ROMPTR 0E4 026 $ "Int" EQUAL case * 9EEA8
             :: ROMPTR 0E4 02E ABND NOT ?SEMI     * 9EED2
-              FLUSHKEYS ATTNFLGCLR # A03 GETTHEMESG APPprompt1! SetDA1Temp ; * 9EEF1
+              FLUSHKEYS ATTNFLGCLR # A03 GETTHEMESG APPprompt1! SetDA1Temp ; * 9EEF1  "Interrupted"
             ROMPTR 0E4 02D BINT0 EQUAL case      * 9EF19
             :: ROMPTR 0E4 026 ROMPTR 0E4 00F BINT2 #<>case * 9EF33
               :: ROMPTR 0E4 02E ?SKIP ROMPTR 0E4 026 * 9EF58
@@ -436,7 +436,7 @@ ROMP_0E4_02E:
 * refs (1): 9DA1F
 ROMP_0E4_02F:
         :: ROMPTR 0E4 02C ?SKIP ROMPTR 0E4 01E   * 9EFFD
-          TRUE ROMPTR 0E4 008 DUP ID>$ # E407 JstGetTHEMESG SWAP&$ * 9F01D
+          TRUE ROMPTR 0E4 008 DUP ID>$ # E407 JstGetTHEMESG SWAP&$ * 9F01D  "Solving for "
           ROMPTR 0E4 02E ITE DISPROW1 DROP       * 9F04B
           ' ID Mpar SAFE@ DROP OCRC SWAPDROP     * 9F065
           { nohalt NULLLAM } BIND ROMPTR 0E4 012 INDEX@ NTHCOMPDROP * 9F08D  ~MESRclEqn
@@ -464,32 +464,32 @@ ROMP_0E4_02F:
 * ROMPTR 0E4 030
 * refs (1): 9DA1F
 ROMP_0E4_030:
-        :: # E404 ERROROUT ;                     * 9F301
+        :: # E404 ERROROUT ;                     * 9F301  "Too Many Unknowns"
 
 * ROMPTR 0E4 031
 * refs (1): 9DA1F
 ROMP_0E4_031:
-        :: # E401 ERROROUT ;                     * 9F31A
+        :: # E401 ERROROUT ;                     * 9F31A  "Invalid Mpar"
 
 * ROMPTR 0E4 032
 * refs (1): 9DA1F
 ROMP_0E4_032:
-        :: # E406 ERROROUT ;                     * 9F333
+        :: # E406 ERROROUT ;                     * 9F333  "Illegal During MROOT"
 
 * ROMPTR 0E4 033
 * refs (1): 9DA1F
 ROMP_0E4_033:
-        :: # E405 ERROROUT ;                     * 9F34C
+        :: # E405 ERROROUT ;                     * 9F34C  "All Variables Known"
 
 * ROMPTR 0E4 034
 * refs (1): 9DA1F
 MINIT~2:
-        :: # E402 ERROROUT ;                     * 9F365
+        :: # E402 ERROROUT ;                     * 9F365  "Single Equation"
 
 * ROMPTR 0E4 035
 * refs (1): 9DA1F
 MINIT~3:
-        :: # E403 ERROROUT ;                     * 9F37E
+        :: # E403 ERROROUT ;                     * 9F37E  "EQ Invalid for MINIT"
 
 * ROMPTR 0E4 036
 * refs (1): 9DA1F
@@ -797,8 +797,8 @@ LIB0E4.hash:
         CON(5)  0                                * A0628  names of length 14
         CON(5)  0                                * A062D  names of length 15
         CON(5)  0                                * A0632  names of length 16
-        REL(5)  L_A063C                          * A0637  end of the names
-L_A063C:
+        REL(5)  LIB0E4.hash.L1                   * A0637  end of the names
+LIB0E4.hash.L1:
         CON(5)  0                                * A063C  command 000 has no name
         ENDLENGTH                                * A0641
 

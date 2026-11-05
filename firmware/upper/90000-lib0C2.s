@@ -68,7 +68,7 @@ EGV~1:
                 D=D+1   P                        * 90300
                 GOSBVL  XYEX                     * 90303
                 GOSBVL  SUB_2B6BC                * 9030A
-                GOVLNG  L_2A235                  * 90311
+                GOVLNG  PUSH%.L9                 * 90311
               ENDCODE                            * 90318
               3UNROLL 1GETLAM #1+_ONE_DO OVER PULL%%EL 4PICK L%* 3PICK * 90318
               PUT%%EL SWAP#1+SWAP NextInArray ROTDROP ; * 90340

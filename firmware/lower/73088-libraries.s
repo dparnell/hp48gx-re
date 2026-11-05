@@ -18,9 +18,9 @@ OBJ_73088:
         D0=C                                     * 730A7
         LC(5)   xi                               * 730AA
         ?C=A    A                                * 730B1
-        GOYES   L_730BD                          * 730B4
-        GOVLNG  L_29AA8                          * 730B6
-L_730BD:
+        GOYES   OBJ_73088.L1                     * 730B4
+        GOVLNG  nextsym'R.L2                     * 730B6
+OBJ_73088.L1:
         C=RSTK                                   * 730BD
         CD0EX                                    * 730BF
         R0=C.F  A                                * 730C2
@@ -33,7 +33,7 @@ L_730BD:
         A=A-C   W                                * 730E3
         LC(5)   nextsym'R                        * 730E6
         ?A#0    W                                * 730ED
-        GOYES   L_73111                          * 730F0
+        GOYES   OBJ_73088.L2                     * 730F0
         A=R0.F  A                                * 730F2
         AD0EX                                    * 730F8
         C=DAT0  A                                * 730FB
@@ -41,7 +41,7 @@ L_730BD:
         DAT0=C  A                                * 73104
         D0=A                                     * 73107
         LC(5)   OBJ_73117                        * 7310A
-L_73111:
+OBJ_73088.L2:
         A=C     A                                * 73111
         PC=(A)                                   * 73113
         RPL
@@ -412,7 +412,7 @@ MsgTab(0):
         CON(5)  DOCSTR                           * 73E6A  element type
         CON(5)  1                                * 73E6F  dimensions
         CON(5)  16                               * 73E74
-L_73E79:
+MsgTab(0).L1:
         $BODY   "Insufficient Memory"            * 73E79  1
         $BODY   "Directory Recursion"            * 73EA4  2
         $BODY   "Undefined Local Name"           * 73ECF  3

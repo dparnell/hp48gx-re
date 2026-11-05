@@ -507,17 +507,17 @@ ROMP_0E0_047:
               D1=D1+  3                          * D0970
               LC(2)   #0A                        * D0973
               B=C     B                          * D0977
-L_D097A:
+ROMP_0E0_047.loop1:
               D1=D1+  2                          * D097A
               D=D-1   A                          * D097D
-              GOC     L_D0997                    * D097F
+              GOC     ROMP_0E0_047.L2            * D097F
               A=DAT1  B                          * D0982
               ?A#B    B                          * D0985
-              GOYES   L_D097A                    * D0988
+              GOYES   ROMP_0E0_047.loop1         * D0988
               LA(2)   #20                        * D098A
               DAT1=A  B                          * D0991
-              GONC    L_D097A                    * D0994
-L_D0997:
+              GONC    ROMP_0E0_047.loop1         * D0994
+ROMP_0E0_047.L2:
               GOSBVL  GETPTR                     * D0997
               A=DAT0  A                          * D099E
               D0=D0+  5                          * D09A1
@@ -658,8 +658,8 @@ LIB0E0.hash:
         CON(5)  0                                * D1188  names of length 14
         CON(5)  0                                * D118D  names of length 15
         CON(5)  0                                * D1192  names of length 16
-        REL(5)  L_D119C                          * D1197  end of the names
-L_D119C:
+        REL(5)  LIB0E0.hash.L1                   * D1197  end of the names
+LIB0E0.hash.L1:
         CON(5)  0                                * D119C  command 000 has no name
         ENDLENGTH                                * D11A1
 

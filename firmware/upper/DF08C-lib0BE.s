@@ -400,8 +400,8 @@ LIB0BE.hash:
         CON(5)  0                                * E04D3  names of length 14
         CON(5)  0                                * E04D8  names of length 15
         CON(5)  0                                * E04DD  names of length 16
-        REL(5)  L_E04E7                          * E04E2  end of the names
-L_E04E7:
+        REL(5)  LIB0BE.hash.L1                   * E04E2  end of the names
+LIB0BE.hash.L1:
         CON(5)  0                                * E04E7  command 000 has no name
         ENDLENGTH                                * E04EC
 

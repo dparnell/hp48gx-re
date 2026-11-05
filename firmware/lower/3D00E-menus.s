@@ -305,8 +305,8 @@ LIB0A7.hash:
         CON(5)  0                                * 3D5BF  names of length 14
         CON(5)  0                                * 3D5C4  names of length 15
         CON(5)  0                                * 3D5C9  names of length 16
-        REL(5)  L_3D5D3                          * 3D5CE  end of the names
-L_3D5D3:
+        REL(5)  LIB0A7.hash.L1                   * 3D5CE  end of the names
+LIB0A7.hash.L1:
         CON(5)  0                                * 3D5D3  command 000 has no name
         ENDLENGTH                                * 3D5D8
 
@@ -358,8 +358,8 @@ LIB0A7.link:
         ASSEMBLE
         D=D+C   A                                * 3D6AA
 * a branch also enters #3D6AD, where the nibbles decode as RTNSXM
-L_3D6AC:
-        GOTO    L_3D6AC+1                        * 3D6AC
+LIB0A7.link.L1:
+        GOTO    LIB0A7.link.L1+1                 * 3D6AC
         BSS     1                                * 3D6B0  zeros
 
 LIB0A2:
@@ -527,10 +527,10 @@ ROMP_0A2_01C:
 * ROMPTR 0A2 01D
 * refs (1): 3D6B1
 ROMP_0A2_01D:
-        :: Modifier SetDA23NoCh BINT61 TestSysFlag case InvUserMo * 3D93D
+        :: Modifier SetDA23NoCh BINT61 TestSysFlag case InvUserMo * 3D93D  flag -61: [USR][USR] locks / [USR] locks User
           UserKeys? NOTcase SetUserMo            * 3D960
           1USR? case OBJ_3FFCA                   * 3D96F
-          BINT62 ClrSysFlag ;                    * 3D97E
+          BINT62 ClrSysFlag ;                    * 3D97E  flag -62: User keys off / User keys on
 
 * ROMPTR 0A2 01E
 * refs (1): 3D6B1
@@ -615,7 +615,7 @@ ROMP_0A2_02D:
 * ROMPTR 0A2 02E
 * refs (2): 3D6B1 6BCCC
 ROMP_0A2_02E:
-        :: TakeOver BINT51 SysITE CHR_; CHR_, EchoChrKey ; * 3DB37
+        :: TakeOver BINT51 SysITE CHR_; CHR_, EchoChrKey ; * 3DB37  flag -51: Fraction mark: . / Fraction mark: ,
 
 * ROMPTR 0A2 02F
 * refs (1): 3D6B1
@@ -646,8 +646,8 @@ LIB0A2.hash:
         CON(5)  0                                * 3DBCE  names of length 14
         CON(5)  0                                * 3DBD3  names of length 15
         CON(5)  0                                * 3DBD8  names of length 16
-        REL(5)  L_3DBE2                          * 3DBDD  end of the names
-L_3DBE2:
+        REL(5)  LIB0A2.hash.L1                   * 3DBDD  end of the names
+LIB0A2.hash.L1:
         CON(5)  0                                * 3DBE2  command 000 has no name
         ENDLENGTH                                * 3DBE7
 

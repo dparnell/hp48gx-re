@@ -230,7 +230,7 @@ ROMP_0E2_022:
                   EQ$ "IC=-ICS*(e^((q*VBC)/\0A(k*T))-1)+αF*IES*\0A(e^((q*VBE)/(k*T))-1)" * F2FEE
                   EQ$ "IS=αF*IES" EQ$ "IS=αR*ICS" EQ$ "IB+IE+IC=0" * F3068
                   EQ$ "ICO=ICS*(1-αF*αR)" EQ$ "ICEO=ICO/(1-αF)" * F30BE
-L_F310E:
+ROMP_0E2_022.L1:
                   EQ$ "VCEsat=(k*T)/q*LN((1+\0AIC/IB*(1-αR))/(αR*(1-\0AIC/IB*((1-αF)/αF))))" } * F310E
                 {                                * F318D
                   EQ$ "IE=-IES*(EXP(UBASE(VBE/(CONST(kq)*UBASE(T))))-1)+αR*ICS*(EXP(UBASE(VBC/(CONST(kq)*UBASE(T))))-1)" * F3192

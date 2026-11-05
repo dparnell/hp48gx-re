@@ -123,8 +123,8 @@ LIB0A3.hash:
         CON(5)  0                                * 3E1B2  names of length 14
         CON(5)  0                                * 3E1B7  names of length 15
         CON(5)  0                                * 3E1BC  names of length 16
-        REL(5)  L_3E1C6                          * 3E1C1  end of the names
-L_3E1C6:
+        REL(5)  LIB0A3.hash.L1                   * 3E1C1  end of the names
+LIB0A3.hash.L1:
         CON(5)  0                                * 3E1C6  command 000 has no name
         ENDLENGTH                                * 3E1CB
 
@@ -567,25 +567,25 @@ OBJ_3F0CA:
             D1=D1+  5                            * 3F0F4
             A=DAT1  A                            * 3F0F7
             A=A-CON A,6                          * 3F0FA
-            GOC     L_3F111                      * 3F100
+            GOC     OBJ_3F0CA.loop1              * 3F100
             A=A-1   A                            * 3F103
             A=A-1   A                            * 3F105
-            GOC     L_3F11E                      * 3F107
+            GOC     OBJ_3F0CA.L2                 * 3F107
             A=A-1   A                            * 3F10A
             A=A-1   A                            * 3F10C
-            GOC     L_3F14D                      * 3F10E
-L_3F111:
+            GOC     SUB_3F13E.L1                 * 3F10E
+OBJ_3F0CA.loop1:
             C=R0                                 * 3F111
             D1=C                                 * 3F114
             GOVLNG  PushFLoop                    * 3F117
-L_3F11E:
+OBJ_3F0CA.L2:
             D1=D1+  5                            * 3F11E
             GOSUB   SUB_3F13E                    * 3F121
-            GOC     L_3F111                      * 3F125
+            GOC     OBJ_3F0CA.loop1              * 3F125
             LC(2)   #09                          * 3F128
-L_3F12C:
+OBJ_3F0CA.L3:
             ?C<A    A                            * 3F12C
-            GOYES   L_3F111                      * 3F12F
+            GOYES   OBJ_3F0CA.loop1              * 3F12F
             C=R0                                 * 3F131
             D1=C                                 * 3F134
             GOVLNG  OverWrTLoop                  * 3F137
@@ -598,23 +598,23 @@ SUB_3F13E:
             LC(2)   #30                          * 3F145
             A=A-C   A                            * 3F149
             RTN                                  * 3F14B
-L_3F14D:
+SUB_3F13E.L1:
             D1=D1+  5                            * 3F14D
             GOSUB   SUB_3F13E                    * 3F150
-            GOC     L_3F111                      * 3F154
+            GOC     OBJ_3F0CA.loop1              * 3F154
             LC(2)   #03                          * 3F157
             ?C<A    A                            * 3F15B
-            GOYES   L_3F111                      * 3F15E
+            GOYES   OBJ_3F0CA.loop1              * 3F15E
             ?C=A    A                            * 3F160
-            GOYES   L_3F169                      * 3F163
+            GOYES   SUB_3F13E.L2                 * 3F163
             LC(2)   #09                          * 3F165
-L_3F169:
+SUB_3F13E.L2:
             R1=C                                 * 3F169
             D1=D1+  2                            * 3F16C
             GOSUB   SUB_3F13E                    * 3F16F
-            GOC     L_3F111                      * 3F173
+            GOC     OBJ_3F0CA.loop1              * 3F173
             C=R1                                 * 3F176
-            GONC    L_3F12C                      * 3F179
+            GONC    OBJ_3F0CA.L3                 * 3F179
           ENDCODE                                * 3F17C
         ;                                        * 3F17C
         FILLTO  #3F1E3                           * 3F181  98 zero nibbles: the next entry stays at #3F1E3
@@ -650,53 +650,53 @@ OBJ_3F2D3:
         LC(14)  #4E59554F494541                  * 3F2F1
         B=A     A                                * 3F301
         LA(2)   #20                              * 3F303
-        D1=(5)  L_3F384                          * 3F30A
+        D1=(5)  OBJ_3F2D3.L7                     * 3F30A
         P=      6                                * 3F311
-L_3F313:
+OBJ_3F2D3.loop1:
         ?B=C    B                                * 3F313
-        GOYES   L_3F35B                          * 3F316
+        GOYES   OBJ_3F2D3.L3                     * 3F316
         C=C+A   B                                * 3F318
         ?B=C    B                                * 3F31B
-        GOYES   L_3F35B                          * 3F31E
+        GOYES   OBJ_3F2D3.L3                     * 3F31E
         CSRC                                     * 3F320
         CSRC                                     * 3F323
         D1=D1+  12                               * 3F326
         P=P-1                                    * 3F329
-        GONC    L_3F313                          * 3F32B
+        GONC    OBJ_3F2D3.loop1                  * 3F32B
         P=      0                                * 3F32E
         LC(6)   #435044                          * 3F330
         P=      2                                * 3F338
-L_3F33A:
+OBJ_3F2D3.loop2:
         ?B=C    B                                * 3F33A
-        GOYES   L_3F37E                          * 3F33D
+        GOYES   OBJ_3F2D3.L6                     * 3F33D
         C=C+A   B                                * 3F33F
         ?B=C    B                                * 3F342
-        GOYES   L_3F37E                          * 3F345
+        GOYES   OBJ_3F2D3.L6                     * 3F345
         CSRC                                     * 3F347
         CSRC                                     * 3F34A
         D1=D1+  2                                * 3F34D
         P=P-1                                    * 3F350
-        GONC    L_3F33A                          * 3F352
+        GONC    OBJ_3F2D3.loop2                  * 3F352
         C=0     A                                * 3F355
-        GOTO    L_3F36C                          * 3F357
-L_3F35B:
+        GOTO    OBJ_3F2D3.L5                     * 3F357
+OBJ_3F2D3.L3:
         AD1EX                                    * 3F35B
         C=R0.F  A                                * 3F35E
         A=A+C   A                                * 3F364
         D1=A                                     * 3F366
-L_3F369:
+OBJ_3F2D3.loop4:
         C=DAT1  B                                * 3F369
-L_3F36C:
+OBJ_3F2D3.L5:
         C=C+B   B                                * 3F36C
         R0=C.F  A                                * 3F36F
         P=      0                                * 3F375
         GOVLNG  PUSH#LOOP                        * 3F377
-L_3F37E:
+OBJ_3F2D3.L6:
         C=0     A                                * 3F37E
-        GOTO    L_3F369                          * 3F380
+        GOTO    OBJ_3F2D3.loop4                  * 3F380
 
 * Accents: for A E I O U Y N, what to add to the letter for each accented form, 0 for none (read by OBJ_3F2D3)
-L_3F384:
+OBJ_3F2D3.L7:
         CON(2)  #7F                              * 3F384  entry 0
         CON(2)  #80                              * 3F386
         CON(2)  #81                              * 3F388
@@ -777,7 +777,7 @@ NumEntryLin(s):
 NumEntryLin(b):
         CON(5)  NumEntryLin(b)~1                 * 3F519  code object: the address of its machine code
         ASSEMBLE
-L_3F51E:
+NumEntryLin(b).L1:
         D0=D0+  5                                * 3F51E
         A=DAT0  A                                * 3F521
         CD0EX                                    * 3F524
@@ -794,24 +794,24 @@ L_3F51E:
         C=D     A                                * 3F547
         GOSBVL  DIV5                             * 3F549
         B=C     A                                * 3F550
-L_3F552:
+NumEntryLin(b).loop2:
         A=DAT1  A                                * 3F552
         ?A=0    A                                * 3F555
-        GOYES   L_3F565                          * 3F558
+        GOYES   NumEntryLin(b).L3                * 3F558
         B=B-1   A                                * 3F55A
-        GOC     L_3F567                          * 3F55C
+        GOC     NumEntryLin(b).L4                * 3F55C
         D1=D1+  5                                * 3F55F
-        GONC    L_3F552                          * 3F562
-L_3F565:
+        GONC    NumEntryLin(b).loop2             * 3F562
+NumEntryLin(b).L3:
         C=C-B   A                                * 3F565
-L_3F567:
+NumEntryLin(b).L4:
         R0=C.F  A                                * 3F567
         C=R2.F  A                                * 3F56D
         ?C=0    A                                * 3F573
-        GOYES   L_3F57E                          * 3F576
+        GOYES   NumEntryLin(b).L5                * 3F576
         P=      1                                * 3F578
         GOSUB   SUB_3F585                        * 3F57A
-L_3F57E:
+NumEntryLin(b).L5:
         GOVLNG  PUSH#LOOP                        * 3F57E
 
 * refs (1): 3F57A
@@ -1110,7 +1110,7 @@ NonUsrKeyOK?:
         CON(5)  (*)+5                            * 3FF75  primitive code object
         ASSEMBLE
         LC(3)   #40A                             * 3FF7A
-        GOVLNG  L_539E6                          * 3FF7F
+        GOVLNG  OBJ_539D8.L1                     * 3FF7F
 
 * ->
 * refs (2): 41BAF 41F22
@@ -1124,13 +1124,13 @@ SetNUsrKeyOK:
 ClrNUsrKeyOK:
         CON(5)  (*)+5                            * 3FF97  primitive code object
         LC(3)   #40A                             * 3FF9C
-        GOVLNG  L_539F1                          * 3FFA1
+        GOVLNG  OBJ_539D8.L2                     * 3FFA1
 
 * refs (3): 397CF 3D96F 3FC28
 1USR?:
         CON(5)  (*)+5                            * 3FFA8  primitive code object
         LC(3)   #106                             * 3FFAD
-        GOVLNG  L_539E6                          * 3FFB2
+        GOVLNG  OBJ_539D8.L1                     * 3FFB2
 
 * refs (1): 40D70
 SetUserMo~1:
@@ -1142,6 +1142,6 @@ SetUserMo~1:
 OBJ_3FFCA:
         CON(5)  (*)+5                            * 3FFCA  primitive code object
         LC(3)   #106                             * 3FFCF
-        GOVLNG  L_539F1                          * 3FFD4
-L_3FFDB:
+        GOVLNG  OBJ_539D8.L2                     * 3FFD4
+OBJ_3FFCA.L1:
         FILLTO  #40002                           * 3FFDB  39 zero nibbles: the next entry stays at #40002

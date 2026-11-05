@@ -28,7 +28,7 @@ ROMP_0E2_060:
 * refs (1): E3857
 ROMP_0E2_061:
         { BINT48 BINT6                           * FDD2C
-L_FDD3B:
+ROMP_0E2_061.L1:
           PCGROB  "images/FDD3B-packed.png"      * FDD3B  72 x 43, packed
         }                                        * FDFD7
 
@@ -91,5 +91,5 @@ ROMP_0E2_069:
         ENDLENGTH                                * FF959
         FILLTO  #FFFFC                           * FF959  1699 zero nibbles: the next entry stays at #FFFFC
 
-L_FFFFC:
+ROMP_0E2_069.L1:
         CRC                                      * FFFFC  self-test CRC correction (computed by the assembler)

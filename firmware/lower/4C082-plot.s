@@ -13,7 +13,7 @@ NEWINDEP:
         CON(5)  (*)+5                            * 4C09B  primitive code object
         ASSEMBLE
         GOSUB   SUB_4C0BE                        * 4C0A0
-L_4C0A4:
+NEWINDEP.L1:
         DAT1=A  W                                * 4C0A4
         GOSBVL  GETPTR                           * 4C0A8
         D1=D1+  5                                * 4C0AF
@@ -37,7 +37,7 @@ OBJ_4C0D4:
         CON(5)  (*)+5                            * 4C0D4  primitive code object
         GOSUB   SUB_4C0BE                        * 4C0D9
         D1=D1+  5                                * 4C0DD
-        GOTO    L_4C0A4                          * 4C0E0
+        GOTO    NEWINDEP.L1                      * 4C0E0
         RPL
 
 * refs (11): 48B2A 4B701 4C553 8A656 8A665 8B2C0 ...
@@ -561,7 +561,7 @@ SUB_4DAFD:
         C=C-1   B                                * 4DB08
         RTNNC                                    * 4DB0B
         P=      2                                * 4DB0E
-        GOVLNG  L_01FC6                          * 4DB10
+        GOVLNG  Warmstart.L1                     * 4DB10
         BSS     1                                * 4DB17  zeros
         RPL
 
@@ -685,9 +685,9 @@ OBJ_4DF67:
         D=D+1   A                                * 4DF79
         ST=1    1                                * 4DF7B
         ?C=A    A                                * 4DF7E
-        GOYES   L_4DF86                          * 4DF81
+        GOYES   OBJ_4DF67.L1                     * 4DF81
         ST=0    1                                * 4DF83
-L_4DF86:
+OBJ_4DF67.L1:
         C=DAT1  A                                * 4DF86
         CD1EX                                    * 4DF89
         D1=D1+  10                               * 4DF8C
@@ -709,21 +709,21 @@ L_4DF86:
         B=A     W                                * 4DFC4
         A=A!C   W                                * 4DFC7
         ?ST=0   1                                * 4DFCB
-        GOYES   L_4DFDA                          * 4DFCE
+        GOYES   OBJ_4DF67.L2                     * 4DFCE
         ABEX    W                                * 4DFD0
         A=A&C   W                                * 4DFD3
         A=B-A   W                                * 4DFD7
-L_4DFDA:
+OBJ_4DF67.L2:
         C=R0.F  A                                * 4DFDA
-L_4DFE0:
+OBJ_4DF67.loop3:
         C=C-1   A                                * 4DFE0
-        GOC     L_4DFF6                          * 4DFE2
+        GOC     OBJ_4DF67.L4                     * 4DFE2
         DAT1=A  2                                * 4DFE5
         ASR     W                                * 4DFE9
         ASR     W                                * 4DFEC
         D1=D1+  2                                * 4DFEF
-        GOTO    L_4DFE0                          * 4DFF2
-L_4DFF6:
+        GOTO    OBJ_4DF67.loop3                  * 4DFF2
+OBJ_4DF67.L4:
         GOVLNG  GETPTRLOOP                       * 4DFF6
 
 * refs (1): 4DECC
@@ -750,10 +750,10 @@ OBJ_4DFFD:
         GOSUB   SUB_4E06F                        * 4E046
         GOSUB   SUB_4E07D                        * 4E04A
         LC(5)   FALSE                            * 4E04E
-        GOTO    L_4E060                          * 4E055
-L_4E059:
+        GOTO    OBJ_4DFFD.L2                     * 4E055
+OBJ_4DFFD.L1:
         LC(5)   TRUE                             * 4E059
-L_4E060:
+OBJ_4DFFD.L2:
         A=R0.F  A                                * 4E060
         AD1EX                                    * 4E066
         A=C     A                                * 4E069
@@ -772,11 +772,11 @@ SUB_4E07D:
         A=A-1   A                                * 4E07D
         A=A-1   A                                * 4E07F
         ?C>A    A                                * 4E081
-        GOYES   L_4E059                          * 4E084
+        GOYES   OBJ_4DFFD.L1                     * 4E084
         C=C-1   A                                * 4E086
-        GOC     L_4E059                          * 4E088
+        GOC     OBJ_4DFFD.L1                     * 4E088
         C=C-1   A                                * 4E08B
-        GOC     L_4E059                          * 4E08D
+        GOC     OBJ_4DFFD.L1                     * 4E08D
         RTN                                      * 4E090
         RPL
 
@@ -793,25 +793,25 @@ CursCorner:
         R1=C.F  A                                * 4E0C6
         GOSBVL  SAVPTR                           * 4E0CC
         A=A-1   A                                * 4E0D3
-        GOC     L_4E100                          * 4E0D5
+        GOC     CursCorner.L3                    * 4E0D5
         A=A-1   A                                * 4E0D8
-        GOC     L_4E100                          * 4E0DA
-L_4E0DD:
+        GOC     CursCorner.L3                    * 4E0DA
+CursCorner.loop1:
         R0=A.F  A                                * 4E0DD
         C=R1.F  A                                * 4E0E3
         C=C-1   A                                * 4E0E9
-        GOC     L_4E106                          * 4E0EB
+        GOC     CursCorner.L4                    * 4E0EB
         C=C-1   A                                * 4E0EE
-        GOC     L_4E106                          * 4E0F0
-L_4E0F3:
+        GOC     CursCorner.L4                    * 4E0F0
+CursCorner.loop2:
         R1=C.F  A                                * 4E0F3
         GOVLNG  Push2#Loop                       * 4E0F9
-L_4E100:
+CursCorner.L3:
         A=0     A                                * 4E100
-        GOTO    L_4E0DD                          * 4E102
-L_4E106:
+        GOTO    CursCorner.loop1                 * 4E102
+CursCorner.L4:
         C=0     A                                * 4E106
-        GOTO    L_4E0F3                          * 4E108
+        GOTO    CursCorner.loop2                 * 4E108
 
 * refs (1): 4DEDB
 OBJ_4E10C:
@@ -881,10 +881,10 @@ SUB_4E210:
 * refs (2): 4E148 4E158
 SUB_4E227:
         A=A-1   A                                * 4E227
-        GOC     L_4E231                          * 4E229
+        GOC     SUB_4E227.L1                     * 4E229
         A=A-1   A                                * 4E22C
         RTNNC                                    * 4E22E
-L_4E231:
+SUB_4E227.L1:
         A=0     A                                * 4E231
         RTN                                      * 4E233
 
@@ -1169,9 +1169,9 @@ Warning202:
 
 * refs (1): 4BB2F
 OBJ_4ED70:
-        :: ' 15GETLAM ' GETXPOS ' 1PUTLAM BINT28 TestSysFlag case OBJ_4BB98 * 4ED70
+        :: ' 15GETLAM ' GETXPOS ' 1PUTLAM BINT28 TestSysFlag case OBJ_4BB98 * 4ED70  flag -28: Sequential plot / Simultaneous plot
           BINT1 OBJ_4A96E DROP ' ' OBJ_4BF71 ITE OBJ_4C616 OBJ_4B747 * 4EDA7
-          BINT1 BINT31 TestSysFlag ITE           * 4EDD4
+          BINT1 BINT31 TestSysFlag ITE           * 4EDD4  flag -31: Connect points / Plot points only
           :: '                                   * 4EDE8
             :: DROP COLA PlotEval                * 4EDF2
             ;                                    * 4EE06
@@ -1218,7 +1218,7 @@ bins(3r)~3:
 OBJ_4EF73:
         :: BINT28 PUTLAM ERRSET EVALCRUNCH ERRTRAP * 4EF73
           :: ERROR@ # 100 #/ SWAPDROP BINT3 #<>case ERRJMP * 4EF91
-            ERRORCLR BINT31 TestSysFlag ?SKIP    * 4EFBE
+            ERRORCLR BINT31 TestSysFlag ?SKIP    * 4EFBE  flag -31: Connect points / Plot points only
             :: BINT28 GETLAM ClrLastPt ;         * 4EFD2
             2RDROP ;                             * 4EFEB
           0LASTOWDOB! CK1NOLASTWD U>nbr ;        * 4EFF5

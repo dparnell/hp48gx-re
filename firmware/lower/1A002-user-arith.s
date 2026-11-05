@@ -143,9 +143,9 @@ INHARDROM?:
         A=DAT1  A                                * 1A2DF
         LC(5)   CMOS                             * 1A2E2
         ?C>A    A                                * 1A2E9
-        GOYES   L_1A2F5                          * 1A2EC
+        GOYES   INHARDROM?.L1                    * 1A2EC
         GOVLNG  PushFLoop                        * 1A2EE
-L_1A2F5:
+INHARDROM?.L1:
         GOVLNG  PushTLoop                        * 1A2F5
 
 * ->
@@ -358,7 +358,7 @@ x>NUM:
         CON(3)  #002                             * 1A5FE  library
         CON(3)  #036                             * 1A601  command
 xLAST:
-        :: CK0 BINT55 TestSysFlag NOTcase lastarg * 1A604
+        :: CK0 BINT55 TestSysFlag NOTcase lastarg * 1A604  flag -55: Save last args / No last args
           Err#NoLstArg ERROROUT ;                * 1A622
 
 * refs (1): 1A61D
@@ -366,80 +366,80 @@ lastarg:
         CON(5)  (*)+5                            * 1A631  primitive code object
         ASSEMBLE
         ST=0    10                               * 1A636
-L_1A639:
+lastarg.loop1:
         AD0EX                                    * 1A639
         D0=(5)  LASTARG5                         * 1A63C
         C=DAT0  A                                * 1A643
         ?C#0    A                                * 1A646
-        GOYES   L_1A67B                          * 1A649
+        GOYES   lastarg.L2                       * 1A649
         D0=D0-  5                                * 1A64B
         C=DAT0  A                                * 1A64E
         ?C#0    A                                * 1A651
-        GOYES   L_1A68C                          * 1A654
+        GOYES   lastarg.L3                       * 1A654
         D0=D0-  5                                * 1A656
         C=DAT0  A                                * 1A659
         ?C#0    A                                * 1A65C
-        GOYES   L_1A6AD                          * 1A65F
+        GOYES   lastarg.L5                       * 1A65F
         D0=D0-  5                                * 1A661
         C=DAT0  A                                * 1A664
         ?C#0    A                                * 1A667
-        GOYES   L_1A6BE                          * 1A66A
+        GOYES   lastarg.L7                       * 1A66A
         D0=D0-  5                                * 1A66C
         C=DAT0  A                                * 1A66F
         ?C#0    A                                * 1A672
-        GOYES   L_1A6CF                          * 1A675
-        GOTO    L_1A6E8                          * 1A677
-L_1A67B:
+        GOYES   lastarg.L8                       * 1A675
+        GOTO    lastarg.L10                      * 1A677
+lastarg.L2:
         D=D-CON A,5                              * 1A67B
-        GOC     L_1A6F7                          * 1A681
+        GOC     lastarg.L11                      * 1A681
         D1=D1-  10                               * 1A684
         P=      9                                * 1A687
-        GONC    L_1A69A                          * 1A689
-L_1A68C:
+        GONC    lastarg.L4                       * 1A689
+lastarg.L3:
         D=D-CON A,4                              * 1A68C
-        GOC     L_1A6F7                          * 1A692
+        GOC     lastarg.L11                      * 1A692
         D1=D1-  5                                * 1A695
         P=      4                                * 1A698
-L_1A69A:
+lastarg.L4:
         D0=(5)  LASTARG4                         * 1A69A
         C=DAT0  WP                               * 1A6A1
         DAT1=C  WP                               * 1A6A5
-        GOTO    L_1A6B6                          * 1A6A9
-L_1A6AD:
+        GOTO    lastarg.L6                       * 1A6A9
+lastarg.L5:
         D=D-CON A,3                              * 1A6AD
-        GOC     L_1A6F7                          * 1A6B3
-L_1A6B6:
+        GOC     lastarg.L11                      * 1A6B3
+lastarg.L6:
         D1=D1-  15                               * 1A6B6
         P=      14                               * 1A6B9
-        GONC    L_1A6D9                          * 1A6BB
-L_1A6BE:
+        GONC    lastarg.L9                       * 1A6BB
+lastarg.L7:
         D=D-CON A,2                              * 1A6BE
-        GOC     L_1A6F7                          * 1A6C4
+        GOC     lastarg.L11                      * 1A6C4
         D1=D1-  10                               * 1A6C7
         P=      9                                * 1A6CA
-        GONC    L_1A6D9                          * 1A6CC
-L_1A6CF:
+        GONC    lastarg.L9                       * 1A6CC
+lastarg.L8:
         D=D-1   A                                * 1A6CF
-        GOC     L_1A6F7                          * 1A6D1
+        GOC     lastarg.L11                      * 1A6D1
         D1=D1-  5                                * 1A6D4
         P=      4                                * 1A6D7
-L_1A6D9:
+lastarg.L9:
         D0=(5)  LASTARG                          * 1A6D9
         C=DAT0  WP                               * 1A6E0
         DAT1=C  WP                               * 1A6E4
-L_1A6E8:
+lastarg.L10:
         D0=A                                     * 1A6E8
         P=      0                                * 1A6EB
         A=DAT0  A                                * 1A6ED
         D0=D0+  5                                * 1A6F0
         PC=(A)                                   * 1A6F3
-L_1A6F7:
+lastarg.L11:
         D=D+C   A                                * 1A6F7
         D0=A                                     * 1A6F9
         P=      0                                * 1A6FC
         GOSBVL  SUB_14ED6                        * 1A6FE
         ST=1    10                               * 1A705
-        GOTO    L_1A639                          * 1A708
+        GOTO    lastarg.loop1                    * 1A708
         BSS     12                               * 1A70C  zeros
 
 * sec -> 0 -> rc.p
@@ -489,19 +489,19 @@ wait:
             R0=C                                 * 1A810
             GOSBVL  GetTime++                    * 1A813
             R1=C                                 * 1A81A
-L_1A81D:
+wait.loop1:
             D0=(5)  ATTNFLG                      * 1A81D
             A=DAT0  A                            * 1A824
             ?A#0    A                            * 1A827
-            GOYES   L_1A843                      * 1A82A
+            GOYES   wait.L2                      * 1A82A
             GOSBVL  GetTime++                    * 1A82C
             A=R1                                 * 1A833
             P=      12                           * 1A836
             C=C-A   WP                           * 1A838
             A=R0                                 * 1A83B
             ?C<=A   WP                           * 1A83E
-            GOYES   L_1A81D                      * 1A841
-L_1A843:
+            GOYES   wait.loop1                   * 1A841
+wait.L2:
             P=      0                            * 1A843
             GOVLNG  GETPTRLOOP                   * 1A845
           ENDCODE                                * 1A84C

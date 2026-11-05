@@ -50,17 +50,17 @@ UMSIN~4:
             P=      14                           * CABCC
             LC(1)   #9                           * CABCE
             ?ST=1   4                            * CABD1
-            GOYES   L_CABF5                      * CABD4
+            GOYES   UMSIN~4.L1                   * CABD4
             A=A+1   A                            * CABD6
             LC(1)   #1                           * CABD8
             ?ST=0   9                            * CABDB
-            GOYES   L_CABF5                      * CABDE
+            GOYES   UMSIN~4.L1                   * CABDE
             A=A+1   A                            * CABE0
             P=      0                            * CABE2
             LC(15)  #572957795130823             * CABE4
-L_CABF5:
+UMSIN~4.L1:
             B=C     W                            * CABF5
-            GOVLNG  L_2A235                      * CABF8
+            GOVLNG  PUSH%.L9                     * CABF8
           ENDCODE                                * CABFF
           SWAPROT OBJ_0F756 BINT8 PULLEREALEL SWAP %0_2A2B4 BINT8 PUTREALEL * CABFF
           OBJ_3835E EQUALNOTcase CONSTUNITERR    * CAC27
@@ -94,8 +94,8 @@ LIB0C1.hash:
         CON(5)  0                                * CACEB  names of length 14
         CON(5)  0                                * CACF0  names of length 15
         CON(5)  0                                * CACF5  names of length 16
-        REL(5)  L_CACFF                          * CACFA  end of the names
-L_CACFF:
+        REL(5)  LIB0C1.hash.L1                   * CACFA  end of the names
+LIB0C1.hash.L1:
         CON(5)  0                                * CACFF  command 000 has no name
         ENDLENGTH                                * CAD04
 

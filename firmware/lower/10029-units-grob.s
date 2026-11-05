@@ -52,7 +52,7 @@ OBJ_1013C:
         B=0     A                                * 10148
         D=0     A                                * 1014A
         D=D+1   A                                * 1014C
-L_1014E:
+OBJ_1013C.loop1:
         B=B+1   A                                * 1014E
         D1=D1+  5                                * 10150
         A=DAT1  A                                * 10153
@@ -60,19 +60,19 @@ L_1014E:
         A=DAT0  A                                * 10159
         LC(5)   DOCSTR                           * 1015C
         ?C=A    A                                * 10163
-        GOYES   L_10184                          * 10166
+        GOYES   OBJ_1013C.L2                     * 10166
         LC(5)   DOCHAR                           * 10168
         ?C=A    A                                * 1016F
-        GOYES   L_10184                          * 10172
+        GOYES   OBJ_1013C.L2                     * 10172
         LC(5)   DOREAL                           * 10174
         ?C=A    A                                * 1017B
-        GOYES   L_10184                          * 1017E
+        GOYES   OBJ_1013C.L2                     * 1017E
         D=D+1   A                                * 10180
         D=D+1   A                                * 10182
-L_10184:
+OBJ_1013C.L2:
         D=D-1   A                                * 10184
         ?D#0    A                                * 10186
-        GOYES   L_1014E                          * 10189
+        GOYES   OBJ_1013C.loop1                  * 10189
         A=B     A                                * 1018B
         GOVLNG  PUSH#ALOOP                       * 1018D
         RPL
@@ -151,7 +151,7 @@ OBJ_104D2:
           OVER5PICK %< case OBJ_105EA            * 1056D
           3PICK ROLLDROP 3PICK BINT1 #-UNROLL ROT %- SWAP #4- dup;drop(s) * 10581
           BINT2 #-UNROLL                         * 105B3
-L_105BD:
+OBJ_104D2.L1:
           dup;drop(s) #1- dup;drop(s) #1- dup;drop(s) #1-SWAP #3- SWAPTRUE ; * 105BD
 
 * refs (1): 1057C
@@ -163,7 +163,7 @@ OBJ_105EA:
 * refs (1): 10568
 OBJ_10680:
         :: 2DROP SWAPDROP #3- dup;drop(s) #1- dup;drop(s) BINT2 #-ROLL * 10680
-          DROPOVER BINT3 #+ROLL #3- 3PICK BINT3 #+UNROLL GOTO L_105BD ; * 106AD
+          DROPOVER BINT3 #+ROLL #3- 3PICK BINT3 #+UNROLL GOTO OBJ_104D2.L1 ; * 106AD
 
 * refs (2): 101B7 101C1
 OBJ_106DF:
@@ -273,17 +273,17 @@ st=>uo?~3:
         A=DAT1  B                                * 10B2C
         LC(2)   #4B                              * 10B2F
         ?C#A    B                                * 10B33
-        GOYES   L_10B3F                          * 10B36
+        GOYES   st=>uo?~3.L1                     * 10B36
         LC(2)   #6B                              * 10B38
-        GONC    L_10B4C                          * 10B3C
-L_10B3F:
+        GONC    st=>uo?~3.L2                     * 10B3C
+st=>uo?~3.L1:
         LC(2)   #48                              * 10B3F
         ?C#A    B                                * 10B43
-        GOYES   L_10B4F                          * 10B46
+        GOYES   st=>uo?~3.L3                     * 10B46
         LC(2)   #68                              * 10B48
-L_10B4C:
+st=>uo?~3.L2:
         DAT1=C  B                                * 10B4C
-L_10B4F:
+st=>uo?~3.L3:
         C=RSTK                                   * 10B4F
         D1=C                                     * 10B51
         A=DAT0  A                                * 10B54
@@ -373,30 +373,30 @@ SUB_10CDB:
         LC(5)   #00001                           * 10D1B
         DAT0=C  A                                * 10D22
         D0=D0+  5                                * 10D25
-        LC(5)   portnotaverr                     * 10D28
+        LC(5)   portnotaverr                     * 10D28  "Port Not Available"
         DAT0=C  A                                * 10D2F
         D0=D0+  5                                * 10D32
         AR0EX                                    * 10D35
         LC(1)   #9                               * 10D38
         D=C     P                                * 10D3B
-L_10D3E:
+SUB_10CDB.loop1:
         C=0     W                                * 10D3E
         C=A     P                                * 10D41
         A=A+A   P                                * 10D44
-        GONC    L_10D56                          * 10D47
+        GONC    SUB_10CDB.L2                     * 10D47
         C=-C    P                                * 10D4A
         CSRC                                     * 10D4D
         LC(1)   #9                               * 10D50
-        GOC     L_10D59                          * 10D53
-L_10D56:
+        GOC     SUB_10CDB.L3                     * 10D53
+SUB_10CDB.L2:
         CSRC                                     * 10D56
-L_10D59:
+SUB_10CDB.L3:
         CSRC                                     * 10D59
         DAT0=C  W                                * 10D5C
         D0=D0+  16                               * 10D60
         ASR     W                                * 10D63
         D=D-1   P                                * 10D66
-        GONC    L_10D3E                          * 10D69
+        GONC    SUB_10CDB.loop1                  * 10D69
         A=R0                                     * 10D6C
         P=      0                                * 10D6F
         GOVLNG  GETPTR                           * 10D71
@@ -433,7 +433,7 @@ UMTAN~1:
         ST=0    9                                * 10E1A
         ST=0    4                                * 10E1D
         GOSBVL  SUB_2B6F2                        * 10E20
-        GOVLNG  L_2AECC                          * 10E27
+        GOVLNG  SUB_2AEC5.L1                     * 10E27
         BSS     8                                * 10E2E  zeros
         RPL
 
@@ -471,14 +471,14 @@ INVUNITERR:
         CON(5)  (*)+5                            * 10EEA  primitive code object
         ASSEMBLE
         LC(5)   #00B01                           * 10EEF
-        GOTO    L_10F06                          * 10EF6
+        GOTO    CONSTUNITERR.L1                  * 10EF6
 
 * Error B02h
 * refs (4): 0F71F 0FBF1 CAC31 CAC86
 CONSTUNITERR:
         CON(5)  (*)+5                            * 10EFA  primitive code object
-        LC(5)   constuniterr                     * 10EFF
-L_10F06:
+        LC(5)   constuniterr                     * 10EFF  "Inconsistent Units"
+CONSTUNITERR.L1:
         A=C     A                                * 10F06
         GOVLNG  Errjmp                           * 10F08
 
@@ -491,7 +491,7 @@ LIB001:
         REL(5)  LIB001.message                   * 10F1E  message table
         CON(5)  0                                * 10F23  link table
         REL(5)  ChkUserKeys                      * 10F28  config
-L_10F2D:
+LIB001.L1:
         LC(3)   #103                             * 10F2D
         GOSBVL  SUB_53B0A                        * 10F32
         LC(5)   #00101                           * 10F39
@@ -503,7 +503,7 @@ GPErrjmpC:
         A=C     A                                * 10F42
         P=      0                                * 10F44
         GOSBVL  GETPTR                           * 10F46
-L_10F4D:
+GPErrjmpC.L1:
         GOVLNG  Errjmp                           * 10F4D
 
 * Error 102h
@@ -536,7 +536,7 @@ DoErrNCE:
 * refs (19): 10F60 10F70 10F92 10FA2 10FB2 10FC2 ...
 ErrjmpC:
         A=C     A                                * 10F80
-        GOTO    L_10F4D                          * 10F82
+        GOTO    GPErrjmpC.L1                     * 10F82
 
 * Error 106h
 * refs (2): 14150 689D1
@@ -702,47 +702,47 @@ OBJ_110EF:
         GOSUB   SUB_11186                        * 110F4
         GOSUB   SUB_11156                        * 110F8
         GOSUB   SUB_111D6                        * 110FC
-        GOC     L_11107                          * 11100
+        GOC     OBJ_110EF.L1                     * 11100
         GOSUB   SUB_11156                        * 11103
-L_11107:
+OBJ_110EF.L1:
         A=A+1   A                                * 11107
         D0=D0-  2                                * 11109
         GOSUB   SUB_1120D                        * 1110C
-        GOC     L_11138                          * 11110
+        GOC     OBJ_110EF.L2                     * 11110
         A=A-1   A                                * 11113
         D0=D0+  2                                * 11115
         C=DAT0  B                                * 11118
         B=C     B                                * 1111B
         LC(2)   #45                              * 1111E
         ?B#C    B                                * 11122
-        GOYES   L_1114F                          * 11125
+        GOYES   OBJ_110EF.L3                     * 11125
         ?A=0    A                                * 11127
-        GOYES   L_1114F                          * 1112A
+        GOYES   OBJ_110EF.L3                     * 1112A
         A=A+1   A                                * 1112C
         D0=D0+  2                                * 1112E
         GOSUB   SUB_1120D                        * 11131
-        GONC    L_1114F                          * 11135
-L_11138:
+        GONC    OBJ_110EF.L3                     * 11135
+OBJ_110EF.L2:
         R0=A                                     * 11138
         GOSBVL  PUSH#                            * 1113B
         LC(5)   FalseTrue                        * 11142
         A=C     A                                * 11149
         PC=(A)                                   * 1114B
-L_1114F:
+OBJ_110EF.L3:
         GOVLNG  GPPushFLoop                      * 1114F
 
 * refs (2): 110F8 11103
 SUB_11156:
         LC(2)   #2B                              * 11156
         ?B=C    B                                * 1115A
-        GOYES   L_1115F                          * 1115D
-L_1115F:
+        GOYES   SUB_11156.L1                     * 1115D
+SUB_11156.L1:
         LC(2)   #2D                              * 1115F
-        GOC     L_1116F                          * 11163  never taken
+        GOC     SUB_11156.L2                     * 11163  never taken
         ?B#C    B                                * 11166
         RTNYES                                   * 11169
         LC(2)   #2B                              * 1116B
-L_1116F:
+SUB_11156.L2:
         DAT0=C  B                                * 1116F
         GOSBVL  GETPTR                           * 11172
         LC(5)   TrueTrue                         * 11179
@@ -755,12 +755,12 @@ SUB_11186:
         D0=(5)  #8084F                           * 1118D
         C=DAT0  1                                * 11194
         ?CBIT=1 2                                * 11198
-        GOYES   L_111A6                          * 1119D
+        GOYES   SUB_11186.L1                     * 1119D
         LC(2)   #2E                              * 1119F
-        GONC    L_111AA                          * 111A3
-L_111A6:
+        GONC    SUB_11186.L2                     * 111A3
+SUB_11186.L1:
         LC(2)   #2C                              * 111A6
-L_111AA:
+SUB_11186.L2:
         D=C     B                                * 111AA
         D0=(5)  TEMPENV                          * 111AD
         A=DAT0  A                                * 111B4
@@ -779,24 +779,24 @@ L_111AA:
 * refs (2): 110FC 11248
 SUB_111D6:
         ST=0    0                                * 111D6
-        GOTO    L_111E0                          * 111D9
+        GOTO    SUB_111DD.loop1                  * 111D9
 
 * refs (1): 11287
 SUB_111DD:
         ST=1    0                                * 111DD
-L_111E0:
+SUB_111DD.loop1:
         ?ST=0   0                                * 111E0
-        GOYES   L_111EE                          * 111E3
+        GOYES   SUB_111DD.L2                     * 111E3
         A=A+1   A                                * 111E5
         D0=D0-  2                                * 111E7
-        GOTO    L_111F6                          * 111EA
-L_111EE:
+        GOTO    SUB_111DD.L3                     * 111EA
+SUB_111DD.L2:
         D0=D0+  2                                * 111EE
         A=A-1   A                                * 111F1
         RTNC                                     * 111F3
-L_111F6:
+SUB_111DD.L3:
         GOSUB   SUB_1120D                        * 111F6
-        GOC     L_111E0                          * 111FA
+        GOC     SUB_111DD.loop1                  * 111FA
         LC(2)   #0A                              * 111FD
         ?B=C    B                                * 11201
         RTNYES                                   * 11204
@@ -813,9 +813,9 @@ SUB_1120D:
         RTNYES                                   * 11219
         LC(2)   #30                              * 1121B
         ?B>=C   B                                * 1121F
-        GOYES   L_11226                          * 11222
+        GOYES   SUB_1120D.L1                     * 11222
         RTN                                      * 11224
-L_11226:
+SUB_1120D.L1:
         LC(2)   #39                              * 11226
         ?B<=C   B                                * 1122A
         RTNYES                                   * 1122D
@@ -832,41 +832,41 @@ OBJ_1123F:
         ASSEMBLE
         GOSUB   SUB_11186                        * 11244
         GOSUB   SUB_111D6                        * 11248
-        GOC     L_11271                          * 1124C
+        GOC     OBJ_1123F.L2                     * 1124C
         GOSUB   SUB_112C5                        * 1124F
         GOSUB   SUB_112D8                        * 11253
-        GONC    L_11271                          * 11257
+        GONC    OBJ_1123F.L2                     * 11257
         D0=D0+  2                                * 1125A
         A=A-1   A                                * 1125D
-        GOC     L_1126C                          * 1125F
+        GOC     OBJ_1123F.L1                     * 1125F
         C=DAT0  B                                * 11262
         B=C     B                                * 11265
         GOSUB   SUB_112C5                        * 11268
-L_1126C:
+OBJ_1123F.L1:
         D0=D0-  2                                * 1126C
         A=A+1   A                                * 1126F
-L_11271:
+OBJ_1123F.L2:
         A=A+1   A                                * 11271
         D0=D0-  2                                * 11273
         GOSUB   SUB_1120D                        * 11276
-        GOC     L_11287                          * 1127A
+        GOC     OBJ_1123F.L3                     * 1127A
         GOSUB   SUB_112D8                        * 1127D
-        GOC     L_11287                          * 11281
-        GONC    L_1128B                          * 11284
-L_11287:
+        GOC     OBJ_1123F.L3                     * 11281
+        GONC    OBJ_1123F.L4                     * 11284
+OBJ_1123F.L3:
         GOSUB   SUB_111DD                        * 11287
-L_1128B:
+OBJ_1123F.L4:
         GOSUB   SUB_112C5                        * 1128B
         D0=D0+  2                                * 1128F
         A=A-1   A                                * 11292
-        GOC     L_112A8                          * 11294
+        GOC     OBJ_1123F.L5                     * 11294
         GOSUB   SUB_1120D                        * 11297
-        GONC    L_112A8                          * 1129B
+        GONC    OBJ_1123F.L5                     * 1129B
         LC(5)   CHR_E                            * 1129E
-        GOC     L_112AF                          * 112A5
-L_112A8:
+        GOC     OBJ_1123F.L6                     * 112A5
+OBJ_1123F.L5:
         LC(5)   _1E_                             * 112A8
-L_112AF:
+OBJ_1123F.L6:
         RSTK=C                                   * 112AF
         A=A+1   A                                * 112B1
         R0=A                                     * 112B3
@@ -881,7 +881,7 @@ SUB_112C5:
         ?B#C    B                                * 112C9
         RTNYES                                   * 112CC
         LC(5)   NULL$                            * 112CE
-        GONC    L_112AF                          * 112D5
+        GONC    OBJ_1123F.L6                     * 112D5
 
 * refs (2): 11253 1127D
 SUB_112D8:
@@ -914,63 +914,63 @@ DelLastArg:
 ClrBusyAnn:
         CON(5)  (*)+5                            * 11320  primitive code object
         LC(2)   #80                              * 11325
-        GOTO    L_11390                          * 11329
+        GOTO    OBJ_11387.L1                     * 11329
 
 * ->
 * refs (3): 3FD3B 3FD68 3FD95
 SetAlphaAnn:
         CON(5)  (*)+5                            * 1132D  primitive code object
         LC(2)   #40                              * 11332
-        GOTO    L_1137B                          * 11336
+        GOTO    ClrLeftAnn.L1                    * 11336
 
 * ->
 * refs (3): 3FCB4 3FCE1 3FD0E
 ClrAlphaAnn:
         CON(5)  (*)+5                            * 1133A  primitive code object
         LC(2)   #40                              * 1133F
-        GOTO    L_11390                          * 11343
+        GOTO    OBJ_11387.L1                     * 11343
 
 * ->
 * refs (2): 3FD18 3FD9A
 SetRightAnn:
         CON(5)  (*)+5                            * 11347  primitive code object
         LC(2)   #20                              * 1134C
-        GOTO    L_1137B                          * 11350
+        GOTO    ClrLeftAnn.L1                    * 11350
 
 * ->
 * refs (4): 3FCBE 3FCEB 3FD45 3FD72
 ClrRightAnn:
         CON(5)  (*)+5                            * 11354  primitive code object
         LC(2)   #20                              * 11359
-        GOTO    L_11390                          * 1135D
+        GOTO    OBJ_11387.L1                     * 1135D
 
 * ->
 * refs (2): 3FCE6 3FD6D
 SetLeftAnn:
         CON(5)  (*)+5                            * 11361  primitive code object
         LC(2)   #10                              * 11366
-        GOTO    L_1137B                          * 1136A
+        GOTO    ClrLeftAnn.L1                    * 1136A
 
 * ->
 * refs (4): 3FCB9 3FD13 3FD40 3FD9F
 ClrLeftAnn:
         CON(5)  (*)+5                            * 1136E  primitive code object
         LC(2)   #10                              * 11373
-        GOTO    L_11390                          * 11377
-L_1137B:
+        GOTO    OBJ_11387.L1                     * 11377
+ClrLeftAnn.L1:
         GOSUB   SUB_113B0                        * 1137B
         C=C!A   B                                * 1137F
-        GOTO    L_1139A                          * 11383
+        GOTO    OBJ_11387.L2                     * 11383
 
 * refs (1): 2D368
 OBJ_11387:
         CON(5)  (*)+5                            * 11387  primitive code object
         LC(2)   #02                              * 1138C
-L_11390:
+OBJ_11387.L1:
         C=-C-1  A                                * 11390
         GOSUB   SUB_113B0                        * 11392
         C=C&A   B                                * 11396
-L_1139A:
+OBJ_11387.L2:
         DAT0=C  B                                * 1139A
         A=R0                                     * 1139D
         D0=A                                     * 113A0
@@ -990,70 +990,70 @@ SUB_113B0:
 OBJ_113C2:
         CON(5)  (*)+5                            * 113C2  primitive code object
         LC(5)   DEPTHSAVE                        * 113C7
-        GOTO    L_114B3                          * 113CE
+        GOTO    OBJ_11495.L1                     * 113CE
 
 * refs (3): 6AE38 6BAC9 6C2FD
 OBJ_113D2:
         CON(5)  (*)+5                            * 113D2  primitive code object
         LC(5)   DEPTHSAVE                        * 113D7
-        GOTO    L_114C9                          * 113DE
+        GOTO    OBJ_11495.L3                     * 113DE
 
 * refs (2): 4255C 428EF
 OBJ_113E2:
         CON(5)  (*)+5                            * 113E2  primitive code object
         LC(5)   TOPLINE                          * 113E7
-        GOTO    L_114C9                          * 113EE
+        GOTO    OBJ_11495.L3                     * 113EE
 
 * refs (8): 3A0E9 427B4 427D7 42845 42863 4288B ...
 OBJ_113F2:
         CON(5)  (*)+5                            * 113F2  primitive code object
         LC(5)   TOPLINE                          * 113F7
-        GOTO    L_114B3                          * 113FE
+        GOTO    OBJ_11495.L1                     * 113FE
 
 * refs (1): 4287C
 OBJ_11402:
         CON(5)  (*)+5                            * 11402  primitive code object
         LC(5)   TOPLINE                          * 11407
-        GOTO    L_114E1                          * 1140E
+        GOTO    OBJ_11495.L6                     * 1140E
 
 * refs (2): 4289F 429FD
 OBJ_11412:
         CON(5)  (*)+5                            * 11412  primitive code object
         LC(5)   TOPLINE                          * 11417
-        GOTO    L_114EC                          * 1141E
+        GOTO    OBJ_11495.L7                     * 1141E
 
 * refs (1): 42B98
 OBJ_11422:
         CON(5)  (*)+5                            * 11422  primitive code object
         LC(5)   CR_COUNT                         * 11427
-        GOTO    L_114E1                          * 1142E
+        GOTO    OBJ_11495.L6                     * 1142E
 
 * -> #
 * refs (8): 3A09E 3A175 4258E 4270F 4274B 427B9 ...
 FIRSTC@:
         CON(5)  (*)+5                            * 11432  primitive code object
         LC(5)   FIRSTCHAR                        * 11437
-        GOTO    L_114B3                          * 1143E
+        GOTO    OBJ_11495.L1                     * 1143E
 
 * ->
 * refs (3): 425CA 428D6 42B93
 SETFIRSTC_0:
         CON(5)  (*)+5                            * 11442  primitive code object
         LC(5)   FIRSTCHAR                        * 11447
-        GOTO    L_114F8                          * 1144E
+        GOTO    OBJ_11495.L8                     * 1144E
 
 * refs (1): 425A2
 LCursor~1:
         CON(5)  (*)+5                            * 11452  primitive code object
         LC(5)   FIRSTCHAR                        * 11457
-        GOTO    L_114EC                          * 1145E
+        GOTO    OBJ_11495.L7                     * 1145E
 
 * ->
 * refs (2): 42633 42656
 FIRSTC+:
         CON(5)  (*)+5                            * 11462  primitive code object
         LC(5)   FIRSTCHAR                        * 11467
-        GOTO    L_114E1                          * 1146E
+        GOTO    OBJ_11495.L6                     * 1146E
 
 * refs (3): 178E7 17900 17932
 OBJ_11472:
@@ -1063,7 +1063,7 @@ OBJ_11472:
         D0=A                                     * 11488
         A=0     A                                * 1148B
         A=DAT0  1                                * 1148D
-        GOTO    L_114C2                          * 11491
+        GOTO    OBJ_11495.L2                     * 11491
 
 * refs (3): 172E8 178F1 1790A
 OBJ_11495:
@@ -1072,58 +1072,58 @@ OBJ_11495:
         LC(5)   PADCOUNT                         * 114A1
         CD0EX                                    * 114A8
         DAT0=A  1                                * 114AB
-        GOTO    L_114DA                          * 114AF
-L_114B3:
+        GOTO    OBJ_11495.L5                     * 114AF
+OBJ_11495.L1:
         A=C     A                                * 114B3
         GOSBVL  SAVPTR                           * 114B5
         D0=A                                     * 114BC
         A=DAT0  A                                * 114BF
-L_114C2:
+OBJ_11495.L2:
         GOVLNG  PUSH#ALOOP                       * 114C2
-L_114C9:
+OBJ_11495.L3:
         RSTK=C                                   * 114C9
         GOSBVL  POP#                             * 114CB
         C=RSTK                                   * 114D2
         CD0EX                                    * 114D4
-L_114D7:
+OBJ_11495.loop4:
         DAT0=A  A                                * 114D7
-L_114DA:
+OBJ_11495.L5:
         D0=C                                     * 114DA
-        GOTO    L_11585                          * 114DD
-L_114E1:
+        GOTO    ClrLock.L3                       * 114DD
+OBJ_11495.L6:
         CD0EX                                    * 114E1
         A=DAT0  A                                * 114E4
         A=A+1   A                                * 114E7
-        GONC    L_114D7                          * 114E9
-L_114EC:
+        GONC    OBJ_11495.loop4                  * 114E9
+OBJ_11495.L7:
         CD0EX                                    * 114EC
         A=DAT0  A                                * 114EF
         A=A-1   A                                * 114F2
-        GOTO    L_114D7                          * 114F4
-L_114F8:
+        GOTO    OBJ_11495.loop4                  * 114F4
+OBJ_11495.L8:
         CD0EX                                    * 114F8
         A=0     A                                * 114FB
-        GOTO    L_114D7                          * 114FD
+        GOTO    OBJ_11495.loop4                  * 114FD
 
 * -> flag
 * refs (3): 3AFB1 3FC14 D73EA
 Lock?:
         CON(5)  (*)+5                            * 11501  primitive code object
         LC(5)   KEYLOCK                          * 11506
-        GOTO    L_1151D                          * 1150D
+        GOTO    PrgmEntry?.L1                    * 1150D
 
 * -> flag
 * refs (25): 39858 3BE59 3D55B 3DFDD 3EDD4 3EE01 ...
 PrgmEntry?:
         CON(5)  (*)+5                            * 11511  primitive code object
         LC(5)   ACCUM                            * 11516
-L_1151D:
+PrgmEntry?.L1:
         CD1EX                                    * 1151D
         A=DAT1  P                                * 11520
         D1=C                                     * 11524
         ?A#0    P                                * 11527
-        GOYES   L_1152C                          * 1152A
-L_1152C:
+        GOYES   PrgmEntry?.L2                    * 1152A
+PrgmEntry?.L2:
         GOVLNG  PushT/FLoop                      * 1152C
 
 * ->
@@ -1131,38 +1131,38 @@ L_1152C:
 SetPrgmEntry:
         CON(5)  (*)+5                            * 11533  primitive code object
         LC(5)   ACCUM                            * 11538
-        GOTO    L_1154F                          * 1153F
+        GOTO    SetLock.L1                       * 1153F
 
 * ->
 * refs (1): 40D2A
 SetLock:
         CON(5)  (*)+5                            * 11543  primitive code object
         LC(5)   KEYLOCK                          * 11548
-L_1154F:
+SetLock.L1:
         CD1EX                                    * 1154F
         A=0     P                                * 11552
         A=A+1   P                                * 11555
-        GOTO    L_1157E                          * 11558
+        GOTO    ClrLock.L2                       * 11558
 
 * ->
 * refs (1): 443B2
 ClrPrgmEntry:
         CON(5)  (*)+5                            * 1155C  primitive code object
         LC(5)   ACCUM                            * 11561
-        GOTO    L_11578                          * 11568
+        GOTO    ClrLock.L1                       * 11568
 
 * ->
 * refs (1): 40D3E
 ClrLock:
         CON(5)  (*)+5                            * 1156C  primitive code object
         LC(5)   KEYLOCK                          * 11571
-L_11578:
+ClrLock.L1:
         CD1EX                                    * 11578
         A=0     P                                * 1157B
-L_1157E:
+ClrLock.L2:
         DAT1=A  P                                * 1157E
         D1=C                                     * 11582
-L_11585:
+ClrLock.L3:
         A=DAT0  A                                * 11585
         D0=D0+  5                                * 11588
         PC=(A)                                   * 1158B
@@ -1178,32 +1178,32 @@ MAKEGROB:
         R1=A                                     * 115A3
         GOSUB   makegrob                         * 115A6
         AD0EX                                    * 115AA
-        GOLONG  L_11FF1                          * 115AD
+        GOLONG  $>grob.L5                        * 115AD
 
 * R0.A = x, R1.A = y --> D0 = body Makes a grob of size x,y Prolog is in D0-20
 * refs (6): 115A6 11953 11D6D 11FC3 12098 9D2ED
 makegrob:
         ST=0    10                               * 115B3
-L_115B6:
+makegrob.loop1:
         A=R0                                     * 115B6
         GOSUB   w->W                             * 115B9
         R3=A.F  A                                * 115BD
         C=R1.F  A                                * 115C3
         GOSUB   SUB_11642                        * 115C9
-        GOC     L_115DB                          * 115CD
+        GOC     makegrob.L2                      * 115CD
         C=0     A                                * 115D0
         LC(2)   #14                              * 115D2
         C=C+B   A                                * 115D6
-        GONC    L_115DF                          * 115D8
-L_115DB:
+        GONC    makegrob.L3                      * 115D8
+makegrob.L2:
         C=0     A                                * 115DB
         C=C-1   A                                * 115DD
-L_115DF:
+makegrob.L3:
         GOSBVL  CREATETEMP                       * 115DF
-        GONC    L_115F4                          * 115E6
+        GONC    makegrob.L4                      * 115E6
         GOSBVL  St10Gb                           * 115E9
-        GOTO    L_115B6                          * 115F0
-L_115F4:
+        GOTO    makegrob.loop1                   * 115F0
+makegrob.L4:
         LC(5)   DOGROB                           * 115F4
         DAT0=C  A                                * 115FB
         D0=D0+  5                                * 115FE
@@ -1231,15 +1231,15 @@ L_115F4:
 SUB_11642:
         B=0     A                                * 11642
         ?C<A    A                                * 11644
-        GOYES   L_11653                          * 11647
+        GOYES   SUB_11642.L2                     * 11647
         CAEX    A                                * 11649
-        GONC    L_11653                          * 1164B
-L_1164E:
+        GONC    SUB_11642.L2                     * 1164B
+SUB_11642.loop1:
         B=B+A   A                                * 1164E
         RTNC                                     * 11650
-L_11653:
+SUB_11642.L2:
         C=C-1   A                                * 11653
-        GONC    L_1164E                          * 11655
+        GONC    SUB_11642.loop1                  * 11655
         RTNCC                                    * 11658
 
 * Calculates GROB width A.A=width in pixels -> A.A=width in nibbles
@@ -1276,7 +1276,7 @@ GROB!:
         C=RSTK                                   * 116A5
         D1=C                                     * 116A7
         GOSUB   grob!                            * 116AA
-L_116AE:
+GROB!.L1:
         GOVLNG  GETPTRLOOP                       * 116AE
 
 * R0,R1 = (row,col), D0 = grob1, D1 = grob2 --> Stores grob1 into grob2
@@ -1297,12 +1297,12 @@ grob!:
         D1=D1+  5                                * 116D9
         B=0     A                                * 116DC
         C=R0                                     * 116DE
-        GOTO    L_116E7                          * 116E1
-L_116E5:
+        GOTO    grob!.L2                         * 116E1
+grob!.loop1:
         B=B+A   A                                * 116E5
-L_116E7:
+grob!.L2:
         C=C-1   A                                * 116E7
-        GONC    L_116E5                          * 116E9
+        GONC    grob!.loop1                      * 116E9
         B=B-A   A                                * 116EC
         C=R1                                     * 116EE
         D=C     A                                * 116F1
@@ -1334,9 +1334,9 @@ L_116E7:
         C=0     A                                * 1173F
         LC(1)   #4                               * 11741
         ?C>A    A                                * 11744
-        GOYES   L_1174C                          * 11747
+        GOYES   grob!.L3                         * 11747
         ST=0    1                                * 11749
-L_1174C:
+grob!.L3:
         GOSUB   w->W                             * 1174C
         C=A     A                                * 11750
         RSTK=C                                   * 11752
@@ -1350,12 +1350,12 @@ L_1174C:
         CSRC                                     * 11768
         B=C     S                                * 1176B
         LC(2)   #0F                              * 1176E
-        GOTO    L_11779                          * 11772
-L_11776:
+        GOTO    grob!.L5                         * 11772
+grob!.loop4:
         C=C+C   B                                * 11776
-L_11779:
+grob!.L5:
         B=B-1   S                                * 11779
-        GONC    L_11776                          * 1177C
+        GONC    grob!.loop4                      * 1177C
         CSR     A                                * 1177F
         D=C     A                                * 11781
         A=R0                                     * 11783
@@ -1371,25 +1371,25 @@ L_11779:
         B=C     A                                * 117A1
         LC(2)   #FF                              * 117A3
         ?ST=1   1                                * 117A7
-        GOYES   L_117B4                          * 117AA
+        GOYES   grob!.L7                         * 117AA
         A=B     A                                * 117AC
-        GONC    L_117B4                          * 117AE
-L_117B1:
+        GONC    grob!.L7                         * 117AE
+grob!.loop6:
         C=C+C   B                                * 117B1
-L_117B4:
+grob!.L7:
         A=A-1   A                                * 117B4
-        GONC    L_117B1                          * 117B6
+        GONC    grob!.loop6                      * 117B6
         ?ST=0   1                                * 117B9
-        GOYES   L_117C2                          * 117BC
+        GOYES   grob!.L8                         * 117BC
         C=C!D   P                                * 117BE
-L_117C2:
+grob!.L8:
         CSL     A                                * 117C2
         C=D     P                                * 117C4
         D=C     A                                * 117C7
         C=RSTK                                   * 117C9
         B=C     A                                * 117CB
         C=RSTK                                   * 117CD
-L_117CF:
+grob!.loop9:
         ST=1    0                                * 117CF
         A=R3                                     * 117D2
         A=A+B   A                                * 117D5
@@ -1404,32 +1404,32 @@ L_117CF:
         RSTK=C                                   * 117EC
         A=R0                                     * 117EE
         R1=A                                     * 117F1
-L_117F4:
+grob!.loop10:
         A=R1                                     * 117F4
         C=0     A                                * 117F7
         LC(1)   #4                               * 117F9
         ?C>A    A                                * 117FC
-        GOYES   L_11879                          * 117FF
+        GOYES   grob!.L13                        * 117FF
         B=A     A                                * 11801
         BSRB.F  A                                * 11803
         BSRB.F  A                                * 11808
         LC(1)   #E                               * 1180D
         ?B<C    A                                * 11810
-        GOYES   L_11817                          * 11813
+        GOYES   grob!.L11                        * 11813
         B=C     A                                * 11815
-L_11817:
+grob!.L11:
         A=DAT0  W                                * 11817
         GOSUB   SUB_118B8                        * 1181B
         GOSUB   SUB_118F3                        * 1181F
         ?ST=0   0                                * 11823
-        GOYES   L_1183E                          * 11826
+        GOYES   grob!.L12                        * 11826
         C=P     5                                * 11828
         P=      0                                * 1182C
         C=DAT1  1                                * 1182E
         C=C&D   P                                * 11832
         A=A!C   P                                * 11836
         P=C     5                                * 1183A
-L_1183E:
+grob!.L12:
         DAT1=A  WP                               * 1183E
         CD1EX                                    * 11842
         C+P+1                                    * 11845
@@ -1446,10 +1446,10 @@ L_1183E:
         C=C+A   A                                * 1186D
         D0=C                                     * 1186F
         ST=0    0                                * 11872
-        GOTO    L_117F4                          * 11875
-L_11879:
+        GOTO    grob!.loop10                     * 11875
+grob!.L13:
         ?A=0    A                                * 11879
-        GOYES   L_118A3                          * 1187C
+        GOYES   grob!.L14                        * 1187C
         A=DAT0  B                                * 1187E
         GOSUB   SUB_118B8                        * 11881
         C=D     A                                * 11885
@@ -1463,7 +1463,7 @@ L_11879:
         C=C&B   B                                * 11898
         A=A!C   B                                * 1189C
         DAT1=A  B                                * 118A0
-L_118A3:
+grob!.L14:
         C=RSTK                                   * 118A3
         B=C     A                                * 118A5
         C=RSTK                                   * 118A7
@@ -1471,35 +1471,35 @@ L_118A3:
         A=A-1   A                                * 118AC
         RTNC                                     * 118AE
         R2=A                                     * 118B1
-        GOTO    L_117CF                          * 118B4
+        GOTO    grob!.loop9                      * 118B4
 
 * refs (2): 1181B 11881
 SUB_118B8:
         ?C=0    S                                * 118B8
         RTNYES                                   * 118BB
         ?ST=1   0                                * 118BD
-        GOYES   L_118E1                          * 118C0
+        GOYES   SUB_118B8.L3                     * 118C0
         B=C     S                                * 118C2
         P=      15                               * 118C5
         LC(1)   #4                               * 118C7
         P=      0                                * 118CA
         BCEX    S                                * 118CC
         B=B-C   S                                * 118CF
-        GOTO    L_118D9                          * 118D2
-L_118D6:
+        GOTO    SUB_118B8.L2                     * 118D2
+SUB_118B8.loop1:
         ASRB                                     * 118D6
-L_118D9:
+SUB_118B8.L2:
         B=B-1   S                                * 118D9
-        GONC    L_118D6                          * 118DC
+        GONC    SUB_118B8.loop1                  * 118DC
         RTNCC                                    * 118DF
-L_118E1:
+SUB_118B8.L3:
         B=C     S                                * 118E1
-        GOTO    L_118EB                          * 118E4
-L_118E8:
+        GOTO    SUB_118B8.L5                     * 118E4
+SUB_118B8.loop4:
         A=A+A   W                                * 118E8
-L_118EB:
+SUB_118B8.L5:
         B=B-1   S                                * 118EB
-        GONC    L_118E8                          * 118EE
+        GONC    SUB_118B8.loop4                  * 118EE
         RTNCC                                    * 118F1
 
 * refs (1): 1181F
@@ -1518,24 +1518,24 @@ SUB_118F3:
         CPEX    15                               * 11911
         B=B-C   A                                * 11915
         RTNCC                                    * 11917
-L_11919:
+SUB_118F3.L1:
         GOSUBL  GETPTR~jump_3                    * 11919
         LC(5)   NULLPAINT                        * 1191F
         DAT1=C  A                                * 11926
-        GOLONG  L_12002                          * 11929
+        GOLONG  $>grob.L7                        * 11929
 
 * grob #x1 #y1 #x2 #y2 -> grob'
 * refs (35): 0E051 4572B 484CC 4DD5A 4DEEF 4DF5D ...
 SUBGROB:
         CON(5)  (*)+5                            * 1192F  primitive code object
         GOSUB   SUB_11BAA                        * 11934
-        GOC     L_11919                          * 11938
+        GOC     SUB_118F3.L1                     * 11938
         C=DAT1  A                                * 1193B
         D1=C                                     * 1193E
         GOSUB   SUB_11BED                        * 11941
-        GOC     L_11919                          * 11945
+        GOC     SUB_118F3.L1                     * 11945
         GOSUB   SUB_11C06                        * 11948
-        GONC    L_11919                          * 1194C
+        GONC    SUB_118F3.L1                     * 1194C
         GOSUB   SUB_11C29                        * 1194F
         GOSUBL  makegrob                         * 11953
         GOSUB   SUB_11A58                        * 11959
@@ -1554,7 +1554,7 @@ SUBGROB:
         CD0EX                                    * 11982
         R2=C                                     * 11985
         CR3EX.F A                                * 11988
-L_1198E:
+SUBGROB.loop1:
         RSTK=C                                   * 1198E
         C=B     A                                * 11990
         RSTK=C                                   * 11992
@@ -1564,7 +1564,7 @@ L_1198E:
         D1=C                                     * 1199F
         C=R4.F  A                                * 119A2
         D0=C                                     * 119A8
-L_119AB:
+SUBGROB.loop2:
         A=DAT0  W                                * 119AB
         C=B     A                                * 119AF
         D=C     A                                * 119B1
@@ -1574,21 +1574,21 @@ L_119AB:
         C=0     A                                * 119BF
         LC(1)   #E                               * 119C1
         ?D>=C   A                                * 119C4
-        GOYES   L_119CB                          * 119C7
+        GOYES   SUBGROB.L3                       * 119C7
         C=D     A                                * 119C9
-L_119CB:
+SUBGROB.L3:
         P=C     0                                * 119CB
         P=P+1                                    * 119CF
         B=C     S                                * 119D1
-        GOTO    L_119DD                          * 119D4
-L_119D8:
+        GOTO    SUBGROB.L5                       * 119D4
+SUBGROB.loop4:
         ASRB.F  WP                               * 119D8
-L_119DD:
+SUBGROB.L5:
         B=B-1   S                                * 119DD
-        GONC    L_119D8                          * 119E0
+        GONC    SUBGROB.loop4                    * 119E0
         P=P-1                                    * 119E3
         P=P-1                                    * 119E5
-        GOC     L_11A0A                          * 119E7
+        GOC     SUBGROB.L6                       * 119E7
         DAT1=A  WP                               * 119EA
         C=C+C   A                                * 119EE
         C=C+C   A                                * 119F0
@@ -1599,10 +1599,10 @@ L_119DD:
         CD1EX                                    * 119FD
         C+P+1                                    * 11A00
         D1=C                                     * 11A03
-        GOTO    L_119AB                          * 11A06
-L_11A0A:
+        GOTO    SUBGROB.loop2                    * 11A06
+SUBGROB.L6:
         B=B-1   A                                * 11A0A
-        GOC     L_11A27                          * 11A0C
+        GOC     SUBGROB.L7                       * 11A0C
         DCEX    S                                * 11A0F
         P=C     15                               * 11A12
         DCEX    S                                * 11A16
@@ -1610,7 +1610,7 @@ L_11A0A:
         P=      0                                * 11A1D
         A=A&C   P                                * 11A1F
         DAT1=A  1                                * 11A23
-L_11A27:
+SUBGROB.L7:
         C=RSTK                                   * 11A27
         B=C     A                                * 11A29
         C=RSTK                                   * 11A2B
@@ -1623,11 +1623,11 @@ L_11A27:
         A=R1                                     * 11A3D
         A=A-1   A                                * 11A40
         R1=A                                     * 11A42
-        GOC     L_11A4C                          * 11A45
-        GOTO    L_1198E                          * 11A48
-L_11A4C:
+        GOC     SUBGROB.L8                       * 11A45
+        GOTO    SUBGROB.loop1                    * 11A48
+SUBGROB.L8:
         A=R3.F  A                                * 11A4C
-        GOLONG  L_11FF1                          * 11A52
+        GOLONG  $>grob.L5                        * 11A52
 
 * refs (3): 11959 11D71 11FC9
 SUB_11A58:
@@ -1643,19 +1643,19 @@ SUB_11A58:
 GROB!ZERO:
         CON(5)  (*)+5                            * 11A6D  primitive code object
         GOSUB   SUB_11BAA                        * 11A72
-        GONC    L_11A7D                          * 11A76
-        GOTO    L_116AE                          * 11A79
-L_11A7D:
+        GONC    GROB!ZERO.L1                     * 11A76
+        GOTO    GROB!.L1                         * 11A79
+GROB!ZERO.L1:
         C=DAT1  A                                * 11A7D
         D1=C                                     * 11A80
         GOSUB   SUB_11BED                        * 11A83
-        GONC    L_11A8E                          * 11A87
-        GOTO    L_116AE                          * 11A8A
-L_11A8E:
+        GONC    GROB!ZERO.L2                     * 11A87
+        GOTO    GROB!.L1                         * 11A8A
+GROB!ZERO.L2:
         GOSUB   SUB_11C06                        * 11A8E
-        GOC     L_11A99                          * 11A92
-        GOTO    L_116AE                          * 11A95
-L_11A99:
+        GOC     GROB!ZERO.L3                     * 11A92
+        GOTO    GROB!.L1                         * 11A95
+GROB!ZERO.L3:
         GOSUB   SUB_11C29                        * 11A99
         GOSUB   SUB_11C58                        * 11A9D
         R3=A                                     * 11AA1
@@ -1677,29 +1677,29 @@ L_11A99:
         CSRB.F  A                                * 11AD6
         CSRB.F  A                                * 11ADB
         ?C#A    A                                * 11AE0
-        GOYES   L_11AE9                          * 11AE3
+        GOYES   GROB!ZERO.L4                     * 11AE3
         C=C!D   S                                * 11AE5
-L_11AE9:
+GROB!ZERO.L4:
         C=R1.F  A                                * 11AE9
         C=C-1   A                                * 11AEF
         R1=C                                     * 11AF1
         B=C     S                                * 11AF4
         C=0     A                                * 11AF7
         LC(1)   #4                               * 11AF9
-L_11AFC:
+GROB!ZERO.loop5:
         ?B=0    S                                * 11AFC
-        GOYES   L_11B0C                          * 11AFF
-L_11B01:
+        GOYES   GROB!ZERO.L7                     * 11AFF
+GROB!ZERO.loop6:
         B=B+B   S                                * 11B01
-        GONC    L_11B01                          * 11B04
+        GONC    GROB!ZERO.loop6                  * 11B04
         C=C-1   A                                * 11B07
-        GONC    L_11AFC                          * 11B09
-L_11B0C:
+        GONC    GROB!ZERO.loop5                  * 11B09
+GROB!ZERO.L7:
         A=R0                                     * 11B0C
         A=A-C   A                                * 11B0F
         R0=A                                     * 11B11
         C=B     A                                * 11B14
-L_11B16:
+GROB!ZERO.loop8:
         RSTK=C                                   * 11B16
         C=R3.F  A                                * 11B18
         D1=C                                     * 11B1E
@@ -1710,7 +1710,7 @@ L_11B16:
         A=R0                                     * 11B30
         B=A     A                                * 11B33
         A=0     W                                * 11B35
-L_11B38:
+GROB!ZERO.loop9:
         C=B     A                                * 11B38
         D=C     A                                * 11B3A
         DSRB.F  A                                * 11B3C
@@ -1719,12 +1719,12 @@ L_11B38:
         C=0     A                                * 11B48
         LC(1)   #E                               * 11B4A
         ?D>=C   A                                * 11B4D
-        GOYES   L_11B54                          * 11B50
+        GOYES   GROB!ZERO.L10                    * 11B50
         C=D     A                                * 11B52
-L_11B54:
+GROB!ZERO.L10:
         P=C     0                                * 11B54
         P=P-1                                    * 11B58
-        GOC     L_11B74                          * 11B5A
+        GOC     GROB!ZERO.L11                    * 11B5A
         DAT1=A  WP                               * 11B5D
         C=C+C   A                                * 11B61
         C=C+C   A                                * 11B63
@@ -1732,17 +1732,17 @@ L_11B54:
         CD1EX                                    * 11B67
         C+P+1                                    * 11B6A
         D1=C                                     * 11B6D
-        GOTO    L_11B38                          * 11B70
-L_11B74:
+        GOTO    GROB!ZERO.loop9                  * 11B70
+GROB!ZERO.L11:
         P=      0                                * 11B74
         B=B-1   A                                * 11B76
-        GOC     L_11B8D                          * 11B78
+        GOC     GROB!ZERO.L12                    * 11B78
         DCEX    S                                * 11B7B
         A=DAT1  S                                * 11B7E
         A=A&C   S                                * 11B82
         DAT1=A  S                                * 11B86
         DCEX    S                                * 11B8A
-L_11B8D:
+GROB!ZERO.L12:
         C=RSTK                                   * 11B8D
         A=R3                                     * 11B8F
         A=A+C   A                                * 11B92
@@ -1750,10 +1750,10 @@ L_11B8D:
         A=R1                                     * 11B97
         A=A-1   A                                * 11B9A
         R1=A                                     * 11B9C
-        GOC     L_11BA6                          * 11B9F
-        GOTO    L_11B16                          * 11BA2
-L_11BA6:
-        GOTO    L_116AE                          * 11BA6
+        GOC     GROB!ZERO.L13                    * 11B9F
+        GOTO    GROB!ZERO.loop8                  * 11BA2
+GROB!ZERO.L13:
+        GOTO    GROB!.L1                         * 11BA6
 
 * refs (2): 11934 11A72
 SUB_11BAA:
@@ -1798,9 +1798,9 @@ SUB_11C06:
         C=DAT1  A                                * 11C09
         A=R2                                     * 11C0C
         ?C>A    A                                * 11C0F
-        GOYES   L_11C16                          * 11C12
+        GOYES   SUB_11C06.L1                     * 11C12
         RTNCC                                    * 11C14
-L_11C16:
+SUB_11C06.L1:
         D1=D1+  5                                * 11C16
         C=DAT1  A                                * 11C19
         D1=D1-  15                               * 11C1C
@@ -1814,21 +1814,21 @@ SUB_11C29:
         D1=D1+  10                               * 11C29
         C=DAT1  A                                * 11C2C
         ?B<=C   A                                * 11C2F
-        GOYES   L_11C3E                          * 11C32
+        GOYES   SUB_11C29.L1                     * 11C32
         B=C     A                                * 11C34
         A=R2                                     * 11C36
         C=C-A   A                                * 11C39
         R1=C                                     * 11C3B
-L_11C3E:
+SUB_11C29.L1:
         D1=D1+  5                                * 11C3E
         C=DAT1  A                                * 11C41
         ?D<=C   A                                * 11C44
-        GOYES   L_11C53                          * 11C47
+        GOYES   SUB_11C29.L2                     * 11C47
         D=C     A                                * 11C49
         A=R4                                     * 11C4B
         C=C-A   A                                * 11C4E
         R0=C                                     * 11C50
-L_11C53:
+SUB_11C29.L2:
         D1=D1-  15                               * 11C53
         RTN                                      * 11C56
 
@@ -1841,12 +1841,12 @@ SUB_11C58:
         D1=D1+  5                                * 11C66
         AD1EX                                    * 11C69
         C=R2                                     * 11C6C
-        GOTO    L_11C75                          * 11C6F
-L_11C73:
+        GOTO    SUB_11C58.L2                     * 11C6F
+SUB_11C58.loop1:
         A=A+B   A                                * 11C73
-L_11C75:
+SUB_11C58.L2:
         C=C-1   A                                * 11C75
-        GONC    L_11C73                          * 11C77
+        GONC    SUB_11C58.loop1                  * 11C77
         C=R4                                     * 11C7A
         CSRB.F  A                                * 11C7D
         CSRB.F  A                                * 11C82
@@ -1856,21 +1856,21 @@ L_11C75:
 * refs (2): 11969 11AA9
 SUB_11C8B:
         LC(5)   #73103                           * 11C8B
-        GOTO    L_11C9D                          * 11C92
+        GOTO    SUB_11C96.L1                     * 11C92
 
 * refs (1): 11ABC
 SUB_11C96:
         LC(5)   #08CE3                           * 11C96
-L_11C9D:
+SUB_11C96.L1:
         C=C&D   P                                * 11C9D
         P=C     0                                * 11CA1
         CSR     A                                * 11CA5
-        GOTO    L_11CAD                          * 11CA7
-L_11CAB:
+        GOTO    SUB_11C96.L3                     * 11CA7
+SUB_11C96.loop2:
         CSR     A                                * 11CAB
-L_11CAD:
+SUB_11C96.L3:
         P=P-1                                    * 11CAD
-        GONC    L_11CAB                          * 11CAF
+        GONC    SUB_11C96.loop2                  * 11CAF
         P=C     0                                * 11CB2
         C=P     15                               * 11CB6
         P=      0                                * 11CBA
@@ -1901,38 +1901,38 @@ SUB_11CCC:
         D1=D1+  5                                * 11CE8
         A=0     A                                * 11CEB
         A=A+1   A                                * 11CED
-        GOTO    L_11D3A                          * 11CEF
+        GOTO    $>GROB.L4                        * 11CEF
 
 * $ -> grob
 * refs (4): 44234 4424F 504FB 6CBAC
 $>BIGGROB:
         CON(5)  (*)+5                            * 11CF3  primitive code object
         GOSUB   SUB_11CCC                        * 11CF8
-        GOTO    L_11D08                          * 11CFC
+        GOTO    $>GROB.L1                        * 11CFC
 
 * $ -> grob
 * refs (24): 0E010 0E033 1272F 12752 2F0A4 504EC ...
 $>GROB:
         CON(5)  (*)+5                            * 11D00  primitive code object
         XM=0                                     * 11D05
-L_11D08:
+$>GROB.L1:
         GOSUB   SAVPTR~jump_7                    * 11D08
         A=DAT1  A                                * 11D0C
         GOSUB   SUB_120CC                        * 11D0F
         ?A#0    A                                * 11D13
-        GOYES   L_11D2A                          * 11D16
-L_11D18:
+        GOYES   $>GROB.L3                        * 11D16
+$>GROB.L2:
         GOSUB   GETPTR~jump_3                    * 11D18
         LC(5)   NULLPAINT                        * 11D1C
         DAT1=C  A                                * 11D23
-        GOTO    L_12002                          * 11D26
-L_11D2A:
+        GOTO    $>grob.L7                        * 11D26
+$>GROB.L3:
         GOSUB   SUB_11D52                        * 11D2A
         C=R3                                     * 11D2E
         D=C     A                                * 11D31
         AD1EX                                    * 11D33
         GOSUB   SUB_120CC                        * 11D36
-L_11D3A:
+$>GROB.L4:
         B=0     A                                * 11D3A
         CD0EX                                    * 11D3C
         R3=C                                     * 11D3F
@@ -1940,16 +1940,16 @@ L_11D3A:
         C=A     A                                * 11D45
         GOSUB   SUB_11D92                        * 11D47
         C=R3                                     * 11D4B
-        GOTO    L_11FEF                          * 11D4E
+        GOTO    $>grob.L4                        * 11D4E
 
 * refs (2): 11CDF 11D2A
 SUB_11D52:
         C=0     A                                * 11D52
         LC(1)   #8                               * 11D54
         ?XM=0                                    * 11D57
-        GOYES   L_11D5F                          * 11D5A
+        GOYES   SUB_11D52.L1                     * 11D5A
         LC(1)   #A                               * 11D5C
-L_11D5F:
+SUB_11D52.L1:
         R1=C                                     * 11D5F
         A=A+A   A                                * 11D62
         C=A     A                                * 11D64
@@ -1982,17 +1982,17 @@ SUB_11D92:
         A=A+B   A                                * 11DA2
         AD0EX                                    * 11DA4
         C=C-1   A                                * 11DA7
-        GONC    L_11DB7                          * 11DA9
+        GONC    SUB_11D92.L1                     * 11DA9
         ?ABIT=0 0                                * 11DAC
-        GOYES   L_11E2B                          * 11DB1
-        GOTO    L_11EE9                          * 11DB3
-L_11DB7:
+        GOYES   SUB_11D92.loop4                  * 11DB1
+        GOTO    SUB_11D92.L9                     * 11DB3
+SUB_11D92.L1:
         ?ABIT=1 0                                * 11DB7
-        GOYES   L_11DC7                          * 11DBC
+        GOYES   SUB_11D92.L2                     * 11DBC
         ?C#0    A                                * 11DBE
-        GOYES   L_11E2D                          * 11DC1
-        GOTO    L_11EAA                          * 11DC3
-L_11DC7:
+        GOYES   SUB_11D92.loop5                  * 11DC1
+        GOTO    SUB_11D92.L7                     * 11DC3
+SUB_11D92.L2:
         GOSUB   SUB_11F17                        * 11DC7
         RSTK=C                                   * 11DCB
         A=DAT1  B                                * 11DCD
@@ -2001,7 +2001,7 @@ L_11DC7:
         CD1EX                                    * 11DDA
         GOSUB   SUB_11EF2                        * 11DDD
         RSTK=C                                   * 11DE1
-L_11DE3:
+SUB_11D92.loop3:
         A=DAT0  B                                * 11DE3
         LC(2)   #03                              * 11DE6
         A=A&C   B                                * 11DEA
@@ -2015,20 +2015,20 @@ L_11DE3:
         C=C+D   A                                * 11E04
         CD0EX                                    * 11E06
         C=C-1   S                                * 11E09
-        GONC    L_11DE3                          * 11E0C
+        GONC    SUB_11D92.loop3                  * 11E0C
         C=RSTK                                   * 11E0F
         D1=C                                     * 11E11
         GOSUB   SUB_11EF9                        * 11E14
         D0=D0+  1                                * 11E18
         C=RSTK                                   * 11E1B
         C=C-1   A                                * 11E1D
-        GOC     L_11E2B                          * 11E1F
+        GOC     SUB_11D92.loop4                  * 11E1F
         ?C#0    A                                * 11E22
-        GOYES   L_11E2D                          * 11E25
-        GOTO    L_11EAA                          * 11E27
-L_11E2B:
+        GOYES   SUB_11D92.loop5                  * 11E25
+        GOTO    SUB_11D92.L7                     * 11E27
+SUB_11D92.loop4:
         RTNCC                                    * 11E2B
-L_11E2D:
+SUB_11D92.loop5:
         GOSUB   SUB_11F17                        * 11E2D
         RSTK=C                                   * 11E31
         A=DAT1  A                                * 11E33
@@ -2042,7 +2042,7 @@ L_11E2D:
         AD1EX                                    * 11E50
         B=A     A                                * 11E53
         RSTK=C                                   * 11E55
-L_11E57:
+SUB_11D92.loop6:
         C=B     A                                * 11E57
         CD1EX                                    * 11E59
         B=C     A                                * 11E5C
@@ -2062,7 +2062,7 @@ L_11E57:
         C=C+D   A                                * 11E85
         CD0EX                                    * 11E87
         C=C-1   S                                * 11E8A
-        GONC    L_11E57                          * 11E8D
+        GONC    SUB_11D92.loop6                  * 11E8D
         C=RSTK                                   * 11E90
         D1=C                                     * 11E92
         GOSUB   SUB_11EF9                        * 11E95
@@ -2070,16 +2070,16 @@ L_11E57:
         C=RSTK                                   * 11E9C
         C=C-1   A                                * 11E9E
         C=C-1   A                                * 11EA0
-        GOC     L_11E2B                          * 11EA2
+        GOC     SUB_11D92.loop4                  * 11EA2
         ?C#0    A                                * 11EA5
-        GOYES   L_11E2D                          * 11EA8
-L_11EAA:
+        GOYES   SUB_11D92.loop5                  * 11EA8
+SUB_11D92.L7:
         GOSUB   SUB_11F17                        * 11EAA
         A=DAT1  B                                * 11EAE
         GOSBVL  SUB_7A126                        * 11EB1
         D1=C                                     * 11EB8
         GOSUB   SUB_11EF2                        * 11EBB
-L_11EBF:
+SUB_11D92.loop8:
         A=DAT0  B                                * 11EBF
         LC(2)   #C0                              * 11EC2
         A=A&C   B                                * 11EC6
@@ -2091,15 +2091,15 @@ L_11EBF:
         C=C+D   A                                * 11EDA
         CD0EX                                    * 11EDC
         C=C-1   S                                * 11EDF
-        GONC    L_11EBF                          * 11EE2
+        GONC    SUB_11D92.loop8                  * 11EE2
         GOSUB   SUB_11EF9                        * 11EE5
-L_11EE9:
+SUB_11D92.L9:
         RTNSC                                    * 11EE9
         BSS     7                                * 11EEB  zeros
 
 * refs (4): 11DDD 11E43 11E4C 11EBB
 SUB_11EF2:
-        GOVLNG  L_0C169                          * 11EF2
+        GOVLNG  SUB_0C11B.L3                     * 11EF2
 
 * refs (3): 11E14 11E95 11EE5
 SUB_11EF9:
@@ -2109,10 +2109,10 @@ SUB_11EF9:
         C=C+C   A                                * 11F00
         C=C+C   A                                * 11F02
         ?XM=0                                    * 11F04
-        GOYES   L_11F0D                          * 11F07
+        GOYES   SUB_11EF9.L1                     * 11F07
         C=C+D   A                                * 11F09
         C=C+D   A                                * 11F0B
-L_11F0D:
+SUB_11EF9.L1:
         A=A-C   A                                * 11F0D
         D0=A                                     * 11F0F
         D0=D0+  1                                * 11F12
@@ -2122,9 +2122,9 @@ L_11F0D:
 SUB_11F17:
         P=      7                                * 11F17
         ?XM=0                                    * 11F19
-        GOYES   L_11F20                          * 11F1C
+        GOYES   SUB_11F17.L1                     * 11F1C
         P=      9                                * 11F1E
-L_11F20:
+SUB_11F17.L1:
         C=P     15                               * 11F20
         P=      0                                * 11F24
         RTN                                      * 11F26
@@ -2136,13 +2136,13 @@ SUB_11F28:
         C=A     B                                * 11F2A
         A=C     A                                * 11F2D
         ?XM=0                                    * 11F2F
-        GOYES   L_11F5B                          * 11F32
+        GOYES   SUB_11F28.L2                     * 11F32
         LC(2)   #1F                              * 11F34
         ?C<=A   B                                * 11F38
-        GOYES   L_11F46                          * 11F3B
+        GOYES   SUB_11F28.L1                     * 11F3B
         LC(5)   Font10+2540                      * 11F3D  glyph used for codes below #20
         RTN                                      * 11F44
-L_11F46:
+SUB_11F28.L1:
         C=A     A                                * 11F46
         C=C+C   A                                * 11F48
         C=C+C   A                                * 11F4A
@@ -2151,13 +2151,13 @@ L_11F46:
         LC(5)   Font10-620                       * 11F50  glyph of code c = #7A047 + 20*c
         C=C+A   A                                * 11F57
         RTN                                      * 11F59
-L_11F5B:
+SUB_11F28.L2:
         LC(2)   #1F                              * 11F5B
         ?C<=A   B                                * 11F5F
-        GOYES   L_11F6D                          * 11F62
+        GOYES   SUB_11F28.L3                     * 11F62
         LC(5)   Font8+2032                       * 11F64  glyph used for codes below #20
         RTN                                      * 11F6B
-L_11F6D:
+SUB_11F28.L3:
         ASL     A                                * 11F6D
         LC(5)   Font8-496                        * 11F6F  glyph of code c = #7B257 + 16*c
         C=C+A   A                                * 11F76
@@ -2173,9 +2173,9 @@ $>grob:
         A=DAT1  A                                * 11F8C
         GOSUB   SUB_120CC                        * 11F8F
         ?A#0    A                                * 11F93
-        GOYES   L_11F9C                          * 11F96
-        GOTO    L_11D18                          * 11F98
-L_11F9C:
+        GOYES   $>grob.L1                        * 11F96
+        GOTO    $>GROB.L2                        * 11F98
+$>grob.L1:
         R4=A.F  A                                * 11F9C
         C=A     A                                * 11FA2
         GOSUB   SUB_120F5                        * 11FA4
@@ -2184,14 +2184,14 @@ L_11F9C:
         C=0     A                                * 11FB0
         LC(1)   #6                               * 11FB2
         ?ST=1   3                                * 11FB5
-        GOYES   L_11FBD                          * 11FB8
+        GOYES   $>grob.L2                        * 11FB8
         LC(1)   #5                               * 11FBA
-L_11FBD:
+$>grob.L2:
         R1=C.F  A                                * 11FBD
         GOSUBL  makegrob                         * 11FC3
         GOSUB   SUB_11A58                        * 11FC9
         D1=D1+  10                               * 11FCD
-L_11FD0:
+$>grob.L3:
         A=R3.F  A                                * 11FD0
         CD0EX                                    * 11FD6
         D0=C                                     * 11FD9
@@ -2201,13 +2201,13 @@ L_11FD0:
         ST=0    2                                * 11FE6
         GOSUB   SUB_12223                        * 11FE9
         C=RSTK                                   * 11FED
-L_11FEF:
+$>grob.L4:
         A=C     A                                * 11FEF
-L_11FF1:
+$>grob.L5:
         P=      0                                * 11FF1
         C=0     A                                * 11FF3
         LC(2)   #14                              * 11FF5
         A=A-C   A                                * 11FF9
         GOSUB   GETPTR~jump_3                    * 11FFB
-L_11FFF:
+$>grob.L6:
         DAT1=A  A                                * 11FFF

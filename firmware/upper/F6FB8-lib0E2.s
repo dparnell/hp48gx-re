@@ -35,7 +35,7 @@ ROMP_0E2_03B:
 * refs (1): E3857
 ROMP_0E2_03C:
         { BINT16 BINT6                           * F7C42
-L_F7C51:
+ROMP_0E2_03C.L1:
           PCGROB  "images/F7C51-packed.png"      * F7C51  96 x 43, packed
         }                                        * F7EFC
 
@@ -106,7 +106,7 @@ ROMP_0E2_045:
 * refs (1): E3857
 ROMP_0E2_046:
         { BINT8 BINT3                            * F9193
-L_F91A2:
+ROMP_0E2_046.L1:
           PCGROB  "images/F91A2-packed.png"      * F91A2  112 x 50, packed
         }                                        * F9582
 

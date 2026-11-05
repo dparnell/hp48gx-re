@@ -350,7 +350,7 @@ OBJ_36C2A:
 
 * refs (2): 94A40 953B9
 OBJ_36C52:
-        :: BINT54 TestSysFlag ITE %%0 %%1E-14    * 36C52
+        :: BINT54 TestSysFlag ITE %%0 %%1E-14    * 36C52  flag -54: Tiny element → 0 / Use tiny element
         ;                                        * 36C70
 
 * refs (19): 37A27 7CDA1 900C2 90169 90178 903C2 ...
@@ -479,9 +479,9 @@ OBJ_36F74:
         ASSEMBLE
         GOSUB   POP2#~jump                       * 36FB5
         A=A+C   A                                * 36FB9
-L_36FBB:
+#+#1+.L1:
         A=A+1   A                                * 36FBB
-L_36FBD:
+#+#1+.L2:
         GOVLNG  Push#Loop                        * 36FBD
 
 * refs (23): 7D274 90DCD 90E3B 90F28 910AE 91AD6 ...
@@ -490,9 +490,9 @@ L_36FBD:
         CON(5)  (*)+5                            * 36FC4  primitive code object
         GOSUB   POP2#~jump                       * 36FC9
         A=A-C   A                                * 36FCD
-L_36FCF:
+#-#1-.L1:
         A=A-1   A                                * 36FCF
-        GOTO    L_36FBD                          * 36FD1
+        GOTO    #+#1+.L2                         * 36FD1
         BSS     6                                * 36FD5  zeros
 
 * refs (9): 7D0E9 90280 933E6 93445 936A7 93960 ...
@@ -515,7 +515,7 @@ OBJ_36FDB:
         A=0     A                                * 37006
         A=DAT0  X                                * 37008
         R0=A                                     * 3700C
-        GOTO    L_377D6                          * 3700F
+        GOTO    OBJ_376C1.L6                     * 3700F
 
 * refs (7): 7CF1D 93233 9334B 934B3 936CA 93C9B ...
 OBJ_37013:
@@ -566,16 +566,16 @@ OBJ_3706E:
         A=DAT1  A                                * 3708B
         A=A-1   A                                * 3708E
         ?A#0    A                                * 37090
-        GOYES   L_370AD                          * 37093
+        GOYES   OBJ_3706E.L1                     * 37093
         D1=D1+  5                                * 37095
         A=DAT1  A                                * 37098
         D0=D0+  15                               * 3709B
         D0=D0+  5                                * 3709E
         C=DAT0  A                                * 370A1
         ?C#A    A                                * 370A4
-        GOYES   L_370AD                          * 370A7
-        GOTO    L_37501                          * 370A9
-L_370AD:
+        GOYES   OBJ_3706E.L1                     * 370A7
+        GOTO    SWAPROWS.L6                      * 370A9
+OBJ_3706E.L1:
         GOSBVL  GETPTR                           * 370AD
 
 * refs (1): CAEBE
@@ -608,22 +608,22 @@ L%ARRY*%%:
         C=DAT1  A                                * 370FA
         A=A-1   A                                * 370FD
         ?A=0    A                                * 370FF
-        GOYES   L_37115                          * 37102
+        GOYES   L%ARRY*%%.L1                     * 37102
         D1=D1+  5                                * 37104
         D=C     A                                * 37107
         C=DAT1  A                                * 37109
-        GOSBVL  L_35790                          * 3710C
+        GOSBVL  PUTCMPEL.L6                      * 3710C
         C=B     A                                * 37113
-L_37115:
+L%ARRY*%%.L1:
         C=C-1   A                                * 37115
         R4=C                                     * 37117
         D1=D1+  5                                * 3711A
-L_3711D:
+L%ARRY*%%.loop2:
         SETDEC                                   * 3711D
         D1=D1+  5                                * 3711F
         A=DAT1  W                                * 37122
         ?A=0    W                                * 37126
-        GOYES   L_37151                          * 37129
+        GOYES   L%ARRY*%%.L3                     * 37129
         B=A     W                                * 3712B
         B=0     S                                * 3712E
         D1=D1-  5                                * 37131
@@ -635,15 +635,15 @@ L_3711D:
         P=      14                               * 37148
         A=B     WP                               * 3714A
         DAT1=A  W                                * 3714D
-L_37151:
+L%ARRY*%%.L3:
         D1=D1+  16                               * 37151
         SETHEX                                   * 37154
         C=R4                                     * 37156
         C=C-1   A                                * 37159
         R4=C                                     * 3715B
-        GONC    L_3711D                          * 3715E
+        GONC    L%ARRY*%%.loop2                  * 3715E
         P=      0                                * 37161
-        GOTO    L_37501                          * 37163
+        GOTO    SWAPROWS.L6                      * 37163
 
 * refs (34): C89E6 C8AB9 C8ADD C8B9B C8BE8 C8BF2 ...
 * [%%]v [%%]w %%s -> [%%]v': in place, v[i] := v[i] + s*w[i] (zero w[i] skipped)
@@ -678,7 +678,7 @@ L_37151:
         D0=D0+  10                               * 371B9
         CD0EX                                    * 371BC
         RSTK=C                                   * 371BF
-L_371C1:
+[%%]AXPY.loop1:
         C=RSTK                                   * 371C1
         D0=C                                     * 371C3
         GOSBVL  GETAB0                           * 371C6
@@ -686,7 +686,7 @@ L_371C1:
         RSTK=C                                   * 371D0
         D1=D1+  5                                * 371D2
         ?B=0    W                                * 371D5
-        GOYES   L_3720D                          * 371D8
+        GOYES   [%%]AXPY.L2                      * 371D8
         SETDEC                                   * 371DA
         GOSBVL  RCCD0                            * 371DC
         GOSUB   MULTF~jump_2                     * 371E3
@@ -701,22 +701,22 @@ L_371C1:
         P=      14                               * 37204
         A=B     WP                               * 37206
         DAT1=A  W                                * 37209
-L_3720D:
+[%%]AXPY.L2:
         D1=D1+  16                               * 3720D
         SETHEX                                   * 37210
         C=R4                                     * 37212
         C=C-1   A                                * 37215
         R4=C                                     * 37217
-        GONC    L_371C1                          * 3721A
+        GONC    [%%]AXPY.loop1                   * 3721A
         P=      0                                * 3721D
-        GOTO    L_37501                          * 3721F
+        GOTO    SWAPROWS.L6                      * 3721F
 
 * refs (4): C845C C8B34 C98EB C9E28
 OBJ_37223:
         CON(5)  (*)+5                            * 37223  primitive code object
         GOSBVL  SUB_2A0B1                        * 37228
         HST=0   3                                * 3722F
-L_37232:
+OBJ_37223.L1:
         GOSBVL  RADDF                            * 37232
         GOSBVL  SUB_29F76                        * 37239
         GOVLNG  PUSH%LOOP                        * 37240
@@ -734,7 +734,7 @@ L_37232:
         GOSBVL  GETPTR                           * 37265
         GOSBVL  POP1%SPLITA                      * 3726C
         GOSBVL  RCCD0                            * 37273
-        GOTO    L_37232                          * 3727A
+        GOTO    OBJ_37223.L1                     * 3727A
 
 * refs (39): 911E4 9133D 9134C 9136F 9138D 913B0 ...
 * %%3 %%2 %%1 -> %%3+%%2*%%1: extended-real multiply-add
@@ -742,7 +742,7 @@ L_37232:
         CON(5)  (*)+5                            * 3727E  primitive code object
         GOSBVL  SUB_2A0B1                        * 37283
         HST=0   3                                * 3728A
-L_3728D:
+%%+*.L1:
         GOSUB   MULTF~jump_2                     * 3728D
         GOSBVL  STAB0                            * 37291
         P=      0                                * 37298
@@ -752,7 +752,7 @@ L_3728D:
         GOSBVL  RCCD0                            * 372AA
 B%ABS1~1:
         GOSBVL  RADDF                            * 372B1
-        GOTO    L_37915                          * 372B8
+        GOTO    OBJ_37898.L6                     * 372B8
 
 * refs (21): 2CA8A 91DDD 91E1E 91E5F 91EA0 92067 ...
 * %%3 %%2 %%1 -> %%3-%%2*%%1: extended-real multiply-subtract
@@ -761,17 +761,17 @@ B%ABS1~1:
         GOSBVL  SUB_2A0B1                        * 372C1
         HST=0   3                                * 372C8
         A=-A-1  S                                * 372CB
-        GOTO    L_3728D                          * 372CE
+        GOTO    %%+*.L1                          * 372CE
 
 * refs (4): 3713E 371E3 37256 3728D
 MULTF~jump_2:
         GOVLNG  MULTF                            * 372D2
-L_372D9:
+MULTF~jump_2.L1:
         GOSBVL  MOVEDOWN                         * 372D9
-        GOTO    L_37501                          * 372E0
-L_372E4:
+        GOTO    SWAPROWS.L6                      * 372E0
+MULTF~jump_2.L2:
         GOSBVL  MOVEUP                           * 372E4
-        GOTO    L_37501                          * 372EB
+        GOTO    SWAPROWS.L6                      * 372EB
 
 * refs (226): 7CE7D 7CFFE 7D080 7D17F 7D242 9004C ...
 * [%%] #n -> [%%] %%  (or [C%%] #n -> [C%%] C%%): element n of an extended real or complex array; the array stays
@@ -788,29 +788,29 @@ PULL%%EL:
         ST=0    1                                * 3730F
         LC(5)   DOEREL                           * 37312
         ?D=C    A                                * 37319
-        GOYES   L_37323                          * 3731C
+        GOYES   PULL%%EL.L1                      * 3731C
         ST=1    1                                * 3731E
         A=A+A   A                                * 37321
-L_37323:
+PULL%%EL.L1:
         D1=D1+  5                                * 37323
         C=DAT1  B                                * 37326
         D1=D1+  10                               * 37329
         C=C-1   B                                * 3732C
         ?C=0    B                                * 3732F
-        GOYES   L_37337                          * 37332
+        GOYES   PULL%%EL.L2                      * 37332
         D1=D1+  5                                * 37334
-L_37337:
+PULL%%EL.L2:
         GOSUB   SUB_3768C                        * 37337
         CD1EX                                    * 3733B
         C=C+A   A                                * 3733E
         D1=C                                     * 37340
         GOSBVL  GETAB1                           * 37343
         ?ST=1   1                                * 3734A
-        GOYES   L_37353                          * 3734D
-        GOTO    L_37915                          * 3734F
-L_37353:
+        GOYES   PULL%%EL.L3                      * 3734D
+        GOTO    OBJ_37898.L6                     * 3734F
+PULL%%EL.L3:
         GOSBVL  Get1%CD                          * 37353
-        GOVLNG  L_51BA2                          * 3735A
+        GOVLNG  C%%CHS.L2                        * 3735A
 
 * refs (163): 7D030 7D094 7D19D 7D256 90340 9058E ...
 * [%%] %% #n -> [%%]'  (or C%%): store element n of an extended array in place, without copying it
@@ -829,9 +829,9 @@ PUT%%EL:
         ST=0    1                                * 37386
         LC(5)   DOEREL                           * 37389
         ?D=C    A                                * 37390
-        GOYES   L_37398                          * 37393
+        GOYES   PUT%%EL.L1                       * 37393
         ST=1    1                                * 37395
-L_37398:
+PUT%%EL.L1:
         D1=D1+  5                                * 37398
         C=DAT1  A                                * 3739B
         D1=C                                     * 3739E
@@ -841,18 +841,18 @@ L_37398:
         ST=0    0                                * 373A9
         LC(5)   DOEREL                           * 373AC
         ?D=C    A                                * 373B3
-        GOYES   L_373BD                          * 373B6
+        GOYES   PUT%%EL.L2                       * 373B6
         ST=1    0                                * 373B8
         A=A+A   A                                * 373BB
-L_373BD:
+PUT%%EL.L2:
         D1=D1+  5                                * 373BD
         C=DAT1  B                                * 373C0
         D1=D1+  10                               * 373C3
         C=C-1   B                                * 373C6
         ?C=0    B                                * 373C9
-        GOYES   L_373D1                          * 373CC
+        GOYES   PUT%%EL.L3                       * 373CC
         D1=D1+  5                                * 373CE
-L_373D1:
+PUT%%EL.L3:
         GOSUB   SUB_3768C                        * 373D1
         CD1EX                                    * 373D5
         C=C+A   A                                * 373D8
@@ -861,17 +861,17 @@ L_373D1:
         GOSBVL  SUB_7D89B                        * 373E0
         GOSBVL  PutAB%1                          * 373E7
         ?ST=0   0                                * 373EE
-        GOYES   L_3740C                          * 373F1
+        GOYES   PUT%%EL.L5                       * 373F1
         A=0     W                                * 373F3
         B=0     W                                * 373F6
         ?ST=0   1                                * 373F9
-        GOYES   L_37405                          * 373FC
+        GOYES   PUT%%EL.L4                       * 373FC
         GOSBVL  SUB_7D89B                        * 373FE
-L_37405:
+PUT%%EL.L4:
         GOSBVL  PutAB%1                          * 37405
-L_3740C:
+PUT%%EL.L5:
         SETHEX                                   * 3740C
-        GOTO    L_37501                          * 3740E
+        GOTO    SWAPROWS.L6                      * 3740E
 
 * refs (2): 37450 54248
 SUB_37412:
@@ -916,19 +916,19 @@ SWAPROWS:
         ST=0    0                                * 3747D
         LC(5)   DOREAL                           * 37480
         ?C=A    A                                * 37487
-        GOYES   L_3748F                          * 3748A
+        GOYES   SWAPROWS.L1                      * 3748A
         ST=1    0                                * 3748C
-L_3748F:
+SWAPROWS.L1:
         D1=D1+  5                                * 3748F
         C=DAT1  A                                * 37492
         A=C     A                                * 37495
         D1=D1+  10                               * 37497
         C=C-1   A                                * 3749A
         ?C=0    A                                * 3749C
-        GOYES   L_374A7                          * 3749F
+        GOYES   SWAPROWS.L2                      * 3749F
         A=DAT1  A                                * 374A1
         D1=D1+  5                                * 374A4
-L_374A7:
+SWAPROWS.L2:
         C=A     A                                * 374A7
         D=D-1   A                                * 374A9
         GOSUB   SUB_376B3                        * 374AB
@@ -936,9 +936,9 @@ L_374A7:
         D0=C                                     * 374B2
         BSL     A                                * 374B5
         ?ST=0   0                                * 374B7
-        GOYES   L_374BE                          * 374BA
+        GOYES   SWAPROWS.L3                      * 374BA
         B=B+B   A                                * 374BC
-L_374BE:
+SWAPROWS.L3:
         C=C+B   A                                * 374BE
         D1=C                                     * 374C0
         C=RSTK                                   * 374C3
@@ -949,15 +949,15 @@ L_374BE:
         CD0EX                                    * 374CF
         BSL     A                                * 374D2
         ?ST=0   0                                * 374D4
-        GOYES   L_374DD                          * 374D7
+        GOYES   SWAPROWS.L4                      * 374D7
         B=B+B   A                                * 374D9
         A=A+A   A                                * 374DB
-L_374DD:
+SWAPROWS.L4:
         C=C+B   A                                * 374DD
         D0=C                                     * 374DF
         B=A     A                                * 374E2
         B=B-1   A                                * 374E4
-L_374E6:
+SWAPROWS.loop5:
         A=DAT0  W                                * 374E6
         C=DAT1  W                                * 374EA
         DAT0=C  W                                * 374EE
@@ -965,8 +965,8 @@ L_374E6:
         D0=D0+  16                               * 374F6
         D1=D1+  16                               * 374F9
         B=B-1   A                                * 374FC
-        GONC    L_374E6                          * 374FE
-L_37501:
+        GONC    SWAPROWS.loop5                   * 374FE
+SWAPROWS.L6:
         GOVLNG  GETPTRLOOP                       * 37501
 
 * [] #m #n -> []' #m #n
@@ -985,27 +985,27 @@ SWAPCOLUMNS:
         ST=0    0                                * 37527
         LC(5)   DOEREL                           * 3752A
         ?C=A    A                                * 37531
-        GOYES   L_37539                          * 37534
+        GOYES   SWAPCOLUMNS.L1                   * 37534
         ST=1    0                                * 37536
-L_37539:
+SWAPCOLUMNS.L1:
         D1=D1+  5                                * 37539
         C=DAT1  A                                * 3753C
         A=C     A                                * 3753F
         D1=D1+  10                               * 37541
         C=C-1   A                                * 37544
         ?C=0    A                                * 37546
-        GOYES   L_37551                          * 37549
+        GOYES   SWAPCOLUMNS.L2                   * 37549
         A=DAT1  A                                * 3754B
         D1=D1+  5                                * 3754E
-L_37551:
+SWAPCOLUMNS.L2:
         C=A     A                                * 37551
         D=D-1   A                                * 37553
         GOSUB   SUB_376B3                        * 37555
         GOSUB   SUB_3767E                        * 37559
         ?ST=0   0                                * 3755D
-        GOYES   L_37564                          * 37560
+        GOYES   SWAPCOLUMNS.L3                   * 37560
         B=B+B   A                                * 37562
-L_37564:
+SWAPCOLUMNS.L3:
         CD1EX                                    * 37564
         D0=C                                     * 37567
         C=C+B   A                                * 3756A
@@ -1017,22 +1017,22 @@ L_37564:
         GOSUB   SUB_376B3                        * 37577
         GOSUB   SUB_3767E                        * 3757B
         ?ST=0   0                                * 3757F
-        GOYES   L_37588                          * 37582
+        GOYES   SWAPCOLUMNS.L4                   * 37582
         B=B+B   A                                * 37584
         A=A+A   A                                * 37586
-L_37588:
+SWAPCOLUMNS.L4:
         CD0EX                                    * 37588
         C=C+B   A                                * 3758B
         D0=C                                     * 3758D
         B=A     A                                * 37590
         B=B-1   A                                * 37592
-L_37594:
+SWAPCOLUMNS.loop5:
         GOSUB   SUB_3765A                        * 37594
         D0=D0+  16                               * 37598
         D1=D1+  16                               * 3759B
         B=B-1   A                                * 3759E
-        GONC    L_37594                          * 375A0
-        GOTO    L_37501                          * 375A3
+        GONC    SWAPCOLUMNS.loop5                * 375A0
+        GOTO    SWAPROWS.L6                      * 375A3
 
 * refs (5): 9324C 93364 93DF8 977F9 983A3
 OBJ_375A7:
@@ -1048,9 +1048,9 @@ OBJ_375A7:
         ST=0    0                                * 375C4
         LC(5)   DOEREL                           * 375C7
         ?D=C    A                                * 375CE
-        GOYES   L_375D6                          * 375D1
+        GOYES   OBJ_375A7.L1                     * 375D1
         ST=1    0                                * 375D3
-L_375D6:
+OBJ_375A7.L1:
         D1=D1+  10                               * 375D6
         C=DAT1  A                                * 375D9
         R0=C                                     * 375DC
@@ -1064,11 +1064,11 @@ L_375D6:
         GOSUB   SUB_3768C                        * 375F2
         GOSUB   SUB_3769E                        * 375F6
         ?ST=0   0                                * 375FA
-        GOYES   L_37605                          * 375FD
+        GOYES   OBJ_375A7.L2                     * 375FD
         A=A+A   A                                * 375FF
         B=B+B   A                                * 37601
         D=D+D   A                                * 37603
-L_37605:
+OBJ_375A7.L2:
         C=R0                                     * 37605
         BCEX    A                                * 37608
         AD1EX                                    * 3760A
@@ -1078,10 +1078,10 @@ L_37605:
         C=C+A   A                                * 37615
         D1=C                                     * 37617
         B=B-1   A                                * 3761A
-L_3761C:
+OBJ_375A7.loop3:
         GOSUB   SUB_3765A                        * 3761C
         ?ST=0   0                                * 37620
-        GOYES   L_3763B                          * 37623
+        GOYES   OBJ_375A7.L4                     * 37623
         D0=D0+  16                               * 37625
         D1=D1+  16                               * 37628
         GOSUB   SUB_3765A                        * 3762B
@@ -1089,7 +1089,7 @@ L_3761C:
         D1=D1-  5                                * 37632
         D0=D0-  16                               * 37635
         D1=D1-  16                               * 37638
-L_3763B:
+OBJ_375A7.L4:
         D0=D0-  5                                * 3763B
         D1=D1-  5                                * 3763E
         CD1EX                                    * 37641
@@ -1099,8 +1099,8 @@ L_3763B:
         C=C+D   A                                * 3764C
         D0=C                                     * 3764E
         B=B-1   A                                * 37651
-        GONC    L_3761C                          * 37653
-        GOTO    L_37501                          * 37656
+        GONC    OBJ_375A7.loop3                  * 37653
+        GOTO    SWAPROWS.L6                      * 37656
 
 * refs (3): 37594 3761C 3762B
 SUB_3765A:
@@ -1160,7 +1160,7 @@ SAVPTR~jump_17:
 
 * refs (5): 374AB 374CB 37555 37577 37721
 SUB_376B3:
-        GOVLNG  L_35790                          * 376B3
+        GOVLNG  PUTCMPEL.L6                      * 376B3
 
 * refs (5): 36FB5 36FC9 37467 37511 375B0
 POP2#~jump:
@@ -1185,9 +1185,9 @@ OBJ_376C1:
         ST=0    0                                * 376F2
         LC(5)   DOEREL                           * 376F5
         ?C=A    A                                * 376FC
-        GOYES   L_37704                          * 376FF
+        GOYES   OBJ_376C1.L1                     * 376FF
         ST=1    0                                * 37701
-L_37704:
+OBJ_376C1.L1:
         D1=D1+  10                               * 37704
         C=DAT1  A                                * 37707
         R4=C                                     * 3770A
@@ -1206,10 +1206,10 @@ L_37704:
         GOSUB   SUB_3767E                        * 3772C
         GOSUB   SUB_3768C                        * 37730
         ?ST=0   0                                * 37734
-        GOYES   L_3773D                          * 37737
+        GOYES   OBJ_376C1.L2                     * 37737
         B=B+B   A                                * 37739
         A=A+A   A                                * 3773B
-L_3773D:
+OBJ_376C1.L2:
         CD1EX                                    * 3773D
         C=C+B   A                                * 37740
         D1=C                                     * 37742
@@ -1218,7 +1218,7 @@ L_3773D:
         R2=A                                     * 3774B
         R3=A                                     * 3774E
         ST=0    1                                * 37751
-L_37754:
+OBJ_376C1.loop3:
         SETDEC                                   * 37754
         D1=D1+  5                                * 37756
         A=DAT1  W                                * 37759
@@ -1227,7 +1227,7 @@ L_37754:
         D1=D1-  5                                * 37763
         A=DAT1  A                                * 37766
         ?ST=0   0                                * 37769
-        GOYES   L_37791                          * 3776C
+        GOYES   OBJ_376C1.L4                     * 3776C
         D1=D1+  16                               * 3776E
         D1=D1+  10                               * 37771
         C=DAT1  W                                * 37774
@@ -1238,17 +1238,17 @@ L_37754:
         D1=D1-  5                                * 37784
         D1=D1-  16                               * 37787
         GOSBVL  RADDF                            * 3778A
-L_37791:
+OBJ_376C1.L4:
         GOSBVL  SUB_2BF81                        * 37791
         GOSBVL  RCAB2                            * 37798
         P=      6                                * 3779F
         GOSBVL  TST15                            * 377A1
-        GOC     L_377B9                          * 377A8
+        GOC     OBJ_376C1.L5                     * 377A8
         GOSBVL  STCD2                            * 377AB
         C=RSTK                                   * 377B2
         RSTK=C                                   * 377B4
         R0=C                                     * 377B6
-L_377B9:
+OBJ_376C1.L5:
         SETHEX                                   * 377B9
         P=      0                                * 377BB
         A=R1                                     * 377BD
@@ -1260,8 +1260,8 @@ L_377B9:
         RSTK=C                                   * 377CC
         A=R4                                     * 377CE
         ?C<=A   A                                * 377D1
-        GOYES   L_37754                          * 377D4
-L_377D6:
+        GOYES   OBJ_376C1.loop3                  * 377D4
+OBJ_376C1.L6:
         GOVLNG  PUSH#LOOP                        * 377D6
 
 * refs (1): 7CF8B
@@ -1275,60 +1275,60 @@ OBJ_377DD:
         D1=(5)  DOEREL                           * 377F5
         CD1EX                                    * 377FC
         ?C#A    A                                * 377FF
-        GOYES   L_37812                          * 37802
+        GOYES   OBJ_377DD.L1                     * 37802
         ST=0    0                                * 37804
         GOSBVL  POP1%%                           * 37807
-        GOTO    L_37823                          * 3780E
-L_37812:
+        GOTO    OBJ_377DD.L2                     * 3780E
+OBJ_377DD.L1:
         ST=1    0                                * 37812
         GOSBVL  POPC%%                           * 37815
         GOSBVL  STCD2                            * 3781C
-L_37823:
+OBJ_377DD.L2:
         SETHEX                                   * 37823
         LC(5)   #50000                           * 37825
         ?C<=A   A                                * 3782C
-        GOYES   L_37869                          * 3782F
+        GOYES   OBJ_377DD.L6                     * 3782F
         LC(5)   #10000                           * 37831
         ?C<A    A                                * 37838
-        GOYES   L_3788A                          * 3783B
-L_3783D:
+        GOYES   OBJ_377DD.L7                     * 3783B
+OBJ_377DD.loop3:
         ?ST=0   0                                * 3783D
-        GOYES   L_3785E                          * 37840
+        GOYES   OBJ_377DD.L5                     * 37840
         GOSBVL  RCCD2                            * 37842
         GOSBVL  PUSHC%%                          * 37849
-L_37850:
+OBJ_377DD.loop4:
         A=R4                                     * 37850
         R0=A                                     * 37853
         GOSUB   SAVPTR~jump_17                   * 37856
-        GOTO    L_377D6                          * 3785A
-L_3785E:
+        GOTO    OBJ_376C1.L6                     * 3785A
+OBJ_377DD.L5:
         GOSBVL  SUB_2A24B                        * 3785E
-        GOTO    L_37850                          * 37865
-L_37869:
+        GOTO    OBJ_377DD.loop4                  * 37865
+OBJ_377DD.L6:
         LC(5)   HARDRAMEND                       * 37869
         ?C<=A   A                                * 37870
-        GOYES   L_3783D                          * 37873
+        GOYES   OBJ_377DD.loop3                  * 37873
         LC(5)   #10000                           * 37875
         A=A+C   A                                * 3787C
         C=R4                                     * 3787E
         C=C-1   A                                * 37881
         R4=C                                     * 37883
-        GOTO    L_3783D                          * 37886
-L_3788A:
+        GOTO    OBJ_377DD.loop3                  * 37886
+OBJ_377DD.L7:
         A=A-C   A                                * 3788A
         C=R4                                     * 3788C
         C=C+1   A                                * 3788F
         R4=C                                     * 37891
-        GOTO    L_3783D                          * 37894
+        GOTO    OBJ_377DD.loop3                  * 37894
 
 * refs (1): 97F26
 OBJ_37898:
         CON(5)  (*)+5                            * 37898  primitive code object
         GOSBVL  POP#                             * 3789D
         ?A#0    A                                * 378A4
-        GOYES   L_378AD                          * 378A7
-        GOTO    L_3791C                          * 378A9
-L_378AD:
+        GOYES   OBJ_37898.L1                     * 378A7
+        GOTO    OBJ_37898.L7                     * 378A9
+OBJ_37898.L1:
         R4=A                                     * 378AD
         C=DAT1  A                                * 378B0
         CD1EX                                    * 378B3
@@ -1336,48 +1336,48 @@ L_378AD:
         D1=(5)  DOEREL                           * 378B9
         CD1EX                                    * 378C0
         ?C#A    A                                * 378C3
-        GOYES   L_378D6                          * 378C6
+        GOYES   OBJ_37898.L2                     * 378C6
         ST=0    0                                * 378C8
         GOSBVL  POP1%%                           * 378CB
-        GOTO    L_378E7                          * 378D2
-L_378D6:
+        GOTO    OBJ_37898.L3                     * 378D2
+OBJ_37898.L2:
         ST=1    0                                * 378D6
         GOSBVL  POPC%%                           * 378D9
         GOSBVL  STCD2                            * 378E0
-L_378E7:
+OBJ_37898.L3:
         SETHEX                                   * 378E7
         C=R4                                     * 378E9
         D=C     A                                * 378EC
         C=C+C   A                                * 378EE
-        GOC     L_37934                          * 378F0
+        GOC     OBJ_37898.L9                     * 378F0
         LC(5)   #10000                           * 378F3
-L_378FA:
+OBJ_37898.loop4:
         SETDEC                                   * 378FA
         A=A+C   A                                * 378FC
         D=D-1   A                                * 378FE
         ?D=0    A                                * 37900
-        GOYES   L_37910                          * 37903
+        GOYES   OBJ_37898.L5                     * 37903
         A=A+C   A                                * 37905
         D=D-1   A                                * 37907
         ?D=0    A                                * 37909
-        GOYES   L_37910                          * 3790C
+        GOYES   OBJ_37898.L5                     * 3790C
         A=A+C   A                                * 3790E
-L_37910:
+OBJ_37898.L5:
         ?ST=1   0                                * 37910
-        GOYES   L_37926                          * 37913
-L_37915:
+        GOYES   OBJ_37898.L8                     * 37913
+OBJ_37898.L6:
         GOSBVL  SUB_2A24B                        * 37915
-L_3791C:
+OBJ_37898.L7:
         A=DAT0  A                                * 3791C
         D0=D0+  5                                * 3791F
         PC=(A)                                   * 37922
-L_37926:
+OBJ_37898.L8:
         GOSBVL  RCCD2                            * 37926
-        GOVLNG  L_51BA2                          * 3792D
-L_37934:
+        GOVLNG  C%%CHS.L2                        * 3792D
+OBJ_37898.L9:
         D=-D    A                                * 37934
         LC(5)   HARDRAMEND                       * 37936
-        GOTO    L_378FA                          * 3793D
+        GOTO    OBJ_37898.loop4                  * 3793D
         RPL
 
 * refs (1): 7CF81
@@ -1554,13 +1554,13 @@ L%CONJ:
 
 * refs (28): 368CC 370B4 37BC1 37DEB 7CEBE 8830A ...
 doerr501:
-        :: # 501 ERROROUT                        * 37DCD
+        :: # 501 ERROROUT                        * 37DCD  "Invalid Dimension"
 
 * refs (25): 1DD6A 364B7 36507 365CA 365ED 365FC ...
 * flag -> : Invalid Dimension error (#501) unless the flag is TRUE
 NcaseDIMERR:
           :: ?SEMI                               * 37DE1
-L_37DEB:
+NcaseDIMERR.L1:
             doerr501 ;                           * 37DEB
         ;                                        * 37DF5
         BSS     21                               * 37DFA
@@ -1584,38 +1584,38 @@ MATREDIM~1:
         CON(5)  (*)+5                            * 37E73  primitive code object
         ASSEMBLE
         ST=0    7                                * 37E78
-        GOTO    L_37EA2                          * 37E7B
+        GOTO    @rdm(ar,ls)~1.L4                 * 37E7B
 
 * refs (1): 37E41
 @rdm(ar,ls)~1:
         CON(5)  (*)+5                            * 37E7F  primitive code object
         ST=1    7                                * 37E84
-        GOTO    L_37EA2                          * 37E87
-L_37E8B:
+        GOTO    @rdm(ar,ls)~1.L4                 * 37E87
+@rdm(ar,ls)~1.L1:
         ?ST=0   8                                * 37E8B
-        GOYES   L_37E94                          * 37E8E
+        GOYES   @rdm(ar,ls)~1.loop2              * 37E8E
         GOSUB   SUB_38327                        * 37E90
-L_37E94:
+@rdm(ar,ls)~1.loop2:
         GOSBVL  GETPTR                           * 37E94
-L_37E9B:
+@rdm(ar,ls)~1.loop3:
         GOVLNG  DOMEMERR                         * 37E9B
-L_37EA2:
+@rdm(ar,ls)~1.L4:
         GOSUB   POP#~jump_3                      * 37EA2
         ST=0    6                                * 37EA6
         A=A-1   A                                * 37EA9
         ?A=0    A                                * 37EAB
-        GOYES   L_37EBA                          * 37EAE
+        GOYES   @rdm(ar,ls)~1.L5                 * 37EAE
         ST=1    6                                * 37EB0
         GOSUB   POP#~jump_3                      * 37EB3
         R4=A                                     * 37EB7
-L_37EBA:
+@rdm(ar,ls)~1.L5:
         GOSUB   POP#~jump_3                      * 37EBA
         R3=A                                     * 37EBE
         GOSUB   POP#~jump_3                      * 37EC1
         P=      4                                * 37EC5
         A=A-1   P                                * 37EC7
         P=      0                                * 37ECA
-        GONC    L_37E9B                          * 37ECC
+        GONC    @rdm(ar,ls)~1.loop3              * 37ECC
         ASL     A                                * 37ECF
         R2=A                                     * 37ED1
         GOSUB   POP#~jump_3                      * 37ED4
@@ -1628,43 +1628,43 @@ L_37EBA:
         A=DAT1  A                                * 37EED
         LC(5)   DOREAL                           * 37EF0
         ?C=A    A                                * 37EF7
-        GOYES   L_37F0F                          * 37EFA
+        GOYES   @rdm(ar,ls)~1.L6                 * 37EFA
         A=R2                                     * 37EFC
         A=A+A   A                                * 37EFF
-        GOC     L_37E94                          * 37F01
+        GOC     @rdm(ar,ls)~1.loop2              * 37F01
         R2=A                                     * 37F04
         A=R1                                     * 37F07
         A=A+A   A                                * 37F0A
         R1=A                                     * 37F0C
-L_37F0F:
+@rdm(ar,ls)~1.L6:
         ST=0    8                                * 37F0F
         D0=(5)  INITEN                           * 37F12
         C=DAT0  B                                * 37F19
         ?C=0    P                                * 37F1C
-        GOYES   L_37F2A                          * 37F1F
+        GOYES   @rdm(ar,ls)~1.L7                 * 37F1F
         C=0     A                                * 37F21
         DAT0=C  1                                * 37F23
         ST=1    8                                * 37F27
-L_37F2A:
+@rdm(ar,ls)~1.L7:
         A=R2                                     * 37F2A
         LC(1)   #5                               * 37F2D
         ?ST=0   6                                * 37F30
-        GOYES   L_37F38                          * 37F33
+        GOYES   @rdm(ar,ls)~1.L8                 * 37F33
         A=C     P                                * 37F35
-L_37F38:
+@rdm(ar,ls)~1.L8:
         R2=A                                     * 37F38
         C=R1                                     * 37F3B
         D1=D1+  5                                * 37F3E
         C=DAT1  1                                * 37F41
         C=C-1   A                                * 37F45
         ?C=0    P                                * 37F47
-        GOYES   L_37F4F                          * 37F4A
+        GOYES   @rdm(ar,ls)~1.L9                 * 37F4A
         LC(1)   #5                               * 37F4C
-L_37F4F:
+@rdm(ar,ls)~1.L9:
         ST=0    5                                * 37F4F
         C=C-A   A                                * 37F52
         R1=C                                     * 37F54
-        GONC    L_37F73                          * 37F57
+        GONC    @rdm(ar,ls)~1.L10                * 37F57
         C=-C    A                                * 37F5A
         GOSUB   SUB_3804D                        * 37F5C
         ST=1    5                                * 37F60
@@ -1672,14 +1672,14 @@ L_37F4F:
         A=R2                                     * 37F67
         C=R1                                     * 37F6A
         A=A+C   A                                * 37F6D
-        GOTO    L_37F7B                          * 37F6F
-L_37F73:
+        GOTO    @rdm(ar,ls)~1.L11                * 37F6F
+@rdm(ar,ls)~1.L10:
         A=0     P                                * 37F73
         ?C=0    A                                * 37F76
-        GOYES   L_37FF3                          * 37F79
-L_37F7B:
+        GOYES   @rdm(ar,ls)~1.L16                * 37F79
+@rdm(ar,ls)~1.L11:
         ?C=0    P                                * 37F7B
-        GOYES   L_37FE7                          * 37F7E
+        GOYES   @rdm(ar,ls)~1.L15                * 37F7E
         B=A     A                                * 37F80
         D0=(5)  DSKTOP                           * 37F82
         C=DAT0  A                                * 37F89
@@ -1689,41 +1689,41 @@ L_37F7B:
         D0=D0+  15                               * 37F95
         A=C     A                                * 37F98
         C=DAT0  A                                * 37F9A
-L_37F9D:
+@rdm(ar,ls)~1.loop12:
         D0=D0+  5                                * 37F9D
         C=C-1   A                                * 37FA0
-        GONC    L_37F9D                          * 37FA2
+        GONC    @rdm(ar,ls)~1.loop12             * 37FA2
         C=0     A                                * 37FA5
         LC(1)   #A                               * 37FA7
         A=A+C   A                                * 37FAA
         A=A+C   A                                * 37FAC
         LC(1)   #5                               * 37FAE
         ?ST=0   6                                * 37FB1
-        GOYES   L_37FB8                          * 37FB4
+        GOYES   @rdm(ar,ls)~1.L13                * 37FB4
         C=C+C   A                                * 37FB6
-L_37FB8:
+@rdm(ar,ls)~1.L13:
         A=A+C   A                                * 37FB8
         CD0EX                                    * 37FBA
         ?C>A    A                                * 37FBD
-        GOYES   L_37FD8                          * 37FC0
+        GOYES   @rdm(ar,ls)~1.L14                * 37FC0
         A=A+B   A                                * 37FC2
         D1=A                                     * 37FC4
         C=C+B   A                                * 37FC7
         D0=C                                     * 37FC9
         C=B     A                                * 37FCC
         GOSBVL  MOVEUP                           * 37FCE
-        GONC    L_37FE7                          * 37FD5
-L_37FD8:
+        GONC    @rdm(ar,ls)~1.L15                * 37FD5
+@rdm(ar,ls)~1.L14:
         D1=A                                     * 37FD8
         D0=C                                     * 37FDB
         C=B     A                                * 37FDE
         GOSBVL  MOVEDOWN                         * 37FE0
-L_37FE7:
+@rdm(ar,ls)~1.L15:
         ?ST=1   5                                * 37FE7
-        GOYES   L_37FF3                          * 37FEA
+        GOYES   @rdm(ar,ls)~1.L16                * 37FEA
         C=R1                                     * 37FEC
         GOSUB   SUB_3807A                        * 37FEF
-L_37FF3:
+@rdm(ar,ls)~1.L16:
         D0=(5)  DSKTOP                           * 37FF3
         A=DAT0  A                                * 37FFA
         D0=A                                     * 37FFD

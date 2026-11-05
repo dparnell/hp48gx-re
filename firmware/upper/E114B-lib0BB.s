@@ -106,8 +106,8 @@ LIB0BB.hash:
         CON(5)  0                                * E1A2B  names of length 14
         CON(5)  0                                * E1A30  names of length 15
         CON(5)  0                                * E1A35  names of length 16
-        REL(5)  L_E1A3F                          * E1A3A  end of the names
-L_E1A3F:
+        REL(5)  LIB0BB.hash.L1                   * E1A3A  end of the names
+LIB0BB.hash.L1:
         CON(5)  0                                * E1A3F  command 000 has no name
         ENDLENGTH                                * E1A44
 

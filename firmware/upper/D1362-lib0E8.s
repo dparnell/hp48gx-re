@@ -304,16 +304,16 @@ ROMP_0E8_01C:
           D0=(5)  #806E9                         * D21E7
           C=DAT0  A                              * D21EE
           ?C>A    A                              * D21F1
-          GOYES   L_D2205                        * D21F4
+          GOYES   ~INTEMPOB?.L1                  * D21F4
           D0=(5)  #806EE                         * D21F6
           C=DAT0  A                              * D21FD
           ?C>A    A                              * D2200
-          GOYES   L_D2211                        * D2203
-L_D2205:
+          GOYES   ~INTEMPOB?.L2                  * D2203
+~INTEMPOB?.L1:
           C=RSTK                                 * D2205
           D0=C                                   * D2207
           GOVLNG  PushFLoop                      * D220A
-L_D2211:
+~INTEMPOB?.L2:
           C=RSTK                                 * D2211
           D0=C                                   * D2213
           GOVLNG  PushTLoop                      * D2216
@@ -444,11 +444,11 @@ ROMP_0E8_029:
           C=R2.F  A                              * D286F
           A=A+C   A                              * D2875
           D1=A                                   * D2877
-L_D287A:
+ROMP_0E8_029.loop1:
           C=R4.F  A                              * D287A
           GOSBVL  MOVEDOWN                       * D2880
           B=B-1   A                              * D2887
-          GOC     L_D28AB                        * D2889
+          GOC     ROMP_0E8_029.L2                * D2889
           C=R3.F  A                              * D288C
           AD0EX                                  * D2892
           A=A+C   A                              * D2895
@@ -457,8 +457,8 @@ L_D287A:
           AD1EX                                  * D28A0
           A=A+C   A                              * D28A3
           D1=A                                   * D28A5
-          GONC    L_D287A                        * D28A8
-L_D28AB:
+          GONC    ROMP_0E8_029.loop1             * D28A8
+ROMP_0E8_029.L2:
           GOSBVL  GETPTR                         * D28AB
           D1=D1+  10                             * D28B2
           C=DAT1  A                              * D28B5
@@ -727,8 +727,8 @@ XRECV~1:
 ROMP_0E8_042:
         :: DOOPENIO ITE                          * D421E
           :: dup;RclInVars(gn)? IT               * D422D
-            :: DROP BINT36 TestSysFlag NOTcase   * D423C
-              :: # 13C ERROROUT ;                * D4255
+            :: DROP BINT36 TestSysFlag NOTcase   * D423C  flag -36: RECV renames / RECV overwrites
+              :: # 13C ERROROUT ;                * D4255  "Name Conflict"
             ;                                    * D426E
             GARBAGE MEM                          * D4273
             CODE                                 * D427D  794 nibbles
@@ -737,9 +737,9 @@ ROMP_0E8_042:
               ASRB.F  A                          * D4295
               LC(5)   #007D0                     * D429A
               C=A-C   A                          * D42A1
-              GONC    L_D42AD                    * D42A3
+              GONC    ROMP_0E8_042.L1            * D42A3
               GOVLNG  GPMEMERR                   * D42A6
-L_D42AD:
+ROMP_0E8_042.L1:
               R1=C                               * D42AD
               GOSBVL  MAKE$                      * D42B0
               GOSBVL  DisableIntr                * D42B7
@@ -748,103 +748,103 @@ L_D42AD:
               ST=0    8                          * D42C6
               ST=1    3                          * D42C9
               ST=1    6                          * D42CC
-L_D42CF:
+ROMP_0E8_042.loop2:
               A=R2                               * D42CF
               A=A-1   XS                         * D42D2
-              GOC     L_D4328                    * D42D5
+              GOC     ROMP_0E8_042.L5            * D42D5
               R2=A                               * D42D8
               ?ST=1   8                          * D42DB
-              GOYES   L_D4342                    * D42DE
+              GOYES   ROMP_0E8_042.L8            * D42DE
               LC(2)   #15                        * D42E0
-L_D42E4:
+ROMP_0E8_042.loop3:
               GOSUB   SUB_D454E                  * D42E4
               CD0EX                              * D42E8
               D0=C                               * D42EB
               R3=C                               * D42EE
               ST=0    2                          * D42F1
-L_D42F4:
+ROMP_0E8_042.loop4:
               ST=0    1                          * D42F4
               LC(5)   #14000                     * D42F7
               GOSUB   SUB_D446F                  * D42FE
-              GOC     L_D42CF                    * D4302
+              GOC     ROMP_0E8_042.loop2         * D4302
               C=0     A                          * D4305
               LC(2)   #7F                        * D4307
               D=C     A                          * D430B
               LC(2)   #01                        * D430D
               ?C=A    B                          * D4311
-              GOYES   L_D4353                    * D4314
+              GOYES   ROMP_0E8_042.L12           * D4314
               LC(2)   #04                        * D4316
               ?C=A    B                          * D431A
-              GOYES   L_D4333                    * D431D
+              GOYES   ROMP_0E8_042.L7            * D431D
               LC(2)   #18                        * D431F
               ?C#A    B                          * D4323
-              GOYES   L_D42F4                    * D4326
-L_D4328:
-              LC(5)   xferfailerr                * D4328
-L_D432F:
-              GOTO    L_D4405                    * D432F
-L_D4333:
+              GOYES   ROMP_0E8_042.loop4         * D4326
+ROMP_0E8_042.L5:
+              LC(5)   xferfailerr                * D4328  "Transfer Failed"
+ROMP_0E8_042.loop6:
+              GOTO    ROMP_0E8_042.L21           * D432F
+ROMP_0E8_042.L7:
               LC(2)   #06                        * D4333
               GOSUB   SUB_D454E                  * D4337
               ST=0    3                          * D433B
-              GOTO    L_D440F                    * D433E
-L_D4342:
-              GOTO    L_D43FE                    * D4342
-L_D4346:
+              GOTO    ROMP_0E8_042.L23           * D433E
+ROMP_0E8_042.L8:
+              GOTO    ROMP_0E8_042.L20           * D4342
+ROMP_0E8_042.loop9:
               C=RSTK                             * D4346
-L_D4348:
+ROMP_0E8_042.loop10:
               GOSUB   SUB_D4468                  * D4348
-              GONC    L_D4348                    * D434C
-L_D434F:
-              GOTO    L_D42CF                    * D434F
-L_D4353:
+              GONC    ROMP_0E8_042.loop10        * D434C
+ROMP_0E8_042.loop11:
+              GOTO    ROMP_0E8_042.loop2         * D434F
+ROMP_0E8_042.L12:
               GOSUB   SUB_D4468                  * D4353
-              GOC     L_D4348                    * D4357
+              GOC     ROMP_0E8_042.loop10        * D4357
               C=A     A                          * D435A
               A=R2                               * D435C
               ?C=A    B                          * D435F
-              GOYES   L_D436E                    * D4362
+              GOYES   ROMP_0E8_042.L13           * D4362
               A=A-1   A                          * D4364
               ?C#A    B                          * D4366
-              GOYES   L_D4348                    * D4369
+              GOYES   ROMP_0E8_042.loop10        * D4369
               ST=1    2                          * D436B
-L_D436E:
+ROMP_0E8_042.L13:
               RSTK=C                             * D436E
               GOSUB   SUB_D4468                  * D4370
-              GOC     L_D4346                    * D4374
+              GOC     ROMP_0E8_042.loop9         * D4374
               A=-A-1  B                          * D4377
               C=RSTK                             * D437A
               ?C#A    B                          * D437C
-              GOYES   L_D4348                    * D437F
+              GOYES   ROMP_0E8_042.loop10        * D437F
               B=0     A                          * D4381
-L_D4383:
+ROMP_0E8_042.loop14:
               C=R1                               * D4383
               C=C-1   A                          * D4386
               R1=C                               * D4388
               C=0     A                          * D438B
               LC(1)   #1                         * D438D
-              GOC     L_D432F                    * D4390
+              GOC     ROMP_0E8_042.loop6         * D4390
               GOSUB   SUB_D4468                  * D4393
-              GOC     L_D43B8                    * D4397
+              GOC     ROMP_0E8_042.L15           * D4397
               DAT0=A  B                          * D439A
               D0=D0+  2                          * D439D
               B=B+A   A                          * D43A0
               D=D-1   A                          * D43A2
-              GONC    L_D4383                    * D43A4
+              GONC    ROMP_0E8_042.loop14        * D43A4
               GOSUB   SUB_D4468                  * D43A7
-              GOC     L_D43B8                    * D43AB
+              GOC     ROMP_0E8_042.L15           * D43AB
               ?ST=1   8                          * D43AE
-              GOYES   L_D43FE                    * D43B1
+              GOYES   ROMP_0E8_042.L20           * D43B1
               ?A=B    B                          * D43B3
-              GOYES   L_D43BB                    * D43B6
-L_D43B8:
+              GOYES   ROMP_0E8_042.L16           * D43B6
+ROMP_0E8_042.L15:
               ST=1    1                          * D43B8
-L_D43BB:
+ROMP_0E8_042.L16:
               ?ST=1   1                          * D43BB
-              GOYES   L_D43C5                    * D43BE
+              GOYES   ROMP_0E8_042.L17           * D43BE
               ?ST=0   2                          * D43C0
-              GOYES   L_D43E6                    * D43C3
-L_D43C5:
+              GOYES   ROMP_0E8_042.L18           * D43C3
+ROMP_0E8_042.L17:
               C=R3                               * D43C5
               D0=C                               * D43C8
               A=R1                               * D43CB
@@ -855,26 +855,26 @@ L_D43C5:
               A=A-C   A                          * D43D8
               R1=A                               * D43DA
               ?ST=0   1                          * D43DD
-              GOYES   L_D43F6                    * D43E0
-              GOTO    L_D434F                    * D43E2
-L_D43E6:
+              GOYES   ROMP_0E8_042.L19           * D43E0
+              GOTO    ROMP_0E8_042.loop11        * D43E2
+ROMP_0E8_042.L18:
               C=R2                               * D43E6
               C=C+1   B                          * D43E9
               P=      2                          * D43EC
               LC(1)   #9                         * D43EE
               P=      0                          * D43F1
               R2=C                               * D43F3
-L_D43F6:
+ROMP_0E8_042.L19:
               LC(2)   #06                        * D43F6
-              GOTO    L_D42E4                    * D43FA
-L_D43FE:
-              LC(5)   intrptderr                 * D43FE
-L_D4405:
+              GOTO    ROMP_0E8_042.loop3         * D43FA
+ROMP_0E8_042.L20:
+              LC(5)   intrptderr                 * D43FE  "Interrupted"
+ROMP_0E8_042.L21:
               R4=C                               * D4405
               GOSUB   SUB_D4457                  * D4408
-L_D440C:
+ROMP_0E8_042.L22:
               ST=1    3                          * D440C
-L_D440F:
+ROMP_0E8_042.L23:
               GOSBVL  Shrink$                    * D440F
               D1=(5)  ANNCTRL2                   * D4416
               C=DAT1  1                          * D441D
@@ -885,21 +885,21 @@ L_D440F:
               A=R0                               * D4438
               DAT1=A  A                          * D443B
               C=R4                               * D443E
-L_D4441:
+ROMP_0E8_042.L24:
               ?ST=1   3                          * D4441
-              GOYES   L_D444D                    * D4444
+              GOYES   ROMP_0E8_042.L25           * D4444
               GOVLNG  PushTLoop                  * D4446
-L_D444D:
+ROMP_0E8_042.L25:
               R0=C                               * D444D
               GOVLNG  Push#FLoop                 * D4450
 
 * refs (2): D4408 D4782
 SUB_D4457:
               LC(3)   #218                       * D4457
-L_D445C:
+SUB_D4457.loop1:
               GOSUB   SUB_D44FB                  * D445C
               C=C-1   XS                         * D4460
-              GONC    L_D445C                    * D4463
+              GONC    SUB_D4457.loop1            * D4463
               RTN                                * D4466
 
 * refs (5): D4348 D4353 D4370 D4393 D43A7
@@ -911,36 +911,36 @@ SUB_D446F:
               D1=(5)  TIMER2                     * D446F
               A=DAT1  A                          * D4476
               A=A-C   A                          * D4479
-L_D447B:
+SUB_D446F.loop1:
               D1=(2)  #11                        * D447B
               C=DAT1  1                          * D447F
               ?CBIT=1 0                          * D4483
-              GOYES   L_D44C2                    * D4488
+              GOYES   SUB_D44B9.L1               * D4488
               GOSBVL  OnKeyDown?                 * D448A
-              GONC    L_D44A1                    * D4491
+              GONC    SUB_D446F.L2               * D4491
               ST=1    8                          * D4494
               LC(5)   #00800                     * D4497
               GOC     SUB_D446F                  * D449E
-L_D44A1:
+SUB_D446F.L2:
               D1=(2)  #38                        * D44A1
               C=DAT1  A                          * D44A5
               ?C#A    A                          * D44A8
-              GOYES   L_D447B                    * D44AB
-              LC(5)   timeouterr                 * D44AD
+              GOYES   SUB_D446F.loop1            * D44AB
+              LC(5)   timeouterr                 * D44AD  "Timeout"
               ?ST=0   8                          * D44B4
               RTNYES                             * D44B7
 
 * refs (1): D4786
 SUB_D44B9:
-              LC(5)   intrptderr                 * D44B9
+              LC(5)   intrptderr                 * D44B9  "Interrupted"
               RTNSC                              * D44C0
-L_D44C2:
+SUB_D44B9.L1:
               ?CBIT=0 2                          * D44C2
-              GOYES   L_D44D4                    * D44C7
+              GOYES   SUB_D44B9.L2               * D44C7
               ST=1    1                          * D44C9
               D1=(2)  #13                        * D44CC
               DAT1=A  1                          * D44D0
-L_D44D4:
+SUB_D44B9.L2:
               D1=(2)  #14                        * D44D4
               A=0     A                          * D44D8
               A=DAT1  B                          * D44DA
@@ -965,25 +965,25 @@ SUB_D44FB:
               LC(5)   #09C40                     * D44FD
               A=C     A                          * D4504
               D1=(5)  NOP1MASK18                 * D4506
-L_D450D:
+SUB_D44FB.loop1:
               C=DAT1  1                          * D450D
               ?CBIT=0 0                          * D4511
-              GOYES   L_D4543                    * D4516
+              GOYES   SUB_D44FB.L4               * D4516
               GOSBVL  OnKeyDown?                 * D4518
-              GONC    L_D4525                    * D451F
+              GONC    SUB_D44FB.L2               * D451F
               ST=1    8                          * D4522
-L_D4525:
+SUB_D44FB.L2:
               A=A-1   A                          * D4525
-              GONC    L_D450D                    * D4527
+              GONC    SUB_D44FB.loop1            * D4527
               C=RSTK                             * D452A
               ?ST=0   6                          * D452C
-              GOYES   L_D453F                    * D452F
-              LC(5)   xferfailerr                * D4531
+              GOYES   SUB_D44FB.L3               * D452F
+              LC(5)   xferfailerr                * D4531  "Transfer Failed"
               R4=C                               * D4538
-              GOTO    L_D440C                    * D453B
-L_D453F:
-              GOTO    L_D47C6                    * D453F
-L_D4543:
+              GOTO    ROMP_0E8_042.L22           * D453B
+SUB_D44FB.L3:
+              GOTO    SUB_D454E.L20              * D453F
+SUB_D44FB.L4:
               D1=(2)  #16                        * D4543
               C=RSTK                             * D4547
               DAT1=C  B                          * D4549
@@ -997,9 +997,9 @@ SUB_D454E:
               A=C     A                          * D455D
               CBIT=0  1                          * D455F
               ?ABIT=1 1                          * D4564
-              GOYES   L_D4570                    * D4569
+              GOYES   SUB_D454E.L1               * D4569
               CBIT=1  1                          * D456B
-L_D4570:
+SUB_D454E.L1:
               DAT1=C  1                          * D4570
               D1=(5)  IRC                        * D4574
               C=DAT1  B                          * D457B
@@ -1025,7 +1025,7 @@ L_D4570:
               R0=A                               * D4605
               GOSBVL  SAFESKIPOB                 * D4608
               LC(5)   #00203                     * D460F
-              GOC     L_D4666                    * D4616
+              GOC     SUB_D454E.L3               * D4616
               CD0EX                              * D4619
               A=R0                               * D461C
               C=C-A   A                          * D461F
@@ -1044,102 +1044,102 @@ L_D4570:
               ST=C                               * D4653
               ST=1    3                          * D4655
               ST=1    7                          * D4658
-L_D465B:
+SUB_D454E.loop2:
               LC(5)   #78000                     * D465B
               GOSUB   SUB_D446F                  * D4662
-L_D4666:
-              GOC     L_D46B4                    * D4666
+SUB_D454E.L3:
+              GOC     SUB_D454E.L7               * D4666
               LC(2)   #18                        * D4669
               ?C=A    B                          * D466D
-              GOYES   L_D46AD                    * D4670
+              GOYES   SUB_D454E.L6               * D4670
               LC(2)   #15                        * D4672
               ?C#A    B                          * D4676
-              GOYES   L_D465B                    * D4679
-L_D467B:
+              GOYES   SUB_D454E.loop2            * D4679
+SUB_D454E.loop4:
               GOSUB   SUB_D44EA                  * D467B
               C=0     A                          * D467F
               LC(1)   #7                         * D4681
               D=C     A                          * D4684
               C=R4                               * D4686
               B=0     A                          * D4689
-L_D468B:
+SUB_D454E.loop5:
               GOSUB   SUB_D44FB                  * D468B
               B=B+C   B                          * D468F
               CSR     W                          * D4692
               CSR     W                          * D4695
               D=D-1   A                          * D4698
-              GONC    L_D468B                    * D469A
+              GONC    SUB_D454E.loop5            * D469A
               A=R0                               * D469D
               D0=A                               * D46A0
               C=0     A                          * D46A3
               LC(2)   #78                        * D46A5
-              GOTO    L_D46CD                    * D46A9
-L_D46AD:
-              LC(5)   intrptderr                 * D46AD
-L_D46B4:
+              GOTO    SUB_D454E.L9               * D46A9
+SUB_D454E.L6:
+              LC(5)   intrptderr                 * D46AD  "Interrupted"
+SUB_D454E.L7:
               ST=1    3                          * D46B4
-              GOTO    L_D47CD                    * D46B7
-L_D46BB:
+              GOTO    SUB_D454E.L21              * D46B7
+SUB_D454E.loop8:
               A=R0                               * D46BB
               D0=A                               * D46BE
               GOSUB   SUB_D44EA                  * D46C1
               B=0     A                          * D46C5
               C=0     A                          * D46C7
               LC(2)   #80                        * D46C9
-L_D46CD:
+SUB_D454E.L9:
               A=R1                               * D46CD
               A=A-C   A                          * D46D0
-              GONC    L_D46DF                    * D46D2
+              GONC    SUB_D454E.L10              * D46D2
               C=C+A   A                          * D46D5
               A=-A    A                          * D46D7
               ASL     A                          * D46D9
               ASL     A                          * D46DB
               C=C+A   A                          * D46DD
-L_D46DF:
+SUB_D454E.L10:
               R3=C                               * D46DF
               C=C-1   B                          * D46E2
               D=C     A                          * D46E5
-L_D46E7:
+SUB_D454E.loop11:
               C=DAT0  B                          * D46E7
               D0=D0+  2                          * D46EA
               B=B+C   A                          * D46ED
               GOSUB   SUB_D44FB                  * D46EF
               D=D-1   B                          * D46F3
-              GONC    L_D46E7                    * D46F6
+              GONC    SUB_D454E.loop11           * D46F6
               DSR     A                          * D46F9
               DSR     A                          * D46FB
-              GOC     L_D4724                    * D46FD
-L_D4700:
+              GOC     SUB_D454E.L15              * D46FD
+SUB_D454E.loop12:
               C=R2                               * D4700
               C=C-1   XS                         * D4703
               R2=C                               * D4706
-              GOC     L_D471A                    * D4709
+              GOC     SUB_D454E.loop13           * D4709
               ?ST=1   8                          * D470C
-              GOYES   L_D4782                    * D470F
+              GOYES   SUB_D454E.L17              * D470F
               ?ST=0   7                          * D4711
-              GOYES   L_D46BB                    * D4714
-              GOTO    L_D467B                    * D4716
-L_D471A:
-              GOTO    L_D47C6                    * D471A
-L_D471E:
+              GOYES   SUB_D454E.loop8            * D4714
+              GOTO    SUB_D454E.loop4            * D4716
+SUB_D454E.loop13:
+              GOTO    SUB_D454E.L20              * D471A
+SUB_D454E.loop14:
               C=0     A                          * D471E
               GOSUB   SUB_D44FB                  * D4720
-L_D4724:
+SUB_D454E.L15:
               D=D-1   B                          * D4724
-              GONC    L_D471E                    * D4727
+              GONC    SUB_D454E.loop14           * D4727
               C=B     A                          * D472A
               GOSUB   SUB_D454E                  * D472C
               ?ST=1   8                          * D4730
-              GOYES   L_D4782                    * D4733
+              GOYES   SUB_D454E.L17              * D4733
               GOSUB   SUB_D44DF                  * D4735
-L_D4739:
-              GOC     L_D4700                    * D4739
+SUB_D454E.loop16:
+              GOC     SUB_D454E.loop12           * D4739
               LC(2)   #18                        * D473C
               ?C=A    B                          * D4740
-              GOYES   L_D471A                    * D4743
+              GOYES   SUB_D454E.loop13           * D4743
               LC(2)   #06                        * D4745
               ?C#A    B                          * D4749
-              GOYES   L_D4739                    * D474C
+              GOYES   SUB_D454E.loop16           * D474C
               ST=0    7                          * D474E
               AD0EX                              * D4751
               R0=A                               * D4754
@@ -1157,46 +1157,46 @@ L_D4739:
               A=A-B   A                          * D4774
               R1=A                               * D4776
               ?A=0    A                          * D4779
-              GOYES   L_D47E3                    * D477C
-              GOTO    L_D46BB                    * D477E
-L_D4782:
+              GOYES   SUB_D454E.L22              * D477C
+              GOTO    SUB_D454E.loop8            * D477E
+SUB_D454E.L17:
               GOSUB   SUB_D4457                  * D4782
               GOSUB   SUB_D44B9                  * D4786
-              GOTO    L_D47CD                    * D478A
-L_D478E:
+              GOTO    SUB_D454E.L21              * D478A
+SUB_D454E.loop18:
               C=R2                               * D478E
               C=C-1   XS                         * D4791
-              GOC     L_D47C6                    * D4794
-L_D4797:
+              GOC     SUB_D454E.L20              * D4794
+SUB_D454E.loop19:
               R2=C                               * D4797
               C=D     A                          * D479A
               GOSUB   SUB_D454E                  * D479C
               ?ST=1   8                          * D47A0
-              GOYES   L_D47C6                    * D47A3
+              GOYES   SUB_D454E.L20              * D47A3
               GOSUB   SUB_D44DF                  * D47A5
-              GOC     L_D478E                    * D47A9
+              GOC     SUB_D454E.loop18           * D47A9
               LC(2)   #18                        * D47AC
               ?C=A    B                          * D47B0
-              GOYES   L_D47C6                    * D47B3
+              GOYES   SUB_D454E.L20              * D47B3
               LC(2)   #06                        * D47B5
               ?C#A    B                          * D47B9
-              GOYES   L_D478E                    * D47BC
+              GOYES   SUB_D454E.loop18           * D47BC
               ?ST=1   8                          * D47BE
-              GOYES   L_D47C6                    * D47C1
+              GOYES   SUB_D454E.L20              * D47C1
               ST=0    3                          * D47C3
-L_D47C6:
-              LC(5)   xferfailerr                * D47C6
-L_D47CD:
+SUB_D454E.L20:
+              LC(5)   xferfailerr                * D47C6  "Transfer Failed"
+SUB_D454E.L21:
               GOSBVL  AllowIntr                  * D47CD
               A=C     A                          * D47D4
               GOSBVL  GETPTR                     * D47D6
               C=A     A                          * D47DD
-              GOTO    L_D4441                    * D47DF
-L_D47E3:
+              GOTO    ROMP_0E8_042.L24           * D47DF
+SUB_D454E.L22:
               LC(2)   #04                        * D47E3
               D=C     A                          * D47E7
               LC(3)   #500                       * D47E9
-              GOTO    L_D4797                    * D47EE
+              GOTO    SUB_D454E.loop19           * D47EE
             ENDCODE                              * D47F2
             NOTcase ERROROUT                     * D47F2
           ;                                      * D47FC

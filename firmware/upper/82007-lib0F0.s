@@ -28,8 +28,8 @@ LIB0F0.hash:
         CON(5)  0                                * 82069  names of length 14
         CON(5)  0                                * 8206E  names of length 15
         CON(5)  0                                * 82073  names of length 16
-        REL(5)  L_8207D                          * 82078  end of the names
-L_8207D:
+        REL(5)  LIB0F0.hash.L1                   * 82078  end of the names
+LIB0F0.hash.L1:
         CON(5)  0                                * 8207D  command 000 has no name
         ENDLENGTH                                * 82082
 

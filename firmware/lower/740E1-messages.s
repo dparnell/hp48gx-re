@@ -243,7 +243,7 @@ MsgTab(5):
 
         CON(5)  DOHSTR                           * 75675  units table
         LENGTH                                   * 7567A  length, to #760C9
-L_7567F:
+MsgTab(5).L1:
         CON(4)  U.m-(*)                          * 7567F  names of 1 character
         CON(4)  U.Hz-(*)                         * 75683  names of 2 characters
         CON(4)  U.dyn-(*)                        * 75687  names of 3 characters

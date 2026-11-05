@@ -20,7 +20,7 @@ LIB0E1:
 CONLIB~1:
         :: RECLAIMDISP POLSaveUI ERRSET          * A080C
           :: ClrDA1IsStat FALSE                  * A0820
-            { LAM CLFlag } BIND ROMPTR 0E1 001 # E128 JstGetTHEMESG TOTEMPOB * A082F
+            { LAM CLFlag } BIND ROMPTR 0E1 001 # E128 JstGetTHEMESG TOTEMPOB * A082F  "CONSTANTS LIBRARY"
             ROMPTR 0E1 002 ONEONE ROMPTR 0E1 005 RESOROMP ROMPTR 0E1 003 * A0870
             NULL{} ROMPTR 0E0 010 ABND ClrDAsOK ; * A089B  ~BRbrowse
           ERRTRAP POLResUI&Err POLRestoreUI ;    * A08BA
@@ -189,9 +189,9 @@ ROMP_0E1_009:
             SWAPDROP ;                           * A1DD2
           :: ROMPTR 0E1 007 SWAP NTHCOMPDROP ; BINT61 UserITE * A1DDC
           :: DUPTYPEEXT? ?CARCOMP SWAP # 20 #= IT * A1E05
-            :: BINT17 SysITE                     * A1E2D
+            :: BINT17 SysITE                     * A1E2D  flag -17: angle mode
               :: DROP %PI ;                      * A1E3C
-              :: BINT18 TestSysFlag IT           * A1E50
+              :: BINT18 TestSysFlag IT           * A1E50  flag -18: angle mode
                 :: DROP % 2E2 ;                  * A1E64
               ;                                  * A1E88
             ;                                    * A1E8D
@@ -201,7 +201,7 @@ ROMP_0E1_009:
 * ROMPTR 0E1 00A
 * refs (1): A07F5
 CONST~2:
-        :: # E129 ERROROUT ;                     * A1EA1
+        :: # E129 ERROROUT ;                     * A1EA1  "Undefined Constant"
 
 * ROMPTR 0E1 00B
 * refs (1): A07F5
@@ -273,8 +273,8 @@ LIB0E1.hash:
         CON(5)  0                                * A23CD  names of length 14
         CON(5)  0                                * A23D2  names of length 15
         CON(5)  0                                * A23D7  names of length 16
-        REL(5)  L_A23E1                          * A23DC  end of the names
-L_A23E1:
+        REL(5)  LIB0E1.hash.L1                   * A23DC  end of the names
+LIB0E1.hash.L1:
         CON(5)  0                                * A23E1  command 000 has no name
         ENDLENGTH                                * A23E6
 

@@ -219,7 +219,7 @@ ROMP_0C3_019:
         CODE                                     * CC727  192 nibbles
           GOSBVL  POP#                           * CC731
           ?A=0    A                              * CC738
-          GOYES   L_CC77E                        * CC73B
+          GOYES   ROMP_0C3_019.L2                * CC73B
           GOSBVL  SAVPTR                         * CC73D
           C=DAT1  A                              * CC744
           D1=C                                   * CC747
@@ -229,27 +229,27 @@ ROMP_0C3_019:
           ST=0    0                              * CC752
           LC(5)   DOREAL                         * CC755
           ?D=C    A                              * CC75C
-          GOYES   L_CC764                        * CC75F
+          GOYES   ROMP_0C3_019.L1                * CC75F
           ST=1    0                              * CC761
-L_CC764:
+ROMP_0C3_019.L1:
           D1=D1+  5                              * CC764
           C=DAT1  A                              * CC767
           D=C     A                              * CC76A
           D1=D1+  5                              * CC76C
           C=DAT1  A                              * CC76F
           ?C>=A   A                              * CC772
-          GOYES   L_CC78B                        * CC775
+          GOYES   ROMP_0C3_019.L3                * CC775
           GOSBVL  GETPTR                         * CC777
-L_CC77E:
+ROMP_0C3_019.L2:
           LC(5)   SETSIZEERR                     * CC77E
           A=C     A                              * CC785
           PC=(A)                                 * CC787
-L_CC78B:
+ROMP_0C3_019.L3:
           C=C-1   A                              * CC78B
           ?C#0    A                              * CC78D
-          GOYES   L_CC799                        * CC790
-          GOVLNG  L_370AD                        * CC792
-L_CC799:
+          GOYES   ROMP_0C3_019.L4                * CC790
+          GOVLNG  OBJ_3706E.L1                   * CC792
+ROMP_0C3_019.L4:
           C=C+1   A                              * CC799
           C=C-A   A                              * CC79B
           DCEX    A                              * CC79D
@@ -257,23 +257,23 @@ L_CC799:
           D1=D1+  5                              * CC7A1
           B=B-1   A                              * CC7A4
           ?B=0    A                              * CC7A6
-          GOYES   L_CC7B1                        * CC7A9
+          GOYES   ROMP_0C3_019.L5                * CC7A9
           C=DAT1  A                              * CC7AB
           D1=D1+  5                              * CC7AE
-L_CC7B1:
+ROMP_0C3_019.L5:
           CSL     A                              * CC7B1
           ?ST=0   0                              * CC7B3
-          GOYES   L_CC7BA                        * CC7B6
+          GOYES   ROMP_0C3_019.L6                * CC7B6
           C=C+C   A                              * CC7B8
-L_CC7BA:
+ROMP_0C3_019.L6:
           R0=C                                   * CC7BA
-          GOSBVL  L_35790                        * CC7BD
+          GOSBVL  PUTCMPEL.L6                    * CC7BD
           C=B     A                              * CC7C4
           R1=C                                   * CC7C6
           C=R0                                   * CC7C9
           D=C     A                              * CC7CC
           C=A     A                              * CC7CE
-          GOSBVL  L_35790                        * CC7D0
+          GOSBVL  PUTCMPEL.L6                    * CC7D0
           AD1EX                                  * CC7D7
           A=A+B   A                              * CC7DA
           D0=A                                   * CC7DC
@@ -281,7 +281,7 @@ L_CC7BA:
           A=A-C   A                              * CC7E2
           D1=A                                   * CC7E4
           C=R1                                   * CC7E7
-          GOVLNG  L_372D9                        * CC7EA
+          GOVLNG  MULTF~jump_2.L1                * CC7EA
         ENDCODE                                  * CC7F1
 
 * ROMPTR 0C3 01A
@@ -309,47 +309,47 @@ ROMP_0C3_01A:
           ST=0    0                              * CC833
           LC(5)   DOREAL                         * CC836
           ?D=C    A                              * CC83D
-          GOYES   L_CC845                        * CC840
+          GOYES   ROMP_0C3_01A.L1                * CC840
           ST=1    0                              * CC842
-L_CC845:
+ROMP_0C3_01A.L1:
           D1=D1+  5                              * CC845
           C=DAT1  A                              * CC848
           D=C     A                              * CC84B
           D1=D1+  5                              * CC84D
           C=DAT1  A                              * CC850
           ?A=0    A                              * CC853
-          GOYES   L_CC85D                        * CC856
+          GOYES   ROMP_0C3_01A.L2                * CC856
           ?C>=A   A                              * CC858
-          GOYES   L_CC871                        * CC85B
-L_CC85D:
+          GOYES   ROMP_0C3_01A.L3                * CC85B
+ROMP_0C3_01A.L2:
           GOSBVL  GETPTR                         * CC85D
           LC(5)   SETSIZEERR                     * CC864
           A=C     A                              * CC86B
           PC=(A)                                 * CC86D
-L_CC871:
+ROMP_0C3_01A.L3:
           C=C-A   A                              * CC871
           DCEX    A                              * CC873
           B=C     A                              * CC875
           D1=D1+  5                              * CC877
           B=B-1   A                              * CC87A
           ?B=0    A                              * CC87C
-          GOYES   L_CC887                        * CC87F
+          GOYES   ROMP_0C3_01A.L4                * CC87F
           C=DAT1  A                              * CC881
           D1=D1+  5                              * CC884
-L_CC887:
+ROMP_0C3_01A.L4:
           CSL     A                              * CC887
           ?ST=0   0                              * CC889
-          GOYES   L_CC890                        * CC88C
+          GOYES   ROMP_0C3_01A.L5                * CC88C
           C=C+C   A                              * CC88E
-L_CC890:
+ROMP_0C3_01A.L5:
           A=C     A                              * CC890
-          GOSBVL  L_35790                        * CC892
+          GOSBVL  PUTCMPEL.L6                    * CC892
           CD0EX                                  * CC899
           D1=C                                   * CC89C
           C=C-A   A                              * CC89F
           D0=C                                   * CC8A1
           C=B     A                              * CC8A4
-          GOVLNG  L_372E4                        * CC8A6
+          GOVLNG  MULTF~jump_2.L2                * CC8A6
         ENDCODE                                  * CC8AD
 
 * ROMPTR 0C3 01B
@@ -358,14 +358,14 @@ ROMP_0C3_01B:
         CODE                                     * CC8AD  238 nibbles
           ST=1    1                              * CC8B7
           GOSBVL  popflag                        * CC8BA
-          GOC     L_CC8C7                        * CC8C1
+          GOC     ROMP_0C3_01B.L1                * CC8C1
           ST=0    1                              * CC8C4
-L_CC8C7:
+ROMP_0C3_01B.L1:
           GOSBVL  POP#                           * CC8C7
           ?A#0    A                              * CC8CE
-          GOYES   L_CC8D7                        * CC8D1
-          GOTO    L_CC950                        * CC8D3
-L_CC8D7:
+          GOYES   ROMP_0C3_01B.L2                * CC8D1
+          GOTO    ROMP_0C3_01B.L7                * CC8D3
+ROMP_0C3_01B.L2:
           GOSBVL  SAVPTR                         * CC8D7
           C=DAT1  A                              * CC8DE
           D0=C                                   * CC8E1
@@ -375,26 +375,26 @@ L_CC8D7:
           ST=0    0                              * CC8EC
           LC(5)   DOREAL                         * CC8EF
           ?D=C    A                              * CC8F6
-          GOYES   L_CC8FE                        * CC8F9
+          GOYES   ROMP_0C3_01B.L3                * CC8F9
           ST=1    0                              * CC8FB
-L_CC8FE:
+ROMP_0C3_01B.L3:
           D0=D0+  5                              * CC8FE
           C=DAT0  A                              * CC901
           C=C-1   A                              * CC904
           ?C=0    A                              * CC906
-          GOYES   L_CC912                        * CC909
-L_CC90B:
-          GOVLNG  L_370AD                        * CC90B
-L_CC912:
+          GOYES   ROMP_0C3_01B.L5                * CC909
+ROMP_0C3_01B.loop4:
+          GOVLNG  OBJ_3706E.L1                   * CC90B
+ROMP_0C3_01B.L5:
           D0=D0+  5                              * CC912
           C=DAT0  A                              * CC915
           R1=C                                   * CC918
           D0=D0+  5                              * CC91B
           CSL     A                              * CC91E
           ?ST=0   0                              * CC920
-          GOYES   L_CC927                        * CC923
+          GOYES   ROMP_0C3_01B.L6                * CC923
           C=C+C   A                              * CC925
-L_CC927:
+ROMP_0C3_01B.L6:
           R0=C                                   * CC927
           D1=D1+  5                              * CC92A
           C=DAT1  A                              * CC92D
@@ -406,40 +406,40 @@ L_CC927:
           D1=D1+  5                              * CC93E
           C=DAT1  A                              * CC941
           ?C>=A   A                              * CC944
-          GOYES   L_CC95D                        * CC947
+          GOYES   ROMP_0C3_01B.L8                * CC947
           GOSBVL  GETPTR                         * CC949
-L_CC950:
+ROMP_0C3_01B.L7:
           LC(5)   SETSIZEERR                     * CC950
           A=C     A                              * CC957
           PC=(A)                                 * CC959
-L_CC95D:
+ROMP_0C3_01B.L8:
           C=D     A                              * CC95D
           D1=D1+  5                              * CC95F
           D=D-1   A                              * CC962
           ?D=0    A                              * CC964
-          GOYES   L_CC96F                        * CC967
+          GOYES   ROMP_0C3_01B.L9                * CC967
           C=DAT1  A                              * CC969
           D1=D1+  5                              * CC96C
-L_CC96F:
+ROMP_0C3_01B.L9:
           CAEX    A                              * CC96F
           D=C     A                              * CC971
           D=D-1   A                              * CC973
           C=R1                                   * CC975
           ?C=A    A                              * CC978
-          GOYES   L_CC981                        * CC97B
-          GOTO    L_CC90B                        * CC97D
-L_CC981:
+          GOYES   ROMP_0C3_01B.L10               * CC97B
+          GOTO    ROMP_0C3_01B.loop4             * CC97D
+ROMP_0C3_01B.L10:
           C=R0                                   * CC981
-          GOSBVL  L_35790                        * CC984
+          GOSBVL  PUTCMPEL.L6                    * CC984
           AD1EX                                  * CC98B
           A=A+B   A                              * CC98E
           ?ST=1   1                              * CC990
-          GOYES   L_CC998                        * CC993
+          GOYES   ROMP_0C3_01B.L11               * CC993
           AD0EX                                  * CC995
-L_CC998:
+ROMP_0C3_01B.L11:
           D1=A                                   * CC998
           C=R0                                   * CC99B
-          GOVLNG  L_372D9                        * CC99E
+          GOVLNG  MULTF~jump_2.L1                * CC99E
         ENDCODE                                  * CC9A5
 
 LIB0C3.hash:
@@ -461,8 +461,8 @@ LIB0C3.hash:
         CON(5)  0                                * CC9F0  names of length 14
         CON(5)  0                                * CC9F5  names of length 15
         CON(5)  0                                * CC9FA  names of length 16
-        REL(5)  L_CCA04                          * CC9FF  end of the names
-L_CCA04:
+        REL(5)  LIB0C3.hash.L1                   * CC9FF  end of the names
+LIB0C3.hash.L1:
         CON(5)  0                                * CCA04  command 000 has no name
         ENDLENGTH                                * CCA09
 

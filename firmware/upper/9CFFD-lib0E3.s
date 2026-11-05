@@ -40,7 +40,7 @@ ROMP_0E3_061:
 ROMP_0E3_062:
             LAM 'PC1 }                           * 9D0B8
           BIND CLCD10 DUP ROMPTR 0E2 02A EQITE   * 9D0CC
-          :: DROP BINT0 BINT36 # E304 JstGetTHEMESG $>GROB XYGROBDISP BINT0 * 9D0EB
+          :: DROP BINT0 BINT36 # E304 JstGetTHEMESG $>GROB XYGROBDISP BINT0 * 9D0EB  "No Picture Available"
             BINT21 ROMPTR 0E3 00F CARCOMP EVAL ROMPTR 0E3 011 SWAP GETATELN * 9D11D
             DROP PTR CHR_: >T$ $>GROB XYGROBDISP ; * 9D14C
           :: DUP LENCOMP DUP BINT3 #= ITE        * 9D16A
@@ -84,62 +84,62 @@ ROMP_0E3_062:
           A=R2                                   * 9D30B
           B=A     A                              * 9D30E
           A=0     A                              * 9D310
-L_9D312:
+~PCunpack.loop1:
           A=0     S                              * 9D312
-L_9D315:
+~PCunpack.loop2:
           B=B-1   A                              * 9D315
-          GOC     L_9D36D                        * 9D317
+          GOC     ~PCunpack.L6                   * 9D317
           A=DAT0  B                              * 9D31A
           B=B-1   A                              * 9D31D
           B=B-1   A                              * 9D31F
           D0=D0+  2                              * 9D321
           ?ABIT=0 7                              * 9D324
-          GOYES   L_9D376                        * 9D329
+          GOYES   ~PCunpack.L7                   * 9D329
           ABIT=0  7                              * 9D32B
           C=DAT0  1                              * 9D330
           ?A=0    S                              * 9D334
-          GOYES   L_9D345                        * 9D337
+          GOYES   ~PCunpack.L3                   * 9D337
           DAT1=C  B                              * 9D339
           D1=D1+  2                              * 9D33C
           A=A-1   B                              * 9D33F
-          GOC     L_9D312                        * 9D342
-L_9D345:
+          GOC     ~PCunpack.loop1                * 9D342
+~PCunpack.L3:
           CSL     B                              * 9D345
           C=DAT0  1                              * 9D348
           D0=D0+  1                              * 9D34C
-L_9D34F:
+~PCunpack.loop4:
           A=A-1   B                              * 9D34F
-          GOC     L_9D364                        * 9D352
+          GOC     ~PCunpack.loop5                * 9D352
           DAT1=C  B                              * 9D355
           D1=D1+  2                              * 9D358
           A=A-1   B                              * 9D35B
-          GONC    L_9D34F                        * 9D35E
-          GOC     L_9D312                        * 9D361
-L_9D364:
+          GONC    ~PCunpack.loop4                * 9D35E
+          GOC     ~PCunpack.loop1                * 9D361
+~PCunpack.loop5:
           A=0     S                              * 9D364
           A=A-1   S                              * 9D367
-          GOC     L_9D315                        * 9D36A
-L_9D36D:
+          GOC     ~PCunpack.loop2                * 9D36A
+~PCunpack.L6:
           P=      0                              * 9D36D
           GOVLNG  GPOverWrR0Lp                   * 9D36F
-L_9D376:
+~PCunpack.L7:
           B=B-A   A                              * 9D376
           ?A#0    S                              * 9D378
-          GOYES   L_9D38D                        * 9D37B
-L_9D37D:
+          GOYES   ~PCunpack.L9                   * 9D37B
+~PCunpack.loop8:
           C=DAT0  1                              * 9D37D
           D0=D0+  1                              * 9D381
           CSL     B                              * 9D384
           A=A-1   B                              * 9D387
-          GOC     L_9D364                        * 9D38A
-L_9D38D:
+          GOC     ~PCunpack.loop5                * 9D38A
+~PCunpack.L9:
           C=DAT0  1                              * 9D38D
           D0=D0+  1                              * 9D391
           DAT1=C  B                              * 9D394
           D1=D1+  2                              * 9D397
           A=A-1   B                              * 9D39A
-          GONC    L_9D37D                        * 9D39D
-          GOTO    L_9D312                        * 9D3A0
+          GONC    ~PCunpack.loop8                * 9D39D
+          GOTO    ~PCunpack.loop1                * 9D3A0
         ENDCODE                                  * 9D3A4
 
 * ROMPTR 0E3 064
@@ -202,7 +202,7 @@ SOLVEQN~1:
           ITE DROP                               * 9D5C5
           :: KILLGDISP # 40 # 83 MAKEGROB GROB>GDISP BINT3 NTHCOMPDROP EVAL * 9D5CF
             DUP ROMPTR 0E2 02A EQITE             * 9D606
-            :: # E304 JstGetTHEMESG $>GROB GBUFF BINT0 BINT36 GROB! DROP * 9D61B
+            :: # E304 JstGetTHEMESG $>GROB GBUFF BINT0 BINT36 GROB! DROP * 9D61B  "No Picture Available"
               OVER PTR CHR_: >T$ $>GROB GBUFF BINT0 BINT21 ; * 9D64D
             :: DUPLENCOMP DUP #3= ITE_DROP       * 9D675
               :: NTHCOMPDROP EVAL ; INCOMPDROP ROMPTR 0E3 063 GBUFF 2SWAP ; * 9D68E  ~PCunpack
@@ -242,8 +242,8 @@ LIB0E3.hash:
         CON(5)  0                                * 9D7C6  names of length 14
         CON(5)  0                                * 9D7CB  names of length 15
         CON(5)  0                                * 9D7D0  names of length 16
-        REL(5)  L_9D7DA                          * 9D7D5  end of the names
-L_9D7DA:
+        REL(5)  LIB0E3.hash.L1                   * 9D7D5  end of the names
+LIB0E3.hash.L1:
         CON(5)  0                                * 9D7DA  command 000 has no name
         ENDLENGTH                                * 9D7DF
 

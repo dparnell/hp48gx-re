@@ -37,18 +37,18 @@ ROMP_0C4_003:
           A=DAT1  A                              * CAE92
           A=A-1   A                              * CAE95
           GOSUB   SUB_CAEC5                      * CAE97
-          GOC     L_CAEB9                        * CAE9B
+          GOC     ROMP_0C4_003.L2                * CAE9B
           A=A-1   A                              * CAE9E
-          GOC     L_CAEAA                        * CAEA0
+          GOC     ROMP_0C4_003.L1                * CAEA0
           GOSUB   SUB_CAEC5                      * CAEA3
-          GOC     L_CAEB9                        * CAEA7
-L_CAEAA:
+          GOC     ROMP_0C4_003.L2                * CAEA7
+ROMP_0C4_003.L1:
           C=RSTK                                 * CAEAA
           D1=C                                   * CAEAC
           A=DAT0  A                              * CAEAF
           D0=D0+  5                              * CAEB2
           PC=(A)                                 * CAEB5
-L_CAEB9:
+ROMP_0C4_003.L2:
           C=RSTK                                 * CAEB9
           D1=C                                   * CAEBB
           GOSBVL  SUB_370B4                      * CAEBE
@@ -58,11 +58,11 @@ SUB_CAEC5:
           D1=D1+  5                              * CAEC5
           C=0     W                              * CAEC8
           C=DAT1  A                              * CAECB
-L_CAECE:
+SUB_CAEC5.loop1:
           SB=0                                   * CAECE
           CSRB                                   * CAED1
           ?SB=0                                  * CAED4
-          GOYES   L_CAECE                        * CAED7
+          GOYES   SUB_CAEC5.loop1                * CAED7
           ?C#0    A                              * CAED9
           RTNYES                                 * CAEDC
           RTNCC                                  * CAEDE
@@ -74,9 +74,9 @@ ROMP_0C4_004:
         CODE                                     * CAEE0  1382 nibbles
           ST=1    3                              * CAEEA
           GOSBVL  popflag                        * CAEED
-          GOC     L_CAEFA                        * CAEF4
+          GOC     ROMP_0C4_004.L1                * CAEF4
           ST=0    3                              * CAEF7
-L_CAEFA:
+ROMP_0C4_004.L1:
           D1=D1+  5                              * CAEFA
           D=D+1   A                              * CAEFD
           GOSBVL  SAVPTR                         * CAEFF
@@ -95,15 +95,15 @@ L_CAEFA:
           D1=D1+  5                              * CAF2A
           A=A-1   A                              * CAF2D
           ?A=0    A                              * CAF2F
-          GOYES   L_CAF40                        * CAF32
+          GOYES   ROMP_0C4_004.L2                * CAF32
           D=C     A                              * CAF34
           C=DAT1  A                              * CAF36
           D1=D1+  5                              * CAF39
-          GOTO    L_CAF44                        * CAF3C
-L_CAF40:
+          GOTO    ROMP_0C4_004.L3                * CAF3C
+ROMP_0C4_004.L2:
           D=0     A                              * CAF40
           D=D+1   A                              * CAF42
-L_CAF44:
+ROMP_0C4_004.L3:
           DCEX    A                              * CAF44
           D0=D0+  6                              * CAF46
           DAT0=C  A                              * CAF49
@@ -116,7 +116,7 @@ L_CAF44:
           GOSUB   SUB_CB049                      * CAF5F
           CD1EX                                  * CAF63
           ?A=0    A                              * CAF66
-          GOYES   L_CAFD1                        * CAF69
+          GOYES   ROMP_0C4_004.L5                * CAF69
           RSTK=C                                 * CAF6B
           GOSBVL  CSLW5                          * CAF6D
           C=RSTK                                 * CAF74
@@ -128,7 +128,7 @@ L_CAF44:
           DAT0=C  A                              * CAF8A
           D0=D0+  5                              * CAF8D
           C=0     A                              * CAF90
-L_CAF92:
+ROMP_0C4_004.loop4:
           C=C+1   A                              * CAF92
           DAT0=C  A                              * CAF94
           GOSUB   SUB_CB05C                      * CAF97
@@ -143,17 +143,17 @@ L_CAF92:
           D0=D0+  11                             * CAFB6
           C=DAT0  A                              * CAFB9
           ?C#A    A                              * CAFBC
-          GOYES   L_CAF92                        * CAFBF
+          GOYES   ROMP_0C4_004.loop4             * CAFBF
           C=R4                                   * CAFC1
           GOSBVL  CSRW5                          * CAFC4
           D0=D0-  16                             * CAFCB
           D0=D0-  1                              * CAFCE
-L_CAFD1:
+ROMP_0C4_004.L5:
           R4=C                                   * CAFD1
           D0=D0+  11                             * CAFD4
           A=DAT0  S                              * CAFD7
           ?A=0    S                              * CAFDB
-          GOYES   L_CB040                        * CAFDE
+          GOYES   ROMP_0C4_004.L7                * CAFDE
           D0=D0-  6                              * CAFE0
           DAT0=A  S                              * CAFE3
           D0=D0+  1                              * CAFE7
@@ -172,7 +172,7 @@ L_CAFD1:
           DAT0=C  A                              * CB00E
           D0=D0+  5                              * CB011
           C=0     A                              * CB014
-L_CB016:
+ROMP_0C4_004.loop6:
           C=C+1   A                              * CB016
           DAT0=C  A                              * CB018
           GOSUB   SUB_CB05C                      * CB01B
@@ -186,8 +186,8 @@ L_CB016:
           D0=D0+  11                             * CB035
           C=DAT0  A                              * CB038
           ?C#A    A                              * CB03B
-          GOYES   L_CB016                        * CB03E
-L_CB040:
+          GOYES   ROMP_0C4_004.loop6             * CB03E
+ROMP_0C4_004.L7:
           P=      0                              * CB040
           GOVLNG  GETPTRLOOP                     * CB042
 
@@ -195,12 +195,12 @@ L_CB040:
 SUB_CB049:
           A=0     A                              * CB049
           A=A-1   A                              * CB04B
-L_CB04D:
+SUB_CB049.loop1:
           A=A+1   A                              * CB04D
           SB=0                                   * CB04F
           CSRB                                   * CB052
           ?SB=0                                  * CB055
-          GOYES   L_CB04D                        * CB058
+          GOYES   SUB_CB049.loop1                * CB058
           RTN                                    * CB05A
 
 * refs (2): CAF97 CB01B
@@ -219,9 +219,9 @@ SUB_CB05C:
           GOSBVL  XYEX                           * CB081
           GOSBVL  DIVF                           * CB088
           ?ST=0   3                              * CB08F
-          GOYES   L_CB097                        * CB092
+          GOYES   SUB_CB05C.L1                   * CB092
           A=-A-1  S                              * CB094
-L_CB097:
+SUB_CB05C.L1:
           D0=D0+  16                             * CB097
           D0=D0+  16                             * CB09A
           D0=D0+  11                             * CB09D
@@ -230,7 +230,7 @@ L_CB097:
           D0=D0-  16                             * CB0A6
           D0=D0-  6                              * CB0A9
           C=0     S                              * CB0AC
-L_CB0AF:
+SUB_CB05C.loop2:
           DAT0=C  S                              * CB0AF
           D0=D0-  16                             * CB0B3
           D0=D0-  16                             * CB0B6
@@ -247,7 +247,7 @@ L_CB0AF:
           DAT0=C  A                              * CB0D9
           D0=D0+  5                              * CB0DC
           C=0     A                              * CB0DF
-L_CB0E1:
+SUB_CB05C.loop3:
           C=C+1   A                              * CB0E1
           DAT0=C  A                              * CB0E3
           D0=D0-  16                             * CB0E6
@@ -275,7 +275,7 @@ L_CB0E1:
           SETHEX                                 * CB132
           GOSUB   SUB_CB3D4                      * CB134
           C=0     A                              * CB138
-L_CB13A:
+SUB_CB05C.loop4:
           C=C+1   A                              * CB13A
           DAT0=C  A                              * CB13C
           GOSBVL  CkATTNcode                     * CB13F
@@ -348,9 +348,9 @@ L_CB13A:
           D0=D0+  15                             * CB23C
           C=DAT0  A                              * CB23F
           ?C=A    A                              * CB242
-          GOYES   L_CB24B                        * CB245
-          GOTO    L_CB13A                        * CB247
-L_CB24B:
+          GOYES   SUB_CB05C.L5                   * CB245
+          GOTO    SUB_CB05C.loop4                * CB247
+SUB_CB05C.L5:
           D0=D0-  16                             * CB24B
           D0=D0-  9                              * CB24E
           C=DAT0  A                              * CB251
@@ -367,10 +367,10 @@ L_CB24B:
           D0=D0-  10                             * CB272
           A=DAT0  A                              * CB275
           ?C=A    A                              * CB278
-          GOYES   L_CB283                        * CB27B
+          GOYES   SUB_CB05C.L6                   * CB27B
           C=A     A                              * CB27D
-          GOTO    L_CB0E1                        * CB27F
-L_CB283:
+          GOTO    SUB_CB05C.loop3                * CB27F
+SUB_CB05C.L6:
           D0=D0-  16                             * CB283
           D0=D0-  11                             * CB286
           A=DAT0  S                              * CB289
@@ -380,9 +380,9 @@ L_CB283:
           C=DAT0  S                              * CB296
           C=C+1   S                              * CB29A
           ?C=A    S                              * CB29D
-          GOYES   L_CB2A6                        * CB2A0
-          GOTO    L_CB0AF                        * CB2A2
-L_CB2A6:
+          GOYES   SUB_CB05C.L7                   * CB2A0
+          GOTO    SUB_CB05C.loop2                * CB2A2
+SUB_CB05C.L7:
           GOSUB   SUB_CB3DA                      * CB2A6
           C=DAT0  A                              * CB2AA
           R0=C                                   * CB2AD
@@ -393,18 +393,18 @@ L_CB2A6:
           D1=C                                   * CB2BD
           B=0     A                              * CB2C0
           D0=D0+  7                              * CB2C2
-L_CB2C5:
+SUB_CB05C.loop8:
           A=R1                                   * CB2C5
           C=B     A                              * CB2C8
           GOSUB   SUB_CB346                      * CB2CA
           ?A>=B   A                              * CB2CE
-          GOYES   L_CB305                        * CB2D1
+          GOYES   SUB_CB05C.L9                   * CB2D1
           C=B     A                              * CB2D3
           C=C-A   A                              * CB2D5
           D=C     A                              * CB2D7
           C=DAT0  A                              * CB2D9
           A=B     A                              * CB2DC
-          GOSBVL  L_35790                        * CB2DE
+          GOSBVL  PUTCMPEL.L6                    * CB2DE
           ABEX    A                              * CB2E5
           CD1EX                                  * CB2E7
           D1=C                                   * CB2EA
@@ -416,7 +416,7 @@ L_CB2C5:
           GOSUB   SUB_CB3C9                      * CB2FC
           C=RSTK                                 * CB300
           D0=C                                   * CB302
-L_CB305:
+SUB_CB05C.L9:
           C=DAT0  A                              * CB305
           AD1EX                                  * CB308
           A=A+C   A                              * CB30B
@@ -424,7 +424,7 @@ L_CB305:
           B=B+1   A                              * CB310
           C=R0                                   * CB312
           ?B#C    A                              * CB315
-          GOYES   L_CB2C5                        * CB318
+          GOYES   SUB_CB05C.loop8                * CB318
           RTN                                    * CB31A
 
 * refs (2): CB2F4 CB2F8
@@ -446,57 +446,57 @@ SUB_CB31C:
 * refs (2): CB0F4 CB2CA
 SUB_CB346:
           A=0     A                              * CB346
-          GOTO    L_CB35B                        * CB348
-L_CB34C:
+          GOTO    SUB_CB346.L2                   * CB348
+SUB_CB346.loop1:
           A=A+A   A                              * CB34C
           SB=0                                   * CB34E
           CSRB                                   * CB351
           ?SB=0                                  * CB354
-          GOYES   L_CB35B                        * CB357
+          GOYES   SUB_CB346.L2                   * CB357
           A=A+1   A                              * CB359
-L_CB35B:
+SUB_CB346.L2:
           A=A-1   S                              * CB35B
-          GONC    L_CB34C                        * CB35E
+          GONC    SUB_CB346.loop1                * CB35E
           RTN                                    * CB361
 
 * refs (2): CB0C6 CB26E
 SUB_CB363:
           C=0     A                              * CB363
           C=C+1   A                              * CB365
-L_CB367:
+SUB_CB363.loop1:
           C=C-1   S                              * CB367
           RTNC                                   * CB36A
           C=C+C   A                              * CB36D
-          GONC    L_CB367                        * CB36F
+          GONC    SUB_CB363.loop1                * CB36F
 
 * refs (2): CB157 CB258
 SUB_CB372:
           SB=0                                   * CB372
-L_CB375:
+SUB_CB372.loop1:
           CSRB                                   * CB375
           ?SB=0                                  * CB378
-          GOYES   L_CB37F                        * CB37B
+          GOYES   SUB_CB372.L2                   * CB37B
           RTN                                    * CB37D
-L_CB37F:
+SUB_CB372.L2:
           D=D+D   A                              * CB37F
-          GOTO    L_CB375                        * CB381
+          GOTO    SUB_CB372.loop1                * CB381
 
 * refs (1): CB117
 SUB_CB385:
           GOSBVL  SUB_2B6E9                      * CB385
           GOSBVL  EXAB0                          * CB38C
           ?ST=0   11                             * CB393
-          GOYES   L_CB39B                        * CB396
+          GOYES   SUB_CB385.L1                   * CB396
           A=-A-1  S                              * CB398
-L_CB39B:
+SUB_CB385.L1:
           P=      0                              * CB39B
           LC(3)   #F00                           * CB39D
           ?C=A    X                              * CB3A2
-          GOYES   L_CB3B5                        * CB3A5
+          GOYES   SUB_CB385.L3                   * CB3A5
           GOSBVL  RCCD0                          * CB3A7
-L_CB3AE:
+SUB_CB385.L2:
           GOVLNG  MULTF                          * CB3AE
-L_CB3B5:
+SUB_CB385.L3:
           A=0     A                              * CB3B5
           B=0     W                              * CB3B7
           P=      14                             * CB3BA
@@ -574,7 +574,7 @@ SUB_CB418:
 * refs (5): CB108 CB173 CB186 CB19C CB1B3
 SUB_CB42E:
           GOSBVL  GETCD0                         * CB42E
-          GOTO    L_CB3AE                        * CB435
+          GOTO    SUB_CB385.L2                   * CB435
 
 * refs (4): CB1D7 CB1ED CB206 CB215
 SUB_CB439:
@@ -665,20 +665,20 @@ PEVAL~1:
             D1=(5)  DOEREL                       * CB94F
             CD1EX                                * CB956
             ?C#A    A                            * CB959
-            GOYES   L_CB973                      * CB95C
+            GOYES   PEVAL~1.L1                   * CB95C
             GOSBVL  POP1%%                       * CB95E
             GOSUB   SUB_CB9CE                    * CB965
-            GOC     L_CB996                      * CB969
-            GOVLNG  L_2A235                      * CB96C
-L_CB973:
+            GOC     PEVAL~1.L2                   * CB969
+            GOVLNG  PUSH%.L9                     * CB96C
+PEVAL~1.L1:
             GOSBVL  POPC%%                       * CB973
             GOSBVL  STCD0                        * CB97A
             GOSUB   SUB_CB9CE                    * CB981
-            GONC    L_CB9AE                      * CB985
+            GONC    PEVAL~1.L3                   * CB985
             GOSBVL  EXAB0                        * CB988
             GOSUB   SUB_CB9CE                    * CB98F
-            GONC    L_CB9B9                      * CB993
-L_CB996:
+            GONC    PEVAL~1.L4                   * CB993
+PEVAL~1.L2:
             SETHEX                               * CB996
             GOSBVL  GETPTR                       * CB998
             D1=D1-  5                            * CB99F
@@ -686,25 +686,25 @@ L_CB996:
             A=DAT0  A                            * CB9A4
             D0=D0+  5                            * CB9A7
             PC=(A)                               * CB9AA
-L_CB9AE:
+PEVAL~1.L3:
             GOSBVL  EXAB0                        * CB9AE
             GOSUB   SUB_CB9CE                    * CB9B5
-L_CB9B9:
+PEVAL~1.L4:
             GOSBVL  RCCD0                        * CB9B9
             GOSBVL  XYEX                         * CB9C0
-            GOVLNG  L_51BA2                      * CB9C7
+            GOVLNG  C%%CHS.L2                    * CB9C7
 
 * refs (4): CB965 CB981 CB98F CB9B5
 SUB_CB9CE:
             LC(5)   #50000                       * CB9CE
             ?C<=A   A                            * CB9D5
-            GOYES   L_CB9EA                      * CB9D8
+            GOYES   SUB_CB9CE.L1                 * CB9D8
             LC(5)   #10000                       * CB9DA
             ?C>A    A                            * CB9E1
             RTNYES                               * CB9E4
             A=C     A                            * CB9E6
             RTNCC                                * CB9E8
-L_CB9EA:
+SUB_CB9CE.L1:
             LC(5)   #90000                       * CB9EA
             ?C<A    A                            * CB9F1
             RTNYES                               * CB9F4
@@ -732,8 +732,8 @@ LIB0C4.hash:
         CON(5)  0                                * CBA59  names of length 14
         CON(5)  0                                * CBA5E  names of length 15
         CON(5)  0                                * CBA63  names of length 16
-        REL(5)  L_CBA6D                          * CBA68  end of the names
-L_CBA6D:
+        REL(5)  LIB0C4.hash.L1                   * CBA68  end of the names
+LIB0C4.hash.L1:
         CON(5)  0                                * CBA6D  command 000 has no name
         ENDLENGTH                                * CBA72
 

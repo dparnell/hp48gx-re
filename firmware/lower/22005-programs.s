@@ -98,7 +98,7 @@ _IR_:
             $ "IR"                               * 2212D
 
 _wire_:
-            $ "wire" !append$ DISPROW2 OBJ_49A42 JstGetTHEMESG BINT35 SysITE * 2213B
+            $ "wire" !append$ DISPROW2 OBJ_49A42 JstGetTHEMESG BINT35 SysITE * 2213B  flag -35: ASCII transfer / Binary transfer
 
 _binary_:
             $ "binary"                           * 2216B
@@ -167,21 +167,21 @@ SetupBaud:
 * refs (5): 2E9A3 B02CE B8521 B8535 B8CFA
 %9600:
             % 9.6E3 }                            * 22391
-          BINT6 L_22473 DOBAUD ;                 * 223AB
+          BINT6 SetupTrans.L1 DOBAUD ;           * 223AB
 
 SetupCKSM:
         :: AtUserStack                           * 223BF
-          { %1 %2 %3 } BINT2 L_22473 DOCKSM ;    * 223C9
+          { %1 %2 %3 } BINT2 SetupTrans.L1 DOCKSM ; * 223C9
 
 SetupParit:
         :: AtUserStack                           * 223F6
-          { %0_2A2B4 %1 %2 %3 %4 } BINT5 L_22473 DOPARITY ; * 22400
+          { %0_2A2B4 %1 %2 %3 %4 } BINT5 SetupTrans.L1 DOPARITY ; * 22400
 
 SetupTrans:
         :: AtUserStack                           * 22437
-          { %0_2A2B4 %1 %2 %3 } BINT1 L_22473 DOTRANSIO ; * 22441
+          { %0_2A2B4 %1 %2 %3 } BINT1 SetupTrans.L1 DOTRANSIO ; * 22441
 
-L_22473:
+SetupTrans.L1:
         CON(5)  DOCOL                            * 22473  address (the code jumps or points through it)
 
         CON(5)  GetIOPAR                         * 22478  address (the code jumps or points through it)
@@ -313,7 +313,7 @@ xDTAG:
         :: ~CK1;STRIPTAGS ;                      * 22633
 
 LIB002.hash:
-        ACPTR L_7633B Reset                      * 22642
+        ACPTR H700.REPEAT.L2 Reset               * 22642
 
 LIB002.link:
         CON(5)  DOHSTR                           * 22651  link table of library 002
@@ -721,7 +721,7 @@ LIB700:
         RPL
 
 LIB700.hash:
-        ACPTR L_7612D Reset                      * 22DFE
+        ACPTR U.arcmin.L2 Reset                  * 22DFE
 
 LIB700.link:
         CON(5)  DOHSTR                           * 22E0D  link table of library 700
@@ -997,7 +997,7 @@ next_2326A:
 
 STEP:
         B=B+1   P                                * 23280
-L_23283:
+STEP.L1:
         D1=(5)  TEMPENV                          * 23283
         C=DAT1  A                                * 2328A
         D1=C                                     * 2328D
@@ -1011,7 +1011,7 @@ L_23283:
         P=      0                                * 232A3
         LC(5)   DOREAL                           * 232A5
         ?D=C    A                                * 232AC
-        GOYES   L_232C7                          * 232AF
+        GOYES   step(r).L1                       * 232AF
         SETHEX                                   * 232B1
         GOSBVL  GETPTR                           * 232B3
         LC(5)   SETTYPEERR                       * 232BA
@@ -1019,18 +1019,18 @@ L_23283:
 step(r):
         A=C     A                                * 232C1
         PC=(A)                                   * 232C3
-L_232C7:
+step(r).L1:
         P=      14                               * 232C7
         D0=D0+  5                                * 232C9
         C=DAT0  W                                * 232CC
         GOSBVL  SUB_2BCAC                        * 232D0
         ST=0    0                                * 232D7
         ?A=0    S                                * 232DA
-        GOYES   L_232E2                          * 232DD
+        GOYES   IFERR.L1                         * 232DD
 
 IFERR:
         ST=1    0                                * 232DF
-L_232E2:
+IFERR.L1:
         GOSBVL  RADDF                            * 232E2
         D1=D1-  10                               * 232E9
         C=DAT1  A                                * 232EC
@@ -1040,11 +1040,11 @@ L_232E2:
         GOSBVL  SUB_2BCAC                        * 232F9
         P=      4                                * 23300
         ?ST=0   0                                * 23302
-        GOYES   L_23309                          * 23305
+        GOYES   IFERR.L2                         * 23305
         P=      1                                * 23307
-L_23309:
+IFERR.L2:
         GOSBVL  TST15                            * 23309
-        GOC     L_23356                          * 23310
+        GOC     IFERR.L3                         * 23310
         GOSBVL  PACK                             * 23313
         GOSBVL  PUSH%                            * 2331A
         D1=D1+  5                                * 23321
@@ -1065,7 +1065,7 @@ L_23309:
         LC(5)   ?ATTNQUIT0                       * 23349
         A=C     A                                * 23350
         PC=(A)                                   * 23352
-L_23356:
+IFERR.L3:
         P=      0                                * 23356
         SETHEX                                   * 23358
         GOSBVL  GETPTR                           * 2335A
@@ -1101,7 +1101,7 @@ xSTEP~real:
         ASSEMBLE
         GOSBVL  POP1%                            * 233C6
         GOSBVL  SPLITA                           * 233CD
-        GOTO    L_23283                          * 233D4
+        GOTO    STEP.L1                          * 233D4
 
 * ->
 * ROMPTR 700 00D IFERR
@@ -1176,9 +1176,9 @@ OBJ_23502:
         RSTK=C                                   * 23517
         C=0     A                                * 23519
         RSTK=C                                   * 2351B
-L_2351D:
+OBJ_23502.loop1:
         D=D-1   A                                * 2351D
-        GONC    L_23568                          * 2351F
+        GONC    OBJ_23502.L3                     * 2351F
         C=RSTK                                   * 23522
         R0=C                                     * 23524
         C=RSTK                                   * 23527
@@ -1188,10 +1188,10 @@ L_2351D:
         GOSBVL  GARBAGECOL                       * 23535
         GOSBVL  GETPTR                           * 2353C
         D=D-1   A                                * 23543
-        GONC    L_23551                          * 23545
+        GONC    OBJ_23502.L2                     * 23545
         D=0     A                                * 23548
         GOVLNG  DOMEMERR                         * 2354A
-L_23551:
+OBJ_23502.L2:
         C=B     A                                * 23551
         CD0EX                                    * 23553
         RSTK=C                                   * 23556
@@ -1201,17 +1201,17 @@ L_23551:
         RSTK=C                                   * 23561
         C=R0                                     * 23563
         RSTK=C                                   * 23566
-L_23568:
+OBJ_23502.L3:
         A=DAT0  A                                * 23568
         LC(5)   DOLAM                            * 2356B
         ?C=A    A                                * 23572
-        GOYES   L_235BB                          * 23575
+        GOYES   OBJ_23502.L5                     * 23575
         AD0EX                                    * 23577
         C=DAT0  A                                * 2357A
         D0=(5)  DOLAM                            * 2357D
         AD0EX                                    * 23584
         ?C=A    A                                * 23587
-        GOYES   L_235B2                          * 2358A
+        GOYES   OBJ_23502.L4                     * 2358A
         C=RSTK                                   * 2358C
         R0=C                                     * 2358E
         C=RSTK                                   * 23591
@@ -1223,11 +1223,11 @@ L_23568:
         A=DAT0  A                                * 235A8
         D0=D0+  5                                * 235AB
         PC=(A)                                   * 235AE
-L_235B2:
+OBJ_23502.L4:
         C=DAT0  A                                * 235B2
         D0=D0+  5                                * 235B5
-        GONC    L_235D6                          * 235B8
-L_235BB:
+        GONC    OBJ_23502.L6                     * 235B8
+OBJ_23502.L5:
         AD0EX                                    * 235BB
         D0=A                                     * 235BE
         D0=D0+  5                                * 235C1
@@ -1238,7 +1238,7 @@ L_235BB:
         AD0EX                                    * 235CE
         C=C+A   A                                * 235D1
         CD0EX                                    * 235D3
-L_235D6:
+OBJ_23502.L6:
         D1=D1-  5                                * 235D6
         DAT1=C  A                                * 235D9
         C=RSTK                                   * 235DC
@@ -1251,7 +1251,7 @@ L_235D6:
         RSTK=C                                   * 235ED
         C=A     A                                * 235EF
         RSTK=C                                   * 235F1
-        GOTO    L_2351D                          * 235F3
+        GOTO    OBJ_23502.loop1                  * 235F3
 
 * ROMPTR 700 011 »
 * refs (7): 22DE7 24311 D2FA8 D3CDE D3F55 D3F6E ...

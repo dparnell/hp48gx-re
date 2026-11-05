@@ -377,13 +377,13 @@ OBJ_5DEEB:
         CON(5)  (*)+5                            * 5DEEB  primitive code object
         ASSEMBLE
         ST=1    2                                * 5DEF0
-        GOTO    L_5DEFF                          * 5DEF3
+        GOTO    OBJ_5DEF7.L1                     * 5DEF3
 
 * refs (3): 56DDD 58E90 5DED7
 OBJ_5DEF7:
         CON(5)  (*)+5                            * 5DEF7  primitive code object
         ST=0    2                                * 5DEFC
-L_5DEFF:
+OBJ_5DEF7.L1:
         C=DAT1  A                                * 5DEFF
         CD1EX                                    * 5DF02
         RSTK=C                                   * 5DF05
@@ -396,33 +396,33 @@ L_5DEFF:
         LC(5)   DOCOL                            * 5DF1F
         P=      14                               * 5DF26
         ?C=A    WP                               * 5DF28
-        GOYES   L_5DF4A                          * 5DF2B
+        GOYES   OBJ_5DEF7.L3                     * 5DF2B
         ?ST=1   2                                * 5DF2D
-        GOYES   L_5DF36                          * 5DF30
-        GOTO    L_5DFC9                          * 5DF32
-L_5DF36:
+        GOYES   OBJ_5DEF7.L2                     * 5DF30
+        GOTO    OBJ_5DEF7.L6                     * 5DF32
+OBJ_5DEF7.L2:
         P=      10                               * 5DF36
         LC(5)   xRPN->                           * 5DF38
         P=      14                               * 5DF3F
         ?C=A    WP                               * 5DF41
-        GOYES   L_5DF4A                          * 5DF44
-        GOTO    L_5DFC9                          * 5DF46
-L_5DF4A:
+        GOYES   OBJ_5DEF7.L3                     * 5DF44
+        GOTO    OBJ_5DEF7.L6                     * 5DF46
+OBJ_5DEF7.L3:
         P=      0                                * 5DF4A
         C=0     A                                * 5DF4C
         R0=C                                     * 5DF4E
         D1=D1+  15                               * 5DF51
-L_5DF54:
+OBJ_5DEF7.loop4:
         A=DAT1  A                                * 5DF54
         LC(5)   DOSYMB                           * 5DF57
         ?C=A    A                                * 5DF5E
-        GOYES   L_5DFDD                          * 5DF61
+        GOYES   OBJ_5DEF7.L8                     * 5DF61
         LC(5)   x<<                              * 5DF63
         ?C=A    A                                * 5DF6A
-        GOYES   L_5DFDD                          * 5DF6D
+        GOYES   OBJ_5DEF7.L8                     * 5DF6D
         LC(5)   DOLAM                            * 5DF6F
         ?C#A    A                                * 5DF76
-        GOYES   L_5DF9B                          * 5DF79
+        GOYES   OBJ_5DEF7.L5                     * 5DF79
         A=R0                                     * 5DF7B
         A=A+1   A                                * 5DF7E
         R0=A                                     * 5DF80
@@ -434,33 +434,33 @@ L_5DF54:
         CD1EX                                    * 5DF90
         C=C+A   A                                * 5DF93
         D1=C                                     * 5DF95
-        GONC    L_5DF54                          * 5DF98
-L_5DF9B:
+        GONC    OBJ_5DEF7.loop4                  * 5DF98
+OBJ_5DEF7.L5:
         D1=D1+  5                                * 5DF9B
         AD1EX                                    * 5DF9E
         C=DAT1  A                                * 5DFA1
         D1=(5)  DOSYMB                           * 5DFA4
         AD1EX                                    * 5DFAB
         ?C=A    A                                * 5DFAE
-        GOYES   L_5DFFB                          * 5DFB1
+        GOYES   OBJ_5DEF7.L9                     * 5DFB1
         A=R0                                     * 5DFB3
         A=A+1   A                                * 5DFB6
         R0=A                                     * 5DFB8
         A=C     A                                * 5DFBB
         LC(5)   DOLAM                            * 5DFBD
         ?C=A    A                                * 5DFC4
-        GOYES   L_5DF54                          * 5DFC7
-L_5DFC9:
+        GOYES   OBJ_5DEF7.loop4                  * 5DFC7
+OBJ_5DEF7.L6:
         C=RSTK                                   * 5DFC9
         D1=C                                     * 5DFCB
-L_5DFCE:
+OBJ_5DEF7.loop7:
         P=      0                                * 5DFCE
         LC(5)   skipcola                         * 5DFD0
         A=C     A                                * 5DFD7
         PC=(A)                                   * 5DFD9
-L_5DFDD:
+OBJ_5DEF7.L8:
         ?ST=1   2                                * 5DFDD
-        GOYES   L_5DFFB                          * 5DFE0
+        GOYES   OBJ_5DEF7.L9                     * 5DFE0
         CD0EX                                    * 5DFE2
         CD1EX                                    * 5DFE5
         CD0EX                                    * 5DFE8
@@ -468,21 +468,21 @@ L_5DFDD:
         CD0EX                                    * 5DFF2
         CD1EX                                    * 5DFF5
         CD0EX                                    * 5DFF8
-L_5DFFB:
+OBJ_5DEF7.L9:
         P=      0                                * 5DFFB
         A=DAT1  10                               * 5DFFD
         C=RSTK                                   * 5E001
         D1=C                                     * 5E003
         ?ST=1   2                                * 5E006
-        GOYES   L_5E024                          * 5E009
+        GOYES   OBJ_5DEF7.L10                    * 5E009
         P=      5                                * 5E00B
         LC(5)   SEMI                             * 5E00D
         P=      0                                * 5E014
         LC(5)   x>>                              * 5E016
         P=      9                                * 5E01D
         ?C#A    WP                               * 5E01F
-        GOYES   L_5DFCE                          * 5E022
-L_5E024:
+        GOYES   OBJ_5DEF7.loop7                  * 5E022
+OBJ_5DEF7.L10:
         P=      0                                * 5E024
         LC(5)   TEMPENV                          * 5E026
         CD1EX                                    * 5E02D
@@ -496,12 +496,12 @@ L_5E024:
         D1=C                                     * 5E045
         C=R0                                     * 5E048
         ?C#A    A                                * 5E04B
-        GOYES   L_5E05A                          * 5E04E
+        GOYES   OBJ_5DEF7.L11                    * 5E04E
         LC(5)   OBJ_22F3B                        * 5E050
-        GONC    L_5E061                          * 5E057
-L_5E05A:
+        GONC    OBJ_5DEF7.L12                    * 5E057
+OBJ_5DEF7.L11:
         LC(5)   COLA                             * 5E05A
-L_5E061:
+OBJ_5DEF7.L12:
         A=C     A                                * 5E061
         PC=(A)                                   * 5E063
         RPL
@@ -1014,25 +1014,25 @@ argum~1:
         C=0     S                                * 5E909
         LC(5)   CK0                              * 5E90C
         ?C=A    A                                * 5E913
-        GOYES   L_5E957                          * 5E916
+        GOYES   argum~1.L1                       * 5E916
         LC(5)   CK1&Dispatch                     * 5E918
         C=C+1   S                                * 5E91F
         ?C=A    A                                * 5E922
-        GOYES   L_5E957                          * 5E925
+        GOYES   argum~1.L1                       * 5E925
         LC(5)   CK2&Dispatch                     * 5E927
         C=C+1   S                                * 5E92E
         ?C=A    A                                * 5E931
-        GOYES   L_5E957                          * 5E934
+        GOYES   argum~1.L1                       * 5E934
         LC(5)   CK3&Dispatch                     * 5E936
         C=C+1   S                                * 5E93D
         ?C=A    A                                * 5E940
-        GOYES   L_5E957                          * 5E943
+        GOYES   argum~1.L1                       * 5E943
         LC(5)   CK4&Dispatch                     * 5E945
         C=C+1   S                                * 5E94C
         ?C=A    A                                * 5E94F
-        GOYES   L_5E957                          * 5E952
+        GOYES   argum~1.L1                       * 5E952
         C=C+1   S                                * 5E954
-L_5E957:
+argum~1.L1:
         C=0     A                                * 5E957
         P=C     15                               * 5E959
         CPEX    0                                * 5E95D
@@ -1070,11 +1070,11 @@ infarg?:
         D1=C                                     * 5E9B8
         LC(5)   CKINFARGS                        * 5E9BB
         ?C#A    A                                * 5E9C2
-        GOYES   L_5E9D4                          * 5E9C5
+        GOYES   infarg?.L1                       * 5E9C5
         LC(5)   TRUE                             * 5E9C7
         A=C     A                                * 5E9CE
         PC=(A)                                   * 5E9D0
-L_5E9D4:
+infarg?.L1:
         LC(5)   FALSE                            * 5E9D4
         A=C     A                                * 5E9DB
         PC=(A)                                   * 5E9DD
@@ -1153,7 +1153,7 @@ rot:
         A=A+1   A                                * 5EB5F
         C=0     A                                * 5EB61
         NOP4                                     * 5EB63
-L_5EB67:
+rot.L1:
         R0=A.F  A                                * 5EB67
         R1=C.F  A                                * 5EB6D
         GOSBVL  SAVPTR                           * 5EB73
@@ -1163,7 +1163,7 @@ L_5EB67:
         C=0     A                                * 5EB83
         B=0     A                                * 5EB85
         D=0     A                                * 5EB87
-L_5EB89:
+rot.loop2:
         GOSUB   SUB_5EC10                        * 5EB89
         CAEX    A                                * 5EB8D
         D=D+C   A                                * 5EB8F
@@ -1171,14 +1171,14 @@ L_5EB89:
         CR0EX.F A                                * 5EB93
         C=C-1   A                                * 5EB99
         CR0EX.F A                                * 5EB9B
-        GONC    L_5EB89                          * 5EBA1
-L_5EBA4:
+        GONC    rot.loop2                        * 5EBA1
+rot.loop3:
         GOSUB   SUB_5EC10                        * 5EBA4
         B=B+A   A                                * 5EBA8
         CR1EX.F A                                * 5EBAA
         C=C-1   A                                * 5EBB0
         CR1EX.F A                                * 5EBB2
-        GONC    L_5EBA4                          * 5EBB8
+        GONC    rot.loop3                        * 5EBB8
         GOSUB   SUB_5EC41                        * 5EBBB
         GOVLNG  GETPTRLOOP                       * 5EBBF
 
@@ -1188,7 +1188,7 @@ L_5EBA4:
         CON(5)  (*)+5                            * 5EBC6  primitive code object
         LA(5)   #00002                           * 5EBCB
         C=0     A                                * 5EBD5
-        GOTO    L_5EB67                          * 5EBD7
+        GOTO    rot.L1                           * 5EBD7
 
 * meta1 meta2 meta3 -> meta3 meta1 meta2
 * refs (57): 21C24 2425D 296FB 548EB 558A0 562AF ...
@@ -1197,7 +1197,7 @@ unrot:
         A=0     A                                * 5EBE0
         C=0     A                                * 5EBE2
         C=C+1   A                                * 5EBE4
-        GOTO    L_5EB67                          * 5EBE6
+        GOTO    rot.L1                           * 5EBE6
 
 * meta1 meta2 meta3 meta4 -> meta4 meta1 meta2 meta3
 * refs (7): 5492C 58009 5802C 58241 58264 84229 ...
@@ -1205,7 +1205,7 @@ unrot:
         CON(5)  (*)+5                            * 5EBEA  primitive code object
         A=0     A                                * 5EBEF
         LC(5)   #00002                           * 5EBF1
-        GOTO    L_5EB67                          * 5EBF8
+        GOTO    rot.L1                           * 5EBF8
 
 * META1..METAn+1 #n -> META2..METAn+1 META1
 * refs (4): 2943F 296B5 843A5 8445E
@@ -1214,7 +1214,7 @@ N+1roll:
         GOSBVL  POP#                             * 5EC01
         A=A-1   A                                * 5EC08
         C=0     A                                * 5EC0A
-        GOTO    L_5EB67                          * 5EC0C
+        GOTO    rot.L1                           * 5EC0C
 
 * refs (4): 5EB33 5EB3D 5EB89 5EBA4
 SUB_5EC10:
@@ -1254,17 +1254,17 @@ SUB_5EC41:
         A=A-CON A,15                             * 5EC60
         C=D     A                                * 5EC66
         ?B>=C   A                                * 5EC68
-        GOYES   L_5EC7F                          * 5EC6B
+        GOYES   SUB_5EC41.L2                     * 5EC6B
         ?A>=B   A                                * 5EC6D
-        GOYES   L_5ECAB                          * 5EC70
-L_5EC72:
+        GOYES   MOVEDOWN~jump.L1                 * 5EC70
+SUB_5EC41.loop1:
         C=R1                                     * 5EC72
         D1=C                                     * 5EC75
         C=R0                                     * 5EC78
-        GOTO    L_5ECDD                          * 5EC7B
-L_5EC7F:
+        GOTO    MOVEUP~jump.L1                   * 5EC7B
+SUB_5EC41.L2:
         ?C>A    A                                * 5EC7F
-        GOYES   L_5EC72                          * 5EC82
+        GOYES   SUB_5EC41.loop1                  * 5EC82
         GOSUB   MOVEDOWN~jump                    * 5EC84
         CD0EX                                    * 5EC88
         D0=C                                     * 5EC8B
@@ -1281,7 +1281,7 @@ L_5EC7F:
 * refs (3): 5EC84 5EC97 5ECB5
 MOVEDOWN~jump:
         GOVLNG  MOVEDOWN                         * 5ECA4
-L_5ECAB:
+MOVEDOWN~jump.L1:
         CD0EX                                    * 5ECAB
         C=C+D   A                                * 5ECAE
         D0=C                                     * 5ECB0
@@ -1302,23 +1302,23 @@ L_5ECAB:
 * refs (1): 5ECCB
 MOVEUP~jump:
         GOVLNG  MOVEUP                           * 5ECD6
-L_5ECDD:
+MOVEUP~jump.L1:
         C=C-1   A                                * 5ECDD
         RSTK=C                                   * 5ECDF
-L_5ECE1:
+MOVEUP~jump.loop2:
         A=DAT0  A                                * 5ECE1
         C=0     A                                * 5ECE4
         DAT0=C  A                                * 5ECE6
-L_5ECE9:
+MOVEUP~jump.loop3:
         AD0EX                                    * 5ECE9
         C=B     A                                * 5ECEC
         C=C+A   A                                * 5ECEE
-        GOC     L_5ECFE                          * 5ECF0
+        GOC     MOVEUP~jump.L4                   * 5ECF0
         AD1EX                                    * 5ECF3
         ?C<A    A                                * 5ECF6
-        GOYES   L_5ED21                          * 5ECF9
+        GOYES   MOVEUP~jump.L5                   * 5ECF9
         AD1EX                                    * 5ECFB
-L_5ECFE:
+MOVEUP~jump.L4:
         C=D     A                                * 5ECFE
         A=A-C   A                                * 5ED00
         AD0EX                                    * 5ED02
@@ -1330,10 +1330,10 @@ L_5ECFE:
         RTNC                                     * 5ED11
         RSTK=C                                   * 5ED14
         ?A#0    A                                * 5ED16
-        GOYES   L_5ECE9                          * 5ED19
+        GOYES   MOVEUP~jump.loop3                * 5ED19
         D0=D0+  5                                * 5ED1B
-        GONC    L_5ECE1                          * 5ED1E
-L_5ED21:
+        GONC    MOVEUP~jump.loop2                * 5ED1E
+MOVEUP~jump.L5:
         D1=A                                     * 5ED21
         A=C     A                                * 5ED24
         AD0EX                                    * 5ED26
@@ -1345,9 +1345,9 @@ L_5ED21:
         RTNC                                     * 5ED35
         RSTK=C                                   * 5ED38
         ?A#0    A                                * 5ED3A
-        GOYES   L_5ECE9                          * 5ED3D
+        GOYES   MOVEUP~jump.loop3                * 5ED3D
         D0=D0+  5                                * 5ED3F
-        GONC    L_5ECE1                          * 5ED42
+        GONC    MOVEUP~jump.loop2                * 5ED42
 
 * meta1..meta5 -> meta2..meta5 meta1
 * refs (4): 57FFF 58022 58237 5825A
@@ -1356,7 +1356,7 @@ L_5ED21:
         B=B+1   A                                * 5ED48
         LA(5)   #00003                           * 5ED4A
         C=0     A                                * 5ED54
-        GOTO    L_5EB67                          * 5ED56
+        GOTO    rot.L1                           * 5ED56
 
 * meta1..meta5 -> meta5 meta1..meta4
 * refs (4): 840C6 8411B 843AF 84468
@@ -1364,7 +1364,7 @@ L_5ED21:
         CON(5)  (*)+5                            * 5ED5A  primitive code object
         A=0     A                                * 5ED5F
         LC(5)   #00003                           * 5ED61
-        GOTO    L_5EB67                          * 5ED68
+        GOTO    rot.L1                           * 5ED68
 
 * META1..METAn+1 #n -> METAn+1 META1..METAn
 N+1unroll:
@@ -1373,7 +1373,7 @@ N+1unroll:
         C=A     A                                * 5ED78
         A=0     A                                * 5ED7A
         C=C-1   A                                * 5ED7C
-        GOTO    L_5EB67                          * 5ED7E
+        GOTO    rot.L1                           * 5ED7E
         RPL
 
 * refs (2): 60545 6078E
@@ -1405,9 +1405,9 @@ numb1stcase~1:
 numb1stcase:
         CON(5)  (*)+5                            * 5EDFC  primitive code object
         GOSUB   numb1stcase~1                    * 5EE01
-        GOC     L_5EE0C                          * 5EE05
+        GOC     numb1stcase.L1                   * 5EE05
         GOTO    doskip                           * 5EE08
-L_5EE0C:
+numb1stcase.L1:
         GOTO    docola                           * 5EE0C
 
 * Meta&NEG -> Meta COLA Meta -> Meta SKIP Meta&(%<0) -> Meta&ABS(%) COLA
@@ -1420,25 +1420,25 @@ M-1stcasechs:
         C=DAT1  A                                * 5EE1E
         D1=A                                     * 5EE21
         ?C#0    A                                * 5EE24
-        GOYES   L_5EE2D                          * 5EE27
-        GOTO    L_5EED7                          * 5EE29
-L_5EE2D:
+        GOYES   M-1stcasechs.L1                  * 5EE27
+        GOTO    M-1stcasechs.L4                  * 5EE29
+M-1stcasechs.L1:
         D1=D1+  5                                * 5EE2D
         A=DAT1  A                                * 5EE30
         LC(5)   xNEG                             * 5EE33
         ?C=A    A                                * 5EE3A
-        GOYES   L_5EEA7                          * 5EE3D
+        GOYES   M-1stcasechs.L3                  * 5EE3D
         LC(5)   DOREAL                           * 5EE3F
         CD1EX                                    * 5EE46
         AD1EX                                    * 5EE49
         RSTK=C                                   * 5EE4C
         C=DAT1  A                                * 5EE4E
         ?C#A    A                                * 5EE51
-        GOYES   L_5EE9C                          * 5EE54
+        GOYES   M-1stcasechs.L2                  * 5EE54
         D1=D1+  5                                * 5EE56
         A=DAT1  W                                * 5EE59
         ?A=0    S                                * 5EE5D
-        GOYES   L_5EE9C                          * 5EE60
+        GOYES   M-1stcasechs.L2                  * 5EE60
         A=0     S                                * 5EE62
         C=RSTK                                   * 5EE65
         D1=C                                     * 5EE67
@@ -1456,12 +1456,12 @@ L_5EE2D:
         D1=D1-  5                                * 5EE92
         DAT1=C  A                                * 5EE95
         GOTO    docola                           * 5EE98
-L_5EE9C:
+M-1stcasechs.L2:
         C=RSTK                                   * 5EE9C
         D1=C                                     * 5EE9E
         D1=D1-  5                                * 5EEA1
-        GONC    L_5EED7                          * 5EEA4
-L_5EEA7:
+        GONC    M-1stcasechs.L4                  * 5EEA4
+M-1stcasechs.L3:
         D1=D1-  5                                * 5EEA7
         A=DAT1  A                                * 5EEAA
         AD1EX                                    * 5EEAD
@@ -1476,7 +1476,7 @@ L_5EEA7:
         GOSBVL  SAVPTR                           * 5EEC5
         GOSBVL  PUSH#                            * 5EECC
         GOTO    docola                           * 5EED3
-L_5EED7:
+M-1stcasechs.L4:
         GOTO    doskip                           * 5EED7
 
 * %<0 -> :: % <ob1> ; ob -> :: ob <ob2> <rest> ;
@@ -1489,7 +1489,7 @@ REALNEGcase:
         RSTK=C                                   * 5EEEC
         LC(5)   DOREAL                           * 5EEEE
         ?C#A    A                                * 5EEF5
-        GOYES   L_5EED7                          * 5EEF8
+        GOYES   M-1stcasechs.L4                  * 5EEF8
         C=RSTK                                   * 5EEFA
         CD1EX                                    * 5EEFC
         D1=D1+  5                                * 5EEFF
@@ -1497,7 +1497,7 @@ REALNEGcase:
         C=DAT1  S                                * 5EF05
         D1=C                                     * 5EF09
         ?C=0    S                                * 5EF0C
-        GOYES   L_5EED7                          * 5EF0F
+        GOYES   M-1stcasechs.L4                  * 5EF0F
         GOTO    docola                           * 5EF11
         RPL
 
@@ -1514,7 +1514,7 @@ M1st+case:
         ASSEMBLE
         LC(5)   x+                               * 5EF33
         D1=D1+  5                                * 5EF3A
-        GOTO    L_5EFE6                          * 5EF3D
+        GOTO    MEQ1stcase.L1                    * 5EF3D
 
 * Meta&- ? case
 * refs (7): 274EA 57C53 587BE 58868 5B23A 5D0D1 ...
@@ -1522,7 +1522,7 @@ M1st-case:
         CON(5)  (*)+5                            * 5EF41  primitive code object
         LC(5)   x-                               * 5EF46
         D1=D1+  5                                * 5EF4D
-        GOTO    L_5EFE6                          * 5EF50
+        GOTO    MEQ1stcase.L1                    * 5EF50
 
 * Meta&* ? case
 * refs (17): 57E58 58643 5891C 58A48 58BC6 58BEE ...
@@ -1530,7 +1530,7 @@ M1st*case:
         CON(5)  (*)+5                            * 5EF54  primitive code object
         LC(5)   x*                               * 5EF59
         D1=D1+  5                                * 5EF60
-        GOTO    L_5EFE6                          * 5EF63
+        GOTO    MEQ1stcase.L1                    * 5EF63
 
 * Meta&/ ? case
 * refs (7): 587C8 58926 5B72B 5D348 5D438 83A40 ...
@@ -1538,7 +1538,7 @@ M1st/case:
         CON(5)  (*)+5                            * 5EF67  primitive code object
         LC(5)   x/                               * 5EF6C
         D1=D1+  5                                * 5EF73
-        GOTO    L_5EFE6                          * 5EF76
+        GOTO    MEQ1stcase.L1                    * 5EF76
 
 * Meta&NEG ? case
 * refs (6): 27FF3 555C6 587D2 58872 5D0DB 5D1CB
@@ -1546,7 +1546,7 @@ M1stNEGcase:
         CON(5)  (*)+5                            * 5EF7A  primitive code object
         LC(5)   xNEG                             * 5EF7F
         D1=D1+  5                                * 5EF86
-        GOTO    L_5EFE6                          * 5EF89
+        GOTO    MEQ1stcase.L1                    * 5EF89
 
 * Meta&INV ? case
 * refs (8): 587DC 58930 5B735 5BC44 5BCBC 5BCE9 ...
@@ -1554,7 +1554,7 @@ M1stINVcase:
         CON(5)  (*)+5                            * 5EF8D  primitive code object
         LC(5)   xINV                             * 5EF92
         D1=D1+  5                                * 5EF99
-        GOTO    L_5EFE6                          * 5EF9C
+        GOTO    MEQ1stcase.L1                    * 5EF9C
 
 * Meta&^ ? case
 * refs (4): 5561B 57B68 58625 5893A
@@ -1562,7 +1562,7 @@ M1st^case:
         CON(5)  (*)+5                            * 5EFA0  primitive code object
         LC(5)   x^                               * 5EFA5
         D1=D1+  5                                * 5EFAC
-        GOTO    L_5EFE6                          * 5EFAF
+        GOTO    MEQ1stcase.L1                    * 5EFAF
 
 * Meta&SQ ? case
 * refs (1): 587E6
@@ -1570,7 +1570,7 @@ M1stSQcase:
         CON(5)  (*)+5                            * 5EFB3  primitive code object
         LC(5)   xSQ                              * 5EFB8
         D1=D1+  5                                * 5EFBF
-        GOTO    L_5EFE6                          * 5EFC2
+        GOTO    MEQ1stcase.L1                    * 5EFC2
 
 * Meta&FNCAPPLY ? case
 * refs (7): 1F8D9 20E14 57B06 58DD7 59FB4 5B6A9 ...
@@ -1578,7 +1578,7 @@ M1stFNCcase:
         CON(5)  (*)+5                            * 5EFC6  primitive code object
         LC(5)   xFCNAPPLY                        * 5EFCB
         D1=D1+  5                                * 5EFD2
-        GOTO    L_5EFE6                          * 5EFD5
+        GOTO    MEQ1stcase.L1                    * 5EFD5
 
 * meta&ob1 ob2 -> ob1=ob2 ? case
 * refs (10): 55418 55436 554DB 5559E 555BC 583A9 ...
@@ -1587,14 +1587,14 @@ MEQ1stcase:
         D=D+1   A                                * 5EFDE
         C=DAT1  A                                * 5EFE0
         D1=D1+  10                               * 5EFE3
-L_5EFE6:
+MEQ1stcase.L1:
         A=DAT1  A                                * 5EFE6
         D1=D1-  5                                * 5EFE9
         ?C=A    A                                * 5EFEC
-        GOYES   L_5EFF5                          * 5EFEF
-L_5EFF1:
+        GOYES   MEQ1stcase.L3                    * 5EFEF
+MEQ1stcase.L2:
         GOTO    doskip                           * 5EFF1
-L_5EFF5:
+MEQ1stcase.L3:
         GOTO    docola                           * 5EFF5
 
 * meta1&ob1 meta2&ob2 ob3 ->
@@ -1607,7 +1607,7 @@ MEQopscase:
         C=DAT1  A                                * 5F006
         D1=D1-  5                                * 5F009
         ?C#A    A                                * 5F00C
-        GOYES   L_5EFF1                          * 5F00F
+        GOYES   MEQ1stcase.L2                    * 5F00F
         RSTK=C                                   * 5F011
         C=DAT1  A                                * 5F013
         CD1EX                                    * 5F016
@@ -1627,8 +1627,8 @@ MEQopscase:
         D1=C                                     * 5F03A
         C=RSTK                                   * 5F03D
         ?C=A    A                                * 5F03F
-        GOYES   L_5EFF5                          * 5F042
-        GOTO    L_5EFF1                          * 5F044
+        GOYES   MEQ1stcase.L3                    * 5F042
+        GOTO    MEQ1stcase.L2                    * 5F044
         RPL
 
 * meta1&ob1 meta2&ob2
@@ -1830,15 +1830,15 @@ IMPLODE~5:
         A=DAT1  A                                * 5F53C
         LC(5)   ~CK2&Dispatch                    * 5F53F
         ?C=A    A                                * 5F546
-        GOYES   L_5F564                          * 5F549
+        GOYES   IMPLODE~5.L2                     * 5F549
         LC(5)   ~CK2&Dispatch_2                  * 5F54B
         ?C=A    A                                * 5F552
-        GOYES   L_5F564                          * 5F555
-L_5F557:
+        GOYES   IMPLODE~5.L2                     * 5F555
+IMPLODE~5.L1:
         LC(5)   SKIP                             * 5F557
         A=C     A                                * 5F55E
         PC=(A)                                   * 5F560
-L_5F564:
+IMPLODE~5.L2:
         LC(5)   COLA                             * 5F564
         A=C     A                                * 5F56B
         PC=(A)                                   * 5F56D
@@ -1886,7 +1886,7 @@ OBJ_5F63E:
 * refs (23): 54E84 57B51 5BE5B 5BE86 5BED3 5BF58 ...
 * Rewrite rules with the default operator table: the inline pattern/action pairs after the call are matched against the meta (see SUB_5F6F9)
 RuleMatch:
-        LC(5)   L_5F7E0                          * 5F6F2
+        LC(5)   SUB_5F6F9.L9                     * 5F6F2
 
 * refs (5): 5C699 5C6E5 5C749 5C851 5C929
 SUB_5F6F9:
@@ -1897,21 +1897,21 @@ SUB_5F6F9:
         D1=D1+  5                                * 5F70B
         CD1EX                                    * 5F70E
         R2=C.F  A                                * 5F711
-L_5F717:
+SUB_5F6F9.loop1:
         C=R2.F  A                                * 5F717
         D1=C                                     * 5F71D
         C=DAT0  A                                * 5F720
         D0=D0+  5                                * 5F723
         C=C+1   P                                * 5F726
-        GOC     L_5F78E                          * 5F729
+        GOC     SUB_5F6F9.L5                     * 5F729
         C=C-1   P                                * 5F72C
-L_5F72F:
+SUB_5F6F9.loop2:
         ?C#0    A                                * 5F72F
-        GOYES   L_5F738                          * 5F732
-        GOTO    L_5F7C2                          * 5F734
-L_5F738:
+        GOYES   SUB_5F6F9.L3                     * 5F732
+        GOTO    SUB_5F6F9.L8                     * 5F734
+SUB_5F6F9.L3:
         C=C-1   P                                * 5F738
-        GOC     L_5F79F                          * 5F73B
+        GOC     SUB_5F6F9.L6                     * 5F73B
         CPEX    0                                * 5F73E
         CSR     A                                * 5F742
         D=C     A                                * 5F744
@@ -1928,37 +1928,37 @@ L_5F738:
         CD0EX                                    * 5F762
         C=DAT1  A                                * 5F765
         ?C=A    A                                * 5F768
-        GOYES   L_5F785                          * 5F76B
+        GOYES   SUB_5F6F9.L4                     * 5F76B
         A=DAT0  A                                * 5F76D
         D0=D0+  5                                * 5F770
         LC(5)   DOROMP                           * 5F773
         ?C#A    A                                * 5F77A
-        GOYES   L_5F717                          * 5F77D
+        GOYES   SUB_5F6F9.loop1                  * 5F77D
         D0=D0+  6                                * 5F77F
-        GONC    L_5F717                          * 5F782
-L_5F785:
+        GONC    SUB_5F6F9.loop1                  * 5F782
+SUB_5F6F9.L4:
         D1=D1+  5                                * 5F785
         C=D     A                                * 5F788
-        GOTO    L_5F72F                          * 5F78A
-L_5F78E:
+        GOTO    SUB_5F6F9.loop2                  * 5F78A
+SUB_5F6F9.L5:
         GOSBVL  GETPTR                           * 5F78E
         A=DAT0  A                                * 5F795
         D0=D0+  5                                * 5F798
         PC=(A)                                   * 5F79B
-L_5F79F:
+SUB_5F6F9.L6:
         A=0     A                                * 5F79F
-L_5F7A1:
+SUB_5F6F9.loop7:
         A=A+1   A                                * 5F7A1
         CSR     A                                * 5F7A3
         ?C=0    P                                * 5F7A5
-        GOYES   L_5F7A1                          * 5F7A8
+        GOYES   SUB_5F6F9.loop7                  * 5F7A8
         RSTK=C                                   * 5F7AA
         R1=A.F  A                                * 5F7AC
         R0=A.F  A                                * 5F7B2
-        GOSUB   L_5F821                          * 5F7B8
+        GOSUB   SUB_5F6F9.loop10                 * 5F7B8
         C=RSTK                                   * 5F7BC
-        GOTO    L_5F72F                          * 5F7BE
-L_5F7C2:
+        GOTO    SUB_5F6F9.loop2                  * 5F7BE
+SUB_5F6F9.L8:
         CD0EX                                    * 5F7C2
         RSTK=C                                   * 5F7C5
         GOSBVL  GETPTR                           * 5F7C7
@@ -1968,7 +1968,7 @@ L_5F7C2:
         A=C     A                                * 5F7DA
         PC=(A)                                   * 5F7DC
 
-L_5F7E0:
+SUB_5F6F9.L9:
         CON(5)  x+                               * 5F7E0  address (the code jumps or points through it)
 
         CON(5)  x-                               * 5F7E5  address (the code jumps or points through it)
@@ -1994,47 +1994,47 @@ L_5F7E0:
         CON(5)  xPI                              * 5F817  address (the code jumps or points through it)
 
         CON(5)  %2                               * 5F81C  address (the code jumps or points through it)
-L_5F821:
+SUB_5F6F9.loop10:
         ST=1    4                                * 5F821
-L_5F824:
+SUB_5F6F9.L11:
         ST=0    5                                * 5F824
         A=DAT1  A                                * 5F827
         LC(5)   xFCNAPPLY                        * 5F82A
         ?C=A    A                                * 5F831
-        GOYES   L_5F88E                          * 5F834
+        GOYES   SUB_5F6F9.L16                    * 5F834
         AD1EX                                    * 5F836
         B=A     A                                * 5F839
         A=DAT1  A                                * 5F83B
         LC(5)   DOCOL                            * 5F83E
         ?C#A    A                                * 5F845
-        GOYES   L_5F875                          * 5F848
+        GOYES   SUB_5F6F9.L13                    * 5F848
         D1=D1+  5                                * 5F84A
         A=DAT1  A                                * 5F84D
         LC(5)   CKINFARGS                        * 5F850
         ?C=A    A                                * 5F857
-        GOYES   L_5F886                          * 5F85A
-        D1=(5)  L_5F908                          * 5F85C
+        GOYES   SUB_5F6F9.L15                    * 5F85A
+        D1=(5)  SUB_5F8F0.L1                     * 5F85C
         P=P-1                                    * 5F863
-L_5F865:
+SUB_5F6F9.loop12:
         P=P+1                                    * 5F865
         C=DAT1  A                                * 5F867
         D1=D1+  5                                * 5F86A
         ?C#A    A                                * 5F86D
-        GOYES   L_5F865                          * 5F870
-        GONC    L_5F877                          * 5F872
-L_5F875:
+        GOYES   SUB_5F6F9.loop12                 * 5F870
+        GONC    SUB_5F6F9.L14                    * 5F872
+SUB_5F6F9.L13:
         P=      0                                * 5F875
-L_5F877:
+SUB_5F6F9.L14:
         C=0     A                                * 5F877
         CPEX    0                                * 5F879
         A=B     A                                * 5F87D
         D1=A                                     * 5F87F
-        GOTO    L_5F8AC                          * 5F882
-L_5F886:
+        GOTO    SUB_5F6F9.L17                    * 5F882
+SUB_5F6F9.L15:
         ST=1    5                                * 5F886
         A=B     A                                * 5F889
         D1=A                                     * 5F88B
-L_5F88E:
+SUB_5F6F9.L16:
         D1=D1+  5                                * 5F88E
         A=DAT1  A                                * 5F891
         AD1EX                                    * 5F894
@@ -2044,11 +2044,11 @@ L_5F88E:
         D1=D1-  5                                * 5F8A0
         C=C+1   A                                * 5F8A3
         ?ST=1   5                                * 5F8A5
-        GOYES   L_5F8AC                          * 5F8A8
+        GOYES   SUB_5F6F9.L17                    * 5F8A8
         C=C+1   A                                * 5F8AA
-L_5F8AC:
+SUB_5F6F9.L17:
         ?ST=0   4                                * 5F8AC
-        GOYES   L_5F8DB                          * 5F8AF
+        GOYES   SUB_5F6F9.L18                    * 5F8AF
         D1=D1+  5                                * 5F8B1
         A=R0.F  A                                * 5F8B4
         A=A+1   A                                * 5F8BA
@@ -2059,8 +2059,8 @@ L_5F8AC:
         R1=A.F  A                                * 5F8CC
         ?A=0    A                                * 5F8D2
         RTNYES                                   * 5F8D5
-        GOTO    L_5F821                          * 5F8D7
-L_5F8DB:
+        GOTO    SUB_5F6F9.loop10                 * 5F8D7
+SUB_5F6F9.L18:
         A=R1.F  A                                * 5F8DB
         ?C>=A   A                                * 5F8E1
         RTNYES                                   * 5F8E4
@@ -2075,9 +2075,9 @@ SUB_5F8F0:
         A=A-1   A                                * 5F8F9
         R0=A.F  A                                * 5F8FB
         D1=D1-  5                                * 5F901
-        GOTO    L_5F824                          * 5F904
+        GOTO    SUB_5F6F9.L11                    * 5F904
 
-L_5F908:
+SUB_5F8F0.L1:
         CON(5)  CK0                              * 5F908  address (the code jumps or points through it)
 
         CON(5)  CK1&Dispatch                     * 5F90D  address (the code jumps or points through it)
@@ -2095,7 +2095,7 @@ L_5F908:
 splitup:
         CON(5)  (*)+5                            * 5F926  primitive code object
         GOSUB   SUB_5F93A                        * 5F92B
-        GOSUB   L_5F821                          * 5F92F
+        GOSUB   SUB_5F6F9.loop10                 * 5F92F
         GOVLNG  PUSH#LOOP                        * 5F933
 
 * refs (2): 5F92B 5F973
@@ -2207,18 +2207,18 @@ ROT#1+UNROT:
         A=A+1   A                                * 5FB8D
         LC(5)   #0002B                           * 5FB8F
         ?C<A    A                                * 5FB96
-        GOYES   L_5FBBA                          * 5FB99
+        GOYES   ROT#1+UNROT.L2                   * 5FB99
         GOSUB   SUB_5FBDC                        * 5FB9B
         A=A+A   A                                * 5FB9F
         LC(5)   BINT0                            * 5FBA1
         A=A+C   A                                * 5FBA8
-L_5FBAA:
+ROT#1+UNROT.loop1:
         DAT1=A  A                                * 5FBAA
         D1=D1-  10                               * 5FBAD
         A=DAT0  A                                * 5FBB0
         D0=D0+  5                                * 5FBB3
         PC=(A)                                   * 5FBB6
-L_5FBBA:
+ROT#1+UNROT.L2:
         R0=A.F  A                                * 5FBBA
         D1=D1-  10                               * 5FBC0
         GOSBVL  SAVPTR                           * 5FBC3
@@ -2226,7 +2226,7 @@ L_5FBBA:
         A=DAT1  A                                * 5FBD1
         D=D+1   A                                * 5FBD4
         D1=D1+  15                               * 5FBD6
-        GONC    L_5FBAA                          * 5FBD9
+        GONC    ROT#1+UNROT.loop1                * 5FBD9
 
 * refs (2): 5FB9B 5FBFC
 SUB_5FBDC:
@@ -2256,10 +2256,10 @@ pick1#0=case:
         A=DAT1  A                                * 5FC11
         D1=C                                     * 5FC14
         ?A=0    A                                * 5FC17
-        GOYES   L_5FC20                          * 5FC1A
-        GOTO    L_5F557                          * 5FC1C
-L_5FC20:
-        GOTO    L_5F564                          * 5FC20
+        GOYES   pick1#0=case.L1                  * 5FC1A
+        GOTO    IMPLODE~5.L1                     * 5FC1C
+pick1#0=case.L1:
+        GOTO    IMPLODE~5.L2                     * 5FC20
         RPL
 
 * n..1 #n -> n..1 #n n+1
@@ -2286,13 +2286,13 @@ OBJ_5FC65:
 SUB_5FCA3:
         C=C-1   A                                * 5FCA3
         R0=C.F  A                                * 5FCA5
-L_5FCAB:
+SUB_5FCA3.L1:
         A=DAT0  A                                * 5FCAB
         C=DAT1  A                                * 5FCAE
         ?C#A    A                                * 5FCB1
-        GOYES   L_5FCBA                          * 5FCB4
-        GOTO    L_5FD76                          * 5FCB6
-L_5FCBA:
+        GOYES   SUB_5FCA3.L2                     * 5FCB4
+        GOTO    SUB_5FCFC.L6                     * 5FCB6
+SUB_5FCA3.L2:
         AD0EX                                    * 5FCBA
         R1=A.F  A                                * 5FCBD
         CD1EX                                    * 5FCC3
@@ -2300,7 +2300,7 @@ L_5FCBA:
         A=DAT0  A                                * 5FCCC
         C=DAT1  A                                * 5FCCF
         ?C#A    A                                * 5FCD2
-        GOYES   L_5FCFA                          * 5FCD5
+        GOYES   SUB_5FCA3.L3                     * 5FCD5
         CD1EX                                    * 5FCD7
         R3=C.F  A                                * 5FCDA
         AD0EX                                    * 5FCE0
@@ -2310,8 +2310,8 @@ L_5FCBA:
         A=C     A                                * 5FCEF
         GOSUB   SUB_5FCFC                        * 5FCF1
         ?A=B    A                                * 5FCF5
-        GOYES   L_5FD13                          * 5FCF8
-L_5FCFA:
+        GOYES   SUB_5FCFC.L1                     * 5FCF8
+SUB_5FCA3.L3:
         RTNSC                                    * 5FCFA
 
 * refs (2): 5FCE3 5FCF1
@@ -2323,7 +2323,7 @@ SUB_5FCFC:
         CD1EX                                    * 5FD0C
         A=A-C   A                                * 5FD0F
         RTN                                      * 5FD11
-L_5FD13:
+SUB_5FCFC.L1:
         D1=C                                     * 5FD13
         A=R3.F  A                                * 5FD16
         D0=A                                     * 5FD1C
@@ -2332,27 +2332,27 @@ L_5FD13:
         CSR     A                                * 5FD25
         B=C     A                                * 5FD27
         B=B-1   A                                * 5FD29
-        GOC     L_5FD46                          * 5FD2B
-L_5FD2E:
+        GOC     SUB_5FCFC.L3                     * 5FD2B
+SUB_5FCFC.loop2:
         A=DAT0  W                                * 5FD2E
         C=DAT1  W                                * 5FD32
         D0=D0+  16                               * 5FD36
         D1=D1+  16                               * 5FD39
         ?C#A    W                                * 5FD3C
-        GOYES   L_5FD58                          * 5FD3F
+        GOYES   SUB_5FCFC.L4                     * 5FD3F
         B=B-1   A                                * 5FD41
-        GONC    L_5FD2E                          * 5FD43
-L_5FD46:
+        GONC    SUB_5FCFC.loop2                  * 5FD43
+SUB_5FCFC.L3:
         P=P-1                                    * 5FD46
-        GOC     L_5FD5E                          * 5FD48
+        GOC     SUB_5FCFC.L5                     * 5FD48
         A=DAT0  WP                               * 5FD4B
         C=DAT1  WP                               * 5FD4F
         ?C=A    WP                               * 5FD53
-        GOYES   L_5FD5E                          * 5FD56
-L_5FD58:
+        GOYES   SUB_5FCFC.L5                     * 5FD56
+SUB_5FCFC.L4:
         P=      0                                * 5FD58
-        GOTO    L_5FCFA                          * 5FD5A
-L_5FD5E:
+        GOTO    SUB_5FCA3.L3                     * 5FD5A
+SUB_5FCFC.L5:
         P=      0                                * 5FD5E
         BSL     A                                * 5FD60
         AD0EX                                    * 5FD62
@@ -2361,16 +2361,16 @@ L_5FD5E:
         CD1EX                                    * 5FD6A
         C=C-B   A                                * 5FD6D
         D1=C                                     * 5FD6F
-        GOTO    L_5FD88                          * 5FD72
-L_5FD76:
+        GOTO    SUB_5FCFC.L7                     * 5FD72
+SUB_5FCFC.L6:
         AD0EX                                    * 5FD76
         R1=A.F  A                                * 5FD79
         CD1EX                                    * 5FD7F
         R2=C.F  A                                * 5FD82
-L_5FD88:
+SUB_5FCFC.L7:
         A=R0.F  A                                * 5FD88
         A=A-1   A                                * 5FD8E
-        GOC     L_5FDB5                          * 5FD90
+        GOC     SUB_5FCFC.L8                     * 5FD90
         R0=A.F  A                                * 5FD93
         A=R1.F  A                                * 5FD99
         D0=A                                     * 5FD9F
@@ -2378,8 +2378,8 @@ L_5FD88:
         C=R2.F  A                                * 5FDA5
         D1=C                                     * 5FDAB
         D1=D1+  5                                * 5FDAE
-        GOTO    L_5FCAB                          * 5FDB1
-L_5FDB5:
+        GOTO    SUB_5FCA3.L1                     * 5FDB1
+SUB_5FCFC.L8:
         RTNCC                                    * 5FDB5
         RPL
 
@@ -2441,28 +2441,28 @@ OBJ_5FF73:
         A=DAT1  A                                * 5FF80
         LC(5)   DOIDNT                           * 5FF83
         ?C=A    A                                * 5FF8A
-        GOYES   L_5FFAE                          * 5FF8D
+        GOYES   OBJ_5FF73.L3                     * 5FF8D
         LC(5)   DOLAM                            * 5FF8F
         ?C=A    A                                * 5FF96
-        GOYES   L_5FFAE                          * 5FF99
-L_5FF9B:
+        GOYES   OBJ_5FF73.L3                     * 5FF99
+OBJ_5FF73.loop1:
         LA(5)   FALSE                            * 5FF9B
-L_5FFA5:
+OBJ_5FF73.loop2:
         C=RSTK                                   * 5FFA5
         D1=C                                     * 5FFA7
         PC=(A)                                   * 5FFAA
-L_5FFAE:
+OBJ_5FF73.L3:
         D1=D1+  5                                * 5FFAE
         A=DAT1  B                                * 5FFB1
         A=A-1   B                                * 5FFB4
-        GOC     L_5FF9B                          * 5FFB7
+        GOC     OBJ_5FF73.loop1                  * 5FFB7
         D1=D1+  2                                * 5FFBA
         A=DAT1  B                                * 5FFBD
         LC(2)   #26                              * 5FFC0
         ?C#A    B                                * 5FFC4
-        GOYES   L_5FF9B                          * 5FFC7
+        GOYES   OBJ_5FF73.loop1                  * 5FFC7
         LA(5)   TRUE                             * 5FFC9
-        GONC    L_5FFA5                          * 5FFD3
+        GONC    OBJ_5FF73.loop2                  * 5FFD3
         RPL
 
 * refs (1): 60107

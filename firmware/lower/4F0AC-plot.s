@@ -527,9 +527,9 @@ getxpos:
         ASSEMBLE
         GOSUB   SUB_5064F                        * 505E9
         GOSBVL  RADDF                            * 505ED
-L_505F4:
+getxpos.L1:
         ?A=0    S                                * 505F4
-        GOYES   L_5061F                          * 505F7
+        GOYES   getxpos.L2                       * 505F7
         C=0     W                                * 505F9
         P=      14                               * 505FC
         LC(1)   #1                               * 505FE
@@ -540,20 +540,20 @@ L_505F4:
         A=-A-1  S                                * 50614
         SETHEX                                   * 50617
         C=0     A                                * 50619
-        GOTO    L_5062C                          * 5061B
-L_5061F:
+        GOTO    getxpos.L3                       * 5061B
+getxpos.L2:
         GOSBVL  PACK                             * 5061F
         SETHEX                                   * 50626
         C=0     A                                * 50628
         C=C+1   A                                * 5062A
-L_5062C:
+getxpos.L3:
         R0=C.F  A                                * 5062C
         R1=A                                     * 50632
         GOSBVL  PUSH#                            * 50635
         GOSBVL  SAVPTR                           * 5063C
         SETDEC                                   * 50643
         A=R1                                     * 50645
-        GOVLNG  L_18CF6                          * 50648
+        GOVLNG  COERCE.L1                        * 50648
 
 * refs (2): 505E9 506B0
 SUB_5064F:
@@ -588,7 +588,7 @@ getypos:
         GOSUB   SUB_5064F                        * 506B0
         A=-A-1  S                                * 506B4
         GOSBVL  RADDF                            * 506B7
-        GOTO    L_505F4                          * 506BE
+        GOTO    getxpos.L1                       * 506BE
 
 * refs (15): 4F444 4F44E 4F606 4F61F 4F63D 4F656 ...
 * #sign #mag -> #n: 20-bit two's complement (#sign 0 = negative; magnitude capped at #7FFFF)
@@ -599,18 +599,18 @@ SgnMag>#:
         R1=C.F  A                                * 506D0
         LC(5)   #7FFFF                           * 506D6
         ?C>=A   A                                * 506DD
-        GOYES   L_506E4                          * 506E0
+        GOYES   SgnMag>#.L1                      * 506E0
         A=C     A                                * 506E2
-L_506E4:
+SgnMag>#.L1:
         C=R1.F  A                                * 506E4
         ?C#0    A                                * 506EA
-        GOYES   L_506F6                          * 506ED
+        GOYES   SgnMag>#.L2                      * 506ED
         C=0     W                                * 506EF
         C=C-A   A                                * 506F2
         A=C     A                                * 506F4
-L_506F6:
+SgnMag>#.L2:
         GOSBVL  SAVPTR                           * 506F6
-        GOTO    L_50721                          * 506FD
+        GOTO    RclRowMenu.L1                    * 506FD
 
 * refs (4): 4E365 515BE 516BD 6FCEC
 RclRowMenu:
@@ -621,7 +621,7 @@ RclRowMenu:
         A=DAT0  B                                * 50716
         LC(2)   #3F                              * 50719
         A=A&C   B                                * 5071D
-L_50721:
+RclRowMenu.L1:
         R0=A                                     * 50721
         GOVLNG  PUSH#LOOP                        * 50724
         RPL
@@ -646,36 +646,36 @@ OutOfPICT(4s)?:
         ST=0    2                                * 5078E
         ST=0    1                                * 50791
         A=A+A   A                                * 50794
-        GONC    L_5079F                          * 50796
+        GONC    OutOfPICT(4s)?.L1                * 50796
         ST=1    2                                * 50799
         ST=1    1                                * 5079C
-L_5079F:
+OutOfPICT(4s)?.L1:
         A=R3                                     * 5079F
         A=A+A   A                                * 507A2
-        GONC    L_507AF                          * 507A4
+        GONC    OutOfPICT(4s)?.L2                * 507A4
         ?ST=1   1                                * 507A7
-        GOYES   L_507CD                          * 507AA
+        GOYES   OutOfPICT(4s)?.loop4             * 507AA
         ST=1    2                                * 507AC
-L_507AF:
+OutOfPICT(4s)?.L2:
         ST=0    1                                * 507AF
         A=R2                                     * 507B2
         A=A+A   A                                * 507B5
-        GONC    L_507C0                          * 507B7
+        GONC    OutOfPICT(4s)?.L3                * 507B7
         ST=1    2                                * 507BA
         ST=1    1                                * 507BD
-L_507C0:
+OutOfPICT(4s)?.L3:
         A=R4                                     * 507C0
         A=A+A   A                                * 507C3
-        GONC    L_507E5                          * 507C5
+        GONC    OutOfPICT(4s)?.L6                * 507C5
         ?ST=0   1                                * 507C8
-        GOYES   L_507E2                          * 507CB
-L_507CD:
+        GOYES   OutOfPICT(4s)?.L5                * 507CB
+OutOfPICT(4s)?.loop4:
         GOSBVL  GETPTR                           * 507CD
         LA(5)   SEMI                             * 507D4
         PC=(A)                                   * 507DE
-L_507E2:
+OutOfPICT(4s)?.L5:
         ST=1    2                                * 507E2
-L_507E5:
+OutOfPICT(4s)?.L6:
         ST=0    1                                * 507E5
         LC(5)   CMOS                             * 507E8
         B=C     A                                * 507EF
@@ -689,18 +689,18 @@ L_507E5:
         A=R4                                     * 50809
         A=A+B   A                                * 5080C
         ?C>A    A                                * 5080E
-        GOYES   L_50819                          * 50811
+        GOYES   OutOfPICT(4s)?.L7                * 50811
         ST=1    2                                * 50813
         ST=1    1                                * 50816
-L_50819:
+OutOfPICT(4s)?.L7:
         A=R2                                     * 50819
         A=A+B   A                                * 5081C
         ?C>A    A                                * 5081E
-        GOYES   L_5082B                          * 50821
+        GOYES   OutOfPICT(4s)?.L8                * 50821
         ?ST=1   1                                * 50823
-        GOYES   L_507CD                          * 50826
+        GOYES   OutOfPICT(4s)?.loop4             * 50826
         ST=1    2                                * 50828
-L_5082B:
+OutOfPICT(4s)?.L8:
         ST=0    1                                * 5082B
         D0=D0+  5                                * 5082E
         C=DAT0  A                                * 50831
@@ -709,23 +709,23 @@ L_5082B:
         A=A+B   A                                * 50839
         R0=A                                     * 5083B
         ?C>A    A                                * 5083E
-        GOYES   L_50849                          * 50841
+        GOYES   OutOfPICT(4s)?.L9                * 50841
         ST=1    2                                * 50843
         ST=1    1                                * 50846
-L_50849:
+OutOfPICT(4s)?.L9:
         A=R3                                     * 50849
         A=A+B   A                                * 5084C
         ?C>A    A                                * 5084E
-        GOYES   L_5085F                          * 50851
+        GOYES   OutOfPICT(4s)?.L11               * 50851
         ?ST=0   1                                * 50853
-        GOYES   L_5085C                          * 50856
-        GOTO    L_507CD                          * 50858
-L_5085C:
+        GOYES   OutOfPICT(4s)?.L10               * 50856
+        GOTO    OutOfPICT(4s)?.loop4             * 50858
+OutOfPICT(4s)?.L10:
         ST=1    2                                * 5085C
-L_5085F:
+OutOfPICT(4s)?.L11:
         C=R0                                     * 5085F
         ?C<A    A                                * 50862
-        GOYES   L_5087F                          * 50865
+        GOYES   OutOfPICT(4s)?.L12               * 50865
         A=R1                                     * 50867
         C=R3                                     * 5086A
         R1=C                                     * 5086D
@@ -734,7 +734,7 @@ L_5085F:
         C=R2                                     * 50876
         R2=A                                     * 50879
         R4=C                                     * 5087C
-L_5087F:
+OutOfPICT(4s)?.L12:
         A=R1                                     * 5087F
         R0=A                                     * 50882
         A=R2                                     * 50885
@@ -747,9 +747,9 @@ L_5087F:
         R1=A                                     * 508A2
         GOSBVL  PUSH2#                           * 508A5
         ?ST=1   2                                * 508AC
-        GOYES   L_508B8                          * 508AF
+        GOYES   OutOfPICT(4s)?.L13               * 508AF
         GOVLNG  PushFLoop                        * 508B1
-L_508B8:
+OutOfPICT(4s)?.L13:
         GOVLNG  PushTLoop                        * 508B8
 
 * refs (2): 5078A 50B28
@@ -797,7 +797,7 @@ LINEOFF3:
         ASSEMBLE
         ST=1    0                                * 50AD1
         ST=0    1                                * 50AD4
-        GOTO    L_50B22                          * 50AD7
+        GOTO    LINEON.L1                        * 50AD7
 
 * #x1 #y1 #x2 #y2 ->
 * refs (2): 5073A 5074E
@@ -805,7 +805,7 @@ TOGLINE3:
         CON(5)  (*)+5                            * 50ADB  primitive code object
         ST=1    4                                * 50AE0
         ST=0    1                                * 50AE3
-        GOTO    L_50B25                          * 50AE6
+        GOTO    LINEON.L2                        * 50AE6
 
 * #x1 #y1 #x2 #y2 ->
 * refs (2): 50767 5077B
@@ -813,21 +813,21 @@ LINEON3:
         CON(5)  (*)+5                            * 50AEA  primitive code object
         ST=0    0                                * 50AEF
         ST=0    1                                * 50AF2
-        GOTO    L_50B22                          * 50AF5
+        GOTO    LINEON.L1                        * 50AF5
 
 * #x1 #y1 #x2 #y2 ->
 TOGLINE:
         CON(5)  (*)+5                            * 50AF9  primitive code object
         ST=1    4                                * 50AFE
         ST=1    1                                * 50B01
-        GOTO    L_50B25                          * 50B04
+        GOTO    LINEON.L2                        * 50B04
 
 * #x1 #y1 #x2 #y2 ->
 LINEOFF:
         CON(5)  (*)+5                            * 50B08  primitive code object
         ST=1    0                                * 50B0D
         ST=1    1                                * 50B10
-        GOTO    L_50B22                          * 50B13
+        GOTO    LINEON.L1                        * 50B13
 
 * #x1 #y1 #x2 #y2 ->
 * refs (9): BBAEC BBB00 BBB0F BBB23 BBB4B BBB69 ...
@@ -835,35 +835,35 @@ LINEON:
         CON(5)  (*)+5                            * 50B17  primitive code object
         ST=0    0                                * 50B1C
         ST=1    1                                * 50B1F
-L_50B22:
+LINEON.L1:
         ST=0    4                                * 50B22
-L_50B25:
+LINEON.L2:
         ST=0    5                                * 50B25
         GOSUB   SUB_508BF                        * 50B28
         A=R2                                     * 50B2C
         ST=0    2                                * 50B2F
         LC(5)   #7FFFF                           * 50B32
         ?C<A    A                                * 50B39
-        GOYES   L_50B4D                          * 50B3C
+        GOYES   LINEON.L3                        * 50B3C
         A=R4                                     * 50B3E
         ?C<A    A                                * 50B41
-        GOYES   L_50B54                          * 50B44
+        GOYES   LINEON.L4                        * 50B44
         A=R2                                     * 50B46
-        GOTO    L_50B5E                          * 50B49
-L_50B4D:
+        GOTO    LINEON.L5                        * 50B49
+LINEON.L3:
         C=R4                                     * 50B4D
-        GOTO    L_50B6B                          * 50B50
-L_50B54:
+        GOTO    LINEON.L6                        * 50B50
+LINEON.L4:
         C=R2                                     * 50B54
         ST=1    2                                * 50B57
-        GOTO    L_50B6B                          * 50B5A
-L_50B5E:
+        GOTO    LINEON.L6                        * 50B5A
+LINEON.L5:
         C=R4                                     * 50B5E
         ?C>=A   A                                * 50B61
-        GOYES   L_50B6B                          * 50B64
+        GOYES   LINEON.L6                        * 50B64
         ST=1    2                                * 50B66
         CAEX    A                                * 50B69
-L_50B6B:
+LINEON.L6:
         C=C-A   A                                * 50B6B
         R4=C                                     * 50B6D
         A=R1                                     * 50B70
@@ -873,13 +873,13 @@ L_50B6B:
         A=R4                                     * 50B7B
         ST=0    3                                * 50B7E
         ?C>=A   A                                * 50B81
-        GOYES   L_50B89                          * 50B84
+        GOYES   LINEON.L7                        * 50B84
         ST=1    3                                * 50B86
-L_50B89:
+LINEON.L7:
         ?ST=0   3                                * 50B89
-        GOYES   L_50B90                          * 50B8C
+        GOYES   LINEON.L8                        * 50B8C
         CAEX    A                                * 50B8E
-L_50B90:
+LINEON.L8:
         A=A+A   A                                * 50B90
         R0=A                                     * 50B92
         A=A-C   A                                * 50B95
@@ -887,9 +887,9 @@ L_50B90:
         A=R4                                     * 50B99
         C=R3                                     * 50B9C
         ?ST=0   3                                * 50B9F
-        GOYES   L_50BA6                          * 50BA2
+        GOYES   LINEON.L9                        * 50BA2
         CAEX    A                                * 50BA4
-L_50BA6:
+LINEON.L9:
         D=C     A                                * 50BA6
         A=A-C   A                                * 50BA8
         A=A+A   A                                * 50BAA
@@ -898,100 +898,100 @@ L_50BA6:
         R4=A                                     * 50BB1
         C=R0                                     * 50BB4
         RSTK=C                                   * 50BB7
-L_50BB9:
+LINEON.loop10:
         C=R2                                     * 50BB9
         R0=C                                     * 50BBC
         A=R1                                     * 50BBF
         C=D     A                                * 50BC2
         RSTK=C                                   * 50BC4
         ?ST=0   1                                * 50BC6
-        GOYES   L_50BD6                          * 50BC9
+        GOYES   LINEON.L11                       * 50BC9
         D1=(5)  ADISP                            * 50BCB
-        GOTO    L_50BDD                          * 50BD2
-L_50BD6:
+        GOTO    LINEON.L12                       * 50BD2
+LINEON.L11:
         D1=(5)  GDISP                            * 50BD6
-L_50BDD:
+LINEON.L12:
         GOSUB   SUB_50CD7                        * 50BDD
-        GOC     L_50C10                          * 50BE1
+        GOC     LINEON.L14                       * 50BE1
         ST=1    5                                * 50BE4
         GOSBVL  GETPIX3                          * 50BE7
         ?ST=0   4                                * 50BEE
-        GOYES   L_50C05                          * 50BF1
+        GOYES   LINEON.L13                       * 50BF1
         ST=0    0                                * 50BF3
         C=A     P                                * 50BF6
         C=C&B   P                                * 50BF9
         ?C=0    P                                * 50BFD
-        GOYES   L_50C05                          * 50C00
+        GOYES   LINEON.L13                       * 50C00
         ST=1    0                                * 50C02
-L_50C05:
+LINEON.L13:
         GOSBVL  pixon2                           * 50C05
-        GOTO    L_50C19                          * 50C0C
-L_50C10:
+        GOTO    LINEON.L15                       * 50C0C
+LINEON.L14:
         ?ST=0   5                                * 50C10
-        GOYES   L_50C19                          * 50C13
-        GOTO    L_50CD0                          * 50C15
-L_50C19:
+        GOYES   LINEON.L15                       * 50C13
+        GOTO    LINEON.L27                       * 50C15
+LINEON.L15:
         D0=(5)  ATTNFLG                          * 50C19
         C=DAT0  A                                * 50C20
         ?C=0    A                                * 50C23
-        GOYES   L_50C2C                          * 50C26
-        GOTO    L_50CD0                          * 50C28
-L_50C2C:
+        GOYES   LINEON.L16                       * 50C26
+        GOTO    LINEON.L27                       * 50C28
+LINEON.L16:
         C=RSTK                                   * 50C2C
         D=C     A                                * 50C2E
         C=R4.F  A                                * 50C30
         C=C+C   A                                * 50C36
-        GOC     L_50C83                          * 50C38
+        GOC     LINEON.L21                       * 50C38
         ?ST=1   3                                * 50C3B
-        GOYES   L_50C51                          * 50C3E
+        GOYES   LINEON.L17                       * 50C3E
         C=R2.F  A                                * 50C40
         ?ST=0   2                                * 50C46
-        GOYES   L_50C63                          * 50C49
+        GOYES   LINEON.L18                       * 50C49
         C=C-1   A                                * 50C4B
-        GOTO    L_50C65                          * 50C4D
-L_50C51:
+        GOTO    LINEON.L19                       * 50C4D
+LINEON.L17:
         C=R1.F  A                                * 50C51
         C=C+1   A                                * 50C57
         R1=C.F  A                                * 50C59
-        GOTO    L_50C6B                          * 50C5F
-L_50C63:
+        GOTO    LINEON.L20                       * 50C5F
+LINEON.L18:
         C=C+1   A                                * 50C63
-L_50C65:
+LINEON.L19:
         R2=C.F  A                                * 50C65
-L_50C6B:
+LINEON.L20:
         C=R4.F  A                                * 50C6B
         A=R3.F  A                                * 50C71
         C=C+A   A                                * 50C77
         R4=C.F  A                                * 50C79
-        GOTO    L_50C95                          * 50C7F
-L_50C83:
+        GOTO    LINEON.L22                       * 50C7F
+LINEON.L21:
         A=R4.F  A                                * 50C83
         C=RSTK                                   * 50C89
         RSTK=C                                   * 50C8B
         A=A+C   A                                * 50C8D
         R4=A.F  A                                * 50C8F
-L_50C95:
+LINEON.L22:
         ?ST=0   3                                * 50C95
-        GOYES   L_50CB7                          * 50C98
+        GOYES   LINEON.L25                       * 50C98
         C=R2.F  A                                * 50C9A
         ?ST=0   2                                * 50CA0
-        GOYES   L_50CAB                          * 50CA3
+        GOYES   LINEON.L23                       * 50CA3
         C=C-1   A                                * 50CA5
-        GOTO    L_50CAD                          * 50CA7
-L_50CAB:
+        GOTO    LINEON.L24                       * 50CA7
+LINEON.L23:
         C=C+1   A                                * 50CAB
-L_50CAD:
+LINEON.L24:
         R2=C.F  A                                * 50CAD
-        GOTO    L_50CC5                          * 50CB3
-L_50CB7:
+        GOTO    LINEON.L26                       * 50CB3
+LINEON.L25:
         C=R1.F  A                                * 50CB7
         C=C+1   A                                * 50CBD
         R1=C.F  A                                * 50CBF
-L_50CC5:
+LINEON.L26:
         D=D-1   A                                * 50CC5
-        GOC     L_50CD0                          * 50CC7
-        GOLONG  L_50BB9                          * 50CCA
-L_50CD0:
+        GOC     LINEON.L27                       * 50CC7
+        GOLONG  LINEON.loop10                    * 50CCA
+LINEON.L27:
         GOVLNG  GETPTRLOOP                       * 50CD0
 
 * refs (1): 50BDD
@@ -1064,9 +1064,9 @@ LookForEQ/äDAT~2:
         GOSUB   SUB_50E94                        * 50E6B
         C=R1.F  A                                * 50E6F
         ?C<=A   A                                * 50E75
-        GOYES   L_50E7C                          * 50E78
+        GOYES   !#1+IF<dim-1.L1                  * 50E78
         A=A+1   A                                * 50E7A
-L_50E7C:
+!#1+IF<dim-1.L1:
         D=D+1   A                                * 50E7C
         DAT1=A  A                                * 50E7E
         C=R0                                     * 50E81
@@ -1090,9 +1090,9 @@ SUB_50E94:
         CON(5)  (*)+5                            * 50EA5  primitive code object
         GOSUB   SUB_50E94                        * 50EAA
         A=A-1   A                                * 50EAE
-        GONC    L_50E7C                          * 50EB0
+        GONC    !#1+IF<dim-1.L1                  * 50EB0
         A=0     A                                * 50EB3
-        GOTO    L_50E7C                          * 50EB5
+        GOTO    !#1+IF<dim-1.L1                  * 50EB5
         BSS     2                                * 50EB9  zeros
         RPL
 
@@ -1113,7 +1113,7 @@ OBJ_50EE3:
 
 * refs (4): 3E761 484E0 4DB27 50EF7
 ~BINT32;TestSysFlag:
-        :: BINT32 TestSysFlag ;                  * 50F2E
+        :: BINT32 TestSysFlag ;                  * 50F2E  flag -32: Solid cursor / Inverse cursor
 
 * refs (1): 49E2A
 ChkEQ(eq)~1:
@@ -1275,7 +1275,7 @@ PtoR:
 PlotEval:
         :: ERRSET EVALCRUNCH ERRTRAP             * 5135F
           :: ERROR@ # 100 #/ SWAPDROP BINT3 #<>case ERRJMP * 51373
-            ERRORCLR BINT31 TestSysFlag ?SKIP ~BINT1;ClrLastPt * 513A0
+            ERRORCLR BINT31 TestSysFlag ?SKIP ~BINT1;ClrLastPt * 513A0  flag -31: Connect points / Plot points only
             2RDROP ;                             * 513B9
           0LASTOWDOB! CK1NOLASTWD U>nbr ;        * 513C3
 
@@ -1546,14 +1546,14 @@ C%%>C%:
         CON(5)  (*)+5                            * 519F8  primitive code object
         ASSEMBLE
         GOSUBL  POPC%%                           * 519FD
-        GOTO    L_51A13                          * 51A03
+        GOTO    %%>C%.L1                         * 51A03
 
 * %%re %%im -> C%
 * refs (17): 379D7 51DA1 51E5A 51EF0 520FD 52166 ...
 %%>C%:
         CON(5)  (*)+5                            * 51A07  primitive code object
         GOSBVL  SUB_2A0B1                        * 51A0C
-L_51A13:
+%%>C%.L1:
         R3=C                                     * 51A13
         GOSBVL  PACK                             * 51A16
         AR3EX                                    * 51A1D
@@ -1562,7 +1562,7 @@ L_51A13:
         GOSBVL  PACK                             * 51A26
         C=R3                                     * 51A2D
         CAEX    W                                * 51A30
-        GOTO    L_51B81                          * 51A33
+        GOTO    C%CHS.L2                         * 51A33
 
 * %re -> C%
 * refs (17): 1B165 1B40E 1B717 1B784 1B88A 1B8ED ...
@@ -1570,7 +1570,7 @@ Re>C%:
         CON(5)  (*)+5                            * 51A37  primitive code object
         GOSBVL  POP1%                            * 51A3C
         C=0     W                                * 51A43
-        GOTO    L_51B81                          * 51A46
+        GOTO    C%CHS.L2                         * 51A46
 
 * C% -> C%'
 * refs (6): 52634 5264D 52661 527F0 52822 52859
@@ -1579,7 +1579,7 @@ C%*i:
         GOSUBL  POPC%                            * 51A4F
         CAEX    W                                * 51A55
         A=-A-1  S                                * 51A58
-        GOTO    L_51B81                          * 51A5B
+        GOTO    C%CHS.L2                         * 51A5B
 
 * C% -> C%'
 * refs (5): 5263E 5266B 527FA 5282C 52854
@@ -1587,7 +1587,7 @@ C/i:
         CON(5)  (*)+5                            * 51A5F  primitive code object
         GOSUBL  POPC%                            * 51A64
         CAEX    W                                * 51A6A
-        GOTO    L_51B7E                          * 51A6D
+        GOTO    C%CHS.L1                         * 51A6D
         RPL
 
 * %r %ang %ph -> %x %y %z
@@ -1622,7 +1622,7 @@ C%%0=:
         D1=D1+  10                               * 51B35
         C=DAT1  W                                * 51B38
         D1=D1+  5                                * 51B3C
-        GOTO    L_51B55                          * 51B3F
+        GOTO    C%0=.L1                          * 51B3F
 
 * C% -> flag
 * refs (6): 37D05 520D5 52111 521ED 5237E 5F145
@@ -1632,14 +1632,14 @@ C%0=:
         AD1EX                                    * 51B4B
         D1=D1+  5                                * 51B4E
         C=DAT1  W                                * 51B51
-L_51B55:
+C%0=.L1:
         ?C#0    W                                * 51B55
-        GOYES   L_51B66                          * 51B58
+        GOYES   C%0=.L2                          * 51B58
         D1=D1+  16                               * 51B5A
         C=DAT1  W                                * 51B5D
         ?C#0    W                                * 51B61
-        GOYES   L_51B66                          * 51B64
-L_51B66:
+        GOYES   C%0=.L2                          * 51B64
+C%0=.L2:
         D1=A                                     * 51B66
         GOVLNG  OverWrF/TLp                      * 51B69
 
@@ -1649,9 +1649,9 @@ C%CHS:
         CON(5)  (*)+5                            * 51B70  primitive code object
         GOSUBL  POPC%                            * 51B75
         A=-A-1  S                                * 51B7B
-L_51B7E:
+C%CHS.L1:
         C=-C-1  S                                * 51B7E
-L_51B81:
+C%CHS.L2:
         GOSUBL  PUSHC%                           * 51B81
         A=DAT0  A                                * 51B87
         D0=D0+  5                                * 51B8A
@@ -1663,9 +1663,9 @@ C%%CHS:
         CON(5)  (*)+5                            * 51B91  primitive code object
         GOSUBL  POPC%%                           * 51B96
         A=-A-1  S                                * 51B9C
-L_51B9F:
+C%%CHS.L1:
         C=-C-1  S                                * 51B9F
-L_51BA2:
+C%%CHS.L2:
         GOSUBL  PUSHC%%                          * 51BA2
         A=DAT0  A                                * 51BA8
         D0=D0+  5                                * 51BAB
@@ -1676,14 +1676,14 @@ L_51BA2:
 C%CONJ:
         CON(5)  (*)+5                            * 51BB2  primitive code object
         GOSUBL  POPC%                            * 51BB7
-        GOTO    L_51B7E                          * 51BBD
+        GOTO    C%CHS.L1                         * 51BBD
 
 * C%% -> C%%'
 * refs (5): 35F76 37D96 7CF54 92AC9 CB648
 C%%CONJ:
         CON(5)  (*)+5                            * 51BC1  primitive code object
         GOSUBL  POPC%%                           * 51BC6
-        GOTO    L_51B9F                          * 51BCC
+        GOTO    C%%CHS.L1                        * 51BCC
         RPL
 
 * C% % -> C%'

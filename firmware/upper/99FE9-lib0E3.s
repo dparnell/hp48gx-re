@@ -201,13 +201,13 @@ ROMP_0E3_01C:
             D1=D1+  8                            * 9A619
             LC(5)   #000EE                       * 9A61C
             D=C     B                            * 9A623
-L_9A626:
+ROMP_0E3_01C.loop1:
             D1=D1+  2                            * 9A626
             C=DAT1  B                            * 9A629
             ?D=C    B                            * 9A62C
-            GOYES   L_9A626                      * 9A62F
+            GOYES   ROMP_0E3_01C.loop1           * 9A62F
             A=A-1   A                            * 9A631
-            GONC    L_9A626                      * 9A633
+            GONC    ROMP_0E3_01C.loop1           * 9A633
             R0=C                                 * 9A636
             GOVLNG  PUSH#LOOP                    * 9A639
           ENDCODE                                * 9A640
@@ -322,7 +322,7 @@ ROMP_0E3_028:
         :: ROMPTR 0E3 04B palparse ?SEMI         * 9AD8D
           3DROP ERROR@ BINT1 #= caseERRJMP       * 9ADA7
           SYMBOL ID Keyword ID Conflict x- ;     * 9ADC0
-          # E303 JstGetTHEMESG DISPROW1 NULL$ DISPROW2 ERRBEEP ; * 9ADFB
+          # E303 JstGetTHEMESG DISPROW1 NULL$ DISPROW2 ERRBEEP ; * 9ADFB  "Keyword Conflict"
 
 * ROMPTR 0E3 029
 * refs (1): 99FF5
@@ -658,7 +658,7 @@ ROMP_0E3_044:
 * ROMPTR 0E3 045
 * refs (1): 99FF5
 ROMP_0E3_045:
-        :: CLEARLCD # E301 JstGetTHEMESG DISPROW4 SetDA1Valid ROMPTR 0E3 046 ; * 9C650
+        :: CLEARLCD # E301 JstGetTHEMESG DISPROW4 SetDA1Valid ROMPTR 0E3 046 ; * 9C650  "Starting Solver"
 
 * ROMPTR 0E3 046
 * refs (1): 99FF5
@@ -708,22 +708,22 @@ ROMP_0E3_04B:
           D=C     A                              * 9C7D1
           LC(5)   #00002                         * 9C7D3
           B=C     A                              * 9C7DA
-L_9C7DC:
+ROMP_0E3_04B.loop1:
           C=DAT1  B                              * 9C7DC
           LA(2)   #10                            * 9C7DF
           ?C>A    B                              * 9C7E6
-          GOYES   L_9C80D                        * 9C7E9
+          GOYES   ROMP_0E3_04B.L2                * 9C7E9
           P=C     0                              * 9C7EB
           LC(16)  #5543322110111111              * 9C7EF
           P=C     0                              * 9C801
           C=0     A                              * 9C805
           CPEX    0                              * 9C807
           B=B+C   A                              * 9C80B
-L_9C80D:
+ROMP_0E3_04B.L2:
           B=B+1   A                              * 9C80D
           D1=D1+  2                              * 9C80F
           D=D-1   A                              * 9C812
-          GONC    L_9C7DC                        * 9C814
+          GONC    ROMP_0E3_04B.loop1             * 9C814
           B=B+B   A                              * 9C817
           LC(5)   #00005                         * 9C819
           BCEX    A                              * 9C820
@@ -752,115 +752,115 @@ L_9C80D:
           D=C     A                              * 9C86F
           LC(2)   #11                            * 9C871
           B=C     B                              * 9C875
-L_9C878:
+ROMP_0E3_04B.loop3:
           A=DAT0  B                              * 9C878
           ?A<B    B                              * 9C87B
-          GOYES   L_9C88A                        * 9C87E
+          GOYES   ROMP_0E3_04B.L4                * 9C87E
           DAT1=A  B                              * 9C880
           D1=D1+  2                              * 9C883
-          GOTO    L_9C9C5                        * 9C886
-L_9C88A:
+          GOTO    ROMP_0E3_04B.L25               * 9C886
+ROMP_0E3_04B.L4:
           A=A-1   B                              * 9C88A
           A=A-1   B                              * 9C88D
-          GONC    L_9C8AC                        * 9C890
+          GONC    ROMP_0E3_04B.L6                * 9C890
           LC(12)  #2854534E4F43                  * 9C893
-L_9C8A1:
+ROMP_0E3_04B.loop5:
           DAT1=C  12                             * 9C8A1
           D1=D1+  12                             * 9C8A5
-          GOTO    L_9C9C5                        * 9C8A8
-L_9C8AC:
+          GOTO    ROMP_0E3_04B.L25               * 9C8A8
+ROMP_0E3_04B.L6:
           A=A-1   B                              * 9C8AC
-          GONC    L_9C8C3                        * 9C8AF
+          GONC    ROMP_0E3_04B.L7                * 9C8AF
           LC(12)  #284553414255                  * 9C8B2
-          GOC     L_9C8A1                        * 9C8C0
-L_9C8C3:
+          GOC     ROMP_0E3_04B.loop5             * 9C8C0
+ROMP_0E3_04B.L7:
           A=A-1   B                              * 9C8C3
-          GONC    L_9C8E0                        * 9C8C6
+          GONC    ROMP_0E3_04B.L8                * 9C8C6
           LC(10)  #2845544649                    * 9C8C9
           DAT1=C  10                             * 9C8D5
           D1=D1+  10                             * 9C8D9
-          GOTO    L_9C9C5                        * 9C8DC
-L_9C8E0:
+          GOTO    ROMP_0E3_04B.L25               * 9C8DC
+ROMP_0E3_04B.L8:
           A=A-1   B                              * 9C8E0
-          GONC    L_9C8FB                        * 9C8E3
+          GONC    ROMP_0E3_04B.L10               * 9C8E3
           LC(8)   #28534F43                      * 9C8E6
-L_9C8F0:
+ROMP_0E3_04B.loop9:
           DAT1=C  8                              * 9C8F0
           D1=D1+  8                              * 9C8F4
-          GOTO    L_9C9C5                        * 9C8F7
-L_9C8FB:
+          GOTO    ROMP_0E3_04B.L25               * 9C8F7
+ROMP_0E3_04B.L10:
           A=A-1   B                              * 9C8FB
-          GONC    L_9C90E                        * 9C8FE
+          GONC    ROMP_0E3_04B.L11               * 9C8FE
           LC(8)   #284E4953                      * 9C901
-          GOC     L_9C8F0                        * 9C90B
-L_9C90E:
+          GOC     ROMP_0E3_04B.loop9             * 9C90B
+ROMP_0E3_04B.L11:
           A=A-1   B                              * 9C90E
-          GONC    L_9C926                        * 9C911
+          GONC    ROMP_0E3_04B.L13               * 9C911
           LC(6)   #646172                        * 9C914
-L_9C91C:
+ROMP_0E3_04B.loop12:
           DAT1=C  6                              * 9C91C
           D1=D1+  6                              * 9C920
-          GONC    L_9C98B                        * 9C923
-L_9C926:
+          GONC    ROMP_0E3_04B.L20               * 9C923
+ROMP_0E3_04B.L13:
           A=A-1   B                              * 9C926
-          GONC    L_9C937                        * 9C929
+          GONC    ROMP_0E3_04B.L14               * 9C929
           LC(6)   #6F7774                        * 9C92C
-          GOC     L_9C91C                        * 9C934
-L_9C937:
+          GOC     ROMP_0E3_04B.loop12            * 9C934
+ROMP_0E3_04B.L14:
           A=A-1   B                              * 9C937
-          GONC    L_9C946                        * 9C93A
+          GONC    ROMP_0E3_04B.L15               * 9C93A
           LC(4)   #2A32                          * 9C93D
-          GOC     L_9C984                        * 9C943
-L_9C946:
+          GOC     ROMP_0E3_04B.loop19            * 9C943
+ROMP_0E3_04B.L15:
           A=A-1   B                              * 9C946
-          GONC    L_9C955                        * 9C949
+          GONC    ROMP_0E3_04B.L16               * 9C949
           LC(4)   #2A29                          * 9C94C
-          GOC     L_9C984                        * 9C952
-L_9C955:
+          GOC     ROMP_0E3_04B.loop19            * 9C952
+ROMP_0E3_04B.L16:
           A=A-1   B                              * 9C955
-          GONC    L_9C969                        * 9C958
+          GONC    ROMP_0E3_04B.L17               * 9C958
           LC(2)   #0A                            * 9C95B
           DAT1=C  B                              * 9C95F
           D1=D1+  2                              * 9C962
-          GOTO    L_9C9C5                        * 9C965
-L_9C969:
+          GOTO    ROMP_0E3_04B.L25               * 9C965
+ROMP_0E3_04B.L17:
           A=A-1   B                              * 9C969
-          GONC    L_9C978                        * 9C96C
+          GONC    ROMP_0E3_04B.L18               * 9C96C
           LC(4)   #2D32                          * 9C96F
-          GOC     L_9C984                        * 9C975
-L_9C978:
+          GOC     ROMP_0E3_04B.loop19            * 9C975
+ROMP_0E3_04B.L18:
           A=A-1   B                              * 9C978
-          GONC    L_9C98F                        * 9C97B
+          GONC    ROMP_0E3_04B.L21               * 9C97B
           LC(4)   #325E                          * 9C97E
-L_9C984:
+ROMP_0E3_04B.loop19:
           DAT1=C  4                              * 9C984
           D1=D1+  4                              * 9C988
-L_9C98B:
-          GOTO    L_9C9C5                        * 9C98B
-L_9C98F:
+ROMP_0E3_04B.L20:
+          GOTO    ROMP_0E3_04B.L25               * 9C98B
+ROMP_0E3_04B.L21:
           A=A-1   B                              * 9C98F
-          GONC    L_9C99E                        * 9C992
+          GONC    ROMP_0E3_04B.L22               * 9C992
           LC(4)   #282F                          * 9C995
-          GOC     L_9C984                        * 9C99B
-L_9C99E:
+          GOC     ROMP_0E3_04B.loop19            * 9C99B
+ROMP_0E3_04B.L22:
           A=A-1   B                              * 9C99E
-          GONC    L_9C9AD                        * 9C9A1
+          GONC    ROMP_0E3_04B.L23               * 9C9A1
           LC(4)   #283D                          * 9C9A4
-          GOC     L_9C984                        * 9C9AA
-L_9C9AD:
+          GOC     ROMP_0E3_04B.loop19            * 9C9AA
+ROMP_0E3_04B.L23:
           A=A-1   B                              * 9C9AD
-          GONC    L_9C9BC                        * 9C9B0
+          GONC    ROMP_0E3_04B.L24               * 9C9B0
           LC(4)   #2929                          * 9C9B3
-          GOC     L_9C984                        * 9C9B9
-L_9C9BC:
+          GOC     ROMP_0E3_04B.loop19            * 9C9B9
+ROMP_0E3_04B.L24:
           LC(4)   #282A                          * 9C9BC
-          GONC    L_9C984                        * 9C9C2
-L_9C9C5:
+          GONC    ROMP_0E3_04B.loop19            * 9C9C2
+ROMP_0E3_04B.L25:
           D0=D0+  2                              * 9C9C5
           D=D-1   A                              * 9C9C8
-          GOC     L_9C9D1                        * 9C9CA
-          GOTO    L_9C878                        * 9C9CD
-L_9C9D1:
+          GOC     ROMP_0E3_04B.L26               * 9C9CA
+          GOTO    ROMP_0E3_04B.loop3             * 9C9CD
+ROMP_0E3_04B.L26:
           LC(2)   #27                            * 9C9D1
           DAT1=C  B                              * 9C9D5
           GOSBVL  GETPTR                         * 9C9D8
@@ -926,7 +926,7 @@ ROMP_0E3_052:
 * refs (1): 99FF5
 ROMP_0E3_053:
         :: DUP#1= ITE DROPNULL$                  * 9CCA2
-          :: UNCOERCE ROMPTR 0E3 017 UNCOERCE EDITDECOMP$ # E302 * 9CCB6
+          :: UNCOERCE ROMPTR 0E3 017 UNCOERCE EDITDECOMP$ # E302 * 9CCB6  " OF "
             JstGetTHEMESG &$SWAP EDITDECOMP$ &$ ; * 9CCDF
           ROMPTR 0E3 018 DUP#1= ITE              * 9CCF8
           :: DROP $ " *" &$ ;                    * 9CD0D

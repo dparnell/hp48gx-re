@@ -36,8 +36,8 @@ LIB0E2.hash:
         CON(5)  0                                * E38D2  names of length 14
         CON(5)  0                                * E38D7  names of length 15
         CON(5)  0                                * E38DC  names of length 16
-        REL(5)  L_E38E6                          * E38E1  end of the names
-L_E38E6:
+        REL(5)  LIB0E2.hash.L1                   * E38E1  end of the names
+LIB0E2.hash.L1:
         CON(5)  0                                * E38E6  command 000 has no name
         ENDLENGTH                                * E38EB
 

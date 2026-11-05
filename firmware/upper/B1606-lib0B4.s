@@ -45,23 +45,23 @@ ROMP_0B4_1C0:
 * ROMPTR 0B4 1C1
 * refs (1): A2437
 ROMP_0B4_1C1:
-        :: ROMPTR 0B0 0AB # B917 BINT1 BINT10 # B918 BINT1 BINT19 # B919 * B17A0
-          BINT1 BINT28 # B91A BINT8 BINT37 # B91B BINT50 BINT37 # B91C # 5C * B17E2
+        :: ROMPTR 0B0 0AB # B917 BINT1 BINT10 # B918 BINT1 BINT19 # B919 * B17A0  "Number Format:"  "Angle Measure:"  "Coord System:"
+          BINT1 BINT28 # B91A BINT8 BINT37 # B91B BINT50 BINT37 # B91C # 5C * B17E2  "Beep"  "Clock"  "FM,"
           BINT37 'RROMPTR@ ROMPTR 0B4 1C7 BINT61 BINT8 BINT19 BINT9 BINT12 * B1828
-          MINUSONE BINT33 # B91D ROMPTR 0B5 143 BINT17 ROMPTR 0B5 144 * B1856
+          MINUSONE BINT33 # B91D ROMPTR 0B5 143 BINT17 ROMPTR 0B5 144 * B1856  "Choose number display format"
           MINUSONE 'RROMPTR@ ROMPTR 0B4 1C9 BINT85 BINT8 BINT13 BINT9 BINT13 * B1885
-          { BINT0 } BINT4 # B91E ROMPTR 0B5 148 BINT4 %0_2A2B4 MINUSONE * B18B3
+          { BINT0 } BINT4 # B91E ROMPTR 0B5 148 BINT4 %0_2A2B4 MINUSONE * B18B3  "Enter decimal places to display"
           'RROMPTR@ ROMPTR 0B4 1CA BINT61 BINT17 BINT43 BINT9 BINT12 * B18EB
-          MINUSONE BINT17 # B91F ROMPTR 0B5 149 BINT17 ROMPTR 0B5 14A * B1914
+          MINUSONE BINT17 # B91F ROMPTR 0B5 149 BINT17 ROMPTR 0B5 14A * B1914  "Choose angle measure"
           MINUSONE 'RROMPTR@ ROMPTR 0B4 1CA BINT61 BINT26 BINT67 BINT9 * B1943
-          BINT12 MINUSONE BINT17 # B920 ROMPTR 0B5 14D BINT17 ROMPTR 0B5 14E * B196C
+          BINT12 MINUSONE BINT17 # B920 ROMPTR 0B5 14D BINT17 ROMPTR 0B5 14E * B196C  "Choose coordinate system"
           MINUSONE 'RROMPTR@ ROMPTR 0B4 1CA BINT1 BINT35 BINT6 BINT9 BINT32 * B19A0
-          MINUSONE MINUSONE # B921 MINUSONE MINUSONE TRUE MINUSONE 'RROMPTR@ * B19CE
+          MINUSONE MINUSONE # B921 MINUSONE MINUSONE TRUE MINUSONE 'RROMPTR@ * B19CE  "Enable standard beep?"
           ROMPTR 0B4 1CA BINT43 BINT35 BINT6 BINT9 BINT32 MINUSONE MINUSONE * B19FB
-          # B922 MINUSONE MINUSONE FALSE MINUSONE 'RROMPTR@ ROMPTR 0B4 1CA * B1A29
-          BINT85 BINT35 BINT6 BINT9 BINT32 MINUSONE MINUSONE # B923 MINUSONE * B1A57
+          # B922 MINUSONE MINUSONE FALSE MINUSONE 'RROMPTR@ ROMPTR 0B4 1CA * B1A29  "Display ticking clock?"
+          BINT85 BINT35 BINT6 BINT9 BINT32 MINUSONE MINUSONE # B923 MINUSONE * B1A57  "Use comma as fraction mark?"
           MINUSONE FALSE MINUSONE BINT6 BINT7 'RROMPTR@ ROMPTR 0B4 1C4 * B1A89
-          # B916 ROMPTR 0B4 1C2 BINT7 ROMPTR 0B0 0AA DoInputForm NOT?SEMI * B1AB2
+          # B916 ROMPTR 0B4 1C2 BINT7 ROMPTR 0B0 0AA DoInputForm NOT?SEMI * B1AB2  "Calculator Modes"
           ROMPTR 0B4 1C3 ;                       * B1AE1
 
 * ROMPTR 0B4 1C2
@@ -139,7 +139,7 @@ ROMP_0B4_1CB:
 * refs (1): A2437
 ROMP_0B4_1CC:
         :: DUP ROMPTR 0B0 0C5 ?ROMPTR@ ' ROMPTR 0B5 14B ?ROMPTR@ EQUAL ITE * B1E6A  ~gFldVal
-          :: BINT18 SysITE                       * B1EA3
+          :: BINT18 SysITE                       * B1EA3  flag -18: angle mode
             :: ' ROMPTR 0B5 14C ;                * B1EB2
             :: ' ROMPTR 0B5 14A ; ;              * B1ECC
           :: ' ROMPTR 0B5 14B ;                  * B1EEB
@@ -149,7 +149,7 @@ ROMP_0B4_1CC:
 * refs (1): A2437
 ROMP_0B4_1CD:
         :: DUP ROMPTR 0B0 0C5 ?ROMPTR@ ' ROMPTR 0B5 14E ?ROMPTR@ EQUAL ITE * B1F2A  ~gFldVal
-          :: BINT15 SysITE                       * B1F63
+          :: BINT15 SysITE                       * B1F63  flag -15: coordinate system
             :: ' ROMPTR 0B5 150 ;                * B1F72
             :: ' ROMPTR 0B5 14F ; ;              * B1F8C
           :: ' ROMPTR 0B5 14E ;                  * B1FAB
@@ -164,7 +164,7 @@ ROMP_0B4_1CE:
 * refs (1): A2437
 ROMP_0B4_1CF:
         :: TakeOver NULL{}                       * B201E
-          { LAM 'F } BIND 'RROMPTR@ ROMPTR 0B4 1D0 # B935 'RROMPTR@ * B202D
+          { LAM 'F } BIND 'RROMPTR@ ROMPTR 0B4 1D0 # B935 'RROMPTR@ * B202D  "System Flags"
           ROMPTR 0B5 157 NULL{} BINT1 ROMPTR 0B3 000 NOTcase * B2066  ~Choose
           :: ABND FALSE ;                        * B208B
           DROP LAM 'F ABND DUPLENCOMP #0= casedrop FALSE * B209F
@@ -227,7 +227,7 @@ ROMP_0B4_1D6:
 * ROMPTR 0B4 1D7
 * refs (1): A2437
 ROMP_0B4_1D7:
-        :: ROMPTR 0B0 0AB TRUE # B982 TRUE MINUSONE TRUE ROMPTR 0B4 1D8 * B2466
+        :: ROMPTR 0B0 0AB TRUE # B982 TRUE MINUSONE TRUE ROMPTR 0B4 1D8 * B2466  "Objects in"
           caseDROP ;                             * B249F
 
 * ROMPTR 0B4 1D8
@@ -363,9 +363,9 @@ ROMP_0B4_1DE:
 * ROMPTR 0B4 1DF
 * refs (1): A2437
 ROMP_0B4_1DF:
-        :: 1LAMBIND # B984 BINT1 BINT19 'DROPFALSE BINT31 BINT17 BINT97 * B2D30
-          BINT9 BINT21 MINUSONE BINT4 # B985 # B986 MINUSONE 1GETLAM XEQRCL * B2D62
-          DUP ONEONE 'DROPFALSE # B983 DoInputForm NOTcase * B2D99
+        :: 1LAMBIND # B984 BINT1 BINT19 'DROPFALSE BINT31 BINT17 BINT97 * B2D30  "Object:"
+          BINT9 BINT21 MINUSONE BINT4 # B985 # B986 MINUSONE 1GETLAM XEQRCL * B2D62  "Enter new object"  "Obs in"
+          DUP ONEONE 'DROPFALSE # B983 DoInputForm NOTcase * B2D99  "Edit Variable"
           :: ABND FALSE ;                        * B2DBC
           1GETABND ROMPTR 0B5 15C TRUE ;         * B2DD0
 
@@ -381,12 +381,12 @@ ROMP_0B4_1E0:
 * ROMPTR 0B4 1E1
 * refs (1): A2437
 ROMP_0B4_1E1:
-        :: 'RROMPTR@ ROMPTR 0B4 1E2 # B987 'RROMPTR@ ROMPTR 0B5 163 NULL{} * B2E8B
+        :: 'RROMPTR@ ROMPTR 0B4 1E2 # B987 'RROMPTR@ ROMPTR 0B5 163 NULL{} * B2E8B  "Directories:"
           ROMPTR 0B5 15E OVER 4UNROLL            * B2EBF
           { LAM 'TD LAM 'TN LAM 'DC } BIND ROMPTR 0B3 000 ABND SetDA123NoCh * B2ED4  ~Choose
           NOTcaseFALSE NULL{}                    * B2F1F
           SWAP                                   * B2F29
-          :: GOTO L_1849B ; TRUE ;               * B2F2E
+          :: GOTO PATHDIR.L1 ; TRUE ;            * B2F2E
 
 * ROMPTR 0B4 1E2
 * refs (1): A2437
@@ -429,14 +429,14 @@ ROMP_0B4_1E5:
 * ROMPTR 0B4 1E6
 * refs (1): A2437
 ROMP_0B4_1E6:
-        :: # B984 BINT1 BINT10 # B989 BINT1 BINT19 # B98A BINT8 BINT28 * B3267
+        :: # B984 BINT1 BINT10 # B989 BINT1 BINT19 # B98A BINT8 BINT28 * B3267  "Object:"  "Name:"  "Directory"
           'RROMPTR@ ROMPTR 0B4 1E9 BINT31 BINT8 BINT97 BINT9 BINT21 MINUSONE * B32A8
-          BINT4 # B985 # B986 MINUSONE MINUSONE MINUSONE 'DROPFALSE BINT31 * B32D6
+          BINT4 # B985 # B986 MINUSONE MINUSONE MINUSONE 'DROPFALSE BINT31 * B32D6  "Enter new object"  "Obs in"
           BINT17 BINT49 BINT9 BINT1              * B3308
-          { BINT6 } BINT4 # B98B MINUSONE MINUSONE MINUSONE MINUSONE * B331C
+          { BINT6 } BINT4 # B98B MINUSONE MINUSONE MINUSONE MINUSONE * B331C  "Enter variable name"
           'RROMPTR@ ROMPTR 0B4 1EA BINT1 BINT26 BINT6 BINT9 BINT32 MINUSONE * B334E
-          MINUSONE # B98C MINUSONE MINUSONE FALSE FALSE BINT3 DUP 'RROMPTR@ * B337C
-          ROMPTR 0B4 1E7 # B988 14GETLAM ?SKIP   * B33AE
+          MINUSONE # B98C MINUSONE MINUSONE FALSE FALSE BINT3 DUP 'RROMPTR@ * B337C  "Create a new directory?"
+          ROMPTR 0B4 1E7 # B988 14GETLAM ?SKIP   * B33AE  "New Variable"
           :: HARDBUFF TOTEMPOB 1LAMBIND ;        * B33CD
           DoInputForm 14GETLAM ?SKIP             * B33E6
           :: 1GETABND HARDBUFF ZEROZERO GROB! ;  * B33F5
@@ -522,9 +522,9 @@ ROMP_0B4_1EE:
 * ROMPTR 0B4 1EF
 * refs (1): A2437
 ROMP_0B4_1EF:
-        :: # B989 BINT1 BINT19 # B98E BINT1 BINT28 'DROPFALSE BINT37 BINT17 * B387F
+        :: # B989 BINT1 BINT19 # B98E BINT1 BINT28 'DROPFALSE BINT37 BINT17 * B387F  "Name:"  "Copy To:"
           BINT91 BINT9 BINT1                     * B38BB
-          { BINT6 BINT5 } BINT4 # B98D MINUSONE MINUSONE MINUSONE BINT19 * B38CA
+          { BINT6 BINT5 } BINT4 # B98D MINUSONE MINUSONE MINUSONE BINT19 * B38CA  "Enter names of vars to copy"
           ROLL                                   * B3901
 
 * ROMPTR 0B4 1F0
@@ -533,7 +533,7 @@ ROMP_0B4_1F0:
           :: 'RROMPTR@ ROMPTR 0B4 1F2 BINT37 BINT26 BINT91 BINT9 BINT5 * B3906
             { BINT6 BINT5 } BINT4 MINUSONE MINUSONE MINUSONE MINUSONE * B3934
             MINUSONE ;                           * B3961
-          BINT2 DUP 'RROMPTR@ ROMPTR 0B4 1F1 # B98F DoInputForm NOTcaseFALSE * B396B
+          BINT2 DUP 'RROMPTR@ ROMPTR 0B4 1F1 # B98F DoInputForm NOTcaseFALSE * B396B  "Copy Variable(s)"
           ROMPTR 0B5 164                         * B3999
           TRUE ;                                 * B39A4
 
@@ -548,7 +548,7 @@ ROMP_0B4_1F1:
 ROMP_0B4_1F2:
         ::                                       * B39D1
           { BINT37 ROMPTR 0B4 1E1 BINT13         * B39D6
-            :: BINT1 ROMPTR 0B0 0C5 TYPELIST? ITE # B990 # B991 * B39F0  ~gFldVal
+            :: BINT1 ROMPTR 0B0 0C5 TYPELIST? ITE # B990 # B991 * B39F0  ~gFldVal  "Enter directory path"  "Enter var name or directory path"
               ~DUPTYPEBINT?;case;JstGetTHEMESG ; * B3A23
           }                                      * B3A2D
           EQLookup case                          * B3A32
@@ -573,10 +573,10 @@ ROMP_0B4_1F3:
 * ROMPTR 0B4 1F4
 * refs (1): A2437
 ROMP_0B4_1F4:
-        :: # B989 BINT1 BINT19 # B992 BINT1 BINT28 'DROPFALSE BINT37 BINT17 * B3B85
+        :: # B989 BINT1 BINT19 # B992 BINT1 BINT28 'DROPFALSE BINT37 BINT17 * B3B85  "Name:"  "Move To:"
           BINT91 BINT9 BINT1                     * B3BC1
-          { BINT6 BINT5 } BINT4 # B993 MINUSONE MINUSONE MINUSONE BINT19 * B3BD0
-          ROLL ROMPTR 0B4 1F0 BINT2 DUP 'RROMPTR@ ROMPTR 0B4 1F5 # B994 * B3C07
+          { BINT6 BINT5 } BINT4 # B993 MINUSONE MINUSONE MINUSONE BINT19 * B3BD0  "Enter names of vars to move"
+          ROLL ROMPTR 0B4 1F0 BINT2 DUP 'RROMPTR@ ROMPTR 0B4 1F5 # B994 * B3C07  "Move Variable(s)"
           DoInputForm NOTcaseFALSE ROMPTR 0B5 167 * B3C3B
           TRUE ;                                 * B3C50
 
@@ -612,11 +612,11 @@ ROMP_0B4_1F7:
             :: INNERCOMP ZERO_DO ISTOP@ ROLL ROMPTR 0B3 03F LOOP 15GETLAM * B3E22  ~BBGetN
               LENCOMP {}N ;                      * B3E50
             DUPTYPELIST? ITE                     * B3E5F
-            :: DUPLENCOMP #>$ # B995 JstGetTHEMESG &$ ; * B3E69
+            :: DUPLENCOMP #>$ # B995 JstGetTHEMESG &$ ; * B3E69  " Vars:"
             :: DUP ID>$ PTR CHR_: >T$ ;          * B3E91
-            $ "\0A  " &$ SWAP ROMPTR 0B5 169 #>$ &$ # B997 JstGetTHEMESG &$ * B3EAF
+            $ "\0A  " &$ SWAP ROMPTR 0B5 169 #>$ &$ # B997 JstGetTHEMESG &$ * B3EAF  " bytes"
             CHR_Newline >T$ ;                    * B3EF2
-          # B996 JstGetTHEMESG &$ $ "\0A  " &$ ROMPTR 0B5 16A #>$ &$ # B997 * B3F01
+          # B996 JstGetTHEMESG &$ $ "\0A  " &$ ROMPTR 0B5 16A #>$ &$ # B997 * B3F01  "Mem Available:"  " bytes"
           JstGetTHEMESG &$ BINT15 BINT15 MINUSONE ' ROMPTR 0B1 002 * B3F49  ~MsgBoxMenu
           ROMPTR 0B1 000 DROP SetDA123NoCh ;     * B3F72  ~DoMsgBox
 
@@ -663,8 +663,8 @@ LIB0B4.hash:
         CON(5)  0                                * B4128  names of length 14
         CON(5)  0                                * B412D  names of length 15
         CON(5)  0                                * B4132  names of length 16
-        REL(5)  L_B413C                          * B4137  end of the names
-L_B413C:
+        REL(5)  LIB0B4.hash.L1                   * B4137  end of the names
+LIB0B4.hash.L1:
         CON(5)  0                                * B413C  command 000 has no name
         ENDLENGTH                                * B4141
 

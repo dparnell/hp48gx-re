@@ -16,39 +16,39 @@
         C=0     A                                * 38020
         C=C+1   A                                * 38022
         ?ST=0   6                                * 38024
-        GOYES   L_38037                          * 38027
+        GOYES   @rdm(ar,ls)~1.L17                * 38027
         A=R4                                     * 38029
         D0=D0+  5                                * 3802C
         DAT0=A  A                                * 3802F
         D0=D0-  5                                * 38032
         C=C+1   A                                * 38035
-L_38037:
+@rdm(ar,ls)~1.L17:
         D0=D0-  5                                * 38037
         DAT0=C  A                                * 3803A
         ?ST=0   8                                * 3803D
-        GOYES   L_38046                          * 38040
+        GOYES   @rdm(ar,ls)~1.L18                * 38040
         GOSUB   SUB_38327                        * 38042
-L_38046:
+@rdm(ar,ls)~1.L18:
         GOVLNG  GETPTRLOOP                       * 38046
 
 * refs (1): 37F5C
 SUB_3804D:
         ST=0    1                                * 3804D
-L_38050:
+SUB_3804D.loop1:
         D=C     A                                * 38050
         GOSBVL  ROOM                             * 38052
         DCEX    A                                * 38059
         ?D>=C   A                                * 3805B
         RTNYES                                   * 3805E
         ?ST=0   1                                * 38060
-        GOYES   L_38069                          * 38063
-        GOTO    L_37E8B                          * 38065
-L_38069:
+        GOYES   SUB_3804D.L2                     * 38063
+        GOTO    @rdm(ar,ls)~1.L1                 * 38065
+SUB_3804D.L2:
         RSTK=C                                   * 38069
         GOSBVL  GARBAGECOL                       * 3806B
         C=RSTK                                   * 38072
         ST=1    1                                * 38074
-        GONC    L_38050                          * 38077
+        GONC    SUB_3804D.loop1                  * 38077
 
 * refs (2): 37F63 37FEF
 SUB_3807A:
@@ -58,18 +58,18 @@ SUB_3807A:
         A=DAT0  A                                * 38087
         D0=A                                     * 3808A
         ?ST=1   7                                * 3808D
-        GOYES   L_380D2                          * 38090
+        GOYES   SUB_3807A.L2                     * 38090
         B=C     A                                * 38092
         GOSBVL  SKIPOB                           * 38094
         A=DAT0  A                                * 3809B
         ?ST=1   5                                * 3809E
-        GOYES   L_380B4                          * 380A1
+        GOYES   SUB_3807A.L1                     * 380A1
         A=A-B   A                                * 380A3
         DAT0=A  A                                * 380A5
         AD0EX                                    * 380A8
         C=B     A                                * 380AB
         GOVLNG  MOVERSD                          * 380AD
-L_380B4:
+SUB_3807A.L1:
         A=A+B   A                                * 380B4
         DAT0=A  A                                * 380B6
         AD0EX                                    * 380B9
@@ -79,8 +79,8 @@ L_380B4:
         C=RSTK                                   * 380C7
         A=B     A                                * 380C9
         D1=A                                     * 380CB
-        GOTO    L_38118                          * 380CE
-L_380D2:
+        GOTO    SUB_3807A.L4                     * 380CE
+SUB_3807A.L2:
         CAEX    A                                * 380D2
         RSTK=C                                   * 380D4
         C=R1                                     * 380D6
@@ -95,39 +95,41 @@ L_380D2:
         AD0EX                                    * 380F5
         C=R0                                     * 380F8
         ?ST=1   5                                * 380FB
-        GOYES   L_38109                          * 380FE
+        GOYES   SUB_3807A.L3                     * 380FE
         A=A-C   A                                * 38100
         GOVLNG  MOVEDSU                          * 38102
-L_38109:
+SUB_3807A.L3:
         GOSBVL  MOVEDSD                          * 38109
         A=B     A                                * 38110
         D1=A                                     * 38112
         C=R0                                     * 38115
-L_38118:
+SUB_3807A.L4:
         GOVLNG  WIPEOUT                          * 38118
         RPL
 
 * [F%] -> [F%]'
 * refs (8): 1D3A1 1D3F1 8E2DD 8E300 8F39B 8F3B9 ...
 MATTRN:
-        :: DUP MDIMS NOT?GOTO L_37DEB 2DROP CKREF OBJ_38185 ; * 3811F
+        :: DUP MDIMS NOT?GOTO NcaseDIMERR.L1 2DROP * 3811F
+          CKREF OBJ_38185 ;                      * 3813D
 
 * refs (1): 1D3D3
 @trn(ar):
-        :: DUP MDIMS NOT?GOTO L_37DEB 2DROP FreeRefs OBJ_38185 ; * 3814C
+        :: DUP MDIMS NOT?GOTO NcaseDIMERR.L1 2DROP * 3814C
+          FreeRefs OBJ_38185 ;                   * 3816A
 
 * refs (11): CBC7D CBC91 CBFA2 CBFF4 CC216 CC24A ...
 @trn!(ar):
         CON(5)  (*)+5                            * 38179  primitive code object
         ASSEMBLE
         ST=0    1                                * 3817E
-        GOTO    L_3818D                          * 38181
+        GOTO    OBJ_38185.L1                     * 38181
 
 * refs (6): 38142 3816F 939B6 939E3 93A02 93A0C
 OBJ_38185:
         CON(5)  (*)+5                            * 38185  primitive code object
         ST=1    1                                * 3818A
-L_3818D:
+OBJ_38185.L1:
         GOSBVL  SAVPTR                           * 3818D
         A=DAT1  A                                * 38194
         D0=A                                     * 38197
@@ -136,9 +138,9 @@ L_3818D:
         LC(5)   DOREAL                           * 381A0
         ST=0    0                                * 381A7
         ?C=A    A                                * 381AA
-        GOYES   L_381B2                          * 381AD
+        GOYES   OBJ_38185.L2                     * 381AD
         ST=1    0                                * 381AF
-L_381B2:
+OBJ_38185.L2:
         D0=D0+  10                               * 381B2
         A=DAT0  A                                * 381B5
         R1=A                                     * 381B8
@@ -173,48 +175,48 @@ SUB_381FA:
         C=B     A                                * 3820C
         R3=C                                     * 3820E
         D=C     A                                * 38211
-L_38213:
+SUB_381FA.loop1:
         D=D-1   A                                * 38213
         ?D=0    A                                * 38215
-        GOYES   L_38288                          * 38218
+        GOYES   SUB_381FA.L4                     * 38218
         GOSUB   SUB_3830E                        * 3821A
         A=DAT0  W                                * 3821E
         B=A     S                                * 38222
         B=B+B   S                                * 38225
         B=B+B   S                                * 38228
-        GOC     L_38213                          * 3822B
+        GOC     SUB_381FA.loop1                  * 3822B
         P=      15                               * 3822E
         LC(1)   #4                               * 38230
         A=A!C   S                                * 38233
         DAT0=A  W                                * 38237
         P=      0                                * 3823B
         ?ST=0   0                                * 3823D
-        GOYES   L_3824C                          * 38240
+        GOYES   SUB_381FA.loop2                  * 38240
         D0=D0+  16                               * 38242
         C=DAT0  W                                * 38245
         R0=C                                     * 38249
-L_3824C:
+SUB_381FA.loop2:
         GOSUB   SUB_382DC                        * 3824C
         C=DAT0  W                                * 38250
         CAEX    W                                * 38254
         DAT0=C  W                                * 38257
         ?ST=0   0                                * 3825B
-        GOYES   L_3826E                          * 3825E
+        GOYES   SUB_381FA.L3                     * 3825E
         D0=D0+  16                               * 38260
         C=DAT0  W                                * 38263
         CR0EX                                    * 38267
         DAT0=C  W                                * 3826A
-L_3826E:
+SUB_381FA.L3:
         B=A     S                                * 3826E
         B=B+B   S                                * 38271
         B=B+B   S                                * 38274
-        GOC     L_38213                          * 38277
+        GOC     SUB_381FA.loop1                  * 38277
         P=      15                               * 3827A
         LC(1)   #4                               * 3827C
         A=A!C   S                                * 3827F
         P=      0                                * 38283
-        GONC    L_3824C                          * 38285
-L_38288:
+        GONC    SUB_381FA.loop2                  * 38285
+SUB_381FA.L4:
         P=      15                               * 38288
         LC(1)   #B                               * 3828A
         B=C     S                                * 3828D
@@ -225,27 +227,27 @@ L_38288:
         D0=C                                     * 3829A
         D=D-1   A                                * 3829D
         D0=D0-  1                                * 3829F
-L_382A2:
+SUB_381FA.loop5:
         D0=D0+  16                               * 382A2
         A=DAT0  S                                * 382A5
         A=A&B   S                                * 382A9
         DAT0=A  S                                * 382AD
         ?ST=0   0                                * 382B1
-        GOYES   L_382D5                          * 382B4
+        GOYES   SUB_381FA.L6                     * 382B4
         D0=D0+  1                                * 382B6
         A=DAT0  W                                * 382B9
         D0=D0+  15                               * 382BD
         ?ST=0   1                                * 382C0
-        GOYES   L_382D5                          * 382C3
+        GOYES   SUB_381FA.L6                     * 382C3
         ?A=0    W                                * 382C5
-        GOYES   L_382D5                          * 382C8
+        GOYES   SUB_381FA.L6                     * 382C8
         SETDEC                                   * 382CA
         A=-A-1  S                                * 382CC
         SETHEX                                   * 382CF
         DAT0=A  S                                * 382D1
-L_382D5:
+SUB_381FA.L6:
         D=D-1   A                                * 382D5
-        GONC    L_382A2                          * 382D7
+        GONC    SUB_381FA.loop5                  * 382D7
         RTN                                      * 382DA
 
 * refs (1): 3824C
@@ -261,10 +263,10 @@ SUB_382DC:
         C=R2                                     * 382EF
         D=0     A                                * 382F2
         D=D-1   A                                * 382F4
-L_382F6:
+SUB_382DC.loop1:
         D=D+1   A                                * 382F6
         B=B-C   A                                * 382F8
-        GONC    L_382F6                          * 382FA
+        GONC    SUB_382DC.loop1                  * 382FA
         C=R3                                     * 382FD
         C=C-1   A                                * 38300
         GOSUB   SUB_3833E                        * 38302
@@ -279,9 +281,9 @@ SUB_3830E:
         C=C-1   A                                * 38310
         CSL     A                                * 38312
         ?ST=0   0                                * 38314
-        GOYES   L_3831B                          * 38317
+        GOYES   SUB_3830E.L1                     * 38317
         C=C+C   A                                * 38319
-L_3831B:
+SUB_3830E.L1:
         B=C     A                                * 3831B
         C=R4                                     * 3831D
         C=C+B   A                                * 38320
@@ -301,7 +303,7 @@ POP#~jump_3:
 
 * refs (3): 38208 382E5 38302
 SUB_3833E:
-        GOVLNG  L_35790                          * 3833E
+        GOVLNG  PUTCMPEL.L6                      * 3833E
         RPL
 
 * refs (219): A280B A2884 A2D6B A34B6 A352F A35A3 ...
@@ -375,13 +377,13 @@ StartupProc:
 * refs (1): 38593
 StartupProc~1:
         :: InitSysUI                             * 385A7
-L_385B1:
+StartupProc~1.L1:
           BEGIN AtUserStack SysMenuCheck SysDisplay GetKeyOb ERRSET DoKeyOb * 385B1
           ERRTRAP SysErrorTrap AGAIN ;           * 385D4
 
 * refs (1): 385AC
 InitSysUI:
-        :: CLEARLCD InitDispModes OBJ_3FEEE BINT62 ClrSysFlag DoMenuMTH * 385E8
+        :: CLEARLCD InitDispModes OBJ_3FEEE BINT62 ClrSysFlag DoMenuMTH * 385E8  flag -62: User keys off / User keys on
           InitEd&Modes InitPOLVars OBJ_6CC32 OBJ_17F40 DelLastArg * 3860B
           ?FlashAlert ERROR@ #5= IT              * 38624
 
@@ -552,75 +554,75 @@ AppDisplay!:
         CON(5)  (*)+5                            * 38C08  primitive code object
         ASSEMBLE
         LC(5)   AppDisplay                       * 38C0D
-        GOTO    L_38CA4                          * 38C14
+        GOTO    AppError!.L1                     * 38C14
 
 * ->
 * refs (2): 389DA 38B13
 AppDisplay@:
         CON(5)  (*)+5                            * 38C18  primitive code object
         LC(5)   AppDisplay                       * 38C1D
-        GOTO    L_38CB7                          * 38C24
+        GOTO    AppError@.L1                     * 38C24
 
 * refs (1): 38BE0
 NoAppDisplay!:
         CON(5)  (*)+5                            * 38C28  primitive code object
         LC(5)   AppDisplay                       * 38C2D
-        GOTO    L_38CCA                          * 38C34
+        GOTO    NoAppError!.L1                   * 38C34
 
 * ob ->
 * refs (1): 38AB9
 AppKeys!:
         CON(5)  (*)+5                            * 38C38  primitive code object
         LC(5)   AppKeys                          * 38C3D
-        GOTO    L_38CA4                          * 38C44
+        GOTO    AppError!.L1                     * 38C44
 
 * refs (2): 389DF 3FA16
 AppKeys@:
         CON(5)  (*)+5                            * 38C48  primitive code object
         LC(5)   AppKeys                          * 38C4D
-        GOTO    L_38CB7                          * 38C54
+        GOTO    AppError@.L1                     * 38C54
 
 * ???
 * refs (1): 38BE5
 AppKeys0:
         CON(5)  (*)+5                            * 38C58  primitive code object
         LC(5)   AppKeys                          * 38C5D
-        GOTO    L_38CCA                          * 38C64
+        GOTO    NoAppError!.L1                   * 38C64
 
 * ob ->
 * refs (1): 38A6E
 AppExitCond!:
         CON(5)  (*)+5                            * 38C68  primitive code object
         LC(5)   AppExitCond                      * 38C6D
-        GOTO    L_38CA4                          * 38C74
+        GOTO    AppError!.L1                     * 38C74
 
 * -> ob
 * refs (2): 389FD 38AF5
 AppExitCond@:
         CON(5)  (*)+5                            * 38C78  primitive code object
         LC(5)   AppExitCond                      * 38C7D
-        GOTO    L_38CB7                          * 38C84
+        GOTO    AppError@.L1                     * 38C84
 
 * refs (1): 38BF9
 NoAppExitCnd!:
         CON(5)  (*)+5                            * 38C88  primitive code object
         LC(5)   AppExitCond                      * 38C8D
-        GOTO    L_38CCA                          * 38C94
+        GOTO    NoAppError!.L1                   * 38C94
 
 * ob ->
 * refs (1): 38A69
 AppError!:
         CON(5)  (*)+5                            * 38C98  primitive code object
         LC(5)   AppError                         * 38C9D
-L_38CA4:
-        GOVLNG  L_08D14                          * 38CA4
+AppError!.L1:
+        GOVLNG  CONTEXT!.L1                      * 38CA4
 
 * -> ob
 * refs (2): 38A02 38B68
 AppError@:
         CON(5)  (*)+5                            * 38CAB  primitive code object
         LC(5)   AppError                         * 38CB0
-L_38CB7:
+AppError@.L1:
         GOVLNG  SysPtr@                          * 38CB7
 
 * ->
@@ -628,107 +630,107 @@ L_38CB7:
 NoAppError!:
         CON(5)  (*)+5                            * 38CBE  primitive code object
         LC(5)   AppError                         * 38CC3
-L_38CCA:
-        GOVLNG  L_08D2F                          * 38CCA
+NoAppError!.L1:
+        GOVLNG  CONTEXT!.L3                      * 38CCA
 
 * -> flag
 * refs (2): 38859 38B4A
 AppError?:
         CON(5)  (*)+5                            * 38CD1  primitive code object
         LC(3)   #406                             * 38CD6
-        GOTO    L_38D83                          * 38CDB
+        GOTO    AppSuspOK?.L1                    * 38CDB
 
 * ->
 * refs (2): 38B7C 38B95
 SetAppError:
         CON(5)  (*)+5                            * 38CDF  primitive code object
         LC(3)   #406                             * 38CE4
-        GOTO    L_38D94                          * 38CE9
+        GOTO    SetAppSuspOK.L1                  * 38CE9
 
 * ->
 * refs (3): 38872 38AE1 38BCC
 ClrAppError:
         CON(5)  (*)+5                            * 38CED  primitive code object
         LC(3)   #406                             * 38CF2
-        GOTO    L_38DA5                          * 38CF7
+        GOTO    ClrAppSuspOK.L1                  * 38CF7
 
 * -> flag
 * refs (5): 389C1 3FA02 479DE 4A29E 6C5DC
 AppMode?:
         CON(5)  (*)+5                            * 38CFB  primitive code object
         LC(3)   #80A                             * 38D00
-        GOTO    L_38D83                          * 38D05
+        GOTO    AppSuspOK?.L1                    * 38D05
 
 * ->
 * refs (3): 38AC3 6C3CA 6C8F5
 SetAppMode:
         CON(5)  (*)+5                            * 38D09  primitive code object
         LC(3)   #80A                             * 38D0E
-        GOTO    L_38D94                          * 38D13
+        GOTO    SetAppSuspOK.L1                  * 38D13
 
 * ->
 * refs (2): 38BDB 6C5E1
 ClrAppMode:
         CON(5)  (*)+5                            * 38D17  primitive code object
         LC(3)   #80A                             * 38D1C
-        GOTO    L_38DA5                          * 38D21
+        GOTO    ClrAppSuspOK.L1                  * 38D21
 
 * -> flag
 * refs (2): 389E4 3FA2A
 NAppKeyOK?:
         CON(5)  (*)+5                            * 38D25  primitive code object
         LC(3)   #20A                             * 38D2A
-        GOTO    L_38D83                          * 38D2F
+        GOTO    AppSuspOK?.L1                    * 38D2F
 
 * ->
 * refs (1): 38AAF
 SetNAppKeyOK:
         CON(5)  (*)+5                            * 38D33  primitive code object
         LC(3)   #20A                             * 38D38
-        GOTO    L_38D94                          * 38D3D
+        GOTO    SetAppSuspOK.L1                  * 38D3D
 
 * ->
 * refs (2): 38AB4 38BEA
 ClrNAppKeyOK:
         CON(5)  (*)+5                            * 38D41  primitive code object
         LC(3)   #20A                             * 38D46
-        GOTO    L_38DA5                          * 38D4B
+        GOTO    ClrAppSuspOK.L1                  * 38D4B
 
 * -> flag
 * refs (2): 389E9 3FA3E
 DoStdKeys?:
         CON(5)  (*)+5                            * 38D4F  primitive code object
         LC(3)   #80B                             * 38D54
-        GOTO    L_38D83                          * 38D59
+        GOTO    AppSuspOK?.L1                    * 38D59
 
 * ->
 * refs (1): 38AA0
 SetDoStdKeys:
         CON(5)  (*)+5                            * 38D5D  primitive code object
         LC(3)   #80B                             * 38D62
-        GOTO    L_38D94                          * 38D67
+        GOTO    SetAppSuspOK.L1                  * 38D67
 
 * ->
 * refs (2): 38AA5 38BEF
 ClrDoStdKeys:
         CON(5)  (*)+5                            * 38D6B  primitive code object
         LC(3)   #80B                             * 38D70
-        GOTO    L_38DA5                          * 38D75
+        GOTO    ClrAppSuspOK.L1                  * 38D75
 
 * ->
 * refs (2): 14474 389F8
 AppSuspOK?:
         CON(5)  (*)+5                            * 38D79  primitive code object
         LC(3)   #206                             * 38D7E
-L_38D83:
-        GOVLNG  L_539E6                          * 38D83
+AppSuspOK?.L1:
+        GOVLNG  OBJ_539D8.L1                     * 38D83
 
 * ->
 * refs (2): 38A78 38BF4
 SetAppSuspOK:
         CON(5)  (*)+5                            * 38D8A  primitive code object
         LC(3)   #206                             * 38D8F
-L_38D94:
+SetAppSuspOK.L1:
         GOVLNG  SetISysFlag                      * 38D94
 
 * ->
@@ -736,8 +738,8 @@ L_38D94:
 ClrAppSuspOK:
         CON(5)  (*)+5                            * 38D9B  primitive code object
         LC(3)   #206                             * 38DA0
-L_38DA5:
-        GOVLNG  L_539F1                          * 38DA5
+ClrAppSuspOK.L1:
+        GOVLNG  OBJ_539D8.L2                     * 38DA5
         RPL
 
 * -> flag
@@ -990,392 +992,392 @@ DA1ValidF?:
         CON(5)  (*)+5                            * 39275  primitive code object
         ASSEMBLE
         LC(3)   #107                             * 3927A
-        GOTO    L_39573                          * 3927F
+        GOTO    NoRollDA2?.L1                    * 3927F
 
 * ->
 * refs (1): 38FD7
 SetDA1ValidF:
         CON(5)  (*)+5                            * 39283  primitive code object
         LC(3)   #107                             * 39288
-        GOTO    L_39584                          * 3928D
+        GOTO    SetNoRollDA2.L1                  * 3928D
 
 * ->
 * refs (1): 390D1
 ClrDA1ValidF:
         CON(5)  (*)+5                            * 39291  primitive code object
         LC(3)   #107                             * 39296
-        GOTO    L_39595                          * 3929B
+        GOTO    ClrNoRollDA2.L1                  * 3929B
 
 * -> flag
 * refs (1): 38E0B
 DA2aValidF?:
         CON(5)  (*)+5                            * 3929F  primitive code object
         LC(3)   #207                             * 392A4
-        GOTO    L_39573                          * 392A9
+        GOTO    NoRollDA2?.L1                    * 392A9
 
 * ->
 * refs (1): 38FF0
 SetDA2aValidF:
         CON(5)  (*)+5                            * 392AD  primitive code object
         LC(3)   #207                             * 392B2
-        GOTO    L_39584                          * 392B7
+        GOTO    SetNoRollDA2.L1                  * 392B7
 
 * ->
 * refs (1): 390EA
 ClrDA2aValidF:
         CON(5)  (*)+5                            * 392BB  primitive code object
         LC(3)   #207                             * 392C0
-        GOTO    L_39595                          * 392C5
+        GOTO    ClrNoRollDA2.L1                  * 392C5
 
 * -> flag
 * refs (1): 38E5B
 DA2bValidF?:
         CON(5)  (*)+5                            * 392C9  primitive code object
         LC(3)   #407                             * 392CE
-        GOTO    L_39573                          * 392D3
+        GOTO    NoRollDA2?.L1                    * 392D3
 
 * ->
 * refs (1): 39004
 SetDA2bValidF:
         CON(5)  (*)+5                            * 392D7  primitive code object
         LC(3)   #407                             * 392DC
-        GOTO    L_39584                          * 392E1
+        GOTO    SetNoRollDA2.L1                  * 392E1
 
 * ->
 * refs (1): 39103
 ClrDA2bValidF:
         CON(5)  (*)+5                            * 392E5  primitive code object
         LC(3)   #407                             * 392EA
-        GOTO    L_39595                          * 392EF
+        GOTO    ClrNoRollDA2.L1                  * 392EF
 
 * -> flag
 * refs (1): 38EC4
 DA3ValidF?:
         CON(5)  (*)+5                            * 392F3  primitive code object
         LC(3)   #807                             * 392F8
-        GOTO    L_39573                          * 392FD
+        GOTO    NoRollDA2?.L1                    * 392FD
 
 * ->
 * refs (1): 3901D
 SetDA3ValidF:
         CON(5)  (*)+5                            * 39301  primitive code object
         LC(3)   #807                             * 39306
-        GOTO    L_39584                          * 3930B
+        GOTO    SetNoRollDA2.L1                  * 3930B
 
 * ->
 * refs (1): 39130
 ClrDA3ValidF:
         CON(5)  (*)+5                            * 3930F  primitive code object
         LC(3)   #807                             * 39314
-        GOTO    L_39595                          * 39319
+        GOTO    ClrNoRollDA2.L1                  * 39319
 
 * ->
 * refs (1): 38DC5
 DA1TempF:
         CON(5)  (*)+5                            * 3931D  primitive code object
         LC(3)   #806                             * 39322
-        GOTO    L_39573                          * 39327
+        GOTO    NoRollDA2?.L1                    * 39327
 
 * ->
 * refs (1): 39031
 SetDA1TempF:
         CON(5)  (*)+5                            * 3932B  primitive code object
         LC(3)   #806                             * 39330
-        GOTO    L_39584                          * 39335
+        GOTO    SetNoRollDA2.L1                  * 39335
 
 * ->
 * refs (1): 390D6
 ClrDA1TempF:
         CON(5)  (*)+5                            * 39339  primitive code object
         LC(3)   #806                             * 3933E
-        GOTO    L_39595                          * 39343
+        GOTO    ClrNoRollDA2.L1                  * 39343
 
 * -> flag
 * refs (2): 38E15 DD49E
 DA2aTempF?:
         CON(5)  (*)+5                            * 39347  primitive code object
         LC(3)   #104                             * 3934C
-        GOTO    L_39573                          * 39351
+        GOTO    NoRollDA2?.L1                    * 39351
 
 * ->
 * refs (2): 3904A DD48A
 SetDA2aTempF:
         CON(5)  (*)+5                            * 39355  primitive code object
         LC(3)   #104                             * 3935A
-        GOTO    L_39584                          * 3935F
+        GOTO    SetNoRollDA2.L1                  * 3935F
 
 * ->
 * refs (2): 390EF DD48F
 ClrDA2aTempF:
         CON(5)  (*)+5                            * 39363  primitive code object
         LC(3)   #104                             * 39368
-        GOTO    L_39595                          * 3936D
+        GOTO    ClrNoRollDA2.L1                  * 3936D
 
 * refs (2): 19C3D 38E65
 DA2bTemp?:
         CON(5)  (*)+5                            * 39371  primitive code object
         LC(3)   #204                             * 39376
-        GOTO    L_39573                          * 3937B
+        GOTO    NoRollDA2?.L1                    * 3937B
 
 * ->
 * refs (1): 3905E
 SetDA2bTempF:
         CON(5)  (*)+5                            * 3937F  primitive code object
         LC(3)   #204                             * 39384
-        GOTO    L_39584                          * 39389
+        GOTO    SetNoRollDA2.L1                  * 39389
 
 * ->
 * refs (1): 39108
 ClrDA2bTemp:
         CON(5)  (*)+5                            * 3938D  primitive code object
         LC(3)   #204                             * 39392
-        GOTO    L_39595                          * 39397
+        GOTO    ClrNoRollDA2.L1                  * 39397
 
 * -> flag
 * refs (1): 38ECE
 DA3TempF?:
         CON(5)  (*)+5                            * 3939B  primitive code object
         LC(3)   #404                             * 393A0
-        GOTO    L_39573                          * 393A5
+        GOTO    NoRollDA2?.L1                    * 393A5
 
 * ->
 * refs (1): 39077
 SetDA3TempF:
         CON(5)  (*)+5                            * 393A9  primitive code object
         LC(3)   #404                             * 393AE
-        GOTO    L_39584                          * 393B3
+        GOTO    SetNoRollDA2.L1                  * 393B3
 
 * ->
 * refs (1): 39135
 ClrDA3TempF:
         CON(5)  (*)+5                            * 393B7  primitive code object
         LC(3)   #404                             * 393BC
-        GOTO    L_39595                          * 393C1
+        GOTO    ClrNoRollDA2.L1                  * 393C1
 
 * -> flag
 * refs (1): 38DD4
 DA1NoCh?:
         CON(5)  (*)+5                            * 393C5  primitive code object
         LC(3)   #108                             * 393CA
-        GOTO    L_39573                          * 393CF
+        GOTO    NoRollDA2?.L1                    * 393CF
 
 * ->
 * refs (40): 391A3 391CB 391F3 3D9F9 404C7 404EF ...
 SetDA1NoCh:
         CON(5)  (*)+5                            * 393D3  primitive code object
         LC(3)   #108                             * 393D8
-        GOTO    L_39584                          * 393DD
+        GOTO    SetNoRollDA2.L1                  * 393DD
 
 * ->
 * refs (1): 390DB
 ClrDA1NoCh:
         CON(5)  (*)+5                            * 393E1  primitive code object
         LC(3)   #108                             * 393E6
-        GOTO    L_39595                          * 393EB
+        GOTO    ClrNoRollDA2.L1                  * 393EB
 
 * -> flag
 * refs (1): 38E24
 DA2aNoCh?:
         CON(5)  (*)+5                            * 393EF  primitive code object
         LC(3)   #208                             * 393F4
-        GOTO    L_39573                          * 393F9
+        GOTO    NoRollDA2?.L1                    * 393F9
 
 * ->
 * refs (25): 3909A 3918F 391E4 3E6ED 3E6F7 40B47 ...
 SetDA2aNoCh:
         CON(5)  (*)+5                            * 393FD  primitive code object
         LC(3)   #208                             * 39402
-        GOTO    L_39584                          * 39407
+        GOTO    SetNoRollDA2.L1                  * 39407
 
 * ->
 * refs (1): 390F4
 ClrDA2NoCh:
         CON(5)  (*)+5                            * 3940B  primitive code object
         LC(3)   #208                             * 39410
-        GOTO    L_39595                          * 39415
+        GOTO    ClrNoRollDA2.L1                  * 39415
 
 * -> flag
 * refs (1): 38E74
 DA2bNoCh?:
         CON(5)  (*)+5                            * 39419  primitive code object
         LC(3)   #408                             * 3941E
-        GOTO    L_39573                          * 39423
+        GOTO    NoRollDA2?.L1                    * 39423
 
 * ->
 * refs (12): 39194 3DE63 3ED98 4005D 42B57 B1C9D ...
 SetDA2bNoCh:
         CON(5)  (*)+5                            * 39427  primitive code object
         LC(3)   #408                             * 3942C
-        GOTO    L_39584                          * 39431
+        GOTO    SetNoRollDA2.L1                  * 39431
 
 * ->
 * refs (1): 3910D
 ClrDA2bNoCh:
         CON(5)  (*)+5                            * 39435  primitive code object
         LC(3)   #408                             * 3943A
-        GOTO    L_39595                          * 3943F
+        GOTO    ClrNoRollDA2.L1                  * 3943F
 
 * -> flag
 * refs (2): 38674 38EDD
 DA3NoCh?:
         CON(5)  (*)+5                            * 39443  primitive code object
         LC(3)   #808                             * 39448
-        GOTO    L_39573                          * 3944D
+        GOTO    NoRollDA2?.L1                    * 3944D
 
 * ->
 * refs (40): 15590 222E4 391BC 391D0 391FD 3EED3 ...
 SetDA3NoCh:
         CON(5)  (*)+5                            * 39451  primitive code object
         LC(3)   #808                             * 39456
-        GOTO    L_39584                          * 3945B
+        GOTO    SetNoRollDA2.L1                  * 3945B
 
 * ->
 * refs (1): 3913A
 ClrDA3NoCh:
         CON(5)  (*)+5                            * 3945F  primitive code object
         LC(3)   #808                             * 39464
-        GOTO    L_39595                          * 39469
+        GOTO    ClrNoRollDA2.L1                  * 39469
 
 * -> flag
 * refs (3): 38DB1 3924D BC7D8
 DA1Bad?:
         CON(5)  (*)+5                            * 3946D  primitive code object
         LC(3)   #109                             * 39472
-        GOTO    L_39573                          * 39477
+        GOTO    NoRollDA2?.L1                    * 39477
 
 * ->
 * refs (13): 1A043 38DED 38F96 390A9 390B8 395B0 ...
 SetDA1Bad:
         CON(5)  (*)+5                            * 3947B  primitive code object
         LC(3)   #109                             * 39480
-        GOTO    L_39584                          * 39485
+        GOTO    SetNoRollDA2.L1                  * 39485
 
 * ->
 * refs (3): 38FDC 39036 BC83C
 ClrDA1Bad:
         CON(5)  (*)+5                            * 39489  primitive code object
         LC(3)   #109                             * 3948E
-        GOTO    L_39595                          * 39493
+        GOTO    ClrNoRollDA2.L1                  * 39493
 
 * -> flag
 * refs (8): 38E01 38FC3 39257 BB7CA BC7DD D55A1 ...
 DA2aBad?:
         CON(5)  (*)+5                            * 39497  primitive code object
         LC(3)   #209                             * 3949C
-        GOTO    L_39573                          * 394A1
+        GOTO    NoRollDA2?.L1                    * 394A1
 
 * ->
 * refs (10): 1A048 38E3D 38F9B 390BD 39BA3 437B6 ...
 SetDA2aBad:
         CON(5)  (*)+5                            * 394A5  primitive code object
         LC(3)   #209                             * 394AA
-        GOTO    L_39584                          * 394AF
+        GOTO    SetNoRollDA2.L1                  * 394AF
 
 * ->
 * refs (3): 38FF5 3904F BC82D
 ClrDA2aBad:
         CON(5)  (*)+5                            * 394B3  primitive code object
         LC(3)   #209                             * 394B8
-        GOTO    L_39595                          * 394BD
+        GOTO    ClrNoRollDA2.L1                  * 394BD
 
 * -> flag
 * refs (6): 38E51 39261 BB070 BB122 BC5B4 BC7E2
 DA2bBad?:
         CON(5)  (*)+5                            * 394C1  primitive code object
         LC(3)   #409                             * 394C6
-        GOTO    L_39573                          * 394CB
+        GOTO    NoRollDA2?.L1                    * 394CB
 
 * ->
 * refs (12): 19CC7 1A04D 38E8D 38FA0 390C2 437BB ...
 SetDA2bBad:
         CON(5)  (*)+5                            * 394CF  primitive code object
         LC(3)   #409                             * 394D4
-        GOTO    L_39584                          * 394D9
+        GOTO    SetNoRollDA2.L1                  * 394D9
 
 * ->
 * refs (3): 39009 39063 BC81E
 ClrDA2bBad:
         CON(5)  (*)+5                            * 394DD  primitive code object
         LC(3)   #409                             * 394E2
-        GOTO    L_39595                          * 394E7
+        GOTO    ClrNoRollDA2.L1                  * 394E7
 
 * -> flag
 * refs (3): 38EBA 3926B BC7E7
 DA3Bad?:
         CON(5)  (*)+5                            * 394EB  primitive code object
         LC(3)   #809                             * 394F0
-        GOTO    L_39573                          * 394F5
+        GOTO    NoRollDA2?.L1                    * 394F5
 
 * ->
 * refs (14): 19C05 1A052 38EF6 38FA5 3A1DE 3D56A ...
 SetDA3Bad:
         CON(5)  (*)+5                            * 394F9  primitive code object
         LC(3)   #809                             * 394FE
-        GOTO    L_39584                          * 39503
+        GOTO    SetNoRollDA2.L1                  * 39503
 
 * ->
 * refs (3): 39022 3907C BC80F
 ClrDA3Bad:
         CON(5)  (*)+5                            * 39507  primitive code object
         LC(3)   #809                             * 3950C
-        GOTO    L_39595                          * 39511
+        GOTO    ClrNoRollDA2.L1                  * 39511
 
 * -> flag
 * refs (3): 04903 39ADD BC7CE
 DA1IsStat?:
         CON(5)  (*)+5                            * 39515  primitive code object
         LC(3)   #10C                             * 3951A
-        GOTO    L_39573                          * 3951F
+        GOTO    NoRollDA2?.L1                    * 3951F
 
 * ->
 * refs (2): 395D8 BC855
 SetDA1IsStat:
         CON(5)  (*)+5                            * 39523  primitive code object
         LC(3)   #10C                             * 39528
-        GOTO    L_39584                          * 3952D
+        GOTO    SetNoRollDA2.L1                  * 3952D
 
 * ->
 * refs (15): 17B9F 2DA45 38FE1 3903B 4CECE 4D92A ...
 ClrDA1IsStat:
         CON(5)  (*)+5                            * 39531  primitive code object
         LC(3)   #10C                             * 39536
-        GOTO    L_39595                          * 3953B
+        GOTO    ClrNoRollDA2.L1                  * 3953B
 
 * -> flag
 * refs (2): 42082 BC7D3
 DA2bEdit?:
         CON(5)  (*)+5                            * 3953F  primitive code object
         LC(3)   #401                             * 39544
-        GOTO    L_39573                          * 39549
+        GOTO    NoRollDA2?.L1                    * 39549
 
 * ->
 * refs (7): 3A01C 40BAB BC846 D6A06 D8631 D8646 ...
 SetDA2bEdit:
         CON(5)  (*)+5                            * 3954D  primitive code object
         LC(3)   #401                             * 39552
-        GOTO    L_39584                          * 39557
+        GOTO    SetNoRollDA2.L1                  * 39557
 
 * ->
 * refs (5): 3900E 39068 BC84B D69D8 DCC9A
 ClrDA2bEdit:
         CON(5)  (*)+5                            * 3955B  primitive code object
         LC(3)   #401                             * 39560
-        GOTO    L_39595                          * 39565
+        GOTO    ClrNoRollDA2.L1                  * 39565
 
 * -> flag
 * refs (1): 39BFD
 NoRollDA2?:
         CON(5)  (*)+5                            * 39569  primitive code object
         LC(3)   #101                             * 3956E
-L_39573:
-        GOVLNG  L_539E6                          * 39573
+NoRollDA2?.L1:
+        GOVLNG  OBJ_539D8.L1                     * 39573
 
 * ->
 * refs (1): 39DB5
 SetNoRollDA2:
         CON(5)  (*)+5                            * 3957A  primitive code object
         LC(3)   #101                             * 3957F
-L_39584:
+SetNoRollDA2.L1:
         GOVLNG  SetISysFlag                      * 39584
 
 * ->
@@ -1383,8 +1385,8 @@ L_39584:
 ClrNoRollDA2:
         CON(5)  (*)+5                            * 3958B  primitive code object
         LC(3)   #101                             * 39590
-L_39595:
-        GOVLNG  L_539F1                          * 39595
+ClrNoRollDA2.L1:
+        GOVLNG  OBJ_539D8.L2                     * 39595
         RPL
 
 * ->
@@ -1413,14 +1415,14 @@ Blank&GROB!:
 
 * refs (1): 395E7
 AngleStatus:
-        :: BINT17 SysITE                         * 39673
+        :: BINT17 SysITE                         * 39673  flag -17: angle mode
           :: $_RAD BINT4 ;                       * 39682
-          :: BINT18 SysITE $_GRAD NULL$ BINT2 ; BINT0 BINT20 ; * 39696
+          :: BINT18 SysITE $_GRAD NULL$ BINT2 ; BINT0 BINT20 ; * 39696  flag -18: angle mode
 
 * refs (1): 395F1
 ComVecStatus:
-        :: BINT16 SysITE                         * 396C8
-          :: BINT15 SysITE $_R<< $_R<Z ; NULL$ BINT22 BINT20 BINT37 ; * 396D7
+        :: BINT16 SysITE                         * 396C8  flag -16: coordinate system
+          :: BINT15 SysITE $_R<< $_R<Z ; NULL$ BINT22 BINT20 BINT37 ; * 396D7  flag -15: coordinate system
 
 * refs (1): 395FB
 HaltDispStatus:
@@ -1442,16 +1444,16 @@ UserFlagStat:
             D0=(5)  UserFlags                    * 3977A
             A=DAT0  B                            * 39781
             A=-A-1  A                            * 39784
-L_39786:
+UserFlagStat.loop1:
             SB=0                                 * 39786
             ASRB                                 * 39789
             ?SB=0                                * 3978C
-            GOYES   L_39795                      * 3978F
+            GOYES   UserFlagStat.L2              * 3978F
             LC(2)   #20                          * 39791
-L_39795:
+UserFlagStat.L2:
             P=P+1                                * 39795
             P=P+1                                * 39797
-            GONC    L_39786                      * 39799
+            GONC    UserFlagStat.loop1           * 39799
             DAT1=C  10                           * 3979C
             GOVLNG  GETPTRLOOP                   * 397A0
           ENDCODE                                * 397A7
@@ -1524,7 +1526,7 @@ PathStatus~1:
 
 * refs (2): 39930 39AE7
 OBJ_39A83:
-        :: DATE Date>d$ APPEND_SPACE BINT42 TestSysFlag IT APPEND_SPACE * 39A83
+        :: DATE Date>d$ APPEND_SPACE BINT42 TestSysFlag IT APPEND_SPACE * 39A83  flag -42: mm/dd/yy format / dd.mm.yy format
           TOD TOD>t$ !append$ $>grob HARDBUFF BINT63 BINT7 GROB! ; * 39AAB
 
 * refs (2): 048C7 048EA
@@ -1649,7 +1651,7 @@ OBJ_39F42:
 
 * refs (1): 39CC5
 MLmode?:
-        :: BINT52 TestSysFlag NOT ;              * 39F56
+        :: BINT52 TestSysFlag NOT ;              * 39F56  flag -52: Show many lines / Show one line
 
 * refs (3): 39C20 42836 448A3
 LINESOFSTACK:
@@ -1668,11 +1670,11 @@ SUB_39F93:
         GOSBVL  SUB_44747                        * 39F93
         LC(5)   #00003                           * 39F9A
         ?C<A    A                                * 39FA1
-        GOYES   L_39FAC                          * 39FA4
+        GOYES   SUB_39F93.L1                     * 39FA4
         C=C-A   A                                * 39FA6
         C=C+1   A                                * 39FA8
         RTN                                      * 39FAA
-L_39FAC:
+SUB_39F93.L1:
         C=0     A                                * 39FAC
         RTN                                      * 39FAE
 
@@ -1680,7 +1682,7 @@ L_39FAC:
 AbbrevStack?:
         CON(5)  (*)+5                            * 39FB0  primitive code object
         LC(3)   #201                             * 39FB5
-        GOVLNG  L_539E6                          * 39FBA
+        GOVLNG  OBJ_539D8.L1                     * 39FBA
 
 * refs (1): 39C89
 SetAbbrevStk:
@@ -1692,7 +1694,7 @@ SetAbbrevStk:
 ClrAbbrevStk:
         CON(5)  (*)+5                            * 39FD2  primitive code object
         LC(3)   #201                             * 39FD7
-        GOVLNG  L_539F1                          * 39FDC
+        GOVLNG  OBJ_539D8.L2                     * 39FDC
         RPL
 
 * refs (2): 3A04E 3A053

@@ -81,7 +81,7 @@ utpn(3r):
           CODE                                   * 2C103  28 nibbles
             GOSBVL  utpn(3r)~1                   * 2C10D
             GOSBVL  SUB_77EBC                    * 2C114
-L_2C11B:
+utpn(3r).L1:
             GOSBVL  PACK                         * 2C11B
             GOVLNG  PUSH%LOOP                    * 2C122
           ENDCODE                                * 2C129
@@ -93,7 +93,7 @@ utpn(2r):
           CODE                                   * 2C13D  18 nibbles
             GOSBVL  SUB_77E62                    * 2C147
             GOSBVL  utpn(2r)~1                   * 2C14E
-            GOTO    L_2C11B                      * 2C155
+            GOTO    utpn(3r).L1                  * 2C155
           ENDCODE                                * 2C159
         ;                                        * 2C159
 
@@ -103,7 +103,7 @@ utpf(3r):
           CODE                                   * 2C168  18 nibbles
             GOSBVL  SUB_77E62                    * 2C172
             GOSBVL  utpf(3r)~1                   * 2C179
-            GOTO    L_2C11B                      * 2C180
+            GOTO    utpn(3r).L1                  * 2C180
           ENDCODE                                * 2C184
         ;                                        * 2C184
 
@@ -113,7 +113,7 @@ utpt(2r):
           CODE                                   * 2C198  18 nibbles
             GOSBVL  SUB_77E62                    * 2C1A2
             GOSBVL  SUB_78077                    * 2C1A9
-            GOTO    L_2C11B                      * 2C1B0
+            GOTO    utpn(3r).L1                  * 2C1B0
           ENDCODE                                * 2C1B4
         ;                                        * 2C1B4
 
@@ -180,14 +180,14 @@ Stoä(r):
 
 * refs (3): 1FD7A B57A2 B7D6A
 å-:
-        :: dup;ra?#BAT! STATRCL ?GOTO L_2C392 DUP MDIMS case2drop Sto@ä * 2C32E
+        :: dup;ra?#BAT! STATRCL ?GOTO å-.L1 DUP MDIMS case2drop Sto@ä * 2C32E
           BINT1 OVER TWO{}N %0_2A2B4 MAKEARRY Sto@ä STATRCL DROPSWAP BINT0 * 2C35B
-          GOTO L_2C3E7                           * 2C388
-L_2C392:
+          GOTO å-.L2                             * 2C388
+å-.L1:
           OBJ_2D252 OVER MDIMS ?SKIP ONESWAP     * 2C392
           3PICK MDIMSDROP 3PICK #<> caseSIZEERR ROT#+ * 2C3AB
           SWAP TWO{}N @rdm(ar,ls) OVERARSIZE OVERARSIZE OVER#- * 2C3C9
-L_2C3E7:
+å-.L2:
           4UNROLL #1+_ONE_DO SWAPINDEX@ PULLREALEL ROTSWAP 4PICK INDEX@ #+ * 2C3E7
           PUTREALEL NextInArray 3DROP ;          * 2C40F
 
@@ -452,68 +452,68 @@ maxcols(s,ra):
         D0=D0+  5                                * 2CCA9
         A=DAT0  A                                * 2CCAC
         GOSBVL  SUB_7A08B                        * 2CCAF
-        GOTO    L_2CD9E                          * 2CCB6
+        GOTO    OBJ_2CD27.L6                     * 2CCB6
 
 * refs (3): 2C567 4957D B7EA5
 ColumnMAX:
         CON(5)  (*)+5                            * 2CCBA  primitive code object
         ST=1    3                                * 2CCBF
-L_2CCC2:
+ColumnMAX.L1:
         GOSUB   SUB_2CF2D                        * 2CCC2
         SETDEC                                   * 2CCC6
         GOSUB   SUB_2CFC0                        * 2CCC8
         A=B     M                                * 2CCCC
-        GOTO    L_2CD9E                          * 2CCCF
+        GOTO    OBJ_2CD27.L6                     * 2CCCF
 
 * refs (3): 2C599 49573 B7EBE
 ColumnMIN:
         CON(5)  (*)+5                            * 2CCD3  primitive code object
         ST=0    3                                * 2CCD8
-        GOTO    L_2CCC2                          * 2CCDB
+        GOTO    ColumnMAX.L1                     * 2CCDB
 
 * refs (4): 2C5CB 2C94F 2C968 B7E8C
 ColumnTOT:
         CON(5)  (*)+5                            * 2CCDF  primitive code object
         ST=0    3                                * 2CCE4
         ST=0    4                                * 2CCE7
-        GOTO    L_2CD35                          * 2CCEA
+        GOTO    OBJ_2CD27.L2                     * 2CCEA
 
 * refs (2): 2C580 B7E23
 ColumnMEAN:
         CON(5)  (*)+5                            * 2CCEE  primitive code object
         ST=1    3                                * 2CCF3
         ST=0    4                                * 2CCF6
-        GOTO    L_2CD35                          * 2CCF9
+        GOTO    OBJ_2CD27.L2                     * 2CCF9
 
 * refs (2): 2C5E4 B7E6E
 ColumnVAR:
         CON(5)  (*)+5                            * 2CCFD  primitive code object
         ST=0    3                                * 2CD02
-        GOTO    L_2CD11                          * 2CD05
+        GOTO    ColumnTDEV.L1                    * 2CD05
 
 * refs (2): 2C5B2 B7E46
 ColumnTDEV:
         CON(5)  (*)+5                            * 2CD09  primitive code object
         ST=1    3                                * 2CD0E
-L_2CD11:
+ColumnTDEV.L1:
         ST=1    4                                * 2CD11
         ST=0    1                                * 2CD14
-        GOTO    L_2CD35                          * 2CD17
+        GOTO    OBJ_2CD27.L2                     * 2CD17
 
 * refs (2): B7E73 CB51A
 OBJ_2CD1B:
         CON(5)  (*)+5                            * 2CD1B  primitive code object
         ST=0    3                                * 2CD20
-        GOTO    L_2CD2F                          * 2CD23
+        GOTO    OBJ_2CD27.L1                     * 2CD23
 
 * refs (2): B7E4B CB501
 OBJ_2CD27:
         CON(5)  (*)+5                            * 2CD27  primitive code object
         ST=1    3                                * 2CD2C
-L_2CD2F:
+OBJ_2CD27.L1:
         ST=1    4                                * 2CD2F
         ST=1    1                                * 2CD32
-L_2CD35:
+OBJ_2CD27.L2:
         GOSUB   SUB_2CF2D                        * 2CD35
         R3=A                                     * 2CD39
         DCEX    A                                * 2CD3C
@@ -522,16 +522,16 @@ L_2CD35:
         ST=0    2                                * 2CD43
         GOSUB   SUB_2D019                        * 2CD46
         ?ST=1   4                                * 2CD4A
-        GOYES   L_2CD54                          * 2CD4D
+        GOYES   OBJ_2CD27.L3                     * 2CD4D
         ?ST=0   3                                * 2CD4F
-        GOYES   L_2CD97                          * 2CD52
-L_2CD54:
+        GOYES   OBJ_2CD27.L5                     * 2CD52
+OBJ_2CD27.L3:
         RSTK=C                                   * 2CD54
         A=R2                                     * 2CD56
         GOSUB   SUB_2CE52                        * 2CD59
         C=RSTK                                   * 2CD5D
         ?ST=0   4                                * 2CD5F
-        GOYES   L_2CD97                          * 2CD62
+        GOYES   OBJ_2CD27.L5                     * 2CD62
         GOSBVL  EXAB2                            * 2CD64
         ABEX    A                                * 2CD6B
         BCEX    A                                * 2CD6D
@@ -543,16 +543,16 @@ L_2CD54:
         A=C     A                                * 2CD7C
         SETHEX                                   * 2CD7E
         ?ST=1   1                                * 2CD80
-        GOYES   L_2CD87                          * 2CD83
+        GOYES   OBJ_2CD27.L4                     * 2CD83
         A=A-1   A                                * 2CD85
-L_2CD87:
+OBJ_2CD27.L4:
         GOSUB   SUB_2CE52                        * 2CD87
         ?ST=0   3                                * 2CD8B
-        GOYES   L_2CD97                          * 2CD8E
+        GOYES   OBJ_2CD27.L5                     * 2CD8E
         GOSBVL  SUB_2B9F3                        * 2CD90
-L_2CD97:
+OBJ_2CD27.L5:
         GOSBVL  PACK                             * 2CD97
-L_2CD9E:
+OBJ_2CD27.L6:
         GOVLNG  PUSH%LOOP                        * 2CD9E
 
 * refs (8): 2C850 2C87D 2C8FF 2C90E 2CA21 2CA30 ...
@@ -566,29 +566,29 @@ OBJ_2CDA5:
         GOSUB   SUB_2CEFC                        * 2CDBA
         ST=0    2                                * 2CDBE
         ?A#B    A                                * 2CDC1
-        GOYES   L_2CDC9                          * 2CDC4
+        GOYES   OBJ_2CDA5.L1                     * 2CDC4
         ST=1    2                                * 2CDC6
-L_2CDC9:
+OBJ_2CDA5.L1:
         A=R0                                     * 2CDC9
         DCEX    A                                * 2CDCC
         RSTK=C                                   * 2CDCE
         C=D     A                                * 2CDD0
         GOSUB   SUB_2D019                        * 2CDD2
         C=RSTK                                   * 2CDD6
-        GONC    L_2CDED                          * 2CDD8
-L_2CDDB:
+        GONC    OBJ_2CDA5.L3                     * 2CDD8
+OBJ_2CDA5.L2:
         C=D     A                                * 2CDDB
         A=C     A                                * 2CDDD
         P=      0                                * 2CDDF
         SETHEX                                   * 2CDE1
         GOSUB   GETPTR~jump_6                    * 2CDE3
         C=A     A                                * 2CDE7
-        GOTO    L_2D313                          * 2CDE9
-L_2CDED:
+        GOTO    OBJ_2D307.L1                     * 2CDE9
+OBJ_2CDA5.L3:
         A=C     A                                * 2CDED
         GOSUB   SUB_2CE52                        * 2CDEF
-L_2CDF3:
-        GOVLNG  L_2A235                          * 2CDF3
+OBJ_2CDA5.L4:
+        GOVLNG  PUSH%.L9                         * 2CDF3
 
 * refs (5): 2C864 2C891 2C98B 2C9B3 2CA62
 OBJ_2CDFA:
@@ -603,9 +603,9 @@ OBJ_2CDFA:
         GOSUB   SUB_2CEFC                        * 2CE16
         ST=0    2                                * 2CE1A
         ?A#B    A                                * 2CE1D
-        GOYES   L_2CE25                          * 2CE20
+        GOYES   OBJ_2CDFA.L1                     * 2CE20
         ST=1    2                                * 2CE22
-L_2CE25:
+OBJ_2CDFA.L1:
         A=R3                                     * 2CE25
         D1=A                                     * 2CE28
         D1=D1+  10                               * 2CE2B
@@ -617,9 +617,9 @@ L_2CE25:
         AD0EX                                    * 2CE42
         SETDEC                                   * 2CE45
         GOSUB   SUB_2D0B0                        * 2CE47
-L_2CE4B:
-        GONC    L_2CDF3                          * 2CE4B
-        GOTO    L_2CDDB                          * 2CE4E
+OBJ_2CDFA.L2:
+        GONC    OBJ_2CDA5.L4                     * 2CE4B
+        GOTO    OBJ_2CDA5.L2                     * 2CE4E
 
 * refs (3): 2CD59 2CD87 2CDEF
 SUB_2CE52:
@@ -654,22 +654,22 @@ OBJ_2CE7C:
         GOSUB   SUB_2CEFC                        * 2CEB1
         ST=0    1                                * 2CEB5
         ?A#B    A                                * 2CEB8
-        GOYES   L_2CEC0                          * 2CEBB
+        GOYES   OBJ_2CE7C.L1                     * 2CEBB
         ST=1    1                                * 2CEBD
-L_2CEC0:
+OBJ_2CE7C.L1:
         A=R1                                     * 2CEC0
         B=A     A                                * 2CEC3
         GOSUB   SUB_2CEFC                        * 2CEC5
         ST=0    0                                * 2CEC9
         ?A#B    A                                * 2CECC
-        GOYES   L_2CED4                          * 2CECF
+        GOYES   OBJ_2CE7C.L2                     * 2CECF
         ST=1    0                                * 2CED1
-L_2CED4:
+OBJ_2CE7C.L2:
         A=R2                                     * 2CED4
         A=R4.F  A                                * 2CED7
         R4=A                                     * 2CEDD
         GOSUB   SUB_2D131                        * 2CEE0
-        GOTO    L_2CE4B                          * 2CEE4
+        GOTO    OBJ_2CDFA.L2                     * 2CEE4
 
 * refs (9): 2CDAA 2CDFF 2CE06 2CE81 2CE88 2CE8F ...
 SUB_2CEE8:
@@ -694,16 +694,16 @@ SUB_2CEFC:
 OBJ_2CF08:
         CON(5)  (*)+5                            * 2CF08  primitive code object
         GOSUB   SUB_2CF8B                        * 2CF0D
-        GOC     L_2CF25                          * 2CF11
+        GOC     OBJ_2CF08.L1                     * 2CF11
         GOSUB   GETPTR~jump_6                    * 2CF14
         D1=D1-  15                               * 2CF18
         D=D-1   A                                * 2CF1B
         D=D-1   A                                * 2CF1D
         D=D-1   A                                * 2CF1F
-        GOTO    L_2D2BD                          * 2CF21
-L_2CF25:
+        GOTO    OBJ_2D252.L3                     * 2CF21
+OBJ_2CF08.L1:
         GOSUB   GETPTR~jump_6                    * 2CF25
-        GOTO    L_2D2EC                          * 2CF29
+        GOTO    OBJ_2D2E7.L1                     * 2CF29
 
 * refs (4): 2CCC2 2CD35 2CDB1 2CE0D
 SUB_2CF2D:
@@ -720,10 +720,10 @@ SUB_2CF31:
         D0=A                                     * 2CF45
         C=DAT0  A                                * 2CF48
         A=A+C   A                                * 2CF4B
-        GONC    L_2CF54                          * 2CF4D
+        GONC    SUB_2CF31.L1                     * 2CF4D
         A=0     A                                * 2CF50
         A=A-1   A                                * 2CF52
-L_2CF54:
+SUB_2CF31.L1:
         AR4EX                                    * 2CF54
         D1=A                                     * 2CF57
         D1=D1+  5                                * 2CF5A
@@ -773,7 +773,7 @@ SUB_2CFC0:
         RSTK=C                                   * 2CFC0
         A=DAT0  W                                * 2CFC2
         GOSUB   SPLITA~jump                      * 2CFC6
-L_2CFCA:
+SUB_2CFC0.loop1:
         CD0EX                                    * 2CFCA
         D=C     A                                * 2CFCD
         C=RSTK                                   * 2CFCF
@@ -782,25 +782,25 @@ L_2CFCA:
         SETDEC                                   * 2CFD5
         RSTK=C                                   * 2CFD7
         C=R4                                     * 2CFD9
-        GOC     L_2D013                          * 2CFDC
+        GOC     SUB_2CFC0.L3                     * 2CFDC
         ?D>=C   A                                * 2CFDF
-        GOYES   L_2D013                          * 2CFE2
+        GOYES   SUB_2CFC0.L3                     * 2CFE2
         C=D     A                                * 2CFE4
         D0=C                                     * 2CFE6
         C=DAT0  W                                * 2CFE9
         GOSBVL  SUB_2BCAC                        * 2CFED
         P=      6                                * 2CFF4
         ?ST=1   3                                * 2CFF6
-        GOYES   L_2CFFD                          * 2CFF9
+        GOYES   SUB_2CFC0.L2                     * 2CFF9
         P=      3                                * 2CFFB
-L_2CFFD:
+SUB_2CFC0.L2:
         GOSBVL  TST15                            * 2CFFD
-        GOC     L_2CFCA                          * 2D004
+        GOC     SUB_2CFC0.loop1                  * 2D004
         A=C     W                                * 2D007
         C=D     W                                * 2D00A
         B=C     W                                * 2D00D
-        GONC    L_2CFCA                          * 2D010
-L_2D013:
+        GONC    SUB_2CFC0.loop1                  * 2D010
+SUB_2CFC0.L3:
         C=RSTK                                   * 2D013
         P=      0                                * 2D015
         RTN                                      * 2D017
@@ -812,25 +812,25 @@ SUB_2D019:
         A=0     W                                * 2D01F
         R0=A                                     * 2D022
         R1=A                                     * 2D025
-L_2D028:
+SUB_2D019.loop1:
         RSTK=C                                   * 2D028
         GOSUB   SUB_2D080                        * 2D02A
         ?ST=0   2                                * 2D02E
-        GOYES   L_2D05A                          * 2D031
+        GOYES   SUB_2D019.L3                     * 2D031
         GOSUB   SUB_2D08B                        * 2D033
-        GONC    L_2D040                          * 2D037
+        GONC    SUB_2D019.L2                     * 2D037
         C=RSTK                                   * 2D03A
         C=D     A                                * 2D03C
         RTNSC                                    * 2D03E
-L_2D040:
+SUB_2D019.L2:
         C=R0                                     * 2D040
         RSTK=C                                   * 2D043
         R4=C.F  S                                * 2D045
-        GOSBVL  L_78E05                          * 2D04B
+        GOSBVL  SUB_78DE9.L3                     * 2D04B
         C=R4                                     * 2D052
         C=RSTK                                   * 2D055
         R0=C                                     * 2D057
-L_2D05A:
+SUB_2D019.L3:
         GOSBVL  SUB_7A076                        * 2D05A
         C=RSTK                                   * 2D061
         AD1EX                                    * 2D063
@@ -840,11 +840,11 @@ L_2D05A:
         D1=A                                     * 2D06C
         B=A     A                                * 2D06F
         A=R4                                     * 2D071
-        GOC     L_2D07C                          * 2D074
+        GOC     SUB_2D019.L4                     * 2D074
         ?A>B    A                                * 2D077
-        GOYES   L_2D028                          * 2D07A
-L_2D07C:
-        GOTO    L_2D23E                          * 2D07C
+        GOYES   SUB_2D019.loop1                  * 2D07A
+SUB_2D019.L4:
+        GOTO    SUB_2D131.L5                     * 2D07C
 
 * refs (3): 2D02A 2D0C1 2D1AF
 SUB_2D080:
@@ -859,18 +859,18 @@ SUB_2D08B:
         P=      14                               * 2D08B
         C=0     A                                * 2D08D
         ?B=0    P                                * 2D08F
-        GOYES   L_2D0A5                          * 2D092
+        GOYES   SUB_2D08B.L2                     * 2D092
         ?A#0    S                                * 2D094
-        GOYES   L_2D09B                          * 2D097
+        GOYES   SUB_2D08B.L1                     * 2D097
         RTNCC                                    * 2D099
-L_2D09B:
+SUB_2D08B.L1:
         P=      0                                * 2D09B
         LC(3)   #605                             * 2D09D
-        GOC     L_2D0AC                          * 2D0A2
-L_2D0A5:
+        GOC     SUB_2D08B.L3                     * 2D0A2
+SUB_2D08B.L2:
         P=      0                                * 2D0A5
         LC(3)   #606                             * 2D0A7
-L_2D0AC:
+SUB_2D08B.L3:
         D=C     A                                * 2D0AC
         RTNSC                                    * 2D0AE
 
@@ -881,25 +881,25 @@ SUB_2D0B0:
         R0=A                                     * 2D0B6
         R1=A                                     * 2D0B9
         HST=0   3                                * 2D0BC
-L_2D0BF:
+SUB_2D0B0.loop1:
         RSTK=C                                   * 2D0BF
         GOSUB   SUB_2D080                        * 2D0C1
         ?ST=0   2                                * 2D0C5
-        GOYES   L_2D0F1                          * 2D0C8
+        GOYES   SUB_2D0B0.L3                     * 2D0C8
         GOSUB   SUB_2D08B                        * 2D0CA
-        GONC    L_2D0D7                          * 2D0CE
+        GONC    SUB_2D0B0.L2                     * 2D0CE
         C=RSTK                                   * 2D0D1
         C=D     A                                * 2D0D3
         RTNSC                                    * 2D0D5
-L_2D0D7:
+SUB_2D0B0.L2:
         C=R0                                     * 2D0D7
         RSTK=C                                   * 2D0DA
         R4=C.F  S                                * 2D0DC
-        GOSBVL  L_78E05                          * 2D0E2
+        GOSBVL  SUB_78DE9.L3                     * 2D0E2
         C=R4                                     * 2D0E9
         C=RSTK                                   * 2D0EC
         R0=C                                     * 2D0EE
-L_2D0F1:
+SUB_2D0B0.L3:
         GOSBVL  RCCD2                            * 2D0F1
         C=-C-1  S                                * 2D0F8
         GOSBVL  RADDF                            * 2D0FB
@@ -915,11 +915,11 @@ L_2D0F1:
         D1=A                                     * 2D11D
         B=A     A                                * 2D120
         A=R4                                     * 2D122
-        GOC     L_2D12D                          * 2D125
+        GOC     SUB_2D0B0.L4                     * 2D125
         ?A>B    A                                * 2D128
-        GOYES   L_2D0BF                          * 2D12B
-L_2D12D:
-        GOTO    L_2D23E                          * 2D12D
+        GOYES   SUB_2D0B0.loop1                  * 2D12B
+SUB_2D0B0.L4:
+        GOTO    SUB_2D131.L5                     * 2D12D
 
 * refs (1): 2CEE0
 SUB_2D131:
@@ -927,21 +927,21 @@ SUB_2D131:
         R0=A                                     * 2D134
         R1=A                                     * 2D137
         HST=0   3                                * 2D13A
-L_2D13D:
+SUB_2D131.loop1:
         RSTK=C                                   * 2D13D
         A=DAT0  W                                * 2D13F
         CD0EX                                    * 2D143
         RSTK=C                                   * 2D146
         GOSUB   SPLITA~jump                      * 2D148
         ?ST=0   0                                * 2D14C
-        GOYES   L_2D160                          * 2D14F
+        GOYES   SUB_2D131.L2                     * 2D14F
         GOSUB   SUB_2D08B                        * 2D151
-        GONC    L_2D160                          * 2D155
+        GONC    SUB_2D131.L2                     * 2D155
         C=RSTK                                   * 2D158
         C=RSTK                                   * 2D15A
         C=D     A                                * 2D15C
         RTNSC                                    * 2D15E
-L_2D160:
+SUB_2D131.L2:
         C=R4                                     * 2D160
         P=      15                               * 2D163
         C=P     15                               * 2D165
@@ -965,14 +965,14 @@ L_2D160:
         GOSBVL  STAB2                            * 2D1A8
         GOSUB   SUB_2D080                        * 2D1AF
         ?ST=0   1                                * 2D1B3
-        GOYES   L_2D1C7                          * 2D1B6
+        GOYES   SUB_2D131.L3                     * 2D1B6
         GOSUB   SUB_2D08B                        * 2D1B8
-        GONC    L_2D1C7                          * 2D1BC
+        GONC    SUB_2D131.L3                     * 2D1BC
         C=RSTK                                   * 2D1BF
         C=RSTK                                   * 2D1C1
         C=D     A                                * 2D1C3
         RTNSC                                    * 2D1C5
-L_2D1C7:
+SUB_2D131.L3:
         C=R4                                     * 2D1C7
         CSL     W                                * 2D1CA
         CSLC                                     * 2D1CD
@@ -1002,16 +1002,16 @@ L_2D1C7:
         GOSUB   ChkäData(_)                      * 2D21F
         D1=A                                     * 2D223
         ?B#0    A                                * 2D226
-        GOYES   L_2D22B                          * 2D229
-L_2D22B:
+        GOYES   SUB_2D131.L4                     * 2D229
+SUB_2D131.L4:
         B=A     A                                * 2D22B
         A=R4                                     * 2D22D
         SETDEC                                   * 2D230
-        GOC     L_2D23E                          * 2D232  never taken
+        GOC     SUB_2D131.L5                     * 2D232  never taken
         ?A<=B   A                                * 2D235
-        GOYES   L_2D23E                          * 2D238
-        GOTO    L_2D13D                          * 2D23A
-L_2D23E:
+        GOYES   SUB_2D131.L5                     * 2D238
+        GOTO    SUB_2D131.loop1                  * 2D23A
+SUB_2D131.L5:
         GOSBVL  RCAB0                            * 2D23E
         P=      0                                * 2D245
         RTNCC                                    * 2D247
@@ -1033,35 +1033,35 @@ OBJ_2D252:
         A=DAT0  A                                * 2D262
         LC(5)   DOARRY                           * 2D265
         ?C#A    A                                * 2D26C
-        GOYES   L_2D29D                          * 2D26F
+        GOYES   OBJ_2D252.loop1                  * 2D26F
         D0=D0+  10                               * 2D271
         A=DAT0  A                                * 2D274
         LC(5)   DOREAL                           * 2D277
         ?C#A    A                                * 2D27E
-        GOYES   L_2D29D                          * 2D281
+        GOYES   OBJ_2D252.loop1                  * 2D281
         D0=D0+  5                                * 2D283
         A=DAT0  A                                * 2D286
         A=A-1   A                                * 2D289
         A=A-1   A                                * 2D28B
         A=A-1   A                                * 2D28D
-        GONC    L_2D29D                          * 2D28F
+        GONC    OBJ_2D252.loop1                  * 2D28F
         D0=D0+  5                                * 2D292
         A=DAT0  A                                * 2D295
         ?A#0    A                                * 2D298
-        GOYES   L_2D2AD                          * 2D29B
-L_2D29D:
+        GOYES   OBJ_2D252.L2                     * 2D29B
+OBJ_2D252.loop1:
         C=RSTK                                   * 2D29D
         D0=C                                     * 2D29F
         LC(5)   #00601                           * 2D2A2
-        GOTO    L_2D313                          * 2D2A9
-L_2D2AD:
+        GOTO    OBJ_2D307.L1                     * 2D2A9
+OBJ_2D252.L2:
         D0=D0+  5                                * 2D2AD
         A=DAT0  A                                * 2D2B0
         ?A=0    A                                * 2D2B3
-        GOYES   L_2D29D                          * 2D2B6
+        GOYES   OBJ_2D252.loop1                  * 2D2B6
         C=RSTK                                   * 2D2B8
         D0=C                                     * 2D2BA
-L_2D2BD:
+OBJ_2D252.L3:
         A=DAT0  A                                * 2D2BD
         D0=D0+  5                                * 2D2C0
         PC=(A)                                   * 2D2C3
@@ -1070,32 +1070,32 @@ L_2D2BD:
 rclä!~1:
         CON(5)  (*)+5                            * 2D2C7  primitive code object
         LC(5)   #00602                           * 2D2CC
-        GOTO    L_2D313                          * 2D2D3
+        GOTO    OBJ_2D307.L1                     * 2D2D3
 
 * refs (3): 2C616 2C832 2CA76
 OBJ_2D2D7:
         CON(5)  (*)+5                            * 2D2D7  primitive code object
         LC(5)   #00603                           * 2D2DC
-        GOTO    L_2D313                          * 2D2E3
+        GOTO    OBJ_2D307.L1                     * 2D2E3
 
 * refs (5): 2C788 2C7A1 2C7BA 2C7D3 4CA3C
 OBJ_2D2E7:
         CON(5)  (*)+5                            * 2D2E7  primitive code object
-L_2D2EC:
+OBJ_2D2E7.L1:
         LC(5)   #00604                           * 2D2EC  error number
-        GOTO    L_2D313                          * 2D2F3
+        GOTO    OBJ_2D307.L1                     * 2D2F3
 
 * refs (1): 2CBFC
 OBJ_2D2F7:
         CON(5)  (*)+5                            * 2D2F7  primitive code object
         LC(5)   #00605                           * 2D2FC
-        GOTO    L_2D313                          * 2D303
+        GOTO    OBJ_2D307.L1                     * 2D303
 
 * refs (1): 2CBF7
 OBJ_2D307:
         CON(5)  (*)+5                            * 2D307  primitive code object
         LC(5)   #00606                           * 2D30C
-L_2D313:
+OBJ_2D307.L1:
         A=C     A                                * 2D313
         GOVLNG  Errjmp                           * 2D315
         BSS     31                               * 2D31C
@@ -1232,7 +1232,7 @@ SEND_PACKET:
 SENDEOT~1:
           :: DUP                                 * 2D5EB
             { LAMPACKET LAMRETRY LAMMaxR } BIND  * 2D5F5
-L_2D613:
+SENDEOT~1.L1:
             SEND_PACKET~1 NOTcase Lpop;2false    * 2D613
             DUP CHR_Y EQUALcase                  * 2D622
             :: OVER GetKermPkt# #=case           * 2D631
@@ -1244,7 +1244,8 @@ OBJ_2D645:
 
 * refs (1): 2D6EF
 OBJ_2D668:
-              :: 3DROP LAMMaxR OBJ_2D7AD ?GOTO L_2D613 XFERFAIL Lpop;2false ; * 2D668
+              :: 3DROP LAMMaxR OBJ_2D7AD ?GOTO SENDEOT~1.L1 XFERFAIL * 2D668
+                Lpop;2false ;                    * 2D68B
               Lpop;true;false ;                  * 2D695
             DUP CHR_N EQUALcase                  * 2D69F
             :: OVER LAMPKNO #1+ # 40 #/ DROP #=case OBJ_2D645 * 2D6AE
@@ -1262,12 +1263,12 @@ Lpop;2false:
 
 * refs (6): 2D7F8 2DD7E 2F05E 2F22A 2F51A 2FAAB
 KDispRow2:
-        :: BINT39 TestSysFlag caseDROP DISPROW2  * 2D730
+        :: BINT39 TestSysFlag caseDROP DISPROW2  * 2D730  flag -39: Show I/O messages / No I/O messages
         ;                                        * 2D749
 
 * refs (6): 2D4D1 2D82A 2DA8B 2F027 2F0F9 2F902
 KDispStatus2:
-        :: BINT39 TestSysFlag caseDROP DISPSTATUS2 * 2D74E
+        :: BINT39 TestSysFlag caseDROP DISPSTATUS2 * 2D74E  flag -39: Show I/O messages / No I/O messages
         ;                                        * 2D767
 
 * refs (2): 2D799 2D8B1
@@ -1322,7 +1323,7 @@ SetServMode:
 ClrServMode:
         CON(5)  (*)+5                            * 2D9B2  primitive code object
         LC(3)   #202                             * 2D9B7
-        GOVLNG  L_539F1                          * 2D9BC
+        GOVLNG  OBJ_539D8.L2                     * 2D9BC
         RPL
 
 * refs (2): 2D9EB 2DAEA
@@ -1336,16 +1337,16 @@ DOSERVER:
         :: KERMOPEN CHOOSE_INIT OBJ_2D37C BINT0 TRUE * 2D9F5
           { LAMEXCHP LAMKP LAMPKNO nohalt } BIND ERRSET * 2DA13
           :: SetServMode                         * 2DA3B
-L_2DA45:
+DOSERVER.L1:
             ClrDA1IsStat                         * 2DA45
 
 * refs (4): 2DDE7 2E06D 2E090 2EB14
 KERMOPEN~1:
-            :: BINT39 TestSysFlag COLA ?SKIP     * 2DA4A
+            :: BINT39 TestSysFlag COLA ?SKIP     * 2DA4A  flag -39: Show I/O messages / No I/O messages
             ;                                    * 2DA63
-            :: CLEARVDISP CLEARMENU ; # C0C JstGetTHEMESG KDispStatus2 * 2DA68
+            :: CLEARVDISP CLEARMENU ; # C0C JstGetTHEMESG KDispStatus2 * 2DA68  "Awaiting Server Cmd."
             OBJ_2D37C CHOOSE_INIT                * 2DA90
-L_2DA9A:
+KERMOPEN~1.L1:
             ' LAMEXCHP STO 'LamKPSto BINT0       * 2DA9A
 
 * refs (4): 2D535 2DB71 2F392 2F835
@@ -1360,17 +1361,18 @@ OBJ_2DAB3:
               :: TurnOff ClrServMode KERMOPEN SetServMode ; * 2DB44
             ;                                    * 2DB62
             REPEAT                               * 2DB67
-L_2DB6C:
-            BINT0 OBJ_2DAB3 CHR_S DOSERVER~2 L_2DEED CHR_I DOSERVER~2 * 2DB6C
-            L_2DE41 ROT DECODE 3UNROLL CHR_R DOSERVER~2 L_2DFB4 CHR_C * 2DB8F
-            DOSERVER~2 L_2DD4C CHR_G DOSERVER~2 L_2DE98 DUP CHR_E EQUALcase * 2DBB7
-            :: 2DROP OBJ_30E6C GOTO L_2DFA5 ;    * 2DBDF
+OBJ_2DAB3.L1:
+            BINT0 OBJ_2DAB3 CHR_S DOSERVER~2 DropSysErr$.L5 CHR_I DOSERVER~2 * 2DB6C
+            DropSysErr$.L3 ROT DECODE 3UNROLL CHR_R DOSERVER~2 _:chr(10)_.L2 * 2DB8F
+            CHR_C DOSERVER~2 OBJ_2DCE8.L1 CHR_G DOSERVER~2 DropSysErr$.L4 * 2DBB2
+            DUP CHR_E EQUALcase                  * 2DBD0
+            :: 2DROP OBJ_30E6C GOTO _:chr(10)_.L1 ; * 2DBDF
             3DROP                                * 2DBFD
-L_2DC02:
+OBJ_2DAB3.L2:
             InvalServCmd                         * 2DC02
-L_2DC07:
-            OBJ_2EFA0 DUP OBJ_2F01D %2 dowait SENDERROR GOTO L_2DA45 * 2DC07
-L_2DC2F:
+OBJ_2DAB3.L3:
+            OBJ_2EFA0 DUP OBJ_2F01D %2 dowait SENDERROR GOTO DOSERVER.L1 * 2DC07
+OBJ_2DAB3.L4:
             DOSERVER~1 ERRSET                    * 2DC2F
 
 StringVarsBytes(st):
@@ -1380,7 +1382,7 @@ StringVarsBytes(st):
                 APPEND_SPACE SWAP #>% EDITDECOMP$ !append$ !append$ APNDCRLF * 2DC93
                 ROT !insert$ SWAPLOOP DROP ;     * 2DCB6
             ;                                    * 2DCCF
-            ERRTRAP DropSysErr$ GOTO L_2DE05     * 2DCD4
+            ERRTRAP DropSysErr$ GOTO DropSysErr$.L1 * 2DCD4
 
 * refs (1): 2DDA1
 OBJ_2DCE8:
@@ -1388,9 +1390,9 @@ OBJ_2DCE8:
               :: OBJ_2EFA0 APNDCRLF SENDERROR ERRJMP ; * 2DCF7
               GETTHEMESG REALSTRSTR JstGetTHEMESG APPEND_SPACE !insert$ * 2DD15
               NEWLINE$ !append$ ' LAMERRMSG STO ; * 2DD2E
-L_2DD4C:
+OBJ_2DCE8.L1:
             TWODROPNULL$ BINT0                   * 2DD4C
-            { LAMERRMSG NULLLAM } BIND # C11 JstGetTHEMESG KDispRow2 * 2DD56
+            { LAMERRMSG NULLLAM } BIND # C11 JstGetTHEMESG KDispRow2 * 2DD56  "Processing Command"
             KINVISLF &$ FLUSHKEYS xIFERR xSTR> xERRTHEN OBJ_2DCE8 xIFEND * 2DD83
             CK0NOLASTWD 0LASTOWDOB! ERRSET DOSERVER~3 ERRTRAP * 2DDAB
 
@@ -1398,12 +1400,12 @@ L_2DD4C:
 DropSysErr$:
             :: DropSysObs ERROR@ OBJ_2EFA0 APNDCRLF ; ABND KERMOPEN~1 * 2DDC4
             :: TOADISP REDISPHBUFF ClrDAsOK ;    * 2DDEC
-L_2DE05:
+DropSysErr$.L1:
             NULL$SWAP CHR_X DOSERVER~6 ClrServMode KERMOPEN SetServMode * 2DE05
-L_2DE23:
-            ?GOTO L_2DA45 ?GOTO L_2DB6C GOTO L_2DC07 * 2DE23
-L_2DE41:
-            2DROP ACK_INIT NOT?GOTO L_2DC07 BINT0 SENDACK CHOOSE_INIT * 2DE41
+DropSysErr$.L2:
+            ?GOTO DOSERVER.L1 ?GOTO OBJ_2DAB3.L1 GOTO OBJ_2DAB3.L3 * 2DE23
+DropSysErr$.L3:
+            2DROP ACK_INIT NOT?GOTO OBJ_2DAB3.L3 BINT0 SENDACK CHOOSE_INIT * 2DE41
             CODE                                 * 2DE64  32 nibbles
               GOSUBL  SUB_3086F                  * 2DE6E
               D0=D0+  2                          * 2DE74
@@ -1414,16 +1416,16 @@ L_2DE41:
               DAT1=C  B                          * 2DE84
               GOVLNG  GETPTRLOOP                 * 2DE87
             ENDCODE                              * 2DE8E
-            GOTO L_2DA9A                         * 2DE8E
-L_2DE98:
+            GOTO KERMOPEN~1.L1                   * 2DE8E
+DropSysErr$.L4:
             DROPSWAP CAR$ DUP CHR_F EQUAL OVER CHR_L EQUALOR casedrop * 2DE98
             SENDNULLACK                          * 2DEC5
-            CHR_D EQUAL ?GOTO L_2DC2F DROP GOTO L_2DC02 * 2DECA
-L_2DEED:
+            CHR_D EQUAL ?GOTO OBJ_2DAB3.L4 DROP GOTO OBJ_2DAB3.L2 * 2DECA
+DropSysErr$.L5:
             2DROP NULL$ DUP FALSE                * 2DEED
             { LAMLNAME LAMKMODE LAMKRM } BIND ERRSET OBJ_2F709 ERRTRAP * 2DF01
-            :: DropSysObs ERROR@ OBJ_2E4BE FALSE ; ABND ?GOTO L_2DA45 ?GOTO * 2DF2E
-            L_2DB6C DUP OBJ_2EFA0 SWAP #SyntaxErr #= IT * 2DF60
+            :: DropSysObs ERROR@ OBJ_2E4BE FALSE ; ABND ?GOTO DOSERVER.L1 * 2DF2E
+            ?GOTO OBJ_2DAB3.L1 DUP OBJ_2EFA0 SWAP #SyntaxErr #= IT * 2DF5B
 
 * refs (1): 2D8FC
 Conc:RC(2st):
@@ -1431,19 +1433,19 @@ Conc:RC(2st):
 
 _:chr(10)_:
               $ ":\0A" !append$ !insert$ ;       * 2DF88
-L_2DFA5:
-            OBJ_2F01D GOTO L_2DA45               * 2DFA5
-L_2DFB4:
+_:chr(10)_.L1:
+            OBJ_2F01D GOTO DOSERVER.L1           * 2DFA5
+_:chr(10)_.L2:
             2DROP DUP palparse NOTcase           * 2DFB4
             :: 4DROP OBJ_2DFE6 ;                 * 2DFC8
             dup;#nm? case2drop                   * 2DFDC
 
 * refs (1): 2DFD2
 OBJ_2DFE6:
-            :: OBJ_672DC GOTO L_2DC07 ;          * 2DFE6
+            :: OBJ_672DC GOTO OBJ_2DAB3.L3 ;     * 2DFE6
             DRPExitAtLOOP NOTcasedrop            * 2DFFF
-            :: DOSERVER~5 GOTO L_2DC07 ;         * 2E009
-            CHR_F DOSERVER~6 GOTO L_2DE23 ;      * 2E022
+            :: DOSERVER~5 GOTO OBJ_2DAB3.L3 ;    * 2E009
+            CHR_F DOSERVER~6 GOTO DropSysErr$.L2 ; * 2E022
           ERRTRAP                                * 2E03B
           :: ERROR@ DUP #0=?SEMI FLUSHKEYS ClrServMode GETTHEMESG SENDERROR * 2E040
             AllowPrlcdCl KERMOPEN~1 ClrDAsOK ERRJMP ; * 2E068

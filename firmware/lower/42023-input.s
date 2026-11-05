@@ -90,8 +90,8 @@ addrATTNFLG:
         C=DAT0  A                                * 42271
         D0=A                                     * 42274
         ?C#0    A                                * 42277
-        GOYES   L_4229A                          * 4227A
-        GONC    L_4229A                          * 4227C
+        GOYES   adrTIMEOUTCLK.L1                 * 4227A
+        GONC    adrTIMEOUTCLK.L1                 * 4227C
 
 * refs (4): 17FDE 2DB3A 420D2 4222B
 TIMEOUT?:
@@ -104,8 +104,8 @@ adrTIMEOUTCLK:
         C=DAT1  S                                * 4228E
         D1=C                                     * 42292
         ?C=0    S                                * 42295
-        GOYES   L_4229A                          * 42298
-L_4229A:
+        GOYES   adrTIMEOUTCLK.L1                 * 42298
+adrTIMEOUTCLK.L1:
         GOVLNG  PushT/FLoop                      * 4229A
 
 * -> flag
@@ -115,7 +115,7 @@ ALARM?:
         CD0EX                                    * 422A6
         GOSUB   SUB_422B4                        * 422A9
         CD0EX                                    * 422AD
-        GOTO    L_4229A                          * 422B0
+        GOTO    adrTIMEOUTCLK.L1                 * 422B0
 
 * refs (1): 422A9
 SUB_422B4:
@@ -131,7 +131,7 @@ SUB_422B4:
         CD0EX                                    * 422CB
         GOSUB   SUB_422D9                        * 422CE
         CD0EX                                    * 422D2
-        GOTO    L_4229A                          * 422D5
+        GOTO    adrTIMEOUTCLK.L1                 * 422D5
 
 * refs (1): 422CE
 SUB_422D9:
@@ -149,25 +149,25 @@ UART?~1:
         C=DAT1  X                                * 422FA
         AD1EX                                    * 422FE
         ?C#0    X                                * 42301
-        GOYES   L_4229A                          * 42304
-        GONC    L_4229A                          * 42306
+        GOYES   adrTIMEOUTCLK.L1                 * 42304
+        GONC    adrTIMEOUTCLK.L1                 * 42306
 
 * refs (2): 42253 85605
 OBJ_42309:
         CON(5)  (*)+5                            * 42309  primitive code object
         LC(3)   #202                             * 4230E
-        GOVLNG  L_539E6                          * 42313
+        GOVLNG  OBJ_539D8.L1                     * 42313
 
 * refs (4): 041AC 041D9 421DB 421F9
 OBJ_4231A:
         CON(5)  (*)+5                            * 4231A  primitive code object
         AD1EX                                    * 4231F
-        GOSUB   L_42333                          * 42322
+        GOSUB   OBJ_4231A.L1                     * 42322
         AD1EX                                    * 42326
         A=DAT0  A                                * 42329
         D0=D0+  5                                * 4232C
         PC=(A)                                   * 4232F
-L_42333:
+OBJ_4231A.L1:
         D1=(5)  ANNUNCIATORS                     * 42333
         C=DAT1  B                                * 4233A
         CBIT=1  7                                * 4233D
@@ -196,7 +196,7 @@ GETKEY~9:
         GOSBVL  SAVPTR                           * 42384
         ST=0    15                               * 4238B
         GOSUB   settimeout                       * 4238E
-        GOTO    L_423A9                          * 42392
+        GOTO    OBJ_42396.L1                     * 42392
 
 * refs (3): 1800B 42118 421E0
 OBJ_42396:
@@ -204,7 +204,7 @@ OBJ_42396:
         GOSBVL  SAVPTR                           * 4239B
         ST=0    15                               * 423A2
         GOSUB   clrtimeout                       * 423A5
-L_423A9:
+OBJ_42396.L1:
         GOSBVL  AllowIntr                        * 423A9
         P=      0                                * 423B0
         SETHEX                                   * 423B2
@@ -216,12 +216,12 @@ settimeout:
         A=C     W                                * 423C2
         GOSBVL  SUB_01797                        * 423C5
         A=A+C   W                                * 423CC
-        GOTO    L_423D6                          * 423CF
+        GOTO    clrtimeout.L1                    * 423CF
 
 * refs (1): 423A5
 clrtimeout:
         A=0     W                                * 423D3
-L_423D6:
+clrtimeout.L1:
         GOSBVL  SUB_01A96                        * 423D6
         GOVLNG  SUB_01485                        * 423DD
         RPL
@@ -262,7 +262,7 @@ CtlAlarm!:
         CON(5)  (*)+5                            * 4248E  primitive code object
         ASSEMBLE
         LC(5)   CtlAlarm                         * 42493
-        GOVLNG  L_08D14                          * 4249A
+        GOVLNG  CONTEXT!.L1                      * 4249A
 
 * refs (1): 38962
 CtlAlarm@:
@@ -274,13 +274,13 @@ CtlAlarm@:
 SysErrorTrap~2:
         CON(5)  (*)+5                            * 424B4  primitive code object
         LC(5)   CtlAlarm                         * 424B9
-        GOVLNG  L_08D35                          * 424C0
+        GOVLNG  CONTEXT!.L4                      * 424C0
 
 * refs (1): 3FF02
 OBJ_424C7:
         CON(5)  (*)+5                            * 424C7  primitive code object
         LC(5)   CtlAlarm                         * 424CC
-        GOVLNG  L_08D2F                          * 424D3
+        GOVLNG  CONTEXT!.L3                      * 424D3
         RPL
 
 * refs (2): 3B4D2 432B4
@@ -441,10 +441,10 @@ DelCursChr~1:
         D0=C                                     * 42A17
         A=DAT0  B                                * 42A1A
         ?A#0    B                                * 42A1D
-        GOYES   L_42A29                          * 42A20
+        GOYES   DelCursChr~1.L1                  * 42A20
         ST=0    3                                * 42A22
-        GOTO    L_42AB8                          * 42A25
-L_42A29:
+        GOTO    DelCursChr~1.L5                  * 42A25
+DelCursChr~1.L1:
         RSTK=C                                   * 42A29
         D0=(5)  EDITLINE                         * 42A2B
         C=DAT0  A                                * 42A32
@@ -452,7 +452,7 @@ L_42A29:
         B=B-C   A                                * 42A37
         LC(5)   #00030                           * 42A39
         ?B<=C   A                                * 42A40
-        GOYES   L_42A69                          * 42A43
+        GOYES   DelCursChr~1.L2                  * 42A43
         D1=(5)  DSKTOP                           * 42A45
         A=DAT1  A                                * 42A4C
         C=A     A                                * 42A4F
@@ -464,7 +464,7 @@ L_42A29:
         C=C+1   A                                * 42A62
         C=C+1   A                                * 42A64
         DAT1=C  A                                * 42A66
-L_42A69:
+DelCursChr~1.L2:
         LC(2)   #0A                              * 42A69
         B=C     B                                * 42A6D
         C=RSTK                                   * 42A70
@@ -475,26 +475,26 @@ L_42A69:
         A=DAT0  B                                * 42A7D
         ST=0    3                                * 42A80
         ?A#B    B                                * 42A83
-        GOYES   L_42A8B                          * 42A86
+        GOYES   DelCursChr~1.L3                  * 42A86
         ST=1    3                                * 42A88
-L_42A8B:
+DelCursChr~1.L3:
         GOSBVL  MOVEUP                           * 42A8B
         ?ST=0   3                                * 42A92
-        GOYES   L_42AA9                          * 42A95
+        GOYES   DelCursChr~1.L4                  * 42A95
         D1=(5)  CR_COUNT                         * 42A97
         C=DAT1  A                                * 42A9E
         C=C-1   A                                * 42AA1
         DAT1=C  A                                * 42AA3
-        GONC    L_42AB8                          * 42AA6
-L_42AA9:
+        GONC    DelCursChr~1.L5                  * 42AA6
+DelCursChr~1.L4:
         GOSBVL  SUB_44772                        * 42AA9
         ?A#0    B                                * 42AB0
-        GOYES   L_42AB8                          * 42AB3
+        GOYES   DelCursChr~1.L5                  * 42AB3
         ST=1    3                                * 42AB5
-L_42AB8:
+DelCursChr~1.L5:
         ?ST=1   3                                * 42AB8
-        GOYES   L_42ABD                          * 42ABB
-L_42ABD:
+        GOYES   DelCursChr~1.L6                  * 42ABB
+DelCursChr~1.L6:
         GOVLNG  GPPushT/FLp                      * 42ABD
 
 * refs (2): 13BBE 42A13

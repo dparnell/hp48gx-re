@@ -49,7 +49,7 @@ ROMP_0A8_005:
 * refs (1): C5332
 ROMP_0A8_006:
         {                                        * C5436
-          :: TakeOver $ "CYLIN" BINT15 TestSysFlag NOT BINT16 TestSysFlag * C543B
+          :: TakeOver $ "CYLIN" BINT15 TestSysFlag NOT BINT16 TestSysFlag * C543B  flag -15: coordinate system  flag -16: coordinate system
             AND Box/StdLabel ;                   * C5472
           :: EvalNextChkPRG ROMPTR 0AB 014 ; }   * C5481  CYLIN
 
@@ -57,7 +57,7 @@ ROMP_0A8_006:
 * refs (1): C5332
 ROMP_0A8_007:
         {                                        * C54A0
-          :: TakeOver $ "SPHERE" BINT15 TestSysFlag BINT16 TestSysFlag AND * C54A5
+          :: TakeOver $ "SPHERE" BINT15 TestSysFlag BINT16 TestSysFlag AND * C54A5  flag -15: coordinate system  flag -16: coordinate system
             Box/StdLabel ;                       * C54DE
           :: EvalNextChkPRG ROMPTR 0AB 015 ; }   * C54E8  SPHERE
 
@@ -936,8 +936,8 @@ LIB0A8.hash:
         CON(5)  0                                * C7627  names of length 14
         CON(5)  0                                * C762C  names of length 15
         CON(5)  0                                * C7631  names of length 16
-        REL(5)  L_C763B                          * C7636  end of the names
-L_C763B:
+        REL(5)  LIB0A8.hash.L1                   * C7636  end of the names
+LIB0A8.hash.L1:
         CON(5)  0                                * C763B  command 000 has no name
         ENDLENGTH                                * C7640
 

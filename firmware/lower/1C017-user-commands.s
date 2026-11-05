@@ -426,7 +426,7 @@ RCLSYSF:
         ASSEMBLE
         GOSBVL  SAVPTR                           * 1C63C
         D0=(5)  SystemFlags                      * 1C643
-        GOTO    L_1C661                          * 1C64A
+        GOTO    RCLUSERF.L1                      * 1C64A
 
 * -> hxs
 * refs (1): 1C628
@@ -434,7 +434,7 @@ RCLUSERF:
         CON(5)  (*)+5                            * 1C64E  primitive code object
         GOSBVL  SAVPTR                           * 1C653
         D0=(5)  UserFlags                        * 1C65A
-L_1C661:
+RCLUSERF.L1:
         A=DAT0  W                                * 1C661
         P=      15                               * 1C665
         GOSBVL  PUSHhxs                          * 1C667
@@ -492,7 +492,7 @@ STOUSERF:
         A=0     W                                * 1C71F
         A=DAT1  WP                               * 1C722
         D1=(5)  UserFlags                        * 1C726
-        GOTO    L_1C767                          * 1C72D
+        GOTO    STOSYSF.L1                       * 1C72D
 
 * hxs ->
 * refs (7): 1C6E8 B51F3 B5207 B89D1 B89F9 D14B9 ...
@@ -512,7 +512,7 @@ STOSYSF:
         A=0     W                                * 1C759
         A=DAT1  WP                               * 1C75C
         D1=(5)  SystemFlags                      * 1C760
-L_1C767:
+STOSYSF.L1:
         DAT1=A  W                                * 1C767
         C=RSTK                                   * 1C76B
         D1=C                                     * 1C76D
@@ -1452,8 +1452,8 @@ OBJ_1DD51:
         :: dup;ra?#BAT! DOARRY> INNERCOMP #1= NcaseDIMERR %2 * 1DD51
           EQcasedrop OBJ_1DE28                   * 1DD74
           %3 %<> case SKIP                       * 1DD7E
-          BINT16 TestSysFlag NOTcase SKIP        * 1DD92
-          3UNROLL 2%>%% %%R>P BINT15 TestSysFlag IT * 1DDA6
+          BINT16 TestSysFlag NOTcase SKIP        * 1DD92  flag -16: coordinate system
+          3UNROLL 2%>%% %%R>P BINT15 TestSysFlag IT * 1DDA6  flag -15: coordinate system
           :: ROT %>%% ROT %%R>P 2@REVAL SWAPROT ; * 1DDC4
 
 * refs (1): 1DE4B
@@ -1466,7 +1466,7 @@ OBJ_1DE19:
 
 * refs (1): 1DD79
 OBJ_1DE28:
-          :: BINT16 TestSysFlag NOTcase SKIP     * 1DE28
+          :: BINT16 TestSysFlag NOTcase SKIP     * 1DE28  flag -16: coordinate system
             2%>%% %%R>P OBJ_1DDEC COLASKIP ;     * 1DE41
         ;                                        * 1DE5A
 
@@ -1483,8 +1483,8 @@ x>V2:
 
 * refs (1): 1DE75
 x>V2~real,real:
-        :: BINT16 TestSysFlag IT %POL>%REC       * 1DE7F
-          BINT19 TestSysFlag case %>C%           * 1DE98
+        :: BINT16 TestSysFlag IT %POL>%REC       * 1DE7F  flag -16: coordinate system
+          BINT19 TestSysFlag case %>C%           * 1DE98  flag -19: →V2 → vector / →V2 → complex
           %2 XEQ>VECTOR ;                        * 1DEAC
 
 * x y z -> []
@@ -1500,8 +1500,8 @@ x>V3:
 
 * refs (1): 1DED1
 ->v3(3r):
-        :: BINT16 TestSysFlag IT                 * 1DEDB
-          :: BINT15 SysITE %SPH>%REC             * 1DEEF
+        :: BINT16 TestSysFlag IT                 * 1DEDB  flag -16: coordinate system
+          :: BINT15 SysITE %SPH>%REC             * 1DEEF  flag -15: coordinate system
             :: 3UNROLL %POL>%REC ROT ; ;         * 1DF03
           %3 XEQ>VECTOR ;                        * 1DF21
 
@@ -1510,7 +1510,7 @@ x>V3:
 {}>%sBIND:
         :: 3PICK NULLCOMP? caseSIZEERR NULL{}    * 1DF30
           DUP 4NULLLAM{} BIND >R                 * 1DF49
-L_1DF5D:
+{}>%sBIND.loop1:
           ticR NOT?SEMI                          * 1DF5D
           DUPTYPEREAL? ?SKIP                     * 1DF67
           :: CRUNCH CK1NoBlame CK&DISPATCH1      * 1DF71
@@ -1519,7 +1519,7 @@ L_1DF5D:
             BINT14                               * 1DF99  unit
             :: DUP 2PUTLAM U>nbr ;               * 1DF9E
           ;                                      * 1DFB7
-          1GETLAM SWAP >TCOMP 1PUTLAM GOTO L_1DF5D ; * 1DFBC
+          1GETLAM SWAP >TCOMP 1PUTLAM GOTO {}>%sBIND.loop1 ; * 1DFBC
 
 * refs (10): 1D111 1D12A 1D157 1D82A 1D870 1D89D ...
 OBJ_1DFDF:

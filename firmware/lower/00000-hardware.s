@@ -8,7 +8,7 @@
 * Reset entry: P=3, then on to RESET (#01FEA) and the boot code at #7018C
 Reset:
         P=      3                                * 00000
-        GOTO    L_001BC                          * 00002
+        GOTO    Interrupt.L13                    * 00002
         CLRST                                    * 00006
         A=C     A                                * 00008
         DCEX    A                                * 0000A
@@ -18,23 +18,23 @@ Reset:
         PIN     #0000F                           * the CPU jumps here on an interrupt
 Interrupt:
         ST=1    14                               * 0000F
-        GOC     L_00022                          * 00012
+        GOC     Interrupt.L3                     * 00012
         ?ST=0   15                               * 00015
-        GOYES   L_00020                          * 00018
-L_0001A:
+        GOYES   Interrupt.L2                     * 00018
+Interrupt.loop1:
         RSTK=C                                   * 0001A
-        GOTO    L_0003E                          * 0001C
-L_00020:
+        GOTO    Interrupt.L5                     * 0001C
+Interrupt.L2:
         RTNCC                                    * 00020
-L_00022:
+Interrupt.L3:
         ?ST=1   15                               * 00022
-        GOYES   L_0001A                          * 00025
+        GOYES   Interrupt.loop1                  * 00025
         RTNSC                                    * 00027
         BSS     15                               * 00029  zeros
-L_00038:
+Interrupt.L4:
         P=      8                                * 00038
-        GOTO    L_001BC                          * 0003A
-L_0003E:
+        GOTO    Interrupt.L13                    * 0003A
+Interrupt.L5:
         CD1EX                                    * 0003E
         D1=(5)  =D1-low-nib_save                 * 00041
         DAT1=C  1                                * 00048
@@ -50,17 +50,17 @@ L_0003E:
         C=0     A                                * 00074
         C=P     3                                * 00076
         P=      2                                * 0007A
-        GOC     L_00082                          * 0007C
+        GOC     Interrupt.L6                     * 0007C
         C=C+1   P                                * 0007F
-L_00082:
+Interrupt.L6:
         P=      1                                * 00082
         C=-C-1  P                                * 00084
         SETHEX                                   * 00087
         P=      0                                * 00089
         ?SB=0                                    * 0008B
-        GOYES   L_00093                          * 0008E
+        GOYES   Interrupt.L7                     * 0008E
         C=C+1   P                                * 00090
-L_00093:
+Interrupt.L7:
         D1=D1+  16                               * 00093
         DAT1=C  A                                * 00096
         D1=D1+  5                                * 00099
@@ -86,82 +86,82 @@ L_00093:
         D1=D1+  5                                * 000D6
         CD0EX                                    * 000D9
         DAT1=C  A                                * 000DC
-        GOTO    L_00140                          * 000DF
+        GOTO    Interrupt.L8                     * 000DF
         FILLTO  #00140                           * 000E3  93 zero nibbles: the next entry stays at #00140
-L_00140:
+Interrupt.L8:
         ST=1    13                               * 00140
         D0=(5)  TIMER2CTRL                       * 00143
         A=DAT0  1                                * 0014A
         ?ABIT=1 0                                * 0014E
-        GOYES   L_0015B                          * 00153
-        GOLONG  L_01315                          * 00155
-L_0015B:
+        GOYES   Interrupt.L9                     * 00153
+        GOLONG  GetTime++.L1                     * 00155
+Interrupt.L9:
         D0=(5)  NOP1MASK14                       * 0015B
         A=DAT0  1                                * 00162
         LC(1)   #C                               * 00166
         DAT0=C  1                                * 00169
         ?MP=0                                    * 0016D
-        GOYES   L_0017C                          * 00170
+        GOYES   Interrupt.L11                    * 00170
         GOSUB   SUB_002DA                        * 00172
-L_00176:
+Interrupt.loop10:
         P=      11                               * 00176
-        GOTO    L_001BC                          * 00178
-L_0017C:
+        GOTO    Interrupt.L13                    * 00178
+Interrupt.L11:
         D0=(2)  #09                              * 0017C
         LC(1)   #4                               * 00180
         DAT0=C  1                                * 00183
         D0=(2)  #08                              * 00187
         C=DAT0  1                                * 0018B
         ?CBIT=0 0                                * 0018F
-        GOYES   L_001A3                          * 00194
+        GOYES   Interrupt.L12                    * 00194
         ST=1    0                                * 00196
         GOSUB   SUB_002FF                        * 00199
         P=      1                                * 0019D
-        GOTO    L_001BC                          * 0019F
-L_001A3:
+        GOTO    Interrupt.L13                    * 0019F
+Interrupt.L12:
         D1=(4)  #0000                            * 001A3
         A=DAT1  A                                * 001A9
         P=      0                                * 001AC
         LC(5)   #A5C3F                           * 001AE
         ?C=A    A                                * 001B5
-        GOYES   L_001C3                          * 001B8
+        GOYES   Interrupt.L14                    * 001B8
         P=      7                                * 001BA
-L_001BC:
-        GOVLNG  L_01FC6                          * 001BC
-L_001C3:
+Interrupt.L13:
+        GOVLNG  Warmstart.L1                     * 001BC
+Interrupt.L14:
         GOSUB   SUB_003C0                        * 001C3
         D0=(5)  #0011C                           * 001C7
         C=DAT0  1                                * 001CE
         ?CBIT=0 2                                * 001D2
-        GOYES   L_001E2                          * 001D7
+        GOYES   Interrupt.L15                    * 001D7
         CBIT=0  2                                * 001D9
         DAT0=C  1                                * 001DE
-L_001E2:
+Interrupt.L15:
         D0=(2)  #1A                              * 001E2
         C=DAT0  1                                * 001E6
         ?CBIT=0 1                                * 001EA
-        GOYES   L_001FA                          * 001EF
+        GOYES   Interrupt.L16                    * 001EF
         CBIT=0  1                                * 001F1
         DAT0=C  1                                * 001F6
-L_001FA:
+Interrupt.L16:
         D1=(4)  #00E1                            * 001FA
         C=DAT1  1                                * 00200
         D0=(5)  #0010F                           * 00204
         A=DAT0  1                                * 0020B
-L_0020F:
+Interrupt.L17:
         ?C=A    P                                * 0020F
-        GOYES   L_00218                          * 00212
-        GOTO    L_00176                          * 00214
-L_00218:
+        GOYES   Interrupt.L18                    * 00212
+        GOTO    Interrupt.loop10                 * 00214
+Interrupt.L18:
         GOSBVL  srvc_timer2                      * 00218
         GOSUB   SUB_005EC                        * 0021F
         GOSUB   SUB_00672                        * 00223
         GOSUBL  OnKeyDown?                       * 00227
-        GONC    L_00236                          * 0022D
-        GOLONG  L_00E38                          * 00230
-L_00236:
-        GOSUB   L_00768                          * 00236
-L_0023A:
+        GONC    Interrupt.L19                    * 0022D
+        GOLONG  SUB_00E21.L1                     * 00230
+Interrupt.L19:
+        GOSUB   SUB_00735.L2                     * 00236
+Interrupt.L20:
         GOSUB   D1=IRAM~jump                     * 0023A
         D1=(4)  #0608                            * 0023E
         C=DAT1  W                                * 00244
@@ -196,9 +196,9 @@ L_0023A:
         CSR     A                                * 002A6
         P=      0                                * 002A8
         C=C+1   P                                * 002AA
-        GOC     L_002B2                          * 002AD
+        GOC     Interrupt.L21                    * 002AD
         SETDEC                                   * 002B0
-L_002B2:
+Interrupt.L21:
         P=      1                                * 002B2
         C=C-1   P                                * 002B4
         P=C     2                                * 002B7
@@ -215,32 +215,32 @@ L_002B2:
 SUB_002DA:
         P=      0                                * 002DA
         D0=(5)  NOP1MASK14                       * 002DC
-L_002E3:
+SUB_002DA.loop1:
         MP=0                                     * 002E3
         C=0     A                                * 002E6
         C=C+1   XS                               * 002E8
-L_002EB:
+SUB_002DA.loop2:
         C=C-1   A                                * 002EB
-        GONC    L_002EB                          * 002ED
+        GONC    SUB_002DA.loop2                  * 002ED
         LC(1)   #C                               * 002F0
         DAT0=C  1                                * 002F3
         ?MP=0                                    * 002F7
         RTNYES                                   * 002FA
-        GONC    L_002E3                          * 002FC
+        GONC    SUB_002DA.loop1                  * 002FC
 
 * refs (2): 00199 01097
 SUB_002FF:
-        GOVLNG  L_70250                          * 002FF
-L_00306:
+        GOVLNG  SUB_70242.L1                     * 002FF
+SUB_002FF.L1:
         D0=(2)  #2E                              * 00306
         C=DAT0  B                                * 0030A
         RSTK=C                                   * 0030D
         P=      0                                * 0030F
         C=0     A                                * 00311
         ?ST=0   0                                * 00313
-        GOYES   L_0031C                          * 00316
+        GOYES   SUB_002FF.L2                     * 00316
         LC(2)   #10                              * 00318
-L_0031C:
+SUB_002FF.L2:
         DAT0=C  B                                * 0031C
         GOSUBL  SUB_00DF8                        * 0031F
         INTOFF                                   * 00325
@@ -250,12 +250,12 @@ L_0031C:
         D0=(2)  #0E                              * 00333
         LC(1)   #8                               * 00337
         DAT0=C  1                                * 0033A
-L_0033E:
+SUB_002FF.loop3:
         C=0     A                                * 0033E
         D0=(2)  #09                              * 00340
         DAT0=C  1                                * 00344
-        GOVLNG  L_043B7                          * 00348
-L_0034F:
+        GOVLNG  SUB_04391.L1                     * 00348
+SUB_002FF.L4:
         D0=(2)  #09                              * 0034F
         LC(1)   #4                               * 00353
         DAT0=C  1                                * 00356
@@ -268,10 +268,10 @@ L_0034F:
         A=DAT0  1                                * 0036E
         LC(1)   #A                               * 00372
         A=A-C   P                                * 00375
-L_00378:
+SUB_002FF.loop5:
         C=DAT0  1                                * 00378
         ?C#A    P                                * 0037C
-        GOYES   L_00378                          * 0037F
+        GOYES   SUB_002FF.loop5                  * 0037F
         C=RSTK                                   * 00381
         D0=(2)  #2E                              * 00383
         DAT0=C  B                                * 00387
@@ -280,7 +280,7 @@ L_00378:
         D0=(2)  #08                              * 00398
         C=DAT0  1                                * 0039C
         ?CBIT=1 0                                * 003A0
-        GOYES   L_0033E                          * 003A5
+        GOYES   SUB_002FF.loop3                  * 003A5
         D0=(2)  #0E                              * 003A7
         LC(1)   #C                               * 003AB
         DAT0=C  1                                * 003AE
@@ -314,9 +314,9 @@ SUB_003C0:
         DAT1=C  1                                * 0040B
         CBIT=1  1                                * 0040F
         DAT0=C  1                                * 00414
-L_00418:
+SUB_003C0.loop1:
         GOSBVL  SUB_7011B                        * 00418
-        GOC     L_0049F                          * 0041F
+        GOC     SUB_003C0.L5                     * 0041F
         D0=(2)  #0D                              * 00422
         A=0     A                                * 00426
         A=DAT0  1                                * 00428
@@ -324,22 +324,22 @@ L_00418:
         C=A     A                                * 00431
         A=A+A   A                                * 00433
         A=A+C   A                                * 00435
-        LC(5)   L_00487                          * 00437  table of 3-nibble entries, indexed by 3*A
+        LC(5)   SUB_003C0.L4                     * 00437  table of 3-nibble entries, indexed by 3*A
         C=C+A   A                                * 0043E
         D0=C                                     * 00440
         A=DAT0  X                                * 00443
         D0=(5)  TIMER2                           * 00447
         C=DAT0  X                                * 0044E
         C=C-A   X                                * 00452
-L_00455:
+SUB_003C0.loop2:
         D0=(2)  #38                              * 00455
         A=DAT0  X                                * 00459
         ?C=A    X                                * 0045D
-        GOYES   L_0046F                          * 00460
+        GOYES   SUB_003C0.L3                     * 00460
         GOSBVL  SUB_7011B                        * 00462
-        GOC     L_0049F                          * 00469
-        GONC    L_00455                          * 0046C
-L_0046F:
+        GOC     SUB_003C0.L5                     * 00469
+        GONC    SUB_003C0.loop2                  * 0046C
+SUB_003C0.L3:
         D1=(4)  #0654                            * 0046F
         C=DAT1  1                                * 00475
         D0=(2)  #0C                              * 00479
@@ -348,7 +348,7 @@ L_0046F:
         RTNSC                                    * 00485
 
 * Time-out ticks by baud code 0-7 (read at #00437)
-L_00487:
+SUB_003C0.L4:
         CON(3)  #12C                             * 00487  entry 0
         CON(3)  #0BC                             * 0048A  entry 1
         CON(3)  #096                             * 0048D  entry 2
@@ -357,65 +357,65 @@ L_00487:
         CON(3)  #02F                             * 00496  entry 5
         CON(3)  #026                             * 00499  entry 6
         CON(3)  #017                             * 0049C  entry 7
-L_0049F:
+SUB_003C0.L5:
         ?ABIT=0 8                                * 0049F
-        GOYES   L_004AF                          * 004A4
+        GOYES   SUB_003C0.L6                     * 004A4
         D0=(2)  #14                              * 004A6
         A=DAT0  B                                * 004AA
         B=A     A                                * 004AD
-L_004AF:
+SUB_003C0.L6:
         D1=(4)  #0519                            * 004AF
         C=DAT1  7                                * 004B5
         ?ABIT=0 10                               * 004B9
-        GOYES   L_004D0                          * 004BE
+        GOYES   SUB_003C0.L7                     * 004BE
         D0=(2)  #13                              * 004C0
         DAT0=A  1                                * 004C4
         CBIT=1  8                                * 004C8
-        GONC    L_00537                          * 004CD
-L_004D0:
+        GONC    SUB_003C0.L10                    * 004CD
+SUB_003C0.L7:
         P=      5                                * 004D0
         A=C     P                                * 004D2
         A=A+A   P                                * 004D5
         P=      0                                * 004D8
-        GONC    L_00537                          * 004DA
+        GONC    SUB_003C0.L10                    * 004DA
         D=C     W                                * 004DD
         LA(2)   #13                              * 004E0
         GOSBVL  SUB_70134                        * 004E7
         C=D     W                                * 004EE
         ?A=B    B                                * 004F1
-        GOYES   L_0051B                          * 004F4
+        GOYES   SUB_003C0.L8                     * 004F4
         LA(2)   #11                              * 004F6
         GOSBVL  SUB_70134                        * 004FD
         C=D     W                                * 00504
         ?A#B    B                                * 00507
-        GOYES   L_00537                          * 0050A
+        GOYES   SUB_003C0.L10                    * 0050A
         P=      5                                * 0050C
         A=C     P                                * 0050E
         LC(1)   #B                               * 00511
         C=C&A   P                                * 00514
-        GONC    L_00527                          * 00518
-L_0051B:
+        GONC    SUB_003C0.L9                     * 00518
+SUB_003C0.L8:
         P=      5                                * 0051B
         A=C     P                                * 0051D
         LC(1)   #4                               * 00520
         C=C!A   P                                * 00523
-L_00527:
+SUB_003C0.L9:
         D1=(4)  #051E                            * 00527
         DAT1=C  P                                * 0052D
         P=      0                                * 00531
-        GOTO    L_00418                          * 00533
-L_00537:
+        GOTO    SUB_003C0.loop1                  * 00533
+SUB_003C0.L10:
         ?C#0    XS                               * 00537
-        GOYES   L_0054A                          * 0053A
+        GOYES   SUB_003C0.L11                    * 0053A
         C=C+1   B                                * 0053C
-        GONC    L_0054A                          * 0053F
+        GONC    SUB_003C0.L11                    * 0053F
         C=C-1   B                                * 00542
         CBIT=1  11                               * 00545
-L_0054A:
+SUB_003C0.L11:
         D1=(4)  #0519                            * 0054A
         DAT1=C  7                                * 00550
         ?C#0    XS                               * 00554
-        GOYES   L_0057C                          * 00557
+        GOYES   SUB_003C0.L12                    * 00557
         A=C     A                                * 00559
         ASR     A                                * 0055B
         ASR     A                                * 0055D
@@ -429,37 +429,37 @@ L_0054A:
         CD1EX                                    * 00574
         A=B     A                                * 00577
         DAT1=A  B                                * 00579
-L_0057C:
+SUB_003C0.L12:
         D1=(4)  #0519                            * 0057C
         A=DAT1  X                                * 00582
         LC(2)   #DF                              * 00586
         ?C<=A   B                                * 0058A
-        GOYES   L_00594                          * 0058D
+        GOYES   SUB_003C0.L13                    * 0058D
         ?A=0    XS                               * 0058F
-        GOYES   L_005E5                          * 00592
-L_00594:
+        GOYES   SUB_003C0.L15                    * 00592
+SUB_003C0.L13:
         D1=(4)  #051E                            * 00594
         A=DAT1  1                                * 0059A
         LC(1)   #3                               * 0059E
         A=A&C   P                                * 005A1
         LC(1)   #2                               * 005A5
         ?C#A    P                                * 005A8
-        GOYES   L_005E5                          * 005AB
+        GOYES   SUB_003C0.L15                    * 005AB
         D0=(2)  #12                              * 005AD
         A=DAT0  1                                * 005B1
         ?ABIT=1 0                                * 005B5
-        GOYES   L_005D5                          * 005BA
+        GOYES   SUB_003C0.L14                    * 005BA
         LA(2)   #13                              * 005BC
         GOSBVL  SUB_3114C                        * 005C3
         GOSBVL  SUB_7015D                        * 005CA
-        GOTO    L_00418                          * 005D1
-L_005D5:
+        GOTO    SUB_003C0.loop1                  * 005D1
+SUB_003C0.L14:
         D1=D1+  1                                * 005D5
         A=DAT1  1                                * 005D8
         ABIT=1  3                                * 005DC
         DAT1=A  1                                * 005E1
-L_005E5:
-        GOTO    L_00418                          * 005E5
+SUB_003C0.L15:
+        GOTO    SUB_003C0.loop1                  * 005E5
         BSS     3                                * 005E9  zeros
 
 * refs (1): 0021F
@@ -469,16 +469,16 @@ SUB_005EC:
         D0=(5)  TIMER1CTRL                       * 005F0
         A=DAT0  1                                * 005F7
         ?ABIT=1 3                                * 005FB
-        GOYES   L_00604                          * 00600
+        GOYES   SUB_005EC.L1                     * 00600
         RTNCC                                    * 00602
-L_00604:
+SUB_005EC.L1:
         GOSUB   SUB_008DF                        * 00604
         D1=(4)  #08CC                            * 00608
         C=DAT1  1                                * 0060E
         C=C-1   P                                * 00612
-        GOC     L_0061C                          * 00615
+        GOC     SUB_005EC.L2                     * 00615
         DAT1=C  1                                * 00618
-L_0061C:
+SUB_005EC.L2:
         LA(4)   #0801                            * 0061C
         LC(3)   #205                             * 00625
         A=C     B                                * 0062A
@@ -528,20 +528,20 @@ SUB_00672:
         C=DAT1  XS                               * 006B2
         A=A!C   XS                               * 006B6
         ?A=0    XS                               * 006BA
-        GOYES   L_006C1                          * 006BD
+        GOYES   SUB_00672.L1                     * 006BD
         A=A+1   A                                * 006BF
-L_006C1:
+SUB_00672.L1:
         D1=(4)  #0840                            * 006C1
         DAT1=A  1                                * 006C7
         D1=(4)  #0841                            * 006CB
         C=DAT1  B                                * 006D1
         CBIT=0  3                                * 006D4
         ?A=0    P                                * 006D9
-        GOYES   L_006E3                          * 006DC
+        GOYES   SUB_00672.L2                     * 006DC
         CBIT=1  3                                * 006DE
-L_006E3:
+SUB_00672.L2:
         DAT1=C  B                                * 006E3
-        GOVLNG  L_01E79                          * 006E6
+        GOVLNG  OBJ_01E5E.L1                     * 006E6
 
 * refs (2): 00683 325B1
 SUB_006ED:
@@ -552,14 +552,14 @@ SUB_006ED:
         D0=(2)  #08                              * 006FD
         LC(3)   #50F                             * 00701
         A=C     A                                * 00706
-L_00708:
+SUB_006ED.loop1:
         C=DAT0  1                                * 00708
         C=C&B   P                                * 0070C
         A=A&C   P                                * 00710
         CSL     B                                * 00714
         A=A!C   B                                * 00717
         C=C-1   XS                               * 0071B
-        GONC    L_00708                          * 0071E
+        GONC    SUB_006ED.loop1                  * 0071E
         D0=(2)  #09                              * 00721
         LC(1)   #4                               * 00725
         DAT0=C  1                                * 00728
@@ -578,61 +578,61 @@ SUB_00735:
         A=DAT0  1                                * 0074B
         LC(1)   #5                               * 0074F
         A=A-C   P                                * 00752
-L_00755:
+SUB_00735.loop1:
         C=DAT0  1                                * 00755
         ?C#A    P                                * 00759
-        GOYES   L_00755                          * 0075C
+        GOYES   SUB_00735.loop1                  * 0075C
         D0=(2)  #0F                              * 0075E
         C=DAT0  XS                               * 00762
         RTNCC                                    * 00766
-L_00768:
+SUB_00735.L2:
         GOSUB   D1=IRAM~jump                     * 00768
         D1=(4)  #065B                            * 0076C
         C=DAT1  S                                * 00772
         ?C=0    S                                * 00776
-        GOYES   L_0077F                          * 00779
+        GOYES   SUB_00735.L3                     * 00779
         P=      0                                * 0077B
         RTNCC                                    * 0077D
-L_0077F:
+SUB_00735.L3:
         GOSUB   BITMAP                           * 0077F
         B=A     W                                * 00783
         ?A#0    W                                * 00786
-        GOYES   L_007A6                          * 00789
+        GOYES   SUB_00735.L5                     * 00789
         D1=(4)  #065C                            * 0078B
         C=0     W                                * 00791
         C=DAT1  13                               * 00794
         ?C#0    W                                * 00798
-        GOYES   L_007A6                          * 0079B
-L_0079D:
+        GOYES   SUB_00735.L5                     * 0079B
+SUB_00735.L4:
         RSI                                      * 0079D
         P=      0                                * 007A2
         RTNCC                                    * 007A4
-L_007A6:
+SUB_00735.L5:
         GOSUB   Debounce                         * 007A6  inline data follows
         ?ABIT=0 0                                * 007AA
         GOYES   SrvcKbdAB                        * 007AF
-        GOTO    L_008C4                          * 007B1
+        GOTO    SrvcKbdAB.L17                    * 007B1
 
 * ( A.W -> ) Sets KEYSTATE and KEYBUFFER
 * refs (2): 007AA 02818
 SrvcKbdAB:
         GOSUB   D1=IRAM~jump                     * 007B5
         LC(1)   #3                               * 007B9
-L_007BC:
+SrvcKbdAB.loop1:
         ?B=0    W                                * 007BC
-        GOYES   L_007DC                          * 007BF
-L_007C1:
+        GOYES   SrvcKbdAB.L4                     * 007BF
+SrvcKbdAB.loop2:
         ?B#0    P                                * 007C1
-        GOYES   L_007CC                          * 007C4
+        GOYES   SrvcKbdAB.loop3                  * 007C4
         BSR     W                                * 007C6
-        GONC    L_007BC                          * 007C9
-L_007CC:
+        GONC    SrvcKbdAB.loop1                  * 007C9
+SrvcKbdAB.loop3:
         B=B+B   P                                * 007CC
-        GONC    L_007CC                          * 007CF
+        GONC    SrvcKbdAB.loop3                  * 007CF
         C=C-1   P                                * 007D2
-        GONC    L_007C1                          * 007D5
-        GOTO    L_008C9                          * 007D8
-L_007DC:
+        GONC    SrvcKbdAB.loop2                  * 007D5
+        GOTO    SrvcKbdAB.L18                    * 007D8
+SrvcKbdAB.L4:
         GOSUB   SUB_009E1                        * 007DC
         D=C     S                                * 007E0
         D1=(4)  #065C                            * 007E3
@@ -640,20 +640,20 @@ L_007DC:
         C=DAT1  13                               * 007EC
         DAT1=A  13                               * 007F0
         ?A#0    W                                * 007F4
-        GOYES   L_007FD                          * 007F7
-        GOTO    L_0079D                          * 007F9
-L_007FD:
+        GOYES   SrvcKbdAB.L5                     * 007F7
+        GOTO    SUB_00735.L4                     * 007F9
+SrvcKbdAB.L5:
         ?C#A    W                                * 007FD
-        GOYES   L_00806                          * 00800
-        GOTO    L_008C9                          * 00802
-L_00806:
+        GOYES   SrvcKbdAB.L6                     * 00800
+        GOTO    SrvcKbdAB.L18                    * 00802
+SrvcKbdAB.L6:
         P=      12                               * 00806
         C=-C-1  WP                               * 00808
         A=A&C   WP                               * 0080B
         ?A#0    W                                * 0080F
-        GOYES   L_00818                          * 00812
-        GOTO    L_008C9                          * 00814
-L_00818:
+        GOYES   SrvcKbdAB.L7                     * 00812
+        GOTO    SrvcKbdAB.L18                    * 00814
+SrvcKbdAB.L7:
         GOSUB   SUB_009E1                        * 00818
         B=C     S                                * 0081C
         LC(6)   #7DF7FF                          * 0081F
@@ -662,66 +662,66 @@ L_00818:
         P=      0                                * 0082D
         ASRB                                     * 0082F
         ?A#0    W                                * 00832
-        GOYES   L_0084B                          * 00835
+        GOYES   SrvcKbdAB.L9                     * 00835
         C=B     S                                * 00837
         GOSUB   SUB_00A09                        * 0083A
-        GONC    L_00845                          * 0083E
-        GOTO    L_008C0                          * 00841
-L_00845:
+        GONC    SrvcKbdAB.L8                     * 0083E
+        GOTO    SrvcKbdAB.L16                    * 00841
+SrvcKbdAB.L8:
         B=C     W                                * 00845
-        GONC    L_00892                          * 00848
-L_0084B:
+        GONC    SrvcKbdAB.loop14                 * 00848
+SrvcKbdAB.L9:
         C=D     S                                * 0084B
         GOSUB   SUB_00A09                        * 0084E
         D=C     A                                * 00852
-        GOC     L_008C0                          * 00854
-        D0=(5)  L_00A82+1                        * 00857
+        GOC     SrvcKbdAB.L16                    * 00854
+        D0=(5)  SUB_00A37.L3+1                   * 00857
         B=0     W                                * 0085E
-        GONC    L_00867                          * 00861
-L_00864:
+        GONC    SrvcKbdAB.L11                    * 00861
+SrvcKbdAB.loop10:
         ASR     W                                * 00864
-L_00867:
+SrvcKbdAB.L11:
         D0=D0+  8                                * 00867
-L_0086A:
+SrvcKbdAB.loop12:
         ?A=0    P                                * 0086A
-        GOYES   L_00864                          * 0086D
+        GOYES   SrvcKbdAB.loop10                 * 0086D
         SB=0                                     * 0086F
         ASRB                                     * 00872
         ?SB=0                                    * 00875
-        GOYES   L_0088A                          * 00878
+        GOYES   SrvcKbdAB.L13                    * 00878
         BSL     W                                * 0087A
         BSL     W                                * 0087D
         C=DAT0  B                                * 00880
         C=C!D   B                                * 00883
         B=C     B                                * 00887
-L_0088A:
+SrvcKbdAB.L13:
         D0=D0+  2                                * 0088A
         ?A#0    W                                * 0088D
-        GOYES   L_0086A                          * 00890
-L_00892:
+        GOYES   SrvcKbdAB.loop12                 * 00890
+SrvcKbdAB.loop14:
         C=B     A                                * 00892
         GOSUB   SUB_00D9F                        * 00894
-        GOC     L_008A9                          * 00898
+        GOC     SrvcKbdAB.L15                    * 00898
         BSR     W                                * 0089B
         BSR     W                                * 0089E
         ?B#0    W                                * 008A1
-        GOYES   L_00892                          * 008A4
-        GONC    L_008C9                          * 008A6
-L_008A9:
+        GOYES   SrvcKbdAB.loop14                 * 008A4
+        GONC    SrvcKbdAB.L18                    * 008A6
+SrvcKbdAB.L15:
         GOSBVL  getBPOFF                         * 008A9
         ?ST=1   4                                * 008B0
-        GOYES   L_008C0                          * 008B3
+        GOYES   SrvcKbdAB.L16                    * 008B3
         LC(2)   #F9                              * 008B5
         GOSBVL  RCKBp                            * 008B9
-L_008C0:
+SrvcKbdAB.L16:
         GOSUB   SUB_00D3B                        * 008C0
-L_008C4:
+SrvcKbdAB.L17:
         RSI                                      * 008C4
-L_008C9:
+SrvcKbdAB.L18:
         GOSUB   SUB_00655                        * 008C9
         GOSUB   SUB_00A37                        * 008CD
         RTNC                                     * 008D1
-        GOTO    L_00768                          * 008D4
+        GOTO    SUB_00735.L2                     * 008D4
 
 * refs (11): 0023A 0068C 00768 007B5 00D8E 00FF8 ...
 D1=IRAM~jump:
@@ -743,15 +743,15 @@ BITMAP:
         SB=0                                     * 008FC
         CSRB                                     * 008FF
         ?SB=0                                    * 00902
-        GOYES   L_0091C                          * 00905
+        GOYES   BITMAP.loop1                     * 00905
         CPEX    15                               * 00907
         C=P     0                                * 0090B
         CBIT=1  3                                * 0090F
         P=C     0                                * 00914
         CPEX    15                               * 00918
-L_0091C:
+BITMAP.loop1:
         ?ABIT=1 3                                * 0091C
-        GOYES   L_0093F                          * 00921
+        GOYES   BITMAP.loop2                     * 00921
         A=A+A   X                                * 00923
         C=A     X                                * 00926
         OUT=C                                    * 00929
@@ -760,10 +760,10 @@ L_0091C:
         CSRC                                     * 00932
         C=C+C   W                                * 00935
         C=C+C   W                                * 00938
-        GOTO    L_0091C                          * 0093B
-L_0093F:
+        GOTO    BITMAP.loop1                     * 0093B
+BITMAP.loop2:
         ?ABIT=1 8                                * 0093F
-        GOYES   L_0097C                          * 00944
+        GOYES   BITMAP.L3                        * 00944
         A=A+A   X                                * 00946
         C=A     X                                * 00949
         OUT=C                                    * 0094C
@@ -773,15 +773,15 @@ L_0093F:
         SB=0                                     * 00958
         CSRB                                     * 0095B
         ?SB=0                                    * 0095E
-        GOYES   L_0093F                          * 00961
+        GOYES   BITMAP.loop2                     * 00961
         CPEX    15                               * 00963
         C=P     0                                * 00967
         CBIT=1  3                                * 0096B
         P=C     0                                * 00970
         CPEX    15                               * 00974
-        GONC    L_0093F                          * 00978
+        GONC    BITMAP.loop2                     * 00978
         BSS     1                                * 0097B  zeros
-L_0097C:
+BITMAP.L3:
         LC(3)   #1FF                             * 0097C
         OUT=C                                    * 00981
         C=IN                                     * 00984
@@ -802,22 +802,22 @@ Debounce:
         C=RSTK                                   * 009A5
         D=C     A                                * 009A7
         D0=(5)  #00139                           * 009A9
-L_009B0:
+Debounce.loop1:
         C=DAT0  S                                * 009B0
         P=      14                               * 009B4
         LC(1)   #5                               * 009B6
-L_009B9:
+Debounce.loop2:
         A=DAT0  S                                * 009B9
         ?C=A    S                                * 009BD
-        GOYES   L_009B9                          * 009C0
+        GOYES   Debounce.loop2                   * 009C0
         C=A     S                                * 009C2
         GOSUB   BITMAP                           * 009C5
         ABEX    W                                * 009C9
         ?A#B    W                                * 009CC
-        GOYES   L_009B0                          * 009CF
+        GOYES   Debounce.loop1                   * 009CF
         P=      14                               * 009D1
         C=C-1   P                                * 009D3
-        GONC    L_009B9                          * 009D6
+        GONC    Debounce.loop2                   * 009D6
         P=      0                                * 009D9
         C=D     A                                * 009DB
         PC=C                                     * 009DD
@@ -831,33 +831,33 @@ SUB_009E1:
         C=C+C   P                                * 009EC
         C=C+C   P                                * 009EF
         P=      13                               * 009F2
-L_009F4:
+SUB_009E1.loop1:
         C=C+C   S                                * 009F4
         C=C+C   XS                               * 009F7
-        GONC    L_00A00                          * 009FA
+        GONC    SUB_009E1.L2                     * 009FA
         C=C+1   S                                * 009FD
-L_00A00:
+SUB_009E1.L2:
         CSR     A                                * 00A00
         P=P+1                                    * 00A02
-        GONC    L_009F4                          * 00A04
+        GONC    SUB_009E1.loop1                  * 00A04
         RTNCC                                    * 00A07
 
 * refs (2): 0083A 0084E
 SUB_00A09:
-        D0=(5)  L_00A2F                          * 00A09
+        D0=(5)  SUB_00A09.L2                     * 00A09
         P=C     15                               * 00A10
         C=0     W                                * 00A14
-L_00A17:
+SUB_00A09.loop1:
         C=DAT0  1                                * 00A17
         D0=D0+  1                                * 00A1B
         P=P-1                                    * 00A1E
-        GONC    L_00A17                          * 00A20
+        GONC    SUB_00A09.loop1                  * 00A20
         P=      0                                * 00A23
         C=C+1   P                                * 00A25
         C=C-1   P                                * 00A28
         CSL     A                                * 00A2B
         RTN                                      * 00A2D
-L_00A2F:
+SUB_00A09.L2:
         NIBHEX  084FCFFF                         * 00A2F  ∡ôüÿ
 
 * refs (1): 008CD
@@ -868,25 +868,25 @@ SUB_00A37:
         LC(1)   #6                               * 00A44
         A=A&C   P                                * 00A47
         ?C=A    P                                * 00A4B
-        GOYES   L_00A52                          * 00A4E
+        GOYES   SUB_00A37.L1                     * 00A4E
         RTNCC                                    * 00A50
-L_00A52:
+SUB_00A37.L1:
         D0=(2)  #37                              * 00A52
         C=0     A                                * 00A56
         C=DAT0  1                                * 00A58
         ?CBIT=1 3                                * 00A5C
         RTNYES                                   * 00A61
         ?C=0    A                                * 00A63
-        GOYES   L_00A6A                          * 00A66
+        GOYES   SUB_00A37.L2                     * 00A66
         RTNCC                                    * 00A68
-L_00A6A:
+SUB_00A37.L2:
         LC(3)   #1FF                             * 00A6A
         A=C     A                                * 00A6F
         D0=(2)  #38                              * 00A71
         C=DAT0  X                                * 00A75
         A=A&C   X                                * 00A79
         LC(3)   #137                             * 00A7D
-L_00A82:
+SUB_00A37.L3:
         ?C>=A   X                                * 00A82
         RTNYES                                   * 00A85
         RTNCC                                    * 00A87
@@ -939,7 +939,7 @@ KeyBitCodes:
         CON(2)  #08                              * 00ADF  entry 43
         CON(2)  #06                              * 00AE1  entry 44
         CON(2)  #05                              * 00AE3  entry 45
-L_00AE5:
+KeyBitCodes.L1:
         CON(2)  #04                              * 00AE5  entry 46
         CON(2)  #03                              * 00AE7  entry 47
         CON(2)  #02                              * 00AE9  entry 48
@@ -1038,7 +1038,7 @@ L_00AE5:
         CON(3)  #001                             * 00BF9  entry 45
         CON(3)  #008                             * 00BFC
         CON(3)  #001                             * 00BFF  entry 46
-L_00C02:
+KeyBitCodes.L2:
         CON(3)  #004                             * 00C02
         CON(3)  #001                             * 00C05  entry 47
         CON(3)  #002                             * 00C08
@@ -1118,31 +1118,31 @@ SUB_00C8D:
         P=      0                                * 00C8D
         LC(2)   #80                              * 00C8F
         ?C#A    B                                * 00C93
-        GOYES   L_00C9F                          * 00C96
+        GOYES   SUB_00C8D.L1                     * 00C96
         LC(2)   #1E                              * 00C98
         A=C     B                                * 00C9C
-L_00C9F:
+SUB_00C8D.L1:
         LC(2)   #40                              * 00C9F
         ?C#A    B                                * 00CA3
-        GOYES   L_00CAF                          * 00CA6
+        GOYES   SUB_00C8D.L2                     * 00CA6
         LC(2)   #23                              * 00CA8
         A=C     B                                * 00CAC
-L_00CAF:
+SUB_00C8D.L2:
         LC(2)   #2D                              * 00CAF
         ?C=A    B                                * 00CB3
-        GOYES   L_00D12                          * 00CB6
+        GOYES   SUB_00C8D.L3                     * 00CB6
         ?A=0    B                                * 00CB8
-        GOYES   L_00D12                          * 00CBB
+        GOYES   SUB_00C8D.L3                     * 00CBB
         LC(2)   #31                              * 00CBD
         ?C<A    B                                * 00CC1
-        GOYES   L_00D12                          * 00CC4
+        GOYES   SUB_00C8D.L3                     * 00CC4
         C=0     A                                * 00CC6
         C=A     B                                * 00CC8
         C=C+C   A                                * 00CCB
         A=C     A                                * 00CCD
         C=C+C   A                                * 00CCF
         A=A+C   A                                * 00CD1
-        LC(5)   L_00AE5                          * 00CD3  table of 6-nibble entries, indexed by 6*B
+        LC(5)   KeyBitCodes.L1                   * 00CD3  table of 6-nibble entries, indexed by 6*B
         A=A+C   A                                * 00CDA
         D1=A                                     * 00CDC
         C=DAT1  X                                * 00CDF
@@ -1159,23 +1159,23 @@ L_00CAF:
         GOSUB   SUB_00E21                        * 00D09
         ?A#0    X                                * 00D0D
         RTNYES                                   * 00D10
-L_00D12:
+SUB_00C8D.L3:
         RTNCC                                    * 00D12
 
 * refs (1): 01E95
 SUB_00D14:
         LC(3)   #004                             * 00D14
-        GOTO    L_00D2B                          * 00D19
+        GOTO    SUB_00D26.L1                     * 00D19
 
 * refs (1): 01EA7
 SUB_00D1D:
         LC(3)   #002                             * 00D1D
-        GOTO    L_00D2B                          * 00D22
+        GOTO    SUB_00D26.L1                     * 00D22
 
 * refs (1): 01E83
 SUB_00D26:
         LC(3)   #008                             * 00D26
-L_00D2B:
+SUB_00D26.L1:
         OUT=C                                    * 00D2B
         GOSUB   CINRTN                           * 00D2E
         ?CBIT=1 5                                * 00D32
@@ -1285,149 +1285,149 @@ SUB_00E21:
         ?C#0    A                                * 00E31
         RTNYES                                   * 00E34
         RTN                                      * 00E36
-L_00E38:
+SUB_00E21.L1:
         P=      0                                * 00E38
-        LC(5)   L_00FF8                          * 00E3A  return address, pushed with RSTK=C
+        LC(5)   SUB_00E21.L17                    * 00E3A  return address, pushed with RSTK=C
         RSTK=C                                   * 00E41
         D1=(4)  #065A                            * 00E43
         A=DAT1  S                                * 00E49
         B=A     S                                * 00E4D
-L_00E50:
+SUB_00E21.loop2:
         P=      0                                * 00E50
         LC(3)   #1FF                             * 00E52
         OUT=C                                    * 00E57
         LC(5)   #0004E                           * 00E5A
         A=0     A                                * 00E61
-L_00E63:
+SUB_00E21.loop3:
         GOSUB   AINRTN                           * 00E63
         ?A#0    A                                * 00E67
-        GOYES   L_00E73                          * 00E6A
+        GOYES   SUB_00E21.L4                     * 00E6A
         C=C-1   A                                * 00E6C
-        GONC    L_00E63                          * 00E6E
+        GONC    SUB_00E21.loop3                  * 00E6E
         RTN                                      * 00E71
-L_00E73:
+SUB_00E21.L4:
         GOSBVL  BITMAP                           * 00E73
-        D1=(5)  L_00ED5                          * 00E7A
+        D1=(5)  SUB_00E21.L10                    * 00E7A
         P=      12                               * 00E81
-L_00E83:
+SUB_00E21.loop5:
         C=DAT1  S                                * 00E83
         C=C-1   S                                * 00E87
-        GOC     L_00E50                          * 00E8A
+        GOC     SUB_00E21.loop2                  * 00E8A
         D1=D1+  1                                * 00E8D
         C=DAT1  13                               * 00E90
         D1=D1+  13                               * 00E94
         ?C=A    WP                               * 00E97
-        GOYES   L_00EA2                          * 00E9A
+        GOYES   SUB_00E21.L6                     * 00E9A
         D1=D1+  5                                * 00E9C
-        GONC    L_00E83                          * 00E9F
-L_00EA2:
+        GONC    SUB_00E21.loop5                  * 00E9F
+SUB_00E21.L6:
         P=      0                                * 00EA2
         C=C-1   S                                * 00EA4
-        GONC    L_00EB3                          * 00EA7
+        GONC    SUB_00E21.L7                     * 00EA7
         C=RSTK                                   * 00EAA
         AD1EX                                    * 00EAC
         PC=(A)                                   * 00EAF
-L_00EB3:
+SUB_00E21.L7:
         A=DAT1  A                                * 00EB3
         C=C-1   S                                * 00EB6
-        GONC    L_00ECB                          * 00EB9
+        GONC    SUB_00E21.L8                     * 00EB9
         ?B#0    S                                * 00EBC
-        GOYES   L_00ECB                          * 00EBF
-        LA(5)   L_0023A                          * 00EC1  return address, pushed with RSTK=C
-L_00ECB:
+        GOYES   SUB_00E21.L8                     * 00EBF
+        LA(5)   Interrupt.L20                    * 00EC1  return address, pushed with RSTK=C
+SUB_00E21.L8:
         C=RSTK                                   * 00ECB
         C=A     A                                * 00ECD
-L_00ECF:
+SUB_00E21.loop9:
         RSTK=C                                   * 00ECF
-        GOTO    L_00E50                          * 00ED1
+        GOTO    SUB_00E21.loop2                  * 00ED1
 
 * ON-key combinations (read at #00E7A): kind (1 jump, 2 and 3 other actions), 13-nibble key bitmap, handler
-L_00ED5:
+SUB_00E21.L10:
         CON(1)  1                                * 00ED5  entry 0
         CON(13) #0000000000003                   * 00ED6
-        CON(5)  L_00F94                          * 00EE3
+        CON(5)  SUB_00E21.L11                    * 00EE3
         CON(1)  1                                * 00EE8  entry 1
         CON(13) #0000000000041                   * 00EE9
-        CON(5)  L_00F9A                          * 00EF6
+        CON(5)  SUB_00E21.L12                    * 00EF6
         CON(1)  3                                * 00EFB  entry 2
         CON(13) #1000000000001                   * 00EFC
-        CON(5)  L_0023A                          * 00F09
+        CON(5)  Interrupt.L20                    * 00F09
         CON(1)  3                                * 00F0E  entry 3
         CON(13) #0100000000401                   * 00F0F
         CON(5)  Coldstart                        * 00F1C
         CON(1)  3                                * 00F21  entry 4
         CON(13) #0000000000201                   * 00F22
-        CON(5)  L_01011                          * 00F2F
+        CON(5)  SUB_00E21.L19                    * 00F2F
         CON(1)  3                                * 00F34  entry 5
         CON(13) #0000000008001                   * 00F35
-        CON(5)  L_010CE                          * 00F42
+        CON(5)  SUB_010A9.L2                     * 00F42
         CON(1)  2                                * 00F47  entry 6
         CON(13) #0800000000001                   * 00F48
         CON(5)  Warmstart                        * 00F55
         CON(1)  2                                * 00F5A  entry 7
         CON(13) #0400000000001                   * 00F5B
-        CON(5)  L_01176                          * 00F68
+        CON(5)  CINRTN.L3                        * 00F68
         CON(1)  2                                * 00F6D  entry 8
         CON(13) #0200000000001                   * 00F6E
-        CON(5)  L_01165                          * 00F7B
+        CON(5)  CINRTN.L1                        * 00F7B
         CON(1)  2                                * 00F80  entry 9
         CON(13) #0000000000005                   * 00F81
-        CON(5)  L_01087                          * 00F8E
+        CON(5)  SUB_00E21.L23                    * 00F8E
         CON(1)  0                                * 00F93  end of table
-L_00F94:
+SUB_00E21.L11:
         P=      1                                * 00F94
-        GOTO    L_00F9C                          * 00F96
-L_00F9A:
+        GOTO    SUB_00E21.L13                    * 00F96
+SUB_00E21.L12:
         P=      0                                * 00F9A
-L_00F9C:
+SUB_00E21.L13:
         D1=(5)  CONTRAST                         * 00F9C
         A=DAT1  B                                * 00FA3
         P=P-1                                    * 00FA6
         P=      0                                * 00FA8
         LC(2)   #1F                              * 00FAA
         A=A&C   B                                * 00FAE
-        GOC     L_00FC4                          * 00FB2
+        GOC     SUB_00E21.L14                    * 00FB2
         A=A+1   B                                * 00FB5
         LC(2)   #18                              * 00FB8
         ?C<A    B                                * 00FBC
-        GOYES   L_00FE5                          * 00FBF
-        GONC    L_00FD3                          * 00FC1
-L_00FC4:
+        GOYES   SUB_00E21.L16                    * 00FBF
+        GONC    SUB_00E21.L15                    * 00FC1
+SUB_00E21.L14:
         A=A-1   B                                * 00FC4
-        GOC     L_00FE5                          * 00FC7
+        GOC     SUB_00E21.L16                    * 00FC7
         LC(2)   #09                              * 00FCA
         ?C>A    B                                * 00FCE
-        GOYES   L_00FE5                          * 00FD1
-L_00FD3:
+        GOYES   SUB_00E21.L16                    * 00FD1
+SUB_00E21.L15:
         C=DAT1  B                                * 00FD3
         C=0     P                                * 00FD6
         CBIT=0  4                                * 00FD9
         A=A!C   B                                * 00FDE
         DAT1=A  B                                * 00FE2
-L_00FE5:
+SUB_00E21.L16:
         GOSUB   SUB_01145                        * 00FE5
         GOSUB   SUB_01145                        * 00FE9
-        LC(5)   L_0023A                          * 00FED
-        GOTO    L_00ECF                          * 00FF4
-L_00FF8:
+        LC(5)   Interrupt.L20                    * 00FED
+        GOTO    SUB_00E21.loop9                  * 00FF4
+SUB_00E21.L17:
         GOSUB   D1=IRAM~jump                     * 00FF8
         D1=(4)  #07F7                            * 00FFC
         C=DAT1  A                                * 01002
         C=C+1   A                                * 01005
-        GOC     L_0100D                          * 01007
+        GOC     SUB_00E21.L18                    * 01007
         DAT1=C  A                                * 0100A
-L_0100D:
-        GOTO    L_01081                          * 0100D
-L_01011:
+SUB_00E21.L18:
+        GOTO    SUB_00E21.L22                    * 0100D
+SUB_00E21.L19:
         GOSUB   D1=IRAM~jump                     * 01011
         D1=(4)  #069C                            * 01015
         P=      10                               * 0101B
-L_0101D:
+SUB_00E21.loop20:
         C=RSTK                                   * 0101D
         DAT1=C  A                                * 0101F
         D1=D1+  5                                * 01022
         P=P+1                                    * 01025
-        GONC    L_0101D                          * 01027
+        GONC    SUB_00E21.loop20                 * 01027
         C=R2                                     * 0102A
         CSLC                                     * 0102D
         GOSBVL  CSLW5                            * 01030
@@ -1443,15 +1443,15 @@ L_0101D:
         R2=C.F  S                                * 01066
         R2=C.F  A                                * 0106C
         P=      10                               * 01072
-L_01074:
+SUB_00E21.loop21:
         D1=D1-  5                                * 01074
         C=DAT1  A                                * 01077
         RSTK=C                                   * 0107A
         P=P+1                                    * 0107C
-        GONC    L_01074                          * 0107E
-L_01081:
-        GOLONG  L_0023A                          * 01081
-L_01087:
+        GONC    SUB_00E21.loop21                 * 0107E
+SUB_00E21.L22:
+        GOLONG  Interrupt.L20                    * 01081
+SUB_00E21.L23:
         P=      0                                * 01087
         LC(2)   #E4                              * 01089
         GOSBVL  RCKBp                            * 0108D
@@ -1459,7 +1459,7 @@ L_01087:
         GOSUBL  SUB_002FF                        * 01097
         GOSUB   SUB_010A9                        * 0109D
         P=      0                                * 010A1
-        GOLONG  L_001BC                          * 010A3
+        GOLONG  Interrupt.L13                    * 010A3
 
 * refs (2): 0109D 80C9A
 SUB_010A9:
@@ -1467,41 +1467,41 @@ SUB_010A9:
         D1=(4)  #0010                            * 010AF
         C=0     W                                * 010B5
         P=      12                               * 010B8
-L_010BA:
+SUB_010A9.loop1:
         DAT1=C  W                                * 010BA
         D1=D1+  16                               * 010BE
         DAT1=C  B                                * 010C1
         D1=D1+  2                                * 010C4
         P=P+1                                    * 010C7
-        GONC    L_010BA                          * 010C9
+        GONC    SUB_010A9.loop1                  * 010C9
         RTN                                      * 010CC
-L_010CE:
+SUB_010A9.L2:
         GOSUBL  D1=IRAM~jump                     * 010CE
         D1=(4)  #0834                            * 010D4
         LC(1)   #F                               * 010DA
         DAT1=C  1                                * 010DD
-        GOTO    L_01081                          * 010E1
+        GOTO    SUB_00E21.L22                    * 010E1
 
 * Allow interrupts.
 * refs (34): 01199 01300 0173E 01E6E 02165 04557 ...
 AllowIntr:
         ST=1    15                               * 010E5
         INTON                                    * 010E8
-        GOC     L_01101                          * 010EC
+        GOC     AllowIntr.L2                     * 010EC
         ?ST=0   14                               * 010EF
-        GOYES   L_010F9                          * 010F2
+        GOYES   AllowIntr.L1                     * 010F2
         RSI                                      * 010F4
-L_010F9:
+AllowIntr.L1:
         ?ST=0   15                               * 010F9
-        GOYES   L_01110                          * 010FC
-        GONC    L_01110                          * 010FE
-L_01101:
+        GOYES   AllowIntr.L3                     * 010FC
+        GONC    AllowIntr.L3                     * 010FE
+AllowIntr.L2:
         ?ST=0   14                               * 01101
-        GOYES   L_01110                          * 01104
+        GOYES   AllowIntr.L3                     * 01104
         RSI                                      * 01106
         ?ST=1   15                               * 0110B
-        GOYES   L_01110                          * 0110E
-L_01110:
+        GOYES   AllowIntr.L3                     * 0110E
+AllowIntr.L3:
         ST=0    14                               * 01110
         RTI                                      * 01113
 
@@ -1527,9 +1527,9 @@ SUB_01145:
         AD1EX                                    * 01145
         D1=(5)  #0597F                           * 01148  loop count, swapped into A
         AD1EX                                    * 0114F
-L_01152:
+SUB_01145.loop1:
         A=A-1   A                                * 01152
-        GONC    L_01152                          * 01154
+        GONC    SUB_01145.loop1                  * 01154
         RTNCC                                    * 01157
         BSS     1                                * 01159  zeros
 
@@ -1545,17 +1545,17 @@ AINRTN:
 CINRTN:
         C=IN                                     * 01160
         RTN                                      * 01163
-L_01165:
+CINRTN.L1:
         ST=0    8                                * 01165
         ST=0    10                               * 01168
-L_0116B:
+CINRTN.L2:
         GOSUB   SUB_0119D                        * 0116B
         ST=1    6                                * 0116F
-        GOTO    L_0117D                          * 01172
-L_01176:
+        GOTO    CINRTN.L4                        * 01172
+CINRTN.L3:
         GOSUB   SUB_0119D                        * 01176
         ST=0    6                                * 0117A
-L_0117D:
+CINRTN.L4:
         GOSUBL  D1=IRAM~jump                     * 0117D
         D1=(4)  #065A                            * 01183
         LC(1)   #F                               * 01189
@@ -1577,7 +1577,7 @@ SUB_011AC:
         MP=0                                     * 011B2
         GOSBVL  SUB_02241                        * 011B5
         GOSBVL  SUB_022D9                        * 011BC
-        GOVLNG  L_701C3                          * 011C3
+        GOVLNG  SUB_7017C.L2                     * 011C3
 
 * refs (1): 011A1
 SUB_011CA:
@@ -1602,9 +1602,9 @@ SUB_011FC:
         C=DAT1  1                                * 01205
         D=0     S                                * 01209
         ?CBIT=1 0                                * 0120C
-        GOYES   L_01216                          * 01211
+        GOYES   SUB_011FC.L1                     * 01211
         D=D+1   S                                * 01213
-L_01216:
+SUB_011FC.L1:
         D1=(2)  #1B                              * 01216
         A=DAT1  A                                * 0121A
         D1=(2)  #04                              * 0121D
@@ -1621,9 +1621,9 @@ L_01216:
         A=0     A                                * 0124A
         A=DAT1  4                                * 0124C
         ?C=A    A                                * 01250
-        GOYES   L_01258                          * 01253
+        GOYES   SUB_011FC.L2                     * 01253
         D=D+1   S                                * 01255
-L_01258:
+SUB_011FC.L2:
         D1=(4)  #0058                            * 01258
         A=0     W                                * 0125E
         A=DAT1  13                               * 01261
@@ -1632,31 +1632,31 @@ L_01258:
         C=0     W                                * 0126F
         P=      0                                * 01272
         ?D#0    S                                * 01274
-        GOYES   L_0128A                          * 01277
+        GOYES   SUB_011FC.L4                     * 01277
         A=DAT1  1                                * 01279
-L_0127D:
+SUB_011FC.loop3:
         C=DAT1  1                                * 0127D
         ?C=A    P                                * 01281
-        GOYES   L_0127D                          * 01284
+        GOYES   SUB_011FC.loop3                  * 01284
         C=DAT1  8                                * 01286
-L_0128A:
+SUB_011FC.L4:
         A=B     W                                * 0128A
         P=      7                                * 0128D
         B=C     P                                * 0128F
         B=B+B   P                                * 01292
-        GONC    L_0129E                          * 01295
+        GONC    SUB_011FC.L5                     * 01295
         C=-C    W                                * 01298
         C=-C    WP                               * 0129B
-L_0129E:
+SUB_011FC.L5:
         DCEX    W                                * 0129E
         P=C     15                               * 012A1
         C=A     W                                * 012A5
         C=C-D   W                                * 012A8
         ?P=     0                                * 012AB
-        GOYES   L_012B4                          * 012AE
+        GOYES   SUB_011FC.L6                     * 012AE
         P=      0                                * 012B0
         RTNSC                                    * 012B2
-L_012B4:
+SUB_011FC.L6:
         B=C     W                                * 012B4
         C=0     W                                * 012B7
         P=      5                                * 012BA
@@ -1679,7 +1679,7 @@ L_012B4:
 GetTimChk:
         GOSUB   SUB_011FC                        * 012EE
         RTNNC                                    * 012F2
-        GOTO    L_01315                          * 012F5
+        GOTO    GetTime++.L1                     * 012F5
 
 * refs (5): 0130E 0D39E 0EF8E 80167 8173A
 SUB_012F9:
@@ -1695,9 +1695,9 @@ SavPtrTime*:
 GetTime++:
         GOSUB   SUB_012F9                        * 0130E
         RTNNC                                    * 01312
-L_01315:
+GetTime++.L1:
         P=      4                                * 01315
-        GOLONG  L_001BC                          * 01317
+        GOLONG  Interrupt.L13                    * 01317
 
 * refs (2): 00218 043F2
 srvc_timer2:
@@ -1705,36 +1705,36 @@ srvc_timer2:
         D1=(5)  TIMER2CTRL                       * 0131F
         A=DAT1  1                                * 01326
         ?ABIT=1 1                                * 0132A
-        GOYES   L_01333                          * 0132F
-L_01331:
+        GOYES   srvc_timer2.L2                   * 0132F
+srvc_timer2.loop1:
         RTNCC                                    * 01331
-L_01333:
+srvc_timer2.L2:
         ?ABIT=0 3                                * 01333
-        GOYES   L_01331                          * 01338
+        GOYES   srvc_timer2.loop1                * 01338
         GOSBVL  SUB_011FC                        * 0133A
-        GONC    L_01348                          * 01341
-        GOTO    L_014AB                          * 01344
-L_01348:
+        GONC    srvc_timer2.L3                   * 01341
+        GOTO    SUB_01496.L1                     * 01344
+srvc_timer2.L3:
         ST=0    2                                * 01348
         B=C     W                                * 0134B
         GOSUB   D1=IRAM~jump_2                   * 0134E
         D1=(4)  #0835                            * 01352
         C=DAT1  P                                * 01358
         ?C#0    P                                * 0135C
-        GOYES   L_01382                          * 0135F
+        GOYES   srvc_timer2.L5                   * 0135F
         D1=(4)  #065A                            * 01361
         C=DAT1  1                                * 01367
         ?C=0    P                                * 0136B
-        GOYES   L_0137F                          * 0136E
+        GOYES   srvc_timer2.L4                   * 0136E
         D0=(5)  ALARMS                           * 01370
         A=DAT0  A                                * 01377
         ?A#0    A                                * 0137A
-        GOYES   L_01386                          * 0137D
-L_0137F:
+        GOYES   srvc_timer2.L6                   * 0137D
+srvc_timer2.L4:
         ST=1    12                               * 0137F
-L_01382:
-        GOTO    L_01453                          * 01382
-L_01386:
+srvc_timer2.L5:
+        GOTO    srvc_timer2.L12                  * 01382
+srvc_timer2.L6:
         C=RSTK                                   * 01386
         GOSBVL  CSLW5                            * 01388
         C=RSTK                                   * 0138F
@@ -1742,41 +1742,41 @@ L_01386:
         D0=A                                     * 01394
         A=DAT0  A                                * 01397
         GOSBVL  SUB_0E914                        * 0139A
-        GOC     L_0140A                          * 013A1
-L_013A4:
+        GOC     srvc_timer2.L9                   * 013A1
+srvc_timer2.loop7:
         D0=D0+  5                                * 013A4
         GOSBVL  SUB_0E8F3                        * 013A7
-        GONC    L_0140E                          * 013AE
+        GONC    srvc_timer2.L10                  * 013AE
         GOSBVL  SUB_0E914                        * 013B1
-        GOC     L_0140A                          * 013B8
+        GOC     srvc_timer2.L9                   * 013B8
         D0=D0+  5                                * 013BB
         GOSBVL  SUB_0E8FE                        * 013BE
-        GOC     L_0140A                          * 013C5
+        GOC     srvc_timer2.L9                   * 013C5
         D0=D0+  5                                * 013C8
         GOSBVL  SUB_0E909                        * 013CB
-        GOC     L_0140A                          * 013D2
+        GOC     srvc_timer2.L9                   * 013D2
         D0=D0+  5                                * 013D5
         C=0     W                                * 013D8
         C=DAT0  13                               * 013DB
         D0=D0+  13                               * 013DF
         D0=D0+  10                               * 013E2
         ?B<C    W                                * 013E5
-        GOYES   L_0140E                          * 013E8
+        GOYES   srvc_timer2.L10                  * 013E8
         C=DAT0  1                                * 013EA
         ?C#0    P                                * 013EE
-        GOYES   L_013FD                          * 013F1
+        GOYES   srvc_timer2.L8                   * 013F1
         ST=1    2                                * 013F3
         LC(1)   #1                               * 013F6
         DAT0=C  1                                * 013F9
-L_013FD:
+srvc_timer2.L8:
         D0=D0+  1                                * 013FD
         GOSBVL  SAFESKIPOB                       * 01400
-        GONC    L_013A4                          * 01407
-L_0140A:
+        GONC    srvc_timer2.loop7                * 01407
+srvc_timer2.L9:
         GOTO    TryToRM?                         * 0140A
-L_0140E:
+srvc_timer2.L10:
         ?ST=0   2                                * 0140E
-        GOYES   L_01445                          * 01411
+        GOYES   srvc_timer2.L11                  * 01411
         ST=1    12                               * 01413
         D1=(5)  ALARMSDUE                        * 01416
         LC(1)   #F                               * 0141D
@@ -1787,14 +1787,14 @@ L_0140E:
         DAT1=A  B                                * 01433
         C=B     A                                * 01436
         D=C     A                                * 01438
-        GOSBVL  L_01E79                          * 0143A  inline data follows
+        GOSBVL  OBJ_01E5E.L1                     * 0143A  inline data follows
         NIBHEX  DBD5                             * 01441  ½]
-L_01445:
+srvc_timer2.L11:
         C=R0                                     * 01445
         RSTK=C                                   * 01448
         GOSBVL  CSRW5                            * 0144A
         RSTK=C                                   * 01451
-L_01453:
+srvc_timer2.L12:
         GOSUB   D1=IRAM~jump_2                   * 01453
         D1=(4)  #0069                            * 01457
         C=0     W                                * 0145D
@@ -1816,7 +1816,7 @@ SUB_01485:
 * refs (1): 042F6
 SUB_0148C:
         GOSBVL  SUB_011FC                        * 0148C
-        GOC     L_014AB                          * 01493
+        GOC     SUB_01496.L1                     * 01493
 
 * refs (1): 0CEA0
 SUB_01496:
@@ -1824,10 +1824,10 @@ SUB_01496:
         D0=(5)  TIMER2CTRL                       * 01499
         C=DAT0  1                                * 014A0
         ?CBIT=1 0                                * 014A4
-        GOYES   L_014B2                          * 014A9
-L_014AB:
-        GOVLNG  L_01315                          * 014AB
-L_014B2:
+        GOYES   SUB_01496.L2                     * 014A9
+SUB_01496.L1:
+        GOVLNG  GetTime++.L1                     * 014AB
+SUB_01496.L2:
         P=      0                                * 014B2
         C=0     W                                * 014B4
         LC(8)   #7E900000                        * 014B7
@@ -1837,46 +1837,46 @@ L_014B2:
         D0=(4)  #0077                            * 014CB
         C=DAT0  1                                * 014D1
         ?C=0    P                                * 014D5
-        GOYES   L_014EC                          * 014D8
+        GOYES   SUB_01496.L3                     * 014D8
         C=0     W                                * 014DA
         LC(7)   #1C20000                         * 014DD
         A=C     W                                * 014E6
         A=A+B   W                                * 014E9
-L_014EC:
+SUB_01496.L3:
         D0=(4)  #0069                            * 014EC
         C=0     W                                * 014F2
         C=DAT0  13                               * 014F5
         ?C=0    W                                * 014F9
-        GOYES   L_0150E                          * 014FC
+        GOYES   SUB_01496.L4                     * 014FC
         ?C>=A   W                                * 014FE
-        GOYES   L_0150E                          * 01501
+        GOYES   SUB_01496.L4                     * 01501
         A=C     W                                * 01503
         ?A>=B   W                                * 01506
-        GOYES   L_0150E                          * 01509
+        GOYES   SUB_01496.L4                     * 01509
         A=B     W                                * 0150B
-L_0150E:
+SUB_01496.L4:
         D0=(4)  #0835                            * 0150E
         C=DAT0  1                                * 01514
         ?C#0    P                                * 01518
-        GOYES   L_0154E                          * 0151B
+        GOYES   SUB_01496.L6                     * 0151B
         D0=(4)  #072A                            * 0151D
         C=DAT0  A                                * 01523
         ?C=0    A                                * 01526
-        GOYES   L_0153A                          * 01529
+        GOYES   SUB_01496.L5                     * 01529
         D0=(4)  #065A                            * 0152B
         C=DAT0  1                                * 01531
         ?C#0    P                                * 01535
-        GOYES   L_01552                          * 01538
-L_0153A:
+        GOYES   SUB_01496.L7                     * 01538
+SUB_01496.L5:
         C=0     W                                * 0153A
         LC(4)   #2000                            * 0153D
         C=C+B   W                                * 01543
         ?C>=A   W                                * 01546
-        GOYES   L_0154E                          * 01549
+        GOYES   SUB_01496.L6                     * 01549
         A=C     W                                * 0154B
-L_0154E:
-        GOTO    L_01607                          * 0154E
-L_01552:
+SUB_01496.L6:
+        GOTO    TryToRM?.L2                      * 0154E
+SUB_01496.L7:
         C=RSTK                                   * 01552
         GOSBVL  CSLW5                            * 01554
         C=RSTK                                   * 0155B
@@ -1887,13 +1887,13 @@ L_01552:
         D1=A                                     * 0156D
         GOSBVL  SUB_0E914                        * 01570
         GOC     TryToRM?                         * 01577
-L_0157A:
+SUB_01496.loop8:
         D0=D0+  5                                * 0157A
         GOSBVL  SUB_0E8F3                        * 0157D
-        GOC     L_0158D                          * 01584
+        GOC     SUB_01496.L9                     * 01584
         AD1EX                                    * 01587
-        GONC    L_015F9                          * 0158A
-L_0158D:
+        GONC    TryToRM?.L1                      * 0158A
+SUB_01496.L9:
         GOSBVL  SUB_0E914                        * 0158D
         GOC     TryToRM?                         * 01594
         D0=D0+  5                                * 01597
@@ -1908,34 +1908,34 @@ L_0158D:
         AD1EX                                    * 015BB
         D1=A                                     * 015BE
         ?C>A    W                                * 015C1
-        GOYES   L_015F9                          * 015C4
+        GOYES   TryToRM?.L1                      * 015C4
         D0=D0+  13                               * 015C6
         D0=D0+  10                               * 015C9
         C=DAT0  1                                * 015CC
         ?C#0    P                                * 015D0
-        GOYES   L_015E3                          * 015D3
+        GOYES   SUB_01496.L10                    * 015D3
         A=C     W                                * 015D5
         ?A>=B   W                                * 015D8
-        GOYES   L_015F9                          * 015DB
+        GOYES   TryToRM?.L1                      * 015DB
         A=B     W                                * 015DD
-        GONC    L_015F9                          * 015E0
-L_015E3:
+        GONC    TryToRM?.L1                      * 015E0
+SUB_01496.L10:
         D0=D0+  1                                * 015E3
         GOSBVL  SAFESKIPOB                       * 015E6
-        GONC    L_0157A                          * 015ED
+        GONC    SUB_01496.loop8                  * 015ED
 
 * refs (7): 0140A 01577 01594 015A1 015AE 0CBA7 ...
 TryToRM?:
         P=      9                                * 015F0
-        GOVLNG  L_01FC6                          * 015F2
-L_015F9:
+        GOVLNG  Warmstart.L1                     * 015F2
+TryToRM?.L1:
         C=R0                                     * 015F9
         RSTK=C                                   * 015FC
         GOSBVL  CSRW5                            * 015FE
         RSTK=C                                   * 01605
-L_01607:
+TryToRM?.L2:
         ?ST=0   0                                * 01607
-        GOYES   L_01634                          * 0160A
+        GOYES   TryToRM?.L3                      * 0160A
         ABEX    W                                * 0160C
         D0=A                                     * 0160F
         C=0     W                                * 01612
@@ -1948,32 +1948,32 @@ L_01607:
         C=C+A   W                                * 01626
         ABEX    W                                * 01629
         ?C>=A   W                                * 0162C
-        GOYES   L_01634                          * 0162F
+        GOYES   TryToRM?.L3                      * 0162F
         A=C     W                                * 01631
-L_01634:
+TryToRM?.L3:
         GOSUB   D0=IRAM~jump                     * 01634
         GOSUB   SUB_01750                        * 01638
         ?C<A    W                                * 0163C
-        GOYES   L_01660                          * 0163F
+        GOYES   TryToRM?.L5                      * 0163F
         GOSUB   SUB_01763                        * 01641
         ?C>A    W                                * 01645
-        GOYES   L_01655                          * 01648
+        GOYES   TryToRM?.L4                      * 01648
         ?B>=C   W                                * 0164A
-        GOYES   L_01698                          * 0164D
+        GOYES   TryToRM?.L9                      * 0164D
         B=C     W                                * 0164F
-        GONC    L_01698                          * 01652
-L_01655:
+        GONC    TryToRM?.L9                      * 01652
+TryToRM?.L4:
         GOSUB   SUB_01776                        * 01655
         C=-C    W                                * 01659
-        GOTO    L_0166F                          * 0165C
-L_01660:
+        GOTO    TryToRM?.L7                      * 0165C
+TryToRM?.L5:
         ?B>=C   W                                * 01660
-        GOYES   L_0166B                          * 01663
+        GOYES   TryToRM?.L6                      * 01663
         A=C     W                                * 01665
-        GONC    L_01698                          * 01668
-L_0166B:
+        GONC    TryToRM?.L9                      * 01668
+TryToRM?.L6:
         GOSUB   SUB_01776                        * 0166B
-L_0166F:
+TryToRM?.L7:
         A=A-C   W                                * 0166F
         B=B-C   W                                * 01672
         R0=A                                     * 01675
@@ -1981,13 +1981,13 @@ L_0166F:
         A=0     W                                * 0167E
         A=DAT0  13                               * 01681
         ?A=0    W                                * 01685
-        GOYES   L_01691                          * 01688
+        GOYES   TryToRM?.L8                      * 01688
         A=A-C   W                                * 0168A
         DAT0=A  13                               * 0168D
-L_01691:
+TryToRM?.L8:
         A=R0                                     * 01691
-        GOTO    L_014B2                          * 01694
-L_01698:
+        GOTO    SUB_01496.L2                     * 01694
+TryToRM?.L9:
         GOSUB   SUB_016E9                        * 01698
         C=A     W                                * 0169C
         C=C-B   W                                * 0169F
@@ -1996,10 +1996,10 @@ L_01698:
         D0=(5)  TIMER2                           * 016A8
         P=      7                                * 016AF
         A=DAT0  S                                * 016B1
-L_016B5:
+TryToRM?.loop10:
         C=DAT0  S                                * 016B5
         ?C=A    S                                * 016B9
-        GOYES   L_016B5                          * 016BC
+        GOYES   TryToRM?.loop10                  * 016BC
         C=DAT0  8                                * 016BE
         C=C+A   WP                               * 016C2
         DAT0=C  8                                * 016C5
@@ -2116,17 +2116,17 @@ makebeep:
         P=      0                                * 017EB
         LC(2)   #7C                              * 017ED
         A=A-C   W                                * 017F1
-        GONC    L_017FA                          * 017F4
+        GONC    makebeep.L1                      * 017F4
         A=0     W                                * 017F7
-L_017FA:
+makebeep.L1:
         LC(2)   #1A                              * 017FA
         GOSBVL  IntDivW                          * 017FE
         C=0     W                                * 01805
         C=C-1   X                                * 01808
         ?C>=A   W                                * 0180B
-        GOYES   L_01813                          * 0180E
+        GOYES   makebeep.L2                      * 0180E
         A=C     W                                * 01810
-L_01813:
+makebeep.L2:
         R3=A                                     * 01813
         A=R2                                     * 01816
         C=R1                                     * 01819
@@ -2146,9 +2146,9 @@ L_01813:
         C=D     W                                * 01852
         GOSBVL  IntDivW                          * 01855
         A=A-1   W                                * 0185C
-        GONC    L_01865                          * 0185F
+        GONC    makebeep.L3                      * 0185F
         A=0     W                                * 01862
-L_01865:
+makebeep.L3:
         C=A     W                                * 01865
         D=C     W                                * 01868
         C=R3                                     * 0186B
@@ -2167,19 +2167,19 @@ addrORghost:
         P=C     2                                * 0189D
         CBIT=0  11                               * 018A1
         NOP4                                     * 018A6
-L_018AA:
+addrORghost.loop1:
         A=DAT0  A                                * 018AA
         ?A#0    A                                * 018AD
-        GOYES   L_018C8                          * 018B0
+        GOYES   addrORghost.L3                   * 018B0
         OUT=C                                    * 018B2
         A=B     X                                * 018B5
-L_018B8:
+addrORghost.loop2:
         A=A-1   X                                * 018B8
-        GONC    L_018B8                          * 018BB
+        GONC    addrORghost.loop2                * 018BB
         CPEX    2                                * 018BE
         D=D-1   W                                * 018C2
-        GONC    L_018AA                          * 018C5
-L_018C8:
+        GONC    addrORghost.loop1                * 018C5
+addrORghost.L3:
         C=DAT1  X                                * 018C8
         OUT=C                                    * 018CC
         D1=(5)  TIMER1CTRL                       * 018CF
@@ -2195,26 +2195,26 @@ clkspd:
         B=0     A                                * 018E4
         D0=(5)  #00139                           * 018E6
         A=DAT0  B                                * 018ED
-L_018F0:
+clkspd.loop1:
         C=DAT0  B                                * 018F0
         ?C=A    P                                * 018F3
-        GOYES   L_018F0                          * 018F6
+        GOYES   clkspd.loop1                     * 018F6
         P=      1                                * 018F8
         C=C-1   P                                * 018FA
         C=C-1   P                                * 018FD
-L_01900:
+clkspd.loop2:
         B=B+1   A                                * 01900
         A=DAT0  B                                * 01902
         ?C#A    B                                * 01905
-        GOYES   L_01900                          * 01908
+        GOYES   clkspd.loop2                     * 01908
         A=0     A                                * 0190A
         P=      0                                * 0190C
         C=0     A                                * 0190E
         LC(2)   #35                              * 01910
-L_01914:
+clkspd.loop3:
         A=A+B   A                                * 01914
         C=C-1   A                                * 01916
-        GONC    L_01914                          * 01918
+        GONC    clkspd.loop3                     * 01918
         C=0     A                                * 0191B
         LC(1)   #9                               * 0191D
         A=A+C   A                                * 01920
@@ -2232,14 +2232,14 @@ SUB_01929:
         A=A&C   X                                * 0193F
         LC(2)   #09                              * 01943
         ?C>A    B                                * 01947
-        GOYES   L_01955                          * 0194A
+        GOYES   SUB_01929.L1                     * 0194A
         LC(2)   #18                              * 0194C
         ?C>=A   B                                * 01950
-        GOYES   L_0195C                          * 01953
-L_01955:
+        GOYES   SUB_01929.L2                     * 01953
+SUB_01929.L1:
         LC(2)   #0E                              * 01955
         A=C     B                                * 01959
-L_0195C:
+SUB_01929.L2:
         DAT0=A  X                                * 0195C
         D0=(2)  #09                              * 01960
         LC(1)   #4                               * 01964
@@ -2251,7 +2251,7 @@ L_0195C:
         D0=(5)  #0011C                           * 0197D
         C=0     A                                * 01984
         DAT0=C  1                                * 01986
-        GOSUB   L_01C7F                          * 0198A
+        GOSUB   D0->Sft1.L1                      * 0198A
         GOSUB   SUB_01CEC                        * 0198E
         D0=(5)  TIMER1CTRL                       * 01992
         LC(2)   #10                              * 01999
@@ -2280,17 +2280,17 @@ SUB_019DA:
         D0=(2)  #37                              * 019F0
         LC(1)   #1                               * 019F4
         DAT0=C  1                                * 019F7
-L_019FB:
+SUB_019DA.loop1:
         SHUTDN                                   * 019FB
         D0=(2)  #08                              * 019FE
         C=DAT0  1                                * 01A02
         ?CBIT=1 0                                * 01A06
-        GOYES   L_01A1C                          * 01A0B
+        GOYES   SUB_019DA.L2                     * 01A0B
         D0=(2)  #37                              * 01A0D
         C=DAT0  1                                * 01A11
         ?CBIT=0 3                                * 01A15
-        GOYES   L_019FB                          * 01A1A
-L_01A1C:
+        GOYES   SUB_019DA.loop1                  * 01A1A
+SUB_019DA.L2:
         D0=(2)  #37                              * 01A1C
         LC(1)   #7                               * 01A20
         DAT0=C  1                                * 01A23
@@ -2305,7 +2305,7 @@ SUB_01A33:
         GOSUB   SUB_01A96                        * 01A36
         GOSUB   SUB_01ABD                        * 01A3A
         GOSBVL  SUB_011FC                        * 01A3E
-        GOC     L_01A65                          * 01A45
+        GOC     SUB_01A33.L1                     * 01A45
         B=C     W                                * 01A48
         GOSBVL  SUB_01789                        * 01A4B
         DCEX    W                                * 01A52
@@ -2313,15 +2313,15 @@ SUB_01A33:
         C=C+D   W                                * 01A58
         A=A+C   W                                * 01A5B
         C=D     W                                * 01A5E
-        GOTO    L_01A82                          * 01A61
-L_01A65:
+        GOTO    SUB_01A33.L2                     * 01A61
+SUB_01A33.L1:
         P=      4                                * 01A65
         GOSBVL  SUB_02708                        * 01A67
         GOSBVL  SUB_01763                        * 01A6E
         A=C     W                                * 01A75
         GOSBVL  SUB_01789                        * 01A78
         A=A+C   W                                * 01A7F
-L_01A82:
+SUB_01A33.L2:
         GOSBVL  SUB_016E9                        * 01A82
         D1=(5)  TIMER2                           * 01A89
         DAT1=C  8                                * 01A90
@@ -2373,27 +2373,27 @@ RCKBp:
         C=P     4                                * 01B0A
         BCEX    X                                * 01B0E
         NOP5                                     * 01B11
-L_01B16:
+RCKBp.loop1:
         OUT=C                                    * 01B16
         P=C     4                                * 01B19
         ?CBIT=1 11                               * 01B1D
-        GOYES   L_01B30                          * 01B22
+        GOYES   RCKBp.L2                         * 01B22
         CBIT=1  11                               * 01B24
         ?CBIT=1 11                               * 01B29
-        GOYES   L_01B3C                          * 01B2E
-L_01B30:
+        GOYES   RCKBp.loop3                      * 01B2E
+RCKBp.L2:
         CBIT=0  11                               * 01B30
         ?CBIT=1 11                               * 01B35
-        GOYES   L_01B3C                          * 01B3A
-L_01B3C:
+        GOYES   RCKBp.loop3                      * 01B3A
+RCKBp.loop3:
         DSLC                                     * 01B3C
         DSRC                                     * 01B3F
         CSTEX                                    * 01B42
         CSTEX                                    * 01B44
         P=P-1                                    * 01B46
-        GONC    L_01B3C                          * 01B48
+        GONC    RCKBp.loop3                      * 01B48
         B=B+1   B                                * 01B4B
-        GONC    L_01B16                          * 01B4E
+        GONC    RCKBp.loop1                      * 01B4E
         P=      0                                * 01B51
         AD1EX                                    * 01B53
         D1=(5)  TIMER1CTRL                       * 01B56
@@ -2511,7 +2511,7 @@ D0->Sft1:
         C=RSTK                                   * 01C78
         D0=A                                     * 01C7A
         RTNCC                                    * 01C7D
-L_01C7F:
+D0->Sft1.L1:
         GOSUB   D0->Row1                         * 01C7F
         D1=(5)  DISPADDR                         * 01C83
         DAT1=A  A                                * 01C8A
@@ -2531,9 +2531,9 @@ L_01C7F:
         A=DAT0  B                                * 01CC7
         LC(2)   #B7                              * 01CCA
         ?ABIT=1 7                                * 01CCE
-        GOYES   L_01CD9                          * 01CD3
+        GOYES   D0->Sft1.L2                      * 01CD3
         LC(2)   #37                              * 01CD5
-L_01CD9:
+D0->Sft1.L2:
         D1=(2)  #28                              * 01CD9
         DAT1=C  B                                * 01CDD
         DAT0=C  B                                * 01CE0
@@ -2551,9 +2551,9 @@ SUB_01CEC:
         D0=(4)  #06CB                            * 01D09
         DAT0=C  A                                * 01D0F
         D0=(4)  #069A                            * 01D12
-        GOVLNG  L_7DF9D                          * 01D18
+        GOVLNG  EXPR>~1~romptr.L1                * 01D18
         FILLTO  #01D44                           * 01D1F  37 zero nibbles: the next entry stays at #01D44
-L_01D44:
+SUB_01CEC.L1:
         GOSBVL  SUB_12690                        * 01D44
         GOSUB   SUB_019DA                        * 01D4B
         GOSUB   DispOff                          * 01D4F
@@ -2581,7 +2581,7 @@ SUB_01DA1:
         P=      0                                * 01DA1
         LC(5)   #3FFFB                           * 01DA3
         GOSUB   SUB_01E2A                        * 01DAA
-        GONC    L_01DFB                          * 01DAE
+        GONC    SUB_01DA1.L3                     * 01DAE
         GOSUB   SUB_01DFD                        * 01DB1
         R3=A                                     * 01DB5
         GOSUB   SUB_01E08                        * 01DB8
@@ -2593,28 +2593,28 @@ SUB_01DA1:
         C=R3                                     * 01DCC
         DAT0=C  A                                * 01DCF
         ?C#A    A                                * 01DD2
-        GOYES   L_01DEC                          * 01DD5
+        GOYES   SUB_01DA1.L1                     * 01DD5
         A=R4                                     * 01DD7
         GOSUB   SUB_01E19                        * 01DDA
         LC(8)   #4B383231                        * 01DDE
-        GOTO    L_01DF6                          * 01DE8
-L_01DEC:
+        GOTO    SUB_01DA1.L2                     * 01DE8
+SUB_01DA1.L1:
         LC(8)   #4B323320                        * 01DEC
-L_01DF6:
+SUB_01DA1.L2:
         D0=D0+  5                                * 01DF6
         RTNCC                                    * 01DF9
-L_01DFB:
+SUB_01DA1.L3:
         RTNSC                                    * 01DFB
 
 * refs (2): 01DB1 01DC8
 SUB_01DFD:
         LC(5)   #0FFFB                           * 01DFD
-        GOTO    L_01E0F                          * 01E04
+        GOTO    SUB_01E08.L1                     * 01E04
 
 * refs (1): 01DB8
 SUB_01E08:
         LC(5)   #3FFFB                           * 01E08
-L_01E0F:
+SUB_01E08.L1:
         C=C+B   A                                * 01E0F
         D0=C                                     * 01E11
         A=DAT0  A                                * 01E14
@@ -2639,17 +2639,17 @@ SUB_01E2A:
         DAT0=C  A                                * 01E38
         A=DAT0  A                                * 01E3B
         ?C#A    A                                * 01E3E
-        GOYES   L_01E5A                          * 01E41
+        GOYES   SUB_01E2A.L1                     * 01E41
         C=0     A                                * 01E43
         DAT0=C  A                                * 01E45
         A=DAT0  A                                * 01E48
         ?C#A    A                                * 01E4B
-        GOYES   L_01E5A                          * 01E4E
+        GOYES   SUB_01E2A.L1                     * 01E4E
         C=RSTK                                   * 01E50
         DAT0=C  A                                * 01E52
         D0=D0+  5                                * 01E55
         RTNSC                                    * 01E58
-L_01E5A:
+SUB_01E2A.L1:
         C=RSTK                                   * 01E5A
         RTNCC                                    * 01E5C
 
@@ -2658,35 +2658,35 @@ OBJ_01E5E:
         CON(5)  (*)+5                            * 01E5E  primitive code object
         GOSUB   SAVPTR~jump                      * 01E63
         ST=0    15                               * 01E67
-        GOSUB   L_01E79                          * 01E6A  inline data follows
+        GOSUB   OBJ_01E5E.L1                     * 01E6A  inline data follows
         GOSBVL  AllowIntr                        * 01E6E
-        GOTO    L_01FB6                          * 01E75
-L_01E79:
+        GOTO    CLEARLCD.L1                      * 01E75
+OBJ_01E5E.L1:
         C=RSTK                                   * 01E79
         B=C     A                                * 01E7B
         P=      0                                * 01E7D
         SETHEX                                   * 01E7F
         A=0     A                                * 01E81
         GOSBVL  SUB_00D26                        * 01E83
-        GONC    L_01E95                          * 01E8A
+        GONC    OBJ_01E5E.L2                     * 01E8A
         ABIT=1  6                                * 01E8D
         A=A+1   XS                               * 01E92
-L_01E95:
+OBJ_01E5E.L2:
         GOSBVL  SUB_00D14                        * 01E95
-        GONC    L_01EA7                          * 01E9C
+        GONC    OBJ_01E5E.L3                     * 01E9C
         ABIT=1  4                                * 01E9F
         A=A+1   XS                               * 01EA4
-L_01EA7:
+OBJ_01E5E.L3:
         GOSBVL  SUB_00D1D                        * 01EA7
-        GONC    L_01EB9                          * 01EAE
+        GONC    OBJ_01E5E.L4                     * 01EAE
         ABIT=1  5                                * 01EB1
         A=A+1   XS                               * 01EB6
-L_01EB9:
+OBJ_01E5E.L4:
         ASRB.F  XS                               * 01EB9
         ?A=0    XS                               * 01EBE
-        GOYES   L_01EC5                          * 01EC1
+        GOYES   OBJ_01E5E.L5                     * 01EC1
         A=0     A                                * 01EC3
-L_01EC5:
+OBJ_01E5E.L5:
         GOSUB   D1=IRAM~jump_3                   * 01EC5
         D1=(4)  #0841                            * 01EC9
         C=DAT1  B                                * 01ECF
@@ -2708,20 +2708,20 @@ D1=IRAM~jump_3:
 
 * refs (2): 01ED6 804B9
 SUB_01EFD:
-        D1=(5)  L_01F41                          * 01EFD
+        D1=(5)  SUB_01EFD.L3                     * 01EFD
         C=B     A                                * 01F04
         RSTK=C                                   * 01F06
         B=0     A                                * 01F08
-L_01F0A:
+SUB_01EFD.loop1:
         D1=D1+  2                                * 01F0A
         A=A+A   B                                * 01F0D
-        GONC    L_01F1D                          * 01F10
+        GONC    SUB_01EFD.L2                     * 01F10
         C=DAT1  B                                * 01F13
         B=B!C   B                                * 01F16
-        GOC     L_01F0A                          * 01F1A
-L_01F1D:
+        GOC     SUB_01EFD.loop1                  * 01F1A
+SUB_01EFD.L2:
         ?A#0    B                                * 01F1D
-        GOYES   L_01F0A                          * 01F20
+        GOYES   SUB_01EFD.loop1                  * 01F20
         D1=(5)  ANNCTRL                          * 01F22
         A=DAT1  B                                * 01F29
         P=      0                                * 01F2C
@@ -2731,7 +2731,7 @@ L_01F1D:
         DAT1=A  B                                * 01F3A
         C=RSTK                                   * 01F3D
         B=C     A                                * 01F3F
-L_01F41:
+SUB_01EFD.L3:
         RTNCC                                    * 01F41
 
 * Annunciator bit for each bit of the annunciator byte (read at #01F13)
@@ -2752,7 +2752,7 @@ GETKEY~8:
         GOSBVL  SUB_00655                        * 01F5D
         C=RSTK                                   * 01F64
         D0=C                                     * 01F66
-        GOTO    L_01F9D                          * 01F69
+        GOTO    CLCD10.L1                        * 01F69
 
 * ->
 * refs (4): 8D396 9CA6B 9D0D1 CF5EE
@@ -2769,7 +2769,7 @@ CLCD10:
         GOSBVL  WIPEOUT                          * 01F91
         C=RSTK                                   * 01F98
         D1=C                                     * 01F9A
-L_01F9D:
+CLCD10.L1:
         A=DAT0  A                                * 01F9D
         D0=D0+  5                                * 01FA0
         PC=(A)                                   * 01FA3
@@ -2780,39 +2780,39 @@ CLEARLCD:
         CON(5)  (*)+5                            * 01FA7  primitive code object
         GOSUB   SAVPTR~jump                      * 01FAC
         GOSUBL  ClrScrMn                         * 01FB0
-L_01FB6:
+CLEARLCD.L1:
         GOVLNG  GETPTRLOOP                       * 01FB6
 
 * refs (4): 00F55 04244 131C1 21B53
 Warmstart:
         ST=1    6                                * 01FBD
-        GOTO    L_01FC9                          * 01FC0
+        GOTO    Warmstart.L2                     * 01FC0
         NIBHEX  2F                               * 01FC4  ò
-L_01FC6:
+Warmstart.L1:
         ST=0    6                                * 01FC6
-L_01FC9:
+Warmstart.L2:
         ST=0    2                                * 01FC9
         ST=1    7                                * 01FCC
-        GOTO    L_01FE3                          * 01FCF
+        GOTO    norecCSseq.L2                    * 01FCF
 
 * refs (3): 00F1C 0202F 020B1
 Coldstart:
         ST=1    7                                * 01FD3
-        GOTO    L_01FDD                          * 01FD6
+        GOTO    norecCSseq.L1                    * 01FD6
 
 norecCSseq:
         ST=0    7                                * 01FDA
-L_01FDD:
+norecCSseq.L1:
         ST=1    2                                * 01FDD
         ST=1    6                                * 01FE0
-L_01FE3:
+norecCSseq.L2:
         C=P     15                               * 01FE3
         ST=0    15                               * 01FE7
         RESET                                    * 01FEA
-        GOVLNG  L_7018C                          * 01FED
-L_01FF4:
+        GOVLNG  SUB_7017C.L1                     * 01FED
+norecCSseq.L3:
         ?ST=1   6                                * 01FF4
-        GOYES   L_02033                          * 01FF7
+        GOYES   norecCSseq.L7                    * 01FF7
         P=C     15                               * 01FF9
         ?P=     3                                * 01FFD
-        GOYES   L_02007                          * 02000
+        GOYES   norecCSseq.L4                    * 02000

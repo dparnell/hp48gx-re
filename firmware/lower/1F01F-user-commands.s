@@ -30,7 +30,7 @@ ChkExpr1Name:
         RSTK=C                                   * 1F06F
         C=DAT0  A                                * 1F071
         ?C#A    A                                * 1F074
-        GOYES   L_1F0C9                          * 1F077
+        GOYES   ChkExpr1Name.loop2               * 1F077
         D0=D0+  5                                * 1F079
         CD0EX                                    * 1F07C
         RSTK=C                                   * 1F07F
@@ -41,35 +41,35 @@ ChkExpr1Name:
         D0=C                                     * 1F090
         LC(5)   SEMI                             * 1F093
         ?C#A    A                                * 1F09A
-        GOYES   L_1F0C9                          * 1F09D
+        GOYES   ChkExpr1Name.loop2               * 1F09D
         A=DAT0  A                                * 1F09F
         LC(5)   DOIDNT                           * 1F0A2
         ?C=A    A                                * 1F0A9
-        GOYES   L_1F0BA                          * 1F0AC
+        GOYES   ChkExpr1Name.loop1               * 1F0AC
         LC(5)   DOLAM                            * 1F0AE
         ?C#A    A                                * 1F0B5
-        GOYES   L_1F0DB                          * 1F0B8
-L_1F0BA:
+        GOYES   ChkExpr1Name.L3                  * 1F0B8
+ChkExpr1Name.loop1:
         C=RSTK                                   * 1F0BA
         D0=C                                     * 1F0BC
         A=DAT0  A                                * 1F0BF
         D0=D0+  5                                * 1F0C2
         PC=(A)                                   * 1F0C5
-L_1F0C9:
+ChkExpr1Name.loop2:
         C=RSTK                                   * 1F0C9
         D0=C                                     * 1F0CB
         LC(5)   SETTYPEERR                       * 1F0CE
         A=C     A                                * 1F0D5
         PC=(A)                                   * 1F0D7
-L_1F0DB:
+ChkExpr1Name.L3:
         AD0EX                                    * 1F0DB
         A=DAT0  A                                * 1F0DE
         ?C=A    A                                * 1F0E1
-        GOYES   L_1F0BA                          * 1F0E4
+        GOYES   ChkExpr1Name.loop1               * 1F0E4
         LC(5)   DOIDNT                           * 1F0E6
         ?C=A    A                                * 1F0ED
-        GOYES   L_1F0BA                          * 1F0F0
-        GONC    L_1F0C9                          * 1F0F2
+        GOYES   ChkExpr1Name.loop1               * 1F0F0
+        GONC    ChkExpr1Name.loop2               * 1F0F2
         RPL
 
 * QN sym -> symf
@@ -322,7 +322,7 @@ xAPPLY:
 * refs (2): 1F5B2 1F5CF
 apply(_,s):
         :: uncrunch ~BINT3;RROLL DUP#1- dvarlsBIND pullrev symcomp SWAPDROP * 1F5F6  slot 3
-          ChkExpr1Name CARCOMP GOTO L_1F6EF ;    * 1F61E
+          ChkExpr1Name CARCOMP GOTO OBJ_1F6E0.L1 ; * 1F61E
         CON(2)  #A2                              * 1F637  end of the slots: property byte (meaning not yet known)
         ASSEMBLE
         NOP3                                     * 1F639
@@ -353,7 +353,7 @@ xFCNAPPLY:
 * refs (5): 1F681 1F7B7 1F811 85E71 85E7B
 OBJ_1F6E0:
         :: DROP CK0NOLASTWD                      * 1F6E0
-L_1F6EF:
+OBJ_1F6E0.L1:
           1GETLAM #1+ dup nmetasyms 1GETABND #1+ NDROP #1-SWAP symcomp OVER * 1F6EF
           BINT2 psh SINNERMETA pshtop& Cr xFCNAPPLY CK1NOLASTWD NOTNUM? * 1F721
           ?SKIP SETNONEXTERR                     * 1F749
@@ -511,8 +511,8 @@ matchv(ex,li):
         :: match'(ex,li) FALSE ;                 * 1FACE  slot 1
         CON(2)  #01                              * 1FAE2  end of the slots: property byte (meaning not yet known)
         ASSEMBLE
-        GONC    L_1FAE7                          * 1FAE4
-L_1FAE7:
+        GONC    matchv(ex,li).L1                 * 1FAE4
+matchv(ex,li).L1:
         CSTEX                                    * 1FAE7
         RTN                                      * 1FAE9
         RPL
@@ -539,8 +539,8 @@ xFORMUNIT~1:
         :: BINT2 nmetasyms ' x* EvalNoCK ;       * 1FB31  slot 3
         CON(2)  #00                              * 1FB54  end of the slots: property byte (meaning not yet known)
         ASSEMBLE
-        GONC    L_1FB59                          * 1FB56
-L_1FB59:
+        GONC    xFORMUNIT~1.L1                   * 1FB56
+xFORMUNIT~1.L1:
         P=P+1                                    * 1FB59
         RTN                                      * 1FB5B
         RPL
@@ -927,7 +927,7 @@ xXCOL:
         CON(3)  #133                             * 1FFF7  command
 xYCOL:
         ::                                       * 1FFFA
-L_1FFFF:
+xYCOL.L1:
           CK1&Dispatch                           * 1FFFF
           BINT1 STATYCOL                         * 20004  real
         ;                                        * 2000E
@@ -1028,7 +1028,7 @@ xBINS:
         CON(3)  #13C                             * 20130  command
 xBARPLOT:
         :: CK0 'IDBAR                            * 20133
-L_20142:
+xBARPLOT.L1:
           PUTPTYPE AUTOSCALE BlankDA12 DOERASE draw ; * 20142
 
 * ->
@@ -1038,7 +1038,7 @@ L_20142:
         CON(3)  #002                             * 20161  library
         CON(3)  #13D                             * 20164  command
 xHISTPLOT:
-        :: CK0 'IDHISTOGRAM GOTO L_20142 ;       * 20167
+        :: CK0 'IDHISTOGRAM GOTO xBARPLOT.L1 ;   * 20167
 
 * ->
 * ROMPTR 002 13E SCATRPLOT
@@ -1047,7 +1047,7 @@ xHISTPLOT:
         CON(3)  #002                             * 20186  library
         CON(3)  #13E                             * 20189  command
 xSCATRPLOT:
-        :: CK0 'IDSCATTER GOTO L_20142 ;         * 2018C
+        :: CK0 'IDSCATTER GOTO xBARPLOT.L1 ;     * 2018C
 
 * ->
 * ROMPTR 002 13F LINFIT

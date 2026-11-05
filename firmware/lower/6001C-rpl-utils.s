@@ -70,7 +70,7 @@ OBJ_601B6:
         D1=C                                     * 60210
         C=R0.F  A                                * 60213
         GOSUBL  SUB_5FCA3                        * 60219
-        GONC    L_60240                          * 6021F
+        GONC    SUB_60236.L1                     * 6021F
         GOSBVL  GETPTR                           * 60222
         LC(5)   FALSE                            * 60229
         A=C     A                                * 60230
@@ -83,7 +83,7 @@ SUB_60236:
         A=A+A   A                                * 6023A
         A=A+C   A                                * 6023C
         RTN                                      * 6023E
-L_60240:
+SUB_60236.L1:
         GOSBVL  GETPTR                           * 60240
         LC(5)   TRUE                             * 60247
         A=C     A                                * 6024E
@@ -113,15 +113,15 @@ OBJ_602BD:
         R3=A.F  A                                * 602F0
         C=R1.F  A                                * 602F6
         D=D-C   A                                * 602FC
-        GONC    L_60328                          * 602FE
+        GONC    OBJ_602BD.L1                     * 602FE
         GOSBVL  SAVPTR                           * 60301
         GOSBVL  GARBAGECOL                       * 60308
         GOSBVL  GETPTR                           * 6030F
         C=R1.F  A                                * 60316
         D=D-C   A                                * 6031C
-        GONC    L_60328                          * 6031E
+        GONC    OBJ_602BD.L1                     * 6031E
         GOVLNG  DOMEMERR                         * 60321
-L_60328:
+OBJ_602BD.L1:
         D=D+1   A                                * 60328
         GOSBVL  SAVPTR                           * 6032A
         C=R1.F  A                                * 60331
@@ -426,7 +426,7 @@ RSWAP:
         DAT0=C  A                                * 60EDB
         C=RSTK                                   * 60EDE
         D0=C                                     * 60EE0
-        GOTO    L_60F91                          * 60EE3
+        GOTO    3DROP~1.L3                       * 60EE3
 
 * 1 2 3 -> 2 1 3
 * refs (103): 0909D 15559 173C9 1773E 1788D 180AB ...
@@ -439,7 +439,7 @@ ROTSWAP:
         DAT1=A  A                                * 60EF8
         D1=D1-  5                                * 60EFB
         DAT1=C  A                                * 60EFE
-L_60F01:
+ROTSWAP.L1:
         D1=D1-  5                                * 60F01
         A=DAT0  A                                * 60F04
         D0=D0+  5                                * 60F07
@@ -453,7 +453,7 @@ ROTDROPSWAP:
         D1=D1+  10                               * 60F16
         DAT1=A  A                                * 60F19
         D=D+1   A                                * 60F1C
-        GONC    L_60F01                          * 60F1E  always taken
+        GONC    ROTSWAP.L1                       * 60F1E  always taken
 
 * 1 2 3 -> 2 3
 * refs (123): 08FEE 092C1 09352 0F37B 172AC 17793 ...
@@ -462,7 +462,7 @@ ROTDROP:
         D=D+1   A                                * 60F26
         C=DAT1  10                               * 60F28
         D1=D1+  5                                * 60F2C
-        GOTO    L_6139A                          * 60F2F
+        GOTO    DUPUNROT.L3                      * 60F2F
 
 * 1 2 3 -> 3 2 1
 * refs (74): 0522E 05309 0983B 1024D 15DDD 1A279 ...
@@ -473,7 +473,7 @@ SWAPROT:
         C=DAT1  A                                * 60F3E
         DAT1=A  A                                * 60F41
         D1=D1-  10                               * 60F44
-        GOTO    L_610ED                          * 60F47
+        GOTO    5UNROLL.L1                       * 60F47
 
 * 1 2 3 ->
 * refs (98): 0C227 1DA7A 200D8 21579 218C1 28D80 ...
@@ -487,9 +487,9 @@ SWAPROT:
         CON(5)  (*)+5                            * 60F54  primitive code object
         D1=D1+  15                               * 60F59
         D=D+1   A                                * 60F5C
-L_60F5E:
+7DROP.L1:
         D=D+1   A                                * 60F5E
-L_60F60:
+7DROP.L2:
         D=D+1   A                                * 60F60
         GOTO    4DropLoop                        * 60F62
 
@@ -498,14 +498,14 @@ L_60F60:
 6DROP:
         CON(5)  (*)+5                            * 60F66  primitive code object
         D1=D1+  10                               * 60F6B
-        GOTO    L_60F5E                          * 60F6E
+        GOTO    7DROP.L1                         * 60F6E
 
 * 1..5 ->
 * refs (25): 17671 17784 239D4 285BC 3037F 45637 ...
 5DROP:
         CON(5)  (*)+5                            * 60F72  primitive code object
         D1=D1+  5                                * 60F77
-        GOTO    L_60F60                          * 60F7A
+        GOTO    7DROP.L2                         * 60F7A
 
 * 1..4 ->
 * refs (48): 1002E 1039C 21898 246F9 2471C 274BD ...
@@ -519,12 +519,12 @@ L_60F60:
         D=D+1   A                                * 60F86
 3DROP~1:
         D1=D1+  15                               * 60F88
-L_60F8B:
+3DROP~1.L1:
         D=D+1   A                                * 60F8B
-L_60F8D:
+3DROP~1.L2:
         D=D+1   A                                * 60F8D
         D=D+1   A                                * 60F8F
-L_60F91:
+3DROP~1.L3:
         A=DAT0  A                                * 60F91
         D0=D0+  5                                * 60F94
         PC=(A)                                   * 60F97
@@ -536,7 +536,7 @@ SWAPDROP:
         A=DAT1  A                                * 60FA0
         D1=D1+  5                                * 60FA3
         D=D+1   A                                * 60FA6
-        GOTO    L_6102F                          * 60FA8
+        GOTO    6ROLL.L2                         * 60FA8
 
 * 1 2 3 -> 3 1 2
 * refs (438): 08F94 08FF3 09357 093E3 0EF6D 0F457 ...
@@ -544,7 +544,7 @@ SWAPDROP:
         CON(5)  (*)+5                            * 60FAC  primitive code object
         A=DAT1  A                                * 60FB1
         D1=D1+  5                                * 60FB4
-        GOTO    L_6138D                          * 60FB7
+        GOTO    DUPUNROT.L2                      * 60FB7
 
 * 1 2 3 4 -> 2 3 4 1
 * refs (286): 090A2 0B67E 0C654 0C6EF 0E200 126EE ...
@@ -556,7 +556,7 @@ SWAPDROP:
         D1=D1-  10                               * 60FCA
         DAT1=A  15                               * 60FCD
         D1=D1-  5                                * 60FD1
-        GOTO    L_610ED                          * 60FD4
+        GOTO    5UNROLL.L1                       * 60FD4
 
 * 1 2 3 4 5 -> 2 3 4 5 1
 * refs (215): 0F385 103F1 103F6 1054A 1054F 126F8 ...
@@ -573,7 +573,7 @@ SWAPDROP:
         D1=D1-  5                                * 60FF6
         C=RSTK                                   * 60FF9
         DAT1=C  A                                * 60FFB
-        GOTO    L_6102C                          * 60FFE
+        GOTO    6ROLL.L1                         * 60FFE
 
 * 1..6 -> 2..6 1
 * refs (105): 0AAD0 0F6CF 16FB1 174D2 1756D 1757C ...
@@ -590,9 +590,9 @@ SWAPDROP:
         D1=D1-  10                               * 61022
         C=R0                                     * 61025
         DAT1=C  10                               * 61028
-L_6102C:
+6ROLL.L1:
         D1=D1-  5                                * 6102C
-L_6102F:
+6ROLL.L2:
         DAT1=A  A                                * 6102F
         A=DAT0  A                                * 61032
         D0=D0+  5                                * 61035
@@ -614,7 +614,7 @@ L_6102F:
         DAT1=C  A                                * 6105E
         D1=D1-  15                               * 61061
         C=R1                                     * 61064
-        GOTO    L_61087                          * 61067
+        GOTO    7ROLL.L1                         * 61067
 
 * 1..7 -> 2..7 1
 * refs (51): 16CA2 17581 2247D 25B6F 25B74 284D2 ...
@@ -627,12 +627,12 @@ L_6102F:
         D1=D1+  15                               * 6107E
         A=DAT1  A                                * 61081
         D1=D1-  10                               * 61084
-L_61087:
+7ROLL.L1:
         DAT1=C  15                               * 61087
         D1=D1-  15                               * 6108B
         C=R0                                     * 6108E
         DAT1=C  15                               * 61091
-        GOTO    L_6102C                          * 61095
+        GOTO    6ROLL.L1                         * 61095
 
 * 1 2 3 -> 3 1 2 3
 * refs (15): 08FA3 26167 2C8F0 3B622 4360D 4FD68 ...
@@ -670,7 +670,7 @@ DUP4UNROLL:
         DAT1=C  15                               * 610E4
         D1=D1-  5                                * 610E8
         C=RSTK                                   * 610EB
-L_610ED:
+5UNROLL.L1:
         DAT1=C  A                                * 610ED
         A=DAT0  A                                * 610F0
         D0=D0+  5                                * 610F3
@@ -692,7 +692,7 @@ L_610ED:
         DAT1=C  15                               * 6111C
         D1=D1-  10                               * 61120
         C=R0                                     * 61123
-        GOTO    L_6139A                          * 61126
+        GOTO    DUPUNROT.L3                      * 61126
 
 * 1 2 3 -> 3
 * refs (96): 098B3 16135 1620C 16289 16C1F 16EE9 ...
@@ -701,7 +701,7 @@ ROTROT2DROP:
         A=DAT1  A                                * 6112F
         D1=D1+  10                               * 61132
         DAT1=A  A                                * 61135
-        GOTO    L_60F8D                          * 61138
+        GOTO    3DROP~1.L2                       * 61138
 
 * 1 2 3 4 -> 4
 * refs (18): 0B606 27FD0 2F2ED 406BB 406F2 49673 ...
@@ -710,15 +710,15 @@ ROTROT2DROP:
         A=DAT1  A                                * 61141
         D1=D1+  15                               * 61144
         DAT1=A  A                                * 61147
-        GOTO    L_60F8B                          * 6114A
+        GOTO    3DROP~1.L1                       * 6114A
 
 * ->
 * refs (32): 146EF 1492E 14B9F 14DD7 1779D 17ECA ...
 2RDROP:
         CON(5)  (*)+5                            * 6114E  primitive code object
-        LC(5)   portnotaverr                     * 61153
+        LC(5)   portnotaverr                     * 61153  "Port Not Available"
         B=B-C   A                                * 6115A
-        GOTO    L_60F8D                          * 6115C
+        GOTO    3DROP~1.L2                       * 6115C
 
 * ->
 * refs (9): 14D78 17CE7 5CE3D 5CE74 5CEAB 5CEE2 ...
@@ -726,7 +726,7 @@ ROTROT2DROP:
         CON(5)  (*)+5                            * 61160  primitive code object
         LC(5)   #0000F                           * 61165
         B=B-C   A                                * 6116C
-        GOTO    L_60F8B                          * 6116E
+        GOTO    3DROP~1.L1                       * 6116E
 
 * 1..n-m #n #m -> 1..n-m 1
 * refs (1): 67C7B
@@ -734,7 +734,7 @@ ROTROT2DROP:
         CON(5)  (*)+5                            * 61172  primitive code object
         GOSBVL  POP2#                            * 61177
         A=A-C   A                                * 6117E
-        GOTO    L_61192                          * 61180
+        GOTO    #+PICK.L1                        * 61180
 
 * 1..n+m #n #m -> 1..n+m 1
 * refs (2): 104E1 8BB0F
@@ -742,11 +742,11 @@ ROTROT2DROP:
         CON(5)  (*)+5                            * 61184  primitive code object
         GOSBVL  POP2#                            * 61189
         A=A+C   A                                * 61190
-L_61192:
+#+PICK.L1:
         D1=D1-  5                                * 61192
         D=D-1   A                                * 61195
         CD1EX                                    * 61197
-        GOTO    L_611CB                          * 6119A
+        GOTO    #2+PICK.L3                       * 6119A
 
 * ob&meta -> ob&meta ob
 * refs (12): 318C2 59039 59F5F 5AD2B 5B19A 5FFEA ...
@@ -758,7 +758,7 @@ DUP#1+PICK:
 #1+PICK:
         CON(5)  (*)+5                            * 611A3  primitive code object
         GOSUB   SUB_611B0                        * 611A8
-        GOTO    L_611C9                          * 611AC
+        GOTO    #2+PICK.L2                       * 611AC
 
 * refs (5): 611A8 611C3 611D7 611E6 618AD
 SUB_611B0:
@@ -773,12 +773,12 @@ SUB_611B0:
 #2+PICK:
         CON(5)  (*)+5                            * 611BE  primitive code object
         GOSUB   SUB_611B0                        * 611C3
-L_611C7:
+#2+PICK.L1:
         A=A+1   A                                * 611C7
-L_611C9:
+#2+PICK.L2:
         A=A+1   A                                * 611C9
-L_611CB:
-        GOVLNG  L_032F3                          * 611CB
+#2+PICK.L3:
+        GOVLNG  PICK.L1                          * 611CB
 
 * 1..n #n-3 -> 1..n 1
 * refs (17): 10B03 29674 5584B 57694 584E4 584EE ...
@@ -786,7 +786,7 @@ L_611CB:
         CON(5)  (*)+5                            * 611D2  primitive code object
         GOSUB   SUB_611B0                        * 611D7
         A=A+1   A                                * 611DB
-        GOTO    L_611C7                          * 611DD
+        GOTO    #2+PICK.L1                       * 611DD
 
 * 1..n #n-4 -> 1..n 1
 * refs (4): 5B1B8 5F620 60DF1 D1DE1
@@ -795,10 +795,10 @@ L_611CB:
         GOSUB   SUB_611B0                        * 611E6
         A=A+1   A                                * 611EA
         A=A+1   A                                * 611EC
-        GOTO    L_611C7                          * 611EE
-L_611F2:
+        GOTO    #2+PICK.L1                       * 611EE
+#4+PICK.L1:
         GOSUB   SafGarbD-1~jump                  * 611F2
-        GONC    L_61208                          * 611F6  always taken
+        GONC    3PICK.L1                         * 611F6  always taken
 
 * 1 2 -> 1 2 2 1
 * refs (29): 3F40B 406B1 40EB5 43BC1 45D43 46E96 ...
@@ -810,90 +810,90 @@ L_611F2:
 3PICK:
         CON(5)  (*)+5                            * 611FE  primitive code object
         D=D-1   A                                * 61203
-        GOC     L_611F2                          * 61205
-L_61208:
+        GOC     #4+PICK.L1                       * 61205
+3PICK.L1:
         D1=D1+  10                               * 61208
         A=DAT1  A                                * 6120B
         D1=D1-  15                               * 6120E
-        GOTO    L_6102F                          * 61211
-L_61215:
+        GOTO    6ROLL.L2                         * 61211
+3PICK.L2:
         GOSUB   SafGarbD-1~jump                  * 61215
-        GONC    L_61226                          * 61219  always taken
+        GONC    4PICK.L1                         * 61219  always taken
 
 * 1 2 3 4 -> 1 2 3 4 1
 * refs (396): 0F6CA 10347 10635 10649 13B74 1487F ...
 4PICK:
         CON(5)  (*)+5                            * 6121C  primitive code object
         D=D-1   A                                * 61221
-        GOC     L_61215                          * 61223
-L_61226:
+        GOC     3PICK.L2                         * 61223
+4PICK.L1:
         D1=D1+  15                               * 61226
         A=DAT1  A                                * 61229
         D1=D1-  15                               * 6122C
-        GOTO    L_6102C                          * 6122F
-L_61233:
+        GOTO    6ROLL.L1                         * 6122F
+4PICK.L2:
         GOSUB   SafGarbD-1~jump                  * 61233
-        GONC    L_61244                          * 61237  always taken
+        GONC    5PICK.L1                         * 61237  always taken
 
 * 1 2 3 4 5 -> 1 2 3 4 5 1
 * refs (246): 103BA 103CE 104A0 10513 10527 10559 ...
 5PICK:
         CON(5)  (*)+5                            * 6123A  primitive code object
         D=D-1   A                                * 6123F
-        GOC     L_61233                          * 61241
-L_61244:
+        GOC     4PICK.L2                         * 61241
+5PICK.L1:
         D1=D1+  15                               * 61244
         D1=D1+  5                                * 61247
         A=DAT1  A                                * 6124A
         D1=D1-  15                               * 6124D
         D1=D1-  10                               * 61250
-        GOTO    L_6102F                          * 61253
-L_61257:
+        GOTO    6ROLL.L2                         * 61253
+5PICK.L2:
         GOSUB   SafGarbD-1~jump                  * 61257
-        GONC    L_61268                          * 6125B  always taken
+        GONC    6PICK.L1                         * 6125B  always taken
 
 * 1..6 -> 1..6 1
 * refs (179): 1037E 104D7 10626 16D45 1710D 17658 ...
 6PICK:
         CON(5)  (*)+5                            * 6125E  primitive code object
         D=D-1   A                                * 61263
-        GOC     L_61257                          * 61265
-L_61268:
+        GOC     5PICK.L2                         * 61265
+6PICK.L1:
         D1=D1+  15                               * 61268
         D1=D1+  10                               * 6126B
         A=DAT1  A                                * 6126E
         D1=D1-  15                               * 61271
         D1=D1-  15                               * 61274
-        GOTO    L_6102F                          * 61277
-L_6127B:
+        GOTO    6ROLL.L2                         * 61277
+6PICK.L2:
         GOSUB   SafGarbD-1~jump                  * 6127B
-        GONC    L_6128C                          * 6127F  always taken
+        GONC    7PICK.L1                         * 6127F  always taken
 
 * 1..7 -> 1..7 1
 * refs (104): 104E6 33913 33F2A 3653E 3698A 453CB ...
 7PICK:
         CON(5)  (*)+5                            * 61282  primitive code object
         D=D-1   A                                * 61287
-        GOC     L_6127B                          * 61289
-L_6128C:
+        GOC     6PICK.L2                         * 61289
+7PICK.L1:
         D1=D1+  15                               * 6128C
         D1=D1+  15                               * 6128F
         A=DAT1  A                                * 61292
         D1=D1-  15                               * 61295
         D1=D1-  15                               * 61298
         D1=D1-  5                                * 6129B
-        GOTO    L_6102F                          * 6129E
-L_612A2:
+        GOTO    6ROLL.L2                         * 6129E
+7PICK.L2:
         GOSUB   SafGarbD-1~jump                  * 612A2
-        GONC    L_612B3                          * 612A6  always taken
+        GONC    8PICK.L1                         * 612A6  always taken
 
 * 1..8 -> 1..8 1
 * refs (83): 1760D 17743 29534 36561 45344 4AD1F ...
 8PICK:
         CON(5)  (*)+5                            * 612A9  primitive code object
         D=D-1   A                                * 612AE
-        GOC     L_612A2                          * 612B0
-L_612B3:
+        GOC     7PICK.L2                         * 612B0
+8PICK.L1:
         D1=D1+  15                               * 612B3
         D1=D1+  15                               * 612B6
         D1=D1+  5                                * 612B9
@@ -901,7 +901,7 @@ L_612B3:
         D1=D1-  15                               * 612BF
         D1=D1-  15                               * 612C2
         D1=D1-  10                               * 612C5
-        GOTO    L_6102F                          * 612C8
+        GOTO    6ROLL.L2                         * 612C8
 
 * 1..n-m #n #m -> 2..n-m 1
 * refs (5): 1042D 1043C 10608 10662 106A8
@@ -909,7 +909,7 @@ L_612B3:
         CON(5)  (*)+5                            * 612CC  primitive code object
         GOSBVL  POP2#                            * 612D1
         A=A-C   A                                * 612D8
-        GOTO    L_612EC                          * 612DA
+        GOTO    #+ROLL.L1                        * 612DA
 
 * 1..n+m #n #m -> 2..n+m 1
 * refs (4): 1061C 1063F 106B7 10AEF
@@ -917,8 +917,8 @@ L_612B3:
         CON(5)  (*)+5                            * 612DE  primitive code object
         GOSBVL  POP2#                            * 612E3
         A=A+C   A                                * 612EA
-L_612EC:
-        GOVLNG  L_03330                          * 612EC
+#+ROLL.L1:
+        GOVLNG  ROLL.L1                          * 612EC
 
 * ob 1..n #n -> 1..n ob
 * refs (7): 05318 0E49B 20E66 24221 39D74 4CB18 ...
@@ -926,7 +926,7 @@ L_612EC:
         CON(5)  (*)+5                            * 612F3  primitive code object
         GOSBVL  POP#                             * 612F8
         A=A+1   A                                * 612FF
-        GOTO    L_612EC                          * 61301
+        GOTO    #+ROLL.L1                        * 61301
 
 * ob meta -> meta ob
 * refs (34): 05238 05242 0524C 052DA 05322 0982C ...
@@ -935,7 +935,7 @@ get1:
         GOSUBL  SUB_62278                        * 6130A
         A=A+1   A                                * 61310
         A=A+1   A                                * 61312
-        GOTO    L_612EC                          * 61314
+        GOTO    #+ROLL.L1                        * 61314
 
 * a b 1..n #n -> b 1..n a
 * refs (4): 1DC23 32034 41AD8 9F616
@@ -944,7 +944,7 @@ get1:
         GOSBVL  POP#                             * 6131D
         A=A+1   A                                * 61324
         A=A+1   A                                * 61326
-        GOTO    L_612EC                          * 61328
+        GOTO    #+ROLL.L1                        * 61328
 
 * 1..n-m #n #m -> n-m 1..n+m-1
 * refs (4): 1041E 10595 105B8 10671
@@ -952,7 +952,7 @@ get1:
         CON(5)  (*)+5                            * 6132C  primitive code object
         GOSBVL  POP2#                            * 61331
         A=A-C   A                                * 61338
-        GOTO    L_6134C                          * 6133A
+        GOTO    #+UNROLL.L1                      * 6133A
 
 * 1..n+m #n #m -> n+m 1..n+m-1
 * refs (3): 10630 106CB 10B12
@@ -960,8 +960,8 @@ get1:
         CON(5)  (*)+5                            * 6133E  primitive code object
         GOSBVL  POP2#                            * 61343
         A=A+C   A                                * 6134A
-L_6134C:
-        GOVLNG  L_033A9                          * 6134C
+#+UNROLL.L1:
+        GOVLNG  UNROLL.L1                        * 6134C
 
 * ob 1..n #n -> n ob 1..n-1
 * refs (4): 3203E 4CB36 68C29 B88F0
@@ -969,7 +969,7 @@ L_6134C:
         CON(5)  (*)+5                            * 61353  primitive code object
         GOSBVL  POP#                             * 61358
         A=A+1   A                                * 6135F
-        GOTO    L_6134C                          * 61361
+        GOTO    #+UNROLL.L1                      * 61361
 
 * a b 1..n #n -> n a b 1..n-1
 * refs (16): 10132 1064E 1DC41 282AA 54846 56E5A ...
@@ -978,25 +978,25 @@ L_6134C:
         GOSBVL  POP#                             * 6136A
         A=A+1   A                                * 61371
         A=A+1   A                                * 61373
-        GOTO    L_6134C                          * 61375
-L_61379:
+        GOTO    #+UNROLL.L1                      * 61375
+#2+UNROLL.L1:
         GOSUB   SafGarbD-1~jump                  * 61379
-        GONC    L_6138A                          * 6137D  always taken
+        GONC    DUPUNROT.L1                      * 6137D  always taken
 
 * 1 2 -> 2 1 2
 * refs (151): 08E38 0F566 10128 110B3 148D4 14B2C ...
 DUPUNROT:
         CON(5)  (*)+5                            * 61380  primitive code object
         D=D-1   A                                * 61385
-        GOC     L_61379                          * 61387
-L_6138A:
+        GOC     #2+UNROLL.L1                     * 61387
+DUPUNROT.L1:
         A=DAT1  A                                * 6138A
-L_6138D:
+DUPUNROT.L2:
         C=DAT1  10                               * 6138D
         D1=D1+  5                                * 61391
         DAT1=A  A                                * 61394
         D1=D1-  10                               * 61397
-L_6139A:
+DUPUNROT.L3:
         DAT1=C  10                               * 6139A
         A=DAT0  A                                * 6139E
         D0=D0+  5                                * 613A1
@@ -1005,214 +1005,214 @@ L_6139A:
 * refs (15): 611F2 61215 61233 61257 6127B 612A2 ...
 SafGarbD-1~jump:
         GOVLNG  SafGarbD-1                       * 613A8
-L_613AF:
+SafGarbD-1~jump.L1:
         GOSUB   SafGarbD-1~jump                  * 613AF
-        GONC    L_613C0                          * 613B3  always taken
+        GONC    1GETLAM.L1                       * 613B3  always taken
 
 * -> ob
 * refs (370): 09043 0C749 0F89B 10923 109EB 10A63 ...
 1GETLAM:
         CON(5)  (*)+5                            * 613B6  primitive code object
         D=D-1   A                                * 613BB
-        GOC     L_613AF                          * 613BD
-L_613C0:
+        GOC     SafGarbD-1~jump.L1               * 613BD
+1GETLAM.L1:
         AD0EX                                    * 613C0
         D0=(5)  TEMPENV                          * 613C3
         C=DAT0  A                                * 613CA
         D0=C                                     * 613CD
-L_613D0:
+1GETLAM.L2:
         D0=D0+  15                               * 613D0
         C=DAT0  A                                * 613D3
         D0=A                                     * 613D6
         D1=D1-  5                                * 613D9
-        GOTO    L_610ED                          * 613DC
-L_613E0:
+        GOTO    5UNROLL.L1                       * 613DC
+1GETLAM.L3:
         GOSUB   SafGarbD-1~jump                  * 613E0
-        GONC    L_613F1                          * 613E4  always taken
+        GONC    2GETLAM.L1                       * 613E4  always taken
 
 * -> ob
 * refs (324): 0C9B8 0F896 0F8CD 0F9E0 10900 1DC2D ...
 2GETLAM:
         CON(5)  (*)+5                            * 613E7  primitive code object
         D=D-1   A                                * 613EC
-        GOC     L_613E0                          * 613EE
-L_613F1:
+        GOC     1GETLAM.L3                       * 613EE
+2GETLAM.L1:
         AD0EX                                    * 613F1
         D0=(5)  TEMPENV                          * 613F4
         C=DAT0  A                                * 613FB
         D0=C                                     * 613FE
         D0=D0+  10                               * 61401
-        GONC    L_613D0                          * 61404
-L_61407:
+        GONC    1GETLAM.L2                       * 61404
+2GETLAM.L2:
         GOSUB   SafGarbD-1~jump                  * 61407
-        GONC    L_61418                          * 6140B  always taken
+        GONC    3GETLAM.L1                       * 6140B  always taken
 
 * -> ob
 * refs (233): 0F990 1D1F9 1DFF8 1E02A 24CFD 2564B ...
 3GETLAM:
         CON(5)  (*)+5                            * 6140E  primitive code object
         D=D-1   A                                * 61413
-        GOC     L_61407                          * 61415
-L_61418:
+        GOC     2GETLAM.L2                       * 61415
+3GETLAM.L1:
         AD0EX                                    * 61418
         D0=(5)  TEMPENV                          * 6141B
         C=DAT0  A                                * 61422
         D0=C                                     * 61425
         D0=D0+  10                               * 61428
         D0=D0+  10                               * 6142B
-        GONC    L_613D0                          * 6142E
-L_61431:
+        GONC    1GETLAM.L2                       * 6142E
+3GETLAM.L2:
         GOSUB   SafGarbD-1~jump                  * 61431
-        GONC    L_61442                          * 61435  always taken
+        GONC    4GETLAM.L1                       * 61435  always taken
 
 * -> ob
 * refs (230): 0F995 1E02F 27B6B 27C42 29502 2FC09 ...
 4GETLAM:
         CON(5)  (*)+5                            * 61438  primitive code object
         D=D-1   A                                * 6143D
-        GOC     L_61431                          * 6143F
-L_61442:
+        GOC     3GETLAM.L2                       * 6143F
+4GETLAM.L1:
         AD0EX                                    * 61442
         D0=(5)  TEMPENV                          * 61445
         C=DAT0  A                                * 6144C
         D0=C                                     * 6144F
         D0=D0+  15                               * 61452
         D0=D0+  15                               * 61455
-        GOTO    L_613D0                          * 61458
+        GOTO    1GETLAM.L2                       * 61458
 
 * -> ob
 * refs (195): 19CD6 19CF5 19F14 19F37 1A07F 27BDE ...
 5GETLAM:
         CON(5)  (*)+5                            * 6145C  primitive code object
         LC(5)   #00037                           * 61461
-        GOTO    L_61589                          * 61468
+        GOTO    22Lget.L2                        * 61468
 
 * -> ob
 * refs (147): 27C1A 33D19 342E3 452F9 45317 46CCF ...
 6GETLAM:
         CON(5)  (*)+5                            * 6146C  primitive code object
         LC(5)   #00041                           * 61471
-        GOTO    L_61589                          * 61478
+        GOTO    22Lget.L2                        * 61478
 
 * -> ob
 * refs (145): 27C47 33C5B 33CE7 3405B 342D9 46C2A ...
 7GETLAM:
         CON(5)  (*)+5                            * 6147C  primitive code object
         LC(5)   #0004B                           * 61481
-        GOTO    L_61589                          * 61488
+        GOTO    22Lget.L2                        * 61488
 
 * -> ob
 * refs (145): 19AFD 273C3 27E63 28405 470D0 47102 ...
 8GETLAM:
         CON(5)  (*)+5                            * 6148C  primitive code object
         LC(5)   #00055                           * 61491
-        GOTO    L_61589                          * 61498
+        GOTO    22Lget.L2                        * 61498
 
 * -> ob
 * refs (95): 28400 454D9 4550B 46D2E 4CBF4 4FE7B ...
 9GETLAM:
         CON(5)  (*)+5                            * 6149C  primitive code object
         LC(5)   #0005F                           * 614A1
-        GOTO    L_61589                          * 614A8
+        GOTO    22Lget.L2                        * 614A8
 
 * -> ob
 * refs (81): 283FB 452B8 452EF 4530D 46CD4 4783F ...
 10GETLAM:
         CON(5)  (*)+5                            * 614AC  primitive code object
         LC(5)   #00069                           * 614B1
-        GOTO    L_61589                          * 614B8
+        GOTO    22Lget.L2                        * 614B8
 
 * -> ob
 * refs (63): 19B0C 283F6 4829C 4A919 4B846 4B9AE ...
 11GETLAM:
         CON(5)  (*)+5                            * 614BC  primitive code object
         LC(5)   #00073                           * 614C1
-        GOTO    L_61589                          * 614C8
+        GOTO    22Lget.L2                        * 614C8
 
 * -> ob
 * refs (73): 0C9BD 482EC 48323 48346 4837D 483E6 ...
 12GETLAM:
         CON(5)  (*)+5                            * 614CC  primitive code object
         LC(5)   #0007D                           * 614D1
-        GOTO    L_61589                          * 614D8
+        GOTO    22Lget.L2                        * 614D8
 
 * -> ob
 * refs (51): 19FAC 481FC 48215 4D745 4DD9B 4DEC7 ...
 13GETLAM:
         CON(5)  (*)+5                            * 614DC  primitive code object
         LC(5)   #00087                           * 614E1
-        GOTO    L_61589                          * 614E8
+        GOTO    22Lget.L2                        * 614E8
 
 * -> ob
 * refs (68): 470D5 4844F 48468 4DE0E 4DEBD 6A398 ...
 14GETLAM:
         CON(5)  (*)+5                            * 614EC  primitive code object
         LC(5)   #00091                           * 614F1
-        GOTO    L_61589                          * 614F8
+        GOTO    22Lget.L2                        * 614F8
 
 * -> ob
 * refs (91): 0C645 0C6A9 0C6E0 457C1 45913 46213 ...
 15GETLAM:
         CON(5)  (*)+5                            * 614FC  primitive code object
         LC(5)   #0009B                           * 61501
-        GOTO    L_61589                          * 61508
+        GOTO    22Lget.L2                        * 61508
 
 * -> ob
 * refs (48): 0CA1C 4D22C 4D9A2 50D82 50DB9 51030 ...
 16GETLAM:
         CON(5)  (*)+5                            * 6150C  primitive code object
         LC(5)   #000A5                           * 61511
-        GOTO    L_61589                          * 61518
+        GOTO    22Lget.L2                        * 61518
 
 * -> ob
 * refs (38): 4BB25 4BCAB 4BD2D 4C31E 4C4DB 6CB4D ...
 17GETLAM:
         CON(5)  (*)+5                            * 6151C  primitive code object
         LC(5)   #000AF                           * 61521
-        GOTO    L_61589                          * 61528
+        GOTO    22Lget.L2                        * 61528
 
 * -> ob
 * refs (57): 48A2B 4B4FF 4B6ED 4BB7F 4BE81 4C549 ...
 18GETLAM:
         CON(5)  (*)+5                            * 6152C  primitive code object
         LC(5)   #000B9                           * 61531
-        GOTO    L_61589                          * 61538
+        GOTO    22Lget.L2                        * 61538
 
 * -> ob
 * refs (16): 489F9 48CDD 4BB34 4BC15 4C116 4C1D4 ...
 19GETLAM:
         CON(5)  (*)+5                            * 6153C  primitive code object
         LC(5)   #000C3                           * 61541
-        GOTO    L_61589                          * 61548
+        GOTO    22Lget.L2                        * 61548
 
 * -> ob
 * refs (40): 48AA8 4C233 4C26A 4C463 8D7B7 8DB9D ...
 20GETLAM:
         CON(5)  (*)+5                            * 6154C  primitive code object
         LC(5)   #000CD                           * 61551
-        GOTO    L_61589                          * 61558
+        GOTO    22Lget.L2                        * 61558
 
 * -> ob
 * refs (44): 0C64F 0C6EA 457CB 4591D 4621D 48AE4 ...
 21GETLAM:
         CON(5)  (*)+5                            * 6155C  primitive code object
         LC(5)   #000D7                           * 61561
-        GOTO    L_61589                          * 61568
+        GOTO    22Lget.L2                        * 61568
 
 * refs (25): 4D7D1 6A12C 6CCFE 6CFD3 6D01E 6E915 ...
 22Lget:
         CON(5)  (*)+5                            * 6156C  primitive code object
         LC(5)   #000E1                           * 61571
-        GOTO    L_61589                          * 61578
-L_6157C:
+        GOTO    22Lget.L2                        * 61578
+22Lget.loop1:
         R0=C                                     * 6157C
         GOSUB   SafGarbD-1~jump                  * 6157F
         C=R0                                     * 61583
-        GONC    L_6158E                          * 61586
-L_61589:
+        GONC    22Lget.L3                        * 61586
+22Lget.L2:
         D=D-1   A                                * 61589
-        GOC     L_6157C                          * 6158B
-L_6158E:
+        GOC     22Lget.loop1                     * 6158B
+22Lget.L3:
         A=C     A                                * 6158E
         CD0EX                                    * 61590
         RSTK=C                                   * 61593
@@ -1223,13 +1223,13 @@ L_6158E:
         A=DAT0  A                                * 615A4
         D1=D1-  5                                * 615A7
         DAT1=A  A                                * 615AA
-L_615AD:
+22Lget.loop4:
         C=RSTK                                   * 615AD
         D0=C                                     * 615AF
         A=DAT0  A                                * 615B2
         D0=D0+  5                                * 615B5
         PC=(A)                                   * 615B8
-L_615BC:
+22Lget.L5:
         A=C     A                                * 615BC
         CD0EX                                    * 615BE
         RSTK=C                                   * 615C1
@@ -1241,28 +1241,28 @@ L_615BC:
         D1=D1+  5                                * 615D5
         D=D+1   A                                * 615D8
         DAT0=A  A                                * 615DA
-        GONC    L_615AD                          * 615DD  always taken
+        GONC    22Lget.loop4                     * 615DD  always taken
 
 * ob ->
 * refs (61): 1DA2F 1DA57 1DAE3 1DB15 1DB1F 1DFCB ...
 1PUTLAM:
         CON(5)  (*)+5                            * 615E0  primitive code object
         LC(5)   #0000F                           * 615E5
-        GOTO    L_615BC                          * 615EC
+        GOTO    22Lget.L5                        * 615EC
 
 * ob ->
 * refs (53): 0C951 0F9B3 1DFA8 27B3E 29D52 43ABD ...
 2PUTLAM:
         CON(5)  (*)+5                            * 615F0  primitive code object
         LC(5)   #00019                           * 615F5
-        GOTO    L_615BC                          * 615FC
+        GOTO    22Lget.L5                        * 615FC
 
 * ob ->
 * refs (56): 0C942 27B66 27BC0 43A63 43B30 43BE4 ...
 3PUTLAM:
         CON(5)  (*)+5                            * 61600  primitive code object
         LC(5)   #00023                           * 61605
-        GOTO    L_615BC                          * 6160C
+        GOTO    22Lget.L5                        * 6160C
 
 * ob -> ob
 * refs (5): 27B2A 484D1 4DA21 4DD5F 68D0F
@@ -1274,133 +1274,133 @@ DUP4PUTLAM:
 4PUTLAM:
         CON(5)  (*)+5                            * 61615  primitive code object
         LC(5)   #0002D                           * 6161A
-        GOTO    L_615BC                          * 61621
+        GOTO    22Lget.L5                        * 61621
 
 * ob ->
 * refs (36): 19ABE 27B25 49220 5191A 570D6 68D0A ...
 5PUTLAM:
         CON(5)  (*)+5                            * 61625  primitive code object
         LC(5)   #00037                           * 6162A
-        GOTO    L_615BC                          * 61631
+        GOTO    22Lget.L5                        * 61631
 
 * ob ->
 * refs (37): 19F5B 27B1B 48FAE 51924 570D1 68D00 ...
 6PUTLAM:
         CON(5)  (*)+5                            * 61635  primitive code object
         LC(5)   #00041                           * 6163A
-        GOTO    L_615BC                          * 61641
+        GOTO    22Lget.L5                        * 61641
 
 * ob ->
 * refs (41): 27B39 46C6B 48FA9 49FCE 4D227 4EE7E ...
 7PUTLAM:
         CON(5)  (*)+5                            * 61645  primitive code object
         LC(5)   #0004B                           * 6164A
-        GOTO    L_615BC                          * 61651
+        GOTO    22Lget.L5                        * 61651
 
 * ob ->
 * refs (38): 19AB4 28414 46C66 472A9 48DE2 49FC9 ...
 8PUTLAM:
         CON(5)  (*)+5                            * 61655  primitive code object
         LC(5)   #00055                           * 6165A
-        GOTO    L_615BC                          * 61661
+        GOTO    22Lget.L5                        * 61661
 
 * ob ->
 * refs (25): 28419 50208 5191F 570CC 6A195 6B871 ...
 9PUTLAM:
         CON(5)  (*)+5                            * 61665  primitive code object
         LC(5)   #0005F                           * 6166A
-        GOTO    L_615BC                          * 61671
+        GOTO    22Lget.L5                        * 61671
 
 * ob ->
 * refs (25): 2841E 5022B 51929 570C7 69DAC 6A1C7 ...
 10PUTLAM:
         CON(5)  (*)+5                            * 61675  primitive code object
         LC(5)   #00069                           * 6167A
-        GOTO    L_615BC                          * 61681
+        GOTO    22Lget.L5                        * 61681
 
 * ob ->
 * refs (34): 28423 4A8A1 4E4E2 4E550 6A08C 6A1EF ...
 11PUTLAM:
         CON(5)  (*)+5                            * 61685  primitive code object
         LC(5)   #00073                           * 6168A
-        GOTO    L_615BC                          * 61691
+        GOTO    22Lget.L5                        * 61691
 
 * ob ->
 * refs (20): 0C94C 4C5E9 4E4C4 6A0AA 6B844 6CBE8 ...
 12PUTLAM:
         CON(5)  (*)+5                            * 61695  primitive code object
         LC(5)   #0007D                           * 6169A
-        GOTO    L_615BC                          * 616A1
+        GOTO    22Lget.L5                        * 616A1
 
 * ob ->
 * refs (18): 4D1F5 6A4BA 6B849 6E9A6 8D505 8E7E2 ...
 13PUTLAM:
         CON(5)  (*)+5                            * 616A5  primitive code object
         LC(5)   #00087                           * 616AA
-        GOTO    L_615BC                          * 616B1
+        GOTO    22Lget.L5                        * 616B1
 
 * ob ->
 * refs (12): 4D1EB 6A20D 6B83A 6E7BC 6EF0A 6EFDC ...
 14PUTLAM:
         CON(5)  (*)+5                            * 616B5  primitive code object
         LC(5)   #00091                           * 616BA
-        GOTO    L_615BC                          * 616C1
+        GOTO    22Lget.L5                        * 616C1
 
 * ob ->
 * refs (31): 488D7 4A8CE 4BD14 4BD46 4C341 570C2 ...
 15PUTLAM:
         CON(5)  (*)+5                            * 616C5  primitive code object
         LC(5)   #0009B                           * 616CA
-        GOTO    L_615BC                          * 616D1
+        GOTO    22Lget.L5                        * 616D1
 
 * ob ->
 * refs (21): 0CA0D 47120 4717A 488E1 4D254 4E6B8 ...
 16PUTLAM:
         CON(5)  (*)+5                            * 616D5  primitive code object
         LC(5)   #000A5                           * 616DA
-        GOTO    L_615BC                          * 616E1
+        GOTO    22Lget.L5                        * 616E1
 
 * ob ->
 * refs (15): 488DC 4A8D3 6B7A4 6CB2F 6CB61 8BFB1 ...
 17PUTLAM:
         CON(5)  (*)+5                            * 616E5  primitive code object
         LC(5)   #000AF                           * 616EA
-        GOTO    L_615BC                          * 616F1
+        GOTO    22Lget.L5                        * 616F1
 
 * ob ->
 * refs (26): 4A8E7 686CA 6875B 69346 697A7 69DCF ...
 18PUTLAM:
         CON(5)  (*)+5                            * 616F5  primitive code object
         LC(5)   #000B9                           * 616FA
-        GOTO    L_615BC                          * 61701
+        GOTO    22Lget.L5                        * 61701
 
 * ob ->
 * refs (11): 4BA03 4BC42 69C55 6B7AE 6BFD3 6FFF3 ...
 19PUTLAM:
         CON(5)  (*)+5                            * 61705  primitive code object
         LC(5)   #000C3                           * 6170A
-        GOTO    L_615BC                          * 61711
+        GOTO    22Lget.L5                        * 61711
 
 * ob ->
 * refs (7): 4A9A0 4D231 570BD 8E286 8EF46 8F44C ...
 20PUTLAM:
         CON(5)  (*)+5                            * 61715  primitive code object
         LC(5)   #000CD                           * 6171A
-        GOTO    L_615BC                          * 61721
+        GOTO    22Lget.L5                        * 61721
 
 * ob ->
 * refs (7): 4A9A5 4D23B 570DB 8E30F 8F3CD 8F4EE ...
 21PUTLAM:
         CON(5)  (*)+5                            * 61725  primitive code object
         LC(5)   #000D7                           * 6172A
-        GOTO    L_615BC                          * 61731
+        GOTO    22Lget.L5                        * 61731
 
 * ob ->
 * refs (12): 4D29A 6A0E6 6D634 6E6F9 8E0D1 8E27C ...
 22PUTLAM:
         CON(5)  (*)+5                            * 61735  primitive code object
         LC(5)   #000E1                           * 6173A
-        GOTO    L_615BC                          * 61741
+        GOTO    22Lget.L5                        * 61741
 
 * ->
 * refs (4): 56B6E 60432 605C7 6069E
@@ -1408,7 +1408,7 @@ DUPTEMPENV:
         CON(5)  (*)+5                            * 61745  primitive code object
         GOSBVL  SAVPTR                           * 6174A
         ST=0    10                               * 61751
-L_61754:
+DUPTEMPENV.loop1:
         D0=(5)  TEMPENV                          * 61754
         A=DAT0  A                                * 6175B
         D0=A                                     * 6175E
@@ -1420,10 +1420,10 @@ L_61754:
         A=DAT1  A                                * 61777
         A=A-B   A                                * 6177A
         ?C<A    A                                * 6177C
-        GOYES   L_6178C                          * 6177F
+        GOYES   DUPTEMPENV.L2                    * 6177F
         GOSBVL  St10Gb                           * 61781
-        GOTO    L_61754                          * 61788
-L_6178C:
+        GOTO    DUPTEMPENV.loop1                 * 61788
+DUPTEMPENV.L2:
         DAT1=A  A                                * 6178C
         D1=A                                     * 6178F
         C=A     A                                * 61792
@@ -1444,7 +1444,7 @@ L_6178C:
         A=A-B   A                                * 617C6
         DAT1=A  A                                * 617C8
         GOSBVL  ADJMEM                           * 617CB
-        GOLONG  L_61F88                          * 617D2
+        GOLONG  DUMP.L9                          * 617D2
 
 * #n -> #n ob lam F -> #n T
 * refs (2): 56723 56778
@@ -1460,16 +1460,16 @@ GETLAMPAIR:
         D1=C                                     * 617F5
         C=DAT1  A                                * 617F8
         ?C>A    A                                * 617FB
-        GOYES   L_6180B                          * 617FE
+        GOYES   GETLAMPAIR.L1                    * 617FE
         C=RSTK                                   * 61800
         D1=C                                     * 61802
         GOLONG  PushTLoop                        * 61805
-L_6180B:
+GETLAMPAIR.L1:
         CD1EX                                    * 6180B
         A=A+C   A                                * 6180E
         LC(5)   #00002                           * 61810
         D=D-C   A                                * 61817
-        GONC    L_61853                          * 61819
+        GONC    GETLAMPAIR.L3                    * 61819
         D=D+C   A                                * 6181C
         R0=A                                     * 6181E
         C=RSTK                                   * 61821
@@ -1479,14 +1479,14 @@ L_6180B:
         GOSUBL  GETPTR~jump_9                    * 61833
         LC(5)   #00002                           * 61839
         D=D-C   A                                * 61840
-        GONC    L_6184B                          * 61842
+        GONC    GETLAMPAIR.L2                    * 61842
         D=D+C   A                                * 61845
-        GOTO    L_61DBD                          * 61847
-L_6184B:
+        GOTO    SUB_61D86.L2                     * 61847
+GETLAMPAIR.L2:
         CD1EX                                    * 6184B
         RSTK=C                                   * 6184E
         A=R0                                     * 61850
-L_61853:
+GETLAMPAIR.L3:
         D1=A                                     * 61853
         A=DAT1  10                               * 61856
         C=RSTK                                   * 6185A
@@ -1500,7 +1500,7 @@ L_61853:
 #=case:
         CON(5)  (*)+5                            * 6186C  primitive code object
         GOSBVL  POP2#                            * 61871
-        GOTO    L_61943                          * 61878
+        GOTO    EQcase.L1                        * 61878
 
 * #m #n -> :: #m <ob1> ; #m #n -> :: #m <ob2> <rest> ;
 * refs (6): 57A1B 5E08F 5F2F8 9107C 92FCF D0334
@@ -1509,7 +1509,7 @@ OVER#=case:
         GOSBVL  POP2#                            * 61881
         D1=D1-  5                                * 61888
         D=D-1   A                                * 6188B
-        GOTO    L_61943                          * 6188D
+        GOTO    EQcase.L1                        * 6188D
 
 * #0 -> :: #0 <ob1> ; # -> :: # <ob2> <rest> ;
 * refs (40): 021FB 1940C 1DB8D 1DCA5 213A2 27558 ...
@@ -1522,7 +1522,7 @@ DUP#0=case:
         CON(5)  (*)+5                            * 61896  primitive code object
         GOSBVL  POP#                             * 6189B
         A=A-1   A                                * 618A2
-        GOTO    L_6199C                          * 618A4
+        GOTO    case.L2                          * 618A4
 
 * #0 -> :: <ob1> ; # -> :: # <ob2> <rest> ;
 * refs (13): 16E85 2192C 4262E 69978 6AFF5 6B147 ...
@@ -1531,7 +1531,7 @@ DUP#0=csedrp:
         GOSUB   SUB_611B0                        * 618AD
         D1=C                                     * 618B1
         C=0     A                                * 618B4
-        GOTO    L_618CA                          * 618B6
+        GOTO    EQcasedrop.L1                    * 618B6
 
 * ob1 ob1 -> :: <ob1> ; ob1 ob2 -> :: ob1 <ob2> <rest> ;
 * refs (39): 0C62C 0C63B 0C6C7 0C6D6 0F4CF 10A04 ...
@@ -1541,10 +1541,10 @@ EQcasedrop:
         D1=D1+  5                                * 618C2
         D=D+1   A                                * 618C5
         C=DAT1  A                                * 618C7
-L_618CA:
+EQcasedrop.L1:
         ?C=A    A                                * 618CA
-        GOYES   L_61907                          * 618CD
-        GOTO    L_619A6                          * 618CF
+        GOYES   casedrop.L2                      * 618CD
+        GOTO    case.L4                          * 618CF
 
 * #m #n -> :: <ob1> ; #m #n -> :: #m <ob2> <rest> ;
 * refs (135): 09057 0E589 0E5B7 14074 1471C 19D0E ...
@@ -1553,47 +1553,47 @@ L_618CA:
         GOSBVL  POP2#                            * 618D8
         D1=D1-  5                                * 618DF
         D=D-1   A                                * 618E2
-        GOTO    L_618CA                          * 618E4
+        GOTO    EQcasedrop.L1                    * 618E4
 
 * ob T -> :: ob <ob2> <rest> ; ob F -> :: <ob1> ;
 * refs (108): 09818 0C21D 0C695 0C72B 0F0BB 110A9 ...
 NOTcasedrop:
         CON(5)  (*)+5                            * 618E8  primitive code object
         GOSUB   popflag                          * 618ED
-        GONC    L_61907                          * 618F1
-        GOC     L_61903                          * 618F4
+        GONC    casedrop.L2                      * 618F1
+        GOC     casedrop.L1                      * 618F4
 
 * ob T -> :: <ob1> ; ob F -> :: ob <ob2> <rest> ;
 * refs (160): 0E561 0E57A 0E733 0EAEB 0EBC1 1090F ...
 casedrop:
         CON(5)  (*)+5                            * 618F7  primitive code object
         GOSUB   popflag                          * 618FC
-        GOC     L_61907                          * 61900
-L_61903:
-        GOTO    L_619A6                          * 61903
-L_61907:
+        GOC     casedrop.L2                      * 61900
+casedrop.L1:
+        GOTO    case.L4                          * 61903
+casedrop.L2:
         D1=D1+  5                                * 61907
         D=D+1   A                                * 6190A
-        GOTO    L_6199F                          * 6190C
+        GOTO    case.L3                          * 6190C
 
 * ob1 ob2 T -> :: ob1 ob2 <ob2> <rest> ; ob1 ob2 F -> :: <ob1> ;
 * refs (17): 0C20E 16E99 1A0A9 4BADF 6B2FF 6B6E1 ...
 NOTcase2drop:
         CON(5)  (*)+5                            * 61910  primitive code object
         GOSUB   popflag                          * 61915
-        GOC     L_61903                          * 61919
-        GONC    L_6192B                          * 6191C
+        GOC     casedrop.L1                      * 61919
+        GONC    case2drop.L1                     * 6191C
 
 * ob1 ob2 T -> :: <ob1> ; ob1 ob2 F -> :: ob1 ob2 <ob2> <rest> ;
 * refs (72): 17266 19F2D 19F4C 1A075 1A7A1 29476 ...
 case2drop:
         CON(5)  (*)+5                            * 6191F  primitive code object
         GOSUB   popflag                          * 61924
-        GONC    L_61903                          * 61928
-L_6192B:
+        GONC    casedrop.L1                      * 61928
+case2drop.L1:
         D1=D1+  5                                * 6192B
         D=D+1   A                                * 6192E
-        GONC    L_61907                          * 61930  always taken
+        GONC    casedrop.L2                      * 61930  always taken
 
 * ob1 ob1 -> :: ob1 <ob1> ; ob1 ob2 -> :: ob1 <ob2> <rest> ;
 * refs (7): 0F48E 169BE 169CD 41796 478AD 4C71A ...
@@ -1603,18 +1603,18 @@ EQcase:
         D1=D1+  5                                * 6193B
         D=D+1   A                                * 6193E
         C=DAT1  A                                * 61940
-L_61943:
+EQcase.L1:
         ?C=A    A                                * 61943
-        GOYES   L_6199F                          * 61946
-        GONC    L_619A6                          * 61948
+        GOYES   case.L3                          * 61946
+        GONC    case.L4                          * 61948
 
 * ob T -> :: ; ob F -> :: ob <ob1> <rest> ;
 * refs (91): 10941 145F5 1809C 18150 18715 18C68 ...
 caseDROP:
         CON(5)  (*)+5                            * 6194B  primitive code object
         GOSUB   popflag                          * 61950
-        GONC    L_6196C                          * 61954
-L_61957:
+        GONC    NOTcaseDROP.L1                   * 61954
+caseDROP.L1:
         D1=D1+  5                                * 61957
         D=D+1   A                                * 6195A
         GOTO    SEMILOOP                         * 6195C
@@ -1624,67 +1624,67 @@ L_61957:
 NOTcaseDROP:
         CON(5)  (*)+5                            * 61960  primitive code object
         GOSUB   popflag                          * 61965
-        GONC    L_61957                          * 61969
-L_6196C:
-        GOTO    L_61A4E                          * 6196C
+        GONC    caseDROP.L1                      * 61969
+NOTcaseDROP.L1:
+        GOTO    SEMILOOP.L1                      * 6196C
 
 * ob1 ob2 T -> :: ; ob1 ob2 F -> :: ob1 ob2 <ob1> <rest> ;
 * refs (24): 0F42A 0FBEC 0FCAF 107F7 10883 479B1 ...
 case2DROP:
         CON(5)  (*)+5                            * 61970  primitive code object
         GOSUB   popflag                          * 61975
-        GONC    L_6196C                          * 61979
-L_6197C:
+        GONC    NOTcaseDROP.L1                   * 61979
+case2DROP.L1:
         D1=D1+  5                                * 6197C
         D=D+1   A                                * 6197F
-        GONC    L_61957                          * 61981  always taken
+        GONC    caseDROP.L1                      * 61981  always taken
 
 * ob1 ob2 T -> :: ob1 ob2 <ob1> <rest> ; ob1 ob2 F -> :: ;
 * refs (22): 0941A 21D0D 34056 3FC2D 40EA6 42552 ...
 NOTcase2DROP:
         CON(5)  (*)+5                            * 61984  primitive code object
         GOSUB   popflag                          * 61989
-        GOC     L_6196C                          * 6198D
-        GONC    L_6197C                          * 61990
+        GOC     NOTcaseDROP.L1                   * 6198D
+        GONC    case2DROP.L1                     * 61990
 
 * T -> :: <ob1> ; F -> :: <ob2> <rest> ;
 * refs (697): 048B3 048C2 048DB 08FFD 09285 092DA ...
 case:
         CON(5)  (*)+5                            * 61993  primitive code object
-L_61998:
+case.L1:
         GOSUB   popflag                          * 61998
-L_6199C:
-        GONC    L_619A6                          * 6199C
-L_6199F:
-        GOVLNG  L_06FD6                          * 6199F
-L_619A6:
-        GOVLNG  L_07152                          * 619A6
+case.L2:
+        GONC    case.L4                          * 6199C
+case.L3:
+        GOVLNG  COLA.L1                          * 6199F
+case.L4:
+        GOVLNG  SKIP.L1                          * 619A6
 
 * T -> :: <ob2> <rest> ; F -> :: <ob1> ;
 * refs (519): 092B7 0937A 09845 0989A 0C686 0C785 ...
 NOTcase:
         CON(5)  (*)+5                            * 619AD  primitive code object
-L_619B2:
+NOTcase.L1:
         GOSUB   popflag                          * 619B2
-        GOC     L_619A6                          * 619B6
-        GONC    L_6199F                          * 619B9
+        GOC     case.L4                          * 619B6
+        GONC    case.L3                          * 619B9
 
 * T -> :: <ob1> <rest> ; F -> :: <ob2> <rest> ;
 * refs (447): 02228 0BB1C 0C83E 0C933 0CAE1 0DD21 ...
 IT:
         CON(5)  (*)+5                            * 619BC  primitive code object
         GOSUB   popflag                          * 619C1
-        GONC    L_619A6                          * 619C5
-        GOC     L_619D6                          * 619C8
+        GONC    case.L4                          * 619C5
+        GOC     GOTO.L2                          * 619C8
 
 * ->
 * refs (112): 0C76C 0F277 0F29F 0F2C2 0F2E5 0F308 ...
 GOTO:
         CON(5)  (*)+5                            * 619CB  primitive code object
-L_619D0:
+GOTO.L1:
         A=DAT0  A                                * 619D0
         D0=A                                     * 619D3
-L_619D6:
+GOTO.L2:
         A=DAT0  A                                * 619D6
         D0=D0+  5                                * 619D9
         PC=(A)                                   * 619DC
@@ -1694,18 +1694,18 @@ L_619D6:
 ?GOTO:
         CON(5)  (*)+5                            * 619E0  primitive code object
         GOSUB   popflag                          * 619E5
-        GOC     L_619D0                          * 619E9
-L_619EC:
+        GOC     GOTO.L1                          * 619E9
+?GOTO.L1:
         D0=D0+  5                                * 619EC
-        GOTO    L_61A4E                          * 619EF
+        GOTO    SEMILOOP.L1                      * 619EF
 
 * flag ->
 * refs (25): 0F231 0F986 0FF11 14A7D 16DE0 2DE4B ...
 NOT?GOTO:
         CON(5)  (*)+5                            * 619F3  primitive code object
         GOSUB   popflag                          * 619F8
-        GOC     L_619EC                          * 619FC
-        GONC    L_619D0                          * 619FF
+        GOC     ?GOTO.L1                         * 619FC
+        GONC    GOTO.L1                          * 619FF
 
 * Pop to A.A, if TRUE then set carry
 * refs (23): 31647 31656 618ED 618FC 61915 61924 ...
@@ -1725,7 +1725,7 @@ popflag:
         GOSBVL  POP#                             * 61A1D
         ?A=0    A                                * 61A24
         GOYES   SEMILOOP                         * 61A27
-        GONC    L_61A4E                          * 61A29
+        GONC    SEMILOOP.L1                      * 61A29
 
 * T -> :: <ob1> <rest> ; F -> :: ;
 * refs (193): 09460 0C816 0C861 0F227 0F245 0FE76 ...
@@ -1733,20 +1733,20 @@ NOT?SEMI:
         CON(5)  (*)+5                            * 61A2C  primitive code object
         GOSUB   popflag                          * 61A31
         GONC    SEMILOOP                         * 61A35
-        GOC     L_61A4E                          * 61A38
+        GOC     SEMILOOP.L1                      * 61A38
 
 * T -> :: ; F -> :: <ob1> <rest> ;
 * refs (328): 041B6 106E9 108FB 109C8 10A36 10ACC ...
 ?SEMI:
         CON(5)  (*)+5                            * 61A3B  primitive code object
         GOSUB   popflag                          * 61A40
-        GONC    L_61A4E                          * 61A44
+        GONC    SEMILOOP.L1                      * 61A44
 
 * ->
 * refs (3): 6195C 61A24 61A35
 SEMILOOP:
         GOVLNG  SEMILOOP~1                       * 61A47
-L_61A4E:
+SEMILOOP.L1:
         A=DAT0  A                                * 61A4E
         D0=D0+  5                                * 61A51
         PC=(A)                                   * 61A54
@@ -1756,10 +1756,10 @@ L_61A4E:
 ITE_DROP:
         CON(5)  (*)+5                            * 61A58  primitive code object
         GOSUB   popflag                          * 61A5D
-        GONC    L_61A4E                          * 61A61
+        GONC    SEMILOOP.L1                      * 61A61
         D1=D1+  5                                * 61A64
         D=D+1   A                                * 61A67
-        GOTO    L_619A6                          * 61A69
+        GOTO    case.L4                          * 61A69
 
 * Returns and evals first obj in previous stream.
 * refs (29): 1F76C 1F8C5 217BD 510A3 56D8D 57392 ...
@@ -1798,10 +1798,10 @@ COLARPITE:
         D=D+C   A                                * 61AC0
         LC(5)   TRUE                             * 61AC2
         ?C=A    A                                * 61AC9
-        GOYES   L_61AD0                          * 61ACC
-L_61ACE:
+        GOYES   COLARPITE.L2                     * 61ACC
+COLARPITE.L1:
         C=RSTK                                   * 61ACE
-L_61AD0:
+COLARPITE.L2:
         C=RSTK                                   * 61AD0
         A=C     A                                * 61AD2
         PC=(A)                                   * 61AD4
@@ -1813,7 +1813,7 @@ ITE:
         CD0EX                                    * 61ADD
         D0=C                                     * 61AE0
         RSTK=C                                   * 61AE3
-        GOTO    L_61B02                          * 61AE5
+        GOTO    2'RCOLARPITE.L1                  * 61AE5
 
 * Return to composite and ITE there.
 * refs (9): 62C37 63E6B 63E7F 63E93 63EA7 63EBB ...
@@ -1827,18 +1827,18 @@ ITE:
         CD0EX                                    * 61AFB
         B=C     A                                * 61AFE
         D=D+1   A                                * 61B00
-L_61B02:
+2'RCOLARPITE.L1:
         GOSBVL  SKIPOB                           * 61B02
         CD0EX                                    * 61B09
         RSTK=C                                   * 61B0C
         D0=C                                     * 61B0E
         GOSBVL  SKIPOB                           * 61B11
         GOSUB   popflag                          * 61B18
-        GONC    L_61B21                          * 61B1C
+        GONC    2'RCOLARPITE.L2                  * 61B1C
         C=RSTK                                   * 61B1F
-L_61B21:
+2'RCOLARPITE.L2:
         C=RSTK                                   * 61B21
-L_61B23:
+2'RCOLARPITE.L3:
         RSTK=C                                   * 61B23
         CD0EX                                    * 61B25
         A=DAT0  A                                * 61B28
@@ -1848,48 +1848,48 @@ L_61B23:
         RSTK=C                                   * 61B34
         LC(5)   PRLG                             * 61B36
         ?C#A    A                                * 61B3D
-        GOYES   L_61AD0                          * 61B40
-        GONC    L_61ACE                          * 61B42
+        GOYES   COLARPITE.L2                     * 61B40
+        GONC    COLARPITE.L1                     * 61B42
 
 * ->
 * refs (3): 1DDDD 1DDF1 1DDFB
 2@REVAL:
         CON(5)  (*)+5                            * 61B45  primitive code object
         LC(5)   #FFFF6                           * 61B4A
-        GOTO    L_61B61                          * 61B51
+        GOTO    3@REVAL.L1                       * 61B51
 
 * ->
 * refs (2): 2E6A0 3657F
 3@REVAL:
         CON(5)  (*)+5                            * 61B55  primitive code object
         LC(5)   #FFFF1                           * 61B5A
-L_61B61:
+3@REVAL.L1:
         C=C+B   A                                * 61B61
         CD0EX                                    * 61B63
         A=DAT0  A                                * 61B66
         D0=C                                     * 61B69
         C=A     A                                * 61B6C
-        GOTO    L_61B23                          * 61B6E
+        GOTO    2'RCOLARPITE.L3                  * 61B6E
 
 * ob T -> :: ob <ob1> <rest> ; ob F -> :: <ob1> <rest> ;
 * refs (2): 0BCE3 2FC22
 NOT?DROP:
         CON(5)  (*)+5                            * 61B72  primitive code object
         GOSUBL  popflag                          * 61B77
-        GOC     L_61B85                          * 61B7D
+        GOC     NOT?DROP.L1                      * 61B7D
         D1=D1+  5                                * 61B80
         D=D+1   A                                * 61B83
-L_61B85:
-        GOTO    L_61A4E                          * 61B85
+NOT?DROP.L1:
+        GOTO    SEMILOOP.L1                      * 61B85
 
 * -> ob T -> F
 * refs (15): 0F222 0F240 0F981 0FE71 145A6 14A14 ...
 ticR:
         CON(5)  (*)+5                            * 61B89  primitive code object
         D=D-1   A                                * 61B8E
-        GONC    L_61B99                          * 61B90
+        GONC    ticR.L1                          * 61B90
         GOSUBL  SafGarbD-1~jump                  * 61B93
-L_61B99:
+ticR.L1:
         C=B     A                                * 61B99
         CD0EX                                    * 61B9B
         RSTK=C                                   * 61B9E
@@ -1902,23 +1902,23 @@ L_61B99:
         A=DAT0  A                                * 61BB1
         LC(5)   SEMI                             * 61BB4
         ?C=A    A                                * 61BBB
-        GOYES   L_61C05                          * 61BBE
+        GOYES   ticR.L4                          * 61BBE
         D0=A                                     * 61BC0
         A=DAT0  A                                * 61BC3
         LC(5)   PRLG                             * 61BC6
         ?C=A    A                                * 61BCD
-        GOYES   L_61BE3                          * 61BD0
+        GOYES   ticR.L2                          * 61BD0
         AD0EX                                    * 61BD2
         DAT1=A  A                                * 61BD5
         C=RSTK                                   * 61BD8
         D0=C                                     * 61BDA
         D0=D0+  5                                * 61BDD
-        GONC    L_61BEF                          * 61BE0
-L_61BE3:
+        GONC    ticR.L3                          * 61BE0
+ticR.L2:
         C=RSTK                                   * 61BE3
         D0=C                                     * 61BE5
         GOSBVL  SKIPOB                           * 61BE8
-L_61BEF:
+ticR.L3:
         A=B     A                                * 61BEF
         AD0EX                                    * 61BF1
         D0=D0-  5                                * 61BF4
@@ -1926,7 +1926,7 @@ L_61BEF:
         C=RSTK                                   * 61BFA
         D0=C                                     * 61BFC
         GOLONG  PushTLoop                        * 61BFF
-L_61C05:
+ticR.L4:
         A=B     A                                * 61C05
         D0=A                                     * 61C07
         D0=D0-  5                                * 61C0A
@@ -1955,18 +1955,18 @@ EXPAND:
         C+P+1                                    * 61C47
         RSTK=C                                   * 61C4A
         ST=0    10                               * 61C4C
-L_61C4F:
+EXPAND.loop1:
         C=RSTK                                   * 61C4F
         RSTK=C                                   * 61C51
         GOSBVL  CREATETEMP                       * 61C53
-        GONC    L_61C99                          * 61C5A
+        GONC    EXPAND.L3                        * 61C5A
         ?ST=0   10                               * 61C5D
-        GOYES   L_61C70                          * 61C60
+        GOYES   EXPAND.L2                        * 61C60
         C=RSTK                                   * 61C62
         C=RSTK                                   * 61C64
         GOSUBL  GETPTR~jump_9                    * 61C66
-        GOTO    L_61DBD                          * 61C6C
-L_61C70:
+        GOTO    SUB_61D86.L2                     * 61C6C
+EXPAND.L2:
         ST=1    10                               * 61C70
         GOSUBL  GARBAGECOL~jump                  * 61C73
         GOSUBL  GETPTR~jump_9                    * 61C79
@@ -1980,8 +1980,8 @@ L_61C70:
         RSTK=C                                   * 61C8F
         C=A     A                                * 61C91
         RSTK=C                                   * 61C93
-        GOTO    L_61C4F                          * 61C95
-L_61C99:
+        GOTO    EXPAND.loop1                     * 61C95
+EXPAND.L3:
         C=RSTK                                   * 61C99
         B=C     A                                * 61C9B
         C=RSTK                                   * 61C9D
@@ -2035,7 +2035,7 @@ CACHE:
         CD1EX                                    * 61D2E
         C=C+A   A                                * 61D31
         D1=C                                     * 61D33
-        GOTO    L_61A4E                          * 61D36
+        GOTO    SEMILOOP.L1                      * 61D36
         RPL
 
 * refs (4): 14E8B 17D5A 61D4D 61F9E
@@ -2062,13 +2062,13 @@ SAVESTACK:
         D0=D0+  5                                * 61D79
         AD0EX                                    * 61D7C
         DAT1=A  A                                * 61D7F
-        GOTO    L_61F88                          * 61D82
+        GOTO    DUMP.L9                          * 61D82
 
 * refs (2): 61D0E 61D75
 SUB_61D86:
         R1=C                                     * 61D86
         ST=0    10                               * 61D89
-L_61D8C:
+SUB_61D86.loop1:
         C=C+1   A                                * 61D8C
         C=C+1   A                                * 61D8E
         B=C     A                                * 61D90
@@ -2078,16 +2078,16 @@ L_61D8C:
         B=B+B   A                                * 61D98
         GOSBVL  ROOM                             * 61D9A
         ?B<=C   A                                * 61DA1
-        GOYES   L_61DF3                          * 61DA4
+        GOYES   SUB_61D86.L4                     * 61DA4
         ?ST=0   10                               * 61DA6
-        GOYES   L_61DC4                          * 61DA9
+        GOYES   SUB_61D86.L3                     * 61DA9
         GOSUBL  GETPTR~jump_9                    * 61DAB
         ?ST=1   1                                * 61DB1
-        GOYES   L_61DBD                          * 61DB4
-        GOVLNG  L_10F2D                          * 61DB6
-L_61DBD:
+        GOYES   SUB_61D86.L2                     * 61DB4
+        GOVLNG  LIB001.L1                        * 61DB6
+SUB_61D86.L2:
         GOVLNG  DOMEMERR                         * 61DBD
-L_61DC4:
+SUB_61D86.L3:
         A=R2.F  A                                * 61DC4
         D0=(5)  OSAVE                            * 61DCA
         DAT0=A  A                                * 61DD1
@@ -2097,8 +2097,8 @@ L_61DC4:
         A=DAT0  A                                * 61DE4
         R2=A.F  A                                * 61DE7
         C=R1                                     * 61DED
-        GONC    L_61D8C                          * 61DF0
-L_61DF3:
+        GONC    SUB_61D86.loop1                  * 61DF0
+SUB_61D86.L4:
         C=B     A                                * 61DF3
         R0=C                                     * 61DF5
         D0=(5)  TEMPENV                          * 61DF8
@@ -2136,22 +2136,22 @@ L_61DF3:
         C=A     A                                * 61E6D
         D1=D1+  5                                * 61E6F
         A=A-1   A                                * 61E72
-        GOC     L_61E9B                          * 61E74
+        GOC     SUB_61D86.L7                     * 61E74
         DAT1=C  10                               * 61E77
         D1=D1+  10                               * 61E7B
         A=A-1   A                                * 61E7E
-        GOC     L_61E95                          * 61E80
-L_61E83:
+        GOC     SUB_61D86.L6                     * 61E80
+SUB_61D86.loop5:
         C=DAT0  A                                * 61E83
         DAT1=C  10                               * 61E86
         D1=D1+  10                               * 61E8A
         D0=D0+  5                                * 61E8D
         A=A-1   A                                * 61E90
-        GONC    L_61E83                          * 61E92
-L_61E95:
+        GONC    SUB_61D86.loop5                  * 61E92
+SUB_61D86.L6:
         C=DAT0  A                                * 61E95
         D0=D0+  5                                * 61E98
-L_61E9B:
+SUB_61D86.L7:
         DAT1=C  A                                * 61E9B
         D1=(5)  EDITLINE                         * 61E9E
         RTN                                      * 61EA5
@@ -2166,7 +2166,7 @@ DUMP:
         D=D+1   A                                * 61EB5
         GOSBVL  SAVPTR                           * 61EB7
         C=A     A                                * 61EBE
-L_61EC0:
+DUMP.L1:
         RSTK=C                                   * 61EC0
         GOSUBL  GARBAGECOL~jump                  * 61EC2
         C=RSTK                                   * 61EC8
@@ -2175,18 +2175,18 @@ L_61EC0:
         C=DAT0  A                                * 61ED3
         D0=C                                     * 61ED6
         A=0     M                                * 61ED9
-L_61EDC:
+DUMP.loop2:
         A=DAT0  A                                * 61EDC
         C=C+A   A                                * 61EDF
         B=C     A                                * 61EE1
         D0=D0+  10                               * 61EE3
         C=DAT0  A                                * 61EE6
         ?D=C    A                                * 61EE9
-        GOYES   L_61EF6                          * 61EEC
+        GOYES   DUMP.L3                          * 61EEC
         C=B     A                                * 61EEE
         D0=C                                     * 61EF0
-        GONC    L_61EDC                          * 61EF3
-L_61EF6:
+        GONC    DUMP.loop2                       * 61EF3
+DUMP.L3:
         ASRB                                     * 61EF6
         LC(5)   #00005                           * 61EF9
         A=A-C   A                                * 61F00
@@ -2195,25 +2195,25 @@ L_61EF6:
         B=C     A                                * 61F0C
         D1=(5)  DSKTOP                           * 61F0E
         ?ST=1   1                                * 61F15
-        GOYES   L_61F21                          * 61F18
+        GOYES   DUMP.L4                          * 61F18
         D1=(5)  EDITLINE                         * 61F1A
-L_61F21:
+DUMP.L4:
         C=DAT1  A                                * 61F21
         RSTK=C                                   * 61F24
         C=C-B   A                                * 61F26
         ?C>=A   A                                * 61F28
-        GOYES   L_61F33                          * 61F2B
-        GOLONG  L_61DBD                          * 61F2D
-L_61F33:
+        GOYES   DUMP.L5                          * 61F2B
+        GOLONG  SUB_61D86.L2                     * 61F2D
+DUMP.L5:
         C=RSTK                                   * 61F33
         C=C-A   A                                * 61F35
         D1=(5)  DSKTOP                           * 61F37
         ?ST=0   1                                * 61F3E
-        GOYES   L_61F4C                          * 61F41
+        GOYES   DUMP.L6                          * 61F41
         CD1EX                                    * 61F43
         D1=D1+  5                                * 61F46
         CD1EX                                    * 61F49
-L_61F4C:
+DUMP.L6:
         DAT1=C  A                                * 61F4C
         D1=C                                     * 61F4F
         D0=D0+  5                                * 61F52
@@ -2221,21 +2221,21 @@ L_61F4C:
         B=A     A                                * 61F58
         D0=D0+  10                               * 61F5A
         A=A-1   A                                * 61F5D
-        GOC     L_61F73                          * 61F5F
-L_61F62:
+        GOC     DUMP.L8                          * 61F5F
+DUMP.loop7:
         C=DAT0  A                                * 61F62
         DAT1=C  A                                * 61F65
         D0=D0+  10                               * 61F68
         D1=D1+  5                                * 61F6B
         A=A-1   A                                * 61F6E
-        GONC    L_61F62                          * 61F70
-L_61F73:
+        GONC    DUMP.loop7                       * 61F70
+DUMP.L8:
         GOSBVL  ADJMEM                           * 61F73
         ?ST=0   1                                * 61F7A
-        GOYES   L_61F88                          * 61F7D
+        GOYES   DUMP.L9                          * 61F7D
         A=B     A                                * 61F7F
         GOVLNG  PUSH#ALOOP                       * 61F81
-L_61F88:
+DUMP.L9:
         GOVLNG  GETPTRLOOP                       * 61F88
 
 * refs (1): 3DE59
@@ -2244,14 +2244,14 @@ OBJ_61F8F:
         GOSBVL  SAVPTR                           * 61F94
         ST=0    1                                * 61F9B
         LC(5)   SAVELAM                          * 61F9E
-        GOTO    L_61EC0                          * 61FA5
+        GOTO    DUMP.L1                          * 61FA5
 
 * ob -> ob flag
 * refs (9): 16AB3 1CDD9 24DC0 269C2 26A87 270C0 ...
 DUPROM-WORD?:
         CON(5)  (*)+5                            * 61FA9  primitive code object
         GOSUB   SAVPTR~jump_20                   * 61FAE
-        GOTO    L_61FC7                          * 61FB2
+        GOTO    ROM-WORD?.L1                     * 61FB2
 
 * ob -> flag
 * refs (4): 16E44 2FE0C 41502 72A02
@@ -2261,7 +2261,7 @@ ROM-WORD?:
         D=D+1   A                                * 61FBE
         GOSUB   SAVPTR~jump_20                   * 61FC0
         D1=D1-  5                                * 61FC4
-L_61FC7:
+ROM-WORD?.L1:
         GOSUB   Rom-Word?                        * 61FC7
         GOTO    GPPushT/FLp                      * 61FCB
 
@@ -2270,19 +2270,19 @@ Rom-Word?:
         A=DAT1  A                                * 61FCF
         LC(5)   CMOS                             * 61FD2
         ?C>A    A                                * 61FD9
-        GOYES   L_61FE2                          * 61FDC
-        GOTO    L_61FFF                          * 61FDE
-L_61FE2:
+        GOYES   Rom-Word?.L1                     * 61FDC
+        GOTO    Rom-Word?.L2                     * 61FDE
+Rom-Word?.L1:
         C=A     A                                * 61FE2
         RSTK=C                                   * 61FE4
         A=A-CON A,11                             * 61FE6
         GOSBVL  ROMPTR>ADDR                      * 61FEC
         C=RSTK                                   * 61FF3
         CAEX    A                                * 61FF5
-        GOC     L_61FFF                          * 61FF7
+        GOC     Rom-Word?.L2                     * 61FF7
         ?C=A    A                                * 61FFA
         RTNYES                                   * 61FFD
-L_61FFF:
+Rom-Word?.L2:
         RTNCC                                    * 61FFF
 
 * 1 2 3 4 -> 3 4 1 2
@@ -2295,7 +2295,7 @@ L_61FFF:
         DAT1=A  10                               * 62011
         D1=D1-  10                               * 62015
         DAT1=C  10                               * 62018
-        GOTO    L_62544                          * 6201C
+        GOTO    DROPZERO.L1                      * 6201C
 
 * ob -> ob flag
 * refs (11): 0F259 0FE94 35029 42D0F 68A26 6BE75 ...
@@ -2307,7 +2307,7 @@ DUPTYPECHAR?:
 TYPECHAR?:
         CON(5)  (*)+5                            * 62025  primitive code object
         LC(5)   DOCHAR                           * 6202A
-        GOTO    L_6205B                          * 62031
+        GOTO    TYPEEXT?.L1                      * 62031
 
 * ob -> ob flag
 * refs (35): 10001 147C6 1538E 153F2 15491 154AF ...
@@ -2319,7 +2319,7 @@ DUPTYPEIDNT?:
 TYPEIDNT?:
         CON(5)  (*)+5                            * 6203A  primitive code object
         LC(5)   DOIDNT                           * 6203F
-        GOTO    L_6205B                          * 62046
+        GOTO    TYPEEXT?.L1                      * 62046
 
 * ob -> ob flag
 * refs (22): 0FE49 0FF3E 0FFC5 1004C 10092 15540 ...
@@ -2331,11 +2331,11 @@ DUPTYPEEXT?:
 TYPEEXT?:
         CON(5)  (*)+5                            * 6204F  primitive code object
         LC(5)   DOEXT                            * 62054
-L_6205B:
+TYPEEXT?.L1:
         RSTK=C                                   * 6205B
         C=DAT1  A                                * 6205D
         CD1EX                                    * 62060
-L_62063:
+TYPEEXT?.L2:
         A=DAT1  A                                * 62063
         D1=C                                     * 62066
         C=RSTK                                   * 62069
@@ -2460,7 +2460,7 @@ DUPTYPELAM?:
 TYPELAM?:
         CON(5)  (*)+5                            * 6211A  primitive code object
         LC(5)   DOLAM                            * 6211F
-        GOTO    L_6205B                          * 62126
+        GOTO    TYPEEXT?.L1                      * 62126
 
 * ob -> ob flag
 * refs (32): 1A007 40049 40071 4009E 4E92E 4E94C ...
@@ -2472,7 +2472,7 @@ DUPTYPEBINT?:
 TYPEBINT?:
         CON(5)  (*)+5                            * 6212F  primitive code object
         LC(5)   DOBINT                           * 62134
-        GOTO    L_6205B                          * 6213B
+        GOTO    TYPEEXT?.L1                      * 6213B
 
 * ob -> ob flag
 DUPTYPEHSTR?:
@@ -2483,7 +2483,7 @@ DUPTYPEHSTR?:
 TYPEHSTR?:
         CON(5)  (*)+5                            * 62144  primitive code object
         LC(5)   DOHSTR                           * 62149
-        GOTO    L_6205B                          * 62150
+        GOTO    TYPEEXT?.L1                      * 62150
 
 * ob -> ob flag
 * refs (41): 0F24A 0FEEE 10239 10752 14097 2E664 ...
@@ -2495,7 +2495,7 @@ DUPTYPECSTR?:
 TYPECSTR?:
         CON(5)  (*)+5                            * 62159  primitive code object
         LC(5)   DOCSTR                           * 6215E
-        GOTO    L_6205B                          * 62165
+        GOTO    TYPEEXT?.L1                      * 62165
 
 * ob -> ob flag
 * refs (73): 0C690 0F22C 0FF1B 0FFA2 1DB65 1DF67 ...
@@ -2507,7 +2507,7 @@ DUPTYPEREAL?:
 TYPEREAL?:
         CON(5)  (*)+5                            * 6216E  primitive code object
         LC(5)   DOREAL                           * 62173
-        GOTO    L_6205B                          * 6217A
+        GOTO    TYPEEXT?.L1                      * 6217A
 
 * ob -> ob flag
 * refs (8): 0C726 4504C 450CE 458A2 45F76 45F8A ...
@@ -2519,7 +2519,7 @@ DUPTYPECMP?:
 TYPECMP?:
         CON(5)  (*)+5                            * 62183  primitive code object
         LC(5)   DOCMP                            * 62188
-        GOTO    L_6205B                          * 6218F
+        GOTO    TYPEEXT?.L1                      * 6218F
 
 * ob -> ob flag
 * refs (6): 193C6 4C580 63DA8 8D085 8D12A B4DB4
@@ -2531,7 +2531,7 @@ DUPTYPEARRY?:
 TYPEARRAY?:
         CON(5)  (*)+5                            * 62198  primitive code object
         LC(5)   DOARRY                           * 6219D
-        GOTO    L_6205B                          * 621A4
+        GOTO    TYPEEXT?.L1                      * 621A4
 
 * ob -> ob flag
 * refs (10): 10010 3A6B3 60E50 62B24 68AB7 6ACC1 ...
@@ -2543,7 +2543,7 @@ DUPTYPEROMP?:
 TYPEROMP?:
         CON(5)  (*)+5                            * 621AD  primitive code object
         LC(5)   DOROMP                           * 621B2
-        GOTO    L_6205B                          * 621B9
+        GOTO    TYPEEXT?.L1                      * 621B9
 
 * ob -> ob flag
 * refs (11): 093BB 09813 147E4 17AE0 185A9 20C3F ...
@@ -2555,7 +2555,7 @@ DUPTYPERRP?:
 TYPERRP?:
         CON(5)  (*)+5                            * 621C2  primitive code object
         LC(5)   DORRP                            * 621C7
-        GOTO    L_6205B                          * 621CE
+        GOTO    TYPEEXT?.L1                      * 621CE
 
 * ob -> ob flag
 * refs (19): 28B6E 34E67 49C5E 4AC07 4BCBA 5050F ...
@@ -2567,7 +2567,7 @@ DUPTYPESYMB?:
 TYPESYMB?:
         CON(5)  (*)+5                            * 621D7  primitive code object
         LC(5)   DOSYMB                           * 621DC
-        GOTO    L_6205B                          * 621E3
+        GOTO    TYPEEXT?.L1                      * 621E3
 
 * ob -> ob flag
 * refs (21): 1478F 15160 2593E 271D9 354C3 3F072 ...
@@ -2579,7 +2579,7 @@ DUPTYPECOL?:
 TYPECOL?:
         CON(5)  (*)+5                            * 621EC  primitive code object
         LC(5)   DOCOL                            * 621F1
-        GOTO    L_6205B                          * 621F8
+        GOTO    TYPEEXT?.L1                      * 621F8
 
 * ob -> ob flag
 * refs (4): 31D83 8BB14 C0B81 DCBE7
@@ -2591,7 +2591,7 @@ DUPTYPEGROB?:
 TYPEGROB?:
         CON(5)  (*)+5                            * 62201  primitive code object
         LC(5)   DOGROB                           * 62206
-        GOTO    L_6205B                          * 6220D
+        GOTO    TYPEEXT?.L1                      * 6220D
 
 * ob -> ob flag
 * refs (75): 14B31 15228 15246 15304 17441 19448 ...
@@ -2603,7 +2603,7 @@ DUPTYPELIST?:
 TYPELIST?:
         CON(5)  (*)+5                            * 62216  primitive code object
         LC(5)   DOLIST                           * 6221B
-        GOTO    L_6205B                          * 62222
+        GOTO    TYPEEXT?.L1                      * 62222
 
 * ob -> ob flag
 DUPTYPETAG?:
@@ -2614,36 +2614,36 @@ DUPTYPETAG?:
 TYPETAGGED?:
         CON(5)  (*)+5                            * 6222B  primitive code object
         LC(5)   DOTAG                            * 62230
-        GOTO    L_6205B                          * 62237
+        GOTO    TYPEEXT?.L1                      * 62237
 
 * ob -> flag
 * refs (28): 17865 194C5 1CDBB 1DCCD 35E5E 35F3A ...
 TYPERARRY?:
         CON(5)  (*)+5                            * 6223B  primitive code object
         LC(5)   DOREAL                           * 62240
-L_62247:
+TYPERARRY?.L1:
         RSTK=C                                   * 62247
         C=DAT1  A                                * 62249
         CD1EX                                    * 6224C
         D1=D1+  10                               * 6224F
-        GOTO    L_62063                          * 62252
+        GOTO    TYPEEXT?.L2                      * 62252
 
 * ob -> flag
 * refs (4): 194E3 363AE 8F195 8F309
 TYPECARRY?:
         CON(5)  (*)+5                            * 62256  primitive code object
         LC(5)   DOCMP                            * 6225B
-        GOTO    L_62247                          * 62262
+        GOTO    TYPERARRY?.L1                    * 62262
 
 * # -> # flag
 * refs (76): 09320 0B6AB 0E72E 106E4 108F6 127C0 ...
 DUP#0=:
         CON(5)  (*)+5                            * 62266  primitive code object
         GOSUB   SUB_62278                        * 6226B
-L_6226F:
+DUP#0=.L1:
         ?A=0    A                                * 6226F
-        GOYES   L_62274                          * 62272
-L_62274:
+        GOYES   DUP#0=.L2                        * 62272
+DUP#0=.L2:
         GOTO    PushT/FLoop                      * 62274
 
 * refs (5): 6130A 6226B 622CA 622D9 626FC
@@ -2661,25 +2661,25 @@ SUB_62278:
         CON(5)  (*)+5                            * 62289  primitive code object
         GOSUB   POP#~jump_4                      * 6228E
         A=A-1   A                                * 62292
-L_62294:
+#3=.L1:
         A=A-1   A                                * 62294
-        GOTO    L_622B0                          * 62296
+        GOTO    #1=.L1                           * 62296
 
 * # -> flag
 * refs (31): 1523C 368C2 3F92B 3F96C 3F9A8 467B6 ...
 #2=:
         CON(5)  (*)+5                            * 6229A  primitive code object
         GOSUB   POP#~jump_4                      * 6229F
-        GOTO    L_62294                          * 622A3
+        GOTO    #3=.L1                           * 622A3
 
 * # -> flag
 * refs (86): 093A7 0C668 152C3 1DD65 20C17 29458 ...
 #1=:
         CON(5)  (*)+5                            * 622A7  primitive code object
         GOSUB   POP#~jump_4                      * 622AC
-L_622B0:
+#1=.L1:
         A=A-1   A                                * 622B0
-        GOTO    L_6226F                          * 622B2
+        GOTO    DUP#0=.L1                        * 622B2
 
 * # -> flag
 * refs (20): 0C762 108D3 17BB3 1DB79 28B87 39CB6 ...
@@ -2687,7 +2687,7 @@ L_622B0:
         CON(5)  (*)+5                            * 622B6  primitive code object
         GOSUB   POP#~jump_4                      * 622BB
         A=A-1   A                                * 622BF
-        GOTO    L_622DD                          * 622C1
+        GOTO    DUP#0<>.L1                       * 622C1
 
 * # -> # flag
 * refs (28): 16EA3 25264 252D7 290C3 33111 3F7BE ...
@@ -2695,17 +2695,17 @@ DUP#1=:
         CON(5)  (*)+5                            * 622C5  primitive code object
         GOSUB   SUB_62278                        * 622CA
         A=A-1   A                                * 622CE
-        GOTO    L_6226F                          * 622D0
+        GOTO    DUP#0=.L1                        * 622D0
 
 * # -> # flag
 * refs (21): 1088D 1D31D 2B278 42F85 42FBC 42FEE ...
 DUP#0<>:
         CON(5)  (*)+5                            * 622D4  primitive code object
         GOSUB   SUB_62278                        * 622D9
-L_622DD:
+DUP#0<>.L1:
         ?A#0    A                                * 622DD
-        GOYES   L_62274                          * 622E0
-        GONC    L_62274                          * 622E2
+        GOYES   DUP#0=.L2                        * 622E0
+        GONC    DUP#0=.L2                        * 622E2
         RPL
 
 * $ $' -> $'+$
@@ -2738,14 +2738,14 @@ SWAP&$:
         CON(5)  (*)+5                            * 62394  primitive code object
         ASSEMBLE
         ST=1    3                                * 62399
-        GOTO    L_623A8                          * 6239C
+        GOTO    !!append$.L1                     * 6239C
 
 * $ $' -> $+$'
 * refs (14): 15D6A 15DE2 15E79 15ECE 2D979 2D983 ...
 !!append$:
         CON(5)  (*)+5                            * 623A0  primitive code object
         ST=0    3                                * 623A5
-L_623A8:
+!!append$.L1:
         GOSBVL  SAVPTR                           * 623A8
         ST=0    10                               * 623AF
         A=DAT1  A                                * 623B2
@@ -2755,26 +2755,26 @@ L_623A8:
         LC(5)   #00005                           * 623BE
         C=A-C   A                                * 623C5
         ?C=0    A                                * 623C7
-        GOYES   L_623F9                          * 623CA
-L_623CC:
+        GOYES   !!append$.L4                     * 623CA
+!!append$.loop2:
         D=C     A                                * 623CC
         GOSBVL  ROOM                             * 623CE
         DCEX    A                                * 623D5
         ?D>=C   A                                * 623D7
-        GOYES   L_623FD                          * 623DA
+        GOYES   !!append$.L5                     * 623DA
         ?ST=1   10                               * 623DC
-        GOYES   L_623EF                          * 623DF
+        GOYES   !!append$.L3                     * 623DF
         RSTK=C                                   * 623E1
         GOSUB   GARBAGECOL~jump                  * 623E3
         ST=1    10                               * 623E7
         C=RSTK                                   * 623EA
-        GONC    L_623CC                          * 623EC
-L_623EF:
+        GONC    !!append$.loop2                  * 623EC
+!!append$.L3:
         GOSUB   GETPTR~jump_9                    * 623EF
-        GOLONG  L_61DBD                          * 623F3
-L_623F9:
-        GOTO    L_62467                          * 623F9
-L_623FD:
+        GOLONG  SUB_61D86.L2                     * 623F3
+!!append$.L4:
+        GOTO    !!append$.L7                     * 623F9
+!!append$.L5:
         GOSUBL  D0=DSKTOP                        * 623FD
         D0=D0+  5                                * 62403
         A=DAT0  A                                * 62406
@@ -2795,11 +2795,11 @@ L_623FD:
         R0=A                                     * 6242D
         C=A     A                                * 62430
         ?ST=0   3                                * 62432
-        GOYES   L_6243F                          * 62435
+        GOYES   !!append$.L6                     * 62435
         A=B     A                                * 62437
         D0=A                                     * 62439
         D0=D0+  10                               * 6243C
-L_6243F:
+!!append$.L6:
         AD0EX                                    * 6243F
         GOSBVL  MOVERSU                          * 62442
         A=B     A                                * 62449
@@ -2810,11 +2810,11 @@ L_6243F:
         D0=D0+  10                               * 6245A
         C=R0                                     * 6245D
         GOSBVL  MOVEDOWN                         * 62460
-L_62467:
+!!append$.L7:
         GOSUB   GETPTR~jump_9                    * 62467
         D1=D1+  5                                * 6246B
         D=D+1   A                                * 6246E
-        GOTO    L_62544                          * 62470
+        GOTO    DROPZERO.L1                      * 62470
 
 * ->
 * refs (2): 2376D 5EA0E
@@ -2829,7 +2829,7 @@ L_62467:
         D0=(5)  LASTROMWDOB                      * 6248D
         DAT0=C  A                                * 62494
         D0=A                                     * 62497
-        GOTO    L_62544                          * 6249A
+        GOTO    DROPZERO.L1                      * 6249A
 
 * refs (10): 61C21 61CFC 6228E 6229F 622AC 622BB ...
 POP#~jump_4:
@@ -2852,34 +2852,34 @@ SAVPTR~jump_20:
 #MIN:
         CON(5)  (*)+5                            * 624BA  primitive code object
         ST=0    1                                * 624BF
-        GOTO    L_624CE                          * 624C2
+        GOTO    #MAX.L1                          * 624C2
 
 * # #' -> #''
 * refs (20): 43BCB 4415B 44D22 666AB 666BA 66992 ...
 #MAX:
         CON(5)  (*)+5                            * 624C6  primitive code object
         ST=1    1                                * 624CB
-L_624CE:
+#MAX.L1:
         GOSBVL  POP#                             * 624CE
         R0=A                                     * 624D5
         GOSBVL  POP#                             * 624D8
         GOSBVL  SAVPTR                           * 624DF
         C=R0                                     * 624E6
         ?C<A    A                                * 624E9
-        GOYES   L_624F0                          * 624EC
+        GOYES   #MAX.L2                          * 624EC
         CAEX    A                                * 624EE
-L_624F0:
+#MAX.L2:
         ?ST=1   1                                * 624F0
-        GOYES   L_62504                          * 624F3
+        GOYES   #-#2/.L1                         * 624F3
         A=C     A                                * 624F5
-        GOTO    L_62504                          * 624F7
+        GOTO    #-#2/.L1                         * 624F7
 
 * # #' -> (#-#')/2
 * refs (2): 4CF19 4CF28
 #-#2/:
         CON(5)  (*)+5                            * 624FB  primitive code object
         GOSUB   #-#2/~1                          * 62500
-L_62504:
+#-#2/.L1:
         GOVLNG  PUSH#ALOOP                       * 62504
 
 * refs (1): 62500
@@ -2899,7 +2899,7 @@ DROPZERO:
         CON(5)  (*)+5                            * 62535  primitive code object
         LC(5)   BINT0                            * 6253A
         DAT1=C  A                                * 62541
-L_62544:
+DROPZERO.L1:
         A=DAT0  A                                * 62544
         D0=D0+  5                                * 62547
         PC=(A)                                   * 6254A
@@ -2913,104 +2913,104 @@ L_62544:
         D1=D1+  5                                * 6255D
         DAT1=C  A                                * 62560
         D1=D1-  5                                * 62563
-        GOTO    L_62544                          * 62566
+        GOTO    DROPZERO.L1                      * 62566
 
 * # -> #+3
 * refs (59): 09804 0B5ED 10379 103A1 10496 10504 ...
 #3+:
         CON(5)  (*)+5                            * 6256A  primitive code object
         LC(5)   #00003                           * 6256F
-        GOTO    L_62636                          * 62576
+        GOTO    #6-.L1                           * 62576
 
 * # -> #+4
 * refs (17): 1034C 10955 27A2B 43A95 43B62 43BF3 ...
 #4+:
         CON(5)  (*)+5                            * 6257A  primitive code object
         LC(5)   #00004                           * 6257F
-        GOTO    L_62636                          * 62586
+        GOTO    #6-.L1                           * 62586
 
 * # -> #+5
 * refs (14): 0901B 104F0 2F432 3F59D 41102 41D4C ...
 #5+:
         CON(5)  (*)+5                            * 6258A  primitive code object
         LC(5)   #00005                           * 6258F
-        GOTO    L_62636                          * 62596
+        GOTO    #6-.L1                           * 62596
 
 * # -> #+6
 * refs (11): 65B73 66412 675E9 675FD 6D3DE 6D751 ...
 #6+:
         CON(5)  (*)+5                            * 6259A  primitive code object
         LC(5)   #00006                           * 6259F
-        GOTO    L_62636                          * 625A6
+        GOTO    #6-.L1                           * 625A6
 
 * # -> #+7
 * refs (10): BB668 BB6A0 BBA2E BBA43 BBFA1 BBFCA ...
 #7+:
         CON(5)  (*)+5                            * 625AA  primitive code object
         LC(5)   #00007                           * 625AF
-        GOTO    L_62636                          * 625B6
+        GOTO    #6-.L1                           * 625B6
 
 * # -> #+8
 * refs (12): 0E01A 0E105 1275C 65B41 6D936 8E992 ...
 #8+:
         CON(5)  (*)+5                            * 625BA  primitive code object
         LC(5)   #00008                           * 625BF
-        GOTO    L_62636                          * 625C6
+        GOTO    #6-.L1                           * 625C6
 
 * # -> #+9
 * refs (8): 65ADD 65F08 66110 66133 D9192 D92F2 ...
 #9+:
         CON(5)  (*)+5                            * 625CA  primitive code object
         LC(5)   #00009                           * 625CF
-        GOTO    L_62636                          * 625D6
+        GOTO    #6-.L1                           * 625D6
 
 * # -> #+10
 * refs (3): CE62A D9173 D9383
 #10+:
         CON(5)  (*)+5                            * 625DA  primitive code object
-        LC(5)   portnotaverr                     * 625DF
-        GOTO    L_62636                          * 625E6
+        LC(5)   portnotaverr                     * 625DF  "Port Not Available"
+        GOTO    #6-.L1                           * 625E6
 
 * # -> #+12
 * refs (16): 6CFE2 6D8C8 8D988 8DAD3 8E8FF 8E941 ...
 #12+:
         CON(5)  (*)+5                            * 625EA  primitive code object
         LC(5)   #0000C                           * 625EF
-        GOTO    L_62636                          * 625F6
+        GOTO    #6-.L1                           * 625F6
 
 * # -> #-3
 * refs (35): 102BB 10446 105DB 10621 1068F 106BC ...
 #3-:
         CON(5)  (*)+5                            * 625FA  primitive code object
         LC(5)   #FFFFD                           * 625FF
-        GOTO    L_62636                          * 62606
+        GOTO    #6-.L1                           * 62606
 
 * # -> #-4
 * refs (20): 1040F 105A9 32066 33049 43BD0 43C6B ...
 #4-:
         CON(5)  (*)+5                            * 6260A  primitive code object
         LC(5)   #FFFFC                           * 6260F
-        GOTO    L_62636                          * 62616
+        GOTO    #6-.L1                           * 62616
 
 * # -> #-5
 * refs (9): 10C09 64177 660A2 6C2F8 6D968 6DAD5 ...
 #5-:
         CON(5)  (*)+5                            * 6261A  primitive code object
         LC(5)   #FFFFB                           * 6261F
-        GOTO    L_62636                          * 62626
+        GOTO    #6-.L1                           * 62626
 
 * # -> #-6
 * refs (6): 41D29 65C63 D1394 D1C67 D7D0D D7DFE
 #6-:
         CON(5)  (*)+5                            * 6262A  primitive code object
         LC(5)   #FFFFA                           * 6262F
-L_62636:
+#6-.L1:
         RSTK=C                                   * 62636
         GOSBVL  POP#                             * 62638
         GOSBVL  SAVPTR                           * 6263F
         C=RSTK                                   * 62646
         A=A+C   A                                * 62648
-        GOTO    L_6266D                          * 6264A
+        GOTO    #10*.L2                          * 6264A
 
 * # -> #*10
 * refs (5): 13B7E 2E2D2 3A5B4 4420F D87E2
@@ -3023,9 +3023,9 @@ L_62636:
         A=A+A   A                                * 62665
         A=A+A   A                                * 62667
         C=C+C   A                                * 62669
-L_6266B:
+#10*.L1:
         A=A+C   A                                * 6266B
-L_6266D:
+#10*.L2:
         GOVLNG  PUSH#ALOOP                       * 6266D
 
 * # -> #*8
@@ -3037,7 +3037,7 @@ L_6266D:
         A=A+A   A                                * 62687
         A=A+A   A                                * 62689
         A=A+A   A                                * 6268B
-        GOTO    L_6266D                          * 6268D
+        GOTO    #10*.L2                          * 6268D
 
 * # -> #*6
 * refs (7): 13B6F 2F501 41157 416F6 41D24 44200 ...
@@ -3048,7 +3048,7 @@ L_6266D:
         A=A+A   A                                * 626A4
         C=A     A                                * 626A6
         A=A+A   A                                * 626A8
-        GOTO    L_6266B                          * 626AA
+        GOTO    #10*.L1                          * 626AA
 
 * Skips 5 objects, then does COLA.
 5skipcola:
@@ -3061,7 +3061,7 @@ L_6266D:
         GOSBVL  SKIPOB                           * 626C8
 skipcola~1:
         GOSBVL  SKIPOB                           * 626CF
-        GOLONG  L_6199F                          * 626D6
+        GOLONG  case.L3                          * 626D6
 
 * Does 3SKIP, then COLA.
 3skipcola:
@@ -3087,9 +3087,9 @@ DUP#2+:
         GOSUB   SUB_62278                        * 626FC
         A=A+1   A                                * 62700
         A=A+1   A                                * 62702
-L_62704:
+DUP#2+.L1:
         GOSUB   SAVPTR~jump_20                   * 62704
-        GOTO    L_627CE                          * 62708
+        GOTO    DUPLEN$.L1                       * 62708
 
 * 1 2 3 -> 2 1
 * refs (33): 09007 093F7 10441 17329 1DACF 1F457 ...
@@ -3100,7 +3100,7 @@ DROPSWAP:
         D1=D1+  10                               * 62717
         C=DAT1  A                                * 6271A
         D1=D1-  5                                * 6271D
-        GOLONG  L_6139A                          * 62720
+        GOLONG  DUPUNROT.L3                      * 62720
 
 * 1 2 3 -> 2
 * refs (43): 102B1 16E53 16FE3 291E4 2F6AF 2F795 ...
@@ -3111,44 +3111,44 @@ DROPSWAPDROP:
         D1=D1+  5                                * 6272F
         A=DAT1  A                                * 62732
         D1=D1+  5                                * 62735
-        GOLONG  L_6102F                          * 62738
-L_6273E:
+        GOLONG  6ROLL.L2                         * 62738
+DROPSWAPDROP.L1:
         GOSUBL  SafGarbD-1~jump                  * 6273E
-        GONC    L_62751                          * 62744  always taken
+        GONC    SWAPDUP.L1                       * 62744  always taken
 
 * 1 2 -> 2 1 1
 * refs (53): 0D30E 0E1E2 0E1EC 1561C 16C75 177D9 ...
 SWAPDUP:
         CON(5)  (*)+5                            * 62747  primitive code object
         D=D-1   A                                * 6274C
-        GOC     L_6273E                          * 6274E
-L_62751:
+        GOC     DROPSWAPDROP.L1                  * 6274E
+SWAPDUP.L1:
         A=DAT1  A                                * 62751
         D1=D1+  5                                * 62754
         C=DAT1  A                                * 62757
         DAT1=A  A                                * 6275A
-L_6275D:
+SWAPDUP.L2:
         D1=D1-  5                                * 6275D
         DAT1=C  A                                * 62760
         D1=D1-  5                                * 62763
-        GOLONG  L_610ED                          * 62766
-L_6276C:
+        GOLONG  5UNROLL.L1                       * 62766
+SWAPDUP.L3:
         GOSUBL  SafGarbD-1~jump                  * 6276C
-        GONC    L_6277F                          * 62772  always taken
+        GONC    ROTDUP.L1                        * 62772  always taken
 
 * 1 2 3 -> 2 3 1 1
 * refs (14): 092C6 0E466 17374 366E7 6FAEB 72341 ...
 ROTDUP:
         CON(5)  (*)+5                            * 62775  primitive code object
         D=D-1   A                                * 6277A
-        GOC     L_6276C                          * 6277C
-L_6277F:
+        GOC     SWAPDUP.L3                       * 6277C
+ROTDUP.L1:
         A=DAT1  10                               * 6277F
         D1=D1+  10                               * 62783
         C=DAT1  A                                * 62786
         D1=D1-  5                                * 62789
         DAT1=A  10                               * 6278C
-        GOTO    L_6275D                          * 62790
+        GOTO    SWAPDUP.L2                       * 62790
 
 * # #' -> #'-#
 * refs (31): 277DD 27EAE 29561 430FC 4E9EC 4EB8B ...
@@ -3157,7 +3157,7 @@ SWAP#-:
         GOSUBL  POP2#~jump_2                     * 62799
         CAEX    A                                * 6279F
         A=A-C   A                                * 627A1
-        GOTO    L_62704                          * 627A3
+        GOTO    DUP#2+.L1                        * 627A3
 
 * 1 2 -> 1 1
 * refs (39): 10432 10833 127CF 147EE 14A19 1F7AD ...
@@ -3166,7 +3166,7 @@ DROPDUP:
         D1=D1+  5                                * 627AC
         A=DAT1  A                                * 627AF
         D1=D1-  5                                * 627B2
-        GOLONG  L_6102F                          * 627B5
+        GOLONG  6ROLL.L2                         * 627B5
 
 * $ -> $ #
 * refs (35): 12775 16266 178BF 225FA 244AB 25637 ...
@@ -3175,7 +3175,7 @@ DUPLEN$:
         A=DAT1  A                                * 627C0
         GOSUB   SAVPTR~jump_20                   * 627C3
         GOSBVL  SUB_120CC                        * 627C7
-L_627CE:
+DUPLEN$.L1:
         GOVLNG  PUSH#ALOOP                       * 627CE
 
 * # #' -> #+#' #+#'
@@ -3184,7 +3184,7 @@ L_627CE:
         CON(5)  (*)+5                            * 627D5  primitive code object
         GOSUBL  POP2#~jump_2                     * 627DA
         A=A+C   A                                * 627E0
-L_627E2:
+#+DUP.L1:
         GOSUBL  SAVPTR~jump_20                   * 627E2
         R0=A                                     * 627E8
 
@@ -3199,7 +3199,7 @@ Push2#aLoop:
         CON(5)  (*)+5                            * 627F8  primitive code object
         GOSUBL  POP2#~jump_2                     * 627FD
         A=A-C   A                                * 62803
-        GOTO    L_627E2                          * 62805
+        GOTO    #+DUP.L1                         * 62805
 
 * # -> #+1 #+1
 * refs (26): 05313 109DC 10A27 17117 254CA 437FC ...
@@ -3207,7 +3207,7 @@ Push2#aLoop:
         CON(5)  (*)+5                            * 62809  primitive code object
         GOSUBL  POP#~jump_4                      * 6280E
         A=A+1   A                                * 62814
-        GOTO    L_627E2                          * 62816
+        GOTO    #+DUP.L1                         * 62816
 
 * # -> #-1 #-1
 * refs (15): 296AB 2D7B7 4AB80 4AC7A 4C9CE 5F99B ...
@@ -3215,7 +3215,7 @@ Push2#aLoop:
         CON(5)  (*)+5                            * 6281A  primitive code object
         GOSUB   POP#~jump_4                      * 6281F
         A=A-1   A                                * 62823
-        GOTO    L_627E2                          * 62825
+        GOTO    #+DUP.L1                         * 62825
 
 * refs (9): 620F0 62799 627DA 627FD 628A6 628C0 ...
 POP2#~jump_2:
@@ -3242,13 +3242,13 @@ SWAPDROPSWAP:
         D1=D1+  10                               * 62855
         A=DAT1  A                                * 62858
         DAT1=C  A                                * 6285B
-        GOLONG  L_6102C                          * 6285E
+        GOLONG  6ROLL.L1                         * 6285E
 
 * 1 2 3 4 -> 2 3 4
 * refs (34): 1D506 25081 2546B 25470 25510 25920 ...
 4ROLLDROP:
         CON(5)  (*)+5                            * 62864  primitive code object
-L_62869:
+4ROLLDROP.L1:
         D=D+1   A                                * 62869
         A=DAT1  15                               * 6286B
         D1=D1+  5                                * 6286F
@@ -3267,7 +3267,7 @@ L_62869:
         DAT1=A  A                                * 6288E
         D1=D1-  5                                * 62891
         D1=D1-  15                               * 62894
-        GOTO    L_62869                          * 62897
+        GOTO    4ROLLDROP.L1                     * 62897
 
 * # #' -> # #' flag
 * refs (12): 18C63 3A0AD 4111B 46CF2 46D4C 4DC8A ...
@@ -3276,8 +3276,8 @@ L_62869:
         GOSUBL  SAVPTR~jump_20                   * 628A0
         GOSUBL  POP2#~jump_2                     * 628A6
         ?C>A    A                                * 628AC
-        GOYES   L_628CB                          * 628AF
-        GOTO    L_628CB                          * 628B1
+        GOYES   2DUP#=.L1                        * 628AF
+        GOTO    2DUP#=.L1                        * 628B1
 
 * # #' -> # #' flag
 * refs (23): 3A152 43BB2 6A28F 6A4BF 6A5AF 7CF22 ...
@@ -3286,8 +3286,8 @@ L_62869:
         GOSUBL  SAVPTR~jump_20                   * 628BA
         GOSUBL  POP2#~jump_2                     * 628C0
         ?C=A    A                                * 628C6
-        GOYES   L_628CB                          * 628C9
-L_628CB:
+        GOYES   2DUP#=.L1                        * 628C9
+2DUP#=.L1:
         GOLONG  GPPushT/FLp                      * 628CB
 
 * # #' -> # #' flag
@@ -3297,8 +3297,8 @@ L_628CB:
         GOSUBL  SAVPTR~jump_20                   * 628D6
         GOSUBL  POP2#~jump_2                     * 628DC
         ?C<A    A                                * 628E2
-        GOYES   L_628CB                          * 628E5
-        GOTO    L_628CB                          * 628E7
+        GOYES   2DUP#=.L1                        * 628E5
+        GOTO    2DUP#=.L1                        * 628E7
 
 * # -> # #+1
 * refs (40): 0F99A 272AA 27C5B 35083 36575 3A50F ...
@@ -3307,8 +3307,8 @@ DUP#1+:
         GOSUBL  SAVPTR~jump_20                   * 628F0
         GOSUBL  POP#~jump_4                      * 628F6
         A=A+1   A                                * 628FC
-L_628FE:
-        GOLONG  L_6266D                          * 628FE
+DUP#1+.L1:
+        GOLONG  #10*.L2                          * 628FE
 
 * # ob -> ob #+1
 * refs (84): 08E42 0F12E 10720 10784 107BB 10829 ...
@@ -3325,7 +3325,7 @@ SWAP#1+:
         A=DAT1  A                                * 62923
         D1=C                                     * 62926
         A=A+1   A                                * 62929
-        GOTO    L_628FE                          * 6292B
+        GOTO    DUP#1+.L1                        * 6292B
 
 * # -> # #-1
 * refs (28): 1F484 1F605 41143 5961E 65D37 6602F ...
@@ -3334,14 +3334,14 @@ DUP#1-:
         GOSUBL  SAVPTR~jump_20                   * 62934
         GOSUBL  POP#~jump_4                      * 6293A
         A=A-1   A                                * 62940
-        GOTO    L_628FE                          * 62942
+        GOTO    DUP#1+.L1                        * 62942
 
 * ob -> #1
 * refs (25): 27643 416E7 43C4D 4B77E 4B7A6 4D9C0 ...
 DROPONE:
         CON(5)  (*)+5                            * 62946  primitive code object
         LC(5)   BINT1                            * 6294B
-        GOLONG  L_610ED                          * 62952
+        GOLONG  5UNROLL.L1                       * 62952
 
 * ->
 * refs (18): 2156A 24A7E 275D0 283C9 56ABA 57BE0 ...
@@ -3349,8 +3349,8 @@ RDROPCOLA:
         CON(5)  (*)+5                            * 62958  primitive code object
         LC(5)   #00005                           * 6295D
         B=B-C   A                                * 62964
-L_62966:
-        GOVLNG  L_06FD6                          * 62966
+RDROPCOLA.L1:
+        GOVLNG  COLA.L1                          * 62966
 
 * Drops rest of current stream does COLA in the above one.
 * refs (10): 0BE05 21E64 237E9 26338 2858F 5EA95 ...
@@ -3362,7 +3362,7 @@ COLACOLA:
         A=DAT0  A                                * 6297A
         AD0EX                                    * 6297D
         B=A     A                                * 62980
-        GOTO    L_62966                          * 62982
+        GOTO    RDROPCOLA.L1                     * 62982
 
 * T -> :: <ob1> ; F -> :: <ob2> <rest> ;
 * refs (26): 21642 5F131 5F14A 5F195 5F1B3 5F1FE ...
@@ -3374,7 +3374,7 @@ COLAcase:
         A=DAT0  A                                * 62993
         AD0EX                                    * 62996
         B=A     A                                * 62999
-        GOLONG  L_61998                          * 6299B
+        GOLONG  case.L1                          * 6299B
 
 * T -> :: <ob2> <rest> ; F -> :: <ob1> ;
 * refs (6): 1B708 2920C 63DE9 63DFD 63E11 63E25
@@ -3386,7 +3386,7 @@ COLANOTcase:
         A=DAT0  A                                * 629AE
         AD0EX                                    * 629B1
         B=A     A                                * 629B4
-        GOLONG  L_619B2                          * 629B6
+        GOLONG  NOTcase.L1                       * 629B6
         RPL
 
 * f1 f2 -> :: <ob1> ; f1 f2 -> :: <ob2> <rest> ;

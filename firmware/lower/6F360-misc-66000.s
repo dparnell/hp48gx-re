@@ -18,7 +18,7 @@ OBJ_6F36A:
 OBJ_6F3C4:
           :: DUP OBJ_67E54 INNERCOMP ROT #1-UNROT {}N OBJ_67F31 ; SWAPDROP * 6F3C4
           case OBJ_6F41E                         * 6F3F6
-          GOTO L_6F338 ;                         * 6F400
+          GOTO OBJ_6F315.L1 ;                    * 6F400
 
 * refs (1): 4B8C8
 OBJ_6F40F:
@@ -27,7 +27,7 @@ OBJ_6F40F:
 * refs (6): 6F130 6F162 6F1DA 6F306 6F3FB 6F496
 OBJ_6F41E:
           :: OBJ_6F36A                           * 6F41E
-L_6F428:
+OBJ_6F41E.L1:
             DUP                                  * 6F428
 
 * refs (9): 65D87 65EE5 661C9 66593 665AC 6B7E0 ...
@@ -40,7 +40,7 @@ OBJ_6F42D:
 * refs (4): 65E22 6F2C0 6F310 6F54A
 OBJ_6F46E:
           :: OVERSWAP #2- OBJ_67F0B ; SWAP BINT4 #<>case OBJ_6F41E * 6F46E
-          OBJ_67E64 EqwBoxSecond@ GOTO L_6F428 ; * 6F49B
+          OBJ_67E64 EqwBoxSecond@ GOTO OBJ_6F41E.L1 ; * 6F49B
 
 * refs (1): 6E3ED
 OBJ_6F4B4:
@@ -113,15 +113,15 @@ OBJ_6F71B:
 * refs (1): 4B4A5
 OBJ_6F810:
         :: OBJ_6F595                             * 6F810
-L_6F81A:
+OBJ_6F810.loop1:
           #1= FALSE OBJ_6F621 NOTcase OBJ_6F608  * 6F81A
           OBJ_6F883 OBJ_6F5E5 casedrop OBJ_6F608 * 6F833
-          OBJ_679D7 GOTO L_6F81A ;               * 6F847
+          OBJ_679D7 GOTO OBJ_6F810.loop1 ;       * 6F847
 
 * refs (1): 4B4C3
 OBJ_6F85B:
         :: OBJ_6F595 #1<> TRUE                   * 6F85B
-L_6F86F:
+OBJ_6F85B.L1:
           OBJ_6F621 NOTcase OBJ_6F608            * 6F86F
 
 * refs (1): 6F98C
@@ -130,24 +130,25 @@ OBJ_6F87E:
 
 * refs (2): 461AF 6F833
 OBJ_6F883:
-            :: DUP OBJ_6AAB9 NOT?GOTO L_6F8D8 OBJ_67B12 OBJ_6B381 OBJ_6AC80 * 6F883
+            :: DUP OBJ_6AAB9 NOT?GOTO OBJ_6F8AB.L1 OBJ_67B12 OBJ_6B381 * 6F883
+              OBJ_6AC80                          * 6F8A6
 
 * refs (1): 689E0
 OBJ_6F8AB:
               :: DUP OBJ_2846E EQ SWAP OBJ_2845A EQOR ; NOT?SEMI * 6F8AB
-L_6F8D8:
+OBJ_6F8AB.L1:
               RDROP OBJ_6FACC ;                  * 6F8D8
             OBJ_67B17 OBJ_6B39F OBJ_6FACC ;      * 6F8E7
         ;                                        * 6F8FB
 
 * refs (1): 6B407
 OBJ_6F900:
-        :: OBJ_6F595 TRUE GOTO L_6F92D ;         * 6F900
+        :: OBJ_6F595 TRUE GOTO OBJ_6F91E.L1 ;    * 6F900
 
 * refs (1): 6B3F9
 OBJ_6F91E:
         :: OBJ_6F595 FALSE                       * 6F91E
-L_6F92D:
+OBJ_6F91E.L1:
           3UNROLL #1<> 3PICK OBJ_6F621 NOTcasedrop OBJ_6F608 * 6F92D
           BEGIN DUP OBJ_6F5E5 case2drpfls OBJ_679D7 * 6F94B
           #1<> 4PICK OBJ_6F621 DUP IT ROTDROP    * 6F964
@@ -210,43 +211,43 @@ OBJ_6FD85:
         CON(5)  (*)+5                            * 6FD85  primitive code object
         ASSEMBLE
         LC(5)   BINT2                            * 6FD8A
-L_6FD91:
+OBJ_6FD85.L1:
         A=DAT1  A                                * 6FD91
         ?C=A    A                                * 6FD94
-        GOYES   L_6FDA6                          * 6FD97
+        GOYES   OBJ_6FD85.L3                     * 6FD97
         LC(5)   SKIP                             * 6FD99
-L_6FDA0:
+OBJ_6FD85.loop2:
         A=C     A                                * 6FDA0
         PC=(A)                                   * 6FDA2
-L_6FDA6:
+OBJ_6FD85.L3:
         D1=D1+  5                                * 6FDA6
         D=D+1   A                                * 6FDA9
         LC(5)   COLA                             * 6FDAB
-        GOTO    L_6FDA0                          * 6FDB2
+        GOTO    OBJ_6FD85.loop2                  * 6FDB2
 
 * refs (7): 65CA9 661D8 6E17C 6E19A 6E393 6E3CA ...
 OBJ_6FDB6:
         CON(5)  (*)+5                            * 6FDB6  primitive code object
         LC(5)   BINT4                            * 6FDBB
-        GOTO    L_6FD91                          * 6FDC2
+        GOTO    OBJ_6FD85.L1                     * 6FDC2
 
 * refs (7): 44C50 65CB3 661E2 6D48D 6E1A4 6E39D ...
 OBJ_6FDC6:
         CON(5)  (*)+5                            * 6FDC6  primitive code object
         LC(5)   BINT6                            * 6FDCB
-        GOTO    L_6FD91                          * 6FDD2
+        GOTO    OBJ_6FD85.L1                     * 6FDD2
 
 * refs (3): 6A888 6A8A6 6A8B5
 OBJ_6FDD6:
         CON(5)  (*)+5                            * 6FDD6  primitive code object
         ST=1    0                                * 6FDDB
-        GOTO    L_6FDEA                          * 6FDDE
+        GOTO    OBJ_6FDE2.L1                     * 6FDDE
 
 * refs (1): 6E32A
 OBJ_6FDE2:
         CON(5)  (*)+5                            * 6FDE2  primitive code object
         ST=0    0                                * 6FDE7
-L_6FDEA:
+OBJ_6FDE2.L1:
         C=DAT0  A                                * 6FDEA
         D0=D0+  5                                * 6FDED
         RSTK=C                                   * 6FDF0
@@ -258,23 +259,23 @@ L_6FDEA:
         C=DAT1  B                                * 6FE08
         C=C-1   B                                * 6FE0B
         D1=D1+  2                                * 6FE0E
-L_6FE11:
+OBJ_6FDE2.loop2:
         A=DAT1  B                                * 6FE11
         ?A=B    B                                * 6FE14
-        GOYES   L_6FE3B                          * 6FE17
+        GOYES   OBJ_6FDE2.L4                     * 6FE17
         D1=D1+  7                                * 6FE19
         C=C-1   B                                * 6FE1C
-        GONC    L_6FE11                          * 6FE1F
+        GONC    OBJ_6FDE2.loop2                  * 6FE1F
         ?ST=1   0                                * 6FE22
-        GOYES   L_6FE2E                          * 6FE25
+        GOYES   OBJ_6FDE2.L3                     * 6FE25
         GOVLNG  GETPTRFALSE                      * 6FE27
-L_6FE2E:
+OBJ_6FDE2.L3:
         LA(5)   DoBadKey                         * 6FE2E
-        GOC     L_6FE41                          * 6FE38
-L_6FE3B:
+        GOC     OBJ_6FDE2.L5                     * 6FE38
+OBJ_6FDE2.L4:
         D1=D1+  2                                * 6FE3B
         A=DAT1  A                                * 6FE3E
-L_6FE41:
+OBJ_6FDE2.L5:
         GOSBVL  GETPTR                           * 6FE41
         D1=D1-  5                                * 6FE48
         DAT1=A  A                                * 6FE4B
@@ -318,7 +319,7 @@ OBJ_6FEE1:
             OBJ_2708E DROP BINT4 NTHCOMPDROP ;   * 6FF5E
           EVAL ;                                 * 6FF77
         ASSEMBLE
-L_6FF81:
+OBJ_6FEE1.L1:
         A=A-1   S                                * 6FF81
         RTNC                                     * 6FF84
         A=A-1   S                                * 6FF87
@@ -327,16 +328,16 @@ L_6FF81:
         LC(1)   #7                               * 6FF8F
         P=      0                                * 6FF92
         A=A-C   S                                * 6FF94
-        GOC     L_6FFB5                          * 6FF97
+        GOC     OBJ_6FEE1.L3                     * 6FF97
         D1=(5)  #8084F                           * 6FF9A
         A=DAT1  1                                * 6FFA1
         ?ABIT=0 2                                * 6FFA5
-        GOYES   L_6FFAF                          * 6FFAA
+        GOYES   OBJ_6FEE1.L2                     * 6FFAA
         A=A-1   S                                * 6FFAC
-L_6FFAF:
+OBJ_6FEE1.L2:
         A=A-1   S                                * 6FFAF
         RTNC                                     * 6FFB2
-L_6FFB5:
+OBJ_6FEE1.L3:
         RTNCC                                    * 6FFB5
         RPL
 

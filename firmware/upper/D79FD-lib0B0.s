@@ -275,7 +275,7 @@ ROMP_0B0_08D:
 * refs (1): D49CE
 ROMP_0B0_08E:
         :: EDITDECOMP$ InitEdLine EditString OBJ_3A030 SetPrgmEntry * D85DF
-          SetDA2bValid # B914 ' ROMPTR 0B0 08F ROMPTR 0B0 092 OBJ_1A03E case * D85FD
+          SetDA2bValid # B914 ' ROMPTR 0B0 08F ROMPTR 0B0 092 OBJ_1A03E case * D85FD  "Invalid object type"
           SetDA2bEdit                            * D8631
           5GETLAM ROMPTR 0B0 032 SetDA2bEdit ;   * D8636
 
@@ -296,7 +296,7 @@ ROMP_0B0_08F:
 * refs (1): D49CE
 ROMP_0B0_090:
         :: EDITDECOMP$ InitEdLine EditString OBJ_3A030 SetPrgmEntry * D86EC
-          SetDA2bValid # B915 ROMPTR 0B0 091 SetDA2bEdit OBJ_1A03E ; * D870A  DoAlert
+          SetDA2bValid # B915 ROMPTR 0B0 091 SetDA2bEdit OBJ_1A03E ; * D870A  DoAlert  "Invalid object value"
 
 * ROMPTR 0B0 091
 * refs (1): D49CE
@@ -740,8 +740,8 @@ LIB0B0.hash:
         CON(5)  0                                * D95DB  names of length 14
         CON(5)  0                                * D95E0  names of length 15
         CON(5)  0                                * D95E5  names of length 16
-        REL(5)  L_D95EF                          * D95EA  end of the names
-L_D95EF:
+        REL(5)  LIB0B0.hash.L1                   * D95EA  end of the names
+LIB0B0.hash.L1:
         CON(5)  0                                * D95EF  command 000 has no name
         ENDLENGTH                                * D95F4
 

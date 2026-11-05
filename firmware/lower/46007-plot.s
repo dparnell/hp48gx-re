@@ -48,9 +48,9 @@ OBJ_46152:
 * refs (1): 4B4E1
 OBJ_4618C:
         :: OBJ_6F595                             * 4618C
-L_46196:
+OBJ_4618C.loop1:
           #1= TRUE OBJ_6F621 NOTcase OBJ_6F608   * 46196
-          OBJ_6F883 EqwDupBoxParent@ OBJ_679D7 GOTO L_46196 ; * 461AF
+          OBJ_6F883 EqwDupBoxParent@ OBJ_679D7 GOTO OBJ_4618C.loop1 ; * 461AF
 
 * refs (2): 6B482 6F59F
 OBJ_461CD:
@@ -436,8 +436,8 @@ dup;Vector*­Rcl(nm)?:
         :: dup;RclInVars(gn)? NOTcaseFALSE OVER  * 4737D
           'EQ EQUALcase                          * 47391
           :: OBJ_473E6 OVER EQUALcase TRUE       * 4739B
-            GOTO L_473C3 ;                       * 473B4
-L_473C3:
+            GOTO dup;Vector*­Rcl(nm)?.L1 ;       * 473B4
+dup;Vector*­Rcl(nm)?.L1:
           DUPTYPEIDNT? NOTcaseTRUE DUPSAFE@      * 473C3
           IT ROTDROP                             * 473D2
           TRUE ;                                 * 473DC
@@ -675,7 +675,7 @@ xDEPND~real:
 
 * refs (1): 47899
 FastCat?:
-        :: BINT59 TestSysFlag ;                  * 47AB0
+        :: BINT59 TestSysFlag ;                  * 47AB0  flag -59: Show variables / Show names only
 
 * refs (1): 47E19
 OBJ_47AC4:

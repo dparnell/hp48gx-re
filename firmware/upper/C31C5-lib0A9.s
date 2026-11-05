@@ -1694,8 +1694,8 @@ LIB0A9.hash:
         CON(5)  0                                * C4BAE  names of length 14
         CON(5)  0                                * C4BB3  names of length 15
         CON(5)  0                                * C4BB8  names of length 16
-        REL(5)  L_C4BC2                          * C4BBD  end of the names
-L_C4BC2:
+        REL(5)  LIB0A9.hash.L1                   * C4BBD  end of the names
+LIB0A9.hash.L1:
         CON(5)  0                                * C4BC2  command 000 has no name
         ENDLENGTH                                * C4BC7
 

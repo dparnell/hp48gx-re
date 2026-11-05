@@ -172,7 +172,7 @@ ROMP_0B5_01B:
 * ROMPTR 0B5 01C
 * refs (1): B4B39
 ROMP_0B5_01C:
-        :: ROMPTR 0B5 025 BINT14 SysITE BINT1 BINT2 NTHCOMPDROP ; * B501C
+        :: ROMPTR 0B5 025 BINT14 SysITE BINT1 BINT2 NTHCOMPDROP ; * B501C  flag -14: Payment at end / Payment at begin
 
 * ROMPTR 0B5 01D
 * refs (1): B4B39
@@ -227,12 +227,12 @@ ROMP_0B5_025:
 * ROMPTR 0B5 026
 * refs (1): B4B39
 ROMP_0B5_026:
-        { # BF4C # BF4D TRUE }                   * B5231
+        { # BF4C # BF4D TRUE }                   * B5231  "Begin"  "Beg"
 
 * ROMPTR 0B5 027
 * refs (1): B4B39
 ROMP_0B5_027:
-        { # BF4B # BF4B FALSE }                  * B5254
+        { # BF4B # BF4B FALSE }                  * B5254  "End"  "End"
 
 * ROMPTR 0B5 028
 * refs (1): B4B39
@@ -428,97 +428,97 @@ ROMP_0B5_050:
 * ROMPTR 0B5 051
 * refs (1): B4B39
 ROMP_0B5_051:
-        { # BE69                                 * B5999
+        { # BE69                                 * B5999  "Function"
           :: 'IDFUNCTION PUTPTYPE ; }            * B59A8
 
 * ROMPTR 0B5 052
 * refs (1): B4B39
 ROMP_0B5_052:
-        { # BE6A                                 * B59C1
+        { # BE6A                                 * B59C1  "Polar"
           :: 'IDPOLAR PUTPTYPE ; }               * B59D0
 
 * ROMPTR 0B5 053
 * refs (1): B4B39
 ROMP_0B5_053:
-        { # BE6B                                 * B59E9
+        { # BE6B                                 * B59E9  "Conic"
           :: 'IDCONIC PUTPTYPE ; }               * B59F8
 
 * ROMPTR 0B5 054
 * refs (1): B4B39
 ROMP_0B5_054:
-        { # BE6C                                 * B5A11
+        { # BE6C                                 * B5A11  "Truth"
           :: 'IDTRUTH PUTPTYPE ; }               * B5A20
 
 * ROMPTR 0B5 055
 * refs (1): B4B39
 ROMP_0B5_055:
-        { # BE6D                                 * B5A39
+        { # BE6D                                 * B5A39  "Parametric"
           :: 'IDPARAMETER PUTPTYPE ; }           * B5A48
 
 * ROMPTR 0B5 056
 * refs (1): B4B39
 ROMP_0B5_056:
-        { # BE6E                                 * B5A61
+        { # BE6E                                 * B5A61  "Diff Eq"
           :: ' ROMPTR 0AB 00E PUTPTYPE ; }       * B5A70  DIFFEQ
 
 * ROMPTR 0B5 057
 * refs (1): B4B39
 ROMP_0B5_057:
-        { # BE6F                                 * B5A94
+        { # BE6F                                 * B5A94  "Histogram"
           :: 'IDHISTOGRAM PUTPTYPE ; }           * B5AA3
 
 * ROMPTR 0B5 058
 * refs (1): B4B39
 ROMP_0B5_058:
-        { # BE70                                 * B5ABC
+        { # BE70                                 * B5ABC  "Bar"
           :: 'IDBAR PUTPTYPE ; }                 * B5ACB
 
 * ROMPTR 0B5 059
 * refs (1): B4B39
 ROMP_0B5_059:
-        { # BE71                                 * B5AE4
+        { # BE71                                 * B5AE4  "Scatter"
           :: 'IDSCATTER PUTPTYPE ; }             * B5AF3
 
 * ROMPTR 0B5 05A
 * refs (1): B4B39
 ROMP_0B5_05A:
-        { # BE72                                 * B5B0C
+        { # BE72                                 * B5B0C  "Slopefield"
           :: ' ROMPTR 0AB 00C PUTPTYPE ; }       * B5B1B  SLOPEFIELD
 
 * ROMPTR 0B5 05B
 * refs (1): B4B39
 ROMP_0B5_05B:
-        { # BE73                                 * B5B3F
+        { # BE73                                 * B5B3F  "Wireframe"
           :: ' ROMPTR 0AB 008 PUTPTYPE ; }       * B5B4E  WIREFRAME
 
 * ROMPTR 0B5 05C
 * refs (1): B4B39
 ROMP_0B5_05C:
-        { # BE74                                 * B5B72
+        { # BE74                                 * B5B72  "Ps-Contour"
           :: ' ROMPTR 0AB 00D PUTPTYPE ; }       * B5B81  PCONTOUR
 
 * ROMPTR 0B5 05D
 * refs (1): B4B39
 ROMP_0B5_05D:
-        { # BE75                                 * B5BA5
+        { # BE75                                 * B5BA5  "Y-Slice"
           :: ' ROMPTR 0AB 00B PUTPTYPE ; }       * B5BB4  YSLICE
 
 * ROMPTR 0B5 05E
 * refs (1): B4B39
 ROMP_0B5_05E:
-        { # BE76                                 * B5BD8
+        { # BE76                                 * B5BD8  "Gridmap"
           :: ' ROMPTR 0AB 00A PUTPTYPE ; }       * B5BE7  GRIDMAP
 
 * ROMPTR 0B5 05F
 * refs (1): B4B39
 ROMP_0B5_05F:
-        { # BE77                                 * B5C0B
+        { # BE77                                 * B5C0B  "Pr-Surface"
           :: ' ROMPTR 0AB 009 PUTPTYPE ; }       * B5C1A  PARSURFACE
 
 * ROMPTR 0B5 060
 * refs (1): B4B39
 ~BINT31;TestSysFlag;NOT:
-        :: BINT31 TestSysFlag NOT ;              * B5C3E
+        :: BINT31 TestSysFlag NOT ;              * B5C3E  flag -31: Connect points / Plot points only
 
 * ROMPTR 0B5 061
 * refs (1): B4B39
@@ -529,7 +529,7 @@ ROMP_0B5_061:
 * ROMPTR 0B5 062
 * refs (1): B4B39
 ~BINT28;TestSysFlag:
-        :: BINT28 TestSysFlag ;                  * B5C7A
+        :: BINT28 TestSysFlag ;                  * B5C7A  flag -28: Sequential plot / Simultaneous plot
 
 * ROMPTR 0B5 063
 * refs (1): B4B39
@@ -634,7 +634,7 @@ ROMP_0B5_06F:
 * ROMPTR 0B5 070
 * refs (1): B4B39
 ~BINT29;TestSysFlag;NOT:
-        :: BINT29 TestSysFlag NOT ;              * B611B
+        :: BINT29 TestSysFlag NOT ;              * B611B  flag -29: Draw axes too / Don't draw axes
 
 * ROMPTR 0B5 071
 * refs (1): B4B39
@@ -856,12 +856,12 @@ ROMP_0B5_093:
 * ROMPTR 0B5 094
 * refs (1): B4B39
 ~BINT3;TestSysFlag;NOT:
-        :: BINT3 TestSysFlag NOT ;               * B69CB
+        :: BINT3 TestSysFlag NOT ;               * B69CB  flag -3: Function → symb / Function → num
 
 * ROMPTR 0B5 095
 * refs (1): B4B39
 ~BINT1;TestSysFlag:
-        :: BINT1 TestSysFlag ;                   * B69E4
+        :: BINT1 TestSysFlag ;                   * B69E4  flag -1: General solutions / Principal value
 
 * ROMPTR 0B5 096
 * refs (1): B4B39
@@ -939,12 +939,12 @@ ROMP_0B5_0A0:
 * ROMPTR 0B5 0A1
 * refs (1): B4B39
 ROMP_0B5_0A1:
-        { # BD26 FALSE }                         * B6CD1
+        { # BD26 FALSE }                         * B6CD1  "Symbolic"
 
 * ROMPTR 0B5 0A2
 * refs (1): B4B39
 ROMP_0B5_0A2:
-        { # BD27 TRUE }                          * B6CEA
+        { # BD27 TRUE }                          * B6CEA  "Numeric"
 
 * ROMPTR 0B5 0A3
 * refs (1): B4B39
@@ -956,7 +956,7 @@ ROMP_0B5_0A3:
 ROMP_0B5_0A4:
           :: DUP %IP SWAP %FP %100 %* DUP %IP SWAP %FP %100 %* %IP * B6D0D
             ROMPTR 0B5 0B5                       * B6D53
-            :: BINT41 TestSysFlag case BINT3     * B6D5E
+            :: BINT41 TestSysFlag case BINT3     * B6D5E  flag -41: 12-hour clock / 24-hour clock
               4PICK %12 %> ITE                   * B6D77
               :: 4ROLL %12 %- 4UNROLL BINT2 ;    * B6D8B
               :: 4PICK %12 %= case BINT2         * B6DAE
@@ -990,14 +990,14 @@ ROMP_0B5_0A6:
 * refs (1): B4B39
 ROMP_0B5_0A7:
           :: DUP %IP SWAP %FP %100 %* DUP %IP SWAP %100 %* %FP %100 %* * B6EFF
-            BINT42 TestSysFlag IT ROTSWAP        * B6F4A
+            BINT42 TestSysFlag IT ROTSWAP        * B6F4A  flag -42: mm/dd/yy format / dd.mm.yy format
           ;                                      * B6F5E
         ;                                        * B6F63
 
 * ROMPTR 0B5 0A8
 * refs (1): B4B39
 ROMP_0B5_0A8:
-        :: BINT42 TestSysFlag IT ROTSWAP         * B6F68
+        :: BINT42 TestSysFlag IT ROTSWAP         * B6F68  flag -42: mm/dd/yy format / dd.mm.yy format
           %IP %100 %/ %FP %100 %* COERCE ROMPTR 0B5 0AA SWAP %IP %100 %/ %FP * B6F81
           %+ %+ >DATE ;                          * B6FC8
 
@@ -1038,13 +1038,13 @@ ROMP_0B5_0AA:
             GOSBVL  SUB_0D36C                    * B7105
             SETHEX                               * B710C
             ST=0    1                            * B710E
-            GONC    L_B7117                      * B7111
+            GONC    ROMP_0B5_0AA.L1              * B7111
             ST=1    1                            * B7114
-L_B7117:
+ROMP_0B5_0AA.L1:
             GOSBVL  GETPTR                       * B7117
             ?ST=1   1                            * B711E
-            GOYES   L_B7123                      * B7121
-L_B7123:
+            GOYES   ROMP_0B5_0AA.L2              * B7121
+ROMP_0B5_0AA.L2:
             GOVLNG  PushT/FLoop                  * B7123
           ENDCODE                                * B712A
           ?SEMI                                  * B712A
@@ -1053,7 +1053,7 @@ L_B7123:
 * ROMPTR 0B5 0AB
 * refs (1): B4B39
 ROMP_0B5_0AB:
-        :: ROMPTR 0B5 0AA BINT42 TestSysFlag IT ROTSWAP * B7139
+        :: ROMPTR 0B5 0AA BINT42 TestSysFlag IT ROTSWAP * B7139  flag -42: mm/dd/yy format / dd.mm.yy format
           SWAP UNCOERCE %100 %/ %+ SWAP UNCOERCE %+ Date>hxs13 * B715D
           CODE                                   * B718A  53 nibbles
             A=DAT1  A                            * B7194
@@ -1100,7 +1100,7 @@ ROMP_0B5_0AD:
 * ROMPTR 0B5 0AE
 * refs (1): B4B39
 ROMP_0B5_0AE:
-        :: BINT42 SysITE ROMPTR 0B5 0D4 ROMPTR 0B5 0D3 ; * B73DA
+        :: BINT42 SysITE ROMPTR 0B5 0D4 ROMPTR 0B5 0D3 ; * B73DA  flag -42: mm/dd/yy format / dd.mm.yy format
 
 * ROMPTR 0B5 0AF
 * refs (1): B4B39
@@ -1115,7 +1115,7 @@ ROMP_0B5_0B0:
           DUP #>$ SWAP BINT10 #< IT              * B7465
           :: CHR_Space >H$ ;                     * B7483
           APPEND_SPACE                           * B7497
-          { # BC15 # BC16 # BC17 # BC18 # BC19 # BC1A # BC1B } 3GETLAM * B749C
+          { # BC15 # BC16 # BC17 # BC18 # BC19 # BC1A # BC1B } 3GETLAM * B749C  "Monday"  "Tuesday"  "Wednesday"  "Thursday"  "Friday"  "Saturday"  "Sunday"
           INDEX@ 2GETLAM ROMPTR 0B5 0AB NTHCOMPDROP JstGetTHEMESG &$ SWAP * B74F1
           UNCOERCE TWO{}N LOOP 1GETABND {}N ;    * B751A
 
@@ -1149,19 +1149,19 @@ ROMP_0B5_0B5:
 * ROMPTR 0B5 0B6
 * refs (1): B4B39
 ROMP_0B5_0B6:
-        { # BC1D # BC1D                          * B76A3
+        { # BC1D # BC1D                          * B76A3  "AM"  "AM"
           :: FALSE FALSE ; }                     * B76BC
 
 * ROMPTR 0B5 0B7
 * refs (1): B4B39
 ROMP_0B5_0B7:
-        { # BC1E # BC1E                          * B76D5
+        { # BC1E # BC1E                          * B76D5  "PM"  "PM"
           :: FALSE TRUE ; }                      * B76EE
 
 * ROMPTR 0B5 0B8
 * refs (1): B4B39
 ROMP_0B5_0B8:
-        { # BC1F # BC20                          * B7707
+        { # BC1F # BC20                          * B7707  "24-hour time"  "24-hr"
           :: TRUE FALSE ; }                      * B7720
 
 * ROMPTR 0B5 0B9
@@ -1174,62 +1174,62 @@ ROMP_0B5_0B9:
 * ROMPTR 0B5 0BA
 * refs (1): B4B39
 ROMP_0B5_0BA:
-        { # BC21 %1 }                            * B77C7
+        { # BC21 %1 }                            * B77C7  " 1 January"
 
 * ROMPTR 0B5 0BB
 * refs (1): B4B39
 ROMP_0B5_0BB:
-        { # BC22 %2 }                            * B77E0
+        { # BC22 %2 }                            * B77E0  " 2 February"
 
 * ROMPTR 0B5 0BC
 * refs (1): B4B39
 ROMP_0B5_0BC:
-        { # BC23 %3 }                            * B77F9
+        { # BC23 %3 }                            * B77F9  " 3 March"
 
 * ROMPTR 0B5 0BD
 * refs (1): B4B39
 ROMP_0B5_0BD:
-        { # BC24 %4 }                            * B7812
+        { # BC24 %4 }                            * B7812  " 4 April"
 
 * ROMPTR 0B5 0BE
 * refs (1): B4B39
 ROMP_0B5_0BE:
-        { # BC25 %5 }                            * B782B
+        { # BC25 %5 }                            * B782B  " 5 May"
 
 * ROMPTR 0B5 0BF
 * refs (1): B4B39
 ROMP_0B5_0BF:
-        { # BC26 %6 }                            * B7844
+        { # BC26 %6 }                            * B7844  " 6 June"
 
 * ROMPTR 0B5 0C0
 * refs (1): B4B39
 ROMP_0B5_0C0:
-        { # BC27 %7 }                            * B785D
+        { # BC27 %7 }                            * B785D  " 7 July"
 
 * ROMPTR 0B5 0C1
 * refs (1): B4B39
 ROMP_0B5_0C1:
-        { # BC28 %8 }                            * B7876
+        { # BC28 %8 }                            * B7876  " 8 August"
 
 * ROMPTR 0B5 0C2
 * refs (1): B4B39
 ROMP_0B5_0C2:
-        { # BC29 %9 }                            * B788F
+        { # BC29 %9 }                            * B788F  " 9 September"
 
 * ROMPTR 0B5 0C3
 * refs (1): B4B39
 ROMP_0B5_0C3:
-        { # BC2A %10 }                           * B78A8
+        { # BC2A %10 }                           * B78A8  "10 October"
 
 * ROMPTR 0B5 0C4
 * refs (1): B4B39
 ROMP_0B5_0C4:
-        { # BC2B %11 }                           * B78C1
+        { # BC2B %11 }                           * B78C1  "11 November"
 
 * ROMPTR 0B5 0C5
 * refs (1): B4B39
 ROMP_0B5_0C5:
-        { # BC2C %12 }                           * B78DA
+        { # BC2C %12 }                           * B78DA  "12 December"
 
 * ROMPTR 0B5 0C6
 * refs (1): B4B39
@@ -1240,7 +1240,7 @@ ROMP_0B5_0C6:
 * ROMPTR 0B5 0C7
 * refs (1): B4B39
 ROMP_0B5_0C7:
-        { # BC2D BINT1                           * B7934
+        { # BC2D BINT1                           * B7934  "Week"
 
 * ROMPTR 0B5 0C8
 * refs (1): B4B39
@@ -1250,7 +1250,7 @@ ROMP_0B5_0C8:
 * ROMPTR 0B5 0C9
 * refs (1): B4B39
 ROMP_0B5_0C9:
-        { # BC2E BINT2                           * B7962
+        { # BC2E BINT2                           * B7962  "Day"
 
 * ROMPTR 0B5 0CA
 * refs (1): B4B39
@@ -1260,7 +1260,7 @@ ROMP_0B5_0CA:
 * ROMPTR 0B5 0CB
 * refs (1): B4B39
 ROMP_0B5_0CB:
-        { # BC2F BINT3                           * B7990
+        { # BC2F BINT3                           * B7990  "Hour"
 
 * ROMPTR 0B5 0CC
 * refs (1): B4B39
@@ -1270,7 +1270,7 @@ ROMP_0B5_0CC:
 * ROMPTR 0B5 0CD
 * refs (1): B4B39
 ROMP_0B5_0CD:
-        { # BC30 BINT4                           * B79BE
+        { # BC30 BINT4                           * B79BE  "Minute"
 
 * ROMPTR 0B5 0CE
 * refs (1): B4B39
@@ -1280,7 +1280,7 @@ ROMP_0B5_0CE:
 * ROMPTR 0B5 0CF
 * refs (1): B4B39
 ROMP_0B5_0CF:
-        { # BC31 BINT5                           * B79EC
+        { # BC31 BINT5                           * B79EC  "Second"
 
 * ROMPTR 0B5 0D0
 * refs (1): B4B39
@@ -1290,7 +1290,7 @@ ROMP_0B5_0D0:
 * ROMPTR 0B5 0D1
 * refs (1): B4B39
 ROMP_0B5_0D1:
-        { # BC32 # BC33 # BC34 # BC35 # BC36 }   * B7A1A
+        { # BC32 # BC33 # BC34 # BC35 # BC36 }   * B7A1A  "Weeks"  "Days"  "Hours"  "Minutes"  "Seconds"
 
 * ROMPTR 0B5 0D2
 * refs (1): B4B39
@@ -1300,12 +1300,12 @@ ROMP_0B5_0D2:
 * ROMPTR 0B5 0D3
 * refs (1): B4B39
 ROMP_0B5_0D3:
-        { # BC37 # BC38 FALSE }                  * B7A76
+        { # BC37 # BC38 FALSE }                  * B7A76  "Month/Day/Year"  "M/D/Y"
 
 * ROMPTR 0B5 0D4
 * refs (1): B4B39
 ROMP_0B5_0D4:
-        { # BC39 # BC3A TRUE }                   * B7A99
+        { # BC39 # BC3A TRUE }                   * B7A99  "Day.Month.Year"  "D.M.Y"
 
 * ROMPTR 0B5 0D5
 * refs (1): B4B39

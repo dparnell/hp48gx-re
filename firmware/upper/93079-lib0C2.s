@@ -76,10 +76,10 @@ ROMP_0C2_021:
               GOSBVL  SUB_2B767                  * 93611
               C=R1                               * 93618
               ?B#C    M                          * 9361B
-              GOYES   L_93627                    * 9361E
+              GOYES   ROMP_0C2_021.L1            * 9361E
               GOSBVL  RSUB1                      * 93620
-L_93627:
-              GOVLNG  L_2A235                    * 93627
+ROMP_0C2_021.L1:
+              GOVLNG  PUSH%.L9                   * 93627
             ENDCODE                              * 9362E
             4dropn;IU! case 4DROP                * 9362E
             %%10 OVER %%^ 5ROLL OVER %%* 5ROLL 3PICK %%/ %%+ 4ROLL %% 9.5E-1 * 9363D
@@ -160,7 +160,7 @@ ROMP_0C2_025:
             C=C+A   A                            * 93B86
             D1=C                                 * 93B88
             B=B-1   A                            * 93B8B
-L_93B8D:
+ROMP_0C2_025.loop1:
             A=DAT0  W                            * 93B8D
             C=DAT1  W                            * 93B91
             DAT0=C  W                            * 93B95
@@ -172,7 +172,7 @@ L_93B8D:
             C=C+D   A                            * 93BA8
             D0=C                                 * 93BAA
             B=B-1   A                            * 93BAD
-            GONC    L_93B8D                      * 93BAF
+            GONC    ROMP_0C2_025.loop1           * 93BAF
             GOVLNG  GETPTRLOOP                   * 93BB2
           ENDCODE                                * 93BB9
           2DROP                                  * 93BB9
@@ -205,9 +205,9 @@ ROMP_0C2_026:
             ST=0    0                            * 93D35
             LC(5)   DOEREL                       * 93D38
             ?C=A    A                            * 93D3F
-            GOYES   L_93D47                      * 93D42
+            GOYES   ROMP_0C2_026.L1              * 93D42
             ST=1    0                            * 93D44
-L_93D47:
+ROMP_0C2_026.L1:
             D1=D1+  10                           * 93D47
             C=DAT1  A                            * 93D4A
             C=C-1   A                            * 93D4D
@@ -217,15 +217,15 @@ L_93D47:
             C=DAT1  A                            * 93D56
             R4=C                                 * 93D59
             D1=D1+  5                            * 93D5C
-            GOSBVL  L_35790                      * 93D5F
+            GOSBVL  PUTCMPEL.L6                  * 93D5F
             A=R0                                 * 93D66
             B=B+A   A                            * 93D69
             B=B-1   A                            * 93D6B
             GOSBVL  SUB_3767E                    * 93D6D
             ?ST=0   0                            * 93D74
-            GOYES   L_93D7B                      * 93D77
+            GOYES   ROMP_0C2_026.L2              * 93D77
             B=B+B   A                            * 93D79
-L_93D7B:
+ROMP_0C2_026.L2:
             AD1EX                                * 93D7B
             A=A+B   A                            * 93D7E
             D1=A                                 * 93D80
@@ -233,31 +233,31 @@ L_93D7B:
             R2=A                                 * 93D86
             R3=A                                 * 93D89
             ST=0    1                            * 93D8C
-L_93D8F:
+ROMP_0C2_026.loop3:
             GOSBVL  GETAB1                       * 93D8F
             ?ST=0   0                            * 93D96
-            GOYES   L_93DA1                      * 93D99
+            GOYES   ROMP_0C2_026.L4              * 93D99
             D1=D1+  16                           * 93D9B
             D1=D1+  5                            * 93D9E
-L_93DA1:
+ROMP_0C2_026.L4:
             SETDEC                               * 93DA1
             GOSBVL  SUB_2BF81                    * 93DA3
             GOSBVL  RCAB2                        * 93DAA
             P=      6                            * 93DB1
             GOSBVL  TST15                        * 93DB3
-            GOC     L_93DCB                      * 93DBA
+            GOC     ROMP_0C2_026.L5              * 93DBA
             GOSBVL  STCD2                        * 93DBD
             C=RSTK                               * 93DC4
             RSTK=C                               * 93DC6
             R0=C                                 * 93DC8
-L_93DCB:
+ROMP_0C2_026.L5:
             SETHEX                               * 93DCB
             C=RSTK                               * 93DCD
             C=C+1   A                            * 93DCF
             RSTK=C                               * 93DD1
             A=R4                                 * 93DD3
             ?C<=A   A                            * 93DD6
-            GOYES   L_93D8F                      * 93DD9
+            GOYES   ROMP_0C2_026.loop3           * 93DD9
             P=      0                            * 93DDB
             GOVLNG  PUSH#LOOP                    * 93DDD
           ENDCODE                                * 93DE4
@@ -455,20 +455,20 @@ ROMP_0C2_033:
             GOSBVL  SUB_3768C                    * 95272
             LC(5)   DOEREL                       * 95279
             ?D=C    A                            * 95280
-            GOYES   L_95287                      * 95283
+            GOYES   ROMP_0C2_033.L1              * 95283
             A=A+A   A                            * 95285
-L_95287:
+ROMP_0C2_033.L1:
             C=0     S                            * 95287
             C=C+1   S                            * 9528A
-            GONC    L_9529C                      * 9528D
-L_95290:
+            GONC    ROMP_0C2_033.L3              * 9528D
+ROMP_0C2_033.loop2:
             DAT1=C  S                            * 95290
             CD1EX                                * 95294
             C=C+A   A                            * 95297
             D1=C                                 * 95299
-L_9529C:
+ROMP_0C2_033.L3:
             B=B-1   A                            * 9529C
-            GONC    L_95290                      * 9529E
+            GONC    ROMP_0C2_033.loop2           * 9529E
             GOVLNG  GETPTRLOOP                   * 952A1
           ENDCODE                                * 952A8
         ;                                        * 952A8

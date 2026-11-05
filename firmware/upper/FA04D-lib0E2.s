@@ -42,7 +42,7 @@ ROMP_0E2_04F:
 * refs (1): E3857
 ROMP_0E2_050:
         { BINT16 BINT4                           * FB0DF
-L_FB0EE:
+ROMP_0E2_050.L1:
           PCGROB  "images/FB0EE-packed.png"      * FB0EE  96 x 46, packed
         }                                        * FB45E
 

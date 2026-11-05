@@ -130,8 +130,8 @@ LIB0BF.hash:
         CON(5)  0                                * DF060  names of length 14
         CON(5)  0                                * DF065  names of length 15
         CON(5)  0                                * DF06A  names of length 16
-        REL(5)  L_DF074                          * DF06F  end of the names
-L_DF074:
+        REL(5)  LIB0BF.hash.L1                   * DF06F  end of the names
+LIB0BF.hash.L1:
         CON(5)  0                                * DF074  command 000 has no name
         ENDLENGTH                                * DF079
 

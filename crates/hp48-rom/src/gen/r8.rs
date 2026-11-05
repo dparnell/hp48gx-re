@@ -5,8 +5,8 @@
 
 use crate::prelude::*;
 
-// L_80000: firmware/upper/80000-selftest.s:6
-pub(crate) fn L_80000(r: &mut Run) {
+// VersionStrings.L1: firmware/upper/80000-selftest.s:6
+pub(crate) fn VersionStrings_L1(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -21,13 +21,13 @@ pub(crate) fn L_80000(r: &mut Run) {
             }
             // #80012:
             0x80012..=0x80012 => {
-                branch!(r, at, 0x80019, 9, r.cpu.call(0x01C7F)); // GOSBVL L_01C7F
+                branch!(r, at, 0x80019, 9, r.cpu.call(0x01C7F)); // GOSBVL D0->Sft1.L1
             }
             // #80019:
             0x80019..=0x80019 => {
-                jump!(r, at, 6, r.cpu.pc = 0x8002B); // GOTO L_8002B
+                jump!(r, at, 6, r.cpu.pc = 0x8002B); // GOTO VersionStrings.L3
             }
-            // L_8001D:
+            // VersionStrings.loop2:
             0x8001D..=0x8001F => {
                 op!(r, at, 0x8001D..0x8001F, 4, r.cpu.zero(R::C, Field::A)); // C=0 A
                 branch!(r, at, 0x80025, 8, r.cpu.call(0x804B6)); // GOSUBL SUB_804B6
@@ -36,9 +36,9 @@ pub(crate) fn L_80000(r: &mut Run) {
             0x80025..=0x80025 => {
                 branch!(r, at, 0x8002B, 8, r.cpu.call(0x814C5)); // GOSUBL SUB_814C5
             }
-            // L_8002B:
+            // VersionStrings.L3:
             0x8002B..=0x8002B => {
-                branch!(r, at, 0x80031, 8, r.cpu.call(0x802BE)); // GOSUBL L_802BE
+                branch!(r, at, 0x80031, 8, r.cpu.call(0x802BE)); // GOSUBL SUB_80215.L2
             }
             // #80031:
             0x80031..=0x80031 => {
@@ -50,7 +50,7 @@ pub(crate) fn L_80000(r: &mut Run) {
             }
             // #8003E:
             0x8003E..=0x8003E => {
-                branch!(r, at, 0x80043, 7, r.cpu.st_test(6, true, Some(0x80091))); // ?ST=1 6 / GOYES L_80091
+                branch!(r, at, 0x80043, 7, r.cpu.st_test(6, true, Some(0x80091))); // ?ST=1 6 / GOYES SUB_80081.L1
             }
             // #80043:
             0x80043..=0x80043 => {
@@ -60,13 +60,13 @@ pub(crate) fn L_80000(r: &mut Run) {
                 r.spend(7);
                 return;
             }
-            // L_80048:
+            // VersionStrings.loop4:
             0x80048..=0x80048 => {
                 branch!(r, at, 0x8004F, 9, r.cpu.call(0x04840)); // GOSBVL POPKEY
             }
             // #8004F:
             0x8004F..=0x8004F => {
-                branch!(r, at, 0x80052, 5, r.cpu.jump_if(Cond::Carry, 0x80048)); // GOC L_80048
+                branch!(r, at, 0x80052, 5, r.cpu.jump_if(Cond::Carry, 0x80048)); // GOC VersionStrings.loop4
             }
             // #80052:
             0x80052..=0x80054 => {
@@ -77,18 +77,18 @@ pub(crate) fn L_80000(r: &mut Run) {
             0x8005A..=0x80060 => {
                 op!(r, at, 0x8005A..0x8005C, 4, r.cpu.zero(R::C, Field::A)); // C=0 A
                 op!(r, at, 0x8005C..0x80060, 6, r.cpu.load_const(R::C, 2, 0x1C)); // LC(2) #1C
-                branch!(r, at, 0x80065, 7, r.cpu.test(Test::Regs(Cmp::Gt, R::B, R::C), Field::A, Some(0x8001D))); // ?B>C A / GOYES L_8001D
+                branch!(r, at, 0x80065, 7, r.cpu.test(Test::Regs(Cmp::Gt, R::B, R::C), Field::A, Some(0x8001D))); // ?B>C A / GOYES VersionStrings.loop2
             }
             // #80065:
             0x80065..=0x80070 => {
                 op!(r, at, 0x80065..0x80067, 4, r.cpu.dec(R::B, Field::A)); // B=B-1 A
                 op!(r, at, 0x80067..0x80069, 4, r.cpu.copy(R::A, R::B, Field::A)); // A=B A
-                op!(r, at, 0x80069..0x80070, 9, r.cpu.load_const(R::C, 5, 0x80232)); // LC(5) L_80232
+                op!(r, at, 0x80069..0x80070, 9, r.cpu.load_const(R::C, 5, 0x80232)); // LC(5) SUB_80215.L1
                 branch!(r, at, 0x80074, 6, r.cpu.call(0x80081)); // GOSUB SUB_80081
             }
             // #80074:
             0x80074..=0x8007D => {
-                op!(r, at, 0x80074..0x8007B, 9, r.cpu.load_const(R::C, 5, 0x8001D)); // LC(5) L_8001D
+                op!(r, at, 0x80074..0x8007B, 9, r.cpu.load_const(R::C, 5, 0x8001D)); // LC(5) VersionStrings.loop2
                 op!(r, at, 0x8007B..0x8007D, 4, r.cpu.push_c()); // RSTK=C
                 jump_io!(r, at, 23, r.cpu.pc_indirect(R::A, r.hw)); // PC=(A)
             }
@@ -115,7 +115,7 @@ pub(crate) fn SUB_80081(r: &mut Run) {
                 op!(r, at, 0x8008D..0x8008F, 4, r.cpu.add(R::A, R::C, Field::A)); // A=A+C A
                 jump!(r, at, 9, r.cpu.rtn(RtnKind::Plain)); // RTN
             }
-            // L_80091:
+            // SUB_80081.L1:
             0x80091..=0x80091 => {
                 branch!(r, at, 0x80097, 8, r.cpu.call(0x8040D)); // GOSUBL ClrScrMn~jump
             }
@@ -153,11 +153,11 @@ pub(crate) fn SUB_80081(r: &mut Run) {
             }
             // #800C7:
             0x800C7..=0x800C7 => {
-                branch!(r, at, 0x800CC, 7, r.cpu.st_test(10, false, Some(0x800ED))); // ?ST=0 10 / GOYES L_800ED
+                branch!(r, at, 0x800CC, 7, r.cpu.st_test(10, false, Some(0x800ED))); // ?ST=0 10 / GOYES SUB_80081.L3
             }
             // #800CC:
             0x800CC..=0x800CC => {
-                branch!(r, at, 0x800D1, 7, r.cpu.st_test(7, false, Some(0x800E1))); // ?ST=0 7 / GOYES L_800E1
+                branch!(r, at, 0x800D1, 7, r.cpu.st_test(7, false, Some(0x800E1))); // ?ST=0 7 / GOYES SUB_80081.L2
             }
             // #800D1:
             0x800D1..=0x800D1 => {
@@ -169,9 +169,9 @@ pub(crate) fn SUB_80081(r: &mut Run) {
             }
             // #800DD:
             0x800DD..=0x800DD => {
-                jump!(r, at, 6, r.cpu.pc = 0x800ED); // GOTO L_800ED
+                jump!(r, at, 6, r.cpu.pc = 0x800ED); // GOTO SUB_80081.L3
             }
-            // L_800E1:
+            // SUB_80081.L2:
             0x800E1..=0x800E1 => {
                 branch!(r, at, 0x800E7, 8, r.cpu.call(0x80D39)); // GOSUBL SUB_80D39
             }
@@ -179,9 +179,9 @@ pub(crate) fn SUB_80081(r: &mut Run) {
             0x800E7..=0x800E7 => {
                 branch!(r, at, 0x800ED, 8, r.cpu.call(0x8155D)); // GOSUBL SUB_8155D
             }
-            // L_800ED:
+            // SUB_80081.L3:
             0x800ED..=0x800ED => {
-                branch!(r, at, 0x800F2, 7, r.cpu.st_test(8, false, Some(0x800FE))); // ?ST=0 8 / GOYES L_800FE
+                branch!(r, at, 0x800F2, 7, r.cpu.st_test(8, false, Some(0x800FE))); // ?ST=0 8 / GOYES SUB_80081.L4
             }
             // #800F2:
             0x800F2..=0x800F2 => {
@@ -191,7 +191,7 @@ pub(crate) fn SUB_80081(r: &mut Run) {
             0x800F8..=0x800F8 => {
                 branch!(r, at, 0x800FE, 8, r.cpu.call(0x8155D)); // GOSUBL SUB_8155D
             }
-            // L_800FE:
+            // SUB_80081.L4:
             0x800FE..=0x800FE => {
                 branch!(r, at, 0x80102, 6, r.cpu.call(0x802C8)); // GOSUB SUB_802C8
             }
@@ -213,51 +213,51 @@ pub(crate) fn SUB_80081(r: &mut Run) {
             }
             // #80118:
             0x80118..=0x80118 => {
-                jump!(r, at, 6, r.cpu.pc = 0x8002B); // GOTO L_8002B
+                jump!(r, at, 6, r.cpu.pc = 0x8002B); // GOTO VersionStrings.L3
             }
-            // L_8011C:
+            // SUB_80081.L5:
             0x8011C..=0x80122 => {
                 op!(r, at, 0x8011C..0x8011F, 5, r.cpu.st_set(8, false)); // ST=0 8
                 op!(r, at, 0x8011F..0x80122, 5, r.cpu.st_set(10, false)); // ST=0 10
-                jump!(r, at, 6, r.cpu.pc = 0x80160); // GOTO L_80160
+                jump!(r, at, 6, r.cpu.pc = 0x80160); // GOTO SUB_80081.L11
             }
-            // L_80126:
+            // SUB_80081.L6:
             0x80126..=0x8012F => {
                 op!(r, at, 0x80126..0x80129, 5, r.cpu.st_set(8, false)); // ST=0 8
                 op!(r, at, 0x80129..0x8012C, 5, r.cpu.st_set(10, true)); // ST=1 10
                 op!(r, at, 0x8012C..0x8012F, 5, r.cpu.st_set(7, false)); // ST=0 7
-                jump!(r, at, 6, r.cpu.pc = 0x80160); // GOTO L_80160
+                jump!(r, at, 6, r.cpu.pc = 0x80160); // GOTO SUB_80081.L11
             }
-            // L_80133:
+            // SUB_80081.L7:
             0x80133..=0x8013C => {
                 op!(r, at, 0x80133..0x80136, 5, r.cpu.st_set(8, false)); // ST=0 8
                 op!(r, at, 0x80136..0x80139, 5, r.cpu.st_set(10, true)); // ST=1 10
                 op!(r, at, 0x80139..0x8013C, 5, r.cpu.st_set(7, true)); // ST=1 7
-                jump!(r, at, 6, r.cpu.pc = 0x80160); // GOTO L_80160
+                jump!(r, at, 6, r.cpu.pc = 0x80160); // GOTO SUB_80081.L11
             }
-            // L_80140:
+            // SUB_80081.L8:
             0x80140..=0x80146 => {
                 op!(r, at, 0x80140..0x80143, 5, r.cpu.st_set(8, true)); // ST=1 8
                 op!(r, at, 0x80143..0x80146, 5, r.cpu.st_set(10, false)); // ST=0 10
-                jump!(r, at, 6, r.cpu.pc = 0x80160); // GOTO L_80160
+                jump!(r, at, 6, r.cpu.pc = 0x80160); // GOTO SUB_80081.L11
             }
-            // L_8014A:
+            // SUB_80081.L9:
             0x8014A..=0x80153 => {
                 op!(r, at, 0x8014A..0x8014D, 5, r.cpu.st_set(8, true)); // ST=1 8
                 op!(r, at, 0x8014D..0x80150, 5, r.cpu.st_set(10, true)); // ST=1 10
                 op!(r, at, 0x80150..0x80153, 5, r.cpu.st_set(7, false)); // ST=0 7
-                jump!(r, at, 6, r.cpu.pc = 0x80160); // GOTO L_80160
+                jump!(r, at, 6, r.cpu.pc = 0x80160); // GOTO SUB_80081.L11
             }
-            // L_80157:
+            // SUB_80081.L10:
             0x80157..=0x8015D => {
                 op!(r, at, 0x80157..0x8015A, 5, r.cpu.st_set(8, true)); // ST=1 8
                 op!(r, at, 0x8015A..0x8015D, 5, r.cpu.st_set(10, true)); // ST=1 10
                 op!(r, at, 0x8015D..0x80160, 5, r.cpu.st_set(7, true)); // ST=1 7
                 at = 0x80160;
             }
-            // L_80160:
+            // SUB_80081.L11:
             0x80160..=0x80160 => {
-                jump!(r, at, 9, r.cpu.pc = 0x0116B); // GOVLNG L_0116B
+                jump!(r, at, 9, r.cpu.pc = 0x0116B); // GOVLNG CINRTN.L2
             }
             _ => {
                 r.cpu.pc = at;
@@ -277,14 +277,14 @@ pub(crate) fn SUB_80167(r: &mut Run) {
             }
             // #8016E:
             0x8016E..=0x8016E => {
-                branch!(r, at, 0x80171, 5, r.cpu.jump_if(Cond::NoCarry, 0x80174)); // GONC L_80174
+                branch!(r, at, 0x80171, 5, r.cpu.jump_if(Cond::NoCarry, 0x80174)); // GONC SUB_80167.L1
             }
             // #80171:
             0x80171..=0x80171 => {
                 op!(r, at, 0x80171..0x80174, 5, r.cpu.zero(R::C, Field::W)); // C=0 W
                 at = 0x80174;
             }
-            // L_80174:
+            // SUB_80167.L1:
             0x80174..=0x80174 => {
                 branch!(r, at, 0x8017A, 8, r.cpu.call(0x80EBC)); // GOSUBL SUB_80EBC
             }
@@ -296,26 +296,26 @@ pub(crate) fn SUB_80167(r: &mut Run) {
                 op!(r, at, 0x80187..0x8018A, 5, r.cpu.not(R::C, Field::W)); // C=-C-1 W
                 op!(r, at, 0x8018A..0x80190, 8, r.cpu.d_load(1, 4, 0x85)); // D1=(4) #0085
                 io!(r, at, 0x80190..0x80194, 27, r.cpu.store(1, R::C, Field::Nibbles(13), r.hw)); // DAT1=C 13
-                op!(r, at, 0x80194..0x8019B, 9, r.cpu.d_load(0, 5, 0x818D5)); // D0=(5) L_818D5
+                op!(r, at, 0x80194..0x8019B, 9, r.cpu.d_load(0, 5, 0x818D5)); // D0=(5) SUB_817E9.L19
                 branch!(r, at, 0x801A1, 8, r.cpu.call(0x815FE)); // GOSUBL SUB_815FE
             }
             // #801A1:
             0x801A1..=0x801A1 => {
-                jump!(r, at, 6, r.cpu.pc = 0x80202); // GOTO L_80202
+                jump!(r, at, 6, r.cpu.pc = 0x80202); // GOTO SUB_80167.L6
             }
-            // L_801A5:
+            // SUB_80167.L2:
             0x801A5..=0x801AC => {
-                op!(r, at, 0x801A5..0x801AC, 9, r.cpu.d_load(0, 5, 0x818E9)); // D0=(5) L_818E9
+                op!(r, at, 0x801A5..0x801AC, 9, r.cpu.d_load(0, 5, 0x818E9)); // D0=(5) SUB_817E9.L20
                 branch!(r, at, 0x801B2, 8, r.cpu.call(0x8165A)); // GOSUBL SUB_8165A
             }
             // #801B2:
             0x801B2..=0x801B8 => {
                 op!(r, at, 0x801B2..0x801B8, 8, r.cpu.d_load(1, 4, 0x84)); // D1=(4) #0084
-                jump!(r, at, 6, r.cpu.pc = 0x801CF); // GOTO L_801CF
+                jump!(r, at, 6, r.cpu.pc = 0x801CF); // GOTO SUB_80167.L4
             }
-            // L_801BC:
+            // SUB_80167.L3:
             0x801BC..=0x801C3 => {
-                op!(r, at, 0x801BC..0x801C3, 9, r.cpu.d_load(0, 5, 0x818F7)); // D0=(5) L_818F7
+                op!(r, at, 0x801BC..0x801C3, 9, r.cpu.d_load(0, 5, 0x818F7)); // D0=(5) SUB_817E9.L21
                 branch!(r, at, 0x801C9, 8, r.cpu.call(0x8165A)); // GOSUBL SUB_8165A
             }
             // #801C9:
@@ -323,7 +323,7 @@ pub(crate) fn SUB_80167(r: &mut Run) {
                 op!(r, at, 0x801C9..0x801CF, 8, r.cpu.d_load(1, 4, 0x91)); // D1=(4) #0091
                 at = 0x801CF;
             }
-            // L_801CF:
+            // SUB_80167.L4:
             0x801CF..=0x801E3 => {
                 op!(r, at, 0x801CF..0x801D2, 5, r.cpu.d_ex_r(1, R::C, false)); // CD1EX
                 op!(r, at, 0x801D2..0x801D5, 5, r.cpu.d_from_r(1, R::C, false)); // D1=C
@@ -334,7 +334,7 @@ pub(crate) fn SUB_80167(r: &mut Run) {
                 op!(r, at, 0x801E3..0x801E5, 4, r.cpu.p = 0); // P= 0
                 at = 0x801E5;
             }
-            // L_801E5:
+            // SUB_80167.loop5:
             0x801E5..=0x801E9 => {
                 io!(r, at, 0x801E5..0x801E9, 15, r.cpu.load(1, R::C, Field::Nibbles(1), r.hw)); // C=DAT1 1
                 branch!(r, at, 0x801ED, 6, r.cpu.call(0x80215)); // GOSUB SUB_80215
@@ -345,13 +345,13 @@ pub(crate) fn SUB_80167(r: &mut Run) {
                 op!(r, at, 0x801F0..0x801F3, 5, r.cpu.d_add(0, 2)); // D0=D0+ 2
                 op!(r, at, 0x801F3..0x801F6, 5, r.cpu.d_sub(1, 1)); // D1=D1- 1
                 op!(r, at, 0x801F6..0x801F9, 5, r.cpu.dec(R::C, Field::S)); // C=C-1 S
-                branch!(r, at, 0x801FC, 5, r.cpu.jump_if(Cond::NoCarry, 0x801E5)); // GONC L_801E5
+                branch!(r, at, 0x801FC, 5, r.cpu.jump_if(Cond::NoCarry, 0x801E5)); // GONC SUB_80167.loop5
             }
             // #801FC:
             0x801FC..=0x801FC => {
-                branch!(r, at, 0x80202, 8, r.cpu.call(0x81602)); // GOSUBL L_81602
+                branch!(r, at, 0x80202, 8, r.cpu.call(0x81602)); // GOSUBL SUB_815FE.L1
             }
-            // L_80202:
+            // SUB_80167.L6:
             0x80202..=0x80202 => {
                 branch!(r, at, 0x80208, 8, r.cpu.call(0x81769)); // GOSUBL SUB_81769
             }
@@ -398,15 +398,15 @@ pub(crate) fn SUB_80215(r: &mut Run) {
     }
 }
 
-// L_802BE: firmware/upper/80000-selftest.s:203
-pub(crate) fn L_802BE(r: &mut Run) {
+// SUB_80215.L2: firmware/upper/80000-selftest.s:203
+pub(crate) fn SUB_80215_L2(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
             0x802BE..=0x802C4 => {
                 op!(r, at, 0x802BE..0x802C0, 4, r.cpu.p = 0); // P= 0
                 op!(r, at, 0x802C0..0x802C4, 6, r.cpu.load_const(R::C, 2, 0xE4)); // LC(2) #E4
-                jump!(r, at, 6, r.cpu.pc = 0x802D8); // GOTO L_802D8
+                jump!(r, at, 6, r.cpu.pc = 0x802D8); // GOTO SUB_802D2.L1
             }
             _ => {
                 r.cpu.pc = at;
@@ -424,7 +424,7 @@ pub(crate) fn SUB_802C8(r: &mut Run) {
             0x802C8..=0x802CE => {
                 op!(r, at, 0x802C8..0x802CA, 4, r.cpu.p = 0); // P= 0
                 op!(r, at, 0x802CA..0x802CE, 6, r.cpu.load_const(R::C, 2, 0xDA)); // LC(2) #DA
-                jump!(r, at, 6, r.cpu.pc = 0x802D8); // GOTO L_802D8
+                jump!(r, at, 6, r.cpu.pc = 0x802D8); // GOTO SUB_802D2.L1
             }
             _ => {
                 r.cpu.pc = at;
@@ -444,7 +444,7 @@ pub(crate) fn SUB_802D2(r: &mut Run) {
                 op!(r, at, 0x802D4..0x802D8, 6, r.cpu.load_const(R::C, 2, 0xF4)); // LC(2) #F4
                 at = 0x802D8;
             }
-            // L_802D8:
+            // SUB_802D2.L1:
             0x802D8..=0x802D8 => {
                 jump!(r, at, 9, r.cpu.pc = 0x01AD7); // GOVLNG RCKBp
             }
@@ -467,21 +467,21 @@ pub(crate) fn SUB_802DF(r: &mut Run) {
             // #802E5:
             0x802E5..=0x802E8 => {
                 op!(r, at, 0x802E5..0x802E8, 5, r.cpu.scratch(ScratchOp::FromScratch, R::C, 1, Field::W)); // C=R1
-                branch!(r, at, 0x802ED, 7, r.cpu.test(Test::NonZero(R::C), Field::A, Some(0x80300))); // ?C#0 A / GOYES L_80300
+                branch!(r, at, 0x802ED, 7, r.cpu.test(Test::NonZero(R::C), Field::A, Some(0x80300))); // ?C#0 A / GOYES SUB_802DF.L1
             }
             // #802ED:
             0x802ED..=0x802F4 => {
-                op!(r, at, 0x802ED..0x802F4, 9, r.cpu.d_load(0, 5, 0x81893)); // D0=(5) L_81893
+                op!(r, at, 0x802ED..0x802F4, 9, r.cpu.d_load(0, 5, 0x81893)); // D0=(5) SUB_817E9.L14
                 branch!(r, at, 0x802FA, 8, r.cpu.call(0x8165A)); // GOSUBL SUB_8165A
             }
             // #802FA:
             0x802FA..=0x802FC => {
                 op!(r, at, 0x802FA..0x802FC, 4, r.cpu.zero(R::C, Field::A)); // C=0 A
-                jump!(r, at, 6, r.cpu.pc = 0x8031D); // GOTO L_8031D
+                jump!(r, at, 6, r.cpu.pc = 0x8031D); // GOTO SUB_802DF.L2
             }
-            // L_80300:
+            // SUB_802DF.L1:
             0x80300..=0x80307 => {
-                op!(r, at, 0x80300..0x80307, 9, r.cpu.d_load(0, 5, 0x818A1)); // D0=(5) L_818A1
+                op!(r, at, 0x80300..0x80307, 9, r.cpu.d_load(0, 5, 0x818A1)); // D0=(5) SUB_817E9.L15
                 branch!(r, at, 0x8030D, 8, r.cpu.call(0x8165A)); // GOSUBL SUB_8165A
             }
             // #8030D:
@@ -495,13 +495,13 @@ pub(crate) fn SUB_802DF(r: &mut Run) {
                 op!(r, at, 0x80319..0x8031D, 6, r.cpu.load_const(R::C, 2, 0xFA)); // LC(2) #FA
                 at = 0x8031D;
             }
-            // L_8031D:
+            // SUB_802DF.L2:
             0x8031D..=0x8031D => {
                 branch!(r, at, 0x80323, 8, r.cpu.call(0x804B6)); // GOSUBL SUB_804B6
             }
             // #80323:
             0x80323..=0x80323 => {
-                jump!(r, at, 8, r.cpu.pc = 0x81765); // GOLONG L_81765
+                jump!(r, at, 8, r.cpu.pc = 0x81765); // GOLONG SUB_81736.L2
             }
             _ => {
                 r.cpu.pc = at;
@@ -521,7 +521,7 @@ pub(crate) fn SUB_80329(r: &mut Run) {
             }
             // #8032F:
             0x8032F..=0x80336 => {
-                op!(r, at, 0x8032F..0x80336, 9, r.cpu.d_load(0, 5, 0x81823)); // D0=(5) L_81823
+                op!(r, at, 0x8032F..0x80336, 9, r.cpu.d_load(0, 5, 0x81823)); // D0=(5) SUB_817E9.L4
                 branch!(r, at, 0x8033C, 8, r.cpu.call(0x815FE)); // GOSUBL SUB_815FE
             }
             // #8033C:
@@ -541,7 +541,7 @@ pub(crate) fn SUB_80329(r: &mut Run) {
             0x80350..=0x8035A => {
                 op!(r, at, 0x80350..0x80356, 8, r.cpu.d_load(1, 4, 0x9A)); // D1=(4) #009A
                 io!(r, at, 0x80356..0x8035A, 28, r.cpu.store(1, R::C, Field::Nibbles(14), r.hw)); // DAT1=C 14
-                jump!(r, at, 8, r.cpu.pc = 0x81765); // GOLONG L_81765
+                jump!(r, at, 8, r.cpu.pc = 0x81765); // GOLONG SUB_81736.L2
             }
             _ => {
                 r.cpu.pc = at;
@@ -577,7 +577,7 @@ pub(crate) fn SUB_80360(r: &mut Run) {
             }
             // #80383:
             0x80383..=0x80383 => {
-                jump!(r, at, 8, r.cpu.pc = 0x80B26); // GOLONG L_80B26
+                jump!(r, at, 8, r.cpu.pc = 0x80B26); // GOLONG SUB_80ABA.L6
             }
             _ => {
                 r.cpu.pc = at;
@@ -606,7 +606,7 @@ pub(crate) fn SUB_80389(r: &mut Run) {
             }
             // #80399:
             0x80399..=0x803A0 => {
-                op!(r, at, 0x80399..0x803A0, 9, r.cpu.d_load(0, 5, 0x8182D)); // D0=(5) L_8182D
+                op!(r, at, 0x80399..0x803A0, 9, r.cpu.d_load(0, 5, 0x8182D)); // D0=(5) SUB_817E9.L5
                 branch!(r, at, 0x803A6, 8, r.cpu.call(0x815FE)); // GOSUBL SUB_815FE
             }
             // #803A6:
@@ -724,7 +724,7 @@ pub(crate) fn SUB_80414(r: &mut Run) {
             0x80435..=0x8043B => {
                 op!(r, at, 0x80435..0x80438, 5, r.cpu.srb(R::B)); // BSRB
                 op!(r, at, 0x80438..0x8043B, 5, r.cpu.srb(R::B)); // BSRB
-                jump!(r, at, 6, r.cpu.pc = 0x80477); // GOTO L_80477
+                jump!(r, at, 6, r.cpu.pc = 0x80477); // GOTO SUB_8044F.L1
             }
             _ => {
                 r.cpu.pc = at;
@@ -744,14 +744,14 @@ pub(crate) fn SUB_8043F(r: &mut Run) {
                 op!(r, at, 0x80441..0x80444, 5, r.cpu.copy(R::C, R::B, Field::W)); // C=B W
                 at = 0x80444;
             }
-            // L_80444:
+            // SUB_8043F.loop1:
             0x80444..=0x80444 => {
                 branch!(r, at, 0x80448, 6, r.cpu.call(0x8049F)); // GOSUB SUB_8049F
             }
             // #80448:
             0x80448..=0x8044A => {
                 op!(r, at, 0x80448..0x8044A, 4, r.cpu.dec(R::D, Field::A)); // D=D-1 A
-                branch!(r, at, 0x8044D, 5, r.cpu.jump_if(Cond::NoCarry, 0x80444)); // GONC L_80444
+                branch!(r, at, 0x8044D, 5, r.cpu.jump_if(Cond::NoCarry, 0x80444)); // GONC SUB_8043F.loop1
             }
             // #8044D:
             0x8044D..=0x8044D => {
@@ -791,7 +791,7 @@ pub(crate) fn SUB_8044F(r: &mut Run) {
                 op!(r, at, 0x80470..0x80473, 5, r.cpu.load_const(R::C, 1, 0x7)); // LC(1) #7
                 branch!(r, at, 0x80477, 6, r.cpu.call(0x8047D)); // GOSUB SUB_8047D
             }
-            // L_80477:
+            // SUB_8044F.L1:
             0x80477..=0x80477 => {
                 jump!(r, at, 8, r.cpu.pc = 0x8155D); // GOLONG SUB_8155D
             }
@@ -812,11 +812,11 @@ pub(crate) fn SUB_8047D(r: &mut Run) {
                 op!(r, at, 0x8047D..0x8047F, 4, r.cpu.copy(R::D, R::C, Field::A)); // D=C A
                 at = 0x8047F;
             }
-            // L_8047F:
+            // SUB_8047D.loop1:
             0x8047F..=0x80485 => {
                 op!(r, at, 0x8047F..0x80482, 5, r.cpu.zero(R::C, Field::W)); // C=0 W
                 op!(r, at, 0x80482..0x80485, 5, r.cpu.add(R::A, R::A, Field::S)); // A=A+A S
-                branch!(r, at, 0x80488, 5, r.cpu.jump_if(Cond::NoCarry, 0x80494)); // GONC L_80494
+                branch!(r, at, 0x80488, 5, r.cpu.jump_if(Cond::NoCarry, 0x80494)); // GONC SUB_8047D.L2
             }
             // #80488:
             0x80488..=0x80491 => {
@@ -826,14 +826,14 @@ pub(crate) fn SUB_8047D(r: &mut Run) {
                 op!(r, at, 0x80491..0x80494, 5, r.cpu.not(R::C, Field::W)); // C=-C-1 W
                 at = 0x80494;
             }
-            // L_80494:
+            // SUB_8047D.L2:
             0x80494..=0x80494 => {
                 branch!(r, at, 0x80498, 6, r.cpu.call(0x8049F)); // GOSUB SUB_8049F
             }
             // #80498:
             0x80498..=0x8049A => {
                 op!(r, at, 0x80498..0x8049A, 4, r.cpu.dec(R::D, Field::A)); // D=D-1 A
-                branch!(r, at, 0x8049D, 5, r.cpu.jump_if(Cond::NoCarry, 0x8047F)); // GONC L_8047F
+                branch!(r, at, 0x8049D, 5, r.cpu.jump_if(Cond::NoCarry, 0x8047F)); // GONC SUB_8047D.loop1
             }
             // #8049D:
             0x8049D..=0x8049D => {
@@ -896,7 +896,7 @@ pub(crate) fn SUB_804C0(r: &mut Run) {
             }
             // #804C6:
             0x804C6..=0x804CD => {
-                op!(r, at, 0x804C6..0x804CD, 9, r.cpu.d_load(0, 5, 0x81837)); // D0=(5) L_81837
+                op!(r, at, 0x804C6..0x804CD, 9, r.cpu.d_load(0, 5, 0x81837)); // D0=(5) SUB_817E9.L6
                 branch!(r, at, 0x804D3, 8, r.cpu.call(0x815FE)); // GOSUBL SUB_815FE
             }
             // #804D3:
@@ -912,11 +912,11 @@ pub(crate) fn SUB_804C0(r: &mut Run) {
             }
             // #804FA:
             0x804FA..=0x804FA => {
-                branch!(r, at, 0x804FD, 5, r.cpu.jump_if(Cond::NoCarry, 0x80533)); // GONC L_80533
+                branch!(r, at, 0x804FD, 5, r.cpu.jump_if(Cond::NoCarry, 0x80533)); // GONC SUB_804C0.L2
             }
             // #804FD:
             0x804FD..=0x80520 => {
-                op!(r, at, 0x804FD..0x80504, 9, r.cpu.d_load(0, 5, 0x80000)); // D0=(5) L_80000
+                op!(r, at, 0x804FD..0x80504, 9, r.cpu.d_load(0, 5, 0x80000)); // D0=(5) VersionStrings.L1
                 op!(r, at, 0x80504..0x8050B, 9, r.cpu.load_const(R::C, 5, 0x3FFF)); // LC(5) #03FFF
                 op!(r, at, 0x8050B..0x8050D, 4, r.cpu.copy(R::B, R::C, Field::A)); // B=C A
                 op!(r, at, 0x8050D..0x80514, 9, r.cpu.load_const(R::C, 5, 0x0)); // LC(5) #00000
@@ -927,19 +927,19 @@ pub(crate) fn SUB_804C0(r: &mut Run) {
             }
             // #80524:
             0x80524..=0x80524 => {
-                branch!(r, at, 0x80527, 5, r.cpu.jump_if(Cond::NoCarry, 0x8052D)); // GONC L_8052D
+                branch!(r, at, 0x80527, 5, r.cpu.jump_if(Cond::NoCarry, 0x8052D)); // GONC SUB_804C0.L1
             }
             // #80527:
             0x80527..=0x80527 => {
-                jump!(r, at, 8, r.cpu.pc = 0x816FE); // GOLONG L_816FE
+                jump!(r, at, 8, r.cpu.pc = 0x816FE); // GOLONG SUB_816E5.L2
             }
-            // L_8052D:
+            // SUB_804C0.L1:
             0x8052D..=0x8052F => {
                 op!(r, at, 0x8052D..0x8052F, 4, r.cpu.p = 15); // P= 15
                 op!(r, at, 0x8052F..0x80533, 6, r.cpu.cp_ex(4)); // CPEX 4
                 at = 0x80533;
             }
-            // L_80533:
+            // SUB_804C0.L2:
             0x80533..=0x80547 => {
                 op!(r, at, 0x80533..0x80536, 5, r.cpu.d_ex_r(0, R::C, false)); // CD0EX
                 op!(r, at, 0x80536..0x8053C, 8, r.cpu.scratch(ScratchOp::FromScratch, R::C, 1, Field::A)); // C=R1.F A
@@ -973,7 +973,7 @@ pub(crate) fn SUB_8054D(r: &mut Run) {
                 op!(r, at, 0x80563..0x80565, 4, r.cpu.pop_c()); // C=RSTK
                 at = 0x80565;
             }
-            // L_80565:
+            // SUB_8054D.loop1:
             0x80565..=0x80573 => {
                 op!(r, at, 0x80565..0x80568, 5, r.cpu.d_from_r(0, R::A, false)); // D0=A
                 op!(r, at, 0x80568..0x8056A, 4, r.cpu.push_c()); // RSTK=C
@@ -984,14 +984,14 @@ pub(crate) fn SUB_8054D(r: &mut Run) {
                 op!(r, at, 0x80573..0x80575, 4, r.cpu.copy(R::C, R::B, Field::A)); // C=B A
                 at = 0x80575;
             }
-            // L_80575:
+            // SUB_8054D.loop2:
             0x80575..=0x80585 => {
                 io!(r, at, 0x80575..0x80579, 30, r.cpu.load(0, R::A, Field::W, r.hw)); // A=DAT0 W
                 op!(r, at, 0x80579..0x8057C, 5, r.cpu.d_add(0, 16)); // D0=D0+ 16
                 io!(r, at, 0x8057C..0x80580, 30, r.cpu.load(1, R::A, Field::W, r.hw)); // A=DAT1 W
                 op!(r, at, 0x80580..0x80583, 5, r.cpu.d_add(1, 16)); // D1=D1+ 16
                 op!(r, at, 0x80583..0x80585, 4, r.cpu.dec(R::C, Field::A)); // C=C-1 A
-                branch!(r, at, 0x80588, 5, r.cpu.jump_if(Cond::NoCarry, 0x80575)); // GONC L_80575
+                branch!(r, at, 0x80588, 5, r.cpu.jump_if(Cond::NoCarry, 0x80575)); // GONC SUB_8054D.loop2
             }
             // #80588:
             0x80588..=0x80594 => {
@@ -1001,7 +1001,7 @@ pub(crate) fn SUB_8054D(r: &mut Run) {
                 op!(r, at, 0x8058E..0x80590, 4, r.cpu.add(R::A, R::C, Field::A)); // A=A+C A
                 op!(r, at, 0x80590..0x80592, 4, r.cpu.add(R::A, R::C, Field::A)); // A=A+C A
                 op!(r, at, 0x80592..0x80594, 4, r.cpu.dec(R::D, Field::A)); // D=D-1 A
-                branch!(r, at, 0x80597, 5, r.cpu.jump_if(Cond::NoCarry, 0x80565)); // GONC L_80565
+                branch!(r, at, 0x80597, 5, r.cpu.jump_if(Cond::NoCarry, 0x80565)); // GONC SUB_8054D.loop1
             }
             // #80597:
             0x80597..=0x80597 => {
@@ -1017,7 +1017,7 @@ pub(crate) fn SUB_8054D(r: &mut Run) {
                 op!(r, at, 0x805AC..0x805AF, 5, r.cpu.dec(R::A, Field::P)); // A=A-1 P
                 op!(r, at, 0x805AF..0x805B1, 4, r.cpu.inc(R::A, Field::A)); // A=A+1 A
                 op!(r, at, 0x805B1..0x805B3, 4, r.cpu.p = 0); // P= 0
-                jump!(r, at, 6, r.cpu.pc = 0x80B26); // GOTO L_80B26
+                jump!(r, at, 6, r.cpu.pc = 0x80B26); // GOTO SUB_80ABA.L6
             }
             _ => {
                 r.cpu.pc = at;
@@ -1034,7 +1034,7 @@ pub(crate) fn SUB_805B7(r: &mut Run) {
         match at {
             0x805B7..=0x805B9 => {
                 op!(r, at, 0x805B7..0x805B9, 4, r.cpu.p = 0); // P= 0
-                branch!(r, at, 0x805BE, 7, r.cpu.test(Test::NonZero(R::A), Field::A, Some(0x805D4))); // ?A#0 A / GOYES L_805D4
+                branch!(r, at, 0x805BE, 7, r.cpu.test(Test::NonZero(R::A), Field::A, Some(0x805D4))); // ?A#0 A / GOYES SUB_805B7.L1
             }
             // #805BE:
             0x805BE..=0x805C5 => {
@@ -1056,7 +1056,7 @@ pub(crate) fn SUB_805B7(r: &mut Run) {
             0x805D2..=0x805D2 => {
                 jump!(r, at, 9, r.cpu.rtn(RtnKind::Plain)); // RTN
             }
-            // L_805D4:
+            // SUB_805B7.L1:
             0x805D4..=0x805DB => {
                 op!(r, at, 0x805D4..0x805DB, 9, r.cpu.load_const(R::C, 5, 0xC0000)); // LC(5) #C0000
                 r.sync();
@@ -1107,7 +1107,7 @@ pub(crate) fn SUB_805FE(r: &mut Run) {
         match at {
             0x805FE..=0x80600 => {
                 op!(r, at, 0x805FE..0x80600, 4, r.cpu.p = 0); // P= 0
-                branch!(r, at, 0x80605, 7, r.cpu.test(Test::Zero(R::A), Field::A, Some(0x8061B))); // ?A=0 A / GOYES L_8061B
+                branch!(r, at, 0x80605, 7, r.cpu.test(Test::Zero(R::A), Field::A, Some(0x8061B))); // ?A=0 A / GOYES SUB_805FE.L1
             }
             // #80605:
             0x80605..=0x8060C => {
@@ -1129,7 +1129,7 @@ pub(crate) fn SUB_805FE(r: &mut Run) {
             0x80619..=0x80619 => {
                 jump!(r, at, 9, r.cpu.rtn(RtnKind::Plain)); // RTN
             }
-            // L_8061B:
+            // SUB_805FE.L1:
             0x8061B..=0x80622 => {
                 op!(r, at, 0x8061B..0x80622, 9, r.cpu.load_const(R::C, 5, 0xF0000)); // LC(5) #F0000
                 r.sync();
@@ -1219,7 +1219,7 @@ pub(crate) fn SUB_8066D(r: &mut Run) {
             }
             // #80677:
             0x80677..=0x8067E => {
-                op!(r, at, 0x80677..0x8067E, 9, r.cpu.d_load(0, 5, 0x81841)); // D0=(5) L_81841
+                op!(r, at, 0x80677..0x8067E, 9, r.cpu.d_load(0, 5, 0x81841)); // D0=(5) SUB_817E9.L7
                 branch!(r, at, 0x80684, 8, r.cpu.call(0x8165A)); // GOSUBL SUB_8165A
             }
             // #80684:
@@ -1234,14 +1234,14 @@ pub(crate) fn SUB_8066D(r: &mut Run) {
             }
             // #80696:
             0x80696..=0x80696 => {
-                branch!(r, at, 0x80699, 5, r.cpu.jump_if(Cond::NoCarry, 0x806A4)); // GONC L_806A4
+                branch!(r, at, 0x80699, 5, r.cpu.jump_if(Cond::NoCarry, 0x806A4)); // GONC SUB_8066D.L1
             }
             // #80699:
             0x80699..=0x806A0 => {
                 op!(r, at, 0x80699..0x806A0, 9, r.cpu.d_load(0, 5, 0x1)); // D0=(5) #00001
-                jump!(r, at, 6, r.cpu.pc = 0x806BF); // GOTO L_806BF
+                jump!(r, at, 6, r.cpu.pc = 0x806BF); // GOTO SUB_8066D.L2
             }
-            // L_806A4:
+            // SUB_8066D.L1:
             0x806A4..=0x806A4 => {
                 branch!(r, at, 0x806AA, 8, r.cpu.call(0x8148B)); // GOSUBL SUB_8148B
             }
@@ -1251,7 +1251,7 @@ pub(crate) fn SUB_8066D(r: &mut Run) {
             }
             // #806B0:
             0x806B0..=0x806B0 => {
-                branch!(r, at, 0x806B3, 5, r.cpu.jump_if(Cond::Carry, 0x806BF)); // GOC L_806BF
+                branch!(r, at, 0x806B3, 5, r.cpu.jump_if(Cond::Carry, 0x806BF)); // GOC SUB_8066D.L2
             }
             // #806B3:
             0x806B3..=0x806B3 => {
@@ -1259,9 +1259,9 @@ pub(crate) fn SUB_8066D(r: &mut Run) {
             }
             // #806B9:
             0x806B9..=0x806B9 => {
-                jump!(r, at, 8, r.cpu.pc = 0x816FE); // GOLONG L_816FE
+                jump!(r, at, 8, r.cpu.pc = 0x816FE); // GOLONG SUB_816E5.L2
             }
-            // L_806BF:
+            // SUB_8066D.L2:
             0x806BF..=0x806BF => {
                 branch!(r, at, 0x806C5, 8, r.cpu.call(0x8120A)); // GOSUBL SUB_8120A
             }
@@ -1309,7 +1309,7 @@ pub(crate) fn SUB_806DE(r: &mut Run) {
                 op!(r, at, 0x80722..0x80724, 4, r.cpu.copy(R::C, R::D, Field::A)); // C=D A
                 at = 0x80724;
             }
-            // L_80724:
+            // SUB_806DE.loop1:
             0x80724..=0x80750 => {
                 op!(r, at, 0x80724..0x80727, 5, r.cpu.d_from_r(0, R::C, false)); // D0=C
                 io!(r, at, 0x80727..0x8072B, 29, r.cpu.store(0, R::A, Field::Nibbles(15), r.hw)); // DAT0=A 15
@@ -1324,32 +1324,32 @@ pub(crate) fn SUB_806DE(r: &mut Run) {
                 op!(r, at, 0x80747..0x8074A, 5, r.cpu.d_from_r(0, R::C, false)); // D0=C
                 op!(r, at, 0x8074A..0x8074C, 4, r.cpu.p = 14); // P= 14
                 io!(r, at, 0x8074C..0x80750, 29, r.cpu.load(0, R::C, Field::Nibbles(15), r.hw)); // C=DAT0 15
-                branch!(r, at, 0x80755, 7, r.cpu.test(Test::Regs(Cmp::Ne, R::C, R::A), Field::WP, Some(0x807A6))); // ?C#A WP / GOYES L_807A6
+                branch!(r, at, 0x80755, 7, r.cpu.test(Test::Regs(Cmp::Ne, R::C, R::A), Field::WP, Some(0x807A6))); // ?C#A WP / GOYES SUB_806DE.L2
             }
             // #80755:
             0x80755..=0x8075C => {
                 op!(r, at, 0x80755..0x80758, 5, r.cpu.d_add(0, 15)); // D0=D0+ 15
                 io!(r, at, 0x80758..0x8075C, 29, r.cpu.load(0, R::C, Field::Nibbles(15), r.hw)); // C=DAT0 15
-                branch!(r, at, 0x80761, 7, r.cpu.test(Test::Regs(Cmp::Ne, R::C, R::A), Field::WP, Some(0x807A6))); // ?C#A WP / GOYES L_807A6
+                branch!(r, at, 0x80761, 7, r.cpu.test(Test::Regs(Cmp::Ne, R::C, R::A), Field::WP, Some(0x807A6))); // ?C#A WP / GOYES SUB_806DE.L2
             }
             // #80761:
             0x80761..=0x80768 => {
                 op!(r, at, 0x80761..0x80764, 5, r.cpu.d_add(0, 15)); // D0=D0+ 15
                 io!(r, at, 0x80764..0x80768, 29, r.cpu.load(0, R::C, Field::Nibbles(15), r.hw)); // C=DAT0 15
-                branch!(r, at, 0x8076D, 7, r.cpu.test(Test::Regs(Cmp::Ne, R::C, R::A), Field::WP, Some(0x807A6))); // ?C#A WP / GOYES L_807A6
+                branch!(r, at, 0x8076D, 7, r.cpu.test(Test::Regs(Cmp::Ne, R::C, R::A), Field::WP, Some(0x807A6))); // ?C#A WP / GOYES SUB_806DE.L2
             }
             // #8076D:
             0x8076D..=0x80774 => {
                 op!(r, at, 0x8076D..0x80770, 5, r.cpu.d_add(0, 15)); // D0=D0+ 15
                 io!(r, at, 0x80770..0x80774, 29, r.cpu.load(0, R::C, Field::Nibbles(15), r.hw)); // C=DAT0 15
-                branch!(r, at, 0x80779, 7, r.cpu.test(Test::Regs(Cmp::Ne, R::C, R::A), Field::WP, Some(0x807A6))); // ?C#A WP / GOYES L_807A6
+                branch!(r, at, 0x80779, 7, r.cpu.test(Test::Regs(Cmp::Ne, R::C, R::A), Field::WP, Some(0x807A6))); // ?C#A WP / GOYES SUB_806DE.L2
             }
             // #80779:
             0x80779..=0x80782 => {
                 op!(r, at, 0x80779..0x8077C, 5, r.cpu.d_add(0, 15)); // D0=D0+ 15
                 op!(r, at, 0x8077C..0x8077E, 4, r.cpu.p = 3); // P= 3
                 io!(r, at, 0x8077E..0x80782, 18, r.cpu.load(0, R::C, Field::Nibbles(4), r.hw)); // C=DAT0 4
-                branch!(r, at, 0x80787, 7, r.cpu.test(Test::Regs(Cmp::Ne, R::C, R::A), Field::WP, Some(0x807A6))); // ?C#A WP / GOYES L_807A6
+                branch!(r, at, 0x80787, 7, r.cpu.test(Test::Regs(Cmp::Ne, R::C, R::A), Field::WP, Some(0x807A6))); // ?C#A WP / GOYES SUB_806DE.L2
             }
             // #80787:
             0x80787..=0x8079F => {
@@ -1361,13 +1361,13 @@ pub(crate) fn SUB_806DE(r: &mut Run) {
                 op!(r, at, 0x80797..0x8079A, 5, r.cpu.copy(R::A, R::C, Field::P)); // A=C P
                 op!(r, at, 0x8079A..0x8079C, 4, r.cpu.copy(R::C, R::D, Field::A)); // C=D A
                 op!(r, at, 0x8079C..0x8079F, 5, r.cpu.dec(R::B, Field::S)); // B=B-1 S
-                branch!(r, at, 0x807A2, 5, r.cpu.jump_if(Cond::Carry, 0x807B7)); // GOC L_807B7
+                branch!(r, at, 0x807A2, 5, r.cpu.jump_if(Cond::Carry, 0x807B7)); // GOC SUB_806DE.L3
             }
             // #807A2:
             0x807A2..=0x807A2 => {
-                jump!(r, at, 6, r.cpu.pc = 0x80724); // GOTO L_80724
+                jump!(r, at, 6, r.cpu.pc = 0x80724); // GOTO SUB_806DE.loop1
             }
-            // L_807A6:
+            // SUB_806DE.L2:
             0x807A6..=0x807AA => {
                 op!(r, at, 0x807A6..0x807A8, 4, r.cpu.pop_c()); // C=RSTK
                 op!(r, at, 0x807A8..0x807AA, 4, r.cpu.exch(R::D, R::C, Field::A)); // DCEX A
@@ -1378,14 +1378,14 @@ pub(crate) fn SUB_806DE(r: &mut Run) {
             // #807AD:
             0x807AD..=0x807AF => {
                 op!(r, at, 0x807AD..0x807AF, 4, r.cpu.p = 0); // P= 0
-                branch!(r, at, 0x807B3, 6, r.cpu.call(0x807B7)); // GOSUB L_807B7
+                branch!(r, at, 0x807B3, 6, r.cpu.call(0x807B7)); // GOSUB SUB_806DE.L3
             }
             // #807B3:
             0x807B3..=0x807B5 => {
                 op!(r, at, 0x807B3..0x807B5, 4, r.cpu.push_c()); // RSTK=C
                 jump!(r, at, 9, r.cpu.rtn(RtnKind::SetCarry)); // RTNSC
             }
-            // L_807B7:
+            // SUB_806DE.L3:
             0x807B7..=0x807E7 => {
                 op!(r, at, 0x807B7..0x807BA, 5, r.cpu.d_ex_r(0, R::C, false)); // CD0EX
                 op!(r, at, 0x807BA..0x807BD, 5, r.cpu.scratch(ScratchOp::FromScratch, R::A, 1, Field::W)); // A=R1
@@ -1459,17 +1459,17 @@ pub(crate) fn SUB_8081A(r: &mut Run) {
             0x8081A..=0x8081A => {
                 jump!(r, at, 9, r.cpu.pc = 0x044D4); // GOVLNG SUB_044D4
             }
-            // L_80821:
+            // SUB_8081A.L1:
             0x80821..=0x80824 => {
                 op!(r, at, 0x80821..0x80824, 5, r.cpu.st_set(11, true)); // ST=1 11
-                jump!(r, at, 6, r.cpu.pc = 0x8082B); // GOTO L_8082B
+                jump!(r, at, 6, r.cpu.pc = 0x8082B); // GOTO SUB_8081A.L3
             }
-            // L_80828:
+            // SUB_8081A.L2:
             0x80828..=0x80828 => {
                 op!(r, at, 0x80828..0x8082B, 5, r.cpu.st_set(11, false)); // ST=0 11
                 at = 0x8082B;
             }
-            // L_8082B:
+            // SUB_8081A.L3:
             0x8082B..=0x8082E => {
                 op!(r, at, 0x8082B..0x8082E, 5, r.cpu.st_set(9, false)); // ST=0 9
                 branch!(r, at, 0x80832, 6, r.cpu.call(0x80916)); // GOSUB SUB_80916
@@ -1495,23 +1495,23 @@ pub(crate) fn SUB_8081A(r: &mut Run) {
             // #80849:
             0x80849..=0x80850 => {
                 op!(r, at, 0x80849..0x80850, 9, r.cpu.d_load(0, 5, 0x80946)); // D0=(5) KeyTestAll
-                branch!(r, at, 0x80855, 7, r.cpu.st_test(11, false, Some(0x8085C))); // ?ST=0 11 / GOYES L_8085C
+                branch!(r, at, 0x80855, 7, r.cpu.st_test(11, false, Some(0x8085C))); // ?ST=0 11 / GOYES SUB_8081A.loop4
             }
             // #80855:
             0x80855..=0x80855 => {
                 op!(r, at, 0x80855..0x8085C, 9, r.cpu.d_load(0, 5, 0x809AA)); // D0=(5) KeyTestDiag
                 at = 0x8085C;
             }
-            // L_8085C:
+            // SUB_8081A.loop4:
             0x8085C..=0x80864 => {
                 io!(r, at, 0x8085C..0x8085F, 16, r.cpu.load(0, R::C, Field::B, r.hw)); // C=DAT0 B
                 op!(r, at, 0x8085F..0x80861, 4, r.cpu.copy(R::D, R::C, Field::A)); // D=C A
                 op!(r, at, 0x80861..0x80864, 5, r.cpu.d_add(0, 2)); // D0=D0+ 2
-                branch!(r, at, 0x80869, 7, r.cpu.test(Test::NonZero(R::C), Field::B, Some(0x8088F))); // ?C#0 B / GOYES L_8088F
+                branch!(r, at, 0x80869, 7, r.cpu.test(Test::NonZero(R::C), Field::B, Some(0x8088F))); // ?C#0 B / GOYES SUB_8081A.L6
             }
             // #80869:
             0x80869..=0x80869 => {
-                branch!(r, at, 0x8086E, 7, r.cpu.st_test(9, false, Some(0x80889))); // ?ST=0 9 / GOYES L_80889
+                branch!(r, at, 0x8086E, 7, r.cpu.st_test(9, false, Some(0x80889))); // ?ST=0 9 / GOYES SUB_8081A.L5
             }
             // #8086E:
             0x8086E..=0x8087F => {
@@ -1522,13 +1522,13 @@ pub(crate) fn SUB_8081A(r: &mut Run) {
             }
             // #80883:
             0x80883..=0x80883 => {
-                jump!(r, at, 8, r.cpu.pc = 0x81709); // GOLONG L_81709
+                jump!(r, at, 8, r.cpu.pc = 0x81709); // GOLONG SUB_816E5.L3
             }
-            // L_80889:
+            // SUB_8081A.L5:
             0x80889..=0x80889 => {
-                jump!(r, at, 8, r.cpu.pc = 0x816FE); // GOLONG L_816FE
+                jump!(r, at, 8, r.cpu.pc = 0x816FE); // GOLONG SUB_816E5.L2
             }
-            // L_8088F:
+            // SUB_8081A.L6:
             0x8088F..=0x8088F => {
                 branch!(r, at, 0x80893, 6, r.cpu.call(0x80EBC)); // GOSUB SUB_80EBC
             }
@@ -1539,7 +1539,7 @@ pub(crate) fn SUB_8081A(r: &mut Run) {
                 io!(r, at, 0x8089B..0x8089E, 19, r.cpu.store(1, R::A, Field::A, r.hw)); // DAT1=A A
                 at = 0x8089E;
             }
-            // L_8089E:
+            // SUB_8081A.loop7:
             0x8089E..=0x8089E => {
                 r.cpu.pc = 0x808A3;
                 r.sync();
@@ -1551,21 +1551,21 @@ pub(crate) fn SUB_8081A(r: &mut Run) {
             0x808A3..=0x808AC => {
                 op!(r, at, 0x808A3..0x808A9, 8, r.cpu.d_load(1, 4, 0x7F7)); // D1=(4) #07F7
                 io!(r, at, 0x808A9..0x808AC, 19, r.cpu.load(1, R::C, Field::A, r.hw)); // C=DAT1 A
-                branch!(r, at, 0x808B1, 7, r.cpu.test(Test::Zero(R::C), Field::A, Some(0x808BA))); // ?C=0 A / GOYES L_808BA
+                branch!(r, at, 0x808B1, 7, r.cpu.test(Test::Zero(R::C), Field::A, Some(0x808BA))); // ?C=0 A / GOYES SUB_8081A.L8
             }
             // #808B1:
             0x808B1..=0x808B7 => {
                 op!(r, at, 0x808B1..0x808B3, 4, r.cpu.zero(R::C, Field::A)); // C=0 A
                 op!(r, at, 0x808B3..0x808B7, 6, r.cpu.load_const(R::C, 2, 0x2D)); // LC(2) #2D
-                branch!(r, at, 0x808BA, 5, r.cpu.jump_if(Cond::NoCarry, 0x808CB)); // GONC L_808CB
+                branch!(r, at, 0x808BA, 5, r.cpu.jump_if(Cond::NoCarry, 0x808CB)); // GONC SUB_8081A.L9
             }
-            // L_808BA:
+            // SUB_8081A.L8:
             0x808BA..=0x808BA => {
                 branch!(r, at, 0x808C1, 9, r.cpu.call(0x04840)); // GOSBVL POPKEY
             }
             // #808C1:
             0x808C1..=0x808C1 => {
-                branch!(r, at, 0x808C4, 5, r.cpu.jump_if(Cond::NoCarry, 0x808CB)); // GONC L_808CB
+                branch!(r, at, 0x808C4, 5, r.cpu.jump_if(Cond::NoCarry, 0x808CB)); // GONC SUB_8081A.L9
             }
             // #808C4:
             0x808C4..=0x808C4 => {
@@ -1575,11 +1575,11 @@ pub(crate) fn SUB_8081A(r: &mut Run) {
             }
             // #808C7:
             0x808C7..=0x808C7 => {
-                jump!(r, at, 6, r.cpu.pc = 0x8089E); // GOTO L_8089E
+                jump!(r, at, 6, r.cpu.pc = 0x8089E); // GOTO SUB_8081A.loop7
             }
-            // L_808CB:
+            // SUB_8081A.L9:
             0x808CB..=0x808CB => {
-                branch!(r, at, 0x808D0, 7, r.cpu.test(Test::Regs(Cmp::Eq, R::D, R::C), Field::B, Some(0x80904))); // ?D=C B / GOYES L_80904
+                branch!(r, at, 0x808D0, 7, r.cpu.test(Test::Regs(Cmp::Eq, R::D, R::C), Field::B, Some(0x80904))); // ?D=C B / GOYES SUB_8081A.L10
             }
             // #808D0:
             0x808D0..=0x808E9 => {
@@ -1591,7 +1591,7 @@ pub(crate) fn SUB_8081A(r: &mut Run) {
                 op!(r, at, 0x808E0..0x808E3, 5, r.cpu.copy(R::C, R::D, Field::B)); // C=D B
                 op!(r, at, 0x808E3..0x808E5, 4, r.cpu.push_c()); // RSTK=C
                 op!(r, at, 0x808E5..0x808E9, 6, r.cpu.load_const(R::C, 2, 0xF4)); // LC(2) #F4
-                branch!(r, at, 0x808EF, 8, r.cpu.call(0x802D8)); // GOSUBL L_802D8
+                branch!(r, at, 0x808EF, 8, r.cpu.call(0x802D8)); // GOSUBL SUB_802D2.L1
             }
             // #808EF:
             0x808EF..=0x808F4 => {
@@ -1603,12 +1603,12 @@ pub(crate) fn SUB_8081A(r: &mut Run) {
             0x808FA..=0x80900 => {
                 op!(r, at, 0x808FA..0x808FD, 5, r.cpu.scratch(ScratchOp::FromScratch, R::A, 4, Field::W)); // A=R4
                 op!(r, at, 0x808FD..0x80900, 5, r.cpu.d_from_r(0, R::A, false)); // D0=A
-                jump!(r, at, 6, r.cpu.pc = 0x8085C); // GOTO L_8085C
+                jump!(r, at, 6, r.cpu.pc = 0x8085C); // GOTO SUB_8081A.loop4
             }
-            // L_80904:
+            // SUB_8081A.L10:
             0x80904..=0x80908 => {
                 op!(r, at, 0x80904..0x80908, 6, r.cpu.load_const(R::C, 2, 0x94)); // LC(2) #94
-                branch!(r, at, 0x8090E, 8, r.cpu.call(0x802D8)); // GOSUBL L_802D8
+                branch!(r, at, 0x8090E, 8, r.cpu.call(0x802D8)); // GOSUBL SUB_802D2.L1
             }
             // #8090E:
             0x8090E..=0x8090E => {
@@ -1616,7 +1616,7 @@ pub(crate) fn SUB_8081A(r: &mut Run) {
             }
             // #80912:
             0x80912..=0x80912 => {
-                jump!(r, at, 6, r.cpu.pc = 0x8085C); // GOTO L_8085C
+                jump!(r, at, 6, r.cpu.pc = 0x8085C); // GOTO SUB_8081A.loop4
             }
             _ => {
                 r.cpu.pc = at;
@@ -1638,15 +1638,15 @@ pub(crate) fn SUB_80916(r: &mut Run) {
             }
             // #80925:
             0x80925..=0x8092C => {
-                op!(r, at, 0x80925..0x8092C, 9, r.cpu.d_load(0, 5, 0x8184B)); // D0=(5) L_8184B
-                branch!(r, at, 0x80931, 7, r.cpu.st_test(11, false, Some(0x80938))); // ?ST=0 11 / GOYES L_80938
+                op!(r, at, 0x80925..0x8092C, 9, r.cpu.d_load(0, 5, 0x8184B)); // D0=(5) SUB_817E9.L8
+                branch!(r, at, 0x80931, 7, r.cpu.st_test(11, false, Some(0x80938))); // ?ST=0 11 / GOYES SUB_80916.L1
             }
             // #80931:
             0x80931..=0x80931 => {
-                op!(r, at, 0x80931..0x80938, 9, r.cpu.d_load(0, 5, 0x81855)); // D0=(5) L_81855
+                op!(r, at, 0x80931..0x80938, 9, r.cpu.d_load(0, 5, 0x81855)); // D0=(5) SUB_817E9.L9
                 at = 0x80938;
             }
-            // L_80938:
+            // SUB_80916.L1:
             0x80938..=0x80938 => {
                 branch!(r, at, 0x8093E, 8, r.cpu.call(0x815FE)); // GOSUBL SUB_815FE
             }
@@ -1664,8 +1664,8 @@ pub(crate) fn SUB_80916(r: &mut Run) {
     }
 }
 
-// L_809BE: firmware/upper/80000-selftest.s:787
-pub(crate) fn L_809BE(r: &mut Run) {
+// KeyTestDiag.L1: firmware/upper/80000-selftest.s:787
+pub(crate) fn KeyTestDiag_L1(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -1674,7 +1674,7 @@ pub(crate) fn L_809BE(r: &mut Run) {
             }
             // #809C4:
             0x809C4..=0x809CB => {
-                op!(r, at, 0x809C4..0x809CB, 9, r.cpu.d_load(0, 5, 0x81867)); // D0=(5) L_81867
+                op!(r, at, 0x809C4..0x809CB, 9, r.cpu.d_load(0, 5, 0x81867)); // D0=(5) SUB_817E9.L11
                 branch!(r, at, 0x809D1, 8, r.cpu.call(0x815FE)); // GOSUBL SUB_815FE
             }
             // #809D1:
@@ -1693,7 +1693,7 @@ pub(crate) fn L_809BE(r: &mut Run) {
                 op!(r, at, 0x809ED..0x809F0, 5, r.cpu.scratch(ScratchOp::ToScratch, R::C, 3, Field::W)); // R3=C
                 at = 0x809F0;
             }
-            // L_809F0:
+            // KeyTestDiag.loop2:
             0x809F0..=0x809F0 => {
                 branch!(r, at, 0x809F6, 8, r.cpu.call(0x802C8)); // GOSUBL SUB_802C8
             }
@@ -1731,7 +1731,7 @@ pub(crate) fn L_809BE(r: &mut Run) {
             // #80A3D:
             0x80A3D..=0x80A40 => {
                 op!(r, at, 0x80A3D..0x80A40, 5, r.cpu.scratch(ScratchOp::FromScratch, R::A, 2, Field::W)); // A=R2
-                branch!(r, at, 0x80A45, 7, r.cpu.test(Test::Regs(Cmp::Ne, R::C, R::A), Field::A, Some(0x80A73))); // ?C#A A / GOYES L_80A73
+                branch!(r, at, 0x80A45, 7, r.cpu.test(Test::Regs(Cmp::Ne, R::C, R::A), Field::A, Some(0x80A73))); // ?C#A A / GOYES KeyTestDiag.L4
             }
             // #80A45:
             0x80A45..=0x80A45 => {
@@ -1739,11 +1739,11 @@ pub(crate) fn L_809BE(r: &mut Run) {
             }
             // #80A4C:
             0x80A4C..=0x80A4C => {
-                branch!(r, at, 0x80A4F, 5, r.cpu.jump_if(Cond::NoCarry, 0x809F0)); // GONC L_809F0
+                branch!(r, at, 0x80A4F, 5, r.cpu.jump_if(Cond::NoCarry, 0x809F0)); // GONC KeyTestDiag.loop2
             }
             // #80A4F:
             0x80A4F..=0x80A4F => {
-                branch!(r, at, 0x80A53, 6, r.cpu.call(0x80B26)); // GOSUB L_80B26
+                branch!(r, at, 0x80A53, 6, r.cpu.call(0x80B26)); // GOSUB SUB_80ABA.L6
             }
             // #80A53:
             0x80A53..=0x80A61 => {
@@ -1752,22 +1752,22 @@ pub(crate) fn L_809BE(r: &mut Run) {
                 io!(r, at, 0x80A5D..0x80A61, 15, r.cpu.store(1, R::C, Field::Nibbles(1), r.hw)); // DAT1=C 1
                 branch!(r, at, 0x80A67, 8, r.cpu.call(0x8040D)); // GOSUBL ClrScrMn~jump
             }
-            // L_80A67:
+            // KeyTestDiag.loop3:
             0x80A67..=0x80A67 => {
                 branch!(r, at, 0x80A6E, 9, r.cpu.call(0x00E0B)); // GOSBVL SUB_00E0B
             }
             // #80A6E:
             0x80A6E..=0x80A6E => {
-                branch!(r, at, 0x80A71, 5, r.cpu.jump_if(Cond::Carry, 0x80A67)); // GOC L_80A67
+                branch!(r, at, 0x80A71, 5, r.cpu.jump_if(Cond::Carry, 0x80A67)); // GOC KeyTestDiag.loop3
             }
             // #80A71:
             0x80A71..=0x80A71 => {
                 jump!(r, at, 9, r.cpu.rtn(RtnKind::Plain)); // RTN
             }
-            // L_80A73:
+            // KeyTestDiag.L4:
             0x80A73..=0x80A75 => {
                 op!(r, at, 0x80A73..0x80A75, 4, r.cpu.push_c()); // RSTK=C
-                branch!(r, at, 0x80A79, 6, r.cpu.call(0x80B26)); // GOSUB L_80B26
+                branch!(r, at, 0x80A79, 6, r.cpu.call(0x80B26)); // GOSUB SUB_80ABA.L6
             }
             // #80A79:
             0x80A79..=0x80A87 => {
@@ -1778,7 +1778,7 @@ pub(crate) fn L_809BE(r: &mut Run) {
             }
             // #80A8D:
             0x80A8D..=0x80A94 => {
-                op!(r, at, 0x80A8D..0x80A94, 9, r.cpu.d_load(0, 5, 0x81885)); // D0=(5) L_81885
+                op!(r, at, 0x80A8D..0x80A94, 9, r.cpu.d_load(0, 5, 0x81885)); // D0=(5) SUB_817E9.L12
                 branch!(r, at, 0x80A9A, 8, r.cpu.call(0x815FE)); // GOSUBL SUB_815FE
             }
             // #80A9A:
@@ -1788,7 +1788,7 @@ pub(crate) fn L_809BE(r: &mut Run) {
                 op!(r, at, 0x80A9F..0x80AA5, 8, r.cpu.scratch(ScratchOp::FromScratch, R::C, 1, Field::A)); // C=R1.F A
                 op!(r, at, 0x80AA5..0x80AAA, 7, r.cpu.bit_set(R::C, 4, true)); // CBIT=1 4
                 op!(r, at, 0x80AAA..0x80AB0, 8, r.cpu.scratch(ScratchOp::ToScratch, R::C, 1, Field::A)); // R1=C.F A
-                branch!(r, at, 0x80AB4, 6, r.cpu.call(0x80A67)); // GOSUB L_80A67
+                branch!(r, at, 0x80AB4, 6, r.cpu.call(0x80A67)); // GOSUB KeyTestDiag.loop3
             }
             // #80AB4:
             0x80AB4..=0x80AB4 => {
@@ -1810,44 +1810,44 @@ pub(crate) fn SUB_80ABA(r: &mut Run) {
             0x80ABA..=0x80AC4 => {
                 op!(r, at, 0x80ABA..0x80ABC, 4, r.cpu.copy(R::A, R::C, Field::A)); // A=C A
                 op!(r, at, 0x80ABC..0x80AC4, 10, r.cpu.load_const(R::C, 6, 0x30C30C)); // LC(6) #30C30C
-                branch!(r, at, 0x80ACB, 9, r.cpu.bit_test(R::A, 3, true, Some(0x80ACE))); // ?ABIT=1 3 / GOYES L_80ACE
+                branch!(r, at, 0x80ACB, 9, r.cpu.bit_test(R::A, 3, true, Some(0x80ACE))); // ?ABIT=1 3 / GOYES SUB_80ABA.L1
             }
             // #80ACB:
             0x80ACB..=0x80ACB => {
                 op!(r, at, 0x80ACB..0x80ACE, 5, r.cpu.zero(R::C, Field::P)); // C=0 P
                 at = 0x80ACE;
             }
-            // L_80ACE:
+            // SUB_80ABA.L1:
             0x80ACE..=0x80AD0 => {
                 op!(r, at, 0x80ACE..0x80AD0, 4, r.cpu.p = 2); // P= 2
-                branch!(r, at, 0x80AD7, 9, r.cpu.bit_test(R::A, 2, true, Some(0x80ADA))); // ?ABIT=1 2 / GOYES L_80ADA
+                branch!(r, at, 0x80AD7, 9, r.cpu.bit_test(R::A, 2, true, Some(0x80ADA))); // ?ABIT=1 2 / GOYES SUB_80ABA.L2
             }
             // #80AD7:
             0x80AD7..=0x80AD7 => {
                 op!(r, at, 0x80AD7..0x80ADA, 5, r.cpu.zero(R::C, Field::P)); // C=0 P
                 at = 0x80ADA;
             }
-            // L_80ADA:
+            // SUB_80ABA.L2:
             0x80ADA..=0x80ADC => {
                 op!(r, at, 0x80ADA..0x80ADC, 4, r.cpu.p = 3); // P= 3
-                branch!(r, at, 0x80AE3, 9, r.cpu.bit_test(R::A, 1, true, Some(0x80AE6))); // ?ABIT=1 1 / GOYES L_80AE6
+                branch!(r, at, 0x80AE3, 9, r.cpu.bit_test(R::A, 1, true, Some(0x80AE6))); // ?ABIT=1 1 / GOYES SUB_80ABA.L3
             }
             // #80AE3:
             0x80AE3..=0x80AE3 => {
                 op!(r, at, 0x80AE3..0x80AE6, 5, r.cpu.zero(R::C, Field::P)); // C=0 P
                 at = 0x80AE6;
             }
-            // L_80AE6:
+            // SUB_80ABA.L3:
             0x80AE6..=0x80AE8 => {
                 op!(r, at, 0x80AE6..0x80AE8, 4, r.cpu.p = 5); // P= 5
-                branch!(r, at, 0x80AEF, 9, r.cpu.bit_test(R::A, 0, true, Some(0x80AF2))); // ?ABIT=1 0 / GOYES L_80AF2
+                branch!(r, at, 0x80AEF, 9, r.cpu.bit_test(R::A, 0, true, Some(0x80AF2))); // ?ABIT=1 0 / GOYES SUB_80ABA.L4
             }
             // #80AEF:
             0x80AEF..=0x80AEF => {
                 op!(r, at, 0x80AEF..0x80AF2, 5, r.cpu.zero(R::C, Field::P)); // C=0 P
                 at = 0x80AF2;
             }
-            // L_80AF2:
+            // SUB_80ABA.L4:
             0x80AF2..=0x80AFA => {
                 op!(r, at, 0x80AF2..0x80AF4, 4, r.cpu.p = 15); // P= 15
                 op!(r, at, 0x80AF4..0x80AF7, 5, r.cpu.load_const(R::C, 1, 0x7)); // LC(1) #7
@@ -1855,7 +1855,7 @@ pub(crate) fn SUB_80ABA(r: &mut Run) {
                 op!(r, at, 0x80AFA..0x80AFC, 4, r.cpu.p = 0); // P= 0
                 at = 0x80AFC;
             }
-            // L_80AFC:
+            // SUB_80ABA.loop5:
             0x80AFC..=0x80B15 => {
                 op!(r, at, 0x80AFC..0x80AFF, 5, r.cpu.copy(R::C, R::B, Field::W)); // C=B W
                 io!(r, at, 0x80AFF..0x80B03, 20, r.cpu.store(0, R::C, Field::Nibbles(6), r.hw)); // DAT0=C 6
@@ -1864,7 +1864,7 @@ pub(crate) fn SUB_80ABA(r: &mut Run) {
                 op!(r, at, 0x80B0D..0x80B0F, 4, r.cpu.add(R::A, R::C, Field::A)); // A=A+C A
                 op!(r, at, 0x80B0F..0x80B12, 5, r.cpu.d_from_r(0, R::A, false)); // D0=A
                 op!(r, at, 0x80B12..0x80B15, 5, r.cpu.dec(R::B, Field::S)); // B=B-1 S
-                branch!(r, at, 0x80B18, 5, r.cpu.jump_if(Cond::NoCarry, 0x80AFC)); // GONC L_80AFC
+                branch!(r, at, 0x80B18, 5, r.cpu.jump_if(Cond::NoCarry, 0x80AFC)); // GONC SUB_80ABA.loop5
             }
             // #80B18:
             0x80B18..=0x80B24 => {
@@ -1873,11 +1873,11 @@ pub(crate) fn SUB_80ABA(r: &mut Run) {
                 op!(r, at, 0x80B21..0x80B24, 5, r.cpu.d_from_r(0, R::A, false)); // D0=A
                 jump!(r, at, 9, r.cpu.rtn(RtnKind::ClearCarry)); // RTNCC
             }
-            // L_80B26:
+            // SUB_80ABA.L6:
             0x80B26..=0x80B26 => {
                 jump!(r, at, 9, r.cpu.pc = 0x010E5); // GOVLNG AllowIntr
             }
-            // L_80B2D:
+            // SUB_80ABA.L7:
             0x80B2D..=0x80B2D => {
                 branch!(r, at, 0x80B33, 8, r.cpu.call(0x802D2)); // GOSUBL SUB_802D2
             }
@@ -1891,11 +1891,11 @@ pub(crate) fn SUB_80ABA(r: &mut Run) {
             }
             // #80B3F:
             0x80B3F..=0x80B3F => {
-                jump!(r, at, 6, r.cpu.pc = 0x80A67); // GOTO L_80A67
+                jump!(r, at, 6, r.cpu.pc = 0x80A67); // GOTO KeyTestDiag.loop3
             }
-            // L_80B43:
+            // SUB_80ABA.L8:
             0x80B43..=0x80B4A => {
-                op!(r, at, 0x80B43..0x80B4A, 9, r.cpu.d_load(0, 5, 0x81937)); // D0=(5) L_81937
+                op!(r, at, 0x80B43..0x80B4A, 9, r.cpu.d_load(0, 5, 0x81937)); // D0=(5) SUB_817E9.L27
                 branch!(r, at, 0x80B4E, 6, r.cpu.call(0x80D29)); // GOSUB SUB_80D29
             }
             // #80B4E:
@@ -1920,7 +1920,7 @@ pub(crate) fn SUB_80ABA(r: &mut Run) {
             // #80B68:
             0x80B68..=0x80B6A => {
                 op!(r, at, 0x80B68..0x80B6A, 4, r.cpu.pop_c()); // C=RSTK
-                branch!(r, at, 0x80B6D, 5, r.cpu.jump_if(Cond::Carry, 0x80BB5)); // GOC L_80BB5
+                branch!(r, at, 0x80B6D, 5, r.cpu.jump_if(Cond::Carry, 0x80BB5)); // GOC SUB_80ABA.L11
             }
             // #80B6D:
             0x80B6D..=0x80B71 => {
@@ -1930,7 +1930,7 @@ pub(crate) fn SUB_80ABA(r: &mut Run) {
             }
             // #80B75:
             0x80B75..=0x80B75 => {
-                branch!(r, at, 0x80B78, 5, r.cpu.jump_if(Cond::Carry, 0x80BB5)); // GOC L_80BB5
+                branch!(r, at, 0x80B78, 5, r.cpu.jump_if(Cond::Carry, 0x80BB5)); // GOC SUB_80ABA.L11
             }
             // #80B78:
             0x80B78..=0x80B78 => {
@@ -1951,38 +1951,38 @@ pub(crate) fn SUB_80ABA(r: &mut Run) {
             // #80B8A:
             0x80B8A..=0x80B8C => {
                 op!(r, at, 0x80B8A..0x80B8C, 4, r.cpu.zero(R::C, Field::A)); // C=0 A
-                branch!(r, at, 0x80B8F, 5, r.cpu.jump_if(Cond::Carry, 0x80BA8)); // GOC L_80BA8
+                branch!(r, at, 0x80B8F, 5, r.cpu.jump_if(Cond::Carry, 0x80BA8)); // GOC SUB_80ABA.L9
             }
             // #80B8F:
             0x80B8F..=0x80B93 => {
                 op!(r, at, 0x80B8F..0x80B93, 6, r.cpu.load_const(R::C, 2, 0x6)); // LC(2) #06
-                branch!(r, at, 0x80B98, 7, r.cpu.test(Test::Regs(Cmp::Ne, R::C, R::A), Field::B, Some(0x80BAE))); // ?C#A B / GOYES L_80BAE
+                branch!(r, at, 0x80B98, 7, r.cpu.test(Test::Regs(Cmp::Ne, R::C, R::A), Field::B, Some(0x80BAE))); // ?C#A B / GOYES SUB_80ABA.L10
             }
             // #80B98:
             0x80B98..=0x80B9C => {
                 op!(r, at, 0x80B98..0x80B9C, 6, r.cpu.load_const(R::C, 2, 0x94)); // LC(2) #94
-                branch!(r, at, 0x80BA2, 8, r.cpu.call(0x802D8)); // GOSUBL L_802D8
+                branch!(r, at, 0x80BA2, 8, r.cpu.call(0x802D8)); // GOSUBL SUB_802D2.L1
             }
             // #80BA2:
             0x80BA2..=0x80BA2 => {
-                jump!(r, at, 8, r.cpu.pc = 0x816FE); // GOLONG L_816FE
+                jump!(r, at, 8, r.cpu.pc = 0x816FE); // GOLONG SUB_816E5.L2
             }
-            // L_80BA8:
+            // SUB_80ABA.L9:
             0x80BA8..=0x80BAA => {
                 op!(r, at, 0x80BA8..0x80BAA, 4, r.cpu.inc(R::C, Field::A)); // C=C+1 A
-                jump!(r, at, 6, r.cpu.pc = 0x80BB7); // GOTO L_80BB7
+                jump!(r, at, 6, r.cpu.pc = 0x80BB7); // GOTO SUB_80ABA.L12
             }
-            // L_80BAE:
+            // SUB_80ABA.L10:
             0x80BAE..=0x80BB1 => {
                 op!(r, at, 0x80BAE..0x80BB1, 5, r.cpu.load_const(R::C, 1, 0x2)); // LC(1) #2
-                jump!(r, at, 6, r.cpu.pc = 0x80BB7); // GOTO L_80BB7
+                jump!(r, at, 6, r.cpu.pc = 0x80BB7); // GOTO SUB_80ABA.L12
             }
-            // L_80BB5:
+            // SUB_80ABA.L11:
             0x80BB5..=0x80BB5 => {
                 op!(r, at, 0x80BB5..0x80BB7, 4, r.cpu.copy(R::C, R::A, Field::A)); // C=A A
                 at = 0x80BB7;
             }
-            // L_80BB7:
+            // SUB_80ABA.L12:
             0x80BB7..=0x80BBC => {
                 op!(r, at, 0x80BB7..0x80BB9, 4, r.cpu.push_c()); // RSTK=C
                 op!(r, at, 0x80BB9..0x80BBC, 5, r.cpu.load_const(R::C, 1, 0x6)); // LC(1) #6
@@ -2040,7 +2040,7 @@ pub(crate) fn SUB_80BE7(r: &mut Run) {
                 op!(r, at, 0x80BE9..0x80BED, 6, r.cpu.cp_ex(0)); // CPEX 0
                 at = 0x80BED;
             }
-            // L_80BED:
+            // SUB_80BE7.loop1:
             0x80BED..=0x80BFE => {
                 op!(r, at, 0x80BED..0x80BEF, 4, r.cpu.push_c()); // RSTK=C
                 op!(r, at, 0x80BEF..0x80BF3, 6, r.cpu.load_const(R::C, 2, 0x30)); // LC(2) #30
@@ -2060,7 +2060,7 @@ pub(crate) fn SUB_80BE7(r: &mut Run) {
             0x80C09..=0x80C0E => {
                 op!(r, at, 0x80C09..0x80C0C, 5, r.cpu.scratch(ScratchOp::FromScratch, R::A, 1, Field::W)); // A=R1
                 op!(r, at, 0x80C0C..0x80C0E, 4, r.cpu.dec(R::C, Field::A)); // C=C-1 A
-                branch!(r, at, 0x80C11, 5, r.cpu.jump_if(Cond::NoCarry, 0x80BED)); // GONC L_80BED
+                branch!(r, at, 0x80C11, 5, r.cpu.jump_if(Cond::NoCarry, 0x80BED)); // GONC SUB_80BE7.loop1
             }
             // #80C11:
             0x80C11..=0x80C11 => {
@@ -2081,11 +2081,11 @@ pub(crate) fn SUB_80C13(r: &mut Run) {
         match at {
             0x80C13..=0x80C1A => {
                 op!(r, at, 0x80C13..0x80C1A, 9, r.cpu.load_const(R::C, 5, 0xABD)); // LC(5) #00ABD
-                jump!(r, at, 8, r.cpu.pc = 0x815DC); // GOLONG L_815DC
+                jump!(r, at, 8, r.cpu.pc = 0x815DC); // GOLONG SUB_815D3.loop1
             }
-            // L_80C20:
+            // SUB_80C13.L1:
             0x80C20..=0x80C27 => {
-                op!(r, at, 0x80C20..0x80C27, 9, r.cpu.d_load(0, 5, 0x81941)); // D0=(5) L_81941
+                op!(r, at, 0x80C20..0x80C27, 9, r.cpu.d_load(0, 5, 0x81941)); // D0=(5) SUB_817E9.L28
                 branch!(r, at, 0x80C2B, 6, r.cpu.call(0x80D29)); // GOSUB SUB_80D29
             }
             // #80C2B:
@@ -2117,13 +2117,13 @@ pub(crate) fn SUB_80C13(r: &mut Run) {
             }
             // #80C50:
             0x80C50..=0x80C50 => {
-                branch!(r, at, 0x80C55, 7, r.cpu.test(Test::Regs(Cmp::Eq, R::C, R::A), Field::A, Some(0x80C59))); // ?C=A A / GOYES L_80C59
+                branch!(r, at, 0x80C55, 7, r.cpu.test(Test::Regs(Cmp::Eq, R::C, R::A), Field::A, Some(0x80C59))); // ?C=A A / GOYES SUB_80C13.L2
             }
             // #80C55:
             0x80C55..=0x80C55 => {
-                jump!(r, at, 6, r.cpu.pc = 0x80BB5); // GOTO L_80BB5
+                jump!(r, at, 6, r.cpu.pc = 0x80BB5); // GOTO SUB_80ABA.L11
             }
-            // L_80C59:
+            // SUB_80C13.L2:
             0x80C59..=0x80C71 => {
                 op!(r, at, 0x80C59..0x80C5C, 5, r.cpu.zero(R::C, Field::W)); // C=0 W
                 op!(r, at, 0x80C5C..0x80C5E, 4, r.cpu.p = 0); // P= 0
@@ -2131,11 +2131,11 @@ pub(crate) fn SUB_80C13(r: &mut Run) {
                 op!(r, at, 0x80C68..0x80C6B, 5, r.cpu.scratch(ScratchOp::FromScratch, R::A, 3, Field::W)); // A=R3
                 op!(r, at, 0x80C6B..0x80C6E, 5, r.cpu.add(R::A, R::C, Field::W)); // A=A+C W
                 op!(r, at, 0x80C6E..0x80C71, 5, r.cpu.st_set(15, false)); // ST=0 15
-                branch!(r, at, 0x80C78, 9, r.cpu.call(0x01A82)); // GOSBVL L_01A82
+                branch!(r, at, 0x80C78, 9, r.cpu.call(0x01A82)); // GOSBVL SUB_01A33.L2
             }
             // #80C78:
             0x80C78..=0x80C78 => {
-                branch!(r, at, 0x80C7C, 6, r.cpu.call(0x80B26)); // GOSUB L_80B26
+                branch!(r, at, 0x80C7C, 6, r.cpu.call(0x80B26)); // GOSUB SUB_80ABA.L6
             }
             // #80C7C:
             0x80C7C..=0x80C7C => {
@@ -2153,14 +2153,14 @@ pub(crate) fn SUB_80C13(r: &mut Run) {
             }
             // #80C8E:
             0x80C8E..=0x80C8E => {
-                branch!(r, at, 0x80C91, 5, r.cpu.jump_if(Cond::NoCarry, 0x80C97)); // GONC L_80C97
+                branch!(r, at, 0x80C91, 5, r.cpu.jump_if(Cond::NoCarry, 0x80C97)); // GONC SUB_80C13.L3
             }
             // #80C91:
             0x80C91..=0x80C93 => {
                 op!(r, at, 0x80C91..0x80C93, 4, r.cpu.copy(R::A, R::C, Field::A)); // A=C A
-                jump!(r, at, 6, r.cpu.pc = 0x80BB5); // GOTO L_80BB5
+                jump!(r, at, 6, r.cpu.pc = 0x80BB5); // GOTO SUB_80ABA.L11
             }
-            // L_80C97:
+            // SUB_80C13.L3:
             0x80C97..=0x80C9A => {
                 op!(r, at, 0x80C97..0x80C9A, 5, r.cpu.st_set(15, false)); // ST=0 15
                 branch!(r, at, 0x80CA1, 9, r.cpu.call(0x010A9)); // GOSBVL SUB_010A9
@@ -2172,7 +2172,7 @@ pub(crate) fn SUB_80C13(r: &mut Run) {
             }
             // #80CAA:
             0x80CAA..=0x80CAA => {
-                branch!(r, at, 0x80CAE, 6, r.cpu.call(0x80B26)); // GOSUB L_80B26
+                branch!(r, at, 0x80CAE, 6, r.cpu.call(0x80B26)); // GOSUB SUB_80ABA.L6
             }
             // #80CAE:
             0x80CAE..=0x80CB1 => {
@@ -2182,7 +2182,7 @@ pub(crate) fn SUB_80C13(r: &mut Run) {
             // #80CB7:
             0x80CB7..=0x80CBA => {
                 op!(r, at, 0x80CB7..0x80CBA, 5, r.cpu.st_set(6, false)); // ST=0 6
-                jump!(r, at, 8, r.cpu.pc = 0x80000); // GOLONG L_80000
+                jump!(r, at, 8, r.cpu.pc = 0x80000); // GOLONG VersionStrings.L1
             }
             _ => {
                 r.cpu.pc = at;
@@ -2201,13 +2201,13 @@ pub(crate) fn SUB_80CC0(r: &mut Run) {
                 op!(r, at, 0x80CC0..0x80CC3, 5, r.cpu.zero(R::B, Field::W)); // B=0 W
                 at = 0x80CC3;
             }
-            // L_80CC3:
+            // SUB_80CC0.loop1:
             0x80CC3..=0x80CC3 => {
                 branch!(r, at, 0x80CC7, 6, r.cpu.call(0x81076)); // GOSUB POPUART~jump
             }
             // #80CC7:
             0x80CC7..=0x80CC7 => {
-                branch!(r, at, 0x80CCA, 5, r.cpu.jump_if(Cond::Carry, 0x80CC3)); // GOC L_80CC3
+                branch!(r, at, 0x80CCA, 5, r.cpu.jump_if(Cond::Carry, 0x80CC3)); // GOC SUB_80CC0.loop1
             }
             // #80CCA:
             0x80CCA..=0x80CD5 => {
@@ -2215,7 +2215,7 @@ pub(crate) fn SUB_80CC0(r: &mut Run) {
                 op!(r, at, 0x80CCD..0x80CD0, 5, r.cpu.copy(R::B, R::A, Field::S)); // B=A S
                 op!(r, at, 0x80CD0..0x80CD3, 5, r.cpu.shr(R::B, Field::W)); // BSR W
                 op!(r, at, 0x80CD3..0x80CD5, 4, r.cpu.p_inc()); // P=P+1
-                branch!(r, at, 0x80CD8, 5, r.cpu.jump_if(Cond::NoCarry, 0x80CC3)); // GONC L_80CC3
+                branch!(r, at, 0x80CD8, 5, r.cpu.jump_if(Cond::NoCarry, 0x80CC3)); // GONC SUB_80CC0.loop1
             }
             // #80CD8:
             0x80CD8..=0x80CE1 => {
@@ -2346,7 +2346,7 @@ pub(crate) fn SUB_80D39(r: &mut Run) {
     loop {
         match at {
             0x80D39..=0x80D40 => {
-                op!(r, at, 0x80D39..0x80D40, 9, r.cpu.d_load(0, 5, 0x818AB)); // D0=(5) L_818AB
+                op!(r, at, 0x80D39..0x80D40, 9, r.cpu.d_load(0, 5, 0x818AB)); // D0=(5) SUB_817E9.L16
                 branch!(r, at, 0x80D44, 6, r.cpu.call(0x80D29)); // GOSUB SUB_80D29
             }
             // #80D44:
@@ -2362,7 +2362,7 @@ pub(crate) fn SUB_80D39(r: &mut Run) {
             }
             // #80D59:
             0x80D59..=0x80D59 => {
-                branch!(r, at, 0x80D5C, 5, r.cpu.jump_if(Cond::NoCarry, 0x80D7A)); // GONC L_80D7A
+                branch!(r, at, 0x80D5C, 5, r.cpu.jump_if(Cond::NoCarry, 0x80D7A)); // GONC SUB_80D39.L1
             }
             // #80D5C:
             0x80D5C..=0x80D69 => {
@@ -2377,13 +2377,13 @@ pub(crate) fn SUB_80D39(r: &mut Run) {
             }
             // #80D71:
             0x80D71..=0x80D71 => {
-                branch!(r, at, 0x80D74, 5, r.cpu.jump_if(Cond::NoCarry, 0x80D7A)); // GONC L_80D7A
+                branch!(r, at, 0x80D74, 5, r.cpu.jump_if(Cond::NoCarry, 0x80D7A)); // GONC SUB_80D39.L1
             }
             // #80D74:
             0x80D74..=0x80D74 => {
-                jump!(r, at, 8, r.cpu.pc = 0x816FE); // GOLONG L_816FE
+                jump!(r, at, 8, r.cpu.pc = 0x816FE); // GOLONG SUB_816E5.L2
             }
-            // L_80D7A:
+            // SUB_80D39.L1:
             0x80D7A..=0x80D85 => {
                 op!(r, at, 0x80D7A..0x80D7D, 5, r.cpu.scratch(ScratchOp::FromScratch, R::A, 1, Field::W)); // A=R1
                 op!(r, at, 0x80D7D..0x80D82, 7, r.cpu.bit_set(R::A, 5, true)); // ABIT=1 5
@@ -2404,7 +2404,7 @@ pub(crate) fn SUB_80D8B(r: &mut Run) {
     loop {
         match at {
             0x80D8B..=0x80D92 => {
-                op!(r, at, 0x80D8B..0x80D92, 9, r.cpu.d_load(0, 5, 0x81923)); // D0=(5) L_81923
+                op!(r, at, 0x80D8B..0x80D92, 9, r.cpu.d_load(0, 5, 0x81923)); // D0=(5) SUB_817E9.L25
                 branch!(r, at, 0x80D96, 6, r.cpu.call(0x80D29)); // GOSUB SUB_80D29
             }
             // #80D96:
@@ -2424,7 +2424,7 @@ pub(crate) fn SUB_80D8B(r: &mut Run) {
             }
             // #80DAF:
             0x80DAF..=0x80DAF => {
-                branch!(r, at, 0x80DB2, 5, r.cpu.jump_if(Cond::NoCarry, 0x80DD8)); // GONC L_80DD8
+                branch!(r, at, 0x80DB2, 5, r.cpu.jump_if(Cond::NoCarry, 0x80DD8)); // GONC SUB_80D8B.L1
             }
             // #80DB2:
             0x80DB2..=0x80DBF => {
@@ -2443,7 +2443,7 @@ pub(crate) fn SUB_80D8B(r: &mut Run) {
             }
             // #80DCB:
             0x80DCB..=0x80DCB => {
-                branch!(r, at, 0x80DCE, 5, r.cpu.jump_if(Cond::NoCarry, 0x80DD8)); // GONC L_80DD8
+                branch!(r, at, 0x80DCE, 5, r.cpu.jump_if(Cond::NoCarry, 0x80DD8)); // GONC SUB_80D8B.L1
             }
             // #80DCE:
             0x80DCE..=0x80DCE => {
@@ -2451,9 +2451,9 @@ pub(crate) fn SUB_80D8B(r: &mut Run) {
             }
             // #80DD2:
             0x80DD2..=0x80DD2 => {
-                jump!(r, at, 8, r.cpu.pc = 0x816FE); // GOLONG L_816FE
+                jump!(r, at, 8, r.cpu.pc = 0x816FE); // GOLONG SUB_816E5.L2
             }
-            // L_80DD8:
+            // SUB_80D8B.L1:
             0x80DD8..=0x80DD8 => {
                 branch!(r, at, 0x80DDC, 6, r.cpu.call(0x80D13)); // GOSUB SUB_80D13
             }
@@ -2478,7 +2478,7 @@ pub(crate) fn SUB_80DED(r: &mut Run) {
     loop {
         match at {
             0x80DED..=0x80DED => {
-                jump!(r, at, 9, r.cpu.pc = 0x30EBC); // GOVLNG L_30EBC
+                jump!(r, at, 9, r.cpu.pc = 0x30EBC); // GOVLNG SUB_30E82.L1
             }
             _ => {
                 r.cpu.pc = at;
@@ -2495,12 +2495,12 @@ pub(crate) fn SUB_80DF4(r: &mut Run) {
         match at {
             0x80DF4..=0x80E00 => {
                 op!(r, at, 0x80DF4..0x80DF6, 4, r.cpu.zero(R::C, Field::A)); // C=0 A
-                op!(r, at, 0x80DF6..0x80DFD, 9, r.cpu.d_load(0, 5, 0x818BF)); // D0=(5) L_818BF
+                op!(r, at, 0x80DF6..0x80DFD, 9, r.cpu.d_load(0, 5, 0x818BF)); // D0=(5) SUB_817E9.L18
                 io!(r, at, 0x80DFD..0x80E00, 16, r.cpu.load(0, R::C, Field::B, r.hw)); // C=DAT0 B
                 op!(r, at, 0x80E00..0x80E03, 5, r.cpu.d_add(0, 2)); // D0=D0+ 2
                 at = 0x80E03;
             }
-            // L_80E03:
+            // SUB_80DF4.loop1:
             0x80E03..=0x80E05 => {
                 op!(r, at, 0x80E03..0x80E05, 4, r.cpu.dec(R::C, Field::A)); // C=C-1 A
                 branch!(r, at, 0x80E08, 5, r.cpu.rtn_if(Cond::Carry)); // RTNC
@@ -2518,17 +2518,17 @@ pub(crate) fn SUB_80DF4(r: &mut Run) {
                 op!(r, at, 0x80E16..0x80E18, 4, r.cpu.copy(R::A, R::C, Field::A)); // A=C A
                 op!(r, at, 0x80E18..0x80E1A, 4, r.cpu.pop_c()); // C=RSTK
                 op!(r, at, 0x80E1A..0x80E1D, 5, r.cpu.d_from_r(0, R::C, false)); // D0=C
-                branch!(r, at, 0x80E20, 5, r.cpu.jump_if(Cond::Carry, 0x80E7E)); // GOC L_80E7E
+                branch!(r, at, 0x80E20, 5, r.cpu.jump_if(Cond::Carry, 0x80E7E)); // GOC SUB_80DF4.L3
             }
             // #80E20:
             0x80E20..=0x80E20 => {
                 op!(r, at, 0x80E20..0x80E23, 5, r.cpu.scratch(ScratchOp::FromScratch, R::C, 2, Field::W)); // C=R2
                 at = 0x80E23;
             }
-            // L_80E23:
+            // SUB_80DF4.loop2:
             0x80E23..=0x80E25 => {
                 op!(r, at, 0x80E23..0x80E25, 4, r.cpu.dec(R::C, Field::A)); // C=C-1 A
-                branch!(r, at, 0x80E28, 5, r.cpu.jump_if(Cond::NoCarry, 0x80E23)); // GONC L_80E23
+                branch!(r, at, 0x80E28, 5, r.cpu.jump_if(Cond::NoCarry, 0x80E23)); // GONC SUB_80DF4.loop2
             }
             // #80E28:
             0x80E28..=0x80E2F => {
@@ -2541,12 +2541,12 @@ pub(crate) fn SUB_80DF4(r: &mut Run) {
             0x80E33..=0x80E3C => {
                 op!(r, at, 0x80E33..0x80E39, 8, r.cpu.d_load(1, 4, 0x519)); // D1=(4) #0519
                 io!(r, at, 0x80E39..0x80E3C, 16, r.cpu.load(1, R::A, Field::B, r.hw)); // A=DAT1 B
-                branch!(r, at, 0x80E41, 7, r.cpu.test(Test::Zero(R::A), Field::B, Some(0x80E98))); // ?A=0 B / GOYES L_80E98
+                branch!(r, at, 0x80E41, 7, r.cpu.test(Test::Zero(R::A), Field::B, Some(0x80E98))); // ?A=0 B / GOYES SUB_80DF4.L5
             }
             // #80E41:
             0x80E41..=0x80E45 => {
                 op!(r, at, 0x80E41..0x80E45, 6, r.cpu.load_const(R::C, 2, 0x1)); // LC(2) #01
-                branch!(r, at, 0x80E4A, 7, r.cpu.test(Test::Regs(Cmp::Ne, R::C, R::A), Field::B, Some(0x80EA3))); // ?C#A B / GOYES L_80EA3
+                branch!(r, at, 0x80E4A, 7, r.cpu.test(Test::Regs(Cmp::Ne, R::C, R::A), Field::B, Some(0x80EA3))); // ?C#A B / GOYES SUB_80DF4.L6
             }
             // #80E4A:
             0x80E4A..=0x80E65 => {
@@ -2559,7 +2559,7 @@ pub(crate) fn SUB_80DF4(r: &mut Run) {
                 op!(r, at, 0x80E5D..0x80E60, 5, r.cpu.d_from_r(1, R::C, false)); // D1=C
                 op!(r, at, 0x80E60..0x80E62, 4, r.cpu.zero(R::A, Field::A)); // A=0 A
                 io!(r, at, 0x80E62..0x80E65, 16, r.cpu.load(1, R::A, Field::B, r.hw)); // A=DAT1 B
-                branch!(r, at, 0x80E6A, 7, r.cpu.test(Test::Regs(Cmp::Ne, R::A, R::B), Field::B, Some(0x80E87))); // ?A#B B / GOYES L_80E87
+                branch!(r, at, 0x80E6A, 7, r.cpu.test(Test::Regs(Cmp::Ne, R::A, R::B), Field::B, Some(0x80E87))); // ?A#B B / GOYES SUB_80DF4.L4
             }
             // #80E6A:
             0x80E6A..=0x80E7A => {
@@ -2568,16 +2568,16 @@ pub(crate) fn SUB_80DF4(r: &mut Run) {
                 io!(r, at, 0x80E72..0x80E75, 16, r.cpu.store(1, R::C, Field::B, r.hw)); // DAT1=C B
                 op!(r, at, 0x80E75..0x80E78, 5, r.cpu.d_add(0, 2)); // D0=D0+ 2
                 op!(r, at, 0x80E78..0x80E7A, 4, r.cpu.pop_c()); // C=RSTK
-                jump!(r, at, 6, r.cpu.pc = 0x80E03); // GOTO L_80E03
+                jump!(r, at, 6, r.cpu.pc = 0x80E03); // GOTO SUB_80DF4.loop1
             }
-            // L_80E7E:
+            // SUB_80DF4.L3:
             0x80E7E..=0x80E85 => {
                 op!(r, at, 0x80E7E..0x80E80, 4, r.cpu.pop_c()); // C=RSTK
                 op!(r, at, 0x80E80..0x80E82, 4, r.cpu.copy(R::C, R::A, Field::A)); // C=A A
                 op!(r, at, 0x80E82..0x80E85, 5, r.cpu.d_from_r(0, R::C, false)); // D0=C
                 jump!(r, at, 9, r.cpu.rtn(RtnKind::ClearCarry)); // RTNCC
             }
-            // L_80E87:
+            // SUB_80DF4.L4:
             0x80E87..=0x80E96 => {
                 op!(r, at, 0x80E87..0x80E89, 4, r.cpu.pop_c()); // C=RSTK
                 op!(r, at, 0x80E89..0x80E8C, 5, r.cpu.inc(R::A, Field::XS)); // A=A+1 XS
@@ -2587,16 +2587,16 @@ pub(crate) fn SUB_80DF4(r: &mut Run) {
                 op!(r, at, 0x80E93..0x80E96, 5, r.cpu.d_from_r(0, R::A, false)); // D0=A
                 jump!(r, at, 9, r.cpu.rtn(RtnKind::ClearCarry)); // RTNCC
             }
-            // L_80E98:
+            // SUB_80DF4.L5:
             0x80E98..=0x80EA1 => {
                 op!(r, at, 0x80E98..0x80E9A, 4, r.cpu.pop_c()); // C=RSTK
-                op!(r, at, 0x80E9A..0x80EA1, 9, r.cpu.d_load(0, 5, 0x20000)); // D0=(5) L_1FFFF+1
+                op!(r, at, 0x80E9A..0x80EA1, 9, r.cpu.d_load(0, 5, 0x20000)); // D0=(5) xYCOL.L1+1
                 jump!(r, at, 9, r.cpu.rtn(RtnKind::ClearCarry)); // RTNCC
             }
-            // L_80EA3:
+            // SUB_80DF4.L6:
             0x80EA3..=0x80EAC => {
                 op!(r, at, 0x80EA3..0x80EA5, 4, r.cpu.pop_c()); // C=RSTK
-                op!(r, at, 0x80EA5..0x80EAC, 9, r.cpu.d_load(0, 5, 0x30000)); // D0=(5) L_30000
+                op!(r, at, 0x80EA5..0x80EAC, 9, r.cpu.d_load(0, 5, 0x30000)); // D0=(5) SUB_2FFD0.L2
                 jump!(r, at, 9, r.cpu.rtn(RtnKind::ClearCarry)); // RTNCC
             }
             _ => {
@@ -2647,9 +2647,9 @@ pub(crate) fn SUB_80EBC(r: &mut Run) {
             0x80EBC..=0x80EBC => {
                 jump!(r, at, 9, r.cpu.pc = 0x0C1B6); // GOVLNG SUB_0C1B6
             }
-            // L_80EC3:
+            // SUB_80EBC.L1:
             0x80EC3..=0x80ECA => {
-                op!(r, at, 0x80EC3..0x80ECA, 9, r.cpu.d_load(0, 5, 0x818B5)); // D0=(5) L_818B5
+                op!(r, at, 0x80EC3..0x80ECA, 9, r.cpu.d_load(0, 5, 0x818B5)); // D0=(5) SUB_817E9.L17
                 branch!(r, at, 0x80ECE, 6, r.cpu.call(0x80D29)); // GOSUB SUB_80D29
             }
             // #80ECE:
@@ -2663,13 +2663,13 @@ pub(crate) fn SUB_80EBC(r: &mut Run) {
             }
             // #80ED9:
             0x80ED9..=0x80ED9 => {
-                branch!(r, at, 0x80EDC, 5, r.cpu.jump_if(Cond::Carry, 0x80EE2)); // GOC L_80EE2
+                branch!(r, at, 0x80EDC, 5, r.cpu.jump_if(Cond::Carry, 0x80EE2)); // GOC SUB_80EBC.L2
             }
             // #80EDC:
             0x80EDC..=0x80EDC => {
-                jump!(r, at, 8, r.cpu.pc = 0x816FE); // GOLONG L_816FE
+                jump!(r, at, 8, r.cpu.pc = 0x816FE); // GOLONG SUB_816E5.L2
             }
-            // L_80EE2:
+            // SUB_80EBC.L2:
             0x80EE2..=0x80EED => {
                 op!(r, at, 0x80EE2..0x80EE5, 5, r.cpu.scratch(ScratchOp::FromScratch, R::A, 1, Field::W)); // A=R1
                 op!(r, at, 0x80EE5..0x80EEA, 7, r.cpu.bit_set(R::A, 6, true)); // ABIT=1 6
@@ -2703,16 +2703,16 @@ pub(crate) fn SUB_80EF3(r: &mut Run) {
             }
             // #80F05:
             0x80F05..=0x80F05 => {
-                branch!(r, at, 0x80F09, 6, r.cpu.call(0x80B26)); // GOSUB L_80B26
+                branch!(r, at, 0x80F09, 6, r.cpu.call(0x80B26)); // GOSUB SUB_80ABA.L6
             }
-            // L_80F09:
+            // SUB_80EF3.loop1:
             0x80F09..=0x80F12 => {
                 op!(r, at, 0x80F09..0x80F0B, 4, r.cpu.p = 0); // P= 0
                 op!(r, at, 0x80F0B..0x80F12, 9, r.cpu.load_const(R::C, 5, 0xAA68)); // LC(5) #0AA68
                 op!(r, at, 0x80F12..0x80F15, 5, r.cpu.scratch(ScratchOp::ToScratch, R::C, 3, Field::W)); // R3=C
                 at = 0x80F15;
             }
-            // L_80F15:
+            // SUB_80EF3.loop2:
             0x80F15..=0x80F17 => {
                 op!(r, at, 0x80F15..0x80F17, 4, r.cpu.p = 0); // P= 0
                 branch!(r, at, 0x80F1B, 6, r.cpu.call(0x81051)); // GOSUB SUB_81051
@@ -2725,7 +2725,7 @@ pub(crate) fn SUB_80EF3(r: &mut Run) {
             0x80F1F..=0x80F26 => {
                 op!(r, at, 0x80F1F..0x80F22, 5, r.cpu.load_const(R::C, 1, 0xA)); // LC(1) #A
                 io!(r, at, 0x80F22..0x80F26, 15, r.cpu.store(0, R::C, Field::Nibbles(1), r.hw)); // DAT0=C 1
-                branch!(r, at, 0x80F29, 5, r.cpu.jump_if(Cond::NoCarry, 0x80F62)); // GONC L_80F62
+                branch!(r, at, 0x80F29, 5, r.cpu.jump_if(Cond::NoCarry, 0x80F62)); // GONC SUB_80EF3.L5
             }
             // #80F29:
             0x80F29..=0x80F29 => {
@@ -2735,7 +2735,7 @@ pub(crate) fn SUB_80EF3(r: &mut Run) {
             0x80F2D..=0x80F36 => {
                 op!(r, at, 0x80F2D..0x80F33, 8, r.cpu.d_load(1, 4, 0x7F7)); // D1=(4) #07F7
                 io!(r, at, 0x80F33..0x80F36, 19, r.cpu.load(1, R::C, Field::A, r.hw)); // C=DAT1 A
-                branch!(r, at, 0x80F3B, 7, r.cpu.test(Test::NonZero(R::C), Field::A, Some(0x80F45))); // ?C#0 A / GOYES L_80F45
+                branch!(r, at, 0x80F3B, 7, r.cpu.test(Test::NonZero(R::C), Field::A, Some(0x80F45))); // ?C#0 A / GOYES SUB_80EF3.L3
             }
             // #80F3B:
             0x80F3B..=0x80F3B => {
@@ -2743,50 +2743,50 @@ pub(crate) fn SUB_80EF3(r: &mut Run) {
             }
             // #80F42:
             0x80F42..=0x80F42 => {
-                branch!(r, at, 0x80F45, 5, r.cpu.jump_if(Cond::Carry, 0x80F4E)); // GOC L_80F4E
+                branch!(r, at, 0x80F45, 5, r.cpu.jump_if(Cond::Carry, 0x80F4E)); // GOC SUB_80EF3.L4
             }
-            // L_80F45:
+            // SUB_80EF3.L3:
             0x80F45..=0x80F4C => {
                 op!(r, at, 0x80F45..0x80F4C, 9, r.cpu.d_load(0, 5, 0x1)); // D0=(5) #00001
                 jump!(r, at, 9, r.cpu.rtn(RtnKind::SetCarry)); // RTNSC
             }
-            // L_80F4E:
+            // SUB_80EF3.L4:
             0x80F4E..=0x80F56 => {
                 op!(r, at, 0x80F4E..0x80F51, 5, r.cpu.scratch(ScratchOp::FromScratch, R::A, 3, Field::W)); // A=R3
                 op!(r, at, 0x80F51..0x80F53, 4, r.cpu.dec(R::A, Field::A)); // A=A-1 A
                 op!(r, at, 0x80F53..0x80F56, 5, r.cpu.scratch(ScratchOp::ToScratch, R::A, 3, Field::W)); // R3=A
-                branch!(r, at, 0x80F59, 5, r.cpu.jump_if(Cond::NoCarry, 0x80F15)); // GONC L_80F15
+                branch!(r, at, 0x80F59, 5, r.cpu.jump_if(Cond::NoCarry, 0x80F15)); // GONC SUB_80EF3.loop2
             }
             // #80F59:
             0x80F59..=0x80F60 => {
                 op!(r, at, 0x80F59..0x80F60, 9, r.cpu.d_load(0, 5, 0x2)); // D0=(5) #00002
                 jump!(r, at, 9, r.cpu.rtn(RtnKind::SetCarry)); // RTNSC
             }
-            // L_80F62:
+            // SUB_80EF3.L5:
             0x80F62..=0x80F66 => {
                 op!(r, at, 0x80F62..0x80F66, 6, r.cpu.load_const(R::C, 2, 0x4)); // LC(2) #04
-                branch!(r, at, 0x80F6B, 7, r.cpu.test(Test::Regs(Cmp::Ne, R::C, R::A), Field::B, Some(0x80F6D))); // ?C#A B / GOYES L_80F6D
+                branch!(r, at, 0x80F6B, 7, r.cpu.test(Test::Regs(Cmp::Ne, R::C, R::A), Field::B, Some(0x80F6D))); // ?C#A B / GOYES SUB_80EF3.L6
             }
             // #80F6B:
             0x80F6B..=0x80F6B => {
                 jump!(r, at, 9, r.cpu.rtn(RtnKind::ClearCarry)); // RTNCC
             }
-            // L_80F6D:
+            // SUB_80EF3.L6:
             0x80F6D..=0x80F6D => {
                 branch!(r, at, 0x80F71, 6, r.cpu.call(0x81068)); // GOSUB OUTUART~jump
             }
             // #80F71:
             0x80F71..=0x80F71 => {
-                branch!(r, at, 0x80F74, 5, r.cpu.jump_if(Cond::NoCarry, 0x80F09)); // GONC L_80F09
+                branch!(r, at, 0x80F74, 5, r.cpu.jump_if(Cond::NoCarry, 0x80F09)); // GONC SUB_80EF3.loop1
             }
             // #80F74:
             0x80F74..=0x80F77 => {
                 op!(r, at, 0x80F74..0x80F77, 5, r.cpu.d_from_r(0, R::C, false)); // D0=C
                 jump!(r, at, 9, r.cpu.rtn(RtnKind::SetCarry)); // RTNSC
             }
-            // L_80F79:
+            // SUB_80EF3.L7:
             0x80F79..=0x80F80 => {
-                op!(r, at, 0x80F79..0x80F80, 9, r.cpu.d_load(0, 5, 0x8192D)); // D0=(5) L_8192D
+                op!(r, at, 0x80F79..0x80F80, 9, r.cpu.d_load(0, 5, 0x8192D)); // D0=(5) SUB_817E9.L26
                 branch!(r, at, 0x80F84, 6, r.cpu.call(0x80D29)); // GOSUB SUB_80D29
             }
             // #80F84:
@@ -2799,13 +2799,13 @@ pub(crate) fn SUB_80EF3(r: &mut Run) {
             }
             // #80F8C:
             0x80F8C..=0x80F8C => {
-                branch!(r, at, 0x80F8F, 5, r.cpu.jump_if(Cond::Carry, 0x80F95)); // GOC L_80F95
+                branch!(r, at, 0x80F8F, 5, r.cpu.jump_if(Cond::Carry, 0x80F95)); // GOC SUB_80EF3.L8
             }
             // #80F8F:
             0x80F8F..=0x80F8F => {
-                jump!(r, at, 8, r.cpu.pc = 0x816FE); // GOLONG L_816FE
+                jump!(r, at, 8, r.cpu.pc = 0x816FE); // GOLONG SUB_816E5.L2
             }
-            // L_80F95:
+            // SUB_80EF3.L8:
             0x80F95..=0x80FA0 => {
                 op!(r, at, 0x80F95..0x80F98, 5, r.cpu.scratch(ScratchOp::FromScratch, R::A, 1, Field::W)); // A=R1
                 op!(r, at, 0x80F98..0x80F9D, 7, r.cpu.bit_set(R::A, 10, true)); // ABIT=1 10
@@ -2849,7 +2849,7 @@ pub(crate) fn SUB_80FA6(r: &mut Run) {
             }
             // #80FC5:
             0x80FC5..=0x80FC5 => {
-                branch!(r, at, 0x80FC9, 6, r.cpu.call(0x80B26)); // GOSUB L_80B26
+                branch!(r, at, 0x80FC9, 6, r.cpu.call(0x80B26)); // GOSUB SUB_80ABA.L6
             }
             // #80FC9:
             0x80FC9..=0x80FD2 => {
@@ -2863,42 +2863,42 @@ pub(crate) fn SUB_80FA6(r: &mut Run) {
                 op!(r, at, 0x80FDC..0x80FDE, 4, r.cpu.zero(R::A, Field::A)); // A=0 A
                 at = 0x80FDE;
             }
-            // L_80FDE:
+            // SUB_80FA6.loop1:
             0x80FDE..=0x80FE1 => {
                 io!(r, at, 0x80FDE..0x80FE1, 16, r.cpu.load(1, R::A, Field::B, r.hw)); // A=DAT1 B
-                branch!(r, at, 0x80FE6, 7, r.cpu.test(Test::NonZero(R::A), Field::B, Some(0x80FF4))); // ?A#0 B / GOYES L_80FF4
+                branch!(r, at, 0x80FE6, 7, r.cpu.test(Test::NonZero(R::A), Field::B, Some(0x80FF4))); // ?A#0 B / GOYES SUB_80FA6.loop2
             }
             // #80FE6:
             0x80FE6..=0x80FE8 => {
                 op!(r, at, 0x80FE6..0x80FE8, 4, r.cpu.dec(R::C, Field::A)); // C=C-1 A
-                branch!(r, at, 0x80FEB, 5, r.cpu.jump_if(Cond::NoCarry, 0x80FDE)); // GONC L_80FDE
+                branch!(r, at, 0x80FEB, 5, r.cpu.jump_if(Cond::NoCarry, 0x80FDE)); // GONC SUB_80FA6.loop1
             }
             // #80FEB:
             0x80FEB..=0x80FF2 => {
                 op!(r, at, 0x80FEB..0x80FF2, 9, r.cpu.d_load(0, 5, 0x2)); // D0=(5) #00002
                 jump!(r, at, 9, r.cpu.rtn(RtnKind::SetCarry)); // RTNSC
             }
-            // L_80FF4:
+            // SUB_80FA6.loop2:
             0x80FF4..=0x80FF6 => {
                 op!(r, at, 0x80FF4..0x80FF6, 4, r.cpu.copy(R::B, R::A, Field::A)); // B=A A
                 op!(r, at, 0x80FF6..0x80FFD, 9, r.cpu.load_const(R::C, 5, 0x656)); // LC(5) #00656
                 at = 0x80FFD;
             }
-            // L_80FFD:
+            // SUB_80FA6.loop3:
             0x80FFD..=0x81000 => {
                 io!(r, at, 0x80FFD..0x81000, 16, r.cpu.load(1, R::A, Field::B, r.hw)); // A=DAT1 B
-                branch!(r, at, 0x81005, 7, r.cpu.test(Test::Regs(Cmp::Ne, R::A, R::B), Field::B, Some(0x80FF4))); // ?A#B B / GOYES L_80FF4
+                branch!(r, at, 0x81005, 7, r.cpu.test(Test::Regs(Cmp::Ne, R::A, R::B), Field::B, Some(0x80FF4))); // ?A#B B / GOYES SUB_80FA6.loop2
             }
             // #81005:
             0x81005..=0x81007 => {
                 op!(r, at, 0x81005..0x81007, 4, r.cpu.dec(R::C, Field::A)); // C=C-1 A
-                branch!(r, at, 0x8100A, 5, r.cpu.jump_if(Cond::NoCarry, 0x80FFD)); // GONC L_80FFD
+                branch!(r, at, 0x8100A, 5, r.cpu.jump_if(Cond::NoCarry, 0x80FFD)); // GONC SUB_80FA6.loop3
             }
             // #8100A:
             0x8100A..=0x8100A => {
                 branch!(r, at, 0x8100E, 6, r.cpu.call(0x81051)); // GOSUB SUB_81051
             }
-            // L_8100E:
+            // SUB_80FA6.loop4:
             0x8100E..=0x8100E => {
                 branch!(r, at, 0x81012, 6, r.cpu.call(0x80EB5)); // GOSUB D1=IRAM~jump_5
             }
@@ -2906,7 +2906,7 @@ pub(crate) fn SUB_80FA6(r: &mut Run) {
             0x81012..=0x8101B => {
                 op!(r, at, 0x81012..0x81018, 8, r.cpu.d_load(1, 4, 0x7F7)); // D1=(4) #07F7
                 io!(r, at, 0x81018..0x8101B, 19, r.cpu.load(1, R::C, Field::A, r.hw)); // C=DAT1 A
-                branch!(r, at, 0x81020, 7, r.cpu.test(Test::NonZero(R::C), Field::A, Some(0x8102A))); // ?C#0 A / GOYES L_8102A
+                branch!(r, at, 0x81020, 7, r.cpu.test(Test::NonZero(R::C), Field::A, Some(0x8102A))); // ?C#0 A / GOYES SUB_80FA6.L5
             }
             // #81020:
             0x81020..=0x81020 => {
@@ -2914,32 +2914,32 @@ pub(crate) fn SUB_80FA6(r: &mut Run) {
             }
             // #81027:
             0x81027..=0x81027 => {
-                branch!(r, at, 0x8102A, 5, r.cpu.jump_if(Cond::Carry, 0x81033)); // GOC L_81033
+                branch!(r, at, 0x8102A, 5, r.cpu.jump_if(Cond::Carry, 0x81033)); // GOC SUB_80FA6.L6
             }
-            // L_8102A:
+            // SUB_80FA6.L5:
             0x8102A..=0x81031 => {
                 op!(r, at, 0x8102A..0x81031, 9, r.cpu.d_load(0, 5, 0x1)); // D0=(5) #00001
                 jump!(r, at, 9, r.cpu.rtn(RtnKind::SetCarry)); // RTNSC
             }
-            // L_81033:
+            // SUB_80FA6.L6:
             0x81033..=0x81033 => {
                 branch!(r, at, 0x81037, 6, r.cpu.call(0x81076)); // GOSUB POPUART~jump
             }
             // #81037:
             0x81037..=0x81037 => {
-                branch!(r, at, 0x8103A, 5, r.cpu.jump_if(Cond::NoCarry, 0x8103E)); // GONC L_8103E
+                branch!(r, at, 0x8103A, 5, r.cpu.jump_if(Cond::NoCarry, 0x8103E)); // GONC SUB_80FA6.L7
             }
             // #8103A:
             0x8103A..=0x8103A => {
                 jump!(r, at, 6, r.cpu.pc = 0x80FA6); // GOTO SUB_80FA6
             }
-            // L_8103E:
+            // SUB_80FA6.L7:
             0x8103E..=0x8103E => {
                 branch!(r, at, 0x81042, 6, r.cpu.call(0x81068)); // GOSUB OUTUART~jump
             }
             // #81042:
             0x81042..=0x81042 => {
-                branch!(r, at, 0x81045, 5, r.cpu.jump_if(Cond::NoCarry, 0x8100E)); // GONC L_8100E
+                branch!(r, at, 0x81045, 5, r.cpu.jump_if(Cond::NoCarry, 0x8100E)); // GONC SUB_80FA6.loop4
             }
             // #81045:
             0x81045..=0x81048 => {
@@ -3029,7 +3029,7 @@ pub(crate) fn POPUART_jump(r: &mut Run) {
             0x81076..=0x81076 => {
                 jump!(r, at, 9, r.cpu.pc = 0x31289); // GOVLNG POPUART
             }
-            // L_8107D:
+            // POPUART~jump.L1:
             0x8107D..=0x8107D => {
                 branch!(r, at, 0x81083, 8, r.cpu.call(0x802D2)); // GOSUBL SUB_802D2
             }
@@ -3039,7 +3039,7 @@ pub(crate) fn POPUART_jump(r: &mut Run) {
             }
             // #81089:
             0x81089..=0x81090 => {
-                op!(r, at, 0x81089..0x81090, 9, r.cpu.d_load(0, 5, 0x81905)); // D0=(5) L_81905
+                op!(r, at, 0x81089..0x81090, 9, r.cpu.d_load(0, 5, 0x81905)); // D0=(5) SUB_817E9.L22
                 branch!(r, at, 0x81096, 8, r.cpu.call(0x8165A)); // GOSUBL SUB_8165A
             }
             // #81096:
@@ -3062,23 +3062,23 @@ pub(crate) fn POPUART_jump(r: &mut Run) {
                 op!(r, at, 0x810B9..0x810BB, 4, r.cpu.p = 14); // P= 14
                 at = 0x810BB;
             }
-            // L_810BB:
+            // POPUART~jump.loop2:
             0x810BB..=0x810BB => {
-                branch!(r, at, 0x810C0, 7, r.cpu.test(Test::Zero(R::B), Field::XS, Some(0x810D0))); // ?B=0 XS / GOYES L_810D0
+                branch!(r, at, 0x810C0, 7, r.cpu.test(Test::Zero(R::B), Field::XS, Some(0x810D0))); // ?B=0 XS / GOYES POPUART~jump.L3
             }
             // #810C0:
             0x810C0..=0x810C7 => {
                 op!(r, at, 0x810C0..0x810C2, 4, r.cpu.p_inc()); // P=P+1
                 op!(r, at, 0x810C2..0x810C4, 4, r.cpu.p_inc()); // P=P+1
                 op!(r, at, 0x810C4..0x810C7, 5, r.cpu.add(R::B, R::B, Field::XS)); // B=B+B XS
-                branch!(r, at, 0x810CA, 5, r.cpu.jump_if(Cond::NoCarry, 0x810BB)); // GONC L_810BB
+                branch!(r, at, 0x810CA, 5, r.cpu.jump_if(Cond::NoCarry, 0x810BB)); // GONC POPUART~jump.loop2
             }
             // #810CA:
             0x810CA..=0x810CD => {
                 op!(r, at, 0x810CA..0x810CD, 5, r.cpu.inc(R::C, Field::P)); // C=C+1 P
-                branch!(r, at, 0x810D0, 5, r.cpu.jump_if(Cond::NoCarry, 0x810BB)); // GONC L_810BB
+                branch!(r, at, 0x810D0, 5, r.cpu.jump_if(Cond::NoCarry, 0x810BB)); // GONC POPUART~jump.loop2
             }
-            // L_810D0:
+            // POPUART~jump.L3:
             0x810D0..=0x810D2 => {
                 op!(r, at, 0x810D0..0x810D2, 4, r.cpu.p = 0); // P= 0
                 branch!(r, at, 0x810D6, 6, r.cpu.call(0x80EBC)); // GOSUB SUB_80EBC
@@ -3087,7 +3087,7 @@ pub(crate) fn POPUART_jump(r: &mut Run) {
             0x810D6..=0x810E0 => {
                 op!(r, at, 0x810D6..0x810DC, 8, r.cpu.d_load(1, 4, 0x9C)); // D1=(4) #009C
                 io!(r, at, 0x810DC..0x810E0, 22, r.cpu.store(1, R::C, Field::Nibbles(8), r.hw)); // DAT1=C 8
-                jump!(r, at, 8, r.cpu.pc = 0x81765); // GOLONG L_81765
+                jump!(r, at, 8, r.cpu.pc = 0x81765); // GOLONG SUB_81736.L2
             }
             _ => {
                 r.cpu.pc = at;
@@ -3111,7 +3111,7 @@ pub(crate) fn SUB_810E6(r: &mut Run) {
             }
             // #810F2:
             0x810F2..=0x810F9 => {
-                op!(r, at, 0x810F2..0x810F9, 9, r.cpu.d_load(0, 5, 0x8190F)); // D0=(5) L_8190F
+                op!(r, at, 0x810F2..0x810F9, 9, r.cpu.d_load(0, 5, 0x8190F)); // D0=(5) SUB_817E9.L23
                 branch!(r, at, 0x810FF, 8, r.cpu.call(0x8165A)); // GOSUBL SUB_8165A
             }
             // #810FF:
@@ -3124,14 +3124,14 @@ pub(crate) fn SUB_810E6(r: &mut Run) {
                 op!(r, at, 0x81109..0x8110B, 4, r.cpu.copy(R::A, R::C, Field::A)); // A=C A
                 op!(r, at, 0x8110B..0x81110, 7, r.cpu.load_const(R::C, 3, 0xA00)); // LC(3) #A00
                 op!(r, at, 0x81110..0x81114, 6, r.cpu.and(R::A, R::C, Field::XS)); // A=A&C XS
-                branch!(r, at, 0x81119, 7, r.cpu.test(Test::Regs(Cmp::Eq, R::C, R::A), Field::XS, Some(0x81124))); // ?C=A XS / GOYES L_81124
+                branch!(r, at, 0x81119, 7, r.cpu.test(Test::Regs(Cmp::Eq, R::C, R::A), Field::XS, Some(0x81124))); // ?C=A XS / GOYES SUB_810E6.L1
             }
             // #81119:
             0x81119..=0x81120 => {
                 op!(r, at, 0x81119..0x81120, 9, r.cpu.d_load(0, 5, 0x2)); // D0=(5) #00002
-                jump!(r, at, 6, r.cpu.pc = 0x81158); // GOTO L_81158
+                jump!(r, at, 6, r.cpu.pc = 0x81158); // GOTO SUB_810E6.L3
             }
-            // L_81124:
+            // SUB_810E6.L1:
             0x81124..=0x81124 => {
                 branch!(r, at, 0x81128, 6, r.cpu.call(0x812AB)); // GOSUB SUB_812AB
             }
@@ -3142,14 +3142,14 @@ pub(crate) fn SUB_810E6(r: &mut Run) {
             }
             // #81131:
             0x81131..=0x81131 => {
-                branch!(r, at, 0x81134, 5, r.cpu.jump_if(Cond::NoCarry, 0x8113F)); // GONC L_8113F
+                branch!(r, at, 0x81134, 5, r.cpu.jump_if(Cond::NoCarry, 0x8113F)); // GONC SUB_810E6.L2
             }
             // #81134:
             0x81134..=0x8113B => {
                 op!(r, at, 0x81134..0x8113B, 9, r.cpu.d_load(0, 5, 0x1)); // D0=(5) #00001
-                jump!(r, at, 6, r.cpu.pc = 0x81158); // GOTO L_81158
+                jump!(r, at, 6, r.cpu.pc = 0x81158); // GOTO SUB_810E6.L3
             }
-            // L_8113F:
+            // SUB_810E6.L2:
             0x8113F..=0x8113F => {
                 branch!(r, at, 0x81143, 6, r.cpu.call(0x8148B)); // GOSUB SUB_8148B
             }
@@ -3159,7 +3159,7 @@ pub(crate) fn SUB_810E6(r: &mut Run) {
             }
             // #81147:
             0x81147..=0x81147 => {
-                branch!(r, at, 0x8114A, 5, r.cpu.jump_if(Cond::Carry, 0x81158)); // GOC L_81158
+                branch!(r, at, 0x8114A, 5, r.cpu.jump_if(Cond::Carry, 0x81158)); // GOC SUB_810E6.L3
             }
             // #8114A:
             0x8114A..=0x8114A => {
@@ -3167,13 +3167,13 @@ pub(crate) fn SUB_810E6(r: &mut Run) {
             }
             // #8114E:
             0x8114E..=0x8114E => {
-                branch!(r, at, 0x81154, 8, r.cpu.call(0x816FE)); // GOSUBL L_816FE
+                branch!(r, at, 0x81154, 8, r.cpu.call(0x816FE)); // GOSUBL SUB_816E5.L2
             }
             // #81154:
             0x81154..=0x81154 => {
-                jump!(r, at, 6, r.cpu.pc = 0x81173); // GOTO L_81173
+                jump!(r, at, 6, r.cpu.pc = 0x81173); // GOTO SUB_810E6.L4
             }
-            // L_81158:
+            // SUB_810E6.L3:
             0x81158..=0x81158 => {
                 branch!(r, at, 0x8115C, 6, r.cpu.call(0x8120A)); // GOSUB SUB_8120A
             }
@@ -3188,9 +3188,9 @@ pub(crate) fn SUB_810E6(r: &mut Run) {
                 op!(r, at, 0x8116D..0x81173, 8, r.cpu.scratch(ScratchOp::ToScratch, R::C, 1, Field::A)); // R1=C.F A
                 at = 0x81173;
             }
-            // L_81173:
+            // SUB_810E6.L4:
             0x81173..=0x8117A => {
-                op!(r, at, 0x81173..0x8117A, 9, r.cpu.d_load(0, 5, 0x81919)); // D0=(5) L_81919
+                op!(r, at, 0x81173..0x8117A, 9, r.cpu.d_load(0, 5, 0x81919)); // D0=(5) SUB_817E9.L24
                 branch!(r, at, 0x81180, 8, r.cpu.call(0x8165A)); // GOSUBL SUB_8165A
             }
             // #81180:
@@ -3203,23 +3203,23 @@ pub(crate) fn SUB_810E6(r: &mut Run) {
                 op!(r, at, 0x8118A..0x8118C, 4, r.cpu.copy(R::A, R::C, Field::A)); // A=C A
                 op!(r, at, 0x8118C..0x81191, 7, r.cpu.load_const(R::C, 3, 0x500)); // LC(3) #500
                 op!(r, at, 0x81191..0x81195, 6, r.cpu.and(R::A, R::C, Field::XS)); // A=A&C XS
-                branch!(r, at, 0x8119A, 7, r.cpu.test(Test::Regs(Cmp::Eq, R::C, R::A), Field::XS, Some(0x811A5))); // ?C=A XS / GOYES L_811A5
+                branch!(r, at, 0x8119A, 7, r.cpu.test(Test::Regs(Cmp::Eq, R::C, R::A), Field::XS, Some(0x811A5))); // ?C=A XS / GOYES SUB_810E6.L5
             }
             // #8119A:
             0x8119A..=0x811A1 => {
                 op!(r, at, 0x8119A..0x811A1, 9, r.cpu.d_load(0, 5, 0x2)); // D0=(5) #00002
-                jump!(r, at, 6, r.cpu.pc = 0x811ED); // GOTO L_811ED
+                jump!(r, at, 6, r.cpu.pc = 0x811ED); // GOTO SUB_810E6.L7
             }
-            // L_811A5:
+            // SUB_810E6.L5:
             0x811A5..=0x811A5 => {
                 branch!(r, at, 0x811A9, 6, r.cpu.call(0x812FA)); // GOSUB SUB_812FA
             }
             // #811A9:
             0x811A9..=0x811D2 => {
-                op!(r, at, 0x811A9..0x811B0, 9, r.cpu.load_const(R::C, 5, 0x81CAD)); // LC(5) L_81CAD
+                op!(r, at, 0x811A9..0x811B0, 9, r.cpu.load_const(R::C, 5, 0x81CAD)); // LC(5) SUB_81BA2.L4
                 op!(r, at, 0x811B0..0x811B3, 5, r.cpu.d_from_r(0, R::C, false)); // D0=C
                 op!(r, at, 0x811B3..0x811B5, 4, r.cpu.copy(R::A, R::C, Field::A)); // A=C A
-                op!(r, at, 0x811B5..0x811BC, 9, r.cpu.load_const(R::C, 5, 0x8198D)); // LC(5) L_8198D
+                op!(r, at, 0x811B5..0x811BC, 9, r.cpu.load_const(R::C, 5, 0x8198D)); // LC(5) SUB_817E9.L29
                 op!(r, at, 0x811BC..0x811BE, 4, r.cpu.sub(R::A, R::A, R::C, Field::A)); // A=A-C A
                 op!(r, at, 0x811BE..0x811C5, 9, r.cpu.load_const(R::C, 5, 0x40000)); // LC(5) #40000
                 op!(r, at, 0x811C5..0x811CB, 8, r.cpu.load_const(R::C, 4, 0x9A3)); // LC(4) #09A3
@@ -3235,15 +3235,15 @@ pub(crate) fn SUB_810E6(r: &mut Run) {
                 op!(r, at, 0x811DF..0x811E1, 4, r.cpu.push_c()); // RSTK=C
                 jump!(r, at, 9, r.cpu.rtn(RtnKind::Plain)); // RTN
             }
-            // L_811E3:
+            // SUB_810E6.L6:
             0x811E3..=0x811E3 => {
                 branch!(r, at, 0x811E7, 6, r.cpu.call(0x8120A)); // GOSUB SUB_8120A
             }
             // #811E7:
             0x811E7..=0x811E7 => {
-                jump!(r, at, 8, r.cpu.pc = 0x816FE); // GOLONG L_816FE
+                jump!(r, at, 8, r.cpu.pc = 0x816FE); // GOLONG SUB_816E5.L2
             }
-            // L_811ED:
+            // SUB_810E6.L7:
             0x811ED..=0x811ED => {
                 branch!(r, at, 0x811F1, 6, r.cpu.call(0x8120A)); // GOSUB SUB_8120A
             }
@@ -3306,7 +3306,7 @@ pub(crate) fn SUB_81211(r: &mut Run) {
             }
             // #81231:
             0x81231..=0x81231 => {
-                branch!(r, at, 0x81234, 5, r.cpu.jump_if(Cond::Carry, 0x8129F)); // GOC L_8129F
+                branch!(r, at, 0x81234, 5, r.cpu.jump_if(Cond::Carry, 0x8129F)); // GOC SUB_81211.L4
             }
             // #81234:
             0x81234..=0x81234 => {
@@ -3326,18 +3326,18 @@ pub(crate) fn SUB_81211(r: &mut Run) {
                 op!(r, at, 0x81252..0x81254, 4, r.cpu.copy(R::B, R::C, Field::A)); // B=C A
                 at = 0x81254;
             }
-            // L_81254:
+            // SUB_81211.loop1:
             0x81254..=0x81254 => {
                 branch!(r, at, 0x8125A, 8, r.cpu.call(0x806DE)); // GOSUBL SUB_806DE
             }
             // #8125A:
             0x8125A..=0x8125A => {
-                branch!(r, at, 0x8125D, 5, r.cpu.jump_if(Cond::Carry, 0x81297)); // GOC L_81297
+                branch!(r, at, 0x8125D, 5, r.cpu.jump_if(Cond::Carry, 0x81297)); // GOC SUB_81211.L3
             }
             // #8125D:
             0x8125D..=0x8125F => {
                 op!(r, at, 0x8125D..0x8125F, 4, r.cpu.dec(R::B, Field::A)); // B=B-1 A
-                branch!(r, at, 0x81262, 5, r.cpu.jump_if(Cond::NoCarry, 0x81254)); // GONC L_81254
+                branch!(r, at, 0x81262, 5, r.cpu.jump_if(Cond::NoCarry, 0x81254)); // GONC SUB_81211.loop1
             }
             // #81262:
             0x81262..=0x8126F => {
@@ -3358,24 +3358,24 @@ pub(crate) fn SUB_81211(r: &mut Run) {
                 op!(r, at, 0x8127D..0x8127F, 4, r.cpu.copy(R::B, R::C, Field::A)); // B=C A
                 op!(r, at, 0x8127F..0x81281, 4, r.cpu.pop_c()); // C=RSTK
                 op!(r, at, 0x81281..0x81287, 8, r.cpu.scratch(ScratchOp::ToScratch, R::C, 0, Field::A)); // R0=C.F A
-                branch!(r, at, 0x8128C, 7, r.cpu.test(Test::Regs(Cmp::Ne, R::A, R::B), Field::A, Some(0x8128E))); // ?A#B A / GOYES L_8128E
+                branch!(r, at, 0x8128C, 7, r.cpu.test(Test::Regs(Cmp::Ne, R::A, R::B), Field::A, Some(0x8128E))); // ?A#B A / GOYES SUB_81211.L2
             }
             // #8128C:
             0x8128C..=0x8128C => {
                 jump!(r, at, 9, r.cpu.rtn(RtnKind::ClearCarry)); // RTNCC
             }
-            // L_8128E:
+            // SUB_81211.L2:
             0x8128E..=0x81295 => {
                 op!(r, at, 0x8128E..0x81295, 9, r.cpu.d_load(0, 5, 0x0)); // D0=(5) #00000
                 jump!(r, at, 9, r.cpu.rtn(RtnKind::SetCarry)); // RTNSC
             }
-            // L_81297:
+            // SUB_81211.L3:
             0x81297..=0x81299 => {
                 op!(r, at, 0x81297..0x81299, 4, r.cpu.pop_c()); // C=RSTK
                 op!(r, at, 0x81299..0x8129F, 8, r.cpu.scratch(ScratchOp::ToScratch, R::C, 1, Field::A)); // R1=C.F A
                 at = 0x8129F;
             }
-            // L_8129F:
+            // SUB_81211.L4:
             0x8129F..=0x812A9 => {
                 op!(r, at, 0x8129F..0x812A1, 4, r.cpu.pop_c()); // C=RSTK
                 op!(r, at, 0x812A1..0x812A3, 4, r.cpu.pop_c()); // C=RSTK
@@ -3651,7 +3651,7 @@ pub(crate) fn SUB_813BE(r: &mut Run) {
         match at {
             0x813BE..=0x813C2 => {
                 io!(r, at, 0x813BE..0x813C2, 15, r.cpu.load(0, R::C, Field::Nibbles(1), r.hw)); // C=DAT0 1
-                branch!(r, at, 0x813C6, 6, r.cpu.call(0x81562)); // GOSUB L_81562
+                branch!(r, at, 0x813C6, 6, r.cpu.call(0x81562)); // GOSUB SUB_8155D.loop1
             }
             // #813C6:
             0x813C6..=0x813C6 => {
@@ -3679,7 +3679,7 @@ pub(crate) fn SUB_813CC(r: &mut Run) {
                 op!(r, at, 0x813DD..0x813E0, 5, r.cpu.scratch(ScratchOp::ToScratch, R::C, 2, Field::W)); // R2=C
                 at = 0x813E0;
             }
-            // L_813E0:
+            // SUB_813CC.loop1:
             0x813E0..=0x81427 => {
                 op!(r, at, 0x813E0..0x813E3, 5, r.cpu.scratch(ScratchOp::FromScratch, R::C, 3, Field::W)); // C=R3
                 op!(r, at, 0x813E3..0x813E6, 5, r.cpu.d_from_r(1, R::C, false)); // D1=C
@@ -3704,7 +3704,7 @@ pub(crate) fn SUB_813CC(r: &mut Run) {
                 op!(r, at, 0x8141D..0x81420, 5, r.cpu.d_from_r(1, R::C, false)); // D1=C
                 io!(r, at, 0x81420..0x81424, 15, r.cpu.load(1, R::A, Field::Nibbles(1), r.hw)); // A=DAT1 1
                 op!(r, at, 0x81424..0x81427, 5, r.cpu.load_const(R::C, 1, 0x1)); // LC(1) #1
-                branch!(r, at, 0x8142C, 7, r.cpu.test(Test::Regs(Cmp::Ne, R::C, R::A), Field::P, Some(0x81483))); // ?C#A P / GOYES L_81483
+                branch!(r, at, 0x8142C, 7, r.cpu.test(Test::Regs(Cmp::Ne, R::C, R::A), Field::P, Some(0x81483))); // ?C#A P / GOYES SUB_813CC.L3
             }
             // #8142C:
             0x8142C..=0x8143E => {
@@ -3714,7 +3714,7 @@ pub(crate) fn SUB_813CC(r: &mut Run) {
                 op!(r, at, 0x81434..0x81437, 5, r.cpu.d_from_r(1, R::A, false)); // D1=A
                 io!(r, at, 0x81437..0x8143B, 15, r.cpu.load(1, R::A, Field::Nibbles(1), r.hw)); // A=DAT1 1
                 op!(r, at, 0x8143B..0x8143E, 5, r.cpu.load_const(R::C, 1, 0x2)); // LC(1) #2
-                branch!(r, at, 0x81443, 7, r.cpu.test(Test::Regs(Cmp::Ne, R::C, R::A), Field::P, Some(0x81483))); // ?C#A P / GOYES L_81483
+                branch!(r, at, 0x81443, 7, r.cpu.test(Test::Regs(Cmp::Ne, R::C, R::A), Field::P, Some(0x81483))); // ?C#A P / GOYES SUB_813CC.L3
             }
             // #81443:
             0x81443..=0x8146A => {
@@ -3732,28 +3732,28 @@ pub(crate) fn SUB_813CC(r: &mut Run) {
                 op!(r, at, 0x81462..0x81465, 5, r.cpu.scratch(ScratchOp::FromScratch, R::A, 2, Field::W)); // A=R2
                 op!(r, at, 0x81465..0x81467, 4, r.cpu.add(R::A, R::A, Field::A)); // A=A+A A
                 op!(r, at, 0x81467..0x8146A, 5, r.cpu.scratch(ScratchOp::ToScratch, R::A, 2, Field::W)); // R2=A
-                branch!(r, at, 0x8146D, 5, r.cpu.jump_if(Cond::Carry, 0x81481)); // GOC L_81481
+                branch!(r, at, 0x8146D, 5, r.cpu.jump_if(Cond::Carry, 0x81481)); // GOC SUB_813CC.L2
             }
             // #8146D:
             0x8146D..=0x81472 => {
                 op!(r, at, 0x8146D..0x81470, 5, r.cpu.scratch(ScratchOp::FromScratch, R::C, 3, Field::W)); // C=R3
                 op!(r, at, 0x81470..0x81472, 4, r.cpu.add(R::A, R::C, Field::A)); // A=A+C A
-                branch!(r, at, 0x81475, 5, r.cpu.jump_if(Cond::Carry, 0x81481)); // GOC L_81481
+                branch!(r, at, 0x81475, 5, r.cpu.jump_if(Cond::Carry, 0x81481)); // GOC SUB_813CC.L2
             }
             // #81475:
             0x81475..=0x81478 => {
                 op!(r, at, 0x81475..0x81478, 5, r.cpu.scratch(ScratchOp::FromScratch, R::C, 0, Field::W)); // C=R0
-                branch!(r, at, 0x8147D, 7, r.cpu.test(Test::Regs(Cmp::Le, R::C, R::A), Field::A, Some(0x81481))); // ?C<=A A / GOYES L_81481
+                branch!(r, at, 0x8147D, 7, r.cpu.test(Test::Regs(Cmp::Le, R::C, R::A), Field::A, Some(0x81481))); // ?C<=A A / GOYES SUB_813CC.L2
             }
             // #8147D:
             0x8147D..=0x8147D => {
-                jump!(r, at, 6, r.cpu.pc = 0x813E0); // GOTO L_813E0
+                jump!(r, at, 6, r.cpu.pc = 0x813E0); // GOTO SUB_813CC.loop1
             }
-            // L_81481:
+            // SUB_813CC.L2:
             0x81481..=0x81481 => {
                 jump!(r, at, 9, r.cpu.rtn(RtnKind::ClearCarry)); // RTNCC
             }
-            // L_81483:
+            // SUB_813CC.L3:
             0x81483..=0x81489 => {
                 op!(r, at, 0x81483..0x81486, 5, r.cpu.d_ex_r(1, R::A, false)); // AD1EX
                 op!(r, at, 0x81486..0x81489, 5, r.cpu.d_from_r(0, R::A, false)); // D0=A
@@ -3784,7 +3784,7 @@ pub(crate) fn SUB_8148B(r: &mut Run) {
                 io!(r, at, 0x8149E..0x814A2, 22, r.cpu.store(1, R::C, Field::Nibbles(8), r.hw)); // DAT1=C 8
                 op!(r, at, 0x814A2..0x814A5, 5, r.cpu.d_ex_r(0, R::C, false)); // CD0EX
                 op!(r, at, 0x814A5..0x814A7, 4, r.cpu.push_c()); // RSTK=C
-                branch!(r, at, 0x814AB, 6, r.cpu.call(0x81602)); // GOSUB L_81602
+                branch!(r, at, 0x814AB, 6, r.cpu.call(0x81602)); // GOSUB SUB_815FE.L1
             }
             // #814AB:
             0x814AB..=0x814B0 => {
@@ -3798,13 +3798,13 @@ pub(crate) fn SUB_8148B(r: &mut Run) {
             }
             // #814B9:
             0x814B9..=0x814B9 => {
-                branch!(r, at, 0x814BC, 5, r.cpu.jump_if(Cond::NoCarry, 0x814BE)); // GONC L_814BE
+                branch!(r, at, 0x814BC, 5, r.cpu.jump_if(Cond::NoCarry, 0x814BE)); // GONC SUB_8148B.L1
             }
             // #814BC:
             0x814BC..=0x814BC => {
                 jump!(r, at, 9, r.cpu.rtn(RtnKind::ClearCarry)); // RTNCC
             }
-            // L_814BE:
+            // SUB_8148B.L1:
             0x814BE..=0x814BE => {
                 jump!(r, at, 9, r.cpu.pc = 0x00C8D); // GOVLNG SUB_00C8D
             }
@@ -3861,7 +3861,7 @@ pub(crate) fn SUB_814E8(r: &mut Run) {
                 op!(r, at, 0x814EE..0x814F0, 4, r.cpu.copy(R::B, R::C, Field::A)); // B=C A
                 at = 0x814F0;
             }
-            // L_814F0:
+            // SUB_814E8.loop1:
             0x814F0..=0x81507 => {
                 io!(r, at, 0x814F0..0x814F4, 15, r.cpu.load(0, R::C, Field::Nibbles(1), r.hw)); // C=DAT0 1
                 op!(r, at, 0x814F4..0x814F9, 7, r.cpu.bit_set(R::C, 1, true)); // CBIT=1 1
@@ -3870,7 +3870,7 @@ pub(crate) fn SUB_814E8(r: &mut Run) {
                 op!(r, at, 0x81500..0x81502, 4, r.cpu.add(R::A, R::B, Field::A)); // A=A+B A
                 op!(r, at, 0x81502..0x81505, 5, r.cpu.d_from_r(0, R::A, false)); // D0=A
                 op!(r, at, 0x81505..0x81507, 4, r.cpu.dec(R::D, Field::A)); // D=D-1 A
-                branch!(r, at, 0x8150A, 5, r.cpu.jump_if(Cond::NoCarry, 0x814F0)); // GONC L_814F0
+                branch!(r, at, 0x8150A, 5, r.cpu.jump_if(Cond::NoCarry, 0x814F0)); // GONC SUB_814E8.loop1
             }
             // #8150A:
             0x8150A..=0x8150A => {
@@ -3928,7 +3928,7 @@ pub(crate) fn SUB_81529(r: &mut Run) {
                 op!(r, at, 0x81531..0x81534, 5, r.cpu.d_ex_r(0, R::C, false)); // CD0EX
                 at = 0x81534;
             }
-            // L_81534:
+            // SUB_81529.loop1:
             0x81534..=0x81558 => {
                 op!(r, at, 0x81534..0x81537, 5, r.cpu.d_from_r(0, R::C, false)); // D0=C
                 op!(r, at, 0x81537..0x81539, 4, r.cpu.zero(R::A, Field::A)); // A=0 A
@@ -3943,7 +3943,7 @@ pub(crate) fn SUB_81529(r: &mut Run) {
                 op!(r, at, 0x81551..0x81554, 5, r.cpu.d_add(0, 1)); // D0=D0+ 1
                 op!(r, at, 0x81554..0x81556, 4, r.cpu.add(R::C, R::B, Field::A)); // C=C+B A
                 op!(r, at, 0x81556..0x81558, 4, r.cpu.dec(R::D, Field::A)); // D=D-1 A
-                branch!(r, at, 0x8155B, 5, r.cpu.jump_if(Cond::NoCarry, 0x81534)); // GONC L_81534
+                branch!(r, at, 0x8155B, 5, r.cpu.jump_if(Cond::NoCarry, 0x81534)); // GONC SUB_81529.loop1
             }
             // #8155B:
             0x8155B..=0x8155B => {
@@ -3963,28 +3963,28 @@ pub(crate) fn SUB_8155D(r: &mut Run) {
     loop {
         match at {
             0x8155D..=0x8155D => {
-                branch!(r, at, 0x81562, 7, r.cpu.st_test(6, true, Some(0x81577))); // ?ST=1 6 / GOYES L_81577
+                branch!(r, at, 0x81562, 7, r.cpu.st_test(6, true, Some(0x81577))); // ?ST=1 6 / GOYES SUB_8155D.L3
             }
-            // L_81562:
+            // SUB_8155D.loop1:
             0x81562..=0x81562 => {
                 branch!(r, at, 0x81569, 9, r.cpu.call(0x00E0B)); // GOSBVL SUB_00E0B
             }
             // #81569:
             0x81569..=0x81569 => {
-                branch!(r, at, 0x8156C, 5, r.cpu.jump_if(Cond::NoCarry, 0x81562)); // GONC L_81562
+                branch!(r, at, 0x8156C, 5, r.cpu.jump_if(Cond::NoCarry, 0x81562)); // GONC SUB_8155D.loop1
             }
-            // L_8156C:
+            // SUB_8155D.loop2:
             0x8156C..=0x81573 => {
-                op!(r, at, 0x8156C..0x81573, 9, r.cpu.load_const(R::C, 5, 0x8F34)); // LC(5) L_08F34
-                jump!(r, at, 6, r.cpu.pc = 0x815DC); // GOTO L_815DC
+                op!(r, at, 0x8156C..0x81573, 9, r.cpu.load_const(R::C, 5, 0x8F34)); // LC(5) dup2;idem(nm,bk)?.L10
+                jump!(r, at, 6, r.cpu.pc = 0x815DC); // GOTO SUB_815D3.loop1
             }
-            // L_81577:
+            // SUB_8155D.L3:
             0x81577..=0x81577 => {
                 branch!(r, at, 0x8157E, 9, r.cpu.call(0x04840)); // GOSBVL POPKEY
             }
             // #8157E:
             0x8157E..=0x8157E => {
-                branch!(r, at, 0x81581, 5, r.cpu.jump_if(Cond::Carry, 0x8156C)); // GOC L_8156C
+                branch!(r, at, 0x81581, 5, r.cpu.jump_if(Cond::Carry, 0x8156C)); // GOC SUB_8155D.loop2
             }
             // #81581:
             0x81581..=0x81583 => {
@@ -3997,7 +3997,7 @@ pub(crate) fn SUB_8155D(r: &mut Run) {
                 op!(r, at, 0x8158A..0x8158F, 7, r.cpu.bit_set(R::C, 3, true)); // CBIT=1 3
                 op!(r, at, 0x8158F..0x81595, 8, r.cpu.scratch(ScratchOp::ToScratch, R::C, 1, Field::A)); // R1=C.F A
                 op!(r, at, 0x81595..0x81599, 6, r.cpu.load_const(R::C, 2, 0xF4)); // LC(2) #F4
-                branch!(r, at, 0x8159F, 8, r.cpu.call(0x802D8)); // GOSUBL L_802D8
+                branch!(r, at, 0x8159F, 8, r.cpu.call(0x802D8)); // GOSUBL SUB_802D2.L1
             }
             // #8159F:
             0x8159F..=0x8159F => {
@@ -4005,7 +4005,7 @@ pub(crate) fn SUB_8155D(r: &mut Run) {
             }
             // #815A5:
             0x815A5..=0x815AC => {
-                op!(r, at, 0x815A5..0x815AC, 9, r.cpu.d_load(0, 5, 0x8185F)); // D0=(5) L_8185F
+                op!(r, at, 0x815A5..0x815AC, 9, r.cpu.d_load(0, 5, 0x8185F)); // D0=(5) SUB_817E9.L10
                 branch!(r, at, 0x815B2, 8, r.cpu.call(0x815FE)); // GOSUBL SUB_815FE
             }
             // #815B2:
@@ -4017,7 +4017,7 @@ pub(crate) fn SUB_8155D(r: &mut Run) {
             }
             // #815C0:
             0x815C0..=0x815C0 => {
-                jump!(r, at, 8, r.cpu.pc = 0x8001D); // GOLONG L_8001D
+                jump!(r, at, 8, r.cpu.pc = 0x8001D); // GOLONG VersionStrings.loop2
             }
             _ => {
                 r.cpu.pc = at;
@@ -4035,7 +4035,7 @@ pub(crate) fn SUB_815C6(r: &mut Run) {
             0x815C6..=0x815CF => {
                 op!(r, at, 0x815C6..0x815C8, 4, r.cpu.p = 0); // P= 0
                 op!(r, at, 0x815C8..0x815CF, 9, r.cpu.load_const(R::C, 5, 0x479A)); // LC(5) #0479A
-                jump!(r, at, 6, r.cpu.pc = 0x815DC); // GOTO L_815DC
+                jump!(r, at, 6, r.cpu.pc = 0x815DC); // GOTO SUB_815D3.loop1
             }
             _ => {
                 r.cpu.pc = at;
@@ -4055,10 +4055,10 @@ pub(crate) fn SUB_815D3(r: &mut Run) {
                 op!(r, at, 0x815D5..0x815DC, 9, r.cpu.load_const(R::C, 5, 0x59808)); // LC(5) #59808
                 at = 0x815DC;
             }
-            // L_815DC:
+            // SUB_815D3.loop1:
             0x815DC..=0x815DE => {
                 op!(r, at, 0x815DC..0x815DE, 4, r.cpu.dec(R::C, Field::A)); // C=C-1 A
-                branch!(r, at, 0x815E1, 5, r.cpu.jump_if(Cond::NoCarry, 0x815DC)); // GONC L_815DC
+                branch!(r, at, 0x815E1, 5, r.cpu.jump_if(Cond::NoCarry, 0x815DC)); // GONC SUB_815D3.loop1
             }
             // #815E1:
             0x815E1..=0x815E1 => {
@@ -4068,7 +4068,7 @@ pub(crate) fn SUB_815D3(r: &mut Run) {
             0x815E3..=0x815E3 => {
                 branch!(r, at, 0x815E7, 6, r.cpu.call(0x8165A)); // GOSUB SUB_8165A
             }
-            // L_815E7:
+            // SUB_815D3.L2:
             0x815E7..=0x815E7 => {
                 branch!(r, at, 0x815EE, 9, r.cpu.call(0x01C31)); // GOSBVL D0->Row1
             }
@@ -4077,7 +4077,7 @@ pub(crate) fn SUB_815D3(r: &mut Run) {
                 op!(r, at, 0x815EE..0x815F5, 9, r.cpu.load_const(R::C, 5, 0x110)); // LC(5) #00110
                 op!(r, at, 0x815F5..0x815F7, 4, r.cpu.add(R::A, R::C, Field::A)); // A=A+C A
                 op!(r, at, 0x815F7..0x815FA, 5, r.cpu.d_from_r(0, R::A, false)); // D0=A
-                jump!(r, at, 6, r.cpu.pc = 0x81609); // GOTO L_81609
+                jump!(r, at, 6, r.cpu.pc = 0x81609); // GOTO SUB_815FE.L2
             }
             _ => {
                 r.cpu.pc = at;
@@ -4095,11 +4095,11 @@ pub(crate) fn SUB_815FE(r: &mut Run) {
             0x815FE..=0x815FE => {
                 branch!(r, at, 0x81602, 6, r.cpu.call(0x8165A)); // GOSUB SUB_8165A
             }
-            // L_81602:
+            // SUB_815FE.L1:
             0x81602..=0x81602 => {
                 branch!(r, at, 0x81609, 9, r.cpu.call(0x01C31)); // GOSBVL D0->Row1
             }
-            // L_81609:
+            // SUB_815FE.L2:
             0x81609..=0x8160B => {
                 op!(r, at, 0x81609..0x8160B, 4, r.cpu.pop_c()); // C=RSTK
                 branch!(r, at, 0x81612, 9, r.cpu.call(0x0D618)); // GOSBVL CSLW5
@@ -4184,9 +4184,9 @@ pub(crate) fn SUB_81662(r: &mut Run) {
                 io!(r, at, 0x81677..0x8167A, 19, r.cpu.load(1, R::C, Field::A, r.hw)); // C=DAT1 A
                 op!(r, at, 0x8167A..0x8167D, 5, r.cpu.d_from_r(1, R::C, false)); // D1=C
                 op!(r, at, 0x8167D..0x81683, 8, r.cpu.d_load(1, 4, 0x92)); // D1=(4) #0092
-                jump!(r, at, 6, r.cpu.pc = 0x81693); // GOTO L_81693
+                jump!(r, at, 6, r.cpu.pc = 0x81693); // GOTO SUB_81662.L2
             }
-            // L_81687:
+            // SUB_81662.loop1:
             0x81687..=0x81690 => {
                 io!(r, at, 0x81687..0x8168A, 16, r.cpu.load(0, R::C, Field::B, r.hw)); // C=DAT0 B
                 io!(r, at, 0x8168A..0x8168D, 16, r.cpu.store(1, R::C, Field::B, r.hw)); // DAT1=C B
@@ -4194,26 +4194,26 @@ pub(crate) fn SUB_81662(r: &mut Run) {
                 op!(r, at, 0x81690..0x81693, 5, r.cpu.d_add(1, 2)); // D1=D1+ 2
                 at = 0x81693;
             }
-            // L_81693:
+            // SUB_81662.L2:
             0x81693..=0x81695 => {
                 op!(r, at, 0x81693..0x81695, 4, r.cpu.dec(R::A, Field::A)); // A=A-1 A
-                branch!(r, at, 0x81698, 5, r.cpu.jump_if(Cond::NoCarry, 0x81687)); // GONC L_81687
+                branch!(r, at, 0x81698, 5, r.cpu.jump_if(Cond::NoCarry, 0x81687)); // GONC SUB_81662.loop1
             }
             // #81698:
             0x81698..=0x8169C => {
                 op!(r, at, 0x81698..0x8169C, 6, r.cpu.load_const(R::C, 2, 0x20)); // LC(2) #20
-                jump!(r, at, 6, r.cpu.pc = 0x816A6); // GOTO L_816A6
+                jump!(r, at, 6, r.cpu.pc = 0x816A6); // GOTO SUB_81662.L4
             }
-            // L_816A0:
+            // SUB_81662.loop3:
             0x816A0..=0x816A3 => {
                 io!(r, at, 0x816A0..0x816A3, 16, r.cpu.store(1, R::C, Field::B, r.hw)); // DAT1=C B
                 op!(r, at, 0x816A3..0x816A6, 5, r.cpu.d_add(1, 2)); // D1=D1+ 2
                 at = 0x816A6;
             }
-            // L_816A6:
+            // SUB_81662.L4:
             0x816A6..=0x816A8 => {
                 op!(r, at, 0x816A6..0x816A8, 4, r.cpu.dec(R::B, Field::A)); // B=B-1 A
-                branch!(r, at, 0x816AB, 5, r.cpu.jump_if(Cond::NoCarry, 0x816A0)); // GONC L_816A0
+                branch!(r, at, 0x816AB, 5, r.cpu.jump_if(Cond::NoCarry, 0x816A0)); // GONC SUB_81662.loop3
             }
             // #816AB:
             0x816AB..=0x816AB => {
@@ -4279,30 +4279,30 @@ pub(crate) fn SUB_816E5(r: &mut Run) {
                 op!(r, at, 0x816E5..0x816E8, 5, r.cpu.rotate(R::B, true)); // BSLC
                 op!(r, at, 0x816E8..0x816EC, 6, r.cpu.load_const(R::C, 2, 0x39)); // LC(2) #39
                 op!(r, at, 0x816EC..0x816EF, 5, r.cpu.exch(R::B, R::C, Field::P)); // BCEX P
-                branch!(r, at, 0x816F4, 7, r.cpu.test(Test::Regs(Cmp::Ge, R::B, R::C), Field::P, Some(0x816F6))); // ?B>=C P / GOYES L_816F6
+                branch!(r, at, 0x816F4, 7, r.cpu.test(Test::Regs(Cmp::Ge, R::B, R::C), Field::P, Some(0x816F6))); // ?B>=C P / GOYES SUB_816E5.L1
             }
             // #816F4:
             0x816F4..=0x816F4 => {
                 op!(r, at, 0x816F4..0x816F6, 4, r.cpu.add(R::C, R::A, Field::A)); // C=C+A A
                 at = 0x816F6;
             }
-            // L_816F6:
+            // SUB_816E5.L1:
             0x816F6..=0x816FC => {
                 io!(r, at, 0x816F6..0x816F9, 16, r.cpu.store(1, R::C, Field::B, r.hw)); // DAT1=C B
                 op!(r, at, 0x816F9..0x816FC, 5, r.cpu.d_add(1, 2)); // D1=D1+ 2
                 jump!(r, at, 9, r.cpu.rtn(RtnKind::Plain)); // RTN
             }
-            // L_816FE:
+            // SUB_816E5.L2:
             0x816FE..=0x81705 => {
-                op!(r, at, 0x816FE..0x81705, 9, r.cpu.d_load(0, 5, 0x8188D)); // D0=(5) L_8188D
-                jump!(r, at, 6, r.cpu.pc = 0x81710); // GOTO L_81710
+                op!(r, at, 0x816FE..0x81705, 9, r.cpu.d_load(0, 5, 0x8188D)); // D0=(5) SUB_817E9.L13
+                jump!(r, at, 6, r.cpu.pc = 0x81710); // GOTO SUB_816E5.L4
             }
-            // L_81709:
+            // SUB_816E5.L3:
             0x81709..=0x81709 => {
-                op!(r, at, 0x81709..0x81710, 9, r.cpu.d_load(0, 5, 0x818A1)); // D0=(5) L_818A1
+                op!(r, at, 0x81709..0x81710, 9, r.cpu.d_load(0, 5, 0x818A1)); // D0=(5) SUB_817E9.L15
                 at = 0x81710;
             }
-            // L_81710:
+            // SUB_816E5.L4:
             0x81710..=0x8171E => {
                 io!(r, at, 0x81710..0x81713, 16, r.cpu.load(0, R::C, Field::B, r.hw)); // C=DAT0 B
                 op!(r, at, 0x81713..0x81716, 5, r.cpu.d_add(0, 2)); // D0=D0+ 2
@@ -4316,7 +4316,7 @@ pub(crate) fn SUB_816E5(r: &mut Run) {
                 op!(r, at, 0x81724..0x8172A, 8, r.cpu.d_load(1, 4, 0x9C)); // D1=(4) #009C
                 io!(r, at, 0x8172A..0x8172E, r.cpu.mem_cycles(Field::WP), r.cpu.load(0, R::C, Field::WP, r.hw)); // C=DAT0 WP
                 io!(r, at, 0x8172E..0x81732, r.cpu.mem_cycles(Field::WP), r.cpu.store(1, R::C, Field::WP, r.hw)); // DAT1=C WP
-                jump!(r, at, 6, r.cpu.pc = 0x81765); // GOTO L_81765
+                jump!(r, at, 6, r.cpu.pc = 0x81765); // GOTO SUB_81736.L2
             }
             _ => {
                 r.cpu.pc = at;
@@ -4341,14 +4341,14 @@ pub(crate) fn SUB_81736(r: &mut Run) {
             }
             // #81741:
             0x81741..=0x81741 => {
-                branch!(r, at, 0x81744, 5, r.cpu.jump_if(Cond::NoCarry, 0x81747)); // GONC L_81747
+                branch!(r, at, 0x81744, 5, r.cpu.jump_if(Cond::NoCarry, 0x81747)); // GONC SUB_81736.L1
             }
             // #81744:
             0x81744..=0x81744 => {
                 op!(r, at, 0x81744..0x81747, 5, r.cpu.zero(R::C, Field::W)); // C=0 W
                 at = 0x81747;
             }
-            // L_81747:
+            // SUB_81736.L1:
             0x81747..=0x81747 => {
                 branch!(r, at, 0x8174D, 8, r.cpu.call(0x80EBC)); // GOSUBL SUB_80EBC
             }
@@ -4359,16 +4359,16 @@ pub(crate) fn SUB_81736(r: &mut Run) {
                 op!(r, at, 0x81757..0x81759, 4, r.cpu.p = 12); // P= 12
                 op!(r, at, 0x81759..0x8175C, 5, r.cpu.inc(R::A, Field::WP)); // A=A+1 WP
                 op!(r, at, 0x8175C..0x8175E, 4, r.cpu.p = 0); // P= 0
-                branch!(r, at, 0x81761, 5, r.cpu.jump_if(Cond::NoCarry, 0x81765)); // GONC L_81765
+                branch!(r, at, 0x81761, 5, r.cpu.jump_if(Cond::NoCarry, 0x81765)); // GONC SUB_81736.L2
             }
             // #81761:
             0x81761..=0x81761 => {
                 io!(r, at, 0x81761..0x81765, 27, r.cpu.store(1, R::C, Field::Nibbles(13), r.hw)); // DAT1=C 13
                 at = 0x81765;
             }
-            // L_81765:
+            // SUB_81736.L2:
             0x81765..=0x81765 => {
-                branch!(r, at, 0x81769, 6, r.cpu.call(0x81602)); // GOSUB L_81602
+                branch!(r, at, 0x81769, 6, r.cpu.call(0x81602)); // GOSUB SUB_815FE.L1
             }
             _ => {
                 r.cpu.pc = at;
@@ -4396,7 +4396,7 @@ pub(crate) fn SUB_81769(r: &mut Run) {
             }
             // #81781:
             0x81781..=0x8178C => {
-                op!(r, at, 0x81781..0x81788, 9, r.cpu.d_load(1, 5, 0x817E7)); // D1=(5) L_817E7
+                op!(r, at, 0x81781..0x81788, 9, r.cpu.d_load(1, 5, 0x817E7)); // D1=(5) SUB_81769.L2
                 op!(r, at, 0x81788..0x8178A, 4, r.cpu.zero(R::C, Field::A)); // C=0 A
                 op!(r, at, 0x8178A..0x8178C, 4, r.cpu.inc(R::C, Field::A)); // C=C+1 A
                 branch!(r, at, 0x81790, 6, r.cpu.call(0x817E9)); // GOSUB SUB_817E9
@@ -4420,7 +4420,7 @@ pub(crate) fn SUB_81769(r: &mut Run) {
                 op!(r, at, 0x817AE..0x817B2, 6, r.cpu.load_const(R::C, 2, 0x15)); // LC(2) #15
                 at = 0x817B2;
             }
-            // L_817B2:
+            // SUB_81769.loop1:
             0x817B2..=0x817C4 => {
                 op!(r, at, 0x817B2..0x817B4, 4, r.cpu.push_c()); // RSTK=C
                 op!(r, at, 0x817B4..0x817B7, 5, r.cpu.scratch(ScratchOp::FromScratch, R::C, 3, Field::W)); // C=R3
@@ -4435,7 +4435,7 @@ pub(crate) fn SUB_81769(r: &mut Run) {
             0x817C8..=0x817CC => {
                 op!(r, at, 0x817C8..0x817CA, 4, r.cpu.pop_c()); // C=RSTK
                 op!(r, at, 0x817CA..0x817CC, 4, r.cpu.dec(R::C, Field::A)); // C=C-1 A
-                branch!(r, at, 0x817CF, 5, r.cpu.jump_if(Cond::NoCarry, 0x817B2)); // GONC L_817B2
+                branch!(r, at, 0x817CF, 5, r.cpu.jump_if(Cond::NoCarry, 0x817B2)); // GONC SUB_81769.loop1
             }
             // #817CF:
             0x817CF..=0x817D5 => {
@@ -4451,7 +4451,7 @@ pub(crate) fn SUB_81769(r: &mut Run) {
             }
             // #817E3:
             0x817E3..=0x817E3 => {
-                jump!(r, at, 6, r.cpu.pc = 0x8180D); // GOTO L_8180D
+                jump!(r, at, 6, r.cpu.pc = 0x8180D); // GOTO SUB_817E9.L3
             }
             _ => {
                 r.cpu.pc = at;
@@ -4467,15 +4467,15 @@ pub(crate) fn SUB_817E9(r: &mut Run) {
     loop {
         match at {
             0x817E9..=0x817E9 => {
-                jump!(r, at, 6, r.cpu.pc = 0x81808); // GOTO L_81808
+                jump!(r, at, 6, r.cpu.pc = 0x81808); // GOTO SUB_817E9.L2
             }
-            // L_817ED:
+            // SUB_817E9.loop1:
             0x817ED..=0x817F8 => {
                 op!(r, at, 0x817ED..0x817EF, 4, r.cpu.push_c()); // RSTK=C
                 io!(r, at, 0x817EF..0x817F2, 16, r.cpu.load(1, R::A, Field::B, r.hw)); // A=DAT1 B
                 op!(r, at, 0x817F2..0x817F5, 5, r.cpu.d_add(1, 2)); // D1=D1+ 2
                 op!(r, at, 0x817F5..0x817F8, 5, r.cpu.st_set(15, false)); // ST=0 15
-                branch!(r, at, 0x817FF, 9, r.cpu.call(0x65886)); // GOSBVL L_65886
+                branch!(r, at, 0x817FF, 9, r.cpu.call(0x65886)); // GOSBVL SUB_65863.L2
             }
             // #817FF:
             0x817FF..=0x817FF => {
@@ -4486,12 +4486,12 @@ pub(crate) fn SUB_817E9(r: &mut Run) {
                 op!(r, at, 0x81806..0x81808, 4, r.cpu.pop_c()); // C=RSTK
                 at = 0x81808;
             }
-            // L_81808:
+            // SUB_817E9.L2:
             0x81808..=0x8180A => {
                 op!(r, at, 0x81808..0x8180A, 4, r.cpu.dec(R::C, Field::A)); // C=C-1 A
-                branch!(r, at, 0x8180D, 5, r.cpu.jump_if(Cond::NoCarry, 0x817ED)); // GONC L_817ED
+                branch!(r, at, 0x8180D, 5, r.cpu.jump_if(Cond::NoCarry, 0x817ED)); // GONC SUB_817E9.loop1
             }
-            // L_8180D:
+            // SUB_817E9.L3:
             0x8180D..=0x81821 => {
                 op!(r, at, 0x8180D..0x81814, 9, r.cpu.d_load(0, 5, 0x10B)); // D0=(5) ANNCTRL
                 io!(r, at, 0x81814..0x81817, 16, r.cpu.load(0, R::C, Field::B, r.hw)); // C=DAT0 B
@@ -4524,14 +4524,14 @@ pub(crate) fn code_81990(r: &mut Run) {
             }
             // #819A4:
             0x819A4..=0x819A4 => {
-                branch!(r, at, 0x819A7, 5, r.cpu.jump_if(Cond::NoCarry, 0x819B2)); // GONC L_819B2
+                branch!(r, at, 0x819A7, 5, r.cpu.jump_if(Cond::NoCarry, 0x819B2)); // GONC SUB_817E9.L30
             }
             // #819A7:
             0x819A7..=0x819AE => {
                 op!(r, at, 0x819A7..0x819AE, 9, r.cpu.d_load(0, 5, 0x1)); // D0=(5) #00001
-                jump!(r, at, 6, r.cpu.pc = 0x819D7); // GOTO L_819D7
+                jump!(r, at, 6, r.cpu.pc = 0x819D7); // GOTO SUB_817E9.L31
             }
-            // L_819B2:
+            // SUB_817E9.L30:
             0x819B2..=0x819B4 => {
                 op!(r, at, 0x819B2..0x819B4, 4, r.cpu.copy(R::B, R::C, Field::A)); // B=C A
                 branch!(r, at, 0x819B8, 6, r.cpu.call(0x81B3D)); // GOSUB SUB_81B3D
@@ -4551,7 +4551,7 @@ pub(crate) fn code_81990(r: &mut Run) {
             }
             // #819C9:
             0x819C9..=0x819C9 => {
-                branch!(r, at, 0x819CC, 5, r.cpu.jump_if(Cond::Carry, 0x819D7)); // GOC L_819D7
+                branch!(r, at, 0x819CC, 5, r.cpu.jump_if(Cond::Carry, 0x819D7)); // GOC SUB_817E9.L31
             }
             // #819CC:
             0x819CC..=0x819CC => {
@@ -4559,15 +4559,15 @@ pub(crate) fn code_81990(r: &mut Run) {
             }
             // #819D0:
             0x819D0..=0x819D0 => {
-                jump!(r, at, 9, r.cpu.pc = 0x811E3); // GOVLNG L_811E3
+                jump!(r, at, 9, r.cpu.pc = 0x811E3); // GOVLNG SUB_810E6.L6
             }
-            // L_819D7:
+            // SUB_817E9.L31:
             0x819D7..=0x819D7 => {
                 branch!(r, at, 0x819DB, 6, r.cpu.call(0x81B3D)); // GOSUB SUB_81B3D
             }
             // #819DB:
             0x819DB..=0x819DB => {
-                jump!(r, at, 9, r.cpu.pc = 0x811ED); // GOVLNG L_811ED
+                jump!(r, at, 9, r.cpu.pc = 0x811ED); // GOVLNG SUB_810E6.L7
             }
             _ => {
                 r.cpu.pc = at;
@@ -4601,7 +4601,7 @@ pub(crate) fn SUB_819E2(r: &mut Run) {
             }
             // #81A03:
             0x81A03..=0x81A03 => {
-                branch!(r, at, 0x81A06, 5, r.cpu.jump_if(Cond::Carry, 0x81A72)); // GOC L_81A72
+                branch!(r, at, 0x81A06, 5, r.cpu.jump_if(Cond::Carry, 0x81A72)); // GOC SUB_819E2.L4
             }
             // #81A06:
             0x81A06..=0x81A06 => {
@@ -4621,18 +4621,18 @@ pub(crate) fn SUB_819E2(r: &mut Run) {
                 op!(r, at, 0x81A24..0x81A26, 4, r.cpu.copy(R::B, R::C, Field::A)); // B=C A
                 at = 0x81A26;
             }
-            // L_81A26:
+            // SUB_819E2.loop1:
             0x81A26..=0x81A26 => {
                 branch!(r, at, 0x81A2C, 8, r.cpu.call(0x81BA2)); // GOSUBL SUB_81BA2
             }
             // #81A2C:
             0x81A2C..=0x81A2C => {
-                branch!(r, at, 0x81A2F, 5, r.cpu.jump_if(Cond::Carry, 0x81A6A)); // GOC L_81A6A
+                branch!(r, at, 0x81A2F, 5, r.cpu.jump_if(Cond::Carry, 0x81A6A)); // GOC SUB_819E2.L3
             }
             // #81A2F:
             0x81A2F..=0x81A31 => {
                 op!(r, at, 0x81A2F..0x81A31, 4, r.cpu.dec(R::B, Field::A)); // B=B-1 A
-                branch!(r, at, 0x81A34, 5, r.cpu.jump_if(Cond::NoCarry, 0x81A26)); // GONC L_81A26
+                branch!(r, at, 0x81A34, 5, r.cpu.jump_if(Cond::NoCarry, 0x81A26)); // GONC SUB_819E2.loop1
             }
             // #81A34:
             0x81A34..=0x81A41 => {
@@ -4653,24 +4653,24 @@ pub(crate) fn SUB_819E2(r: &mut Run) {
                 op!(r, at, 0x81A50..0x81A52, 4, r.cpu.copy(R::B, R::C, Field::A)); // B=C A
                 op!(r, at, 0x81A52..0x81A54, 4, r.cpu.pop_c()); // C=RSTK
                 op!(r, at, 0x81A54..0x81A5A, 8, r.cpu.scratch(ScratchOp::ToScratch, R::C, 0, Field::A)); // R0=C.F A
-                branch!(r, at, 0x81A5F, 7, r.cpu.test(Test::Regs(Cmp::Ne, R::A, R::B), Field::A, Some(0x81A61))); // ?A#B A / GOYES L_81A61
+                branch!(r, at, 0x81A5F, 7, r.cpu.test(Test::Regs(Cmp::Ne, R::A, R::B), Field::A, Some(0x81A61))); // ?A#B A / GOYES SUB_819E2.L2
             }
             // #81A5F:
             0x81A5F..=0x81A5F => {
                 jump!(r, at, 9, r.cpu.rtn(RtnKind::ClearCarry)); // RTNCC
             }
-            // L_81A61:
+            // SUB_819E2.L2:
             0x81A61..=0x81A68 => {
                 op!(r, at, 0x81A61..0x81A68, 9, r.cpu.d_load(0, 5, 0x0)); // D0=(5) #00000
                 jump!(r, at, 9, r.cpu.rtn(RtnKind::SetCarry)); // RTNSC
             }
-            // L_81A6A:
+            // SUB_819E2.L3:
             0x81A6A..=0x81A6C => {
                 op!(r, at, 0x81A6A..0x81A6C, 4, r.cpu.pop_c()); // C=RSTK
                 op!(r, at, 0x81A6C..0x81A72, 8, r.cpu.scratch(ScratchOp::ToScratch, R::C, 1, Field::A)); // R1=C.F A
                 at = 0x81A72;
             }
-            // L_81A72:
+            // SUB_819E2.L4:
             0x81A72..=0x81A7C => {
                 op!(r, at, 0x81A72..0x81A74, 4, r.cpu.pop_c()); // C=RSTK
                 op!(r, at, 0x81A74..0x81A76, 4, r.cpu.pop_c()); // C=RSTK
@@ -4699,7 +4699,7 @@ pub(crate) fn SUB_81A7E(r: &mut Run) {
                 op!(r, at, 0x81A8F..0x81A92, 5, r.cpu.scratch(ScratchOp::ToScratch, R::C, 2, Field::W)); // R2=C
                 at = 0x81A92;
             }
-            // L_81A92:
+            // SUB_81A7E.loop1:
             0x81A92..=0x81AD9 => {
                 op!(r, at, 0x81A92..0x81A95, 5, r.cpu.scratch(ScratchOp::FromScratch, R::C, 3, Field::W)); // C=R3
                 op!(r, at, 0x81A95..0x81A98, 5, r.cpu.d_from_r(1, R::C, false)); // D1=C
@@ -4724,7 +4724,7 @@ pub(crate) fn SUB_81A7E(r: &mut Run) {
                 op!(r, at, 0x81ACF..0x81AD2, 5, r.cpu.d_from_r(1, R::C, false)); // D1=C
                 io!(r, at, 0x81AD2..0x81AD6, 15, r.cpu.load(1, R::A, Field::Nibbles(1), r.hw)); // A=DAT1 1
                 op!(r, at, 0x81AD6..0x81AD9, 5, r.cpu.load_const(R::C, 1, 0x1)); // LC(1) #1
-                branch!(r, at, 0x81ADE, 7, r.cpu.test(Test::Regs(Cmp::Ne, R::C, R::A), Field::P, Some(0x81B35))); // ?C#A P / GOYES L_81B35
+                branch!(r, at, 0x81ADE, 7, r.cpu.test(Test::Regs(Cmp::Ne, R::C, R::A), Field::P, Some(0x81B35))); // ?C#A P / GOYES SUB_81A7E.L3
             }
             // #81ADE:
             0x81ADE..=0x81AF0 => {
@@ -4734,7 +4734,7 @@ pub(crate) fn SUB_81A7E(r: &mut Run) {
                 op!(r, at, 0x81AE6..0x81AE9, 5, r.cpu.d_from_r(1, R::A, false)); // D1=A
                 io!(r, at, 0x81AE9..0x81AED, 15, r.cpu.load(1, R::A, Field::Nibbles(1), r.hw)); // A=DAT1 1
                 op!(r, at, 0x81AED..0x81AF0, 5, r.cpu.load_const(R::C, 1, 0x2)); // LC(1) #2
-                branch!(r, at, 0x81AF5, 7, r.cpu.test(Test::Regs(Cmp::Ne, R::C, R::A), Field::P, Some(0x81B35))); // ?C#A P / GOYES L_81B35
+                branch!(r, at, 0x81AF5, 7, r.cpu.test(Test::Regs(Cmp::Ne, R::C, R::A), Field::P, Some(0x81B35))); // ?C#A P / GOYES SUB_81A7E.L3
             }
             // #81AF5:
             0x81AF5..=0x81B1C => {
@@ -4752,28 +4752,28 @@ pub(crate) fn SUB_81A7E(r: &mut Run) {
                 op!(r, at, 0x81B14..0x81B17, 5, r.cpu.scratch(ScratchOp::FromScratch, R::A, 2, Field::W)); // A=R2
                 op!(r, at, 0x81B17..0x81B19, 4, r.cpu.add(R::A, R::A, Field::A)); // A=A+A A
                 op!(r, at, 0x81B19..0x81B1C, 5, r.cpu.scratch(ScratchOp::ToScratch, R::A, 2, Field::W)); // R2=A
-                branch!(r, at, 0x81B1F, 5, r.cpu.jump_if(Cond::Carry, 0x81B33)); // GOC L_81B33
+                branch!(r, at, 0x81B1F, 5, r.cpu.jump_if(Cond::Carry, 0x81B33)); // GOC SUB_81A7E.L2
             }
             // #81B1F:
             0x81B1F..=0x81B24 => {
                 op!(r, at, 0x81B1F..0x81B22, 5, r.cpu.scratch(ScratchOp::FromScratch, R::C, 3, Field::W)); // C=R3
                 op!(r, at, 0x81B22..0x81B24, 4, r.cpu.add(R::A, R::C, Field::A)); // A=A+C A
-                branch!(r, at, 0x81B27, 5, r.cpu.jump_if(Cond::Carry, 0x81B33)); // GOC L_81B33
+                branch!(r, at, 0x81B27, 5, r.cpu.jump_if(Cond::Carry, 0x81B33)); // GOC SUB_81A7E.L2
             }
             // #81B27:
             0x81B27..=0x81B2A => {
                 op!(r, at, 0x81B27..0x81B2A, 5, r.cpu.scratch(ScratchOp::FromScratch, R::C, 0, Field::W)); // C=R0
-                branch!(r, at, 0x81B2F, 7, r.cpu.test(Test::Regs(Cmp::Le, R::C, R::A), Field::A, Some(0x81B33))); // ?C<=A A / GOYES L_81B33
+                branch!(r, at, 0x81B2F, 7, r.cpu.test(Test::Regs(Cmp::Le, R::C, R::A), Field::A, Some(0x81B33))); // ?C<=A A / GOYES SUB_81A7E.L2
             }
             // #81B2F:
             0x81B2F..=0x81B2F => {
-                jump!(r, at, 6, r.cpu.pc = 0x81A92); // GOTO L_81A92
+                jump!(r, at, 6, r.cpu.pc = 0x81A92); // GOTO SUB_81A7E.loop1
             }
-            // L_81B33:
+            // SUB_81A7E.L2:
             0x81B33..=0x81B33 => {
                 jump!(r, at, 9, r.cpu.rtn(RtnKind::ClearCarry)); // RTNCC
             }
-            // L_81B35:
+            // SUB_81A7E.L3:
             0x81B35..=0x81B3B => {
                 op!(r, at, 0x81B35..0x81B38, 5, r.cpu.d_ex_r(1, R::A, false)); // AD1EX
                 op!(r, at, 0x81B38..0x81B3B, 5, r.cpu.d_from_r(0, R::A, false)); // D0=A
@@ -4795,7 +4795,7 @@ pub(crate) fn SUB_81B3D(r: &mut Run) {
             0x81B3D..=0x81B69 => {
                 op!(r, at, 0x81B3D..0x81B44, 9, r.cpu.d_load(1, 5, 0x90000)); // D1=(5) #90000
                 io!(r, at, 0x81B44..0x81B47, 16, r.cpu.load(1, R::C, Field::B, r.hw)); // C=DAT1 B
-                op!(r, at, 0x81B47..0x81B4E, 9, r.cpu.d_load(1, 5, 0x40000)); // D1=(5) L_3FFDB+37
+                op!(r, at, 0x81B47..0x81B4E, 9, r.cpu.d_load(1, 5, 0x40000)); // D1=(5) OBJ_3FFCA.L1+37
                 op!(r, at, 0x81B4E..0x81B54, 8, r.cpu.d_load(1, 4, 0x69A)); // D1=(4) #069A
                 io!(r, at, 0x81B54..0x81B57, 16, r.cpu.load(1, R::C, Field::B, r.hw)); // C=DAT1 B
                 op!(r, at, 0x81B57..0x81B5C, 7, r.cpu.bit_set(R::C, 7, true)); // CBIT=1 7
@@ -4818,7 +4818,7 @@ pub(crate) fn SUB_81B6B(r: &mut Run) {
     loop {
         match at {
             0x81B6B..=0x81B97 => {
-                op!(r, at, 0x81B6B..0x81B72, 9, r.cpu.d_load(1, 5, 0x40000)); // D1=(5) L_3FFDB+37
+                op!(r, at, 0x81B6B..0x81B72, 9, r.cpu.d_load(1, 5, 0x40000)); // D1=(5) OBJ_3FFCA.L1+37
                 op!(r, at, 0x81B72..0x81B78, 8, r.cpu.d_load(1, 4, 0x69A)); // D1=(4) #069A
                 io!(r, at, 0x81B78..0x81B7B, 16, r.cpu.load(1, R::C, Field::B, r.hw)); // C=DAT1 B
                 op!(r, at, 0x81B7B..0x81B80, 7, r.cpu.bit_set(R::C, 7, false)); // CBIT=0 7
@@ -4879,7 +4879,7 @@ pub(crate) fn SUB_81BA2(r: &mut Run) {
                 op!(r, at, 0x81BE6..0x81BE8, 4, r.cpu.copy(R::C, R::D, Field::A)); // C=D A
                 at = 0x81BE8;
             }
-            // L_81BE8:
+            // SUB_81BA2.loop1:
             0x81BE8..=0x81C14 => {
                 op!(r, at, 0x81BE8..0x81BEB, 5, r.cpu.d_from_r(0, R::C, false)); // D0=C
                 io!(r, at, 0x81BEB..0x81BEF, 29, r.cpu.store(0, R::A, Field::Nibbles(15), r.hw)); // DAT0=A 15
@@ -4894,32 +4894,32 @@ pub(crate) fn SUB_81BA2(r: &mut Run) {
                 op!(r, at, 0x81C0B..0x81C0E, 5, r.cpu.d_from_r(0, R::C, false)); // D0=C
                 op!(r, at, 0x81C0E..0x81C10, 4, r.cpu.p = 14); // P= 14
                 io!(r, at, 0x81C10..0x81C14, 29, r.cpu.load(0, R::C, Field::Nibbles(15), r.hw)); // C=DAT0 15
-                branch!(r, at, 0x81C19, 7, r.cpu.test(Test::Regs(Cmp::Ne, R::C, R::A), Field::WP, Some(0x81C6A))); // ?C#A WP / GOYES L_81C6A
+                branch!(r, at, 0x81C19, 7, r.cpu.test(Test::Regs(Cmp::Ne, R::C, R::A), Field::WP, Some(0x81C6A))); // ?C#A WP / GOYES SUB_81BA2.L2
             }
             // #81C19:
             0x81C19..=0x81C20 => {
                 op!(r, at, 0x81C19..0x81C1C, 5, r.cpu.d_add(0, 15)); // D0=D0+ 15
                 io!(r, at, 0x81C1C..0x81C20, 29, r.cpu.load(0, R::C, Field::Nibbles(15), r.hw)); // C=DAT0 15
-                branch!(r, at, 0x81C25, 7, r.cpu.test(Test::Regs(Cmp::Ne, R::C, R::A), Field::WP, Some(0x81C6A))); // ?C#A WP / GOYES L_81C6A
+                branch!(r, at, 0x81C25, 7, r.cpu.test(Test::Regs(Cmp::Ne, R::C, R::A), Field::WP, Some(0x81C6A))); // ?C#A WP / GOYES SUB_81BA2.L2
             }
             // #81C25:
             0x81C25..=0x81C2C => {
                 op!(r, at, 0x81C25..0x81C28, 5, r.cpu.d_add(0, 15)); // D0=D0+ 15
                 io!(r, at, 0x81C28..0x81C2C, 29, r.cpu.load(0, R::C, Field::Nibbles(15), r.hw)); // C=DAT0 15
-                branch!(r, at, 0x81C31, 7, r.cpu.test(Test::Regs(Cmp::Ne, R::C, R::A), Field::WP, Some(0x81C6A))); // ?C#A WP / GOYES L_81C6A
+                branch!(r, at, 0x81C31, 7, r.cpu.test(Test::Regs(Cmp::Ne, R::C, R::A), Field::WP, Some(0x81C6A))); // ?C#A WP / GOYES SUB_81BA2.L2
             }
             // #81C31:
             0x81C31..=0x81C38 => {
                 op!(r, at, 0x81C31..0x81C34, 5, r.cpu.d_add(0, 15)); // D0=D0+ 15
                 io!(r, at, 0x81C34..0x81C38, 29, r.cpu.load(0, R::C, Field::Nibbles(15), r.hw)); // C=DAT0 15
-                branch!(r, at, 0x81C3D, 7, r.cpu.test(Test::Regs(Cmp::Ne, R::C, R::A), Field::WP, Some(0x81C6A))); // ?C#A WP / GOYES L_81C6A
+                branch!(r, at, 0x81C3D, 7, r.cpu.test(Test::Regs(Cmp::Ne, R::C, R::A), Field::WP, Some(0x81C6A))); // ?C#A WP / GOYES SUB_81BA2.L2
             }
             // #81C3D:
             0x81C3D..=0x81C46 => {
                 op!(r, at, 0x81C3D..0x81C40, 5, r.cpu.d_add(0, 15)); // D0=D0+ 15
                 op!(r, at, 0x81C40..0x81C42, 4, r.cpu.p = 3); // P= 3
                 io!(r, at, 0x81C42..0x81C46, 18, r.cpu.load(0, R::C, Field::Nibbles(4), r.hw)); // C=DAT0 4
-                branch!(r, at, 0x81C4B, 7, r.cpu.test(Test::Regs(Cmp::Ne, R::C, R::A), Field::WP, Some(0x81C6A))); // ?C#A WP / GOYES L_81C6A
+                branch!(r, at, 0x81C4B, 7, r.cpu.test(Test::Regs(Cmp::Ne, R::C, R::A), Field::WP, Some(0x81C6A))); // ?C#A WP / GOYES SUB_81BA2.L2
             }
             // #81C4B:
             0x81C4B..=0x81C63 => {
@@ -4931,13 +4931,13 @@ pub(crate) fn SUB_81BA2(r: &mut Run) {
                 op!(r, at, 0x81C5B..0x81C5E, 5, r.cpu.copy(R::A, R::C, Field::P)); // A=C P
                 op!(r, at, 0x81C5E..0x81C60, 4, r.cpu.copy(R::C, R::D, Field::A)); // C=D A
                 op!(r, at, 0x81C60..0x81C63, 5, r.cpu.dec(R::B, Field::S)); // B=B-1 S
-                branch!(r, at, 0x81C66, 5, r.cpu.jump_if(Cond::Carry, 0x81C7B)); // GOC L_81C7B
+                branch!(r, at, 0x81C66, 5, r.cpu.jump_if(Cond::Carry, 0x81C7B)); // GOC SUB_81BA2.L3
             }
             // #81C66:
             0x81C66..=0x81C66 => {
-                jump!(r, at, 6, r.cpu.pc = 0x81BE8); // GOTO L_81BE8
+                jump!(r, at, 6, r.cpu.pc = 0x81BE8); // GOTO SUB_81BA2.loop1
             }
-            // L_81C6A:
+            // SUB_81BA2.L2:
             0x81C6A..=0x81C6E => {
                 op!(r, at, 0x81C6A..0x81C6C, 4, r.cpu.pop_c()); // C=RSTK
                 op!(r, at, 0x81C6C..0x81C6E, 4, r.cpu.exch(R::D, R::C, Field::A)); // DCEX A
@@ -4948,14 +4948,14 @@ pub(crate) fn SUB_81BA2(r: &mut Run) {
             // #81C71:
             0x81C71..=0x81C73 => {
                 op!(r, at, 0x81C71..0x81C73, 4, r.cpu.p = 0); // P= 0
-                branch!(r, at, 0x81C77, 6, r.cpu.call(0x81C7B)); // GOSUB L_81C7B
+                branch!(r, at, 0x81C77, 6, r.cpu.call(0x81C7B)); // GOSUB SUB_81BA2.L3
             }
             // #81C77:
             0x81C77..=0x81C79 => {
                 op!(r, at, 0x81C77..0x81C79, 4, r.cpu.push_c()); // RSTK=C
                 jump!(r, at, 9, r.cpu.rtn(RtnKind::SetCarry)); // RTNSC
             }
-            // L_81C7B:
+            // SUB_81BA2.L3:
             0x81C7B..=0x81CAB => {
                 op!(r, at, 0x81C7B..0x81C7E, 5, r.cpu.d_ex_r(0, R::C, false)); // CD0EX
                 op!(r, at, 0x81C7E..0x81C81, 5, r.cpu.scratch(ScratchOp::FromScratch, R::A, 1, Field::W)); // A=R1
@@ -4974,7 +4974,7 @@ pub(crate) fn SUB_81BA2(r: &mut Run) {
                 op!(r, at, 0x81CA9..0x81CAB, 4, r.cpu.exch(R::D, R::C, Field::A)); // DCEX A
                 jump!(r, at, 9, r.cpu.rtn(RtnKind::ClearCarry)); // RTNCC
             }
-            // L_81CAD:
+            // SUB_81BA2.L4:
             0x81CAD..=0x81CAD => {
                 branch!(r, at, 0x81CB1, 6, r.cpu.call(0x81E27)); // GOSUB SUB_81E27
             }
@@ -4983,7 +4983,7 @@ pub(crate) fn SUB_81BA2(r: &mut Run) {
                 op!(r, at, 0x81CB1..0x81CB8, 9, r.cpu.load_const(R::C, 5, 0xF)); // LC(5) #0000F
                 jump!(r, at, 6, r.cpu.pc = 0x81DE7); // GOTO SUB_81DE7
             }
-            // L_81CBC:
+            // SUB_81BA2.L5:
             0x81CBC..=0x81CBC => {
                 branch!(r, at, 0x81CC3, 9, r.cpu.call(0x01BFF)); // GOSBVL ClrScrMn
             }
@@ -5000,7 +5000,7 @@ pub(crate) fn SUB_81BA2(r: &mut Run) {
                 io!(r, at, 0x81CDD..0x81CE0, 16, r.cpu.store(1, R::C, Field::B, r.hw)); // DAT1=C B
                 jump!(r, at, 9, r.cpu.rtn(RtnKind::Plain)); // RTN
             }
-            // L_81CE2:
+            // SUB_81BA2.L6:
             0x81CE2..=0x81CE2 => {
                 branch!(r, at, 0x81CE6, 6, r.cpu.call(0x81E27)); // GOSUB SUB_81E27
             }
@@ -5012,9 +5012,9 @@ pub(crate) fn SUB_81BA2(r: &mut Run) {
             // #81CF1:
             0x81CF1..=0x81CF8 => {
                 op!(r, at, 0x81CF1..0x81CF8, 9, r.cpu.load_const(R::C, 5, 0x10)); // LC(5) #00010
-                jump!(r, at, 6, r.cpu.pc = 0x81D12); // GOTO L_81D12
+                jump!(r, at, 6, r.cpu.pc = 0x81D12); // GOTO SUB_81BA2.L8
             }
-            // L_81CFC:
+            // SUB_81BA2.L7:
             0x81CFC..=0x81CFC => {
                 branch!(r, at, 0x81D00, 6, r.cpu.call(0x81E27)); // GOSUB SUB_81E27
             }
@@ -5028,7 +5028,7 @@ pub(crate) fn SUB_81BA2(r: &mut Run) {
                 op!(r, at, 0x81D0B..0x81D12, 9, r.cpu.load_const(R::C, 5, 0x8)); // LC(5) #00008
                 at = 0x81D12;
             }
-            // L_81D12:
+            // SUB_81BA2.L8:
             0x81D12..=0x81D12 => {
                 branch!(r, at, 0x81D16, 6, r.cpu.call(0x81E00)); // GOSUB SUB_81E00
             }
@@ -5040,7 +5040,7 @@ pub(crate) fn SUB_81BA2(r: &mut Run) {
             0x81D1D..=0x81D1D => {
                 jump!(r, at, 9, r.cpu.pc = 0x01BFF); // GOVLNG ClrScrMn
             }
-            // L_81D24:
+            // SUB_81BA2.L9:
             0x81D24..=0x81D24 => {
                 branch!(r, at, 0x81D28, 6, r.cpu.call(0x81E19)); // GOSUB SUB_81E19
             }
@@ -5049,7 +5049,7 @@ pub(crate) fn SUB_81BA2(r: &mut Run) {
                 op!(r, at, 0x81D28..0x81D2F, 9, r.cpu.load_const(R::C, 5, 0xE)); // LC(5) #0000E
                 branch!(r, at, 0x81D33, 6, r.cpu.call(0x81DE7)); // GOSUB SUB_81DE7
             }
-            // L_81D33:
+            // SUB_81BA2.L10:
             0x81D33..=0x81D37 => {
                 op!(r, at, 0x81D33..0x81D35, 4, r.cpu.p = 0); // P= 0
                 op!(r, at, 0x81D35..0x81D37, 4, r.cpu.dec = false); // SETHEX
@@ -5057,7 +5057,7 @@ pub(crate) fn SUB_81BA2(r: &mut Run) {
             }
             // #81D3E:
             0x81D3E..=0x81D45 => {
-                op!(r, at, 0x81D3E..0x81D45, 9, r.cpu.d_load(1, 5, 0x81D93)); // D1=(5) L_81D93
+                op!(r, at, 0x81D3E..0x81D45, 9, r.cpu.d_load(1, 5, 0x81D93)); // D1=(5) SUB_81D6E.L2
                 branch!(r, at, 0x81D4C, 9, r.cpu.call(0x01C58)); // GOSBVL D0->Sft1
             }
             // #81D4C:
@@ -5068,7 +5068,7 @@ pub(crate) fn SUB_81BA2(r: &mut Run) {
             }
             // #81D55:
             0x81D55..=0x81D5C => {
-                op!(r, at, 0x81D55..0x81D5C, 9, r.cpu.d_load(1, 5, 0x81DBD)); // D1=(5) L_81DBD
+                op!(r, at, 0x81D55..0x81D5C, 9, r.cpu.d_load(1, 5, 0x81DBD)); // D1=(5) SUB_81D6E.L3
                 branch!(r, at, 0x81D63, 9, r.cpu.call(0x01C58)); // GOSBVL D0->Sft1
             }
             // #81D63:
@@ -5099,7 +5099,7 @@ pub(crate) fn SUB_81D6E(r: &mut Run) {
                 op!(r, at, 0x81D77..0x81D79, 4, r.cpu.p = 9); // P= 9
                 at = 0x81D79;
             }
-            // L_81D79:
+            // SUB_81D6E.loop1:
             0x81D79..=0x81D8E => {
                 io!(r, at, 0x81D79..0x81D7D, 20, r.cpu.load(1, R::A, Field::Nibbles(6), r.hw)); // A=DAT1 6
                 io!(r, at, 0x81D7D..0x81D81, 20, r.cpu.store(0, R::A, Field::Nibbles(6), r.hw)); // DAT0=A 6
@@ -5108,7 +5108,7 @@ pub(crate) fn SUB_81D6E(r: &mut Run) {
                 op!(r, at, 0x81D86..0x81D89, 5, r.cpu.d_from_r(0, R::A, false)); // D0=A
                 op!(r, at, 0x81D89..0x81D8C, 5, r.cpu.d_add(1, 6)); // D1=D1+ 6
                 op!(r, at, 0x81D8C..0x81D8E, 4, r.cpu.p_inc()); // P=P+1
-                branch!(r, at, 0x81D91, 5, r.cpu.jump_if(Cond::NoCarry, 0x81D79)); // GONC L_81D79
+                branch!(r, at, 0x81D91, 5, r.cpu.jump_if(Cond::NoCarry, 0x81D79)); // GONC SUB_81D6E.loop1
             }
             // #81D91:
             0x81D91..=0x81D91 => {
@@ -5128,7 +5128,7 @@ pub(crate) fn SUB_81DE7(r: &mut Run) {
     loop {
         match at {
             0x81DE7..=0x81DEE => {
-                op!(r, at, 0x81DE7..0x81DEE, 9, r.cpu.d_load(0, 5, 0x73E79)); // D0=(5) L_73E79
+                op!(r, at, 0x81DE7..0x81DEE, 9, r.cpu.d_load(0, 5, 0x73E79)); // D0=(5) MsgTab(0).L1
                 branch!(r, at, 0x81DF2, 6, r.cpu.call(0x81E4C)); // GOSUB SUB_81E4C
             }
             // #81DF2:
@@ -5137,7 +5137,7 @@ pub(crate) fn SUB_81DE7(r: &mut Run) {
             }
             // #81DF9:
             0x81DF9..=0x81DF9 => {
-                jump!(r, at, 9, r.cpu.pc = 0x81602); // GOVLNG L_81602
+                jump!(r, at, 9, r.cpu.pc = 0x81602); // GOVLNG SUB_815FE.L1
             }
             _ => {
                 r.cpu.pc = at;
@@ -5153,7 +5153,7 @@ pub(crate) fn SUB_81E00(r: &mut Run) {
     loop {
         match at {
             0x81E00..=0x81E07 => {
-                op!(r, at, 0x81E00..0x81E07, 9, r.cpu.d_load(0, 5, 0x73E79)); // D0=(5) L_73E79
+                op!(r, at, 0x81E00..0x81E07, 9, r.cpu.d_load(0, 5, 0x73E79)); // D0=(5) MsgTab(0).L1
                 branch!(r, at, 0x81E0B, 6, r.cpu.call(0x81E4C)); // GOSUB SUB_81E4C
             }
             // #81E0B:
@@ -5162,7 +5162,7 @@ pub(crate) fn SUB_81E00(r: &mut Run) {
             }
             // #81E12:
             0x81E12..=0x81E12 => {
-                jump!(r, at, 9, r.cpu.pc = 0x815E7); // GOVLNG L_815E7
+                jump!(r, at, 9, r.cpu.pc = 0x815E7); // GOVLNG SUB_815D3.L2
             }
             _ => {
                 r.cpu.pc = at;
@@ -5182,7 +5182,7 @@ pub(crate) fn SUB_81E19(r: &mut Run) {
             }
             // #81E20:
             0x81E20..=0x81E20 => {
-                branch!(r, at, 0x81E27, 9, r.cpu.call(0x00768)); // GOSBVL L_00768
+                branch!(r, at, 0x81E27, 9, r.cpu.call(0x00768)); // GOSBVL SUB_00735.L2
             }
             _ => {
                 r.cpu.pc = at;
@@ -5215,7 +5215,7 @@ pub(crate) fn SUB_81E27(r: &mut Run) {
             }
             // #81E45:
             0x81E45..=0x81E45 => {
-                jump!(r, at, 9, r.cpu.pc = 0x802BE); // GOVLNG L_802BE
+                jump!(r, at, 9, r.cpu.pc = 0x802BE); // GOVLNG SUB_80215.L2
             }
             _ => {
                 r.cpu.pc = at;
@@ -5235,22 +5235,22 @@ pub(crate) fn SUB_81E4C(r: &mut Run) {
                 op!(r, at, 0x81E4E..0x81E50, 4, r.cpu.dec(R::C, Field::A)); // C=C-1 A
                 at = 0x81E50;
             }
-            // L_81E50:
+            // SUB_81E4C.loop1:
             0x81E50..=0x81E5E => {
                 io!(r, at, 0x81E50..0x81E53, 19, r.cpu.load(0, R::A, Field::A, r.hw)); // A=DAT0 A
                 op!(r, at, 0x81E53..0x81E59, 8, r.cpu.sub_con(R::A, Field::A, 5)); // A=A-CON A,5
                 op!(r, at, 0x81E59..0x81E5C, 5, r.cpu.d_add(0, 5)); // D0=D0+ 5
                 op!(r, at, 0x81E5C..0x81E5E, 4, r.cpu.dec(R::C, Field::A)); // C=C-1 A
-                branch!(r, at, 0x81E61, 5, r.cpu.jump_if(Cond::Carry, 0x81E6D)); // GOC L_81E6D
+                branch!(r, at, 0x81E61, 5, r.cpu.jump_if(Cond::Carry, 0x81E6D)); // GOC SUB_81E4C.L2
             }
             // #81E61:
             0x81E61..=0x81E69 => {
                 op!(r, at, 0x81E61..0x81E64, 5, r.cpu.d_ex_r(0, R::C, false)); // CD0EX
                 op!(r, at, 0x81E64..0x81E66, 4, r.cpu.add(R::C, R::A, Field::A)); // C=C+A A
                 op!(r, at, 0x81E66..0x81E69, 5, r.cpu.d_ex_r(0, R::C, false)); // CD0EX
-                jump!(r, at, 6, r.cpu.pc = 0x81E50); // GOTO L_81E50
+                jump!(r, at, 6, r.cpu.pc = 0x81E50); // GOTO SUB_81E4C.loop1
             }
-            // L_81E6D:
+            // SUB_81E4C.L2:
             0x81E6D..=0x81E72 => {
                 op!(r, at, 0x81E6D..0x81E72, 7, r.cpu.srb_field(R::A, Field::A)); // ASRB.F A
                 jump!(r, at, 9, r.cpu.rtn(RtnKind::Plain)); // RTN
@@ -5307,7 +5307,7 @@ pub(crate) fn SUB_81E4C(r: &mut Run) {
             }
             // #81EC8:
             0x81EC8..=0x81EC8 => {
-                jump!(r, at, 9, r.cpu.pc = 0x80A67); // GOVLNG L_80A67
+                jump!(r, at, 9, r.cpu.pc = 0x80A67); // GOVLNG KeyTestDiag.loop3
             }
             _ => {
                 r.cpu.pc = at;
@@ -5324,7 +5324,7 @@ pub(crate) fn code_85C25(r: &mut Run) {
         match at {
             0x85C25..=0x85C2C => {
                 op!(r, at, 0x85C25..0x85C2C, 9, r.cpu.load_const(R::C, 5, 0x2BAA)); // LC(5) DOEXT1
-                jump!(r, at, 9, r.cpu.pc = 0x27270); // GOVLNG L_27270
+                jump!(r, at, 9, r.cpu.pc = 0x27270); // GOVLNG NOTROMPcase.L1
             }
             _ => {
                 r.cpu.pc = at;
@@ -5347,14 +5347,14 @@ pub(crate) fn code_85C60(r: &mut Run) {
                 op!(r, at, 0x85C6B..0x85C6E, 5, r.cpu.d_add(1, 5)); // D1=D1+ 5
                 op!(r, at, 0x85C6E..0x85C70, 4, r.cpu.zero(R::A, Field::A)); // A=0 A
                 io!(r, at, 0x85C70..0x85C73, 16, r.cpu.load(1, R::A, Field::B, r.hw)); // A=DAT1 B
-                branch!(r, at, 0x85C78, 7, r.cpu.test(Test::Zero(R::A), Field::A, Some(0x85C7A))); // ?A=0 A / GOYES L_85C7A
+                branch!(r, at, 0x85C78, 7, r.cpu.test(Test::Zero(R::A), Field::A, Some(0x85C7A))); // ?A=0 A / GOYES ROMP_0F0_091.L1
             }
             // #85C78:
             0x85C78..=0x85C78 => {
                 op!(r, at, 0x85C78..0x85C7A, 4, r.cpu.inc(R::A, Field::A)); // A=A+1 A
                 at = 0x85C7A;
             }
-            // L_85C7A:
+            // ROMP_0F0_091.L1:
             0x85C7A..=0x85CA5 => {
                 op!(r, at, 0x85C7A..0x85C7C, 4, r.cpu.inc(R::A, Field::A)); // A=A+1 A
                 op!(r, at, 0x85C7C..0x85C7E, 4, r.cpu.add(R::A, R::A, Field::A)); // A=A+A A
@@ -5418,14 +5418,14 @@ pub(crate) fn code_87071(r: &mut Run) {
                 io!(r, at, 0x870BE..0x870C1, 19, r.cpu.load(0, R::A, Field::A, r.hw)); // A=DAT0 A
                 op!(r, at, 0x870C1..0x870C4, 5, r.cpu.d_add(0, 10)); // D0=D0+ 10
                 op!(r, at, 0x870C4..0x870C6, 4, r.cpu.dec(R::A, Field::A)); // A=A-1 A
-                branch!(r, at, 0x870CB, 7, r.cpu.test(Test::Zero(R::A), Field::A, Some(0x870CE))); // ?A=0 A / GOYES L_870CE
+                branch!(r, at, 0x870CB, 7, r.cpu.test(Test::Zero(R::A), Field::A, Some(0x870CE))); // ?A=0 A / GOYES ROMP_0C0_000.L1
             }
             // #870CB:
             0x870CB..=0x870CB => {
                 op!(r, at, 0x870CB..0x870CE, 5, r.cpu.d_add(0, 5)); // D0=D0+ 5
                 at = 0x870CE;
             }
-            // L_870CE:
+            // ROMP_0C0_000.L1:
             0x870CE..=0x8710F => {
                 op!(r, at, 0x870CE..0x870D1, 5, r.cpu.d_ex_r(0, R::A, false)); // AD0EX
                 op!(r, at, 0x870D1..0x870D4, 5, r.cpu.scratch(ScratchOp::ToScratch, R::A, 2, Field::W)); // R2=A
@@ -5450,7 +5450,7 @@ pub(crate) fn code_87071(r: &mut Run) {
                 op!(r, at, 0x8710F..0x87112, 5, r.cpu.d_from_r(0, R::C, false)); // D0=C
                 at = 0x87112;
             }
-            // L_87112:
+            // ROMP_0C0_000.loop2:
             0x87112..=0x87119 => {
                 io!(r, at, 0x87112..0x87116, 30, r.cpu.load(0, R::A, Field::W, r.hw)); // A=DAT0 W
                 op!(r, at, 0x87116..0x87119, 5, r.cpu.d_add(0, 16)); // D0=D0+ 16
@@ -5464,26 +5464,26 @@ pub(crate) fn code_87071(r: &mut Run) {
             0x87126..=0x8712B => {
                 op!(r, at, 0x87126..0x87129, 5, r.cpu.scratch(ScratchOp::FromScratch, R::C, 2, Field::W)); // C=R2
                 op!(r, at, 0x87129..0x8712B, 4, r.cpu.p = 4); // P= 4
-                branch!(r, at, 0x87130, 7, r.cpu.test(Test::Regs(Cmp::Eq, R::C, R::A), Field::P, Some(0x87138))); // ?C=A P / GOYES L_87138
+                branch!(r, at, 0x87130, 7, r.cpu.test(Test::Regs(Cmp::Eq, R::C, R::A), Field::P, Some(0x87138))); // ?C=A P / GOYES ROMP_0C0_000.L3
             }
             // #87130:
             0x87130..=0x87130 => {
-                branch!(r, at, 0x87135, 7, r.cpu.test(Test::NonZero(R::C), Field::P, Some(0x8713D))); // ?C#0 P / GOYES L_8713D
+                branch!(r, at, 0x87135, 7, r.cpu.test(Test::NonZero(R::C), Field::P, Some(0x8713D))); // ?C#0 P / GOYES ROMP_0C0_000.L4
             }
             // #87135:
             0x87135..=0x87135 => {
-                branch!(r, at, 0x87138, 5, r.cpu.jump_if(Cond::NoCarry, 0x87140)); // GONC L_87140
+                branch!(r, at, 0x87138, 5, r.cpu.jump_if(Cond::NoCarry, 0x87140)); // GONC ROMP_0C0_000.L5
             }
-            // L_87138:
+            // ROMP_0C0_000.L3:
             0x87138..=0x87138 => {
-                branch!(r, at, 0x8713D, 7, r.cpu.test(Test::Regs(Cmp::Ge, R::C, R::A), Field::A, Some(0x87140))); // ?C>=A A / GOYES L_87140
+                branch!(r, at, 0x8713D, 7, r.cpu.test(Test::Regs(Cmp::Ge, R::C, R::A), Field::A, Some(0x87140))); // ?C>=A A / GOYES ROMP_0C0_000.L5
             }
-            // L_8713D:
+            // ROMP_0C0_000.L4:
             0x8713D..=0x8713D => {
                 op!(r, at, 0x8713D..0x87140, 5, r.cpu.scratch(ScratchOp::ToScratch, R::A, 2, Field::W)); // R2=A
                 at = 0x87140;
             }
-            // L_87140:
+            // ROMP_0C0_000.L5:
             0x87140..=0x87140 => {
                 branch!(r, at, 0x87147, 9, r.cpu.call(0x0CA81)); // GOSBVL CkATTNcode
             }
@@ -5492,7 +5492,7 @@ pub(crate) fn code_87071(r: &mut Run) {
                 op!(r, at, 0x87147..0x8714A, 5, r.cpu.scratch(ScratchOp::FromScratch, R::A, 1, Field::W)); // A=R1
                 op!(r, at, 0x8714A..0x8714C, 4, r.cpu.dec(R::A, Field::A)); // A=A-1 A
                 op!(r, at, 0x8714C..0x8714F, 5, r.cpu.scratch(ScratchOp::ToScratch, R::A, 1, Field::W)); // R1=A
-                branch!(r, at, 0x87152, 5, r.cpu.jump_if(Cond::NoCarry, 0x87112)); // GONC L_87112
+                branch!(r, at, 0x87152, 5, r.cpu.jump_if(Cond::NoCarry, 0x87112)); // GONC ROMP_0C0_000.loop2
             }
             // #87152:
             0x87152..=0x87157 => {
@@ -5510,25 +5510,25 @@ pub(crate) fn code_87071(r: &mut Run) {
                 op!(r, at, 0x87166..0x87169, 5, r.cpu.scratch(ScratchOp::FromScratch, R::A, 2, Field::W)); // A=R2
                 op!(r, at, 0x87169..0x87170, 9, r.cpu.load_const(R::C, 5, 0x480)); // LC(5) #00480
                 op!(r, at, 0x87170..0x87172, 4, r.cpu.p = 4); // P= 4
-                branch!(r, at, 0x87177, 7, r.cpu.test(Test::NonZero(R::A), Field::P, Some(0x8717C))); // ?A#0 P / GOYES L_8717C
+                branch!(r, at, 0x87177, 7, r.cpu.test(Test::NonZero(R::A), Field::P, Some(0x8717C))); // ?A#0 P / GOYES ROMP_0C0_000.L6
             }
             // #87177:
             0x87177..=0x87177 => {
-                branch!(r, at, 0x8717C, 7, r.cpu.test(Test::Regs(Cmp::Le, R::C, R::A), Field::A, Some(0x871DF))); // ?C<=A A / GOYES L_871DF
+                branch!(r, at, 0x8717C, 7, r.cpu.test(Test::Regs(Cmp::Le, R::C, R::A), Field::A, Some(0x871DF))); // ?C<=A A / GOYES ROMP_0C0_000.loop11
             }
-            // L_8717C:
+            // ROMP_0C0_000.L6:
             0x8717C..=0x87180 => {
                 op!(r, at, 0x8717C..0x8717E, 4, r.cpu.dec = true); // SETDEC
                 op!(r, at, 0x8717E..0x87180, 4, r.cpu.sub(R::C, R::C, R::A, Field::A)); // C=C-A A
-                jump!(r, at, 6, r.cpu.pc = 0x8718D); // GOTO L_8718D
+                jump!(r, at, 6, r.cpu.pc = 0x8718D); // GOTO ROMP_0C0_000.L8
             }
-            // L_87184:
+            // ROMP_0C0_000.loop7:
             0x87184..=0x87186 => {
                 op!(r, at, 0x87184..0x87186, 4, r.cpu.p = 0); // P= 0
                 op!(r, at, 0x87186..0x8718D, 9, r.cpu.load_const(R::C, 5, 0x99988)); // LC(5) #99988
                 at = 0x8718D;
             }
-            // L_8718D:
+            // ROMP_0C0_000.L8:
             0x8718D..=0x87190 => {
                 op!(r, at, 0x8718D..0x87190, 5, r.cpu.scratch(ScratchOp::ToScratch, R::C, 0, Field::W)); // R0=C
                 branch!(r, at, 0x87194, 6, r.cpu.call(0x8791E)); // GOSUB SUB_8791E
@@ -5543,13 +5543,13 @@ pub(crate) fn code_87071(r: &mut Run) {
                 op!(r, at, 0x871A0..0x871A3, 5, r.cpu.d_from_r(1, R::A, false)); // D1=A
                 at = 0x871A3;
             }
-            // L_871A3:
+            // ROMP_0C0_000.loop9:
             0x871A3..=0x871A3 => {
                 branch!(r, at, 0x871A9, 8, r.cpu.call(0x87C29)); // GOSUBL GETAB1~jump
             }
             // #871A9:
             0x871A9..=0x871A9 => {
-                branch!(r, at, 0x871AE, 7, r.cpu.test(Test::Zero(R::B), Field::W, Some(0x871C1))); // ?B=0 W / GOYES L_871C1
+                branch!(r, at, 0x871AE, 7, r.cpu.test(Test::Zero(R::B), Field::W, Some(0x871C1))); // ?B=0 W / GOYES ROMP_0C0_000.L10
             }
             // #871AE:
             0x871AE..=0x871B5 => {
@@ -5562,7 +5562,7 @@ pub(crate) fn code_87071(r: &mut Run) {
             0x871BB..=0x871BB => {
                 branch!(r, at, 0x871C1, 8, r.cpu.call(0x87C09)); // GOSUBL SUB_87C09
             }
-            // L_871C1:
+            // ROMP_0C0_000.L10:
             0x871C1..=0x871C1 => {
                 branch!(r, at, 0x871C8, 9, r.cpu.call(0x0CA81)); // GOSBVL CkATTNcode
             }
@@ -5571,7 +5571,7 @@ pub(crate) fn code_87071(r: &mut Run) {
                 op!(r, at, 0x871C8..0x871CB, 5, r.cpu.scratch(ScratchOp::FromScratch, R::C, 1, Field::W)); // C=R1
                 op!(r, at, 0x871CB..0x871CD, 4, r.cpu.dec(R::C, Field::A)); // C=C-1 A
                 op!(r, at, 0x871CD..0x871D0, 5, r.cpu.scratch(ScratchOp::ToScratch, R::C, 1, Field::W)); // R1=C
-                branch!(r, at, 0x871D3, 5, r.cpu.jump_if(Cond::NoCarry, 0x871A3)); // GONC L_871A3
+                branch!(r, at, 0x871D3, 5, r.cpu.jump_if(Cond::NoCarry, 0x871A3)); // GONC ROMP_0C0_000.loop9
             }
             // #871D3:
             0x871D3..=0x871D9 => {
@@ -5579,7 +5579,7 @@ pub(crate) fn code_87071(r: &mut Run) {
                 op!(r, at, 0x871D6..0x871D9, 5, r.cpu.inc(R::C, Field::S)); // C=C+1 S
                 branch!(r, at, 0x871DF, 8, r.cpu.call(0x87A04)); // GOSUBL SUB_87A04
             }
-            // L_871DF:
+            // ROMP_0C0_000.loop11:
             0x871DF..=0x871E5 => {
                 op!(r, at, 0x871DF..0x871E2, 5, r.cpu.zero(R::C, Field::S)); // C=0 S
                 op!(r, at, 0x871E2..0x871E5, 5, r.cpu.inc(R::C, Field::S)); // C=C+1 S
@@ -5592,12 +5592,12 @@ pub(crate) fn code_87071(r: &mut Run) {
                 io!(r, at, 0x871F1..0x871F4, 19, r.cpu.load(1, R::C, Field::A, r.hw)); // C=DAT1 A
                 op!(r, at, 0x871F4..0x871F6, 4, r.cpu.dec(R::C, Field::A)); // C=C-1 A
                 op!(r, at, 0x871F6..0x871F8, 4, r.cpu.dec(R::C, Field::A)); // C=C-1 A
-                branch!(r, at, 0x871FB, 5, r.cpu.jump_if(Cond::Carry, 0x87220)); // GOC L_87220
+                branch!(r, at, 0x871FB, 5, r.cpu.jump_if(Cond::Carry, 0x87220)); // GOC ROMP_0C0_000.L12
             }
             // #871FB:
             0x871FB..=0x871FD => {
                 op!(r, at, 0x871FB..0x871FD, 4, r.cpu.dec(R::C, Field::A)); // C=C-1 A
-                branch!(r, at, 0x87200, 5, r.cpu.jump_if(Cond::NoCarry, 0x87255)); // GONC L_87255
+                branch!(r, at, 0x87200, 5, r.cpu.jump_if(Cond::NoCarry, 0x87255)); // GONC ROMP_0C0_000.L13
             }
             // #87200:
             0x87200..=0x87200 => {
@@ -5623,7 +5623,7 @@ pub(crate) fn code_87071(r: &mut Run) {
             0x8721C..=0x8721C => {
                 jump!(r, at, 6, r.cpu.pc = 0x879A7); // GOTO SUB_879A7
             }
-            // L_87220:
+            // ROMP_0C0_000.L12:
             0x87220..=0x87220 => {
                 branch!(r, at, 0x87224, 6, r.cpu.call(0x8791E)); // GOSUB SUB_8791E
             }
@@ -5660,7 +5660,7 @@ pub(crate) fn code_87071(r: &mut Run) {
             0x87251..=0x87251 => {
                 jump!(r, at, 6, r.cpu.pc = 0x879A7); // GOTO SUB_879A7
             }
-            // L_87255:
+            // ROMP_0C0_000.L13:
             0x87255..=0x87258 => {
                 io!(r, at, 0x87255..0x87258, 19, r.cpu.load(1, R::A, Field::A, r.hw)); // A=DAT1 A
                 branch!(r, at, 0x8725F, 9, r.cpu.call(0x7A0AA)); // GOSBVL SUB_7A0AA
@@ -5780,7 +5780,7 @@ pub(crate) fn code_87071(r: &mut Run) {
                 op!(r, at, 0x87306..0x87309, 5, r.cpu.d_from_r(0, R::C, false)); // D0=C
                 at = 0x87309;
             }
-            // L_87309:
+            // ROMP_0C0_000.loop14:
             0x87309..=0x87309 => {
                 branch!(r, at, 0x8730D, 6, r.cpu.call(0x8791E)); // GOSUB SUB_8791E
             }
@@ -5809,7 +5809,7 @@ pub(crate) fn code_87071(r: &mut Run) {
                 op!(r, at, 0x87335..0x87338, 5, r.cpu.d_sub(0, 5)); // D0=D0- 5
                 branch!(r, at, 0x8733E, 8, r.cpu.call(0x87C16)); // GOSUBL SUB_87C16
             }
-            // L_8733E:
+            // ROMP_0C0_000.loop15:
             0x8733E..=0x8733E => {
                 branch!(r, at, 0x87344, 8, r.cpu.call(0x87C30)); // GOSUBL GETAB0~jump
             }
@@ -5828,7 +5828,7 @@ pub(crate) fn code_87071(r: &mut Run) {
             }
             // #87356:
             0x87356..=0x87356 => {
-                branch!(r, at, 0x8735A, 6, r.cpu.call(0x87961)); // GOSUB L_87961
+                branch!(r, at, 0x8735A, 6, r.cpu.call(0x87961)); // GOSUB SUB_8795D.L1
             }
             // #8735A:
             0x8735A..=0x8735A => {
@@ -5845,14 +5845,14 @@ pub(crate) fn code_87071(r: &mut Run) {
             // #8736A:
             0x8736A..=0x8736D => {
                 op!(r, at, 0x8736A..0x8736D, 5, r.cpu.scratch(ScratchOp::Exchange, R::C, 3, Field::W)); // CR3EX
-                branch!(r, at, 0x87372, 7, r.cpu.test(Test::NonZero(R::C), Field::A, Some(0x87375))); // ?C#0 A / GOYES L_87375
+                branch!(r, at, 0x87372, 7, r.cpu.test(Test::NonZero(R::C), Field::A, Some(0x87375))); // ?C#0 A / GOYES ROMP_0C0_000.L16
             }
             // #87372:
             0x87372..=0x87372 => {
                 op!(r, at, 0x87372..0x87375, 5, r.cpu.not(R::A, Field::S)); // A=-A-1 S
                 at = 0x87375;
             }
-            // L_87375:
+            // ROMP_0C0_000.L16:
             0x87375..=0x87378 => {
                 op!(r, at, 0x87375..0x87378, 5, r.cpu.scratch(ScratchOp::Exchange, R::C, 3, Field::W)); // CR3EX
                 branch!(r, at, 0x8737E, 8, r.cpu.call(0x87ED2)); // GOSUBL STAB0~jump_6
@@ -5875,7 +5875,7 @@ pub(crate) fn code_87071(r: &mut Run) {
             }
             // #87392:
             0x87392..=0x87392 => {
-                branch!(r, at, 0x87396, 6, r.cpu.call(0x87961)); // GOSUB L_87961
+                branch!(r, at, 0x87396, 6, r.cpu.call(0x87961)); // GOSUB SUB_8795D.L1
             }
             // #87396:
             0x87396..=0x87396 => {
@@ -5890,7 +5890,7 @@ pub(crate) fn code_87071(r: &mut Run) {
                 op!(r, at, 0x873A3..0x873A6, 5, r.cpu.scratch(ScratchOp::FromScratch, R::C, 3, Field::W)); // C=R3
                 op!(r, at, 0x873A6..0x873A8, 4, r.cpu.dec(R::C, Field::A)); // C=C-1 A
                 op!(r, at, 0x873A8..0x873AB, 5, r.cpu.scratch(ScratchOp::ToScratch, R::C, 3, Field::W)); // R3=C
-                branch!(r, at, 0x873AE, 5, r.cpu.jump_if(Cond::NoCarry, 0x8733E)); // GONC L_8733E
+                branch!(r, at, 0x873AE, 5, r.cpu.jump_if(Cond::NoCarry, 0x8733E)); // GONC ROMP_0C0_000.loop15
             }
             // #873AE:
             0x873AE..=0x873B0 => {
@@ -5912,7 +5912,7 @@ pub(crate) fn code_87071(r: &mut Run) {
             }
             // #873CA:
             0x873CA..=0x873CA => {
-                branch!(r, at, 0x873CE, 6, r.cpu.call(0x87961)); // GOSUB L_87961
+                branch!(r, at, 0x873CE, 6, r.cpu.call(0x87961)); // GOSUB SUB_8795D.L1
             }
             // #873CE:
             0x873CE..=0x873CE => {
@@ -5930,13 +5930,13 @@ pub(crate) fn code_87071(r: &mut Run) {
             }
             // #873E2:
             0x873E2..=0x873E2 => {
-                branch!(r, at, 0x873E5, 5, r.cpu.jump_if(Cond::Carry, 0x873E9)); // GOC L_873E9
+                branch!(r, at, 0x873E5, 5, r.cpu.jump_if(Cond::Carry, 0x873E9)); // GOC ROMP_0C0_000.L17
             }
             // #873E5:
             0x873E5..=0x873E5 => {
-                jump!(r, at, 6, r.cpu.pc = 0x87309); // GOTO L_87309
+                jump!(r, at, 6, r.cpu.pc = 0x87309); // GOTO ROMP_0C0_000.loop14
             }
-            // L_873E9:
+            // ROMP_0C0_000.L17:
             0x873E9..=0x873E9 => {
                 branch!(r, at, 0x873ED, 6, r.cpu.call(0x87941)); // GOSUB RCAB0~jump
             }
@@ -6023,7 +6023,7 @@ pub(crate) fn code_87071(r: &mut Run) {
                 io!(r, at, 0x8746D..0x87470, 16, r.cpu.store(1, R::C, Field::B, r.hw)); // DAT1=C B
                 at = 0x87470;
             }
-            // L_87470:
+            // ROMP_0C0_000.L18:
             0x87470..=0x87470 => {
                 branch!(r, at, 0x87476, 8, r.cpu.call(0x87D4C)); // GOSUBL SUB_87D4C
             }
@@ -6049,13 +6049,13 @@ pub(crate) fn code_87071(r: &mut Run) {
             }
             // #8748F:
             0x8748F..=0x8748F => {
-                branch!(r, at, 0x87492, 5, r.cpu.jump_if(Cond::Carry, 0x87496)); // GOC L_87496
+                branch!(r, at, 0x87492, 5, r.cpu.jump_if(Cond::Carry, 0x87496)); // GOC ROMP_0C0_000.L19
             }
             // #87492:
             0x87492..=0x87492 => {
-                jump!(r, at, 6, r.cpu.pc = 0x87744); // GOTO L_87744
+                jump!(r, at, 6, r.cpu.pc = 0x87744); // GOTO ROMP_0C0_000.L32
             }
-            // L_87496:
+            // ROMP_0C0_000.L19:
             0x87496..=0x87496 => {
                 branch!(r, at, 0x8749A, 6, r.cpu.call(0x87941)); // GOSUB RCAB0~jump
             }
@@ -6077,7 +6077,7 @@ pub(crate) fn code_87071(r: &mut Run) {
             }
             // #874AC:
             0x874AC..=0x874AC => {
-                branch!(r, at, 0x874AF, 5, r.cpu.jump_if(Cond::Carry, 0x874F1)); // GOC L_874F1
+                branch!(r, at, 0x874AF, 5, r.cpu.jump_if(Cond::Carry, 0x874F1)); // GOC ROMP_0C0_000.L21
             }
             // #874AF:
             0x874AF..=0x874BB => {
@@ -6085,7 +6085,7 @@ pub(crate) fn code_87071(r: &mut Run) {
                 op!(r, at, 0x874B2..0x874B5, 5, r.cpu.d_from_r(1, R::C, false)); // D1=C
                 op!(r, at, 0x874B5..0x874B8, 5, r.cpu.d_add(1, 10)); // D1=D1+ 10
                 io!(r, at, 0x874B8..0x874BB, 16, r.cpu.load(1, R::C, Field::B, r.hw)); // C=DAT1 B
-                branch!(r, at, 0x874C0, 7, r.cpu.test(Test::NonZero(R::C), Field::B, Some(0x874D5))); // ?C#0 B / GOYES L_874D5
+                branch!(r, at, 0x874C0, 7, r.cpu.test(Test::NonZero(R::C), Field::B, Some(0x874D5))); // ?C#0 B / GOYES ROMP_0C0_000.L20
             }
             // #874C0:
             0x874C0..=0x874C0 => {
@@ -6105,9 +6105,9 @@ pub(crate) fn code_87071(r: &mut Run) {
             }
             // #874D2:
             0x874D2..=0x874D2 => {
-                branch!(r, at, 0x874D5, 5, r.cpu.jump_if(Cond::NoCarry, 0x874F1)); // GONC L_874F1
+                branch!(r, at, 0x874D5, 5, r.cpu.jump_if(Cond::NoCarry, 0x874F1)); // GONC ROMP_0C0_000.L21
             }
-            // L_874D5:
+            // ROMP_0C0_000.L20:
             0x874D5..=0x874D5 => {
                 branch!(r, at, 0x874D9, 6, r.cpu.call(0x87941)); // GOSUB RCAB0~jump
             }
@@ -6130,9 +6130,9 @@ pub(crate) fn code_87071(r: &mut Run) {
             }
             // #874ED:
             0x874ED..=0x874ED => {
-                branch!(r, at, 0x874F1, 6, r.cpu.call(0x87B63)); // GOSUB L_87B63
+                branch!(r, at, 0x874F1, 6, r.cpu.call(0x87B63)); // GOSUB SUB_87B5F.L1
             }
-            // L_874F1:
+            // ROMP_0C0_000.L21:
             0x874F1..=0x8750B => {
                 op!(r, at, 0x874F1..0x874F4, 5, r.cpu.scratch(ScratchOp::FromScratch, R::C, 4, Field::W)); // C=R4
                 op!(r, at, 0x874F4..0x874F7, 5, r.cpu.d_from_r(1, R::C, false)); // D1=C
@@ -6156,7 +6156,7 @@ pub(crate) fn code_87071(r: &mut Run) {
                 op!(r, at, 0x8751E..0x87521, 5, r.cpu.load_const(R::C, 1, 0x6)); // LC(1) #6
                 at = 0x87521;
             }
-            // L_87521:
+            // ROMP_0C0_000.loop22:
             0x87521..=0x8753E => {
                 io!(r, at, 0x87521..0x87524, 19, r.cpu.load(1, R::A, Field::A, r.hw)); // A=DAT1 A
                 op!(r, at, 0x87524..0x87527, 5, r.cpu.d_add(1, 5)); // D1=D1+ 5
@@ -6167,9 +6167,9 @@ pub(crate) fn code_87071(r: &mut Run) {
                 io!(r, at, 0x87534..0x87538, 30, r.cpu.store(0, R::A, Field::W, r.hw)); // DAT0=A W
                 op!(r, at, 0x87538..0x8753B, 5, r.cpu.d_add(0, 16)); // D0=D0+ 16
                 op!(r, at, 0x8753B..0x8753E, 5, r.cpu.dec(R::C, Field::P)); // C=C-1 P
-                branch!(r, at, 0x87541, 5, r.cpu.jump_if(Cond::NoCarry, 0x87521)); // GONC L_87521
+                branch!(r, at, 0x87541, 5, r.cpu.jump_if(Cond::NoCarry, 0x87521)); // GONC ROMP_0C0_000.loop22
             }
-            // L_87541:
+            // ROMP_0C0_000.loop23:
             0x87541..=0x87541 => {
                 branch!(r, at, 0x87545, 6, r.cpu.call(0x87D2B)); // GOSUB SUB_87D2B
             }
@@ -6192,7 +6192,7 @@ pub(crate) fn code_87071(r: &mut Run) {
             // #87555:
             0x87555..=0x87557 => {
                 op!(r, at, 0x87555..0x87557, 4, r.cpu.dec = true); // SETDEC
-                branch!(r, at, 0x8755B, 6, r.cpu.call(0x87961)); // GOSUB L_87961
+                branch!(r, at, 0x8755B, 6, r.cpu.call(0x87961)); // GOSUB SUB_8795D.L1
             }
             // #8755B:
             0x8755B..=0x8755B => {
@@ -6204,7 +6204,7 @@ pub(crate) fn code_87071(r: &mut Run) {
             }
             // #87563:
             0x87563..=0x87563 => {
-                branch!(r, at, 0x87567, 6, r.cpu.call(0x87961)); // GOSUB L_87961
+                branch!(r, at, 0x87567, 6, r.cpu.call(0x87961)); // GOSUB SUB_8795D.L1
             }
             // #87567:
             0x87567..=0x87567 => {
@@ -6218,7 +6218,7 @@ pub(crate) fn code_87071(r: &mut Run) {
             0x8756F..=0x8756F => {
                 branch!(r, at, 0x87573, 6, r.cpu.call(0x87B28)); // GOSUB SUB_87B28
             }
-            // L_87573:
+            // ROMP_0C0_000.loop24:
             0x87573..=0x87573 => {
                 branch!(r, at, 0x87577, 6, r.cpu.call(0x87D41)); // GOSUB SUB_87D41
             }
@@ -6250,7 +6250,7 @@ pub(crate) fn code_87071(r: &mut Run) {
             }
             // #875A4:
             0x875A4..=0x875A4 => {
-                branch!(r, at, 0x875A7, 5, r.cpu.jump_if(Cond::NoCarry, 0x875BB)); // GONC L_875BB
+                branch!(r, at, 0x875A7, 5, r.cpu.jump_if(Cond::NoCarry, 0x875BB)); // GONC ROMP_0C0_000.L25
             }
             // #875A7:
             0x875A7..=0x875AD => {
@@ -6262,9 +6262,9 @@ pub(crate) fn code_87071(r: &mut Run) {
             0x875B1..=0x875B7 => {
                 op!(r, at, 0x875B1..0x875B4, 5, r.cpu.d_add(1, 16)); // D1=D1+ 16
                 op!(r, at, 0x875B4..0x875B7, 5, r.cpu.d_add(1, 5)); // D1=D1+ 5
-                jump!(r, at, 6, r.cpu.pc = 0x875D7); // GOTO L_875D7
+                jump!(r, at, 6, r.cpu.pc = 0x875D7); // GOTO ROMP_0C0_000.L26
             }
-            // L_875BB:
+            // ROMP_0C0_000.L25:
             0x875BB..=0x875BB => {
                 branch!(r, at, 0x875BF, 6, r.cpu.call(0x87941)); // GOSUB RCAB0~jump
             }
@@ -6279,7 +6279,7 @@ pub(crate) fn code_87071(r: &mut Run) {
             }
             // #875CA:
             0x875CA..=0x875CA => {
-                branch!(r, at, 0x875CD, 5, r.cpu.jump_if(Cond::NoCarry, 0x875D7)); // GONC L_875D7
+                branch!(r, at, 0x875CD, 5, r.cpu.jump_if(Cond::NoCarry, 0x875D7)); // GONC ROMP_0C0_000.L26
             }
             // #875CD:
             0x875CD..=0x875D3 => {
@@ -6287,7 +6287,7 @@ pub(crate) fn code_87071(r: &mut Run) {
                 op!(r, at, 0x875D0..0x875D3, 5, r.cpu.zero(R::B, Field::W)); // B=0 W
                 branch!(r, at, 0x875D7, 6, r.cpu.call(0x87C09)); // GOSUB SUB_87C09
             }
-            // L_875D7:
+            // ROMP_0C0_000.L26:
             0x875D7..=0x875D7 => {
                 branch!(r, at, 0x875DB, 6, r.cpu.call(0x87BA1)); // GOSUB SUB_87BA1
             }
@@ -6349,9 +6349,9 @@ pub(crate) fn code_87071(r: &mut Run) {
             }
             // #87627:
             0x87627..=0x87627 => {
-                jump!(r, at, 6, r.cpu.pc = 0x876CC); // GOTO L_876CC
+                jump!(r, at, 6, r.cpu.pc = 0x876CC); // GOTO ROMP_0C0_000.L30
             }
-            // L_8762B:
+            // ROMP_0C0_000.loop27:
             0x8762B..=0x87636 => {
                 op!(r, at, 0x8762B..0x8762D, 4, r.cpu.push_c()); // RSTK=C
                 op!(r, at, 0x8762D..0x8762F, 4, r.cpu.copy(R::C, R::D, Field::A)); // C=D A
@@ -6406,7 +6406,7 @@ pub(crate) fn code_87071(r: &mut Run) {
             }
             // #87668:
             0x87668..=0x87668 => {
-                branch!(r, at, 0x8766B, 5, r.cpu.jump_if(Cond::Carry, 0x876C4)); // GOC L_876C4
+                branch!(r, at, 0x8766B, 5, r.cpu.jump_if(Cond::Carry, 0x876C4)); // GOC ROMP_0C0_000.loop28
             }
             // #8766B:
             0x8766B..=0x8766B => {
@@ -6422,7 +6422,7 @@ pub(crate) fn code_87071(r: &mut Run) {
             }
             // #87677:
             0x87677..=0x87677 => {
-                branch!(r, at, 0x8767A, 5, r.cpu.jump_if(Cond::Carry, 0x876C4)); // GOC L_876C4
+                branch!(r, at, 0x8767A, 5, r.cpu.jump_if(Cond::Carry, 0x876C4)); // GOC ROMP_0C0_000.loop28
             }
             // #8767A:
             0x8767A..=0x8767A => {
@@ -6475,7 +6475,7 @@ pub(crate) fn code_87071(r: &mut Run) {
             }
             // #876B2:
             0x876B2..=0x876B2 => {
-                branch!(r, at, 0x876B5, 5, r.cpu.jump_if(Cond::Carry, 0x876C4)); // GOC L_876C4
+                branch!(r, at, 0x876B5, 5, r.cpu.jump_if(Cond::Carry, 0x876C4)); // GOC ROMP_0C0_000.loop28
             }
             // #876B5:
             0x876B5..=0x876B5 => {
@@ -6491,17 +6491,17 @@ pub(crate) fn code_87071(r: &mut Run) {
             }
             // #876C1:
             0x876C1..=0x876C1 => {
-                branch!(r, at, 0x876C4, 5, r.cpu.jump_if(Cond::NoCarry, 0x876C8)); // GONC L_876C8
+                branch!(r, at, 0x876C4, 5, r.cpu.jump_if(Cond::NoCarry, 0x876C8)); // GONC ROMP_0C0_000.L29
             }
-            // L_876C4:
+            // ROMP_0C0_000.loop28:
             0x876C4..=0x876C4 => {
-                jump!(r, at, 6, r.cpu.pc = 0x87184); // GOTO L_87184
+                jump!(r, at, 6, r.cpu.pc = 0x87184); // GOTO ROMP_0C0_000.loop7
             }
-            // L_876C8:
+            // ROMP_0C0_000.L29:
             0x876C8..=0x876C8 => {
                 branch!(r, at, 0x876CC, 6, r.cpu.call(0x87C1C)); // GOSUB PUTAB0~jump_2
             }
-            // L_876CC:
+            // ROMP_0C0_000.L30:
             0x876CC..=0x876CC => {
                 branch!(r, at, 0x876D0, 6, r.cpu.call(0x87B38)); // GOSUB SUB_87B38
             }
@@ -6543,7 +6543,7 @@ pub(crate) fn code_87071(r: &mut Run) {
             }
             // #876FA:
             0x876FA..=0x876FA => {
-                branch!(r, at, 0x876FD, 5, r.cpu.jump_if(Cond::Carry, 0x876C4)); // GOC L_876C4
+                branch!(r, at, 0x876FD, 5, r.cpu.jump_if(Cond::Carry, 0x876C4)); // GOC ROMP_0C0_000.loop28
             }
             // #876FD:
             0x876FD..=0x876FD => {
@@ -6559,7 +6559,7 @@ pub(crate) fn code_87071(r: &mut Run) {
             }
             // #87709:
             0x87709..=0x87709 => {
-                branch!(r, at, 0x8770C, 5, r.cpu.jump_if(Cond::Carry, 0x876C4)); // GOC L_876C4
+                branch!(r, at, 0x8770C, 5, r.cpu.jump_if(Cond::Carry, 0x876C4)); // GOC ROMP_0C0_000.loop28
             }
             // #8770C:
             0x8770C..=0x8770C => {
@@ -6579,13 +6579,13 @@ pub(crate) fn code_87071(r: &mut Run) {
                 op!(r, at, 0x8771D..0x8771F, 4, r.cpu.copy(R::D, R::C, Field::A)); // D=C A
                 op!(r, at, 0x8771F..0x87721, 4, r.cpu.pop_c()); // C=RSTK
                 op!(r, at, 0x87721..0x87723, 4, r.cpu.dec(R::C, Field::A)); // C=C-1 A
-                branch!(r, at, 0x87726, 5, r.cpu.jump_if(Cond::Carry, 0x8772A)); // GOC L_8772A
+                branch!(r, at, 0x87726, 5, r.cpu.jump_if(Cond::Carry, 0x8772A)); // GOC ROMP_0C0_000.L31
             }
             // #87726:
             0x87726..=0x87726 => {
-                jump!(r, at, 6, r.cpu.pc = 0x8762B); // GOTO L_8762B
+                jump!(r, at, 6, r.cpu.pc = 0x8762B); // GOTO ROMP_0C0_000.loop27
             }
-            // L_8772A:
+            // ROMP_0C0_000.L31:
             0x8772A..=0x8772A => {
                 branch!(r, at, 0x8772E, 6, r.cpu.call(0x87CA7)); // GOSUB SUB_87CA7
             }
@@ -6604,21 +6604,21 @@ pub(crate) fn code_87071(r: &mut Run) {
             }
             // #8773E:
             0x8773E..=0x8773E => {
-                jump!(r, at, 8, r.cpu.pc = 0x87F49); // GOLONG L_87F49
+                jump!(r, at, 8, r.cpu.pc = 0x87F49); // GOLONG SUB_87F14.L2
             }
-            // L_87744:
+            // ROMP_0C0_000.L32:
             0x87744..=0x87751 => {
                 op!(r, at, 0x87744..0x87747, 5, r.cpu.scratch(ScratchOp::FromScratch, R::C, 4, Field::W)); // C=R4
                 op!(r, at, 0x87747..0x8774A, 5, r.cpu.d_from_r(1, R::C, false)); // D1=C
                 op!(r, at, 0x8774A..0x8774D, 5, r.cpu.d_add(1, 10)); // D1=D1+ 10
                 io!(r, at, 0x8774D..0x87751, 15, r.cpu.load(1, R::C, Field::S, r.hw)); // C=DAT1 S
-                branch!(r, at, 0x87756, 7, r.cpu.test(Test::NonZero(R::C), Field::S, Some(0x8775A))); // ?C#0 S / GOYES L_8775A
+                branch!(r, at, 0x87756, 7, r.cpu.test(Test::NonZero(R::C), Field::S, Some(0x8775A))); // ?C#0 S / GOYES ROMP_0C0_000.L33
             }
             // #87756:
             0x87756..=0x87756 => {
-                jump!(r, at, 6, r.cpu.pc = 0x87807); // GOTO L_87807
+                jump!(r, at, 6, r.cpu.pc = 0x87807); // GOTO ROMP_0C0_000.L36
             }
-            // L_8775A:
+            // ROMP_0C0_000.L33:
             0x8775A..=0x87773 => {
                 op!(r, at, 0x8775A..0x8775C, 4, r.cpu.dec = true); // SETDEC
                 op!(r, at, 0x8775C..0x8775F, 5, r.cpu.zero(R::A, Field::W)); // A=0 W
@@ -6669,7 +6669,7 @@ pub(crate) fn code_87071(r: &mut Run) {
             }
             // #877A5:
             0x877A5..=0x877A5 => {
-                branch!(r, at, 0x877A9, 6, r.cpu.call(0x87961)); // GOSUB L_87961
+                branch!(r, at, 0x877A9, 6, r.cpu.call(0x87961)); // GOSUB SUB_8795D.L1
             }
             // #877A9:
             0x877A9..=0x877A9 => {
@@ -6681,13 +6681,13 @@ pub(crate) fn code_87071(r: &mut Run) {
             }
             // #877B1:
             0x877B1..=0x877B1 => {
-                branch!(r, at, 0x877B6, 7, r.cpu.test(Test::Zero(R::B), Field::WP, Some(0x877BA))); // ?B=0 WP / GOYES L_877BA
+                branch!(r, at, 0x877B6, 7, r.cpu.test(Test::Zero(R::B), Field::WP, Some(0x877BA))); // ?B=0 WP / GOYES ROMP_0C0_000.L34
             }
             // #877B6:
             0x877B6..=0x877B6 => {
-                jump!(r, at, 6, r.cpu.pc = 0x87541); // GOTO L_87541
+                jump!(r, at, 6, r.cpu.pc = 0x87541); // GOTO ROMP_0C0_000.loop23
             }
-            // L_877BA:
+            // ROMP_0C0_000.L34:
             0x877BA..=0x877BA => {
                 branch!(r, at, 0x877BE, 6, r.cpu.call(0x87BC4)); // GOSUB SUB_87BC4
             }
@@ -6742,23 +6742,23 @@ pub(crate) fn code_87071(r: &mut Run) {
             }
             // #877F0:
             0x877F0..=0x877F0 => {
-                branch!(r, at, 0x877F3, 5, r.cpu.jump_if(Cond::Carry, 0x877F7)); // GOC L_877F7
+                branch!(r, at, 0x877F3, 5, r.cpu.jump_if(Cond::Carry, 0x877F7)); // GOC ROMP_0C0_000.L35
             }
             // #877F3:
             0x877F3..=0x877F3 => {
-                jump!(r, at, 6, r.cpu.pc = 0x878BF); // GOTO L_878BF
+                jump!(r, at, 6, r.cpu.pc = 0x878BF); // GOTO ROMP_0C0_000.L38
             }
-            // L_877F7:
+            // ROMP_0C0_000.L35:
             0x877F7..=0x87800 => {
                 op!(r, at, 0x877F7..0x877F9, 4, r.cpu.p = 0); // P= 0
                 op!(r, at, 0x877F9..0x87800, 9, r.cpu.load_const(R::C, 5, 0xC001)); // LC(5) #0C001
                 jump!(r, at, 9, r.cpu.pc = 0x10F40); // GOVLNG GPErrjmpC
             }
-            // L_87807:
+            // ROMP_0C0_000.L36:
             0x87807..=0x8780E => {
                 op!(r, at, 0x87807..0x8780A, 5, r.cpu.d_add(1, 1)); // D1=D1+ 1
                 io!(r, at, 0x8780A..0x8780E, 15, r.cpu.load(1, R::C, Field::S, r.hw)); // C=DAT1 S
-                branch!(r, at, 0x87813, 7, r.cpu.test(Test::NonZero(R::C), Field::S, Some(0x87866))); // ?C#0 S / GOYES L_87866
+                branch!(r, at, 0x87813, 7, r.cpu.test(Test::NonZero(R::C), Field::S, Some(0x87866))); // ?C#0 S / GOYES ROMP_0C0_000.L37
             }
             // #87813:
             0x87813..=0x8781A => {
@@ -6830,13 +6830,13 @@ pub(crate) fn code_87071(r: &mut Run) {
             }
             // #8785E:
             0x8785E..=0x8785E => {
-                branch!(r, at, 0x87862, 6, r.cpu.call(0x87B63)); // GOSUB L_87B63
+                branch!(r, at, 0x87862, 6, r.cpu.call(0x87B63)); // GOSUB SUB_87B5F.L1
             }
             // #87862:
             0x87862..=0x87862 => {
-                jump!(r, at, 6, r.cpu.pc = 0x87573); // GOTO L_87573
+                jump!(r, at, 6, r.cpu.pc = 0x87573); // GOTO ROMP_0C0_000.loop24
             }
-            // L_87866:
+            // ROMP_0C0_000.L37:
             0x87866..=0x87866 => {
                 branch!(r, at, 0x8786A, 6, r.cpu.call(0x87D57)); // GOSUB SUB_87D57
             }
@@ -6900,9 +6900,9 @@ pub(crate) fn code_87071(r: &mut Run) {
             }
             // #878BB:
             0x878BB..=0x878BB => {
-                jump!(r, at, 6, r.cpu.pc = 0x87573); // GOTO L_87573
+                jump!(r, at, 6, r.cpu.pc = 0x87573); // GOTO ROMP_0C0_000.loop24
             }
-            // L_878BF:
+            // ROMP_0C0_000.L38:
             0x878BF..=0x878BF => {
                 branch!(r, at, 0x878C3, 6, r.cpu.call(0x87D57)); // GOSUB SUB_87D57
             }
@@ -6935,7 +6935,7 @@ pub(crate) fn code_87071(r: &mut Run) {
                 op!(r, at, 0x878E7..0x878E9, 4, r.cpu.copy(R::B, R::C, Field::A)); // B=C A
                 at = 0x878E9;
             }
-            // L_878E9:
+            // ROMP_0C0_000.loop39:
             0x878E9..=0x87903 => {
                 io!(r, at, 0x878E9..0x878EC, 19, r.cpu.load(1, R::A, Field::A, r.hw)); // A=DAT1 A
                 op!(r, at, 0x878EC..0x878EF, 5, r.cpu.d_add(1, 5)); // D1=D1+ 5
@@ -6950,11 +6950,11 @@ pub(crate) fn code_87071(r: &mut Run) {
             // #8790A:
             0x8790A..=0x8790C => {
                 op!(r, at, 0x8790A..0x8790C, 4, r.cpu.dec(R::B, Field::A)); // B=B-1 A
-                branch!(r, at, 0x8790F, 5, r.cpu.jump_if(Cond::NoCarry, 0x878E9)); // GONC L_878E9
+                branch!(r, at, 0x8790F, 5, r.cpu.jump_if(Cond::NoCarry, 0x878E9)); // GONC ROMP_0C0_000.loop39
             }
             // #8790F:
             0x8790F..=0x8790F => {
-                jump!(r, at, 6, r.cpu.pc = 0x871DF); // GOTO L_871DF
+                jump!(r, at, 6, r.cpu.pc = 0x871DF); // GOTO ROMP_0C0_000.loop11
             }
             _ => {
                 r.cpu.pc = at;
@@ -7109,7 +7109,7 @@ pub(crate) fn SUB_8795D(r: &mut Run) {
             0x8795D..=0x8795D => {
                 branch!(r, at, 0x87961, 6, r.cpu.call(0x8794F)); // GOSUB RCCD0~jump_6
             }
-            // L_87961:
+            // SUB_8795D.L1:
             0x87961..=0x87969 => {
                 op!(r, at, 0x87961..0x87964, 5, r.cpu.d_ex_r(0, R::C, false)); // CD0EX
                 op!(r, at, 0x87964..0x87966, 4, r.cpu.push_c()); // RSTK=C
@@ -7224,7 +7224,7 @@ pub(crate) fn SUB_87999(r: &mut Run) {
     loop {
         match at {
             0x87999..=0x87999 => {
-                jump!(r, at, 9, r.cpu.pc = 0x2BBD9); // GOVLNG L_2BBD9
+                jump!(r, at, 9, r.cpu.pc = 0x2BBD9); // GOVLNG DIV2.L3
             }
             _ => {
                 r.cpu.pc = at;
@@ -7240,7 +7240,7 @@ pub(crate) fn SUB_879A0(r: &mut Run) {
     loop {
         match at {
             0x879A0..=0x879A0 => {
-                jump!(r, at, 9, r.cpu.pc = 0x2BBBC); // GOVLNG L_2BBBC
+                jump!(r, at, 9, r.cpu.pc = 0x2BBBC); // GOVLNG DIV2.L1
             }
             _ => {
                 r.cpu.pc = at;
@@ -7318,7 +7318,7 @@ pub(crate) fn SUB_87A04(r: &mut Run) {
                 io!(r, at, 0x87A10..0x87A13, 19, r.cpu.load(1, R::C, Field::A, r.hw)); // C=DAT1 A
                 at = 0x87A13;
             }
-            // L_87A13:
+            // SUB_87A04.loop1:
             0x87A13..=0x87A16 => {
                 op!(r, at, 0x87A13..0x87A16, 5, r.cpu.scratch(ScratchOp::ToScratch, R::C, 0, Field::W)); // R0=C
                 branch!(r, at, 0x87A1A, 6, r.cpu.call(0x87DC6)); // GOSUB SUB_87DC6
@@ -7351,26 +7351,26 @@ pub(crate) fn SUB_87A04(r: &mut Run) {
             0x87A41..=0x87A47 => {
                 op!(r, at, 0x87A41..0x87A44, 5, r.cpu.zero(R::A, Field::W)); // A=0 W
                 op!(r, at, 0x87A44..0x87A47, 5, r.cpu.scratch(ScratchOp::FromScratch, R::C, 4, Field::W)); // C=R4
-                branch!(r, at, 0x87A4C, 7, r.cpu.test(Test::Zero(R::C), Field::S, Some(0x87A57))); // ?C=0 S / GOYES L_87A57
+                branch!(r, at, 0x87A4C, 7, r.cpu.test(Test::Zero(R::C), Field::S, Some(0x87A57))); // ?C=0 S / GOYES SUB_87A04.L2
             }
             // #87A4C:
             0x87A4C..=0x87A54 => {
                 op!(r, at, 0x87A4C..0x87A4F, 5, r.cpu.inc(R::A, Field::M)); // A=A+1 M
                 op!(r, at, 0x87A4F..0x87A51, 4, r.cpu.p = 14); // P= 14
                 op!(r, at, 0x87A51..0x87A54, 5, r.cpu.inc(R::B, Field::P)); // B=B+1 P
-                branch!(r, at, 0x87A57, 5, r.cpu.jump_if(Cond::NoCarry, 0x87A62)); // GONC L_87A62
+                branch!(r, at, 0x87A57, 5, r.cpu.jump_if(Cond::NoCarry, 0x87A62)); // GONC SUB_87A04.L3
             }
-            // L_87A57:
+            // SUB_87A04.L2:
             0x87A57..=0x87A59 => {
                 op!(r, at, 0x87A57..0x87A59, 4, r.cpu.dec = true); // SETDEC
-                branch!(r, at, 0x87A60, 9, r.cpu.call(0x2A141)); // GOSBVL L_2A141
+                branch!(r, at, 0x87A60, 9, r.cpu.call(0x2A141)); // GOSBVL SUB_2A0B1.L3
             }
             // #87A60:
             0x87A60..=0x87A60 => {
                 op!(r, at, 0x87A60..0x87A62, 4, r.cpu.dec = false); // SETHEX
                 at = 0x87A62;
             }
-            // L_87A62:
+            // SUB_87A04.L3:
             0x87A62..=0x87A62 => {
                 branch!(r, at, 0x87A66, 6, r.cpu.call(0x87ED2)); // GOSUB STAB0~jump_6
             }
@@ -7380,7 +7380,7 @@ pub(crate) fn SUB_87A04(r: &mut Run) {
             }
             // #87A6A:
             0x87A6A..=0x87A6A => {
-                jump!(r, at, 6, r.cpu.pc = 0x87A13); // GOTO L_87A13
+                jump!(r, at, 6, r.cpu.pc = 0x87A13); // GOTO SUB_87A04.loop1
             }
             _ => {
                 r.cpu.pc = at;
@@ -7401,7 +7401,7 @@ pub(crate) fn SUB_87A6E(r: &mut Run) {
                 op!(r, at, 0x87A74..0x87A77, 5, r.cpu.scratch(ScratchOp::ToScratch, R::A, 4, Field::W)); // R4=A
                 at = 0x87A77;
             }
-            // L_87A77:
+            // SUB_87A6E.loop1:
             0x87A77..=0x87A79 => {
                 op!(r, at, 0x87A77..0x87A79, 4, r.cpu.zero(R::C, Field::A)); // C=0 A
                 branch!(r, at, 0x87A7D, 6, r.cpu.call(0x87DC6)); // GOSUB SUB_87DC6
@@ -7422,7 +7422,7 @@ pub(crate) fn SUB_87A6E(r: &mut Run) {
             0x87A8B..=0x87A91 => {
                 op!(r, at, 0x87A8B..0x87A8E, 5, r.cpu.zero(R::A, Field::W)); // A=0 W
                 op!(r, at, 0x87A8E..0x87A91, 5, r.cpu.scratch(ScratchOp::FromScratch, R::C, 4, Field::W)); // C=R4
-                branch!(r, at, 0x87A96, 7, r.cpu.test(Test::Zero(R::C), Field::S, Some(0x87AA2))); // ?C=0 S / GOYES L_87AA2
+                branch!(r, at, 0x87A96, 7, r.cpu.test(Test::Zero(R::C), Field::S, Some(0x87AA2))); // ?C=0 S / GOYES SUB_87A6E.L2
             }
             // #87A96:
             0x87A96..=0x87A9F => {
@@ -7433,7 +7433,7 @@ pub(crate) fn SUB_87A6E(r: &mut Run) {
                 op!(r, at, 0x87A9F..0x87AA2, 5, r.cpu.zero(R::A, Field::X)); // A=0 X
                 at = 0x87AA2;
             }
-            // L_87AA2:
+            // SUB_87A6E.L2:
             0x87AA2..=0x87AA2 => {
                 branch!(r, at, 0x87AA6, 6, r.cpu.call(0x87ED2)); // GOSUB STAB0~jump_6
             }
@@ -7443,7 +7443,7 @@ pub(crate) fn SUB_87A6E(r: &mut Run) {
             }
             // #87AAA:
             0x87AAA..=0x87AAA => {
-                branch!(r, at, 0x87AAD, 5, r.cpu.jump_if(Cond::Carry, 0x87A77)); // GOC L_87A77
+                branch!(r, at, 0x87AAD, 5, r.cpu.jump_if(Cond::Carry, 0x87A77)); // GOC SUB_87A6E.loop1
             }
             _ => {
                 r.cpu.pc = at;
@@ -7464,7 +7464,7 @@ pub(crate) fn SUB_87AAD(r: &mut Run) {
                 op!(r, at, 0x87AB1..0x87AB3, 4, r.cpu.add(R::C, R::C, Field::A)); // C=C+C A
                 op!(r, at, 0x87AB3..0x87AB5, 4, r.cpu.p = 0); // P= 0
                 op!(r, at, 0x87AB5..0x87ABC, 9, r.cpu.load_const(R::C, 5, 0x5000)); // LC(5) #05000
-                branch!(r, at, 0x87ABF, 5, r.cpu.jump_if(Cond::Carry, 0x87AC6)); // GOC L_87AC6
+                branch!(r, at, 0x87ABF, 5, r.cpu.jump_if(Cond::Carry, 0x87AC6)); // GOC SUB_87AAD.L1
             }
             // #87ABF:
             0x87ABF..=0x87ABF => {
@@ -7474,16 +7474,16 @@ pub(crate) fn SUB_87AAD(r: &mut Run) {
             0x87AC4..=0x87AC4 => {
                 jump!(r, at, 9, r.cpu.rtn(RtnKind::Plain)); // RTN
             }
-            // L_87AC6:
+            // SUB_87AAD.L1:
             0x87AC6..=0x87AC8 => {
                 op!(r, at, 0x87AC6..0x87AC8, 4, r.cpu.neg(R::C, Field::A)); // C=-C A
-                branch!(r, at, 0x87ACD, 7, r.cpu.test(Test::Regs(Cmp::Gt, R::C, R::A), Field::A, Some(0x87ACF))); // ?C>A A / GOYES L_87ACF
+                branch!(r, at, 0x87ACD, 7, r.cpu.test(Test::Regs(Cmp::Gt, R::C, R::A), Field::A, Some(0x87ACF))); // ?C>A A / GOYES SUB_87AAD.L2
             }
             // #87ACD:
             0x87ACD..=0x87ACD => {
                 jump!(r, at, 9, r.cpu.rtn(RtnKind::Plain)); // RTN
             }
-            // L_87ACF:
+            // SUB_87AAD.L2:
             0x87ACF..=0x87AD5 => {
                 op!(r, at, 0x87ACF..0x87AD2, 5, r.cpu.zero(R::A, Field::W)); // A=0 W
                 op!(r, at, 0x87AD2..0x87AD5, 5, r.cpu.zero(R::B, Field::W)); // B=0 W
@@ -7506,7 +7506,7 @@ pub(crate) fn SubCDTest(r: &mut Run) {
             0x87AD7..=0x87ADC => {
                 op!(r, at, 0x87AD7..0x87AD9, 4, r.cpu.dec = true); // SETDEC
                 op!(r, at, 0x87AD9..0x87ADC, 5, r.cpu.not(R::C, Field::S)); // C=-C-1 S
-                branch!(r, at, 0x87AE0, 6, r.cpu.call(0x87961)); // GOSUB L_87961
+                branch!(r, at, 0x87AE0, 6, r.cpu.call(0x87961)); // GOSUB SUB_8795D.L1
             }
             // #87AE0:
             0x87AE0..=0x87AE2 => {
@@ -7537,7 +7537,7 @@ pub(crate) fn SUB_87AEE(r: &mut Run) {
             0x87AEE..=0x87AEE => {
                 branch!(r, at, 0x87AF2, 6, r.cpu.call(0x87C1C)); // GOSUB PUTAB0~jump_2
             }
-            // L_87AF2:
+            // SUB_87AEE.L1:
             0x87AF2..=0x87AF2 => {
                 branch!(r, at, 0x87AF6, 6, r.cpu.call(0x87AFA)); // GOSUB EXAB0~jump_3
             }
@@ -7580,7 +7580,7 @@ pub(crate) fn Save2ABR0(r: &mut Run) {
             }
             // #87B05:
             0x87B05..=0x87B05 => {
-                jump!(r, at, 6, r.cpu.pc = 0x87AF2); // GOTO L_87AF2
+                jump!(r, at, 6, r.cpu.pc = 0x87AF2); // GOTO SUB_87AEE.L1
             }
             _ => {
                 r.cpu.pc = at;
@@ -7748,7 +7748,7 @@ pub(crate) fn SUB_87B58(r: &mut Run) {
             }
             // #87B5C:
             0x87B5C..=0x87B5C => {
-                branch!(r, at, 0x87B5F, 5, r.cpu.jump_if(Cond::NoCarry, 0x87B63)); // GONC L_87B63
+                branch!(r, at, 0x87B5F, 5, r.cpu.jump_if(Cond::NoCarry, 0x87B63)); // GONC SUB_87B5F.L1
             }
             _ => {
                 r.cpu.pc = at;
@@ -7766,7 +7766,7 @@ pub(crate) fn SUB_87B5F(r: &mut Run) {
             0x87B5F..=0x87B5F => {
                 branch!(r, at, 0x87B63, 6, r.cpu.call(0x87DB0)); // GOSUB SUB_87DB0
             }
-            // L_87B63:
+            // SUB_87B5F.L1:
             0x87B63..=0x87B65 => {
                 op!(r, at, 0x87B63..0x87B65, 4, r.cpu.dec = true); // SETDEC
                 branch!(r, at, 0x87B69, 6, r.cpu.call(0x87ED2)); // GOSUB STAB0~jump_6
@@ -8198,7 +8198,7 @@ pub(crate) fn SUB_87C3E(r: &mut Run) {
             0x87C3E..=0x87C47 => {
                 op!(r, at, 0x87C3E..0x87C40, 4, r.cpu.p = 0); // P= 0
                 op!(r, at, 0x87C40..0x87C47, 9, r.cpu.load_const(R::C, 5, 0x25D)); // LC(5) #0025D
-                jump!(r, at, 6, r.cpu.pc = 0x87C54); // GOTO L_87C54
+                jump!(r, at, 6, r.cpu.pc = 0x87C54); // GOTO SUB_87C4B.L1
             }
             _ => {
                 r.cpu.pc = at;
@@ -8218,7 +8218,7 @@ pub(crate) fn SUB_87C4B(r: &mut Run) {
                 op!(r, at, 0x87C4D..0x87C54, 9, r.cpu.load_const(R::C, 5, 0x1F4)); // LC(5) #001F4
                 at = 0x87C54;
             }
-            // L_87C54:
+            // SUB_87C4B.L1:
             0x87C54..=0x87C62 => {
                 op!(r, at, 0x87C54..0x87C56, 4, r.cpu.copy(R::D, R::C, Field::A)); // D=C A
                 op!(r, at, 0x87C56..0x87C59, 5, r.cpu.scratch(ScratchOp::FromScratch, R::C, 4, Field::W)); // C=R4
@@ -8244,7 +8244,7 @@ pub(crate) fn SUB_87C66(r: &mut Run) {
             0x87C66..=0x87C6F => {
                 op!(r, at, 0x87C66..0x87C68, 4, r.cpu.p = 0); // P= 0
                 op!(r, at, 0x87C68..0x87C6F, 9, r.cpu.load_const(R::C, 5, 0x209)); // LC(5) #00209
-                jump!(r, at, 6, r.cpu.pc = 0x87C7C); // GOTO L_87C7C
+                jump!(r, at, 6, r.cpu.pc = 0x87C7C); // GOTO SUB_87C73.L1
             }
             _ => {
                 r.cpu.pc = at;
@@ -8264,7 +8264,7 @@ pub(crate) fn SUB_87C73(r: &mut Run) {
                 op!(r, at, 0x87C75..0x87C7C, 9, r.cpu.load_const(R::C, 5, 0x1F4)); // LC(5) #001F4
                 at = 0x87C7C;
             }
-            // L_87C7C:
+            // SUB_87C73.L1:
             0x87C7C..=0x87C87 => {
                 op!(r, at, 0x87C7C..0x87C7E, 4, r.cpu.copy(R::D, R::C, Field::A)); // D=C A
                 op!(r, at, 0x87C7E..0x87C81, 5, r.cpu.scratch(ScratchOp::FromScratch, R::C, 4, Field::W)); // C=R4
@@ -8306,7 +8306,7 @@ pub(crate) fn SUB_87C91(r: &mut Run) {
             0x87C91..=0x87C98 => {
                 op!(r, at, 0x87C91..0x87C93, 4, r.cpu.p = 0); // P= 0
                 op!(r, at, 0x87C93..0x87C98, 7, r.cpu.load_const(R::C, 3, 0x11)); // LC(3) #011
-                jump!(r, at, 6, r.cpu.pc = 0x87D99); // GOTO L_87D99
+                jump!(r, at, 6, r.cpu.pc = 0x87D99); // GOTO SUB_87D8E.L1
             }
             _ => {
                 r.cpu.pc = at;
@@ -8324,7 +8324,7 @@ pub(crate) fn SUB_87C9C(r: &mut Run) {
             0x87C9C..=0x87CA3 => {
                 op!(r, at, 0x87C9C..0x87C9E, 4, r.cpu.p = 0); // P= 0
                 op!(r, at, 0x87C9E..0x87CA3, 7, r.cpu.load_const(R::C, 3, 0x50)); // LC(3) #050
-                jump!(r, at, 6, r.cpu.pc = 0x87D99); // GOTO L_87D99
+                jump!(r, at, 6, r.cpu.pc = 0x87D99); // GOTO SUB_87D8E.L1
             }
             _ => {
                 r.cpu.pc = at;
@@ -8342,7 +8342,7 @@ pub(crate) fn SUB_87CA7(r: &mut Run) {
             0x87CA7..=0x87CAE => {
                 op!(r, at, 0x87CA7..0x87CA9, 4, r.cpu.p = 0); // P= 0
                 op!(r, at, 0x87CA9..0x87CAE, 7, r.cpu.load_const(R::C, 3, 0x7A)); // LC(3) #07A
-                jump!(r, at, 6, r.cpu.pc = 0x87D99); // GOTO L_87D99
+                jump!(r, at, 6, r.cpu.pc = 0x87D99); // GOTO SUB_87D8E.L1
             }
             _ => {
                 r.cpu.pc = at;
@@ -8360,7 +8360,7 @@ pub(crate) fn SUB_87CB2(r: &mut Run) {
             0x87CB2..=0x87CB9 => {
                 op!(r, at, 0x87CB2..0x87CB4, 4, r.cpu.p = 0); // P= 0
                 op!(r, at, 0x87CB4..0x87CB9, 7, r.cpu.load_const(R::C, 3, 0x10D)); // LC(3) #10D
-                jump!(r, at, 6, r.cpu.pc = 0x87D99); // GOTO L_87D99
+                jump!(r, at, 6, r.cpu.pc = 0x87D99); // GOTO SUB_87D8E.L1
             }
             _ => {
                 r.cpu.pc = at;
@@ -8378,7 +8378,7 @@ pub(crate) fn SUB_87CBD(r: &mut Run) {
             0x87CBD..=0x87CC4 => {
                 op!(r, at, 0x87CBD..0x87CBF, 4, r.cpu.p = 0); // P= 0
                 op!(r, at, 0x87CBF..0x87CC4, 7, r.cpu.load_const(R::C, 3, 0x122)); // LC(3) #122
-                jump!(r, at, 6, r.cpu.pc = 0x87D99); // GOTO L_87D99
+                jump!(r, at, 6, r.cpu.pc = 0x87D99); // GOTO SUB_87D8E.L1
             }
             _ => {
                 r.cpu.pc = at;
@@ -8396,7 +8396,7 @@ pub(crate) fn SUB_87CC8(r: &mut Run) {
             0x87CC8..=0x87CCF => {
                 op!(r, at, 0x87CC8..0x87CCA, 4, r.cpu.p = 0); // P= 0
                 op!(r, at, 0x87CCA..0x87CCF, 7, r.cpu.load_const(R::C, 3, 0x137)); // LC(3) #137
-                jump!(r, at, 6, r.cpu.pc = 0x87D99); // GOTO L_87D99
+                jump!(r, at, 6, r.cpu.pc = 0x87D99); // GOTO SUB_87D8E.L1
             }
             _ => {
                 r.cpu.pc = at;
@@ -8414,7 +8414,7 @@ pub(crate) fn SUB_87CD3(r: &mut Run) {
             0x87CD3..=0x87CDA => {
                 op!(r, at, 0x87CD3..0x87CD5, 4, r.cpu.p = 0); // P= 0
                 op!(r, at, 0x87CD5..0x87CDA, 7, r.cpu.load_const(R::C, 3, 0x161)); // LC(3) #161
-                jump!(r, at, 6, r.cpu.pc = 0x87D99); // GOTO L_87D99
+                jump!(r, at, 6, r.cpu.pc = 0x87D99); // GOTO SUB_87D8E.L1
             }
             _ => {
                 r.cpu.pc = at;
@@ -8432,7 +8432,7 @@ pub(crate) fn SUB_87CDE(r: &mut Run) {
             0x87CDE..=0x87CE5 => {
                 op!(r, at, 0x87CDE..0x87CE0, 4, r.cpu.p = 0); // P= 0
                 op!(r, at, 0x87CE0..0x87CE5, 7, r.cpu.load_const(R::C, 3, 0x18B)); // LC(3) #18B
-                jump!(r, at, 6, r.cpu.pc = 0x87D99); // GOTO L_87D99
+                jump!(r, at, 6, r.cpu.pc = 0x87D99); // GOTO SUB_87D8E.L1
             }
             _ => {
                 r.cpu.pc = at;
@@ -8450,7 +8450,7 @@ pub(crate) fn SUB_87CE9(r: &mut Run) {
             0x87CE9..=0x87CF0 => {
                 op!(r, at, 0x87CE9..0x87CEB, 4, r.cpu.p = 0); // P= 0
                 op!(r, at, 0x87CEB..0x87CF0, 7, r.cpu.load_const(R::C, 3, 0x1A0)); // LC(3) #1A0
-                jump!(r, at, 6, r.cpu.pc = 0x87D99); // GOTO L_87D99
+                jump!(r, at, 6, r.cpu.pc = 0x87D99); // GOTO SUB_87D8E.L1
             }
             _ => {
                 r.cpu.pc = at;
@@ -8468,7 +8468,7 @@ pub(crate) fn SUB_87CF4(r: &mut Run) {
             0x87CF4..=0x87CFB => {
                 op!(r, at, 0x87CF4..0x87CF6, 4, r.cpu.p = 0); // P= 0
                 op!(r, at, 0x87CF6..0x87CFB, 7, r.cpu.load_const(R::C, 3, 0x1CA)); // LC(3) #1CA
-                jump!(r, at, 6, r.cpu.pc = 0x87D99); // GOTO L_87D99
+                jump!(r, at, 6, r.cpu.pc = 0x87D99); // GOTO SUB_87D8E.L1
             }
             _ => {
                 r.cpu.pc = at;
@@ -8486,7 +8486,7 @@ pub(crate) fn SUB_87CFF(r: &mut Run) {
             0x87CFF..=0x87D06 => {
                 op!(r, at, 0x87CFF..0x87D01, 4, r.cpu.p = 0); // P= 0
                 op!(r, at, 0x87D01..0x87D06, 7, r.cpu.load_const(R::C, 3, 0x1DF)); // LC(3) #1DF
-                jump!(r, at, 6, r.cpu.pc = 0x87D99); // GOTO L_87D99
+                jump!(r, at, 6, r.cpu.pc = 0x87D99); // GOTO SUB_87D8E.L1
             }
             _ => {
                 r.cpu.pc = at;
@@ -8504,7 +8504,7 @@ pub(crate) fn SUB_87D0A(r: &mut Run) {
             0x87D0A..=0x87D11 => {
                 op!(r, at, 0x87D0A..0x87D0C, 4, r.cpu.p = 0); // P= 0
                 op!(r, at, 0x87D0C..0x87D11, 7, r.cpu.load_const(R::C, 3, 0x11)); // LC(3) #011
-                jump!(r, at, 6, r.cpu.pc = 0x87DA1); // GOTO L_87DA1
+                jump!(r, at, 6, r.cpu.pc = 0x87DA1); // GOTO SUB_87D8E.L2
             }
             _ => {
                 r.cpu.pc = at;
@@ -8522,7 +8522,7 @@ pub(crate) fn SUB_87D15(r: &mut Run) {
             0x87D15..=0x87D1C => {
                 op!(r, at, 0x87D15..0x87D17, 4, r.cpu.p = 0); // P= 0
                 op!(r, at, 0x87D17..0x87D1C, 7, r.cpu.load_const(R::C, 3, 0x26)); // LC(3) #026
-                jump!(r, at, 6, r.cpu.pc = 0x87DA1); // GOTO L_87DA1
+                jump!(r, at, 6, r.cpu.pc = 0x87DA1); // GOTO SUB_87D8E.L2
             }
             _ => {
                 r.cpu.pc = at;
@@ -8540,7 +8540,7 @@ pub(crate) fn SUB_87D20(r: &mut Run) {
             0x87D20..=0x87D27 => {
                 op!(r, at, 0x87D20..0x87D22, 4, r.cpu.p = 0); // P= 0
                 op!(r, at, 0x87D22..0x87D27, 7, r.cpu.load_const(R::C, 3, 0x50)); // LC(3) #050
-                jump!(r, at, 6, r.cpu.pc = 0x87DA1); // GOTO L_87DA1
+                jump!(r, at, 6, r.cpu.pc = 0x87DA1); // GOTO SUB_87D8E.L2
             }
             _ => {
                 r.cpu.pc = at;
@@ -8558,7 +8558,7 @@ pub(crate) fn SUB_87D2B(r: &mut Run) {
             0x87D2B..=0x87D32 => {
                 op!(r, at, 0x87D2B..0x87D2D, 4, r.cpu.p = 0); // P= 0
                 op!(r, at, 0x87D2D..0x87D32, 7, r.cpu.load_const(R::C, 3, 0xA4)); // LC(3) #0A4
-                jump!(r, at, 6, r.cpu.pc = 0x87DA1); // GOTO L_87DA1
+                jump!(r, at, 6, r.cpu.pc = 0x87DA1); // GOTO SUB_87D8E.L2
             }
             _ => {
                 r.cpu.pc = at;
@@ -8576,7 +8576,7 @@ pub(crate) fn SUB_87D36(r: &mut Run) {
             0x87D36..=0x87D3D => {
                 op!(r, at, 0x87D36..0x87D38, 4, r.cpu.p = 0); // P= 0
                 op!(r, at, 0x87D38..0x87D3D, 7, r.cpu.load_const(R::C, 3, 0xF8)); // LC(3) #0F8
-                jump!(r, at, 6, r.cpu.pc = 0x87DA1); // GOTO L_87DA1
+                jump!(r, at, 6, r.cpu.pc = 0x87DA1); // GOTO SUB_87D8E.L2
             }
             _ => {
                 r.cpu.pc = at;
@@ -8594,7 +8594,7 @@ pub(crate) fn SUB_87D41(r: &mut Run) {
             0x87D41..=0x87D48 => {
                 op!(r, at, 0x87D41..0x87D43, 4, r.cpu.p = 0); // P= 0
                 op!(r, at, 0x87D43..0x87D48, 7, r.cpu.load_const(R::C, 3, 0x10D)); // LC(3) #10D
-                jump!(r, at, 6, r.cpu.pc = 0x87DA1); // GOTO L_87DA1
+                jump!(r, at, 6, r.cpu.pc = 0x87DA1); // GOTO SUB_87D8E.L2
             }
             _ => {
                 r.cpu.pc = at;
@@ -8612,7 +8612,7 @@ pub(crate) fn SUB_87D4C(r: &mut Run) {
             0x87D4C..=0x87D53 => {
                 op!(r, at, 0x87D4C..0x87D4E, 4, r.cpu.p = 0); // P= 0
                 op!(r, at, 0x87D4E..0x87D53, 7, r.cpu.load_const(R::C, 3, 0x122)); // LC(3) #122
-                jump!(r, at, 6, r.cpu.pc = 0x87DA1); // GOTO L_87DA1
+                jump!(r, at, 6, r.cpu.pc = 0x87DA1); // GOTO SUB_87D8E.L2
             }
             _ => {
                 r.cpu.pc = at;
@@ -8630,7 +8630,7 @@ pub(crate) fn SUB_87D57(r: &mut Run) {
             0x87D57..=0x87D5E => {
                 op!(r, at, 0x87D57..0x87D59, 4, r.cpu.p = 0); // P= 0
                 op!(r, at, 0x87D59..0x87D5E, 7, r.cpu.load_const(R::C, 3, 0x137)); // LC(3) #137
-                jump!(r, at, 6, r.cpu.pc = 0x87DA1); // GOTO L_87DA1
+                jump!(r, at, 6, r.cpu.pc = 0x87DA1); // GOTO SUB_87D8E.L2
             }
             _ => {
                 r.cpu.pc = at;
@@ -8648,7 +8648,7 @@ pub(crate) fn SUB_87D62(r: &mut Run) {
             0x87D62..=0x87D69 => {
                 op!(r, at, 0x87D62..0x87D64, 4, r.cpu.p = 0); // P= 0
                 op!(r, at, 0x87D64..0x87D69, 7, r.cpu.load_const(R::C, 3, 0x161)); // LC(3) #161
-                jump!(r, at, 6, r.cpu.pc = 0x87DA1); // GOTO L_87DA1
+                jump!(r, at, 6, r.cpu.pc = 0x87DA1); // GOTO SUB_87D8E.L2
             }
             _ => {
                 r.cpu.pc = at;
@@ -8666,7 +8666,7 @@ pub(crate) fn SUB_87D6D(r: &mut Run) {
             0x87D6D..=0x87D74 => {
                 op!(r, at, 0x87D6D..0x87D6F, 4, r.cpu.p = 0); // P= 0
                 op!(r, at, 0x87D6F..0x87D74, 7, r.cpu.load_const(R::C, 3, 0x18B)); // LC(3) #18B
-                jump!(r, at, 6, r.cpu.pc = 0x87DA1); // GOTO L_87DA1
+                jump!(r, at, 6, r.cpu.pc = 0x87DA1); // GOTO SUB_87D8E.L2
             }
             _ => {
                 r.cpu.pc = at;
@@ -8684,7 +8684,7 @@ pub(crate) fn SUB_87D78(r: &mut Run) {
             0x87D78..=0x87D7F => {
                 op!(r, at, 0x87D78..0x87D7A, 4, r.cpu.p = 0); // P= 0
                 op!(r, at, 0x87D7A..0x87D7F, 7, r.cpu.load_const(R::C, 3, 0x1B5)); // LC(3) #1B5
-                jump!(r, at, 6, r.cpu.pc = 0x87DA1); // GOTO L_87DA1
+                jump!(r, at, 6, r.cpu.pc = 0x87DA1); // GOTO SUB_87D8E.L2
             }
             _ => {
                 r.cpu.pc = at;
@@ -8702,7 +8702,7 @@ pub(crate) fn SUB_87D83(r: &mut Run) {
             0x87D83..=0x87D8A => {
                 op!(r, at, 0x87D83..0x87D85, 4, r.cpu.p = 0); // P= 0
                 op!(r, at, 0x87D85..0x87D8A, 7, r.cpu.load_const(R::C, 3, 0x1CA)); // LC(3) #1CA
-                jump!(r, at, 6, r.cpu.pc = 0x87DA1); // GOTO L_87DA1
+                jump!(r, at, 6, r.cpu.pc = 0x87DA1); // GOTO SUB_87D8E.L2
             }
             _ => {
                 r.cpu.pc = at;
@@ -8720,9 +8720,9 @@ pub(crate) fn SUB_87D8E(r: &mut Run) {
             0x87D8E..=0x87D95 => {
                 op!(r, at, 0x87D8E..0x87D90, 4, r.cpu.p = 0); // P= 0
                 op!(r, at, 0x87D90..0x87D95, 7, r.cpu.load_const(R::C, 3, 0x1DF)); // LC(3) #1DF
-                jump!(r, at, 6, r.cpu.pc = 0x87DA1); // GOTO L_87DA1
+                jump!(r, at, 6, r.cpu.pc = 0x87DA1); // GOTO SUB_87D8E.L2
             }
-            // L_87D99:
+            // SUB_87D8E.L1:
             0x87D99..=0x87D99 => {
                 branch!(r, at, 0x87D9D, 6, r.cpu.call(0x87DB0)); // GOSUB SUB_87DB0
             }
@@ -8730,7 +8730,7 @@ pub(crate) fn SUB_87D8E(r: &mut Run) {
             0x87D9D..=0x87D9D => {
                 jump!(r, at, 6, r.cpu.pc = 0x87C0F); // GOTO PutAB%1~jump
             }
-            // L_87DA1:
+            // SUB_87D8E.L2:
             0x87DA1..=0x87DA1 => {
                 branch!(r, at, 0x87DA5, 6, r.cpu.call(0x87DB0)); // GOSUB SUB_87DB0
             }
@@ -8828,7 +8828,7 @@ pub(crate) fn SUB_87DCE(r: &mut Run) {
                 op!(r, at, 0x87DE6..0x87DED, 9, r.cpu.load_const(R::C, 5, 0x272)); // LC(5) #00272
                 at = 0x87DED;
             }
-            // L_87DED:
+            // SUB_87DCE.L1:
             0x87DED..=0x87DF7 => {
                 op!(r, at, 0x87DED..0x87DEF, 4, r.cpu.add(R::D, R::C, Field::A)); // D=D+C A
                 op!(r, at, 0x87DEF..0x87DF2, 5, r.cpu.d_ex_r(1, R::C, false)); // CD1EX
@@ -8905,7 +8905,7 @@ pub(crate) fn SUB_87E09(r: &mut Run) {
             0x87E27..=0x87E30 => {
                 op!(r, at, 0x87E27..0x87E29, 4, r.cpu.p = 0); // P= 0
                 op!(r, at, 0x87E29..0x87E30, 9, r.cpu.load_const(R::C, 5, 0x297)); // LC(5) #00297
-                jump!(r, at, 6, r.cpu.pc = 0x87DED); // GOTO L_87DED
+                jump!(r, at, 6, r.cpu.pc = 0x87DED); // GOTO SUB_87DCE.L1
             }
             _ => {
                 r.cpu.pc = at;
@@ -8925,7 +8925,7 @@ pub(crate) fn SUB_87E34(r: &mut Run) {
             }
             // #87E38:
             0x87E38..=0x87E38 => {
-                branch!(r, at, 0x87E3C, 6, r.cpu.call(0x87961)); // GOSUB L_87961
+                branch!(r, at, 0x87E3C, 6, r.cpu.call(0x87961)); // GOSUB SUB_8795D.L1
             }
             // #87E3C:
             0x87E3C..=0x87E3C => {
@@ -8937,7 +8937,7 @@ pub(crate) fn SUB_87E34(r: &mut Run) {
             }
             // #87E44:
             0x87E44..=0x87E44 => {
-                branch!(r, at, 0x87E48, 6, r.cpu.call(0x87961)); // GOSUB L_87961
+                branch!(r, at, 0x87E48, 6, r.cpu.call(0x87961)); // GOSUB SUB_8795D.L1
             }
             // #87E48:
             0x87E48..=0x87E48 => {
@@ -9043,7 +9043,7 @@ pub(crate) fn SUB_87E50(r: &mut Run) {
             }
             // #87EA3:
             0x87EA3..=0x87EA3 => {
-                jump!(r, at, 6, r.cpu.pc = 0x87961); // GOTO L_87961
+                jump!(r, at, 6, r.cpu.pc = 0x87961); // GOTO SUB_8795D.L1
             }
             _ => {
                 r.cpu.pc = at;
@@ -9077,7 +9077,7 @@ pub(crate) fn SUB_87EA7(r: &mut Run) {
             // #87EBA:
             0x87EBA..=0x87EBC => {
                 op!(r, at, 0x87EBA..0x87EBC, 4, r.cpu.p = 14); // P= 14
-                branch!(r, at, 0x87EC1, 7, r.cpu.test(Test::NonZero(R::B), Field::WP, Some(0x87ED9))); // ?B#0 WP / GOYES L_87ED9
+                branch!(r, at, 0x87EC1, 7, r.cpu.test(Test::NonZero(R::B), Field::WP, Some(0x87ED9))); // ?B#0 WP / GOYES STAB0~jump_6.L1
             }
             // #87EC1:
             0x87EC1..=0x87ECF => {
@@ -9105,7 +9105,7 @@ pub(crate) fn STAB0_jump_6(r: &mut Run) {
             0x87ED2..=0x87ED2 => {
                 jump!(r, at, 9, r.cpu.pc = 0x2BE61); // GOVLNG STAB0
             }
-            // L_87ED9:
+            // STAB0~jump_6.L1:
             0x87ED9..=0x87ED9 => {
                 branch!(r, at, 0x87EDD, 6, r.cpu.call(0x87BE7)); // GOSUB SUB_87BE7
             }
@@ -9189,7 +9189,7 @@ pub(crate) fn SUB_87F14(r: &mut Run) {
                 op!(r, at, 0x87F24..0x87F27, 5, r.cpu.load_const(R::C, 1, 0x5)); // LC(1) #5
                 at = 0x87F27;
             }
-            // L_87F27:
+            // SUB_87F14.loop1:
             0x87F27..=0x87F44 => {
                 io!(r, at, 0x87F27..0x87F2A, 19, r.cpu.load(1, R::A, Field::A, r.hw)); // A=DAT1 A
                 op!(r, at, 0x87F2A..0x87F2D, 5, r.cpu.d_add(1, 5)); // D1=D1+ 5
@@ -9200,13 +9200,13 @@ pub(crate) fn SUB_87F14(r: &mut Run) {
                 io!(r, at, 0x87F3A..0x87F3E, 30, r.cpu.store(0, R::A, Field::W, r.hw)); // DAT0=A W
                 op!(r, at, 0x87F3E..0x87F41, 5, r.cpu.d_add(0, 16)); // D0=D0+ 16
                 op!(r, at, 0x87F41..0x87F44, 5, r.cpu.dec(R::C, Field::P)); // C=C-1 P
-                branch!(r, at, 0x87F47, 5, r.cpu.jump_if(Cond::NoCarry, 0x87F27)); // GONC L_87F27
+                branch!(r, at, 0x87F47, 5, r.cpu.jump_if(Cond::NoCarry, 0x87F27)); // GONC SUB_87F14.loop1
             }
             // #87F47:
             0x87F47..=0x87F47 => {
                 jump!(r, at, 9, r.cpu.rtn(RtnKind::Plain)); // RTN
             }
-            // L_87F49:
+            // SUB_87F14.L2:
             0x87F49..=0x87F49 => {
                 branch!(r, at, 0x87F4D, 6, r.cpu.call(0x87B8F)); // GOSUB SUB_87B8F
             }
@@ -9243,7 +9243,7 @@ pub(crate) fn SUB_87F14(r: &mut Run) {
                 op!(r, at, 0x87F74..0x87F76, 4, r.cpu.dec = true); // SETDEC
                 branch!(r, at, 0x87F7A, 6, r.cpu.call(0x88283)); // GOSUB HypotABR0
             }
-            // L_87F7A:
+            // SUB_87F14.loop3:
             0x87F7A..=0x87F82 => {
                 op!(r, at, 0x87F7A..0x87F7C, 4, r.cpu.dec = true); // SETDEC
                 op!(r, at, 0x87F7C..0x87F7F, 5, r.cpu.d_sub(0, 16)); // D0=D0- 16
@@ -9268,7 +9268,7 @@ pub(crate) fn SUB_87F14(r: &mut Run) {
             }
             // #87F96:
             0x87F96..=0x87F96 => {
-                branch!(r, at, 0x87F9A, 6, r.cpu.call(0x87961)); // GOSUB L_87961
+                branch!(r, at, 0x87F9A, 6, r.cpu.call(0x87961)); // GOSUB SUB_8795D.L1
             }
             // #87F9A:
             0x87F9A..=0x87F9A => {
@@ -9279,7 +9279,7 @@ pub(crate) fn SUB_87F14(r: &mut Run) {
                 op!(r, at, 0x87FA1..0x87FA3, 4, r.cpu.pop_c()); // C=RSTK
                 op!(r, at, 0x87FA3..0x87FA5, 4, r.cpu.dec(R::C, Field::A)); // C=C-1 A
                 op!(r, at, 0x87FA5..0x87FA7, 4, r.cpu.push_c()); // RSTK=C
-                branch!(r, at, 0x87FAA, 5, r.cpu.jump_if(Cond::NoCarry, 0x87F7A)); // GONC L_87F7A
+                branch!(r, at, 0x87FAA, 5, r.cpu.jump_if(Cond::NoCarry, 0x87F7A)); // GONC SUB_87F14.loop3
             }
             // #87FAA:
             0x87FAA..=0x87FAC => {
@@ -9315,19 +9315,19 @@ pub(crate) fn SUB_87F14(r: &mut Run) {
             }
             // #87FD6:
             0x87FD6..=0x87FD6 => {
-                branch!(r, at, 0x87FD9, 5, r.cpu.jump_if(Cond::NoCarry, 0x87FDD)); // GONC L_87FDD
+                branch!(r, at, 0x87FD9, 5, r.cpu.jump_if(Cond::NoCarry, 0x87FDD)); // GONC SUB_87F14.L4
             }
             // #87FD9:
             0x87FD9..=0x87FD9 => {
-                jump!(r, at, 6, r.cpu.pc = 0x878BF); // GOTO L_878BF
+                jump!(r, at, 6, r.cpu.pc = 0x878BF); // GOTO ROMP_0C0_000.L38
             }
-            // L_87FDD:
+            // SUB_87F14.L4:
             0x87FDD..=0x87FEA => {
                 op!(r, at, 0x87FDD..0x87FE0, 5, r.cpu.scratch(ScratchOp::FromScratch, R::C, 4, Field::W)); // C=R4
                 op!(r, at, 0x87FE0..0x87FE3, 5, r.cpu.d_from_r(1, R::C, false)); // D1=C
                 op!(r, at, 0x87FE3..0x87FE6, 5, r.cpu.d_add(1, 10)); // D1=D1+ 10
                 io!(r, at, 0x87FE6..0x87FEA, 15, r.cpu.load(1, R::C, Field::S, r.hw)); // C=DAT1 S
-                branch!(r, at, 0x87FEF, 7, r.cpu.test(Test::Zero(R::C), Field::S, Some(0x88008))); // ?C=0 S / GOYES L_88008
+                branch!(r, at, 0x87FEF, 7, r.cpu.test(Test::Zero(R::C), Field::S, Some(0x88008))); // ?C=0 S / GOYES SUB_87F14.L5
             }
             // #87FEF:
             0x87FEF..=0x87FEF => {
@@ -9347,13 +9347,13 @@ pub(crate) fn SUB_87F14(r: &mut Run) {
             }
             // #87FFF:
             0x87FFF..=0x87FFF => {
-                branch!(r, at, 0x88002, 5, r.cpu.jump_if(Cond::NoCarry, 0x88008)); // GONC L_88008
+                branch!(r, at, 0x88002, 5, r.cpu.jump_if(Cond::NoCarry, 0x88008)); // GONC SUB_87F14.L5
             }
             // #88002:
             0x88002..=0x88002 => {
-                jump!(r, at, 8, r.cpu.pc = 0x87744); // GOLONG L_87744
+                jump!(r, at, 8, r.cpu.pc = 0x87744); // GOLONG ROMP_0C0_000.L32
             }
-            // L_88008:
+            // SUB_87F14.L5:
             0x88008..=0x88008 => {
                 branch!(r, at, 0x8800C, 6, r.cpu.call(0x8804A)); // GOSUB SUB_8804A
             }
@@ -9391,7 +9391,7 @@ pub(crate) fn SUB_87F14(r: &mut Run) {
             }
             // #8802F:
             0x8802F..=0x8802F => {
-                branch!(r, at, 0x88033, 6, r.cpu.call(0x87961)); // GOSUB L_87961
+                branch!(r, at, 0x88033, 6, r.cpu.call(0x87961)); // GOSUB SUB_8795D.L1
             }
             // #88033:
             0x88033..=0x88033 => {
@@ -9403,15 +9403,15 @@ pub(crate) fn SUB_87F14(r: &mut Run) {
             }
             // #8803B:
             0x8803B..=0x8803B => {
-                branch!(r, at, 0x88040, 7, r.cpu.test(Test::NonZero(R::B), Field::WP, Some(0x88044))); // ?B#0 WP / GOYES L_88044
+                branch!(r, at, 0x88040, 7, r.cpu.test(Test::NonZero(R::B), Field::WP, Some(0x88044))); // ?B#0 WP / GOYES SUB_87F14.L6
             }
             // #88040:
             0x88040..=0x88040 => {
-                jump!(r, at, 6, r.cpu.pc = 0x878BF); // GOTO L_878BF
+                jump!(r, at, 6, r.cpu.pc = 0x878BF); // GOTO ROMP_0C0_000.L38
             }
-            // L_88044:
+            // SUB_87F14.L6:
             0x88044..=0x88044 => {
-                jump!(r, at, 8, r.cpu.pc = 0x87470); // GOLONG L_87470
+                jump!(r, at, 8, r.cpu.pc = 0x87470); // GOLONG ROMP_0C0_000.L18
             }
             _ => {
                 r.cpu.pc = at;
@@ -9485,7 +9485,7 @@ pub(crate) fn SUB_8804A(r: &mut Run) {
             }
             // #8808D:
             0x8808D..=0x8808D => {
-                branch!(r, at, 0x88091, 6, r.cpu.call(0x87B63)); // GOSUB L_87B63
+                branch!(r, at, 0x88091, 6, r.cpu.call(0x87B63)); // GOSUB SUB_87B5F.L1
             }
             // #88091:
             0x88091..=0x88091 => {
@@ -9515,7 +9515,7 @@ pub(crate) fn SUB_8804A(r: &mut Run) {
             }
             // #880B3:
             0x880B3..=0x880B3 => {
-                branch!(r, at, 0x880B7, 6, r.cpu.call(0x87B63)); // GOSUB L_87B63
+                branch!(r, at, 0x880B7, 6, r.cpu.call(0x87B63)); // GOSUB SUB_87B5F.L1
             }
             // #880B7:
             0x880B7..=0x880B7 => {
@@ -9556,7 +9556,7 @@ pub(crate) fn SUB_8804A(r: &mut Run) {
             }
             // #880E0:
             0x880E0..=0x880E0 => {
-                branch!(r, at, 0x880E4, 6, r.cpu.call(0x87961)); // GOSUB L_87961
+                branch!(r, at, 0x880E4, 6, r.cpu.call(0x87961)); // GOSUB SUB_8795D.L1
             }
             // #880E4:
             0x880E4..=0x880E4 => {
@@ -9795,13 +9795,13 @@ pub(crate) fn SUB_8813B(r: &mut Run) {
             }
             // #881CA:
             0x881CA..=0x881CA => {
-                branch!(r, at, 0x881CF, 7, r.cpu.test(Test::Zero(R::C), Field::S, Some(0x881D3))); // ?C=0 S / GOYES L_881D3
+                branch!(r, at, 0x881CF, 7, r.cpu.test(Test::Zero(R::C), Field::S, Some(0x881D3))); // ?C=0 S / GOYES SUB_8813B.L1
             }
             // #881CF:
             0x881CF..=0x881CF => {
                 branch!(r, at, 0x881D3, 6, r.cpu.call(0x88207)); // GOSUB SUB_88207
             }
-            // L_881D3:
+            // SUB_8813B.L1:
             0x881D3..=0x881D3 => {
                 branch!(r, at, 0x881D7, 6, r.cpu.call(0x87E34)); // GOSUB SUB_87E34
             }
@@ -9903,20 +9903,20 @@ pub(crate) fn SUB_88215(r: &mut Run) {
             }
             // #88227:
             0x88227..=0x88227 => {
-                branch!(r, at, 0x8822C, 7, r.cpu.test(Test::NonZero(R::B), Field::W, Some(0x88230))); // ?B#0 W / GOYES L_88230
+                branch!(r, at, 0x8822C, 7, r.cpu.test(Test::NonZero(R::B), Field::W, Some(0x88230))); // ?B#0 W / GOYES SUB_88215.L1
             }
             // #8822C:
             0x8822C..=0x8822C => {
                 jump!(r, at, 6, r.cpu.pc = 0x87ED2); // GOTO STAB0~jump_6
             }
-            // L_88230:
+            // SUB_88215.L1:
             0x88230..=0x88230 => {
                 branch!(r, at, 0x88236, 8, r.cpu.call(0x87956)); // GOSUBL RCCD2~jump_6
             }
             // #88236:
             0x88236..=0x88239 => {
                 op!(r, at, 0x88236..0x88239, 5, r.cpu.zero(R::C, Field::S)); // C=0 S
-                branch!(r, at, 0x8823F, 8, r.cpu.call(0x87961)); // GOSUBL L_87961
+                branch!(r, at, 0x8823F, 8, r.cpu.call(0x87961)); // GOSUBL SUB_8795D.L1
             }
             // #8823F:
             0x8823F..=0x8823F => {
@@ -9951,7 +9951,7 @@ pub(crate) fn SUB_88215(r: &mut Run) {
             // #88269:
             0x88269..=0x8826C => {
                 op!(r, at, 0x88269..0x8826C, 5, r.cpu.scratch(ScratchOp::FromScratch, R::C, 2, Field::W)); // C=R2
-                branch!(r, at, 0x88271, 7, r.cpu.test(Test::Zero(R::C), Field::S, Some(0x8827F))); // ?C=0 S / GOYES L_8827F
+                branch!(r, at, 0x88271, 7, r.cpu.test(Test::Zero(R::C), Field::S, Some(0x8827F))); // ?C=0 S / GOYES SUB_88215.L2
             }
             // #88271:
             0x88271..=0x8827D => {
@@ -9961,7 +9961,7 @@ pub(crate) fn SUB_88215(r: &mut Run) {
                 op!(r, at, 0x8827A..0x8827D, 5, r.cpu.zero(R::A, Field::S)); // A=0 S
                 jump!(r, at, 9, r.cpu.rtn(RtnKind::Plain)); // RTN
             }
-            // L_8827F:
+            // SUB_88215.L2:
             0x8827F..=0x8827F => {
                 jump!(r, at, 6, r.cpu.pc = 0x87AFA); // GOTO EXAB0~jump_3
             }
@@ -9982,16 +9982,16 @@ pub(crate) fn HypotABR0(r: &mut Run) {
             0x88283..=0x88288 => {
                 op!(r, at, 0x88283..0x88285, 4, r.cpu.p = 14); // P= 14
                 op!(r, at, 0x88285..0x88288, 5, r.cpu.scratch(ScratchOp::FromScratch, R::C, 1, Field::W)); // C=R1
-                branch!(r, at, 0x8828D, 7, r.cpu.test(Test::NonZero(R::C), Field::WP, Some(0x88292))); // ?C#0 WP / GOYES L_88292
+                branch!(r, at, 0x8828D, 7, r.cpu.test(Test::NonZero(R::C), Field::WP, Some(0x88292))); // ?C#0 WP / GOYES HypotABR0.L2
             }
-            // L_8828D:
+            // HypotABR0.loop1:
             0x8828D..=0x88290 => {
                 op!(r, at, 0x8828D..0x88290, 5, r.cpu.zero(R::A, Field::S)); // A=0 S
                 jump!(r, at, 9, r.cpu.rtn(RtnKind::Plain)); // RTN
             }
-            // L_88292:
+            // HypotABR0.L2:
             0x88292..=0x88292 => {
-                branch!(r, at, 0x88297, 7, r.cpu.test(Test::NonZero(R::B), Field::WP, Some(0x882A0))); // ?B#0 WP / GOYES L_882A0
+                branch!(r, at, 0x88297, 7, r.cpu.test(Test::NonZero(R::B), Field::WP, Some(0x882A0))); // ?B#0 WP / GOYES HypotABR0.L3
             }
             // #88297:
             0x88297..=0x88297 => {
@@ -9999,9 +9999,9 @@ pub(crate) fn HypotABR0(r: &mut Run) {
             }
             // #8829D:
             0x8829D..=0x8829D => {
-                branch!(r, at, 0x882A0, 5, r.cpu.jump_if(Cond::NoCarry, 0x8828D)); // GONC L_8828D
+                branch!(r, at, 0x882A0, 5, r.cpu.jump_if(Cond::NoCarry, 0x8828D)); // GONC HypotABR0.loop1
             }
-            // L_882A0:
+            // HypotABR0.L3:
             0x882A0..=0x882A0 => {
                 branch!(r, at, 0x882A6, 8, r.cpu.call(0x8798A)); // GOSUBL SUB_8798A
             }
@@ -10119,27 +10119,27 @@ pub(crate) fn code_88398(r: &mut Run) {
                 io!(r, at, 0x883E5..0x883E8, 19, r.cpu.load(0, R::A, Field::A, r.hw)); // A=DAT0 A
                 op!(r, at, 0x883E8..0x883EB, 5, r.cpu.st_set(0, false)); // ST=0 0
                 op!(r, at, 0x883EB..0x883F2, 9, r.cpu.load_const(R::C, 5, 0x2933)); // LC(5) DOREAL
-                branch!(r, at, 0x883F7, 7, r.cpu.test(Test::Regs(Cmp::Eq, R::C, R::A), Field::A, Some(0x883FA))); // ?C=A A / GOYES L_883FA
+                branch!(r, at, 0x883F7, 7, r.cpu.test(Test::Regs(Cmp::Eq, R::C, R::A), Field::A, Some(0x883FA))); // ?C=A A / GOYES ROMP_0C0_002.L1
             }
             // #883F7:
             0x883F7..=0x883F7 => {
                 op!(r, at, 0x883F7..0x883FA, 5, r.cpu.st_set(0, true)); // ST=1 0
                 at = 0x883FA;
             }
-            // L_883FA:
+            // ROMP_0C0_002.L1:
             0x883FA..=0x88405 => {
                 op!(r, at, 0x883FA..0x883FD, 5, r.cpu.d_add(0, 5)); // D0=D0+ 5
                 io!(r, at, 0x883FD..0x88400, 19, r.cpu.load(0, R::A, Field::A, r.hw)); // A=DAT0 A
                 op!(r, at, 0x88400..0x88403, 5, r.cpu.d_add(0, 10)); // D0=D0+ 10
                 op!(r, at, 0x88403..0x88405, 4, r.cpu.dec(R::A, Field::A)); // A=A-1 A
-                branch!(r, at, 0x8840A, 7, r.cpu.test(Test::Zero(R::A), Field::A, Some(0x8840D))); // ?A=0 A / GOYES L_8840D
+                branch!(r, at, 0x8840A, 7, r.cpu.test(Test::Zero(R::A), Field::A, Some(0x8840D))); // ?A=0 A / GOYES ROMP_0C0_002.L2
             }
             // #8840A:
             0x8840A..=0x8840A => {
                 op!(r, at, 0x8840A..0x8840D, 5, r.cpu.d_add(0, 5)); // D0=D0+ 5
                 at = 0x8840D;
             }
-            // L_8840D:
+            // ROMP_0C0_002.L2:
             0x8840D..=0x88447 => {
                 op!(r, at, 0x8840D..0x88410, 5, r.cpu.d_ex_r(0, R::A, false)); // AD0EX
                 op!(r, at, 0x88410..0x88413, 5, r.cpu.scratch(ScratchOp::ToScratch, R::A, 2, Field::W)); // R2=A
@@ -10161,18 +10161,18 @@ pub(crate) fn code_88398(r: &mut Run) {
                 op!(r, at, 0x88447..0x8844A, 5, r.cpu.d_from_r(0, R::C, false)); // D0=C
                 at = 0x8844A;
             }
-            // L_8844A:
+            // ROMP_0C0_002.loop3:
             0x8844A..=0x88451 => {
                 io!(r, at, 0x8844A..0x8844E, 30, r.cpu.load(0, R::A, Field::W, r.hw)); // A=DAT0 W
                 op!(r, at, 0x8844E..0x88451, 5, r.cpu.d_add(0, 16)); // D0=D0+ 16
-                branch!(r, at, 0x88456, 7, r.cpu.st_test(0, false, Some(0x88459))); // ?ST=0 0 / GOYES L_88459
+                branch!(r, at, 0x88456, 7, r.cpu.st_test(0, false, Some(0x88459))); // ?ST=0 0 / GOYES ROMP_0C0_002.L4
             }
             // #88456:
             0x88456..=0x88456 => {
                 op!(r, at, 0x88456..0x88459, 5, r.cpu.d_add(0, 16)); // D0=D0+ 16
                 at = 0x88459;
             }
-            // L_88459:
+            // ROMP_0C0_002.L4:
             0x88459..=0x88459 => {
                 branch!(r, at, 0x88460, 9, r.cpu.call(0x2BC4A)); // GOSBVL SPLITA
             }
@@ -10184,26 +10184,26 @@ pub(crate) fn code_88398(r: &mut Run) {
             0x88466..=0x8846B => {
                 op!(r, at, 0x88466..0x88469, 5, r.cpu.scratch(ScratchOp::FromScratch, R::C, 2, Field::W)); // C=R2
                 op!(r, at, 0x88469..0x8846B, 4, r.cpu.p = 4); // P= 4
-                branch!(r, at, 0x88470, 7, r.cpu.test(Test::Regs(Cmp::Eq, R::C, R::A), Field::P, Some(0x88478))); // ?C=A P / GOYES L_88478
+                branch!(r, at, 0x88470, 7, r.cpu.test(Test::Regs(Cmp::Eq, R::C, R::A), Field::P, Some(0x88478))); // ?C=A P / GOYES ROMP_0C0_002.L5
             }
             // #88470:
             0x88470..=0x88470 => {
-                branch!(r, at, 0x88475, 7, r.cpu.test(Test::NonZero(R::C), Field::P, Some(0x8847D))); // ?C#0 P / GOYES L_8847D
+                branch!(r, at, 0x88475, 7, r.cpu.test(Test::NonZero(R::C), Field::P, Some(0x8847D))); // ?C#0 P / GOYES ROMP_0C0_002.L6
             }
             // #88475:
             0x88475..=0x88475 => {
-                branch!(r, at, 0x88478, 5, r.cpu.jump_if(Cond::NoCarry, 0x88480)); // GONC L_88480
+                branch!(r, at, 0x88478, 5, r.cpu.jump_if(Cond::NoCarry, 0x88480)); // GONC ROMP_0C0_002.L7
             }
-            // L_88478:
+            // ROMP_0C0_002.L5:
             0x88478..=0x88478 => {
-                branch!(r, at, 0x8847D, 7, r.cpu.test(Test::Regs(Cmp::Ge, R::C, R::A), Field::A, Some(0x88480))); // ?C>=A A / GOYES L_88480
+                branch!(r, at, 0x8847D, 7, r.cpu.test(Test::Regs(Cmp::Ge, R::C, R::A), Field::A, Some(0x88480))); // ?C>=A A / GOYES ROMP_0C0_002.L7
             }
-            // L_8847D:
+            // ROMP_0C0_002.L6:
             0x8847D..=0x8847D => {
                 op!(r, at, 0x8847D..0x88480, 5, r.cpu.scratch(ScratchOp::ToScratch, R::A, 2, Field::W)); // R2=A
                 at = 0x88480;
             }
-            // L_88480:
+            // ROMP_0C0_002.L7:
             0x88480..=0x88480 => {
                 branch!(r, at, 0x88487, 9, r.cpu.call(0x0CA81)); // GOSBVL CkATTNcode
             }
@@ -10212,7 +10212,7 @@ pub(crate) fn code_88398(r: &mut Run) {
                 op!(r, at, 0x88487..0x8848A, 5, r.cpu.scratch(ScratchOp::FromScratch, R::A, 1, Field::W)); // A=R1
                 op!(r, at, 0x8848A..0x8848C, 4, r.cpu.dec(R::A, Field::A)); // A=A-1 A
                 op!(r, at, 0x8848C..0x8848F, 5, r.cpu.scratch(ScratchOp::ToScratch, R::A, 1, Field::W)); // R1=A
-                branch!(r, at, 0x88492, 5, r.cpu.jump_if(Cond::NoCarry, 0x8844A)); // GONC L_8844A
+                branch!(r, at, 0x88492, 5, r.cpu.jump_if(Cond::NoCarry, 0x8844A)); // GONC ROMP_0C0_002.loop3
             }
             // #88492:
             0x88492..=0x88497 => {
@@ -10230,25 +10230,25 @@ pub(crate) fn code_88398(r: &mut Run) {
                 op!(r, at, 0x884A6..0x884A9, 5, r.cpu.scratch(ScratchOp::FromScratch, R::A, 2, Field::W)); // A=R2
                 op!(r, at, 0x884A9..0x884B0, 9, r.cpu.load_const(R::C, 5, 0x480)); // LC(5) #00480
                 op!(r, at, 0x884B0..0x884B2, 4, r.cpu.p = 4); // P= 4
-                branch!(r, at, 0x884B7, 7, r.cpu.test(Test::NonZero(R::A), Field::P, Some(0x884BC))); // ?A#0 P / GOYES L_884BC
+                branch!(r, at, 0x884B7, 7, r.cpu.test(Test::NonZero(R::A), Field::P, Some(0x884BC))); // ?A#0 P / GOYES ROMP_0C0_002.L8
             }
             // #884B7:
             0x884B7..=0x884B7 => {
-                branch!(r, at, 0x884BC, 7, r.cpu.test(Test::Regs(Cmp::Le, R::C, R::A), Field::A, Some(0x8851B))); // ?C<=A A / GOYES L_8851B
+                branch!(r, at, 0x884BC, 7, r.cpu.test(Test::Regs(Cmp::Le, R::C, R::A), Field::A, Some(0x8851B))); // ?C<=A A / GOYES ROMP_0C0_002.loop13
             }
-            // L_884BC:
+            // ROMP_0C0_002.L8:
             0x884BC..=0x884C0 => {
                 op!(r, at, 0x884BC..0x884BE, 4, r.cpu.dec = true); // SETDEC
                 op!(r, at, 0x884BE..0x884C0, 4, r.cpu.sub(R::C, R::C, R::A, Field::A)); // C=C-A A
-                jump!(r, at, 6, r.cpu.pc = 0x884CD); // GOTO L_884CD
+                jump!(r, at, 6, r.cpu.pc = 0x884CD); // GOTO ROMP_0C0_002.L10
             }
-            // L_884C4:
+            // ROMP_0C0_002.loop9:
             0x884C4..=0x884C6 => {
                 op!(r, at, 0x884C4..0x884C6, 4, r.cpu.p = 0); // P= 0
                 op!(r, at, 0x884C6..0x884CD, 9, r.cpu.load_const(R::C, 5, 0x99988)); // LC(5) #99988
                 at = 0x884CD;
             }
-            // L_884CD:
+            // ROMP_0C0_002.L10:
             0x884CD..=0x884D0 => {
                 op!(r, at, 0x884CD..0x884D0, 5, r.cpu.scratch(ScratchOp::ToScratch, R::C, 0, Field::W)); // R0=C
                 branch!(r, at, 0x884D6, 8, r.cpu.call(0x88F35)); // GOSUBL SUB_88F35
@@ -10260,13 +10260,13 @@ pub(crate) fn code_88398(r: &mut Run) {
                 op!(r, at, 0x884DC..0x884DF, 5, r.cpu.d_from_r(1, R::A, false)); // D1=A
                 at = 0x884DF;
             }
-            // L_884DF:
+            // ROMP_0C0_002.loop11:
             0x884DF..=0x884DF => {
                 branch!(r, at, 0x884E5, 8, r.cpu.call(0x89232)); // GOSUBL GETAB1~jump_2
             }
             // #884E5:
             0x884E5..=0x884E5 => {
-                branch!(r, at, 0x884EA, 7, r.cpu.test(Test::Zero(R::B), Field::W, Some(0x884FD))); // ?B=0 W / GOYES L_884FD
+                branch!(r, at, 0x884EA, 7, r.cpu.test(Test::Zero(R::B), Field::W, Some(0x884FD))); // ?B=0 W / GOYES ROMP_0C0_002.L12
             }
             // #884EA:
             0x884EA..=0x884F1 => {
@@ -10279,7 +10279,7 @@ pub(crate) fn code_88398(r: &mut Run) {
             0x884F7..=0x884F7 => {
                 branch!(r, at, 0x884FD, 8, r.cpu.call(0x89212)); // GOSUBL SUB_89212
             }
-            // L_884FD:
+            // ROMP_0C0_002.L12:
             0x884FD..=0x884FD => {
                 branch!(r, at, 0x88504, 9, r.cpu.call(0x0CA81)); // GOSBVL CkATTNcode
             }
@@ -10288,7 +10288,7 @@ pub(crate) fn code_88398(r: &mut Run) {
                 op!(r, at, 0x88504..0x88507, 5, r.cpu.scratch(ScratchOp::FromScratch, R::C, 1, Field::W)); // C=R1
                 op!(r, at, 0x88507..0x88509, 4, r.cpu.dec(R::C, Field::A)); // C=C-1 A
                 op!(r, at, 0x88509..0x8850C, 5, r.cpu.scratch(ScratchOp::ToScratch, R::C, 1, Field::W)); // R1=C
-                branch!(r, at, 0x8850F, 5, r.cpu.jump_if(Cond::NoCarry, 0x884DF)); // GONC L_884DF
+                branch!(r, at, 0x8850F, 5, r.cpu.jump_if(Cond::NoCarry, 0x884DF)); // GONC ROMP_0C0_002.loop11
             }
             // #8850F:
             0x8850F..=0x88515 => {
@@ -10296,7 +10296,7 @@ pub(crate) fn code_88398(r: &mut Run) {
                 op!(r, at, 0x88512..0x88515, 5, r.cpu.inc(R::C, Field::S)); // C=C+1 S
                 branch!(r, at, 0x8851B, 8, r.cpu.call(0x8901B)); // GOSUBL SUB_8901B
             }
-            // L_8851B:
+            // ROMP_0C0_002.loop13:
             0x8851B..=0x88521 => {
                 op!(r, at, 0x8851B..0x8851E, 5, r.cpu.zero(R::C, Field::S)); // C=0 S
                 op!(r, at, 0x8851E..0x88521, 5, r.cpu.inc(R::C, Field::S)); // C=C+1 S
@@ -10309,12 +10309,12 @@ pub(crate) fn code_88398(r: &mut Run) {
                 io!(r, at, 0x8852D..0x88530, 19, r.cpu.load(1, R::C, Field::A, r.hw)); // C=DAT1 A
                 op!(r, at, 0x88530..0x88532, 4, r.cpu.dec(R::C, Field::A)); // C=C-1 A
                 op!(r, at, 0x88532..0x88534, 4, r.cpu.dec(R::C, Field::A)); // C=C-1 A
-                branch!(r, at, 0x88537, 5, r.cpu.jump_if(Cond::Carry, 0x88560)); // GOC L_88560
+                branch!(r, at, 0x88537, 5, r.cpu.jump_if(Cond::Carry, 0x88560)); // GOC ROMP_0C0_002.L14
             }
             // #88537:
             0x88537..=0x88539 => {
                 op!(r, at, 0x88537..0x88539, 4, r.cpu.dec(R::C, Field::A)); // C=C-1 A
-                branch!(r, at, 0x8853C, 5, r.cpu.jump_if(Cond::NoCarry, 0x8858F)); // GONC L_8858F
+                branch!(r, at, 0x8853C, 5, r.cpu.jump_if(Cond::NoCarry, 0x8858F)); // GONC ROMP_0C0_002.L15
             }
             // #8853C:
             0x8853C..=0x8853C => {
@@ -10340,7 +10340,7 @@ pub(crate) fn code_88398(r: &mut Run) {
             0x8855A..=0x8855A => {
                 jump!(r, at, 8, r.cpu.pc = 0x88FBE); // GOLONG SUB_88FBE
             }
-            // L_88560:
+            // ROMP_0C0_002.L14:
             0x88560..=0x88560 => {
                 branch!(r, at, 0x88566, 8, r.cpu.call(0x88F35)); // GOSUBL SUB_88F35
             }
@@ -10366,7 +10366,7 @@ pub(crate) fn code_88398(r: &mut Run) {
                 op!(r, at, 0x88586..0x88589, 5, r.cpu.scratch(ScratchOp::ToScratch, R::C, 1, Field::W)); // R1=C
                 jump!(r, at, 8, r.cpu.pc = 0x88FBE); // GOLONG SUB_88FBE
             }
-            // L_8858F:
+            // ROMP_0C0_002.L15:
             0x8858F..=0x88592 => {
                 io!(r, at, 0x8858F..0x88592, 19, r.cpu.load(1, R::A, Field::A, r.hw)); // A=DAT1 A
                 branch!(r, at, 0x88599, 9, r.cpu.call(0x7A0AA)); // GOSBVL SUB_7A0AA
@@ -10463,7 +10463,7 @@ pub(crate) fn code_88398(r: &mut Run) {
                 op!(r, at, 0x8862B..0x8862E, 5, r.cpu.d_from_r(0, R::C, false)); // D0=C
                 at = 0x8862E;
             }
-            // L_8862E:
+            // ROMP_0C0_002.loop16:
             0x8862E..=0x8862E => {
                 branch!(r, at, 0x88634, 8, r.cpu.call(0x88F35)); // GOSUBL SUB_88F35
             }
@@ -10487,7 +10487,7 @@ pub(crate) fn code_88398(r: &mut Run) {
                 op!(r, at, 0x88654..0x88657, 5, r.cpu.d_sub(0, 5)); // D0=D0- 5
                 branch!(r, at, 0x8865D, 8, r.cpu.call(0x8921F)); // GOSUBL PUTAB0Back
             }
-            // L_8865D:
+            // ROMP_0C0_002.loop17:
             0x8865D..=0x88660 => {
                 op!(r, at, 0x8865D..0x88660, 5, r.cpu.scratch(ScratchOp::ToScratch, R::C, 3, Field::W)); // R3=C
                 branch!(r, at, 0x88666, 8, r.cpu.call(0x89239)); // GOSUBL GETAB0~jump_2
@@ -10507,7 +10507,7 @@ pub(crate) fn code_88398(r: &mut Run) {
             }
             // #8867A:
             0x8867A..=0x8867A => {
-                branch!(r, at, 0x88680, 8, r.cpu.call(0x88F78)); // GOSUBL L_88F78
+                branch!(r, at, 0x88680, 8, r.cpu.call(0x88F78)); // GOSUBL SUB_88F74.L1
             }
             // #88680:
             0x88680..=0x88680 => {
@@ -10533,17 +10533,17 @@ pub(crate) fn code_88398(r: &mut Run) {
             0x8869E..=0x886A4 => {
                 op!(r, at, 0x8869E..0x886A1, 5, r.cpu.zero(R::C, Field::S)); // C=0 S
                 op!(r, at, 0x886A1..0x886A4, 5, r.cpu.scratch(ScratchOp::Exchange, R::A, 3, Field::W)); // AR3EX
-                branch!(r, at, 0x886A9, 7, r.cpu.test(Test::NonZero(R::A), Field::A, Some(0x886AC))); // ?A#0 A / GOYES L_886AC
+                branch!(r, at, 0x886A9, 7, r.cpu.test(Test::NonZero(R::A), Field::A, Some(0x886AC))); // ?A#0 A / GOYES ROMP_0C0_002.L18
             }
             // #886A9:
             0x886A9..=0x886A9 => {
                 op!(r, at, 0x886A9..0x886AC, 5, r.cpu.not(R::C, Field::S)); // C=-C-1 S
                 at = 0x886AC;
             }
-            // L_886AC:
+            // ROMP_0C0_002.L18:
             0x886AC..=0x886AF => {
                 op!(r, at, 0x886AC..0x886AF, 5, r.cpu.scratch(ScratchOp::Exchange, R::A, 3, Field::W)); // AR3EX
-                branch!(r, at, 0x886B5, 8, r.cpu.call(0x88F78)); // GOSUBL L_88F78
+                branch!(r, at, 0x886B5, 8, r.cpu.call(0x88F78)); // GOSUBL SUB_88F74.L1
             }
             // #886B5:
             0x886B5..=0x886B5 => {
@@ -10557,7 +10557,7 @@ pub(crate) fn code_88398(r: &mut Run) {
             0x886C2..=0x886C7 => {
                 op!(r, at, 0x886C2..0x886C5, 5, r.cpu.scratch(ScratchOp::FromScratch, R::C, 3, Field::W)); // C=R3
                 op!(r, at, 0x886C5..0x886C7, 4, r.cpu.dec(R::C, Field::A)); // C=C-1 A
-                branch!(r, at, 0x886CA, 5, r.cpu.jump_if(Cond::NoCarry, 0x8865D)); // GONC L_8865D
+                branch!(r, at, 0x886CA, 5, r.cpu.jump_if(Cond::NoCarry, 0x8865D)); // GONC ROMP_0C0_002.loop17
             }
             // #886CA:
             0x886CA..=0x886CC => {
@@ -10579,7 +10579,7 @@ pub(crate) fn code_88398(r: &mut Run) {
             }
             // #886E8:
             0x886E8..=0x886E8 => {
-                branch!(r, at, 0x886EE, 8, r.cpu.call(0x88F78)); // GOSUBL L_88F78
+                branch!(r, at, 0x886EE, 8, r.cpu.call(0x88F78)); // GOSUBL SUB_88F74.L1
             }
             // #886EE:
             0x886EE..=0x886EE => {
@@ -10597,13 +10597,13 @@ pub(crate) fn code_88398(r: &mut Run) {
             }
             // #88706:
             0x88706..=0x88706 => {
-                branch!(r, at, 0x88709, 5, r.cpu.jump_if(Cond::Carry, 0x8870D)); // GOC L_8870D
+                branch!(r, at, 0x88709, 5, r.cpu.jump_if(Cond::Carry, 0x8870D)); // GOC ROMP_0C0_002.L19
             }
             // #88709:
             0x88709..=0x88709 => {
-                jump!(r, at, 6, r.cpu.pc = 0x8862E); // GOTO L_8862E
+                jump!(r, at, 6, r.cpu.pc = 0x8862E); // GOTO ROMP_0C0_002.loop16
             }
-            // L_8870D:
+            // ROMP_0C0_002.L19:
             0x8870D..=0x8870D => {
                 branch!(r, at, 0x88713, 8, r.cpu.call(0x88F58)); // GOSUBL RCAB0~jump_2
             }
@@ -10682,7 +10682,7 @@ pub(crate) fn code_88398(r: &mut Run) {
                 io!(r, at, 0x88796..0x88799, 16, r.cpu.store(1, R::C, Field::B, r.hw)); // DAT1=C B
                 at = 0x88799;
             }
-            // L_88799:
+            // ROMP_0C0_002.L20:
             0x88799..=0x88799 => {
                 branch!(r, at, 0x8879F, 8, r.cpu.call(0x89376)); // GOSUBL SUB_89376
             }
@@ -10708,13 +10708,13 @@ pub(crate) fn code_88398(r: &mut Run) {
             }
             // #887BE:
             0x887BE..=0x887BE => {
-                branch!(r, at, 0x887C1, 5, r.cpu.jump_if(Cond::Carry, 0x887C5)); // GOC L_887C5
+                branch!(r, at, 0x887C1, 5, r.cpu.jump_if(Cond::Carry, 0x887C5)); // GOC ROMP_0C0_002.L21
             }
             // #887C1:
             0x887C1..=0x887C1 => {
-                jump!(r, at, 6, r.cpu.pc = 0x88D40); // GOTO L_88D40
+                jump!(r, at, 6, r.cpu.pc = 0x88D40); // GOTO ROMP_0C0_002.L45
             }
-            // L_887C5:
+            // ROMP_0C0_002.L21:
             0x887C5..=0x887C5 => {
                 branch!(r, at, 0x887C9, 6, r.cpu.call(0x88F58)); // GOSUB RCAB0~jump_2
             }
@@ -10736,7 +10736,7 @@ pub(crate) fn code_88398(r: &mut Run) {
             }
             // #887DD:
             0x887DD..=0x887DD => {
-                branch!(r, at, 0x887E0, 5, r.cpu.jump_if(Cond::Carry, 0x88828)); // GOC L_88828
+                branch!(r, at, 0x887E0, 5, r.cpu.jump_if(Cond::Carry, 0x88828)); // GOC ROMP_0C0_002.L23
             }
             // #887E0:
             0x887E0..=0x887EC => {
@@ -10744,7 +10744,7 @@ pub(crate) fn code_88398(r: &mut Run) {
                 op!(r, at, 0x887E3..0x887E6, 5, r.cpu.d_from_r(1, R::C, false)); // D1=C
                 op!(r, at, 0x887E6..0x887E9, 5, r.cpu.d_add(1, 10)); // D1=D1+ 10
                 io!(r, at, 0x887E9..0x887EC, 16, r.cpu.load(1, R::C, Field::B, r.hw)); // C=DAT1 B
-                branch!(r, at, 0x887F1, 7, r.cpu.test(Test::NonZero(R::C), Field::B, Some(0x88808))); // ?C#0 B / GOYES L_88808
+                branch!(r, at, 0x887F1, 7, r.cpu.test(Test::NonZero(R::C), Field::B, Some(0x88808))); // ?C#0 B / GOYES ROMP_0C0_002.L22
             }
             // #887F1:
             0x887F1..=0x887F1 => {
@@ -10764,9 +10764,9 @@ pub(crate) fn code_88398(r: &mut Run) {
             }
             // #88805:
             0x88805..=0x88805 => {
-                branch!(r, at, 0x88808, 5, r.cpu.jump_if(Cond::NoCarry, 0x88828)); // GONC L_88828
+                branch!(r, at, 0x88808, 5, r.cpu.jump_if(Cond::NoCarry, 0x88828)); // GONC ROMP_0C0_002.L23
             }
-            // L_88808:
+            // ROMP_0C0_002.L22:
             0x88808..=0x88808 => {
                 branch!(r, at, 0x8880C, 6, r.cpu.call(0x88F58)); // GOSUB RCAB0~jump_2
             }
@@ -10789,9 +10789,9 @@ pub(crate) fn code_88398(r: &mut Run) {
             }
             // #88822:
             0x88822..=0x88822 => {
-                branch!(r, at, 0x88828, 8, r.cpu.call(0x8916C)); // GOSUBL L_8916C
+                branch!(r, at, 0x88828, 8, r.cpu.call(0x8916C)); // GOSUBL SUB_89168.L1
             }
-            // L_88828:
+            // ROMP_0C0_002.L23:
             0x88828..=0x88842 => {
                 op!(r, at, 0x88828..0x8882B, 5, r.cpu.scratch(ScratchOp::FromScratch, R::C, 4, Field::W)); // C=R4
                 op!(r, at, 0x8882B..0x8882E, 5, r.cpu.d_from_r(1, R::C, false)); // D1=C
@@ -10815,7 +10815,7 @@ pub(crate) fn code_88398(r: &mut Run) {
                 op!(r, at, 0x88857..0x8885A, 5, r.cpu.load_const(R::C, 1, 0x6)); // LC(1) #6
                 at = 0x8885A;
             }
-            // L_8885A:
+            // ROMP_0C0_002.loop24:
             0x8885A..=0x88877 => {
                 io!(r, at, 0x8885A..0x8885D, 19, r.cpu.load(1, R::A, Field::A, r.hw)); // A=DAT1 A
                 op!(r, at, 0x8885D..0x88860, 5, r.cpu.d_add(1, 5)); // D1=D1+ 5
@@ -10826,9 +10826,9 @@ pub(crate) fn code_88398(r: &mut Run) {
                 io!(r, at, 0x8886D..0x88871, 30, r.cpu.store(0, R::A, Field::W, r.hw)); // DAT0=A W
                 op!(r, at, 0x88871..0x88874, 5, r.cpu.d_add(0, 16)); // D0=D0+ 16
                 op!(r, at, 0x88874..0x88877, 5, r.cpu.dec(R::C, Field::P)); // C=C-1 P
-                branch!(r, at, 0x8887A, 5, r.cpu.jump_if(Cond::NoCarry, 0x8885A)); // GONC L_8885A
+                branch!(r, at, 0x8887A, 5, r.cpu.jump_if(Cond::NoCarry, 0x8885A)); // GONC ROMP_0C0_002.loop24
             }
-            // L_8887A:
+            // ROMP_0C0_002.loop25:
             0x8887A..=0x8887A => {
                 branch!(r, at, 0x88880, 8, r.cpu.call(0x89355)); // GOSUBL SUB_89355
             }
@@ -10851,7 +10851,7 @@ pub(crate) fn code_88398(r: &mut Run) {
             // #88894:
             0x88894..=0x88896 => {
                 op!(r, at, 0x88894..0x88896, 4, r.cpu.dec = true); // SETDEC
-                branch!(r, at, 0x8889A, 6, r.cpu.call(0x88F78)); // GOSUB L_88F78
+                branch!(r, at, 0x8889A, 6, r.cpu.call(0x88F78)); // GOSUB SUB_88F74.L1
             }
             // #8889A:
             0x8889A..=0x8889A => {
@@ -10863,7 +10863,7 @@ pub(crate) fn code_88398(r: &mut Run) {
             }
             // #888A4:
             0x888A4..=0x888A4 => {
-                branch!(r, at, 0x888A8, 6, r.cpu.call(0x88F78)); // GOSUB L_88F78
+                branch!(r, at, 0x888A8, 6, r.cpu.call(0x88F78)); // GOSUB SUB_88F74.L1
             }
             // #888A8:
             0x888A8..=0x888A8 => {
@@ -10877,7 +10877,7 @@ pub(crate) fn code_88398(r: &mut Run) {
             0x888B4..=0x888B4 => {
                 branch!(r, at, 0x888BA, 8, r.cpu.call(0x89131)); // GOSUBL SUB_89131
             }
-            // L_888BA:
+            // ROMP_0C0_002.loop26:
             0x888BA..=0x888BA => {
                 branch!(r, at, 0x888C0, 8, r.cpu.call(0x8936B)); // GOSUBL SUB_8936B
             }
@@ -10911,7 +10911,7 @@ pub(crate) fn code_88398(r: &mut Run) {
             }
             // #888EF:
             0x888EF..=0x888EF => {
-                branch!(r, at, 0x888F2, 5, r.cpu.jump_if(Cond::Carry, 0x88922)); // GOC L_88922
+                branch!(r, at, 0x888F2, 5, r.cpu.jump_if(Cond::Carry, 0x88922)); // GOC ROMP_0C0_002.L28
             }
             // #888F2:
             0x888F2..=0x888F2 => {
@@ -10932,7 +10932,7 @@ pub(crate) fn code_88398(r: &mut Run) {
             }
             // #88909:
             0x88909..=0x88909 => {
-                branch!(r, at, 0x8890C, 5, r.cpu.jump_if(Cond::NoCarry, 0x88918)); // GONC L_88918
+                branch!(r, at, 0x8890C, 5, r.cpu.jump_if(Cond::NoCarry, 0x88918)); // GONC ROMP_0C0_002.L27
             }
             // #8890C:
             0x8890C..=0x88912 => {
@@ -10940,13 +10940,13 @@ pub(crate) fn code_88398(r: &mut Run) {
                 op!(r, at, 0x8890F..0x88912, 5, r.cpu.zero(R::B, Field::W)); // B=0 W
                 branch!(r, at, 0x88918, 8, r.cpu.call(0x89212)); // GOSUBL SUB_89212
             }
-            // L_88918:
+            // ROMP_0C0_002.L27:
             0x88918..=0x8891E => {
                 op!(r, at, 0x88918..0x8891B, 5, r.cpu.d_add(1, 16)); // D1=D1+ 16
                 op!(r, at, 0x8891B..0x8891E, 5, r.cpu.d_add(1, 5)); // D1=D1+ 5
-                jump!(r, at, 6, r.cpu.pc = 0x88A61); // GOTO L_88A61
+                jump!(r, at, 6, r.cpu.pc = 0x88A61); // GOTO ROMP_0C0_002.L34
             }
-            // L_88922:
+            // ROMP_0C0_002.L28:
             0x88922..=0x88922 => {
                 branch!(r, at, 0x88928, 8, r.cpu.call(0x891AA)); // GOSUBL SUB_891AA
             }
@@ -10995,9 +10995,9 @@ pub(crate) fn code_88398(r: &mut Run) {
             }
             // #88975:
             0x88975..=0x88975 => {
-                jump!(r, at, 6, r.cpu.pc = 0x889D3); // GOTO L_889D3
+                jump!(r, at, 6, r.cpu.pc = 0x889D3); // GOTO ROMP_0C0_002.L32
             }
-            // L_88979:
+            // ROMP_0C0_002.loop29:
             0x88979..=0x88979 => {
                 branch!(r, at, 0x8897F, 8, r.cpu.call(0x89239)); // GOSUBL GETAB0~jump_2
             }
@@ -11016,7 +11016,7 @@ pub(crate) fn code_88398(r: &mut Run) {
             }
             // #88991:
             0x88991..=0x88991 => {
-                branch!(r, at, 0x88995, 6, r.cpu.call(0x88F78)); // GOSUB L_88F78
+                branch!(r, at, 0x88995, 6, r.cpu.call(0x88F78)); // GOSUB SUB_88F74.L1
             }
             // #88995:
             0x88995..=0x88995 => {
@@ -11024,7 +11024,7 @@ pub(crate) fn code_88398(r: &mut Run) {
             }
             // #88999:
             0x88999..=0x88999 => {
-                branch!(r, at, 0x8899C, 5, r.cpu.jump_if(Cond::Carry, 0x889C9)); // GOC L_889C9
+                branch!(r, at, 0x8899C, 5, r.cpu.jump_if(Cond::Carry, 0x889C9)); // GOC ROMP_0C0_002.loop30
             }
             // #8899C:
             0x8899C..=0x8899C => {
@@ -11050,7 +11050,7 @@ pub(crate) fn code_88398(r: &mut Run) {
             }
             // #889BE:
             0x889BE..=0x889BE => {
-                branch!(r, at, 0x889C2, 6, r.cpu.call(0x88F78)); // GOSUB L_88F78
+                branch!(r, at, 0x889C2, 6, r.cpu.call(0x88F78)); // GOSUB SUB_88F74.L1
             }
             // #889C2:
             0x889C2..=0x889C2 => {
@@ -11058,17 +11058,17 @@ pub(crate) fn code_88398(r: &mut Run) {
             }
             // #889C6:
             0x889C6..=0x889C6 => {
-                branch!(r, at, 0x889C9, 5, r.cpu.jump_if(Cond::NoCarry, 0x889CD)); // GONC L_889CD
+                branch!(r, at, 0x889C9, 5, r.cpu.jump_if(Cond::NoCarry, 0x889CD)); // GONC ROMP_0C0_002.L31
             }
-            // L_889C9:
+            // ROMP_0C0_002.loop30:
             0x889C9..=0x889C9 => {
-                jump!(r, at, 6, r.cpu.pc = 0x884C4); // GOTO L_884C4
+                jump!(r, at, 6, r.cpu.pc = 0x884C4); // GOTO ROMP_0C0_002.loop9
             }
-            // L_889CD:
+            // ROMP_0C0_002.L31:
             0x889CD..=0x889CD => {
                 branch!(r, at, 0x889D3, 8, r.cpu.call(0x8921F)); // GOSUBL PUTAB0Back
             }
-            // L_889D3:
+            // ROMP_0C0_002.L32:
             0x889D3..=0x889D3 => {
                 branch!(r, at, 0x889D9, 8, r.cpu.call(0x8922C)); // GOSUBL SUB_8922C
             }
@@ -11087,7 +11087,7 @@ pub(crate) fn code_88398(r: &mut Run) {
             0x889EB..=0x889F1 => {
                 op!(r, at, 0x889EB..0x889EE, 5, r.cpu.d_ex_r(1, R::A, false)); // AD1EX
                 op!(r, at, 0x889EE..0x889F1, 5, r.cpu.scratch(ScratchOp::Exchange, R::A, 3, Field::W)); // AR3EX
-                branch!(r, at, 0x889F5, 6, r.cpu.call(0x88F78)); // GOSUB L_88F78
+                branch!(r, at, 0x889F5, 6, r.cpu.call(0x88F78)); // GOSUB SUB_88F74.L1
             }
             // #889F5:
             0x889F5..=0x889F5 => {
@@ -11095,7 +11095,7 @@ pub(crate) fn code_88398(r: &mut Run) {
             }
             // #889F9:
             0x889F9..=0x889F9 => {
-                branch!(r, at, 0x889FC, 5, r.cpu.jump_if(Cond::Carry, 0x889C9)); // GOC L_889C9
+                branch!(r, at, 0x889FC, 5, r.cpu.jump_if(Cond::Carry, 0x889C9)); // GOC ROMP_0C0_002.loop30
             }
             // #889FC:
             0x889FC..=0x889FC => {
@@ -11110,13 +11110,13 @@ pub(crate) fn code_88398(r: &mut Run) {
                 op!(r, at, 0x88A09..0x88A0C, 5, r.cpu.scratch(ScratchOp::FromScratch, R::C, 2, Field::W)); // C=R2
                 op!(r, at, 0x88A0C..0x88A0E, 4, r.cpu.dec(R::C, Field::A)); // C=C-1 A
                 op!(r, at, 0x88A0E..0x88A11, 5, r.cpu.scratch(ScratchOp::ToScratch, R::C, 2, Field::W)); // R2=C
-                branch!(r, at, 0x88A14, 5, r.cpu.jump_if(Cond::Carry, 0x88A18)); // GOC L_88A18
+                branch!(r, at, 0x88A14, 5, r.cpu.jump_if(Cond::Carry, 0x88A18)); // GOC ROMP_0C0_002.L33
             }
             // #88A14:
             0x88A14..=0x88A14 => {
-                jump!(r, at, 6, r.cpu.pc = 0x88979); // GOTO L_88979
+                jump!(r, at, 6, r.cpu.pc = 0x88979); // GOTO ROMP_0C0_002.loop29
             }
-            // L_88A18:
+            // ROMP_0C0_002.L33:
             0x88A18..=0x88A21 => {
                 op!(r, at, 0x88A18..0x88A1B, 5, r.cpu.zero(R::C, Field::W)); // C=0 W
                 op!(r, at, 0x88A1B..0x88A1E, 5, r.cpu.scratch(ScratchOp::ToScratch, R::C, 0, Field::W)); // R0=C
@@ -11165,9 +11165,9 @@ pub(crate) fn code_88398(r: &mut Run) {
             // #88A58:
             0x88A58..=0x88A5B => {
                 op!(r, at, 0x88A58..0x88A5B, 5, r.cpu.st_set(0, false)); // ST=0 0
-                jump!(r, at, 8, r.cpu.pc = 0x89574); // GOLONG L_89574
+                jump!(r, at, 8, r.cpu.pc = 0x89574); // GOLONG SUB_89549.L2
             }
-            // L_88A61:
+            // ROMP_0C0_002.L34:
             0x88A61..=0x88A61 => {
                 branch!(r, at, 0x88A65, 6, r.cpu.call(0x891AA)); // GOSUB SUB_891AA
             }
@@ -11250,10 +11250,10 @@ pub(crate) fn code_88398(r: &mut Run) {
                 op!(r, at, 0x88AE2..0x88AE5, 5, r.cpu.d_add(0, 5)); // D0=D0+ 5
                 branch!(r, at, 0x88AE9, 6, r.cpu.call(0x89207)); // GOSUB SUB_89207
             }
-            // L_88AE9:
+            // ROMP_0C0_002.loop35:
             0x88AE9..=0x88AEC => {
                 op!(r, at, 0x88AE9..0x88AEC, 5, r.cpu.scratch(ScratchOp::FromScratch, R::A, 2, Field::W)); // A=R2
-                branch!(r, at, 0x88AF1, 7, r.cpu.test(Test::NonZero(R::A), Field::A, Some(0x88B0F))); // ?A#0 A / GOYES L_88B0F
+                branch!(r, at, 0x88AF1, 7, r.cpu.test(Test::NonZero(R::A), Field::A, Some(0x88B0F))); // ?A#0 A / GOYES ROMP_0C0_002.L36
             }
             // #88AF1:
             0x88AF1..=0x88AF7 => {
@@ -11273,13 +11273,13 @@ pub(crate) fn code_88398(r: &mut Run) {
             }
             // #88B0B:
             0x88B0B..=0x88B0B => {
-                jump!(r, at, 6, r.cpu.pc = 0x88B2C); // GOTO L_88B2C
+                jump!(r, at, 6, r.cpu.pc = 0x88B2C); // GOTO ROMP_0C0_002.L38
             }
-            // L_88B0F:
+            // ROMP_0C0_002.L36:
             0x88B0F..=0x88B13 => {
                 op!(r, at, 0x88B0F..0x88B11, 4, r.cpu.pop_c()); // C=RSTK
                 op!(r, at, 0x88B11..0x88B13, 4, r.cpu.push_c()); // RSTK=C
-                branch!(r, at, 0x88B18, 7, r.cpu.test(Test::Regs(Cmp::Gt, R::C, R::A), Field::A, Some(0x88B26))); // ?C>A A / GOYES L_88B26
+                branch!(r, at, 0x88B18, 7, r.cpu.test(Test::Regs(Cmp::Gt, R::C, R::A), Field::A, Some(0x88B26))); // ?C>A A / GOYES ROMP_0C0_002.L37
             }
             // #88B18:
             0x88B18..=0x88B18 => {
@@ -11289,15 +11289,15 @@ pub(crate) fn code_88398(r: &mut Run) {
             0x88B1C..=0x88B22 => {
                 op!(r, at, 0x88B1C..0x88B1F, 5, r.cpu.d_sub(1, 16)); // D1=D1- 16
                 op!(r, at, 0x88B1F..0x88B22, 5, r.cpu.d_sub(1, 5)); // D1=D1- 5
-                jump!(r, at, 6, r.cpu.pc = 0x88BD2); // GOTO L_88BD2
+                jump!(r, at, 6, r.cpu.pc = 0x88BD2); // GOTO ROMP_0C0_002.L41
             }
-            // L_88B26:
+            // ROMP_0C0_002.L37:
             0x88B26..=0x88B29 => {
                 op!(r, at, 0x88B26..0x88B29, 5, r.cpu.d_sub(0, 16)); // D0=D0- 16
                 op!(r, at, 0x88B29..0x88B2C, 5, r.cpu.d_sub(0, 5)); // D0=D0- 5
                 at = 0x88B2C;
             }
-            // L_88B2C:
+            // ROMP_0C0_002.L38:
             0x88B2C..=0x88B2C => {
                 branch!(r, at, 0x88B30, 6, r.cpu.call(0x89293)); // GOSUB GETCD0~jump_2
             }
@@ -11350,7 +11350,7 @@ pub(crate) fn code_88398(r: &mut Run) {
             }
             // #88B64:
             0x88B64..=0x88B64 => {
-                branch!(r, at, 0x88B68, 6, r.cpu.call(0x88F78)); // GOSUB L_88F78
+                branch!(r, at, 0x88B68, 6, r.cpu.call(0x88F78)); // GOSUB SUB_88F74.L1
             }
             // #88B68:
             0x88B68..=0x88B68 => {
@@ -11362,13 +11362,13 @@ pub(crate) fn code_88398(r: &mut Run) {
             }
             // #88B70:
             0x88B70..=0x88B70 => {
-                branch!(r, at, 0x88B73, 5, r.cpu.jump_if(Cond::NoCarry, 0x88B77)); // GONC L_88B77
+                branch!(r, at, 0x88B73, 5, r.cpu.jump_if(Cond::NoCarry, 0x88B77)); // GONC ROMP_0C0_002.L39
             }
             // #88B73:
             0x88B73..=0x88B73 => {
-                jump!(r, at, 6, r.cpu.pc = 0x884C4); // GOTO L_884C4
+                jump!(r, at, 6, r.cpu.pc = 0x884C4); // GOTO ROMP_0C0_002.loop9
             }
-            // L_88B77:
+            // ROMP_0C0_002.L39:
             0x88B77..=0x88B77 => {
                 branch!(r, at, 0x88B7B, 6, r.cpu.call(0x89225)); // GOSUB PUTAB0~jump_3
             }
@@ -11420,7 +11420,7 @@ pub(crate) fn code_88398(r: &mut Run) {
             }
             // #88BB5:
             0x88BB5..=0x88BB5 => {
-                branch!(r, at, 0x88BB9, 6, r.cpu.call(0x88F78)); // GOSUB L_88F78
+                branch!(r, at, 0x88BB9, 6, r.cpu.call(0x88F78)); // GOSUB SUB_88F74.L1
             }
             // #88BB9:
             0x88BB9..=0x88BB9 => {
@@ -11432,13 +11432,13 @@ pub(crate) fn code_88398(r: &mut Run) {
             }
             // #88BC1:
             0x88BC1..=0x88BC1 => {
-                branch!(r, at, 0x88BC4, 5, r.cpu.jump_if(Cond::NoCarry, 0x88BC8)); // GONC L_88BC8
+                branch!(r, at, 0x88BC4, 5, r.cpu.jump_if(Cond::NoCarry, 0x88BC8)); // GONC ROMP_0C0_002.L40
             }
             // #88BC4:
             0x88BC4..=0x88BC4 => {
-                jump!(r, at, 6, r.cpu.pc = 0x884C4); // GOTO L_884C4
+                jump!(r, at, 6, r.cpu.pc = 0x884C4); // GOTO ROMP_0C0_002.loop9
             }
-            // L_88BC8:
+            // ROMP_0C0_002.L40:
             0x88BC8..=0x88BC8 => {
                 branch!(r, at, 0x88BCC, 6, r.cpu.call(0x89225)); // GOSUB PUTAB0~jump_3
             }
@@ -11448,7 +11448,7 @@ pub(crate) fn code_88398(r: &mut Run) {
                 op!(r, at, 0x88BCF..0x88BD2, 5, r.cpu.d_add(0, 5)); // D0=D0+ 5
                 at = 0x88BD2;
             }
-            // L_88BD2:
+            // ROMP_0C0_002.L41:
             0x88BD2..=0x88BD2 => {
                 branch!(r, at, 0x88BD6, 6, r.cpu.call(0x89232)); // GOSUB GETAB1~jump_2
             }
@@ -11467,7 +11467,7 @@ pub(crate) fn code_88398(r: &mut Run) {
             0x88BE6..=0x88BEC => {
                 op!(r, at, 0x88BE6..0x88BE9, 5, r.cpu.d_ex_r(1, R::A, false)); // AD1EX
                 op!(r, at, 0x88BE9..0x88BEC, 5, r.cpu.scratch(ScratchOp::Exchange, R::A, 3, Field::W)); // AR3EX
-                branch!(r, at, 0x88BF0, 6, r.cpu.call(0x88F78)); // GOSUB L_88F78
+                branch!(r, at, 0x88BF0, 6, r.cpu.call(0x88F78)); // GOSUB SUB_88F74.L1
             }
             // #88BF0:
             0x88BF0..=0x88BF0 => {
@@ -11483,7 +11483,7 @@ pub(crate) fn code_88398(r: &mut Run) {
                 op!(r, at, 0x88BFD..0x88BFF, 4, r.cpu.push_c()); // RSTK=C
                 op!(r, at, 0x88BFF..0x88C01, 4, r.cpu.copy(R::D, R::C, Field::A)); // D=C A
                 op!(r, at, 0x88C01..0x88C04, 5, r.cpu.scratch(ScratchOp::FromScratch, R::C, 2, Field::W)); // C=R2
-                branch!(r, at, 0x88C09, 7, r.cpu.test(Test::Regs(Cmp::Lt, R::D, R::C), Field::A, Some(0x88C26))); // ?D<C A / GOYES L_88C26
+                branch!(r, at, 0x88C09, 7, r.cpu.test(Test::Regs(Cmp::Lt, R::D, R::C), Field::A, Some(0x88C26))); // ?D<C A / GOYES ROMP_0C0_002.L42
             }
             // #88C09:
             0x88C09..=0x88C09 => {
@@ -11508,19 +11508,19 @@ pub(crate) fn code_88398(r: &mut Run) {
                 op!(r, at, 0x88C1F..0x88C22, 5, r.cpu.not(R::A, Field::S)); // A=-A-1 S
                 branch!(r, at, 0x88C26, 6, r.cpu.call(0x88F74)); // GOSUB SUB_88F74
             }
-            // L_88C26:
+            // ROMP_0C0_002.L42:
             0x88C26..=0x88C26 => {
                 branch!(r, at, 0x88C2A, 6, r.cpu.call(0x890B6)); // GOSUB SUB_890B6
             }
             // #88C2A:
             0x88C2A..=0x88C2A => {
-                branch!(r, at, 0x88C2D, 5, r.cpu.jump_if(Cond::NoCarry, 0x88C31)); // GONC L_88C31
+                branch!(r, at, 0x88C2D, 5, r.cpu.jump_if(Cond::NoCarry, 0x88C31)); // GONC ROMP_0C0_002.L43
             }
             // #88C2D:
             0x88C2D..=0x88C2D => {
-                jump!(r, at, 6, r.cpu.pc = 0x884C4); // GOTO L_884C4
+                jump!(r, at, 6, r.cpu.pc = 0x884C4); // GOTO ROMP_0C0_002.loop9
             }
-            // L_88C31:
+            // ROMP_0C0_002.L43:
             0x88C31..=0x88C31 => {
                 branch!(r, at, 0x88C35, 6, r.cpu.call(0x89218)); // GOSUB PutAB%1~jump_2
             }
@@ -11533,13 +11533,13 @@ pub(crate) fn code_88398(r: &mut Run) {
                 op!(r, at, 0x88C3C..0x88C3F, 5, r.cpu.scratch(ScratchOp::FromScratch, R::C, 2, Field::W)); // C=R2
                 op!(r, at, 0x88C3F..0x88C41, 4, r.cpu.dec(R::C, Field::A)); // C=C-1 A
                 op!(r, at, 0x88C41..0x88C44, 5, r.cpu.scratch(ScratchOp::ToScratch, R::C, 2, Field::W)); // R2=C
-                branch!(r, at, 0x88C47, 5, r.cpu.jump_if(Cond::Carry, 0x88C4B)); // GOC L_88C4B
+                branch!(r, at, 0x88C47, 5, r.cpu.jump_if(Cond::Carry, 0x88C4B)); // GOC ROMP_0C0_002.L44
             }
             // #88C47:
             0x88C47..=0x88C47 => {
-                jump!(r, at, 6, r.cpu.pc = 0x88AE9); // GOTO L_88AE9
+                jump!(r, at, 6, r.cpu.pc = 0x88AE9); // GOTO ROMP_0C0_002.loop35
             }
-            // L_88C4B:
+            // ROMP_0C0_002.L44:
             0x88C4B..=0x88C4D => {
                 op!(r, at, 0x88C4B..0x88C4D, 4, r.cpu.pop_c()); // C=RSTK
                 branch!(r, at, 0x88C51, 6, r.cpu.call(0x891F0)); // GOSUB D0Back2%%
@@ -11615,7 +11615,7 @@ pub(crate) fn code_88398(r: &mut Run) {
                 op!(r, at, 0x88C98..0x88C9B, 5, r.cpu.d_ex_r(0, R::C, false)); // CD0EX
                 op!(r, at, 0x88C9B..0x88C9E, 5, r.cpu.d_from_r(0, R::C, false)); // D0=C
                 op!(r, at, 0x88C9E..0x88CA1, 5, r.cpu.d_from_r(1, R::C, false)); // D1=C
-                branch!(r, at, 0x88CA5, 6, r.cpu.call(0x8916C)); // GOSUB L_8916C
+                branch!(r, at, 0x88CA5, 6, r.cpu.call(0x8916C)); // GOSUB SUB_89168.L1
             }
             // #88CA5:
             0x88CA5..=0x88CA5 => {
@@ -11627,7 +11627,7 @@ pub(crate) fn code_88398(r: &mut Run) {
             }
             // #88CAD:
             0x88CAD..=0x88CAD => {
-                branch!(r, at, 0x88CB1, 6, r.cpu.call(0x88F78)); // GOSUB L_88F78
+                branch!(r, at, 0x88CB1, 6, r.cpu.call(0x88F78)); // GOSUB SUB_88F74.L1
             }
             // #88CB1:
             0x88CB1..=0x88CB1 => {
@@ -11652,7 +11652,7 @@ pub(crate) fn code_88398(r: &mut Run) {
             }
             // #88CCF:
             0x88CCF..=0x88CCF => {
-                branch!(r, at, 0x88CD3, 6, r.cpu.call(0x88F78)); // GOSUB L_88F78
+                branch!(r, at, 0x88CD3, 6, r.cpu.call(0x88F78)); // GOSUB SUB_88F74.L1
             }
             // #88CD3:
             0x88CD3..=0x88CD3 => {
@@ -11694,7 +11694,7 @@ pub(crate) fn code_88398(r: &mut Run) {
             }
             // #88D05:
             0x88D05..=0x88D05 => {
-                branch!(r, at, 0x88D09, 6, r.cpu.call(0x88F78)); // GOSUB L_88F78
+                branch!(r, at, 0x88D09, 6, r.cpu.call(0x88F78)); // GOSUB SUB_88F74.L1
             }
             // #88D09:
             0x88D09..=0x88D09 => {
@@ -11743,21 +11743,21 @@ pub(crate) fn code_88398(r: &mut Run) {
             // #88D37:
             0x88D37..=0x88D3A => {
                 op!(r, at, 0x88D37..0x88D3A, 5, r.cpu.st_set(0, true)); // ST=1 0
-                jump!(r, at, 8, r.cpu.pc = 0x89574); // GOLONG L_89574
+                jump!(r, at, 8, r.cpu.pc = 0x89574); // GOLONG SUB_89549.L2
             }
-            // L_88D40:
+            // ROMP_0C0_002.L45:
             0x88D40..=0x88D4D => {
                 op!(r, at, 0x88D40..0x88D43, 5, r.cpu.scratch(ScratchOp::FromScratch, R::C, 4, Field::W)); // C=R4
                 op!(r, at, 0x88D43..0x88D46, 5, r.cpu.d_from_r(1, R::C, false)); // D1=C
                 op!(r, at, 0x88D46..0x88D49, 5, r.cpu.d_add(1, 10)); // D1=D1+ 10
                 io!(r, at, 0x88D49..0x88D4D, 15, r.cpu.load(1, R::C, Field::S, r.hw)); // C=DAT1 S
-                branch!(r, at, 0x88D52, 7, r.cpu.test(Test::NonZero(R::C), Field::S, Some(0x88D56))); // ?C#0 S / GOYES L_88D56
+                branch!(r, at, 0x88D52, 7, r.cpu.test(Test::NonZero(R::C), Field::S, Some(0x88D56))); // ?C#0 S / GOYES ROMP_0C0_002.L46
             }
             // #88D52:
             0x88D52..=0x88D52 => {
-                jump!(r, at, 6, r.cpu.pc = 0x88E03); // GOTO L_88E03
+                jump!(r, at, 6, r.cpu.pc = 0x88E03); // GOTO ROMP_0C0_002.L49
             }
-            // L_88D56:
+            // ROMP_0C0_002.L46:
             0x88D56..=0x88D6F => {
                 op!(r, at, 0x88D56..0x88D58, 4, r.cpu.dec = true); // SETDEC
                 op!(r, at, 0x88D58..0x88D5B, 5, r.cpu.zero(R::A, Field::W)); // A=0 W
@@ -11808,7 +11808,7 @@ pub(crate) fn code_88398(r: &mut Run) {
             }
             // #88DA1:
             0x88DA1..=0x88DA1 => {
-                branch!(r, at, 0x88DA5, 6, r.cpu.call(0x88F78)); // GOSUB L_88F78
+                branch!(r, at, 0x88DA5, 6, r.cpu.call(0x88F78)); // GOSUB SUB_88F74.L1
             }
             // #88DA5:
             0x88DA5..=0x88DA5 => {
@@ -11820,13 +11820,13 @@ pub(crate) fn code_88398(r: &mut Run) {
             }
             // #88DAD:
             0x88DAD..=0x88DAD => {
-                branch!(r, at, 0x88DB2, 7, r.cpu.test(Test::Zero(R::B), Field::WP, Some(0x88DB6))); // ?B=0 WP / GOYES L_88DB6
+                branch!(r, at, 0x88DB2, 7, r.cpu.test(Test::Zero(R::B), Field::WP, Some(0x88DB6))); // ?B=0 WP / GOYES ROMP_0C0_002.L47
             }
             // #88DB2:
             0x88DB2..=0x88DB2 => {
-                jump!(r, at, 6, r.cpu.pc = 0x8887A); // GOTO L_8887A
+                jump!(r, at, 6, r.cpu.pc = 0x8887A); // GOTO ROMP_0C0_002.loop25
             }
-            // L_88DB6:
+            // ROMP_0C0_002.L47:
             0x88DB6..=0x88DB6 => {
                 branch!(r, at, 0x88DBA, 6, r.cpu.call(0x891CD)); // GOSUB SUB_891CD
             }
@@ -11881,23 +11881,23 @@ pub(crate) fn code_88398(r: &mut Run) {
             }
             // #88DEC:
             0x88DEC..=0x88DEC => {
-                branch!(r, at, 0x88DEF, 5, r.cpu.jump_if(Cond::Carry, 0x88DF3)); // GOC L_88DF3
+                branch!(r, at, 0x88DEF, 5, r.cpu.jump_if(Cond::Carry, 0x88DF3)); // GOC ROMP_0C0_002.L48
             }
             // #88DEF:
             0x88DEF..=0x88DEF => {
-                jump!(r, at, 6, r.cpu.pc = 0x88EBB); // GOTO L_88EBB
+                jump!(r, at, 6, r.cpu.pc = 0x88EBB); // GOTO ROMP_0C0_002.L51
             }
-            // L_88DF3:
+            // ROMP_0C0_002.L48:
             0x88DF3..=0x88DFC => {
                 op!(r, at, 0x88DF3..0x88DF5, 4, r.cpu.p = 0); // P= 0
                 op!(r, at, 0x88DF5..0x88DFC, 9, r.cpu.load_const(R::C, 5, 0xC001)); // LC(5) #0C001
                 jump!(r, at, 9, r.cpu.pc = 0x10F40); // GOVLNG GPErrjmpC
             }
-            // L_88E03:
+            // ROMP_0C0_002.L49:
             0x88E03..=0x88E0A => {
                 op!(r, at, 0x88E03..0x88E06, 5, r.cpu.d_add(1, 1)); // D1=D1+ 1
                 io!(r, at, 0x88E06..0x88E0A, 15, r.cpu.load(1, R::C, Field::S, r.hw)); // C=DAT1 S
-                branch!(r, at, 0x88E0F, 7, r.cpu.test(Test::NonZero(R::C), Field::S, Some(0x88E62))); // ?C#0 S / GOYES L_88E62
+                branch!(r, at, 0x88E0F, 7, r.cpu.test(Test::NonZero(R::C), Field::S, Some(0x88E62))); // ?C#0 S / GOYES ROMP_0C0_002.L50
             }
             // #88E0F:
             0x88E0F..=0x88E16 => {
@@ -11969,13 +11969,13 @@ pub(crate) fn code_88398(r: &mut Run) {
             }
             // #88E5A:
             0x88E5A..=0x88E5A => {
-                branch!(r, at, 0x88E5E, 6, r.cpu.call(0x8916C)); // GOSUB L_8916C
+                branch!(r, at, 0x88E5E, 6, r.cpu.call(0x8916C)); // GOSUB SUB_89168.L1
             }
             // #88E5E:
             0x88E5E..=0x88E5E => {
-                jump!(r, at, 6, r.cpu.pc = 0x888BA); // GOTO L_888BA
+                jump!(r, at, 6, r.cpu.pc = 0x888BA); // GOTO ROMP_0C0_002.loop26
             }
-            // L_88E62:
+            // ROMP_0C0_002.L50:
             0x88E62..=0x88E62 => {
                 branch!(r, at, 0x88E66, 6, r.cpu.call(0x89381)); // GOSUB SUB_89381
             }
@@ -12039,9 +12039,9 @@ pub(crate) fn code_88398(r: &mut Run) {
             }
             // #88EB7:
             0x88EB7..=0x88EB7 => {
-                jump!(r, at, 6, r.cpu.pc = 0x888BA); // GOTO L_888BA
+                jump!(r, at, 6, r.cpu.pc = 0x888BA); // GOTO ROMP_0C0_002.loop26
             }
-            // L_88EBB:
+            // ROMP_0C0_002.L51:
             0x88EBB..=0x88EBB => {
                 branch!(r, at, 0x88EBF, 6, r.cpu.call(0x89381)); // GOSUB SUB_89381
             }
@@ -12052,7 +12052,7 @@ pub(crate) fn code_88398(r: &mut Run) {
             // #88EC3:
             0x88EC3..=0x88EC6 => {
                 op!(r, at, 0x88EC3..0x88EC6, 5, r.cpu.scratch(ScratchOp::FromScratch, R::C, 1, Field::W)); // C=R1
-                branch!(r, at, 0x88ECB, 7, r.cpu.test(Test::Zero(R::C), Field::W, Some(0x88EE2))); // ?C=0 W / GOYES L_88EE2
+                branch!(r, at, 0x88ECB, 7, r.cpu.test(Test::Zero(R::C), Field::W, Some(0x88EE2))); // ?C=0 W / GOYES ROMP_0C0_002.L52
             }
             // #88ECB:
             0x88ECB..=0x88ED6 => {
@@ -12070,7 +12070,7 @@ pub(crate) fn code_88398(r: &mut Run) {
             0x88EDE..=0x88EDE => {
                 branch!(r, at, 0x88EE2, 6, r.cpu.call(0x89155)); // GOSUB SUB_89155
             }
-            // L_88EE2:
+            // ROMP_0C0_002.L52:
             0x88EE2..=0x88EE2 => {
                 branch!(r, at, 0x88EE6, 6, r.cpu.call(0x88FBE)); // GOSUB SUB_88FBE
             }
@@ -12092,7 +12092,7 @@ pub(crate) fn code_88398(r: &mut Run) {
                 op!(r, at, 0x88EFC..0x88EFE, 4, r.cpu.copy(R::B, R::C, Field::A)); // B=C A
                 at = 0x88EFE;
             }
-            // L_88EFE:
+            // ROMP_0C0_002.loop53:
             0x88EFE..=0x88F18 => {
                 io!(r, at, 0x88EFE..0x88F01, 19, r.cpu.load(1, R::A, Field::A, r.hw)); // A=DAT1 A
                 op!(r, at, 0x88F01..0x88F04, 5, r.cpu.d_add(1, 5)); // D1=D1+ 5
@@ -12107,11 +12107,11 @@ pub(crate) fn code_88398(r: &mut Run) {
             // #88F1F:
             0x88F1F..=0x88F21 => {
                 op!(r, at, 0x88F1F..0x88F21, 4, r.cpu.dec(R::B, Field::A)); // B=B-1 A
-                branch!(r, at, 0x88F24, 5, r.cpu.jump_if(Cond::NoCarry, 0x88EFE)); // GONC L_88EFE
+                branch!(r, at, 0x88F24, 5, r.cpu.jump_if(Cond::NoCarry, 0x88EFE)); // GONC ROMP_0C0_002.loop53
             }
             // #88F24:
             0x88F24..=0x88F24 => {
-                jump!(r, at, 8, r.cpu.pc = 0x8851B); // GOLONG L_8851B
+                jump!(r, at, 8, r.cpu.pc = 0x8851B); // GOLONG ROMP_0C0_002.loop13
             }
             _ => {
                 r.cpu.pc = at;
@@ -12266,7 +12266,7 @@ pub(crate) fn SUB_88F74(r: &mut Run) {
             0x88F74..=0x88F74 => {
                 branch!(r, at, 0x88F78, 6, r.cpu.call(0x88F66)); // GOSUB RCCD0~jump_7
             }
-            // L_88F78:
+            // SUB_88F74.L1:
             0x88F78..=0x88F80 => {
                 op!(r, at, 0x88F78..0x88F7B, 5, r.cpu.d_ex_r(0, R::C, false)); // CD0EX
                 op!(r, at, 0x88F7B..0x88F7D, 4, r.cpu.push_c()); // RSTK=C
@@ -12382,7 +12382,7 @@ pub(crate) fn SUB_88FB0(r: &mut Run) {
     loop {
         match at {
             0x88FB0..=0x88FB0 => {
-                jump!(r, at, 9, r.cpu.pc = 0x2BBD9); // GOVLNG L_2BBD9
+                jump!(r, at, 9, r.cpu.pc = 0x2BBD9); // GOVLNG DIV2.L3
             }
             _ => {
                 r.cpu.pc = at;
@@ -12398,7 +12398,7 @@ pub(crate) fn SUB_88FB7(r: &mut Run) {
     loop {
         match at {
             0x88FB7..=0x88FB7 => {
-                jump!(r, at, 9, r.cpu.pc = 0x2BBBC); // GOVLNG L_2BBBC
+                jump!(r, at, 9, r.cpu.pc = 0x2BBBC); // GOVLNG DIV2.L1
             }
             _ => {
                 r.cpu.pc = at;
@@ -12476,7 +12476,7 @@ pub(crate) fn SUB_8901B(r: &mut Run) {
                 io!(r, at, 0x89027..0x8902A, 19, r.cpu.load(1, R::C, Field::A, r.hw)); // C=DAT1 A
                 at = 0x8902A;
             }
-            // L_8902A:
+            // SUB_8901B.loop1:
             0x8902A..=0x8902D => {
                 op!(r, at, 0x8902A..0x8902D, 5, r.cpu.scratch(ScratchOp::ToScratch, R::C, 0, Field::W)); // R0=C
                 branch!(r, at, 0x89031, 6, r.cpu.call(0x893FB)); // GOSUB SUB_893FB
@@ -12503,32 +12503,32 @@ pub(crate) fn SUB_8901B(r: &mut Run) {
                 op!(r, at, 0x89052..0x89055, 5, r.cpu.scratch(ScratchOp::ToScratch, R::A, 0, Field::W)); // R0=A
                 op!(r, at, 0x89055..0x89058, 5, r.cpu.scratch(ScratchOp::ToScratch, R::A, 1, Field::W)); // R1=A
                 op!(r, at, 0x89058..0x8905B, 5, r.cpu.scratch(ScratchOp::FromScratch, R::C, 4, Field::W)); // C=R4
-                branch!(r, at, 0x89060, 7, r.cpu.test(Test::Zero(R::C), Field::S, Some(0x8906B))); // ?C=0 S / GOYES L_8906B
+                branch!(r, at, 0x89060, 7, r.cpu.test(Test::Zero(R::C), Field::S, Some(0x8906B))); // ?C=0 S / GOYES SUB_8901B.L2
             }
             // #89060:
             0x89060..=0x89068 => {
                 op!(r, at, 0x89060..0x89063, 5, r.cpu.inc(R::A, Field::M)); // A=A+1 M
                 op!(r, at, 0x89063..0x89065, 4, r.cpu.p = 14); // P= 14
                 op!(r, at, 0x89065..0x89068, 5, r.cpu.inc(R::B, Field::P)); // B=B+1 P
-                branch!(r, at, 0x8906B, 5, r.cpu.jump_if(Cond::NoCarry, 0x89076)); // GONC L_89076
+                branch!(r, at, 0x8906B, 5, r.cpu.jump_if(Cond::NoCarry, 0x89076)); // GONC SUB_8901B.L3
             }
-            // L_8906B:
+            // SUB_8901B.L2:
             0x8906B..=0x8906D => {
                 op!(r, at, 0x8906B..0x8906D, 4, r.cpu.dec = true); // SETDEC
-                branch!(r, at, 0x89074, 9, r.cpu.call(0x2A141)); // GOSBVL L_2A141
+                branch!(r, at, 0x89074, 9, r.cpu.call(0x2A141)); // GOSBVL SUB_2A0B1.L3
             }
             // #89074:
             0x89074..=0x89074 => {
                 op!(r, at, 0x89074..0x89076, 4, r.cpu.dec = false); // SETHEX
                 at = 0x89076;
             }
-            // L_89076:
+            // SUB_8901B.L3:
             0x89076..=0x89076 => {
                 branch!(r, at, 0x8907A, 6, r.cpu.call(0x88FBE)); // GOSUB SUB_88FBE
             }
             // #8907A:
             0x8907A..=0x8907A => {
-                jump!(r, at, 6, r.cpu.pc = 0x8902A); // GOTO L_8902A
+                jump!(r, at, 6, r.cpu.pc = 0x8902A); // GOTO SUB_8901B.loop1
             }
             _ => {
                 r.cpu.pc = at;
@@ -12549,7 +12549,7 @@ pub(crate) fn SUB_8907E(r: &mut Run) {
                 op!(r, at, 0x89084..0x89087, 5, r.cpu.scratch(ScratchOp::ToScratch, R::A, 4, Field::W)); // R4=A
                 at = 0x89087;
             }
-            // L_89087:
+            // SUB_8907E.loop1:
             0x89087..=0x89089 => {
                 op!(r, at, 0x89087..0x89089, 4, r.cpu.zero(R::C, Field::A)); // C=0 A
                 branch!(r, at, 0x8908D, 6, r.cpu.call(0x893FB)); // GOSUB SUB_893FB
@@ -12564,7 +12564,7 @@ pub(crate) fn SUB_8907E(r: &mut Run) {
                 op!(r, at, 0x89095..0x89098, 5, r.cpu.scratch(ScratchOp::ToScratch, R::A, 0, Field::W)); // R0=A
                 op!(r, at, 0x89098..0x8909B, 5, r.cpu.scratch(ScratchOp::ToScratch, R::A, 1, Field::W)); // R1=A
                 op!(r, at, 0x8909B..0x8909E, 5, r.cpu.scratch(ScratchOp::FromScratch, R::C, 4, Field::W)); // C=R4
-                branch!(r, at, 0x890A3, 7, r.cpu.test(Test::Zero(R::C), Field::S, Some(0x890AF))); // ?C=0 S / GOYES L_890AF
+                branch!(r, at, 0x890A3, 7, r.cpu.test(Test::Zero(R::C), Field::S, Some(0x890AF))); // ?C=0 S / GOYES SUB_8907E.L2
             }
             // #890A3:
             0x890A3..=0x890AC => {
@@ -12575,13 +12575,13 @@ pub(crate) fn SUB_8907E(r: &mut Run) {
                 op!(r, at, 0x890AC..0x890AF, 5, r.cpu.zero(R::A, Field::X)); // A=0 X
                 at = 0x890AF;
             }
-            // L_890AF:
+            // SUB_8907E.L2:
             0x890AF..=0x890AF => {
                 branch!(r, at, 0x890B3, 6, r.cpu.call(0x88FBE)); // GOSUB SUB_88FBE
             }
             // #890B3:
             0x890B3..=0x890B3 => {
-                branch!(r, at, 0x890B6, 5, r.cpu.jump_if(Cond::Carry, 0x89087)); // GOC L_89087
+                branch!(r, at, 0x890B6, 5, r.cpu.jump_if(Cond::Carry, 0x89087)); // GOC SUB_8907E.loop1
             }
             _ => {
                 r.cpu.pc = at;
@@ -12602,7 +12602,7 @@ pub(crate) fn SUB_890B6(r: &mut Run) {
                 op!(r, at, 0x890BA..0x890BC, 4, r.cpu.add(R::C, R::C, Field::A)); // C=C+C A
                 op!(r, at, 0x890BC..0x890BE, 4, r.cpu.p = 0); // P= 0
                 op!(r, at, 0x890BE..0x890C5, 9, r.cpu.load_const(R::C, 5, 0x5000)); // LC(5) #05000
-                branch!(r, at, 0x890C8, 5, r.cpu.jump_if(Cond::Carry, 0x890CF)); // GOC L_890CF
+                branch!(r, at, 0x890C8, 5, r.cpu.jump_if(Cond::Carry, 0x890CF)); // GOC SUB_890B6.L1
             }
             // #890C8:
             0x890C8..=0x890C8 => {
@@ -12612,16 +12612,16 @@ pub(crate) fn SUB_890B6(r: &mut Run) {
             0x890CD..=0x890CD => {
                 jump!(r, at, 9, r.cpu.rtn(RtnKind::Plain)); // RTN
             }
-            // L_890CF:
+            // SUB_890B6.L1:
             0x890CF..=0x890D1 => {
                 op!(r, at, 0x890CF..0x890D1, 4, r.cpu.neg(R::C, Field::A)); // C=-C A
-                branch!(r, at, 0x890D6, 7, r.cpu.test(Test::Regs(Cmp::Gt, R::C, R::A), Field::A, Some(0x890D8))); // ?C>A A / GOYES L_890D8
+                branch!(r, at, 0x890D6, 7, r.cpu.test(Test::Regs(Cmp::Gt, R::C, R::A), Field::A, Some(0x890D8))); // ?C>A A / GOYES SUB_890B6.L2
             }
             // #890D6:
             0x890D6..=0x890D6 => {
                 jump!(r, at, 9, r.cpu.rtn(RtnKind::Plain)); // RTN
             }
-            // L_890D8:
+            // SUB_890B6.L2:
             0x890D8..=0x890DE => {
                 op!(r, at, 0x890D8..0x890DB, 5, r.cpu.zero(R::A, Field::W)); // A=0 W
                 op!(r, at, 0x890DB..0x890DE, 5, r.cpu.zero(R::B, Field::W)); // B=0 W
@@ -12644,7 +12644,7 @@ pub(crate) fn SubCDTestb(r: &mut Run) {
             0x890E0..=0x890E5 => {
                 op!(r, at, 0x890E0..0x890E2, 4, r.cpu.dec = true); // SETDEC
                 op!(r, at, 0x890E2..0x890E5, 5, r.cpu.not(R::C, Field::S)); // C=-C-1 S
-                branch!(r, at, 0x890E9, 6, r.cpu.call(0x88F78)); // GOSUB L_88F78
+                branch!(r, at, 0x890E9, 6, r.cpu.call(0x88F78)); // GOSUB SUB_88F74.L1
             }
             // #890E9:
             0x890E9..=0x890EB => {
@@ -12675,7 +12675,7 @@ pub(crate) fn SUB_890F7(r: &mut Run) {
             0x890F7..=0x890F7 => {
                 branch!(r, at, 0x890FB, 6, r.cpu.call(0x89225)); // GOSUB PUTAB0~jump_3
             }
-            // L_890FB:
+            // SUB_890F7.L1:
             0x890FB..=0x890FB => {
                 branch!(r, at, 0x890FF, 6, r.cpu.call(0x89103)); // GOSUB EXAB0~jump_4
             }
@@ -12717,7 +12717,7 @@ pub(crate) fn SUB_8910A(r: &mut Run) {
             }
             // #8910E:
             0x8910E..=0x8910E => {
-                jump!(r, at, 6, r.cpu.pc = 0x890FB); // GOTO L_890FB
+                jump!(r, at, 6, r.cpu.pc = 0x890FB); // GOTO SUB_890F7.L1
             }
             _ => {
                 r.cpu.pc = at;
@@ -12897,7 +12897,7 @@ pub(crate) fn SUB_89161(r: &mut Run) {
             }
             // #89165:
             0x89165..=0x89165 => {
-                branch!(r, at, 0x89168, 5, r.cpu.jump_if(Cond::NoCarry, 0x8916C)); // GONC L_8916C
+                branch!(r, at, 0x89168, 5, r.cpu.jump_if(Cond::NoCarry, 0x8916C)); // GONC SUB_89168.L1
             }
             _ => {
                 r.cpu.pc = at;
@@ -12915,7 +12915,7 @@ pub(crate) fn SUB_89168(r: &mut Run) {
             0x89168..=0x89168 => {
                 branch!(r, at, 0x8916C, 6, r.cpu.call(0x893E5)); // GOSUB SUB_893E5
             }
-            // L_8916C:
+            // SUB_89168.L1:
             0x8916C..=0x8916E => {
                 op!(r, at, 0x8916C..0x8916E, 4, r.cpu.dec = true); // SETDEC
                 branch!(r, at, 0x89172, 6, r.cpu.call(0x89507)); // GOSUB STAB0~jump_7
@@ -13385,7 +13385,7 @@ pub(crate) fn SUB_89247(r: &mut Run) {
             0x89247..=0x89250 => {
                 op!(r, at, 0x89247..0x89249, 4, r.cpu.p = 0); // P= 0
                 op!(r, at, 0x89249..0x89250, 9, r.cpu.load_const(R::C, 5, 0x25D)); // LC(5) #0025D
-                jump!(r, at, 6, r.cpu.pc = 0x8925D); // GOTO L_8925D
+                jump!(r, at, 6, r.cpu.pc = 0x8925D); // GOTO SUB_89254.L1
             }
             _ => {
                 r.cpu.pc = at;
@@ -13405,7 +13405,7 @@ pub(crate) fn SUB_89254(r: &mut Run) {
                 op!(r, at, 0x89256..0x8925D, 9, r.cpu.load_const(R::C, 5, 0x1F4)); // LC(5) #001F4
                 at = 0x8925D;
             }
-            // L_8925D:
+            // SUB_89254.L1:
             0x8925D..=0x8926B => {
                 op!(r, at, 0x8925D..0x8925F, 4, r.cpu.copy(R::D, R::C, Field::A)); // D=C A
                 op!(r, at, 0x8925F..0x89262, 5, r.cpu.scratch(ScratchOp::FromScratch, R::C, 4, Field::W)); // C=R4
@@ -13431,7 +13431,7 @@ pub(crate) fn SUB_8926F(r: &mut Run) {
             0x8926F..=0x89278 => {
                 op!(r, at, 0x8926F..0x89271, 4, r.cpu.p = 0); // P= 0
                 op!(r, at, 0x89271..0x89278, 9, r.cpu.load_const(R::C, 5, 0x209)); // LC(5) #00209
-                jump!(r, at, 6, r.cpu.pc = 0x89285); // GOTO L_89285
+                jump!(r, at, 6, r.cpu.pc = 0x89285); // GOTO SUB_8927C.L1
             }
             _ => {
                 r.cpu.pc = at;
@@ -13451,7 +13451,7 @@ pub(crate) fn SUB_8927C(r: &mut Run) {
                 op!(r, at, 0x8927E..0x89285, 9, r.cpu.load_const(R::C, 5, 0x1F4)); // LC(5) #001F4
                 at = 0x89285;
             }
-            // L_89285:
+            // SUB_8927C.L1:
             0x89285..=0x89290 => {
                 op!(r, at, 0x89285..0x89287, 4, r.cpu.copy(R::D, R::C, Field::A)); // D=C A
                 op!(r, at, 0x89287..0x8928A, 5, r.cpu.scratch(ScratchOp::FromScratch, R::C, 4, Field::W)); // C=R4
@@ -13493,7 +13493,7 @@ pub(crate) fn SUB_8929A(r: &mut Run) {
             0x8929A..=0x892A1 => {
                 op!(r, at, 0x8929A..0x8929C, 4, r.cpu.p = 0); // P= 0
                 op!(r, at, 0x8929C..0x892A1, 7, r.cpu.load_const(R::C, 3, 0x11)); // LC(3) #011
-                jump!(r, at, 6, r.cpu.pc = 0x893CE); // GOTO L_893CE
+                jump!(r, at, 6, r.cpu.pc = 0x893CE); // GOTO SUB_893C3.L1
             }
             _ => {
                 r.cpu.pc = at;
@@ -13511,7 +13511,7 @@ pub(crate) fn SUB_892A5(r: &mut Run) {
             0x892A5..=0x892AC => {
                 op!(r, at, 0x892A5..0x892A7, 4, r.cpu.p = 0); // P= 0
                 op!(r, at, 0x892A7..0x892AC, 7, r.cpu.load_const(R::C, 3, 0x3B)); // LC(3) #03B
-                jump!(r, at, 6, r.cpu.pc = 0x893CE); // GOTO L_893CE
+                jump!(r, at, 6, r.cpu.pc = 0x893CE); // GOTO SUB_893C3.L1
             }
             _ => {
                 r.cpu.pc = at;
@@ -13529,7 +13529,7 @@ pub(crate) fn SUB_892B0(r: &mut Run) {
             0x892B0..=0x892B7 => {
                 op!(r, at, 0x892B0..0x892B2, 4, r.cpu.p = 0); // P= 0
                 op!(r, at, 0x892B2..0x892B7, 7, r.cpu.load_const(R::C, 3, 0x50)); // LC(3) #050
-                jump!(r, at, 6, r.cpu.pc = 0x893CE); // GOTO L_893CE
+                jump!(r, at, 6, r.cpu.pc = 0x893CE); // GOTO SUB_893C3.L1
             }
             _ => {
                 r.cpu.pc = at;
@@ -13547,7 +13547,7 @@ pub(crate) fn SUB_892BB(r: &mut Run) {
             0x892BB..=0x892C2 => {
                 op!(r, at, 0x892BB..0x892BD, 4, r.cpu.p = 0); // P= 0
                 op!(r, at, 0x892BD..0x892C2, 7, r.cpu.load_const(R::C, 3, 0x7A)); // LC(3) #07A
-                jump!(r, at, 6, r.cpu.pc = 0x893CE); // GOTO L_893CE
+                jump!(r, at, 6, r.cpu.pc = 0x893CE); // GOTO SUB_893C3.L1
             }
             _ => {
                 r.cpu.pc = at;
@@ -13565,7 +13565,7 @@ pub(crate) fn SUB_892C6(r: &mut Run) {
             0x892C6..=0x892CD => {
                 op!(r, at, 0x892C6..0x892C8, 4, r.cpu.p = 0); // P= 0
                 op!(r, at, 0x892C8..0x892CD, 7, r.cpu.load_const(R::C, 3, 0x10D)); // LC(3) #10D
-                jump!(r, at, 6, r.cpu.pc = 0x893CE); // GOTO L_893CE
+                jump!(r, at, 6, r.cpu.pc = 0x893CE); // GOTO SUB_893C3.L1
             }
             _ => {
                 r.cpu.pc = at;
@@ -13583,7 +13583,7 @@ pub(crate) fn SUB_892D1(r: &mut Run) {
             0x892D1..=0x892D8 => {
                 op!(r, at, 0x892D1..0x892D3, 4, r.cpu.p = 0); // P= 0
                 op!(r, at, 0x892D3..0x892D8, 7, r.cpu.load_const(R::C, 3, 0x122)); // LC(3) #122
-                jump!(r, at, 6, r.cpu.pc = 0x893CE); // GOTO L_893CE
+                jump!(r, at, 6, r.cpu.pc = 0x893CE); // GOTO SUB_893C3.L1
             }
             _ => {
                 r.cpu.pc = at;
@@ -13601,7 +13601,7 @@ pub(crate) fn SUB_892DC(r: &mut Run) {
             0x892DC..=0x892E3 => {
                 op!(r, at, 0x892DC..0x892DE, 4, r.cpu.p = 0); // P= 0
                 op!(r, at, 0x892DE..0x892E3, 7, r.cpu.load_const(R::C, 3, 0x137)); // LC(3) #137
-                jump!(r, at, 6, r.cpu.pc = 0x893CE); // GOTO L_893CE
+                jump!(r, at, 6, r.cpu.pc = 0x893CE); // GOTO SUB_893C3.L1
             }
             _ => {
                 r.cpu.pc = at;
@@ -13619,7 +13619,7 @@ pub(crate) fn SUB_892E7(r: &mut Run) {
             0x892E7..=0x892EE => {
                 op!(r, at, 0x892E7..0x892E9, 4, r.cpu.p = 0); // P= 0
                 op!(r, at, 0x892E9..0x892EE, 7, r.cpu.load_const(R::C, 3, 0x161)); // LC(3) #161
-                jump!(r, at, 6, r.cpu.pc = 0x893CE); // GOTO L_893CE
+                jump!(r, at, 6, r.cpu.pc = 0x893CE); // GOTO SUB_893C3.L1
             }
             _ => {
                 r.cpu.pc = at;
@@ -13637,7 +13637,7 @@ pub(crate) fn SUB_892F2(r: &mut Run) {
             0x892F2..=0x892F9 => {
                 op!(r, at, 0x892F2..0x892F4, 4, r.cpu.p = 0); // P= 0
                 op!(r, at, 0x892F4..0x892F9, 7, r.cpu.load_const(R::C, 3, 0x18B)); // LC(3) #18B
-                jump!(r, at, 6, r.cpu.pc = 0x893CE); // GOTO L_893CE
+                jump!(r, at, 6, r.cpu.pc = 0x893CE); // GOTO SUB_893C3.L1
             }
             _ => {
                 r.cpu.pc = at;
@@ -13655,7 +13655,7 @@ pub(crate) fn SUB_892FD(r: &mut Run) {
             0x892FD..=0x89304 => {
                 op!(r, at, 0x892FD..0x892FF, 4, r.cpu.p = 0); // P= 0
                 op!(r, at, 0x892FF..0x89304, 7, r.cpu.load_const(R::C, 3, 0x1A0)); // LC(3) #1A0
-                jump!(r, at, 6, r.cpu.pc = 0x893CE); // GOTO L_893CE
+                jump!(r, at, 6, r.cpu.pc = 0x893CE); // GOTO SUB_893C3.L1
             }
             _ => {
                 r.cpu.pc = at;
@@ -13673,7 +13673,7 @@ pub(crate) fn SUB_89308(r: &mut Run) {
             0x89308..=0x8930F => {
                 op!(r, at, 0x89308..0x8930A, 4, r.cpu.p = 0); // P= 0
                 op!(r, at, 0x8930A..0x8930F, 7, r.cpu.load_const(R::C, 3, 0x1B5)); // LC(3) #1B5
-                jump!(r, at, 6, r.cpu.pc = 0x893CE); // GOTO L_893CE
+                jump!(r, at, 6, r.cpu.pc = 0x893CE); // GOTO SUB_893C3.L1
             }
             _ => {
                 r.cpu.pc = at;
@@ -13691,7 +13691,7 @@ pub(crate) fn SUB_89313(r: &mut Run) {
             0x89313..=0x8931A => {
                 op!(r, at, 0x89313..0x89315, 4, r.cpu.p = 0); // P= 0
                 op!(r, at, 0x89315..0x8931A, 7, r.cpu.load_const(R::C, 3, 0x1CA)); // LC(3) #1CA
-                jump!(r, at, 6, r.cpu.pc = 0x893CE); // GOTO L_893CE
+                jump!(r, at, 6, r.cpu.pc = 0x893CE); // GOTO SUB_893C3.L1
             }
             _ => {
                 r.cpu.pc = at;
@@ -13709,7 +13709,7 @@ pub(crate) fn SUB_8931E(r: &mut Run) {
             0x8931E..=0x89325 => {
                 op!(r, at, 0x8931E..0x89320, 4, r.cpu.p = 0); // P= 0
                 op!(r, at, 0x89320..0x89325, 7, r.cpu.load_const(R::C, 3, 0x1DF)); // LC(3) #1DF
-                jump!(r, at, 6, r.cpu.pc = 0x893CE); // GOTO L_893CE
+                jump!(r, at, 6, r.cpu.pc = 0x893CE); // GOTO SUB_893C3.L1
             }
             _ => {
                 r.cpu.pc = at;
@@ -13727,7 +13727,7 @@ pub(crate) fn SUB_89329(r: &mut Run) {
             0x89329..=0x89330 => {
                 op!(r, at, 0x89329..0x8932B, 4, r.cpu.p = 0); // P= 0
                 op!(r, at, 0x8932B..0x89330, 7, r.cpu.load_const(R::C, 3, 0x1F4)); // LC(3) #1F4
-                jump!(r, at, 6, r.cpu.pc = 0x893CE); // GOTO L_893CE
+                jump!(r, at, 6, r.cpu.pc = 0x893CE); // GOTO SUB_893C3.L1
             }
             _ => {
                 r.cpu.pc = at;
@@ -13745,7 +13745,7 @@ pub(crate) fn SUB_89334(r: &mut Run) {
             0x89334..=0x8933B => {
                 op!(r, at, 0x89334..0x89336, 4, r.cpu.p = 0); // P= 0
                 op!(r, at, 0x89336..0x8933B, 7, r.cpu.load_const(R::C, 3, 0x11)); // LC(3) #011
-                jump!(r, at, 6, r.cpu.pc = 0x893D6); // GOTO L_893D6
+                jump!(r, at, 6, r.cpu.pc = 0x893D6); // GOTO SUB_893C3.L2
             }
             _ => {
                 r.cpu.pc = at;
@@ -13763,7 +13763,7 @@ pub(crate) fn SUB_8933F(r: &mut Run) {
             0x8933F..=0x89346 => {
                 op!(r, at, 0x8933F..0x89341, 4, r.cpu.p = 0); // P= 0
                 op!(r, at, 0x89341..0x89346, 7, r.cpu.load_const(R::C, 3, 0x26)); // LC(3) #026
-                jump!(r, at, 6, r.cpu.pc = 0x893D6); // GOTO L_893D6
+                jump!(r, at, 6, r.cpu.pc = 0x893D6); // GOTO SUB_893C3.L2
             }
             _ => {
                 r.cpu.pc = at;
@@ -13781,7 +13781,7 @@ pub(crate) fn SUB_8934A(r: &mut Run) {
             0x8934A..=0x89351 => {
                 op!(r, at, 0x8934A..0x8934C, 4, r.cpu.p = 0); // P= 0
                 op!(r, at, 0x8934C..0x89351, 7, r.cpu.load_const(R::C, 3, 0x50)); // LC(3) #050
-                jump!(r, at, 6, r.cpu.pc = 0x893D6); // GOTO L_893D6
+                jump!(r, at, 6, r.cpu.pc = 0x893D6); // GOTO SUB_893C3.L2
             }
             _ => {
                 r.cpu.pc = at;
@@ -13799,7 +13799,7 @@ pub(crate) fn SUB_89355(r: &mut Run) {
             0x89355..=0x8935C => {
                 op!(r, at, 0x89355..0x89357, 4, r.cpu.p = 0); // P= 0
                 op!(r, at, 0x89357..0x8935C, 7, r.cpu.load_const(R::C, 3, 0xA4)); // LC(3) #0A4
-                jump!(r, at, 6, r.cpu.pc = 0x893D6); // GOTO L_893D6
+                jump!(r, at, 6, r.cpu.pc = 0x893D6); // GOTO SUB_893C3.L2
             }
             _ => {
                 r.cpu.pc = at;
@@ -13817,7 +13817,7 @@ pub(crate) fn SUB_89360(r: &mut Run) {
             0x89360..=0x89367 => {
                 op!(r, at, 0x89360..0x89362, 4, r.cpu.p = 0); // P= 0
                 op!(r, at, 0x89362..0x89367, 7, r.cpu.load_const(R::C, 3, 0xF8)); // LC(3) #0F8
-                jump!(r, at, 6, r.cpu.pc = 0x893D6); // GOTO L_893D6
+                jump!(r, at, 6, r.cpu.pc = 0x893D6); // GOTO SUB_893C3.L2
             }
             _ => {
                 r.cpu.pc = at;
@@ -13835,7 +13835,7 @@ pub(crate) fn SUB_8936B(r: &mut Run) {
             0x8936B..=0x89372 => {
                 op!(r, at, 0x8936B..0x8936D, 4, r.cpu.p = 0); // P= 0
                 op!(r, at, 0x8936D..0x89372, 7, r.cpu.load_const(R::C, 3, 0x10D)); // LC(3) #10D
-                jump!(r, at, 6, r.cpu.pc = 0x893D6); // GOTO L_893D6
+                jump!(r, at, 6, r.cpu.pc = 0x893D6); // GOTO SUB_893C3.L2
             }
             _ => {
                 r.cpu.pc = at;
@@ -13853,7 +13853,7 @@ pub(crate) fn SUB_89376(r: &mut Run) {
             0x89376..=0x8937D => {
                 op!(r, at, 0x89376..0x89378, 4, r.cpu.p = 0); // P= 0
                 op!(r, at, 0x89378..0x8937D, 7, r.cpu.load_const(R::C, 3, 0x122)); // LC(3) #122
-                jump!(r, at, 6, r.cpu.pc = 0x893D6); // GOTO L_893D6
+                jump!(r, at, 6, r.cpu.pc = 0x893D6); // GOTO SUB_893C3.L2
             }
             _ => {
                 r.cpu.pc = at;
@@ -13871,7 +13871,7 @@ pub(crate) fn SUB_89381(r: &mut Run) {
             0x89381..=0x89388 => {
                 op!(r, at, 0x89381..0x89383, 4, r.cpu.p = 0); // P= 0
                 op!(r, at, 0x89383..0x89388, 7, r.cpu.load_const(R::C, 3, 0x137)); // LC(3) #137
-                jump!(r, at, 6, r.cpu.pc = 0x893D6); // GOTO L_893D6
+                jump!(r, at, 6, r.cpu.pc = 0x893D6); // GOTO SUB_893C3.L2
             }
             _ => {
                 r.cpu.pc = at;
@@ -13889,7 +13889,7 @@ pub(crate) fn SUB_8938C(r: &mut Run) {
             0x8938C..=0x89393 => {
                 op!(r, at, 0x8938C..0x8938E, 4, r.cpu.p = 0); // P= 0
                 op!(r, at, 0x8938E..0x89393, 7, r.cpu.load_const(R::C, 3, 0x14C)); // LC(3) #14C
-                jump!(r, at, 6, r.cpu.pc = 0x893D6); // GOTO L_893D6
+                jump!(r, at, 6, r.cpu.pc = 0x893D6); // GOTO SUB_893C3.L2
             }
             _ => {
                 r.cpu.pc = at;
@@ -13907,7 +13907,7 @@ pub(crate) fn SUB_89397(r: &mut Run) {
             0x89397..=0x8939E => {
                 op!(r, at, 0x89397..0x89399, 4, r.cpu.p = 0); // P= 0
                 op!(r, at, 0x89399..0x8939E, 7, r.cpu.load_const(R::C, 3, 0x161)); // LC(3) #161
-                jump!(r, at, 6, r.cpu.pc = 0x893D6); // GOTO L_893D6
+                jump!(r, at, 6, r.cpu.pc = 0x893D6); // GOTO SUB_893C3.L2
             }
             _ => {
                 r.cpu.pc = at;
@@ -13925,7 +13925,7 @@ pub(crate) fn SUB_893A2(r: &mut Run) {
             0x893A2..=0x893A9 => {
                 op!(r, at, 0x893A2..0x893A4, 4, r.cpu.p = 0); // P= 0
                 op!(r, at, 0x893A4..0x893A9, 7, r.cpu.load_const(R::C, 3, 0x18B)); // LC(3) #18B
-                jump!(r, at, 6, r.cpu.pc = 0x893D6); // GOTO L_893D6
+                jump!(r, at, 6, r.cpu.pc = 0x893D6); // GOTO SUB_893C3.L2
             }
             _ => {
                 r.cpu.pc = at;
@@ -13943,7 +13943,7 @@ pub(crate) fn SUB_893AD(r: &mut Run) {
             0x893AD..=0x893B4 => {
                 op!(r, at, 0x893AD..0x893AF, 4, r.cpu.p = 0); // P= 0
                 op!(r, at, 0x893AF..0x893B4, 7, r.cpu.load_const(R::C, 3, 0x1B5)); // LC(3) #1B5
-                jump!(r, at, 6, r.cpu.pc = 0x893D6); // GOTO L_893D6
+                jump!(r, at, 6, r.cpu.pc = 0x893D6); // GOTO SUB_893C3.L2
             }
             _ => {
                 r.cpu.pc = at;
@@ -13961,7 +13961,7 @@ pub(crate) fn SUB_893B8(r: &mut Run) {
             0x893B8..=0x893BF => {
                 op!(r, at, 0x893B8..0x893BA, 4, r.cpu.p = 0); // P= 0
                 op!(r, at, 0x893BA..0x893BF, 7, r.cpu.load_const(R::C, 3, 0x1CA)); // LC(3) #1CA
-                jump!(r, at, 6, r.cpu.pc = 0x893D6); // GOTO L_893D6
+                jump!(r, at, 6, r.cpu.pc = 0x893D6); // GOTO SUB_893C3.L2
             }
             _ => {
                 r.cpu.pc = at;
@@ -13979,9 +13979,9 @@ pub(crate) fn SUB_893C3(r: &mut Run) {
             0x893C3..=0x893CA => {
                 op!(r, at, 0x893C3..0x893C5, 4, r.cpu.p = 0); // P= 0
                 op!(r, at, 0x893C5..0x893CA, 7, r.cpu.load_const(R::C, 3, 0x1DF)); // LC(3) #1DF
-                jump!(r, at, 6, r.cpu.pc = 0x893D6); // GOTO L_893D6
+                jump!(r, at, 6, r.cpu.pc = 0x893D6); // GOTO SUB_893C3.L2
             }
-            // L_893CE:
+            // SUB_893C3.L1:
             0x893CE..=0x893CE => {
                 branch!(r, at, 0x893D2, 6, r.cpu.call(0x893E5)); // GOSUB SUB_893E5
             }
@@ -13989,7 +13989,7 @@ pub(crate) fn SUB_893C3(r: &mut Run) {
             0x893D2..=0x893D2 => {
                 jump!(r, at, 6, r.cpu.pc = 0x89218); // GOTO PutAB%1~jump_2
             }
-            // L_893D6:
+            // SUB_893C3.L2:
             0x893D6..=0x893D6 => {
                 branch!(r, at, 0x893DA, 6, r.cpu.call(0x893E5)); // GOSUB SUB_893E5
             }
@@ -14087,7 +14087,7 @@ pub(crate) fn SUB_89403(r: &mut Run) {
                 op!(r, at, 0x8941B..0x89422, 9, r.cpu.load_const(R::C, 5, 0x272)); // LC(5) #00272
                 at = 0x89422;
             }
-            // L_89422:
+            // SUB_89403.L1:
             0x89422..=0x8942C => {
                 op!(r, at, 0x89422..0x89424, 4, r.cpu.add(R::D, R::C, Field::A)); // D=D+C A
                 op!(r, at, 0x89424..0x89427, 5, r.cpu.d_ex_r(1, R::C, false)); // CD1EX
@@ -14164,7 +14164,7 @@ pub(crate) fn SUB_8943E(r: &mut Run) {
             0x8945C..=0x89465 => {
                 op!(r, at, 0x8945C..0x8945E, 4, r.cpu.p = 0); // P= 0
                 op!(r, at, 0x8945E..0x89465, 9, r.cpu.load_const(R::C, 5, 0x282)); // LC(5) #00282
-                jump!(r, at, 6, r.cpu.pc = 0x89422); // GOTO L_89422
+                jump!(r, at, 6, r.cpu.pc = 0x89422); // GOTO SUB_89403.L1
             }
             _ => {
                 r.cpu.pc = at;
@@ -14184,7 +14184,7 @@ pub(crate) fn SUB_89469(r: &mut Run) {
             }
             // #8946D:
             0x8946D..=0x8946D => {
-                branch!(r, at, 0x89471, 6, r.cpu.call(0x88F78)); // GOSUB L_88F78
+                branch!(r, at, 0x89471, 6, r.cpu.call(0x88F78)); // GOSUB SUB_88F74.L1
             }
             // #89471:
             0x89471..=0x89471 => {
@@ -14196,7 +14196,7 @@ pub(crate) fn SUB_89469(r: &mut Run) {
             }
             // #89479:
             0x89479..=0x89479 => {
-                branch!(r, at, 0x8947D, 6, r.cpu.call(0x88F78)); // GOSUB L_88F78
+                branch!(r, at, 0x8947D, 6, r.cpu.call(0x88F78)); // GOSUB SUB_88F74.L1
             }
             // #8947D:
             0x8947D..=0x8947D => {
@@ -14302,7 +14302,7 @@ pub(crate) fn SUB_89485(r: &mut Run) {
             }
             // #894D8:
             0x894D8..=0x894D8 => {
-                jump!(r, at, 6, r.cpu.pc = 0x88F78); // GOTO L_88F78
+                jump!(r, at, 6, r.cpu.pc = 0x88F78); // GOTO SUB_88F74.L1
             }
             _ => {
                 r.cpu.pc = at;
@@ -14336,7 +14336,7 @@ pub(crate) fn SUB_894DC(r: &mut Run) {
             // #894EF:
             0x894EF..=0x894F1 => {
                 op!(r, at, 0x894EF..0x894F1, 4, r.cpu.p = 14); // P= 14
-                branch!(r, at, 0x894F6, 7, r.cpu.test(Test::NonZero(R::B), Field::WP, Some(0x8950E))); // ?B#0 WP / GOYES L_8950E
+                branch!(r, at, 0x894F6, 7, r.cpu.test(Test::NonZero(R::B), Field::WP, Some(0x8950E))); // ?B#0 WP / GOYES STAB0~jump_7.L1
             }
             // #894F6:
             0x894F6..=0x89504 => {
@@ -14364,7 +14364,7 @@ pub(crate) fn STAB0_jump_7(r: &mut Run) {
             0x89507..=0x89507 => {
                 jump!(r, at, 9, r.cpu.pc = 0x2BE61); // GOVLNG STAB0
             }
-            // L_8950E:
+            // STAB0~jump_7.L1:
             0x8950E..=0x8950E => {
                 branch!(r, at, 0x89512, 6, r.cpu.call(0x891F0)); // GOSUB D0Back2%%
             }
@@ -14451,7 +14451,7 @@ pub(crate) fn SUB_89549(r: &mut Run) {
                 op!(r, at, 0x89562..0x89565, 5, r.cpu.load_const(R::C, 1, 0x2)); // LC(1) #2
                 at = 0x89565;
             }
-            // L_89565:
+            // SUB_89549.loop1:
             0x89565..=0x89565 => {
                 branch!(r, at, 0x89569, 6, r.cpu.call(0x89232)); // GOSUB GETAB1~jump_2
             }
@@ -14462,13 +14462,13 @@ pub(crate) fn SUB_89549(r: &mut Run) {
             // #8956D:
             0x8956D..=0x8956F => {
                 op!(r, at, 0x8956D..0x8956F, 4, r.cpu.dec(R::C, Field::A)); // C=C-1 A
-                branch!(r, at, 0x89572, 5, r.cpu.jump_if(Cond::NoCarry, 0x89565)); // GONC L_89565
+                branch!(r, at, 0x89572, 5, r.cpu.jump_if(Cond::NoCarry, 0x89565)); // GONC SUB_89549.loop1
             }
             // #89572:
             0x89572..=0x89572 => {
                 jump!(r, at, 9, r.cpu.rtn(RtnKind::Plain)); // RTN
             }
-            // L_89574:
+            // SUB_89549.L2:
             0x89574..=0x89574 => {
                 branch!(r, at, 0x89578, 6, r.cpu.call(0x89198)); // GOSUB SUB_89198
             }
@@ -14501,7 +14501,7 @@ pub(crate) fn SUB_89549(r: &mut Run) {
                 op!(r, at, 0x8959C..0x8959F, 5, r.cpu.zero(R::A, Field::S)); // A=0 S
                 at = 0x8959F;
             }
-            // L_8959F:
+            // SUB_89549.loop3:
             0x8959F..=0x895A1 => {
                 op!(r, at, 0x8959F..0x895A1, 4, r.cpu.dec = true); // SETDEC
                 branch!(r, at, 0x895A5, 6, r.cpu.call(0x88F8E)); // GOSUB SUB_88F8E
@@ -14513,7 +14513,7 @@ pub(crate) fn SUB_89549(r: &mut Run) {
             // #895A9:
             0x895A9..=0x895AC => {
                 op!(r, at, 0x895A9..0x895AC, 5, r.cpu.zero(R::C, Field::S)); // C=0 S
-                branch!(r, at, 0x895B0, 6, r.cpu.call(0x88F78)); // GOSUB L_88F78
+                branch!(r, at, 0x895B0, 6, r.cpu.call(0x88F78)); // GOSUB SUB_88F74.L1
             }
             // #895B0:
             0x895B0..=0x895B0 => {
@@ -14524,18 +14524,18 @@ pub(crate) fn SUB_89549(r: &mut Run) {
                 op!(r, at, 0x895B7..0x895BA, 5, r.cpu.scratch(ScratchOp::FromScratch, R::C, 2, Field::W)); // C=R2
                 op!(r, at, 0x895BA..0x895BC, 4, r.cpu.dec(R::C, Field::A)); // C=C-1 A
                 op!(r, at, 0x895BC..0x895BF, 5, r.cpu.scratch(ScratchOp::ToScratch, R::C, 2, Field::W)); // R2=C
-                branch!(r, at, 0x895C2, 5, r.cpu.jump_if(Cond::NoCarry, 0x8959F)); // GONC L_8959F
+                branch!(r, at, 0x895C2, 5, r.cpu.jump_if(Cond::NoCarry, 0x8959F)); // GONC SUB_89549.loop3
             }
             // #895C2:
             0x895C2..=0x895C4 => {
                 op!(r, at, 0x895C2..0x895C4, 4, r.cpu.dec = true); // SETDEC
-                branch!(r, at, 0x895C9, 7, r.cpu.st_test(0, false, Some(0x895CD))); // ?ST=0 0 / GOYES L_895CD
+                branch!(r, at, 0x895C9, 7, r.cpu.st_test(0, false, Some(0x895CD))); // ?ST=0 0 / GOYES SUB_89549.L4
             }
             // #895C9:
             0x895C9..=0x895C9 => {
                 branch!(r, at, 0x895CD, 6, r.cpu.call(0x88FB0)); // GOSUB SUB_88FB0
             }
-            // L_895CD:
+            // SUB_89549.L4:
             0x895CD..=0x895D8 => {
                 op!(r, at, 0x895CD..0x895CF, 4, r.cpu.p = 0); // P= 0
                 op!(r, at, 0x895CF..0x895D6, 9, r.cpu.load_const(R::C, 5, 0x13)); // LC(5) #00013
@@ -14564,19 +14564,19 @@ pub(crate) fn SUB_89549(r: &mut Run) {
             }
             // #895F3:
             0x895F3..=0x895F3 => {
-                branch!(r, at, 0x895F6, 5, r.cpu.jump_if(Cond::NoCarry, 0x895FA)); // GONC L_895FA
+                branch!(r, at, 0x895F6, 5, r.cpu.jump_if(Cond::NoCarry, 0x895FA)); // GONC SUB_89549.L5
             }
             // #895F6:
             0x895F6..=0x895F6 => {
-                jump!(r, at, 6, r.cpu.pc = 0x88EBB); // GOTO L_88EBB
+                jump!(r, at, 6, r.cpu.pc = 0x88EBB); // GOTO ROMP_0C0_002.L51
             }
-            // L_895FA:
+            // SUB_89549.L5:
             0x895FA..=0x89607 => {
                 op!(r, at, 0x895FA..0x895FD, 5, r.cpu.scratch(ScratchOp::FromScratch, R::C, 4, Field::W)); // C=R4
                 op!(r, at, 0x895FD..0x89600, 5, r.cpu.d_from_r(1, R::C, false)); // D1=C
                 op!(r, at, 0x89600..0x89603, 5, r.cpu.d_add(1, 10)); // D1=D1+ 10
                 io!(r, at, 0x89603..0x89607, 15, r.cpu.load(1, R::C, Field::S, r.hw)); // C=DAT1 S
-                branch!(r, at, 0x8960C, 7, r.cpu.test(Test::Zero(R::C), Field::S, Some(0x89625))); // ?C=0 S / GOYES L_89625
+                branch!(r, at, 0x8960C, 7, r.cpu.test(Test::Zero(R::C), Field::S, Some(0x89625))); // ?C=0 S / GOYES SUB_89549.L6
             }
             // #8960C:
             0x8960C..=0x8960C => {
@@ -14596,13 +14596,13 @@ pub(crate) fn SUB_89549(r: &mut Run) {
             }
             // #8961C:
             0x8961C..=0x8961C => {
-                branch!(r, at, 0x8961F, 5, r.cpu.jump_if(Cond::NoCarry, 0x89625)); // GONC L_89625
+                branch!(r, at, 0x8961F, 5, r.cpu.jump_if(Cond::NoCarry, 0x89625)); // GONC SUB_89549.L6
             }
             // #8961F:
             0x8961F..=0x8961F => {
-                jump!(r, at, 8, r.cpu.pc = 0x88D40); // GOLONG L_88D40
+                jump!(r, at, 8, r.cpu.pc = 0x88D40); // GOLONG ROMP_0C0_002.L45
             }
-            // L_89625:
+            // SUB_89549.L6:
             0x89625..=0x89625 => {
                 branch!(r, at, 0x89629, 6, r.cpu.call(0x89667)); // GOSUB SUB_89667
             }
@@ -14640,7 +14640,7 @@ pub(crate) fn SUB_89549(r: &mut Run) {
             }
             // #8964C:
             0x8964C..=0x8964C => {
-                branch!(r, at, 0x89650, 6, r.cpu.call(0x88F78)); // GOSUB L_88F78
+                branch!(r, at, 0x89650, 6, r.cpu.call(0x88F78)); // GOSUB SUB_88F74.L1
             }
             // #89650:
             0x89650..=0x89650 => {
@@ -14652,15 +14652,15 @@ pub(crate) fn SUB_89549(r: &mut Run) {
             }
             // #89658:
             0x89658..=0x89658 => {
-                branch!(r, at, 0x8965D, 7, r.cpu.test(Test::NonZero(R::B), Field::WP, Some(0x89661))); // ?B#0 WP / GOYES L_89661
+                branch!(r, at, 0x8965D, 7, r.cpu.test(Test::NonZero(R::B), Field::WP, Some(0x89661))); // ?B#0 WP / GOYES SUB_89549.L7
             }
             // #8965D:
             0x8965D..=0x8965D => {
-                jump!(r, at, 6, r.cpu.pc = 0x88EBB); // GOTO L_88EBB
+                jump!(r, at, 6, r.cpu.pc = 0x88EBB); // GOTO ROMP_0C0_002.L51
             }
-            // L_89661:
+            // SUB_89549.L7:
             0x89661..=0x89661 => {
-                jump!(r, at, 8, r.cpu.pc = 0x88799); // GOLONG L_88799
+                jump!(r, at, 8, r.cpu.pc = 0x88799); // GOLONG ROMP_0C0_002.L20
             }
             _ => {
                 r.cpu.pc = at;
@@ -14734,7 +14734,7 @@ pub(crate) fn SUB_89667(r: &mut Run) {
             }
             // #896AA:
             0x896AA..=0x896AA => {
-                branch!(r, at, 0x896AE, 6, r.cpu.call(0x8916C)); // GOSUB L_8916C
+                branch!(r, at, 0x896AE, 6, r.cpu.call(0x8916C)); // GOSUB SUB_89168.L1
             }
             // #896AE:
             0x896AE..=0x896AE => {
@@ -14764,7 +14764,7 @@ pub(crate) fn SUB_89667(r: &mut Run) {
             }
             // #896D0:
             0x896D0..=0x896D0 => {
-                branch!(r, at, 0x896D4, 6, r.cpu.call(0x8916C)); // GOSUB L_8916C
+                branch!(r, at, 0x896D4, 6, r.cpu.call(0x8916C)); // GOSUB SUB_89168.L1
             }
             // #896D4:
             0x896D4..=0x896D4 => {
@@ -14805,7 +14805,7 @@ pub(crate) fn SUB_89667(r: &mut Run) {
             }
             // #896FD:
             0x896FD..=0x896FD => {
-                branch!(r, at, 0x89701, 6, r.cpu.call(0x88F78)); // GOSUB L_88F78
+                branch!(r, at, 0x89701, 6, r.cpu.call(0x88F78)); // GOSUB SUB_88F74.L1
             }
             // #89701:
             0x89701..=0x89701 => {
@@ -15052,13 +15052,13 @@ pub(crate) fn SUB_89760(r: &mut Run) {
             }
             // #897EF:
             0x897EF..=0x897EF => {
-                branch!(r, at, 0x897F4, 7, r.cpu.test(Test::Zero(R::C), Field::S, Some(0x897F8))); // ?C=0 S / GOYES L_897F8
+                branch!(r, at, 0x897F4, 7, r.cpu.test(Test::Zero(R::C), Field::S, Some(0x897F8))); // ?C=0 S / GOYES SUB_89760.L1
             }
             // #897F4:
             0x897F4..=0x897F4 => {
                 branch!(r, at, 0x897F8, 6, r.cpu.call(0x8982C)); // GOSUB SUB_8982C
             }
-            // L_897F8:
+            // SUB_89760.L1:
             0x897F8..=0x897F8 => {
                 branch!(r, at, 0x897FC, 6, r.cpu.call(0x89469)); // GOSUB SUB_89469
             }
@@ -15160,20 +15160,20 @@ pub(crate) fn SUB_8983A(r: &mut Run) {
             }
             // #8984C:
             0x8984C..=0x8984C => {
-                branch!(r, at, 0x89851, 7, r.cpu.test(Test::NonZero(R::B), Field::W, Some(0x89855))); // ?B#0 W / GOYES L_89855
+                branch!(r, at, 0x89851, 7, r.cpu.test(Test::NonZero(R::B), Field::W, Some(0x89855))); // ?B#0 W / GOYES SUB_8983A.L1
             }
             // #89851:
             0x89851..=0x89851 => {
                 jump!(r, at, 6, r.cpu.pc = 0x89507); // GOTO STAB0~jump_7
             }
-            // L_89855:
+            // SUB_8983A.L1:
             0x89855..=0x89855 => {
                 branch!(r, at, 0x8985B, 8, r.cpu.call(0x88F6D)); // GOSUBL RCCD2~jump_7
             }
             // #8985B:
             0x8985B..=0x8985E => {
                 op!(r, at, 0x8985B..0x8985E, 5, r.cpu.zero(R::C, Field::S)); // C=0 S
-                branch!(r, at, 0x89864, 8, r.cpu.call(0x88F78)); // GOSUBL L_88F78
+                branch!(r, at, 0x89864, 8, r.cpu.call(0x88F78)); // GOSUBL SUB_88F74.L1
             }
             // #89864:
             0x89864..=0x89864 => {
@@ -15208,7 +15208,7 @@ pub(crate) fn SUB_8983A(r: &mut Run) {
             // #8988E:
             0x8988E..=0x89891 => {
                 op!(r, at, 0x8988E..0x89891, 5, r.cpu.scratch(ScratchOp::FromScratch, R::C, 2, Field::W)); // C=R2
-                branch!(r, at, 0x89896, 7, r.cpu.test(Test::Zero(R::C), Field::S, Some(0x898A4))); // ?C=0 S / GOYES L_898A4
+                branch!(r, at, 0x89896, 7, r.cpu.test(Test::Zero(R::C), Field::S, Some(0x898A4))); // ?C=0 S / GOYES SUB_8983A.L2
             }
             // #89896:
             0x89896..=0x898A2 => {
@@ -15218,7 +15218,7 @@ pub(crate) fn SUB_8983A(r: &mut Run) {
                 op!(r, at, 0x8989F..0x898A2, 5, r.cpu.zero(R::A, Field::S)); // A=0 S
                 jump!(r, at, 9, r.cpu.rtn(RtnKind::Plain)); // RTN
             }
-            // L_898A4:
+            // SUB_8983A.L2:
             0x898A4..=0x898A4 => {
                 jump!(r, at, 6, r.cpu.pc = 0x89103); // GOTO EXAB0~jump_4
             }
@@ -15238,16 +15238,16 @@ pub(crate) fn SUB_898A8(r: &mut Run) {
             0x898A8..=0x898AD => {
                 op!(r, at, 0x898A8..0x898AA, 4, r.cpu.p = 14); // P= 14
                 op!(r, at, 0x898AA..0x898AD, 5, r.cpu.scratch(ScratchOp::FromScratch, R::C, 1, Field::W)); // C=R1
-                branch!(r, at, 0x898B2, 7, r.cpu.test(Test::NonZero(R::C), Field::WP, Some(0x898B7))); // ?C#0 WP / GOYES L_898B7
+                branch!(r, at, 0x898B2, 7, r.cpu.test(Test::NonZero(R::C), Field::WP, Some(0x898B7))); // ?C#0 WP / GOYES SUB_898A8.L2
             }
-            // L_898B2:
+            // SUB_898A8.loop1:
             0x898B2..=0x898B5 => {
                 op!(r, at, 0x898B2..0x898B5, 5, r.cpu.zero(R::A, Field::S)); // A=0 S
                 jump!(r, at, 9, r.cpu.rtn(RtnKind::Plain)); // RTN
             }
-            // L_898B7:
+            // SUB_898A8.L2:
             0x898B7..=0x898B7 => {
-                branch!(r, at, 0x898BC, 7, r.cpu.test(Test::NonZero(R::B), Field::WP, Some(0x898C5))); // ?B#0 WP / GOYES L_898C5
+                branch!(r, at, 0x898BC, 7, r.cpu.test(Test::NonZero(R::B), Field::WP, Some(0x898C5))); // ?B#0 WP / GOYES SUB_898A8.L3
             }
             // #898BC:
             0x898BC..=0x898BC => {
@@ -15255,9 +15255,9 @@ pub(crate) fn SUB_898A8(r: &mut Run) {
             }
             // #898C2:
             0x898C2..=0x898C2 => {
-                branch!(r, at, 0x898C5, 5, r.cpu.jump_if(Cond::NoCarry, 0x898B2)); // GONC L_898B2
+                branch!(r, at, 0x898C5, 5, r.cpu.jump_if(Cond::NoCarry, 0x898B2)); // GONC SUB_898A8.loop1
             }
-            // L_898C5:
+            // SUB_898A8.L3:
             0x898C5..=0x898C5 => {
                 branch!(r, at, 0x898CB, 8, r.cpu.call(0x88FA1)); // GOSUBL SUB_88FA1
             }
@@ -15364,7 +15364,7 @@ pub(crate) fn ROMP_0F1_024(r: &mut Run) {
             }
             // #8C44C:
             0x8C44C..=0x8C44C => {
-                branch!(r, at, 0x8C44F, 5, r.cpu.jump_if(Cond::NoCarry, 0x8C46C)); // GONC L_8C46C
+                branch!(r, at, 0x8C44F, 5, r.cpu.jump_if(Cond::NoCarry, 0x8C46C)); // GONC ROMP_0F1_024.L1
             }
             // #8C44F:
             0x8C44F..=0x8C44F => {
@@ -15378,7 +15378,7 @@ pub(crate) fn ROMP_0F1_024(r: &mut Run) {
                 op!(r, at, 0x8C466..0x8C468, 4, r.cpu.copy(R::A, R::C, Field::A)); // A=C A
                 jump_io!(r, at, 23, r.cpu.pc_indirect(R::A, r.hw)); // PC=(A)
             }
-            // L_8C46C:
+            // ROMP_0F1_024.L1:
             0x8C46C..=0x8C487 => {
                 op!(r, at, 0x8C46C..0x8C472, 8, r.cpu.scratch(ScratchOp::FromScratch, R::A, 3, Field::A)); // A=R3.F A
                 op!(r, at, 0x8C472..0x8C474, 4, r.cpu.add(R::A, R::A, Field::A)); // A=A+A A
@@ -15443,7 +15443,7 @@ pub(crate) fn ROMP_0F1_025(r: &mut Run) {
             }
             // #8C502:
             0x8C502..=0x8C502 => {
-                branch!(r, at, 0x8C505, 5, r.cpu.jump_if(Cond::NoCarry, 0x8C513)); // GONC L_8C513
+                branch!(r, at, 0x8C505, 5, r.cpu.jump_if(Cond::NoCarry, 0x8C513)); // GONC ROMP_0F1_025.L1
             }
             // #8C505:
             0x8C505..=0x8C505 => {
@@ -15453,7 +15453,7 @@ pub(crate) fn ROMP_0F1_025(r: &mut Run) {
             0x8C50C..=0x8C50C => {
                 jump!(r, at, 9, r.cpu.pc = 0x04FD3); // GOVLNG DoErrULN
             }
-            // L_8C513:
+            // ROMP_0F1_025.L1:
             0x8C513..=0x8C534 => {
                 op!(r, at, 0x8C513..0x8C519, 8, r.cpu.scratch(ScratchOp::FromScratch, R::A, 3, Field::A)); // A=R3.F A
                 op!(r, at, 0x8C519..0x8C51B, 4, r.cpu.add(R::A, R::A, Field::A)); // A=A+A A
@@ -15494,14 +15494,14 @@ pub(crate) fn ROMP_0EA_00C(r: &mut Run) {
                 op!(r, at, 0x8D757..0x8D75B, 6, r.cpu.load_const(R::C, 2, 0x14)); // LC(2) #14
                 at = 0x8D75B;
             }
-            // L_8D75B:
+            // ROMP_0EA_00C.loop1:
             0x8D75B..=0x8D76A => {
                 op!(r, at, 0x8D75B..0x8D75E, 5, r.cpu.d_add(0, 10)); // D0=D0+ 10
                 io!(r, at, 0x8D75E..0x8D761, 19, r.cpu.load(1, R::A, Field::A, r.hw)); // A=DAT1 A
                 op!(r, at, 0x8D761..0x8D764, 5, r.cpu.d_add(1, 5)); // D1=D1+ 5
                 io!(r, at, 0x8D764..0x8D767, 19, r.cpu.store(0, R::A, Field::A, r.hw)); // DAT0=A A
                 op!(r, at, 0x8D767..0x8D76A, 5, r.cpu.dec(R::C, Field::B)); // C=C-1 B
-                branch!(r, at, 0x8D76D, 5, r.cpu.jump_if(Cond::NoCarry, 0x8D75B)); // GONC L_8D75B
+                branch!(r, at, 0x8D76D, 5, r.cpu.jump_if(Cond::NoCarry, 0x8D75B)); // GONC ROMP_0EA_00C.loop1
             }
             // #8D76D:
             0x8D76D..=0x8D781 => {
@@ -15522,11 +15522,11 @@ pub(crate) fn ROMP_0EA_00C(r: &mut Run) {
 }
 
 pub const ROUTINES: &[(u32, u32, Block, &str)] = &[
-    (0x80000, 0x80080, L_80000, "L_80000"),
+    (0x80000, 0x80080, VersionStrings_L1, "VersionStrings_L1"),
     (0x80081, 0x80166, SUB_80081, "SUB_80081"),
     (0x80167, 0x80214, SUB_80167, "SUB_80167"),
     (0x80215, 0x80231, SUB_80215, "SUB_80215"),
-    (0x802BE, 0x802C7, L_802BE, "L_802BE"),
+    (0x802BE, 0x802C7, SUB_80215_L2, "SUB_80215_L2"),
     (0x802C8, 0x802D1, SUB_802C8, "SUB_802C8"),
     (0x802D2, 0x802DE, SUB_802D2, "SUB_802D2"),
     (0x802DF, 0x80328, SUB_802DF, "SUB_802DF"),
@@ -15549,7 +15549,7 @@ pub const ROUTINES: &[(u32, u32, Block, &str)] = &[
     (0x807E9, 0x80819, SUB_807E9, "SUB_807E9"),
     (0x8081A, 0x80915, SUB_8081A, "SUB_8081A"),
     (0x80916, 0x80945, SUB_80916, "SUB_80916"),
-    (0x809BE, 0x80AB9, L_809BE, "L_809BE"),
+    (0x809BE, 0x80AB9, KeyTestDiag_L1, "KeyTestDiag_L1"),
     (0x80ABA, 0x80BCA, SUB_80ABA, "SUB_80ABA"),
     (0x80BCB, 0x80BE6, SUB_80BCB, "SUB_80BCB"),
     (0x80BE7, 0x80C12, SUB_80BE7, "SUB_80BE7"),

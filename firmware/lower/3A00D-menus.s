@@ -230,13 +230,13 @@ OBJ_3A753:
         DAT0=C  11                               * 3A7B1
         GOSBVL  ROMPTR>ADDR                      * 3A7B5
         ?ST=1   1                                * 3A7BC
-        GOYES   L_3A7D6                          * 3A7BF
+        GOYES   OBJ_3A753.L2                     * 3A7BF
         GOSUB   SUB_3A83B                        * 3A7C1
-L_3A7C5:
+OBJ_3A753.loop1:
         GOSUB   SUB_3A8B9                        * 3A7C5
         A=R4.F  A                                * 3A7C9
         GOVLNG  PUSH#ALOOP                       * 3A7CF
-L_3A7D6:
+OBJ_3A753.L2:
         D0=(5)  #800FF                           * 3A7D6
         C=DAT0  A                                * 3A7DD
         R3=C.F  A                                * 3A7E0
@@ -260,7 +260,7 @@ L_3A7D6:
         C=R2.F  A                                * 3A824
         B=C     A                                * 3A82A
         LC(5)   IRAMBUFF                         * 3A82C
-        GOTO    L_3A7C5                          * 3A833
+        GOTO    OBJ_3A753.loop1                  * 3A833
 
 * refs (2): 3A7E8 3A820
 SUB_3A837:
@@ -275,19 +275,19 @@ SUB_3A83B:
         C=DAT1  A                                * 3A844
         A=R4.F  A                                * 3A847
         ?C>=A   A                                * 3A84D
-        GOYES   L_3A85F                          * 3A850
+        GOYES   SUB_3A83B.L1                     * 3A850
         GOSUB   SUB_3A883                        * 3A852
         R4=A.F  A                                * 3A856
         C=DAT1  A                                * 3A85C
-L_3A85F:
+SUB_3A83B.L1:
         C=C-A   A                                * 3A85F
         B=C     A                                * 3A861
         C=0     A                                * 3A863
         LC(1)   #5                               * 3A865
         ?B<=C   A                                * 3A868
-        GOYES   L_3A86F                          * 3A86B
+        GOYES   SUB_3A83B.L2                     * 3A86B
         B=C     A                                * 3A86D
-L_3A86F:
+SUB_3A83B.L2:
         D1=D1+  5                                * 3A86F
         A=A-1   A                                * 3A872
         C=A     A                                * 3A874
@@ -303,11 +303,11 @@ SUB_3A883:
         B=C     A                                * 3A883
         LC(5)   #FFFFB                           * 3A885
         ?C=A    A                                * 3A88C
-        GOYES   L_3A897                          * 3A88F
+        GOYES   SUB_3A883.L1                     * 3A88F
         A=0     A                                * 3A891
         A=A+1   A                                * 3A893
         RTN                                      * 3A895
-L_3A897:
+SUB_3A883.L1:
         A=B     A                                * 3A897
         R0=A.F  A                                * 3A899
         A=A-1   A                                * 3A89F
@@ -323,17 +323,17 @@ L_3A897:
 SUB_3A8B9:
         D0=C                                     * 3A8B9
         D1=(5)  #80961                           * 3A8BC
-L_3A8C3:
+SUB_3A8B9.loop1:
         C=DAT0  6                                * 3A8C3
         DAT1=C  6                                * 3A8C7
         B=B-1   A                                * 3A8CB
         RTNC                                     * 3A8CD
         D0=D0+  6                                * 3A8D0
         D1=D1+  11                               * 3A8D3
-        GONC    L_3A8C3                          * 3A8D6
+        GONC    SUB_3A8B9.loop1                  * 3A8D6
         B=C-B   A                                * 3A8D9
         ?D=C    A                                * 3A8DB
-        GOYES   L_3A91E+3                        * 3A8DE
+        GOYES   OBJ_3A919.L1+3                   * 3A8DE
         DAT1=A  1                                * 3A8E0
         ?ST=0   15                               * 3A8E4
         GOYES   OBJ_3A8E9+3                      * 3A8E7
@@ -342,39 +342,39 @@ L_3A8C3:
 OBJ_3A8E9:
         CON(5)  (*)+5                            * 3A8E9  primitive code object
         LC(5)   KeyRomPtr1                       * 3A8EE
-        GOTO    L_3A945                          * 3A8F5
+        GOTO    OBJ_3A939.L1                     * 3A8F5
 
 * refs (1): 3A672
 OBJ_3A8F9:
         CON(5)  (*)+5                            * 3A8F9  primitive code object
         LC(5)   KeyRomPtr2                       * 3A8FE
-        GOTO    L_3A945                          * 3A905
+        GOTO    OBJ_3A939.L1                     * 3A905
 
 * refs (1): 3A66D
 OBJ_3A909:
         CON(5)  (*)+5                            * 3A909  primitive code object
         LC(5)   KeyRomPtr3                       * 3A90E
-        GOTO    L_3A945                          * 3A915
+        GOTO    OBJ_3A939.L1                     * 3A915
 
 * refs (1): 3A668
 OBJ_3A919:
         CON(5)  (*)+5                            * 3A919  primitive code object
 * a branch also enters #3A921, where the nibbles decode as GOSUB #3A12E
-L_3A91E:
+OBJ_3A919.L1:
         LC(5)   KeyRomPtr4                       * 3A91E
-        GOTO    L_3A945                          * 3A925
+        GOTO    OBJ_3A939.L1                     * 3A925
 
 * refs (1): 3A663
 OBJ_3A929:
         CON(5)  (*)+5                            * 3A929  primitive code object
         LC(5)   KeyRomPtr5                       * 3A92E
-        GOTO    L_3A945                          * 3A935
+        GOTO    OBJ_3A939.L1                     * 3A935
 
 * refs (1): 3A65E
 OBJ_3A939:
         CON(5)  (*)+5                            * 3A939  primitive code object
         LC(5)   KeyRomPtr6                       * 3A93E
-L_3A945:
+OBJ_3A939.L1:
         A=C     A                                * 3A945
         GOVLNG  DOBINT                           * 3A947
 
@@ -429,7 +429,7 @@ SetSomeRow:
 * ->
 * refs (1): 3B72B
 1A/LockA:
-        :: Modifier SetDA123NoCh BINT60 TestSysFlag case LockAlpha * 3AA0A
+        :: Modifier SetDA123NoCh BINT60 TestSysFlag case LockAlpha * 3AA0A  flag -60: [α][α] locks / [α] locks Alpha
           àShiftOnly ;                           * 3AA2D
 
         :: DoDelims $_<<>> ?ClrAlgSetPr ;        * 3AA37
@@ -725,8 +725,8 @@ LIB0A6.hash:
         CON(5)  0                                * 3AC9F  names of length 14
         CON(5)  0                                * 3ACA4  names of length 15
         CON(5)  0                                * 3ACA9  names of length 16
-        REL(5)  L_3ACB3                          * 3ACAE  end of the names
-L_3ACB3:
+        REL(5)  LIB0A6.hash.L1                   * 3ACAE  end of the names
+LIB0A6.hash.L1:
         CON(5)  0                                * 3ACB3  command 000 has no name
         ENDLENGTH                                * 3ACB8
 
@@ -976,7 +976,7 @@ ROMP_0A4_01C:
 * ROMPTR 0A4 01D
 * refs (1): 3AEAA
 ROMP_0A4_01D:
-        :: Modifier SetDA123NoCh BINT60 TestSysFlag Lock? ORcase UnLockAlpha * 3AF98
+        :: Modifier SetDA123NoCh BINT60 TestSysFlag Lock? ORcase UnLockAlpha * 3AF98  flag -60: [α][α] locks / [α] locks Alpha
           LockAlpha ;                            * 3AFC0
 
 * ROMPTR 0A4 01E
@@ -1093,8 +1093,8 @@ LIB0A4.hash:
         CON(5)  0                                * 3B0C6  names of length 14
         CON(5)  0                                * 3B0CB  names of length 15
         CON(5)  0                                * 3B0D0  names of length 16
-        REL(5)  L_3B0DA                          * 3B0D5  end of the names
-L_3B0DA:
+        REL(5)  LIB0A4.hash.L1                   * 3B0D5  end of the names
+LIB0A4.hash.L1:
         CON(5)  0                                * 3B0DA  command 000 has no name
         ENDLENGTH                                * 3B0DF
 
@@ -1451,7 +1451,7 @@ K__0__3B7EA:
 * ROMPTR 0A1 02E
 * refs (2): 3B23B 6BCE0
 ROMP_0A1_02E:
-        :: TakeOver BINT51 SysITE CHR_, CHR_. EchoChrKey ; * 3B7F1
+        :: TakeOver BINT51 SysITE CHR_, CHR_. EchoChrKey ; * 3B7F1  flag -51: Fraction mark: . / Fraction mark: ,
 
 * ROMPTR 0A1 02F
 * refs (2): 3B23B 6BD26
@@ -1482,8 +1482,8 @@ LIB0A1.hash:
         CON(5)  0                                * 3B876  names of length 14
         CON(5)  0                                * 3B87B  names of length 15
         CON(5)  0                                * 3B880  names of length 16
-        REL(5)  L_3B88A                          * 3B885  end of the names
-L_3B88A:
+        REL(5)  LIB0A1.hash.L1                   * 3B885  end of the names
+LIB0A1.hash.L1:
         CON(5)  0                                * 3B88A  command 000 has no name
         ENDLENGTH                                * 3B88F
 
@@ -1816,8 +1816,8 @@ LIB0A5.hash:
         CON(5)  0                                * 3BBCA  names of length 14
         CON(5)  0                                * 3BBCF  names of length 15
         CON(5)  0                                * 3BBD4  names of length 16
-        REL(5)  L_3BBDE                          * 3BBD9  end of the names
-L_3BBDE:
+        REL(5)  LIB0A5.hash.L1                   * 3BBD9  end of the names
+LIB0A5.hash.L1:
         CON(5)  0                                * 3BBDE  command 000 has no name
         ENDLENGTH                                * 3BBE3
 

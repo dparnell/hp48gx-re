@@ -44,7 +44,7 @@ ROMP_0E7_001:
 * ROMPTR 0E7 002
 * refs (1): CCAAB
 ROMP_0E7_002:
-        :: # 304 ERRORSTO ERRJMP ;               * CCEA5
+        :: # 304 ERRORSTO ERRJMP ;               * CCEA5  "Undefined Result"
 
 * ROMPTR 0E7 003
 * refs (1): CCAAB
@@ -74,12 +74,12 @@ ROMP_0E7_005:
 * ROMPTR 0E7 006
 * refs (1): CCAAB
 TVMROOT~2:
-        :: # 202 ERROROUT ;                      * CD0FB
+        :: # 202 ERROROUT ;                      * CD0FB  "Bad Argument Type"
 
 * ROMPTR 0E7 007
 * refs (1): CCAAB
 ROMP_0E7_007:
-        :: # 203 ERROROUT ;                      * CD114
+        :: # 203 ERROROUT ;                      * CD114  "Bad Argument Value"
 
 * ROMPTR 0E7 008
 * refs (1): CCAAB
@@ -155,7 +155,7 @@ TINC~1:
 * ROMPTR 0E7 010
 * refs (1): CCAAB
 ROMP_0E7_010:
-        :: # B02 ERROROUT ;                      * CD768
+        :: # B02 ERROROUT ;                      * CD768  "Inconsistent Units"
 
 * ROMPTR 0E7 011
 * refs (1): CCAAB
@@ -410,13 +410,13 @@ ROMP_0E7_03A:
 * ROMPTR 0E7 03B
 * refs (1): CCAAB
 ROMP_0E7_03B:
-        :: # E705 JstGetTHEMESG ROMPTR 0E7 043 BINT16 BINT8 ROMPTR 0E7 03F * CE371
+        :: # E705 JstGetTHEMESG ROMPTR 0E7 043 BINT16 BINT8 ROMPTR 0E7 03F * CE371  "YOU MADE IT!!"
           ROMPTR 0E7 055 XYGROBDISP ROMPTR 0E7 03D SetDAsTemp ROMPTR 0E7 04E ; * CE3A5
 
 * ROMPTR 0E7 03C
 * refs (1): CCAAB
 ROMP_0E7_03C:
-        :: # E706 JstGetTHEMESG ROMPTR 0E7 043 ROMPTR 0E7 03F ROMPTR 0E7 054 * CE3D5
+        :: # E706 JstGetTHEMESG ROMPTR 0E7 043 ROMPTR 0E7 03F ROMPTR 0E7 054 * CE3D5  "YOU BLEW UP!!"
           XYGROBDISP ROMPTR 0E7 03D SetDAsTemp ROMPTR 0E7 04E ; * CE40A
 
 * ROMPTR 0E7 03D
@@ -437,8 +437,8 @@ MINEHUNT~2:
           #1+ SWAPDUP #1<> IT #1-                * CE529
           DO ROT 3PICK3PICK DO JINDEX@ INDEX@ ROMPTR 0E7 04F BINT49 #= IT * CE542
           #1+                                    * CE57A
-          LOOP 3UNROLL LOOP 2DROP # E701 JstGetTHEMESG SWAP DUP #1= ITE * CE57F
-          # E702 # E703                          * CE5B6
+          LOOP 3UNROLL LOOP 2DROP # E701 JstGetTHEMESG SWAP DUP #1= ITE * CE57F  "NEAR "
+          # E702 # E703                          * CE5B6  " MINE  "  " MINES  "
           JstGetTHEMESG SWAP #>$ SWAP &$ &$ ROMPTR 0E7 043 ; * CE5CA
 
 * ROMPTR 0E7 03F
@@ -473,7 +473,7 @@ ROMP_0E7_042:
 * ROMPTR 0E7 043
 * refs (1): CCAAB
 ROMP_0E7_043:
-        :: # E704 JstGetTHEMESG ROMPTR 0E7 034 #>$ &$ &$ $>grob DUPGROBDIM * CE7AB
+        :: # E704 JstGetTHEMESG ROMPTR 0E7 034 #>$ &$ &$ $>grob DUPGROBDIM * CE7AB  "  SCORE: "
           SWAPDROP DUP # 6D #> IT                * CE7E3
           :: DROP ZEROZERO # 6D BINT6 SUBGROB # 6D ; * CE801
           # 6D SWAP#- #2/ BINT11 #+ BINT0 ROT BINT6 # 6D MAKEGROB HARDBUFF * CE833
@@ -659,14 +659,14 @@ MINEHUNT~15:
               A=DAT1  A                          * CF08C
               LC(5)   #000E7                     * CF08F
               ?C#A    A                          * CF096
-              GOYES   L_CF0B5                    * CF099
+              GOYES   MINEHUNT~15.L1             * CF099
               D1=D1-  10                         * CF09B
               LC(5)   DOLIST                     * CF09E
               DAT1=C  A                          * CF0A5
               D1=D1+  5                          * CF0A8
               LC(5)   DOBINT                     * CF0AB
               DAT1=C  A                          * CF0B2
-L_CF0B5:
+MINEHUNT~15.L1:
               C=RSTK                             * CF0B5
               D1=C                               * CF0B7
               GOVLNG  PushF/TLoop                * CF0BA
@@ -687,14 +687,14 @@ L_CF0B5:
           D1=C                                   * CF11B
           C=RSTK                                 * CF11E
           ?C=A    A                              * CF120
-          GOYES   L_CF13B                        * CF123
+          GOYES   ~UTTYPEEXT0?.L1                * CF123
           P=      0                              * CF125
           LC(5)   FALSE                          * CF127
           DAT1=C  A                              * CF12E
           A=DAT0  A                              * CF131
           D0=D0+  5                              * CF134
           PC=(A)                                 * CF137
-L_CF13B:
+~UTTYPEEXT0?.L1:
           P=      0                              * CF13B
           LC(5)   TRUE                           * CF13D
           DAT1=C  A                              * CF144
@@ -722,8 +722,8 @@ LIB0E7.hash:
         CON(5)  0                                * CF19C  names of length 14
         CON(5)  0                                * CF1A1  names of length 15
         CON(5)  0                                * CF1A6  names of length 16
-        REL(5)  L_CF1B0                          * CF1AB  end of the names
-L_CF1B0:
+        REL(5)  LIB0E7.hash.L1                   * CF1AB  end of the names
+LIB0E7.hash.L1:
         CON(5)  0                                * CF1B0  command 000 has no name
         ENDLENGTH                                * CF1B5
 

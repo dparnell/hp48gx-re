@@ -21,8 +21,8 @@ LIB0E8.hash:
         CON(5)  0                                * D4851  names of length 14
         CON(5)  0                                * D4856  names of length 15
         CON(5)  0                                * D485B  names of length 16
-        REL(5)  L_D4865                          * D4860  end of the names
-L_D4865:
+        REL(5)  LIB0E8.hash.L1                   * D4860  end of the names
+LIB0E8.hash.L1:
         CON(5)  0                                * D4865  command 000 has no name
         ENDLENGTH                                * D486A
 

@@ -108,7 +108,7 @@ ROMP_0B9_000:
         $BODY   "56 Standard beep on"            * E2D7E  84
         $BODY   "57 Alarm beep on"               * E2DA9  85
         $BODY   "58 Show INFO"                   * E2DCE  86
-L_E2DEB:
+ROMP_0B9_000.L1:
         $BODY   "59 Show variables"              * E2DEB  87
         $BODY   "60 [α][α] locks"                * E2E12  88
         $BODY   "61 [USR][USR] locks"            * E2E35  89
@@ -199,8 +199,8 @@ LIB0B9.hash:
         CON(5)  0                                * E381F  names of length 14
         CON(5)  0                                * E3824  names of length 15
         CON(5)  0                                * E3829  names of length 16
-        REL(5)  L_E3833                          * E382E  end of the names
-L_E3833:
+        REL(5)  LIB0B9.hash.L1                   * E382E  end of the names
+LIB0B9.hash.L1:
         CON(5)  0                                * E3833  command 000 has no name
         ENDLENGTH                                * E3838
 

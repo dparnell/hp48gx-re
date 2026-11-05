@@ -191,7 +191,7 @@ ROMP_0B1_012:
           TOADISP DispStsBound 6GETLAM EVAL DUPTYPECSTR? IT ROMPTR 0B0 0A5 * DD542
           HARDBUFF ZEROZERO BINT0 BINT7 BLANKIT GROB! ROMPTR 0B1 013 ITE * DD56B
           :: 5GETLAM EVAL ;                      * DD599
-          :: # B901 JstGetTHEMESG ;              * DD5AD
+          :: # B901 JstGetTHEMESG ;              * DD5AD  "Press [CONT] for menu"
           DUPTYPECSTR? ITE                       * DD5C6
           :: $>grob BINT1 BINT8 ;                * DD5D0
           :: BINT1 BINT7 ;                       * DD5E9
@@ -390,8 +390,8 @@ LIB0B1.hash:
         CON(5)  0                                * DE38D  names of length 14
         CON(5)  0                                * DE392  names of length 15
         CON(5)  0                                * DE397  names of length 16
-        REL(5)  L_DE3A1                          * DE39C  end of the names
-L_DE3A1:
+        REL(5)  LIB0B1.hash.L1                   * DE39C  end of the names
+LIB0B1.hash.L1:
         CON(5)  0                                * DE3A1  command 000 has no name
         ENDLENGTH                                * DE3A6
 

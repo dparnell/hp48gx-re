@@ -498,7 +498,7 @@ ROT#1+:
         ASSEMBLE
         GOSUBL  POP2#~jump_2                     * 637D1
         A=A-C   A                                * 637D7
-        GOVLNG  L_36FBB                          * 637D9
+        GOVLNG  #+#1+.L1                         * 637D9
         RPL
 
 * # ob -> ob #-1
@@ -518,7 +518,7 @@ DROP#1-:
         ASSEMBLE
         GOSUBL  POP2#~jump_2                     * 6380D
         A=A+C   A                                * 63813
-        GOVLNG  L_36FCF                          * 63815
+        GOVLNG  #-#1-.L1                         * 63815
         RPL
 
 * T -> :: <ob1> ; F -> :: <ob2> ;
@@ -1084,11 +1084,11 @@ Embedded?:
         D1=D1-  5                                * 6414F
         C=DAT1  A                                * 64152
         ?B>C    A                                * 64155
-        GOYES   L_64166                          * 64158
+        GOYES   Embedded?.L1                     * 64158
         ?C>=A   A                                * 6415A
-        GOYES   L_64166                          * 6415D
+        GOYES   Embedded?.L1                     * 6415D
         GOVLNG  GPPushTLoop                      * 6415F
-L_64166:
+Embedded?.L1:
         GOVLNG  GPPushFLoop                      * 64166
         RPL
 
@@ -1113,17 +1113,17 @@ DupAndThen:
         LC(1)   #5                               * 641CE
         A=A+C   A                                * 641D1
         D=D-1   A                                * 641D3
-        GOC     L_641E5                          * 641D5
-L_641D8:
+        GOC     DupAndThen.L2                    * 641D5
+DupAndThen.loop1:
         C=DAT1  A                                * 641D8
         D1=D1-  5                                * 641DB
         DAT1=C  A                                * 641DE
         PC=(A)                                   * 641E1
-L_641E5:
+DupAndThen.L2:
         R1=A.F  A                                * 641E5
         GOSBVL  SafGarbD-1                       * 641EB
         A=R1.F  A                                * 641F2
-        GOTO    L_641D8                          * 641F8
+        GOTO    DupAndThen.loop1                 * 641F8
 
 * -> #0 #0
 * refs (84): 27A1C 45780 45F05 46BB1 47665 49021 ...
@@ -1131,7 +1131,7 @@ ZEROZERO:
         CON(5)  (*)+5                            * 641FC  primitive code object
         A=0     A                                * 64201
         C=0     A                                * 64203
-        GOTO    L_64214                          * 64205
+        GOTO    #ZERO#ONE.L1                     * 64205
 
 * -> #0 #1
 * refs (4): 6D050 6DA17 6E596 7CEE6
@@ -1140,12 +1140,12 @@ ZEROZERO:
         A=0     A                                * 6420E
         C=0     A                                * 64210
         C=C+1   A                                * 64212
-L_64214:
+#ZERO#ONE.L1:
         D=D-1   A                                * 64214
-        GOC     L_64251                          * 64216
+        GOC     SUB_64236.L1                     * 64216
         D=D-1   A                                * 64219
-        GOC     L_64251                          * 6421B
-L_6421E:
+        GOC     SUB_64236.L1                     * 6421B
+#ZERO#ONE.L2:
         RSTK=C                                   * 6421E
         GOSUB   SUB_64236                        * 64220
         C=RSTK                                   * 64224
@@ -1167,16 +1167,16 @@ SUB_64236:
         D1=D1-  5                                * 64249
         DAT1=A  A                                * 6424C
         RTN                                      * 6424F
-L_64251:
+SUB_64236.L1:
         R0=A.F  A                                * 64251
         RSTK=C                                   * 64257
         GOSBVL  SafGarbD-1                       * 64259
         D=D-1   A                                * 64260
-        GOC     L_64271                          * 64262
+        GOC     SUB_64236.L2                     * 64262
         C=RSTK                                   * 64265
         A=R0.F  A                                * 64267
-        GOTO    L_6421E                          * 6426D
-L_64271:
+        GOTO    #ZERO#ONE.L2                     * 6426D
+SUB_64236.L2:
         D=0     A                                * 64271
         GOVLNG  DOMEMERR                         * 64273
 
@@ -1187,7 +1187,7 @@ L_64271:
         A=0     A                                * 6427F
         C=0     A                                * 64281
         LC(1)   #7                               * 64283
-        GOTO    L_64214                          * 64286
+        GOTO    #ZERO#ONE.L1                     * 64286
 
 * -> #1 #27d
 #ONE#27:
@@ -1196,7 +1196,7 @@ L_64271:
         A=A+1   A                                * 64291
         C=0     A                                * 64293
         LC(2)   #1B                              * 64295
-        GOTO    L_64214                          * 64299
+        GOTO    #ZERO#ONE.L1                     * 64299
 
 * -> #2 #1
 * refs (2): 920E4 92134
@@ -1206,7 +1206,7 @@ L_64271:
         LC(1)   #1                               * 642A4
         A=C     A                                * 642A7
         A=A+1   A                                * 642A9
-        GOTO    L_64214                          * 642AB
+        GOTO    #ZERO#ONE.L1                     * 642AB
 
 * -> #2 #2
 * refs (3): 6C84B 920CB 9211B
@@ -1215,7 +1215,7 @@ L_64271:
         C=0     A                                * 642B4
         LC(1)   #2                               * 642B6
         A=C     A                                * 642B9
-        GOTO    L_64214                          * 642BB
+        GOTO    #ZERO#ONE.L1                     * 642BB
 
 * -> #2 #4
 #TWO#FOUR:
@@ -1224,7 +1224,7 @@ L_64271:
         LC(1)   #2                               * 642C6
         A=C     A                                * 642C9
         C=C+C   A                                * 642CB
-        GOTO    L_64214                          * 642CD
+        GOTO    #ZERO#ONE.L1                     * 642CD
 
 * -> #3 #4
 * refs (2): 664F8 6D819
@@ -1234,7 +1234,7 @@ L_64271:
         LC(1)   #3                               * 642D8
         A=C     A                                * 642DB
         C=C+1   A                                * 642DD
-        GOTO    L_64214                          * 642DF
+        GOTO    #ZERO#ONE.L1                     * 642DF
         RPL
 
 * -> #5 #4
@@ -1247,7 +1247,7 @@ L_64271:
         LC(1)   #5                               * 642FE
         A=C     A                                * 64301
         C=C-1   A                                * 64303
-        GOTO    L_64214                          * 64305
+        GOTO    #ZERO#ONE.L1                     * 64305
         RPL
 
 * -> #0 #0 #0
@@ -1352,14 +1352,14 @@ POS$:
         CON(5)  (*)+5                            * 645B1  primitive code object
         ASSEMBLE
         ST=0    1                                * 645B6
-        GOTO    L_645C5                          * 645B9
+        GOTO    POS$REV.L1                       * 645B9
 
 * $ $find #limit -> #pos -> #0
 * refs (1): DD1BE
 POS$REV:
         CON(5)  (*)+5                            * 645BD  primitive code object
         ST=1    1                                * 645C2
-L_645C5:
+POS$REV.L1:
         GOSBVL  POP#                             * 645C5
         R0=A.F  A                                * 645CC
         C=DAT1  A                                * 645D2
@@ -1374,23 +1374,23 @@ L_645C5:
         A=R1.F  A                                * 645F5
         GOSUB   SUB_64727                        * 645FB
         ?C=0    A                                * 645FF
-        GOYES   L_6466C                          * 64602
+        GOYES   POS$REV.loop2                    * 64602
         R1=A.F  A                                * 64604
         R2=C.F  A                                * 6460A
         A=R3.F  A                                * 64610
         GOSUB   SUB_64727                        * 64616
         ?C=0    A                                * 6461A
-        GOYES   L_6466C                          * 6461D
+        GOYES   POS$REV.loop2                    * 6461D
         R3=A.F  A                                * 6461F
         R4=C.F  A                                * 64625
         A=R0.F  A                                * 6462B
         ?A=0    A                                * 64631
-        GOYES   L_6466C                          * 64634
+        GOYES   POS$REV.loop2                    * 64634
         C=R2.F  A                                * 64636
         C=C-A   A                                * 6463C
-        GOC     L_6466C                          * 6463E
+        GOC     POS$REV.loop2                    * 6463E
         ?ST=1   1                                * 64641
-        GOYES   L_64672                          * 64644
+        GOYES   POS$REV.L3                       * 64644
         C=C+1   A                                * 64646
         D=C     A                                * 64648
         A=A-1   A                                * 6464A
@@ -1400,23 +1400,23 @@ L_645C5:
         R2=A.F  A                                * 64656
         C=R4.F  A                                * 6465C
         D=D-C   A                                * 64662
-        GOC     L_6466C                          * 64664
+        GOC     POS$REV.loop2                    * 64664
         D=D+1   A                                * 64667
-        GONC    L_646A6                          * 64669
-L_6466C:
+        GONC    POS$REV.loop5                    * 64669
+POS$REV.loop2:
         A=0     A                                * 6466C
-        GOTO    L_64710                          * 6466E
-L_64672:
+        GOTO    POS$REV.L11                      * 6466E
+POS$REV.L3:
         B=A     A                                * 64672
         A=R2.F  A                                * 64674
         C=R4.F  A                                * 6467A
         A=A-C   A                                * 64680
-        GOC     L_6466C                          * 64682
+        GOC     POS$REV.loop2                    * 64682
         A=A+1   A                                * 64685
         ?A<B    A                                * 64687
-        GOYES   L_6468E                          * 6468A
+        GOYES   POS$REV.L4                       * 6468A
         A=B     A                                * 6468C
-L_6468E:
+POS$REV.L4:
         C=A     A                                * 6468E
         D=C     A                                * 64690
         D=D+1   A                                * 64692
@@ -1425,44 +1425,44 @@ L_6468E:
         C=R1.F  A                                * 64698
         A=A+C   A                                * 6469E
         R2=A.F  A                                * 646A0
-L_646A6:
+POS$REV.loop5:
         D=D-1   A                                * 646A6
-        GOC     L_6466C                          * 646A8
+        GOC     POS$REV.loop2                    * 646A8
         D0=A                                     * 646AB
         A=R3.F  A                                * 646AE
         D1=A                                     * 646B4
         A=R4.F  A                                * 646B7
         B=A     A                                * 646BD
-L_646BF:
+POS$REV.loop6:
         B=B-1   A                                * 646BF
-        GOC     L_646FB                          * 646C1
+        GOC     POS$REV.L10                      * 646C1
         A=DAT0  B                                * 646C4
         C=DAT1  B                                * 646C7
         ?C#A    B                                * 646CA
-        GOYES   L_646D8                          * 646CD
+        GOYES   POS$REV.L7                       * 646CD
         D0=D0+  2                                * 646CF
         D1=D1+  2                                * 646D2
-        GONC    L_646BF                          * 646D5
-L_646D8:
+        GONC    POS$REV.loop6                    * 646D5
+POS$REV.L7:
         A=R2.F  A                                * 646D8
         D0=A                                     * 646DE
         ?ST=1   1                                * 646E1
-        GOYES   L_646EC                          * 646E4
+        GOYES   POS$REV.L8                       * 646E4
         D0=D0+  2                                * 646E6
-        GONC    L_646EF                          * 646E9
-L_646EC:
+        GONC    POS$REV.L9                       * 646E9
+POS$REV.L8:
         D0=D0-  2                                * 646EC
-L_646EF:
+POS$REV.L9:
         AD0EX                                    * 646EF
         R2=A.F  A                                * 646F2
-        GONC    L_646A6                          * 646F8
-L_646FB:
+        GONC    POS$REV.loop5                    * 646F8
+POS$REV.L10:
         C=R1.F  A                                * 646FB
         A=R2.F  A                                * 64701
         A=A-C   A                                * 64707
         ASRB.F  A                                * 64709
         A=A+1   A                                * 6470E
-L_64710:
+POS$REV.L11:
         R0=A.F  A                                * 64710
         GOSBVL  PUSH#                            * 64716
         A=DAT0  A                                * 6471D
@@ -1475,18 +1475,18 @@ SUB_64727:
         A=DAT0  A                                * 6472A
         LC(5)   DOCHAR                           * 6472D
         ?C#A    A                                * 64734
-        GOYES   L_64740                          * 64737
+        GOYES   SUB_64727.L1                     * 64737
         C=0     A                                * 64739
         C=C+1   A                                * 6473B
-        GONC    L_64754                          * 6473D
-L_64740:
+        GONC    SUB_64727.L2                     * 6473D
+SUB_64727.L1:
         D0=D0+  5                                * 64740
         A=DAT0  A                                * 64743
         D1=A                                     * 64746
         D1=D1-  5                                * 64749
         CD1EX                                    * 6474C
         CSRB.F  A                                * 6474F
-L_64754:
+SUB_64727.L2:
         D0=D0+  5                                * 64754
         AD0EX                                    * 64757
         RTN                                      * 6475A
@@ -1523,10 +1523,10 @@ NEXTCOMPOB:
         ASSEMBLE
         GOSBVL  POP#                             * 64810
         ?A#0    A                                * 64817
-        GOYES   L_64822                          * 6481A
+        GOYES   NEXTCOMPOB.L1                    * 6481A
         LC(1)   #5                               * 6481C
         A=C     P                                * 6481F
-L_64822:
+NEXTCOMPOB.L1:
         C=DAT1  A                                * 64822
         C=C+A   A                                * 64825
         CD1EX                                    * 64827
@@ -1534,25 +1534,25 @@ L_64822:
         A=DAT1  A                                * 6482C
         LC(5)   SEMI                             * 6482F
         ?C#A    A                                * 64836
-        GOYES   L_6484D                          * 64839
+        GOYES   NEXTCOMPOB.L3                    * 64839
         C=RSTK                                   * 6483B
         D1=C                                     * 6483D
         LC(5)   FALSE                            * 64840
-L_64847:
+NEXTCOMPOB.loop2:
         A=C     A                                * 64847
         PC=(A)                                   * 64849
-L_6484D:
+NEXTCOMPOB.L3:
         C=A     A                                * 6484D
         CD1EX                                    * 6484F
         RSTK=C                                   * 64852
         A=DAT1  A                                * 64854
         LC(5)   PRLG                             * 64857
         ?C#A    A                                * 6485E
-        GOYES   L_6486A                          * 64861
+        GOYES   NEXTCOMPOB.L4                    * 64861
         C=RSTK                                   * 64863
         RSTK=C                                   * 64865
         D1=C                                     * 64867
-L_6486A:
+NEXTCOMPOB.L4:
         C=RSTK                                   * 6486A
         A=C     A                                * 6486C
         C=RSTK                                   * 6486E
@@ -1576,7 +1576,7 @@ L_6486A:
         D1=D1-  5                                * 648AD
         DAT1=A  A                                * 648B0
         LC(5)   TRUE                             * 648B3
-        GONC    L_64847                          * 648BA
+        GONC    NEXTCOMPOB.loop2                 * 648BA
 
 >LASTRAM-WORD:
         C=B     A                                * 648BD
@@ -1604,15 +1604,15 @@ L_6486A:
 
         CODE                                     * 648EF  532 nibbles
           ST=0    10                             * 648F9
-L_648FC:
+>LASTRAM-WORD.loop1:
           GOSBVL  SAVPTR                         * 648FC
           GOSBVL  ROOM                           * 64903
           LA(5)   #00005                         * 6490A
           ?C>A    A                              * 64914
-          GOYES   L_64924                        * 64917
+          GOYES   >LASTRAM-WORD.L2               * 64917
           GOSBVL  SUB_12D68                      * 64919
-          GOTO    L_648FC                        * 64920
-L_64924:
+          GOTO    >LASTRAM-WORD.loop1            * 64920
+>LASTRAM-WORD.L2:
           R0=C                                   * 64924
           C=0     S                              * 64927
           D0=(5)  INITEN                         * 6492A
@@ -1682,15 +1682,15 @@ L_64924:
           R2=C                                   * 649F1
           AD0EX                                  * 649F4
           D1=A                                   * 649F7
-L_649FA:
+>LASTRAM-WORD.loop3:
           C=R0                                   * 649FA
           A=R4                                   * 649FD
           A=A-C   A                              * 64A00
-          GOC     L_64A10                        * 64A02
+          GOC     >LASTRAM-WORD.L4               * 64A02
           R4=A                                   * 64A05
           GOSUB   SUB_64ADC                      * 64A08
-          GOTO    L_649FA                        * 64A0C
-L_64A10:
+          GOTO    >LASTRAM-WORD.loop3            * 64A0C
+>LASTRAM-WORD.L4:
           C=C+A   A                              * 64A10
           GOSUB   SUB_64ADC                      * 64A12
           D0=(5)  DSKTOP                         * 64A16
@@ -1713,7 +1713,7 @@ L_64A10:
           D1=A                                   * 64A4F
           D1=D1+  5                              * 64A52
           ?C#A    A                              * 64A55
-          GOYES   L_64A72                        * 64A58
+          GOYES   >LASTRAM-WORD.L5               * 64A58
           C=0     A                              * 64A5A
           C=DAT1  X                              * 64A5C
           A=C     A                              * 64A60
@@ -1724,7 +1724,7 @@ L_64A10:
           AD1EX                                  * 64A6A
           A=A+C   A                              * 64A6D
           D1=A                                   * 64A6F
-L_64A72:
+>LASTRAM-WORD.L5:
           D1=D1+  3                              * 64A72
           CD1EX                                  * 64A75
           D1=C                                   * 64A78
@@ -3262,16 +3262,16 @@ SUB_657B9:
         C=0     A                                * 657BD
         LC(1)   #6                               * 657BF
         A=C     A                                * 657C2
-        GOTO    L_657D1                          * 657C4
-L_657C8:
+        GOTO    SUB_657B9.L2                     * 657C4
+SUB_657B9.loop1:
         BSR     W                                * 657C8
         CSL     W                                * 657CB
         CSL     W                                * 657CE
-L_657D1:
+SUB_657B9.L2:
         LC(2)   #30                              * 657D1
         C=B     P                                * 657D5
         A=A-1   A                                * 657D8
-        GONC    L_657C8                          * 657DA
+        GONC    SUB_657B9.loop1                  * 657DA
         RTN                                      * 657DD
 
 * refs (1): 657B9
@@ -3281,16 +3281,16 @@ SUB_657DF:
         LC(2)   #23                              * 657E3
         B=0     W                                * 657E7
         P=      5                                * 657EA
-L_657EC:
+SUB_657DF.loop1:
         B=B+B   W                                * 657EC
         SETHEX                                   * 657EF
         A=A+A   WP                               * 657F1
         SETDEC                                   * 657F4
-        GONC    L_657FC                          * 657F6
+        GONC    SUB_657DF.L2                     * 657F6
         B=B+1   W                                * 657F9
-L_657FC:
+SUB_657DF.L2:
         C=C-1   A                                * 657FC
-        GONC    L_657EC                          * 657FE
+        GONC    SUB_657DF.loop1                  * 657FE
         P=      0                                * 65801
         SETHEX                                   * 65803
         RTNCC                                    * 65805
@@ -3299,29 +3299,29 @@ L_657FC:
 * A C -> A C = quotient, B = remainder: 64-bit division in the current mode (hex or decimal); C=0 does not return
 IntDivW:
         P=      0                                * 65807
-L_65809:
+IntDivW.loop1:
         ?C#0    S                                * 65809
-        GOYES   L_6581B                          * 6580C
+        GOYES   IntDivW.L2                       * 6580C
         ?C>=A   W                                * 6580E
-        GOYES   L_6581B                          * 65811
+        GOYES   IntDivW.L2                       * 65811
         CSL     W                                * 65813
         P=P+1                                    * 65816
-        GONC    L_65809                          * 65818
-L_6581B:
+        GONC    IntDivW.loop1                    * 65818
+IntDivW.L2:
         B=A     W                                * 6581B
         A=0     W                                * 6581E
         A=A-1   P                                * 65821
-L_65824:
+IntDivW.loop3:
         A=A+1   P                                * 65824
-L_65827:
+IntDivW.loop4:
         B=B-C   W                                * 65827
-        GONC    L_65824                          * 6582A
+        GONC    IntDivW.loop3                    * 6582A
         B=B+C   W                                * 6582D
         P=P-1                                    * 65830
-        GOC     L_6583B                          * 65832
+        GOC     IntDivW.L5                       * 65832
         CSR     W                                * 65835
-        GONC    L_65827                          * 65838
-L_6583B:
+        GONC    IntDivW.loop4                    * 65838
+IntDivW.L5:
         C=A     W                                * 6583B
         P=      0                                * 6583E
         RTNCC                                    * 65840
@@ -3330,15 +3330,15 @@ L_6583B:
 SUB_65842:
         C=C&A   B                                * 65842
         B=0     A                                * 65846
-L_65848:
+SUB_65842.loop1:
         ?C=0    B                                * 65848
-        GOYES   L_65858                          * 6584B
-L_6584D:
+        GOYES   SUB_65842.L3                     * 6584B
+SUB_65842.loop2:
         C=C+C   B                                * 6584D
-        GONC    L_6584D                          * 65850
+        GONC    SUB_65842.loop2                  * 65850
         B=B+1   A                                * 65853
-        GONC    L_65848                          * 65855
-L_65858:
+        GONC    SUB_65842.loop1                  * 65855
+SUB_65842.L3:
         C=B     A                                * 65858
         ?CBIT=0 0                                * 6585A
         RTNYES                                   * 6585F
@@ -3350,13 +3350,13 @@ SUB_65863:
         C=C+C   WP                               * 65866
         CBIT=1  1                                * 65869
         ?ABIT=0 0                                * 6586E
-        GOYES   L_6587F                          * 65873
+        GOYES   SUB_65863.L1                     * 65873
         CBIT=0  1                                * 65875
         CBIT=1  0                                * 6587A
-L_6587F:
+SUB_65863.L1:
         ASRB.F  X                                * 6587F
         RTN                                      * 65884
-L_65886:
+SUB_65863.L2:
         P=      0                                * 65886
         SETHEX                                   * 65888
         D0=(5)  ANNCTRL                          * 6588A
@@ -3366,31 +3366,31 @@ L_65886:
         A=0     XS                               * 6589C
         LC(2)   #78                              * 6589F
         GOSUB   SUB_65842                        * 658A3
-        GOC     L_658AF                          * 658A7
+        GOC     SUB_65863.L3                     * 658A7
         ABIT=1  11                               * 658AA
-L_658AF:
+SUB_65863.L3:
         LC(2)   #E6                              * 658AF
         GOSUB   SUB_65842                        * 658B3
-        GOC     L_658BF                          * 658B7
+        GOC     SUB_65863.L4                     * 658B7
         ABIT=1  10                               * 658BA
-L_658BF:
+SUB_65863.L4:
         LC(2)   #D5                              * 658BF
         GOSUB   SUB_65842                        * 658C3
-        GOC     L_658CF                          * 658C7
+        GOC     SUB_65863.L5                     * 658C7
         ABIT=1  9                                * 658CA
-L_658CF:
+SUB_65863.L5:
         LC(2)   #8B                              * 658CF
         GOSUB   SUB_65842                        * 658D3
-        GOC     L_658DF                          * 658D7
+        GOC     SUB_65863.L6                     * 658D7
         ABIT=1  8                                * 658DA
-L_658DF:
+SUB_65863.L6:
         C=0     W                                * 658DF
-L_658E2:
+SUB_65863.loop7:
         GOSUB   SUB_65863                        * 658E2
         GOSUB   SUB_65863                        * 658E6
         P=P+1                                    * 658EA
         ?P#     6                                * 658EC
-        GOYES   L_658E2                          * 658EF
+        GOYES   SUB_65863.loop7                  * 658EF
         CSL     WP                               * 658F1
         P=      0                                * 658F4
         LC(1)   #E                               * 658F6
@@ -3398,28 +3398,28 @@ L_658E2:
         C=C+C   W                                * 658FC
         A=C     W                                * 658FF
         LC(2)   #44                              * 65902
-L_65906:
+SUB_65863.loop8:
         GOSBVL  SUB_4DAFD                        * 65906
         ?CBIT=1 9                                * 6590D
-        GOYES   L_65906                          * 65912
+        GOYES   SUB_65863.loop8                  * 65912
         LC(2)   #1D                              * 65914
         B=C     A                                * 65918
-L_6591A:
+SUB_65863.loop9:
         LC(2)   #44                              * 6591A
-L_6591E:
+SUB_65863.loop10:
         GOSBVL  SUB_4DAFD                        * 6591E
         ?CBIT=1 8                                * 65925
-        GOYES   L_6591E                          * 6592A
+        GOYES   SUB_65863.loop10                 * 6592A
         D0=(5)  #0011D                           * 6592C
         C=0     A                                * 65933
         ?ABIT=0 0                                * 65935
-        GOYES   L_6593E                          * 6593A
+        GOYES   SUB_65863.L11                    * 6593A
         C=C+1   A                                * 6593C
-L_6593E:
+SUB_65863.L11:
         DAT0=C  1                                * 6593E
         ASRB                                     * 65942
         B=B-1   B                                * 65945
-        GONC    L_6591A                          * 65948
+        GONC    SUB_65863.loop9                  * 65948
         RTNCC                                    * 6594B
         BSS     1                                * 6594D  zeros
 
@@ -3427,13 +3427,13 @@ L_6593E:
 putnibs:
         CON(5)  (*)+5                            * 6594E  primitive code object
         ST=1    0                                * 65953
-        GOTO    L_65962                          * 65956
+        GOTO    getnibs.L1                       * 65956
 
 * hxs hxs -> hxs'
 getnibs:
         CON(5)  (*)+5                            * 6595A  primitive code object
         ST=0    0                                * 6595F
-L_65962:
+getnibs.L1:
         A=DAT1  A                                * 65962
         AD1EX                                    * 65965
         D1=D1+  10                               * 65968
@@ -3443,37 +3443,37 @@ L_65962:
         D1=D1+  5                                * 65974
         D=D+1   A                                * 65977
         ?ST=0   0                                * 65979
-        GOYES   L_65991                          * 6597C
+        GOYES   getnibs.L2                       * 6597C
         A=DAT1  A                                * 6597E
         D1=D1+  5                                * 65981
         D=D+1   A                                * 65984
         GOSBVL  SAVPTR                           * 65986
-        GOTO    L_6599B                          * 6598D
-L_65991:
+        GOTO    getnibs.L3                       * 6598D
+getnibs.L2:
         GOSBVL  SAVPTR                           * 65991
         A=DAT1  A                                * 65998
-L_6599B:
+getnibs.L3:
         D1=A                                     * 6599B
         D1=D1+  5                                * 6599E
         C=DAT1  A                                * 659A1
         C=C-CON A,6                              * 659A4
-        GOC     L_659D7                          * 659AA
+        GOC     getnibs.L5                       * 659AA
         D1=D1+  5                                * 659AD
         CPEX    0                                * 659B0
         ?C#0    A                                * 659B4
-        GOYES   L_659D7                          * 659B7
+        GOYES   getnibs.L5                       * 659B7
         C=R0                                     * 659B9
         D0=C                                     * 659BC
         ?ST=0   0                                * 659BF
-        GOYES   L_659CD                          * 659C2
+        GOYES   getnibs.L4                       * 659C2
         CD0EX                                    * 659C4
         CD1EX                                    * 659C7
         CD0EX                                    * 659CA
-L_659CD:
+getnibs.L4:
         C=DAT0  WP                               * 659CD
         DAT1=C  WP                               * 659D1
         P=      0                                * 659D5
-L_659D7:
+getnibs.L5:
         GOVLNG  GETPTRLOOP                       * 659D7
         RPL
 
@@ -3497,7 +3497,7 @@ OBJ_65A29:
 
 * refs (2): 68402 6D1D6
 OBJ_65A38:
-        :: DUP GOTO L_6E12C ;                    * 65A38
+        :: DUP GOTO OBJ_6E11D.L1 ;               * 65A38
 
 * refs (1): 1F1F7
 OBJ_65A51:

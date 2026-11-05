@@ -52,7 +52,7 @@ ROMP_0E2_013:
           UNIT %0_2A2B4 $ "in" %4 um^ umEND ;    * EA18B
           UNIT %0_2A2B4 $ "lbf" umEND ;          * EA1B7
           UNIT %0_2A2B4 $ "ft"                   * EA1DB
-L_EA1F3:
+ROMP_0E2_013.L1:
             $ "lbf" um* umEND ;                  * EA1F3
           UNIT %0_2A2B4 $ "lbf" $ "ft" um/ umEND ; * EA212
           UNIT %0_2A2B4 $ "lb" umEND ;           * EA249
@@ -76,7 +76,7 @@ L_EA1F3:
           UNIT %0_2A2B4 $ "lb" $ "in" %2 um^ um* umEND ; * EA568
           UNIT %0_2A2B4 $ "ft" tok_s %2 um^ um/ umEND ; * EA5A7
           UNIT %0_2A2B4 $ "r"                    * EA5DD
-L_EA5F3:
+ROMP_0E2_013.L2:
             $ "min" %2 um^ um/ umEND ;           * EA5F3
           UNIT %0_2A2B4 $ "r" $ "min" um/ umEND ; * EA61C
           UNIT %0_2A2B4 $ "ft" %3 um^ umEND ;    * EA651
@@ -97,7 +97,7 @@ L_EA5F3:
           UNIT %0_2A2B4 $ "Btu" $ "h" $ "ft" %2 um^ um* um/ umEND ; * EA981
           UNIT %0_2A2B4 $ "hp" umEND ;           * EA9D3
           UNIT                                   * EA9F5
-L_EA9FA:
+ROMP_0E2_013.L3:
             %0_2A2B4 $ "lbf" tok_s um* $ "ft" %2 um^ um/ umEND ; * EA9FA
           UNIT %0_2A2B4 $ "ft" %2 um^ tok_s um/ umEND ; * EAA40
           UNIT %0_2A2B4 $ "ft" %3 um^ $ "min" um/ umEND ; * EAA76

@@ -47,6 +47,18 @@ COMMENT_COL = 48
 # pictures packed hex strings.
 EQLIB = (0xE384B, 0x100000)
 
+# Generated names: branch targets, and any of them in a comment.
+LOCAL = re.compile(r"L_[0-9A-F]{5}")
+PLACEHOLDER = re.compile(r"\b(?:L|SUB|OBJ)_([0-9A-F]{5})\b")
+
+# Words that take a message number, and words that take a system flag.
+MESSAGE_WORDS = {"ERROROUT", "ERRORSTO", "GETTHEMESG", "JstGetTHEMESG", "msg>TAG", "DO#EXIT"}
+FLAG_WORDS = {"TestSysFlag", "SetSysFlag", "ClrSysFlag", "SysITE"}
+
+# System flags that work as fields, which the flag browser doesn't list.
+FLAG_FIELDS = [(5, 10, "binary word size"), (11, 12, "binary base"), (15, 16, "coordinate system"),
+               (17, 18, "angle mode"), (45, 48, "display digits"), (49, 50, "display format")]
+
 # Secondaries of up to TINY_WORDS named words are named after their content
 # (`~sstDISP;RDUP;GsstFIN`), if that is at most TINY_NAME characters.
 TINY_WORDS = 3
@@ -1540,7 +1552,96 @@ class Generator:
 
     def resolve_all(self):
         for ln in self.lines:
+            self.text(ln)       # gives every target its label
+        self.name_locals()
+        for ln in self.lines:
             ln.parts = [self.text(ln)]
+
+    def name_locals(self):
+        """Branch targets are named after the routine they are in: SKIPOB.L2,
+        or SKIPOB.loop3 for a target of a branch back from the same routine,
+        numbered from the top of the routine."""
+        labels = sorted(self.label)
+        tops = [a for a in labels if not LOCAL.fullmatch(self.label[a])]
+        count = defaultdict(int)
+        for a in labels:
+            if not LOCAL.fullmatch(self.label[a]):
+                continue
+            i = bisect.bisect_right(tops, a)
+            if i == 0:
+                continue
+            top, end = tops[i - 1], tops[i] if i < len(tops) else 0x100000
+            back = any(isinstance(f, int) and a <= f < end for f, _ in self.xrefs.get(a, ()))
+            count[top] += 1
+            del self.used[self.label[a]]
+            self.label[a] = "%s.%s%d" % (self.label[top], "loop" if back else "L", count[top])
+            self.used[self.label[a]] = a
+
+    def load_messages(self):
+        """The libraries' message tables, by message number (library * 256
+        + index), and the flag browser's text for each system flag."""
+        r = self.rom
+        self.message_text = {}
+        for lib in self.s["libs"]:
+            a = lib.message
+            if a is None:
+                continue
+            if PROLOGS.get(r.addr(a)) == "DOACPTR":
+                a = r.addr(a + 5)
+            kind = PROLOGS.get(r.addr(a))
+            if kind not in ("DOARRY", "DOLNKARRY") or PROLOGS.get(r.addr(a + 10)) != "DOCSTR" or r.addr(a + 15) != 1:
+                continue
+            n = r.addr(a + 20)
+            p = a + 25 + (5 * n if kind == "DOLNKARRY" else 0)
+            for i in range(1, n + 1):
+                if kind == "DOLNKARRY":
+                    f = a + 25 + 5 * (i - 1)
+                    if not r.addr(f):
+                        continue
+                    q = (f + r.addr(f)) & 0xFFFFF
+                else:
+                    q = p
+                size = r.addr(q)
+                self.message_text[lib.num * 256 + i] = "".join(
+                    chr(b) if b >= 32 else " " for b in (r.byte(q + 5 + 2 * k) for k in range((size - 5) // 2)))
+                p = q + size
+        self.flag_text = {}
+        for num, text in sorted((k, v) for k, v in self.message_text.items() if k >> 8 == 0xB9):
+            m = re.fullmatch(r"(\d\d) (.*)", text)
+            if m:
+                self.flag_text.setdefault(int(m.group(1)), []).append(m.group(2))
+        for lo, hi, what in FLAG_FIELDS:
+            for f in range(lo, hi + 1):
+                self.flag_text.setdefault(f, [what])
+
+    def number_of(self, tok):
+        """The value of a word naming a binary integer, or None."""
+        a = self.used.get(tok)
+        if a is None or a + 10 > len(self.n) or self.word(a) != sasm.PROLOG["DOBINT"]:
+            return None
+        return self.word(a + 5)
+
+    def explain(self, ln):
+        """Say what the numbers on a line mean: message numbers, in words,
+        and system flags, as the flag browser describes them."""
+        if not ln.size or not ln.verify:
+            return
+        toks = ln.parts[0].split()
+        notes = []
+        for i, t in enumerate(toks):
+            if t == "#" and i + 1 < len(toks) and re.fullmatch(r"[0-9A-F]{3,4}", toks[i + 1]):
+                v = int(toks[i + 1], 16)
+                if v in self.message_text and (v >= 0xA000 or MESSAGE_WORDS & set(toks[i + 2:i + 5])):
+                    notes.append('"%s"' % self.message_text[v])
+            elif t in self.message_eq and self.message_eq[t] in self.message_text:
+                notes.append('"%s"' % self.message_text[self.message_eq[t]])
+            elif t in FLAG_WORDS and i:
+                hexa = i > 1 and toks[i - 2] == "#" and sasm.HEX.fullmatch(toks[i - 1])
+                v = int(toks[i - 1], 16) if hexa else self.number_of(toks[i - 1])
+                if v in self.flag_text:
+                    notes.append("flag -%d: %s" % (v, " / ".join(self.flag_text[v])))
+        if notes:
+            ln.comment = "  ".join(([ln.comment] if ln.comment else []) + notes)
 
     def verify(self):
         asm = sasm.Assembler()
@@ -1852,6 +1953,7 @@ class Generator:
         self.done = set()
         for _, _, lines in blocks:
             for k, ln in enumerate(self.pack(lines)):
+                self.explain(ln)
                 if ln.size:
                     for _ in range(self.ends.pop(ln.pc, 0)):
                         out.append("%-*s * %05X" % (COMMENT_COL, "        ENDLENGTH", ln.pc))
@@ -1863,7 +1965,12 @@ class Generator:
                     mode = ln.after
         f = SRC / path
         f.parent.mkdir(parents=True, exist_ok=True)
-        f.write_text(hp_map("\n".join(out)) + "\n", encoding="utf-8", newline="\n")
+        text = PLACEHOLDER.sub(self.current_name, "\n".join(out))
+        f.write_text(hp_map(text) + "\n", encoding="utf-8", newline="\n")
+
+    def current_name(self, m):
+        """A generated name in a comment, as the label is now called."""
+        return self.label.get(int(m.group(1), 16), m.group(0))
 
     def run(self, check=True):
         # Replace only what this writes (the directory may hold a README)
@@ -1879,6 +1986,8 @@ class Generator:
         self.name_labels()
         self.resolve_all()
         self.verify()
+        self.load_messages()
+        self.message_eq = {nm: a for a, nm in self.eq.items() if a in self.messages}
         files = self.write()
         print("wrote %d files, %d lines, %d labels (%d derived from where they are used), %d equates" % (
             len(files) + 2, len(self.lines), len(self.label), len(self.derived), len(self.eq)))

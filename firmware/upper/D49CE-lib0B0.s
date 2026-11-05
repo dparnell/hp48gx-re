@@ -285,9 +285,9 @@ ROMP_0B0_01B:
         :: BINT32 IFECallFieldMH ?SEMI           * D578C
           4GETLAM ROMPTR 0B0 07D ITE             * D57A0
           :: DROP                                * D57B5
-            { # B903 ROMPTR 0B0 01C } ;          * D57BF
-          { # B904 ROMPTR 0B0 01C }              * D57E3
-          { # B905 ROMPTR 0B0 01D } TWO{}N ;     * D5802
+            { # B903 ROMPTR 0B0 01C } ;          * D57BF  "Reset value"
+          { # B904 ROMPTR 0B0 01C }              * D57E3  "Delete value"
+          { # B905 ROMPTR 0B0 01D } TWO{}N ;     * D5802  "Reset all"
 
 * ROMPTR 0B0 01C
 * refs (1): D49CE
@@ -477,7 +477,7 @@ ROMP_0B0_031:
 ROMP_0B0_032:
         :: BINT35 IFECallFieldMH ?SEMI           * D61D3
           ' ROMPTR 0B0 033 ?ROMPTR@ 4GETLAM ROMPTR 0B0 0B9 >TCOMP BINT17 * D61E7
-          4GETLAM ROMPTR 0B0 035 DUPLENCOMP #1= ITE # B907 # B906 * D6216
+          4GETLAM ROMPTR 0B0 035 DUPLENCOMP #1= ITE # B907 # B906 * D6216  "Valid object type:"  "Valid object types:"
           3UNROLL BINT1 ROMPTR 0B3 000 DUP BINT0 EQ NOTcase * D6249  ~Choose
           :: IT DROP                             * D6272
             SetDA123NoCh ;                       * D6281
@@ -520,40 +520,40 @@ ROMP_0B0_035:
           DUPLENCOMP 2NULLLAM{} BIND 1GETLAM #1+_ONE_DO 2GETLAM INDEX@ * D6439
           NTHCOMPDROP                            * D645C
           { MINUSONE                             * D6461
-            { # B908                             * D646B
+            { # B908                             * D646B  "Any object"
               :: BINT1 FALSE NULL$ ; }           * D647A
             BINT0                                * D6498
-            { # B909                             * D649D
+            { # B909                             * D649D  "Real number"
               :: BINT1 FALSE NULL$ ; }           * D64AC
             BINT1                                * D64CA
-            { # B90A                             * D64CF
+            { # B90A                             * D64CF  "(Complex num)"
               :: BINT2 FALSE $ "()" ; }          * D64DE
             BINT2                                * D6505
-            { # B90B                             * D650A
+            { # B90B                             * D650A  ""String""
               :: BINT2 FALSE $ "\"\"" ; }        * D6519
             BINT3                                * D6540
-            { # B90C                             * D6545
+            { # B90C                             * D6545  "[ Real array ]"
               :: BINT2 FALSE $ "[]" ; }          * D6554
             BINT4                                * D657B
-            { # B90D                             * D6580
+            { # B90D                             * D6580  "[(Cmpl array)]"
               :: BINT3 FALSE $ "[()]" ; }        * D658F
             BINT5                                * D65BA
-            { # B90E                             * D65BF
+            { # B90E                             * D65BF  "{ List }"
               :: BINT2 FALSE $ "{}" ; }          * D65CE
             BINT6                                * D65F5
-            { # B90F                             * D65FA
+            { # B90F                             * D65FA  "Name"
               :: BINT1 FALSE NULL$ ; }           * D6609
             BINT8                                * D6627
-            { # B910                             * D662C
+            { # B910                             * D662C  "« Program »"
               :: BINT3 FALSE $ "« »" ; }         * D663B
             BINT9                                * D6664
-            { # B911                             * D6669
+            { # B911                             * D6669  "'Algebraic'"
               :: BINT2 TRUE $ "''" ; }           * D6678
             BINT10                               * D669F
-            { # B912                             * D66A4
+            { # B912                             * D66A4  "# Binary int"
               :: BINT2 FALSE $ "#" ; }           * D66B3
             BINT13                               * D66D8
-            { # B913                             * D66DD
+            { # B913                             * D66DD  "_Unit object"
               :: BINT1 FALSE $ "_" ; }           * D66EC
           }                                      * D6711
           EQLookup DROP LOOP 1GETABND {}N ;      * D6716

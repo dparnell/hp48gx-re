@@ -341,7 +341,7 @@ COND~3:
 * ROMPTR 0C2 059
 * refs (1): 90007
 ROMP_0C2_059:
-        :: BINT54 TestSysFlag case %%0           * 9851F
+        :: BINT54 TestSysFlag case %%0           * 9851F  flag -54: Tiny element → 0 / Use tiny element
           CODE                                   * 98538  220 nibbles
             GOSBVL  SAVPTR                       * 98542
             C=DAT1  A                            * 98549
@@ -354,77 +354,77 @@ ROMP_0C2_059:
             R0=A                                 * 9855D
             LC(5)   DOREAL                       * 98560
             ?D=C    A                            * 98567
-            GOYES   L_9856E                      * 9856A
+            GOYES   ROMP_0C2_059.L1              * 9856A
             A=A+A   A                            * 9856C
-L_9856E:
+ROMP_0C2_059.L1:
             C=R0                                 * 9856E
             D=C     A                            * 98571
             LC(5)   #0004F                       * 98573
             ?D<C    A                            * 9857A
-            GOYES   L_98589                      * 9857D
+            GOYES   ROMP_0C2_059.L2              * 9857D
             A=0     W                            * 9857F
             B=0     W                            * 98582
-            GOTO    L_98617                      * 98585
-L_98589:
+            GOTO    ROMP_0C2_059.L9              * 98585
+ROMP_0C2_059.L2:
             C=A     A                            * 98589
-            GOSBVL  L_35790                      * 9858B
+            GOSBVL  PUTCMPEL.L6                  * 9858B
             C=B     A                            * 98592
             D1=D1+  10                           * 98594
             C=C-1   A                            * 98597
             RSTK=C                               * 98599
             LC(5)   #99999                       * 9859B
             D=C     A                            * 985A2
-L_985A4:
+ROMP_0C2_059.loop3:
             A=DAT1  W                            * 985A4
             ?A=0    M                            * 985A8
-            GOYES   L_985D4                      * 985AB
+            GOYES   ROMP_0C2_059.L6              * 985AB
             GOSBVL  SPLITA                       * 985AD
             P=      0                            * 985B4
             LC(5)   #50000                       * 985B6
             C=C+A   A                            * 985BD
             P=      13                           * 985BF
-L_985C1:
+ROMP_0C2_059.loop4:
             ?B=0    WP                           * 985C1
-            GOYES   L_985CD                      * 985C4
+            GOYES   ROMP_0C2_059.L5              * 985C4
             P=P-1                                * 985C6
             C=C-1   A                            * 985C8
-            GONC    L_985C1                      * 985CA
-L_985CD:
+            GONC    ROMP_0C2_059.loop4           * 985CA
+ROMP_0C2_059.L5:
             ?D<=C   A                            * 985CD
-            GOYES   L_985D4                      * 985D0
+            GOYES   ROMP_0C2_059.L6              * 985D0
             D=C     A                            * 985D2
-L_985D4:
+ROMP_0C2_059.L6:
             SETHEX                               * 985D4
             D1=D1+  16                           * 985D6
             C=RSTK                               * 985D9
             C=C-1   A                            * 985DB
             RSTK=C                               * 985DD
-            GONC    L_985A4                      * 985DF
+            GONC    ROMP_0C2_059.loop3           * 985DF
             SETDEC                               * 985E2
             P=      0                            * 985E4
             C=D     A                            * 985E6
             C=C+1   A                            * 985E8
-            GOC     L_9860A                      * 985EA
+            GOC     ROMP_0C2_059.L8              * 985EA
             LC(5)   #50000                       * 985ED
             D=D-C   A                            * 985F4
             A=R0                                 * 985F6
             SETHEX                               * 985F9
             A=A-1   A                            * 985FB
             C=0     A                            * 985FD
-L_985FF:
+ROMP_0C2_059.loop7:
             SETDEC                               * 985FF
             C=C+D   A                            * 98601
             SETHEX                               * 98603
             A=A-1   A                            * 98605
-            GONC    L_985FF                      * 98607
-L_9860A:
+            GONC    ROMP_0C2_059.loop7           * 98607
+ROMP_0C2_059.L8:
             A=0     W                            * 9860A
             B=0     W                            * 9860D
             P=      14                           * 98610
             B=B+1   P                            * 98612
             A=C     A                            * 98615
-L_98617:
-            GOVLNG  L_37915                      * 98617
+ROMP_0C2_059.L9:
+            GOVLNG  OBJ_37898.L6                 * 98617
           ENDCODE                                * 9861E
         ;                                        * 9861E
 
@@ -435,8 +435,8 @@ ROMP_0C2_05A:
           HST=0   3                              * 9862D
           GOSBVL  SUB_2A0B1                      * 98630
           ?D#0    M                              * 98637
-          GOYES   L_98654                        * 9863A
-L_9863C:
+          GOYES   ROMP_0C2_05A.L2                * 9863A
+ROMP_0C2_05A.loop1:
           SETHEX                                 * 9863C
           GOSBVL  GETPTR                         * 9863E
           D1=D1-  5                              * 98645
@@ -444,7 +444,7 @@ L_9863C:
           A=DAT0  A                              * 9864A
           D0=D0+  5                              * 9864D
           PC=(A)                                 * 98650
-L_98654:
+ROMP_0C2_05A.L2:
           R0=C                                   * 98654
           P=      0                              * 98657
           LC(5)   #50000                         * 98659
@@ -455,23 +455,23 @@ L_98654:
           C=A     W                              * 9866A
           A=R1                                   * 9866D
           A=A-C   A                              * 98670
-          GOC     L_98684                        * 98672
+          GOC     ROMP_0C2_05A.L3                * 98672
           LC(5)   #40000                         * 98675
           ?C<=A   A                              * 9867C
-          GOYES   L_9863C                        * 9867F
-          GONC    L_98690                        * 98681
-L_98684:
+          GOYES   ROMP_0C2_05A.loop1             * 9867F
+          GONC    ROMP_0C2_05A.L4                * 98681
+ROMP_0C2_05A.L3:
           LC(5)   #60000                         * 98684
           ?C>=A   A                              * 9868B
-          GOYES   L_9863C                        * 9868E
-L_98690:
+          GOYES   ROMP_0C2_05A.loop1             * 9868E
+ROMP_0C2_05A.L4:
           ST=0    1                              * 98690
           ST=1    2                              * 98693
           C=0     S                              * 98696
           GOSBVL  SUB_2BF26                      * 98699
           C=R0                                   * 986A0
           A=A+C   A                              * 986A3
-          GOVLNG  L_37915                        * 986A5
+          GOVLNG  OBJ_37898.L6                   * 986A5
         ENDCODE                                  * 986AC
 
 * ROMPTR 0C2 05B
@@ -480,7 +480,7 @@ RREF~1:
         :: BINT1 OVER MDIMS NOTcase doerr501     * 986AC
           RESOROMP ROMPTR 0C2 05C RESOROMP ROMPTR 0C2 05E 2NULLLAM{} BIND * 986CA
           DUP #8* !MAKEHXS 4NULLLAM{} BIND CKREF OBJ_7CD7E 1GETLAM OBJ_7D28D * 986F4
-          ONESWAP 2GETLAM #1+_ONE_DO BINT54 TestSysFlag ITE %%0 * 98721
+          ONESWAP 2GETLAM #1+_ONE_DO BINT54 TestSysFlag ITE %%0 * 98721  flag -54: Tiny element → 0 / Use tiny element
           :: 1GETLAM 2GETLAM INDEX@ 6GETLAM EVAL ; * 98744
           4GETLAM #1- #3* 5PICK TYPERARRY? ?SKIP #2* * 98767
           UNCOERCE%% %%* SWAP 4GETLAM 3GETLAM #> ITE %%0 * 9878A
@@ -555,7 +555,7 @@ RREF~4:
           B=0     W                              * 98B85
           P=      14                             * 98B88
           B=B+1   P                              * 98B8A
-          GOVLNG  L_37915                        * 98B8D
+          GOVLNG  OBJ_37898.L6                   * 98B8D
         ENDCODE                                  * 98B94
 
 LIB0C2.hash:
@@ -577,8 +577,8 @@ LIB0C2.hash:
         CON(5)  0                                * 98BDF  names of length 14
         CON(5)  0                                * 98BE4  names of length 15
         CON(5)  0                                * 98BE9  names of length 16
-        REL(5)  L_98BF3                          * 98BEE  end of the names
-L_98BF3:
+        REL(5)  LIB0C2.hash.L1                   * 98BEE  end of the names
+LIB0C2.hash.L1:
         CON(5)  0                                * 98BF3  command 000 has no name
         ENDLENGTH                                * 98BF8
 

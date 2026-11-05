@@ -111,14 +111,14 @@ InitEdLine~1:
         C=DAT0  A                                * 442E7
         DAT0=A  A                                * 442EA
         ?C>A    A                                * 442ED
-        GOYES   L_44308                          * 442F0
+        GOYES   InitEdLine~1.L1                  * 442F0
         D1=A                                     * 442F2
         D0=C                                     * 442F5
         C=C-B   A                                * 442F8
         GOSBVL  MOVEUP                           * 442FA
         AD1EX                                    * 44301
-        GOTO    L_44323                          * 44304
-L_44308:
+        GOTO    InitEdLine~1.L2                  * 44304
+InitEdLine~1.L1:
         C=C-A   A                                * 44308
         BCEX    A                                * 4430A
         D0=C                                     * 4430C
@@ -129,7 +129,7 @@ L_44308:
         GOSBVL  MOVEDOWN                         * 44318
         C=RSTK                                   * 4431F
         A=C     A                                * 44321
-L_44323:
+InitEdLine~1.L2:
         D0=(5)  DSKTOP                           * 44323
         DAT0=A  A                                * 4432A
         D0=(5)  EDITLINE                         * 4432D
@@ -230,7 +230,7 @@ AddInComLine(st):
         ASSEMBLE
         ST=0    1                                * 444C8
         ST=0    10                               * 444CB
-L_444CE:
+AddInComLine(st).L1:
         GOSBVL  SAVPTR                           * 444CE
         A=DAT1  A                                * 444D5
         D1=A                                     * 444D8
@@ -238,30 +238,30 @@ L_444CE:
         A=DAT1  A                                * 444DE
         LC(5)   #00005                           * 444E1
         A=A-C   A                                * 444E8
-        GOTO    L_4450F                          * 444EA
+        GOTO    Char>Edit.L2                     * 444EA
 
 * refs (3): 4076F 42B11 42D19
 Char>Edit:
         CON(5)  (*)+5                            * 444EE  primitive code object
         ST=1    1                                * 444F3
         ST=0    10                               * 444F6
-L_444F9:
+Char>Edit.loop1:
         GOSBVL  SAVPTR                           * 444F9
         A=DAT1  A                                * 44500
         D1=A                                     * 44503
         LC(5)   #00002                           * 44506
         A=C     A                                * 4450D
-L_4450F:
+Char>Edit.L2:
         D1=D1+  5                                * 4450F
         B=A     A                                * 44512
         GOSBVL  ROOM                             * 44514
         ?B<C    A                                * 4451B
-        GOYES   L_4452F                          * 4451E
+        GOYES   Char>Edit.L3                     * 4451E
         GOSBVL  SUB_12D68                        * 44520
         ?ST=0   1                                * 44527
-        GOYES   L_444CE                          * 4452A
-        GONC    L_444F9                          * 4452C
-L_4452F:
+        GOYES   AddInComLine(st).L1              * 4452A
+        GONC    Char>Edit.loop1                  * 4452C
+Char>Edit.L3:
         BSRB.F  A                                * 4452F
         C=B     A                                * 44534
         D=C     A                                * 44536
@@ -270,9 +270,9 @@ L_4452F:
         ST=0    2                                * 44542
         LC(5)   #00016                           * 44545
         ?C<A    A                                * 4454C
-        GOYES   L_44554                          * 4454F
+        GOYES   Char>Edit.L4                     * 4454F
         ST=1    2                                * 44551
-L_44554:
+Char>Edit.L4:
         C=A     A                                * 44554
         A=A+B   A                                * 44556
         DAT0=A  A                                * 44558
@@ -283,25 +283,25 @@ L_44554:
         D0=C                                     * 44569
         D0=D0-  2                                * 4456C
         LC(3)   #203                             * 4456F
-        GOSBVL  L_53AF2                          * 44574
-        GOC     L_44590                          * 4457B
+        GOSBVL  NoIgnoreAlm.L1                   * 44574
+        GOC     Char>Edit.L6                     * 4457B
         LC(2)   #0A                              * 4457E
-L_44582:
+Char>Edit.loop5:
         GOSUB   SUB_44616                        * 44582
-        GOC     L_44590                          * 44586
+        GOC     Char>Edit.L6                     * 44586
         GOSUB   SUB_44603                        * 44589
-        GONC    L_44582                          * 4458D
-L_44590:
+        GONC    Char>Edit.loop5                  * 4458D
+Char>Edit.L6:
         ?ST=0   1                                * 44590
-        GOYES   L_445A9                          * 44593
+        GOYES   Char>Edit.L7                     * 44593
         ?ST=0   2                                * 44595
-        GOYES   L_445A9                          * 44598
+        GOYES   Char>Edit.L7                     * 44598
         A=DAT0  B                                * 4459A
         ?A#0    B                                * 4459D
-        GOYES   L_445A9                          * 445A0
+        GOYES   Char>Edit.L7                     * 445A0
         GOSUB   SUB_44603                        * 445A2
-        GONC    L_44625                          * 445A6
-L_445A9:
+        GONC    SUB_44616.L1                     * 445A6
+Char>Edit.L7:
         A=B     A                                * 445A9
         A=A+A   A                                * 445AB
         CD1EX                                    * 445AD
@@ -331,14 +331,14 @@ L_445A9:
         CD0EX                                    * 445F4
         C=RSTK                                   * 445F7
         CD1EX                                    * 445F9
-L_445FC:
+Char>Edit.loop8:
         GOSUB   SUB_44603                        * 445FC
-        GONC    L_445FC                          * 44600
+        GONC    Char>Edit.loop8                  * 44600
 
 * refs (3): 44589 445A2 445FC
 SUB_44603:
         B=B-1   A                                * 44603
-        GOC     L_44625                          * 44605
+        GOC     SUB_44616.L1                     * 44605
         A=DAT1  B                                * 44608
         D1=D1+  2                                * 4460B
         DAT0=A  B                                * 4460E
@@ -353,21 +353,21 @@ SUB_44616:
         ?A=0    B                                * 4461E
         RTNYES                                   * 44621
         RTN                                      * 44623
-L_44625:
+SUB_44616.L1:
         C=0     A                                * 44625
         LC(2)   #15                              * 44627
         B=C     A                                * 4462B
         LC(2)   #0A                              * 4462D
         GOSUB   SUB_44616                        * 44631
-        GOC     L_4463A                          * 44635
+        GOC     SUB_44616.L2                     * 44635
         B=B-1   A                                * 44638
-L_4463A:
+SUB_44616.L2:
         D0=(5)  CURSOROFFSET                     * 4463A
         C=0     A                                * 44641
         C=DAT0  B                                * 44643
         C=C+D   A                                * 44646
         ?B>=C   A                                * 44648
-        GOYES   L_44666                          * 4464B
+        GOYES   SUB_44616.L3                     * 4464B
         A=B     A                                * 4464D
         DAT0=A  B                                * 4464F
         C=C-A   A                                * 44652
@@ -375,21 +375,21 @@ L_4463A:
         A=DAT0  A                                * 4465B
         A=A+C   A                                * 4465E
         DAT0=A  A                                * 44660
-        GONC    L_44669                          * 44663
-L_44666:
+        GONC    SUB_44616.L4                     * 44663
+SUB_44616.L3:
         DAT0=C  B                                * 44666
-L_44669:
+SUB_44616.L4:
         LC(3)   #10A                             * 44669
         GOSBVL  setflag                          * 4466E
         GOSBVL  ADJMEM                           * 44675
-        GOVLNG  L_30DB4                          * 4467C
+        GOVLNG  DECODE.L3                        * 4467C
 
 * -> $
 * refs (7): 38836 3A03F 4095D 40ADE 43183 D73CC ...
 EDITLINE$:
         CON(5)  (*)+5                            * 44683  primitive code object
         GOSBVL  SAVPTR                           * 44688
-L_4468F:
+EDITLINE$.loop1:
         GOSUB   SUB_446E7                        * 4468F
         R1=A                                     * 44693
         R2=C                                     * 44696
@@ -398,35 +398,35 @@ L_4468F:
         D1=C                                     * 446A3
         A=R2                                     * 446A6
         ASRB.F  A                                * 446A9
-        GOTO    L_446BB                          * 446AE
-L_446B2:
+        GOTO    EDITLINE$.L3                     * 446AE
+EDITLINE$.loop2:
         C=DAT1  B                                * 446B2
         DAT0=C  B                                * 446B5
         D0=D0+  2                                * 446B8
-L_446BB:
+EDITLINE$.L3:
         D1=D1-  2                                * 446BB
         A=A-1   A                                * 446BE
-        GONC    L_446B2                          * 446C0
+        GONC    EDITLINE$.loop2                  * 446C0
         GOSBVL  GETPTR                           * 446C3
         D=D-1   A                                * 446CA
-        GOC     L_446DC                          * 446CC
+        GOC     EDITLINE$.L4                     * 446CC
         D1=D1-  5                                * 446CF
         A=R0                                     * 446D2
-        GOVLNG  L_03678                          * 446D5
-L_446DC:
+        GOVLNG  GPOverWrALp.L1                   * 446D5
+EDITLINE$.L4:
         GOSBVL  SUB_12D68                        * 446DC
-        GOTO    L_4468F                          * 446E3
+        GOTO    EDITLINE$.loop1                  * 446E3
 
 * refs (2): 4468F 4471D
 SUB_446E7:
         D0=(5)  TEMPENV                          * 446E7
         A=DAT0  A                                * 446EE
         D0=A                                     * 446F1
-L_446F4:
+SUB_446E7.loop1:
         D0=D0-  2                                * 446F4
         C=DAT0  B                                * 446F7
         ?C#0    B                                * 446FA
-        GOYES   L_446F4                          * 446FD
+        GOYES   SUB_446E7.loop1                  * 446FD
         D0=D0+  2                                * 446FF
         LC(6)   #000000                          * 44702
         CD0EX                                    * 4470A
@@ -440,7 +440,7 @@ SizeOfComLine:
         GOSUB   SUB_446E7                        * 4471D
         CSRB.F  A                                * 44721
         R0=C                                     * 44726
-L_44729:
+SizeOfComLine.L1:
         GOVLNG  PUSH#LOOP                        * 44729
 
 * refs (25): 3A058 3A5A0 3B373 3B4A0 3E40C 3E4F5 ...
@@ -449,7 +449,7 @@ EDITPARTS:
         GOSBVL  SAVPTR                           * 44735
         GOSUB   SUB_44747                        * 4473C
         R0=A                                     * 44740
-        GOTO    L_44729                          * 44743
+        GOTO    SizeOfComLine.L1                 * 44743
 
 * refs (2): 39F93 4473C
 SUB_44747:
@@ -486,8 +486,8 @@ InputLAttn~1:
         C=RSTK                                   * 44798
         D0=C                                     * 4479A
         ?A=0    B                                * 4479D
-        GOYES   L_447A2                          * 447A0
-L_447A2:
+        GOYES   InputLAttn~1.L1                  * 447A0
+InputLAttn~1.L1:
         GOVLNG  PushT/FLoop                      * 447A2
 
 * refs (1): 44842
@@ -499,28 +499,28 @@ SUB_447A9:
         D0=A                                     * 447BC
         B=B-1   A                                * 447BF
         B=B-1   A                                * 447C1
-        GOC     L_447DA                          * 447C3
+        GOC     SUB_447A9.L2                     * 447C3
         LC(2)   #0A                              * 447C6
-L_447CA:
+SUB_447A9.loop1:
         D0=D0-  2                                * 447CA
         A=DAT0  B                                * 447CD
         ?C#A    B                                * 447D0
-        GOYES   L_447CA                          * 447D3
+        GOYES   SUB_447A9.loop1                  * 447D3
         B=B-1   A                                * 447D5
-        GONC    L_447CA                          * 447D7
-L_447DA:
+        GONC    SUB_447A9.loop1                  * 447D7
+SUB_447A9.L2:
         CD0EX                                    * 447DA
         RSTK=C                                   * 447DD
         D0=C                                     * 447DF
         LC(2)   #0A                              * 447E2
-L_447E6:
+SUB_447A9.loop3:
         D0=D0-  2                                * 447E6
         A=DAT0  B                                * 447E9
         ?A=0    B                                * 447EC
-        GOYES   L_447F6                          * 447EF
+        GOYES   SUB_447A9.L4                     * 447EF
         ?C#A    B                                * 447F1
-        GOYES   L_447E6                          * 447F4
-L_447F6:
+        GOYES   SUB_447A9.loop3                  * 447F4
+SUB_447A9.L4:
         C=0     W                                * 447F6
         C=RSTK                                   * 447F9
         B=C     A                                * 447FB
@@ -532,13 +532,13 @@ L_447F6:
         A=A+A   A                                * 4480F
         ST=0    2                                * 44811
         ?C<=A   A                                * 44814
-        GOYES   L_44824                          * 44817
+        GOYES   SUB_447A9.L5                     * 44817
         C=C-A   A                                * 44819
         B=B-A   A                                * 4481B
         A=B     A                                * 4481D
         R0=A                                     * 4481F
         RTN                                      * 44822
-L_44824:
+SUB_447A9.L5:
         A=C     A                                * 44824
         C=0     A                                * 44826
         ST=1    2                                * 44828
@@ -554,11 +554,11 @@ OBJ_4482D:
         GOSUB   SUB_447A9                        * 44842
         CSRB.F  A                                * 44846
         ?ST=0   2                                * 4484B
-        GOYES   L_4485A                          * 4484E
+        GOYES   OBJ_4482D.L1                     * 4484E
         DAT0=C  A                                * 44850
         C=A     A                                * 44853
         CSRB.F  A                                * 44855
-L_4485A:
+OBJ_4482D.L1:
         R0=C                                     * 4485A
         D0=(5)  CURSOROFFSET                     * 4485D
         A=0     A                                * 44864
@@ -566,13 +566,13 @@ L_4485A:
         R1=A                                     * 44869
         ST=0    1                                * 4486C
         ?C>A    A                                * 4486F
-        GOYES   L_44877                          * 44872
+        GOYES   OBJ_4482D.L2                     * 44872
         ST=1    1                                * 44874
-L_44877:
+OBJ_4482D.L2:
         GOSBVL  PUSH2#                           * 44877
         ?ST=0   1                                * 4487E
-        GOYES   L_44883                          * 44881
-L_44883:
+        GOYES   OBJ_4482D.L3                     * 44881
+OBJ_4482D.L3:
         GOVLNG  PushT/FLoop                      * 44883
         RPL
 
@@ -634,27 +634,27 @@ OBJ_44B9B:
         CON(5)  (*)+5                            * 44B9B  primitive code object
         ASSEMBLE
         LC(5)   COLWIDTH                         * 44BA0
-        GOTO    L_44BF9                          * 44BA7
+        GOTO    OBJ_44BCB.L2                     * 44BA7
 
 * refs (3): 8ED8E 8F218 8F560
 OBJ_44BAB:
         CON(5)  (*)+5                            * 44BAB  primitive code object
         LC(5)   COLWIDTH                         * 44BB0
-        GOTO    L_44BDB                          * 44BB7
+        GOTO    OBJ_44BCB.L1                     * 44BB7
 
 * refs (12): 8E28B 8E314 8E681 8E6A9 8E77B 8E790 ...
 * -> #: the MatrixWriter's entry direction (ENTRWISE, #80916)
 ENTRWISE@:
         CON(5)  (*)+5                            * 44BBB  primitive code object
         LC(5)   ENTRWISE                         * 44BC0
-        GOTO    L_44BF9                          * 44BC7
+        GOTO    OBJ_44BCB.L2                     * 44BC7
 
 * refs (2): 8EC7D 8ECB5
 OBJ_44BCB:
         CON(5)  (*)+5                            * 44BCB  primitive code object
         LC(5)   ENTRWISE                         * 44BD0
         NOP4                                     * 44BD7
-L_44BDB:
+OBJ_44BCB.L1:
         RSTK=C                                   * 44BDB
         GOSBVL  POP#                             * 44BDD
         C=RSTK                                   * 44BE4
@@ -664,12 +664,12 @@ L_44BDB:
         A=DAT0  A                                * 44BEF
         D0=D0+  5                                * 44BF2
         PC=(A)                                   * 44BF5
-L_44BF9:
+OBJ_44BCB.L2:
         CD1EX                                    * 44BF9
         A=0     A                                * 44BFC
         A=DAT1  B                                * 44BFE
         D1=C                                     * 44C01
-        GOVLNG  L_67907                          * 44C04
+        GOVLNG  EqwBoxParent@.L3                 * 44C04
         FILLTO  #44C31                           * 44C0B  38 zero nibbles: the next entry stays at #44C31
         RPL
 
@@ -697,7 +697,7 @@ OBJ_44C8C:
 
 * refs (1): 65ABF
 OBJ_44CA0:
-          :: BINT6 MAKEGROB OBJ_670EE ; GOTO L_44CEB ; * 44CA0
+          :: BINT6 MAKEGROB OBJ_670EE ; GOTO OBJ_44CD2.L1 ; * 44CA0
 
 * refs (1): 68416
 OBJ_44CC8:
@@ -706,19 +706,19 @@ OBJ_44CC8:
 * refs (2): 666BF 6D792
 OBJ_44CD2:
           :: BINT4 MAKEGROB OBJ_6715D ;          * 44CD2
-L_44CEB:
+OBJ_44CD2.L1:
           OBJ_44DB3 OBJ_44D9A ;                  * 44CEB
 
 * refs (1): 68407
 OBJ_44CFA:
         :: OBJ_67987 DUP#0= ?SKIP OBJ_67A9D      * 44CFA
           3PICK EqwBoxFirst@ OBJ_67A9D #MAX      * 44D13
-L_44D27:
+OBJ_44CFA.L1:
           #2+ DUP OBJ_66FF1 OBJ_44DB3 #2/ OBJ_67C09 ; * 44D27
 
 * refs (1): 6840C
 OBJ_44D4A:
-        :: OBJ_67987 OBJ_67A9D GOTO L_44D27 ;    * 44D4A
+        :: OBJ_67987 OBJ_67A9D GOTO OBJ_44CFA.L1 ; * 44D4A
 
 * refs (1): 68420
 OBJ_44D68:
@@ -1034,12 +1034,12 @@ OBJ_45BE8:
         GOSBVL  POP#                             * 45BF5
         B=A     A                                * 45BFC
         B=B-1   A                                * 45BFE
-        GOC     L_45C0F                          * 45C00
-L_45C03:
+        GOC     OBJ_45BE8.L2                     * 45C00
+OBJ_45BE8.loop1:
         GOSBVL  SKIPOB                           * 45C03
         B=B-1   A                                * 45C0A
-        GONC    L_45C03                          * 45C0C
-L_45C0F:
+        GONC    OBJ_45BE8.loop1                  * 45C0C
+OBJ_45BE8.L2:
         A=R0.F  A                                * 45C0F
         B=A     A                                * 45C15
         A=DAT0  A                                * 45C17

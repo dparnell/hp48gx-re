@@ -232,7 +232,7 @@ ROMP_0F0_091:
           ::                                     * 85C16
             CODE                                 * 85C1B  14 nibbles
               LC(5)   DOEXT1                     * 85C25
-              GOVLNG  L_27270                    * 85C2C
+              GOVLNG  NOTROMPcase.L1             * 85C2C
             ENDCODE                              * 85C33
             SKIP OBJ_71BB6 NOP TOTEMPOB DUP BAKNAME DROP * 85C33
             CODE                                 * 85C56  73 nibbles
@@ -244,9 +244,9 @@ ROMP_0F0_091:
               A=0     A                          * 85C6E
               A=DAT1  B                          * 85C70
               ?A=0    A                          * 85C73
-              GOYES   L_85C7A                    * 85C76
+              GOYES   ROMP_0F0_091.L1            * 85C76
               A=A+1   A                          * 85C78
-L_85C7A:
+ROMP_0F0_091.L1:
               A=A+1   A                          * 85C7A
               A=A+A   A                          * 85C7C
               D1=C                               * 85C7E

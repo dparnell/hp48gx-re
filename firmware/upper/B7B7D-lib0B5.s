@@ -158,12 +158,12 @@ ROMP_0B5_0F2:
 * ROMPTR 0B5 0F3
 * refs (1): B4B39
 ROMP_0B5_0F3:
-        { # BB17 TRUE }                          * B7F92
+        { # BB17 TRUE }                          * B7F92  "Sample"
 
 * ROMPTR 0B5 0F4
 * refs (1): B4B39
 ROMP_0B5_0F4:
-        { # BB18 FALSE }                         * B7FAB
+        { # BB18 FALSE }                         * B7FAB  "Population"
 
 * ROMPTR 0B5 0F5
 * refs (1): B4B39
@@ -174,27 +174,27 @@ ROMP_0B5_0F5:
 * ROMPTR 0B5 0F6
 * refs (1): B4B39
 ROMP_0B5_0F6:
-        { # BB3B xLINFIT }                       * B8005
+        { # BB3B xLINFIT }                       * B8005  "Linear Fit"
 
 * ROMPTR 0B5 0F7
 * refs (1): B4B39
 ROMP_0B5_0F7:
-        { # BB3C xLOGFIT }                       * B801E
+        { # BB3C xLOGFIT }                       * B801E  "Logarithmic Fit"
 
 * ROMPTR 0B5 0F8
 * refs (1): B4B39
 ROMP_0B5_0F8:
-        { # BB3D xEXPFIT }                       * B8037
+        { # BB3D xEXPFIT }                       * B8037  "Exponential Fit"
 
 * ROMPTR 0B5 0F9
 * refs (1): B4B39
 ROMP_0B5_0F9:
-        { # BB3E xPWRFIT }                       * B8050
+        { # BB3E xPWRFIT }                       * B8050  "Power Fit"
 
 * ROMPTR 0B5 0FA
 * refs (1): B4B39
 ROMP_0B5_0FA:
-        { # BB3F xBESTFIT }                      * B8069
+        { # BB3F xBESTFIT }                      * B8069  "Best Fit"
 
 * ROMPTR 0B5 0FB
 * refs (1): B4B39
@@ -204,9 +204,9 @@ ROMP_0B5_0FB:
 * ROMPTR 0B5 0FC
 * refs (1): B4B39
 ROMP_0B5_0FC:
-          :: ROMPTR 0B5 11E BINT6 {}N DUP BINT33 TestSysFlag BINT35 * B8092
+          :: ROMPTR 0B5 11E BINT6 {}N DUP BINT33 TestSysFlag BINT35 * B8092  flag -33: Transfer via wire / Transfer via IR
             TestSysFlag 3NULLLAM{} BIND INCOMPDROP SWAPDROP %3 SWAP * B80C0
-            6->list;StoInIPAR BINT33 SetSysFlag BINT35 SetSysFlag ; * B80E3
+            6->list;StoInIPAR BINT33 SetSysFlag BINT35 SetSysFlag ; * B80E3  flag -33: Transfer via wire / Transfer via IR  flag -35: ASCII transfer / Binary transfer
           ERRSET                                 * B8101
           :: DUPTYPELIST? ITE SENDLIST SENDNAME  * B8106
           ;                                      * B811F
@@ -236,14 +236,14 @@ ROMP_0B5_0FF:
 * ROMPTR 0B5 100
 * refs (1): B4B39
 ROMP_0B5_100:
-        :: BINT34 TestSysFlag ITE ROMPTR 0B5 121 ROMPTR 0B5 120 * B820C
+        :: BINT34 TestSysFlag ITE ROMPTR 0B5 121 ROMPTR 0B5 120 * B820C  flag -34: Print via IR / Print via wire
         ;                                        * B8236
 
 * ROMPTR 0B5 101
 * refs (1): B4B39
 ROMP_0B5_101:
         :: ROMPTR 0B0 09A DUP ?SKIP              * B823B
-          :: BINT33 ClrSysFlag ;                 * B8255
+          :: BINT33 ClrSysFlag ;                 * B8255  flag -33: Transfer via wire / Transfer via IR
           NOT BINT34 ROMPTR 0B5 11B ;            * B8269
 
 * ROMPTR 0B5 102
@@ -261,7 +261,7 @@ ROMP_0B5_103:
 * ROMPTR 0B5 104
 * refs (1): B4B39
 ~BINT38;TestSysFlag;NOT:
-        :: BINT38 TestSysFlag NOT ;              * B82E9
+        :: BINT38 TestSysFlag NOT ;              * B82E9  flag -38: Add linefeeds / No linefeeds
 
 * ROMPTR 0B5 105
 * refs (1): B4B39
@@ -285,7 +285,7 @@ ROMP_0B5_107:
 * ROMPTR 0B5 108
 * refs (1): B4B39
 ROMP_0B5_108:
-        :: BINT33 TestSysFlag ITE ROMPTR 0B5 120 ROMPTR 0B5 121 * B83BE
+        :: BINT33 TestSysFlag ITE ROMPTR 0B5 120 ROMPTR 0B5 121 * B83BE  flag -33: Transfer via wire / Transfer via IR
         ;                                        * B83E8
 
 * ROMPTR 0B5 109
@@ -296,7 +296,7 @@ ROMP_0B5_109:
 * ROMPTR 0B5 10A
 * refs (1): B4B39
 ROMP_0B5_10A:
-        :: ROMPTR 0B5 12C BINT35 TestSysFlag ITE BINT2 BINT1 * B8412
+        :: ROMPTR 0B5 12C BINT35 TestSysFlag ITE BINT2 BINT1 * B8412  flag -35: ASCII transfer / Binary transfer
           NTHCOMPDROP ;                          * B843B
 
 * ROMPTR 0B5 10B
@@ -336,7 +336,7 @@ ROMP_0B5_10D:
 * ROMPTR 0B5 10E
 * refs (1): B4B39
 ~BINT36;TestSysFlag:
-        :: BINT36 TestSysFlag ;                  * B8625
+        :: BINT36 TestSysFlag ;                  * B8625  flag -36: RECV renames / RECV overwrites
 
 * ROMPTR 0B5 10F
 * refs (1): B4B39
@@ -354,7 +354,7 @@ ROMP_0B5_110:
             R0=C                                 * B86A4
             GOSBVL  GetStrLenStk                 * B86A7
             ?C<A    A                            * B86AE
-            GOYES   L_B86E5                      * B86B1
+            GOYES   ROMP_0B5_110.L3              * B86B1
             D=C     A                            * B86B3
             A=A-1   A                            * B86B5
             B=A     A                            * B86B7
@@ -363,43 +363,43 @@ ROMP_0B5_110:
             C=C+A   A                            * B86BE
             D1=C                                 * B86C0
             ST=0    4                            * B86C3
-L_B86C6:
+ROMP_0B5_110.loop1:
             GOSUB   SUB_B86EE                    * B86C6
-            GOC     L_B86C6                      * B86CA
+            GOC     ROMP_0B5_110.loop1           * B86CA
             C=B     A                            * B86CD
             R0=C                                 * B86CF
-L_B86D2:
+ROMP_0B5_110.loop2:
             GOSUB   SUB_B86EE                    * B86D2
-            GONC    L_B86D2                      * B86D6
+            GONC    ROMP_0B5_110.loop2           * B86D6
             C=B     A                            * B86D9
             R1=C                                 * B86DB
             GOVLNG  Push2#Loop                   * B86DE
-L_B86E5:
+ROMP_0B5_110.L3:
             A=0     A                            * B86E5
             GOVLNG  PUSH#ALOOP                   * B86E7
 
 * refs (2): B86C6 B86D2
 SUB_B86EE:
             D=D-1   A                            * B86EE
-            GOC     L_B86E5                      * B86F0
+            GOC     ROMP_0B5_110.L3              * B86F0
             B=B+1   A                            * B86F3
             A=DAT1  B                            * B86F5
             D1=D1+  2                            * B86F8
             LC(2)   #20                          * B86FB
             ?C=A    B                            * B86FF
-            GOYES   L_B871C                      * B8702
+            GOYES   SUB_B86EE.L1                 * B8702
             LC(2)   #09                          * B8704
             ?C=A    B                            * B8708
-            GOYES   L_B871C                      * B870B
+            GOYES   SUB_B86EE.L1                 * B870B
             C=C+1   A                            * B870D
             ST=1    4                            * B870F
             ?C=A    B                            * B8712
             RTNYES                               * B8715
             ST=0    4                            * B8717
             RTNCC                                * B871A
-L_B871C:
+SUB_B86EE.L1:
             ?ST=1   4                            * B871C
-            GOYES   L_B86E5                      * B871F
+            GOYES   ROMP_0B5_110.L3              * B871F
             RTNSC                                * B8721
           ENDCODE                                * B8723
           2NULLLAM{} BIND 2GETLAM $ ":\\" BINT1 POS$ DUP#0=csedrp * B8723
@@ -514,12 +514,12 @@ ROMP_0B5_11F:
 * ROMPTR 0B5 120
 * refs (1): B4B39
 ROMP_0B5_120:
-        { # BA2C # BA2D TRUE }                   * B8C4E
+        { # BA2C # BA2D TRUE }                   * B8C4E  "Infrared"  "IR"
 
 * ROMPTR 0B5 121
 * refs (1): B4B39
 ROMP_0B5_121:
-        { # BA2E # BA2E FALSE }                  * B8C71
+        { # BA2E # BA2E FALSE }                  * B8C71  "Wire"  "Wire"
 
 * ROMPTR 0B5 122
 * refs (1): B4B39
@@ -529,12 +529,12 @@ ROMP_0B5_122:
 * ROMPTR 0B5 123
 * refs (1): B4B39
 ROMP_0B5_123:
-        { # BA2F TRUE }                          * B8CB4
+        { # BA2F TRUE }                          * B8CB4  "Kermit"
 
 * ROMPTR 0B5 124
 * refs (1): B4B39
 ROMP_0B5_124:
-        { # BA30 FALSE }                         * B8CCD
+        { # BA30 FALSE }                         * B8CCD  "XModem"
 
 * ROMPTR 0B5 125
 * refs (1): B4B39
@@ -550,27 +550,27 @@ ROMP_0B5_126:
 * ROMPTR 0B5 127
 * refs (1): B4B39
 ROMP_0B5_127:
-        { # BA3A # BA3A %0_2A2B4 }               * B8D45
+        { # BA3A # BA3A %0_2A2B4 }               * B8D45  "None"  "None"
 
 * ROMPTR 0B5 128
 * refs (1): B4B39
 ROMP_0B5_128:
-        { # BA31 # BA31 %1 }                     * B8D68
+        { # BA31 # BA31 %1 }                     * B8D68  "Odd"  "Odd"
 
 * ROMPTR 0B5 129
 * refs (1): B4B39
 ROMP_0B5_129:
-        { # BA32 # BA32 %2 }                     * B8D8B
+        { # BA32 # BA32 %2 }                     * B8D8B  "Even"  "Even"
 
 * ROMPTR 0B5 12A
 * refs (1): B4B39
 ROMP_0B5_12A:
-        { # BA33 # BA33 %3 }                     * B8DAE
+        { # BA33 # BA33 %3 }                     * B8DAE  "Mark"  "Mark"
 
 * ROMPTR 0B5 12B
 * refs (1): B4B39
 ROMP_0B5_12B:
-        { # BA34 # BA35 %4 }                     * B8DD1
+        { # BA34 # BA35 %4 }                     * B8DD1  "Space"  "Spc"
 
 * ROMPTR 0B5 12C
 * refs (1): B4B39
@@ -580,12 +580,12 @@ ROMP_0B5_12C:
 * ROMPTR 0B5 12D
 * refs (1): B4B39
 ROMP_0B5_12D:
-        { # BA36 # BA37 TRUE }                   * B8E14
+        { # BA36 # BA37 TRUE }                   * B8E14  "ASCII"  "ASC"
 
 * ROMPTR 0B5 12E
 * refs (1): B4B39
 ROMP_0B5_12E:
-        { # BA38 # BA39 FALSE }                  * B8E37
+        { # BA38 # BA39 FALSE }                  * B8E37  "Binary"  "Bin"
 
 * ROMPTR 0B5 12F
 * refs (1): B4B39
@@ -595,22 +595,22 @@ ROMP_0B5_12F:
 * ROMPTR 0B5 130
 * refs (1): B4B39
 ROMP_0B5_130:
-        { # BA3A # BA3A %0_2A2B4 }               * B8E90
+        { # BA3A # BA3A %0_2A2B4 }               * B8E90  "None"  "None"
 
 * ROMPTR 0B5 131
 * refs (1): B4B39
 ROMP_0B5_131:
-        { # BA3B # BA3C %1 }                     * B8EB3
+        { # BA3B # BA3C %1 }                     * B8EB3  "Newline (Ch 10)"  "Newl"
 
 * ROMPTR 0B5 132
 * refs (1): B4B39
 ROMP_0B5_132:
-        { # BA3D # BA3E %2 }                     * B8ED6
+        { # BA3D # BA3E %2 }                     * B8ED6  "Chr 128-159"  "→159"
 
 * ROMPTR 0B5 133
 * refs (1): B4B39
 ROMP_0B5_133:
-        { # BA40 # BA3F %3 }                     * B8EF9
+        { # BA40 # BA3F %3 }                     * B8EF9  "Chr 128-255"  "→255"
 
 * ROMPTR 0B5 134
 * refs (1): B4B39
@@ -620,17 +620,17 @@ ROMP_0B5_134:
 * ROMPTR 0B5 135
 * refs (1): B4B39
 ROMP_0B5_135:
-        { # BA41 %1 }                            * B8F47
+        { # BA41 %1 }                            * B8F47  "One-digit arith"
 
 * ROMPTR 0B5 136
 * refs (1): B4B39
 ROMP_0B5_136:
-        { # BA42 %2 }                            * B8F60
+        { # BA42 %2 }                            * B8F60  "Two-digit arith"
 
 * ROMPTR 0B5 137
 * refs (1): B4B39
 ROMP_0B5_137:
-        { # BA43 %3 }                            * B8F79
+        { # BA43 %3 }                            * B8F79  "Three-digit CRC"
 
 * ROMPTR 0B5 138
 * refs (1): B4B39
@@ -659,14 +659,14 @@ ROMP_0B5_13A:
 * ROMPTR 0B5 13B
 * refs (1): B4B39
 ROMP_0B5_13B:
-        :: BINT16 TestSysFlag NOTcase ROMPTR 0B5 14E * B901F
-          BINT15 TestSysFlag NOTcase ROMPTR 0B5 14F * B903E
+        :: BINT16 TestSysFlag NOTcase ROMPTR 0B5 14E * B901F  flag -16: coordinate system
+          BINT15 TestSysFlag NOTcase ROMPTR 0B5 14F * B903E  flag -15: coordinate system
           ROMPTR 0B5 150 ;                       * B9058
 
 * ROMPTR 0B5 13C
 * refs (1): B4B39
 ~BINT56;TestSysFlag;NOT:
-        :: BINT56 TestSysFlag NOT ;              * B9068
+        :: BINT56 TestSysFlag NOT ;              * B9068  flag -56: Standard beep on / Standard beep off
 
 * ROMPTR 0B5 13D
 * refs (1): B4B39
@@ -677,7 +677,7 @@ ROMP_0B5_13D:
 * ROMPTR 0B5 13E
 * refs (1): B4B39
 ~BINT40;TestSysFlag:
-        :: BINT40 TestSysFlag ;                  * B90A4
+        :: BINT40 TestSysFlag ;                  * B90A4  flag -40: Don't show clock / Show clock
 
 * ROMPTR 0B5 13F
 * refs (1): B4B39
@@ -688,7 +688,7 @@ ROMP_0B5_13F:
 * ROMPTR 0B5 140
 * refs (1): B4B39
 ~BINT51;TestSysFlag:
-        :: BINT51 TestSysFlag ;                  * B90DB
+        :: BINT51 TestSysFlag ;                  * B90DB  flag -51: Fraction mark: . / Fraction mark: ,
 
 * ROMPTR 0B5 141
 * refs (1): B4B39
@@ -710,23 +710,23 @@ ROMP_0B5_143:
 * ROMPTR 0B5 144
 * refs (1): B4B39
 ROMP_0B5_144:
-        { # B924 # B925                          * B9199
+        { # B924 # B925                          * B9199  "Standard"  "Std"
           :: DROP DOSTD ; }                      * B91B2
 
 * ROMPTR 0B5 145
 * refs (1): B4B39
 ROMP_0B5_145:
-        { # B926 # B927 DOFIX }                  * B91CB
+        { # B926 # B927 DOFIX }                  * B91CB  "Fixed"  "Fix"
 
 * ROMPTR 0B5 146
 * refs (1): B4B39
 ROMP_0B5_146:
-        { # B928 # B929 DOSCI }                  * B91EE
+        { # B928 # B929 DOSCI }                  * B91EE  "Scientific"  "Sci"
 
 * ROMPTR 0B5 147
 * refs (1): B4B39
 ROMP_0B5_147:
-        { # B92A # B92B DOENG }                  * B9211
+        { # B92A # B92B DOENG }                  * B9211  "Engineering"  "Eng"
 
 * ROMPTR 0B5 148
 * refs (1): B4B39
@@ -741,17 +741,17 @@ ROMP_0B5_149:
 * ROMPTR 0B5 14A
 * refs (1): B4B39
 ROMP_0B5_14A:
-        { # B92C # B92D SETDEG }                 * B92AA
+        { # B92C # B92D SETDEG }                 * B92AA  "Degrees"  "Deg"
 
 * ROMPTR 0B5 14B
 * refs (1): B4B39
 ROMP_0B5_14B:
-        { # B92E # B92F SETRAD }                 * B92CD
+        { # B92E # B92F SETRAD }                 * B92CD  "Radians"  "Rad"
 
 * ROMPTR 0B5 14C
 * refs (1): B4B39
 ROMP_0B5_14C:
-        { # B930 # B931 SETGRAD }                * B92F0
+        { # B930 # B931 SETGRAD }                * B92F0  "Grads"  "Grad"
 
 * ROMPTR 0B5 14D
 * refs (1): B4B39
@@ -761,32 +761,32 @@ ROMP_0B5_14D:
 * ROMPTR 0B5 14E
 * refs (1): B4B39
 ROMP_0B5_14E:
-        { # B932 ROMPTR 0B5 151 }                * B933E
+        { # B932 ROMPTR 0B5 151 }                * B933E  "Rectangular"
 
 * ROMPTR 0B5 14F
 * refs (1): B4B39
 ROMP_0B5_14F:
-        { # B933 ROMPTR 0B5 152 }                * B935D
+        { # B933 ROMPTR 0B5 152 }                * B935D  "Polar"
 
 * ROMPTR 0B5 150
 * refs (1): B4B39
 ROMP_0B5_150:
-        { # B934 ROMPTR 0B5 153 }                * B937C
+        { # B934 ROMPTR 0B5 153 }                * B937C  "Spherical"
 
 * ROMPTR 0B5 151
 * refs (1): B4B39
 ~BINT16;ClrSysFlag:
-        :: BINT16 ClrSysFlag ;                   * B939B
+        :: BINT16 ClrSysFlag ;                   * B939B  flag -16: coordinate system
 
 * ROMPTR 0B5 152
 * refs (1): B4B39
 ROMP_0B5_152:
-        :: BINT15 ClrSysFlag BINT16 SetSysFlag ; * B93AF
+        :: BINT15 ClrSysFlag BINT16 SetSysFlag ; * B93AF  flag -15: coordinate system  flag -16: coordinate system
 
 * ROMPTR 0B5 153
 * refs (1): B4B39
 ROMP_0B5_153:
-        :: BINT15 SetSysFlag BINT16 SetSysFlag ; * B93CD
+        :: BINT15 SetSysFlag BINT16 SetSysFlag ; * B93CD  flag -15: coordinate system  flag -16: coordinate system
 
 * ROMPTR 0B5 154
 * refs (1): B4B39
@@ -806,7 +806,7 @@ ROMP_0B5_156:
 * ROMPTR 0B5 157
 * refs (1): B4B39
 ROMP_0B5_157:
-        :: DUP ROMPTR 0B4 1D5 ITE # B95C # B936  * B946A
+        :: DUP ROMPTR 0B4 1D5 ITE # B95C # B936  * B946A  "01 Principal value"  "01 General solutions"
           ROMPTR 0B5 154 ROT #>CHR BINT1 POS$ #1-+ JstGetTHEMESG ; * B9498
 
 * ROMPTR 0B5 158
@@ -837,7 +837,7 @@ ROMP_0B5_15C:
 * ROMPTR 0B5 15D
 * refs (1): B4B39
 ROMP_0B5_15D:
-        :: DUP ID>$ BINT59 TestSysFlag ITE SWAPDROP * B95CE
+        :: DUP ID>$ BINT59 TestSysFlag ITE SWAPDROP * B95CE  flag -59: Show variables / Show names only
           :: $ ": " &$ SWAP XEQRCL ROMPTR 0B0 075 &$ ; * B95F1
           BINT1 BINT23 SUB$ ;                    * B9628
 
@@ -937,7 +937,7 @@ ROMP_0B5_165:
             :: DROP SWAPROT DUPTYPELIST? NOT?SEMI * B9B23
               DUPLENCOMP #1= ?SEMI               * B9B3C
               ROTDROP SWAP2DUP EQUALPOSCOMP #0=?SKIP * B9B4B
-              :: # 13C ERROROUT ; DUP CREATEDIR XEQRCL SWAP ZEROSWAP ; * B9B5F
+              :: # 13C ERROROUT ; DUP CREATEDIR XEQRCL SWAP ZEROSWAP ; * B9B5F  "Name Conflict"
             DUPTYPELIST? ITE INNERCOMP BINT1     * B9B96
             DUP#0=csDROP ZERO_DO DUPTYPEIDNT? NcaseTYPEERR DUP * B9BAA
             3PUTLAM 1GETLAM CONTEXT! DUP XEQRCL DUP 4PUTLAM 2GETLAM EVAL * B9BC3
@@ -1005,8 +1005,8 @@ LIB0B5.hash:
         CON(5)  0                                * B9E35  names of length 14
         CON(5)  0                                * B9E3A  names of length 15
         CON(5)  0                                * B9E3F  names of length 16
-        REL(5)  L_B9E49                          * B9E44  end of the names
-L_B9E49:
+        REL(5)  LIB0B5.hash.L1                   * B9E44  end of the names
+LIB0B5.hash.L1:
         CON(5)  0                                * B9E49  command 000 has no name
         ENDLENGTH                                * B9E4E
 

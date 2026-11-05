@@ -11,7 +11,7 @@ OBJ_52017:
 
 * refs (8): 2B18A 51FE0 51FFE 5202B 52526 97A00 ...
 OBJ_5203A:
-        :: BINT22 TestSysFlag NOTcasedrop INFRESERR * 5203A
+        :: BINT22 TestSysFlag NOTcasedrop INFRESERR * 5203A  flag -22: Infinite → error / Infinite → ±9E499
           BINT26 SetSysFlag ;                    * 52053
 
 * C% -> %
@@ -268,22 +268,22 @@ PUSHC%:
         ST=0    10                               * 52ADB
         SETHEX                                   * 52ADE
         ?A#0    M                                * 52AE0
-        GOYES   L_52AE8                          * 52AE3
+        GOYES   PUSHC%.L1                        * 52AE3
         A=0     W                                * 52AE5
-L_52AE8:
+PUSHC%.L1:
         R0=A                                     * 52AE8
         ?C#0    M                                * 52AEB
-        GOYES   L_52AF3                          * 52AEE
+        GOYES   PUSHC%.L2                        * 52AEE
         C=0     W                                * 52AF0
-L_52AF3:
+PUSHC%.L2:
         R1=C                                     * 52AF3
-L_52AF6:
+PUSHC%.loop3:
         P=      0                                * 52AF6
         GOSBVL  ROOM                             * 52AF8
         A=C     A                                * 52AFF
         LC(5)   #00030                           * 52B01
         ?C>A    A                                * 52B08
-        GOYES   L_52B4D                          * 52B0B
+        GOYES   PUSHC%.L4                        * 52B0B
         LC(2)   #25                              * 52B0D
         GOSBVL  CREATETEMP                       * 52B11
         AD0EX                                    * 52B18
@@ -301,9 +301,9 @@ L_52AF6:
         D1=D1-  5                                * 52B45
         DAT1=A  A                                * 52B48
         RTN                                      * 52B4B
-L_52B4D:
+PUSHC%.L4:
         GOSBVL  St10Gb                           * 52B4D
-        GONC    L_52AF6                          * 52B54
+        GONC    PUSHC%.loop3                     * 52B54
 
 * ( C%%pop -> A:B C:D) Pop C%% (<REF>SETDEC )
 * refs (8): 3575D 37815 378D9 37CBB 519FD 51B96 ...
@@ -335,28 +335,28 @@ PUSHC%%:
         ST=0    10                               * 52B95
         SETHEX                                   * 52B98
         ?B#0    M                                * 52B9A
-        GOYES   L_52BA2                          * 52B9D
+        GOYES   PUSHC%%.L1                       * 52B9D
         A=0     W                                * 52B9F
-L_52BA2:
+PUSHC%%.L1:
         R0=A                                     * 52BA2
         B=A     S                                * 52BA5
         A=B     W                                * 52BA8
         R1=A                                     * 52BAB
         ?D#0    M                                * 52BAE
-        GOYES   L_52BB6                          * 52BB1
+        GOYES   PUSHC%%.L2                       * 52BB1
         C=0     W                                * 52BB3
-L_52BB6:
+PUSHC%%.L2:
         R2=C                                     * 52BB6
         D=C     S                                * 52BB9
         C=D     W                                * 52BBC
         R3=C                                     * 52BBF
-L_52BC2:
+PUSHC%%.loop3:
         P=      0                                * 52BC2
         GOSBVL  ROOM                             * 52BC4
         A=C     A                                * 52BCB
         LC(5)   #0003A                           * 52BCD
         ?C>A    A                                * 52BD4
-        GOYES   L_52C2B                          * 52BD7
+        GOYES   PUSHC%%.L4                       * 52BD7
         LC(2)   #2F                              * 52BD9
         GOSBVL  CREATETEMP                       * 52BDD
         AD0EX                                    * 52BE4
@@ -380,9 +380,9 @@ L_52BC2:
         D1=D1-  5                                * 52C23
         DAT1=A  A                                * 52C26
         RTN                                      * 52C29
-L_52C2B:
+PUSHC%%.L4:
         GOSBVL  St10Gb                           * 52C2B
-        GOTO    L_52BC2                          * 52C32
+        GOTO    PUSHC%%.loop3                    * 52C32
         RPL
 
 * seco %precision %lo %hi -> %integral %error
@@ -450,7 +450,7 @@ CALCINTEG:
             GOSUBL  CALCINTEG~1                  * 52D6F
             GOSUBL  CALCINTEG~12                 * 52D75
             GOSUBL  DIVF~jump_2                  * 52D7B
-            GOTO    L_52F13                      * 52D81
+            GOTO    4NULLLAM{}.L1                * 52D81
           ENDCODE                                * 52D85
           CALCINTEG~6                            * 52D85
           CODE                                   * 52D8A  39 nibbles
@@ -463,7 +463,7 @@ CALCINTEG:
             DAT1=A  W                            * 52DAD
             D1=D1+  16                           * 52DB1
             A=0     W                            * 52DB4
-            GOTO    L_5346C                      * 52DB7
+            GOTO    4NULLLAM{}.L8                * 52DB7
           ENDCODE                                * 52DBB
           BINT16 ONE_DO                          * 52DBB
           CODE                                   * 52DC5  60 nibbles
@@ -548,9 +548,9 @@ CALCINTEG:
             GOSUB   RCAB2~jump                   * 52F07
             GOSUB   CALCINTEG~5                  * 52F0B
             GOSUB   RADDF~jump_2                 * 52F0F
-L_52F13:
+4NULLLAM{}.L1:
             GOSUB   CALCINTEG~4                  * 52F13
-L_52F17:
+4NULLLAM{}.loop2:
             GOVLNG  PUSH%LOOP                    * 52F17
           ENDCODE                                * 52F1E
           CALCINTEG~6                            * 52F1E
@@ -565,7 +565,7 @@ L_52F17:
             C=DAT1  W                            * 52F48
             CAEX    W                            * 52F4C
             DAT1=C  W                            * 52F4F
-            GOTO    L_52F17                      * 52F53
+            GOTO    4NULLLAM{}.loop2             * 52F53
           ENDCODE                                * 52F57
           CALCINTEG~6 INDEX@ UNCOERCE ISTOP@ UNCOERCE * 52F57
           CODE                                   * 52F70  211 nibbles
@@ -627,7 +627,7 @@ L_52F17:
             GOSUB   CALCINTEG~9                  * 5303D
             GOSUB   RADDF~jump_2                 * 53041
             GOSUB   CALCINTEG~10                 * 53045
-            GOTO    L_53470                      * 53049
+            GOTO    4NULLLAM{}.L9                * 53049
           ENDCODE                                * 5304D
           BINT2 +LOOP INDEX@ CALCINTEG~14 UNCOERCE * 5304D
           CODE                                   * 53066  354 nibbles
@@ -721,7 +721,7 @@ L_52F17:
             GOSUB   RCCD2~jump_2                 * 531C2
             GOSUB   RADDF~jump_2                 * 531C6
             GOSUB   CALCINTEG~4                  * 531CA
-            GOTO    L_5346C                      * 531CE
+            GOTO    4NULLLAM{}.L8                * 531CE
           ENDCODE                                * 531D2
           INDEX@ DUP                             * 531D2
           CODE                                   * 531DC  559 nibbles
@@ -762,7 +762,7 @@ L_52F17:
             D1=D1+  16                           * 53267
             A=0     W                            * 5326A
             DAT1=A  W                            * 5326D
-L_53271:
+4NULLLAM{}.loop3:
             A=R4                                 * 53271
             A=A-1   S                            * 53274
             R4=A                                 * 53277
@@ -787,14 +787,14 @@ L_53271:
             CSR     B                            * 532B2
             C=C-1   P                            * 532B5
             ?C<=A   P                            * 532B8
-            GOYES   L_532D2                      * 532BB
+            GOYES   4NULLLAM{}.L4                * 532BB
             D1=D1+  16                           * 532BD
             A=DAT1  W                            * 532C0
             C=R1                                 * 532C4
             C=-C-1  S                            * 532C7
             GOSUB   CALCINTEG~1                  * 532CA
             GOSUB   STAB2~jump_2                 * 532CE
-L_532D2:
+4NULLLAM{}.L4:
             GOSUB   CALCINTEG~7                  * 532D2
             A=DAT1  W                            * 532D6
             GOSBVL  SPLITA                       * 532DA
@@ -831,7 +831,7 @@ L_532D2:
             C=0     S                            * 5334E
             P=      6                            * 53351
             GOSBVL  TST15                        * 53353
-            GOC     L_5339E                      * 5335A
+            GOC     4NULLLAM{}.L5                * 5335A
             A=R4                                 * 5335D
             A=0     S                            * 53360
             A=A+1   S                            * 53363
@@ -846,11 +846,11 @@ L_532D2:
             GOSUB   CALCINTEG~12                 * 53385
             P=      6                            * 53389
             GOSBVL  TST15                        * 5338B
-            GOC     L_5339E                      * 53392
+            GOC     4NULLLAM{}.L5                * 53392
             A=R4                                 * 53395
             A=A+1   S                            * 53398
             R4=A                                 * 5339B
-L_5339E:
+4NULLLAM{}.L5:
             GOSUB   CALCINTEG~7                  * 5339E
             C=DAT1  W                            * 533A2
             D1=D1-  16                           * 533A6
@@ -871,17 +871,17 @@ L_5339E:
             P=      0                            * 533DF
             SETHEX                               * 533E1
             ?A=0    S                            * 533E3
-            GOYES   L_53404                      * 533E6
+            GOYES   4NULLLAM{}.L7                * 533E6
             C=A     B                            * 533E8
             CSR     B                            * 533EB
             A=A+1   P                            * 533EE
             R4=A                                 * 533F1
             ?C=A    P                            * 533F4
-            GOYES   L_533FD                      * 533F7
-            GOTO    L_53271                      * 533F9
-L_533FD:
-            GOVLNG  L_0370A                      * 533FD
-L_53404:
+            GOYES   4NULLLAM{}.L6                * 533F7
+            GOTO    4NULLLAM{}.loop3             * 533F9
+4NULLLAM{}.L6:
+            GOVLNG  Push#TLoop.L1                * 533FD
+4NULLLAM{}.L7:
             GOSUB   GETPTR~jump_7                * 53404
             LC(5)   TRUE                         * 53408
             A=C     A                            * 5340F
@@ -905,9 +905,9 @@ L_53404:
             BSL     A                            * 53465
             C=C+B   A                            * 53467
             D1=C                                 * 53469
-L_5346C:
+4NULLLAM{}.L8:
             DAT1=A  W                            * 5346C
-L_53470:
+4NULLLAM{}.L9:
             SETHEX                               * 53470
             P=      0                            * 53472
             GOSUB   GETPTR~jump_7                * 53474
@@ -972,7 +972,7 @@ L_53470:
             GOSUB   SAVPTR~jump_18               * 53552
             GOSUB   RCAB2~jump                   * 53556
             GOSBVL  PACK                         * 5355A
-            GOTO    L_52F17                      * 53561
+            GOTO    4NULLLAM{}.loop2             * 53561
           ENDCODE                                * 53565
           ABND                                   * 53565
         ;                                        * 5356A
@@ -1131,22 +1131,22 @@ CALCINTEG~14:
         GOSBVL  POP#                             * 536B1
         A=A-1   A                                * 536B8
         LC(5)   #00001                           * 536BA
-L_536C1:
+CALCINTEG~14.loop1:
         C=C+C   A                                * 536C1
         A=A-1   A                                * 536C3
-        GONC    L_536C1                          * 536C5
+        GONC    CALCINTEG~14.loop1               * 536C5
         R0=C                                     * 536C8
         GOSUB   SAVPTR~jump_18                   * 536CB
         GOVLNG  PUSH#LOOP                        * 536CF
-L_536D6:
+CALCINTEG~14.loop2:
         GOSUB   GETPTR~jump_7                    * 536D6
         D=D-1   A                                * 536DA
-        GONC    L_536F0                          * 536DC
+        GONC    CALCINTEG~14.L3                  * 536DC
         D=D+1   A                                * 536DF
         GOSUB   SAVPTR~jump_18                   * 536E1
         GOSBVL  St10Gb                           * 536E5
-        GOTO    L_536D6                          * 536EC
-L_536F0:
+        GOTO    CALCINTEG~14.loop2               * 536EC
+CALCINTEG~14.L3:
         LC(5)   %%0                              * 536F0
         D1=D1-  5                                * 536F7
         DAT1=C  A                                * 536FA
@@ -1158,20 +1158,20 @@ L_536F0:
 SetUserFlag:
         CON(5)  (*)+5                            * 53725  primitive code object
         ST=1    0                                * 5372A
-        GOTO    L_53739                          * 5372D
+        GOTO    SetSysFlag.L1                    * 5372D
 
 * # ->
 * refs (34): 1C2A1 1DA89 1DB42 2A5FA 2A60E 31ABB ...
 SetSysFlag:
         CON(5)  (*)+5                            * 53731  primitive code object
         ST=0    0                                * 53736
-L_53739:
+SetSysFlag.L1:
         GOSUB   SUB_537A6                        * 53739
         C=C!A   XS                               * 5373D
-L_53741:
+SetSysFlag.L2:
         DAT0=C  XS                               * 53741
         C=R0                                     * 53745
-L_53748:
+SetSysFlag.L3:
         D0=C                                     * 53748
         A=DAT0  A                                * 5374B
         D0=D0+  5                                * 5374E
@@ -1182,49 +1182,49 @@ L_53748:
 ClrUserFlag:
         CON(5)  (*)+5                            * 53755  primitive code object
         ST=1    0                                * 5375A
-        GOTO    L_53769                          * 5375D
+        GOTO    ClrSysFlag.L1                    * 5375D
 
 * # ->
 * refs (33): 1C302 1C500 1DA0C 1DAF7 2A5DC 2A5E6 ...
 ClrSysFlag:
         CON(5)  (*)+5                            * 53761  primitive code object
         ST=0    0                                * 53766
-L_53769:
+ClrSysFlag.L1:
         GOSUB   SUB_537A6                        * 53769
         A=-A-1  XS                               * 5376D
         C=C&A   XS                               * 53770
-        GOTO    L_53741                          * 53774
+        GOTO    SetSysFlag.L2                    * 53774
 
 * # -> flag
 * refs (19): 1C340 1C4D8 63EDE 9A68B 9A6E8 9A742 ...
 TestUserFlag:
         CON(5)  (*)+5                            * 53778  primitive code object
         ST=1    0                                * 5377D
-        GOTO    L_5378C                          * 53780
+        GOTO    TestSysFlag.L1                   * 53780
 
 * # -> flag
 * refs (111): 0D2DF 167C9 1763F 176B7 1A613 1C345 ...
 TestSysFlag:
         CON(5)  (*)+5                            * 53784  primitive code object
         ST=0    0                                * 53789
-L_5378C:
+TestSysFlag.L1:
         GOSUB   SUB_537A6                        * 5378C
         C=C&A   XS                               * 53790
         A=R0                                     * 53794
         D0=A                                     * 53797
         ?C#0    XS                               * 5379A
-        GOYES   L_5379F                          * 5379D
-L_5379F:
+        GOYES   TestSysFlag.L2                   * 5379D
+TestSysFlag.L2:
         GOVLNG  PushT/FLoop                      * 5379F
 
 * refs (3): 53739 53769 5378C
 SUB_537A6:
         GOSBVL  POP#                             * 537A6
         ?A=0    A                                * 537AD
-        GOYES   L_53807                          * 537B0
+        GOYES   SUB_537A6.L2                     * 537B0
         LC(5)   #00040                           * 537B2
         ?C<A    A                                * 537B9
-        GOYES   L_53807                          * 537BC
+        GOYES   SUB_537A6.L2                     * 537BC
         A=A-1   A                                * 537BE
         LC(2)   #03                              * 537C0
         C=C&A   B                                * 537C4
@@ -1233,9 +1233,9 @@ SUB_537A6:
         ASRB.F  B                                * 537D0
         LC(5)   UserFlags                        * 537D5
         ?ST=1   0                                * 537DC
-        GOYES   L_537E8                          * 537DF
+        GOYES   SUB_537A6.L1                     * 537DF
         LC(5)   SystemFlags                      * 537E1
-L_537E8:
+SUB_537A6.L1:
         C=C+A   A                                * 537E8
         CD0EX                                    * 537EA
         R0=C                                     * 537ED
@@ -1246,7 +1246,7 @@ L_537E8:
         A=C     XS                               * 537FE
         C=DAT0  XS                               * 53801
         RTN                                      * 53805
-L_53807:
+SUB_537A6.L2:
         GOVLNG  DOSIZEERR                        * 53807
 
 * T -> %1 F -> %0
@@ -1258,9 +1258,9 @@ COERCEFLAG:
         A=A-C   A                                * 5381D
         LC(5)   %1                               * 5381F
         ?A=0    A                                * 53826
-        GOYES   L_53832                          * 53829
+        GOYES   COERCEFLAG.L1                    * 53829
         LC(5)   %0_2A2B4                         * 5382B
-L_53832:
+COERCEFLAG.L1:
         DAT1=C  A                                * 53832
         LC(5)   SEMI                             * 53835
         A=C     A                                * 5383C
@@ -1269,7 +1269,7 @@ L_53832:
 
 * refs (3): 1C2A6 1C6ED 40062
 ChkDelLastArg:
-        :: BINT55 TestSysFlag NOT?SEMI           * 53842
+        :: BINT55 TestSysFlag NOT?SEMI           * 53842  flag -55: Save last args / No last args
           DelLastArg ;                           * 53856
 
 * refs (3): 40C7B C644E C6462
@@ -1277,7 +1277,7 @@ HISTON?:
         CON(5)  (*)+5                            * 53860  primitive code object
         ASSEMBLE
         LC(3)   #105                             * 53865
-        GOTO    L_539E6                          * 5386A
+        GOTO    OBJ_539D8.L1                     * 5386A
 
 * refs (2): 38831 C6471
 UnableLastCmd:
@@ -1289,7 +1289,7 @@ UnableLastCmd:
 DisLastCmd:
         CON(5)  (*)+5                            * 5387C  primitive code object
         LC(3)   #105                             * 53881
-        GOTO    L_539F1                          * 53886
+        GOTO    OBJ_539D8.L2                     * 53886
         RPL
 
 * refs (1): C646C
@@ -1306,14 +1306,14 @@ DelMemComLine:
         DAT0=A  W                                * 538B0
         D0=D0+  15                               * 538B4
         DAT0=A  A                                * 538B7
-        GOLONG  L_53748                          * 538BA
+        GOLONG  SetSysFlag.L3                    * 538BA
 
 * -> flag
 * refs (7): 14391 143C0 38656 3DE3B 40CEE C639D ...
 UNDO_ON?:
         CON(5)  (*)+5                            * 538C0  primitive code object
         LC(3)   #103                             * 538C5
-        GOTO    L_539E6                          * 538CA
+        GOTO    OBJ_539D8.L1                     * 538CA
 
 * ->
 * refs (2): 14456 C63E3
@@ -1327,7 +1327,7 @@ UNDO_ON:
 UNDO_OFF:
         CON(5)  (*)+5                            * 538DC  primitive code object
         LC(3)   #103                             * 538E1
-        GOTO    L_539F1                          * 538E6
+        GOTO    OBJ_539D8.L2                     * 538E6
 
 * refs (1): 42091
 ?BlinkCursor~1:
@@ -1340,13 +1340,13 @@ UNDO_OFF:
 NOBLINK:
         CON(5)  (*)+5                            * 538F8  primitive code object
         LC(3)   #205                             * 538FD
-        GOTO    L_539F1                          * 53902
+        GOTO    OBJ_539D8.L2                     * 53902
 
 * refs (1): 13D1E
 OBJ_53906:
         CON(5)  (*)+5                            * 53906  primitive code object
         LC(3)   #205                             * 5390B
-        GOTO    L_539E6                          * 53910
+        GOTO    OBJ_539D8.L1                     * 53910
 
 * refs (2): 1597D 39E87
 OBJ_53914:
@@ -1358,13 +1358,13 @@ OBJ_53914:
 OBJ_53922:
         CON(5)  (*)+5                            * 53922  primitive code object
         LC(3)   #805                             * 53927
-        GOTO    L_539F1                          * 5392C
+        GOTO    OBJ_539D8.L2                     * 5392C
 
 * refs (9): 15E24 15EDD 15F42 15F88 16D4F 16E5D ...
 OBJ_53930:
         CON(5)  (*)+5                            * 53930  primitive code object
         LC(3)   #805                             * 53935
-        GOTO    L_539E6                          * 5393A
+        GOTO    OBJ_539D8.L1                     * 5393A
 
 * refs (1): 319C6
 OBJ_5393E:
@@ -1376,20 +1376,20 @@ OBJ_5393E:
 OBJ_5394C:
         CON(5)  (*)+5                            * 5394C  primitive code object
         LC(3)   #803                             * 53951
-        GOTO    L_539F1                          * 53956
+        GOTO    OBJ_539D8.L2                     * 53956
 
 * refs (4): 15F14 16A72 16D54 34E71
 OBJ_5395A:
         CON(5)  (*)+5                            * 5395A  primitive code object
         LC(3)   #803                             * 5395F
-        GOTO    L_539E6                          * 53964
+        GOTO    OBJ_539D8.L1                     * 53964
 
 * -> flag
 * refs (10): 39820 3DFEC 40558 405B2 405EE 408B4 ...
 AlgEntry?:
         CON(5)  (*)+5                            * 53968  primitive code object
         LC(3)   #403                             * 5396D
-        GOTO    L_539E6                          * 53972
+        GOTO    OBJ_539D8.L1                     * 53972
 
 * ->
 * refs (8): 3DFFB 40E33 42F12 42F1C 42FDA D5F25 ...
@@ -1403,31 +1403,31 @@ SetAlgEntry:
 ClrAlgEntry:
         CON(5)  (*)+5                            * 53984  primitive code object
         LC(3)   #403                             * 53989
-        GOTO    L_539F1                          * 5398E
+        GOTO    OBJ_539D8.L2                     * 5398E
 
 * refs (2): 448C6 D9B72
 MinusMo:
         CON(5)  (*)+5                            * 53992  primitive code object
         LC(3)   #405                             * 53997
-        GOTO    L_539E6                          * 5399C
+        GOTO    OBJ_539D8.L1                     * 5399C
 
 * refs (2): 3BA81 D9C0A
 MinusMo_539A0:
         CON(5)  (*)+5                            * 539A0  primitive code object
         LC(3)   #405                             * 539A5
-        GOTO    L_53A01                          * 539AA
+        GOTO    SetISysFlag.L1                   * 539AA
 
 * refs (1): 443B7
 MajusMo:
         CON(5)  (*)+5                            * 539AE  primitive code object
         LC(3)   #405                             * 539B3
-        GOTO    L_539F1                          * 539B8
+        GOTO    OBJ_539D8.L2                     * 539B8
 
 * refs (1): 34E3A
 OBJ_539BC:
         CON(5)  (*)+5                            * 539BC  primitive code object
         LC(3)   #20B                             * 539C1
-        GOTO    L_539E6                          * 539C6
+        GOTO    OBJ_539D8.L1                     * 539C6
 
 * refs (2): 16112 1623E
 OBJ_539CA:
@@ -1439,11 +1439,11 @@ OBJ_539CA:
 OBJ_539D8:
         CON(5)  (*)+5                            * 539D8  primitive code object
         LC(3)   #20B                             * 539DD
-        GOTO    L_539F1                          * 539E2
-L_539E6:
-        GOSUB   L_53AF2                          * 539E6
+        GOTO    OBJ_539D8.L2                     * 539E2
+OBJ_539D8.L1:
+        GOSUB   NoIgnoreAlm.L1                   * 539E6
         GOVLNG  PushT/FLoop                      * 539EA
-L_539F1:
+OBJ_539D8.L2:
         GOSUB   SUB_53B0A                        * 539F1
         GOTO    D0=ALoop                         * 539F5
 
@@ -1451,7 +1451,7 @@ L_539F1:
 SetISysFlag:
         GOSUB   setflag                          * 539F9
         GOTO    D0=ALoop                         * 539FD
-L_53A01:
+SetISysFlag.L1:
         GOSUB   SUB_53B1D                        * 53A01
 
 * refs (3): 4438D 539F5 539FD
@@ -1465,13 +1465,13 @@ D0=ALoop:
 InvCursor:
         CON(5)  (*)+5                            * 53A12  primitive code object
         LC(3)   #203                             * 53A17
-        GOTO    L_53A01                          * 53A1C
+        GOTO    SetISysFlag.L1                   * 53A1C
 
 * refs (4): 3F2B5 42D28 42FA3 D9BDD
 REPLACE_MODE:
         CON(5)  (*)+5                            * 53A20  primitive code object
         LC(3)   #203                             * 53A25
-        GOTO    L_539F1                          * 53A2A
+        GOTO    OBJ_539D8.L2                     * 53A2A
 
 * ->
 * refs (4): 3F2C9 42D0A 42F9E 443C1
@@ -1485,14 +1485,14 @@ INSERT_MODE:
 INSERT?:
         CON(5)  (*)+5                            * 53A3C  primitive code object
         LC(3)   #203                             * 53A41
-        GOTO    L_539E6                          * 53A46
+        GOTO    OBJ_539D8.L1                     * 53A46
 
 * -> flag
 * refs (20): 19BBD 19BE6 19C33 19CA4 19F28 38822 ...
 EditLExists?:
         CON(5)  (*)+5                            * 53A4A  primitive code object
         LC(3)   #10A                             * 53A4F
-        GOTO    L_539E6                          * 53A54
+        GOTO    OBJ_539D8.L1                     * 53A54
 
 BeginComLine:
         CON(5)  (*)+5                            * 53A58  primitive code object
@@ -1503,13 +1503,13 @@ BeginComLine:
 InitEdLine~2:
         CON(5)  (*)+5                            * 53A66  primitive code object
         LC(3)   #10A                             * 53A6B
-        GOTO    L_539F1                          * 53A70
+        GOTO    OBJ_539D8.L2                     * 53A70
 
 * refs (1): 38FBE
 DA2aLess1OK?~1:
         CON(5)  (*)+5                            * 53A74  primitive code object
         LC(3)   #40B                             * 53A79
-        GOTO    L_539E6                          * 53A7E
+        GOTO    OBJ_539D8.L1                     * 53A7E
 
 * refs (1): 39095
 ?SetEditRoll~1:
@@ -1521,13 +1521,13 @@ DA2aLess1OK?~1:
 ClrNewEditL:
         CON(5)  (*)+5                            * 53A90  primitive code object
         LC(3)   #40B                             * 53A95
-        GOTO    L_539F1                          * 53A9A
+        GOTO    OBJ_539D8.L2                     * 53A9A
 
 * refs (1): 39AF6
 Clock?:
         CON(5)  (*)+5                            * 53A9E  primitive code object
         LC(3)   #102                             * 53AA3
-        GOTO    L_539E6                          * 53AA8
+        GOTO    OBJ_539D8.L1                     * 53AA8
 
 DoClock:
         CON(5)  (*)+5                            * 53AAC  primitive code object
@@ -1538,13 +1538,13 @@ DoClock:
 NoClock:
         CON(5)  (*)+5                            * 53ABA  primitive code object
         LC(3)   #102                             * 53ABF
-        GOTO    L_539F1                          * 53AC4
+        GOTO    OBJ_539D8.L2                     * 53AC4
 
 * refs (1): 42235
 GETKEY~7:
         CON(5)  (*)+5                            * 53AC8  primitive code object
         LC(3)   #801                             * 53ACD
-        GOTO    L_539E6                          * 53AD2
+        GOTO    OBJ_539D8.L1                     * 53AD2
 
 * refs (1): 17FBB
 OBJ_53AD6:
@@ -1556,26 +1556,26 @@ OBJ_53AD6:
 NoIgnoreAlm:
         CON(5)  (*)+5                            * 53AE4  primitive code object
         LC(3)   #801                             * 53AE9
-        GOTO    L_539F1                          * 53AEE
-L_53AF2:
+        GOTO    OBJ_539D8.L2                     * 53AEE
+NoIgnoreAlm.L1:
         GOSUB   SUB_53B45                        * 53AF2
         A=DAT0  P                                * 53AF6
         AD0EX                                    * 53AFA
         A=A&C   P                                * 53AFD
         ?A#0    P                                * 53B01
-        GOYES   L_53B06                          * 53B04
-L_53B06:
+        GOYES   NoIgnoreAlm.L2                   * 53B04
+NoIgnoreAlm.L2:
         P=      0                                * 53B06
         RTN                                      * 53B08
 
 * refs (2): 10F32 539F1
 SUB_53B0A:
         GOSUB   SUB_53B45                        * 53B0A
-L_53B0E:
+SUB_53B0A.L1:
         A=DAT0  P                                * 53B0E
         C=-C-1  P                                * 53B12
         A=A&C   P                                * 53B15
-        GOTO    L_53B3D                          * 53B19
+        GOTO    setflag.L2                       * 53B19
 
 * refs (1): 53A01
 SUB_53B1D:
@@ -1583,16 +1583,16 @@ SUB_53B1D:
         A=DAT0  P                                * 53B21
         A=A&C   P                                * 53B25
         ?A=0    P                                * 53B29
-        GOYES   L_53B35                          * 53B2C
-        GONC    L_53B0E                          * 53B2E
+        GOYES   setflag.L1                       * 53B2C
+        GONC    SUB_53B0A.L1                     * 53B2E
 
 * refs (4): 02498 027A9 4466E 539F9
 setflag:
         GOSUB   SUB_53B45                        * 53B31
-L_53B35:
+setflag.L1:
         A=DAT0  P                                * 53B35
         A=A!C   P                                * 53B39
-L_53B3D:
+setflag.L2:
         DAT0=A  P                                * 53B3D
         P=      0                                * 53B41
         RTN                                      * 53B43
@@ -1623,17 +1623,17 @@ NumbMode:
 * ->
 * refs (12): 157D8 15819 2867A 2869D 286D9 5A045 ...
 CLRNUM:
-        :: BINT3 ClrSysFlag ;                    * 53B88
+        :: BINT3 ClrSysFlag ;                    * 53B88  flag -3: Function → symb / Function → num
 
 * ->
 * refs (12): 15797 1580A 1582D 286C0 286F2 5A086 ...
 SETNUM:
-        :: BINT3 SetSysFlag ;                    * 53B9C
+        :: BINT3 SetSysFlag ;                    * 53B9C  flag -3: Function → symb / Function → num
 
 * -> flag
 * refs (15): 15792 1F293 1F744 1F78F 1F7DA 20DC4 ...
 NOTNUM?:
-        :: BINT3 TestSysFlag NOT ;               * 53BB0
+        :: BINT3 TestSysFlag NOT ;               * 53BB0  flag -3: Function → symb / Function → num
 
 * -> flag
 * refs (10): 51500 56C22 56C81 57793 577F2 5B4AB ...
@@ -1643,21 +1643,21 @@ DEG?:
 * -> flag
 * refs (15): 514E1 53BF6 54E61 56C18 56C77 5775C ...
 RAD?:
-        :: BINT17 TestSysFlag ;                  * 53BDD
+        :: BINT17 TestSysFlag ;                  * 53BDD  flag -17: angle mode
 
 * refs (2): 53BCE C6272
 rad?;fs?(-18)?:
-        :: RAD? BINT18 TestSysFlag ;             * 53BF1
+        :: RAD? BINT18 TestSysFlag ;             * 53BF1  flag -18: angle mode
 
 * -> flag
 * refs (1): 5EA77
 NOTCONST?:
-        :: BINT2 TestSysFlag NOT ;               * 53C0A
+        :: BINT2 TestSysFlag NOT ;               * 53C0A  flag -2: Constant → symb / Constant → num
 
 * -> flag
 * refs (5): 57644 592F5 86D4E 86DDA 86E20
 PRSOL?:
-        :: BINT1 TestSysFlag ;                   * 53C23
+        :: BINT1 TestSysFlag ;                   * 53C23  flag -1: General solutions / Principal value
 
 * ->
 * refs (1): 1C599
@@ -1665,28 +1665,28 @@ DOHEX:
         CON(5)  (*)+5                            * 53C37  primitive code object
         ASSEMBLE
         LC(1)   #C                               * 53C3C
-        GOTO    L_53C62                          * 53C3F
+        GOTO    DODEC.L1                         * 53C3F
 
 * ->
 * refs (1): 1C563
 DOBIN:
         CON(5)  (*)+5                            * 53C43  primitive code object
         LC(1)   #8                               * 53C48
-        GOTO    L_53C62                          * 53C4B
+        GOTO    DODEC.L1                         * 53C4B
 
 * ->
 * refs (1): 1C5B4
 DOOCT:
         CON(5)  (*)+5                            * 53C4F  primitive code object
         LC(1)   #4                               * 53C54
-        GOTO    L_53C62                          * 53C57
+        GOTO    DODEC.L1                         * 53C57
 
 * ->
 * refs (1): 1C57E
 DODEC:
         CON(5)  (*)+5                            * 53C5B  primitive code object
         C=0     A                                * 53C60
-L_53C62:
+DODEC.L1:
         AD0EX                                    * 53C62
         R0=A                                     * 53C65
         D0=(5)  #80845                           * 53C68
@@ -1717,15 +1717,15 @@ dostws:
         GOSBVL  POP#                             * 53CAF
         GOSUB   SAVPTR~jump_19                   * 53CB6
         ?A=0    A                                * 53CBA
-        GOYES   L_53CC1                          * 53CBD
+        GOYES   dostws.L1                        * 53CBD
         A=A-1   A                                * 53CBF
-L_53CC1:
+dostws.L1:
         C=0     A                                * 53CC1
         LC(2)   #3F                              * 53CC3
         ?C>=A   A                                * 53CC7
-        GOYES   L_53CCE                          * 53CCA
+        GOYES   dostws.L2                        * 53CCA
         CAEX    A                                * 53CCC
-L_53CCE:
+dostws.L2:
         D0=(5)  #80844                           * 53CCE
         C=DAT0  B                                * 53CD5
         B=C     A                                * 53CD8
@@ -1748,7 +1748,7 @@ bitAND:
         ASSEMBLE
         GOSUB   POP2HXS                          * 53D09
         A=A&C   WP                               * 53D0D
-        GOTO    L_53E95                          * 53D11
+        GOTO    bitASR.L3                        * 53D11
 
 * hxs hxs' -> hxs''
 * refs (1): 1E822
@@ -1756,7 +1756,7 @@ bitOR:
         CON(5)  (*)+5                            * 53D15  primitive code object
         GOSUB   POP2HXS                          * 53D1A
         A=A!C   WP                               * 53D1E
-        GOTO    L_53E95                          * 53D22
+        GOTO    bitASR.L3                        * 53D22
 
 * hxs hxs' -> hxs''
 * refs (1): 1E90F
@@ -1771,7 +1771,7 @@ bitXOR:
         A=A!C   WP                               * 53D3F
         C=R0                                     * 53D43
         A=A&C   WP                               * 53D46
-        GOTO    L_53E95                          * 53D4A
+        GOTO    bitASR.L3                        * 53D4A
 
 * hxs -> hxs'
 * refs (1): 1E8A8
@@ -1779,7 +1779,7 @@ bitNOT:
         CON(5)  (*)+5                            * 53D4E  primitive code object
         GOSUB   POPHXS                           * 53D53
         A=-A-1  WP                               * 53D57
-        GOTO    L_53E95                          * 53D5A
+        GOTO    bitASR.L3                        * 53D5A
 
 * hxs -> hxs'
 * refs (1): 1962A
@@ -1787,7 +1787,7 @@ bitSL:
         CON(5)  (*)+5                            * 53D5E  primitive code object
         GOSUB   POPHXS                           * 53D63
         A=A+A   WP                               * 53D67
-        GOTO    L_53E95                          * 53D6A
+        GOTO    bitASR.L3                        * 53D6A
 
 * hxs -> hxs'
 * refs (1): 1964A
@@ -1796,7 +1796,7 @@ bitSLB:
         GOSUB   POPHXS                           * 53D73
         ASL     WP                               * 53D77
         ASL     WP                               * 53D7A
-        GOTO    L_53E95                          * 53D7D
+        GOTO    bitASR.L3                        * 53D7D
 
 * hxs -> hxs'
 * refs (1): 1966A
@@ -1804,7 +1804,7 @@ bitSR:
         CON(5)  (*)+5                            * 53D81  primitive code object
         GOSUB   POPHXS                           * 53D86
         ASRB                                     * 53D8A
-        GOTO    L_53E95                          * 53D8D
+        GOTO    bitASR.L3                        * 53D8D
 
 * hxs -> hxs'
 * refs (1): 1968A
@@ -1813,7 +1813,7 @@ bitSRB:
         GOSUB   POPHXS                           * 53D96
         ASR     WP                               * 53D9A
         ASR     WP                               * 53D9D
-        GOTO    L_53E95                          * 53DA0
+        GOTO    bitASR.L3                        * 53DA0
 
 * hxs -> hxs'
 * refs (1): 195EA
@@ -1821,7 +1821,7 @@ bitRR:
         CON(5)  (*)+5                            * 53DA4  primitive code object
         GOSUB   POPHXS                           * 53DA9
         GOSUB   SUB_53DB5                        * 53DAD
-        GOTO    L_53E95                          * 53DB1
+        GOTO    bitASR.L3                        * 53DB1
 
 * refs (2): 53DAD 53DFE
 SUB_53DB5:
@@ -1830,15 +1830,15 @@ SUB_53DB5:
         ?SB=0                                    * 53DBB
         RTNYES                                   * 53DBE
         LC(5)   #01248                           * 53DC0
-L_53DC7:
+SUB_53DB5.loop1:
         C=C&B   P                                * 53DC7
         ?C#0    P                                * 53DCB
-        GOYES   L_53DDB                          * 53DCE
+        GOYES   SUB_53DB5.L2                     * 53DCE
         CSRC                                     * 53DD0
         ?C=0    P                                * 53DD3
         RTNYES                                   * 53DD6
-        GONC    L_53DC7                          * 53DD8
-L_53DDB:
+        GONC    SUB_53DB5.loop1                  * 53DD8
+SUB_53DB5.L2:
         A=A!C   P                                * 53DDB
         RTN                                      * 53DDF
 
@@ -1853,11 +1853,11 @@ bitRRB:
         LC(2)   #07                              * 53DF3
         DCEX    B                                * 53DF7
         P=C     0                                * 53DFA
-L_53DFE:
+bitRRB.loop1:
         GOSUB   SUB_53DB5                        * 53DFE
         D=D-1   B                                * 53E02
-        GONC    L_53DFE                          * 53E05
-        GOTO    L_53E95                          * 53E08
+        GONC    bitRRB.loop1                     * 53E05
+        GOTO    bitASR.L3                        * 53E08
 
 * hxs -> hxs'
 * refs (1): 195AA
@@ -1865,7 +1865,7 @@ bitRL:
         CON(5)  (*)+5                            * 53E0C  primitive code object
         GOSUB   POPHXS                           * 53E11
         GOSUB   SUB_53E1D                        * 53E15
-        GOTO    L_53E95                          * 53E19
+        GOTO    bitASR.L3                        * 53E19
 
 * refs (2): 53E15 53E58
 SUB_53E1D:
@@ -1873,11 +1873,11 @@ SUB_53E1D:
         C=B     P                                * 53E21
         C=-C-1  P                                * 53E24
         A=A+A   WP                               * 53E27
-        GOC     L_53E36                          * 53E2A
+        GOC     SUB_53E1D.L1                     * 53E2A
         C=C&A   P                                * 53E2D
         ?C=0    P                                * 53E31
         RTNYES                                   * 53E34
-L_53E36:
+SUB_53E1D.L1:
         A=A+1   WP                               * 53E36
         RTN                                      * 53E39
 
@@ -1892,11 +1892,11 @@ bitRLB:
         LC(2)   #07                              * 53E4D
         DCEX    B                                * 53E51
         P=C     0                                * 53E54
-L_53E58:
+bitRLB.loop1:
         GOSUB   SUB_53E1D                        * 53E58
         D=D-1   B                                * 53E5C
-        GONC    L_53E58                          * 53E5F
-        GOC     L_53E95                          * 53E62
+        GONC    bitRLB.loop1                     * 53E5F
+        GOC     bitASR.L3                        * 53E62
 
 * hxs -> hxs'
 * refs (1): 1958A
@@ -1907,17 +1907,17 @@ bitASR:
         D=0     W                                * 53E71
         D=C     P                                * 53E74
         C=B     P                                * 53E77
-L_53E7A:
+bitASR.loop1:
         C=C+C   P                                * 53E7A
-        GOC     L_53E87                          * 53E7D
+        GOC     bitASR.L2                        * 53E7D
         DSRB                                     * 53E80
-        GOTO    L_53E7A                          * 53E83
-L_53E87:
+        GOTO    bitASR.loop1                     * 53E83
+bitASR.L2:
         C=D     P                                * 53E87
         C=C&A   P                                * 53E8A
         ASRB                                     * 53E8E
         A=A!C   P                                * 53E91
-L_53E95:
+bitASR.L3:
         A=A&B   P                                * 53E95
         GOVLNG  PUSHhxsLoop                      * 53E99
 
@@ -1927,7 +1927,7 @@ bit+:
         CON(5)  (*)+5                            * 53EA0  primitive code object
         GOSUB   POP2HXS                          * 53EA5
         A=A+C   WP                               * 53EA9
-        GOTO    L_53E95                          * 53EAC
+        GOTO    bitASR.L3                        * 53EAC
 
 * hxs hxs' -> hxs''
 * refs (3): 1AD54 54312 54326
@@ -1936,7 +1936,7 @@ bit-:
         GOSUB   POP2HXS                          * 53EB5
         C=-C    WP                               * 53EB9
         A=A+C   WP                               * 53EBC
-        GOTO    L_53E95                          * 53EBF
+        GOTO    bitASR.L3                        * 53EBF
 
 * hxs -> hxs'
 * refs (1): 1A9D6
@@ -1944,7 +1944,7 @@ bitNEG:
         CON(5)  (*)+5                            * 53EC3  primitive code object
         GOSUB   POPHXS                           * 53EC8
         A=-A    WP                               * 53ECC
-        GOTO    L_53E95                          * 53ECF
+        GOTO    bitASR.L3                        * 53ECF
 
 * hxs hxs' -> hxs''
 * refs (3): 1AE39 542E0 542F4
@@ -1952,23 +1952,23 @@ bit*:
         CON(5)  (*)+5                            * 53ED3  primitive code object
         GOSUB   POP2HXS                          * 53ED8
         GOSUB   MPY                              * 53EDC
-        GOTO    L_53E95                          * 53EE0
+        GOTO    bitASR.L3                        * 53EE0
 
 * Multiply A.W and C.W (-> A.W=C.W) Uses D.W, SB. Returns carry clear
 * refs (3): 0181C 01832 53EDC
 MPY:
         D=C     W                                * 53EE4
         C=0     W                                * 53EE7
-L_53EEA:
+MPY.loop1:
         SB=0                                     * 53EEA
         ASRB                                     * 53EED
         ?SB=0                                    * 53EF0
-        GOYES   L_53EF8                          * 53EF3
+        GOYES   MPY.L2                           * 53EF3
         C=C+D   W                                * 53EF5
-L_53EF8:
+MPY.L2:
         D=D+D   W                                * 53EF8
         ?A#0    W                                * 53EFB
-        GOYES   L_53EEA                          * 53EFE
+        GOYES   MPY.loop1                        * 53EFE
         A=C     W                                * 53F00
         RTNCC                                    * 53F03
 
@@ -1983,38 +1983,38 @@ bit/:
         B=0     W                                * 53F17
         D=0     B                                * 53F1A
         ?C#0    W                                * 53F1D
-        GOYES   L_53F31                          * 53F20
-        GONC    L_53F50                          * 53F22
-L_53F25:
+        GOYES   bit/.L2                          * 53F20
+        GONC    bit/.loop6                       * 53F22
+bit/.loop1:
         D=D+1   B                                * 53F25
         R1=C                                     * 53F28
         C=C+C   W                                * 53F2B
-        GOC     L_53F5D                          * 53F2E
-L_53F31:
+        GOC     bit/.L7                          * 53F2E
+bit/.L2:
         ?C<=A   W                                * 53F31
-        GOYES   L_53F25                          * 53F34
-        GONC    L_53F4A                          * 53F36
-L_53F39:
+        GOYES   bit/.loop1                       * 53F34
+        GONC    bit/.L5                          * 53F36
+bit/.loop3:
         CSRB                                     * 53F39
-L_53F3C:
+bit/.loop4:
         B=B+B   W                                * 53F3C
         ?C>A    W                                * 53F3F
-        GOYES   L_53F4A                          * 53F42
+        GOYES   bit/.L5                          * 53F42
         A=A-C   W                                * 53F44
         B=B+1   W                                * 53F47
-L_53F4A:
+bit/.L5:
         D=D-1   B                                * 53F4A
-        GONC    L_53F39                          * 53F4D
-L_53F50:
+        GONC    bit/.loop3                       * 53F4D
+bit/.loop6:
         A=B     W                                * 53F50
         C=R0                                     * 53F53
         BCEX    W                                * 53F56
-        GOTO    L_53E95                          * 53F59
-L_53F5D:
+        GOTO    bitASR.L3                        * 53F59
+bit/.L7:
         C=R1                                     * 53F5D
         D=D-1   B                                * 53F60
-        GOC     L_53F50                          * 53F63
-        GONC    L_53F3C                          * 53F66
+        GOC     bit/.loop6                       * 53F63
+        GONC    bit/.loop4                       * 53F66
 
 * refs (5): 53CB6 53F92 5403E 54055 540C0
 SAVPTR~jump_19:
@@ -2061,9 +2061,9 @@ SUB_53F99:
         CSRB                                     * 53FC1
         C=C-1   B                                * 53FC4
         ?SB=0                                    * 53FC7
-        GOYES   L_53FCF                          * 53FCA
+        GOYES   SUB_53F99.L1                     * 53FCA
         C=C+1   B                                * 53FCC
-L_53FCF:
+SUB_53F99.L1:
         RSTK=C                                   * 53FCF
         LC(2)   #03                              * 53FD1
         A=A&C   B                                * 53FD5
@@ -2072,14 +2072,14 @@ L_53FCF:
         B=0     P                                * 53FDF
         B=B-1   P                                * 53FE2
         ?SB=0                                    * 53FE5
-        GOYES   L_53FF9                          * 53FE8
-L_53FEA:
+        GOYES   SUB_53F99.L4                     * 53FE8
+SUB_53F99.loop2:
         A=A-1   B                                * 53FEA
-        GOC     L_53FF6                          * 53FED
+        GOC     SUB_53F99.L3                     * 53FED
         B=B+B   P                                * 53FF0
-        GOC     L_53FEA                          * 53FF3
-L_53FF6:
+        GOC     SUB_53F99.loop2                  * 53FF3
+SUB_53F99.L3:
         B=-B-1  P                                * 53FF6
-L_53FF9:
+SUB_53F99.L4:
         C=0     B                                * 53FF9
         C=P     0                                * 53FFC

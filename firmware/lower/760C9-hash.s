@@ -2,7 +2,7 @@
 * Addresses in the right-hand comments are those of the original ROM.
 * Follows on from the previous file (at #760C9 in the original ROM).
         ENDLENGTH                                * 760C9
-L_760C9:
+U.arcmin.L1:
         A=A+1   A                                * 760C9
         A=A+B   XS                               * 760CB
         BSR     A                                * 760CE
@@ -58,7 +58,7 @@ L_760C9:
         NIBASC  "y"                              * 76129  entry 21
         CON(2)  #76                              * 7612B
 
-L_7612D:
+U.arcmin.L2:
         CON(5)  DOHSTR                           * 7612D  hash table of library 700
 * a branch also enters #76132, where the nibbles decode as addrslot
         LENGTH                                   * 76132  length, to #7633B
@@ -78,7 +78,7 @@ L_7612D:
         CON(5)  0                                * 76178  names of length 14
         CON(5)  0                                * 7617D  names of length 15
         CON(5)  0                                * 76182  names of length 16
-        REL(5)  L_762AA                          * 76187  end of the names
+        REL(5)  H700.REPEAT.L1                   * 76187  end of the names
 H700.':
         CON(2)  1                                * 7618C
         NIBASC  "'"                              * 7618E
@@ -185,7 +185,7 @@ H700.REPEAT:
         CON(2)  6                                * 76299
         NIBASC  "REPEAT"                         * 7629B
         CON(3)  #006                             * 762A7  command
-L_762AA:
+H700.REPEAT.L1:
         CON(5)  (*)-H700.IF                      * 762AA  name of command 000
         CON(5)  (*)-H700.THEN                    * 762AF  name of command 001
         CON(5)  (*)-H700.ELSE                    * 762B4  name of command 002
@@ -219,7 +219,7 @@ L_762AA:
         CON(5)  (*)-H700.PROMPT                  * 76336  name of command 01C
         ENDLENGTH                                * 7633B
 
-L_7633B:
+H700.REPEAT.L2:
         CON(5)  DOHSTR                           * 7633B  hash table of library 002
 * a branch also enters #76340, where the nibbles decode as addrslot
         LENGTH                                   * 76340  length, to #77E62
@@ -245,7 +245,7 @@ L_7633B:
         CON(5)  0                                * 76386  names of length 14
         CON(5)  0                                * 7638B  names of length 15
         CON(5)  0                                * 76390  names of length 16
-        REL(5)  L_776DD                          * 76395  end of the names
+        REL(5)  H002.PARAMETRIC.L1               * 76395  end of the names
 H002.%:
         CON(2)  1                                * 7639A
         NIBASC  "%"                              * 7639C
@@ -2020,7 +2020,7 @@ H002.PARAMETRIC:
         CON(2)  10                               * 776C4
         NIBASC  "PARAMETRIC"                     * 776C6
         CON(3)  #0DF                             * 776DA  command
-L_776DD:
+H002.PARAMETRIC.L1:
         CON(5)  (*)-H002.ASR                     * 776DD  name of command 000
         CON(5)  (*)-H002.RL                      * 776E2  name of command 001
         CON(5)  (*)-H002.RLB                     * 776E7  name of command 002
@@ -2441,7 +2441,7 @@ SUB_77E62:
         LC(5)   #00002                           * 77E79
         D=C     A                                * 77E80
         SETDEC                                   * 77E82
-L_77E84:
+SUB_77E62.loop1:
         D1=D1-  5                                * 77E84
         C=DAT1  A                                * 77E87
         CD1EX                                    * 77E8A
@@ -2451,7 +2451,7 @@ L_77E84:
         GOSUB   SPLITA~jump~jump                 * 77E97
         GOSUBL  PUTAB0~jump                      * 77E9B
         D=D-1   A                                * 77EA1
-        GONC    L_77E84                          * 77EA3
+        GONC    SUB_77E62.loop1                  * 77EA3
         RTN                                      * 77EA6
 
 * refs (1): 2C10D
@@ -2471,22 +2471,22 @@ SUB_77EBC:
         P=      12                               * 77ED3
         LC(3)   #232                             * 77ED5
         ?ST=0   0                                * 77EDA
-        GOYES   L_77EE4                          * 77EDD
+        GOYES   SUB_77EBC.L1                     * 77EDD
         LC(3)   #350                             * 77EDF
-L_77EE4:
+SUB_77EBC.L1:
         GOSUBL  SUB_788A7                        * 77EE4
-        GONC    L_77EF1                          * 77EEA
-        GOTO    L_77F8E                          * 77EED
-L_77EF1:
+        GONC    SUB_77EBC.L2                     * 77EEA
+        GOTO    SUB_77F77.L2                     * 77EED
+SUB_77EBC.L2:
         D1=D1+  1                                * 77EF1
-        GOSUB   L_7856F                          * 77EF4
+        GOSUB   SUB_78556.L1                     * 77EF4
         GOSUB   SUB_78605                        * 77EF8
-        GOSUBL  L_787E6                          * 77EFC
+        GOSUBL  SUB_787E2.L1                     * 77EFC
         GOSUBL  SUB_7874D                        * 77F02
-        GOSUB   L_785B2                          * 77F08
+        GOSUB   SUB_78591.L2                     * 77F08
         GOSUB   SUB_7806A                        * 77F0C
         GOSUBL  EXAB0~jump                       * 77F10
-L_77F16:
+SUB_77EBC.loop3:
         GOSUBL  EXAB0~jump                       * 77F16
         GOSUBL  EXAB2~jump                       * 77F1C
         GOSUB   SUB_786C3                        * 77F22
@@ -2497,7 +2497,7 @@ L_77F16:
         C=D     W                                * 77F34
         R4=C                                     * 77F37
         GOSUBL  RCCD0~jump_3                     * 77F3A
-        GOSUBL  L_78760                          * 77F40
+        GOSUBL  SUB_7875C.L1                     * 77F40
         B=0     S                                * 77F46
         C=R4                                     * 77F49
         CR1EX                                    * 77F4C
@@ -2506,27 +2506,27 @@ L_77F16:
         C=RSTK                                   * 77F55
         CR0EX                                    * 77F57
         ?C#A    A                                * 77F5A
-        GOYES   L_77F16                          * 77F5D
+        GOYES   SUB_77EBC.loop3                  * 77F5D
         C=D     W                                * 77F5F
         ?B#C    W                                * 77F62
-        GOYES   L_77F16                          * 77F65
+        GOYES   SUB_77EBC.loop3                  * 77F65
         GOSUB   SUB_78524                        * 77F67
         ?ST=1   0                                * 77F6B
-        GOYES   L_77F73                          * 77F6E
+        GOYES   SUB_77EBC.L4                     * 77F6E
         A=-A-1  S                                * 77F70
-L_77F73:
-        GOTO    L_78543                          * 77F73
+SUB_77EBC.L4:
+        GOTO    SUB_7853C.L1                     * 77F73
 
 * refs (3): 77FB5 77FC5 77FE0
 SUB_77F77:
-        GOSUB   L_7856F                          * 77F77
+        GOSUB   SUB_78556.L1                     * 77F77
         GOSUB   RCCD2~jump_3                     * 77F7B
-        GOSUB   L_7858A                          * 77F7F
-L_77F83:
+        GOSUB   SUB_78582.L1                     * 77F7F
+SUB_77F77.L1:
         ?ST=0   0                                * 77F83
         RTNYES                                   * 77F86
-        GOLONG  L_7838C                          * 77F88
-L_77F8E:
+        GOLONG  SUB_78340.L4                     * 77F88
+SUB_77F77.L2:
         A=0     W                                * 77F8E
         B=0     W                                * 77F91
         GOSUB   SUB_78682                        * 77F94
@@ -2534,12 +2534,12 @@ L_77F8E:
         BCEX    M                                * 77F9E
         GOSUB   SUB_78688                        * 77FA1
         ?ST=1   0                                * 77FA5
-        GOYES   L_77FAD                          * 77FA8
+        GOYES   SUB_77F77.L3                     * 77FA8
         BCEX    M                                * 77FAA
-L_77FAD:
+SUB_77F77.L3:
         GOSUB   SUB_78676                        * 77FAD
         GOSUB   SUB_7867C                        * 77FB1
-L_77FB5:
+SUB_77F77.loop4:
         GOSUB   SUB_77F77                        * 77FB5
         GOSUB   SUB_7861D                        * 77FB9
         P=      2                                * 77FBD

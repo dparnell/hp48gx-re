@@ -44,7 +44,7 @@ ROMP_0B2_002:
 ROMP_0B2_003:
         :: 'RROMPTR@ ROMPTR 0B2 006 BINT0 BINT0 BINT7 BINT9 BINT0 MINUSONE * D9C2B
           MINUSONE NULL$ MINUSONE MINUSONE MINUSONE DUP BINT0 BINT1 * D9C5E
-          'RROMPTR@ ROMPTR 0B2 004 # B998 ;      * D9C86
+          'RROMPTR@ ROMPTR 0B2 004 # B998 ;      * D9C86  "Characters "
 
 * ROMPTR 0B2 004
 * refs (1): D9A51
@@ -92,7 +92,7 @@ ROMP_0B2_007:
 * refs (1): D9A51
 ROMP_0B2_008:
         :: LAM '1C LAM 'CF #+ DUP #>$ $>grob SWAP #1+ ROMPTR 0B2 02F * D9F04
-          GETATELN DROP ROMPTR 0B2 009 # B99A JstGetTHEMESG $>grob # B999 * D9F4C
+          GETATELN DROP ROMPTR 0B2 009 # B99A JstGetTHEMESG $>grob # B999 * D9F4C  "Num:"  "Key:"
           JstGetTHEMESG $>grob BINT48 BINT8 BLANKIT HARDBUFF BINT1 BINT50 * D9F7F
           GROB! HARDBUFF # 63 BINT50 GROB! HARDBUFF BINT19 BINT50 GROB! * D9FA7
           HARDBUFF # 77 BINT50 GROB! ;           * D9FD9
@@ -101,7 +101,7 @@ ROMP_0B2_008:
 * refs (1): D9A51
 ROMP_0B2_009:
         :: DUPNULL$? casedrop                    * D9FF7
-          :: # B99B JstGetTHEMESG $>grob ;       * DA006
+          :: # B99B JstGetTHEMESG $>grob ;       * DA006  "(none)"
           BINT6 BINT40 MAKEGROB BINT0 ROT DUPLEN$ #1+_ONE_DO DUP INDEX@ DUP * DA024
           SUB$ DUP CAR$ CHR># DUP BINT9 #> ITE   * DA056
           :: DROP $>grob ;                       * DA07E
@@ -640,6 +640,6 @@ LIB0B2.hash:
         CON(5)  0                                * DCA69  names of length 14
         CON(5)  0                                * DCA6E  names of length 15
         CON(5)  0                                * DCA73  names of length 16
-        REL(5)  L_DCA7D                          * DCA78  end of the names
-L_DCA7D:
+        REL(5)  LIB0B2.hash.L1                   * DCA78  end of the names
+LIB0B2.hash.L1:
         CON(5)  0                                * DCA7D  command 000 has no name

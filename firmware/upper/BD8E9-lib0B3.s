@@ -66,8 +66,8 @@ LIB0B3.hash:
         CON(5)  0                                * BE78E  names of length 14
         CON(5)  0                                * BE793  names of length 15
         CON(5)  0                                * BE798  names of length 16
-        REL(5)  L_BE7A2                          * BE79D  end of the names
-L_BE7A2:
+        REL(5)  LIB0B3.hash.L1                   * BE79D  end of the names
+LIB0B3.hash.L1:
         CON(5)  0                                * BE7A2  command 000 has no name
         ENDLENGTH                                * BE7A7
 

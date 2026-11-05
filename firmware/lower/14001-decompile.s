@@ -3,7 +3,7 @@
 * Most referenced: msg>TAG EDITDECOMP$ GsstFIN DOSTOE DECOMP$ sstDISP nohalt ->StkStr22! 'EQ DORCLE DO>STR CRUNCH
 * Follows on from the previous file (at #14001 in the original ROM).
         D0=C                                     * 14001
-L_14004:
+SAVEERRN.L2:
         A=DAT0  A                                * 14004
         D0=D0+  5                                * 14007
         PC=(A)                                   * 1400A
@@ -21,14 +21,14 @@ ERR0:
         CD0EX                                    * 1402C
         DAT0=A  A                                * 1402F
         CD0EX                                    * 14032
-        GOTO    L_14004                          * 14035
+        GOTO    SAVEERRN.L2                      * 14035
 
 * -> #
 * refs (3): 14051 1406A 2DCED
 ERRN:
         CON(5)  (*)+5                            * 14039  primitive code object
         LC(5)   LASTERROR                        * 1403E
-        GOVLNG  L_114B3                          * 14045
+        GOVLNG  OBJ_11495.L1                     * 14045
         RPL
 
 * -> hxs
@@ -79,18 +79,18 @@ DOBEEP:
             GOSBVL  POP1%                        * 14169
             LC(3)   #499                         * 14170
             ?C<A    X                            * 14175
-            GOYES   L_1418A                      * 14178
+            GOYES   DOBEEP.L2                    * 14178
             LC(1)   #6                           * 1417A
             ?C>=A   P                            * 1417D
-            GOYES   L_14185                      * 14180
+            GOYES   DOBEEP.L1                    * 14180
             CAEX    P                            * 14182
-L_14185:
+DOBEEP.L1:
             ?A=0    M                            * 14185
-            GOYES   L_14192                      * 14188
-L_1418A:
+            GOYES   DOBEEP.L3                    * 14188
+DOBEEP.L2:
             LC(3)   #003                         * 1418A
             A=A+C   X                            * 1418F
-L_14192:
+DOBEEP.L3:
             GOVLNG  PUSH%LOOP                    * 14192
           ENDCODE                                * 14199
           COERCESWAP COERCE setbeep ?ATTNQUIT0 ; * 14199
@@ -109,7 +109,7 @@ setbeep:
         D=C     A                                * 141CF
         C=A     A                                * 141D1
         GOSBVL  makebeep                         * 141D3
-        GOTO    L_14203                          * 141DA
+        GOTO    ERRBEEP.L1                       * 141DA
 
 * refs (3): 141C9 141EA 1420F
 SAVPTR~jump_10:
@@ -125,7 +125,7 @@ ERRBEEP:
         D=C     A                                * 141F5
         LC(3)   #04A                             * 141F7
         GOSBVL  makebeep                         * 141FC
-L_14203:
+ERRBEEP.L1:
         GOVLNG  GETPTRLOOP                       * 14203
 
 * $ $' -> flag
@@ -155,37 +155,37 @@ $>$?:
         CSRB                                     * 1424C
         D=C     A                                * 1424F
         D=D-1   A                                * 14251
-        GOC     L_1427B                          * 14253
+        GOC     $>$?.loop2                       * 14253
         B=B-1   A                                * 14256
-        GOC     L_1429B                          * 14258
-L_1425B:
+        GOC     $>$?.L5                          * 14258
+$>$?.loop1:
         A=DAT0  B                                * 1425B
         C=DAT1  B                                * 1425E
         D0=D0+  2                                * 14261
         D1=D1+  2                                * 14264
         ?C>A    B                                * 14267
-        GOYES   L_1429B                          * 1426A
+        GOYES   $>$?.L5                          * 1426A
         ?C<A    B                                * 1426C
-        GOYES   L_1427B                          * 1426F
+        GOYES   $>$?.loop2                       * 1426F
         B=B-1   A                                * 14271
-        GOC     L_14296                          * 14273
+        GOC     $>$?.L4                          * 14273
         D=D-1   A                                * 14276
-        GONC    L_1425B                          * 14278
-L_1427B:
+        GONC    $>$?.loop1                       * 14278
+$>$?.loop2:
         LC(5)   %0_2A2B4                         * 1427B
-L_14282:
+$>$?.loop3:
         A=C     A                                * 14282
         GOSBVL  GETPTR                           * 14284
         D1=D1+  10                               * 1428B
         D=D+1   A                                * 1428E
         D=D+1   A                                * 14290
         PC=(A)                                   * 14292
-L_14296:
+$>$?.L4:
         D=D-1   A                                * 14296
-        GOC     L_1427B                          * 14298
-L_1429B:
+        GOC     $>$?.loop2                       * 14298
+$>$?.L5:
         LC(5)   %1                               * 1429B
-        GOTO    L_14282                          * 142A2
+        GOTO    $>$?.loop3                       * 142A2
         RPL
 
 * $ $' -> flag
@@ -220,7 +220,7 @@ drop;<7>:
 * refs (3): 15124 23481 23851
 halt:
         :: CK0NOLASTWD SuspendOK? NOTcase NOHALTERR * 14378
-L_14391:
+halt.L1:
           UNDO_ON?                               * 14391
 
 {'halt}:
@@ -231,8 +231,8 @@ L_14391:
             LAM 'halt }                          * 1439B
           BIND ERRSET                            * 143B1
           :: UNDO_ON? IT SAVESTACK               * 143BB
-            GOTO L_385B1 ;                       * 143CF
-L_143DE:
+            GOTO StartupProc~1.L1 ;              * 143CF
+Π'halt.L1:
           ERRTRAP OBJ_14E54 OBJ_1444C DropSysObs ERROR@ Err#Cont #= ?SEMI * 143DE
           ' Π'halt DRPExitAtLOOP casedrop ERRJMP * 14406
           ERROR@ Err#Kill #<>case ERRJMP         * 1441F
@@ -281,13 +281,13 @@ OBJ_14533:
             C=B     A                            * 1456F
             CD0EX                                * 14571
             B=C     A                            * 14574
-            LC(5)   L_143DE                      * 14576
-L_1457D:
+            LC(5)   Π'halt.L1                    * 14576
+OBJ_14533.loop1:
             D0=D0-  5                            * 1457D
             D=D+1   A                            * 14580
             A=DAT0  A                            * 14582
             ?C#A    A                            * 14585
-            GOYES   L_1457D                      * 14588
+            GOYES   OBJ_14533.loop1              * 14588
             D0=D0-  5                            * 1458A
             A=DAT0  A                            * 1458D
             D0=D0+  5                            * 14590
@@ -296,9 +296,9 @@ L_1457D:
             D0=D0+  5                            * 14598
             A=B     A                            * 1459B
             AD0EX                                * 1459D
-            GOLONG  L_14F86                      * 145A0
+            GOLONG  RROLL.L4                     * 145A0
           ENDCODE                                * 145A6
-L_145A6:
+OBJ_14533.loop2:
           ticR case OBJ_14613                    * 145A6
           RDROP                                  * 145B5
           CODE                                   * 145BA  49 nibbles
@@ -307,19 +307,19 @@ L_145A6:
             D0=D0-  5                            * 145C9
             A=DAT0  A                            * 145CC
             D0=C                                 * 145CF
-            LC(5)   L_14E22                      * 145D2
+            LC(5)   ®nop¯.L1                     * 145D2
             ?C#A    A                            * 145D9
-            GOYES   L_145E8                      * 145DC
+            GOYES   OBJ_14533.L3                 * 145DC
             LC(5)   FALSE                        * 145DE
-            GONC    L_145EF                      * 145E5
-L_145E8:
+            GONC    OBJ_14533.L4                 * 145E5
+OBJ_14533.L3:
             LC(5)   TRUE                         * 145E8
-L_145EF:
+OBJ_14533.L4:
             A=C     A                            * 145EF
             PC=(A)                               * 145F1
           ENDCODE                                * 145F5
           caseDROP RDROP                         * 145F5
-          RDUP GOTO L_145A6 ;                    * 145FF
+          RDUP GOTO OBJ_14533.loop2 ;            * 145FF
 
 * refs (1): 145B0
 OBJ_14613:
@@ -329,18 +329,18 @@ OBJ_14613:
 * refs (1): 1461D
 OBJ_14640:
         ::                                       * 14640
-L_14645:
+OBJ_14640.L1:
           ERRTRAP OBJ_14654 ;                    * 14645
 
 * refs (1): 1464A
 OBJ_14654:
         :: DropSysObs RDROP ERROR@ BINT1 #= caseERRJMP ERROR@ * 14654
           #0=case ERRJMP                         * 1467C
-          ERROR@ Err#Kill #= ?GOTO L_146AE SysErrorTrap GOTO L_14391 * 14686
-L_146AE:
+          ERROR@ Err#Kill #= ?GOTO OBJ_14654.L1 SysErrorTrap GOTO halt.L1 * 14686
+OBJ_14654.L1:
           OBJ_14EEC #0=?SKIP ERRJMP kill ;       * 146AE
 
-L_146C7:
+OBJ_14654.L2:
         CON(5)  OBJ_14EEC                        * 146C7  address (the code jumps or points through it)
 
         CON(5)  #1+                              * 146CC  address (the code jumps or points through it)
@@ -349,7 +349,7 @@ L_146C7:
 
         CON(5)  RDROP                            * 146D6  address (the code jumps or points through it)
 
-L_146DB:
+OBJ_14654.L3:
         CON(5)  OBJ_14EEC                        * 146DB  address (the code jumps or points through it)
 
         CON(5)  DUP                              * 146E0  address (the code jumps or points through it)
@@ -366,7 +366,7 @@ L_146DB:
 
         CON(5)  GOTO                             * 146FE  address (the code jumps or points through it)
 
-        CON(5)  L_14391                          * 14703  address (the code jumps or points through it)
+        CON(5)  halt.L1                          * 14703  address (the code jumps or points through it)
 
         SEMI                                     * 14708
 
@@ -375,7 +375,7 @@ OBJ_1470D:
         :: SWAP BINT0 #=casedrop OBJ_14762       * 1470D
           #1=case OBJ_147C1                      * 14726
           'R 2Ob>Seco ->StkStr22! OBJ_14D8C RDROP BINT2 OBJ_14F8C GOTO * 14730
-          L_146DB ;                              * 14758
+          OBJ_14654.L3 ;                         * 14758
 
 * refs (5): 14721 147D0 147DF 14802 14811
 OBJ_14762:
@@ -409,9 +409,9 @@ OBJ_1483E:
 * refs (2): 149C9 14B18
 OBJ_14843:
           :: DUP PALPTRDCMP DROP ; OBJ_148C0 OBJ_148C0 OBJ_148C0 OBJ_148C0 * 14843
-          BINT5 ' xIFEND 4PICK EQ ?GOTO L_148A7 DROP OBJ_148C0 OBJ_148C0 * 14870
-          BINT7                                  * 148A2
-L_148A7:
+          BINT5 ' xIFEND 4PICK EQ ?GOTO OBJ_14843.L1 DROP OBJ_148C0 * 14870
+          OBJ_148C0 BINT7                        * 1489D
+OBJ_14843.L1:
           SWAP OBJ_14D8C ::NEVAL GsstFIN ;       * 148A7
 
 * refs (6): 1485C 14861 14866 1486B 14898 1489D
@@ -425,14 +425,14 @@ OBJ_148C0:
 * refs (1): 236DC
 OBJ_1490B:
         :: sstDISP                               * 1490B
-          :: xENDDO GOTO L_146C7 ; 2RDROP        * 14915
-L_14933:
+          :: xENDDO GOTO OBJ_14654.L2 ; 2RDROP   * 14915
+OBJ_1490B.L1:
           OBJ_14EEC #1+ OBJ_14F8C GsstFIN ;      * 14933
 
 * refs (1): 23080
 OBJ_1494C:
-        :: sstDISP xREPEAT GOTO L_146DB OBJ_14EEC #1+ RROLL RDROP OBJ_14EEC * 1494C
-          OBJ_14F8C RSKIP RSKIP RSKIP GsstFIN ;  * 1497E
+        :: sstDISP xREPEAT GOTO OBJ_14654.L3 OBJ_14EEC #1+ RROLL RDROP * 1494C
+          OBJ_14EEC OBJ_14F8C RSKIP RSKIP RSKIP GsstFIN ; * 14979
 
 * refs (1): 236AD
 OBJ_1499C:
@@ -444,21 +444,21 @@ OBJ_149BF:
 
 * refs (1): 14A5A
 OBJ_149C4:
-          :: OBJ_14843 ONESWAP ; GOTO L_14A0F    * 149C4
-L_149E2:
+          :: OBJ_14843 ONESWAP ; GOTO OBJ_149C4.L2 * 149C4
+OBJ_149C4.loop1:
           RSWAP RDROP 3UNROLL 3PICK ID>$ SPACE$ !insert$ !append$ * 149E2
           SWAP#1+SWAP                            * 14A0A
-L_14A0F:
-          RDUP ticR DROPDUP TYPELAM? ?GOTO L_149E2 RDROP DROP OBJ_14D8C * 14A0F
-          ::NEVAL ERRSET OBJ_14FC3 GsstFIN ;     * 14A3C
+OBJ_149C4.L2:
+          RDUP ticR DROPDUP TYPELAM? ?GOTO OBJ_149C4.loop1 RDROP DROP * 14A0F
+          OBJ_14D8C ::NEVAL ERRSET OBJ_14FC3 GsstFIN ; * 14A37
 
 * refs (1): 23027
 OBJ_14A55:
         :: OBJ_149C4                             * 14A55
-L_14A5F:
-          SWAP#1+SWAP 'R 3UNROLL 3PICK DUP TYPELAM? NOT?GOTO L_14AA5 ID>$ * 14A5F
-          SPACE$ !insert$ !append$ GOTO L_14A5F  * 14A8C
-L_14AA5:
+OBJ_14A55.loop1:
+          SWAP#1+SWAP 'R 3UNROLL 3PICK DUP TYPELAM? NOT?GOTO OBJ_14A55.L2 * 14A5F
+          ID>$ SPACE$ !insert$ !append$ GOTO OBJ_14A55.loop1 * 14A87
+OBJ_14A55.L2:
           ->StkStr22! CHR_Space >H$ CHR_Newline >H$ !append$ CHR_Space >H$ * 14AA5
           DISPSTATUS2 VERYSLOW ::NEVAL GsstFIN ; * 14ACD
 
@@ -473,7 +473,7 @@ OBJ_14B13:
 
 OBJ_14B72:
         :: DUP sstDISP                           * 14B72
-          :: EVAL ERRSET GOTO L_146C7 ; 2RDROP GOTO L_14933 ; * 14B81
+          :: EVAL ERRSET GOTO OBJ_14654.L2 ; 2RDROP GOTO OBJ_1490B.L1 ; * 14B81
 
 * refs (1): 2366D
 OBJ_14BB3:
@@ -494,10 +494,10 @@ sstDISP:
 
 * refs (1): 22F1D
 OBJ_14C30:
-        :: EVAL GOTO L_14C58 RSKIP 'R GOTO L_14C62 * 14C30
-L_14C58:
+        :: EVAL GOTO OBJ_14C30.L1 RSKIP 'R GOTO OBJ_14C30.L2 * 14C30
+OBJ_14C30.L1:
           ' xTHEN                                * 14C58
-L_14C62:
+OBJ_14C30.L2:
           sstDISP GsstFIN ;                      * 14C62
 
 * refs (1): 22FC9
@@ -531,19 +531,19 @@ OBJ_14D1B:
         D0=C                                     * 14D31
         LC(5)   SEMI                             * 14D34
         ?C=A    A                                * 14D3B
-        GOYES   L_14D44                          * 14D3E
-L_14D40:
-        GOTO    L_14F7C                          * 14D40
-L_14D44:
+        GOYES   OBJ_14D1B.L2                     * 14D3E
+OBJ_14D1B.loop1:
+        GOTO    RROLL.loop3                      * 14D40
+OBJ_14D1B.L2:
         C=B     A                                * 14D44
         CD0EX                                    * 14D46
         D0=D0-  15                               * 14D49
         D0=D0-  5                                * 14D4C
         A=DAT0  A                                * 14D4F
         D0=C                                     * 14D52
-        LC(5)   L_14E22                          * 14D55
+        LC(5)   ®nop¯.L1                         * 14D55
         ?C=A    A                                * 14D5C
-        GOYES   L_14D40                          * 14D5F
+        GOYES   OBJ_14D1B.loop1                  * 14D5F
         LC(5)   OBJ_14D6E                        * 14D61
         A=C     A                                * 14D68
         PC=(A)                                   * 14D6A
@@ -560,7 +560,7 @@ OBJ_14D8C:
 * refs (1): 147B7
 OBJ_14DAA:
         :: ' ®nop¯ >R >R OBJ_14EEC DUP RROLL RROLL 2RDROP RDUP ERRTRAP NOP * 14DAA
-          GOTO L_145A6 ;                         * 14DEB
+          GOTO OBJ_14533.loop2 ;                 * 14DEB
 
 * refs (2): 14799 147A8
 OBJ_14DFA:
@@ -569,7 +569,7 @@ OBJ_14DFA:
 * refs (1): 14DB4
 ®nop¯:
         ::                                       * 14E1D
-L_14E22:
+®nop¯.L1:
           NOP ;                                  * 14E22
 
 * refs (1): 234B5
@@ -594,9 +594,9 @@ OBJ_14E6D:
         D0=C                                     * 14E88
         LC(5)   SAVELAM                          * 14E8B
         ?C=A    A                                * 14E92
-        GOYES   L_14E9E                          * 14E95
+        GOYES   OBJ_14E6D.L1                     * 14E95
         GOVLNG  PushFLoop                        * 14E97
-L_14E9E:
+OBJ_14E6D.L1:
         GOVLNG  PushTLoop                        * 14E9E
 
 * ->
@@ -604,12 +604,12 @@ L_14E9E:
 RDUP:
         CON(5)  (*)+5                            * 14EA5  primitive code object
         ST=0    10                               * 14EAA
-L_14EAD:
+RDUP.loop1:
         D=D-1   A                                * 14EAD
-        GONC    L_14EB9                          * 14EAF
+        GONC    RDUP.L2                          * 14EAF
         GOSUB   SUB_14ED6                        * 14EB2
-        GONC    L_14EAD                          * 14EB6
-L_14EB9:
+        GONC    RDUP.loop1                       * 14EB6
+RDUP.L2:
         C=B     A                                * 14EB9
         CD0EX                                    * 14EBB
         D0=D0-  5                                * 14EBE
@@ -619,15 +619,15 @@ L_14EB9:
         D0=D0+  5                                * 14ECA
         CD0EX                                    * 14ECD
         B=C     A                                * 14ED0
-        GOTO    L_14F7C                          * 14ED2
+        GOTO    RROLL.loop3                      * 14ED2
 
 * refs (2): 14EB2 1A6FE
 SUB_14ED6:
         ?ST=1   10                               * 14ED6
-        GOYES   L_14EE5                          * 14ED9
+        GOYES   SUB_14ED6.L1                     * 14ED9
         ST=1    10                               * 14EDB
-        GOVLNG  L_18382                          * 14EDE
-L_14EE5:
+        GOVLNG  SUB_18362.L1                     * 14EDE
+SUB_14ED6.L1:
         GOVLNG  DOMEMERR                         * 14EE5
 
 * refs (9): 14433 146AE 146C7 146DB 14933 14965 ...
@@ -637,21 +637,21 @@ OBJ_14EEC:
         C=B     A                                * 14EF8
         D0=C                                     * 14EFA
         B=0     A                                * 14EFD
-        LC(5)   L_14645                          * 14EFF
-L_14F06:
+        LC(5)   OBJ_14640.L1                     * 14EFF
+OBJ_14EEC.loop1:
         B=B+1   A                                * 14F06
         D0=D0-  5                                * 14F08
         A=DAT0  A                                * 14F0B
         ?A=0    A                                * 14F0E
-        GOYES   L_14F1C                          * 14F11
+        GOYES   OBJ_14EEC.L2                     * 14F11
         ?C#A    A                                * 14F13
-        GOYES   L_14F06                          * 14F16
+        GOYES   OBJ_14EEC.loop1                  * 14F16
         B=B+1   A                                * 14F18
         A=B     A                                * 14F1A
-L_14F1C:
+OBJ_14EEC.L2:
         R0=A                                     * 14F1C
         GOSBVL  PUSH#                            * 14F1F
-        GOTO    L_14F7C                          * 14F26
+        GOTO    RROLL.loop3                      * 14F26
 
 * #n ->
 * refs (9): 146D1 146E5 146EA 1496F 14DCD 14DD2 ...
@@ -663,7 +663,7 @@ RROLL:
         A=A+A   A                                * 14F3A
         A=A+C   A                                * 14F3C
         C=C-1   A                                * 14F3E
-        GOC     L_14F7C                          * 14F40
+        GOC     RROLL.loop3                      * 14F40
         R0=C                                     * 14F43
         C=B     A                                * 14F46
         C=C-A   A                                * 14F48
@@ -673,27 +673,27 @@ RROLL:
         RSTK=C                                   * 14F52
         D0=D0+  5                                * 14F54
         A=R0                                     * 14F57
-L_14F5A:
+RROLL.loop1:
         A=A-1   A                                * 14F5A
-        GOC     L_14F6F                          * 14F5C
+        GOC     RROLL.L2                         * 14F5C
         C=DAT0  A                                * 14F5F
         D0=D0-  5                                * 14F62
         DAT0=C  A                                * 14F65
         D0=D0+  10                               * 14F68
-        GOTO    L_14F5A                          * 14F6B
-L_14F6F:
+        GOTO    RROLL.loop1                      * 14F6B
+RROLL.L2:
         D0=D0-  5                                * 14F6F
         C=RSTK                                   * 14F72
         DAT0=C  A                                * 14F74
         C=RSTK                                   * 14F77
         D0=C                                     * 14F79
-L_14F7C:
+RROLL.loop3:
         A=DAT0  A                                * 14F7C
         D0=D0+  5                                * 14F7F
         PC=(A)                                   * 14F82
-L_14F86:
+RROLL.L4:
         B=A     A                                * 14F86
-        GOTO    L_14F7C                          * 14F88
+        GOTO    RROLL.loop3                      * 14F88
 
 * refs (4): 1474E 1493D 1497E 149B0
 OBJ_14F8C:
@@ -715,7 +715,7 @@ OBJ_14F8C:
         D0=D0+  5                                * 14FB7
         CD0EX                                    * 14FBA
         B=C     A                                * 14FBD
-        GOTO    L_14F7C                          * 14FBF
+        GOTO    RROLL.loop3                      * 14FBF
 
 * refs (3): 14A46 14AFF 14B5E
 OBJ_14FC3:
@@ -729,16 +729,16 @@ OBJ_14FC3:
         D0=A                                     * 14FE1
         C=DAT0  A                                * 14FE4
         ?C=0    A                                * 14FE7
-        GOYES   L_14FFC                          * 14FEA
+        GOYES   OBJ_14FC3.L1                     * 14FEA
         D0=D0+  5                                * 14FEC
         C=DAT0  A                                * 14FEF
         ?C=0    A                                * 14FF2
-        GOYES   L_14FFC                          * 14FF5
+        GOYES   OBJ_14FC3.L1                     * 14FF5
         C=C-1   A                                * 14FF7
         DAT0=C  A                                * 14FF9
-L_14FFC:
+OBJ_14FC3.L1:
         GOSBVL  GETPTR                           * 14FFC
-        GOTO    L_14F7C                          * 15003
+        GOTO    RROLL.loop3                      * 15003
         RPL
 
 * % ->
@@ -808,7 +808,7 @@ OBJ_15156:
 GsstFIN:
         CON(5)  (*)+5                            * 1518D  primitive code object
         ASSEMBLE
-        LC(5)   L_146DB                          * 15192
+        LC(5)   OBJ_14654.L3                     * 15192
         D0=C                                     * 15199
         A=DAT0  A                                * 1519C
         D0=D0+  5                                * 1519F
@@ -955,19 +955,19 @@ ALGeq?:
             D1=C                                 * 156A7
             LC(5)   DOLIST                       * 156AA
             ?C=A    A                            * 156B1
-            GOYES   L_156CE                      * 156B4
+            GOYES   ALGeq?.L1                    * 156B4
             LC(5)   DOCOL                        * 156B6
             ?C=A    A                            * 156BD
-            GOYES   L_156CE                      * 156C0
+            GOYES   ALGeq?.L1                    * 156C0
             LC(5)   DOSYMB                       * 156C2
             ?C#A    A                            * 156C9
-            GOYES   L_156D8                      * 156CC
-L_156CE:
+            GOYES   ALGeq?.L2                    * 156CC
+ALGeq?.L1:
             LC(5)   TRUE                         * 156CE
-            GONC    L_156DF                      * 156D5
-L_156D8:
+            GONC    ALGeq?.L3                    * 156D5
+ALGeq?.L2:
             LC(5)   FALSE                        * 156D8
-L_156DF:
+ALGeq?.L3:
             A=C     A                            * 156DF
             PC=(A)                               * 156E1
           ENDCODE                                * 156E5
@@ -1051,11 +1051,11 @@ Trceq!:
 
 * refs (1): A306E
 OBJ_158B9:
-            # A07 msg>TAG 1GETABND 'EvalNoCK:_sup xEVAL CK1NoBlame * 158B9
+            # A07 msg>TAG 1GETABND 'EvalNoCK:_sup xEVAL CK1NoBlame * 158B9  "Left"
 
 * refs (1): A307D
 OBJ_158DC:
-            # A08 msg>TAG ;                      * 158DC
+            # A08 msg>TAG ;                      * 158DC  "Right"
           'EvalNoCK:_sup xEVAL CK1NoBlame        * 158F0
 
 * refs (1): A3091
@@ -1112,7 +1112,7 @@ stkdecomp$w:
         ASSEMBLE
         ST=1    3                                * 159F0
         ST=0    4                                * 159F3
-        GOTO    L_15B48                          * 159F6
+        GOTO    OBJ_15B3D.L2                     * 159F6
         RPL
 
 * ->
@@ -1136,14 +1136,14 @@ RclOldMode:
         CON(5)  (*)+5                            * 15A54  primitive code object
         ASSEMBLE
         ST=0    1                                * 15A59
-        GOTO    L_15A68                          * 15A5C
+        GOTO    rstfmt1.L1                       * 15A5C
 
 * ->
 * refs (7): 15A36 15A45 2FCBD 45DE8 468E7 D80F5 ...
 rstfmt1:
         CON(5)  (*)+5                            * 15A60  primitive code object
         ST=1    1                                * 15A65
-L_15A68:
+rstfmt1.L1:
         GOSUB   SUB_15AD5                        * 15A68
         A=DAT0  B                                * 15A6C
         DAT1=A  B                                * 15A6F
@@ -1152,7 +1152,7 @@ L_15A68:
         A=DAT0  B                                * 15A7C
         DAT1=A  B                                * 15A7F
         P=      0                                * 15A82
-L_15A84:
+rstfmt1.L2:
         GOVLNG  GETPTRLOOP                       * 15A84
 
 * ->
@@ -1160,13 +1160,13 @@ L_15A84:
 savefmt1:
         CON(5)  (*)+5                            * 15A8B  primitive code object
         ST=1    1                                * 15A90
-        GOTO    L_15A9F                          * 15A93
+        GOTO    TempStd.L1                       * 15A93
 
 * refs (2): 3528C 352F5
 TempStd:
         CON(5)  (*)+5                            * 15A97  primitive code object
         ST=0    1                                * 15A9C
-L_15A9F:
+TempStd.L1:
         GOSUB   SUB_15AD5                        * 15A9F
         P=      0                                * 15AA3
         A=DAT1  B                                * 15AA5
@@ -1181,7 +1181,7 @@ L_15A9F:
         LC(2)   #CF                              * 15AC6
         A=A&C   B                                * 15ACA
         DAT1=A  B                                * 15ACE
-        GOTO    L_15A84                          * 15AD1
+        GOTO    rstfmt1.L2                       * 15AD1
 
 * refs (2): 15A68 15A9F
 SUB_15AD5:
@@ -1218,15 +1218,15 @@ editdecomp$w:
         CON(5)  (*)+5                            * 15B31  primitive code object
         ASSEMBLE
         ST=1    4                                * 15B36
-        GOTO    L_15B45                          * 15B39
+        GOTO    OBJ_15B3D.L1                     * 15B39
 
 * refs (2): 15B27 16FF2
 OBJ_15B3D:
         CON(5)  (*)+5                            * 15B3D  primitive code object
         ST=0    4                                * 15B42
-L_15B45:
+OBJ_15B3D.L1:
         ST=0    3                                * 15B45
-L_15B48:
+OBJ_15B3D.L2:
         GOSUB   SUB_15C5F                        * 15B48
 
 * Decompiler handlers by object type (walked by SUB_15C5F): prolog, handler when ST3 is set, handler when it is clear
@@ -1292,35 +1292,35 @@ L_15B48:
 SUB_15C5F:
         GOSBVL  SAVPTR                           * 15C5F
         GOSBVL  Rom-Word?                        * 15C66
-        GONC    L_15C84                          * 15C6D
+        GONC    SUB_15C5F.L3                     * 15C6D
         LC(5)   ~PALPTRDCMP;NOTcase;_type(_)_    * 15C70
-L_15C77:
+SUB_15C5F.loop1:
         A=C     A                                * 15C77
-L_15C79:
+SUB_15C5F.loop2:
         GOSBVL  GETPTR                           * 15C79
         PC=(A)                                   * 15C80
-L_15C84:
+SUB_15C5F.L3:
         D1=A                                     * 15C84
         A=DAT1  A                                * 15C87
         C=RSTK                                   * 15C8A
         D0=C                                     * 15C8C
-L_15C8F:
+SUB_15C5F.loop4:
         C=DAT0  A                                * 15C8F
         ?C=A    A                                * 15C92
-        GOYES   L_15CA9                          * 15C95
+        GOYES   SUB_15C5F.L5                     * 15C95
         D0=D0+  15                               * 15C97
         ?C#0    A                                * 15C9A
-        GOYES   L_15C8F                          * 15C9D
+        GOYES   SUB_15C5F.loop4                  * 15C9D
         LC(5)   _type(_)_                        * 15C9F
-        GONC    L_15C77                          * 15CA6
-L_15CA9:
+        GONC    SUB_15C5F.loop1                  * 15CA6
+SUB_15C5F.L5:
         D0=D0+  5                                * 15CA9
         ?ST=1   3                                * 15CAC
-        GOYES   L_15CB4                          * 15CAF
+        GOYES   SUB_15C5F.L6                     * 15CAF
         D0=D0+  5                                * 15CB1
-L_15CB4:
+SUB_15C5F.L6:
         A=DAT0  A                                * 15CB4
-        GOTO    L_15C79                          * 15CB7
+        GOTO    SUB_15C5F.loop2                  * 15CB7
         RPL
 
 * refs (2): 15C9F 16162

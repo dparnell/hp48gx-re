@@ -5,7 +5,7 @@
 
 * refs (1): 17FCA
 OBJ_1802E:
-        CON(5)  L_181FA                          * 1802E  code object: the address of its machine code
+        CON(5)  OBJ_181C8.L1                     * 1802E  code object: the address of its machine code
 
         CON(5)  caseFALSE                        * 18033  address (the code jumps or points through it)
 
@@ -13,7 +13,7 @@ OBJ_1802E:
 
         CON(5)  GOTO                             * 1803D  address (the code jumps or points through it)
 
-        CON(5)  L_17FBB                          * 18042  address (the code jumps or points through it)
+        CON(5)  OBJ_17FB1.loop1                  * 18042  address (the code jumps or points through it)
         RPL
 
         SEMI                                     * 18047
@@ -48,27 +48,27 @@ OBJ_181C8:
         :: SWAP IT SWAPDROP                      * 181C8
           DUP CONTEXT! LastNonNull drop;dq OBJ_1804C ; * 181DC
         ASSEMBLE
-L_181FA:
+OBJ_181C8.L1:
         D=-D-1  A                                * 181FA
         D0=D0-  2                                * 181FC
         GOSBVL  POP#                             * 181FF
         LC(5)   #00001                           * 18206
         ?C=A    A                                * 1820D
-        GOYES   L_18225                          * 18210
+        GOYES   OBJ_181C8.L2                     * 18210
         LC(2)   #06                              * 18212
         ?C#A    A                                * 18216
-        GOYES   L_1823B                          * 18219
+        GOYES   OBJ_181C8.L5                     * 18219
         LC(5)   FALSE                            * 1821B
-        GONC    L_1822C                          * 18222
-L_18225:
+        GONC    OBJ_181C8.L3                     * 18222
+OBJ_181C8.L2:
         LC(5)   TRUE                             * 18225
-L_1822C:
+OBJ_181C8.L3:
         D1=D1-  5                                * 1822C
         D=D-1   A                                * 1822F
         DAT1=C  A                                * 18231
-L_18234:
+OBJ_181C8.L4:
         GOVLNG  PushTLoop                        * 18234
-L_1823B:
+OBJ_181C8.L5:
         GOVLNG  PushFLoop                        * 1823B
 
 * refs (1): 17D00
@@ -79,8 +79,8 @@ NoMemComLine?:
         A=DAT0  A                                * 18251
         D0=C                                     * 18254
         ?A#0    A                                * 18257
-        GOYES   L_1823B                          * 1825A
-        GONC    L_18234                          * 1825C
+        GOYES   OBJ_181C8.L5                     * 1825A
+        GONC    OBJ_181C8.L4                     * 1825C
 
 * refs (1): 17D28
 NoLastStack?:
@@ -89,19 +89,19 @@ NoLastStack?:
         CD0EX                                    * 1826B
         A=DAT0  A                                * 1826E
         D0=A                                     * 18271
-L_18274:
+NoLastStack?.L1:
         A=DAT0  A                                * 18274
         D0=C                                     * 18277
         ?A=0    A                                * 1827A
-        GOYES   L_18234                          * 1827D
-        GONC    L_1823B                          * 1827F
+        GOYES   OBJ_181C8.L4                     * 1827D
+        GONC    OBJ_181C8.L5                     * 1827F
 
 * refs (1): 17D73
 NoLastArg?:
         CON(5)  (*)+5                            * 18282  primitive code object
         LC(5)   LASTARG                          * 18287
         CD0EX                                    * 1828E
-        GOTO    L_18274                          * 18291
+        GOTO    NoLastStack?.L1                  * 18291
 
 * refs (3): 387C3 6C927 8D3B9
 OBJ_18295:
@@ -113,13 +113,13 @@ OBJ_18295:
         C=0     A                                * 182AA
         C=DAT0  1                                * 182AC
         ?C=0    B                                * 182B0
-        GOYES   L_182F7                          * 182B3
+        GOYES   OBJ_18295.L3                     * 182B3
         D=D-C   A                                * 182B5
-        GONC    L_182C6                          * 182B7
+        GONC    OBJ_18295.L1                     * 182B7
         C=RSTK                                   * 182BA
         D0=C                                     * 182BC
         GOVLNG  DOMEMERR                         * 182BF
-L_182C6:
+OBJ_18295.L1:
         D0=(5)  LASTARG                          * 182C6
         P=C     0                                * 182CD
         A=C     A                                * 182D1
@@ -130,15 +130,15 @@ L_182C6:
         A=A-C   A                                * 182DC
         D1=A                                     * 182DE
         P=P-1                                    * 182E1
-L_182E3:
+OBJ_18295.loop2:
         C=DAT0  A                                * 182E3
         DAT1=C  A                                * 182E6
         D0=D0+  5                                * 182E9
         D1=D1+  5                                * 182EC
         P=P-1                                    * 182EF
-        GONC    L_182E3                          * 182F1
+        GONC    OBJ_18295.loop2                  * 182F1
         D1=A                                     * 182F4
-L_182F7:
+OBJ_18295.L3:
         P=      0                                * 182F7
         C=RSTK                                   * 182F9
         D0=C                                     * 182FB
@@ -149,9 +149,9 @@ L_182F7:
 * refs (16): 143ED 14659 202B3 2DDC9 2DF33 2E09F ...
 DropSysObs:
         CON(5)  (*)+5                            * 18308  primitive code object
-L_1830D:
+DropSysObs.L1:
         GOSUB   SUB_1831B                        * 1830D
-L_18311:
+DropSysObs.L2:
         A=DAT0  A                                * 18311
         D0=D0+  5                                * 18314
         PC=(A)                                   * 18317
@@ -164,24 +164,24 @@ SUB_1831B:
         C=DAT1  A                                * 1832C
         A=A-C   A                                * 1832F
         D1=A                                     * 18331
-        GOTO    L_18382                          * 18334
+        GOTO    SUB_18362.L1                     * 18334
 
 * refs (3): 17BB8 17F06 18010
 OBJ_18338:
         CON(5)  (*)+5                            * 18338  primitive code object
-        GOSUB   L_18382                          * 1833D
+        GOSUB   SUB_18362.L1                     * 1833D
         LC(5)   #00050                           * 18341
         ?D>C    A                                * 18348
-        GOYES   L_18351                          * 1834B
-        GOTO    L_1823B                          * 1834D
-L_18351:
-        GOTO    L_18234                          * 18351
+        GOYES   OBJ_18338.L1                     * 1834B
+        GOTO    OBJ_181C8.L5                     * 1834D
+OBJ_18338.L1:
+        GOTO    OBJ_181C8.L4                     * 18351
 
 * refs (1): 17E4D
 DelStack:
         CON(5)  (*)+5                            * 18355  primitive code object
         GOSUB   SUB_18362                        * 1835A
-        GOTO    L_18311                          * 1835E
+        GOTO    DropSysObs.L2                    * 1835E
 
 * refs (2): 17C44 1835A
 SUB_18362:
@@ -192,7 +192,7 @@ SUB_18362:
         DAT1=C  A                                * 1837A
         A=A-C   A                                * 1837D
         D1=A                                     * 1837F
-L_18382:
+SUB_18362.L1:
         GOSBVL  SAVPTR                           * 18382
         GOSBVL  GARBAGECOL                       * 18389
         GOVLNG  GETPTR                           * 18390
@@ -218,7 +218,7 @@ OBJ_183EB:
         A=DAT1  A                                * 183F7
         D0=A                                     * 183FA
         D0=D0+  10                               * 183FD
-        GOTO    L_1841D                          * 18400
+        GOTO    OBJ_18404.L1                     * 18400
 
 * refs (1): 183BA
 OBJ_18404:
@@ -227,19 +227,19 @@ OBJ_18404:
         GOSBVL  SAVPTR                           * 1840C
         D0=A                                     * 18413
         GOSBVL  SUB_0841E                        * 18416
-L_1841D:
+OBJ_18404.L1:
         A=0     A                                * 1841D
         A=DAT0  B                                * 1841F
         LC(2)   #17                              * 18422
         ?C>A    B                                * 18426
-        GOYES   L_1842E                          * 18429
+        GOYES   OBJ_18404.L2                     * 18429
         A=C     B                                * 1842B
-L_1842E:
+OBJ_18404.L2:
         D0=D0+  2                                * 1842E
         CD0EX                                    * 18431
         R3=C                                     * 18434
         R2=A                                     * 18437
-        LC(5)   portnotaverr                     * 1843A
+        LC(5)   portnotaverr                     * 1843A  "Port Not Available"
         A=A+A   A                                * 18441
         C=C+A   A                                * 18443
         R0=C                                     * 18445
@@ -254,15 +254,15 @@ L_1842E:
         C=R3                                     * 18466
         D1=C                                     * 18469
         C=R2                                     * 1846C
-        GOTO    L_1847F                          * 1846F
-L_18473:
+        GOTO    OBJ_18404.L4                     * 1846F
+OBJ_18404.loop3:
         A=DAT1  B                                * 18473
         D1=D1+  2                                * 18476
         DAT0=A  B                                * 18479
         D0=D0+  2                                * 1847C
-L_1847F:
+OBJ_18404.L4:
         C=C-1   B                                * 1847F
-        GONC    L_18473                          * 18482
+        GONC    OBJ_18404.loop3                  * 18482
         GOVLNG  GPOverWrR0Lp                     * 18485
         RPL
 
@@ -270,7 +270,7 @@ L_1847F:
 * refs (3): 1A12F 26890 B2738
 PATHDIR:
         :: NULL{} CONTEXT@                       * 1848C
-L_1849B:
+PATHDIR.L1:
           BEGIN DUP RAM-WORDNAME ROTSWAP >HCOMP SWAP MYRAMROMPAIR NOT UNTIL * 1849B
           CDRCOMP ' xHOME >HCOMP ;               * 184C8
 
@@ -350,11 +350,11 @@ CkNonNull:
         A=DAT1  B                                * 18661
         D1=C                                     * 18664
         ?A#0    B                                * 18667
-        GOYES   L_18678                          * 1866A
+        GOYES   CkNonNull.L1                     * 1866A
         D1=D1+  5                                * 1866C
         D=D+1   A                                * 1866F
         GOVLNG  PushFLoop                        * 18671
-L_18678:
+CkNonNull.L1:
         GOVLNG  PushTLoop                        * 18678
         RPL
 
@@ -401,7 +401,7 @@ OBJ_187AB:
         D1=D1+  2                                * 187C0
         LC(2)   #02                              * 187C3
         A=A-C   B                                * 187C7
-        GOC     L_187F6                          * 187CA
+        GOC     OBJ_187AB.L1                     * 187CA
         A=A+A   B                                * 187CD
         CD1EX                                    * 187D0
         C=C+A   A                                * 187D3
@@ -410,11 +410,11 @@ OBJ_187AB:
         A=DAT1  4                                * 187DA
         LC(5)   #05145                           * 187DE
         ?C#A    A                                * 187E5
-        GOYES   L_187F6                          * 187E8
+        GOYES   OBJ_187AB.L1                     * 187E8
         C=RSTK                                   * 187EA
         D1=C                                     * 187EC
         GOVLNG  PushTLoop                        * 187EF
-L_187F6:
+OBJ_187AB.L1:
         C=RSTK                                   * 187F6
         D1=C                                     * 187F8
         GOVLNG  PushFLoop                        * 187FB
@@ -423,17 +423,17 @@ L_187F6:
 OBJ_18802:
         CON(5)  (*)+5                            * 18802  primitive code object
         D=D-1   A                                * 18807
-        GONC    L_18812                          * 18809
+        GONC    OBJ_18802.L1                     * 18809
         GOSUB   SUB_1882C                        * 1880C
         D=D-1   A                                * 18810
-L_18812:
+OBJ_18802.L1:
         LC(5)   LASTROMWDOB                      * 18812
         CD0EX                                    * 18819
         A=DAT0  A                                * 1881C
         D0=C                                     * 1881F
         D1=D1-  5                                * 18822
         DAT1=A  A                                * 18825
-        GOTO    L_18869                          * 18828
+        GOTO    0LASTOWDOB!.L1                   * 18828
 
 * refs (1): 1880C
 SUB_1882C:
@@ -453,7 +453,7 @@ SUB_1882C:
         D0=(5)  LASTROMWDOB                      * 1885C
         DAT0=C  A                                * 18863
         D0=A                                     * 18866
-L_18869:
+0LASTOWDOB!.L1:
         A=DAT0  A                                * 18869
         D0=D0+  5                                * 1886C
         PC=(A)                                   * 1886F
@@ -491,7 +491,7 @@ NOT$:
         ASSEMBLE
         ST=1    3                                * 188EB
         ST=0    4                                * 188EE
-        GOTO    L_1890F                          * 188F1
+        GOTO    !XOR$.L1                         * 188F1
 
 * $ $' -> $''   ???
 * refs (3): 18891 4F908 4F930
@@ -499,7 +499,7 @@ NOT$:
         CON(5)  (*)+5                            * 188F5  primitive code object
         ST=0    3                                * 188FA
         ST=1    4                                * 188FD
-        GOTO    L_1890F                          * 18900
+        GOTO    !XOR$.L1                         * 18900
 
 * $ $' -> $''   ???
 * refs (2): 188A5 4F935
@@ -507,29 +507,29 @@ NOT$:
         CON(5)  (*)+5                            * 18904  primitive code object
         ST=0    3                                * 18909
         ST=0    4                                * 1890C
-L_1890F:
+!XOR$.L1:
         A=DAT1  A                                * 1890F
         D1=D1+  5                                * 18912
         D=D+1   A                                * 18915
         GOSUB   SUB_18997                        * 18917
-L_1891B:
+!XOR$.loop2:
         D=D-1   A                                * 1891B
-        GOC     L_18939                          * 1891D
+        GOC     !XOR$.L3                         * 1891D
         A=DAT0  W                                * 18920
         C=DAT1  W                                * 18924
         GOSUB   SUB_189C6                        * 18928
         DAT1=A  W                                * 1892C
         D0=D0+  16                               * 18930
         D1=D1+  16                               * 18933
-        GONC    L_1891B                          * 18936
-L_18939:
+        GONC    !XOR$.loop2                      * 18936
+!XOR$.L3:
         P=P-1                                    * 18939
-        GOC     L_1894E                          * 1893B
+        GOC     !XOR$.L4                         * 1893B
         A=DAT0  WP                               * 1893E
         C=DAT1  WP                               * 18942
         GOSUB   SUB_189C6                        * 18946
         DAT1=A  WP                               * 1894A
-L_1894E:
+!XOR$.L4:
         P=      0                                * 1894E
         GOSBVL  GETPTR                           * 18950
         A=DAT0  A                                * 18957
@@ -542,22 +542,22 @@ L_1894E:
         CON(5)  (*)+5                            * 18961  primitive code object
         A=DAT1  A                                * 18966
         GOSUB   SUB_18997                        * 18969
-L_1896D:
+!NOT$.loop1:
         D=D-1   A                                * 1896D
-        GOC     L_18983                          * 1896F
+        GOC     !NOT$.L2                         * 1896F
         A=DAT0  W                                * 18972
         A=-A-1  W                                * 18976
         DAT0=A  W                                * 18979
         D0=D0+  16                               * 1897D
-        GONC    L_1896D                          * 18980
-L_18983:
+        GONC    !NOT$.loop1                      * 18980
+!NOT$.L2:
         P=P-1                                    * 18983
-        GOC     L_18993                          * 18985
+        GOC     !NOT$.L3                         * 18985
         A=DAT0  WP                               * 18988
         A=-A-1  WP                               * 1898C
         DAT0=A  WP                               * 1898F
-L_18993:
-        GOTO    L_1894E                          * 18993
+!NOT$.L3:
+        GOTO    !XOR$.L4                         * 18993
 
 * refs (2): 18917 18969
 SUB_18997:
@@ -628,7 +628,7 @@ CK0NOLASTWD~1:
         A=0     S                                * 18A47
         DAT1=A  S                                * 18A4A
         D1=C                                     * 18A4E
-L_18A51:
+CK0NOLASTWD~1.L1:
         A=DAT0  A                                * 18A51
         D0=D0+  5                                * 18A54
         PC=(A)                                   * 18A57
@@ -638,66 +638,66 @@ L_18A51:
 CK3:
         CON(5)  (*)+5                            * 18A5B  primitive code object
         GOSUB   SetLastRomWrd                    * 18A60
-        GOTO    L_18A6D                          * 18A64
+        GOTO    CK3NOLASTWD.L1                   * 18A64
 
 * ob1...ob3 -> ob1...ob3
 * refs (4): 1E039 1F834 1F93D 85DB3
 CK3NOLASTWD:
         CON(5)  (*)+5                            * 18A68  primitive code object
-L_18A6D:
+CK3NOLASTWD.L1:
         GOSUB   SUB_18A75                        * 18A6D
-        GOTO    L_18A51                          * 18A71
+        GOTO    CK0NOLASTWD~1.L1                 * 18A71
 
 * refs (2): 18A6D 18EF9
 SUB_18A75:
         P=      15                               * 18A75
         LC(1)   #3                               * 18A77
         P=      14                               * 18A7A
-        GOTO    L_18AC6                          * 18A7C
+        GOTO    SUB_18ABF.L1                     * 18A7C
 
 * ob1 ob2 -> ob1 ob2
 * refs (5): 1E766 1FBA7 1FBC2 1FBF8 1FC2E
 CK2:
         CON(5)  (*)+5                            * 18A80  primitive code object
         GOSUB   SetLastRomWrd                    * 18A85
-        GOTO    L_18A92                          * 18A89
+        GOTO    CK2NOLASTWD.L1                   * 18A89
 
 * ob1 ob2 -> ob1 ob2
 * refs (17): 154FF 1D203 1E002 1F839 1F852 20DEC ...
 CK2NOLASTWD:
         CON(5)  (*)+5                            * 18A8D  primitive code object
-L_18A92:
+CK2NOLASTWD.L1:
         GOSUB   SUB_18A9A                        * 18A92
-        GOTO    L_18A51                          * 18A96
+        GOTO    CK0NOLASTWD~1.L1                 * 18A96
 
 * refs (2): 18A92 18EE8
 SUB_18A9A:
         P=      15                               * 18A9A
         LC(1)   #2                               * 18A9C
         P=      9                                * 18A9F
-        GOTO    L_18AC6                          * 18AA1
+        GOTO    SUB_18ABF.L1                     * 18AA1
 
 * ob -> ob
 * refs (13): 1A2C1 1A5E9 1CB10 1CB8B 1F153 1F9C9 ...
 CK1:
         CON(5)  (*)+5                            * 18AA5  primitive code object
         GOSUB   SetLastRomWrd                    * 18AAA
-        GOTO    L_18AB7                          * 18AAE
+        GOTO    CK1NOLASTWD.L1                   * 18AAE
 
 * ob -> ob
 * refs (35): 15093 15937 18C4F 1F659 1F73F 22F90 ...
 CK1NOLASTWD:
         CON(5)  (*)+5                            * 18AB2  primitive code object
-L_18AB7:
+CK1NOLASTWD.L1:
         GOSUB   SUB_18ABF                        * 18AB7
-        GOTO    L_18A51                          * 18ABB
+        GOTO    CK0NOLASTWD~1.L1                 * 18ABB
 
 * refs (2): 18AB7 18ED7
 SUB_18ABF:
         P=      15                               * 18ABF
         LC(1)   #1                               * 18AC1
         P=      4                                * 18AC4
-L_18AC6:
+SUB_18ABF.L1:
         A=0     W                                * 18AC6
         A=DAT1  WP                               * 18AC9
         R0=A                                     * 18ACD
@@ -711,26 +711,26 @@ L_18AC6:
         CPEX    0                                * 18AE5
         D1=(5)  DEPTHSAVE                        * 18AE9
         ?C>=A   A                                * 18AF0
-        GOYES   L_18B35                          * 18AF3
+        GOYES   SUB_18ABF.L3                     * 18AF3
         A=A-C   A                                * 18AF5
         DAT1=A  A                                * 18AF7
         D1=(5)  #80850                           * 18AFA
         C=DAT1  B                                * 18B01
         ?CBIT=1 2                                * 18B04
-        GOYES   L_18B2E                          * 18B09
+        GOYES   SUB_18ABF.loop2                  * 18B09
         D1=(5)  LASTARG                          * 18B0B
         A=R0                                     * 18B12
         DAT1=A  15                               * 18B15
         D1=(5)  LASTARGCOUNT                     * 18B19
         C=DAT1  B                                * 18B20
         ?CBIT=1 4                                * 18B23
-        GOYES   L_18B4F                          * 18B28
+        GOYES   SUB_18ABF.L4                     * 18B28
         DAT1=C  S                                * 18B2A
-L_18B2E:
+SUB_18ABF.loop2:
         C=RSTK                                   * 18B2E
         D1=C                                     * 18B30
         RTN                                      * 18B33
-L_18B35:
+SUB_18ABF.L3:
         DAT1=A  A                                * 18B35
         D1=(5)  LASTARGCOUNT                     * 18B38
         C=0     S                                * 18B3F
@@ -738,56 +738,56 @@ L_18B35:
         C=RSTK                                   * 18B46
         D1=C                                     * 18B48
         GOTO    DoErrTFA                         * 18B4B
-L_18B4F:
+SUB_18ABF.L4:
         A=0     W                                * 18B4F
         CBIT=0  4                                * 18B52
-L_18B57:
+SUB_18ABF.L5:
         DAT1=C  B                                * 18B57
         DAT1=C  S                                * 18B5A
         D1=(5)  LASTARG4                         * 18B5E
         DAT1=A  10                               * 18B65
-        GOTO    L_18B2E                          * 18B69
+        GOTO    SUB_18ABF.loop2                  * 18B69
 
 * ob1...ob5 -> ob1...ob5
 CK5:
         CON(5)  (*)+5                            * 18B6D  primitive code object
         GOSUB   SetLastRomWrd                    * 18B72
-        GOTO    L_18B7F                          * 18B76
+        GOTO    CK5NOLASTWD.L1                   * 18B76
 
 * ob1...ob5 -> ob1...ob5
 CK5NOLASTWD:
         CON(5)  (*)+5                            * 18B7A  primitive code object
-L_18B7F:
+CK5NOLASTWD.L1:
         GOSUB   SUB_18B87                        * 18B7F
-        GOTO    L_18A51                          * 18B83
+        GOTO    CK0NOLASTWD~1.L1                 * 18B83
 
 * refs (2): 18B7F 18F1B
 SUB_18B87:
         P=      15                               * 18B87
         LC(1)   #5                               * 18B89
         P=      9                                * 18B8C
-        GOTO    L_18BB3                          * 18B8E
+        GOTO    SUB_18BAC.L1                     * 18B8E
 
 * ob1...ob5 -> ob1...ob5
 CK4:
         CON(5)  (*)+5                            * 18B92  primitive code object
         GOSUB   SetLastRomWrd                    * 18B97
-        GOTO    L_18BA4                          * 18B9B
+        GOTO    CK4NOLASTWD.L1                   * 18B9B
 
 * ob1...ob4 -> ob1...ob4
 * refs (2): 85D0E 85D59
 CK4NOLASTWD:
         CON(5)  (*)+5                            * 18B9F  primitive code object
-L_18BA4:
+CK4NOLASTWD.L1:
         GOSUB   SUB_18BAC                        * 18BA4
-        GOTO    L_18A51                          * 18BA8
+        GOTO    CK0NOLASTWD~1.L1                 * 18BA8
 
 * refs (2): 18BA4 18F0A
 SUB_18BAC:
         P=      15                               * 18BAC
         LC(1)   #4                               * 18BAE
         P=      4                                * 18BB1
-L_18BB3:
+SUB_18BAC.L1:
         A=DAT1  15                               * 18BB3
         R0=A                                     * 18BB7
         CD1EX                                    * 18BBA
@@ -807,24 +807,24 @@ L_18BB3:
         P=      0                                * 18BE6
         D1=(5)  DEPTHSAVE                        * 18BE8
         ?C>=A   A                                * 18BEF
-        GOYES   L_18C2C                          * 18BF2
+        GOYES   SUB_18BAC.L2                     * 18BF2
         A=A-C   A                                * 18BF4
         DAT1=A  A                                * 18BF6
         D1=(5)  #80850                           * 18BF9
         C=DAT1  XS                               * 18C00
         ?CBIT=1 10                               * 18C04
-        GOYES   L_18C30                          * 18C09
+        GOYES   SUB_18BAC.L3                     * 18C09
         D1=(5)  LASTARG                          * 18C0B
         A=R0                                     * 18C12
         DAT1=A  15                               * 18C15
         A=R1                                     * 18C19
         D1=(5)  LASTARGCOUNT                     * 18C1C
         CBIT=1  4                                * 18C23
-        GOTO    L_18B57                          * 18C28
-L_18C2C:
-        GOTO    L_18B35                          * 18C2C
-L_18C30:
-        GOTO    L_18B2E                          * 18C30
+        GOTO    SUB_18ABF.L5                     * 18C28
+SUB_18BAC.L2:
+        GOTO    SUB_18ABF.L3                     * 18C2C
+SUB_18BAC.L3:
+        GOTO    SUB_18ABF.loop2                  * 18C30
 
 * ob1...obn %n ->  ob1..obn #n
 * refs (8): 1C788 1FC69 1FC84 1FC9F 1FCBA 1FCD5 ...
@@ -863,7 +863,7 @@ SETNONEXTERR:
 * refs (1): 18C92
 DoErrUN:
         LC(5)   #00204                           * 18C97
-        GOTO    L_18CCE                          * 18C9E
+        GOTO    DoErrTFA.L1                      * 18C9E
 
 * Error 203h
 * refs (77): 0E566 0E57F 188C3 193E9 19411 19434 ...
@@ -874,7 +874,7 @@ SETSIZEERR:
 * refs (3): 18CA2 2AE94 53807
 DOSIZEERR:
         LC(5)   #00203                           * 18CA7
-        GOTO    L_18CCE                          * 18CAE
+        GOTO    DoErrTFA.L1                      * 18CAE
 
 * Error 202h
 * refs (56): 0905C 150CF 193D0 19452 1949D 194CF ...
@@ -884,7 +884,7 @@ SETTYPEERR:
 * refs (3): 18CB2 18F51 19290
 DoErrBAT:
         LC(5)   #00202                           * 18CB7
-        GOTO    L_18CCE                          * 18CBE
+        GOTO    DoErrTFA.L1                      * 18CBE
 
 * Error 201h
 * refs (11): 18C6D 1F5A3 1F66D 23018 234EE 5949A ...
@@ -894,7 +894,7 @@ SETSTACKERR:
 * refs (3): 18B4B 18CC2 19285
 DoErrTFA:
         LC(5)   #00201                           * 18CC7
-L_18CCE:
+DoErrTFA.L1:
         A=C     A                                * 18CCE
         GOVLNG  Errjmp                           * 18CD0
 
@@ -904,72 +904,72 @@ L_18CCE:
         CON(5)  (*)+5                            * 18CD7  primitive code object
         GOSBVL  POP1%                            * 18CDC
         A=0     S                                * 18CE3
-        GOTO    L_18CF6                          * 18CE6
+        GOTO    COERCE.L1                        * 18CE6
 
 * % -> #
 * refs (116): 0E3E4 0E729 140BF 140F6 1419E 14300 ...
 COERCE:
         CON(5)  (*)+5                            * 18CEA  primitive code object
         GOSBVL  POP1%                            * 18CEF
-L_18CF6:
+COERCE.L1:
         SETHEX                                   * 18CF6
         ?A=0    S                                * 18CF8
-        GOYES   L_18D1B                          * 18CFB
-L_18CFD:
+        GOYES   COERCE.L6                        * 18CFB
+COERCE.loop2:
         A=0     A                                * 18CFD
-        GOTO    L_18D07                          * 18CFF
-L_18D03:
+        GOTO    COERCE.loop4                     * 18CFF
+COERCE.loop3:
         A=0     A                                * 18D03
         A=A-1   A                                * 18D05
-L_18D07:
+COERCE.loop4:
         R0=A                                     * 18D07
-L_18D0A:
+COERCE.loop5:
         GOSBVL  PUSH#                            * 18D0A
         A=DAT0  A                                * 18D11
         D0=D0+  5                                * 18D14
         PC=(A)                                   * 18D17
-L_18D1B:
+COERCE.L6:
         ?A=0    W                                * 18D1B
-        GOYES   L_18D07                          * 18D1E
+        GOYES   COERCE.loop4                     * 18D1E
         LC(3)   #500                             * 18D20
         ?C>A    X                                * 18D25
-        GOYES   L_18D48                          * 18D28
+        GOYES   COERCE.L7                        * 18D28
         LC(3)   #999                             * 18D2A
         ?C#A    X                                * 18D2F
-        GOYES   L_18CFD                          * 18D32
+        GOYES   COERCE.loop2                     * 18D32
         P=      14                               * 18D34
         LC(1)   #4                               * 18D36
         C=C-A   P                                * 18D39
         P=      0                                * 18D3C
-        GONC    L_18CFD                          * 18D3E
+        GONC    COERCE.loop2                     * 18D3E
         A=0     A                                * 18D41
         A=A+1   A                                * 18D43
-        GONC    L_18D07                          * 18D45
-L_18D48:
+        GONC    COERCE.loop4                     * 18D45
+COERCE.L7:
         LC(3)   #006                             * 18D48
         ?C<A    X                                * 18D4D
-        GOYES   L_18D03                          * 18D50
+        GOYES   COERCE.loop3                     * 18D50
         B=A     X                                * 18D52
         C=A     X                                * 18D55
         P=      14                               * 18D58
-L_18D5A:
+COERCE.loop8:
         P=P-1                                    * 18D5A
         C=C-1   X                                * 18D5C
-        GONC    L_18D5A                          * 18D5F
+        GONC    COERCE.loop8                     * 18D5F
         SETDEC                                   * 18D62
         A=A+A   P                                * 18D64
         A=0     WP                               * 18D67
-        GONC    L_18D7E                          * 18D6A
+        GONC    COERCE.L9                        * 18D6A
         A=A-1   WP                               * 18D6D
         A=A+1   W                                * 18D70
         ?A=0    S                                * 18D73
-        GOYES   L_18D7E                          * 18D76
+        GOYES   COERCE.L9                        * 18D76
         ASR     W                                * 18D78
         B=B+1   X                                * 18D7B
-L_18D7E:
+COERCE.L9:
         C=0     W                                * 18D7E
         SETHEX                                   * 18D81
-L_18D83:
+COERCE.loop10:
         C=C+C   W                                * 18D83
         D=C     W                                * 18D86
         C=C+C   W                                * 18D89
@@ -977,23 +977,23 @@ L_18D83:
         C=C+D   W                                * 18D8F
         ASL     W                                * 18D92
         ?A=0    S                                * 18D95
-        GOYES   L_18DA5                          * 18D98
-L_18D9A:
+        GOYES   COERCE.L12                       * 18D98
+COERCE.loop11:
         C=C+1   W                                * 18D9A
         A=A-1   S                                * 18D9D
         ?A#0    S                                * 18DA0
-        GOYES   L_18D9A                          * 18DA3
-L_18DA5:
+        GOYES   COERCE.loop11                    * 18DA3
+COERCE.L12:
         B=B-1   X                                * 18DA5
-        GONC    L_18D83                          * 18DA8
+        GONC    COERCE.loop10                    * 18DA8
         R0=C                                     * 18DAB
         P=      0                                * 18DAE
         C=0     A                                * 18DB0
         ?C=0    W                                * 18DB2
-        GOYES   L_18DBB                          * 18DB5
-        GOTO    L_18D03                          * 18DB7
-L_18DBB:
-        GOTO    L_18D0A                          * 18DBB
+        GOYES   COERCE.L13                       * 18DB5
+        GOTO    COERCE.loop3                     * 18DB7
+COERCE.L13:
+        GOTO    COERCE.loop5                     * 18DBB
 
 * # -> %
 * refs (97): 0DCC2 0E715 0EB0E 0EBCB 14056 1412D ...
@@ -1003,23 +1003,23 @@ UNCOERCE:
         GOSBVL  SAVPTR                           * 18DCB
         LC(2)   #19                              * 18DD2
         B=0     W                                * 18DD6
-L_18DD9:
+UNCOERCE.loop1:
         B=B+B   W                                * 18DD9
         SETHEX                                   * 18DDC
         A=A+A   A                                * 18DDE
         SETDEC                                   * 18DE0
-        GONC    L_18DE8                          * 18DE2
+        GONC    UNCOERCE.L2                      * 18DE2
         B=B+1   W                                * 18DE5
-L_18DE8:
+UNCOERCE.L2:
         C=C-1   B                                * 18DE8
-        GONC    L_18DD9                          * 18DEB
+        GONC    UNCOERCE.loop1                   * 18DEB
         P=      5                                * 18DEE
         A=A-1   X                                * 18DF0
-L_18DF3:
+UNCOERCE.loop3:
         A=A+1   X                                * 18DF3
         BSRC                                     * 18DF6
         ?B#0    WP                               * 18DF9
-        GOYES   L_18DF3                          * 18DFC
+        GOYES   UNCOERCE.loop3                   * 18DFC
         BSR     W                                * 18DFE
         A=B     M                                * 18E01
         A=0     S                                * 18E04
@@ -1040,18 +1040,18 @@ DNOTSYMB?SEMI:
         ASSEMBLE
         A=DAT1  A                                * 18E4A
         ?A=0    A                                * 18E4D
-        GOYES   L_18E67                          * 18E50
+        GOYES   DNOTSYMB?SEMI.L1                 * 18E50
         AD1EX                                    * 18E52
         C=DAT1  A                                * 18E55
         D1=(5)  DOSYMB                           * 18E58
         AD1EX                                    * 18E5F
         ?C=A    A                                * 18E62
-        GOYES   L_18E74                          * 18E65
-L_18E67:
+        GOYES   DNOTSYMB?SEMI.L2                 * 18E65
+DNOTSYMB?SEMI.L1:
         LC(5)   SEMI                             * 18E67
         A=C     A                                * 18E6E
         PC=(A)                                   * 18E70
-L_18E74:
+DNOTSYMB?SEMI.L2:
         A=DAT0  A                                * 18E74
         D0=D0+  5                                * 18E77
         PC=(A)                                   * 18E7A
@@ -1061,18 +1061,18 @@ L_18E74:
         CON(5)  (*)+5                            * 18E7E  primitive code object
         A=DAT1  A                                * 18E83
         ?A=0    A                                * 18E86
-        GOYES   L_18EA0                          * 18E89
+        GOYES   ->num(ex)~1.L1                   * 18E89
         AD1EX                                    * 18E8B
         C=DAT1  A                                * 18E8E
         D1=(5)  DOSYMB                           * 18E91
         AD1EX                                    * 18E98
         ?C=A    A                                * 18E9B
-        GOYES   L_18EAD                          * 18E9E
-L_18EA0:
+        GOYES   ->num(ex)~1.L2                   * 18E9E
+->num(ex)~1.L1:
         LC(5)   FALSE                            * 18EA0
         A=C     A                                * 18EA7
         PC=(A)                                   * 18EA9
-L_18EAD:
+->num(ex)~1.L2:
         LC(5)   TRUE                             * 18EAD
         A=C     A                                * 18EB4
         PC=(A)                                   * 18EB6
@@ -1092,7 +1092,7 @@ CK1&Dispatch:
         CON(5)  (*)+5                            * 18ECE  primitive code object
         GOSUB   SetLastRomWrd                    * 18ED3
         GOSUB   SUB_18ABF                        * 18ED7
-        GOTO    L_18F5C                          * 18EDB
+        GOTO    EvalNoCK.L4                      * 18EDB
 
 * ->
 * refs (111): 196E0 19754 197AA 19997 199B7 199D7 ...
@@ -1100,7 +1100,7 @@ CK2&Dispatch:
         CON(5)  (*)+5                            * 18EDF  primitive code object
         GOSUB   SetLastRomWrd                    * 18EE4
         GOSUB   SUB_18A9A                        * 18EE8
-        GOTO    L_18F5C                          * 18EEC
+        GOTO    EvalNoCK.L4                      * 18EEC
 
 * ->
 * refs (30): 1A403 1C043 1C861 1C8EF 1D40C 1D5E4 ...
@@ -1108,7 +1108,7 @@ CK3&Dispatch:
         CON(5)  (*)+5                            * 18EF0  primitive code object
         GOSUB   SetLastRomWrd                    * 18EF5
         GOSUB   SUB_18A75                        * 18EF9
-        GOTO    L_18F5C                          * 18EFD
+        GOTO    EvalNoCK.L4                      * 18EFD
 
 * ->
 * refs (10): 1E5D7 1F1D9 1F228 1F2CE 26DA6 5E945 ...
@@ -1116,7 +1116,7 @@ CK4&Dispatch:
         CON(5)  (*)+5                            * 18F01  primitive code object
         GOSUB   SetLastRomWrd                    * 18F06
         GOSUB   SUB_18BAC                        * 18F0A
-        GOTO    L_18F5C                          * 18F0E
+        GOTO    EvalNoCK.L4                      * 18F0E
 
 * ->
 * refs (6): 26DA1 5F921 72E6A C181C C19E3 D1957
@@ -1124,30 +1124,30 @@ CK5&Dispatch:
         CON(5)  (*)+5                            * 18F12  primitive code object
         GOSUB   SetLastRomWrd                    * 18F17
         GOSUB   SUB_18B87                        * 18F1B
-        GOTO    L_18F5C                          * 18F1F
+        GOTO    EvalNoCK.L4                      * 18F1F
 
 * comp -> ?
 * refs (22): 18F79 19F05 1EA62 1EB83 1F861 1F94C ...
 EvalNoCK:
         CON(5)  EvalNoCK~1                       * 18F23  code object: the address of its machine code
         BSS     23                               * 18F28
-L_18F3F:
+EvalNoCK.L1:
         ?ST=0   5                                * 18F3F
-        GOYES   L_18F51                          * 18F42
+        GOYES   EvalNoCK.L2                      * 18F42
         LC(5)   OBJ_72EA5                        * 18F44
         A=C     A                                * 18F4B
         PC=(A)                                   * 18F4D
-L_18F51:
+EvalNoCK.L2:
         GOTO    DoErrBAT                         * 18F51
-L_18F55:
+EvalNoCK.L3:
         ST=0    5                                * 18F55
-        GOTO    L_18FB7                          * 18F58
-L_18F5C:
+        GOTO    CK&DISPATCH1.L1                  * 18F58
+EvalNoCK.L4:
         ST=1    5                                * 18F5C
-        GOTO    L_18FB7                          * 18F5F
-L_18F63:
+        GOTO    CK&DISPATCH1.L1                  * 18F5F
+EvalNoCK.L5:
         ST=0    5                                * 18F63
-        GOTO    L_18FC2                          * 18F66
+        GOTO    CK&DISPATCH1.L2                  * 18F66
         RPL
 
 * RS ob ->
@@ -1156,74 +1156,74 @@ L_18F63:
         :: 'R COLA EvalNoCK                      * 18F6A
         ;                                        * 18F7E
         ASSEMBLE
-L_18F83:
-        GOTO    L_18F3F                          * 18F83
-L_18F87:
+'EvalNoCK:_sup.loop1:
+        GOTO    EvalNoCK.L1                      * 18F83
+'EvalNoCK:_sup.L2:
         ?ST=0   4                                * 18F87
-        GOYES   L_18F83                          * 18F8A
+        GOYES   'EvalNoCK:_sup.loop1             * 18F8A
         ST=1    2                                * 18F8C
         ST=0    4                                * 18F8F
         C=RSTK                                   * 18F92
         C=RSTK                                   * 18F94
         D0=C                                     * 18F96
-        GOTO    L_18FC5                          * 18F99
+        GOTO    CK&DISPATCH1.L3                  * 18F99
 
 * ->
 * refs (56): 16AD1 1839C 1C6BB 1CB95 1D498 1D579 ...
 CK&DISPATCH0:
         CON(5)  (*)+5                            * 18F9D  primitive code object
         ST=0    4                                * 18FA2
-        GOTO    L_18F63                          * 18FA5
+        GOTO    EvalNoCK.L5                      * 18FA5
 
 * ->
 CK&DISPATCH2:
         CON(5)  (*)+5                            * 18FA9  primitive code object
-        GOTO    L_18F55                          * 18FAE
+        GOTO    EvalNoCK.L3                      * 18FAE
 
 * ->
 * refs (27): 15098 15142 1DF80 1FA1B 20491 204CD ...
 CK&DISPATCH1:
-        CON(5)  L_18F55                          * 18FB2  code object: the address of its machine code
-L_18FB7:
+        CON(5)  EvalNoCK.L3                      * 18FB2  code object: the address of its machine code
+CK&DISPATCH1.L1:
         ST=1    4                                * 18FB7
         CD0EX                                    * 18FBA
         D0=C                                     * 18FBD
         RSTK=C                                   * 18FC0
-L_18FC2:
+CK&DISPATCH1.L2:
         ST=0    2                                * 18FC2
-L_18FC5:
+CK&DISPATCH1.L3:
         CD1EX                                    * 18FC5
-L_18FC8:
+CK&DISPATCH1.loop4:
         RSTK=C                                   * 18FC8
         D1=C                                     * 18FCA
         A=DAT0  A                                * 18FCD
         LC(5)   SEMI                             * 18FD0
         ?C=A    A                                * 18FD7
-        GOYES   L_18F87                          * 18FDA
+        GOYES   'EvalNoCK:_sup.L2                * 18FDA
         LC(5)   DOBINT                           * 18FDC
         ?C#A    A                                * 18FE3
-        GOYES   L_18FF1                          * 18FE6
+        GOYES   CK&DISPATCH1.L5                  * 18FE6
         D0=D0+  5                                * 18FE8
         C=DAT0  A                                * 18FEB
-        GONC    L_18FFD                          * 18FEE
-L_18FF1:
+        GONC    CK&DISPATCH1.L6                  * 18FEE
+CK&DISPATCH1.L5:
         AD0EX                                    * 18FF1
         D0=D0+  5                                * 18FF4
         C=DAT0  A                                * 18FF7
         D0=A                                     * 18FFA
-L_18FFD:
+CK&DISPATCH1.L6:
         D0=D0+  5                                * 18FFD
-L_19000:
+CK&DISPATCH1.loop7:
         ?C#0    P                                * 19000
-        GOYES   L_19009                          * 19003
-        GOTO    L_19078                          * 19005
-L_19009:
+        GOYES   CK&DISPATCH1.L8                  * 19003
+        GOTO    CK&DISPATCH1.L15                 * 19005
+CK&DISPATCH1.L8:
         ST=0    3                                * 19009
         C=C+1   P                                * 1900C
-        GONC    L_19017                          * 1900F
+        GONC    CK&DISPATCH1.loop9               * 1900F
         ST=1    3                                * 19012
         CSR     A                                * 19015
-L_19017:
+CK&DISPATCH1.loop9:
         RSTK=C                                   * 19017
         A=0     A                                * 19019
         A=C     P                                * 1901B
@@ -1232,12 +1232,12 @@ L_19017:
         A=A+A   A                                * 19022
         A=A+C   A                                * 19024
         ?ST=1   3                                * 19026
-        GOYES   L_19036                          * 19029
-        LC(5)   L_1911C+2                        * 1902B
-        GOTO    L_1903D                          * 19032
-L_19036:
+        GOYES   CK&DISPATCH1.L10                 * 19029
+        LC(5)   CK&DISPATCH1.L21+2               * 1902B
+        GOTO    CK&DISPATCH1.L11                 * 19032
+CK&DISPATCH1.L10:
         LC(5)   #1916E                           * 19036
-L_1903D:
+CK&DISPATCH1.L11:
         A=A+C   A                                * 1903D
         AD1EX                                    * 1903F
         C=DAT1  A                                * 19042
@@ -1249,46 +1249,46 @@ L_1903D:
         D1=C                                     * 19053
         C=RSTK                                   * 19056
         ?C=A    A                                * 19058
-        GOYES   L_19076                          * 1905B
+        GOYES   CK&DISPATCH1.loop14              * 1905B
         ?C=0    A                                * 1905D
-        GOYES   L_19098                          * 19060
-L_19062:
+        GOYES   CK&DISPATCH1.L17                 * 19060
+CK&DISPATCH1.loop12:
         ?ST=1   2                                * 19062
-        GOYES   L_190C0                          * 19065
-L_19067:
+        GOYES   CK&DISPATCH1.L18                 * 19065
+CK&DISPATCH1.loop13:
         C=RSTK                                   * 19067
         GOSBVL  SKIPOB                           * 19069
         C=RSTK                                   * 19070
-        GOTO    L_18FC8                          * 19072
-L_19076:
+        GOTO    CK&DISPATCH1.loop4               * 19072
+CK&DISPATCH1.loop14:
         C=RSTK                                   * 19076
-L_19078:
+CK&DISPATCH1.L15:
         D1=D1+  5                                * 19078
         CSR     A                                * 1907B
         ?C=0    A                                * 1907D
-        GOYES   L_19086                          * 19080
-        GOTO    L_19000                          * 19082
-L_19086:
+        GOYES   CK&DISPATCH1.L16                 * 19080
+        GOTO    CK&DISPATCH1.loop7               * 19082
+CK&DISPATCH1.L16:
         C=RSTK                                   * 19086
         D1=C                                     * 19088
         LC(5)   COLA                             * 1908B
         A=C     A                                * 19092
         PC=(A)                                   * 19094
-L_19098:
+CK&DISPATCH1.L17:
         LC(5)   DOSYMB                           * 19098
         ?C=A    A                                * 1909F
-        GOYES   L_19076                          * 190A2
+        GOYES   CK&DISPATCH1.loop14              * 190A2
         LC(5)   DOIDNT                           * 190A4
         ?C=A    A                                * 190AB
-        GOYES   L_19076                          * 190AE
+        GOYES   CK&DISPATCH1.loop14              * 190AE
         LC(5)   DOLAM                            * 190B0
         ?C=A    A                                * 190B7
-        GOYES   L_19076                          * 190BA
-        GOTO    L_19062                          * 190BC
-L_190C0:
+        GOYES   CK&DISPATCH1.loop14              * 190BA
+        GOTO    CK&DISPATCH1.loop12              * 190BC
+CK&DISPATCH1.L18:
         LC(5)   DOTAG                            * 190C0
         ?C#A    A                                * 190C7
-        GOYES   L_19067                          * 190CA
+        GOYES   CK&DISPATCH1.loop13              * 190CA
         C=DAT1  A                                * 190CC
         CD1EX                                    * 190CF
         D1=D1+  5                                * 190D2
@@ -1307,18 +1307,18 @@ L_190C0:
         A=DAT1  A                                * 190FB
         LC(5)   PRLG                             * 190FE
         ?C=A    A                                * 19105
-        GOYES   L_19114                          * 19108
+        GOYES   CK&DISPATCH1.L19                 * 19108
         A=R0.F  A                                * 1910A
-        GOTO    L_1911A                          * 19110
-L_19114:
+        GOTO    CK&DISPATCH1.L20                 * 19110
+CK&DISPATCH1.L19:
         A=R1.F  A                                * 19114
-L_1911A:
+CK&DISPATCH1.L20:
         C=RSTK                                   * 1911A
-L_1911C:
+CK&DISPATCH1.L21:
         D1=C                                     * 1911C
         DAT1=A  A                                * 1911F
         C=RSTK                                   * 19122
-        GOTO    L_19017                          * 19124
+        GOTO    CK&DISPATCH1.loop9               * 19124
 
 * Argument dispatch: the prolog for each type digit 1-E (A, name or algebraic, is 0 and checked in code); read at #19017
         CON(5)  DOREAL                           * 19128  entry 0
@@ -1366,24 +1366,24 @@ Code_19191:
         B=0     A                                * 191D6
         D0=(5)  #00013                           * 191D8
         C=R0                                     * 191DF
-L_191E2:
+#*OVF.loop1:
         B=B+B   A                                * 191E2
-        GOC     L_19200                          * 191E4
+        GOC     #*OVF.L4                         * 191E4
         A=A+A   A                                * 191E7
-        GONC    L_191F1                          * 191E9
+        GONC    #*OVF.L2                         * 191E9
         B=B+C   A                                * 191EC
-        GOC     L_19200                          * 191EE
-L_191F1:
+        GOC     #*OVF.L4                         * 191EE
+#*OVF.L2:
         D0=D0-  1                                * 191F1
-        GONC    L_191E2                          * 191F4
-L_191F7:
+        GONC    #*OVF.loop1                      * 191F4
+#*OVF.loop3:
         C=B     A                                * 191F7
         R0=C                                     * 191F9
-        GOTO    L_18D0A                          * 191FC
-L_19200:
+        GOTO    COERCE.loop5                     * 191FC
+#*OVF.L4:
         B=0     A                                * 19200
         B=B-1   A                                * 19202
-        GOC     L_191F7                          * 19204  always taken
+        GOC     #*OVF.loop3                      * 19204  always taken
 
 * ->
 * refs (1): 1D06D
@@ -1398,36 +1398,36 @@ CKNFLOATS:
         B=C     A                                * 19222
         D1=A                                     * 19224
         D1=D1+  5                                * 19227
-        GONC    L_19256                          * 1922A
-L_1922D:
+        GONC    CKNFLOATS.L2                     * 1922A
+CKNFLOATS.loop1:
         A=DAT1  A                                * 1922D
         ?A=0    A                                * 19230
-        GOYES   L_1927E                          * 19233
+        GOYES   CKNFLOATS.L4                     * 19233
         D0=A                                     * 19235
         A=DAT0  A                                * 19238
         LC(5)   DOREAL                           * 1923B
         ?C=A    A                                * 19242
-        GOYES   L_19256                          * 19245
+        GOYES   CKNFLOATS.L2                     * 19245
         LC(5)   DOCMP                            * 19247
         ?C#A    A                                * 1924E
-        GOYES   L_19289                          * 19251
+        GOYES   CKNFLOATS.L5                     * 19251
         ST=1    0                                * 19253
-L_19256:
+CKNFLOATS.L2:
         D1=D1+  5                                * 19256
         B=B-1   A                                * 19259
-        GONC    L_1922D                          * 1925B
+        GONC    CKNFLOATS.loop1                  * 1925B
         GOSBVL  GETPTR                           * 1925E
         LC(5)   %0_2A2B4                         * 19265
         ?ST=0   0                                * 1926C
-        GOYES   L_19278                          * 1926F
+        GOYES   CKNFLOATS.L3                     * 1926F
         LC(5)   C%0                              * 19271
-L_19278:
+CKNFLOATS.L3:
         A=C     A                                * 19278
         PC=(A)                                   * 1927A
-L_1927E:
+CKNFLOATS.L4:
         GOSBVL  GETPTR                           * 1927E
         GOTO    DoErrTFA                         * 19285
-L_19289:
+CKNFLOATS.L5:
         GOSBVL  GETPTR                           * 19289
         GOTO    DoErrBAT                         * 19290
 
@@ -1455,16 +1455,16 @@ L_19289:
         ST=0    0                                * 192C6
         LC(5)   DOREAL                           * 192C9
         ?C=A    A                                * 192D0
-        GOYES   L_192D8                          * 192D3
+        GOYES   >ARRY.L1                         * 192D3
         ST=1    0                                * 192D5
-L_192D8:
+>ARRY.L1:
         D0=D0-  5                                * 192D8
         C=DAT0  A                                * 192DB
         AD0EX                                    * 192DE
         A=A+C   A                                * 192E1
         D0=A                                     * 192E3
-        GONC    L_19333                          * 192E6
-L_192E9:
+        GONC    >ARRY.L6                         * 192E6
+>ARRY.loop2:
         D1=D1+  5                                * 192E9
         C=DAT1  A                                * 192EC
         CD1EX                                    * 192EF
@@ -1473,27 +1473,27 @@ L_192E9:
         LC(5)   DOCMP                            * 192F7
         D1=D1+  5                                * 192FE
         ?C=A    A                                * 19301
-        GOYES   L_19315                          * 19304
+        GOYES   >ARRY.L3                         * 19304
         A=DAT1  W                                * 19306
         ?ST=0   0                                * 1930A
-        GOYES   L_19327                          * 1930D
+        GOYES   >ARRY.L5                         * 1930D
         C=0     W                                * 1930F
-        GONC    L_19320                          * 19312
-L_19315:
+        GONC    >ARRY.L4                         * 19312
+>ARRY.L3:
         A=DAT1  W                                * 19315
         D1=D1+  16                               * 19319
         C=DAT1  W                                * 1931C
-L_19320:
+>ARRY.L4:
         D0=D0-  16                               * 19320
         DAT0=C  W                                * 19323
-L_19327:
+>ARRY.L5:
         D0=D0-  16                               * 19327
         DAT0=A  W                                * 1932A
         C=RSTK                                   * 1932E
         D1=C                                     * 19330
-L_19333:
+>ARRY.L6:
         B=B-1   A                                * 19333
-        GONC    L_192E9                          * 19335
+        GONC    >ARRY.loop2                      * 19335
         C=RSTK                                   * 19338
         B=C     A                                * 1933A
         C=RSTK                                   * 1933C
@@ -1511,10 +1511,10 @@ NOTINHARDROM?:
         A=DAT1  A                                * 19355
         LC(5)   CMOS                             * 19358
         ?C>A    A                                * 1935F
-        GOYES   L_19368                          * 19362
-        GOTO    L_18EAD                          * 19364
-L_19368:
-        GOTO    L_18EA0                          * 19368
+        GOYES   NOTINHARDROM?.L1                 * 19362
+        GOTO    ->num(ex)~1.L2                   * 19364
+NOTINHARDROM?.L1:
+        GOTO    ->num(ex)~1.L1                   * 19368
         RPL
 
 * refs (18): 1D34F 1D372 1D3C4 1D3E7 202F6 20319 ...

@@ -251,25 +251,25 @@ SystemLevel?:
         D1=D1+  5                                * 407A9
         C=DAT1  A                                * 407AC
         ?C=A    A                                * 407AF
-        GOYES   L_407EF                          * 407B2
+        GOYES   SystemLevel?.L3                  * 407B2
         LA(5)   DOCOL                            * 407B4
         ?C=A    A                                * 407BE
-        GOYES   L_407CE                          * 407C1
+        GOYES   SystemLevel?.L1                  * 407C1
         D1=C                                     * 407C3
         C=DAT1  A                                * 407C6
         ?C#A    A                                * 407C9
-        GOYES   L_407E3                          * 407CC
-L_407CE:
+        GOYES   SystemLevel?.L2                  * 407CC
+SystemLevel?.L1:
         D1=D1+  5                                * 407CE
         C=DAT1  A                                * 407D1
         LA(5)   TakeOver                         * 407D4
         ?C=A    A                                * 407DE
-        GOYES   L_407EF                          * 407E1
-L_407E3:
+        GOYES   SystemLevel?.L3                  * 407E1
+SystemLevel?.L2:
         C=RSTK                                   * 407E3
         D1=C                                     * 407E5
         GOVLNG  PushFLoop                        * 407E8
-L_407EF:
+SystemLevel?.L3:
         C=RSTK                                   * 407EF
         D1=C                                     * 407F1
         GOVLNG  PushTLoop                        * 407F4
@@ -355,7 +355,7 @@ OBJ_409B2:
 
 * refs (2): 40927 409D0
 OBJ_40A4C:
-        :: BINT63 TestSysFlag BINT62 TestSysFlag AND ; * 40A4C
+        :: BINT63 TestSysFlag BINT62 TestSysFlag AND ; * 40A4C  flag -63: Custom ENTER off / Custom ENTER on  flag -62: User keys off / User keys on
 
 * ob ->
 * refs (2): 23461 408F5
@@ -363,7 +363,7 @@ KeyOb!:
         CON(5)  (*)+5                            * 40A6F  primitive code object
         ASSEMBLE
         LC(5)   KeyOb                            * 40A74
-        GOVLNG  L_08D14                          * 40A7B
+        GOVLNG  CONTEXT!.L1                      * 40A7B
 
 * -> id/romptr
 * refs (3): 2343E 409B7 409C6
@@ -377,11 +377,11 @@ KeyOb@:
 KeyOb0:
         CON(5)  (*)+5                            * 40A95  primitive code object
         LC(5)   KeyOb                            * 40A9A
-        GOVLNG  L_08D2F                          * 40AA1
+        GOVLNG  CONTEXT!.L3                      * 40AA1
 
         CON(5)  (*)+5                            * 40AA8  primitive code object
         LC(5)   KeyOb                            * 40AAD
-        GOVLNG  L_08D35                          * 40AB4
+        GOVLNG  CONTEXT!.L4                      * 40AB4
         RPL
 
 * refs (2): 4098F 8E01C
@@ -428,7 +428,7 @@ GetLastEdit:
         A=DAT0  1                                * 40BF9
         B=A     P                                * 40BFD
         ?A=0    P                                * 40C00
-        GOYES   L_40C26                          * 40C03
+        GOYES   GetLastEdit.L1                   * 40C03
         C=A     A                                * 40C05
         C=C+C   P                                * 40C07
         C=C+C   P                                * 40C0A
@@ -438,15 +438,15 @@ GetLastEdit:
         D1=C                                     * 40C15
         C=DAT1  A                                * 40C18
         ?C#0    A                                * 40C1B
-        GOYES   L_40C35                          * 40C1E
+        GOYES   GetLastEdit.L2                   * 40C1E
         B=C     P                                * 40C20
         D1=A                                     * 40C23
-L_40C26:
+GetLastEdit.L1:
         C=DAT1  A                                * 40C26
         ?C#0    A                                * 40C29
-        GOYES   L_40C35                          * 40C2C
-        GOVLNG  L_0370A                          * 40C2E
-L_40C35:
+        GOYES   GetLastEdit.L2                   * 40C2C
+        GOVLNG  Push#TLoop.L1                    * 40C2E
+GetLastEdit.L2:
         B=B+1   P                                * 40C35
         LA(1)   #3                               * 40C38
         A=A&B   P                                * 40C3E
@@ -454,15 +454,15 @@ L_40C35:
         A=C     A                                * 40C46
         GOSBVL  GETPTR                           * 40C48
         ST=0    10                               * 40C4F
-L_40C52:
+GetLastEdit.loop3:
         D=D-1   A                                * 40C52
-        GOC     L_40C64                          * 40C54
+        GOC     GetLastEdit.L4                   * 40C54
         D1=D1-  5                                * 40C57
         DAT1=A  A                                * 40C5A
         GOVLNG  PushTLoop                        * 40C5D
-L_40C64:
+GetLastEdit.L4:
         GOSBVL  SUB_12D68                        * 40C64
-        GOTO    L_40C52                          * 40C6B
+        GOTO    GetLastEdit.loop3                * 40C6B
         NIBHEX  8DAA560                          * 40C6F  Øªe
         RPL
 
@@ -489,7 +489,7 @@ CMDSTO:
         C=RSTK                                   * 40CB9
         D=D+1   A                                * 40CBB
         D1=D1+  5                                * 40CBD
-        GONC    L_40CDC                          * 40CC0  always taken
+        GONC    OBJ_40CC3.L1                     * 40CC0  always taken
 
 * refs (3): 4439E 8D2DB D9A86
 OBJ_40CC3:
@@ -498,7 +498,7 @@ OBJ_40CC3:
         CD0EX                                    * 40CCF
         LA(1)   #0                               * 40CD2
         DAT0=A  1                                * 40CD8
-L_40CDC:
+OBJ_40CC3.L1:
         D0=C                                     * 40CDC
         A=DAT0  A                                * 40CDF
         D0=D0+  5                                * 40CE2
@@ -529,11 +529,11 @@ InvUserMo:
 
 * refs (1): 3D96A
 SetUserMo:
-        :: BINT62 SetSysFlag SetUserMo~1 ;       * 40D61
+        :: BINT62 SetSysFlag SetUserMo~1 ;       * 40D61  flag -62: User keys off / User keys on
 
 * refs (1): 3FCA0
 QuitUserMo:
-        :: BINT62 ClrSysFlag OBJ_3FFCA ;         * 40D7A
+        :: BINT62 ClrSysFlag OBJ_3FFCA ;         * 40D7A  flag -62: User keys off / User keys on
 
 * -> :: <ob1> <rest> ; -> :: <rest> ;
 * refs (12): 3B369 3B437 3B496 3B4EB 3B57D 3B596 ...
@@ -588,9 +588,9 @@ SLOW:
         CON(5)  (*)+5                            * 40EE7  primitive code object
         ASSEMBLE
         LC(5)   #00ABD                           * 40EEC
-L_40EF3:
+SLOW.loop1:
         C=C-1   A                                * 40EF3
-        GONC    L_40EF3                          * 40EF5
+        GONC    SLOW.loop1                       * 40EF5
         A=DAT0  A                                * 40EF8
         D0=D0+  5                                * 40EFB
         PC=(A)                                   * 40EFE
@@ -600,14 +600,14 @@ L_40EF3:
 VERYSLOW:
         CON(5)  (*)+5                            * 40F02  primitive code object
         LC(5)   #0D6CE                           * 40F07
-        GOTO    L_40EF3                          * 40F0E
+        GOTO    SLOW.loop1                       * 40F0E
 
 * ->
 * refs (1): 3893F
 VERYVERYSLOW:
         CON(5)  (*)+5                            * 40F12  primitive code object
         LC(5)   #8640C                           * 40F17  delay count
-        GOTO    L_40EF3                          * 40F1E
+        GOTO    SLOW.loop1                       * 40F1E
         RPL
 
 * ob ID ->
@@ -839,7 +839,7 @@ StartMenu~3:
         CON(5)  (*)+5                            * 417AF  primitive code object
         ASSEMBLE
         LC(3)   #402                             * 417B4
-        GOVLNG  L_539F1                          * 417B9
+        GOVLNG  OBJ_539D8.L2                     * 417B9
 
 * refs (1): 4175A
 InitTrack:~1:
@@ -851,13 +851,13 @@ InitTrack:~1:
 SysMenuCheck~2:
         CON(5)  (*)+5                            * 417D1  primitive code object
         LC(3)   #402                             * 417D6
-        GOVLNG  L_539E6                          * 417DB
+        GOVLNG  OBJ_539D8.L1                     * 417DB
 
 * refs (1): 41026
 StartMenu~4:
         CON(5)  (*)+5                            * 417E2  primitive code object
         LC(3)   #804                             * 417E7
-        GOVLNG  L_539F1                          * 417EC
+        GOVLNG  OBJ_539D8.L2                     * 417EC
 
 * ->
 * refs (4): 3BEF9 3D411 3D44D 3F6B0
@@ -870,13 +870,13 @@ SetRebuild:
 SysMenuCheck~3:
         CON(5)  (*)+5                            * 41804  primitive code object
         LC(3)   #804                             * 41809
-        GOVLNG  L_539E6                          * 4180E
+        GOVLNG  OBJ_539D8.L1                     * 4180E
 
 * refs (2): 3A6A4 411CA
 OBJ_41815:
         CON(5)  (*)+5                            * 41815  primitive code object
         LC(3)   #802                             * 4181A
-        GOVLNG  L_539F1                          * 4181F
+        GOVLNG  OBJ_539D8.L2                     * 4181F
 
 * refs (4): 3A659 4100D 410CB 41198
 OBJ_41826:
@@ -888,203 +888,203 @@ OBJ_41826:
 OBJ_41837:
         CON(5)  (*)+5                            * 41837  primitive code object
         LC(3)   #802                             * 4183C
-        GOVLNG  L_539E6                          * 41841
+        GOVLNG  OBJ_539D8.L1                     * 41841
 
 * #n ->
 * refs (7): 3A654 3A9F6 3B220 3BEEF 3F72D 41017 ...
 MenuRow!:
         CON(5)  (*)+5                            * 41848  primitive code object
         LC(5)   MenuRow                          * 4184D
-        GOVLNG  L_114C9                          * 41854
+        GOVLNG  OBJ_11495.L3                     * 41854
 
 * -> #n
 * refs (14): 389F3 38A25 3A64A 3A9EC 3F7B9 3F809 ...
 MenuRow@:
         CON(5)  (*)+5                            * 4185B  primitive code object
         LC(5)   MenuRow                          * 41860
-        GOVLNG  L_114B3                          * 41867
+        GOVLNG  OBJ_11495.L1                     * 41867
 
 * #n ->
 * refs (5): 387F0 38AD7 38BBD 40FEF 413A5
 LastMenuRow!:
         CON(5)  (*)+5                            * 4186E  primitive code object
         LC(5)   LastMenuRow                      * 41873
-        GOVLNG  L_114C9                          * 4187A
+        GOVLNG  OBJ_11495.L3                     * 4187A
 
 * -> #n
 * refs (5): 387D7 389D5 38A1B 40030 40FAE
 LastMenuRow@:
         CON(5)  (*)+5                            * 41881  primitive code object
         LC(5)   LastMenuRow                      * 41886
-        GOVLNG  L_114B3                          * 4188D
+        GOVLNG  OBJ_11495.L1                     * 4188D
 
 * refs (1): 41021
 StartMenu~5:
         CON(5)  (*)+5                            * 41894  primitive code object
         LC(5)   MenuDef                          * 41899
-        GOTO    L_41A24                          * 418A0
+        GOTO    OBJ_41A14.L1                     * 418A0
 
 * -> menu
 * refs (10): 389EE 38A20 3A62C 3BE27 3BEA9 40F9F ...
 MenuDef@:
         CON(5)  (*)+5                            * 418A4  primitive code object
         LC(5)   MenuDef                          * 418A9
-        GOTO    L_41A2B                          * 418B0
+        GOTO    OBJ_41A14.L2                     * 418B0
 
 * refs (1): 410B7
 StartMenu~6:
         CON(5)  (*)+5                            * 418B4  primitive code object
         LC(5)   MenuData                         * 418B9
-        GOTO    L_41A24                          * 418C0
+        GOTO    OBJ_41A14.L1                     * 418C0
 
 * refs (1): 410D0
 SetThisRow~1:
         CON(5)  (*)+5                            * 418C4  primitive code object
         LC(5)   MenuData                         * 418C9
-        GOTO    L_41A32                          * 418D0
+        GOTO    OBJ_41A14.L3                     * 418D0
 
 * ob ->
 * refs (3): 3C380 4103F 4A307
 MenuRowAct!:
         CON(5)  (*)+5                            * 418D4  primitive code object
         LC(5)   MenuRowAct                       * 418D9
-        GOTO    L_41A24                          * 418E0
+        GOTO    OBJ_41A14.L1                     * 418E0
 
 * refs (2): 3AA00 3B22A
 OBJ_418E4:
         CON(5)  (*)+5                            * 418E4  primitive code object
         LC(5)   MenuRowAct                       * 418E9
-        GOTO    L_41A32                          * 418F0
+        GOTO    OBJ_41A14.L3                     * 418F0
 
 * ob ->
 * refs (5): 151E2 3D45C 3F063 4104E 9DCEC
 LabelDef!:
         CON(5)  (*)+5                            * 418F4  primitive code object
         LC(5)   LabelDef                         * 418F9
-        GOTO    L_41A24                          * 41900
+        GOTO    OBJ_41A14.L1                     * 41900
 
 * #col ob ->
 * refs (2): 3A24C 3A2D3
 DoLabel:
         CON(5)  (*)+5                            * 41904  primitive code object
         LC(5)   LabelDef                         * 41909
-        GOTO    L_41A32                          * 41910
+        GOTO    OBJ_41A14.L3                     * 41910
 
 * og -> ob
 * refs (6): 151B5 3EF37 3F013 4105D 4A316 9DD01
 MenuKeyNS!:
         CON(5)  (*)+5                            * 41914  primitive code object
         LC(5)   MenuKeyNS                        * 41919
-        GOTO    L_41A24                          * 41920
+        GOTO    OBJ_41A14.L1                     * 41920
 
 * -> ob
 * refs (1): 3EFCD
 MenuKeyNS@:
         CON(5)  (*)+5                            * 41924  primitive code object
         LC(5)   MenuKeyNS                        * 41929
-        GOTO    L_41A2B                          * 41930
+        GOTO    OBJ_41A14.L2                     * 41930
 
 * #n ->
 * refs (7): 3B261 3B27A 3B293 3B2AC 3B2C5 3B2DE ...
 DoMenuKeyNS:
         CON(5)  (*)+5                            * 41934  primitive code object
         LC(5)   MenuKeyNS                        * 41939
-        GOTO    L_41A32                          * 41940
+        GOTO    OBJ_41A14.L3                     * 41940
 
 * ob -> ob
 * refs (7): 151C4 3C395 3EF5A 3F027 4106C 4A325 ...
 MenuKeyLS!:
         CON(5)  (*)+5                            * 41944  primitive code object
         LC(5)   MenuKeyLS                        * 41949
-        GOTO    L_41A24                          * 41950
+        GOTO    OBJ_41A14.L1                     * 41950
 
 * refs (7): 3D6D7 3D6F0 3D709 3D722 3D73B 3D754 ...
 OBJ_41954:
         CON(5)  (*)+5                            * 41954  primitive code object
         LC(5)   MenuKeyLS                        * 41959
-        GOTO    L_41A32                          * 41960
+        GOTO    OBJ_41A14.L3                     * 41960
 
 * ob -> ob
 * refs (6): 151D3 3EF7D 3F02C 4107B 4A334 9DD2B
 MenuKeyRS!:
         CON(5)  (*)+5                            * 41964  primitive code object
         LC(5)   MenuKeyRS                        * 41969
-        GOTO    L_41A24                          * 41970
+        GOTO    OBJ_41A14.L1                     * 41970
 
 * refs (8): 3DD13 3DD2C 3DD45 3DD5E 3DD77 3DD90 ...
 OBJ_41974:
         CON(5)  (*)+5                            * 41974  primitive code object
         LC(5)   MenuKeyRS                        * 41979
-        GOTO    L_41A32                          * 41980
+        GOTO    OBJ_41A14.L3                     * 41980
 
 * ob ->
 * refs (7): 151F1 3FB6E 4108A 413C8 4A2F3 9DCD7 ...
 ReviewKey!:
         CON(5)  (*)+5                            * 41984  primitive code object
         LC(5)   ReviewKey                        * 41989
-        GOTO    L_41A24                          * 41990
+        GOTO    OBJ_41A14.L1                     * 41990
 
 * refs (3): 3DEC2 4A2CB C53DD
 LocalReview:
         CON(5)  (*)+5                            * 41994  primitive code object
         LC(5)   ReviewKey                        * 41999
-        GOTO    L_41A32                          * 419A0
+        GOTO    OBJ_41A14.L3                     * 419A0
 
 * refs (2): 41094 4174B
 OBJ_419A4:
         CON(5)  (*)+5                            * 419A4  primitive code object
         LC(5)   TrackAct                         * 419A9
-        GOTO    L_41A24                          * 419B0
+        GOTO    OBJ_41A14.L1                     * 419B0
 
 * refs (1): 417A5
 SysMenuCheck~4:
         CON(5)  (*)+5                            * 419B4  primitive code object
         LC(5)   TrackAct                         * 419B9
-        GOTO    L_41A32                          * 419C0
+        GOTO    OBJ_41A14.L3                     * 419C0
 
 * ob ->
 * refs (3): 3BD00 3EC8F 410A3
 MenuExitAct!:
         CON(5)  (*)+5                            * 419C4  primitive code object
         LC(5)   MenuExitAct                      * 419C9
-        GOTO    L_41A24                          * 419D0
+        GOTO    OBJ_41A14.L1                     * 419D0
 
 * refs (1): 4003A
 StartMenu~7:
         CON(5)  (*)+5                            * 419D4  primitive code object
         LC(5)   MenuExitAct                      * 419D9
-        GOTO    L_41A32                          * 419E0
+        GOTO    OBJ_41A14.L3                     * 419E0
 
 * menu ->
 * refs (5): 387F5 38ADC 38BC2 40FE5 413AF
 LastMenuDef!:
         CON(5)  (*)+5                            * 419E4  primitive code object
         LC(5)   LastMenuDef                      * 419E9
-        GOTO    L_41A24                          * 419F0
+        GOTO    OBJ_41A14.L1                     * 419F0
 
 * -> menu
 * refs (5): 387D2 389D0 38A16 4002B 40FA9
 LastMenuDef@:
         CON(5)  (*)+5                            * 419F4  primitive code object
         LC(5)   LastMenuDef                      * 419F9
-        GOTO    L_41A2B                          * 41A00
+        GOTO    OBJ_41A14.L2                     * 41A00
 
 * refs (4): 410AD 41755 4177D 417A0
 OBJ_41A04:
         CON(5)  (*)+5                            * 41A04  primitive code object
         LC(5)   LastContext                      * 41A09
-        GOTO    L_41A24                          * 41A10
+        GOTO    OBJ_41A14.L1                     * 41A10
 
 * refs (2): 41769 41791
 OBJ_41A14:
         CON(5)  (*)+5                            * 41A14  primitive code object
         LC(5)   LastContext                      * 41A19
-        GOTO    L_41A2B                          * 41A20
-L_41A24:
-        GOVLNG  L_08D14                          * 41A24
-L_41A2B:
+        GOTO    OBJ_41A14.L2                     * 41A20
+OBJ_41A14.L1:
+        GOVLNG  CONTEXT!.L1                      * 41A24
+OBJ_41A14.L2:
         GOVLNG  SysPtr@                          * 41A2B
-L_41A32:
+OBJ_41A14.L3:
         GOVLNG  PC=((C))                         * 41A32
         RPL
 
@@ -1109,7 +1109,7 @@ ID_UserKeys.:
 * -> flag
 * refs (3): 397C0 3D960 3FA7F
 UserKeys?:
-        :: BINT62 TestSysFlag ;                  * 41A8D
+        :: BINT62 TestSysFlag ;                  * 41A8D  flag -62: User keys off / User keys on
 
 * {} ->
 * refs (1): 22523
@@ -1219,7 +1219,7 @@ UserKeys!:
         CON(5)  (*)+5                            * 41F2C  primitive code object
         ASSEMBLE
         LC(5)   UserKeys                         * 41F31
-        GOVLNG  L_08D14                          * 41F38
+        GOVLNG  CONTEXT!.L1                      * 41F38
 
 * -> {}
 * refs (4): 17DD5 3FA93 41C07 41E7D
@@ -1233,7 +1233,7 @@ GetUserKeys:
 PgUserKeys:
         CON(5)  (*)+5                            * 41F52  primitive code object
         LC(5)   UserKeys                         * 41F57
-        GOVLNG  L_08D2F                          * 41F5E
+        GOVLNG  CONTEXT!.L3                      * 41F5E
         RPL
 
 * -> #kc #flag

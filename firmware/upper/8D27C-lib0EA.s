@@ -122,13 +122,13 @@ ROMP_0EA_00C:
           LC(5)   BINT0                          * 8D74D
           DAT0=C  A                              * 8D754
           LC(2)   #14                            * 8D757
-L_8D75B:
+ROMP_0EA_00C.loop1:
           D0=D0+  10                             * 8D75B
           A=DAT1  A                              * 8D75E
           D1=D1+  5                              * 8D761
           DAT0=A  A                              * 8D764
           C=C-1   B                              * 8D767
-          GONC    L_8D75B                        * 8D76A
+          GONC    ROMP_0EA_00C.loop1             * 8D76A
           C=RSTK                                 * 8D76D
           D0=C                                   * 8D76F
           LC(5)   #00016                         * 8D772
@@ -351,7 +351,7 @@ ROMP_0EA_02E:
 * ROMPTR 0EA 02F
 * refs (1): 8D288
 ROMP_0EA_02F:
-          :: DROP # 502 JstGetTHEMESG DO$EXIT ;  * 8E1FE
+          :: DROP # 502 JstGetTHEMESG DO$EXIT ;  * 8E1FE  "Invalid Array Element"
           LOOP ;                                 * 8E221
 
 * ROMPTR 0EA 030
@@ -622,7 +622,7 @@ ROMP_0EA_055:
 * refs (1): 8D288
 ROMP_0EA_056:
         :: ComLine?:(bip;q) 8GETLAM 20GETLAM #>case DoBadKey * 8EE4B
-          # 503 JstGetTHEMESG BigDisp1(st) 20GETLAM #1=case ROMPTR 0EA 051 * 8EE69
+          # 503 JstGetTHEMESG BigDisp1(st) 20GETLAM #1=case ROMPTR 0EA 051 * 8EE69  "Deleting Row"
           22Lget 8GETLAM 20GETLAM #=?SKIP        * 8EE92
 
 * ROMPTR 0EA 057
@@ -692,7 +692,7 @@ CopyColsRght~1:
 * refs (1): 8D288
 ROMP_0EA_05F:
         :: ComLine?:(bip;q) 9GETLAM 21GETLAM #>case DoBadKey * 8F33B
-          # 504 JstGetTHEMESG BigDisp1(st) 21GETLAM #1=case ROMPTR 0EA 051 * 8F359
+          # 504 JstGetTHEMESG BigDisp1(st) 21GETLAM #1=case ROMPTR 0EA 051 * 8F359  "Deleting Column"
           22Lget 9GETLAM 21GETLAM #=?SKIP CopyColsLeft MATTRN 21GETLAM #1- * 8F382
           20GETLAM TWO{}N MATREDIM MATTRN 22PUTLAM 21GETLAM #1- 21PUTLAM * 8F3AA
           ROMPTR 0EA 031 ROMPTR 0EA 040 ;        * 8F3D2
@@ -701,7 +701,7 @@ ROMP_0EA_05F:
 * refs (1): 8D288
 ROMP_0EA_060:
         :: ComLine?:(bip;q) 20GETLAM #0= caseDoBadKey BINT1 * 8F3ED
-          18PUTLAM # 505 JstGetTHEMESG BigDisp1(st) 22Lget 20GETLAM #1+ * 8F40B
+          18PUTLAM # 505 JstGetTHEMESG BigDisp1(st) 22Lget 20GETLAM #1+ * 8F40B  "Inserting Row"
           21GETLAM TWO{}N MATREDIM 20GETLAM #1+ 20PUTLAM 8GETLAM 20GETLAM * 8F433
           #=?SKIP CopyRowsDown 22PUTLAM ROMPTR 0EA 031 ROMPTR 0EA 040 ; * 8F45B
 
@@ -709,7 +709,7 @@ ROMP_0EA_060:
 * refs (1): 8D288
 ROMP_0EA_061:
         :: ComLine?:(bip;q) 21GETLAM #0= caseDoBadKey BINT1 * 8F485
-          18PUTLAM # 506 JstGetTHEMESG BigDisp1(st) 22Lget MATTRN 21GETLAM * 8F4A3
+          18PUTLAM # 506 JstGetTHEMESG BigDisp1(st) 22Lget MATTRN 21GETLAM * 8F4A3  "Inserting Column"
           #1+ 20GETLAM TWO{}N MATREDIM MATTRN 21GETLAM #1+ 21PUTLAM 9GETLAM * 8F4CB
           21GETLAM #=?SKIP CopyColsRght 22PUTLAM ROMPTR 0EA 031 * 8F4F8
           ROMPTR 0EA 040 ;                       * 8F517
@@ -850,8 +850,8 @@ LIB0EA.hash:
         CON(5)  0                                * 8FD59  names of length 14
         CON(5)  0                                * 8FD5E  names of length 15
         CON(5)  0                                * 8FD63  names of length 16
-        REL(5)  L_8FD6D                          * 8FD68  end of the names
-L_8FD6D:
+        REL(5)  LIB0EA.hash.L1                   * 8FD68  end of the names
+LIB0EA.hash.L1:
         CON(5)  0                                * 8FD6D  command 000 has no name
         ENDLENGTH                                * 8FD72
 

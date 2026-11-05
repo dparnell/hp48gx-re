@@ -358,13 +358,13 @@ SUB_57956:
         C=C-1   S                                * 5796B
         C=C-1   S                                * 5796E
         C=C-1   S                                * 57971
-        GONC    L_57985                          * 57974
+        GONC    SUB_57956.L1                     * 57974
         P=      3                                * 57977
         CSL     WP                               * 57979
         CSL     WP                               * 5797C
         P=      0                                * 5797F
         LC(2)   #30                              * 57981
-L_57985:
+SUB_57956.L1:
         A=C     A                                * 57985
         LC(4)   #3030                            * 57987
         P=      3                                * 5798D
@@ -383,10 +383,10 @@ L_57985:
         LC(4)   #3030                            * 579B5
         A=A+C   A                                * 579BB
         ?C=A    B                                * 579BD
-        GOYES   L_579E9                          * 579C0
+        GOYES   SUB_57956.L3                     * 579C0
         DAT1=A  4                                * 579C2
         LC(2)   #03                              * 579C6
-L_579CA:
+SUB_57956.loop2:
         D1=D1-  4                                * 579CA
         DAT1=C  2                                * 579CD
         D1=D1-  5                                * 579D1
@@ -396,12 +396,12 @@ L_579CA:
         LC(5)   TOTEMPOB                         * 579DC
         A=C     A                                * 579E3
         PC=(A)                                   * 579E5
-L_579E9:
+SUB_57956.L3:
         ASR     A                                * 579E9
         ASR     A                                * 579EB
         DAT1=A  B                                * 579ED
         LC(2)   #02                              * 579F0
-        GOTO    L_579CA                          * 579F4
+        GOTO    SUB_57956.loop2                  * 579F4
         BSS     20                               * 579F8
         RPL
 
@@ -505,40 +505,40 @@ NXTPOT%:
         LC(3)   #011                             * 57D14
         P=      3                                * 57D19
         SETDEC                                   * 57D1B
-L_57D1D:
+NXTPOT%.loop1:
         ?A#0    P                                * 57D1D
-        GOYES   L_57D2F                          * 57D20
+        GOYES   NXTPOT%.L2                       * 57D20
         ?C=A    X                                * 57D22
-        GOYES   L_57D34                          * 57D25
+        GOYES   NXTPOT%.L3                       * 57D25
         P=P+1                                    * 57D27
         C=C-1   X                                * 57D29
-        GONC    L_57D1D                          * 57D2C
-L_57D2F:
+        GONC    NXTPOT%.loop1                    * 57D2C
+NXTPOT%.L2:
         ?C#A    X                                * 57D2F
-        GOYES   L_57D78                          * 57D32
-L_57D34:
+        GOYES   NXTPOT%.L6                       * 57D32
+NXTPOT%.L3:
         C=0     M                                * 57D34
         C=C+1   P                                * 57D37
         A=A-C   M                                * 57D3A
         P=      14                               * 57D3D
         ?A#0    P                                * 57D3F
-        GOYES   L_57D4A                          * 57D42
+        GOYES   NXTPOT%.L4                       * 57D42
         A=A-1   X                                * 57D44
         ASL     M                                * 57D47
-L_57D4A:
+NXTPOT%.L4:
         P=      0                                * 57D4A
         SETHEX                                   * 57D4C
         LC(5)   TRUE                             * 57D4E
         ?A=0    S                                * 57D55
-        GOYES   L_57D61                          * 57D58
+        GOYES   NXTPOT%.L5                       * 57D58
         LC(5)   FALSE                            * 57D5A
-L_57D61:
+NXTPOT%.L5:
         DAT1=C  A                                * 57D61
         GOSBVL  PUSH%                            * 57D64
         LC(5)   TRUE                             * 57D6B
         A=C     A                                * 57D72
         PC=(A)                                   * 57D74
-L_57D78:
+NXTPOT%.L6:
         P=      0                                * 57D78
         SETHEX                                   * 57D7A
         GOSBVL  GETPTR                           * 57D7C
@@ -748,17 +748,17 @@ BodyMore?:
         D0=D0+  5                                * 585BC
         A=DAT0  A                                * 585BF
         D0=A                                     * 585C2
-L_585C5:
+BodyMore?.loop1:
         A=DAT0  S                                * 585C5
         C=DAT1  S                                * 585C9
         ?C#A    S                                * 585CD
-        GOYES   L_585DB                          * 585D0
+        GOYES   BodyMore?.L2                     * 585D0
         D0=D0+  1                                * 585D2
         D1=D1+  1                                * 585D5
-        GONC    L_585C5                          * 585D8
-L_585DB:
+        GONC    BodyMore?.loop1                  * 585D8
+BodyMore?.L2:
         ?C<A    S                                * 585DB
-        GOYES   L_58600                          * 585DE
+        GOYES   BodyMore?.L3                     * 585DE
         GOSBVL  GETPTR                           * 585E0
         D1=D1+  5                                * 585E7
         D=D+1   A                                * 585EA
@@ -767,7 +767,7 @@ L_585DB:
         A=DAT0  A                                * 585F6
         D0=D0+  5                                * 585F9
         PC=(A)                                   * 585FC
-L_58600:
+BodyMore?.L3:
         GOSBVL  GETPTR                           * 58600
         D1=D1+  5                                * 58607
         D=D+1   A                                * 5860A
@@ -809,23 +809,23 @@ NoIdsInMeta?:
         C=A     A                                * 5872B
         CD0EX                                    * 5872D
         RSTK=C                                   * 58730
-L_58732:
+NoIdsInMeta?.loop1:
         D1=D1+  5                                * 58732
         D0=D0-  1                                * 58735
-        GOC     L_58793                          * 58738
+        GOC     NoIdsInMeta?.L3                  * 58738
         C=DAT1  A                                * 5873B
         CD1EX                                    * 5873E
         A=DAT1  A                                * 58741
         D1=C                                     * 58744
         LC(5)   DOIDNT                           * 58747
         ?C=A    A                                * 5874E
-        GOYES   L_58786                          * 58751
+        GOYES   NoIdsInMeta?.L2                  * 58751
         LC(5)   DOLAM                            * 58753
         ?C=A    A                                * 5875A
-        GOYES   L_58786                          * 5875D
+        GOYES   NoIdsInMeta?.L2                  * 5875D
         LC(5)   DOCOL                            * 5875F
         ?C#A    A                                * 58766
-        GOYES   L_58732                          * 58769
+        GOYES   NoIdsInMeta?.loop1               * 58769
         C=DAT1  A                                * 5876B
         CD1EX                                    * 5876E
         D1=D1+  5                                * 58771
@@ -833,15 +833,15 @@ L_58732:
         D1=C                                     * 58777
         LC(5)   CK0                              * 5877A
         ?C#A    A                                * 58781
-        GOYES   L_58732                          * 58784
-L_58786:
+        GOYES   NoIdsInMeta?.loop1               * 58784
+NoIdsInMeta?.L2:
         LC(5)   FALSE                            * 58786
         A=C     A                                * 5878D
-        GOTO    L_5879C                          * 5878F
-L_58793:
+        GOTO    NoIdsInMeta?.L4                  * 5878F
+NoIdsInMeta?.L3:
         LC(5)   TRUE                             * 58793
         A=C     A                                * 5879A
-L_5879C:
+NoIdsInMeta?.L4:
         C=RSTK                                   * 5879C
         D0=C                                     * 5879E
         C=RSTK                                   * 587A1
@@ -953,7 +953,7 @@ M-1potcase:
         CON(5)  (*)+5                            * 58ADE  primitive code object
         ASSEMBLE
         CD1EX                                    * 58AE3
-        D1=(5)  L_58B17                          * 58AE6
+        D1=(5)  M-1potcase.L2                    * 58AE6
         A=DAT1  15                               * 58AED
         D1=C                                     * 58AF1
         D1=D1+  5                                * 58AF4
@@ -961,14 +961,14 @@ M-1potcase:
         D1=D1-  5                                * 58AFB
         P=      14                               * 58AFE
         ?C#A    WP                               * 58B00
-        GOYES   L_58B0E                          * 58B03
+        GOYES   M-1potcase.L1                    * 58B03
         P=      0                                * 58B05
         GOVLNG  docola                           * 58B07
-L_58B0E:
+M-1potcase.L1:
         P=      0                                * 58B0E
         GOVLNG  doskip                           * 58B10
 
-L_58B17:
+M-1potcase.L2:
         CON(5)  x*                               * 58B17  address (the code jumps or points through it)
 
         CON(5)  x^                               * 58B1C  address (the code jumps or points through it)
@@ -1009,14 +1009,14 @@ count+:
         CON(5)  (*)+5                            * 58C02  primitive code object
         ASSEMBLE
         ST=1    0                                * 58C07
-        GOTO    L_58C16                          * 58C0A
+        GOTO    count*.L1                        * 58C0A
 
 * meta -> meta #0 meta &*&*..&* -> meta #n
 * refs (3): 57E99 57EBC 58CBC
 count*:
         CON(5)  (*)+5                            * 58C0E  primitive code object
         ST=0    0                                * 58C13
-L_58C16:
+count*.L1:
         A=DAT1  A                                * 58C16
         AD1EX                                    * 58C19
         D1=D1+  5                                * 58C1C
@@ -1028,16 +1028,16 @@ L_58C16:
         RSTK=C                                   * 58C2C
         LC(5)   x*                               * 58C2E
         ?ST=0   0                                * 58C35
-        GOYES   L_58C41                          * 58C38
+        GOYES   count*.loop2                     * 58C38
         LC(5)   x+                               * 58C3A
-L_58C41:
+count*.loop2:
         D1=D1+  5                                * 58C41
         A=DAT1  A                                * 58C44
         ?C#A    A                                * 58C47
-        GOYES   L_58C52                          * 58C4A
+        GOYES   count*.L3                        * 58C4A
         D0=D0+  1                                * 58C4C
-        GONC    L_58C41                          * 58C4F
-L_58C52:
+        GONC    count*.loop2                     * 58C4F
+count*.L3:
         C=RSTK                                   * 58C52
         CD0EX                                    * 58C54
         A=C     A                                * 58C57

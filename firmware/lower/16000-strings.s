@@ -4,52 +4,52 @@
 * Follows on from the previous file (at #16000 in the original ROM).
         B=B-C   A                                * 16000
         D1=D1+  5                                * 16002
-L_16005:
+longhxs~1.loop1:
         A=DAT1  8                                * 16005
         D1=D1+  8                                * 16009
-L_1600C:
+longhxs~1.loop2:
         LC(2)   #39                              * 1600C
         ?C>=A   P                                * 16010
-        GOYES   L_1601C                          * 16013
+        GOYES   longhxs~1.L3                     * 16013
         LC(2)   #47                              * 16015
         A=A+C   P                                * 16019
-L_1601C:
+longhxs~1.L3:
         C=A     P                                * 1601C
         CSRC                                     * 1601F
         CSRC                                     * 16022
         ASR     W                                * 16025
         ?C=0    B                                * 16028
-        GOYES   L_1600C                          * 1602B
+        GOYES   longhxs~1.loop2                  * 1602B
         A=C     W                                * 1602D
         C=0     W                                * 16030
         LC(1)   #8                               * 16033
         B=B-C   A                                * 16036
-        GOC     L_16045                          * 16038
+        GOC     longhxs~1.L4                     * 16038
         DAT0=A  W                                * 1603B
         D0=D0+  16                               * 1603F
-        GONC    L_16005                          * 16042
-L_16045:
+        GONC    longhxs~1.loop1                  * 16042
+longhxs~1.L4:
         C=C+B   A                                * 16045
         C=C+C   A                                * 16047
         C=C-1   A                                * 16049
-        GOC     L_16058                          * 1604B
+        GOC     longhxs~1.L5                     * 1604B
         P=C     0                                * 1604E
         DAT0=A  WP                               * 16052
         P=      0                                * 16056
-L_16058:
+longhxs~1.L5:
         GOVLNG  GETPTRLOOP                       * 16058
 
 * refs (3): 14BC7 160DB 16F7A
 addtics:
         CON(5)  (*)+5                            * 1605F  primitive code object
         LC(2)   #27                              * 16064
-        GOTO    L_16075                          * 16068
+        GOTO    add2_(st).L1                     * 16068
 
 * refs (4): 15F0F 15F1E 15F4C 15F79
 add2_(st):
         CON(5)  (*)+5                            * 1606C  primitive code object
         LC(2)   #22                              * 16071
-L_16075:
+add2_(st).L1:
         RSTK=C                                   * 16075
         GOSBVL  SAVPTR                           * 16077
         A=DAT1  A                                * 1607E
@@ -87,9 +87,9 @@ L_16075:
         ASSEMBLE
         LC(5)   ID>$                             * 160EA
         ?ST=0   4                                * 160F1
-        GOYES   L_160FD                          * 160F4
+        GOYES   ->str2(nm).L1                    * 160F4
         LC(5)   ->str1(nm)                       * 160F6
-L_160FD:
+->str2(nm).L1:
         A=C     A                                * 160FD
         PC=(A)                                   * 160FF
         RPL
@@ -119,33 +119,33 @@ NULL$TEMP:
 * refs (7): 15B74 15B83 15B92 15BBF 15BEC 15BFB ...
 ->str2(ar):
         :: OBJ_159B4 NULL$TEMP SWAP NULL{}       * 161D0
-L_161E9:
+->str2(ar).loop1:
           OVERSWAP OBJ_169E1 4ROLLROT !append$ OVER NULLCOMP? case * 161E9
           ROTROT2DROP                            * 1620C
-          NEWLINE$&$ 3UNROLL GOTO L_161E9 ;      * 16211
+          NEWLINE$&$ 3UNROLL GOTO ->str2(ar).loop1 ; * 16211
 
 * refs (5): 15B6F 15B7E 15B8D 15BF6 15C05
 ->str1(ar):
         :: NULL$TEMP OVER NULL{}                 * 1622A
-L_1623E:
+->str1(ar).loop1:
           OBJ_539CA ERRSET OBJ_169E1 ERRTRAP OBJ_159AF OBJ_539D8 3UNROLL * 1623E
           !append$ DUPLEN$ DcompWidth@ #1+ #> 3PICK NULLCOMP? ORcase * 16261
           ROTROT2DROP                            * 16289
-          APPEND_SPACE 3PICK ROT GOTO L_1623E ;  * 1628E
+          APPEND_SPACE 3PICK ROT GOTO ->str1(ar).loop1 ; * 1628E
 
 * refs (2): 15B51 B51D5
 ->str1(r):
         CON(5)  (*)+5                            * 162AC  primitive code object
         ASSEMBLE
         ST=1    0                                * 162B1
-        GOTO    L_162C0                          * 162B4
+        GOTO    a%>$.L1                          * 162B4
 
 * % -> $
 * refs (11): 0F23B 15B56 175D6 176C6 17851 31CE0 ...
 a%>$:
         CON(5)  (*)+5                            * 162B8  primitive code object
         ST=0    0                                * 162BD
-L_162C0:
+a%>$.L1:
         LC(5)   #00030                           * 162C0
         GOSUB   SUB_162EA                        * 162C7
         A=DAT1  A                                * 162CB
@@ -165,13 +165,13 @@ SUB_162EA:
 * refs (1): 18448
 SUB_162F4:
         ST=0    10                               * 162F4
-L_162F7:
+SUB_162F4.loop1:
         C=R0                                     * 162F7
         GOSBVL  CREATETEMP                       * 162FA
-        GONC    L_1630C                          * 16301
+        GONC    SUB_162F4.L2                     * 16301
         GOSUB   St10Gb                           * 16304
-        GOTO    L_162F7                          * 16308
-L_1630C:
+        GOTO    SUB_162F4.loop1                  * 16308
+SUB_162F4.L2:
         D1=(5)  DSKTOP                           * 1630C
         C=DAT1  A                                * 16313
         D1=C                                     * 16316
@@ -199,11 +199,11 @@ St10Gb~1:
 * refs (1): 162D8
 SUB_16353:
         ?A=0    S                                * 16353
-        GOYES   L_16362                          * 16356
+        GOYES   SUB_16353.L1                     * 16356
         LC(2)   #2D                              * 16358
         DAT0=C  B                                * 1635C
         D0=D0+  2                                * 1635F
-L_16362:
+SUB_16353.L1:
         D1=(5)  #8084D                           * 16362
         C=DAT1  B                                * 16369
         D1=(5)  #8084F                           * 1636C
@@ -214,30 +214,30 @@ L_16362:
         P=      1                                * 16382
         LC(1)   #B                               * 16384
         ?D<=C   P                                * 16387
-        GOYES   L_1638F                          * 1638A
+        GOYES   SUB_16353.L2                     * 1638A
         D=C     P                                * 1638C
-L_1638F:
+SUB_16353.L2:
         P=      0                                * 1638F
         C=D     B                                * 16391
         ?C#0    P                                * 16394
-        GOYES   L_16415                          * 16397
+        GOYES   SUB_16353.L9                     * 16397
         ST=0    0                                * 16399
         ?A#0    M                                * 1639C
-        GOYES   L_163AD                          * 1639F
+        GOYES   SUB_16353.L3                     * 1639F
         LC(2)   #30                              * 163A1
         DAT0=C  B                                * 163A5
         D0=D0+  2                                * 163A8
         RTNCC                                    * 163AB
-L_163AD:
+SUB_16353.L3:
         SETDEC                                   * 163AD
         LC(3)   #012                             * 163AF
         B=C     A                                * 163B4
         P=      2                                * 163B6
-L_163B8:
+SUB_16353.loop4:
         P=P+1                                    * 163B8
         B=B-1   X                                * 163BA
         ?A=0    P                                * 163BD
-        GOYES   L_163B8                          * 163C0
+        GOYES   SUB_16353.loop4                  * 163C0
         P=P+1                                    * 163C2
         CPEX    15                               * 163C4
         SETHEX                                   * 163C8
@@ -245,33 +245,33 @@ L_163B8:
         SETDEC                                   * 163CD
         P=      0                                * 163CF
         B=B-A   X                                * 163D1
-        GONC    L_163ED                          * 163D4
+        GONC    SUB_16353.loop5                  * 163D4
         LC(3)   #500                             * 163D7
         ?C<A    X                                * 163DC
-        GOYES   L_16403                          * 163DF
+        GOYES   SUB_16353.L7                     * 163DF
         LC(3)   #011                             * 163E1
         ?C<A    X                                * 163E6
-        GOYES   L_1640D                          * 163E9
+        GOYES   SUB_16353.L8                     * 163E9
         B=0     A                                * 163EB
-L_163ED:
+SUB_16353.loop5:
         P=      15                               * 163ED
-L_163EF:
+SUB_16353.loop6:
         P=P+1                                    * 163EF
         B=B-1   X                                * 163F1
-        GONC    L_163EF                          * 163F4
+        GONC    SUB_16353.loop6                  * 163F4
         CPEX    1                                * 163F7
         P=      0                                * 163FB
         LC(1)   #9                               * 163FD
-        GOC     L_16415                          * 16400
-L_16403:
+        GOC     SUB_16353.L9                     * 16400
+SUB_16353.L7:
         LC(3)   #012                             * 16403
         ?B<=C   X                                * 16408
-        GOYES   L_163ED                          * 1640B
-L_1640D:
+        GOYES   SUB_16353.loop5                  * 1640B
+SUB_16353.L8:
         CSLC                                     * 1640D
         CSL     A                                * 16410
         LC(1)   #2                               * 16412
-L_16415:
+SUB_16353.L9:
         D=C     B                                * 16415
         B=0     W                                * 16418
         ABEX    M                                * 1641B
@@ -279,17 +279,17 @@ L_16415:
         A=0     S                                * 16421
         SETDEC                                   * 16424
         C=C+C   XS                               * 16426
-        GONC    L_1642F                          * 16429
+        GONC    SUB_16353.L10                    * 16429
         A=A+1   S                                * 1642C
-L_1642F:
+SUB_16353.L10:
         C=D     B                                * 1642F
         CSTEX                                    * 16432
         ?ST=1   1                                * 16434
-        GOYES   L_1643D                          * 16437
-        GOTO    L_164FE                          * 16439
-L_1643D:
+        GOYES   SUB_16353.L11                    * 16437
+        GOTO    SUB_16353.L22                    * 16439
+SUB_16353.L11:
         CSTEX                                    * 1643D
-L_1643F:
+SUB_16353.loop12:
         SETHEX                                   * 1643F
         ST=0    0                                * 16441
         P=      1                                * 16444
@@ -301,12 +301,12 @@ L_1643F:
         C=B     WP                               * 16455
         B=B+C   W                                * 16458
         ?B=0    S                                * 1645B
-        GOYES   L_1646C                          * 1645E
+        GOYES   SUB_16353.L13                    * 1645E
         BSR     W                                * 16460
         A=A+1   X                                * 16463
-        GONC    L_1646C                          * 16466
+        GONC    SUB_16353.L13                    * 16466
         A=0     S                                * 16469
-L_1646C:
+SUB_16353.L13:
         B=0     WP                               * 1646C
         SETHEX                                   * 1646F
         B=B-1   WP                               * 16471
@@ -314,154 +314,154 @@ L_1646C:
         B=0     P                                * 16476
         SETDEC                                   * 16479
         ?A=0    S                                * 1647B
-        GOYES   L_1648D                          * 1647E
+        GOYES   SUB_16353.L14                    * 1647E
         A=-A    X                                * 16480
         LC(3)   #499                             * 16483
         ?C=A    X                                * 16488
-        GOYES   L_164E5                          * 1648B
-L_1648D:
+        GOYES   SUB_16353.L19                    * 1648B
+SUB_16353.L14:
         C=D     B                                * 1648D
         CSTEX                                    * 16490
         ?ST=1   0                                * 16492
-        GOYES   L_16497                          * 16495
-L_16497:
+        GOYES   SUB_16353.L15                    * 16495
+SUB_16353.L15:
         CSTEX                                    * 16497
-        GONC    L_164E5                          * 16499
+        GONC    SUB_16353.L19                    * 16499
         LC(3)   #300                             * 1649C
         D=C     X                                * 164A1
         C=A     A                                * 164A4
-L_164A6:
+SUB_16353.loop16:
         C=C-D   X                                * 164A6
-        GONC    L_164A6                          * 164A9
+        GONC    SUB_16353.loop16                 * 164A9
         C=C+D   X                                * 164AC
         DSR     X                                * 164AF
         ?D#0    X                                * 164B2
-        GOYES   L_164A6                          * 164B5
+        GOYES   SUB_16353.loop16                 * 164B5
         ?C=0    X                                * 164B7
-        GOYES   L_164E5                          * 164BA
+        GOYES   SUB_16353.L19                    * 164BA
         B=C     P                                * 164BC
         A=A-C   A                                * 164BF
         ?A=0    S                                * 164C1
-        GOYES   L_164CE                          * 164C4
+        GOYES   SUB_16353.L17                    * 164C4
         LC(1)   #3                               * 164C6
         A=A+C   A                                * 164C9
         B=C-B   P                                * 164CB
-L_164CE:
+SUB_16353.L17:
         SETHEX                                   * 164CE
         LC(1)   #D                               * 164D0
         C=C-B   P                                * 164D3
         P=C     0                                * 164D6
-L_164DA:
+SUB_16353.loop18:
         P=P+1                                    * 164DA
         B=B+1   P                                * 164DC
-        GOC     L_164DA                          * 164DF
+        GOC     SUB_16353.loop18                 * 164DF
         B=B-1   P                                * 164E2
-L_164E5:
+SUB_16353.L19:
         SETHEX                                   * 164E5
         A=A+1   A                                * 164E7
         P=      14                               * 164E9
-L_164EB:
+SUB_16353.loop20:
         ASL     WP                               * 164EB
         ?A=0    P                                * 164EE
-        GOYES   L_164EB                          * 164F1
+        GOYES   SUB_16353.loop20                 * 164F1
         A=A-1   WP                               * 164F3
-        GOTO    L_16596                          * 164F6
-L_164FA:
-        GOTO    L_1643F                          * 164FA
-L_164FE:
+        GOTO    SUB_16353.L31                    * 164F6
+SUB_16353.loop21:
+        GOTO    SUB_16353.loop12                 * 164FA
+SUB_16353.L22:
         ST=0    0                                * 164FE
         CSTEX                                    * 16501
         D=C     B                                * 16503
         P=C     1                                * 16506
         C=A     A                                * 1650A
-L_1650C:
+SUB_16353.loop23:
         C=C+1   A                                * 1650C
         P=P-1                                    * 1650E
-        GONC    L_1650C                          * 16510
+        GONC    SUB_16353.loop23                 * 16510
         C=C+C   XS                               * 16513
-        GOC     L_164FA                          * 16516
-L_16519:
+        GOC     SUB_16353.loop21                 * 16516
+SUB_16353.loop24:
         P=P-1                                    * 16519
         ?P=     1                                * 1651B
-        GOYES   L_16554                          * 1651E
+        GOYES   SUB_16353.L26                    * 1651E
         C=C-1   X                                * 16520
-        GONC    L_16519                          * 16523
+        GONC    SUB_16353.loop24                 * 16523
         C=0     W                                * 16526
         ?B=0    M                                * 16529
-        GOYES   L_16565                          * 1652C
+        GOYES   SUB_16353.L27                    * 1652C
         C=B     WP                               * 1652E
         C=C+B   W                                * 16531
         C=0     WP                               * 16534
         ?C=0    W                                * 16537
-        GOYES   L_164FA                          * 1653A
+        GOYES   SUB_16353.loop21                 * 1653A
         ?C=0    S                                * 1653C
-        GOYES   L_16565                          * 1653F
+        GOYES   SUB_16353.L27                    * 1653F
         CSR     W                                * 16541
         A=A+1   X                                * 16544
-        GONC    L_1654D                          * 16547
+        GONC    SUB_16353.L25                    * 16547
         A=0     S                                * 1654A
-L_1654D:
+SUB_16353.L25:
         P=P-1                                    * 1654D
         ?P#     1                                * 1654F
-        GOYES   L_16565                          * 16552
-L_16554:
+        GOYES   SUB_16353.L27                    * 16552
+SUB_16353.L26:
         P=      0                                * 16554
         LC(3)   #011                             * 16556
         P=      2                                * 1655B
         ?C<A    X                                * 1655D
-        GOYES   L_164FA                          * 16560
+        GOYES   SUB_16353.loop21                 * 16560
         C=B     W                                * 16562
-L_16565:
+SUB_16353.L27:
         B=C     W                                * 16565
         ?A=0    S                                * 16568
-        GOYES   L_16578                          * 1656B
-L_1656D:
+        GOYES   SUB_16353.L29                    * 1656B
+SUB_16353.loop28:
         BSR     W                                * 1656D
         P=P-1                                    * 16570
         A=A+1   X                                * 16572
-        GONC    L_1656D                          * 16575
-L_16578:
+        GONC    SUB_16353.loop28                 * 16575
+SUB_16353.L29:
         SETHEX                                   * 16578
         B=B-1   WP                               * 1657A
         P=      0                                * 1657D
         B=A     P                                * 1657F
         ASR     B                                * 16582
         ?A=0    P                                * 16585
-        GOYES   L_16590                          * 16588
+        GOYES   SUB_16353.L30                    * 16588
         LC(1)   #A                               * 1658A
         B=B+C   P                                * 1658D
-L_16590:
+SUB_16353.L30:
         A=0     W                                * 16590
         A=A-1   W                                * 16593
-L_16596:
+SUB_16353.L31:
         P=      0                                * 16596
         A=B     P                                * 16598
         D=D+D   P                                * 1659B
         BSL     W                                * 1659E
-        GONC    L_165C1                          * 165A1
+        GONC    SUB_16353.loop33                 * 165A1
         ?B=0    S                                * 165A4
-        GOYES   L_16608                          * 165A7
+        GOYES   SUB_16353.loop35                 * 165A7
         LC(1)   #E                               * 165A9
         C=C-A   P                                * 165AC
         P=C     0                                * 165AF
         LC(1)   #F                               * 165B3
         ?B#C    P                                * 165B6
-        GOYES   L_165BF                          * 165B9
+        GOYES   SUB_16353.L32                    * 165B9
         A=0     A                                * 165BB
         A=A-1   A                                * 165BD
-L_165BF:
+SUB_16353.L32:
         P=      0                                * 165BF
-L_165C1:
+SUB_16353.loop33:
         C=B     S                                * 165C1
         B=B+1   S                                * 165C4
-        GOC     L_16625                          * 165C7
+        GOC     SUB_16353.L36                    * 165C7
         LC(1)   #3                               * 165CA
         CSLC                                     * 165CD
-L_165D0:
+SUB_16353.loop34:
         DAT0=C  B                                * 165D0
         D0=D0+  2                                * 165D3
         ?ST=0   0                                * 165D6
-        GOYES   L_16608                          * 165D9
+        GOYES   SUB_16353.loop35                 * 165D9
         C=A     A                                * 165DB
         C=-C    A                                * 165DD
         P=C     0                                * 165DF
@@ -469,21 +469,21 @@ L_165D0:
         LC(10)  #1001001000                      * 165E5
         P=      0                                * 165F1
         ?C=0    P                                * 165F3
-        GOYES   L_16608                          * 165F6
+        GOYES   SUB_16353.loop35                 * 165F6
         LC(4)   #2E2C                            * 165F8
         GOSUB   SUB_16656                        * 165FE
         DAT0=C  B                                * 16602
         D0=D0+  2                                * 16605
-L_16608:
+SUB_16353.loop35:
         BSL     W                                * 16608
         A=A-1   P                                * 1660B
-        GONC    L_165C1                          * 1660E
+        GONC    SUB_16353.loop33                 * 1660E
         ST=0    0                                * 16611
         LC(4)   #2C2E                            * 16614
         GOSUB   SUB_16656                        * 1661A
         BSR     W                                * 1661E
-        GOTO    L_165D0                          * 16621
-L_16625:
+        GOTO    SUB_16353.loop34                 * 16621
+SUB_16353.L36:
         A=A+1   S                                * 16625
         RTNC                                     * 16628
         LC(2)   #45                              * 1662B
@@ -491,16 +491,16 @@ L_16625:
         D0=D0+  2                                * 16632
         A=A-1   S                                * 16635
         ?A=0    S                                * 16638
-        GOYES   L_16647                          * 1663B
+        GOYES   SUB_16353.L37                    * 1663B
         LC(2)   #2D                              * 1663D
         DAT0=C  B                                * 16641
         D0=D0+  2                                * 16644
-L_16647:
+SUB_16353.L37:
         B=A     W                                * 16647
         A=0     W                                * 1664A
         A=A-1   W                                * 1664D
         ST=0    0                                * 16650
-        GOC     L_16608                          * 16653
+        GOC     SUB_16353.loop35                 * 16653
 
 * refs (2): 165FE 1661A
 SUB_16656:
@@ -508,10 +508,10 @@ SUB_16656:
         D1=(5)  #8084F                           * 16658
         C=DAT1  B                                * 1665F
         ?CBIT=0 2                                * 16662
-        GOYES   L_1666D                          * 16667
+        GOYES   SUB_16656.L1                     * 16667
         DSR     A                                * 16669
         DSR     A                                * 1666B
-L_1666D:
+SUB_16656.L1:
         C=D     A                                * 1666D
         RTN                                      * 1666F
 
@@ -566,18 +566,18 @@ Clean$:
 DOFIX:
         CON(5)  (*)+5                            * 166E3  primitive code object
         A=0     A                                * 166E8
-L_166EA:
+DOFIX.L1:
         A=A+1   A                                * 166EA
-        GONC    L_16716                          * 166EC  always taken
+        GONC    DOSTD.L1                         * 166EC  always taken
 
 * # ->
 * refs (4): 1C441 45DCF 468CE B9207
 DOSCI:
         CON(5)  (*)+5                            * 166EF  primitive code object
         A=0     A                                * 166F4
-L_166F6:
+DOSCI.L1:
         A=A+1   A                                * 166F6
-        GONC    L_166EA                          * 166F8  always taken
+        GONC    DOFIX.L1                         * 166F8  always taken
 
 * # ->
 * refs (2): 1C475 B922A
@@ -585,7 +585,7 @@ DOENG:
         CON(5)  (*)+5                            * 166FB  primitive code object
         A=0     A                                * 16700
         A=A+1   A                                * 16702
-        GONC    L_166F6                          * 16704  always taken
+        GONC    DOSCI.L1                         * 16704  always taken
 
 * ->
 * refs (3): 1C490 B91BC D13AD
@@ -593,15 +593,15 @@ DOSTD:
         CON(5)  (*)+5                            * 16707  primitive code object
         A=0     B                                * 1670C
         R0=A                                     * 1670F
-        GOTO    L_1672E                          * 16712
-L_16716:
+        GOTO    DOSTD.L2                         * 16712
+DOSTD.L1:
         R0=A                                     * 16716
         GOSBVL  POP#                             * 16719
         LC(5)   #0000B                           * 16720
         ?C>=A   A                                * 16727
-        GOYES   L_1672E                          * 1672A
+        GOYES   DOSTD.L2                         * 1672A
         A=C     A                                * 1672C
-L_1672E:
+DOSTD.L2:
         CD0EX                                    * 1672E
         RSTK=C                                   * 16731
         D0=(5)  #8084E                           * 16733
@@ -627,34 +627,34 @@ SUB_1676A:
         A=A+1   A                                * 16772
         SETDEC                                   * 16774
         B=0     W                                * 16776
-L_16779:
+SUB_1676A.loop1:
         SB=0                                     * 16779
         CSRB                                     * 1677C
         ?SB=0                                    * 1677F
-        GOYES   L_16787                          * 16782
+        GOYES   SUB_1676A.L2                     * 16782
         B=B+A   W                                * 16784
-L_16787:
+SUB_1676A.L2:
         A=A+A   W                                * 16787
         ?C#0    W                                * 1678A
-        GOYES   L_16779                          * 1678D
+        GOYES   SUB_1676A.loop1                  * 1678D
         C=B     W                                * 1678F
         SETHEX                                   * 16792
         A=0     B                                * 16794
         P=      5                                * 16797
-L_16799:
+SUB_1676A.loop3:
         A=A+1   B                                * 16799
         CSRC                                     * 1679C
         ?C#0    WP                               * 1679F
-        GOYES   L_16799                          * 167A2
+        GOYES   SUB_1676A.loop3                  * 167A2
         P=      1                                * 167A4
         A=A-1   B                                * 167A6
-L_167A9:
+SUB_1676A.loop4:
         CSLC                                     * 167A9
         LC(1)   #3                               * 167AC
         DAT0=C  B                                * 167AF
         D0=D0+  2                                * 167B2
         A=A-1   B                                * 167B5
-        GONC    L_167A9                          * 167B8
+        GONC    SUB_1676A.loop4                  * 167B8
         P=      0                                * 167BB
         RTNCC                                    * 167BD
         RPL
@@ -662,7 +662,7 @@ L_167A9:
 * -> flag
 * refs (9): 17559 24FFF 250F4 25D0D 2616C 27FA8 ...
 DPRADIX?:
-        :: BINT51 TestSysFlag NOT ;              * 167BF
+        :: BINT51 TestSysFlag NOT ;              * 167BF  flag -51: Fraction mark: . / Fraction mark: ,
 
 * # -> "#:\ "
 * refs (5): 15D4C 31A48 39DCE 39DFB 3F610
@@ -670,14 +670,14 @@ DPRADIX?:
         CON(5)  (*)+5                            * 167D8  primitive code object
         ASSEMBLE
         ST=0    9                                * 167DD
-        GOTO    L_167EC                          * 167E0
+        GOTO    #>$.L1                           * 167E0
 
 * # -> $
 * refs (24): 15DCE 15DD8 15EB5 16199 161A3 219C2 ...
 #>$:
         CON(5)  (*)+5                            * 167E4  primitive code object
         ST=1    9                                * 167E9
-L_167EC:
+#>$.L1:
         GOSBVL  SAVPTR                           * 167EC
         ST=0    10                               * 167F3
         A=0     W                                * 167F6
@@ -686,25 +686,25 @@ L_167EC:
         C=0     W                                * 16803
         B=0     A                                * 16806
         LC(1)   #A                               * 16808
-L_1680B:
+#>$.loop2:
         B=B+1   A                                * 1680B
         ?C>A    W                                * 1680D
-        GOYES   L_16824                          * 16810
+        GOYES   #>$.L3                           * 16810
         C=C+C   W                                * 16812
         D=C     W                                * 16815
         C=C+C   W                                * 16818
         C=C+C   W                                * 1681B
         C=C+D   W                                * 1681E
-        GONC    L_1680B                          * 16821
-L_16824:
+        GONC    #>$.loop2                        * 16821
+#>$.L3:
         ?ST=1   9                                * 16824
-        GOYES   L_1682D                          * 16827
+        GOYES   #>$.L4                           * 16827
         B=B+1   A                                * 16829
         B=B+1   A                                * 1682B
-L_1682D:
+#>$.L4:
         C=B     A                                * 1682D
         GOSUB   SUB_16837                        * 1682F
-        GOTO    L_16954                          * 16833
+        GOTO    stackitw.loop11                  * 16833
 
 * refs (2): 1682F 168D6
 SUB_16837:
@@ -722,12 +722,12 @@ SUB_16837:
 s:str(st,s):
         CON(5)  (*)+5                            * 1685C  primitive code object
         GOSUBL  s:str(st,s)~1                    * 16861
-        GONC    L_1686F                          * 16867  always taken
+        GONC    stackitw.L1                      * 16867  always taken
 
 * refs (1): 159A5
 stackitw:
         CON(5)  (*)+5                            * 1686A  primitive code object
-L_1686F:
+stackitw.L1:
         GOSBVL  POP#                             * 1686F
         R1=A                                     * 16876
         GOSBVL  SAVPTR                           * 16879
@@ -736,14 +736,14 @@ L_1686F:
         B=C     A                                * 16885
         LC(1)   #A                               * 16887
         ?C>A    A                                * 1688A
-        GOYES   L_1689C                          * 1688D
+        GOYES   stackitw.L3                      * 1688D
         LC(2)   #64                              * 1688F
         ?C>A    A                                * 16893
-        GOYES   L_1689A                          * 16896
+        GOYES   stackitw.L2                      * 16896
         B=B+1   A                                * 16898
-L_1689A:
+stackitw.L2:
         B=B+1   A                                * 1689A
-L_1689C:
+stackitw.L3:
         B=B+1   A                                * 1689C
         GOSBVL  GetStrLenStk                     * 1689E
         A=C     A                                * 168A5
@@ -753,13 +753,13 @@ L_1689C:
         C=DAT1  B                                * 168B2
         C=C+CON A,3                              * 168B5
         ?C>=A   A                                * 168BB
-        GOYES   L_168D0                          * 168BE
+        GOYES   stackitw.L4                      * 168BE
         A=0     A                                * 168C0
         LA(2)   #16                              * 168C2
         ?C>A    A                                * 168C9
-        GOYES   L_168D0                          * 168CC
+        GOYES   stackitw.L4                      * 168CC
         C=C+1   A                                * 168CE
-L_168D0:
+stackitw.L4:
         R2=C                                     * 168D0
         ST=0    9                                * 168D3
         GOSUB   SUB_16837                        * 168D6
@@ -780,7 +780,7 @@ L_168D0:
         C=C-B   A                                * 16906
         ST=0    0                                * 16908
         ?C<=A   A                                * 1690B
-        GOYES   L_16948                          * 1690E
+        GOYES   stackitw.L10                     * 1690E
         C=C+B   A                                * 16910
         B=B+A   A                                * 16912
         D=C     A                                * 16914
@@ -788,35 +788,35 @@ L_168D0:
         LC(2)   #18                              * 16918
         C=C+C   A                                * 1691C
         ?D>=C   A                                * 1691E
-        GOYES   L_16934                          * 16921
+        GOYES   stackitw.L6                      * 16921
         C=D     A                                * 16923
-L_16925:
+stackitw.loop5:
         B=C-B   A                                * 16925
-        GOC     L_16946                          * 16927
+        GOC     stackitw.L9                      * 16927
         BSRB                                     * 1692A
         LC(2)   #20                              * 1692D
-        GONC    L_16940                          * 16931
-L_16934:
+        GONC    stackitw.L8                      * 16931
+stackitw.L6:
         ST=1    0                                * 16934
-        GOC     L_16925                          * 16937
-L_1693A:
+        GOC     stackitw.loop5                   * 16937
+stackitw.loop7:
         DAT1=C  B                                * 1693A
         D1=D1+  2                                * 1693D
-L_16940:
+stackitw.L8:
         B=B-1   B                                * 16940
-        GONC    L_1693A                          * 16943
-L_16946:
+        GONC    stackitw.loop7                   * 16943
+stackitw.L9:
         C=A     A                                * 16946
-L_16948:
+stackitw.L10:
         GOSBVL  MOVEDOWN                         * 16948
         ?ST=1   0                                * 1694F
-        GOYES   L_1695B                          * 16952
-L_16954:
+        GOYES   stackitw.L12                     * 16952
+stackitw.loop11:
         GOVLNG  GPOverWrR0Lp                     * 16954
-L_1695B:
+stackitw.L12:
         AD1EX                                    * 1695B
         GOSBVL  Clean$R0                         * 1695E
-        GOTO    L_16954                          * 16965
+        GOTO    stackitw.loop11                  * 16965
         RPL
 
 * refs (3): 1595A 159FF 16A18
@@ -838,18 +838,18 @@ NDROPFALSE:
 
 * refs (2): 161EE 16248
 OBJ_169E1:
-        :: OBJ_5394C GOTO L_16A22 ;              * 169E1
+        :: OBJ_5394C GOTO OBJ_16A0E.L2 ;         * 169E1
 
 * refs (2): 319CB 31B15
 OBJ_169FA:
-        :: GOTO L_16A1D ;                        * 169FA
+        :: GOTO OBJ_16A0E.L1 ;                   * 169FA
 
 * refs (2): 2FCAE 39E8C
 OBJ_16A0E:
         :: OBJ_5394C OBJ_16969                   * 16A0E
-L_16A1D:
+OBJ_16A0E.L1:
           !DcompWidth                            * 16A1D
-L_16A22:
+OBJ_16A0E.L2:
           ?ATTNQUIT OVER TYPECMP? case OBJ_17518 * 16A22
           OVER TYPEARRAY? IT                     * 16A3B
           :: OVER 2D/3D(ar)? case                * 16A4A
@@ -924,7 +924,7 @@ OBJ_16D16:
 _:_:
             $ ":" 4PICK ID>$ OVER !append$SWAP 6PICK OBJ_177B6 OBJ_53930 * 16D25
             OBJ_5395A OR AND ITE_DROP !insert$ OBJ_177CA case OBJ_171E9 * 16D54
-L_16D7C:
+_:_.L1:
             XYZ>ZCOLA OBJ_1727A ;                * 16D7C
 
 * refs (1): 16FD4
@@ -937,7 +937,7 @@ OBJ_16DB3:
 
 Rep2(<FFFFF>):
           :: SWAPDROP MINUSONE SWAP ;            * 16DBD
-          SPACE$ OBJ_177CA NOT?GOTO L_16D7C OBJ_6B359 OBJ_34D3C * 16DD6
+          SPACE$ OBJ_177CA NOT?GOTO _:_.L1 OBJ_6B359 OBJ_34D3C * 16DD6
 
 * refs (3): 16E21 16FC0 16FFC
 OBJ_16DF4:
@@ -1097,7 +1097,7 @@ OBJ_174C3:
 * refs (6): 296B0 45213 6D8B9 96565 A9A11 B3F91
 9rolld:
             :: BINT9 UNROLL ;                    * 174F0
-            GOTO L_1757C ;                       * 17504
+            GOTO ->str(c)~2.L1 ;                 * 17504
         ;                                        * 17513
 
 * refs (3): 16A36 31CEF 31D1C
@@ -1113,11 +1113,11 @@ OBJ_17518:
           :: FALSE 5UNROLL tokrparen DPRADIX? tok, tok; RPITE 6ROLL * 17545
             OBJ_1DE19                            * 17572
             OBJ_34C49                            * 17577
-L_1757C:
+->str(c)~2.L1:
             6ROLL 7ROLL DUP OBJ_175C7 >R         * 1757C
-L_17595:
-            DUP#0= ?GOTO L_175B8 RSKIP #1- GOTO L_17595 * 17595
-L_175B8:
+->str(c)~2.loop2:
+            DUP#0= ?GOTO ->str(c)~2.L3 RSKIP #1- GOTO ->str(c)~2.loop2 * 17595
+->str(c)~2.L3:
             DROP ;                               * 175B8
         ;                                        * 175C2
 
@@ -1128,7 +1128,7 @@ OBJ_175C7:
           :: 3PICK TRUE BINT16 OBJ_176AD ;       * 175EA
           :: 8PICK case OBJ_1768A                * 17608
             #2+ COLASKIP ;                       * 1761C
-          :: BINT9 PICK BINT16 TestSysFlag BINT15 OBJ_176AD ; * 1762B
+          :: BINT9 PICK BINT16 TestSysFlag BINT15 OBJ_176AD ; * 1762B  flag -16: coordinate system
           :: 6PICK OBJ_176EE ; DROP 7UNROLL 5DROP IT SWAPDROP * 17653
           NULL{} }                               * 17680
 
@@ -1230,10 +1230,10 @@ DcompWidth@:
         C=0     A                                * 17993
         C=DAT0  B                                * 17995
         ?C#0    B                                * 17998
-        GOYES   L_179A2                          * 1799B
+        GOYES   DcompWidth@.L1                   * 1799B
         C=C-1   A                                * 1799D
         C=0     P                                * 1799F
-L_179A2:
+DcompWidth@.L1:
         R0=C                                     * 179A2
         GOVLNG  PUSH#LOOP                        * 179A5
 
@@ -1264,27 +1264,27 @@ addrTEMPTOP:
         C=DAT0  A                                * 179EF
         ST=0    0                                * 179F2
         ?C<=A   A                                * 179F5
-        GOYES   L_17A0C                          * 179F8
+        GOYES   addrTEMPTOP.L1                   * 179F8
         D0=(5)  TEMPOB                           * 179FA
         C=DAT0  A                                * 17A01
         ?C>A    A                                * 17A04
-        GOYES   L_17A0C                          * 17A07
+        GOYES   addrTEMPTOP.L1                   * 17A07
         ST=1    0                                * 17A09
-L_17A0C:
+addrTEMPTOP.L1:
         GOSBVL  SUB_08503                        * 17A0C
         CD0EX                                    * 17A13
         D1=C                                     * 17A16
         A=DAT1  A                                * 17A19
         ?A#0    A                                * 17A1C
-        GOYES   L_17A25                          * 17A1F
-        GOTO    L_17B7A                          * 17A21
-L_17A25:
+        GOYES   addrTEMPTOP.L2                   * 17A1F
+        GOTO    FixRRP.L4                        * 17A21
+addrTEMPTOP.L2:
         ABEX    A                                * 17A25
         ?A#0    A                                * 17A27
-        GOYES   L_17A6A                          * 17A2A
+        GOYES   addrTEMPTOP.L4                   * 17A2A
         C=C+B   A                                * 17A2C
         D0=C                                     * 17A2E
-L_17A31:
+addrTEMPTOP.loop3:
         GOSBVL  SKIPVARNAME                      * 17A31
         AD0EX                                    * 17A38
         C=B     A                                * 17A3B
@@ -1299,27 +1299,27 @@ L_17A31:
         D1=D1-  5                                * 17A5D
         DAT1=A  A                                * 17A60
         GOVLNG  PushTLoop                        * 17A63
-L_17A6A:
+addrTEMPTOP.L4:
         ?ST=1   0                                * 17A6A
-        GOYES   L_17A71                          * 17A6D
+        GOYES   addrTEMPTOP.L5                   * 17A6D
         B=A     A                                * 17A6F
-L_17A71:
+addrTEMPTOP.L5:
         C=C+B   A                                * 17A71
         D0=C                                     * 17A73
-L_17A76:
+addrTEMPTOP.loop6:
         ?A>B    A                                * 17A76
-        GOYES   L_17A31                          * 17A79
+        GOYES   addrTEMPTOP.loop3                * 17A79
         LC(5)   #00005                           * 17A7B
         B=B-C   A                                * 17A82
         ?B#C    A                                * 17A84
-        GOYES   L_17A8D                          * 17A87
-        GOTO    L_17B0B                          * 17A89
-L_17A8D:
+        GOYES   addrTEMPTOP.L7                   * 17A87
+        GOTO    FixRRP.L1                        * 17A89
+addrTEMPTOP.L7:
         D0=D0-  5                                * 17A8D
         C=DAT0  A                                * 17A90
         B=B-C   A                                * 17A93
         ?ST=0   0                                * 17A95
-        GOYES   L_17AD0                          * 17A98
+        GOYES   addrTEMPTOP.L9                   * 17A98
         RSTK=C                                   * 17A9A
         C=0     M                                * 17A9C
         C=DAT1  10                               * 17A9F
@@ -1332,18 +1332,18 @@ L_17A8D:
         C=DAT0  7                                * 17AB3
         C=0     A                                * 17AB7
         ?C=0    M                                * 17AB9
-        GOYES   L_17AC3                          * 17ABC
+        GOYES   addrTEMPTOP.L8                   * 17ABC
         C=C-1   A                                * 17ABE
         C=C+1   M                                * 17AC0
-L_17AC3:
+addrTEMPTOP.L8:
         LC(5)   DOTAG                            * 17AC3
         DAT0=C  7                                * 17ACA
         C=RSTK                                   * 17ACE
-L_17AD0:
+addrTEMPTOP.L9:
         AD0EX                                    * 17AD0
         A=A-C   A                                * 17AD3
         AD0EX                                    * 17AD5
-        GONC    L_17A76                          * 17AD8  always taken
+        GONC    addrTEMPTOP.loop6                * 17AD8  always taken
         RPL
 
 * refs (2): 16B62 17298
@@ -1355,10 +1355,10 @@ FixRRP:
             GOSBVL  SUB_08503                    * 17AFE
             AD0EX                                * 17B05
             D1=A                                 * 17B08
-L_17B0B:
+FixRRP.L1:
             C=DAT1  A                            * 17B0B
             ?C=0    A                            * 17B0E
-            GOYES   L_17B7A                      * 17B11
+            GOYES   FixRRP.L4                    * 17B11
             AD1EX                                * 17B13
             D1=A                                 * 17B16
             A=A+C   A                            * 17B19
@@ -1366,8 +1366,8 @@ L_17B0B:
             C=DAT1  A                            * 17B1E
             D1=D1-  5                            * 17B21
             C=C-1   A                            * 17B24
-            GOC     L_17B7A                      * 17B26
-L_17B29:
+            GOC     FixRRP.L4                    * 17B26
+FixRRP.loop2:
             R1=C                                 * 17B29
             D0=A                                 * 17B2C
             B=A     A                            * 17B2F
@@ -1377,9 +1377,9 @@ L_17B29:
             C=DAT0  7                            * 17B42
             C=0     A                            * 17B46
             C=C-1   M                            * 17B48
-            GONC    L_17B51                      * 17B4B
+            GONC    FixRRP.L3                    * 17B4B
             C=0     M                            * 17B4E
-L_17B51:
+FixRRP.L3:
             CD0EX                                * 17B51
             D0=C                                 * 17B54
             C=C-B   A                            * 17B57
@@ -1388,13 +1388,13 @@ L_17B51:
             AD0EX                                * 17B60
             C=R1                                 * 17B63
             C=C-1   A                            * 17B66
-            GONC    L_17B29                      * 17B68
+            GONC    FixRRP.loop2                 * 17B68
             C=0     M                            * 17B6B
             CD1EX                                * 17B6E
             D1=C                                 * 17B71
             C=A-C   A                            * 17B74
             DAT1=C  10                           * 17B76
-L_17B7A:
+FixRRP.L4:
             GOVLNG  GPOverWrFLp                  * 17B7A
           ENDCODE                                * 17B81
         ;                                        * 17B81
@@ -1402,15 +1402,15 @@ L_17B7A:
 * refs (3): 17C0D 17C48 3859D
 VLM:
         :: RDROP VLM~3 ClrBusyAnn RECLAIMDISP ClrDA1IsStat OBJ_01E5E ERROR@ * 17B86
-          OBJ_38854 #1<> OBJ_18338 AND ?GOTO L_17BFE ERRBEEP DoMenuMTH * 17BAE
+          OBJ_38854 #1<> OBJ_18338 AND ?GOTO VLM.L1 ERRBEEP DoMenuMTH * 17BAE
           ERRORCLR #135_64EAA JstGetTHEMESG DISPROW1 ERRSET VLM~4 ERRTRAP * 17BD6
           VLM~2                                  * 17BF9
-L_17BFE:
+VLM.L1:
           OBJ_17F40 VLM~1 ERRTRAP VLM ;          * 17BFE
 
 * refs (1): 17C03
 VLM~1:
-        :: HOMEDIR ERRSET SetThisRow ClrDAsOK GOTO L_385B1 ; * 17C17
+        :: HOMEDIR ERRSET SetThisRow ClrDAsOK GOTO StartupProc~1.L1 ; * 17C17
 
 * refs (1): 17BF9
 VLM~2:
@@ -1427,7 +1427,7 @@ VLM~3:
         A=0     A                                * 17C5A
         D1=(5)  leeway                           * 17C5C
         DAT1=A  A                                * 17C63
-        GOTO    L_1830D                          * 17C66
+        GOTO    DropSysObs.L1                    * 17C66
         RPL
 
 * refs (1): 17BEF
@@ -1435,10 +1435,10 @@ VLM~4:
         :: #134_64EA0 JstGetTHEMESG DISPROW3 Y/N-Menu BEGIN HOMEDIR * 17C6A
           NoEditLine? ?SKIP                      * 17C8D
           :: #13D_64EF0 JstGetTHEMESG VLM~5 InitEd&Modes ; * 17C97
-L_17CB5:
+VLM~4.loop1:
           DEPTH #0=?SKIP                         * 17CB5
           :: VLM~6 OVER OBJ_15CCF VLM~5          * 17CBF
-            :: DROP CK0NOLASTWD 3RDROP GOTO L_17CB5 ; ; * 17CD8
+            :: DROP CK0NOLASTWD 3RDROP GOTO VLM~4.loop1 ; ; * 17CD8
           NoMemComLine? ?SKIP                    * 17D00
           :: #138_64EC8 JstGetTHEMESG VLM~5 DelMemComLine ; * 17D0A
           NoLastStack? ?SKIP                     * 17D28
@@ -1477,7 +1477,7 @@ Y/N-Menu:
         ASSEMBLE
         GOSBVL  SAVPTR                           * 17F1A
         ST=0    15                               * 17F21
-        LC(5)   L_81D33                          * 17F24  code in the self-test area
+        LC(5)   SUB_81BA2.L10                    * 17F24  code in the self-test area
         GOSBVL  SUB_7008B                        * 17F2B
         GOSBVL  AllowIntr                        * 17F32
         GOVLNG  GETPTRLOOP                       * 17F39
@@ -1494,7 +1494,7 @@ OBJ_17F40:
             D0=C                                 * 17F73
             D1=D1+  5                            * 17F76
             D=D+1   A                            * 17F79
-            GOTO    L_18311                      * 17F7B
+            GOTO    DropSysObs.L2                * 17F7B
           ENDCODE                                * 17F7F
         ;                                        * 17F7F
 
@@ -1507,11 +1507,11 @@ VLM~5:
 * refs (2): 17F93 181BE
 OBJ_17FB1:
         :: NOBLINK                               * 17FB1
-L_17FBB:
-          OBJ_53AD6 GETKEY ?GOTO OBJ_1802E ATTN? ?GOTO L_18006 TIMEOUT? IT * 17FBB
-          off!                                   * 17FE8
+OBJ_17FB1.loop1:
+          OBJ_53AD6 GETKEY ?GOTO OBJ_1802E ATTN? ?GOTO OBJ_17FB1.L2 TIMEOUT? * 17FBB
+          IT off!                                * 17FE3
           UART? IT FLUSHRSBUF                    * 17FED
-          GOTO L_17FBB                           * 17FFC
-L_18006:
+          GOTO OBJ_17FB1.loop1                   * 17FFC
+OBJ_17FB1.L2:
           ATTNFLGCLR OBJ_42396 OBJ_18338 caseTRUE ERRBEEP * 18006
-          GOTO L_17FBB ;                         * 1801F
+          GOTO OBJ_17FB1.loop1 ;                 * 1801F

@@ -19,7 +19,7 @@ POLAR_8C9FD:
               15GETLAM SWAP %>C% ;               * 8CA75
           }                                      * 8CA89
           FALSE ~';PlotEval                      * 8CA8E
-          :: BINT31 TestSysFlag ITE              * 8CA98
+          :: BINT31 TestSysFlag ITE              * 8CA98  flag -31: Connect points / Plot points only
             :: ' OBJ_4CE0B ;                     * 8CAAC
             :: ' PlotFcnPt ;                     * 8CAC0
           ;                                      * 8CAD4
@@ -43,7 +43,7 @@ PARAMETRIC:
               15GETLAM SWAP TWO{}N ;             * 8CBB9
           }                                      * 8CBCD
           FALSE ~';PlotEval                      * 8CBD2
-          :: BINT31 TestSysFlag ITE              * 8CBDC
+          :: BINT31 TestSysFlag ITE              * 8CBDC  flag -31: Connect points / Plot points only
             :: ' OBJ_4CE0B ;                     * 8CBF0
             :: ' PlotFcnPt ;                     * 8CC04
           ;                                      * 8CC18
@@ -59,7 +59,7 @@ TRUTH:
         :: CK0 'IDTRUTH PUTPTYPE ;               * 8CC7F
 
         { FALSE OBJ_4C4B8 NOP TRUE NULL{} FALSE ~';PlotEval * 8CC98
-          :: BINT31 TestSysFlag ITE              * 8CCC0
+          :: BINT31 TestSysFlag ITE              * 8CCC0  flag -31: Connect points / Plot points only
             :: ' OBJ_4CE0B ;                     * 8CCD4
             :: ' PlotFcnPt ;                     * 8CCE8
           ;                                      * 8CCFC
@@ -76,7 +76,7 @@ SCATTER:
 
         { FALSE                                  * 8CD6D
           :: DROP OBJ_4C8D1 ; NOP TRUE NULL{} TRUE ~';PlotEval * 8CD77
-          :: BINT31 TestSysFlag ITE              * 8CDA4
+          :: BINT31 TestSysFlag ITE              * 8CDA4  flag -31: Connect points / Plot points only
             :: ' OBJ_4CE0B ;                     * 8CDB8
             :: ' PlotFcnPt ;                     * 8CDCC
           ;                                      * 8CDE0
@@ -93,7 +93,7 @@ HISTOGRAM:
 
         { FALSE                                  * 8CE51
           :: DROP OBJ_4D993 ; NOP TRUE NULL{} FALSE ~';PlotEval * 8CE5B
-          :: BINT31 TestSysFlag ITE              * 8CE88
+          :: BINT31 TestSysFlag ITE              * 8CE88  flag -31: Connect points / Plot points only
             :: ' OBJ_4CE0B ;                     * 8CE9C
             :: ' PlotFcnPt ;                     * 8CEB0
           ;                                      * 8CEC4
@@ -110,7 +110,7 @@ BAR:
 
         { FALSE                                  * 8CF3F
           :: DROP OBJ_4D9CF ; NOP TRUE NULL{} FALSE ~';PlotEval * 8CF49
-          :: BINT31 TestSysFlag ITE              * 8CF76
+          :: BINT31 TestSysFlag ITE              * 8CF76  flag -31: Connect points / Plot points only
             :: ' OBJ_4CE0B ;                     * 8CF8A
             :: ' PlotFcnPt ;                     * 8CF9E
           ;                                      * 8CFB2

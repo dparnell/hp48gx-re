@@ -493,7 +493,7 @@ OBJ_4A285:
           AppMode? ?SEMI                         * 4A29E
           OBJ_6DE82 ?SEMI                        * 4A2A8
           KEYINBUFFER? ?SEMI                     * 4A2B2
-          BINT58 TestSysFlag ?SEMI               * 4A2BC
+          BINT58 TestSysFlag ?SEMI               * 4A2BC  flag -58: Show INFO / Don't show INFO
           LocalReview ;                          * 4A2CB
 
 * refs (1): 4A302
@@ -507,13 +507,13 @@ OBJ_4A2E9:
 
 * refs (1): 3D3A6
 OBJ_4A33E:
-        :: OBJ_49A38 JstGetTHEMESG BINT33 SysITE * 4A33E
+        :: OBJ_49A38 JstGetTHEMESG BINT33 SysITE * 4A33E  flag -33: Transfer via wire / Transfer via IR
 
 _IR__4A357:
           $ "IR"                                 * 4A357
 
 _wire__4A365:
-          $ "wire" !append$ DISPROW3 OBJ_49A42 JstGetTHEMESG BINT35 SysITE * 4A365
+          $ "wire" !append$ DISPROW3 OBJ_49A42 JstGetTHEMESG BINT35 SysITE * 4A365  flag -35: ASCII transfer / Binary transfer
 
 _binary__4A395:
           $ "binary"                             * 4A395
@@ -1035,7 +1035,7 @@ OBJ_4B9D6:
 
 * refs (1): 8CA20
 OBJ_4BA0D:
-        :: BINT31 TestSysFlag ITE                * 4BA0D
+        :: BINT31 TestSysFlag ITE                * 4BA0D  flag -31: Connect points / Plot points only
           :: ' OBJ_4CDD9 ;                       * 4BA21
           :: ' OBJ_4C382 ;                       * 4BA35
           3PUTLAM COLA OBJ_4BAAD                 * 4BA49
@@ -1043,7 +1043,7 @@ OBJ_4BA0D:
 
 * refs (1): 8C821
 OBJ_4BA5D:
-        :: BINT31 TestSysFlag ITE                * 4BA5D
+        :: BINT31 TestSysFlag ITE                * 4BA5D  flag -31: Connect points / Plot points only
           :: ' OBJ_4CE0B ;                       * 4BA71
           :: ' PlotFcnPt ;                       * 4BA85
           3PUTLAM COLA OBJ_4BAAD                 * 4BA99
@@ -1062,7 +1062,7 @@ OBJ_4BABC:
           OBJ_4B9D6 OBJ_4C314 ZERO_DO ERRSET     * 4BB07
           :: 15GETLAM 17GETLAM NEWINDEP OBJ_4ED70 19GETLAM TYPEEXT? ITE * 4BB1B
             OBJ_4BC06 OBJ_4C12A                  * 4BB43
-            BINT28 TestSysFlag IT ExitAtLOOP     * 4BB4D
+            BINT28 TestSysFlag IT ExitAtLOOP     * 4BB4D  flag -28: Sequential plot / Simultaneous plot
           ;                                      * 4BB61
           ERRTRAP OBJ_4B4EB ~ATTNFLG@;#0=?SEMI;ExitAtLOOP LOOP ATTNFLGCLR * 4BB66
           18GETLAM RESETDEPTH INDEPVAR ?PURGE_HERE ; * 4BB7F
@@ -1086,7 +1086,7 @@ OBJ_4BC83:
           :: uncrunch                            * 4BC97
             :: 15GETLAM 17GETLAM NEWINDEP OBJ_50D02 DUPTYPESYMB? NOTcase * 4BCA1
               doerr607                           * 4BCC4
-              BINT31 TestSysFlag ITE             * 4BCC9
+              BINT31 TestSysFlag ITE             * 4BCC9  flag -31: Connect points / Plot points only
               :: ' OBJ_4C7D3 ;                   * 4BCD8
               :: ' OBJ_4C846 ;                   * 4BCEC
               3PUTLAM ~RclDepnd;1get(li)? INDEPVAR DUP 15PUTLAM OBJ_5956F * 4BD00
@@ -1106,7 +1106,7 @@ OBJ_4BC83:
 
 * refs (1): 8CB64
 OBJ_4BE9F:
-        :: BINT31 TestSysFlag ITE                * 4BE9F
+        :: BINT31 TestSysFlag ITE                * 4BE9F  flag -31: Connect points / Plot points only
           :: ' OBJ_4C3B9 ;                       * 4BEB3
           :: ' OBJ_4C3E6 ;                       * 4BEC7
           3PUTLAM COLA OBJ_4BAAD                 * 4BEDB
@@ -1114,7 +1114,7 @@ OBJ_4BE9F:
 
 * refs (4): 4BBCA 4BD9B 4BDC3 4BE27
 OBJ_4BEEF:
-        :: INDEX@ #1+ BINT31 TestSysFlag ITE     * 4BEEF
+        :: INDEX@ #1+ BINT31 TestSysFlag ITE     * 4BEEF  flag -31: Connect points / Plot points only
           :: '                                   * 4BF0D
             :: DROP COLA PlotEval                * 4BF17
             ;                                    * 4BF2B

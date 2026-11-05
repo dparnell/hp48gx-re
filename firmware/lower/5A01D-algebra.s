@@ -174,33 +174,33 @@ OBJ_5A55E:
         A=DAT1  W                                * 5A573
         B=0     A                                * 5A577
         ?A=0    M                                * 5A579
-        GOYES   L_5A5B6                          * 5A57C
+        GOYES   OBJ_5A55E.L4                     * 5A57C
         C=0     A                                * 5A57E
         C=A     X                                * 5A580
         A=0     X                                * 5A583
         P=      13                               * 5A586
         SETDEC                                   * 5A588
-L_5A58A:
+OBJ_5A55E.loop1:
         ?A=0    WP                               * 5A58A
-        GOYES   L_5A597                          * 5A58D
+        GOYES   OBJ_5A55E.L2                     * 5A58D
         P=P-1                                    * 5A58F
         B=B+1   X                                * 5A591
-        GONC    L_5A58A                          * 5A594
-L_5A597:
+        GONC    OBJ_5A55E.loop1                  * 5A594
+OBJ_5A55E.L2:
         ?C=0    X                                * 5A597
-        GOYES   L_5A5B6                          * 5A59A
+        GOYES   OBJ_5A55E.L4                     * 5A59A
         A=C     X                                * 5A59C
         A=A+A   X                                * 5A59F
-        GONC    L_5A5AB                          * 5A5A2
+        GONC    OBJ_5A55E.L3                     * 5A5A2
         P=      3                                * 5A5A5
         LC(2)   #99                              * 5A5A7
-L_5A5AB:
+OBJ_5A55E.L3:
         B=B-C   A                                * 5A5AB
         P=      4                                * 5A5AD
         ?B=0    P                                * 5A5AF
-        GOYES   L_5A5B6                          * 5A5B2
+        GOYES   OBJ_5A55E.L4                     * 5A5B2
         B=0     A                                * 5A5B4
-L_5A5B6:
+OBJ_5A55E.L4:
         P=      0                                * 5A5B6
         SETHEX                                   * 5A5B8
         A=B     A                                * 5A5BA
@@ -300,9 +300,9 @@ OBJ_5A8A5:
         C=R0.F  A                                * 5A8C9
         A=A-C   A                                * 5A8CF
         LC(5)   COLA                             * 5A8D1
-        GONC    L_5A8E2                          * 5A8D8
+        GONC    OBJ_5A8A5.L1                     * 5A8D8
         LC(5)   SKIP                             * 5A8DB
-L_5A8E2:
+OBJ_5A8A5.L1:
         A=C     A                                * 5A8E2
         PC=(A)                                   * 5A8E4
 
@@ -319,25 +319,25 @@ OBJ_5A8E8:
         C=DAT1  W                                * 5A908
         D1=A                                     * 5A90C
         ?C#0    S                                * 5A90F
-        GOYES   L_5A944                          * 5A912
+        GOYES   OBJ_5A8E8.L2                     * 5A912
         CAEX    X                                * 5A914
         LC(3)   #001                             * 5A917
         ?C<A    X                                * 5A91C
-        GOYES   L_5A94B                          * 5A91F
+        GOYES   OBJ_5A8E8.L3                     * 5A91F
         P=C     13                               * 5A921
         CPEX    0                                * 5A925
         P=C     14                               * 5A929
         CPEX    1                                * 5A92D
         ?A#0    X                                * 5A931
-        GOYES   L_5A939                          * 5A934
+        GOYES   OBJ_5A8E8.L1                     * 5A934
         CSR     B                                * 5A936
-L_5A939:
+OBJ_5A8E8.L1:
         A=R0.F  B                                * 5A939
         ?C>A    B                                * 5A93F
-        GOYES   L_5A94B                          * 5A942
-L_5A944:
+        GOYES   OBJ_5A8E8.L3                     * 5A942
+OBJ_5A8E8.L2:
         GOVLNG  PushTLoop                        * 5A944
-L_5A94B:
+OBJ_5A8E8.L3:
         GOVLNG  PushFLoop                        * 5A94B
 
 * refs (1): 56822
@@ -373,27 +373,27 @@ SUB_5A999:
         D1=(5)  #8084F                           * 5A9A6
         A=DAT1  1                                * 5A9AD
         ?ABIT=1 0                                * 5A9B1
-        GOYES   L_5A9C5                          * 5A9B6
+        GOYES   SUB_5A999.L1                     * 5A9B6
         ?ABIT=1 1                                * 5A9B8
-        GOYES   L_5A9C5                          * 5A9BD
+        GOYES   SUB_5A999.L1                     * 5A9BD
         A=C     B                                * 5A9BF
-        GONC    L_5A9F1                          * 5A9C2
-L_5A9C5:
+        GONC    SUB_5A999.L2                     * 5A9C2
+SUB_5A999.L1:
         D1=(5)  #8084E                           * 5A9C5
         A=DAT1  1                                * 5A9CC
         LC(1)   #A                               * 5A9D0
         C=A-C   P                                * 5A9D3
-        GOC     L_5A9F1                          * 5A9D6
+        GOC     SUB_5A999.L2                     * 5A9D6
         A=C     P                                * 5A9D9
         P=      1                                * 5A9DC
         A=A+1   P                                * 5A9DE
         P=      0                                * 5A9E1
         LC(1)   #2                               * 5A9E3
         ?C>A    P                                * 5A9E6
-        GOYES   L_5A9F1                          * 5A9E9
+        GOYES   SUB_5A999.L2                     * 5A9E9
         A=0     P                                * 5A9EB
         A=A+1   P                                * 5A9EE
-L_5A9F1:
+SUB_5A999.L2:
         P=      0                                * 5A9F1
         RTN                                      * 5A9F3
         RPL
@@ -947,7 +947,7 @@ drpmeta/:
         :: SWAPDROP#1- COLA meta/                * 5BD89
         ;                                        * 5BD9D
 
-L_5BDA2:
+drpmeta/.L1:
         CON(5)  x+                               * 5BDA2  address (the code jumps or points through it)
 
         CON(5)  x-                               * 5BDA7  address (the code jumps or points through it)
@@ -958,7 +958,7 @@ L_5BDA2:
 
         CON(5)  x=                               * 5BDB6  address (the code jumps or points through it)
 
-L_5BDBB:
+drpmeta/.L2:
         CON(5)  xSIN                             * 5BDBB  address (the code jumps or points through it)
 
         CON(5)  xCOS                             * 5BDC0  address (the code jumps or points through it)
@@ -983,7 +983,7 @@ L_5BDBB:
 
         CON(5)  xATANH                           * 5BDF2  address (the code jumps or points through it)
 
-L_5BDF7:
+drpmeta/.L3:
         CON(5)  xCONJ                            * 5BDF7  address (the code jumps or points through it)
 
         CON(5)  xRE                              * 5BDFC  address (the code jumps or points through it)
@@ -1006,7 +1006,7 @@ L_5BDF7:
 
         CON(5)  xSQ                              * 5BE29  address (the code jumps or points through it)
 
-L_5BE2E:
+drpmeta/.L4:
         CON(5)  x+                               * 5BE2E  address (the code jumps or points through it)
 
         CON(5)  x-                               * 5BE33  address (the code jumps or points through it)
@@ -1504,7 +1504,7 @@ Meta->TRG:
 MetaT->:
         CON(5)  (*)+5                            * 5C68D  primitive code object
         ASSEMBLE
-        LC(5)   L_5BDA2                          * 5C692
+        LC(5)   drpmeta/.L1                      * 5C692
         GOSBVL  SUB_5F6F9                        * 5C699  inline data follows
 
 * rewrite rules, read by the interpreter called just before (RuleMatch, #5F6F2)
@@ -1526,7 +1526,7 @@ MetaT->:
 Meta<-T:
         CON(5)  (*)+5                            * 5C6D9  primitive code object
         ASSEMBLE
-        LC(5)   L_5BDA2                          * 5C6DE
+        LC(5)   drpmeta/.L1                      * 5C6DE
         GOSBVL  SUB_5F6F9                        * 5C6E5  inline data follows
 
 * rewrite rules, read by the interpreter called just before (RuleMatch, #5F6F2)
@@ -1548,7 +1548,7 @@ Meta<-T:
 Meta->()C%:
         CON(5)  (*)+5                            * 5C73D  primitive code object
         ASSEMBLE
-        LC(5)   L_5BDF7                          * 5C742
+        LC(5)   drpmeta/.L3                      * 5C742
         GOSBVL  SUB_5F6F9                        * 5C749  inline data follows
 
 * rewrite rules, read by the interpreter called just before (RuleMatch, #5F6F2)
@@ -1592,7 +1592,7 @@ Meta->()C%:
 Meta->DEF:
         CON(5)  (*)+5                            * 5C845  primitive code object
         ASSEMBLE
-        LC(5)   L_5BDBB                          * 5C84A
+        LC(5)   drpmeta/.L2                      * 5C84A
         GOSBVL  SUB_5F6F9                        * 5C851  inline data follows
 
 * rewrite rules, read by the interpreter called just before (RuleMatch, #5F6F2)
@@ -1629,7 +1629,7 @@ Meta->DEF:
 MetaTRG*:
         CON(5)  (*)+5                            * 5C91D  primitive code object
         ASSEMBLE
-        LC(5)   L_5BE2E                          * 5C922
+        LC(5)   drpmeta/.L4                      * 5C922
         GOSBVL  SUB_5F6F9                        * 5C929  inline data follows
 
 * rewrite rules, read by the interpreter called just before (RuleMatch, #5F6F2)

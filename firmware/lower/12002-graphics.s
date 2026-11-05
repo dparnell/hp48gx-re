@@ -2,7 +2,7 @@
 * Addresses in the right-hand comments are those of the original ROM.
 * Most referenced: HARDBUFF GBUFF TOADISP XYGROBDISP INVGROB HARDBUFF2 BLANKIT PIXON3 WINDOWXY DISPSTATUS2 DISPROW5 WINDOWCORNER
 * Follows on from the previous file (at #12002 in the original ROM).
-L_12002:
+$>grob.L7:
         A=DAT0  A                                * 12002
         D0=D0+  5                                * 12005
         PC=(A)                                   * 12008
@@ -26,28 +26,28 @@ RIGHT$3x6:
         D0=A                                     * 12033
         A=R0                                     * 12036
         B=A     A                                * 12039
-L_1203B:
+RIGHT$3x6.loop1:
         D=D-1   A                                * 1203B
-        GOC     L_12079                          * 1203D
+        GOC     RIGHT$3x6.L3                     * 1203D
         D1=D1-  2                                * 12040
         A=DAT1  B                                * 12043
         GOSBVL  SUB_7A1F4                        * 12046
         AD1EX                                    * 1204D
-        GOSBVL  L_0C169                          * 12050
+        GOSBVL  SUB_0C11B.L3                     * 12050
         C=0     A                                * 12057
         C=DAT1  1                                * 12059
         D1=A                                     * 1205D
         B=B-C   A                                * 12060
-        GOC     L_1206C                          * 12062
+        GOC     RIGHT$3x6.L2                     * 12062
         D0=D0+  1                                * 12065
-        GOTO    L_1203B                          * 12068
-L_1206C:
+        GOTO    RIGHT$3x6.loop1                  * 12068
+RIGHT$3x6.L2:
         B=B+C   A                                * 1206C
         LC(5)   TRUE                             * 1206E
-        GOTO    L_12080                          * 12075
-L_12079:
+        GOTO    RIGHT$3x6.L4                     * 12075
+RIGHT$3x6.L3:
         LC(5)   FALSE                            * 12079
-L_12080:
+RIGHT$3x6.L4:
         RSTK=C                                   * 12080
         A=R0                                     * 12082
         A=A-B   A                                * 12085
@@ -70,7 +70,7 @@ L_12080:
         C=C+A   A                                * 120BC
         C=C+A   A                                * 120BE
         CD1EX                                    * 120C0
-        GOTO    L_11FD0                          * 120C3
+        GOTO    $>grob.L3                        * 120C3
         BSS     5                                * 120C7  zeros
 
 * refs (8): 11D0F 11D36 11F8F 1201F 120B0 1219A ...
@@ -94,19 +94,19 @@ SUB_120F5:
         B=0     A                                * 120F5
         D=C     A                                * 120F7
         D=0     S                                * 120F9
-L_120FC:
+SUB_120F5.loop1:
         D=D-1   S                                * 120FC
-        GONC    L_1210F                          * 120FF
+        GONC    SUB_120F5.L2                     * 120FF
         GOSUB   SUB_1211E                        * 12102
         RTNC                                     * 12106
         AD1EX                                    * 12109
         D0=A                                     * 1210C
-L_1210F:
+SUB_120F5.L2:
         A=0     A                                * 1210F
         A=DAT0  1                                * 12111
         B=B+A   A                                * 12115
         D0=D0+  11                               * 12117
-        GOTO    L_120FC                          * 1211A
+        GOTO    SUB_120F5.loop1                  * 1211A
 
 * refs (3): 12102 121B3 12267
 SUB_1211E:
@@ -115,9 +115,9 @@ SUB_1211E:
         C=0     A                                * 12123
         LC(1)   #8                               * 12125
         ?D>=C   A                                * 12128
-        GOYES   L_1212F                          * 1212B
+        GOYES   SUB_1211E.L1                     * 1212B
         C=D     A                                * 1212D
-L_1212F:
+SUB_1211E.L1:
         D=D-C   A                                * 1212F
         P=C     0                                * 12131
         C=P     15                               * 12135
@@ -127,7 +127,7 @@ L_1212F:
         D1=D1+  16                               * 12143
         GOSBVL  SUB_7A1FA                        * 12146
         AD1EX                                    * 1214D
-        GOSBVL  L_0C169                          * 12150
+        GOSBVL  SUB_0C11B.L3                     * 12150
         RTNCC                                    * 12157
         BSS     5                                * 12159  zeros
 
@@ -143,9 +143,9 @@ CENTER$3x5:
         D=D+1   A                                * 12173
         GOSBVL  POP2#                            * 12175
         C=C-CON A,3                              * 1217C
-        GONC    L_12187                          * 12182
+        GONC    CENTER$3x5.L1                    * 12182
         C=0     A                                * 12185
-L_12187:
+CENTER$3x5.L1:
         R2=C                                     * 12187
         R3=A                                     * 1218A
         GOSUB   SAVPTR~jump_7                    * 1218D
@@ -158,26 +158,26 @@ L_12187:
         DCEX    A                                * 121A3
         A=R0                                     * 121A5
         B=A     A                                * 121A8
-L_121AA:
+CENTER$3x5.loop2:
         D=D-1   S                                * 121AA
-        GONC    L_121C2                          * 121AD
+        GONC    CENTER$3x5.L3                    * 121AD
         D0=C                                     * 121B0
         GOSUB   SUB_1211E                        * 121B3
         AD1EX                                    * 121B7
         C=A     A                                * 121BA
         CD0EX                                    * 121BC
-        GOC     L_121D8                          * 121BF
-L_121C2:
+        GOC     CENTER$3x5.L5                    * 121BF
+CENTER$3x5.L3:
         A=0     A                                * 121C2
         A=DAT0  1                                * 121C4
         D0=D0+  11                               * 121C8
         B=B-A   A                                * 121CB
-        GOC     L_121D6                          * 121CD
+        GOC     CENTER$3x5.L4                    * 121CD
         C=C+1   A                                * 121D0
-        GOTO    L_121AA                          * 121D2
-L_121D6:
+        GOTO    CENTER$3x5.loop2                 * 121D2
+CENTER$3x5.L4:
         B=B+A   A                                * 121D6
-L_121D8:
+CENTER$3x5.L5:
         D=C     A                                * 121D8
         A=R0                                     * 121DA
         A=A-B   A                                * 121DD
@@ -185,9 +185,9 @@ L_121D8:
         ASRB.F  A                                * 121E1
         C=R3                                     * 121E6
         C=C-A   A                                * 121E9
-        GONC    L_121F0                          * 121EB
+        GONC    CENTER$3x5.L6                    * 121EB
         C=0     A                                * 121EE
-L_121F0:
+CENTER$3x5.L6:
         CR4EX                                    * 121F0
         D1=C                                     * 121F3
         GOSUB   SUB_11C58                        * 121F6
@@ -203,7 +203,7 @@ L_121F0:
         C=D     A                                * 12214
         ST=0    2                                * 12216
         GOSUB   SUB_12223                        * 12219
-        GOLONG  L_116AE                          * 1221D
+        GOLONG  GROB!.L1                         * 1221D
 
 * refs (2): 11FE9 12219
 SUB_12223:
@@ -217,18 +217,18 @@ SUB_12223:
         CD1EX                                    * 12235
         R2=C                                     * 12238
         P=      15                               * 1223B
-L_1223D:
+SUB_12223.loop1:
         LC(1)   #4                               * 1223D
-L_12240:
+SUB_12223.loop2:
         ?C>A    S                                * 12240
-        GOYES   L_1224E                          * 12243
+        GOYES   SUB_12223.L3                     * 12243
         A=A-C   S                                * 12245
         D0=D0+  1                                * 12248
-        GONC    L_12240                          * 1224B
-L_1224E:
+        GONC    SUB_12223.loop2                  * 1224B
+SUB_12223.L3:
         P=      0                                * 1224E
         D=D-1   S                                * 12250
-        GONC    L_1227C                          * 12253
+        GONC    SUB_12223.L4                     * 12253
         B=A     S                                * 12256
         C=R2                                     * 12259
         D1=C                                     * 1225C
@@ -242,7 +242,7 @@ L_1224E:
         DCEX    A                                * 12274
         R1=C                                     * 12276
         A=B     S                                * 12279
-L_1227C:
+SUB_12223.L4:
         C=0     W                                * 1227C
         C=DAT1  11                               * 1227F
         D1=D1+  11                               * 12283
@@ -250,22 +250,22 @@ L_1227C:
         B=C     W                                * 12289
         C=0     A                                * 1228C
         C=C-1   A                                * 1228E
-        GOC     L_12295                          * 12290
-L_12293:
+        GOC     SUB_12223.L6                     * 12290
+SUB_12223.loop5:
         C=C+C   A                                * 12293
-L_12295:
+SUB_12223.L6:
         C=C-1   S                                * 12295
-        GONC    L_12293                          * 12298
+        GONC    SUB_12223.loop5                  * 12298
         C=-C-1  A                                * 1229B
         C=A     S                                * 1229D
         A=A+B   S                                * 122A0
-        GONC    L_122AB                          * 122A3
-L_122A6:
+        GONC    SUB_12223.L8                     * 122A3
+SUB_12223.loop7:
         C=C+C   A                                * 122A6
         B=B+B   W                                * 122A8
-L_122AB:
+SUB_12223.L8:
         C=C-1   S                                * 122AB
-        GONC    L_122A6                          * 122AE
+        GONC    SUB_12223.loop7                  * 122AE
         C=-C-1  A                                * 122B1
         CD1EX                                    * 122B3
         RSTK=C                                   * 122B6
@@ -274,9 +274,9 @@ L_122AB:
         CD1EX                                    * 122BE
         P=      4                                * 122C1
         ?ST=0   2                                * 122C3
-        GOYES   L_122CA                          * 122C6
+        GOYES   SUB_12223.loop9                  * 122C6
         P=      5                                * 122C8
-L_122CA:
+SUB_12223.loop9:
         RSTK=C                                   * 122CA
         A=DAT1  A                                * 122CC
         A=A&C   X                                * 122CF
@@ -291,10 +291,10 @@ L_122CA:
         D1=C                                     * 122EC
         C=RSTK                                   * 122EF
         P=P-1                                    * 122F1
-        GONC    L_122CA                          * 122F3
+        GONC    SUB_12223.loop9                  * 122F3
         C=RSTK                                   * 122F6
         D1=C                                     * 122F8
-        GOTO    L_1223D                          * 122FB
+        GOTO    SUB_12223.loop1                  * 122FB
 
 * grob -> grob'
 * refs (24): 3A380 3A3E2 3A444 4CDC0 4DBBD 4FC32 ...
@@ -308,9 +308,9 @@ INVGROB:
         C=0     A                                * 12314
         LC(2)   #10                              * 12316
         A=A-C   A                                * 1231A
-        GONC    L_12323                          * 1231C
-        GOTO    L_123C2                          * 1231F
-L_12323:
+        GONC    INVGROB.L1                       * 1231C
+        GOTO    INVGROB.L8                       * 1231F
+INVGROB.L1:
         D1=D1+  5                                * 12323
         C=DAT1  A                                * 12326
         C=C-1   A                                * 12329
@@ -336,29 +336,29 @@ L_12323:
         C=R1                                     * 12362
         C=C-1   A                                * 12365
         P=C     0                                * 12367
-        GOTO    L_12374                          * 1236B
-L_1236F:
+        GOTO    INVGROB.L3                       * 1236B
+INVGROB.loop2:
         DSRB.F  WP                               * 1236F
-L_12374:
+INVGROB.L3:
         B=B-1   A                                * 12374
-        GONC    L_1236F                          * 12376
+        GONC    INVGROB.loop2                    * 12376
         C=RSTK                                   * 12379
-L_1237B:
+INVGROB.loop4:
         RSTK=C                                   * 1237B
         A=R0                                     * 1237D
         B=A     A                                * 12380
-        GOTO    L_12394                          * 12382
-L_12386:
+        GOTO    INVGROB.L6                       * 12382
+INVGROB.loop5:
         A=DAT1  W                                * 12386
         A=-A-1  W                                * 1238A
         DAT1=A  W                                * 1238D
         D1=D1+  16                               * 12391
-L_12394:
+INVGROB.L6:
         B=B-1   A                                * 12394
-        GONC    L_12386                          * 12396
+        GONC    INVGROB.loop5                    * 12396
         C=R1                                     * 12399
         ?C=0    A                                * 1239C
-        GOYES   L_123B9                          * 1239F
+        GOYES   INVGROB.L7                       * 1239F
         C=DAT1  WP                               * 123A1
         C=-C-1  WP                               * 123A5
         C=C&D   WP                               * 123A8
@@ -366,13 +366,13 @@ L_12394:
         CD1EX                                    * 123B0
         C+P+1                                    * 123B3
         D1=C                                     * 123B6
-L_123B9:
+INVGROB.L7:
         C=RSTK                                   * 123B9
         C=C-1   A                                * 123BB
-        GONC    L_1237B                          * 123BD
+        GONC    INVGROB.loop4                    * 123BD
         P=      0                                * 123C0
-L_123C2:
-        GOLONG  L_116AE                          * 123C2
+INVGROB.L8:
+        GOLONG  GROB!.L1                         * 123C2
 
 * refs (3): 39D97 39DD8 3A0C6
 BigDisp(st,s):
@@ -380,39 +380,39 @@ BigDisp(st,s):
         GOSUB   POP#~jump                        * 123CD
         A=A-1   A                                * 123D1
         A=A-1   A                                * 123D3
-        GOC     L_1241A                          * 123D5
+        GOC     BigDisp4(st).L1                  * 123D5
         A=A-1   A                                * 123D8
-        GOC     L_1240A                          * 123DA
+        GOC     BigDisp3(st).L1                  * 123DA
         A=A-1   A                                * 123DD
-        GOC     L_123FA                          * 123DF
-        GONC    L_123EA                          * 123E2
+        GOC     BigDisp2(st).L1                  * 123DF
+        GONC    BigDisp1(st).L1                  * 123E2
 
 * refs (5): 8D6F7 8EE78 8F368 8F41F 8F4B7
 BigDisp1(st):
         CON(5)  (*)+5                            * 123E5  primitive code object
-L_123EA:
+BigDisp1(st).L1:
         LC(5)   #0002E                           * 123EA
-        GOTO    L_12421                          * 123F1
+        GOTO    BigDisp4(st).L2                  * 123F1
 
 BigDisp2(st):
         CON(5)  (*)+5                            * 123F5  primitive code object
-L_123FA:
+BigDisp2(st).L1:
         LC(5)   #00024                           * 123FA
-        GOTO    L_12421                          * 12401
+        GOTO    BigDisp4(st).L2                  * 12401
 
 BigDisp3(st):
         CON(5)  (*)+5                            * 12405  primitive code object
-L_1240A:
+BigDisp3(st).L1:
         LC(5)   #0001A                           * 1240A
-        GOTO    L_12421                          * 12411
+        GOTO    BigDisp4(st).L2                  * 12411
 
 BigDisp4(st):
         CON(5)  (*)+5                            * 12415  primitive code object
-L_1241A:
+BigDisp4(st).L1:
         LC(5)   #00010                           * 1241A
-L_12421:
+BigDisp4(st).L2:
         GOSUB   SUB_11CCC                        * 12421
-        GOTO    L_124DA                          * 12425
+        GOTO    DISPROW8.L3                      * 12425
 
 * $ #row ->
 * refs (7): 15469 3A532 3FBB0 413FA 4140E 492ED ...
@@ -421,85 +421,85 @@ DISPN:
         GOSUB   POP#~jump                        * 1242E
         A=A-1   A                                * 12432
         A=A-1   A                                * 12434
-        GOC     L_12460                          * 12436
+        GOC     DISPROW1.L1                      * 12436
         A=A-1   A                                * 12439
-        GOC     L_12470                          * 1243B
+        GOC     DISPROW2.L1                      * 1243B
         A=A-1   A                                * 1243E
-        GOC     L_12480                          * 12440
+        GOC     DISPROW3.L1                      * 12440
         A=A-1   A                                * 12443
-        GOC     L_12490                          * 12445
+        GOC     DISPROW4.L1                      * 12445
         A=A-1   A                                * 12448
-        GOC     L_124A0                          * 1244A
+        GOC     DISPROW5.L1                      * 1244A
         A=A-1   A                                * 1244D
-        GOC     L_124B0                          * 1244F
+        GOC     DISPROW6.L1                      * 1244F
         A=A-1   A                                * 12452
-        GOC     L_124C0                          * 12454
-        GOTO    L_124D0                          * 12457
+        GOC     DISPROW7.L1                      * 12454
+        GOTO    DISPROW8.L1                      * 12457
 
 * $ ->
 * refs (10): 17BE5 22114 3409C 387AA 4798E 479BB ...
 DISPROW1:
         CON(5)  (*)+5                            * 1245B  primitive code object
-L_12460:
+DISPROW1.L1:
         LC(5)   #00000                           * 12460
-        GOTO    L_124D7                          * 12467
+        GOTO    DISPROW8.L2                      * 12467
 
 * $ ->
 * refs (7): 22152 2D744 340A6 387AF 479C0 9AE14 ...
 DISPROW2:
         CON(5)  (*)+5                            * 1246B  primitive code object
-L_12470:
+DISPROW2.L1:
         LC(5)   #00008                           * 12470
-        GOTO    L_124D7                          * 12477
+        GOTO    DISPROW8.L2                      * 12477
 
 * $ ->
 * refs (10): 17C79 2219A 45F40 46076 4A37C 4A54E ...
 DISPROW3:
         CON(5)  (*)+5                            * 1247B  primitive code object
-L_12480:
+DISPROW3.L1:
         LC(5)   #00010                           * 12480
-        GOTO    L_124D7                          * 12487
+        GOTO    DISPROW8.L2                      * 12487
 
 * $ ->
 * refs (9): 221D1 45F67 4609E 4A3C4 4A575 4A64B ...
 DISPROW4:
         CON(5)  (*)+5                            * 1248B  primitive code object
-L_12490:
+DISPROW4.L1:
         LC(5)   #00018                           * 12490
-        GOTO    L_124D7                          * 12497
+        GOTO    DISPROW8.L2                      * 12497
 
 * $ ->
 * refs (11): 17EF7 17F89 18187 222B2 45FB7 460C6 ...
 DISPROW5:
         CON(5)  (*)+5                            * 1249B  primitive code object
-L_124A0:
+DISPROW5.L1:
         LC(5)   #00020                           * 124A0
-        GOTO    L_124D7                          * 124A7
+        GOTO    DISPROW8.L2                      * 124A7
 
 * $ ->
 * refs (10): 17F01 181B9 222C6 45FD5 460EE 4A4AF ...
 DISPROW6:
         CON(5)  (*)+5                            * 124AB  primitive code object
-L_124B0:
+DISPROW6.L1:
         LC(5)   #00028                           * 124B0
-        GOTO    L_124D7                          * 124B7
+        GOTO    DISPROW8.L2                      * 124B7
 
 * $ ->
 * refs (8): 222DA 45FF8 46111 4A504 4A5E0 4A669 ...
 DISPROW7:
         CON(5)  (*)+5                            * 124BB  primitive code object
-L_124C0:
+DISPROW7.L1:
         LC(5)   #00030                           * 124C0
-        GOTO    L_124D7                          * 124C7
+        GOTO    DISPROW8.L2                      * 124C7
 
 * $ ->
 DISPROW8:
         CON(5)  (*)+5                            * 124CB  primitive code object
-L_124D0:
+DISPROW8.L1:
         LC(5)   #00038                           * 124D0
-L_124D7:
+DISPROW8.L2:
         XM=0                                     * 124D7
-L_124DA:
+DISPROW8.L3:
         RSTK=C                                   * 124DA
         A=DAT1  A                                * 124DC
         D1=D1+  5                                * 124DF
@@ -509,11 +509,11 @@ L_124DA:
         LC(5)   #00016                           * 124EE
         ST=0    1                                * 124F5
         ?C>=A   A                                * 124F8
-        GOYES   L_12504                          * 124FB
+        GOYES   DISPROW8.L4                      * 124FB
         ST=1    1                                * 124FD
         A=C     A                                * 12500
         A=A-1   A                                * 12502
-L_12504:
+DISPROW8.L4:
         R2=A                                     * 12504
         C=C-A   A                                * 12507
         CSRB.F  A                                * 12509
@@ -539,19 +539,19 @@ L_12504:
         C=0     A                                * 12553
         LC(2)   #16                              * 12555
         ?C#A    A                                * 12559
-        GOYES   L_12562                          * 1255C
-        GOTO    L_125E2                          * 1255E
-L_12562:
+        GOYES   DISPROW8.L5                      * 1255C
+        GOTO    DISPROW8.loop10                  * 1255E
+DISPROW8.L5:
         CD0EX                                    * 12562
         D0=C                                     * 12565
         ?ABIT=0 0                                * 12568
-        GOYES   L_125A1                          * 1256D
+        GOYES   DISPROW8.L7                      * 1256D
         RSTK=C                                   * 1256F
         LC(3)   #703                             * 12571
         ?XM=0                                    * 12576
-        GOYES   L_12580                          * 12579
+        GOYES   DISPROW8.loop6                   * 12579
         LC(3)   #903                             * 1257B
-L_12580:
+DISPROW8.loop6:
         A=DAT0  B                                * 12580
         A=A&C   B                                * 12583
         DAT0=A  B                                * 12587
@@ -559,41 +559,41 @@ L_12580:
         C=C+D   A                                * 1258D
         CD0EX                                    * 1258F
         C=C-1   XS                               * 12592
-        GONC    L_12580                          * 12595
+        GONC    DISPROW8.loop6                   * 12595
         C=RSTK                                   * 12598
         C=C+1   A                                * 1259A
         C=C+1   A                                * 1259C
         D0=C                                     * 1259E
-L_125A1:
+DISPROW8.L7:
         ?ST=1   1                                * 125A1
-        GOYES   L_125ED                          * 125A4
+        GOYES   DISPROW8.L11                     * 125A4
         CR3EX.F A                                * 125A6
         C=C-1   A                                * 125AC
         CR3EX.F A                                * 125AE
-        GOC     L_125E2                          * 125B4
+        GOC     DISPROW8.loop10                  * 125B4
         A=0     A                                * 125B7
         P=      7                                * 125B9
         ?XM=0                                    * 125BB
-        GOYES   L_125C2                          * 125BE
+        GOYES   DISPROW8.loop8                   * 125BE
         P=      9                                * 125C0
-L_125C2:
+DISPROW8.loop8:
         RSTK=C                                   * 125C2
         C=R3.F  A                                * 125C4
-L_125CA:
+DISPROW8.loop9:
         DAT0=A  X                                * 125CA
         D0=D0+  3                                * 125CE
         C=C-1   A                                * 125D1
-        GONC    L_125CA                          * 125D3
+        GONC    DISPROW8.loop9                   * 125D3
         C=RSTK                                   * 125D6
         C=C+D   A                                * 125D8
         D0=C                                     * 125DA
         P=P-1                                    * 125DD
-        GONC    L_125C2                          * 125DF
-L_125E2:
+        GONC    DISPROW8.loop8                   * 125DF
+DISPROW8.loop10:
         P=      0                                * 125E2
         XM=0                                     * 125E4
-        GOLONG  L_116AE                          * 125E7
-L_125ED:
+        GOLONG  GROB!.L1                         * 125E7
+DISPROW8.L11:
         C=C-1   A                                * 125ED
         C=C-1   A                                * 125EF
         C=C+D   A                                * 125F1
@@ -602,10 +602,10 @@ L_125ED:
         C=C+D   A                                * 125F7
         C=C+D   A                                * 125F9
         ?XM=0                                    * 125FB
-        GOYES   L_12604                          * 125FE
+        GOYES   DISPROW8.L12                     * 125FE
         C=C+D   A                                * 12600
         C=C+D   A                                * 12602
-L_12604:
+DISPROW8.L12:
         D0=C                                     * 12604
         A=0     A                                * 12607
         A=DAT0  P                                * 12609
@@ -620,7 +620,7 @@ L_12604:
         LC(2)   #54                              * 12626
         A=A!C   B                                * 1262A
         DAT0=A  B                                * 1262E
-        GOTO    L_125E2                          * 12631
+        GOTO    DISPROW8.loop10                  * 12631
 
 * -> dispgrob
 * refs (115): 0E12D 126E4 12950 12969 12982 12B5D ...
@@ -630,7 +630,7 @@ HARDBUFF:
 * refs (1): 12635
 addrVDISP:
         LC(5)   VDISP                            * 1263A
-        GOTO    L_12671                          * 12641
+        GOTO    GBUFF.L1                         * 12641
 
 * -> menugrob
 * refs (22): 3A29C 4712F 47148 47189 4E735 50415 ...
@@ -640,7 +640,7 @@ HARDBUFF2:
 * refs (1): 12645
 addrVDISP2:
         LC(5)   VDISP2                           * 1264A
-        GOTO    L_12671                          * 12651
+        GOTO    GBUFF.L1                         * 12651
 
 * -> textgrob
 * refs (4): 503E8 50442 5046F 6CC52
@@ -650,14 +650,14 @@ ABUFF:
 * refs (1): 12655
 addrADISP:
         LC(5)   ADISP                            * 1265A
-        GOTO    L_12671                          * 12661
+        GOTO    GBUFF.L1                         * 12661
 
 * -> graphgrob
 * refs (38): 17D9B 1CA9E 20CB7 45690 45721 4577B ...
 GBUFF:
         CON(5)  (*)+5                            * 12665  primitive code object
         LC(5)   GDISP                            * 1266A
-L_12671:
+GBUFF.L1:
         RSTK=C                                   * 12671
         GOSBVL  SUB_0EDFA                        * 12673
         C=RSTK                                   * 1267A
@@ -666,15 +666,15 @@ L_12671:
         D0=C                                     * 12682
         D1=D1-  5                                * 12685
         D=D-1   A                                * 12688
-        GOLONG  L_11FFF                          * 1268A
+        GOLONG  $>grob.L6                        * 1268A
 
 * refs (1): 01D44
 SUB_12690:
         D1=(5)  LINECOUNTg                       * 12690
         C=DAT1  B                                * 12697
         ?CBIT=0 7                                * 1269A
-        GOYES   L_126A1                          * 1269F
-L_126A1:
+        GOYES   SUB_12690.L1                     * 1269F
+SUB_12690.L1:
         D1=(5)  DISPADDR                         * 126A1
         P=      0                                * 126A8
         LC(5)   #01D22                           * 126AA
@@ -688,7 +688,7 @@ L_126A1:
         DAT1=C  1                                * 126CC
         D1=(2)  #28                              * 126D0
         LC(2)   #3F                              * 126D4
-        GOVLNG  L_72D12                          * 126D8
+        GOVLNG  SUB_72D01.L1                     * 126D8
         RPL
 
 * #startrow #rows ->
@@ -745,7 +745,7 @@ DispMenu.1~1:
         LC(1)   #7                               * 1285B
         CSRC                                     * 1285E
         LA(2)   #7D                              * 12861
-L_12868:
+DispMenu.1~1.loop1:
         D0=D0+  7                                * 12868
         GOSUB   SUB_12890                        * 1286B
         GOSUB   SUB_128A1                        * 1286F
@@ -753,10 +753,10 @@ L_12868:
         GOSUB   SUB_128A1                        * 12877
         GOSUB   SUB_12890                        * 1287B
         C=C-1   S                                * 1287F
-        GONC    L_12868                          * 12882
+        GONC    DispMenu.1~1.loop1               * 12882
         C=RSTK                                   * 12885
         CD0EX                                    * 12887
-        GOLONG  L_12002                          * 1288A
+        GOLONG  $>grob.L7                        * 1288A
 
 * refs (4): 1286B 12873 1287B 128A4
 SUB_12890:
@@ -787,7 +787,7 @@ XYGROBDISP:
             LC(1)   #A                           * 128D4
             B=C     A                            * 128D7
             LC(5)   HEIGHTENHBUFF                * 128D9
-            GONC    L_12907                      * 128E0  always taken
+            GONC    XYGROBDISP.L1                * 128E0  always taken
           ENDCODE                                * 128E3
           CODE                                   * 128E3  99 nibbles
             GOSUB   SAVPTR~jump_8                * 128ED
@@ -796,7 +796,7 @@ XYGROBDISP:
             B=0     A                            * 128FB
             B=B-1   P                            * 128FD
             LC(5)   BROADENHBUFF                 * 12900
-L_12907:
+XYGROBDISP.L1:
             R1=C.F  A                            * 12907
             C=DAT1  A                            * 1290D
             C=C+B   A                            * 12910
@@ -809,9 +809,9 @@ L_12907:
             D1=C                                 * 12926
             C=DAT1  A                            * 12929
             ?C<A    A                            * 1292C
-            GOYES   L_12937                      * 1292F
-            GOLONG  L_1305A                      * 12931
-L_12937:
+            GOYES   XYGROBDISP.L2                * 1292F
+            GOLONG  KILLADISP.L2                 * 12931
+XYGROBDISP.L2:
             A=A-C   A                            * 12937
             R0=A.F  A                            * 12939
             GOSBVL  PUSH#                        * 1293F
@@ -849,10 +849,10 @@ ScreenUpN:
         D1=C                                     * 129C9
         LC(1)   #6                               * 129CC
         D=C     A                                * 129CF
-L_129D1:
+ScreenUpN.loop1:
         C=D     A                                * 129D1
         P=C     0                                * 129D3
-L_129D7:
+ScreenUpN.loop2:
         C=DAT1  W                                * 129D7
         DAT0=C  W                                * 129DB
         D0=D0+  16                               * 129DF
@@ -866,10 +866,10 @@ L_129D7:
         D0=D0+  2                                * 129F9
         D1=D1+  2                                * 129FC
         P=P+1                                    * 129FF
-        GONC    L_129D7                          * 12A01
+        GONC    ScreenUpN.loop2                  * 12A01
         A=A-1   A                                * 12A04
-        GONC    L_129D1                          * 12A06
-        GOTO    L_1305A                          * 12A09
+        GONC    ScreenUpN.loop1                  * 12A06
+        GOTO    KILLADISP.L2                     * 12A09
 
 * moves stk displ up 1 line
 ScreenUp:
@@ -889,7 +889,7 @@ ScreenUp:
         D1=C                                     * 12A3E
         LC(1)   #8                               * 12A41
         D=C     A                                * 12A44
-        GOTO    L_129D1                          * 12A46
+        GOTO    ScreenUpN.loop1                  * 12A46
 
 * (#n -> ) moves stk displ down #n lines
 * refs (1): 43A81
@@ -901,10 +901,10 @@ ScreenDnN:
         B=A     A                                * 12A5C
         LC(5)   #00154                           * 12A5E
         D=0     A                                * 12A65
-L_12A67:
+ScreenDnN.loop1:
         D=D+C   A                                * 12A67
         B=B-1   A                                * 12A69
-        GONC    L_12A67                          * 12A6B
+        GONC    ScreenDnN.loop1                  * 12A6B
         D1=(5)  VDISP                            * 12A6E
         C=DAT1  A                                * 12A75
         B=C     A                                * 12A78
@@ -921,10 +921,10 @@ L_12A67:
         D=C     A                                * 12A9B
         LC(5)   #002A8                           * 12A9D
         R0=C                                     * 12AA4
-L_12AA7:
+ScreenDnN.loop2:
         C=D     A                                * 12AA7
         P=C     0                                * 12AA9
-L_12AAD:
+ScreenDnN.loop3:
         C=DAT0  W                                * 12AAD
         DAT1=C  W                                * 12AB1
         D0=D0+  16                               * 12AB5
@@ -938,7 +938,7 @@ L_12AAD:
         D0=D0+  2                                * 12ACF
         D1=D1+  2                                * 12AD2
         P=P+1                                    * 12AD5
-        GONC    L_12AAD                          * 12AD7
+        GONC    ScreenDnN.loop3                  * 12AD7
         C=R0                                     * 12ADA
         AD0EX                                    * 12ADD
         A=A-C   A                                * 12AE0
@@ -947,8 +947,8 @@ L_12AAD:
         A=A-C   A                                * 12AE8
         AD1EX                                    * 12AEA
         A=A-1   A                                * 12AED
-        GONC    L_12AA7                          * 12AEF
-        GOTO    L_1305A                          * 12AF2
+        GONC    ScreenDnN.loop2                  * 12AEF
+        GOTO    KILLADISP.L2                     * 12AF2
 
 * moves stk displ down 1 line
 ScreenDn:
@@ -958,10 +958,10 @@ ScreenDn:
         B=A     A                                * 12B09
         LC(5)   #00110                           * 12B0B
         D=0     A                                * 12B12
-L_12B14:
+ScreenDn.loop1:
         D=D+C   A                                * 12B14
         B=B-1   A                                * 12B16
-        GONC    L_12B14                          * 12B18
+        GONC    ScreenDn.loop1                   * 12B18
         D1=(5)  VDISP                            * 12B1B
         C=DAT1  A                                * 12B22
         B=C     A                                * 12B25
@@ -978,7 +978,7 @@ L_12B14:
         D=C     A                                * 12B48
         LC(5)   #00220                           * 12B4A
         R0=C                                     * 12B51
-        GOTO    L_12AA7                          * 12B54
+        GOTO    ScreenDnN.loop2                  * 12B54
         RPL
 
 * -> #width
@@ -1005,7 +1005,7 @@ BROADENGROB:
         R4=A                                     * 12BC3
         ST=0    10                               * 12BC6
         GOSUB   SAVPTR~jump_8                    * 12BC9
-L_12BCD:
+BROADENGROB.loop1:
         A=R4.F  A                                * 12BCD
         B=A     A                                * 12BD3
         C=DAT1  A                                * 12BD5
@@ -1013,13 +1013,13 @@ L_12BCD:
         D1=D1+  15                               * 12BDB
         A=DAT1  A                                * 12BDE
         B=B+A   A                                * 12BE1
-        GOC     L_12BF2                          * 12BE3
+        GOC     BROADENGROB.loop2                * 12BE3
         LC(5)   #007FF                           * 12BE6
         ?B<=C   A                                * 12BED
-        GOYES   L_12BF6                          * 12BF0
-L_12BF2:
-        GOTO    L_12D7E                          * 12BF2
-L_12BF6:
+        GOYES   BROADENGROB.L3                   * 12BF0
+BROADENGROB.loop2:
+        GOTO    SUB_12D68.L1                     * 12BF2
+BROADENGROB.L3:
         C=B     A                                * 12BF6
         R0=C.F  A                                * 12BF8
         GOSBVL  w->W                             * 12BFE
@@ -1029,26 +1029,26 @@ L_12BF6:
         C=A-C   A                                * 12C14
         R2=C.F  A                                * 12C16
         ?C=0    A                                * 12C1C
-        GOYES   L_12C34                          * 12C1F
+        GOYES   BROADENGROB.L4                   * 12C1F
         D1=D1-  5                                * 12C21
         A=DAT1  A                                * 12C24
         A=A-1   A                                * 12C27
-        GONC    L_12C42                          * 12C29
+        GONC    BROADENGROB.L5                   * 12C29
         C=0     A                                * 12C2C
         R0=C.F  A                                * 12C2E
-L_12C34:
+BROADENGROB.L4:
         R4=C.F  A                                * 12C34
         GOSUB   SUB_12D85                        * 12C3A
-        GOTO    L_12F85                          * 12C3E
-L_12C42:
+        GOTO    StoNoCurGrob(go).L1              * 12C3E
+BROADENGROB.L5:
         R3=A.F  A                                * 12C42
         B=C     A                                * 12C48
         C=0     A                                * 12C4A
-L_12C4C:
+BROADENGROB.loop6:
         C=C+B   A                                * 12C4C
-        GOC     L_12BF2                          * 12C4E
+        GOC     BROADENGROB.loop2                * 12C4E
         A=A-1   A                                * 12C51
-        GONC    L_12C4C                          * 12C53
+        GONC    BROADENGROB.loop6                * 12C53
         D1=D1-  5                                * 12C56
         A=DAT1  A                                * 12C59
         B=A     A                                * 12C5C
@@ -1058,10 +1058,10 @@ L_12C4C:
         RSTK=C                                   * 12C65
         GOSBVL  MOVERSU                          * 12C67
         C=RSTK                                   * 12C6E
-        GONC    L_12C7B                          * 12C70
+        GONC    BROADENGROB.L7                   * 12C70
         GOSUB   SUB_12D68                        * 12C73
-        GOTO    L_12BCD                          * 12C77
-L_12C7B:
+        GOTO    BROADENGROB.loop1                * 12C77
+BROADENGROB.L7:
         R4=C.F  A                                * 12C7B
         C=C+B   A                                * 12C81
         A=R2.F  A                                * 12C83
@@ -1073,7 +1073,7 @@ L_12C7B:
         ABEX    A                                * 12C98
         D0=A                                     * 12C9A
         C=R3.F  A                                * 12C9D
-L_12CA3:
+BROADENGROB.loop8:
         RSTK=C                                   * 12CA3
         C=D     A                                * 12CA5
         GOSBVL  WIPEOUT                          * 12CA7
@@ -1087,13 +1087,13 @@ L_12CA3:
         D1=C                                     * 12CC4
         C=RSTK                                   * 12CC7
         C=C-1   A                                * 12CC9
-        GONC    L_12CA3                          * 12CCB
+        GONC    BROADENGROB.loop8                * 12CCB
         GOSUB   SUB_12D85                        * 12CCE
         CD1EX                                    * 12CD2
         D0=(5)  VDISP                            * 12CD5
         A=DAT0  A                                * 12CDC
         ?C=A    A                                * 12CDF
-        GOYES   L_12D16                          * 12CE2
+        GOYES   BROADENGROB.L9                   * 12CE2
         D0=(5)  SAVE_OFFSET                      * 12CE4
         A=0     W                                * 12CEB
         A=DAT0  A                                * 12CEE
@@ -1106,8 +1106,8 @@ L_12CA3:
         C=R2                                     * 12D08
         A=A+C   X                                * 12D0B
         DAT0=A  X                                * 12D0E
-        GOTO    L_12F85                          * 12D12
-L_12D16:
+        GOTO    StoNoCurGrob(go).L1              * 12D12
+BROADENGROB.L9:
         LC(5)   #00014                           * 12D16
         C=C+A   A                                * 12D1D
         D0=(5)  DISP1CTLg                        * 12D1F
@@ -1127,16 +1127,16 @@ L_12D16:
         DAT0=A  X                                * 12D55
         D0=(5)  LINEOFFS                         * 12D59
         DAT0=A  X                                * 12D60
-        GOTO    L_12F02                          * 12D64
+        GOTO    StoCurGrob(go).L1                * 12D64
 
 * refs (7): 12C73 12E39 40C64 44520 446DC 5427E ...
 SUB_12D68:
         ?ST=1   10                               * 12D68
-        GOYES   L_12D7E                          * 12D6B
+        GOYES   SUB_12D68.L1                     * 12D6B
         GOSBVL  GARBAGECOL                       * 12D6D
         ST=1    10                               * 12D74
         GOVLNG  GETPTR                           * 12D77
-L_12D7E:
+SUB_12D68.L1:
         GOVLNG  GPMEMERR                         * 12D7E
 
 * refs (2): 12C3A 12CCE
@@ -1172,25 +1172,25 @@ HEIGHTENGROB:
         R4=A.F  A                                * 12DDD
         ST=0    10                               * 12DE3
         GOSUB   SAVPTR~jump_8                    * 12DE6
-L_12DEA:
+HEIGHTENGROB.loop1:
         B=A     A                                * 12DEA
         C=DAT1  A                                * 12DEC
         D1=C                                     * 12DEF
         D1=D1+  15                               * 12DF2
         A=DAT1  A                                * 12DF5
         ?A#0    A                                * 12DF8
-        GOYES   L_12E01                          * 12DFB
-        GOTO    L_12F85                          * 12DFD
-L_12E01:
+        GOYES   HEIGHTENGROB.L2                  * 12DFB
+        GOTO    StoNoCurGrob(go).L1              * 12DFD
+HEIGHTENGROB.L2:
         GOSBVL  w->W                             * 12E01
         C=0     A                                * 12E08
         B=B-1   A                                * 12E0A
-        GONC    L_12E13                          * 12E0C
-        GOTO    L_12E57                          * 12E0F
-L_12E13:
+        GONC    HEIGHTENGROB.loop3               * 12E0C
+        GOTO    HEIGHTENGROB.L5                  * 12E0F
+HEIGHTENGROB.loop3:
         C=C+A   A                                * 12E13
         B=B-1   A                                * 12E15
-        GONC    L_12E13                          * 12E17
+        GONC    HEIGHTENGROB.loop3               * 12E17
         D1=D1-  10                               * 12E1A
         A=DAT1  A                                * 12E1D
         CD1EX                                    * 12E20
@@ -1200,16 +1200,16 @@ L_12E13:
         AD1EX                                    * 12E2A
         GOSBVL  MOVERSU                          * 12E2D
         C=RSTK                                   * 12E34
-        GONC    L_12E49                          * 12E36
+        GONC    HEIGHTENGROB.L4                  * 12E36
         GOSUBL  SUB_12D68                        * 12E39
         A=R4.F  A                                * 12E3F
-        GOTO    L_12DEA                          * 12E45
-L_12E49:
+        GOTO    HEIGHTENGROB.loop1               * 12E45
+HEIGHTENGROB.L4:
         A=B     A                                * 12E49
         D1=A                                     * 12E4B
         RSTK=C                                   * 12E4E
         GOSBVL  WIPEOUT                          * 12E50
-L_12E57:
+HEIGHTENGROB.L5:
         GOSUB   GETPTR~jump_4                    * 12E57
         C=RSTK                                   * 12E5B
         A=DAT1  A                                * 12E5D
@@ -1224,7 +1224,7 @@ L_12E57:
         A=R4.F  A                                * 12E7A
         A=A+C   A                                * 12E80
         DAT1=A  A                                * 12E82
-        GOTO    L_12F02                          * 12E85
+        GOTO    StoCurGrob(go).L1                * 12E85
 
 * refs (1): 12FA3
 StoCurGrob(go):
@@ -1254,9 +1254,9 @@ StoCurGrob(go):
         LC(1)   #8                               * 12EF7
         A=A&C   P                                * 12EFA
         DAT1=A  1                                * 12EFE
-L_12F02:
+StoCurGrob(go).L1:
         GOSUB   disprange                        * 12F02
-        GOTO    L_12F85                          * 12F06
+        GOTO    StoNoCurGrob(go).L1              * 12F06
 
 * refs (1): 12FA8
 StoNoCurGrob(go):
@@ -1286,11 +1286,11 @@ StoNoCurGrob(go):
         A=DAT1  B                                * 12F78
         D1=(5)  SAVE_LC                          * 12F7B
         DAT1=A  B                                * 12F82
-L_12F85:
+StoNoCurGrob(go).L1:
         GOSUB   GETPTR~jump_4                    * 12F85
         D1=D1+  5                                * 12F89
         D=D+1   A                                * 12F8C
-        GOLONG  L_137D2                          * 12F8E
+        GOLONG  WINDOWCORNER.L1                  * 12F8E
         RPL
 
 * grob ->
@@ -1328,9 +1328,9 @@ SUB_12FC0:
         C=DAT1  A                                * 13003
         C=C-CON A,15                             * 13006
         GOSBVL  MOVERSU                          * 1300C
-        GONC    L_1301A                          * 13013
-        GOTO    L_12D7E                          * 13016
-L_1301A:
+        GONC    SUB_12FC0.L1                     * 13013
+        GOTO    SUB_12D68.L1                     * 13016
+SUB_12FC0.L1:
         GOSUB   GETPTR~jump_4                    * 1301A
         C=DAT1  A                                * 1301E
         D0=C                                     * 13021
@@ -1349,10 +1349,10 @@ KILLADISP:
         CON(5)  (*)+5                            * 13043  primitive code object
         GOSUB   SAVPTR~jump_8                    * 13048
         LC(5)   VDISP3                           * 1304C
-L_13053:
+KILLADISP.L1:
         R0=C                                     * 13053
         GOSUB   SUB_13075                        * 13056
-L_1305A:
+KILLADISP.L2:
         GOVLNG  GETPTRLOOP                       * 1305A
 
 * ->
@@ -1361,7 +1361,7 @@ KILLGDISP:
         CON(5)  (*)+5                            * 13061  primitive code object
         GOSUB   SAVPTR~jump_8                    * 13066
         LC(5)   GDISP                            * 1306A
-        GOTO    L_13053                          * 13071
+        GOTO    KILLADISP.L1                     * 13071
 
 * refs (2): 12FCA 13056
 SUB_13075:
@@ -1409,7 +1409,7 @@ RSZVDISP:
         A=DAT1  A                                * 13102
         LC(15)  #00083000380077F                 * 13105
         ?C>=A   A                                * 13116
-        GOYES   L_13161                          * 13119
+        GOYES   TOADISP.L1                       * 13119
         B=A     A                                * 1311B
         A=A-C   A                                * 1311D
         DAT1=C  15                               * 1311F
@@ -1417,7 +1417,7 @@ RSZVDISP:
         CAEX    A                                * 13126
         A=A+B   A                                * 13128
         GOSBVL  MOVERSD                          * 1312A
-        GOTO    L_13218                          * 13131
+        GOTO    WINDOWUP.L2                      * 13131
 
 * ->
 * refs (4): 47D7F 4CF32 4F093 C0A90
@@ -1425,9 +1425,9 @@ TOGDISP:
         CON(5)  (*)+5                            * 13135  primitive code object
         GOSUB   SAVPTR~jump_8                    * 1313A
         GOSUB   SUB_13197                        * 1313E
-        GOC     L_13161                          * 13142
+        GOC     TOADISP.L1                       * 13142
         GOSUB   SUB_132C5                        * 13145
-        GOTO    L_1305A                          * 13149
+        GOTO    KILLADISP.L2                     * 13149
 
 * ->
 * refs (31): 130B1 19CCC 2DDF1 2EB1E 387A0 38912 ...
@@ -1435,10 +1435,10 @@ TOADISP:
         CON(5)  (*)+5                            * 1314D  primitive code object
         GOSUB   SAVPTR~jump_8                    * 13152
         GOSUB   SUB_13197                        * 13156
-        GONC    L_13161                          * 1315A
+        GONC    TOADISP.L1                       * 1315A
         GOSUB   SUB_132C5                        * 1315D
-L_13161:
-        GOLONG  L_1305A                          * 13161
+TOADISP.L1:
+        GOLONG  KILLADISP.L2                     * 13161
 
 * -> flag
 * refs (3): 12F99 4E2B6 9DDF7
@@ -1449,14 +1449,14 @@ GDISPON?:
         GOSUB   SUB_13197                        * 13172
         C=R0                                     * 13176
         CD1EX                                    * 13179
-        GOC     L_1318C                          * 1317C
+        GOC     GDISPON?.L2                      * 1317C
         LC(5)   FALSE                            * 1317F
-L_13186:
+GDISPON?.loop1:
         A=C     A                                * 13186
         PC=(A)                                   * 13188
-L_1318C:
+GDISPON?.L2:
         LC(5)   TRUE                             * 1318C
-        GOTO    L_13186                          * 13193
+        GOTO    GDISPON?.loop1                   * 13193
 
 * refs (3): 1313E 13156 13172
 SUB_13197:
@@ -1469,9 +1469,9 @@ SUB_13197:
         D1=(5)  VDISP3                           * 131B0
         A=DAT1  A                                * 131B7
         ?C#A    A                                * 131BA
-        GOYES   L_131C1                          * 131BD
+        GOYES   SUB_13197.L1                     * 131BD
         RTN                                      * 131BF
-L_131C1:
+SUB_13197.L1:
         GOVLNG  Warmstart                        * 131C1
 
 * ->
@@ -1494,14 +1494,14 @@ WINDOWUP:
         A=C     A                                * 13202
         C=RSTK                                   * 13204
         ?C>A    A                                * 13206
-        GOYES   L_13218                          * 13209
-L_1320B:
+        GOYES   WINDOWUP.L2                      * 13209
+WINDOWUP.L1:
         DAT0=A  A                                * 1320B
         D0=(5)  DISPADDR                         * 1320E
         DAT0=A  A                                * 13215
-L_13218:
+WINDOWUP.L2:
         GOSUB   disprange                        * 13218
-        GOTO    L_1305A                          * 1321C
+        GOTO    KILLADISP.L2                     * 1321C
 
 * ->
 * refs (4): 481ED 4D182 4D736 4DD87
@@ -1528,15 +1528,15 @@ WINDOWDOWN:
         CBIT=0  6                                * 13266
         CBIT=0  7                                * 1326B
         ?D=C    B                                * 13270
-        GOYES   L_13283                          * 13273
+        GOYES   WINDOWDOWN.L2                    * 13273
         D=C     A                                * 13275
         C=0     A                                * 13277
-L_13279:
+WINDOWDOWN.loop1:
         C=C+A   A                                * 13279
         D=D-1   A                                * 1327B
-        GONC    L_13279                          * 1327D
-        GOC     L_13295                          * 13280
-L_13283:
+        GONC    WINDOWDOWN.loop1                 * 1327D
+        GOC     WINDOWDOWN.L3                    * 13280
+WINDOWDOWN.L2:
         C=A     A                                * 13283
         C=C+C   A                                * 13285
         C=C+C   A                                * 13287
@@ -1546,7 +1546,7 @@ L_13283:
         C=C+C   A                                * 1328F
         C=C+C   A                                * 13291
         C=C-D   A                                * 13293
-L_13295:
+WINDOWDOWN.L3:
         D=C     A                                * 13295
         D0=(5)  DISP1CTLg                        * 13297
         C=DAT0  A                                * 1329E
@@ -1554,13 +1554,13 @@ L_13295:
         LC(5)   #00022                           * 132A3
         C=C+D   A                                * 132AA
         ?B>=C   A                                * 132AC
-        GOYES   L_132B5                          * 132AF
-        GOTO    L_13218                          * 132B1
-L_132B5:
+        GOYES   WINDOWDOWN.L4                    * 132AF
+        GOTO    WINDOWUP.L2                      * 132B1
+WINDOWDOWN.L4:
         D0=(5)  DISP1CTLg                        * 132B5
         C=DAT0  A                                * 132BC
         A=A+C   A                                * 132BF
-        GOTO    L_1320B                          * 132C1
+        GOTO    WINDOWUP.L1                      * 132C1
 
 * refs (2): 13145 1315D
 SUB_132C5:
@@ -1573,9 +1573,9 @@ SUB_132C5:
         D0=(5)  DISP1CTLg                        * 132DC
         C=DAT0  A                                * 132E3
         C=C-A   A                                * 132E6
-        GONC    L_132ED                          * 132E8
+        GONC    SUB_132C5.L1                     * 132E8
         C=0     A                                * 132EB
-L_132ED:
+SUB_132C5.L1:
         D1=(5)  SAVE_OFFSET                      * 132ED
         A=DAT1  A                                * 132F4
         B=A     A                                * 132F7
@@ -1630,10 +1630,10 @@ disprange:
         C=DAT1  X                                * 133BF
         CBIT=0  0                                * 133C3
         ?CBIT=0 11                               * 133C8
-        GOYES   L_133D5                          * 133CD
+        GOYES   disprange.L1                     * 133CD
         C=-C    W                                * 133CF
         C=-C    X                                * 133D2
-L_133D5:
+disprange.L1:
         A=C     W                                * 133D5
         D1=(4)  #069A                            * 133D8
         C=0     W                                * 133DE
@@ -1644,20 +1644,20 @@ L_133D5:
         LC(2)   #3F                              * 133F1
         ST=0    3                                * 133F5
         ?B<C    A                                * 133F8
-        GOYES   L_13400                          * 133FB
+        GOYES   disprange.L2                     * 133FB
         ST=1    3                                * 133FD
-L_13400:
+disprange.L2:
         D0=(5)  DISPIO                           * 13400
         C=0     W                                * 13407
         C=DAT0  1                                * 1340A
         CBIT=0  3                                * 1340E
         ?CBIT=1 2                                * 13413
-        GOYES   L_1341A                          * 13418
-L_1341A:
+        GOYES   disprange.L3                     * 13418
+disprange.L3:
         LC(2)   #22                              * 1341A
-        GONC    L_13425                          * 1341E
+        GONC    disprange.L4                     * 1341E
         NIBHEX  3142                             * 13421  .$
-L_13425:
+disprange.L4:
         D=C     A                                * 13425
         C=C+A   W                                * 13427
         A=B     W                                * 1342A
@@ -1667,18 +1667,18 @@ L_13425:
         A=DAT1  A                                * 1343D
         C=C+A   A                                * 13440
         ?C>=A   A                                * 13442
-        GOYES   L_13449                          * 13445
+        GOYES   disprange.L5                     * 13445
         A=C     A                                * 13447
-L_13449:
+disprange.L5:
         RSTK=C                                   * 13449
         ?ST=1   3                                * 1344B
-        GOYES   L_13460                          * 1344E
+        GOYES   disprange.L6                     * 1344E
         D1=(4)  #0695                            * 13450
         C=DAT1  A                                * 13456
         ?C>=A   A                                * 13459
-        GOYES   L_13460                          * 1345C
+        GOYES   disprange.L6                     * 1345C
         A=C     A                                * 1345E
-L_13460:
+disprange.L6:
         D1=(4)  #0645                            * 13460
         DAT1=A  A                                * 13466
         C=RSTK                                   * 13469
@@ -1688,20 +1688,20 @@ L_13460:
         C=DAT1  A                                * 13475
         C=C+D   A                                * 13478
         ?C<A    A                                * 1347A
-        GOYES   L_13481                          * 1347D
+        GOYES   disprange.L7                     * 1347D
         A=C     A                                * 1347F
-L_13481:
+disprange.L7:
         ?ST=1   3                                * 13481
-        GOYES   L_134A1                          * 13484
+        GOYES   disprange.L8                     * 13484
         LC(5)   #00110                           * 13486
         B=C     A                                * 1348D
         D1=(4)  #0695                            * 1348F
         C=DAT1  A                                * 13495
         C=C+B   A                                * 13498
         ?C<A    A                                * 1349A
-        GOYES   L_134A1                          * 1349D
+        GOYES   disprange.L8                     * 1349D
         A=C     A                                * 1349F
-L_134A1:
+disprange.L8:
         D1=(4)  #064A                            * 134A1
         DAT1=A  A                                * 134A7
         C=RSTK                                   * 134AA
@@ -1721,7 +1721,7 @@ CLEARVDISP:
         C=C-CON A,15                             * 134D0
         D1=D1+  15                               * 134D6
         GOSBVL  WIPEOUT                          * 134D9
-        GOTO    L_1305A                          * 134E0
+        GOTO    KILLADISP.L2                     * 134E0
 
 * ->
 * refs (4): 470F8 48832 4D164 4DDC3
@@ -1735,27 +1735,27 @@ WINDOWLEFT:
         B=B&C   P                                * 134FD
         ABIT=0  3                                * 13501
         A=A-1   P                                * 13506
-        GOC     L_13530                          * 13509
+        GOC     WINDOWLEFT.L2                    * 13509
         LC(1)   #3                               * 1350C
         ?C=A    P                                * 1350F
-        GOYES   L_13520                          * 13512
+        GOYES   WINDOWLEFT.L1                    * 13512
         A=A!B   P                                * 13514
         DAT0=A  1                                * 13518
-        GOTO    L_13602                          * 1351C
-L_13520:
+        GOTO    WINDOWRIGHT.L4                   * 1351C
+WINDOWLEFT.L1:
         A=A!B   P                                * 13520
         DAT0=A  1                                * 13524
         GOSUB   SUB_13642                        * 13528
-        GOTO    L_13602                          * 1352C
-L_13530:
+        GOTO    WINDOWRIGHT.L4                   * 1352C
+WINDOWLEFT.L2:
         GOSUB   SUB_13606                        * 13530
         C=0     W                                * 13534
         C=R0.F  A                                * 13537
         GOSBVL  IntDivW                          * 1353D
         ?B#0    W                                * 13544
-        GOYES   L_1354D                          * 13547
-        GOTO    L_1305A                          * 13549
-L_1354D:
+        GOYES   WINDOWLEFT.L3                    * 13547
+        GOTO    KILLADISP.L2                     * 13549
+WINDOWLEFT.L3:
         A=R1                                     * 1354D
         A=A-1   A                                * 13550
         A=A-1   A                                * 13552
@@ -1768,7 +1768,7 @@ L_1354D:
         A=A!C   P                                * 1356F
         DAT0=A  1                                * 13573
         GOSUB   SUB_13657                        * 13577
-        GOTO    L_13602                          * 1357B
+        GOTO    WINDOWRIGHT.L4                   * 1357B
 
 * ->
 * refs (4): 470C6 48440 4D1A0 4DDFA
@@ -1780,9 +1780,9 @@ WINDOWRIGHT:
         C=0     A                                * 1358E
         LC(2)   #83                              * 13590
         ?B>C    A                                * 13594
-        GOYES   L_1359D                          * 13597
-        GOTO    L_1305A                          * 13599
-L_1359D:
+        GOYES   WINDOWRIGHT.L1                   * 13597
+        GOTO    KILLADISP.L2                     * 13599
+WINDOWRIGHT.L1:
         C=D     A                                * 1359D
         A=C     A                                * 1359F
         B=A     A                                * 135A1
@@ -1791,20 +1791,20 @@ L_1359D:
         ABIT=0  3                                * 135AA
         LC(1)   #7                               * 135AF
         ?C=A    P                                * 135B2
-        GOYES   L_135DD                          * 135B5
+        GOYES   WINDOWRIGHT.L3                   * 135B5
         A=A+1   A                                * 135B7
         LC(1)   #4                               * 135B9
         ?C=A    P                                * 135BC
-        GOYES   L_135CD                          * 135BF
+        GOYES   WINDOWRIGHT.L2                   * 135BF
         A=A!B   P                                * 135C1
         DAT0=A  1                                * 135C5
-        GOTO    L_13602                          * 135C9
-L_135CD:
+        GOTO    WINDOWRIGHT.L4                   * 135C9
+WINDOWRIGHT.L2:
         A=A!B   P                                * 135CD
         DAT0=A  1                                * 135D1
         GOSUB   SUB_13657                        * 135D5
-        GOTO    L_13602                          * 135D9
-L_135DD:
+        GOTO    WINDOWRIGHT.L4                   * 135D9
+WINDOWRIGHT.L3:
         A=B     A                                * 135DD
         DAT0=A  1                                * 135DF
         D0=(5)  DISP1CTLg                        * 135E3
@@ -1815,8 +1815,8 @@ L_135DD:
         D0=(5)  DISPADDR                         * 135F4
         DAT0=A  A                                * 135FB
         GOSUB   SUB_13642                        * 135FE
-L_13602:
-        GOTO    L_13218                          * 13602
+WINDOWRIGHT.L4:
+        GOTO    WINDOWUP.L2                      * 13602
 
 * refs (2): 13530 137DC
 SUB_13606:
@@ -1844,7 +1844,7 @@ SUB_13642:
         A=DAT0  X                                * 13649
         A=A+1   X                                * 1364D
         A=A+1   X                                * 13650
-        GOTO    L_13668                          * 13653
+        GOTO    SUB_13657.L1                     * 13653
 
 * refs (2): 13577 135D5
 SUB_13657:
@@ -1852,7 +1852,7 @@ SUB_13657:
         A=DAT0  X                                * 1365E
         A=A-1   X                                * 13662
         A=A-1   X                                * 13665
-L_13668:
+SUB_13657.L1:
         DAT0=A  X                                * 13668
         D0=(5)  LINEOFFS                         * 1366C
         DAT0=A  X                                * 13673
@@ -1867,7 +1867,7 @@ WINDOWXY:
         GOSUB   SAVPTR~jump_8                    * 13687
         C=RSTK                                   * 1368B
         GOSUB   WindowXY                         * 1368D
-        GOTO    L_1305A                          * 13691
+        GOTO    KILLADISP.L2                     * 13691
 
 * ->
 * refs (9): 130BB 2DDF6 2EB23 387A5 69CFC 6B4CA ...
@@ -1877,7 +1877,7 @@ REDISPHBUFF:
         A=0     A                                * 1369E
         C=0     A                                * 136A0
         GOSUB   WindowXY                         * 136A2
-        GOTO    L_1305A                          * 136A6
+        GOTO    KILLADISP.L2                     * 136A6
 
 * refs (2): 1368D 136A2
 WindowXY:
@@ -1898,7 +1898,7 @@ addrLINECNTg:
         D0=D0+  10                               * 136D5
         C=DAT0  A                                * 136D8
         ?B>C    A                                * 136DB
-        GOYES   L_136FB                          * 136DE
+        GOYES   addrLINECNTg.L1                  * 136DE
         C=RSTK                                   * 136E0
         CAEX    A                                * 136E2
         RSTK=C                                   * 136E4
@@ -1909,11 +1909,11 @@ addrLINECNTg:
         D0=D0+  5                                * 136F0
         C=DAT0  A                                * 136F3
         ?B<=C   A                                * 136F6
-        GOYES   L_136FF                          * 136F9
-L_136FB:
+        GOYES   addrLINECNTg.L2                  * 136F9
+addrLINECNTg.L1:
         C=RSTK                                   * 136FB
         RTNSC                                    * 136FD
-L_136FF:
+addrLINECNTg.L2:
         CAEX    A                                * 136FF
         GOSBVL  w->W                             * 13701
         R0=A                                     * 13708
@@ -1925,13 +1925,13 @@ L_136FF:
         B=C     A                                * 13721
         AR0EX                                    * 13723
         ?CBIT=1 2                                * 13726
-        GOYES   L_1372D                          * 1372B
-L_1372D:
+        GOYES   addrLINECNTg.L3                  * 1372B
+addrLINECNTg.L3:
         C=0     A                                * 1372D
         LC(2)   #22                              * 1372F
-        GONC    L_1373A                          * 13733
+        GONC    addrLINECNTg.L4                  * 13733
         NIBHEX  3142                             * 13736  .$
-L_1373A:
+addrLINECNTg.L4:
         C=A-C   A                                * 1373A
         D0=(5)  LINEOFFS                         * 1373C
         DAT0=C  X                                * 13743
@@ -1949,12 +1949,12 @@ L_1373A:
         AR0EX                                    * 13773
         C=RSTK                                   * 13776
         B=0     A                                * 13778
-        GOTO    L_13780                          * 1377A
-L_1377E:
+        GOTO    addrLINECNTg.L6                  * 1377A
+addrLINECNTg.loop5:
         B=B+A   A                                * 1377E
-L_13780:
+addrLINECNTg.L6:
         C=C-1   A                                * 13780
-        GONC    L_1377E                          * 13782
+        GONC    addrLINECNTg.loop5               * 13782
         A=R0                                     * 13785
         A=A+B   A                                * 13788
         D0=(5)  VDISP                            * 1378A
@@ -1978,7 +1978,7 @@ WINDOWCORNER:
         R1=C                                     * 137C5
         R0=A                                     * 137C8
         GOSBVL  PUSH2#                           * 137CB
-L_137D2:
+WINDOWCORNER.L1:
         A=DAT0  A                                * 137D2
         D0=D0+  5                                * 137D5
         PC=(A)                                   * 137D8
@@ -2009,7 +2009,7 @@ PIXOFF3:
         ST=1    0                                * 13814
         ST=0    1                                * 13817
         LC(5)   GDISP                            * 1381A
-        GOTO    L_1385C                          * 13821
+        GOTO    PIXON.L2                         * 13821
 
 * #x #y ->
 * refs (20): 0C9EF 48A76 4C1BB 4C373 4C3AA 4C3D7 ...
@@ -2018,23 +2018,23 @@ PIXON3:
         ST=0    0                                * 1382A
         ST=0    1                                * 1382D
         LC(5)   GDISP                            * 13830
-        GOTO    L_1385C                          * 13837
+        GOTO    PIXON.L2                         * 13837
 
 * #x #y ->
 PIXOFF:
         CON(5)  (*)+5                            * 1383B  primitive code object
         ST=1    0                                * 13840
         ST=1    1                                * 13843
-        GOTO    L_13855                          * 13846
+        GOTO    PIXON.L1                         * 13846
 
 * #x #y ->
 PIXON:
         CON(5)  (*)+5                            * 1384A  primitive code object
         ST=0    0                                * 1384F
         ST=1    1                                * 13852
-L_13855:
+PIXON.L1:
         LC(5)   ADISP                            * 13855
-L_1385C:
+PIXON.L2:
         CD1EX                                    * 1385C
         A=DAT1  A                                * 1385F
         D1=A                                     * 13862
@@ -2048,17 +2048,17 @@ L_1385C:
         GOSBVL  POP#                             * 13880
         C=R1.F  A                                * 13887
         ?C<=A   A                                * 1388D
-        GOYES   L_138E4                          * 13890
+        GOYES   pixon2~1.L2                      * 13890
         R0=A.F  A                                * 13892
         GOSBVL  POP#                             * 13898
         C=R2.F  A                                * 1389F
         ?C<=A   A                                * 138A5
-        GOYES   L_138C0                          * 138A8
+        GOYES   PIXON.L3                         * 138A8
         GOSBVL  SAVPTR                           * 138AA
         GOSUB   GETPIX3                          * 138B1
         GOSUB   pixon2                           * 138B5
         GOSBVL  GETPTR                           * 138B9
-L_138C0:
+PIXON.L3:
         A=DAT0  A                                * 138C0
         D0=D0+  5                                * 138C3
         PC=(A)                                   * 138C6
@@ -2069,15 +2069,15 @@ pixon2:
         GOYES   pixon2~1                         * 138CD
         B=-B-1  P                                * 138CF
         A=A&B   P                                * 138D2
-        GOTO    L_138DE                          * 138D6
+        GOTO    pixon2~1.L1                      * 138D6
 pixon2~1:
         A=A!B   P                                * 138DA
-L_138DE:
+pixon2~1.L1:
         DAT0=A  1                                * 138DE
         RTN                                      * 138E2
-L_138E4:
+pixon2~1.L2:
         GOSBVL  POP#                             * 138E4
-        GOTO    L_138C0                          * 138EB
+        GOTO    PIXON.L3                         * 138EB
 
 * refs (1): 139BF
 GETPIX:
@@ -2090,12 +2090,12 @@ GETPIX3:
         ASRB.F  A                                * 138F8
         ASRB.F  A                                * 138FD
         ?ST=0   1                                * 13902
-        GOYES   L_13912                          * 13905
+        GOYES   GETPIX3.L1                       * 13905
         D0=(5)  ADISP                            * 13907
-        GOTO    L_13919                          * 1390E
-L_13912:
+        GOTO    GETPIX3.L2                       * 1390E
+GETPIX3.L1:
         D0=(5)  GDISP                            * 13912
-L_13919:
+GETPIX3.L2:
         C=DAT0  A                                * 13919
         D0=C                                     * 1391C
         D0=D0+  15                               * 1391F
@@ -2109,10 +2109,10 @@ L_13919:
         C=R0.F  A                                * 13937
         D=0     A                                * 1393D
         DCEX    A                                * 1393F
-L_13941:
+GETPIX3.loop3:
         C=C+D   A                                * 13941
         B=B-1   A                                * 13943
-        GONC    L_13941                          * 13945
+        GONC    GETPIX3.loop3                    * 13945
         A=A+C   A                                * 13948
         CD0EX                                    * 1394A
         C=C+A   A                                * 1394D
@@ -2124,15 +2124,15 @@ L_13941:
         B=0     P                                * 1395F
         B=B+1   P                                * 13962
         A=A-1   P                                * 13965
-        GOC     L_13980                          * 13968
+        GOC     GETPIX3.L4                       * 13968
         B=B+B   P                                * 1396B
         A=A-1   P                                * 1396E
-        GOC     L_13980                          * 13971
+        GOC     GETPIX3.L4                       * 13971
         B=B+B   P                                * 13974
         A=A-1   P                                * 13977
-        GOC     L_13980                          * 1397A
+        GOC     GETPIX3.L4                       * 1397A
         B=B+B   P                                * 1397D
-L_13980:
+GETPIX3.L4:
         A=DAT0  P                                * 13980
         RTN                                      * 13984
 
@@ -2141,31 +2141,31 @@ L_13980:
 PIXON?3:
         CON(5)  (*)+5                            * 13986  primitive code object
         ST=0    1                                * 1398B
-        GOTO    L_1399A                          * 1398E
+        GOTO    PIXON?.L1                        * 1398E
 
 * #x #y -> flag
 PIXON?:
         CON(5)  (*)+5                            * 13992  primitive code object
         ST=1    1                                * 13997
-L_1399A:
+PIXON?.L1:
         GOSBVL  POP#                             * 1399A
         R0=A                                     * 139A1
         GOSBVL  POP#                             * 139A4
         GOSBVL  SAVPTR                           * 139AB
         ?ST=1   1                                * 139B2
-        GOYES   L_139BF                          * 139B5
+        GOYES   PIXON?.L2                        * 139B5
         GOSUB   GETPIX3                          * 139B7
-        GOTO    L_139C3                          * 139BB
-L_139BF:
+        GOTO    PIXON?.L3                        * 139BB
+PIXON?.L2:
         GOSUB   GETPIX                           * 139BF
-L_139C3:
+PIXON?.L3:
         A=A&B   P                                * 139C3
         GOSBVL  GETPTR                           * 139C7
         LC(5)   FALSE                            * 139CE
         ?A=0    P                                * 139D5
-        GOYES   L_139E1                          * 139D8
+        GOYES   PIXON?.L4                        * 139D8
         LC(5)   TRUE                             * 139DA
-L_139E1:
+PIXON?.L4:
         A=C     A                                * 139E1
         PC=(A)                                   * 139E3
 
@@ -2182,9 +2182,9 @@ DispBadToken~1:
         GOSUB   SUB_13AF8                        * 13A11
         B=0     S                                * 13A15
         ?ST=0   0                                * 13A18
-        GOYES   L_13A20                          * 13A1B
+        GOYES   DispBadToken~1.L1                * 13A1B
         B=B+1   S                                * 13A1D
-L_13A20:
+DispBadToken~1.L1:
         D1=(5)  VDISP                            * 13A20
         C=DAT1  A                                * 13A27
         A=A+C   A                                * 13A2A
@@ -2197,16 +2197,16 @@ L_13A20:
         A=R0.F  B                                * 13A45
         B=A     B                                * 13A4B
         ?B=0    B                                * 13A4E
-        GOYES   L_13AC5                          * 13A51
+        GOYES   DispBadToken~1.L4                * 13A51
         P=      2                                * 13A53
         LC(1)   #9                               * 13A55
         B=C     XS                               * 13A58
-L_13A5B:
+DispBadToken~1.loop2:
         B=B-1   B                                * 13A5B
-        GOC     L_13A93                          * 13A5E
+        GOC     DispBadToken~1.L3                * 13A5E
         A=DAT1  B                                * 13A61
         ?ST=1   0                                * 13A64
-        GOYES   L_13ACE                          * 13A67
+        GOYES   DispBadToken~1.L5                * 13A67
         P=      1                                * 13A69
         LC(1)   #C                               * 13A6B
         C=C&A   P                                * 13A6E
@@ -2218,10 +2218,10 @@ L_13A5B:
         DAT1=A  B                                * 13A86
         D1=D1+  1                                * 13A89
         ST=1    0                                * 13A8C
-        GOTO    L_13A5B                          * 13A8F
-L_13A93:
+        GOTO    DispBadToken~1.loop2             * 13A8F
+DispBadToken~1.L3:
         B=B-1   XS                               * 13A93
-        GOC     L_13AC5                          * 13A96
+        GOC     DispBadToken~1.L4                * 13A96
         C=R2.F  A                                * 13A99
         A=R3.F  A                                * 13A9F
         C=C+A   A                                * 13AA5
@@ -2231,13 +2231,13 @@ L_13A93:
         B=A     B                                * 13AB3
         ST=0    0                                * 13AB6
         ?B=0    S                                * 13AB9
-        GOYES   L_13A5B                          * 13ABC
+        GOYES   DispBadToken~1.loop2             * 13ABC
         ST=1    0                                * 13ABE
-        GOTO    L_13A5B                          * 13AC1
-L_13AC5:
+        GOTO    DispBadToken~1.loop2             * 13AC1
+DispBadToken~1.L4:
         P=      0                                * 13AC5
         GOVLNG  GETPTRLOOP                       * 13AC7
-L_13ACE:
+DispBadToken~1.L5:
         P=      0                                * 13ACE
         LC(1)   #3                               * 13AD0
         C=C&A   P                                * 13AD3
@@ -2249,7 +2249,7 @@ L_13ACE:
         DAT1=A  B                                * 13AEB
         D1=D1+  2                                * 13AEE
         ST=0    0                                * 13AF1
-        GOTO    L_13A5B                          * 13AF4
+        GOTO    DispBadToken~1.loop2             * 13AF4
 
 * refs (1): 13A11
 SUB_13AF8:
@@ -2260,9 +2260,9 @@ SUB_13AF8:
         SB=0                                     * 13B01
         DSRB.F  A                                * 13B04
         ?SB=0                                    * 13B09
-        GOYES   L_13B11                          * 13B0C
+        GOYES   SUB_13AF8.L1                     * 13B0C
         ST=1    0                                * 13B0E
-L_13B11:
+SUB_13AF8.L1:
         A=A-1   A                                * 13B11
         C=A     A                                * 13B13
         ASL     A                                * 13B15
@@ -2305,17 +2305,17 @@ OBJ_13BB5:
         D0=C                                     * 13BC5
         A=DAT0  B                                * 13BC8
         ?A=0    B                                * 13BCB
-        GOYES   L_13BD9                          * 13BCE
+        GOYES   OBJ_13BB5.L1                     * 13BCE
         LC(2)   #0A                              * 13BD0
         ?C#A    B                                * 13BD4
-        GOYES   L_13BE0                          * 13BD7
-L_13BD9:
+        GOYES   OBJ_13BB5.L2                     * 13BD7
+OBJ_13BB5.L1:
         LC(2)   #20                              * 13BD9
         A=C     B                                * 13BDD
-L_13BE0:
+OBJ_13BB5.L2:
         D0=(5)  CURSORCHR                        * 13BE0
         DAT0=A  B                                * 13BE7
-L_13BEA:
+OBJ_13BB5.L3:
         GOVLNG  GETPTRLOOP                       * 13BEA
 
 * refs (1): 13BA6
@@ -2345,7 +2345,7 @@ OBJ_13BF1:
         D1=(5)  CURSORCHR                        * 13C3E
         A=DAT1  B                                * 13C45
         GOSBVL  SUB_13C5A                        * 13C48
-        GOTO    L_13BEA                          * 13C4F
+        GOTO    OBJ_13BB5.L3                     * 13C4F
         BSS     5                                * 13C53  zeros
 
 * refs (1): 13C5A
@@ -2401,12 +2401,12 @@ cursorblink+:
         ASSEMBLE
         GOSUB   SAVPTR~jump_9                    * 13D2D
         LC(3)   #203                             * 13D31
-        GOSBVL  L_53AF2                          * 13D36
+        GOSBVL  NoIgnoreAlm.L1                   * 13D36
         GOSUB   SUB_13DDC                        * 13D3D
         D0=(5)  CURSOR1                          * 13D41
-        GOC     L_13D69                          * 13D48
+        GOC     cursorblink-.L1                  * 13D48
         D0=(5)  CURSOR2                          * 13D4B
-        GONC    L_13D69                          * 13D52
+        GONC    cursorblink-.L1                  * 13D52
 
 * refs (5): 13D0A 40922 427E1 42944 42B43
 cursorblink-:
@@ -2414,17 +2414,17 @@ cursorblink-:
         GOSUB   SAVPTR~jump_9                    * 13D5A
         GOSUB   SUB_13DDC                        * 13D5E
         D0=(5)  CURSORGROB                       * 13D62
-L_13D69:
+cursorblink-.L1:
         GOSBVL  grob!                            * 13D69
         D0=(5)  CURSORSTATE                      * 13D70
         C=DAT0  S                                * 13D77
         C=0     A                                * 13D7B
         ?C#0    S                                * 13D7D
-        GOYES   L_13D84                          * 13D80
+        GOYES   cursorblink-.L2                  * 13D80
         C=C-1   A                                * 13D82
-L_13D84:
+cursorblink-.L2:
         DAT0=C  1                                * 13D84
-        GOTO    L_13BEA                          * 13D88
+        GOTO    OBJ_13BB5.L3                     * 13D88
         RPL
 
 * -> grob
@@ -2459,46 +2459,46 @@ OBJ_13E05:
         LC(1)   #8                               * 13E14
         DAT1=C  1                                * 13E17
         D1=A                                     * 13E1B
-        GOTO    L_13FD4                          * 13E1E
+        GOTO    ToTheLastRow~1.L4                * 13E1E
 
 * refs (3): 13BAB 13CD8 42181
 OBJ_13E22:
         CON(5)  (*)+5                            * 13E22  primitive code object
         ST=1    0                                * 13E27
-        GOTO    L_13E36                          * 13E2A
+        GOTO    GETKEY~2.L1                      * 13E2A
 
 * refs (1): 13CC9
 GETKEY~2:
         CON(5)  (*)+5                            * 13E2E  primitive code object
         ST=0    0                                * 13E33
-L_13E36:
+GETKEY~2.L1:
         LC(5)   CURSORSTATE                      * 13E36
         CD0EX                                    * 13E3D
         C=0     S                                * 13E40
         ?ST=0   0                                * 13E43
-        GOYES   L_13E4B                          * 13E46
+        GOYES   GETKEY~2.L2                      * 13E46
         C=C-1   S                                * 13E48
-L_13E4B:
+GETKEY~2.L2:
         DAT0=C  S                                * 13E4B
-        GOTO    L_13FD1                          * 13E4F
+        GOTO    ToTheLastRow~1.L3                * 13E4F
 
 * refs (1): 421AE
 GETKEY~3:
         CON(5)  (*)+5                            * 13E53  primitive code object
         LC(5)   T1COUNT                          * 13E58
-        GOTO    L_13E6F                          * 13E5F
+        GOTO    GETKEY~4.L1                      * 13E5F
 
 * refs (1): 13CB5
 GETKEY~4:
         CON(5)  (*)+5                            * 13E63  primitive code object
         LC(5)   CURSORSTATE                      * 13E68
-L_13E6F:
+GETKEY~4.L1:
         CD0EX                                    * 13E6F
         C=DAT0  S                                * 13E72
         D0=C                                     * 13E76
         ?C#0    S                                * 13E79
-        GOYES   L_13E7E                          * 13E7C
-L_13E7E:
+        GOYES   GETKEY~4.L2                      * 13E7C
+GETKEY~4.L2:
         GOVLNG  PushT/FLoop                      * 13E7E
 
 * -> #
@@ -2509,7 +2509,7 @@ CURSOR_OFF:
         D0=(5)  CURSOROFFSET                     * 13E8E
         A=0     A                                * 13E95
         A=DAT0  B                                * 13E97
-        GOTO    L_13F5F                          * 13E9A
+        GOTO    CurrentRow.L2                    * 13E9A
 
 * refs (3): 425AC 42827 42912
 OBJ_13E9E:
@@ -2519,7 +2519,7 @@ OBJ_13E9E:
         GOSBVL  POP#                             * 13EAC
         C=RSTK                                   * 13EB3
         CD0EX                                    * 13EB5
-        GOTO    L_13EEA                          * 13EB8
+        GOTO    CURSOR_OFF+.L1                   * 13EB8
 
 * ->
 * refs (3): 425C5 428DB 42B89
@@ -2528,7 +2528,7 @@ CURSOR_OFF0:
         LC(5)   CURSOROFFSET                     * 13EC1
         CD0EX                                    * 13EC8
         A=0     B                                * 13ECB
-        GOTO    L_13EEA                          * 13ECE
+        GOTO    CURSOR_OFF+.L1                   * 13ECE
 
 * ->
 * refs (2): 42642 42651
@@ -2538,24 +2538,24 @@ CURSOR_OFF+:
         CD0EX                                    * 13EDE
         A=DAT0  B                                * 13EE1
         A=A+1   B                                * 13EE4
-        GOC     L_13EED                          * 13EE7
-L_13EEA:
+        GOC     CURSOR_OFF+.L2                   * 13EE7
+CURSOR_OFF+.L1:
         DAT0=A  B                                * 13EEA
-L_13EED:
-        GOTO    L_13FD1                          * 13EED
+CURSOR_OFF+.L2:
+        GOTO    ToTheLastRow~1.L3                * 13EED
 
 * -> #
 * refs (7): 3B5CD 3B618 3E639 424EE 42746 42769 ...
 CURSOR@:
         CON(5)  (*)+5                            * 13EF1  primitive code object
         LC(5)   CURSOR                           * 13EF6
-        GOTO    L_13F53                          * 13EFD
+        GOTO    CurrentRow.L1                    * 13EFD
 
 * refs (2): 4261A 428CC
 CURSOR+:
         CON(5)  (*)+5                            * 13F01  primitive code object
         LC(5)   CURSOR                           * 13F06
-        GOTO    L_13F75                          * 13F0D
+        GOTO    OBJ_13F69.L1                     * 13F0D
 
 * refs (1): 4257A
 LCursor~2:
@@ -2564,7 +2564,7 @@ LCursor~2:
         CD0EX                                    * 13F1D
         A=DAT0  A                                * 13F20
         A=A-1   A                                * 13F23
-        GOTO    L_13FCE                          * 13F25
+        GOTO    ToTheLastRow~1.L2                * 13F25
 
 * refs (6): 3B5D7 3B5EB 4253E 425C0 4268D 4292B
 SETCURSOR:
@@ -2574,18 +2574,18 @@ SETCURSOR:
         GOSBVL  POP#                             * 13F37
         C=RSTK                                   * 13F3E
         CD0EX                                    * 13F40
-        GOTO    L_13FCE                          * 13F43
+        GOTO    ToTheLastRow~1.L2                * 13F43
 
 * refs (6): 426F6 42732 42840 4286D 42890 448A8
 CurrentRow:
         CON(5)  (*)+5                            * 13F47  primitive code object
         LC(5)   CURSORPART                       * 13F4C
-L_13F53:
+CurrentRow.L1:
         A=C     A                                * 13F53
         GOSUB   SAVPTR~jump_9                    * 13F55
         D0=A                                     * 13F59
         A=DAT0  A                                * 13F5C
-L_13F5F:
+CurrentRow.L2:
         R0=A                                     * 13F5F
         GOVLNG  PUSH#LOOP                        * 13F62
 
@@ -2593,10 +2593,10 @@ L_13F5F:
 OBJ_13F69:
         CON(5)  (*)+5                            * 13F69  primitive code object
         LC(5)   CURSORPART                       * 13F6E
-L_13F75:
+OBJ_13F69.L1:
         CD0EX                                    * 13F75
         A=DAT0  A                                * 13F78
-        GOTO    L_13FC9                          * 13F7B
+        GOTO    ToTheLastRow~1.L1                * 13F7B
 
 * refs (1): 4267E
 UCursor~1:
@@ -2606,8 +2606,8 @@ UCursor~1:
         A=DAT0  A                                * 13F8E
         A=A-1   A                                * 13F91
         ?A=0    A                                * 13F93
-        GOYES   L_13FD1                          * 13F96
-        GONC    L_13FCE                          * 13F98
+        GOYES   ToTheLastRow~1.L3                * 13F96
+        GONC    ToTheLastRow~1.L2                * 13F98
 
 * refs (1): 426A6
 ToTheFirstRow~1:
@@ -2615,7 +2615,7 @@ ToTheFirstRow~1:
         LC(5)   CURSORPART                       * 13FA0
         CD0EX                                    * 13FA7
         A=0     A                                * 13FAA
-        GOTO    L_13FC9                          * 13FAC
+        GOTO    ToTheLastRow~1.L1                * 13FAC
 
 * refs (1): 4252A
 ToTheLastRow~1:
@@ -2624,14 +2624,14 @@ ToTheLastRow~1:
         CD0EX                                    * 13FBC
         A=DAT0  A                                * 13FBF
         D0=(5)  CURSORPART                       * 13FC2
-L_13FC9:
+ToTheLastRow~1.L1:
         A=A+1   A                                * 13FC9
-        GOC     L_13FD1                          * 13FCB
-L_13FCE:
+        GOC     ToTheLastRow~1.L3                * 13FCB
+ToTheLastRow~1.L2:
         DAT0=A  A                                * 13FCE
-L_13FD1:
+ToTheLastRow~1.L3:
         D0=C                                     * 13FD1
-L_13FD4:
+ToTheLastRow~1.L4:
         A=DAT0  A                                * 13FD4
         D0=D0+  5                                * 13FD7
         PC=(A)                                   * 13FDA
@@ -2647,6 +2647,6 @@ SAVEERRN:
         LC(5)   ERROR                            * 13FEA
         CD0EX                                    * 13FF1
         A=DAT0  A                                * 13FF4
-L_13FF7:
+SAVEERRN.L1:
         D0=(5)  LASTERROR                        * 13FF7
         DAT0=A  A                                * 13FFE

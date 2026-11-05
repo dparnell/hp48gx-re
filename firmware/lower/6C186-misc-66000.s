@@ -313,7 +313,7 @@ EqwImplicit()?:
         CON(5)  (*)+5                            * 6CC10  primitive code object
         ASSEMBLE
         LC(3)   #10B                             * 6CC15
-        GOVLNG  L_539E6                          * 6CC1A
+        GOVLNG  OBJ_539D8.L1                     * 6CC1A
 
 * refs (6): 6B059 6B26E 6B287 6B4C5 6BA7E 6C492
 OBJ_6CC21:
@@ -325,7 +325,7 @@ OBJ_6CC21:
 OBJ_6CC32:
         CON(5)  (*)+5                            * 6CC32  primitive code object
         LC(3)   #10B                             * 6CC37
-        GOVLNG  L_539F1                          * 6CC3C
+        GOVLNG  OBJ_539D8.L2                     * 6CC3C
         RPL
 
 * refs (1): 6BCBD
@@ -376,7 +376,7 @@ OBJ_6CEC5:
 * refs (1): 6DC15
 OBJ_6CEFC:
           :: OBJ_6D990                           * 6CEFC
-L_6CF06:
+OBJ_6CEFC.L1:
             BINT15 ROLL OBJ_68283 ;              * 6CF06
           EqwBoxCount#3+ EqwBoxCount#2+ EqwCurBox@ ONEONE BINT3 OBJ_6D7DD * 6CF1A
           OBJ_66FF1                              * 6CF38
@@ -409,14 +409,15 @@ OBJ_6D014:
 * refs (2): 6D44C 6D6C5
 OBJ_6D04B:
           :: #ZERO#ONE OBJ_6D779 OBJ_44C4B       * 6D04B
-L_6D05F:
+OBJ_6D04B.L1:
             BINT6 OBJ_6D779 OBJ_6DA4E ;          * 6D05F
           OBJ_6D451 #4+ BINT0 EqwCurBox@         * 6D073
 
 * refs (2): 6D6DE 6D945
 OBJ_6D087:
-          :: Push3Zeros OBJ_6D779 BINT6 MAKEGROB GOTO L_6D05F ; OBJ_6D4CE * 6D087
-          EqwBoxCount#1- DUP#1+ EqwCurBox@ OBJ_6D163 EqwNewLeafBox OBJ_6D5EB ; * 6D0B4
+          :: Push3Zeros OBJ_6D779 BINT6 MAKEGROB GOTO OBJ_6D04B.L1 ; * 6D087
+          OBJ_6D4CE EqwBoxCount#1- DUP#1+ EqwCurBox@ OBJ_6D163 EqwNewLeafBox * 6D0AF
+          OBJ_6D5EB ;                            * 6D0CD
 
 * refs (3): 1F6C2 692E7 6DF03
 OBJ_6D0D7:
@@ -571,7 +572,7 @@ OBJ_6D891:
 
 * refs (4): 65A97 6642B 6CFFB 6D6AC
 OBJ_6D8DC:
-          :: OBJ_6D909 GOTO L_6CF06 ; EqwBoxCount#3+ DUP #6+ EqwCurBox@ * 6D8DC
+          :: OBJ_6D909 GOTO OBJ_6CEFC.L1 ; EqwBoxCount#3+ DUP #6+ EqwCurBox@ * 6D8DC
 
 * refs (9): 65F67 6C8A0 6D3E8 6D433 6D591 6D76A ...
 OBJ_6D909:
@@ -668,14 +669,14 @@ Push3Zeros:
         CON(5)  (*)+5                            * 6DD6E  primitive code object
         ASSEMBLE
         ST=0    10                               * 6DD73
-L_6DD76:
+Push3Zeros.loop1:
         LC(5)   #00003                           * 6DD76
         GOSUB   SUB_6DDA6                        * 6DD7D
-        GOC     L_6DD76                          * 6DD81
+        GOC     Push3Zeros.loop1                 * 6DD81
         LC(15)  #03FEF03FEF03FEF                 * 6DD84
         D1=D1-  15                               * 6DD95
         DAT1=C  15                               * 6DD98
-L_6DD9C:
+Push3Zeros.L2:
         A=DAT0  A                                * 6DD9C
         D0=D0+  5                                * 6DD9F
         PC=(A)                                   * 6DDA2
@@ -688,28 +689,28 @@ SUB_6DDA6:
 * refs (4): 6671E 67EAA 681FF 6DDE9
 SUB_6DDAB:
         ?ST=1   10                               * 6DDAB
-        GOYES   L_6DDCC                          * 6DDAE
+        GOYES   SUB_6DDAB.L1                     * 6DDAE
         D=D+C   A                                * 6DDB0
         GOSBVL  SAVPTR                           * 6DDB2
         GOSBVL  GARBAGECOL                       * 6DDB9
         GOSBVL  GETPTR                           * 6DDC0
         ST=1    10                               * 6DDC7
         RTNSC                                    * 6DDCA
-L_6DDCC:
+SUB_6DDAB.L1:
         GOVLNG  DOMEMERR                         * 6DDCC
 
 * refs (2): 6CFBF 6DBE8
 OBJ_6DDD3:
         CON(5)  (*)+5                            * 6DDD3  primitive code object
         ST=0    10                               * 6DDD8
-L_6DDDB:
+OBJ_6DDD3.loop1:
         LC(5)   #00023                           * 6DDDB
         ?D>=C   A                                * 6DDE2
-        GOYES   L_6DDF0                          * 6DDE5
+        GOYES   OBJ_6DDD3.L2                     * 6DDE5
         D=D-C   A                                * 6DDE7
         GOSUB   SUB_6DDAB                        * 6DDE9
-        GOC     L_6DDDB                          * 6DDED
-L_6DDF0:
+        GOC     OBJ_6DDD3.loop1                  * 6DDED
+OBJ_6DDD3.L2:
         GOSBVL  EqwPOP#>Box                      * 6DDF0
         D1=D1-  5                                * 6DDF7
         D=D-1   A                                * 6DDFA
@@ -726,10 +727,10 @@ L_6DDF0:
         A=0     A                                * 6DE21
         A=DAT0  B                                * 6DE23
         ?A=0    B                                * 6DE26
-        GOYES   L_6DE31                          * 6DE29
+        GOYES   OBJ_6DDD3.L3                     * 6DE29
         C=0     B                                * 6DE2B
         DAT0=C  B                                * 6DE2E
-L_6DE31:
+OBJ_6DDD3.L3:
         GOSUB   SUB_6DE76                        * 6DE31
         A=0     A                                * 6DE35
         GOSUB   SUB_6DE76                        * 6DE37
@@ -746,7 +747,7 @@ L_6DE31:
         D=D-C   A                                * 6DE64
         C=R2                                     * 6DE66
         D0=C                                     * 6DE69
-        GOTO    L_6DD9C                          * 6DE6C
+        GOTO    Push3Zeros.L2                    * 6DE6C
 
 * refs (6): 6DE05 6DE09 6DE0D 6DE4B 6DE52 6DE59
 SUB_6DE70:
@@ -777,7 +778,7 @@ OBJ_6DEAA:
         ;                                        * 6DEFA
 
 * Key dispatch for OBJ_6E311 (through OBJ_6FDE2): keycode byte and object to run
-L_6DEFF:
+OBJ_6DEAA.L1:
         CON(2)  #04                              * 6DEFF  entries
         CON(2)  #00                              * 6DF01  entry 0
         CON(5)  OBJ_6D0D7                        * 6DF03
@@ -819,7 +820,7 @@ OBJ_6DF1D:
         D0=D0+  3                                * 6DF7B
         GOSUB   SUB_6DFC9                        * 6DF7E
         A=R1                                     * 6DF82
-L_6DF85:
+OBJ_6DF1D.loop1:
         GOSBVL  SUB_67A3B                        * 6DF85
         A=0     A                                * 6DF8C
         D0=D0-  9                                * 6DF8E
@@ -827,7 +828,7 @@ L_6DF85:
         D0=D0-  3                                * 6DF95
         GOSUB   SUB_6DFC9                        * 6DF98
         ?A#0    X                                * 6DF9C
-        GOYES   L_6DF85                          * 6DF9F
+        GOYES   OBJ_6DF1D.loop1                  * 6DF9F
         A=R0                                     * 6DFA1
         GOSBVL  SUB_67A3B                        * 6DFA4
         D0=D0-  12                               * 6DFAB
@@ -837,7 +838,7 @@ L_6DF85:
         D0=D0+  3                                * 6DFB8
         C=0     X                                * 6DFBB
         DAT0=C  X                                * 6DFBE
-        GOVLNG  L_685CD                          * 6DFC2
+        GOVLNG  OBJ_685B2.L1                     * 6DFC2
 
 * refs (4): 6DF77 6DF7E 6DF91 6DF98
 SUB_6DFC9:
@@ -856,9 +857,9 @@ OBJ_6DFDE:
         A=A+1   B                                * 6DFE7
         CD0EX                                    * 6DFEA
         DAT0=A  B                                * 6DFED
-L_6DFF0:
+OBJ_6DFDE.L1:
         D0=C                                     * 6DFF0
-L_6DFF3:
+OBJ_6DFDE.L2:
         A=DAT0  A                                * 6DFF3
         D0=D0+  5                                * 6DFF6
         PC=(A)                                   * 6DFF9
@@ -868,7 +869,7 @@ OBJ_6DFFD:
         CON(5)  (*)+5                            * 6DFFD  primitive code object
         D1=D1+  5                                * 6E002
         D=D+1   A                                * 6E005
-        GOTO    L_6DFF3                          * 6E007
+        GOTO    OBJ_6DFDE.L2                     * 6E007
 
 * refs (10): 4B8B4 65D82 65DAF 661F6 665D4 6D285 ...
 OBJ_6E00B:
@@ -876,11 +877,11 @@ OBJ_6E00B:
         GOSUB   SUB_6E08F                        * 6E010
         CD0EX                                    * 6E014
         ?A=0    B                                * 6E017
-        GOYES   L_6E022                          * 6E01A
+        GOYES   OBJ_6E00B.L1                     * 6E01A
         A=A-1   B                                * 6E01C
         DAT0=A  B                                * 6E01F
-L_6E022:
-        GOTO    L_6DFF0                          * 6E022
+OBJ_6E00B.L1:
+        GOTO    OBJ_6DFDE.L1                     * 6E022
 
 * refs (4): 68819 6AEF6 6BE98 6C2B7
 OBJ_6E026:
@@ -891,12 +892,12 @@ OBJ_6E026:
         D1=C                                     * 6E034
         LC(5)   DOCOL                            * 6E037
         ?C=A    A                                * 6E03E
-        GOYES   L_6E04D                          * 6E041
+        GOYES   OBJ_6E026.L1                     * 6E041
         LC(5)   ?OKINALG                         * 6E043
-        GONC    L_6E06D                          * 6E04A
-L_6E04D:
+        GONC    EqwFontHeight.loop1              * 6E04A
+OBJ_6E026.L1:
         LC(5)   OBJ_26A82                        * 6E04D
-        GOC     L_6E06D                          * 6E054
+        GOC     EqwFontHeight.loop1              * 6E054
 
 * refs (18): 65B19 65B55 65BA5 65BCD 65EC2 65FA3 ...
 * -> #h: EquationWriter character height for the size level in AppCount: 10, 8 or 6
@@ -904,20 +905,20 @@ EqwFontHeight:
         CON(5)  (*)+5                            * 6E057  primitive code object
         GOSUB   SUB_6E08F                        * 6E05C
         A=A-1   B                                * 6E060
-        GONC    L_6E073                          * 6E063
+        GONC    EqwFontHeight.L2                 * 6E063
         LC(5)   BINT10                           * 6E066
-L_6E06D:
+EqwFontHeight.loop1:
         A=C     A                                * 6E06D
         PC=(A)                                   * 6E06F
-L_6E073:
+EqwFontHeight.L2:
         A=A-1   B                                * 6E073
-        GOC     L_6E084                          * 6E076
-L_6E079:
+        GOC     EqwFontHeight.L4                 * 6E076
+EqwFontHeight.L3:
         LC(5)   BINT6                            * 6E079
-        GOTO    L_6E06D                          * 6E080
-L_6E084:
+        GOTO    EqwFontHeight.loop1              * 6E080
+EqwFontHeight.L4:
         LC(5)   BINT8                            * 6E084
-        GOTO    L_6E06D                          * 6E08B
+        GOTO    EqwFontHeight.loop1              * 6E08B
 
 * refs (7): 6DFE3 6E010 6E05C 6E0A6 6E0C5 6E0D7 ...
 SUB_6E08F:
@@ -933,38 +934,38 @@ EqwFontWidth:
         CON(5)  (*)+5                            * 6E0A1  primitive code object
         GOSUB   SUB_6E08F                        * 6E0A6
         A=A-1   B                                * 6E0AA
-        GOC     L_6E079                          * 6E0AD
+        GOC     EqwFontHeight.L3                 * 6E0AD
         A=A-1   B                                * 6E0B0
-        GOC     L_6E079                          * 6E0B3
-L_6E0B6:
+        GOC     EqwFontHeight.L3                 * 6E0B3
+EqwFontWidth.L1:
         LC(5)   BINT4                            * 6E0B6
-        GONC    L_6E06D                          * 6E0BD
+        GONC    EqwFontHeight.loop1              * 6E0BD
 
 * refs (9): 65B0F 65B50 65F35 65F5D 65FBC 66052 ...
 OBJ_6E0C0:
         CON(5)  (*)+5                            * 6E0C0  primitive code object
         GOSUB   SUB_6E08F                        * 6E0C5
         A=A-1   B                                * 6E0C9
-        GOC     L_6E084                          * 6E0CC
-        GONC    L_6E079                          * 6E0CF
+        GOC     EqwFontHeight.L4                 * 6E0CC
+        GONC    EqwFontHeight.L3                 * 6E0CF
 
 * refs (7): 66048 66408 6644E 6DB39 6DBF2 6DC47 ...
 OBJ_6E0D2:
         CON(5)  (*)+5                            * 6E0D2  primitive code object
         GOSUB   SUB_6E08F                        * 6E0D7
         A=A-1   B                                * 6E0DB
-        GOC     L_6E079                          * 6E0DE
-        GONC    L_6E0B6                          * 6E0E1
+        GOC     EqwFontHeight.L3                 * 6E0DE
+        GONC    EqwFontWidth.L1                  * 6E0E1
 
         CON(5)  (*)+5                            * 6E0E4  primitive code object
         GOSUB   SUB_6E08F                        * 6E0E9
         A=A-1   B                                * 6E0ED
-        GOC     L_6E0FE                          * 6E0F0
+        GOC     OBJ_6E0D2.L1                     * 6E0F0
         LC(5)   OBJ_66E7F                        * 6E0F3
-        GOTO    L_6E06D                          * 6E0FA
-L_6E0FE:
+        GOTO    EqwFontHeight.loop1              * 6E0FA
+OBJ_6E0D2.L1:
         LC(5)   OBJ_66FB1                        * 6E0FE
-        GOTO    L_6E06D                          * 6E105
+        GOTO    EqwFontHeight.loop1              * 6E105
         RPL
 
 * refs (1): 6CF9C
@@ -978,7 +979,7 @@ OBJ_6E113:
 * refs (1): 6997D
 OBJ_6E11D:
             :: OBJ_67E0C EqwBoxLast@             * 6E11D
-L_6E12C:
+OBJ_6E11D.L1:
               OBJ_6799C OBJ_67AAA #2+ OBJ_6D488 3PICKSWAP OBJ_44DFE BINT2 * 6E12C
               3PICK OBJ_68593 OBJ_67AE2 #1+ OBJ_67C16 ; * 6E14F
           ;                                      * 6E16D
@@ -1015,7 +1016,7 @@ OBJ_6E23F:
 
 * refs (3): 68D82 68EBD 6998C
 OBJ_6E2D0:
-        :: OBJ_2708E ?GOTO L_6E343 DUP           * 6E2D0
+        :: OBJ_2708E ?GOTO OBJ_6E311.L1 DUP      * 6E2D0
 
 * refs (5): 6B73B 6E816 6EA78 6F08B 6F2D4
 OBJ_6E2E9:
@@ -1023,9 +1024,9 @@ OBJ_6E2E9:
 
 * refs (1): 68ED6
 OBJ_6E311:
-          :: OBJ_26BED DROP ROTROT2DROP #1+ OBJ_6FDE2 L_6DEFF ?SEMI * 6E311
+          :: OBJ_26BED DROP ROTROT2DROP #1+ OBJ_6FDE2 OBJ_6DEAA.L1 ?SEMI * 6E311
             ERRJMP ;                             * 6E339
-L_6E343:
+OBJ_6E311.L1:
           OBJ_6F261 EVAL ;                       * 6E343
 
 * refs (1): 6D0E1
@@ -1069,7 +1070,7 @@ OBJ_6E4F6:
 OBJ_6E50F:
         :: SKIP                                  * 6E50F
           :: SKIP                                * 6E519
-            :: OBJ_65E13 GOTO L_6F18A ; #1<> ?SEMI * 6E523
+            :: OBJ_65E13 GOTO OBJ_6F0FE.L1 ; #1<> ?SEMI * 6E523
             OBJ_6D5EB #2+ BINT1 BINT2 OBJ_6DAE9 EqwBoxCount * 6E546
 
 * refs (1): 6E410
@@ -1258,7 +1259,7 @@ OBJ_6F0B8:
         D0=D0-  5                                * 6F0EF
         C=RSTK                                   * 6F0F2
         DAT0=C  B                                * 6F0F4
-        GOVLNG  L_685CD                          * 6F0F7
+        GOVLNG  OBJ_685B2.L1                     * 6F0F7
         RPL
 
 * refs (1): 6EAE6
@@ -1268,7 +1269,7 @@ OBJ_6F0FE:
           EQcasedrop                             * 6F149
           :: DROP 7GETLAM case OBJ_6F41E         * 6F14E
             DUP NULL{} OBJ_67F31 DUPZERO OBJ_67F0B OBJ_67E64 EqwBoxSecond@ * 6F167
-L_6F18A:
+OBJ_6F0FE.L1:
             EqwDupBoxFirst@ OBJ_6D523 EqwBoxLast! * 6F18A
 
 * refs (5): 660E3 6CF65 6D046 6E1AE 6E456
@@ -1298,6 +1299,6 @@ OBJ_6F261:
 OBJ_6F315:
           :: DUPDUP OBJ_67E54 TYPELIST? NOTcaseDROP OBJ_6F3C4 * 6F315
           ;                                      * 6F333
-L_6F338:
+OBJ_6F315.L1:
           OBJ_6F36A EqwBoxPrev@ OBJ_679C0 EqwBoxPrev@ EqwBoxPrev@ OBJ_6D523 * 6F338
           EqwBoxLast! ;                          * 6F356

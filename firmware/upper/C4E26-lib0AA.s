@@ -280,8 +280,8 @@ LIB0AA.hash:
         CON(5)  0                                * C52CC  names of length 14
         CON(5)  0                                * C52D1  names of length 15
         CON(5)  0                                * C52D6  names of length 16
-        REL(5)  L_C52E0                          * C52DB  end of the names
-L_C52E0:
+        REL(5)  LIB0AA.hash.L1                   * C52DB  end of the names
+LIB0AA.hash.L1:
         CON(5)  0                                * C52E0  command 000 has no name
         ENDLENGTH                                * C52E5
 

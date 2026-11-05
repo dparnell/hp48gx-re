@@ -200,7 +200,7 @@ DIFFEQ:
         :: CK0 ' ROMPTR 0AB 00E PUTPTYPE ;       * C0712  DIFFEQ
 
         { TRUE ROMPTR 0B5 07A NOP TRUE NULL{} FALSE ~';PlotEval * C0736
-          :: BINT31 TestSysFlag ITE              * C0764
+          :: BINT31 TestSysFlag ITE              * C0764  flag -31: Connect points / Plot points only
             :: ' OBJ_4CE0B ;                     * C0778
             :: ' PlotFcnPt ;                     * C078C
           ;                                      * C07A0
@@ -253,7 +253,7 @@ CLTEACH:
         CON(3)  #0AB                             * C08AE  library
         CON(3)  #013                             * C08B1  command
 RECT:
-        :: CK0 BINT16 ClrSysFlag ;               * C08B4
+        :: CK0 BINT16 ClrSysFlag ;               * C08B4  flag -16: coordinate system
 
 * ROMPTR 0AB 014
 * refs (1): C0007
@@ -261,7 +261,7 @@ RECT:
         CON(3)  #0AB                             * C08CE  library
         CON(3)  #014                             * C08D1  command
 CYLIN:
-        :: CK0 BINT15 ClrSysFlag BINT16 SetSysFlag ; * C08D4
+        :: CK0 BINT15 ClrSysFlag BINT16 SetSysFlag ; * C08D4  flag -15: coordinate system  flag -16: coordinate system
 
 * ROMPTR 0AB 015
 * refs (1): C0007
@@ -269,7 +269,7 @@ CYLIN:
         CON(3)  #0AB                             * C08F8  library
         CON(3)  #015                             * C08FB  command
 SPHERE:
-        :: CK0 BINT15 SetSysFlag BINT16 SetSysFlag ; * C08FE
+        :: CK0 BINT15 SetSysFlag BINT16 SetSysFlag ; * C08FE  flag -15: coordinate system  flag -16: coordinate system
 
 * ROMPTR 0AB 016
 * refs (1): C0007
@@ -918,7 +918,7 @@ TVM:
         CON(3)  #0AB                             * C1758  library
         CON(3)  #056                             * C175B  command
 TVMBEG:
-        :: CK0 BINT14 SetSysFlag ;               * C175E
+        :: CK0 BINT14 SetSysFlag ;               * C175E  flag -14: Payment at end / Payment at begin
 
 * ROMPTR 0AB 057
 * refs (1): C0007
@@ -926,7 +926,7 @@ TVMBEG:
         CON(3)  #0AB                             * C1778  library
         CON(3)  #057                             * C177B  command
 TVMEND:
-        :: CK0 BINT14 ClrSysFlag ;               * C177E
+        :: CK0 BINT14 ClrSysFlag ;               * C177E  flag -14: Payment at end / Payment at begin
 
 * slots of 0AB 057 (derivative, inverse, ...: used by the symbolic code)
         CON(2)  #01                              * C1797  end of the slots: property byte (meaning not yet known)
@@ -1472,7 +1472,7 @@ LIB0AB.hash:
         CON(5)  0                                * C2594  names of length 14
         CON(5)  0                                * C2599  names of length 15
         CON(5)  0                                * C259E  names of length 16
-        REL(5)  L_C2CA0                          * C25A3  end of the names
+        REL(5)  H0AB.SLOPEFIELD.L1               * C25A3  end of the names
 H0AB.LQ:
         CON(2)  2                                * C25A8
         NIBASC  "LQ"                             * C25AA
@@ -1953,7 +1953,7 @@ H0AB.SLOPEFIELD:
         CON(2)  10                               * C2C87
         NIBASC  "SLOPEFIELD"                     * C2C89
         CON(3)  #00C                             * C2C9D  command
-L_C2CA0:
+H0AB.SLOPEFIELD.L1:
         CON(5)  (*)-H0AB.XVOL                    * C2CA0  name of command 000
         CON(5)  (*)-H0AB.YVOL                    * C2CA5  name of command 001
         CON(5)  (*)-H0AB.ZVOL                    * C2CAA  name of command 002

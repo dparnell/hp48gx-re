@@ -3,11 +3,11 @@
 * Most referenced: cknumdsptch1 Cr 1GETLAMSWP1+ sscknum2 sncknum2 nscknum2 lam'dvar derargABND xssgeneral xsngeneral xnsgeneral nmetasyms
 * Follows on from the previous file (at #54000 in the original ROM).
         ?D>=C   B                                * 54000
-        GOYES   L_5400D                          * 54003
+        GOYES   SUB_53F99.L5                     * 54003
         DCEX    A                                * 54005
         P=C     0                                * 54007
         DCEX    A                                * 5400B
-L_5400D:
+SUB_53F99.L5:
         A=0     W                                * 5400D
         A=DAT1  WP                               * 54010
         P=C     0                                * 54014
@@ -33,7 +33,7 @@ WORDSIZE:
         GOSUB   SAVPTR~jump_19                   * 5403E
         GOSUB   getwordsize                      * 54042
         R0=A                                     * 54046
-L_54049:
+WORDSIZE.L1:
         GOVLNG  PUSH#LOOP                        * 54049
 
 * -> #
@@ -42,7 +42,7 @@ BASE:
         CON(5)  (*)+5                            * 54050  primitive code object
         GOSUB   SAVPTR~jump_19                   * 54055
         GOSUB   SUB_541FA                        * 54059
-        GOTO    L_54049                          * 5405D
+        GOTO    WORDSIZE.L1                      * 5405D
         RPL
 
 * hxs -> $
@@ -72,37 +72,37 @@ hxs>$:
         D=D+1   A                                * 540D5
         D=D+1   A                                * 540D7
         ?C<=A   W                                * 540D9
-        GOYES   L_540E8                          * 540DC
+        GOYES   hxs>$.loop1                      * 540DC
         C=0     B                                * 540DE
         C=C+1   B                                * 540E1
-        GOTO    L_54124                          * 540E4
-L_540E8:
+        GOTO    hxs>$.L5                         * 540E4
+hxs>$.loop1:
         B=C     W                                * 540E8
         ?ST=1   2                                * 540EB
-        GOYES   L_54101                          * 540EE
+        GOYES   hxs>$.L2                         * 540EE
         ?ST=1   3                                * 540F0
-        GOYES   L_5410F                          * 540F3
+        GOYES   hxs>$.L3                         * 540F3
         C=C+C   W                                * 540F5
         C=C+C   W                                * 540F8
         C=C+B   W                                * 540FB
-        GONC    L_5410F                          * 540FE
-L_54101:
+        GONC    hxs>$.L3                         * 540FE
+hxs>$.L2:
         C=C+C   W                                * 54101
         C=C+C   W                                * 54104
         ?ST=0   3                                * 54107
-        GOYES   L_5410F                          * 5410A
+        GOYES   hxs>$.L3                         * 5410A
         C=C+C   W                                * 5410C
-L_5410F:
+hxs>$.L3:
         D=D+1   A                                * 5410F
         C=C+C   W                                * 54111
-        GOC     L_54121                          * 54114
+        GOC     hxs>$.L4                         * 54114
         ?C=0    W                                * 54117
-        GOYES   L_54121                          * 5411A
+        GOYES   hxs>$.L4                         * 5411A
         ?C<=A   W                                * 5411C
-        GOYES   L_540E8                          * 5411F
-L_54121:
+        GOYES   hxs>$.loop1                      * 5411F
+hxs>$.L4:
         C=B     W                                * 54121
-L_54124:
+hxs>$.L5:
         R2=A                                     * 54124
         R3=C                                     * 54127
         C=R0                                     * 5412A
@@ -118,69 +118,69 @@ L_54124:
         CR0EX                                    * 5414D
         RSTK=C                                   * 54150
         C=R3                                     * 54152
-L_54155:
+hxs>$.loop6:
         B=0     B                                * 54155
         C=C-1   W                                * 54158
         ?C#0    W                                * 5415B
-        GOYES   L_54166                          * 5415E
+        GOYES   hxs>$.L7                         * 5415E
         ABEX    B                                * 54160
-        GONC    L_54178                          * 54163
-L_54166:
+        GONC    hxs>$.L9                         * 54163
+hxs>$.L7:
         C=C+1   W                                * 54166
-L_54169:
+hxs>$.loop8:
         B=B+1   B                                * 54169
         A=A-C   W                                * 5416C
-        GONC    L_54169                          * 5416F
+        GONC    hxs>$.loop8                      * 5416F
         B=B-1   B                                * 54172
         A=A+C   W                                * 54175
-L_54178:
+hxs>$.L9:
         D=C     B                                * 54178
         LC(2)   #0A                              * 5417B
         ?B<C    B                                * 5417F
-        GOYES   L_5418A                          * 54182
+        GOYES   hxs>$.L10                        * 54182
         LC(1)   #7                               * 54184
         B=B+C   B                                * 54187
-L_5418A:
+hxs>$.L10:
         LC(2)   #30                              * 5418A
         C=C+B   B                                * 5418E
         DAT0=C  B                                * 54191
         D0=D0+  2                                * 54194
         C=D     B                                * 54197
         ?C=0    W                                * 5419A
-        GOYES   L_541EF                          * 5419D
+        GOYES   hxs>$.L15                        * 5419D
         ?ST=1   2                                * 5419F
-        GOYES   L_541DA                          * 541A2
+        GOYES   hxs>$.L13                        * 541A2
         ?ST=1   3                                * 541A4
-        GOYES   L_541E8                          * 541A7
+        GOYES   hxs>$.L14                        * 541A7
         R1=A                                     * 541A9
         A=R0                                     * 541AC
         B=0     W                                * 541AF
         ?C#A    W                                * 541B2
-        GOYES   L_541BC                          * 541B5
+        GOYES   hxs>$.loop11                     * 541B5
         B=B+1   A                                * 541B7
-        GONC    L_541D0                          * 541B9
-L_541BC:
+        GONC    hxs>$.L12                        * 541B9
+hxs>$.loop11:
         B=A     W                                * 541BC
         A=A+A   W                                * 541BF
         A=A+A   W                                * 541C2
         A=A+B   W                                * 541C5
         A=A+A   W                                * 541C8
         ?C#A    W                                * 541CB
-        GOYES   L_541BC                          * 541CE
-L_541D0:
+        GOYES   hxs>$.loop11                     * 541CE
+hxs>$.L12:
         C=B     W                                * 541D0
         A=R1                                     * 541D3
-        GOTO    L_54155                          * 541D6
-L_541DA:
+        GOTO    hxs>$.loop6                      * 541D6
+hxs>$.L13:
         CSRB                                     * 541DA
         CSRB                                     * 541DD
         ?ST=0   3                                * 541E0
-        GOYES   L_541E8                          * 541E3
+        GOYES   hxs>$.L14                        * 541E3
         CSRB                                     * 541E5
-L_541E8:
+hxs>$.L14:
         CSRB                                     * 541E8
-        GOTO    L_54155                          * 541EB
-L_541EF:
+        GOTO    hxs>$.loop6                      * 541EB
+hxs>$.L15:
         C=RSTK                                   * 541EF
         A=C     A                                * 541F1
         GOVLNG  GPOverWrALp                      * 541F3
@@ -192,18 +192,18 @@ SUB_541FA:
         CSTEX                                    * 54204
         C=0     W                                * 54206
         ?ST=0   2                                * 54209
-        GOYES   L_5421C                          * 5420C
+        GOYES   SUB_541FA.L1                     * 5420C
         LC(1)   #8                               * 5420E
         ?ST=0   3                                * 54211
-        GOYES   L_54227                          * 54214
+        GOYES   SUB_541FA.L2                     * 54214
         C=C+C   B                                * 54216
-        GONC    L_54227                          * 54219
-L_5421C:
+        GONC    SUB_541FA.L2                     * 54219
+SUB_541FA.L1:
         LC(1)   #A                               * 5421C
         ?ST=0   3                                * 5421F
-        GOYES   L_54227                          * 54222
+        GOYES   SUB_541FA.L2                     * 54222
         LC(1)   #2                               * 54224
-L_54227:
+SUB_541FA.L2:
         R0=C                                     * 54227
         RTNCC                                    * 5422A
 
@@ -231,10 +231,10 @@ PUSHhxs:
 GPPushA:
         P=      0                                * 54266
         ST=0    10                               * 54268
-L_5426B:
+GPPushA.loop1:
         GOSUB   GETPTR~jump_8                    * 5426B
         D=D-1   A                                * 5426F
-        GONC    L_54297                          * 54271
+        GONC    GPPushA.L2                       * 54271
         D0=(5)  OSAVE                            * 54274
         DAT0=A  A                                * 5427B
         GOSBVL  SUB_12D68                        * 5427E
@@ -242,8 +242,8 @@ L_5426B:
         A=DAT0  A                                * 5428C
         C=0     A                                * 5428F
         DAT0=C  A                                * 54291
-        GONC    L_5426B                          * 54294
-L_54297:
+        GONC    GPPushA.loop1                    * 54294
+GPPushA.L2:
         D1=D1-  5                                * 54297
         DAT1=A  A                                * 5429A
         RTNCC                                    * 5429D
@@ -296,7 +296,7 @@ bit#%+:
         ASSEMBLE
         GOSUB   POPHXS                           * 54362
         GOSUB   SUB_54371                        * 54366
-L_5436A:
+#>%.L1:
         GOVLNG  PUSH%LOOP                        * 5436A
 
 * refs (1): 54366
@@ -306,53 +306,53 @@ SUB_54371:
         B=0     W                                * 54377
         D=0     W                                * 5437A
         D=D-1   S                                * 5437D
-L_54380:
+SUB_54371.loop1:
         D=D+D   A                                * 54380
         B=B+B   W                                * 54382
-        GONC    L_5438A                          * 54385
+        GONC    SUB_54371.L2                     * 54385
         D=D+1   A                                * 54388
-L_5438A:
+SUB_54371.L2:
         SETHEX                                   * 5438A
         A=A+A   W                                * 5438C
         SETDEC                                   * 5438F
-        GONC    L_5439C                          * 54391
+        GONC    SUB_54371.L3                     * 54391
         B=B+1   W                                * 54394
-        GONC    L_5439C                          * 54397
+        GONC    SUB_54371.L3                     * 54397
         D=D+1   A                                * 5439A
-L_5439C:
+SUB_54371.L3:
         C=C-1   B                                * 5439C
-        GONC    L_54380                          * 5439F
+        GONC    SUB_54371.loop1                  * 5439F
         C=0     X                                * 543A2
         C=C-1   X                                * 543A5
-L_543A8:
+SUB_54371.loop4:
         BSRC                                     * 543A8
         A=B     S                                * 543AB
         ?D#0    A                                * 543AE
-        GOYES   L_543B8                          * 543B1
+        GOYES   SUB_54371.L5                     * 543B1
         ?B=0    W                                * 543B3
-        GOYES   L_543D4                          * 543B6
-L_543B8:
+        GOYES   SUB_54371.L6                     * 543B6
+SUB_54371.L5:
         B=0     S                                * 543B8
         ASR     W                                * 543BB
         C=C+1   X                                * 543BE
         SETHEX                                   * 543C1
         D=D-1   S                                * 543C3
         SETDEC                                   * 543C6
-        GONC    L_543A8                          * 543C8
+        GONC    SUB_54371.loop4                  * 543C8
         DCEX    A                                * 543CB
         BCEX    A                                * 543CD
         DCEX    A                                * 543CF
-        GOC     L_543A8                          * 543D1
-L_543D4:
+        GOC     SUB_54371.loop4                  * 543D1
+SUB_54371.L6:
         P=      2                                * 543D4
         A=A+A   P                                * 543D6
-        GONC    L_543EA                          * 543D9
+        GONC    SUB_54371.L7                     * 543D9
         A=A+1   M                                * 543DC
-        GONC    L_543EA                          * 543DF
+        GONC    SUB_54371.L7                     * 543DF
         P=      14                               * 543E2
         A=A+1   P                                * 543E4
         C=C+1   X                                * 543E7
-L_543EA:
+SUB_54371.L7:
         P=      0                                * 543EA
         A=C     X                                * 543EC
         ?A#0    M                                * 543EF
@@ -367,89 +367,89 @@ L_543EA:
         GOSBVL  POP1%                            * 543FE
         SETHEX                                   * 54405
         ?A=0    S                                * 54407
-        GOYES   L_54422                          * 5440A
-L_5440C:
+        GOYES   %>#.L4                           * 5440A
+%>#.loop1:
         A=0     W                                * 5440C
-        GOTO    L_54419                          * 5440F
-L_54413:
+        GOTO    %>#.loop3                        * 5440F
+%>#.loop2:
         A=0     W                                * 54413
         A=A-1   W                                * 54416
-L_54419:
+%>#.loop3:
         P=      15                               * 54419
         GOVLNG  PUSHhxsLoop                      * 5441B
-L_54422:
+%>#.L4:
         ?A=0    W                                * 54422
-        GOYES   L_54419                          * 54425
+        GOYES   %>#.loop3                        * 54425
         LC(3)   #500                             * 54427
         ?C>A    X                                * 5442C
-        GOYES   L_54451                          * 5442F
+        GOYES   %>#.L5                           * 5442F
         LC(3)   #999                             * 54431
         ?C#A    X                                * 54436
-        GOYES   L_5440C                          * 54439
+        GOYES   %>#.loop1                        * 54439
         P=      14                               * 5443B
         LC(1)   #4                               * 5443D
         C=C-A   P                                * 54440
         P=      0                                * 54443
-        GONC    L_5440C                          * 54445
+        GONC    %>#.loop1                        * 54445
         A=0     W                                * 54448
         A=A+1   B                                * 5444B
-        GONC    L_54419                          * 5444E
-L_54451:
+        GONC    %>#.loop3                        * 5444E
+%>#.L5:
         LC(3)   #019                             * 54451
         ?C<A    X                                * 54456
-        GOYES   L_54413                          * 54459
+        GOYES   %>#.loop2                        * 54459
         B=A     X                                * 5445B
         C=A     X                                * 5445E
         A=0     X                                * 54461
         P=      14                               * 54464
         SETDEC                                   * 54466
-L_54468:
+%>#.loop6:
         P=P-1                                    * 54468
         ?P=     2                                * 5446A
-        GOYES   L_5448F                          * 5446D
+        GOYES   %>#.L7                           * 5446D
         C=C-1   X                                * 5446F
-        GONC    L_54468                          * 54472
+        GONC    %>#.loop6                        * 54472
         A=A+A   P                                * 54475
         A=0     WP                               * 54478
-        GONC    L_5448F                          * 5447B
+        GONC    %>#.L7                           * 5447B
         A=A-1   WP                               * 5447E
         A=A+1   W                                * 54481
         ?A=0    S                                * 54484
-        GOYES   L_5448F                          * 54487
+        GOYES   %>#.L7                           * 54487
         ASR     W                                * 54489
         B=B+1   X                                * 5448C
-L_5448F:
+%>#.L7:
         C=0     W                                * 5448F
         SETHEX                                   * 54492
-L_54494:
+%>#.loop8:
         C=C+C   W                                * 54494
-        GONC    L_5449E                          * 54497
-L_5449A:
-        GOTO    L_54413                          * 5449A
-L_5449E:
+        GONC    %>#.L10                          * 54497
+%>#.loop9:
+        GOTO    %>#.loop2                        * 5449A
+%>#.L10:
         D=C     W                                * 5449E
         C=C+C   W                                * 544A1
-        GOC     L_5449A                          * 544A4
+        GOC     %>#.loop9                        * 544A4
         C=C+C   W                                * 544A7
-        GOC     L_5449A                          * 544AA
+        GOC     %>#.loop9                        * 544AA
         C=C+D   W                                * 544AD
-        GOC     L_5449A                          * 544B0
+        GOC     %>#.loop9                        * 544B0
         ASL     W                                * 544B3
         ?A=0    S                                * 544B6
-        GOYES   L_544C6                          * 544B9
-L_544BB:
+        GOYES   %>#.L12                          * 544B9
+%>#.loop11:
         C=C+1   W                                * 544BB
         A=A-1   S                                * 544BE
         ?A#0    S                                * 544C1
-        GOYES   L_544BB                          * 544C4
-L_544C6:
+        GOYES   %>#.loop11                       * 544C4
+%>#.L12:
         SETDEC                                   * 544C6
         B=B-1   X                                * 544C8
         SETHEX                                   * 544CB
-        GONC    L_54494                          * 544CD
+        GONC    %>#.loop8                        * 544CD
         A=C     W                                * 544D0
         P=      0                                * 544D3
-        GOTO    L_54419                          * 544D5
+        GOTO    %>#.loop3                        * 544D5
 
 * hxs hxs' -> %flag
 * refs (2): 1E9C7 544F1
@@ -458,8 +458,8 @@ HXS==HXS:
         GOSUB   POP2HXS                          * 544DE
         P=      0                                * 544E2
         ?C=A    W                                * 544E4
-        GOYES   L_54521                          * 544E7
-        GONC    L_54510                          * 544E9
+        GOYES   HXS>HXS.L3                       * 544E7
+        GONC    HXS>HXS.L1                       * 544E9
         RPL
 
 * hxs hxs' -> %flag
@@ -475,16 +475,16 @@ HXS>HXS:
         GOSUB   POP2HXS                          * 54505
         P=      0                                * 54509
         ?C<A    W                                * 5450B
-        GOYES   L_54521                          * 5450E
-L_54510:
+        GOYES   HXS>HXS.L3                       * 5450E
+HXS>HXS.L1:
         LC(5)   %0_2A2B4                         * 54510
-L_54517:
+HXS>HXS.loop2:
         A=C     A                                * 54517
         GOSUB   GETPTR~jump_8                    * 54519
         PC=(A)                                   * 5451D
-L_54521:
+HXS>HXS.L3:
         LC(5)   %1                               * 54521
-        GOTO    L_54517                          * 54528
+        GOTO    HXS>HXS.loop2                    * 54528
 
 * hxs hxs' -> %flag
 * refs (1): 1EDB4
@@ -493,8 +493,8 @@ HXS>=HXS:
         GOSUB   POP2HXS                          * 54531
         P=      0                                * 54535
         ?C>A    W                                * 54537
-        GOYES   L_54510                          * 5453A
-        GONC    L_54521                          * 5453C
+        GOYES   HXS>HXS.L1                       * 5453A
+        GONC    HXS>HXS.L3                       * 5453C
 
 * hxs hxs' -> %flag
 * refs (1): 1ED15
@@ -503,8 +503,8 @@ HXS<=HXS:
         GOSUB   POP2HXS                          * 54544
         P=      0                                * 54548
         ?C<A    W                                * 5454A
-        GOYES   L_54510                          * 5454D
-        GONC    L_54521                          * 5454F
+        GOYES   HXS>HXS.L1                       * 5454D
+        GONC    HXS>HXS.L3                       * 5454F
 
 * hxs hxs' -> %flag
 * refs (1): 1EBD7
@@ -513,8 +513,8 @@ HXS<HXS:
         GOSUB   POP2HXS                          * 54557
         P=      0                                * 5455B
         ?C>A    W                                * 5455D
-        GOYES   L_54521                          * 54560
-        GONC    L_54510                          * 54562
+        GOYES   HXS>HXS.L3                       * 54560
+        GONC    HXS>HXS.L1                       * 54562
         RPL
 
 * refs (9): 1A417 1A421 1A42B 1A435 1A43F 1A449 ...
@@ -670,9 +670,9 @@ MetaConcase:
         A=DAT1  A                                * 54A00
         B=A     A                                * 54A03
         D1=C                                     * 54A05
-L_54A08:
+MetaConcase.loop1:
         B=B-1   A                                * 54A08
-        GOC     L_54A59                          * 54A0A
+        GOC     MetaConcase.L3                   * 54A0A
         D1=D1+  5                                * 54A0D
         C=DAT1  A                                * 54A10
         CD1EX                                    * 54A13
@@ -680,24 +680,24 @@ L_54A08:
         D1=C                                     * 54A19
         LC(5)   DOIDNT                           * 54A1C
         ?C=A    A                                * 54A23
-        GOYES   L_54A4C                          * 54A26
+        GOYES   MetaConcase.L2                   * 54A26
         LC(5)   DOLAM                            * 54A28
         ?C=A    A                                * 54A2F
-        GOYES   L_54A4C                          * 54A32
+        GOYES   MetaConcase.L2                   * 54A32
         LC(5)   DOROMP                           * 54A34
         ?C=A    A                                * 54A3B
-        GOYES   L_54A4C                          * 54A3E
+        GOYES   MetaConcase.L2                   * 54A3E
         LC(5)   DOSYMB                           * 54A40
         ?C#A    A                                * 54A47
-        GOYES   L_54A08                          * 54A4A
-L_54A4C:
+        GOYES   MetaConcase.loop1                * 54A4A
+MetaConcase.L2:
         LC(5)   SKIP                             * 54A4C
         A=C     A                                * 54A53
-        GOTO    L_54A62                          * 54A55
-L_54A59:
+        GOTO    MetaConcase.L4                   * 54A55
+MetaConcase.L3:
         LC(5)   COLA                             * 54A59
         A=C     A                                * 54A60
-L_54A62:
+MetaConcase.L4:
         C=RSTK                                   * 54A62
         D1=C                                     * 54A64
         C=RSTK                                   * 54A67

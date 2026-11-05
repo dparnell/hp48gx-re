@@ -162,11 +162,11 @@ OBJ_2464F:
         CON(5)  (*)+5                            * 2464F  primitive code object
         ASSEMBLE
         LC(5)   DOIDNT                           * 24654
-        GOTO    L_2466B                          * 2465B
+        GOTO    OBJ_2464F.L1                     * 2465B
 
         CON(5)  (*)+5                            * 2465F  primitive code object
         LC(5)   DOLAM                            * 24664
-L_2466B:
+OBJ_2464F.L1:
         A=DAT1  A                                * 2466B
         AD1EX                                    * 2466E
         DAT1=C  A                                * 24671
@@ -391,21 +391,21 @@ OBJ_24E83:
         A=DAT0  A                                * 24EE9
         LC(5)   SEMI                             * 24EEC
         ?C=A    A                                * 24EF3
-        GOYES   L_24F5C                          * 24EF6
+        GOYES   {}>DIR.L3                        * 24EF6
         AD0EX                                    * 24EF8
         D0=A                                     * 24EFB
         C=0     A                                * 24EFE
-        GOTO    L_24F21                          * 24F00
-L_24F04:
+        GOTO    {}>DIR.L2                        * 24F00
+{}>DIR.loop1:
         A=DAT0  A                                * 24F04
         LC(5)   SEMI                             * 24F07
         ?C=A    A                                * 24F0E
-        GOYES   L_24F5C                          * 24F11
+        GOYES   {}>DIR.L3                        * 24F11
         AD0EX                                    * 24F13
         D0=A                                     * 24F16
         C=R1.F  A                                * 24F19
         C=A-C   A                                * 24F1F
-L_24F21:
+{}>DIR.L2:
         DAT0=C  A                                * 24F21
         A=A+CON A,5                              * 24F24
         R1=A.F  A                                * 24F2A
@@ -422,8 +422,8 @@ L_24F21:
         DAT0=A  B                                * 24F4B
         D0=D0+  2                                * 24F4E
         GOSBVL  SKIPOB                           * 24F51
-        GOTO    L_24F04                          * 24F58
-L_24F5C:
+        GOTO    {}>DIR.loop1                     * 24F58
+{}>DIR.L3:
         A=R1.F  A                                * 24F5C
         C=R0.F  A                                * 24F62
         D0=C                                     * 24F68
@@ -496,15 +496,15 @@ OBJ_25108:
         D=D+1   A                                * 25119
         LC(5)   TRUE                             * 2511B
         ?C=A    A                                * 25122
-        GOYES   L_25135                          * 25125
+        GOYES   delimcase.L1                     * 25125
         ST=0    3                                * 25127
-        GONC    L_25135                          * 2512A
+        GONC    delimcase.L1                     * 2512A
 
 * refs (6): 0F182 2460E 246DB 27EEF 56FA9 697DE
 delimcase:
         CON(5)  (*)+5                            * 2512D  primitive code object
         ST=0    0                                * 25132
-L_25135:
+delimcase.L1:
         A=DAT1  A                                * 25135
         AD1EX                                    * 25138
         D1=D1+  5                                * 2513B
@@ -514,16 +514,16 @@ L_25135:
         AD1EX                                    * 25147
         ST=0    1                                * 2514A
         A=A-CON A,2                              * 2514D
-        GONC    L_25159                          * 25153
+        GONC    delimcase.L2                     * 25153
         ST=1    1                                * 25156
-L_25159:
+delimcase.L2:
         A=A+1   A                                * 25159
         A=A+1   A                                * 2515B
         ?A=0    A                                * 2515D
-        GOYES   L_251B2                          * 25160
+        GOYES   delimcase.loop4                  * 25160
         A=0     B                                * 25162
         ?A#0    A                                * 25165
-        GOYES   L_251B2                          * 25168
+        GOYES   delimcase.loop4                  * 25168
         A=0     A                                * 2516A
         CD1EX                                    * 2516C
         D1=D1+  5                                * 2516F
@@ -541,39 +541,39 @@ L_25159:
         D1=A                                     * 25193
         CPEX    0                                * 25196
         ?P=     1                                * 2519A
-        GOYES   L_251A9                          * 2519D
+        GOYES   delimcase.loop3                  * 2519D
         ?P=     6                                * 2519F
-        GOYES   L_251A9                          * 251A2
+        GOYES   delimcase.loop3                  * 251A2
         ?P#     15                               * 251A4
-        GOYES   L_251BB                          * 251A7
-L_251A9:
+        GOYES   delimcase.L5                     * 251A7
+delimcase.loop3:
         P=      0                                * 251A9
         GOVLNG  doskip                           * 251AB
-L_251B2:
+delimcase.loop4:
         P=      0                                * 251B2
         GOVLNG  docola                           * 251B4
-L_251BB:
+delimcase.L5:
         ?ST=0   0                                * 251BB
-        GOYES   L_251B2                          * 251BE
+        GOYES   delimcase.loop4                  * 251BE
         ?P=     2                                * 251C0
-        GOYES   L_251A9                          * 251C3
+        GOYES   delimcase.loop3                  * 251C3
         ?P=     10                               * 251C5
-        GOYES   L_251DC                          * 251C8
+        GOYES   delimcase.L6                     * 251C8
         ?P=     11                               * 251CA
-        GOYES   L_251E4                          * 251CD
+        GOYES   delimcase.L7                     * 251CD
         ?P#     7                                * 251CF
-        GOYES   L_251B2                          * 251D2
+        GOYES   delimcase.loop4                  * 251D2
         ?ST=0   1                                * 251D4
-        GOYES   L_251B2                          * 251D7
-        GONC    L_251A9                          * 251D9
-L_251DC:
+        GOYES   delimcase.loop4                  * 251D7
+        GONC    delimcase.loop3                  * 251D9
+delimcase.L6:
         ?ST=1   3                                * 251DC
-        GOYES   L_251A9                          * 251DF
-        GONC    L_251B2                          * 251E1
-L_251E4:
+        GOYES   delimcase.loop3                  * 251DF
+        GONC    delimcase.loop4                  * 251E1
+delimcase.L7:
         ?ST=0   3                                * 251E4
-        GOYES   L_251A9                          * 251E7
-        GONC    L_251B2                          * 251E9
+        GOYES   delimcase.loop3                  * 251E7
+        GONC    delimcase.loop4                  * 251E9
         RPL
 
 * refs (12): 24686 247BC 24A66 24A74 24D39 2509A ...
@@ -646,12 +646,12 @@ nultrior:
         C=DAT1  A                                * 25358
         D1=C                                     * 2535B
         D1=D1-  6                                * 2535E
-        GOC     L_2536E                          * 25361
+        GOC     nultrior.L1                      * 25361
         D1=(5)  SKIP                             * 25364
-        GONC    L_25375                          * 2536B
-L_2536E:
+        GONC    nultrior.L2                      * 2536B
+nultrior.L1:
         D1=(5)  COLA                             * 2536E
-L_25375:
+nultrior.L2:
         AD1EX                                    * 25375
         PC=(A)                                   * 25378
         RPL
@@ -753,27 +753,27 @@ getmatchtok~2:
         A=A+C   A                                * 2556E
         C=DAT1  A                                * 25570
         C=C-A   A                                * 25573
-        GOC     L_255AF                          * 25575
+        GOC     getmatchtok~2.L3                 * 25575
         CD1EX                                    * 25578
         C=C+A   A                                * 2557B
         D0=C                                     * 2557D
         D0=D0-  2                                * 25580
         C=D     B                                * 25583
-L_25586:
+getmatchtok~2.loop1:
         A=DAT0  B                                * 25586
         ?C=A    B                                * 25589
-        GOYES   L_2559C                          * 2558C
+        GOYES   getmatchtok~2.L2                 * 2558C
         B=B+1   A                                * 2558E
         D0=D0+  2                                * 25590
         D1=D1-  2                                * 25593
-        GONC    L_25586                          * 25596
-        GOC     L_255AF                          * 25599
-L_2559C:
+        GONC    getmatchtok~2.loop1              * 25596
+        GOC     getmatchtok~2.L3                 * 25599
+getmatchtok~2.L2:
         A=B     A                                * 2559C
         R0=A                                     * 2559E
         GOSBVL  PUSH#                            * 255A1
         GOVLNG  doskip                           * 255A8
-L_255AF:
+getmatchtok~2.L3:
         GOSBVL  GETPTR                           * 255AF
         GOVLNG  docola                           * 255B6
 
@@ -789,12 +789,12 @@ ngsizecase:
         A=A-C   A                                * 255D8
         LC(5)   COLA                             * 255DA
         ?A=0    A                                * 255E1
-        GOYES   L_255F5                          * 255E4
+        GOYES   ngsizecase.L1                    * 255E4
         A=0     B                                * 255E6
         ?A#0    A                                * 255E9
-        GOYES   L_255F5                          * 255EC
+        GOYES   ngsizecase.L1                    * 255EC
         LC(5)   SKIP                             * 255EE
-L_255F5:
+ngsizecase.L1:
         A=C     A                                * 255F5
         PC=(A)                                   * 255F7
 
@@ -807,12 +807,12 @@ need'case:
         D1=C                                     * 25609
         LC(5)   DOIDNT                           * 2560C
         ?C=A    A                                * 25613
-        GOYES   L_2562B                          * 25616
+        GOYES   need'case.L1                     * 25616
         LC(5)   DOLAM                            * 25618
         ?C=A    A                                * 2561F
-        GOYES   L_2562B                          * 25622
+        GOYES   need'case.L1                     * 25622
         GOVLNG  doskip                           * 25624
-L_2562B:
+need'case.L1:
         GOVLNG  docola                           * 2562B
         RPL
 
@@ -832,26 +832,26 @@ convertbase:
         ASSEMBLE
         GOSBVL  POP#                             * 256E9
         ?A#0    P                                * 256F0
-        GOYES   L_25701                          * 256F3
-        LC(5)   L_2588A                          * 256F5
+        GOYES   convertbase.L1                   * 256F3
+        LC(5)   convertbase.L18                  * 256F5
         RSTK=C                                   * 256FC
-        GONC    L_2572D                          * 256FE
-L_25701:
+        GONC    convertbase.L4                   * 256FE
+convertbase.L1:
         A=A+A   P                                * 25701
-        GOC     L_25713                          * 25704
-        LC(5)   L_2580B                          * 25707
+        GOC     convertbase.L2                   * 25704
+        LC(5)   convertbase.L11                  * 25707
         RSTK=C                                   * 2570E
-        GONC    L_2572D                          * 25710
-L_25713:
+        GONC    convertbase.L4                   * 25710
+convertbase.L2:
         ?A#0    P                                * 25713
-        GOYES   L_25724                          * 25716
-        LC(5)   L_2582D                          * 25718
+        GOYES   convertbase.L3                   * 25716
+        LC(5)   convertbase.L14                  * 25718
         RSTK=C                                   * 2571F
-        GONC    L_2572D                          * 25721
-L_25724:
-        LC(5)   L_25857                          * 25724
+        GONC    convertbase.L4                   * 25721
+convertbase.L3:
+        LC(5)   convertbase.L16                  * 25724
         RSTK=C                                   * 2572B
-L_2572D:
+convertbase.L4:
         GOSBVL  POP#                             * 2572D
         R0=A                                     * 25734
         D1=D1+  5                                * 25737
@@ -863,26 +863,26 @@ L_2572D:
         A=DAT1  A                                * 2574C
         D0=A                                     * 2574F
         D0=D0-  7                                * 25752
-        GOC     L_25773                          * 25755
+        GOC     convertbase.loop7                * 25755
         D1=D1+  5                                * 25758
         B=0     W                                * 2575B
-L_2575E:
+convertbase.loop5:
         C=RSTK                                   * 2575E
         RSTK=C                                   * 25760
         RSTK=C                                   * 25762
         RTN                                      * 25764
-L_25766:
+convertbase.loop6:
         D1=D1+  2                                * 25766
         D0=D0-  2                                * 25769
-        GONC    L_2575E                          * 2576C
-        GOTO    L_25789                          * 2576F
-L_25773:
+        GONC    convertbase.loop5                * 2576C
+        GOTO    convertbase.L8                   * 2576F
+convertbase.loop7:
         C=RSTK                                   * 25773
         GOSBVL  GETPTR                           * 25775
         LC(5)   failed                           * 2577C
         A=C     A                                * 25783
         PC=(A)                                   * 25785
-L_25789:
+convertbase.L8:
         C=RSTK                                   * 25789
         A=DAT1  A                                * 2578B
         D1=A                                     * 2578E
@@ -897,17 +897,17 @@ L_25789:
         C=0     P                                * 257A7
         C=C+1   P                                * 257AA
         A=A+A   B                                * 257AD
-        GONC    L_257BF                          * 257B0
+        GONC    convertbase.L9                   * 257B0
         C=C+C   P                                * 257B3
         C=C+1   P                                * 257B6
         C=C+C   P                                * 257B9
         C=C+1   P                                * 257BC
-L_257BF:
+convertbase.L9:
         A=A+A   B                                * 257BF
-        GONC    L_257CB                          * 257C2
+        GONC    convertbase.L10                  * 257C2
         C=C+C   P                                * 257C5
         C=C+1   P                                * 257C8
-L_257CB:
+convertbase.L10:
         B=B&C   P                                * 257CB
         D1=(5)  DSKTOP                           * 257CF
         A=DAT1  A                                * 257D6
@@ -925,36 +925,36 @@ L_257CB:
         LC(5)   TrueTrue                         * 257FE
         A=C     A                                * 25805
         PC=(A)                                   * 25807
-L_2580B:
+convertbase.L11:
         B=B+B   W                                * 2580B
         A=DAT1  B                                * 2580E
         LC(2)   #30                              * 25811
         ?C=A    B                                * 25815
-        GOYES   L_25825                          * 25818
+        GOYES   convertbase.L12                  * 25818
         C=C+1   B                                * 2581A
         ?C#A    B                                * 2581D
-        GOYES   L_25829                          * 25820
+        GOYES   convertbase.L13                  * 25820
         B=B+1   P                                * 25822
-L_25825:
-        GOTO    L_25766                          * 25825
-L_25829:
-        GOTO    L_25773                          * 25829
-L_2582D:
+convertbase.L12:
+        GOTO    convertbase.loop6                * 25825
+convertbase.L13:
+        GOTO    convertbase.loop7                * 25829
+convertbase.L14:
         B=B+B   W                                * 2582D
         B=B+B   W                                * 25830
         B=B+B   W                                * 25833
         A=DAT1  B                                * 25836
         LC(2)   #30                              * 25839
         A=A-C   B                                * 2583D
-        GOC     L_25853                          * 25840
+        GOC     convertbase.L15                  * 25840
         LC(2)   #07                              * 25843
         ?C<A    B                                * 25847
-        GOYES   L_25853                          * 2584A
+        GOYES   convertbase.L15                  * 2584A
         B=B+A   P                                * 2584C
-        GOTO    L_25766                          * 2584F
-L_25853:
-        GOTO    L_25773                          * 25853
-L_25857:
+        GOTO    convertbase.loop6                * 2584F
+convertbase.L15:
+        GOTO    convertbase.loop7                * 25853
+convertbase.L16:
         C=B     W                                * 25857
         B=B+B   W                                * 2585A
         B=B+B   W                                * 2585D
@@ -964,39 +964,39 @@ L_25857:
         A=DAT1  B                                * 25869
         LC(2)   #30                              * 2586C
         A=A-C   B                                * 25870
-        GOC     L_25886                          * 25873
+        GOC     convertbase.L17                  * 25873
         LC(2)   #09                              * 25876
         ?C<A    B                                * 2587A
-        GOYES   L_25886                          * 2587D
+        GOYES   convertbase.L17                  * 2587D
         B=B+A   W                                * 2587F
-        GOTO    L_25766                          * 25882
-L_25886:
-        GOTO    L_25773                          * 25886
-L_2588A:
+        GOTO    convertbase.loop6                * 25882
+convertbase.L17:
+        GOTO    convertbase.loop7                * 25886
+convertbase.L18:
         BSL     W                                * 2588A
         A=DAT1  B                                * 2588D
         LC(2)   #41                              * 25890
         ?C<=A   B                                * 25894
-        GOYES   L_258B7                          * 25897
+        GOYES   convertbase.L20                  * 25897
         LC(2)   #30                              * 25899
         A=A-C   B                                * 2589D
-        GOC     L_258B3                          * 258A0
+        GOC     convertbase.loop19               * 258A0
         LC(2)   #09                              * 258A3
         ?C<A    B                                * 258A7
-        GOYES   L_258B3                          * 258AA
+        GOYES   convertbase.loop19               * 258AA
         B=A     P                                * 258AC
-        GOTO    L_25766                          * 258AF
-L_258B3:
-        GOTO    L_25773                          * 258B3
-L_258B7:
+        GOTO    convertbase.loop6                * 258AF
+convertbase.loop19:
+        GOTO    convertbase.loop7                * 258B3
+convertbase.L20:
         A=A-C   B                                * 258B7
         LC(2)   #05                              * 258BA
         ?C<A    B                                * 258BE
-        GOYES   L_258B3                          * 258C1
+        GOYES   convertbase.loop19               * 258C1
         LC(1)   #A                               * 258C3
         A=A+C   P                                * 258C6
         B=A     P                                * 258C9
-        GOTO    L_25766                          * 258CC
+        GOTO    convertbase.loop6                * 258CC
 
 * refs (1): 24CB7
 Null#:
@@ -1082,11 +1082,11 @@ OBJ_25AD4:
         ASSEMBLE
         GOSBVL  POP2#                            * 25B10
         A=A+C   A                                * 25B17
-        GOC     L_25B30                          * 25B19
+        GOC     #+OVF.L1                         * 25B19
         R0=A.F  A                                * 25B1C
         GOSBVL  SAVPTR                           * 25B22
         GOVLNG  PUSH#LOOP                        * 25B29
-L_25B30:
+#+OVF.L1:
         LC(5)   MINUSONE                         * 25B30
         A=C     A                                * 25B37
         PC=(A)                                   * 25B39
@@ -1141,32 +1141,32 @@ Extobcode:
         D=C     A                                * 25C8C
         LC(4)   #3041                            * 25C8E
         B=C     A                                * 25C94
-L_25C96:
+Extobcode.loop1:
         A=DAT1  B                                * 25C96
         LC(2)   #41                              * 25C99
         ?C<=A   B                                * 25C9D
-        GOYES   L_25CBC                          * 25CA0
+        GOYES   Extobcode.L3                     * 25CA0
         LC(2)   #30                              * 25CA2
         A=A-C   B                                * 25CA6
-        GOC     L_25CB5                          * 25CA9
+        GOC     Extobcode.loop2                  * 25CA9
         LC(2)   #09                              * 25CAC
         ?C>=A   B                                * 25CB0
-        GOYES   L_25CCE                          * 25CB3
-L_25CB5:
+        GOYES   Extobcode.L4                     * 25CB3
+Extobcode.loop2:
         GOVLNG  GETPTRFALSE                      * 25CB5
-L_25CBC:
+Extobcode.L3:
         A=A-C   B                                * 25CBC
         LC(2)   #05                              * 25CBF
         ?C<A    B                                * 25CC3
-        GOYES   L_25CB5                          * 25CC6
+        GOYES   Extobcode.loop2                  * 25CC6
         LC(1)   #A                               * 25CC8
         A=A+C   P                                * 25CCB
-L_25CCE:
+Extobcode.L4:
         DAT0=A  1                                * 25CCE
         D1=D1+  2                                * 25CD2
         D0=D0+  1                                * 25CD5
         D=D-CON A,2                              * 25CD8
-        GONC    L_25C96                          * 25CDE
+        GONC    Extobcode.loop1                  * 25CDE
 
 * <REF>GETPTR , Do TRUE
 * refs (6): 04263 0B405 0BB51 0E3D8 0ED3E 25C89
@@ -1241,7 +1241,7 @@ OBJ_25E44:
 OBJ_25F4E:
         CON(5)  DOHSTR                           * 25F4E
         LENGTH                                   * 25F53  length, to #26058
-L_25F58:
+OBJ_25F4E.L1:
           NIBHEX  0000000000E00000               * 25F58  #00-#0F ................
           NIBHEX  0000000555060000               * 25F68  #10-#1F ................
           NIBHEX  055511153455B5A5               * 25F78  #20-#2F  !"#$%&'()*+,-./
@@ -1298,7 +1298,7 @@ OBJ_261AD:
         A=DAT1  A                                * 261B2
         LC(5)   FALSE                            * 261B5
         ?C=A    A                                * 261BC
-        GOYES   L_26224                          * 261BF
+        GOYES   OBJ_261AD.L3                     * 261BF
         D1=D1+  5                                * 261C1
         C=DAT1  A                                * 261C4
         CD1EX                                    * 261C7
@@ -1317,7 +1317,7 @@ OBJ_261AD:
         CD1EX                                    * 261EC
         A=A+A   A                                * 261EF
         ?C<=A   A                                * 261F1
-        GOYES   L_26221                          * 261F4
+        GOYES   OBJ_261AD.L2                     * 261F4
         A=DAT1  10                               * 261F6
         D1=D1+  5                                * 261FA
         DAT1=A  10                               * 261FD
@@ -1328,14 +1328,14 @@ OBJ_261AD:
         DAT1=A  15                               * 2620E
         D=D+1   A                                * 26212
         LC(5)   SKIP                             * 26214
-L_2621B:
+OBJ_261AD.loop1:
         A=C     A                                * 2621B
         PC=(A)                                   * 2621D
-L_26221:
+OBJ_261AD.L2:
         D1=D1-  15                               * 26221
-L_26224:
+OBJ_261AD.L3:
         LC(5)   OBJ_2622F                        * 26224
-        GOTO    L_2621B                          * 2622B
+        GOTO    OBJ_261AD.loop1                  * 2622B
         RPL
 
 * refs (2): 254A7 26224
@@ -1400,29 +1400,29 @@ GetNextToken~1:
         D1=D1+  10                               * 26396
         A=B     A                                * 26399
         A=A+A   A                                * 2639B
-        GONC    L_263A4                          * 2639D
-L_263A0:
-        GOTO    L_26435                          * 263A0
-L_263A4:
+        GONC    GetNextToken~1.L2                * 2639D
+GetNextToken~1.loop1:
+        GOTO    GetNextToken~1.L6                * 263A0
+GetNextToken~1.L2:
         LC(5)   #00003                           * 263A4
         A=A+C   A                                * 263AB
-        GOC     L_263A0                          * 263AD
+        GOC     GetNextToken~1.loop1             * 263AD
         C=DAT0  A                                * 263B0
         C=C-A   A                                * 263B3
-        GOC     L_263A0                          * 263B5
+        GOC     GetNextToken~1.loop1             * 263B5
         D=C     A                                * 263B8
         CD0EX                                    * 263BA
         C=C+A   A                                * 263BD
-        GOC     L_263A0                          * 263BF
+        GOC     GetNextToken~1.loop1             * 263BF
         D0=C                                     * 263C2
         CD1EX                                    * 263C5
         A=0     A                                * 263C8
-        GONC    L_263CF                          * 263CA
-L_263CD:
+        GONC    GetNextToken~1.L4                * 263CA
+GetNextToken~1.loop3:
         B=B+1   A                                * 263CD
-L_263CF:
+GetNextToken~1.L4:
         ?D=0    A                                * 263CF
-        GOYES   L_26435                          * 263D2
+        GOYES   GetNextToken~1.L6                * 263D2
         A=DAT0  B                                * 263D4
         D1=C                                     * 263D7
         C=C+A   A                                * 263DA
@@ -1433,40 +1433,40 @@ L_263CF:
         D=D-1   A                                * 263EC
         D=D-1   A                                * 263EE
         ?C=0    S                                * 263F0
-        GOYES   L_263CD                          * 263F3
+        GOYES   GetNextToken~1.loop3             * 263F3
         ?D=0    A                                * 263F5
-        GOYES   L_2644E                          * 263F8
+        GOYES   GetNextToken~1.L7                * 263F8
         P=C     15                               * 263FA
         ?P=     3                                * 263FE
-        GOYES   L_2644E                          * 26401
+        GOYES   GetNextToken~1.L7                * 26401
         ?P=     4                                * 26403
-        GOYES   L_2644E                          * 26406
+        GOYES   GetNextToken~1.L7                * 26406
         ?P=     5                                * 26408
-        GOYES   L_2644E                          * 2640B
+        GOYES   GetNextToken~1.L7                * 2640B
         ?P=     7                                * 2640D
-        GOYES   L_26469                          * 26410
+        GOYES   GetNextToken~1.L8                * 26410
         BCEX    A                                * 26412
         R0=C                                     * 26414
         BCEX    A                                * 26417
         ?P=     6                                * 26419
-        GOYES   L_26422                          * 2641C
-        GOTO    L_264B7                          * 2641E
-L_26422:
+        GOYES   GetNextToken~1.L5                * 2641C
+        GOTO    GetNextToken~1.L12               * 2641E
+GetNextToken~1.L5:
         C=0     S                                * 26422
         C=C+1   S                                * 26425
         D=D-1   A                                * 26428
         D=D-1   A                                * 2642A
         D0=D0+  2                                * 2642C
         B=B+1   A                                * 2642F
-        GOTO    L_264B7                          * 26431
-L_26435:
+        GOTO    GetNextToken~1.L12               * 26431
+GetNextToken~1.L6:
         A=B     A                                * 26435
         R0=A                                     * 26437
         GOSBVL  PUSH#                            * 2643A
         LC(5)   FALSE                            * 26441
         A=C     A                                * 26448
         PC=(A)                                   * 2644A
-L_2644E:
+GetNextToken~1.L7:
         P=      0                                * 2644E
         A=B     A                                * 26450
         R0=A                                     * 26452
@@ -1474,7 +1474,7 @@ L_2644E:
         LC(5)   dup;true                         * 2645C
         A=C     A                                * 26463
         PC=(A)                                   * 26465
-L_26469:
+GetNextToken~1.L8:
         P=      0                                * 26469
         A=B     A                                * 2646B
         R0=A                                     * 2646D
@@ -1482,7 +1482,7 @@ L_26469:
         LC(5)   1+(s);true                       * 26477
         A=C     A                                * 2647E
         PC=(A)                                   * 26480
-L_26484:
+GetNextToken~1.loop9:
         P=      0                                * 26484
         A=B     A                                * 26486
         R1=A                                     * 26488
@@ -1494,13 +1494,13 @@ L_26484:
         LC(5)   TRUE                             * 264A6
         A=C     A                                * 264AD
         PC=(A)                                   * 264AF
-L_264B3:
+GetNextToken~1.loop10:
         P=      0                                * 264B3
-L_264B5:
+GetNextToken~1.loop11:
         B=B+1   A                                * 264B5
-L_264B7:
+GetNextToken~1.L12:
         ?D=0    A                                * 264B7
-        GOYES   L_26484                          * 264BA
+        GOYES   GetNextToken~1.loop9             * 264BA
         A=DAT0  B                                * 264BC
         D1=C                                     * 264BF
         C=C+A   A                                * 264C2
@@ -1513,57 +1513,57 @@ L_264B7:
         D=D-1   A                                * 264D9
         D0=D0+  2                                * 264DB
         ?C=A    S                                * 264DE
-        GOYES   L_264B5                          * 264E1
+        GOYES   GetNextToken~1.loop11            * 264E1
         P=C     15                               * 264E3
         ?P=     2                                * 264E7
-        GOYES   L_264F5                          * 264EA
+        GOYES   GetNextToken~1.L13               * 264EA
         ?P=     1                                * 264EC
-        GOYES   L_26508                          * 264EF
-        GOTO    L_26484                          * 264F1
-L_264F5:
+        GOYES   GetNextToken~1.L14               * 264EF
+        GOTO    GetNextToken~1.loop9             * 264F1
+GetNextToken~1.L13:
         CAEX    S                                * 264F5
         P=C     15                               * 264F8
         CAEX    S                                * 264FC
         ?P=     15                               * 264FF
-        GOYES   L_26528                          * 26502
-        GOTO    L_26484                          * 26504
-L_26508:
+        GOYES   GetNextToken~1.L16               * 26502
+        GOTO    GetNextToken~1.loop9             * 26504
+GetNextToken~1.L14:
         CAEX    S                                * 26508
         P=C     15                               * 2650B
         CAEX    S                                * 2650F
         ?P=     2                                * 26512
-        GOYES   L_264B3                          * 26515
+        GOYES   GetNextToken~1.loop10            * 26515
         ?P=     15                               * 26517
-        GOYES   L_264B3                          * 2651A
+        GOYES   GetNextToken~1.loop10            * 2651A
         ?P#     6                                * 2651C
-        GOYES   L_26524                          * 2651F
-        GONC    L_26528                          * 26521
-L_26524:
-        GOTO    L_26484                          * 26524
-L_26528:
+        GOYES   GetNextToken~1.L15               * 2651F
+        GONC    GetNextToken~1.L16               * 26521
+GetNextToken~1.L15:
+        GOTO    GetNextToken~1.loop9             * 26524
+GetNextToken~1.L16:
         P=      0                                * 26528
         ?D=0    A                                * 2652A
-        GOYES   L_26538                          * 2652D
+        GOYES   GetNextToken~1.L17               * 2652D
         D=D-1   A                                * 2652F
         D=D-1   A                                * 26531
         D0=D0+  2                                * 26533
         B=B+1   A                                * 26536
-L_26538:
-        GOTO    L_264B5                          * 26538
+GetNextToken~1.L17:
+        GOTO    GetNextToken~1.loop11            * 26538
 
 * refs (1): 263E3
 SUB_2653C:
         CPEX    15                               * 2653C
         ?P=     13                               * 26540
-        GOYES   L_2658D                          * 26543
+        GOYES   SUB_2655F.L5                     * 26543
         ?P=     14                               * 26545
-        GOYES   L_2658A                          * 26548
+        GOYES   SUB_2655F.L4                     * 26548
         ?ST=0   3                                * 2654A
-        GOYES   L_26582                          * 2654D
+        GOYES   SUB_2655F.loop3                  * 2654D
         ?P=     15                               * 2654F
-        GOYES   L_26557                          * 26552
-        GONC    L_26563                          * 26554
-L_26557:
+        GOYES   SUB_2653C.L1                     * 26552
+        GONC    SUB_2655F.L1                     * 26554
+SUB_2653C.L1:
         P=      1                                * 26557
         CPEX    15                               * 26559
         RTN                                      * 2655D
@@ -1571,51 +1571,51 @@ L_26557:
 * refs (1): 264CE
 SUB_2655F:
         CPEX    15                               * 2655F
-L_26563:
+SUB_2655F.L1:
         ?P=     8                                * 26563
-        GOYES   L_2657D                          * 26566
+        GOYES   SUB_2655F.L2                     * 26566
         ?P=     9                                * 26568
-        GOYES   L_2659E                          * 2656B
+        GOYES   SUB_2655F.L7                     * 2656B
         ?P=     10                               * 2656D
-        GOYES   L_265AB                          * 26570
+        GOYES   SUB_2655F.L9                     * 26570
         ?P=     11                               * 26572
-        GOYES   L_265B8                          * 26575
+        GOYES   SUB_2655F.L11                    * 26575
         CPEX    15                               * 26577
         RTN                                      * 2657B
-L_2657D:
+SUB_2655F.L2:
         ?ST=1   2                                * 2657D
-        GOYES   L_265A3                          * 26580
-L_26582:
+        GOYES   SUB_2655F.loop8                  * 26580
+SUB_2655F.loop3:
         P=      0                                * 26582
         CPEX    15                               * 26584
         RTN                                      * 26588
-L_2658A:
+SUB_2655F.L4:
         ST=0    3                                * 2658A
-L_2658D:
+SUB_2655F.L5:
         ?ST=0   3                                * 2658D
-        GOYES   L_26598                          * 26590
+        GOYES   SUB_2655F.L6                     * 26590
         ST=0    3                                * 26592
-        GONC    L_26582                          * 26595
-L_26598:
+        GONC    SUB_2655F.loop3                  * 26595
+SUB_2655F.L6:
         ST=1    3                                * 26598
-        GOC     L_26582                          * 2659B
-L_2659E:
+        GOC     SUB_2655F.loop3                  * 2659B
+SUB_2655F.L7:
         ?ST=1   2                                * 2659E
-        GOYES   L_26582                          * 265A1
-L_265A3:
+        GOYES   SUB_2655F.loop3                  * 265A1
+SUB_2655F.loop8:
         P=      2                                * 265A3
         CPEX    15                               * 265A5
         RTN                                      * 265A9
-L_265AB:
+SUB_2655F.L9:
         ?ST=1   2                                * 265AB
-        GOYES   L_265A3                          * 265AE
-L_265B0:
+        GOYES   SUB_2655F.loop8                  * 265AE
+SUB_2655F.loop10:
         P=      5                                * 265B0
         CPEX    15                               * 265B2
         RTN                                      * 265B6
-L_265B8:
+SUB_2655F.L11:
         ?ST=1   2                                * 265B8
-        GOYES   L_265B0                          * 265BB
+        GOYES   SUB_2655F.loop10                 * 265BB
         P=      2                                * 265BD
         CPEX    15                               * 265BF
         RTN                                      * 265C3
@@ -1648,11 +1648,11 @@ realPAcode:
         D1=C                                     * 26614
         D1=D1+  5                                * 26617
         P=      12                               * 2661A
-L_2661C:
+realPAcode.loop1:
         ASL     W                                * 2661C
         ASL     W                                * 2661F
         P=P+1                                    * 26622
-        GONC    L_2661C                          * 26624
+        GONC    realPAcode.loop1                 * 26624
         LA(8)   #2D2B3039                        * 26627
         R0=A                                     * 26634
         D=D+1   A                                * 26637
@@ -1677,67 +1677,67 @@ L_2661C:
         ST=0    5                                * 2666E
         ST=0    0                                * 26671
         GOSUBL  SUB_2681A                        * 26674
-        GOC     L_26695                          * 2667A
-L_2667D:
+        GOC     realPAcode.L3                    * 2667A
+realPAcode.loop2:
         SETHEX                                   * 2667D
         P=      0                                * 2667F
         GOSBVL  GETPTR                           * 26681
         LC(5)   FALSE                            * 26688
         A=C     A                                * 2668F
         PC=(A)                                   * 26691
-L_26695:
+realPAcode.L3:
         ?P=     0                                * 26695
-        GOYES   L_2667D                          * 26698
+        GOYES   realPAcode.loop2                 * 26698
         ?P=     14                               * 2669A
-        GOYES   L_2667D                          * 2669D
+        GOYES   realPAcode.loop2                 * 2669D
         ?P=     12                               * 2669F
-        GOYES   L_266AC                          * 266A2
+        GOYES   realPAcode.loop4                 * 266A2
         ?P#     13                               * 266A4
-        GOYES   L_266B9                          * 266A7
+        GOYES   realPAcode.L5                    * 266A7
         ST=1    1                                * 266A9
-L_266AC:
+realPAcode.loop4:
         GOSUBL  SUB_2681A                        * 266AC
-        GOC     L_266B9                          * 266B2
-        GOTO    L_2676E                          * 266B5
-L_266B9:
+        GOC     realPAcode.L5                    * 266B2
+        GOTO    SUB_2670F.L7                     * 266B5
+realPAcode.L5:
         ?P=     1                                * 266B9
-        GOYES   L_266D1                          * 266BC
+        GOYES   realPAcode.loop6                 * 266BC
         ?P=     2                                * 266BE
-        GOYES   L_266EC                          * 266C1
+        GOYES   realPAcode.L9                    * 266C1
         ?P=     15                               * 266C3
-        GOYES   L_266F3                          * 266C6
+        GOYES   realPAcode.L10                   * 266C6
         ?P=     14                               * 266C8
-        GOYES   L_26703                          * 266CB
-        GOTO    L_267D1                          * 266CD
-L_266D1:
+        GOYES   realPAcode.L13                   * 266CB
+        GOTO    SUB_2670F.L14                    * 266CD
+realPAcode.loop6:
         SETDEC                                   * 266D1
         ?ST=0   4                                * 266D3
-        GOYES   L_266DA                          * 266D6
+        GOYES   realPAcode.L7                    * 266D6
         D=D+1   A                                * 266D8
-L_266DA:
+realPAcode.L7:
         ?ST=0   3                                * 266DA
-        GOYES   L_266E1                          * 266DD
+        GOYES   realPAcode.L8                    * 266DD
         D=D-1   A                                * 266DF
-L_266E1:
+realPAcode.L8:
         ST=1    5                                * 266E1
         GOSUB   SUB_2670F                        * 266E4
-        GOTO    L_266AC                          * 266E8
-L_266EC:
+        GOTO    realPAcode.loop4                 * 266E8
+realPAcode.L9:
         ST=1    4                                * 266EC
-        GOTO    L_266D1                          * 266EF
-L_266F3:
+        GOTO    realPAcode.loop6                 * 266EF
+realPAcode.L10:
         ?ST=0   3                                * 266F3
-        GOYES   L_266FC                          * 266F6
-L_266F8:
-        GOTO    L_267D1                          * 266F8
-L_266FC:
+        GOYES   realPAcode.L12                   * 266F6
+realPAcode.loop11:
+        GOTO    SUB_2670F.L14                    * 266F8
+realPAcode.L12:
         ST=1    3                                * 266FC
-        GOTO    L_266AC                          * 266FF
-L_26703:
+        GOTO    realPAcode.loop4                 * 266FF
+realPAcode.L13:
         ?ST=0   5                                * 26703
-        GOYES   L_266F8                          * 26706
+        GOYES   realPAcode.loop11                * 26706
         ST=0    5                                * 26708
-        GOTO    L_26725                          * 2670B
+        GOTO    SUB_2670F.loop1                  * 2670B
 
 * refs (1): 266E4
 SUB_2670F:
@@ -1748,83 +1748,83 @@ SUB_2670F:
         ASL     W                                * 26719
         ?A=0    P                                * 2671C
         RTNYES                                   * 2671F
-        GOTO    L_26867                          * 26721
-L_26725:
+        GOTO    SUB_2681A.L4                     * 26721
+SUB_2670F.loop1:
         GOSUB   SUB_2681A                        * 26725
-        GOC     L_26730                          * 26729
-        GOTO    L_26788                          * 2672C
-L_26730:
+        GOC     SUB_2670F.L2                     * 26729
+        GOTO    SUB_2670F.L9                     * 2672C
+SUB_2670F.L2:
         ?ST=1   0                                * 26730
-        GOYES   L_26749                          * 26733
+        GOYES   SUB_2670F.L4                     * 26733
         ?P=     12                               * 26735
-        GOYES   L_26742                          * 26738
+        GOYES   SUB_2670F.L3                     * 26738
         ?P#     13                               * 2673A
-        GOYES   L_26749                          * 2673D
+        GOYES   SUB_2670F.L4                     * 2673D
         ST=1    2                                * 2673F
-L_26742:
+SUB_2670F.L3:
         ST=1    0                                * 26742
-        GOTO    L_26725                          * 26745
-L_26749:
+        GOTO    SUB_2670F.loop1                  * 26745
+SUB_2670F.L4:
         ?P=     1                                * 26749
-        GOYES   L_26757                          * 2674C
+        GOYES   SUB_2670F.L6                     * 2674C
         ?P=     2                                * 2674E
-        GOYES   L_26757                          * 26751
-L_26753:
-        GOTO    L_267D1                          * 26753
-L_26757:
+        GOYES   SUB_2670F.L6                     * 26751
+SUB_2670F.loop5:
+        GOTO    SUB_2670F.L14                    * 26753
+SUB_2670F.L6:
         ?B#0    XS                               * 26757
-        GOYES   L_26753                          * 2675A
+        GOYES   SUB_2670F.loop5                  * 2675A
         BSL     X                                * 2675C
         P=      0                                * 2675F
         B=A     P                                * 26761
         ST=1    5                                * 26764
         ST=1    0                                * 26767
-        GOTO    L_26725                          * 2676A
-L_2676E:
+        GOTO    SUB_2670F.loop1                  * 2676A
+SUB_2670F.L7:
         ?ST=1   4                                * 2676E
-        GOYES   L_26791                          * 26771
+        GOYES   SUB_2670F.L10                    * 26771
         ?ST=0   5                                * 26773
-        GOYES   L_2677F                          * 26776
+        GOYES   SUB_2670F.L8                     * 26776
         A=0     W                                * 26778
-        GOTO    L_267F7                          * 2677B
-L_2677F:
+        GOTO    PushFTLp.L2                      * 2677B
+SUB_2670F.L8:
         ?ST=1   3                                * 2677F
-        GOYES   L_267D1                          * 26782
-        GOTO    L_2667D                          * 26784
-L_26788:
+        GOYES   SUB_2670F.L14                    * 26782
+        GOTO    realPAcode.loop2                 * 26784
+SUB_2670F.L9:
         ?ST=1   5                                * 26788
-        GOYES   L_26791                          * 2678B
-        GOTO    L_267D1                          * 2678D
-L_26791:
+        GOYES   SUB_2670F.L10                    * 2678B
+        GOTO    SUB_2670F.L14                    * 2678D
+SUB_2670F.L10:
         A=0     S                                * 26791
         A=0     B                                * 26794
         ?A=0    W                                * 26797
-        GOYES   L_267F7                          * 2679A
+        GOYES   PushFTLp.L2                      * 2679A
         P=      14                               * 2679C
         ?A#0    P                                * 2679E
-        GOYES   L_267AB                          * 267A1
-L_267A3:
+        GOYES   SUB_2670F.L12                    * 267A1
+SUB_2670F.loop11:
         ASL     W                                * 267A3
         ?A=0    P                                * 267A6
-        GOYES   L_267A3                          * 267A9
-L_267AB:
+        GOYES   SUB_2670F.loop11                 * 267A9
+SUB_2670F.L12:
         SETDEC                                   * 267AB
         C=D     A                                * 267AD
         ?ST=0   2                                * 267AF
-        GOYES   L_267B6                          * 267B2
+        GOYES   SUB_2670F.L13                    * 267B2
         B=-B    A                                * 267B4
-L_267B6:
+SUB_2670F.L13:
         C=C+B   A                                * 267B6
         D=C     A                                * 267B8
         P=      0                                * 267BA
         LC(5)   #00500                           * 267BC
         DCEX    A                                * 267C3
         ?D>C    A                                * 267C5
-        GOYES   L_267E9                          * 267C8
+        GOYES   PushFTLp.L1                      * 267C8
         D=-D    A                                * 267CA
         ?D<C    A                                * 267CC
-        GOYES   L_267E9                          * 267CF
-L_267D1:
+        GOYES   PushFTLp.L1                      * 267CF
+SUB_2670F.L14:
         SETHEX                                   * 267D1
         P=      0                                * 267D3
 
@@ -1837,13 +1837,13 @@ PushFTLp:
         LC(5)   failed                           * 267DC
         A=C     A                                * 267E3
         PC=(A)                                   * 267E5
-L_267E9:
+PushFTLp.L1:
         A=C     X                                * 267E9
         A=0     S                                * 267EC
         ?ST=0   1                                * 267EF
-        GOYES   L_267F7                          * 267F2
+        GOYES   PushFTLp.L2                      * 267F2
         A=-A-1  S                                * 267F4
-L_267F7:
+PushFTLp.L2:
         GOSBVL  PUSH%                            * 267F7
         LC(5)   TRUE                             * 267FE
         A=C     A                                * 26805
@@ -1859,37 +1859,37 @@ SUB_2681A:
         SETHEX                                   * 2681A
         P=      0                                * 2681C
         D0=D0-  2                                * 2681E
-        GONC    L_26826                          * 26821
+        GONC    SUB_2681A.L1                     * 26821
         RTNCC                                    * 26824
-L_26826:
+SUB_2681A.L1:
         P=      12                               * 26826
         A=DAT1  B                                * 26828
         D1=D1+  2                                * 2682B
         C=R0                                     * 2682E
         ?C<A    B                                * 26831
-        GOYES   L_2684F                          * 26834
+        GOYES   SUB_2681A.L2                     * 26834
         CSR     W                                * 26836
         CSR     W                                * 26839
         ?C>A    B                                * 2683C
-        GOYES   L_26855                          * 2683F
+        GOYES   SUB_2681A.loop3                  * 2683F
         P=      1                                * 26841
         A=A-C   B                                * 26843
         ?A=0    B                                * 26846
         RTNYES                                   * 26849
         P=      2                                * 2684B
         RTNSC                                    * 2684D
-L_2684F:
+SUB_2681A.L2:
         CSR     W                                * 2684F
         CSR     W                                * 26852
-L_26855:
+SUB_2681A.loop3:
         CSR     W                                * 26855
         CSR     W                                * 26858
         ?C=A    B                                * 2685B
         RTNYES                                   * 2685E
         P=P+1                                    * 26860
-        GONC    L_26855                          * 26862
+        GONC    SUB_2681A.loop3                  * 26862
         RTN                                      * 26865
-L_26867:
+SUB_2681A.L4:
         SETDEC                                   * 26867
         C=0     B                                * 26869
         P=      2                                * 2686C
@@ -1926,7 +1926,7 @@ MACRODCMP~2:
 
 * refs (2): 268E0 26908
 OBJ_26912:
-        CON(5)  L_71E1D                          * 26912  code object: the address of its machine code
+        CON(5)  OBJ_71DFF.L1                     * 26912  code object: the address of its machine code
 
 * refs (1): 24582
 OBJ_26917:
@@ -1941,28 +1941,28 @@ OBJ_26935:
 
 * refs (2): 26921 26944
 OBJ_26953:
-        CON(5)  L_71F99                          * 26953  code object: the address of its machine code
+        CON(5)  ?OKINALG~romptr~1.L7             * 26953  code object: the address of its machine code
         ASSEMBLE
-L_26958:
+OBJ_26953.L1:
         A=DAT1  1                                * 26958
         D1=C                                     * 2695C
         ABIT=0  2                                * 2695F
         ABIT=0  3                                * 26964
         A=A-1   P                                * 26969
-        GOC     L_26988                          * 2696C
+        GOC     OBJ_26953.L2                     * 2696C
         ?A=0    P                                * 2696F
-        GOYES   L_26988                          * 26972
+        GOYES   OBJ_26953.L2                     * 26972
         LC(5)   FALSE                            * 26974
         DAT1=C  A                                * 2697B
         A=DAT0  A                                * 2697E
         D0=D0+  5                                * 26981
         PC=(A)                                   * 26984
-L_26988:
+OBJ_26953.L2:
         GOSBVL  SAVPTR                           * 26988
         C=R0.F  A                                * 2698F
         D0=C                                     * 26995
         C=0     S                                * 26998
-        GOTO    L_26FE1                          * 2699B
+        GOTO    GETPTRFALSE.L2                   * 2699B
         RPL
 
 * refs (7): 24573 2528C 271CF 40549 62AC5 72EB9 ...
@@ -1981,28 +1981,28 @@ OBJ_269DB:
         CON(5)  (*)+5                            * 269DB  primitive code object
         ASSEMBLE
         ST=1    5                                * 269E0
-        GOTO    L_269EF                          * 269E3
+        GOTO    OBJ_269E7.L1                     * 269E3
 
 * refs (2): 269B3 26AC3
 OBJ_269E7:
         CON(5)  (*)+5                            * 269E7  primitive code object
         ST=0    5                                * 269EC
-L_269EF:
+OBJ_269E7.L1:
         C=DAT1  A                                * 269EF
         CD1EX                                    * 269F2
         D1=D1+  5                                * 269F5
         ?ST=0   5                                * 269F8
-        GOYES   L_26A00                          * 269FB
+        GOYES   OBJ_269E7.L2                     * 269FB
         D1=D1-  11                               * 269FD
-L_26A00:
+OBJ_269E7.L2:
         A=DAT1  X                                * 26A00
         D1=C                                     * 26A04
         LC(3)   #700                             * 26A07
         A=A-C   X                                * 26A0C
         LC(5)   TRUE                             * 26A0F
-        GONC    L_26A20                          * 26A16
+        GONC    OBJ_269E7.L3                     * 26A16
         LC(5)   FALSE                            * 26A19
-L_26A20:
+OBJ_269E7.L3:
         DAT1=C  A                                * 26A20
         A=DAT0  A                                * 26A23
         D0=D0+  5                                * 26A26
@@ -2041,42 +2041,42 @@ OBJ_26AE1:
 
 * refs (2): 26AA0 26AE6
 OBJ_26B04:
-        CON(5)  L_71F00                          * 26B04  code object: the address of its machine code
+        CON(5)  SUB_71E57.L2                     * 26B04  code object: the address of its machine code
         ASSEMBLE
-L_26B09:
+OBJ_26B04.L1:
         D1=D1-  1                                * 26B09
         A=DAT1  1                                * 26B0C
         D1=C                                     * 26B10
         LC(5)   TRUE                             * 26B13
         ?ABIT=0 3                                * 26B1A
-        GOYES   L_26B28                          * 26B1F
+        GOYES   OBJ_26B04.L2                     * 26B1F
         LC(5)   FALSE                            * 26B21
-L_26B28:
+OBJ_26B04.L2:
         A=C     A                                * 26B28
         PC=(A)                                   * 26B2A
 
 * refs (2): 26AAA 26AF0
 OBJ_26B2E:
-        CON(5)  L_71F8B                          * 26B2E  code object: the address of its machine code
-L_26B33:
+        CON(5)  ?OKINALG~romptr~1.L6             * 26B2E  code object: the address of its machine code
+OBJ_26B2E.L1:
         D1=D1-  1                                * 26B33
         A=DAT1  1                                * 26B36
         D1=C                                     * 26B3A
         ?ABIT=1 1                                * 26B3D
-        GOYES   L_26B51                          * 26B42
+        GOYES   OBJ_26B2E.L2                     * 26B42
         LC(5)   FALSE                            * 26B44
         A=C     A                                * 26B4B
         PC=(A)                                   * 26B4D
-L_26B51:
+OBJ_26B2E.L2:
         C=0     S                                * 26B51
         ?ABIT=0 2                                * 26B54
-        GOYES   L_26B5E                          * 26B59
+        GOYES   OBJ_26B2E.L3                     * 26B59
         C=C+1   S                                * 26B5B
-L_26B5E:
+OBJ_26B2E.L3:
         GOSBVL  SAVPTR                           * 26B5E
         C=R0.F  A                                * 26B65
         D0=C                                     * 26B6B
-        GOTO    L_26FE1                          * 26B6E
+        GOTO    GETPTRFALSE.L2                   * 26B6E
         FILLTO  #26BED                           * 26B72  123 zero nibbles: the next entry stays at #26BED
         RPL
 
@@ -2100,11 +2100,11 @@ OBJ_26C47:
         A=DAT1  A                                * 26C4C
         LC(5)   FALSE                            * 26C4F
         ?C=A    A                                * 26C56
-        GOYES   L_26C65                          * 26C59
+        GOYES   OBJ_26C47.L1                     * 26C59
         A=DAT0  A                                * 26C5B
         D0=D0+  5                                * 26C5E
         PC=(A)                                   * 26C61
-L_26C65:
+OBJ_26C47.L1:
         LC(5)   SEMI                             * 26C65
         A=C     A                                * 26C6C
         PC=(A)                                   * 26C6E
@@ -2116,26 +2116,26 @@ OBJ_26C72:
 
 * refs (1): 26C77
 OBJ_26C8B:
-        CON(5)  L_7211C                          * 26C8B  code object: the address of its machine code
+        CON(5)  SUB_72107.L1                     * 26C8B  code object: the address of its machine code
         ASSEMBLE
-L_26C90:
+OBJ_26C8B.L1:
         ?C=A    A                                * 26C90
-        GOYES   L_26CC0                          * 26C93
-        D1=(5)  L_26DA1                          * 26C95
+        GOYES   OBJ_26C8B.L4                     * 26C93
+        D1=(5)  OBJ_26C8B.L13                    * 26C95
         B=0     A                                * 26C9C
         B=B+CON A,5                              * 26C9E
-L_26CA4:
+OBJ_26C8B.loop2:
         C=DAT1  A                                * 26CA4
         ?C=A    A                                * 26CA7
-        GOYES   L_26CB4                          * 26CAA
+        GOYES   OBJ_26C8B.L3                     * 26CAA
         D1=D1+  5                                * 26CAC
         B=B-1   A                                * 26CAF
-        GONC    L_26CA4                          * 26CB1
-L_26CB4:
+        GONC    OBJ_26C8B.loop2                  * 26CB1
+OBJ_26C8B.L3:
         ?B#0    A                                * 26CB4
-        GOYES   L_26D0D                          * 26CB7
-        GOVLNG  L_7218E                          * 26CB9
-L_26CC0:
+        GOYES   OBJ_26C8B.L7                     * 26CB7
+        GOVLNG  SUB_72107.L4                     * 26CB9
+OBJ_26C8B.L4:
         CD0EX                                    * 26CC0
         RSTK=C                                   * 26CC3
         D0=C                                     * 26CC5
@@ -2144,25 +2144,25 @@ L_26CC0:
         B=B+CON A,5                              * 26CCD
         LC(5)   DOLAM                            * 26CD3
         D=C     A                                * 26CDA
-L_26CDC:
+OBJ_26C8B.loop5:
         B=B-1   A                                * 26CDC
-        GOC     L_26D08                          * 26CDE
+        GOC     OBJ_26C8B.L6                     * 26CDE
         GOSBVL  SKIPOB                           * 26CE1
         C=DAT0  A                                * 26CE8
         ?D=C    A                                * 26CEB
-        GOYES   L_26CDC                          * 26CEE
+        GOYES   OBJ_26C8B.loop5                  * 26CEE
         CD0EX                                    * 26CF0
         A=C     A                                * 26CF3
         C=DAT0  A                                * 26CF5
         D0=A                                     * 26CF8
         ?D=C    A                                * 26CFB
-        GOYES   L_26CDC                          * 26CFE
+        GOYES   OBJ_26C8B.loop5                  * 26CFE
         B=B-CON A,5                              * 26D00
         B=-B    A                                * 26D06
-L_26D08:
+OBJ_26C8B.L6:
         C=RSTK                                   * 26D08
         D0=C                                     * 26D0A
-L_26D0D:
+OBJ_26C8B.L7:
         D0=D0-  5                                * 26D0D
         CD0EX                                    * 26D10
         D0=C                                     * 26D13
@@ -2171,15 +2171,15 @@ L_26D0D:
         D0=C                                     * 26D1D
         ST=0    1                                * 26D20
         ?ABIT=0 0                                * 26D23
-        GOYES   L_26D6C                          * 26D28
+        GOYES   OBJ_26C8B.L9                     * 26D28
         C=0     S                                * 26D2A
         ?ABIT=0 2                                * 26D2D
-        GOYES   L_26D37                          * 26D32
+        GOYES   OBJ_26C8B.loop8                  * 26D32
         C=C+1   S                                * 26D34
-L_26D37:
+OBJ_26C8B.loop8:
         GOSBVL  SKIPOB                           * 26D37
         C=C-1   S                                * 26D3E
-        GONC    L_26D37                          * 26D41
+        GONC    OBJ_26C8B.loop8                  * 26D41
         A=DAT0  A                                * 26D44
         AD0EX                                    * 26D47
         R1=A.F  A                                * 26D4A
@@ -2187,32 +2187,32 @@ L_26D37:
         LC(5)   PRLG                             * 26D53
         ST=1    1                                * 26D5A
         ?C=A    A                                * 26D5D
-        GOYES   L_26D92                          * 26D60
+        GOYES   OBJ_26C8B.L12                    * 26D60
         ST=0    1                                * 26D62
         AD0EX                                    * 26D65
-        GOTO    L_26D8C                          * 26D68
-L_26D6C:
+        GOTO    OBJ_26C8B.L11                    * 26D68
+OBJ_26C8B.L9:
         A=B     A                                * 26D6C
         A=A+1   A                                * 26D6E
-        GOC     L_26D75                          * 26D70
+        GOC     OBJ_26C8B.L10                    * 26D70
         A=A-1   A                                * 26D73
-L_26D75:
+OBJ_26C8B.L10:
         C=A     A                                * 26D75
         A=A+A   A                                * 26D77
         A=A+A   A                                * 26D79
         A=A+C   A                                * 26D7B
-        LC(5)   L_26DBF                          * 26D7D
+        LC(5)   OBJ_26C8B.L14                    * 26D7D
         A=A+C   A                                * 26D84
         D0=A                                     * 26D86
         A=DAT0  A                                * 26D89
-L_26D8C:
+OBJ_26C8B.L11:
         R1=A.F  A                                * 26D8C
-L_26D92:
+OBJ_26C8B.L12:
         A=B     A                                * 26D92
         R0=A.F  A                                * 26D94
-        GOVLNG  L_721C4                          * 26D9A
+        GOVLNG  OBJ_721A6.L1                     * 26D9A
 
-L_26DA1:
+OBJ_26C8B.L13:
         CON(5)  CK5&Dispatch                     * 26DA1  address (the code jumps or points through it)
 
         CON(5)  CK4&Dispatch                     * 26DA6  address (the code jumps or points through it)
@@ -2225,7 +2225,7 @@ L_26DA1:
 
         CON(5)  CK0                              * 26DBA  address (the code jumps or points through it)
 
-L_26DBF:
+OBJ_26C8B.L14:
         CON(5)  #0590410h                        * 26DBF  address (the code jumps or points through it)
 
         CON(5)  #050410h                         * 26DC4  address (the code jumps or points through it)
@@ -2290,10 +2290,10 @@ OBJ_26E61:
         C=DAT1  S                                * 26E9E
         C=C-1   S                                * 26EA2
         C=C-1   S                                * 26EA5
-        GOC     L_26EB5                          * 26EA8
+        GOC     OBJ_26E61.L1                     * 26EA8
         LC(5)   TRUE                             * 26EAB
         D1=D1+  1                                * 26EB2
-L_26EB5:
+OBJ_26E61.L1:
         AD1EX                                    * 26EB5
         DAT1=C  A                                * 26EB8
         D1=A                                     * 26EBB
@@ -2302,15 +2302,15 @@ L_26EB5:
         AD1EX                                    * 26EC8
         D1=A                                     * 26ECB
         ?A=B    A                                * 26ECE
-        GOYES   L_26EF0                          * 26ED1
+        GOYES   OBJ_26E61.L2                     * 26ED1
         A=0     B                                * 26ED3
         A=DAT1  1                                * 26ED6
         A=A-CON B,4                              * 26EDA
-        GOC     L_26EF0                          * 26EE0
+        GOC     OBJ_26E61.L2                     * 26EE0
         A=A-1   B                                * 26EE3
-        GONC    L_26EF0                          * 26EE6
+        GONC    OBJ_26E61.L2                     * 26EE6
         LC(5)   TRUE                             * 26EE9
-L_26EF0:
+OBJ_26E61.L2:
         R3=C.F  A                                * 26EF0
         A=B     A                                * 26EF6
         D1=A                                     * 26EF8
@@ -2326,49 +2326,49 @@ OBJ_26F18:
         CON(5)  (*)+5                            * 26F18  primitive code object
         P=      15                               * 26F1D
         LC(1)   #4                               * 26F1F
-        GOTO    L_26F88                          * 26F22
+        GOTO    OBJ_26F7A.L1                     * 26F22
 
 * refs (2): 57383 573BF
 OBJ_26F26:
         CON(5)  (*)+5                            * 26F26  primitive code object
         P=      15                               * 26F2B
         LC(1)   #5                               * 26F2D
-        GOTO    L_26F88                          * 26F30
+        GOTO    OBJ_26F7A.L1                     * 26F30
 
 * refs (2): 58D48 85E8F
 OBJ_26F34:
         CON(5)  (*)+5                            * 26F34  primitive code object
         P=      15                               * 26F39
         LC(1)   #6                               * 26F3B
-        GOTO    L_26F88                          * 26F3E
+        GOTO    OBJ_26F7A.L1                     * 26F3E
 
 * refs (1): 57B1F
 ?expanapp~2:
         CON(5)  (*)+5                            * 26F42  primitive code object
         P=      15                               * 26F47
         LC(1)   #7                               * 26F49
-        GOTO    L_26F88                          * 26F4C
+        GOTO    OBJ_26F7A.L1                     * 26F4C
 
 * refs (1): 3F1E8
 OBJ_26F50:
         CON(5)  (*)+5                            * 26F50  primitive code object
         P=      15                               * 26F55
         LC(1)   #8                               * 26F57
-        GOTO    L_26F88                          * 26F5A
+        GOTO    OBJ_26F7A.L1                     * 26F5A
 
 * refs (1): 5B1D6
 intg1~2:
         CON(5)  (*)+5                            * 26F5E  primitive code object
         P=      15                               * 26F63
         LC(1)   #9                               * 26F65
-        GOTO    L_26F88                          * 26F68
+        GOTO    OBJ_26F7A.L1                     * 26F68
 
 * refs (2): 54891 84EC2
 OBJ_26F6C:
         CON(5)  (*)+5                            * 26F6C  primitive code object
         P=      15                               * 26F71
         LC(1)   #A                               * 26F73
-        GOTO    L_26F88                          * 26F76
+        GOTO    OBJ_26F7A.L1                     * 26F76
 
 * refs (7): 28B19 58DFF 5F34D 5F433 5F5DA 5F6A7 ...
 OBJ_26F7A:
@@ -2376,7 +2376,7 @@ OBJ_26F7A:
         P=      15                               * 26F7F
         LC(1)   #B                               * 26F81
         NOP4                                     * 26F84
-L_26F88:
+OBJ_26F7A.L1:
         P=      0                                * 26F88
         R4=C.F  S                                * 26F8A
         GOSBVL  SAVPTR                           * 26F90
@@ -2384,7 +2384,7 @@ L_26F88:
         CD1EX                                    * 26F9A
         A=DAT1  A                                * 26F9D
         LC(5)   DOROMP                           * 26FA0
-        GOVLNG  L_71FC3                          * 26FA7
+        GOVLNG  ?OKINALG~romptr~1.L10            * 26FA7
 
 * <REF>GETPTR , Do FALSE
 * refs (11): 0425C 0B3A4 0BB4A 0E3D1 0E9AB 25CB5 ...
@@ -2393,7 +2393,7 @@ GETPTRFALSE:
         LC(5)   FALSE                            * 26FB5
         A=C     A                                * 26FBC
         PC=(A)                                   * 26FBE
-L_26FC2:
+GETPTRFALSE.L1:
         D0=A                                     * 26FC2
         D0=D0-  10                               * 26FC5
         C=DAT0  A                                * 26FC8
@@ -2402,7 +2402,7 @@ L_26FC2:
         C=R4.F  S                                * 26FD4
         GOSUB   SUB_2702F                        * 26FDA
         GONC    GETPTRFALSE                      * 26FDE
-L_26FE1:
+GETPTRFALSE.L2:
         GOSBVL  SUB_7204C                        * 26FE1
         ST=1    1                                * 26FE8
         A=DAT0  A                                * 26FEB
@@ -2411,11 +2411,11 @@ L_26FE1:
         A=DAT0  A                                * 26FF7
         LC(5)   PRLG                             * 26FFA
         ?C=A    A                                * 27001
-        GOYES   L_27012                          * 27004
+        GOYES   GETPTRFALSE.L3                   * 27004
         ST=0    1                                * 27006
         AD0EX                                    * 27009
         R0=A.F  A                                * 2700C
-L_27012:
+GETPTRFALSE.L3:
         GOSBVL  SUB_72080                        * 27012
         A=R0.F  A                                * 27019
         DAT1=A  A                                * 2701F
